@@ -1,0 +1,31 @@
+{
+
+  // Enforcing Options
+
+  "curly" : true, // enforce curly braces around blocks in loops and conditionals
+  "immed" : true, // prohibit the use of immediate function invocations without wrapping them in parentheses
+  "latedef" : true, // prohibit the use of a variable before it was defined
+  "newcap": true, // enforce capitalized names of constructor functions
+  "nonew" : true, // prohibit the use of constructor functions for side-effects
+  "trailing" : true, // prohibit trailing whitespace
+  "undef": true, // prohibit the use of explicitly undeclared variables
+  "unused": true,
+
+  // Relaxing Options
+
+  "shadow" : true, // tolerate variable shadowing, i.e. re-define variables that have already be defined
+  "sub" : true, // tolerate [] notation when it can be expressed in dot notation, e.g. `dict['key']` instead of `dict.key`
+
+  // Globals
+
+  "browser" : true, // globals exposed by modern browsers e.g. `window`, `document`, etc.
+  "globals": {
+    "describe": false,
+    "it": false,
+    "expect": false,
+    "beforeEach": false,
+    "afterEach": false,
+    "jasmine": false
+  }
+
+}
