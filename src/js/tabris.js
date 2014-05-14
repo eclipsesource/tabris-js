@@ -13,7 +13,7 @@
         var composite = Tabris.create( "rwt.widgets.Composite", {
           style: ["NONE"],
           parent: Tabris._shell.id,
-          bounds: [0, 0, 200, 300] // TODO: replace with layoutData
+          layoutData: { left: 0, right: 0, top: 0, bottom: 0 },
         });
         result.parent = composite;
         properties = merge( properties, {
