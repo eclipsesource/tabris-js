@@ -5,6 +5,11 @@ var page = Tabris.create("tabris.Page", {
   topLevel: true,
 });
 
+Tabris.create("tabris.Page", {
+  title: "Empty Page",
+  topLevel: true,
+});
+
 Tabris.UI.set("activePage", page.id);
 
 var emptyLayoutDataLabel = page.parent.append("rwt.widgets.Label", {
