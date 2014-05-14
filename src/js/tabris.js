@@ -4,6 +4,9 @@
   Tabris = {
 
     create : function create( type, properties ) {
+      if( _isInitialized === false ) {
+        bootstrap();
+      }
       var id = generateId();
       var result = new WidgetProxy( id );
       if( type === "tabris.Page" ) {
@@ -99,24 +102,27 @@
     return result;
   };
 
-  // INITIALIZE TABRIS
+  var _isInitialized = false;
 
-  ClientBridge._processHead( "tabris.UI", true );
+  var bootstrap = function() {
+		_isInitialized = true;
+    ClientBridge._processHead( "tabris.UI", true );
 
-  Tabris.create( "rwt.widgets.Display" );
+    Tabris.create( "rwt.widgets.Display" );
 
-  Tabris._shell = Tabris.create( "rwt.widgets.Shell", {
-    style: ["NO_TRIM"],
-    mode: "maximized"
-  });
+    Tabris._shell = Tabris.create( "rwt.widgets.Shell", {
+                                  style: ["NO_TRIM"],
+                                  mode: "maximized"
+                                  });
 
-  Tabris.UI = Tabris.create( "tabris.UI", {
-    shell: Tabris._shell.id
-  });
+    Tabris.UI = Tabris.create( "tabris.UI", {
+                              shell: Tabris._shell.id
+                              });
 
-  Tabris.UI.on( "ShowPage", function( properties ) {
-    var page = proxies[ properties.pageId ];
-    Tabris.UI.set( "activePage", page.id );
-  });
+    Tabris.UI.on( "ShowPage", function( properties ) {
+                 var page = proxies[ properties.pageId ];
+                 Tabris.UI.set( "activePage", page.id );
+                 });
+    };
 
 })();
