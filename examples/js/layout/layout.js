@@ -1,13 +1,14 @@
+/*jshint unused: false */
 var white = [255, 255, 255];
 
 var page = Tabris.create("tabris.Page", {
   title: "Client Layout",
-  topLevel: true,
+  topLevel: true
 });
 
 Tabris.create("tabris.Page", {
   title: "Empty Page",
-  topLevel: true,
+  topLevel: true
 });
 
 Tabris.UI.set("activePage", page.id);
@@ -28,7 +29,7 @@ var withHeightLabel = page.parent.append("rwt.widgets.Label", {
   layoutData: {
     width: 200,
     height: 200,
-    bottom: 0,
+    bottom: 0
   }
 });
 
@@ -39,7 +40,7 @@ var allMarginsLabel = page.parent.append("rwt.widgets.Label", {
     left: 10,
     right: 20,
     top: 200,
-    bottom: 60,
+    bottom: 60
   }
 });
 
@@ -49,7 +50,7 @@ var helloWorldLabel = page.parent.append("rwt.widgets.Label", {
   foreground: white,
   layoutData: {
     left: 0,
-    top: 40,
+    top: 40
   }
 });
 
@@ -60,7 +61,7 @@ var tabrisLabel = page.parent.append("rwt.widgets.Label", {
   layoutData: {
     right: 20,
     left: [helloWorldLabel, 0],
-    top: [helloWorldLabel, 0],
+    top: [helloWorldLabel, 0]
   }
 });
 
@@ -71,7 +72,7 @@ var eclipseSourceLabel = page.parent.append("rwt.widgets.Label", {
   layoutData: {
     right: 20,
     left: [helloWorldLabel, 40],
-    top: [tabrisLabel, 20],
+    top: [tabrisLabel, 20]
   }
 });
 
@@ -82,7 +83,7 @@ var javaLabel = page.parent.append("rwt.widgets.Label", {
   layoutData: {
     right: 0,
     top: 10,
-    bottom: [tabrisLabel, 5],
+    bottom: [tabrisLabel, 5]
   }
 });
 
@@ -93,6 +94,6 @@ var javaLabel = page.parent.append("rwt.widgets.Label", {
   layoutData: {
     top: 130,
     right: [30, 0],
-    left: [30, 0],
+    left: [30, 0]
   }
 });

@@ -20,12 +20,16 @@
 
   "browser" : true, // globals exposed by modern browsers e.g. `window`, `document`, etc.
   "globals": {
+
+    "Tabris": false,
+
+    // jasmine
     "describe": false,
     "it": false,
     "expect": false,
     "beforeEach": false,
     "afterEach": false,
     "jasmine": false
-  }
 
+  }
 }

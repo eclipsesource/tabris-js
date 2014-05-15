@@ -13,7 +13,7 @@
         var composite = Tabris.create( "rwt.widgets.Composite", {
           style: ["NONE"],
           parent: Tabris._shell.id,
-          layoutData: { left: 0, right: 0, top: 0, bottom: 0 },
+          layoutData: { left: 0, right: 0, top: 0, bottom: 0 }
         });
         result.parent = composite;
         properties = merge( properties, {
@@ -105,7 +105,7 @@
   var _isInitialized = false;
 
   var bootstrap = function() {
-		_isInitialized = true;
+    _isInitialized = true;
     ClientBridge._processHead( "tabris.UI", true );
 
     Tabris.create( "rwt.widgets.Display" );
