@@ -3,7 +3,7 @@
 describe( "Tabris", function() {
 
   beforeEach( function() {
-    ClientBridge = jasmine.createSpyObj( 'ClientBridge', ['_processCreate', '_processCall'] );
+    ClientBridge = jasmine.createSpyObj( 'ClientBridge', ['_processCreate', '_processCall', '_processHead', '_processListen'] );
   } );
 
   describe( "create", function() {
@@ -12,8 +12,8 @@ describe( "Tabris", function() {
       Tabris.create( "foo.bar", { "foo": 23 } );
 
       expect( ClientBridge._processCreate ).toHaveBeenCalled();
-      var type = ClientBridge._processCreate.calls[0].args[1];
-      var properties = ClientBridge._processCreate.calls[0].args[2];
+      var type = ClientBridge._processCreate.calls[3].args[1];
+      var properties = ClientBridge._processCreate.calls[3].args[2];
       expect( type ).toBe( "foo.bar" );
       expect( properties ).toEqual( { "foo" : 23 } );
     } );
