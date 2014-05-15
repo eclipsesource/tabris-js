@@ -8,12 +8,21 @@ describe( "Tabris", function() {
 
   describe( "create", function() {
 
+    it( "executes bootstrap on first create call", function() {
+      Tabris.create( "type", { "foo": 23 } );
+
+      expect( ClientBridge._processCreate ).toHaveBeenCalled();
+      expect( ClientBridge._processCreate.calls[0].args[1] ).toBe( "rwt.widgets.Display" );
+      expect( ClientBridge._processCreate.calls[1].args[1] ).toBe( "rwt.widgets.Shell" );
+      expect( ClientBridge._processCreate.calls[2].args[1] ).toBe( "tabris.UI" );
+    } );
+
     it( "issues a create operation with type and properties", function() {
       Tabris.create( "foo.bar", { "foo": 23 } );
 
       expect( ClientBridge._processCreate ).toHaveBeenCalled();
-      var type = ClientBridge._processCreate.calls[3].args[1];
-      var properties = ClientBridge._processCreate.calls[3].args[2];
+      var type = ClientBridge._processCreate.calls[0].args[1];
+      var properties = ClientBridge._processCreate.calls[0].args[2];
       expect( type ).toBe( "foo.bar" );
       expect( properties ).toEqual( { "foo" : 23 } );
     } );
