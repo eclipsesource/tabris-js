@@ -3,12 +3,46 @@
 describe( "Tabris", function() {
 
   beforeEach( function() {
-    ClientBridge = jasmine.createSpyObj( 'ClientBridge', ['_processCreate', '_processCall', '_processHead', '_processListen'] );
-  } );
+    ClientBridge = jasmine.createSpyObj( 'ClientBridge',
+                                        ['_processHead', '_processCreate', '_processSet',
+                                         '_processCall', '_processListen', '_processDestroy'] );
+    Tabris._isInitialized = true;
+  });
+
+  describe( "initialize", function() {
+
+    it( "creates Display, Shell, and Tabris UI", function() {
+      Tabris._initialize();
+
+      var createCalls = ClientBridge._processCreate.calls;
+      expect( createCalls[0].args[1] ).toBe( "rwt.widgets.Display" );
+      expect( createCalls[1].args[1] ).toBe( "rwt.widgets.Shell" );
+      expect( createCalls[2].args[1] ).toBe( "tabris.UI" );
+    });
+
+    it( "created Shell is active, visible, and maximized", function() {
+      Tabris._initialize();
+
+      var shellProperties = ClientBridge._processCreate.calls[1].args[2];
+      expect( shellProperties.active ).toBe( true );
+      expect( shellProperties.visibility ).toBe( true );
+      expect( shellProperties.mode ).toBe( 'maximized' );
+    });
+
+    it( "Tabris UI refers to Shell", function() {
+      Tabris._initialize();
+
+      var shellId = ClientBridge._processCreate.calls[1].args[0];
+      var tabrisUIProperties = ClientBridge._processCreate.calls[2].args[2];
+      expect( tabrisUIProperties.shell ).toBe( shellId );
+    });
+
+  });
 
   describe( "create", function() {
 
-    it( "executes bootstrap on first create call", function() {
+    it( "executes initialization if not yet initialized", function() {
+      Tabris._isInitialized = undefined;
       Tabris.create( "type", { "foo": 23 } );
 
       expect( ClientBridge._processCreate ).toHaveBeenCalled();

@@ -4,8 +4,8 @@
   Tabris = {
 
     create : function create( type, properties ) {
-      if( _isInitialized === false ) {
-        bootstrap();
+      if( !Tabris._isInitialized ) {
+        Tabris._initialize();
       }
       var id = generateId();
       var result = new WidgetProxy( id );
@@ -23,6 +23,23 @@
       }
       ClientBridge._processCreate( id, type, fixCreateProperties( type, properties ) );
       return result;
+    },
+
+    _initialize : function() {
+      Tabris._isInitialized = true;
+      ClientBridge._processHead( "tabris.UI", true );
+      Tabris.create( "rwt.widgets.Display" );
+      Tabris._shell = Tabris.create( "rwt.widgets.Shell", {
+        style: ["NO_TRIM"],
+        mode: "maximized"
+      });
+      Tabris.UI = Tabris.create( "tabris.UI", {
+        shell: Tabris._shell.id
+      });
+      Tabris.UI.on( "ShowPage", function( properties ) {
+        var page = proxies[ properties.pageId ];
+        Tabris.UI.set( "activePage", page.id );
+      });
     }
 
   };
@@ -101,28 +118,5 @@
     }
     return result;
   };
-
-  var _isInitialized = false;
-
-  var bootstrap = function() {
-    _isInitialized = true;
-    ClientBridge._processHead( "tabris.UI", true );
-
-    Tabris.create( "rwt.widgets.Display" );
-
-    Tabris._shell = Tabris.create( "rwt.widgets.Shell", {
-                                  style: ["NO_TRIM"],
-                                  mode: "maximized"
-                                  });
-
-    Tabris.UI = Tabris.create( "tabris.UI", {
-                              shell: Tabris._shell.id
-                              });
-
-    Tabris.UI.on( "ShowPage", function( properties ) {
-                 var page = proxies[ properties.pageId ];
-                 Tabris.UI.set( "activePage", page.id );
-                 });
-    };
 
 })();
