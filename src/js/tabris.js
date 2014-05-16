@@ -28,6 +28,9 @@
       };
       composite.close = function() {
         // TODO
+        // destroy composite
+        // set active page
+        // destroy page
       };
       return composite;
     },
@@ -46,18 +49,18 @@
         shell: Tabris._shell.id
       });
       Tabris._UI.on( "ShowPage", function( properties ) {
-        var page = proxies[ properties.pageId ];
+        var page = Tabris._proxies[ properties.pageId ];
         Tabris._UI.set( "activePage", page.id );
       });
-    }
+    },
+
+    _proxies: {}
 
   };
 
-  var proxies = {};
-
   var WidgetProxy = function( id ) {
     this.id = id;
-    proxies[id] = this;
+    Tabris._proxies[id] = this;
   };
 
   WidgetProxy.prototype = {
@@ -90,7 +93,7 @@
 
     destroy: function() {
       ClientBridge._processDestroy( this.id );
-      delete proxies[this.id];
+      delete Tabris._proxies[this.id];
     },
 
     append: function( type, properties ) {
