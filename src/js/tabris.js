@@ -24,13 +24,12 @@
         topLevel: toplevel
       });
       composite.open = function() {
-        Tabris._UI.set( "activePage", page.id );
+        setActivePage( page );
       };
       composite.close = function() {
-        // TODO
-        // destroy composite
-        // set active page
-        // destroy page
+        composite.destroy();
+        setLastActivePage();
+        page.destroy();
       };
       return composite;
     },
@@ -50,7 +49,10 @@
       });
       Tabris._UI.on( "ShowPage", function( properties ) {
         var page = Tabris._proxies[ properties.pageId ];
-        Tabris._UI.set( "activePage", page.id );
+        setActivePage( page );
+      });
+      Tabris._UI.on( "ShowPreviousPage", function() {
+        // TODO close current page (back-button-support)
       });
     },
 
@@ -136,6 +138,19 @@
       return "rwt.widgets." + type;
     }
     return type;
+  };
+
+  var pages = [];
+
+  var setActivePage = function( page ) {
+    pages.push( page );
+    Tabris._UI.set( "activePage", page.id );
+  };
+
+  var setLastActivePage = function() {
+    pages.pop();
+    var page = pages[ pages.length - 1 ];
+    Tabris._UI.set( "activePage", page.id );
   };
 
   var idSequence = 1;
