@@ -1,20 +1,54 @@
 /*jshint unused: false */
 
-var createPage = function( name, bgColor, topLevel ) {
-  var page = Tabris.create( "tabris.Page", {
-    title: name,
-    topLevel: topLevel
+var red = [255, 200, 200];
+var green = [200, 255, 200];
+var blue = [200, 200, 255];
+
+var createSubPage = function( title, bgColor ) {
+  var page = Tabris.createPage( title, false );
+  page.set( "background", bgColor );
+  var label = page.append( "rwt.widgets.Label", {
+    layoutData: { left: 10, right: 10, top: 10 },
+    text: title
   });
-  page.parent.set( "background", bgColor );
-  page.parent.append( "rwt.widgets.Label", {
-    bounds: [20, 85, 185, 35],
-    text: name
+  var closeButton = page.append( "rwt.widgets.Button", {
+    text: "close this page",
+    layoutData: { left: 10, right: 10, top: [label.id, 10] }
+  });
+  closeButton.on( "Selection", function() {
+    page.close();
+  });
+  var openButton = page.append( "rwt.widgets.Button", {
+    text: "open another page",
+    layoutData: { left: 10, right: 10, top: [closeButton.id, 10] }
+  });
+  openButton.on( "Selection", function() {
+    var subpage = createSubPage( title + "-sub", bgColor );
+    subpage.open();
   });
   return page;
 };
 
-var page1 = createPage( "Page One", [255, 200, 200], true );
-var page2 = createPage( "Page Two", [200, 255, 200], true );
-var page3 = createPage( "Page Three", [200, 200, 255], true );
+var createToplevelPage = function( title, bgColor ) {
+  var page = Tabris.createPage( title, true );
+  page.set( "background", bgColor );
+  var label = page.append( "rwt.widgets.Label", {
+    layoutData: { left: 10, right: 10, top: 10 },
+    text: title
+  });
+  var button = page.append( "rwt.widgets.Button", {
+    text: "open page",
+    layoutData: { left: 10, right: 10, top: [label.id, 10] }
+  });
+  button.on( "Selection", function() {
+    var subpage = createSubPage( title + "-sub", bgColor );
+    subpage.open();
+  });
+  return page;
+};
 
-Tabris.UI.set( "activePage", page1.id );
+var page1 = createToplevelPage( "Page One", red );
+var page2 = createToplevelPage( "Page Two", green );
+var page3 = createToplevelPage( "Page Three", blue );
+
+page1.open();

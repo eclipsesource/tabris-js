@@ -3,26 +3,33 @@
 
   Tabris = {
 
-    create : function create( type, properties ) {
+    create : function( type, properties ) {
+      var id = generateId();
+      ClientBridge._processCreate( id, type, fixCreateProperties( type, properties ) );
+      return new WidgetProxy( id );
+    },
+
+    createPage : function( title, toplevel ) {
       if( !Tabris._isInitialized ) {
         Tabris._initialize();
       }
-      var id = generateId();
-      var result = new WidgetProxy( id );
-      if( type === "tabris.Page" ) {
-        var composite = Tabris.create( "rwt.widgets.Composite", {
-          style: ["NONE"],
-          parent: Tabris._shell.id,
-          layoutData: { left: 0, right: 0, top: 0, bottom: 0 }
-        });
-        result.parent = composite;
-        properties = merge( properties, {
-          parent: Tabris.UI.id,
-          control: composite.id
-        });
-      }
-      ClientBridge._processCreate( id, type, fixCreateProperties( type, properties ) );
-      return result;
+      var composite = Tabris.create( "rwt.widgets.Composite", {
+        parent: Tabris._shell.id,
+        layoutData: { left: 0, right: 0, top: 0, bottom: 0 }
+      });
+      var page = Tabris.create( "tabris.Page", {
+        parent: Tabris._UI.id,
+        control: composite.id,
+        title: title,
+        topLevel: toplevel
+      });
+      composite.open = function() {
+        Tabris._UI.set( "activePage", page.id );
+      };
+      composite.close = function() {
+        // TODO
+      };
+      return composite;
     },
 
     _initialize : function() {
@@ -33,12 +40,12 @@
         style: ["NO_TRIM"],
         mode: "maximized"
       });
-      Tabris.UI = Tabris.create( "tabris.UI", {
+      Tabris._UI = Tabris.create( "tabris.UI", {
         shell: Tabris._shell.id
       });
-      Tabris.UI.on( "ShowPage", function( properties ) {
+      Tabris._UI.on( "ShowPage", function( properties ) {
         var page = proxies[ properties.pageId ];
-        Tabris.UI.set( "activePage", page.id );
+        Tabris._UI.set( "activePage", page.id );
       });
     }
 
