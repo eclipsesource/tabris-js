@@ -13,14 +13,14 @@ var createSubPage = function( title, bgColor ) {
   });
   var closeButton = page.append( "rwt.widgets.Button", {
     text: "close this page",
-    layoutData: { left: 10, right: 10, top: [label.id, 10] }
+    layoutData: { left: 10, right: 10, top: [label, 10] }
   });
   closeButton.on( "Selection", function() {
     page.close();
   });
   var openButton = page.append( "rwt.widgets.Button", {
     text: "open another page",
-    layoutData: { left: 10, right: 10, top: [closeButton.id, 10] }
+    layoutData: { left: 10, right: 10, top: [closeButton, 10] }
   });
   openButton.on( "Selection", function() {
     var subpage = createSubPage( title + "-sub", bgColor );
@@ -38,7 +38,7 @@ var createToplevelPage = function( title, bgColor ) {
   });
   var button = page.append( "rwt.widgets.Button", {
     text: "open page",
-    layoutData: { left: 10, right: 10, top: [label.id, 10] }
+    layoutData: { left: 10, right: 10, top: [label, 10] }
   });
   button.on( "Selection", function() {
     var subpage = createSubPage( title + "-sub", bgColor );

@@ -80,6 +80,15 @@ describe( "Tabris", function() {
       expect( typeof result.set ).toBe( "function" );
     } );
 
+    it( "translates widgets to ids in layoutData", function() {
+      var label = Tabris.create( "rwt.widgets.Label", {} );
+
+      Tabris.create( "type", { "layoutData": { left: 23, right: label, top: [label, 42] } } );
+
+      var properties = ClientBridge._processCreate.calls[1].args[2];
+      expect( properties.layoutData ).toEqual( { left: 23, right: label.id, top: [label.id, 42] } );
+    } );
+
   } );
 
   describe( "createPage", function() {

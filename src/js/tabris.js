@@ -5,7 +5,7 @@
 
     create : function( type, properties ) {
       var id = generateId();
-      ClientBridge._processCreate( id, type, fixCreateProperties( type, properties ) );
+      ClientBridge._processCreate( id, type, fixProperties( properties ) );
       return new WidgetProxy( id );
     },
 
@@ -38,7 +38,9 @@
       Tabris.create( "rwt.widgets.Display" );
       Tabris._shell = Tabris.create( "rwt.widgets.Shell", {
         style: ["NO_TRIM"],
-        mode: "maximized"
+        mode: "maximized",
+        active: true,
+        visibility: true
       });
       Tabris._UI = Tabris.create( "tabris.UI", {
         shell: Tabris._shell.id
@@ -97,13 +99,31 @@
 
   };
 
-  var fixCreateProperties = function( type, properties ) {
-    // TODO: these properties should become the default
-    if( type === "rwt.widgets.Shell" ) {
-      return merge({
-        active: true,
-        visibility: true
-      }, properties );
+  var translateWidgetToId = function( value ) {
+    if( typeof value === 'object' && value.id ) {
+      return value.id;
+    }
+    return value;
+  };
+
+  var fixLayoutData = function( data ) {
+    for( var key in data ) {
+      if( Array.isArray( data[key] ) ) {
+        for( var i = 0; i < data[key].length; i++ ) {
+          data[key][i] = translateWidgetToId( data[key][i] );
+        }
+      } else {
+        data[key] = translateWidgetToId( data[key] );
+      }
+    }
+    return data;
+  };
+
+  var fixProperties = function( properties ) {
+    for( var key in properties ) {
+      if( key === 'layoutData' ) {
+        properties[key] = fixLayoutData( properties[key] );
+      }
     }
     return properties;
   };
