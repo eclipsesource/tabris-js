@@ -83,7 +83,7 @@ describe( "Tabris", function() {
     it( "translates widgets to ids in layoutData", function() {
       var label = Tabris.create( "rwt.widgets.Label", {} );
 
-      Tabris.create( "type", { "layoutData": { left: 23, right: label, top: [label, 42] } } );
+      Tabris.create( "type", { layoutData: { left: 23, right: label, top: [label, 42] } } );
 
       var properties = ClientBridge._processCreate.calls[1].args[2];
       expect( properties.layoutData ).toEqual( { left: 23, right: label.id, top: [label.id, 42] } );
@@ -193,6 +193,18 @@ describe( "Tabris", function() {
         expect( ClientBridge._processSet.calls[0].args[1].activePage ).toBe( getPageId() );
       } );
 
+    } );
+
+  } );
+
+  describe( "set", function() {
+
+    it( "translates widgets to ids in layoutData", function() {
+      var label = Tabris.create( "rwt.widgets.Label", {} );
+      label.set( "layoutData", { left: 23, right: label, top: [label, 42] } );
+
+      var properties = ClientBridge._processSet.calls[0].args[1];
+      expect( properties.layoutData ).toEqual( { left: 23, right: label.id, top: [label.id, 42] } );
     } );
 
   } );

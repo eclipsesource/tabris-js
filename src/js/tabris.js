@@ -74,7 +74,7 @@
       } else {
         properties = arg1;
       }
-      ClientBridge._processSet( this.id, properties );
+      ClientBridge._processSet( this.id, fixProperties( properties ) );
       return this;
     },
 
