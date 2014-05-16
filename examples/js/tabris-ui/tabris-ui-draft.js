@@ -7,18 +7,18 @@ var blue = [200, 200, 255];
 var createSubPage = function( title, bgColor ) {
   var page = Tabris.createPage( title, false );
   page.set( "background", bgColor );
-  var label = page.append( "rwt.widgets.Label", {
+  var label = page.append( "Label", {
     layoutData: { left: 10, right: 10, top: 10 },
     text: title
   });
-  var closeButton = page.append( "rwt.widgets.Button", {
+  var closeButton = page.append( "Button", {
     text: "close this page",
     layoutData: { left: 10, right: 10, top: [label, 10] }
   });
   closeButton.on( "Selection", function() {
     page.close();
   });
-  var openButton = page.append( "rwt.widgets.Button", {
+  var openButton = page.append( "Button", {
     text: "open another page",
     layoutData: { left: 10, right: 10, top: [closeButton, 10] }
   });
@@ -32,11 +32,11 @@ var createSubPage = function( title, bgColor ) {
 var createToplevelPage = function( title, bgColor ) {
   var page = Tabris.createPage( title, true );
   page.set( "background", bgColor );
-  var label = page.append( "rwt.widgets.Label", {
+  var label = page.append( "Label", {
     layoutData: { left: 10, right: 10, top: 10 },
     text: title
   });
-  var button = page.append( "rwt.widgets.Button", {
+  var button = page.append( "Button", {
     text: "open page",
     layoutData: { left: 10, right: 10, top: [label, 10] }
   });

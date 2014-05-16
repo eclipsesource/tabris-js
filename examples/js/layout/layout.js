@@ -7,7 +7,7 @@ Tabris.createPage("Empty Page", true);
 
 page.open();
 
-var emptyLayoutDataLabel = page.append("rwt.widgets.Label", {
+var emptyLayoutDataLabel = page.append("Label", {
   background: [255, 0, 128],
   text: "Empty layoutData",
   foreground: white,
@@ -16,7 +16,7 @@ var emptyLayoutDataLabel = page.append("rwt.widgets.Label", {
   }
 });
 
-var withHeightLabel = page.append("rwt.widgets.Label", {
+var withHeightLabel = page.append("Label", {
   background: [0, 0, 128],
   text: "Width = 200, Height = 200",
   foreground: white,
@@ -27,7 +27,7 @@ var withHeightLabel = page.append("rwt.widgets.Label", {
   }
 });
 
-var allMarginsLabel = page.append("rwt.widgets.Label", {
+var allMarginsLabel = page.append("Label", {
   background: [0, 128, 128, 40],
   text: "Only margins\nleft: 10, right: 20, top: 200, bottom: 60,",
   layoutData: {
@@ -38,7 +38,7 @@ var allMarginsLabel = page.append("rwt.widgets.Label", {
   }
 });
 
-var helloWorldLabel = page.append("rwt.widgets.Label", {
+var helloWorldLabel = page.append("Label", {
   background: [255, 128, 128],
   text: "Hello World!",
   foreground: white,
@@ -48,7 +48,7 @@ var helloWorldLabel = page.append("rwt.widgets.Label", {
   }
 });
 
-var tabrisLabel = page.append("rwt.widgets.Label", {
+var tabrisLabel = page.append("Label", {
   background: [128, 128, 255],
   text: "Tabris",
   foreground: white,
@@ -59,7 +59,7 @@ var tabrisLabel = page.append("rwt.widgets.Label", {
   }
 });
 
-var eclipseSourceLabel = page.append("rwt.widgets.Label", {
+var eclipseSourceLabel = page.append("Label", {
   background: [128, 128, 255],
   text: "EclipseSource",
   foreground: white,
@@ -70,7 +70,7 @@ var eclipseSourceLabel = page.append("rwt.widgets.Label", {
   }
 });
 
-var javaLabel = page.append("rwt.widgets.Label", {
+var javaLabel = page.append("Label", {
   background: [128, 0, 128],
   foreground: white,
   text: "Java",
@@ -81,7 +81,7 @@ var javaLabel = page.append("rwt.widgets.Label", {
   }
 });
 
-var javaLabel = page.append("rwt.widgets.Label", {
+var javaLabel = page.append("Label", {
   background: [128, 0, 128],
   foreground: white,
   text: "Percentage",

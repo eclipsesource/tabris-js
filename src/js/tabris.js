@@ -5,7 +5,7 @@
 
     create : function( type, properties ) {
       var id = generateId();
-      ClientBridge._processCreate( id, type, fixProperties( properties ) );
+      ClientBridge._processCreate( id, fixType( type ), fixProperties( properties ) );
       return new WidgetProxy( id );
     },
 
@@ -126,6 +126,13 @@
       }
     }
     return properties;
+  };
+
+  var fixType = function( type ) {
+    if( type.indexOf( '.' ) === -1 ) {
+      return "rwt.widgets." + type;
+    }
+    return type;
   };
 
   var idSequence = 1;

@@ -89,6 +89,20 @@ describe( "Tabris", function() {
       expect( properties.layoutData ).toEqual( { left: 23, right: label.id, top: [label.id, 42] } );
     } );
 
+    it( "accepts rwt types without prefix", function() {
+      Tabris.create( "Label", {} );
+
+      var type = ClientBridge._processCreate.calls[0].args[1];
+      expect( type ).toEqual( "rwt.widgets.Label" );
+    } );
+
+    it( "accepts prefixed types", function() {
+      Tabris.create( "custom.Label", {} );
+
+      var type = ClientBridge._processCreate.calls[0].args[1];
+      expect( type ).toEqual( "custom.Label" );
+    } );
+
   } );
 
   describe( "createPage", function() {
