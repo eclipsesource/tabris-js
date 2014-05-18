@@ -2,17 +2,67 @@
 
 describe( "Tabris", function() {
 
-  var createClientBridgeSpy = function() {
-    ClientBridge = jasmine.createSpyObj( 'ClientBridge',
-                                        ['_processHead', '_processCreate', '_processSet',
-                                         '_processCall', '_processListen', '_processDestroy'] );
+  var calls = [];
+
+  ClientBridge = {
+    _processHead : function() {
+      calls.push( { op: 'head',
+                    key: arguments[0],
+                    value: arguments[1] } );
+    },
+    _processCreate : function() {
+      calls.push( { op: 'create',
+                    id: arguments[0],
+                    type: arguments[1],
+                    properties: arguments[2] } );
+    },
+    _processSet : function() {
+      calls.push( { op: 'set',
+                    id: arguments[0],
+                    properties: arguments[1] } );
+    },
+    _processCall : function() {
+      calls.push( { op: 'call',
+                    id: arguments[0],
+                    method: arguments[1],
+                    parameters: arguments[2] } );
+    },
+    _processListen : function() {
+      calls.push( { op: 'listen',
+                    id: arguments[0],
+                    event: arguments[1],
+                    listen: arguments[2],
+                    listener: arguments[3] } );
+    },
+    _processDestroy : function() {
+      calls.push( { op: 'destroy',
+                    id: arguments[0] } );
+    }
+  };
+
+  var resetCalls = function() {
+    return calls.splice( 0, calls.length );
+  };
+
+  var getCreateCalls = function() {
+    return calls.filter( by({ op: 'create'}) );
+  };
+
+  var by = function( properties ) {
+    return function( call ) {
+      for( var key in properties ) {
+        if( properties[key] != call[key] ) {
+          return false;
+        }
+      }
+      return true;
+    };
   };
 
   beforeEach( function() {
-    createClientBridgeSpy();
     Tabris._initialize();
     Tabris._isInitialized = true;
-    createClientBridgeSpy();
+    resetCalls();
   });
 
   describe( "initialize", function() {
@@ -20,27 +70,26 @@ describe( "Tabris", function() {
     it( "creates Display, Shell, and Tabris UI", function() {
       Tabris._initialize();
 
-      var createCalls = ClientBridge._processCreate.calls;
-      expect( createCalls[0].args[1] ).toBe( "rwt.widgets.Display" );
-      expect( createCalls[1].args[1] ).toBe( "rwt.widgets.Shell" );
-      expect( createCalls[2].args[1] ).toBe( "tabris.UI" );
+      expect( getCreateCalls()[0].type ).toBe( "rwt.widgets.Display" );
+      expect( getCreateCalls()[1].type ).toBe( "rwt.widgets.Shell" );
+      expect( getCreateCalls()[2].type ).toBe( "tabris.UI" );
     });
 
     it( "created Shell is active, visible, and maximized", function() {
       Tabris._initialize();
 
-      var shellProperties = ClientBridge._processCreate.calls[1].args[2];
-      expect( shellProperties.active ).toBe( true );
-      expect( shellProperties.visibility ).toBe( true );
-      expect( shellProperties.mode ).toBe( 'maximized' );
+      var shellCreate = getCreateCalls().filter( by({ type: 'rwt.widgets.Shell' }) )[0];
+      expect( shellCreate.properties.active ).toBe( true );
+      expect( shellCreate.properties.visibility ).toBe( true );
+      expect( shellCreate.properties.mode ).toBe( 'maximized' );
     });
 
     it( "Tabris UI refers to Shell", function() {
       Tabris._initialize();
 
-      var shellId = ClientBridge._processCreate.calls[1].args[0];
-      var tabrisUIProperties = ClientBridge._processCreate.calls[2].args[2];
-      expect( tabrisUIProperties.shell ).toBe( shellId );
+      var shellCreate = getCreateCalls().filter( by({ type: "rwt.widgets.Shell" }) )[0];
+      var tabrisUiCreate = getCreateCalls().filter( by({ type: "tabris.UI" }) )[0];
+      expect( tabrisUiCreate.properties.shell ).toBe( shellCreate.id );
     });
 
   });
@@ -48,132 +97,122 @@ describe( "Tabris", function() {
   describe( "create", function() {
 
     it( "issues a create operation with type and properties", function() {
-      Tabris.create( "foo.bar", { "foo": 23 } );
+      Tabris.create( "foo.bar", { foo: 23 } );
 
-      expect( ClientBridge._processCreate ).toHaveBeenCalled();
-      var type = ClientBridge._processCreate.calls[0].args[1];
-      var properties = ClientBridge._processCreate.calls[0].args[2];
-      expect( type ).toBe( "foo.bar" );
-      expect( properties ).toEqual( { "foo" : 23 } );
+      expect( calls.length ).toBe( 1 );
+      expect( calls[0].op ).toBe( 'create' );
+      expect( calls[0].type ).toBe( 'foo.bar' );
+      expect( calls[0].properties ).toEqual( { foo: 23 } );
     } );
 
     it( "creates a non-empty widget id", function() {
-      Tabris.create( "type", { "foo": 23 } );
+      Tabris.create( "type", { foo: 23 } );
 
-      var id = ClientBridge._processCreate.calls[0].args[0];
+      var id = calls[0].id;
       expect( typeof id ).toBe( "string" );
       expect( id.length ).toBeGreaterThan( 0 );
     } );
 
     it( "creates different widget ids for subsequent calls", function() {
-      Tabris.create( "type", { "foo": 23 } );
-      Tabris.create( "type", { "foo": 23 } );
+      Tabris.create( "type", { foo: 23 } );
+      Tabris.create( "type", { foo: 23 } );
 
-      var id1 = ClientBridge._processCreate.calls[0].args[0];
-      var id2 = ClientBridge._processCreate.calls[1].args[0];
-      expect( id2 ).not.toEqual( id1 );
+      expect( calls[0].id ).not.toEqual( calls[1].id );
     } );
 
     it( "returns a proxy object", function() {
-      var result = Tabris.create( "type", { "foo": 23 } );
+      var result = Tabris.create( "type", { foo: 23 } );
+
       expect( result ).toBeDefined();
       expect( typeof result.set ).toBe( "function" );
     } );
 
     it( "translates widgets to ids in layoutData", function() {
-      var label = Tabris.create( "rwt.widgets.Label", {} );
+      var label = Tabris.create( "Label", {} );
 
-      Tabris.create( "type", { layoutData: { left: 23, right: label, top: [label, 42] } } );
+      Tabris.create( "custom.type", { layoutData: { left: 23, right: label, top: [label, 42] } } );
 
-      var properties = ClientBridge._processCreate.calls[1].args[2];
+      var properties = calls.filter( by({ op: 'create', type: "custom.type" }) )[0].properties;
       expect( properties.layoutData ).toEqual( { left: 23, right: label.id, top: [label.id, 42] } );
     } );
 
     it( "accepts rwt types without prefix", function() {
       Tabris.create( "Label", {} );
 
-      var type = ClientBridge._processCreate.calls[0].args[1];
-      expect( type ).toEqual( "rwt.widgets.Label" );
+      expect( calls[0].type ).toEqual( "rwt.widgets.Label" );
     } );
 
     it( "accepts prefixed types", function() {
       Tabris.create( "custom.Label", {} );
 
-      var type = ClientBridge._processCreate.calls[0].args[1];
-      expect( type ).toEqual( "custom.Label" );
+      expect( calls[0].type ).toEqual( "custom.Label" );
     } );
 
   } );
 
   describe( "createPage", function() {
 
-    var getCompositeId = function() {
-      return ClientBridge._processCreate.calls[0].args[0];
+    var getCompositeCreate = function() {
+      return calls.filter( by( { op: 'create', type: 'rwt.widgets.Composite' }) )[0];
     };
-
-    var getPageId = function() {
-      return ClientBridge._processCreate.calls[1].args[0];
-    };
-
-    var getCompositeProperties = function() {
-      return ClientBridge._processCreate.calls[0].args[2];
-    };
-
-    var getPageProperties = function() {
-      return ClientBridge._processCreate.calls[1].args[2];
+    var getPageCreate = function() {
+      return calls.filter( by( { op: 'create', type: 'tabris.Page' }) )[0];
     };
 
     it( "creates a Composite and a Page", function() {
       Tabris.createPage( "title", true );
 
-      expect( ClientBridge._processCreate ).toHaveBeenCalled();
-      expect( ClientBridge._processCreate.calls[0].args[1] ).toBe( "rwt.widgets.Composite" );
-      expect( ClientBridge._processCreate.calls[1].args[1] ).toBe( "tabris.Page" );
+      expect( getCreateCalls().length ).toBe( 2 );
+      expect( getCreateCalls()[0].type ).toBe( "rwt.widgets.Composite" );
+      expect( getCreateCalls()[1].type ).toBe( "tabris.Page" );
     } );
 
     it( "executes initialization if not yet initialized", function() {
       Tabris._isInitialized = undefined;
-      Tabris.createPage( "type", { "foo": 23 } );
+      Tabris.createPage( "type", { foo: 23 } );
 
-      expect( ClientBridge._processCreate ).toHaveBeenCalled();
-      expect( ClientBridge._processCreate.calls[0].args[1] ).toBe( "rwt.widgets.Display" );
+      expect( calls.filter( by({ op: 'create', type: 'rwt.widgets.Display' }) ).length ).toBe( 1 );
     } );
 
     describe( "created Composite", function() {
 
-      it( "is full-size", function() {
-        Tabris.createPage( "title", true );
+      var createCall;
 
-        expect( getCompositeProperties().layoutData ).toEqual( { left: 0, right: 0, top: 0, bottom: 0 } );
+      beforeEach(function() {
+        Tabris.createPage( "title", true );
+        createCall = getCreateCalls().filter( by( { type: 'rwt.widgets.Composite' }) )[0];
+      });
+
+      it( "is full-size", function() {
+        expect( createCall.properties.layoutData ).toEqual( { left: 0, right: 0, top: 0, bottom: 0 } );
       } );
 
-      it( "Created Composite's parent is shell", function() {
-        Tabris.createPage( "title", true );
-
-        expect( getCompositeProperties().parent ).toEqual( Tabris._shell.id );
+      it( "parent is shell", function() {
+        expect( createCall.properties.parent ).toEqual( Tabris._shell.id );
       } );
 
     } );
 
     describe( "created Page", function() {
 
-      it( "has title and toplevel flag", function() {
-        Tabris.createPage( "title", true );
+      var createCall;
 
-        expect( getPageProperties().title ).toBe( "title" );
-        expect( getPageProperties().topLevel ).toBe( true );
+      beforeEach(function() {
+        Tabris.createPage( "title", true );
+        createCall = getCreateCalls().filter( by( { type: 'tabris.Page' }) )[0];
+      });
+
+      it( "has title and toplevel flag", function() {
+        expect( createCall.properties.title ).toBe( "title" );
+        expect( createCall.properties.topLevel ).toBe( true );
       } );
 
       it( "control is set to composite", function() {
-        Tabris.createPage( "title", true );
-
-        expect( getPageProperties().control ).toBe( getCompositeId() );
+        expect( createCall.properties.control ).toBe( getCompositeCreate().id );
       } );
 
       it( "parent is set to Tabris.UI", function() {
-        Tabris.createPage( "title", true );
-
-        expect( getPageProperties().parent ).toBe( Tabris._UI.id );
+        expect( createCall.properties.parent ).toBe( Tabris._UI.id );
       } );
 
     } );
@@ -185,8 +224,9 @@ describe( "Tabris", function() {
 
         page.set( "background", "red" );
 
-        expect( ClientBridge._processSet ).toHaveBeenCalled();
-        expect( ClientBridge._processSet.calls[0].args[1].background ).toEqual( "red" );
+        var setCalls = calls.filter( by({ op: 'set' }) );
+        expect( setCalls.length ).toBeGreaterThan( 0 );
+        expect( setCalls[0].properties.background ).toEqual( "red" );
       } );
 
       it( "supports open and close", function() {
@@ -197,14 +237,45 @@ describe( "Tabris", function() {
         page.open();
       } );
 
-      it( "open sets active page", function() {
-        var page = Tabris.createPage( "title", true );
+      describe( "open", function() {
 
-        page.open();
+        it( "sets active page", function() {
+          var page = Tabris.createPage( "title", true );
 
-        expect( ClientBridge._processSet ).toHaveBeenCalled();
-        expect( ClientBridge._processSet.calls[0].args[0] ).toBe( Tabris._UI.id );
-        expect( ClientBridge._processSet.calls[0].args[1].activePage ).toBe( getPageId() );
+          page.open();
+
+          var call = calls.filter( by({ op: 'set', id: Tabris._UI.id  }) )[0];
+          expect( call.properties.activePage ).toBe( getPageCreate().id );
+        } );
+
+      } );
+
+      describe( "close", function() {
+
+        it( "resets previous active page", function() {
+          var page1 = Tabris.createPage( "page1", true );
+          var page2 = Tabris.createPage( "page2", true );
+          page1.open();
+          var page1Id = getPageCreate().id;
+          page2.open();
+          resetCalls();
+
+          page2.close();
+
+          var call = calls.filter( by({ op: 'set', id: Tabris._UI.id  }) )[0];
+          expect( call.properties.activePage ).toBe( page1Id ); // TODO add _pageId field in page
+        } );
+
+        it( "destroys composite and page", function() {
+          var page = Tabris.createPage( "page1", true );
+          page.open();
+
+          page.close();
+
+          expect( calls.filter( by({ op: 'destroy', id: getPageCreate().id }) ).length ).toBe( 1 );
+          expect( calls.filter( by({ op: 'destroy', id: getCompositeCreate().id }) ).length ).toBe( 1 );
+        } );
+
       } );
 
     } );
@@ -214,11 +285,11 @@ describe( "Tabris", function() {
   describe( "set", function() {
 
     it( "translates widgets to ids in layoutData", function() {
-      var label = Tabris.create( "rwt.widgets.Label", {} );
+      var label = Tabris.create( "Label", {} );
       label.set( "layoutData", { left: 23, right: label, top: [label, 42] } );
 
-      var properties = ClientBridge._processSet.calls[0].args[1];
-      expect( properties.layoutData ).toEqual( { left: 23, right: label.id, top: [label.id, 42] } );
+      var call = calls.filter( by({ op: 'set' }) )[0];
+      expect( call.properties.layoutData ).toEqual( { left: 23, right: label.id, top: [label.id, 42] } );
     } );
 
   } );
@@ -226,10 +297,12 @@ describe( "Tabris", function() {
   describe( "call", function() {
 
     it( "issues call operation", function() {
-      var proxy = Tabris.create( "type", { "foo": 23 } );
-      proxy.call( "method", { "foo": 23 } );
+      var proxy = Tabris.create( "type", { foo: 23 } );
+      proxy.call( "method", { foo: 23 } );
 
-      expect( ClientBridge._processCall ).toHaveBeenCalled();
+      expect( calls[1].op ).toEqual( 'call' );
+      expect( calls[1].method ).toEqual( 'method' );
+      expect( calls[1].parameters ).toEqual( { foo: 23 } );
     } );
 
   } );
