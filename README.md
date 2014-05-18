@@ -1,17 +1,9 @@
 
 Sources and tests for *tabris.js*
 
-Update tabris-android with latest tabris.js
+Update tabris-android with latest tabris.js and example project
 
-    cat src/js/rhino-console-shim.js src/js/tabris.js >> \
-      ../tabris-android/tabris-android/tabris-android/src/main/res/raw/tabris.js
-    sed -i -e 's/\.LauncherActivity/\.JavaScriptLauncherActivity/' \
-      ../tabris-android/tabris-android/tabris-android-launcher/src/main/AndroidManifest.xml
-
-Copy example app to tabris-android
-
-    rsync -r --delete examples/js/tabris-ui/ \
-      ../tabris-android/tabris-android/tabris-android-launcher/src/main/assets/js/
+    ./update-android tabris-ui
 
 Copy tabris.js to tabris-ios
 
