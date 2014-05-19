@@ -1,13 +1,10 @@
-/*jshint unused: false */
 var white = [255, 255, 255];
 
 var page = Tabris.createPage("Client Layout", true);
 
 Tabris.createPage("Empty Page", true);
 
-page.open();
-
-var emptyLayoutDataLabel = page.append("Label", {
+var emptyLayoutDataLabel = page.append("rwt.widgets.Label", {
   background: [255, 0, 128],
   text: "Empty layoutData",
   foreground: white,
@@ -16,7 +13,7 @@ var emptyLayoutDataLabel = page.append("Label", {
   }
 });
 
-var withHeightLabel = page.append("Label", {
+var widthHeightLabel = page.append("rwt.widgets.Label", {
   background: [0, 0, 128],
   text: "Width = 200, Height = 200",
   foreground: white,
@@ -27,7 +24,19 @@ var withHeightLabel = page.append("Label", {
   }
 });
 
-var allMarginsLabel = page.append("Label", {
+page.append("rwt.widgets.Label", {
+  text: "es.png",
+  foreground: white,
+  image: ["images/es.png", 30, 30],
+  layoutData: {
+    width: 30,
+    height: 30,
+    left: [widthHeightLabel.id, 12]
+  }
+});
+
+
+var allMarginsLabel = page.append("rwt.widgets.Label", {
   background: [0, 128, 128, 40],
   text: "Only margins\nleft: 10, right: 20, top: 200, bottom: 60,",
   layoutData: {
@@ -38,7 +47,7 @@ var allMarginsLabel = page.append("Label", {
   }
 });
 
-var helloWorldLabel = page.append("Label", {
+var helloWorldLabel = page.append("rwt.widgets.Label", {
   background: [255, 128, 128],
   text: "Hello World!",
   foreground: white,
@@ -48,40 +57,40 @@ var helloWorldLabel = page.append("Label", {
   }
 });
 
-var tabrisLabel = page.append("Label", {
+var tabrisLabel = page.append("rwt.widgets.Label", {
   background: [128, 128, 255],
   text: "Tabris",
   foreground: white,
   layoutData: {
     right: 20,
-    left: [helloWorldLabel, 0],
-    top: [helloWorldLabel, 0]
+    left: [helloWorldLabel.id, 0],
+    top: [helloWorldLabel.id, 0]
   }
 });
 
-var eclipseSourceLabel = page.append("Label", {
+var eclipseSourceLabel = page.append("rwt.widgets.Label", {
   background: [128, 128, 255],
   text: "EclipseSource",
   foreground: white,
   layoutData: {
     right: 20,
-    left: [helloWorldLabel, 40],
-    top: [tabrisLabel, 20]
+    left: [helloWorldLabel.id, 40],
+    top: [tabrisLabel.id, 20]
   }
 });
 
-var javaLabel = page.append("Label", {
+var javaLabel = page.append("rwt.widgets.Label", {
   background: [128, 0, 128],
   foreground: white,
   text: "Java",
   layoutData: {
     right: 0,
     top: 10,
-    bottom: [tabrisLabel, 5]
+    bottom: [tabrisLabel.id, 5]
   }
 });
 
-var javaLabel = page.append("Label", {
+var javaLabel = page.append("rwt.widgets.Label", {
   background: [128, 0, 128],
   foreground: white,
   text: "Percentage",
@@ -91,3 +100,5 @@ var javaLabel = page.append("Label", {
     left: [30, 0]
   }
 });
+
+page.open();
