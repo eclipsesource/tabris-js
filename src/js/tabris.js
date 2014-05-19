@@ -3,13 +3,13 @@
 
   Tabris = {
 
-    create : function( type, properties ) {
+    create: function( type, properties ) {
       var id = generateId();
       ClientBridge._processCreate( id, fixType( type ), fixProperties( properties ) );
       return new WidgetProxy( id );
     },
 
-    createPage : function( title, toplevel ) {
+    createPage: function( title, toplevel ) {
       if( !Tabris._isInitialized ) {
         Tabris._initialize();
       }
@@ -31,10 +31,11 @@
         setLastActivePage();
         page.destroy();
       };
+      page.close = composite.close;
       return composite;
     },
 
-    _initialize : function() {
+    _initialize: function() {
       Tabris._isInitialized = true;
       ClientBridge._processHead( "tabris.UI", true );
       Tabris.create( "rwt.widgets.Display" );
@@ -52,7 +53,7 @@
         setActivePage( page );
       });
       Tabris._UI.on( "ShowPreviousPage", function() {
-        // TODO close current page (back-button-support)
+        getActivePage().close();
       });
     },
 
@@ -147,9 +148,13 @@
     Tabris._UI.set( "activePage", page.id );
   };
 
+  var getActivePage = function() {
+    return pages[ pages.length - 1 ];
+  };
+
   var setLastActivePage = function() {
     pages.pop();
-    var page = pages[ pages.length - 1 ];
+    var page = getActivePage();
     Tabris._UI.set( "activePage", page.id );
   };
 

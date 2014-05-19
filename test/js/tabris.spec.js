@@ -92,6 +92,15 @@ describe( "Tabris", function() {
       expect( tabrisUiCreate.properties.shell ).toBe( shellCreate.id );
     });
 
+    it( "adds listeners for ShowPage and ShowPreviousPage events to Tabris UI", function() {
+      Tabris._initialize();
+
+      var tabrisUiId = calls.filter( by({ op: 'create', type: 'tabris.UI' }) )[0].id;
+      var listenCalls = calls.filter( by({ op: 'listen', id: tabrisUiId }) );
+      expect( listenCalls.filter( by({ event: 'ShowPage' }) ).length ).toBe( 1 );
+      expect( listenCalls.filter( by({ event: 'ShowPreviousPage' }) ).length ).toBe( 1 );
+    });
+
   });
 
   describe( "create", function() {
