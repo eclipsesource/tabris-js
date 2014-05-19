@@ -159,6 +159,38 @@ describe( "Tabris", function() {
 
   } );
 
+  describe( "createAction", function() {
+
+    var handler;
+    var actionCreate;
+
+    beforeEach(function() {
+      handler = function() {};
+      Tabris.createAction( { title: "Foo", enabled: true }, handler );
+      actionCreate = calls.filter( by({ op: 'create', type: 'tabris.Action' }) );
+    });
+
+    it( "creates an action", function() {
+      expect( actionCreate.length ).toBe( 1 );
+    });
+
+    it( "created action's parent is set to Tabris.UI", function() {
+      expect( actionCreate[0].properties.parent ).toEqual( Tabris._UI.id );
+    });
+
+    it( "properties are passed to created action", function() {
+      expect( actionCreate[0].properties.title ).toEqual( "Foo" );
+      expect( actionCreate[0].properties.enabled ).toBe( true );
+    });
+
+    it( "registers the given hander as listener", function() {
+      var listenCalls = calls.filter( by({ op: 'listen', id: actionCreate[0].id, event: 'Selection' }) );
+      expect( listenCalls.length ).toBe( 1 );
+      expect( listenCalls[0].listener ).toBe( handler );
+    });
+
+  } );
+
   describe( "createPage", function() {
 
     var getCompositeCreate = function() {

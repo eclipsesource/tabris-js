@@ -51,4 +51,8 @@ var page1 = createToplevelPage( "Page One", red );
 var page2 = createToplevelPage( "Page Two", green );
 var page3 = createToplevelPage( "Page Three", blue );
 
+Tabris.createAction({ title: "Page3", enabled: true, visible: true }, function( a, b, c ) {
+  page3.open();
+});
+
 page1.open();

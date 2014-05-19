@@ -9,6 +9,14 @@
       return new WidgetProxy( id );
     },
 
+    createAction: function( properties, handler ) {
+      var action = Tabris.create( "tabris.Action", merge( properties, {
+        parent: Tabris._UI.id
+      }));
+      action.on( "Selection", handler );
+      return action;
+    },
+
     createPage: function( properties ) {
       if( !Tabris._isInitialized ) {
         Tabris._initialize();
