@@ -9,20 +9,21 @@
       return new WidgetProxy( id );
     },
 
-    createPage: function( title, toplevel ) {
+    createPage: function( properties ) {
       if( !Tabris._isInitialized ) {
         Tabris._initialize();
       }
-      var composite = Tabris.create( "rwt.widgets.Composite", {
+      var pageKeys = ['title', 'image', 'topLevel'];
+      var compositeProperties = merge( omit( properties, pageKeys ), {
         parent: Tabris._shell.id,
         layoutData: { left: 0, right: 0, top: 0, bottom: 0 }
       });
-      var page = Tabris.create( "tabris.Page", {
+      var composite = Tabris.create( "rwt.widgets.Composite", compositeProperties );
+      var pageProperties = merge( pick( properties, pageKeys ), {
         parent: Tabris._UI.id,
-        control: composite.id,
-        title: title,
-        topLevel: toplevel
+        control: composite.id
       });
+      var page = Tabris.create( "tabris.Page", pageProperties );
       composite.open = function() {
         setActivePage( page );
       };
@@ -164,14 +165,34 @@
     return "o" + ( idSequence++ );
   };
 
-  var merge = function( o1, o2 ) {
+  var merge = function( obj1, obj2 ) {
     var result = {};
     var name;
-    for( name in o1 ) {
-      result[name] = o1[name];
+    for( name in obj1 ) {
+      result[name] = obj1[name];
     }
-    for( name in o2 ) {
-      result[name] = o2[name];
+    for( name in obj2 ) {
+      result[name] = obj2[name];
+    }
+    return result;
+  };
+
+  var omit = function( object, keys ) {
+    var result = {};
+    for( var key in object ) {
+      if( keys.indexOf( key ) === -1 ) {
+        result[key] = object[key];
+      }
+    }
+    return result;
+  };
+
+  var pick = function( object, keys ) {
+    var result = {};
+    for( var key in object ) {
+      if( keys.indexOf( key ) !== -1 ) {
+        result[key] = object[key];
+      }
     }
     return result;
   };

@@ -169,7 +169,7 @@ describe( "Tabris", function() {
     };
 
     it( "creates a Composite and a Page", function() {
-      Tabris.createPage( "title", true );
+      Tabris.createPage();
 
       expect( getCreateCalls().length ).toBe( 2 );
       expect( getCreateCalls()[0].type ).toBe( "rwt.widgets.Composite" );
@@ -178,7 +178,7 @@ describe( "Tabris", function() {
 
     it( "executes initialization if not yet initialized", function() {
       Tabris._isInitialized = undefined;
-      Tabris.createPage( "type", { foo: 23 } );
+      Tabris.createPage();
 
       expect( calls.filter( by({ op: 'create', type: 'rwt.widgets.Display' }) ).length ).toBe( 1 );
     } );
@@ -188,9 +188,19 @@ describe( "Tabris", function() {
       var createCall;
 
       beforeEach(function() {
-        Tabris.createPage( "title", true );
+        Tabris.createPage({ title: "title", image: "image", topLevel: true, background: "red" });
         createCall = getCreateCalls().filter( by( { type: 'rwt.widgets.Composite' }) )[0];
       });
+
+      it( "does not inherit page properties", function() {
+        expect( createCall.properties.title ).not.toBeDefined();
+        expect( createCall.properties.image ).not.toBeDefined();
+        expect( createCall.properties.topLevel ).not.toBeDefined();
+      } );
+
+      it( "has non-page properties", function() {
+        expect( createCall.properties.background ).toEqual( "red" );
+      } );
 
       it( "is full-size", function() {
         expect( createCall.properties.layoutData ).toEqual( { left: 0, right: 0, top: 0, bottom: 0 } );
@@ -207,12 +217,17 @@ describe( "Tabris", function() {
       var createCall;
 
       beforeEach(function() {
-        Tabris.createPage( "title", true );
+        Tabris.createPage({ title: "title", image: "image", topLevel: true, background: "red" });
         createCall = getCreateCalls().filter( by( { type: 'tabris.Page' }) )[0];
       });
 
-      it( "has title and toplevel flag", function() {
+      it( "does not inherit non-page properties", function() {
+        expect( createCall.properties.background ).not.toBeDefined();
+      } );
+
+      it( "has title, image and topLevel properties", function() {
         expect( createCall.properties.title ).toBe( "title" );
+        expect( createCall.properties.image ).toBe( "image" );
         expect( createCall.properties.topLevel ).toBe( true );
       } );
 
@@ -229,7 +244,7 @@ describe( "Tabris", function() {
     describe( "returned object", function() {
 
       it( "modifies composite", function() {
-        var page = Tabris.createPage( "title", true );
+        var page = Tabris.createPage();
 
         page.set( "background", "red" );
 
@@ -239,7 +254,7 @@ describe( "Tabris", function() {
       } );
 
       it( "supports open and close", function() {
-        var page = Tabris.createPage( "title", true );
+        var page = Tabris.createPage();
 
         expect( typeof page.open ).toBe( 'function' );
         expect( typeof page.close ).toBe( 'function' );
@@ -249,7 +264,7 @@ describe( "Tabris", function() {
       describe( "open", function() {
 
         it( "sets active page", function() {
-          var page = Tabris.createPage( "title", true );
+          var page = Tabris.createPage();
 
           page.open();
 
@@ -262,8 +277,8 @@ describe( "Tabris", function() {
       describe( "close", function() {
 
         it( "resets previous active page", function() {
-          var page1 = Tabris.createPage( "page1", true );
-          var page2 = Tabris.createPage( "page2", true );
+          var page1 = Tabris.createPage();
+          var page2 = Tabris.createPage();
           page1.open();
           var page1Id = getPageCreate().id;
           page2.open();
@@ -276,7 +291,7 @@ describe( "Tabris", function() {
         } );
 
         it( "destroys composite and page", function() {
-          var page = Tabris.createPage( "page1", true );
+          var page = Tabris.createPage();
           page.open();
 
           page.close();

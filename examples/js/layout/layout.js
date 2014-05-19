@@ -1,9 +1,9 @@
 /*jshint unused: false */
 var white = [255, 255, 255];
 
-var page = Tabris.createPage("Client Layout", true);
+var page = Tabris.createPage({ title: "Client Layout", topLevel: true });
 
-Tabris.createPage("Empty Page", true);
+Tabris.createPage({ title: "Empty Page", topLevel: true });
 
 var emptyLayoutDataLabel = page.append("rwt.widgets.Label", {
   background: [255, 0, 128],

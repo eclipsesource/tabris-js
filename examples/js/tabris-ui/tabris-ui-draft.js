@@ -5,7 +5,7 @@ var green = [200, 255, 200];
 var blue = [200, 200, 255];
 
 var createSubPage = function( title, bgColor ) {
-  var page = Tabris.createPage( title, false );
+  var page = Tabris.createPage({ title: title, topLevel: false });
   page.set( "background", bgColor );
   var label = page.append( "Label", {
     layoutData: { left: 10, right: 10, top: 10 },
@@ -30,7 +30,7 @@ var createSubPage = function( title, bgColor ) {
 };
 
 var createToplevelPage = function( title, bgColor ) {
-  var page = Tabris.createPage( title, true );
+  var page = Tabris.createPage({ title: title, topLevel: true });
   page.set( "background", bgColor );
   var label = page.append( "Label", {
     layoutData: { left: 10, right: 10, top: 10 },
