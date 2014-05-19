@@ -1,3 +1,4 @@
+/*jshint unused: false */
 var white = [255, 255, 255];
 
 var page = Tabris.createPage("Client Layout", true);
@@ -34,7 +35,6 @@ page.append("rwt.widgets.Label", {
     left: [widthHeightLabel.id, 12]
   }
 });
-
 
 var allMarginsLabel = page.append("rwt.widgets.Label", {
   background: [0, 128, 128, 40],
