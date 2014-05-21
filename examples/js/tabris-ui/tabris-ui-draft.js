@@ -26,6 +26,17 @@ var createSubPage = function( title, bgColor ) {
     var subpage = createSubPage( title + "-sub", bgColor );
     subpage.open();
   });
+
+  // Page action
+  var pageAction = Tabris.createAction({
+    title: "Share",
+    enabled: true,
+    visible: true
+  }, function() {});
+  page.on( "Dispose", function() {
+    pageAction.destroy();
+  });
+
   return page;
 };
 
