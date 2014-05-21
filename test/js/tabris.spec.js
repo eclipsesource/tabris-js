@@ -165,7 +165,7 @@ describe( "Tabris", function() {
     var actionCreate;
 
     beforeEach(function() {
-      handler = function() {};
+      handler = jasmine.createSpy();
       Tabris.createAction( { title: "Foo", enabled: true }, handler );
       actionCreate = calls.filter( by({ op: 'create', type: 'tabris.Action' }) );
     });
@@ -183,10 +183,18 @@ describe( "Tabris", function() {
       expect( actionCreate[0].properties.enabled ).toBe( true );
     });
 
-    it( "registers the given hander as listener", function() {
+    it( "creates a listen operation", function() {
       var listenCalls = calls.filter( by({ op: 'listen', id: actionCreate[0].id, event: 'Selection' }) );
+
       expect( listenCalls.length ).toBe( 1 );
-      expect( listenCalls[0].listener ).toBe( handler );
+    });
+
+    it( "listen registers function that notifies listeners", function() {
+      var listenCalls = calls.filter( by({ op: 'listen', id: actionCreate[0].id, event: 'Selection' }) );
+
+      listenCalls[0].listener( { foo: 23 } );
+
+      expect( handler ).toHaveBeenCalledWith( { foo: 23 } );
     });
 
   } );
@@ -359,6 +367,42 @@ describe( "Tabris", function() {
       expect( calls[1].op ).toEqual( 'call' );
       expect( calls[1].method ).toEqual( 'method' );
       expect( calls[1].parameters ).toEqual( { foo: 23 } );
+    } );
+
+  } );
+
+  describe( "addListener", function() {
+
+    it( "added listeners are called", function() {
+      var label = Tabris.create( "Label", {} );
+      var listener = jasmine.createSpy( "listener" );
+
+      label._addListener( "foo", listener );
+      label._notifyListeners( "foo", ["bar", 23] );
+
+      expect( listener ).toHaveBeenCalledWith( "bar", 23 );
+    } );
+
+    it( "listeners added twice are called twice", function() {
+      var label = Tabris.create( "Label", {} );
+      var listener = jasmine.createSpy( "listener" );
+
+      label._addListener( "foo", listener );
+      label._addListener( "foo", listener );
+      label._notifyListeners( "foo", ["bar", 23] );
+
+      expect( listener.calls.length ).toBe( 2 );
+    } );
+
+    it( "listeners can be removed", function() {
+      var label = Tabris.create( "Label", {} );
+      var listener = jasmine.createSpy( "listener" );
+
+      label._addListener( "foo", listener );
+      label._removeListener( "foo", listener );
+      label._notifyListeners( "foo", [] );
+
+      expect( listener ).not.toHaveBeenCalled();
     } );
 
   } );

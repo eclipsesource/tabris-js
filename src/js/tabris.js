@@ -72,6 +72,7 @@
 
   var WidgetProxy = function( id ) {
     this.id = id;
+    this._listeners = {};
     Tabris._proxies[id] = this;
   };
 
@@ -98,18 +99,48 @@
       return this;
     },
 
-    on: function( event, listener /*, options*/ ) {
-      ClientBridge._processListen( this.id, event, true, listener );
+    on: function( event, listener ) {
+      this._addListener( event, listener );
+      var proxy = this;
+      ClientBridge._processListen( this.id, event, true, function() {
+        proxy._notifyListeners( event, arguments );
+      });
       return this;
     },
 
     destroy: function() {
       ClientBridge._processDestroy( this.id );
+      this._listeners = null;
       delete Tabris._proxies[this.id];
     },
 
     append: function( type, properties ) {
       return Tabris.create( type, merge( properties, { parent: this.id } ) );
+    },
+
+    _addListener: function( event, listener ) {
+      if( !( event in this._listeners ) ) {
+        this._listeners[ event ] = [];
+      }
+      this._listeners[ event ].push( listener );
+    },
+
+    _removeListener: function( event, listener ) {
+      if( event in this._listeners ) {
+        var index = this._listeners[ event ].indexOf( listener );
+        if( index !== -1 ) {
+          this._listeners[ event ].splice( index, 1 );
+        }
+      }
+    },
+
+    _notifyListeners: function( event, args ) {
+      if( event in this._listeners ) {
+        var listeners = this._listeners[event];
+        for( var i = 0; i < listeners.length; i++ ) {
+          listeners[i].apply( this, args );
+        }
+      }
     }
 
   };
