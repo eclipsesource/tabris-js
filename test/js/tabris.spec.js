@@ -361,12 +361,35 @@ describe( "Tabris", function() {
   describe( "call", function() {
 
     it( "issues call operation", function() {
-      var proxy = Tabris.create( "type", { foo: 23 } );
-      proxy.call( "method", { foo: 23 } );
+      var label = Tabris.create( "type", { foo: 23 } );
+      label.call( "method", { foo: 23 } );
 
       expect( calls[1].op ).toEqual( 'call' );
       expect( calls[1].method ).toEqual( 'method' );
       expect( calls[1].parameters ).toEqual( { foo: 23 } );
+    } );
+
+  } );
+
+  describe( "destroy", function() {
+
+    it( "issues destroy operation", function() {
+      var label = Tabris.create( "type", { foo: 23 } );
+
+      label.destroy();
+
+      var destroyCalls = calls.filter( by({ op: 'destroy', id: calls[0].id }) );
+      expect( destroyCalls.length ).toBe( 1 );
+    } );
+
+    it( "notifies dispose listeners", function() {
+      var label = Tabris.create( "type", { foo: 23 } );
+      var listener = jasmine.createSpy();
+      label.on( "Dispose", listener );
+
+      label.destroy();
+
+      expect( listener ).toHaveBeenCalled();
     } );
 
   } );

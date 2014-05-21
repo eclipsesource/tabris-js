@@ -109,6 +109,7 @@
     },
 
     destroy: function() {
+      this._notifyListeners( "Dispose", [{}] );
       ClientBridge._processDestroy( this.id );
       this._listeners = null;
       delete Tabris._proxies[this.id];
