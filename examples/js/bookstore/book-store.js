@@ -62,7 +62,7 @@
       layoutData: {
         left: PAGE_MARGIN,
         right: PAGE_MARGIN,
-        top: [titleLabel.id, PAGE_MARGIN],
+        top: [titleLabel, PAGE_MARGIN],
         bottom: PAGE_MARGIN
       },
       text: "Etiam nisl nisi, egestas quis lacus ut, tristique suscipit metus. In vehicula lectus metus, at accumsan elit fringilla blandit. Integer et quam sed dolor pharetra molestie id eget dui. Donec ac libero eu lectus dapibus placerat eu a tellus. Fusce vulputate ac sem sit amet bibendum. Pellentesque euismod varius purus nec pharetra. Sed vitae ipsum sit amet risus vehicula euismod in at nunc. Sed in viverra arcu, id blandit risus. Praesent sagittis quis nisl id molestie. Donec dignissim, nisl id volutpat consectetur, massa diam aliquam lectus, sed euismod leo elit eu justo. Integer vel ante sapien.\n\nNunc sit amet blandit tellus, sed consequat neque. Proin vel elementum augue. Quisque gravida nulla nisl, at fermentum turpis euismod in. Maecenas vitae tortor at ante vulputate iaculis at vitae sem. Nulla dui erat, viverra eget mauris in, sodales mollis purus. Integer rhoncus suscipit mi in pulvinar. Nam metus augue, dictum a egestas ut, gravida eget ipsum. Nunc sapien nisl, mollis et mauris in, venenatis blandit magna. Nullam scelerisque tellus lacus, in lobortis purus consectetur sed. Etiam pulvinar sapien vel nibh vehicula, in lacinia odio pharetra. Duis tincidunt metus a semper auctor. Sed nec consequat augue, id vulputate orci. Nunc metus nulla, luctus id porttitor nec, interdum sed lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus."
@@ -137,7 +137,7 @@
       markupEnabled: true,
       text: "<b>" + book.title + "</b>",
       layoutData: {
-        left: [imageLabel.id, PAGE_MARGIN],
+        left: [imageLabel, PAGE_MARGIN],
         top: PAGE_MARGIN,
         right: PAGE_MARGIN
       }
@@ -145,16 +145,16 @@
 
     var authorLabel = detailsComposite.append("rwt.widgets.Label", {
       layoutData: {
-        left: [imageLabel.id, PAGE_MARGIN],
-        top: [titleLabel.id, PAGE_MARGIN]
+        left: [imageLabel, PAGE_MARGIN],
+        top: [titleLabel, PAGE_MARGIN]
       },
       text: book.author
     });
 
     detailsComposite.append("rwt.widgets.Label", {
       layoutData: {
-        left: [imageLabel.id, PAGE_MARGIN],
-        top: [authorLabel.id, PAGE_MARGIN]
+        left: [imageLabel, PAGE_MARGIN],
+        top: [authorLabel, PAGE_MARGIN]
       },
       foreground: [102, 153, 0],
       text: "EUR 12,95"
@@ -165,7 +165,7 @@
         height: 1,
         right: 0,
         left: 0,
-        top: [detailsComposite.id, 0]
+        top: [detailsComposite, 0]
       },
       background: [0, 0, 0, 30]
     });
@@ -173,7 +173,7 @@
     var tabFolder = page.append("rwt.widgets.TabFolder", {
       style: ["TOP"],
       layoutData: {
-        top: [detailsComposite.id, 0],
+        top: [detailsComposite, 0],
         left: 0,
         right: 0,
         bottom: 0

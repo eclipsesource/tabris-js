@@ -32,7 +32,7 @@ page.append("rwt.widgets.Label", {
   layoutData: {
     width: 30,
     height: 30,
-    left: [widthHeightLabel.id, 12]
+    left: [widthHeightLabel, 12]
   }
 });
 
@@ -63,8 +63,8 @@ var tabrisLabel = page.append("rwt.widgets.Label", {
   foreground: white,
   layoutData: {
     right: 20,
-    left: [helloWorldLabel.id, 0],
-    top: [helloWorldLabel.id, 0]
+    left: [helloWorldLabel, 0],
+    top: [helloWorldLabel, 0]
   }
 });
 
@@ -74,8 +74,8 @@ var eclipseSourceLabel = page.append("rwt.widgets.Label", {
   foreground: white,
   layoutData: {
     right: 20,
-    left: [helloWorldLabel.id, 40],
-    top: [tabrisLabel.id, 20]
+    left: [helloWorldLabel, 40],
+    top: [tabrisLabel, 20]
   }
 });
 
@@ -86,7 +86,7 @@ var javaLabel = page.append("rwt.widgets.Label", {
   layoutData: {
     right: 0,
     top: 10,
-    bottom: [tabrisLabel.id, 5]
+    bottom: [tabrisLabel, 5]
   }
 });
 
