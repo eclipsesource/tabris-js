@@ -90,7 +90,7 @@ var javaLabel = page.append("rwt.widgets.Label", {
   }
 });
 
-var javaLabel = page.append("rwt.widgets.Label", {
+var percentageLabel = page.append("rwt.widgets.Label", {
   background: [128, 0, 128],
   foreground: white,
   text: "Percentage",
