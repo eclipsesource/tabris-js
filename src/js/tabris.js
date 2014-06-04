@@ -1,7 +1,13 @@
 /*global Tabris: true, ClientBridge: false */
 (function() {
 
+  var _loadFunctions = [];
+
   Tabris = {
+
+    load: function( fn ) {
+      _loadFunctions.push( fn );
+    },
 
     create: function( type, properties ) {
       var id = generateId();
@@ -18,9 +24,6 @@
     },
 
     createPage: function( properties ) {
-      if( !Tabris._isInitialized ) {
-        Tabris._initialize();
-      }
       var pageKeys = ['title', 'image', 'topLevel'];
       var compositeProperties = merge( omit( properties, pageKeys ), {
         parent: Tabris._shell.id,
@@ -44,8 +47,7 @@
       return composite;
     },
 
-    _initialize: function() {
-      Tabris._isInitialized = true;
+    _start: function() {
       ClientBridge._processHead( "tabris.UI", true );
       Tabris.create( "rwt.widgets.Display" );
       Tabris._shell = Tabris.create( "rwt.widgets.Shell", {
@@ -64,6 +66,11 @@
       Tabris._UI.on( "ShowPreviousPage", function() {
         getActivePage().close();
       });
+      var i = 0;
+      while( i < _loadFunctions.length ) {
+        _loadFunctions[i++].call();
+      }
+      _loadFunctions = [];
     },
 
     _proxies: {}
@@ -236,5 +243,9 @@
     }
     return result;
   };
+
+  ClientBridge._setStartCallback( function() {
+    Tabris._start();
+  });
 
 })();

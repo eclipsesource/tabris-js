@@ -60,15 +60,14 @@ describe( "Tabris", function() {
   };
 
   beforeEach( function() {
-    Tabris._initialize();
-    Tabris._isInitialized = true;
+    Tabris._start();
     resetCalls();
   });
 
-  describe( "initialize", function() {
+  describe( "start", function() {
 
     it( "creates Display, Shell, and Tabris UI", function() {
-      Tabris._initialize();
+      Tabris._start();
 
       expect( getCreateCalls()[0].type ).toBe( "rwt.widgets.Display" );
       expect( getCreateCalls()[1].type ).toBe( "rwt.widgets.Shell" );
@@ -76,7 +75,7 @@ describe( "Tabris", function() {
     });
 
     it( "created Shell is active, visible, and maximized", function() {
-      Tabris._initialize();
+      Tabris._start();
 
       var shellCreate = getCreateCalls().filter( by({ type: 'rwt.widgets.Shell' }) )[0];
       expect( shellCreate.properties.active ).toBe( true );
@@ -85,7 +84,7 @@ describe( "Tabris", function() {
     });
 
     it( "Tabris UI refers to Shell", function() {
-      Tabris._initialize();
+      Tabris._start();
 
       var shellCreate = getCreateCalls().filter( by({ type: "rwt.widgets.Shell" }) )[0];
       var tabrisUiCreate = getCreateCalls().filter( by({ type: "tabris.UI" }) )[0];
@@ -93,12 +92,45 @@ describe( "Tabris", function() {
     });
 
     it( "adds listeners for ShowPage and ShowPreviousPage events to Tabris UI", function() {
-      Tabris._initialize();
+      Tabris._start();
 
       var tabrisUiId = calls.filter( by({ op: 'create', type: 'tabris.UI' }) )[0].id;
       var listenCalls = calls.filter( by({ op: 'listen', id: tabrisUiId }) );
       expect( listenCalls.filter( by({ event: 'ShowPage' }) ).length ).toBe( 1 );
       expect( listenCalls.filter( by({ event: 'ShowPreviousPage' }) ).length ).toBe( 1 );
+    });
+
+  });
+
+  describe( "load", function() {
+
+    it( "function is executed at start time", function() {
+      var fn = jasmine.createSpy();
+
+      Tabris.load( fn );
+      Tabris._start();
+
+      expect( fn ).toHaveBeenCalled();
+    });
+
+    it( "nested load functions are executed at the end", function() {
+      var log = [];
+
+      Tabris.load( function() {
+        log.push( "1" );
+        Tabris.load( function() {
+          log.push( "1a" );
+        });
+        Tabris.load( function() {
+          log.push( "1b" );
+        });
+      });
+      Tabris.load( function() {
+        log.push( "2" );
+      });
+      Tabris._start();
+
+      expect( log ).toEqual([ "1", "2", "1a", "1b" ]);
     });
 
   });
@@ -214,13 +246,6 @@ describe( "Tabris", function() {
       expect( getCreateCalls().length ).toBe( 2 );
       expect( getCreateCalls()[0].type ).toBe( "rwt.widgets.Composite" );
       expect( getCreateCalls()[1].type ).toBe( "tabris.Page" );
-    } );
-
-    it( "executes initialization if not yet initialized", function() {
-      Tabris._isInitialized = undefined;
-      Tabris.createPage();
-
-      expect( calls.filter( by({ op: 'create', type: 'rwt.widgets.Display' }) ).length ).toBe( 1 );
     } );
 
     describe( "created Composite", function() {

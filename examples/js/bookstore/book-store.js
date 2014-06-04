@@ -1,5 +1,5 @@
 /*jshint unused: false */
-(function () {
+Tabris.load(function() {
 
   function createBook(title, author, image, popular, favorite) {
     return {
@@ -317,4 +317,4 @@
 
   bookStorePage.open();
 
-})();
+});
