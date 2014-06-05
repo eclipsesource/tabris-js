@@ -1,40 +1,35 @@
-/*global Tabris: false, ClientBridge: true */
+/*global Tabris: false, NativeBridge: true */
 
 describe( "Tabris", function() {
 
   var calls = [];
 
-  ClientBridge = {
-    _processHead : function() {
-      calls.push( { op: 'head',
-                    key: arguments[0],
-                    value: arguments[1] } );
-    },
-    _processCreate : function() {
+  NativeBridge = {
+    create : function() {
       calls.push( { op: 'create',
                     id: arguments[0],
                     type: arguments[1],
                     properties: arguments[2] } );
     },
-    _processSet : function() {
+    set : function() {
       calls.push( { op: 'set',
                     id: arguments[0],
                     properties: arguments[1] } );
     },
-    _processCall : function() {
+    call : function() {
       calls.push( { op: 'call',
                     id: arguments[0],
                     method: arguments[1],
                     parameters: arguments[2] } );
     },
-    _processListen : function() {
+    listen : function() {
       calls.push( { op: 'listen',
                     id: arguments[0],
                     event: arguments[1],
                     listen: arguments[2],
                     listener: arguments[3] } );
     },
-    _processDestroy : function() {
+    destroy : function() {
       calls.push( { op: 'destroy',
                     id: arguments[0] } );
     }

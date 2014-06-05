@@ -1,4 +1,4 @@
-/*global Tabris: true, ClientBridge: false */
+/*global Tabris: true, NativeBridge: false */
 (function() {
 
   var _loadFunctions = [];
@@ -11,7 +11,7 @@
 
     create: function( type, properties ) {
       var id = generateId();
-      ClientBridge._processCreate( id, fixType( type ), fixProperties( properties ) );
+      NativeBridge.create( id, fixType( type ), fixProperties( properties ) );
       return new WidgetProxy( id );
     },
 
@@ -48,7 +48,6 @@
     },
 
     _start: function() {
-      ClientBridge._processHead( "tabris.UI", true );
       Tabris.create( "rwt.widgets.Display" );
       Tabris._shell = Tabris.create( "rwt.widgets.Shell", {
         style: ["NO_TRIM"],
@@ -86,7 +85,7 @@
   WidgetProxy.prototype = {
 
     get: function( method ) {
-      return ClientBridge._processGet( this.id, method );
+      return NativeBridge.set( this.id, method );
     },
 
     set: function( arg1, arg2 ) {
@@ -97,19 +96,19 @@
       } else {
         properties = arg1;
       }
-      ClientBridge._processSet( this.id, fixProperties( properties ) );
+      NativeBridge.set( this.id, fixProperties( properties ) );
       return this;
     },
 
     call: function( method, parameters ) {
-      ClientBridge._processCall( this.id, method, parameters );
+      NativeBridge.call( this.id, method, parameters );
       return this;
     },
 
     on: function( event, listener ) {
       this._addListener( event, listener );
       var proxy = this;
-      ClientBridge._processListen( this.id, event, true, function() {
+      NativeBridge.listen( this.id, event, true, function() {
         proxy._notifyListeners( event, arguments );
       });
       return this;
@@ -117,7 +116,7 @@
 
     destroy: function() {
       this._notifyListeners( "Dispose", [{}] );
-      ClientBridge._processDestroy( this.id );
+      NativeBridge.destroy( this.id );
       this._listeners = null;
       delete Tabris._proxies[this.id];
     },
@@ -244,7 +243,7 @@
     return result;
   };
 
-  ClientBridge._setStartCallback( function() {
+  NativeBridge.setStartCallback( function() {
     Tabris._start();
   });
 
