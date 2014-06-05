@@ -29,7 +29,7 @@
     "expect": false,
     "beforeEach": false,
     "afterEach": false,
+    "spyOn": false,
     "jasmine": false
-
   }
 }
