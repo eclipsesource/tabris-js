@@ -243,8 +243,4 @@
     return result;
   };
 
-  NativeBridge.setStartCallback( function() {
-    Tabris._start();
-  });
-
 })();
