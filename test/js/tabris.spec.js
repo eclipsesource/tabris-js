@@ -26,8 +26,7 @@ describe( "Tabris", function() {
       calls.push( { op: 'listen',
                     id: arguments[0],
                     event: arguments[1],
-                    listen: arguments[2],
-                    listener: arguments[3] } );
+                    listen: arguments[2] } );
     },
     destroy : function() {
       calls.push( { op: 'destroy',
@@ -59,7 +58,7 @@ describe( "Tabris", function() {
     resetCalls();
   });
 
-  describe( "start", function() {
+  describe( "_start", function() {
 
     it( "creates Display, Shell, and Tabris UI", function() {
       Tabris._start();
@@ -93,6 +92,31 @@ describe( "Tabris", function() {
       var listenCalls = calls.filter( by({ op: 'listen', id: tabrisUiId }) );
       expect( listenCalls.filter( by({ event: 'ShowPage' }) ).length ).toBe( 1 );
       expect( listenCalls.filter( by({ event: 'ShowPreviousPage' }) ).length ).toBe( 1 );
+    });
+
+    it( "can be called without a context", function() {
+      Tabris._start.call();
+    });
+
+  });
+
+  describe( "_notify", function() {
+
+    it( "notifies widget proxy", function() {
+      var label = Tabris.create( "Label", {} );
+      spyOn( label, "_notifyListeners" );
+
+      Tabris._notify( label.id, "foo", { "bar": 23 } );
+
+      expect( label._notifyListeners ).toHaveBeenCalledWith( "foo", [{ "bar": 23 }] );
+    });
+
+    it( "sliently ignores events for non-existing ids (does not crash)", function() {
+      Tabris._notify( "no-id", "foo", [23, 42] );
+    });
+
+    it( "can be called without a context", function() {
+      Tabris._notify.call( "no-id", "foo", [23, 42] );
     });
 
   });
@@ -211,17 +235,17 @@ describe( "Tabris", function() {
     });
 
     it( "creates a listen operation", function() {
-      var listenCalls = calls.filter( by({ op: 'listen', id: actionCreate[0].id, event: 'Selection' }) );
+      var actionId = actionCreate[0].id;
+      var listenCalls = calls.filter( by({ op: 'listen', id: actionId, event: 'Selection' }) );
 
       expect( listenCalls.length ).toBe( 1 );
     });
 
     it( "listen registers function that notifies listeners", function() {
-      var listenCalls = calls.filter( by({ op: 'listen', id: actionCreate[0].id, event: 'Selection' }) );
+      var actionId = actionCreate[0].id;
+      Tabris._notify( actionId, "Selection", { "foo": 23 } );
 
-      listenCalls[0].listener( { foo: 23 } );
-
-      expect( handler ).toHaveBeenCalledWith( { foo: 23 } );
+      expect( handler ).toHaveBeenCalledWith( { "foo": 23 } );
     });
 
   } );
@@ -391,6 +415,42 @@ describe( "Tabris", function() {
 
   } );
 
+  describe( "on", function() {
+
+    var label;
+    var listener;
+
+    beforeEach( function() {
+      label = Tabris.create( "Label", {} );
+      listener = jasmine.createSpy( "listener" );
+      resetCalls();
+    } );
+
+    it( "issues a listen (true) operation for first listener", function() {
+      label.on( "foo", listener );
+
+      expect( calls[0].op ).toEqual( "listen" );
+      expect( calls[0].event ).toEqual( "foo" );
+      expect( calls[0].listen ).toEqual( true );
+    } );
+
+    it( "issues a listen operation for another listener for another event", function() {
+      label.on( "foo", listener );
+      label.on( "bar", listener );
+
+      expect( calls[1].op ).toEqual( "listen" );
+      expect( calls[1].event ).toEqual( "bar" );
+    } );
+
+    it( "does not issue a listen operation for subsequent listeners for the same event", function() {
+      label.on( "foo", listener );
+      label.on( "foo", listener );
+
+      expect( calls.length ).toBe( 1 );
+    } );
+
+  } );
+
   describe( "destroy", function() {
 
     it( "issues destroy operation", function() {
@@ -414,22 +474,24 @@ describe( "Tabris", function() {
 
   } );
 
-  describe( "addListener", function() {
+  describe( "listener management", function() {
 
-    it( "added listeners are called", function() {
-      var label = Tabris.create( "Label", {} );
-      var listener = jasmine.createSpy( "listener" );
+    var label;
+    var listener;
 
+    beforeEach( function() {
+      label = Tabris.create( "Label", {} );
+      listener = jasmine.createSpy( "listener" );
+    } );
+
+    it( "added listener will be notified", function() {
       label._addListener( "foo", listener );
       label._notifyListeners( "foo", ["bar", 23] );
 
       expect( listener ).toHaveBeenCalledWith( "bar", 23 );
     } );
 
-    it( "listeners added twice are called twice", function() {
-      var label = Tabris.create( "Label", {} );
-      var listener = jasmine.createSpy( "listener" );
-
+    it( "listeners added twice will be notified twice", function() {
       label._addListener( "foo", listener );
       label._addListener( "foo", listener );
       label._notifyListeners( "foo", ["bar", 23] );
@@ -437,10 +499,7 @@ describe( "Tabris", function() {
       expect( listener.calls.length ).toBe( 2 );
     } );
 
-    it( "listeners can be removed", function() {
-      var label = Tabris.create( "Label", {} );
-      var listener = jasmine.createSpy( "listener" );
-
+    it( "removed listeners will not be notfied anymore", function() {
       label._addListener( "foo", listener );
       label._removeListener( "foo", listener );
       label._notifyListeners( "foo", [] );

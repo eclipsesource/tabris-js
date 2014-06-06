@@ -72,6 +72,13 @@
       _loadFunctions = [];
     },
 
+    _notify: function( id, event, param ) {
+      var proxy = Tabris._proxies[ id ];
+      if( proxy ) {
+        proxy._notifyListeners( event, [param] );
+      }
+    },
+
     _proxies: {}
 
   };
@@ -106,11 +113,9 @@
     },
 
     on: function( event, listener ) {
-      this._addListener( event, listener );
-      var proxy = this;
-      NativeBridge.listen( this.id, event, true, function() {
-        proxy._notifyListeners( event, arguments );
-      });
+      if( this._addListener( event, listener ) ) {
+        NativeBridge.listen( this.id, event, true );
+      }
       return this;
     },
 
@@ -130,6 +135,7 @@
         this._listeners[ event ] = [];
       }
       this._listeners[ event ].push( listener );
+      return this._listeners[ event ].length === 1;
     },
 
     _removeListener: function( event, listener ) {
@@ -137,8 +143,10 @@
         var index = this._listeners[ event ].indexOf( listener );
         if( index !== -1 ) {
           this._listeners[ event ].splice( index, 1 );
+          return this._listeners[ event ].length === 0;
         }
       }
+      return false;
     },
 
     _notifyListeners: function( event, args ) {
