@@ -119,6 +119,13 @@
       return this;
     },
 
+    off: function( event, listener ) {
+      if( this._removeListener( event, listener ) ) {
+        NativeBridge.listen( this.id, event, false );
+      }
+      return this;
+    },
+
     destroy: function() {
       this._notifyListeners( "Dispose", [{}] );
       NativeBridge.destroy( this.id );

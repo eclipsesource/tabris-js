@@ -451,6 +451,35 @@ describe( "Tabris", function() {
 
   } );
 
+  describe( "off", function() {
+
+    var label;
+    var listener;
+
+    beforeEach( function() {
+      label = Tabris.create( "Label", {} );
+      listener = jasmine.createSpy( "listener" );
+      label.on( "foo", listener );
+      resetCalls();
+    } );
+
+    it( "issues a listen (false) operation for last listener removed", function() {
+      label.off( "foo", listener );
+
+      expect( calls[0].op ).toEqual( "listen" );
+      expect( calls[0].event ).toEqual( "foo" );
+      expect( calls[0].listen ).toBe( false );
+    } );
+
+    it( "does not issue a listen operation when there are other listeners for the same event", function() {
+      label.on( "foo", listener );
+      label.off( "foo", listener );
+
+      expect( calls.length ).toBe( 0 );
+    } );
+
+  } );
+
   describe( "destroy", function() {
 
     it( "issues destroy operation", function() {
