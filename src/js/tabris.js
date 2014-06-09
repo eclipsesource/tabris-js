@@ -1,4 +1,4 @@
-/*global Tabris: true, NativeBridge: false */
+/*global Tabris: true */
 (function() {
 
   var _loadFunctions = [];
@@ -10,8 +10,11 @@
     },
 
     create: function( type, properties ) {
+      if( !Tabris._nativeBridge ) {
+        throw new Error( "tabris.js not started" );
+      }
       var id = generateId();
-      NativeBridge.create( id, fixType( type ), fixProperties( properties ) );
+      Tabris._nativeBridge.create( id, fixType( type ), fixProperties( properties ) );
       return new WidgetProxy( id );
     },
 
@@ -47,7 +50,8 @@
       return composite;
     },
 
-    _start: function() {
+    _start: function( nativeBridge ) {
+      Tabris._nativeBridge = nativeBridge;
       Tabris.create( "rwt.widgets.Display" );
       Tabris._shell = Tabris.create( "rwt.widgets.Shell", {
         style: ["NO_TRIM"],
@@ -92,7 +96,7 @@
   WidgetProxy.prototype = {
 
     get: function( method ) {
-      return NativeBridge.set( this.id, method );
+      return Tabris._nativeBridge.set( this.id, method );
     },
 
     set: function( arg1, arg2 ) {
@@ -103,32 +107,32 @@
       } else {
         properties = arg1;
       }
-      NativeBridge.set( this.id, fixProperties( properties ) );
+      Tabris._nativeBridge.set( this.id, fixProperties( properties ) );
       return this;
     },
 
     call: function( method, parameters ) {
-      NativeBridge.call( this.id, method, parameters );
+      Tabris._nativeBridge.call( this.id, method, parameters );
       return this;
     },
 
     on: function( event, listener ) {
       if( this._addListener( event, listener ) ) {
-        NativeBridge.listen( this.id, event, true );
+        Tabris._nativeBridge.listen( this.id, event, true );
       }
       return this;
     },
 
     off: function( event, listener ) {
       if( this._removeListener( event, listener ) ) {
-        NativeBridge.listen( this.id, event, false );
+        Tabris._nativeBridge.listen( this.id, event, false );
       }
       return this;
     },
 
     destroy: function() {
       this._notifyListeners( "Dispose", [{}] );
-      NativeBridge.destroy( this.id );
+      Tabris._nativeBridge.destroy( this.id );
       this._listeners = null;
       delete Tabris._proxies[this.id];
     },

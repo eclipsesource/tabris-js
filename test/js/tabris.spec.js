@@ -1,10 +1,10 @@
-/*global Tabris: false, NativeBridge: true */
+/*global Tabris: false */
 
 describe( "Tabris", function() {
 
   var calls = [];
 
-  NativeBridge = {
+  var nativeBridge = {
     create : function() {
       calls.push( { op: 'create',
                     id: arguments[0],
@@ -54,14 +54,14 @@ describe( "Tabris", function() {
   };
 
   beforeEach( function() {
-    Tabris._start();
+    Tabris._start( nativeBridge );
     resetCalls();
   });
 
   describe( "_start", function() {
 
     it( "creates Display, Shell, and Tabris UI", function() {
-      Tabris._start();
+      Tabris._start( nativeBridge );
 
       expect( getCreateCalls()[0].type ).toBe( "rwt.widgets.Display" );
       expect( getCreateCalls()[1].type ).toBe( "rwt.widgets.Shell" );
@@ -69,7 +69,7 @@ describe( "Tabris", function() {
     });
 
     it( "created Shell is active, visible, and maximized", function() {
-      Tabris._start();
+      Tabris._start( nativeBridge );
 
       var shellCreate = getCreateCalls().filter( by({ type: 'rwt.widgets.Shell' }) )[0];
       expect( shellCreate.properties.active ).toBe( true );
@@ -78,7 +78,7 @@ describe( "Tabris", function() {
     });
 
     it( "Tabris UI refers to Shell", function() {
-      Tabris._start();
+      Tabris._start( nativeBridge );
 
       var shellCreate = getCreateCalls().filter( by({ type: "rwt.widgets.Shell" }) )[0];
       var tabrisUiCreate = getCreateCalls().filter( by({ type: "tabris.UI" }) )[0];
@@ -86,7 +86,7 @@ describe( "Tabris", function() {
     });
 
     it( "adds listeners for ShowPage and ShowPreviousPage events to Tabris UI", function() {
-      Tabris._start();
+      Tabris._start( nativeBridge );
 
       var tabrisUiId = calls.filter( by({ op: 'create', type: 'tabris.UI' }) )[0].id;
       var listenCalls = calls.filter( by({ op: 'listen', id: tabrisUiId }) );
@@ -95,7 +95,13 @@ describe( "Tabris", function() {
     });
 
     it( "can be called without a context", function() {
-      Tabris._start.call();
+      Tabris._start.call( null, nativeBridge );
+    });
+
+    it( "fails if no native bridge is provided", function() {
+      expect( function() {
+        Tabris._start.call( null, null );
+      } ).toThrow();
     });
 
   });
@@ -127,7 +133,7 @@ describe( "Tabris", function() {
       var fn = jasmine.createSpy();
 
       Tabris.load( fn );
-      Tabris._start();
+      Tabris._start( nativeBridge );
 
       expect( fn ).toHaveBeenCalled();
     });
@@ -147,7 +153,7 @@ describe( "Tabris", function() {
       Tabris.load( function() {
         log.push( "2" );
       });
-      Tabris._start();
+      Tabris._start( nativeBridge );
 
       expect( log ).toEqual([ "1", "2", "1a", "1b" ]);
     });
@@ -155,6 +161,14 @@ describe( "Tabris", function() {
   });
 
   describe( "create", function() {
+
+    it( "fails if tabris.js not yet started", function() {
+      delete Tabris._nativeBridge;
+
+      expect( function() {
+        Tabris.create( "foo.bar", { foo: 23 } );
+      } ).toThrow( "tabris.js not started" );
+    } );
 
     it( "issues a create operation with type and properties", function() {
       Tabris.create( "foo.bar", { foo: 23 } );
