@@ -1,61 +1,13 @@
-/*global Tabris: false */
+/*global Tabris: false, NativeBridgeSpy: false */
 
 describe( "Tabris", function() {
 
-  var calls = [];
-
-  var nativeBridge = {
-    create : function() {
-      calls.push( { op: 'create',
-                    id: arguments[0],
-                    type: arguments[1],
-                    properties: arguments[2] } );
-    },
-    set : function() {
-      calls.push( { op: 'set',
-                    id: arguments[0],
-                    properties: arguments[1] } );
-    },
-    call : function() {
-      calls.push( { op: 'call',
-                    id: arguments[0],
-                    method: arguments[1],
-                    parameters: arguments[2] } );
-    },
-    listen : function() {
-      calls.push( { op: 'listen',
-                    id: arguments[0],
-                    event: arguments[1],
-                    listen: arguments[2] } );
-    },
-    destroy : function() {
-      calls.push( { op: 'destroy',
-                    id: arguments[0] } );
-    }
-  };
-
-  var resetCalls = function() {
-    return calls.splice( 0, calls.length );
-  };
-
-  var getCreateCalls = function() {
-    return calls.filter( by({ op: 'create'}) );
-  };
-
-  var by = function( properties ) {
-    return function( call ) {
-      for( var key in properties ) {
-        if( properties[key] != call[key] ) {
-          return false;
-        }
-      }
-      return true;
-    };
-  };
+  var nativeBridge;
 
   beforeEach( function() {
+    nativeBridge = new NativeBridgeSpy();
     Tabris._start( nativeBridge );
-    resetCalls();
+    nativeBridge.resetCalls();
   });
 
   describe( "_start", function() {
@@ -63,15 +15,16 @@ describe( "Tabris", function() {
     it( "creates Display, Shell, and Tabris UI", function() {
       Tabris._start( nativeBridge );
 
-      expect( getCreateCalls()[0].type ).toBe( "rwt.widgets.Display" );
-      expect( getCreateCalls()[1].type ).toBe( "rwt.widgets.Shell" );
-      expect( getCreateCalls()[2].type ).toBe( "tabris.UI" );
+      var createCalls = nativeBridge.calls({ op: 'create' });
+      expect( createCalls[0].type ).toBe( "rwt.widgets.Display" );
+      expect( createCalls[1].type ).toBe( "rwt.widgets.Shell" );
+      expect( createCalls[2].type ).toBe( "tabris.UI" );
     });
 
     it( "created Shell is active, visible, and maximized", function() {
       Tabris._start( nativeBridge );
 
-      var shellCreate = getCreateCalls().filter( by({ type: 'rwt.widgets.Shell' }) )[0];
+      var shellCreate = nativeBridge.calls({ op: 'create', type: 'rwt.widgets.Shell' })[0];
       expect( shellCreate.properties.active ).toBe( true );
       expect( shellCreate.properties.visibility ).toBe( true );
       expect( shellCreate.properties.mode ).toBe( 'maximized' );
@@ -80,18 +33,17 @@ describe( "Tabris", function() {
     it( "Tabris UI refers to Shell", function() {
       Tabris._start( nativeBridge );
 
-      var shellCreate = getCreateCalls().filter( by({ type: "rwt.widgets.Shell" }) )[0];
-      var tabrisUiCreate = getCreateCalls().filter( by({ type: "tabris.UI" }) )[0];
+      var shellCreate = nativeBridge.calls({ op: 'create', type: 'rwt.widgets.Shell' })[0];
+      var tabrisUiCreate = nativeBridge.calls({ op: 'create', type: 'tabris.UI' })[0];
       expect( tabrisUiCreate.properties.shell ).toBe( shellCreate.id );
     });
 
     it( "adds listeners for ShowPage and ShowPreviousPage events to Tabris UI", function() {
       Tabris._start( nativeBridge );
 
-      var tabrisUiId = calls.filter( by({ op: 'create', type: 'tabris.UI' }) )[0].id;
-      var listenCalls = calls.filter( by({ op: 'listen', id: tabrisUiId }) );
-      expect( listenCalls.filter( by({ event: 'ShowPage' }) ).length ).toBe( 1 );
-      expect( listenCalls.filter( by({ event: 'ShowPreviousPage' }) ).length ).toBe( 1 );
+      var tabrisUiId = nativeBridge.calls({ op: 'create', type: 'tabris.UI' })[0].id;
+      expect( nativeBridge.calls({ op: 'listen', id: tabrisUiId, event: 'ShowPage' }).length ).toBe( 1 );
+      expect( nativeBridge.calls({ op: 'listen', id: tabrisUiId, event: 'ShowPreviousPage' }).length ).toBe( 1 );
     });
 
     it( "can be called without a context", function() {
@@ -173,16 +125,15 @@ describe( "Tabris", function() {
     it( "issues a create operation with type and properties", function() {
       Tabris.create( "foo.bar", { foo: 23 } );
 
+      var calls = nativeBridge.calls({ op: 'create', type: 'foo.bar' });
       expect( calls.length ).toBe( 1 );
-      expect( calls[0].op ).toBe( 'create' );
-      expect( calls[0].type ).toBe( 'foo.bar' );
       expect( calls[0].properties ).toEqual( { foo: 23 } );
     } );
 
     it( "creates a non-empty widget id", function() {
       Tabris.create( "type", { foo: 23 } );
 
-      var id = calls[0].id;
+      var id = nativeBridge.calls()[0].id;
       expect( typeof id ).toBe( "string" );
       expect( id.length ).toBeGreaterThan( 0 );
     } );
@@ -191,7 +142,8 @@ describe( "Tabris", function() {
       Tabris.create( "type", { foo: 23 } );
       Tabris.create( "type", { foo: 23 } );
 
-      expect( calls[0].id ).not.toEqual( calls[1].id );
+      var createCalls = nativeBridge.calls({ op: 'create' });
+      expect( createCalls[0].id ).not.toEqual( createCalls[1].id );
     } );
 
     it( "returns a proxy object", function() {
@@ -206,20 +158,20 @@ describe( "Tabris", function() {
 
       Tabris.create( "custom.type", { layoutData: { left: 23, right: label, top: [label, 42] } } );
 
-      var properties = calls.filter( by({ op: 'create', type: "custom.type" }) )[0].properties;
+      var properties = nativeBridge.calls({ op: 'create', type: "custom.type" })[0].properties;
       expect( properties.layoutData ).toEqual( { left: 23, right: label.id, top: [label.id, 42] } );
     } );
 
     it( "accepts rwt types without prefix", function() {
       Tabris.create( "Label", {} );
 
-      expect( calls[0].type ).toEqual( "rwt.widgets.Label" );
+      expect( nativeBridge.calls({ op: 'create' })[0].type ).toEqual( "rwt.widgets.Label" );
     } );
 
     it( "accepts prefixed types", function() {
       Tabris.create( "custom.Label", {} );
 
-      expect( calls[0].type ).toEqual( "custom.Label" );
+      expect( nativeBridge.calls({ op: 'create' })[0].type ).toEqual( "custom.Label" );
     } );
 
   } );
@@ -232,7 +184,7 @@ describe( "Tabris", function() {
     beforeEach(function() {
       handler = jasmine.createSpy();
       Tabris.createAction( { title: "Foo", enabled: true }, handler );
-      actionCreate = calls.filter( by({ op: 'create', type: 'tabris.Action' }) );
+      actionCreate = nativeBridge.calls({ op: 'create', type: 'tabris.Action' });
     });
 
     it( "creates an action", function() {
@@ -250,7 +202,7 @@ describe( "Tabris", function() {
 
     it( "creates a listen operation", function() {
       var actionId = actionCreate[0].id;
-      var listenCalls = calls.filter( by({ op: 'listen', id: actionId, event: 'Selection' }) );
+      var listenCalls = nativeBridge.calls({ op: 'listen', id: actionId, event: 'Selection' });
 
       expect( listenCalls.length ).toBe( 1 );
     });
@@ -267,18 +219,19 @@ describe( "Tabris", function() {
   describe( "createPage", function() {
 
     var getCompositeCreate = function() {
-      return calls.filter( by( { op: 'create', type: 'rwt.widgets.Composite' }) )[0];
+      return nativeBridge.calls({ op: 'create', type: 'rwt.widgets.Composite' })[0];
     };
     var getPageCreate = function() {
-      return calls.filter( by( { op: 'create', type: 'tabris.Page' }) )[0];
+      return nativeBridge.calls({ op: 'create', type: 'tabris.Page' })[0];
     };
 
     it( "creates a Composite and a Page", function() {
       Tabris.createPage();
 
-      expect( getCreateCalls().length ).toBe( 2 );
-      expect( getCreateCalls()[0].type ).toBe( "rwt.widgets.Composite" );
-      expect( getCreateCalls()[1].type ).toBe( "tabris.Page" );
+      var createCalls = nativeBridge.calls({ op: 'create' });
+      expect( createCalls.length ).toBe( 2 );
+      expect( createCalls[0].type ).toBe( "rwt.widgets.Composite" );
+      expect( createCalls[1].type ).toBe( "tabris.Page" );
     } );
 
     describe( "created Composite", function() {
@@ -287,7 +240,7 @@ describe( "Tabris", function() {
 
       beforeEach(function() {
         Tabris.createPage({ title: "title", image: "image", topLevel: true, background: "red" });
-        createCall = getCreateCalls().filter( by( { type: 'rwt.widgets.Composite' }) )[0];
+        createCall = nativeBridge.calls({ op: 'create', type: 'rwt.widgets.Composite' })[0];
       });
 
       it( "does not inherit page properties", function() {
@@ -316,7 +269,7 @@ describe( "Tabris", function() {
 
       beforeEach(function() {
         Tabris.createPage({ title: "title", image: "image", topLevel: true, background: "red" });
-        createCall = getCreateCalls().filter( by( { type: 'tabris.Page' }) )[0];
+        createCall = nativeBridge.calls({ op: 'create', type: 'tabris.Page' })[0];
       });
 
       it( "does not inherit non-page properties", function() {
@@ -346,7 +299,7 @@ describe( "Tabris", function() {
 
         page.set( "background", "red" );
 
-        var setCalls = calls.filter( by({ op: 'set' }) );
+        var setCalls = nativeBridge.calls({ op: 'set' });
         expect( setCalls.length ).toBeGreaterThan( 0 );
         expect( setCalls[0].properties.background ).toEqual( "red" );
       } );
@@ -366,7 +319,7 @@ describe( "Tabris", function() {
 
           page.open();
 
-          var call = calls.filter( by({ op: 'set', id: Tabris._UI.id  }) )[0];
+          var call = nativeBridge.calls({ op: 'set', id: Tabris._UI.id  })[0];
           expect( call.properties.activePage ).toBe( getPageCreate().id );
         } );
 
@@ -380,11 +333,11 @@ describe( "Tabris", function() {
           page1.open();
           var page1Id = getPageCreate().id;
           page2.open();
-          resetCalls();
+          nativeBridge.resetCalls();
 
           page2.close();
 
-          var call = calls.filter( by({ op: 'set', id: Tabris._UI.id  }) )[0];
+          var call = nativeBridge.calls({ op: 'set', id: Tabris._UI.id  })[0];
           expect( call.properties.activePage ).toBe( page1Id ); // TODO add _pageId field in page
         } );
 
@@ -394,8 +347,8 @@ describe( "Tabris", function() {
 
           page.close();
 
-          expect( calls.filter( by({ op: 'destroy', id: getPageCreate().id }) ).length ).toBe( 1 );
-          expect( calls.filter( by({ op: 'destroy', id: getCompositeCreate().id }) ).length ).toBe( 1 );
+          expect( nativeBridge.calls({ op: 'destroy', id: getPageCreate().id }).length ).toBe( 1 );
+          expect( nativeBridge.calls({ op: 'destroy', id: getCompositeCreate().id }).length ).toBe( 1 );
         } );
 
       } );
@@ -410,7 +363,7 @@ describe( "Tabris", function() {
       var label = Tabris.create( "Label", {} );
       label.set( "layoutData", { left: 23, right: label, top: [label, 42] } );
 
-      var call = calls.filter( by({ op: 'set' }) )[0];
+      var call = nativeBridge.calls({ op: 'set' })[0];
       expect( call.properties.layoutData ).toEqual( { left: 23, right: label.id, top: [label.id, 42] } );
     } );
 
@@ -422,9 +375,10 @@ describe( "Tabris", function() {
       var label = Tabris.create( "type", { foo: 23 } );
       label.call( "method", { foo: 23 } );
 
-      expect( calls[1].op ).toEqual( 'call' );
-      expect( calls[1].method ).toEqual( 'method' );
-      expect( calls[1].parameters ).toEqual( { foo: 23 } );
+      var call = nativeBridge.calls()[1];
+      expect( call.op ).toEqual( 'call' );
+      expect( call.method ).toEqual( 'method' );
+      expect( call.parameters ).toEqual( { foo: 23 } );
     } );
 
   } );
@@ -437,30 +391,29 @@ describe( "Tabris", function() {
     beforeEach( function() {
       label = Tabris.create( "Label", {} );
       listener = jasmine.createSpy( "listener" );
-      resetCalls();
+      nativeBridge.resetCalls();
     } );
 
     it( "issues a listen (true) operation for first listener", function() {
       label.on( "foo", listener );
 
-      expect( calls[0].op ).toEqual( "listen" );
-      expect( calls[0].event ).toEqual( "foo" );
-      expect( calls[0].listen ).toEqual( true );
+      var call = nativeBridge.calls({ op: 'listen', event: 'foo' })[0];
+      expect( call.listen ).toEqual( true );
     } );
 
     it( "issues a listen operation for another listener for another event", function() {
       label.on( "foo", listener );
       label.on( "bar", listener );
 
-      expect( calls[1].op ).toEqual( "listen" );
-      expect( calls[1].event ).toEqual( "bar" );
+      var call = nativeBridge.calls({ op: 'listen', event: 'bar' })[0];
+      expect( call.listen ).toEqual( true );
     } );
 
     it( "does not issue a listen operation for subsequent listeners for the same event", function() {
       label.on( "foo", listener );
       label.on( "foo", listener );
 
-      expect( calls.length ).toBe( 1 );
+      expect( nativeBridge.calls({ op: 'listen' }).length ).toBe( 1 );
     } );
 
   } );
@@ -474,22 +427,21 @@ describe( "Tabris", function() {
       label = Tabris.create( "Label", {} );
       listener = jasmine.createSpy( "listener" );
       label.on( "foo", listener );
-      resetCalls();
+      nativeBridge.resetCalls();
     } );
 
     it( "issues a listen (false) operation for last listener removed", function() {
       label.off( "foo", listener );
 
-      expect( calls[0].op ).toEqual( "listen" );
-      expect( calls[0].event ).toEqual( "foo" );
-      expect( calls[0].listen ).toBe( false );
+      var call = nativeBridge.calls({ op: 'listen', event: 'foo' })[0];
+      expect( call.listen ).toBe( false );
     } );
 
     it( "does not issue a listen operation when there are other listeners for the same event", function() {
       label.on( "foo", listener );
       label.off( "foo", listener );
 
-      expect( calls.length ).toBe( 0 );
+      expect( nativeBridge.calls().length ).toBe( 0 );
     } );
 
   } );
@@ -501,8 +453,9 @@ describe( "Tabris", function() {
 
       label.destroy();
 
-      var destroyCalls = calls.filter( by({ op: 'destroy', id: calls[0].id }) );
-      expect( destroyCalls.length ).toBe( 1 );
+      var createCall = nativeBridge.calls({ op: 'create' })[0];
+      var destroyCall = nativeBridge.calls({ op: 'destroy' })[0];
+      expect( destroyCall.id ).toBe( createCall.id );
     } );
 
     it( "notifies dispose listeners", function() {
