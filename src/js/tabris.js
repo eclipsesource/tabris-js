@@ -96,7 +96,7 @@
   WidgetProxy.prototype = {
 
     get: function( method ) {
-      return Tabris._nativeBridge.set( this.id, method );
+      return Tabris._nativeBridge.get( this.id, method );
     },
 
     set: function( arg1, arg2 ) {
