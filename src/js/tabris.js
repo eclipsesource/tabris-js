@@ -1,12 +1,13 @@
 /*global util: false, Tabris: true */
-(function() {
 
-  var _loadFunctions = [];
+(function() {
 
   Tabris = {
 
+    _loadFunctions: [],
+
     load: function( fn ) {
-      _loadFunctions.push( fn );
+      Tabris._loadFunctions.push( fn );
     },
 
     create: function( type, properties ) {
@@ -18,62 +19,12 @@
       return new WidgetProxy( id );
     },
 
-    createAction: function( properties, handler ) {
-      var action = Tabris.create( "tabris.Action", util.merge( properties, {
-        parent: Tabris._UI.id
-      }));
-      action.on( "Selection", handler );
-      return action;
-    },
-
-    createPage: function( properties ) {
-      var pageKeys = ['title', 'image', 'topLevel'];
-      var compositeProperties = util.merge( util.omit( properties, pageKeys ), {
-        parent: Tabris._shell.id,
-        layoutData: { left: 0, right: 0, top: 0, bottom: 0 }
-      });
-      var composite = Tabris.create( "rwt.widgets.Composite", compositeProperties );
-      var pageProperties = util.merge( util.pick( properties, pageKeys ), {
-        parent: Tabris._UI.id,
-        control: composite.id
-      });
-      var page = Tabris.create( "tabris.Page", pageProperties );
-      composite.open = function() {
-        setActivePage( page );
-      };
-      composite.close = function() {
-        composite.destroy();
-        setLastActivePage();
-        page.destroy();
-      };
-      page.close = composite.close;
-      return composite;
-    },
-
     _start: function( nativeBridge ) {
       Tabris._nativeBridge = nativeBridge;
-      Tabris.create( "rwt.widgets.Display" );
-      Tabris._shell = Tabris.create( "rwt.widgets.Shell", {
-        style: ["NO_TRIM"],
-        mode: "maximized",
-        active: true,
-        visibility: true
-      });
-      Tabris._UI = Tabris.create( "tabris.UI", {
-        shell: Tabris._shell.id
-      });
-      Tabris._UI.on( "ShowPage", function( properties ) {
-        var page = Tabris._proxies[ properties.pageId ];
-        setActivePage( page );
-      });
-      Tabris._UI.on( "ShowPreviousPage", function() {
-        getActivePage().close();
-      });
       var i = 0;
-      while( i < _loadFunctions.length ) {
-        _loadFunctions[i++].call();
+      while( i < Tabris._loadFunctions.length ) {
+        Tabris._loadFunctions[i++].call();
       }
-      _loadFunctions = [];
     },
 
     _notify: function( id, event, param ) {
@@ -205,23 +156,6 @@
       return "rwt.widgets." + type;
     }
     return type;
-  };
-
-  var pages = [];
-
-  var setActivePage = function( page ) {
-    pages.push( page );
-    Tabris._UI.set( "activePage", page.id );
-  };
-
-  var getActivePage = function() {
-    return pages[ pages.length - 1 ];
-  };
-
-  var setLastActivePage = function() {
-    pages.pop();
-    var page = getActivePage();
-    Tabris._UI.set( "activePage", page.id );
   };
 
   var idSequence = 1;

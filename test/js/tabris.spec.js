@@ -3,57 +3,42 @@
 describe( "Tabris", function() {
 
   var nativeBridge;
+  var log;
 
   beforeEach( function() {
     nativeBridge = new NativeBridgeSpy();
+    log = [];
+    Tabris._loadFunctions = [];
     Tabris._start( nativeBridge );
-    nativeBridge.resetCalls();
   });
 
   describe( "_start", function() {
-
-    it( "creates Display, Shell, and Tabris UI", function() {
-      Tabris._start( nativeBridge );
-
-      var createCalls = nativeBridge.calls({ op: 'create' });
-      expect( createCalls[0].type ).toBe( "rwt.widgets.Display" );
-      expect( createCalls[1].type ).toBe( "rwt.widgets.Shell" );
-      expect( createCalls[2].type ).toBe( "tabris.UI" );
-    });
-
-    it( "created Shell is active, visible, and maximized", function() {
-      Tabris._start( nativeBridge );
-
-      var shellCreate = nativeBridge.calls({ op: 'create', type: 'rwt.widgets.Shell' })[0];
-      expect( shellCreate.properties.active ).toBe( true );
-      expect( shellCreate.properties.visibility ).toBe( true );
-      expect( shellCreate.properties.mode ).toBe( 'maximized' );
-    });
-
-    it( "Tabris UI refers to Shell", function() {
-      Tabris._start( nativeBridge );
-
-      var shellCreate = nativeBridge.calls({ op: 'create', type: 'rwt.widgets.Shell' })[0];
-      var tabrisUiCreate = nativeBridge.calls({ op: 'create', type: 'tabris.UI' })[0];
-      expect( tabrisUiCreate.properties.shell ).toBe( shellCreate.id );
-    });
-
-    it( "adds listeners for ShowPage and ShowPreviousPage events to Tabris UI", function() {
-      Tabris._start( nativeBridge );
-
-      var tabrisUiId = nativeBridge.calls({ op: 'create', type: 'tabris.UI' })[0].id;
-      expect( nativeBridge.calls({ op: 'listen', id: tabrisUiId, event: 'ShowPage' }).length ).toBe( 1 );
-      expect( nativeBridge.calls({ op: 'listen', id: tabrisUiId, event: 'ShowPreviousPage' }).length ).toBe( 1 );
-    });
 
     it( "can be called without a context", function() {
       Tabris._start.call( null, nativeBridge );
     });
 
-    it( "fails if no native bridge is provided", function() {
-      expect( function() {
-        Tabris._start.call( null, null );
-      } ).toThrow();
+    it( "executes all load functions", function() {
+      Tabris.load( function() {
+        log.push( "foo" );
+      });
+      Tabris.load( function() {
+        log.push( "bar" );
+      });
+
+      Tabris._start.call( null );
+
+      expect( log ).toEqual( ["foo", "bar"] );
+    });
+
+    it( "load functions can access Tabris functions", function() {
+      Tabris.load( function() {
+        Tabris.create( "Foo" );
+      });
+
+      Tabris._start.call( null, nativeBridge );
+
+      expect( nativeBridge.calls({ op: "create", type: "rwt.widgets.Foo" }).length ).toBe( 1 );
     });
 
   });
@@ -172,187 +157,6 @@ describe( "Tabris", function() {
       Tabris.create( "custom.Label", {} );
 
       expect( nativeBridge.calls({ op: 'create' })[0].type ).toEqual( "custom.Label" );
-    } );
-
-  } );
-
-  describe( "createAction", function() {
-
-    var handler;
-    var actionCreate;
-
-    beforeEach(function() {
-      handler = jasmine.createSpy();
-      Tabris.createAction( { title: "Foo", enabled: true }, handler );
-      actionCreate = nativeBridge.calls({ op: 'create', type: 'tabris.Action' });
-    });
-
-    it( "creates an action", function() {
-      expect( actionCreate.length ).toBe( 1 );
-    });
-
-    it( "created action's parent is set to Tabris.UI", function() {
-      expect( actionCreate[0].properties.parent ).toEqual( Tabris._UI.id );
-    });
-
-    it( "properties are passed to created action", function() {
-      expect( actionCreate[0].properties.title ).toEqual( "Foo" );
-      expect( actionCreate[0].properties.enabled ).toBe( true );
-    });
-
-    it( "calls native listen", function() {
-      var actionId = actionCreate[0].id;
-      var listenCalls = nativeBridge.calls({ op: 'listen', id: actionId, event: 'Selection' });
-
-      expect( listenCalls.length ).toBe( 1 );
-    });
-
-    it( "listen registers function that notifies listeners", function() {
-      var actionId = actionCreate[0].id;
-      Tabris._notify( actionId, "Selection", { "foo": 23 } );
-
-      expect( handler ).toHaveBeenCalledWith( { "foo": 23 } );
-    });
-
-  } );
-
-  describe( "createPage", function() {
-
-    var getCompositeCreate = function() {
-      return nativeBridge.calls({ op: 'create', type: 'rwt.widgets.Composite' })[0];
-    };
-    var getPageCreate = function() {
-      return nativeBridge.calls({ op: 'create', type: 'tabris.Page' })[0];
-    };
-
-    it( "creates a Composite and a Page", function() {
-      Tabris.createPage();
-
-      var createCalls = nativeBridge.calls({ op: 'create' });
-      expect( createCalls.length ).toBe( 2 );
-      expect( createCalls[0].type ).toBe( "rwt.widgets.Composite" );
-      expect( createCalls[1].type ).toBe( "tabris.Page" );
-    } );
-
-    describe( "created Composite", function() {
-
-      var createCall;
-
-      beforeEach(function() {
-        Tabris.createPage({ title: "title", image: "image", topLevel: true, background: "red" });
-        createCall = nativeBridge.calls({ op: 'create', type: 'rwt.widgets.Composite' })[0];
-      });
-
-      it( "does not inherit page properties", function() {
-        expect( createCall.properties.title ).not.toBeDefined();
-        expect( createCall.properties.image ).not.toBeDefined();
-        expect( createCall.properties.topLevel ).not.toBeDefined();
-      } );
-
-      it( "has non-page properties", function() {
-        expect( createCall.properties.background ).toEqual( "red" );
-      } );
-
-      it( "is full-size", function() {
-        expect( createCall.properties.layoutData ).toEqual( { left: 0, right: 0, top: 0, bottom: 0 } );
-      } );
-
-      it( "parent is shell", function() {
-        expect( createCall.properties.parent ).toEqual( Tabris._shell.id );
-      } );
-
-    } );
-
-    describe( "created Page", function() {
-
-      var createCall;
-
-      beforeEach(function() {
-        Tabris.createPage({ title: "title", image: "image", topLevel: true, background: "red" });
-        createCall = nativeBridge.calls({ op: 'create', type: 'tabris.Page' })[0];
-      });
-
-      it( "does not inherit non-page properties", function() {
-        expect( createCall.properties.background ).not.toBeDefined();
-      } );
-
-      it( "has title, image and topLevel properties", function() {
-        expect( createCall.properties.title ).toBe( "title" );
-        expect( createCall.properties.image ).toBe( "image" );
-        expect( createCall.properties.topLevel ).toBe( true );
-      } );
-
-      it( "control is set to composite", function() {
-        expect( createCall.properties.control ).toBe( getCompositeCreate().id );
-      } );
-
-      it( "parent is set to Tabris.UI", function() {
-        expect( createCall.properties.parent ).toBe( Tabris._UI.id );
-      } );
-
-    } );
-
-    describe( "returned object", function() {
-
-      it( "modifies composite", function() {
-        var page = Tabris.createPage();
-
-        page.set( "background", "red" );
-
-        var setCalls = nativeBridge.calls({ op: 'set' });
-        expect( setCalls.length ).toBeGreaterThan( 0 );
-        expect( setCalls[0].properties.background ).toEqual( "red" );
-      } );
-
-      it( "supports open and close", function() {
-        var page = Tabris.createPage();
-
-        expect( typeof page.open ).toBe( 'function' );
-        expect( typeof page.close ).toBe( 'function' );
-        page.open();
-      } );
-
-      describe( "open", function() {
-
-        it( "sets active page", function() {
-          var page = Tabris.createPage();
-
-          page.open();
-
-          var call = nativeBridge.calls({ op: 'set', id: Tabris._UI.id  })[0];
-          expect( call.properties.activePage ).toBe( getPageCreate().id );
-        } );
-
-      } );
-
-      describe( "close", function() {
-
-        it( "resets previous active page", function() {
-          var page1 = Tabris.createPage();
-          var page2 = Tabris.createPage();
-          page1.open();
-          var page1Id = getPageCreate().id;
-          page2.open();
-          nativeBridge.resetCalls();
-
-          page2.close();
-
-          var call = nativeBridge.calls({ op: 'set', id: Tabris._UI.id  })[0];
-          expect( call.properties.activePage ).toBe( page1Id ); // TODO add _pageId field in page
-        } );
-
-        it( "destroys composite and page", function() {
-          var page = Tabris.createPage();
-          page.open();
-
-          page.close();
-
-          expect( nativeBridge.calls({ op: 'destroy', id: getPageCreate().id }).length ).toBe( 1 );
-          expect( nativeBridge.calls({ op: 'destroy', id: getCompositeCreate().id }).length ).toBe( 1 );
-        } );
-
-      } );
-
     } );
 
   } );
