@@ -11,7 +11,7 @@ module.exports = function(grunt) {
         stripBanners: true
       },
       dist: {
-        src: ['src/js/tabris.js'],
+        src: ['src/js/util.js', 'src/js/tabris.js'],
         dest: 'build/tabris.js'
       }
     },

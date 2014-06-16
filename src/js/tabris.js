@@ -1,4 +1,4 @@
-/*global Tabris: true */
+/*global util: false, Tabris: true */
 (function() {
 
   var _loadFunctions = [];
@@ -19,7 +19,7 @@
     },
 
     createAction: function( properties, handler ) {
-      var action = Tabris.create( "tabris.Action", merge( properties, {
+      var action = Tabris.create( "tabris.Action", util.merge( properties, {
         parent: Tabris._UI.id
       }));
       action.on( "Selection", handler );
@@ -28,12 +28,12 @@
 
     createPage: function( properties ) {
       var pageKeys = ['title', 'image', 'topLevel'];
-      var compositeProperties = merge( omit( properties, pageKeys ), {
+      var compositeProperties = util.merge( util.omit( properties, pageKeys ), {
         parent: Tabris._shell.id,
         layoutData: { left: 0, right: 0, top: 0, bottom: 0 }
       });
       var composite = Tabris.create( "rwt.widgets.Composite", compositeProperties );
-      var pageProperties = merge( pick( properties, pageKeys ), {
+      var pageProperties = util.merge( util.pick( properties, pageKeys ), {
         parent: Tabris._UI.id,
         control: composite.id
       });
@@ -138,7 +138,7 @@
     },
 
     append: function( type, properties ) {
-      return Tabris.create( type, merge( properties, { parent: this.id } ) );
+      return Tabris.create( type, util.merge( properties, { parent: this.id } ) );
     },
 
     _addListener: function( event, listener ) {
@@ -228,38 +228,6 @@
 
   var generateId = function() {
     return "o" + ( idSequence++ );
-  };
-
-  var merge = function( obj1, obj2 ) {
-    var result = {};
-    var name;
-    for( name in obj1 ) {
-      result[name] = obj1[name];
-    }
-    for( name in obj2 ) {
-      result[name] = obj2[name];
-    }
-    return result;
-  };
-
-  var omit = function( object, keys ) {
-    var result = {};
-    for( var key in object ) {
-      if( keys.indexOf( key ) === -1 ) {
-        result[key] = object[key];
-      }
-    }
-    return result;
-  };
-
-  var pick = function( object, keys ) {
-    var result = {};
-    for( var key in object ) {
-      if( keys.indexOf( key ) !== -1 ) {
-        result[key] = object[key];
-      }
-    }
-    return result;
   };
 
 })();
