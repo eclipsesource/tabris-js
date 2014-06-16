@@ -20,8 +20,10 @@
 
   "browser" : true, // globals exposed by modern browsers e.g. `window`, `document`, etc.
   "globals": {
-
     "Tabris": false,
+
+    // Grunt
+    "module": false,
 
     // jasmine
     "describe": false,
