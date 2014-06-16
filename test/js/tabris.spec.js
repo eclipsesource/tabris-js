@@ -122,7 +122,7 @@ describe( "Tabris", function() {
       } ).toThrow( "tabris.js not started" );
     } );
 
-    it( "issues a create operation with type and properties", function() {
+    it( "calls native create with type and properties", function() {
       Tabris.create( "foo.bar", { foo: 23 } );
 
       var calls = nativeBridge.calls({ op: 'create', type: 'foo.bar' });
@@ -200,7 +200,7 @@ describe( "Tabris", function() {
       expect( actionCreate[0].properties.enabled ).toBe( true );
     });
 
-    it( "creates a listen operation", function() {
+    it( "calls native listen", function() {
       var actionId = actionCreate[0].id;
       var listenCalls = nativeBridge.calls({ op: 'listen', id: actionId, event: 'Selection' });
 
@@ -357,6 +357,27 @@ describe( "Tabris", function() {
 
   } );
 
+  describe( "get", function() {
+
+    it( "calls native get", function() {
+      var label = Tabris.create( "Label", {} );
+
+      label.get( "foo" );
+
+      expect( nativeBridge.calls({ op: "get", property: "foo" }).length ).toBe( 1 );
+    } );
+
+    it( "returns value from native", function() {
+      var label = Tabris.create( "Label", {} );
+      spyOn( nativeBridge, "get" ).andReturn( 23 );
+
+      var result = label.get( "prop" );
+
+      expect( result ).toBe( 23 );
+    } );
+
+  } );
+
   describe( "set", function() {
 
     it( "translates widgets to ids in layoutData", function() {
@@ -371,7 +392,7 @@ describe( "Tabris", function() {
 
   describe( "call", function() {
 
-    it( "issues call operation", function() {
+    it( "calls native call", function() {
       var label = Tabris.create( "type", { foo: 23 } );
       label.call( "method", { foo: 23 } );
 
@@ -394,14 +415,14 @@ describe( "Tabris", function() {
       nativeBridge.resetCalls();
     } );
 
-    it( "issues a listen (true) operation for first listener", function() {
+    it( "calls native listen (true) for first listener", function() {
       label.on( "foo", listener );
 
       var call = nativeBridge.calls({ op: 'listen', event: 'foo' })[0];
       expect( call.listen ).toEqual( true );
     } );
 
-    it( "issues a listen operation for another listener for another event", function() {
+    it( "calls native listen for another listener for another event", function() {
       label.on( "foo", listener );
       label.on( "bar", listener );
 
@@ -409,7 +430,7 @@ describe( "Tabris", function() {
       expect( call.listen ).toEqual( true );
     } );
 
-    it( "does not issue a listen operation for subsequent listeners for the same event", function() {
+    it( "does not call native listen for subsequent listeners for the same event", function() {
       label.on( "foo", listener );
       label.on( "foo", listener );
 
@@ -430,14 +451,14 @@ describe( "Tabris", function() {
       nativeBridge.resetCalls();
     } );
 
-    it( "issues a listen (false) operation for last listener removed", function() {
+    it( "calls native listen (false) for last listener removed", function() {
       label.off( "foo", listener );
 
       var call = nativeBridge.calls({ op: 'listen', event: 'foo' })[0];
       expect( call.listen ).toBe( false );
     } );
 
-    it( "does not issue a listen operation when there are other listeners for the same event", function() {
+    it( "calls native listen when there are other listeners for the same event", function() {
       label.on( "foo", listener );
       label.off( "foo", listener );
 
@@ -448,7 +469,7 @@ describe( "Tabris", function() {
 
   describe( "destroy", function() {
 
-    it( "issues destroy operation", function() {
+    it( "calls native destroy", function() {
       var label = Tabris.create( "type", { foo: 23 } );
 
       label.destroy();

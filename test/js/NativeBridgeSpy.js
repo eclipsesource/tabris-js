@@ -12,6 +12,12 @@ NativeBridgeSpy.prototype = {
                         properties: arguments[2] } );
   },
 
+  get : function() {
+    this._calls.push( { op: 'get',
+                        id: arguments[0],
+                        property: arguments[1] } );
+  },
+
   set : function() {
     this._calls.push( { op: 'set',
                         id: arguments[0],
