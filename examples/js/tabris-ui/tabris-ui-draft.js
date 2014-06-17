@@ -35,7 +35,7 @@ Tabris.load( function() {
       visible: true
     }, function() {});
     page.on( "Dispose", function() {
-      pageAction.destroy();
+      pageAction.dispose();
     });
 
     return page;

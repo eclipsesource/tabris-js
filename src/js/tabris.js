@@ -5,6 +5,7 @@
   Tabris = {
 
     _loadFunctions: [],
+    _proxies: {},
 
     load: function( fn ) {
       Tabris._loadFunctions.push( fn );
@@ -15,8 +16,13 @@
         throw new Error( "tabris.js not started" );
       }
       var id = generateId();
+      var parent = null;
+      if( properties && properties.parent ) {
+        parent = properties.parent;
+        properties.parent = translateWidgetToId( properties.parent );
+      }
       Tabris._nativeBridge.create( id, fixType( type ), fixProperties( properties ) );
-      return new WidgetProxy( id );
+      return new WidgetProxy( id, parent );
     },
 
     _start: function( nativeBridge ) {
@@ -32,25 +38,33 @@
       if( proxy ) {
         proxy._notifyListeners( event, [param] );
       }
-    },
-
-    _proxies: {}
+    }
 
   };
 
-  var WidgetProxy = function( id ) {
+  var WidgetProxy = function( id, parent ) {
     this.id = id;
-    this._listeners = {};
     Tabris._proxies[id] = this;
+    if( parent ) {
+      this._parent = parent;
+      parent._addChild( this );
+    }
   };
 
   WidgetProxy.prototype = {
 
+    append: function( type, properties ) {
+      this._checkDisposed();
+      return Tabris.create( type, util.merge( properties, { parent: this } ) );
+    },
+
     get: function( method ) {
+      this._checkDisposed();
       return Tabris._nativeBridge.get( this.id, method );
     },
 
     set: function( arg1, arg2 ) {
+      this._checkDisposed();
       var properties;
       if( typeof arg1 === "string" ) {
         properties = {};
@@ -63,11 +77,13 @@
     },
 
     call: function( method, parameters ) {
+      this._checkDisposed();
       Tabris._nativeBridge.call( this.id, method, parameters );
       return this;
     },
 
     on: function( event, listener ) {
+      this._checkDisposed();
       if( this._addListener( event, listener ) ) {
         Tabris._nativeBridge.listen( this.id, event, true );
       }
@@ -75,24 +91,39 @@
     },
 
     off: function( event, listener ) {
+      this._checkDisposed();
       if( this._removeListener( event, listener ) ) {
         Tabris._nativeBridge.listen( this.id, event, false );
       }
       return this;
     },
 
-    destroy: function() {
+    dispose: function() {
+      if( !this._isDisposed ) {
+        Tabris._nativeBridge.destroy( this.id );
+        this._destroy();
+        if( this._parent ) {
+          this._parent._removeChild( this );
+        }
+        this._isDisposed = true;
+      }
+    },
+
+    _destroy: function() {
+      if( this._children ) {
+        for( var i = 0; i < this._children.length; i++ ) {
+          this._children[i]._destroy();
+        }
+      }
       this._notifyListeners( "Dispose", [{}] );
-      Tabris._nativeBridge.destroy( this.id );
       this._listeners = null;
       delete Tabris._proxies[this.id];
     },
 
-    append: function( type, properties ) {
-      return Tabris.create( type, util.merge( properties, { parent: this.id } ) );
-    },
-
     _addListener: function( event, listener ) {
+      if( !this._listeners ) {
+        this._listeners = [];
+      }
       if( !( event in this._listeners ) ) {
         this._listeners[ event ] = [];
       }
@@ -101,7 +132,7 @@
     },
 
     _removeListener: function( event, listener ) {
-      if( event in this._listeners ) {
+      if( this._listeners && event in this._listeners ) {
         var index = this._listeners[ event ].indexOf( listener );
         if( index !== -1 ) {
           this._listeners[ event ].splice( index, 1 );
@@ -112,11 +143,33 @@
     },
 
     _notifyListeners: function( event, args ) {
-      if( event in this._listeners ) {
+      if( this._listeners && event in this._listeners ) {
         var listeners = this._listeners[event];
         for( var i = 0; i < listeners.length; i++ ) {
           listeners[i].apply( this, args );
         }
+      }
+    },
+
+    _addChild: function( child ) {
+      if( !this._children ) {
+        this._children = [];
+      }
+      this._children.push( child );
+    },
+
+    _removeChild: function( child ) {
+      if( this._children ) {
+        var index = this._children.indexOf( child );
+        if( index !== -1 ) {
+          this._children.splice( index, 1 );
+        }
+      }
+    },
+
+    _checkDisposed: function() {
+      if( this._isDisposed ) {
+        throw new Error( "Object is disposed" );
       }
     }
 

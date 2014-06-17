@@ -131,11 +131,13 @@ describe( "Tabris", function() {
       expect( createCalls[0].id ).not.toEqual( createCalls[1].id );
     } );
 
-    it( "returns a proxy object", function() {
-      var result = Tabris.create( "type", { foo: 23 } );
+    it( "translates parent widget to id in properties", function() {
+      var parent = Tabris.create( "Composite", {} );
 
-      expect( result ).toBeDefined();
-      expect( typeof result.set ).toBe( "function" );
+      Tabris.create( "Label", { parent: parent } );
+
+      var properties = nativeBridge.calls({ op: 'create', type: "rwt.widgets.Label" })[0].properties;
+      expect( properties.parent ).toEqual( parent.id );
     } );
 
     it( "translates widgets to ids in layoutData", function() {
@@ -159,6 +161,45 @@ describe( "Tabris", function() {
       expect( nativeBridge.calls({ op: 'create' })[0].type ).toEqual( "custom.Label" );
     } );
 
+    it( "returns a proxy object", function() {
+      var result = Tabris.create( "type", { foo: 23 } );
+
+      expect( result ).toBeDefined();
+      expect( typeof result.set ).toBe( "function" );
+    } );
+
+  } );
+
+  describe( "append", function() {
+
+    it( "calls native create with parent", function() {
+      var parent = Tabris.create( "Composite", {} );
+
+      parent.append( "Label", {} );
+
+      var createCall = nativeBridge.calls({ op: "create", type: "rwt.widgets.Label" })[0];
+      expect( createCall.properties.parent ).toBe( parent.id );
+    } );
+
+    it( "fails on disposed object", function() {
+      var parent = Tabris.create( "Composite", {} );
+      parent.dispose();
+
+      expect( function() {
+        parent.append( "Label", {} );
+      }).toThrow( "Object is disposed" );
+    } );
+
+    it( "returns a proxy object with parent", function() {
+      var parent = Tabris.create( "Composite", {} );
+
+      var child = parent.append( "Label", {} );
+
+      expect( child ).toBeDefined();
+      expect( typeof child.set ).toBe( "function" );
+      expect( child._parent ).toBe( parent );
+    } );
+
   } );
 
   describe( "get", function() {
@@ -180,6 +221,15 @@ describe( "Tabris", function() {
       expect( result ).toBe( 23 );
     } );
 
+    it( "fails on disposed object", function() {
+      var label = Tabris.create( "Label", {} );
+      label.dispose();
+
+      expect( function() {
+        label.get( "foo" );
+      }).toThrow( "Object is disposed" );
+    } );
+
   } );
 
   describe( "set", function() {
@@ -190,6 +240,23 @@ describe( "Tabris", function() {
 
       var call = nativeBridge.calls({ op: 'set' })[0];
       expect( call.properties.layoutData ).toEqual( { left: 23, right: label.id, top: [label.id, 42] } );
+    } );
+
+    it( "returns self to allow chaining", function() {
+      var label = Tabris.create( "Label", {} );
+
+      var result = label.set( "foo", 23 );
+
+      expect( result ).toBe( label );
+    } );
+
+    it( "fails on disposed object", function() {
+      var label = Tabris.create( "Label", {} );
+      label.dispose();
+
+      expect( function() {
+        label.set( "foo", 23 );
+      }).toThrow( "Object is disposed" );
     } );
 
   } );
@@ -204,6 +271,23 @@ describe( "Tabris", function() {
       expect( call.op ).toEqual( 'call' );
       expect( call.method ).toEqual( 'method' );
       expect( call.parameters ).toEqual( { foo: 23 } );
+    } );
+
+    it( "returns self to allow chaining", function() {
+      var label = Tabris.create( "Label", {} );
+
+      var result = label.call( "foo", {} );
+
+      expect( result ).toBe( label );
+    } );
+
+    it( "fails on disposed object", function() {
+      var label = Tabris.create( "Label", {} );
+      label.dispose();
+
+      expect( function() {
+        label.call( "foo", {} );
+      }).toThrow( "Object is disposed" );
     } );
 
   } );
@@ -241,6 +325,20 @@ describe( "Tabris", function() {
       expect( nativeBridge.calls({ op: 'listen' }).length ).toBe( 1 );
     } );
 
+    it( "returns self to allow chaining", function() {
+      var result = label.on( "foo", listener );
+
+      expect( result ).toBe( label );
+    } );
+
+    it( "fails on disposed object", function() {
+      label.dispose();
+
+      expect( function() {
+        label.on( "foo", listener );
+      }).toThrow( "Object is disposed" );
+    } );
+
   } );
 
   describe( "off", function() {
@@ -269,14 +367,28 @@ describe( "Tabris", function() {
       expect( nativeBridge.calls().length ).toBe( 0 );
     } );
 
+    it( "returns self to allow chaining", function() {
+      var result = label.off( "foo", listener );
+
+      expect( result ).toBe( label );
+    } );
+
+    it( "fails on disposed object", function() {
+      label.dispose();
+
+      expect( function() {
+        label.off( "foo", listener );
+      }).toThrow( "Object is disposed" );
+    } );
+
   } );
 
-  describe( "destroy", function() {
+  describe( "dispose", function() {
 
     it( "calls native destroy", function() {
       var label = Tabris.create( "type", { foo: 23 } );
 
-      label.destroy();
+      label.dispose();
 
       var createCall = nativeBridge.calls({ op: 'create' })[0];
       var destroyCall = nativeBridge.calls({ op: 'destroy' })[0];
@@ -288,9 +400,63 @@ describe( "Tabris", function() {
       var listener = jasmine.createSpy();
       label.on( "Dispose", listener );
 
-      label.destroy();
+      label.dispose();
 
       expect( listener ).toHaveBeenCalled();
+    } );
+
+    it( "notifies all children's dispose listeners", function() {
+      var parent = Tabris.create( "type", {} );
+      var child1 = Tabris.create( "type", { parent: parent } );
+      var child2 = Tabris.create( "type", { parent: parent } );
+
+      parent.on( "Dispose", function() { log.push( "parent" ); } );
+      child1.on( "Dispose", function() { log.push( "child1" ); } );
+      child2.on( "Dispose", function() { log.push( "child2" ); } );
+
+      parent.dispose();
+
+      expect( log ).toEqual( [ "child1", "child2", "parent" ] );
+    } );
+
+    it( "notifies children's dispose listeners recursively", function() {
+      var parent = Tabris.create( "type", {} );
+      var child = Tabris.create( "type", { parent: parent } );
+      var grandchild = Tabris.create( "type", { parent: child } );
+      parent.on( "Dispose", function() { log.push( "parent" ); } );
+      child.on( "Dispose", function() { log.push( "child" ); } );
+      grandchild.on( "Dispose", function() { log.push( "grandchild" ); } );
+
+      parent.dispose();
+
+      expect( log ).toEqual( [ "grandchild", "child", "parent" ] );
+    } );
+
+    it( "does not call native destroy on children", function() {
+      var parent = Tabris.create( "type", {} );
+      Tabris.create( "type", { parent: parent } );
+
+      parent.dispose();
+
+      expect( nativeBridge.calls({ op: 'destroy' }).length ).toBe( 1 );
+    } );
+
+    it( "does not call native destroy twice when called twice", function() {
+      var label = Tabris.create( "type", {} );
+
+      label.dispose();
+      label.dispose();
+
+      expect( nativeBridge.calls({ op: 'destroy' }).length ).toBe( 1 );
+    } );
+
+    it( "unregisters from parent to allow garbage collection", function() {
+      var parent = Tabris.create( "Composite", {} );
+      var child = Tabris.create( "Label", { parent: parent } );
+
+      child.dispose();
+
+      expect( parent._children.length ).toBe( 0 );
     } );
 
   } );
@@ -303,6 +469,10 @@ describe( "Tabris", function() {
     beforeEach( function() {
       label = Tabris.create( "Label", {} );
       listener = jasmine.createSpy( "listener" );
+    } );
+
+    it( "notify without listeners does not fail", function() {
+      label._notifyListeners( "foo", ["bar", 23] );
     } );
 
     it( "added listener will be notified", function() {

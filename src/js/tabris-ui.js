@@ -41,7 +41,7 @@ Tabris._ui = {
 
   createAction: function( properties, handler ) {
     var action = Tabris.create( "tabris.Action", util.merge( properties, {
-      parent: Tabris._UI.id
+      parent: Tabris._UI
     }));
     action.on( "Selection", handler );
     return action;
@@ -50,12 +50,12 @@ Tabris._ui = {
   createPage: function( properties ) {
     var pageKeys = ['title', 'image', 'topLevel'];
     var compositeProperties = util.merge( util.omit( properties, pageKeys ), {
-      parent: Tabris._shell.id,
+      parent: Tabris._shell,
       layoutData: { left: 0, right: 0, top: 0, bottom: 0 }
     });
     var composite = Tabris.create( "rwt.widgets.Composite", compositeProperties );
     var pageProperties = util.merge( util.pick( properties, pageKeys ), {
-      parent: Tabris._UI.id,
+      parent: Tabris._UI,
       control: composite.id
     });
     var page = Tabris.create( "tabris.Page", pageProperties );
@@ -63,9 +63,9 @@ Tabris._ui = {
       Tabris._ui.setActivePage( page );
     };
     composite.close = function() {
-      composite.destroy();
+      composite.dispose();
       Tabris._ui.setLastActivePage();
-      page.destroy();
+      page.dispose();
     };
     page.close = composite.close;
     return composite;
