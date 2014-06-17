@@ -104,7 +104,7 @@ describe( "Tabris", function() {
 
       expect( function() {
         Tabris.create( "foo.bar", { foo: 23 } );
-      } ).toThrow( "tabris.js not started" );
+      } ).toThrowError( "tabris.js not started" );
     } );
 
     it( "calls native create with type and properties", function() {
@@ -187,7 +187,7 @@ describe( "Tabris", function() {
 
       expect( function() {
         parent.append( "Label", {} );
-      }).toThrow( "Object is disposed" );
+      }).toThrowError( "Object is disposed" );
     } );
 
     it( "returns a proxy object with parent", function() {
@@ -214,7 +214,7 @@ describe( "Tabris", function() {
 
     it( "returns value from native", function() {
       var label = Tabris.create( "Label", {} );
-      spyOn( nativeBridge, "get" ).andReturn( 23 );
+      spyOn( nativeBridge, "get" ).and.returnValue( 23 );
 
       var result = label.get( "prop" );
 
@@ -227,7 +227,7 @@ describe( "Tabris", function() {
 
       expect( function() {
         label.get( "foo" );
-      }).toThrow( "Object is disposed" );
+      }).toThrowError( "Object is disposed" );
     } );
 
   } );
@@ -256,7 +256,7 @@ describe( "Tabris", function() {
 
       expect( function() {
         label.set( "foo", 23 );
-      }).toThrow( "Object is disposed" );
+      }).toThrowError( "Object is disposed" );
     } );
 
   } );
@@ -287,7 +287,7 @@ describe( "Tabris", function() {
 
       expect( function() {
         label.call( "foo", {} );
-      }).toThrow( "Object is disposed" );
+      }).toThrowError( "Object is disposed" );
     } );
 
   } );
@@ -336,7 +336,7 @@ describe( "Tabris", function() {
 
       expect( function() {
         label.on( "foo", listener );
-      }).toThrow( "Object is disposed" );
+      }).toThrowError( "Object is disposed" );
     } );
 
   } );
@@ -378,7 +378,7 @@ describe( "Tabris", function() {
 
       expect( function() {
         label.off( "foo", listener );
-      }).toThrow( "Object is disposed" );
+      }).toThrowError( "Object is disposed" );
     } );
 
   } );
@@ -487,7 +487,7 @@ describe( "Tabris", function() {
       label._addListener( "foo", listener );
       label._notifyListeners( "foo", ["bar", 23] );
 
-      expect( listener.calls.length ).toBe( 2 );
+      expect( listener.calls.count() ).toBe( 2 );
     } );
 
     it( "removed listeners will not be notfied anymore", function() {
