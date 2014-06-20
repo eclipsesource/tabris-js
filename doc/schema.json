@@ -1,0 +1,477 @@
+{
+  "Widget": {
+    "id": "rwt.widgets.Widget",
+    "type": "object",
+    "properties": {
+      "style": {
+        "type": "array"
+      },
+      "bounds": {
+        "type": "array",
+        "items": [
+          {
+            "description": "X Offset",
+            "type": "number"
+          },
+          {
+            "description": "Y Offset",
+            "type": "number"
+          },
+          {
+            "description": "Width",
+            "type": "number"
+          },
+          {
+            "description": "Height",
+            "type": "number"
+          }
+        ]
+      },
+      "tabIndex": {
+        "type": "number"
+      },
+      "enabled": {
+        "type": "boolean"
+      },
+      "visibility": {
+        "type": "boolean"
+      },
+      "font": {
+        "type": "array",
+        "items": [
+          {
+            "type": "array",
+            "items": [
+              {
+                "description": "Font Name",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "description": "Font Size",
+            "type": "number"
+          },
+          {
+            "description": "Bold",
+            "type": "boolean"
+          },
+          {
+            "description": "Italic",
+            "type": "boolean"
+          }
+        ]
+      },
+      "foreground": {
+        "type": "array",
+        "items": [
+          {
+            "description": "Red",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 255
+          },
+          {
+            "description": "Green",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 255
+          },
+          {
+            "description": "Blue",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 255
+          },
+          {
+            "description": "Alpha",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 255
+          }
+        ]
+      },
+      "background": {
+        "type": "array",
+        "items": [
+          {
+            "description": "Red",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 255
+          },
+          {
+            "description": "Green",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 255
+          },
+          {
+            "description": "Blue",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 255
+          },
+          {
+            "description": "Alpha",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 255
+          }
+        ]
+      },
+      "backgroundImage": {
+        "type": "array",
+        "items": [
+          {
+            "description": "Image Path",
+            "type": "string"
+          },
+          {
+            "description": "width",
+            "type": "number"
+          },
+          {
+            "description": "height",
+            "type": "number"
+          }
+        ]
+      },
+      "data": {
+        "type": "object"
+      }
+    },
+    "listeners": [
+      "Dispose"
+    ]
+  },
+  "Control": {
+    "id": "rwt.widgets.Control",
+    "type": "object",
+    "extends": "rwt.widgets.Widget",
+    "properties": {
+      "menu": {
+        "type": "string"
+      }
+    },
+    "listeners": [
+      "FocusIn",
+      "FocusOut",
+      {
+        "MouseDown": {
+          "event": {
+            "parameters": {
+              "button": {
+                "type": "number"
+              },
+              "x": {
+                "type": "number"
+              },
+              "y": {
+                "type": "number"
+              },
+              "time": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      },
+      {
+        "MouseUp": {
+          "event": {
+            "parameters": {
+              "button": {
+                "type": "number"
+              },
+              "x": {
+                "type": "number"
+              },
+              "y": {
+                "type": "number"
+              },
+              "time": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      },
+      {
+        "MouseDoubleClick": {
+          "event": {
+            "parameters": {
+              "button": {
+                "type": "number"
+              },
+              "x": {
+                "type": "number"
+              },
+              "y": {
+                "type": "number"
+              },
+              "time": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      },
+      {
+        "MenuDetect": {
+          "event": {
+            "parameters": {
+              "x": {
+                "type": "number"
+              },
+              "y": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "Label": {
+    "id": "rwt.widgets.Label",
+    "type": "object",
+    "extends": "rwt.widgets.Control",
+    "properties": {
+      "alignment": {
+        "type": "string",
+        "values": [
+          "left",
+          "right",
+          "center"
+        ]
+      },
+      "text": {
+        "type": "string"
+      },
+      "image": {
+        "type": "array",
+        "items": [
+          {
+            "description": "Image Path",
+            "type": "string"
+          },
+          {
+            "description": "Width",
+            "type": "number"
+          },
+          {
+            "description": "Height",
+            "type": "number"
+          }
+        ]
+      },
+      "markupEnabled": {
+        "type": "boolean"
+      }
+    }
+  },
+  "Text": {
+    "id": "rwt.widgets.Text",
+    "type": "object",
+    "extends": "rwt.widgets.Scrollable",
+    "properties": {
+      "style": {
+        "type": "array",
+        "values": [
+          "SINGLE",
+          "MULTI",
+          "PASSWORD"
+        ]
+      },
+      "text": {
+        "type": "string"
+      },
+      "toolTip": {
+        "type": "string"
+      },
+      "echoChar": {
+        "type": "string"
+      },
+      "textLimit": {
+        "type": "number"
+      },
+      "selection": {
+        "type": "array"
+      }
+    },
+    "listeners": [
+      "Selection",
+      "Verify",
+      "Modify"
+    ]
+  },
+  "Combo": {
+    "id": "rwt.widgets.Combo",
+    "type": "object",
+    "extends": "rwt.widgets.Composite",
+    "properties": {
+      "text": {
+        "type": "string"
+      },
+      "toolTip": {
+        "type": "string"
+      },
+      "selectionIndex": {
+        "type": "number"
+      },
+      "items": {
+        "type": "array"
+      },
+      "font": {
+        "type": "array",
+        "items": [
+          {
+            "type": "array",
+            "items": [
+              {
+                "description": "Font Name",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "description": "Font Size",
+            "type": "number"
+          },
+          {
+            "description": "Bold",
+            "type": "boolean"
+          },
+          {
+            "description": "Italic",
+            "type": "boolean"
+          }
+        ]
+      }
+    },
+    "listeners": [
+      "Selection",
+      "Verify",
+      "Modify"
+    ]
+  },
+  "DateTime": {
+    "id": "rwt.widgets.DateTime",
+    "type": "object",
+    "extends": "rwt.widgets.Composite",
+    "properties": {
+      "style": {
+        "type": "array",
+        "values": [
+          "DATE",
+          "TIME"
+        ]
+      },
+      "year": {
+        "type": "number"
+      },
+      "month": {
+        "type": "number"
+      },
+      "day": {
+        "type": "number"
+      },
+      "minutes": {
+        "type": "number"
+      },
+      "seconds": {
+        "type": "number"
+      },
+      "datePattern": {
+        "type": "string"
+      },
+      "dateSeparator": {
+        "type": "string"
+      },
+      "toolTip": {
+        "type": "string"
+      }
+    },
+    "listeners": [
+      "Selection"
+    ]
+  },
+  "Button": {
+    "id": "rwt.widgets.Button",
+    "type": "object",
+    "extends": "rwt.widgets.Control",
+    "properties": {
+      "style": {
+        "type": "array",
+        "values": [
+          "PUSH",
+          "CHECK",
+          "RADIO",
+          "FLAT",
+          "TOGGLE"
+        ]
+      },
+      "text": {
+        "type": "string"
+      },
+      "alignment": {
+        "type": "string",
+        "values": [
+          "left",
+          "right",
+          "center"
+        ]
+      },
+      "selection": {
+        "type": "boolean"
+      },
+      "image": {
+        "type": "array",
+        "items": [
+          {
+            "description": "Image Path",
+            "type": "string"
+          },
+          {
+            "description": "width",
+            "type": "number"
+          },
+          {
+            "description": "height",
+            "type": "number"
+          }
+        ]
+      }
+    },
+    "font": {
+      "type": "array",
+      "items": [
+        {
+          "type": "array",
+          "items": [
+            {
+              "description": "Font Name",
+              "type": "string"
+            }
+          ]
+        },
+        {
+          "description": "Font Size",
+          "type": "number"
+        },
+        {
+          "description": "Bold",
+          "type": "boolean"
+        },
+        {
+          "description": "Italic",
+          "type": "boolean"
+        }
+      ]
+    }
+  },
+  "listeners": [
+    "Selection"
+  ]
+}
