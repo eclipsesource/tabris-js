@@ -1,9 +1,7 @@
 
-Sources and tests for *tabris.js*
-=================================
+# Sources and tests for *tabris.js*
 
-Build
------
+## Build
 
 Install [Grunt](http://gruntjs.com) using npm:
 
@@ -17,15 +15,13 @@ Build:
 
     grunt [-v]
 
-Update tabris-android
----------------------
+## Update tabris-android
 
 Copy latest tabris.js and example project to local android-js repository:
 
     ./update-android tabris-ui
 
-Update tabris-ios
------------------
+## Update tabris-ios
 
 Copy tabris.js to tabris-ios
 
