@@ -175,7 +175,7 @@ Tabris.load(function() {
                                     + dateTime.get("day")
             });
         } else {
-            message.destroy();
+            message.dispose();
             message = null;
             populateMessage();
         }
