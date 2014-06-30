@@ -1,0 +1,88 @@
+{
+  "id": "rwt.widgets.Control",
+  "type": "object",
+  "extends": "rwt.widgets.Widget",
+  "properties": {
+    "menu": {
+      "type": "string"
+    }
+  },
+  "listeners": [
+    "FocusIn",
+    "FocusOut",
+    {
+      "MouseDown": {
+        "event": {
+          "parameters": {
+            "button": {
+              "type": "number"
+            },
+            "x": {
+              "type": "number"
+            },
+            "y": {
+              "type": "number"
+            },
+            "time": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    {
+      "MouseUp": {
+        "event": {
+          "parameters": {
+            "button": {
+              "type": "number"
+            },
+            "x": {
+              "type": "number"
+            },
+            "y": {
+              "type": "number"
+            },
+            "time": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    {
+      "MouseDoubleClick": {
+        "event": {
+          "parameters": {
+            "button": {
+              "type": "number"
+            },
+            "x": {
+              "type": "number"
+            },
+            "y": {
+              "type": "number"
+            },
+            "time": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    {
+      "MenuDetect": {
+        "event": {
+          "parameters": {
+            "x": {
+              "type": "number"
+            },
+            "y": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

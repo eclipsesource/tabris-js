@@ -1,0 +1,44 @@
+{
+  "id": "rwt.widgets.Combo",
+  "type": "object",
+  "extends": "rwt.widgets.Composite",
+  "properties": {
+    "text": {
+      "type": "string"
+    },
+    "toolTip": {
+      "type": "string"
+    },
+    "selectionIndex": {
+      "type": "number"
+    },
+    "items": {
+      "type": "array"
+    },
+    "font": {
+      "type": [
+        {
+          "description": "Font Name",
+          "type": "array of strings"
+        },
+        {
+          "description": "Font Size",
+          "type": "number"
+        },
+        {
+          "description": "Bold",
+          "type": "boolean"
+        },
+        {
+          "description": "Italic",
+          "type": "boolean"
+        }
+      ]
+    }
+  },
+  "listeners": [
+    "Selection",
+    "Verify",
+    "Modify"
+  ]
+}
