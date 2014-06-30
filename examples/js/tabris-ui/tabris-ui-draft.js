@@ -6,26 +6,27 @@ Tabris.load( function() {
   var blue = [200, 200, 255];
 
   var createSubPage = function( title, bgColor ) {
-    var page = Tabris.createPage({ title: title, topLevel: false });
-    page.set( "background", bgColor );
+    var page = Tabris.createPage({
+      title: title,
+      topLevel: false,
+      background: bgColor
+    });
     var label = page.append( "Label", {
       layoutData: { left: 10, right: 10, top: 10 },
       text: title
     });
-    var closeButton = page.append( "Button", {
-      text: "close this page",
-      layoutData: { left: 10, right: 10, top: [label, 10] }
-    });
-    closeButton.on( "Selection", function() {
-      page.close();
-    });
     var openButton = page.append( "Button", {
       text: "open another page",
-      layoutData: { left: 10, right: 10, top: [closeButton, 10] }
-    });
-    openButton.on( "Selection", function() {
+      layoutData: { left: 10, right: 10, top: [label, 10] }
+    }).on( "Selection", function() {
       var subpage = createSubPage( title + "-sub", bgColor );
       subpage.open();
+    });
+    page.append( "Button", {
+      text: "close this page",
+      layoutData: { left: 10, right: 10, top: [openButton, 10] }
+    }).on( "Selection", function() {
+      page.close();
     });
 
     // Page action
@@ -42,19 +43,27 @@ Tabris.load( function() {
   };
 
   var createToplevelPage = function( title, bgColor ) {
-    var page = Tabris.createPage({ title: title, topLevel: true });
-    page.set( "background", bgColor );
+    var page = Tabris.createPage({
+      title: title,
+      topLevel: true,
+      background: bgColor
+    });
     var label = page.append( "Label", {
       layoutData: { left: 10, right: 10, top: 10 },
       text: title
     });
-    var button = page.append( "Button", {
+    var openButton = page.append( "Button", {
       text: "open page",
       layoutData: { left: 10, right: 10, top: [label, 10] }
-    });
-    button.on( "Selection", function() {
+    }).on( "Selection", function() {
       var subpage = createSubPage( title + "-sub", bgColor );
       subpage.open();
+    });
+    page.append( "Button", {
+      text: "close this page",
+      layoutData: { left: 10, right: 10, top: [openButton, 10] }
+    }).on( "Selection", function() {
+      page.close();
     });
     return page;
   };

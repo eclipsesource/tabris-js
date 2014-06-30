@@ -1,34 +1,34 @@
 var DEBUG = true;
 
-Tabris.load(function() {
-  var page = Tabris.createPage({
-    title: "Automata",
-    topLevel: true
-  });
-  page.set("background", [0, 0, 0, 255]);
-  page.set("bounds", [0,0,320,504]);
-  // var bounds = page.get("bounds");
-
-  var label = page.append("rwt.widgets.Label", {
-    bounds: [0, 0, 80, 40],
-    background: [255, 0, 0, 200],
-    foreground: [255, 255, 255, 255],
-    text:"FPS"
-  });
+Tabris.load( function() {
 
   // var height = Ti.Platform.displayCaps.platformHeight;
   // var width = Ti.Platform.displayCaps.platformWidth;
-  var width = 320;//bounds[2];
+  var width = 320; //bounds[2];
   var height = 504; //bounds[3];
 
   var CELL_SIZE = Math.floor(Math.min(height, width) / 30);
   var xSize = width / CELL_SIZE;
   var ySize = height / CELL_SIZE;
+
   //var universe = Ti.UI.createWindow({
   //  backgroundColor: '#000',
   //  modal: false,
   //  exitOnClose: true
   //});
+  var page = Tabris.createPage({
+    title: "Automata",
+    topLevel: true,
+    background: [0, 0, 0]
+  });
+
+  // TODO [rst] Move down when z-order is fixed
+  var label = page.append( "Label", {
+    bounds: [0, 0, 80, 40],
+    background: [255, 0, 0, 200],
+    foreground: [255, 255, 255],
+    text: "FPS"
+  });
 
   function getNextState(x, y, alive) {
     var count = 0,
@@ -75,9 +75,9 @@ Tabris.load(function() {
     cells[x] = [];
     for (var y = 0; y < ySize; y++) {
       var alive = Math.random() >= 0.5;
-      var composite = page.append("rwt.widgets.Composite", {
+      var composite = page.append("Composite", {
         bounds: [x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE],
-        background: [255, 255, 255, 255],
+        background: [255, 255, 255],
         visibility: alive
       });
       cells[x][y] = {
