@@ -29,11 +29,11 @@ Acceptable values for `width` and `height`:
 When there is no `layoutData` specified for a widget, the behavior is undefined.
 If some properties are missing, the following rules apply:
 
-* When `width` is not specified, the width is defined by the difference between `right` and `left`. When either `left` or `right` is also missing, the widget should shrink to it's minimal width.
+* When `width` is not specified, the width is defined by the difference between `right` and `left`. When either `left` or `right` is also missing, the widget should shrink to the minimal width required to display its content.
 
 * When both `left` and `right` are missing, the widget should be aligned on the left edge.
 
-* When `height` is not specified, the height is defined by the difference between `bottom` and `top`. When either `top` or `bottom` is also missing, the widget should shrink to it's minimal height.
+* When `height` is not specified, the height is defined by the difference between `bottom` and `top`. When either `top` or `bottom` is also missing, the widget should shrink to the minimal height required to display its content.
 
 * When both `top` and `bottom` are missing, the widget should be aligned on the top edge.
 
