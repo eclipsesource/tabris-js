@@ -56,4 +56,26 @@ describe( "util", function() {
 
   });
 
+  describe( "bind", function() {
+
+    it( "returns a wrapper that will be called with context", function() {
+      var fn = function() { return this; };
+      var obj = {};
+
+      var wrapper = util.bind( fn, obj );
+
+      expect( wrapper() ).toBe( obj );
+    });
+
+    it( "wrapper receives arguments", function() {
+      var fn = jasmine.createSpy();
+
+      var wrapper = util.bind( fn, {} );
+      wrapper( 23, 42 );
+
+      expect( fn ).toHaveBeenCalledWith( 23, 42 );
+    });
+
+  });
+
 });

@@ -1,12 +1,40 @@
 /*global Tabris: true, util: false */
 
-Tabris._ui = {
+Tabris.UIController = function() {
+  this._pages = [];
+};
 
-  _pages: [],
+Tabris.UIController.prototype = {
+
+  init: function() {
+    var self = this;
+    Tabris.create( "rwt.widgets.Display" );
+    this._shell = Tabris.create( "rwt.widgets.Shell", {
+      style: ["NO_TRIM"],
+      mode: "maximized",
+      active: true,
+      visibility: true
+    });
+    this._ui = Tabris.create( "tabris.UI", {
+      shell: this._shell.id
+    });
+    this._ui.on( "ShowPage", function( properties ) {
+      var page = Tabris._proxies[ properties.pageId ];
+      self.setActivePage( page );
+    });
+    this._ui.on( "ShowPreviousPage", function() {
+      self.getActivePage().close();
+    });
+  },
+
+  install: function( target ) {
+    target.createAction = util.bind( this.createAction, this );
+    target.createPage = util.bind( this.createPage, this );
+  },
 
   setActivePage: function( page ) {
     this._pages.push( page );
-    Tabris._UI.set( "activePage", page.id );
+    this._ui.set( "activePage", page.id );
   },
 
   getActivePage: function() {
@@ -16,55 +44,38 @@ Tabris._ui = {
   setLastActivePage: function() {
     this._pages.pop();
     var page = this.getActivePage();
-    Tabris._UI.set( "activePage", page.id );
-  },
-
-  load: function() {
-    Tabris.create( "rwt.widgets.Display" );
-    Tabris._shell = Tabris.create( "rwt.widgets.Shell", {
-      style: ["NO_TRIM"],
-      mode: "maximized",
-      active: true,
-      visibility: true
-    });
-    Tabris._UI = Tabris.create( "tabris.UI", {
-      shell: Tabris._shell.id
-    });
-    Tabris._UI.on( "ShowPage", function( properties ) {
-      var page = Tabris._proxies[ properties.pageId ];
-      Tabris._ui.setActivePage( page );
-    });
-    Tabris._UI.on( "ShowPreviousPage", function() {
-      Tabris._ui.getActivePage().close();
-    });
+    if( page ) {
+      this._ui.set( "activePage", page.id );
+    }
   },
 
   createAction: function( properties, handler ) {
     var action = Tabris.create( "tabris.Action", util.merge( properties, {
-      parent: Tabris._UI
+      parent: this._ui
     }));
     action.on( "Selection", handler );
     return action;
   },
 
   createPage: function( properties ) {
+    var self = this;
     var pageKeys = ['title', 'image', 'topLevel'];
     var compositeProperties = util.merge( util.omit( properties, pageKeys ), {
-      parent: Tabris._shell,
+      parent: this._shell,
       layoutData: { left: 0, right: 0, top: 0, bottom: 0 }
     });
     var composite = Tabris.create( "rwt.widgets.Composite", compositeProperties );
     var pageProperties = util.merge( util.pick( properties, pageKeys ), {
-      parent: Tabris._UI,
+      parent: this._ui,
       control: composite.id
     });
     var page = Tabris.create( "tabris.Page", pageProperties );
     composite.open = function() {
-      Tabris._ui.setActivePage( page );
+      self.setActivePage( page );
     };
     composite.close = function() {
       composite.dispose();
-      Tabris._ui.setLastActivePage();
+      self.setLastActivePage();
       page.dispose();
     };
     page.close = composite.close;
@@ -72,6 +83,8 @@ Tabris._ui = {
   }
 };
 
-Tabris.createAction = Tabris._ui.createAction;
-Tabris.createPage = Tabris._ui.createPage;
-Tabris.load( Tabris._ui.load );
+Tabris.load( function() {
+  var uiController = new Tabris.UIController();
+  uiController.init();
+  uiController.install( Tabris );
+});
