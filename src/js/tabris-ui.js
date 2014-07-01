@@ -9,14 +9,14 @@ Tabris.UIController.prototype = {
   init: function() {
     var self = this;
     Tabris.create( "rwt.widgets.Display" );
-    this._shell = Tabris.create( "rwt.widgets.Shell", {
+    Tabris._shell = Tabris.create( "rwt.widgets.Shell", {
       style: ["NO_TRIM"],
       mode: "maximized",
       active: true,
       visibility: true
     });
     this._ui = Tabris.create( "tabris.UI", {
-      shell: this._shell.id
+      shell: Tabris._shell.id
     });
     this._ui.on( "ShowPage", function( properties ) {
       var page = Tabris._proxies[ properties.pageId ];
@@ -61,7 +61,7 @@ Tabris.UIController.prototype = {
     var self = this;
     var pageKeys = ['title', 'image', 'topLevel'];
     var compositeProperties = util.merge( util.omit( properties, pageKeys ), {
-      parent: this._shell,
+      parent: Tabris._shell,
       layoutData: { left: 0, right: 0, top: 0, bottom: 0 }
     });
     var composite = Tabris.create( "rwt.widgets.Composite", compositeProperties );
