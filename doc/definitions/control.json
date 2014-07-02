@@ -5,6 +5,14 @@
   "properties": {
     "menu": {
       "type": "string"
+    },
+    "data": {
+      "type": {
+        "showTouch": {
+          "description": "Show local touch feedback on a widget.",
+          "type": "boolean"
+        }
+      }
     }
   },
   "listeners": [

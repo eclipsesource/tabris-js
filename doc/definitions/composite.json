@@ -1,0 +1,11 @@
+{
+  "id": "rwt.widgets.Composite",
+  "type": "object",
+  "extends": "rwt.widgets.Control",
+  "description": "Can optionally contain children. The order of the children is important, as it corresponds to the Z-ordering of the items. The last added child stays on the bottom of the Z-ordering.",
+  "properties" : {
+    "children": {
+      "type": "array of widgets"
+    }
+  }
+}

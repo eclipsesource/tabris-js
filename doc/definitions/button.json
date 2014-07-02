@@ -5,7 +5,7 @@
   "properties": {
     "style": {
       "description": "Valid values are 'PUSH', 'CHECK', 'RADIO', 'FLAT' and 'TOGGLE'.",
-      "type": "string"
+      "type": "array of strings"
     },
     "text": {
       "type": "string"

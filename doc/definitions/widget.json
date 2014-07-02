@@ -3,7 +3,7 @@
   "type": "object",
   "properties": {
     "style": {
-      "type": "array"
+      "type": "array of strings"
     },
     "bounds": {
       "type": [
@@ -125,9 +125,6 @@
           "type": "number"
         }
       ]
-    },
-    "data": {
-      "type": "object"
     }
   },
   "listeners": [
