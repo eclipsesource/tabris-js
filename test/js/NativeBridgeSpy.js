@@ -1,6 +1,8 @@
+/*global NativeBridgeSpy: true */
+(function(){
 
-var NativeBridgeSpy = function() {
-  this._calls = [];
+NativeBridgeSpy = function() {
+  this.resetCalls();
 };
 
 NativeBridgeSpy.prototype = {
@@ -44,18 +46,27 @@ NativeBridgeSpy.prototype = {
   },
 
   calls: function( filterProperties ) {
-    return this._calls.filter( function( call ) {
-      for( var key in filterProperties ) {
-        if( filterProperties[key] != call[key] ) {
-          return false;
-        }
-      }
-      return true;
-    });
+    return this._calls.select( filterProperties );
   },
 
   resetCalls: function() {
     this._calls = [];
+    this._calls.select = select;
   }
 
 };
+
+var select = function( filterProperties ) {
+  var result = this.filter( function( call ) {
+    for( var key in filterProperties ) {
+      if( filterProperties[key] != call[key] ) {
+        return false;
+      }
+    }
+    return true;
+  } );
+  result.select = this.select;
+  return result;
+};
+
+}());

@@ -10,7 +10,8 @@ module.exports = function(grunt) {
     },
     jasmine: {
       options: {
-        specs: ['test/js/util.spec.js', 'test/js/tabris.spec.js', 'test/js/tabris-ui.spec.js'],
+        specs: ['test/js/util.spec.js', 'test/js/NativeBridgeSpy.spec.js',
+                'test/js/tabris.spec.js', 'test/js/tabris-ui.spec.js'],
         helpers: ['test/js/NativeBridgeSpy.js'],
         version: '2.0.0',
         display: 'short',
