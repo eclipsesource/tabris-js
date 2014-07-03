@@ -124,7 +124,7 @@ Tabris.load(function() {
     },
     year: 2014,
     day: 20,
-    month: 5,
+    month: 5
   });
 
   var checkbox = page.append("Button", {
