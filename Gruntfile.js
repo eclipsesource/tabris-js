@@ -11,13 +11,13 @@ module.exports = function(grunt) {
     jasmine: {
       options: {
         specs: ['test/js/util.spec.js', 'test/js/NativeBridgeSpy.spec.js',
-                'test/js/tabris.spec.js', 'test/js/tabris-ui.spec.js'],
+                'test/js/tabris.spec.js', 'test/js/tabris-ui.spec.js', 'test/js/PageProxy.spec.js'],
         helpers: ['test/js/NativeBridgeSpy.js'],
         version: '2.0.0',
         display: 'short',
         summary: true
       },
-      src: ['src/js/util.js', 'src/js/tabris.js', 'src/js/tabris-ui.js']
+      src: ['src/js/util.js', 'src/js/tabris.js', 'src/js/tabris-ui.js', 'src/js/PageProxy.js']
     },
     concat: {
       options: {
@@ -25,7 +25,7 @@ module.exports = function(grunt) {
         stripBanners: true
       },
       dist: {
-        src: ['src/js/util.js', 'src/js/tabris.js', 'src/js/tabris-ui.js'],
+        src: ['src/js/util.js', 'src/js/tabris.js', 'src/js/tabris-ui.js', 'src/js/PageProxy.js'],
         dest: 'build/tabris.js'
       }
     },
