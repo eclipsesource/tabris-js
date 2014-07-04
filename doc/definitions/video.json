@@ -1,0 +1,56 @@
+{
+  "id": "tabris.widgets.Video",
+  "type": "object",
+  "extends": "rwt.widgets.Composite",
+  "properties": {
+    "enabled": {
+      "type": "boolean"
+    },
+    "repeat": {
+      "type": "boolean"
+    },
+    "controls_visible": {
+      "type": "boolean"
+    },
+    "url": {
+      "type": "string"
+    },
+    "playback": {
+      "description": "Valid values are: 'play', 'pause', 'stop', 'fast_forward' and 'fast_backward'.",
+      "type": "string"
+    },
+    "presentation": {
+      "description": "Valid values are: 'full_screen' and 'embedded'.",
+      "type": "string"
+    },
+    "speed": {
+      "type": "number"
+    }
+  },
+  "listeners": [
+    {
+      "Presentation": {
+        "event": {
+          "parameters": {
+            "presentation": {
+              "description": "Valid values are: 'full_screen', 'embedded'.",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "Playback": {
+        "event": {
+          "parameters": {
+            "playback": {
+              "description": "Valid values are: 'play', 'pause', 'stop', 'fast_forward', 'fast_backward', 'error', 'ready', 'done'.",
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -29,6 +29,9 @@
   "Text": {
     "$ref": "#/definitions/text.json"
   },
+  "Video": {
+    "$ref": "#/definitions/video.json"
+  }
   "Widget": {
     "$ref": "#/definitions/widget.json"
   }
