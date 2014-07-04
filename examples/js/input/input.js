@@ -10,8 +10,8 @@ Tabris.load(function() {
   var firstNameLabel = page.append("Label", {
     layoutData: {
       left: 10,
-      right: [70, 0],
-      top: 10
+      top: 10,
+      width: 120
     },
     alignment: "left",
     text: "First Name:"
@@ -23,14 +23,16 @@ Tabris.load(function() {
       right: 10,
       top: 10
     },
+    // TODO: style 'BORDER' explicitly specified as a workaround for tabris-js bug #15
+    style: ['BORDER'],
     message: "First Name"
   });
 
   var lastNameLabel = page.append("Label", {
     layoutData: {
       left: 10,
-      right: [70, 0],
-      top: [firstNameInput, 10]
+      top: [firstNameInput, 10],
+      width: 120
     },
     alignment: "left",
     text: "Last Name:"
@@ -42,21 +44,24 @@ Tabris.load(function() {
       right: 10,
       top: [firstNameInput, 10]
     },
+    // TODO: style 'BORDER' explicitly specified as a workaround for tabris-js bug #15
+    style: ['BORDER'],
     message: "Last Name"
   });
 
   var passphraseLabel = page.append("Label", {
     layoutData: {
       left: 10,
-      right: [70, 0],
-      top: [lastNameInput, 10]
+      top: [lastNameInput, 10],
+      width: 120
     },
     alignment: "left",
     text: "Passphrase:"
   });
 
   var passphraseInput = page.append("Text", {
-    style: ["PASSWORD"],
+    // TODO: style 'BORDER' explicitly specified as a workaround for tabris-js bug #15
+    style: ["PASSWORD", "BORDER"],
     layoutData: {
       left: [passphraseLabel, 10],
       right: 10,
@@ -68,8 +73,8 @@ Tabris.load(function() {
   var countryLabel = page.append("Label", {
     layoutData: {
       left: 10,
-      right: [70, 0],
-      top: [passphraseInput, 10]
+      top: [passphraseInput, 10],
+      width: 120,
     },
     alignment: "left",
     text: "Country:"
@@ -88,8 +93,8 @@ Tabris.load(function() {
   var classLabel = page.append("Label", {
     layoutData: {
       left: 10,
-      right: [70, 0],
-      top: [countryCombo, 10]
+      top: [countryCombo, 10],
+      width: 120
     },
     alignment: "left",
     text: "Class:"
@@ -108,8 +113,8 @@ Tabris.load(function() {
   var dateTimeLabel = page.append("Label", {
     layoutData: {
       left: 10,
-      right: [70, 0],
-      top: [classCombo, 10]
+      top: [classCombo, 10],
+      width: 120
     },
     alignment: "left",
     text: "Date:"
@@ -131,7 +136,9 @@ Tabris.load(function() {
     layoutData: {
       left: [dateTimeLabel, 10],
       right: 10,
-      top: [dateTime, 10]
+      top: [dateTime, 10],
+      // TODO: height explicitly set as a workaround for tabris-android bug #527
+      height: 30
     },
     style: ["CHECK"],
     text: "Vegetarian"
