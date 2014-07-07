@@ -1,0 +1,63 @@
+{
+  "id": "tabris.Action",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "visibility": {
+      "type": "boolean"
+    },
+    "placementPriority": {
+      "description": "Valid values are 'HIGH' and 'LOW'.",
+      "type": "string"
+    },
+    "foreground": {
+      "type": [
+        {
+          "description": "Red",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 255
+        },
+        {
+          "description": "Green",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 255
+        },
+        {
+          "description": "Blue",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 255
+        },
+        {
+          "description": "Alpha",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 255
+        }
+      ]
+    },
+    "image": {
+      "type": [
+        {
+          "description": "Image Path",
+          "type": "string"
+        },
+        {
+          "description": "width",
+          "type": "number"
+        },
+        {
+          "description": "height",
+          "type": "number"
+        }
+      ]
+    }
+  }
+}

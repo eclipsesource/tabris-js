@@ -1,4 +1,7 @@
 {
+  "Action": {
+    "$ref": "#/definitions/action.json"
+  },
   "Button": {
     "$ref": "#/definitions/button.json"
   },
@@ -16,6 +19,9 @@
   },
   "Label": {
     "$ref": "#/definitions/label.json"
+  },
+  "Page": {
+    "$ref": "#/definitions/page.json"
   },
   "ScrollBar": {
     "$ref": "#/definitions/scrollBar.json"
