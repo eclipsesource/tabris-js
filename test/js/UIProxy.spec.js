@@ -129,6 +129,27 @@ describe( "UIProxy", function() {
 
     });
 
+    describe( "createAction without a handler function", function() {
+
+      var actionCreateCalls;
+
+      beforeEach(function() {
+        uiProxy.createAction( { title: "Foo", enabled: true } );
+        actionCreateCalls = nativeBridge.calls({ op: 'create', type: 'tabris.Action' });
+      });
+
+      it( "creates an action anyway", function() {
+        expect( actionCreateCalls.length ).toBe( 1 );
+      });
+
+      it( "does not listen on created action", function() {
+        var actionId = actionCreateCalls[0].id;
+
+        expect( nativeBridge.calls({ op: 'listen', id: actionId, listen: true }).length ).toBe( 0 );
+      });
+
+    });
+
     describe( "createPage", function() {
 
       it( "creates a Page and a Composite", function() {
