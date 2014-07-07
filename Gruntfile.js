@@ -7,6 +7,10 @@ module.exports = function(grunt) {
                 ' * All rights reserved.',
                 ' */\n'].join('\n');
 
+  var prefix = function( prefix, strings ) {
+    return strings.map( function( string ) { return prefix + string; } );
+  };
+
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     jshint: {
@@ -17,14 +21,16 @@ module.exports = function(grunt) {
     },
     jasmine: {
       options: {
-        specs: ['test/js/util.spec.js', 'test/js/NativeBridgeSpy.spec.js',
-                'test/js/tabris.spec.js', 'test/js/tabris-ui.spec.js', 'test/js/PageProxy.spec.js'],
+        specs: prefix( 'test/js/',
+                       ['util.spec.js', 'NativeBridgeSpy.spec.js', 'tabris.spec.js',
+                        'tabris-ui.spec.js', 'Proxy.spec.js', 'PageProxy.spec.js'] ),
         helpers: ['test/js/NativeBridgeSpy.js'],
         version: '2.0.0',
         display: 'short',
         summary: true
       },
-      src: ['src/js/util.js', 'src/js/tabris.js', 'src/js/tabris-ui.js', 'src/js/PageProxy.js']
+      src: prefix( 'src/js/',
+                   ['util.js', 'tabris.js', 'tabris-ui.js', 'Proxy.js', 'PageProxy.js'] )
     },
     concat: {
       options: {
@@ -32,7 +38,8 @@ module.exports = function(grunt) {
         stripBanners: true
       },
       dist: {
-        src: ['src/js/util.js', 'src/js/tabris.js', 'src/js/tabris-ui.js', 'src/js/PageProxy.js'],
+        src: prefix( 'src/js/',
+                     ['util.js', 'tabris.js', 'tabris-ui.js', 'Proxy.js', 'PageProxy.js'] ),
         dest: 'build/tabris.js'
       }
     },
