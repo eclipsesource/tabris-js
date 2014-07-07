@@ -22,7 +22,7 @@ module.exports = function(grunt) {
     jasmine: {
       options: {
         specs: prefix( 'test/js/',
-                       ['util.spec.js', 'NativeBridgeSpy.spec.js', 'tabris.spec.js',
+                       ['util.spec.js', 'NativeBridgeSpy.spec.js', 'Tabris.spec.js',
                         'tabris-ui.spec.js', 'Proxy.spec.js', 'PageProxy.spec.js'] ),
         helpers: ['test/js/NativeBridgeSpy.js'],
         version: '2.0.0',
@@ -30,7 +30,7 @@ module.exports = function(grunt) {
         summary: true
       },
       src: prefix( 'src/js/',
-                   ['util.js', 'tabris.js', 'tabris-ui.js', 'Proxy.js', 'PageProxy.js'] )
+                   ['util.js', 'Tabris.js', 'tabris-ui.js', 'Proxy.js', 'PageProxy.js'] )
     },
     concat: {
       options: {
@@ -39,7 +39,7 @@ module.exports = function(grunt) {
       },
       dist: {
         src: prefix( 'src/js/',
-                     ['util.js', 'tabris.js', 'tabris-ui.js', 'Proxy.js', 'PageProxy.js'] ),
+                     ['util.js', 'Tabris.js', 'tabris-ui.js', 'Proxy.js', 'PageProxy.js'] ),
         dest: 'build/tabris.js'
       }
     },
