@@ -8,7 +8,7 @@
 describe( "PageProxy", function() {
 
   var nativeBridge;
-  var uiController;
+  var uiProxy;
   var pageProxy;
   var uiId = "uiId";
 
@@ -16,9 +16,9 @@ describe( "PageProxy", function() {
     nativeBridge = new NativeBridgeSpy();
     Tabris._loadFunctions = [];
     Tabris._start( nativeBridge );
-    uiController = jasmine.createSpyObj( "uiController", ["setActivePage", "setLastActivePage"] );
-    uiController._ui = { id: uiId, _addChild: function() {}, _removeChild: function() {} };
-    pageProxy = new Tabris.PageProxy( uiController );
+    uiProxy = jasmine.createSpyObj( "uiProxy", ["setActivePage", "setLastActivePage"] );
+    uiProxy._ui = { id: uiId, _addChild: function() {}, _removeChild: function() {} };
+    pageProxy = new Tabris.PageProxy( uiProxy );
   });
 
   describe( "create", function() {
@@ -145,7 +145,7 @@ describe( "PageProxy", function() {
       it( "sets active page", function() {
         pageProxy.open();
 
-        expect( uiController.setActivePage ).toHaveBeenCalledWith( pageProxy._page );
+        expect( uiProxy.setActivePage ).toHaveBeenCalledWith( pageProxy._page );
       });
 
     });
@@ -157,7 +157,7 @@ describe( "PageProxy", function() {
 
         pageProxy.close();
 
-        expect( uiController.setLastActivePage ).toHaveBeenCalled();
+        expect( uiProxy.setLastActivePage ).toHaveBeenCalled();
       });
 
       it( "destroys composite and page", function() {

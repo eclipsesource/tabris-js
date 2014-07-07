@@ -5,8 +5,8 @@
 
 /*global Tabris: true, util: false */
 
-Tabris.PageProxy = function( uiController ) {
-  this._uiController = uiController;
+Tabris.PageProxy = function( uiProxy ) {
+  this._uiProxy = uiProxy;
 };
 
 Tabris.PageProxy.prototype = {
@@ -20,7 +20,7 @@ Tabris.PageProxy.prototype = {
     });
     this._composite = Tabris.create( "rwt.widgets.Composite", compositeProperties );
     var pageProperties = util.merge( util.pick( properties, this._PAGE_PROPS ), {
-      parent: this._uiController._ui,
+      parent: this._uiProxy._ui,
       control: this._composite.id
     });
     this._page = Tabris.create( "tabris.Page", pageProperties );
@@ -72,12 +72,12 @@ Tabris.PageProxy.prototype = {
   },
 
   open: function() {
-    this._uiController.setActivePage( this._page );
+    this._uiProxy.setActivePage( this._page );
   },
 
   close: function() {
     this._composite.dispose();
-    this._uiController.setLastActivePage();
+    this._uiProxy.setLastActivePage();
     this._page.dispose();
   }
 

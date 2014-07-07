@@ -5,13 +5,13 @@
 
 /*global Tabris: true, util: false */
 
-Tabris.UIController = function() {
+Tabris.UIProxy = function() {
   this._pages = [];
 };
 
-Tabris.UIController.prototype = {
+Tabris.UIProxy.prototype = {
 
-  init: function() {
+  _create: function() {
     var self = this;
     Tabris.create( "rwt.widgets.Display" );
     Tabris._shell = Tabris.create( "rwt.widgets.Shell", {
@@ -30,9 +30,10 @@ Tabris.UIController.prototype = {
     this._ui.on( "ShowPreviousPage", function() {
       self.getActivePage().close();
     });
+    return this;
   },
 
-  install: function( target ) {
+  _install: function( target ) {
     target.createAction = util.bind( this.createAction, this );
     target.createPage = util.bind( this.createPage, this );
   },
@@ -68,7 +69,5 @@ Tabris.UIController.prototype = {
 };
 
 Tabris.load( function() {
-  var uiController = new Tabris.UIController();
-  uiController.init();
-  uiController.install( Tabris );
+  new Tabris.UIProxy()._create()._install( Tabris );
 });
