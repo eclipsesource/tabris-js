@@ -8,53 +8,33 @@ Tabris.load(function() {
   });
 
   var firstNameLabel = page.append("Label", {
-    layoutData: {
-      left: 10,
-      top: 10,
-      width: 120
-    },
+    layoutData: {left: 10, top: 10, width: 120},
     alignment: "left",
     text: "First Name:"
   });
 
   var firstNameInput = page.append("Text", {
-    layoutData: {
-      left: [firstNameLabel, 10],
-      right: 10,
-      top: 10
-    },
+    layoutData: {left: [firstNameLabel, 10], right: 10, top: 10},
     // TODO: style 'BORDER' explicitly specified as a workaround for tabris-js bug #15
     style: ['BORDER'],
     message: "First Name"
   });
 
   var lastNameLabel = page.append("Label", {
-    layoutData: {
-      left: 10,
-      top: [firstNameInput, 10],
-      width: 120
-    },
+    layoutData: {left: 10, top: [firstNameInput, 10], width: 120},
     alignment: "left",
     text: "Last Name:"
   });
 
   var lastNameInput = page.append("Text", {
-    layoutData: {
-      left: [lastNameLabel, 10],
-      right: 10,
-      top: [firstNameInput, 10]
-    },
+    layoutData: {left: [lastNameLabel, 10], right: 10, top: [firstNameInput, 10]},
     // TODO: style 'BORDER' explicitly specified as a workaround for tabris-js bug #15
     style: ['BORDER'],
     message: "Last Name"
   });
 
   var passphraseLabel = page.append("Label", {
-    layoutData: {
-      left: 10,
-      top: [lastNameInput, 10],
-      width: 120
-    },
+    layoutData: {left: 10, top: [lastNameInput, 10], width: 120},
     alignment: "left",
     text: "Passphrase:"
   });
@@ -62,94 +42,57 @@ Tabris.load(function() {
   var passphraseInput = page.append("Text", {
     // TODO: style 'BORDER' explicitly specified as a workaround for tabris-js bug #15
     style: ["PASSWORD", "BORDER"],
-    layoutData: {
-      left: [passphraseLabel, 10],
-      right: 10,
-      top: [lastNameInput, 10]
-    },
+    layoutData: {left: [passphraseLabel, 10], right: 10, top: [lastNameInput, 10]},
     message: "Passphrase"
   });
 
   var countryLabel = page.append("Label", {
-    layoutData: {
-      left: 10,
-      top: [passphraseInput, 10],
-      width: 120,
-    },
+    layoutData: {left: 10, top: [passphraseInput, 10], width: 120},
     alignment: "left",
     text: "Country:"
   });
 
   var countryCombo = page.append("Combo", {
-    layoutData: {
-      left: [countryLabel, 10],
-      right: 10,
-      top: [passphraseInput, 10]
-    },
+    layoutData: {left: [countryLabel, 10], right: 10, top: [passphraseInput, 10]},
     items: ["Germany", "Canada", "USA", "Bulgaria"],
     selectionIndex: 0
   });
 
   var classLabel = page.append("Label", {
-    layoutData: {
-      left: 10,
-      top: [countryCombo, 10],
-      width: 120
-    },
+    layoutData: {left: 10, top: [countryCombo, 10], width: 120},
     alignment: "left",
     text: "Class:"
   });
 
   var classCombo = page.append("Combo", {
-    layoutData: {
-      left: [classLabel, 10],
-      right: 10,
-      top: [countryCombo, 10]
-    },
+    layoutData: {left: [classLabel, 10], right: 10, top: [countryCombo, 10]},
     items: ["Business", "Economy", "Economy Plus"],
     selectionIndex: 0
   });
 
   var dateTimeLabel = page.append("Label", {
-    layoutData: {
-      left: 10,
-      top: [classCombo, 10],
-      width: 120
-    },
+    layoutData: {left: 10, top: [classCombo, 10], width: 120},
     alignment: "left",
     text: "Date:"
   });
 
   var dateTime = page.append("DateTime", {
     style: ["DATE"],
-    layoutData: {
-      left: [dateTimeLabel, 10],
-      right: 10,
-      top: [classCombo, 10]
-    },
+    layoutData: {left: [dateTimeLabel, 10], right: 10, top: [classCombo, 10]},
     year: 2014,
     day: 20,
     month: 5
   });
 
   var checkbox = page.append("Button", {
-    layoutData: {
-      left: [dateTimeLabel, 10],
-      right: 10,
-      top: [dateTime, 10],
-      // TODO: height explicitly set as a workaround for tabris-android bug #527
-      height: 30
-    },
+    // TODO: height explicitly set as a workaround for tabris-android bug #527
+    layoutData: {left: [dateTimeLabel, 10], right: 10, top: [dateTime, 10], height: 30},
     style: ["CHECK"],
     text: "Vegetarian"
   });
 
   var button = page.append("Button", {
-    layoutData: {
-      left: 10,
-      right: 10,
-      top: [checkbox, 20]
-    },
+    layoutData: {left: 10, right: 10, top: [checkbox, 20]},
     text: "Place Reservation",
     background: [139, 0, 0],
     foreground: [255, 255, 255]
@@ -162,11 +105,7 @@ Tabris.load(function() {
   function populateMessage() {
     if (!message) {
       message = page.append("Label", {
-        layoutData: {
-          left: 10,
-          right: 10,
-          top: [button, 10]
-        },
+        layoutData: {left: 10, right: 10, top: [button, 10]},
         alignment: "left",
         text: "Flight booked for: " + createName() + "\n" + "Departure: " + createDepartureDate()
       });
