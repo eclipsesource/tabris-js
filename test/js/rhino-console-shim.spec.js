@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2014 EclipseSource.
+ * All rights reserved.
+ */
+
 /*global java: true, console: false */
 
 describe( "rhino-console-shim", function() {

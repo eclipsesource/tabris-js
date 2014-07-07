@@ -1,5 +1,12 @@
 module.exports = function(grunt) {
 
+  var banner = ['/*!',
+                ' * tabris.js <%= grunt.template.today("yyyy-mm-dd") %>',
+                ' *',
+                ' * Copyright (c) 2014 EclipseSource.',
+                ' * All rights reserved.',
+                ' */\n'].join('\n');
+
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     jshint: {
@@ -21,7 +28,7 @@ module.exports = function(grunt) {
     },
     concat: {
       options: {
-        banner: '/*! tabris.js <%= grunt.template.today("yyyy-mm-dd") %> */\n',
+        banner: banner,
         stripBanners: true
       },
       dist: {
@@ -31,7 +38,7 @@ module.exports = function(grunt) {
     },
     uglify: {
       options: {
-        banner: '/*! tabris.js <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+        banner: banner
       },
       build: {
         src: 'build/tabris.js',

@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2014 EclipseSource.
+ * All rights reserved.
+ */
+
 /*global console: true, java: false */
 
 (function() {

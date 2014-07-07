@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2014 EclipseSource.
+ * All rights reserved.
+ */
+
 /*global Tabris: true, util: false */
 
 Tabris.PageProxy = function( uiController ) {
