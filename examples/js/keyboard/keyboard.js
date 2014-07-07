@@ -165,7 +165,7 @@ Tabris.load(function() {
   composite.append("Text", {
     style: ["BORDER"],
     layoutData: {left: [urlLabel, 10], right: 10, top: [phoneInput, 10]},
-    keyboard: "url",
+    keyboard: "url"
   });
 
   page.open();
