@@ -22,7 +22,6 @@
       if( properties && properties.parent ) {
         this._parent = properties.parent;
         this._parent._addChild( this );
-        properties.parent = translateWidgetToId( properties.parent );
       }
       Tabris._nativeBridge.create( this.id, fixType( type ), fixProperties( properties ) );
       return this;
@@ -150,21 +149,18 @@
 
   };
 
-  var translateWidgetToId = function( value ) {
-    if( typeof value === 'object' && value.id ) {
-      return value.id;
-    }
-    return value;
+  var translateProxyToId = function( value ) {
+    return value instanceof Tabris.Proxy ? value.id : value;
   };
 
   var fixLayoutData = function( data ) {
     for( var key in data ) {
       if( Array.isArray( data[key] ) ) {
         for( var i = 0; i < data[key].length; i++ ) {
-          data[key][i] = translateWidgetToId( data[key][i] );
+          data[key][i] = translateProxyToId( data[key][i] );
         }
       } else {
-        data[key] = translateWidgetToId( data[key] );
+        data[key] = translateProxyToId( data[key] );
       }
     }
     return data;
@@ -172,8 +168,10 @@
 
   var fixProperties = function( properties ) {
     for( var key in properties ) {
-      if( key === 'layoutData' ) {
+      if( key === "layoutData" ) {
         properties[key] = fixLayoutData( properties[key] );
+      } else {
+        properties[key] = translateProxyToId( properties[key] );
       }
     }
     return properties;

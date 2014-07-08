@@ -17,7 +17,7 @@ describe( "PageProxy", function() {
     Tabris._loadFunctions = [];
     Tabris._start( nativeBridge );
     uiProxy = jasmine.createSpyObj( "uiProxy", ["setActivePage", "setLastActivePage"] );
-    uiProxy._ui = { id: uiId, _addChild: function() {}, _removeChild: function() {} };
+    uiProxy._ui = new Tabris.Proxy( uiId );
     pageProxy = new Tabris.PageProxy( uiProxy );
   });
 
