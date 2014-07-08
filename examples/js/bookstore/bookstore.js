@@ -49,8 +49,7 @@ Tabris.load(function() {
 
     composite.append("Label", {
       style: ["WRAP"],
-      layoutData: { left: PAGE_MARGIN, right: PAGE_MARGIN,
-                    top: [titleLabel, PAGE_MARGIN], bottom: PAGE_MARGIN },
+      layoutData: { left: PAGE_MARGIN, right: PAGE_MARGIN, top: [titleLabel, PAGE_MARGIN], bottom: PAGE_MARGIN },
       text: "Etiam nisl nisi, egestas quis lacus ut, tristique suscipit metus. In vehicula lectus metus, at accumsan elit fringilla blandit. Integer et quam sed dolor pharetra molestie id eget dui. Donec ac libero eu lectus dapibus placerat eu a tellus. Fusce vulputate ac sem sit amet bibendum. Pellentesque euismod varius purus nec pharetra. Sed vitae ipsum sit amet risus vehicula euismod in at nunc. Sed in viverra arcu, id blandit risus. Praesent sagittis quis nisl id molestie. Donec dignissim, nisl id volutpat consectetur, massa diam aliquam lectus, sed euismod leo elit eu justo. Integer vel ante sapien.\n\nNunc sit amet blandit tellus, sed consequat neque. Proin vel elementum augue. Quisque gravida nulla nisl, at fermentum turpis euismod in. Maecenas vitae tortor at ante vulputate iaculis at vitae sem. Nulla dui erat, viverra eget mauris in, sodales mollis purus. Integer rhoncus suscipit mi in pulvinar. Nam metus augue, dictum a egestas ut, gravida eget ipsum. Nunc sapien nisl, mollis et mauris in, venenatis blandit magna. Nullam scelerisque tellus lacus, in lobortis purus consectetur sed. Etiam pulvinar sapien vel nibh vehicula, in lacinia odio pharetra. Duis tincidunt metus a semper auctor. Sed nec consequat augue, id vulputate orci. Nunc metus nulla, luctus id porttitor nec, interdum sed lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus."
     });
 
@@ -95,7 +94,7 @@ Tabris.load(function() {
 
     detailsComposite.append("Composite", {
       layoutData: { left: 0, right: 0, top: 0, bottom: 0 }
-    }).on("MouseUp", function () {
+    }).on("MouseUp", function() {
       createReadBookPage(book).open();
     });
 
@@ -159,7 +158,6 @@ Tabris.load(function() {
     return page;
   }
 
-
   function createBooksGrid(parent, books) {
 
     var grid = parent.append("Grid", {
@@ -198,7 +196,7 @@ Tabris.load(function() {
       ]
     });
 
-    grid.on("Selection", function (event) {
+    grid.on("Selection", function(event) {
       var gridItem = Tabris._proxies[event.item];
       var index = gridItem.get("index");
       createBookPage(books[index]).open();
@@ -211,7 +209,7 @@ Tabris.load(function() {
     for (var i = 0; i < books.length; i++) {
       grid.append("GridItem", {
         index: i,
-        texts: [ "",books[i].title, books[i].author],
+        texts: [ "", books[i].title, books[i].author],
         images: [books[i].image, null, null]
       });
     }
@@ -232,15 +230,15 @@ Tabris.load(function() {
     return  page;
   }
 
-  var bookStorePage = createBooksPage("Book Store", "images/page_all_books.png", function () {
+  var bookStorePage = createBooksPage("Book Store", "images/page_all_books.png", function() {
     return true;
   });
 
-  createBooksPage("Popular", "images/page_popular_books.png", function (book) {
+  createBooksPage("Popular", "images/page_popular_books.png", function(book) {
     return book.popular;
   });
 
-  createBooksPage("Favorite", "images/page_favorite_books.png", function (book) {
+  createBooksPage("Favorite", "images/page_favorite_books.png", function(book) {
     return book.favorite;
   });
 
@@ -248,7 +246,7 @@ Tabris.load(function() {
     title: "Settings",
     placementPriority: "LOW",
     image: ["images/action_settings.png", 32, 32]
-  }, function () {
+  }, function() {
     createSettingsPage().open();
   });
 
