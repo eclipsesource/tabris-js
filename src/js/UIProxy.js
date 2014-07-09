@@ -3,28 +3,28 @@
  * All rights reserved.
  */
 
-/*global Tabris: true, util: false */
+/*global tabris: true, util: false */
 
-Tabris.UIProxy = function() {
+tabris.UIProxy = function() {
   this._pages = [];
 };
 
-Tabris.UIProxy.prototype = {
+tabris.UIProxy.prototype = {
 
   _create: function() {
     var self = this;
-    Tabris.create( "rwt.widgets.Display" );
-    Tabris._shell = Tabris.create( "rwt.widgets.Shell", {
+    tabris.create( "rwt.widgets.Display" );
+    tabris._shell = tabris.create( "rwt.widgets.Shell", {
       style: ["NO_TRIM"],
       mode: "maximized",
       active: true,
       visibility: true
     });
-    this._ui = Tabris.create( "tabris.UI", {
-      shell: Tabris._shell.id
+    this._ui = tabris.create( "tabris.UI", {
+      shell: tabris._shell.id
     });
     this._ui.on( "ShowPage", function( properties ) {
-      var page = Tabris._proxies[ properties.pageId ];
+      var page = tabris._proxies[ properties.pageId ];
       self.setActivePage( page );
     });
     this._ui.on( "ShowPreviousPage", function() {
@@ -56,7 +56,7 @@ Tabris.UIProxy.prototype = {
   },
 
   createAction: function( properties, handler ) {
-    var action = Tabris.create( "tabris.Action", util.extend( {}, properties, {
+    var action = tabris.create( "tabris.Action", util.extend( {}, properties, {
       parent: this._ui
     }));
     if( typeof handler === "function" ) {
@@ -66,10 +66,10 @@ Tabris.UIProxy.prototype = {
   },
 
   createPage: function( properties ) {
-    return new Tabris.PageProxy( this )._create( properties );
+    return new tabris.PageProxy( this )._create( properties );
   }
 };
 
-Tabris.load( function() {
-  new Tabris.UIProxy()._create()._install( Tabris );
+tabris.load( function() {
+  new tabris.UIProxy()._create()._install( tabris );
 });

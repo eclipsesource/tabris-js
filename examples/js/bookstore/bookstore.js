@@ -1,4 +1,4 @@
-Tabris.load(function() {
+tabris.load(function() {
 
   function createBook(title, author, image, popular, favorite) {
     return {
@@ -24,7 +24,7 @@ Tabris.load(function() {
 
   function createReadBookPage(book) {
 
-    var page = Tabris.createPage({
+    var page = tabris.createPage({
       title: book.title
     });
 
@@ -60,7 +60,7 @@ Tabris.load(function() {
 
   function createBooksPage(title, image, filter) {
 
-    var page = Tabris.createPage({
+    var page = tabris.createPage({
       title: title,
       topLevel: true,
       image: [image, 32, 32]
@@ -80,7 +80,7 @@ Tabris.load(function() {
 
   function createBookPage(book) {
 
-    var page = Tabris.createPage({
+    var page = tabris.createPage({
       title: book.title
     });
 
@@ -197,7 +197,7 @@ Tabris.load(function() {
     });
 
     grid.on("Selection", function(event) {
-      var gridItem = Tabris._proxies[event.item];
+      var gridItem = tabris._proxies[event.item];
       var index = gridItem.get("index");
       createBookPage(books[index]).open();
     });
@@ -218,7 +218,7 @@ Tabris.load(function() {
   }
 
   function createSettingsPage() {
-    var page = Tabris.createPage({
+    var page = tabris.createPage({
       title: "Settings"
     });
 
@@ -242,7 +242,7 @@ Tabris.load(function() {
     return book.favorite;
   });
 
-  Tabris.createAction({
+  tabris.createAction({
     title: "Settings",
     placementPriority: "LOW",
     image: ["images/action_settings.png", 32, 32]

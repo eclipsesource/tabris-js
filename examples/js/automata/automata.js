@@ -1,6 +1,6 @@
 var DEBUG = true;
 
-Tabris.load( function() {
+tabris.load( function() {
 
   // var height = Ti.Platform.displayCaps.platformHeight;
   // var width = Ti.Platform.displayCaps.platformWidth;
@@ -16,7 +16,7 @@ Tabris.load( function() {
   //  modal: false,
   //  exitOnClose: true
   //});
-  var page = Tabris.createPage({
+  var page = tabris.createPage({
     title: "Automata",
     topLevel: true,
     background: [0, 0, 0]

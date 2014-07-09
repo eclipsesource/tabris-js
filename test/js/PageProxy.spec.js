@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 
-/*global Tabris: false, NativeBridgeSpy: false */
+/*global tabris: false, NativeBridgeSpy: false */
 
 describe( "PageProxy", function() {
 
@@ -14,11 +14,11 @@ describe( "PageProxy", function() {
 
   beforeEach( function() {
     nativeBridge = new NativeBridgeSpy();
-    Tabris._loadFunctions = [];
-    Tabris._start( nativeBridge );
+    tabris._loadFunctions = [];
+    tabris._start( nativeBridge );
     uiProxy = jasmine.createSpyObj( "uiProxy", ["setActivePage", "setLastActivePage"] );
-    uiProxy._ui = new Tabris.Proxy( uiId );
-    pageProxy = new Tabris.PageProxy( uiProxy );
+    uiProxy._ui = new tabris.Proxy( uiId );
+    pageProxy = new tabris.PageProxy( uiProxy );
   });
 
   describe( "create", function() {
@@ -48,7 +48,7 @@ describe( "PageProxy", function() {
       });
 
       it( "parent is shell", function() {
-        expect( createCall.properties.parent ).toEqual( Tabris._shell.id );
+        expect( createCall.properties.parent ).toEqual( tabris._shell.id );
       });
 
       it( "is full-size", function() {
@@ -85,7 +85,7 @@ describe( "PageProxy", function() {
         compositeId = nativeBridge.calls({ op: "create", type: "rwt.widgets.Composite" })[0].id;
       });
 
-      it( "parent is set to Tabris.UI", function() {
+      it( "parent is set to tabris.UI", function() {
         expect( createCall.properties.parent ).toBe( uiId );
       });
 

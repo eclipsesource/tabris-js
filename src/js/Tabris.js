@@ -3,37 +3,37 @@
  * All rights reserved.
  */
 
-/*global Tabris: true */
+/*global tabris: true */
 
 (function() {
 
-  Tabris = {
+  tabris = {
 
     _loadFunctions: [],
     _proxies: {},
 
     load: function( fn ) {
-      Tabris._loadFunctions.push( fn );
+      tabris._loadFunctions.push( fn );
     },
 
     create: function( type, properties ) {
-      if( !Tabris._nativeBridge ) {
+      if( !tabris._nativeBridge ) {
         throw new Error( "tabris.js not started" );
       }
       var id = generateId();
-      return new Tabris.Proxy( id )._create( type, properties );
+      return new tabris.Proxy( id )._create( type, properties );
     },
 
     _start: function( nativeBridge ) {
-      Tabris._nativeBridge = nativeBridge;
+      tabris._nativeBridge = nativeBridge;
       var i = 0;
-      while( i < Tabris._loadFunctions.length ) {
-        Tabris._loadFunctions[i++].call();
+      while( i < tabris._loadFunctions.length ) {
+        tabris._loadFunctions[i++].call();
       }
     },
 
     _notify: function( id, event, param ) {
-      var proxy = Tabris._proxies[ id ];
+      var proxy = tabris._proxies[ id ];
       if( proxy ) {
         proxy._notifyListeners( event, [param] );
       }

@@ -1,4 +1,4 @@
-Tabris.load(function() {
+tabris.load(function() {
 
   var imageHolder;
 
@@ -23,7 +23,7 @@ Tabris.load(function() {
     "orion-nebula"
   ];
 
-  var page = Tabris.createPage({
+  var page = tabris.createPage({
     title: "The Big Bang Theory",
     topLevel: true
   });
@@ -101,12 +101,12 @@ Tabris.load(function() {
 
   var recreateThumbnailAction = function(actionTitle) {
     action.dispose();
-    action = Tabris.createAction({
+    action = tabris.createAction({
       title: actionTitle
     }, toggleAction);
   };
 
-  var action = Tabris.createAction({
+  var action = tabris.createAction({
     title: "Fullscreen"
   }, toggleAction);
 

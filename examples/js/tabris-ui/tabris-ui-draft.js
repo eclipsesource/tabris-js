@@ -1,12 +1,12 @@
 /*jshint unused: false */
-Tabris.load( function() {
+tabris.load( function() {
 
   var red = [255, 200, 200];
   var green = [200, 255, 200];
   var blue = [200, 200, 255];
 
   var createSubPage = function( title, bgColor ) {
-    var page = Tabris.createPage({
+    var page = tabris.createPage({
       title: title,
       topLevel: false,
       background: bgColor
@@ -30,7 +30,7 @@ Tabris.load( function() {
     });
 
     // Page action
-    var pageAction = Tabris.createAction({
+    var pageAction = tabris.createAction({
       title: "Share",
       enabled: true,
       visible: true
@@ -43,7 +43,7 @@ Tabris.load( function() {
   };
 
   var createToplevelPage = function( title, bgColor ) {
-    var page = Tabris.createPage({
+    var page = tabris.createPage({
       title: title,
       topLevel: true,
       background: bgColor
@@ -72,7 +72,7 @@ Tabris.load( function() {
   var page2 = createToplevelPage( "Page Two", green );
   var page3 = createToplevelPage( "Page Three", blue );
 
-  Tabris.createAction({ title: "Page3", enabled: true, visible: true }, function( a, b, c ) {
+  tabris.createAction({ title: "Page3", enabled: true, visible: true }, function( a, b, c ) {
     page3.open();
   });
 

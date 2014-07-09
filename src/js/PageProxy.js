@@ -3,27 +3,27 @@
  * All rights reserved.
  */
 
-/*global Tabris: true, util: false */
+/*global tabris: true, util: false */
 
-Tabris.PageProxy = function( uiProxy ) {
+tabris.PageProxy = function( uiProxy ) {
   this._uiProxy = uiProxy;
 };
 
-Tabris.PageProxy.prototype = {
+tabris.PageProxy.prototype = {
 
   _PAGE_PROPS: ["title", "image", "style", "topLevel"],
 
   _create: function( properties ) {
     var compositeProperties = util.extend( util.omit( properties, this._PAGE_PROPS ), {
-      parent: Tabris._shell,
+      parent: tabris._shell,
       layoutData: { left: 0, right: 0, top: 0, bottom: 0 }
     });
-    this._composite = Tabris.create( "rwt.widgets.Composite", compositeProperties );
+    this._composite = tabris.create( "rwt.widgets.Composite", compositeProperties );
     var pageProperties = util.extend( util.pick( properties, this._PAGE_PROPS ), {
       parent: this._uiProxy._ui,
       control: this._composite.id
     });
-    this._page = Tabris.create( "tabris.Page", pageProperties );
+    this._page = tabris.create( "tabris.Page", pageProperties );
     return this;
   },
 

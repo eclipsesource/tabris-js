@@ -3,9 +3,9 @@
  * All rights reserved.
  */
 
-/*global Tabris: false, NativeBridgeSpy: false */
+/*global tabris: false, NativeBridgeSpy: false */
 
-describe( "Tabris", function() {
+describe( "tabris", function() {
 
   var nativeBridge;
   var log;
@@ -13,35 +13,35 @@ describe( "Tabris", function() {
   beforeEach( function() {
     nativeBridge = new NativeBridgeSpy();
     log = [];
-    Tabris._loadFunctions = [];
-    Tabris._start( nativeBridge );
+    tabris._loadFunctions = [];
+    tabris._start( nativeBridge );
   });
 
   describe( "_start", function() {
 
     it( "can be called without a context", function() {
-      Tabris._start.call( null, nativeBridge );
+      tabris._start.call( null, nativeBridge );
     });
 
     it( "executes all load functions", function() {
-      Tabris.load( function() {
+      tabris.load( function() {
         log.push( "foo" );
       });
-      Tabris.load( function() {
+      tabris.load( function() {
         log.push( "bar" );
       });
 
-      Tabris._start.call( null );
+      tabris._start.call( null );
 
       expect( log ).toEqual( ["foo", "bar"] );
     });
 
-    it( "load functions can access Tabris functions", function() {
-      Tabris.load( function() {
-        Tabris.create( "Foo" );
+    it( "load functions can access tabris functions", function() {
+      tabris.load( function() {
+        tabris.create( "Foo" );
       });
 
-      Tabris._start.call( null, nativeBridge );
+      tabris._start.call( null, nativeBridge );
 
       expect( nativeBridge.calls({ op: "create", type: "rwt.widgets.Foo" }).length ).toBe( 1 );
     });
@@ -51,20 +51,20 @@ describe( "Tabris", function() {
   describe( "_notify", function() {
 
     it( "notifies widget proxy", function() {
-      var label = Tabris.create( "Label", {} );
+      var label = tabris.create( "Label", {} );
       spyOn( label, "_notifyListeners" );
 
-      Tabris._notify( label.id, "foo", { "bar": 23 } );
+      tabris._notify( label.id, "foo", { "bar": 23 } );
 
       expect( label._notifyListeners ).toHaveBeenCalledWith( "foo", [{ "bar": 23 }] );
     });
 
     it( "sliently ignores events for non-existing ids (does not crash)", function() {
-      Tabris._notify( "no-id", "foo", [23, 42] );
+      tabris._notify( "no-id", "foo", [23, 42] );
     });
 
     it( "can be called without a context", function() {
-      Tabris._notify.call( "no-id", "foo", [23, 42] );
+      tabris._notify.call( "no-id", "foo", [23, 42] );
     });
 
   });
@@ -74,8 +74,8 @@ describe( "Tabris", function() {
     it( "function is executed at start time", function() {
       var fn = jasmine.createSpy();
 
-      Tabris.load( fn );
-      Tabris._start( nativeBridge );
+      tabris.load( fn );
+      tabris._start( nativeBridge );
 
       expect( fn ).toHaveBeenCalled();
     });
@@ -83,19 +83,19 @@ describe( "Tabris", function() {
     it( "nested load functions are executed at the end", function() {
       var log = [];
 
-      Tabris.load( function() {
+      tabris.load( function() {
         log.push( "1" );
-        Tabris.load( function() {
+        tabris.load( function() {
           log.push( "1a" );
         });
-        Tabris.load( function() {
+        tabris.load( function() {
           log.push( "1b" );
         });
       });
-      Tabris.load( function() {
+      tabris.load( function() {
         log.push( "2" );
       });
-      Tabris._start( nativeBridge );
+      tabris._start( nativeBridge );
 
       expect( log ).toEqual([ "1", "2", "1a", "1b" ]);
     });
@@ -105,35 +105,35 @@ describe( "Tabris", function() {
   describe( "create", function() {
 
     it( "fails if tabris.js not yet started", function() {
-      delete Tabris._nativeBridge;
+      delete tabris._nativeBridge;
 
       expect( function() {
-        Tabris.create( "foo.bar", {} );
+        tabris.create( "foo.bar", {} );
       } ).toThrowError( "tabris.js not started" );
     } );
 
     it( "creates a non-empty widget id", function() {
-      var proxy = Tabris.create( "type", {} );
+      var proxy = tabris.create( "type", {} );
 
       expect( typeof proxy.id ).toBe( "string" );
       expect( proxy.id.length ).toBeGreaterThan( 0 );
     } );
 
     it( "creates different widget ids for subsequent calls", function() {
-      var proxy1 = Tabris.create( "type", {} );
-      var proxy2 = Tabris.create( "type", {} );
+      var proxy1 = tabris.create( "type", {} );
+      var proxy2 = tabris.create( "type", {} );
 
       expect( proxy1.id ).not.toEqual( proxy2.id );
     } );
 
     it( "returns a proxy object", function() {
-      var result = Tabris.create( "type", {} );
+      var result = tabris.create( "type", {} );
 
-      expect( result ).toEqual( jasmine.any( Tabris.Proxy ) );
+      expect( result ).toEqual( jasmine.any( tabris.Proxy ) );
     } );
 
     it( "triggers a create operation with type and properties", function() {
-      var proxy = Tabris.create( "foo.bar", { foo: 23 } );
+      var proxy = tabris.create( "foo.bar", { foo: 23 } );
 
       var createCall = nativeBridge.calls({ op: "create", id: proxy.id })[0];
 

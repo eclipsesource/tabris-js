@@ -20,7 +20,7 @@
 
   "browser" : true, // globals exposed by modern browsers e.g. `window`, `document`, etc.
   "globals": {
-    "Tabris": false,
+    "tabris": false,
 
     // Grunt
     "module": false,

@@ -1,4 +1,4 @@
-Tabris.load(function() {
+tabris.load(function() {
 
   var red = [210, 50, 20];
   var green = [0, 128, 0];
@@ -13,7 +13,7 @@ Tabris.load(function() {
 
   var createPage = function(pageTitle, pageIsTopLevel) {
 
-    var page = Tabris.createPage({
+    var page = tabris.createPage({
       title: pageTitle,
       topLevel: pageIsTopLevel
     });
@@ -55,7 +55,7 @@ Tabris.load(function() {
     });
 
     addGlobalActionButton.on("Selection", function() {
-      var action = Tabris.createAction({
+      var action = tabris.createAction({
         title: "Share",
         image: ["images/action_share.png", 24, 24]
       }, function() {

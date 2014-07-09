@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 
-/*global Tabris: false, NativeBridgeSpy: false */
+/*global tabris: false, NativeBridgeSpy: false */
 
 describe( "UIProxy", function() {
 
@@ -14,9 +14,9 @@ describe( "UIProxy", function() {
 
   beforeEach( function() {
     nativeBridge = new NativeBridgeSpy();
-    Tabris._loadFunctions = [];
-    Tabris._start( nativeBridge );
-    uiProxy = new Tabris.UIProxy();
+    tabris._loadFunctions = [];
+    tabris._start( nativeBridge );
+    uiProxy = new tabris.UIProxy();
   });
 
   describe( "create", function() {
@@ -25,7 +25,7 @@ describe( "UIProxy", function() {
       uiProxy._create();
     });
 
-    it( "creates Display, Shell, and Tabris UI", function() {
+    it( "creates Display, Shell, and tabris UI", function() {
       var createCalls = nativeBridge.calls({ op: 'create' });
       expect( createCalls[0].type ).toBe( "rwt.widgets.Display" );
       expect( createCalls[1].type ).toBe( "rwt.widgets.Shell" );
@@ -39,13 +39,13 @@ describe( "UIProxy", function() {
       expect( shellCreate.properties.mode ).toBe( 'maximized' );
     });
 
-    it( "created Tabris UI refers to Shell", function() {
+    it( "created tabris UI refers to Shell", function() {
       var shellCreate = nativeBridge.calls({ op: 'create', type: 'rwt.widgets.Shell' })[0];
       var tabrisUiCreate = nativeBridge.calls({ op: 'create', type: 'tabris.UI' })[0];
       expect( tabrisUiCreate.properties.shell ).toBe( shellCreate.id );
     });
 
-    it( "listens on Tabris UI ShowPage and ShowPreviousPage events", function() {
+    it( "listens on tabris UI ShowPage and ShowPreviousPage events", function() {
       var tabrisUiId = nativeBridge.calls({ op: 'create', type: 'tabris.UI' })[0].id;
       expect( nativeBridge.calls({ op: 'listen', id: tabrisUiId, event: 'ShowPage' }).length ).toBe( 1 );
       expect( nativeBridge.calls({ op: 'listen', id: tabrisUiId, event: 'ShowPreviousPage' }).length ).toBe( 1 );
@@ -104,7 +104,7 @@ describe( "UIProxy", function() {
         expect( actionCreateCalls.length ).toBe( 1 );
       });
 
-      it( "created action's parent is set to Tabris.UI", function() {
+      it( "created action's parent is set to tabris.UI", function() {
         expect( actionCreateCalls[0].properties.parent ).toEqual( uiId );
       });
 
@@ -122,7 +122,7 @@ describe( "UIProxy", function() {
       it( "handler is notified on action event", function() {
         var actionId = actionCreateCalls[0].id;
 
-        Tabris._notify( actionId, "Selection", { "foo": 23 } );
+        tabris._notify( actionId, "Selection", { "foo": 23 } );
 
         expect( handler ).toHaveBeenCalledWith( { "foo": 23 } );
       });
@@ -177,7 +177,7 @@ describe( "UIProxy", function() {
       it( "returns a PageProxy", function() {
         var page = uiProxy.createPage();
 
-        expect( page instanceof Tabris.PageProxy ).toBe( true );
+        expect( page instanceof tabris.PageProxy ).toBe( true );
       });
 
     });

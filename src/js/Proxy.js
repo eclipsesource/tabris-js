@@ -3,38 +3,38 @@
  * All rights reserved.
  */
 
-/*global util: false, Tabris: true */
+/*global util: false, tabris: true */
 
 (function() {
 
-  Tabris.Proxy = function( id ) {
+  tabris.Proxy = function( id ) {
     this.id = id;
-    Tabris._proxies[id] = this;
+    tabris._proxies[id] = this;
   };
 
-  Tabris.Proxy.create = function( id, type, properties ) {
-    return new Tabris.Proxy( id )._create( type, properties );
+  tabris.Proxy.create = function( id, type, properties ) {
+    return new tabris.Proxy( id )._create( type, properties );
   };
 
-  Tabris.Proxy.prototype = {
+  tabris.Proxy.prototype = {
 
     _create: function( type, properties ) {
       if( properties && properties.parent ) {
         this._parent = properties.parent;
         this._parent._addChild( this );
       }
-      Tabris._nativeBridge.create( this.id, fixType( type ), fixProperties( properties ) );
+      tabris._nativeBridge.create( this.id, fixType( type ), fixProperties( properties ) );
       return this;
     },
 
     append: function( type, properties ) {
       this._checkDisposed();
-      return Tabris.create( type, util.extend( {}, properties, { parent: this } ) );
+      return tabris.create( type, util.extend( {}, properties, { parent: this } ) );
     },
 
     get: function( method ) {
       this._checkDisposed();
-      return Tabris._nativeBridge.get( this.id, method );
+      return tabris._nativeBridge.get( this.id, method );
     },
 
     set: function( arg1, arg2 ) {
@@ -46,20 +46,20 @@
       } else {
         properties = arg1;
       }
-      Tabris._nativeBridge.set( this.id, fixProperties( properties ) );
+      tabris._nativeBridge.set( this.id, fixProperties( properties ) );
       return this;
     },
 
     call: function( method, parameters ) {
       this._checkDisposed();
-      Tabris._nativeBridge.call( this.id, method, parameters );
+      tabris._nativeBridge.call( this.id, method, parameters );
       return this;
     },
 
     on: function( event, listener ) {
       this._checkDisposed();
       if( this._addListener( event, listener ) ) {
-        Tabris._nativeBridge.listen( this.id, event, true );
+        tabris._nativeBridge.listen( this.id, event, true );
       }
       return this;
     },
@@ -67,14 +67,14 @@
     off: function( event, listener ) {
       this._checkDisposed();
       if( this._removeListener( event, listener ) ) {
-        Tabris._nativeBridge.listen( this.id, event, false );
+        tabris._nativeBridge.listen( this.id, event, false );
       }
       return this;
     },
 
     dispose: function() {
       if( !this._isDisposed ) {
-        Tabris._nativeBridge.destroy( this.id );
+        tabris._nativeBridge.destroy( this.id );
         this._destroy();
         if( this._parent ) {
           this._parent._removeChild( this );
@@ -91,7 +91,7 @@
       }
       this._notifyListeners( "Dispose", [{}] );
       this._listeners = null;
-      delete Tabris._proxies[this.id];
+      delete tabris._proxies[this.id];
     },
 
     _addListener: function( event, listener ) {
@@ -150,7 +150,7 @@
   };
 
   var translateProxyToId = function( value ) {
-    return value instanceof Tabris.Proxy ? value.id : value;
+    return value instanceof tabris.Proxy ? value.id : value;
   };
 
   var fixLayoutData = function( data ) {

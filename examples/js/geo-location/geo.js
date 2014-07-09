@@ -1,19 +1,19 @@
-Tabris.load(function() {
+tabris.load(function() {
 
-  var page = Tabris.createPage({
+  var page = tabris.createPage({
     title: "Geo Location Example",
     topLevel: true
   });
 
   var location = null;
 
-  var geo = new Tabris.Proxy( "tabris.Geolocation" );
+  var geo = new tabris.Proxy( "tabris.Geolocation" );
   geo.on( "LocationUpdate", function( event ) {
     location = event;
     showLocation();
   });
 
-  var launcher = Tabris.create( "tabris.AppLauncher" );
+  var launcher = tabris.create( "tabris.AppLauncher" );
 
   function showLocation() {
     locationLabel.set( "text", locationToString( location ) );

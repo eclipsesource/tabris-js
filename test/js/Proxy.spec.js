@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 
-/*global Tabris: false, NativeBridgeSpy: false */
+/*global tabris: false, NativeBridgeSpy: false */
 
 describe( "Proxy", function() {
 
@@ -13,8 +13,8 @@ describe( "Proxy", function() {
   beforeEach( function() {
     nativeBridge = new NativeBridgeSpy();
     log = [];
-    Tabris._loadFunctions = [];
-    Tabris._start( nativeBridge );
+    tabris._loadFunctions = [];
+    tabris._start( nativeBridge );
   });
 
   describe( "create", function() {
@@ -22,7 +22,7 @@ describe( "Proxy", function() {
     var proxy;
 
     beforeEach( function() {
-      proxy = new Tabris.Proxy( "test-id" );
+      proxy = new tabris.Proxy( "test-id" );
     });
 
     it( "calls native create with type and properties", function() {
@@ -34,7 +34,7 @@ describe( "Proxy", function() {
     } );
 
     it( "translates proxies to ids in properties", function() {
-      var other = new Tabris.Proxy( "other-id" );
+      var other = new tabris.Proxy( "other-id" );
 
       proxy._create( "custom.type", { foo: other } );
 
@@ -52,7 +52,7 @@ describe( "Proxy", function() {
     } );
 
     it( "translates widgets to ids in layoutData", function() {
-      var other = new Tabris.Proxy( "other-id" );
+      var other = new tabris.Proxy( "other-id" );
 
       proxy._create( "custom.type", { layoutData: { left: 23, right: other, top: [other, 42] } } );
 
@@ -79,7 +79,7 @@ describe( "Proxy", function() {
     var proxy;
 
     beforeEach( function() {
-      proxy = new Tabris.Proxy( "test-id" );
+      proxy = new tabris.Proxy( "test-id" );
     });
 
     describe( "append", function() {
@@ -102,7 +102,7 @@ describe( "Proxy", function() {
       it( "returns a proxy object with parent", function() {
         var child = proxy.append( "Label", {} );
 
-        expect( child ).toEqual( jasmine.any( Tabris.Proxy ) );
+        expect( child ).toEqual( jasmine.any( tabris.Proxy ) );
         expect( child._parent ).toBe( proxy );
       } );
 
@@ -137,7 +137,7 @@ describe( "Proxy", function() {
     describe( "set", function() {
 
       it( "translates widgets to ids in properties", function() {
-        var other = new Tabris.Proxy( "other-id" );
+        var other = new tabris.Proxy( "other-id" );
 
         proxy.set( "foo", other );
 
@@ -155,7 +155,7 @@ describe( "Proxy", function() {
       } );
 
       it( "translates widgets to ids in layoutData", function() {
-        var other = new Tabris.Proxy( "other-id" );
+        var other = new tabris.Proxy( "other-id" );
 
         proxy.set( "layoutData", { left: 23, right: other, top: [other, 42] } );
 
@@ -312,8 +312,8 @@ describe( "Proxy", function() {
       } );
 
       it( "notifies all children's dispose listeners", function() {
-        var child1 = Tabris.create( "type", { parent: proxy } );
-        var child2 = Tabris.create( "type", { parent: proxy } );
+        var child1 = tabris.create( "type", { parent: proxy } );
+        var child2 = tabris.create( "type", { parent: proxy } );
 
         proxy.on( "Dispose", function() { log.push( "parent" ); } );
         child1.on( "Dispose", function() { log.push( "child1" ); } );
@@ -325,9 +325,9 @@ describe( "Proxy", function() {
       } );
 
       it( "notifies children's dispose listeners recursively", function() {
-        var parent = Tabris.create( "type", {} );
-        var child = Tabris.create( "type", { parent: parent } );
-        var grandchild = Tabris.create( "type", { parent: child } );
+        var parent = tabris.create( "type", {} );
+        var child = tabris.create( "type", { parent: parent } );
+        var grandchild = tabris.create( "type", { parent: child } );
         parent.on( "Dispose", function() { log.push( "parent" ); } );
         child.on( "Dispose", function() { log.push( "child" ); } );
         grandchild.on( "Dispose", function() { log.push( "grandchild" ); } );
@@ -338,7 +338,7 @@ describe( "Proxy", function() {
       } );
 
       it( "does not call native destroy on children", function() {
-        Tabris.create( "type", { parent: proxy } );
+        tabris.create( "type", { parent: proxy } );
 
         proxy.dispose();
 
@@ -353,7 +353,7 @@ describe( "Proxy", function() {
       } );
 
       it( "unregisters from parent to allow garbage collection", function() {
-        var child = Tabris.create( "Label", { parent: proxy } );
+        var child = tabris.create( "Label", { parent: proxy } );
 
         child.dispose();
 

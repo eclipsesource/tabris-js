@@ -1,8 +1,8 @@
-Tabris.load(function() {
+tabris.load(function() {
 
   var message;
 
-  var page = Tabris.createPage({
+  var page = tabris.createPage({
     title: "Oceanic Flight 815 Booking",
     topLevel: true
   });

@@ -1,9 +1,9 @@
 /*jshint unused: false */
-Tabris.load( function() {
+tabris.load( function() {
 
   var white = [255, 255, 255];
 
-  var page = Tabris.createPage({ title: "Client Layout", topLevel: true });
+  var page = tabris.createPage({ title: "Client Layout", topLevel: true });
 
   var emptyLayoutDataLabel = page.append("Label", {
     background: [255, 0, 128],
@@ -41,7 +41,7 @@ Tabris.load( function() {
 
   var tabrisLabel = page.append("Label", {
     background: [128, 128, 255],
-    text: "Tabris",
+    text: "tabris",
     foreground: white,
     layoutData: { right: 20, left: [helloWorldLabel, 0], top: [helloWorldLabel, 0] }
   });

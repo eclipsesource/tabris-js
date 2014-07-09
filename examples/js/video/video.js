@@ -1,6 +1,6 @@
-Tabris.load(function() {
+tabris.load(function() {
 
-  var page = Tabris.createPage({
+  var page = tabris.createPage({
     title: "Video",
     topLevel: true
   });
