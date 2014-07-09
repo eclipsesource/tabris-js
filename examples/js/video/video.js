@@ -73,10 +73,9 @@ tabris.load(function() {
     video.set("presentation", "full_screen");
   });
 
-  var controlsCheckbox = controls.append("Button", {
+  var controlsCheckbox = controls.append("CheckBox", {
     // TODO: height explicitly set as a workaround for tabris-android bug #527
     layoutData: {bottom: 5, left: 5, width: 100, height: 30},
-    style: ['CHECK'],
     text: "Controls",
     selection: true
   });
@@ -86,10 +85,9 @@ tabris.load(function() {
     video.set("controls_visible", !video.get("controls_visible"));
   });
 
-  var repeatCheckbox = controls.append("Button", {
+  var repeatCheckbox = controls.append("CheckBox", {
     // TODO: height explicitly set as a workaround for tabris-android bug #527
     layoutData: {bottom: 5, left: [controlsCheckbox, 5], width: 100, height: 30},
-    style: ['CHECK'],
     text: "Repeat"
   });
 

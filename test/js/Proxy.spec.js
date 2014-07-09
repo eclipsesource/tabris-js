@@ -17,6 +17,50 @@ describe( "Proxy", function() {
 
   describe( "create", function() {
 
+    it( "creates proxy for standard types", function() {
+      tabris.Proxy.create( "id", "rwt.widgets.Button", { style: ["PUSH"], text: "foo" } );
+
+      var create = nativeBridge.calls({ op: "create" })[0];
+      expect( create.type ).toEqual( "rwt.widgets.Button" );
+      expect( create.properties ).toEqual( { style: ["PUSH"], text: "foo" } );
+    } );
+
+    it( "maps 'Button' to rwt.widgets.Button [PUSH]", function() {
+      tabris.Proxy.create( "id", "Button", { "text": "foo" } );
+
+      var create = nativeBridge.calls({ op: "create" })[0];
+      expect( create.type ).toEqual( "rwt.widgets.Button" );
+      expect( create.properties ).toEqual( { style: ["PUSH"], text: "foo" } );
+    } );
+
+    it( "maps 'CheckBox' to rwt.widgets.Button [CHECK]", function() {
+      tabris.Proxy.create( "id", "CheckBox", { "text": "foo" } );
+
+      var create = nativeBridge.calls({ op: "create" })[0];
+      expect( create.type ).toEqual( "rwt.widgets.Button" );
+      expect( create.properties ).toEqual( { style: ["CHECK"], text: "foo" } );
+    } );
+
+    it( "maps 'RadioButton' to rwt.widgets.Button [RADIO]", function() {
+      tabris.Proxy.create( "id", "RadioButton", { "text": "foo" } );
+
+      var create = nativeBridge.calls({ op: "create" })[0];
+      expect( create.type ).toEqual( "rwt.widgets.Button" );
+      expect( create.properties ).toEqual( { style: ["RADIO"], text: "foo" } );
+    } );
+
+    it( "maps 'ToggleButton' to rwt.widgets.Button [TOGGLE]", function() {
+      tabris.Proxy.create( "id", "ToggleButton", { "text": "foo" } );
+
+      var create = nativeBridge.calls({ op: "create" })[0];
+      expect( create.type ).toEqual( "rwt.widgets.Button" );
+      expect( create.properties ).toEqual( { style: ["TOGGLE"], text: "foo" } );
+    } );
+
+  });
+
+  describe( "_create", function() {
+
     var proxy;
 
     beforeEach( function() {

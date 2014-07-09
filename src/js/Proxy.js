@@ -11,7 +11,27 @@
   };
 
   tabris.Proxy.create = function( id, type, properties ) {
-    return new tabris.Proxy( id )._create( type, properties );
+    var proxy = new tabris.Proxy( id );
+    var factory = tabris.Proxy._factories[type in tabris.Proxy._factories ? type : "default"];
+    return factory( proxy, type, properties );
+  };
+
+  tabris.Proxy._factories = {
+    "Button": function( proxy, type, properties ) {
+      return proxy._create( "rwt.widgets.Button", util.extend( { style: ["PUSH"] }, properties ));
+    },
+    "CheckBox": function( proxy, type, properties ) {
+      return proxy._create( "rwt.widgets.Button", util.extend( { style: ["CHECK"] }, properties ));
+    },
+    "RadioButton": function( proxy, type, properties ) {
+      return proxy._create( "rwt.widgets.Button", util.extend( { style: ["RADIO"] }, properties ));
+    },
+    "ToggleButton": function( proxy, type, properties ) {
+      return proxy._create( "rwt.widgets.Button", util.extend( { style: ["TOGGLE"] }, properties ));
+    },
+    "default": function( proxy, type, properties ) {
+      return proxy._create( type, properties );
+    }
   };
 
   tabris.Proxy.prototype = {

@@ -84,10 +84,9 @@ tabris.load(function() {
     month: 5
   });
 
-  var checkbox = page.append("Button", {
+  var checkbox = page.append("CheckBox", {
     // TODO: height explicitly set as a workaround for tabris-android bug #527
     layoutData: {left: [dateTimeLabel, 10], right: 10, top: [dateTime, 10], height: 30},
-    style: ["CHECK"],
     text: "Vegetarian"
   });
 

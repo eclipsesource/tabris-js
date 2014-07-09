@@ -33,7 +33,6 @@ tabris.load(function() {
 
   var locationButton = page.append( "Button", {
     text: "Where am I?",
-    style: [ "PUSH" ],
     layoutData: { left: 10, right: 10, top: [locationLabel, 10] }
   }).on( "Selection", function() {
     geo.set({
