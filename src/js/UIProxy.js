@@ -56,7 +56,7 @@ Tabris.UIProxy.prototype = {
   },
 
   createAction: function( properties, handler ) {
-    var action = Tabris.create( "tabris.Action", util.merge( properties, {
+    var action = Tabris.create( "tabris.Action", util.extend( {}, properties, {
       parent: this._ui
     }));
     if( typeof handler === "function" ) {

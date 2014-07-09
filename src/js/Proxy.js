@@ -29,7 +29,7 @@
 
     append: function( type, properties ) {
       this._checkDisposed();
-      return Tabris.create( type, util.merge( properties, { parent: this } ) );
+      return Tabris.create( type, util.extend( {}, properties, { parent: this } ) );
     },
 
     get: function( method ) {

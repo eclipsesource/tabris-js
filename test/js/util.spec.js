@@ -7,20 +7,22 @@
 
 describe( "util", function() {
 
-  describe( "merge", function() {
+  describe( "extend", function() {
 
-    it( "returns a copy", function() {
-      var original = { "a": 1 };
+    it( "copies properties of all source objects into target object", function() {
+      var target = { "a": 1, "b": 1 };
 
-      var result = util.merge( original, { "b": 2 } );
+      util.extend( target, { "b": 2, "c": 2 }, { "c": 3 } );
 
-      expect( result ).not.toBe( original );
+      expect( target ).toEqual( { "a": 1, "b": 2, "c": 3 } );
     });
 
-    it( "copies properties of all parameter objects", function() {
-      var result = util.merge( { "a": 1, "b": 1 }, { "b": 2, "c": 2 }, { "c": 3 } );
+    it( "returns target object", function() {
+      var object = {};
 
-      expect( result ).toEqual( { "a": 1, "b": 2, "c": 3 } );
+      var result = util.extend( object, { "a": 1 } );
+
+      expect( result ).toBe( object );
     });
 
   });

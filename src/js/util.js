@@ -7,15 +7,14 @@
 
 util = {
 
-  merge: function() {
-    var result = {};
-    for( var i = 0; i < arguments.length; i++ ) {
-      var object = arguments[i];
-      for( var name in object ) {
-        result[name] = object[name];
+  extend: function( target ) {
+    for( var i = 1; i < arguments.length; i++ ) {
+      var source = arguments[i];
+      for( var name in source ) {
+        target[name] = source[name];
       }
     }
-    return result;
+    return target;
   },
 
   pick: function( object, keys ) {

@@ -14,12 +14,12 @@ Tabris.PageProxy.prototype = {
   _PAGE_PROPS: ["title", "image", "style", "topLevel"],
 
   _create: function( properties ) {
-    var compositeProperties = util.merge( util.omit( properties, this._PAGE_PROPS ), {
+    var compositeProperties = util.extend( util.omit( properties, this._PAGE_PROPS ), {
       parent: Tabris._shell,
       layoutData: { left: 0, right: 0, top: 0, bottom: 0 }
     });
     this._composite = Tabris.create( "rwt.widgets.Composite", compositeProperties );
-    var pageProperties = util.merge( util.pick( properties, this._PAGE_PROPS ), {
+    var pageProperties = util.extend( util.pick( properties, this._PAGE_PROPS ), {
       parent: this._uiProxy._ui,
       control: this._composite.id
     });
