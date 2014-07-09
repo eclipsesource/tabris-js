@@ -3,8 +3,6 @@
  * All rights reserved.
  */
 
-/*global tabris: false, NativeBridgeSpy: false */
-
 describe( "Proxy", function() {
 
   var nativeBridge;

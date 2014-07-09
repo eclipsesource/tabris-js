@@ -21,6 +21,8 @@
   "browser" : true, // globals exposed by modern browsers e.g. `window`, `document`, etc.
   "globals": {
     "tabris": false,
+    "util": false,
+    "NativeBridgeSpy": false,
 
     // Grunt
     "module": false,

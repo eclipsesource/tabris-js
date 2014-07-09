@@ -3,8 +3,6 @@
  * All rights reserved.
  */
 
-/*global util: false, tabris: true */
-
 (function() {
 
   tabris.Proxy = function( id ) {

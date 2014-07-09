@@ -3,8 +3,6 @@
  * All rights reserved.
  */
 
-/*global tabris: true, util: false */
-
 tabris.UIProxy = function() {
   this._pages = [];
 };

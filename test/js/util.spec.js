@@ -3,8 +3,6 @@
  * All rights reserved.
  */
 
-/*global util: false */
-
 describe( "util", function() {
 
   describe( "extend", function() {

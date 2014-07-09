@@ -3,8 +3,6 @@
  * All rights reserved.
  */
 
-/*global NativeBridgeSpy: false */
-
 describe( "NativeBridgeSpy", function() {
 
   var nativeBridge;
