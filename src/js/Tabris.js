@@ -8,7 +8,9 @@
 (function() {
 
   // TODO [rst] uppercase Tabris is still accessed by native code, remove when not needed anymore
-  Tabris = tabris = {
+  Tabris = tabris = util.extend( function( id ) {
+    return id in tabris._proxies ? tabris._proxies[ id ] : new tabris.Proxy( id );
+  }, {
 
     _loadFunctions: [],
     _proxies: {},
@@ -40,7 +42,7 @@
       }
     }
 
-  };
+  });
 
   var idSequence = 1;
 

@@ -15,6 +15,30 @@ describe( "tabris", function() {
     tabris._start( nativeBridge );
   });
 
+  describe( "when used as a function", function() {
+
+    it( "returns a proxy for the given id", function() {
+      var result = tabris( "foo" );
+
+      expect( result ).toEqual( jasmine.any( tabris.Proxy ) );
+      expect( result.id ).toBe( "foo" );
+    });
+
+    it( "returns same proxy instance for the same id", function() {
+      var result1 = tabris( "foo" );
+      var result2 = tabris( "foo" );
+
+      expect( result1 ).toBe( result2 );
+    });
+
+    it( "does not call create on native bridge", function() {
+      tabris( "foo" );
+
+      expect( nativeBridge.calls().length ).toBe( 0 );
+    });
+
+  });
+
   describe( "_start", function() {
 
     it( "can be called without a context", function() {

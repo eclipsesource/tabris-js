@@ -7,7 +7,7 @@ tabris.load(function() {
 
   var location = null;
 
-  var geo = new tabris.Proxy( "tabris.Geolocation" );
+  var geo = tabris( "tabris.Geolocation" );
   geo.on( "LocationUpdate", function( event ) {
     location = event;
     showLocation();
