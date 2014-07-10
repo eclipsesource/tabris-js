@@ -3,11 +3,12 @@
  * All rights reserved.
  */
 
-/*global tabris: true */
+/*global Tabris: true, tabris: true */
 
 (function() {
 
-  tabris = {
+  // TODO [rst] uppercase Tabris is still accessed by native code, remove when not needed anymore
+  Tabris = tabris = {
 
     _loadFunctions: [],
     _proxies: {},
