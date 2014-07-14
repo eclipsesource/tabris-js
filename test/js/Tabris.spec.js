@@ -163,6 +163,14 @@ describe( "tabris", function() {
       expect( createCall.properties.foo ).toBe( 23 );
     } );
 
+    it( "executes type translations", function() {
+      var proxy = tabris.create( "CheckBox", {} );
+
+      var createCall = nativeBridge.calls({ op: "create", id: proxy.id })[0];
+
+      expect( createCall.type ).toBe( "rwt.widgets.Button" );
+    } );
+
   } );
 
 } );

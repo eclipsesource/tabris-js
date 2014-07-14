@@ -24,7 +24,7 @@
         throw new Error( "tabris.js not started" );
       }
       var id = generateId();
-      return new tabris.Proxy( id )._create( type, properties );
+      return tabris.Proxy.create( id, type, properties );
     },
 
     _start: function( nativeBridge ) {
