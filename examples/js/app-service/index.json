@@ -1,0 +1,10 @@
+{
+  "resources": [
+    {
+      "path": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.js"
+    },
+    {
+      "path": "app-service.js"
+    }
+  ]
+}
