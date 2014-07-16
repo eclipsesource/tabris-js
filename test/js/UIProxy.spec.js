@@ -180,6 +180,19 @@ describe( "UIProxy", function() {
 
     });
 
+    describe( "when a Close event is received for the Shell", function() {
+
+      beforeEach(function() {
+        tabris._notify( shellId, "Close", {});
+      });
+
+      it( "sends a Shell destroy", function() {
+        // See https://github.com/eclipsesource/tabris-js/issues/28
+        expect( nativeBridge.calls({id: shellId, op: "destroy"}).length ).toBe( 1 );
+      });
+
+    });
+
   });
 
 });

@@ -18,6 +18,9 @@ tabris.UIProxy.prototype = {
       active: true,
       visibility: true
     });
+    tabris._shell.on( "Close", function() {
+      tabris._shell.dispose();
+    });
     this._ui = tabris.create( "tabris.UI", {
       shell: tabris._shell.id
     });
