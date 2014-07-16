@@ -1,10 +1,10 @@
 {
   "resources": [
     {
-      "path": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.js"
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.js"
     },
     {
-      "path": "video.js"
+      "src": "video.js"
     }
   ]
 }
