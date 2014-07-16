@@ -29,6 +29,10 @@
     "ToggleButton": function( proxy, type, properties ) {
       return proxy._create( "rwt.widgets.Button", util.extend( { style: ["TOGGLE"] }, properties ));
     },
+    "Text": function( proxy, type, properties ) {
+      var style = textTypeToStyle[ properties.type ] || textTypeToStyle[ "default" ];
+      return proxy._create( "rwt.widgets.Text", util.extend( { style: style }, properties ));
+    },
     "default": function( proxy, type, properties ) {
       return proxy._create( type, properties );
     }
@@ -200,6 +204,13 @@
       return "rwt.widgets." + type;
     }
     return type;
+  };
+
+  var textTypeToStyle = {
+    "password" : ["BORDER", "PASSWORD"],
+    "search" : ["BORDER", "SEARCH"],
+    "multiline" : ["BORDER", "MULTI"],
+    "default" : ["BORDER"]
   };
 
 })();

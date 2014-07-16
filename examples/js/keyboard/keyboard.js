@@ -23,7 +23,6 @@ tabris.load(function() {
   });
 
   var capitalizeOnInput = composite.append("Text", {
-    style: ["BORDER"],
     layoutData: {left: [capitalizeOnLabel, 10], right: 10, top: 10},
     data: {
       "autoCapitalize": true
@@ -37,7 +36,6 @@ tabris.load(function() {
   });
 
   var capitalizeOffInput = composite.append("Text", {
-    style: ["BORDER"],
     layoutData: {left: [capitalizeOffLabel, 10], right: 10, top: [capitalizeOnInput, 10]},
     data: {
       "autoCapitalize": false
@@ -51,7 +49,6 @@ tabris.load(function() {
   });
 
   var autoCorrectOnInput = composite.append("Text", {
-    style: ["BORDER"],
     layoutData: {left: [autoCorrectOnLabel, 10], right: 10, top: [capitalizeOffInput, 10]},
     data: {
       "autoCorrect": true
@@ -65,7 +62,6 @@ tabris.load(function() {
   });
 
   var autoCorrectOffInput = composite.append("Text", {
-    style: ["BORDER"],
     layoutData: {left: [autoCorrectOffLabel, 10], right: 10, top: [autoCorrectOnInput, 10]},
     data: {
       "autoCorrect": false
@@ -79,7 +75,6 @@ tabris.load(function() {
   });
 
   var asciiInput = composite.append("Text", {
-    style: ["BORDER"],
     layoutData: {left: [asciiLabel, 10], right: 10, top: [autoCorrectOffInput, 10]},
     data: {
       "keyboard": "ascii"
@@ -93,7 +88,6 @@ tabris.load(function() {
   });
 
   var decimalInput = composite.append("Text", {
-    style: ["BORDER"],
     layoutData: {left: [decimalLabel, 10], right: 10, top: [asciiInput, 10]},
     data: {
       "keyboard": "decimal"
@@ -107,7 +101,6 @@ tabris.load(function() {
   });
 
   var emailInput = composite.append("Text", {
-    style: ["BORDER"],
     layoutData: {left: [emailLabel, 10], right: 10, top: [decimalInput, 10]},
     data: {
       "keyboard": "email"
@@ -121,7 +114,6 @@ tabris.load(function() {
   });
 
   var numbersInput = composite.append("Text", {
-    style: ["BORDER"],
     layoutData: {left: [numbersLabel, 10], right: 10, top: [emailInput, 10]},
     data: {
       "keyboard": "number"
@@ -135,7 +127,6 @@ tabris.load(function() {
   });
 
   var numbersPunctuationInput = composite.append("Text", {
-    style: ["BORDER"],
     layoutData: {left: [numbersPunctuationLabel, 10], right: 10, top: [numbersInput, 10]},
     data: {
       "keyboard": "numbersAndPunctuation"
@@ -149,7 +140,6 @@ tabris.load(function() {
   });
 
   var phoneInput = composite.append("Text", {
-    style: ["BORDER"],
     layoutData: {left: [phoneLabel, 10], right: 10, top: [numbersPunctuationInput, 10]},
     data: {
       "keyboard": "phone"
@@ -163,7 +153,6 @@ tabris.load(function() {
   });
 
   composite.append("Text", {
-    style: ["BORDER"],
     layoutData: {left: [urlLabel, 10], right: 10, top: [phoneInput, 10]},
     keyboard: "url"
   });

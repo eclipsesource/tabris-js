@@ -15,8 +15,6 @@ tabris.load(function() {
 
   var firstNameInput = page.append("Text", {
     layoutData: {left: [firstNameLabel, 10], right: 10, top: 10},
-    // TODO: style 'BORDER' explicitly specified as a workaround for tabris-js bug #15
-    style: ['BORDER'],
     message: "First Name"
   });
 
@@ -28,8 +26,6 @@ tabris.load(function() {
 
   var lastNameInput = page.append("Text", {
     layoutData: {left: [lastNameLabel, 10], right: 10, top: [firstNameInput, 10]},
-    // TODO: style 'BORDER' explicitly specified as a workaround for tabris-js bug #15
-    style: ['BORDER'],
     message: "Last Name"
   });
 
@@ -40,8 +36,7 @@ tabris.load(function() {
   });
 
   var passphraseInput = page.append("Text", {
-    // TODO: style 'BORDER' explicitly specified as a workaround for tabris-js bug #15
-    style: ["PASSWORD", "BORDER"],
+    type: "password",
     layoutData: {left: [passphraseLabel, 10], right: 10, top: [lastNameInput, 10]},
     message: "Passphrase"
   });

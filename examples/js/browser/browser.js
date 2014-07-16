@@ -11,7 +11,6 @@ tabris.load(function() {
   });
 
   var urlInput = page.append("Text", {
-    style: ["BORDER"],
     layoutData: {left: 8, right: [goButton, 8], top: 8},
     message: "URL",
     text: "http://eclipsesource.com/"
