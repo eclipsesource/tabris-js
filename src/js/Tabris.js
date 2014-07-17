@@ -3,12 +3,11 @@
  * All rights reserved.
  */
 
-/*global Tabris: true, tabris: true */
+/*global tabris: true */
 
 (function() {
 
-  // TODO [rst] uppercase Tabris is still accessed by native code, remove when not needed anymore
-  Tabris = tabris = util.extend( function( id ) {
+  tabris = util.extend( function( id ) {
     return id in tabris._proxies ? tabris._proxies[ id ] : new tabris.Proxy( id );
   }, {
 
