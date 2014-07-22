@@ -23,14 +23,14 @@ module.exports = function(grunt) {
       options: {
         specs: prefix( 'test/js/',
                        ['util.spec.js', 'NativeBridgeSpy.spec.js', 'Tabris.spec.js',
-                        'Proxy.spec.js', 'UIProxy.spec.js', 'PageProxy.spec.js'] ),
+                        'Window.spec.js', 'Proxy.spec.js', 'UIProxy.spec.js', 'PageProxy.spec.js'] ),
         helpers: ['test/js/NativeBridgeSpy.js'],
         version: '2.0.0',
         display: 'short',
         summary: true
       },
       src: prefix( 'src/js/',
-                   ['util.js', 'Tabris.js', 'Proxy.js', 'UIProxy.js', 'PageProxy.js'] )
+                   ['util.js', 'Tabris.js', 'Window.js', 'Proxy.js', 'UIProxy.js', 'PageProxy.js'] )
     },
     concat: {
       options: {
@@ -39,7 +39,7 @@ module.exports = function(grunt) {
       },
       dist: {
         src: prefix( 'src/js/',
-                     ['util.js', 'Tabris.js', 'Proxy.js', 'UIProxy.js', 'PageProxy.js'] ),
+                     ['util.js', 'Tabris.js', 'Window.js', 'Proxy.js', 'UIProxy.js', 'PageProxy.js'] ),
         dest: 'build/tabris.js'
       }
     },
