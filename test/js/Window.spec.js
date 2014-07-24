@@ -12,7 +12,15 @@ describe("Window", function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._start( nativeBridge );
-    wnd = new tabris.Window.create();
+    wnd = tabris.Window.create();
+  });
+
+  describe( "created window", function() {
+
+    it( "is an instance of tabris.Window", function() {
+      expect(wnd).toEqual(jasmine.any(tabris.Window));
+    });
+
   });
 
   describe("setTimeout", function() {

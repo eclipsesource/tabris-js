@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 
-(function(){
+/*global window: true*/
 
 tabris.Window = function() {
 };
@@ -50,4 +50,7 @@ tabris.Window.create = function() {
   return wnd;
 };
 
-}());
+if( typeof window === "undefined" ) {
+  window = tabris.Window.create();
+  window.tabris = tabris;
+}
