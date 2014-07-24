@@ -21,16 +21,13 @@ module.exports = function(grunt) {
     },
     jasmine: {
       options: {
-        specs: prefix( 'test/js/',
-                       ['util.spec.js', 'NativeBridgeSpy.spec.js', 'Tabris.spec.js',
-                        'Window.spec.js', 'Proxy.spec.js', 'UIProxy.spec.js', 'PageProxy.spec.js'] ),
+        specs: 'test/js/*.spec.js',
         helpers: ['test/js/NativeBridgeSpy.js'],
         version: '2.0.0',
         display: 'short',
         summary: true
       },
-      src: prefix( 'src/js/',
-                   ['util.js', 'Tabris.js', 'Window.js', 'Proxy.js', 'UIProxy.js', 'PageProxy.js'] )
+      src: 'build/tabris.js'
     },
     concat: {
       options: {
@@ -59,6 +56,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
-  grunt.registerTask('default', ['jshint', 'jasmine', 'concat', 'uglify']);
+  grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'jasmine']);
 
 };

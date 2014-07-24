@@ -39,6 +39,11 @@
       if( proxy ) {
         proxy._notifyListeners( event, [param] );
       }
+    },
+
+    _reset: function() {
+      this._loadFunctions = [];
+      this._proxies = {};
     }
 
   });

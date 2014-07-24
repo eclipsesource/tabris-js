@@ -12,7 +12,7 @@ describe( "UIProxy", function() {
 
   beforeEach( function() {
     nativeBridge = new NativeBridgeSpy();
-    tabris._loadFunctions = [];
+    tabris._reset();
     tabris._start( nativeBridge );
     uiProxy = new tabris.UIProxy();
   });

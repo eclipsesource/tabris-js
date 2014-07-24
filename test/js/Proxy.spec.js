@@ -11,7 +11,7 @@ describe( "Proxy", function() {
   beforeEach( function() {
     nativeBridge = new NativeBridgeSpy();
     log = [];
-    tabris._loadFunctions = [];
+    tabris._reset();
     tabris._start( nativeBridge );
   });
 

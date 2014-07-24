@@ -10,8 +10,7 @@ describe("Window", function() {
 
   beforeEach(function () {
     nativeBridge = new NativeBridgeSpy();
-    tabris._loadFunctions = [];
-    tabris._proxies = [];
+    tabris._reset();
     tabris._start( nativeBridge );
     wnd = new tabris.Window.create();
   });
