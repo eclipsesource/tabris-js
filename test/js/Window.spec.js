@@ -28,12 +28,14 @@ describe("Window", function() {
     var delay = 23;
     var taskId;
     var callback;
-    var createCall;
+    var createCall, listenCall, startCall;
 
     beforeEach(function() {
       callback = jasmine.createSpy("callback");
       taskId = wnd.setTimeout(callback, delay);
       createCall = nativeBridge.calls({op: "create", type: "tabris.Timer"})[0];
+      listenCall = nativeBridge.calls({id: createCall.id, op: "listen", event : "Run"})[0];
+      startCall = nativeBridge.calls({id: createCall.id, op: "call", method : "start"})[0];
     });
 
     it("creates native Timer", function() {
@@ -46,8 +48,19 @@ describe("Window", function() {
     });
 
     it("listens on Run event of native Timer", function() {
-      var listenCall = nativeBridge.calls({id: createCall.id, op: "listen", event : "Run"})[0];
       expect(listenCall).toBeDefined();
+    });
+
+    it("starts the native Timer", function() {
+      expect(startCall).toBeDefined();
+    });
+
+    it("create, listen, start are called in this order", function() {
+      var createPosition = nativeBridge.calls().indexOf(createCall);
+      var listenPosition = nativeBridge.calls().indexOf(listenCall);
+      var startPosition = nativeBridge.calls().indexOf(startCall);
+      expect(listenPosition).toBeGreaterThan(createPosition);
+      expect(startPosition).toBeGreaterThan(listenPosition);
     });
 
     it("returns a number", function() {
@@ -105,12 +118,14 @@ describe("Window", function() {
     var delay = 23;
     var taskId;
     var callback;
-    var createCall;
+    var createCall, listenCall, startCall;
 
     beforeEach(function() {
       callback = jasmine.createSpy("callback");
       taskId = wnd.setInterval(callback, delay);
       createCall = nativeBridge.calls({op: "create", type: "tabris.Timer"})[0];
+      listenCall = nativeBridge.calls({id: createCall.id, op: "listen", event : "Run"})[0];
+      startCall = nativeBridge.calls({id: createCall.id, op: "call", method : "start"})[0];
     });
 
     it("creates native Timer", function() {
@@ -123,8 +138,19 @@ describe("Window", function() {
     });
 
     it("listens on Run event of native Timer", function() {
-      var listenCall = nativeBridge.calls({id: createCall.id, op: "listen", event : "Run"})[0];
       expect(listenCall).toBeDefined();
+    });
+
+    it("starts the native Timer", function() {
+      expect(startCall).toBeDefined();
+    });
+
+    it("create, listen, start are called in this order", function() {
+      var createPosition = nativeBridge.calls().indexOf(createCall);
+      var listenPosition = nativeBridge.calls().indexOf(listenCall);
+      var startPosition = nativeBridge.calls().indexOf(startCall);
+      expect(listenPosition).toBeGreaterThan(createPosition);
+      expect(startPosition).toBeGreaterThan(listenPosition);
     });
 
     it("returns a number", function() {

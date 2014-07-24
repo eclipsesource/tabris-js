@@ -25,7 +25,7 @@ tabris.Window.create = function() {
         timer.dispose();
         delete timers[taskId];
       }
-    });
+    }).call( "start" );
     timers[taskId] = timer;
     return taskId;
   }
