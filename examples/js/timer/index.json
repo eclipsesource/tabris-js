@@ -1,0 +1,10 @@
+{
+  "resources": [
+    {
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.js"
+    },
+    {
+      "src": "timer.js"
+    }
+  ]
+}
