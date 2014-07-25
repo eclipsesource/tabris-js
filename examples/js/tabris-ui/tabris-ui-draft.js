@@ -1,9 +1,9 @@
 /*jshint unused: false */
 tabris.load( function() {
 
-  var red = [255, 200, 200];
-  var green = [200, 255, 200];
-  var blue = [200, 200, 255];
+  var red = "#ffc8c8";
+  var green = "#c8ffc8";
+  var blue = "#c8c8ff";
 
   var createSubPage = function( title, bgColor ) {
     var page = tabris.createPage({

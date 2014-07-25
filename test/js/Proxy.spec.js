@@ -185,6 +185,22 @@ describe( "Proxy", function() {
         expect( result ).toBe( 23 );
       } );
 
+      it( "translates foreground to string", function() {
+        spyOn( nativeBridge, "get" ).and.returnValue( [170, 255, 0, 128] );
+
+        var result = proxy.get( "foreground" );
+
+        expect( result ).toBe( "rgba(170, 255, 0, 0.5)" );
+      } );
+
+      it( "translates background to string", function() {
+        spyOn( nativeBridge, "get" ).and.returnValue( [170, 255, 0, 128] );
+
+        var result = proxy.get( "background" );
+
+        expect( result ).toBe( "rgba(170, 255, 0, 0.5)" );
+      } );
+
       it( "fails on disposed object", function() {
         proxy.dispose();
 
@@ -240,6 +256,32 @@ describe( "Proxy", function() {
         proxy.set({ layoutData: layoutData });
 
         expect( layoutData.top ).toEqual( [other, 42] );
+      } );
+
+      it( "translates foreground and backgrund colors to arrays", function() {
+        proxy.set({ foreground: "red", background: "rgba(1, 2, 3, 0.5)" });
+
+        var call = nativeBridge.calls({ op: "set" })[0];
+        expect( call.properties.foreground ).toEqual( [255, 0, 0, 255] );
+        expect( call.properties.background ).toEqual( [1, 2, 3, 128] );
+      } );
+
+      it( "translates colors in row templates", function() {
+        var template = [{ left: 23, foreground: "red", background: "rgba(1, 2, 3, 0.5)" }];
+
+        proxy.set( { rowTemplate: template } );
+
+        var call = nativeBridge.calls({ op: "set" })[0];
+        expect( call.properties.rowTemplate[0].foreground ).toEqual( [255, 0, 0, 255] );
+        expect( call.properties.rowTemplate[0].background ).toEqual( [1, 2, 3, 128] );
+      } );
+
+      it( "does not modify row templates", function() {
+        var template = [{ left: 23, foreground: "red" }];
+
+        proxy.set( { rowTemplate: template } );
+
+        expect( template ).toEqual( [{ left: 23, foreground: "red" }] );
       } );
 
       it( "returns self to allow chaining", function() {

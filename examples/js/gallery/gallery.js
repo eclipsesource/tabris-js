@@ -29,7 +29,7 @@ tabris.load(function() {
   });
 
   var mainComposite = page.append("Composite", {
-    background: [0, 0, 0],
+    background: "black",
     layoutData: {left: 0, top: 0, right: 0, bottom: 0}
   });
 
@@ -39,7 +39,7 @@ tabris.load(function() {
     style: ["H_SCROLL"],
     data: {"paging":true},
     layoutData: scrolledCompositeLayoutData,
-    background: [32, 32, 32, 160]
+    background: "rgb(32, 32, 32, 0.6)"
   });
 
   scrolledComposite.append("rwt.widgets.ScrollBar", {

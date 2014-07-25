@@ -88,8 +88,8 @@ tabris.load(function() {
   var button = page.append("Button", {
     layoutData: {left: 10, right: 10, top: [checkbox, 20]},
     text: "Place Reservation",
-    background: [139, 0, 0],
-    foreground: [255, 255, 255]
+    background: "#8b0000",
+    foreground: "white"
   });
 
   button.on("Selection", function() {

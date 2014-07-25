@@ -62,7 +62,7 @@ describe( "PageProxy", function() {
       });
 
       it( "has non-page properties", function() {
-        expect( createCall.properties.background ).toEqual( "red" );
+        expect( createCall.properties.background ).toEqual( [255, 0, 0, 255] );
       });
 
     });
@@ -134,7 +134,7 @@ describe( "PageProxy", function() {
 
         var setCalls = nativeBridge.calls({ op: "set", id: compositeCreateCall.id });
         expect( setCalls.length ).toBe( 1 );
-        expect( setCalls[0].properties.background ).toEqual( "red" );
+        expect( setCalls[0].properties.background ).toEqual( [255, 0, 0, 255] );
       });
 
     });

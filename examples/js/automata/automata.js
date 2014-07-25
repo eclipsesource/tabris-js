@@ -19,14 +19,14 @@ tabris.load( function() {
   var page = tabris.createPage({
     title: "Automata",
     topLevel: true,
-    background: [0, 0, 0]
+    background: '#000'
   });
 
   // TODO [rst] Move down when z-order is fixed
   var label = page.append( "Label", {
     bounds: [0, 0, 80, 40],
-    background: [255, 0, 0, 200],
-    foreground: [255, 255, 255],
+    background: "rgba(255, 0, 0, 0.8)",
+    foreground: "#fff",
     text: "FPS"
   });
 
@@ -77,7 +77,7 @@ tabris.load( function() {
       var alive = Math.random() >= 0.5;
       var composite = page.append("Composite", {
         bounds: [x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE],
-        background: [255, 255, 255],
+        background: "#fff",
         visibility: alive
       });
       cells[x][y] = {

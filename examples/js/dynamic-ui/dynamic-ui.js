@@ -1,8 +1,5 @@
 tabris.load(function() {
 
-  var red = [210, 50, 20];
-  var green = [0, 128, 0];
-
   var topLevelPages = [];
   var pages = [];
   var actions = [];
@@ -21,8 +18,8 @@ tabris.load(function() {
     var addRootPageButton = page.append("Button", {
       layoutData: {left: 5, right: 5, top: 5},
       text: "Add Root Page",
-      background: green,
-      foreground: [255, 255, 255],
+      background: "green",
+      foreground: "white",
       image: ["images/add_root_page.png", 24, 24]
     });
 
@@ -35,8 +32,8 @@ tabris.load(function() {
     var addPageButton = page.append("Button", {
       layoutData: {left: 5, right: 5, top: [addRootPageButton, 5]},
       text: "Add Page",
-      background: green,
-      foreground: [255, 255, 255],
+      background: "green",
+      foreground: "white",
       image: ["images/add_page.png", 24, 24]
     });
 
@@ -49,8 +46,8 @@ tabris.load(function() {
     var addGlobalActionButton = page.append("Button", {
       layoutData: {left: 5, right: 5, top: [addPageButton, 5]},
       text: "Add Global Action",
-      background: green,
-      foreground: [255, 255, 255],
+      background: "green",
+      foreground: "white",
       image: ["images/global_action.png", 24, 24]
     });
 
@@ -69,8 +66,8 @@ tabris.load(function() {
     var removeLastGlobalActionButton = page.append("Button", {
       layoutData: {left: 5, right: 5, bottom: 5},
       text: "Remove Last Global Action",
-      background: red,
-      foreground: [255, 255, 255],
+      background: "red",
+      foreground: "white",
       image: ["images/global_action.png", 24, 24]
     });
 
@@ -84,8 +81,8 @@ tabris.load(function() {
     var removeLastRootPageButton = page.append("Button", {
       layoutData: {left: 5, right: 5, bottom: [removeLastGlobalActionButton, 5]},
       text: "Remove Last Root Page",
-      background: red,
-      foreground: [255, 255, 255],
+      background: "red",
+      foreground: "white",
       image: ["images/remove_root_page.png", 24, 24]
     });
 

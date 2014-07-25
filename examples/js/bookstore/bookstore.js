@@ -44,7 +44,7 @@ tabris.load(function() {
       markupEnabled: true,
       text: "<b>" + book.title + "</b>",
       layoutData: { left: PAGE_MARGIN, top: PAGE_MARGIN * 2, right: PAGE_MARGIN },
-      foreground: [0, 0, 0, 128]
+      foreground: "rgba(0, 0, 0, 0.5)"
     });
 
     composite.append("Label", {
@@ -86,7 +86,7 @@ tabris.load(function() {
 
     var detailsComposite = page.append("Composite", {
       layoutData: { height: 184, left: 0, right: 0 },
-      background: [255, 255, 255],
+      background: "white",
       data: {
         showTouch: true
       }
@@ -117,13 +117,13 @@ tabris.load(function() {
 
     detailsComposite.append("Label", {
       layoutData: { left: [imageLabel, PAGE_MARGIN], top: [authorLabel, PAGE_MARGIN] },
-      foreground: [102, 153, 0],
+      foreground: "rgb(102, 153, 0)",
       text: "EUR 12,95"
     });
 
     page.append("Label", {
       layoutData: { height: 1, right: 0, left: 0, top: [detailsComposite, 0] },
-      background: [0, 0, 0, 30]
+      background: "rgba(0, 0, 0, 0.1)"
     });
 
     var tabFolder = page.append("TabFolder", {
@@ -182,7 +182,7 @@ tabris.load(function() {
           top: [0, PAGE_MARGIN],
           bottom: [0, 0],
           bindingIndex: 1,
-          foreground: [74, 74, 74, 255]
+          foreground: "rgb(74, 74, 74)"
         },
         {
           type: "text",
@@ -191,7 +191,7 @@ tabris.load(function() {
           top: [0, 36],
           bottom: [0, 0],
           bindingIndex: 2,
-          foreground: [123, 123, 123, 255]
+          foreground: "rgb(123, 123, 123)"
         }
       ]
     });

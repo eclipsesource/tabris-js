@@ -169,7 +169,7 @@ describe( "UIProxy", function() {
         uiProxy.createPage({ background: "red" });
 
         var createCall = nativeBridge.calls({ op: "create", type: "rwt.widgets.Composite" })[0];
-        expect( createCall.properties.background ).toBe( "red" );
+        expect( createCall.properties.background ).toEqual( [255, 0, 0, 255] );
       });
 
       it( "returns a PageProxy", function() {
