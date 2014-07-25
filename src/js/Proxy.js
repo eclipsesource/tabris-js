@@ -45,7 +45,7 @@
         this._parent = properties.parent;
         this._parent._addChild( this );
       }
-      tabris._nativeBridge.create( this.id, fixType( type ), fixProperties( properties ) );
+      tabris._nativeBridge.create( this.id, translateType( type ), translateProperties( properties ) );
       return this;
     },
 
@@ -68,7 +68,7 @@
       } else {
         properties = arg1;
       }
-      tabris._nativeBridge.set( this.id, fixProperties( properties ) );
+      tabris._nativeBridge.set( this.id, translateProperties( properties ) );
       return this;
     },
 
@@ -171,40 +171,43 @@
 
   };
 
-  var translateProxyToId = function( value ) {
-    return value instanceof tabris.Proxy ? value.id : value;
-  };
-
-  var fixLayoutData = function( data ) {
-    for( var key in data ) {
-      if( Array.isArray( data[key] ) ) {
-        for( var i = 0; i < data[key].length; i++ ) {
-          data[key][i] = translateProxyToId( data[key][i] );
-        }
-      } else {
-        data[key] = translateProxyToId( data[key] );
-      }
-    }
-    return data;
-  };
-
-  var fixProperties = function( properties ) {
+  function translateProperties( properties ) {
+    var result = {};
     for( var key in properties ) {
-      if( key === "layoutData" ) {
-        properties[key] = fixLayoutData( properties[key] );
+      result[key] = translateProperty( key, properties[key] );
+    }
+    return result;
+  }
+
+  function translateProperty( name, value ) {
+    if( name === "layoutData" ) {
+      return translateLayoutData( value );
+    }
+    return translateProxyToId( value );
+  }
+
+  function translateLayoutData( layoutData ) {
+    var result = {};
+    for( var key in layoutData ) {
+      if( Array.isArray( layoutData[key] ) ) {
+        result[key] = layoutData[key].map( translateProxyToId );
       } else {
-        properties[key] = translateProxyToId( properties[key] );
+        result[key] = translateProxyToId( layoutData[key] );
       }
     }
-    return properties;
-  };
+    return result;
+  }
 
-  var fixType = function( type ) {
+  function translateProxyToId( value ) {
+    return value instanceof tabris.Proxy ? value.id : value;
+  }
+
+  function translateType( type ) {
     if( type.indexOf( '.' ) === -1 ) {
       return "rwt.widgets." + type;
     }
     return type;
-  };
+  }
 
   var textTypeToStyle = {
     "password" : ["BORDER", "PASSWORD"],

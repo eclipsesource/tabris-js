@@ -17,6 +17,12 @@ describe( "Proxy", function() {
 
   describe( "create", function() {
 
+    var proxy;
+
+    beforeEach( function() {
+      proxy = new tabris.Proxy( "test-id" );
+    });
+
     it( "creates proxy for standard types", function() {
       tabris.Proxy.create( "id", "rwt.widgets.Button", { style: ["PUSH"], text: "foo" } );
 
@@ -89,16 +95,6 @@ describe( "Proxy", function() {
       expect( create.properties.style ).toEqual( ["BORDER", "MULTI"] );
     } );
 
-  });
-
-  describe( "_create", function() {
-
-    var proxy;
-
-    beforeEach( function() {
-      proxy = new tabris.Proxy( "test-id" );
-    });
-
     it( "calls native create with type and properties", function() {
       proxy._create( "foo.bar", { foo: 23 } );
 
@@ -107,7 +103,7 @@ describe( "Proxy", function() {
       expect( calls[0].properties ).toEqual( { foo: 23 } );
     } );
 
-    it( "translates proxies to ids in properties", function() {
+    it( "translates properties", function() {
       var other = new tabris.Proxy( "other-id" );
 
       proxy._create( "custom.type", { foo: other } );
@@ -116,22 +112,13 @@ describe( "Proxy", function() {
       expect( properties.foo ).toBe( "other-id" );
     } );
 
-    it( "does not translate objects with id field to ids", function() {
-      var obj = { id: "23", name: "bar" };
-
-      proxy._create( "custom.type", { foo: obj } );
-
-      var properties = nativeBridge.calls({ op: "create", type: "custom.type" })[0].properties;
-      expect( properties.foo ).toEqual( obj );
-    } );
-
-    it( "translates widgets to ids in layoutData", function() {
+    it( "translation does not modify properties", function() {
       var other = new tabris.Proxy( "other-id" );
+      var properties = { foo: other };
 
-      proxy._create( "custom.type", { layoutData: { left: 23, right: other, top: [other, 42] } } );
+      proxy._create( "custom.type", properties );
 
-      var properties = nativeBridge.calls({ op: "create", type: "custom.type" })[0].properties;
-      expect( properties.layoutData ).toEqual( { left: 23, right: other.id, top: [other.id, 42] } );
+      expect( properties.foo ).toBe( other );
     } );
 
     it( "accepts rwt types without prefix", function() {
@@ -228,6 +215,15 @@ describe( "Proxy", function() {
         expect( properties.foo ).toEqual( obj );
       } );
 
+      it( "translation does not modify properties", function() {
+        var other = new tabris.Proxy( "other-id" );
+        var properties = { foo: other };
+
+        proxy.set( properties );
+
+        expect( properties.foo ).toBe( other );
+      } );
+
       it( "translates widgets to ids in layoutData", function() {
         var other = new tabris.Proxy( "other-id" );
 
@@ -235,6 +231,15 @@ describe( "Proxy", function() {
 
         var call = nativeBridge.calls({ op: "set" })[0];
         expect( call.properties.layoutData ).toEqual( { left: 23, right: other.id, top: [other.id, 42] } );
+      } );
+
+      it( "translation does not modify layoutData", function() {
+        var other = new tabris.Proxy( "other-id" );
+        var layoutData = { left: 23, right: other, top: [other, 42] };
+
+        proxy.set({ layoutData: layoutData });
+
+        expect( layoutData.top ).toEqual( [other, 42] );
       } );
 
       it( "returns self to allow chaining", function() {
