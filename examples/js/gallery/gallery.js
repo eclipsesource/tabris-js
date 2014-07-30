@@ -37,8 +37,9 @@ tabris.load(function() {
 
   var scrolledComposite = mainComposite.append("ScrolledComposite", {
     style: ["H_SCROLL"],
+    data: {"paging":true},
     layoutData: scrolledCompositeLayoutData,
-    background: [32, 32, 32]
+    background: [32, 32, 32, 160]
   });
 
   scrolledComposite.append("rwt.widgets.ScrollBar", {
@@ -46,8 +47,7 @@ tabris.load(function() {
   });
 
   var composite = scrolledComposite.append("Composite", {
-    // only works with bounds
-    bounds: [0, 0, 2929, 150]
+    layoutData: {}
   });
 
   function createImageThumbPath(imageName) {
@@ -59,7 +59,7 @@ tabris.load(function() {
   }
 
   function bindShowToSelection(image, path) {
-    image.on("Selection", function() {
+    image.on("MouseUp", function() {
       updateCentralImage(path);
     });
   }
@@ -83,7 +83,8 @@ tabris.load(function() {
     }
     imageHolder = mainComposite.append("Label", {
       layoutData: {top: 0, bottom: 0, left: 0, right: 0},
-      image: [path, 0, 0]
+      data: {"zoom":true},
+      image: [path, null, null]
     });
   }
 
@@ -102,12 +103,14 @@ tabris.load(function() {
   var recreateThumbnailAction = function(actionTitle) {
     action.dispose();
     action = tabris.createAction({
-      title: actionTitle
+      title: actionTitle,
+      placementPriority: "HIGH"
     }, toggleAction);
   };
 
   var action = tabris.createAction({
-    title: "Fullscreen"
+    title: "Fullscreen",
+    placementPriority: "HIGH"
   }, toggleAction);
 
   page.open();
