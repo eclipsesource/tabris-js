@@ -1,13 +1,13 @@
 var DEBUG = true;
 
-tabris.load( function() {
+tabris.load(function() {
 
   // var height = Ti.Platform.displayCaps.platformHeight;
   // var width = Ti.Platform.displayCaps.platformWidth;
-  var width = 320; //bounds[2];
-  var height = 504; //bounds[3];
+  var width = 300; //bounds[2];
+  var height = 400; //bounds[3];
 
-  var CELL_SIZE = Math.floor(Math.min(height, width) / 30);
+  var CELL_SIZE = 5; //Math.floor(Math.min(height, width) / 2);
   var xSize = width / CELL_SIZE;
   var ySize = height / CELL_SIZE;
 
@@ -112,21 +112,20 @@ tabris.load( function() {
   //});
   //universe.add(label);
 
+  var time = new Date().getTime();
+
   //
   //universe.open();
   page.open();
 
-
   if (DEBUG) {
-    var lastTime = new Date().getTime(),
-      renderTime = 0,
-      ctr = 0,
-      thisTime;
+    var count;
+    var start = new Date().getTime();
   }
 
   var run = function() {
     var x, y, cell;
-    while (true) {
+    var render = function() {
       // render current generation
       for (x = 0; x < xSize; x++) {
         for (y = 0; y < ySize; y++) {
@@ -152,22 +151,23 @@ tabris.load( function() {
       }
 
       if (DEBUG) {
-        thisTime = new Date().getTime();
-        renderTime += thisTime - lastTime;
-        lastTime = thisTime;
-
-        // Sadly this shows that the "render" time, which consists solely of changing the visible
-        // state of the proxies, consumes about 100x as much time as the "generation" step.
-        if (++ctr % 10 === 0) {
-          // label.text = 'FPS: ' + Math.round(10000.0/(renderTime/ctr))/10;
-          label.set("text", 'FPS: ' + Math.round(10000.0 / (renderTime / ctr)) / 10);
-          renderTime = ctr = 0;
+        count++;
+        var curTime = new Date().getTime();
+        var diff = curTime - start;
+        if (diff >= 1000) {
+          label.set("text", "FPS: " + count);
+          count = 0;
+          start = curTime;
         }
-      }
-    }
 
+      }
+    };
+    window.setInterval(render, 0);
   };
 
-  label.on( "MouseDown", run );
+  var offset = new Date().getTime() - time;
+  label.set("text", 'Load: ' + offset);
+
+  label.on("MouseDown", run);
 
 });
