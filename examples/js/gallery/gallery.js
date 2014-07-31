@@ -39,7 +39,7 @@ tabris.load(function() {
     style: ["H_SCROLL"],
     data: {"paging":true},
     layoutData: scrolledCompositeLayoutData,
-    background: "rgb(32, 32, 32, 0.6)"
+    background: "rgba(32, 32, 32, 0.6)"
   });
 
   scrolledComposite.append("rwt.widgets.ScrollBar", {
