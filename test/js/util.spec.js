@@ -83,4 +83,35 @@ describe( "util", function() {
 
   });
 
+  describe( "extendPrototype", function() {
+
+    it( "returns object with source function prototype as prototype", function() {
+      var Class1 = function(){};
+      Class1.prototype = { "a" : 1 };
+      var object = util.extendPrototype( Class1, {} );
+
+      expect( object.a ).toBe( 1 );
+      expect( object.hasOwnProperty( "a" ) ).toBeFalsy();
+    });
+
+    it( "returns object with target object properties", function() {
+      var object = util.extendPrototype( function(){}, { "a" : 1 } );
+
+      expect( object.a ).toBe( 1 );
+      expect( object.hasOwnProperty( "a" ) ).toBeTruthy();
+    });
+
+    it( "works with instanceof", function() {
+      var Class1 = function(){};
+      var Class2 = function(){};
+
+      Class2.prototype = util.extendPrototype( Class1, {} );
+      var object = new Class2();
+
+      expect( object instanceof Class2 ).toBeTruthy();
+      expect( object instanceof Class1 ).toBeTruthy();
+    });
+
+  });
+
 });

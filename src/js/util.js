@@ -41,6 +41,12 @@ util = {
     return function() {
       return fn.apply( context, arguments );
     };
+  },
+
+  extendPrototype : function( fn, target ) {
+    var Helper = function(){};
+    Helper.prototype = fn.prototype;
+    return util.extend( new Helper(), target );
   }
 
 };
