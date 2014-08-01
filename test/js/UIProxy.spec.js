@@ -193,6 +193,16 @@ describe( "UIProxy", function() {
 
     });
 
+    it( "ShowPreviousPage event closes page", function() {
+      var pageProxy = uiProxy.createPage({});
+      pageProxy.open();
+      spyOn( pageProxy, "close" );
+
+      tabris._notify( uiId, "ShowPreviousPage", {} );
+
+      expect( pageProxy.close ).toHaveBeenCalled();
+    });
+
   });
 
 });

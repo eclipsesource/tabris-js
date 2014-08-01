@@ -26,6 +26,8 @@ tabris.PageProxy.prototype = {
       control: this._composite.id
     });
     this._page = tabris.create( "tabris.Page", pageProperties );
+    // temporary fix to make UIProxy listener on ShowPreviousPage work, see issue 38
+    this._page.close = util.bind( function() { this.close(); }, this );
     return this;
   },
 
