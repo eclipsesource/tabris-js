@@ -67,7 +67,7 @@ tabris.UIProxy.prototype = {
   },
 
   createPage: function( properties ) {
-    return new tabris.PageProxy( this )._create( properties );
+    return tabris.PageProxy.create( this, properties );
   }
 };
 

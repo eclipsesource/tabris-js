@@ -7,6 +7,10 @@ tabris.PageProxy = function( uiProxy ) {
   this._uiProxy = uiProxy;
 };
 
+tabris.PageProxy.create = function( uiProxy, properties ) {
+  return new tabris.PageProxy( uiProxy )._create( properties );
+};
+
 tabris.PageProxy.prototype = {
 
   _PAGE_PROPS: ["title", "image", "style", "topLevel"],
