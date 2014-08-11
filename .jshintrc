@@ -20,6 +20,7 @@
 
   "browser" : true, // globals exposed by modern browsers e.g. `window`, `document`, etc.
   "globals": {
+    "console": false,
     "tabris": false,
     "util": false,
     "NativeBridgeSpy": false,
