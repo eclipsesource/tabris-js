@@ -37,7 +37,7 @@ module.exports = function(grunt) {
       dist: {
         src: prefix( 'src/js/',
                      ['util.js', 'util-colors.js',
-                      'Tabris.js', 'Window.js', 'Console.js', 'Proxy.js', 'UIProxy.js', 'PageProxy.js'] ),
+                      'Tabris.js', 'Window.js', 'Proxy.js', 'UIProxy.js', 'PageProxy.js'] ),
         dest: 'build/tabris.js'
       }
     },
