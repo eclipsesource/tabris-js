@@ -3,54 +3,56 @@
  * All rights reserved.
  */
 
-/*global window: true*/
+/*global Window: false */
 
-tabris.Window = function() {
-};
+(function() {
 
-tabris.Window.create = function() {
+  tabris._addWindowMethods = function( wnd ) {
 
-  var wnd = new tabris.Window();
-  var taskSequence = 0;
-  var timers = {};
+    if( typeof wnd.setTimeout === "function" ) {
+      return;
+    }
 
-  function createTimer( fn, delay, repeat ) {
-    var taskId = taskSequence++;
-    var timer = tabris.create( "tabris.Timer", {
-      delay : delay,
-      repeat: repeat
-    }).on( "Run", function() {
-      fn.call();
-      if( !repeat ) {
+    var taskSequence = 0;
+    var timers = {};
+
+    function createTimer( fn, delay, repeat ) {
+      var taskId = taskSequence++;
+      var timer = tabris.create( "tabris.Timer", {
+        delay : delay,
+        repeat: repeat
+      }).on( "Run", function() {
+        fn.call();
+        if( !repeat ) {
+          timer.dispose();
+          delete timers[taskId];
+        }
+      }).call( "start" );
+      timers[taskId] = timer;
+      return taskId;
+    }
+
+    wnd.setTimeout = function( fn, delay ) {
+      return createTimer( fn, delay, false );
+    };
+
+    wnd.setInterval = function( fn, delay ) {
+      return createTimer( fn, delay, true );
+    };
+
+    wnd.clearTimeout = wnd.clearInterval = function( taskId ) {
+      var timer = timers[taskId];
+      if( timer ) {
+        timer.call( "cancel", {});
         timer.dispose();
         delete timers[taskId];
       }
-    }).call( "start" );
-    timers[taskId] = timer;
-    return taskId;
+    };
+
+  };
+
+  if( typeof Window === "function" ) {
+    tabris._addWindowMethods( Window.prototype );
   }
 
-  wnd.setTimeout = function( fn, delay ) {
-    return createTimer( fn, delay, false );
-  };
-
-  wnd.setInterval = function( fn, delay ) {
-    return createTimer( fn, delay, true );
-  };
-
-  wnd.clearTimeout = wnd.clearInterval = function( taskId ) {
-    var timer = timers[taskId];
-    if( timer ) {
-      timer.call( "cancel", {});
-      timer.dispose();
-      delete timers[taskId];
-    }
-  };
-
-  return wnd;
-};
-
-if( typeof window === "undefined" ) {
-  window = tabris.Window.create();
-  window.tabris = tabris;
-}
+})();

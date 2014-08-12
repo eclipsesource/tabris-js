@@ -72,9 +72,9 @@ tabris.load(function() {
   buttonStart.on("Selection", function() {
     var delay = parseInt(textDelay.get("text"));
     if (checkRepeat.get("selection")) {
-      taskId = window.setInterval(updateStatusLabels, delay);
+      taskId = setInterval(updateStatusLabels, delay);
     } else {
-      taskId = window.setTimeout(function() {
+      taskId = setTimeout(function() {
         updateStatusLabels();
         enableTimerStart(true);
       }, delay);
@@ -83,7 +83,7 @@ tabris.load(function() {
   });
 
   buttonCancelTimer.on("Selection", function() {
-    window.clearTimeout(taskId);
+    clearTimeout(taskId);
     enableTimerStart(true);
   });
 
