@@ -5,6 +5,9 @@
     },
     {
       "src": "canvas.js"
+    },
+    {
+      "src": "animation.js"
     }
   ]
 }

@@ -39,7 +39,7 @@ tabris.load(function() {
   }
 
   var page = tabris.createPage({
-    title: "Canvas Example",
+    title: "Basic Shapes",
     topLevel: true
   });
 
