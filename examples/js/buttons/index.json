@@ -1,0 +1,13 @@
+{
+  "resources": [
+    {
+      "src": "../tabris.js"
+    },
+    {
+      "src": "buttons.js"
+    },
+    {
+      "src": "questions.js"
+    }
+  ]
+}
