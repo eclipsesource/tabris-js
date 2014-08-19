@@ -111,7 +111,7 @@
     },
 
     arc: function(x, y, radius, startAngle, endAngle, anticlockwise) {
-      this._operations.push(["ellipse", x, y, radius, radius, 0, startAngle, endAngle, !!anticlockwise]);
+      this._operations.push(["arc", x, y, radius, startAngle, endAngle, !!anticlockwise]);
     },
 
     fillRect: function(x, y, width, height) {

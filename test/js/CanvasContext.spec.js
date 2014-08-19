@@ -321,14 +321,14 @@ describe("CanvasContext", function() {
       ctx.arc(10, 20, 5, 1, 2);
       ctx.fill();
 
-      expect(getDrawOperations()[0]).toEqual(["ellipse", 10, 20, 5, 5, 0, 1, 2, false]);
+      expect(getDrawOperations()[0]).toEqual(["arc", 10, 20, 5, 1, 2, false]);
     });
 
     it("arc with anticlockwise", function() {
       ctx.arc(10, 20, 5, 1, 2, true);
       ctx.fill();
 
-      expect(getDrawOperations()[0]).toEqual(["ellipse", 10, 20, 5, 5, 0, 1, 2, true]);
+      expect(getDrawOperations()[0]).toEqual(["arc", 10, 20, 5, 1, 2, true]);
     });
 
     it("quadraticCurve", function() {
