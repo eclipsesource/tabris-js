@@ -174,7 +174,11 @@
   function encodeProperties( properties ) {
     var result = {};
     for( var key in properties ) {
-      result[key] = encodeProperty( key, properties[key] );
+      try {
+        result[key] = encodeProperty( key, properties[key] );
+      } catch( error ) {
+        console.warn( "Unsupported " + key + " value: " + properties[key] );
+      }
     }
     return result;
   }

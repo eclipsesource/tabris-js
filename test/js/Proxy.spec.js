@@ -5,14 +5,20 @@
 
 describe( "Proxy", function() {
 
+  var consoleBackup = window.console;
   var nativeBridge;
   var log;
 
   beforeEach( function() {
+    window.console = jasmine.createSpyObj("console", ["log", "info", "warn", "error"]);
     nativeBridge = new NativeBridgeSpy();
     log = [];
     tabris._reset();
     tabris._start( nativeBridge );
+  });
+
+  afterEach(function() {
+    window.console = consoleBackup;
   });
 
   describe( "create", function() {
@@ -282,6 +288,19 @@ describe( "Proxy", function() {
         proxy.set( { rowTemplate: template } );
 
         expect( template ).toEqual( [{ left: 23, foreground: "red" }] );
+      } );
+
+      it( "skips properties that fail to encode", function() {
+        proxy.set( { foo: 23, foreground: "unknown" } );
+
+        var call = nativeBridge.calls({ op: "set" })[0];
+        expect( call.properties ).toEqual( {foo: 23} );
+      } );
+
+      it( "issues warning for properties that fail to encode", function() {
+        proxy.set( { foo: 23, foreground: "unknown" } );
+
+        expect( window.console.warn ).toHaveBeenCalledWith( "Unsupported foreground value: unknown" );
       } );
 
       it( "returns self to allow chaining", function() {
