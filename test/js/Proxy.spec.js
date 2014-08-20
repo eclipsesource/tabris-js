@@ -24,7 +24,7 @@ describe( "Proxy", function() {
     });
 
     it( "creates proxy for standard types", function() {
-      tabris.Proxy.create( "id", "rwt.widgets.Button", { style: ["PUSH"], text: "foo" } );
+      tabris.Proxy.create( "rwt.widgets.Button", { style: ["PUSH"], text: "foo" } );
 
       var create = nativeBridge.calls({ op: "create" })[0];
       expect( create.type ).toEqual( "rwt.widgets.Button" );
@@ -32,7 +32,7 @@ describe( "Proxy", function() {
     } );
 
     it( "maps 'Button' to rwt.widgets.Button [PUSH]", function() {
-      tabris.Proxy.create( "id", "Button", { text: "foo" } );
+      tabris.Proxy.create( "Button", { text: "foo" } );
 
       var create = nativeBridge.calls({ op: "create" })[0];
       expect( create.type ).toEqual( "rwt.widgets.Button" );
@@ -40,7 +40,7 @@ describe( "Proxy", function() {
     } );
 
     it( "maps 'CheckBox' to rwt.widgets.Button [CHECK]", function() {
-      tabris.Proxy.create( "id", "CheckBox", { text: "foo" } );
+      tabris.Proxy.create( "CheckBox", { text: "foo" } );
 
       var create = nativeBridge.calls({ op: "create" })[0];
       expect( create.type ).toEqual( "rwt.widgets.Button" );
@@ -48,7 +48,7 @@ describe( "Proxy", function() {
     } );
 
     it( "maps 'RadioButton' to rwt.widgets.Button [RADIO]", function() {
-      tabris.Proxy.create( "id", "RadioButton", { text: "foo" } );
+      tabris.Proxy.create( "RadioButton", { text: "foo" } );
 
       var create = nativeBridge.calls({ op: "create" })[0];
       expect( create.type ).toEqual( "rwt.widgets.Button" );
@@ -56,7 +56,7 @@ describe( "Proxy", function() {
     } );
 
     it( "maps 'ToggleButton' to rwt.widgets.Button [TOGGLE]", function() {
-      tabris.Proxy.create( "id", "ToggleButton", { text: "foo" } );
+      tabris.Proxy.create( "ToggleButton", { text: "foo" } );
 
       var create = nativeBridge.calls({ op: "create" })[0];
       expect( create.type ).toEqual( "rwt.widgets.Button" );
@@ -64,7 +64,7 @@ describe( "Proxy", function() {
     } );
 
     it( "maps 'Text' to rwt.widgets.Text [BORDER]", function() {
-      tabris.Proxy.create( "id", "Text", { text: "foo" } );
+      tabris.Proxy.create( "Text", { text: "foo" } );
 
       var create = nativeBridge.calls({ op: "create" })[0];
       expect( create.type ).toEqual( "rwt.widgets.Text" );
@@ -72,7 +72,7 @@ describe( "Proxy", function() {
     } );
 
     it( "maps 'Text' with type 'password' to rwt.widgets.Text [PASSWORD]", function() {
-      tabris.Proxy.create( "id", "Text", { type: "password", text: "foo" } );
+      tabris.Proxy.create( "Text", { type: "password", text: "foo" } );
 
       var create = nativeBridge.calls({ op: "create" })[0];
       expect( create.type ).toEqual( "rwt.widgets.Text" );
@@ -80,7 +80,7 @@ describe( "Proxy", function() {
     } );
 
     it( "maps 'Text' with type 'search' to rwt.widgets.Text [SEARCH]", function() {
-      tabris.Proxy.create( "id", "Text", { type: "search", text: "foo" } );
+      tabris.Proxy.create( "Text", { type: "search", text: "foo" } );
 
       var create = nativeBridge.calls({ op: "create" })[0];
       expect( create.type ).toEqual( "rwt.widgets.Text" );
@@ -88,7 +88,7 @@ describe( "Proxy", function() {
     } );
 
     it( "maps 'Text' with type 'multiline' to rwt.widgets.Text [MULTI]", function() {
-      tabris.Proxy.create( "id", "Text", { type: "multiline", text: "foo" } );
+      tabris.Proxy.create( "Text", { type: "multiline", text: "foo" } );
 
       var create = nativeBridge.calls({ op: "create" })[0];
       expect( create.type ).toEqual( "rwt.widgets.Text" );

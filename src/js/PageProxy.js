@@ -4,6 +4,7 @@
  */
 
 tabris.PageProxy = function( uiProxy ) {
+  tabris.Proxy.call( this );
   this._uiProxy = uiProxy;
 };
 
@@ -11,7 +12,7 @@ tabris.PageProxy.create = function( uiProxy, properties ) {
   return new tabris.PageProxy( uiProxy )._create( properties );
 };
 
-tabris.PageProxy.prototype = {
+tabris.PageProxy.prototype = util.extendPrototype( tabris.Proxy, {
 
   _PAGE_PROPS: ["title", "image", "style", "topLevel"],
 
@@ -25,9 +26,7 @@ tabris.PageProxy.prototype = {
       parent: this._uiProxy._ui,
       control: this._composite.id
     });
-    this._page = tabris.create( "tabris.Page", pageProperties );
-    // temporary fix to make UIProxy listener on ShowPreviousPage work, see issue 38
-    this._page.close = util.bind( function() { this.close(); }, this );
+    tabris.Proxy.prototype._create.call( this, "tabris.Page", pageProperties );
     return this;
   },
 
@@ -37,7 +36,7 @@ tabris.PageProxy.prototype = {
 
   get: function( property ) {
     if( this._PAGE_PROPS.indexOf( property ) !== -1 ) {
-      return this._page.get( property );
+      return tabris.Proxy.prototype.get.call( this, property );
     }
     return this._composite.get( property );
   },
@@ -50,7 +49,7 @@ tabris.PageProxy.prototype = {
     } else {
       properties = arg1;
     }
-    this._page.set( util.pick( properties, this._PAGE_PROPS ) );
+    tabris.Proxy.prototype.set.call( this, util.pick( properties, this._PAGE_PROPS ) );
     this._composite.set( util.omit( properties, this._PAGE_PROPS ) );
     return this;
   },
@@ -72,17 +71,17 @@ tabris.PageProxy.prototype = {
 
   dispose: function() {
     this._composite.dispose();
-    this._page.dispose();
+    tabris.Proxy.prototype.dispose.call( this );
   },
 
   open: function() {
-    this._uiProxy.setActivePage( this._page );
+    this._uiProxy.setActivePage( this );
   },
 
   close: function() {
     this._composite.dispose();
     this._uiProxy.setLastActivePage();
-    this._page.dispose();
+    this.dispose();
   }
 
-};
+});

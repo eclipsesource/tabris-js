@@ -20,6 +20,10 @@ describe( "PageProxy", function() {
     pageProxy = new tabris.PageProxy( uiProxy );
   });
 
+  it( "is instance of Proxy", function() {
+    expect( pageProxy ).toEqual( jasmine.any( tabris.Proxy ) );
+  } );
+
   describe( "create", function() {
 
     it( "creates a Composite and a Page", function() {
@@ -144,7 +148,7 @@ describe( "PageProxy", function() {
       it( "sets active page", function() {
         pageProxy.open();
 
-        expect( uiProxy.setActivePage ).toHaveBeenCalledWith( pageProxy._page );
+        expect( uiProxy.setActivePage ).toHaveBeenCalledWith( pageProxy );
       });
 
     });

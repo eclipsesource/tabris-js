@@ -6,12 +6,12 @@
 (function() {
 
   tabris.Proxy = function( id ) {
-    this.id = id;
-    tabris._proxies[id] = this;
+    this.id = id || generateId();
+    tabris._proxies[this.id] = this;
   };
 
-  tabris.Proxy.create = function( id, type, properties ) {
-    var proxy = new tabris.Proxy( id );
+  tabris.Proxy.create = function( type, properties ) {
+    var proxy = new tabris.Proxy();
     var factory = tabris.Proxy._factories[type in tabris.Proxy._factories ? type : "default"];
     return factory( proxy, type, properties );
   };
@@ -242,6 +242,12 @@
 
   function decodeColor( value ) {
     return util.colorArrayToString( value );
+  }
+
+  var idSequence = 1;
+
+  function generateId() {
+    return "o" + ( idSequence++ );
   }
 
   var textTypeToStyle = {

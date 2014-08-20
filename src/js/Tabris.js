@@ -22,8 +22,7 @@
       if( !tabris._nativeBridge ) {
         throw new Error( "tabris.js not started" );
       }
-      var id = generateId();
-      return tabris.Proxy.create( id, type, properties );
+      return tabris.Proxy.create( type, properties );
     },
 
     _start: function( nativeBridge ) {
@@ -47,11 +46,5 @@
     }
 
   });
-
-  var idSequence = 1;
-
-  var generateId = function() {
-    return "o" + ( idSequence++ );
-  };
 
 })();
