@@ -56,7 +56,7 @@
       var rgb = NAMES[str];
       return [rgb[0], rgb[1], rgb[2], 255];
     }
-    throw new Error("invalid color");
+    throw new Error("invalid color: " + str);
   };
 
   /*

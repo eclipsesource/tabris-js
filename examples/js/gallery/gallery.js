@@ -47,7 +47,7 @@ tabris.load(function() {
   });
 
   var composite = scrolledComposite.append("Composite", {
-    layoutData: {}
+    layoutData: {left: 0, top: 0}
   });
 
   function createImageThumbPath(imageName) {
@@ -91,7 +91,7 @@ tabris.load(function() {
   var toggleAction = function() {
     if (!scrolledComposite.isHidden) {
       recreateThumbnailAction("Thumbnails");
-      scrolledComposite.set("layoutData", {height: 0});
+      scrolledComposite.set("layoutData", {left:0, top:0, height: 0});
       scrolledComposite.isHidden = true;
     } else {
       recreateThumbnailAction("Fullscreen");

@@ -177,7 +177,7 @@
       try {
         result[key] = encodeProperty( key, properties[key] );
       } catch( error ) {
-        console.warn( "Unsupported " + key + " value: " + properties[key] );
+        console.warn( "Unsupported " + key + " value: " + error.message );
       }
     }
     return result;
@@ -187,6 +187,7 @@
     if( name === "foreground" || name === "background" ) {
       return encodeColor( value );
     } else if( name === "layoutData" ) {
+      checkLayoutData( value );
       return encodeLayoutData( value );
     } else if( name === "rowTemplate" ) {
       return encodeRowTemplate( value );
@@ -212,6 +213,15 @@
       }
     }
     return result;
+  }
+
+  function checkLayoutData( layoutData ) {
+    if( !( "left" in layoutData ) && !( "right" in layoutData ) ) {
+      throw new Error( "either left or right should be specified" );
+    }
+    if( !( "top" in layoutData ) && !( "bottom" in layoutData ) ) {
+      throw new Error( "either top or bottom should be specified" );
+    }
   }
 
   function encodeLayoutData( layoutData ) {

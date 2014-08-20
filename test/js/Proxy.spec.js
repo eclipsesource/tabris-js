@@ -10,7 +10,7 @@ describe( "Proxy", function() {
   var log;
 
   beforeEach( function() {
-    window.console = jasmine.createSpyObj("console", ["log", "info", "warn", "error"]);
+    window.console = jasmine.createSpyObj( "console", ["log", "info", "warn", "error"] );
     nativeBridge = new NativeBridgeSpy();
     log = [];
     tabris._reset();
@@ -246,6 +246,20 @@ describe( "Proxy", function() {
         expect( properties.foo ).toBe( other );
       } );
 
+      it( "raises a warning for incomplete horizontal layoutData", function() {
+        proxy.set( "layoutData", {} );
+
+        expect( console.warn )
+          .toHaveBeenCalledWith( "Unsupported layoutData value: either left or right should be specified" );
+      } );
+
+      it( "raises a warning for incomplete vertical layoutData", function() {
+        proxy.set( "layoutData", {left: 0} );
+
+        expect( console.warn )
+          .toHaveBeenCalledWith( "Unsupported layoutData value: either top or bottom should be specified" );
+      } );
+
       it( "translates widgets to ids in layoutData", function() {
         var other = new tabris.Proxy( "other-id" );
 
@@ -300,7 +314,8 @@ describe( "Proxy", function() {
       it( "issues warning for properties that fail to encode", function() {
         proxy.set( { foo: 23, foreground: "unknown" } );
 
-        expect( window.console.warn ).toHaveBeenCalledWith( "Unsupported foreground value: unknown" );
+        expect( window.console.warn )
+          .toHaveBeenCalledWith( "Unsupported foreground value: invalid color: unknown" );
       } );
 
       it( "returns self to allow chaining", function() {
