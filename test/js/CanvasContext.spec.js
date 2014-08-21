@@ -263,6 +263,82 @@ describe("CanvasContext", function() {
 
   });
 
+  describe("textAlign", function() {
+
+    it("defaults to 'start'", function() {
+      expect(ctx.textAlign).toEqual("start");
+    });
+
+    it("accepts changes", function() {
+      ctx.textAlign = "center";
+
+      expect(ctx.textAlign).toEqual("center");
+    });
+
+    it("renders changes", function() {
+      ctx.textAlign = "center";
+      ctx.fillText("foo", 10, 10);
+
+      expect(getDrawOperations()).toEqual([
+        ["textAlign", "center"],
+        ["fillText", "foo", false, false, false, 10, 10]
+      ]);
+    });
+
+    it("ignores unknown values", function() {
+      ctx.textAlign = "center";
+
+      ctx.textAlign = "unknown";
+
+      expect(ctx.textAlign).toEqual("center");
+    });
+
+    it("issues a warning for invalid values", function() {
+      ctx.textAlign = "foo";
+
+      expect(window.console.warn).toHaveBeenCalledWith("Unsupported value for textAlign: foo");
+    });
+
+  });
+
+  describe("textBaseline", function() {
+
+    it("defaults to 'alphabetic'", function() {
+      expect(ctx.textBaseline).toEqual("alphabetic");
+    });
+
+    it("accepts changes", function() {
+      ctx.textBaseline = "middle";
+
+      expect(ctx.textBaseline).toEqual("middle");
+    });
+
+    it("renders changes", function() {
+      ctx.textBaseline = "middle";
+      ctx.fillText("foo", 10, 10);
+
+      expect(getDrawOperations()).toEqual([
+        ["textBaseline", "middle"],
+        ["fillText", "foo", false, false, false, 10, 10]
+      ]);
+    });
+
+    it("ignores unknown values", function() {
+      ctx.textBaseline = "middle";
+
+      ctx.textBaseline = "unknown";
+
+      expect(ctx.textBaseline).toEqual("middle");
+    });
+
+    it("issues a warning for invalid values", function() {
+      ctx.textBaseline = "foo";
+
+      expect(window.console.warn).toHaveBeenCalledWith("Unsupported value for textBaseline: foo");
+    });
+
+  });
+
   describe("save", function() {
 
     it("does not change current state", function() {

@@ -5,8 +5,6 @@
 
 (function() {
 
-  var id = function( value ) { return value; };
-
   tabris.CanvasContext = function(gc) {
     this._gc = gc;
     this._state = createState();
@@ -114,6 +112,25 @@
     return canvas._ctx;
   };
 
+  function passThrough(value) {
+    return value;
+  }
+
+  function checkValue(value) {
+    if(value in this.values) {
+      return value;
+    }
+    throw new Error(value);
+  }
+
+  function toObject(array) {
+    var obj = {};
+    array.forEach(function(name) {
+      obj[name] = true;
+    });
+    return obj;
+  }
+
   var properties = {
     lineWidth: {
       def: 1,
@@ -121,31 +138,21 @@
         if(value > 0) {
           return value;
         }
-        throw new Error("illegal lineWidth: " + value);
+        throw new Error(value);
       },
-      decode: id
+      decode: passThrough
     },
     lineCap: {
       def: "butt",
-      values: { "butt": true, "round": true, "square": true },
-      encode: function(value) {
-        if(value in this.values) {
-          return value;
-        }
-        throw new Error("illegal lineCap:" + value);
-      },
-      decode: id
+      values: toObject(["butt", "round", "square"]),
+      encode: checkValue,
+      decode: passThrough
     },
     lineJoin: {
       def: "miter",
-      values: { "bevel": true, "miter": true, "round": true },
-      encode: function(value) {
-        if(value in this.values) {
-          return value;
-        }
-        throw new Error("illegal lineJoin: " + value);
-      },
-      decode: id
+      values: toObject(["bevel", "miter", "round"]),
+      encode: checkValue,
+      decode: passThrough
     },
     fillStyle: {
       def: [0, 0, 0, 255],
@@ -156,6 +163,18 @@
       def: [0, 0, 0, 255],
       encode: util.colorStringToArray,
       decode: util.colorArrayToString
+    },
+    textAlign: {
+      def: "start",
+      values: toObject(["start", "end", "left", "right", "center"]),
+      encode: checkValue,
+      decode: passThrough
+    },
+    textBaseline: {
+      def: "alphabetic",
+      values: toObject(["top", "hanging", "middle", "alphabetic", "ideographic", "bottom"]),
+      encode: checkValue,
+      decode: passThrough
     }
   };
 
