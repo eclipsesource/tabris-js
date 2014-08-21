@@ -8,6 +8,9 @@
     },
     {
       "src": "animation.js"
+    },
+    {
+      "src": "arc.js"
     }
   ]
 }

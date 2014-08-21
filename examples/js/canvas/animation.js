@@ -105,7 +105,7 @@ tabris.load(function() {
       ctx.beginPath();
       var radius = 3;
       ctx.arc(x, y, radius, 0, 2 * Math.PI);
-      ctx.moveTo(cx + radius/2, y);
+      ctx.moveTo(cx + radius / 2, y);
       ctx.arc(cx, y, radius, 0, 2 * Math.PI);
       ctx.fill();
       ctx.stroke();
@@ -131,7 +131,7 @@ tabris.load(function() {
         if (this.start === 0) {
           this.start = now;
         } else if (time >= 1000) {
-          this.fps = this.count / (time/1000);
+          this.fps = this.count / (time / 1000);
           this.start = now;
           this.count = 0;
         }
@@ -158,7 +158,5 @@ tabris.load(function() {
     var ctx = tabris.getContext(canvas, width, height);
     example(ctx, width, height);
   });
-
-  page.open();
 
 });
