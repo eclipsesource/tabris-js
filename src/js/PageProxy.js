@@ -4,7 +4,7 @@
  */
 
 tabris.PageProxy = function( uiProxy ) {
-  tabris.Proxy.call( this );
+  this.Super();
   this._uiProxy = uiProxy;
 };
 
@@ -26,7 +26,7 @@ tabris.PageProxy.prototype = util.extendPrototype( tabris.Proxy, {
       parent: this._uiProxy._ui,
       control: this._composite.id
     });
-    tabris.Proxy.prototype._create.call( this, "tabris.Page", pageProperties );
+    this.super( "_create", "tabris.Page", pageProperties );
     return this;
   },
 
@@ -36,7 +36,7 @@ tabris.PageProxy.prototype = util.extendPrototype( tabris.Proxy, {
 
   get: function( property ) {
     if( this._PAGE_PROPS.indexOf( property ) !== -1 ) {
-      return tabris.Proxy.prototype.get.call( this, property );
+      return this.super( "get", property );
     }
     return this._composite.get( property );
   },
@@ -49,7 +49,7 @@ tabris.PageProxy.prototype = util.extendPrototype( tabris.Proxy, {
     } else {
       properties = arg1;
     }
-    tabris.Proxy.prototype.set.call( this, util.pick( properties, this._PAGE_PROPS ) );
+    this.super( "set", util.pick( properties, this._PAGE_PROPS ) );
     this._composite.set( util.omit( properties, this._PAGE_PROPS ) );
     return this;
   },
@@ -71,7 +71,7 @@ tabris.PageProxy.prototype = util.extendPrototype( tabris.Proxy, {
 
   dispose: function() {
     this._composite.dispose();
-    tabris.Proxy.prototype.dispose.call( this );
+    this.super( "dispose" );
   },
 
   open: function() {

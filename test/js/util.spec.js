@@ -85,8 +85,14 @@ describe( "util", function() {
 
   describe( "extendPrototype", function() {
 
+    var Class1, Class2;
+
+    beforeEach( function() {
+      Class1 = function(){};
+      Class2 = function(){};
+    } );
+
     it( "returns object with source function prototype as prototype", function() {
-      var Class1 = function(){};
       Class1.prototype = { "a" : 1 };
       var object = util.extendPrototype( Class1, {} );
 
@@ -102,14 +108,95 @@ describe( "util", function() {
     });
 
     it( "works with instanceof", function() {
-      var Class1 = function(){};
-      var Class2 = function(){};
 
       Class2.prototype = util.extendPrototype( Class1, {} );
       var object = new Class2();
 
       expect( object instanceof Class2 ).toBeTruthy();
       expect( object instanceof Class1 ).toBeTruthy();
+    });
+
+    describe( "adds super function that", function() {
+
+      it( "calls overwritten methods", function() {
+        Class1.prototype.myFunction = jasmine.createSpy();
+
+        Class2.prototype = util.extendPrototype( Class1, {
+          myFunction : function() {
+            this.super( "myFunction" );
+          }
+        });
+        ( new Class2() ).myFunction();
+
+        expect( Class1.prototype.myFunction ).toHaveBeenCalled();
+      });
+
+      it( "calls overwritten methods with arguments", function() {
+        Class1.prototype.myFunction = jasmine.createSpy();
+
+        Class2.prototype = util.extendPrototype( Class1, {
+          myFunction : function() {
+            this.super( "myFunction", 1, 2, 3 );
+          }
+        });
+        ( new Class2() ).myFunction();
+
+        expect( Class1.prototype.myFunction ).toHaveBeenCalledWith( 1, 2, 3 );
+      });
+
+      it( "calls overwritten methods with context", function() {
+        Class1.prototype.myFunction = jasmine.createSpy();
+
+        Class2.prototype = util.extendPrototype( Class1, {
+          myFunction : function() {
+            this.super( "myFunction" );
+          }
+        });
+        var instance = new Class2();
+        instance.myFunction();
+        expect( Class1.prototype.myFunction.calls.all()[0].object ).toBe( instance );
+      });
+
+      describe( "adds Super function that", function() {
+
+        it( "calls the super constructor", function() {
+          Class1 = jasmine.createSpy();
+          Class2 = function(){
+            this.Super();
+          };
+          Class2.prototype = util.extendPrototype( Class1, {} );
+          /*jshint nonew: false*/
+          new Class2();
+
+          expect( Class1 ).toHaveBeenCalled();
+        });
+
+        it( "calls the super constructor with the instance as context", function() {
+          Class1 = jasmine.createSpy();
+          Class2 = function(){
+            this.Super();
+          };
+          Class2.prototype = util.extendPrototype( Class1, {} );
+          var instance = new Class2();
+
+          expect( Class1.calls.all()[0].object ).toBe( instance );
+        });
+
+        it( "calls the super constructor with argumetns", function() {
+          Class1 = jasmine.createSpy();
+          Class2 = function(){
+            this.Super( 1, 2, 3 );
+          };
+          Class2.prototype = util.extendPrototype( Class1, {} );
+          /*jshint nonew: false*/
+          new Class2();
+
+          expect( Class1 ).toHaveBeenCalledWith( 1, 2, 3 );
+        });
+
+      });
+
+
     });
 
   });
