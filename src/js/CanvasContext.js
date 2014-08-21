@@ -5,82 +5,29 @@
 
 (function() {
 
+  var id = function( value ) { return value; };
+
   tabris.CanvasContext = function(gc) {
     this._gc = gc;
-    this._lineWidth = 1;
-    this._lineCap = "butt";
-    this._lineJoin = "miter";
-    this._fillStyle = [0, 0, 0, 255];
-    this._strokeStyle = [0, 0, 0, 255];
+    this._state = createState();
+    this._savedStates = [];
     this._operations = [];
-    Object.defineProperty(this, "lineWidth", {
-      get: function() {
-        return this._lineWidth;
-      },
-      set: function(value) {
-        if(value > 0) {
-          this._lineWidth = value;
-          this._operations.push(["lineWidth", value]);
-        } else {
-          console.warn("Unsupported value for lineWidth: " + value);
-        }
-      }
-    });
-    Object.defineProperty(this, "lineCap", {
-      get: function() {
-        return this._lineCap;
-      },
-      set: function(value) {
-        if(value in validLineCaps) {
-          this._lineCap = value;
-          this._operations.push(["lineCap", value]);
-        } else {
-          console.warn("Unsupported value for lineCap: " + value);
-        }
-      }
-    });
-    Object.defineProperty(this, "lineJoin", {
-      get: function() {
-        return this._lineJoin;
-      },
-      set: function(value) {
-        if(value in validLineJoins) {
-          this._lineJoin = value;
-          this._operations.push(["lineJoin", value]);
-        } else {
-          console.warn("Unsupported value for lineJoin: " + value);
-        }
-      }
-    });
-    Object.defineProperty(this, "fillStyle", {
-      get: function() {
-        return util.colorArrayToString(this._fillStyle);
-      },
-      set: function(str) {
-        try {
-          this._fillStyle = util.colorStringToArray(str);
-          this._operations.push(["fillStyle", this._fillStyle]);
-        } catch( error ) {
-          console.warn("Unsupported value for fillStyle: " + str);
-        }
-      }
-    });
-    Object.defineProperty(this, "strokeStyle", {
-      get: function() {
-        return util.colorArrayToString(this._strokeStyle);
-      },
-      set: function(str) {
-        try {
-          this._strokeStyle = util.colorStringToArray(str);
-          this._operations.push(["strokeStyle", this._strokeStyle]);
-        } catch( error ) {
-          console.warn("Unsupported value for strokeStyle: " + str);
-        }
-      }
-    });
+    for(var name in properties) {
+      defineProperty(this, name);
+    }
   };
 
   tabris.CanvasContext.prototype = {
+
+    save: function() {
+      this._operations.push(["save"]);
+      this._savedStates.push(util.clone(this._state));
+    },
+
+    restore: function() {
+      this._operations.push(["restore"]);
+      this._state = this._savedStates.pop() || this._state;
+    },
 
     beginPath: function() {
       this._operations.push(["beginPath"]);
@@ -167,7 +114,74 @@
     return canvas._ctx;
   };
 
-  var validLineCaps ={ "butt": true, "round": true, "square": true };
-  var validLineJoins ={ "bevel": true, "miter": true, "round": true };
+  var properties = {
+    lineWidth: {
+      def: 1,
+      encode: function(value) {
+        if(value > 0) {
+          return value;
+        }
+        throw new Error("illegal lineWidth: " + value);
+      },
+      decode: id
+    },
+    lineCap: {
+      def: "butt",
+      values: { "butt": true, "round": true, "square": true },
+      encode: function(value) {
+        if(value in this.values) {
+          return value;
+        }
+        throw new Error("illegal lineCap:" + value);
+      },
+      decode: id
+    },
+    lineJoin: {
+      def: "miter",
+      values: { "bevel": true, "miter": true, "round": true },
+      encode: function(value) {
+        if(value in this.values) {
+          return value;
+        }
+        throw new Error("illegal lineJoin: " + value);
+      },
+      decode: id
+    },
+    fillStyle: {
+      def: [0, 0, 0, 255],
+      encode: util.colorStringToArray,
+      decode: util.colorArrayToString
+    },
+    strokeStyle: {
+      def: [0, 0, 0, 255],
+      encode: util.colorStringToArray,
+      decode: util.colorArrayToString
+    }
+  };
+
+  function createState() {
+    var state = {};
+    for(var name in properties) {
+      state[name] = properties[name].def;
+    }
+    return state;
+  }
+
+  function defineProperty(context, name) {
+    var prop = properties[name];
+    Object.defineProperty(context, name, {
+      get: function() {
+        return prop.decode(context._state[name]);
+      },
+      set: function(value) {
+        try {
+          context._state[name] = prop.encode(value);
+          context._operations.push([name, this._state[name]]);
+        } catch(error) {
+          console.warn("Unsupported value for " + name + ": " + value);
+        }
+      }
+    });
+  }
 
 })();

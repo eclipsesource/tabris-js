@@ -37,6 +37,14 @@ util = {
     return result;
   },
 
+  clone: function( object ) {
+    var result = {};
+    for( var key in object ) {
+      result[key] = object[key];
+    }
+    return result;
+  },
+
   bind: function( fn, context ) {
     return function() {
       return fn.apply( context, arguments );

@@ -61,6 +61,24 @@ describe( "util", function() {
 
   });
 
+  describe( "clone", function() {
+
+    it( "returns a copy", function() {
+      var original = { "a": 1 };
+
+      var result = util.clone( original );
+
+      expect( result ).not.toBe( original );
+    });
+
+    it( "copies all properties", function() {
+      var result = util.clone( { "a": 1, "b": 2 } );
+
+      expect( result ).toEqual( { "a": 1, "b": 2 } );
+    });
+
+  });
+
   describe( "bind", function() {
 
     it( "returns a wrapper that will be called with context", function() {

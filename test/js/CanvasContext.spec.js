@@ -263,6 +263,71 @@ describe("CanvasContext", function() {
 
   });
 
+  describe("save", function() {
+
+    it("does not change current state", function() {
+      ctx.strokeStyle = "red";
+      ctx.save();
+
+      expect(ctx.strokeStyle).toEqual("rgba(255, 0, 0, 1)");
+    });
+
+    it("renders save operation", function() {
+      ctx.save();
+      ctx.fill();
+
+      expect(getDrawOperations()).toEqual([
+        ["save"],
+        ["fill"]
+      ]);
+    });
+
+  });
+
+  describe("restore", function() {
+
+    it("restores previous state", function() {
+      ctx.strokeStyle = "red";
+      ctx.save();
+      ctx.strokeStyle = "blue";
+
+      ctx.restore();
+
+      expect(ctx.strokeStyle).toEqual("rgba(255, 0, 0, 1)");
+    });
+
+    it("restores multiple steps", function() {
+      ctx.strokeStyle = "red";
+      ctx.save();
+      ctx.strokeStyle = "blue";
+      ctx.save();
+
+      ctx.restore();
+      ctx.restore();
+
+      expect(ctx.strokeStyle).toEqual("rgba(255, 0, 0, 1)");
+    });
+
+    it("does not change current state when stack is empty", function() {
+      ctx.strokeStyle = "red";
+
+      ctx.restore();
+
+      expect(ctx.strokeStyle).toEqual("rgba(255, 0, 0, 1)");
+    });
+
+    it("renders restore operation", function() {
+      ctx.restore();
+      ctx.fill();
+
+      expect(getDrawOperations()).toEqual([
+        ["restore"],
+        ["fill"]
+      ]);
+    });
+
+  });
+
   describe("path operations", function() {
 
     it("aren't rendered before flush", function() {
