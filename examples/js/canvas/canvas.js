@@ -53,33 +53,33 @@ tabris.load(function() {
   ctx.fillRect(50, 20, 20, 80);
   ctx.fillStyle = "rgba(100, 100, 255, 0.5)";
   ctx.fillRect(20, 50, 80, 20);
-  ctx.strokeText("transparency", 20, 110);
+  ctx.fillText("transparency", 20, 120);
 
   drawPolygon(ctx, 20, 150);
   ctx.stroke();
-  ctx.strokeText("polygon", 20, 220);
+  ctx.fillText("polygon", 20, 225);
 
   drawArc(ctx, 20, 250);
   ctx.fill();
   ctx.stroke();
-  ctx.strokeText("arc", 20, 330);
+  ctx.fillText("arc", 20, 345);
 
   ctx.strokeStyle = "blue";
   drawLinear(ctx, 140, 20);
   ctx.stroke();
-  ctx.strokeText("linear", 140, 70);
+  ctx.fillText("linear", 140, 75);
 
   ctx.lineWidth = 2;
   ctx.strokeStyle = "purple";
   drawQuadratic(ctx, 140, 100);
   ctx.stroke();
-  ctx.strokeText("quadratic", 140, 150);
+  ctx.fillText("quadratic", 140, 155);
 
-  ctx.lineWidth = 3;
+  ctx.lineWidth = 4;
   ctx.strokeStyle = "olive";
   drawBezier(ctx, 140, 180);
-  ctx.strokeText("bezier", 140, 230);
   ctx.stroke();
+  ctx.fillText("bezier", 140, 240);
 
   page.open();
 

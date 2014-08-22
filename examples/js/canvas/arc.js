@@ -1,30 +1,7 @@
 tabris.load(function() {
 
-  var RADIUS = 20;
-
-  function drawArc(ctx, x, y, startAngel, endAngel, counterClockwise) {
-    ctx.beginPath();
-    ctx.moveTo(x + RADIUS, y + RADIUS);
-    ctx.arc(x + RADIUS, y + RADIUS, RADIUS, startAngel * Math.PI, endAngel * Math.PI, counterClockwise);
-    ctx.fillStyle = "rgba(255, 100, 100, 0.5)";
-    ctx.fill();
-    ctx.fillStyle = "black";
-    ctx.strokeText(startAngel.toString().concat(", ").concat(endAngel), x, y + RADIUS * 2);
-  }
-
-  var page = tabris.createPage({
-    title: "Arcs",
-    topLevel: true
-  });
-
-  var canvasSize = 300;
-  var canvas = page.append("Canvas", {
-    layoutData: {left: 10, top: 10, right: 10, height: canvasSize}
-  });
-
-  var context = tabris.getContext(canvas, canvasSize, canvasSize);
-
-  context.fillStyle = "rgba(255, 100, 100, 0.5)";
+  var CANVAS_SIZE = 300;
+  var ARC_RADIUS = 20;
 
   function drawArcs(counterClockwise) {
     drawArc(context, 10, 10, 0.25, 1.5, counterClockwise);
@@ -44,12 +21,35 @@ tabris.load(function() {
     drawArc(context, 160, 240, 0, 2.5, counterClockwise);
   }
 
+  function drawArc(context, x, y, startAngle, endAngle, counterClockwise) {
+    context.beginPath();
+    context.moveTo(x + ARC_RADIUS, y + ARC_RADIUS);
+    context.arc(x + ARC_RADIUS, y + ARC_RADIUS, ARC_RADIUS, startAngle * Math.PI, endAngle * Math.PI, counterClockwise);
+    context.fillStyle = "rgba(255, 100, 100, 0.5)";
+    context.fill();
+    context.fillStyle = "black";
+    context.fillText(startAngle.toString().concat(", ").concat(endAngle), x + ARC_RADIUS, y + ARC_RADIUS * 2);
+  }
+
   function clearCanvas() {
     context.beginPath();
-    context.rect(0, 0, canvasSize, canvasSize);
+    context.rect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
     context.fillStyle = 'white';
     context.fill();
   }
+
+  var page = tabris.createPage({
+    title: "Arcs",
+    topLevel: true
+  });
+
+  var canvas = page.append("Canvas", {
+    layoutData: {left: 10, top: 10, right: 10, height: CANVAS_SIZE}
+  });
+
+  var context = tabris.getContext(canvas, CANVAS_SIZE, CANVAS_SIZE);
+  context.textAlign = "center";
+  context.textBaseline = "top";
 
   var checkBox = page.append("CheckBox", {
     text: "Counterclockwise",
