@@ -11,6 +11,9 @@
     },
     {
       "src": "arc.js"
+    },
+    {
+      "src": "text.js"
     }
   ]
 }
