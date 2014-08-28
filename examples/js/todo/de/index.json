@@ -1,0 +1,37 @@
+{
+  "resources": [
+    {
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.js"
+    },
+    {
+      "src": "http://underscorejs.org/underscore-min.js"
+    },
+    {
+      "src": "http://backbonejs.org/backbone-min.js"
+    },
+    {
+      "src": "../../backbone/TabrisBackbone.js"
+    },
+    {
+      "src": "texts-de.js"
+    },
+    {
+      "src": "../TodoItem.js"
+    },
+    {
+      "src": "../TodoList.js"
+    },
+    {
+      "src": "../TodoListView.js"
+    },
+    {
+      "src": "../TodoItemView.js"
+    },
+    {
+      "src": "../TodoEditView.js"
+    },
+    {
+      "src": "../app.js"
+    }
+  ]
+}
