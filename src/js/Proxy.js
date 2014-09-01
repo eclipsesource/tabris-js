@@ -186,6 +186,8 @@
   function encodeProperty( name, value ) {
     if( name === "foreground" || name === "background" ) {
       return encodeColor( value );
+    } else if( name === "font" ) {
+      return encodeFont( value );
     } else if( name === "layoutData" ) {
       checkLayoutData( value );
       return encodeLayoutData( value );
@@ -197,6 +199,14 @@
 
   function encodeColor( value ) {
     return util.colorStringToArray( value );
+  }
+
+  function encodeFont( value ) {
+    return util.fontStringToArray( value );
+  }
+
+  function decodeFont( value ) {
+    return util.fontArrayToString( value );
   }
 
   function encodeRowTemplate( template ) {
@@ -250,6 +260,8 @@
   function decodeProperty( name, value ) {
     if( name === "foreground" || name === "background" ) {
       return decodeColor( value );
+    } else if( name === "font" ) {
+      return decodeFont( value );
     }
     return value;
   }

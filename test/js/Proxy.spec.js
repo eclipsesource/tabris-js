@@ -207,6 +207,14 @@ describe( "Proxy", function() {
         expect( result ).toBe( "rgba(170, 255, 0, 0.5)" );
       } );
 
+      it( "translates font to string", function() {
+        spyOn( nativeBridge, "get" ).and.returnValue( [["Arial"], 12, true, true] );
+
+        var result = proxy.get( "font" );
+
+        expect( result ).toBe( "italic bold 12px Arial" );
+      } );
+
       it( "fails on disposed object", function() {
         proxy.dispose();
 
@@ -284,6 +292,13 @@ describe( "Proxy", function() {
         var call = nativeBridge.calls({ op: "set" })[0];
         expect( call.properties.foreground ).toEqual( [255, 0, 0, 255] );
         expect( call.properties.background ).toEqual( [1, 2, 3, 128] );
+      } );
+
+      it( "translates font string to array", function() {
+        proxy.set({ font: "12px Arial" });
+
+        var call = nativeBridge.calls({ op: "set" })[0];
+        expect( call.properties.font ).toEqual([["Arial"], 12, false, false]);
       } );
 
       it( "translates colors in row templates", function() {

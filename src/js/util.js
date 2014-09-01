@@ -51,7 +51,7 @@ util = {
     };
   },
 
-  extendPrototype : function( fn, target ) {
+  extendPrototype: function( fn, target ) {
     var Helper = function(){};
     Helper.prototype = fn.prototype;
     return util.extend( new Helper(), target, {
