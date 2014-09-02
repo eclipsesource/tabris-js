@@ -8,11 +8,7 @@ todo.TodoEditView = Backbone.View.extend({
     "Selection confirmationButton": "close"
   },
 
-  widget: function() {
-    var page = tabris.createPage({title: todo.texts.editItem, topLevel: false});
-    page.open();
-    return page;
-  },
+  attributes: {title: todo.texts.editItem, topLevel: false},
 
   initialize: function() {
     this.createWidgets();
@@ -54,7 +50,6 @@ todo.TodoEditView = Backbone.View.extend({
       this.model.clear();
     }
     this.remove();
-    this.widget.close();
   }
 
 });

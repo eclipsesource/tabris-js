@@ -68,6 +68,9 @@
     // Remove this view by taking the element out of the DOM, and removing any
     // applicable Backbone.Events listeners.
     remove: function() {
+      if(this.widget.close) {
+        this.widget.close();
+      }
       this.widget.dispose();
       this.stopListening();
       return this;
@@ -147,16 +150,19 @@
 
     // Ensure that the View has a widget to render into.
     // Create a widget from the `widgetType`, `attributes` and `layoutData` properties.
-    // A parent has to be present.
+    // If no parent is present, create and open a page;
     _ensureWidget: function( options ) {
       if(!this.widget) {
         var attrs = _.extend({}, _.result(this, 'attributes'));
-        if(!this.parentWidget && !this.parentView) {
-          throw new Error('Can not create view without parent or widget');
+        if(!this.parentWidget && this.parentView) {
+          this.parentWidget = this.parentView.container || this.parentView.widget;
         }
-        this.parentWidget = this.parentWidget || this.parentView.container || this.parentView.widget;
-        var widget = this.parentWidget.append(_.result(this, 'widgetType'), attrs);
-        this.setWidget(widget, false);
+        if( this.parentWidget ) {
+          this.setWidget(this.parentWidget.append(_.result(this, 'widgetType'), attrs), false);
+        } else {
+          this.setWidget(tabris.createPage(attrs), false);
+          this.widget.open();
+        }
       } else {
         this.setWidget(_.result(this, 'widget'), false);
       }

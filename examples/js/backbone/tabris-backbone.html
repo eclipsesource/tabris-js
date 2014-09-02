@@ -11,7 +11,6 @@
       font-size: 14px;
       line-height: 22px;
       font-family: Helvetica Neue, Helvetica, Arial;
-      background: #f4f4f4 url(docs/images/background.png);
     }
     .interface {
       font-family: "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, sans-serif !important;
@@ -449,11 +448,11 @@
       object when
       the view is first created. If you'd like to create a view that references
       a widget that is <i>already created</i>, pass in the widget as an option:
-      <tt>new View({widget: existingWidget})</tt>. If you don't do so, you have
-      to provide either an <tt>parentWidget</tt> or a <tt>parentView</tt>. You may
+      <tt>new View({widget: existingWidget})</tt>. Alternatively you can
+      provide a <tt>parentWidget</tt> or a <tt>parentView</tt>. You may
       also want to provide <tt>layoutData</tt> for the widget. (You could also provide
-      it in the <tt>attributes</tt> object, but since <tt>layoutData</tt> is almost always
-      needed it can also be set as an option directly.)
+      it in the options <tt>attributes</tt> object, but that would override any attributes defined
+      in the class <tt>attributes</tt> property.)
     </p>
 
 <pre>var doc = documents.first();
@@ -468,28 +467,61 @@ new DocumentRow({
     <p id="View-widget">
       <b class="header">widget</b><code>view.widget</code>
       <br>
-      All views have a root widget at all times (the <b>widget</b> property).
-      <ins>(TB: Could it be useful to be able to initialize a view lazily?)</ins>
-      If no widget is given in the constructor, <tt>this.widget</tt> is created from the
-      view's <tt>widgetType</tt> and <tt>attributes</tt> properties,
-      if specified. If not, <b>widget</b> will be an empty <tt>Composite</tt>. It is attached to the
-      given <tt>parentWidget</tt> or <tt>parentView</tt>. If both are given, <tt>parentWidget</tt>
-      is used. If <tt>parentView</tt> is used, the new widget is attached to<tt>parentView.widget</tt>
-      or to <tt>parentView.container</tt> (if present).
+      All views have a root widget (the <tt>this.widget</tt>. property) at all times, from before
+      <tt>initialize</tt> is called until <tt>remove</tt> is called. (Even <tt>remove</tt> just
+      disposes the widget, it does not clear the reference. Therefore you should take care
+      not to hold references to obsolte views, or the garbage collector can't do it's work.)
+    </p>
+    <ul>
+      <li>
+        If a widget is given in the constructor options (<tt>{ widget: widget }</tt>), that widget
+        will set as the root widget.
+      </li>
+      <li>
+        If no widget is given in the constructor call, the View next will look for it in the class
+        definition. If the object given to <tt>View.extend</tt> implements a function <tt>widget</tt>
+        it will be called to create the widget. E.g.: <tt>{ widget: function(){ return widget; } }</tt>.
+        The function can also access <tt>this.parentWidget</tt> or <tt>this.parentView</tt>, if
+        given in the constructor call.
+      </li>
+      <li>
+        If no widget is provided by the constructor options or class definition, the View will
+        attempt to create one itself. If a <tt>parentWidget</tt> is given in the constructor
+        options, it will be attached to that. The type of the widget will be that of the
+        <tt>widgetType</tt> property set in the class definition, or <tt>Composite</tt> if none
+        is given.
+      </li>
+      <li>
+        If there is no <tt>parentWidget</tt> to create a widget, the View will next look for
+        a <tt>parentView</tt>. If one is present the wigdet will be added to it's <tt>widget</tt>,
+        unless there is also a widget called <tt>container</tt> attached to the view. In that case
+        it is used as the parent. (See example below.)
+      </li>
+      <li>
+        If there is no <tt>widget</tt>, <tt>parentWidget</tt> or <tt>parentView</tt> provided,
+        the View will create a new tabris-UI page and open it. You can use the attributes object
+        to determine it's <tt>title</tt> and <tt>topLevel</tt> (etc.) attributes. The View will
+        also automatically be closed when <tt>remove</tt> is called.
+      </li>
+    </ul>
+    <p>
+      In any case, the <tt>attributes</tt> given in either the options or the class definition
+      will be applied to the widget, as will <tt>layoutData</tt>, if given in the
+      constructor options object.
     </p>
 
-<div class="run" title="Run"></div><pre class="runnable">var ItemView = Backbone.View.extend({
-  widgetType: 'label'
-});
-
-var BodyView = Backbone.View.extend({
+<div class="run" title="Run"></div><pre class="runnable">var BodyView = Backbone.View.extend({
   initialize : function() {
     this.container = this.widget.append("Composite");
   }
 });
 
-var body = new BodyView({parentWidget: page);
-var item = new ItemView({parentView: body});
+var ItemView = Backbone.View.extend({
+  widgetType: 'label'
+});
+
+var body = new BodyView({parentWidget: myPage, layoutData: { top: 0, left: 0 });
+var item = new ItemView({parentView: body, layoutData: { top: 0, left: 0 }});
 
 // we now have: page->body.widget->body.composite->item.widget
 </pre>

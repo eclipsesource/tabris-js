@@ -101,6 +101,18 @@ describe( "TabrisBackbone View", function() {
       expect(parent.append).toHaveBeenCalledWith("Button", {});
     });
 
+    it("creates and opens page with attributes if no widget or parent is given", function() {
+      var page = tabris.PageProxy.create( new tabris.UIProxy(), {});
+      spyOn(page, "open");
+      tabris.createPage = jasmine.createSpy().and.returnValue(page);
+
+      var view = new MyView({ attributes: { title: "foo" }});
+
+      expect(tabris.createPage).toHaveBeenCalledWith({ title: "foo" });
+      expect(view.widget).toBe(page);
+      expect(view.widget.open).toHaveBeenCalled();
+    });
+
     it("stores parentView widget as parentWidget", function() {
       var parentView = new MyView({ "widget": parent });
       var view = new MyView({
@@ -326,6 +338,16 @@ describe( "TabrisBackbone View", function() {
       view.remove();
 
       expect(widget.dispose).toHaveBeenCalled();
+    });
+
+    it("closes page", function() {
+      var page = tabris.PageProxy.create( new tabris.UIProxy(), {});
+      var view = new MyView({"widget": page});
+      spyOn(page, "close");
+
+      view.remove();
+
+      expect(page.close).toHaveBeenCalled();
     });
 
     it("stops listening to model", function() {

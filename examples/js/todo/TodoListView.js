@@ -14,11 +14,7 @@ todo.TodoListView = Backbone.View.extend({
 
   remainingTemplate: _.template(todo.texts.remaining, {variable: "remaining"}),
 
-  widget: function() {
-    var page = tabris.createPage({title: todo.texts.listTitle, topLevel: true, background: "white"});
-    page.open();
-    return page;
-  },
+  attributes: {title: todo.texts.listTitle, topLevel: true, background: "white"},
 
   initialize: function() {
     this.itemViews = {};
