@@ -35,9 +35,18 @@ module.exports = function(grunt) {
         stripBanners: true
       },
       dist: {
-        src: prefix( 'src/js/',
-                     ['util.js', 'util-colors.js', 'util-fonts.js',
-                      'Tabris.js', 'Window.js', 'Proxy.js', 'UIProxy.js', 'PageProxy.js', 'CanvasContext.js'] ),
+        src: prefix( 'src/js/', [
+                     'util.js',
+                     'util-colors.js',
+                     'util-fonts.js',
+                     'Tabris.js',
+                     'Window.js',
+                     'Proxy.js',
+                     'UIProxy.js',
+                     'PageProxy.js',
+                     'CanvasContext.js',
+                     'XMLHttpRequest.js'
+                    ] ),
         dest: 'build/tabris.js'
       }
     },

@@ -1,7 +1,37 @@
 tabris.load(function() {
 
   var MARGIN = 12;
-  var httpRequest = null;
+  var error = "";
+
+  var xhr = new tabris.XMLHttpRequest();
+
+  xhr.ontimeout = function() {
+    error = "timeout";
+    updateResponseLabel(this);
+  };
+
+  xhr.onerror = function() {
+    error = "network error";
+    updateResponseLabel(this);
+  };
+
+  xhr.onabort = function() {
+    error = "aborted";
+    updateResponseLabel(this);
+  };
+
+  xhr.onreadystatechange = function() {
+    updateResponseLabel(xhr);
+    if (xhr.readyState == xhr.states.DONE) {
+      button.set("text", "Send request");
+    }
+  };
+
+  xhr.onprogress = function(e) {
+    progressBar.set("selection", e.loaded / e.total * 100);
+  };
+
+  xhr.timeout = 2000;
 
   var page = tabris.createPage({
     title: "XMLHttpRequest",
@@ -11,7 +41,7 @@ tabris.load(function() {
   var urlText = page.append("Text", {
     layoutData: {left: MARGIN, right: MARGIN, top: MARGIN},
     message: "Request url",
-    text: "http://85.214.110.251/protected/Tabris-trial-SDK-1.4.0-preview.zip"
+    text: "index.json"
   });
 
   var button = page.append("Button", {
@@ -54,56 +84,41 @@ tabris.load(function() {
 
   button.on("Selection", function() {
     progressBar.set("selection", 0);
-    if (httpRequest === null) {
+    if ([xhr.states.UNSENT, xhr.states.DONE].indexOf(xhr.readyState) > -1) {
       button.set("text", "Cancel");
       httpStatusLabel.set("text", "");
       headerLabel.set("text", "");
       bodyLabel.set("text", "");
       sendRequest(urlText.get("text").toString());
     } else {
-      httpRequest.call("abort");
+      xhr.abort();
     }
   });
 
-  function updateResponseLabel(e) {
-    stateLabel.set("text", "<b>" + e.state + "</b>");
-    if (e.state == "headers") {
-      httpStatusLabel.set("text", "Response: " + e.code + " " + e.message);
-      headerLabel.set("text", "Headers: " + Object.keys(e.headers).length);
+  function updateResponseLabel(xhr) {
+    stateLabel.set("text", "<b>" + getStateName() + (error ? " (" + error + ")" : "") + "</b>");
+    if (xhr.readyState == xhr.states.HEADERS_RECEIVED) {
+      httpStatusLabel.set("text", "Response: " + xhr.status + " " + xhr.statusText);
+      headerLabel.set("text", "Headers: " + xhr.getAllResponseHeaders().split(/\r\n|\r|\n/).length);
     }
-    if (e.state == "finished") {
-      bodyLabel.set("text", e.response.substr(0, Math.min(200, e.response.length)));
+    if (xhr.readyState == xhr.states.DONE) {
+      bodyLabel.set("text", xhr.responseText.substr(0, Math.min(200, xhr.responseText.length)));
+    }
+  }
+
+  function getStateName() {
+    for (var key in xhr.states) {
+      if(xhr.states[key] == xhr.readyState) {
+        return key;
+      }
     }
   }
 
   function sendRequest(url) {
-    httpRequest = tabris.create("tabris.HttpRequest");
-    httpRequest.on("StateChange", function(e) {
-      console.log(e.state);
-      updateResponseLabel(e);
-      if (requestEnded(e)) {
-        button.set("text", "Send request");
-        httpRequest.dispose();
-        httpRequest = null;
-      }
-    });
-    httpRequest.call("send", {
-      url: url,
-      method: "GET",
-      headers: {
-        "Accept-Encoding": "gzip,deflate"
-      },
-      timeout: 2000
-    });
-    httpRequest.on("DownloadProgress", function(e) {
-      progressBar.set("selection", e.loaded / e.total * 100);
-    });
+    error = "";
+    xhr.open("GET", url);
+    xhr.send();
   }
-
-  function requestEnded(e) {
-    return e.state == "finished" || e.state == "aborted" || e.state == "error" || e.state == "timeout";
-  }
-
   page.open();
 
 });
