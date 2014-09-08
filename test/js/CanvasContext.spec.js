@@ -550,6 +550,18 @@ describe("CanvasContext", function() {
 
   });
 
+  describe("clearRect", function() {
+
+    it("is rendered immediately", function() {
+      ctx.clearRect(10, 20, 30, 40);
+
+      expect(getDrawOperations()).toEqual([
+        ["clearRect", 10, 20, 30, 40]
+      ]);
+    });
+
+  });
+
   describe("fillRect", function() {
 
     it("is rendered immediately", function() {

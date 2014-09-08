@@ -25,9 +25,7 @@ tabris.load(function() {
     }
 
     function clear() {
-      // TODO: ctx.clearRect(0, 0, width, height);
-      ctx.fillStyle = '#fff';
-      ctx.fillRect(0, 0, width, height);
+      ctx.clearRect(0, 0, width, height);
     }
 
     function drawAxes() {

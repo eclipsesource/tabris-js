@@ -59,6 +59,11 @@
       this._operations.push(["arc", x, y, radius, startAngle, endAngle, !!anticlockwise]);
     },
 
+    clearRect: function(x, y, width, height) {
+      this._operations.push(["clearRect", x, y, width, height]);
+      this._flush();
+    },
+
     fillRect: function(x, y, width, height) {
       this._operations.push(["beginPath"], ["rect", x, y, width, height]);
       this.fill();
