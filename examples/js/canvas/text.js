@@ -9,40 +9,45 @@ tabris.load(function() {
     layoutData: {left: 10, top: 10, right: 10, bottom: 10}
   });
 
-  var ctx = tabris.getContext(canvas, 500, 700);
-
+  var ctx = tabris.getContext(canvas, 300, 300);
   ctx.strokeStyle = "red";
-  ctx.moveTo(5, 100);
-  ctx.lineTo(500, 100);
+
+  var x = 50;
+  var y = 50;
+
+  ctx.moveTo(5, y);
+  ctx.lineTo(295, y);
   ctx.stroke();
-
-  ctx.textBaseline = "top";
-  ctx.fillText("Top", 5, 100);
-  ctx.textBaseline = "bottom";
-  ctx.fillText("Bottom", 50, 100);
-  ctx.textBaseline = "middle";
-  ctx.fillText("Middle", 120, 100);
-  ctx.textBaseline = "alphabetic";
-  ctx.fillText("Alphabetic", 190, 100);
-  ctx.textBaseline = "ideographic";
-  ctx.fillText("Ideographic", 390, 100);
-  ctx.textBaseline = "hanging";
-  ctx.fillText("Hanging", 290, 100);
-
-  ctx.strokeStyle = "red";
-  ctx.moveTo(150, 120);
-  ctx.lineTo(150, 270);
-  ctx.stroke();
-
-  ctx.textAlign = "start";
-  ctx.fillText("start", 150, 160);
-  ctx.textAlign = "end";
-  ctx.fillText("end", 150, 180);
-  ctx.textAlign = "left";
-  ctx.fillText("left", 150, 200);
   ctx.textAlign = "center";
-  ctx.fillText("center", 150, 220);
-  ctx.textAlign = "right";
-  ctx.fillText("right", 150, 240);
+  ["top", "bottom", "middle"].forEach(function(mode) {
+    ctx.textBaseline = mode;
+    ctx.fillText(mode, x, y);
+    x += 100;
+  });
+
+  x = 50;
+  y = 100;
+
+  ctx.moveTo(5, y);
+  ctx.lineTo(295, y);
+  ctx.stroke();
+  ["hanging", "alphabetic", "ideographic"].forEach(function(mode) {
+    ctx.textBaseline = mode;
+    ctx.fillText(mode, x, y);
+    x += 100;
+  });
+
+  x = 150;
+  y = 170;
+
+  ctx.moveTo(x, 150);
+  ctx.lineTo(x, 270);
+  ctx.stroke();
+  ctx.textBaseline = "middle";
+  ["start", "end", "left", "right", "center"].forEach(function(mode) {
+    ctx.textAlign = mode;
+    ctx.fillText(mode, x, y);
+    y += 20;
+  });
 
 });
