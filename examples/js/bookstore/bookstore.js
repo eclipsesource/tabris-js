@@ -73,7 +73,7 @@ tabris.load(function() {
       }
     }
 
-    createBooksGrid(page, filteredBooks);
+    createBooksList(page, filteredBooks);
 
     return page;
   }
@@ -134,12 +134,12 @@ tabris.load(function() {
       }
     });
 
-    var booksGrid = createBooksGrid(tabFolder, books);
+    var booksList = createBooksList(tabFolder, books);
 
     tabFolder.append("TabItem", {
       index: 0,
       text: "Related",
-      control: booksGrid
+      control: booksList
     });
 
     var tabRelatedComposite = tabFolder.append("Composite", {});
@@ -158,9 +158,9 @@ tabris.load(function() {
     return page;
   }
 
-  function createBooksGrid(parent, books) {
+  function createBooksList(parent, books) {
 
-    var grid = parent.append("Grid", {
+    var list = parent.append("List", {
       itemCount: books.length,
       linesVisible: true,
       layoutData: { left: 0, right: 0, top: 0, bottom: 0 },
@@ -196,25 +196,21 @@ tabris.load(function() {
       ]
     });
 
-    grid.on("Selection", function(event) {
-      var gridItem = tabris._proxies[event.item];
-      var index = gridItem.get("index");
+    list.on("Selection", function(event) {
+      var listItem = tabris._proxies[event.item];
+      var index = listItem.get("index");
       createBookPage(books[index]).open();
     });
 
-    grid.append("ScrollBar", {
-      style: ["VERTICAL"]
-    });
-
     for (var i = 0; i < books.length; i++) {
-      grid.append("GridItem", {
+      list.append("ListItem", {
         index: i,
         texts: [ "", books[i].title, books[i].author],
         images: [books[i].image, null, null]
       });
     }
 
-    return grid;
+    return list;
   }
 
   function createSettingsPage() {

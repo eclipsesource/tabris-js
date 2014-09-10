@@ -33,6 +33,16 @@
       var style = textTypeToStyle[ properties.type ] || textTypeToStyle[ "default" ];
       return proxy._create( "rwt.widgets.Text", util.extend( { style: style }, properties ));
     },
+    "List": function( proxy, type, properties ) {
+      var list = proxy._create( "rwt.widgets.Grid", util.extend( { style: [] }, properties ));
+      list.append("ScrollBar", {
+        style: ["VERTICAL"]
+      });
+      return list;
+    },
+    "ListItem": function( proxy, type, properties ) {
+      return proxy._create( "rwt.widgets.GridItem", properties );
+    },
     "default": function( proxy, type, properties ) {
       return proxy._create( type, properties );
     }

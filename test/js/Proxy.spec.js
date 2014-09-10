@@ -101,6 +101,24 @@ describe( "Proxy", function() {
       expect( create.properties.style ).toEqual( ["BORDER", "MULTI"] );
     } );
 
+    it( "maps 'List' to rwt.widgets.Grid with a vertical Scollbar", function() {
+      tabris.Proxy.create( "List", { linesVisible: true } );
+
+      var createCalls = nativeBridge.calls({ op: "create" });
+      expect( createCalls[0].type ).toEqual( "rwt.widgets.Grid" );
+      expect( createCalls[0].properties ).toEqual( { style: [], linesVisible: true } );
+      expect( createCalls[1].type ).toEqual( "rwt.widgets.ScrollBar" );
+      expect( createCalls[1].properties ).toEqual( { style: ["VERTICAL"], parent: createCalls[0].id } );
+    } );
+
+    it( "maps 'ListItem' to rwt.widgets.GridItem", function() {
+      tabris.Proxy.create( "ListItem", { texts: ["foo", "bar"] } );
+
+      var create = nativeBridge.calls({ op: "create" })[0];
+      expect( create.type ).toEqual( "rwt.widgets.GridItem" );
+      expect( create.properties ).toEqual( { texts: ["foo", "bar"] } );
+    } );
+
     it( "calls native create with type and properties", function() {
       proxy._create( "foo.bar", { foo: 23 } );
 
