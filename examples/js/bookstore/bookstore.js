@@ -1,44 +1,37 @@
 tabris.load(function() {
 
-  function createBook(title, author, image, popular, favorite) {
-    return {
-      title: title,
-      author: author,
-      image: [image, 106, 160],
-      popular: popular,
-      favorite: favorite
-    };
-  }
-
   var books = [
-    createBook("Schroder: A Novel", "Amity Gaige", "images/book_schroder.jpg"),
-    createBook("Vampires in the Lemon Grove: Stories", "Karen Russell", "images/book_vampires.jpg", false, true),
-    createBook("After Visiting Friends: A Son's Story", "Michael Hainey", "images/book_after_visiting.jpg", true, true),
-    createBook("A History of Future Cities", "Daniel Brook", "images/book_a_history.jpg", true, true),
-    createBook("Autobiography of Us: A Novel", "Aria Beth Sloss", "images/book_autobiografy.jpg", false, true),
-    createBook("How Literature Saved My Life", "David Shields", "images/book_how_literature.jpg", true, false),
-    createBook("The Dinner", "Herman Koch", "images/book_the_dinner.jpg", true, true)
-  ];
+    ["Schroder: A Novel", "Amity Gaige", "images/book_schroder.jpg"],
+    ["Vampires in the Lemon Grove: Stories", "Karen Russell", "images/book_vampires.jpg", false, true],
+    ["After Visiting Friends: A Son's Story", "Michael Hainey", "images/book_after_visiting.jpg", true, true],
+    ["A History of Future Cities", "Daniel Brook", "images/book_a_history.jpg", true, true],
+    ["Autobiography of Us: A Novel", "Aria Beth Sloss", "images/book_autobiografy.jpg", false, true],
+    ["How Literature Saved My Life", "David Shields", "images/book_how_literature.jpg", true, false],
+    ["The Dinner", "Herman Koch", "images/book_the_dinner.jpg", true, true]
+  ].map(function(array) {
+    return {
+      title: array[0],
+      author: array[1],
+      image: [array[2], 106, 160],
+      popular: array[3],
+      favorite: array[4]
+    };
+  });
 
   var PAGE_MARGIN = 12;
 
   function createReadBookPage(book) {
-
     var page = tabris.createPage({
       title: book.title
     });
-
     var scrolledComposite = page.append("ScrolledComposite", {
       style: ["V_SCROLL"],
       layoutData: { left: 0, right: 0, top: 0, bottom: 0 }
     });
-
     scrolledComposite.append("ScrollBar", {
       style: ["VERTICAL"]
     });
-
     var composite = scrolledComposite.append("Composite", {});
-
     var titleLabel = composite.append("Label", {
       style: ["WRAP"],
       markupEnabled: true,
@@ -46,44 +39,29 @@ tabris.load(function() {
       layoutData: { left: PAGE_MARGIN, top: PAGE_MARGIN * 2, right: PAGE_MARGIN },
       foreground: "rgba(0, 0, 0, 0.5)"
     });
-
     composite.append("Label", {
       style: ["WRAP"],
       layoutData: { left: PAGE_MARGIN, right: PAGE_MARGIN, top: [titleLabel, PAGE_MARGIN], bottom: PAGE_MARGIN },
       text: "Etiam nisl nisi, egestas quis lacus ut, tristique suscipit metus. In vehicula lectus metus, at accumsan elit fringilla blandit. Integer et quam sed dolor pharetra molestie id eget dui. Donec ac libero eu lectus dapibus placerat eu a tellus. Fusce vulputate ac sem sit amet bibendum. Pellentesque euismod varius purus nec pharetra. Sed vitae ipsum sit amet risus vehicula euismod in at nunc. Sed in viverra arcu, id blandit risus. Praesent sagittis quis nisl id molestie. Donec dignissim, nisl id volutpat consectetur, massa diam aliquam lectus, sed euismod leo elit eu justo. Integer vel ante sapien.\n\nNunc sit amet blandit tellus, sed consequat neque. Proin vel elementum augue. Quisque gravida nulla nisl, at fermentum turpis euismod in. Maecenas vitae tortor at ante vulputate iaculis at vitae sem. Nulla dui erat, viverra eget mauris in, sodales mollis purus. Integer rhoncus suscipit mi in pulvinar. Nam metus augue, dictum a egestas ut, gravida eget ipsum. Nunc sapien nisl, mollis et mauris in, venenatis blandit magna. Nullam scelerisque tellus lacus, in lobortis purus consectetur sed. Etiam pulvinar sapien vel nibh vehicula, in lacinia odio pharetra. Duis tincidunt metus a semper auctor. Sed nec consequat augue, id vulputate orci. Nunc metus nulla, luctus id porttitor nec, interdum sed lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus."
     });
-
     scrolledComposite.set("content", composite);
-
     return page;
   }
 
   function createBooksPage(title, image, filter) {
-
     var page = tabris.createPage({
       title: title,
       topLevel: true,
       image: [image, 32, 32]
     });
-
-    var filteredBooks = [];
-    for (var i = 0; i < books.length; i++) {
-      if (filter(books[i])) {
-        filteredBooks.push(books[i]);
-      }
-    }
-
-    createBooksList(page, filteredBooks);
-
+    createBooksList(page, books.filter(filter));
     return page;
   }
 
   function createBookPage(book) {
-
     var page = tabris.createPage({
       title: book.title
     });
-
     var detailsComposite = page.append("Composite", {
       layoutData: { height: 184, left: 0, right: 0 },
       background: "white",
@@ -91,41 +69,34 @@ tabris.load(function() {
         showTouch: true
       }
     });
-
     detailsComposite.append("Composite", {
       layoutData: { left: 0, right: 0, top: 0, bottom: 0 }
     }).on("MouseUp", function() {
       createReadBookPage(book).open();
     });
-
     var imageLabel = detailsComposite.append("Label", {
       layoutData: { height: 160, width: 106, left: PAGE_MARGIN, top: PAGE_MARGIN },
       image: book.image
     });
-
     var titleLabel = detailsComposite.append("Label", {
       style: ["WRAP"],
       markupEnabled: true,
       text: "<b>" + book.title + "</b>",
       layoutData: { left: [imageLabel, PAGE_MARGIN], top: PAGE_MARGIN, right: PAGE_MARGIN }
     });
-
     var authorLabel = detailsComposite.append("Label", {
       layoutData: { left: [imageLabel, PAGE_MARGIN], top: [titleLabel, PAGE_MARGIN] },
       text: book.author
     });
-
     detailsComposite.append("Label", {
       layoutData: { left: [imageLabel, PAGE_MARGIN], top: [authorLabel, PAGE_MARGIN] },
       foreground: "rgb(102, 153, 0)",
       text: "EUR 12,95"
     });
-
     page.append("Label", {
       layoutData: { height: 1, right: 0, left: 0, top: [detailsComposite, 0] },
       background: "rgba(0, 0, 0, 0.1)"
     });
-
     var tabFolder = page.append("TabFolder", {
       style: ["TOP"],
       layoutData: { top: [detailsComposite, 0], left: 0, right: 0, bottom: 0 },
@@ -133,33 +104,26 @@ tabris.load(function() {
         paging: true
       }
     });
-
     var booksList = createBooksList(tabFolder, books);
-
     tabFolder.append("TabItem", {
       index: 0,
       text: "Related",
       control: booksList
     });
-
     var tabRelatedComposite = tabFolder.append("Composite", {});
-
     tabRelatedComposite.append("Label", {
       text: "Great Book.",
       layoutData: { left: PAGE_MARGIN, top: PAGE_MARGIN, right: PAGE_MARGIN, bottom: PAGE_MARGIN }
     });
-
     tabFolder.append("TabItem", {
       index: 1,
       text: "Comments",
       control: tabRelatedComposite
     });
-
     return page;
   }
 
   function createBooksList(parent, books) {
-
     var list = parent.append("List", {
       itemCount: books.length,
       linesVisible: true,
@@ -168,34 +132,24 @@ tabris.load(function() {
       rowTemplate: [
         {
           type: "image",
-          left: [0, PAGE_MARGIN],
-          top: [0, PAGE_MARGIN],
-          width: 32,
-          height: 48,
+          bindingIndex: 0,
           scaleMode: "FIT",
-          bindingIndex: 0
+          left: [0, PAGE_MARGIN], top: [0, PAGE_MARGIN], width: 32, height: 48
         },
         {
           type: "text",
-          left: [0, 56],
-          right: [0, PAGE_MARGIN],
-          top: [0, PAGE_MARGIN],
-          bottom: [0, 0],
           bindingIndex: 1,
+          left: [0, 56], right: [0, PAGE_MARGIN], top: [0, PAGE_MARGIN], bottom: [0, 0],
           foreground: "rgb(74, 74, 74)"
         },
         {
           type: "text",
-          left: [0, 56],
-          right: [0, PAGE_MARGIN],
-          top: [0, 36],
-          bottom: [0, 0],
           bindingIndex: 2,
+          left: [0, 56], right: [0, PAGE_MARGIN], top: [0, 36], bottom: [0, 0],
           foreground: "rgb(123, 123, 123)"
         }
       ]
     });
-
     list.on("Selection", function(event) {
       var listItem = tabris._proxies[event.item];
       var index = listItem.get("index");
@@ -205,11 +159,10 @@ tabris.load(function() {
     for (var i = 0; i < books.length; i++) {
       list.append("ListItem", {
         index: i,
-        texts: [ "", books[i].title, books[i].author],
+        texts: ["", books[i].title, books[i].author],
         images: [books[i].image, null, null]
       });
     }
-
     return list;
   }
 
@@ -217,12 +170,10 @@ tabris.load(function() {
     var page = tabris.createPage({
       title: "Settings"
     });
-
     page.append("Label", {
       text: "Settings",
       layoutData: { left: PAGE_MARGIN, right: PAGE_MARGIN, top: PAGE_MARGIN, bottom: PAGE_MARGIN }
     });
-
     return  page;
   }
 
