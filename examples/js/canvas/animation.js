@@ -1,14 +1,45 @@
 tabris.load(function() {
 
-  function example(ctx, width, height) {
-    var cx = Math.floor(width / 3);
-    var cy = Math.floor(height / 2);
-    var unit = width / 12;
+  function Example() {
+    var ctx, width, height, cx, cy, unit;
     var angle = 0;
     var timerId = null;
+    var running = false;
 
-    ctx.font = '18px sans-serif';
-    ctx.lineJoin = 'round';
+    this.init = function(newCtx, newWidth, newHeight) {
+      ctx = newCtx;
+      width = newWidth;
+      height = newHeight;
+      ctx.font = '18px sans-serif';
+      ctx.lineJoin = 'round';
+      cx = Math.floor(width / 3);
+      cy = Math.floor(height / 2);
+      unit = width / 12;
+      // initial draw
+      if(!running) {
+        draw();
+      }
+    };
+
+    this.start = function() {
+      clearTimeout(timerId);
+      running = true;
+      draw();
+    };
+
+    this.stop = function() {
+      clearTimeout(timerId);
+      running = false;
+    };
+
+    this.toggle = function() {
+      if(running) {
+        this.stop();
+      } else {
+        this.start();
+      }
+      return running;
+    };
 
     function draw() {
       clear();
@@ -19,9 +50,10 @@ tabris.load(function() {
       drawFpsLabel();
       speedometer.update();
       angle += Math.PI / 90;
-      // cancel pending timer and schedule
-      clearTimeout(timerId);
-      timerId = setTimeout(draw, 0);
+      // re-schedule
+      if(running) {
+        timerId = setTimeout(draw, 0);
+      }
     }
 
     function clear() {
@@ -135,26 +167,33 @@ tabris.load(function() {
         }
       }
     };
-
-    draw();
   }
+
+  var example = new Example();
 
   var page = tabris.createPage({
     title: "Animation",
     topLevel: true
   });
 
-  var canvas = page.append("Canvas", {
-    layoutData: {left: 10, top: 10, right: 10, bottom: 10}
+  var button = page.append("Button", {
+    text: "start",
+    layoutData: {left: 10, bottom: 10}
+  }).on("Selection", function() {
+    var running = example.toggle();
+    button.set("text", running ? "stop" : "start");
   });
 
-  // TODO hook into resize function on canvas
-  tabris._shell.on("Resize", function() {
-    // obtain real size from canvas
-    var width = 500;
-    var height = 250;
+  var canvas = page.append("Canvas", {
+    layoutData: {left: 10, top: 10, right: 10, bottom: [button, 10]}
+  });
+
+  canvas.on("Resize", function() {
+    var bounds = canvas.get("bounds");
+    var width = bounds[2];
+    var height = Math.min(bounds[3], Math.floor(width/2));
     var ctx = tabris.getContext(canvas, width, height);
-    example(ctx, width, height);
+    example.init(ctx, width, height);
   });
 
 });
