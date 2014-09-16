@@ -6,10 +6,10 @@ tabris.load(function() {
     var timerId = null;
     var running = false;
 
-    this.init = function(newCtx, newWidth, newHeight) {
+    this.init = function(newCtx) {
       ctx = newCtx;
-      width = newWidth;
-      height = newHeight;
+      width = ctx.canvas.width;
+      height = ctx.canvas.height;
       ctx.font = '18px sans-serif';
       ctx.lineJoin = 'round';
       cx = Math.floor(width / 3);
@@ -193,7 +193,7 @@ tabris.load(function() {
     var width = bounds[2];
     var height = Math.min(bounds[3], Math.floor(width/2));
     var ctx = tabris.getContext(canvas, width, height);
-    example.init(ctx, width, height);
+    example.init(ctx);
   });
 
 });

@@ -68,6 +68,13 @@ describe("CanvasContext", function() {
       expect(call.parameters.height).toEqual(100);
     });
 
+    it("updates width and height in canvas dummy", function() {
+      ctx = tabris.getContext(canvas, 100, 200);
+
+      expect(ctx.canvas.width).toEqual(100);
+      expect(ctx.canvas.height).toEqual(200);
+    });
+
   });
 
   describe("lineWidth", function() {

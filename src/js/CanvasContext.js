@@ -10,6 +10,10 @@
     this._state = createState();
     this._savedStates = [];
     this._operations = [];
+    this.canvas = {
+      width : 0,
+      height: 0
+    };
     for(var name in properties) {
       defineProperty(this, name);
     }
@@ -94,26 +98,33 @@
       this._flush();
     },
 
+    _init: function( width, height) {
+      this.canvas.width = width;
+      this.canvas.height = height;
+      this._gc.call("init", {
+        width: width,
+        height: height,
+        font: [["sans-serif"], 12, false, false],
+        fillStyle: [0, 0, 0, 255],
+        strokeStyle: [0, 0, 0, 255]
+      });
+    },
+
     _flush: function() {
       this._gc.call("draw", { "operations": this._operations });
       this._operations = [];
     }
+
   };
 
   tabris.getContext = function( canvas, width, height ) {
     if( !canvas._gc ) {
       canvas._gc = canvas.append("GC", {});
     }
-    canvas._gc.call("init", {
-      width: width,
-      height: height,
-      font: [["sans-serif"], 12, false, false],
-      fillStyle: [0, 0, 0, 255],
-      strokeStyle: [0, 0, 0, 255]
-    });
     if( !canvas._ctx ) {
       canvas._ctx = new tabris.CanvasContext( canvas._gc );
     }
+    canvas._ctx._init( width, height );
     return canvas._ctx;
   };
 
