@@ -219,6 +219,31 @@ describe("XMLHttpRequest", function() {
       }));
     });
 
+    it("calls proxy send with data property", function() {
+      initializeProxy(xhr);
+      proxy.call = jasmine.createSpy("call");
+      xhr.open("POST", "http://foo.com");
+      xhr.send("foo");
+      expect(proxy.call).toHaveBeenCalledWith("send", jasmine.objectContaining({
+        data: "foo"
+      }));
+    });
+
+    it("calls proxy send with null data if request method is HEAD or GET", function() {
+      initializeProxy(xhr);
+      proxy.call = jasmine.createSpy("call");
+      xhr.open("GET", "http://foo.com");
+      xhr.send("foo");
+      expect(proxy.call).toHaveBeenCalledWith("send", jasmine.objectContaining({
+        data: null
+      }));
+      xhr.open("HEAD", "http://foo.com");
+      xhr.send("foo");
+      expect(proxy.call).toHaveBeenCalledWith("send", jasmine.objectContaining({
+        data: null
+      }));
+    });
+
     it("calls proxy send with headers property and appended header", function() {
       initializeProxy(xhr);
       proxy.call = jasmine.createSpy("call");
@@ -245,13 +270,20 @@ describe("XMLHttpRequest", function() {
 
     it("resets uploadCompleted", function() {
       xhr.upload.onprogress = jasmine.createSpy("onprogress");
-      xhr.open("GET", "http://foo.com");
+      xhr.open("POST", "http://foo.com");
       proxy._notifyListeners("StateChange", [{state: "headers"}]);
       proxy._notifyListeners("StateChange", [{state: "error"}]);
       expect(xhr.upload.onprogress).not.toHaveBeenCalled();
-      xhr.send();
+      xhr.send("foo");
       proxy._notifyListeners("StateChange", [{state: "error"}]);
       expect(xhr.upload.onprogress).toHaveBeenCalled();
+    });
+
+    it("sets uploadCompleted when requestBody empty", function() {
+      xhr.upload.onloadstart = jasmine.createSpy("onloadstart");
+      xhr.open("GET", "http://foo.com");
+      xhr.send();
+      expect(xhr.upload.onloadstart).not.toHaveBeenCalled();
     });
 
     it("calls onloadstart", function() {
@@ -263,8 +295,8 @@ describe("XMLHttpRequest", function() {
 
     it("calls upload onloadstart", function() {
       xhr.upload.onloadstart = jasmine.createSpy("onloadstart");
-      xhr.open("GET", "http://foobar.com");
-      xhr.send();
+      xhr.open("POST", "http://foobar.com");
+      xhr.send("foo");
       expect(xhr.upload.onloadstart).toHaveBeenCalled();
     });
 
@@ -442,8 +474,8 @@ describe("XMLHttpRequest", function() {
           xhr.upload.onprogress = jasmine.createSpy("onprogress");
           xhr.upload[handler] = jasmine.createSpy(handler);
           xhr.upload.onloadend = jasmine.createSpy("onloadend");
-          xhr.open("GET", "http://foo.com");
-          xhr.send();
+          xhr.open("POST", "http://foo.com");
+          xhr.send("foo");
           proxy._notifyListeners("StateChange", [{state: entry}]);
           expect(xhr.upload.onprogress).toHaveBeenCalled();
           expect(xhr.upload[handler]).toHaveBeenCalled();
@@ -553,8 +585,8 @@ describe("XMLHttpRequest", function() {
 
     it("dispatches upload progress events when send interrupted", function() {
       handlers.forEach(function(handler) {
-        xhr.open("GET", "http://www.foo.com");
-        xhr.send();
+        xhr.open("POST", "http://www.foo.com");
+        xhr.send("foo");
         xhr.upload[handler] = jasmine.createSpy(handler);
         xhr.abort();
         expect(xhr.upload[handler]).toHaveBeenCalled();

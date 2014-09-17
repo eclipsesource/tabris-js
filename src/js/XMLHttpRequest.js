@@ -324,7 +324,7 @@
   };
 
   var createSendMethod = function(xhr, scope) {
-    return function() { // #the-send()-method
+    return function(data) { // #the-send()-method
       scope.proxy = tabris.create("tabris.HttpRequest");
       scope.proxy.on("StateChange", function(e) {
         stateChangeHandler(e, xhr, scope);
@@ -343,9 +343,16 @@
       if(scope.sendInvoked) { // (2)
         throw new Error("InvalidStateError: 'send' invoked, failed to execute 'send'");
       }
-      // (3), (4): TODO: handle data
+      if(["GET", "HEAD"].indexOf(scope.requestMethod) > -1) { // (3)
+        data = null;
+      }
+      scope.requestBody = data; // (4)
+      // TODO: support encoding and mimetype for string response types
       // (5): no storage mutex
       scope.error = scope.uploadComplete = false; // (6), see (8)
+      if(!data) { // (7)
+        scope.uploadComplete = true;
+      }
       // (8): uploadEvents is relevant for the "force preflight flag", but this logic is handled by
       // the client
       // Basic access authentication
@@ -357,15 +364,16 @@
       }
       scope.sendInvoked = true; // (9.1)
       dispatchProgressEvent("loadstart", xhr); // (9.2)
-      // Note: should not be called if uplodComplete is true, but until data attribute handling is
-      // implemented this state is not reachable
-      dispatchProgressEvent("loadstart", xhr.upload); // (9.3)
+      if(!scope.uploadComplete) {
+        dispatchProgressEvent("loadstart", xhr.upload); // (9.3)
+      }
       // (10): only handling the same origin case
       scope.proxy.call("send", { // request URL fetch
         url: scope.requestUrl.source,
         method: scope.requestMethod,
         timeout: xhr.timeout,
-        headers: scope.authorRequestHeaders
+        headers: scope.authorRequestHeaders,
+        data: scope.requestBody
       });
     };
   };
