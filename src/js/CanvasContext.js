@@ -31,6 +31,8 @@
       this._state = this._savedStates.pop() || this._state;
     },
 
+    // Path operations
+
     beginPath: function() {
       this._operations.push(["beginPath"]);
     },
@@ -62,6 +64,30 @@
     arc: function(x, y, radius, startAngle, endAngle, anticlockwise) {
       this._operations.push(["arc", x, y, radius, startAngle, endAngle, !!anticlockwise]);
     },
+
+    // Transformations
+
+    scale: function(x, y) {
+      this._operations.push(["scale", x, y]);
+    },
+
+    rotate: function(angle) {
+      this._operations.push(["rotate", angle]);
+    },
+
+    translate: function(x, y) {
+      this._operations.push(["translate", x, y]);
+    },
+
+    transform: function(a, b, c, d, e, f) {
+      this._operations.push(["transform", a, b, c, d, e, f]);
+    },
+
+    setTransform: function(a, b, c, d, e, f) {
+      this._operations.push(["setTransform", a, b, c, d, e, f]);
+    },
+
+    // Drawing operations
 
     clearRect: function(x, y, width, height) {
       this._operations.push(["clearRect", x, y, width, height]);

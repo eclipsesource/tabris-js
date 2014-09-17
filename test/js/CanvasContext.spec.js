@@ -495,6 +495,71 @@ describe("CanvasContext", function() {
 
   });
 
+  describe("transformations", function() {
+
+    it("aren't rendered before flush", function() {
+      ctx.setTransform(1, 2, 3, 4, 5, 6);
+      ctx.transform(1, 2, 3, 4, 5, 6);
+      ctx.translate(23, 42);
+      ctx.rotate(3.14);
+      ctx.scale(2, 3);
+
+      expect(getDrawOperations()).not.toBeDefined();
+    });
+
+    it("are rendered on flush", function() {
+      ctx.setTransform(1, 2, 3, 4, 5, 6);
+      ctx.transform(1, 2, 3, 4, 5, 6);
+      ctx.translate(23, 42);
+      ctx.rotate(3.14);
+      ctx.scale(2, 3);
+
+      ctx.rect(10, 20, 30, 40);
+      ctx.fill();
+
+      expect(getDrawOperations().length).toEqual(7);
+      expect(getDrawOperations()[0]).toEqual(["setTransform", 1, 2, 3, 4, 5, 6]);
+      expect(getDrawOperations()[5]).toEqual(["rect", 10, 20, 30, 40]);
+      expect(getDrawOperations()[6]).toEqual(["fill"]);
+    });
+
+    it("scale", function() {
+      ctx.scale(2, 3);
+      ctx.fill();
+
+      expect(getDrawOperations()[0]).toEqual(["scale", 2, 3]);
+    });
+
+    it("rotate", function() {
+      ctx.rotate(3.14);
+      ctx.fill();
+
+      expect(getDrawOperations()[0]).toEqual(["rotate", 3.14]);
+    });
+
+    it("translate", function() {
+      ctx.translate(23, 42);
+      ctx.fill();
+
+      expect(getDrawOperations()[0]).toEqual(["translate", 23, 42]);
+    });
+
+    it("transform", function() {
+      ctx.transform(1, 2, 3, 4, 5, 6);
+      ctx.fill();
+
+      expect(getDrawOperations()[0]).toEqual(["transform", 1, 2, 3, 4, 5, 6]);
+    });
+
+    it("setTransform", function() {
+      ctx.setTransform(1, 2, 3, 4, 5, 6);
+      ctx.fill();
+
+      expect(getDrawOperations()[0]).toEqual(["setTransform", 1, 2, 3, 4, 5, 6]);
+    });
+
+  });
+
   describe("fill", function() {
 
     it("is rendered immediately", function() {
