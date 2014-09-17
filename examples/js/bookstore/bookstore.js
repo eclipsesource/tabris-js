@@ -70,7 +70,7 @@ tabris.load(function() {
       }
     });
     detailsComposite.append("Composite", {
-      layoutData: { left: 0, right: 0, top: 0, bottom: 0 }
+      layoutData: { left: 0, right: 0, top: 0, height: 160 + 2 * PAGE_MARGIN }
     }).on("MouseUp", function() {
       createReadBookPage(book).open();
     });
