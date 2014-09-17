@@ -571,7 +571,7 @@
     // non-RFC compliant validation for HTTP header values ported from Chromium:
     // https://chromium.googlesource.com/chromium/blink.git/+/master/Source/platform/network/HTTPParsers.cpp
     // Regex for Latin-1 characters only: https://gist.github.com/LeoDutra/3044325
-    if(!(/[A-z\u00C0-\u00ff]+/g).test(value) || value.indexOf("\n") > -1 || value.indexOf("\r") > -1 ) {
+    if(!(/[*A-z\u00C0-\u00ff]+/g).test(value) || value.indexOf("\n") > -1 || value.indexOf("\r") > -1) {
       return false;
     }
     return true;

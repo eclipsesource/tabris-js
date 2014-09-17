@@ -638,6 +638,11 @@ describe("XMLHttpRequest", function() {
       );
     });
 
+    it("doesn't fail with HTTP header values containing wildcards", function() {
+      xhr.open("GET", "http://foo.com");
+      xhr.setRequestHeader("Foo", "*/*");
+    });
+
     it("fails with case variant of forbidden header", function() {
       xhr.open("GET", "http://foo.com");
       expect(function() {
