@@ -1088,21 +1088,3 @@ describe("XMLHttpRequest", function() {
   });
 
 });
-
-describe("XMLHttpRequestEvent", function() {
-  describe("constructor", function() {
-    it("initializes properties", function() {
-      var xhrEvent = new tabris.XMLHttpRequestEvent("type", {bubbles: true, cancelable: true});
-      expect("type" in xhrEvent).toBe(true);
-      expect("target" in xhrEvent).toBe(true);
-      expect("currentTarget" in xhrEvent).toBe(true);
-      expect("eventPhase" in xhrEvent).toBe(true);
-      expect("bubbles" in xhrEvent).toBe(true);
-      expect("cancelable" in xhrEvent).toBe(true);
-      expect("defaultPrevented" in xhrEvent).toBe(true);
-      expect("isTrusted" in xhrEvent).toBe(true);
-      expect("timeStamp" in xhrEvent).toBe(true);
-      expect("phases" in xhrEvent).toBe(true);
-    });
-  });
-});

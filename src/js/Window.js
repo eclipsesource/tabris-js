@@ -53,6 +53,7 @@
 
   if( typeof Window === "function" ) {
     tabris._addWindowMethods( Window.prototype );
+    tabris._addEventTargetMethods( Window );
   }
 
 })();

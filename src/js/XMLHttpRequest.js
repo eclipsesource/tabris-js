@@ -48,44 +48,9 @@
   /////////
   // Events
 
-  tabris.XMLHttpRequestEvent = function(type, eventInitDict) {
-    this.type = type;
-    this.timeStamp = Date.now();
-    if(typeof eventInitDict != "undefined") {
-      if("bubbles" in eventInitDict) {
-        this.bubbles = eventInitDict.bubbles;
-      }
-      if("cancelable" in eventInitDict) {
-        this.cancelable = eventInitDict.cancelable;
-      }
-    }
-  };
-
-  var noop = function() {};
-
-  tabris.XMLHttpRequestEvent.prototype = {
-    type: "",
-    target: null,
-    currentTarget: null,
-    eventPhase: this.UNSENT,
-    bubbles: false,
-    cancelable: false,
-    defaultPrevented: false,
-    isTrusted: false,
-    stopPropagation: noop,
-    stopImmediatePropagation: noop,
-    preventDefault: noop,
-    phases: {
-      NONE: 0,
-      CAPTURING_PHASE: 1,
-      AT_TARGET: 2,
-      BUBBLING_PHASE: 3
-    }
-  };
-
   tabris.XMLHttpRequestProgressEvent = function() {};
 
-  tabris.XMLHttpRequestProgressEvent.prototype = util.extendPrototype(tabris.XMLHttpRequestEvent, {
+  tabris.XMLHttpRequestProgressEvent.prototype = util.extendPrototype(tabris.Event, {
     lengthComputable: false,
     loaded: 0,
     total: 0
@@ -671,7 +636,7 @@
   };
 
   var initXhrEvent = function(type, target) {
-    var xhrEvent = new tabris.XMLHttpRequestEvent(type);
+    var xhrEvent = new tabris.Event(type);
     xhrEvent.currentTarget = xhrEvent.target = target;
     return xhrEvent;
   };
@@ -681,7 +646,6 @@
 
   if(typeof XMLHttpRequest === "undefined") {
     window.XMLHttpRequest = tabris.XMLHttpRequest;
-    window.XMLHttpRequestEvent = tabris.XMLHttpRequestEvent;
     window.XMLHttpRequestProgressEvent= tabris.XMLHttpRequestProgressEvent;
   }
 
