@@ -4,6 +4,12 @@
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.js"
     },
     {
+      "src": "../../jquery/domMock.js"
+    },
+    {
+      "src": "../../jquery/jquery.js"
+    },
+    {
       "src": "http://underscorejs.org/underscore-min.js"
     },
     {

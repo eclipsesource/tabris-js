@@ -42,7 +42,7 @@ todo.TodoEditView = Backbone.View.extend({
   close: function() {
     var editedTodo = this.inputText.get("text");
     if(editedTodo) {
-      this.model.set({
+      this.model.save({
         "title": this.inputText.get("text"),
         "priority": this.priorityCombo.get("selectionIndex")
       });

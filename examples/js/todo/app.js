@@ -13,11 +13,7 @@
 
   var createModel = function() {
     var todos = new todo.TodoList();
-    todos.create({title: "Buy milk"});
-    todos.create({title: "Buy carrots"});
-    todos.create({title: "Buy tomatoes"});
-    todos.create({title: "Drink beer", priority: todo.PRIORITY_HIGH});
-    todos.create({title: "Go to sleep", priority: todo.PRIORITY_LOW});
+    todos.fetch();
     return todos;
   };
 

@@ -4,6 +4,8 @@ todo = window.todo || {};
 
 todo.TodoList = Backbone.Collection.extend({
 
+  url: "http://192.168.x.xxx:3000",
+
   model: todo.TodoItem,
 
   done: function() {

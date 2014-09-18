@@ -17,12 +17,6 @@
 /*jshint undef:false */
 (function() {
 
-  // Overwritten sync because we do not use a remote data source (sync requires a set URL-option).
-  // sync() gets indirectly called by create() and directly by destroy().
-  Backbone.sync = function() {
-    return null;
-  };
-
   var View = Backbone.View = function(options) {
     this.cid = _.uniqueId('view');
     options = options || {};

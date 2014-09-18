@@ -101,7 +101,7 @@ todo.TodoListView = Backbone.View.extend({
 
   toggleAllComplete: function() {
     var checked = this.markAllCheckbox.get("selection");
-    this.model.invoke("set", "done", checked);
+    this.model.invoke("save", "done", checked);
   }
 
 });

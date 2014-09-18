@@ -4,6 +4,8 @@ todo = window.todo || {};
 
 todo.TodoItem = Backbone.Model.extend({
 
+  urlRoot: "http://192.168.x.xxx:3000",
+
   defaults: function() {
     return {
       order: this.collection.nextOrder(),

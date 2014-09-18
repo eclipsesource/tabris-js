@@ -40,7 +40,7 @@ todo.TodoItemView = Backbone.View.extend({
   },
 
   toggleDone: function() {
-    this.model.set("done", this.toggleCheckbox.get("selection"));
+    this.model.save("done", this.toggleCheckbox.get("selection"));
   },
 
   edit: function() {
