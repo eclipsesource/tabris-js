@@ -119,14 +119,14 @@ describe("XMLHttpRequest", function() {
 
     it("resets responseText", function() {
       sendRequest(xhr);
-      proxy._notifyListeners("StateChange", [{state: "finished", response: "foo"}]);
+      proxy.trigger("StateChange", {state: "finished", response: "foo"});
       xhr.open("GET", "http://foo.com");
       expect(xhr.responseText).toBe("");
     });
 
     it("sets sendInvoked to false", function() {
       sendRequest(xhr);
-      proxy._notifyListeners("StateChange", [{state: "finished", response: "foo"}]);
+      proxy.trigger("StateChange", {state: "finished", response: "foo"});
       xhr.open("GET", "http://foo.com");
       xhr.send();
       xhr.open("GET", "http://foo.com");
@@ -260,22 +260,22 @@ describe("XMLHttpRequest", function() {
       sendRequest(xhr);
       xhr.open("GET", "http://foobar.com");
       xhr.send();
-      proxy._notifyListeners("StateChange", [{state: "error"}]);
+      proxy.trigger("StateChange", {state: "error"});
       expect(xhr.responseText).toBe("");
       xhr.open("GET", "http://foo.com");
       xhr.send();
-      proxy._notifyListeners("StateChange", [{state: "finished", response: "foo"}]);
+      proxy.trigger("StateChange", {state: "finished", response: "foo"});
       expect(xhr.responseText).toBe("foo");
     });
 
     it("resets uploadCompleted", function() {
       xhr.upload.onprogress = jasmine.createSpy("onprogress");
       xhr.open("POST", "http://foo.com");
-      proxy._notifyListeners("StateChange", [{state: "headers"}]);
-      proxy._notifyListeners("StateChange", [{state: "error"}]);
+      proxy.trigger("StateChange", {state: "headers"});
+      proxy.trigger("StateChange", {state: "error"});
       expect(xhr.upload.onprogress).not.toHaveBeenCalled();
       xhr.send("foo");
-      proxy._notifyListeners("StateChange", [{state: "error"}]);
+      proxy.trigger("StateChange", {state: "error"});
       expect(xhr.upload.onprogress).toHaveBeenCalled();
     });
 
@@ -336,12 +336,12 @@ describe("XMLHttpRequest", function() {
       });
 
       it("doesn't fail when onreadystatechange not implemented", function() {
-        proxy._notifyListeners("StateChange", [{state: "finished", response: "foo"}]);
+        proxy.trigger("StateChange", {state: "finished", response: "foo"});
       });
 
       it("sets readystatechange event type to 'readystatechange'", function() {
         xhr.onreadystatechange = jasmine.createSpy("onreadystatechange");
-        proxy._notifyListeners("StateChange", [{state: "finished", response: "foo"}]);
+        proxy.trigger("StateChange", {state: "finished", response: "foo"});
         expect(xhr.onreadystatechange).toHaveBeenCalledWith(jasmine.objectContaining({
           type: "readystatechange"
         }));
@@ -349,19 +349,19 @@ describe("XMLHttpRequest", function() {
 
       it("calls onreadystatechange on proxy event state 'headers'", function() {
         xhr.onreadystatechange = jasmine.createSpy("onreadystatechange");
-        proxy._notifyListeners("StateChange", [{state: "headers"}]);
+        proxy.trigger("StateChange", {state: "headers"});
         expect(xhr.onreadystatechange).toHaveBeenCalled();
       });
 
       it("calls onreadystatechange on proxy event state 'loading'", function() {
         xhr.onreadystatechange = jasmine.createSpy("onreadystatechange");
-        proxy._notifyListeners("StateChange", [{state: "loading"}]);
+        proxy.trigger("StateChange", {state: "loading"});
         expect(xhr.onreadystatechange).toHaveBeenCalled();
       });
 
       it("calls onreadystatechange on proxy event state 'finished'", function() {
         xhr.onreadystatechange = jasmine.createSpy("onreadystatechange");
-        proxy._notifyListeners("StateChange", [{state: "finished"}]);
+        proxy.trigger("StateChange", {state: "finished"});
         expect(xhr.onreadystatechange).toHaveBeenCalled();
       });
 
@@ -369,7 +369,7 @@ describe("XMLHttpRequest", function() {
         progressEvents.forEach(function(event){
           var handler = "on" + event;
           xhr.upload[handler] = jasmine.createSpy(handler);
-          proxy._notifyListeners("StateChange", [{state: "headers"}]);
+          proxy.trigger("StateChange", {state: "headers"});
           expect(xhr.upload[handler]).toHaveBeenCalled();
         });
       });
@@ -378,7 +378,7 @@ describe("XMLHttpRequest", function() {
         progressEvents.forEach(function(event){
           var handler = "on" + event;
           xhr[handler] = jasmine.createSpy(handler);
-          proxy._notifyListeners("StateChange", [{state: "finished"}]);
+          proxy.trigger("StateChange", {state: "finished"});
           expect(xhr[handler]).toHaveBeenCalled();
           sendRequest(xhr);
         });
@@ -388,7 +388,7 @@ describe("XMLHttpRequest", function() {
         progressEvents.forEach(function(event){
           var handler = "on" + event;
           xhr.upload[handler] = jasmine.createSpy(handler);
-          proxy._notifyListeners("StateChange", [{state: "finished"}]);
+          proxy.trigger("StateChange", {state: "finished"});
           expect(xhr.upload[handler]).toHaveBeenCalled();
           sendRequest(xhr);
         });
@@ -396,7 +396,7 @@ describe("XMLHttpRequest", function() {
 
       it("sets target and currentTarget to XHR", function() {
         xhr.onreadystatechange = jasmine.createSpy("onreadystatechange");
-        proxy._notifyListeners("StateChange", [{state: "finished", response: "foo"}]);
+        proxy.trigger("StateChange", {state: "finished", response: "foo"});
         expect(xhr.onreadystatechange).toHaveBeenCalledWith(jasmine.objectContaining({
           target: xhr,
           currentTarget: xhr
@@ -404,47 +404,47 @@ describe("XMLHttpRequest", function() {
       });
 
       it("sets state to 'HEADERS_RECEIVED' when proxy event state 'headers'", function() {
-        proxy._notifyListeners("StateChange", [{state: "headers"}]);
+        proxy.trigger("StateChange", {state: "headers"});
         expect(xhr.readyState).toBe(xhr.states.HEADERS_RECEIVED);
       });
 
       it("sets HTTP status code to 'code' when state 'headers'", function() {
-        proxy._notifyListeners("StateChange", [{state: "headers", code: 200}]);
+        proxy.trigger("StateChange", {state: "headers", code: 200});
         expect(xhr.status).toBe(200);
       });
 
       it("sets HTTP statusText to 'message' when state 'headers'", function() {
-        proxy._notifyListeners("StateChange", [{state: "headers", message: "OK"}]);
+        proxy.trigger("StateChange", {state: "headers", message: "OK"});
         expect(xhr.statusText).toBe("OK");
       });
 
       it("sets response headers to headers when proxy event state 'headers'", function() {
-        proxy._notifyListeners("StateChange", [{
+        proxy.trigger("StateChange", {
           state: "headers",
           code: 200,
           headers: {"Header-Name1": "foo", "Header-Name2": "bar, baz"}
-        }]);
+        });
         expect(xhr.getAllResponseHeaders()).toBe("Header-Name1: foo\nHeader-Name2: bar, baz");
       });
 
       it("sets state to 'LOADING' when proxy event state 'loading'", function() {
-        proxy._notifyListeners("StateChange", [{state: "loading"}]);
+        proxy.trigger("StateChange", {state: "loading"});
         expect(xhr.readyState).toBe(xhr.states.LOADING);
       });
 
       it("sets state to 'DONE' when proxy event state 'finished'", function() {
-        proxy._notifyListeners("StateChange", [{state: "finished", response: "foo"}]);
+        proxy.trigger("StateChange", {state: "finished", response: "foo"});
         expect(xhr.readyState).toBe(xhr.states.DONE);
       });
 
       it("sets responseText to 'response' when proxy event state 'finished'", function() {
-        proxy._notifyListeners("StateChange", [{state: "finished", response: "foo"}]);
+        proxy.trigger("StateChange", {state: "finished", response: "foo"});
         expect(xhr.responseText).toBe("foo");
       });
 
       it("sets state to 'DONE' on request error", function() {
         requestErrors.forEach(function(entry) {
-          proxy._notifyListeners("StateChange", [{state: entry}]);
+          proxy.trigger("StateChange", {state: entry});
           expect(xhr.readyState).toBe(xhr.states.DONE);
         });
       });
@@ -452,7 +452,7 @@ describe("XMLHttpRequest", function() {
       it("calls onreadystatechange on request error", function() {
         requestErrors.forEach(function(entry) {
           xhr.onreadystatechange = jasmine.createSpy("onreadystatechange");
-          proxy._notifyListeners("StateChange", [{state: entry}]);
+          proxy.trigger("StateChange", {state: entry});
           expect(xhr.onreadystatechange).toHaveBeenCalled();
         });
       });
@@ -463,7 +463,7 @@ describe("XMLHttpRequest", function() {
           xhr.onprogress = jasmine.createSpy("onprogress");
           xhr[handler] = jasmine.createSpy(handler);
           xhr.onloadend = jasmine.createSpy("onloadend");
-          proxy._notifyListeners("StateChange", [{state: entry}]);
+          proxy.trigger("StateChange", {state: entry});
           expect(xhr.onprogress).toHaveBeenCalled();
           expect(xhr[handler]).toHaveBeenCalled();
           expect(xhr.onloadend).toHaveBeenCalled();
@@ -478,7 +478,7 @@ describe("XMLHttpRequest", function() {
           xhr.upload.onloadend = jasmine.createSpy("onloadend");
           xhr.open("POST", "http://foo.com");
           xhr.send("foo");
-          proxy._notifyListeners("StateChange", [{state: entry}]);
+          proxy.trigger("StateChange", {state: entry});
           expect(xhr.upload.onprogress).toHaveBeenCalled();
           expect(xhr.upload[handler]).toHaveBeenCalled();
           expect(xhr.upload.onloadend).toHaveBeenCalled();
@@ -493,8 +493,8 @@ describe("XMLHttpRequest", function() {
           xhr.upload.onloadend = jasmine.createSpy("onloadend");
           xhr.open("GET", "http://foo.com");
           xhr.send();
-          proxy._notifyListeners("StateChange", [{state: "headers"}]);
-          proxy._notifyListeners("StateChange", [{state: entry}]);
+          proxy.trigger("StateChange", {state: "headers"});
+          proxy.trigger("StateChange", {state: entry});
           expect(xhr.upload.onprogress).not.toHaveBeenCalled();
           expect(xhr.upload[handler]).not.toHaveBeenCalled();
           expect(xhr.upload.onloadend.calls.count()).toEqual(1); // called on "headers" stateChange
@@ -502,15 +502,15 @@ describe("XMLHttpRequest", function() {
       });
 
       it("sets error to true on request error", function() {
-        proxy._notifyListeners("StateChange", [{state: "finished", response: "foo"}]);
+        proxy.trigger("StateChange", {state: "finished", response: "foo"});
         sendRequest(xhr);
-        proxy._notifyListeners("StateChange", [{state: "error"}]);
+        proxy.trigger("StateChange", {state: "error"});
         expect(xhr.responseText).toBe("");
       });
 
       it("calls onprogress on proxy event 'DownloadRequest'", function() {
         xhr.onprogress = jasmine.createSpy("onprogress");
-        proxy._notifyListeners("DownloadProgress", [{lengthComputable: true, loaded: 50, total: 100}]);
+        proxy.trigger("DownloadProgress", {lengthComputable: true, loaded: 50, total: 100});
         expect(xhr.onprogress).toHaveBeenCalledWith(jasmine.objectContaining({
           lengthComputable: true,
           loaded: 50,
@@ -520,7 +520,7 @@ describe("XMLHttpRequest", function() {
 
       it("calls upload.onprogress on proxy event 'UploadRequest'", function() {
         xhr.upload.onprogress = jasmine.createSpy("onprogress");
-        proxy._notifyListeners("UploadProgress", [{lengthComputable: true, loaded: 50, total: 100}]);
+        proxy.trigger("UploadProgress", {lengthComputable: true, loaded: 50, total: 100});
         expect(xhr.upload.onprogress).toHaveBeenCalledWith(jasmine.objectContaining({
           lengthComputable: true,
           loaded: 50,
@@ -557,7 +557,7 @@ describe("XMLHttpRequest", function() {
 
     it("changes state to 'UNSENT' with state 'DONE'", function() {
       sendRequest(xhr);
-      proxy._notifyListeners("StateChange", [{state: "finished", response: "foo"}]);
+      proxy.trigger("StateChange", {state: "finished", response: "foo"});
       xhr.abort();
       expect(xhr.readyState).toBe(xhr.states.UNSENT);
     });
@@ -600,7 +600,7 @@ describe("XMLHttpRequest", function() {
       handlers.forEach(function(handler) {
         xhr.open("GET", "http://www.foo.com");
         xhr.send();
-        proxy._notifyListeners("StateChange", [{state: "headers"}]);
+        proxy.trigger("StateChange", {state: "headers"});
         xhr.upload[handler] = jasmine.createSpy(handler);
         xhr.abort();
         if(handler != "loadend") {
@@ -678,25 +678,25 @@ describe("XMLHttpRequest", function() {
     });
 
     it("returns empty string when state not allowed", function() {
-      proxy._notifyListeners("StateChange", [{
+      proxy.trigger("StateChange", {
         state: "headers",
         headers: {"Header-Name1": "foo", "Header-Name2": "bar, baz"}
-      }]);
+      });
       xhr.open("GET", "http://foo.com");
       expect(xhr.getAllResponseHeaders()).toBe("");
     });
 
     it("returns empty string on error", function() {
-      proxy._notifyListeners("StateChange", [{
+      proxy.trigger("StateChange", {
         state: "headers",
         headers: {"Header-Name1": "foo", "Header-Name2": "bar, baz"}
-      }]);
-      proxy._notifyListeners("StateChange", [{state: "error"}]);
+      });
+      proxy.trigger("StateChange", {state: "error"});
       expect(xhr.getAllResponseHeaders()).toBe("");
     });
 
     it("returns response headers without forbidden headers", function() {
-      proxy._notifyListeners("StateChange", [{
+      proxy.trigger("StateChange", {
         state: "headers",
         code: 200,
         headers: {
@@ -706,7 +706,7 @@ describe("XMLHttpRequest", function() {
           "Header-Name1": "foo",
           "Header-Name2": "bar, baz"
         }
-      }]);
+      });
       expect(xhr.getAllResponseHeaders()).toBe("Header-Name1: foo\nHeader-Name2: bar, baz");
     });
 
@@ -719,33 +719,33 @@ describe("XMLHttpRequest", function() {
     });
 
     it("returns null when readyState not allowed", function() {
-      proxy._notifyListeners("StateChange", [{
+      proxy.trigger("StateChange", {
         state: "headers",
         headers: {"Header-Name1": "foo", "Header-Name2": "bar, baz"}
-      }]);
+      });
       xhr.open("GET", "http://foo.com");
       expect(xhr.getResponseHeader("Header-Name1")).toBe(null);
     });
 
     it("returns null on error", function() {
-      proxy._notifyListeners("StateChange", [{
+      proxy.trigger("StateChange", {
         state: "headers",
         headers: {"Header-Name1": "foo", "Header-Name2": "bar, baz"}
-      }]);
-      proxy._notifyListeners("StateChange", [{state: "error"}]);
+      });
+      proxy.trigger("StateChange", {state: "error"});
       expect(xhr.getResponseHeader("Header-Name1")).toBe(null);
     });
 
     it("returns response header", function() {
-      proxy._notifyListeners("StateChange", [{
+      proxy.trigger("StateChange", {
         state: "headers",
         headers: {"Header-Name1": "foo", "Header-Name2": "bar, baz"}
-      }]);
+      });
       expect(xhr.getResponseHeader("Header-Name1")).toBe("foo");
     });
 
     it("doesn't return forbidden response headers", function() {
-      proxy._notifyListeners("StateChange", [{
+      proxy.trigger("StateChange", {
         state: "headers",
         headers: {
           "Status": "foo",
@@ -754,7 +754,7 @@ describe("XMLHttpRequest", function() {
           "Header-Name1": "foo",
           "Header-Name2": "bar, baz"
         }
-      }]);
+      });
       expect(xhr.getResponseHeader("Status")).toBe(null);
       expect(xhr.getResponseHeader("Set-Cookie")).toBe(null);
       expect(xhr.getResponseHeader("Set-Cookie2")).toBe(null);
@@ -821,34 +821,34 @@ describe("XMLHttpRequest", function() {
       });
 
       it("fails when responseText was not a string", function() {
-        proxy._notifyListeners("StateChange", [{state: "finished", response: 2}]);
+        proxy.trigger("StateChange", {state: "finished", response: 2});
         expect(function() {
-          /* jshint unused: false */
+          /*jshint unused: false */
           var responseText = xhr.responseText;
         }).toThrowError("IllegalStateError: responseText is not a string");
       });
 
       it("returns responseText", function() {
-        proxy._notifyListeners("StateChange", [{state: "finished", response: "foo"}]);
+        proxy.trigger("StateChange", {state: "finished", response: "foo"});
         expect(xhr.responseText).toBe("foo");
       });
 
       it("returns empty string when state not allowed", function() {
-        proxy._notifyListeners("StateChange", [{state: "headers", response: "hello"}]);
+        proxy.trigger("StateChange", {state: "headers", response: "hello"});
         expect(xhr.responseText).toBe("");
       });
 
       it("returns empty string on error", function() {
-        proxy._notifyListeners("StateChange", [{state: "finished", response: "foo"}]);
+        proxy.trigger("StateChange", {state: "finished", response: "foo"});
         sendRequest(xhr);
-        proxy._notifyListeners("StateChange", [{state: "error"}]);
+        proxy.trigger("StateChange", {state: "error"});
         expect(xhr.responseText).toBe("");
       });
 
       it("fails with invalid reponseText type", function() {
-        proxy._notifyListeners("StateChange", [{state: "finished", response:["foo"]}]);
+        proxy.trigger("StateChange", {state: "finished", response:["foo"]});
         expect(function() {
-          /* jshint unused: false */
+          /*jshint unused: false */
           var responseText = xhr.responseText;
         }).toThrowError("IllegalStateError: responseText is not a string");
       });
@@ -871,24 +871,24 @@ describe("XMLHttpRequest", function() {
       });
 
       it("returns empty string when state not allowed", function() {
-        proxy._notifyListeners("StateChange", [{state: "headers", response: "hello"}]);
+        proxy.trigger("StateChange", {state: "headers", response: "hello"});
         expect(xhr.response).toBe("");
       });
 
       it("returns empty string on error", function() {
-        proxy._notifyListeners("StateChange", [{state: "finished", response: "foo"}]);
+        proxy.trigger("StateChange", {state: "finished", response: "foo"});
         sendRequest(xhr);
-        proxy._notifyListeners("StateChange", [{state: "error"}]);
+        proxy.trigger("StateChange", {state: "error"});
         expect(xhr.response).toBe("");
       });
 
       it("returns responseText when responseType empty string or 'text'", function() {
-        proxy._notifyListeners("StateChange", [{state: "finished", response: "foo"}]);
+        proxy.trigger("StateChange", {state: "finished", response: "foo"});
         expect(xhr.response).toBe("foo");
         sendRequest(xhr);
         xhr.open("GET", "http://foo.com");
         xhr.responseType = "text";
-        proxy._notifyListeners("StateChange", [{state: "finished", response: "foo"}]);
+        proxy.trigger("StateChange", {state: "finished", response: "foo"});
         expect(xhr.response).toBe("foo");
       });
 
@@ -906,7 +906,7 @@ describe("XMLHttpRequest", function() {
 
       it("fails with bad state", function() {
         sendRequest(xhr);
-        proxy._notifyListeners("StateChange", [{state: "loading"}]);
+        proxy.trigger("StateChange", {state: "loading"});
         expect(function() {
           xhr.responseType = "foo";
         }).toThrowError(
@@ -994,14 +994,14 @@ describe("XMLHttpRequest", function() {
       });
 
       it("returns 0 when state not allowed", function() {
-        proxy._notifyListeners("StateChange", [{state: "headers", code: 200}]);
+        proxy.trigger("StateChange", {state: "headers", code: 200});
         xhr.open("GET", "http://foo.com");
         expect(xhr.status).toBe(0);
       });
 
       it("returns 0 on error", function() {
-        proxy._notifyListeners("StateChange", [{state: "headers", code: 200}]);
-        proxy._notifyListeners("StateChange", [{state: "error"}]);
+        proxy.trigger("StateChange", {state: "headers", code: 200});
+        proxy.trigger("StateChange", {state: "error"});
         expect(xhr.status).toBe(0);
       });
 
@@ -1027,14 +1027,14 @@ describe("XMLHttpRequest", function() {
       });
 
       it("returns empty string when state not allowed", function() {
-        proxy._notifyListeners("StateChange", [{state: "headers", message: "OK"}]);
+        proxy.trigger("StateChange", {state: "headers", message: "OK"});
         xhr.open("GET", "http://foo.com");
         expect(xhr.statusText).toBe("");
       });
 
       it("returns empty string on error", function() {
-        proxy._notifyListeners("StateChange", [{state: "headers", message: "OK"}]);
-        proxy._notifyListeners("StateChange", [{state: "error"}]);
+        proxy.trigger("StateChange", {state: "headers", message: "OK"});
+        proxy.trigger("StateChange", {state: "error"});
         expect(xhr.statusText).toBe("");
       });
 
@@ -1055,7 +1055,7 @@ describe("XMLHttpRequest", function() {
     describe("set", function() {
 
       it("fails with state other than UNSENT or OPENED", function() {
-        proxy._notifyListeners("StateChange", [{state: "headers", message: "OK"}]);
+        proxy.trigger("StateChange", {state: "headers", message: "OK"});
         expect(function() {
           xhr.withCredentials = true;
         }).toThrowError(

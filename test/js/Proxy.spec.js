@@ -443,10 +443,11 @@ describe( "Proxy", function() {
 
     describe( "off", function() {
 
-      var listener;
+      var listener, listener2;
 
       beforeEach( function() {
         listener = jasmine.createSpy( "listener" );
+        listener2 = jasmine.createSpy( "listener2" );
         proxy.on( "foo", listener );
         nativeBridge.resetCalls();
       } );
@@ -458,8 +459,8 @@ describe( "Proxy", function() {
         expect( call.listen ).toBe( false );
       } );
 
-      it( "calls native listen when there are other listeners for the same event", function() {
-        proxy.on( "foo", listener );
+      it( "does not call native listen when there are other listeners for the same event", function() {
+        proxy.on( "foo", listener2 );
         proxy.off( "foo", listener );
 
         expect( nativeBridge.calls().length ).toBe( 0 );
@@ -497,6 +498,7 @@ describe( "Proxy", function() {
         proxy.dispose();
 
         expect( listener ).toHaveBeenCalled();
+        expect( listener.calls.first().args ).toEqual([ {} ]);
       } );
 
       it( "notifies all children's dispose listeners", function() {
@@ -546,43 +548,6 @@ describe( "Proxy", function() {
         child.dispose();
 
         expect( proxy._children.length ).toBe( 0 );
-      } );
-
-    } );
-
-    describe( "listener management", function() {
-
-      var listener;
-
-      beforeEach( function() {
-        listener = jasmine.createSpy( "listener" );
-      } );
-
-      it( "notify without listeners does not fail", function() {
-        proxy._notifyListeners( "foo", ["bar", 23] );
-      } );
-
-      it( "added listener will be notified", function() {
-        proxy._addListener( "foo", listener );
-        proxy._notifyListeners( "foo", ["bar", 23] );
-
-        expect( listener ).toHaveBeenCalledWith( "bar", 23 );
-      } );
-
-      it( "listeners added twice will be notified twice", function() {
-        proxy._addListener( "foo", listener );
-        proxy._addListener( "foo", listener );
-        proxy._notifyListeners( "foo", ["bar", 23] );
-
-        expect( listener.calls.count() ).toBe( 2 );
-      } );
-
-      it( "removed listeners will not be notfied anymore", function() {
-        proxy._addListener( "foo", listener );
-        proxy._removeListener( "foo", listener );
-        proxy._notifyListeners( "foo", [] );
-
-        expect( listener ).not.toHaveBeenCalled();
       } );
 
     } );

@@ -48,7 +48,7 @@
     }
   };
 
-  tabris.Proxy.prototype = {
+  util.extend(tabris.Proxy.prototype, tabris.Events, {
 
     _create: function( type, properties ) {
       if( properties && properties.parent ) {
@@ -88,17 +88,20 @@
       return this;
     },
 
-    on: function( event, listener ) {
+    on: function( event, listener, context ) {
       this._checkDisposed();
-      if( this._addListener( event, listener ) ) {
+      var wasListening = this._isListening( event );
+      tabris.Events.on.call( this, event, listener, context );
+      if( !wasListening ) {
         tabris._nativeBridge.listen( this.id, event, true );
       }
       return this;
     },
 
-    off: function( event, listener ) {
+    off: function( event, listener, context ) {
       this._checkDisposed();
-      if( this._removeListener( event, listener ) ) {
+      tabris.Events.off.call( this, event, listener, context );
+      if( !this._isListening( event ) ) {
         tabris._nativeBridge.listen( this.id, event, false );
       }
       return this;
@@ -121,40 +124,9 @@
           this._children[i]._destroy();
         }
       }
-      this._notifyListeners( "Dispose", [{}] );
-      this._listeners = null;
+      this.trigger( "Dispose", {} );
+      tabris.Events.off.call( this );
       delete tabris._proxies[this.id];
-    },
-
-    _addListener: function( event, listener ) {
-      if( !this._listeners ) {
-        this._listeners = [];
-      }
-      if( !( event in this._listeners ) ) {
-        this._listeners[ event ] = [];
-      }
-      this._listeners[ event ].push( listener );
-      return this._listeners[ event ].length === 1;
-    },
-
-    _removeListener: function( event, listener ) {
-      if( this._listeners && event in this._listeners ) {
-        var index = this._listeners[ event ].indexOf( listener );
-        if( index !== -1 ) {
-          this._listeners[ event ].splice( index, 1 );
-          return this._listeners[ event ].length === 0;
-        }
-      }
-      return false;
-    },
-
-    _notifyListeners: function( event, args ) {
-      if( this._listeners && event in this._listeners ) {
-        var listeners = this._listeners[event];
-        for( var i = 0; i < listeners.length; i++ ) {
-          listeners[i].apply( this, args );
-        }
-      }
     },
 
     _addChild: function( child ) {
@@ -179,7 +151,7 @@
       }
     }
 
-  };
+  });
 
   function encodeProperties( properties ) {
     var result = {};

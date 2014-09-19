@@ -40,6 +40,7 @@ module.exports = function(grunt) {
                      'util-colors.js',
                      'util-fonts.js',
                      'Tabris.js',
+                     'Events.js',
                      'DOMEvents.js',
                      'Window.js',
                      'Proxy.js',

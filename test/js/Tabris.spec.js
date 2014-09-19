@@ -74,11 +74,11 @@ describe( "tabris", function() {
 
     it( "notifies widget proxy", function() {
       var label = tabris.create( "Label", {} );
-      spyOn( label, "_notifyListeners" );
+      spyOn( label, "trigger" );
 
       tabris._notify( label.id, "foo", { "bar": 23 } );
 
-      expect( label._notifyListeners ).toHaveBeenCalledWith( "foo", [{ "bar": 23 }] );
+      expect( label.trigger ).toHaveBeenCalledWith( "foo", { "bar": 23 } );
     });
 
     it( "sliently ignores events for non-existing ids (does not crash)", function() {

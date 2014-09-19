@@ -36,7 +36,7 @@
     _notify: function( id, event, param ) {
       var proxy = tabris._proxies[ id ];
       if( proxy ) {
-        proxy._notifyListeners( event, [param] );
+        proxy.trigger( event, param );
       }
     },
 
