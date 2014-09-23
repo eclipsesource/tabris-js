@@ -26,7 +26,7 @@ describe("XMLHttpRequest", function() {
     xhr = null;
   });
 
-  var initializeProxy = function(xhr) {
+  var sendRequest = function(xhr) {
     xhr.open("GET", "http://foo.com");
     xhr.send();
   };
@@ -106,7 +106,7 @@ describe("XMLHttpRequest", function() {
     });
 
     it("resets requestHeaders", function() {
-      initializeProxy(xhr);
+      sendRequest(xhr);
       proxy.call = jasmine.createSpy("call");
       xhr.open("GET", "http://foo.com");
       xhr.setRequestHeader("Foo", "Bar");
@@ -118,14 +118,14 @@ describe("XMLHttpRequest", function() {
     });
 
     it("resets responseText", function() {
-      initializeProxy(xhr);
+      sendRequest(xhr);
       proxy._notifyListeners("StateChange", [{state: "finished", response: "foo"}]);
       xhr.open("GET", "http://foo.com");
       expect(xhr.responseText).toBe("");
     });
 
     it("sets sendInvoked to false", function() {
-      initializeProxy(xhr);
+      sendRequest(xhr);
       proxy._notifyListeners("StateChange", [{state: "finished", response: "foo"}]);
       xhr.open("GET", "http://foo.com");
       xhr.send();
@@ -178,7 +178,7 @@ describe("XMLHttpRequest", function() {
     });
 
     it("calls proxy send with request URL specified as open argument", function() {
-      initializeProxy(xhr);
+      sendRequest(xhr);
       proxy.call = jasmine.createSpy("call");
       xhr.open("GET", "http://foo.com");
       xhr.send();
@@ -188,7 +188,7 @@ describe("XMLHttpRequest", function() {
     });
 
     it("calls proxy send with method specified as open argument", function() {
-      initializeProxy(xhr);
+      sendRequest(xhr);
       proxy.call = jasmine.createSpy("call");
       xhr.open("GET", "http://foo.com");
       xhr.send();
@@ -198,7 +198,7 @@ describe("XMLHttpRequest", function() {
     });
 
     it("calls proxy send with timeout property", function() {
-      initializeProxy(xhr);
+      sendRequest(xhr);
       proxy.call = jasmine.createSpy("call");
       xhr.open("GET", "http://foo.com");
       xhr.timeout = 2000;
@@ -209,7 +209,7 @@ describe("XMLHttpRequest", function() {
     });
 
     it("calls proxy send with headers property", function() {
-      initializeProxy(xhr);
+      sendRequest(xhr);
       proxy.call = jasmine.createSpy("call");
       xhr.open("GET", "http://foo.com");
       xhr.setRequestHeader("Foo", "Bar");
@@ -220,7 +220,7 @@ describe("XMLHttpRequest", function() {
     });
 
     it("calls proxy send with data property", function() {
-      initializeProxy(xhr);
+      sendRequest(xhr);
       proxy.call = jasmine.createSpy("call");
       xhr.open("POST", "http://foo.com");
       xhr.send("foo");
@@ -230,7 +230,7 @@ describe("XMLHttpRequest", function() {
     });
 
     it("calls proxy send with null data if request method is HEAD or GET", function() {
-      initializeProxy(xhr);
+      sendRequest(xhr);
       proxy.call = jasmine.createSpy("call");
       xhr.open("GET", "http://foo.com");
       xhr.send("foo");
@@ -245,7 +245,7 @@ describe("XMLHttpRequest", function() {
     });
 
     it("calls proxy send with headers property and appended header", function() {
-      initializeProxy(xhr);
+      sendRequest(xhr);
       proxy.call = jasmine.createSpy("call");
       xhr.open("GET", "http://foo.com");
       xhr.setRequestHeader("Foo", "Bar");
@@ -257,7 +257,7 @@ describe("XMLHttpRequest", function() {
     });
 
     it("resets error", function() {
-      initializeProxy(xhr);
+      sendRequest(xhr);
       xhr.open("GET", "http://foobar.com");
       xhr.send();
       proxy._notifyListeners("StateChange", [{state: "error"}]);
@@ -332,7 +332,7 @@ describe("XMLHttpRequest", function() {
       var progressEvents =  ["load", "loadend"];
 
       beforeEach(function() {
-        initializeProxy(xhr);
+        sendRequest(xhr);
       });
 
       it("doesn't fail when onreadystatechange not implemented", function() {
@@ -380,6 +380,7 @@ describe("XMLHttpRequest", function() {
           xhr[handler] = jasmine.createSpy(handler);
           proxy._notifyListeners("StateChange", [{state: "finished"}]);
           expect(xhr[handler]).toHaveBeenCalled();
+          sendRequest(xhr);
         });
       });
 
@@ -389,6 +390,7 @@ describe("XMLHttpRequest", function() {
           xhr.upload[handler] = jasmine.createSpy(handler);
           proxy._notifyListeners("StateChange", [{state: "finished"}]);
           expect(xhr.upload[handler]).toHaveBeenCalled();
+          sendRequest(xhr);
         });
       });
 
@@ -501,6 +503,7 @@ describe("XMLHttpRequest", function() {
 
       it("sets error to true on request error", function() {
         proxy._notifyListeners("StateChange", [{state: "finished", response: "foo"}]);
+        sendRequest(xhr);
         proxy._notifyListeners("StateChange", [{state: "error"}]);
         expect(xhr.responseText).toBe("");
       });
@@ -538,7 +541,7 @@ describe("XMLHttpRequest", function() {
     });
 
     it("calls proxy abort", function() {
-      initializeProxy(xhr);
+      sendRequest(xhr);
       proxy.call = jasmine.createSpy("call");
       xhr.abort();
       expect(proxy.call).toHaveBeenCalledWith("abort");
@@ -553,7 +556,7 @@ describe("XMLHttpRequest", function() {
     });
 
     it("changes state to 'UNSENT' with state 'DONE'", function() {
-      initializeProxy(xhr);
+      sendRequest(xhr);
       proxy._notifyListeners("StateChange", [{state: "finished", response: "foo"}]);
       xhr.abort();
       expect(xhr.readyState).toBe(xhr.states.UNSENT);
@@ -667,7 +670,7 @@ describe("XMLHttpRequest", function() {
   describe("getAllResponseHeaders", function() {
 
     beforeEach(function() {
-      initializeProxy(xhr);
+      sendRequest(xhr);
     });
 
     it("initially returns an empty string", function() {
@@ -712,7 +715,7 @@ describe("XMLHttpRequest", function() {
   describe("getResponseHeader", function() {
 
     beforeEach(function() {
-      initializeProxy(xhr);
+      sendRequest(xhr);
     });
 
     it("returns null when readyState not allowed", function() {
@@ -814,7 +817,7 @@ describe("XMLHttpRequest", function() {
     describe("get", function() {
 
       beforeEach(function() {
-        initializeProxy(xhr);
+        sendRequest(xhr);
       });
 
       it("fails when responseText was not a string", function() {
@@ -837,6 +840,7 @@ describe("XMLHttpRequest", function() {
 
       it("returns empty string on error", function() {
         proxy._notifyListeners("StateChange", [{state: "finished", response: "foo"}]);
+        sendRequest(xhr);
         proxy._notifyListeners("StateChange", [{state: "error"}]);
         expect(xhr.responseText).toBe("");
       });
@@ -863,7 +867,7 @@ describe("XMLHttpRequest", function() {
     describe("get", function() {
 
       beforeEach(function() {
-        initializeProxy(xhr);
+        sendRequest(xhr);
       });
 
       it("returns empty string when state not allowed", function() {
@@ -873,6 +877,7 @@ describe("XMLHttpRequest", function() {
 
       it("returns empty string on error", function() {
         proxy._notifyListeners("StateChange", [{state: "finished", response: "foo"}]);
+        sendRequest(xhr);
         proxy._notifyListeners("StateChange", [{state: "error"}]);
         expect(xhr.response).toBe("");
       });
@@ -880,6 +885,7 @@ describe("XMLHttpRequest", function() {
       it("returns responseText when responseType empty string or 'text'", function() {
         proxy._notifyListeners("StateChange", [{state: "finished", response: "foo"}]);
         expect(xhr.response).toBe("foo");
+        sendRequest(xhr);
         xhr.open("GET", "http://foo.com");
         xhr.responseType = "text";
         proxy._notifyListeners("StateChange", [{state: "finished", response: "foo"}]);
@@ -899,7 +905,7 @@ describe("XMLHttpRequest", function() {
     describe("set", function() {
 
       it("fails with bad state", function() {
-        initializeProxy(xhr);
+        sendRequest(xhr);
         proxy._notifyListeners("StateChange", [{state: "loading"}]);
         expect(function() {
           xhr.responseType = "foo";
@@ -984,7 +990,7 @@ describe("XMLHttpRequest", function() {
     describe("get", function() {
 
       beforeEach(function() {
-        initializeProxy(xhr);
+        sendRequest(xhr);
       });
 
       it("returns 0 when state not allowed", function() {
@@ -1017,7 +1023,7 @@ describe("XMLHttpRequest", function() {
     describe("get", function() {
 
       beforeEach(function() {
-        initializeProxy(xhr);
+        sendRequest(xhr);
       });
 
       it("returns empty string when state not allowed", function() {
@@ -1039,7 +1045,7 @@ describe("XMLHttpRequest", function() {
   describe("withCredentials", function() {
 
     beforeEach(function() {
-      initializeProxy(xhr);
+      sendRequest(xhr);
     });
 
     it("is initialized with false", function() {

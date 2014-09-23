@@ -497,6 +497,8 @@
         dispatchEvent("readystatechange", xhr);
         dispatchFinishedProgressEvents(xhr);
         dispatchFinishedProgressEvents(xhr.upload);
+        scope.proxy.dispose();
+        scope.proxy = null;
         break;
       case "error":
         handleRequestError("error", xhr, scope);
