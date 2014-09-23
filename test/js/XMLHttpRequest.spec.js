@@ -131,7 +131,7 @@ describe("XMLHttpRequest", function() {
       xhr.send();
       xhr.open("GET", "http://foo.com");
       xhr.abort();
-      expect(xhr.readyState).toBe(xhr.states.UNSENT);
+      expect(xhr.readyState).toBe(xhr.UNSENT);
     });
 
     it("sets url username and password if url relative", function() {
@@ -405,7 +405,7 @@ describe("XMLHttpRequest", function() {
 
       it("sets state to 'HEADERS_RECEIVED' when proxy event state 'headers'", function() {
         proxy.trigger("StateChange", {state: "headers"});
-        expect(xhr.readyState).toBe(xhr.states.HEADERS_RECEIVED);
+        expect(xhr.readyState).toBe(xhr.HEADERS_RECEIVED);
       });
 
       it("sets HTTP status code to 'code' when state 'headers'", function() {
@@ -429,12 +429,12 @@ describe("XMLHttpRequest", function() {
 
       it("sets state to 'LOADING' when proxy event state 'loading'", function() {
         proxy.trigger("StateChange", {state: "loading"});
-        expect(xhr.readyState).toBe(xhr.states.LOADING);
+        expect(xhr.readyState).toBe(xhr.LOADING);
       });
 
       it("sets state to 'DONE' when proxy event state 'finished'", function() {
         proxy.trigger("StateChange", {state: "finished", response: "foo"});
-        expect(xhr.readyState).toBe(xhr.states.DONE);
+        expect(xhr.readyState).toBe(xhr.DONE);
       });
 
       it("sets responseText to 'response' when proxy event state 'finished'", function() {
@@ -445,7 +445,7 @@ describe("XMLHttpRequest", function() {
       it("sets state to 'DONE' on request error", function() {
         requestErrors.forEach(function(entry) {
           proxy.trigger("StateChange", {state: entry});
-          expect(xhr.readyState).toBe(xhr.states.DONE);
+          expect(xhr.readyState).toBe(xhr.DONE);
         });
       });
 
@@ -549,17 +549,17 @@ describe("XMLHttpRequest", function() {
 
     it("changes state to 'UNSENT' with states 'UNSENT' and 'OPENED' if send() not invoked", function() {
       xhr.abort();
-      expect(xhr.readyState).toBe(xhr.states.UNSENT);
+      expect(xhr.readyState).toBe(xhr.UNSENT);
       xhr.open("GET", "http://foobar.com");
       xhr.abort();
-      expect(xhr.readyState).toBe(xhr.states.UNSENT);
+      expect(xhr.readyState).toBe(xhr.UNSENT);
     });
 
     it("changes state to 'UNSENT' with state 'DONE'", function() {
       sendRequest(xhr);
       proxy.trigger("StateChange", {state: "finished", response: "foo"});
       xhr.abort();
-      expect(xhr.readyState).toBe(xhr.states.UNSENT);
+      expect(xhr.readyState).toBe(xhr.UNSENT);
     });
 
     it("dispatches readystatechange event when send interrupted", function() {
@@ -942,7 +942,7 @@ describe("XMLHttpRequest", function() {
   describe("readyState", function() {
 
     it("is initialized with the 'UNSENT' state value", function() {
-      expect(xhr.timeout).toBe(xhr.states.UNSENT);
+      expect(xhr.timeout).toBe(xhr.UNSENT);
     });
 
     it("is readonly", function() {

@@ -22,7 +22,7 @@ tabris.load(function() {
 
   xhr.onreadystatechange = function() {
     updateResponseLabel(xhr);
-    if (xhr.readyState == xhr.states.DONE) {
+    if (xhr.readyState == xhr.DONE) {
       button.set("text", "Send request");
     }
   };
@@ -84,7 +84,7 @@ tabris.load(function() {
 
   button.on("Selection", function() {
     progressBar.set("selection", 0);
-    if ([xhr.states.UNSENT, xhr.states.DONE].indexOf(xhr.readyState) > -1) {
+    if ([xhr.UNSENT, xhr.DONE].indexOf(xhr.readyState) > -1) {
       button.set("text", "Cancel");
       httpStatusLabel.set("text", "");
       headerLabel.set("text", "");
@@ -97,18 +97,18 @@ tabris.load(function() {
 
   function updateResponseLabel(xhr) {
     stateLabel.set("text", "<b>" + getStateName() + (error ? " (" + error + ")" : "") + "</b>");
-    if (xhr.readyState == xhr.states.HEADERS_RECEIVED) {
+    if (xhr.readyState == xhr.HEADERS_RECEIVED) {
       httpStatusLabel.set("text", "Response: " + xhr.status + " " + xhr.statusText);
       headerLabel.set("text", "Headers: " + xhr.getAllResponseHeaders().split(/\r\n|\r|\n/).length);
     }
-    if (xhr.readyState == xhr.states.DONE) {
+    if (xhr.readyState == xhr.DONE) {
       bodyLabel.set("text", xhr.responseText.substr(0, Math.min(200, xhr.responseText.length)));
     }
   }
 
   function getStateName() {
-    for (var key in xhr.states) {
-      if(xhr.states[key] == xhr.readyState) {
+    for (var key in xhr) {
+      if(xhr[key] == xhr.readyState) {
         return key;
       }
     }

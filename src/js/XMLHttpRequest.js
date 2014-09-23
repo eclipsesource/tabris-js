@@ -36,13 +36,11 @@
   };
 
   tabris.XMLHttpRequest.prototype = {
-    states: {
-      UNSENT: 0,
-      OPENED: 1,
-      HEADERS_RECEIVED: 2,
-      LOADING: 3,
-      DONE: 4
-    }
+    UNSENT: 0,
+    OPENED: 1,
+    HEADERS_RECEIVED: 2,
+    LOADING: 3,
+    DONE: 4
   };
 
   /////////
@@ -68,7 +66,7 @@
     scope.status = 0;
     scope.statusText = "";
     scope.responseHeaders = "";
-    scope.readyState = xhr.states.UNSENT;
+    scope.readyState = xhr.UNSENT;
     scope.responseText = "";
     scope.withCredentials = false;
     scope.responseType = "";
@@ -123,7 +121,7 @@
         if(typeof scope.responseText != "string") { // (1*)
           throw new Error("IllegalStateError: responseText is not a string");
         }
-        if((scope.readyState != xhr.states.LOADING && scope.readyState != xhr.states.DONE)) { // (2)
+        if((scope.readyState != xhr.LOADING && scope.readyState != xhr.DONE)) { // (2)
           return "";
         }
         if(scope.error) { // (3)
@@ -140,7 +138,7 @@
       get: function() {
         // Note: only the if-statement implemented, as response types different than 'text' are
         // currently not supported
-        if(scope.readyState != xhr.states.LOADING && scope.readyState != xhr.states.DONE) { // (1)
+        if(scope.readyState != xhr.LOADING && scope.readyState != xhr.DONE) { // (1)
           return "";
         }
         if(scope.error) { // (2)
@@ -158,7 +156,7 @@
         return scope.responseType;
       },
       set: function(value) {
-        if((scope.readyState == xhr.states.LOADING || scope.readyState == xhr.states.DONE)) { // (1)
+        if((scope.readyState == xhr.LOADING || scope.readyState == xhr.DONE)) { // (1)
           throw new Error(
             "InvalidStateError: state must not be 'LOADING' or 'DONE' when setting responseType"
           );
@@ -195,7 +193,7 @@
   var definePropertyStatus = function(xhr, scope) {
     Object.defineProperty(xhr, "status", { // #the-status-attribute
       get: function() {
-        if([xhr.states.OPENED, xhr.states.UNSENT].indexOf(scope.readyState) > -1) { // (1)
+        if([xhr.OPENED, xhr.UNSENT].indexOf(scope.readyState) > -1) { // (1)
           return 0;
         }
         if(scope.error) { // (2)
@@ -210,7 +208,7 @@
   var definePropertyStatusText = function(xhr, scope) {
     Object.defineProperty(xhr, "statusText", {
       get: function() { // #the-statustext-attribute
-        if([xhr.states.OPENED, xhr.states.UNSENT].indexOf(scope.readyState) > -1) { // (1)
+        if([xhr.OPENED, xhr.UNSENT].indexOf(scope.readyState) > -1) { // (1)
           return "";
         }
         if(scope.error) { // (2)
@@ -225,7 +223,7 @@
   var definePropertyWithCredentials = function(xhr, scope) {
     Object.defineProperty(xhr, "withCredentials", { // #the-withcredentials-attribute
       set: function(value) {
-        if(scope.readyState != xhr.states.UNSENT && scope.readyState != xhr.states.OPENED) { // (1)
+        if(scope.readyState != xhr.UNSENT && scope.readyState != xhr.OPENED) { // (1)
           throw new Error(
             "InvalidStateError: state must be 'UNSENT' or 'OPENED' when setting withCredentials"
           );
@@ -281,8 +279,8 @@
       scope.authorRequestHeaders = {};
       scope.sendInvoked = false;
       scope.responseText = null;
-      if(scope.readyState != xhr.states.OPENED) { // (15)
-        scope.readyState = xhr.states.OPENED;
+      if(scope.readyState != xhr.OPENED) { // (15)
+        scope.readyState = xhr.OPENED;
         dispatchEvent("readystatechange", xhr);
       }
     };
@@ -300,7 +298,7 @@
       scope.proxy.on("UploadProgress", function(e) {
         dispatchProgressEvent("progress", xhr.upload, e.lengthComputable, e.loaded, e.total);
       });
-      if(scope.readyState != xhr.states.OPENED) { // (1)
+      if(scope.readyState != xhr.OPENED) { // (1)
         throw new Error(
           "InvalidStateError: Object's state must be 'OPENED', failed to execute 'send'"
         );
@@ -348,8 +346,8 @@
       if(scope.proxy) {
         scope.proxy.call("abort"); // (1)
       }
-      if(!([xhr.states.UNSENT, xhr.states.OPENED].indexOf(scope.readyState) > -1 &&
-         !scope.sendInvoked || scope.readyState === xhr.states.DONE)) { // send() interrupted
+      if(!([xhr.UNSENT, xhr.OPENED].indexOf(scope.readyState) > -1 &&
+         !scope.sendInvoked || scope.readyState === xhr.DONE)) { // send() interrupted
         // (2.1), (2.2): setting readyState DONE with sendInvoked true or false seems to be an
         // internal state which doesn't affect the behavior and thus cannot be tested
         dispatchEvent("readystatechange", xhr); // (2.3)
@@ -359,13 +357,13 @@
         }
         dispatchAbortProgressEvents(xhr); // (2.5), (2.6), (2.7)
       }
-      scope.readyState = xhr.states.UNSENT; // (3)
+      scope.readyState = xhr.UNSENT; // (3)
     };
   };
 
   var createSetRequestHeaderMethod = function(xhr, scope) {
     return function(header, value) { // #dom-xmlhttprequest-setrequestheader
-      if(scope.readyState !== xhr.states.OPENED) { // (1)
+      if(scope.readyState !== xhr.OPENED) { // (1)
         throw new Error(
           "InvalidStateError: Object's state must be 'OPENED', failed to execute 'setRequestHeader'"
         );
@@ -394,7 +392,7 @@
 
   var createGetResponseHeaderMethod = function(xhr, scope) {
     return function(header) { // #the-getresponseheader()-method
-      if([xhr.states.UNSENT, xhr.states.OPENED].indexOf(xhr.readyState) > -1) { // (1)
+      if([xhr.UNSENT, xhr.OPENED].indexOf(xhr.readyState) > -1) { // (1)
         return null;
       }
       if(scope.error) { // (2)
@@ -415,7 +413,7 @@
 
   var createGetAllResponseHeadersMethod = function(xhr, scope) {
     return function() { // #the-getallresponseheaders()-method
-      if([xhr.states.UNSENT, xhr.states.OPENED].indexOf(xhr.readyState) > -1) { // (1)
+      if([xhr.UNSENT, xhr.OPENED].indexOf(xhr.readyState) > -1) { // (1)
         return "";
       }
       if(scope.error) { // (2)
@@ -443,7 +441,7 @@
     // Note: we supply lengthComputable, loaded and total only with the "progress" event types
     switch (e.state) {
       case "headers":
-        scope.readyState = xhr.states.HEADERS_RECEIVED;
+        scope.readyState = xhr.HEADERS_RECEIVED;
         scope.status = e.code;
         scope.statusText = e.message;
         scope.responseHeaders = e.headers;
@@ -452,13 +450,13 @@
         dispatchFinishedProgressEvents(xhr.upload);
         break;
       case "loading":
-        scope.readyState = xhr.states.LOADING;
+        scope.readyState = xhr.LOADING;
         dispatchEvent("readystatechange", xhr);
         break;
       case "finished":
         // TODO create response based on responseType
         scope.responseText = e.response;
-        scope.readyState = xhr.states.DONE;
+        scope.readyState = xhr.DONE;
         dispatchEvent("readystatechange", xhr);
         dispatchFinishedProgressEvents(xhr);
         dispatchFinishedProgressEvents(xhr.upload);
@@ -479,7 +477,7 @@
 
   var handleRequestError = function(event, xhr, scope){ // #request-error
     scope.error = true; // (1*) (#terminate-the-request)
-    scope.readyState = xhr.states.DONE; // (1)
+    scope.readyState = xhr.DONE; // (1)
     // (2): superfluous as we don't support synchronous requests
     dispatchEvent("readystatechange", xhr); // (3)
     dispatchErrorProgressEvents(event, xhr);
