@@ -60,3 +60,5 @@ tabris.Events = {
   }
 
 };
+
+util.extend(tabris, tabris.Events);

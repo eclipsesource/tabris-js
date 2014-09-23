@@ -13,18 +13,23 @@ describe("CanvasContext", function() {
   beforeEach(function() {
     window.console = jasmine.createSpyObj("console", ["log", "info", "warn", "error"]);
     nativeBridge = new NativeBridgeSpy();
+    tabris._start(nativeBridge);
     gc = new tabris.Proxy("gc-id");
     ctx = new tabris.CanvasContext(gc);
     tabris._reset();
-    tabris._start(nativeBridge);
   });
 
   afterEach(function() {
     window.console = consoleBackup;
+    gc.dispose();
   });
 
-  function getDrawOperations(index) {
-    var call = nativeBridge.calls({ id: gc.id, op: "call", method: "draw" })[index || 0];
+  function flush() {
+    tabris.trigger("flush");
+  }
+
+  function getDrawOperations() {
+    var call = nativeBridge.calls({ id: gc.id, op: "call", method: "draw" })[0];
     return call ? call.parameters.operations : undefined;
   }
 
@@ -91,11 +96,10 @@ describe("CanvasContext", function() {
 
     it("renders changes", function() {
       ctx.lineWidth = 2;
-      ctx.stroke();
+      flush();
 
       expect(getDrawOperations()).toEqual([
-        ["lineWidth", 2],
-        ["stroke"]
+        ["lineWidth", 2]
       ]);
     });
 
@@ -130,11 +134,10 @@ describe("CanvasContext", function() {
 
     it("renders changes", function() {
       ctx.lineCap = "round";
-      ctx.stroke();
+      flush();
 
       expect(getDrawOperations()).toEqual([
-        ["lineCap", "round"],
-        ["stroke"]
+        ["lineCap", "round"]
       ]);
     });
 
@@ -168,11 +171,10 @@ describe("CanvasContext", function() {
 
     it("renders changes", function() {
       ctx.lineJoin = "round";
-      ctx.stroke();
+      flush();
 
       expect(getDrawOperations()).toEqual([
-        ["lineJoin", "round"],
-        ["stroke"]
+        ["lineJoin", "round"]
       ]);
     });
 
@@ -206,11 +208,10 @@ describe("CanvasContext", function() {
 
     it("renders changes", function() {
       ctx.fillStyle = "red";
-      ctx.fill();
+      flush();
 
       expect(getDrawOperations()).toEqual([
-        ["fillStyle", [255, 0, 0, 255]],
-        ["fill"]
+        ["fillStyle", [255, 0, 0, 255]]
       ]);
     });
 
@@ -245,11 +246,10 @@ describe("CanvasContext", function() {
 
     it("renders changes", function() {
       ctx.strokeStyle = "red";
-      ctx.stroke();
+      flush();
 
       expect(getDrawOperations()).toEqual([
-        ["strokeStyle", [255, 0, 0, 255]],
-        ["stroke"]
+        ["strokeStyle", [255, 0, 0, 255]]
       ]);
     });
 
@@ -284,11 +284,10 @@ describe("CanvasContext", function() {
 
     it("renders changes", function() {
       ctx.textAlign = "center";
-      ctx.fillText("foo", 10, 10);
+      flush();
 
       expect(getDrawOperations()).toEqual([
-        ["textAlign", "center"],
-        ["fillText", "foo", false, false, false, 10, 10]
+        ["textAlign", "center"]
       ]);
     });
 
@@ -322,11 +321,10 @@ describe("CanvasContext", function() {
 
     it("renders changes", function() {
       ctx.textBaseline = "middle";
-      ctx.fillText("foo", 10, 10);
+      flush();
 
       expect(getDrawOperations()).toEqual([
-        ["textBaseline", "middle"],
-        ["fillText", "foo", false, false, false, 10, 10]
+        ["textBaseline", "middle"]
       ]);
     });
 
@@ -357,11 +355,10 @@ describe("CanvasContext", function() {
 
     it("renders save operation", function() {
       ctx.save();
-      ctx.fill();
+      flush();
 
       expect(getDrawOperations()).toEqual([
-        ["save"],
-        ["fill"]
+        ["save"]
       ]);
     });
 
@@ -401,11 +398,10 @@ describe("CanvasContext", function() {
 
     it("renders restore operation", function() {
       ctx.restore();
-      ctx.fill();
+      flush();
 
       expect(getDrawOperations()).toEqual([
-        ["restore"],
-        ["fill"]
+        ["restore"]
       ]);
     });
 
@@ -436,59 +432,67 @@ describe("CanvasContext", function() {
       ctx.bezierCurveTo(50, 70, 60, 80, 70, 80);
       ctx.closePath();
 
-      ctx.fill();
+      flush();
 
-      expect(getDrawOperations().length).toEqual(9);
+      expect(getDrawOperations().length).toEqual(8);
       expect(getDrawOperations()[0]).toEqual(["beginPath"]);
       expect(getDrawOperations()[7]).toEqual(["closePath"]);
-      expect(getDrawOperations()[8]).toEqual(["fill"]);
+    });
+
+    it("are not rendered after gc disposal anymore", function() {
+      ctx.rect(10, 20, 30, 40);
+
+      gc.dispose();
+      flush();
+
+      expect(getDrawOperations()).not.toBeDefined();
     });
 
     it("moveTo", function() {
       ctx.moveTo(10, 20);
-      ctx.fill();
+      flush();
 
       expect(getDrawOperations()[0]).toEqual(["moveTo", 10, 20]);
     });
 
     it("lineTo", function() {
       ctx.lineTo(10, 20);
-      ctx.fill();
+      flush();
 
       expect(getDrawOperations()[0]).toEqual(["lineTo", 10, 20]);
     });
 
     it("rect", function() {
       ctx.rect(10, 20, 30, 40);
-      ctx.fill();
+      flush();
 
       expect(getDrawOperations()[0]).toEqual(["rect", 10, 20, 30, 40]);
     });
 
     it("arc", function() {
       ctx.arc(10, 20, 5, 1, 2);
-      ctx.fill();
+      flush();
 
       expect(getDrawOperations()[0]).toEqual(["arc", 10, 20, 5, 1, 2, false]);
     });
 
     it("arc with anticlockwise", function() {
       ctx.arc(10, 20, 5, 1, 2, true);
-      ctx.fill();
+      flush();
 
       expect(getDrawOperations()[0]).toEqual(["arc", 10, 20, 5, 1, 2, true]);
     });
 
     it("quadraticCurve", function() {
       ctx.quadraticCurveTo(10, 20, 30, 40);
-      ctx.fill();
+      flush();
 
       expect(getDrawOperations()[0]).toEqual(["quadraticCurveTo", 10, 20, 30, 40]);
     });
 
     it("bezierCurve", function() {
       ctx.bezierCurveTo(10, 20, 30, 40, 50, 60);
-      ctx.fill();
+      flush();
 
       expect(getDrawOperations()[0]).toEqual(["bezierCurveTo", 10, 20, 30, 40, 50, 60]);
     });
@@ -514,46 +518,44 @@ describe("CanvasContext", function() {
       ctx.rotate(3.14);
       ctx.scale(2, 3);
 
-      ctx.rect(10, 20, 30, 40);
-      ctx.fill();
+      flush();
 
-      expect(getDrawOperations().length).toEqual(7);
+      expect(getDrawOperations().length).toEqual(5);
       expect(getDrawOperations()[0]).toEqual(["setTransform", 1, 2, 3, 4, 5, 6]);
-      expect(getDrawOperations()[5]).toEqual(["rect", 10, 20, 30, 40]);
-      expect(getDrawOperations()[6]).toEqual(["fill"]);
+      expect(getDrawOperations()[4]).toEqual(["scale", 2, 3]);
     });
 
     it("scale", function() {
       ctx.scale(2, 3);
-      ctx.fill();
+      flush();
 
       expect(getDrawOperations()[0]).toEqual(["scale", 2, 3]);
     });
 
     it("rotate", function() {
       ctx.rotate(3.14);
-      ctx.fill();
+      flush();
 
       expect(getDrawOperations()[0]).toEqual(["rotate", 3.14]);
     });
 
     it("translate", function() {
       ctx.translate(23, 42);
-      ctx.fill();
+      flush();
 
       expect(getDrawOperations()[0]).toEqual(["translate", 23, 42]);
     });
 
     it("transform", function() {
       ctx.transform(1, 2, 3, 4, 5, 6);
-      ctx.fill();
+      flush();
 
       expect(getDrawOperations()[0]).toEqual(["transform", 1, 2, 3, 4, 5, 6]);
     });
 
     it("setTransform", function() {
       ctx.setTransform(1, 2, 3, 4, 5, 6);
-      ctx.fill();
+      flush();
 
       expect(getDrawOperations()[0]).toEqual(["setTransform", 1, 2, 3, 4, 5, 6]);
     });
@@ -562,29 +564,11 @@ describe("CanvasContext", function() {
 
   describe("fill", function() {
 
-    it("is rendered immediately", function() {
-      ctx.beginPath();
-      ctx.rect(10, 20, 30, 40);
+    it("is rendered", function() {
       ctx.fill();
+      flush();
 
       expect(getDrawOperations()).toEqual([
-        ["beginPath"],
-        ["rect", 10, 20, 30, 40],
-        ["fill"]
-      ]);
-    });
-
-    it("clears operations stack", function() {
-      ctx.beginPath();
-      ctx.rect(10, 20, 30, 40);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.rect(50, 60, 70, 80);
-      ctx.fill();
-
-      expect(getDrawOperations(1)).toEqual([
-        ["beginPath"],
-        ["rect", 50, 60, 70, 80],
         ["fill"]
       ]);
     });
@@ -593,29 +577,11 @@ describe("CanvasContext", function() {
 
   describe("stroke", function() {
 
-    it("is rendered immediately", function() {
-      ctx.beginPath();
-      ctx.rect(10, 20, 30, 40);
+    it("is rendered", function() {
       ctx.stroke();
+      flush();
 
       expect(getDrawOperations()).toEqual([
-        ["beginPath"],
-        ["rect", 10, 20, 30, 40],
-        ["stroke"]
-      ]);
-    });
-
-    it("clears operations stack", function() {
-      ctx.beginPath();
-      ctx.rect(10, 20, 30, 40);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.rect(50, 60, 70, 80);
-      ctx.stroke();
-
-      expect(getDrawOperations(1)).toEqual([
-        ["beginPath"],
-        ["rect", 50, 60, 70, 80],
         ["stroke"]
       ]);
     });
@@ -624,8 +590,9 @@ describe("CanvasContext", function() {
 
   describe("clearRect", function() {
 
-    it("is rendered immediately", function() {
+    it("is rendered", function() {
       ctx.clearRect(10, 20, 30, 40);
+      flush();
 
       expect(getDrawOperations()).toEqual([
         ["clearRect", 10, 20, 30, 40]
@@ -636,8 +603,9 @@ describe("CanvasContext", function() {
 
   describe("fillRect", function() {
 
-    it("is rendered immediately", function() {
+    it("is rendered", function() {
       ctx.fillRect(10, 20, 30, 40);
+      flush();
 
       expect(getDrawOperations()).toEqual([
         ["beginPath"],
@@ -650,8 +618,9 @@ describe("CanvasContext", function() {
 
   describe("strokeRect", function() {
 
-    it("is rendered immediately", function() {
+    it("is rendered", function() {
       ctx.strokeRect(10, 20, 30, 40);
+      flush();
 
       expect(getDrawOperations()).toEqual([
         ["beginPath"],
@@ -664,8 +633,9 @@ describe("CanvasContext", function() {
 
   describe("fillText", function() {
 
-    it("is rendered immediately", function() {
+    it("is rendered", function() {
       ctx.fillText("foo", 10, 20);
+      flush();
 
       expect(getDrawOperations()).toEqual([
         ["fillText", "foo", false, false, false, 10, 20]
@@ -676,8 +646,9 @@ describe("CanvasContext", function() {
 
   describe("strokeText", function() {
 
-    it("is rendered immediately", function() {
+    it("is rendered", function() {
       ctx.strokeText("foo", 10, 20);
+      flush();
 
       expect(getDrawOperations()).toEqual([
         ["strokeText", "foo", false, false, false, 10, 20]

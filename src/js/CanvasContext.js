@@ -17,6 +17,10 @@
     for(var name in properties) {
       defineProperty(this, name);
     }
+    tabris.on("flush", this._flush, this);
+    gc.on("Dispose", function() {
+      tabris.off("flush", this._flush, this);
+    }, this);
   };
 
   tabris.CanvasContext.prototype = {
@@ -91,7 +95,6 @@
 
     clearRect: function(x, y, width, height) {
       this._operations.push(["clearRect", x, y, width, height]);
-      this._flush();
     },
 
     fillRect: function(x, y, width, height) {
@@ -106,22 +109,18 @@
 
     fillText: function(text, x, y /*, maxWidth*/) {
       this._operations.push(["fillText", text, false, false, false, x, y]);
-      this._flush();
     },
 
     strokeText: function(text, x, y /*, maxWidth*/) {
       this._operations.push(["strokeText", text, false, false, false, x, y]);
-      this._flush();
     },
 
     fill: function() {
       this._operations.push(["fill"]);
-      this._flush();
     },
 
     stroke: function() {
       this._operations.push(["stroke"]);
-      this._flush();
     },
 
     _init: function( width, height) {
@@ -137,8 +136,10 @@
     },
 
     _flush: function() {
-      this._gc.call("draw", { "operations": this._operations });
-      this._operations = [];
+      if (this._operations.length > 0) {
+        this._gc.call("draw", { "operations": this._operations });
+        this._operations = [];
+      }
     }
 
   };
@@ -175,7 +176,7 @@
 
   var properties = {
     lineWidth: {
-      def: 1,
+      init: 1,
       encode: function(value) {
         if(value > 0) {
           return value;
@@ -185,35 +186,35 @@
       decode: passThrough
     },
     lineCap: {
-      def: "butt",
+      init: "butt",
       values: toObject(["butt", "round", "square"]),
       encode: checkValue,
       decode: passThrough
     },
     lineJoin: {
-      def: "miter",
+      init: "miter",
       values: toObject(["bevel", "miter", "round"]),
       encode: checkValue,
       decode: passThrough
     },
     fillStyle: {
-      def: [0, 0, 0, 255],
+      init: [0, 0, 0, 255],
       encode: util.colorStringToArray,
       decode: util.colorArrayToString
     },
     strokeStyle: {
-      def: [0, 0, 0, 255],
+      init: [0, 0, 0, 255],
       encode: util.colorStringToArray,
       decode: util.colorArrayToString
     },
     textAlign: {
-      def: "start",
+      init: "start",
       values: toObject(["start", "end", "left", "right", "center"]),
       encode: checkValue,
       decode: passThrough
     },
     textBaseline: {
-      def: "alphabetic",
+      init: "alphabetic",
       values: toObject(["top", "hanging", "middle", "alphabetic", "ideographic", "bottom"]),
       encode: checkValue,
       decode: passThrough
@@ -223,7 +224,7 @@
   function createState() {
     var state = {};
     for(var name in properties) {
-      state[name] = properties[name].def;
+      state[name] = properties[name].init;
     }
     return state;
   }

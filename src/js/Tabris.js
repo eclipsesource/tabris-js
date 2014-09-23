@@ -31,6 +31,7 @@
       while( i < tabris._loadFunctions.length ) {
         tabris._loadFunctions[i++].call();
       }
+      tabris.trigger("flush");
     },
 
     _notify: function( id, event, param ) {
@@ -38,6 +39,7 @@
       if( proxy ) {
         proxy.trigger( event, param );
       }
+      tabris.trigger("flush");
     },
 
     _reset: function() {
