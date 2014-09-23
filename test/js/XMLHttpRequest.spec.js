@@ -31,6 +31,18 @@ describe("XMLHttpRequest", function() {
     xhr.send();
   };
 
+  it("is an EventTarget", function() {
+    var handler1 = jasmine.createSpy("handler1");
+    var handler2 = jasmine.createSpy("handler2");
+    xhr.addEventListener("foo", handler1);
+    xhr.addEventListener("bar", handler2);
+    xhr.removeEventListener("foo", handler1);
+    xhr.dispatchEvent({type: "foo"});
+    xhr.dispatchEvent({type: "bar"});
+    expect(handler2).toHaveBeenCalled();
+    expect(handler1).not.toHaveBeenCalled();
+  });
+
   describe("open", function() {
 
     it("fails without method", function() {
@@ -508,7 +520,7 @@ describe("XMLHttpRequest", function() {
         expect(xhr.responseText).toBe("");
       });
 
-      it("calls onprogress on proxy event 'DownloadRequest'", function() {
+      it("calls onprogress on proxy event 'DownloadProgress'", function() {
         xhr.onprogress = jasmine.createSpy("onprogress");
         proxy.trigger("DownloadProgress", {lengthComputable: true, loaded: 50, total: 100});
         expect(xhr.onprogress).toHaveBeenCalledWith(jasmine.objectContaining({
@@ -762,30 +774,6 @@ describe("XMLHttpRequest", function() {
 
     it("returns null when header not found", function() {
       expect(xhr.getResponseHeader("Header-Name1")).toBe(null);
-    });
-
-  });
-
-  describe("onreadystatechange", function() {
-
-    it("is initialized with null", function() {
-      expect(xhr.onreadystatechange).toBe(null);
-    });
-
-    describe("set", function() {
-
-      it("doesn't set value when value not a function", function() {
-        xhr.onreadystatechange = "foo";
-        expect(xhr.onreadystatechange).toBe(null);
-      });
-
-      it("sets value to function", function() {
-        var foo = function() {
-        };
-        xhr.onreadystatechange = foo;
-        expect(xhr.onreadystatechange).toBe(foo);
-      });
-
     });
 
   });
@@ -1086,5 +1074,73 @@ describe("XMLHttpRequest", function() {
     });
 
   });
+
+  var eventHandlers = {
+    eventTypes: [
+      "loadstart", "readystatechange", "load", "loadend", "progress", "timeout", "abort", "error"
+    ],
+    uploadEventTypes: ["progress", "loadstart", "load", "loadend", "timeout", "abort", "error"]
+  };
+
+  var describeEventHandlers = function(name, eventTypes, property) {
+
+    var getTarget = function(property) {
+      if (property) {
+        return xhr[property];
+      }
+      return xhr;
+    };
+
+    describe(name, function() {
+
+      it("are initialized with null", function() {
+        eventTypes.forEach(function(type) {
+          var handler = "on" + type;
+          expect(getTarget(property)[handler]).toBe(null);
+        });
+      });
+
+      describe("set", function() {
+
+        it("doesn't set value when value not a function", function() {
+          eventTypes.forEach(function(type) {
+            var handler = "on" + type;
+            getTarget(property)[handler] = "foo";
+            expect(getTarget(property)[handler]).toBe(null);
+          });
+        });
+
+        it("sets value to function", function() {
+          var foo = function() {};
+          eventTypes.forEach(function(type) {
+            var handler = "on" + type;
+            getTarget(property)[handler] = foo;
+            expect(getTarget(property)[handler]).toBe(foo);
+          });
+        });
+
+        it("replaces existing listener", function() {
+          var handler1 = jasmine.createSpy("handler1");
+          var handler2 = jasmine.createSpy("handler2");
+          eventTypes.forEach(function(type) {
+            var handler = "on" + type;
+            getTarget(property)[handler] = handler1;
+            getTarget(property)[handler] = handler2;
+            getTarget(property).dispatchEvent({
+              type: type
+            });
+            expect(handler1).not.toHaveBeenCalled();
+            expect(handler2).toHaveBeenCalled();
+          });
+        });
+
+      });
+
+    });
+
+  };
+
+  describeEventHandlers("event handlers", eventHandlers.eventTypes);
+  describeEventHandlers("upload event handlers", eventHandlers.uploadEventTypes, "upload");
 
 });

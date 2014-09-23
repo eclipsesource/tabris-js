@@ -12,6 +12,11 @@
 
 (function() {
 
+  var eventTypes = [
+    "loadstart", "readystatechange", "load", "loadend", "progress", "timeout", "abort", "error"
+  ];
+  var uploadEventTypes = ["progress", "loadstart", "load", "loadend", "timeout", "abort", "error"];
+
   //////////////
   // Constructor
 
@@ -21,18 +26,21 @@
     definePropertyReadyState(this, scope);
     definePropertyTimeout(this, scope);
     definePropertyResponse(this, scope);
-    definePropertyOnreadystatechange(this, scope);
     definePropertyResponseText(this, scope);
     definePropertyResponseType(this, scope);
     definePropertyStatus(this, scope);
     definePropertyStatusText(this, scope);
     definePropertyWithCredentials(this, scope);
+    defineEventHandlers(this, scope);
+    initializeEventHandlers(scope);
     this.open = createOpenMethod(this, scope);
     this.send = createSendMethod(this, scope);
     this.abort = createAbortMethod(this, scope);
     this.setRequestHeader = createSetRequestHeaderMethod(this, scope);
     this.getResponseHeader = createGetResponseHeaderMethod(this, scope);
     this.getAllResponseHeaders = createGetAllResponseHeadersMethod(this, scope);
+    tabris._addDOMEventTargetMethods(this);
+    tabris._addDOMEventTargetMethods(scope.uploadEventTarget);
   };
 
   tabris.XMLHttpRequest.prototype = {
@@ -46,7 +54,9 @@
   /////////
   // Events
 
-  tabris.XMLHttpRequestProgressEvent = function() {};
+  tabris.XMLHttpRequestProgressEvent = function(type) {
+    this.type = type;
+  };
 
   tabris.XMLHttpRequestProgressEvent.prototype = util.extendPrototype(tabris.DOMEvent, {
     lengthComputable: false,
@@ -61,7 +71,8 @@
     var scope = {};
     scope.proxy = null;
     scope.authorRequestHeaders = {};
-    scope.upload = {};
+    scope.uploadListeners = {};
+    scope.uploadEventTarget = {};
     scope.timeout = 0;
     scope.status = 0;
     scope.statusText = "";
@@ -70,7 +81,6 @@
     scope.responseText = "";
     scope.withCredentials = false;
     scope.responseType = "";
-    scope.onreadystatechange = null;
     scope.sendInvoked = false;
     scope.isSynchronous = false;
     scope.error = false;
@@ -78,10 +88,19 @@
     return scope;
   };
 
+  var initializeEventHandlers = function(scope) {
+    eventTypes.forEach(function(eventType) {
+      scope["on" + eventType] = null;
+    });
+    uploadEventTypes.forEach(function(eventType) {
+      scope.uploadListeners["on" + eventType] = null;
+    });
+  };
+
   var definePropertyUpload = function(xhr, scope) {
     Object.defineProperty(xhr, "upload", {
       get: function() {
-        return scope.upload;
+        return scope.uploadEventTarget;
       },
       set: function() {}
     });
@@ -176,15 +195,27 @@
     });
   };
 
-  var definePropertyOnreadystatechange = function(xhr, scope) {
-    Object.defineProperty(xhr, "onreadystatechange", {
+  var defineEventHandlers = function(xhr, scope) {
+    eventTypes.forEach(function(eventType) {
+      defineEventHandler(eventType, xhr, scope);
+    });
+    uploadEventTypes.forEach(function(eventType) {
+      defineEventHandler(eventType, scope.uploadEventTarget, scope.uploadListeners);
+    });
+  };
+
+  var defineEventHandler = function(eventType, target, listeners) {
+    var handler = "on" + eventType;
+    Object.defineProperty(target, handler, {
       get: function() {
-        return scope.onreadystatechange;
+        return listeners[handler];
       },
       set: function(value) {
-        // mimicks the behaviour of Firefox and Chromium
+        // mimicks the behavior of Firefox and Chromium
         if(typeof value === "function") {
-          scope.onreadystatechange = value;
+          target.removeEventListener(eventType, target[handler]);
+          listeners[handler] = value;
+          target.addEventListener(eventType, target[handler]);
         }
       }
     });
@@ -281,7 +312,7 @@
       scope.responseText = null;
       if(scope.readyState != xhr.OPENED) { // (15)
         scope.readyState = xhr.OPENED;
-        dispatchEvent("readystatechange", xhr);
+        dispatchXHREvent("readystatechange", xhr);
       }
     };
   };
@@ -350,7 +381,7 @@
          !scope.sendInvoked || scope.readyState === xhr.DONE)) { // send() interrupted
         // (2.1), (2.2): setting readyState DONE with sendInvoked true or false seems to be an
         // internal state which doesn't affect the behavior and thus cannot be tested
-        dispatchEvent("readystatechange", xhr); // (2.3)
+        dispatchXHREvent("readystatechange", xhr); // (2.3)
         if(!scope.uploadComplete) {
           scope.uploadComplete = true; // (2.4.1)
           dispatchAbortProgressEvents(xhr.upload); // (2.4.2), (2.4.3), (2.4.4)
@@ -445,19 +476,19 @@
         scope.status = e.code;
         scope.statusText = e.message;
         scope.responseHeaders = e.headers;
-        dispatchEvent("readystatechange", xhr);
+        dispatchXHREvent("readystatechange", xhr);
         scope.uploadComplete = true; // #make-upload-progress-notifications
         dispatchFinishedProgressEvents(xhr.upload);
         break;
       case "loading":
         scope.readyState = xhr.LOADING;
-        dispatchEvent("readystatechange", xhr);
+        dispatchXHREvent("readystatechange", xhr);
         break;
       case "finished":
         // TODO create response based on responseType
         scope.responseText = e.response;
         scope.readyState = xhr.DONE;
-        dispatchEvent("readystatechange", xhr);
+        dispatchXHREvent("readystatechange", xhr);
         dispatchFinishedProgressEvents(xhr);
         dispatchFinishedProgressEvents(xhr.upload);
         scope.proxy.dispose();
@@ -479,7 +510,7 @@
     scope.error = true; // (1*) (#terminate-the-request)
     scope.readyState = xhr.DONE; // (1)
     // (2): superfluous as we don't support synchronous requests
-    dispatchEvent("readystatechange", xhr); // (3)
+    dispatchXHREvent("readystatechange", xhr); // (3)
     dispatchErrorProgressEvents(event, xhr);
     if(!scope.uploadComplete) {
       scope.uploadComplete = true;
@@ -587,19 +618,7 @@
   // Event dispatcher
 
   var dispatchProgressEvent = function(type, target, lengthComputable, loaded, total) {
-    var xhrProgressEvent = initXhrProgressEvent(type, target);
-    if(lengthComputable) {
-      xhrProgressEvent.lengthComputable = lengthComputable;
-    }
-    if(loaded) {
-      xhrProgressEvent.loaded = loaded;
-    }
-    if(total) {
-      xhrProgressEvent.total = total;
-    }
-    if(target['on' + type]) {
-      target['on' + type](xhrProgressEvent);
-    }
+    target.dispatchEvent(initXhrProgressEvent(type, target, lengthComputable, loaded, total));
   };
 
   var dispatchAbortProgressEvents = function(context) {
@@ -620,17 +639,24 @@
     dispatchProgressEvent("loadend", context);
   };
 
-  var initXhrProgressEvent = function(type, target) {
+  var initXhrProgressEvent = function(type, target, lengthComputable, loaded, total) {
     var xhrProgressEvent = new tabris.XMLHttpRequestProgressEvent(type);
     xhrProgressEvent.currentTarget = xhrProgressEvent.target = target;
+    if(lengthComputable) {
+      xhrProgressEvent.lengthComputable = lengthComputable;
+    }
+    if(loaded) {
+      xhrProgressEvent.loaded = loaded;
+    }
+    if(total) {
+      xhrProgressEvent.total = total;
+    }
     return xhrProgressEvent;
   };
 
-  var dispatchEvent = function(type, target) {
+  var dispatchXHREvent = function(type, target) {
     var xhrEvent = initXhrEvent(type, target);
-    if(target['on' + type]) {
-      target['on' + type](xhrEvent);
-    }
+    target.dispatchEvent(xhrEvent);
   };
 
   var initXhrEvent = function(type, target) {
@@ -644,7 +670,7 @@
 
   if(typeof XMLHttpRequest === "undefined") {
     window.XMLHttpRequest = tabris.XMLHttpRequest;
-    window.XMLHttpRequestProgressEvent= tabris.XMLHttpRequestProgressEvent;
+    window.XMLHttpRequestProgressEvent = tabris.XMLHttpRequestProgressEvent;
   }
 
 })();
