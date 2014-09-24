@@ -56,7 +56,7 @@ util = {
     Helper.prototype = fn.prototype;
     return util.extend( new Helper(), target, {
       "super" : function( method ) {
-        fn.prototype[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ) );
+        return fn.prototype[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ) );
       },
       "Super" : function() {
         fn.apply( this, arguments );
