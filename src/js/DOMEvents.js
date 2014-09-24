@@ -7,7 +7,7 @@
 
   var noop = function() {};
 
-  tabris.Event = function(type, eventInitDict) {
+  tabris.DOMEvent = function(type, eventInitDict) {
     this.type = type;
     this.timeStamp = Date.now();
     if(typeof eventInitDict != "undefined") {
@@ -20,7 +20,7 @@
     }
   };
 
-  tabris.Event.prototype = {
+  tabris.DOMEvent.prototype = {
     NONE: 0,
     CAPTURING_PHASE: 1,
     AT_TARGET: 2,
@@ -37,7 +37,8 @@
     preventDefault: noop
   };
 
-  tabris._addEventTargetMethods = function(target) {
+
+  tabris._addDOMEventTargetMethods = function(target) {
 
     if(typeof target.addEventListener === "function") {
       return;

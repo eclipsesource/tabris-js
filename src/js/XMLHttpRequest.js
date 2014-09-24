@@ -50,7 +50,7 @@
 
   tabris.XMLHttpRequestProgressEvent = function() {};
 
-  tabris.XMLHttpRequestProgressEvent.prototype = util.extendPrototype(tabris.Event, {
+  tabris.XMLHttpRequestProgressEvent.prototype = util.extendPrototype(tabris.DOMEvent, {
     lengthComputable: false,
     loaded: 0,
     total: 0
@@ -636,7 +636,7 @@
   };
 
   var initXhrEvent = function(type, target) {
-    var xhrEvent = new tabris.Event(type);
+    var xhrEvent = new tabris.DOMEvent(type);
     xhrEvent.currentTarget = xhrEvent.target = target;
     return xhrEvent;
   };

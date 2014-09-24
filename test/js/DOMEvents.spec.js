@@ -10,14 +10,14 @@ describe("DOMEvents", function() {
 
   beforeEach(function () {
     target = {};
-    tabris._addEventTargetMethods(target);
+    tabris._addDOMEventTargetMethods(target);
     listener = jasmine.createSpy();
   });
 
   describe("Event constructor", function() {
 
     it("sets default values", function() {
-      var event = new tabris.Event("type");
+      var event = new tabris.DOMEvent("type");
       expect(event.NONE).toBe(0);
       expect(event.CAPTURING_PHASE).toBe(1);
       expect(event.AT_TARGET).toBe(2);
@@ -35,19 +35,19 @@ describe("DOMEvents", function() {
     });
 
     it("sets type from parameter", function() {
-      var event = new tabris.Event("type");
+      var event = new tabris.DOMEvent("type");
       expect(event.type).toBe("type");
     });
 
     it("sets values from eventInitDict parameter", function() {
-      var event = new tabris.Event("type", {bubbles: true, cancelable: true});
+      var event = new tabris.DOMEvent("type", {bubbles: true, cancelable: true});
       expect(event.bubbles).toBe(true);
       expect(event.cancelable).toBe(true);
     });
 
   });
 
-  describe("addEventTargetMethods", function() {
+  describe("addDOMEventTargetMethods", function() {
 
     it("adds methods to target", function() {
       expect(typeof target.addEventListener).toBe("function");
@@ -60,7 +60,7 @@ describe("DOMEvents", function() {
       var removeEventListener = target.removeEventListener;
       var dispatchEvent = target.dispatchEvent;
 
-      tabris._addEventTargetMethods(target);
+      tabris._addDOMEventTargetMethods(target);
 
       expect(target.addEventListener).toBe(addEventListener);
       expect(target.removeEventListener).toBe(removeEventListener);
