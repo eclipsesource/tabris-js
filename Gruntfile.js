@@ -48,6 +48,7 @@ module.exports = function(grunt) {
                      'ScrollCompositeProxy.js',
                      'PageProxy.js',
                      'CanvasContext.js',
+                     'WebStorage.js',
                      'XMLHttpRequest.js'
                     ] ),
         dest: 'build/tabris.js'
