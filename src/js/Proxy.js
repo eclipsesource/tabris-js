@@ -11,40 +11,39 @@
   };
 
   tabris.Proxy.create = function( type, properties ) {
-    var proxy = new tabris.Proxy();
     var factory = tabris.Proxy._factories[type in tabris.Proxy._factories ? type : "default"];
-    return factory( proxy, type, properties );
+    return factory( type, properties );
   };
 
   tabris.Proxy._factories = {
-    "Button": function( proxy, type, properties ) {
-      return proxy._create( "rwt.widgets.Button", util.extend( { style: ["PUSH"] }, properties ));
+    "Button": function( type, properties ) {
+      return new tabris.Proxy()._create( "rwt.widgets.Button", util.extend( { style: ["PUSH"] }, properties ));
     },
-    "CheckBox": function( proxy, type, properties ) {
-      return proxy._create( "rwt.widgets.Button", util.extend( { style: ["CHECK"] }, properties ));
+    "CheckBox": function( type, properties ) {
+      return new tabris.Proxy()._create( "rwt.widgets.Button", util.extend( { style: ["CHECK"] }, properties ));
     },
-    "RadioButton": function( proxy, type, properties ) {
-      return proxy._create( "rwt.widgets.Button", util.extend( { style: ["RADIO"] }, properties ));
+    "RadioButton": function( type, properties ) {
+      return new tabris.Proxy()._create( "rwt.widgets.Button", util.extend( { style: ["RADIO"] }, properties ));
     },
-    "ToggleButton": function( proxy, type, properties ) {
-      return proxy._create( "rwt.widgets.Button", util.extend( { style: ["TOGGLE"] }, properties ));
+    "ToggleButton": function( type, properties ) {
+      return new tabris.Proxy()._create( "rwt.widgets.Button", util.extend( { style: ["TOGGLE"] }, properties ));
     },
-    "Text": function( proxy, type, properties ) {
+    "Text": function( type, properties ) {
       var style = textTypeToStyle[ properties.type ] || textTypeToStyle[ "default" ];
-      return proxy._create( "rwt.widgets.Text", util.extend( { style: style }, properties ));
+      return new tabris.Proxy()._create( "rwt.widgets.Text", util.extend( { style: style }, properties ));
     },
-    "List": function( proxy, type, properties ) {
-      var list = proxy._create( "rwt.widgets.Grid", util.extend( { style: [] }, properties ));
+    "List": function( type, properties ) {
+      var list = new tabris.Proxy()._create( "rwt.widgets.Grid", util.extend( { style: [] }, properties ));
       list.append("ScrollBar", {
         style: ["VERTICAL"]
       });
       return list;
     },
-    "ListItem": function( proxy, type, properties ) {
-      return proxy._create( "rwt.widgets.GridItem", properties );
+    "ListItem": function( type, properties ) {
+      return new tabris.Proxy()._create( "rwt.widgets.GridItem", properties );
     },
-    "default": function( proxy, type, properties ) {
-      return proxy._create( type, properties );
+    "default": function( type, properties ) {
+      return new tabris.Proxy()._create( type, properties );
     }
   };
 

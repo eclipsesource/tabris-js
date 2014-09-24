@@ -5,16 +5,10 @@ tabris.load(function() {
     topLevel: true
   });
 
-  var scrolledComposite = page.append("ScrolledComposite", {
-    style: ["V_SCROLL"],
+  var composite = page.append("ScrollComposite", {
+    scroll: "vertical",
     layoutData: {left: 0, right: 0, top: 0, bottom: 0}
   });
-
-  scrolledComposite.append("ScrollBar", {
-    style: ["VERTICAL"]
-  });
-
-  var composite = scrolledComposite.append("Composite", {});
 
   var capitalizeOnLabel = composite.append("Label", {
     layoutData: {left: 10, top: 10, width: 120},

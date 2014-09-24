@@ -33,21 +33,13 @@ tabris.load(function() {
     layoutData: {left: 0, top: 0, right: 0, bottom: 0}
   });
 
-  var scrolledCompositeLayoutData = {left: 0, right: 0, bottom: 0, height: 164};
+  var scrollCompositeLayoutData = {left: 0, right: 0, bottom: 0, height: 164};
 
-  var scrolledComposite = mainComposite.append("ScrolledComposite", {
-    style: ["H_SCROLL"],
+  var scrollComposite = mainComposite.append("ScrollComposite", {
+    scroll: "horizontal",
     data: {"paging":true},
-    layoutData: scrolledCompositeLayoutData,
+    layoutData: scrollCompositeLayoutData,
     background: "rgba(32, 32, 32, 0.6)"
-  });
-
-  scrolledComposite.append("rwt.widgets.ScrollBar", {
-    style: ["HORIZONTAL"]
-  });
-
-  var composite = scrolledComposite.append("Composite", {
-    layoutData: {left: 0, top: 0}
   });
 
   function createImageThumbPath(imageName) {
@@ -67,7 +59,7 @@ tabris.load(function() {
   for (var i = 0; i < imageNames.length; i++) {
     var imageThumbPath = createImageThumbPath(imageNames[i]);
     var imageBigPath = createImageBigPath(imageNames[i]);
-    var image = composite.append("Label", {
+    var image = scrollComposite.append("Label", {
       layoutData: {top: 7, left: i * 150 + i * 7, width: 150, height: 150},
       image: [imageThumbPath, 150, 150],
       data: {
@@ -89,14 +81,14 @@ tabris.load(function() {
   }
 
   var toggleAction = function() {
-    if (!scrolledComposite.isHidden) {
+    if (!scrollComposite.isHidden) {
       recreateThumbnailAction("Thumbnails");
-      scrolledComposite.set("layoutData", {left:0, top:0, height: 0});
-      scrolledComposite.isHidden = true;
+      scrollComposite.set("layoutData", {left:0, top:0, height: 0});
+      scrollComposite.isHidden = true;
     } else {
       recreateThumbnailAction("Fullscreen");
-      scrolledComposite.set("layoutData", scrolledCompositeLayoutData);
-      scrolledComposite.isHidden = false;
+      scrollComposite.set("layoutData", scrollCompositeLayoutData);
+      scrollComposite.isHidden = false;
     }
   };
 

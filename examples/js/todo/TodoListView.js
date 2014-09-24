@@ -1,4 +1,4 @@
-/* global todo: true, Backbone: false, _: false */
+/*global todo: true, Backbone: false, _: false */
 
 todo = window.todo || {};
 
@@ -35,8 +35,7 @@ todo.TodoListView = Backbone.View.extend({
       text: todo.texts.markAllCheckbox,
       font: [[""], 16, true, false]
     });
-    this.scrolledComposite = this.widget.append("ScrolledComposite", {style: ["V_SCROLL"]});
-    this.container = this.scrolledComposite.append("Composite");
+    this.container = this.widget.append("ScrollComposite", {scroll: "vertical"});
     this.clearCompletedButton = this.widget.append("Button");
     this.todoCountLabel = this.widget.append("Label", {markupEnabled: true});
     this.layout();
@@ -51,7 +50,7 @@ todo.TodoListView = Backbone.View.extend({
       left: 10,
       right: [this.clearCompletedButton, 0]
     });
-    this.scrolledComposite.set("layoutData", {
+    this.container.set("layoutData", {
       top: [this.markAllCheckbox, 10],
       left: 0,
       right: 0,
