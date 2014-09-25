@@ -82,4 +82,11 @@
 
   };
 
+  if (typeof window !== "undefined") {
+    tabris._addDOMEventTargetMethods(window);
+    if (!window.Event) {
+      window.Event = tabris.DOMEvent;
+    }
+  }
+
 }());

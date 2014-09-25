@@ -42,7 +42,7 @@ module.exports = function(grunt) {
                      'Tabris.js',
                      'Events.js',
                      'DOMEvents.js',
-                     'Window.js',
+                     'WindowTimers.js',
                      'Proxy.js',
                      'UIProxy.js',
                      'ScrollCompositeProxy.js',

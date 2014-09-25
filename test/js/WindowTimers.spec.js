@@ -3,36 +3,36 @@
  * All rights reserved.
  */
 
-describe("window polyfills", function() {
+describe("WindowTimers", function() {
 
   var nativeBridge;
-  var wnd;
+  var target;
 
   beforeEach(function () {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._start(nativeBridge);
-    wnd = {};
+    target = {};
   });
 
   it("do not overwrite existing window methods", function() {
-    var setTimeout = wnd.setTimeout = function() {};
-    var setInterval = wnd.setInterval = function() {};
-    var clearTimeout = wnd.clearTimeout = function() {};
-    var clearInterval = wnd.clearInterval = function() {};
+    var setTimeout = target.setTimeout = function() {};
+    var setInterval = target.setInterval = function() {};
+    var clearTimeout = target.clearTimeout = function() {};
+    var clearInterval = target.clearInterval = function() {};
 
-    tabris._addWindowMethods( wnd );
+    tabris._addWindowTimerMethods( target );
 
-    expect( wnd.setTimeout ).toBe( setTimeout );
-    expect( wnd.setInterval ).toBe( setInterval );
-    expect( wnd.clearTimeout ).toBe( clearTimeout );
-    expect( wnd.clearInterval ).toBe( clearInterval );
+    expect( target.setTimeout ).toBe( setTimeout );
+    expect( target.setInterval ).toBe( setInterval );
+    expect( target.clearTimeout ).toBe( clearTimeout );
+    expect( target.clearInterval ).toBe( clearInterval );
   });
 
   describe("created methods", function() {
 
     beforeEach(function () {
-      tabris._addWindowMethods(wnd);
+      tabris._addWindowTimerMethods(target);
     });
 
     describe("setTimeout", function() {
@@ -44,7 +44,7 @@ describe("window polyfills", function() {
 
       beforeEach(function() {
         callback = jasmine.createSpy("callback");
-        taskId = wnd.setTimeout(callback, delay);
+        taskId = target.setTimeout(callback, delay);
         createCall = nativeBridge.calls({ op: "create", type: "tabris.Timer" })[0];
         listenCall = nativeBridge.calls({ id: createCall.id, op: "listen", event: "Run" })[0];
         startCall = nativeBridge.calls({ id: createCall.id, op: "call", method: "start" })[0];
@@ -80,7 +80,7 @@ describe("window polyfills", function() {
       });
 
       it("returns ascending numbers", function() {
-        var nextTaskId = wnd.setTimeout(callback, 23);
+        var nextTaskId = target.setTimeout(callback, 23);
         expect(nextTaskId).toBeGreaterThan(taskId);
       });
 
@@ -104,7 +104,7 @@ describe("window polyfills", function() {
       describe("clearTimeout", function() {
 
         beforeEach(function() {
-          wnd.clearTimeout(taskId);
+          target.clearTimeout(taskId);
         });
 
         it("calls native cancelTask", function() {
@@ -118,7 +118,7 @@ describe("window polyfills", function() {
         });
 
         it("tolerates unknown taskId", function() {
-          wnd.clearTimeout(taskId + 1);
+          target.clearTimeout(taskId + 1);
         });
 
       });
@@ -126,7 +126,7 @@ describe("window polyfills", function() {
       describe("clearInterval", function() {
 
         beforeEach(function() {
-          wnd.clearInterval(taskId);
+          target.clearInterval(taskId);
         });
 
         it("calls native cancelTask", function() {
@@ -140,7 +140,7 @@ describe("window polyfills", function() {
         });
 
         it("tolerates unknown taskId", function() {
-          wnd.clearInterval(taskId + 1);
+          target.clearInterval(taskId + 1);
         });
 
       });
@@ -156,7 +156,7 @@ describe("window polyfills", function() {
 
       beforeEach(function() {
         callback = jasmine.createSpy("callback");
-        taskId = wnd.setInterval(callback, delay);
+        taskId = target.setInterval(callback, delay);
         createCall = nativeBridge.calls({op: "create", type: "tabris.Timer"})[0];
         listenCall = nativeBridge.calls({id: createCall.id, op: "listen", event : "Run"})[0];
         startCall = nativeBridge.calls({id: createCall.id, op: "call", method : "start"})[0];
@@ -192,12 +192,12 @@ describe("window polyfills", function() {
       });
 
       it("returns ascending numbers", function() {
-        var nextTaskId = wnd.setInterval(callback, delay);
+        var nextTaskId = target.setInterval(callback, delay);
         expect(nextTaskId).toBeGreaterThan(taskId);
       });
 
       it("returned numbers don't clash with getTimeout", function() {
-        var timeoutTaskId = wnd.setTimeout(callback, delay);
+        var timeoutTaskId = target.setTimeout(callback, delay);
         expect(timeoutTaskId).toBeGreaterThan(taskId);
       });
 
@@ -222,7 +222,7 @@ describe("window polyfills", function() {
       describe("clearInterval", function() {
 
         beforeEach(function() {
-          wnd.clearInterval(taskId);
+          target.clearInterval(taskId);
         });
 
         it("calls native cancelTask", function() {
@@ -236,7 +236,7 @@ describe("window polyfills", function() {
         });
 
         it("tolerates unknown taskId", function() {
-          wnd.clearInterval(taskId + 1);
+          target.clearInterval(taskId + 1);
         });
 
       });
