@@ -27,7 +27,8 @@
           timer.dispose();
           delete timers[taskId];
         }
-      }).call( "start" );
+      });
+      timer.call( "start" );
       timers[taskId] = timer;
       return taskId;
     }

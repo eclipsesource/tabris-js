@@ -83,8 +83,7 @@
 
     call: function( method, parameters ) {
       this._checkDisposed();
-      tabris._nativeBridge.call( this.id, method, parameters );
-      return this;
+      return tabris._nativeBridge.call( this.id, method, parameters );
     },
 
     on: function( event, listener, context ) {

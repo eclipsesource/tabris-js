@@ -378,10 +378,12 @@ describe( "Proxy", function() {
         expect( call.parameters ).toEqual( { foo: 23 } );
       } );
 
-      it( "returns self to allow chaining", function() {
-        var result = proxy.call( "foo", {} );
+      it( "returns value from native", function() {
+        spyOn( nativeBridge, "call" ).and.returnValue( 23 );
 
-        expect( result ).toBe( proxy );
+        var result = proxy.call( "method", {} );
+
+        expect( result ).toBe( 23 );
       } );
 
       it( "fails on disposed object", function() {
