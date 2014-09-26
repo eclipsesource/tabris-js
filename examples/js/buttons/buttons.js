@@ -26,7 +26,7 @@ tabris.load(function() {
 
     function correctAnswer(questionObject) {
       for (var i = 0; i < questionObject.answers.length; i++) {
-        if (answerButtons[i].get("selection") != isInArray(questionObject.correctAnswers, i)) {
+        if (answerButtons[i].get("selection") !== isInArray(questionObject.correctAnswers, i)) {
           return false;
         }
       }

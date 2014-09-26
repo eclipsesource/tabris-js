@@ -16,7 +16,7 @@ describe("LocalStorage", function() {
     spyOn(window, "tabris").and.callFake(function(type, properties) {
       proxy = tabris.Proxy.create(type, properties);
       spyOn(proxy, "call").and.callFake(function(method, args) {
-        if (method == "get" && args.key == "savedKey") {
+        if (method === "get" && args.key === "savedKey") {
           return "savedVal";
         }
         return null;

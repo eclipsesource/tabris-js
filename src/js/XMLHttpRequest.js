@@ -137,10 +137,10 @@
         if(scope.responseText === null) { // (1*)
           return "";
         }
-        if(typeof scope.responseText != "string") { // (1*)
+        if(typeof scope.responseText !== "string") { // (1*)
           throw new Error("IllegalStateError: responseText is not a string");
         }
-        if((scope.readyState != xhr.LOADING && scope.readyState != xhr.DONE)) { // (2)
+        if((scope.readyState !== xhr.LOADING && scope.readyState !== xhr.DONE)) { // (2)
           return "";
         }
         if(scope.error) { // (3)
@@ -157,7 +157,7 @@
       get: function() {
         // Note: only the if-statement implemented, as response types different than 'text' are
         // currently not supported
-        if(scope.readyState != xhr.LOADING && scope.readyState != xhr.DONE) { // (1)
+        if(scope.readyState !== xhr.LOADING && scope.readyState !== xhr.DONE) { // (1)
           return "";
         }
         if(scope.error) { // (2)
@@ -175,7 +175,7 @@
         return scope.responseType;
       },
       set: function(value) {
-        if((scope.readyState == xhr.LOADING || scope.readyState == xhr.DONE)) { // (1)
+        if((scope.readyState === xhr.LOADING || scope.readyState === xhr.DONE)) { // (1)
           throw new Error(
             "InvalidStateError: state must not be 'LOADING' or 'DONE' when setting responseType"
           );
@@ -254,7 +254,7 @@
   var definePropertyWithCredentials = function(xhr, scope) {
     Object.defineProperty(xhr, "withCredentials", { // #the-withcredentials-attribute
       set: function(value) {
-        if(scope.readyState != xhr.UNSENT && scope.readyState != xhr.OPENED) { // (1)
+        if(scope.readyState !== xhr.UNSENT && scope.readyState !== xhr.OPENED) { // (1)
           throw new Error(
             "InvalidStateError: state must be 'UNSENT' or 'OPENED' when setting withCredentials"
           );
@@ -264,7 +264,7 @@
         }
         // (3): superfluous as we don't support synchronous requests
         // mimicking Chromium and Firefox behaviour when setting a non-boolean value:
-        if(typeof value == "boolean") {
+        if(typeof value === "boolean") {
           scope.withCredentials = value; // (4)
         }
       },
@@ -288,7 +288,7 @@
       // regex taken from http://stackoverflow.com/a/19709846:
       parsedUrl.isRelative = !new RegExp('^(?:[a-z]+:)?//', 'i').test(url);
       parsedUrl.userdata = urlWithoutProtocol.substring(0, urlWithoutProtocol.indexOf('@'));
-      if(typeof async == "undefined") { // (10)
+      if(typeof async === "undefined") { // (10)
         async = true;
         username = null;
         password = null;
@@ -310,7 +310,7 @@
       scope.authorRequestHeaders = {};
       scope.sendInvoked = false;
       scope.responseText = null;
-      if(scope.readyState != xhr.OPENED) { // (15)
+      if(scope.readyState !== xhr.OPENED) { // (15)
         scope.readyState = xhr.OPENED;
         dispatchXHREvent("readystatechange", xhr);
       }
@@ -329,7 +329,7 @@
       scope.proxy.on("UploadProgress", function(e) {
         dispatchProgressEvent("progress", xhr.upload, e.lengthComputable, e.loaded, e.total);
       });
-      if(scope.readyState != xhr.OPENED) { // (1)
+      if(scope.readyState !== xhr.OPENED) { // (1)
         throw new Error(
           "InvalidStateError: Object's state must be 'OPENED', failed to execute 'send'"
         );
@@ -434,7 +434,7 @@
         return null;
       }
       for(var key in scope.responseHeaders) { // (4), (5)
-        if(key.toLowerCase() == header.toLowerCase()) {
+        if(key.toLowerCase() === header.toLowerCase()) {
           return scope.responseHeaders[key];
         }
       }

@@ -22,7 +22,7 @@ tabris.load(function() {
 
   xhr.onreadystatechange = function() {
     updateResponseLabel(xhr);
-    if (xhr.readyState == xhr.DONE) {
+    if (xhr.readyState === xhr.DONE) {
       button.set("text", "Send request");
     }
   };
@@ -97,18 +97,18 @@ tabris.load(function() {
 
   function updateResponseLabel(xhr) {
     stateLabel.set("text", "<b>" + getStateName() + (error ? " (" + error + ")" : "") + "</b>");
-    if (xhr.readyState == xhr.HEADERS_RECEIVED) {
+    if (xhr.readyState === xhr.HEADERS_RECEIVED) {
       httpStatusLabel.set("text", "Response: " + xhr.status + " " + xhr.statusText);
       headerLabel.set("text", "Headers: " + xhr.getAllResponseHeaders().split(/\r\n|\r|\n/).length);
     }
-    if (xhr.readyState == xhr.DONE) {
+    if (xhr.readyState === xhr.DONE) {
       bodyLabel.set("text", xhr.responseText.substr(0, Math.min(200, xhr.responseText.length)));
     }
   }
 
   function getStateName() {
     for (var key in xhr) {
-      if(xhr[key] == xhr.readyState) {
+      if(xhr[key] === xhr.readyState) {
         return key;
       }
     }
