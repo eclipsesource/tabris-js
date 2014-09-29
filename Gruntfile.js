@@ -45,6 +45,7 @@ module.exports = function(grunt) {
                      'WindowTimers.js',
                      'Proxy.js',
                      'UIProxy.js',
+                     'ListProxy.js',
                      'ScrollCompositeProxy.js',
                      'PageProxy.js',
                      'CanvasContext.js',

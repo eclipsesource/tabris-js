@@ -101,24 +101,6 @@ describe( "Proxy", function() {
       expect( create.properties.style ).toEqual( ["BORDER", "MULTI"] );
     } );
 
-    it( "maps 'List' to rwt.widgets.Grid with a vertical Scollbar", function() {
-      tabris.Proxy.create( "List", { linesVisible: true } );
-
-      var createCalls = nativeBridge.calls({ op: "create" });
-      expect( createCalls[0].type ).toEqual( "rwt.widgets.Grid" );
-      expect( createCalls[0].properties ).toEqual( { style: [], linesVisible: true } );
-      expect( createCalls[1].type ).toEqual( "rwt.widgets.ScrollBar" );
-      expect( createCalls[1].properties ).toEqual( { style: ["VERTICAL"], parent: createCalls[0].id } );
-    } );
-
-    it( "maps 'ListItem' to rwt.widgets.GridItem", function() {
-      tabris.Proxy.create( "ListItem", { texts: ["foo", "bar"] } );
-
-      var create = nativeBridge.calls({ op: "create" })[0];
-      expect( create.type ).toEqual( "rwt.widgets.GridItem" );
-      expect( create.properties ).toEqual( { texts: ["foo", "bar"] } );
-    } );
-
     it( "calls native create with type and properties", function() {
       proxy._create( "foo.bar", { foo: 23 } );
 
@@ -317,24 +299,6 @@ describe( "Proxy", function() {
 
         var call = nativeBridge.calls({ op: "set" })[0];
         expect( call.properties.font ).toEqual([["Arial"], 12, false, false]);
-      } );
-
-      it( "translates colors in row templates", function() {
-        var template = [{ left: 23, foreground: "red", background: "rgba(1, 2, 3, 0.5)" }];
-
-        proxy.set( { rowTemplate: template } );
-
-        var call = nativeBridge.calls({ op: "set" })[0];
-        expect( call.properties.rowTemplate[0].foreground ).toEqual( [255, 0, 0, 255] );
-        expect( call.properties.rowTemplate[0].background ).toEqual( [1, 2, 3, 128] );
-      } );
-
-      it( "does not modify row templates", function() {
-        var template = [{ left: 23, foreground: "red" }];
-
-        proxy.set( { rowTemplate: template } );
-
-        expect( template ).toEqual( [{ left: 23, foreground: "red" }] );
       } );
 
       it( "skips properties that fail to encode", function() {

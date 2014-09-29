@@ -32,16 +32,6 @@
       var style = textTypeToStyle[ properties.type ] || textTypeToStyle[ "default" ];
       return new tabris.Proxy()._create( "rwt.widgets.Text", util.extend( { style: style }, properties ));
     },
-    "List": function( type, properties ) {
-      var list = new tabris.Proxy()._create( "rwt.widgets.Grid", util.extend( { style: [] }, properties ));
-      list.append("ScrollBar", {
-        style: ["VERTICAL"]
-      });
-      return list;
-    },
-    "ListItem": function( type, properties ) {
-      return new tabris.Proxy()._create( "rwt.widgets.GridItem", properties );
-    },
     "default": function( type, properties ) {
       return new tabris.Proxy()._create( type, properties );
     }
@@ -54,7 +44,7 @@
         this._parent = properties.parent;
         this._parent._addChild( this );
       }
-      tabris._nativeBridge.create( this.id, encodeType( type ), encodeProperties( properties ) );
+      tabris._nativeBridge.create( this.id, encodeType( type ), this._encodeProperties( properties ) );
       return this;
     },
 
@@ -65,7 +55,7 @@
 
     get: function( name ) {
       this._checkDisposed();
-      return decodeProperty( name, tabris._nativeBridge.get( this.id, name ) );
+      return this._decodeProperty( name, tabris._nativeBridge.get( this.id, name ) );
     },
 
     set: function( arg1, arg2 ) {
@@ -77,7 +67,7 @@
       } else {
         properties = arg1;
       }
-      tabris._nativeBridge.set( this.id, encodeProperties( properties ) );
+      tabris._nativeBridge.set( this.id, this._encodeProperties( properties ) );
       return this;
     },
 
@@ -117,14 +107,18 @@
     },
 
     _destroy: function() {
+      this._destroyChildren();
+      this.trigger( "Dispose", {} );
+      tabris.Events.off.call( this );
+      delete tabris._proxies[this.id];
+    },
+
+    _destroyChildren: function() {
       if( this._children ) {
         for( var i = 0; i < this._children.length; i++ ) {
           this._children[i]._destroy();
         }
       }
-      this.trigger( "Dispose", {} );
-      tabris.Events.off.call( this );
-      delete tabris._proxies[this.id];
     },
 
     _addChild: function( child ) {
@@ -147,35 +141,45 @@
       if( this._isDisposed ) {
         throw new Error( "Object is disposed" );
       }
-    }
+    },
 
-  });
-
-  function encodeProperties( properties ) {
-    var result = {};
-    for( var key in properties ) {
-      try {
-        result[key] = encodeProperty( key, properties[key] );
-      } catch( error ) {
-        console.warn( "Unsupported " + key + " value: " + error.message );
+    _encodeProperties: function( properties ) {
+      var result = {};
+      for( var key in properties ) {
+        this._setProperty(key, properties[key], result);
       }
-    }
-    return result;
-  }
+      return result;
+    },
 
-  function encodeProperty( name, value ) {
-    if( name === "foreground" || name === "background" ) {
-      return encodeColor( value );
-    } else if( name === "font" ) {
-      return encodeFont( value );
-    } else if( name === "layoutData" ) {
-      checkLayoutData( value );
-      return encodeLayoutData( value );
-    } else if( name === "rowTemplate" ) {
-      return encodeRowTemplate( value );
+    _setProperty: function( name, value, target ) {
+      try {
+        target[name] = this._encodeProperty(name, value);
+      } catch( error ) {
+        console.warn( "Unsupported "+ name + " value: " + error.message );
+      }
+    },
+
+    _encodeProperty: function( name, value ) {
+      if( name === "foreground" || name === "background" ) {
+        return encodeColor( value );
+      } else if( name === "font" ) {
+        return encodeFont( value );
+      } else if( name === "layoutData" ) {
+        checkLayoutData( value );
+        return encodeLayoutData( value );
+      }
+      return encodeProxyToId( value );
+    },
+
+    _decodeProperty: function(name, value) {
+      if (name === "foreground" || name === "background") {
+        return decodeColor(value);
+      } else if (name === "font") {
+        return decodeFont(value);
+      }
+      return value;
     }
-    return encodeProxyToId( value );
-  }
+  });
 
   function encodeColor( value ) {
     return util.colorStringToArray( value );
@@ -187,22 +191,6 @@
 
   function decodeFont( value ) {
     return util.fontArrayToString( value );
-  }
-
-  function encodeRowTemplate( template ) {
-    return template.map( encodeTemplateCell );
-  }
-
-  function encodeTemplateCell( cell ) {
-    var result = {};
-    for( var key in cell ) {
-      if( key === "foreground" || key === "background" ) {
-        result[key] = encodeColor( cell[key] );
-      } else {
-        result[key] = cell[key];
-      }
-    }
-    return result;
   }
 
   function checkLayoutData( layoutData ) {
@@ -235,15 +223,6 @@
       return "rwt.widgets." + type;
     }
     return type;
-  }
-
-  function decodeProperty( name, value ) {
-    if( name === "foreground" || name === "background" ) {
-      return decodeColor( value );
-    } else if( name === "font" ) {
-      return decodeFont( value );
-    }
-    return value;
   }
 
   function decodeColor( value ) {

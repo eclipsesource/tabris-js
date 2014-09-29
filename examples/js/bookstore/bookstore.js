@@ -58,7 +58,7 @@ tabris.load(function() {
       title: book.title
     });
     var detailsComposite = page.append("Composite", {
-      layoutData: { height: 184, left: 0, right: 0 },
+      layoutData: { top: 0, height: 184, left: 0, right: 0 },
       background: "white",
       data: {
         showTouch: true
@@ -119,46 +119,34 @@ tabris.load(function() {
   }
 
   function createBooksList(parent, books) {
-    var list = parent.append("List", {
-      itemCount: books.length,
+    return parent.append("List", {
       linesVisible: true,
       layoutData: { left: 0, right: 0, top: 0, bottom: 0 },
       itemHeight: 72,
-      rowTemplate: [
+      template: [
         {
           type: "image",
-          bindingIndex: 0,
+          binding: "image",
           scaleMode: "FIT",
           left: [0, PAGE_MARGIN], top: [0, PAGE_MARGIN], width: 32, height: 48
         },
         {
           type: "text",
-          bindingIndex: 1,
+          binding: "title",
           left: [0, 56], right: [0, PAGE_MARGIN], top: [0, PAGE_MARGIN], bottom: [0, 0],
           foreground: "rgb(74, 74, 74)"
         },
         {
           type: "text",
-          bindingIndex: 2,
+          binding: "author",
           left: [0, 56], right: [0, PAGE_MARGIN], top: [0, 36], bottom: [0, 0],
           foreground: "rgb(123, 123, 123)"
         }
-      ]
+      ],
+      items: books
+    }).on("Selection", function(event) {
+      createBookPage(event.item).open();
     });
-    list.on("Selection", function(event) {
-      var listItem = tabris._proxies[event.item];
-      var index = listItem.get("index");
-      createBookPage(books[index]).open();
-    });
-
-    for (var i = 0; i < books.length; i++) {
-      list.append("ListItem", {
-        index: i,
-        texts: ["", books[i].title, books[i].author],
-        images: [books[i].image, null, null]
-      });
-    }
-    return list;
   }
 
   function createSettingsPage() {
