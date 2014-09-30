@@ -35,7 +35,7 @@ tabris.load(function() {
   });
 
   var contentComposite = scrollComposite.append("Composite", {
-    layoutData: { left: 0, right: 0, top: [titleComposite, 0], bottom: 0 },
+    layoutData: { left: 0, right: 0, top: [titleComposite, 0], height: 1000 },
     background: "white"
   });
 
