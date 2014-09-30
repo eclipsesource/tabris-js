@@ -54,8 +54,8 @@ tabris.ScrollCompositeProxy.prototype = util.extendPrototype(tabris.Proxy, {
 
 });
 
-tabris.Proxy._factories.ScrollComposite = function(type, properties) {
+tabris.Proxy.registerType("ScrollComposite", function(type, properties) {
   return new tabris.ScrollCompositeProxy()._create(properties);
-};
+});
 
 })();

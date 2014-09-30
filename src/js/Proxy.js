@@ -11,30 +11,19 @@
   };
 
   tabris.Proxy.create = function( type, properties ) {
-    var factory = tabris.Proxy._factories[type in tabris.Proxy._factories ? type : "default"];
-    return factory( type, properties );
+    if (type in tabris.Proxy._factories) {
+      return tabris.Proxy._factories[type](type, properties);
+    }
+    return new tabris.Proxy()._create(type, properties);
   };
 
-  tabris.Proxy._factories = {
-    "Button": function( type, properties ) {
-      return new tabris.Proxy()._create( "rwt.widgets.Button", util.extend( { style: ["PUSH"] }, properties ));
-    },
-    "CheckBox": function( type, properties ) {
-      return new tabris.Proxy()._create( "rwt.widgets.Button", util.extend( { style: ["CHECK"] }, properties ));
-    },
-    "RadioButton": function( type, properties ) {
-      return new tabris.Proxy()._create( "rwt.widgets.Button", util.extend( { style: ["RADIO"] }, properties ));
-    },
-    "ToggleButton": function( type, properties ) {
-      return new tabris.Proxy()._create( "rwt.widgets.Button", util.extend( { style: ["TOGGLE"] }, properties ));
-    },
-    "Text": function( type, properties ) {
-      var style = textTypeToStyle[ properties.type ] || textTypeToStyle[ "default" ];
-      return new tabris.Proxy()._create( "rwt.widgets.Text", util.extend( { style: style }, properties ));
-    },
-    "default": function( type, properties ) {
-      return new tabris.Proxy()._create( type, properties );
+  tabris.Proxy._factories = {};
+
+  tabris.Proxy.registerType = function(type, factory) {
+    if (type in tabris.Proxy._factories) {
+      throw new Error("Factory already registered for type " + type);
     }
+    tabris.Proxy._factories[type] = factory;
   };
 
   util.extend(tabris.Proxy.prototype, tabris.Events, {
@@ -241,5 +230,22 @@
     "multiline" : ["BORDER", "MULTI"],
     "default" : ["BORDER"]
   };
+
+  tabris.Proxy.registerType("Button", function(type, properties) {
+    return new tabris.Proxy()._create("rwt.widgets.Button", util.extend({style: ["PUSH"]}, properties));
+  });
+  tabris.Proxy.registerType("CheckBox", function(type, properties) {
+    return new tabris.Proxy()._create("rwt.widgets.Button", util.extend({style: ["CHECK"]}, properties));
+  });
+  tabris.Proxy.registerType("RadioButton", function(type, properties) {
+    return new tabris.Proxy()._create("rwt.widgets.Button", util.extend({style: ["RADIO"]}, properties));
+  });
+  tabris.Proxy.registerType("ToggleButton", function(type, properties) {
+    return new tabris.Proxy()._create("rwt.widgets.Button", util.extend({style: ["TOGGLE"]}, properties));
+  });
+  tabris.Proxy.registerType("Text", function(type, properties) {
+    var style = textTypeToStyle[ properties.type ] || textTypeToStyle["default"];
+    return new tabris.Proxy()._create("rwt.widgets.Text", util.extend({style: style}, properties));
+  });
 
 })();

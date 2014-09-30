@@ -167,11 +167,11 @@
     };
   }
 
-  tabris.Proxy._factories.List = function(type, properties) {
+  tabris.Proxy.registerType("List", function(type, properties) {
     return new tabris.ListProxy()._create(properties);
-  };
-  tabris.Proxy._factories.ListItem = function(type, properties) {
+  });
+  tabris.Proxy.registerType("ListItem", function(type, properties) {
     return new tabris.Proxy()._create("rwt.widgets.GridItem", properties);
-  };
+  });
 
 })();
