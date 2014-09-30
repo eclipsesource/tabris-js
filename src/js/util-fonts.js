@@ -3,11 +3,11 @@
  * All rights reserved.
  */
 
-(function(){
+(function() {
 
   util.fontStringToArray = function(str) {
     var result = [[], 0, false, false];
-    var parts = str.split( /(?:\s|^)\d+px(?:\s|$)/ );
+    var parts = str.split(/(?:\s|^)\d+px(?:\s|$)/);
     checkTruthy(parts.length === 2 || parts.length === 1, "Invalid font syntax");
     result[1] = parseInt(/(?:\s|^)(\d+)px(?:\s|$)/.exec(str)[1], 10);
     parseStyles(result, parts[0]);
@@ -16,26 +16,26 @@
   };
 
   util.fontArrayToString = function(fontArr) {
-    return   (fontArr[2] ? "italic " : "") + (fontArr[3] ? "bold " : "") +
-             (fontArr[1] + "px") + (fontArr[0][0] ? " " : "") + (fontArr[0].join( ", "));
+    return (fontArr[2] ? "italic " : "") + (fontArr[3] ? "bold " : "") +
+        (fontArr[1] + "px") + (fontArr[0][0] ? " " : "") + (fontArr[0].join(", "));
   };
 
   var parseStyles = function(fontArr, styles) {
     var styleArr = styles.trim().split(/\s+/);
     checkTruthy(styleArr.length <= 2, "Too many font styles");
-    styleArr.forEach(function(property){
-      switch(property.trim()) {
+    styleArr.forEach(function(property) {
+      switch (property.trim()) {
         case "bold":
           checkTruthy(fontArr[3] === false, "Invalid font weight");
           fontArr[3] = true;
-        break;
+          break;
         case "italic":
           checkTruthy(fontArr[2] === false, "Invalid font variant");
           fontArr[2] = true;
-        break;
+          break;
         case "normal":
         case "":
-        break;
+          break;
         default:
           throw new Error("Unknown font property: " + property.trim());
       }
@@ -53,7 +53,7 @@
   };
 
   var checkTruthy = function(value, message) {
-    if(!value) {
+    if (!value) {
       throw new Error(message);
     }
   };

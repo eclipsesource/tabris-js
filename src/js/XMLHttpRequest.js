@@ -17,7 +17,7 @@
   ];
   var uploadEventTypes = ["progress", "loadstart", "load", "loadend", "timeout", "abort", "error"];
 
-  //////////////
+  // -----------------------------------------------------------------
   // Constructor
 
   tabris.XMLHttpRequest = function() {
@@ -51,7 +51,7 @@
     DONE: 4
   };
 
-  /////////
+  // -----------------------------------------------------------------
   // Events
 
   tabris.XMLHttpRequestProgressEvent = function(type) {
@@ -64,7 +64,7 @@
     total: 0
   });
 
-  /////////////
+  // -----------------------------------------------------------------
   // Properties
 
   var createScopeObject = function(xhr) {
@@ -122,7 +122,7 @@
       },
       set: function(value) {
         // (1): superfluous, as we don't support synchronous requests
-        if(!isNaN(value)) { // (2)
+        if (!isNaN(value)) { // (2)
           scope.timeout = Math.round(value);
         }
       }
@@ -134,16 +134,16 @@
       get: function() {
         // Steps merged with #text-response-entity-body, entity body steps marked with '*'
         // Note: HttpRequest's response is already stringified
-        if(scope.responseText === null) { // (1*)
+        if (scope.responseText === null) { // (1*)
           return "";
         }
-        if(typeof scope.responseText !== "string") { // (1*)
+        if (typeof scope.responseText != "string") { // (1*)
           throw new Error("IllegalStateError: responseText is not a string");
         }
-        if((scope.readyState !== xhr.LOADING && scope.readyState !== xhr.DONE)) { // (2)
+        if ((scope.readyState != xhr.LOADING && scope.readyState != xhr.DONE)) { // (2)
           return "";
         }
-        if(scope.error) { // (3)
+        if (scope.error) { // (3)
           return "";
         }
         return scope.responseText;
@@ -157,10 +157,10 @@
       get: function() {
         // Note: only the if-statement implemented, as response types different than 'text' are
         // currently not supported
-        if(scope.readyState !== xhr.LOADING && scope.readyState !== xhr.DONE) { // (1)
+        if (scope.readyState != xhr.LOADING && scope.readyState != xhr.DONE) { // (1)
           return "";
         }
-        if(scope.error) { // (2)
+        if (scope.error) { // (2)
           return "";
         }
         return scope.responseText; // (3)
@@ -175,19 +175,19 @@
         return scope.responseType;
       },
       set: function(value) {
-        if((scope.readyState === xhr.LOADING || scope.readyState === xhr.DONE)) { // (1)
+        if ((scope.readyState == xhr.LOADING || scope.readyState == xhr.DONE)) { // (1)
           throw new Error(
-            "InvalidStateError: state must not be 'LOADING' or 'DONE' when setting responseType"
+              "InvalidStateError: state must not be 'LOADING' or 'DONE' when setting responseType"
           );
         }
         // (2): superfluous as we don't support synchronous requests
         // (3): we don't handle the concurrency in this layer, so no worker environments
         // mimicking Chromium and Firefox behaviour when setting a not allowed responseType:
-        if(["arraybuffer", "blob", "document", "json", "text"].indexOf(value) < 0) {
+        if (["arraybuffer", "blob", "document", "json", "text"].indexOf(value) < 0) {
           return;
         }
         // currently only the 'text' response type is supported
-        if(["arraybuffer", "blob", "document", "json"].indexOf(value) > -1) {
+        if (["arraybuffer", "blob", "document", "json"].indexOf(value) > -1) {
           throw new Error("Only the 'text' response type is supported.");
         }
         scope.responseType = value;
@@ -212,7 +212,7 @@
       },
       set: function(value) {
         // mimicks the behavior of Firefox and Chromium
-        if(typeof value === "function") {
+        if (typeof value === "function") {
           target.removeEventListener(eventType, target[handler]);
           listeners[handler] = value;
           target.addEventListener(eventType, target[handler]);
@@ -224,10 +224,10 @@
   var definePropertyStatus = function(xhr, scope) {
     Object.defineProperty(xhr, "status", { // #the-status-attribute
       get: function() {
-        if([xhr.OPENED, xhr.UNSENT].indexOf(scope.readyState) > -1) { // (1)
+        if ([xhr.OPENED, xhr.UNSENT].indexOf(scope.readyState) > -1) { // (1)
           return 0;
         }
-        if(scope.error) { // (2)
+        if (scope.error) { // (2)
           return 0;
         }
         return scope.status; // (3)
@@ -239,10 +239,10 @@
   var definePropertyStatusText = function(xhr, scope) {
     Object.defineProperty(xhr, "statusText", {
       get: function() { // #the-statustext-attribute
-        if([xhr.OPENED, xhr.UNSENT].indexOf(scope.readyState) > -1) { // (1)
+        if ([xhr.OPENED, xhr.UNSENT].indexOf(scope.readyState) > -1) { // (1)
           return "";
         }
-        if(scope.error) { // (2)
+        if (scope.error) { // (2)
           return "";
         }
         return scope.statusText; // (3)
@@ -254,17 +254,17 @@
   var definePropertyWithCredentials = function(xhr, scope) {
     Object.defineProperty(xhr, "withCredentials", { // #the-withcredentials-attribute
       set: function(value) {
-        if(scope.readyState !== xhr.UNSENT && scope.readyState !== xhr.OPENED) { // (1)
+        if (scope.readyState != xhr.UNSENT && scope.readyState != xhr.OPENED) { // (1)
           throw new Error(
-            "InvalidStateError: state must be 'UNSENT' or 'OPENED' when setting withCredentials"
+              "InvalidStateError: state must be 'UNSENT' or 'OPENED' when setting withCredentials"
           );
         }
-        if(scope.sendInvoked) { // (2)
+        if (scope.sendInvoked) { // (2)
           throw new Error("InvalidStateError: 'send' invoked, failed to set 'withCredentials'");
         }
         // (3): superfluous as we don't support synchronous requests
         // mimicking Chromium and Firefox behaviour when setting a non-boolean value:
-        if(typeof value === "boolean") {
+        if (typeof value == "boolean") {
           scope.withCredentials = value; // (4)
         }
       },
@@ -274,7 +274,7 @@
     });
   };
 
-  //////////
+  // -----------------------------------------------------------------
   // Methods
 
   var createOpenMethod = function(xhr, scope) {
@@ -286,18 +286,18 @@
       // regex taken from http://stackoverflow.com/a/8206299:
       var urlWithoutProtocol = url.replace(/.*?:\/\//g, "");
       // regex taken from http://stackoverflow.com/a/19709846:
-      parsedUrl.isRelative = !new RegExp('^(?:[a-z]+:)?//', 'i').test(url);
-      parsedUrl.userdata = urlWithoutProtocol.substring(0, urlWithoutProtocol.indexOf('@'));
-      if(typeof async === "undefined") { // (10)
+      parsedUrl.isRelative = !new RegExp("^(?:[a-z]+:)?//", "i").test(url);
+      parsedUrl.userdata = urlWithoutProtocol.substring(0, urlWithoutProtocol.indexOf("@"));
+      if (typeof async == "undefined") { // (10)
         async = true;
         username = null;
         password = null;
       }
-      if(!async) {
+      if (!async) {
         throw new Error("Only asynchronous request supported.");
       }
-      if(parsedUrl.isRelative){ // (11)
-        if(username && password) {
+      if (parsedUrl.isRelative) { // (11)
+        if (username && password) {
           parsedUrl.userdata = username + ":" + password;
         }
       }
@@ -310,7 +310,7 @@
       scope.authorRequestHeaders = {};
       scope.sendInvoked = false;
       scope.responseText = null;
-      if(scope.readyState !== xhr.OPENED) { // (15)
+      if (scope.readyState != xhr.OPENED) { // (15)
         scope.readyState = xhr.OPENED;
         dispatchXHREvent("readystatechange", xhr);
       }
@@ -329,36 +329,36 @@
       scope.proxy.on("UploadProgress", function(e) {
         dispatchProgressEvent("progress", xhr.upload, e.lengthComputable, e.loaded, e.total);
       });
-      if(scope.readyState !== xhr.OPENED) { // (1)
+      if (scope.readyState != xhr.OPENED) { // (1)
         throw new Error(
-          "InvalidStateError: Object's state must be 'OPENED', failed to execute 'send'"
+            "InvalidStateError: Object's state must be 'OPENED', failed to execute 'send'"
         );
       }
-      if(scope.sendInvoked) { // (2)
+      if (scope.sendInvoked) { // (2)
         throw new Error("InvalidStateError: 'send' invoked, failed to execute 'send'");
       }
-      if(["GET", "HEAD"].indexOf(scope.requestMethod) > -1) { // (3)
+      if (["GET", "HEAD"].indexOf(scope.requestMethod) > -1) { // (3)
         data = null;
       }
       scope.requestBody = data; // (4)
       // TODO: support encoding and mimetype for string response types
       // (5): no storage mutex
       scope.error = scope.uploadComplete = false; // (6), see (8)
-      if(!data) { // (7)
+      if (!data) { // (7)
         scope.uploadComplete = true;
       }
       // (8): uploadEvents is relevant for the "force preflight flag", but this logic is handled by
       // the client
       // Basic access authentication
-      if(scope.withCredentials) {
+      if (scope.withCredentials) {
         // TODO: encode userdata in base64, will not function if not encoded
-        if(scope.requestUrl.userdata) {
+        if (scope.requestUrl.userdata) {
           xhr.setRequestHeader("Authorization", "Basic " + scope.requestUrl.userdata);
         }
       }
       scope.sendInvoked = true; // (9.1)
       dispatchProgressEvent("loadstart", xhr); // (9.2)
-      if(!scope.uploadComplete) {
+      if (!scope.uploadComplete) {
         dispatchProgressEvent("loadstart", xhr.upload); // (9.3)
       }
       // (10): only handling the same origin case
@@ -374,15 +374,15 @@
 
   var createAbortMethod = function(xhr, scope) {
     return function() { // #the-abort()-method
-      if(scope.proxy) {
+      if (scope.proxy) {
         scope.proxy.call("abort"); // (1)
       }
-      if(!([xhr.UNSENT, xhr.OPENED].indexOf(scope.readyState) > -1 &&
-         !scope.sendInvoked || scope.readyState === xhr.DONE)) { // send() interrupted
+      if (!([xhr.UNSENT, xhr.OPENED].indexOf(scope.readyState) > -1 && !scope.sendInvoked ||
+          scope.readyState === xhr.DONE)) { // send() interrupted
         // (2.1), (2.2): setting readyState DONE with sendInvoked true or false seems to be an
         // internal state which doesn't affect the behavior and thus cannot be tested
         dispatchXHREvent("readystatechange", xhr); // (2.3)
-        if(!scope.uploadComplete) {
+        if (!scope.uploadComplete) {
           scope.uploadComplete = true; // (2.4.1)
           dispatchAbortProgressEvents(xhr.upload); // (2.4.2), (2.4.3), (2.4.4)
         }
@@ -394,26 +394,24 @@
 
   var createSetRequestHeaderMethod = function(xhr, scope) {
     return function(header, value) { // #dom-xmlhttprequest-setrequestheader
-      if(scope.readyState !== xhr.OPENED) { // (1)
-        throw new Error(
-          "InvalidStateError: Object's state must be 'OPENED', failed to execute 'setRequestHeader'"
-        );
+      if (scope.readyState !== xhr.OPENED) { // (1)
+        throw new Error("InvalidStateError: " +
+                "Object's state must be 'OPENED', failed to execute 'setRequestHeader'");
       }
-      if(scope.sendInvoked) { // (2)
-        throw new Error(
-          "InvalidStateError: cannot set request header if 'send()' invoked and request not completed"
-        );
+      if (scope.sendInvoked) { // (2)
+        throw new Error("InvalidStateError: " +
+                "cannot set request header if 'send()' invoked and request not completed");
       }
-      if(!validHttpToken(header)){ // (3)
+      if (!validHttpToken(header)) { // (3)
         throw new TypeError("Invalid HTTP header name, failed to execute 'open'");
       }
-      if(!isValidHttpHeaderValue(value)) { // (4)
+      if (!isValidHttpHeaderValue(value)) { // (4)
         throw new TypeError("Invalid HTTP header value, failed to execute 'open'");
       }
-      if(isForbiddenHeader(header)) { // (5)
+      if (isForbiddenHeader(header)) { // (5)
         throw new Error("Cannot set forbidden header '" + header + "'");
       }
-      if(header in scope.authorRequestHeaders) { // (6):
+      if (header in scope.authorRequestHeaders) { // (6):
         scope.authorRequestHeaders[header] = scope.authorRequestHeaders[header] + ", " + value; // (7)
       } else {
         scope.authorRequestHeaders[header] = value; // (8)
@@ -423,18 +421,18 @@
 
   var createGetResponseHeaderMethod = function(xhr, scope) {
     return function(header) { // #the-getresponseheader()-method
-      if([xhr.UNSENT, xhr.OPENED].indexOf(xhr.readyState) > -1) { // (1)
+      if ([xhr.UNSENT, xhr.OPENED].indexOf(xhr.readyState) > -1) { // (1)
         return null;
       }
-      if(scope.error) { // (2)
+      if (scope.error) { // (2)
         return null;
       }
       var forbiddenHeaders = ["set-cookie", "set-cookie2", "status"]; // (3)
-      if(forbiddenHeaders.indexOf(header.toLowerCase()) > -1) {
+      if (forbiddenHeaders.indexOf(header.toLowerCase()) > -1) {
         return null;
       }
-      for(var key in scope.responseHeaders) { // (4), (5)
-        if(key.toLowerCase() === header.toLowerCase()) {
+      for (var key in scope.responseHeaders) { // (4), (5)
+        if (key.toLowerCase() == header.toLowerCase()) {
           return scope.responseHeaders[key];
         }
       }
@@ -444,10 +442,10 @@
 
   var createGetAllResponseHeadersMethod = function(xhr, scope) {
     return function() { // #the-getallresponseheaders()-method
-      if([xhr.UNSENT, xhr.OPENED].indexOf(xhr.readyState) > -1) { // (1)
+      if ([xhr.UNSENT, xhr.OPENED].indexOf(xhr.readyState) > -1) { // (1)
         return "";
       }
-      if(scope.error) { // (2)
+      if (scope.error) { // (2)
         return "";
       }
       return stringifyResponseHeaders(scope.responseHeaders); // (3)
@@ -457,15 +455,15 @@
   var stringifyResponseHeaders = function(headers) {
     var string = [];
     var forbiddenHeaders = ["set-cookie", "set-cookie2", "status"];
-    for(var key in headers) {
-      if(forbiddenHeaders.indexOf(key.toLowerCase()) < 0) {
+    for (var key in headers) {
+      if (forbiddenHeaders.indexOf(key.toLowerCase()) < 0) {
         string.push(key + ": " + headers[key]);
       }
     }
     return string.join("\n");
   };
 
-  ////////////////
+  // -----------------------------------------------------------------
   // Event handler
 
   var stateChangeHandler = function(e, xhr, scope) { // #infrastructure-for-the-send()-method
@@ -506,26 +504,26 @@
     }
   };
 
-  var handleRequestError = function(event, xhr, scope){ // #request-error
+  var handleRequestError = function(event, xhr, scope) { // #request-error
     scope.error = true; // (1*) (#terminate-the-request)
     scope.readyState = xhr.DONE; // (1)
     // (2): superfluous as we don't support synchronous requests
     dispatchXHREvent("readystatechange", xhr); // (3)
     dispatchErrorProgressEvents(event, xhr);
-    if(!scope.uploadComplete) {
+    if (!scope.uploadComplete) {
       scope.uploadComplete = true;
       dispatchErrorProgressEvents(event, xhr.upload);
     }
   };
 
-  /////////////
+  // -----------------------------------------------------------------
   // Validators
 
   var validateRequiredOpenArgs = function(method, url) {
-    if(!method) {
+    if (!method) {
       throw new TypeError("Method argument should be specified to execute 'open'");
     }
-    if(!url) {
+    if (!url) {
       throw new TypeError("URL argument should be specified to execute 'open'");
     }
     validateMethod(method);
@@ -534,19 +532,19 @@
   };
 
   var validateMethod = function(method) {
-    if(!validHttpToken(method)){
+    if (!validHttpToken(method)) {
       throw new TypeError("Invalid HTTP method, failed to execute 'open'");
     }
     // (6):
     var tokens = ["CONNECT", "DELETE", "GET", "HEAD", "OPTIONS", "POST", "PUT", "TRACE", "TRACK"];
     var uppercaseMethod = method.toUpperCase();
-    if(tokens.indexOf(uppercaseMethod) >= 0) {
+    if (tokens.indexOf(uppercaseMethod) >= 0) {
       method = uppercaseMethod;
     }
     var forbiddenTokens = ["CONNECT", "TRACE", "TRACK"]; // (7)
-    if(forbiddenTokens.indexOf(method) >= 0) {
+    if (forbiddenTokens.indexOf(method) >= 0) {
       throw new Error(
-        "SecurityError: '" + method + "' HTTP method is not secure, failed to execute 'open'"
+              "SecurityError: '" + method + "' HTTP method is not secure, failed to execute 'open'"
       );
     }
   };
@@ -554,23 +552,17 @@
   var validHttpToken = function(httpToken) {
     // RFC-compliant validation for HTTP tokens ported from Chromium:
     // https://chromium.googlesource.com/chromium/blink.git/+/master/Source/platform/network/HTTPParsers.cpp
-    var forbiddenCharacters = [
-      "(", ")", "<", ">", "@", ",", ";", ":", "\\", "\"", "\/", "[", "]", "?", "=", "{", "}"
-    ];
-    if(/[^\x21-\x7E]/.test(httpToken) || forbiddenCharacters.indexOf(httpToken) >= 0) {
-      return false;
-    }
-    return true;
+    var forbiddenCharacters = ["(", ")", "<", ">", "@", ",", ";", ":", "\\", "\"", "\/", "[", "]",
+        "?", "=", "{", "}"];
+    return !(/[^\x21-\x7E]/.test(httpToken) || forbiddenCharacters.indexOf(httpToken) >= 0);
   };
 
   var isValidHttpHeaderValue = function(value) {
     // non-RFC compliant validation for HTTP header values ported from Chromium:
     // https://chromium.googlesource.com/chromium/blink.git/+/master/Source/platform/network/HTTPParsers.cpp
     // Regex for Latin-1 characters only: https://gist.github.com/LeoDutra/3044325
-    if(!(/[*A-z\u00C0-\u00ff]+/g).test(value) || value.indexOf("\n") > -1 || value.indexOf("\r") > -1) {
-      return false;
-    }
-    return true;
+    return !(!(/[*A-z\u00C0-\u00ff]+/g).test(value) || value.indexOf("\n") > -1 ||
+        value.indexOf("\r") > -1);
   };
 
   var isForbiddenHeader = function(header) {
@@ -614,7 +606,7 @@
   // TODO: add to copyright header
   // var urlValidationRegex = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/i;
 
-  ///////////////////
+  // -----------------------------------------------------------------
   // Event dispatcher
 
   var dispatchProgressEvent = function(type, target, lengthComputable, loaded, total) {
@@ -642,13 +634,13 @@
   var initXhrProgressEvent = function(type, target, lengthComputable, loaded, total) {
     var xhrProgressEvent = new tabris.XMLHttpRequestProgressEvent(type);
     xhrProgressEvent.currentTarget = xhrProgressEvent.target = target;
-    if(lengthComputable) {
+    if (lengthComputable) {
       xhrProgressEvent.lengthComputable = lengthComputable;
     }
-    if(loaded) {
+    if (loaded) {
       xhrProgressEvent.loaded = loaded;
     }
-    if(total) {
+    if (total) {
       xhrProgressEvent.total = total;
     }
     return xhrProgressEvent;
@@ -665,10 +657,10 @@
     return xhrEvent;
   };
 
-  /////////
+  // -----------------------------------------------------------------
   // Export
 
-  if(typeof XMLHttpRequest === "undefined") {
+  if (typeof XMLHttpRequest === "undefined") {
     window.XMLHttpRequest = tabris.XMLHttpRequest;
     window.XMLHttpRequestProgressEvent = tabris.XMLHttpRequestProgressEvent;
   }

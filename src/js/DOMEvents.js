@@ -10,11 +10,11 @@
   tabris.DOMEvent = function(type, eventInitDict) {
     this.type = type;
     this.timeStamp = Date.now();
-    if(typeof eventInitDict !== "undefined") {
-      if("bubbles" in eventInitDict) {
+    if (typeof eventInitDict != "undefined") {
+      if ("bubbles" in eventInitDict) {
         this.bubbles = eventInitDict.bubbles;
       }
-      if("cancelable" in eventInitDict) {
+      if ("cancelable" in eventInitDict) {
         this.cancelable = eventInitDict.cancelable;
       }
     }
@@ -37,33 +37,32 @@
     preventDefault: noop
   };
 
-
   tabris._addDOMEventTargetMethods = function(target) {
 
-    if(typeof target.addEventListener === "function") {
+    if (typeof target.addEventListener === "function") {
       return;
     }
 
     var listeners;
 
-    target.addEventListener = function(type, listener /*, useCapture*/ ) {
-      if(!listeners) {
+    target.addEventListener = function(type, listener /*, useCapture*/) {
+      if (!listeners) {
         listeners = [];
       }
-      if(!(type in listeners)) {
+      if (!(type in listeners)) {
         listeners[type] = [];
       }
       var index = listeners[type].indexOf(listener);
-      if(index === -1) {
+      if (index === -1) {
         listeners[type].push(listener);
       }
       return listeners[type].length === 1;
     };
 
-    target.removeEventListener = function(type, listener /*, useCapture*/ ) {
-      if(listeners && type in listeners) {
+    target.removeEventListener = function(type, listener /*, useCapture*/) {
+      if (listeners && type in listeners) {
         var index = listeners[type].indexOf(listener);
-        if(index !== -1) {
+        if (index !== -1) {
           listeners[type].splice(index, 1);
           return listeners[type].length === 0;
         }
@@ -72,7 +71,7 @@
     };
 
     target.dispatchEvent = function(event) {
-      if(listeners && event.type in listeners) {
+      if (listeners && event.type in listeners) {
         var eventListeners = listeners[event.type];
         for (var i = 0; i < eventListeners.length; i++) {
           eventListeners[i].call(this, event);

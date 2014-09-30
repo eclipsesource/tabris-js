@@ -17,7 +17,7 @@
     function createTimer(fn, delay, repeat) {
       var taskId = taskSequence++;
       var timer = tabris.create("tabris.Timer", {
-        delay : delay,
+        delay: delay,
         repeat: repeat
       }).on("Run", function() {
         fn.call();

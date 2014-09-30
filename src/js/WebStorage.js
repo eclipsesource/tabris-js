@@ -15,26 +15,26 @@
     // Note: key and length methods currently not supported
 
     setItem: function(key, value) {
-      if(!key) {
+      if (!key) {
         throw new TypeError("Key argument must be specified to execute 'setItem'");
       }
-      if(!value) {
+      if (!value) {
         throw new TypeError("Value argument must be specified to execute 'setItem'");
       }
-      if(typeof key === "string" && typeof value === "string") {
+      if (typeof key == "string" && typeof value == "string") {
         proxy.call("add", {key: key, value: value});
       }
     },
 
     getItem: function(key) {
       // Note: the client implementation should return "null" when the item was not found
-      if(typeof key === "string") {
+      if (typeof key == "string") {
         return proxy.call("get", {key: key});
       }
     },
 
     removeItem: function(key) {
-      if(typeof key === "string") {
+      if (typeof key == "string") {
         proxy.call("remove", {keys: [key]});
       }
     },
@@ -59,7 +59,7 @@
     storageArea: null
   });
 
-  if(!window.Storage) {
+  if (!window.Storage) {
     window.Storage = tabris.WebStorage;
     window.localStorage = new tabris.WebStorage();
   }

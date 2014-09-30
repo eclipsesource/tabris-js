@@ -11,10 +11,10 @@
     this._savedStates = [];
     this._operations = [];
     this.canvas = {
-      width : 0,
+      width: 0,
       height: 0
     };
-    for(var name in properties) {
+    for (var name in properties) {
       defineProperty(this, name);
     }
     tabris.on("flush", this._flush, this);
@@ -123,7 +123,7 @@
       this._operations.push(["stroke"]);
     },
 
-    _init: function( width, height) {
+    _init: function(width, height) {
       this.canvas.width = width;
       this.canvas.height = height;
       this._gc.call("init", {
@@ -137,21 +137,21 @@
 
     _flush: function() {
       if (this._operations.length > 0) {
-        this._gc.call("draw", { "operations": this._operations });
+        this._gc.call("draw", {operations: this._operations});
         this._operations = [];
       }
     }
 
   };
 
-  tabris.getContext = function( canvas, width, height ) {
-    if( !canvas._gc ) {
+  tabris.getContext = function(canvas, width, height) {
+    if (!canvas._gc) {
       canvas._gc = canvas.append("GC", {});
     }
-    if( !canvas._ctx ) {
-      canvas._ctx = new tabris.CanvasContext( canvas._gc );
+    if (!canvas._ctx) {
+      canvas._ctx = new tabris.CanvasContext(canvas._gc);
     }
-    canvas._ctx._init( width, height );
+    canvas._ctx._init(width, height);
     return canvas._ctx;
   };
 
@@ -160,7 +160,7 @@
   }
 
   function checkValue(value) {
-    if(value in this.values) {
+    if (value in this.values) {
       return value;
     }
     throw new Error(value);
@@ -178,7 +178,7 @@
     lineWidth: {
       init: 1,
       encode: function(value) {
-        if(value > 0) {
+        if (value > 0) {
           return value;
         }
         throw new Error(value);
@@ -223,7 +223,7 @@
 
   function createState() {
     var state = {};
-    for(var name in properties) {
+    for (var name in properties) {
       state[name] = properties[name].init;
     }
     return state;
@@ -239,7 +239,7 @@
         try {
           context._state[name] = prop.encode(value);
           context._operations.push([name, this._state[name]]);
-        } catch(error) {
+        } catch (error) {
           console.warn("Unsupported value for " + name + ": " + value);
         }
       }

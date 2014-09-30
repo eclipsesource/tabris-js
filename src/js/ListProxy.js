@@ -52,7 +52,7 @@
     _findItemIndex: function(itemId) {
       for (var i = 0; i < this._children.length; i++) {
         if (this._children[i].id === itemId) {
-          return i-1;
+          return i - 1;
         }
       }
       return -1;
@@ -128,7 +128,7 @@
     },
 
     _disposeItems: function() {
-      if( this._children ) {
+      if (this._children) {
         // omit scroll bar
         for (var i = this._children.length - 1; i > 0; i--) {
           this._children[i].dispose();

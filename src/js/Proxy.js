@@ -5,12 +5,12 @@
 
 (function() {
 
-  tabris.Proxy = function( id ) {
+  tabris.Proxy = function(id) {
     this.id = id || generateId();
     tabris._proxies[this.id] = this;
   };
 
-  tabris.Proxy.create = function( type, properties ) {
+  tabris.Proxy.create = function(type, properties) {
     if (type in tabris.Proxy._factories) {
       return tabris.Proxy._factories[type](type, properties);
     }
@@ -28,68 +28,68 @@
 
   util.extend(tabris.Proxy.prototype, tabris.Events, {
 
-    _create: function( type, properties ) {
-      if( properties && properties.parent ) {
+    _create: function(type, properties) {
+      if (properties && properties.parent) {
         this._parent = properties.parent;
-        this._parent._addChild( this );
+        this._parent._addChild(this);
       }
-      tabris._nativeBridge.create( this.id, encodeType( type ), this._encodeProperties( properties ) );
+      tabris._nativeBridge.create(this.id, encodeType(type), this._encodeProperties(properties));
       return this;
     },
 
-    append: function( type, properties ) {
+    append: function(type, properties) {
       this._checkDisposed();
-      return tabris.create( type, util.extend( {}, properties, { parent: this } ) );
+      return tabris.create(type, util.extend({}, properties, {parent: this}));
     },
 
-    get: function( name ) {
+    get: function(name) {
       this._checkDisposed();
-      return this._decodeProperty( name, tabris._nativeBridge.get( this.id, name ) );
+      return this._decodeProperty(name, tabris._nativeBridge.get(this.id, name));
     },
 
-    set: function( arg1, arg2 ) {
+    set: function(arg1, arg2) {
       this._checkDisposed();
       var properties;
-      if( typeof arg1 === "string" ) {
+      if (typeof arg1 === "string") {
         properties = {};
         properties[arg1] = arg2;
       } else {
         properties = arg1;
       }
-      tabris._nativeBridge.set( this.id, this._encodeProperties( properties ) );
+      tabris._nativeBridge.set(this.id, this._encodeProperties(properties));
       return this;
     },
 
-    call: function( method, parameters ) {
+    call: function(method, parameters) {
       this._checkDisposed();
-      return tabris._nativeBridge.call( this.id, method, parameters );
+      return tabris._nativeBridge.call(this.id, method, parameters);
     },
 
-    on: function( event, listener, context ) {
+    on: function(event, listener, context) {
       this._checkDisposed();
-      var wasListening = this._isListening( event );
-      tabris.Events.on.call( this, event, listener, context );
-      if( !wasListening ) {
-        tabris._nativeBridge.listen( this.id, event, true );
+      var wasListening = this._isListening(event);
+      tabris.Events.on.call(this, event, listener, context);
+      if (!wasListening) {
+        tabris._nativeBridge.listen(this.id, event, true);
       }
       return this;
     },
 
-    off: function( event, listener, context ) {
+    off: function(event, listener, context) {
       this._checkDisposed();
-      tabris.Events.off.call( this, event, listener, context );
-      if( !this._isListening( event ) ) {
-        tabris._nativeBridge.listen( this.id, event, false );
+      tabris.Events.off.call(this, event, listener, context);
+      if (!this._isListening(event)) {
+        tabris._nativeBridge.listen(this.id, event, false);
       }
       return this;
     },
 
     dispose: function() {
-      if( !this._isDisposed ) {
-        tabris._nativeBridge.destroy( this.id );
+      if (!this._isDisposed) {
+        tabris._nativeBridge.destroy(this.id);
         this._destroy();
-        if( this._parent ) {
-          this._parent._removeChild( this );
+        if (this._parent) {
+          this._parent._removeChild(this);
         }
         this._isDisposed = true;
       }
@@ -97,67 +97,67 @@
 
     _destroy: function() {
       this._destroyChildren();
-      this.trigger( "Dispose", {} );
-      tabris.Events.off.call( this );
+      this.trigger("Dispose", {});
+      tabris.Events.off.call(this);
       delete tabris._proxies[this.id];
     },
 
     _destroyChildren: function() {
-      if( this._children ) {
-        for( var i = 0; i < this._children.length; i++ ) {
+      if (this._children) {
+        for (var i = 0; i < this._children.length; i++) {
           this._children[i]._destroy();
         }
       }
     },
 
-    _addChild: function( child ) {
-      if( !this._children ) {
+    _addChild: function(child) {
+      if (!this._children) {
         this._children = [];
       }
-      this._children.push( child );
+      this._children.push(child);
     },
 
-    _removeChild: function( child ) {
-      if( this._children ) {
-        var index = this._children.indexOf( child );
-        if( index !== -1 ) {
-          this._children.splice( index, 1 );
+    _removeChild: function(child) {
+      if (this._children) {
+        var index = this._children.indexOf(child);
+        if (index !== -1) {
+          this._children.splice(index, 1);
         }
       }
     },
 
     _checkDisposed: function() {
-      if( this._isDisposed ) {
-        throw new Error( "Object is disposed" );
+      if (this._isDisposed) {
+        throw new Error("Object is disposed");
       }
     },
 
-    _encodeProperties: function( properties ) {
+    _encodeProperties: function(properties) {
       var result = {};
-      for( var key in properties ) {
+      for (var key in properties) {
         this._setProperty(key, properties[key], result);
       }
       return result;
     },
 
-    _setProperty: function( name, value, target ) {
+    _setProperty: function(name, value, target) {
       try {
         target[name] = this._encodeProperty(name, value);
-      } catch( error ) {
-        console.warn( "Unsupported "+ name + " value: " + error.message );
+      } catch (error) {
+        console.warn("Unsupported " + name + " value: " + error.message);
       }
     },
 
-    _encodeProperty: function( name, value ) {
-      if( name === "foreground" || name === "background" ) {
-        return encodeColor( value );
-      } else if( name === "font" ) {
-        return encodeFont( value );
-      } else if( name === "layoutData" ) {
-        checkLayoutData( value );
-        return encodeLayoutData( value );
+    _encodeProperty: function(name, value) {
+      if (name === "foreground" || name === "background") {
+        return encodeColor(value);
+      } else if (name === "font") {
+        return encodeFont(value);
+      } else if (name === "layoutData") {
+        checkLayoutData(value);
+        return encodeLayoutData(value);
       }
-      return encodeProxyToId( value );
+      return encodeProxyToId(value);
     },
 
     _decodeProperty: function(name, value) {
@@ -170,78 +170,82 @@
     }
   });
 
-  function encodeColor( value ) {
-    return util.colorStringToArray( value );
+  function encodeColor(value) {
+    return util.colorStringToArray(value);
   }
 
-  function encodeFont( value ) {
-    return util.fontStringToArray( value );
+  function encodeFont(value) {
+    return util.fontStringToArray(value);
   }
 
-  function decodeFont( value ) {
-    return util.fontArrayToString( value );
+  function decodeFont(value) {
+    return util.fontArrayToString(value);
   }
 
-  function checkLayoutData( layoutData ) {
-    if( !( "left" in layoutData ) && !( "right" in layoutData ) ) {
-      throw new Error( "either left or right should be specified" );
+  function checkLayoutData(layoutData) {
+    if (!("left" in layoutData) && !("right" in layoutData)) {
+      throw new Error("either left or right should be specified");
     }
-    if( !( "top" in layoutData ) && !( "bottom" in layoutData ) ) {
-      throw new Error( "either top or bottom should be specified" );
+    if (!("top" in layoutData) && !("bottom" in layoutData)) {
+      throw new Error("either top or bottom should be specified");
     }
   }
 
-  function encodeLayoutData( layoutData ) {
+  function encodeLayoutData(layoutData) {
     var result = {};
-    for( var key in layoutData ) {
-      if( Array.isArray( layoutData[key] ) ) {
-        result[key] = layoutData[key].map( encodeProxyToId );
+    for (var key in layoutData) {
+      if (Array.isArray(layoutData[key])) {
+        result[key] = layoutData[key].map(encodeProxyToId);
       } else {
-        result[key] = encodeProxyToId( layoutData[key] );
+        result[key] = encodeProxyToId(layoutData[key]);
       }
     }
     return result;
   }
 
-  function encodeProxyToId( value ) {
+  function encodeProxyToId(value) {
     return value instanceof tabris.Proxy ? value.id : value;
   }
 
-  function encodeType( type ) {
-    if( type.indexOf( '.' ) === -1 ) {
+  function encodeType(type) {
+    if (type.indexOf(".") === -1) {
       return "rwt.widgets." + type;
     }
     return type;
   }
 
-  function decodeColor( value ) {
-    return util.colorArrayToString( value );
+  function decodeColor(value) {
+    return util.colorArrayToString(value);
   }
 
   var idSequence = 1;
 
   function generateId() {
-    return "o" + ( idSequence++ );
+    return "o" + (idSequence++);
   }
 
   var textTypeToStyle = {
-    "password" : ["BORDER", "PASSWORD"],
-    "search" : ["BORDER", "SEARCH"],
-    "multiline" : ["BORDER", "MULTI"],
-    "default" : ["BORDER"]
+    password: ["BORDER", "PASSWORD"],
+    search: ["BORDER", "SEARCH"],
+    multiline: ["BORDER", "MULTI"],
+    default: ["BORDER"]
   };
 
   tabris.Proxy.registerType("Button", function(type, properties) {
-    return new tabris.Proxy()._create("rwt.widgets.Button", util.extend({style: ["PUSH"]}, properties));
+    return new tabris.Proxy()._create("rwt.widgets.Button",
+        util.extend({style: ["PUSH"]}, properties));
   });
   tabris.Proxy.registerType("CheckBox", function(type, properties) {
-    return new tabris.Proxy()._create("rwt.widgets.Button", util.extend({style: ["CHECK"]}, properties));
+    return new tabris.Proxy()._create("rwt.widgets.Button",
+        util.extend({style: ["CHECK"]}, properties));
   });
   tabris.Proxy.registerType("RadioButton", function(type, properties) {
-    return new tabris.Proxy()._create("rwt.widgets.Button", util.extend({style: ["RADIO"]}, properties));
+    return new tabris.Proxy()._create("rwt.widgets.Button",
+        util.extend({style: ["RADIO"]}, properties));
   });
   tabris.Proxy.registerType("ToggleButton", function(type, properties) {
-    return new tabris.Proxy()._create("rwt.widgets.Button", util.extend({style: ["TOGGLE"]}, properties));
+    return new tabris.Proxy()._create("rwt.widgets.Button",
+        util.extend({style: ["TOGGLE"]}, properties));
   });
   tabris.Proxy.registerType("Text", function(type, properties) {
     var style = textTypeToStyle[ properties.type ] || textTypeToStyle["default"];
