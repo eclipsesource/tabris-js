@@ -8,7 +8,7 @@ describe("DOMEvents", function() {
   var target;
   var listener;
 
-  beforeEach(function () {
+  beforeEach(function() {
     target = {};
     tabris._addDOMEventTargetMethods(target);
     listener = jasmine.createSpy();
@@ -69,7 +69,7 @@ describe("DOMEvents", function() {
 
     describe("when listener is added", function() {
 
-      beforeEach(function () {
+      beforeEach(function() {
         target.addEventListener("foo", listener);
       });
 
@@ -87,7 +87,7 @@ describe("DOMEvents", function() {
 
       describe("and removed", function() {
 
-        beforeEach(function () {
+        beforeEach(function() {
           target.removeEventListener("foo", listener);
         });
 
@@ -100,7 +100,7 @@ describe("DOMEvents", function() {
 
       describe("and added again", function() {
 
-        beforeEach(function () {
+        beforeEach(function() {
           target.addEventListener("foo", listener);
         });
 
@@ -112,7 +112,7 @@ describe("DOMEvents", function() {
 
         describe("and removed once", function() {
 
-          beforeEach(function () {
+          beforeEach(function() {
             target.removeEventListener("foo", listener);
           });
 

@@ -29,7 +29,7 @@ describe("CanvasContext", function() {
   }
 
   function getDrawOperations() {
-    var call = nativeBridge.calls({ id: gc.id, op: "call", method: "draw" })[0];
+    var call = nativeBridge.calls({id: gc.id, op: "call", method: "draw"})[0];
     return call ? call.parameters.operations : undefined;
   }
 
@@ -58,7 +58,7 @@ describe("CanvasContext", function() {
     it("calls init", function() {
       tabris.getContext(canvas, 100, 200);
 
-      var call = nativeBridge.calls({ op: "call", method: "init" })[0];
+      var call = nativeBridge.calls({op: "call", method: "init"})[0];
       expect(call.parameters.width).toEqual(100);
       expect(call.parameters.height).toEqual(200);
     });
@@ -68,7 +68,7 @@ describe("CanvasContext", function() {
 
       tabris.getContext(canvas, 200, 100);
 
-      var call = nativeBridge.calls({ op: "call", method: "init" })[1];
+      var call = nativeBridge.calls({op: "call", method: "init"})[1];
       expect(call.parameters.width).toEqual(200);
       expect(call.parameters.height).toEqual(100);
     });
@@ -227,7 +227,7 @@ describe("CanvasContext", function() {
       ctx.fillStyle = "no-such-color";
 
       expect(window.console.warn)
-        .toHaveBeenCalledWith("Unsupported value for fillStyle: no-such-color");
+          .toHaveBeenCalledWith("Unsupported value for fillStyle: no-such-color");
     });
 
   });
@@ -265,7 +265,7 @@ describe("CanvasContext", function() {
       ctx.strokeStyle = "no-such-color";
 
       expect(window.console.warn)
-        .toHaveBeenCalledWith("Unsupported value for strokeStyle: no-such-color");
+          .toHaveBeenCalledWith("Unsupported value for strokeStyle: no-such-color");
     });
 
   });

@@ -8,7 +8,7 @@ describe("WindowTimers", function() {
   var nativeBridge;
   var target;
 
-  beforeEach(function () {
+  beforeEach(function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._start(nativeBridge);
@@ -21,17 +21,17 @@ describe("WindowTimers", function() {
     var clearTimeout = target.clearTimeout = function() {};
     var clearInterval = target.clearInterval = function() {};
 
-    tabris._addWindowTimerMethods( target );
+    tabris._addWindowTimerMethods(target);
 
-    expect( target.setTimeout ).toBe( setTimeout );
-    expect( target.setInterval ).toBe( setInterval );
-    expect( target.clearTimeout ).toBe( clearTimeout );
-    expect( target.clearInterval ).toBe( clearInterval );
+    expect(target.setTimeout).toBe(setTimeout);
+    expect(target.setInterval).toBe(setInterval);
+    expect(target.clearTimeout).toBe(clearTimeout);
+    expect(target.clearInterval).toBe(clearInterval);
   });
 
   describe("created methods", function() {
 
-    beforeEach(function () {
+    beforeEach(function() {
       tabris._addWindowTimerMethods(target);
     });
 
@@ -45,9 +45,9 @@ describe("WindowTimers", function() {
       beforeEach(function() {
         callback = jasmine.createSpy("callback");
         taskId = target.setTimeout(callback, delay);
-        createCall = nativeBridge.calls({ op: "create", type: "tabris.Timer" })[0];
-        listenCall = nativeBridge.calls({ id: createCall.id, op: "listen", event: "Run" })[0];
-        startCall = nativeBridge.calls({ id: createCall.id, op: "call", method: "start" })[0];
+        createCall = nativeBridge.calls({op: "create", type: "tabris.Timer"})[0];
+        listenCall = nativeBridge.calls({id: createCall.id, op: "listen", event: "Run"})[0];
+        startCall = nativeBridge.calls({id: createCall.id, op: "call", method: "start"})[0];
       });
 
       it("creates native Timer", function() {
@@ -158,8 +158,8 @@ describe("WindowTimers", function() {
         callback = jasmine.createSpy("callback");
         taskId = target.setInterval(callback, delay);
         createCall = nativeBridge.calls({op: "create", type: "tabris.Timer"})[0];
-        listenCall = nativeBridge.calls({id: createCall.id, op: "listen", event : "Run"})[0];
-        startCall = nativeBridge.calls({id: createCall.id, op: "call", method : "start"})[0];
+        listenCall = nativeBridge.calls({id: createCall.id, op: "listen", event: "Run"})[0];
+        startCall = nativeBridge.calls({id: createCall.id, op: "call", method: "start"})[0];
       });
 
       it("creates native Timer", function() {

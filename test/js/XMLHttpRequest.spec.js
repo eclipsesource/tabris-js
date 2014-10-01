@@ -90,13 +90,15 @@ describe("XMLHttpRequest", function() {
     it("fails with forbidden method name", function() {
       expect(function() {
         xhr.open("CONNECT", "http://foo.com");
-      }).toThrowError("SecurityError: 'CONNECT' HTTP method is not secure, failed to execute 'open'");
+      }).toThrowError("SecurityError: " +
+                      "'CONNECT' HTTP method is not secure, failed to execute 'open'");
     });
 
     it("fails with forbidden non-uppercase method name", function() {
       expect(function() {
         xhr.open("coNnEcT", "http://foo.com");
-      }).toThrowError("SecurityError: 'CONNECT' HTTP method is not secure, failed to execute 'open'");
+      }).toThrowError("SecurityError: " +
+                      "'CONNECT' HTTP method is not secure, failed to execute 'open'");
     });
 
     // URL validation commented out as Rhino crashes with an OOM-error with several URLs
@@ -151,7 +153,7 @@ describe("XMLHttpRequest", function() {
       xhr.open("GET", "index.json", true, "user", "password");
       xhr.send();
       expect(proxy.call).toHaveBeenCalledWith("send", jasmine.objectContaining({
-        headers: {"Authorization": "Basic user:password"}
+        headers: {Authorization: "Basic user:password"}
       }));
     });
 
@@ -161,7 +163,7 @@ describe("XMLHttpRequest", function() {
       xhr.open("GET", "index.json", true, "user", null);
       xhr.send();
       expect(proxy.call).not.toHaveBeenCalledWith("send", jasmine.objectContaining({
-        headers: {"Authorization": "Basic user:password"}
+        headers: {Authorization: "Basic user:password"}
       }));
     });
 
@@ -178,7 +180,8 @@ describe("XMLHttpRequest", function() {
     it("fails when state not 'opened'", function() {
       expect(function() {
         xhr.send();
-      }).toThrowError("InvalidStateError: Object's state must be 'OPENED', failed to execute 'send'");
+      }).toThrowError("InvalidStateError: " +
+                      "Object's state must be 'OPENED', failed to execute 'send'");
     });
 
     it("fails if send invoked", function() {
@@ -227,7 +230,7 @@ describe("XMLHttpRequest", function() {
       xhr.setRequestHeader("Foo", "Bar");
       xhr.send();
       expect(proxy.call).toHaveBeenCalledWith("send", jasmine.objectContaining({
-        headers: {"Foo": "Bar"}
+        headers: {Foo: "Bar"}
       }));
     });
 
@@ -264,7 +267,7 @@ describe("XMLHttpRequest", function() {
       xhr.setRequestHeader("Foo", "Baz");
       xhr.send();
       expect(proxy.call).toHaveBeenCalledWith("send", jasmine.objectContaining({
-        headers: {"Foo": "Bar, Baz"}
+        headers: {Foo: "Bar, Baz"}
       }));
     });
 
@@ -317,7 +320,7 @@ describe("XMLHttpRequest", function() {
       xhr.open("GET", "http://user:password@foobar.com");
       xhr.send();
       expect(proxy.call).toHaveBeenCalledWith("send", jasmine.objectContaining({
-        headers: {"Authorization": "Basic user:password"}
+        headers: {Authorization: "Basic user:password"}
       }));
     });
 
@@ -325,7 +328,7 @@ describe("XMLHttpRequest", function() {
       xhr.open("GET", "http://user:password@foobar.com");
       xhr.send();
       expect(proxy.call).not.toHaveBeenCalledWith("send", jasmine.objectContaining({
-        headers: {"Authorization": "Basic user:password"}
+        headers: {Authorization: "Basic user:password"}
       }));
     });
 
@@ -334,7 +337,7 @@ describe("XMLHttpRequest", function() {
       xhr.open("GET", "http://foobar.com");
       xhr.send();
       expect(proxy.call).not.toHaveBeenCalledWith("send", jasmine.objectContaining({
-        headers: {"Authorization": "Basic user:password"}
+        headers: {Authorization: "Basic user:password"}
       }));
     });
 
@@ -378,7 +381,7 @@ describe("XMLHttpRequest", function() {
       });
 
       it("calls upload progress events on proxy event state 'headers'", function() {
-        progressEvents.forEach(function(event){
+        progressEvents.forEach(function(event) {
           var handler = "on" + event;
           xhr.upload[handler] = jasmine.createSpy(handler);
           proxy.trigger("StateChange", {state: "headers"});
@@ -387,7 +390,7 @@ describe("XMLHttpRequest", function() {
       });
 
       it("calls progress events on proxy event state 'finished'", function() {
-        progressEvents.forEach(function(event){
+        progressEvents.forEach(function(event) {
           var handler = "on" + event;
           xhr[handler] = jasmine.createSpy(handler);
           proxy.trigger("StateChange", {state: "finished"});
@@ -397,7 +400,7 @@ describe("XMLHttpRequest", function() {
       });
 
       it("calls upload progress events on proxy event state 'finished'", function() {
-        progressEvents.forEach(function(event){
+        progressEvents.forEach(function(event) {
           var handler = "on" + event;
           xhr.upload[handler] = jasmine.createSpy(handler);
           proxy.trigger("StateChange", {state: "finished"});
@@ -615,7 +618,7 @@ describe("XMLHttpRequest", function() {
         proxy.trigger("StateChange", {state: "headers"});
         xhr.upload[handler] = jasmine.createSpy(handler);
         xhr.abort();
-        if(handler !== "loadend") {
+        if (handler != "loadend") {
           expect(xhr.upload[handler]).not.toHaveBeenCalled();
         } else {
           expect(xhr.upload[handler].calls.count()).toEqual(1);
@@ -712,7 +715,7 @@ describe("XMLHttpRequest", function() {
         state: "headers",
         code: 200,
         headers: {
-          "Status": "foo",
+          Status: "foo",
           "Set-Cookie": "foo",
           "Set-Cookie2": "foo",
           "Header-Name1": "foo",
@@ -760,7 +763,7 @@ describe("XMLHttpRequest", function() {
       proxy.trigger("StateChange", {
         state: "headers",
         headers: {
-          "Status": "foo",
+          Status: "foo",
           "Set-Cookie": "foo",
           "Set-Cookie2": "foo",
           "Header-Name1": "foo",
@@ -785,7 +788,7 @@ describe("XMLHttpRequest", function() {
     });
 
     it("is readonly", function() {
-      xhr.upload = {"Foo": "Bar"};
+      xhr.upload = {Foo: "Bar"};
       expect(xhr.upload === JSON.stringify({}));
     });
 
@@ -834,7 +837,7 @@ describe("XMLHttpRequest", function() {
       });
 
       it("fails with invalid reponseText type", function() {
-        proxy.trigger("StateChange", {state: "finished", response:["foo"]});
+        proxy.trigger("StateChange", {state: "finished", response: ["foo"]});
         expect(function() {
           /*jshint unused: false */
           var responseText = xhr.responseText;

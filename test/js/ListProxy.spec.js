@@ -209,7 +209,6 @@ describe("ListProxy", function() {
         ]);
       });
 
-
       it("translates colors to arrays", function() {
         var rowTemplate = nativeBridge.calls({id: list.id, op: "set"})[0].properties.rowTemplate;
         expect(rowTemplate[0].foreground).toEqual([255, 0, 0, 255]);
