@@ -79,6 +79,15 @@ describe("util", function() {
 
   });
 
+  describe("invert", function() {
+
+    it("inverts object with string values", function() {
+      var result = util.invert({Moe: "Moses", Larry: "Louis", Curly: "Jerome"});
+      expect(result).toEqual({Moses: "Moe", Louis: "Larry", Jerome: "Curly"});
+    });
+
+  });
+
   describe("bind", function() {
 
     it("returns a wrapper that will be called with context", function() {

@@ -16,8 +16,8 @@
     }
   },
   "listeners": [
-    "FocusIn",
-    "FocusOut",
+    "focusin",
+    "focusout",
     {
       "MouseDown": {
         "event": {

@@ -81,6 +81,15 @@ describe("tabris", function() {
       expect(label.trigger).toHaveBeenCalledWith("foo", {bar: 23});
     });
 
+    it("notifies widget proxy with translated event name", function() {
+      var label = tabris.create("Label", {});
+      spyOn(label, "trigger");
+
+      tabris._notify(label.id, "FocusIn", {});
+
+      expect(label.trigger).toHaveBeenCalledWith("focusin", {});
+    });
+
     it("sliently ignores events for non-existing ids (does not crash)", function() {
       tabris._notify("no-id", "foo", [23, 42]);
     });

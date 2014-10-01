@@ -70,7 +70,7 @@
       var wasListening = this._isListening(event);
       tabris.Events.on.call(this, event, listener, context);
       if (!wasListening) {
-        tabris._nativeBridge.listen(this.id, event, true);
+        tabris._nativeBridge.listen(this.id, tabris._encodeEventName(event), true);
       }
       return this;
     },
@@ -79,7 +79,7 @@
       this._checkDisposed();
       tabris.Events.off.call(this, event, listener, context);
       if (!this._isListening(event)) {
-        tabris._nativeBridge.listen(this.id, event, false);
+        tabris._nativeBridge.listen(this.id, tabris._encodeEventName(event), false);
       }
       return this;
     },
@@ -172,6 +172,7 @@
       }
       return value;
     }
+
   });
 
   function encodeColor(value) {

@@ -13,6 +13,8 @@
 
     _loadFunctions: [],
     _proxies: {},
+    _localEventNames: getLocalEventNames(),
+    _nativeEventNames: util.invert(getLocalEventNames()),
 
     load: function(fn) {
       tabris._loadFunctions.push(fn);
@@ -37,7 +39,7 @@
     _notify: function(id, event, param) {
       var proxy = tabris._proxies[ id ];
       if (proxy) {
-        proxy._trigger(event, param);
+        proxy._trigger(this._decodeEventName(event), param);
       }
       tabris.trigger("flush");
     },
@@ -45,8 +47,23 @@
     _reset: function() {
       this._loadFunctions = [];
       this._proxies = {};
+    },
+
+    _decodeEventName: function(event) {
+      return this._localEventNames[event] || event;
+    },
+
+    _encodeEventName: function(event) {
+      return this._nativeEventNames[event] || event;
     }
 
   });
+
+  function getLocalEventNames() {
+    return {
+      FocusIn: "focusin",
+      FocusOut: "focusout"
+    };
+  }
 
 })();

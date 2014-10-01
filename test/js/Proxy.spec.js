@@ -392,6 +392,13 @@ describe("Proxy", function() {
         expect(call.listen).toEqual(true);
       });
 
+      it("calls native listen with translated event name", function() {
+        proxy.on("focusin", listener); // example with not just one upper case character!
+
+        var call = nativeBridge.calls({op: "listen"})[0];
+        expect(call.event).toBe("FocusIn");
+      });
+
       it("calls native listen for another listener for another event", function() {
         proxy.on("foo", listener);
         proxy.on("bar", listener);
@@ -439,6 +446,14 @@ describe("Proxy", function() {
 
         var call = nativeBridge.calls({op: "listen", event: "foo"})[0];
         expect(call.listen).toBe(false);
+      });
+
+      it("calls native listen with translated event name", function() {
+        proxy.on("focusin", listener);
+        proxy.off("focusin", listener);
+
+        var call = nativeBridge.calls({op: "listen"})[1];
+        expect(call.event).toBe("FocusIn");
       });
 
       it("does not call native listen when other listeners exist for same event", function() {

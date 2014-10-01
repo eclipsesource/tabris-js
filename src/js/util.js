@@ -45,6 +45,14 @@ util = {
     return result;
   },
 
+  invert: function(object) {
+    var result = {};
+    for (var key in object) {
+      result[object[key]] = key;
+    }
+    return result;
+  },
+
   bind: function(fn, context) {
     return function() {
       return fn.apply(context, arguments);
