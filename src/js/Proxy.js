@@ -95,6 +95,10 @@
       }
     },
 
+    _trigger: function() {
+      this.trigger.apply(this, Array.prototype.slice.call(arguments));
+    },
+
     _destroy: function() {
       this._destroyChildren();
       this.trigger("Dispose", {});

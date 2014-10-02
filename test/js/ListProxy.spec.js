@@ -240,7 +240,7 @@ describe("ListProxy", function() {
       });
     });
 
-    describe("when a Selection event is triggered", function() {
+    describe("when a Selection event is received from native", function() {
       var listener;
 
       beforeEach(function() {
@@ -248,11 +248,25 @@ describe("ListProxy", function() {
         list.set("items", ["Ron", "Sue", "Tom"]);
         var item2Id = nativeBridge.calls({op: "create", type: "rwt.widgets.GridItem"})[2].id;
         list.on("Selection", listener);
-        list.trigger("Selection", {item: item2Id});
+        tabris._notify(list.id, "Selection", {item: item2Id});
       });
 
       it("translates event to contain data item and index", function() {
         expect(listener).toHaveBeenCalledWith({item: "Tom", index: 2});
+      });
+    });
+
+    describe("when a Selection event is triggered", function() {
+      var listener;
+
+      beforeEach(function() {
+        listener = jasmine.createSpy("listener");
+        list.on("Selection", listener);
+        list.trigger("Selection", {item: "Sue", index: 1});
+      });
+
+      it("is not affected by the translation", function() {
+        expect(listener).toHaveBeenCalledWith({item: "Sue", index: 1});
       });
     });
   });

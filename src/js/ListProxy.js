@@ -39,14 +39,14 @@
       this._createItems();
     },
 
-    trigger: function(type) {
+    _trigger: function(type) {
       if (type === "Selection") {
         var event = arguments[1];
         var index = this._findItemIndex(event.item);
         var item = this._items ? this._items[index] : null;
-        return this.super("trigger", type, {item: item, index: index});
+        return this.trigger(type, {item: item, index: index});
       }
-      tabris.Events.trigger.apply(this, Array.prototype.slice.call(arguments, 1));
+      tabris.Proxy.prototype._trigger.apply(this, Array.prototype.slice.call(arguments));
     },
 
     _findItemIndex: function(itemId) {
