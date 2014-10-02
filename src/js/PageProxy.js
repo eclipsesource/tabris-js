@@ -24,7 +24,7 @@ tabris.PageProxy.prototype = util.extendPrototype(tabris.Proxy, {
     this._composite = tabris.create("rwt.widgets.Composite", compositeProperties);
     var pageProperties = util.extend(util.pick(properties, this._PAGE_PROPS), {
       parent: this._uiProxy._ui,
-      control: this._composite.id
+      control: this._composite
     });
     this.super("_create", "tabris.Page", pageProperties);
     return this;

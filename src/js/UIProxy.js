@@ -22,7 +22,7 @@ tabris.UIProxy.prototype = {
       tabris._shell.dispose();
     });
     this._ui = tabris.create("tabris.UI", {
-      shell: tabris._shell.id
+      shell: tabris._shell
     });
     this._ui.on("ShowPage", function(properties) {
       var page = tabris._proxies[properties.pageId];
@@ -41,7 +41,7 @@ tabris.UIProxy.prototype = {
 
   setActivePage: function(page) {
     this._pages.push(page);
-    this._ui.set("activePage", page.id);
+    this._ui.set("activePage", page);
   },
 
   getActivePage: function() {
@@ -52,7 +52,7 @@ tabris.UIProxy.prototype = {
     this._pages.pop();
     var page = this.getActivePage();
     if (page) {
-      this._ui.set("activePage", page.id);
+      this._ui.set("activePage", page);
     }
   },
 
