@@ -54,7 +54,7 @@
 
   });
 
-  tabris.Proxy.registerType("ScrollComposite", function(type, properties) {
+  tabris.registerType("ScrollComposite", function(type, properties) {
     return new tabris.ScrollCompositeProxy()._create(properties);
   });
 

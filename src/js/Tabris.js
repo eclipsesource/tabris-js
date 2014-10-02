@@ -13,6 +13,7 @@
 
     _loadFunctions: [],
     _proxies: {},
+    _factories: {},
     _localEventNames: getLocalEventNames(),
     _nativeEventNames: util.invert(getLocalEventNames()),
 
@@ -25,6 +26,13 @@
         throw new Error("tabris.js not started");
       }
       return tabris.Proxy.create(type, properties);
+    },
+
+    registerType: function(type, factory) {
+      if (type in tabris._factories) {
+        throw new Error("Factory already registered for type " + type);
+      }
+      tabris._factories[type] = factory;
     },
 
     _start: function(nativeBridge) {

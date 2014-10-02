@@ -182,4 +182,19 @@ describe("tabris", function() {
 
   });
 
+  describe("register types", function() {
+    it("allows to register a new type", function() {
+      var factory = jasmine.createSpy("factory");
+      tabris.registerType("CustomType", factory);
+      tabris.create("CustomType", {foo: 23});
+      expect(factory).toHaveBeenCalledWith("CustomType", {foo: 23});
+    });
+
+    it("prevents to overwrite already registered types", function() {
+      expect(function() {
+        tabris.registerType("Button", jasmine.createSpy("factory"));
+      }).toThrowError("Factory already registered for type Button");
+    });
+  });
+
 });
