@@ -77,7 +77,7 @@
   var select = function(filterProperties) {
     var result = this.filter(function(call) {
       for (var key in filterProperties) {
-        if (filterProperties[key] != call[key]) {
+        if (filterProperties[key] !== call[key]) {
           return false;
         }
       }

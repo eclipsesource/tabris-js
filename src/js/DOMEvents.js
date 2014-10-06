@@ -10,7 +10,7 @@
   tabris.DOMEvent = function(type, eventInitDict) {
     this.type = type;
     this.timeStamp = Date.now();
-    if (typeof eventInitDict != "undefined") {
+    if (typeof eventInitDict !== "undefined") {
       if ("bubbles" in eventInitDict) {
         this.bubbles = eventInitDict.bubbles;
       }

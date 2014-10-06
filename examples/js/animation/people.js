@@ -17,8 +17,8 @@ tabris.load(function() {
     ["Moritz", "Post", "moritz.jpg"],
     ["Tim", "Buschtöns", "tim.jpg"]
   ].map(function(element) {
-      return { firstName: element[0], lastName: element[1], image: IMAGE_PATH + element[2] };
-    });
+    return {firstName: element[0], lastName: element[1], image: IMAGE_PATH + element[2]};
+  });
 
   function animateInFromBottom(widget, i) {
     widget.set({
@@ -93,17 +93,17 @@ tabris.load(function() {
 
   function createPersonDetail(parent, person, delay) {
     var composite = parent.append("Composite", {
-      layoutData: {left: 0, right: 0, top: 0, height: IMAGE_SIZE + MARGIN_LARGE }
+      layoutData: {left: 0, right: 0, top: 0, height: IMAGE_SIZE + MARGIN_LARGE}
     });
     var imageLabel = composite.append("Label", {
-      image: [person["image"].toString(), IMAGE_SIZE, IMAGE_SIZE],
+      image: [person.image.toString(), IMAGE_SIZE, IMAGE_SIZE],
       scaleX: 0.75,
       scaleY: 0.75,
       opacity: 0.0
     });
     var nameLabel = composite.append("Label", {
       layoutData: {left: [imageLabel, MARGIN], top: 0},
-      text: person["firstName"] + " " + person["lastName"],
+      text: person.firstName + " " + person.lastName,
       font: "bold 18px"
     });
     var professionLabel = composite.append("Label", {
@@ -139,7 +139,7 @@ tabris.load(function() {
     });
     var imageLabel = composite.append("Label", {
       layoutData: {left: 0, top: 0, width: THUMB_SIZE, height: THUMB_SIZE},
-      image: [person["image"].toString(), THUMB_SIZE, THUMB_SIZE],
+      image: [person.image.toString(), THUMB_SIZE, THUMB_SIZE],
       data: {showTouch: true}
     });
     imageLabel.on("MouseUp", function() {
@@ -148,7 +148,7 @@ tabris.load(function() {
     composite.append("Label", {
       alignment: "center",
       layoutData: {left: 0, top: [imageLabel, 0], width: THUMB_SIZE},
-      text: person["firstName"]
+      text: person.firstName
     });
     return composite;
   }
@@ -173,7 +173,7 @@ tabris.load(function() {
   var curPersonDetailComposite = createPersonDetail(personDetailsCompositeParent, people[2], ANIMATION_START_DELAY);
 
   var peopleComposite = page.append("Composite", {
-    layoutData: {left: MARGIN, top: [personDetailsCompositeParent, MARGIN] }
+    layoutData: {left: MARGIN, top: [personDetailsCompositeParent, MARGIN]}
   });
 
   createPersonThumbComposites(peopleComposite);

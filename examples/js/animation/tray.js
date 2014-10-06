@@ -7,6 +7,18 @@ tabris.load(function() {
   var prevPrevEvent;
   var animation;
 
+  var loremIpsum = "Etiam nisl nisi, egestas quis lacus ut, tristique suscipit metus. In " +
+                   "vehicula lectus metus, at accumsan elit fringilla blandit. Integer et quam " +
+                   "sed dolor pharetra molestie id eget dui. Donec ac libero eu lectus dapibus " +
+                   "placerat eu a tellus. Fusce vulputate ac sem sit amet bibendum.\n\n" +
+                   "Pellentesque euismod varius purus nec pharetra. Sed vitae ipsum sit amet " +
+                   "risus vehicula euismod in at nunc. Sed in viverra arcu, id blandit risus. " +
+                   "Praesent sagittis quis nisl id molestie. Donec dignissim, nisl id volutpat " +
+                   "consectetur, massa diam aliquam lectus, sed euismod leo elit eu justo. " +
+                   "Integer vel ante sapien.\n\nNunc sit amet blandit tellus, sed consequat " +
+                   "neque. Proin vel elementum augue. Quisque gravida nulla nisl, at fermentum " +
+                   "turpis euismod in. ";
+
   var page = tabris.createPage({
     title: "Tray",
     topLevel: true
@@ -54,8 +66,8 @@ tabris.load(function() {
 
   page.append("Label", {
     style: ["WRAP"],
-    layoutData: { left: MARGIN, right: MARGIN, top: MARGIN, bottom: MARGIN },
-    text: "Etiam nisl nisi, egestas quis lacus ut, tristique suscipit metus. In vehicula lectus metus, at accumsan elit fringilla blandit. Integer et quam sed dolor pharetra molestie id eget dui. Donec ac libero eu lectus dapibus placerat eu a tellus. Fusce vulputate ac sem sit amet bibendum.\n\nPellentesque euismod varius purus nec pharetra. Sed vitae ipsum sit amet risus vehicula euismod in at nunc. Sed in viverra arcu, id blandit risus. Praesent sagittis quis nisl id molestie. Donec dignissim, nisl id volutpat consectetur, massa diam aliquam lectus, sed euismod leo elit eu justo. Integer vel ante sapien.\n\nNunc sit amet blandit tellus, sed consequat neque. Proin vel elementum augue. Quisque gravida nulla nisl, at fermentum turpis euismod in. ",
+    layoutData: {left: MARGIN, right: MARGIN, top: MARGIN, bottom: MARGIN},
+    text: loremIpsum,
     foreground: "#777"
   });
 
@@ -85,7 +97,7 @@ tabris.load(function() {
   });
 
   strapTarget.on("MouseMove", function(e) {
-    var y = e["y"] - prevEvent["y"];
+    var y = e.y - prevEvent.y;
     prevPrevEvent = prevEvent;
     prevEvent = e;
     var translationY = tray.get("translationY") + y;
@@ -95,8 +107,8 @@ tabris.load(function() {
   });
 
   strapTarget.on("MouseUp", function() {
-    var time = prevEvent["time"] - prevPrevEvent["time"];
-    var y = prevEvent["y"] - prevPrevEvent["y"];
+    var time = prevEvent.time - prevPrevEvent.time;
+    var y = prevEvent.y - prevPrevEvent.y;
     var translationTarget = 0;
     if (y >= 0) {
       translationTarget = verticalTrayOffset;

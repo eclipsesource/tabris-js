@@ -1,5 +1,6 @@
-/* exported questionsArray, shuffleArray */
-var questionsArray = [
+/*exported questions */
+
+var questions = [
   {
     "question" : "How many friends are there in Friends?",
     "answers" : [ "Six", "Five", "6"],
@@ -26,16 +27,3 @@ var questionsArray = [
     "correctAnswers" : [0]
   }
 ];
-
-function shuffleArray(array) {
-  var remainingElements = array.length,
-    randomIndexInRange,
-    temp;
-  while ( remainingElements > 0 ){
-    randomIndexInRange = Math.floor(Math.random() * remainingElements--);
-    temp = array[remainingElements];
-    array[remainingElements] = array[randomIndexInRange];
-    array[randomIndexInRange] = temp;
-  }
-  return array;
-}

@@ -618,7 +618,7 @@ describe("XMLHttpRequest", function() {
         proxy.trigger("StateChange", {state: "headers"});
         xhr.upload[handler] = jasmine.createSpy(handler);
         xhr.abort();
-        if (handler != "loadend") {
+        if (handler !== "loadend") {
           expect(xhr.upload[handler]).not.toHaveBeenCalled();
         } else {
           expect(xhr.upload[handler].calls.count()).toEqual(1);
