@@ -18,30 +18,17 @@ tabris.load(function() {
     };
   });
 
-  var PAGE_MARGIN = 12;
+  var loremIpsum = "Etiam nisl nisi, egestas quis lacus ut, tristique suscipit metus. In " +
+                   "vehicula lectus metus, at accumsan elit fringilla blandit. Integer et quam " +
+                   "sed dolor pharetra molestie id eget dui. Donec ac libero eu lectus dapibus " +
+                   "placerat eu a tellus. Fusce vulputate ac sem sit amet bibendum. Pellentesque " +
+                   "euismod varius purus nec pharetra. Sed vitae ipsum sit amet risus vehicula " +
+                   "euismod in at nunc. Sed in viverra arcu, id blandit risus. Praesent sagittis " +
+                   "quis nisl id molestie. Donec dignissim, nisl id volutpat consectetur, massa " +
+                   "diam aliquam lectus, sed euismod leo elit eu justo. Integer vel ante " +
+                   "sapien.";
 
-  function createReadBookPage(book) {
-    var page = tabris.createPage({
-      title: book.title
-    });
-    var composite = page.append("ScrollComposite", {
-      scroll: "vertical",
-      layoutData: { left: 0, right: 0, top: 0, bottom: 0 }
-    });
-    var titleLabel = composite.append("Label", {
-      style: ["WRAP"],
-      markupEnabled: true,
-      text: "<b>" + book.title + "</b>",
-      layoutData: { left: PAGE_MARGIN, top: PAGE_MARGIN * 2, right: PAGE_MARGIN },
-      foreground: "rgba(0, 0, 0, 0.5)"
-    });
-    composite.append("Label", {
-      style: ["WRAP"],
-      layoutData: { left: PAGE_MARGIN, right: PAGE_MARGIN, top: [titleLabel, PAGE_MARGIN], bottom: PAGE_MARGIN },
-      text: "Etiam nisl nisi, egestas quis lacus ut, tristique suscipit metus. In vehicula lectus metus, at accumsan elit fringilla blandit. Integer et quam sed dolor pharetra molestie id eget dui. Donec ac libero eu lectus dapibus placerat eu a tellus. Fusce vulputate ac sem sit amet bibendum. Pellentesque euismod varius purus nec pharetra. Sed vitae ipsum sit amet risus vehicula euismod in at nunc. Sed in viverra arcu, id blandit risus. Praesent sagittis quis nisl id molestie. Donec dignissim, nisl id volutpat consectetur, massa diam aliquam lectus, sed euismod leo elit eu justo. Integer vel ante sapien.\n\nNunc sit amet blandit tellus, sed consequat neque. Proin vel elementum augue. Quisque gravida nulla nisl, at fermentum turpis euismod in. Maecenas vitae tortor at ante vulputate iaculis at vitae sem. Nulla dui erat, viverra eget mauris in, sodales mollis purus. Integer rhoncus suscipit mi in pulvinar. Nam metus augue, dictum a egestas ut, gravida eget ipsum. Nunc sapien nisl, mollis et mauris in, venenatis blandit magna. Nullam scelerisque tellus lacus, in lobortis purus consectetur sed. Etiam pulvinar sapien vel nibh vehicula, in lacinia odio pharetra. Duis tincidunt metus a semper auctor. Sed nec consequat augue, id vulputate orci. Nunc metus nulla, luctus id porttitor nec, interdum sed lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus."
-    });
-    return page;
-  }
+  var PAGE_MARGIN = 12;
 
   function createBooksPage(title, image, filter) {
     var page = tabris.createPage({
@@ -58,43 +45,43 @@ tabris.load(function() {
       title: book.title
     });
     var detailsComposite = page.append("Composite", {
-      layoutData: { top: 0, height: 184, left: 0, right: 0 },
+      layoutData: {top: 0, height: 184, left: 0, right: 0},
       background: "white",
       data: {
         showTouch: true
       }
     });
     detailsComposite.append("Composite", {
-      layoutData: { left: 0, right: 0, top: 0, height: 160 + 2 * PAGE_MARGIN }
+      layoutData: {left: 0, right: 0, top: 0, height: 160 + 2 * PAGE_MARGIN}
     }).on("MouseUp", function() {
       createReadBookPage(book).open();
     });
     var imageLabel = detailsComposite.append("Label", {
-      layoutData: { height: 160, width: 106, left: PAGE_MARGIN, top: PAGE_MARGIN },
+      layoutData: {height: 160, width: 106, left: PAGE_MARGIN, top: PAGE_MARGIN},
       image: book.image
     });
     var titleLabel = detailsComposite.append("Label", {
       style: ["WRAP"],
       markupEnabled: true,
       text: "<b>" + book.title + "</b>",
-      layoutData: { left: [imageLabel, PAGE_MARGIN], top: PAGE_MARGIN, right: PAGE_MARGIN }
+      layoutData: {left: [imageLabel, PAGE_MARGIN], top: PAGE_MARGIN, right: PAGE_MARGIN}
     });
     var authorLabel = detailsComposite.append("Label", {
-      layoutData: { left: [imageLabel, PAGE_MARGIN], top: [titleLabel, PAGE_MARGIN] },
+      layoutData: {left: [imageLabel, PAGE_MARGIN], top: [titleLabel, PAGE_MARGIN]},
       text: book.author
     });
     detailsComposite.append("Label", {
-      layoutData: { left: [imageLabel, PAGE_MARGIN], top: [authorLabel, PAGE_MARGIN] },
+      layoutData: {left: [imageLabel, PAGE_MARGIN], top: [authorLabel, PAGE_MARGIN]},
       foreground: "rgb(102, 153, 0)",
       text: "EUR 12,95"
     });
     page.append("Label", {
-      layoutData: { height: 1, right: 0, left: 0, top: [detailsComposite, 0] },
+      layoutData: {height: 1, right: 0, left: 0, top: [detailsComposite, 0]},
       background: "rgba(0, 0, 0, 0.1)"
     });
     var tabFolder = page.append("TabFolder", {
       style: ["TOP"],
-      layoutData: { top: [detailsComposite, 0], left: 0, right: 0, bottom: 0 },
+      layoutData: {top: [detailsComposite, 0], left: 0, right: 0, bottom: 0},
       data: {
         paging: true
       }
@@ -108,7 +95,7 @@ tabris.load(function() {
     var tabRelatedComposite = tabFolder.append("Composite", {});
     tabRelatedComposite.append("Label", {
       text: "Great Book.",
-      layoutData: { left: PAGE_MARGIN, top: PAGE_MARGIN, right: PAGE_MARGIN, bottom: PAGE_MARGIN }
+      layoutData: {left: PAGE_MARGIN, top: PAGE_MARGIN, right: PAGE_MARGIN, bottom: PAGE_MARGIN}
     });
     tabFolder.append("TabItem", {
       index: 1,
@@ -121,7 +108,7 @@ tabris.load(function() {
   function createBooksList(parent, books) {
     return parent.append("List", {
       linesVisible: true,
-      layoutData: { left: 0, right: 0, top: 0, bottom: 0 },
+      layoutData: {left: 0, right: 0, top: 0, bottom: 0},
       itemHeight: 72,
       template: [
         {
@@ -149,15 +136,38 @@ tabris.load(function() {
     });
   }
 
+  function createReadBookPage(book) {
+    var page = tabris.createPage({
+                                   title: book.title
+                                 });
+    var composite = page.append("ScrollComposite", {
+      scroll: "vertical",
+      layoutData: {left: 0, right: 0, top: 0, bottom: 0}
+    });
+    var titleLabel = composite.append("Label", {
+      style: ["WRAP"],
+      markupEnabled: true,
+      text: "<b>" + book.title + "</b>",
+      layoutData: {left: PAGE_MARGIN, top: PAGE_MARGIN * 2, right: PAGE_MARGIN},
+      foreground: "rgba(0, 0, 0, 0.5)"
+    });
+    composite.append("Label", {
+      style: ["WRAP"],
+      layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: [titleLabel, PAGE_MARGIN], bottom: PAGE_MARGIN},
+      text: [loremIpsum, loremIpsum, loremIpsum].join("\n\n")
+    });
+    return page;
+  }
+
   function createSettingsPage() {
     var page = tabris.createPage({
       title: "Settings"
     });
     page.append("Label", {
       text: "Settings",
-      layoutData: { left: PAGE_MARGIN, right: PAGE_MARGIN, top: PAGE_MARGIN, bottom: PAGE_MARGIN }
+      layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: PAGE_MARGIN, bottom: PAGE_MARGIN}
     });
-    return  page;
+    return page;
   }
 
   var bookStorePage = createBooksPage("Book Store", "images/page_all_books.png", function() {
