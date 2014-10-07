@@ -6,7 +6,7 @@ tabris.load(function() {
 
     function createAnswerButton(type, answer, refWidget) {
       return answerComposite.append(type, {
-        font: [["arial"], 25, true, false],
+        font: "25px sans-serif",
         layoutData: {left: [40, 0], right: [10, 0], top: refWidget ? [refWidget, 20] : 0},
         text: answer
       }).on("Selection", function() {
@@ -55,22 +55,22 @@ tabris.load(function() {
                                  });
 
     var statusComposite = page.append("Composite", {
-      layoutData: { left: 0, right: 0, top: [80, 0], bottom: 0 }
+      layoutData: {left: 0, right: 0, top: [80, 0], bottom: 0}
     });
 
     var answerComposite = page.append("Composite", {
-      layoutData: { left: 0, right: 0, top: [50, 0], bottom: [statusComposite, 0] }
+      layoutData: {left: 0, right: 0, top: [50, 0], bottom: [statusComposite, 0]}
     });
 
     var questionComposite = page.append("Composite", {
-      layoutData: { left: 0, right: 0, top: 0, bottom: [answerComposite, 0] }
+      layoutData: {left: 0, right: 0, top: 0, bottom: [answerComposite, 0]}
     });
 
     questionComposite.append("Label", {
-      layoutData: { left: 10, right: 10, top: 10 },
+      layoutData: {left: 10, right: 10, top: 10},
       alignment: "center",
       text: questionObject.question,
-        font: [["arial"], 25, true, false],
+      font: "25px sans-serif",
       style: ["WRAP"]
     });
 
@@ -80,14 +80,14 @@ tabris.load(function() {
 
     var statusLabel = statusComposite.append("Label", {
       text: "",
-        font: [["arial"], 25, true, false],
-      layoutData: { left: 13, bottom: 13, width: 200, height: 50 }  // iOS needs this width/heigth
+      font: "25px sans-serif",
+      layoutData: {left: 13, bottom: 13, width: 200, height: 35}  // iOS needs this width/heigth
     });
 
     var nextButton = statusComposite.append("Button", {
       text: "Next",
-        font: [["arial"], 25, true, false],
-      layoutData: { right: 10, bottom: 10, width: 150, heigth: 25 },
+      font: "25px sans-serif",
+      layoutData: {right: 10, bottom: 10, width: 150, heigth: 25},
       enabled: false
     }).on("Selection", function() {
       if (!correctAnswer(questionObject)) {
@@ -123,5 +123,8 @@ tabris.load(function() {
     }
     return array;
   }
+
+  shuffleArray(questions);
+  createQuizPage(questions[currentQuestionIndex]).open();
 
 });
