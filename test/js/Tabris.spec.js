@@ -72,25 +72,50 @@ describe("tabris", function() {
 
   describe("_notify", function() {
 
-    it("notifies widget proxy", function() {
-      var label = tabris.create("Label", {});
-      spyOn(label, "trigger");
+    var label;
 
+    beforeEach(function() {
+      label = tabris.create("Label", {});
+      spyOn(label, "trigger");
+    });
+
+    it("notifies widget proxy", function() {
       tabris._notify(label.id, "foo", {bar: 23});
 
       expect(label.trigger).toHaveBeenCalledWith("foo", {bar: 23});
     });
 
     it("notifies widget proxy with translated event name", function() {
-      var label = tabris.create("Label", {});
-      spyOn(label, "trigger");
-
-      tabris._notify(label.id, "FocusIn", {});
+      tabris._notify.call(window, label.id, "FocusIn", {});
 
       expect(label.trigger).toHaveBeenCalledWith("focusin", {});
     });
 
-    it("sliently ignores events for non-existing ids (does not crash)", function() {
+    it("notifies widget proxy with touchstart event object", function() {
+      tabris._notify(label.id, "MouseDown", {x:12, y:34});
+
+      expect(label.trigger).toHaveBeenCalledWith("touchstart", {touches: [{x: 12, y: 34}]});
+    });
+
+    it("notifies widget proxy with touchmove event object", function() {
+      tabris._notify(label.id, "MouseMove", {x:12, y:34});
+
+      expect(label.trigger).toHaveBeenCalledWith("touchmove", {touches: [{x: 12, y: 34}]});
+    });
+
+    it("notifies widget proxy with touchend event object", function() {
+      tabris._notify(label.id, "MouseUp", {x:12, y:34});
+
+      expect(label.trigger).toHaveBeenCalledWith("touchend", {touches: [{x: 12, y: 34}]});
+    });
+
+    it("notifies widget proxy with longpress event object", function() {
+      tabris._notify(label.id, "MenuDetect", {x: 12, y: 34});
+
+      expect(label.trigger).toHaveBeenCalledWith("longpress", {touches: [{x: 12, y: 34}]});
+    });
+
+    it("silently ignores events for non-existing ids (does not crash)", function() {
       tabris._notify("no-id", "foo", [23, 42]);
     });
 

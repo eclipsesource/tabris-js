@@ -47,7 +47,7 @@
     _notify: function(id, event, param) {
       var proxy = tabris._proxies[ id ];
       if (proxy) {
-        proxy._trigger(this._decodeEventName(event), param);
+        proxy._trigger(tabris._decodeEventName(event), tabris._decodeEventParam(event, param));
       }
       tabris.trigger("flush");
     },
@@ -63,6 +63,13 @@
 
     _encodeEventName: function(event) {
       return this._nativeEventNames[event] || event;
+    },
+
+    _decodeEventParam: function(event, param) {
+      if (touchEvents.indexOf(event) !== -1) {
+        return {touches: [{x: param.x, y: param.y}]};
+      }
+      return param;
     }
 
   });
@@ -70,8 +77,14 @@
   function getLocalEventNames() {
     return {
       FocusIn: "focusin",
-      FocusOut: "focusout"
+      FocusOut: "focusout",
+      MouseDown: "touchstart",
+      MouseMove: "touchmove",
+      MouseUp: "touchend",
+      MenuDetect: "longpress"
     };
   }
+
+  var touchEvents = ["MouseDown", "MouseUp", "MouseMove", "MenuDetect"];
 
 })();
