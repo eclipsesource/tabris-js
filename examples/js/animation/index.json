@@ -1,4 +1,6 @@
 {
+  "title": "Animations",
+  "description": "Animations can be used to change properties",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.js"

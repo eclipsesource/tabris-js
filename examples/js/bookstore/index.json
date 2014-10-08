@@ -1,4 +1,6 @@
 {
+  "title": "Bookstore",
+  "description": "An example of a bookstore app",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.js"

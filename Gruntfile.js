@@ -1,3 +1,7 @@
+/*global require: false*/
+
+var path = require('path');
+
 module.exports = function(grunt) {
 
   var banner = ['/*!',
@@ -70,6 +74,26 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+
+  grunt.registerTask('examples', 'Copy examples to build, create index', function() {
+    var aggregatedIndex = [];
+    grunt.file.expand("examples/js/*").forEach(function(dir) {
+      if (grunt.file.exists(dir, "index.json")) {
+        var index = grunt.file.readJSON(path.join(dir, "/index.json"));
+        if ("title" in index) {
+          grunt.file.recurse(dir, function callback(abspath) {
+            grunt.file.copy(abspath, path.join('build/', abspath));
+          });
+          aggregatedIndex.push({
+            title: index.title,
+            description: index.description || "",
+            path: path.basename(dir)
+          });
+        }
+      }
+    });
+    grunt.file.write('build/examples/js/index.json', JSON.stringify(aggregatedIndex, null, 2));
+  });
 
   grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'jasmine']);
 
