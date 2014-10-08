@@ -2,7 +2,7 @@ tabris.load(function() {
 
   var MARGIN = 12;
   var MARGIN_LARGE = 24;
-  var LARGE_FONT = [[""], 20, false, false];
+  var LARGE_FONT = "20px";
 
   var cpsCount = 0;
   var startTime = new Date().getTime();

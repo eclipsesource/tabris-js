@@ -33,7 +33,7 @@ todo.TodoListView = Backbone.View.extend({
     });
     this.markAllCheckbox = this.widget.append("CheckBox", {
       text: todo.texts.markAllCheckbox,
-      font: [[""], 16, true, false]
+      font: "bold 16px"
     });
     this.container = this.widget.append("ScrollComposite", {scroll: "vertical"});
     this.clearCompletedButton = this.widget.append("Button");
