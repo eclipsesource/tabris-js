@@ -31,82 +31,85 @@ tabris.load(function() {
   var PAGE_MARGIN = 12;
 
   function createBooksPage(title, image, filter) {
-    var page = tabris.createPage({
+    return tabris.createPage({
       title: title,
       topLevel: true,
       image: [image, 32, 32]
-    });
-    createBooksList(page, books.filter(filter));
-    return page;
+    }).append(createBooksList(books.filter(filter)));
   }
 
   function createBookPage(book) {
-    var page = tabris.createPage({
+    var detailsComposite = createDetailsComposite(book)
+      .set("layoutData", {top: 0, height: 184, left: 0, right: 0});
+    var tabFolder = createTabFolder()
+      .set("layoutData", {top: [detailsComposite, 0], left: 0, right: 0, bottom: 0});
+    var separator = tabris.create("Label", {
+      layoutData: {height: 1, right: 0, left: 0, top: [detailsComposite, 0]},
+      background: "rgba(0, 0, 0, 0.1)"
+    });
+    return tabris.createPage({
       title: book.title
-    });
-    var detailsComposite = page.append("Composite", {
-      layoutData: {top: 0, height: 184, left: 0, right: 0},
-      background: "white",
-      data: {
-        showTouch: true
-      }
-    });
-    detailsComposite.append("Composite", {
+    }).append(detailsComposite, separator, tabFolder);
+  }
+
+  function createDetailsComposite(book) {
+    var touchComp = tabris.create("Composite", {
       layoutData: {left: 0, right: 0, top: 0, height: 160 + 2 * PAGE_MARGIN}
     }).on("MouseUp", function() {
       createReadBookPage(book).open();
     });
-    var imageLabel = detailsComposite.append("Label", {
+    var imageLabel = tabris.create("Label", {
       layoutData: {height: 160, width: 106, left: PAGE_MARGIN, top: PAGE_MARGIN},
       image: book.image
     });
-    var titleLabel = detailsComposite.append("Label", {
+    var titleLabel = tabris.create("Label", {
       style: ["WRAP"],
       markupEnabled: true,
       text: "<b>" + book.title + "</b>",
       layoutData: {left: [imageLabel, PAGE_MARGIN], top: PAGE_MARGIN, right: PAGE_MARGIN}
     });
-    var authorLabel = detailsComposite.append("Label", {
+    var authorLabel = tabris.create("Label", {
       layoutData: {left: [imageLabel, PAGE_MARGIN], top: [titleLabel, PAGE_MARGIN]},
       text: book.author
     });
-    detailsComposite.append("Label", {
+    var priceLabel = tabris.create("Label", {
       layoutData: {left: [imageLabel, PAGE_MARGIN], top: [authorLabel, PAGE_MARGIN]},
       foreground: "rgb(102, 153, 0)",
       text: "EUR 12,95"
     });
-    page.append("Label", {
-      layoutData: {height: 1, right: 0, left: 0, top: [detailsComposite, 0]},
-      background: "rgba(0, 0, 0, 0.1)"
-    });
-    var tabFolder = page.append("TabFolder", {
+    return tabris.create("Composite", {
+      background: "white",
+      data: {showTouch: true}
+    }).append(touchComp, imageLabel, titleLabel, authorLabel, priceLabel);
+  }
+
+  function createTabFolder() {
+    var tabFolder = tabris.create("TabFolder", {
       style: ["TOP"],
-      layoutData: {top: [detailsComposite, 0], left: 0, right: 0, bottom: 0},
-      data: {
-        paging: true
-      }
+      data: {paging: true}
     });
-    var booksList = createBooksList(tabFolder, books);
+    var booksList = createBooksList(books);
+    tabFolder.append(booksList);
     tabFolder.append("TabItem", {
       index: 0,
       text: "Related",
       control: booksList
     });
-    var tabRelatedComposite = tabFolder.append("Composite", {});
-    tabRelatedComposite.append("Label", {
+    var relatedComposite = tabris.create("Composite", {}).append("Label", {
       text: "Great Book.",
       layoutData: {left: PAGE_MARGIN, top: PAGE_MARGIN, right: PAGE_MARGIN, bottom: PAGE_MARGIN}
     });
+    tabFolder.append(relatedComposite);
     tabFolder.append("TabItem", {
       index: 1,
       text: "Comments",
-      control: tabRelatedComposite
+      control: relatedComposite
     });
-    return page;
+    return tabFolder;
   }
 
-  function createBooksList(parent, books) {
-    return parent.append("List", {
+  function createBooksList(books) {
+    return tabris.create("List", {
       linesVisible: true,
       layoutData: {left: 0, right: 0, top: 0, bottom: 0},
       itemHeight: 72,
@@ -116,14 +119,12 @@ tabris.load(function() {
           binding: "image",
           scaleMode: "FIT",
           left: [0, PAGE_MARGIN], top: [0, PAGE_MARGIN], width: 32, height: 48
-        },
-        {
+        }, {
           type: "text",
           binding: "title",
           left: [0, 56], right: [0, PAGE_MARGIN], top: [0, PAGE_MARGIN], bottom: [0, 0],
           foreground: "rgb(74, 74, 74)"
-        },
-        {
+        }, {
           type: "text",
           binding: "author",
           left: [0, 56], right: [0, PAGE_MARGIN], top: [0, 36], bottom: [0, 0],
@@ -137,37 +138,36 @@ tabris.load(function() {
   }
 
   function createReadBookPage(book) {
-    var page = tabris.createPage({
-                                   title: book.title
-                                 });
-    var composite = page.append("ScrollComposite", {
+    var page = tabris.createPage({title: book.title});
+    var composite = tabris.create("ScrollComposite", {
+      parent: page,
       scroll: "vertical",
       layoutData: {left: 0, right: 0, top: 0, bottom: 0}
     });
-    var titleLabel = composite.append("Label", {
+    var titleLabel = tabris.create("Label", {
+      parent: composite,
       style: ["WRAP"],
       markupEnabled: true,
       text: "<b>" + book.title + "</b>",
       layoutData: {left: PAGE_MARGIN, top: PAGE_MARGIN * 2, right: PAGE_MARGIN},
       foreground: "rgba(0, 0, 0, 0.5)"
     });
-    composite.append("Label", {
+    tabris.create("Label", {
+      parent: composite,
       style: ["WRAP"],
       layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: [titleLabel, PAGE_MARGIN], bottom: PAGE_MARGIN},
-      text: [loremIpsum, loremIpsum, loremIpsum].join("\n\n")
+      text: [loremIpsum, loremIpsum, loremIpsum, loremIpsum, loremIpsum, loremIpsum].join("\n\n")
     });
     return page;
   }
 
   function createSettingsPage() {
-    var page = tabris.createPage({
+    return tabris.createPage({
       title: "Settings"
-    });
-    page.append("Label", {
+    }).append("Label", {
       text: "Settings",
       layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: PAGE_MARGIN, bottom: PAGE_MARGIN}
     });
-    return page;
   }
 
   var bookStorePage = createBooksPage("Book Store", "images/page_all_books.png", function() {

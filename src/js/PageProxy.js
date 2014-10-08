@@ -30,10 +30,6 @@ tabris.PageProxy.prototype = util.extendPrototype(tabris.Proxy, {
     return this;
   },
 
-  append: function(type, properties) {
-    return this._composite.append(type, properties);
-  },
-
   get: function(property) {
     if (this._PAGE_PROPS.indexOf(property) !== -1) {
       return this.super("get", property);
@@ -82,6 +78,10 @@ tabris.PageProxy.prototype = util.extendPrototype(tabris.Proxy, {
     this._composite.dispose();
     this._uiProxy.setLastActivePage();
     this.dispose();
+  },
+
+  _getContainer: function() {
+    return this._composite;
   }
 
 });

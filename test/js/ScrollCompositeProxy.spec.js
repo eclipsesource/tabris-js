@@ -16,10 +16,9 @@ describe("ScrollCompositeProxy", function() {
   });
 
   describe("when a ScrollComposite is created", function() {
-    var createCalls;
-    var scrollComposite;
+    var scrollComposite, createCalls;
     beforeEach(function() {
-      scrollComposite = parent.append("ScrollComposite", {});
+      scrollComposite = tabris.create("ScrollComposite", {parent: parent});
       createCalls = nativeBridge.calls({op: "create"});
     });
 
@@ -41,16 +40,42 @@ describe("ScrollCompositeProxy", function() {
       expect(setCall.properties).toEqual({content: createCalls[2].id});
     });
 
-    describe("when a widget is appended to the ScrollComposite", function() {
-      var createCalls;
+    describe("append with type and properties", function() {
+      var result;
+
       beforeEach(function() {
-        scrollComposite.append("Button", {});
-        createCalls = nativeBridge.calls({op: "create"});
+        result = scrollComposite.append("Button", {});
       });
-      it("is appended to the inner composite", function() {
-        expect(createCalls[3].type).toBe("rwt.widgets.Button");
-        expect(createCalls[3].properties.parent).toEqual(createCalls[2].id);
+
+      it("sets child's parent to the inner composite", function() {
+        var call = nativeBridge.calls({op: "create", type: "rwt.widgets.Button"})[0];
+        expect(call.properties.parent).toEqual(scrollComposite._composite.id);
       });
+
+      it("returns self to allow chaining", function() {
+        expect(result).toBe(scrollComposite);
+      });
+
+    });
+
+    describe("append with proxy", function() {
+      var result, child;
+
+      beforeEach(function() {
+        child = new tabris.Proxy("child");
+        nativeBridge.resetCalls();
+        result = scrollComposite.append(child);
+      });
+
+      it("sets child's parent to the inner composite", function() {
+        var call = nativeBridge.calls({op: "set", id: child.id})[0];
+        expect(call.properties.parent).toBe(scrollComposite._composite.id);
+      });
+
+      it("returns self to allow chaining", function() {
+        expect(result).toBe(scrollComposite);
+      });
+
     });
 
     describe("when a Scroll listener is added", function() {
@@ -87,6 +112,22 @@ describe("ScrollCompositeProxy", function() {
           expect(listener.calls.count()).toBe(0);
         });
       });
+    });
+
+    describe("setting as a parent", function() {
+      var child;
+
+      beforeEach(function() {
+        child = new tabris.Proxy();
+        nativeBridge.resetCalls();
+        child.set("parent", scrollComposite);
+      });
+
+      it("uses inner composite in 'set'", function() {
+        var call = nativeBridge.calls({op: "set", id: child.id})[0];
+        expect(call.properties.parent).toBe(scrollComposite._composite.id);
+      });
+
     });
 
   });

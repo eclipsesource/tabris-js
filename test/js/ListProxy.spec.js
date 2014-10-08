@@ -19,7 +19,7 @@ describe("ListProxy", function() {
     var createCalls;
     var list;
     beforeEach(function() {
-      list = parent.append("List", {linesVisible: true});
+      list = tabris.create("List", {parent: parent, linesVisible: true});
       createCalls = nativeBridge.calls({op: "create"});
     });
 

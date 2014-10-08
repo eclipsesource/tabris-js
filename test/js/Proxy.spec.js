@@ -141,7 +141,7 @@ describe("Proxy", function() {
 
   });
 
-  describe("after creation", function() {
+  describe("when created", function() {
 
     var proxy;
 
@@ -149,30 +149,74 @@ describe("Proxy", function() {
       proxy = new tabris.Proxy("test-id");
     });
 
-    describe("append", function() {
+    describe("when disposed", function() {
+      beforeEach(function() {
+        proxy.dispose();
+      });
+
+      it("calling append fails", function() {
+        expect(function() {
+          proxy.append();
+        }).toThrowError("Object is disposed");
+      });
+    });
+
+    describe("append with type and properties", function() {
+      var result;
+
+      beforeEach(function() {
+        result = proxy.append("Label", {});
+      });
 
       it("calls native create with parent", function() {
-        proxy.append("Label", {});
-
         var createCall = nativeBridge.calls({op: "create", type: "rwt.widgets.Label"})[0];
         expect(createCall.properties.parent).toBe(proxy.id);
       });
 
-      it("fails on disposed object", function() {
-        proxy.dispose();
+      it("returns self to allow chaining", function() {
+        expect(result).toBe(proxy);
+      });
+    });
 
-        expect(function() {
-          proxy.append("Label", {});
-        }).toThrowError("Object is disposed");
+    describe("append with proxy", function() {
+      var child, result;
+
+      beforeEach(function() {
+        child = tabris.create("Label", {});
+        nativeBridge.resetCalls();
+        result = proxy.append(child);
       });
 
-      it("returns a proxy object with parent", function() {
-        var child = proxy.append("Label", {});
-
-        expect(child).toEqual(jasmine.any(tabris.Proxy));
-        expect(child._parent).toBe(proxy);
+      it("sets the proxy's parent", function() {
+        var calls = nativeBridge.calls();
+        expect(calls.length).toBe(1);
+        expect(calls[0]).toEqual({op: "set", id: child.id, properties: {parent: proxy.id}});
       });
 
+      it("returns self to allow chaining", function() {
+        expect(result).toBe(proxy);
+      });
+    });
+
+    describe("append with multiple proxies", function() {
+      var child1, child2, result;
+
+      beforeEach(function() {
+        child1 = tabris.create("Label", {});
+        child2 = tabris.create("Label", {});
+        nativeBridge.resetCalls();
+        result = proxy.append(child1, child2);
+      });
+
+      it("sets the proxy's parent", function() {
+        var calls = nativeBridge.calls();
+        expect(calls.length).toBe(2);
+        expect(calls[1]).toEqual({op: "set", id: child2.id, properties: {parent: proxy.id}});
+      });
+
+      it("returns self to allow chaining", function() {
+        expect(result).toBe(proxy);
+      });
     });
 
     describe("get", function() {
@@ -287,7 +331,7 @@ describe("Proxy", function() {
         expect(layoutData.top).toEqual([other, 42]);
       });
 
-      it("translates foreground and backgrund colors to arrays", function() {
+      it("translates foreground and background colors to arrays", function() {
         proxy.set({foreground: "red", background: "rgba(1, 2, 3, 0.5)"});
 
         var call = nativeBridge.calls({op: "set"})[0];
@@ -330,6 +374,48 @@ describe("Proxy", function() {
         }).toThrowError("Object is disposed");
       });
 
+    });
+
+    describe("when parent is set", function() {
+      var parent1 = new tabris.Proxy("parent1");
+      var parent2 = new tabris.Proxy("parent2");
+
+      beforeEach(function() {
+        proxy.set({parent: parent1});
+      });
+
+      it("is added to parent's children list", function() {
+        expect(parent1._children).toContain(proxy);
+      });
+
+      describe("when another parent is set", function() {
+        beforeEach(function() {
+          proxy.set({parent: parent2});
+        });
+
+        it("is removed from old parent's children list", function() {
+          expect(parent1._children).not.toContain(proxy);
+        });
+
+        it("is added to new parent's children list", function() {
+          expect(parent2._children).toContain(proxy);
+        });
+      });
+    });
+
+    describe("setting a page as a parent", function() {
+      var pageProxy;
+
+      beforeEach(function() {
+        pageProxy = new tabris.PageProxy("pageProxy")._create({});
+        nativeBridge.resetCalls();
+        proxy.set("parent", pageProxy);
+      });
+
+      it("translates the parent to the page's composite in the protocol", function() {
+        var call = nativeBridge.calls({op: "set", id: proxy.id})[0];
+        expect(call.properties.parent).toBe(pageProxy._composite.id);
+      });
     });
 
     describe("call", function() {

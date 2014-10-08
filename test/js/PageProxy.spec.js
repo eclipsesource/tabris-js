@@ -112,7 +112,6 @@ describe("PageProxy", function() {
   });
 
   describe("when created", function() {
-
     var pageCreateCall;
     var compositeCreateCall;
 
@@ -121,6 +120,43 @@ describe("PageProxy", function() {
       pageCreateCall = nativeBridge.calls({op: "create", type: "tabris.Page"})[0];
       compositeCreateCall = nativeBridge.calls({op: "create", type: "rwt.widgets.Composite"})[0];
       nativeBridge.resetCalls();
+    });
+
+    describe("append with type and properties", function() {
+      var result;
+
+      beforeEach(function() {
+        result = pageProxy.append("foo.Bar", {bar: 23});
+      });
+
+      it("appends to the composite", function() {
+        var call = nativeBridge.calls({op: "create", type: "foo.Bar"})[0];
+        expect(call.properties.parent).toEqual(compositeCreateCall.id);
+      });
+
+      it("returns self to allow chaining", function() {
+        expect(result).toBe(pageProxy);
+      });
+
+    });
+
+    describe("append with proxy", function() {
+      var result, child;
+
+      beforeEach(function() {
+        child = new tabris.Proxy("child");
+        result = pageProxy.append(child);
+      });
+
+      it("sets child's parent to the composite", function() {
+        var call = nativeBridge.calls({op: "set", id: child.id})[0];
+        expect(call.properties.parent).toEqual(compositeCreateCall.id);
+      });
+
+      it("returns self to allow chaining", function() {
+        expect(result).toBe(pageProxy);
+      });
+
     });
 
     describe("set", function() {
@@ -170,6 +206,22 @@ describe("PageProxy", function() {
 
         expect(nativeBridge.calls({op: "destroy", id: pageCreateCall.id}).length).toBe(1);
         expect(nativeBridge.calls({op: "destroy", id: compositeCreateCall.id}).length).toBe(1);
+      });
+
+    });
+
+    describe("setting as a parent", function() {
+      var child;
+
+      beforeEach(function() {
+        child = new tabris.Proxy();
+        nativeBridge.resetCalls();
+        child.set("parent", pageProxy);
+      });
+
+      it("uses page's composite in 'set'", function() {
+        var call = nativeBridge.calls({op: "set", id: child.id})[0];
+        expect(call.properties.parent).toBe(pageProxy._composite.id);
       });
 
     });

@@ -20,16 +20,17 @@
       this.super("_create", "rwt.widgets.ScrolledComposite", util.extend(scrollProps, {
         style: properties.scroll === "horizontal" ? ["H_SCROLL"] : ["V_SCROLL"]
       }));
-      this._scrollBar = this.super("append", "rwt.widgets.ScrollBar", {
+      this._scrollBar = new tabris.Proxy();
+      tabris._nativeBridge.create(this._scrollBar.id, "rwt.widgets.ScrollBar", {
+        parent: this.id,
         style: properties.scroll === "horizontal" ? ["HORIZONTAL"] : ["VERTICAL"]
       });
-      this._composite = this.super("append", "rwt.widgets.Composite", {});
+      this._composite = new tabris.Proxy();
+      tabris._nativeBridge.create(this._composite.id, "rwt.widgets.Composite", {
+        parent: this.id
+      });
       this.set("content", this._composite);
       return this;
-    },
-
-    append: function(type, properties) {
-      return this._composite.append(type, properties);
     },
 
     on: function(event, listener, context) {
@@ -50,6 +51,10 @@
     _scrollBarListener: function() {
       var selection = this.get("origin");
       this.trigger("Scroll", {x: selection[0], y: selection[1]});
+    },
+
+    _getContainer: function() {
+      return this._composite;
     }
 
   });

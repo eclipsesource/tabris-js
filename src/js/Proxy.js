@@ -20,17 +20,24 @@
   util.extend(tabris.Proxy.prototype, tabris.Events, {
 
     _create: function(type, properties) {
-      if (properties && properties.parent) {
-        this._parent = properties.parent;
-        this._parent._addChild(this);
-      }
       tabris._nativeBridge.create(this.id, encodeType(type), this._encodeProperties(properties));
       return this;
     },
 
     append: function(type, properties) {
       this._checkDisposed();
-      return tabris.create(type, util.extend({}, properties, {parent: this}));
+      if (arguments[0] instanceof tabris.Proxy) {
+        for (var i = 0; i < arguments.length; i++) {
+          this._append(arguments[i]);
+        }
+      } else {
+        tabris.create(type, util.extend({}, properties, {parent: this}));
+      }
+      return this;
+    },
+
+    _append: function(proxy) {
+      proxy.set("parent", this);
     },
 
     get: function(name) {
@@ -144,15 +151,32 @@
     },
 
     _encodeProperty: function(name, value) {
-      if (name === "foreground" || name === "background") {
-        return encodeColor(value);
-      } else if (name === "font") {
-        return encodeFont(value);
-      } else if (name === "layoutData") {
-        checkLayoutData(value);
-        return encodeLayoutData(value);
+      switch (name) {
+        case "foreground":
+        case "background":
+          return encodeColor(value);
+        case "font":
+          return encodeFont(value);
+        case "layoutData":
+          checkLayoutData(value);
+          return encodeLayoutData(value);
+        case "parent":
+          this._setParent(value);
+          return encodeProxyToId(value._getContainer());
       }
       return encodeProxyToId(value);
+    },
+
+    _getContainer: function() {
+      return this;
+    },
+
+    _setParent: function(parent) {
+      if (this._parent) {
+        this._parent._removeChild(this);
+      }
+      this._parent = parent;
+      this._parent._addChild(this);
     },
 
     _decodeProperty: function(name, value) {
