@@ -16,7 +16,7 @@
   };
 
   util.fontArrayToString = function(fontArr) {
-    return (fontArr[2] ? "italic " : "") + (fontArr[3] ? "bold " : "") +
+    return (fontArr[3] ? "italic " : "") + (fontArr[2] ? "bold " : "") +
         (fontArr[1] + "px") + (fontArr[0][0] ? " " : "") + (fontArr[0].join(", "));
   };
 
@@ -25,12 +25,12 @@
     checkTruthy(styleArr.length <= 2, "Too many font styles");
     styleArr.forEach(function(property) {
       switch (property.trim()) {
-        case "bold":
-          checkTruthy(fontArr[3] === false, "Invalid font weight");
+        case "italic":
+          checkTruthy(fontArr[3] === false, "Invalid font variant");
           fontArr[3] = true;
           break;
-        case "italic":
-          checkTruthy(fontArr[2] === false, "Invalid font variant");
+        case "bold":
+          checkTruthy(fontArr[2] === false, "Invalid font weight");
           fontArr[2] = true;
           break;
         case "normal":

@@ -43,27 +43,27 @@ describe("util-fonts", function() {
     });
 
     it("parses valid styles", function() {
-      expect(parse("italic 12px")[2]).toBe(true);
-      expect(parse("bold italic 12px")[2]).toBe(true);
-      expect(parse("italic bold 12px")[2]).toBe(true);
-      expect(parse("italic bold 12px Arial, Times")[2]).toBe(true);
-      expect(parse("normal normal 12px")[2]).toBe(false);
-      expect(parse("bold normal 12px")[2]).toBe(false);
-      expect(parse("normal 12px")[2]).toBe(false);
-      expect(parse("12px")[2]).toBe(false);
-      expect(parse("12px italic")[2]).toBe(false);
+      expect(parse("italic 12px")[3]).toBe(true);
+      expect(parse("bold italic 12px")[3]).toBe(true);
+      expect(parse("italic bold 12px")[3]).toBe(true);
+      expect(parse("italic bold 12px Arial, Times")[3]).toBe(true);
+      expect(parse("normal normal 12px")[3]).toBe(false);
+      expect(parse("bold normal 12px")[3]).toBe(false);
+      expect(parse("normal 12px")[3]).toBe(false);
+      expect(parse("12px")[3]).toBe(false);
+      expect(parse("12px italic")[3]).toBe(false);
     });
 
     it("parses valid weight", function() {
-      expect(parse("bold 12px")[3]).toBe(true);
-      expect(parse("bold   italic 12px")[3]).toBe(true);
-      expect(parse("  italic bold 12px")[3]).toBe(true);
+      expect(parse("bold 12px")[2]).toBe(true);
+      expect(parse("bold   italic 12px")[2]).toBe(true);
+      expect(parse("  italic bold 12px")[2]).toBe(true);
       expect(parse(" italic  bold 12px Arial, Times")[2]).toBe(true);
-      expect(parse("normal normal 12px")[3]).toBe(false);
-      expect(parse("italic normal 12px")[3]).toBe(false);
-      expect(parse("normal 12px")[3]).toBe(false);
-      expect(parse("12px")[3]).toBe(false);
-      expect(parse("12px bold")[3]).toBe(false);
+      expect(parse("normal normal 12px")[2]).toBe(false);
+      expect(parse("italic normal 12px")[2]).toBe(false);
+      expect(parse("normal 12px")[2]).toBe(false);
+      expect(parse("12px")[2]).toBe(false);
+      expect(parse("12px bold")[2]).toBe(false);
     });
 
     it("throws error for strings with invalid styles", function() {
@@ -118,8 +118,8 @@ describe("util-fonts", function() {
       expect(decode([["Arial", "Times New Roman"], 12, false, false]))
           .toBe("12px Arial, Times New Roman");
       expect(decode([[""], 12, false, false])).toBe("12px");
-      expect(decode([[""], 12, true, false])).toBe("italic 12px");
-      expect(decode([[""], 12, false, true])).toBe("bold 12px");
+      expect(decode([[""], 12, true, false])).toBe("bold 12px");
+      expect(decode([[""], 12, false, true])).toBe("italic 12px");
       expect(decode([[""], 12, true, true])).toBe("italic bold 12px");
       expect(decode([["Arial"], 12, true, true])).toBe("italic bold 12px Arial");
     });
