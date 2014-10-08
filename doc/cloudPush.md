@@ -62,3 +62,27 @@ for the `Notification` event type. This will also trigger the registration reque
 ```javascript
 cloudPush.on("Notification", function() {});
 ```
+
+Android
+-------
+
+Cloud push notifications will be showed in the notification center of Android
+regardless whether the application is running in the foreground, if it was
+paused, destroyed by the system to free up resources or closed by the user
+through swiping away the app from the app switcher. It won't be notified only in
+the case the application has just been installed and has never been started or
+if the user force closes the app in the system application settings from
+Android 3.1 onwards.
+
+iOS
+---
+
+iOS can receive remote push notifications regardless whether the application is
+running or not. When running in the foreground the application is notified of
+the remote notification and can e.g. update its UI according to the information
+received, but no notification will be showed in the notification center. If the
+application is running in background or if it is not running at all (e.g. if it
+was force-closed by swiping it up in the app preview view shown by double-tapping
+on the home button), the application doesn't get informed of the notification. In
+this case it can only handle the notification payload when the user clicks on the
+action button of the notification alert.
