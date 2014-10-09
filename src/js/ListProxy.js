@@ -5,18 +5,12 @@
 
 (function() {
 
-  tabris.ListProxy = function() {
-    this.Super();
-  };
+  tabris.registerType("List", {
 
-  tabris.ListProxy.create = function(properties) {
-    return new tabris.ListProxy()._create(properties);
-  };
-
-  tabris.ListProxy.prototype = util.extendPrototype(tabris.Proxy, {
+    _type: "rwt.widgets.Grid",
 
     _create: function(properties) {
-      this.super("_create", "rwt.widgets.Grid", util.extend({style: ["V_SCROLL"]}, properties));
+      this.super("_create", util.extend({style: ["V_SCROLL"]}, properties));
       this.append("ScrollBar", {style: ["VERTICAL"]});
       this._createItems();
       return this;
@@ -46,7 +40,7 @@
         var item = this._items ? this._items[index] : null;
         return this.trigger(type, {item: item, index: index});
       }
-      tabris.Proxy.prototype._trigger.apply(this, Array.prototype.slice.call(arguments));
+      tabris.Proxy.prototype._trigger.apply(this, arguments);
     },
 
     _findItemIndex: function(itemId) {
@@ -167,11 +161,8 @@
     };
   }
 
-  tabris.registerType("List", function(type, properties) {
-    return new tabris.ListProxy()._create(properties);
-  });
-  tabris.registerType("ListItem", function(type, properties) {
-    return new tabris.Proxy()._create("rwt.widgets.GridItem", properties);
+  tabris.registerType("ListItem", {
+    _type: "rwt.widgets.GridItem"
   });
 
 })();

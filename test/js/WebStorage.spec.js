@@ -13,8 +13,8 @@ describe("LocalStorage", function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._start(nativeBridge);
-    spyOn(window, "tabris").and.callFake(function(type, properties) {
-      proxy = tabris.Proxy.create(type, properties);
+    spyOn(window, "tabris").and.callFake(function() {
+      proxy = new tabris.Proxy();
       spyOn(proxy, "call").and.callFake(function(method, args) {
         if (method === "get" && args.key === "savedKey") {
           return "savedVal";

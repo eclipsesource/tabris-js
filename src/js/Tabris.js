@@ -8,12 +8,11 @@
 (function() {
 
   tabris = util.extend(function(id) {
-    return id in tabris._proxies ? tabris._proxies[ id ] : new tabris.Proxy(id);
+    return id in tabris._proxies ? tabris._proxies[id] : new tabris.Proxy(id);
   }, {
 
     _loadFunctions: [],
     _proxies: {},
-    _factories: {},
     _localEventNames: getLocalEventNames(),
     _nativeEventNames: util.invert(getLocalEventNames()),
 
@@ -25,14 +24,22 @@
       if (!tabris._nativeBridge) {
         throw new Error("tabris.js not started");
       }
-      return tabris.Proxy.create(type, properties);
+      if (!(type in tabris)) {
+        // TODO [rst] Allow unregistered types for compatibility, replace with error
+        tabris.registerType(type, {});
+      }
+      return new tabris[type]()._create(properties);
     },
 
-    registerType: function(type, factory) {
-      if (type in tabris._factories) {
-        throw new Error("Factory already registered for type " + type);
+    registerType: function(type, members) {
+      if (type in tabris) {
+        throw new Error("Type already registered: " + type);
       }
-      tabris._factories[type] = factory;
+      tabris[type] = function() {
+        tabris.Proxy.apply(this, arguments);
+      };
+      members.type = type;
+      tabris[type].prototype = util.extendPrototype(tabris.Proxy, members);
     },
 
     _start: function(nativeBridge) {
@@ -45,7 +52,7 @@
     },
 
     _notify: function(id, event, param) {
-      var proxy = tabris._proxies[ id ];
+      var proxy = tabris._proxies[id];
       if (proxy) {
         proxy._trigger(tabris._decodeEventName(event), tabris._decodeEventParam(event, param));
       }

@@ -10,17 +10,12 @@
     tabris._proxies[this.id] = this;
   };
 
-  tabris.Proxy.create = function(type, properties) {
-    if (type in tabris._factories) {
-      return tabris._factories[type](type, properties);
-    }
-    return new tabris.Proxy()._create(type, properties);
-  };
-
   util.extend(tabris.Proxy.prototype, tabris.Events, {
 
-    _create: function(type, properties) {
-      tabris._nativeBridge.create(this.id, encodeType(type), this._encodeProperties(properties));
+    _create: function(properties) {
+      var type = this._type || encodeType(this.type);
+      var properties = util.extend(this._properties || {}, this._encodeProperties(properties));
+      tabris._nativeBridge.create(this.id, type, properties);
       return this;
     },
 
@@ -94,7 +89,7 @@
     },
 
     _trigger: function() {
-      this.trigger.apply(this, Array.prototype.slice.call(arguments));
+      this.trigger.apply(this, arguments);
     },
 
     _destroy: function() {
@@ -251,25 +246,32 @@
     default: ["BORDER"]
   };
 
-  tabris.registerType("Button", function(type, properties) {
-    return new tabris.Proxy()._create("rwt.widgets.Button",
-        util.extend({style: ["PUSH"]}, properties));
+  tabris.registerType("Button", {
+    _type: "rwt.widgets.Button",
+    _properties: {style: ["PUSH"]}
   });
-  tabris.registerType("CheckBox", function(type, properties) {
-    return new tabris.Proxy()._create("rwt.widgets.Button",
-        util.extend({style: ["CHECK"]}, properties));
+  tabris.registerType("CheckBox", {
+    _type: "rwt.widgets.Button",
+    _properties: {style: ["CHECK"]}
   });
-  tabris.registerType("RadioButton", function(type, properties) {
-    return new tabris.Proxy()._create("rwt.widgets.Button",
-        util.extend({style: ["RADIO"]}, properties));
+  tabris.registerType("RadioButton", {
+    _type: "rwt.widgets.Button",
+    _properties: {style: ["RADIO"]}
   });
-  tabris.registerType("ToggleButton", function(type, properties) {
-    return new tabris.Proxy()._create("rwt.widgets.Button",
-        util.extend({style: ["TOGGLE"]}, properties));
+  tabris.registerType("ToggleButton", {
+    _type: "rwt.widgets.Button",
+    _properties: {style: ["TOGGLE"]}
   });
-  tabris.registerType("Text", function(type, properties) {
-    var style = textTypeToStyle[ properties.type ] || textTypeToStyle["default"];
-    return new tabris.Proxy()._create("rwt.widgets.Text", util.extend({style: style}, properties));
+  tabris.registerType("Label", {
+    _type: "rwt.widgets.Label"
   });
+  tabris.registerType("Text", {
+    _type: "rwt.widgets.Text",
+    _create: function(properties) {
+      var style = textTypeToStyle[properties.type] || textTypeToStyle["default"];
+      this.super("_create", util.extend({style: style}, properties));
+    }
+  });
+  tabris.registerType("ScrollBar", {});
 
 })();

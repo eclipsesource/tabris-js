@@ -5,19 +5,13 @@
 
 (function() {
 
-  tabris.ScrollCompositeProxy = function() {
-    this.Super();
-  };
+  tabris.registerType("ScrollComposite", {
 
-  tabris.ScrollCompositeProxy.create = function(properties) {
-    return new tabris.ScrollCompositeProxy()._create(properties);
-  };
-
-  tabris.ScrollCompositeProxy.prototype = util.extendPrototype(tabris.Proxy, {
+    _type: "rwt.widgets.ScrolledComposite",
 
     _create: function(properties) {
       var scrollProps = util.omit(properties, ["scroll"]);
-      this.super("_create", "rwt.widgets.ScrolledComposite", util.extend(scrollProps, {
+      this.super("_create", util.extend(scrollProps, {
         style: properties.scroll === "horizontal" ? ["H_SCROLL"] : ["V_SCROLL"]
       }));
       this._scrollBar = new tabris.Proxy();
@@ -57,10 +51,6 @@
       return this._composite;
     }
 
-  });
-
-  tabris.registerType("ScrollComposite", function(type, properties) {
-    return new tabris.ScrollCompositeProxy()._create(properties);
   });
 
 })();

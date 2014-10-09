@@ -27,10 +27,11 @@ describe("Proxy", function() {
 
     beforeEach(function() {
       proxy = new tabris.Proxy("test-id");
+      proxy._type = "TestType";
     });
 
     it("creates proxy for standard types", function() {
-      tabris.Proxy.create("rwt.widgets.Button", {style: ["PUSH"], text: "foo"});
+      tabris.create("rwt.widgets.Button", {style: ["PUSH"], text: "foo"});
 
       var create = nativeBridge.calls({op: "create"})[0];
       expect(create.type).toEqual("rwt.widgets.Button");
@@ -38,7 +39,7 @@ describe("Proxy", function() {
     });
 
     it("maps 'Button' to rwt.widgets.Button [PUSH]", function() {
-      tabris.Proxy.create("Button", {text: "foo"});
+      tabris.create("Button", {text: "foo"});
 
       var create = nativeBridge.calls({op: "create"})[0];
       expect(create.type).toEqual("rwt.widgets.Button");
@@ -46,7 +47,7 @@ describe("Proxy", function() {
     });
 
     it("maps 'CheckBox' to rwt.widgets.Button [CHECK]", function() {
-      tabris.Proxy.create("CheckBox", {text: "foo"});
+      tabris.create("CheckBox", {text: "foo"});
 
       var create = nativeBridge.calls({op: "create"})[0];
       expect(create.type).toEqual("rwt.widgets.Button");
@@ -54,7 +55,7 @@ describe("Proxy", function() {
     });
 
     it("maps 'RadioButton' to rwt.widgets.Button [RADIO]", function() {
-      tabris.Proxy.create("RadioButton", {text: "foo"});
+      tabris.create("RadioButton", {text: "foo"});
 
       var create = nativeBridge.calls({op: "create"})[0];
       expect(create.type).toEqual("rwt.widgets.Button");
@@ -62,7 +63,7 @@ describe("Proxy", function() {
     });
 
     it("maps 'ToggleButton' to rwt.widgets.Button [TOGGLE]", function() {
-      tabris.Proxy.create("ToggleButton", {text: "foo"});
+      tabris.create("ToggleButton", {text: "foo"});
 
       var create = nativeBridge.calls({op: "create"})[0];
       expect(create.type).toEqual("rwt.widgets.Button");
@@ -70,7 +71,7 @@ describe("Proxy", function() {
     });
 
     it("maps 'Text' to rwt.widgets.Text [BORDER]", function() {
-      tabris.Proxy.create("Text", {text: "foo"});
+      tabris.create("Text", {text: "foo"});
 
       var create = nativeBridge.calls({op: "create"})[0];
       expect(create.type).toEqual("rwt.widgets.Text");
@@ -78,7 +79,7 @@ describe("Proxy", function() {
     });
 
     it("maps 'Text' with type 'password' to rwt.widgets.Text [PASSWORD]", function() {
-      tabris.Proxy.create("Text", {type: "password", text: "foo"});
+      tabris.create("Text", {type: "password", text: "foo"});
 
       var create = nativeBridge.calls({op: "create"})[0];
       expect(create.type).toEqual("rwt.widgets.Text");
@@ -86,7 +87,7 @@ describe("Proxy", function() {
     });
 
     it("maps 'Text' with type 'search' to rwt.widgets.Text [SEARCH]", function() {
-      tabris.Proxy.create("Text", {type: "search", text: "foo"});
+      tabris.create("Text", {type: "search", text: "foo"});
 
       var create = nativeBridge.calls({op: "create"})[0];
       expect(create.type).toEqual("rwt.widgets.Text");
@@ -94,17 +95,17 @@ describe("Proxy", function() {
     });
 
     it("maps 'Text' with type 'multiline' to rwt.widgets.Text [MULTI]", function() {
-      tabris.Proxy.create("Text", {type: "multiline", text: "foo"});
+      tabris.create("Text", {type: "multiline", text: "foo"});
 
       var create = nativeBridge.calls({op: "create"})[0];
       expect(create.type).toEqual("rwt.widgets.Text");
       expect(create.properties.style).toEqual(["BORDER", "MULTI"]);
     });
 
-    it("calls native create with type and properties", function() {
-      proxy._create("foo.bar", {foo: 23});
+    it("calls native create with properties", function() {
+      proxy._create({foo: 23});
 
-      var calls = nativeBridge.calls({op: "create", type: "foo.bar"});
+      var calls = nativeBridge.calls({op: "create", type: "TestType"});
       expect(calls.length).toBe(1);
       expect(calls[0].properties).toEqual({foo: 23});
     });
@@ -112,9 +113,9 @@ describe("Proxy", function() {
     it("translates properties", function() {
       var other = new tabris.Proxy("other-id");
 
-      proxy._create("custom.type", {foo: other});
+      proxy._create({foo: other});
 
-      var properties = nativeBridge.calls({op: "create", type: "custom.type"})[0].properties;
+      var properties = nativeBridge.calls({op: "create", type: "TestType"})[0].properties;
       expect(properties.foo).toBe("other-id");
     });
 
@@ -122,19 +123,23 @@ describe("Proxy", function() {
       var other = new tabris.Proxy("other-id");
       var properties = {foo: other};
 
-      proxy._create("custom.type", properties);
+      proxy._create(properties);
 
       expect(properties.foo).toBe(other);
     });
 
     it("accepts rwt types without prefix", function() {
-      proxy._create("Label", {});
+      delete proxy._type;
+      proxy.type = "Label";
+      proxy._create({});
 
       expect(nativeBridge.calls({op: "create"})[0].type).toEqual("rwt.widgets.Label");
     });
 
     it("accepts prefixed types", function() {
-      proxy._create("custom.Label", {});
+      delete proxy._type;
+      proxy.type = "custom.Label";
+      proxy._create({});
 
       expect(nativeBridge.calls({op: "create"})[0].type).toEqual("custom.Label");
     });

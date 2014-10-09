@@ -209,16 +209,43 @@ describe("tabris", function() {
 
   describe("register types", function() {
     it("allows to register a new type", function() {
-      var factory = jasmine.createSpy("factory");
-      tabris.registerType("CustomType", factory);
-      tabris.create("CustomType", {foo: 23});
-      expect(factory).toHaveBeenCalledWith("CustomType", {foo: 23});
+      var members = {foo: 23};
+      tabris.registerType("CustomType", members);
+      var instance = tabris.create("CustomType");
+      expect(instance).toEqual(jasmine.any(tabris.Proxy));
+      expect(instance).toEqual(jasmine.any(tabris.CustomType));
+      delete tabris.CustomType;
+    });
+
+    it("adds members to new type", function() {
+      var members = {foo: 23};
+      tabris.registerType("CustomType", members);
+      var instance = tabris.create("CustomType");
+      expect(instance.foo).toBe(23);
+      expect(instance.type).toBe("CustomType");
+      delete tabris.CustomType;
+    });
+
+    it("calls 'create' with type", function() {
+      tabris.registerType("CustomType", {});
+      tabris.create("CustomType");
+
+      expect(nativeBridge.calls({op: "create"})[0].type).toBe("rwt.widgets.CustomType");
+      delete tabris.CustomType;
+    });
+
+    it("calls 'create' with _type if present", function() {
+      tabris.registerType("CustomType", {_type: "foo.Type"});
+      tabris.create("CustomType");
+
+      expect(nativeBridge.calls({op: "create"})[0].type).toBe("foo.Type");
+      delete tabris.CustomType;
     });
 
     it("prevents to overwrite already registered types", function() {
       expect(function() {
-        tabris.registerType("Button", jasmine.createSpy("factory"));
-      }).toThrowError("Factory already registered for type Button");
+        tabris.registerType("Button", {});
+      }).toThrowError("Type already registered: Button");
     });
   });
 

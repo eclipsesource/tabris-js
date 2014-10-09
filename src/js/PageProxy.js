@@ -14,6 +14,8 @@ tabris.PageProxy.create = function(uiProxy, properties) {
 
 tabris.PageProxy.prototype = util.extendPrototype(tabris.Proxy, {
 
+  _type: "tabris.Page",
+
   _PAGE_PROPS: ["title", "image", "style", "topLevel"],
 
   _create: function(properties) {
@@ -26,7 +28,7 @@ tabris.PageProxy.prototype = util.extendPrototype(tabris.Proxy, {
       parent: this._uiProxy._ui,
       control: this._composite
     });
-    this.super("_create", "tabris.Page", pageProperties);
+    this.super("_create", pageProperties);
     return this;
   },
 
