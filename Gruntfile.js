@@ -17,6 +17,7 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    clean: ["build"],
     jshint: {
       options: {
         jshintrc: true
@@ -70,12 +71,13 @@ module.exports = function(grunt) {
     }
   });
 
+  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
-  grunt.registerTask('examples', 'Copy examples to build, create index', function() {
+  grunt.registerTask('examples', 'Copy examples to build/, create index', function() {
     var aggregatedIndex = [];
     grunt.file.expand("examples/js/*").forEach(function(dir) {
       if (grunt.file.exists(dir, "index.json")) {
@@ -95,6 +97,6 @@ module.exports = function(grunt) {
     grunt.file.write('build/examples/js/index.json', JSON.stringify(aggregatedIndex, null, 2));
   });
 
-  grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'jasmine']);
+  grunt.registerTask('default', ['clean', 'jshint', 'concat', 'uglify', 'jasmine', 'examples']);
 
 };
