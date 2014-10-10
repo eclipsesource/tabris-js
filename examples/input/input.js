@@ -2,76 +2,76 @@ tabris.load(function() {
 
   var message;
 
-  var page = tabris.createPage({
+  var page = tabris.create("Page", {
     title: "Oceanic Flight 815 Booking",
     topLevel: true
   });
 
-  var firstNameLabel = page.append("Label", {
+  var firstNameLabel = tabris.create("Label", {
     layoutData: {left: 10, top: 10, width: 120},
     alignment: "left",
     text: "First Name:"
   });
 
-  var firstNameInput = page.append("Text", {
+  var firstNameInput = tabris.create("Text", {
     layoutData: {left: [firstNameLabel, 10], right: 10, top: 10},
     message: "First Name"
   });
 
-  var lastNameLabel = page.append("Label", {
+  var lastNameLabel = tabris.create("Label", {
     layoutData: {left: 10, top: [firstNameInput, 10], width: 120},
     alignment: "left",
     text: "Last Name:"
   });
 
-  var lastNameInput = page.append("Text", {
+  var lastNameInput = tabris.create("Text", {
     layoutData: {left: [lastNameLabel, 10], right: 10, top: [firstNameInput, 10]},
     message: "Last Name"
   });
 
-  var passphraseLabel = page.append("Label", {
+  var passphraseLabel = tabris.create("Label", {
     layoutData: {left: 10, top: [lastNameInput, 10], width: 120},
     alignment: "left",
     text: "Passphrase:"
   });
 
-  var passphraseInput = page.append("Text", {
+  var passphraseInput = tabris.create("Text", {
     type: "password",
     layoutData: {left: [passphraseLabel, 10], right: 10, top: [lastNameInput, 10]},
     message: "Passphrase"
   });
 
-  var countryLabel = page.append("Label", {
+  var countryLabel = tabris.create("Label", {
     layoutData: {left: 10, top: [passphraseInput, 10], width: 120},
     alignment: "left",
     text: "Country:"
   });
 
-  var countryCombo = page.append("Combo", {
+  var countryCombo = tabris.create("Combo", {
     layoutData: {left: [countryLabel, 10], right: 10, top: [passphraseInput, 10]},
     items: ["Germany", "Canada", "USA", "Bulgaria"],
     selectionIndex: 0
   });
 
-  var classLabel = page.append("Label", {
+  var classLabel = tabris.create("Label", {
     layoutData: {left: 10, top: [countryCombo, 10], width: 120},
     alignment: "left",
     text: "Class:"
   });
 
-  var classCombo = page.append("Combo", {
+  var classCombo = tabris.create("Combo", {
     layoutData: {left: [classLabel, 10], right: 10, top: [countryCombo, 10]},
     items: ["Business", "Economy", "Economy Plus"],
     selectionIndex: 0
   });
 
-  var dateTimeLabel = page.append("Label", {
+  var dateTimeLabel = tabris.create("Label", {
     layoutData: {left: 10, top: [classCombo, 10], width: 120},
     alignment: "left",
     text: "Date:"
   });
 
-  var dateTime = page.append("DateTime", {
+  var dateTime = tabris.create("DateTime", {
     style: ["DATE"],
     layoutData: {left: [dateTimeLabel, 10], right: 10, top: [classCombo, 10]},
     year: 2014,
@@ -79,26 +79,26 @@ tabris.load(function() {
     month: 5
   });
 
-  var checkbox = page.append("CheckBox", {
-    // TODO: height explicitly set as a workaround for tabris-android bug #527
-    layoutData: {left: [dateTimeLabel, 10], right: 10, top: [dateTime, 10], height: 30},
+  var checkbox = tabris.create("CheckBox", {
+    layoutData: {left: [dateTimeLabel, 10], right: 10, top: [dateTime, 10]},
     text: "Vegetarian"
   });
 
-  var button = page.append("Button", {
+  var button = tabris.create("Button", {
     layoutData: {left: 10, right: 10, top: [checkbox, 20]},
     text: "Place Reservation",
     background: "#8b0000",
     foreground: "white"
-  });
-
-  button.on("Selection", function() {
+  }).on("Selection", function() {
     populateMessage();
   });
 
+  page.append(firstNameLabel, firstNameInput, lastNameLabel, lastNameInput, passphraseLabel, passphraseInput,
+    countryLabel, countryCombo, classLabel, classCombo, dateTimeLabel, dateTime, checkbox, button);
+
   function populateMessage() {
     if (!message) {
-      message = page.append("Label", {
+      message = tabris.create("Label", {
         layoutData: {left: 10, right: 10, top: [button, 10]},
         alignment: "left",
         text: "Flight booked for: " + createName() + "\n" + "Departure: " + createDepartureDate()
