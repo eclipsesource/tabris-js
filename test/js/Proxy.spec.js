@@ -408,21 +408,6 @@ describe("Proxy", function() {
       });
     });
 
-    describe("setting a page as a parent", function() {
-      var pageProxy;
-
-      beforeEach(function() {
-        pageProxy = new tabris.PageProxy("pageProxy")._create({});
-        nativeBridge.resetCalls();
-        proxy.set("parent", pageProxy);
-      });
-
-      it("translates the parent to the page's composite in the protocol", function() {
-        var call = nativeBridge.calls({op: "set", id: proxy.id})[0];
-        expect(call.properties.parent).toBe(pageProxy._composite.id);
-      });
-    });
-
     describe("call", function() {
 
       it("calls native call", function() {

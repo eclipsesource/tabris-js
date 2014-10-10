@@ -31,7 +31,7 @@ tabris.load(function() {
   var PAGE_MARGIN = 12;
 
   function createBooksPage(title, image, filter) {
-    return tabris.createPage({
+    return tabris.create("Page", {
       title: title,
       topLevel: true,
       image: [image, 32, 32]
@@ -47,7 +47,7 @@ tabris.load(function() {
       layoutData: {height: 1, right: 0, left: 0, top: [detailsComposite, 0]},
       background: "rgba(0, 0, 0, 0.1)"
     });
-    return tabris.createPage({
+    return tabris.create("Page", {
       title: book.title
     }).append(detailsComposite, separator, tabFolder);
   }
@@ -55,7 +55,7 @@ tabris.load(function() {
   function createDetailsComposite(book) {
     var touchComp = tabris.create("Composite", {
       layoutData: {left: 0, right: 0, top: 0, height: 160 + 2 * PAGE_MARGIN}
-    }).on("MouseUp", function() {
+    }).on("touchend", function() {
       createReadBookPage(book).open();
     });
     var imageLabel = tabris.create("Label", {
@@ -138,7 +138,7 @@ tabris.load(function() {
   }
 
   function createReadBookPage(book) {
-    var page = tabris.createPage({title: book.title});
+    var page = tabris.create("Page", {title: book.title});
     var composite = tabris.create("ScrollComposite", {
       parent: page,
       scroll: "vertical",
@@ -156,13 +156,13 @@ tabris.load(function() {
       parent: composite,
       style: ["WRAP"],
       layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: [titleLabel, PAGE_MARGIN], bottom: PAGE_MARGIN},
-      text: [loremIpsum, loremIpsum, loremIpsum, loremIpsum, loremIpsum, loremIpsum].join("\n\n")
+      text: [loremIpsum, loremIpsum, loremIpsum].join("\n\n")
     });
     return page;
   }
 
   function createSettingsPage() {
-    return tabris.createPage({
+    return tabris.create("Page", {
       title: "Settings"
     }).append("Label", {
       text: "Settings",

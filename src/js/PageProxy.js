@@ -3,16 +3,7 @@
  * All rights reserved.
  */
 
-tabris.PageProxy = function(uiProxy) {
-  this.Super();
-  this._uiProxy = uiProxy;
-};
-
-tabris.PageProxy.create = function(uiProxy, properties) {
-  return new tabris.PageProxy(uiProxy)._create(properties);
-};
-
-tabris.PageProxy.prototype = util.extendPrototype(tabris.Proxy, {
+tabris.registerType("Page", {
 
   _type: "tabris.Page",
 
@@ -25,7 +16,7 @@ tabris.PageProxy.prototype = util.extendPrototype(tabris.Proxy, {
     });
     this._composite = tabris.create("rwt.widgets.Composite", compositeProperties);
     var pageProperties = util.extend(util.pick(properties, this._PAGE_PROPS), {
-      parent: this._uiProxy._ui,
+      parent: tabris._uiProxy._ui,
       control: this._composite
     });
     this.super("_create", pageProperties);
@@ -73,12 +64,12 @@ tabris.PageProxy.prototype = util.extendPrototype(tabris.Proxy, {
   },
 
   open: function() {
-    this._uiProxy.setActivePage(this);
+    tabris._uiProxy.setActivePage(this);
   },
 
   close: function() {
     this._composite.dispose();
-    this._uiProxy.setLastActivePage();
+    tabris._uiProxy.setLastActivePage();
     this.dispose();
   },
 

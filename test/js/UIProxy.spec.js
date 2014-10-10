@@ -151,6 +151,14 @@ describe("UIProxy", function() {
 
     describe("createPage", function() {
 
+      beforeEach(function() {
+        tabris._uiProxy = uiProxy;
+      });
+
+      afterEach(function() {
+        delete tabris._uiProxy;
+      });
+
       it("creates a Page and a Composite", function() {
         uiProxy.createPage();
 
@@ -173,10 +181,20 @@ describe("UIProxy", function() {
         expect(createCall.properties.background).toEqual([255, 0, 0, 255]);
       });
 
-      it("returns a PageProxy", function() {
+      it("returns a Page", function() {
         var page = uiProxy.createPage();
 
-        expect(page instanceof tabris.PageProxy).toBe(true);
+        expect(page instanceof tabris.Page).toBe(true);
+      });
+
+      it("ShowPreviousPage event closes page", function() {
+        var pageProxy = uiProxy.createPage({});
+        pageProxy.open();
+        spyOn(pageProxy, "close");
+
+        tabris._notify(uiId, "ShowPreviousPage", {});
+
+        expect(pageProxy.close).toHaveBeenCalled();
       });
 
     });
@@ -192,16 +210,6 @@ describe("UIProxy", function() {
         expect(nativeBridge.calls({id: shellId, op: "destroy"}).length).toBe(1);
       });
 
-    });
-
-    it("ShowPreviousPage event closes page", function() {
-      var pageProxy = uiProxy.createPage({});
-      pageProxy.open();
-      spyOn(pageProxy, "close");
-
-      tabris._notify(uiId, "ShowPreviousPage", {});
-
-      expect(pageProxy.close).toHaveBeenCalled();
     });
 
   });

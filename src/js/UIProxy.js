@@ -37,6 +37,7 @@ tabris.UIProxy.prototype = {
   _install: function(target) {
     target.createAction = util.bind(this.createAction, this);
     target.createPage = util.bind(this.createPage, this);
+    target._uiProxy = this;
   },
 
   setActivePage: function(page) {
@@ -67,7 +68,7 @@ tabris.UIProxy.prototype = {
   },
 
   createPage: function(properties) {
-    return tabris.PageProxy.create(this, properties);
+    return tabris.create("Page", properties);
   }
 };
 
