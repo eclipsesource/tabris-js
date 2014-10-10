@@ -269,7 +269,7 @@
     _type: "rwt.widgets.Text",
     _create: function(properties) {
       var style = textTypeToStyle[properties.type] || textTypeToStyle["default"];
-      this.super("_create", util.extend({style: style}, properties));
+      return this.super("_create", util.extend({style: style}, properties));
     }
   });
   tabris.registerType("ScrollBar", {});
