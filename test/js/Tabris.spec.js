@@ -92,19 +92,19 @@ describe("tabris", function() {
     });
 
     it("notifies widget proxy with touchstart event object", function() {
-      tabris._notify(label.id, "MouseDown", {x:12, y:34});
+      tabris._notify(label.id, "MouseDown", {x: 12, y: 34});
 
       expect(label.trigger).toHaveBeenCalledWith("touchstart", {touches: [{x: 12, y: 34}]});
     });
 
     it("notifies widget proxy with touchmove event object", function() {
-      tabris._notify(label.id, "MouseMove", {x:12, y:34});
+      tabris._notify(label.id, "MouseMove", {x: 12, y: 34});
 
       expect(label.trigger).toHaveBeenCalledWith("touchmove", {touches: [{x: 12, y: 34}]});
     });
 
     it("notifies widget proxy with touchend event object", function() {
-      tabris._notify(label.id, "MouseUp", {x:12, y:34});
+      tabris._notify(label.id, "MouseUp", {x: 12, y: 34});
 
       expect(label.trigger).toHaveBeenCalledWith("touchend", {touches: [{x: 12, y: 34}]});
     });
