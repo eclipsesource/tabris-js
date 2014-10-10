@@ -3,10 +3,10 @@
  * All rights reserved.
  */
 
-describe("PageProxy", function() {
+describe("Page", function() {
 
   var nativeBridge;
-  var pageProxy;
+  var page;
   var uiId = "uiId";
 
   beforeEach(function() {
@@ -16,7 +16,7 @@ describe("PageProxy", function() {
     tabris._shell = new tabris.Proxy("shellId");
     tabris._uiProxy = jasmine.createSpyObj("uiProxy", ["setActivePage", "setLastActivePage"]);
     tabris._uiProxy._ui = new tabris.Proxy(uiId);
-    pageProxy = new tabris.Page();
+    page = new tabris.Page();
   });
 
   afterEach(function() {
@@ -24,13 +24,13 @@ describe("PageProxy", function() {
   });
 
   it("is instance of Proxy", function() {
-    expect(pageProxy).toEqual(jasmine.any(tabris.Proxy));
+    expect(page).toEqual(jasmine.any(tabris.Proxy));
   });
 
   describe("create", function() {
 
     it("creates a Composite and a Page", function() {
-      pageProxy._create({});
+      page._create({});
 
       var createCalls = nativeBridge.calls({op: "create"});
       expect(createCalls.length).toBe(2);
@@ -43,7 +43,7 @@ describe("PageProxy", function() {
       var createCall;
 
       beforeEach(function() {
-        pageProxy._create({
+        page._create({
           title: "title",
           image: "image",
           style: "fullscreen",
@@ -80,7 +80,7 @@ describe("PageProxy", function() {
       var compositeId;
 
       beforeEach(function() {
-        pageProxy._create({
+        page._create({
           title: "title",
           image: "image",
           style: "fullscreen",
@@ -119,7 +119,7 @@ describe("PageProxy", function() {
     var compositeCreateCall;
 
     beforeEach(function() {
-      pageProxy._create({});
+      page._create({});
       pageCreateCall = nativeBridge.calls({op: "create", type: "tabris.Page"})[0];
       compositeCreateCall = nativeBridge.calls({op: "create", type: "rwt.widgets.Composite"})[0];
       nativeBridge.resetCalls();
@@ -129,7 +129,7 @@ describe("PageProxy", function() {
       var result;
 
       beforeEach(function() {
-        result = pageProxy.append("foo.Bar", {bar: 23});
+        result = page.append("foo.Bar", {bar: 23});
       });
 
       it("appends to the composite", function() {
@@ -138,7 +138,7 @@ describe("PageProxy", function() {
       });
 
       it("returns self to allow chaining", function() {
-        expect(result).toBe(pageProxy);
+        expect(result).toBe(page);
       });
 
     });
@@ -148,7 +148,7 @@ describe("PageProxy", function() {
 
       beforeEach(function() {
         child = new tabris.Proxy("child");
-        result = pageProxy.append(child);
+        result = page.append(child);
       });
 
       it("sets child's parent to the composite", function() {
@@ -157,7 +157,7 @@ describe("PageProxy", function() {
       });
 
       it("returns self to allow chaining", function() {
-        expect(result).toBe(pageProxy);
+        expect(result).toBe(page);
       });
 
     });
@@ -165,7 +165,7 @@ describe("PageProxy", function() {
     describe("set", function() {
 
       it("modifies the page", function() {
-        pageProxy.set("title", "foo");
+        page.set("title", "foo");
 
         var setCalls = nativeBridge.calls({op: "set", id: pageCreateCall.id});
         expect(setCalls.length).toBe(1);
@@ -173,7 +173,7 @@ describe("PageProxy", function() {
       });
 
       it("modifies the composite", function() {
-        pageProxy.set("background", "red");
+        page.set("background", "red");
 
         var setCalls = nativeBridge.calls({op: "set", id: compositeCreateCall.id});
         expect(setCalls.length).toBe(1);
@@ -185,9 +185,9 @@ describe("PageProxy", function() {
     describe("open", function() {
 
       it("sets active page", function() {
-        pageProxy.open();
+        page.open();
 
-        expect(tabris._uiProxy.setActivePage).toHaveBeenCalledWith(pageProxy);
+        expect(tabris._uiProxy.setActivePage).toHaveBeenCalledWith(page);
       });
 
     });
@@ -195,17 +195,17 @@ describe("PageProxy", function() {
     describe("close", function() {
 
       it("restores previous active page", function() {
-        pageProxy.open();
+        page.open();
 
-        pageProxy.close();
+        page.close();
 
         expect(tabris._uiProxy.setLastActivePage).toHaveBeenCalled();
       });
 
       it("destroys composite and page", function() {
-        pageProxy.open();
+        page.open();
 
-        pageProxy.close();
+        page.close();
 
         expect(nativeBridge.calls({op: "destroy", id: pageCreateCall.id}).length).toBe(1);
         expect(nativeBridge.calls({op: "destroy", id: compositeCreateCall.id}).length).toBe(1);
@@ -219,12 +219,12 @@ describe("PageProxy", function() {
       beforeEach(function() {
         child = new tabris.Proxy();
         nativeBridge.resetCalls();
-        child.set("parent", pageProxy);
+        child.set("parent", page);
       });
 
       it("uses page's composite in 'set'", function() {
         var call = nativeBridge.calls({op: "set", id: child.id})[0];
-        expect(call.properties.parent).toBe(pageProxy._composite.id);
+        expect(call.properties.parent).toBe(page._composite.id);
       });
 
     });
@@ -235,12 +235,12 @@ describe("PageProxy", function() {
       beforeEach(function() {
         child = new tabris.Proxy();
         nativeBridge.resetCalls();
-        child.set("parent", pageProxy);
+        child.set("parent", page);
       });
 
       it("translates the parent to the page's composite in the protocol", function() {
         var call = nativeBridge.calls({op: "set", id: child.id})[0];
-        expect(call.properties.parent).toBe(pageProxy._composite.id);
+        expect(call.properties.parent).toBe(page._composite.id);
       });
     });
 

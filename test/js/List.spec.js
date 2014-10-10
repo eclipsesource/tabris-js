@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 
-describe("ListProxy", function() {
+describe("List", function() {
 
   var nativeBridge;
   var parent;

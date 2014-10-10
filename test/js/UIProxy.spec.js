@@ -188,13 +188,13 @@ describe("UIProxy", function() {
       });
 
       it("ShowPreviousPage event closes page", function() {
-        var pageProxy = uiProxy.createPage({});
-        pageProxy.open();
-        spyOn(pageProxy, "close");
+        var page = uiProxy.createPage({});
+        page.open();
+        spyOn(page, "close");
 
         tabris._notify(uiId, "ShowPreviousPage", {});
 
-        expect(pageProxy.close).toHaveBeenCalled();
+        expect(page.close).toHaveBeenCalled();
       });
 
     });

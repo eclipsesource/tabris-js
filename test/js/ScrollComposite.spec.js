@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 
-describe("ScrollCompositeProxy", function() {
+describe("ScrollComposite", function() {
 
   var nativeBridge;
   var parent;
