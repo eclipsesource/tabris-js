@@ -1,78 +1,93 @@
-/*jshint unused: false */
-tabris.load( function() {
+tabris.load(function() {
 
   var red = "#ffc8c8";
   var green = "#c8ffc8";
   var blue = "#c8c8ff";
 
-  var createSubPage = function( title, bgColor ) {
-    var page = tabris.createPage({
+  var createSubPage = function(title, bgColor) {
+    var page = tabris.create("Page", {
       title: title,
       topLevel: false,
       background: bgColor
     });
-    var label = page.append( "Label", {
-      layoutData: { left: 10, right: 10, top: 10 },
+
+    var label = tabris.create("Label", {
+      layoutData: {left: 10, right: 10, top: 10},
       text: title
     });
-    var openButton = page.append( "Button", {
+
+    var openButton = tabris.create("Button", {
       text: "open another page",
-      layoutData: { left: 10, right: 10, top: [label, 10] }
-    }).on( "Selection", function() {
-      var subpage = createSubPage( title + "-sub", bgColor );
-      subpage.open();
+      layoutData: {left: 10, right: 10, top: [label, 10]}
+    }).on("Selection", function() {
+      createSubPage(title + "-sub", bgColor).open();
     });
-    page.append( "Button", {
+
+    var closeButton = tabris.create("Button", {
       text: "close this page",
-      layoutData: { left: 10, right: 10, top: [openButton, 10] }
-    }).on( "Selection", function() {
+      layoutData: {left: 10, right: 10, top: [openButton, 10]}
+    }).on("Selection", function() {
       page.close();
     });
 
-    // Page action
+    page.append(label, openButton, closeButton);
+
+    page.on("Dispose", function() {
+      pageAction.dispose();
+    });
+
     var pageAction = tabris.createAction({
       title: "Share",
       enabled: true,
       visible: true
     }, function() {});
-    page.on( "Dispose", function() {
-      pageAction.dispose();
-    });
 
     return page;
   };
 
-  var createToplevelPage = function( title, bgColor ) {
+  var createToplevelPage = function(title, bgColor) {
     var page = tabris.createPage({
       title: title,
       topLevel: true,
       background: bgColor
     });
-    var label = page.append( "Label", {
-      layoutData: { left: 10, right: 10, top: 10 },
+
+    var label = tabris.create("Label", {
+      layoutData: {left: 10, right: 10, top: 10},
       text: title
     });
-    var openButton = page.append( "Button", {
+
+    var openButton = tabris.create("Button", {
       text: "open page",
-      layoutData: { left: 10, right: 10, top: [label, 10] }
-    }).on( "Selection", function() {
-      var subpage = createSubPage( title + "-sub", bgColor );
+      layoutData: {left: 10, right: 10, top: [label, 10]}
+    }).on("Selection", function() {
+      var subpage = createSubPage(title + "-sub", bgColor);
       subpage.open();
     });
-    page.append( "Button", {
+
+    var closeButton = tabris.create("Button", {
       text: "close this page",
-      layoutData: { left: 10, right: 10, top: [openButton, 10] }
-    }).on( "Selection", function() {
+      layoutData: {left: 10, right: 10, top: [openButton, 10]}
+    });
+
+    page.append(label, openButton, closeButton);
+
+    closeButton.on("Selection", function() {
       page.close();
     });
+
     return page;
   };
 
-  var page1 = createToplevelPage( "Page One", red );
-  var page2 = createToplevelPage( "Page Two", green );
-  var page3 = createToplevelPage( "Page Three", blue );
+  var page1 = createToplevelPage("Page One", red);
+  createToplevelPage("Page Two", green);
+  var page3 = createToplevelPage("Page Three", blue);
 
-  tabris.createAction({ title: "Page3", enabled: true, visible: true }, function( a, b, c ) {
+  tabris.createAction({
+    title: "Page3",
+    enabled: true,
+    visible: true
+  }, function() {
     page3.open();
   });
 
