@@ -9,48 +9,50 @@ tabris.load(function() {
 
   var taskId;
 
-  var page = tabris.createPage({
+  var page = tabris.create("Page", {
     title: "Timer",
     topLevel: true
   });
 
-  var labelStatus = page.append("rwt.widgets.Label", {
+  var labelStatus = tabris.create("Label", {
     text: "Last update: <none>",
     layoutData: {left: MARGIN, top: MARGIN_LARGE, right: MARGIN},
     font: LARGE_FONT
   });
 
-  var labelCps = page.append("rwt.widgets.Label", {
+  var labelCps = tabris.create("Label", {
     text: "Calls per second: <none>",
     layoutData: {left: MARGIN, top: [labelStatus, MARGIN], right: MARGIN},
     font: LARGE_FONT
   });
 
-  var labelDelay = page.append("rwt.widgets.Label", {
+  var labelDelay = tabris.create("Label", {
     text: "Delay (ms)",
     layoutData: {left: MARGIN, top: [labelCps, MARGIN_LARGE]}
   });
 
-  var textDelay = page.append("Text", {
+  var textDelay = tabris.create("Text", {
     text: "1000",
     message: "Delay (ms)",
     layoutData: {left: [labelDelay, MARGIN], top: [labelCps, MARGIN_LARGE]}
   });
 
-  var checkRepeat = page.append("CheckBox", {
+  var checkRepeat = tabris.create("CheckBox", {
     text: "Repeat",
     layoutData: {left: MARGIN, top: [textDelay, MARGIN]}
   });
 
-  var buttonStart = page.append("Button", {
+  var buttonStart = tabris.create("Button", {
     text: "Start timer",
     layoutData: {left: [50, MARGIN / 4], top: [checkRepeat, MARGIN_LARGE], right: MARGIN}
   });
 
-  var buttonCancelTimer = page.append("Button", {
+  var buttonCancelTimer = tabris.create("Button", {
     text: "Cancel timer",
     layoutData: {left: MARGIN, top: [checkRepeat, MARGIN_LARGE], right: [50, MARGIN / 4]}
   });
+
+  page.append(labelStatus, labelCps, labelDelay, textDelay, checkRepeat, buttonStart, buttonCancelTimer);
 
   var updateStatusLabels = function() {
     cpsCount++;
