@@ -79,7 +79,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('examples', 'Copy examples to build/, create index', function() {
     var aggregatedIndex = [];
-    grunt.file.expand("examples/js/*").forEach(function(dir) {
+    grunt.file.expand("examples/*").forEach(function(dir) {
       if (grunt.file.exists(dir, "index.json")) {
         var index = grunt.file.readJSON(path.join(dir, "/index.json"));
         if ("title" in index) {
@@ -94,7 +94,7 @@ module.exports = function(grunt) {
         }
       }
     });
-    grunt.file.write('build/examples/js/index.json', JSON.stringify(aggregatedIndex, null, 2));
+    grunt.file.write('build/examples/index.json', JSON.stringify(aggregatedIndex, null, 2));
   });
 
   grunt.registerTask('default', ['clean', 'jshint', 'concat', 'uglify', 'jasmine', 'examples']);
