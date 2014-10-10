@@ -83,9 +83,14 @@ describe("UIProxy", function() {
 
     beforeEach(function() {
       uiProxy._create();
+      tabris._uiProxy = uiProxy;
       shellId = nativeBridge.calls({op: "create", type: "rwt.widgets.Shell"})[0].id;
       uiId = nativeBridge.calls({op: "create", type: "tabris.UI"})[0].id;
       nativeBridge.resetCalls();
+    });
+
+    afterEach(function() {
+      delete tabris._uiProxy;
     });
 
     describe("createAction", function() {
@@ -150,14 +155,6 @@ describe("UIProxy", function() {
     });
 
     describe("createPage", function() {
-
-      beforeEach(function() {
-        tabris._uiProxy = uiProxy;
-      });
-
-      afterEach(function() {
-        delete tabris._uiProxy;
-      });
 
       it("creates a Page and a Composite", function() {
         uiProxy.createPage();

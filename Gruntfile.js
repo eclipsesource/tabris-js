@@ -53,6 +53,7 @@ module.exports = function(grunt) {
                      'List.js',
                      'ScrollComposite.js',
                      'Page.js',
+                     'Action.js',
                      'CanvasContext.js',
                      'WebStorage.js',
                      'XMLHttpRequest.js'

@@ -58,9 +58,7 @@ tabris.UIProxy.prototype = {
   },
 
   createAction: function(properties, handler) {
-    var action = tabris.create("tabris.Action", util.extend({}, properties, {
-      parent: this._ui
-    }));
+    var action = tabris.create("Action", properties);
     if (typeof handler === "function") {
       action.on("Selection", handler);
     }

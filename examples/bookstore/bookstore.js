@@ -182,11 +182,11 @@ tabris.load(function() {
     return book.favorite;
   });
 
-  tabris.createAction({
+  tabris.create("Action", {
     title: "Settings",
     placementPriority: "LOW",
     image: ["images/action_settings.png", 32, 32]
-  }, function() {
+  }).on("Selection", function() {
     createSettingsPage().open();
   });
 
