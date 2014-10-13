@@ -1,69 +1,74 @@
-/*jshint unused: false */
-tabris.load( function() {
+tabris.load(function() {
 
-  var page = tabris.createPage({ title: "Client Layout", topLevel: true });
+  var page = tabris.create("Page", {
+    title: "Client Layout",
+    topLevel: true
+  });
 
-  var emptyLayoutDataLabel = page.append("Label", {
+  var emptyLayoutDataLabel = tabris.create("Label", {
     background: "#ff0080",
     text: "Empty layoutData",
     foreground: "white",
-    layoutData: { }
+    layoutData: {left: 0, top: 0}
   });
 
-  var widthHeightLabel = page.append("Label", {
+  var widthHeightLabel = tabris.create("Label", {
     background: "#ff0080",
     text: "Width = 200, Height = 200",
     foreground: "white",
-    layoutData: { width: 200, height: 200, bottom: 0 }
+    layoutData: {left: 0, bottom: 0, width: 200, height: 200}
   });
 
-  page.append("Label", {
+  var esImage = tabris.create("Label", {
     text: "es.png",
     foreground: "white",
-    image: ["images/es.png", 30, 30],
-    layoutData: { width: 30, height: 30, left: [widthHeightLabel, 12] }
+    image: {src: "images/es.png", width: 30, height: 30},
+    layoutData: {left: [widthHeightLabel, 12], top: 0, width: 30, height: 30}
   });
 
-  var allMarginsLabel = page.append("Label", {
+  var allMarginsLabel = tabris.create("Label", {
     background: "rgba(0, 128, 128, 0.2)",
-    text: "Only margins\nleft: 10, right: 20, top: 200, bottom: 60,",
-    layoutData: { left: 10, right: 20, top: 200, bottom: 60 }
+    text: "Only margins\nleft: 10, right: 20, top: 200, bottom: 60",
+    layoutData: {left: 10, top: 200, right: 20, bottom: 60}
   });
 
-  var helloWorldLabel = page.append("Label", {
+  var helloWorldLabel = tabris.create("Label", {
     background: "#ff8080",
     text: "Hello World!",
     foreground: "white",
-    layoutData: { left: 0, top: 40 }
+    layoutData: {left: 0, top: 40}
   });
 
-  var tabrisLabel = page.append("Label", {
+  var tabrisLabel = tabris.create("Label", {
     background: "#8080ff",
     text: "tabris",
     foreground: "white",
-    layoutData: { right: 20, left: [helloWorldLabel, 0], top: [helloWorldLabel, 0] }
+    layoutData: {left: [helloWorldLabel, 0], top: [helloWorldLabel, 0], right: 20}
   });
 
-  var eclipseSourceLabel = page.append("Label", {
+  var eclipseSourceLabel = tabris.create("Label", {
     background: "#8080ff",
     text: "EclipseSource",
     foreground: "white",
-    layoutData: { right: 20, left: [helloWorldLabel, 40], top: [tabrisLabel, 20] }
+    layoutData: {left: [helloWorldLabel, 40], top: [tabrisLabel, 20], right: 20}
   });
 
-  var javaLabel = page.append("Label", {
+  var javaLabel = tabris.create("Label", {
     background: "#800080",
     foreground: "white",
     text: "Java",
-    layoutData: { right: 0, top: 10, bottom: [tabrisLabel, 5] }
+    layoutData: {top: 10, right: 0, bottom: [tabrisLabel, 5]}
   });
 
-  var percentageLabel = page.append("Label", {
+  var percentageLabel = tabris.create("Label", {
     background: "#800080",
     foreground: "white",
     text: "Percentage",
-    layoutData: { top: 130, right: [30, 0], left: [30, 0] }
+    layoutData: {left: [30, 0], top: 130, right: [30, 0]}
   });
+
+  page.append(emptyLayoutDataLabel, widthHeightLabel, esImage, allMarginsLabel, helloWorldLabel,
+    tabrisLabel, eclipseSourceLabel, javaLabel, percentageLabel);
 
   page.open();
 
