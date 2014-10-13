@@ -48,6 +48,7 @@ module.exports = function(grunt) {
                      'Events.js',
                      'DOMEvents.js',
                      'WindowTimers.js',
+                     'Device.js',
                      'Proxy.js',
                      'UIProxy.js',
                      'List.js',
