@@ -1,5 +1,15 @@
 tabris.load(function() {
 
+  var page = tabris.create("Page", {
+    title: "Basic Shapes",
+    topLevel: true
+  });
+
+  var canvas = tabris.create("Canvas", {
+    parent: page,
+    layoutData: {left: 10, top: 10, right: 10, bottom: 10}
+  });
+
   function drawLinear(ctx, x, y) {
     ctx.beginPath();
     ctx.moveTo(x, y + 25);
@@ -37,15 +47,6 @@ tabris.load(function() {
     ctx.arc(x + 40, y + 40, 40, Math.PI / 4, -Math.PI / 4);
     ctx.closePath();
   }
-
-  var page = tabris.createPage({
-    title: "Basic Shapes",
-    topLevel: true
-  });
-
-  var canvas = page.append("Canvas", {
-    layoutData: {left: 10, top: 10, right: 10, bottom: 10}
-  });
 
   var ctx = tabris.getContext(canvas, 400, 400);
 

@@ -1,5 +1,43 @@
 tabris.load(function() {
 
+  var page = tabris.create("Page", {
+    title: "Animation",
+    topLevel: true
+  });
+
+  var button = tabris.create("Button", {
+    text: "start",
+    layoutData: {
+      left: 10,
+      bottom: 10
+    }
+  });
+
+  var canvas = tabris.create("Canvas", {
+    parent: page,
+    layoutData: {
+      left: 10,
+      top: 10,
+      right: 10,
+      bottom: [button, 10]
+    }
+  });
+
+  page.append(button);
+
+  button.on("selection", function() {
+    var running = example.toggle();
+    button.set("text", running ? "stop" : "start");
+  });
+
+  canvas.on("resize", function() {
+    var bounds = canvas.get("bounds");
+    var width = bounds[2];
+    var height = Math.min(bounds[3], Math.floor(width / 2));
+    var ctx = tabris.getContext(canvas, width, height);
+    example.init(ctx);
+  });
+
   function Example() {
     var ctx, width, height, cx, cy, unit;
     var angle = 0;
@@ -10,13 +48,13 @@ tabris.load(function() {
       ctx = newCtx;
       width = ctx.canvas.width;
       height = ctx.canvas.height;
-      ctx.font = '18px sans-serif';
-      ctx.lineJoin = 'round';
+      ctx.font = "18px sans-serif";
+      ctx.lineJoin = "round";
       cx = Math.floor(width / 3);
       cy = Math.floor(height / 2);
       unit = width / 12;
       // initial draw
-      if(!running) {
+      if (!running) {
         draw();
       }
     };
@@ -33,7 +71,7 @@ tabris.load(function() {
     };
 
     this.toggle = function() {
-      if(running) {
+      if (running) {
         this.stop();
       } else {
         this.start();
@@ -51,7 +89,7 @@ tabris.load(function() {
       speedometer.update();
       angle += Math.PI / 90;
       // re-schedule
-      if(running) {
+      if (running) {
         timerId = setTimeout(draw, 0);
       }
     }
@@ -61,7 +99,7 @@ tabris.load(function() {
     }
 
     function drawAxes() {
-      ctx.strokeStyle = '#aaa';
+      ctx.strokeStyle = "#aaa";
       ctx.lineWidth = 1;
       ctx.beginPath();
       // x and y axes
@@ -84,12 +122,12 @@ tabris.load(function() {
       ctx.font = "12px sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "top";
-      ctx.fillText('π', cx + Math.PI * unit, cy + 8);
-      ctx.fillText('2π', cx + 2 * Math.PI * unit, cy + 8);
+      ctx.fillText("π", cx + Math.PI * unit, cy + 8);
+      ctx.fillText("2π", cx + 2 * Math.PI * unit, cy + 8);
       ctx.textAlign = "left";
       ctx.textBaseline = "middle";
-      ctx.fillText('1', cx + 8, cy - unit);
-      ctx.fillText('-1', cx + 8, cy + unit);
+      ctx.fillText("1", cx + 8, cy - unit);
+      ctx.fillText("-1", cx + 8, cy + unit);
     }
 
     function drawSine(t) {
@@ -102,14 +140,14 @@ tabris.load(function() {
         y = Math.sin(t + x);
         ctx.lineTo(cx + x * unit, cy + y * unit);
       }
-      ctx.strokeStyle = '#fa0';
+      ctx.strokeStyle = "#fa0";
       ctx.lineWidth = 2;
       ctx.stroke();
     }
 
     function drawCircle() {
       var ccx = cx - 1.5 * unit;
-      ctx.strokeStyle = '#0af';
+      ctx.strokeStyle = "#0af";
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.arc(ccx, cy, unit, 0, 2 * Math.PI);
@@ -120,8 +158,8 @@ tabris.load(function() {
       var ccx = cx - 1.5 * unit;
       var x = ccx + Math.cos(t) * unit;
       var y = cy + Math.sin(t) * unit;
-      ctx.strokeStyle = '#0af';
-      ctx.fillStyle = '#fff';
+      ctx.strokeStyle = "#0af";
+      ctx.fillStyle = "#fff";
       ctx.lineWidth = 2;
       ctx.beginPath();
       // lines
@@ -144,7 +182,7 @@ tabris.load(function() {
     function drawFpsLabel() {
       ctx.textAlign = "left";
       ctx.textBaseline = "top";
-      ctx.fillStyle = '#000';
+      ctx.fillStyle = "#000";
       ctx.lineWidth = 1;
       // TODO concat only needed on Rhino
       ctx.fillText("FPS: ".concat(speedometer.fps.toFixed(1)), 10, 10);
@@ -170,30 +208,5 @@ tabris.load(function() {
   }
 
   var example = new Example();
-
-  var page = tabris.createPage({
-    title: "Animation",
-    topLevel: true
-  });
-
-  var button = page.append("Button", {
-    text: "start",
-    layoutData: {left: 10, bottom: 10}
-  }).on("selection", function() {
-    var running = example.toggle();
-    button.set("text", running ? "stop" : "start");
-  });
-
-  var canvas = page.append("Canvas", {
-    layoutData: {left: 10, top: 10, right: 10, bottom: [button, 10]}
-  });
-
-  canvas.on("resize", function() {
-    var bounds = canvas.get("bounds");
-    var width = bounds[2];
-    var height = Math.min(bounds[3], Math.floor(width/2));
-    var ctx = tabris.getContext(canvas, width, height);
-    example.init(ctx);
-  });
 
 });

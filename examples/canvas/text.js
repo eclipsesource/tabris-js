@@ -1,11 +1,12 @@
 tabris.load(function() {
 
-  var page = tabris.createPage({
+  var page = tabris.create("Page", {
     title: "Text",
     topLevel: true
   });
 
-  var canvas = page.append("Canvas", {
+  var canvas = tabris.create("Canvas", {
+    parent: page,
     layoutData: {left: 10, top: 10, right: 10, bottom: 10}
   });
 
