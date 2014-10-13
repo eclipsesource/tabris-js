@@ -19,25 +19,25 @@ tabris.load(function() {
                    "neque. Proin vel elementum augue. Quisque gravida nulla nisl, at fermentum " +
                    "turpis euismod in. ";
 
-  var page = tabris.createPage({
+  var page = tabris.create("Page", {
     title: "Tray",
     topLevel: true
   });
 
-  var tray = page.append("Composite", {
+  var tray = tabris.create("Composite", {
     layoutData: {left: 0, right: 0, top: [30, 0], bottom: 0}
   });
 
-  var strap = tray.append("Composite", {
+  var strap = tabris.create("Composite", {
     layoutData: {left: [40, 0], right: [40, 0], top: 0, height: 48},
     background: "#259b24"
   });
 
-  var strapTarget = strap.append("Composite", {
+  var strapContainer = tabris.create("Composite", {
     layoutData: {left: 0, right: 0, top: 0, bottom: 0}
   });
 
-  var strapLabel = strap.append("Label", {
+  var strapLabel = tabris.create("Label", {
     layoutData: {left: MARGIN, right: MARGIN, top: 10},
     alignment: "center",
     text: "⇧",
@@ -45,12 +45,12 @@ tabris.load(function() {
     foreground: "white"
   });
 
-  var content = tray.append("Composite", {
+  var content = tabris.create("Composite", {
     layoutData: {left: MARGIN, right: MARGIN, top: [strap, 0], bottom: 0},
     background: "#8bc34a"
   });
 
-  content.append("Label", {
+  var contentLabel = tabris.create("Label", {
     layoutData: {left: MARGIN, right: MARGIN, top: MARGIN},
     alignment: "center",
     text: "Tray content",
@@ -58,61 +58,66 @@ tabris.load(function() {
     foreground: "white"
   });
 
-  var shade = page.append("Composite", {
+  var shade = tabris.create("Composite", {
     layoutData: {left: 0, right: 0, top: 0, bottom: 0},
     background: "black",
     opacity: 0
   });
 
-  page.append("Label", {
+  var pageLabel = tabris.create("Label", {
     style: ["WRAP"],
     layoutData: {left: MARGIN, right: MARGIN, top: MARGIN, bottom: MARGIN},
     text: loremIpsum,
     foreground: "#777"
   });
 
+  strap.append(strapLabel, strapContainer);
+  content.append(contentLabel);
+  tray.append(content, strap);
+  page.append(tray, shade, pageLabel);
+
   function updateShadeOpacity() {
-    var traveled = tray.get("translationY") / verticalTrayOffset;
+    var traveled = tray.get("transform").translationY / verticalTrayOffset;
     shade.set("opacity", 0.75 - traveled);
   }
 
   function updateStrapLabelRotation() {
-    var traveled = tray.get("translationY") / verticalTrayOffset;
-    strapLabel.set("rotation", traveled * Math.PI - Math.PI);
+    var traveled = tray.get("transform").translationY / verticalTrayOffset;
+    strapLabel.set("transform", {rotation: traveled * Math.PI - Math.PI});
   }
 
   content.on("resize", function() {
     var bounds = content.get("bounds");
     verticalTrayOffset = bounds[3];
-    tray.set("translationY", verticalTrayOffset);
+    tray.set("transform", {translationY: verticalTrayOffset});
     updateShadeOpacity();
     updateStrapLabelRotation();
   });
 
-  strapTarget.on("MouseDown", function(e) {
+  strapLabel.on("touchstart", function(e) {
     prevEvent = e;
     if (animation !== undefined) {
       animation.call("cancel");
     }
   });
 
-  strapTarget.on("MouseMove", function(e) {
-    var y = e.y - prevEvent.y;
+  strapLabel.on("touchmove", function(e) {
+    var y = e.touches[0].y - prevEvent.touches[0].y;
     prevPrevEvent = prevEvent;
     prevEvent = e;
-    var translationY = tray.get("translationY") + y;
-    tray.set("translationY", Math.min(Math.max(translationY, 0), verticalTrayOffset));
+    var offsetY = tray.get("transform").translationY + y;
+    tray.set("transform", {translationY: Math.min(Math.max(offsetY, 0), verticalTrayOffset)});
     updateShadeOpacity();
     updateStrapLabelRotation();
   });
 
-  strapTarget.on("MouseUp", function() {
-    var time = prevEvent.time - prevPrevEvent.time;
-    var y = prevEvent.y - prevPrevEvent.y;
+  strapLabel.on("touchend", function() {
+    var y = prevEvent.touches[0].y - prevPrevEvent.touches[0].y;
     var translationTarget = 0;
     if (y >= 0) {
       translationTarget = verticalTrayOffset;
     }
+    var time = prevEvent.time - prevPrevEvent.time;
     var duration = time / y * 400;
     if (duration < 0) {
       duration *= -1;
@@ -122,7 +127,9 @@ tabris.load(function() {
       duration: duration,
       easing: "ease-out", // "linear", "ease-in", "ease-out", "ease-in-out"
       properties: {
-        translationY: translationTarget
+        transform: {
+          translationY: translationTarget
+        }
       }
     }).on("Progress", function() {
       updateShadeOpacity();

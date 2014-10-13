@@ -23,7 +23,9 @@ tabris.load(function() {
   function animateInFromBottom(widget, i) {
     widget.set({
       opacity: 0.0,
-      translationY: THUMB_SIZE / 2
+      transform: {
+        translationY: THUMB_SIZE / 2
+      }
     });
     tabris.create("tabris.Animation", {
       target: widget,
@@ -32,7 +34,9 @@ tabris.load(function() {
       easing: "ease-in-out",
       properties: {
         opacity: 1.0,
-        translationY: 0
+        transform: {
+          translationY: 0
+        }
       }
     }).on("Completion", function() {
       this.dispose();
@@ -42,7 +46,9 @@ tabris.load(function() {
   function animateInFromRight(widget, delay) {
     widget.set({
       opacity: 0.0,
-      translationX: 32
+      transform: {
+        translationX: 32
+      }
     });
     tabris.create("tabris.Animation", {
       target: widget,
@@ -51,7 +57,9 @@ tabris.load(function() {
       easing: "ease-out",
       properties: {
         opacity: 1.0,
-        translationX: 0
+        transform: {
+          translationX: 0
+        }
       }
     }).on("Completion", function() {
       this.dispose();
@@ -67,8 +75,10 @@ tabris.load(function() {
       easing: "ease-out",
       properties: {
         opacity: 1.0,
-        scaleX: 1.0,
-        scaleY: 1.0
+        transform: {
+          scaleX: 1.0,
+          scaleY: 1.0
+        }
       }
     }).on("Completion", function() {
       this.dispose();
@@ -82,7 +92,9 @@ tabris.load(function() {
       easing: "ease-out",
       properties: {
         opacity: 0.0,
-        translationX: -64
+        transform: {
+          translationX: -64
+        }
       }
     }).on("Completion", function() {
       this.dispose();
@@ -92,33 +104,37 @@ tabris.load(function() {
   }
 
   function createPersonDetail(parent, person, delay) {
-    var composite = parent.append("Composite", {
+    var composite = tabris.create("Composite", {
       layoutData: {left: 0, right: 0, top: 0, height: IMAGE_SIZE + MARGIN_LARGE}
     });
-    var imageLabel = composite.append("Label", {
-      image: {src: person.image.toString(), width: IMAGE_SIZE, height: IMAGE_SIZE},
-      scaleX: 0.75,
-      scaleY: 0.75,
+    var imageLabel = tabris.create("Label", {
+      image: {src: person.image, width: IMAGE_SIZE, height: IMAGE_SIZE},
+      transform: {
+        scaleX: 0.75,
+        scaleY: 0.75
+      },
       opacity: 0.0
     });
-    var nameLabel = composite.append("Label", {
+    var nameLabel = tabris.create("Label", {
       layoutData: {left: [imageLabel, MARGIN], top: 0},
       text: person.firstName + " " + person.lastName,
       font: "bold 18px"
     });
-    var professionLabel = composite.append("Label", {
+    var professionLabel = tabris.create("Label", {
       layoutData: {left: [imageLabel, MARGIN], top: [nameLabel, MARGIN]},
       text: "Software developer"
     });
-    var companyLabel = composite.append("Label", {
+    var companyLabel = tabris.create("Label", {
       layoutData: {left: [imageLabel, MARGIN], top: [professionLabel, MARGIN_SMALL]},
       text: "EclipseSource"
     });
-    var mailLabel = composite.append("Label", {
+    var mailLabel = tabris.create("Label", {
       layoutData: {left: [imageLabel, MARGIN], top: [companyLabel, MARGIN]},
       text: "mail@eclipsesource.com",
       font: "italic 14px"
     });
+    parent.append(composite);
+    composite.append(imageLabel, nameLabel, professionLabel, companyLabel, mailLabel);
     animateInScaleUp(imageLabel, delay);
     animateInFromRight(nameLabel, delay);
     animateInFromRight(professionLabel, 100 + delay);
@@ -134,22 +150,24 @@ tabris.load(function() {
     } else {
       layoutData = {top: 0, left: [neighborComposite, MARGIN]};
     }
-    var composite = parent.append("Composite", {
+    var composite = tabris.create("Composite", {
       layoutData: layoutData
     });
-    var imageLabel = composite.append("Label", {
+    var imageLabel = tabris.create("Label", {
       layoutData: {left: 0, top: 0, width: THUMB_SIZE, height: THUMB_SIZE},
-      image: {src: person.image.toString(), width: THUMB_SIZE, height: THUMB_SIZE},
+      image: {src: person.image, width: THUMB_SIZE, height: THUMB_SIZE},
       data: {showTouch: true}
     });
-    imageLabel.on("MouseUp", function() {
+    imageLabel.on("touchend", function() {
       animateOutLeftCreateCurrentPerson(person);
     });
-    composite.append("Label", {
+    var firstNameLabel = tabris.create("Label", {
       alignment: "center",
       layoutData: {left: 0, top: [imageLabel, 0], width: THUMB_SIZE},
       text: person.firstName
     });
+    parent.append(composite);
+    composite.append(imageLabel, firstNameLabel);
     return composite;
   }
 
@@ -161,21 +179,22 @@ tabris.load(function() {
     }
   }
 
-  var page = tabris.createPage({
+  var page = tabris.create("Page", {
     title: "People",
     topLevel: true
   });
 
-  var personDetailsCompositeParent = page.append("Composite", {
+  var personDetailsCompositeParent = tabris.create("Composite", {
     layoutData: {left: MARGIN, top: MARGIN_LARGE, right: MARGIN}
   });
 
   var curPersonDetailComposite = createPersonDetail(personDetailsCompositeParent, people[2], ANIMATION_START_DELAY);
 
-  var peopleComposite = page.append("Composite", {
+  var peopleComposite = tabris.create("Composite", {
     layoutData: {left: MARGIN, top: [personDetailsCompositeParent, MARGIN]}
   });
 
+  page.append(personDetailsCompositeParent, peopleComposite);
   createPersonThumbComposites(peopleComposite);
 
   page.open();
