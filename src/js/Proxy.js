@@ -152,6 +152,9 @@
           return encodeColor(value);
         case "font":
           return encodeFont(value);
+        case "image":
+        case "backgroundImage":
+          return encodeImage(value);
         case "layoutData":
           checkLayoutData(value);
           return encodeLayoutData(value);
@@ -175,10 +178,15 @@
     },
 
     _decodeProperty: function(name, value) {
-      if (name === "foreground" || name === "background") {
-        return decodeColor(value);
-      } else if (name === "font") {
-        return decodeFont(value);
+      switch (name) {
+        case "foreground":
+        case "background":
+          return decodeColor(value);
+        case "font":
+          return decodeFont(value);
+        case "image":
+        case "backgroundImage":
+          return decodeImage(value);
       }
       return value;
     }
@@ -195,6 +203,14 @@
 
   function decodeFont(value) {
     return util.fontArrayToString(value);
+  }
+
+  function encodeImage(value) {
+    return util.imageToArray(value);
+  }
+
+  function decodeImage(value) {
+    return util.imageFromArray(value);
   }
 
   function checkLayoutData(layoutData) {

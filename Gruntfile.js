@@ -44,6 +44,7 @@ module.exports = function(grunt) {
                      'util.js',
                      'util-colors.js',
                      'util-fonts.js',
+                     'util-images.js',
                      'Tabris.js',
                      'Events.js',
                      'DOMEvents.js',

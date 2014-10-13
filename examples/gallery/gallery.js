@@ -64,7 +64,7 @@ tabris.load(function() {
     var image = tabris.create("Label", {
       parent: scrollComposite,
       layoutData: {top: 7, left: i * 150 + i * 7, width: 150, height: 150},
-      image: [imageThumbPath, 150, 150],
+      image: {src: imageThumbPath, width: 150, height: 150},
       data: {
         showTouch: true
       }
@@ -80,7 +80,7 @@ tabris.load(function() {
       parent: mainComposite,
       layoutData: {top: 0, bottom: 0, left: 0, right: 0},
       data: {"zoom":true},
-      image: [path, null, null]
+      image: {src: path}
     });
   }
 

@@ -96,7 +96,7 @@ tabris.load(function() {
       layoutData: {left: 0, right: 0, top: 0, height: IMAGE_SIZE + MARGIN_LARGE}
     });
     var imageLabel = composite.append("Label", {
-      image: [person.image.toString(), IMAGE_SIZE, IMAGE_SIZE],
+      image: {src: person.image.toString(), width: IMAGE_SIZE, height: IMAGE_SIZE},
       scaleX: 0.75,
       scaleY: 0.75,
       opacity: 0.0
@@ -139,7 +139,7 @@ tabris.load(function() {
     });
     var imageLabel = composite.append("Label", {
       layoutData: {left: 0, top: 0, width: THUMB_SIZE, height: THUMB_SIZE},
-      image: [person.image.toString(), THUMB_SIZE, THUMB_SIZE],
+      image: {src: person.image.toString(), width: THUMB_SIZE, height: THUMB_SIZE},
       data: {showTouch: true}
     });
     imageLabel.on("MouseUp", function() {

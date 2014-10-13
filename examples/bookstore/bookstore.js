@@ -12,7 +12,7 @@ tabris.load(function() {
     return {
       title: array[0],
       author: array[1],
-      image: [array[2], 106, 160],
+      image: {src: array[2], width: 106, height: 160},
       popular: array[3],
       favorite: array[4]
     };
@@ -34,7 +34,7 @@ tabris.load(function() {
     return tabris.create("Page", {
       title: title,
       topLevel: true,
-      image: [image, 32, 32]
+      image: {src: image, width: 32, height: 32}
     }).append(createBooksList(books.filter(filter)));
   }
 
@@ -185,7 +185,7 @@ tabris.load(function() {
   tabris.create("Action", {
     title: "Settings",
     placementPriority: "LOW",
-    image: ["images/action_settings.png", 32, 32]
+    image: {src: "images/action_settings.png", width: 32, height: 32}
   }).on("Selection", function() {
     createSettingsPage().open();
   });

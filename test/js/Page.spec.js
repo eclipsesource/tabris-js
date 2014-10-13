@@ -82,7 +82,7 @@ describe("Page", function() {
       beforeEach(function() {
         page._create({
           title: "title",
-          image: "image",
+          image: {src: "image"},
           style: "fullscreen",
           topLevel: true,
           background: "red"
@@ -101,7 +101,7 @@ describe("Page", function() {
 
       it("has title, image and topLevel properties", function() {
         expect(createCall.properties.title).toBe("title");
-        expect(createCall.properties.image).toBe("image");
+        expect(createCall.properties.image).toEqual(["image", null, null, null]);
         expect(createCall.properties.style).toBe("fullscreen");
         expect(createCall.properties.topLevel).toBe(true);
       });

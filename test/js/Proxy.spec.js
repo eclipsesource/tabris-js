@@ -232,6 +232,22 @@ describe("Proxy", function() {
         expect(result).toBe("italic bold 12px Arial");
       });
 
+      it("translates image to object", function() {
+        spyOn(nativeBridge, "get").and.returnValue(["foo", 23, 42]);
+
+        var result = proxy.get("image");
+
+        expect(result).toEqual({src: "foo", width: 23, height: 42});
+      });
+
+      it("translates backgroundImage to object", function() {
+        spyOn(nativeBridge, "get").and.returnValue(["foo", 23, 42]);
+
+        var result = proxy.get("backgroundImage");
+
+        expect(result).toEqual({src: "foo", width: 23, height: 42});
+      });
+
       it("fails on disposed object", function() {
         proxy.dispose();
 
@@ -317,6 +333,17 @@ describe("Proxy", function() {
 
         var call = nativeBridge.calls({op: "set"})[0];
         expect(call.properties.font).toEqual([["Arial"], 12, false, false]);
+      });
+
+      it("translates image annd backgroundImage to array", function() {
+        proxy.set({
+          image: {src: "foo", width: 23, height: 42},
+          backgroundImage: {src: "bar", width: 23, height: 42}
+        });
+
+        var call = nativeBridge.calls({op: "set"})[0];
+        expect(call.properties.image).toEqual(["foo", 23, 42, null]);
+        expect(call.properties.backgroundImage).toEqual(["bar", 23, 42, null]);
       });
 
       it("skips properties that fail to encode", function() {
