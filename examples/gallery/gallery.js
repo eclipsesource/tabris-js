@@ -28,14 +28,16 @@ tabris.load(function() {
     topLevel: true
   });
 
-  var mainComposite = page.append("Composite", {
+  var mainComposite = tabris.create("Composite", {
+    parent: page,
     background: "black",
     layoutData: {left: 0, top: 0, right: 0, bottom: 0}
   });
 
   var scrollCompositeLayoutData = {left: 0, right: 0, bottom: 0, height: 164};
 
-  var scrollComposite = mainComposite.append("ScrollComposite", {
+  var scrollComposite = tabris.create("ScrollComposite", {
+    parent: mainComposite,
     scroll: "horizontal",
     data: {"paging":true},
     layoutData: scrollCompositeLayoutData,
@@ -51,7 +53,7 @@ tabris.load(function() {
   }
 
   function bindShowToSelection(image, path) {
-    image.on("MouseUp", function() {
+    image.on("touchend", function() {
       updateCentralImage(path);
     });
   }
@@ -59,7 +61,8 @@ tabris.load(function() {
   for (var i = 0; i < imageNames.length; i++) {
     var imageThumbPath = createImageThumbPath(imageNames[i]);
     var imageBigPath = createImageBigPath(imageNames[i]);
-    var image = scrollComposite.append("Label", {
+    var image = tabris.create("Label", {
+      parent: scrollComposite,
       layoutData: {top: 7, left: i * 150 + i * 7, width: 150, height: 150},
       image: [imageThumbPath, 150, 150],
       data: {
@@ -73,7 +76,8 @@ tabris.load(function() {
     if (imageHolder) {
       imageHolder.dispose();
     }
-    imageHolder = mainComposite.append("Label", {
+    imageHolder = tabris.create("Label", {
+      parent: mainComposite,
       layoutData: {top: 0, bottom: 0, left: 0, right: 0},
       data: {"zoom":true},
       image: [path, null, null]
