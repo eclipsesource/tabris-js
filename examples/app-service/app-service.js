@@ -2,22 +2,24 @@ tabris.load(function() {
 
   var MARGIN = 16;
 
-  var page = tabris.createPage({
+  var page = tabris.create("Page", {
     title: "App Service",
     topLevel: true
   });
 
-  var pauseLabel = page.append("Label", {
+  var pauseLabel = tabris.create("Label", {
     style: ["BORDER"],
     layoutData: {left: MARGIN, top: MARGIN, right: MARGIN},
     text: "Pause: not yet"
   });
 
-  var resumeLabel = page.append("Label", {
+  var resumeLabel = tabris.create("Label", {
     style: ["BORDER"],
     layoutData: {left: MARGIN, top: [pauseLabel, MARGIN], right: MARGIN},
     text: "Resume: not yet"
   });
+
+  page.append(pauseLabel, resumeLabel);
 
   var app = tabris("tabris.App");
 
