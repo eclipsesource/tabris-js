@@ -3,27 +3,29 @@ tabris.load(function() {
   var MARGIN = 8;
   var MARGIN_LARGE = 16;
 
-  var page = tabris.createPage({
+  var page = tabris.create("Page", {
     title: "Console",
     topLevel: true
   });
 
-  var levelCombo = page.append("Combo", {
-    layoutData: { right: MARGIN, top: MARGIN_LARGE},
+  var levelCombo = tabris.create("Combo", {
+    layoutData: {right: MARGIN, top: MARGIN_LARGE},
     items: ["Error", "Warning", "Info", "Log", "Debug"],
     selectionIndex: 2
   });
 
-  var logText = page.append("Text", {
+  var logText = tabris.create("Text", {
     text: "Message",
     message: "Log message",
     layoutData: {left: MARGIN, top: MARGIN_LARGE, right: [levelCombo, MARGIN]}
   });
 
-  var logButton = page.append("Button", {
+  var logButton = tabris.create("Button", {
     text: "Log",
     layoutData: {left: MARGIN, right: MARGIN, top: [levelCombo, MARGIN_LARGE]}
   });
+
+  page.append(levelCombo, logText, logButton);
 
   logButton.on("Selection", function() {
     var text = logText.get("text");
