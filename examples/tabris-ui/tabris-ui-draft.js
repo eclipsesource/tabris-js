@@ -36,17 +36,17 @@ tabris.load(function() {
       pageAction.dispose();
     });
 
-    var pageAction = tabris.createAction({
+    var pageAction = tabris.create("Action", {
       title: "Share",
       enabled: true,
       visible: true
-    }, function() {});
+    });
 
     return page;
   };
 
   var createToplevelPage = function(title, bgColor) {
-    var page = tabris.createPage({
+    var page = tabris.create("Page", {
       title: title,
       topLevel: true,
       background: bgColor
@@ -83,11 +83,11 @@ tabris.load(function() {
   createToplevelPage("Page Two", green);
   var page3 = createToplevelPage("Page Three", blue);
 
-  tabris.createAction({
+  tabris.create("Action", {
     title: "Page3",
     enabled: true,
     visible: true
-  }, function() {
+  }).on("selection", function() {
     page3.open();
   });
 
