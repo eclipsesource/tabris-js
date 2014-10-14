@@ -74,7 +74,7 @@
 
     _decodeEventParam: function(event, param) {
       if (touchEvents.indexOf(event) !== -1) {
-        return {touches: [{x: param.x, y: param.y}]};
+        return {touches: [{x: param.x, y: param.y}], time: param.time};
       }
       return param;
     }

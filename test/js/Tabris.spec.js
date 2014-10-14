@@ -91,28 +91,35 @@ describe("tabris", function() {
       expect(label.trigger).toHaveBeenCalledWith("focusin", {});
     });
 
-    it("notifies widget proxy with touchstart event object", function() {
-      tabris._notify(label.id, "MouseDown", {x: 12, y: 34});
+    describe("with mouse events", function() {
 
-      expect(label.trigger).toHaveBeenCalledWith("touchstart", {touches: [{x: 12, y: 34}]});
-    });
+      var mouseEventProps = {x: 12, y: 34, time: 124};
+      var touchEventProps = {touches: [{x: 12, y: 34}], time: 124};
 
-    it("notifies widget proxy with touchmove event object", function() {
-      tabris._notify(label.id, "MouseMove", {x: 12, y: 34});
+      it("notifies widget proxy with touchstart event object", function() {
+        tabris._notify(label.id, "MouseDown", mouseEventProps);
 
-      expect(label.trigger).toHaveBeenCalledWith("touchmove", {touches: [{x: 12, y: 34}]});
-    });
+        expect(label.trigger).toHaveBeenCalledWith("touchstart", touchEventProps);
+      });
 
-    it("notifies widget proxy with touchend event object", function() {
-      tabris._notify(label.id, "MouseUp", {x: 12, y: 34});
+      it("notifies widget proxy with touchmove event object", function() {
+        tabris._notify(label.id, "MouseMove", mouseEventProps);
 
-      expect(label.trigger).toHaveBeenCalledWith("touchend", {touches: [{x: 12, y: 34}]});
-    });
+        expect(label.trigger).toHaveBeenCalledWith("touchmove", touchEventProps);
+      });
 
-    it("notifies widget proxy with longpress event object", function() {
-      tabris._notify(label.id, "MenuDetect", {x: 12, y: 34});
+      it("notifies widget proxy with touchend event object", function() {
+        tabris._notify(label.id, "MouseUp", mouseEventProps);
 
-      expect(label.trigger).toHaveBeenCalledWith("longpress", {touches: [{x: 12, y: 34}]});
+        expect(label.trigger).toHaveBeenCalledWith("touchend", touchEventProps);
+      });
+
+      it("notifies widget proxy with longpress event object", function() {
+        tabris._notify(label.id, "MenuDetect", mouseEventProps);
+
+        expect(label.trigger).toHaveBeenCalledWith("longpress", touchEventProps);
+      });
+
     });
 
     it("silently ignores events for non-existing ids (does not crash)", function() {
