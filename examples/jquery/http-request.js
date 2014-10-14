@@ -6,18 +6,19 @@ tabris.load(function() {
   var MARGIN = 12;
   var lastLabel;
 
-  var page = tabris.createPage({
+  var page = tabris.create("Page", {
     title: "XMLHttpRequest",
     topLevel: true
   });
 
   var createLabel = function(labelText) {
-    lastLabel = page.append("Label", {
+    lastLabel = tabris.create("Label", {
       style: ["WRAP"],
       text: labelText,
       markupEnabled: true,
       layoutData: {left: MARGIN, right: MARGIN, top: [lastLabel, MARGIN]}
     });
+    page.append(lastLabel);
   };
 
   $.getJSON("http://www.telize.com/geoip", function(json) {
@@ -26,11 +27,11 @@ tabris.load(function() {
     createLabel("Longitude: " + json.longitude);
   });
 
-  $.getJSON("https://data.itpir.wm.edu/deflate/api.php?val=100USD1986USA&json=true", function (json) {
+  $.getJSON("https://data.itpir.wm.edu/deflate/api.php?val=100USD1986USA&json=true", function(json) {
     createLabel("Value of 1986 100$ today: " + json.deflated_amount + "$");
   });
 
-  $.getJSON("http://api.automeme.net/text.json", function (json) {
+  $.getJSON("http://api.automeme.net/text.json", function(json) {
     createLabel("Meme: " + json[0]);
   });
 
