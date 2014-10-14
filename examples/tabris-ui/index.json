@@ -1,7 +1,7 @@
 {
   "resources": [
     {
-      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.js"
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
     },
     {
       "src": "tabris-ui-draft.js"
