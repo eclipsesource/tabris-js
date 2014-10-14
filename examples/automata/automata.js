@@ -4,31 +4,33 @@ tabris.load(function() {
 
   // var height = Ti.Platform.displayCaps.platformHeight;
   // var width = Ti.Platform.displayCaps.platformWidth;
-  var width = 300; //bounds[2];
-  var height = 400; //bounds[3];
+  var width = 300; // bounds[2];
+  var height = 400; // bounds[3];
 
-  var CELL_SIZE = 5; //Math.floor(Math.min(height, width) / 2);
+  var CELL_SIZE = 5; // Math.floor(Math.min(height, width) / 2);
   var xSize = width / CELL_SIZE;
   var ySize = height / CELL_SIZE;
 
-  //var universe = Ti.UI.createWindow({
+  // var universe = Ti.UI.createWindow({
   //  backgroundColor: '#000',
   //  modal: false,
   //  exitOnClose: true
-  //});
-  var page = tabris.createPage({
+  // });
+  var page = tabris.create("Page", {
     title: "Automata",
     topLevel: true,
-    background: '#000'
+    background: "#000"
   });
 
   // TODO [rst] Move down when z-order is fixed
-  var label = page.append( "Label", {
+  var label = tabris.create("Label", {
     bounds: [0, 0, 80, 40],
     background: "rgba(255, 0, 0, 0.8)",
     foreground: "#fff",
     text: "FPS"
   });
+
+  page.append(label);
 
   function getNextState(x, y, alive) {
     var count = 0,
@@ -75,11 +77,12 @@ tabris.load(function() {
     cells[x] = [];
     for (var y = 0; y < ySize; y++) {
       var alive = Math.random() >= 0.5;
-      var composite = page.append("Composite", {
+      var composite = tabris.create("Composite", {
         bounds: [x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE],
         background: "#fff",
         visibility: alive
       });
+      page.append(composite);
       cells[x][y] = {
         // proxy: Ti.UI.createView({
         //   height: CELL_SIZE,
@@ -98,24 +101,23 @@ tabris.load(function() {
     }
   }
 
-  //// add FPS label
-  //var label = Ti.UI.createLabel({
-  //  text: 'FPS: ',
-  //  color: '#fff',
-  //  backgroundColor: '#a00',
-  //  height: 40,
-  //  width: 80,
-  //  top: 0,
-  //  left: 0,
-  //  textAlign: 'center',
-  //  opacity: 0.8
-  //});
-  //universe.add(label);
+  // add FPS label
+  // var label = Ti.UI.createLabel({
+  //   text: 'FPS: ',
+  //   color: '#fff',
+  //   backgroundColor: '#a00',
+  //   height: 40,
+  //   width: 80,
+  //   top: 0,
+  //   left: 0,
+  //   textAlign: 'center',
+  //   opacity: 0.8
+  // });
+  // universe.add(label);
 
   var time = new Date().getTime();
 
-  //
-  //universe.open();
+  // universe.open();
   page.open();
 
   if (DEBUG) {
@@ -166,8 +168,8 @@ tabris.load(function() {
   };
 
   var offset = new Date().getTime() - time;
-  label.set("text", 'Load: ' + offset);
+  label.set("text", "Load: " + offset);
 
-  label.on("MouseDown", run);
+  label.on("touchstart", run);
 
 });
