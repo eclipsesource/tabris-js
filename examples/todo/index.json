@@ -1,0 +1,45 @@
+{
+  "title": "Backbone.js todo list application",
+  "description": "Sample Backbone.js integration demonstrating the todo list application",
+  "resources": [
+    {
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+    },
+    {
+      "src": "../jquery/domMock.js"
+    },
+    {
+      "src": "../jquery/jquery.js"
+    },
+    {
+      "src": "http://underscorejs.org/underscore-min.js"
+    },
+    {
+      "src": "http://backbonejs.org/backbone-min.js"
+    },
+    {
+      "src": "../backbone/TabrisBackbone.js"
+    },
+    {
+      "src": "en/texts-en.js"
+    },
+    {
+      "src": "TodoItem.js"
+    },
+    {
+      "src": "TodoList.js"
+    },
+    {
+      "src": "TodoListView.js"
+    },
+    {
+      "src": "TodoItemView.js"
+    },
+    {
+      "src": "TodoEditView.js"
+    },
+    {
+      "src": "app.js"
+    }
+  ]
+}
