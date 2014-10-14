@@ -35,8 +35,6 @@ tabris.UIProxy.prototype = {
   },
 
   _install: function(target) {
-    target.createAction = util.bind(this.createAction, this);
-    target.createPage = util.bind(this.createPage, this);
     target._uiProxy = this;
   },
 
@@ -55,19 +53,8 @@ tabris.UIProxy.prototype = {
     if (page) {
       this._ui.set("activePage", page);
     }
-  },
-
-  createAction: function(properties, handler) {
-    var action = tabris.create("Action", properties);
-    if (typeof handler === "function") {
-      action.on("selection", handler);
-    }
-    return action;
-  },
-
-  createPage: function(properties) {
-    return tabris.create("Page", properties);
   }
+
 };
 
 tabris.load(function() {

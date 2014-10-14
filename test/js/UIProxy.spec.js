@@ -52,33 +52,6 @@ describe("UIProxy", function() {
 
   });
 
-  describe("install", function() {
-
-    var target;
-
-    beforeEach(function() {
-      target = {};
-      spyOn(uiProxy, "createPage");
-      spyOn(uiProxy, "createAction");
-      uiProxy._install(target);
-    });
-
-    it("adds createPage function to target object", function() {
-      target.createPage();
-
-      expect(uiProxy.createPage).toHaveBeenCalled();
-      expect(uiProxy.createPage.calls.first().object).toBe(uiProxy);
-    });
-
-    it("adds createAction function to target object", function() {
-      target.createAction();
-
-      expect(uiProxy.createAction).toHaveBeenCalled();
-      expect(uiProxy.createAction.calls.first().object).toBe(uiProxy);
-    });
-
-  });
-
   describe("after creation", function() {
 
     beforeEach(function() {
@@ -91,109 +64,6 @@ describe("UIProxy", function() {
 
     afterEach(function() {
       delete tabris._uiProxy;
-    });
-
-    describe("createAction", function() {
-
-      var handler;
-      var actionCreateCalls;
-
-      beforeEach(function() {
-        handler = jasmine.createSpy();
-        uiProxy.createAction({title: "Foo", enabled: true}, handler);
-        actionCreateCalls = nativeBridge.calls({op: "create", type: "tabris.Action"});
-      });
-
-      it("creates an action", function() {
-        expect(actionCreateCalls.length).toBe(1);
-      });
-
-      it("created action's parent is set to tabris.UI", function() {
-        expect(actionCreateCalls[0].properties.parent).toEqual(uiId);
-      });
-
-      it("properties are passed to created action", function() {
-        expect(actionCreateCalls[0].properties.title).toEqual("Foo");
-        expect(actionCreateCalls[0].properties.enabled).toBe(true);
-      });
-
-      it("listens on created action", function() {
-        var actionId = actionCreateCalls[0].id;
-
-        expect(nativeBridge.calls({op: "listen", id: actionId, listen: true}).length).toBe(1);
-      });
-
-      it("handler is notified on action event", function() {
-        var actionId = actionCreateCalls[0].id;
-
-        tabris._notify(actionId, "selection", {foo: 23});
-
-        expect(handler).toHaveBeenCalledWith({foo: 23});
-      });
-
-    });
-
-    describe("createAction without a handler function", function() {
-
-      var actionCreateCalls;
-
-      beforeEach(function() {
-        uiProxy.createAction({title: "Foo", enabled: true});
-        actionCreateCalls = nativeBridge.calls({op: "create", type: "tabris.Action"});
-      });
-
-      it("creates an action anyway", function() {
-        expect(actionCreateCalls.length).toBe(1);
-      });
-
-      it("does not listen on created action", function() {
-        var actionId = actionCreateCalls[0].id;
-
-        expect(nativeBridge.calls({op: "listen", id: actionId, listen: true}).length).toBe(0);
-      });
-
-    });
-
-    describe("createPage", function() {
-
-      it("creates a Page and a Composite", function() {
-        uiProxy.createPage();
-
-        var createCalls = nativeBridge.calls({op: "create"});
-        expect(createCalls.select({type: "tabris.Page"}).length).toBe(1);
-        expect(createCalls.select({type: "rwt.widgets.Composite"}).length).toBe(1);
-      });
-
-      it("passes page properties to created Page", function() {
-        uiProxy.createPage({title: "foo"});
-
-        var createCall = nativeBridge.calls({op: "create", type: "tabris.Page"})[0];
-        expect(createCall.properties.title).toBe("foo");
-      });
-
-      it("passes non-page properties to created Composite", function() {
-        uiProxy.createPage({background: "red"});
-
-        var createCall = nativeBridge.calls({op: "create", type: "rwt.widgets.Composite"})[0];
-        expect(createCall.properties.background).toEqual([255, 0, 0, 255]);
-      });
-
-      it("returns a Page", function() {
-        var page = uiProxy.createPage();
-
-        expect(page instanceof tabris.Page).toBe(true);
-      });
-
-      it("ShowPreviousPage event closes page", function() {
-        var page = uiProxy.createPage({});
-        page.open();
-        spyOn(page, "close");
-
-        tabris._notify(uiId, "ShowPreviousPage", {});
-
-        expect(page.close).toHaveBeenCalled();
-      });
-
     });
 
     describe("when a Close event is received for the Shell", function() {
@@ -209,6 +79,24 @@ describe("UIProxy", function() {
 
     });
 
+    describe("when a page is created", function() {
+
+      var page;
+
+      beforeEach(function() {
+        page = tabris.create("Page", {title: "Foo"});
+        page.open();
+        spyOn(page, "close");
+      });
+
+      it("ShowPreviousPage event closes page", function() {
+        tabris._notify(uiId, "ShowPreviousPage", {});
+        expect(page.close).toHaveBeenCalled();
+      });
+
+    });
+
   });
+
 
 });
