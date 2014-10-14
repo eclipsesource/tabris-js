@@ -146,7 +146,7 @@
 
   tabris.getContext = function(canvas, width, height) {
     if (!canvas._gc) {
-      canvas._gc = canvas.append("GC", {});
+      canvas._gc = tabris.create("GC", {parent: canvas});
     }
     if (!canvas._ctx) {
       canvas._ctx = new tabris.CanvasContext(canvas._gc);

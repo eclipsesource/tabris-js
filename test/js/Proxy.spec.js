@@ -134,24 +134,7 @@ describe("Proxy", function() {
       });
     });
 
-    describe("append with type and properties", function() {
-      var result;
-
-      beforeEach(function() {
-        result = proxy.append("Label", {});
-      });
-
-      it("calls native create with parent", function() {
-        var createCall = nativeBridge.calls({op: "create", type: "rwt.widgets.Label"})[0];
-        expect(createCall.properties.parent).toBe(proxy.id);
-      });
-
-      it("returns self to allow chaining", function() {
-        expect(result).toBe(proxy);
-      });
-    });
-
-    describe("append with proxy", function() {
+    describe("calling append with a proxy", function() {
       var child, result;
 
       beforeEach(function() {
@@ -160,7 +143,7 @@ describe("Proxy", function() {
         result = proxy.append(child);
       });
 
-      it("sets the proxy's parent", function() {
+      it("sets the child's parent", function() {
         var calls = nativeBridge.calls();
         expect(calls.length).toBe(1);
         expect(calls[0]).toEqual({op: "set", id: child.id, properties: {parent: proxy.id}});
@@ -169,6 +152,7 @@ describe("Proxy", function() {
       it("returns self to allow chaining", function() {
         expect(result).toBe(proxy);
       });
+
     });
 
     describe("append with multiple proxies", function() {
@@ -181,7 +165,7 @@ describe("Proxy", function() {
         result = proxy.append(child1, child2);
       });
 
-      it("sets the proxy's parent", function() {
+      it("sets the children's parent", function() {
         var calls = nativeBridge.calls();
         expect(calls.length).toBe(2);
         expect(calls[1]).toEqual({op: "set", id: child2.id, properties: {parent: proxy.id}});
@@ -190,6 +174,17 @@ describe("Proxy", function() {
       it("returns self to allow chaining", function() {
         expect(result).toBe(proxy);
       });
+
+    });
+
+    describe("append with non-widget", function() {
+
+      it("throws an error", function() {
+        expect(function() {
+          proxy.append({});
+        }).toThrowError("Cannot append non-widget");
+      });
+
     });
 
     describe("get", function() {

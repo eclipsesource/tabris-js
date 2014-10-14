@@ -125,39 +125,17 @@ describe("Page", function() {
       nativeBridge.resetCalls();
     });
 
-    describe("append with type and properties", function() {
-      var result;
-
-      beforeEach(function() {
-        result = page.append("foo.Bar", {bar: 23});
-      });
-
-      it("appends to the composite", function() {
-        var call = nativeBridge.calls({op: "create", type: "foo.Bar"})[0];
-        expect(call.properties.parent).toEqual(compositeCreateCall.id);
-      });
-
-      it("returns self to allow chaining", function() {
-        expect(result).toBe(page);
-      });
-
-    });
-
-    describe("append with proxy", function() {
-      var result, child;
+    describe("when a child is appended", function() {
+      var child;
 
       beforeEach(function() {
         child = new tabris.Proxy("child");
-        result = page.append(child);
+        page.append(child);
       });
 
       it("sets child's parent to the composite", function() {
         var call = nativeBridge.calls({op: "set", id: child.id})[0];
         expect(call.properties.parent).toEqual(compositeCreateCall.id);
-      });
-
-      it("returns self to allow chaining", function() {
-        expect(result).toBe(page);
       });
 
     });

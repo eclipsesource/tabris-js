@@ -19,14 +19,13 @@
       return this;
     },
 
-    append: function(type, properties) {
+    append: function() {
       this._checkDisposed();
-      if (arguments[0] instanceof tabris.Proxy) {
-        for (var i = 0; i < arguments.length; i++) {
-          this._append(arguments[i]);
+      for (var i = 0; i < arguments.length; i++) {
+        if (!(arguments[i] instanceof tabris.Proxy)) {
+          throw new Error("Cannot append non-widget");
         }
-      } else {
-        tabris.create(type, util.extend({}, properties, {parent: this}));
+        this._append(arguments[i]);
       }
       return this;
     },

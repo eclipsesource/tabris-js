@@ -11,7 +11,7 @@
 
     _create: function(properties) {
       this.super("_create", util.extend({style: ["V_SCROLL"]}, properties));
-      this.append("ScrollBar", {style: ["VERTICAL"]});
+      tabris.create("ScrollBar", {parent: this, style: ["VERTICAL"]});
       this._createItems();
       return this;
     },
@@ -111,7 +111,8 @@
         var createImages = this._createImagesFn();
         for (var i = 0; i < this._items.length; i++) {
           var item = this._items[i];
-          this.append("ListItem", {
+          tabris.create("ListItem", {
+            parent: this,
             index: i,
             texts: createTexts(item),
             images: createImages(item)

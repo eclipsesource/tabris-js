@@ -6,19 +6,17 @@
 describe("ScrollComposite", function() {
 
   var nativeBridge;
-  var parent;
 
   beforeEach(function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._start(nativeBridge);
-    parent = new tabris.Proxy("parent-id");
   });
 
   describe("when a ScrollComposite is created", function() {
     var scrollComposite, createCalls;
     beforeEach(function() {
-      scrollComposite = tabris.create("ScrollComposite", {parent: parent});
+      scrollComposite = tabris.create("ScrollComposite", {});
       createCalls = nativeBridge.calls({op: "create"});
     });
 
@@ -40,25 +38,7 @@ describe("ScrollComposite", function() {
       expect(setCall.properties).toEqual({content: createCalls[2].id});
     });
 
-    describe("append with type and properties", function() {
-      var result;
-
-      beforeEach(function() {
-        result = scrollComposite.append("Button", {});
-      });
-
-      it("sets child's parent to the inner composite", function() {
-        var call = nativeBridge.calls({op: "create", type: "rwt.widgets.Button"})[0];
-        expect(call.properties.parent).toEqual(scrollComposite._composite.id);
-      });
-
-      it("returns self to allow chaining", function() {
-        expect(result).toBe(scrollComposite);
-      });
-
-    });
-
-    describe("append with proxy", function() {
+    describe("when a child is appended", function() {
       var result, child;
 
       beforeEach(function() {
@@ -135,7 +115,7 @@ describe("ScrollComposite", function() {
   describe("when a ScrollComposite is created with scroll='vertical'", function() {
     var createCalls;
     beforeEach(function() {
-      parent.append("ScrollComposite", {scroll: "vertical"});
+      tabris.create("ScrollComposite", {scroll: "vertical"});
       createCalls = nativeBridge.calls({op: "create"});
     });
     it("the ScrolledComposite is vertical", function() {
@@ -149,7 +129,7 @@ describe("ScrollComposite", function() {
   describe("when a ScrollComposite is created with scroll='horizontal'", function() {
     var createCalls;
     beforeEach(function() {
-      parent.append("ScrollComposite", {scroll: "horizontal"});
+      tabris.create("ScrollComposite", {scroll: "horizontal"});
       createCalls = nativeBridge.calls({op: "create"});
     });
     it("the ScrolledComposite is horizontal", function() {
