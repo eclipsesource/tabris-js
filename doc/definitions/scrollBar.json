@@ -9,6 +9,6 @@
     }
   },
   "listeners": [
-    "Selection"
+    "selection"
   ]
 }

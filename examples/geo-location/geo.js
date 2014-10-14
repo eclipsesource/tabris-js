@@ -34,7 +34,7 @@ tabris.load(function() {
   var locationButton = page.append( "Button", {
     text: "Where am I?",
     layoutData: { left: 10, right: 10, top: [locationLabel, 10] }
-  }).on( "Selection", function() {
+  }).on( "selection", function() {
     geo.set({
       "needsPosition": "ONCE",
       "frequency": 10000,
@@ -46,7 +46,7 @@ tabris.load(function() {
   var mapButton = page.append( "Button", {
     text: "Show on map",
     layoutData: { left: 10, right: 10, top: [locationButton, 10] }
-  }).on( "Selection", function() {
+  }).on("selection", function() {
     launcher.call( "open", {
       "app": "MAPS",
       "latitude": location.latitude.toString(),

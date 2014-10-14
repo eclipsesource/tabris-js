@@ -69,7 +69,7 @@ tabris.load(function() {
   contentComposite.append(contentLabel);
   titleComposite.append(titleLabel, subtitleLabel);
 
-  page.on("Resize", function() {
+  page.on("resize", function() {
     var bounds = scrollComposite.get("bounds");
     var width = bounds[2];
     var imageHeight = width / 1.4; // 1.4 is the image aspect ratio
@@ -78,7 +78,7 @@ tabris.load(function() {
     titleComposite.set("layoutData", {left: 0, top: imageHeight - titleCompHeight, right: 0, height: 64});
   });
 
-  scrollComposite.on("Scroll", function(offset) {
+  scrollComposite.on("scroll", function(offset) {
     imageLabel.set("transform", {translationY: offset.y * 0.4});
     var titleCompY = titleComposite.get("bounds")[1];
     if (titleCompY - offset.y < 0) {

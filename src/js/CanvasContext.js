@@ -18,7 +18,7 @@
       defineProperty(this, name);
     }
     tabris.on("flush", this._flush, this);
-    gc.on("Dispose", function() {
+    gc.on("dispose", function() {
       tabris.off("flush", this._flush, this);
     }, this);
   };

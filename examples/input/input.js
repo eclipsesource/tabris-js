@@ -89,7 +89,7 @@ tabris.load(function() {
     text: "Place Reservation",
     background: "#8b0000",
     foreground: "white"
-  }).on("Selection", function() {
+  }).on("selection", function() {
     populateMessage();
   });
 

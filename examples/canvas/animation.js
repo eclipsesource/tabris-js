@@ -179,7 +179,7 @@ tabris.load(function() {
   var button = page.append("Button", {
     text: "start",
     layoutData: {left: 10, bottom: 10}
-  }).on("Selection", function() {
+  }).on("selection", function() {
     var running = example.toggle();
     button.set("text", running ? "stop" : "start");
   });
@@ -188,7 +188,7 @@ tabris.load(function() {
     layoutData: {left: 10, top: 10, right: 10, bottom: [button, 10]}
   });
 
-  canvas.on("Resize", function() {
+  canvas.on("resize", function() {
     var bounds = canvas.get("bounds");
     var width = bounds[2];
     var height = Math.min(bounds[3], Math.floor(width/2));

@@ -56,7 +56,7 @@ tabris.load(function() {
     layoutData: {left: 0, right: 0, top: [canvas, 8]}
   });
 
-  checkBox.on("Selection", function() {
+  checkBox.on("selection", function() {
     clearCanvas();
     drawArcs(checkBox.get("selection"));
   });

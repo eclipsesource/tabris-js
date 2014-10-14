@@ -30,7 +30,7 @@
   },
   "listeners": [
     "Activate",
-    "Resize",
+    "resize",
     "Move",
     "Close"
   ]

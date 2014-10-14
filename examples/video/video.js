@@ -24,7 +24,7 @@ tabris.load(function() {
     text: "play"
   });
 
-  playButton.on("Selection", function() {
+  playButton.on("selection", function() {
     video.set("playback", "play");
   });
 
@@ -33,7 +33,7 @@ tabris.load(function() {
     text: "pause"
   });
 
-  pauseButton.on("Selection", function() {
+  pauseButton.on("selection", function() {
     video.set("playback", "pause");
   });
 
@@ -42,7 +42,7 @@ tabris.load(function() {
     text: "stop"
   });
 
-  stopButton.on("Selection", function() {
+  stopButton.on("selection", function() {
     video.set("playback", "stop");
   });
 
@@ -51,7 +51,7 @@ tabris.load(function() {
     text: "backward"
   });
 
-  backwardButton.on("Selection", function() {
+  backwardButton.on("selection", function() {
     video.set("playback", "fast_backward");
   });
 
@@ -60,7 +60,7 @@ tabris.load(function() {
     text: "forward"
   });
 
-  forwardButton.on("Selection", function() {
+  forwardButton.on("selection", function() {
     video.set("playback", "fast_forward");
   });
 
@@ -69,7 +69,7 @@ tabris.load(function() {
     text: "fullscreen"
   });
 
-  fullscreenButton.on("Selection", function() {
+  fullscreenButton.on("selection", function() {
     video.set("presentation", "full_screen");
   });
 
@@ -80,7 +80,7 @@ tabris.load(function() {
     selection: true
   });
 
-  controlsCheckbox.on("Selection", function() {
+  controlsCheckbox.on("selection", function() {
     // TODO: workaround for tabris-js bug #14
     video.set("controls_visible", !video.get("controls_visible"));
   });
@@ -91,7 +91,7 @@ tabris.load(function() {
     text: "Repeat"
   });
 
-  repeatCheckbox.on("Selection", function() {
+  repeatCheckbox.on("selection", function() {
     // TODO: workaround for tabris-js bug #14
     video.set("repeat", !video.get("repeat"));
   });

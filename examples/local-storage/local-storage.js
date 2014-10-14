@@ -40,17 +40,17 @@ tabris.load(function() {
     storeLabel.set("text", "<b>Store content:</b><br />".concat(value));
   }
 
-  addButton.on("Selection", function() {
+  addButton.on("selection", function() {
     localStorage.setItem(STORAGE_KEY, storeText.get("text"));
     updateStoreLabel();
   });
 
-  removeButton.on("Selection", function() {
+  removeButton.on("selection", function() {
     localStorage.removeItem(STORAGE_KEY);
     updateStoreLabel();
   });
 
-  clearButton.on("Selection", function() {
+  clearButton.on("selection", function() {
     localStorage.clear();
     updateStoreLabel();
   });

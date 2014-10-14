@@ -34,7 +34,7 @@
     },
 
     _trigger: function(type) {
-      if (type === "Selection") {
+      if (type === "selection") {
         var event = arguments[1];
         var index = this._findItemIndex(event.item);
         var item = this._items ? this._items[index] : null;

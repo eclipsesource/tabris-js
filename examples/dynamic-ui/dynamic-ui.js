@@ -21,7 +21,7 @@ tabris.load(function() {
       background: "green",
       foreground: "white",
       image: ["images/add_root_page.png", 24, 24]
-    }).on("Selection", function() {
+    }).on("selection", function() {
       var page = createPage("Root Page: " + createRandomPageId(), true);
       topLevelPages.push(page);
       page.open();
@@ -33,7 +33,7 @@ tabris.load(function() {
       background: "green",
       foreground: "white",
       image: ["images/add_page.png", 24, 24]
-    }).on("Selection", function() {
+    }).on("selection", function() {
       var page = createPage("Page: " + createRandomPageId(), false);
       pages.push(page);
       page.open();
@@ -45,7 +45,7 @@ tabris.load(function() {
       background: "green",
       foreground: "white",
       image: ["images/global_action.png", 24, 24]
-    }).on("Selection", function() {
+    }).on("selection", function() {
       var action = tabris.createAction({
         title: "Share",
         image: ["images/action_share.png", 24, 24]
@@ -62,7 +62,7 @@ tabris.load(function() {
       background: "red",
       foreground: "white",
       image: ["images/global_action.png", 24, 24]
-    }).on("Selection", function() {
+    }).on("selection", function() {
       if (actions.length - 1 >= 0) {
         actions[actions.length - 1].dispose();
         actions.pop();
@@ -75,7 +75,7 @@ tabris.load(function() {
       background: "red",
       foreground: "white",
       image: ["images/remove_root_page.png", 24, 24]
-    }).on("Selection", function() {
+    }).on("selection", function() {
       if (topLevelPages.length - 1 >= 0) {
         topLevelPages[topLevelPages.length - 1].close();
         topLevelPages.pop();

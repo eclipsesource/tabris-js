@@ -27,7 +27,7 @@ tabris.load(function() {
 
   page.append(levelCombo, logText, logButton);
 
-  logButton.on("Selection", function() {
+  logButton.on("selection", function() {
     var text = logText.get("text");
     var selection = levelCombo.get("selectionIndex");
     if (selection === 0) {

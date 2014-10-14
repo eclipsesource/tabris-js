@@ -60,7 +60,7 @@ tabris.UIProxy.prototype = {
   createAction: function(properties, handler) {
     var action = tabris.create("Action", properties);
     if (typeof handler === "function") {
-      action.on("Selection", handler);
+      action.on("selection", handler);
     }
     return action;
   },

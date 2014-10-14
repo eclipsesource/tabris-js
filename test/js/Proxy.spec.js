@@ -546,7 +546,7 @@ describe("Proxy", function() {
 
       it("notifies dispose listeners", function() {
         var listener = jasmine.createSpy();
-        proxy.on("Dispose", listener);
+        proxy.on("dispose", listener);
 
         proxy.dispose();
 
@@ -558,13 +558,13 @@ describe("Proxy", function() {
         var child1 = tabris.create("type", {parent: proxy});
         var child2 = tabris.create("type", {parent: proxy});
 
-        proxy.on("Dispose", function() {
+        proxy.on("dispose", function() {
           log.push("parent");
         });
-        child1.on("Dispose", function() {
+        child1.on("dispose", function() {
           log.push("child1");
         });
-        child2.on("Dispose", function() {
+        child2.on("dispose", function() {
           log.push("child2");
         });
 
@@ -577,13 +577,13 @@ describe("Proxy", function() {
         var parent = tabris.create("type", {});
         var child = tabris.create("type", {parent: parent});
         var grandchild = tabris.create("type", {parent: child});
-        parent.on("Dispose", function() {
+        parent.on("dispose", function() {
           log.push("parent");
         });
-        child.on("Dispose", function() {
+        child.on("dispose", function() {
           log.push("child");
         });
-        grandchild.on("Dispose", function() {
+        grandchild.on("dispose", function() {
           log.push("grandchild");
         });
 

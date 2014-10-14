@@ -61,8 +61,8 @@
     }
   },
   "listeners": [
-    "Selection",
+    "selection",
     "Verify",
-    "Modify"
+    "modify"
   ]
 }

@@ -88,7 +88,11 @@
       MouseDown: "touchstart",
       MouseMove: "touchmove",
       MouseUp: "touchend",
-      MenuDetect: "longpress"
+      MenuDetect: "longpress",
+      Selection: "selection",
+      Resize: "resize",
+      Scroll: "scroll",
+      Modify: "modify"
     };
   }
 

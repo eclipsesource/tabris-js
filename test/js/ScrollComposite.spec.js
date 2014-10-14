@@ -84,31 +84,31 @@ describe("ScrollComposite", function() {
       beforeEach(function() {
         listener = jasmine.createSpy();
         scrollBar = tabris(createCalls[1].id);
-        scrollComposite.on("Scroll", listener);
+        scrollComposite.on("scroll", listener);
         spyOn(scrollComposite, "get").and.callFake(function(name) {
           return (name === "origin") ? [23, 42] : null;
         });
       });
       it("is notified on ScrollBar change", function() {
-        scrollBar.trigger("Selection", {});
+        scrollBar.trigger("selection", {});
         expect(listener).toHaveBeenCalled();
         expect(listener.calls.first().args).toEqual([{x: 23, y: 42}]);
       });
       describe("when another listener is added", function() {
         beforeEach(function() {
-          scrollComposite.on("Scroll", jasmine.createSpy());
+          scrollComposite.on("scroll", jasmine.createSpy());
         });
         it("is notified on ScrollBar change once", function() {
-          scrollBar.trigger("Selection", {});
+          scrollBar.trigger("selection", {});
           expect(listener.calls.count()).toBe(1);
         });
       });
       describe("when the listener is removed", function() {
         beforeEach(function() {
-          scrollComposite.off("Scroll", listener);
+          scrollComposite.off("scroll", listener);
         });
         it("is not notified on ScrollBar change anymore", function() {
-          scrollBar.trigger("Selection", {});
+          scrollBar.trigger("selection", {});
           expect(listener.calls.count()).toBe(0);
         });
       });

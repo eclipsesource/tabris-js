@@ -82,7 +82,7 @@ tabris.load(function() {
     layoutData: {left: MARGIN, right: MARGIN, top: [headerLabel, MARGIN]}
   });
 
-  button.on("Selection", function() {
+  button.on("selection", function() {
     progressBar.set("selection", 0);
     if ([xhr.UNSENT, xhr.DONE].indexOf(xhr.readyState) > -1) {
       button.set("text", "Cancel");

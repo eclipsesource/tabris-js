@@ -247,8 +247,8 @@ describe("List", function() {
         listener = jasmine.createSpy("listener");
         list.set("items", ["Ron", "Sue", "Tom"]);
         var item2Id = nativeBridge.calls({op: "create", type: "rwt.widgets.GridItem"})[2].id;
-        list.on("Selection", listener);
-        tabris._notify(list.id, "Selection", {item: item2Id});
+        list.on("selection", listener);
+        tabris._notify(list.id, "selection", {item: item2Id});
       });
 
       it("translates event to contain data item and index", function() {
@@ -261,8 +261,8 @@ describe("List", function() {
 
       beforeEach(function() {
         listener = jasmine.createSpy("listener");
-        list.on("Selection", listener);
-        list.trigger("Selection", {item: "Sue", index: 1});
+        list.on("selection", listener);
+        list.trigger("selection", {item: "Sue", index: 1});
       });
 
       it("is not affected by the translation", function() {

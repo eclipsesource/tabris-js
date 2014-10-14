@@ -9,7 +9,7 @@ tabris.load(function() {
         font: "25px sans-serif",
         layoutData: {left: [40, 0], right: [10, 0], top: refWidget ? [refWidget, 20] : 0},
         text: answer
-      }).on("Selection", function() {
+      }).on("selection", function() {
         activateNextButton();
         statusLabel.set("text", "");
       });
@@ -89,7 +89,7 @@ tabris.load(function() {
       font: "25px sans-serif",
       layoutData: {right: 10, bottom: 10, width: 150, heigth: 25},
       enabled: false
-    }).on("Selection", function() {
+    }).on("selection", function() {
       if (!correctAnswer(questionObject)) {
         statusLabel.set("text", "Sorry, try again!");
         nextButton.set("enabled", false);

@@ -19,7 +19,7 @@ tabris.load(function() {
     text: "Animate"
   });
 
-  button.on("Selection", function() {
+  button.on("selection", function() {
     tabris.create("tabris.Animation", {
       target: label,
       delay: 0,

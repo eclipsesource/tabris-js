@@ -94,7 +94,7 @@
 
     _destroy: function() {
       this._destroyChildren();
-      this.trigger("Dispose", {});
+      this.trigger("dispose", {});
       tabris.Events.off.call(this);
       delete tabris._proxies[this.id];
     },

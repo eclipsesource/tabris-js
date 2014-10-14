@@ -19,20 +19,20 @@ tabris.load(function() {
     var openButton = tabris.create("Button", {
       text: "open another page",
       layoutData: {left: 10, right: 10, top: [label, 10]}
-    }).on("Selection", function() {
+    }).on("selection", function() {
       createSubPage(title + "-sub", bgColor).open();
     });
 
     var closeButton = tabris.create("Button", {
       text: "close this page",
       layoutData: {left: 10, right: 10, top: [openButton, 10]}
-    }).on("Selection", function() {
+    }).on("selection", function() {
       page.close();
     });
 
     page.append(label, openButton, closeButton);
 
-    page.on("Dispose", function() {
+    page.on("dispose", function() {
       pageAction.dispose();
     });
 
@@ -60,7 +60,7 @@ tabris.load(function() {
     var openButton = tabris.create("Button", {
       text: "open page",
       layoutData: {left: 10, right: 10, top: [label, 10]}
-    }).on("Selection", function() {
+    }).on("selection", function() {
       var subpage = createSubPage(title + "-sub", bgColor);
       subpage.open();
     });
@@ -72,7 +72,7 @@ tabris.load(function() {
 
     page.append(label, openButton, closeButton);
 
-    closeButton.on("Selection", function() {
+    closeButton.on("selection", function() {
       page.close();
     });
 

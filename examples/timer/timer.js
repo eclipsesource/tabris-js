@@ -71,7 +71,7 @@ tabris.load(function() {
     buttonCancelTimer.set("enabled", !available);
   }
 
-  buttonStart.on("Selection", function() {
+  buttonStart.on("selection", function() {
     var delay = parseInt(textDelay.get("text"));
     if (checkRepeat.get("selection")) {
       taskId = setInterval(updateStatusLabels, delay);
@@ -84,7 +84,7 @@ tabris.load(function() {
     enableTimerStart(false);
   });
 
-  buttonCancelTimer.on("Selection", function() {
+  buttonCancelTimer.on("selection", function() {
     clearTimeout(taskId);
     enableTimerStart(true);
   });

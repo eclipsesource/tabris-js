@@ -126,7 +126,7 @@ describe("UIProxy", function() {
       it("handler is notified on action event", function() {
         var actionId = actionCreateCalls[0].id;
 
-        tabris._notify(actionId, "Selection", {foo: 23});
+        tabris._notify(actionId, "selection", {foo: 23});
 
         expect(handler).toHaveBeenCalledWith({foo: 23});
       });

@@ -132,7 +132,7 @@ tabris.load(function() {
         }
       ],
       items: books
-    }).on("Selection", function(event) {
+    }).on("selection", function(event) {
       createBookPage(event.item).open();
     });
   }
@@ -186,7 +186,7 @@ tabris.load(function() {
     title: "Settings",
     placementPriority: "LOW",
     image: {src: "images/action_settings.png", width: 32, height: 32}
-  }).on("Selection", function() {
+  }).on("selection", function() {
     createSettingsPage().open();
   });
 

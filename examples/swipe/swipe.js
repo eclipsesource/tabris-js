@@ -38,7 +38,7 @@ tabris.load(function() {
 
   var locked = false;
 
-  lockButton.on("Selection", function() {
+  lockButton.on("selection", function() {
     if( !locked ) {
       swipe.call("lockRight", {
         index: 0
