@@ -4,36 +4,38 @@ tabris.load(function() {
   var MARGIN_LARGE = 16;
   var STORAGE_KEY = "message";
 
-  var page = tabris.createPage({
+  var page = tabris.create("Page", {
     title: "Local storage",
     topLevel: true
   });
 
-  var storeText = page.append("Text", {
+  var storeText = tabris.create("Text", {
     text: "Hallo World!",
     message: "String to store",
     layoutData: {left: MARGIN, top: MARGIN_LARGE, right: MARGIN}
   });
 
-  var addButton = page.append("Button", {
+  var addButton = tabris.create("Button", {
     text: "Add",
     layoutData: {left: MARGIN, right: [66.6, MARGIN], top: [storeText, MARGIN_LARGE]}
   });
 
-  var removeButton = page.append("Button", {
+  var removeButton = tabris.create("Button", {
     text: "Remove",
     layoutData: {left: [33.3, 0], right: [33.3, 0], top: [storeText, MARGIN_LARGE]}
   });
 
-  var clearButton = page.append("Button", {
+  var clearButton = tabris.create("Button", {
     text: "Clear",
     layoutData: {left: [66.6, MARGIN], right: MARGIN, top: [storeText, MARGIN_LARGE]}
   });
 
-  var storeLabel = page.append("Label", {
+  var storeLabel = tabris.create("Label", {
     layoutData: {left: MARGIN, top: [addButton, MARGIN_LARGE], right: MARGIN},
     markupEnabled: true
   });
+
+  page.append(storeText, addButton, removeButton, clearButton, storeLabel);
 
   function updateStoreLabel() {
     var value = localStorage.getItem(STORAGE_KEY);
