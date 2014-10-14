@@ -73,7 +73,7 @@ tabris.load(function() {
     var bounds = scrollComposite.get("bounds");
     var width = bounds[2];
     var imageHeight = width / 1.4; // 1.4 is the image aspect ratio
-    imageLabel.set("image", ["images/salad.jpg", width, width]);
+    imageLabel.set("image", {src: "images/salad.jpg", width: width, height: width});
     var titleCompHeight = titleComposite.get("bounds")[3];
     titleComposite.set("layoutData", {left: 0, top: imageHeight - titleCompHeight, right: 0, height: 64});
   });
