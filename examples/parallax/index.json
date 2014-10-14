@@ -1,4 +1,6 @@
 {
+  "title": "Parallax scrolling",
+  "description": "Provides a sample implementation for a parallax scrolling effect",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"

@@ -1,4 +1,6 @@
 {
+  "title": "Navigation",
+  "description": "Showcases creating pages and subpages and the navigation between them",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"

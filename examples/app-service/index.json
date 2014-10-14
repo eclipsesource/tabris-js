@@ -1,4 +1,6 @@
 {
+  "title": "Lifecycle events: Pause, Resume",
+  "description": "Showcases attaching listeners to Pause and Resume events",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"

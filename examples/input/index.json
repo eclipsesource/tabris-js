@@ -1,4 +1,6 @@
 {
+  "title": "Input elements",
+  "description": "Showcases various input elements like Text, Checkbox, Combo, ...",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"

@@ -1,4 +1,6 @@
 {
+  "title": "Video",
+  "description": "Demonstrates the tabris.js video widget and its API",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"

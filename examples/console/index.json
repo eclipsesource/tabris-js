@@ -1,4 +1,6 @@
 {
+  "title": "Console",
+  "description": "Showcases console.log, .debug, .info, .warn, .error",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"

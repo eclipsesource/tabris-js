@@ -1,4 +1,6 @@
 {
+  "title": "Touch Events",
+  "description": "Demonstrates the tabris.js touch API",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
