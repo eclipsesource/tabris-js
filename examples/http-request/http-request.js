@@ -3,6 +3,70 @@ tabris.load(function() {
   var MARGIN = 12;
   var error = "";
 
+  var page = tabris.create("Page", {
+    title: "XMLHttpRequest",
+    topLevel: true
+  });
+
+  var urlText = tabris.create("Text", {
+    layoutData: {left: MARGIN, right: MARGIN, top: MARGIN},
+    message: "Request url",
+    text: "index.json"
+  });
+
+  var button = tabris.create("Button", {
+    layoutData: {left: MARGIN, right: MARGIN, top: [urlText, MARGIN]},
+    text: "Send request"
+  });
+
+  var progressBar = tabris.create("ProgressBar", {
+    style: ["WRAP"],
+    layoutData: {left: MARGIN, right: MARGIN, top: [button, MARGIN]},
+    markupEnabled: true,
+    minimum: 0,
+    maximum: 100,
+    selection: 0
+  });
+
+  var stateLabel = tabris.create("Label", {
+    style: ["WRAP"],
+    markupEnabled: true,
+    layoutData: {left: MARGIN, right: MARGIN, top: [progressBar, MARGIN]}
+  });
+
+  var httpStatusLabel = tabris.create("Label", {
+    style: ["WRAP"],
+    markupEnabled: true,
+    layoutData: {left: MARGIN, right: MARGIN, top: [stateLabel, MARGIN]}
+  });
+
+  var headerLabel = tabris.create("Label", {
+    style: ["WRAP"],
+    markupEnabled: true,
+    layoutData: {left: MARGIN, right: MARGIN, top: [httpStatusLabel, MARGIN]}
+  });
+
+  var bodyLabel = tabris.create("Label", {
+    style: ["WRAP"],
+    markupEnabled: true,
+    layoutData: {left: MARGIN, right: MARGIN, top: [headerLabel, MARGIN]}
+  });
+
+  page.append(urlText, button, progressBar, stateLabel, httpStatusLabel, headerLabel, bodyLabel);
+
+  button.on("selection", function() {
+    progressBar.set("selection", 0);
+    if ([xhr.UNSENT, xhr.DONE].indexOf(xhr.readyState) > -1) {
+      button.set("text", "Cancel");
+      httpStatusLabel.set("text", "");
+      headerLabel.set("text", "");
+      bodyLabel.set("text", "");
+      sendRequest(urlText.get("text").toString());
+    } else {
+      xhr.abort();
+    }
+  });
+
   var xhr = new tabris.XMLHttpRequest();
 
   xhr.ontimeout = function() {
@@ -33,67 +97,7 @@ tabris.load(function() {
 
   xhr.timeout = 2000;
 
-  var page = tabris.createPage({
-    title: "XMLHttpRequest",
-    topLevel: true
-  });
 
-  var urlText = page.append("Text", {
-    layoutData: {left: MARGIN, right: MARGIN, top: MARGIN},
-    message: "Request url",
-    text: "index.json"
-  });
-
-  var button = page.append("Button", {
-    layoutData: {left: MARGIN, right: MARGIN, top: [urlText, MARGIN]},
-    text: "Send request"
-  });
-
-  var progressBar = page.append("ProgressBar", {
-    style: ["WRAP"],
-    layoutData: {left: MARGIN, right: MARGIN, top: [button, MARGIN]},
-    markupEnabled: true,
-    minimum: 0,
-    maximum: 100,
-    selection: 0
-  });
-
-  var stateLabel = page.append("Label", {
-    style: ["WRAP"],
-    markupEnabled: true,
-    layoutData: {left: MARGIN, right: MARGIN, top: [progressBar, MARGIN]}
-  });
-
-  var httpStatusLabel = page.append("Label", {
-    style: ["WRAP"],
-    markupEnabled: true,
-    layoutData: {left: MARGIN, right: MARGIN, top: [stateLabel, MARGIN]}
-  });
-
-  var headerLabel = page.append("Label", {
-    style: ["WRAP"],
-    markupEnabled: true,
-    layoutData: {left: MARGIN, right: MARGIN, top: [httpStatusLabel, MARGIN]}
-  });
-
-  var bodyLabel = page.append("Label", {
-    style: ["WRAP"],
-    markupEnabled: true,
-    layoutData: {left: MARGIN, right: MARGIN, top: [headerLabel, MARGIN]}
-  });
-
-  button.on("selection", function() {
-    progressBar.set("selection", 0);
-    if ([xhr.UNSENT, xhr.DONE].indexOf(xhr.readyState) > -1) {
-      button.set("text", "Cancel");
-      httpStatusLabel.set("text", "");
-      headerLabel.set("text", "");
-      bodyLabel.set("text", "");
-      sendRequest(urlText.get("text").toString());
-    } else {
-      xhr.abort();
-    }
-  });
 
   function updateResponseLabel(xhr) {
     stateLabel.set("text", "<b>" + getStateName() + (error ? " (" + error + ")" : "") + "</b>");
