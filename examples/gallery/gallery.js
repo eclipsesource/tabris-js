@@ -23,13 +23,12 @@ tabris.load(function() {
     "orion-nebula"
   ];
 
-  var page = tabris.createPage({
+  var page = tabris.create("Page", {
     title: "The Big Bang Theory",
     topLevel: true
   });
 
   var mainComposite = tabris.create("Composite", {
-    parent: page,
     background: "black",
     layoutData: {left: 0, top: 0, right: 0, bottom: 0}
   });
@@ -37,12 +36,14 @@ tabris.load(function() {
   var scrollCompositeLayoutData = {left: 0, right: 0, bottom: 0, height: 164};
 
   var scrollComposite = tabris.create("ScrollComposite", {
-    parent: mainComposite,
     scroll: "horizontal",
-    data: {"paging":true},
+    data: {paging: true},
     layoutData: scrollCompositeLayoutData,
     background: "rgba(32, 32, 32, 0.6)"
   });
+
+  mainComposite.append(scrollComposite);
+  page.append(mainComposite);
 
   function createImageThumbPath(imageName) {
     return "images/".concat(imageName).concat("_thumb.jpg");
@@ -62,13 +63,13 @@ tabris.load(function() {
     var imageThumbPath = createImageThumbPath(imageNames[i]);
     var imageBigPath = createImageBigPath(imageNames[i]);
     var image = tabris.create("Label", {
-      parent: scrollComposite,
       layoutData: {top: 7, left: i * 150 + i * 7, width: 150, height: 150},
       image: {src: imageThumbPath, width: 150, height: 150},
       data: {
         showTouch: true
       }
     });
+    scrollComposite.append(image);
     bindShowToSelection(image, imageBigPath);
   }
 
@@ -77,17 +78,17 @@ tabris.load(function() {
       imageHolder.dispose();
     }
     imageHolder = tabris.create("Label", {
-      parent: mainComposite,
       layoutData: {top: 0, bottom: 0, left: 0, right: 0},
-      data: {"zoom":true},
+      data: {zoom: true},
       image: {src: path}
     });
+    mainComposite.append(imageHolder);
   }
 
   var toggleAction = function() {
     if (!scrollComposite.isHidden) {
       recreateThumbnailAction("Thumbnails");
-      scrollComposite.set("layoutData", {left:0, top:0, height: 0});
+      scrollComposite.set("layoutData", {left: 0, top: 0, height: 0});
       scrollComposite.isHidden = true;
     } else {
       recreateThumbnailAction("Fullscreen");
@@ -98,16 +99,18 @@ tabris.load(function() {
 
   var recreateThumbnailAction = function(actionTitle) {
     action.dispose();
-    action = tabris.createAction({
+    action = tabris.create("Action", {
       title: actionTitle,
       placementPriority: "HIGH"
-    }, toggleAction);
+    });
+    action.on("selection", toggleAction);
   };
 
-  var action = tabris.createAction({
+  var action = tabris.create("Action", {
     title: "Fullscreen",
     placementPriority: "HIGH"
-  }, toggleAction);
+  });
+  action.on("selection", toggleAction);
 
   page.open();
 });
