@@ -68,9 +68,9 @@ describe("List", function() {
         beforeEach(function() {
           nativeBridge.resetCalls();
           list.set("items", [
-            {name: "Ron", phone: "00", icon: "img:ron"},
-            {name: "Sue", phone: "01", icon: "img:sue"},
-            {name: "Tom", phone: "02", icon: "img:tom"}
+            {name: "Ron", phone: "00", icon: {src: "ron.jpg"}},
+            {name: "Sue", phone: "01", icon: {src: "sue.jpg"}},
+            {name: "Tom", phone: "02", icon: {src: "tom.jpg"}}
           ]);
         });
 
@@ -95,8 +95,8 @@ describe("List", function() {
           beforeEach(function() {
             nativeBridge.resetCalls();
             list.set("items", [
-              {name: "Ron", phone: "00", icon: "img:ron"},
-              {name: "Tom", phone: "02", icon: "img:tom"}
+              {name: "Ron", phone: "00", icon: {src: "ron.jpg"}},
+              {name: "Tom", phone: "02", icon: {src: "tom.jpg"}}
             ]);
           });
 
@@ -145,20 +145,29 @@ describe("List", function() {
       describe("items are arrays", function() {
         beforeEach(function() {
           list.set("items", [
-            ["Ron", "00", "img:ron100", "img:ron200"],
-            ["Sue", "01", "img:sue100", "img:sue200"],
-            ["Tom", "02", "img:tom100", "img:tom200"]
+            ["Ron", "00", {src: "ron100.jpg"}, {src: "ron200.jpg"}],
+            ["Sue", "01", {src: "sue100.jpg"}, {src: "sue200.jpg"}],
+            ["Tom", "02", {src: "tom100.jpg"}, {src: "tom200.jpg"}]
           ]);
         });
 
         it("CREATEs GridItems with values from items", function() {
           var createCalls = nativeBridge.calls({op: "create", type: "rwt.widgets.GridItem"});
+
           expect(createCalls.map(function(call) {
-            return util.pick(call.properties, ["texts", "images"]);
+            return call.properties.texts;
           })).toEqual([
-            {texts: ["Ron", "00"], images: ["img:ron100", "img:ron200"]},
-            {texts: ["Sue", "01"], images: ["img:sue100", "img:sue200"]},
-            {texts: ["Tom", "02"], images: ["img:tom100", "img:tom200"]}
+            ["Ron", "00"],
+            ["Sue", "01"],
+            ["Tom", "02"]
+          ]);
+
+          expect(createCalls.map(function(call) {
+            return call.properties.images;
+          })).toEqual([
+            [["ron100.jpg", null, null, null], ["ron200.jpg", null, null, null]],
+            [["sue100.jpg", null, null, null], ["sue200.jpg", null, null, null]],
+            [["tom100.jpg", null, null, null], ["tom200.jpg", null, null, null]]
           ]);
         });
       });
@@ -172,7 +181,7 @@ describe("List", function() {
           {type: "image", binding: 2}
         ]);
         list.set("items", [
-          ["Ron", "img:ron100", "img:ron200"]
+          ["Ron", {src: "ron100.jpg"}, {src: "ron200.jpg"}]
         ]);
       });
 
@@ -190,13 +199,13 @@ describe("List", function() {
           {type: "image", binding: 2}
         ]);
         list.set("items", [
-          ["Ron", "00", "img:ron"]
+          ["Ron", "00", {src: "ron.jpg"}]
         ]);
       });
 
       it("fills images array with nulls", function() {
         var createCall = nativeBridge.calls({op: "create", type: "rwt.widgets.GridItem"})[0];
-        expect(createCall.properties.images).toEqual(["img:ron", null]);
+        expect(createCall.properties.images).toEqual([["ron.jpg", null, null, null], null]);
       });
     });
 

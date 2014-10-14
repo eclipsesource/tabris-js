@@ -155,6 +155,8 @@
         case "image":
         case "backgroundImage":
           return encodeImage(value);
+        case "images":
+          return encodeImages(value);
         case "layoutData":
           checkLayoutData(value);
           return encodeLayoutData(value);
@@ -187,6 +189,8 @@
         case "image":
         case "backgroundImage":
           return decodeImage(value);
+        case "images":
+          return decodeImages(value);
       }
       return value;
     }
@@ -211,6 +215,18 @@
 
   function decodeImage(value) {
     return util.imageFromArray(value);
+  }
+
+  function encodeImages(value) {
+    return value.map(function(value) {
+      return value == null ? null : util.imageToArray(value);
+    });
+  }
+
+  function decodeImages(value) {
+    return value.map(function(value) {
+      return value == null ? null : util.imageFromArray(value);
+    });
   }
 
   function checkLayoutData(layoutData) {
