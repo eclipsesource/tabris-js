@@ -36,6 +36,21 @@
   <!-- helper files -->
   <script type="text/javascript" src="js/NativeBridgeSpy.js"></script>
 
+  <!-- catch specs that aren't executed due to load errors -->
+  <script type="text/javascript">
+    (function() {
+      var loadErrors = [];
+      window.addEventListener("error", function(error) {
+        loadErrors.push(error.message);
+      }, false);
+      describe("All specs", function() {
+        it("have been loaded without errors", function() {
+          expect(loadErrors).toEqual([]);
+        });
+      });
+    }());
+  </script>
+
   <!-- spec files -->
   <script type="text/javascript" src="js/util.spec.js"></script>
   <script type="text/javascript" src="js/util-colors.spec.js"></script>
