@@ -19,15 +19,16 @@ todo.TodoItemView = Backbone.View.extend({
   },
 
   createWidgets: function() {
-    this.toggleCheckbox = this.widget.append("CheckBox");
-    this.clearLabel = this.widget.append("Label", {
-      backgroundImage: ["../images/destroy.png", 20, 20]
+    this.toggleCheckbox = tabris.create("CheckBox");
+    this.clearLabel = tabris.create("Label", {
+      backgroundImage: {src: "../images/destroy.png", width: 20, height: 20}
     });
+    this.widget.append(this.toggleCheckbox, this.clearLabel);
     this.layout();
   },
 
   layout: function() {
-    this.toggleCheckbox.set("layoutData", {left: 20, top: 0, height:50, right: 44});
+    this.toggleCheckbox.set("layoutData", {left: 20, top: 0, height: 50, right: 44});
     this.clearLabel.set("layoutData", {top: 15, right: 17, width: 20, height: 20});
   },
 
@@ -53,7 +54,7 @@ todo.TodoItemView = Backbone.View.extend({
 
   excludeFromLayout: function() {
     var nextView = this.parentView.getItemView(this.model.getNext());
-    if(nextView) {
+    if (nextView) {
       var previousView = this.parentView.getItemView(this.model.getPrevious());
       var top = previousView ? [previousView.widget, 0] : 0;
       nextView.widget.set("layoutData", {left: 0, top: top, right: 0});

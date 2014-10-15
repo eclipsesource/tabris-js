@@ -27,17 +27,19 @@ todo.TodoListView = Backbone.View.extend({
   },
 
   createWidgets: function() {
-    this.input = this.widget.append("Text", {
+    this.input = tabris.create("Text", {
       style: ["SINGLE", "BORDER"],
       message: todo.texts.inputMessage
     });
-    this.markAllCheckbox = this.widget.append("CheckBox", {
+    this.markAllCheckbox = tabris.create("CheckBox", {
       text: todo.texts.markAllCheckbox,
       font: "bold 16px"
     });
-    this.container = this.widget.append("ScrollComposite", {scroll: "vertical"});
-    this.clearCompletedButton = this.widget.append("Button");
-    this.todoCountLabel = this.widget.append("Label", {markupEnabled: true});
+    this.container = tabris.create("ScrollComposite", {scroll: "vertical"});
+    this.clearCompletedButton = tabris.create("Button");
+    this.todoCountLabel = tabris.create("Label", {markupEnabled: true});
+    this.widget.append(this.input, this.markAllCheckbox, this.container, this.clearCompletedButton,
+      this.todoCountLabel);
     this.layout();
   },
 
@@ -88,7 +90,7 @@ todo.TodoListView = Backbone.View.extend({
 
   createItem: function() {
     var inputText = this.input.get("text");
-    if(inputText) {
+    if (inputText) {
       this.model.create({title: inputText});
       this.input.set("text", "");
     }

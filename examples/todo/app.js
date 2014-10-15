@@ -5,7 +5,7 @@
 /* global todo: true */
 /* jshint nonew: false */
 
-(function(){
+(function() {
 
   tabris.load(function() {
     new todo.TodoListView({model: createModel()});

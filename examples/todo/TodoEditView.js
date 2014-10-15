@@ -15,16 +15,18 @@ todo.TodoEditView = Backbone.View.extend({
   },
 
   createWidgets: function() {
-    this.confirmationButton = this.widget.append("Button", {text: "OK"});
-    this.priorityCombo = this.widget.append("Combo", {
+    this.confirmationButton = tabris.create("Button", {text: "OK"});
+    this.priorityCombo = tabris.create("Combo", {
       items: [todo.texts.priorityLow, todo.texts.priorityMedium, todo.texts.priorityHigh],
       selectionIndex: this.model.get("priority")
     });
-    this.priorityLabel = this.widget.append("Label", {
+    this.priorityLabel = tabris.create("Label", {
       text: todo.texts.priorityLabel,
       markupEnabled: true
     });
-    this.inputText = this.widget.append("Text", {text: this.model.get("title")});
+    this.inputText = tabris.create("Text", {text: this.model.get("title")});
+    this.widget.append(this.confirmationButton, this.priorityCombo, this.priorityLabel,
+      this.inputText);
     this.layout();
   },
 
@@ -41,10 +43,10 @@ todo.TodoEditView = Backbone.View.extend({
 
   close: function() {
     var editedTodo = this.inputText.get("text");
-    if(editedTodo) {
+    if (editedTodo) {
       this.model.save({
-        "title": this.inputText.get("text"),
-        "priority": this.priorityCombo.get("selectionIndex")
+        title: this.inputText.get("text"),
+        priority: this.priorityCombo.get("selectionIndex")
       });
     } else {
       this.model.clear();
