@@ -93,8 +93,9 @@ tabris.load(function() {
     populateMessage();
   });
 
-  page.append(firstNameLabel, firstNameInput, lastNameLabel, lastNameInput, passphraseLabel, passphraseInput,
-    countryLabel, countryCombo, classLabel, classCombo, dateTimeLabel, dateTime, checkbox, button);
+  page.append(firstNameLabel, firstNameInput, lastNameLabel, lastNameInput, passphraseLabel,
+    passphraseInput, countryLabel, countryCombo, classLabel, classCombo, dateTimeLabel, dateTime,
+    checkbox, button);
 
   function populateMessage() {
     if (!message) {
@@ -103,6 +104,7 @@ tabris.load(function() {
         alignment: "left",
         text: "Flight booked for: " + createName() + "\n" + "Departure: " + createDepartureDate()
       });
+      page.append(message);
     } else {
       message.dispose();
       message = null;
