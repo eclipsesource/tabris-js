@@ -75,8 +75,7 @@ tabris.load(function() {
   });
 
   var controlsCheckbox = tabris.create("CheckBox", {
-    // TODO: height explicitly set as a workaround for tabris-android bug #527
-    layoutData: {bottom: 5, left: 5, width: 100, height: 30},
+    layoutData: {bottom: 5, left: 5, width: 100},
     text: "Controls",
     selection: true
   });
@@ -87,8 +86,7 @@ tabris.load(function() {
   });
 
   var repeatCheckbox = tabris.create("CheckBox", {
-    // TODO: height explicitly set as a workaround for tabris-android bug #527
-    layoutData: {bottom: 5, left: [controlsCheckbox, 5], width: 100, height: 30},
+    layoutData: {bottom: 5, left: [controlsCheckbox, 5], width: 100},
     text: "Repeat"
   });
 
