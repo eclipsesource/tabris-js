@@ -23,7 +23,7 @@ tabris.load(function() {
 
   page.append(goButton, urlInput, browser);
 
-  goButton.on("Selection", function() {
+  goButton.on("selection", function() {
     browser.set("url", urlInput.get("text"));
   });
 
