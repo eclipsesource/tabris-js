@@ -20,7 +20,7 @@ tabris.load(function() {
       text: "Add Root Page",
       background: "green",
       foreground: "white",
-      image: ["images/add_root_page.png", 24, 24]
+      image: {src: "images/add_root_page.png", width: 24, height: 24}
     }).on("selection", function() {
       var page = createPage("Root Page: " + createRandomPageId(), true);
       topLevelPages.push(page);
@@ -32,7 +32,7 @@ tabris.load(function() {
       text: "Add Page",
       background: "green",
       foreground: "white",
-      image: ["images/add_page.png", 24, 24]
+      image: {src: "images/add_page.png", width: 24, height: 24}
     }).on("selection", function() {
       var page = createPage("Page: " + createRandomPageId(), false);
       pages.push(page);
@@ -44,24 +44,24 @@ tabris.load(function() {
       text: "Add Global Action",
       background: "green",
       foreground: "white",
-      image: ["images/global_action.png", 24, 24]
+      image: {src: "images/global_action.png", width: 24, height: 24}
     }).on("selection", function() {
-      var action = tabris.createAction({
+      var action = tabris.create("Action", {
         title: "Share",
-        image: ["images/action_share.png", 24, 24]
-      }, function() {
-        // TODO: implement action
+        image: {src: "images/action_share.png", width: 24, height: 24}
       });
+      // TODO: implement action
       actions.push(action);
     });
 
     // TODO: add page actions to demo when implemented. See tabris-js issue #8.
+
     var removeLastGlobalActionButton = tabris.create("Button", {
       layoutData: {left: 5, right: 5, bottom: 5},
       text: "Remove Last Global Action",
       background: "red",
       foreground: "white",
-      image: ["images/global_action.png", 24, 24]
+      image: {src: "images/global_action.png", width: 24, height: 24}
     }).on("selection", function() {
       if (actions.length - 1 >= 0) {
         actions[actions.length - 1].dispose();
@@ -74,7 +74,7 @@ tabris.load(function() {
       text: "Remove Last Root Page",
       background: "red",
       foreground: "white",
-      image: ["images/remove_root_page.png", 24, 24]
+      image: {src: "images/remove_root_page.png", width: 24, height: 24}
     }).on("selection", function() {
       if (topLevelPages.length - 1 >= 0) {
         topLevelPages[topLevelPages.length - 1].close();
@@ -82,11 +82,8 @@ tabris.load(function() {
       }
     });
 
-    page.append(addRootPageButton, addPageButton, addGlobalActionButton, removeLastGlobalActionButton,
-      removeLastRootPageButton);
-
-    return page;
-
+    return page.append(addRootPageButton, addPageButton, addGlobalActionButton,
+      removeLastGlobalActionButton, removeLastRootPageButton);
   };
 
   var topLevelPage = createPage("Dynamic UI Start", true);
