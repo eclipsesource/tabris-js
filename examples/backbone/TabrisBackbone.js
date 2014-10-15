@@ -151,7 +151,8 @@
         }
         if (this.parentWidget) {
           var widget = tabris.create(_.result(this, "widgetType"), attrs);
-          this.setWidget(this.parentWidget.append(widget), false);
+          this.parentWidget.append(widget);
+          this.setWidget(widget, false);
         } else {
           this.setWidget(tabris.create("Page", attrs), false);
           this.widget.open();

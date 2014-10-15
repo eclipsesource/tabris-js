@@ -5,7 +5,7 @@ todo = window.todo || {};
 todo.TodoEditView = Backbone.View.extend({
 
   events: {
-    "Selection confirmationButton": "close"
+    "selection confirmationButton": "close"
   },
 
   attributes: {title: todo.texts.editItem, topLevel: false},

@@ -6,9 +6,9 @@ todo = window.todo || {};
 todo.TodoItemView = Backbone.View.extend({
 
   events: {
-    "Selection toggleCheckbox": "toggleDone",
-    "MenuDetect toggleCheckbox": "edit",
-    "Selection clearLabel": "clear"
+    "selection toggleCheckbox": "toggleDone",
+    "longpress toggleCheckbox": "edit",
+    "selection clearLabel": "clear"
   },
 
   initialize: function() {
@@ -21,7 +21,7 @@ todo.TodoItemView = Backbone.View.extend({
   createWidgets: function() {
     this.toggleCheckbox = tabris.create("CheckBox");
     this.clearLabel = tabris.create("Label", {
-      backgroundImage: {src: "../images/destroy.png", width: 20, height: 20}
+      backgroundImage: {src: "images/destroy.png", width: 20, height: 20}
     });
     this.widget.append(this.toggleCheckbox, this.clearLabel);
     this.layout();

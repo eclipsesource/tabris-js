@@ -6,8 +6,8 @@ todo.TodoListView = Backbone.View.extend({
 
   events: {
     "DefaultSelection input": "createItem",
-    "Selection clearCompletedButton": "clearCompleted",
-    "Selection markAllCheckbox": "toggleAllComplete"
+    "selection clearCompletedButton": "clearCompleted",
+    "selection markAllCheckbox": "toggleAllComplete"
   },
 
   completedTemplate: _.template(todo.texts.clearCompleted, {variable: "done"}),
