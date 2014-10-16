@@ -21,7 +21,7 @@
       "src": "lib/backbone/TabrisBackbone.js"
     },
     {
-      "src": "en/texts-en.js"
+      "src": "texts-en.js"
     },
     {
       "src": "TodoItem.js"
