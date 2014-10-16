@@ -132,6 +132,12 @@ describe("Proxy", function() {
           proxy.append();
         }).toThrowError("Object is disposed");
       });
+
+      it("calling appendTo fails", function() {
+        expect(function() {
+          proxy.append();
+        }).toThrowError("Object is disposed");
+      });
     });
 
     describe("calling append with a proxy", function() {
@@ -183,6 +189,37 @@ describe("Proxy", function() {
         expect(function() {
           proxy.append({});
         }).toThrowError("Cannot append non-widget");
+      });
+
+    });
+
+    describe("calling appendTo with a proxy", function() {
+      var parent, result;
+
+      beforeEach(function() {
+        parent = tabris.create("Composite", {});
+        nativeBridge.resetCalls();
+        result = proxy.appendTo(parent);
+      });
+
+      it("sets the proxy's parent", function() {
+        var calls = nativeBridge.calls();
+        expect(calls.length).toBe(1);
+        expect(calls[0]).toEqual({op: "set", id: proxy.id, properties: {parent: parent.id}});
+      });
+
+      it("returns self to allow chaining", function() {
+        expect(result).toBe(proxy);
+      });
+
+    });
+
+    describe("appendTo with non-widget", function() {
+
+      it("throws an error", function() {
+        expect(function() {
+          proxy.appendTo({});
+        }).toThrowError("Cannot append to non-widget");
       });
 
     });

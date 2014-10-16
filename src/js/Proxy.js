@@ -30,6 +30,15 @@
       return this;
     },
 
+    appendTo: function(proxy) {
+      this._checkDisposed();
+      if (!(proxy instanceof tabris.Proxy)) {
+        throw new Error("Cannot append to non-widget");
+      }
+      proxy._append(this);
+      return this;
+    },
+
     _append: function(proxy) {
       proxy.set("parent", this);
     },
