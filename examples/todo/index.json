@@ -6,10 +6,10 @@
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
     },
     {
-      "src": "../jquery/domMock.js"
+      "src": "lib/jquery/domMock.js"
     },
     {
-      "src": "../jquery/jquery.js"
+      "src": "lib/jquery/jquery.min.js"
     },
     {
       "src": "http://underscorejs.org/underscore-min.js"
@@ -18,7 +18,7 @@
       "src": "http://backbonejs.org/backbone-min.js"
     },
     {
-      "src": "../backbone/TabrisBackbone.js"
+      "src": "lib/backbone/TabrisBackbone.js"
     },
     {
       "src": "en/texts-en.js"
