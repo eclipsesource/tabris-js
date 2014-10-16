@@ -63,7 +63,7 @@ describe("util", function() {
 
   describe("clone", function() {
 
-    it("returns a copy", function() {
+    it("returns a copy of object", function() {
       var original = {a: 1};
 
       var result = util.clone(original);
@@ -84,6 +84,22 @@ describe("util", function() {
     it("inverts object with string values", function() {
       var result = util.invert({Moe: "Moses", Larry: "Louis", Curly: "Jerome"});
       expect(result).toEqual({Moses: "Moe", Louis: "Larry", Jerome: "Curly"});
+    });
+
+  });
+
+  describe("rename", function() {
+
+    it("renames keys on resulting object", function() {
+      var original = {foo1: "bar1", foo2: "bar2", foo3: "bar3"};
+      var result = util.rename(original, {foo1: "foo4", foo2: "foo5", foox: "fooy"});
+      expect(result).toEqual({foo4: "bar1", foo5: "bar2", foo3: "bar3"});
+    });
+
+    it("does not modify existing object", function() {
+      var original = {foo1: "bar1", foo2: "bar2", foo3: "bar3"};
+      util.rename(original, {foo1: "foo4", foo2: "foo5", foox: "fooy"});
+      expect(original).toEqual({foo1: "bar1", foo2: "bar2", foo3: "bar3"});
     });
 
   });

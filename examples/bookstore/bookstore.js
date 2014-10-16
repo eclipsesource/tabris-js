@@ -44,8 +44,9 @@ tabris.load(function() {
     });
     var detailsComposite = createDetailsComposite(book)
       .set("layoutData", {top: 0, height: 184, left: 0, right: 0});
-    createTabFolder(bookPage)
-      .set("layoutData", {top: [detailsComposite, 0], left: 0, right: 0, bottom: 0});
+    bookPage.append(createTabFolder().set({
+      layoutData: {top: [detailsComposite, 0], left: 0, right: 0, bottom: 0}
+    }));
     var separator = tabris.create("Label", {
       layoutData: {height: 1, right: 0, left: 0, top: [detailsComposite, 0]},
       background: "rgba(0, 0, 0, 0.1)"
@@ -85,32 +86,16 @@ tabris.load(function() {
     return detailsComposite.append(touchComp, imageLabel, titleLabel, authorLabel, priceLabel);
   }
 
-  function createTabFolder(bookPage) {
-    var booksList = createBooksList(books);
-    var tabFolder = tabris.create("TabFolder", {
-      parent: bookPage,
-      style: ["TOP"],
-      data: {paging: true}
-    });
-    var relatedComposite = tabris.create("Composite", {});
-    tabris.create("TabItem", {
-      parent: tabFolder,
-      index: 0,
-      text: "Related",
-      control: booksList
-    });
-    tabris.create("TabItem", {
-      parent: tabFolder,
-      index: 1,
-      text: "Comments",
-      control: relatedComposite
-    });
-    var relatedLabel = tabris.create("Label", {
-      text: "Great Book.",
-      layoutData: {left: PAGE_MARGIN, top: PAGE_MARGIN, right: PAGE_MARGIN, bottom: PAGE_MARGIN}
-    });
-    relatedComposite.append(relatedLabel);
-    return tabFolder.append(booksList, relatedComposite);
+  function createTabFolder() {
+    return tabris.create("TabFolder", {paging: true}).append(
+      tabris.create("Tab", {title: "Related"}).append(createBooksList(books)),
+      tabris.create("Tab", {title: "Comments"}).append(
+        tabris.create("Label", {
+          text: "Great Book.",
+          layoutData: {left: PAGE_MARGIN, top: PAGE_MARGIN, right: PAGE_MARGIN, bottom: PAGE_MARGIN}
+        })
+      )
+    );
   }
 
   function createBooksList(books) {

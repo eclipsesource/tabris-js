@@ -45,6 +45,14 @@ util = {
     return result;
   },
 
+  rename: function(object, mapping) {
+    var result = {};
+    for (var key in object) {
+      result[ mapping[key] || key ] = object[key];
+    }
+    return result;
+  },
+
   invert: function(object) {
     var result = {};
     for (var key in object) {
