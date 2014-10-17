@@ -1,6 +1,6 @@
 {
-  "title": "Widget Events",
-  "description": "Events fired on all widgets.",
+  "title": "Common Events",
+  "description": "Events supported by most widgets.",
   "events": [
     "touchstart",
     "touchmove",

@@ -74,6 +74,32 @@ module.exports = function(grunt) {
         src: 'build/tabris.js',
         dest: 'build/tabris.min.js'
       }
+    },
+    doc: {
+      json: prefix('doc/definitions/', [
+        'widgetProperties.json',
+        'widgetEvents.json',
+        'Action.json',
+        'Button.json',
+        'Combo.json',
+        'Composite.json',
+        'Label.json',
+        'List.json',
+        'Page.json',
+        'ScrollComposite.json',
+        'Text.json',
+        'WebView.json'
+      ]),
+      target: 'build/doc/widget-types.md',
+      templates: 'doc/generator/*.template.md'
+    },
+    copy: {
+      doc: {
+        expand: true,
+        cwd: 'doc/',
+        src: '*.md',
+        dest: 'build/doc/'
+      }
     }
   });
 
@@ -82,6 +108,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadTasks('doc/generator');
 
   grunt.registerTask('examples', 'Copy examples to build/, create index', function() {
     var aggregatedIndex = [];
@@ -103,6 +131,6 @@ module.exports = function(grunt) {
     grunt.file.write('build/examples/index.json', JSON.stringify(aggregatedIndex, null, 2));
   });
 
-  grunt.registerTask('default', ['clean', 'jshint', 'concat', 'uglify', 'jasmine', 'examples']);
+  grunt.registerTask('default', ['clean', 'doc', 'copy:doc', 'jshint', 'concat', 'uglify', 'jasmine', 'examples']);
 
 };

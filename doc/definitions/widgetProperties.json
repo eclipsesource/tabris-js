@@ -1,6 +1,6 @@
 {
-  "title": "Widget Properties",
-  "description": "Properties used by all widgets.",
+  "title": "Common Properties",
+  "description": "Properties used by most widgets.",
   "properties": {
     "enabled": "boolean",
     "visibility": "boolean",
