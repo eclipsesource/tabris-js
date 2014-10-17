@@ -58,6 +58,7 @@ module.exports = function(grunt) {
                      'Action.js',
                      'TabFolder.js',
                      'CanvasContext.js',
+                     'LegacyCanvasContext.js',
                      'WebStorage.js',
                      'XMLHttpRequest.js'
                     ] ),

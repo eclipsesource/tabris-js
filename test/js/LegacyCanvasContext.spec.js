@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 
-describe("CanvasContext", function() {
+describe("Legacy CanvasContext", function() {
 
   var consoleBackup = window.console;
   var nativeBridge;
@@ -15,7 +15,7 @@ describe("CanvasContext", function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._start(nativeBridge);
     gc = new tabris.Proxy("gc-id");
-    ctx = new tabris.CanvasContext(gc);
+    ctx = new tabris.LegacyCanvasContext(gc);
     tabris._reset();
   });
 
@@ -30,57 +30,8 @@ describe("CanvasContext", function() {
 
   function getDrawOperations() {
     var call = nativeBridge.calls({id: gc.id, op: "call", method: "draw"})[0];
-    return call ? call.parameters.packedOperations : undefined;
+    return call ? call.parameters.operations : undefined;
   }
-
-  describe("getContext", function() {
-
-    var canvas;
-
-    beforeEach(function() {
-      canvas = new tabris.Proxy();
-    });
-
-    it("creates and returns graphics context", function() {
-      var ctx = tabris.getContext(canvas, 100, 200);
-
-      expect(ctx).toEqual(jasmine.any(tabris.LegacyCanvasContext));
-    });
-
-    it("returns same instance everytime", function() {
-      var ctx1 = tabris.getContext(canvas, 100, 200);
-
-      var ctx2 = tabris.getContext(canvas, 100, 200);
-
-      expect(ctx2).toBe(ctx1);
-    });
-
-    it("calls init", function() {
-      tabris.getContext(canvas, 100, 200);
-
-      var call = nativeBridge.calls({op: "call", method: "init"})[0];
-      expect(call.parameters.width).toEqual(100);
-      expect(call.parameters.height).toEqual(200);
-    });
-
-    it("calls init everytime", function() {
-      tabris.getContext(canvas, 100, 200);
-
-      tabris.getContext(canvas, 200, 100);
-
-      var call = nativeBridge.calls({op: "call", method: "init"})[1];
-      expect(call.parameters.width).toEqual(200);
-      expect(call.parameters.height).toEqual(100);
-    });
-
-    it("updates width and height in canvas dummy", function() {
-      ctx = tabris.getContext(canvas, 100, 200);
-
-      expect(ctx.canvas.width).toEqual(100);
-      expect(ctx.canvas.height).toEqual(200);
-    });
-
-  });
 
   describe("lineWidth", function() {
 
@@ -98,9 +49,9 @@ describe("CanvasContext", function() {
       ctx.lineWidth = 2;
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["lineWidth"], [0], [2], [], [], []]
-      );
+      expect(getDrawOperations()).toEqual([
+        ["lineWidth", 2]
+      ]);
     });
 
     it("ignores zero and negative values", function() {
@@ -136,9 +87,9 @@ describe("CanvasContext", function() {
       ctx.lineCap = "round";
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["lineCap"], [0], [], [], ["round"], []]
-      );
+      expect(getDrawOperations()).toEqual([
+        ["lineCap", "round"]
+      ]);
     });
 
     it("ignores unknown values", function() {
@@ -173,9 +124,9 @@ describe("CanvasContext", function() {
       ctx.lineJoin = "round";
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["lineJoin"], [0], [], [], ["round"], []]
-      );
+      expect(getDrawOperations()).toEqual([
+        ["lineJoin", "round"]
+      ]);
     });
 
     it("ignores unknown values", function() {
@@ -210,9 +161,9 @@ describe("CanvasContext", function() {
       ctx.fillStyle = "red";
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["fillStyle"], [0], [], [], [], [255, 0, 0, 255]]
-      );
+      expect(getDrawOperations()).toEqual([
+        ["fillStyle", [255, 0, 0, 255]]
+      ]);
     });
 
     it("ignores invalid color strings", function() {
@@ -248,9 +199,9 @@ describe("CanvasContext", function() {
       ctx.strokeStyle = "red";
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["strokeStyle"], [0], [], [], [], [255, 0, 0, 255]]
-      );
+      expect(getDrawOperations()).toEqual([
+        ["strokeStyle", [255, 0, 0, 255]]
+      ]);
     });
 
     it("ignores invalid color strings", function() {
@@ -286,9 +237,9 @@ describe("CanvasContext", function() {
       ctx.textAlign = "center";
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["textAlign"], [0], [], [], ["center"], []]
-      );
+      expect(getDrawOperations()).toEqual([
+        ["textAlign", "center"]
+      ]);
     });
 
     it("ignores unknown values", function() {
@@ -323,9 +274,9 @@ describe("CanvasContext", function() {
       ctx.textBaseline = "middle";
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["textBaseline"], [0], [], [], ["middle"], []]
-      );
+      expect(getDrawOperations()).toEqual([
+        ["textBaseline", "middle"]
+      ]);
     });
 
     it("ignores unknown values", function() {
@@ -357,9 +308,9 @@ describe("CanvasContext", function() {
       ctx.save();
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["save"], [0], [], [], [], []]
-      );
+      expect(getDrawOperations()).toEqual([
+        ["save"]
+      ]);
     });
 
   });
@@ -400,9 +351,9 @@ describe("CanvasContext", function() {
       ctx.restore();
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["restore"], [0], [], [], [], []]
-      );
+      expect(getDrawOperations()).toEqual([
+        ["restore"]
+      ]);
     });
 
   });
@@ -434,9 +385,9 @@ describe("CanvasContext", function() {
 
       flush();
 
-      expect(getDrawOperations()[0].length).toEqual(8);
-      expect(getDrawOperations()[0][0]).toEqual("beginPath");
-      expect(getDrawOperations()[0][7]).toEqual("closePath");
+      expect(getDrawOperations().length).toEqual(8);
+      expect(getDrawOperations()[0]).toEqual(["beginPath"]);
+      expect(getDrawOperations()[7]).toEqual(["closePath"]);
     });
 
     it("are not rendered after gc disposal anymore", function() {
@@ -452,63 +403,49 @@ describe("CanvasContext", function() {
       ctx.moveTo(10, 20);
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["moveTo"], [0], [10, 20], [], [], []]
-      );
+      expect(getDrawOperations()[0]).toEqual(["moveTo", 10, 20]);
     });
 
     it("lineTo", function() {
       ctx.lineTo(10, 20);
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["lineTo"], [0], [10, 20], [], [], []]
-      );
+      expect(getDrawOperations()[0]).toEqual(["lineTo", 10, 20]);
     });
 
     it("rect", function() {
       ctx.rect(10, 20, 30, 40);
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["rect"], [0], [10, 20, 30, 40], [], [], []]
-      );
+      expect(getDrawOperations()[0]).toEqual(["rect", 10, 20, 30, 40]);
     });
 
     it("arc", function() {
       ctx.arc(10, 20, 5, 1, 2);
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["arc"], [0], [10, 20, 5, 1, 2], [false], [], []]
-      );
+      expect(getDrawOperations()[0]).toEqual(["arc", 10, 20, 5, 1, 2, false]);
     });
 
     it("arc with anticlockwise", function() {
       ctx.arc(10, 20, 5, 1, 2, true);
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["arc"], [0], [10, 20, 5, 1, 2], [true], [], []]
-      );
+      expect(getDrawOperations()[0]).toEqual(["arc", 10, 20, 5, 1, 2, true]);
     });
 
     it("quadraticCurve", function() {
       ctx.quadraticCurveTo(10, 20, 30, 40);
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["quadraticCurveTo"], [0], [10, 20, 30, 40], [], [], []]
-      );
+      expect(getDrawOperations()[0]).toEqual(["quadraticCurveTo", 10, 20, 30, 40]);
     });
 
     it("bezierCurve", function() {
       ctx.bezierCurveTo(10, 20, 30, 40, 50, 60);
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["bezierCurveTo"], [0], [10, 20, 30, 40, 50, 60], [], [], []]
-      );
+      expect(getDrawOperations()[0]).toEqual(["bezierCurveTo", 10, 20, 30, 40, 50, 60]);
     });
 
   });
@@ -534,54 +471,44 @@ describe("CanvasContext", function() {
 
       flush();
 
-      expect(getDrawOperations()[0].length).toEqual(5);
-      expect(getDrawOperations()[0][0]).toEqual("setTransform");
-      expect(getDrawOperations()[0][4]).toEqual("scale");
+      expect(getDrawOperations().length).toEqual(5);
+      expect(getDrawOperations()[0]).toEqual(["setTransform", 1, 2, 3, 4, 5, 6]);
+      expect(getDrawOperations()[4]).toEqual(["scale", 2, 3]);
     });
 
     it("scale", function() {
       ctx.scale(2, 3);
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["scale"], [0], [2, 3], [], [], []]
-      );
+      expect(getDrawOperations()[0]).toEqual(["scale", 2, 3]);
     });
 
     it("rotate", function() {
       ctx.rotate(3.14);
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["rotate"], [0], [3.14], [], [], []]
-      );
+      expect(getDrawOperations()[0]).toEqual(["rotate", 3.14]);
     });
 
     it("translate", function() {
       ctx.translate(23, 42);
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["translate"], [0], [23, 42], [], [], []]
-      );
+      expect(getDrawOperations()[0]).toEqual(["translate", 23, 42]);
     });
 
     it("transform", function() {
       ctx.transform(1, 2, 3, 4, 5, 6);
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["transform"], [0], [1, 2, 3, 4, 5, 6], [], [], []]
-      );
+      expect(getDrawOperations()[0]).toEqual(["transform", 1, 2, 3, 4, 5, 6]);
     });
 
     it("setTransform", function() {
       ctx.setTransform(1, 2, 3, 4, 5, 6);
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["setTransform"], [0], [1, 2, 3, 4, 5, 6], [], [], []]
-      );
+      expect(getDrawOperations()[0]).toEqual(["setTransform", 1, 2, 3, 4, 5, 6]);
     });
 
   });
@@ -592,9 +519,9 @@ describe("CanvasContext", function() {
       ctx.fill();
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["fill"], [0], [], [], [], []]
-      );
+      expect(getDrawOperations()).toEqual([
+        ["fill"]
+      ]);
     });
 
   });
@@ -605,9 +532,9 @@ describe("CanvasContext", function() {
       ctx.stroke();
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["stroke"], [0], [], [], [], []]
-      );
+      expect(getDrawOperations()).toEqual([
+        ["stroke"]
+      ]);
     });
 
   });
@@ -618,9 +545,9 @@ describe("CanvasContext", function() {
       ctx.clearRect(10, 20, 30, 40);
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["clearRect"], [0], [10, 20, 30, 40], [], [], []]
-      );
+      expect(getDrawOperations()).toEqual([
+        ["clearRect", 10, 20, 30, 40]
+      ]);
     });
 
   });
@@ -631,9 +558,11 @@ describe("CanvasContext", function() {
       ctx.fillRect(10, 20, 30, 40);
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["beginPath", "rect", "fill"], [0, 1, 2], [10, 20, 30, 40], [], [], []]
-      );
+      expect(getDrawOperations()).toEqual([
+        ["beginPath"],
+        ["rect", 10, 20, 30, 40],
+        ["fill"]
+      ]);
     });
 
   });
@@ -644,9 +573,11 @@ describe("CanvasContext", function() {
       ctx.strokeRect(10, 20, 30, 40);
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["beginPath", "rect", "stroke"], [0, 1, 2], [10, 20, 30, 40], [], [], []]
-      );
+      expect(getDrawOperations()).toEqual([
+        ["beginPath"],
+        ["rect", 10, 20, 30, 40],
+        ["stroke"]
+      ]);
     });
 
   });
@@ -657,9 +588,9 @@ describe("CanvasContext", function() {
       ctx.fillText("foo", 10, 20);
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["fillText"], [0], [10, 20], [false, false, false], ["foo"], []]
-      );
+      expect(getDrawOperations()).toEqual([
+        ["fillText", "foo", false, false, false, 10, 20]
+      ]);
     });
 
   });
@@ -670,50 +601,9 @@ describe("CanvasContext", function() {
       ctx.strokeText("foo", 10, 20);
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["strokeText"], [0], [10, 20], [false, false, false], ["foo"], []]
-      );
-    });
-
-  });
-
-  describe("operation names", function() {
-
-    it("are rendered once", function() {
-      ctx.lineTo(10, 20);
-      ctx.moveTo(30, 40);
-      flush();
-
-      expect(getDrawOperations()).toEqual(
-        [["lineTo", "moveTo"], [0, 1], [10, 20, 30, 40], [], [], []]
-      );
-    });
-
-    it("are not rendered again", function() {
-      ctx.lineTo(10, 20);
-      ctx.moveTo(30, 40);
-      flush();
-      nativeBridge.resetCalls();
-      ctx.lineTo(50, 60);
-      ctx.moveTo(70, 80);
-      flush();
-
-      expect(getDrawOperations()).toEqual(
-        [[], [0, 1], [50, 60, 70, 80], [], [], []]
-      );
-    });
-
-    it("are appended to existing operations", function() {
-      ctx.lineTo(10, 20);
-      ctx.moveTo(30, 40);
-      flush();
-      nativeBridge.resetCalls();
-      ctx.rect(10, 20, 30, 40);
-      flush();
-
-      expect(getDrawOperations()).toEqual(
-        [["rect"], [2], [10, 20, 30, 40], [], [], []]
-      );
+      expect(getDrawOperations()).toEqual([
+        ["strokeText", "foo", false, false, false, 10, 20]
+      ]);
     });
 
   });
