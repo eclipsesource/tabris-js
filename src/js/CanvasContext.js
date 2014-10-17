@@ -1,4 +1,4 @@
-/**
+    /**
  * Copyright (c) 2014 EclipseSource.
  * All rights reserved.
  */
@@ -121,6 +121,11 @@
 
     stroke: function() {
       this._operations.push(["stroke"]);
+    },
+
+    measureText: function(text) {
+      // TODO wire to native function
+      return {width: text.length * 5 + 5};
     },
 
     _init: function(width, height) {

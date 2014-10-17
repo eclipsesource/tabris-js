@@ -657,4 +657,12 @@ describe("CanvasContext", function() {
 
   });
 
+  describe("measureText", function() {
+
+    it("is rendered", function() {
+      expect(ctx.measureText("foo").width).toBeGreaterThan("foo".length);
+    });
+
+  });
+
 });
