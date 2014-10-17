@@ -34,7 +34,7 @@ tabris.load(function() {
     return tabris.create("Page", {
       title: title,
       topLevel: true,
-      image: {src: image, width: 32, height: 32}
+      image: {src: image, scale: 3 }
     }).append(createBooksList(books.filter(filter)));
   }
 
@@ -176,8 +176,7 @@ tabris.load(function() {
 
   tabris.create("Action", {
     title: "Settings",
-    placementPriority: "LOW",
-    image: {src: "images/action_settings.png", width: 32, height: 32}
+    image: {src: "images/action_settings.png", scale: 3}
   }).on("selection", function() {
     createSettingsPage().open();
   });
