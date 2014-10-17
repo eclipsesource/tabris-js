@@ -68,7 +68,7 @@ describe("TabFolder:", function() {
       var itemCreate;
 
       it("crashes if parent is not a TabFolder", function() {
-        expect(function(){
+        expect(function() {
           tabris.create("Composite").append(page);
         }).toThrow(new Error("Tab must be a child of TabFolder"));
       });
