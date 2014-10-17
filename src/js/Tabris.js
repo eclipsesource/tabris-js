@@ -73,9 +73,6 @@
     },
 
     _decodeEventParam: function(event, param) {
-      if (touchEvents.indexOf(event) !== -1) {
-        return {touches: [{x: param.x, y: param.y}], time: param.time};
-      }
       return param;
     }
 
@@ -85,17 +82,11 @@
     return {
       FocusIn: "focusin",
       FocusOut: "focusout",
-      MouseDown: "touchstart",
-      MouseMove: "touchmove",
-      MouseUp: "touchend",
-      MenuDetect: "longpress",
       Selection: "selection",
       Resize: "resize",
       Scroll: "scroll",
       Modify: "modify"
     };
   }
-
-  var touchEvents = ["MouseDown", "MouseUp", "MouseMove", "MenuDetect"];
 
 })();

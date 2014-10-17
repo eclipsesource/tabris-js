@@ -91,37 +91,6 @@ describe("tabris", function() {
       expect(label.trigger).toHaveBeenCalledWith("focusin", {});
     });
 
-    describe("with mouse events", function() {
-
-      var mouseEventProps = {x: 12, y: 34, time: 124};
-      var touchEventProps = {touches: [{x: 12, y: 34}], time: 124};
-
-      it("notifies widget proxy with touchstart event object", function() {
-        tabris._notify(label.id, "MouseDown", mouseEventProps);
-
-        expect(label.trigger).toHaveBeenCalledWith("touchstart", touchEventProps);
-      });
-
-      it("notifies widget proxy with touchmove event object", function() {
-        tabris._notify(label.id, "MouseMove", mouseEventProps);
-
-        expect(label.trigger).toHaveBeenCalledWith("touchmove", touchEventProps);
-      });
-
-      it("notifies widget proxy with touchend event object", function() {
-        tabris._notify(label.id, "MouseUp", mouseEventProps);
-
-        expect(label.trigger).toHaveBeenCalledWith("touchend", touchEventProps);
-      });
-
-      it("notifies widget proxy with longpress event object", function() {
-        tabris._notify(label.id, "MenuDetect", mouseEventProps);
-
-        expect(label.trigger).toHaveBeenCalledWith("longpress", touchEventProps);
-      });
-
-    });
-
     it("silently ignores events for non-existing ids (does not crash)", function() {
       tabris._notify("no-id", "foo", [23, 42]);
     });
