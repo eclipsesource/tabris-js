@@ -9,41 +9,47 @@ tabris.load(function() {
   });
 
   var canvas = tabris.create("Canvas", {
-    parent: page,
-    layoutData: {left: 10, top: 10, right: 10, height: CANVAS_SIZE}
-  });
+    layoutData: {left: 10, top: 10, width: CANVAS_SIZE, height: CANVAS_SIZE}
+  }).appendTo(page);
 
   var checkBox = tabris.create("CheckBox", {
     text: "Counterclockwise",
     layoutData: {left: 0, right: 0, top: [canvas, 8]}
-  });
-
-  page.append(checkBox);
-
-  checkBox.on("selection", function() {
+  }).on("selection", function() {
     clearCanvas();
     drawArcs(checkBox.get("selection"));
-  });
+  }).appendTo(page);
+
+  var context = tabris.getContext(canvas, CANVAS_SIZE, CANVAS_SIZE);
+  context.textAlign = "center";
+  context.textBaseline = "top";
+
+  clearCanvas();
+  drawArcs(false);
 
   function drawArcs(counterClockwise) {
-    drawArc(context, 10, 10, 0.25, 1.5, counterClockwise);
-    drawArc(context, 80, 10, 1, 0.5, counterClockwise);
-    drawArc(context, 160, 10, -0.5, 0.5, counterClockwise);
+    drawArc(10, 10, 0.25, 1.5, counterClockwise);
+    drawArc(80, 10, 1, 0.5, counterClockwise);
+    drawArc(160, 10, -0.5, 0.5, counterClockwise);
 
-    drawArc(context, 10, 80, 0.5, -0.5, counterClockwise);
-    drawArc(context, 80, 80, -1, -0.5, counterClockwise);
-    drawArc(context, 160, 80, -0.5, 1, counterClockwise);
+    drawArc(10, 80, 0.5, -0.5, counterClockwise);
+    drawArc(80, 80, -1, -0.5, counterClockwise);
+    drawArc(160, 80, -0.5, 1, counterClockwise);
 
-    drawArc(context, 10, 160, 1, 2, counterClockwise);
-    drawArc(context, 160, 160, 0, 0, counterClockwise);
-    drawArc(context, 80, 160, 0, -2.5, counterClockwise);
+    drawArc(10, 160, 1, 2, counterClockwise);
+    drawArc(160, 160, 0, 0, counterClockwise);
+    drawArc(80, 160, 0, -2.5, counterClockwise);
 
-    drawArc(context, 10, 240, 0, -0.5, counterClockwise);
-    drawArc(context, 80, 240, 0, 0.5, counterClockwise);
-    drawArc(context, 160, 240, 0, 2.5, counterClockwise);
+    drawArc(10, 240, 0, -0.5, counterClockwise);
+    drawArc(80, 240, 0, 0.5, counterClockwise);
+    drawArc(160, 240, 0, 2.5, counterClockwise);
   }
 
-  function drawArc(context, x, y, startAngle, endAngle, counterClockwise) {
+  function clearCanvas() {
+    context.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+  }
+
+  function drawArc(x, y, startAngle, endAngle, counterClockwise) {
     context.beginPath();
     context.moveTo(x + ARC_RADIUS, y + ARC_RADIUS);
     context.arc(x + ARC_RADIUS, y + ARC_RADIUS, ARC_RADIUS, startAngle * Math.PI, endAngle * Math.PI, counterClockwise);
@@ -52,19 +58,5 @@ tabris.load(function() {
     context.fillStyle = "black";
     context.fillText(startAngle.toString().concat(", ").concat(endAngle), x + ARC_RADIUS, y + ARC_RADIUS * 2);
   }
-
-  function clearCanvas() {
-    context.beginPath();
-    context.rect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
-    context.fillStyle = "white";
-    context.fill();
-  }
-
-  var context = tabris.getContext(canvas, CANVAS_SIZE, CANVAS_SIZE);
-  context.textAlign = "center";
-  context.textBaseline = "top";
-
-  clearCanvas();
-  drawArcs(false);
 
 });

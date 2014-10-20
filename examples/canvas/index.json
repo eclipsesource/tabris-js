@@ -6,10 +6,10 @@
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
     },
     {
-      "src": "canvas.js"
+      "src": "animation.js"
     },
     {
-      "src": "animation.js"
+      "src": "basic.js"
     },
     {
       "src": "arc.js"

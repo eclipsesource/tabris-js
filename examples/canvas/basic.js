@@ -6,9 +6,42 @@ tabris.load(function() {
   });
 
   var canvas = tabris.create("Canvas", {
-    parent: page,
     layoutData: {left: 10, top: 10, right: 10, bottom: 10}
-  });
+  }).appendTo(page);
+
+  var ctx = tabris.getContext(canvas, 400, 400);
+
+  ctx.fillStyle = "rgba(255, 100, 100, 0.5)";
+  ctx.fillRect(50, 20, 20, 80);
+  ctx.fillStyle = "rgba(100, 100, 255, 0.5)";
+  ctx.fillRect(20, 50, 80, 20);
+  ctx.fillText("transparency", 20, 120);
+
+  drawPolygon(ctx, 20, 150);
+  ctx.stroke();
+  ctx.fillText("polygon", 20, 225);
+
+  drawArc(ctx, 20, 250);
+  ctx.fill();
+  ctx.stroke();
+  ctx.fillText("arc", 20, 345);
+
+  ctx.strokeStyle = "blue";
+  drawLinear(ctx, 140, 20);
+  ctx.stroke();
+  ctx.fillText("linear", 140, 75);
+
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = "purple";
+  drawQuadratic(ctx, 140, 100);
+  ctx.stroke();
+  ctx.fillText("quadratic", 140, 155);
+
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = "olive";
+  drawBezier(ctx, 140, 180);
+  ctx.stroke();
+  ctx.fillText("bezier", 140, 240);
 
   function drawLinear(ctx, x, y) {
     ctx.beginPath();
@@ -47,41 +80,5 @@ tabris.load(function() {
     ctx.arc(x + 40, y + 40, 40, Math.PI / 4, -Math.PI / 4);
     ctx.closePath();
   }
-
-  var ctx = tabris.getContext(canvas, 400, 400);
-
-  ctx.fillStyle = "rgba(255, 100, 100, 0.5)";
-  ctx.fillRect(50, 20, 20, 80);
-  ctx.fillStyle = "rgba(100, 100, 255, 0.5)";
-  ctx.fillRect(20, 50, 80, 20);
-  ctx.fillText("transparency", 20, 120);
-
-  drawPolygon(ctx, 20, 150);
-  ctx.stroke();
-  ctx.fillText("polygon", 20, 225);
-
-  drawArc(ctx, 20, 250);
-  ctx.fill();
-  ctx.stroke();
-  ctx.fillText("arc", 20, 345);
-
-  ctx.strokeStyle = "blue";
-  drawLinear(ctx, 140, 20);
-  ctx.stroke();
-  ctx.fillText("linear", 140, 75);
-
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = "purple";
-  drawQuadratic(ctx, 140, 100);
-  ctx.stroke();
-  ctx.fillText("quadratic", 140, 155);
-
-  ctx.lineWidth = 4;
-  ctx.strokeStyle = "olive";
-  drawBezier(ctx, 140, 180);
-  ctx.stroke();
-  ctx.fillText("bezier", 140, 240);
-
-  page.open();
 
 });

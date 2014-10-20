@@ -6,9 +6,8 @@ tabris.load(function() {
   });
 
   var canvas = tabris.create("Canvas", {
-    parent: page,
     layoutData: {left: 10, top: 10, right: 10, bottom: 10}
-  });
+  }).appendTo(page);
 
   var ctx = tabris.getContext(canvas, 300, 300);
   ctx.strokeStyle = "red";

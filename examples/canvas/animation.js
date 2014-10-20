@@ -11,7 +11,10 @@ tabris.load(function() {
       left: 10,
       bottom: 10
     }
-  });
+  }).on("selection", function() {
+    var running = example.toggle();
+    button.set("text", running ? "stop" : "start");
+  }).appendTo(page);
 
   var canvas = tabris.create("Canvas", {
     parent: page,
@@ -21,22 +24,17 @@ tabris.load(function() {
       right: 10,
       bottom: [button, 10]
     }
-  });
-
-  page.append(button);
-
-  button.on("selection", function() {
-    var running = example.toggle();
-    button.set("text", running ? "stop" : "start");
-  });
-
-  canvas.on("resize", function() {
+  }).on("resize", function() {
     var bounds = canvas.get("bounds");
     var width = bounds[2];
     var height = Math.min(bounds[3], Math.floor(width / 2));
     var ctx = tabris.getContext(canvas, width, height);
     example.init(ctx);
-  });
+  }).appendTo(page);
+
+  var example = new Example();
+
+  page.open();
 
   function Example() {
     var ctx, width, height, cx, cy, unit;
@@ -206,7 +204,5 @@ tabris.load(function() {
       }
     };
   }
-
-  var example = new Example();
 
 });
