@@ -1,44 +1,119 @@
-tabris.js native layout
-=======================
+# Layout
 
-Controls support a property `layoutData`. The value of `layoutData` is an object. Accepted keys are:
+Tabris.js uses the native platform capabilities to layout UIs. All widgets support a property `layoutData` that defines how the widget should be arranged. The value of `layoutData` must be an object with a combination of the following keys:
 
 - `left`
-- `top`
 - `right`
+- `top`
 - `bottom`
+- `centerX`
+- `centerY`
+- `baseline`
 - `width`
 - `height`
 
-Acceptable values for `left`, `top`, `right`, and `bottom`:
+## left
+Defines the position of the widget's left edge.
+Accepted values:
 
-- *offset*
-- [ *percentage*, *offset* ]
-- [ *widget*, *offset* ]
+- *offset*: the distance from the parent's left edge in pixels
+- [*percentage*, *offset*]: the distance from the parent's left edge in percent of the parent's width plus a fixed offset in pixels
+- [*widget*, *offset*]: the distance from the given widget's right edge in pixels
 
-*offset* is a number, specified in px
-*percentage* is a number in the range 0 .. 100
-*widget* is the reference to a widget
+## right
+Defines the position of the widget's right edge.
+Accepted values:
 
-Acceptable values for `width` and `height`:
+- *offset*: the distance from the parent's right edge in pixels
+- [*percentage*, *offset*]: the distance from the parent's right edge in percent of the parent's width plus a fixed offset in pixels
+- [*widget*, *offset*]: the distance from the given widget's left edge in pixels
 
-- size as positive number in px
+## top
+Defines the position of the widget's upper edge.
+Accepted values:
 
-If some properties are missing, the following rules apply:
+- *offset*: the distance from the parent's upper edge in pixels
+- [*percentage*, *offset*]: the distance from the parent's upper edge in percent of the parent's height plus a fixed offset in pixels
+- [*widget*, *offset*]: the distance from the given widget's lower edge in pixels
 
-* When `width` is not specified, the width is defined by the difference between `right` and `left`. When either `left` or `right` is also missing, the widget should shrink to the minimal width required to display its content.
+## bottom
+Defines the position of the widget's lower edge.
+Accepted values:
 
-* When both `left` and `right` are missing, the widget should be aligned on the left edge.
+- *offset*: the distance from the parent's lower edge in pixels
+- [*percentage*, *offset*]: the distance from the parent's lower edge in percent of the parent's height plus a fixed offset in pixels
+- [*widget*, *offset*]: the distance from the given widget's upper edge in pixels
 
-* When `height` is not specified, the height is defined by the difference between `bottom` and `top`. When either `top` or `bottom` is also missing, the widget should shrink to the minimal height required to display its content.
+## centerX
+Defines the horizontal position of the widget relative to the parent's center.
+Accepted values:
 
-* When both `top` and `bottom` are missing, the widget should be aligned on the top edge.
+- *offset*: the distance of this widget's horizontal center line from the parent's horizontal center
 
-When there is no `layoutData` specified for a widget, the widget should be be displayed in the top left corner.
+This property cannot be used in combination with either of `left` and `right`.
 
-Example:
+## centerY
+Defines the vertical position of the widget relative to the parent's center.
+Accepted values:
 
-```json
+- *offset*: the distance of this widget's vertical center line from the parent's vertical center
+
+This property cannot be used in combination with either of `top`, `bottom`, and `baseline`.
+
+## baseline
+Defines the vertical position of the widget relative to another widget's text baseline.
+Accepted values:
+
+- *widget*: a reference to another widget to baseline-align with.
+
+At the moment, this property is only supported for widgets that contain text, i.e. both the actual and the referenced widget must be one of `Label`, `Button`, or `Text`.
+
+For multiline texts, the platforms currently differ: Android aligns on the first line, iOS on the last line.
+
+This property cannot be used in combination with either of `top`, `bottom`, and `centerY`.
+
+## width
+Defines the width of the widget.
+Accepted values:
+
+- *width*: the width of the widget in pixels
+
+## height
+Defines the height of the widget.
+Accepted values:
+
+- *height*: the height of the widget in pixels
+
+## Layout calculation
+
+### Size
+
+When `width` is not specified, the width is defined by the difference between `right` and `left`. When either `left` or `right` is also missing, the widget will shrink to its intrinsic width, i.e. the minimal width required to display its content.
+
+When `height` is not specified, the height is defined by the difference between `bottom` and `top`. When either `top` or `bottom` is also missing, the widget will shrink to its intrinsic height, i.e. the minimal height required to display its content.
+
+### Position
+
+When neither of `left`, `right`, and `centerX` is specified, the widget will be aligned on the parent's left edge.
+
+When neither of `top`, `bottom`, `centerY` and `baseline` is specified, the widget will be aligned on the parent's upper edge.
+
+When there is no `layoutData` specified for a widget, the widget will be be displayed in the top left corner.
+
+### Conflicting properties
+
+Some combinations of properties result in conflicting layout descriptions. To resolve those cases, some properties take precedence over others:
+
+When both `left` and `right` are specified, the property `width` will be ignored.
+When both `top` and `bottom` are specified, the property `height` will be ignored.
+
+When `centerX` is specified, the properties `left` and `right` will be ignored.
+When `centerY` is specified, the properties `top` and `bottom` will be ignored.
+When `baseline` is specified, the properties `top`, `bottom`, and `centerY` will be ignored.
+
+## Example
+
+```javascript
 layoutData: {
   left: 10,          // 10px from left edge
   top: [label, 10],  // label's bottom edge + 10px, i.e. 10px below label
