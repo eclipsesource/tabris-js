@@ -250,19 +250,25 @@ describe("List", function() {
     });
 
     describe("when a Selection event is received from native", function() {
-      var listener;
+      var listener, item2Id;
 
       beforeEach(function() {
         listener = jasmine.createSpy("listener");
         list.set("items", ["Ron", "Sue", "Tom"]);
-        var item2Id = nativeBridge.calls({op: "create", type: "rwt.widgets.GridItem"})[2].id;
+        item2Id = nativeBridge.calls({op: "create", type: "rwt.widgets.GridItem"})[2].id;
         list.on("selection", listener);
-        tabris._notify(list.id, "selection", {item: item2Id});
       });
 
       it("translates event to contain data item and index", function() {
-        expect(listener).toHaveBeenCalledWith({item: "Tom", index: 2});
+        tabris._notify(list.id, "selection", {item: item2Id});
+        expect(listener).toHaveBeenCalledWith({item: "Tom", index: 2, cell: ""});
       });
+
+      it("translates event to contain text as name if present", function() {
+        tabris._notify(list.id, "selection", {item: item2Id, text: "foo"});
+        expect(listener).toHaveBeenCalledWith({item: "Tom", index: 2, cell: "foo"});
+      });
+
     });
 
     describe("when a Selection event is triggered", function() {

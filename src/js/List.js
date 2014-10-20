@@ -38,7 +38,8 @@
         var event = arguments[1];
         var index = this._findItemIndex(event.item);
         var item = this._items ? this._items[index] : null;
-        return this.trigger(type, {item: item, index: index});
+        var cell = event.text ? event.text : "";
+        return this.trigger(type, {item: item, index: index, cell: cell});
       }
       tabris.Proxy.prototype._trigger.apply(this, arguments);
     },
