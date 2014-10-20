@@ -61,6 +61,10 @@
       return this;
     },
 
+    animate: function(properties, options) {
+      tabris.Animation.animate(this, properties, options);
+    },
+
     call: function(method, parameters) {
       this._checkDisposed();
       return tabris._nativeBridge.call(this.id, method, parameters);

@@ -376,6 +376,19 @@ describe("Proxy", function() {
 
     });
 
+    describe("animate", function() {
+
+      it("create internal animate", function() {
+        spyOn(tabris.Animation, "animate");
+
+        var result = proxy.animate({foo: "bar"}, {foo2: "bar2"});
+
+        expect(result).not.toBeDefined();
+        expect(tabris.Animation.animate).toHaveBeenCalledWith(proxy, {foo: "bar"}, {foo2: "bar2"});
+      });
+
+    });
+
     describe("when parent is set", function() {
       var parent1 = new tabris.Proxy("parent1");
       var parent2 = new tabris.Proxy("parent2");

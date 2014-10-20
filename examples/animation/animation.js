@@ -20,26 +20,23 @@ tabris.load(function() {
   });
 
   button.on("selection", function() {
-    tabris.create("tabris.Animation", {
-      target: label,
+    label.animate({
+      opacity: 0.25,
+      transform: {
+        rotation: 0.75 * Math.PI,
+        scaleX: 2.0,
+        scaleY: 2.0,
+        translationX: 100,
+        translationY: 200
+      }
+    },
+    {
       delay: 0,
       duration: 1000,
       repeat: 1,
       reverse: true,
-      easing: "ease-out", // "linear", "ease-in", "ease-out", "ease-in-out"
-      properties: {
-        opacity: 0.25,
-        transform: {
-          rotation: 0.75 * Math.PI,
-          scaleX: 2.0,
-          scaleY: 2.0,
-          translationX: 100,
-          translationY: 200
-        }
-      }
-    }).on("Completion", function() {
-      this.dispose();
-    }).call("start");
+      easing: "ease-out" // "linear", "ease-in", "ease-out", "ease-in-out"
+    });
   });
 
   page.append(label, button);

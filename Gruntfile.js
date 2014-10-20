@@ -47,6 +47,7 @@ module.exports = function(grunt) {
                      'util-images.js',
                      'Tabris.js',
                      'Events.js',
+                     'Animation.js',
                      'DOMEvents.js',
                      'WindowTimers.js',
                      'Device.js',
