@@ -42,9 +42,14 @@ tabris.load(function() {
   }).on("touchend", function(event) {
     printXY(blueLabel, "touchend", event);
     bluePage.set("background", colors.blue[0]);
+  }).on("touchcancel", function(event) {
+    printXY(blueLabel, "touchcancel", event);
+    bluePage.set("background", colors.blue[0]);
   }).on("longpress", function(event) {
+    bluePage.set("background", "white");
     printXY(blueLabel, "longpress", event);
   });
+
   redComposite.on("touchstart", function(event) {
     printXY(redLabel, "touchstart", event);
     redComposite.set("background", colors.red[1]);
@@ -53,20 +58,15 @@ tabris.load(function() {
   }).on("touchend", function(event) {
     printXY(redLabel, "touchend", event);
     redComposite.set("background", colors.red[0]);
+  }).on("touchcancel", function(event) {
+    printXY(redLabel, "touchcancel", event);
+    redComposite.set("background", colors.red[0]);
   }).on("longpress", function(event) {
+    redComposite.set("background", "white");
     printXY(redLabel, "longpress", event);
   });
-  greenComposite.on("touchstart", function(event) {
-    printXY(greenLabel, "touchstart", event);
-    greenComposite.set("background", colors.green[1]);
-  }).on("touchmove", function(event) {
-    printXY(greenLabel, "touchmove", event);
-  }).on("touchend", function(event) {
-    printXY(greenLabel, "touchend", event);
-    greenComposite.set("background", colors.green[0]);
-  }).on("longpress", function(event) {
-    printXY(greenLabel, "longpress", event);
-  });
+
+  greenLabel.set("text", "No touch here!");
 
   bluePage.open();
 
