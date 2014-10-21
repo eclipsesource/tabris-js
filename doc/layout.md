@@ -1,6 +1,8 @@
 # Layout
 
-Tabris.js uses the native platform capabilities to layout UIs. All widgets support a property `layoutData` that defines how the widget should be arranged. The value of `layoutData` must be an object with a combination of the following keys:
+Tabris.js uses the native platform capabilities to layout UIs. As display density widely varies among mobile devices the pixel measures in Tabris.js are always expressed as [Device Independent Pixels](https://en.wikipedia.org/wiki/Device_independent_pixel).
+
+All widgets support a property `layoutData` that defines how the widget should be arranged. The value of `layoutData` must be an object with a combination of the following keys:
 
 - `left`
 - `right`
@@ -121,3 +123,7 @@ layoutData: {
                      // no height or bottom given, i.e. auto-height
 }
 ```
+
+## Device Independent Pixels
+
+The density of a device's display can be accessed by `window.devicePixelRatio`. The value represents the number of native pixels per Device Independent Pixel.
