@@ -1,0 +1,11 @@
+{
+  "type": "Label",
+  "description": "A widget displaying text or an image.",
+  "include": ["widgetProperties", "widgetEvents"],
+  "properties": {
+    "alignment": "string:left|right|center?left",
+    "text": "string",
+    "image": "image",
+    "markupEnabled": "boolean"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "List",
+  "description": "A widget displaying a vertically scrollable list of items with templating support.",
+  "include": ["widgetProperties", "widgetEvents"],
+  "properties": {
+    "linesVisible": "boolean",
+    "itemHeight": "number",
+    "template": "template"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "Video",
+  "description": "A widget used to play a video from a URL source.",
+  "include": ["widgetProperties", "widgetEvents"],
+  "properties": {
+    "enabled": "boolean",
+    "repeat": "boolean",
+    "controls_visible": "boolean",
+    "url": "string",
+    "playback": "string:play|pause|stop|fast_forward|fast_backward",
+    "presentation": "string:full_screen|embedded",
+    "speed": "number"
+  },
+  "events": [
+    "Presentation",
+    "Playback"
+  ]
+}

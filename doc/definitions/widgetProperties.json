@@ -1,0 +1,13 @@
+{
+  "title": "Widget Properties",
+  "description": "Properties used by all widgets.",
+  "properties": {
+    "enabled": "boolean",
+    "visibility": "boolean",
+    "layoutData": "layoutData",
+    "font": "font",
+    "foreground": "color",
+    "background": "color",
+    "backgroundImage": "image"
+  }
+}

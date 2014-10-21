@@ -1,0 +1,18 @@
+{
+  "type": "Text",
+  "description": "A widget allowing the user to enter text.",
+  "include": ["widgetProperties", "widgetEvents"],
+  "properties": {
+    "type": "string:default|password|search|multiline?default",
+    "text": "string",
+    "editable": "boolean",
+    "echoChar": "string",
+    "textLimit": "number",
+    "selection": "number[]"
+  },
+  "events": [
+    "selection",
+    "focusin",
+    "focusout"
+  ]
+}

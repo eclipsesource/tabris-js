@@ -1,0 +1,12 @@
+{
+  "title": "Widget Events",
+  "description": "Events fired on all widgets.",
+  "events": [
+    "touchstart",
+    "touchmove",
+    "touchend",
+    "longpress",
+    "resize",
+    "dispose"
+  ]
+}

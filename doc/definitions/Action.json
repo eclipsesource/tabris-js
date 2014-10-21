@@ -1,0 +1,15 @@
+{
+  "type": "Action",
+  "description": "Actions provide an abstraction for the native navigation concept of the platform.",
+  "properties": {
+    "title": "string",
+    "enabled": "boolean",
+    "visibility": "boolean",
+    "placementPriority": "string:LOW|HIGH?HIGH",
+    "foreground": "color",
+    "image": "Image"
+  },
+  "events": [
+    "selection"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "type": "Page",
+  "description": "A part of the UI displaying the application content which widgets whould be appended to.",
+  "properties": {
+    "title": "string",
+    "topLevel": "boolean",
+    "image": "image"
+  },
+  "events": [
+    "resize"
+  ]
+}

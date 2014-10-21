@@ -1,0 +1,5 @@
+{
+  "type": "Composite",
+  "description": "A widget without content which can contain other widgets.",
+  "include": ["widgetProperties", "widgetEvents"]
+}

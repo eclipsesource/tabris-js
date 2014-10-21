@@ -1,0 +1,11 @@
+{
+  "type": "ScrollComposite",
+  "description": "A scrollable composite with a vertical or a horizontal scrollbar.",
+  "include": ["widgetProperties", "widgetEvents"],
+  "properties": {
+    "scroll": "string:vertical|horizontal?vertical"
+  },
+  "events": [
+    "scroll"
+  ]
+}
