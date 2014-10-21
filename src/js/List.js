@@ -11,7 +11,7 @@
 
     _create: function(properties) {
       this.super("_create", util.extend({style: ["V_SCROLL"]}, properties));
-      tabris.create("ScrollBar", {parent: this, style: ["VERTICAL"]});
+      tabris.create("rwt.widgets.ScrollBar", {parent: this, style: ["VERTICAL"]});
       this._createItems();
       return this;
     },

@@ -13,7 +13,7 @@
   util.extend(tabris.Proxy.prototype, tabris.Events, {
 
     _create: function(properties) {
-      var type = this._type || encodeType(this.type);
+      var type = this._type || this.type;
       var properties = util.extend(this._properties || {}, this._encodeProperties(properties));
       tabris._nativeBridge.create(this.id, type, properties);
       return this;
@@ -266,13 +266,6 @@
     return value instanceof tabris.Proxy ? value.id : value;
   }
 
-  function encodeType(type) {
-    if (type.indexOf(".") === -1) {
-      return "rwt.widgets." + type;
-    }
-    return type;
-  }
-
   function decodeColor(value) {
     return util.colorArrayToString(value);
   }
@@ -294,9 +287,21 @@
     _type: "rwt.widgets.Button",
     _properties: {style: ["PUSH"]}
   });
+  tabris.registerType("Canvas", {
+    _type: "rwt.widgets.Canvas" 
+  });
   tabris.registerType("CheckBox", {
     _type: "rwt.widgets.Button",
     _properties: {style: ["CHECK"]}
+  });
+  tabris.registerType("Combo", {
+    _type: "rwt.widgets.Combo"
+  });
+  tabris.registerType("Composite", {
+    _type: "rwt.widgets.Composite"
+  });
+  tabris.registerType("ProgressBar", {
+    _type: "rwt.widgets.ProgressBar"
   });
   tabris.registerType("RadioButton", {
     _type: "rwt.widgets.Button",

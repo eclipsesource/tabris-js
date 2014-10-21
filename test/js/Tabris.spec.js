@@ -65,7 +65,7 @@ describe("tabris", function() {
 
       tabris._start.call(null, nativeBridge);
 
-      expect(nativeBridge.calls({op: "create", type: "rwt.widgets.Foo"}).length).toBe(1);
+      expect(nativeBridge.calls({op: "create", type: "Foo"}).length).toBe(1);
     });
 
   });
@@ -206,7 +206,7 @@ describe("tabris", function() {
       tabris.registerType("CustomType", {});
       tabris.create("CustomType");
 
-      expect(nativeBridge.calls({op: "create"})[0].type).toBe("rwt.widgets.CustomType");
+      expect(nativeBridge.calls({op: "create"})[0].type).toBe("CustomType");
       delete tabris.CustomType;
     });
 

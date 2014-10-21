@@ -64,22 +64,6 @@ describe("Proxy", function() {
       expect(properties.foo).toBe(other);
     });
 
-    it("accepts rwt types without prefix", function() {
-      delete proxy._type;
-      proxy.type = "Label";
-      proxy._create({});
-
-      expect(nativeBridge.calls({op: "create"})[0].type).toEqual("rwt.widgets.Label");
-    });
-
-    it("accepts prefixed types", function() {
-      delete proxy._type;
-      proxy.type = "custom.Label";
-      proxy._create({});
-
-      expect(nativeBridge.calls({op: "create"})[0].type).toEqual("custom.Label");
-    });
-
   });
 
   describe("when created", function() {
@@ -642,12 +626,33 @@ describe("Proxy", function() {
       expect(create.properties).toEqual({style: ["PUSH"], text: "foo"});
     });
 
+    it("Canvas", function() {
+      tabris.create("Canvas", {});
+
+      var create = nativeBridge.calls({op: "create"})[0];
+      expect(create.type).toEqual("rwt.widgets.Canvas");
+    });
+
     it("CheckBox", function() {
       tabris.create("CheckBox", {text: "foo"});
 
       var create = nativeBridge.calls({op: "create"})[0];
       expect(create.type).toEqual("rwt.widgets.Button");
       expect(create.properties).toEqual({style: ["CHECK"], text: "foo"});
+    });
+
+    it("Combo", function() {
+      tabris.create("Combo", {});
+
+      var create = nativeBridge.calls({op: "create"})[0];
+      expect(create.type).toEqual("rwt.widgets.Combo");
+    });
+
+    it("Composite", function() {
+      tabris.create("Composite", {});
+
+      var create = nativeBridge.calls({op: "create"})[0];
+      expect(create.type).toEqual("rwt.widgets.Composite");
     });
 
     it("RadioButton", function() {
