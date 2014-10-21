@@ -684,7 +684,7 @@ describe("Proxy", function() {
 
       var create = nativeBridge.calls({op: "create"})[0];
       expect(create.type).toEqual("rwt.widgets.Text");
-      expect(create.properties).toEqual({style: ["BORDER"], text: "foo"});
+      expect(create.properties).toEqual({style: ["BORDER", "SINGLE"], text: "foo"});
     });
 
     it("Text (type='password')", function() {
@@ -692,7 +692,7 @@ describe("Proxy", function() {
 
       var create = nativeBridge.calls({op: "create"})[0];
       expect(create.type).toEqual("rwt.widgets.Text");
-      expect(create.properties.style).toEqual(["BORDER", "PASSWORD"]);
+      expect(create.properties.style).toEqual(["BORDER", "SINGLE", "PASSWORD"]);
     });
 
     it("Text (type='search')", function() {
@@ -700,7 +700,7 @@ describe("Proxy", function() {
 
       var create = nativeBridge.calls({op: "create"})[0];
       expect(create.type).toEqual("rwt.widgets.Text");
-      expect(create.properties.style).toEqual(["BORDER", "SEARCH"]);
+      expect(create.properties.style).toEqual(["BORDER", "SINGLE", "SEARCH"]);
     });
 
     it("Text (type='multiline')", function() {

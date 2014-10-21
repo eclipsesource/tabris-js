@@ -277,10 +277,10 @@
   }
 
   var textTypeToStyle = {
-    password: ["BORDER", "PASSWORD"],
-    search: ["BORDER", "SEARCH"],
+    password: ["BORDER", "SINGLE", "PASSWORD"],
+    search: ["BORDER", "SINGLE", "SEARCH"],
     multiline: ["BORDER", "MULTI"],
-    default: ["BORDER"]
+    default: ["BORDER", "SINGLE"]
   };
 
   tabris.registerType("Button", {
