@@ -1,10 +1,13 @@
 {
-  "type": "Button",
-  "description": "A widget representing a button with text and/or image inside.",
+  "type": "CheckBox",
+  "description": "A widget representing a checkbox button.",
   "include": ["widgetProperties", "widgetEvents"],
   "properties": {
     "text": "string",
     "alignment": "string:left|right|center?center",
     "image": "image"
-  }
+  },
+  "events": [
+    "selection"
+  ]
 }

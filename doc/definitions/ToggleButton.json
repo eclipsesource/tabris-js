@@ -1,10 +1,13 @@
 {
-  "type": "Button",
-  "description": "A widget representing a button with text and/or image inside.",
+  "type": "ToggleButton",
+  "description": "A widget representing a toggle button.",
   "include": ["widgetProperties", "widgetEvents"],
   "properties": {
     "text": "string",
     "alignment": "string:left|right|center?center",
     "image": "image"
-  }
+  },
+  "events": [
+    "selection"
+  ]
 }
