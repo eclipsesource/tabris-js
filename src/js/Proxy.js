@@ -312,6 +312,9 @@
       return this.super("_create", util.extend({style: style}, properties));
     }
   });
+  tabris.registerType("WebView", {
+    _type: "rwt.widgets.Browser"
+  });
   tabris.registerType("ScrollBar", {});
 
 })();

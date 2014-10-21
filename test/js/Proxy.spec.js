@@ -38,38 +38,6 @@ describe("Proxy", function() {
       expect(create.properties).toEqual({style: ["PUSH"], text: "foo"});
     });
 
-    it("maps 'Button' to rwt.widgets.Button [PUSH]", function() {
-      tabris.create("Button", {text: "foo"});
-
-      var create = nativeBridge.calls({op: "create"})[0];
-      expect(create.type).toEqual("rwt.widgets.Button");
-      expect(create.properties).toEqual({style: ["PUSH"], text: "foo"});
-    });
-
-    it("maps 'CheckBox' to rwt.widgets.Button [CHECK]", function() {
-      tabris.create("CheckBox", {text: "foo"});
-
-      var create = nativeBridge.calls({op: "create"})[0];
-      expect(create.type).toEqual("rwt.widgets.Button");
-      expect(create.properties).toEqual({style: ["CHECK"], text: "foo"});
-    });
-
-    it("maps 'RadioButton' to rwt.widgets.Button [RADIO]", function() {
-      tabris.create("RadioButton", {text: "foo"});
-
-      var create = nativeBridge.calls({op: "create"})[0];
-      expect(create.type).toEqual("rwt.widgets.Button");
-      expect(create.properties).toEqual({style: ["RADIO"], text: "foo"});
-    });
-
-    it("maps 'ToggleButton' to rwt.widgets.Button [TOGGLE]", function() {
-      tabris.create("ToggleButton", {text: "foo"});
-
-      var create = nativeBridge.calls({op: "create"})[0];
-      expect(create.type).toEqual("rwt.widgets.Button");
-      expect(create.properties).toEqual({style: ["TOGGLE"], text: "foo"});
-    });
-
     it("calls native create with properties", function() {
       proxy._create({foo: 23});
 
@@ -647,6 +615,90 @@ describe("Proxy", function() {
         expect(proxy._children.length).toBe(0);
       });
 
+    });
+
+  });
+
+  describe("registered types", function() {
+
+    it("Button", function() {
+      tabris.create("Button", {text: "foo"});
+
+      var create = nativeBridge.calls({op: "create"})[0];
+      expect(create.type).toEqual("rwt.widgets.Button");
+      expect(create.properties).toEqual({style: ["PUSH"], text: "foo"});
+    });
+
+    it("CheckBox", function() {
+      tabris.create("CheckBox", {text: "foo"});
+
+      var create = nativeBridge.calls({op: "create"})[0];
+      expect(create.type).toEqual("rwt.widgets.Button");
+      expect(create.properties).toEqual({style: ["CHECK"], text: "foo"});
+    });
+
+    it("RadioButton", function() {
+      tabris.create("RadioButton", {text: "foo"});
+
+      var create = nativeBridge.calls({op: "create"})[0];
+      expect(create.type).toEqual("rwt.widgets.Button");
+      expect(create.properties).toEqual({style: ["RADIO"], text: "foo"});
+    });
+
+    it("ToggleButton", function() {
+      tabris.create("ToggleButton", {text: "foo"});
+
+      var create = nativeBridge.calls({op: "create"})[0];
+      expect(create.type).toEqual("rwt.widgets.Button");
+      expect(create.properties).toEqual({style: ["TOGGLE"], text: "foo"});
+    });
+
+    it("Label", function() {
+      tabris.create("Label", {text: "foo"});
+
+      var create = nativeBridge.calls({op: "create"})[0];
+      expect(create.type).toEqual("rwt.widgets.Label");
+      expect(create.properties).toEqual({text: "foo"});
+    });
+
+    it("Text", function() {
+      tabris.create("Text", {text: "foo"});
+
+      var create = nativeBridge.calls({op: "create"})[0];
+      expect(create.type).toEqual("rwt.widgets.Text");
+      expect(create.properties).toEqual({style: ["BORDER"], text: "foo"});
+    });
+
+    it("Text (type='password')", function() {
+      tabris.create("Text", {type: "password"});
+
+      var create = nativeBridge.calls({op: "create"})[0];
+      expect(create.type).toEqual("rwt.widgets.Text");
+      expect(create.properties.style).toEqual(["BORDER", "PASSWORD"]);
+    });
+
+    it("Text (type='search')", function() {
+      tabris.create("Text", {type: "search"});
+
+      var create = nativeBridge.calls({op: "create"})[0];
+      expect(create.type).toEqual("rwt.widgets.Text");
+      expect(create.properties.style).toEqual(["BORDER", "SEARCH"]);
+    });
+
+    it("Text (type='multiline')", function() {
+      tabris.create("Text", {type: "multiline"});
+
+      var create = nativeBridge.calls({op: "create"})[0];
+      expect(create.type).toEqual("rwt.widgets.Text");
+      expect(create.properties.style).toEqual(["BORDER", "MULTI"]);
+    });
+
+    it("WebView", function() {
+      tabris.create("WebView", {text: "foo"});
+
+      var create = nativeBridge.calls({op: "create"})[0];
+      expect(create.type).toEqual("rwt.widgets.Browser");
+      expect(create.properties).toEqual({text: "foo"});
     });
 
   });

@@ -1,12 +1,12 @@
 {
-  "title": "Browser / WebView",
-  "description": "Demonstrates working with a browser widget",
+  "title": "WebView",
+  "description": "Demonstrates working with a web view",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
     },
     {
-      "src": "browser.js"
+      "src": "webview.js"
     }
   ]
 }
