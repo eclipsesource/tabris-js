@@ -324,6 +324,5 @@
   tabris.registerType("WebView", {
     _type: "rwt.widgets.Browser"
   });
-  tabris.registerType("ScrollBar", {});
 
 })();
