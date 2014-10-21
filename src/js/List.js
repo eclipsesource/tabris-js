@@ -112,7 +112,7 @@
         var createImages = this._createImagesFn();
         for (var i = 0; i < this._items.length; i++) {
           var item = this._items[i];
-          tabris.create("ListItem", {
+          tabris.create("rwt.widgets.GridItem", {
             parent: this,
             index: i,
             texts: createTexts(item),
@@ -162,9 +162,5 @@
       return result;
     };
   }
-
-  tabris.registerType("ListItem", {
-    _type: "rwt.widgets.GridItem"
-  });
 
 })();
