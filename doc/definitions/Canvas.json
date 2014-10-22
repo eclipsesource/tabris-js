@@ -1,0 +1,23 @@
+{
+  "type": "Canvas",
+  "description": "A composite on which graphics can be drawn.",
+  "include": ["widgetProperties", "widgetEvents"],
+  "links": [
+    {
+      "title": "Example that shows animation on a canvas",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/examples/canvas/animation.js"
+    },
+    {
+      "title": "Example that draws arcs on a canvas",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/examples/canvas/arc.js"
+    },
+    {
+      "title": "Example that draws shapes on a canvas",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/examples/canvas/basic.js"
+    },
+    {
+      "title": "Example that draws text on a canvas",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/examples/canvas/text.js"
+    }
+  ]
+}

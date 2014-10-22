@@ -1,5 +1,6 @@
 # tabris.js
 
+- Working with [Canvas](canvas)
 - Working with [Widget objects](widgets)
 - Working with [Lists](list)
 - Creating [Layouts](layout)

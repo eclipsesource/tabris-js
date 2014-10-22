@@ -81,6 +81,7 @@ module.exports = function(grunt) {
         'widgetEvents.json',
         'Action.json',
         'Button.json',
+        'Canvas.json',
         'CheckBox.json',
         'Combo.json',
         'Composite.json',
