@@ -90,6 +90,8 @@ module.exports = function(grunt) {
         'ProgressBar.json',
         'RadioButton.json',
         'Slider.json',
+        'Tab.json',
+        'TabFolder.json',
         'ToggleButton.json',
         'ScrollComposite.json',
         'Text.json',

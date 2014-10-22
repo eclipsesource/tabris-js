@@ -1,0 +1,14 @@
+{
+  "type": "TabFolder",
+  "description": "A widget that can switch between [tabs](#Tab).",
+  "include": ["widgetProperties", "widgetEvents"],
+  "properties": {
+    "paging": "boolean"
+  },
+  "links": [
+    {
+      "title": "Example with a TabFolder and Tabs",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/examples/tabfolder/tabfolder.js"
+    }
+  ]
+}
