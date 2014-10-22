@@ -1,0 +1,12 @@
+{
+  "title": "Image",
+  "description": "Demonstrates how to display and scale images",
+  "resources": [
+    {
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+    },
+    {
+      "src": "image.js"
+    }
+  ]
+}
