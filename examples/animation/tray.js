@@ -88,7 +88,7 @@ tabris.load(function() {
 
   content.on("resize", function() {
     var bounds = content.get("bounds");
-    verticalTrayOffset = bounds[3];
+    verticalTrayOffset = bounds.height;
     tray.set("transform", {translationY: verticalTrayOffset});
     updateShadeOpacity();
     updateStrapLabelRotation();

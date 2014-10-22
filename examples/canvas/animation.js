@@ -26,8 +26,8 @@ tabris.load(function() {
     }
   }).on("resize", function() {
     var bounds = canvas.get("bounds");
-    var width = bounds[2];
-    var height = Math.min(bounds[3], Math.floor(width / 2));
+    var width = bounds.width;
+    var height = Math.min(bounds.height, Math.floor(width / 2));
     var ctx = tabris.getContext(canvas, width, height);
     example.init(ctx);
   }).appendTo(page);

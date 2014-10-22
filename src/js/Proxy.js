@@ -171,6 +171,8 @@
           return encodeImages(value);
         case "layoutData":
           return encodeLayoutData(checkLayoutData(value));
+        case "bounds":
+          return encodeBounds(value);
         case "parent":
           this._setParent(value);
           return encodeProxyToId(value._getContainer());
@@ -200,6 +202,8 @@
         case "image":
         case "backgroundImage":
           return decodeImage(value);
+        case "bounds":
+          return decodeBounds(value);
         case "images":
           return decodeImages(value);
       }
@@ -226,6 +230,10 @@
 
   function decodeImage(value) {
     return util.imageFromArray(value);
+  }
+
+  function decodeBounds(value) {
+    return {left: value[0], top: value[1], width: value[2], height: value[3]};
   }
 
   function encodeImages(value) {
@@ -275,6 +283,10 @@
       }
     }
     return result;
+  }
+
+  function encodeBounds(bounds) {
+    return [bounds.left, bounds.top, bounds.width, bounds.height];
   }
 
   function encodeProxyToId(value) {

@@ -6,8 +6,7 @@
     "visibility": "boolean?true",
     "layoutData": "layoutData",
     "font": "Font",
-    "foreground": "Color",
-    "background": "Color",
-    "backgroundImage": "Image"
+    "backgroundImage": "Image",
+    "bounds" : "Bounds"
   }
 }

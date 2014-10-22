@@ -71,11 +71,11 @@ tabris.load(function() {
 
   page.on("resize", function() {
     var bounds = scrollComposite.get("bounds");
-    var pageWidth = bounds[2];
-    var pageHeight = bounds[3];
+    var pageWidth = bounds.width;
+    var pageHeight = bounds.height;
     var imageHeight = pageWidth / 1.4; // 1.4 is the image aspect ratio
     imageLabel.set("image", {src: "images/salad.jpg", width: pageWidth, height: pageWidth});
-    var titleCompHeight = titleComposite.get("bounds")[3];
+    var titleCompHeight = titleComposite.get("bounds").height;
     var titleCompYOffset = Math.min(imageHeight - titleCompHeight, pageHeight / 2);
     titleComposite.set("layoutData", {left: 0, top: titleCompYOffset, right: 0, height: 64});
   });

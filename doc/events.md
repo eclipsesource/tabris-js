@@ -12,13 +12,7 @@ Fired on widget focus lost. The event handler argument is an empty object.
 
 resize
 ======
-Fired on object bounds resize. The event handler argument is an object
-containing the following properties:
-
-* `x` - object `x` position
-* `y` - object `y` position
-* `width` - object width
-* `height` - object height
+Fired on object bounds change.
 
 scroll
 ======

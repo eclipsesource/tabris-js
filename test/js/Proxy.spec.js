@@ -224,6 +224,14 @@ describe("Proxy", function() {
         expect(result).toEqual({src: "foo", width: 23, height: 42});
       });
 
+      it("translates bounds to object", function() {
+        spyOn(nativeBridge, "get").and.returnValue([1, 2, 3, 4]);
+
+        var result = proxy.get("bounds");
+
+        expect(result).toEqual({left:1, top:2, width: 3, height: 4});
+      });
+
       it("translates backgroundImage to object", function() {
         spyOn(nativeBridge, "get").and.returnValue(["foo", 23, 42]);
 
@@ -361,7 +369,7 @@ describe("Proxy", function() {
         expect(call.properties.font).toEqual([["Arial"], 12, false, false]);
       });
 
-      it("translates image annd backgroundImage to array", function() {
+      it("translates image and backgroundImage to array", function() {
         proxy.set({
           image: {src: "foo", width: 23, height: 42},
           backgroundImage: {src: "bar", width: 23, height: 42}
@@ -398,6 +406,13 @@ describe("Proxy", function() {
         expect(function() {
           proxy.set("foo", 23);
         }).toThrowError("Object is disposed");
+      });
+
+      it("translates bounds to array", function() {
+        proxy.set("bounds", {left: 1, top: 2, width: 3, height: 4});
+
+        var call = nativeBridge.calls({op: "set"})[0];
+        expect(call.properties.bounds).toEqual([1, 2, 3, 4]);
       });
 
     });
