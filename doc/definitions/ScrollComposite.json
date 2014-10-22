@@ -7,5 +7,11 @@
   },
   "events": [
     "scroll"
+  ],
+  "links": [
+    {
+      "title": "Example with a ScrollComposite",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/db8adf000aebc8d2c2810c3c4a28350a8e79f683/examples/parallax/parallax.js"
+    }
   ]
 }

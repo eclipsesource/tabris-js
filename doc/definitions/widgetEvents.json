@@ -8,5 +8,15 @@
     "longpress",
     "resize",
     "dispose"
+  ],
+  "links": [
+    {
+      "title": "Example for touch events",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/examples/touch/touch.js"
+    },
+    {
+      "title": "Example with a resize event",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/db8adf000aebc8d2c2810c3c4a28350a8e79f683/examples/parallax/parallax.js"
+    }
   ]
 }

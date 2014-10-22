@@ -14,5 +14,11 @@
     "selection",
     "focusin",
     "focusout"
+  ],
+  "links": [
+    {
+      "title": "Example with text fields and different keyboard types",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/examples/keyboard/keyboard.js"
+    }
   ]
 }

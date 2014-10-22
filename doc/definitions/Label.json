@@ -7,5 +7,11 @@
     "text": "string",
     "image": "image",
     "markupEnabled": "boolean"
-  }
+  },
+  "links": [
+    {
+      "title": "Example with labels and input elements",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/examples/input/input.js"
+    }
+  ]
 }

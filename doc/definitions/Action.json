@@ -11,5 +11,11 @@
   },
   "events": [
     "selection"
+  ],
+  "links": [
+    {
+      "title": "Example for creating pages and actions",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/examples/tabris-ui/tabris-ui-draft.js"
+    }
   ]
 }

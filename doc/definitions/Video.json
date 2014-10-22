@@ -14,5 +14,8 @@
   "events": [
     "Presentation",
     "Playback"
-  ]
+  ],
+  "links": {[
+    {"title": "Example with video wigdet", "path": "https://github.com/eclipsesource/tabris-js/blob/master/examples/video/video.js"}
+  ]}
 }
