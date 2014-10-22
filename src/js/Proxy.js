@@ -242,11 +242,11 @@
   }
 
   function checkLayoutData(layoutData) {
-    if (!("left" in layoutData) && !("right" in layoutData)) {
-      throw new Error("either left or right should be specified");
+    if (!("left" in layoutData) && !("right" in layoutData) && !("centerX" in layoutData)) {
+      throw new Error("either left, right or centerX should be specified");
     }
-    if (!("top" in layoutData) && !("bottom" in layoutData)) {
-      throw new Error("either top or bottom should be specified");
+    if (!("top" in layoutData) && !("bottom" in layoutData) && !("centerY" in layoutData)) {
+      throw new Error("either top, bottom or centerY should be specified");
     }
   }
 

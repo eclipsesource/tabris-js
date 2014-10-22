@@ -274,14 +274,14 @@ describe("Proxy", function() {
       it("raises a warning for incomplete horizontal layoutData", function() {
         proxy.set("layoutData", {});
 
-        var warning = "Unsupported layoutData value: either left or right should be specified";
+        var warning = "Unsupported layoutData value: either left, right or centerX should be specified";
         expect(console.warn).toHaveBeenCalledWith(warning);
       });
 
       it("raises a warning for incomplete vertical layoutData", function() {
         proxy.set("layoutData", {left: 0});
 
-        var warning = "Unsupported layoutData value: either top or bottom should be specified";
+        var warning = "Unsupported layoutData value: either top, bottom or centerY should be specified";
         expect(console.warn).toHaveBeenCalledWith(warning);
       });
 
