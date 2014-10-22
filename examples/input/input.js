@@ -94,18 +94,14 @@ tabris.load(function() {
   }).appendTo(page);
 
   function populateMessage() {
-console.log("populate");
     if (message) {
-console.log("dispose");
       message.dispose();
     }
-console.log("message",
     message = tabris.create("Label", {
       layoutData: {left: 10, right: 10, top: [button, 10]},
       alignment: "left",
       text: "Flight booked for: " + createName() + "\n" + "Departure: " + createDepartureDate()
-    }).appendTo(page)
-);
+    }).appendTo(page);
   }
 
   function createName() {
