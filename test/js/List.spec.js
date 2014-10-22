@@ -18,6 +18,7 @@ describe("List", function() {
   describe("when a List is created", function() {
     var createCalls;
     var list;
+
     beforeEach(function() {
       list = tabris.create("List", {linesVisible: true}).appendTo(parent);
       createCalls = nativeBridge.calls({op: "create"});
@@ -260,12 +261,12 @@ describe("List", function() {
       });
 
       it("translates event to contain data item and index", function() {
-        tabris._notify(list.id, "selection", {item: item2Id});
+        tabris._notify(list.id, "Selection", {item: item2Id});
         expect(listener).toHaveBeenCalledWith({item: "Tom", index: 2, cell: ""});
       });
 
       it("translates event to contain text as name if present", function() {
-        tabris._notify(list.id, "selection", {item: item2Id, text: "foo"});
+        tabris._notify(list.id, "Selection", {item: item2Id, text: "foo"});
         expect(listener).toHaveBeenCalledWith({item: "Tom", index: 2, cell: "foo"});
       });
 

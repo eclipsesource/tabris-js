@@ -184,6 +184,7 @@ describe("tabris", function() {
   });
 
   describe("register types", function() {
+
     it("allows to register a new type", function() {
       var members = {foo: 23};
       tabris.registerType("CustomType", members);
@@ -223,6 +224,52 @@ describe("tabris", function() {
         tabris.registerType("Button", {});
       }).toThrowError("Type already registered: Button");
     });
+
+    it("adds _trigger to constructor", function() {
+      var fn = function() {};
+      tabris.registerType("CustomType", {_trigger: {foo: fn}});
+      var instance = tabris.create("CustomType");
+
+      expect(instance.constructor._trigger.foo).toBe(fn);
+      expect(instance._trigger).toBe(tabris.Proxy.prototype._trigger);
+      delete tabris.CustomType;
+    });
+
+    it("adds empty trigger map to constructor", function() {
+      tabris.registerType("CustomType", {});
+      var instance = tabris.create("CustomType");
+
+      expect(instance.constructor._trigger).toEqual({});
+      delete tabris.CustomType;
+    });
+
+    it("adds _listen to constructor", function() {
+      var fn = function() {};
+      tabris.registerType("CustomType", {_listen: {foo: fn}});
+      var instance = tabris.create("CustomType");
+
+      expect(instance.constructor._listen.foo).toBe(fn);
+      expect(instance._listen).toBe(tabris.Proxy.prototype._listen);
+      delete tabris.CustomType;
+    });
+
+    it("adds empty listen map to constructor", function() {
+      tabris.registerType("CustomType", {});
+      var instance = tabris.create("CustomType");
+
+      expect(instance.constructor._listen).toEqual({});
+      delete tabris.CustomType;
+    });
+
+    it("adds _type to constructor", function() {
+      tabris.registerType("CustomType", {_type: "foo"});
+      var instance = tabris.create("CustomType");
+
+      expect(instance.constructor._type).toBe("foo");
+      expect(instance._type).toBeUndefined();
+      delete tabris.CustomType;
+    });
+
   });
 
 });

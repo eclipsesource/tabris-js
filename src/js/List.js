@@ -33,15 +33,13 @@
       this._createItems();
     },
 
-    _trigger: function(type) {
-      if (type === "selection") {
-        var event = arguments[1];
-        var index = this._findItemIndex(event.item);
+    _trigger: {
+      Selection: function(params) {
+        var index = this._findItemIndex(params.item);
         var item = this._items ? this._items[index] : null;
-        var cell = event.text ? event.text : "";
-        return this.trigger(type, {item: item, index: index, cell: cell});
+        var cell = params.text ? params.text : "";
+        this.trigger("selection", {item: item, index: index, cell: cell});
       }
-      tabris.Proxy.prototype._trigger.apply(this, arguments);
     },
 
     _findItemIndex: function(itemId) {

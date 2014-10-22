@@ -13,9 +13,9 @@
   util.extend(tabris.Proxy.prototype, tabris.Events, {
 
     _create: function(properties) {
-      var type = this._type || this.type;
+      var type = this.constructor._type || this.type;
       tabris._nativeBridge.create(this.id, type);
-      this._setProperties(util.extend({}, this._properties || {}, properties));
+      this._setProperties(util.extend({}, this.constructor._properties, properties));
       return this;
     },
 
@@ -68,7 +68,13 @@
       var wasListening = this._isListening(event);
       tabris.Events.on.call(this, event, listener, context);
       if (!wasListening) {
-        tabris._nativeBridge.listen(this.id, tabris._encodeEventName(event), true);
+        var listen = this.constructor._listen[event] || defaultListen[event];
+        if (listen) {
+          listen.call(this, true);
+        } else {
+          // TODO: only print warning instead
+          tabris._nativeBridge.listen(this.id, event, true);
+        }
       }
       return this;
     },
@@ -77,7 +83,13 @@
       this._checkDisposed();
       tabris.Events.off.call(this, event, listener, context);
       if (!this._isListening(event)) {
-        tabris._nativeBridge.listen(this.id, tabris._encodeEventName(event), false);
+        var listen = this.constructor._listen[event] || defaultListen[event];
+        if (listen) {
+          listen.call(this, false);
+        } else {
+          // TODO: only print warning instead
+          tabris._nativeBridge.listen(this.id, event, false);
+        }
       }
       return this;
     },
@@ -101,8 +113,14 @@
       return this._children ? Array.prototype.slice.call(this._children) : [];
     },
 
-    _trigger: function() {
-      this.trigger.apply(this, arguments);
+    _trigger: function(event, params) {
+      var trigger = this.constructor._trigger[event] || defaultTrigger[event];
+      if (trigger) {
+        trigger.call(this, params);
+      } else {
+        // TODO [tb] : Print warning instead
+        this.trigger(event, params);
+      }
     },
 
     _destroy: function() {
@@ -207,6 +225,29 @@
       return value;
     }
 
+  });
+
+  var defaultListen = {
+    focusin: function(listen) { tabris._nativeBridge.listen(this.id, "FocusIn", listen); },
+    focusout: function(listen) { tabris._nativeBridge.listen(this.id, "FocusOut", listen); },
+    selection: function(listen) { tabris._nativeBridge.listen(this.id, "Selection", listen); },
+    resize: function(listen) { tabris._nativeBridge.listen(this.id, "Resize", listen); },
+    scroll: function(listen) { tabris._nativeBridge.listen(this.id, "Scroll", listen); },
+    modify: function(listen) { tabris._nativeBridge.listen(this.id, "Modify", listen); }
+  };
+
+  var defaultTrigger = {
+    FocusIn: function(params) { this.trigger("focusin", params); },
+    FocusOut: function(params) { this.trigger("focusout", params); },
+    Selection: function(params) { this.trigger("selection", params); },
+    Resize: function(params) { this.trigger("resize", params); },
+    Scroll: function(params) { this.trigger("scroll", params); },
+    Modify: function(params) { this.trigger("modify", params); }
+  };
+
+  util.extend(tabris.Proxy, {
+    _listen: {},
+    _trigger: {}
   });
 
   function encodeColor(value) {

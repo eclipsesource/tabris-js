@@ -27,7 +27,7 @@ describe("Proxy", function() {
 
     beforeEach(function() {
       proxy = new tabris.Proxy("test-id");
-      proxy._type = "TestType";
+      proxy.type = "TestType";
     });
 
     it("creates proxy for standard types", function() {
@@ -60,7 +60,7 @@ describe("Proxy", function() {
 
       tabris.create("CustomType", {foo: 23});
 
-      expect(tabris.CustomType.prototype._properties).toEqual({});
+      expect(tabris.CustomType._properties).toEqual({});
       delete tabris.CustomType;
     });
 

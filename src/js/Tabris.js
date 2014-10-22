@@ -13,8 +13,6 @@
 
     _loadFunctions: [],
     _proxies: {},
-    _localEventNames: getLocalEventNames(),
-    _nativeEventNames: util.invert(getLocalEventNames()),
 
     load: function(fn) {
       tabris._loadFunctions.push(fn);
@@ -38,8 +36,13 @@
       tabris[type] = function() {
         tabris.Proxy.apply(this, arguments);
       };
-      members.type = type;
-      tabris[type].prototype = util.extendPrototype(tabris.Proxy, members);
+      for (var key in constructorDefaults) {
+        tabris[type][key] = members[key] || constructorDefaults[key];
+      }
+      var superProto = util.omit(members, Object.keys(constructorDefaults));
+      superProto.type = type;
+      superProto.constructor = tabris[type]; // util.extendPrototype can not provide the original
+      tabris[type].prototype = util.extendPrototype(tabris.Proxy, superProto);
     },
 
     _start: function(client) {
@@ -54,7 +57,7 @@
     _notify: function(id, event, param) {
       var proxy = tabris._proxies[id];
       if (proxy) {
-        proxy._trigger(tabris._decodeEventName(event), tabris._decodeEventParam(event, param));
+        proxy._trigger(event, param);
       }
       tabris.trigger("flush");
     },
@@ -62,31 +65,15 @@
     _reset: function() {
       this._loadFunctions = [];
       this._proxies = {};
-    },
-
-    _decodeEventName: function(event) {
-      return this._localEventNames[event] || event;
-    },
-
-    _encodeEventName: function(event) {
-      return this._nativeEventNames[event] || event;
-    },
-
-    _decodeEventParam: function(event, param) {
-      return param;
     }
 
   });
 
-  function getLocalEventNames() {
-    return {
-      FocusIn: "focusin",
-      FocusOut: "focusout",
-      Selection: "selection",
-      Resize: "resize",
-      Scroll: "scroll",
-      Modify: "modify"
-    };
-  }
+  var constructorDefaults = {
+    _trigger: {},
+    _listen: {},
+    _properties: {},
+    _type: null
+  };
 
 })();
