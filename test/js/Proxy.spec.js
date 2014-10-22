@@ -272,17 +272,59 @@ describe("Proxy", function() {
       });
 
       it("raises a warning for incomplete horizontal layoutData", function() {
-        proxy.set("layoutData", {});
+        proxy.set("layoutData", {top: 0});
 
-        var warning = "Unsupported layoutData value: either left, right or centerX should be specified";
+        var warning = "Incomplete layoutData: either left, right or centerX should be specified";
         expect(console.warn).toHaveBeenCalledWith(warning);
       });
 
       it("raises a warning for incomplete vertical layoutData", function() {
         proxy.set("layoutData", {left: 0});
 
-        var warning = "Unsupported layoutData value: either top, bottom or centerY should be specified";
+        var warning = "Incomplete layoutData: either top, bottom, centerY, or baseline should be specified";
         expect(console.warn).toHaveBeenCalledWith(warning);
+      });
+
+      it("raises a warning for inconsistent layoutData (centerX)", function() {
+        proxy.set("layoutData", {top: 0, left: 0, centerX: 0});
+
+        var warning = "Inconsistent layoutData: centerX overrides left and right";
+        expect(console.warn).toHaveBeenCalledWith(warning);
+      });
+
+      it("skips overridden properties from layoutData (centerX)", function() {
+        proxy.set("layoutData", {top: 1, left: 2, right: 3, centerX: 4});
+
+        var call = nativeBridge.calls({op: "set"})[0];
+        expect(call.properties.layoutData).toEqual({top: 1, centerX: 4});
+      });
+
+      it("raises a warning for inconsistent layoutData (centerY)", function() {
+        proxy.set("layoutData", {left: 0, top: 0, centerY: 0});
+
+        var warning = "Inconsistent layoutData: centerY overrides top and bottom";
+        expect(console.warn).toHaveBeenCalledWith(warning);
+      });
+
+      it("skips overridden properties from layoutData (centerY)", function() {
+        proxy.set("layoutData", {left: 1, top: 2, bottom: 3, centerY: 4});
+
+        var call = nativeBridge.calls({op: "set"})[0];
+        expect(call.properties.layoutData).toEqual({left: 1, centerY: 4});
+      });
+
+      it("raises a warning for inconsistent layoutData (baseline)", function() {
+        proxy.set("layoutData", {left: 0, top: 0, baseline: 0});
+
+        var warning = "Inconsistent layoutData: baseline overrides top, bottom, and centerY";
+        expect(console.warn).toHaveBeenCalledWith(warning);
+      });
+
+      it("skips overridden properties from layoutData (baseline)", function() {
+        proxy.set("layoutData", {left: 1, top: 2, bottom: 3, centerY: 4, baseline: "other"});
+
+        var call = nativeBridge.calls({op: "set"})[0];
+        expect(call.properties.layoutData).toEqual({left: 1, baseline: "other"});
       });
 
       it("translates widgets to ids in layoutData", function() {

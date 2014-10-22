@@ -170,8 +170,7 @@
         case "images":
           return encodeImages(value);
         case "layoutData":
-          checkLayoutData(value);
-          return encodeLayoutData(value);
+          return encodeLayoutData(checkLayoutData(value));
         case "parent":
           this._setParent(value);
           return encodeProxyToId(value._getContainer());
@@ -242,12 +241,28 @@
   }
 
   function checkLayoutData(layoutData) {
-    if (!("left" in layoutData) && !("right" in layoutData) && !("centerX" in layoutData)) {
-      throw new Error("either left, right or centerX should be specified");
+    if ("centerX" in layoutData) {
+      if (("left" in layoutData) || ("right" in layoutData)) {
+        console.warn("Inconsistent layoutData: centerX overrides left and right");
+        return util.omit(layoutData, ["left", "right"]);
+      }
+    } else if (!("left" in layoutData) && !("right" in layoutData)) {
+      console.warn("Incomplete layoutData: either left, right or centerX should be specified");
     }
-    if (!("top" in layoutData) && !("bottom" in layoutData) && !("centerY" in layoutData)) {
-      throw new Error("either top, bottom or centerY should be specified");
+    if ("baseline" in layoutData) {
+      if (("top" in layoutData) || ("bottom" in layoutData) || ("centerY" in layoutData)) {
+        console.warn("Inconsistent layoutData: baseline overrides top, bottom, and centerY");
+        return util.omit(layoutData, ["top", "bottom", "centerY"]);
+      }
+    } else if ("centerY" in layoutData) {
+      if (("top" in layoutData) || ("bottom" in layoutData)) {
+        console.warn("Inconsistent layoutData: centerY overrides top and bottom");
+        return util.omit(layoutData, ["top", "bottom"]);
+      }
+    } else if (!("top" in layoutData) && !("bottom" in layoutData)) {
+      console.warn("Incomplete layoutData: either top, bottom, centerY, or baseline should be specified");
     }
+    return layoutData;
   }
 
   function encodeLayoutData(layoutData) {
@@ -288,7 +303,7 @@
     _properties: {style: ["PUSH"]}
   });
   tabris.registerType("Canvas", {
-    _type: "rwt.widgets.Canvas" 
+    _type: "rwt.widgets.Canvas"
   });
   tabris.registerType("CheckBox", {
     _type: "rwt.widgets.Button",
