@@ -1,5 +1,5 @@
 {
-  "title": "Common Properties",
+  "title": "Common Widget Properties",
   "description": "Properties used by most widgets.",
   "properties": {
     "enabled": "boolean",

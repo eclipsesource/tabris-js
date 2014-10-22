@@ -93,8 +93,7 @@ module.exports = function(grunt) {
         'Text.json',
         'WebView.json'
       ]),
-      target: 'build/doc/widget-types.md',
-      templates: 'doc/generator/*.template.md'
+      target: 'build/doc/widget-types.md'
     },
     copy: {
       doc: {

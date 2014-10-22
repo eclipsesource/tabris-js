@@ -1,5 +1,5 @@
 {
-  "title": "Common Events",
+  "title": "Common Widget Events",
   "description": "Events supported by most widgets.",
   "events": [
     "touchstart",
