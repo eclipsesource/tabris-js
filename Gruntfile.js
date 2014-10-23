@@ -88,6 +88,7 @@ module.exports = function(grunt) {
         'List.json',
         'Page.json',
         'RadioButton.json',
+        'Slider.json',
         'ToggleButton.json',
         'ScrollComposite.json',
         'Text.json',

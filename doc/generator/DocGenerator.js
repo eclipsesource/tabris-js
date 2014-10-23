@@ -70,7 +70,7 @@ module.exports = function(grunt) {
     result.push(desc.type ? "### Properties\n" : "");
     for (var prop in desc.properties) {
       var value = desc.properties[prop];
-      var type = value.split(":")[0];
+      var type = value.split(":")[0].split("?")[0];
       var def = value.split("?")[1] || "";
       var allowed = value.indexOf(":") !== -1 ? value.split(":")[1].split("?")[0] : "";
       result.push("- *", prop, "*: `", type + "`");

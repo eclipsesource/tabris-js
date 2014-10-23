@@ -20,9 +20,7 @@ tabris.load(function() {
   });
 
   var progressBar = tabris.create("ProgressBar", {
-    style: ["WRAP"],
     layoutData: {left: MARGIN, right: MARGIN, top: [button, MARGIN]},
-    markupEnabled: true,
     minimum: 0,
     maximum: 100,
     selection: 0

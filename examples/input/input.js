@@ -79,8 +79,26 @@ tabris.load(function() {
     month: 5
   }).appendTo(page);
 
+  var luggageLabel = tabris.create("Label", {
+    layoutData: {left: 10, top: [dateField, 10], width: 120},
+    alignment: "left",
+    text: "Luggage:"
+  }).appendTo(page);
+
+  var luggageWeight = tabris.create("Label", {
+    layoutData: {right: 10, top: [dateField, 10], width: 50},
+    alignment: "left",
+    text: "0 Kg"
+  }).appendTo(page);
+
+  var luggage = tabris.create("Slider", {
+    layoutData: {left: [luggageLabel, 10], right: [luggageWeight, 10], top: [dateField, 10]}
+  }).on("selection", function() {
+    luggageWeight.set("text", this.get("selection") + " Kg");
+  }).appendTo(page);
+
   var checkbox = tabris.create("CheckBox", {
-    layoutData: {left: [dateLabel, 10], right: 10, top: [dateField, 10]},
+    layoutData: {left: [dateLabel, 10], right: 10, top: [luggage, 10]},
     text: "Vegetarian"
   }).appendTo(page);
 
