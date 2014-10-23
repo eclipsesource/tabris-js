@@ -1,10 +1,10 @@
 {
   "type": "Composite",
-  "description": "A widget without content which can contain other widgets.",
+  "description": "An empty widget that can contain other widgets.",
   "include": ["widgetProperties", "widgetEvents"],
   "links": [
     {
-      "title": "Example for composites and touch api",
+      "title": "Example for composites and touch API",
       "path": "https://github.com/eclipsesource/tabris-js/blob/master/examples/touch/touch.js"
     }
   ]

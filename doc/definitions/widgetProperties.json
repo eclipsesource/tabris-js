@@ -1,13 +1,13 @@
 {
   "title": "Common Widget Properties",
-  "description": "Properties used by most widgets.",
+  "description": "Properties used by all widgets except Action.",
   "properties": {
-    "enabled": "boolean",
-    "visibility": "boolean",
+    "enabled": "boolean?true",
+    "visibility": "boolean?true",
     "layoutData": "layoutData",
-    "font": "font",
-    "foreground": "color",
-    "background": "color",
-    "backgroundImage": "image"
+    "font": "Font",
+    "foreground": "Color",
+    "background": "Color",
+    "backgroundImage": "Image"
   }
 }

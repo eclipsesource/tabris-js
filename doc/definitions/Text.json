@@ -1,6 +1,6 @@
 {
   "type": "Text",
-  "description": "A widget allowing the user to enter text.",
+  "description": "A widget that allows to enter text.",
   "include": ["widgetProperties", "widgetEvents"],
   "properties": {
     "type": "string:default|password|search|multiline?default",

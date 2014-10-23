@@ -1,11 +1,12 @@
 {
   "type": "CheckBox",
-  "description": "A widget representing a checkbox button.",
+  "description": "A check box widget.",
   "include": ["widgetProperties", "widgetEvents"],
   "properties": {
-    "text": "string",
     "alignment": "string:left|right|center?center",
-    "image": "image"
+    "image": "Image",
+    "selection": "boolean?false",
+    "text": "string"
   },
   "events": [
     "selection"

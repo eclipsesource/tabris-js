@@ -1,10 +1,10 @@
 {
   "type": "Page",
-  "description": "A part of the UI displaying the application content which widgets whould be appended to.",
+  "description": "Pages contain an application's UI. Top-level pages are included in the application's main menu.",
   "properties": {
+    "image": "Image",
     "title": "string",
-    "topLevel": "boolean",
-    "image": "image"
+    "topLevel": "boolean"
   },
   "events": [
     "resize"

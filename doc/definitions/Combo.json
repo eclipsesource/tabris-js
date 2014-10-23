@@ -1,11 +1,11 @@
 {
   "type": "Combo",
-  "description": "A widget representing a dropdown list of items with a single chosen item.",
+  "description": "A widget with a drop-down list of items to choose from.",
   "include": ["widgetProperties", "widgetEvents"],
   "properties": {
-    "text": "string",
+    "items": "string[]",
     "selectionIndex": "number",
-    "items": "string[]"
+    "text": "string"
   },
   "events": [
     "selection"

@@ -1,6 +1,6 @@
 {
   "type": "WebView",
-  "description": "A widget used to display a web page given a URL source.",
+  "description": "A widget that can display a web page.",
   "include": ["widgetProperties", "widgetEvents"],
   "properties": {
     "url": "string"

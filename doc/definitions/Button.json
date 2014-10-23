@@ -1,12 +1,15 @@
 {
   "type": "Button",
-  "description": "A widget representing a button with text and/or image inside.",
+  "description": "A push button. Can contain a text or an image.",
   "include": ["widgetProperties", "widgetEvents"],
   "properties": {
-    "text": "string",
     "alignment": "string:left|right|center?center",
-    "image": "image"
+    "image": "Image",
+    "text": "string"
   },
+  "events": [
+    "selection"
+  ],
   "links": [
     {
       "title": "Example with input elements",

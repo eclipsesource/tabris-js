@@ -1,11 +1,12 @@
 {
   "type": "ToggleButton",
-  "description": "A widget representing a toggle button.",
+  "description": "A push button that remains pressed.",
   "include": ["widgetProperties", "widgetEvents"],
   "properties": {
     "text": "string",
-    "alignment": "string:left|right|center?center",
-    "image": "image"
+    "image": "Image",
+    "selection": "boolean?false",
+    "alignment": "string:left|right|center?center"
   },
   "events": [
     "selection"

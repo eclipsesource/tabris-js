@@ -1,13 +1,13 @@
 {
   "type": "Action",
-  "description": "Actions provide an abstraction for the native navigation concept of the platform.",
+  "description": "An executable item that is integrated in the application's navigation menu. Add a listener on `selection` to implement the action.",
   "properties": {
-    "title": "string",
     "enabled": "boolean",
-    "visibility": "boolean",
+    "foreground": "Color",
+    "image": "Image",
     "placementPriority": "string:LOW|HIGH?HIGH",
-    "foreground": "color",
-    "image": "Image"
+    "title": "string",
+    "visibility": "boolean"
   },
   "events": [
     "selection"

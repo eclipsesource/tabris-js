@@ -1,10 +1,17 @@
 {
   "type": "List",
-  "description": "A widget displaying a vertically scrollable list of items with templating support.",
+  "description": "A scrollable list that display data items, one per row. The row format is defined by a template.",
   "include": ["widgetProperties", "widgetEvents"],
   "properties": {
-    "linesVisible": "boolean",
     "itemHeight": "number",
-    "template": "template"
-  }
+    "items": "mixed[]",
+    "linesVisible": "boolean",
+    "template": "Template"
+  },
+  "links": [
+    {
+      "title": "Example for creating lists",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/examples/bookstore/bookstore.js"
+    }
+  ]
 }
