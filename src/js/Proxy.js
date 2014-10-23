@@ -322,6 +322,9 @@
     _type: "rwt.widgets.Button",
     _properties: {style: ["RADIO"]}
   });
+  tabris.registerType("Slider", {
+    _type: "rwt.widgets.Scale"
+  });
   tabris.registerType("ToggleButton", {
     _type: "rwt.widgets.Button",
     _properties: {style: ["TOGGLE"]}

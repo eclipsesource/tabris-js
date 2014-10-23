@@ -721,6 +721,14 @@ describe("Proxy", function() {
       expect(create.properties).toEqual({text: "foo"});
     });
 
+    it("Slider", function() {
+      tabris.create("Slider", {selection: 23});
+
+      var create = nativeBridge.calls({op: "create"})[0];
+      expect(create.type).toEqual("rwt.widgets.Scale");
+      expect(create.properties).toEqual({selection: 23});
+    });
+
     it("Text", function() {
       tabris.create("Text", {text: "foo"});
 
