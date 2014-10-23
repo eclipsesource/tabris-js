@@ -1,0 +1,17 @@
+{
+  "type": "ProgressBar",
+  "description": "A widget representing a numeric value as a horizontal bar with a growing indicator.",
+  "include": ["widgetProperties", "widgetEvents"],
+  "properties": {
+    "minimum": "number?0",
+    "maximum": "number?100",
+    "selection": "number?0",
+    "state": "string:normal|paused|error?normal"
+  },
+  "links": [
+    {
+      "title" : "ProgressBar in the http-request example",
+      "path" : "https://github.com/eclipsesource/tabris-js/blob/master/examples/http-request/http-request.js"
+    }
+  ]
+}
