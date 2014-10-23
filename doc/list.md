@@ -71,3 +71,9 @@ List events
 
 The *Selection* event gets fired when a list item gets selected. It contains the
 item itself and its index.
+
+```javascript
+booklist.on("selection", function(event) {
+	console.log("List selection: " + event.item + " with selection: " + event.index);
+});
+```
