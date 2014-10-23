@@ -24,7 +24,7 @@ tabris.load(function() {
 
   // TODO [rst] Move down when z-order is fixed
   var label = tabris.create("Label", {
-    bounds: [0, 0, 80, 40],
+    bounds: {left: 0, top: 0, width: 80, height: 40},
     background: "rgba(255, 0, 0, 0.8)",
     foreground: "#fff",
     text: "FPS"
@@ -78,7 +78,7 @@ tabris.load(function() {
     for (var y = 0; y < ySize; y++) {
       var alive = Math.random() >= 0.5;
       var composite = tabris.create("Composite", {
-        bounds: [x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE],
+        bounds: {left: x * CELL_SIZE, top: y * CELL_SIZE, width: CELL_SIZE, height: CELL_SIZE},
         background: "#fff",
         visibility: alive
       });
