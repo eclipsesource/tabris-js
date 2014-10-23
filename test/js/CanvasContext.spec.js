@@ -41,6 +41,12 @@ describe("CanvasContext", function() {
       canvas = new tabris.Proxy();
     });
 
+    it("creates a native GC", function() {
+      tabris.getContext(canvas, 100, 200);
+
+      expect(nativeBridge.calls({op: "create", type: "rwt.widgets.GC"}).length).toBe(1);
+    });
+
     it("creates and returns graphics context", function() {
       var ctx = tabris.getContext(canvas, 100, 200);
 
