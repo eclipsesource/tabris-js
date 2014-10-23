@@ -102,7 +102,7 @@ tabris.load(function() {
   });
 
   strapLabel.on("touchmove", function(e) {
-    var y = e.touches[0].y - prevEvent.touches[0].y;
+    var y = e.touches[0].pageY - prevEvent.touches[0].pageY;
     prevPrevEvent = prevEvent;
     prevEvent = e;
     var offsetY = tray.get("transform").translationY + y;
@@ -120,7 +120,7 @@ tabris.load(function() {
   });
 
   function positionTrayInRestingState() {
-    var y = prevEvent.touches[0].y - prevPrevEvent.touches[0].y;
+    var y = prevEvent.touches[0].pageY - prevPrevEvent.touches[0].pageY;
     var translationTarget = 0;
     if (y >= 0) {
       translationTarget = verticalTrayOffset;
