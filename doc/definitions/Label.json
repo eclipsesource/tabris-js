@@ -1,10 +1,9 @@
 {
   "type": "Label",
-  "description": "A widget to display a text or an image.",
+  "description": "A widget to display a text. For images, use ImageView.",
   "include": ["widgetProperties", "widgetEvents"],
   "properties": {
     "alignment": "string:left|right|center?left",
-    "image": "Image",
     "markupEnabled": "boolean",
     "text": "string"
   },

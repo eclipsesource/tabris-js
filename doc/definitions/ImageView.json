@@ -1,0 +1,15 @@
+{
+  "type": "ImageView",
+  "description": "A widget to display an image.",
+  "include": ["widgetProperties", "widgetEvents"],
+  "properties": {
+    "image": "Image",
+    "scaleMode": "string:auto|fit|fill|stretch|none?auto"
+  },
+  "links": [
+    {
+      "title": "Image example",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/examples/image/image.js"
+    }
+  ]
+}

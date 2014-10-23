@@ -85,6 +85,7 @@ module.exports = function(grunt) {
         'CheckBox.json',
         'Combo.json',
         'Composite.json',
+        'ImageView.json',
         'Label.json',
         'List.json',
         'Page.json',
