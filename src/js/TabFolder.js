@@ -30,6 +30,10 @@
         return !!this._paging;
       }
       return this.super("get", prop);
+    },
+
+    children: function() {
+      return this._children ? this._children.filter(isTab) : [];
     }
 
   });
@@ -118,6 +122,10 @@
       result.data = {paging: properties.paging};
     }
     return result;
+  }
+
+  function isTab(child) {
+    return child instanceof tabris.Tab;
   }
 
   function isItem(child) {
