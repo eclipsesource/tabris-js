@@ -65,22 +65,22 @@ tabris.load(function() {
     selectionIndex: 0
   }).appendTo(page);
 
-  var dateTimeLabel = tabris.create("Label", {
+  var dateLabel = tabris.create("Label", {
     layoutData: {left: 10, top: [classCombo, 10], width: 120},
     alignment: "left",
     text: "Date:"
   }).appendTo(page);
 
-  var dateTime = tabris.create("DateTime", {
+  var dateField = tabris.create("rwt.widgets.DateTime", {
     style: ["DATE"],
-    layoutData: {left: [dateTimeLabel, 10], right: 10, top: [classCombo, 10]},
+    layoutData: {left: [dateLabel, 10], right: 10, top: [classCombo, 10]},
     year: 2014,
     day: 20,
     month: 5
   }).appendTo(page);
 
   var checkbox = tabris.create("CheckBox", {
-    layoutData: {left: [dateTimeLabel, 10], right: 10, top: [dateTime, 10]},
+    layoutData: {left: [dateLabel, 10], right: 10, top: [dateField, 10]},
     text: "Vegetarian"
   }).appendTo(page);
 
@@ -109,7 +109,7 @@ tabris.load(function() {
   }
 
   function createDepartureDate() {
-    return [dateTime.get("year"), (dateTime.get("month") + 1), dateTime.get("day")].join("/");
+    return [dateField.get("year"), (dateField.get("month") + 1), dateField.get("day")].join("/");
   }
 
   page.open();
