@@ -697,6 +697,13 @@ describe("Proxy", function() {
       expect(create.type).toEqual("rwt.widgets.Composite");
     });
 
+    it("ImageView", function() {
+      tabris.create("ImageView", {});
+
+      var create = nativeBridge.calls({op: "create"})[0];
+      expect(create.type).toEqual("tabris.ImageView");
+    });
+
     it("RadioButton", function() {
       tabris.create("RadioButton", {text: "foo"});
 

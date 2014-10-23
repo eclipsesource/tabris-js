@@ -315,6 +315,9 @@
   tabris.registerType("Composite", {
     _type: "rwt.widgets.Composite"
   });
+  tabris.registerType("ImageView", {
+    _type: "tabris.ImageView"
+  });
   tabris.registerType("ProgressBar", {
     _type: "rwt.widgets.ProgressBar"
   });
