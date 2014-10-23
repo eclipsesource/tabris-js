@@ -111,14 +111,21 @@ tabris.load(function() {
     updateStrapLabelRotation();
   });
 
+  strapLabel.on("touchcancel", function() {
+    positionTrayInRestingState();
+  });
+
   strapLabel.on("touchend", function() {
+    positionTrayInRestingState();
+  });
+
+  function positionTrayInRestingState() {
     var y = prevEvent.touches[0].y - prevPrevEvent.touches[0].y;
     var translationTarget = 0;
     if (y >= 0) {
       translationTarget = verticalTrayOffset;
     }
-    var time = prevEvent.time - prevPrevEvent.time;
-    var duration = time / y * 400;
+    var duration = verticalTrayOffset;
     if (duration < 0) {
       duration *= -1;
     }
@@ -138,6 +145,6 @@ tabris.load(function() {
       this.dispose();
       animation = undefined;
     }).call("start");
-  });
+  }
 
 });
