@@ -18,7 +18,8 @@
 
     this.canvas = {
       width: 0,
-      height: 0
+      height: 0,
+      style: {}
     };
     for (var name in properties) {
       defineProperty(this, name);

@@ -80,6 +80,11 @@ describe("CanvasContext", function() {
       expect(ctx.canvas.height).toEqual(200);
     });
 
+    it("allows to set canvas.style attributes", function() {
+      // Used by third party libraries, ensure this doesn't crash
+      ctx.canvas.style.width = 23;
+    });
+
   });
 
   describe("lineWidth", function() {
