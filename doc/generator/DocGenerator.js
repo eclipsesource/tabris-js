@@ -68,7 +68,7 @@ module.exports = function(grunt) {
     }
     var result = [];
     result.push(desc.type ? "### Properties\n" : "");
-    for (var prop in desc.properties) {
+    Object.keys(desc.properties).sort().forEach(function(prop) {
       var value = desc.properties[prop];
       var type = value.split(":")[0].split("?")[0];
       var def = value.split("?")[1] || "";
@@ -77,7 +77,7 @@ module.exports = function(grunt) {
       result.push(allowed ? ", possible values: \"" + allowed.split("|").join("\", \"") + "\"" : "");
       result.push(def ? ", default value: \"" + def + "\"" : "");
       result.push("\n");
-    }
+    });
     result.push("\n");
     return result.join("");
   }
