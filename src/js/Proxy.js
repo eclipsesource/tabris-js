@@ -100,6 +100,14 @@
       }
     },
 
+    parent: function() {
+      return this._parent;
+    },
+
+    children: function() {
+      return this._children ? Array.prototype.slice.call(this._children) : [];
+    },
+
     _trigger: function() {
       this.trigger.apply(this, arguments);
     },

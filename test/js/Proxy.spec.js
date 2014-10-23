@@ -74,6 +74,14 @@ describe("Proxy", function() {
       proxy = new tabris.Proxy("test-id");
     });
 
+    it("parent() returns nothing", function() {
+      expect(proxy.parent()).not.toBeDefined();
+    });
+
+    it("children() returns empty array", function() {
+      expect(proxy.children()).toEqual([]);
+    });
+
     describe("when disposed", function() {
       beforeEach(function() {
         proxy.dispose();
@@ -90,6 +98,15 @@ describe("Proxy", function() {
           proxy.append();
         }).toThrowError("Object is disposed");
       });
+
+      it("parent() returns nothing", function() {
+        expect(proxy.parent()).not.toBeDefined();
+      });
+
+      it("children() returns empty array", function() {
+        expect(proxy.children()).toEqual([]);
+      });
+
     });
 
     describe("calling append with a proxy", function() {
@@ -109,6 +126,15 @@ describe("Proxy", function() {
 
       it("returns self to allow chaining", function() {
         expect(result).toBe(proxy);
+      });
+
+      it("children() contains appended child", function() {
+        expect(proxy.children()).toContain(child);
+      });
+
+      it("children() returns a safe copy", function() {
+        proxy.children()[0] = null;
+        expect(proxy.children()).toContain(child);
       });
 
     });
@@ -131,6 +157,11 @@ describe("Proxy", function() {
 
       it("returns self to allow chaining", function() {
         expect(result).toBe(proxy);
+      });
+
+      it("children() contains appended children", function() {
+        expect(proxy.children()).toContain(child1);
+        expect(proxy.children()).toContain(child2);
       });
 
     });
@@ -162,6 +193,10 @@ describe("Proxy", function() {
 
       it("returns self to allow chaining", function() {
         expect(result).toBe(proxy);
+      });
+
+      it("parent() returns new parent", function() {
+        expect(result.parent()).toBe(parent);
       });
 
     });
@@ -222,6 +257,14 @@ describe("Proxy", function() {
         var result = proxy.get("image");
 
         expect(result).toEqual({src: "foo", width: 23, height: 42});
+      });
+
+      it("translates bounds to object", function() {
+        spyOn(nativeBridge, "get").and.returnValue([1, 2, 3, 4]);
+
+        var result = proxy.get("bounds");
+
+        expect(result).toEqual({left:1, top:2, width: 3, height: 4});
       });
 
       it("translates bounds to object", function() {
