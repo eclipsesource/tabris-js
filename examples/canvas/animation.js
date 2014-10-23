@@ -17,7 +17,6 @@ tabris.load(function() {
   }).appendTo(page);
 
   var canvas = tabris.create("Canvas", {
-    parent: page,
     layoutData: {
       left: 10,
       top: 10,

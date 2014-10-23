@@ -21,9 +21,8 @@ tabris.load(function() {
   });
 
   var swipe = tabris.create("tabris.Swipe", {
-    parent: mainComposite,
     itemCount: 2
-  });
+  }).appendTo(mainComposite);
 
   var item1Label = tabris.create("Label", {
     layoutData: {right: 10, top: [50, 0]},
