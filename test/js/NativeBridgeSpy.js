@@ -8,7 +8,8 @@
 (function() {
 
   NativeBridgeSpy = function() {
-    this.resetCalls();
+    this._calls = [];
+    this._calls.select = select;
   };
 
   NativeBridgeSpy.prototype = {
@@ -64,10 +65,12 @@
     },
 
     calls: function(filterProperties) {
+      tabris._nativeBridge.flush();
       return this._calls.select(filterProperties);
     },
 
     resetCalls: function() {
+      tabris._nativeBridge.flush();
       this._calls = [];
       this._calls.select = select;
     }

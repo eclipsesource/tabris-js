@@ -9,6 +9,7 @@ describe("NativeBridgeSpy", function() {
 
   beforeEach(function() {
     nativeBridge = new NativeBridgeSpy();
+    tabris._nativeBridge = {flush: jasmine.createSpy("flush")};
   });
 
   describe("calls are recorded", function() {

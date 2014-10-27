@@ -46,6 +46,7 @@ module.exports = function(grunt) {
                      'util-fonts.js',
                      'util-images.js',
                      'Tabris.js',
+                     'NativeBridge.js',
                      'Events.js',
                      'Animation.js',
                      'DOMEvents.js',
