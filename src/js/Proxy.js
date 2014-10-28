@@ -25,7 +25,7 @@
         if (!(arguments[i] instanceof tabris.Proxy)) {
           throw new Error("Cannot append non-widget");
         }
-        this._append(arguments[i]);
+        arguments[i]._setParent(this);
       }
       return this;
     },
@@ -35,12 +35,8 @@
       if (!(proxy instanceof tabris.Proxy)) {
         throw new Error("Cannot append to non-widget");
       }
-      proxy._append(this);
+      this._setParent(proxy);
       return this;
-    },
-
-    _append: function(proxy) {
-      proxy.set("parent", this);
     },
 
     get: function(name) {
@@ -176,9 +172,6 @@
           return encodeLayoutData(checkLayoutData(value));
         case "bounds":
           return encodeBounds(value);
-        case "parent":
-          this._setParent(value);
-          return encodeProxyToId(value._getContainer());
       }
       return encodeProxyToId(value);
     },
@@ -188,6 +181,7 @@
     },
 
     _setParent: function(parent) {
+      tabris._nativeBridge.set(this.id, "parent", encodeProxyToId(parent._getContainer()));
       if (this._parent) {
         this._parent._removeChild(this);
       }

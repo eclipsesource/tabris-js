@@ -176,27 +176,49 @@ describe("Proxy", function() {
 
     });
 
-    describe("calling appendTo with a proxy", function() {
-      var parent, result;
+    describe("calling appendTo with a parent", function() {
+
+      var parent1, result;
 
       beforeEach(function() {
-        parent = tabris.create("Composite", {});
+        parent1 = tabris.create("Composite", {});
         nativeBridge.resetCalls();
-        result = proxy.appendTo(parent);
-      });
-
-      it("sets the proxy's parent", function() {
-        var calls = nativeBridge.calls();
-        expect(calls.length).toBe(1);
-        expect(calls[0]).toEqual({op: "set", id: proxy.id, properties: {parent: parent.id}});
+        result = proxy.appendTo(parent1);
       });
 
       it("returns self to allow chaining", function() {
         expect(result).toBe(proxy);
       });
 
+      it("sets the proxy's parent", function() {
+        var setCall = nativeBridge.calls({op: "set", id: proxy.id})[0];
+        expect(setCall.properties.parent).toEqual(parent1.id);
+      });
+
+      it("is added to parent's children list", function() {
+        expect(parent1.children()).toContain(proxy);
+      });
+
       it("parent() returns new parent", function() {
-        expect(result.parent()).toBe(parent);
+        expect(result.parent()).toBe(parent1);
+      });
+
+      describe("calling appendTo with another parent", function() {
+
+        var parent2;
+
+        beforeEach(function() {
+          parent2 = tabris.create("Composite", {});
+          proxy.appendTo(parent2);
+        });
+
+        it("is removed from old parent's children list", function() {
+          expect(parent1.children()).not.toContain(proxy);
+        });
+
+        it("is added to new parent's children list", function() {
+          expect(parent2.children()).toContain(proxy);
+        });
       });
 
     });
@@ -473,33 +495,6 @@ describe("Proxy", function() {
 
     });
 
-    describe("when parent is set", function() {
-      var parent1 = new tabris.Proxy("parent1");
-      var parent2 = new tabris.Proxy("parent2");
-
-      beforeEach(function() {
-        proxy.set({parent: parent1});
-      });
-
-      it("is added to parent's children list", function() {
-        expect(parent1._children).toContain(proxy);
-      });
-
-      describe("when another parent is set", function() {
-        beforeEach(function() {
-          proxy.set({parent: parent2});
-        });
-
-        it("is removed from old parent's children list", function() {
-          expect(parent1._children).not.toContain(proxy);
-        });
-
-        it("is added to new parent's children list", function() {
-          expect(parent2._children).toContain(proxy);
-        });
-      });
-    });
-
     describe("call", function() {
 
       it("calls native call", function() {
@@ -652,8 +647,8 @@ describe("Proxy", function() {
       });
 
       it("notifies all children's dispose listeners", function() {
-        var child1 = tabris.create("type", {parent: proxy});
-        var child2 = tabris.create("type", {parent: proxy});
+        var child1 = tabris.create("type", {}).appendTo(proxy);
+        var child2 = tabris.create("type", {}).appendTo(proxy);
 
         proxy.on("dispose", function() {
           log.push("parent");
@@ -672,8 +667,8 @@ describe("Proxy", function() {
 
       it("notifies children's dispose listeners recursively", function() {
         var parent = tabris.create("type", {});
-        var child = tabris.create("type", {parent: parent});
-        var grandchild = tabris.create("type", {parent: child});
+        var child = tabris.create("type", {}).appendTo(parent);
+        var grandchild = tabris.create("type", {}).appendTo(child);
         parent.on("dispose", function() {
           log.push("parent");
         });
@@ -705,11 +700,11 @@ describe("Proxy", function() {
       });
 
       it("unregisters from parent to allow garbage collection", function() {
-        var child = tabris.create("Label", {parent: proxy});
+        var child = tabris.create("Label", {}).appendTo(proxy);
 
         child.dispose();
 
-        expect(proxy._children.length).toBe(0);
+        expect(proxy.children()).toEqual([]);
       });
 
     });

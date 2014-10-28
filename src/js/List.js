@@ -11,7 +11,7 @@
 
     _create: function(properties) {
       this.super("_create", util.extend({style: ["V_SCROLL"]}, properties));
-      tabris.create("rwt.widgets.ScrollBar", {parent: this, style: ["VERTICAL"]});
+      tabris.create("rwt.widgets.ScrollBar", {style: ["VERTICAL"]}).appendTo(this);
       this._createItems();
       return this;
     },
@@ -113,11 +113,10 @@
         for (var i = 0; i < this._items.length; i++) {
           var item = this._items[i];
           tabris.create("rwt.widgets.GridItem", {
-            parent: this,
             index: i,
             texts: createTexts(item),
             images: createImages(item)
-          });
+          }).appendTo(this);
         }
       }
       delete this._itemsPending;

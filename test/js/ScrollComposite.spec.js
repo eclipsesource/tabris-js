@@ -94,13 +94,13 @@ describe("ScrollComposite", function() {
       });
     });
 
-    describe("setting as a parent", function() {
+    describe("appending a widget", function() {
       var child;
 
       beforeEach(function() {
         child = new tabris.Proxy();
         nativeBridge.resetCalls();
-        child.set("parent", scrollComposite);
+        scrollComposite.append(child);
       });
 
       it("uses inner composite in 'set'", function() {

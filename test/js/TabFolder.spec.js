@@ -75,27 +75,11 @@ describe("TabFolder", function() {
 
     describe("when appending to an illegal parent", function() {
 
-      var consoleBackup = window.console;
-
-      beforeEach(function() {
-        window.console = jasmine.createSpyObj("console", ["log", "info", "warn", "error"]);
+      it("crashes", function() {
+        expect(function() {
+          tab.appendTo(tabris.create("Composite"));
+        }).toThrow(new Error("Tab must be a child of TabFolder"));
       });
-
-      afterEach(function() {
-        window.console = consoleBackup;
-      });
-
-      it("logs a warning", function() {
-        tab.appendTo(tabris.create("Composite"));
-        expect(window.console.warn).toHaveBeenCalledWith("Unsupported parent value: Tab must be a child of TabFolder");
-      });
-
-      // TODO throw an error instead of logging a warning, will be fixed in next commit
-      // it("crashes", function() {
-      //   expect(function() {
-      //     tab.appendTo(tabris.create("Composite"));
-      //   }).toThrow(new Error("Tab must be a child of TabFolder"));
-      // });
 
     });
 

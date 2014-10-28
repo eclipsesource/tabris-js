@@ -191,13 +191,13 @@ describe("Page", function() {
 
     });
 
-    describe("setting as a parent", function() {
+    describe("appending a widget", function() {
       var child;
 
       beforeEach(function() {
         child = new tabris.Proxy();
         nativeBridge.resetCalls();
-        child.set("parent", page);
+        page.append(child);
       });
 
       it("uses page's composite in 'set'", function() {
@@ -205,21 +205,6 @@ describe("Page", function() {
         expect(call.properties.parent).toBe(page._composite.id);
       });
 
-    });
-
-    describe("setting a page as a parent", function() {
-      var child;
-
-      beforeEach(function() {
-        child = new tabris.Proxy();
-        nativeBridge.resetCalls();
-        child.set("parent", page);
-      });
-
-      it("translates the parent to the page's composite in the protocol", function() {
-        var call = nativeBridge.calls({op: "set", id: child.id})[0];
-        expect(call.properties.parent).toBe(page._composite.id);
-      });
     });
 
   });
