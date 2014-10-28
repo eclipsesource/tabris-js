@@ -5,6 +5,7 @@
   "properties": {
     "type": "string:default|password|search|multiline?default",
     "text": "string",
+    "message": "string",
     "editable": "boolean",
     "echoChar": "string",
     "textLimit": "number",
