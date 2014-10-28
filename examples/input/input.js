@@ -93,7 +93,7 @@ tabris.load(function() {
 
   var luggage = tabris.create("Slider", {
     layoutData: {left: [luggageLabel, 10], right: [luggageWeight, 10], top: [dateField, 10]}
-  }).on("selection", function() {
+  }).on("change:selection", function() {
     luggageWeight.set("text", this.get("selection") + " Kg");
   }).appendTo(page);
 

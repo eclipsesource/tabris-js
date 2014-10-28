@@ -8,13 +8,11 @@
     "message": "string",
     "editable": "boolean",
     "echoChar": "string",
-    "textLimit": "number",
-    "selection": "number[]"
+    "textLimit": "number"
   },
   "events": [
-    "selection",
-    "focusin",
-    "focusout"
+    "focus",
+    "blur"
   ],
   "links": [
     {

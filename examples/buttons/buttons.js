@@ -89,7 +89,7 @@ tabris.load(function() {
         font: "25px sans-serif",
         layoutData: {left: [40, 0], right: [10, 0], top: refWidget ? [refWidget, 20] : 0},
         text: answer
-      }).on("selection", function() {
+      }).on("change:selection", function() {
         activateNextButton();
         statusLabel.set("text", "");
       });

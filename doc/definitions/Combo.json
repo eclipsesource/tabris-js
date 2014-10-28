@@ -8,7 +8,7 @@
     "text": "string"
   },
   "events": [
-    "selection"
+    "change:selection"
   ],
   "links": [
     {

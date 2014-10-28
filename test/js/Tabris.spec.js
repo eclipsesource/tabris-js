@@ -88,7 +88,7 @@ describe("tabris", function() {
     it("notifies widget proxy with translated event name", function() {
       tabris._notify.call(window, label.id, "FocusIn", {});
 
-      expect(label.trigger).toHaveBeenCalledWith("focusin", {});
+      expect(label.trigger).toHaveBeenCalledWith("focus", {});
     });
 
     it("silently ignores events for non-existing ids (does not crash)", function() {

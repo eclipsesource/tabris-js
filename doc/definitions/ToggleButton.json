@@ -9,6 +9,6 @@
     "alignment": "string:left|right|center?center"
   },
   "events": [
-    "selection"
+    "change:selection"
   ]
 }
