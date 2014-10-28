@@ -53,22 +53,22 @@
       return -1;
     },
 
-    _setProperty: function(name, value, properties) {
+    _setProperty: function(name, value) {
       switch (name) {
         case "template":
           this._checkDisposed();
-          this._setTemplate(value, properties);
+          this._setTemplate(value);
           break;
         case "items":
           this._checkDisposed();
-          this._setItems(value, properties);
+          this._setItems(value);
           break;
         default:
-          this.super("_setProperty", name, value, properties);
+          this.super("_setProperty", name, value);
       }
     },
 
-    _setTemplate: function(template, properties) {
+    _setTemplate: function(template) {
       this._template = template;
       if (this._template) {
         this._bindings = {text: [], image: []};
@@ -90,15 +90,15 @@
           rowTemplate.push(rowCell);
         }
         this._bindings.length = Math.max(this._bindings.text.length, this._bindings.image.length);
-        properties.rowTemplate = rowTemplate;
+        this._setProperty("rowTemplate", rowTemplate);
       } else {
         delete this._bindings;
       }
     },
 
-    _setItems: function(items, properties) {
+    _setItems: function(items) {
       this._items = items;
-      properties.itemCount = items ? items.length : 0;
+      this._setProperty("itemCount", items ? items.length : 0);
       this._itemsPending = true;
     },
 

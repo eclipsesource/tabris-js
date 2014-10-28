@@ -15,14 +15,13 @@
         style: properties.scroll === "horizontal" ? ["H_SCROLL"] : ["V_SCROLL"]
       }));
       this._scrollBar = new tabris.Proxy();
-      tabris._nativeBridge.create(this._scrollBar.id, "rwt.widgets.ScrollBar", {
-        parent: this.id,
-        style: properties.scroll === "horizontal" ? ["HORIZONTAL"] : ["VERTICAL"]
-      });
+      tabris._nativeBridge.create(this._scrollBar.id, "rwt.widgets.ScrollBar");
+      tabris._nativeBridge.set(this._scrollBar.id, "parent", this.id);
+      var style = properties.scroll === "horizontal" ? ["HORIZONTAL"] : ["VERTICAL"];
+      tabris._nativeBridge.set(this._scrollBar.id, "style", style);
       this._composite = new tabris.Proxy();
-      tabris._nativeBridge.create(this._composite.id, "rwt.widgets.Composite", {
-        parent: this.id
-      });
+      tabris._nativeBridge.create(this._composite.id, "rwt.widgets.Composite");
+      tabris._nativeBridge.set(this._composite.id, "parent", this.id);
       this.set("content", this._composite);
       return this;
     },

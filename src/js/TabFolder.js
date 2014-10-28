@@ -9,20 +9,17 @@
 
     _type: "rwt.widgets.TabFolder",
 
-    _create: function(properties) {
-      return this.super("_create", getTabFolderProps(properties));
-    },
-
     _getItems: function() {
       return this._children.filter(isItem);
     },
 
-    set: function() {
-      var properties = asProperties(arguments);
-      if ("paging" in properties) {
-        this._paging = properties.paging;
+    _setProperty: function(prop, value) {
+      if (prop === "paging") {
+        this._paging = value;
+        this.super("_setProperty", "data", {paging: value});
+      } else {
+        this.super("_setProperty", prop, value);
       }
-      return this.super("set", getTabFolderProps(properties));
     },
 
     get: function(prop) {
@@ -113,15 +110,6 @@
   function getItemProps(properties) {
     // TODO [tb]: Should "image" become "icon" as well?
     return util.rename(util.pick(properties || {}, itemProps), itemPropRenames);
-  }
-
-  function getTabFolderProps(properties) {
-    var result = properties || {};
-    if (result.paging) {
-      result = util.omit(result, ["paging"]);
-      result.data = {paging: properties.paging};
-    }
-    return result;
   }
 
   function isTab(child) {

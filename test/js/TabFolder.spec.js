@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 
-describe("TabFolder:", function() {
+describe("TabFolder", function() {
 
   var nativeBridge, tabFolder, parent;
 
@@ -24,8 +24,8 @@ describe("TabFolder:", function() {
     it("is enabled by set", function() {
       tabFolder.set("paging", true);
 
-      var setOp = nativeBridge.calls({id: tabFolder.id, op: "set"})[1];
-      expect(setOp.properties).toEqual({data: {paging: true}});
+      var setOp = nativeBridge.calls({id: tabFolder.id, op: "create"})[0];
+      expect(setOp.properties.data).toEqual({paging: true});
     });
 
     it("is enabled by create", function() {
@@ -194,6 +194,7 @@ describe("TabFolder:", function() {
 
     beforeEach(function() {
       tab = tabris.create("Tab", {parent: tabFolder});
+      nativeBridge.resetCalls();
       tab.set({
         title: "foo",
         image: {src: "bar"},
@@ -201,8 +202,8 @@ describe("TabFolder:", function() {
         background: "#010203"
       });
       var setCalls = nativeBridge.calls({op: "set"});
-      controlSet = setCalls[1];
-      itemSet = setCalls[2];
+      controlSet = setCalls[0];
+      itemSet = setCalls[1];
     });
 
     it("delegates TabItem properties", function() {

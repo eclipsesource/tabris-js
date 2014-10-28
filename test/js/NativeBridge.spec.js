@@ -23,7 +23,7 @@ describe("NativeBridge", function() {
 
   describe("create", function() {
     beforeEach(function() {
-      bridge.create("id", "type", {foo: 23});
+      bridge.create("id", "type");
     });
 
     it("is not transferred immediately", function() {
@@ -32,13 +32,13 @@ describe("NativeBridge", function() {
 
     it("is transferred on flush", function() {
       tabris.trigger("flush");
-      expect(native.create).toHaveBeenCalledWith("id", "type", {foo: 23});
+      expect(native.create).toHaveBeenCalledWith("id", "type", {});
     });
   });
 
   describe("set", function() {
     beforeEach(function() {
-      bridge.set("id", {foo: 23});
+      bridge.set("id", "foo", 23);
     });
 
     it("is not transferred immediately", function() {
@@ -48,6 +48,25 @@ describe("NativeBridge", function() {
     it("is transferred on flush", function() {
       tabris.trigger("flush");
       expect(native.set).toHaveBeenCalledWith("id", {foo: 23});
+    });
+  });
+
+  describe("subsequent create and set properties", function() {
+    beforeEach(function() {
+      bridge.create("id", "type");
+      bridge.set("id", "foo", 23);
+      bridge.set("id", "bar", 42);
+    });
+
+    it("is not transferred immediately", function() {
+      expect(native.create).not.toHaveBeenCalled();
+      expect(native.set).not.toHaveBeenCalled();
+    });
+
+    it("is transferred on flush", function() {
+      tabris.trigger("flush");
+      expect(native.create).toHaveBeenCalledWith("id", "type", {foo: 23, bar: 42});
+      expect(native.set).not.toHaveBeenCalled();
     });
   });
 

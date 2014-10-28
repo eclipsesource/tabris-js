@@ -14,8 +14,8 @@
 
     _create: function(properties) {
       var type = this._type || this.type;
-      var props = util.extend({}, this._properties || {}, this._encodeProperties(properties));
-      tabris._nativeBridge.create(this.id, type, props);
+      tabris._nativeBridge.create(this.id, type);
+      this._setProperties(util.extend({}, this._properties || {}, properties));
       return this;
     },
 
@@ -50,14 +50,11 @@
 
     set: function(arg1, arg2) {
       this._checkDisposed();
-      var properties;
       if (typeof arg1 === "string") {
-        properties = {};
-        properties[arg1] = arg2;
+        this._setProperty(arg1, arg2);
       } else {
-        properties = arg1;
+        this._setProperties(arg1);
       }
-      tabris._nativeBridge.set(this.id, this._encodeProperties(properties));
       return this;
     },
 
@@ -149,17 +146,15 @@
       }
     },
 
-    _encodeProperties: function(properties) {
-      var result = {};
-      for (var key in properties) {
-        this._setProperty(key, properties[key], result);
+    _setProperties: function(properties) {
+      for (var name in properties) {
+        this._setProperty(name, properties[name]);
       }
-      return result;
     },
 
-    _setProperty: function(name, value, target) {
+    _setProperty: function(name, value) {
       try {
-        target[name] = this._encodeProperty(name, value);
+        tabris._nativeBridge.set(this.id, name, this._encodeProperty(name, value));
       } catch (error) {
         console.warn("Unsupported " + name + " value: " + error.message);
       }
