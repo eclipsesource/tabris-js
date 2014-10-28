@@ -1,0 +1,18 @@
+{
+  "title": "Text",
+  "description": "Demonstrates working with text widgets",
+  "resources": [
+    {
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+    },
+    {
+      "src": "text.js"
+    },
+    {
+      "src": "text-with-text.js"
+    },
+    {
+      "src": "text-non-editable.js"
+    }
+  ]
+}

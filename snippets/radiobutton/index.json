@@ -1,0 +1,12 @@
+{
+  "title": "Radio Button",
+  "description": "Demonstrates creating radio buttons and assigning a selection event handler to them",
+  "resources": [
+    {
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+    },
+    {
+      "src": "radiobutton.js"
+    }
+  ]
+}

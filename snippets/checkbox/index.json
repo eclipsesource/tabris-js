@@ -1,0 +1,12 @@
+{
+  "title": "CheckBox",
+  "description": "Demonstrates creating a checkbox and assigning a selection event handler to it",
+  "resources": [
+    {
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+    },
+    {
+      "src": "checkbox.js"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "title": "Toggle Button",
+  "description": "Demonstrates creating a toggle button and assigning a selection event handler to it",
+  "resources": [
+    {
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+    },
+    {
+      "src": "togglebutton.js"
+    }
+  ]
+}

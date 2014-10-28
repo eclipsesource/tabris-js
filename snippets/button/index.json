@@ -1,0 +1,12 @@
+{
+  "title": "Button",
+  "description": "Demonstrates creating a button and assigning a selection event handler to it",
+  "resources": [
+    {
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+    },
+    {
+      "src": "button.js"
+    }
+  ]
+}
