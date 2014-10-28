@@ -14,8 +14,8 @@
 
     _create: function(properties) {
       var type = this._type || this.type;
-      var properties = util.extend(this._properties || {}, this._encodeProperties(properties));
-      tabris._nativeBridge.create(this.id, type, properties);
+      var props = util.extend({}, this._properties || {}, this._encodeProperties(properties));
+      tabris._nativeBridge.create(this.id, type, props);
       return this;
     },
 

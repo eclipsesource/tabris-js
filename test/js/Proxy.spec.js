@@ -55,13 +55,13 @@ describe("Proxy", function() {
       expect(properties.foo).toBe("other-id");
     });
 
-    it("translation does not modify properties", function() {
-      var other = new tabris.Proxy("other-id");
-      var properties = {foo: other};
+    it("does not modify prototype properties", function() {
+      tabris.registerType("CustomType", {_properties: {}});
 
-      proxy._create(properties);
+      tabris.create("CustomType", {foo: 23});
 
-      expect(properties.foo).toBe(other);
+      expect(tabris.CustomType.prototype._properties).toEqual({});
+      delete tabris.CustomType;
     });
 
   });
