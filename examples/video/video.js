@@ -6,7 +6,6 @@ tabris.load(function() {
   });
 
   var video = tabris.create("tabris.widgets.Video", {
-    parent: page, // TODO: Reparenting does not work for Video widget (tabris-android#625)
     enabled: true,
     controls_visible: true,
     repeat: false,
@@ -14,7 +13,7 @@ tabris.load(function() {
     // TODO: workaround for tabris-ios bug #451
     layoutData: {left: 0, right: 0, top: 0, height: 500},
     url: "http://mirrorblender.top-ix.org/movies/sintel-1024-surround.mp4"
-  });
+  }).appendTo(page);
 
   var controls = tabris.create("Composite", {
     layoutData: {left: 0, right: 0, bottom: 0, height: 90}
