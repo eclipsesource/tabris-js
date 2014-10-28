@@ -15,35 +15,32 @@ describe("TabFolder", function() {
     tabFolder = tabris.create("TabFolder").appendTo(parent);
   });
 
-  it("children() return empty array", function() {
+  it("children list is empty", function() {
     expect(tabFolder.children()).toEqual([]);
   });
 
-  describe("paging", function() {
+  it("paging is false", function() {
+    expect(tabFolder.get("paging")).toBe(false);
+  });
 
-    it("is enabled by set", function() {
+  describe("when paging is set", function() {
+
+    beforeEach(function() {
       tabFolder.set("paging", true);
+    });
 
+    it("sets the 'data' property", function() {
       var setOp = nativeBridge.calls({id: tabFolder.id, op: "create"})[0];
       expect(setOp.properties.data).toEqual({paging: true});
     });
 
-    it("is enabled by create", function() {
-      tabFolder = tabris.create("TabFolder", {paging: true});
-
-      var createOp = nativeBridge.calls({id: tabFolder.id, op: "create"})[0];
-      expect(createOp.properties).toEqual({data: {paging: true}});
-    });
-
-    it("stores property locally", function() {
-      expect(tabFolder.get("paging")).toBe(false);
-      tabFolder.set("paging", true);
+    it("getter reflects change", function() {
       expect(tabFolder.get("paging")).toBe(true);
     });
 
   });
 
-  describe("Creating a Tab with properties", function() {
+  describe("When a Tab is created", function() {
 
     var tab, controlCreate;
 
@@ -60,243 +57,138 @@ describe("TabFolder", function() {
     it("creates a Composite", function() {
       expect(controlCreate.type).toBe("rwt.widgets.Composite");
       expect(controlCreate.id).toBe(tab.id);
+    });
+
+    it("sets non-item properties on the Composite", function() {
       expect(controlCreate.properties.background).toEqual([1, 2, 3, 255]);
     });
 
-    it("creates no TabItem", function() {
+    it("does not create a TabItem", function() {
       expect(nativeBridge.calls({op: "create", type: "rwt.widgets.TabItem"}).length).toBe(0);
     });
 
-    describe("and then setting the parent", function() {
-
-      var itemCreate;
-
-      it("crashes if parent is not a TabFolder", function() {
-        expect(function() {
-          tabris.create("Composite").append(tab);
-        }).toThrow(new Error("Tab must be a child of TabFolder"));
-      });
-
-      it("applies item properties from create", function() {
-        tab.set("parent", tabFolder);
-        itemCreate = nativeBridge.calls({op: "create"})[2];
-
-        expect(itemCreate.type).toBe("rwt.widgets.TabItem");
-        expect(itemCreate.properties).toEqual({
-          control: controlCreate.id,
-          index: 0,
-          text: "foo",
-          image: ["bar", null, null, null],
-          badge: "1",
-          parent: tabFolder.id
-        });
-      });
-
-      it("applies item properties from previous set", function() {
-        tab.set({
-          title: "bar",
-          image: {src: "foo"},
-          badge: "2",
-          background: "#030201"
-        });
-        tab.set("parent", tabFolder);
-        itemCreate = nativeBridge.calls({op: "create"})[2];
-
-        expect(itemCreate.type).toBe("rwt.widgets.TabItem");
-        expect(itemCreate.properties).toEqual({
-          control: controlCreate.id,
-          index: 0,
-          text: "bar",
-          image: ["foo", null, null, null],
-          badge: "2",
-          parent: tabFolder.id
-        });
-      });
-
-      it("applies item properties from same set", function() {
-        tab.set({
-          title: "bar",
-          image: {src: "foo"},
-          badge: "2",
-          background: "#030201",
-          parent: tabFolder
-        });
-        itemCreate = nativeBridge.calls({op: "create"})[2];
-
-        expect(itemCreate.type).toBe("rwt.widgets.TabItem");
-        expect(itemCreate.properties).toEqual({
-          control: controlCreate.id,
-          index: 0,
-          text: "bar",
-          image: ["foo", null, null, null],
-          badge: "2",
-          parent: tabFolder.id
-        });
-      });
-
-      it("TabFolder.children() return list of Tabs", function() {
-        tab.appendTo(tabFolder);
-
-        expect(tabFolder.children()).toEqual([tab]);
-      });
-
-    });
-
-  });
-
-  describe("Creating a Tab with parent", function() {
-
-    var tab, controlCreate, itemCreate;
-
-    beforeEach(function() {
-      tab = tabris.create("Tab", {
-        parent: tabFolder
-      });
-      var createCalls = nativeBridge.calls({op: "create"});
-      controlCreate = createCalls[1];
-      itemCreate = createCalls[2];
-    });
-
-    it("sets the Composite parent", function() {
-      expect(controlCreate.properties.parent).toBe(tabFolder.id);
-    });
-
-    it("creates a TabItem", function() {
-      expect(itemCreate.type).toBe("rwt.widgets.TabItem");
-      expect(itemCreate.properties.control).toBe(controlCreate.id);
-      expect(itemCreate.properties.index).toBe(0);
-    });
-
-    it("sets the TabItem parent", function() {
-      expect(itemCreate.properties.parent).toBe(tabFolder.id);
-    });
-
-    describe("twice", function() {
-
-      it("increases index with each item", function() {
-        tabris.create("Tab", {parent: tabFolder});
-        expect(nativeBridge.calls({op: "create"})[4].properties.index).toBe(1);
-      });
-
-      it("does not increase index if previous item is disposed", function() {
-        tab.dispose();
-        tabris.create("Tab", {parent: tabFolder});
-        expect(nativeBridge.calls({op: "create"})[4].properties.index).toBe(0);
-      });
-
-    });
-
-  });
-
-  describe("Tab.set", function() {
-
-    var tab, controlSet, itemSet;
-
-    beforeEach(function() {
-      tab = tabris.create("Tab", {parent: tabFolder});
-      nativeBridge.resetCalls();
-      tab.set({
-        title: "foo",
-        image: {src: "bar"},
-        badge: "1",
-        background: "#010203"
-      });
-      var setCalls = nativeBridge.calls({op: "set"});
-      controlSet = setCalls[0];
-      itemSet = setCalls[1];
-    });
-
-    it("delegates TabItem properties", function() {
-      expect(itemSet.properties.text).toBe("foo");
-      expect(itemSet.properties.image).toEqual(["bar", null, null, null]);
-      expect(itemSet.properties.badge).toBe("1");
-      expect(itemSet.properties.background).toBeUndefined();
-    });
-
-    it("forwards Control properties", function() {
-      expect(controlSet.properties.background).toEqual([1, 2, 3, 255]);
-    });
-
-  });
-
-  describe("Tab.get (with parent)", function() {
-
-    var tab, controlId, itemId, getCalls;
-
-    beforeEach(function() {
-      tab = tabris.create("Tab", {parent: tabFolder});
-      controlId = nativeBridge.calls({op: "create"})[1].id;
-      itemId = nativeBridge.calls({op: "create"})[2].id;
-      ["title", /*"image",*/ "badge", "visible", "parent"].forEach(function(prop) {
-        tab.get(prop);
-      });
-      getCalls = nativeBridge.calls({op: "get"});
-    });
-
-    it("forwards Control properties", function() {
-      expect(getCalls.select({property: "parent"})[0].id).toBe(controlId);
-      expect(getCalls.select({property: "visible"})[0].id).toBe(controlId);
-    });
-
-    it("delegates TabItem properties", function() {
-      expect(getCalls.select({property: "text"})[0].id).toBe(itemId);
-      /*expect(getCalls.select({property: "image"})[0].id).toBe(itemId);*/
-      expect(getCalls.select({property: "badge"})[0].id).toBe(itemId);
-    });
-
-  });
-
-  describe("Tab.get (without parent)", function() {
-
-    var tab;
-
-    beforeEach(function() {
-      tab = tabris.create("Tab", {
-        title: "foo",
-        image: {src: "bar"},
-        badge: "1"
-      });
-    });
-
-    it("gets TabItem property from create", function() {
+    it("getter returns item properties", function() {
       expect(tab.get("title")).toBe("foo");
       expect(tab.get("image")).toEqual({src: "bar"});
       expect(tab.get("badge")).toBe("1");
     });
 
-    it("gets TabItem property from set", function() {
-      tab.set({
-        title: "bar",
-        image: {src: "foo"},
-        badge: "2"
+    describe("when appending to an illegal parent", function() {
+
+      var consoleBackup = window.console;
+
+      beforeEach(function() {
+        window.console = jasmine.createSpyObj("console", ["log", "info", "warn", "error"]);
       });
 
-      expect(tab.get("title")).toBe("bar");
-      expect(tab.get("image")).toEqual({src: "foo"});
-      expect(tab.get("badge")).toBe("2");
-    });
-
-  });
-
-  describe("Disposing a Tab", function() {
-
-    var tab, disposeCalls, itemId;
-
-    beforeEach(function() {
-      tab = tabris.create("Tab", {
-        parent: tabFolder
+      afterEach(function() {
+        window.console = consoleBackup;
       });
-      tab.dispose();
-      disposeCalls = nativeBridge.calls({op: "destroy"});
-      itemId = nativeBridge.calls({op: "create"})[2].id;
+
+      it("logs a warning", function() {
+        tab.appendTo(tabris.create("Composite"));
+        expect(window.console.warn).toHaveBeenCalledWith("Unsupported parent value: Tab must be a child of TabFolder");
+      });
+
+      // TODO throw an error instead of logging a warning, will be fixed in next commit
+      // it("crashes", function() {
+      //   expect(function() {
+      //     tab.appendTo(tabris.create("Composite"));
+      //   }).toThrow(new Error("Tab must be a child of TabFolder"));
+      // });
+
     });
 
-    it("destroys the control", function() {
-      expect(disposeCalls.select({id: tab.id}).length).toBe(1);
-    });
+    describe("when appending to a TabFolder", function() {
 
-    it("destroys the item", function() {
-      expect(disposeCalls.select({id: itemId}).length).toBe(1);
+      var itemCreate;
+
+      beforeEach(function() {
+        nativeBridge.resetCalls();
+        tab.appendTo(tabFolder);
+        itemCreate = nativeBridge.calls({op: "create", type: "rwt.widgets.TabItem"})[0];
+      });
+
+      it("sets the Composite's parent", function() {
+        var call = nativeBridge.calls({op: "set", id: controlCreate.id})[0];
+        expect(call.properties.parent).toBe(tabFolder.id);
+      });
+
+      it("creates a TabItem with the TabFolder as parent", function() {
+        expect(itemCreate).toBeDefined();
+        expect(itemCreate.properties.parent).toBe(tabFolder.id);
+      });
+
+      it("sets the composite as the TabItem's control", function() {
+        expect(itemCreate.properties.control).toBe(controlCreate.id);
+      });
+
+      it("sets the item properties to the TabItem", function() {
+        expect(itemCreate.properties.text).toBe("foo");
+        expect(itemCreate.properties.image).toEqual(["bar", null, null, null]);
+        expect(itemCreate.properties.badge).toBe("1");
+      });
+
+      it("sets the TabItem index", function() {
+        expect(itemCreate.properties.index).toBe(0);
+      });
+
+      it("getter delegates item properties to native", function() {
+        tab.get("title");
+        tab.get("badge");
+
+        expect(nativeBridge.calls({op: "get", id: itemCreate.id}).length).toBe(2);
+      });
+
+      it("children list contains only the tab", function() {
+        expect(tabFolder.children()).toEqual([tab]);
+      });
+
+      describe("when another tab is created", function() {
+
+        beforeEach(function() {
+          nativeBridge.resetCalls();
+          tabris.create("Tab", {}).appendTo(tabFolder);
+        });
+
+        it("creates TabItem with incremented index", function() {
+          var itemCreate = nativeBridge.calls({op: "create", type: "rwt.widgets.TabItem"})[0];
+          expect(itemCreate.properties.index).toBe(1);
+        });
+
+      });
+
+      describe("when the Tab is disposed", function() {
+
+        beforeEach(function() {
+          nativeBridge.resetCalls();
+          tab.dispose();
+        });
+
+        it("destroys the control", function() {
+          expect(nativeBridge.calls({op: "destroy", id: tab.id})[0]).toBeDefined();
+        });
+
+        it("destroys the item", function() {
+          expect(nativeBridge.calls({op: "destroy", id: itemCreate.id})[0]).toBeDefined();
+        });
+
+        describe("when another Tab is created", function() {
+
+          beforeEach(function() {
+            nativeBridge.resetCalls();
+            tabris.create("Tab", {}).appendTo(tabFolder);
+          });
+
+          it("creates TabItem with same index", function() {
+            var tabItemCreate = nativeBridge.calls({op: "create", type: "rwt.widgets.TabItem"})[0];
+            expect(tabItemCreate.properties.index).toBe(0);
+          });
+
+        });
+
+      });
+
     });
 
   });

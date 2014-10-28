@@ -10,7 +10,7 @@
     _type: "rwt.widgets.TabFolder",
 
     _getItems: function() {
-      return this._children.filter(isItem);
+      return this._children ? this._children.filter(isItem) : [];
     },
 
     _setProperty: function(prop, value) {
@@ -40,76 +40,56 @@
     _type: "rwt.widgets.Composite",
 
     _create: function(properties) {
-      this.super("_create", getControlProps(properties));
-      this._tabItem = new TabItem();
-      this._tabItem.set(util.extend(getItemProps(properties), {control: this.id}));
-      this.on("dispose", this._tabItem.dispose, this._tabItem);
-      return this;
+      this._itemProps = {};
+      return this.super("_create", properties);
     },
 
-    set: function() {
-      var properties = asProperties(arguments);
-      this.super("set", getControlProps(properties));
-      this._tabItem.set(getItemProps(properties));
-      return this;
-    },
-
-    get: function(property) {
-      if (itemOnlyProps.indexOf(property) !== -1) {
-        return this._tabItem.get(itemPropRenames[property] || property);
-      }
-      return this.super("get", property);
-    }
-
-  });
-
-  var TabItem = function() {
-    tabris.Proxy.apply(this, arguments);
-  };
-
-  TabItem.prototype = util.extendPrototype(tabris.Proxy, {
-
-    type: "rwt.widgets.TabItem",
-
-    set: function() {
-      this._checkDisposed();
-      var properties = asProperties(arguments);
-      if (!this._parent && !properties.parent) {
-        this._propertyCache = util.extend(this._propertyCache || {}, properties);
-      } else if (!this._parent && properties.parent) {
-        if (!(properties.parent instanceof tabris.TabFolder)) {
-          throw new Error("Tab must be a child of TabFolder");
+    _setProperty: function(name, value) {
+      if (isItemProp(name)) {
+        if (this._tabItem) {
+          this._tabItem._setProperty(translateItemProp(name), value);
+        } else {
+          this._itemProps[translateItemProp(name)] = value;
         }
-        properties = util.extend(this._propertyCache || {}, properties);
-        delete this._propertyCache;
-        properties.index = properties.parent._getItems().length;
-        this._create(properties);
       } else {
-        this.super("set", properties);
+        this.super("_setProperty", name, value);
       }
-      return this;
     },
 
-    get: function(property) {
-      if (!this._parent) {
-        return this._propertyCache[property];
+    get: function(name) {
+      if (isItemProp(name)) {
+        if (this._tabItem) {
+          return this._tabItem.get(translateItemProp(name));
+        }
+        return this._itemProps[translateItemProp(name)];
       }
-      return this.super("get", property);
-    }
+      return this.super("get", name);
+    },
 
+    _setParent: function(parent) {
+      if (!(parent instanceof tabris.TabFolder)) {
+        throw new Error("Tab must be a child of TabFolder");
+      }
+      this.super("_setParent", parent);
+      this._tabItem = tabris.create("rwt.widgets.TabItem", util.extend({
+        control: this.id,
+        index: parent._getItems().length
+      }, this._itemProps)).appendTo(parent);
+    },
+
+    _destroy: function() {
+      if (this._tabItem) {
+        this._tabItem.dispose();
+      }
+    }
   });
 
-  var itemProps = ["title", "image", "badge", "parent"];
-  var itemOnlyProps = ["title", "image", "badge"];
-  var itemPropRenames = {title: "text"};
-
-  function getControlProps(properties) {
-    return util.omit(properties || {}, itemOnlyProps);
+  function isItemProp(name) {
+    return ["title", "image", "badge"].indexOf(name) !== -1;
   }
 
-  function getItemProps(properties) {
-    // TODO [tb]: Should "image" become "icon" as well?
-    return util.rename(util.pick(properties || {}, itemProps), itemPropRenames);
+  function translateItemProp(name) {
+    return name === "title" ? "text" : name;
   }
 
   function isTab(child) {
@@ -117,18 +97,7 @@
   }
 
   function isItem(child) {
-    return child instanceof TabItem;
-  }
-
-  function asProperties(args) {
-    var properties;
-    if (typeof args[0] === "string") {
-      properties = {};
-      properties[args[0]] = args[1];
-    } else {
-      properties = args[0];
-    }
-    return properties;
+    return !isTab(child);
   }
 
 }());
