@@ -68,7 +68,7 @@ label.set({
 });
 ```
 
-# The Widget Hierarchy
+## The Widget Hierarchy
 
 To be visible, a widget needs a parent. The top-level parent of every UI is a `Page`. Widgets can be included in the widget hierarchy using `append` or `appendTo`.
 
@@ -103,7 +103,7 @@ Example:
 buttonBar.append(okButton, cancelButton);
 ```
 
-# Events
+## Events
 
 Widgets can fire a number of events, e.g. on touch or on modification. Event listeners can be added using the `on` method and removed using `off`. Returns the widget itself.
 
