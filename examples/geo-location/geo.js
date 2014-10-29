@@ -1,3 +1,7 @@
+tabris.registerType("AppLauncher", {
+  _type: "tabris.AppLauncher"
+});
+
 tabris.load(function() {
 
   var page = tabris.create("Page", {
@@ -46,7 +50,7 @@ tabris.load(function() {
     showLocation();
   });
 
-  var launcher = tabris.create("tabris.AppLauncher");
+  var launcher = tabris.create("AppLauncher");
 
   function showLocation() {
     locationLabel.set("text", locationToString(location));

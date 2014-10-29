@@ -13,6 +13,11 @@ describe("tabris", function() {
     log = [];
     tabris._reset();
     tabris._start(nativeBridge);
+    tabris.registerType("TestType", {});
+  });
+
+  afterEach(function() {
+    delete tabris.TestType;
   });
 
   describe("when used as a function", function() {
@@ -60,12 +65,12 @@ describe("tabris", function() {
 
     it("load functions can access tabris functions", function() {
       tabris.load(function() {
-        tabris.create("Foo");
+        tabris.create("TestType");
       });
 
       tabris._start.call(null, nativeBridge);
 
-      expect(nativeBridge.calls({op: "create", type: "Foo"}).length).toBe(1);
+      expect(nativeBridge.calls({op: "create", type: "TestType"}).length).toBe(1);
     });
 
   });
@@ -140,36 +145,42 @@ describe("tabris", function() {
       delete tabris._nativeBridge;
 
       expect(function() {
-        tabris.create("foo.bar", {});
+        tabris.create("TestType", {});
       }).toThrowError("tabris.js not started");
     });
 
+    it("fails if type is unknown", function() {
+      expect(function() {
+        tabris.create("UnknownType", {});
+      }).toThrowError("Unknown type UnknownType");
+    });
+
     it("creates a non-empty widget id", function() {
-      var proxy = tabris.create("type", {});
+      var proxy = tabris.create("TestType", {});
 
       expect(typeof proxy.id).toBe("string");
       expect(proxy.id.length).toBeGreaterThan(0);
     });
 
     it("creates different widget ids for subsequent calls", function() {
-      var proxy1 = tabris.create("type", {});
-      var proxy2 = tabris.create("type", {});
+      var proxy1 = tabris.create("TestType", {});
+      var proxy2 = tabris.create("TestType", {});
 
       expect(proxy1.id).not.toEqual(proxy2.id);
     });
 
     it("returns a proxy object", function() {
-      var result = tabris.create("type", {});
+      var result = tabris.create("TestType", {});
 
       expect(result).toEqual(jasmine.any(tabris.Proxy));
     });
 
     it("triggers a create operation with type and properties", function() {
-      var proxy = tabris.create("foo.bar", {foo: 23});
+      var proxy = tabris.create("TestType", {foo: 23});
 
       var createCall = nativeBridge.calls({op: "create", id: proxy.id})[0];
 
-      expect(createCall.type).toBe("foo.bar");
+      expect(createCall.type).toBe("TestType");
       expect(createCall.properties.foo).toBe(23);
     });
 

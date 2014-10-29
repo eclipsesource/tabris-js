@@ -9,6 +9,10 @@
  *    EclipseSource - initial API and implementation
  ******************************************************************************/
 
+tabris.registerType("_Animation", {
+  _type: "tabris.Animation"
+});
+
 tabris.Animation = {
 
   validOptions: {delay: true, duration: true, repeat: true, reverse: true, easing: true},
@@ -22,7 +26,7 @@ tabris.Animation = {
         console.warn("Invalid animation option \"" + option + "\"");
       }
     }
-    tabris.create("tabris.Animation", util.extend(validatedOptions, {
+    tabris.create("_Animation", util.extend(validatedOptions, {
       target: target,
       properties: properties
     })).on("Completion", function() {

@@ -15,10 +15,12 @@ describe("Proxy", function() {
     log = [];
     tabris._reset();
     tabris._start(nativeBridge);
+    tabris.registerType("TestType", {});
   });
 
   afterEach(function() {
     window.console = consoleBackup;
+    delete tabris.TestType;
   });
 
   describe("create", function() {
@@ -31,7 +33,7 @@ describe("Proxy", function() {
     });
 
     it("creates proxy for standard types", function() {
-      tabris.create("rwt.widgets.Button", {style: ["PUSH"], text: "foo"});
+      tabris.create("Button", {text: "foo"});
 
       var create = nativeBridge.calls({op: "create"})[0];
       expect(create.type).toEqual("rwt.widgets.Button");
@@ -647,8 +649,8 @@ describe("Proxy", function() {
       });
 
       it("notifies all children's dispose listeners", function() {
-        var child1 = tabris.create("type", {}).appendTo(proxy);
-        var child2 = tabris.create("type", {}).appendTo(proxy);
+        var child1 = tabris.create("TestType", {}).appendTo(proxy);
+        var child2 = tabris.create("TestType", {}).appendTo(proxy);
 
         proxy.on("dispose", function() {
           log.push("parent");
@@ -666,9 +668,9 @@ describe("Proxy", function() {
       });
 
       it("notifies children's dispose listeners recursively", function() {
-        var parent = tabris.create("type", {});
-        var child = tabris.create("type", {}).appendTo(parent);
-        var grandchild = tabris.create("type", {}).appendTo(child);
+        var parent = tabris.create("TestType", {});
+        var child = tabris.create("TestType", {}).appendTo(parent);
+        var grandchild = tabris.create("TestType", {}).appendTo(child);
         parent.on("dispose", function() {
           log.push("parent");
         });
@@ -685,7 +687,7 @@ describe("Proxy", function() {
       });
 
       it("does not call native destroy on children", function() {
-        tabris.create("type", {parent: proxy});
+        tabris.create("TestType", {parent: proxy});
 
         proxy.dispose();
 

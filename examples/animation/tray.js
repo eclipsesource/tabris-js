@@ -129,7 +129,7 @@ tabris.load(function() {
     if (duration < 0) {
       duration *= -1;
     }
-    animation = tabris.create("tabris.Animation", {
+    animation = tabris.create("_Animation", {
       target: tray,
       duration: duration,
       easing: "ease-out", // "linear", "ease-in", "ease-out", "ease-in-out"

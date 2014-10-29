@@ -1,3 +1,7 @@
+tabris.registerType("Video", {
+  _type: "tabris.widgets.Video"
+});
+
 tabris.load(function() {
 
   var page = tabris.create("Page", {

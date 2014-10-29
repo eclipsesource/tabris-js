@@ -1,3 +1,7 @@
+tabris.registerType("DateTime", {
+  _type: "rwt.widgets.DateTime"
+});
+
 tabris.load(function() {
 
   var message;
@@ -71,7 +75,7 @@ tabris.load(function() {
     text: "Date:"
   }).appendTo(page);
 
-  var dateField = tabris.create("rwt.widgets.DateTime", {
+  var dateField = tabris.create("DateTime", {
     style: ["DATE"],
     layoutData: {left: [dateLabel, 10], right: 10, top: [classCombo, 10]},
     year: 2014,

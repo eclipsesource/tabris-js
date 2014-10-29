@@ -14,7 +14,7 @@ tabris.registerType("Page", {
       parent: tabris._shell,
       layoutData: {left: 0, right: 0, top: 0, bottom: 0}
     });
-    this._composite = tabris.create("rwt.widgets.Composite", compositeProperties);
+    this._composite = tabris.create("Composite", compositeProperties);
     var pageProperties = util.extend(util.pick(properties, this._PAGE_PROPS), {
       parent: tabris._uiProxy._ui,
       control: this._composite

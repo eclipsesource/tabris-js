@@ -386,6 +386,9 @@
   tabris.registerType("ImageView", {
     _type: "tabris.ImageView"
   });
+  tabris.registerType("Label", {
+    _type: "rwt.widgets.Label"
+  });
   tabris.registerType("ProgressBar", {
     _type: "rwt.widgets.ProgressBar"
   });
@@ -402,6 +405,9 @@
         tabris._nativeBridge.listen(this.id, "Selection", listen);
       }
     }
+  });
+  tabris.registerType("_ScrollBar", {
+    _type: "rwt.widgets.ScrollBar"
   });
   tabris.registerType("Slider", {
     _type: "rwt.widgets.Scale",
@@ -429,9 +435,6 @@
         tabris._nativeBridge.listen(this.id, "Selection", listen);
       }
     }
-  });
-  tabris.registerType("Label", {
-    _type: "rwt.widgets.Label"
   });
   tabris.registerType("Text", {
     _type: "rwt.widgets.Text",

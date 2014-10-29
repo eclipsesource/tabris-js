@@ -5,6 +5,10 @@
 
 (function() {
 
+  tabris.registerType("_TabItem", {
+    _type: "rwt.widgets.TabItem"
+  });
+
   tabris.registerType("TabFolder", {
 
     _type: "rwt.widgets.TabFolder",
@@ -71,7 +75,7 @@
         throw new Error("Tab must be a child of TabFolder");
       }
       this.super("_setParent", parent);
-      this._tabItem = tabris.create("rwt.widgets.TabItem", util.extend({
+      this._tabItem = tabris.create("_TabItem", util.extend({
         control: this.id,
         index: parent._getItems().length
       }, this._itemProps)).appendTo(parent);

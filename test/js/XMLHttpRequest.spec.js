@@ -174,7 +174,7 @@ describe("XMLHttpRequest", function() {
     it("creates proxy", function() {
       xhr.open("GET", "http://www.foo.com");
       xhr.send();
-      expect(tabris.create).toHaveBeenCalledWith("tabris.HttpRequest");
+      expect(tabris.create).toHaveBeenCalledWith("_HttpRequest");
     });
 
     it("fails when state not 'opened'", function() {

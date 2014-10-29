@@ -23,8 +23,7 @@
         throw new Error("tabris.js not started");
       }
       if (!(type in tabris)) {
-        // TODO [rst] Allow unregistered types for compatibility, replace with error
-        tabris.registerType(type, {});
+        throw new Error("Unknown type " + type);
       }
       return new tabris[type]()._create(properties);
     },

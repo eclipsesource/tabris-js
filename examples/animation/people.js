@@ -27,7 +27,7 @@ tabris.load(function() {
         translationY: THUMB_SIZE / 2
       }
     });
-    tabris.create("tabris.Animation", {
+    tabris.create("_Animation", {
       target: widget,
       delay: i * 100 + 800 + ANIMATION_START_DELAY,
       duration: 200,
@@ -50,7 +50,7 @@ tabris.load(function() {
         translationX: 32
       }
     });
-    tabris.create("tabris.Animation", {
+    tabris.create("_Animation", {
       target: widget,
       duration: 500,
       delay: delay,
@@ -68,7 +68,7 @@ tabris.load(function() {
 
   function animateInScaleUp(widget, delay) {
     widget.set("opacity", 0.0);
-    tabris.create("tabris.Animation", {
+    tabris.create("_Animation", {
       target: widget,
       delay: delay,
       duration: 400,
@@ -86,7 +86,7 @@ tabris.load(function() {
   }
 
   function animateOutLeftCreateCurrentPerson(person) {
-    tabris.create("tabris.Animation", {
+    tabris.create("_Animation", {
       target: curPersonDetailComposite,
       duration: 500,
       easing: "ease-out",

@@ -3,6 +3,16 @@
  * All rights reserved.
  */
 
+tabris.registerType("_Display", {
+  _type: "rwt.widgets.Display"
+});
+tabris.registerType("_Shell", {
+  _type: "rwt.widgets.Shell"
+});
+tabris.registerType("_UI", {
+  _type: "tabris.UI"
+});
+
 tabris.UIProxy = function() {
   this._pages = [];
 };
@@ -11,8 +21,8 @@ tabris.UIProxy.prototype = {
 
   _create: function() {
     var self = this;
-    tabris.create("rwt.widgets.Display");
-    tabris._shell = tabris.create("rwt.widgets.Shell", {
+    tabris.create("_Display");
+    tabris._shell = tabris.create("_Shell", {
       style: ["NO_TRIM"],
       mode: "maximized",
       active: true,
@@ -21,7 +31,7 @@ tabris.UIProxy.prototype = {
     tabris._shell.on("Close", function() {
       tabris._shell.dispose();
     });
-    this._ui = tabris.create("tabris.UI", {
+    this._ui = tabris.create("_UI", {
       shell: tabris._shell
     });
     this._ui.on("ShowPage", function(properties) {

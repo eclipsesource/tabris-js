@@ -4,6 +4,10 @@
 
 (function() {
 
+  tabris.registerType("_GC", {
+    _type: "rwt.widgets.GC"
+  });
+
   tabris.CanvasContext = function(gc) {
     this._gc = gc;
     this._state = createState();
@@ -201,7 +205,7 @@
 
   tabris.getContext = function(canvas, width, height) {
     if (!canvas._gc) {
-      canvas._gc = tabris.create("rwt.widgets.GC", {parent: canvas});
+      canvas._gc = tabris.create("_GC", {parent: canvas});
     }
     if (!canvas._ctx) {
       canvas._ctx = tabris._nativeBridge.V8 ? new tabris.CanvasContext(canvas._gc)

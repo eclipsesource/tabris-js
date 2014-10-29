@@ -5,6 +5,10 @@
 
 (function() {
 
+  tabris.registerType("_Timer", {
+    _type: "tabris.Timer"
+  });
+
   tabris._addWindowTimerMethods = function(target) {
 
     if (typeof target.setTimeout === "function") {
@@ -16,7 +20,7 @@
 
     function createTimer(fn, delay, repeat) {
       var taskId = taskSequence++;
-      var timer = tabris.create("tabris.Timer", {
+      var timer = tabris.create("_Timer", {
         delay: delay,
         repeat: repeat
       }).on("Run", function() {

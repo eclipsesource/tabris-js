@@ -5,13 +5,17 @@
 
 (function() {
 
+  tabris.registerType("_GridItem", {
+    _type: "rwt.widgets.GridItem"
+  });
+
   tabris.registerType("List", {
 
     _type: "rwt.widgets.Grid",
 
     _create: function(properties) {
       this.super("_create", util.extend({style: ["V_SCROLL"]}, properties));
-      tabris.create("rwt.widgets.ScrollBar", {style: ["VERTICAL"]}).appendTo(this);
+      tabris.create("_ScrollBar", {style: ["VERTICAL"]}).appendTo(this);
       this._createItems();
       return this;
     },
@@ -110,7 +114,7 @@
         var createImages = this._createImagesFn();
         for (var i = 0; i < this._items.length; i++) {
           var item = this._items[i];
-          tabris.create("rwt.widgets.GridItem", {
+          tabris.create("_GridItem", {
             index: i,
             texts: createTexts(item),
             images: createImages(item)

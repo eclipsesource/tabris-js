@@ -12,6 +12,10 @@
 
 (function() {
 
+  tabris.registerType("_HttpRequest", {
+    _type: "tabris.HttpRequest"
+  });
+
   var eventTypes = [
     "loadstart", "readystatechange", "load", "loadend", "progress", "timeout", "abort", "error"
   ];
@@ -319,7 +323,7 @@
 
   var createSendMethod = function(xhr, scope) {
     return function(data) { // #the-send()-method
-      scope.proxy = tabris.create("tabris.HttpRequest");
+      scope.proxy = tabris.create("_HttpRequest");
       scope.proxy.on("StateChange", function(e) {
         stateChangeHandler(e, xhr, scope);
       });
