@@ -14,7 +14,8 @@ describe("CanvasContext", function() {
     window.console = jasmine.createSpyObj("console", ["log", "info", "warn", "error"]);
     nativeBridge = new NativeBridgeSpy();
     tabris._start(nativeBridge);
-    gc = new tabris.Proxy("gc-id");
+    gc = tabris.create("_GC");
+    nativeBridge.resetCalls();
     ctx = new tabris.CanvasContext(gc);
     tabris._reset();
   });
@@ -38,7 +39,8 @@ describe("CanvasContext", function() {
     var canvas;
 
     beforeEach(function() {
-      canvas = new tabris.Proxy();
+      canvas = tabris.create("Canvas");
+      nativeBridge.resetCalls();
     });
 
     it("creates a native GC", function() {

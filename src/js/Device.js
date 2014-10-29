@@ -5,12 +5,16 @@
 
 (function() {
 
+  tabris.registerType("_Device", {
+    _type: "tabris.Device"
+  });
+
   tabris._addDeviceMethods = function(target) {
 
     if (!("devicePixelRatio" in target)) {
       Object.defineProperty(target, "devicePixelRatio", {
         get: function() {
-          return tabris("tabris.Device").get("scaleFactor");
+          return tabris("_Device").get("scaleFactor");
         },
         set: function() {}
       });

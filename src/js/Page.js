@@ -7,6 +7,10 @@ tabris.registerType("Page", {
 
   _type: "tabris.Page",
 
+  _listen: tabris.Proxy._widgetListen(),
+
+  _trigger: tabris.Proxy._widgetTrigger(),
+
   _PAGE_PROPS: ["title", "image", "style", "topLevel"],
 
   _create: function(properties) {

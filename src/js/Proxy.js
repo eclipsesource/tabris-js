@@ -68,13 +68,7 @@
       var wasListening = this._isListening(event);
       tabris.Events.on.call(this, event, listener, context);
       if (!wasListening) {
-        var listen = this.constructor._listen[event] || defaultListen[event];
-        if (listen) {
-          listen.call(this, true);
-        } else {
-          // TODO: only print warning instead
-          tabris._nativeBridge.listen(this.id, event, true);
-        }
+        this._listen(event, true);
       }
       return this;
     },
@@ -83,13 +77,7 @@
       this._checkDisposed();
       tabris.Events.off.call(this, event, listener, context);
       if (!this._isListening(event)) {
-        var listen = this.constructor._listen[event] || defaultListen[event];
-        if (listen) {
-          listen.call(this, false);
-        } else {
-          // TODO: only print warning instead
-          tabris._nativeBridge.listen(this.id, event, false);
-        }
+        this._listen(event, false);
       }
       return this;
     },
@@ -113,13 +101,27 @@
       return this._children ? Array.prototype.slice.call(this._children) : [];
     },
 
+    _listen: function(event, state) {
+      var listen = this.constructor && this.constructor._listen && this.constructor._listen[event];
+      if (!listen) {
+        console.info("Unknown event type " + event);
+      } else if (typeof listen === "string") {
+        tabris._nativeBridge.listen(this.id, listen, state);
+      } else if (listen instanceof Function) {
+        listen.call(this, state);
+      } else {
+        tabris._nativeBridge.listen(this.id, event, state);
+      }
+    },
+
     _trigger: function(event, params) {
-      var trigger = this.constructor._trigger[event] || defaultTrigger[event];
-      if (trigger) {
+      var trigger = this.constructor && this.constructor._trigger && this.constructor._trigger[event];
+      if (!trigger) {
+        this.trigger(event, params);
+      } else if (trigger instanceof Function) {
         trigger.call(this, params);
       } else {
-        // TODO [tb] : Print warning instead
-        this.trigger(event, params);
+        this.trigger(trigger, params);
       }
     },
 
@@ -227,27 +229,6 @@
 
   });
 
-  var defaultListen = {
-    focus: function(listen) { tabris._nativeBridge.listen(this.id, "FocusIn", listen); },
-    blur: function(listen) { tabris._nativeBridge.listen(this.id, "FocusOut", listen); },
-    selection: function(listen) { tabris._nativeBridge.listen(this.id, "Selection", listen); },
-    "change:bounds": function(listen) { tabris._nativeBridge.listen(this.id, "Resize", listen); },
-    scroll: function(listen) { tabris._nativeBridge.listen(this.id, "Scroll", listen); }
-  };
-
-  var defaultTrigger = {
-    FocusIn: function(params) { this.trigger("focus", params); },
-    FocusOut: function(params) { this.trigger("blur", params); },
-    Selection: function(params) { this.trigger("selection", params); },
-    Resize: function(params) { this.trigger("change:bounds", params); },
-    Scroll: function(params) { this.trigger("scroll", params); }
-  };
-
-  util.extend(tabris.Proxy, {
-    _listen: {},
-    _trigger: {}
-  });
-
   function encodeColor(value) {
     return util.colorStringToArray(value);
   }
@@ -346,105 +327,101 @@
     default: ["BORDER", "SINGLE"]
   };
 
+  util.extend(tabris.Proxy, {
+    _widgetListen: function(listenMap) {
+      return util.extend({
+        touchstart: true,
+        touchmove: true,
+        touchend: true,
+        longpress: true,
+        dispose: function() {},
+        "change:bounds": "Resize"
+      }, (listenMap || {}));
+    },
+    _widgetTrigger: function(triggerMap) {
+      return util.extend({
+        Resize: "change:bounds"
+      }, (triggerMap || {}));
+    }
+  });
+
   tabris.registerType("Button", {
     _type: "rwt.widgets.Button",
-    _properties: {style: ["PUSH"]}
+    _properties: {style: ["PUSH"]},
+    _listen: tabris.Proxy._widgetListen({selection: "Selection"}),
+    _trigger: tabris.Proxy._widgetTrigger({Selection: "selection"})
   });
   tabris.registerType("Canvas", {
-    _type: "rwt.widgets.Canvas"
+    _type: "rwt.widgets.Canvas",
+    _listen: tabris.Proxy._widgetListen(),
+    _trigger: tabris.Proxy._widgetTrigger()
   });
   tabris.registerType("CheckBox", {
     _type: "rwt.widgets.Button",
     _properties: {style: ["CHECK"]},
-    _trigger: {
-      Selection: function(params) {
-        this.trigger("change:selection", params);
-      }
-    },
-    _listen: {
-      "change:selection": function(listen) {
-        tabris._nativeBridge.listen(this.id, "Selection", listen);
-      }
-    }
+    _listen: tabris.Proxy._widgetListen({Selection: "change:selection"}),
+    _trigger: tabris.Proxy._widgetTrigger({"change:selection": "Selection"})
   });
   tabris.registerType("Combo", {
     _type: "rwt.widgets.Combo",
-    _trigger: {
-      Selection: function(params) {
-        this.trigger("change:selection", params);
-      }
-    },
-    _listen: {
-      "change:selection": function(listen) {
-        tabris._nativeBridge.listen(this.id, "Selection", listen);
-      }
-    }
+    _listen: tabris.Proxy._widgetListen({Selection: "change:selection"}),
+    _trigger: tabris.Proxy._widgetTrigger({"change:selection": "Selection"})
   });
   tabris.registerType("Composite", {
-    _type: "rwt.widgets.Composite"
+    _type: "rwt.widgets.Composite",
+    _listen: tabris.Proxy._widgetListen(),
+    _trigger: tabris.Proxy._widgetTrigger()
   });
   tabris.registerType("ImageView", {
-    _type: "tabris.ImageView"
+    _type: "tabris.ImageView",
+    _listen: tabris.Proxy._widgetListen(),
+    _trigger: tabris.Proxy._widgetTrigger()
   });
   tabris.registerType("Label", {
-    _type: "rwt.widgets.Label"
+    _type: "rwt.widgets.Label",
+    _listen: tabris.Proxy._widgetListen(),
+    _trigger: tabris.Proxy._widgetTrigger()
   });
   tabris.registerType("ProgressBar", {
-    _type: "rwt.widgets.ProgressBar"
+    _type: "rwt.widgets.ProgressBar",
+    _listen: tabris.Proxy._widgetListen(),
+    _trigger: tabris.Proxy._widgetTrigger()
   });
   tabris.registerType("RadioButton", {
     _type: "rwt.widgets.Button",
     _properties: {style: ["RADIO"]},
-    _trigger: {
-      Selection: function(params) {
-        this.trigger("change:selection", params);
-      }
-    },
-    _listen: {
-      "change:selection": function(listen) {
-        tabris._nativeBridge.listen(this.id, "Selection", listen);
-      }
-    }
+    _listen: tabris.Proxy._widgetListen({Selection: "change:selection"}),
+    _trigger: tabris.Proxy._widgetTrigger({"change:selection": "Selection"})
   });
   tabris.registerType("_ScrollBar", {
-    _type: "rwt.widgets.ScrollBar"
+    _type: "rwt.widgets.ScrollBar",
+    _listen: tabris.Proxy._widgetListen({Selection: true}),
+    _trigger: tabris.Proxy._widgetTrigger({Selection: true})
   });
   tabris.registerType("Slider", {
     _type: "rwt.widgets.Scale",
-    _trigger: {
-      Selection: function(params) {
-        this.trigger("change:selection", params);
-      }
-    },
-    _listen: {
-      "change:selection": function(listen) {
-        tabris._nativeBridge.listen(this.id, "Selection", listen);
-      }
-    }
-  });
-  tabris.registerType("ToggleButton", {
-    _type: "rwt.widgets.Button",
-    _properties: {style: ["TOGGLE"]},
-    _trigger: {
-      Selection: function(params) {
-        this.trigger("change:selection", params);
-      }
-    },
-    _listen: {
-      "change:selection": function(listen) {
-        tabris._nativeBridge.listen(this.id, "Selection", listen);
-      }
-    }
+    _listen: tabris.Proxy._widgetListen({Selection: "change:selection"}),
+    _trigger: tabris.Proxy._widgetTrigger({"change:selection": "Selection"})
   });
   tabris.registerType("Text", {
     _type: "rwt.widgets.Text",
     _create: function(properties) {
       var style = textTypeToStyle[properties.type] || textTypeToStyle["default"];
       return this.super("_create", util.extend({style: style}, properties));
-    }
+    },
+    _listen: tabris.Proxy._widgetListen({focusin: "FocusIn", focusout: "FocusOut"}),
+    _trigger: tabris.Proxy._widgetTrigger({FocusIn: "focusin", FocusOut: "focusout"})
+  });
+  tabris.registerType("ToggleButton", {
+    _type: "rwt.widgets.Button",
+    _properties: {style: ["TOGGLE"]},
+    _listen: tabris.Proxy._widgetListen({Selection: "change:selection"}),
+    _trigger: tabris.Proxy._widgetTrigger({"change:selection": "Selection"})
   });
   tabris.registerType("WebView", {
-    _type: "rwt.widgets.Browser"
+    _type: "rwt.widgets.Browser",
+    _listen: tabris.Proxy._widgetListen(),
+    _trigger: tabris.Proxy._widgetTrigger()
   });
 
 })();

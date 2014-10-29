@@ -22,24 +22,46 @@ describe("tabris", function() {
 
   describe("when used as a function", function() {
 
-    it("returns a proxy for the given id", function() {
-      var result = tabris("foo");
+    it("returns a proxy with the given string as id and type", function() {
+      var result = tabris("TestType");
 
-      expect(result).toEqual(jasmine.any(tabris.Proxy));
-      expect(result.id).toBe("foo");
+      expect(result).toEqual(jasmine.any(tabris.TestType));
+      expect(result.id).toBe("TestType");
+    });
+
+    it("returns a proxy with translated id and type", function() {
+      tabris.TestType._type = "CustomType";
+      var result = tabris("TestType");
+
+      expect(result).toEqual(jasmine.any(tabris.TestType));
+      expect(result.id).toBe("CustomType");
     });
 
     it("returns same proxy instance for the same id", function() {
-      var result1 = tabris("foo");
-      var result2 = tabris("foo");
+      tabris.TestType._type = "CustomType";
+      var result1 = tabris("TestType");
+      var result2 = tabris("TestType");
+
+      expect(result1).toBe(result2);
+    });
+
+    it("returns same proxy instance for the same translated id", function() {
+      var result1 = tabris("TestType");
+      var result2 = tabris("TestType");
 
       expect(result1).toBe(result2);
     });
 
     it("does not call create on native bridge", function() {
-      tabris("foo");
+      tabris("TestType");
 
       expect(nativeBridge.calls().length).toBe(0);
+    });
+
+    it("fails for unknown types", function() {
+      expect(function() {
+        tabris("foo");
+      }).toThrow();
     });
 
   });
@@ -77,23 +99,32 @@ describe("tabris", function() {
 
   describe("_notify", function() {
 
-    var label;
+    var proxy;
 
     beforeEach(function() {
-      label = tabris.create("Label", {});
-      spyOn(label, "trigger");
+      tabris.TestType._trigger = {};
+      proxy = tabris.create("TestType", {});
+      spyOn(proxy, "trigger");
     });
 
     it("notifies widget proxy", function() {
-      tabris._notify(label.id, "foo", {bar: 23});
+      tabris._notify(proxy.id, "foo", {bar: 23});
 
-      expect(label.trigger).toHaveBeenCalledWith("foo", {bar: 23});
+      expect(proxy.trigger).toHaveBeenCalledWith("foo", {bar: 23});
     });
 
     it("notifies widget proxy with translated event name", function() {
-      tabris._notify.call(window, label.id, "FocusIn", {});
+      tabris.TestType._trigger.foo = "bar";
+      tabris._notify.call(window, proxy.id, "foo", {});
 
-      expect(label.trigger).toHaveBeenCalledWith("focus", {});
+      expect(proxy.trigger).toHaveBeenCalledWith("bar", {});
+    });
+
+    it("calls custom trigger", function() {
+      tabris.TestType._trigger.foo = jasmine.createSpy();
+      tabris._notify.call(window, proxy.id, "foo", {bar: 23});
+
+      expect(tabris.TestType._trigger.foo).toHaveBeenCalledWith({bar: 23});
     });
 
     it("silently ignores events for non-existing ids (does not crash)", function() {

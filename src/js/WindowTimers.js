@@ -6,7 +6,8 @@
 (function() {
 
   tabris.registerType("_Timer", {
-    _type: "tabris.Timer"
+    _type: "tabris.Timer",
+    _listen: {Run: true}
   });
 
   tabris._addWindowTimerMethods = function(target) {

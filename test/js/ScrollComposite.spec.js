@@ -61,6 +61,7 @@ describe("ScrollComposite", function() {
     describe("when a Scroll listener is added", function() {
       var listener;
       var scrollBar;
+
       beforeEach(function() {
         listener = jasmine.createSpy();
         scrollBar = tabris(createCalls[1].id);
@@ -69,29 +70,33 @@ describe("ScrollComposite", function() {
           return (name === "origin") ? [23, 42] : null;
         });
       });
+
       it("is notified on ScrollBar change", function() {
-        scrollBar.trigger("selection", {});
+        scrollBar.trigger("Selection", {});
         expect(listener).toHaveBeenCalled();
         expect(listener.calls.first().args).toEqual([{x: 23, y: 42}]);
       });
+
       describe("when another listener is added", function() {
         beforeEach(function() {
           scrollComposite.on("scroll", jasmine.createSpy());
         });
         it("is notified on ScrollBar change once", function() {
-          scrollBar.trigger("selection", {});
+          scrollBar.trigger("Selection", {});
           expect(listener.calls.count()).toBe(1);
         });
       });
+
       describe("when the listener is removed", function() {
         beforeEach(function() {
           scrollComposite.off("scroll", listener);
         });
         it("is not notified on ScrollBar change anymore", function() {
-          scrollBar.trigger("selection", {});
+          scrollBar.trigger("Selection", {});
           expect(listener.calls.count()).toBe(0);
         });
       });
+
     });
 
     describe("appending a widget", function() {

@@ -33,7 +33,7 @@ describe("LocalStorage", function() {
 
   describe("constructor", function() {
     it("creates proxy", function() {
-      expect(tabris).toHaveBeenCalledWith("tabris.ClientStore");
+      expect(tabris).toHaveBeenCalledWith("_ClientStore");
     });
   });
 

@@ -13,8 +13,9 @@ describe("XMLHttpRequest", function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._start(nativeBridge);
+    var origCreate = tabris.create;
     spyOn(tabris, "create").and.callFake(function() {
-      proxy = new tabris.Proxy();
+      proxy = origCreate.apply(this, arguments);
       proxy.call = jasmine.createSpy("call");
       return proxy;
     });

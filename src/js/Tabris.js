@@ -8,7 +8,11 @@
 (function() {
 
   tabris = util.extend(function(id) {
-    return id in tabris._proxies ? tabris._proxies[id] : new tabris.Proxy(id);
+    if (!tabris._proxies[id] && !tabris[id]) {
+      throw new Error("No native object with id or type " + id);
+    }
+    var nativeId = tabris[id] && tabris[id]._type ? tabris[id]._type : id;
+    return nativeId in tabris._proxies ? tabris._proxies[nativeId] : new tabris[id](nativeId);
   }, {
 
     _loadFunctions: [],
@@ -36,7 +40,7 @@
         tabris.Proxy.apply(this, arguments);
       };
       for (var key in constructorDefaults) {
-        tabris[type][key] = members[key] || constructorDefaults[key];
+        tabris[type][key] = members[key] || constructorDefaults[key]();
       }
       var superProto = util.omit(members, Object.keys(constructorDefaults));
       superProto.type = type;
@@ -69,10 +73,10 @@
   });
 
   var constructorDefaults = {
-    _trigger: {},
-    _listen: {},
-    _properties: {},
-    _type: null
+    _trigger: function() { return {}; },
+    _listen: function() { return {}; },
+    _properties: function() { return {}; },
+    _type: function() { return null; }
   };
 
 })();

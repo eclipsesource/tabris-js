@@ -5,10 +5,14 @@
 
 (function() {
 
+  tabris.registerType("_ClientStore", {
+    _type: "tabris.ClientStore"
+  });
+
   var proxy;
 
   tabris.WebStorage = function() {
-    proxy = tabris("tabris.ClientStore");
+    proxy = tabris("_ClientStore");
   };
 
   tabris.WebStorage.prototype = {

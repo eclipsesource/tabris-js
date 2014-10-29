@@ -4,13 +4,16 @@
  */
 
 tabris.registerType("_Display", {
-  _type: "rwt.widgets.Display"
+  _type: "rwt.widgets.Display",
+  _trigger: {Close: true, Resize: true}
 });
 tabris.registerType("_Shell", {
-  _type: "rwt.widgets.Shell"
+  _type: "rwt.widgets.Shell",
+  _listen: {Close: true}
 });
 tabris.registerType("_UI", {
-  _type: "tabris.UI"
+  _type: "tabris.UI",
+  _listen: {ShowPage: true, ShowPreviousPage: true}
 });
 
 tabris.UIProxy = function() {

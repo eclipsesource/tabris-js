@@ -10,7 +10,7 @@ describe("Device", function() {
     var device, target;
 
     beforeEach(function() {
-      device = tabris("tabris.Device");
+      device = tabris("_Device");
       spyOn(device, "get").and.returnValue(23);
       target = {};
       tabris._addDeviceMethods(target);

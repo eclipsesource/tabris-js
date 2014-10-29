@@ -28,8 +28,8 @@ describe("Proxy", function() {
     var proxy;
 
     beforeEach(function() {
-      proxy = new tabris.Proxy("test-id");
-      proxy.type = "TestType";
+      proxy = tabris.create("TestType");
+      nativeBridge.resetCalls();
     });
 
     it("creates proxy for standard types", function() {
@@ -73,7 +73,8 @@ describe("Proxy", function() {
     var proxy;
 
     beforeEach(function() {
-      proxy = new tabris.Proxy("test-id");
+      proxy = tabris.create("TestType");
+      nativeBridge.resetCalls();
     });
 
     it("parent() returns nothing", function() {
@@ -288,7 +289,7 @@ describe("Proxy", function() {
 
         var result = proxy.get("bounds");
 
-        expect(result).toEqual({left:1, top:2, width: 3, height: 4});
+        expect(result).toEqual({left: 1, top: 2, width: 3, height: 4});
       });
 
       it("translates bounds to object", function() {
@@ -533,6 +534,7 @@ describe("Proxy", function() {
       beforeEach(function() {
         listener = jasmine.createSpy("listener");
         nativeBridge.resetCalls();
+        tabris.TestType._listen.foo = true;
       });
 
       it("calls native listen (true) for first listener", function() {
@@ -542,14 +544,32 @@ describe("Proxy", function() {
         expect(call.listen).toEqual(true);
       });
 
+      it("only prints info for unknown event", function() {
+        proxy.on("unknown", listener);
+
+        expect(nativeBridge.calls({op: "listen", event: "unknown"}).length).toBe(0);
+        var warning = "Unknown event type unknown";
+        expect(console.info).toHaveBeenCalledWith(warning);
+      });
+
       it("calls native listen with translated event name", function() {
-        proxy.on("focus", listener);
+        tabris.TestType._listen.bar = "bar2";
+        proxy.on("bar", listener);
 
         var call = nativeBridge.calls({op: "listen"})[0];
-        expect(call.event).toBe("FocusIn");
+        expect(call.event).toBe("bar2");
+      });
+
+      it("calls custom listen", function() {
+        tabris.TestType._listen.bar = jasmine.createSpy();
+        proxy.on("bar", listener);
+
+        expect(tabris.TestType._listen.bar).toHaveBeenCalled();
       });
 
       it("calls native listen for another listener for another event", function() {
+        tabris.TestType._listen.bar = true;
+
         proxy.on("foo", listener);
         proxy.on("bar", listener);
 
@@ -587,6 +607,7 @@ describe("Proxy", function() {
       beforeEach(function() {
         listener = jasmine.createSpy("listener");
         listener2 = jasmine.createSpy("listener2");
+        tabris.TestType._listen.foo = true;
         proxy.on("foo", listener);
         nativeBridge.resetCalls();
       });
@@ -599,11 +620,14 @@ describe("Proxy", function() {
       });
 
       it("calls native listen with translated event name", function() {
-        proxy.on("focus", listener);
-        proxy.off("focus", listener);
+        tabris.TestType._listen.bar = function(listen) {
+          tabris._nativeBridge.listen(this.id, "bar2", listen);
+        };
+        proxy.on("bar", listener);
+        proxy.off("bar", listener);
 
         var call = nativeBridge.calls({op: "listen"})[1];
-        expect(call.event).toBe("FocusIn");
+        expect(call.event).toBe("bar2");
       });
 
       it("does not call native listen when other listeners exist for same event", function() {

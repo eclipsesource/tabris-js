@@ -1,3 +1,9 @@
+tabris.registerType("App", {
+  _type: "tabris.App",
+  _trigger: {Pause: true, Resume: true, BackNavigation: true},
+  _listen: {Pause: true, Resume: true, BackNavigation: true}
+});
+
 tabris.load(function() {
 
   var MARGIN = 16;
@@ -21,7 +27,7 @@ tabris.load(function() {
 
   page.append(pauseLabel, resumeLabel);
 
-  var app = tabris("tabris.App");
+  var app = tabris("App");
 
   app.on("Pause", function() {
     pauseLabel.set("text", "Pause: Yes");

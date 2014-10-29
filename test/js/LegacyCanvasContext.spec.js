@@ -14,7 +14,8 @@ describe("Legacy CanvasContext", function() {
     window.console = jasmine.createSpyObj("console", ["log", "info", "warn", "error"]);
     nativeBridge = new NativeBridgeSpy();
     tabris._start(nativeBridge);
-    gc = new tabris.Proxy("gc-id");
+    gc = tabris.create("_GC");
+    nativeBridge.resetCalls();
     ctx = new tabris.LegacyCanvasContext(gc);
     tabris._reset();
   });
