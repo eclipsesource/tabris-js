@@ -1,7 +1,7 @@
 {
   "type": "Canvas",
   "description": "A composite on which graphics can be drawn.",
-  "include": ["widgetProperties", "widgetEvents"],
+  "include": ["Widget"],
   "links": [
     {
       "title": "Example that shows animation on a canvas",

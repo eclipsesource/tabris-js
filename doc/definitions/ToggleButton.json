@@ -1,7 +1,7 @@
 {
   "type": "ToggleButton",
   "description": "A push button that remains pressed.",
-  "include": ["widgetProperties", "widgetEvents"],
+  "include": ["Widget"],
   "properties": {
     "text": "string",
     "image": "Image",

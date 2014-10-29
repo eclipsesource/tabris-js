@@ -78,8 +78,7 @@ module.exports = function(grunt) {
     },
     doc: {
       json: prefix('doc/definitions/', [
-        'widgetProperties.json',
-        'widgetEvents.json',
+        'Widget.json',
         'Action.json',
         'Button.json',
         'Canvas.json',

@@ -1,7 +1,7 @@
 {
   "type": "Combo",
   "description": "A widget with a drop-down list of items to choose from.",
-  "include": ["widgetProperties", "widgetEvents"],
+  "include": ["Widget"],
   "properties": {
     "items": "string[]",
     "selectionIndex": "number",

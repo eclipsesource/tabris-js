@@ -1,7 +1,7 @@
 {
   "type": "Tab",
   "description": "A container representing a single tab of the TabFolder widget.",
-  "include": ["widgetProperties", "widgetEvents"],
+  "include": ["Widget"],
   "properties": {
     "title": "string",
     "image": "image",

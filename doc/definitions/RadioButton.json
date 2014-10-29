@@ -1,7 +1,7 @@
 {
   "type": "RadioButton",
   "description": "A radio button. Selecting a radio button de-selects all its siblings (i.e. all radio buttons within the same parent).",
-  "include": ["widgetProperties", "widgetEvents"],
+  "include": ["Widget"],
   "properties": {
     "text": "string",
     "image": "Image",

@@ -1,7 +1,7 @@
 {
   "type": "Slider",
   "description": "A widget representing a numeric value as an movable indicator on a horizontal line.",
-  "include": ["widgetProperties", "widgetEvents"],
+  "include": ["Widget"],
   "properties": {
     "minimum": "number?0",
     "maximum": "number?100",

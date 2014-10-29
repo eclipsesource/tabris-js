@@ -1,7 +1,7 @@
 {
   "type": "Video",
   "description": "A widget used to play a video from a URL source.",
-  "include": ["widgetProperties", "widgetEvents"],
+  "include": ["Widget"],
   "properties": {
     "enabled": "boolean",
     "repeat": "boolean",

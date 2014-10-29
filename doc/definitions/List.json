@@ -1,7 +1,7 @@
 {
   "type": "List",
   "description": "A scrollable list that display data items, one per row. The row format is defined by a template.",
-  "include": ["widgetProperties", "widgetEvents"],
+  "include": ["Widget"],
   "properties": {
     "itemHeight": "number",
     "items": "mixed[]",

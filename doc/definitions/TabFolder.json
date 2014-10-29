@@ -1,7 +1,7 @@
 {
   "type": "TabFolder",
   "description": "A widget that can switch between [tabs](#Tab).",
-  "include": ["widgetProperties", "widgetEvents"],
+  "include": ["Widget"],
   "properties": {
     "paging": "boolean"
   },

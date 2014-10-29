@@ -1,7 +1,7 @@
 {
   "type": "CheckBox",
   "description": "A check box widget.",
-  "include": ["widgetProperties", "widgetEvents"],
+  "include": ["Widget"],
   "properties": {
     "alignment": "string:left|right|center?center",
     "image": "Image",
