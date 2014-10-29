@@ -1,0 +1,24 @@
+{
+  "title": "Layout",
+  "description": "Demonstrates relative positioning, using center offset and baseline",
+  "resources": [
+    {
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+    },
+    {
+      "src": "layout.js"
+    },
+    {
+      "src": "layout-relative-size.js"
+    },
+    {
+      "src": "layout-relative-positioning.js"
+    },
+    {
+      "src": "layout-center.js"
+    },
+    {
+      "src": "layout-baseline.js"
+    }
+  ]
+}

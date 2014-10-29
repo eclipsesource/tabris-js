@@ -1,0 +1,15 @@
+{
+  "title": "Combo",
+  "description": "Demonstrates creating a combo, assigning a selection event handler to it and adding combo items",
+  "resources": [
+    {
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+    },
+    {
+      "src": "combo.js"
+    },
+    {
+      "src": "combo-add-items.js"
+    }
+  ]
+}

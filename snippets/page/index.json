@@ -1,0 +1,18 @@
+{
+  "title": "Page",
+  "description": "Demonstrates creating pages, adding pages dynamically and using pages in full screen",
+  "resources": [
+    {
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+    },
+    {
+      "src": "page.js"
+    },
+    {
+      "src": "page-fullscreen.js"
+    },
+    {
+      "src": "page-add-dynamically.js"
+    }
+  ]
+}

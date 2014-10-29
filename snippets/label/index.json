@@ -1,0 +1,15 @@
+{
+  "title": "Label",
+  "description": "Demonstrates creating a centered label and using markup in the label text",
+  "resources": [
+    {
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+    },
+    {
+      "src": "label.js"
+    },
+    {
+      "src": "label-markup.js"
+    }
+  ]
+}

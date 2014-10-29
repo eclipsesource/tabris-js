@@ -1,0 +1,15 @@
+{
+  "title": "ImageView",
+  "description": "Demonstrates image views scale modes and using an image view as a button",
+  "resources": [
+    {
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+    },
+    {
+      "src": "imageview-as-a-button.js"
+    },
+    {
+      "src": "imageview-scalemodes.js"
+    }
+  ]
+}
