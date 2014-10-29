@@ -4,7 +4,7 @@
   "properties": {
     "image": "Image",
     "title": "string",
-    "topLevel": "boolean"
+    "topLevel": "boolean?false"
   },
   "events": [
     "change:bounds"
