@@ -2,6 +2,8 @@
 
 Tabris.js uses the native platform capabilities to layout UIs. As display density widely varies among mobile devices the pixel measures in Tabris.js are always expressed as [Device Independent Pixels](https://en.wikipedia.org/wiki/Device_independent_pixel).
 
+## Layout Data
+
 All widgets support a property `layoutData` that defines how the widget should be arranged. The value of `layoutData` must be an object with a combination of the following keys:
 
 - `left`
@@ -14,7 +16,7 @@ All widgets support a property `layoutData` that defines how the widget should b
 - `width`
 - `height`
 
-## left
+### left
 Defines the position of the widget's left edge.
 Accepted values:
 
@@ -22,7 +24,7 @@ Accepted values:
 - [*percentage*, *offset*]: the distance from the parent's left edge in percent of the parent's width plus a fixed offset in pixels
 - [*widget*, *offset*]: the distance from the given widget's right edge in pixels
 
-## right
+### right
 Defines the position of the widget's right edge.
 Accepted values:
 
@@ -30,7 +32,7 @@ Accepted values:
 - [*percentage*, *offset*]: the distance from the parent's right edge in percent of the parent's width plus a fixed offset in pixels
 - [*widget*, *offset*]: the distance from the given widget's left edge in pixels
 
-## top
+### top
 Defines the position of the widget's upper edge.
 Accepted values:
 
@@ -38,7 +40,7 @@ Accepted values:
 - [*percentage*, *offset*]: the distance from the parent's upper edge in percent of the parent's height plus a fixed offset in pixels
 - [*widget*, *offset*]: the distance from the given widget's lower edge in pixels
 
-## bottom
+### bottom
 Defines the position of the widget's lower edge.
 Accepted values:
 
@@ -46,7 +48,7 @@ Accepted values:
 - [*percentage*, *offset*]: the distance from the parent's lower edge in percent of the parent's height plus a fixed offset in pixels
 - [*widget*, *offset*]: the distance from the given widget's upper edge in pixels
 
-## centerX
+### centerX
 Defines the horizontal position of the widget relative to the parent's center.
 Accepted values:
 
@@ -54,7 +56,7 @@ Accepted values:
 
 This property cannot be used in combination with either of `left` and `right`.
 
-## centerY
+### centerY
 Defines the vertical position of the widget relative to the parent's center.
 Accepted values:
 
@@ -62,7 +64,7 @@ Accepted values:
 
 This property cannot be used in combination with either of `top`, `bottom`, and `baseline`.
 
-## baseline
+### baseline
 Defines the vertical position of the widget relative to another widget's text baseline.
 Accepted values:
 
@@ -74,13 +76,13 @@ For multiline texts, the platforms currently differ: Android aligns on the first
 
 This property cannot be used in combination with either of `top`, `bottom`, and `centerY`.
 
-## width
+### width
 Defines the width of the widget.
 Accepted values:
 
 - *width*: the width of the widget in pixels
 
-## height
+### height
 Defines the height of the widget.
 Accepted values:
 
