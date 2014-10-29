@@ -67,7 +67,7 @@ module.exports = function(grunt) {
       return "";
     }
     var result = [];
-    result.push(desc.type ? "### Properties\n" : "");
+    result.push(desc.type ? "#### Properties\n" : "");
     Object.keys(desc.properties).sort().forEach(function(prop) {
       var value = desc.properties[prop];
       var type = value.split(":")[0].split("?")[0];
@@ -87,7 +87,7 @@ module.exports = function(grunt) {
       return "";
     }
     var result = [];
-    result.push(desc.type ? "### Events\n" : "");
+    result.push(desc.type ? "#### Events\n" : "");
     desc.events.forEach(function(name) {
       result.push("- ", name, "\n");
     });
@@ -100,7 +100,7 @@ module.exports = function(grunt) {
       return "";
     }
     var result = [];
-    result.push("### See also\n");
+    result.push("#### See also\n");
     desc.links.forEach(function(link) {
       result.push("- [", link.title, "](", link.path, ")\n");
     });
