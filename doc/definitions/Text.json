@@ -7,7 +7,6 @@
     "text": "string",
     "message": "string",
     "editable": "boolean",
-    "echoChar": "string",
     "textLimit": "number"
   },
   "events": [
