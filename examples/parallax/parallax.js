@@ -69,7 +69,7 @@ tabris.load(function() {
   contentComposite.append(contentLabel);
   titleComposite.append(titleLabel, subtitleLabel);
 
-  page.on("resize", function() {
+  page.on("change:bounds", function() {
     var bounds = scrollComposite.get("bounds");
     var pageWidth = bounds.width;
     var pageHeight = bounds.height;

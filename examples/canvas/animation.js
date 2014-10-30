@@ -23,7 +23,7 @@ tabris.load(function() {
       right: 10,
       bottom: [button, 10]
     }
-  }).on("resize", function() {
+  }).on("change:bounds", function() {
     var bounds = canvas.get("bounds");
     var width = bounds.width;
     var height = Math.min(bounds.height, Math.floor(width / 2));

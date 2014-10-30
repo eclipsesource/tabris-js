@@ -14,7 +14,7 @@
     "touchmove",
     "touchend",
     "longpress",
-    "resize",
+    "change:bounds",
     "dispose"
   ],
   "links": [

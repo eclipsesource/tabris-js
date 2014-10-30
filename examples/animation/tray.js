@@ -86,7 +86,7 @@ tabris.load(function() {
     strapLabel.set("transform", {rotation: traveled * Math.PI - Math.PI});
   }
 
-  content.on("resize", function() {
+  content.on("change:bounds", function() {
     var bounds = content.get("bounds");
     verticalTrayOffset = bounds.height;
     tray.set("transform", {translationY: verticalTrayOffset});

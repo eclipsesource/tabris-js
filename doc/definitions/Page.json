@@ -7,7 +7,7 @@
     "topLevel": "boolean"
   },
   "events": [
-    "resize"
+    "change:bounds"
   ],
   "links": [
     {
