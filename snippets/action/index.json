@@ -1,0 +1,15 @@
+{
+  "title": "Action",
+  "description": "Demonstrates creating actions and placing them with specified priority",
+  "resources": [
+    {
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+    },
+    {
+      "src": "action.js"
+    },
+    {
+      "src": "action-placement-priority.js"
+    }
+  ]
+}

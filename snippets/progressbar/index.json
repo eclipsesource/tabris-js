@@ -1,0 +1,12 @@
+{
+  "title": "Progress Bar",
+  "description": "Demonstrates creating a progress bar and setting its selection",
+  "resources": [
+    {
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+    },
+    {
+      "src": "progressbar.js"
+    }
+  ]
+}

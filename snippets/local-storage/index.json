@@ -1,0 +1,12 @@
+{
+  "title": "Local storage",
+  "description": "Showcases the local tabris.js key-value store",
+  "resources": [
+    {
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+    },
+    {
+      "src": "local-storage.js"
+    }
+  ]
+}
