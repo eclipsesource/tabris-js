@@ -20,18 +20,6 @@
       return this;
     },
 
-    get: function(name) {
-      if (name === "items") {
-        this._checkDisposed();
-        return this._items || [];
-      }
-      if (name === "template") {
-        this._checkDisposed();
-        return this._template || [];
-      }
-      return this.super("get", name);
-    },
-
     set: function(arg1, arg2) {
       this.super("set", arg1, arg2);
       this._createItems();
@@ -58,12 +46,13 @@
     },
 
     _setProperty: {
-      template: function(value) {
-        this._setTemplate(value);
-      },
-      items: function(value) {
-        this._setItems(value);
-      }
+      template: function(value) { this._setTemplate(value); },
+      items: function(value) { this._setItems(value); }
+    },
+
+    _getProperty: {
+      template: function() {return this._template || [];},
+      items: function() {return this._items || [];}
     },
 
     _setTemplate: function(template) {

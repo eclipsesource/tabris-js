@@ -37,8 +37,8 @@ describe("List", function() {
     });
 
     describe("when a template is set", function() {
-      var items;
-      var template;
+      var items, template;
+
       beforeEach(function() {
         nativeBridge.resetCalls();
         template = [
@@ -46,7 +46,7 @@ describe("List", function() {
           {type: "text", binding: "name", left: 20},
           {type: "text", binding: "phone", left: 30}
         ];
-        items = list.set("template", template);
+        list.set("template", template);
       });
 
       it("SETs a row template", function() {
@@ -65,14 +65,19 @@ describe("List", function() {
         expect(nativeBridge.calls({op: "create"}).length).toBe(0);
       });
 
+      it("it is returned by get", function() {
+        expect(list.get("template")).toEqual(template);
+      });
+
       describe("when items are set", function() {
         beforeEach(function() {
           nativeBridge.resetCalls();
-          list.set("items", [
+          items = [
             {name: "Ron", phone: "00", icon: {src: "ron.jpg"}},
             {name: "Sue", phone: "01", icon: {src: "sue.jpg"}},
             {name: "Tom", phone: "02", icon: {src: "tom.jpg"}}
-          ]);
+          ];
+          list.set("items", items);
         });
 
         it("CREATEs GridItems with parent", function() {
@@ -90,6 +95,10 @@ describe("List", function() {
         it("SETs item count on Grid", function() {
           var listSetCalls = nativeBridge.calls({id: list.id, op: "set"});
           expect(listSetCalls[0].properties.itemCount).toBe(3);
+        });
+
+        it("they are returned by get", function() {
+          expect(list.get("items")).toEqual(items);
         });
 
         describe("when items are set again", function() {

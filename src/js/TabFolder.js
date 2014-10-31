@@ -24,11 +24,8 @@
       }
     },
 
-    get: function(prop) {
-      if (prop === "paging") {
-        return !!this._paging;
-      }
-      return this.super("get", prop);
+    _getProperty: {
+      paging: function() {return !!this._paging;}
     },
 
     children: function() {

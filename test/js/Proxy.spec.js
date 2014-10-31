@@ -252,6 +252,14 @@ describe("Proxy", function() {
         expect(result).toBe(23);
       });
 
+      it("returns value from custom _getProperty", function() {
+        tabris.TestType._getProperty.prop = function(){ return 23; };
+
+        var result = proxy.get("prop");
+
+        expect(result).toBe(23);
+      });
+
       it("translates foreground to string", function() {
         spyOn(nativeBridge, "get").and.returnValue([170, 255, 0, 128]);
 

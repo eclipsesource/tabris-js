@@ -41,7 +41,7 @@
 
     get: function(name) {
       this._checkDisposed();
-      return this._decodeProperty(name, tabris._nativeBridge.get(this.id, name));
+      return this._getProperty(name);
     },
 
     set: function(arg1, arg2) {
@@ -189,6 +189,16 @@
 
     _setNativeProperty: function(name, value) {
       tabris._nativeBridge.set(this.id, name, value);
+    },
+
+    _getProperty: function(name) {
+      var getProperty = this.constructor && this.constructor._getProperty && this.constructor._getProperty[name];
+      var result = getProperty ? getProperty.call(this) : this._getNativeProperty(name);
+      return this._decodeProperty(name, result);
+    },
+
+    _getNativeProperty: function(name) {
+      return tabris._nativeBridge.get(this.id, name);
     },
 
     _encodeProperty: function(name, value) {
