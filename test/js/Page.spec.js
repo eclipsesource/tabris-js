@@ -7,7 +7,7 @@ describe("Page", function() {
 
   var nativeBridge;
   var page;
-  var uiId = "uiId";
+  var uiId;
 
   beforeEach(function() {
     nativeBridge = new NativeBridgeSpy();
@@ -15,23 +15,30 @@ describe("Page", function() {
     tabris._start(nativeBridge);
     tabris._shell = new tabris.Proxy("shellId");
     tabris._uiProxy = jasmine.createSpyObj("uiProxy", ["setActivePage", "setLastActivePage"]);
-    tabris._uiProxy._ui = new tabris.Proxy(uiId);
-    page = new tabris.Page();
+    tabris._uiProxy._ui = tabris.create("_UI", {
+      shell: tabris._shell
+    });
+    uiId = tabris._uiProxy._ui.id;
+    nativeBridge.resetCalls();
   });
 
   afterEach(function() {
     delete tabris._uiProxy;
   });
 
-  it("is instance of Proxy", function() {
-    expect(page).toEqual(jasmine.any(tabris.Proxy));
-  });
-
   describe("create", function() {
 
-    it("creates a Composite and a Page", function() {
-      page._create({});
+    beforeEach(function() {
+      page = tabris.create("Page", {
+        title: "title",
+        image: {src: "image"},
+        style: "fullscreen",
+        topLevel: true,
+        background: "red"
+      });
+    });
 
+    it("creates a Composite and a Page", function() {
       var createCalls = nativeBridge.calls({op: "create"});
       expect(createCalls.length).toBe(2);
       expect(createCalls[0].type).toBe("rwt.widgets.Composite");
@@ -40,74 +47,60 @@ describe("Page", function() {
 
     describe("created Composite", function() {
 
-      var createCall;
+      var properties;
 
       beforeEach(function() {
-        page._create({
-          title: "title",
-          image: "image",
-          style: "fullscreen",
-          topLevel: true,
-          background: "red"
-        });
-        createCall = nativeBridge.calls({op: "create", type: "rwt.widgets.Composite"})[0];
+        var createCall = nativeBridge.calls({op: "create", type: "rwt.widgets.Composite"})[0];
+        properties = createCall.properties;
       });
 
       it("parent is shell", function() {
-        expect(createCall.properties.parent).toEqual(tabris._shell.id);
+        expect(properties.parent).toEqual(tabris._shell.id);
       });
 
       it("is full-size", function() {
-        expect(createCall.properties.layoutData).toEqual({left: 0, right: 0, top: 0, bottom: 0});
+        expect(properties.layoutData).toEqual({left: 0, right: 0, top: 0, bottom: 0});
       });
 
       it("does not inherit page properties", function() {
-        expect(createCall.properties.title).not.toBeDefined();
-        expect(createCall.properties.image).not.toBeDefined();
-        expect(createCall.properties.style).not.toBeDefined();
-        expect(createCall.properties.topLevel).not.toBeDefined();
+        expect(properties.title).not.toBeDefined();
+        expect(properties.image).not.toBeDefined();
+        expect(properties.style).not.toBeDefined();
+        expect(properties.topLevel).not.toBeDefined();
       });
 
       it("has non-page properties", function() {
-        expect(createCall.properties.background).toEqual([255, 0, 0, 255]);
+        expect(properties.background).toEqual([255, 0, 0, 255]);
       });
 
     });
 
     describe("created Page", function() {
 
-      var createCall;
-      var compositeId;
+      var properties;
 
       beforeEach(function() {
-        page._create({
-          title: "title",
-          image: {src: "image"},
-          style: "fullscreen",
-          topLevel: true,
-          background: "red"
-        });
-        createCall = nativeBridge.calls({op: "create", type: "tabris.Page"})[0];
-        compositeId = nativeBridge.calls({op: "create", type: "rwt.widgets.Composite"})[0].id;
+        var createCall = nativeBridge.calls({op: "create", type: "tabris.Page"})[0];
+        properties = createCall.properties;
       });
 
       it("parent is set to tabris.UI", function() {
-        expect(createCall.properties.parent).toBe(uiId);
+        expect(properties.parent).toBe(uiId);
       });
 
       it("control is set to composite", function() {
-        expect(createCall.properties.control).toBe(compositeId);
+        expect(properties.control).toBe(page.id);
       });
 
       it("has title, image and topLevel properties", function() {
-        expect(createCall.properties.title).toBe("title");
-        expect(createCall.properties.image).toEqual(["image", null, null, null]);
-        expect(createCall.properties.style).toBe("fullscreen");
-        expect(createCall.properties.topLevel).toBe(true);
+        expect(properties.title).toBe("title");
+        expect(properties.image).toEqual(["image", null, null, null]);
+        expect(properties.style).toBe("fullscreen");
+        expect(properties.topLevel).toBe(true);
       });
 
       it("does not inherit non-page properties", function() {
-        expect(createCall.properties.background).not.toBeDefined();
+        expect(properties.background).not.toBeDefined();
       });
 
     });
@@ -119,7 +112,7 @@ describe("Page", function() {
     var compositeCreateCall;
 
     beforeEach(function() {
-      page._create({});
+      page = tabris.create("Page");
       pageCreateCall = nativeBridge.calls({op: "create", type: "tabris.Page"})[0];
       compositeCreateCall = nativeBridge.calls({op: "create", type: "rwt.widgets.Composite"})[0];
       nativeBridge.resetCalls();
@@ -202,7 +195,7 @@ describe("Page", function() {
 
       it("uses page's composite in 'set'", function() {
         var call = nativeBridge.calls({op: "set", id: child.id})[0];
-        expect(call.properties.parent).toBe(page._composite.id);
+        expect(call.properties.parent).toBe(page.id);
       });
 
     });

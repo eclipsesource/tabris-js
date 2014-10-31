@@ -52,7 +52,7 @@ tabris.UIProxy.prototype = {
 
   setActivePage: function(page) {
     this._pages.push(page);
-    this._ui.set("activePage", page);
+    this._ui.set("activePage", page._page);
   },
 
   getActivePage: function() {
@@ -63,7 +63,7 @@ tabris.UIProxy.prototype = {
     this._pages.pop();
     var page = this.getActivePage();
     if (page) {
-      this._ui.set("activePage", page);
+      this._ui.set("activePage", page._page);
     }
   }
 
