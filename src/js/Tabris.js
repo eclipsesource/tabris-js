@@ -39,10 +39,10 @@
       tabris[type] = function() {
         tabris.Proxy.apply(this, arguments);
       };
-      for (var key in constructorDefaults) {
-        tabris[type][key] = members[key] || constructorDefaults[key]();
-      }
-      var superProto = util.omit(members, Object.keys(constructorDefaults));
+      staticMembers.forEach(function(member) {
+        tabris[type][member] = members[member] || (member === "_type" ? null : {});
+      });
+      var superProto = util.omit(members, staticMembers);
       superProto.type = type;
       superProto.constructor = tabris[type]; // util.extendPrototype can not provide the original
       tabris[type].prototype = util.extendPrototype(tabris.Proxy, superProto);
@@ -72,11 +72,6 @@
 
   });
 
-  var constructorDefaults = {
-    _trigger: function() { return {}; },
-    _listen: function() { return {}; },
-    _properties: function() { return {}; },
-    _type: function() { return null; }
-  };
+  var staticMembers = ["_trigger", "_listen", "_setProperty", "_properties", "_type"];
 
 })();

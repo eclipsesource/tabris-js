@@ -7,9 +7,7 @@ tabris.registerType("Action", {
 
   _type: "tabris.Action",
 
-  _listen: {
-    selection: function(listen) { tabris._nativeBridge.listen(this.id, "Selection", listen); }
-  },
+  _listen: {selection: "Selection"},
   _trigger: {
     Selection: function(params) { this.trigger("selection", params); }
   },

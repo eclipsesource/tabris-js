@@ -347,6 +347,15 @@ describe("Proxy", function() {
         expect(properties.foo).toBe(other);
       });
 
+      it("uses custom setProperty function", function() {
+        tabris.TestType._setProperty.foo = jasmine.createSpy();
+
+        proxy.set("foo", "bar");
+
+        expect(nativeBridge.calls({op: "set", id: proxy.id}).length).toBe(0);
+        expect(tabris.TestType._setProperty.foo).toHaveBeenCalledWith("bar");
+      });
+
       it("raises a warning for incomplete horizontal layoutData", function() {
         proxy.set("layoutData", {top: 0});
 
@@ -620,9 +629,7 @@ describe("Proxy", function() {
       });
 
       it("calls native listen with translated event name", function() {
-        tabris.TestType._listen.bar = function(listen) {
-          tabris._nativeBridge.listen(this.id, "bar2", listen);
-        };
+        tabris.TestType._listen.bar = "bar2";
         proxy.on("bar", listener);
         proxy.off("bar", listener);
 

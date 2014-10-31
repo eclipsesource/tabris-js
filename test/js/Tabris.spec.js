@@ -227,13 +227,16 @@ describe("tabris", function() {
 
   describe("register types", function() {
 
+    afterEach(function() {
+      delete tabris.CustomType;
+    });
+
     it("allows to register a new type", function() {
       var members = {foo: 23};
       tabris.registerType("CustomType", members);
       var instance = tabris.create("CustomType");
       expect(instance).toEqual(jasmine.any(tabris.Proxy));
       expect(instance).toEqual(jasmine.any(tabris.CustomType));
-      delete tabris.CustomType;
     });
 
     it("adds members to new type", function() {
@@ -242,7 +245,6 @@ describe("tabris", function() {
       var instance = tabris.create("CustomType");
       expect(instance.foo).toBe(23);
       expect(instance.type).toBe("CustomType");
-      delete tabris.CustomType;
     });
 
     it("calls 'create' with type", function() {
@@ -250,7 +252,6 @@ describe("tabris", function() {
       tabris.create("CustomType");
 
       expect(nativeBridge.calls({op: "create"})[0].type).toBe("CustomType");
-      delete tabris.CustomType;
     });
 
     it("calls 'create' with _type if present", function() {
@@ -258,7 +259,6 @@ describe("tabris", function() {
       tabris.create("CustomType");
 
       expect(nativeBridge.calls({op: "create"})[0].type).toBe("foo.Type");
-      delete tabris.CustomType;
     });
 
     it("prevents to overwrite already registered types", function() {
@@ -274,7 +274,6 @@ describe("tabris", function() {
 
       expect(instance.constructor._trigger.foo).toBe(fn);
       expect(instance._trigger).toBe(tabris.Proxy.prototype._trigger);
-      delete tabris.CustomType;
     });
 
     it("adds empty trigger map to constructor", function() {
@@ -282,7 +281,6 @@ describe("tabris", function() {
       var instance = tabris.create("CustomType");
 
       expect(instance.constructor._trigger).toEqual({});
-      delete tabris.CustomType;
     });
 
     it("adds _listen to constructor", function() {
@@ -292,7 +290,6 @@ describe("tabris", function() {
 
       expect(instance.constructor._listen.foo).toBe(fn);
       expect(instance._listen).toBe(tabris.Proxy.prototype._listen);
-      delete tabris.CustomType;
     });
 
     it("adds empty listen map to constructor", function() {
@@ -300,7 +297,22 @@ describe("tabris", function() {
       var instance = tabris.create("CustomType");
 
       expect(instance.constructor._listen).toEqual({});
-      delete tabris.CustomType;
+    });
+
+    it("adds _setProperty to constructor", function() {
+      var fn = function() {};
+      tabris.registerType("CustomType", {_setProperty: {foo: fn}});
+      var instance = tabris.create("CustomType");
+
+      expect(instance.constructor._setProperty.foo).toBe(fn);
+      expect(instance._setProperty).toBe(tabris.Proxy.prototype._setProperty);
+    });
+
+    it("adds empty setProperty map to constructor", function() {
+      tabris.registerType("CustomType", {});
+      var instance = tabris.create("CustomType");
+
+      expect(instance.constructor._setProperty).toEqual({});
     });
 
     it("adds _type to constructor", function() {
@@ -309,7 +321,6 @@ describe("tabris", function() {
 
       expect(instance.constructor._type).toBe("foo");
       expect(instance._type).toBeUndefined();
-      delete tabris.CustomType;
     });
 
   });

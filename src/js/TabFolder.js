@@ -17,12 +17,10 @@
       return this._children ? this._children.filter(isItem) : [];
     },
 
-    _setProperty: function(prop, value) {
-      if (prop === "paging") {
+    _setProperty: {
+      paging: function(value) {
         this._paging = value;
-        this.super("_setProperty", "data", {paging: value});
-      } else {
-        this.super("_setProperty", prop, value);
+        this._setNativeProperty("data", {paging: value});
       }
     },
 
@@ -48,15 +46,17 @@
       return this.super("_create", properties);
     },
 
-    _setProperty: function(name, value) {
-      if (isItemProp(name)) {
-        if (this._tabItem) {
-          this._tabItem._setProperty(translateItemProp(name), value);
-        } else {
-          this._itemProps[translateItemProp(name)] = value;
-        }
+    _setProperty: {
+      title: function(value) {this._setItemProperty("text", value);},
+      image: function(value) {this._setItemProperty("image", value);},
+      badge: function(value) {this._setItemProperty("badge", value);},
+    },
+
+    _setItemProperty: function(name, value) {
+      if (this._tabItem) {
+        this._tabItem._setProperty(name, value);
       } else {
-        this.super("_setProperty", name, value);
+        this._itemProps[name] = value;
       }
     },
 

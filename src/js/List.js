@@ -57,18 +57,12 @@
       return -1;
     },
 
-    _setProperty: function(name, value) {
-      switch (name) {
-        case "template":
-          this._checkDisposed();
-          this._setTemplate(value);
-          break;
-        case "items":
-          this._checkDisposed();
-          this._setItems(value);
-          break;
-        default:
-          this.super("_setProperty", name, value);
+    _setProperty: {
+      template: function(value) {
+        this._setTemplate(value);
+      },
+      items: function(value) {
+        this._setItems(value);
       }
     },
 

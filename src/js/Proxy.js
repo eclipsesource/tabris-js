@@ -106,15 +106,20 @@
       if (!listen) {
         console.info("Unknown event type " + event);
       } else if (typeof listen === "string") {
-        tabris._nativeBridge.listen(this.id, listen, state);
+        this._nativeListen(listen, state);
       } else if (listen instanceof Function) {
         listen.call(this, state);
       } else {
-        tabris._nativeBridge.listen(this.id, event, state);
+        this._nativeListen(event, state);
       }
     },
 
+    _nativeListen: function(event, state) {
+      tabris._nativeBridge.listen(this.id, event, state);
+    },
+
     _trigger: function(event, params) {
+      // TODO: all these && pre-checks can be removed once no one uses new tabris.Proxy anymore
       var trigger = this.constructor && this.constructor._trigger && this.constructor._trigger[event];
       if (!trigger) {
         this.trigger(event, params);
@@ -169,11 +174,21 @@
     },
 
     _setProperty: function(name, value) {
+      var setProperty = this.constructor && this.constructor._setProperty && this.constructor._setProperty[name];
       try {
-        tabris._nativeBridge.set(this.id, name, this._encodeProperty(name, value));
+        var encodedValue = this._encodeProperty(name, value);
+        if (setProperty instanceof Function) {
+          setProperty.call(this, value);
+        } else {
+          this._setNativeProperty(name, encodedValue);
+        }
       } catch (error) {
         console.warn("Unsupported " + name + " value: " + error.message);
       }
+    },
+
+    _setNativeProperty: function(name, value) {
+      tabris._nativeBridge.set(this.id, name, value);
     },
 
     _encodeProperty: function(name, value) {
