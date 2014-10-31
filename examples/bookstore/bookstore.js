@@ -99,29 +99,30 @@ tabris.load(function() {
   }
 
   function createBooksList(books) {
-    return tabris.create("List", {
+    return tabris.create("CollectionView", {
       linesVisible: true,
       layoutData: {left: 0, right: 0, top: 0, bottom: 0},
       itemHeight: 72,
-      template: [
-        {
-          type: "image",
-          binding: "image",
-          scaleMode: "FIT",
-          left: [0, PAGE_MARGIN], top: [0, PAGE_MARGIN], width: 32, height: 48
-        }, {
-          type: "text",
-          binding: "title",
-          left: [0, 56], right: [0, PAGE_MARGIN], top: [0, PAGE_MARGIN], bottom: [0, 0],
-          foreground: "rgb(74, 74, 74)"
-        }, {
-          type: "text",
-          binding: "author",
-          left: [0, 56], right: [0, PAGE_MARGIN], top: [0, 36], bottom: [0, 0],
-          foreground: "rgb(123, 123, 123)"
-        }
-      ],
-      items: books
+      items: books,
+      initializeCell: function(cell) {
+        var imageView = tabris.create("ImageView", {
+          scaleMode: "fit",
+          layoutData: {left: [0, PAGE_MARGIN], top: [0, PAGE_MARGIN], width: 32, height: 48}
+        }).appendTo(cell);
+        var titleLabel = tabris.create("Label", {
+          foreground: "rgb(74, 74, 74)",
+          layoutData: {left: [0, 56], right: [0, PAGE_MARGIN], top: [0, PAGE_MARGIN], bottom: [0, 0]}
+        }).appendTo(cell);
+        var authorLabel = tabris.create("Label", {
+          foreground: "rgb(123, 123, 123)",
+          layoutData: {left: [0, 56], right: [0, PAGE_MARGIN], top: [0, 36], bottom: [0, 0]}
+        }).appendTo(cell);
+        cell.on("itemchange", function(book) {
+          imageView.set("image", book.image);
+          titleLabel.set("text", book.title);
+          authorLabel.set("text", book.autor);
+        });
+      }
     }).on("selection", function(event) {
       createBookPage(event.item).open();
     });
