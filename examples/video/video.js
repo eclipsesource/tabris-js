@@ -1,4 +1,4 @@
-tabris.registerType("Video", {
+tabris.registerWidget("Video", {
   _type: "tabris.widgets.Video"
 });
 

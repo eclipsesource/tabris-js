@@ -5,11 +5,11 @@
 
 (function() {
 
-  tabris.registerType("_GridItem", {
+  tabris.registerWidget("_GridItem", {
     _type: "rwt.widgets.GridItem"
   });
 
-  tabris.registerType("List", {
+  tabris.registerWidget("List", {
 
     _type: "rwt.widgets.Grid",
 
@@ -37,16 +37,16 @@
       this._createItems();
     },
 
-    _trigger: tabris.Proxy._widgetTrigger({
+    _trigger: {
       Selection: function(params) {
         var index = this._findItemIndex(params.item);
         var item = this._items ? this._items[index] : null;
         var cell = params.text ? params.text : "";
         this.trigger("selection", {item: item, index: index, cell: cell});
       }
-    }),
+    },
 
-    _listen: tabris.Proxy._widgetListen({selection: "Selection"}),
+    _listen: {selection: "Selection"},
 
     _findItemIndex: function(itemId) {
       for (var i = 0; i < this._children.length; i++) {

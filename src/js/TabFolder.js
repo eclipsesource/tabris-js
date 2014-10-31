@@ -9,7 +9,7 @@
     _type: "rwt.widgets.TabItem"
   });
 
-  tabris.registerType("TabFolder", {
+  tabris.registerWidget("TabFolder", {
 
     _type: "rwt.widgets.TabFolder",
 
@@ -39,7 +39,7 @@
 
   });
 
-  tabris.registerType("Tab", {
+  tabris.registerWidget("Tab", {
 
     _type: "rwt.widgets.Composite",
 

@@ -3,13 +3,9 @@
  * All rights reserved.
  */
 
-tabris.registerType("Page", {
+tabris.registerWidget("Page", {
 
   _type: "tabris.Page",
-
-  _listen: tabris.Proxy._widgetListen(),
-
-  _trigger: tabris.Proxy._widgetTrigger(),
 
   _PAGE_PROPS: ["title", "image", "style", "topLevel"],
 

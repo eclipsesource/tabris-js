@@ -5,11 +5,11 @@
 
 (function() {
 
-  tabris.registerType("ScrollComposite", {
+  tabris.registerWidget("ScrollComposite", {
 
     _type: "rwt.widgets.ScrolledComposite",
 
-    _listen: tabris.Proxy._widgetListen({
+    _listen: {
       scroll: function(listen) {
         if (listen) {
           this._scrollBar.on("Selection", this._scrollBarListener, this);
@@ -17,9 +17,7 @@
           this._scrollBar.off("Selection", this._scrollBarListener, this);
         }
       }
-    }),
-
-    _trigger: tabris.Proxy._widgetTrigger(),
+    },
 
     _create: function(properties) {
       var scrollProps = util.omit(properties, ["scroll"]);

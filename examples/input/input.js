@@ -1,4 +1,4 @@
-tabris.registerType("DateTime", {
+tabris.registerWidget("DateTime", {
   _type: "rwt.widgets.DateTime"
 });
 
