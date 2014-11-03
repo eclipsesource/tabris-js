@@ -72,6 +72,8 @@
 
   });
 
-  var staticMembers = ["_trigger", "_listen", "_setProperty", "_getProperty", "_properties", "_type"];
+  var staticMembers = [
+    "_trigger", "_listen", "_setProperty", "_getProperty", "_properties", "_type", "_checkProperty"
+  ];
 
 })();

@@ -175,6 +175,10 @@
 
     _setProperty: function(name, value) {
       var setProperty = this.constructor && this.constructor._setProperty && this.constructor._setProperty[name];
+      var checkProperty = this.constructor && this.constructor._checkProperty && this.constructor._checkProperty[name];
+      if (!checkProperty) {
+        console.warn(this.type + ": Unknown property \"" + name + "\"");
+      }
       try {
         var encodedValue = this._encodeProperty(name, value);
         if (setProperty instanceof Function) {

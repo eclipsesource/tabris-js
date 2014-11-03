@@ -364,6 +364,20 @@ describe("Proxy", function() {
         expect(tabris.TestType._setProperty.foo).toHaveBeenCalledWith("bar");
       });
 
+      it("raises a warning for unknown property", function() {
+        proxy.set("unknownProperty", true);
+
+        var warning = "TestType: Unknown property \"unknownProperty\"";
+        expect(console.warn).toHaveBeenCalledWith(warning);
+      });
+
+      it("raises no warning if _propertyCheck entry is true", function() {
+        tabris.TestType._checkProperty.knownProperty = true;
+        proxy.set("knownProperty", true);
+
+        expect(console.warn).not.toHaveBeenCalled();
+      });
+
       it("raises a warning for incomplete horizontal layoutData", function() {
         proxy.set("layoutData", {top: 0});
 

@@ -338,6 +338,22 @@ describe("tabris", function() {
       expect(instance.constructor._getProperty).toEqual({});
     });
 
+    it("adds _checkProperty to constructor", function() {
+      var fn = function() {};
+      tabris.registerType("CustomType", {_checkProperty: {foo: fn}});
+      var instance = tabris.create("CustomType");
+
+      expect(instance.constructor._checkProperty.foo).toBe(fn);
+      expect(instance._checkProperty).toBe(tabris.Proxy.prototype._checkProperty);
+    });
+
+    it("adds empty checkProperty map to constructor", function() {
+      tabris.registerType("CustomType", {});
+      var instance = tabris.create("CustomType");
+
+      expect(instance.constructor._checkProperty).toEqual({});
+    });
+
     it("adds _type to constructor", function() {
       tabris.registerType("CustomType", {_type: "foo"});
       var instance = tabris.create("CustomType");
