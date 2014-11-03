@@ -1,6 +1,4 @@
 {
-  "title": "Geo-location",
-  "description": "Demonstrates the listeners and API for use of geo data.",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"

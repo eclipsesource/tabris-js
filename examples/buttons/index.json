@@ -1,6 +1,4 @@
 {
-  "title": "Quiz",
-  "description": "A simle quiz showcasing page navigation and different button types",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
