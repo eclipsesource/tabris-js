@@ -64,6 +64,7 @@ tabris.load(function() {
     layoutData: {left: 0, top: 0, right: 0}
   }).appendTo(scrollComposite);
 
+  var titleCompY = 0;
   scrollComposite.on("change:bounds", function() {
     var bounds = scrollComposite.get("bounds");
     var pageWidth = bounds.width;
@@ -71,13 +72,14 @@ tabris.load(function() {
     var imageHeight = pageWidth / 1.4; // 1.4 is the image aspect ratio
     imageLabel.set("image", {src: "images/salad.jpg", width: pageWidth, height: pageWidth});
     var titleCompHeight = titleComposite.get("bounds").height;
-    var titleCompYOffset = Math.min(imageHeight - titleCompHeight, pageHeight / 2);
-    titleComposite.set("layoutData", {left: 0, top: titleCompYOffset, right: 0, height: 64});
+    // we need the offset of the title composite in each scroll event
+    // it can only change when a change:bounds is triggered, wo thats when we assign it
+    titleCompY = Math.min(imageHeight - titleCompHeight, pageHeight / 2);
+    titleComposite.set("layoutData", {left: 0, top: titleCompY, right: 0, height: 64});
   });
 
   scrollComposite.on("scroll", function(offset) {
     imageLabel.set("transform", {translationY: offset.y * 0.4});
-    var titleCompY = titleComposite.get("bounds").top;
     if (titleCompY - offset.y < 0) {
       titleComposite.set("transform", {translationY: offset.y - titleCompY});
     } else {
