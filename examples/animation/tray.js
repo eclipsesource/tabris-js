@@ -26,16 +26,12 @@ tabris.load(function() {
 
   var tray = tabris.create("Composite", {
     layoutData: {left: 0, right: 0, top: [30, 0], bottom: 0}
-  });
+  }).appendTo(page);
 
   var strap = tabris.create("Composite", {
     layoutData: {left: [40, 0], right: [40, 0], top: 0, height: 48},
     background: "#259b24"
-  });
-
-  var strapContainer = tabris.create("Composite", {
-    layoutData: {left: 0, right: 0, top: 0, bottom: 0}
-  });
+  }).appendTo(tray);
 
   var strapLabel = tabris.create("Label", {
     layoutData: {left: MARGIN, right: MARGIN, top: 10},
@@ -43,79 +39,74 @@ tabris.load(function() {
     text: "⇧",
     font: "bold 24px",
     foreground: "white"
-  });
+  }).appendTo(strap);
 
-  var content = tabris.create("Composite", {
+  var trayContent = tabris.create("Composite", {
     layoutData: {left: MARGIN, right: MARGIN, top: [strap, 0], bottom: 0},
     background: "#8bc34a"
-  });
+  }).appendTo(tray);
 
-  var contentLabel = tabris.create("Label", {
+  tabris.create("Label", {
     layoutData: {left: MARGIN, right: MARGIN, top: MARGIN},
     alignment: "center",
     text: "Tray content",
     font: "bold 24px",
     foreground: "white"
-  });
+  }).appendTo(trayContent);
 
   var shade = tabris.create("Composite", {
     layoutData: {left: 0, right: 0, top: 0, bottom: 0},
     background: "black",
     opacity: 0
-  });
+  }).appendTo(page);
 
-  var pageLabel = tabris.create("Label", {
+  tabris.create("Label", {
     style: ["WRAP"],
     layoutData: {left: MARGIN, right: MARGIN, top: MARGIN, bottom: MARGIN},
     text: loremIpsum,
     foreground: "#777"
-  });
+  }).appendTo(page);
 
-  strap.append(strapLabel, strapContainer);
-  content.append(contentLabel);
-  tray.append(content, strap);
-  page.append(tray, shade, pageLabel);
-
-  function updateShadeOpacity() {
-    var traveled = tray.get("transform").translationY / verticalTrayOffset;
+  function updateShadeOpacity(translationY) {
+    var traveled = translationY / verticalTrayOffset;
     shade.set("opacity", 0.75 - traveled);
   }
 
-  function updateStrapLabelRotation() {
-    var traveled = tray.get("transform").translationY / verticalTrayOffset;
+  function updateStrapLabelRotation(translationY) {
+    var traveled = translationY / verticalTrayOffset;
     strapLabel.set("transform", {rotation: traveled * Math.PI - Math.PI});
   }
 
-  content.on("change:bounds", function() {
-    var bounds = content.get("bounds");
+  trayContent.on("change:bounds", function() {
+    var bounds = trayContent.get("bounds");
     verticalTrayOffset = bounds.height;
     tray.set("transform", {translationY: verticalTrayOffset});
-    updateShadeOpacity();
-    updateStrapLabelRotation();
+    updateShadeOpacity(verticalTrayOffset);
+    updateStrapLabelRotation(verticalTrayOffset);
   });
 
-  strapLabel.on("touchstart", function(e) {
+  strap.on("touchstart", function(e) {
     prevEvent = e;
     if (animation !== undefined) {
       animation.call("cancel");
     }
   });
 
-  strapLabel.on("touchmove", function(e) {
+  strap.on("touchmove", function(e) {
     var y = e.touches[0].pageY - prevEvent.touches[0].pageY;
     prevPrevEvent = prevEvent;
     prevEvent = e;
     var offsetY = tray.get("transform").translationY + y;
     tray.set("transform", {translationY: Math.min(Math.max(offsetY, 0), verticalTrayOffset)});
-    updateShadeOpacity();
-    updateStrapLabelRotation();
+    updateShadeOpacity(offsetY);
+    updateStrapLabelRotation(offsetY);
   });
 
-  strapLabel.on("touchcancel", function() {
+  strap.on("touchcancel", function() {
     positionTrayInRestingState();
   });
 
-  strapLabel.on("touchend", function() {
+  strap.on("touchend", function() {
     positionTrayInRestingState();
   });
 
@@ -139,11 +130,16 @@ tabris.load(function() {
         }
       }
     }).on("Progress", function() {
-      updateShadeOpacity();
-      updateStrapLabelRotation();
+      var translationY = tray.get("transform").translationY;
+      updateShadeOpacity(translationY);
+      updateStrapLabelRotation(translationY);
     }).on("Completion", function() {
       this.dispose();
       animation = undefined;
+      // TODO remove the following workaround when tabris-ios #538 is implemented
+      var offsetY = tray.get("transform").translationY;
+      updateShadeOpacity(offsetY);
+      updateStrapLabelRotation(offsetY);
     }).call("start");
   }
 
