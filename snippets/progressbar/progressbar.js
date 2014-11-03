@@ -15,9 +15,13 @@ tabris.load(function() {
     selection: 0
   }).appendTo(page);
 
-  setInterval(function() {
+  var intervalId = setInterval(function() {
     var selection = progressBar.get("selection");
-    progressBar.set("selection", selection < STEPS ? selection + 1 : clearTimeout(this));
+    if (selection < STEPS) {
+      progressBar.set("selection", selection + 1);
+    } else {
+      clearInterval(intervalId);
+    }
   }, 20);
 
   page.open();
