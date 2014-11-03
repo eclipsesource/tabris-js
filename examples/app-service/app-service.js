@@ -1,6 +1,5 @@
 tabris.registerType("App", {
   _type: "tabris.App",
-  _trigger: {Pause: true, Resume: true, BackNavigation: true},
   _listen: {Pause: true, Resume: true, BackNavigation: true}
 });
 

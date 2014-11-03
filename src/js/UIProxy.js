@@ -4,8 +4,7 @@
  */
 
 tabris.registerType("_Display", {
-  _type: "rwt.widgets.Display",
-  _trigger: {Close: true, Resize: true}
+  _type: "rwt.widgets.Display"
 });
 tabris.registerType("_Shell", {
   _type: "rwt.widgets.Shell",

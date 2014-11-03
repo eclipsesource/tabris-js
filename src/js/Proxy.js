@@ -121,12 +121,12 @@
     _trigger: function(event, params) {
       // TODO: all these && pre-checks can be removed once no one uses new tabris.Proxy anymore
       var trigger = this.constructor && this.constructor._trigger && this.constructor._trigger[event];
-      if (!trigger) {
-        this.trigger(event, params);
-      } else if (trigger instanceof Function) {
+      if (trigger instanceof Function) {
         trigger.call(this, params);
-      } else {
+      } else if (typeof trigger === "string") {
         this.trigger(trigger, params);
+      } else {
+        this.trigger(event, params);
       }
     },
 

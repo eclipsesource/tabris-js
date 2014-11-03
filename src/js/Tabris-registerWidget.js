@@ -76,8 +76,7 @@
 
   tabris.registerWidget("_ScrollBar", {
     _type: "rwt.widgets.ScrollBar",
-    _listen: {Selection: true},
-    _trigger: {Selection: true}
+    _listen: {Selection: true}
   });
 
   tabris.registerWidget("Slider", {

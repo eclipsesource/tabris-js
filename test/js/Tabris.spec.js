@@ -127,6 +127,13 @@ describe("tabris", function() {
       expect(tabris.TestType._trigger.foo).toHaveBeenCalledWith({bar: 23});
     });
 
+    it("ignores invalid custom trigger", function() {
+      tabris.TestType._trigger.foo = true;
+      tabris._notify.call(window, proxy.id, "foo", {bar: 23});
+
+      expect(proxy.trigger).toHaveBeenCalledWith("foo", {bar: 23});
+    });
+
     it("silently ignores events for non-existing ids (does not crash)", function() {
       tabris._notify("no-id", "foo", [23, 42]);
     });
