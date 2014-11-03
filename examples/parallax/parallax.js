@@ -10,36 +10,36 @@ tabris.load(function() {
 
   var scrollComposite = tabris.create("ScrollComposite", {
     layoutData: {left: 0, right: 0, top: 0, bottom: 0}
-  });
+  }).appendTo(page);
 
   var titleComposite = tabris.create("Composite", {
     background: "rgba(255,152,0,0.9)"
-  });
+  }).appendTo(scrollComposite);
 
-  var subtitleLabel = tabris.create("Label", {
+  var teaserLabel = tabris.create("Label", {
     style: ["WRAP"],
     markupEnabled: true,
     text: "<b>The perfect side dish</b>",
     font: "16px",
     layoutData: {left: MARGIN, top: MARGIN, right: MARGIN},
     foreground: "black"
-  });
+  }).appendTo(titleComposite);
 
-  var titleLabel = tabris.create("Label", {
+  tabris.create("Label", {
     style: ["WRAP"],
-    layoutData: {left: MARGIN, top: [subtitleLabel, MARGIN_SMALL], right: MARGIN},
+    layoutData: {left: MARGIN, top: [teaserLabel, MARGIN_SMALL], right: MARGIN},
     markupEnabled: true,
     text: "<b>INDIAN SUMMER SALAD</b>",
     font: "24px",
     foreground: "white"
-  });
+  }).appendTo(titleComposite);
 
   var contentComposite = tabris.create("Composite", {
     layoutData: {left: 0, right: 0, top: [titleComposite, 0], height: 1000},
     background: "white"
-  });
+  }).appendTo(scrollComposite);
 
-  var contentLabel = tabris.create("Label", {
+  tabris.create("Label", {
     style: ["WRAP"],
     layoutData: {left: MARGIN, right: MARGIN, top: MARGIN},
     text: "Etiam nisl nisi, egestas quis lacus ut, tristique suscipit metus. In vehicula lectus " +
@@ -58,18 +58,13 @@ tabris.load(function() {
           "sapien vel nibh vehicula, in lacinia odio pharetra. Duis tincidunt metus a semper " +
           "auctor. Sed nec consequat augue, id vulputate orci. Nunc metus nulla, luctus id " +
           "porttitor nec, sed lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus."
-  });
+  }).appendTo(contentComposite);
 
-  var imageLabel = tabris.create("Label", {
+  var imageLabel = tabris.create("ImageView", {
     layoutData: {left: 0, top: 0, right: 0}
-  });
+  }).appendTo(scrollComposite);
 
-  page.append(scrollComposite);
-  scrollComposite.append(titleComposite, contentComposite, imageLabel);
-  contentComposite.append(contentLabel);
-  titleComposite.append(titleLabel, subtitleLabel);
-
-  page.on("change:bounds", function() {
+  scrollComposite.on("change:bounds", function() {
     var bounds = scrollComposite.get("bounds");
     var pageWidth = bounds.width;
     var pageHeight = bounds.height;
@@ -82,7 +77,7 @@ tabris.load(function() {
 
   scrollComposite.on("scroll", function(offset) {
     imageLabel.set("transform", {translationY: offset.y * 0.4});
-    var titleCompY = titleComposite.get("bounds")[1];
+    var titleCompY = titleComposite.get("bounds").top;
     if (titleCompY - offset.y < 0) {
       titleComposite.set("transform", {translationY: offset.y - titleCompY});
     } else {
