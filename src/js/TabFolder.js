@@ -13,10 +13,6 @@
 
     _type: "rwt.widgets.TabFolder",
 
-    _getItems: function() {
-      return this._children ? this._children.filter(isItem) : [];
-    },
-
     _setProperty: {
       paging: function(value) {
         this._paging = value;
@@ -26,6 +22,10 @@
 
     _getProperty: {
       paging: function() {return !!this._paging;}
+    },
+
+    _getItems: function() {
+      return this._children ? this._children.filter(isItem) : [];
     },
 
     children: function() {

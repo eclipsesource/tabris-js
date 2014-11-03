@@ -13,6 +13,27 @@
 
     _type: "rwt.widgets.Grid",
 
+    _listen: {selection: "Selection"},
+
+    _trigger: {
+      Selection: function(params) {
+        var index = this._findItemIndex(params.item);
+        var item = this._items ? this._items[index] : null;
+        var cell = params.text ? params.text : "";
+        this.trigger("selection", {item: item, index: index, cell: cell});
+      }
+    },
+
+    _setProperty: {
+      template: function(value) { this._setTemplate(value); },
+      items: function(value) { this._setItems(value); }
+    },
+
+    _getProperty: {
+      template: function() {return this._template || [];},
+      items: function() {return this._items || [];}
+    },
+
     _create: function(properties) {
       this.super("_create", util.extend({style: ["V_SCROLL"]}, properties));
       tabris.create("_ScrollBar", {style: ["VERTICAL"]}).appendTo(this);
@@ -25,17 +46,6 @@
       this._createItems();
     },
 
-    _trigger: {
-      Selection: function(params) {
-        var index = this._findItemIndex(params.item);
-        var item = this._items ? this._items[index] : null;
-        var cell = params.text ? params.text : "";
-        this.trigger("selection", {item: item, index: index, cell: cell});
-      }
-    },
-
-    _listen: {selection: "Selection"},
-
     _findItemIndex: function(itemId) {
       for (var i = 0; i < this._children.length; i++) {
         if (this._children[i].id === itemId) {
@@ -43,16 +53,6 @@
         }
       }
       return -1;
-    },
-
-    _setProperty: {
-      template: function(value) { this._setTemplate(value); },
-      items: function(value) { this._setItems(value); }
-    },
-
-    _getProperty: {
-      template: function() {return this._template || [];},
-      items: function() {return this._items || [];}
     },
 
     _setTemplate: function(template) {

@@ -41,14 +41,14 @@
   tabris.registerWidget("CheckBox", {
     _type: "rwt.widgets.Button",
     _properties: {style: ["CHECK"]},
-    _listen: {Selection: "change:selection"},
-    _trigger: {"change:selection": "Selection"}
+    _listen: {"change:selection": "Selection"},
+    _trigger: {Selection: "change:selection"}
   });
 
   tabris.registerWidget("Combo", {
     _type: "rwt.widgets.Combo",
-    _listen: {Selection: "change:selection"},
-    _trigger: {"change:selection": "Selection"}
+    _listen: {"change:selection": "Selection"},
+    _trigger: {Selection: "change:selection"}
   });
 
   tabris.registerWidget("Composite", {
@@ -70,8 +70,8 @@
   tabris.registerWidget("RadioButton", {
     _type: "rwt.widgets.Button",
     _properties: {style: ["RADIO"]},
-    _listen: {Selection: "change:selection"},
-    _trigger: {"change:selection": "Selection"}
+    _listen: {"change:selection": "Selection"},
+    _trigger: {Selection: "change:selection"}
   });
 
   tabris.registerWidget("_ScrollBar", {
@@ -82,8 +82,8 @@
 
   tabris.registerWidget("Slider", {
     _type: "rwt.widgets.Scale",
-    _listen: {Selection: "change:selection"},
-    _trigger: {"change:selection": "Selection"}
+    _listen: {"change:selection": "Selection"},
+    _trigger: {Selection: "change:selection"}
   });
 
   tabris.registerWidget("Text", {
@@ -106,8 +106,8 @@
   tabris.registerWidget("ToggleButton", {
     _type: "rwt.widgets.Button",
     _properties: {style: ["TOGGLE"]},
-    _listen: {Selection: "change:selection"},
-    _trigger: {"change:selection": "Selection"}
+    _listen: {"change:selection": "Selection"},
+    _trigger: {Selection: "change:selection"}
   });
 
   tabris.registerWidget("WebView", {
