@@ -1,8 +1,7 @@
 // this snippet uses internal API which will become obsolete
-// in the near future tabris.js will be using Cordova app events
+// in the near future tabris.js will be using Cordova events
 tabris.registerType("App", {
   _type: "tabris.App",
-  _trigger: {Pause: true, Resume: true, BackNavigation: true},
   _listen: {Pause: true, Resume: true, BackNavigation: true}
 });
 

@@ -12,7 +12,8 @@ tabris.load(function() {
     return function() {
       tabris.create("Action", {
         title: placementPriority + " " + (placementPriority === "HIGH" ? ++highCounter : ++lowCounter),
-        placementPriority: placementPriority
+        placementPriority: placementPriority,
+        image: {src: "img/action_settings.png"}
       });
     };
   };
@@ -20,12 +21,12 @@ tabris.load(function() {
   var lowPlacementPriorityButton = tabris.create("Button", {
     layoutData: {left: 10, top: 10, right: 10},
     text: "Add a low placement priority action"
-  }).on("touchend", createActionHandler("LOW")).appendTo(page);
+  }).on("selection", createActionHandler("LOW")).appendTo(page);
 
   tabris.create("Button", {
     layoutData: {left: 10, top: [lowPlacementPriorityButton, 10], right: 10},
     text: "Add a high placement priority action"
-  }).on("touchend", createActionHandler("HIGH")).appendTo(page);
+  }).on("selection", createActionHandler("HIGH")).appendTo(page);
 
   page.open();
 

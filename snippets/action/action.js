@@ -7,7 +7,7 @@ tabris.load(function() {
 
   tabris.create("Action", {
     title: "Action",
-    image: {src: "img/action_share.png"}
+    image: {src: "img/action_search.png"}
   }).on("selection", function() {
     console.log("Action selected.");
   });
