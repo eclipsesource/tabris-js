@@ -121,24 +121,27 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadTasks('doc/generator');
 
-  grunt.registerTask('examples', 'Copy examples to build/, create index', function() {
-    var aggregatedIndex = [];
-    grunt.file.expand("examples/*").forEach(function(dir) {
-      if (grunt.file.exists(dir, "index.json")) {
-        var index = grunt.file.readJSON(path.join(dir, "/index.json"));
-        if ("title" in index) {
-          grunt.file.recurse(dir, function callback(abspath) {
-            grunt.file.copy(abspath, path.join('build/', abspath));
-          });
-          aggregatedIndex.push({
-            title: index.title,
-            description: index.description || "",
-            path: path.basename(dir)
-          });
-        }
-      }
+  grunt.registerTask('examples', 'Copy examples/snippets to build/, create index', function() {
+    ["snippets", "examples"].forEach(function(dir) {
+      var aggregatedIndex = [];
+        grunt.file.expand(dir + "/*").forEach(function(subdir) {
+          if (grunt.file.exists(subdir, "index.json")) {
+            var index = grunt.file.readJSON(path.join(subdir, "/index.json"));
+            if ("title" in index) {
+              grunt.file.recurse(subdir, function callback(abspath) {
+                grunt.file.copy(abspath, path.join('build/', abspath));
+              });
+              aggregatedIndex.push({
+                category: index.category || "",
+                title: index.title,
+                description: index.description || "",
+                path: path.basename(subdir)
+              });
+            }
+          }
+        });
+      grunt.file.write("build/" + dir + "/index.json", JSON.stringify(aggregatedIndex, null, 2));
     });
-    grunt.file.write('build/examples/index.json', JSON.stringify(aggregatedIndex, null, 2));
   });
 
   grunt.registerTask('default', ['clean', 'doc', 'copy:doc', 'jshint', 'concat', 'uglify', 'jasmine', 'examples']);
