@@ -13,15 +13,25 @@
 
     _type: "rwt.widgets.TabFolder",
 
+    _listen: {"change:selection": "Selection"},
+    _trigger: {Selection: "change:selection"},
+
     _setProperty: {
       paging: function(value) {
         this._paging = value;
         this._setNativeProperty("data", {paging: value});
+      },
+      selection: function(tab) {
+        this._setNativeProperty("selection", tab._tabItem.id);
       }
     },
 
     _getProperty: {
-      paging: function() {return !!this._paging;}
+      paging: function() {return !!this._paging;},
+      selection: function() {
+        var selection = this._getNativeProperty("selection");
+        return selection ? tabris(selection)._tab : null;
+      }
     },
 
     _getItems: function() {
@@ -46,7 +56,7 @@
     _setProperty: {
       title: function(value) {this._setItemProperty("text", value);},
       image: function(value) {this._setItemProperty("image", value);},
-      badge: function(value) {this._setItemProperty("badge", value);},
+      badge: function(value) {this._setItemProperty("badge", value);}
     },
 
     _setItemProperty: function(name, value) {
@@ -76,6 +86,7 @@
         control: this.id,
         index: parent._getItems().length
       }, this._itemProps)).appendTo(parent);
+      this._tabItem._tab = this;
     },
 
     _destroy: function() {
@@ -83,6 +94,7 @@
         this._tabItem.dispose();
       }
     }
+
   });
 
   function isItemProp(name) {

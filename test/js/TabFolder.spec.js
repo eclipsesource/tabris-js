@@ -73,7 +73,7 @@ describe("TabFolder", function() {
       expect(tab.get("badge")).toBe("1");
     });
 
-    describe("when appending to an illegal parent", function() {
+    describe("and appended to an illegal parent", function() {
 
       it("crashes", function() {
         expect(function() {
@@ -83,7 +83,7 @@ describe("TabFolder", function() {
 
     });
 
-    describe("when appending to a TabFolder", function() {
+    describe("and appended to a TabFolder", function() {
 
       var itemCreate;
 
@@ -128,7 +128,7 @@ describe("TabFolder", function() {
         expect(tabFolder.children()).toEqual([tab]);
       });
 
-      describe("when another tab is created", function() {
+      describe("and another tab is created", function() {
 
         beforeEach(function() {
           nativeBridge.resetCalls();
@@ -142,29 +142,29 @@ describe("TabFolder", function() {
 
       });
 
-      describe("when the Tab is disposed", function() {
+      describe("and the Tab is disposed", function() {
 
         beforeEach(function() {
           nativeBridge.resetCalls();
           tab.dispose();
         });
 
-        it("destroys the control", function() {
+        it("then destroys the control", function() {
           expect(nativeBridge.calls({op: "destroy", id: tab.id})[0]).toBeDefined();
         });
 
-        it("destroys the item", function() {
+        it("then destroys the item", function() {
           expect(nativeBridge.calls({op: "destroy", id: itemCreate.id})[0]).toBeDefined();
         });
 
-        describe("when another Tab is created", function() {
+        describe("and another Tab is created", function() {
 
           beforeEach(function() {
             nativeBridge.resetCalls();
             tabris.create("Tab", {}).appendTo(tabFolder);
           });
 
-          it("creates TabItem with same index", function() {
+          it("then it creates a TabItem with the same index", function() {
             var tabItemCreate = nativeBridge.calls({op: "create", type: "rwt.widgets.TabItem"})[0];
             expect(tabItemCreate.properties.index).toBe(0);
           });
@@ -173,6 +173,34 @@ describe("TabFolder", function() {
 
       });
 
+    });
+
+  });
+
+  describe("selection property:", function() {
+
+    var tab1, tab2;
+
+    beforeEach(function() {
+      tab1 = tabris.create("Tab", {}).appendTo(tabFolder);
+      tab2 = tabris.create("Tab", {}).appendTo(tabFolder);
+    });
+
+    it("Setting a Tab SETs tabItem id", function() {
+      tabFolder.set("selection", tab2);
+
+      var setCall = nativeBridge.calls({op: "set", id: tabFolder.id})[0];
+      expect(setCall.properties.selection).toBe(tab2._tabItem.id);
+    });
+
+    it("Get returns Tab", function() {
+      spyOn(nativeBridge, "get").and.returnValue(tab2._tabItem.id);
+
+      expect(tabFolder.get("selection")).toBe(tab2);
+    });
+
+    it("Get returns null", function() {
+      expect(tabFolder.get("selection")).toBeNull();
     });
 
   });

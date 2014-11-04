@@ -3,8 +3,12 @@
   "description": "A widget that can switch between [tabs](#Tab).",
   "include": ["Widget"],
   "properties": {
-    "paging": "boolean"
+    "paging": "boolean",
+    "selection": "Tab"
   },
+  "events": [
+    "change:selection"
+  ],
   "links": [
     {
       "title": "Example with a TabFolder and Tabs",
