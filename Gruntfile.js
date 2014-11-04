@@ -49,7 +49,7 @@ module.exports = function(grunt) {
                      'NativeBridge.js',
                      'Events.js',
                      'Proxy.js',
-                     'Tabris-registerWidget.js',
+                     'Widgets.js',
                      'Animation.js',
                      'DOMEvents.js',
                      'WindowTimers.js',
