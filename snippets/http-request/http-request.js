@@ -14,7 +14,6 @@ tabris.load(function() {
     xhr.onreadystatechange = function() {
       if (xhr.readyState === xhr.DONE) {
         tabris.create("Label", {
-          style: ["WRAP"],
           markupEnabled: true,
           text: "<b>Words starting with 'mobile': </b>" + JSON.parse(xhr.responseText)[1].join(", "),
           layoutData: {left: MARGIN, right: MARGIN, top: [button, MARGIN]}

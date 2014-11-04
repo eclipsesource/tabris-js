@@ -61,7 +61,6 @@ tabris.load(function() {
   }).appendTo(page);
 
   tabris.create("Label", {
-    style: ["WRAP"],
     layoutData: {left: MARGIN, right: MARGIN, top: MARGIN, bottom: MARGIN},
     text: loremIpsum,
     foreground: "#777"

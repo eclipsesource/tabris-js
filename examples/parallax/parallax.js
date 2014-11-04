@@ -17,7 +17,6 @@ tabris.load(function() {
   }).appendTo(scrollComposite);
 
   var teaserLabel = tabris.create("Label", {
-    style: ["WRAP"],
     markupEnabled: true,
     text: "<b>The perfect side dish</b>",
     font: "16px",
@@ -26,7 +25,6 @@ tabris.load(function() {
   }).appendTo(titleComposite);
 
   tabris.create("Label", {
-    style: ["WRAP"],
     layoutData: {left: MARGIN, top: [teaserLabel, MARGIN_SMALL], right: MARGIN},
     markupEnabled: true,
     text: "<b>INDIAN SUMMER SALAD</b>",
@@ -40,7 +38,6 @@ tabris.load(function() {
   }).appendTo(scrollComposite);
 
   tabris.create("Label", {
-    style: ["WRAP"],
     layoutData: {left: MARGIN, right: MARGIN, top: MARGIN},
     text: "Etiam nisl nisi, egestas quis lacus ut, tristique suscipit metus. In vehicula lectus " +
           "metus, at accumsan elit fringilla blandit. Integer et quam sed dolor pharetra " +

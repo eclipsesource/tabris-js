@@ -31,7 +31,6 @@ tabris.load(function() {
   });
 
   var storeLabel = tabris.create("Label", {
-    style: ["WRAP"],
     layoutData: {left: MARGIN, top: [addButton, MARGIN_LARGE], right: MARGIN},
     markupEnabled: true
   });

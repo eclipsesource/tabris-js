@@ -13,7 +13,6 @@ tabris.load(function() {
 
   var createLabel = function(labelText) {
     lastLabel = tabris.create("Label", {
-      style: ["WRAP"],
       text: labelText,
       markupEnabled: true,
       layoutData: {left: MARGIN, right: MARGIN, top: [lastLabel, MARGIN]}

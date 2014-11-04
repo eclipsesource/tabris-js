@@ -61,8 +61,7 @@ tabris.load(function() {
         layoutData: {left: 10, right: 10, top: 10},
         alignment: "center",
         text: question.text,
-        font: "25px sans-serif",
-        style: ["WRAP"]
+        font: "25px sans-serif"
       }));
     }
 

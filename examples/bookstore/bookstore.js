@@ -69,7 +69,6 @@ tabris.load(function() {
       image: book.image
     });
     var titleLabel = tabris.create("Label", {
-      style: ["WRAP"],
       markupEnabled: true,
       text: "<b>" + book.title + "</b>",
       layoutData: {left: [imageLabel, PAGE_MARGIN], top: PAGE_MARGIN, right: PAGE_MARGIN}
@@ -135,14 +134,12 @@ tabris.load(function() {
       layoutData: {left: 0, right: 0, top: 0, bottom: 0}
     }).appendTo(page);
     var titleLabel = tabris.create("Label", {
-      style: ["WRAP"],
       markupEnabled: true,
       text: "<b>" + book.title + "</b>",
       layoutData: {left: PAGE_MARGIN, top: PAGE_MARGIN * 2, right: PAGE_MARGIN},
       foreground: "rgba(0, 0, 0, 0.5)"
     }).appendTo(composite);
     tabris.create("Label", {
-      style: ["WRAP"],
       layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: [titleLabel, PAGE_MARGIN], bottom: PAGE_MARGIN},
       text: [loremIpsum, loremIpsum, loremIpsum].join("\n\n")
     }).appendTo(composite);

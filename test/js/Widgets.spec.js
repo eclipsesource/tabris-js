@@ -135,7 +135,7 @@ describe("Widgets", function() {
 
       var create = nativeBridge.calls({op: "create"})[0];
       expect(create.type).toEqual("rwt.widgets.Label");
-      expect(create.properties).toEqual({text: "foo"});
+      expect(create.properties).toEqual({style: ["WRAP"], text: "foo"});
     });
 
     it("Slider", function() {

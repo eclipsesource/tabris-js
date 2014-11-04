@@ -78,6 +78,7 @@
 
   tabris.registerWidget("Label", {
     _type: "rwt.widgets.Label",
+    _properties: {style: ["WRAP"]},
     _checkProperty: {alignment: true, markupEnabled: true, text: true}
   });
 
