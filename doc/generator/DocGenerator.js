@@ -88,9 +88,11 @@ module.exports = function(grunt) {
     }
     var result = [];
     result.push(desc.type ? "#### Events\n" : "");
-    desc.events.forEach(function(name) {
-      result.push("- ", name, "\n");
-    });
+    for (name in desc.events) {
+      if (desc.events.hasOwnProperty(name)) {
+        result.push("- ", name, "\n")
+      }
+    }
     result.push("\n");
     return result.join("");
   }

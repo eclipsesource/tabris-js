@@ -11,10 +11,10 @@
     "presentation": "string:full_screen|embedded",
     "speed": "number"
   },
-  "events": [
-    "Presentation",
-    "Playback"
-  ],
+  "events": {
+    "Presentation": true,
+    "Playback": true
+  },
   "links": {[
     {"title": "Example with video wigdet", "path": "https://github.com/eclipsesource/tabris-js/blob/master/examples/video/video.js"}
   ]}

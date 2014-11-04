@@ -6,9 +6,9 @@
     "paging": "boolean",
     "selection": "Tab"
   },
-  "events": [
-    "change:selection"
-  ],
+  "events": {
+    "change:selection": true
+  },
   "links": [
     {
       "title": "Example with a TabFolder and Tabs",

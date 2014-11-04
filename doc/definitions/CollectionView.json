@@ -7,9 +7,9 @@
     "items": "mixed[]",
     "initializeCell": "function"
   },
-  "events": [
-    "selection"
-  ],
+  "events": {
+    "selection": true
+  },
   "links": [
     {
       "title": "CollectionView example",

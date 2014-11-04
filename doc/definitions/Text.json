@@ -9,10 +9,10 @@
     "editable": "boolean",
     "textLimit": "number"
   },
-  "events": [
-    "focus",
-    "blur"
-  ],
+  "events": {
+    "focus": true,
+    "blur": true
+  },
   "links": [
     {
       "title": "Example with text fields and different keyboard types",

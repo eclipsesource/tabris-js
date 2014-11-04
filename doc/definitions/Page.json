@@ -6,9 +6,9 @@
     "title": "string",
     "topLevel": "boolean?false"
   },
-  "events": [
-    "change:bounds"
-  ],
+  "events": {
+    "change:bounds": true
+  },
   "links": [
     {
       "title": "Example for creating pages and actions",

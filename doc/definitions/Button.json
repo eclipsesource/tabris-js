@@ -7,9 +7,9 @@
     "image": "Image",
     "text": "string"
   },
-  "events": [
-    "selection"
-  ],
+  "events": {
+    "selection": true
+  },
   "links": [
     {
       "title": "Example with input elements",

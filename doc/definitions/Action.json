@@ -9,9 +9,9 @@
     "title": "string",
     "visibility": "boolean"
   },
-  "events": [
-    "selection"
-  ],
+  "events": {
+    "selection": true
+  },
   "links": [
     {
       "title": "Example for creating pages and actions",

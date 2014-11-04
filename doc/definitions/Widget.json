@@ -13,14 +13,14 @@
     "opacity": "number",
     "transform": "Transformation"
   },
-  "events": [
-    "touchstart",
-    "touchmove",
-    "touchend",
-    "longpress",
-    "change:bounds",
-    "dispose"
-  ],
+  "events": {
+    "touchstart": true,
+    "touchmove": true,
+    "touchend": true,
+    "longpress": true,
+    "change:bounds": true,
+    "dispose": true
+  },
   "links": [
     {
       "title": "Example for touch events",

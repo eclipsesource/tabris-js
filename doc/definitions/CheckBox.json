@@ -8,9 +8,9 @@
     "selection": "boolean?false",
     "text": "string"
   },
-  "events": [
-    "change:selection"
-  ],
+  "events": {
+    "change:selection": true
+  },
   "links": [
     {
       "title" : "Example with input elements",

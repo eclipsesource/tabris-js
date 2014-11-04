@@ -7,9 +7,9 @@
     "maximum": "number?100",
     "selection": "number?0"
   },
-  "events": [
-    "selection"
-  ],
+  "events": {
+    "selection": true
+  },
   "links": [
     {
       "title" : "Example with input elements",

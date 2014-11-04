@@ -5,9 +5,9 @@
   "properties": {
     "scroll": "string:vertical|horizontal?vertical"
   },
-  "events": [
-    "scroll"
-  ],
+  "events": {
+    "scroll": true
+  },
   "links": [
     {
       "title": "Example with a ScrollComposite",

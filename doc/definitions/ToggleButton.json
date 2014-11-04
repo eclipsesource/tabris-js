@@ -8,7 +8,7 @@
     "selection": "boolean?false",
     "alignment": "string:left|right|center?center"
   },
-  "events": [
-    "change:selection"
-  ]
+  "events": {
+    "change:selection": true
+  }
 }
