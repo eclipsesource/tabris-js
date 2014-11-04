@@ -378,6 +378,13 @@ describe("Proxy", function() {
         expect(console.warn).not.toHaveBeenCalled();
       });
 
+      it("raises no warning if _propertyCheck itself is true", function() {
+        tabris.TestType._checkProperty = true;
+        proxy.set("knownProperty", true);
+
+        expect(console.warn).not.toHaveBeenCalled();
+      });
+
       it("raises a warning for incomplete horizontal layoutData", function() {
         proxy.set("layoutData", {top: 0});
 

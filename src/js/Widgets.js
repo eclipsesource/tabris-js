@@ -9,6 +9,9 @@
     members = util.clone(members);
     members._listen = util.extend({}, tabris.registerWidget._defaultListen, members._listen || {});
     members._trigger = util.extend({}, tabris.registerWidget._defaultTrigger, members._trigger || {});
+    if (members._checkProperty !== true) {
+      members._checkProperty = util.extend({}, tabris.registerWidget._defaultCheckProperty, members._checkProperty || {});
+    }
     tabris.registerType(type, members);
   };
 
@@ -24,6 +27,16 @@
     },
     _defaultTrigger: {
       Resize: "change:bounds"
+    },
+    _defaultCheckProperty: {
+      enabled: true,
+      visibility: true,
+      layoutData: true,
+      font: true,
+      backgroundImage: true,
+      bounds: true,
+      background: true,
+      foreground: true
     }
   });
 
@@ -32,7 +45,7 @@
     _properties: {style: ["PUSH"]},
     _listen: {selection: "Selection"},
     _trigger: {Selection: "selection"},
-    _checkProperty: {alignment: true, image: true, text: true}
+    _checkProperty: {alignment: true, image: true, text: true, style: true}
   });
 
   tabris.registerWidget("Canvas", {
@@ -44,7 +57,7 @@
     _properties: {style: ["CHECK"]},
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
-    _checkProperty: {alignment: true, image: true, text: true, selection: true}
+    _checkProperty: {alignment: true, image: true, text: true, selection: true, style: true}
   });
 
   tabris.registerWidget("Combo", {
@@ -78,12 +91,7 @@
     _properties: {style: ["RADIO"]},
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
-    _checkProperty: {text: true, image: true, selection: true, alignment: true}
-  });
-
-  tabris.registerWidget("_ScrollBar", {
-    _type: "rwt.widgets.ScrollBar",
-    _listen: {Selection: true}
+    _checkProperty: {text: true, image: true, selection: true, alignment: true, style: true}
   });
 
   tabris.registerWidget("Slider", {
@@ -101,7 +109,7 @@
     },
     _listen: {focus: "FocusIn", blur: "FocusOut", accept: "DefaultSelection"},
     _trigger: {FocusIn: "focus", FocusOut: "blur", DefaultSelection: "accept"},
-    _checkProperty: {type: true, text: true, message: true, editable: true, textLimit: true}
+    _checkProperty: {type: true, text: true, message: true, editable: true, textLimit: true, style: true}
   });
 
   var textTypeToStyle = {
@@ -116,7 +124,7 @@
     _properties: {style: ["TOGGLE"]},
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
-    _checkProperty: {text: true, image: true, selection: true, alignment: true}
+    _checkProperty: {text: true, image: true, selection: true, alignment: true, style: true}
   });
 
   tabris.registerWidget("WebView", {

@@ -47,6 +47,25 @@ describe("Widgets", function() {
       );
     });
 
+    it("adds default checkProperty copy", function() {
+      tabris.registerWidget("TestType", {});
+      expect(tabris.TestType._checkProperty).toEqual(tabris.registerWidget._defaultCheckProperty);
+      expect(tabris.TestType._checkProperty).not.toBe(tabris.registerWidget._defaultCheckProperty);
+    });
+
+    it("extends default checkProperty", function() {
+      var custom = {foo: "bar", enabled: false};
+      tabris.registerWidget("TestType", {_checkProperty: custom});
+      expect(tabris.TestType._checkProperty).toEqual(
+        util.extend({}, tabris.registerWidget._defaultCheckProperty, custom)
+      );
+    });
+
+    it("keeps checkProperty true", function() {
+      tabris.registerWidget("TestType", {_checkProperty: true});
+      expect(tabris.TestType._checkProperty).toBe(true);
+    });
+
   });
 
   describe("registered types", function() {

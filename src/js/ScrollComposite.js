@@ -5,6 +5,12 @@
 
 (function() {
 
+  tabris.registerWidget("_ScrollBar", {
+    _type: "rwt.widgets.ScrollBar",
+    _listen: {Selection: true},
+    _checkProperty: true
+  });
+
   tabris.registerWidget("ScrollComposite", {
 
     _type: "rwt.widgets.ScrolledComposite",
@@ -19,6 +25,8 @@
       }
     },
 
+    _checkProperty: {style: true}, // TODO: should not be required
+
     _create: function(properties) {
       var scrollProps = util.omit(properties, ["scroll"]);
       this.super("_create", util.extend(scrollProps, {
@@ -30,7 +38,7 @@
       tabris._nativeBridge.set(this._scrollBar.id, "parent", this.id);
       this._composite = tabris.create("Composite");
       tabris._nativeBridge.set(this._composite.id, "parent", this.id);
-      this.set("content", this._composite);
+      this._setNativeProperty("content", this._composite.id);
       return this;
     },
 

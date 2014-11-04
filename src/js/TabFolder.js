@@ -6,7 +6,8 @@
 (function() {
 
   tabris.registerType("_TabItem", {
-    _type: "rwt.widgets.TabItem"
+    _type: "rwt.widgets.TabItem",
+    _checkProperty: true
   });
 
   tabris.registerWidget("TabFolder", {

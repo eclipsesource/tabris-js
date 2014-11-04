@@ -9,18 +9,20 @@
 
   tabris.registerType("_Page", {
     _type: "tabris.Page",
-    _checkProperty: {image: true, title: true, topLevel: true}
+    _checkProperty: true
   });
 
   tabris.registerWidget("Page", {
 
     _type: "rwt.widgets.Composite",
 
+    _checkProperty: {image: true, title: true, topLevel: true},
+
     _create: function(properties) {
       this.super("_create",  util.extend(util.omit(properties, pageProperties), {
-        parent: tabris._shell,
         layoutData: {left: 0, right: 0, top: 0, bottom: 0}
       }));
+      this._setNativeProperty("parent", tabris._shell.id);
       this._page = tabris.create("_Page", util.extend(util.pick(properties, pageProperties), {
         parent: tabris._uiProxy._ui,
         control: this

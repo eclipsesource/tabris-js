@@ -14,7 +14,8 @@
 
   tabris.registerType("_HttpRequest", {
     _type: "tabris.HttpRequest",
-    _listen: {StateChange: true, DownloadProgress: true, UploadProgress: true}
+    _listen: {StateChange: true, DownloadProgress: true, UploadProgress: true},
+    _checkProperty: true
   });
 
   var eventTypes = [

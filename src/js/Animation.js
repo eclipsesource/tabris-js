@@ -11,7 +11,8 @@
 
 tabris.registerType("_Animation", {
   _type: "tabris.Animation",
-  _listen: {Completion: true, Progress: true, Start: true}
+  _listen: {Completion: true, Progress: true, Start: true},
+  _checkProperty: true
 });
 
 tabris.Animation = {

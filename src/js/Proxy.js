@@ -174,11 +174,8 @@
     },
 
     _setProperty: function(name, value) {
+      this._checkProperty(name, value);
       var setProperty = this.constructor && this.constructor._setProperty && this.constructor._setProperty[name];
-      var checkProperty = this.constructor && this.constructor._checkProperty && this.constructor._checkProperty[name];
-      if (!checkProperty) {
-        console.warn(this.type + ": Unknown property \"" + name + "\"");
-      }
       try {
         var encodedValue = this._encodeProperty(name, value);
         if (setProperty instanceof Function) {
@@ -188,6 +185,13 @@
         }
       } catch (error) {
         console.warn("Unsupported " + name + " value: " + error.message);
+      }
+    },
+
+    _checkProperty: function(name) {
+      var checkProperty = this.constructor && this.constructor._checkProperty && this.constructor._checkProperty[name];
+      if (!checkProperty && this.constructor._checkProperty !== true) {
+        console.warn(this.type + ": Unknown property \"" + name + "\"");
       }
     },
 
