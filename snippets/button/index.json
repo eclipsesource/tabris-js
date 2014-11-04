@@ -1,5 +1,6 @@
 {
-  "title": "Button",
+  "title": "Creating a button with a selection handler",
+  "category": "Button",
   "description": "Demonstrates creating a button and assigning a selection event handler to it",
   "resources": [
     {

@@ -20,7 +20,7 @@ tabris.load(function() {
     var items = combo.get("items");
     items.push("Item " + (++itemsCount));
     combo.set("items", items);
-    combo.set("selectionIndex", items.length-1);
+    combo.set("selectionIndex", items.length - 1);
   }).appendTo(page);
 
   page.open();

@@ -1,5 +1,6 @@
 {
-  "title": "TabFolder",
+  "title": "Creating a tab folder",
+  "category": "TabFolder",
   "description": "Demonstrates creating a tab folder",
   "resources": [
     {

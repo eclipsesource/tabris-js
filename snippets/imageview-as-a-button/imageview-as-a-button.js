@@ -7,7 +7,7 @@ tabris.load(function() {
   var touched = 0;
   tabris.create("ImageView", {
     layoutData: {centerX: 0, centerY: 0},
-    image: {src: "../images/target_200.png"},
+    image: {src: "images/target_200.png"},
     data: {showTouch: true}
   }).on("touchend", function() {
     touched++;

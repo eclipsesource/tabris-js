@@ -1,5 +1,6 @@
 {
-  "title": "XMLHttpRequest",
+  "title": "Retrieving a JSON response using XMLHttpRequest",
+  "category": "XMLHttpRequest",
   "description": "Demonstrates XMLHttpRequest spec level 1 API in tabris.js",
   "resources": [
     {

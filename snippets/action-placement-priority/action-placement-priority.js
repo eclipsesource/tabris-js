@@ -4,7 +4,7 @@ tabris.load(function() {
   var highCounter = 0;
 
   var page = tabris.create("Page", {
-    title: "Action placement priority",
+    title: "Creating an action with specified placement priority",
     topLevel: true
   });
 
@@ -13,7 +13,7 @@ tabris.load(function() {
       tabris.create("Action", {
         title: placementPriority + " " + (placementPriority === "HIGH" ? ++highCounter : ++lowCounter),
         placementPriority: placementPriority,
-        image: {src: "img/action_settings.png"}
+        image: {src: "images/action_settings.png"}
       });
     };
   };

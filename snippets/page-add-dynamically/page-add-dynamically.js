@@ -6,7 +6,7 @@ tabris.load(function() {
   });
 
   tabris.create("Button", {
-    layoutData: {left: 10, top: 10, right:10},
+    layoutData: {left: 10, top: 10, right: 10},
     text: "Create and open a new page"
   }).on("selection", function() {
     tabris.create("Page", {

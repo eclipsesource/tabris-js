@@ -1,5 +1,6 @@
 {
-  "title": "Radio Button",
+  "title": "Creating radio buttons with selection handlers",
+  "category": "RadioButton",
   "description": "Demonstrates creating radio buttons and assigning a selection event handler to them",
   "resources": [
     {

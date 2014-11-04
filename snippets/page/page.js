@@ -1,7 +1,7 @@
 tabris.load(function() {
 
   tabris.create("Page", {
-    title: "Creating multiple level pages",
+    title: "Creating multiple top level pages",
     topLevel: true
   }).open();
 

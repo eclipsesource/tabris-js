@@ -1,13 +1,13 @@
 {
-  "title": "Layouting a widget with a fixed size",
+  "title": "Widget baseline alignment",
   "category": "Layout",
-  "description": "Demonstrates creating a widget with a fixed size",
+  "description": "Demonstrates positioning a widget by specifying its baseline",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
     },
     {
-      "src": "layout.js"
+      "src": "layout-baseline.js"
     }
   ]
 }

@@ -1,13 +1,13 @@
 {
-  "title": "Creating a colored label with centered text",
+  "title": "Creating a label with markup in text",
   "category": "Label",
-  "description": "Demonstrates creating a centered label",
+  "description": "Demonstrates using markup in the label text",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
     },
     {
-      "src": "label.js"
+      "src": "label-markup.js"
     }
   ]
 }

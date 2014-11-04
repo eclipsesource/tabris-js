@@ -1,4 +1,7 @@
 {
+  "title": "Creating a CollectionView and filling it with items",
+  "category": "Collection View",
+  "description": "Demonstrates creating a collection view, initializing its cells and filling it with items from a collection",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"

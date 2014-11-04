@@ -1,0 +1,13 @@
+{
+  "title": "Dynamically adding combo items",
+  "category": "Combo",
+  "description": "Demonstrates adding items to a combo widget",
+  "resources": [
+    {
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+    },
+    {
+      "src": "combo-add-items.js"
+    }
+  ]
+}

@@ -6,11 +6,11 @@ tabris.load(function() {
     title: "Retrieving a JSON response using XMLHttpRequest",
     topLevel: true
   });
-  
+
   var button = tabris.create("Button", {
     layoutData: {left: MARGIN, top: MARGIN},
     text: "Start xmlHttpRequest"
-  }).on( "selection", function() {
+  }).on("selection", function() {
     xhr.onreadystatechange = function() {
       if (xhr.readyState === xhr.DONE) {
         tabris.create("Label", {
@@ -20,7 +20,7 @@ tabris.load(function() {
           layoutData: {left: MARGIN, right: MARGIN, top: [button, MARGIN]}
         }).appendTo(page);
       }
-    };    
+    };
     xhr.open("GET", "http://en.wiktionary.org/w/api.php?action=opensearch&search=mobile&limit=100");
     xhr.send();
   }).appendTo(page);

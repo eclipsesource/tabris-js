@@ -1,5 +1,6 @@
 {
-  "title": "Local storage",
+  "title": "Storing key/value data pairs on the device",
+  "category": "LocalStorage",
   "description": "Showcases the local tabris.js key-value store",
   "resources": [
     {

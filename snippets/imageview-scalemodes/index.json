@@ -1,0 +1,13 @@
+{
+  "title": "Using different image view scale modes",
+  "category": "ImageView",
+  "description": "Demonstrates image view scale modes",
+  "resources": [
+    {
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+    },
+    {
+      "src": "imageview-scalemodes.js"
+    }
+  ]
+}

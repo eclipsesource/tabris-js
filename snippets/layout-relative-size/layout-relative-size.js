@@ -7,7 +7,7 @@ tabris.load(function() {
     topLevel: true
   });
 
-  var composite1 = tabris.create("Composite", {
+  tabris.create("Composite", {
     layoutData: {left: MARGIN, top: MARGIN, right: MARGIN, bottom: [70, 0]},
     background: "red"
   }).appendTo(page);

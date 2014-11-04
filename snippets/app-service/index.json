@@ -1,5 +1,6 @@
 {
   "title": "Lifecycle events: Pause, Resume",
+  "category": "App Service",
   "description": "Showcases attaching listeners to Pause and Resume events and handling back navigation",
   "resources": [
     {

@@ -16,7 +16,7 @@ var people = [
 tabris.load(function() {
 
   var page = tabris.create("Page", {
-    title: "CollectionView",
+    title: "Creating a CollectionView and filling it with items",
     topLevel: true
   });
 

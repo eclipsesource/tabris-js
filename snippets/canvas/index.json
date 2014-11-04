@@ -1,5 +1,6 @@
 {
-  "title": "Canvas",
+  "title": "Drawing a rectangle on a canvas",
+  "category": "Canvas",
   "description": "Demonstrates how to create a canvas and draw on it using graphics context",
   "resources": [
     {

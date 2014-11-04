@@ -1,5 +1,6 @@
 {
-  "title": "Web View",
+  "title": "Creating a web view",
+  "category": "WebView",
   "description": "Demonstrates creating a web view widget loading and displaying a web page",
   "resources": [
     {

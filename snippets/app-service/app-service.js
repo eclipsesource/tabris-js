@@ -5,7 +5,6 @@ tabris.registerType("App", {
   _listen: {Pause: true, Resume: true, BackNavigation: true}
 });
 
-
 tabris.load(function() {
 
   var MARGIN = 16;

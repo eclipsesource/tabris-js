@@ -1,0 +1,13 @@
+{
+  "title": "Creating an action with specified placement priority",
+  "category": "Action",
+  "description": "Demonstrates placing actions with specified priority",
+  "resources": [
+    {
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+    },
+    {
+      "src": "action-placement-priority.js"
+    }
+  ]
+}

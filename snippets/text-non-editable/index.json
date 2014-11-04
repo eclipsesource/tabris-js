@@ -1,0 +1,13 @@
+{
+  "title": "Creating a non-editable text widget",
+  "category": "Text",
+  "description": "Demonstrates creating a non-editable text widget",
+  "resources": [
+    {
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+    },
+    {
+      "src": "text-non-editable.js"
+    }
+  ]
+}

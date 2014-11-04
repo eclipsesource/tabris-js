@@ -1,6 +1,9 @@
 tabris.load(function() {
 
-  var page = tabris.create("Page", {title: "WebView", topLevel: true});
+  var page = tabris.create("Page", {
+    title: "Creating a web view",
+    topLevel: true
+  });
 
   var text = tabris.create("Text", {
     layoutData: {left: 8, right: 8, top: 8},

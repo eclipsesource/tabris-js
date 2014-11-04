@@ -50,9 +50,9 @@ tabris.load(function() {
 
   function getImage(index) {
     if (index === 0) {
-      return {src: "../images/salad.jpg", scale: 3};
+      return {src: "images/salad.jpg", scale: 3};
     }
-    return {src: "../images/landscape.jpg", scale: 3};
+    return {src: "images/landscape.jpg", scale: 3};
   }
 
   page.open();

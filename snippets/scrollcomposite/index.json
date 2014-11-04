@@ -1,5 +1,6 @@
 {
-  "title": "ScrollComposite",
+  "title": "Creating a scroll composite with text",
+  "category": "ScrollComposite",
   "description": "Demonstrates creating a scroll composite setting its content",
   "resources": [
     {

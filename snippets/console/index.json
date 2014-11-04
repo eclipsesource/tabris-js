@@ -1,5 +1,6 @@
 {
-  "title": "Console",
+  "title": "Using the console",
+  "category": "Console",
   "description": "Showcases console.log, .debug, .info, .warn, .error",
   "resources": [
     {

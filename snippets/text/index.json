@@ -1,18 +1,13 @@
 {
-  "title": "Text",
-  "description": "Demonstrates working with text widgets",
+  "title": "Creating text widgets with set message and focus handlers",
+  "category": "Text",
+  "description": "Demonstrates creating text widgets with set message and focus handlers",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
     },
     {
       "src": "text.js"
-    },
-    {
-      "src": "text-with-text.js"
-    },
-    {
-      "src": "text-non-editable.js"
     }
   ]
 }

@@ -1,13 +1,13 @@
 {
-  "title": "Layouting a widget with a fixed size",
+  "title": "Layouting a widget by percentage",
   "category": "Layout",
-  "description": "Demonstrates creating a widget with a fixed size",
+  "description": "Demonstrates specifying the widget bounds by percentage",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
     },
     {
-      "src": "layout.js"
+      "src": "layout-relative-size.js"
     }
   ]
 }

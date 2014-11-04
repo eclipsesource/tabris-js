@@ -1,5 +1,6 @@
 {
-  "title": "Progress Bar",
+  "title": "Creating a progress bar and setting its selection",
+  "category": "ProgressBar",
   "description": "Demonstrates creating a progress bar and setting its selection",
   "resources": [
     {

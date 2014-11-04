@@ -1,13 +1,13 @@
 {
-  "title": "Layouting a widget with a fixed size",
+  "title": "Relative positioning",
   "category": "Layout",
-  "description": "Demonstrates creating a widget with a fixed size",
+  "description": "Demonstrates positioning a widget relatively to an other widget",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
     },
     {
-      "src": "layout.js"
+      "src": "layout-relative-positioning.js"
     }
   ]
 }

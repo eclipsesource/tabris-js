@@ -1,13 +1,13 @@
 {
-  "title": "Creating multiple top level pages",
+  "title": "Creating a new page dynamically",
   "category": "Page",
-  "description": "Demonstrates creating multiple top level pages",
+  "description": "Demonstrates adding pages dynamically",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
     },
     {
-      "src": "page.js"
+      "src": "page-add-dynamically.js"
     }
   ]
 }

@@ -1,15 +1,13 @@
 {
-  "title": "Action",
-  "description": "Demonstrates creating actions and placing them with specified priority",
+  "title": "Creating an action with an image and a selection handler",
+  "category": "Action",
+  "description": "Demonstrates creating actions",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
     },
     {
       "src": "action.js"
-    },
-    {
-      "src": "action-placement-priority.js"
     }
   ]
 }

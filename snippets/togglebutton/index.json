@@ -1,5 +1,6 @@
 {
-  "title": "Toggle Button",
+  "title": "Creating a toggle button with a selection handler",
+  "category": "ToggleButton",
   "description": "Demonstrates creating a toggle button and assigning a selection event handler to it",
   "resources": [
     {
