@@ -99,8 +99,8 @@
       var style = textTypeToStyle[properties.type] || textTypeToStyle["default"];
       return this.super("_create", util.extend({style: style}, properties));
     },
-    _listen: {focusin: "FocusIn", focusout: "FocusOut", accept: "DefaultSelection"},
-    _trigger: {FocusIn: "focusin", FocusOut: "focusout", DefaultSelection: "accept"},
+    _listen: {focus: "FocusIn", blur: "FocusOut", accept: "DefaultSelection"},
+    _trigger: {FocusIn: "focus", FocusOut: "blur", DefaultSelection: "accept"},
     _checkProperty: {type: true, text: true, message: true, editable: true, textLimit: true}
   });
 
