@@ -9,6 +9,12 @@
 
     _type: "tabris.CollectionView",
 
+    _checkProperty: {
+      itemHeight: true,
+      items: true,
+      initializeCell: true
+    },
+
     _create: function() {
       var result = tabris.Proxy.prototype._create.apply(this, arguments);
       this._nativeListen("createitem", true);

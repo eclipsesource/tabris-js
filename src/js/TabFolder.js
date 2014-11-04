@@ -13,6 +13,11 @@
 
     _type: "rwt.widgets.TabFolder",
 
+    _checkProperty: {
+      paging: true,
+      selection: true
+    },
+
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
 
@@ -47,6 +52,12 @@
   tabris.registerWidget("Tab", {
 
     _type: "rwt.widgets.Composite",
+
+    _checkProperty: {
+      title: true,
+      image: true,
+      badge: true
+    },
 
     _create: function(properties) {
       this._itemProps = {};

@@ -31,7 +31,8 @@
     _type: "rwt.widgets.Button",
     _properties: {style: ["PUSH"]},
     _listen: {selection: "Selection"},
-    _trigger: {Selection: "selection"}
+    _trigger: {Selection: "selection"},
+    _checkProperty: {alignment: true, image: true, text: true}
   });
 
   tabris.registerWidget("Canvas", {
@@ -42,13 +43,15 @@
     _type: "rwt.widgets.Button",
     _properties: {style: ["CHECK"]},
     _listen: {"change:selection": "Selection"},
-    _trigger: {Selection: "change:selection"}
+    _trigger: {Selection: "change:selection"},
+    _checkProperty: {alignment: true, image: true, text: true, selection: true}
   });
 
   tabris.registerWidget("Combo", {
     _type: "rwt.widgets.Combo",
     _listen: {"change:selection": "Selection"},
-    _trigger: {Selection: "change:selection"}
+    _trigger: {Selection: "change:selection"},
+    _checkProperty: {items: true, text: true, selectionIndex: true}
   });
 
   tabris.registerWidget("Composite", {
@@ -56,22 +59,26 @@
   });
 
   tabris.registerWidget("ImageView", {
-    _type: "tabris.ImageView"
+    _type: "tabris.ImageView",
+    _checkProperty: {image: true, scaleMode: true}
   });
 
   tabris.registerWidget("Label", {
-    _type: "rwt.widgets.Label"
+    _type: "rwt.widgets.Label",
+    _checkProperty: {alignment: true, markupEnabled: true, text: true}
   });
 
   tabris.registerWidget("ProgressBar", {
-    _type: "rwt.widgets.ProgressBar"
+    _type: "rwt.widgets.ProgressBar",
+    _checkProperty: {minimum: true, maximum: true, selection: true, state: true}
   });
 
   tabris.registerWidget("RadioButton", {
     _type: "rwt.widgets.Button",
     _properties: {style: ["RADIO"]},
     _listen: {"change:selection": "Selection"},
-    _trigger: {Selection: "change:selection"}
+    _trigger: {Selection: "change:selection"},
+    _checkProperty: {text: true, image: true, selection: true, alignment: true}
   });
 
   tabris.registerWidget("_ScrollBar", {
@@ -82,7 +89,8 @@
   tabris.registerWidget("Slider", {
     _type: "rwt.widgets.Scale",
     _listen: {"change:selection": "Selection"},
-    _trigger: {Selection: "change:selection"}
+    _trigger: {Selection: "change:selection"},
+    _checkProperty: {minimum: true, maximum: true, selection: true}
   });
 
   tabris.registerWidget("Text", {
@@ -92,7 +100,8 @@
       return this.super("_create", util.extend({style: style}, properties));
     },
     _listen: {focusin: "FocusIn", focusout: "FocusOut", accept: "DefaultSelection"},
-    _trigger: {FocusIn: "focusin", FocusOut: "focusout", DefaultSelection: "accept"}
+    _trigger: {FocusIn: "focusin", FocusOut: "focusout", DefaultSelection: "accept"},
+    _checkProperty: {type: true, text: true, message: true, editable: true, textLimit: true}
   });
 
   var textTypeToStyle = {
@@ -106,13 +115,15 @@
     _type: "rwt.widgets.Button",
     _properties: {style: ["TOGGLE"]},
     _listen: {"change:selection": "Selection"},
-    _trigger: {Selection: "change:selection"}
+    _trigger: {Selection: "change:selection"},
+    _checkProperty: {text: true, image: true, selection: true, alignment: true}
   });
 
   tabris.registerWidget("WebView", {
     _type: "rwt.widgets.Browser",
     _listen: {load: "Progress"},
-    _trigger: {Progress: "load"}
+    _trigger: {Progress: "load"},
+    _checkProperty: {url: true}
   });
 
 }());

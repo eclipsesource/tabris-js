@@ -8,7 +8,8 @@
   var pageProperties = ["title", "image", "style", "topLevel"];
 
   tabris.registerType("_Page", {
-    _type: "tabris.Page"
+    _type: "tabris.Page",
+    _checkProperty: {image: true, title: true, topLevel: true}
   });
 
   tabris.registerWidget("Page", {
