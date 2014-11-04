@@ -6,9 +6,6 @@
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
     },
     {
-      "src": "lib/domMock.js"
-    },
-    {
       "src": "lib/jquery.min.js"
     },
     {
