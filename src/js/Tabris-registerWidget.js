@@ -110,7 +110,9 @@
   });
 
   tabris.registerWidget("WebView", {
-    _type: "rwt.widgets.Browser"
+    _type: "rwt.widgets.Browser",
+    _listen: {load: "Progress"},
+    _trigger: {Progress: "load"}
   });
 
 }());
