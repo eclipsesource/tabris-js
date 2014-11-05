@@ -102,7 +102,7 @@
 
     _type: "rwt.widgets.Composite",
 
-    _listen: {itemchange: true},
+    _listen: {itemchange: function() {}},
 
     _supportsChildren: true,
 
