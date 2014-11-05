@@ -36,7 +36,9 @@
       backgroundImage: true,
       bounds: true,
       background: true,
-      foreground: true
+      foreground: true,
+      opacity: true,
+      transform: true
     }
   });
 
@@ -81,7 +83,7 @@
   tabris.registerWidget("Label", {
     _type: "rwt.widgets.Label",
     _properties: {style: ["WRAP"]},
-    _checkProperty: {alignment: true, markupEnabled: true, text: true}
+    _checkProperty: {alignment: true, markupEnabled: true, text: true, style: true}
   });
 
   tabris.registerWidget("ProgressBar", {

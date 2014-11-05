@@ -5,7 +5,7 @@
 
 (function() {
 
-  tabris.registerType("CollectionView", {
+  tabris.registerWidget("CollectionView", {
 
     _type: "tabris.CollectionView",
 

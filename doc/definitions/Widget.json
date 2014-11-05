@@ -9,7 +9,9 @@
     "backgroundImage": "Image",
     "bounds" : "Bounds",
     "background": "Color",
-    "foreground": "Color"
+    "foreground": "Color",
+    "opacity": "number",
+    "transform": "Transformation"
   },
   "events": [
     "touchstart",

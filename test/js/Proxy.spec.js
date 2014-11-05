@@ -616,7 +616,7 @@ describe("Proxy", function() {
         proxy.on("unknown", listener);
 
         expect(nativeBridge.calls({op: "listen", event: "unknown"}).length).toBe(0);
-        var warning = "Unknown event type unknown";
+        var warning = "TestType: Unknown event type unknown";
         expect(console.info).toHaveBeenCalledWith(warning);
       });
 
