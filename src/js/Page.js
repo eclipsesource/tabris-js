@@ -27,6 +27,7 @@
         parent: tabris._uiProxy._ui,
         control: this
       }));
+      this._page.widget = this;
       return this;
     },
 

@@ -41,7 +41,7 @@ tabris.UIProxy.prototype = {
     });
     this._ui.on("ShowPage", function(properties) {
       var page = tabris._proxies[properties.pageId];
-      self.setActivePage(page);
+      self.setActivePage(page.widget);
     });
     this._ui.on("ShowPreviousPage", function() {
       self.getActivePage().close();

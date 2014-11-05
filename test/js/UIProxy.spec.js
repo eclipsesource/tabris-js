@@ -52,7 +52,7 @@ describe("UIProxy", function() {
 
   });
 
-  describe("after creation", function() {
+  describe("instance", function() {
 
     beforeEach(function() {
       uiProxy._create();
@@ -79,7 +79,7 @@ describe("UIProxy", function() {
 
     });
 
-    describe("when a page is created", function() {
+    describe("with a page", function() {
 
       var page;
 
@@ -92,6 +92,12 @@ describe("UIProxy", function() {
       it("ShowPreviousPage event closes page", function() {
         tabris._notify(uiId, "ShowPreviousPage", {});
         expect(page.close).toHaveBeenCalled();
+      });
+
+      it("ShowPage sets activePage", function() {
+        tabris._notify(uiId, "ShowPage", {pageId: page._page.id});
+        var setCall = nativeBridge.calls({op: "set", id: uiId}).pop();
+        expect(setCall.properties.activePage).toBe(page._page.id);
       });
 
     });
