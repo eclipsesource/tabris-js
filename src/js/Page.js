@@ -44,8 +44,7 @@
 
     close: function() {
       this.dispose();
-      tabris._uiProxy.setLastActivePage();
-      this._page.dispose();
+      tabris._uiProxy.restoreLastActivePage();
     }
 
   });

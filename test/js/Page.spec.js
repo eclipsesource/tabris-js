@@ -14,7 +14,7 @@ describe("Page", function() {
     tabris._reset();
     tabris._start(nativeBridge);
     tabris._shell = new tabris.Proxy("shellId");
-    tabris._uiProxy = jasmine.createSpyObj("uiProxy", ["setActivePage", "setLastActivePage"]);
+    tabris._uiProxy = jasmine.createSpyObj("uiProxy", ["setActivePage", "restoreLastActivePage"]);
     tabris._uiProxy._ui = tabris.create("_UI", {
       shell: tabris._shell
     });
@@ -170,7 +170,7 @@ describe("Page", function() {
 
         page.close();
 
-        expect(tabris._uiProxy.setLastActivePage).toHaveBeenCalled();
+        expect(tabris._uiProxy.restoreLastActivePage).toHaveBeenCalled();
       });
 
       it("destroys composite and page", function() {

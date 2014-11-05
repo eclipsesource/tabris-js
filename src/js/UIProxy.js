@@ -44,7 +44,10 @@ tabris.UIProxy.prototype = {
       self.setActivePage(page.widget);
     });
     this._ui.on("ShowPreviousPage", function() {
-      self.getActivePage().close();
+      var page = self.getActivePage();
+      if (page) {
+        page.close();
+      }
     });
     return this;
   },
@@ -62,7 +65,7 @@ tabris.UIProxy.prototype = {
     return this._pages[ this._pages.length - 1 ];
   },
 
-  setLastActivePage: function() {
+  restoreLastActivePage: function() {
     this._pages.pop();
     var page = this.getActivePage();
     if (page) {

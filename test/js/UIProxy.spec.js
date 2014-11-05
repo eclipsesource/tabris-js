@@ -102,6 +102,10 @@ describe("UIProxy", function() {
 
     });
 
+    it("ShowPreviousPage does not fail without a page", function() {
+      tabris._notify(uiId, "ShowPreviousPage", {});
+    });
+
   });
 
 });
