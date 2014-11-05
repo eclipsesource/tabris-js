@@ -762,7 +762,7 @@ describe("Proxy", function() {
 
         proxy.dispose();
 
-        expect(log).toEqual(["child1", "child2", "parent"]);
+        expect(log).toEqual(["parent", "child1", "child2"]);
       });
 
       it("notifies children's dispose listeners recursively", function() {
@@ -781,7 +781,7 @@ describe("Proxy", function() {
 
         parent.dispose();
 
-        expect(log).toEqual(["grandchild", "child", "parent"]);
+        expect(log).toEqual(["parent", "child", "grandchild"]);
       });
 
       it("does not call native destroy on children", function() {
