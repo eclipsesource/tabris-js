@@ -15,6 +15,8 @@
 
     _type: "rwt.widgets.ScrolledComposite",
 
+    _supportsChildren: true,
+
     _listen: {
       scroll: function(listen) {
         if (listen) {

@@ -146,6 +146,13 @@
     },
 
     _addChild: function(child) {
+      var check = this.constructor && this.constructor._supportsChildren;
+      if (check === false) {
+        throw new Error(this.type + " cannot contain children");
+      }
+      if (typeof check === "function" && !check(child)) {
+        throw new Error(this.type + " cannot contain children of type " + child.type);
+      }
       if (!this._children) {
         this._children = [];
       }

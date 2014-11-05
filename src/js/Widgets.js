@@ -49,7 +49,8 @@
   });
 
   tabris.registerWidget("Canvas", {
-    _type: "rwt.widgets.Canvas"
+    _type: "rwt.widgets.Canvas",
+    _supportsChildren: true
   });
 
   tabris.registerWidget("CheckBox", {
@@ -68,7 +69,8 @@
   });
 
   tabris.registerWidget("Composite", {
-    _type: "rwt.widgets.Composite"
+    _type: "rwt.widgets.Composite",
+    _supportsChildren: true
   });
 
   tabris.registerWidget("ImageView", {

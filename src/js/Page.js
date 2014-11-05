@@ -16,6 +16,8 @@
 
     _type: "rwt.widgets.Composite",
 
+    _supportsChildren: true,
+
     _checkProperty: {image: true, title: true, topLevel: true},
 
     _create: function(properties) {

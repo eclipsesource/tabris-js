@@ -15,7 +15,9 @@ describe("Proxy", function() {
     log = [];
     tabris._reset();
     tabris._start(nativeBridge);
-    tabris.registerType("TestType", {});
+    tabris.registerType("TestType", {
+      _supportsChildren: true
+    });
   });
 
   afterEach(function() {
@@ -175,6 +177,34 @@ describe("Proxy", function() {
         expect(function() {
           proxy.append({});
         }).toThrowError("Cannot append non-widget");
+      });
+
+    });
+
+    describe("append when children are not supported", function() {
+
+      it("throws an error", function() {
+        tabris.TestType._supportsChildren = false;
+        var child = tabris.create("Label", {});
+
+        expect(function() {
+          proxy.append(child);
+        }).toThrowError("TestType cannot contain children");
+        expect(proxy.children()).not.toContain(child);
+      });
+
+    });
+
+    describe("append children of unsupported type", function() {
+
+      it("logs an error", function() {
+        tabris.TestType._supportsChildren = function() { return false; };
+        var child = tabris.create("Label", {});
+
+        expect(function() {
+          proxy.append(child);
+        }).toThrowError("TestType cannot contain children of type Label");
+        expect(proxy.children()).not.toContain(child);
       });
 
     });

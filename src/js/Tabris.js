@@ -39,10 +39,10 @@
       tabris[type] = function() {
         tabris.Proxy.apply(this, arguments);
       };
-      staticMembers.forEach(function(member) {
-        tabris[type][member] = members[member] || (member === "_type" ? null : {});
-      });
-      var superProto = util.omit(members, staticMembers);
+      for (var member in staticMembers) {
+        tabris[type][member] = members[member] || getDefault(member);
+      }
+      var superProto = util.omit(members, Object.keys(staticMembers));
       superProto.type = type;
       superProto.constructor = tabris[type]; // util.extendPrototype can not provide the original
       tabris[type].prototype = util.extendPrototype(tabris.Proxy, superProto);
@@ -72,8 +72,20 @@
 
   });
 
-  var staticMembers = [
-    "_trigger", "_listen", "_setProperty", "_getProperty", "_properties", "_type", "_checkProperty"
-  ];
+  function getDefault(member) {
+    var value = staticMembers[member];
+    return value instanceof Object ? util.clone(value) : value;
+  }
+
+  var staticMembers = {
+    "_trigger": {},
+    "_listen": {},
+    "_setProperty": {},
+    "_getProperty": {},
+    "_properties": {},
+    "_type": null,
+    "_checkProperty": {},
+    "_supportsChildren": false
+  };
 
 })();

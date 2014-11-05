@@ -19,6 +19,10 @@
       selection: true
     },
 
+    _supportsChildren: function(child) {
+      return child.type === "Tab" || child.type === "_TabItem";
+    },
+
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
 
