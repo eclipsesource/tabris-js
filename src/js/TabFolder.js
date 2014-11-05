@@ -64,6 +64,8 @@
       badge: true
     },
 
+    _supportsChildren: true,
+
     _create: function(properties) {
       this._itemProps = {};
       return this.super("_create", properties);

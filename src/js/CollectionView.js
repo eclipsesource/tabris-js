@@ -104,6 +104,8 @@
 
     _listen: {itemchange: true},
 
+    _supportsChildren: true,
+
     dispose: function() {
       console.warn("CollectionView cells are container-managed, they cannot be disposed of");
     }
