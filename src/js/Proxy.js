@@ -84,8 +84,8 @@
 
     dispose: function() {
       if (!this._isDisposed) {
-        tabris._nativeBridge.destroy(this.id);
         this._destroy();
+        tabris._nativeBridge.destroy(this.id);
         if (this._parent) {
           this._parent._removeChild(this);
         }

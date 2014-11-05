@@ -708,6 +708,14 @@ describe("Proxy", function() {
         expect(listener.calls.first().args).toEqual([{}]);
       });
 
+      it("notifies dispose listeners before native destroy", function() {
+        proxy.on("dispose", function() {
+          expect(nativeBridge.calls({op: "destroy"}).length).toEqual(0);
+        });
+
+        proxy.dispose();
+      });
+
       it("notifies all children's dispose listeners", function() {
         var child1 = tabris.create("TestType", {}).appendTo(proxy);
         var child2 = tabris.create("TestType", {}).appendTo(proxy);
