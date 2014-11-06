@@ -1,50 +1,120 @@
 Getting Started
 ===============
-Get the developer clients
+Installing the Tabris.js developer clients...
 
-* Android: Download the apk (from [here](http://download.eclipsesource.com/technology/tabris/android/tabris-android-launcher-js-debug.apk))
-* iOS: Use your testflightapp invitation to install
+Expore
+======
+The developer clients come pre-configured with serveral example apps. These examples demonstrate the power and flexibility of Tabris.js. 
 
-The Android developer client enables you to connect with tabris-connect, browser examples and load a javascript app from any url. The url is configured on the URL tab.
+Start the developer client and select the **examples** tab. 
 
-![Android Developer App](img/android-dev-app.png)
+![Android Developer App](img/examples.png)
 
-The iOS client currently allows to open a javascript app from any url. The url is configured in the “Settings” app under Tabris.js.app
+The examples are freely available on GitHub and are developed entirely in JavaScript. Checkout the [GitHub repository](https://github.com/eclipsesource/tabris-js/tree/master/examples), or [download the examples as a single zip](http://tabrisjs.com/examples.zip).
 
-Launching your own app
-======================
-Your own app needs to provide an index.json file that references all javascript files your application needs (at least the tabris.js and your own code). Point the url to the directory which contains the index.json file and launch the app. Thats it.
+See the on-line documentation for an overview of the [example apps](http://tabrisjs.com/examples).
 
-![ios config](img/app-url-ios.png)
+Shared Apps
+------------
+How do you share apps!
 
-Getting insight into your app
-=============================
-Both developer clients provide a console view that can be slid into the application main view from the right of the app. The console log also features a reload button to speed up the develop / deploy cycle.
 
-![ios console](img/console-ios.png) ![android console](img/console-android.png)
+Create Your First App
+=====================
+[Download and extend the examples](http://tabrisjs.com/examples.zip) to begin developing your first Tabris.js application.
 
-Debugging your app
-==================
-Debugging is only supported for Android. You need an Eclipse Installation with the ChromeDevTools integrated. Create a new debug configuration for “Standalone V8 VM” and enter the ip-address of your device. Enter 20001 for the port and press connect. Obviously the developer app must be running. You can find the source code of your app now in a project that is automatically added to your workspace with the name of your debug configuration. Breakpoints and inspection of variables work as expected.
+    http://tabrisjs.com/examples.zip
 
-You can get a ready to work IDE by downloading Eclipse from this link:
-https://yoxos.eclipsesource.com/team/team1/profile/a5d10661b982a709e760b63763f94103 
+Hello, World!
+-------------
+The first example you should look at is *Hello, World!*. You can run this directly from the Examples tab in the Tabris.js client, or extend it and host it locally. This example demonstrates how to create a minimal Tabris.js app.
 
-Eclipse JavaScript tooling
-==========================
-Feel free to use any editor you like to develop your app. If you would like to use Eclipse and get some code completion, error checking and inline documentation you can use the IDE already mentioned above.
+    [$] cd examples/hello
 
-To enable the code completion you have to use the project template provided here:
-https://github.com/jkrause/tabris.js-template/
+### index.json
+The index.json file is used to describe the app, incuding the name, description and a list of source files. All Tabris.js apps must include an index.json.
 
-If you import the ‘templates.xml’ which is contained in the project you will have templates for creating all widget types. Just type tabris[ctrl]-space and have fun. Templates can be imported in Preferences-JavaScript-Editor-Templates.
-![code completion](img/code-completion.png) 
-![code templates](img/code-templates.png)
+    {
+     "title": "Hello, World!",
+     "description": "Tabris.js - Hello, World!",
+     "resources": [
+      {
+        "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+      },
+      {
+        "src": "hello.js"
+      }
+     ]
+    }
 
-Documentation
-=============
-You can find reference documentation for all widgets as well as some background articles about layouting, events and more on staging.tabrisjs.com
 
-[http://staging.tabrisjs.com/documentation/](http://staging.tabrisjs.com/documentation/)
+### hello.js
+The Tabris.js Hello, World! progam is contained in `examples/hello/hello.js`. Tabris.js apps can be developed using any text editor or IDE. 
 
+	tabris.load(function() {
+	
+  	 var page = tabris.create("Page", {
+   	   title: "Hello, World!",
+   	   topLevel: true
+  	  });
+
+  	  var button = tabris.create("Button", {
+        text: "Native Widgets",
+        layoutData: { centerX: 0, top: 100 }
+  	  }).on("selection", function() {
+        label.set("text", "Totally Rock!");
+  	  }).appendTo(page);
+
+  	  var label = tabris.create("Label", {
+        font: "24px",
+        layoutData: {centerX: 0, top: [button, 50]}
+  	  }).appendTo(page);
+
+  	  page.open();
+
+	});
+	
+The Hello, World! app contains a *button* and a *label*. When the button is selected, the label is updated. Both the button and the label are placed on the *page* relative to one another.
+
+![Android Developer App](img/hello.png)
+
+### Deploying your App
+The Tabris.js clients load the apps over-the-air and execute them on the device using a JavaScript runtime and native widget bindings. The easiest way to deploy a Tabris.js app is to host it on a web server and point the native client to that URL. 
+
+Node.js provides an easy to configure HTTP server. Download and instal [node.js](http://nodejs.org/), and using the node package manager, install `http-server`. From your hello world directory, run:
+
+    [$] npm install http-server     
+    [$] http-server ./ -p 7777
+
+*You can also place your `index.json` and `hello.js` files on any http-server, as long as it's accessible from your device.*
+
+Once deployed, use the Tabris.js client to access the app. This can be configured under the URL tab on the client. In the case of a node-js http-server running on your development device, enter:
+
+    http://<device-ip-address>:7777/
+    
+Tabris Connect, the web-portal for Tabris.js, can also be used to configure the URLs available on your device.     
+
+### The Developer Console
+The Tabris.js clients ship with a developer console that can be used to track errors and warnings in the running apps. The console can be slid from the right side of the client. The console provides functionality to filter messages and restart the app. Messages can be logged to the console using the global console object:
+
+    console.log("A log message");
+    console.error("An error Message");
+    console.warn("A warning message");
+    console.info("An info message");
+    console.debug("A debug Message");
+
+Share
+=====
+
+
+
+Further Information
+===================
+[http://tabrisjs.com](http://tabrisjs.com) is your key to Tabris.js. The portal is filled with documentation, examples, the Tabris.js development roadmap, and tools for connecting with your device. The portal also contains links to the examples and snippets. 
+
+
+
+Feedback
+========
+Help us improve Tabris.js! Feedback is always welcome, 
 
