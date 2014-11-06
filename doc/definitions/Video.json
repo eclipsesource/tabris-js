@@ -26,8 +26,8 @@
     }
   },
   "events": {
-    "Presentation": true,
-    "Playback": true
+    "Presentation": {},
+    "Playback": {}
   },
   "links": [
     {

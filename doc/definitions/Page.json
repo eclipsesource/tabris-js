@@ -13,7 +13,7 @@
     }
   },
   "events": {
-    "change:bounds": true
+    "change:bounds": {}
   },
   "links": [
     {

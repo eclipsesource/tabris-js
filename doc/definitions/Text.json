@@ -20,8 +20,8 @@
     }
   },
   "events": {
-    "focus": true,
-    "blur": true
+    "focus": {},
+    "blur": {}
   },
   "links": [
     {

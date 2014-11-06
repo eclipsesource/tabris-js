@@ -8,7 +8,7 @@
     }
   },
   "events": {
-    "scroll": true
+    "scroll": {}
   },
   "links": [
     {

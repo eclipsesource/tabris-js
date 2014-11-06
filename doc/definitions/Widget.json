@@ -34,12 +34,12 @@
     }
   },
   "events": {
-    "touchstart": true,
-    "touchmove": true,
-    "touchend": true,
-    "longpress": true,
-    "change:bounds": true,
-    "dispose": true
+    "touchstart": {},
+    "touchmove": {},
+    "touchend": {},
+    "longpress": {},
+    "change:bounds": {},
+    "dispose": {}
   },
   "links": [
     {

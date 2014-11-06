@@ -11,7 +11,7 @@
     }
   },
   "events": {
-    "change:selection": true
+    "change:selection": {}
   },
   "links": [
     {
