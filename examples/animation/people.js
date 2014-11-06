@@ -20,74 +20,76 @@ tabris.load(function() {
     return {firstName: element[0], lastName: element[1], image: IMAGE_PATH + element[2]};
   });
 
-  function animateInFromBottom(widget, i) {
+  var page = tabris.create("Page", {
+    title: "People",
+    topLevel: true
+  });
+
+  var personDetailsParent = tabris.create("Composite", {
+    layoutData: {left: MARGIN, top: MARGIN_LARGE, right: MARGIN}
+  }).appendTo(page);
+
+  var personDetailView = createPersonDetail(personDetailsParent, people[2], ANIMATION_START_DELAY);
+
+  var peopleComposite = tabris.create("Composite", {
+    layoutData: {left: MARGIN, top: [personDetailsParent, MARGIN], right: 1000}
+  }).appendTo(page);
+
+  people.forEach(function(person, index) {
+    var composite = createPersonThumbView(peopleComposite, person);
+    animateInFromBottom(composite, index);
+  });
+
+  page.open();
+
+  function animateInFromBottom(widget, index) {
     widget.set({
       opacity: 0.0,
-      transform: {
-        translationY: THUMB_SIZE / 2
-      }
+      transform: {translationY: THUMB_SIZE / 2}
     });
-    tabris.create("_Animation", {
-      target: widget,
-      delay: i * 100 + 800 + ANIMATION_START_DELAY,
+    widget.animate({
+      opacity: 1.0,
+      transform: {translationY: 0}
+    }, {
+      delay: index * 100 + 800 + ANIMATION_START_DELAY,
       duration: 200,
-      easing: "ease-in-out",
-      properties: {
-        opacity: 1.0,
-        transform: {
-          translationY: 0
-        }
-      }
-    }).on("Completion", function() {
-      this.dispose();
-    }).call("start");
+      easing: "ease-in-out"
+    });
   }
 
   function animateInFromRight(widget, delay) {
     widget.set({
       opacity: 0.0,
-      transform: {
-        translationX: 32
-      }
+      transform: {translationX: 32}
     });
-    tabris.create("_Animation", {
-      target: widget,
-      duration: 500,
-      delay: delay,
-      easing: "ease-out",
-      properties: {
+    widget.animate({
         opacity: 1.0,
-        transform: {
-          translationX: 0
-        }
+        transform: {translationX: 0}
+      }, {
+        duration: 500,
+        delay: delay,
+        easing: "ease-out"
       }
-    }).on("Completion", function() {
-      this.dispose();
-    }).call("start");
+    );
   }
 
   function animateInScaleUp(widget, delay) {
     widget.set("opacity", 0.0);
-    tabris.create("_Animation", {
-      target: widget,
+    widget.animate({
+      opacity: 1.0,
+      transform: {scaleX: 1.0, scaleY: 1.0}
+    }, {
       delay: delay,
       duration: 400,
-      easing: "ease-out",
-      properties: {
-        opacity: 1.0,
-        transform: {
-          scaleX: 1.0,
-          scaleY: 1.0
-        }
-      }
-    }).on("Completion", function() {
-      this.dispose();
-    }).call("start");
+      easing: "ease-out"
+    });
   }
 
   function animateOutLeftCreateCurrentPerson(person) {
+    // this animation uses internal api to get notified when the animation ended
+    // the callback will be exposed via official api soon
     tabris.create("_Animation", {
-      target: curPersonDetailComposite,
+      target: personDetailView,
       duration: 500,
       easing: "ease-out",
       properties: {
@@ -98,8 +100,8 @@ tabris.load(function() {
       }
     }).on("Completion", function() {
       this.dispose();
-      curPersonDetailComposite.dispose();
-      curPersonDetailComposite = createPersonDetail(personDetailsCompositeParent, person, 0);
+      personDetailView.dispose();
+      personDetailView = createPersonDetail(personDetailsParent, person, 0);
     }).call("start");
   }
 
@@ -107,7 +109,8 @@ tabris.load(function() {
     var composite = tabris.create("Composite", {
       layoutData: {left: 0, right: 0, top: 0, height: IMAGE_SIZE + MARGIN_LARGE}
     });
-    var imageLabel = tabris.create("Label", {
+    var personImage = tabris.create("ImageView", {
+      layoutData: {left: 0, top: 0, width: IMAGE_SIZE, height: IMAGE_SIZE},
       image: {src: person.image, width: IMAGE_SIZE, height: IMAGE_SIZE},
       transform: {
         scaleX: 0.75,
@@ -116,26 +119,26 @@ tabris.load(function() {
       opacity: 0.0
     });
     var nameLabel = tabris.create("Label", {
-      layoutData: {left: [imageLabel, MARGIN], top: 0},
+      layoutData: {left: [personImage, MARGIN], top: 0},
       text: person.firstName + " " + person.lastName,
       font: "bold 18px"
     });
     var professionLabel = tabris.create("Label", {
-      layoutData: {left: [imageLabel, MARGIN], top: [nameLabel, MARGIN]},
+      layoutData: {left: [personImage, MARGIN], top: [nameLabel, MARGIN]},
       text: "Software developer"
     });
     var companyLabel = tabris.create("Label", {
-      layoutData: {left: [imageLabel, MARGIN], top: [professionLabel, MARGIN_SMALL]},
+      layoutData: {left: [personImage, MARGIN], top: [professionLabel, MARGIN_SMALL]},
       text: "EclipseSource"
     });
     var mailLabel = tabris.create("Label", {
-      layoutData: {left: [imageLabel, MARGIN], top: [companyLabel, MARGIN]},
+      layoutData: {left: [personImage, MARGIN], top: [companyLabel, MARGIN]},
       text: "mail@eclipsesource.com",
       font: "italic 14px"
     });
     parent.append(composite);
-    composite.append(imageLabel, nameLabel, professionLabel, companyLabel, mailLabel);
-    animateInScaleUp(imageLabel, delay);
+    composite.append(personImage, nameLabel, professionLabel, companyLabel, mailLabel);
+    animateInScaleUp(personImage, delay);
     animateInFromRight(nameLabel, delay);
     animateInFromRight(professionLabel, 100 + delay);
     animateInFromRight(companyLabel, 200 + delay);
@@ -143,60 +146,24 @@ tabris.load(function() {
     return composite;
   }
 
-  function createPersonThumbComposite(parent, neighborComposite, person) {
-    var layoutData;
-    if (neighborComposite === undefined) {
-      layoutData = {left: 0, top: 0};
-    } else {
-      layoutData = {top: 0, left: [neighborComposite, MARGIN]};
-    }
+  function createPersonThumbView(parent, person) {
+    var neighbor = parent.children().pop();
     var composite = tabris.create("Composite", {
-      layoutData: layoutData
-    });
-    var imageLabel = tabris.create("Label", {
+      layoutData: {left: neighbor ? [neighbor, MARGIN] : 0, top: 0}
+    }).appendTo(parent);
+    var personView = tabris.create("ImageView", {
       layoutData: {left: 0, top: 0, width: THUMB_SIZE, height: THUMB_SIZE},
       image: {src: person.image, width: THUMB_SIZE, height: THUMB_SIZE},
-      data: {showTouch: true}
-    });
-    imageLabel.on("touchend", function() {
+      data: {showTouch: true} // internal API
+    }).on("touchend", function() {
       animateOutLeftCreateCurrentPerson(person);
-    });
-    var firstNameLabel = tabris.create("Label", {
+    }).appendTo(composite);
+    tabris.create("Label", {
       alignment: "center",
-      layoutData: {left: 0, top: [imageLabel, 0], width: THUMB_SIZE},
+      layoutData: {left: 0, top: [personView, 0], width: THUMB_SIZE},
       text: person.firstName
-    });
-    parent.append(composite);
-    composite.append(imageLabel, firstNameLabel);
+    }).appendTo(composite);
     return composite;
   }
-
-  function createPersonThumbComposites(parent) {
-    var composite;
-    for (var i = 0; i < people.length; i++) {
-      composite = createPersonThumbComposite(parent, composite, people[i]);
-      animateInFromBottom(composite, i);
-    }
-  }
-
-  var page = tabris.create("Page", {
-    title: "People",
-    topLevel: true
-  });
-
-  var personDetailsCompositeParent = tabris.create("Composite", {
-    layoutData: {left: MARGIN, top: MARGIN_LARGE, right: MARGIN}
-  });
-
-  var curPersonDetailComposite = createPersonDetail(personDetailsCompositeParent, people[2], ANIMATION_START_DELAY);
-
-  var peopleComposite = tabris.create("Composite", {
-    layoutData: {left: MARGIN, top: [personDetailsCompositeParent, MARGIN]}
-  });
-
-  page.append(personDetailsCompositeParent, peopleComposite);
-  createPersonThumbComposites(peopleComposite);
-
-  page.open();
 
 });
