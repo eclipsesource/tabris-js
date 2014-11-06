@@ -16,13 +16,12 @@ var people = [
 tabris.load(function() {
 
   var page = tabris.create("Page", {
-    title: "Creating a CollectionView and filling it with items",
+    title: "Collection View",
     topLevel: true
   });
 
   tabris.create("CollectionView", {
     layoutData: {left: 0, top: 0, right: 0, bottom: 0},
-    background: "#d8c7a7",
     items: people,
     itemHeight: 256,
     initializeCell: function(cell) {
