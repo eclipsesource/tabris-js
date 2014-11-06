@@ -1,7 +1,7 @@
 {
-  "title": "Drawing a rectangle on a canvas",
+  "title": "Canvas",
   "category": "Canvas",
-  "description": "Demonstrates how to create a canvas and draw on it using graphics context",
+  "description": "Draw shapes on a canvas using HTML5 Canvas API",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
