@@ -1,7 +1,7 @@
 {
-  "title": "Retrieving a JSON response using XMLHttpRequest",
+  "title": "XMLHttpRequest",
   "category": "XMLHttpRequest",
-  "description": "Demonstrates XMLHttpRequest spec level 1 API in tabris.js",
+  "description": "Use XMLHttpRequest to fetch JSON data from a web service",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
