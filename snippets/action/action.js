@@ -1,7 +1,7 @@
 tabris.load(function() {
 
   var page = tabris.create("Page", {
-    title: "Creating an action with an image and a selection handler",
+    title: "Actions",
     topLevel: true
   });
 

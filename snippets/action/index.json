@@ -1,7 +1,7 @@
 {
-  "title": "Creating an action with an image and a selection handler",
+  "title": "Actions",
   "category": "Action",
-  "description": "Demonstrates creating actions",
+  "description": "Create an action with an image and a handler",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"

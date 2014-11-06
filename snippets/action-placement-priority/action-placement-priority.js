@@ -1,32 +1,21 @@
 tabris.load(function() {
 
-  var lowCounter = 0;
-  var highCounter = 0;
-
   var page = tabris.create("Page", {
-    title: "Creating an action with specified placement priority",
+    title: "Actions - Placement",
     topLevel: true
   });
 
-  var createActionHandler = function(placementPriority) {
-    return function() {
-      tabris.create("Action", {
-        title: placementPriority + " " + (placementPriority === "HIGH" ? ++highCounter : ++lowCounter),
-        placementPriority: placementPriority,
-        image: {src: "images/action_settings.png"}
-      });
-    };
+  var createAction = function(title, imageName, placementPriority) {
+    tabris.create("Action", {
+      title: title,
+      placementPriority: placementPriority,
+      image: {src: "images/" + imageName}
+    });
   };
 
-  var lowPlacementPriorityButton = tabris.create("Button", {
-    layoutData: {left: 10, top: 10, right: 10},
-    text: "Add a low placement priority action"
-  }).on("selection", createActionHandler("LOW")).appendTo(page);
-
-  tabris.create("Button", {
-    layoutData: {left: 10, top: [lowPlacementPriorityButton, 10], right: 10},
-    text: "Add a high placement priority action"
-  }).on("selection", createActionHandler("HIGH")).appendTo(page);
+  createAction("Search", "search.png", "HIGH");
+  createAction("Share", "share.png", "LOW");
+  createAction("Settings", "settings.png", "LOW");
 
   page.open();
 
