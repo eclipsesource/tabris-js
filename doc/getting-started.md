@@ -1,12 +1,12 @@
 Getting Started
 ===============
-Installing the Tabris.js developer clients...
+Welcome to Tabris Connect, the easiest way to begin with tabris.js. Once you've installed the tabris.js developer app on your device, you can run cross platform, native apps, written entirely in JavaScript.
 
-Expore
-======
-The developer clients come pre-configured with serveral example apps. These examples demonstrate the power and flexibility of Tabris.js. 
+Installing the tabris.js developer app...
 
-Start the developer client and select the **examples** tab. 
+Explore
+=======
+The tabris.js developer app comes pre-configured with several examples. These examples demonstrate the power and flexibility of tabris.js. 
 
 ![Android Developer App](img/examples.png)
 
@@ -16,23 +16,27 @@ See the on-line documentation for an overview of the [example apps](http://tabri
 
 Shared Apps
 ------------
-How do you share apps!
+In addition to the examples, other apps can be shared and executed on the device by **linking** them through the tabris connect website. Click the **link** button on the examples or snippets page to automatically add the app to your device.
+
+![Android Developer App](img/button-unlinked.png)
+
+From the **Apps** tab, click on the app you wish to run. If an app does not appear, you can swipe down to refresh.
 
 
 Create Your First App
 =====================
-[Download and extend the examples](http://tabrisjs.com/examples.zip) to begin developing your first Tabris.js application.
+[Download and extend the examples](http://tabrisjs.com/examples.zip) to begin developing your first tabris.js app.
 
     http://tabrisjs.com/examples.zip
 
 Hello, World!
 -------------
-The first example you should look at is *Hello, World!*. You can run this directly from the Examples tab in the Tabris.js client, or extend it and host it locally. This example demonstrates how to create a minimal Tabris.js app.
+The first example you should look at is *Hello, World!*. You can run this directly from the Examples tab in the tabris.js developer app, or extend it and host it locally. This example demonstrates how to create a minimal tabris.js app.
 
     [$] cd examples/hello
 
 ### index.json
-The index.json file is used to describe the app, incuding the name, description and a list of source files. All Tabris.js apps must include an index.json.
+The index.json file is used to describe the app, including the name, description and a list of source files. All tabris.js apps must include an index.json.
 
     {
      "title": "Hello, World!",
@@ -49,7 +53,7 @@ The index.json file is used to describe the app, incuding the name, description 
 
 
 ### hello.js
-The Tabris.js Hello, World! progam is contained in `examples/hello/hello.js`. Tabris.js apps can be developed using any text editor or IDE. 
+The tabris.js Hello, World! app is contained in `examples/hello/hello.js`. Tabris.js apps can be developed using any text editor or IDE. 
 
 	tabris.load(function() {
 	
@@ -78,43 +82,53 @@ The Hello, World! app contains a *button* and a *label*. When the button is sele
 
 ![Android Developer App](img/hello.png)
 
-### Deploying your App
-The Tabris.js clients load the apps over-the-air and execute them on the device using a JavaScript runtime and native widget bindings. The easiest way to deploy a Tabris.js app is to host it on a web server and point the native client to that URL. 
+### Running your App
+Tabris.js can load an app over-the air and execute it on the device using a JavaScript runtime and native widget bindings. The easiest way to run a tabris.js app is to point the tabris.js developer app to a webserver hosting the Javascript files. 
 
-Node.js provides an easy to configure HTTP server. Download and instal [node.js](http://nodejs.org/), and using the node package manager, install `http-server`. From your hello world directory, run:
+Node.js provides an easy to install HTTP server. Download and install [node.js](http://nodejs.org/), and using the node package manager, install `http-server`. From your hello world directory, run:
 
     [$] npm install http-server     
     [$] http-server ./ -p 7777
 
 *You can also place your `index.json` and `hello.js` files on any http-server, as long as it's accessible from your device.*
 
-Once deployed, use the Tabris.js client to access the app. This can be configured under the URL tab on the client. In the case of a node-js http-server running on your development device, enter:
+Once deployed, use the tabris.js developer app to access the app. This can be configured under the URL tab on the developer app. In the case of a node-js http-server running on your development device, enter:
 
     http://<device-ip-address>:7777/
     
-Tabris Connect, the web-portal for Tabris.js, can also be used to configure the URLs available on your device.     
+Tabris Connect can also be used to configure the URLs available on your device.
+
+![Link App](img/link-app.png)
+
+Make sure you enter the URL of the web server that is hosting your tabris.js app.
 
 ### The Developer Console
-The Tabris.js clients ship with a developer console that can be used to track errors and warnings in the running apps. The console can be slid from the right side of the client. The console provides functionality to filter messages and restart the app. Messages can be logged to the console using the global console object:
+The tabris.js developer app ship with a developer console that can be used to track errors and warnings in the running apps. The console can be slid from the right side of the screen. The console provides functionality to filter messages and restart the app.
+
+![Developer Console](img/console-android.png)
+
+Messages can be logged to the console using the global console object:
 
     console.log("A log message");
     console.error("An error Message");
     console.warn("A warning message");
     console.info("An info message");
     console.debug("A debug Message");
+    
+
 
 Share
 =====
-
+Tabris.js apps can be shared using Tabris Connect. GitHub repositories are automatically listed on 
 
 
 Further Information
 ===================
-[http://tabrisjs.com](http://tabrisjs.com) is your key to Tabris.js. The portal is filled with documentation, examples, the Tabris.js development roadmap, and tools for connecting with your device. The portal also contains links to the examples and snippets. 
+[http://tabrisjs.com](http://tabrisjs.com) is your key to tabris.js. The portal is filled with documentation, examples, the tabris.js development roadmap, and tools for connecting with your device. The website also contains links to the examples and snippets. 
 
 
 
 Feedback
 ========
-Help us improve Tabris.js! Feedback is always welcome, 
+Help us improve tabris.js! Feedback is always welcome, 
 
