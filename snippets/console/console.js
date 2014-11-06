@@ -1,46 +1,24 @@
 tabris.load(function() {
 
-  var MARGIN = 8;
-  var MARGIN_LARGE = 16;
-
-  var lastWidget;
-  var logText;
-
   var page = tabris.create("Page", {
-    title: "Using the console",
+    title: "Developer Console",
     topLevel: true
   });
 
-  var consoleFunctions = {
-    error: console.error,
-    warn: console.warn,
-    info: console.info,
-    log: console.log,
-    debug: console.debug
-  };
-
-  logText = lastWidget = tabris.create("Text", {
+  var logText = tabris.create("Text", {
+    layoutData: {left: 10, top: 20, right: 10},
     text: "Message",
-    message: "Log message",
-    layoutData: {left: MARGIN, top: MARGIN_LARGE, right: MARGIN}
+    message: "Log message"
   }).appendTo(page);
 
-  var toUpperCase = function(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  };
-
-  var getConsoleHandler = function(type) {
-    return function() {
-      consoleFunctions[type](logText.get("text"));
-    };
-  };
-
-  for (var type in consoleFunctions) {
-    lastWidget = tabris.create("Button", {
-      text: toUpperCase(type),
-      layoutData: {left: MARGIN, right: MARGIN, top: [lastWidget, MARGIN_LARGE]}
-    }).on("selection", getConsoleHandler(type)).appendTo(page);
-  }
+  ["debug", "log", "info", "warn", "error"].forEach(function(method) {
+    tabris.create("Button", {
+      layoutData: {left: 10, right: 10, top: [page.children().pop(), 10]},
+      text: method
+    }).on("selection", function() {
+      console[method](logText.get("text"));
+    }).appendTo(page);
+  });
 
   page.open();
 
