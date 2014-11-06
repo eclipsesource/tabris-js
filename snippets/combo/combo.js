@@ -1,18 +1,19 @@
 tabris.load(function() {
 
   var page = tabris.create("Page", {
-    title: "Creating a combo with a selection handler",
+    title: "Combo Box",
     topLevel: true
   });
 
-  var combo = tabris.create("Combo", {
+  var items = ["North", "East", "South", "West"];
+
+  tabris.create("Combo", {
     layoutData: {left: 20, top: 20, right: 20},
-    items: ["Item 1", "Item 2", "Item 3"],
-    selectionIndex: 0
+    items: items,
+    selectionIndex: 1
   }).on("change:selection", function() {
-    var items = combo.get("items");
-    var selectionIndex = combo.get("selectionIndex");
-    console.log(items[ selectionIndex ] + " selected.");
+    var selectionIndex = this.get("selectionIndex");
+    console.log("Heading " + items[selectionIndex]);
   }).appendTo(page);
 
   page.open();
