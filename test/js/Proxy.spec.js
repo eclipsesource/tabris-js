@@ -283,11 +283,32 @@ describe("Proxy", function() {
       });
 
       it("returns value from custom _getProperty", function() {
-        tabris.TestType._getProperty.prop = function(){ return 23; };
+        tabris.TestType._getProperty.prop = function() { return 23; };
 
         var result = proxy.get("prop");
 
         expect(result).toBe(23);
+      });
+
+      it("raises a warning for unknown property", function() {
+        proxy.get("unknownProperty", true);
+
+        var warning = "TestType: Unknown property \"unknownProperty\"";
+        expect(console.warn).toHaveBeenCalledWith(warning);
+      });
+
+      it("raises no warning if _propertyCheck entry is true", function() {
+        tabris.TestType._checkProperty.knownProperty = true;
+        proxy.get("knownProperty", true);
+
+        expect(console.warn).not.toHaveBeenCalled();
+      });
+
+      it("raises no warning if _propertyCheck itself is true", function() {
+        tabris.TestType._checkProperty = true;
+        proxy.get("knownProperty", true);
+
+        expect(console.warn).not.toHaveBeenCalled();
       });
 
       it("translates foreground to string", function() {

@@ -207,6 +207,7 @@
     },
 
     _getProperty: function(name) {
+      this._checkProperty(name);
       var getProperty = this.constructor && this.constructor._getProperty && this.constructor._getProperty[name];
       var result = getProperty ? getProperty.call(this) : this._getNativeProperty(name);
       return this._decodeProperty(name, result);
