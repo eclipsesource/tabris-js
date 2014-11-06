@@ -1,0 +1,13 @@
+{
+  "title": "Image View - Scale mode 'auto'",
+  "category": "ImageView",
+  "description": "Scale an image to fit the ImageView until it's at it original size, but not more",
+  "resources": [
+    {
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+    },
+    {
+      "src": "imageview-scalemode-auto.js"
+    }
+  ]
+}
