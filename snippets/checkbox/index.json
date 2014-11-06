@@ -1,7 +1,7 @@
 {
-  "title": "Creating a checkbox with a selection handler",
+  "title": "Check Boxes",
   "category": "CheckBox",
-  "description": "Demonstrates creating a checkbox and assigning a selection event handler to it",
+  "description": "Create a check box with a handler",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"

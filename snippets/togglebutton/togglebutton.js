@@ -1,16 +1,18 @@
 tabris.load(function() {
 
   var page = tabris.create("Page", {
-    title: "Creating a toggle button with a selection handler",
+    title: "Toggle Buttons",
     topLevel: true
   });
 
-  var toggleButton = tabris.create("ToggleButton", {
-    layoutData: {left: 0, top: 0},
-    text: "Toggle button"
+  tabris.create("ToggleButton", {
+    layoutData: {left: 10, top: 10},
+    text: "selected",
+    selection: true
   }).on("change:selection", function() {
-    console.log("Toggle button " + (toggleButton.get("selection") ? "selected" : "deselected") + ".");
+    this.set("text", this.get("selection") ? "selected" : "not selected");
   }).appendTo(page);
 
   page.open();
+
 });

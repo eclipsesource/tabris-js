@@ -1,15 +1,18 @@
 tabris.load(function() {
+
   var page = tabris.create("Page", {
-    title: "Creating a checkbox with a selection handler",
+    title: "Check Boxes",
     topLevel: true
   });
 
-  var checkbox = tabris.create("CheckBox", {
-    layoutData: {left: 0, top: 0},
-    text: "Checkbox"
+  tabris.create("CheckBox", {
+    layoutData: {left: 10, top: 10},
+    selection: true,
+    text: "selected"
   }).on("change:selection", function() {
-    console.log("Checkbox " + (checkbox.get("selection") ? "selected" : "deselected") + ".");
+    this.set("text", this.get("selection") ? "selected" : "deselected");
   }).appendTo(page);
 
   page.open();
+
 });

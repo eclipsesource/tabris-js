@@ -1,7 +1,7 @@
 {
-  "title": "Creating a toggle button with a selection handler",
+  "title": "Toggle Buttons",
   "category": "ToggleButton",
-  "description": "Demonstrates creating a toggle button and assigning a selection event handler to it",
+  "description": "Create a toggle button with a selection handler",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"

@@ -1,15 +1,19 @@
 tabris.load(function() {
+
   var page = tabris.create("Page", {
-    title: "Creating a button with a selection handler",
+    title: "Push Buttons",
     topLevel: true
   });
 
+  var count = 0;
+
   tabris.create("Button", {
-    layoutData: {left: 0, top: 0},
+    layoutData: {left: 10, top: 10},
     text: "Button"
   }).on("selection", function() {
-    console.log("Button selected.");
+    this.set("text", "Pressed " + (++count) + " times");
   }).appendTo(page);
 
   page.open();
+
 });
