@@ -3,8 +3,12 @@
   "description": "A widget to display an image.",
   "include": ["Widget"],
   "properties": {
-    "image": "Image",
-    "scaleMode": "string:auto|fit|fill|stretch|none?auto"
+    "image": {
+      "type": "Image"
+    },
+    "scaleMode": {
+      "type": "string:auto|fit|fill|stretch|none?auto"
+    }
   },
   "links": [
     {

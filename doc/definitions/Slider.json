@@ -3,9 +3,15 @@
   "description": "A widget representing a numeric value as an movable indicator on a horizontal line.",
   "include": ["Widget"],
   "properties": {
-    "minimum": "number?0",
-    "maximum": "number?100",
-    "selection": "number?0"
+    "minimum": {
+      "type": "number?0"
+    },
+    "maximum": {
+      "type": "number?100"
+    },
+    "selection": {
+      "type": "number?0"
+    }
   },
   "events": {
     "selection": true

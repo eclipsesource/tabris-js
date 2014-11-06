@@ -3,7 +3,9 @@
   "description": "A widget that can display a web page.",
   "include": ["Widget"],
   "properties": {
-    "url": "string"
+    "url": {
+      "type": "string"
+    }
   },
   "links": [
     {

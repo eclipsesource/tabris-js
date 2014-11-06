@@ -2,16 +2,36 @@
   "title": "Common Widget Properties and Events",
   "description": "Properties and events supported by all widgets except Action.",
   "properties": {
-    "enabled": "boolean?true",
-    "visibility": "boolean?true",
-    "layoutData": "layoutData",
-    "font": "Font",
-    "backgroundImage": "Image",
-    "bounds" : "Bounds",
-    "background": "Color",
-    "foreground": "Color",
-    "opacity": "number",
-    "transform": "Transformation"
+    "enabled": {
+      "type": "boolean?true"
+    },
+    "visibility": {
+      "type": "boolean?true"
+    },
+    "layoutData": {
+      "type": "layoutData"
+    },
+    "font": {
+      "type": "Font"
+    },
+    "backgroundImage": {
+      "type": "Image"
+    },
+    "bounds": {
+      "type": "Bounds"
+    },
+    "background": {
+      "type": "Color"
+    },
+    "foreground": {
+      "type": "Color"
+    },
+    "opacity": {
+      "type": "number"
+    },
+    "transform": {
+      "type": "Transformation"
+    }
   },
   "events": {
     "touchstart": true,

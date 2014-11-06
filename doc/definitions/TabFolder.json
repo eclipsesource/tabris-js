@@ -3,8 +3,12 @@
   "description": "A widget that can switch between [tabs](#Tab).",
   "include": ["Widget"],
   "properties": {
-    "paging": "boolean",
-    "selection": "Tab"
+    "paging": {
+      "type": "boolean"
+    },
+    "selection": {
+      "type": "Tab"
+    }
   },
   "events": {
     "change:selection": true

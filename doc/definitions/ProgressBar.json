@@ -3,10 +3,18 @@
   "description": "A widget representing a numeric value as a horizontal bar with a growing indicator.",
   "include": ["Widget"],
   "properties": {
-    "minimum": "number?0",
-    "maximum": "number?100",
-    "selection": "number?0",
-    "state": "string:normal|paused|error?normal"
+    "minimum": {
+      "type": "number?0"
+    },
+    "maximum": {
+      "type": "number?100"
+    },
+    "selection": {
+      "type": "number?0"
+    },
+    "state": {
+      "type": "string:normal|paused|error?normal"
+    }
   },
   "links": [
     {

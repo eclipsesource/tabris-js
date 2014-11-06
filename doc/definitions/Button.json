@@ -3,9 +3,15 @@
   "description": "A push button. Can contain a text or an image.",
   "include": ["Widget"],
   "properties": {
-    "alignment": "string:left|right|center?center",
-    "image": "Image",
-    "text": "string"
+    "alignment": {
+      "type": "string:left|right|center?center"
+    },
+    "image": {
+      "type": "Image"
+    },
+    "text": {
+      "type": "string"
+    }
   },
   "events": {
     "selection": true

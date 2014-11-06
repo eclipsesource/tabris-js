@@ -3,9 +3,15 @@
   "description": "A container representing a single tab of the TabFolder widget.",
   "include": ["Widget"],
   "properties": {
-    "title": "string",
-    "image": "image",
-    "badge": "string"
+    "title": {
+      "type": "string"
+    },
+    "image": {
+      "type": "image"
+    },
+    "badge": {
+      "type": "string"
+    }
   },
   "links": [
     {

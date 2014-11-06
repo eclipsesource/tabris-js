@@ -3,10 +3,18 @@
   "description": "A push button that remains pressed.",
   "include": ["Widget"],
   "properties": {
-    "text": "string",
-    "image": "Image",
-    "selection": "boolean?false",
-    "alignment": "string:left|right|center?center"
+    "text": {
+      "type": "string"
+    },
+    "image": {
+      "type": "Image"
+    },
+    "selection": {
+      "type": "boolean?false"
+    },
+    "alignment": {
+      "type": "string:left|right|center?center"
+    }
   },
   "events": {
     "change:selection": true

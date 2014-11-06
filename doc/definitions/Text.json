@@ -3,11 +3,21 @@
   "description": "A widget that allows to enter text.",
   "include": ["Widget"],
   "properties": {
-    "type": "string:default|password|search|multiline?default",
-    "text": "string",
-    "message": "string",
-    "editable": "boolean",
-    "textLimit": "number"
+    "type": {
+      "type": "string:default|password|search|multiline?default"
+    },
+    "text": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "editable": {
+      "type": "boolean"
+    },
+    "textLimit": {
+      "type": "number"
+    }
   },
   "events": {
     "focus": true,

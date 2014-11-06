@@ -3,9 +3,15 @@
   "description": "A widget to display a text. For images, use ImageView.",
   "include": ["Widget"],
   "properties": {
-    "alignment": "string:left|right|center?left",
-    "markupEnabled": "boolean",
-    "text": "string"
+    "alignment": {
+      "type": "string:left|right|center?left"
+    },
+    "markupEnabled": {
+      "type": "boolean"
+    },
+    "text": {
+      "type": "string"
+    }
   },
   "links": [
     {

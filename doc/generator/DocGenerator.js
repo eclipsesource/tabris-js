@@ -55,7 +55,7 @@ module.exports = function(grunt) {
           result.push(i === (desc.include.length - 1) ? " and " : ", ");
         }
         var incTitle = includes[include].title;
-        result.push("[" + incTitle + "](#" + incTitle.replace( /\s/g, "_" ) + ")");
+        result.push("[" + incTitle + "](#" + incTitle.replace(/\s/g, "_") + ")");
       }
     }
     result.push("\n\n");
@@ -70,12 +70,14 @@ module.exports = function(grunt) {
     result.push(desc.type ? "#### Properties\n" : "");
     Object.keys(desc.properties).sort().forEach(function(prop) {
       var value = desc.properties[prop];
-      var type = value.split(":")[0].split("?")[0];
-      var def = value.split("?")[1] || "";
-      var allowed = value.indexOf(":") !== -1 ? value.split(":")[1].split("?")[0] : "";
+      var type = value.type.split(":")[0].split("?")[0];
+      var def = value.type.split("?")[1] || "";
+      var description = value.description || "";
+      var allowed = value.type.indexOf(":") !== -1 ? value.type.split(":")[1].split("?")[0] : "";
       result.push("- *", prop, "*: `", type + "`");
       result.push(allowed ? ", possible values: \"" + allowed.split("|").join("\", \"") + "\"" : "");
       result.push(def ? ", default value: \"" + def + "\"" : "");
+      result.push(description ? "  \nDescription: " + description : "");
       result.push("\n");
     });
     result.push("\n");
@@ -88,9 +90,9 @@ module.exports = function(grunt) {
     }
     var result = [];
     result.push(desc.type ? "#### Events\n" : "");
-    for (name in desc.events) {
+    for (var name in desc.events) {
       if (desc.events.hasOwnProperty(name)) {
-        result.push("- ", name, "\n")
+        result.push("- ", name, "\n");
       }
     }
     result.push("\n");

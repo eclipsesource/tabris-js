@@ -3,9 +3,15 @@
   "description": "A scrollable list that display data items in cells, one per row. Cells are created on demand and filled with widgets in the 'initializeCell' callback. When a data item is mapped to a cell, the cell receives a 'setitem' event.",
   "include": ["Widget"],
   "properties": {
-    "itemHeight": "number",
-    "items": "mixed[]",
-    "initializeCell": "function"
+    "itemHeight": {
+      "type": "number"
+    },
+    "items": {
+      "type": "mixed[]"
+    },
+    "initializeCell": {
+      "type": "function"
+    }
   },
   "events": {
     "selection": true

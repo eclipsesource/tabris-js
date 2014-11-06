@@ -3,10 +3,18 @@
   "description": "A check box widget.",
   "include": ["Widget"],
   "properties": {
-    "alignment": "string:left|right|center?center",
-    "image": "Image",
-    "selection": "boolean?false",
-    "text": "string"
+    "alignment": {
+      "type": "string:left|right|center?center"
+    },
+    "image": {
+      "type": "Image"
+    },
+    "selection": {
+      "type": "boolean?false"
+    },
+    "text": {
+      "type": "string"
+    }
   },
   "events": {
     "change:selection": true

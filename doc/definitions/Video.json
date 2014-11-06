@@ -3,19 +3,36 @@
   "description": "A widget used to play a video from a URL source.",
   "include": ["Widget"],
   "properties": {
-    "enabled": "boolean",
-    "repeat": "boolean",
-    "controls_visible": "boolean",
-    "url": "string",
-    "playback": "string:play|pause|stop|fast_forward|fast_backward",
-    "presentation": "string:full_screen|embedded",
-    "speed": "number"
+    "enabled": {
+      "type": "boolean"
+    },
+    "repeat": {
+      "type": "boolean"
+    },
+    "controls_visible": {
+      "type": "boolean"
+    },
+    "url": {
+      "type": "string"
+    },
+    "playback": {
+      "type": "string:play|pause|stop|fast_forward|fast_backward"
+    },
+    "presentation": {
+      "type": "string:full_screen|embedded"
+    },
+    "speed": {
+      "type": "number"
+    }
   },
   "events": {
     "Presentation": true,
     "Playback": true
   },
-  "links": {[
-    {"title": "Example with video wigdet", "path": "https://github.com/eclipsesource/tabris-js/blob/master/examples/video/video.js"}
-  ]}
+  "links": [
+    {
+      "title": "Example with video wigdet",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/examples/video/video.js"
+    }
+  ]
 }

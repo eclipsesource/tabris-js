@@ -3,9 +3,15 @@
   "description": "A widget with a drop-down list of items to choose from.",
   "include": ["Widget"],
   "properties": {
-    "items": "string[]",
-    "selectionIndex": "number",
-    "text": "string"
+    "items": {
+      "type": "string[]"
+    },
+    "selectionIndex": {
+      "type": "number"
+    },
+    "text": {
+      "type": "string"
+    }
   },
   "events": {
     "change:selection": true
