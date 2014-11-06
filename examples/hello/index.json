@@ -1,0 +1,12 @@
+{
+  "title": "Hello, World!",
+  "description": "Tabris.js - Hello, World!",
+  "resources": [
+    {
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+    },
+    {
+      "src": "hello.js"
+    }
+  ]
+}
