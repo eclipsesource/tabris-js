@@ -1,16 +1,26 @@
 tabris.load(function() {
 
   var page = tabris.create("Page", {
-    title: "Creating a colored label with centered text",
+    title: "Labels",
     topLevel: true
   });
 
   tabris.create("Label", {
     layoutData: {left: 10, top: 10, right: 10},
-    text: "Centered label text",
-    alignment: "center",
-    background: "#234",
-    foreground: "white"
+    text: "Left",
+    alignment: "left"
+  }).appendTo(page);
+
+  tabris.create("Label", {
+    layoutData: {left: 10, top: [page.children().pop(), 10], right: 10},
+    text: "Center",
+    alignment: "center"
+  }).appendTo(page);
+
+  tabris.create("Label", {
+    layoutData: {left: 10, top: [page.children().pop(), 10], right: 10},
+    text: "Right",
+    alignment: "right"
   }).appendTo(page);
 
   page.open();

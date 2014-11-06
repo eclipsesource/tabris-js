@@ -1,7 +1,7 @@
 {
-  "title": "Creating a colored label with centered text",
+  "title": "Labels",
   "category": "Label",
-  "description": "Demonstrates creating a centered label",
+  "description": "Creating labels with different alignments",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
