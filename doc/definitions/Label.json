@@ -4,10 +4,12 @@
   "include": ["Widget"],
   "properties": {
     "alignment": {
-      "type": "string:left|right|center?left"
+      "type": "string:left|right|center?left",
+      "description": "Specifies the horizontal alignment of the text."
     },
     "markupEnabled": {
-      "type": "boolean"
+      "type": "boolean",
+      "description": "Allows using a HTML markup subset in the label text. Can only be set in the \"create\" method."
     },
     "text": {
       "type": "string"

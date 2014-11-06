@@ -4,7 +4,8 @@
   "include": ["Widget"],
   "properties": {
     "paging": {
-      "type": "boolean"
+      "type": "boolean",
+      "description": "Enables swiping through tabs."
     },
     "selection": {
       "type": "Tab"

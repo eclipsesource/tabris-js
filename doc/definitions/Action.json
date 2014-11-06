@@ -12,7 +12,8 @@
       "type": "Image"
     },
     "placementPriority": {
-      "type": "string:LOW|HIGH|NORMAL?NORMAL"
+      "type": "string:LOW|HIGH|NORMAL?NORMAL",
+      "description": "Actions with higher placement priority will be placed at a more significant position in the UI, e.g. low priority actions could go into a menu instead of being included in a toolbar."
     },
     "title": {
       "type": "string"

@@ -4,13 +4,15 @@
   "include": ["Widget"],
   "properties": {
     "type": {
-      "type": "string:default|password|search|multiline?default"
+      "type": "string:default|password|search|multiline?default",
+      "description": "The type of the text widget. Can only be set in the \"create\" method."
     },
     "text": {
       "type": "string"
     },
     "message": {
-      "type": "string"
+      "type": "string",
+      "description": "Displayed only when the field is empty."
     },
     "editable": {
       "type": "boolean"
