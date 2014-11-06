@@ -7,44 +7,24 @@ tabris.registerType("App", {
 
 tabris.load(function() {
 
-  var MARGIN = 16;
-
   var page = tabris.create("Page", {
     title: "App Service",
     topLevel: true
   });
+  var statusLabel = tabris.create("Label", {
+    layoutData: {left: 10, right: 10, centerY: 0},
+    alignment: "center",
+    font: "22px sans-serif",
+    text: "App started"
+  }).appendTo(page);
 
-  var pauseLabel = tabris.create("Label", {
-    style: ["BORDER"],
-    layoutData: {left: MARGIN, top: MARGIN, right: MARGIN},
-    text: "Pause: not yet"
+  tabris("App").on("Pause", function() {
+    statusLabel.set("text", "App paused");
+  }).on("Resume", function() {
+    statusLabel.set("text", "App resumed");
+  }).on("BackNavigation", function() {
+    statusLabel.set("text", "Back navigation consumed");
   });
-
-  var resumeLabel = tabris.create("Label", {
-    style: ["BORDER"],
-    layoutData: {left: MARGIN, top: [pauseLabel, MARGIN], right: MARGIN},
-    text: "Resume: not yet"
-  });
-
-  page.append(pauseLabel, resumeLabel);
-
-  var app = tabris("App");
-
-  app.on("Pause", function() {
-    pauseLabel.set("text", "Pause: Yes");
-  });
-
-  app.on("Resume", function() {
-    resumeLabel.set("text", "Resume: Yes");
-  });
-
-  var backNavListener = function() {
-    resumeLabel.set("text", "Resume: reset");
-    pauseLabel.set("text", "Pause: reset");
-    app.off("BackNavigation", backNavListener);
-  };
-
-  app.on("BackNavigation", backNavListener);
 
   page.open();
 

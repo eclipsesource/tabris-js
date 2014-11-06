@@ -1,7 +1,7 @@
 {
-  "title": "Lifecycle events: Pause, Resume",
+  "title": "Application Lifecycle",
   "category": "App Service",
-  "description": "Showcases attaching listeners to Pause and Resume events and handling back navigation",
+  "description": "Attach listeners to Pause and Resume events and handle back navigation",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
