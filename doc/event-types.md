@@ -1,14 +1,17 @@
+**Note:** if not explicitly documented, the event handler argument is not yet
+implemented.
+
 dispose
 =======
-Fired on widget dispose. The event handler argument is an empty object.
+Fired on widget dispose.
 
 focus
 =====
-Fired on widget focus gain. The event handler argument is an empty object.
+Fired on widget focus gain.
 
 blur
 ====
-Fired on widget focus lost. The event handler argument is an empty object.
+Fired on widget focus lost.
 
 resize
 ======
@@ -24,13 +27,22 @@ following properties:
 
 selection
 =========
-Fired on widget selection. The event handler argument is an empty object.
+Fired on widget selection.
+
+change:selection
+================
+Fired on changed widget selection state.
+
+change:bounds
+=============
+Fired when one of the bounds metrics (x, y position, width and height) gets
+changed. The event handler argument is an object with a "bounds" key and an
+array containing the bounds metrics.
 
 longpress
 =========
 Fired after initiating a *touchstart* event for the same widget and holding the
-pointer in position for a specific amount of time. The event handler argument is
-an empty object.
+pointer in position for a specific amount of time.
 
 touchend
 ========
