@@ -68,6 +68,25 @@ label.set({
 });
 ```
 
+### `animate(properties, options)`
+
+Changes a number of widget property with an animation. Currently, only the properties `transform` and `opacity` are supported. Does not yet return any value. 
+
+Parameters:
+
+- *properties*: a set of widget properties to set (*object*)
+- *options*: the properties of the animation itself
+  - *delay*: time to wait until the animation starts in ms, defaults to `0`
+  - *duration*: duration of the animation in ms
+  - *easing*: one of `linear`, `ease-in`, `ease-out`, `ease-in-out`
+  - *repeat*: number of times to repeat the animation, defaults to `1`
+  - *reverse*: plays the animation backwards if set to `true`
+
+Example:
+```javascript
+label.animate({opacity: 0}, {duration: 1000});
+```
+
 ## The Widget Hierarchy
 
 To be visible, a widget needs a parent. The top-level parent of every UI is a `Page`. Widgets can be included in the widget hierarchy using `append` or `appendTo`.
