@@ -32,7 +32,7 @@ tabris.load(function() {
   var personDetailView = createPersonDetail(personDetailsParent, people[2], ANIMATION_START_DELAY);
 
   var peopleComposite = tabris.create("Composite", {
-    layoutData: {left: MARGIN, top: [personDetailsParent, MARGIN], right: 1000}
+    layoutData: {left: MARGIN, top: [personDetailsParent, MARGIN]}
   }).appendTo(page);
 
   people.forEach(function(person, index) {
