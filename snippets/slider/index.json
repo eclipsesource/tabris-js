@@ -1,0 +1,13 @@
+{
+  "title": "Slider",
+  "category": "Slider",
+  "description": "A slider",
+  "resources": [
+    {
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+    },
+    {
+      "src": "slider.js"
+    }
+  ]
+}
