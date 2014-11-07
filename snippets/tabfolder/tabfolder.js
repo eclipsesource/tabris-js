@@ -13,7 +13,7 @@ tabris.load(function() {
   var createTab = function(title, image) {
     var tab = tabris.create("Tab", {
       title: title, // converted to upper-case on Android
-      image: {src: image, width: 15, height: 15} // only used by iOS
+      image: {src: image, scale: 2} // image only used by iOS
     }).appendTo(tabFolder);
     tabris.create("Label", {
       layoutData: {centerX: 0, centerY: 0},
