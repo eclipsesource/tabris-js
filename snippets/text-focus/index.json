@@ -1,13 +1,13 @@
 {
-  "title": "Creating a non-editable text widget",
+  "title": "Text Field and Focus Listener",
   "category": "Text",
-  "description": "Demonstrates creating a non-editable text widget",
+  "description": "Listen to focus events",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
     },
     {
-      "src": "text-non-editable.js"
+      "src": "text-focus.js"
     }
   ]
 }

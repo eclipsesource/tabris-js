@@ -1,7 +1,7 @@
 {
-  "title": "Creating text widgets with set message and focus handlers",
+  "title": "Text Field",
   "category": "Text",
-  "description": "Demonstrates creating text widgets with set message and focus handlers",
+  "description": "with listener",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"

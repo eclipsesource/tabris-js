@@ -1,27 +1,18 @@
 tabris.load(function() {
   var page = tabris.create("Page", {
-    title: "Creating text widgets with set message and focus handlers",
+    title: "Text Field",
     topLevel: true
   });
 
-  var text1 = tabris.create("Text", {
-    layoutData: {left: 0, top: 0},
-    message: "Text 1"
+  tabris.create("Text", {
+    layoutData: {top: 20, left: [20, 0], right: [20, 0]},
+    message: "Type here, press 'Done'"
+  }).on("accept", function() {
+    tabris.create("Label", {
+      layoutData: {top: [page.children().pop(), 20], left: [20, 0]},
+      text: this.get("text")
+    }).appendTo(page);
   }).appendTo(page);
-
-  var text2 = tabris.create("Text", {
-    layoutData: {left: 0, top: [text1, 15]},
-    message: "Text 2"
-  }).appendTo(page);
-
-  [text1, text2].forEach(function(text) {
-    text.on("focus", function() {
-      console.log(this.get("message") + " is focused.");
-    });
-    text.on("blur", function() {
-      console.log(this.get("message") + " lost focus.");
-    });
-  });
 
   page.open();
 });
