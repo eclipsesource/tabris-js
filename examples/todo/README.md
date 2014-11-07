@@ -1,3 +1,6 @@
+This example is outdated
+========================
+
 Using the demo
 ==============
 Before using the demo the required node modules should be first installed:
