@@ -1,6 +1,4 @@
 {
-  "title": "Game of Life",
-  "description": "The classic \"zero-player\" game",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"

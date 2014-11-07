@@ -1,3 +1,9 @@
+// Original source: https://github.com/tonylukasavage/Automata
+// This example was initially developed to showcase Titanium performance characteristics
+// The author himself explains that Titanium is not well suited for this kind of application
+// It resides in this example directory because we wanted to get an idea how this
+// performs with tabris.js
+
 var DEBUG = true;
 
 tabris.load(function() {
