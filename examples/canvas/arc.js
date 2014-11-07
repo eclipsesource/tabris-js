@@ -15,7 +15,7 @@ tabris.load(function() {
   var checkBox = tabris.create("CheckBox", {
     text: "Counterclockwise",
     layoutData: {left: 0, right: 0, top: [canvas, 8]}
-  }).on("selection", function() {
+  }).on("change:selection", function() {
     clearCanvas();
     drawArcs(checkBox.get("selection"));
   }).appendTo(page);
