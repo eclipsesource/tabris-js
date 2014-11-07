@@ -1,3 +1,22 @@
+Translation
+===========
+Translation is an object with the following properties:
+
+* `scaleX` - a factor specifying the scale amount in the x-axis. Default is 1.
+* `scaleY` - a factor specifying the scale amount in the y-axis. Default is 1.
+* `rotation` - specifies the rotation in radians. Default is 0.
+* `translationX` - translation in the x-axis in pixels. Default is 0.
+* `translationY` - translation in the y-axis in pixels. Default is 0.
+
+This will make the widget twice as big and rotate it by 135°:
+```javascript
+{scaleX: 2, scaleY: 2, rotation: Math.PI * 0.75}
+```
+
+Opacity
+=======
+Opacity is a float number between 0 and 1.
+
 Image
 =====
 Images are specified as objects with the following properties:

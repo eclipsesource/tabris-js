@@ -7,7 +7,7 @@
       "type": "string"
     },
     "image": {
-      "type": "image"
+      "type": "Image"
     },
     "badge": {
       "type": "string"
