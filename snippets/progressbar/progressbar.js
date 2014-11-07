@@ -1,27 +1,19 @@
 tabris.load(function() {
 
-  var MARGIN = 15;
-  var STEPS = 200;
-
   var page = tabris.create("Page", {
-    title: "Creating a progress bar and setting its selection",
+    title: "ProgressBar",
     topLevel: true
   });
 
   var progressBar = tabris.create("ProgressBar", {
-    layoutData: {left: MARGIN, right: MARGIN, top: MARGIN},
-    minimum: 0,
-    maximum: STEPS,
-    selection: 0
+    layoutData: {left: 15, right: 15, centerY: 0},
+    maximum: 300,
+    selection: 100
   }).appendTo(page);
 
-  var intervalId = setInterval(function() {
-    var selection = progressBar.get("selection");
-    if (selection < STEPS) {
-      progressBar.set("selection", selection + 1);
-    } else {
-      clearInterval(intervalId);
-    }
+  setInterval(function() {
+    var selection = progressBar.get("selection") + 1;
+    progressBar.set("selection", selection > 300 ? 0 : selection);
   }, 20);
 
   page.open();

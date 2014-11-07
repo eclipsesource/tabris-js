@@ -1,7 +1,7 @@
 {
-  "title": "Creating a progress bar and setting its selection",
+  "title": "Animated progress",
   "category": "ProgressBar",
-  "description": "Demonstrates creating a progress bar and setting its selection",
+  "description": "A progress bar that is animated using a timer",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
