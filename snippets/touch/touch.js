@@ -1,65 +1,35 @@
 tabris.load(function() {
 
-  var colors = {
-    blue: ["#4444FF", "#AAAAFF"],
-    red: ["#EE3333", "#FFAAAA"],
-    green: ["#33EE33", "#AAFFAA"]
-  };
-
-  var printXY = function(label, prefix, event) {
-    label.set("text", prefix + ": " + event.touches[0].x + " X " + event.touches[0].y);
-  };
-
-  var addTouchBackgroundHandlers = function(target, printComposite, targetBackground) {
-    target.on("touchstart", function(event) {
-      printXY(printComposite, "touchstart", event);
-      target.set("background", colors[targetBackground][1]);
-    }).on("touchmove", function(event) {
-      printXY(printComposite, "touchmove", event);
-    }).on("touchend", function(event) {
-      printXY(printComposite, "touchend", event);
-      target.set("background", colors[targetBackground][0]);
-    }).on("touchcancel", function(event) {
-      printXY(printComposite, "touchcancel", event);
-      target.set("background", colors[targetBackground][0]);
-    }).on("longpress", function(event) {
-      target.set("background", "white");
-      printXY(printComposite, "longpress"  , event);
-    });
-  };
-
-  var bluePage = tabris.create("Page", {
-    title: "Handle touch event data",
-    topLevel: true,
-    background: colors.blue[0]
+  var page = tabris.create("Page", {
+    title: "Touch Events",
+    topLevel: true
   });
 
-  var redComposite = tabris.create("Composite", {
-    layoutData: {left: 30, right: 30, top: 60, bottom: [50, 0]},
-    background: colors.red[0]
-  }).appendTo(bluePage);
+  var label = tabris.create("Label", {
+    layoutData: {left: 20, top: 20, right: 20},
+    text: "Touch anywhere..."
+  }).appendTo(page);
 
-  var greenComposite = tabris.create("Composite", {
-    layoutData: {left: 30, right: 30, top: [50, 30], bottom: 30},
-    background: colors.green[0]
-  }).appendTo(bluePage);
+  var printXY = function(prefix, event) {
+    label.set("text", prefix + ": " + Math.round(event.touches[0].x) + " X " + Math.round(event.touches[0].y));
+  };
 
-  var blueLabel = tabris.create("Label", {
-    font: "20px sans-serif"
-  }).appendTo(bluePage);
+  page.on("touchstart", function(event) {
+    printXY("touchstart", event);
+    page.set("background", "yellow");
+  }).on("touchmove", function(event) {
+    printXY("touchmove", event);
+  }).on("touchend", function(event) {
+    printXY("touchend", event);
+    page.set("background", "green");
+  }).on("touchcancel", function(event) {
+    printXY("touchcancel", event);
+    page.set("background", "red");
+  }).on("longpress", function(event) {
+    page.set("background", "blue");
+    printXY("longpress"  , event);
+  });
 
-  var redLabel = tabris.create("Label", {
-    font: "20px sans-serif"
-  }).appendTo(redComposite);
-
-  tabris.create("Label", {
-    font: "20px sans-serif",
-    text: "No touch here!"
-  }).appendTo(greenComposite);
-
-  addTouchBackgroundHandlers(bluePage, blueLabel, "blue");
-  addTouchBackgroundHandlers(redComposite, redLabel, "red");
-
-  bluePage.open();
+  page.open();
 
 });

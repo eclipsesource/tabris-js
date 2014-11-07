@@ -1,6 +1,6 @@
 {
-  "title": "Handle touch event data",
-  "category": "Touch Events",
+  "title": "Touch Event Handling",
+  "category": "TouchEvents",
   "description": "Demonstrates the tabris.js touch API",
   "resources": [
     {
