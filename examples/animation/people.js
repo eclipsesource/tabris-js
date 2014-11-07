@@ -31,8 +31,9 @@ tabris.load(function() {
 
   var personDetailView = createPersonDetail(personDetailsParent, people[2], ANIMATION_START_DELAY);
 
-  var peopleComposite = tabris.create("Composite", {
-    layoutData: {left: MARGIN, top: [personDetailsParent, MARGIN]}
+  var peopleComposite = tabris.create("ScrollComposite", {
+    scroll: "horizontal",
+    layoutData: {left: 0, top: [personDetailsParent, MARGIN], right: 0, height: 96}
   }).appendTo(page);
 
   people.forEach(function(person, index) {
@@ -149,7 +150,7 @@ tabris.load(function() {
   function createPersonThumbView(parent, person) {
     var neighbor = parent.children().pop();
     var composite = tabris.create("Composite", {
-      layoutData: {left: neighbor ? [neighbor, MARGIN] : 0, top: 0}
+      layoutData: {left: neighbor ? [neighbor, MARGIN] : MARGIN, top: 0}
     }).appendTo(parent);
     var personView = tabris.create("ImageView", {
       layoutData: {left: 0, top: 0, width: THUMB_SIZE, height: THUMB_SIZE},
