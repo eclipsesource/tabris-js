@@ -62,7 +62,7 @@ tabris.load(function() {
   for (var i = 0; i < imageNames.length; i++) {
     var imageThumbPath = createImageThumbPath(imageNames[i]);
     var imageBigPath = createImageBigPath(imageNames[i]);
-    var image = tabris.create("Label", {
+    var image = tabris.create("ImageView", {
       layoutData: {top: 7, left: i * 150 + i * 7, width: 150, height: 150},
       image: {src: imageThumbPath, width: 150, height: 150},
       data: {
@@ -77,7 +77,7 @@ tabris.load(function() {
     if (imageHolder) {
       imageHolder.dispose();
     }
-    imageHolder = tabris.create("Label", {
+    imageHolder = tabris.create("ImageView", {
       layoutData: {top: 0, bottom: 0, left: 0, right: 0},
       data: {zoom: true},
       image: {src: path}
