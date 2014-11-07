@@ -183,13 +183,13 @@ tabris.load(function() {
       layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: [settingsLabel, 10]}
     }).appendTo(page);
     tabris.create("Label", {
-      text: "<i>Authors of book covers:</i><br>" +
-        "Paula Rodriguez - 1984<br>" +
-        "Marc Storrs and Rob Morphy - Na Tropie Nieznanych<br>" +
-        "Cat Finnie - Stary Czlowiek I Morze<br>" +
-        "Andrew Brozyna - Hobbit<br>" +
-        "Viacheslav Vystupov - Wojna Swiatow<br>" +
-        "Marc Storrs and Rob Morphy - Zegar Pomaranczowy Pracz<br>" +
+      text: "<i>Authors of book covers:</i><br/>" +
+        "Paula Rodriguez - 1984<br/>" +
+        "Marc Storrs and Rob Morphy - Na Tropie Nieznanych<br/>" +
+        "Cat Finnie - Stary Czlowiek I Morze<br/>" +
+        "Andrew Brozyna - Hobbit<br/>" +
+        "Viacheslav Vystupov - Wojna Swiatow<br/>" +
+        "Marc Storrs and Rob Morphy - Zegar Pomaranczowy Pracz<br/>" +
         "Andrew Evan Harner - Ksiega Dzungli",
         markupEnabled: true,
       layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: [linkLabel, 10]}
