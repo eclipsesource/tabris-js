@@ -1,17 +1,17 @@
 tabris.load(function() {
 
   var page = tabris.create("Page", {
-    title: "Widget baseline alignment",
+    title: "Layout - Baseline Alignment",
     topLevel: true
   });
 
   var label = tabris.create("Label", {
-    layoutData: {left: 15, top: 15},
+    layoutData: {left: 20, top: 20},
     text: "Label:"
   }).appendTo(page);
 
   tabris.create("Text", {
-    layoutData: {left: [label, 15], width: 300, baseline: label},
+    layoutData: {left: [label, 10], width: 300, baseline: label},
     message: "Text"
   }).appendTo(page);
 

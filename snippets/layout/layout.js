@@ -1,14 +1,12 @@
 tabris.load(function() {
 
-  var MARGIN = 15;
-
   var page = tabris.create("Page", {
-    title: "Layouting a widget with a fixed size",
+    title: "Layout - Absolute",
     topLevel: true
   });
 
   tabris.create("Composite", {
-    layoutData: {left: MARGIN, top: MARGIN, width: 100, height: 100},
+    layoutData: {left: 20, top: 20, width: 100, height: 100},
     background: "red"
   }).appendTo(page);
 

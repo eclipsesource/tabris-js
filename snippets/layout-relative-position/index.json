@@ -1,13 +1,13 @@
 {
-  "title": "Relative positioning",
+  "title": "Relative Position",
   "category": "Layout",
-  "description": "Demonstrates positioning a widget relatively to an other widget",
+  "description": "Arrange a widget relative to another one",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
     },
     {
-      "src": "layout-relative-positioning.js"
+      "src": "layout-relative-position.js"
     }
   ]
 }

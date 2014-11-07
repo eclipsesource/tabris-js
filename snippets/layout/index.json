@@ -1,7 +1,7 @@
 {
-  "title": "Layouting a widget with a fixed size",
+  "title": "Absolute Layout",
   "category": "Layout",
-  "description": "Demonstrates creating a widget with a fixed size",
+  "description": "Layout a widget with a fixed size and position",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"

@@ -1,19 +1,17 @@
 tabris.load(function() {
 
-  var MARGIN = 15;
-
   var page = tabris.create("Page", {
-    title: "Layouting a widget by percentage",
+    title: "Layout - Percentages",
     topLevel: true
   });
 
   tabris.create("Composite", {
-    layoutData: {left: MARGIN, top: MARGIN, right: MARGIN, bottom: [70, 0]},
+    layoutData: {left: 10, top: 10, right: 10, bottom: [70, 0]},
     background: "red"
   }).appendTo(page);
 
   tabris.create("Composite", {
-    layoutData: {left: MARGIN, top: [30, MARGIN], right: MARGIN, bottom: MARGIN},
+    layoutData: {left: 10, top: [30, 10], right: 10, bottom: 10},
     background: "blue"
   }).appendTo(page);
 

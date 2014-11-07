@@ -1,7 +1,7 @@
 tabris.load(function() {
 
   var page = tabris.create("Page", {
-    title: "Centered positioning",
+    title: "Layout - Centering",
     topLevel: true
   });
 

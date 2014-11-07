@@ -1,7 +1,7 @@
 {
-  "title": "Centered positioning",
+  "title": "Center Alignment",
   "category": "Layout",
-  "description": "Demonstrates positioning widgets using center offset",
+  "description": "Center-align a widget in its parent",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"

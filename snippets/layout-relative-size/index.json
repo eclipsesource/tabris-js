@@ -1,7 +1,7 @@
 {
-  "title": "Layouting a widget by percentage",
+  "title": "Size by Percentage",
   "category": "Layout",
-  "description": "Demonstrates specifying the widget bounds by percentage",
+  "description": "Specify a widget's bounds as percentage of the parent",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"

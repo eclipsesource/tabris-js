@@ -1,7 +1,7 @@
 tabris.load(function() {
 
   var page = tabris.create("Page", {
-    title: "Relative positioning",
+    title: "Layout - Relative Positioning",
     topLevel: true
   });
 
@@ -11,7 +11,7 @@ tabris.load(function() {
   }).appendTo(page);
 
   tabris.create("Composite", {
-    layoutData: {left: [composite1, 15], top: [composite1, 15], width: 100, height: 100},
+    layoutData: {left: [composite1, 10], top: [composite1, 10], width: 100, height: 100},
     background: "blue"
   }).appendTo(page);
 
