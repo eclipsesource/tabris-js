@@ -103,6 +103,26 @@ Example:
 buttonBar.append(okButton, cancelButton);
 ```
 
+### `parent()`
+
+Returns the widget's parent.
+
+Example:
+
+```javascript
+var parent = button.parent();
+```
+
+### `children()`
+
+Returns the list of children of this widget. The returned array is a copy and can safely be manipulated.
+
+Example:
+
+```javascript
+var lastChild = parent.children().pop();
+```
+
 ## Events
 
 Widgets can fire a number of events, e.g. on touch or on modification. Event listeners can be added using the `on` method and removed using `off`. Returns the widget itself.
