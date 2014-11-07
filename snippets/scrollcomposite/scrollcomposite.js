@@ -1,8 +1,7 @@
 tabris.load(function() {
-  var lastLabel;
 
   var page = tabris.create("Page", {
-    title: "Creating a scroll composite with text",
+    title: "Scroll Composite - Horizontal",
     topLevel: true
   });
 
@@ -13,7 +12,7 @@ tabris.load(function() {
   }).appendTo(page);
 
   for (var i = 0; i < 50; i++) {
-    lastLabel = tabris.create("Label", {
+    tabris.create("Label", {
       layoutData: {left: i * 30 + 20, centerY: 0, width: 30},
       text: i + "°",
       foreground: "white"
@@ -21,4 +20,5 @@ tabris.load(function() {
   }
 
   page.open();
+
 });

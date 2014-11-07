@@ -1,7 +1,7 @@
 {
-  "title": "Creating a scroll composite with text",
+  "title": "Horizontal Scrolling",
   "category": "ScrollComposite",
-  "description": "Demonstrates creating a scroll composite setting its content",
+  "description": "Create a horizontal scroll composite and fill it with labels",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
