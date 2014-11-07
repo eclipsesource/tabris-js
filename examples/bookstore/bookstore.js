@@ -3,13 +3,15 @@ tabris.load(function() {
   var PAGE_MARGIN = 12;
 
   var books = [
-    ["Schroder: A Novel", "Amity Gaige", "images/book_schroder.jpg"],
-    ["Vampires in the Lemon Grove: Stories", "Karen Russell", "images/book_vampires.jpg", false, true],
-    ["After Visiting Friends: A Son's Story", "Michael Hainey", "images/book_after_visiting.jpg", true, true],
-    ["A History of Future Cities", "Daniel Brook", "images/book_a_history.jpg", true, true],
-    ["Autobiography of Us: A Novel", "Aria Beth Sloss", "images/book_autobiografy.jpg", false, true],
-    ["How Literature Saved My Life", "David Shields", "images/book_how_literature.jpg", true, false],
-    ["The Dinner", "Herman Koch", "images/book_the_dinner.jpg", true, true]
+    ["1984", "H.G. Wells", "images/book_1984.jpg"],
+    ["Na Tropie Nieznanych", "Bernard Heuvelmans", "images/book_na_tropie.jpg", false, true],
+    ["Stary Czlowiek I Morze", "Ernest Hemingway", "images/book_stary.jpg", true, true],
+    ["The Catcher In The Rye", "J.D. Salinger", "images/book_catcher.jpg", true, true],
+    ["Moby Dick", "Herman Melville", "images/book_moby_dick.jpg", false, true],
+    ["Hobbit", "J.R.R Tolkien", "images/book_hobbit.jpg", true, false],
+    ["Wojna Swiatow", "H.G. Wells", "images/book_wojna.jpg", true, true],
+    ["Zegar Pomaranczowy Pracz", "Anthony Burgess", "images/book_zegar.jpg", true, true],
+    ["Ksiega Dzungli", "Rudyard Kipling", "images/book_ksiega.jpg", true, true]
   ].map(function(array) {
     return {
       title: array[0],
@@ -169,11 +171,28 @@ tabris.load(function() {
 
   function createSettingsPage() {
     var page = tabris.create("Page", {
-      title: "Settings"
+      title: "License"
     });
+    var settingsLabel = tabris.create("Label", {
+      text: "Book covers come under CC BY 2.0",
+      layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: PAGE_MARGIN}
+    }).appendTo(page);
+    var linkLabel = tabris.create("Label", {
+      text: "<a href=\"https://www.flickr.com/photos/ajourneyroundmyskull/sets/72157626894978086/\">Covers on flickr</a>",
+      markupEnabled: true,
+      layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: [settingsLabel, 10]}
+    }).appendTo(page);
     tabris.create("Label", {
-      text: "Settings",
-      layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: PAGE_MARGIN, bottom: PAGE_MARGIN}
+      text: "<i>Authors of book covers:</i><br>" +
+        "Paula Rodriguez - 1984<br>" +
+        "Marc Storrs and Rob Morphy - Na Tropie Nieznanych<br>" +
+        "Cat Finnie - Stary Czlowiek I Morze<br>" +
+        "Andrew Brozyna - Hobbit<br>" +
+        "Viacheslav Vystupov - Wojna Swiatow<br>" +
+        "Marc Storrs and Rob Morphy - Zegar Pomaranczowy Pracz<br>" +
+        "Andrew Evan Harner - Ksiega Dzungli",
+        markupEnabled: true,
+      layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: [linkLabel, 10]}
     }).appendTo(page);
     return page;
   }
