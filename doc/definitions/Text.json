@@ -21,7 +21,8 @@
   },
   "events": {
     "focus": {},
-    "blur": {}
+    "blur": {},
+    "accept": {}
   },
   "links": [
     {
