@@ -2,12 +2,12 @@ dispose
 =======
 Fired on widget dispose. The event handler argument is an empty object.
 
-focusin
-=======
+focus
+=====
 Fired on widget focus gain. The event handler argument is an empty object.
 
-focusout
-=======
+blur
+====
 Fired on widget focus lost. The event handler argument is an empty object.
 
 resize
