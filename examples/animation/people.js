@@ -113,11 +113,13 @@ tabris.load(function() {
     var personImage = tabris.create("ImageView", {
       layoutData: {left: 0, top: 0, width: IMAGE_SIZE, height: IMAGE_SIZE},
       image: {src: person.image, width: IMAGE_SIZE, height: IMAGE_SIZE},
-      transform: {
+      opacity: 0.0
+    }).on("change:bounds", function listener() {
+      this.set("transform", {
         scaleX: 0.75,
         scaleY: 0.75
-      },
-      opacity: 0.0
+      });
+      animateInScaleUp(this, delay);
     });
     var nameLabel = tabris.create("Label", {
       layoutData: {left: [personImage, MARGIN], top: 0},
@@ -139,7 +141,6 @@ tabris.load(function() {
     });
     parent.append(composite);
     composite.append(personImage, nameLabel, professionLabel, companyLabel, mailLabel);
-    animateInScaleUp(personImage, delay);
     animateInFromRight(nameLabel, delay);
     animateInFromRight(professionLabel, 100 + delay);
     animateInFromRight(companyLabel, 200 + delay);
