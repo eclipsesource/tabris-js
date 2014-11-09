@@ -26,8 +26,8 @@ tabris.load(function() {
   }).appendTo(page);
 
   var setButton = tabris.create("Button", {
-    layoutData: {left: 10, top: [valueField, 20]},
-    text: "set"
+    layoutData: {left: 10, top: [valueLabel, 20]},
+    text: "Set"
   }).on("selection", function() {
     localStorage.setItem(keyField.get("text"), valueField.get("text"));
     valueField.set("text", "");
@@ -35,22 +35,22 @@ tabris.load(function() {
 
   var getButton = tabris.create("Button", {
     layoutData: {left: [setButton, 10], baseline: setButton},
-    text: "get"
+    text: "Get"
   }).on("selection", function() {
     valueField.set("text", localStorage.getItem(keyField.get("text")));
   }).appendTo(page);
 
   var removeButton = tabris.create("Button", {
-    layoutData: {left: [getButton, 10], baseline: getButton},
-    text: "remove"
+    layoutData: {left: [getButton, 10], baseline: setButton},
+    text: "Remove"
   }).on("selection", function() {
     localStorage.removeItem(keyField.get("text"));
     valueField.set("text", "");
   }).appendTo(page);
 
   tabris.create("Button", {
-    layoutData: {left: [removeButton, 10], baseline: removeButton},
-    text: "clear"
+    layoutData: {left: [removeButton, 10], baseline: setButton},
+    text: "Clear"
   }).on("selection", function() {
     localStorage.clear();
     valueField.set("text", "");
