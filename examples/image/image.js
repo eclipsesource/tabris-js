@@ -1,4 +1,3 @@
-
 tabris.load(function() {
 
   var MARGIN = 16;
@@ -39,12 +38,12 @@ tabris.load(function() {
     selectionIndex: 0
   }).appendTo(page);
 
-  imageSizeCombo.on("selection", function() {
+  imageSizeCombo.on("change:selection", function() {
     var index = imageSizeCombo.get("selectionIndex");
     imageView.set("image", getImage(index));
   });
 
-  scaleModeCombo.on("selection", function() {
+  scaleModeCombo.on("change:selection", function() {
     var index = scaleModeCombo.get("selectionIndex");
     imageView.set("scaleMode", scaleModes[index]);
   });
