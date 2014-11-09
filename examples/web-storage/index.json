@@ -6,7 +6,7 @@
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
     },
     {
-      "src": "local-storage.js"
+      "src": "web-storage.js"
     }
   ]
 }
