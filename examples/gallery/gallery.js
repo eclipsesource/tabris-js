@@ -1,7 +1,5 @@
 tabris.load(function() {
 
-  var imageHolder;
-
   var imageNames = [
     "catseye",
     "heic0305a",
@@ -25,92 +23,63 @@ tabris.load(function() {
 
   var page = tabris.create("Page", {
     title: "The Big Bang Theory",
+    background: "black",
     topLevel: true
   });
-
-  var mainComposite = tabris.create("Composite", {
-    background: "black",
-    layoutData: {left: 0, top: 0, right: 0, bottom: 0}
-  });
-
-  var scrollCompositeLayoutData = {left: 0, right: 0, bottom: 0, height: 164};
 
   var scrollComposite = tabris.create("ScrollComposite", {
     scroll: "horizontal",
     data: {paging: true},
-    layoutData: scrollCompositeLayoutData,
+    layoutData: {left: 0, right: 0, bottom: 0, height: 164},
     background: "rgba(32, 32, 32, 0.6)"
-  });
-
-  mainComposite.append(scrollComposite);
-  page.append(mainComposite);
-
-  function createImageThumbPath(imageName) {
-    return "images/".concat(imageName).concat("_thumb.jpg");
-  }
-
-  function createImageBigPath(imageName) {
-    return "images/".concat(imageName).concat(".jpg");
-  }
-
-  function bindShowToSelection(image, path) {
-    image.on("touchend", function() {
-      updateCentralImage(path);
-    });
-  }
+  }).appendTo(page);
 
   for (var i = 0; i < imageNames.length; i++) {
-    var imageThumbPath = createImageThumbPath(imageNames[i]);
-    var imageBigPath = createImageBigPath(imageNames[i]);
-    var image = tabris.create("ImageView", {
+    tabris.create("ImageView", {
       layoutData: {top: 7, left: i * 150 + i * 7, width: 150, height: 150},
-      image: {src: imageThumbPath, width: 150, height: 150},
+      image: {src: "images/" + imageNames[i] + "_thumb.jpg", width: 150, height: 150},
       data: {
         showTouch: true
       }
-    });
-    scrollComposite.append(image);
-    bindShowToSelection(image, imageBigPath);
+    }).appendTo(scrollComposite)
+    .on("touchend", setImageFunction("images/" + imageNames[i] + ".jpg"));
   }
 
-  function updateCentralImage(path) {
-    if (imageHolder) {
-      imageHolder.dispose();
-    }
-    imageHolder = tabris.create("ImageView", {
-      layoutData: {top: 0, bottom: 0, left: 0, right: 0},
-      data: {zoom: true},
-      image: {src: path}
-    });
-    mainComposite.append(imageHolder);
-  }
+  var fullImage = tabris.create("ImageView", {
+    layoutData: {top: 0, bottom: 0, left: 0, right: 0},
+    image: {src: "images/" + imageNames[0] + ".jpg" },
+    scaleMode: "auto"
+  }).appendTo(page);
 
-  var toggleAction = function() {
-    if (!scrollComposite.isHidden) {
-      recreateThumbnailAction("Thumbnails");
-      scrollComposite.set("layoutData", {left: 0, top: 0, height: 0});
-      scrollComposite.isHidden = true;
-    } else {
-      recreateThumbnailAction("Fullscreen");
-      scrollComposite.set("layoutData", scrollCompositeLayoutData);
-      scrollComposite.isHidden = false;
-    }
-  };
-
-  var recreateThumbnailAction = function(actionTitle) {
-    action.dispose();
-    action = tabris.create("Action", {
-      title: actionTitle,
-      placementPriority: "HIGH"
-    });
-    action.on("selection", toggleAction);
-  };
-
-  var action = tabris.create("Action", {
+  var fullscreenAction = tabris.create("Action", {
     title: "Fullscreen",
     placementPriority: "HIGH"
-  });
-  action.on("selection", toggleAction);
+  }).on("selection", toggleAction);
+
+  var thumbnailsAction = tabris.create("Action", {
+    title: "Thumbnails",
+    placementPriority: "HIGH",
+    visibility: false
+  }).on("selection", toggleAction);
 
   page.open();
+
+  function setImageFunction(imagePath) {
+    return function() {
+      fullImage.set("image", {src: imagePath});
+    };
+  }
+
+  function toggleAction() {
+    if (scrollComposite.get("visibility")) {
+      scrollComposite.set("visibility", false);
+      thumbnailsAction.set("visibility", true);
+      fullscreenAction.set("visibility", false);
+    } else {
+      scrollComposite.set("visibility", true);
+      thumbnailsAction.set("visibility", false);
+      fullscreenAction.set("visibility", true);
+    }
+  }
+
 });
