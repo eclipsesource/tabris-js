@@ -1,7 +1,7 @@
 tabris.load(function() {
 
   var page = tabris.create("Page", {
-    title: "Local Storage",
+    title: "Web Storage",
     topLevel: true
   });
 

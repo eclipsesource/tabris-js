@@ -1,13 +1,13 @@
 {
-  "title": "Local Storage",
-  "category": "LocalStorage",
+  "title": "Web Storage",
+  "category": "WebStorage",
   "description": "Count how many times the application was started.",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
     },
     {
-      "src": "local-storage.js"
+      "src": "web-storage.js"
     }
   ]
 }
