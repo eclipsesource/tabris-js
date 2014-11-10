@@ -1,5 +1,6 @@
 tabris.registerWidget("DateTime", {
-  _type: "rwt.widgets.DateTime"
+  _type: "rwt.widgets.DateTime",
+  _checkProperty: {year: true, month: true, day: true}
 });
 
 tabris.load(function() {
@@ -12,91 +13,92 @@ tabris.load(function() {
   });
 
   var firstNameLabel = tabris.create("Label", {
-    layoutData: {left: 10, top: 10, width: 120},
+    layoutData: {left: 10, top: 18, width: 120},
     alignment: "left",
     text: "First Name:"
   }).appendTo(page);
 
   var firstNameInput = tabris.create("Text", {
-    layoutData: {left: [firstNameLabel, 10], right: 10, top: 10},
+    layoutData: {left: [firstNameLabel, 10], right: 10, baseline: firstNameLabel},
     message: "First Name"
   }).appendTo(page);
 
   var lastNameLabel = tabris.create("Label", {
-    layoutData: {left: 10, top: [firstNameInput, 10], width: 120},
+    layoutData: {left: 10, top: [firstNameLabel, 18], width: 120},
     alignment: "left",
     text: "Last Name:"
   }).appendTo(page);
 
   var lastNameInput = tabris.create("Text", {
-    layoutData: {left: [lastNameLabel, 10], right: 10, top: [firstNameInput, 10]},
+    layoutData: {left: [lastNameLabel, 10], right: 10, baseline: lastNameLabel},
     message: "Last Name"
   }).appendTo(page);
 
   var passphraseLabel = tabris.create("Label", {
-    layoutData: {left: 10, top: [lastNameInput, 10], width: 120},
+    layoutData: {left: 10, top: [lastNameLabel, 18], width: 120},
     alignment: "left",
     text: "Passphrase:"
   }).appendTo(page);
 
-  var passphraseInput = tabris.create("Text", {
+  tabris.create("Text", {
     type: "password",
-    layoutData: {left: [passphraseLabel, 10], right: 10, top: [lastNameInput, 10]},
+    layoutData: {left: [passphraseLabel, 10], right: 10, baseline: passphraseLabel},
     message: "Passphrase"
   }).appendTo(page);
 
   var countryLabel = tabris.create("Label", {
-    layoutData: {left: 10, top: [passphraseInput, 10], width: 120},
+    layoutData: {left: 10, top: [passphraseLabel, 18], width: 120},
     alignment: "left",
     text: "Country:"
   }).appendTo(page);
 
-  var countryCombo = tabris.create("Combo", {
-    layoutData: {left: [countryLabel, 10], right: 10, top: [passphraseInput, 10]},
+  tabris.create("Combo", {
+    layoutData: {left: [countryLabel, 10], right: 10, baseline: countryLabel},
     items: ["Germany", "Canada", "USA", "Bulgaria"],
     selectionIndex: 0
   }).appendTo(page);
 
   var classLabel = tabris.create("Label", {
-    layoutData: {left: 10, top: [countryCombo, 10], width: 120},
+    layoutData: {left: 10, top: [countryLabel, 18], width: 120},
     alignment: "left",
     text: "Class:"
   }).appendTo(page);
 
-  var classCombo = tabris.create("Combo", {
-    layoutData: {left: [classLabel, 10], right: 10, top: [countryCombo, 10]},
+  tabris.create("Combo", {
+    layoutData: {left: [classLabel, 10], right: 10, baseline: classLabel},
     items: ["Business", "Economy", "Economy Plus"],
     selectionIndex: 0
   }).appendTo(page);
 
   var dateLabel = tabris.create("Label", {
-    layoutData: {left: 10, top: [classCombo, 10], width: 120},
+    layoutData: {left: 10, top: [classLabel, 18], width: 120},
     alignment: "left",
     text: "Date:"
   }).appendTo(page);
 
+  var current = new Date();
   var dateField = tabris.create("DateTime", {
     style: ["DATE"],
-    layoutData: {left: [dateLabel, 10], right: 10, top: [classCombo, 10]},
-    year: 2014,
-    day: 20,
-    month: 5
+    layoutData: {left: [dateLabel, 10], right: 10, baseline: dateLabel},
+    year: current.getFullYear(),
+    month: current.getMonth(),
+    day: current.getDate()
   }).appendTo(page);
 
   var luggageLabel = tabris.create("Label", {
-    layoutData: {left: 10, top: [dateField, 10], width: 120},
+    layoutData: {left: 10, top: [dateLabel, 18], width: 120},
     alignment: "left",
     text: "Luggage:"
   }).appendTo(page);
 
   var luggageWeight = tabris.create("Label", {
-    layoutData: {right: 10, top: [dateField, 10], width: 50},
+    layoutData: {right: 10, baseline: luggageLabel, width: 50},
     alignment: "left",
     text: "0 Kg"
   }).appendTo(page);
 
   var luggage = tabris.create("Slider", {
-    layoutData: {left: [luggageLabel, 10], right: [luggageWeight, 10], top: [dateField, 10]}
+    layoutData: {left: [luggageLabel, 10], right: [luggageWeight, 10], top: [dateLabel, 18]}
   }).on("change:selection", function() {
     luggageWeight.set("text", this.get("selection") + " Kg");
   }).appendTo(page);
@@ -107,7 +109,7 @@ tabris.load(function() {
   }).appendTo(page);
 
   var button = tabris.create("Button", {
-    layoutData: {left: 10, right: 10, top: [checkbox, 20]},
+    layoutData: {left: 10, right: 10, top: [checkbox, 18]},
     text: "Place Reservation",
     background: "#8b0000",
     foreground: "white"
