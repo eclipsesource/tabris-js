@@ -1,6 +1,6 @@
 {
   "type": "Combo",
-  "description": "A widget with a drop-down list of items to choose from.",
+  "description": "A widget with a drop-down list of items to choose from. *Name is subject to change.*",
   "include": ["Widget"],
   "properties": {
     "items": {

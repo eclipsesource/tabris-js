@@ -129,3 +129,10 @@ layoutData: {
 ## Device Independent Pixels
 
 The density of a device's display can be accessed by `window.devicePixelRatio`. The value represents the number of native pixels per Device Independent Pixel.
+
+## Known issues
+
+* Aligning widgets with the bottom attribute may lead to an expansion of the parent widget on Android.
+* Aligning widgets on widgets that are themselves aligned on a baseline does not work correctly on Android.
+* Retrieving the bounds of widgets that have been transformed reflects the position defined by layoutData on Android but the actual (translated) position on iOS.
+* Setting a transformation on a widget may influence its layout on iOS 7. A workaround is to provide an absolute position for the widget (left, top, width, height).

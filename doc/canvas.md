@@ -13,6 +13,8 @@ tabris.getContext(canvas, width, height);
 * width - the width of the drawable area
 * height - the height of the drawable area
 
+*Pre-Release Note: This method will likely be moved to the canvas itself.*
+
 The following CanvasRenderingContext2D methods are supported:
 
 * save

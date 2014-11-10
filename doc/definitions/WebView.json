@@ -1,6 +1,6 @@
 {
   "type": "WebView",
-  "description": "A widget that can display a web page.",
+  "description": "A widget that can display a web page. *Known Issues: Having multiple instances of this widget on screen may not work.*",
   "include": ["Widget"],
   "properties": {
     "url": {

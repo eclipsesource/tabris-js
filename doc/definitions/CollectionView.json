@@ -13,7 +13,7 @@
     },
     "initializeCell": {
       "type": "function",
-      "description": "A callback used to initialize a collection cell. Cells are created and by the framework and recycled on scrolling. This callback receives an empty collection cell as an argument and appends widgets to it. The cell triggers an 'itemchange' event with a single element from the items array as a callback argument. Can only be set in the \"create\" method."
+      "description": "A callback used to initialize a collection cell. Cells are created by the framework and recycled on scrolling. This callback receives an empty collection cell as an argument and appends widgets to it. The cell triggers an 'itemchange' event (*name subject to change*) with a single element from the items array as a callback argument. Can only be set in the \"create\" method."
     }
   },
   "events": {
