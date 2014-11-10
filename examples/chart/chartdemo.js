@@ -85,8 +85,8 @@ tabris.load(function() {
     }).appendTo(page);
     var createCanvasContext = function() {
       var bounds = canvas.get("bounds");
-      var width = bounds[2];
-      var height = Math.min(bounds[3], width);
+      var width = bounds.width;
+      var height = Math.min(bounds.height, width);
       return tabris.getContext(canvas, width, height);
     };
     button.on("selection", function() {
