@@ -110,6 +110,16 @@ module.exports = function(grunt) {
         src: ['*.md', 'img/*.*'],
         dest: 'build/doc/'
       }
+    },
+    compress: {
+      main: {
+        options: {
+          archive: 'build/examples.zip'
+        },
+        files: [
+          {src: ['examples/**'], filter: 'isFile'}
+        ]
+      }
     }
   });
 
@@ -119,6 +129,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-compress');
   grunt.loadTasks('doc/generator');
 
   grunt.registerTask('examples', 'Copy examples/snippets to build/, create index', function() {
@@ -144,6 +155,6 @@ module.exports = function(grunt) {
     });
   });
 
-  grunt.registerTask('default', ['clean', 'doc', 'copy:doc', 'jshint', 'concat', 'uglify', 'jasmine', 'examples']);
+  grunt.registerTask('default', ['clean', 'doc', 'copy:doc', 'jshint', 'concat', 'uglify', 'jasmine', 'examples', 'compress']);
 
 };
