@@ -16,7 +16,7 @@ See the on-line documentation for an overview of the [example apps](http://tabri
 
 Shared Apps
 ------------
-In addition to the examples, other apps can be shared and executed on the device by **linking** them through the tabris connect website. Click the **link** button on the examples or snippets page to automatically add the app to your device.
+In addition to the examples, other apps can be shared and executed on the device by **linking** them through the tabris connect website. Click the **link** button on the snippets page to automatically add the app to your device.
 
 ![Android Developer App](img/button-unlinked.png)
 
@@ -77,25 +77,25 @@ The tabris.js Hello, World! app is contained in `examples/hello/hello.js`. Tabri
   	  page.open();
 
 	});
-	
+
 The Hello, World! app contains a *button* and a *label*. When the button is selected, the label is updated. Both the button and the label are placed on the *page* relative to one another.
 
 ![Android Developer App](img/hello.png)
 
 ### Running your App
-Tabris.js can load an app over-the air and execute it on the device using a JavaScript runtime and native widget bindings. The easiest way to run a tabris.js app is to point the tabris.js developer app to a webserver hosting the Javascript files. 
+Tabris.js can load an app over-the air and execute it on the device using a JavaScript runtime and native widget bindings. Apps can also be built, bundled and branded so they are self contained and ready for submission to the App Stores. The easiest way to run a tabris.js app is to point the tabris.js developer app to a webserver hosting the Javascript files. Apps can then be changed and hot-deployed to your device for a highly streamlined develop-deploy cycle.
 
 Node.js provides an easy to install HTTP server. Download and install [node.js](http://nodejs.org/), and using the node package manager, install `http-server`. From your hello world directory, run:
 
-    [$] npm install http-server     
+    [$] npm install http-server
     [$] http-server ./ -p 7777
 
 *You can also place your `index.json` and `hello.js` files on any http-server, as long as it's accessible from your device.*
 
-Once deployed, use the tabris.js developer app to access the app. This can be configured under the URL tab on the developer app. In the case of a node-js http-server running on your development device, enter:
+Once deployed, use the tabris.js developer app to access the app. This can be configured under the URL tab on the developer app. In the case of a node-js http-server running on your development machine, enter:
 
-    http://<device-ip-address>:7777/
-    
+    http://<development-machine-ip-address>:7777/
+
 Tabris Connect can also be used to configure the URLs available on your device.
 
 ![Link App](img/link-app.png)
@@ -103,7 +103,7 @@ Tabris Connect can also be used to configure the URLs available on your device.
 Make sure you enter the URL of the web server that is hosting your tabris.js app.
 
 ### The Developer Console
-The tabris.js developer app ship with a developer console that can be used to track errors and warnings in the running apps. The console can be slid from the right side of the screen. The console provides functionality to filter messages and restart the app.
+The tabris.js developer app ships with a developer console that can be used to track errors and warnings in the running apps. The console can be slid from the right side of the screen. The console provides functionality to filter messages and restart the app.
 
 ![Developer Console](img/console-android.png)
 
@@ -114,21 +114,26 @@ Messages can be logged to the console using the global console object:
     console.warn("A warning message");
     console.info("An info message");
     console.debug("A debug Message");
-    
-
 
 Share
 =====
-Tabris.js apps can be shared using Tabris Connect. GitHub repositories are automatically listed on 
+Tabris.js apps can be shared using Tabris Connect. GitHub repositories that contain a tabris.js app (an `index.json` and the JavaScript app) can be enabled on `My Apps` page, and the app will appear on your device. Others can clone your repository and enable it on their device.
+
+![Developer Console](img/link-github.png)
+
+Apps deployed to a publicly available URL can also be shared. Link the app on `My Apps` and choose to make the app public. Publicly available tabris.js apps will appear on the `Grand Central` page.
+
+![Developer Console](img/share-public.png)
+
+Finally, apps can be bundled, branded and built as native apps.
 
 
 Further Information
 ===================
-[http://tabrisjs.com](http://tabrisjs.com) is your key to tabris.js. The portal is filled with documentation, examples, the tabris.js development roadmap, and tools for connecting with your device. The website also contains links to the examples and snippets. 
-
+[http://tabrisjs.com](http://tabrisjs.com) is your key to tabris.js. The website is filled with documentation, examples, the tabris.js development roadmap, and tools for connecting with your device. The website also contains links to the examples and snippets. 
 
 
 Feedback
 ========
-Help us improve tabris.js! Feedback is always welcome, 
+Help us improve tabris.js! Feedback is always welcome. Feel free to invite your friends if you find tabris.js interesting.
 
