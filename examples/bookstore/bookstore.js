@@ -1,6 +1,6 @@
 tabris.load(function() {
 
-  var PAGE_MARGIN = 12;
+  var PAGE_MARGIN = 16;
 
   var books = [
     ["1984", "H.G. Wells", "images/book_1984.jpg"],
@@ -16,7 +16,7 @@ tabris.load(function() {
     return {
       title: array[0],
       author: array[1],
-      image: {src: array[2], width: 106, height: 160},
+      image: {src: array[2]},
       popular: array[3],
       favorite: array[4]
     };
@@ -57,7 +57,7 @@ tabris.load(function() {
     return tabris.create("Page", {
       title: title,
       topLevel: true,
-      image: {src: image, scale: 3 }
+      image: {src: image, scale: 3}
     }).append(createBooksList(books.filter(filter)));
   }
 
@@ -66,7 +66,7 @@ tabris.load(function() {
       title: book.title
     });
     var detailsComposite = createDetailsView(book)
-      .set("layoutData", {top: 0, height: 184, left: 0, right: 0})
+      .set("layoutData", {top: 0, height: 192, left: 0, right: 0})
       .appendTo(page);
     createTabFolder().set({
       layoutData: {top: [detailsComposite, 0], left: 0, right: 0, bottom: 0}
@@ -128,16 +128,17 @@ tabris.load(function() {
       items: books,
       initializeCell: function(cell) {
         var imageView = tabris.create("ImageView", {
-          layoutData: {left: [0, PAGE_MARGIN], top: [0, PAGE_MARGIN], width: 32, height: 48},
+          layoutData: {left: PAGE_MARGIN, centerY: 0, width: 32, height: 48},
           scaleMode: "fit"
         }).appendTo(cell);
         var titleLabel = tabris.create("Label", {
-          layoutData: {left: [0, 56], right: [0, PAGE_MARGIN], top: [0, PAGE_MARGIN], bottom: [0, 0]},
-          foreground: "rgb(74, 74, 74)"
+          layoutData: {left: 64, right: PAGE_MARGIN, top: PAGE_MARGIN},
+          markupEnabled: true,
+          foreground: "#4a4a4a"
         }).appendTo(cell);
         var authorLabel = tabris.create("Label", {
-          layoutData: {left: [0, 56], right: [0, PAGE_MARGIN], top: 36, bottom: 0},
-          foreground: "rgb(123, 123, 123)"
+          layoutData: {left: 64, right: PAGE_MARGIN, top: [titleLabel, 4]},
+          foreground: "#7b7b7b"
         }).appendTo(cell);
         cell.on("itemchange", function(book) {
           imageView.set("image", book.image);
@@ -191,7 +192,7 @@ tabris.load(function() {
         "Viacheslav Vystupov - Wojna Swiatow<br/>" +
         "Marc Storrs and Rob Morphy - Zegar Pomaranczowy Pracz<br/>" +
         "Andrew Evan Harner - Ksiega Dzungli",
-        markupEnabled: true,
+      markupEnabled: true,
       layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: [linkLabel, 10]}
     }).appendTo(page);
     return page;
