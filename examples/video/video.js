@@ -30,6 +30,7 @@ tabris.load(function() {
     text: "play"
   }).on("selection", function() {
     video.set("playback", "play");
+    togglePlay(true);
   }).appendTo(controls);
 
   var pauseButton = tabris.create("Button", {
@@ -38,6 +39,7 @@ tabris.load(function() {
     enabled: false
   }).on("selection", function() {
     video.set("playback", "pause");
+    togglePlay(false);
   }).appendTo(controls);
 
   var stopButton = tabris.create("Button", {
@@ -46,24 +48,11 @@ tabris.load(function() {
     enabled: false
   }).on("selection", function() {
     video.set("playback", "stop");
-  }).appendTo(controls);
-
-  var backwardButton = tabris.create("Button", {
-    layoutData: {top: 5, left: [stopButton, 5], width: 100},
-    text: "backward"
-  }).on("selection", function() {
-    video.set("playback", "fast_backward");
-  }).appendTo(controls);
-
-  var forwardButton = tabris.create("Button", {
-    layoutData: {top: 5, left: [backwardButton, 5], width: 90},
-    text: "forward"
-  }).on("selection", function() {
-    video.set("playback", "fast_forward");
+    togglePlay(false);
   }).appendTo(controls);
 
   tabris.create("Button", {
-    layoutData: {top: 5, left: [forwardButton, 5], width: 100},
+    layoutData: {top: 5, left: [stopButton, 5], width: 100},
     text: "fullscreen"
   }).on("selection", function() {
     video.set("presentation", "full_screen");
@@ -94,25 +83,25 @@ tabris.load(function() {
     // TODO: toLowerCase workaround for tabris-android issue #659
     switch (this.get("playback").toLowerCase()) {
       case "play":
-        playButton.set("enabled", false);
-        setButtonsEnabledState([pauseButton, stopButton, forwardButton], true);
+        togglePlay(true);
         break;
       case "pause":
       case "stop":
-        setButtonsEnabledState([playButton, forwardButton, backwardButton], true);
-        setButtonsEnabledState([pauseButton, stopButton], false);
-        break;
-      case "fast_forward":
-        setButtonsEnabledState([playButton, pauseButton, stopButton, backwardButton], true);
-        forwardButton.set("enabled", false);
-        break;
-      case "fast_backward":
-        setButtonsEnabledState([playButton, pauseButton, stopButton, forwardButton], true);
-        backwardButton.set("enabled", false);
+        togglePlay(false);
         break;
     }
   });
 
   page.open();
+
+  function togglePlay(playing) {
+    if(playing) {
+      playButton.set("enabled", false);
+      setButtonsEnabledState([pauseButton, stopButton], true);
+    } else {
+      setButtonsEnabledState([playButton], true);
+      setButtonsEnabledState([pauseButton, stopButton], false);
+    }
+  }
 
 });
