@@ -45,7 +45,7 @@ module.exports = function(grunt) {
     var result = [];
     result.push(desc.description);
     if (desc.include) {
-      result.push(" Also includes ");
+      result.push("\nIncludes ");
       for (var i = 0; i < desc.include.length; i++) {
         var include = desc.include[i];
         if (!includes[include]) {
@@ -74,10 +74,10 @@ module.exports = function(grunt) {
       var def = value.type.split("?")[1] || "";
       var description = value.description || "";
       var allowed = value.type.indexOf(":") !== -1 ? value.type.split(":")[1].split("?")[0] : "";
-      result.push("- *", prop, "*: `", type + "`");
-      result.push(allowed ? ", possible values: \"" + allowed.split("|").join("\", \"") + "\"" : "");
-      result.push(def ? ", default value: \"" + def + "\"" : "");
-      result.push(description ? "  \nDescription: " + description : "");
+      result.push("- **", prop, "**: *", type + "*");
+      result.push(allowed ? ", supported values: `" + allowed.split("|").join("`, `") + "`" : "");
+      result.push(def ? ", default value: `" + def + "`" : "");
+      result.push(description ? "\n    " + description : "");
       result.push("\n");
     });
     result.push("\n");
@@ -91,9 +91,9 @@ module.exports = function(grunt) {
     var result = [];
     result.push(desc.type ? "#### Events\n" : "");
     for (var name in desc.events) {
-      if (desc.events.hasOwnProperty(name)) {
-        result.push("- ", name, "\n");
-      }
+      var event = desc.events[name];
+      result.push("- **", name, "**");
+      result.push("description" in event ? "\n    " + event.description : "");
     }
     result.push("\n");
     return result.join("");
