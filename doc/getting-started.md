@@ -1,8 +1,12 @@
 Getting Started
 ===============
-Welcome to Tabris Connect, the easiest way to begin with tabris.js. Once you've installed the tabris.js developer app on your device, you can run cross platform, native apps, written entirely in JavaScript.
+Welcome to tabris.js, the framework for developing native apps in JavaScript. For getting started you should log in to https://tabrisjs.com. It provides you with documentation and integrates with the tabris.js App. 
 
-Installing the tabris.js developer app...
+Installing the tabris.js App
+----------------------------
+For the iOS APP you will have to [send us](mailto:care@eclipsesource.com&subject=UDID) the UDID of your iOS device ([here is how you find it](http://whatsmyudid.com/)). We will move the new iOS TestFlight Beta service shortly.
+
+For Android you will have to join our tabris.js Beta-Channel. Please join the Google Group [tabris-js-developer](https://groups.google.com/forum/#!forum/tabris-js-developer) and opt-in to the [beta channel](https://play.google.com/apps/testing/com.eclipsesource.tabris.js). Alternatively you can [download the apk here](http://download.eclipsesource.com/tabris.js/m4a/tabris.js-app-m4a.apk). For staying up to date you should use our Beta-Channel.
 
 Explore
 =======
@@ -10,22 +14,21 @@ The tabris.js developer app comes pre-configured with several examples. These ex
 
 ![Android Developer App](img/examples.png)
 
-The examples are freely available on GitHub and are developed entirely in JavaScript. Checkout the [GitHub repository](https://github.com/eclipsesource/tabris-js/tree/master/examples), or [download the examples as a single zip](http://tabrisjs.com/examples.zip).
+The examples are part of the tabris.js GitHub repository and are developed entirely in JavaScript. Checkout the [GitHub repository](https://github.com/eclipsesource/tabris-js/tree/master/examples).
 
-See the on-line documentation for an overview of the [example apps](http://tabrisjs.com/examples).
 
-Shared Apps
-------------
-In addition to the examples, other apps can be shared and executed on the device by **linking** them through the tabris connect website. Click the **link** button on the snippets page to automatically add the app to your device.
+Snippets / Shared Apps
+----------------------
+In addition to the examples, snippets and even entire apps can be linked to the tabris.js App by **linking** them through the tabris connect website. Click the **link** button on the [snippets page](https://tabrisjs.com/examples/) to automatically add the app to your device.
 
 ![Android Developer App](img/button-unlinked.png)
 
-From the **Apps** tab, click on the app you wish to run. If an app does not appear, you can swipe down to refresh.
+From the **Apps** tab in your tabris.js App click on the app you wish to run. If an app does not appear, you can refresh the list by swiping down on Android or by switching tabs on iOS.
 
 
 Create Your First App
 =====================
-[Download and extend the examples](http://tabrisjs.com/examples.zip) to begin developing your first tabris.js app.
+[Download and extend the examples](http://download.eclipsesource.com/tabris.js/m4a/examples.zip) to begin developing your first tabris.js app.
 
     http://tabrisjs.com/examples.zip
 
@@ -83,7 +86,7 @@ The Hello, World! app contains a *button* and a *label*. When the button is sele
 ![Android Developer App](img/hello.png)
 
 ### Running your App
-Tabris.js can load an app over-the air and execute it on the device using a JavaScript runtime and native widget bindings. Apps can also be built, bundled and branded so they are self contained and ready for submission to the App Stores. The easiest way to run a tabris.js app is to point the tabris.js developer app to a webserver hosting the Javascript files. Apps can then be changed and hot-deployed to your device for a highly streamlined develop-deploy cycle.
+Tabris.js can load an app over-the air and execute it on the device using a JavaScript runtime and native widget bindings. For submission to the App / Play Stores you will need to bundle, build and brand your app. The publishing workflow is not yet supported. The easiest way to develop an app is to point the tabris.js App to a webserver hosting the Javascript files. Apps can then be changed and hot-deployed to your device for a highly streamlined develop-deploy cycle.
 
 Node.js provides an easy to install HTTP server. Download and install [node.js](http://nodejs.org/), and using the node package manager, install `http-server`. From your hello world directory, run:
 
@@ -115,17 +118,16 @@ Messages can be logged to the console using the global console object:
     console.info("An info message");
     console.debug("A debug Message");
 
-Share
+Share 
 =====
-Tabris.js apps can be shared using Tabris Connect. GitHub repositories that contain a tabris.js app (an `index.json` and the JavaScript app) can be enabled on `My Apps` page, and the app will appear on your device. Others can clone your repository and enable it on their device.
+GitHub repositories that contain a tabris.js app (an `index.json` and the JavaScript app) can be easily accessed on your device. Just go to the `My Apps` page on tabris.js.com and turn sharing ON. The app will then appear on your device on the _Apps_ tab. 
 
 ![Developer Console](img/link-github.png)
 
-Apps deployed to a publicly available URL can also be shared. Link the app on `My Apps` and choose to make the app public. Publicly available tabris.js apps will appear on the `Grand Central` page.
+Apps deployed to a publicly available URL can also be accessed on your device. Link the app on `My Apps`. You can even choose to make the app public by selecting the checkbox. Publicly available tabris.js apps will appear on the `Grand Central` page on tabrisjs.com.
 
 ![Developer Console](img/share-public.png)
 
-Finally, apps can be bundled, branded and built as native apps.
 
 
 Further Information
