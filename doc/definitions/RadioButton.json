@@ -11,9 +11,6 @@
     },
     "selection": {
       "type": "boolean?false"
-    },
-    "alignment": {
-      "type": "string:left|right|center?center"
     }
   },
   "events": {

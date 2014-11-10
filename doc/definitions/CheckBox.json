@@ -3,9 +3,6 @@
   "description": "A check box widget.",
   "include": ["Widget"],
   "properties": {
-    "alignment": {
-      "type": "string:left|right|center?center"
-    },
     "image": {
       "type": "Image"
     },
