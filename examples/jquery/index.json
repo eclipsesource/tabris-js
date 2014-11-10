@@ -1,6 +1,7 @@
 {
   "title": "jQuery",
   "description": "Sample jQuery integration for using $.getJSON",
+  "category": "Web APIs",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"

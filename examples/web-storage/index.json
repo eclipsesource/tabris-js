@@ -1,6 +1,7 @@
 {
   "title": "WebStorage",
   "description": "Showcases all feature of the persistent key/value store",
+  "category": "Web APIs",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"

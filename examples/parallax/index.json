@@ -1,5 +1,6 @@
 {
   "title": "Parallax scrolling",
+  "category": "Animation",
   "description": "Provides a sample implementation for a parallax scrolling effect",
   "resources": [
     {

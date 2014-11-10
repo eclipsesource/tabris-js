@@ -1,6 +1,7 @@
 {
   "title": "Input Elements",
   "description": "Showcases various input elements like Text, Checkbox, Combo, ...",
+  "category": "Small Apps",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"

@@ -1,6 +1,7 @@
 {
   "title": "Image",
   "description": "Demonstrates how to display and scale images",
+  "category": "Image, Video",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"

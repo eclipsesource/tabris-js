@@ -1,5 +1,6 @@
 {
   "title": "Canvas",
+  "category": "Canvas",
   "description": "Demonstrates the tabris.js Canvas widget with HTML5 compatible API",
   "resources": [
     {
