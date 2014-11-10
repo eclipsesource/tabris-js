@@ -22,8 +22,12 @@
     }
   },
   "events": {
-    "focus": {},
-    "blur": {},
+    "focus": {
+      "description": "Fired when the widget gains focus."
+    },
+    "blur": {
+      "description": "Fired when the widget lost focus."
+    },
     "accept": {}
   },
   "links": [

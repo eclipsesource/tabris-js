@@ -42,7 +42,9 @@
     "touchend": {},
     "longpress": {},
     "change:bounds": {},
-    "dispose": {}
+    "dispose": {
+      "description": "Fired when the widget is about to be disposed."
+    }
   },
   "links": [
     {

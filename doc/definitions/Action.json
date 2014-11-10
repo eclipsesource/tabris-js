@@ -23,7 +23,9 @@
     }
   },
   "events": {
-    "selection": {}
+    "selection": {
+      "description": "Fired when the action is invoked."
+    }
   },
   "links": [
     {

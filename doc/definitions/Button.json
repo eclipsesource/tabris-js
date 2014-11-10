@@ -15,7 +15,9 @@
     }
   },
   "events": {
-    "selection": {}
+    "selection": {
+      "description": "Fired when the button is pressed."
+    }
   },
   "links": [
     {

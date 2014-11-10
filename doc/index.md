@@ -8,7 +8,7 @@
 - Handle messages from [Cloud Push services](cloudPush)
 - [Widgets types reference](widget-types)
 - [Property types reference](property-types)
-- [Event types reference](event-types)
+- Understand [touch events](touch-events) in tabris.js
 
 ## External Documentation
 - General [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) reference and tutorials (MDN) 

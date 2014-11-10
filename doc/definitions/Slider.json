@@ -14,7 +14,7 @@
     }
   },
   "events": {
-    "selection": {}
+    "change:selection": {}
   },
   "links": [
     {
