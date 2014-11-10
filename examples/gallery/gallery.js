@@ -34,16 +34,17 @@ tabris.load(function() {
     background: "rgba(32, 32, 32, 0.6)"
   }).appendTo(page);
 
-  for (var i = 0; i < imageNames.length; i++) {
+  imageNames.forEach(function(image, index) {
     tabris.create("ImageView", {
-      layoutData: {top: 7, left: i * 150 + i * 7, width: 150, height: 150},
-      image: {src: "images/" + imageNames[i] + "_thumb.jpg", width: 150, height: 150},
+      layoutData: {top: 7, left: index * 157, width: 150, height: 150},
+      image: {src: "images/" + image + "_thumb.jpg", width: 150, height: 150},
       data: {
         showTouch: true
       }
-    }).appendTo(scrollComposite)
-    .on("touchend", setImageFunction("images/" + imageNames[i] + ".jpg"));
-  }
+    }).on("touchend", function() {
+      fullImage.set("image", {src: "images/" + image + ".jpg"});
+    }).appendTo(scrollComposite);
+  });
 
   var fullImage = tabris.create("ImageView", {
     layoutData: {top: 0, bottom: 0, left: 0, right: 0},
@@ -63,12 +64,6 @@ tabris.load(function() {
   }).on("selection", toggleAction);
 
   page.open();
-
-  function setImageFunction(imagePath) {
-    return function() {
-      fullImage.set("image", {src: imagePath});
-    };
-  }
 
   function toggleAction() {
     if (scrollComposite.get("visibility")) {
