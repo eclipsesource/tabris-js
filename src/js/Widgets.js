@@ -38,7 +38,8 @@
       background: true,
       foreground: true,
       opacity: true,
-      transform: true
+      transform: true,
+      highlightOnTouch: true
     }
   });
 

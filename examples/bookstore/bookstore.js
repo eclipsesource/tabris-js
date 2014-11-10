@@ -81,7 +81,7 @@ tabris.load(function() {
   function createDetailsView(book) {
     var composite = tabris.create("Composite", {
       background: "white",
-      data: {showTouch: true}
+      highlightOnTouch: true
     });
     tabris.create("Composite", {
       layoutData: {left: 0, right: 0, top: 0, height: 160 + 2 * PAGE_MARGIN}

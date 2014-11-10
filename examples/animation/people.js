@@ -156,7 +156,7 @@ tabris.load(function() {
     var personView = tabris.create("ImageView", {
       layoutData: {left: 0, top: 0, width: THUMB_SIZE, height: THUMB_SIZE},
       image: {src: person.image, width: THUMB_SIZE, height: THUMB_SIZE},
-      data: {showTouch: true} // internal API
+      highlightOnTouch: true
     }).on("touchend", function() {
       animateOutLeftCreateCurrentPerson(person);
     }).appendTo(composite);

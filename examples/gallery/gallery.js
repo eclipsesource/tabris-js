@@ -38,9 +38,7 @@ tabris.load(function() {
     tabris.create("ImageView", {
       layoutData: {top: 7, left: index * 157, width: 150, height: 150},
       image: {src: "images/" + image + "_thumb.jpg", width: 150, height: 150},
-      data: {
-        showTouch: true
-      }
+      highlightOnTouch: true
     }).on("touchend", function() {
       fullImage.set("image", {src: "images/" + image + ".jpg"});
     }).appendTo(scrollComposite);

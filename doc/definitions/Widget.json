@@ -31,6 +31,9 @@
     },
     "transform": {
       "type": "Transformation"
+    },
+    "highlightOnTouch": {
+      "type": "boolean?false"
     }
   },
   "events": {
