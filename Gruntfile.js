@@ -117,7 +117,7 @@ module.exports = function(grunt) {
           archive: 'build/examples.zip'
         },
         files: [
-          {src: ['examples/**'], filter: 'isFile'}
+          {expand: true, cwd: 'build/', src: ['examples/**'], filter: 'isFile'}
         ]
       }
     }
