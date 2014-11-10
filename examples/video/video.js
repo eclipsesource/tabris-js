@@ -1,5 +1,8 @@
 tabris.registerWidget("Video", {
-  _type: "tabris.widgets.Video"
+  _type: "tabris.widgets.Video",
+  _checkProperty: true,
+  _listen: {Playback:true},
+  _trigger: {Playback:true}
 });
 
 tabris.load(function() {
