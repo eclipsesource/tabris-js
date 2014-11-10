@@ -2,7 +2,7 @@ tabris.load(function() {
 
   var IMAGE_PATH = "images/";
   var IMAGE_SIZE = 128;
-  var THUMB_SIZE = 64;
+  var THUMB_SIZE = 48;
   var MARGIN_SMALL = 4;
   var MARGIN = 12;
   var MARGIN_LARGE = 24;
@@ -31,15 +31,18 @@ tabris.load(function() {
 
   var personDetailView = createPersonDetail(personDetailsParent, people[2], ANIMATION_START_DELAY);
 
-  var peopleComposite = tabris.create("ScrollComposite", {
-    scroll: "horizontal",
+  var peopleComposite = tabris.create("Composite", {
     layoutData: {left: 0, top: [personDetailsParent, MARGIN], right: 0, height: 96}
+  }).on("change:bounds", function() {
+    var thumbsize = Math.min(64, this.get("bounds").width/people.length-MARGIN);
+    this.children().forEach(function(child) {
+      child.dispose();
+    });
+    people.forEach(function(person, index) {
+      var composite = createPersonThumbView(peopleComposite, person, thumbsize);
+      animateInFromBottom(composite, index);
+    });
   }).appendTo(page);
-
-  people.forEach(function(person, index) {
-    var composite = createPersonThumbView(peopleComposite, person);
-    animateInFromBottom(composite, index);
-  });
 
   page.open();
 
@@ -148,22 +151,24 @@ tabris.load(function() {
     return composite;
   }
 
-  function createPersonThumbView(parent, person) {
+  function createPersonThumbView(parent, person, thumbsize) {
     var neighbor = parent.children().pop();
+    var font = (thumbsize < 48) ? "9px" : "12px";
     var composite = tabris.create("Composite", {
       layoutData: {left: neighbor ? [neighbor, MARGIN] : MARGIN, top: 0}
     }).appendTo(parent);
     var personView = tabris.create("ImageView", {
-      layoutData: {left: 0, top: 0, width: THUMB_SIZE, height: THUMB_SIZE},
-      image: {src: person.image, width: THUMB_SIZE, height: THUMB_SIZE},
+      layoutData: {left: 0, top: 0, width: thumbsize, height: thumbsize},
+      image: {src: person.image, width: thumbsize, height: thumbsize},
       highlightOnTouch: true
     }).on("touchend", function() {
       animateOutLeftCreateCurrentPerson(person);
     }).appendTo(composite);
     tabris.create("Label", {
       alignment: "center",
-      layoutData: {left: 0, top: [personView, 0], width: THUMB_SIZE},
-      text: person.firstName
+      layoutData: {left: 0, top: [personView, 0], width: thumbsize},
+      text: person.firstName,
+      font: font
     }).appendTo(composite);
     return composite;
   }
