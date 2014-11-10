@@ -1,6 +1,7 @@
 {
   "title": "Hello, World!",
   "description": "Tabris.js - Hello, World!",
+  "category": "Small Apps",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
