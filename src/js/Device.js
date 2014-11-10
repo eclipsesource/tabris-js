@@ -6,7 +6,8 @@
 (function() {
 
   tabris.registerType("_Device", {
-    _type: "tabris.Device"
+    _type: "tabris.Device",
+    _checkProperty: true
   });
 
   tabris._addDeviceMethods = function(target) {
