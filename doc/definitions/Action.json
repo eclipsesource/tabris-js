@@ -12,7 +12,7 @@
       "type": "Image"
     },
     "placementPriority": {
-      "type": "string:LOW|HIGH?HIGH"
+      "type": "string:LOW|HIGH|NORMAL?NORMAL"
     },
     "title": {
       "type": "string"
