@@ -4,7 +4,7 @@ Welcome to tabris.js, the framework for developing native apps in JavaScript. Fo
 
 Installing the tabris.js App
 ----------------------------
-For the iOS APP you will have to [send us](mailto:care@eclipsesource.com&subject=UDID) the UDID of your iOS device ([here is how you find it](http://whatsmyudid.com/)). We will move the new iOS TestFlight Beta service shortly.
+For the iOS APP you will have to [send us](mailto:care@eclipsesource.com?subject=UDID) the UDID of your iOS device ([here is how you find it](http://whatsmyudid.com/)). We will move the new iOS TestFlight Beta service shortly.
 
 For Android you will have to join our tabris.js Beta-Channel. Please join the Google Group [tabris-js-developer](https://groups.google.com/forum/#!forum/tabris-js-developer) and opt-in to the [beta channel](https://play.google.com/apps/testing/com.eclipsesource.tabris.js). Alternatively you can [download the apk here](http://download.eclipsesource.com/tabris.js/m4a/tabris.js-app-m4a.apk). For staying up to date you should use our Beta-Channel.
 
@@ -19,7 +19,7 @@ The examples are part of the tabris.js GitHub repository and are developed entir
 
 Snippets / Shared Apps
 ----------------------
-In addition to the examples, snippets and even entire apps can be linked to the tabris.js App by **linking** them through the tabris connect website. Click the **link** button on the [snippets page](https://tabrisjs.com/examples/) to automatically add the app to your device.
+In addition to the examples, snippets and even entire apps can be linked to the tabris.js App by **linking** them through the tabris.js website. Click the **link** button on the [snippets page](https://tabrisjs.com/examples/) to automatically add the app to your device.
 
 ![Android Developer App](img/button-unlinked.png)
 
@@ -40,46 +40,48 @@ The first example you should look at is *Hello, World!*. You can run this direct
 
 ### index.json
 The index.json file is used to describe the app, including the name, description and a list of source files. All tabris.js apps must include an index.json.
-
+```js
+{
+  "title": "Hello, World!",
+  "description": "Tabris.js - Hello, World!",
+  "resources": [
     {
-     "title": "Hello, World!",
-     "description": "Tabris.js - Hello, World!",
-     "resources": [
-      {
-        "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
-      },
-      {
-        "src": "hello.js"
-      }
-     ]
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+    },
+    {
+      "src": "hello.js"
     }
-
+  ]
+}
+```
 
 ### hello.js
 The tabris.js Hello, World! app is contained in `examples/hello/hello.js`. Tabris.js apps can be developed using any text editor or IDE. 
 
-	tabris.load(function() {
-	
-  	 var page = tabris.create("Page", {
-   	   title: "Hello, World!",
-   	   topLevel: true
-  	  });
+```js
+tabris.load(function() {
 
-  	  var button = tabris.create("Button", {
-        text: "Native Widgets",
-        layoutData: { centerX: 0, top: 100 }
-  	  }).on("selection", function() {
-        label.set("text", "Totally Rock!");
-  	  }).appendTo(page);
-
-  	  var label = tabris.create("Label", {
-        font: "24px",
-        layoutData: {centerX: 0, top: [button, 50]}
-  	  }).appendTo(page);
-
-  	  page.open();
-
-	});
+    var page = tabris.create("Page", {
+      title: "Hello, World!",
+      topLevel: true
+    });
+    
+    var button = tabris.create("Button", {
+      text: "Native Widgets",
+      layoutData: { centerX: 0, top: 100 }
+    }).on("selection", function() {
+      label.set("text", "Totally Rock!");
+    }).appendTo(page);
+    
+    var label = tabris.create("Label", {
+      font: "24px",
+      layoutData: {centerX: 0, top: [button, 50]}
+    }).appendTo(page);
+    
+    page.open();
+    
+});
+```
 
 The Hello, World! app contains a *button* and a *label*. When the button is selected, the label is updated. Both the button and the label are placed on the *page* relative to one another.
 
@@ -99,7 +101,7 @@ Once deployed, use the tabris.js developer app to access the app. This can be co
 
     http://<development-machine-ip-address>:7777/
 
-Tabris Connect can also be used to configure the URLs available on your device.
+The _My Apps_ page on tabrisjs.com can also be used to configure the URLs available on your device.
 
 ![Link App](img/link-app.png)
 
