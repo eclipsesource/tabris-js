@@ -3,23 +3,28 @@
   "description": "An executable item that is integrated in the application's navigation menu. Add a listener on `selection` to implement the action.",
   "properties": {
     "enabled": {
-      "type": "boolean"
+      "type": "boolean",
+      "description": "Whether the action can be invoked."
     },
     "foreground": {
-      "type": "Color"
+      "type": "Color",
+      "description": "Text color of the action."
     },
     "image": {
-      "type": "Image"
+      "type": "Image",
+      "description": "Icon image for the action."
     },
     "placementPriority": {
       "type": "string:LOW|HIGH|NORMAL?NORMAL",
       "description": "Actions with higher placement priority will be placed at a more significant position in the UI, e.g. low priority actions could go into a menu instead of being included in a toolbar."
     },
     "title": {
-      "type": "string"
+      "type": "string",
+      "description": "The text to be displayed for the action."
     },
     "visibility": {
-      "type": "boolean"
+      "type": "boolean",
+      "description": "Whether the action is visible."
     }
   },
   "events": {
