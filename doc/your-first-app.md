@@ -92,9 +92,9 @@ Messages can be logged to the console using the global console object:
     console.info("An info message");
     console.debug("A debug Message");
 
-Share 
+Share
 =====
-GitHub repositories that contain a tabris.js app (an `index.json` and the JavaScript app) can be easily accessed on your device. Just go to the `My Apps` page on tabris.js.com and turn sharing ON. The app will then appear on your device on the _Apps_ tab. 
+GitHub repositories that contain a tabris.js app (an `index.json` and the JavaScript app) can be easily accessed on your device. Just go to the `My Apps` page on tabris.js.com and turn sharing ON. The app will then appear on your device on the _Apps_ tab.
 
 ![Developer Console](img/link-github.png)
 
@@ -106,4 +106,4 @@ Apps deployed to a publicly available URL can also be accessed on your device. L
 
 Further Information
 ===================
-[http://tabrisjs.com](http://tabrisjs.com) is your key to tabris.js. The website is filled with documentation, examples, the tabris.js development roadmap, and tools for connecting with your device. The website also contains links to the examples and snippets. 
+[http://tabrisjs.com](http://tabrisjs.com) is your key to tabris.js. The website is filled with documentation, examples, the tabris.js development roadmap, and tools for connecting with your device. The website also contains links to the examples and snippets.

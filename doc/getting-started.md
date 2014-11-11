@@ -1,16 +1,18 @@
 Getting Started
 ===============
-Welcome to tabris.js, the framework for developing native apps in JavaScript. For getting started you should log in to https://tabrisjs.com. It provides you with documentation and integrates with the tabris.js App. 
+Welcome to tabris.js, the framework for developing native apps in JavaScript. For getting started you should log in to https://tabrisjs.com. It provides you with documentation and integrates with the tabris.js App.
 
 Installing the tabris.js App
 ----------------------------
-For the iOS APP you will have to [send us](mailto:care@eclipsesource.com?subject=UDID) the UDID of your iOS device ([here is how you find it](http://whatsmyudid.com/)). We will move the new iOS TestFlight Beta service shortly.
+For the iOS APP you will have to send us the UDID of your iOS device ([here is how you find it](http://whatsmyudid.com/)). We will move the new iOS TestFlight Beta service shortly.
 
-For Android you will have to join our tabris.js Beta-Channel. Please join the Google Group [tabris-js-developer](https://groups.google.com/forum/#!forum/tabris-js-developer) and opt-in to the [beta channel](https://play.google.com/apps/testing/com.eclipsesource.tabris.js). Alternatively you can [download the apk here](http://download.eclipsesource.com/tabris.js/m4a/tabris.js-app-m4a.apk). For staying up to date you should use our Beta-Channel.
+For Android you will have to join our tabris.js Beta-Channel with the Google Account used on your device. Alternatively you can [download the apk here](http://download.eclipsesource.com/tabris.js/m4a/tabris.js-app-m4a.apk). For staying up to date you should use our Beta-Channel.
+
+You can simply use [this form](https://tabrisjs.com/developer-apps) to send us the required information.
 
 Explore
 -------
-The tabris.js developer app comes pre-configured with several examples. These examples demonstrate the power and flexibility of tabris.js. 
+The tabris.js developer app comes pre-configured with several examples. These examples demonstrate the power and flexibility of tabris.js.
 
 ![Android Developer App](img/examples.png)
 
@@ -28,7 +30,7 @@ From the **Apps** tab in your tabris.js App click on the app you wish to run. If
 
 Creating your first app
 =======================
-For creating your first app simply follow our [step by step instruction](https://tabrisjs.com/documentation/your-first-app). It requires just a bit of JavaScript code and a tabris.js App installed on your device. 
+For creating your first app simply follow our [step by step instruction](https://tabrisjs.com/documentation/your-first-app). It requires just a bit of JavaScript code and a tabris.js App installed on your device.
 
 
 Feedback
