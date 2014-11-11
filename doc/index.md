@@ -2,7 +2,6 @@
 
 ## Documentation
 - Working with [Widget objects](widgets)
-- Working with [Lists](list)
 - Creating [Layouts](layout)
 - Working with the [Canvas](canvas) widget
 - Handle messages from [Cloud Push services](cloudPush)
