@@ -3,9 +3,6 @@
   "description": "A check box widget.",
   "include": ["Widget"],
   "properties": {
-    "image": {
-      "type": "Image"
-    },
     "selection": {
       "type": "boolean?false"
     },

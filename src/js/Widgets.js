@@ -61,7 +61,7 @@
     _properties: {style: ["CHECK"]},
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
-    _checkProperty: {image: true, text: true, selection: true, style: true}
+    _checkProperty: {text: true, selection: true, style: true}
   });
 
   tabris.registerWidget("Combo", {
@@ -97,7 +97,7 @@
     _properties: {style: ["RADIO"]},
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
-    _checkProperty: {text: true, image: true, selection: true, style: true}
+    _checkProperty: {text: true, selection: true, style: true}
   });
 
   tabris.registerWidget("Slider", {

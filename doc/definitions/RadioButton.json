@@ -6,9 +6,6 @@
     "text": {
       "type": "string"
     },
-    "image": {
-      "type": "Image"
-    },
     "selection": {
       "type": "boolean?false"
     }
