@@ -10,7 +10,7 @@ stored on a messaging server, which the developers should create themselves.
 Tabris.js does not support the developer in any way to write the messaging
 component. It is expected that the developer creates a separate server-side
 message push component which communicates with tabris.js. It sends the push
-messages to the cloud service together with the token, and it in turn then
+messages to the cloud service together with the token, which in turn
 notifies the tabris.js client. Tabris.js uses a message event to notify the
 application of the received message.
 
@@ -71,7 +71,7 @@ regardless whether the application is running in the foreground, if it was
 paused, destroyed by the system to free up resources or closed by the user
 through swiping away the app from the app switcher. It won't be notified only in
 the case the application has just been installed and has never been started or
-if the user force closes the app in the system application settings from
+if the user force-closes the app in the system application settings from
 Android 3.1 onwards.
 
 iOS
@@ -82,7 +82,7 @@ running or not. When running in the foreground the application is notified of
 the remote notification and can e.g. update its UI according to the information
 received, but no notification will be showed in the notification center. If the
 application is running in background or if it is not running at all (e.g. if it
-was force-closed by swiping it up in the app preview view shown by double-tapping
+was force-closed by swiping it up in the app preview, shown by double-tapping
 on the home button), the application doesn't get informed of the notification. In
 this case it can only handle the notification payload when the user clicks on the
 action button of the notification alert.

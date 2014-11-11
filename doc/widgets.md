@@ -23,7 +23,7 @@ var button = tabris.create("Button", {
 
 ## Widget Properties
 
-Every native widget has a set properties (e.g. a text or a color). These properties can be read and written using the methods `get` and `set`, respectively.
+Every native widget has a set of properties (e.g. a text or a color). These properties can be read and written using the methods `get` and `set`, respectively.
 
 ### `get(name)`
 
@@ -40,7 +40,7 @@ var input = textField.get("text");
 
 ### `set(name, value)`
 
-Set a widget property. Returns the widget itself.
+Sets a widget property. Returns the widget itself.
 
 Parameters:
 
@@ -54,7 +54,7 @@ label.set("text", "Hello World");
 
 ### `set(properties)`
 
-Set a number of widget properties at once. Returns the widget itself.
+Sets a number of widget properties at once. Returns the widget itself.
 
 Parameters:
 
@@ -110,7 +110,7 @@ var button = tabris.create("Button", {
 
 ### `append(child, child*, ...)`
 
-Append one or more child widget to this widget. This method is equivalent to calling `appendTo` on every child, e.g. `parent.append(child1, child2)` is a short cut for calling `child1.appendTo(parent)` and `child2.appendTo(parent)`. Returns the widget itself.
+Appends one or more child widget to this widget. This method is equivalent to calling `appendTo` on every child, e.g. `parent.append(child1, child2)` is a short cut for calling `child1.appendTo(parent)` and `child2.appendTo(parent)`. Returns the widget itself.
 
 Parameters:
 
@@ -169,7 +169,7 @@ button.on("selection", selectionHandler);
 
 ### `off(type*, listener*, context*)`
 
-Remove a previously-bound listener function from a widget. If no context is specified, all of the versions of the listener with different contexts will be removed. If no listener is specified, all listeners for the event will be removed. If no type is specified, callbacks for all events will be removed. Returns the widget itself.
+Removes a previously-bound listener function from a widget. If no context is specified, all of the versions of the listener with different contexts will be removed. If no listener is specified, all listeners for the event will be removed. If no type is specified, callbacks for all events will be removed. Returns the widget itself.
 
 Parameters:
 
@@ -185,7 +185,7 @@ button.off("selection", selectionHandler, this);
 
 ### `trigger(type, param*, ...)`
 
-Programmatically invoke all listeners for the given event type with a given set of parameters. Returns the widget itself.
+Programmatically invokes all listeners for the given event type with a given set of parameters. Returns the widget itself.
 
 Parameters:
 
