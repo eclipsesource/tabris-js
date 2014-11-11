@@ -1,4 +1,5 @@
 module.exports = function(grunt) {
+
   grunt.registerTask("doc", function() {
     grunt.file.write(readTargetPath(), createOutput(readJson()));
   });
@@ -55,7 +56,7 @@ module.exports = function(grunt) {
           result.push(i === (desc.include.length - 1) ? " and " : ", ");
         }
         var incTitle = includes[include].title;
-        result.push("[" + incTitle + "](#" + incTitle.replace(/\s/g, "_") + ")");
+        result.push("[" + incTitle + "](#" + incTitle.toLowerCase().replace(/\s/g, "-") + ")");
       }
     }
     result.push("\n\n");
@@ -67,17 +68,16 @@ module.exports = function(grunt) {
       return "";
     }
     var result = [];
-    result.push(desc.type ? "#### Properties\n" : "");
-    Object.keys(desc.properties).sort().forEach(function(prop) {
-      var value = desc.properties[prop];
-      var type = value.type.split(":")[0].split("?")[0];
-      var def = value.type.split("?")[1] || "";
-      var description = value.description || "";
-      var allowed = value.type.indexOf(":") !== -1 ? value.type.split(":")[1].split("?")[0] : "";
-      result.push("- **", prop, "**: *", type + "*");
-      result.push(allowed ? ", supported values: `" + allowed.split("|").join("`, `") + "`" : "");
-      result.push(def ? ", default value: `" + def + "`" : "");
-      result.push(description ? "\n    " + description : "");
+    result.push("#### Properties\n");
+    Object.keys(desc.properties).sort().forEach(function(name) {
+      var property = desc.properties[name];
+      var type = property.type.split(":")[0].split("?")[0];
+      var supValues = property.type.indexOf(":") !== -1 ? property.type.split(":")[1].split("?")[0] : "";
+      var defValue = property.type.split("?")[1] || "";
+      result.push("- **", name, "**: *", type + "*");
+      result.push(supValues ? ", supported values: `" + supValues.split("|").join("`, `") + "`" : "");
+      result.push(defValue ? ", default value: `" + defValue + "`" : "");
+      result.push(property.description ? "\n    " + property.description : "");
       result.push("\n");
     });
     result.push("\n");
@@ -89,12 +89,13 @@ module.exports = function(grunt) {
       return "";
     }
     var result = [];
-    result.push(desc.type ? "#### Events\n" : "");
-    for (var name in desc.events) {
+    result.push("#### Events\n");
+    Object.keys(desc.events).sort().forEach(function(name) {
       var event = desc.events[name];
       result.push("- **", name, "**");
       result.push("description" in event ? "\n    " + event.description : "");
-    }
+      result.push("\n");
+    });
     result.push("\n");
     return result.join("");
   }
