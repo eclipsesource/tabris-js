@@ -1,51 +1,26 @@
-Translation
-===========
-Translation is an object with the following properties:
+Property Types
+==============
 
-* `scaleX` - a factor specifying the scale amount in the x-axis. Default is 1.
-* `scaleY` - a factor specifying the scale amount in the y-axis. Default is 1.
-* `rotation` - specifies the rotation in radians. Default is 0.
-* `translationX` - translation in the x-axis in pixels. Default is 0.
-* `translationY` - translation in the y-axis in pixels. Default is 0.
+## Bounds
 
-This will make the widget twice as big and rotate it by 135&deg;:
+Widget bounds are represented as an object with the following properties:
+
+* **left**: *number*
+The horizontal offset from the parent's left edge in dip
+* **top**: *number*
+The vertical offset from the parent's top edge in dip
+* **width**: *number*
+The width of the widget in dip
+* **height**: *number*
+The height of the widget in dip
+
+Example:
 ```javascript
-{scaleX: 2, scaleY: 2, rotation: Math.PI * 0.75}
+var buttonWidth = button.get("bounds").width;
 ```
 
-Opacity
-=======
-Opacity is a float number between 0 and 1.
+## Color
 
-Image
-=====
-Images are specified as objects with the following properties:
-
-* `src` - image path or URL
-* `width` - (optional) extracted from image file when missing
-* `height` - (optional) extracted from image file when missing
-* `scale` - (optional) ignored when width or height are set
-
-Examples:
-
-```javascript
-{src: "images/catseye.jpg", width: 300, height: 200}
-{src: "http://example.com/catseye.jpg", scale: 2}
-```
-
-Font
-====
-Fonts are specified as strings using the shorthand syntax known from CSS. The font family may be omitted, in this case the default system font will be used.
-
-Examples:
-
-```javascript
-"bold 24px"
-"12px sans-serif"
-```
-
-Color
-=====
 Colors are specified as strings using one of the following formats:
 
 * `#xxxxxx`
@@ -63,3 +38,61 @@ Examples:
 "#rgba(255, 0, 0, 0.8)"
 "red"
 ```
+
+## Font
+
+Fonts are specified as strings using the shorthand syntax known from CSS. The font family may be omitted, in this case the default system font will be used.
+
+Examples:
+
+```javascript
+"bold 24px"
+"12px sans-serif"
+"bold italic 12px sans-serif"
+```
+
+## Image
+
+Images are specified as objects with the following properties:
+
+* **src**: *string*
+    Image path or URL.
+* **width**: *number (optional)*
+    Image width, extracted from the image file when missing.
+* **height**: *number (optional)*
+    Image height, extracted from the image file when missing.
+* **scale**: *number (optional)*
+    Image scale factor - the image will be scaled down by this factor. Ignored when width or height are set.
+
+Examples:
+
+```javascript
+{src: "images/catseye.jpg", width: 300, height: 200}
+{src: "http://example.com/catseye.jpg", scale: 2}
+```
+
+## LayoutData
+
+Used to define how a widget should be arranged within its parent. See [Layouts](layout).
+
+## Transformation
+
+Transformations are specified as an object with the following properties:
+
+* **rotation**: *number*, default: `0`
+    Clock-wise rotation in radians.
+* **scaleX**: *number*, default: `1`
+    Horizontal scale factor.
+* **scaleY**: *number*, default: `1`
+    Vertical scale factor.
+* **translationX**: *number*, default: `0`
+    Horizontal translation (shift) in dip.
+* **translationY**: *number*, default: `0`
+    Vertical translation (shift) in dip.
+
+Example: 
+
+```javascript
+{scaleX: 2, scaleY: 2, rotation: Math.PI * 0.75}
+```
+This transformation will make the widget twice as big and rotate it by 135&deg;.
