@@ -1,6 +1,6 @@
 {
   "type": "Canvas",
-  "description": "A composite on which graphics can be drawn.",
+  "description": "An empty widget to draw graphics on. Can also contain other widgets.",
   "include": ["Widget"],
   "links": [
     {
