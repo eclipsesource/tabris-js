@@ -8,10 +8,12 @@
       "description": "Specifies the horizontal alignment of the button text."
     },
     "image": {
-      "type": "Image"
+      "type": "Image",
+      "description": "An image to be displayed on the button."
     },
     "text": {
-      "type": "string"
+      "type": "string",
+      "description": "The button's label text."
     }
   },
   "events": {
