@@ -76,8 +76,8 @@ module.exports = function(grunt) {
       var defValue = property.type.split("?")[1] || "";
       result.push("- **", name, "**: *", type + "*");
       result.push(supValues ? ", supported values: `" + supValues.split("|").join("`, `") + "`" : "");
-      result.push(defValue ? ", default value: `" + defValue + "`" : "");
-      result.push(property.description ? "\n    " + property.description : "");
+      result.push(defValue ? ", default: `" + defValue + "`" : "");
+      result.push(property.description ? "<br/>" + property.description : "");
       result.push("\n");
     });
     result.push("\n");
@@ -93,7 +93,7 @@ module.exports = function(grunt) {
     Object.keys(desc.events).sort().forEach(function(name) {
       var event = desc.events[name];
       result.push("- **", name, "**");
-      result.push("description" in event ? "\n    " + event.description : "");
+      result.push(event.description ? "<br/>" + event.description : "");
       result.push("\n");
     });
     result.push("\n");
