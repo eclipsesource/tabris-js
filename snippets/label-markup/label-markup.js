@@ -5,7 +5,8 @@ tabris.load(function() {
     topLevel: true
   });
 
-  var markup = "<b>Bold</b>, <i>italic</i>, <big>big</big>, <small>small</small>, <ins>ins</ins>, <del>del</del>, <a>link</a>"
+  var markup = "<b>bold</b>, <i>italic</i>, <big>big</big>, <small>small</small>, " +
+               "<ins>ins</ins>, <del>del</del>, <a>link</a>";
 
   tabris.create("Label", {
     layoutData: {left: 10, top: 10, right: 10},

@@ -22,7 +22,14 @@ module.exports = function(grunt) {
       options: {
         jshintrc: true
       },
-      all: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js', 'examples/**/*.js', '!**/lib/**/*.js']
+      all: [
+        'Gruntfile.js',
+        'src/**/*.js',
+        'test/**/*.js',
+        'examples/**/*.js',
+        'snippets/**/*.js',
+        '!**/lib/**/*.js'
+      ]
     },
     jasmine: {
       options: {
