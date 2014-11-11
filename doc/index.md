@@ -4,7 +4,6 @@
 - Working with [Widget objects](widgets)
 - Creating [Layouts](layout)
 - Working with the [Canvas](canvas) widget
-- Handle messages from [Cloud Push services](cloudPush)
 - [Widgets types reference](widget-types)
 - [Property types reference](property-types)
 - Understand [touch events](touch-events) in tabris.js
