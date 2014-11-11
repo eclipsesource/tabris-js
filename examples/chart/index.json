@@ -1,7 +1,7 @@
 {
   "title": "Chart.js",
   "description": "Embeds the chartjs.org charting library for simple charting",
-  "category": "Canvas",
+  "category": "Web APIs",
   "resources": [
     {
       "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
