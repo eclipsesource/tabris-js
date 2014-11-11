@@ -19,5 +19,11 @@
   },
   "events": {
     "change:selection": {}
-  }
+  },
+  "links": [
+    {
+      "title": "Simple ToggleButton snippet",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/togglebutton/togglebutton.js"
+    }
+  ]
 }

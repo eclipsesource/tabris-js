@@ -32,8 +32,12 @@
   },
   "links": [
     {
-      "title": "Example with text fields and different keyboard types",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/examples/keyboard/keyboard.js"
+      "title": "Simple Text snippet",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/text/text.js"
+    },
+    {
+      "title": "Example with Text and other input controls",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/examples/input/input.js"
     }
   ]
 }

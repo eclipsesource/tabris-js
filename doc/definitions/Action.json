@@ -29,8 +29,12 @@
   },
   "links": [
     {
-      "title": "Example for creating pages and actions",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/examples/tabris-ui/tabris-ui-draft.js"
+      "title": "Snippet for creating actions",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/action/action.js"
+    },
+     {
+      "title": "Actions - placement priorities",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/action-placement-priority/action-placement-priority.js"
     }
   ]
 }

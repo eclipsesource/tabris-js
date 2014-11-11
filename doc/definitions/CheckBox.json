@@ -18,8 +18,8 @@
   },
   "links": [
     {
-      "title" : "Example with input elements",
-      "path" : "https://github.com/eclipsesource/tabris-js/blob/master/examples/input/input.js"
+      "title" : "Simple Checkbox snippet",
+      "path" : "https://github.com/eclipsesource/tabris-js/blob/master/snippets/checkbox/checkbox.js"
     }
   ]
 }

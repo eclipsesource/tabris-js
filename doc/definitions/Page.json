@@ -17,8 +17,16 @@
   },
   "links": [
     {
-      "title": "Example for creating pages and actions",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/examples/tabris-ui/tabris-ui-draft.js"
+      "title": "Simple Page snippet",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/page/page.js"
+    },
+    {
+      "title": "Snippet for creating a full screen Page",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/page-fullscreen/page-fullscreen.js"
+    },
+    {
+      "title": "Snippet for dynamically creating Pages",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/page-add-dynamically/page-add-dynamically.js"
     }
   ]
 }

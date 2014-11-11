@@ -15,7 +15,11 @@
   },
   "links": [
     {
-      "title": "Example with a ScrollComposite",
+      "title": "Simple ScrollComposite snippet",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/scrollcomposite/scrollcomposite.js"
+    },
+    {
+      "title": "Example using a ScrollComposite",
       "path": "https://github.com/eclipsesource/tabris-js/blob/master/examples/parallax/parallax.js"
     }
   ]

@@ -18,8 +18,8 @@
   },
   "links": [
     {
-      "title" : "ProgressBar in the http-request example",
-      "path" : "https://github.com/eclipsesource/tabris-js/blob/master/examples/http-request/http-request.js"
+      "title" : "Simple ProgressBar snippet",
+      "path" : "https://github.com/eclipsesource/tabris-js/blob/master/snippets/progressbar/progressbar.js"
     }
   ]
 }

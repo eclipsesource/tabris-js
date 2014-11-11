@@ -15,8 +15,8 @@
   },
   "links": [
     {
-      "title": "Example with a TabFolder and Tabs",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/examples/tabfolder/tabfolder.js"
+      "title": "Snippet with a TabFolder and Tabs",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/tabfolder/tabfolder.js"
     }
   ]
 }
