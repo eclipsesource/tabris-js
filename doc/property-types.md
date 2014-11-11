@@ -8,7 +8,7 @@ Translation is an object with the following properties:
 * `translationX` - translation in the x-axis in pixels. Default is 0.
 * `translationY` - translation in the y-axis in pixels. Default is 0.
 
-This will make the widget twice as big and rotate it by 135°:
+This will make the widget twice as big and rotate it by 135&deg;:
 ```javascript
 {scaleX: 2, scaleY: 2, rotation: Math.PI * 0.75}
 ```
