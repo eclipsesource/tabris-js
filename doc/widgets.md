@@ -70,7 +70,7 @@ label.set({
 
 ### `animate(properties, options)`
 
-Changes a number of widget property with an animation. Currently, only the properties `transform` and `opacity` are supported. Does not yet return any value. 
+Changes a number of widget properties with an animation. Currently, only the properties `transform` and `opacity` are supported. Does not yet return any value. 
 
 Parameters:
 
