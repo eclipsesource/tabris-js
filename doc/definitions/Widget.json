@@ -3,50 +3,78 @@
   "description": "Properties and events supported by all widgets except Action.",
   "properties": {
     "enabled": {
-      "type": "boolean?true"
+      "type": "boolean?true",
+      "description": "Whether the widget can be operated."
     },
     "visibility": {
-      "type": "boolean?true"
+      "type": "boolean?true",
+      "description": "Whether the widget is visible."
     },
     "layoutData": {
-      "type": "layoutData"
+      "type": "LayoutData",
+      "description": "Specifies how the widget should be arranged in a layout. See [Layout](layout)."
     },
     "font": {
-      "type": "Font"
+      "type": "Font",
+      "description": "The font used for the widget."
     },
     "backgroundImage": {
-      "type": "Image"
+      "type": "Image",
+      "description": "An image to be displayed on the widget's background. If the image is smaller than the widget, it will be tiled."
     },
     "bounds": {
-      "type": "Bounds"
+      "type": "Bounds",
+      "description": "The actual location and size of the widget, relative to its parent."
     },
     "background": {
-      "type": "Color"
+      "type": "Color",
+      "description": "Background color of the widget."
     },
     "foreground": {
-      "type": "Color"
+      "type": "Color",
+      "description": "Text color of the widget."
     },
     "opacity": {
-      "type": "number"
+      "type": "number:0..1?1",
+      "description": "Opacity of the entire widget. Can be used for fade animations."
     },
     "transform": {
-      "type": "Transformation"
+      "type": "Transformation",
+      "description": "Modifications to the widget's shape, size, or position. Can be used for animations."
     },
     "highlightOnTouch": {
-      "type": "boolean?false"
+      "type": "boolean?false",
+      "description": "Whether the entire widget should be highlighted while touched."
     }
   },
   "events": {
-    "touchstart": {},
-    "touchmove": {},
-    "touchend": {},
-    "longpress": {},
-    "change:bounds": {},
+    "touchstart": {
+      "description": "Fired when a widget is touched. See [Touch Events](touch-events)."
+    },
+    "touchmove": {
+      "description": "Fired repeatedly while swiping across the screen. See [Touch Events](touch-events)."
+    },
+    "touchend": {
+      "description": "Fired when a touch ends on the same widget than it started on. See [Touch Events](touch-events)."
+    },
+    "touchcancel": {
+      "description": "Fired instead of touchend when the touch ends on another widget than it started on. See [Touch Events](touch-events)."
+    },
+    "longpress": {
+      "description": "Fired after pressing a widget for a specific amount of time (about a second). See [Touch Events](touch-events)."
+    },
+    "change:bounds": {
+      "description": "Fired when the widget's size or position has changed."
+    },
     "dispose": {
       "description": "Fired when the widget is about to be disposed."
     }
   },
   "links": [
+    {
+      "title": "Understanding layouts in tabris.js",
+      "path": "https://tabrisjs.com/documentation/layouts"
+    },
     {
       "title": "Understanding touch events in tabris.js",
       "path": "https://tabrisjs.com/documentation/touch-events"
