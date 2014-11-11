@@ -27,7 +27,7 @@ In addition to the examples, snippets and even entire apps can be linked to the 
 
 ![Android Developer App](img/button-unlinked.png)
 
-From the **Apps** tab in your tabris.js App click on the app you wish to run. If an app does not appear, you can refresh the list by swiping down on Android or by switching tabs on iOS.
+From the **Apps** tab in the tabris.js app click on the app you wish to run. If an app does not appear, you can refresh the list by swiping down on Android or by switching tabs on iOS.
 
 
 # Creating your first app
