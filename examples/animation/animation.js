@@ -11,7 +11,7 @@ tabris.load(function() {
     layoutData: {left: MARGIN, top: MARGIN},
     background: "#6aa",
     foreground: "white",
-    text: "Hallo World"
+    text: "Hello World!"
   });
 
   var button = tabris.create("Button", {
