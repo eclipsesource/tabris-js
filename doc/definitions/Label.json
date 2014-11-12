@@ -5,14 +5,15 @@
   "properties": {
     "alignment": {
       "type": "string:left|right|center?left",
-      "description": "Specifies the horizontal alignment of the text."
+      "description": "The horizontal alignment of the text."
     },
     "markupEnabled": {
       "type": "boolean",
-      "description": "Allows using a HTML markup subset in the label text. Can only be set in the \"create\" method."
+      "description": "Allows for a subset of HTML tags in the label text. Supported tags are: `a`, `del`, `ins`, `b`, `i`, `strong`, `em`, `big`, `small`, `br`. All tags must be closed (e.g. use `<br/>` instead of `<br>`). Nesting tags is currently not supported. This property must be set in the \"create\" method."
     },
     "text": {
-      "type": "string"
+      "type": "string",
+      "description": "The label text."
     }
   },
   "links": [
