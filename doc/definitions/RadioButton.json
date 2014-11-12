@@ -1,17 +1,21 @@
 {
   "type": "RadioButton",
-  "description": "A radio button. Selecting a radio button de-selects all its siblings (i.e. all radio buttons within the same parent). *Known Issues: RadioButton is not automatically de-selected on iOS*",
+  "description": "A radio button. Selecting a radio button deselects all its siblings (i.e. all radio buttons within the same parent). *Known Issues: RadioButton is not automatically deselected on iOS*",
   "include": ["Widget"],
   "properties": {
-    "text": {
-      "type": "string"
-    },
     "selection": {
-      "type": "boolean?false"
+      "type": "boolean?false",
+      "description": "The checked state of the radio button."
+    },
+    "text": {
+      "type": "string",
+      "description": "The label text of the radio button."
     }
   },
   "events": {
-    "change:selection": {}
+    "change:selection": {
+      "description": "Fired when the radio button is selected or deselected."
+    }
   },
   "links": [
     {

@@ -4,14 +4,18 @@
   "include": ["Widget"],
   "properties": {
     "selection": {
-      "type": "boolean?false"
+      "type": "boolean?false",
+      "description": "The checked state of the check box."
     },
     "text": {
-      "type": "string"
+      "type": "string",
+      "description": "The label text of the check box."
     }
   },
   "events": {
-    "change:selection": {}
+    "change:selection": {
+      "description": "Fired when the check box is checked or unchecked."
+    }
   },
   "links": [
     {
