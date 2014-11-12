@@ -1,0 +1,13 @@
+{
+  "title": "Video",
+  "category": "Video",
+  "description": "Play video",
+  "resources": [
+    {
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+    },
+    {
+      "src": "video.js"
+    }
+  ]
+}
