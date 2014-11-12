@@ -1,0 +1,13 @@
+{
+  "title": "Composite",
+  "category": "Composite",
+  "description": "Create a composite which gets highlighted on touch",
+  "resources": [
+    {
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+    },
+    {
+      "src": "composite-highlight-on-touch.js"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "title": "Composite",
+  "category": "Composite",
+  "description": "Create composites and append children to them",
+  "resources": [
+    {
+      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+    },
+    {
+      "src": "composite.js"
+    }
+  ]
+}
