@@ -1,33 +1,12 @@
 {
   "type": "Video",
-  "description": "A widget used to play a video from a URL source.",
+  "description": "A widget that plays a video from a URL.",
   "include": ["Widget"],
   "properties": {
-    "enabled": {
-      "type": "boolean"
-    },
-    "repeat": {
-      "type": "boolean"
-    },
-    "controls_visible": {
-      "type": "boolean"
-    },
     "url": {
-      "type": "string"
-    },
-    "playback": {
-      "type": "string:play|pause|stop|fast_forward|fast_backward"
-    },
-    "presentation": {
-      "type": "string:full_screen|embedded"
-    },
-    "speed": {
-      "type": "number"
+      "type": "string",
+      "description": "The URL of the video to play."
     }
-  },
-  "events": {
-    "Presentation": {},
-    "Playback": {}
   },
   "links": [
     {

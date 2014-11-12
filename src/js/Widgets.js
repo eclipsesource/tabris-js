@@ -133,6 +133,12 @@
     _checkProperty: {text: true, image: true, selection: true, alignment: true, style: true}
   });
 
+  tabris.registerWidget("Video", {
+    _type: "tabris.widgets.Video",
+    _properties: {controls_visible: true, repeat: false},
+    _checkProperty: {url: true}
+  });
+
   tabris.registerWidget("WebView", {
     _type: "rwt.widgets.Browser",
     _listen: {load: "Progress"},
