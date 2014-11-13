@@ -80,7 +80,7 @@ describe("tabris", function() {
         log.push("bar");
       });
 
-      tabris._start.call(null);
+      tabris._start.call(null, nativeBridge);
 
       expect(log).toEqual(["foo", "bar"]);
     });
