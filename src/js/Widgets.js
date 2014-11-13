@@ -45,10 +45,10 @@
 
   tabris.registerWidget("Button", {
     _type: "rwt.widgets.Button",
-    _properties: {style: ["PUSH"]},
+    _internalProperties: {style: ["PUSH"]},
     _listen: {selection: "Selection"},
     _trigger: {Selection: "selection"},
-    _checkProperty: {alignment: true, image: true, text: true, style: true}
+    _checkProperty: {alignment: true, image: true, text: true}
   });
 
   tabris.registerWidget("Canvas", {
@@ -58,10 +58,10 @@
 
   tabris.registerWidget("CheckBox", {
     _type: "rwt.widgets.Button",
-    _properties: {style: ["CHECK"]},
+    _internalProperties: {style: ["CHECK"]},
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
-    _checkProperty: {text: true, selection: true, style: true}
+    _checkProperty: {text: true, selection: true}
   });
 
   tabris.registerWidget("Combo", {
@@ -83,8 +83,8 @@
 
   tabris.registerWidget("Label", {
     _type: "rwt.widgets.Label",
-    _properties: {style: ["WRAP"]},
-    _checkProperty: {alignment: true, markupEnabled: true, text: true, style: true}
+    _internalProperties: {style: ["WRAP"]},
+    _checkProperty: {alignment: true, markupEnabled: true, text: true}
   });
 
   tabris.registerWidget("ProgressBar", {
@@ -94,10 +94,10 @@
 
   tabris.registerWidget("RadioButton", {
     _type: "rwt.widgets.Button",
-    _properties: {style: ["RADIO"]},
+    _internalProperties: {style: ["RADIO"]},
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
-    _checkProperty: {text: true, selection: true, style: true}
+    _checkProperty: {text: true, selection: true}
   });
 
   tabris.registerWidget("Slider", {
@@ -111,11 +111,13 @@
     _type: "rwt.widgets.Text",
     _create: function(properties) {
       var style = textTypeToStyle[properties.type] || textTypeToStyle["default"];
-      return this.super("_create", util.extend({style: style}, properties));
+      var result = this.super("_create", properties);
+      this._setPropertyNative("style", style);
+      return result;
     },
     _listen: {focus: "FocusIn", blur: "FocusOut", accept: "DefaultSelection"},
     _trigger: {FocusIn: "focus", FocusOut: "blur", DefaultSelection: "accept"},
-    _checkProperty: {type: true, text: true, message: true, editable: true, textLimit: true, style: true}
+    _checkProperty: {type: true, text: true, message: true, editable: true, textLimit: true}
   });
 
   var textTypeToStyle = {
@@ -127,15 +129,15 @@
 
   tabris.registerWidget("ToggleButton", {
     _type: "rwt.widgets.Button",
-    _properties: {style: ["TOGGLE"]},
+    _internalProperties: {style: ["TOGGLE"]},
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
-    _checkProperty: {text: true, image: true, selection: true, alignment: true, style: true}
+    _checkProperty: {text: true, image: true, selection: true, alignment: true}
   });
 
   tabris.registerWidget("Video", {
     _type: "tabris.widgets.Video",
-    _properties: {controls_visible: true, repeat: false},
+    _internalProperties: {controls_visible: true, repeat: false},
     _checkProperty: {url: true}
   });
 

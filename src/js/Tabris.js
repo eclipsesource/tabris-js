@@ -82,7 +82,7 @@
     "_listen": {},
     "_setProperty": {},
     "_getProperty": {},
-    "_properties": {},
+    "_internalProperties": {},
     "_type": null,
     "_checkProperty": {},
     "_supportsChildren": false

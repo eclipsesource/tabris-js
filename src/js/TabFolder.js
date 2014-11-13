@@ -29,10 +29,10 @@
     _setProperty: {
       paging: function(value) {
         this._paging = value;
-        this._setNativeProperty("data", {paging: value});
+        this._setPropertyNative("data", {paging: value});
       },
       selection: function(tab) {
-        this._setNativeProperty("selection", tab._tabItem.id);
+        this._setPropertyNative("selection", tab._tabItem.id);
       }
     },
 

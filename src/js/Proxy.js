@@ -15,7 +15,12 @@
     _create: function(properties) {
       var type = this.constructor._type || this.type;
       tabris._nativeBridge.create(this.id, type);
-      this._setProperties(util.extend({}, this.constructor._properties, properties));
+      if (this.constructor && this.constructor._internalProperties) {
+        for (var name in this.constructor._internalProperties) {
+          this._setPropertyNative(name, this.constructor._internalProperties[name]);
+        }
+      }
+      this._setProperties(properties);
       return this;
     },
 
@@ -188,7 +193,7 @@
         if (setProperty instanceof Function) {
           setProperty.call(this, value);
         } else {
-          this._setNativeProperty(name, encodedValue);
+          this._setPropertyNative(name, encodedValue);
         }
       } catch (error) {
         console.warn("Unsupported " + name + " value: " + error.message);
@@ -202,7 +207,7 @@
       }
     },
 
-    _setNativeProperty: function(name, value) {
+    _setPropertyNative: function(name, value) {
       tabris._nativeBridge.set(this.id, name, value);
     },
 

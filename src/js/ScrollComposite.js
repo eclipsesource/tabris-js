@@ -27,20 +27,18 @@
       }
     },
 
-    _checkProperty: {style: true}, // TODO: should not be required
-
     _create: function(properties) {
       var scrollProps = util.omit(properties, ["scroll"]);
-      this.super("_create", util.extend(scrollProps, {
-        style: properties.scroll === "horizontal" ? ["H_SCROLL"] : ["V_SCROLL"]
-      }));
+      this.super("_create", scrollProps);
+      var style = properties.scroll === "horizontal" ? ["H_SCROLL"] : ["V_SCROLL"];
+      this._setPropertyNative("style", style);
       this._scrollBar = tabris.create("_ScrollBar", {
         style: properties.scroll === "horizontal" ? ["HORIZONTAL"] : ["VERTICAL"]
       });
       tabris._nativeBridge.set(this._scrollBar.id, "parent", this.id);
       this._composite = tabris.create("Composite");
       tabris._nativeBridge.set(this._composite.id, "parent", this.id);
-      this._setNativeProperty("content", this._composite.id);
+      this._setPropertyNative("content", this._composite.id);
       return this;
     },
 

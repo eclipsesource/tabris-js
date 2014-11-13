@@ -34,6 +34,10 @@ describe("Proxy", function() {
       nativeBridge.resetCalls();
     });
 
+    afterEach(function() {
+      delete tabris.CustomType;
+    });
+
     it("creates proxy for standard types", function() {
       tabris.create("Button", {text: "foo"});
 
@@ -59,13 +63,29 @@ describe("Proxy", function() {
       expect(properties.foo).toBe("other-id");
     });
 
+    it("sends native set for extra properties", function() {
+      tabris.registerType("CustomType", {_internalProperties: {foo: 23}, _checkProperty: true});
+
+      tabris.create("CustomType", {bar: 42});
+
+      var properties = nativeBridge.calls({op: "create", type: "CustomType"})[0].properties;
+      expect(properties).toEqual({foo: 23, bar: 42});
+    });
+
+    it("does not raise warning for extra properties", function() {
+      tabris.registerType("CustomType", {_internalProperties: {foo: 23}});
+
+      tabris.create("CustomType", {});
+
+      expect(console.warn).not.toHaveBeenCalled();
+    });
+
     it("does not modify prototype properties", function() {
-      tabris.registerType("CustomType", {_properties: {}});
+      tabris.registerType("CustomType", {_internalProperties: {}});
 
       tabris.create("CustomType", {foo: 23});
 
-      expect(tabris.CustomType._properties).toEqual({});
-      delete tabris.CustomType;
+      expect(tabris.CustomType._internalProperties).toEqual({});
     });
 
   });
