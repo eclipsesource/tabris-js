@@ -60,7 +60,7 @@
 
     _checkProperty: {
       title: true,
-      image: true,
+      image: tabris.PropertyChecks.image,
       badge: true
     },
 

@@ -186,12 +186,12 @@
     },
 
     _setProperty: function(name, value) {
-      this._checkProperty(name, value);
+      var checkedValue = this._checkProperty(name, value);
       var setProperty = this.constructor && this.constructor._setProperty && this.constructor._setProperty[name];
       try {
-        var encodedValue = this._encodeProperty(name, value);
+        var encodedValue = this._encodeProperty(name, checkedValue);
         if (setProperty instanceof Function) {
-          setProperty.call(this, value);
+          setProperty.call(this, checkedValue);
         } else {
           this._setPropertyNative(name, encodedValue);
         }
@@ -200,11 +200,19 @@
       }
     },
 
-    _checkProperty: function(name) {
+    _checkProperty: function(name, value) {
       var checkProperty = this.constructor && this.constructor._checkProperty && this.constructor._checkProperty[name];
       if (!checkProperty && this.constructor._checkProperty !== true) {
         console.warn(this.type + ": Unknown property \"" + name + "\"");
       }
+      if (arguments.length === 2 && checkProperty instanceof Function) {
+        try {
+          return checkProperty(value);
+        } catch (ex) {
+          console.warn(this.type + ": Unsupported value for property \"" + name + "\": " + ex.message);
+        }
+      }
+      return value;
     },
 
     _setPropertyNative: function(name, value) {
@@ -235,7 +243,7 @@
         case "images":
           return encodeImages(value);
         case "layoutData":
-          return encodeLayoutData(checkLayoutData(value));
+          return encodeLayoutData(value);
         case "bounds":
           return encodeBounds(value);
       }
@@ -309,31 +317,6 @@
     return value.map(function(value) {
       return value == null ? null : util.imageFromArray(value);
     });
-  }
-
-  function checkLayoutData(layoutData) {
-    if ("centerX" in layoutData) {
-      if (("left" in layoutData) || ("right" in layoutData)) {
-        console.warn("Inconsistent layoutData: centerX overrides left and right");
-        return util.omit(layoutData, ["left", "right"]);
-      }
-    } else if (!("left" in layoutData) && !("right" in layoutData)) {
-      console.warn("Incomplete layoutData: either left, right or centerX should be specified");
-    }
-    if ("baseline" in layoutData) {
-      if (("top" in layoutData) || ("bottom" in layoutData) || ("centerY" in layoutData)) {
-        console.warn("Inconsistent layoutData: baseline overrides top, bottom, and centerY");
-        return util.omit(layoutData, ["top", "bottom", "centerY"]);
-      }
-    } else if ("centerY" in layoutData) {
-      if (("top" in layoutData) || ("bottom" in layoutData)) {
-        console.warn("Inconsistent layoutData: centerY overrides top and bottom");
-        return util.omit(layoutData, ["top", "bottom"]);
-      }
-    } else if (!("top" in layoutData) && !("bottom" in layoutData)) {
-      console.warn("Incomplete layoutData: either top, bottom, centerY, or baseline should be specified");
-    }
-    return layoutData;
   }
 
   function encodeLayoutData(layoutData) {

@@ -5,6 +5,8 @@
 
 (function() {
 
+  var checks = tabris.PropertyChecks;
+
   tabris.registerWidget = function(type, members) {
     members = util.clone(members);
     members._listen = util.extend({}, tabris.registerWidget._defaultListen, members._listen || {});
@@ -32,9 +34,9 @@
     _defaultCheckProperty: {
       enabled: true,
       visibility: true,
-      layoutData: true,
+      layoutData: checks.layoutData,
       font: true,
-      backgroundImage: true,
+      backgroundImage: checks.image,
       bounds: true,
       background: true,
       foreground: true,
@@ -79,7 +81,7 @@
 
   tabris.registerWidget("ImageView", {
     _type: "tabris.ImageView",
-    _checkProperty: {image: true, scaleMode: true}
+    _checkProperty: {image: checks.image, scaleMode: true}
   });
 
   tabris.registerWidget("Label", {

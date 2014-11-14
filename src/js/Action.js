@@ -10,7 +10,7 @@ tabris.registerType("Action", {
   _checkProperty: {
     enabled: true,
     foreground: true,
-    image: true,
+    image: tabris.PropertyChecks.image,
     placementPriority: true,
     title: true,
     visibility: true

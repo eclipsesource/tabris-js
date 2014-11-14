@@ -317,6 +317,14 @@ describe("Proxy", function() {
         expect(console.warn).toHaveBeenCalledWith(warning);
       });
 
+      it("raises no warning if _propertyCheck entry is a function", function() {
+        tabris.TestType._checkProperty.knownProperty = jasmine.createSpy();
+        proxy.get("knownProperty", true);
+
+        expect(console.warn).not.toHaveBeenCalled();
+        expect(tabris.TestType._checkProperty.knownProperty).not.toHaveBeenCalled();
+      });
+
       it("raises no warning if _propertyCheck entry is true", function() {
         tabris.TestType._checkProperty.knownProperty = true;
         proxy.get("knownProperty", true);
@@ -456,60 +464,35 @@ describe("Proxy", function() {
         expect(console.warn).not.toHaveBeenCalled();
       });
 
-      it("raises a warning for incomplete horizontal layoutData", function() {
-        proxy.set("layoutData", {top: 0});
+      it("raises a warning if _propertyCheck is a function that throws", function() {
+        tabris.TestType._checkProperty.knownProperty = function() {
+          throw new Error("My Error");
+        };
+        proxy.set("knownProperty", true);
 
-        var warning = "Incomplete layoutData: either left, right or centerX should be specified";
-        expect(console.warn).toHaveBeenCalledWith(warning);
+        var message = "TestType: Unsupported value for property \"knownProperty\": My Error";
+        expect(console.warn).toHaveBeenCalledWith(message);
       });
 
-      it("raises a warning for incomplete vertical layoutData", function() {
-        proxy.set("layoutData", {left: 0});
-
-        var warning = "Incomplete layoutData: either top, bottom, centerY, or baseline should be specified";
-        expect(console.warn).toHaveBeenCalledWith(warning);
-      });
-
-      it("raises a warning for inconsistent layoutData (centerX)", function() {
-        proxy.set("layoutData", {top: 0, left: 0, centerX: 0});
-
-        var warning = "Inconsistent layoutData: centerX overrides left and right";
-        expect(console.warn).toHaveBeenCalledWith(warning);
-      });
-
-      it("skips overridden properties from layoutData (centerX)", function() {
-        proxy.set("layoutData", {top: 1, left: 2, right: 3, centerX: 4});
+      it("still sets the value if _propertyCheck is a function that throws", function() {
+        // TODO: This will be flipped later to ignore the incorrect value
+        tabris.TestType._checkProperty.knownProperty = function() {
+          throw new Error("My Error");
+        };
+        proxy.set("knownProperty", "foo");
 
         var call = nativeBridge.calls({op: "set"})[0];
-        expect(call.properties.layoutData).toEqual({top: 1, centerX: 4});
+        expect(call.properties.knownProperty).toBe("foo");
       });
 
-      it("raises a warning for inconsistent layoutData (centerY)", function() {
-        proxy.set("layoutData", {left: 0, top: 0, centerY: 0});
+      it("uses _propertyCheck entry to convert the value", function() {
+        tabris.TestType._checkProperty.knownProperty = jasmine.createSpy();
+        tabris.TestType._checkProperty.knownProperty.and.returnValue("foo");
+        proxy.set("knownProperty", "bar");
 
-        var warning = "Inconsistent layoutData: centerY overrides top and bottom";
-        expect(console.warn).toHaveBeenCalledWith(warning);
-      });
-
-      it("skips overridden properties from layoutData (centerY)", function() {
-        proxy.set("layoutData", {left: 1, top: 2, bottom: 3, centerY: 4});
-
+        expect(tabris.TestType._checkProperty.knownProperty).toHaveBeenCalledWith("bar");
         var call = nativeBridge.calls({op: "set"})[0];
-        expect(call.properties.layoutData).toEqual({left: 1, centerY: 4});
-      });
-
-      it("raises a warning for inconsistent layoutData (baseline)", function() {
-        proxy.set("layoutData", {left: 0, top: 0, baseline: 0});
-
-        var warning = "Inconsistent layoutData: baseline overrides top, bottom, and centerY";
-        expect(console.warn).toHaveBeenCalledWith(warning);
-      });
-
-      it("skips overridden properties from layoutData (baseline)", function() {
-        proxy.set("layoutData", {left: 1, top: 2, bottom: 3, centerY: 4, baseline: "other"});
-
-        var call = nativeBridge.calls({op: "set"})[0];
-        expect(call.properties.layoutData).toEqual({left: 1, baseline: "other"});
+        expect(call.properties.knownProperty).toBe("foo");
       });
 
       it("translates widgets to ids in layoutData", function() {
