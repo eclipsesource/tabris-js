@@ -145,7 +145,7 @@
     _type: "rwt.widgets.Browser",
     _listen: {load: "Progress"},
     _trigger: {Progress: "load"},
-    _checkProperty: {url: true}
+    _checkProperty: {url: true, html: true}
   });
 
 }());

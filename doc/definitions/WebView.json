@@ -5,7 +5,11 @@
   "properties": {
     "url": {
       "type": "string",
-      "description": "The URL of the web page to display."
+      "description": "The URL of the web page to display. Returns empty string when content from \"html\" property is displayed."
+    },
+    "html": {
+      "type": "string",
+      "description": "A complete HTML document to display. Always returns the last set value."
     }
   },
   "links": [
