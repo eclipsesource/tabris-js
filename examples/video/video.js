@@ -1,9 +1,8 @@
-tabris.registerWidget("Video", {
-  _type: "tabris.widgets.Video",
-  _checkProperty: true,
-  _listen: {Playback:true},
-  _trigger: {Playback:true}
-});
+// This example uses internal API that is likely going to change. The internal API is listed below:
+tabris.Video._checkProperty.playback=true;
+tabris.Video._checkProperty.controls_visible=true;
+tabris.Video._checkProperty.repeat=true;
+tabris.Video._listen.Playback=true;
 
 tabris.load(function() {
 
@@ -18,8 +17,6 @@ tabris.load(function() {
 
   var video = tabris.create("Video", {
     enabled: true,
-    controls_visible: true,
-    repeat: false,
     playback: "play",
     layoutData: {left: 0, right: 0, top: 0, bottom: [controls, 0]},
     url: "http://mirrorblender.top-ix.org/movies/sintel-1024-surround.mp4"
