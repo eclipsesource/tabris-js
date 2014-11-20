@@ -146,6 +146,18 @@ describe("tabris", function() {
 
   describe("load", function() {
 
+    beforeEach(function() {
+      delete tabris._nativeBridge;
+      tabris._ready = false;
+    });
+
+    it("function is not executed before start time", function() {
+      var fn = jasmine.createSpy();
+      tabris.load(fn);
+
+      expect(fn).not.toHaveBeenCalled();
+    });
+
     it("function is executed at start time", function() {
       var fn = jasmine.createSpy();
 
@@ -175,11 +187,21 @@ describe("tabris", function() {
       expect(log).toEqual(["1", "2", "1a", "1b"]);
     });
 
+    it("runs immediately if already started", function() {
+      var fn = jasmine.createSpy();
+
+      tabris._start(nativeBridge);
+      tabris.load(fn);
+
+      expect(fn).toHaveBeenCalled();
+    });
+
   });
 
   describe("create", function() {
 
     it("fails if tabris.js not yet started", function() {
+      tabris._ready = false;
       delete tabris._nativeBridge;
 
       expect(function() {

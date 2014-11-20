@@ -28,13 +28,19 @@
     target: null,
     currentTarget: null,
     eventPhase: 0,
+    type: "",
     bubbles: false,
     cancelable: false,
     defaultPrevented: false,
     isTrusted: false,
     stopPropagation: noop,
     stopImmediatePropagation: noop,
-    preventDefault: noop
+    preventDefault: noop,
+    initEvent: function(type, bubbles, cancelable) {
+      this.type = type;
+      this.bubbles = bubbles;
+      this.cancelable = cancelable;
+    }
   };
 
   tabris._addDOMEventTargetMethods = function(target) {

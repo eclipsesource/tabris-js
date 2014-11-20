@@ -22,18 +22,22 @@
 
     function createTimer(fn, delay, repeat) {
       var taskId = taskSequence++;
-      var timer = tabris.create("_Timer", {
-        delay: delay,
-        repeat: repeat
-      }).on("Run", function() {
-        fn.call();
-        if (!repeat) {
-          timer.dispose();
-          delete timers[taskId];
-        }
+      // If tabris is not ready, create the timer on load.
+      // However, clearTimeout won't work until after load.
+      tabris.load(function() {
+        var timer = tabris.create("_Timer", {
+          delay: delay,
+          repeat: repeat
+        }).on("Run", function() {
+          fn.call();
+          if (!repeat) {
+            timer.dispose();
+            delete timers[taskId];
+          }
+        });
+        timer.call("start");
+        timers[taskId] = timer;
       });
-      timer.call("start");
-      timers[taskId] = timer;
       return taskId;
     }
 

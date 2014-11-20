@@ -54,6 +54,16 @@ describe("WindowTimers", function() {
         expect(createCall).toBeDefined();
       });
 
+      it("creates native Timer when tabris is being started", function() {
+        tabris._ready = false;
+        taskId = target.setTimeout(callback, delay);
+
+        tabris._start(nativeBridge);
+
+        createCall = nativeBridge.calls({op: "create", type: "tabris.Timer"})[0];
+        expect(createCall).toBeDefined();
+      });
+
       it("passes arguments to Timer creation", function() {
         expect(createCall.properties.delay).toBe(delay);
         expect(createCall.properties.repeat).toBe(false);

@@ -47,6 +47,20 @@ describe("DOMEvents", function() {
 
   });
 
+  describe("Event.prototype.initEvent", function() {
+
+    var event = new tabris.DOMEvent();
+
+    it("sets the type, bubbles, cancelable", function() {
+      event.initEvent("foo", true, true);
+
+      expect(event.type).toBe("foo");
+      expect(event.bubbles).toBe(true);
+      expect(event.cancelable).toBe(true);
+    });
+
+  });
+
   describe("addDOMEventTargetMethods", function() {
 
     it("adds methods to target", function() {

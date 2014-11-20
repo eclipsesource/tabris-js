@@ -17,9 +17,14 @@
 
     _loadFunctions: [],
     _proxies: {},
+    _ready: false,
 
     load: function(fn) {
-      tabris._loadFunctions.push(fn);
+      if (tabris._ready) {
+        fn.call();
+      } else {
+        tabris._loadFunctions.push(fn);
+      }
     },
 
     create: function(type, properties) {
@@ -49,12 +54,18 @@
     },
 
     _start: function(client) {
+      // temporary workaround until all platforms support this correctly:
+      client.runInThisContext = client.runInThisContext || function(source) {
+        /* jshint evil: true*/
+        window.eval(source);
+      };
       tabris._nativeBridge = new tabris.NativeBridge(client);
       var i = 0;
       while (i < tabris._loadFunctions.length) {
         tabris._loadFunctions[i++].call();
       }
       tabris.trigger("flush");
+      tabris._ready = true;
     },
 
     _notify: function(id, event, param) {
