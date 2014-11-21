@@ -54,10 +54,10 @@
     },
 
     _start: function(client) {
-      // temporary workaround until all platforms support this correctly:
-      client.runInThisContext = client.runInThisContext || function(source) {
-        /* jshint evil: true*/
-        window.eval(source);
+      // TODO temporary workaround until all platforms support runInThisContext correctly
+      client.runInThisContext = function(source) {
+        /*jshint evil: true */
+        return window.eval(source);
       };
       tabris._nativeBridge = new tabris.NativeBridge(client);
       var i = 0;

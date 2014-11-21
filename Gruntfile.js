@@ -28,7 +28,8 @@ module.exports = function(grunt) {
         'test/**/*.js',
         'examples/**/*.js',
         'snippets/**/*.js',
-        '!**/lib/**/*.js'
+        '!**/lib/**/*.js',
+        '!**/node_modules/**/*.js'
       ]
     },
     jasmine: {
@@ -55,6 +56,7 @@ module.exports = function(grunt) {
                      'Tabris.js',
                      'NativeBridge.js',
                      'Events.js',
+                     'Module.js',
                      'Proxy.js',
                      'Widgets.js',
                      'Animation.js',
