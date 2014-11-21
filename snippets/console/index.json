@@ -4,7 +4,7 @@
   "description": "Print messages to the developer console using different log levels",
   "resources": [
     {
-      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+      "src": "https://tabrisjs.com/downloads/nightly/tabris.min.js"
     },
     {
       "src": "console.js"

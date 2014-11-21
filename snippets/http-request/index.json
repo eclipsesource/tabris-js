@@ -4,7 +4,7 @@
   "description": "Use XMLHttpRequest to fetch JSON data from a web service",
   "resources": [
     {
-      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+      "src": "https://tabrisjs.com/downloads/nightly/tabris.min.js"
     },
     {
       "src": "http-request.js"

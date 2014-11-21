@@ -4,7 +4,7 @@
   "description": "Create a combo box to select a string from a list",
   "resources": [
     {
-      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+      "src": "https://tabrisjs.com/downloads/nightly/tabris.min.js"
     },
     {
       "src": "combo.js"

@@ -4,7 +4,7 @@
   "description": "Layout a widget with a fixed size and position",
   "resources": [
     {
-      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+      "src": "https://tabrisjs.com/downloads/nightly/tabris.min.js"
     },
     {
       "src": "layout.js"

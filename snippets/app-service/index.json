@@ -4,7 +4,7 @@
   "description": "Attach listeners to Pause and Resume events and handle back navigation",
   "resources": [
     {
-      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+      "src": "https://tabrisjs.com/downloads/nightly/tabris.min.js"
     },
     {
       "src": "app-service.js"

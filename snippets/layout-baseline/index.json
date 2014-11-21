@@ -4,7 +4,7 @@
   "description": "Align widgets on their baseline",
   "resources": [
     {
-      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+      "src": "https://tabrisjs.com/downloads/nightly/tabris.min.js"
     },
     {
       "src": "layout-baseline.js"
