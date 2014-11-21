@@ -4,7 +4,7 @@
   "description": "Demonstrates using the tabris.js timer with the window.timer API",
   "resources": [
     {
-      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
+      "src": "https://tabrisjs.com/downloads/nightly/tabris.min.js"
     },
     {
       "src": "timer.js"
