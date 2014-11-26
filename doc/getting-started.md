@@ -2,11 +2,9 @@
 Welcome to tabris.js, the framework for developing native apps in JavaScript. For getting started you should log in to https://tabrisjs.com. It provides you with documentation and integrates with the tabris.js App.
 
 ## Installing the tabris.js developer app
-For the iOS app you will have to send us the UDID of your iOS device ([here is how you find it](http://whatsmyudid.com/)). We will move the new iOS TestFlight Beta service shortly. Please use [this form](https://tabrisjs.com/developer-apps) to send us the required information.
+The tabris.js developer apps are available for free on the Apple App Store and Google Play respectively. Simply follow the links below or search for "tabris.js" in the store on your mobile device.
 
-For Android simply use the Google play store. 
-
-[![tabris.js on Google play](https://tabrisjs.com/assets/img/google-batch.png)](https://play.google.com/store/apps/details?id=com.eclipsesource.tabris.js)
+[![tabris.js on Google play](https://tabrisjs.com/assets/img/playstore-badge.png)](https://play.google.com/store/apps/details?id=com.eclipsesource.tabris.js) [![tabris.js on Apple App Store](https://tabrisjs.com/assets/img/appstore-badge.png)](https://itunes.apple.com/us/app/tabris.js/id939600018?mt=8) 
 
 
 ## Explore
