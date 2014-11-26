@@ -10,20 +10,37 @@
     _checkProperty: true
   });
 
-  tabris._addDeviceMethods = function(target) {
-
-    if (!("devicePixelRatio" in target)) {
-      Object.defineProperty(target, "devicePixelRatio", {
-        get: function() {
-          return tabris("_Device").get("scaleFactor");
-        },
-        set: function() {}
+  tabris._addDeviceObject = function(target) {
+    if (!("device" in target)) {
+      var dev = {};
+      ["model", "platform", "version"].forEach(function(name) {
+        defineReadOnlyProperty(dev, name, function() {
+          return tabris("_Device").get(name);
+        });
+      });
+      defineReadOnlyProperty(target, "device", function() {
+        return dev;
       });
     }
-
   };
 
+  tabris._addDeviceMethods = function(target) {
+    if (!("devicePixelRatio" in target)) {
+      defineReadOnlyProperty(target, "devicePixelRatio", function() {
+        return tabris("_Device").get("scaleFactor");
+      });
+    }
+  };
+
+  function defineReadOnlyProperty(target, name, getter) {
+    Object.defineProperty(target, name, {
+      get: getter,
+      set: function() {}
+    });
+  }
+
   if (typeof window !== "undefined") {
+    tabris._addDeviceObject(window);
     tabris._addDeviceMethods(window);
   }
 
