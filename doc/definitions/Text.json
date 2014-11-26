@@ -22,13 +22,18 @@
     }
   },
   "events": {
-    "focus": {
-      "description": "Fired when the widget gains focus."
+    "accept": {
+      "description": "Fired when a text input has been finished by pressing the keyboard's Enter key. The label of this key may vary depending on the platform and locale."
     },
     "blur": {
       "description": "Fired when the widget lost focus."
     },
-    "accept": {}
+    "focus": {
+      "description": "Fired when the widget gains focus."
+    },
+    "change:text": {
+      "description": "Fired when the text property changes."
+    }
   },
   "links": [
     {

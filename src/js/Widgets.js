@@ -115,8 +115,18 @@
       this._setPropertyNative("style", style);
       return result;
     },
-    _listen: {focus: "FocusIn", blur: "FocusOut", accept: "DefaultSelection"},
-    _trigger: {FocusIn: "focus", FocusOut: "blur", DefaultSelection: "accept"},
+    _listen: {
+      focus: "FocusIn",
+      blur: "FocusOut",
+      accept: "DefaultSelection",
+      "change:text": "Modify"
+    },
+    _trigger: {
+      FocusIn: "focus",
+      FocusOut: "blur",
+      DefaultSelection: "accept",
+      Modify: "change:text"
+    },
     _checkProperty: {type: true, text: true, message: true, editable: true, textLimit: true}
   });
 
