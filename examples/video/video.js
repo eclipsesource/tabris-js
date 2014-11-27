@@ -1,8 +1,8 @@
 // This example uses internal API that is likely going to change. The internal API is listed below:
-tabris.Video._checkProperty.playback=true;
-tabris.Video._checkProperty.controls_visible=true;
-tabris.Video._checkProperty.repeat=true;
-tabris.Video._listen.Playback=true;
+tabris.Video._checkProperty.playback = true;
+tabris.Video._checkProperty.controls_visible = true;
+tabris.Video._checkProperty.repeat = true;
+tabris.Video._listen.Playback = true;
 
 tabris.load(function() {
 
@@ -92,7 +92,7 @@ tabris.load(function() {
   page.open();
 
   function togglePlay(playing) {
-    if(playing) {
+    if (playing) {
       playButton.set("enabled", false);
       setButtonsEnabledState([pauseButton, stopButton], true);
     } else {

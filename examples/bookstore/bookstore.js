@@ -178,8 +178,9 @@ tabris.load(function() {
       text: "Book covers come under CC BY 2.0",
       layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: PAGE_MARGIN}
     }).appendTo(page);
+    var url = "https://www.flickr.com/photos/ajourneyroundmyskull/sets/72157626894978086/";
     var linkLabel = tabris.create("Label", {
-      text: "<a href=\"https://www.flickr.com/photos/ajourneyroundmyskull/sets/72157626894978086/\">Covers on flickr</a>",
+      text: "<a href=\"" + url + "\">Covers on flickr</a>",
       markupEnabled: true,
       layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: [settingsLabel, 10]}
     }).appendTo(page);

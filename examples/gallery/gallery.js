@@ -46,7 +46,7 @@ tabris.load(function() {
 
   var fullImage = tabris.create("ImageView", {
     layoutData: {top: 0, bottom: 0, left: 0, right: 0},
-    image: {src: "images/" + imageNames[0] + ".jpg" },
+    image: {src: "images/" + imageNames[0] + ".jpg"},
     scaleMode: "auto"
   }).appendTo(page);
 

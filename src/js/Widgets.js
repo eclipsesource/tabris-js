@@ -10,7 +10,8 @@
     members._listen = util.extend({}, tabris.registerWidget._defaultListen, members._listen || {});
     members._trigger = util.extend({}, tabris.registerWidget._defaultTrigger, members._trigger || {});
     if (members._checkProperty !== true) {
-      members._checkProperty = util.extend({}, tabris.registerWidget._defaultCheckProperty, members._checkProperty || {});
+      var defaultCheckProperty = tabris.registerWidget._defaultCheckProperty;
+      members._checkProperty = util.extend({}, defaultCheckProperty, members._checkProperty || {});
     }
     tabris.registerType(type, members);
   };

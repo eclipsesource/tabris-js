@@ -35,7 +35,7 @@
       },
       initializeCell: function(value) {
         this._initializeCell = value;
-      },
+      }
     },
 
     _getProperty: {

@@ -25,7 +25,6 @@
   ],
   "disallowKeywords": ["with"],
   "requireOperatorBeforeLineBreak": true,
-  "requireCamelCaseOrUpperCaseIdentifiers": true,
   "requireSpaceAfterKeywords": [
     "if",
     "else",
@@ -37,13 +36,7 @@
     "try",
     "catch"
   ],
-  "requireSpaceBeforeBinaryOperators": [
-    "=", "+=", "-=", "*=", "/=", "%=", "<<=", ">>=", ">>>=",
-    "&=", "|=", "^=", "+=",
-    "+", "-", "*", "/", "%", "<<", ">>", ">>>", "&",
-    "|", "^", "&&", "||", "===", "==", ">=",
-    "<=", "<", ">", "!=", "!=="
-  ],
+  "requireSpaceBeforeBinaryOperators": true,
   "requireSpaceAfterBinaryOperators": true,
   "requireSpacesInConditionalExpression": true,
   "requireSpaceBeforeBlockStatements": true,
@@ -59,10 +52,7 @@
   "disallowSpacesInsideArrayBrackets": "all",
   "disallowSpacesInsideParentheses": true,
   "disallowMultipleLineBreaks": true,
-  "disallowNewlineBeforeBlockStatements": true,
-  "requireSpaceAfterLineComment": true,
   "disallowKeywordsOnNewLine": ["else"],
   "disallowTrailingComma": true,
-  "disallowQuotedKeysInObjects": "allButReserved",
   "requireBlocksOnNewline": 1
 }

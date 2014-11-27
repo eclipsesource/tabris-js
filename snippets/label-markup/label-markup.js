@@ -10,7 +10,7 @@ tabris.load(function() {
 
   tabris.create("Label", {
     layoutData: {left: 10, top: 10, right: 10},
-    text: "Label with markup not enabled:\n" + markup,
+    text: "Label with markup not enabled:\n" + markup
   }).appendTo(page);
 
   tabris.create("Label", {

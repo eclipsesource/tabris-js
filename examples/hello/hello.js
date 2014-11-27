@@ -7,7 +7,7 @@ tabris.load(function() {
 
   var button = tabris.create("Button", {
     text: "Native Widgets",
-    layoutData: { centerX: 0, top: 100 }
+    layoutData: {centerX: 0, top: 100}
   }).on("selection", function() {
     label.set("text", "Totally Rock!");
   }).appendTo(page);
