@@ -39,7 +39,7 @@
     _getProperty: {
       paging: function() {return !!this._paging;},
       selection: function() {
-        var selection = this._getNativeProperty("selection");
+        var selection = this._getPropertyNative("selection");
         return selection ? tabris(selection)._tab : null;
       }
     },

@@ -214,11 +214,11 @@
     _getProperty: function(name) {
       this._checkProperty(name);
       var getProperty = this.constructor && this.constructor._getProperty && this.constructor._getProperty[name];
-      var result = getProperty ? getProperty.call(this) : this._getNativeProperty(name);
+      var result = getProperty ? getProperty.call(this) : this._getPropertyNative(name);
       return this._decodeProperty(name, result);
     },
 
-    _getNativeProperty: function(name) {
+    _getPropertyNative: function(name) {
       return tabris._nativeBridge.get(this.id, name);
     },
 
