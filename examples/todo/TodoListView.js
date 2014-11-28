@@ -28,7 +28,6 @@ todo.TodoListView = Backbone.View.extend({
 
   createWidgets: function() {
     this.input = tabris.create("Text", {
-      style: ["SINGLE", "BORDER"],
       message: todo.texts.inputMessage
     });
     this.markAllCheckbox = tabris.create("CheckBox", {
