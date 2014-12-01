@@ -34,7 +34,7 @@
       if (!(type in tabris)) {
         throw new Error("Unknown type " + type);
       }
-      return new tabris[type]()._create(properties);
+      return new tabris[type]()._create(properties || {});
     },
 
     registerType: function(type, members) {

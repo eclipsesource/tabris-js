@@ -3,6 +3,10 @@
   "description": "A widget that can switch between [tabs](#Tab).",
   "include": ["Widget"],
   "properties": {
+    "barPosition": {
+      "type": "string:top|bottom|auto?auto",
+      "description": "The placement of the tab titles. When set to \"auto\", the position is platform dependent. Can only be set in the `create` method."
+    },
     "paging": {
       "type": "boolean",
       "description": "Enables swiping through tabs."

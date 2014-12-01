@@ -110,7 +110,7 @@ tabris.load(function() {
   }
 
   function createTabFolder() {
-    var tabFolder = tabris.create("TabFolder", {style: ["TOP"], paging: true});
+    var tabFolder = tabris.create("TabFolder", {barPosition: "top", paging: true});
     var relatedTab = tabris.create("Tab", {title: "Related"}).appendTo(tabFolder);
     createBooksList(books).appendTo(relatedTab);
     var commentsTab = tabris.create("Tab", {title: "Comments"}).appendTo(tabFolder);

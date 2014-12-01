@@ -14,6 +14,16 @@
 
     _type: "rwt.widgets.TabFolder",
 
+    _create: function(properties) {
+      this.super("_create", util.omit(properties, "barPosition"));
+      if (properties.barPosition === "top") {
+        this._setPropertyNative("style", ["TOP"]);
+      } else if (properties.barPosition === "bottom") {
+        this._setPropertyNative("style", ["BOTTOM"]);
+      }
+      return this;
+    },
+
     _checkProperty: {
       paging: tabris.PropertyChecks.boolean,
       selection: tabris.PropertyChecks.natural
