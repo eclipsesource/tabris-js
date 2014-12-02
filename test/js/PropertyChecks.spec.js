@@ -98,6 +98,10 @@ describe("PropertyChecks:", function() {
       expect(console.warn).not.toHaveBeenCalled();
     });
 
+    it("converts given string to image object with src", function() {
+      expect(check("foo.jpg")).toEqual({src: "foo.jpg"});
+    });
+
     it("fails if image value is null", function() {
       expect(function() {
         check(null);

@@ -14,6 +14,9 @@
   tabris.PropertyChecks = {
 
     image: function(image) {
+      if (typeof image === "string") {
+        image = {src: image};
+      }
       if (!image || typeof image !== "object") {
         throw new Error("Not an image: " + image);
       }
