@@ -15,7 +15,7 @@
     _type: "rwt.widgets.TabFolder",
 
     _checkProperty: {
-      paging: true,
+      paging: tabris.PropertyChecks.boolean,
       selection: true
     },
 

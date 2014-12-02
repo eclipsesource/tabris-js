@@ -8,12 +8,12 @@ tabris.registerType("Action", {
   _type: "tabris.Action",
 
   _checkProperty: {
-    enabled: true,
+    enabled: tabris.PropertyChecks.boolean,
     foreground: true,
     image: tabris.PropertyChecks.image,
     placementPriority: true,
     title: true,
-    visible: true
+    visible: tabris.PropertyChecks.boolean
   },
 
   _setProperty: {

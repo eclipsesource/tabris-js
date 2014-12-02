@@ -35,8 +35,8 @@
       Resize: "change:bounds"
     },
     _defaultCheckProperty: {
-      enabled: true,
-      visible: true,
+      enabled: checks.boolean,
+      visible: checks.boolean,
       layoutData: checks.layoutData,
       font: true,
       backgroundImage: checks.image,
@@ -45,7 +45,7 @@
       foreground: true,
       opacity: true,
       transform: true,
-      highlightOnTouch: true
+      highlightOnTouch: checks.boolean
     },
     _defaultSetProperty: {
       foreground: function(value) {
@@ -116,7 +116,7 @@
     _internalProperties: {style: ["CHECK"]},
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
-    _checkProperty: {text: true, selection: true}
+    _checkProperty: {text: true, selection: checks.boolean}
   });
 
   tabris.registerWidget("Combo", {
@@ -139,7 +139,7 @@
   tabris.registerWidget("Label", {
     _type: "rwt.widgets.Label",
     _internalProperties: {style: ["WRAP"]},
-    _checkProperty: {alignment: true, markupEnabled: true, text: true}
+    _checkProperty: {alignment: true, markupEnabled: checks.boolean, text: true}
   });
 
   tabris.registerWidget("ProgressBar", {
@@ -152,7 +152,7 @@
     _internalProperties: {style: ["RADIO"]},
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
-    _checkProperty: {text: true, selection: true}
+    _checkProperty: {text: true, selection: checks.boolean}
   });
 
   tabris.registerWidget("Slider", {
@@ -182,7 +182,7 @@
       DefaultSelection: "accept",
       Modify: "change:text"
     },
-    _checkProperty: {type: true, text: true, message: true, editable: true, textLimit: true}
+    _checkProperty: {type: true, text: true, message: true, editable: checks.boolean, textLimit: true}
   });
 
   var textTypeToStyle = {
@@ -197,7 +197,7 @@
     _internalProperties: {style: ["TOGGLE"]},
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
-    _checkProperty: {text: true, image: true, selection: true, alignment: true}
+    _checkProperty: {text: true, image: true, selection: checks.boolean, alignment: true}
   });
 
   tabris.registerWidget("Video", {

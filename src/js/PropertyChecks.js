@@ -13,6 +13,10 @@
 
   tabris.PropertyChecks = {
 
+    boolean: function(bool) {
+      return !!bool;
+    },
+
     image: function(image) {
       if (typeof image === "string") {
         image = {src: image};

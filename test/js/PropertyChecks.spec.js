@@ -163,4 +163,32 @@ describe("PropertyChecks:", function() {
 
   });
 
+  describe("boolean", function() {
+
+    var check = tabris.PropertyChecks.boolean;
+
+    it("passes through true", function() {
+      expect(check(true)).toBe(true);
+    });
+
+    it("passes through false", function() {
+      expect(check(false)).toBe(false);
+    });
+
+    it("translates falsy values", function() {
+      expect(check(null)).toBe(false);
+      expect(check("")).toBe(false);
+      expect(check(undefined)).toBe(false);
+      expect(check(0)).toBe(false);
+    });
+
+    it("translates truthy values", function() {
+      expect(check(1)).toBe(true);
+      expect(check({})).toBe(true);
+      expect(check("true")).toBe(true);
+      expect(check("false")).toBe(true);
+    });
+
+  });
+
 });

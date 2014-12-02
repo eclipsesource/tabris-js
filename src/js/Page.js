@@ -18,7 +18,11 @@
 
     _supportsChildren: true,
 
-    _checkProperty: {image: tabris.PropertyChecks.image, title: true, topLevel: true},
+    _checkProperty: {
+      image: tabris.PropertyChecks.image,
+      title: true,
+      topLevel: tabris.PropertyChecks.boolean
+    },
 
     _create: function(properties) {
       this.super("_create",  util.extend(util.omit(properties, pageProperties), {
