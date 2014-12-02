@@ -13,11 +13,11 @@ describe("Widgets", function() {
     tabris._start(nativeBridge);
   });
 
-  describe("tabris.registerWidget", function() {
+  afterEach(function() {
+    delete tabris.TestType;
+  });
 
-    afterEach(function() {
-      delete tabris.TestType;
-    });
+  describe("tabris.registerWidget", function() {
 
     it("adds default listen copy", function() {
       tabris.registerWidget("TestType", {});
@@ -29,6 +29,18 @@ describe("Widgets", function() {
       tabris.registerWidget("TestType", {});
       expect(tabris.TestType._trigger).toEqual(tabris.registerWidget._defaultTrigger);
       expect(tabris.TestType._trigger).not.toBe(tabris.registerWidget._defaultTrigger);
+    });
+
+    it("adds default setProperty copy", function() {
+      tabris.registerWidget("TestType", {});
+      expect(tabris.TestType._setProperty).toEqual(tabris.registerWidget._defaultSetProperty);
+      expect(tabris.TestType._setProperty).not.toBe(tabris.registerWidget._defaultSetProperty);
+    });
+
+    it("adds default getProperty copy", function() {
+      tabris.registerWidget("TestType", {});
+      expect(tabris.TestType._getProperty).toEqual(tabris.registerWidget._defaultGetProperty);
+      expect(tabris.TestType._getProperty).not.toBe(tabris.registerWidget._defaultGetProperty);
     });
 
     it("extends default listen", function() {
@@ -64,6 +76,138 @@ describe("Widgets", function() {
     it("keeps checkProperty true", function() {
       tabris.registerWidget("TestType", {_checkProperty: true});
       expect(tabris.TestType._checkProperty).toBe(true);
+    });
+
+  });
+
+  describe("default encoding", function() {
+
+    var widget;
+
+    beforeEach(function() {
+      tabris.registerWidget("TestType", {});
+      widget = tabris.create("TestType");
+      nativeBridge.resetCalls();
+    });
+
+    it("translates widgets to ids in layoutData", function() {
+      var other = new tabris.Proxy("other-id");
+
+      widget.set("layoutData", {left: 23, right: other, top: [other, 42]});
+
+      var call = nativeBridge.calls({op: "set"})[0];
+      var expected = {left: 23, right: other.id, top: [other.id, 42]};
+      expect(call.properties.layoutData).toEqual(expected);
+    });
+
+    it("translation does not modify layoutData", function() {
+      var other = new tabris.Proxy("other-id");
+      var layoutData = {left: 23, right: other, top: [other, 42]};
+
+      widget.set({layoutData: layoutData});
+
+      expect(layoutData.top).toEqual([other, 42]);
+    });
+
+    it("translates foreground and background colors to arrays", function() {
+      widget.set({foreground: "red", background: "rgba(1, 2, 3, 0.5)"});
+
+      var call = nativeBridge.calls({op: "set"})[0];
+      expect(call.properties.foreground).toEqual([255, 0, 0, 255]);
+      expect(call.properties.background).toEqual([1, 2, 3, 128]);
+    });
+
+    it("translates font string to array", function() {
+      widget.set({font: "12px Arial"});
+
+      var call = nativeBridge.calls({op: "set"})[0];
+      expect(call.properties.font).toEqual([["Arial"], 12, false, false]);
+    });
+
+    it("translates image and backgroundImage to array", function() {
+      widget.set({
+        image: {src: "foo", width: 23, height: 42},
+        backgroundImage: {src: "bar", width: 23, height: 42}
+      });
+
+      var call = nativeBridge.calls({op: "set"})[0];
+      expect(call.properties.image).toEqual(["foo", 23, 42, null]);
+      expect(call.properties.backgroundImage).toEqual(["bar", 23, 42, null]);
+    });
+
+    it("translates bounds to array", function() {
+      widget.set("bounds", {left: 1, top: 2, width: 3, height: 4});
+
+      var call = nativeBridge.calls({op: "set"})[0];
+      expect(call.properties.bounds).toEqual([1, 2, 3, 4]);
+    });
+
+  });
+
+  describe("default decoding", function() {
+
+    var widget;
+
+    beforeEach(function() {
+      tabris.registerWidget("TestType", {});
+      widget = tabris.create("TestType");
+      nativeBridge.resetCalls();
+    });
+
+    it("translates foreground to string", function() {
+      spyOn(nativeBridge, "get").and.returnValue([170, 255, 0, 128]);
+
+      var result = widget.get("foreground");
+
+      expect(result).toBe("rgba(170, 255, 0, 0.5)");
+    });
+
+    it("translates background to string", function() {
+      spyOn(nativeBridge, "get").and.returnValue([170, 255, 0, 128]);
+
+      var result = widget.get("background");
+
+      expect(result).toBe("rgba(170, 255, 0, 0.5)");
+    });
+
+    it("translates font to string", function() {
+      spyOn(nativeBridge, "get").and.returnValue([["Arial"], 12, true, true]);
+
+      var result = widget.get("font");
+
+      expect(result).toBe("italic bold 12px Arial");
+    });
+
+    it("translates image to object", function() {
+      spyOn(nativeBridge, "get").and.returnValue(["foo", 23, 42]);
+
+      var result = widget.get("image");
+
+      expect(result).toEqual({src: "foo", width: 23, height: 42});
+    });
+
+    it("translates bounds to object", function() {
+      spyOn(nativeBridge, "get").and.returnValue([1, 2, 3, 4]);
+
+      var result = widget.get("bounds");
+
+      expect(result).toEqual({left: 1, top: 2, width: 3, height: 4});
+    });
+
+    it("translates bounds to object", function() {
+      spyOn(nativeBridge, "get").and.returnValue([1, 2, 3, 4]);
+
+      var result = widget.get("bounds");
+
+      expect(result).toEqual({left: 1, top: 2, width: 3, height: 4});
+    });
+
+    it("translates backgroundImage to object", function() {
+      spyOn(nativeBridge, "get").and.returnValue(["foo", 23, 42]);
+
+      var result = widget.get("backgroundImage");
+
+      expect(result).toEqual({src: "foo", width: 23, height: 42});
     });
 
   });

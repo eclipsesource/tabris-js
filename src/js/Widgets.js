@@ -6,11 +6,14 @@
 (function() {
 
   var checks = tabris.PropertyChecks;
+  var encoding = tabris.PropertyEncoding;
 
   tabris.registerWidget = function(type, members) {
     members = util.clone(members);
     members._listen = util.extend({}, tabris.registerWidget._defaultListen, members._listen || {});
     members._trigger = util.extend({}, tabris.registerWidget._defaultTrigger, members._trigger || {});
+    members._setProperty = util.extend({}, tabris.registerWidget._defaultSetProperty, members._setProperty || {});
+    members._getProperty = util.extend({}, tabris.registerWidget._defaultGetProperty, members._getProperty || {});
     if (members._checkProperty !== true) {
       var defaultCheckProperty = tabris.registerWidget._defaultCheckProperty;
       members._checkProperty = util.extend({}, defaultCheckProperty, members._checkProperty || {});
@@ -43,6 +46,49 @@
       opacity: true,
       transform: true,
       highlightOnTouch: true
+    },
+    _defaultSetProperty: {
+      foreground: function(value) {
+        this._setPropertyNative("foreground", encoding.encodeColor(value));
+      },
+      background: function(value) {
+        this._setPropertyNative("background", encoding.encodeColor(value));
+      },
+      font: function(value) {
+        this._setPropertyNative("font", encoding.encodeFont(value));
+      },
+      image: function(value) {
+        this._setPropertyNative("image", encoding.encodeImage(value));
+      },
+      backgroundImage: function(value) {
+        this._setPropertyNative("backgroundImage", encoding.encodeImage(value));
+      },
+      layoutData: function(value) {
+        this._setPropertyNative("layoutData", encoding.encodeLayoutData(value));
+      },
+      bounds: function(value) {
+        this._setPropertyNative("bounds", encoding.encodeBounds(value));
+      }
+    },
+    _defaultGetProperty: {
+      foreground: function() {
+        return encoding.decodeColor(this._getPropertyNative("foreground"));
+      },
+      background: function() {
+        return encoding.decodeColor(this._getPropertyNative("background"));
+      },
+      font: function() {
+        return encoding.decodeFont(this._getPropertyNative("font"));
+      },
+      image: function() {
+        return encoding.decodeImage(this._getPropertyNative("image"));
+      },
+      backgroundImage: function() {
+        return encoding.decodeImage(this._getPropertyNative("backgroundImage"));
+      },
+      bounds: function() {
+        return encoding.decodeBounds(this._getPropertyNative("bounds"));
+      }
     }
   });
 

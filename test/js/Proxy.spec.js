@@ -339,62 +339,6 @@ describe("Proxy", function() {
         expect(console.warn).not.toHaveBeenCalled();
       });
 
-      it("translates foreground to string", function() {
-        spyOn(nativeBridge, "get").and.returnValue([170, 255, 0, 128]);
-
-        var result = proxy.get("foreground");
-
-        expect(result).toBe("rgba(170, 255, 0, 0.5)");
-      });
-
-      it("translates background to string", function() {
-        spyOn(nativeBridge, "get").and.returnValue([170, 255, 0, 128]);
-
-        var result = proxy.get("background");
-
-        expect(result).toBe("rgba(170, 255, 0, 0.5)");
-      });
-
-      it("translates font to string", function() {
-        spyOn(nativeBridge, "get").and.returnValue([["Arial"], 12, true, true]);
-
-        var result = proxy.get("font");
-
-        expect(result).toBe("italic bold 12px Arial");
-      });
-
-      it("translates image to object", function() {
-        spyOn(nativeBridge, "get").and.returnValue(["foo", 23, 42]);
-
-        var result = proxy.get("image");
-
-        expect(result).toEqual({src: "foo", width: 23, height: 42});
-      });
-
-      it("translates bounds to object", function() {
-        spyOn(nativeBridge, "get").and.returnValue([1, 2, 3, 4]);
-
-        var result = proxy.get("bounds");
-
-        expect(result).toEqual({left: 1, top: 2, width: 3, height: 4});
-      });
-
-      it("translates bounds to object", function() {
-        spyOn(nativeBridge, "get").and.returnValue([1, 2, 3, 4]);
-
-        var result = proxy.get("bounds");
-
-        expect(result).toEqual({left: 1, top: 2, width: 3, height: 4});
-      });
-
-      it("translates backgroundImage to object", function() {
-        spyOn(nativeBridge, "get").and.returnValue(["foo", 23, 42]);
-
-        var result = proxy.get("backgroundImage");
-
-        expect(result).toEqual({src: "foo", width: 23, height: 42});
-      });
-
       it("fails on disposed object", function() {
         proxy.dispose();
 
@@ -474,6 +418,16 @@ describe("Proxy", function() {
         expect(console.warn).toHaveBeenCalledWith(message);
       });
 
+      it("raises a warning if _setProperty is a function that throws", function() {
+        tabris.TestType._setProperty.knownProperty = function() {
+          throw new Error("My Error");
+        };
+        proxy.set("knownProperty", true);
+
+        var message = "TestType: Failed to set property \"knownProperty\" value: My Error";
+        expect(console.warn).toHaveBeenCalledWith(message);
+      });
+
       it("still sets the value if _propertyCheck is a function that throws", function() {
         // TODO: This will be flipped later to ignore the incorrect value
         tabris.TestType._checkProperty.knownProperty = function() {
@@ -495,65 +449,6 @@ describe("Proxy", function() {
         expect(call.properties.knownProperty).toBe("foo");
       });
 
-      it("translates widgets to ids in layoutData", function() {
-        var other = new tabris.Proxy("other-id");
-
-        proxy.set("layoutData", {left: 23, right: other, top: [other, 42]});
-
-        var call = nativeBridge.calls({op: "set"})[0];
-        var expected = {left: 23, right: other.id, top: [other.id, 42]};
-        expect(call.properties.layoutData).toEqual(expected);
-      });
-
-      it("translation does not modify layoutData", function() {
-        var other = new tabris.Proxy("other-id");
-        var layoutData = {left: 23, right: other, top: [other, 42]};
-
-        proxy.set({layoutData: layoutData});
-
-        expect(layoutData.top).toEqual([other, 42]);
-      });
-
-      it("translates foreground and background colors to arrays", function() {
-        proxy.set({foreground: "red", background: "rgba(1, 2, 3, 0.5)"});
-
-        var call = nativeBridge.calls({op: "set"})[0];
-        expect(call.properties.foreground).toEqual([255, 0, 0, 255]);
-        expect(call.properties.background).toEqual([1, 2, 3, 128]);
-      });
-
-      it("translates font string to array", function() {
-        proxy.set({font: "12px Arial"});
-
-        var call = nativeBridge.calls({op: "set"})[0];
-        expect(call.properties.font).toEqual([["Arial"], 12, false, false]);
-      });
-
-      it("translates image and backgroundImage to array", function() {
-        proxy.set({
-          image: {src: "foo", width: 23, height: 42},
-          backgroundImage: {src: "bar", width: 23, height: 42}
-        });
-
-        var call = nativeBridge.calls({op: "set"})[0];
-        expect(call.properties.image).toEqual(["foo", 23, 42, null]);
-        expect(call.properties.backgroundImage).toEqual(["bar", 23, 42, null]);
-      });
-
-      it("skips properties that fail to encode", function() {
-        proxy.set({foo: 23, foreground: "unknown"});
-
-        var call = nativeBridge.calls({op: "set"})[0];
-        expect(call.properties).toEqual({foo: 23});
-      });
-
-      it("issues warning for properties that fail to encode", function() {
-        proxy.set({foo: 23, foreground: "unknown"});
-
-        expect(window.console.warn)
-            .toHaveBeenCalledWith("Unsupported foreground value: invalid color: unknown");
-      });
-
       it("returns self to allow chaining", function() {
         var result = proxy.set("foo", 23);
 
@@ -566,13 +461,6 @@ describe("Proxy", function() {
         expect(function() {
           proxy.set("foo", 23);
         }).toThrowError("Object is disposed");
-      });
-
-      it("translates bounds to array", function() {
-        proxy.set("bounds", {left: 1, top: 2, width: 3, height: 4});
-
-        var call = nativeBridge.calls({op: "set"})[0];
-        expect(call.properties.bounds).toEqual([1, 2, 3, 4]);
       });
 
     });

@@ -16,6 +16,18 @@ tabris.registerType("Action", {
     visibility: true
   },
 
+  _setProperty: {
+    foreground: function(value) {
+      this._setPropertyNative("foreground", tabris.PropertyEncoding.encodeColor(value));
+    }
+  },
+
+  _getProperty: {
+    foreground: function() {
+      return tabris.PropertyEncoding.decodeColor(this._getPropertyNative("foreground"));
+    }
+  },
+
   _listen: {selection: "Selection"},
 
   _trigger: {

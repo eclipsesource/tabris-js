@@ -189,14 +189,13 @@
       var checkedValue = this._checkProperty(name, value);
       var setProperty = this.constructor && this.constructor._setProperty && this.constructor._setProperty[name];
       try {
-        var encodedValue = this._encodeProperty(name, checkedValue);
         if (setProperty instanceof Function) {
           setProperty.call(this, checkedValue);
         } else {
-          this._setPropertyNative(name, encodedValue);
+          this._setPropertyNative(name, tabris.PropertyEncoding.encodeProxyToId(checkedValue));
         }
       } catch (error) {
-        console.warn("Unsupported " + name + " value: " + error.message);
+        console.warn(this.type + ": Failed to set property \"" + name + "\" value: " + error.message);
       }
     },
 
@@ -222,32 +221,11 @@
     _getProperty: function(name) {
       this._checkProperty(name);
       var getProperty = this.constructor && this.constructor._getProperty && this.constructor._getProperty[name];
-      var result = getProperty ? getProperty.call(this) : this._getPropertyNative(name);
-      return this._decodeProperty(name, result);
+      return getProperty ? getProperty.call(this) : this._getPropertyNative(name);
     },
 
     _getPropertyNative: function(name) {
       return tabris._nativeBridge.get(this.id, name);
-    },
-
-    _encodeProperty: function(name, value) {
-      switch (name) {
-        case "foreground":
-        case "background":
-          return encodeColor(value);
-        case "font":
-          return encodeFont(value);
-        case "image":
-        case "backgroundImage":
-          return encodeImage(value);
-        case "images":
-          return encodeImages(value);
-        case "layoutData":
-          return encodeLayoutData(value);
-        case "bounds":
-          return encodeBounds(value);
-      }
-      return encodeProxyToId(value);
     },
 
     _getContainer: function() {
@@ -255,93 +233,15 @@
     },
 
     _setParent: function(parent) {
-      tabris._nativeBridge.set(this.id, "parent", encodeProxyToId(parent._getContainer()));
+      tabris._nativeBridge.set(this.id, "parent", tabris.PropertyEncoding.encodeProxyToId(parent._getContainer()));
       if (this._parent) {
         this._parent._removeChild(this);
       }
       this._parent = parent;
       this._parent._addChild(this);
-    },
-
-    _decodeProperty: function(name, value) {
-      switch (name) {
-        case "foreground":
-        case "background":
-          return decodeColor(value);
-        case "font":
-          return decodeFont(value);
-        case "image":
-        case "backgroundImage":
-          return decodeImage(value);
-        case "bounds":
-          return decodeBounds(value);
-        case "images":
-          return decodeImages(value);
-      }
-      return value;
     }
 
   });
-
-  function encodeColor(value) {
-    return util.colorStringToArray(value);
-  }
-
-  function encodeFont(value) {
-    return util.fontStringToArray(value);
-  }
-
-  function decodeFont(value) {
-    return util.fontArrayToString(value);
-  }
-
-  function encodeImage(value) {
-    return util.imageToArray(value);
-  }
-
-  function decodeImage(value) {
-    return util.imageFromArray(value);
-  }
-
-  function decodeBounds(value) {
-    return {left: value[0], top: value[1], width: value[2], height: value[3]};
-  }
-
-  function encodeImages(value) {
-    return value.map(function(value) {
-      return value == null ? null : util.imageToArray(value);
-    });
-  }
-
-  function decodeImages(value) {
-    return value.map(function(value) {
-      return value == null ? null : util.imageFromArray(value);
-    });
-  }
-
-  function encodeLayoutData(layoutData) {
-    var result = {};
-    for (var key in layoutData) {
-      if (Array.isArray(layoutData[key])) {
-        result[key] = layoutData[key].map(encodeProxyToId);
-      } else {
-        result[key] = encodeProxyToId(layoutData[key]);
-      }
-    }
-    return result;
-  }
-
-  function encodeBounds(bounds) {
-    return [bounds.left, bounds.top, bounds.width, bounds.height];
-  }
-
-  function encodeProxyToId(value) {
-    return value instanceof tabris.Proxy ? value.id : value;
-  }
-
-  function decodeColor(value) {
-    return util.colorArrayToString(value);
-  }
 
   var idSequence = 1;
 

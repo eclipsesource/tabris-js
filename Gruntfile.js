@@ -73,6 +73,7 @@ module.exports = function(grunt) {
           "Module.js",
           "Proxy.js",
           "PropertyChecks.js",
+          "PropertyEncoding.js",
           "Widgets.js",
           "Animation.js",
           "DOMEvents.js",

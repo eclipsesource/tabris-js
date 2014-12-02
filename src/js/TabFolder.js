@@ -5,7 +5,7 @@
 
 (function() {
 
-  tabris.registerType("_TabItem", {
+  tabris.registerWidget("_TabItem", {
     _type: "rwt.widgets.TabItem",
     _checkProperty: true
   });
