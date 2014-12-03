@@ -136,11 +136,13 @@ describe("Proxy", function() {
     });
 
     describe("calling append with a proxy", function() {
-      var child, result;
+      var child, result, listener;
 
       beforeEach(function() {
+        listener = jasmine.createSpy();
         child = tabris.create("Label", {});
         nativeBridge.resetCalls();
+        proxy.on("addchild", listener);
         result = proxy.append(child);
       });
 
@@ -152,6 +154,13 @@ describe("Proxy", function() {
 
       it("returns self to allow chaining", function() {
         expect(result).toBe(proxy);
+      });
+
+      it("notifies add listeners with arguments child, parent, event", function() {
+        var args = listener.calls.argsFor(0);
+        expect(args[0]).toBe(child);
+        expect(args[1]).toBe(proxy);
+        expect(args[2]).toEqual({});
       });
 
       it("children() contains appended child", function() {
@@ -756,6 +765,18 @@ describe("Proxy", function() {
 
         var destroyCall = nativeBridge.calls({op: "destroy", id: proxy.id})[0];
         expect(destroyCall).toBeDefined();
+      });
+
+      it("notifies parents remove listeners", function() {
+        var listener = jasmine.createSpy();
+        var parent = tabris.create("Composite").on("removechild", listener).append(proxy);
+
+        proxy.dispose();
+
+        var args = listener.calls.argsFor(0);
+        expect(args[0]).toBe(proxy);
+        expect(args[1]).toBe(parent);
+        expect(args[2]).toEqual({index: 0});
       });
 
       it("notifies dispose listeners", function() {

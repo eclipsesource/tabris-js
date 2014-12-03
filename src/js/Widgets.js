@@ -70,6 +70,7 @@
 
   tabris.registerWidget("Canvas", {
     _type: "rwt.widgets.Canvas",
+    _listen: {addchild: function() {}, removechild: function() {}},
     _supportsChildren: true
   });
 
@@ -90,6 +91,7 @@
 
   tabris.registerWidget("Composite", {
     _type: "rwt.widgets.Composite",
+    _listen: {addchild: function() {}, removechild: function() {}},
     _supportsChildren: true
   });
 

@@ -1,5 +1,14 @@
 {
   "type": "Composite",
   "description": "An empty widget that can contain other widgets.",
-  "include": ["Widget"]
+  "title": "Composite events",
+  "include": ["Widget"],
+  "events": {
+    "add": {
+      "description": "Fired when a child is added. Arguments are (child, composite, {})."
+    },
+    "remove": {
+      "description": "Fired when a child is removed. Arguments are (child, composite, {index: number})."
+    }
+  }
 }

@@ -1,0 +1,13 @@
+{
+  "resources": [
+    {
+      "src": "https://tabrisjs.com/downloads/nightly/tabris.min.js"
+    },
+    {
+      "src": "layouts.js"
+    },
+    {
+      "src": "app.js"
+    }
+  ]
+}

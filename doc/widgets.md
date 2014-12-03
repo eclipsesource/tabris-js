@@ -93,7 +93,7 @@ To be visible, a widget needs a parent. The top-level parent of every UI is a `P
 
 ### `appendTo(parent)`
 
-Appends the widget to a parent. If the widget already has a parent, it is deregistered from the actual parent and registered with the new one. Returns the widget itself.
+Appends the widget to a parent. If the widget already has a parent, it is de-registered from the actual parent and registered with the new one. Triggers an *add* event on the parent. Returns the widget itself.
 
 Parameters:
 
@@ -196,7 +196,7 @@ Parameters:
 
 ### `dispose()`
 
-Disposes of the widget, destroys all of its children widgets and triggers a *dispose* event.
+Disposes of the widget and all of its children. Triggers a *remove* event on the parent and a *dispose* event on itself.
 
 Example:
 

@@ -24,7 +24,9 @@
         } else {
           this._scrollBar.off("Selection", this._scrollBarListener, this);
         }
-      }
+      },
+      addchild: function() {},
+      removechild: function() {}
     },
 
     _create: function(properties) {

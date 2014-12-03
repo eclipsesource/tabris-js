@@ -25,6 +25,8 @@
 
     _type: "rwt.widgets.Composite",
 
+    _listen: {addchild: function() {}, removechild: function() {}},
+
     _supportsChildren: true,
 
     _properties: {

@@ -164,6 +164,7 @@
         this._children = [];
       }
       this._children.push(child);
+      this.trigger("addchild", child, this, {});
     },
 
     _removeChild: function(child) {
@@ -172,6 +173,7 @@
         if (index !== -1) {
           this._children.splice(index, 1);
         }
+        this.trigger("removechild", child, this, {index: index});
       }
     },
 

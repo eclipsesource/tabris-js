@@ -1,7 +1,7 @@
 {
   "type": "Canvas",
   "description": "An empty widget to draw graphics on. Can also contain other widgets.",
-  "include": ["Widget"],
+  "include": ["Composite"],
   "links": [
     {
       "title": "Example that shows animation on a canvas",
