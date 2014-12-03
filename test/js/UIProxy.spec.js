@@ -33,7 +33,7 @@ describe("UIProxy", function() {
     it("created Shell is active, visible, and maximized", function() {
       var shellCreate = nativeBridge.calls({op: "create", type: "rwt.widgets.Shell"})[0];
       expect(shellCreate.properties.active).toBe(true);
-      expect(shellCreate.properties.visibility).toBe(true);
+      expect(shellCreate.properties.visible).toBe(true);
       expect(shellCreate.properties.mode).toBe("maximized");
     });
 

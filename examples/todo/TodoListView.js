@@ -64,9 +64,9 @@ todo.TodoListView = Backbone.View.extend({
     var remaining = this.model.remaining().length;
     var todoCountStr = this.remainingTemplate(remaining);
     var completedStr = this.completedTemplate(done);
-    this.markAllCheckbox.set({visibility: !!this.model.length, selection: !remaining});
-    this.todoCountLabel.set({visibility: !!this.model.length, text: todoCountStr});
-    this.clearCompletedButton.set({text: completedStr, visibility: done > 0});
+    this.markAllCheckbox.set({visible: !!this.model.length, selection: !remaining});
+    this.todoCountLabel.set({visible: !!this.model.length, text: todoCountStr});
+    this.clearCompletedButton.set({text: completedStr, visible: done > 0});
   },
 
   addOne: function(todoItem) {

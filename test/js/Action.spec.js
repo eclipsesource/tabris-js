@@ -43,4 +43,41 @@ describe("Action", function() {
 
   });
 
+  describe("set", function() {
+
+    var action;
+
+    beforeEach(function() {
+      action = tabris.create("Action");
+      nativeBridge.resetCalls();
+    });
+
+    it("translates visible to visibility", function() {
+      action.set("visible", true);
+
+      var call = nativeBridge.calls({op: "set"})[0];
+      expect(call.properties.visibility).toBe(true);
+    });
+
+  });
+
+  describe("get", function() {
+
+    var action;
+
+    beforeEach(function() {
+      action = tabris.create("Action");
+      nativeBridge.resetCalls();
+    });
+
+    it("translates visible to visibility", function() {
+      spyOn(nativeBridge, "get");
+
+      action.get("visible");
+
+      expect(nativeBridge.get).toHaveBeenCalledWith(action.id, "visibility");
+    });
+
+  });
+
 });

@@ -13,18 +13,24 @@ tabris.registerType("Action", {
     image: tabris.PropertyChecks.image,
     placementPriority: true,
     title: true,
-    visibility: true
+    visible: true
   },
 
   _setProperty: {
     foreground: function(value) {
       this._setPropertyNative("foreground", tabris.PropertyEncoding.encodeColor(value));
+    },
+    visible: function(value) {
+      this._setPropertyNative("visibility", value);
     }
   },
 
   _getProperty: {
     foreground: function() {
       return tabris.PropertyEncoding.decodeColor(this._getPropertyNative("foreground"));
+    },
+    visible: function() {
+      return this._getPropertyNative("visibility");
     }
   },
 

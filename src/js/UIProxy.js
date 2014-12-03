@@ -31,7 +31,7 @@ tabris.UIProxy.prototype = {
       style: ["NO_TRIM"],
       mode: "maximized",
       active: true,
-      visibility: true
+      visible: true
     });
     tabris._shell.on("Close", function() {
       tabris._shell.dispose();

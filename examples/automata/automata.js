@@ -86,7 +86,7 @@ tabris.load(function() {
       var composite = tabris.create("Composite", {
         bounds: {left: x * CELL_SIZE, top: y * CELL_SIZE, width: CELL_SIZE, height: CELL_SIZE},
         background: "#fff",
-        visibility: alive
+        visible: alive
       });
       page.append(composite);
       cells[x][y] = {
@@ -142,7 +142,7 @@ tabris.load(function() {
           // minimze number of times we need to modify the proxy object
           if (cell.alive !== cell.lastAlive) {
             // cell.proxy.visible = cell.alive;
-            cell.proxy.set("visibility", cell.alive);
+            cell.proxy.set("visible", cell.alive);
           }
 
           // save the state

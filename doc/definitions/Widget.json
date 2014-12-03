@@ -6,7 +6,7 @@
       "type": "boolean?true",
       "description": "Whether the widget can be operated."
     },
-    "visibility": {
+    "visible": {
       "type": "boolean?true",
       "description": "Whether the widget is visible."
     },

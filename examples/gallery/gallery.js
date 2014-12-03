@@ -58,20 +58,20 @@ tabris.load(function() {
   var thumbnailsAction = tabris.create("Action", {
     title: "Thumbnails",
     placementPriority: "HIGH",
-    visibility: false
+    visible: false
   }).on("selection", toggleAction);
 
   page.open();
 
   function toggleAction() {
-    if (scrollComposite.get("visibility")) {
-      scrollComposite.set("visibility", false);
-      thumbnailsAction.set("visibility", true);
-      fullscreenAction.set("visibility", false);
+    if (scrollComposite.get("visible")) {
+      scrollComposite.set("visible", false);
+      thumbnailsAction.set("visible", true);
+      fullscreenAction.set("visible", false);
     } else {
-      scrollComposite.set("visibility", true);
-      thumbnailsAction.set("visibility", false);
-      fullscreenAction.set("visibility", true);
+      scrollComposite.set("visible", true);
+      thumbnailsAction.set("visible", false);
+      fullscreenAction.set("visible", true);
     }
   }
 

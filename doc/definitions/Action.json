@@ -22,7 +22,7 @@
       "type": "string",
       "description": "The text to be displayed for the action."
     },
-    "visibility": {
+    "visible": {
       "type": "boolean",
       "description": "Whether the action is visible."
     }

@@ -22,8 +22,8 @@ tabris.load(function() {
   }).appendTo(page);
 
   $.getJSON("http://www.reddit.com/r/petpictures.json?limit=100", function(json) {
-    loadingLabel.set("visibility", false);
-    progressBar.set("visibility", false);
+    loadingLabel.set("visible", false);
+    progressBar.set("visible", false);
     tabris.create("CollectionView", {
       layoutData: {left: 0, top: 0, right: 0, bottom: 0},
       background: "white",

@@ -80,7 +80,7 @@ describe("Widgets", function() {
 
   });
 
-  describe("default encoding", function() {
+  describe("set default encoding", function() {
 
     var widget;
 
@@ -142,9 +142,16 @@ describe("Widgets", function() {
       expect(call.properties.bounds).toEqual([1, 2, 3, 4]);
     });
 
+    it("translates visible to visibility", function() {
+      widget.set("visible", true);
+
+      var call = nativeBridge.calls({op: "set"})[0];
+      expect(call.properties.visibility).toBe(true);
+    });
+
   });
 
-  describe("default decoding", function() {
+  describe("get default decoding", function() {
 
     var widget;
 
@@ -208,6 +215,14 @@ describe("Widgets", function() {
       var result = widget.get("backgroundImage");
 
       expect(result).toEqual({src: "foo", width: 23, height: 42});
+    });
+
+    it("translates visible to visibility", function() {
+      spyOn(nativeBridge, "get");
+
+      widget.get("visible");
+
+      expect(nativeBridge.get).toHaveBeenCalledWith(widget.id, "visibility");
     });
 
   });

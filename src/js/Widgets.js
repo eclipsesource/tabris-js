@@ -36,7 +36,7 @@
     },
     _defaultCheckProperty: {
       enabled: true,
-      visibility: true,
+      visible: true,
       layoutData: checks.layoutData,
       font: true,
       backgroundImage: checks.image,
@@ -68,6 +68,9 @@
       },
       bounds: function(value) {
         this._setPropertyNative("bounds", encoding.encodeBounds(value));
+      },
+      visible: function(value) {
+        this._setPropertyNative("visibility", value);
       }
     },
     _defaultGetProperty: {
@@ -88,6 +91,9 @@
       },
       bounds: function() {
         return encoding.decodeBounds(this._getPropertyNative("bounds"));
+      },
+      visible: function() {
+        return this._getPropertyNative("visibility");
       }
     }
   });
