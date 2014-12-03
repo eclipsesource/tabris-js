@@ -11,7 +11,7 @@ tabris.registerType("Action", {
     enabled: tabris.PropertyChecks.boolean,
     foreground: true,
     image: tabris.PropertyChecks.image,
-    placementPriority: true,
+    placementPriority: tabris.PropertyChecks.choice("LOW", "HIGH", "NORMAL"),
     title: tabris.PropertyChecks.string,
     visible: tabris.PropertyChecks.boolean
   },

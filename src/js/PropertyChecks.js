@@ -88,12 +88,36 @@
         console.warn("Incomplete layoutData: either top, bottom, centerY, or baseline should be specified");
       }
       return layoutData;
+    },
+
+    choice: function() {
+      var acceptable = Array.prototype.slice.call(arguments);
+      return function(value) {
+        if (acceptable.indexOf(value) === -1) {
+          throwNotAcceptedError(acceptable, value);
+        }
+        return value;
+      };
     }
 
   };
 
   function isDimension(value) {
     return typeof value === "number" && !isNaN(value) && value >= 0 && value !== Infinity;
+  }
+
+  function throwNotAcceptedError(acceptable, given) {
+    var message = ["Accepting "];
+    acceptable.forEach(function(value, index) {
+      message.push("" + value);
+      if (index < acceptable.length - 2) {
+        message.push(", ");
+      } else if (index === acceptable.length - 2) {
+        message.push(" and ");
+      }
+    });
+    message.push(", given was: ", "" + given);
+    throw new Error(message.join(""));
   }
 
 }());

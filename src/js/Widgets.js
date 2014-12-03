@@ -103,7 +103,11 @@
     _internalProperties: {style: ["PUSH"]},
     _listen: {selection: "Selection"},
     _trigger: {Selection: "selection"},
-    _checkProperty: {alignment: true, image: checks.image, text: checks.string}
+    _checkProperty: {
+      alignment: checks.choice("left", "right", "center"),
+      image: checks.image,
+      text: checks.string
+    }
   });
 
   tabris.registerWidget("Canvas", {
@@ -133,13 +137,20 @@
 
   tabris.registerWidget("ImageView", {
     _type: "tabris.ImageView",
-    _checkProperty: {image: checks.image, scaleMode: true}
+    _checkProperty: {
+      image: checks.image,
+      scaleMode: checks.choice("auto", "fit", "fill", "stretch", "none")
+    }
   });
 
   tabris.registerWidget("Label", {
     _type: "rwt.widgets.Label",
     _internalProperties: {style: ["WRAP"]},
-    _checkProperty: {alignment: true, markupEnabled: checks.boolean, text: checks.string}
+    _checkProperty: {
+      alignment: checks.choice("left", "right", "center"),
+      markupEnabled: checks.boolean,
+      text: checks.string
+    }
   });
 
   tabris.registerWidget("ProgressBar", {
@@ -148,7 +159,7 @@
       minimum: checks.integer,
       maximum: checks.integer,
       selection: checks.integer,
-      state: true
+      state: checks.choice("normal", "paused", "error")
     }
   });
 
@@ -188,7 +199,7 @@
       Modify: "change:text"
     },
     _checkProperty: {
-      type: true,
+      type: checks.choice("default", "password", "search", "multiline"),
       text: checks.string,
       message: checks.string,
       editable: checks.boolean,
@@ -208,7 +219,12 @@
     _internalProperties: {style: ["TOGGLE"]},
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
-    _checkProperty: {text: checks.string, image: checks.image, selection: checks.boolean, alignment: true}
+    _checkProperty: {
+      text: checks.string,
+      image: checks.image,
+      selection: checks.boolean,
+      alignment: checks.choice("left", "right", "center")
+    }
   });
 
   tabris.registerWidget("Video", {

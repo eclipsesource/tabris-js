@@ -285,4 +285,32 @@ describe("PropertyChecks:", function() {
 
   });
 
+  describe("choice", function() {
+
+    var choice = tabris.PropertyChecks.choice;
+
+    it("creates function", function() {
+      expect(choice()).toEqual(jasmine.any(Function));
+    });
+
+    it("created function allows given values", function() {
+      var check = choice("1", null, 44);
+
+      expect(check("1")).toBe("1");
+      expect(check(null)).toBe(null);
+      expect(check(44)).toBe(44);
+    });
+
+    it("created function reject values not given", function() {
+      var check = choice("1", null, 44);
+
+      ["2", undefined, 44.1].forEach(function(value) {
+        expect(function() {
+          check(value);
+        }).toThrow(new Error("Accepting 1, null and 44, given was: " + value));
+      });
+    });
+
+  });
+
 });
