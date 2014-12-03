@@ -123,7 +123,7 @@
     _type: "rwt.widgets.Combo",
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
-    _checkProperty: {items: true, text: checks.string, selectionIndex: true}
+    _checkProperty: {items: true, text: checks.string, selectionIndex: checks.natural}
   });
 
   tabris.registerWidget("Composite", {
@@ -144,7 +144,12 @@
 
   tabris.registerWidget("ProgressBar", {
     _type: "rwt.widgets.ProgressBar",
-    _checkProperty: {minimum: true, maximum: true, selection: true, state: true}
+    _checkProperty: {
+      minimum: checks.integer,
+      maximum: checks.integer,
+      selection: checks.integer,
+      state: true
+    }
   });
 
   tabris.registerWidget("RadioButton", {
@@ -159,7 +164,7 @@
     _type: "rwt.widgets.Scale",
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
-    _checkProperty: {minimum: true, maximum: true, selection: true}
+    _checkProperty: {minimum: checks.integer, maximum: checks.integer, selection: checks.integer}
   });
 
   tabris.registerWidget("Text", {
@@ -182,7 +187,13 @@
       DefaultSelection: "accept",
       Modify: "change:text"
     },
-    _checkProperty: {type: true, text: checks.string, message: true, editable: checks.boolean, textLimit: true}
+    _checkProperty: {
+      type: true,
+      text: checks.string,
+      message: checks.string,
+      editable: checks.boolean,
+      textLimit: checks.natural
+    }
   });
 
   var textTypeToStyle = {

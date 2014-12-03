@@ -21,6 +21,26 @@
       return "" + str;
     },
 
+    natural: function(number) {
+      if (typeof number !== "number") {
+        throw new Error(typeof number + " is not a number: " + number);
+      }
+      if (number < 0 || isNaN(number) || number === Infinity) {
+        throw new Error("Number is not a valid value: " + number);
+      }
+      return Math.round(number);
+    },
+
+    integer: function(number) {
+      if (typeof number !== "number") {
+        throw new Error(typeof number + " is not a number: " + number);
+      }
+      if (isNaN(number) || number === Infinity || number === -Infinity) {
+        throw new Error("Number is not a valid value: " + number);
+      }
+      return Math.round(number);
+    },
+
     image: function(image) {
       if (typeof image === "string") {
         image = {src: image};

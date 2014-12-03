@@ -208,4 +208,81 @@ describe("PropertyChecks:", function() {
 
   });
 
+  describe("natural", function() {
+
+    var check = tabris.PropertyChecks.natural;
+
+    it("fails for non-numbers", function() {
+      var values = ["", "foo", "23", null, undefined, true, false, {}, []];
+      values.forEach(function(value) {
+        expect(function() {
+          check(value);
+        }).toThrow(new Error(typeof value + " is not a number: " + value));
+      });
+    });
+
+    it("fails for invalid numbers", function() {
+      var values = [-1, -0.1, NaN, 1 / 0, -1 / 0];
+      values.forEach(function(value) {
+        expect(function() {
+          check(value);
+        }).toThrow(new Error("Number is not a valid value: " + value));
+      });
+    });
+
+    it("accepts natural number including zero", function() {
+      expect(check(0)).toBe(0);
+      expect(check(1)).toBe(1);
+      expect(check(10e10)).toBe(10e10);
+    });
+
+    it("rounds given value", function() {
+      expect(check(0.4)).toBe(0);
+      expect(check(1.1)).toBe(1);
+      expect(check(1.9)).toBe(2);
+    });
+
+  });
+
+  describe("integer", function() {
+
+    var check = tabris.PropertyChecks.integer;
+
+    it("fails for non-numbers", function() {
+      var values = ["", "foo", "23", null, undefined, true, false, {}, []];
+      values.forEach(function(value) {
+        expect(function() {
+          check(value);
+        }).toThrow(new Error(typeof value + " is not a number: " + value));
+      });
+    });
+
+    it("fails for invalid numbers", function() {
+      var values = [NaN, 1 / 0, -1 / 0];
+      values.forEach(function(value) {
+        expect(function() {
+          check(value);
+        }).toThrow(new Error("Number is not a valid value: " + value));
+      });
+    });
+
+    it("accepts positive and negative numbers including zero", function() {
+      expect(check(-(10e10))).toBe(-(10e10));
+      expect(check(-1)).toBe(-1);
+      expect(check(0)).toBe(0);
+      expect(check(1)).toBe(1);
+      expect(check(10e10)).toBe(10e10);
+    });
+
+    it("rounds given value", function() {
+      expect(check(-1.9)).toBe(-2);
+      expect(check(-1.1)).toBe(-1);
+      expect(check(-0.4)).toBe(0);
+      expect(check(0.4)).toBe(0);
+      expect(check(1.1)).toBe(1);
+      expect(check(1.9)).toBe(2);
+    });
+
+  });
+
 });
