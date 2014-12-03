@@ -103,7 +103,7 @@
     _internalProperties: {style: ["PUSH"]},
     _listen: {selection: "Selection"},
     _trigger: {Selection: "selection"},
-    _checkProperty: {alignment: true, image: true, text: true}
+    _checkProperty: {alignment: true, image: checks.image, text: checks.string}
   });
 
   tabris.registerWidget("Canvas", {
@@ -116,14 +116,14 @@
     _internalProperties: {style: ["CHECK"]},
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
-    _checkProperty: {text: true, selection: checks.boolean}
+    _checkProperty: {text: checks.string, selection: checks.boolean}
   });
 
   tabris.registerWidget("Combo", {
     _type: "rwt.widgets.Combo",
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
-    _checkProperty: {items: true, text: true, selectionIndex: true}
+    _checkProperty: {items: true, text: checks.string, selectionIndex: true}
   });
 
   tabris.registerWidget("Composite", {
@@ -139,7 +139,7 @@
   tabris.registerWidget("Label", {
     _type: "rwt.widgets.Label",
     _internalProperties: {style: ["WRAP"]},
-    _checkProperty: {alignment: true, markupEnabled: checks.boolean, text: true}
+    _checkProperty: {alignment: true, markupEnabled: checks.boolean, text: checks.string}
   });
 
   tabris.registerWidget("ProgressBar", {
@@ -152,7 +152,7 @@
     _internalProperties: {style: ["RADIO"]},
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
-    _checkProperty: {text: true, selection: checks.boolean}
+    _checkProperty: {text: checks.string, selection: checks.boolean}
   });
 
   tabris.registerWidget("Slider", {
@@ -182,7 +182,7 @@
       DefaultSelection: "accept",
       Modify: "change:text"
     },
-    _checkProperty: {type: true, text: true, message: true, editable: checks.boolean, textLimit: true}
+    _checkProperty: {type: true, text: checks.string, message: true, editable: checks.boolean, textLimit: true}
   });
 
   var textTypeToStyle = {
@@ -197,7 +197,7 @@
     _internalProperties: {style: ["TOGGLE"]},
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
-    _checkProperty: {text: true, image: true, selection: checks.boolean, alignment: true}
+    _checkProperty: {text: checks.string, image: checks.image, selection: checks.boolean, alignment: true}
   });
 
   tabris.registerWidget("Video", {
@@ -210,7 +210,7 @@
     _type: "rwt.widgets.Browser",
     _listen: {load: "Progress"},
     _trigger: {Progress: "load"},
-    _checkProperty: {url: true, html: true}
+    _checkProperty: {url: true, html: checks.string}
   });
 
 }());

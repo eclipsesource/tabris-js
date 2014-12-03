@@ -59,9 +59,9 @@
     _type: "rwt.widgets.Composite",
 
     _checkProperty: {
-      title: true,
+      title: tabris.PropertyChecks.string,
       image: tabris.PropertyChecks.image,
-      badge: true
+      badge: tabris.PropertyChecks.string
     },
 
     _supportsChildren: true,

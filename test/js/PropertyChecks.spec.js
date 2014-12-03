@@ -191,4 +191,21 @@ describe("PropertyChecks:", function() {
 
   });
 
+  describe("string", function() {
+
+    var check = tabris.PropertyChecks.string;
+
+    it("translates any value to string", function() {
+      expect(check("str")).toBe("str");
+      expect(check(23)).toBe("23");
+      expect(check(false)).toBe("false");
+      expect(check(null)).toBe("null");
+      expect(check(undefined)).toBe("undefined");
+      expect(check({})).toBe("[object Object]");
+      expect(check([1, 2, 3])).toBe("1,2,3");
+      expect(check({toString: function() {return "foo";}})).toBe("foo");
+    });
+
+  });
+
 });

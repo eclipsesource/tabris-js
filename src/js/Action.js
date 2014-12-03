@@ -12,7 +12,7 @@ tabris.registerType("Action", {
     foreground: true,
     image: tabris.PropertyChecks.image,
     placementPriority: true,
-    title: true,
+    title: tabris.PropertyChecks.string,
     visible: tabris.PropertyChecks.boolean
   },
 

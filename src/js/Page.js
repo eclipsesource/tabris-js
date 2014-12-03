@@ -20,7 +20,7 @@
 
     _checkProperty: {
       image: tabris.PropertyChecks.image,
-      title: true,
+      title: tabris.PropertyChecks.string,
       topLevel: tabris.PropertyChecks.boolean
     },
 

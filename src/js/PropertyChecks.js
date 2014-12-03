@@ -17,6 +17,10 @@
       return !!bool;
     },
 
+    string: function(str) {
+      return "" + str;
+    },
+
     image: function(image) {
       if (typeof image === "string") {
         image = {src: image};
