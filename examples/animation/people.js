@@ -152,7 +152,7 @@ tabris.load(function() {
   }
 
   function createPersonThumbView(parent, person, thumbsize) {
-    var neighbor = parent.children().pop();
+    var neighbor = parent.children().last();
     var font = (thumbsize < 48) ? "9px" : "12px";
     var composite = tabris.create("Composite", {
       layoutData: {left: neighbor ? [neighbor, MARGIN] : MARGIN, top: 0}

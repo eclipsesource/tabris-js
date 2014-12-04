@@ -12,13 +12,13 @@ tabris.load(function() {
   }).appendTo(page);
 
   tabris.create("Label", {
-    layoutData: {left: 10, top: [page.children().pop(), 10], right: 10},
+    layoutData: {left: 10, top: [page.children().last(), 10], right: 10},
     text: "Center",
     alignment: "center"
   }).appendTo(page);
 
   tabris.create("Label", {
-    layoutData: {left: 10, top: [page.children().pop(), 10], right: 10},
+    layoutData: {left: 10, top: [page.children().last(), 10], right: 10},
     text: "Right",
     alignment: "right"
   }).appendTo(page);

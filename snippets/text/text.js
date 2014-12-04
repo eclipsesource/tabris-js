@@ -9,7 +9,7 @@ tabris.load(function() {
     message: "Type here, press 'Done'"
   }).on("accept", function() {
     tabris.create("Label", {
-      layoutData: {top: [page.children().pop(), 20], left: [20, 0]},
+      layoutData: {top: [page.children().last(), 20], left: [20, 0]},
       text: this.get("text")
     }).appendTo(page);
   }).appendTo(page);

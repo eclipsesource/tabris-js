@@ -14,7 +14,7 @@ tabris.load(function() {
   }).appendTo(page);
 
   tabris.create("Label", {
-    layoutData: {left: 10, top: [page.children().pop(), 30], right: 10},
+    layoutData: {left: 10, top: [page.children().last(), 30], right: 10},
     text: "Label with markup enabled:\n" + markup,
     markupEnabled: true
   }).appendTo(page);

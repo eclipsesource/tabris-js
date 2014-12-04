@@ -103,7 +103,7 @@
     },
 
     children: function() {
-      return this._children ? Array.prototype.slice.call(this._children) : [];
+      return new tabris.ProxyCollection(this._children || []);
     },
 
     _listen: function(event, state) {

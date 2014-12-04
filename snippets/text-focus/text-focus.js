@@ -15,7 +15,7 @@ tabris.load(function() {
   }).appendTo(page);
 
   tabris.create("Text", {
-    layoutData: {top: [page.children().pop(), 20], left: [20, 0], right: [20, 0]},
+    layoutData: {top: [page.children().last(), 20], left: [20, 0], right: [20, 0]},
     message: "Another field to focus..."
   }).appendTo(page);
 

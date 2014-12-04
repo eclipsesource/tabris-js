@@ -13,7 +13,7 @@ tabris.load(function() {
 
   ["debug", "log", "info", "warn", "error"].forEach(function(method) {
     tabris.create("Button", {
-      layoutData: {left: 10, right: 10, top: [page.children().pop(), 10]},
+      layoutData: {left: 10, right: 10, top: [page.children().last(), 10]},
       text: method
     }).on("selection", function() {
       console[method](logText.get("text"));

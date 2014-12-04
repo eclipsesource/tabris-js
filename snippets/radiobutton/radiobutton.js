@@ -7,7 +7,7 @@ tabris.load(function() {
 
   ["One", "Two", "Three"].forEach(function(title) {
     tabris.create("RadioButton", {
-      layoutData: {left: 10, top: [page.children().pop(), 10]},
+      layoutData: {left: 10, top: [page.children().last(), 10]},
       text: title
     }).on("change:selection", function() {
       console.log(this.get("text") + " selected");

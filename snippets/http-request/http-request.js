@@ -13,7 +13,7 @@ tabris.load(function() {
     xhr.onreadystatechange = function() {
       if (xhr.readyState === xhr.DONE) {
         tabris.create("Label", {
-          layoutData: {left: 10, right: 10, top: [page.children().pop(), 10]},
+          layoutData: {left: 10, right: 10, top: [page.children().last(), 10]},
           text: JSON.parse(xhr.responseText)[1].join(", ")
         }).appendTo(page);
       }

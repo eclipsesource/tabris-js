@@ -103,8 +103,9 @@ describe("Proxy", function() {
       expect(proxy.parent()).not.toBeDefined();
     });
 
-    it("children() returns empty array", function() {
-      expect(proxy.children()).toEqual([]);
+    it("children() returns empty collection", function() {
+      expect(proxy.children()).toEqual(jasmine.any(tabris.ProxyCollection));
+      expect(proxy.children().length).toBe(0);
     });
 
     describe("when disposed", function() {
@@ -128,8 +129,8 @@ describe("Proxy", function() {
         expect(proxy.parent()).not.toBeDefined();
       });
 
-      it("children() returns empty array", function() {
-        expect(proxy.children()).toEqual([]);
+      it("children() returns empty collection", function() {
+        expect(proxy.children().toArray()).toEqual([]);
       });
 
     });
@@ -716,7 +717,7 @@ describe("Proxy", function() {
 
         child.dispose();
 
-        expect(proxy.children()).toEqual([]);
+        expect(proxy.children().toArray()).toEqual([]);
       });
 
     });
