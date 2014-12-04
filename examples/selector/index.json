@@ -1,0 +1,10 @@
+{
+  "resources": [
+    {
+      "src": "https://tabrisjs.com/downloads/nightly/tabris.min.js"
+    },
+    {
+      "src": "selector.js"
+    }
+  ]
+}

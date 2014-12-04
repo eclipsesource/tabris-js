@@ -170,9 +170,41 @@ describe("Proxy", function() {
 
       beforeEach(function() {
         child1 = tabris.create("Label", {});
-        child2 = tabris.create("Label", {});
+        child2 = tabris.create("Button", {});
         nativeBridge.resetCalls();
         result = proxy.append(child1, child2);
+      });
+
+      it("sets the children's parent", function() {
+        var calls = nativeBridge.calls();
+        expect(calls.length).toBe(2);
+        expect(calls[1]).toEqual({op: "set", id: child2.id, properties: {parent: proxy.id}});
+      });
+
+      it("returns self to allow chaining", function() {
+        expect(result).toBe(proxy);
+      });
+
+      it("children() contains appended children", function() {
+        expect(proxy.children()).toContain(child1);
+        expect(proxy.children()).toContain(child2);
+      });
+
+      it("children() with matcher contains filtered children", function() {
+        expect(proxy.children("Label").toArray()).toEqual([child1]);
+        expect(proxy.children("Button").toArray()).toEqual([child2]);
+      });
+
+    });
+
+    describe("append with proxy collection", function() {
+      var child1, child2, result;
+
+      beforeEach(function() {
+        child1 = tabris.create("Label", {});
+        child2 = tabris.create("Label", {});
+        nativeBridge.resetCalls();
+        result = proxy.append(new tabris.ProxyCollection([child1, child2]));
       });
 
       it("sets the children's parent", function() {
@@ -277,6 +309,31 @@ describe("Proxy", function() {
 
     });
 
+    describe("calling appendTo with a collection", function() {
+
+      var parent1, parent2, result;
+
+      beforeEach(function() {
+        parent1 = tabris.create("Composite", {});
+        parent2 = tabris.create("Composite", {});
+        nativeBridge.resetCalls();
+        result = proxy.appendTo(new tabris.ProxyCollection([parent1, parent2]));
+      });
+
+      it("returns self to allow chaining", function() {
+        expect(result).toBe(proxy);
+      });
+
+      it("first entry is added to parent's children list", function() {
+        expect(parent1.children()).toContain(proxy);
+      });
+
+      it("other entry not added to parent's children list", function() {
+        expect(parent2.children()).not.toContain(proxy);
+      });
+
+    });
+
     describe("appendTo with non-widget", function() {
 
       it("throws an error", function() {
@@ -354,6 +411,15 @@ describe("Proxy", function() {
 
       it("translates widgets to ids in properties", function() {
         var other = new tabris.Proxy("other-id");
+
+        proxy.set("foo", other);
+
+        var call = nativeBridge.calls({op: "set", id: proxy.id})[0];
+        expect(call.properties.foo).toBe("other-id");
+      });
+
+      it("translates widget collection to first ids in properties", function() {
+        var other = new tabris.ProxyCollection([new tabris.Proxy("other-id")]);
 
         proxy.set("foo", other);
 

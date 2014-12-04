@@ -26,17 +26,19 @@
 
     append: function() {
       this._checkDisposed();
-      for (var i = 0; i < arguments.length; i++) {
-        if (!(arguments[i] instanceof tabris.Proxy)) {
+      var proxies = arguments[0] instanceof tabris.ProxyCollection ? arguments[0].toArray() : arguments;
+      for (var i = 0; i < proxies.length; i++) {
+        if (!(proxies[i] instanceof tabris.Proxy)) {
           throw new Error("Cannot append non-widget");
         }
-        arguments[i]._setParent(this);
+        proxies[i]._setParent(this);
       }
       return this;
     },
 
     appendTo: function(proxy) {
       this._checkDisposed();
+      proxy = proxy instanceof tabris.ProxyCollection ? proxy.first() : proxy;
       if (!(proxy instanceof tabris.Proxy)) {
         throw new Error("Cannot append to non-widget");
       }
@@ -102,8 +104,8 @@
       return this._parent;
     },
 
-    children: function() {
-      return new tabris.ProxyCollection(this._children || []);
+    children: function(selector) {
+      return new tabris.ProxyCollection(this._children, selector);
     },
 
     _listen: function(event, state) {

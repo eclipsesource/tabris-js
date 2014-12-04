@@ -48,7 +48,13 @@
     },
 
     encodeProxyToId: function(value) {
-      return value instanceof tabris.Proxy ? value.id : value;
+      if (value instanceof tabris.Proxy) {
+        return value.id;
+      }
+      if (value instanceof tabris.ProxyCollection && value[0]) {
+        return value[0].id;
+      }
+      return value;
     },
 
     decodeColor: function(value) {
