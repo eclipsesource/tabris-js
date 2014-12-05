@@ -22,6 +22,9 @@ tabris.registerType("Action", {
     },
     visible: function(value) {
       this._setPropertyNative("visibility", value);
+    },
+    image: function(value) {
+      this._setPropertyNative("image", tabris.PropertyEncoding.encodeImage(value));
     }
   },
 
