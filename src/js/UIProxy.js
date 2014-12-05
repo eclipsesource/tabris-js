@@ -7,7 +7,7 @@ tabris.registerType("_Display", {
   _type: "rwt.widgets.Display",
   _checkProperty: true
 });
-tabris.registerType("_Shell", {
+tabris.registerWidget("_Shell", {
   _type: "rwt.widgets.Shell",
   _listen: {Close: true},
   _checkProperty: true

@@ -26,7 +26,7 @@
 
     _checkProperty: {
       paging: tabris.PropertyChecks.boolean,
-      selection: tabris.PropertyChecks.natural
+      selection: true
     },
 
     _supportsChildren: function(child) {
