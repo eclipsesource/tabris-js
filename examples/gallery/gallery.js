@@ -52,12 +52,12 @@ tabris.load(function() {
 
   var fullscreenAction = tabris.create("Action", {
     title: "Fullscreen",
-    placementPriority: "HIGH"
+    placementPriority: "high"
   }).on("selection", toggleAction);
 
   var thumbnailsAction = tabris.create("Action", {
     title: "Thumbnails",
-    placementPriority: "HIGH",
+    placementPriority: "high",
     visible: false
   }).on("selection", toggleAction);
 

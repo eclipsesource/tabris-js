@@ -59,6 +59,13 @@ describe("Action", function() {
       expect(call.properties.visibility).toBe(true);
     });
 
+    it("translates placement priority to uppercase", function() {
+      action.set("placementPriority", "low");
+
+      var call = nativeBridge.calls({op: "set"})[0];
+      expect(call.properties.placementPriority).toBe("LOW");
+    });
+
   });
 
   describe("get", function() {
@@ -76,6 +83,14 @@ describe("Action", function() {
       action.get("visible");
 
       expect(nativeBridge.get).toHaveBeenCalledWith(action.id, "visibility");
+    });
+
+    it("translates placementPriority to lowercase", function() {
+      spyOn(nativeBridge, "get").and.returnValue("LOW");
+
+      var result = action.get("placementPriority");
+
+      expect(result).toBe("low");
     });
 
   });

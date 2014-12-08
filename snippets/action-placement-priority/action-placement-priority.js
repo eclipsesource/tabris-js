@@ -13,9 +13,9 @@ tabris.load(function() {
     });
   };
 
-  createAction("Search", "search.png", "HIGH");
-  createAction("Share", "share.png", "LOW");
-  createAction("Settings", "settings.png", "LOW");
+  createAction("Search", "search.png", "high");
+  createAction("Share", "share.png", "low");
+  createAction("Settings", "settings.png", "low");
 
   page.open();
 

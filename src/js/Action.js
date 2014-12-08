@@ -11,7 +11,7 @@ tabris.registerType("Action", {
     enabled: tabris.PropertyChecks.boolean,
     foreground: true,
     image: tabris.PropertyChecks.image,
-    placementPriority: tabris.PropertyChecks.choice("LOW", "HIGH", "NORMAL"),
+    placementPriority: tabris.PropertyChecks.choice("low", "high", "normal"),
     title: tabris.PropertyChecks.string,
     visible: tabris.PropertyChecks.boolean
   },
@@ -25,6 +25,9 @@ tabris.registerType("Action", {
     },
     image: function(value) {
       this._setPropertyNative("image", tabris.PropertyEncoding.encodeImage(value));
+    },
+    placementPriority: function(value) {
+      this._setPropertyNative("placementPriority", value.toUpperCase());
     }
   },
 
@@ -34,6 +37,10 @@ tabris.registerType("Action", {
     },
     visible: function() {
       return this._getPropertyNative("visibility");
+    },
+    placementPriority: function() {
+      var value = this._getPropertyNative("placementPriority");
+      return value ? value.toLowerCase() : value;
     }
   },
 
