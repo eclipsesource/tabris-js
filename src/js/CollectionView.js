@@ -9,8 +9,8 @@
 
     _type: "tabris.CollectionView",
 
-    _checkProperty: {
-      itemHeight: tabris.PropertyChecks.natural,
+    _properties: {
+      itemHeight: "natural",
       items: true,
       initializeCell: true
     },

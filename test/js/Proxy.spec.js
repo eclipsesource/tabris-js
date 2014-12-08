@@ -64,7 +64,7 @@ describe("Proxy", function() {
     });
 
     it("sends native set for extra properties", function() {
-      tabris.registerType("CustomType", {_internalProperties: {foo: 23}, _checkProperty: true});
+      tabris.registerType("CustomType", {_internalProperties: {foo: 23}, _properties: true});
 
       tabris.create("CustomType", {bar: 42});
 
@@ -375,25 +375,48 @@ describe("Proxy", function() {
         expect(console.warn).toHaveBeenCalledWith(warning);
       });
 
-      it("raises no warning if _propertyCheck entry is a function", function() {
-        tabris.TestType._checkProperty.knownProperty = jasmine.createSpy();
+      it("raises no warning if _propertyCheck entry is a string", function() {
+        tabris.TestType._properties.knownProperty = "foo";
         proxy.get("knownProperty", true);
 
         expect(console.warn).not.toHaveBeenCalled();
-        expect(tabris.TestType._checkProperty.knownProperty).not.toHaveBeenCalled();
       });
 
       it("raises no warning if _propertyCheck entry is true", function() {
-        tabris.TestType._checkProperty.knownProperty = true;
+        tabris.TestType._properties.knownProperty = true;
         proxy.get("knownProperty", true);
 
         expect(console.warn).not.toHaveBeenCalled();
       });
 
       it("raises no warning if _propertyCheck itself is true", function() {
-        tabris.TestType._checkProperty = true;
+        tabris.TestType._properties = true;
         proxy.get("knownProperty", true);
 
+        expect(console.warn).not.toHaveBeenCalled();
+      });
+
+      it("calls function if _propertyCheck is a string found in PropertyDecoding", function() {
+        tabris.TestType._properties.knownProperty = "color";
+        spyOn(nativeBridge, "get").and.returnValue(23);
+        spyOn(tabris.PropertyDecoding, "color").and.returnValue("foo");
+
+        var result = proxy.get("knownProperty");
+
+        expect(result).toBe("foo");
+        expect(tabris.PropertyDecoding.color).toHaveBeenCalledWith(23);
+        expect(console.warn).not.toHaveBeenCalled();
+      });
+
+      it("calls function if _propertyCheck is an array", function() {
+        tabris.TestType._properties.knownProperty = ["color", 1, 2, 3];
+        spyOn(nativeBridge, "get").and.returnValue(23);
+        spyOn(tabris.PropertyDecoding, "color").and.returnValue("foo");
+
+        var result = proxy.get("knownProperty");
+
+        expect(result).toBe("foo");
+        expect(tabris.PropertyDecoding.color).toHaveBeenCalledWith(23, 1, 2, 3);
         expect(console.warn).not.toHaveBeenCalled();
       });
 
@@ -462,23 +485,50 @@ describe("Proxy", function() {
       });
 
       it("raises no warning if _propertyCheck entry is true", function() {
-        tabris.TestType._checkProperty.knownProperty = true;
+        tabris.TestType._properties.knownProperty = true;
         proxy.set("knownProperty", true);
 
         expect(console.warn).not.toHaveBeenCalled();
       });
 
       it("raises no warning if _propertyCheck itself is true", function() {
-        tabris.TestType._checkProperty = true;
+        tabris.TestType._properties = true;
         proxy.set("knownProperty", true);
 
         expect(console.warn).not.toHaveBeenCalled();
       });
 
-      it("raises a warning if _propertyCheck is a function that throws", function() {
-        tabris.TestType._checkProperty.knownProperty = function() {
-          throw new Error("My Error");
-        };
+      it("raises no warning if _propertyCheck is a string", function() {
+        tabris.TestType._properties.knownProperty = "foo";
+        proxy.set("knownProperty", true);
+
+        expect(console.warn).not.toHaveBeenCalled();
+      });
+
+      it("calls function if _propertyCheck is a string found in PropertyEncoding", function() {
+        tabris.TestType._properties.knownProperty = "boolean";
+        spyOn(tabris.PropertyEncoding, "boolean").and.returnValue(true);
+
+        proxy.set("knownProperty", true);
+
+        expect(tabris.PropertyEncoding.boolean).toHaveBeenCalled();
+        expect(console.warn).not.toHaveBeenCalled();
+      });
+
+      it("calls function with args if _propertyCheck is an array", function() {
+        tabris.TestType._properties.knownProperty = ["choice", ["a", "b", "c"]];
+        spyOn(tabris.PropertyEncoding, "choice").and.returnValue(true);
+
+        proxy.set("knownProperty", "a");
+
+        expect(tabris.PropertyEncoding.choice).toHaveBeenCalledWith("a", ["a", "b", "c"]);
+        expect(console.warn).not.toHaveBeenCalled();
+      });
+
+      it("raises a warning if _propertyCheck references a function that throws", function() {
+        tabris.TestType._properties.knownProperty = "boolean";
+        spyOn(tabris.PropertyEncoding, "boolean").and.throwError("My Error");
+
         proxy.set("knownProperty", true);
 
         var message = "TestType: Unsupported value for property \"knownProperty\": My Error";
@@ -497,7 +547,7 @@ describe("Proxy", function() {
 
       it("still sets the value if _propertyCheck is a function that throws", function() {
         // TODO: This will be flipped later to ignore the incorrect value
-        tabris.TestType._checkProperty.knownProperty = function() {
+        tabris.TestType._properties.knownProperty = function() {
           throw new Error("My Error");
         };
         proxy.set("knownProperty", "foo");
@@ -507,11 +557,12 @@ describe("Proxy", function() {
       });
 
       it("uses _propertyCheck entry to convert the value", function() {
-        tabris.TestType._checkProperty.knownProperty = jasmine.createSpy();
-        tabris.TestType._checkProperty.knownProperty.and.returnValue("foo");
+        tabris.TestType._properties.knownProperty = "boolean";
+        spyOn(tabris.PropertyEncoding, "boolean").and.returnValue("foo");
+
         proxy.set("knownProperty", "bar");
 
-        expect(tabris.TestType._checkProperty.knownProperty).toHaveBeenCalledWith("bar");
+        expect(tabris.PropertyEncoding.boolean).toHaveBeenCalledWith("bar");
         var call = nativeBridge.calls({op: "set"})[0];
         expect(call.properties.knownProperty).toBe("foo");
       });

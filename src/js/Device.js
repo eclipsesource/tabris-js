@@ -7,7 +7,7 @@
 
   tabris.registerType("_Device", {
     _type: "tabris.Device",
-    _checkProperty: true
+    _properties: true
   });
 
   tabris._addDeviceObject = function(target) {

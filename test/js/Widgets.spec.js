@@ -61,21 +61,21 @@ describe("Widgets", function() {
 
     it("adds default checkProperty copy", function() {
       tabris.registerWidget("TestType", {});
-      expect(tabris.TestType._checkProperty).toEqual(tabris.registerWidget._defaultCheckProperty);
-      expect(tabris.TestType._checkProperty).not.toBe(tabris.registerWidget._defaultCheckProperty);
+      expect(tabris.TestType._properties).toEqual(tabris.registerWidget._defaultCheckProperty);
+      expect(tabris.TestType._properties).not.toBe(tabris.registerWidget._defaultCheckProperty);
     });
 
     it("extends default checkProperty", function() {
       var custom = {foo: "bar", enabled: false};
-      tabris.registerWidget("TestType", {_checkProperty: custom});
-      expect(tabris.TestType._checkProperty).toEqual(
+      tabris.registerWidget("TestType", {_properties: custom});
+      expect(tabris.TestType._properties).toEqual(
         util.extend({}, tabris.registerWidget._defaultCheckProperty, custom)
       );
     });
 
     it("keeps checkProperty true", function() {
-      tabris.registerWidget("TestType", {_checkProperty: true});
-      expect(tabris.TestType._checkProperty).toBe(true);
+      tabris.registerWidget("TestType", {_properties: true});
+      expect(tabris.TestType._properties).toBe(true);
     });
 
   });
@@ -124,14 +124,10 @@ describe("Widgets", function() {
       expect(call.properties.font).toEqual([["Arial"], 12, false, false]);
     });
 
-    it("translates image and backgroundImage to array", function() {
-      widget.set({
-        image: {src: "foo", width: 23, height: 42},
-        backgroundImage: {src: "bar", width: 23, height: 42}
-      });
+    it("translates backgroundImage to array", function() {
+      widget.set({backgroundImage: {src: "bar", width: 23, height: 42}});
 
       var call = nativeBridge.calls({op: "set"})[0];
-      expect(call.properties.image).toEqual(["foo", 23, 42, null]);
       expect(call.properties.backgroundImage).toEqual(["bar", 23, 42, null]);
     });
 
@@ -183,14 +179,6 @@ describe("Widgets", function() {
       var result = widget.get("font");
 
       expect(result).toBe("italic bold 12px Arial");
-    });
-
-    it("translates image to object", function() {
-      spyOn(nativeBridge, "get").and.returnValue(["foo", 23, 42]);
-
-      var result = widget.get("image");
-
-      expect(result).toEqual({src: "foo", width: 23, height: 42});
     });
 
     it("translates bounds to object", function() {

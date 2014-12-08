@@ -5,9 +5,9 @@
 
 (function() {
 
-  tabris.registerWidget("_TabItem", {
+  tabris.registerType("_TabItem", {
     _type: "rwt.widgets.TabItem",
-    _checkProperty: true
+    _properties: true
   });
 
   tabris.registerWidget("TabFolder", {
@@ -24,8 +24,8 @@
       return this;
     },
 
-    _checkProperty: {
-      paging: tabris.PropertyChecks.boolean,
+    _properties: {
+      paging: tabris.PropertyEncoding.boolean,
       selection: true
     },
 
@@ -68,10 +68,10 @@
 
     _type: "rwt.widgets.Composite",
 
-    _checkProperty: {
-      title: tabris.PropertyChecks.string,
-      image: tabris.PropertyChecks.image,
-      badge: tabris.PropertyChecks.string
+    _properties: {
+      title: "string",
+      image: "image",
+      badge: "string"
     },
 
     _supportsChildren: true,
@@ -100,7 +100,11 @@
         if (this._tabItem) {
           return this._tabItem.get(translateItemProp(name));
         }
-        return this._itemProps[translateItemProp(name)];
+        var result = this._itemProps[translateItemProp(name)];
+        if (name === "image") {
+          return tabris.PropertyDecoding.image(result);
+        }
+        return result;
       }
       return this.super("get", name);
     },

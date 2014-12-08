@@ -9,7 +9,7 @@
  *    EclipseSource - initial API and implementation
  ******************************************************************************/
 
-describe("PropertyChecks:", function() {
+describe("PropertyEncoding:", function() {
 
   var consoleBackup = window.console;
 
@@ -23,7 +23,7 @@ describe("PropertyChecks:", function() {
 
   describe("layoutData", function() {
 
-    var check = tabris.PropertyChecks.layoutData;
+    var check = tabris.PropertyEncoding.layoutData;
 
     it("raises a warning for incomplete horizontal layoutData", function() {
       check({top: 0});
@@ -82,24 +82,24 @@ describe("PropertyChecks:", function() {
 
   describe("image", function() {
 
-    var check = tabris.PropertyChecks.image;
+    var check = tabris.PropertyEncoding.image;
 
     it("succeeds for minimal image value", function() {
       var result = check({src: "foo.png"});
 
-      expect(result).toEqual({src: "foo.png"});
+      expect(result).toEqual(["foo.png", null, null, null]);
       expect(console.warn).not.toHaveBeenCalled();
     });
 
     it("succeeds for image with width and height", function() {
       var result = check({src: "foo.png", width: 10, height: 10});
 
-      expect(result).toEqual({src: "foo.png", width: 10, height: 10});
+      expect(result).toEqual(["foo.png", 10, 10, null]);
       expect(console.warn).not.toHaveBeenCalled();
     });
 
-    it("converts given string to image object with src", function() {
-      expect(check("foo.jpg")).toEqual({src: "foo.jpg"});
+    it("succeeds for string", function() {
+      expect(check("foo.jpg")).toEqual(["foo.jpg", null, null, null]);
     });
 
     it("fails if image value is null", function() {
@@ -165,7 +165,7 @@ describe("PropertyChecks:", function() {
 
   describe("boolean", function() {
 
-    var check = tabris.PropertyChecks.boolean;
+    var check = tabris.PropertyEncoding.boolean;
 
     it("passes through true", function() {
       expect(check(true)).toBe(true);
@@ -193,7 +193,7 @@ describe("PropertyChecks:", function() {
 
   describe("string", function() {
 
-    var check = tabris.PropertyChecks.string;
+    var check = tabris.PropertyEncoding.string;
 
     it("translates any value to string", function() {
       expect(check("str")).toBe("str");
@@ -210,7 +210,7 @@ describe("PropertyChecks:", function() {
 
   describe("natural", function() {
 
-    var check = tabris.PropertyChecks.natural;
+    var check = tabris.PropertyEncoding.natural;
 
     it("fails for non-numbers", function() {
       var values = ["", "foo", "23", null, undefined, true, false, {}, []];
@@ -246,7 +246,7 @@ describe("PropertyChecks:", function() {
 
   describe("integer", function() {
 
-    var check = tabris.PropertyChecks.integer;
+    var check = tabris.PropertyEncoding.integer;
 
     it("fails for non-numbers", function() {
       var values = ["", "foo", "23", null, undefined, true, false, {}, []];
@@ -287,27 +287,38 @@ describe("PropertyChecks:", function() {
 
   describe("choice", function() {
 
-    var choice = tabris.PropertyChecks.choice;
+    var check = tabris.PropertyEncoding.choice;
 
-    it("creates function", function() {
-      expect(choice()).toEqual(jasmine.any(Function));
+    it("allows string values given in array", function() {
+      var accepted = ["1", "foo", "bar"];
+
+      expect(check("1", accepted)).toBe("1");
+      expect(check("foo", accepted)).toBe("foo");
+      expect(check("bar", accepted)).toBe("bar");
     });
 
-    it("created function allows given values", function() {
-      var check = choice("1", null, 44);
+    it("rejects string values not given in array", function() {
+      var accepted = ["x", "y", "z"];
 
-      expect(check("1")).toBe("1");
-      expect(check(null)).toBe(null);
-      expect(check(44)).toBe(44);
-    });
-
-    it("created function reject values not given", function() {
-      var check = choice("1", null, 44);
-
-      ["2", undefined, 44.1].forEach(function(value) {
+      ["1", "foo", "bar"].forEach(function(value) {
         expect(function() {
-          check(value);
-        }).toThrow(new Error("Accepting 1, null and 44, given was: " + value));
+          check(value, accepted);
+        }).toThrow(new Error("Accepting \"x\", \"y\", \"z\", given was: \"" + value + "\""));
+      });
+    });
+
+    it("translates values given in map", function() {
+      expect(check("1", {1: "2", 3: "4"})).toBe("2");
+      expect(check("3", {1: "2", 3: "4"})).toBe("4");
+    });
+
+    it("rejects string values not given in map", function() {
+      var accepted = {x: true, y: true, z: true};
+
+      ["1", "foo", "bar"].forEach(function(value) {
+        expect(function() {
+          check(value, accepted);
+        }).toThrow(new Error("Accepting \"x\", \"y\", \"z\", given was: \"" + value + "\""));
       });
     });
 

@@ -12,7 +12,7 @@
 tabris.registerType("_Animation", {
   _type: "tabris.Animation",
   _listen: {Completion: true, Progress: true, Start: true},
-  _checkProperty: true
+  _properties: true
 });
 
 tabris.Animation = {

@@ -5,18 +5,15 @@
 
 (function() {
 
-  var checks = tabris.PropertyChecks;
-  var encoding = tabris.PropertyEncoding;
-
   tabris.registerWidget = function(type, members) {
     members = util.clone(members);
     members._listen = util.extend({}, tabris.registerWidget._defaultListen, members._listen || {});
     members._trigger = util.extend({}, tabris.registerWidget._defaultTrigger, members._trigger || {});
     members._setProperty = util.extend({}, tabris.registerWidget._defaultSetProperty, members._setProperty || {});
     members._getProperty = util.extend({}, tabris.registerWidget._defaultGetProperty, members._getProperty || {});
-    if (members._checkProperty !== true) {
+    if (members._properties !== true) {
       var defaultCheckProperty = tabris.registerWidget._defaultCheckProperty;
-      members._checkProperty = util.extend({}, defaultCheckProperty, members._checkProperty || {});
+      members._properties = util.extend({}, defaultCheckProperty, members._properties || {});
     }
     tabris.registerType(type, members);
   };
@@ -35,63 +32,24 @@
       Resize: "change:bounds"
     },
     _defaultCheckProperty: {
-      enabled: checks.boolean,
-      visible: checks.boolean,
-      layoutData: checks.layoutData,
-      font: true,
-      backgroundImage: checks.image,
-      bounds: true,
-      background: true,
-      foreground: true,
+      enabled: "boolean",
+      visible: "boolean",
+      layoutData: "layoutData",
+      font: "font",
+      backgroundImage: "image",
+      bounds: "bounds",
+      background: "color",
+      foreground: "color",
       opacity: true,
       transform: true,
-      highlightOnTouch: checks.boolean
+      highlightOnTouch: "boolean"
     },
     _defaultSetProperty: {
-      foreground: function(value) {
-        this._setPropertyNative("foreground", encoding.encodeColor(value));
-      },
-      background: function(value) {
-        this._setPropertyNative("background", encoding.encodeColor(value));
-      },
-      font: function(value) {
-        this._setPropertyNative("font", encoding.encodeFont(value));
-      },
-      image: function(value) {
-        this._setPropertyNative("image", encoding.encodeImage(value));
-      },
-      backgroundImage: function(value) {
-        this._setPropertyNative("backgroundImage", encoding.encodeImage(value));
-      },
-      layoutData: function(value) {
-        this._setPropertyNative("layoutData", encoding.encodeLayoutData(value));
-      },
-      bounds: function(value) {
-        this._setPropertyNative("bounds", encoding.encodeBounds(value));
-      },
       visible: function(value) {
         this._setPropertyNative("visibility", value);
       }
     },
     _defaultGetProperty: {
-      foreground: function() {
-        return encoding.decodeColor(this._getPropertyNative("foreground"));
-      },
-      background: function() {
-        return encoding.decodeColor(this._getPropertyNative("background"));
-      },
-      font: function() {
-        return encoding.decodeFont(this._getPropertyNative("font"));
-      },
-      image: function() {
-        return encoding.decodeImage(this._getPropertyNative("image"));
-      },
-      backgroundImage: function() {
-        return encoding.decodeImage(this._getPropertyNative("backgroundImage"));
-      },
-      bounds: function() {
-        return encoding.decodeBounds(this._getPropertyNative("bounds"));
-      },
       visible: function() {
         return this._getPropertyNative("visibility");
       }
@@ -103,10 +61,10 @@
     _internalProperties: {style: ["PUSH"]},
     _listen: {selection: "Selection"},
     _trigger: {Selection: "selection"},
-    _checkProperty: {
-      alignment: checks.choice("left", "right", "center"),
-      image: checks.image,
-      text: checks.string
+    _properties: {
+      alignment: ["choice", ["left", "right", "center"]],
+      image: "image",
+      text: "string"
     }
   });
 
@@ -120,14 +78,14 @@
     _internalProperties: {style: ["CHECK"]},
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
-    _checkProperty: {text: checks.string, selection: checks.boolean}
+    _properties: {text: "string", selection: "boolean"}
   });
 
   tabris.registerWidget("Combo", {
     _type: "rwt.widgets.Combo",
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
-    _checkProperty: {items: true, text: checks.string, selectionIndex: checks.natural}
+    _properties: {items: true, text: "string", selectionIndex: "natural"}
   });
 
   tabris.registerWidget("Composite", {
@@ -137,29 +95,29 @@
 
   tabris.registerWidget("ImageView", {
     _type: "tabris.ImageView",
-    _checkProperty: {
-      image: checks.image,
-      scaleMode: checks.choice("auto", "fit", "fill", "stretch", "none")
+    _properties: {
+      image: "image",
+      scaleMode: ["choice", ["auto", "fit", "fill", "stretch", "none"]]
     }
   });
 
   tabris.registerWidget("Label", {
     _type: "rwt.widgets.Label",
     _internalProperties: {style: ["WRAP"]},
-    _checkProperty: {
-      alignment: checks.choice("left", "right", "center"),
-      markupEnabled: checks.boolean,
-      text: checks.string
+    _properties: {
+      alignment: ["choice", ["left", "right", "center"]],
+      markupEnabled: "boolean",
+      text: "string"
     }
   });
 
   tabris.registerWidget("ProgressBar", {
     _type: "rwt.widgets.ProgressBar",
-    _checkProperty: {
-      minimum: checks.integer,
-      maximum: checks.integer,
-      selection: checks.integer,
-      state: checks.choice("normal", "paused", "error")
+    _properties: {
+      minimum: "integer",
+      maximum: "integer",
+      selection: "integer",
+      state: ["choice", ["normal", "paused", "error"]]
     }
   });
 
@@ -168,14 +126,14 @@
     _internalProperties: {style: ["RADIO"]},
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
-    _checkProperty: {text: checks.string, selection: checks.boolean}
+    _properties: {text: "string", selection: "boolean"}
   });
 
   tabris.registerWidget("Slider", {
     _type: "rwt.widgets.Scale",
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
-    _checkProperty: {minimum: checks.integer, maximum: checks.integer, selection: checks.integer}
+    _properties: {minimum: "integer", maximum: "integer", selection: "integer"}
   });
 
   tabris.registerWidget("Text", {
@@ -198,12 +156,12 @@
       DefaultSelection: "accept",
       Modify: "change:text"
     },
-    _checkProperty: {
-      type: checks.choice("default", "password", "search", "multiline"),
-      text: checks.string,
-      message: checks.string,
-      editable: checks.boolean,
-      textLimit: checks.natural
+    _properties: {
+      type: ["choice", ["default", "password", "search", "multiline"]],
+      text: "string",
+      message: "string",
+      editable: "boolean",
+      textLimit: "natural"
     }
   });
 
@@ -219,25 +177,25 @@
     _internalProperties: {style: ["TOGGLE"]},
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
-    _checkProperty: {
-      text: checks.string,
-      image: checks.image,
-      selection: checks.boolean,
-      alignment: checks.choice("left", "right", "center")
+    _properties: {
+      text: "string",
+      image: "image",
+      selection: "boolean",
+      alignment: ["choice", ["left", "right", "center"]]
     }
   });
 
   tabris.registerWidget("Video", {
     _type: "tabris.widgets.Video",
     _internalProperties: {controls_visible: true, repeat: false},
-    _checkProperty: {url: true}
+    _properties: {url: true}
   });
 
   tabris.registerWidget("WebView", {
     _type: "rwt.widgets.Browser",
     _listen: {load: "Progress"},
     _trigger: {Progress: "load"},
-    _checkProperty: {url: true, html: checks.string}
+    _properties: {url: true, html: "string"}
   });
 
 }());

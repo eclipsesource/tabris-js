@@ -95,7 +95,7 @@
     "_getProperty": {},
     "_internalProperties": {},
     "_type": null,
-    "_checkProperty": {},
+    "_properties": {},
     "_supportsChildren": false
   };
 

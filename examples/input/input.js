@@ -1,6 +1,6 @@
 tabris.registerWidget("DateTime", {
   _type: "rwt.widgets.DateTime",
-  _checkProperty: {year: true, month: true, day: true}
+  _properties: {year: true, month: true, day: true}
 });
 
 tabris.load(function() {

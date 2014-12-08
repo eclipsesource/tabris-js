@@ -5,17 +5,17 @@
 
 tabris.registerType("_Display", {
   _type: "rwt.widgets.Display",
-  _checkProperty: true
+  _properties: true
 });
 tabris.registerWidget("_Shell", {
   _type: "rwt.widgets.Shell",
   _listen: {Close: true},
-  _checkProperty: true
+  _properties: true
 });
 tabris.registerType("_UI", {
   _type: "tabris.UI",
   _listen: {ShowPage: true, ShowPreviousPage: true},
-  _checkProperty: true
+  _properties: true
 });
 
 tabris.UIProxy = function() {

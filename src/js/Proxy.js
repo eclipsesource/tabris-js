@@ -188,32 +188,52 @@
     },
 
     _setProperty: function(name, value) {
-      var checkedValue = this._checkProperty(name, value);
+      var type = this._getPropertyType(name);
+      var encodedValue = this._encodeProperty(value, type, name);
       var setProperty = this.constructor && this.constructor._setProperty && this.constructor._setProperty[name];
       try {
         if (setProperty instanceof Function) {
-          setProperty.call(this, checkedValue);
+          setProperty.call(this, encodedValue);
         } else {
-          this._setPropertyNative(name, tabris.PropertyEncoding.encodeProxyToId(checkedValue));
+          this._setPropertyNative(name, tabris.PropertyEncoding.proxy(encodedValue));
         }
       } catch (error) {
         console.warn(this.type + ": Failed to set property \"" + name + "\" value: " + error.message);
       }
     },
 
-    _checkProperty: function(name, value) {
-      var checkProperty = this.constructor && this.constructor._checkProperty && this.constructor._checkProperty[name];
-      if (!checkProperty && this.constructor._checkProperty !== true) {
-        console.warn(this.type + ": Unknown property \"" + name + "\"");
-      }
-      if (arguments.length === 2 && checkProperty instanceof Function) {
-        try {
-          return checkProperty(value);
-        } catch (ex) {
-          console.warn(this.type + ": Unsupported value for property \"" + name + "\": " + ex.message);
+    _encodeProperty: function(value, type, name) {
+      try {
+        if (typeof type === "string" && tabris.PropertyEncoding[type]) {
+          return tabris.PropertyEncoding[type](value);
         }
+        if (Array.isArray(type) && tabris.PropertyEncoding[type[0]]) {
+          var args = [value].concat(type.slice(1));
+          return tabris.PropertyEncoding[type[0]].apply(window, args);
+        }
+        return value;
+      } catch (ex) {
+        console.warn(this.type + ": Unsupported value for property \"" + name + "\": " + ex.message);
+      }
+    },
+
+    _decodeProperty: function(value, type) {
+      if (typeof type === "string" && tabris.PropertyDecoding[type]) {
+        return tabris.PropertyDecoding[type](value);
+      }
+      if (Array.isArray(type) && tabris.PropertyDecoding[type[0]]) {
+        var args = [value].concat(type.slice(1));
+        return tabris.PropertyDecoding[type[0]].apply(window, args);
       }
       return value;
+    },
+
+    _getPropertyType: function(name) {
+      var type = this.constructor && this.constructor._properties && this.constructor._properties[name];
+      if (!type && this.constructor._properties !== true) {
+        console.warn(this.type + ": Unknown property \"" + name + "\"");
+      }
+      return type;
     },
 
     _setPropertyNative: function(name, value) {
@@ -221,9 +241,10 @@
     },
 
     _getProperty: function(name) {
-      this._checkProperty(name);
+      var type = this._getPropertyType(name);
       var getProperty = this.constructor && this.constructor._getProperty && this.constructor._getProperty[name];
-      return getProperty ? getProperty.call(this) : this._getPropertyNative(name);
+      var value = getProperty ? getProperty.call(this) : this._getPropertyNative(name);
+      return this._decodeProperty(value, type);
     },
 
     _getPropertyNative: function(name) {
@@ -235,7 +256,7 @@
     },
 
     _setParent: function(parent) {
-      tabris._nativeBridge.set(this.id, "parent", tabris.PropertyEncoding.encodeProxyToId(parent._getContainer()));
+      tabris._nativeBridge.set(this.id, "parent", tabris.PropertyEncoding.proxy(parent._getContainer()));
       if (this._parent) {
         this._parent._removeChild(this);
       }

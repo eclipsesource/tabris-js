@@ -7,9 +7,18 @@
 
   var pageProperties = ["title", "image", "style", "topLevel"];
 
-  tabris.registerWidget("_Page", {
+  tabris.registerType("_Page", {
     _type: "tabris.Page",
-    _checkProperty: true
+
+    _properties: {
+      image: "image",
+      title: "string",
+      topLevel: "boolean",
+      control: true,
+      parent: true,
+      style: true
+    }
+
   });
 
   tabris.registerWidget("Page", {
@@ -18,10 +27,10 @@
 
     _supportsChildren: true,
 
-    _checkProperty: {
-      image: tabris.PropertyChecks.image,
-      title: tabris.PropertyChecks.string,
-      topLevel: tabris.PropertyChecks.boolean
+    _properties: {
+      image: true,
+      title: true,
+      topLevel: true
     },
 
     _create: function(properties) {
