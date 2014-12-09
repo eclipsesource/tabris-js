@@ -64,8 +64,9 @@
       while (i < tabris._loadFunctions.length) {
         tabris._loadFunctions[i++].call();
       }
-      tabris.trigger("flush");
       tabris._ready = true;
+      tabris.Module.loadMain();
+      tabris.trigger("flush");
     },
 
     _notify: function(id, event, param) {

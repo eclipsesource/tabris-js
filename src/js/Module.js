@@ -5,96 +5,131 @@
 
 (function() {
 
-  // Common.js allows a "conceptual module name space root". This one makes us node.js compatible.
-  var MODULE_ROOT = "./node_modules/";
-
-  tabris.Module = function(id, parent) {
-    this.id = id;
-    this.parent = parent;
-    // TODO: remove instanceof check once root is the main module instead of window
-    if (this.parent && (this.parent.children instanceof Array)) {
-      this.parent.children.push(this);
-    }
-    this.filename = null;
-    this.children = [];
+  tabris.Module = function(id, parent, content) {
+    this.id = id || null;
+    this.parent = parent || null;
     this.exports = {};
+    this._cache = this.parent ? this.parent._cache : {};
+    if (id) {
+      this._cache[id] = this;
+    }
+    if (typeof content === "function") {
+      content(this, this.exports, this.require.bind(this));
+    } else if (content instanceof Object) {
+      this.exports = content;
+    }
   };
 
-  tabris.Module.prototype._load = function() {
+  tabris.Module.prototype = {
+
+    require: function(request) {
+      var currentDir = dirname(this.id || "./");
+      if (request.slice(0, 1) !== ".") {
+        currentDir = "./node_modules";
+      }
+      var postfixes = request.slice(-1) === "/" ? folderPostfixes : filePostfixes;
+      var path = normalizePath(currentDir + "/" + request);
+      if (path) {
+        for (var i = 0; i < postfixes.length; i++) {
+          var module = getModule.call(this, path, postfixes[i]);
+          if (module) {
+            return module;
+          }
+        }
+      }
+      throw new Error("Cannot find module '" + request + "'");
+    }
+
+  };
+
+  var filePostfixes = ["", ".js", ".json", "/package.json", "/index.js", "/index.json"];
+  var folderPostfixes = ["/package.json", "/index.js", "/index.json"];
+
+  tabris.Module.loadMain = function() {
+    try {
+      new tabris.Module().require("./");
+    } catch (error) {
+      console.warn("Could not load main module: " + error);
+    }
+  };
+
+  tabris.Module.createLoader = function(url) {
     var bridge = tabris._nativeBridge._bridge;
-    var fileNames = getFileNamesFor(this);
-    var source;
-    for (var i = 0; i < fileNames.length; i++) {
-      source = bridge.load(fileNames[i]);
-      if (source) {
-        this.filename = fileNames[i];
-        break;
+    var src = bridge.load(url);
+    if (src) {
+      try {
+        return bridge.runInThisContext(wrapSource(src));
+      } catch (ex) {
+        // src may be an index.html
+        if (url.slice(-3) === ".js") {
+          throw new Error("Could not parse " + url);
+        }
       }
     }
-    if (this.filename && (this.filename.slice(-12) === "package.json")) {
-      var pkg = JSON.parse(source);
-      if (pkg.main) {
-        source = bridge.load(this.id + "/" + pkg.main);
-      }
-    }
-    if (!source) {
-      throw new Error("Cannot find module '" + this.id + "'");
-    }
-    var loader = bridge.runInThisContext(wrapSource(source));
-    loader(this, this.exports, this.require.bind(this));
   };
 
-  tabris.Module.prototype.require = function(path, requestingModule) {
-    return this.parent.require(path, requestingModule || this);
+  tabris.Module.readJSON = function(url) {
+    var bridge = tabris._nativeBridge._bridge;
+    var src = bridge.load(url);
+    if (src) {
+      try {
+        return JSON.parse(src);
+      } catch (ex) {
+        throw new Error("Could not parse " + url);
+      }
+    }
   };
 
-  tabris.Module.installRequire = function(target) {
-    var moduleCache = {};
-    target.require = function(path, requestingModule) {
-      var parent = requestingModule || target;
-      var id = getIdFromPath(path, parent);
-      if (!moduleCache[id]) {
-        moduleCache[id] = new tabris.Module(id, parent);
-        moduleCache[id]._load();
-      }
-      return moduleCache[id].exports;
-    };
-  };
-
-  function getIdFromPath(path, parent) {
-    // NOTE: unlike node we can't (reasonably) look up alternate module locations (like home)
-    if (path.slice(0, 1) === ".") {
-      var parentId = parent instanceof tabris.Module ? parent.id : "./";
-      var parentPath = parentId.slice(0, parentId.lastIndexOf("/"));
-      var relativeId = path.slice(0, 2) === "./" ? path.slice(2) : path; // strip "./"
-      return getAbsoluteId(relativeId, parentPath);
+  function getModule(path, postfix) {
+    var url = path + postfix;
+    if (url in this._cache) {
+      return this._cache[url] || undefined;
     }
-    // TODO: check for native modules first (currently there are none)
-    return MODULE_ROOT + path;
-  }
-
-  function getAbsoluteId(relativeId, currentDir) {
-    if (relativeId.slice(0, 3) === "../") {
-      if (currentDir === ".") {
-        throw new Error("Cannot find module '" + relativeId + "'");
+    if (url.slice(-5) === ".json") {
+      var data = tabris.Module.readJSON(url);
+      if (data) {
+        if (postfix === "/package.json" && data.main) {
+          url = path + "/" + data.main;
+          var mainLoader = tabris.Module.createLoader(url);
+          if (mainLoader) {
+            return new tabris.Module(url, this, mainLoader).exports;
+          }
+        } else {
+          return new tabris.Module(url, this, data).exports;
+        }
       }
-      currentDir = currentDir.slice(0, currentDir.lastIndexOf("/"));
-      return getAbsoluteId(relativeId.slice(3), currentDir);
+    } else {
+      var loader = tabris.Module.createLoader(url);
+      if (loader) {
+        return new tabris.Module(url, this, loader).exports;
+      }
     }
-    return currentDir + "/" + relativeId;
+    this._cache[url] = false;
   }
 
-  function getFileNamesFor(module) {
-    // TODO: try .json as well (like node)
-    // Should we also try first without extension and /index.js? (again, like node)
-    return [module.id + ".js", module.id + "/package.json"];
-  }
-
-  function wrapSource(source) { // TODO: do this natively
+  function wrapSource(source) {
     return "(function (module, exports, require) { " + source + "\n});";
   }
 
-  // TODO: will no longer be needed once a main module exists:
-  tabris.Module.installRequire(window);
+  function dirname(id) {
+    return id.slice(0, id.lastIndexOf("/"));
+  }
+
+  function normalizePath(path) {
+    var segments = [];
+    var pathSegments = path.split("/");
+    for (var i = 0; i < pathSegments.length; i++) {
+      var segment = pathSegments[i];
+      if (segment === "..") {
+        var removed = segments.pop();
+        if (!removed || removed === ".") {
+          return null;
+        }
+      } else if (segment === "." ? segments.length === 0 : segment !== "") {
+        segments.push(segment);
+      }
+    }
+    return segments.join("/");
+  }
 
 }());

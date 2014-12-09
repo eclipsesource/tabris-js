@@ -74,9 +74,9 @@ describe("DOMDocument", function() {
       script2 = target.document.createElement("script");
       nonScript = target.document.createElement("div");
       nativeBridge = new NativeBridgeSpy();
-      nativeBridge.load = jasmine.createSpy().and.returnValue(source);
-        /*jshint evil: true */
       tabris._start(nativeBridge);
+      nativeBridge.load = jasmine.createSpy().and.returnValue(source);
+      /*jshint evil: true */
       nativeBridge.runInThisContext = jasmine.createSpy().and.callFake(function(script) {
         window.eval(script);
       });

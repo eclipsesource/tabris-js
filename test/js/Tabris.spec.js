@@ -95,6 +95,14 @@ describe("tabris", function() {
       expect(nativeBridge.calls({op: "create", type: "TestType"}).length).toBe(1);
     });
 
+    it("loads main module", function() {
+      spyOn(tabris.Module, "loadMain");
+
+      tabris._start.call(null, nativeBridge);
+
+      expect(tabris.Module.loadMain).toHaveBeenCalled();
+    });
+
   });
 
   describe("_notify", function() {

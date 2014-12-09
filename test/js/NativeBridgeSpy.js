@@ -64,6 +64,10 @@
       });
     },
 
+    load: function(url) {
+      return url.slice(-5) === ".json" ? "{}" : "exports = 23;";
+    },
+
     calls: function(filterProperties) {
       tabris._nativeBridge.flush();
       return this._calls.select(filterProperties);

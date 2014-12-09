@@ -5,23 +5,20 @@
 
 describe("tabris.Module", function() {
 
-  var nativeBridge, global;
-
-  var respond = function(response) {
-    nativeBridge.load.and.returnValue(response);
-  };
+  var nativeBridge;
 
   beforeEach(function() {
-    global = {};
     nativeBridge = new NativeBridgeSpy();
     tabris._start(nativeBridge);
-    tabris.Module.installRequire(global);
-    nativeBridge.load = jasmine.createSpy();
+    spyOn(nativeBridge, "load");
+    spyOn(tabris.Module, "createLoader").and.returnValue(function(module) {
+      module.exports = module;
+    });
   });
 
   describe("constructor", function() {
 
-    it("sets id and parent", function() {
+    it("sets id and parent from arguments", function() {
       var parent = new tabris.Module("bar");
       var module = new tabris.Module("foo", parent);
 
@@ -29,19 +26,28 @@ describe("tabris.Module", function() {
       expect(module.parent).toBe(parent);
     });
 
+    it("without argumetns sets default values", function() {
+      var module = new tabris.Module();
+
+      expect(module.id).toBeNull();
+      expect(module.parent).toBeNull();
+      expect(module.exports).toEqual({});
+    });
+
     it("sets initial values", function() {
       var module = new tabris.Module("foo");
 
-      expect(module.children).toEqual([]);
       expect(module.exports).toEqual({});
-      expect(module.filename).toBeNull();
     });
 
-    it("adds itself to parent children", function() {
-      var parent = new tabris.Module("bar");
-      var module = new tabris.Module("foo", parent);
+    it("runs loader with parameters", function() {
+      var loader = jasmine.createSpy().and.callFake(function(module, exports) {
+        exports.foo = "bar";
+      });
+      var module = new tabris.Module("foo", null, loader);
 
-      expect(parent.children).toEqual([module]);
+      expect(loader).toHaveBeenCalledWith(module, module.exports, jasmine.any(Function));
+      expect(module.exports).toEqual({foo: "bar"});
     });
 
   });
@@ -50,189 +56,326 @@ describe("tabris.Module", function() {
 
     var module;
 
-    // TODO: circular dependency / module.loaded
+    beforeEach(function() {
+      module = new tabris.Module();
+    });
 
-    describe("._load", function() {
+    describe("require", function() {
 
-      beforeEach(function() {
-        module = new tabris.Module("./foo/bar", global);
+      it("returns exports", function() {
+        tabris.Module.createLoader.and.returnValue(function(module, exports) {
+          exports.bar = 1;
+        });
+
+        var foo = module.require("./foo");
+
+        expect(foo.bar).toBe(1);
       });
 
-      it("loads js for given path", function() {
-        respond("var someValidCode = 1;");
+      it("returns same exports for subsequent calls", function() {
+        var instance1 = module.require("./foo");
+        var instance2 = module.require("./foo");
 
-        module._load();
-
-        expect(nativeBridge.load).toHaveBeenCalledWith("./foo/bar.js");
-        expect(nativeBridge.load.calls.count()).toBe(1);
+        expect(instance1).toBe(instance2);
       });
 
-      it("loads /package.json for given path", function() {
-        nativeBridge.load.and.callFake(function(src) {
-          if (src === "./foo/bar/package.json") {
-            return '{"main": "mylib.js"}';
-          }
-          if (src === "./foo/bar/mylib.js") {
-            return "module.exports = 'success'";
+      it("returns module that is currently loading", function() {
+        tabris.Module.createLoader.and.returnValue(function(module, exports) {
+          exports.foo = 1;
+          module.require("./foo").exports.bar = 2;
+        });
+
+        expect(module.require("./foo")).toEqual({foo: 1, bar: 2});
+      });
+
+      it("returns same exports from different modules", function() {
+        var module1 = new tabris.Module("./module1", module);
+        var module2 = new tabris.Module("./module2", module);
+
+        var instance1 = module1.require("./foo");
+        var instance2 = module2.require("./foo");
+
+        expect(instance1).toBe(instance2);
+      });
+
+      it("requests url only once", function() {
+        module.require("./foo");
+        module.require("./foo");
+
+        expect(tabris.Module.createLoader.calls.count()).toBe(1);
+      });
+
+      it("requests loader with request as path", function() {
+        module.require("./bar");
+
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./bar");
+      });
+
+      it("requests alternate file name .js", function() {
+        tabris.Module.createLoader.and.callFake(function(path) {
+          if (path === "./foo.js") {
+            return function(module) {module.exports = module;};
           }
         });
 
-        module._load();
+        var foo = module.require("./foo");
 
-        expect(nativeBridge.load).toHaveBeenCalledWith("./foo/bar.js");
-        expect(nativeBridge.load).toHaveBeenCalledWith("./foo/bar/package.json");
-        expect(nativeBridge.load).toHaveBeenCalledWith("./foo/bar/mylib.js");
-        expect(module.exports).toBe("success");
+        expect(foo.id).toBe("./foo.js");
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./foo");
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./foo.js");
       });
 
-      it("sets filename", function() {
-        respond("var someValidCode = 1;");
+      it("requests alternate file name .json", function() {
+        tabris.Module.createLoader.and.returnValue(undefined);
+        spyOn(tabris.Module, "readJSON").and.returnValue({data: "bar"});
 
-        module._load();
+        var foo = module.require("./foo");
 
-        expect(module.filename).toBe("./foo/bar.js");
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./foo");
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./foo.js");
+        expect(foo).toEqual({data: "bar"});
       });
 
-      it("throws exception if no source is returned by load", function() {
+      it("requests file specified in /package.json", function() {
+        spyOn(tabris.Module, "readJSON").and.callFake(function(url) {
+          if (url === "./foo/package.json") {
+            return {main: "bar"};
+          }
+        });
+        tabris.Module.createLoader.and.callFake(function(url) {
+          if (url === "./foo/bar") {
+            return function(module) {
+              module.exports = module;
+            };
+          }
+        });
+
+        var foo = module.require("./foo");
+
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./foo");
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./foo.js");
+        expect(tabris.Module.readJSON).toHaveBeenCalledWith("./foo.json");
+        expect(foo.id).toBe("./foo/bar");
+      });
+
+      it("requests alternate file name /index.js", function() {
+        spyOn(tabris.Module, "readJSON");
+        tabris.Module.createLoader.and.callFake(function(path) {
+          if (path === "./foo/index.js") {
+            return function(module) {module.exports = module;};
+          }
+        });
+
+        var foo = module.require("./foo");
+
+        expect(foo.id).toBe("./foo/index.js");
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./foo");
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./foo.js");
+        expect(tabris.Module.readJSON).toHaveBeenCalledWith("./foo.json");
+        expect(tabris.Module.readJSON).toHaveBeenCalledWith("./foo/package.json");
+      });
+
+      it("requests alternate file name /index.json", function() {
+        tabris.Module.createLoader.and.returnValue(undefined);
+        spyOn(tabris.Module, "readJSON").and.callFake(function(url) {
+          if (url === "./foo/index.json") {
+            return {data: "bar"};
+          }
+        });
+
+        var foo = module.require("./foo");
+
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./foo");
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./foo.js");
+        expect(tabris.Module.readJSON).toHaveBeenCalledWith("./foo.json");
+        expect(tabris.Module.readJSON).toHaveBeenCalledWith("./foo/package.json");
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./foo/index.js");
+        expect(foo).toEqual({data: "bar"});
+      });
+
+      it("requests alternate file name for folders", function() {
+        tabris.Module.createLoader.and.returnValue(undefined);
+        spyOn(tabris.Module, "readJSON").and.returnValue(undefined);
+
+        try {
+          module.require("./foo/");
+        } catch (error) {
+        }
+
+        expect(tabris.Module.createLoader).not.toHaveBeenCalledWith("./foo");
+        expect(tabris.Module.createLoader).not.toHaveBeenCalledWith("./foo.js");
+        expect(tabris.Module.readJSON).not.toHaveBeenCalledWith("./foo.json");
+        expect(tabris.Module.readJSON).toHaveBeenCalledWith("./foo/package.json");
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./foo/index.js");
+        expect(tabris.Module.readJSON).toHaveBeenCalledWith("./foo/index.json");
+      });
+
+      it("requests module from node_modules folder", function() {
+        tabris.Module.createLoader.and.returnValue(undefined);
+        spyOn(tabris.Module, "readJSON").and.returnValue(undefined);
+
+        try {
+          module.require("foo");
+        } catch (error) {
+        }
+
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./node_modules/foo");
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./node_modules/foo.js");
+        expect(tabris.Module.readJSON).toHaveBeenCalledWith("./node_modules/foo.json");
+        expect(tabris.Module.readJSON).toHaveBeenCalledWith("./node_modules/foo/package.json");
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./node_modules/foo/index.js");
+      });
+
+      it("requests modules from node_modules folder at top-level", function() {
+        module = new tabris.Module("./foo/bar.js");
+        tabris.Module.createLoader.and.returnValue(undefined);
+        spyOn(tabris.Module, "readJSON").and.returnValue(undefined);
+
+        try {
+          module.require("foo");
+        } catch (error) {
+        }
+
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./node_modules/foo");
+      });
+
+      it("fails if module cannot be found", function() {
+        tabris.Module.createLoader.and.returnValue(undefined);
+        spyOn(tabris.Module, "readJSON").and.returnValue(undefined);
+
         expect(function() {
-          module._load();
-        }).toThrow(new Error("Cannot find module './foo/bar'"));
+          module.require("foo");
+        }).toThrow();
+
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./node_modules/foo");
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./node_modules/foo.js");
+        expect(tabris.Module.readJSON).toHaveBeenCalledWith("./node_modules/foo.json");
+        expect(tabris.Module.readJSON).toHaveBeenCalledWith("./node_modules/foo/package.json");
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./node_modules/foo/index.js");
       });
 
-      it("exposes module locally", function() {
-        respond("module.exports = 1;");
+      it("requests url variants only once", function() {
+        tabris.Module.createLoader.and.returnValue(undefined);
+        spyOn(tabris.Module, "readJSON").and.returnValue({});
 
-        module._load();
+        module.require("./foo");
+        tabris.Module.createLoader.calls.reset();
+        tabris.Module.readJSON.calls.reset();
+        module.require("./foo");
 
-        expect(module.exports).toBe(1);
-        expect(window.module).toBeUndefined();
+        expect(tabris.Module.createLoader.calls.count()).toBe(0);
+        expect(tabris.Module.readJSON.calls.count()).toBe(0);
       });
 
-      it("exposes module.exports locally", function() {
-        respond("exports.x = 1;");
+      describe("from plain module", function() {
 
-        module._load();
+        it("creates module with id", function() {
+          var result = module.require("./bar");
 
-        expect(module.exports.x).toBe(1);
-        expect(window.exports).toBeUndefined();
+          expect(result.id).toBe("./bar");
+        });
+
+        it("creates module with nested id", function() {
+          var result = module.require("./bar/baz");
+
+          expect(result.id).toBe("./bar/baz");
+        });
+
+        it("fails if requested id is outside of module root", function() {
+          expect(function() {
+            module.require("../bar");
+          }).toThrow();
+        });
+
       });
 
-      it("exposes module.require locally", function() {
-        respond("module.exports = require; require('foo');");
-        module.require = jasmine.createSpy();
+      describe("from nested module", function() {
 
-        module._load();
+        beforeEach(function() {
+          module.id = "./foo/bar.js";
+        });
 
-        expect(module.require).toHaveBeenCalledWith("foo");
-        expect(module.require.calls.first().object).toBe(module); // ensure 'this' is the module
-        expect(window.require).not.toBe(module.exports);
-      });
+        it("creates module with plain id", function() {
+          var result = module.require("./baz");
 
-      it("does not run js in global scope", function() {
-        respond("var x = 1");
+          expect(result.id).toBe("./foo/baz");
+        });
 
-        module._load();
+        it("during module loading creates module with plain id", function() {
+          tabris.Module.createLoader.and.callFake(function(path) {
+            if (path === "./foo/baz.js") {
+              return function(module, exports, require) {
+                module.exports = require("./foo");
+              };
+            }
+            if (path === "./foo/foo.js") {
+              return function(module) {module.exports = module;};
+            }
+          });
 
-        expect(window.x).toBeUndefined();
-      });
+          var result = module.require("./baz");
 
-    });
+          expect(result.id).toBe("./foo/foo.js");
+        });
 
-    describe(".require", function() {
+        it("handles path that starts with '../'", function() {
+          var result = module.require("../baz");
 
-      beforeEach(function() {
-        respond("module.exports = module;");
-        module = global.require("./foo/bar");
-      });
+          expect(result.id).toBe("./baz");
+        });
 
-      it("sets module as parent for new module instance", function() {
-        var module2 = module.require("./foo/bar2");
-        expect(module2.parent).toBe(module);
-      });
+        it("handles nested path that starts with '../'", function() {
+          var result = module.require("../bar/baz");
 
-      it("keeps parent for cached module instance", function() {
-        var module2 = global.require("bar2");
+          expect(result.id).toBe("./bar/baz");
+        });
 
-        var module2Cached = module.require("bar2");
+        it("handles path with enclosed '/../'", function() {
+          var result = module.require("./bar/../baz");
 
-        expect(module2).toBe(module2Cached);
-        expect(module2.parent).toBe(global);
-      });
+          expect(result.id).toBe("./foo/baz");
+        });
 
-      it("uses parent path as root for sub directories", function() {
-        var fooBar2 = global.require("./foo/bar2");
+        it("handles path with enclosed '/./'", function() {
+          var result = module.require("./bar/./baz");
 
-        var result = module.require("./bar2");
+          expect(result.id).toBe("./foo/bar/baz");
+        });
 
-        expect(result.id).toBe("./foo/bar2");
-        expect(result).toBe(fooBar2);
-        expect(result).not.toBe(global.require("./bar2"));
-      });
+        it("handles path with multiple enclosed '/./' and '/../'", function() {
+          var result = module.require("././bar/.././baz");
 
-      it("uses parent path as root for parent directories", function() {
-        var bar2 = global.require("./bar2");
+          expect(result.id).toBe("./foo/baz");
+        });
 
-        var result = module.require("../bar2");
-
-        expect(result.id).toBe("./bar2");
-        expect(result).toBe(bar2);
-      });
-
-      it("uses parent path as root for cousin directory", function() {
-        var someOtherDir = global.require("./some/other/dir");
-
-        var result = someOtherDir.require("../../foo/bar");
-
-        expect(result).toBe(module);
-      });
-
-      it("does not use parent path for non-relative module", function() {
-        var bar2 = global.require("bar2");
-
-        var result = module.require("bar2");
-
-        expect(result.id).toBe("./node_modules/bar2");
-        expect(result).toBe(bar2);
       });
 
     });
 
   });
 
-  describe("global require", function() {
+  describe("loadMain", function() {
 
-    beforeEach(function() {
-      respond("module.exports = module;");
+    it("requests package.json", function() {
+      spyOn(tabris.Module, "readJSON").and.returnValue({main: "foo.js"});
+
+      tabris.Module.loadMain();
+
+      expect(tabris.Module.readJSON).toHaveBeenCalledWith("./package.json");
+      expect(tabris.Module.createLoader).toHaveBeenCalledWith("./foo.js");
     });
 
-    it("creates module for relative id", function() {
-      expect(global.require("./foo").id).toBe("./foo");
-    });
+    it("loads main module with root module", function() {
+      spyOn(tabris.Module, "readJSON").and.returnValue({main: "foo.js"});
+      var main;
+      tabris.Module.createLoader.and.returnValue(function(module) {
+        main = module;
+      });
 
-    it("throws exception for module in parent directory", function() {
-      expect(function() {
-        global.require("../foo");
-      }).toThrow();
-    });
+      tabris.Module.loadMain();
 
-    it("creates module with non-relative id", function() {
-      expect(global.require("foo").id).toBe("./node_modules/foo");
-    });
-
-    it("creates module with global as parent", function() {
-      expect(global.require("./foo").parent).toBe(global);
-    });
-
-    it("returns different exports for different modules", function() {
-      expect(global.require("./foo")).not.toBe(global.require("./bar"));
-    });
-
-    it("returns same exports for same path", function() {
-      expect(global.require("./foo")).toBe(global.require("./foo"));
-    });
-
-    it("returns same exports for different paths to the same module", function() {
-      expect(global.require("foo")).toBe(global.require("./node_modules/foo"));
+      expect(main.id).toBe("./foo.js");
+      expect(main.parent.parent).toBe(null);
     });
 
   });
