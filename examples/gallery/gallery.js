@@ -28,7 +28,7 @@ tabris.load(function() {
   });
 
   var scrollComposite = tabris.create("ScrollComposite", {
-    scroll: "horizontal",
+    direction: "horizontal",
     data: {paging: true},
     layoutData: {left: 0, right: 0, bottom: 0, height: 164},
     background: "rgba(32, 32, 32, 0.6)"

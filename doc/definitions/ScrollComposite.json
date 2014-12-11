@@ -3,7 +3,7 @@
   "description": "A composite that allows its content to overflow either vertically (default) or horizontally.",
   "include": ["Widget"],
   "properties": {
-    "scroll": {
+    "direction": {
       "type": "string:vertical|horizontal?vertical",
       "description": "Specifies the scrolling direction of the scroll composite. Can only be set in the \"create\" method."
     }

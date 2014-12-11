@@ -155,7 +155,7 @@ tabris.load(function() {
     var page = tabris.create("Page", {title: book.title});
     var composite = tabris.create("ScrollComposite", {
       layoutData: {left: 0, right: 0, top: 0, bottom: 0},
-      scroll: "vertical"
+      direction: "vertical"
     }).appendTo(page);
     var titleLabel = tabris.create("Label", {
       layoutData: {left: PAGE_MARGIN, top: PAGE_MARGIN * 2, right: PAGE_MARGIN},

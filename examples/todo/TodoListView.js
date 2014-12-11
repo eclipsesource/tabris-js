@@ -34,7 +34,7 @@ todo.TodoListView = Backbone.View.extend({
       text: todo.texts.markAllCheckbox,
       font: "bold 16px"
     });
-    this.container = tabris.create("ScrollComposite", {scroll: "vertical"});
+    this.container = tabris.create("ScrollComposite", {direction: "vertical"});
     this.clearCompletedButton = tabris.create("Button");
     this.todoCountLabel = tabris.create("Label", {markupEnabled: true});
     this.widget.append(this.input, this.markAllCheckbox, this.container, this.clearCompletedButton,

@@ -134,7 +134,7 @@ describe("ScrollComposite", function() {
   describe("when a ScrollComposite is created with scroll='horizontal'", function() {
     var createCalls;
     beforeEach(function() {
-      tabris.create("ScrollComposite", {scroll: "horizontal"});
+      tabris.create("ScrollComposite", {direction: "horizontal"});
       createCalls = nativeBridge.calls({op: "create"});
     });
     it("the ScrolledComposite is horizontal", function() {

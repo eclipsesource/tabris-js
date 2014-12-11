@@ -28,12 +28,12 @@
     },
 
     _create: function(properties) {
-      var scrollProps = util.omit(properties, ["scroll"]);
+      var scrollProps = util.omit(properties, ["direction"]);
       this.super("_create", scrollProps);
-      var style = properties.scroll === "horizontal" ? ["H_SCROLL"] : ["V_SCROLL"];
+      var style = properties.direction === "horizontal" ? ["H_SCROLL"] : ["V_SCROLL"];
       this._setPropertyNative("style", style);
       this._scrollBar = tabris.create("_ScrollBar", {
-        style: properties.scroll === "horizontal" ? ["HORIZONTAL"] : ["VERTICAL"]
+        style: properties.direction === "horizontal" ? ["HORIZONTAL"] : ["VERTICAL"]
       });
       tabris._nativeBridge.set(this._scrollBar.id, "parent", this.id);
       this._composite = tabris.create("Composite");
