@@ -205,35 +205,35 @@ describe("TabFolder", function() {
 
   });
 
-  describe("barPosition property", function() {
+  describe("tabBarLocation property", function() {
 
     beforeEach(function() {
       nativeBridge.resetCalls();
     });
 
     it("is omitted in create", function() {
-      tabFolder = tabris.create("TabFolder", {barPosition: "top"});
+      tabFolder = tabris.create("TabFolder", {tabBarLocation: "top"});
 
       var properties = nativeBridge.calls({id: tabFolder.id, op: "create"})[0].properties;
-      expect(properties.barPosition).toBeUndefined();
+      expect(properties.tabBarLocation).toBeUndefined();
     });
 
     it("sets style TOP for value 'top'", function() {
-      tabFolder = tabris.create("TabFolder", {barPosition: "top"});
+      tabFolder = tabris.create("TabFolder", {tabBarLocation: "top"});
 
       var properties = nativeBridge.calls({id: tabFolder.id, op: "create"})[0].properties;
       expect(properties.style).toEqual(["TOP"]);
     });
 
     it("sets style BOTTOM for value 'bottom'", function() {
-      tabFolder = tabris.create("TabFolder", {barPosition: "bottom"});
+      tabFolder = tabris.create("TabFolder", {tabBarLocation: "bottom"});
 
       var properties = nativeBridge.calls({id: tabFolder.id, op: "create"})[0].properties;
       expect(properties.style).toEqual(["BOTTOM"]);
     });
 
     it("sets no style for value 'default'", function() {
-      tabFolder = tabris.create("TabFolder", {barPosition: "default"});
+      tabFolder = tabris.create("TabFolder", {tabBarLocation: "default"});
 
       var properties = nativeBridge.calls({id: tabFolder.id, op: "create"})[0].properties;
       expect(properties.style).toBeUndefined();
