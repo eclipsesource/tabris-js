@@ -1,6 +1,37 @@
 {
   "title": "Common Widget Properties and Events",
-  "description": "Properties and events supported by all widgets except Action.",
+  "description": "API supported by all widgets except Action.",
+  "methods": {
+    "set": [
+      {
+        "parameters": ["property", "value"],
+        "description": "Sets the given property."
+      },
+      {
+        "parameters": ["properties"],
+        "description": "Sets the all given properties-value pairs."
+      }
+    ],
+    "get": [
+      {
+        "parameters": ["property"],
+        "returns": ["value"],
+        "description": "Gets the current value of the given property."
+      }
+    ],
+    "children": [
+      {
+        "parameters": [],
+        "returns": ["WidgetCollection"],
+        "description": "Returns a collection of all children of this widget."
+      },
+      {
+        "parameters": ["selector"],
+        "returns": ["WidgetCollection"],
+        "description": "Returns a collection of all children of this widget that match the selector."
+      }
+    ]
+  },
   "properties": {
     "enabled": {
       "type": "boolean?true",

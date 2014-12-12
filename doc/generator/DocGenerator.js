@@ -35,6 +35,7 @@ module.exports = function(grunt) {
       grunt.log.verbose.writeln("Generating DOC for " + name);
       result.push("## ", name, "\n");
       result.push(getDescriptionText(desc, data.includes));
+      result.push(getMethodsText(desc));
       result.push(getPropertiesText(desc));
       result.push(getEventsText(desc));
       result.push(getSeeAlsoText(desc));
@@ -61,6 +62,28 @@ module.exports = function(grunt) {
     }
     result.push("\n\n");
     return result.join("");
+  }
+
+  function getMethodsText(desc) {
+    if (!desc.methods) {
+      return "";
+    }
+    var result = [];
+    result.push("#### Methods\n");
+    Object.keys(desc.methods).sort().forEach(function(methodName) {
+      desc.methods[methodName].forEach(function(props) {
+        result.push("- **", sig(methodName, props.parameters) + "**");
+        result.push(props.returns ? ": *" + props.returns + "*" : "");
+        result.push(props.description ? "<br/>" + props.description : "");
+        result.push("\n");
+      });
+    });
+    result.push("\n");
+    return result.join("");
+  }
+
+  function sig(methodName, parameters) {
+    return methodName + "(" + parameters.join(", ") + ")";
   }
 
   function getPropertiesText(desc) {
