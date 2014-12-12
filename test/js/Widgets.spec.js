@@ -145,6 +145,15 @@ describe("Widgets", function() {
       expect(call.properties.visibility).toBe(true);
     });
 
+    it("support 'initial' for foreground, background and font", function() {
+      widget.set({foreground: "initial", background: "initial", font: "initial"});
+
+      var call = nativeBridge.calls({op: "set"})[0];
+      expect(call.properties.foreground).toBeNull();
+      expect(call.properties.background).toBeNull();
+      expect(call.properties.font).toBeNull();
+    });
+
   });
 
   describe("get default decoding", function() {

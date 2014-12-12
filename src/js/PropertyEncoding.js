@@ -49,10 +49,16 @@
     },
 
     color: function(value) {
+      if (value === "initial") {
+        return null;
+      }
       return util.colorStringToArray(value);
     },
 
     font: function(value) {
+      if (value === "initial") {
+        return null;
+      }
       return util.fontStringToArray(value);
     },
 

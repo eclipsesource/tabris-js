@@ -28,7 +28,8 @@ Colors are specified as strings using one of the following formats:
 * `rgb(r, g, b)` with `r`, `g` and `b` being numbers in the range 0..255.
 * `rgba(r, g, b, a)` with `a` being a number in the range 0..1.
 * a [color name](http://www.w3.org/TR/css3-color/#html4) from the CSS3 specification.
-* `transparent`
+* `transparent` sets a fully transparent color. This is a shortcut for `rgba(0, 0, 0, 0)`.
+* `initial` resets the color to its (platform-dependent) default.
 
 Examples:
 
@@ -38,11 +39,12 @@ Examples:
 "#rgb(255, 0, 0)"
 "#rgba(255, 0, 0, 0.8)"
 "red"
+"initial"
 ```
 
 ## Font
 
-Fonts are specified as strings using the shorthand syntax known from CSS. The font family may be omitted, in this case the default system font will be used.
+Fonts are specified as strings using the shorthand syntax known from CSS. The font family may be omitted, in this case the default system font will be used. The value `"initial"` resets the font to its (platform-dependent) default.
 
 Examples:
 
@@ -50,6 +52,7 @@ Examples:
 "bold 24px"
 "12px sans-serif"
 "bold italic 12px sans-serif"
+"initial"
 ```
 
 ## Image
