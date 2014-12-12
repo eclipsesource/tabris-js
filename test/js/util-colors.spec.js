@@ -85,6 +85,10 @@ describe("Color", function() {
       expect(util.colorStringToArray("navy")).toEqual([0, 0, 128, 255]);
     });
 
+    it("accepts 'transparent'", function() {
+      expect(util.colorStringToArray("transparent")).toEqual([0, 0, 0, 0]);
+    });
+
     it("rejects unknown strings", function() {
       expect(function() {
         util.colorStringToArray("unknown");

@@ -14,6 +14,9 @@
   };
 
   util.colorStringToArray = function(str) {
+    if (str === "transparent") {
+      return [0, 0, 0, 0];
+    }
     // #xxxxxx
     if (/^#([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/.test(str)) {
       return [
