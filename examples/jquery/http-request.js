@@ -3,7 +3,6 @@
 var $ = require("./lib/jquery.min.js");
 
 var MARGIN = 12;
-var lastLabel;
 
 var page = tabris.create("Page", {
   title: "XMLHttpRequest",
@@ -11,12 +10,11 @@ var page = tabris.create("Page", {
 });
 
 var createLabel = function(labelText) {
-  lastLabel = tabris.create("Label", {
+  tabris.create("Label", {
     text: labelText,
     markupEnabled: true,
-    layoutData: {left: MARGIN, right: MARGIN, top: [lastLabel, MARGIN]}
-  });
-  page.append(lastLabel);
+    layoutData: {left: MARGIN, right: MARGIN, top: [page.children().last() || 0, MARGIN]}
+  }).appendTo(page);
 };
 
 $.getJSON("http://www.telize.com/geoip", function(json) {
