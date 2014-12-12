@@ -1,9 +1,9 @@
 var page = tabris.create("Page", {
-  title: "Text Field",
+  title: "Text Input",
   topLevel: true
 });
 
-tabris.create("Text", {
+tabris.create("TextInput", {
   layoutData: {top: 20, left: [20, 0], right: [20, 0]},
   message: "Type here, press 'Done'"
 }).on("accept", function() {

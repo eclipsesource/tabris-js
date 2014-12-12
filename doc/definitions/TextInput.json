@@ -1,5 +1,5 @@
 {
-  "type": "Text",
+  "type": "TextInput",
   "description": "A widget that allows to enter text. *Known Issues: The cursor jumps to the beginning of the text in iOS.*",
   "include": ["Widget"],
   "properties": {

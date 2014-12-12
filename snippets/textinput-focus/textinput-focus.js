@@ -1,9 +1,9 @@
 var page = tabris.create("Page", {
-  title: "Text Field / Focus Listener",
+  title: "Text Input / Focus Listener",
   topLevel: true
 });
 
-tabris.create("Text", {
+tabris.create("TextInput", {
   layoutData: {top: 20, left: [20, 0], right: [20, 0]},
   message: "Colorful typing...",
   font: "22px sans-serif"

@@ -1,7 +1,7 @@
 {
-  "title": "Text Field",
-  "category": "Text",
+  "title": "Text Input",
+  "category": "TextInput",
   "description": "with listener",
   "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
-  "main": "text.js"
+  "main": "textinput.js"
 }

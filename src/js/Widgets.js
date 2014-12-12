@@ -148,7 +148,7 @@
     _properties: {minimum: "integer", maximum: "integer", selection: "integer"}
   });
 
-  tabris.registerWidget("Text", {
+  tabris.registerWidget("TextInput", {
     _type: "rwt.widgets.Text",
     _create: function(properties) {
       var style = textTypeToStyle[properties.type] || textTypeToStyle["default"];
@@ -176,6 +176,7 @@
       textLimit: "natural"
     }
   });
+  tabris.Text = tabris.TextInput;
 
   var textTypeToStyle = {
     password: ["BORDER", "SINGLE", "PASSWORD"],
