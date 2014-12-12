@@ -249,6 +249,16 @@ describe("tabris", function() {
       expect(result).toEqual(jasmine.any(tabris.Proxy));
     });
 
+    it("prints a warning if given type is an alias", function() {
+      tabris.Alias = tabris.TestType;
+      spyOn(console, "warn");
+
+      var result = tabris.create("Alias", {});
+
+      expect(result.type).toBe("TestType");
+      expect(console.warn).toHaveBeenCalledWith("\"Alias\" is deprecated, use \"TestType\"");
+    });
+
     it("triggers a create operation with type and properties", function() {
       var proxy = tabris.create("TestType", {foo: 23});
 
