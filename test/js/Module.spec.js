@@ -26,7 +26,7 @@ describe("tabris.Module", function() {
       expect(module.parent).toBe(parent);
     });
 
-    it("without argumetns sets default values", function() {
+    it("without arguments sets default values", function() {
       var module = new tabris.Module();
 
       expect(module.id).toBeNull();
@@ -73,29 +73,33 @@ describe("tabris.Module", function() {
       });
 
       it("returns same exports for subsequent calls", function() {
-        var instance1 = module.require("./foo");
-        var instance2 = module.require("./foo");
+        var exports1 = module.require("./foo");
+        var exports2 = module.require("./foo");
 
-        expect(instance1).toBe(instance2);
+        expect(exports1).toBe(exports2);
       });
 
       it("returns module that is currently loading", function() {
         tabris.Module.createLoader.and.returnValue(function(module, exports) {
           exports.foo = 1;
-          module.require("./foo").exports.bar = 2;
+          module.require("./foo").bar = 2;
         });
 
         expect(module.require("./foo")).toEqual({foo: 1, bar: 2});
       });
 
       it("returns same exports from different modules", function() {
+        tabris.Module.createLoader.and.returnValue(function(module, exports) {
+          exports.bar = 1;
+        });
         var module1 = new tabris.Module("./module1", module);
         var module2 = new tabris.Module("./module2", module);
 
-        var instance1 = module1.require("./foo");
-        var instance2 = module2.require("./foo");
+        var export1 = module1.require("./foo");
+        var export2 = module2.require("./foo");
 
-        expect(instance1).toBe(instance2);
+        expect(export1).toEqual({bar: 1});
+        expect(export1).toBe(export2);
       });
 
       it("requests url only once", function() {

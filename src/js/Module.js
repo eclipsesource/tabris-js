@@ -83,7 +83,7 @@
   function getModule(path, postfix) {
     var url = path + postfix;
     if (url in this._cache) {
-      return this._cache[url] || undefined;
+      return this._cache[url] ? this._cache[url].exports : undefined;
     }
     if (url.slice(-5) === ".json") {
       var data = tabris.Module.readJSON(url);
