@@ -2,12 +2,6 @@
   "title": "Parallax scrolling",
   "category": "Animation",
   "description": "Provides a sample implementation for a parallax scrolling effect",
-  "resources": [
-    {
-      "src": "https://tabrisjs.com/downloads/nightly/tabris.min.js"
-    },
-    {
-      "src": "parallax.js"
-    }
-  ]
+  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
+  "main": "parallax.js"
 }

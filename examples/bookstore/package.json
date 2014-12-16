@@ -1,0 +1,8 @@
+{
+  "title": "Bookstore",
+  "category": "Small Apps",
+  "description": "An example of a bookstore app",
+  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
+  "main": "bookstore.js"
+
+}

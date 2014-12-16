@@ -1,0 +1,7 @@
+{
+  "title": "Hello, World!",
+  "description": "Tabris.js - Hello, World!",
+  "category": "Small Apps",
+  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
+  "main": "hello.js"
+}

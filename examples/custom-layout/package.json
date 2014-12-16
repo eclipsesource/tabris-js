@@ -1,0 +1,4 @@
+{
+  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
+  "main": "app.js"
+}
