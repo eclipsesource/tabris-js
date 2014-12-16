@@ -1,0 +1,7 @@
+{
+  "title": "Collection View",
+  "category": "Collection View",
+  "description": "Create a collection view, initialize its cells and fill it with items",
+  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
+  "main": "collectionview.js"
+}

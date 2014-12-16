@@ -1,0 +1,7 @@
+{
+  "title": "Text Field and Focus Listener",
+  "category": "Text",
+  "description": "Listen to focus events",
+  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
+  "main": "text-focus.js"
+}

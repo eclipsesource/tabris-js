@@ -1,0 +1,7 @@
+{
+  "title": "Creating multiple top level pages",
+  "category": "Page",
+  "description": "Demonstrates creating multiple top level pages",
+  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
+  "main": "page.js"
+}

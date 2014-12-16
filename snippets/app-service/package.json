@@ -1,0 +1,7 @@
+{
+  "title": "Application Lifecycle",
+  "category": "App Service",
+  "description": "Attach listeners to Pause and Resume events and handle back navigation",
+  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
+  "main": "app-service.js"
+}

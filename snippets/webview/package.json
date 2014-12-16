@@ -1,0 +1,7 @@
+{
+  "title": "Web View",
+  "category": "WebView",
+  "description": "Create a web view to load a web page",
+  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
+  "main": "webview.js"
+}

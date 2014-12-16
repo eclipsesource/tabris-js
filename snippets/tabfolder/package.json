@@ -1,0 +1,7 @@
+{
+  "title": "Tab Folder",
+  "category": "TabFolder",
+  "description": "A swipe enabled Tab Folder with 3 tabs",
+  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
+  "main": "tabfolder.js"
+}

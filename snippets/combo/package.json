@@ -1,0 +1,7 @@
+{
+  "title": "Combo Boxes",
+  "category": "Combo",
+  "description": "Create a combo box to select a string from a list",
+  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
+  "main": "combo.js"
+}

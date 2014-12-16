@@ -1,0 +1,7 @@
+{
+  "title": "Timer",
+  "category": "Timer",
+  "description": "Use a timer to delay an action",
+  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
+  "main": "timer.js"
+}

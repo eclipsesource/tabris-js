@@ -1,0 +1,7 @@
+{
+  "title": "Text Field",
+  "category": "Text",
+  "description": "with listener",
+  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
+  "main": "text.js"
+}

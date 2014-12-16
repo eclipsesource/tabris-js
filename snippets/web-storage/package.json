@@ -1,0 +1,7 @@
+{
+  "title": "Web Storage",
+  "category": "WebStorage",
+  "description": "Count how many times the application was started.",
+  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
+  "main": "web-storage.js"
+}

@@ -1,0 +1,7 @@
+{
+  "title": "Image View",
+  "category": "ImageView",
+  "description": "Display images with different scale modes",
+  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
+  "main": "imageview.js"
+}

@@ -1,0 +1,7 @@
+{
+  "title": "Center Alignment",
+  "category": "Layout",
+  "description": "Center-align a widget in its parent",
+  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
+  "main": "layout-center.js"
+}

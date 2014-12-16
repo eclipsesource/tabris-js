@@ -1,0 +1,7 @@
+{
+  "title": "Actions - Placement",
+  "category": "Action",
+  "description": "Create actions with a specified placement priority",
+  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
+  "main": "action-placement-priority.js"
+}

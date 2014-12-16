@@ -1,0 +1,7 @@
+{
+  "title": "Relative Position",
+  "category": "Layout",
+  "description": "Arrange a widget relative to another one",
+  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
+  "main": "layout-relative-position.js"
+}

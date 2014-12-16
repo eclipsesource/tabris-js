@@ -1,0 +1,7 @@
+{
+  "title": "Canvas",
+  "category": "Canvas",
+  "description": "Draw shapes on a canvas using HTML5 Canvas API",
+  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
+  "main": "canvas.js"
+}
