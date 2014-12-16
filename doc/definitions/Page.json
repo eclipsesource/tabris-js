@@ -2,6 +2,20 @@
   "type": "Page",
   "description": "Pages contain an application's UI. Top-level pages are included in the application's main menu.",
   "include": ["Composite"],
+  "methods": {
+    "open": [
+      {
+        "parameters": [],
+        "description": "Opens the page, i.e. makes it the active page."
+      }
+    ],
+    "close": [
+      {
+        "parameters": [],
+        "description": "Closes and disposes of the page."
+      }
+    ]
+  },
   "properties": {
     "image": {
       "type": "Image"

@@ -1,15 +1,17 @@
 {
-  "title": "Common Widget Properties and Events",
+  "title": "Common Widget Methods, Properties and Events",
   "description": "API supported by all widgets except Action.",
   "methods": {
     "set": [
       {
         "parameters": ["property", "value"],
-        "description": "Sets the given property."
+        "description": "Sets the given property.",
+        "returns": "Widget"
       },
       {
         "parameters": ["properties"],
-        "description": "Sets the all given properties-value pairs."
+        "description": "Sets the all given properties-value pairs.",
+        "returns": "Widget"
       }
     ],
     "get": [
@@ -23,12 +25,72 @@
       {
         "parameters": [],
         "returns": ["WidgetCollection"],
-        "description": "Returns a collection of all children of this widget."
+        "description": "Returns a (possibly empty) collection of all children of this widget."
       },
       {
         "parameters": ["selector"],
         "returns": ["WidgetCollection"],
-        "description": "Returns a collection of all children of this widget that match the selector."
+        "description": "Returns a (possibly empty) collection of all children of this widget that match the selector."
+      }
+    ],
+    "parent": [
+      {
+        "parameters": [],
+        "returns": ["Widget"],
+        "description": "Returns the parent of this widget."
+      }
+    ],
+    "appendTo": [
+      {
+        "parameters": ["Composite"],
+        "returns": ["Widget"],
+        "description": "Appends this widget to the given parent. The parent widget must support children (like Page, Composite)."
+      }
+    ],
+    "on": [
+      {
+        "parameters": ["event", "listener"],
+        "returns": "Widget",
+        "description": "Adds a `listener` to the list of functions to be notified when `event` is fired. In the listener function, `this` will point to the widget itself."
+      },
+      {
+        "parameters": ["event", "listener", "context"],
+        "returns": "Widget",
+        "description": "Adds a `listener` to the list of functions to be notified when `event` is fired. In the listener function, `this` will point to the `context` object."
+      }
+    ],
+    "off": [
+      {
+        "parameters": [],
+        "returns": "Widget",
+        "description": "Removes all listeners for all events from this widget."
+      },
+      {
+        "parameters": ["event"],
+        "returns": "Widget",
+        "description": "Removes all listeners for `event` from this widget."
+      },
+      {
+        "parameters": ["event", "listener"],
+        "returns": "Widget",
+        "description": "Removes all occurrences of `listener` that are bound to `event` from this widget, regardless of their `context` parameter."
+      },
+      {
+        "parameters": ["event", "listener", "context"],
+        "returns": "Widget",
+        "description": "Removes all occurences of `listener` that are bound to `event` and `context` from this widget."
+      }
+    ],
+    "animate": [
+      {
+        "parameters": ["properties", "options"],
+        "description": "Starts an animation that transforms the given properties from their current values to the given ones. Currently, only the properties `transform` and `opacity` are supported. Supported `options` are: `delay` (time until the animation starts in ms, defaults to`0), `duration` (in ms), `easing` (one of linear, ease-in, ease-out, ease-in-out), `repeat` (number of times to repeat the animation, defaults to 1), `reverse` (true to play the animation backwards)"
+      }
+    ],
+    "dispose": [
+      {
+        "parameters": [""],
+        "description": "Removes this widget from its parent and destroys it. Also disposes of all its children. Triggers a `remove` event on the parent and a `dispose` event on itself. The widget can no longer be used."
       }
     ]
   },

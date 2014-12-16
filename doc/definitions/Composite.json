@@ -3,6 +3,20 @@
   "description": "An empty widget that can contain other widgets.",
   "title": "Composite events",
   "include": ["Widget"],
+  "methods": {
+    "append": [
+      {
+        "parameters": ["Widget", "Widget*" ],
+        "returns": "Widget",
+        "description": "Adds the given widget(s) in the given order to the composite."
+      },
+      {
+        "parameters": ["WidgetCollection"],
+        "returns": "Widget",
+        "description": "Adds all widgets in the given collection to the composite."
+      }
+    ]
+  },
   "events": {
     "add": {
       "description": "Fired when a child is added. Arguments are (child, composite, {})."

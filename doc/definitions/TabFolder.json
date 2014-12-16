@@ -2,6 +2,15 @@
   "type": "TabFolder",
   "description": "A widget that can switch between [tabs](#Tab).",
   "include": ["Widget"],
+  "methods": {
+    "append": [
+      {
+        "parameters": ["TabItem", "TabItem*" ],
+        "returns": "TabFolder",
+        "description": "Adds the given TabItem widgets in the given order to the TabFolder"
+      }
+    ]
+  },
   "properties": {
     "tabBarLocation": {
       "type": "string:top|bottom|auto?auto",
