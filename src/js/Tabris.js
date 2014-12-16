@@ -65,8 +65,17 @@
         tabris._loadFunctions[i++].call();
       }
       tabris._ready = true;
-      tabris.Module.loadMain();
+      if (tabris._entryPoint) {
+        tabris._entryPoint();
+        delete tabris._entryPoint;
+      } else {
+        tabris.Module.loadMain();
+      }
       tabris.trigger("flush");
+    },
+
+    _setEntryPoint: function(entryPoint) {
+      this._entryPoint = entryPoint;
     },
 
     _notify: function(id, event, param) {

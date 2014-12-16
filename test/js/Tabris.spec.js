@@ -103,6 +103,17 @@ describe("tabris", function() {
       expect(tabris.Module.loadMain).toHaveBeenCalled();
     });
 
+    it("starts entry point instead of main module", function() {
+      spyOn(tabris.Module, "loadMain");
+      var listener = jasmine.createSpy();
+      tabris._setEntryPoint(listener);
+
+      tabris._start.call(null, nativeBridge);
+
+      expect(tabris.Module.loadMain).not.toHaveBeenCalled();
+      expect(listener).toHaveBeenCalled();
+    });
+
   });
 
   describe("_notify", function() {
