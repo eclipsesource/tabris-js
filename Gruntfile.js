@@ -91,7 +91,7 @@ module.exports = function(grunt) {
           "LegacyCanvasContext.js",
           "WebStorage.js",
           "XMLHttpRequest.js"
-        ]),
+        ]).concat("build/cordova.tabris.js"),
         dest: "build/tabris.js"
       }
     },
@@ -146,6 +146,9 @@ module.exports = function(grunt) {
           {expand: true, cwd: "build/", src: ["examples/**"], filter: "isFile"}
         ]
       }
+    },
+    curl: {
+      "build/cordova.tabris.js": "https://tabrisjs.com/downloads/nightly/cordova.tabris.js"
     }
   });
 
@@ -157,6 +160,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.loadNpmTasks("grunt-contrib-copy");
   grunt.loadNpmTasks("grunt-contrib-compress");
+  grunt.loadNpmTasks("grunt-curl");
   grunt.loadTasks("doc/generator");
 
   grunt.registerTask("examples", "Copy examples/snippets to build/, create index", function() {
@@ -189,6 +193,7 @@ module.exports = function(grunt) {
     "copy:doc",
     "jscs",
     "jshint",
+    "curl",
     "concat",
     "uglify",
     "jasmine",
