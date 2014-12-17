@@ -1,7 +1,3 @@
-/*global require: false*/
-
-var path = require("path");
-
 module.exports = function(grunt) {
 
   var banner = ["/*!",
@@ -147,6 +143,9 @@ module.exports = function(grunt) {
         ]
       }
     },
+    examples: {
+      src: ["snippets", "examples"]
+    },
     curl: {
       "build/cordova.tabris.js": "https://tabrisjs.com/downloads/nightly/cordova.tabris.js"
     }
@@ -162,36 +161,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-contrib-compress");
   grunt.loadNpmTasks("grunt-curl");
   grunt.loadTasks("doc/generator");
-
-  grunt.registerTask("copy-examples", "Copy examples and snippets to build/", function() {
-    ["snippets", "examples"].forEach(function(dir) {
-      var aggregatedIndex = [];
-      var count = 0;
-      grunt.file.expand(dir + "/*").forEach(function(subdir) {
-        if (grunt.file.exists(subdir, "package.json")) {
-          var index = grunt.file.readJSON(path.join(subdir, "package.json"));
-          if ("title" in index) {
-            grunt.file.recurse(subdir, function(abspath) {
-              grunt.file.copy(abspath, path.join("build", abspath));
-            });
-            aggregatedIndex.push({
-              category: index.category || "",
-              title: index.title,
-              description: index.description || "",
-              path: path.basename(subdir)
-            });
-            count++;
-          }
-        }
-      });
-      if (grunt.file.exists(dir, "README.md")) {
-        grunt.file.copy(path.join(dir, "README.md"), path.join("build", dir, "README.md"));
-      }
-      grunt.file.write(path.join("build", dir, "index.json"),
-                       JSON.stringify(aggregatedIndex, null, 2));
-      grunt.log.writeln("copied " + count + " " + dir + " to build/");
-    });
-  });
+  grunt.loadTasks("lib/grunt");
 
   grunt.registerTask("default", [
     "clean",
