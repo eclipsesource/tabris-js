@@ -163,15 +163,16 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-curl");
   grunt.loadTasks("doc/generator");
 
-  grunt.registerTask("examples", "Copy examples/snippets to build/, create index", function() {
+  grunt.registerTask("copy-examples", "Copy examples and snippets to build/", function() {
     ["snippets", "examples"].forEach(function(dir) {
       var aggregatedIndex = [];
+      var count = 0;
       grunt.file.expand(dir + "/*").forEach(function(subdir) {
-        if (grunt.file.exists(subdir, "index.json")) {
-          var index = grunt.file.readJSON(path.join(subdir, "/index.json"));
+        if (grunt.file.exists(subdir, "package.json")) {
+          var index = grunt.file.readJSON(path.join(subdir, "package.json"));
           if ("title" in index) {
-            grunt.file.recurse(subdir, function callback(abspath) {
-              grunt.file.copy(abspath, path.join("build/", abspath));
+            grunt.file.recurse(subdir, function(abspath) {
+              grunt.file.copy(abspath, path.join("build", abspath));
             });
             aggregatedIndex.push({
               category: index.category || "",
@@ -179,11 +180,16 @@ module.exports = function(grunt) {
               description: index.description || "",
               path: path.basename(subdir)
             });
+            count++;
           }
         }
       });
-      grunt.file.copy("examples/README.md", "build/examples/README.md");
-      grunt.file.write("build/" + dir + "/index.json", JSON.stringify(aggregatedIndex, null, 2));
+      if (grunt.file.exists(dir, "README.md")) {
+        grunt.file.copy(path.join(dir, "README.md"), path.join("build", dir, "README.md"));
+      }
+      grunt.file.write(path.join("build", dir, "index.json"),
+                       JSON.stringify(aggregatedIndex, null, 2));
+      grunt.log.writeln("copied " + count + " " + dir + " to build/");
     });
   });
 
@@ -197,7 +203,7 @@ module.exports = function(grunt) {
     "concat",
     "uglify",
     "jasmine",
-    "examples",
+    "copy-examples",
     "compress"
   ]);
 
