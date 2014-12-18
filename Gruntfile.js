@@ -160,12 +160,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-contrib-copy");
   grunt.loadNpmTasks("grunt-contrib-compress");
   grunt.loadNpmTasks("grunt-curl");
-  grunt.loadTasks("doc/generator");
-  grunt.loadTasks("lib/grunt");
+  grunt.loadTasks("./grunt");
 
   grunt.registerTask("default", [
     "clean",
-    "doc",
+    "generate-doc",
     "copy:doc",
     "jscs",
     "jshint",

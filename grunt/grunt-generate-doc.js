@@ -1,6 +1,6 @@
 module.exports = function(grunt) {
 
-  grunt.registerTask("doc", function() {
+  grunt.registerTask("generate-doc", function() {
     grunt.file.write(readTargetPath(), createOutput(readJson()));
   });
 
