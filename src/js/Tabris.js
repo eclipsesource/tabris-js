@@ -54,11 +54,6 @@
     },
 
     _start: function(client) {
-      // TODO temporary workaround until all platforms support runInThisContext correctly
-      client.runInThisContext = function(source) {
-        /*jshint evil: true */
-        return window.eval(source);
-      };
       tabris._nativeBridge = new tabris.NativeBridge(client);
       var i = 0;
       while (i < tabris._loadFunctions.length) {
@@ -81,7 +76,12 @@
     _notify: function(id, event, param) {
       var proxy = tabris._proxies[id];
       if (proxy) {
-        proxy._trigger(event, param);
+        try {
+          proxy._trigger(event, param);
+        } catch (error) {
+          console.error(error);
+          console.log(error.stack);
+        }
       }
       tabris.trigger("flush");
     },

@@ -49,7 +49,8 @@
     try {
       new tabris.Module().require("./");
     } catch (error) {
-      console.warn("Could not load main module: " + error);
+      console.error("Could not load main module: " + error);
+      console.log(error.stack);
     }
   };
 
