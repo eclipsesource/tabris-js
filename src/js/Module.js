@@ -59,7 +59,7 @@
     var src = bridge.load(url);
     if (src) {
       try {
-        return bridge.runInThisContext(wrapSource(src));
+        return bridge.runInThisContext(wrapSource(src), url);
       } catch (ex) {
         // src may be an index.html
         if (url.slice(-3) === ".js") {
