@@ -134,13 +134,16 @@ var parent = button.parent();
 
 ### `children()`
 
-Returns the list of children of this widget. The returned array is a copy and can safely be manipulated.
+Returns the list of children of this widget as a `WidgetCollection`. 
 
 Example:
 
 ```javascript
-var lastChild = parent.children().pop();
+var firstChild = parent.children()[0];
+var lastChild = parent.children().last();
 ```
+
+A `WidgetCollection` provides a subset of the Array API (`length`, `forEach`, `filter`, and `indexOf`), as well as the additional methods `first`, `last`, and `toArray`. In addition, all common widget methods except `append` are available on a WidgetCollection.
 
 ## Events
 
