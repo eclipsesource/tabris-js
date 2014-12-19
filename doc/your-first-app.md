@@ -8,20 +8,13 @@ The first example you should look at is *Hello, World!*. You can run this direct
 
     [$] cd examples/hello
 
-### index.json
-The index.json file is used to describe the app, including the name, description and a list of source files. All tabris.js apps must include an index.json.
+### package.json
+The `package.json` file is used to describe the app, including the name, description, dependencies and a the main source files. Every tabris.js app should include a package.json.
 ```js
 {
-  "title": "Hello, World!",
+  "name": "hello-world",
   "description": "Tabris.js - Hello, World!",
-  "resources": [
-    {
-      "src": "http://download.eclipsesource.com/technology/tabris/js/current/tabris.min.js"
-    },
-    {
-      "src": "hello.js"
-    }
-  ]
+  "main": "hello.js"
 }
 ```
 
@@ -29,28 +22,26 @@ The index.json file is used to describe the app, including the name, description
 The tabris.js Hello, World! example is contained in `examples/hello/hello.js`. Tabris.js apps can be developed using any text editor or IDE.
 
 ```js
-tabris.load(function() {
-
-    var page = tabris.create("Page", {
-      title: "Hello, World!",
-      topLevel: true
-    });
-
-    var button = tabris.create("Button", {
-      text: "Native Widgets",
-      layoutData: { centerX: 0, top: 100 }
-    }).on("selection", function() {
-      label.set("text", "Totally Rock!");
-    }).appendTo(page);
-
-    var label = tabris.create("Label", {
-      font: "24px",
-      layoutData: {centerX: 0, top: [button, 50]}
-    }).appendTo(page);
-
-    page.open();
-
+var page = tabris.create("Page", {
+  title: "Hello, World!",
+  topLevel: true
 });
+
+var button = tabris.create("Button", {
+  text: "Native Widgets",
+  layoutData: {centerX: 0, top: 100}
+}).appendTo(page);
+
+var label = tabris.create("Label", {
+  font: "24px",
+  layoutData: {centerX: 0, top: [button, 50]}
+}).appendTo(page);
+
+button.on("selection", function() {
+  label.set("text", "Totally Rock!");
+});
+
+page.open();
 ```
 
 The Hello, World! example contains a *button* and a *label*. When the button is selected, the label is updated. Both the button and the label are placed on the *page* relative to one another.
@@ -65,13 +56,13 @@ To make your scripts available to the tabris.js app you need to run a  webserver
     [$] npm install http-server
     [$] http-server ./ -p 7777
 
-*You can also place your `index.json` and `hello.js` files on any other http-server, as long as it's accessible from your device.*
+*You can also place your `package.json` and `hello.js` files on any other http-server, as long as it's accessible from your device.*
 
 Once your JavaScript files can be accessed by a http url, use the tabris.js developer app to test them. You can enter the url on the URL tab on the developer app. In the case of a node-js http-server running on your development machine, enter:
 
     http://<development-machine-ip-address>:7777/
 
-The _My Scripts_ page on tabrisjs.com can also be used to configure the URLs available on your device, simply press the `Link Script' button. Then enter the URL of the web server that is hosting your tabris.js Script and save.
+The *My Scripts* page on [tabrisjs.com](http://tabrisjs.com) can also be used to configure the URLs available on your device, simply press the *Link Script* button. Then enter the URL of the web server that is hosting your tabris.js Script and save.
 
 ![Link A Script](img/link-app.png)
 
@@ -91,11 +82,11 @@ console.debug("A debug Message");
 ```
 
 ## Share
-GitHub repositories that contain a tabris.js scripts (an `index.json` and the JavaScript files) can be easily accessed on your device. Just go to the `My Scripts` page on tabris.js.com and turn sharing ON. The app will then appear on your device on the _My Scripts_ tab.
+GitHub repositories that contain a tabris.js scripts (a `package.json` and the JavaScript files) can be easily accessed on your device. Just go to the *My Scripts* page on tabris.js.com and turn sharing ON. The app will then appear on your device on the *My Scripts* tab.
 
 ![Developer Console](img/link-github.png)
 
-Tabris scripts accessible at a public URL can also be shared. On tabrisjs.com choose `My Apps` and `Link Script'. Enter the URL and select the checkbox _Make Script public_. Publicly available tabris.js apps will appear on the `Grand Central` page on tabrisjs.com.
+Tabris scripts accessible at a public URL can also be shared. On tabrisjs.com choose *My Apps* and *Link Script*. Enter the URL and select the checkbox *Make Script public*. Publicly available tabris.js apps will appear on the *Grand Central* page on tabrisjs.com.
 
 ![Developer Console](img/share-public.png)
 
@@ -105,4 +96,4 @@ For submission to the App / Play Stores you will need to bundle, build and brand
 
 
 ## Further Information
-[http://tabrisjs.com](http://tabrisjs.com) is your key to tabris.js. The website is filled with documentation, examples, the tabris.js development roadmap, and tools for connecting with your device. The website also contains links to the examples and snippets.
+http://tabrisjs.com is your key to tabris.js. The website is filled with documentation, examples, the tabris.js development roadmap, and tools for connecting with your device. The website also contains links to the examples and snippets.
