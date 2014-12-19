@@ -32,6 +32,8 @@
     "exports": false,
     "require": false,
 
+    "cordova": false,
+
     // jasmine
     "describe": false,
     "it": false,
