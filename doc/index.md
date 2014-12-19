@@ -6,12 +6,16 @@ Tabris.js is a mobile framework that lets you develop native iOS and Android app
 - Working with [Widget objects](widgets)
 - Creating [Layouts](layout)
 - Working with the [Canvas](canvas) widget
-- [Widgets types reference](widget-types)
-- [Property types reference](property-types)
+- Including [Cordova plug-ins](cordova)
 - Understand [touch events](touch-events) in tabris.js
+
+## API Reference
+- [Widgets types](widget-types)
+- [Property types](property-types)
 
 ## External Documentation
 - General [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) reference and tutorials (MDN) 
+- Tabris features a module system compatible to [Node.js Modules](http://nodejs.org/docs/latest/api/modules.html).
 - The [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) is available in tabris.js (MDN)
 - Also available is the [*localStorage* object](https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Storage), but not *sessionStorage* (MDN)
 - Need a timer? You can use [these](https://developer.mozilla.org/en-US/Add-ons/Code_snippets/Timers) (MDN)
