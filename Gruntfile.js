@@ -115,12 +115,13 @@ module.exports = function(grunt) {
         "Page.json",
         "ProgressBar.json",
         "RadioButton.json",
+        "ScrollComposite.json",
         "Slider.json",
         "TabFolder.json",
         "Tab.json",
         "Text.json",
         "ToggleButton.json",
-        "ScrollComposite.json",
+        "Video.json",
         "WebView.json"
       ]),
       target: "build/doc/widget-types.md"
