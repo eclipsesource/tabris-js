@@ -13,33 +13,29 @@ var people = [
   return {firstName: element[0], lastName: element[1], image: IMAGE_PATH + element[2]};
 });
 
-tabris.load(function() {
-
-  var page = tabris.create("Page", {
-    title: "Collection View",
-    topLevel: true
-  });
-
-  tabris.create("CollectionView", {
-    layoutData: {left: 0, top: 0, right: 0, bottom: 0},
-    items: people,
-    itemHeight: 256,
-    initializeCell: function(cell) {
-      var imageView = tabris.create("ImageView", {
-        layoutData: {top: 16, centerX: 0, width: 200, height: 200}
-      }).appendTo(cell);
-      var nameLabel = tabris.create("Label", {
-        layoutData: {top: [imageView, 16], centerX: 0}
-      }).appendTo(cell);
-      cell.on("itemchange", function(person) {
-        imageView.set("image", {src: person.image});
-        nameLabel.set("text", person.firstName);
-      });
-    }
-  }).on("selection", function(event) {
-    console.log("selected", event.item.firstName);
-  }).appendTo(page);
-
-  page.open();
-
+var page = tabris.create("Page", {
+  title: "Collection View",
+  topLevel: true
 });
+
+tabris.create("CollectionView", {
+  layoutData: {left: 0, top: 0, right: 0, bottom: 0},
+  items: people,
+  itemHeight: 256,
+  initializeCell: function(cell) {
+    var imageView = tabris.create("ImageView", {
+      layoutData: {top: 16, centerX: 0, width: 200, height: 200}
+    }).appendTo(cell);
+    var nameLabel = tabris.create("Label", {
+      layoutData: {top: [imageView, 16], centerX: 0}
+    }).appendTo(cell);
+    cell.on("itemchange", function(person) {
+      imageView.set("image", {src: person.image});
+      nameLabel.set("text", person.firstName);
+    });
+  }
+}).on("selection", function(event) {
+  console.log("selected", event.item.firstName);
+}).appendTo(page);
+
+page.open();
