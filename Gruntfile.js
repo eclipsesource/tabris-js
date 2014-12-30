@@ -163,18 +163,43 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-curl");
   grunt.loadTasks("./grunt");
 
-  grunt.registerTask("default", [
-    "clean",
-    "generate-doc",
-    "copy:doc",
+  /* runs static code analysis tools */
+  grunt.registerTask("check", [
     "jscs",
-    "jshint",
+    "jshint"
+  ]);
+
+  /* concatenates and minifies code */
+  grunt.registerTask("build", [
     "curl",
     "concat",
-    "uglify",
-    "jasmine",
+    "uglify"
+  ]);
+
+  /* runs jasmine tests against the build output */
+  grunt.registerTask("test", [
+    "jasmine"
+  ]);
+
+  /* generates reference documentation */
+  grunt.registerTask("doc", [
+    "generate-doc",
+    "copy:doc"
+  ]);
+
+  /* packages example code */
+  grunt.registerTask("examples", [
     "copy-examples",
     "compress"
+  ]);
+
+  grunt.registerTask("default", [
+    "clean",
+    "check",
+    "build",
+    "test",
+    "doc",
+    "examples"
   ]);
 
 };
