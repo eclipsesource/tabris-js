@@ -14,7 +14,7 @@
   "properties": {
     "tabBarLocation": {
       "type": "string:top|bottom|auto?auto",
-      "description": "The placement of the tab titles. When set to \"auto\", the position is platform dependent. Can only be set in the `create` method."
+      "description": "The placement of the tab titles. When set to `auto`, the position is platform dependent. Can only be set in the `create` method."
     },
     "paging": {
       "type": "boolean",

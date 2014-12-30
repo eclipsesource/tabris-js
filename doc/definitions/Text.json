@@ -5,7 +5,7 @@
   "properties": {
     "type": {
       "type": "string:default|password|search|multiline?default",
-      "description": "The type of the text widget. Can only be set in the \"create\" method."
+      "description": "The type of the text widget. Can only be set in the `create` method."
     },
     "text": {
       "type": "string"

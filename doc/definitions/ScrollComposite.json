@@ -5,7 +5,7 @@
   "properties": {
     "direction": {
       "type": "string:vertical|horizontal?vertical",
-      "description": "Specifies the scrolling direction of the scroll composite. Can only be set in the \"create\" method."
+      "description": "Specifies the scrolling direction of the scroll composite. Can only be set in the `create` method."
     }
   },
   "events": {

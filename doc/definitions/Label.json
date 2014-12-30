@@ -9,7 +9,7 @@
     },
     "markupEnabled": {
       "type": "boolean",
-      "description": "Allows for a subset of HTML tags in the label text. Supported tags are: `a`, `del`, `ins`, `b`, `i`, `strong`, `em`, `big`, `small`, `br`. All tags must be closed (e.g. use `<br/>` instead of `<br>`). Nesting tags is currently not supported. This property must be set in the \"create\" method."
+      "description": "Allows for a subset of HTML tags in the label text. Supported tags are: `a`, `del`, `ins`, `b`, `i`, `strong`, `em`, `big`, `small`, `br`. All tags must be closed (e.g. use `<br/>` instead of `<br>`). Nesting tags is currently not supported. This property must be set in the `create` method."
     },
     "text": {
       "type": "string",

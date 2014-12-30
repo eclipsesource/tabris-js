@@ -11,16 +11,16 @@ The target of all touch events is the widget that was touched first.
 Fired when a widget is touched.
 
 ### touchmove
-Fired repeatedly while swiping across the screen after initiating a *touchstart* event. *touchmove* is only fired on the widget that received the *touchstart* event for the same touch.
+Fired repeatedly while swiping across the screen after initiating a `touchstart` event. `touchmove` is only fired on the widget that received the `touchstart` event for the same touch.
 
 ### touchend
-Fired when the touch interaction ends (i.e. the finger is lifted up) on the same widget that received the *touchstart* event. *touchend* is only fired on the widget that received the *touchstart* event for the same touch.
+Fired when the touch interaction ends (i.e. the finger is lifted up) on the same widget that received the `touchstart` event. `touchend` is only fired on the widget that received the `touchstart` event for the same touch.
 
 ### touchcancel
-Fired instead of *touchend* when the touch interaction ends on another widget than it started.
+Fired instead of `touchend` when the touch interaction ends on another widget than it started.
 
 ### longpress
-Fired after initiating a *touchstart* event for the same widget and holding the pointer in position for a specific amount of time (about a second). The event handler argument is an empty object.
+Fired after initiating a `touchstart` event for the same widget and holding the pointer in position for a specific amount of time (about a second). The event handler argument is an empty object.
 
 ## Event Object
 

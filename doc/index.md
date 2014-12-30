@@ -22,7 +22,7 @@ Tabris.js is a mobile framework that lets you develop native iOS and Android app
 - The *context* object used by the tabris.js [Canvas](canvas) implements the [HTML5 canvas API](https://developer.mozilla.org/en/docs/Web/API/CanvasRenderingContext2D) (MDN)
 
 ## Recommended Libraries
-- [Underscore.js](http://underscorejs.org/): Very useful general purpose library that helps handling JavaScript objects, arrays and functions. It's templating can also help with internationalization. 100% compatible with tabris.js. 
+- [Underscore.js](http://underscorejs.org/): Very useful general purpose library that helps handling JavaScript objects, arrays and functions. It's templating can also help with internationalization. 100% compatible with tabris.js.
 - Too lazy to draw your own charts? [Chart.js](http://www.chartjs.org/) can help, as demonstrated in [this example](https://github.com/eclipsesource/tabris-js/blob/master/examples/chart/chartdemo.js).
-- Parts of [jQuery](http://jquery.com) can be used with tabris.js, specifically the *ajax* method. More information and an example can be found [here](https://github.com/eclipsesource/tabris-js/tree/master/examples/jquery).
-- Need data binding? Use [backbonejs.org](http://backbonejs.org/). It is fully compatible except for *BackBone.View*. If you want to use the *sync* method you will either need jQuery-ajax (see above) or the [localStorage](https://github.com/jeromegn/Backbone.localStorage) adapter.  
+- Parts of [jQuery](http://jquery.com) can be used with tabris.js, specifically the `ajax` method. More information and an example can be found [here](https://github.com/eclipsesource/tabris-js/tree/master/examples/jquery).
+- Need data binding? Use [backbonejs.org](http://backbonejs.org/). It is fully compatible except for *BackBone.View*. If you want to use the `sync` method you will either need jQuery-ajax (see above) or the [localStorage](https://github.com/jeromegn/Backbone.localStorage) adapter.
