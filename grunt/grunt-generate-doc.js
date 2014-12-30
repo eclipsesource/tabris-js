@@ -12,7 +12,7 @@ module.exports = function(grunt) {
       var json = grunt.file.readJSON(jsonSrc[i]);
       types.push(json);
       if (json.title) {
-        includes[shortName(jsonSrc[i])] = json;
+        includes[json.type] = json;
       }
     }
     return {types: types, includes: includes};
@@ -20,10 +20,6 @@ module.exports = function(grunt) {
 
   function readTargetPath() {
     return grunt.config("doc").target;
-  }
-
-  function shortName(path) {
-    return path.split("/").pop().split(".")[0];
   }
 
   function createOutput(data) {
