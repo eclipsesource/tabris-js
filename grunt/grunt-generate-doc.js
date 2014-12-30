@@ -98,9 +98,19 @@ module.exports = function(grunt) {
       var supValues = property.type.indexOf(":") !== -1 ? property.type.split(":")[1].split("?")[0] : "";
       var defValue = property.type.split("?")[1] || "";
       result.push("- **", name, "**: *", type + "*");
-      result.push(supValues ? ", supported values: `" + supValues.split("|").join("`, `") + "`" : "");
-      result.push(defValue ? ", default: `" + defValue + "`" : "");
-      result.push(property.description ? "<br/>" + property.description : "");
+      if (supValues) {
+        result.push(", supported values: `" + supValues.split("|").join("`, `") + "`");
+      }
+      if (defValue) {
+        result.push(", default: `" + defValue + "`");
+      }
+      if (property.description) {
+        result.push("<br/>" + property.description);
+      }
+      if (property.static) {
+        result.push("<br/>This property can only be set in the `tabris.create` method. " +
+                    "It cannot be changed after widget creation.");
+      }
       result.push("\n");
     });
     result.push("\n");
