@@ -98,29 +98,7 @@ module.exports = function(grunt) {
       }
     },
     doc: {
-      json: prefix("doc/definitions/", [
-        "Widget.json",
-        "Action.json",
-        "Button.json",
-        "Canvas.json",
-        "CheckBox.json",
-        "CollectionView.json",
-        "Combo.json",
-        "Composite.json",
-        "ImageView.json",
-        "Label.json",
-        "Page.json",
-        "ProgressBar.json",
-        "RadioButton.json",
-        "ScrollComposite.json",
-        "Slider.json",
-        "TabFolder.json",
-        "Tab.json",
-        "Text.json",
-        "ToggleButton.json",
-        "Video.json",
-        "WebView.json"
-      ]),
+      json: "doc/definitions/*.json",
       target: "build/doc/widget-types.md"
     },
     copy: {

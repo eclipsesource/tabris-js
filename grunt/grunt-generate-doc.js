@@ -1,105 +1,118 @@
+var _ = require("underscore");
+
 module.exports = function(grunt) {
 
   grunt.registerTask("generate-doc", function() {
-    grunt.file.write(readTargetPath(), createOutput(readJson()));
+    grunt.file.write(getTargetPath(), createOutput(readJson()));
   });
 
-  function readJson() {
-    var jsonSrc = grunt.config("doc").json;
-    var types = [];
-    var includes = {};
-    for (var i = 0; i < jsonSrc.length; i++) {
-      var json = grunt.file.readJSON(jsonSrc[i]);
-      types.push(json);
-      if (json.title) {
-        includes[json.type] = json;
-      }
-    }
-    return {types: types, includes: includes};
-  }
-
-  function readTargetPath() {
-    return grunt.config("doc").target;
-  }
-
-  function createOutput(data) {
+  function createOutput(widgets) {
+    resolveIncludes(widgets);
     var result = [];
     result.push("# Widget Types\n");
     result.push("This section describes the API specific to different types of widgets.\n\n");
-    data.types.forEach(function(desc) {
-      var name = desc.type || desc.title;
-      grunt.log.verbose.writeln("Generating DOC for " + name);
-      result.push("## ", name, "\n");
-      result.push(getDescriptionText(desc, data.includes));
-      result.push(getMethodsText(desc));
-      result.push(getPropertiesText(desc));
-      result.push(getEventsText(desc));
-      result.push(getSeeAlsoText(desc));
+    var types = ["Widget"].concat(_.chain(widgets).keys().without("Widget").value());
+    types.forEach(function(type) {
+      result.push(renderWidget(widgets[type]));
     });
-    return result.join("");
+    return result.join("\n");
   }
 
-  function getDescriptionText(desc, includes) {
-    var result = [];
-    result.push(desc.description);
-    if (desc.include) {
-      result.push("\nIncludes ");
-      for (var i = 0; i < desc.include.length; i++) {
-        var include = desc.include[i];
-        if (!includes[include]) {
-          throw new Error("Could not find include " + include);
-        }
-        if (i > 0) {
-          result.push(i === (desc.include.length - 1) ? " and " : ", ");
-        }
-        var incTitle = includes[include].title;
-        result.push("[" + incTitle + "](#" + incTitle.toLowerCase().replace(/\s/g, "-") + ")");
+  function resolveIncludes(widgets) {
+    Object.keys(widgets).forEach(function(type) {
+      var widget = widgets[type];
+      if (widget.include) {
+        widget.include = widget.include.map(function(type) {
+          if (!widgets[type]) {
+            throw new Error("Could not find included type " + type);
+          }
+          return widgets[type];
+        });
       }
+    });
+  }
+
+  function readJson() {
+    var widgets = {};
+    grunt.file.expand(grunt.config("doc").json).forEach(function(file) {
+      var json = grunt.file.readJSON(file);
+      widgets[json.type] = json;
+    });
+    return widgets;
+  }
+
+  function getTargetPath() {
+    return grunt.config("doc").target;
+  }
+
+  function renderWidget(widget) {
+    var title = widget.type || widget.title;
+    grunt.log.verbose.writeln("Generating DOC for " + title);
+    var result = [];
+    result.push("## " + title + "\n");
+    result.push(renderDescription(widget));
+    result.push(renderMethods(widget));
+    result.push(renderProperties(widget));
+    result.push(renderEvents(widget));
+    result.push(renderLinks(widget));
+    return result.filter(notEmpty).join("\n");
+  }
+
+  function renderDescription(widget) {
+    var result = [];
+    result.push(widget.description + "\n");
+    if (widget.include) {
+      result.push("Includes ");
+      result.push(widget.include.map(function(widget) {
+        var title = widget.title || widget.type;
+        return "[" + title + "](#" + title.toLowerCase().replace(/\s/g, "-") + ")";
+      }).join(", "));
+      result.push("\n");
     }
-    result.push("\n\n");
     return result.join("");
   }
 
-  function getMethodsText(desc) {
-    if (!desc.methods) {
+  function renderMethods(widget) {
+    if (!widget.methods) {
       return "";
     }
     var result = [];
     result.push("#### Methods\n");
-    Object.keys(desc.methods).sort().forEach(function(methodName) {
-      desc.methods[methodName].forEach(function(props) {
-        result.push("- **", sig(methodName, props.parameters) + "**");
-        result.push(props.returns ? ": *" + props.returns + "*" : "");
-        result.push(props.description ? "<br/>" + props.description : "");
-        result.push("\n");
+    Object.keys(widget.methods).sort().forEach(function(name) {
+      widget.methods[name].forEach(function(desc) {
+        result.push(renderMethod(name, desc));
       });
     });
+    return result.join("");
+  }
+
+  function renderMethod(name, desc) {
+    var result = [];
+    result.push("- **", signature(name, desc.parameters) + "**");
+    if (desc.returns) {
+      result.push(": *" + desc.returns + "*");
+    }
+    if (desc.description) {
+      result.push("<br/>" + desc.description);
+    }
     result.push("\n");
     return result.join("");
   }
 
-  function sig(methodName, parameters) {
+  function signature(methodName, parameters) {
     return methodName + "(" + parameters.join(", ") + ")";
   }
 
-  function getPropertiesText(desc) {
-    if (!desc.properties) {
+  function renderProperties(widget) {
+    if (!widget.properties) {
       return "";
     }
     var result = [];
     result.push("#### Properties\n");
-    Object.keys(desc.properties).sort().forEach(function(name) {
-      var property = desc.properties[name];
-      var type = property.type.split(":")[0].split("?")[0];
-      var supValues = property.type.indexOf(":") !== -1 ? property.type.split(":")[1].split("?")[0] : "";
-      var defValue = property.type.split("?")[1] || "";
-      result.push("- **", name, "**: *", type + "*");
-      if (supValues) {
-        result.push(", supported values: `" + supValues.split("|").join("`, `") + "`");
-      }
-      if (defValue) {
-        result.push(", default: `" + defValue + "`");
-      }
+    Object.keys(widget.properties).sort().forEach(function(name) {
+      var property = widget.properties[name];
+      result.push("- **", name, "**: ");
+      result.push(renderType(property.type));
       if (property.description) {
         result.push("<br/>" + property.description);
       }
@@ -109,37 +122,54 @@ module.exports = function(grunt) {
       }
       result.push("\n");
     });
-    result.push("\n");
     return result.join("");
   }
 
-  function getEventsText(desc) {
-    if (!desc.events) {
+  function renderType(type) {
+    var name = type.split(":")[0].split("?")[0];
+    var supValues = type.indexOf(":") !== -1 ? type.split(":")[1].split("?")[0] : "";
+    var defValue = type.split("?")[1] || "";
+    var result = ["*", name + "*"];
+    if (supValues) {
+      result.push(", supported values: `" + supValues.split("|").join("`, `") + "`");
+    }
+    if (defValue) {
+      result.push(", default: `" + defValue + "`");
+    }
+    return result.join("");
+  }
+
+  function renderEvents(widget) {
+    if (!widget.events) {
       return "";
     }
     var result = [];
     result.push("#### Events\n");
-    Object.keys(desc.events).sort().forEach(function(name) {
-      var event = desc.events[name];
+    Object.keys(widget.events).sort().forEach(function(name) {
+      var event = widget.events[name];
       result.push("- **", name, "**");
-      result.push(event.description ? "<br/>" + event.description : "");
+      if (event.description) {
+        result.push("<br/>" + event.description);
+      }
       result.push("\n");
     });
-    result.push("\n");
     return result.join("");
   }
 
-  function getSeeAlsoText(desc) {
-    if (!desc.links) {
+  function renderLinks(widget) {
+    if (!widget.links) {
       return "";
     }
     var result = [];
     result.push("#### See also\n");
-    desc.links.forEach(function(link) {
+    widget.links.forEach(function(link) {
       result.push("- [", link.title, "](", link.path, ")\n");
     });
-    result.push("\n");
     return result.join("");
+  }
+
+  function notEmpty(value) {
+    return !!value;
   }
 
 };
