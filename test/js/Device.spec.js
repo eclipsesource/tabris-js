@@ -1,8 +1,3 @@
-/**
- * Copyright (c) 2014 EclipseSource.
- * All rights reserved.
- */
-
 describe("Device", function() {
 
   var device, target, nativeBridge;

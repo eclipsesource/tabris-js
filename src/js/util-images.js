@@ -1,8 +1,3 @@
-/**
- * Copyright (c) 2014 EclipseSource.
- * All rights reserved.
- */
-
 (function() {
 
   util.imageToArray = function(value) {

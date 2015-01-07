@@ -1,8 +1,3 @@
-/**
- * Copyright (c) 2014 EclipseSource.
- * All rights reserved.
- */
-
 tabris.registerType("_Display", {
   _type: "rwt.widgets.Display",
   _properties: true

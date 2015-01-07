@@ -1,8 +1,3 @@
-/**
- * Copyright (c) 2014 EclipseSource.
- * All rights reserved.
- */
-
 tabris.Events = {
 
   on: function(type, callback, context) {

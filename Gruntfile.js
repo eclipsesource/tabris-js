@@ -1,15 +1,7 @@
 module.exports = function(grunt) {
 
-  var banner = ["/*!",
-                " * tabris.js <%= grunt.template.today('yyyy-mm-dd') %>",
-                " *",
-                " * Copyright (c) 2014 EclipseSource.",
-                " * All rights reserved.",
-                " */\n"].join("\n");
-
-  var prefix = function(prefix, strings) {
-    return strings.map(function(string) {return prefix + string;});
-  };
+  var banner = blockComment("tabris.js <%= grunt.template.today('yyyy-mm-dd') %>\n\n" +
+                            grunt.file.read("LICENSE"));
 
   grunt.initConfig({
     pkg: grunt.file.readJSON("package.json"),
@@ -201,5 +193,16 @@ module.exports = function(grunt) {
     "doc",
     "examples"
   ]);
+
+  function prefix(prefix, strings) {
+    return strings.map(function(string) {return prefix + string;});
+  }
+
+  function blockComment(text) {
+    var commented = text.trim().split("\n").map(function(line) {
+      return " * " + line;
+    }).join("\n");
+    return "/*!\n" + commented + "\n */\n";
+  }
 
 };

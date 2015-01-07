@@ -1,7 +1,3 @@
-/**
- * Copyright (c) 2014 EclipseSource. All rights reserved.
- */
-
 (function() {
 
   tabris.registerType("_GC", {

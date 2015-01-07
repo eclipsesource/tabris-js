@@ -1,8 +1,3 @@
-/**
- * Copyright (c) 2014 EclipseSource.
- * All rights reserved.
- */
-
 describe("util-fonts", function() {
 
   describe("fontStringToArray", function() {

@@ -1,8 +1,3 @@
-/**
- * Copyright (c) 2014 EclipseSource.
- * All rights reserved.
- */
-
 ["Backbone", "tabris"].forEach(function(provider) {
   if (provider in window) {
 

@@ -1,8 +1,3 @@
-/**
- * Copyright (c) 2014 EclipseSource.
- * All rights reserved.
- */
-
 /*global XMLHttpRequest: true */
 
 // Created based on the W3C XMLHttpRequest specifications: http://www.w3.org/TR/XMLHttpRequest/
