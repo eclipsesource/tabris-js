@@ -7,6 +7,8 @@ var page = new PluginPage("Camera", "org.apache.cordova.camera", function(parent
   }).appendTo(parent).on("selection", function() {
     navigator.camera.getPicture(onSuccess, onFail, {
       quality: 50,
+      targetWidth: 1024,
+      targetHeight: 1024,
       destinationType: window.Camera.DestinationType.FILE_URI
     });
     function onSuccess(imageUrl) {
