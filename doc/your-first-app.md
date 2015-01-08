@@ -1,7 +1,7 @@
 # Create Your First App
-[Download and extend the examples](http://download.eclipsesource.com/tabris.js/m4a/examples.zip) to begin developing your first tabris.js app.
+[Download and extend the examples](http://tabrisjs.com/downloads/m6/examples.zip) to begin developing your first tabris.js app.
 
-    http://download.eclipsesource.com/tabris.js/m4a/examples.zip
+    http://tabrisjs.com/downloads/m6/examples.zip
 
 ## Hello, World!
 The first example you should look at is *Hello, World!*. You can run this directly from the Examples tab in the tabris.js developer app, or extend it and host it locally. This example demonstrates how to create a minimal tabris.js script, the core ingredients of your app.
