@@ -2,44 +2,37 @@ tabris.registerType("_Display", {
   _type: "rwt.widgets.Display",
   _properties: true
 });
+
 tabris.registerWidget("_Shell", {
   _type: "rwt.widgets.Shell",
   _listen: {Close: true},
   _properties: true
 });
+
 tabris.registerType("_UI", {
+
   _type: "tabris.UI",
+
   _listen: {ShowPage: true, ShowPreviousPage: true},
-  _properties: true
-});
-
-tabris.UIProxy = function() {
-  this._pages = [];
-};
-
-tabris.UIProxy.prototype = {
 
   _create: function() {
-    var self = this;
     tabris.create("_Display");
-    tabris._shell = tabris.create("_Shell", {
+    this._shell = tabris.create("_Shell", {
       style: ["NO_TRIM"],
       mode: "maximized",
       active: true,
       visible: true
+    }).on("Close", function() {
+      this.dispose();
     });
-    tabris._shell.on("Close", function() {
-      tabris._shell.dispose();
-    });
-    this._ui = tabris.create("_UI", {
-      shell: tabris._shell
-    });
-    this._ui.on("ShowPage", function(properties) {
+    tabris.Proxy.prototype._create.call(this, {});
+    this._setPropertyNative("shell", this._shell.id);
+    this._pages = [];
+    this.on("ShowPage", function(properties) {
       var page = tabris._proxies[properties.pageId];
-      self.setActivePage(page.widget);
-    });
-    this._ui.on("ShowPreviousPage", function() {
-      var page = self.getActivePage();
+      this._setActivePage(page.widget);
+    }).on("ShowPreviousPage", function() {
+      var page = this._getActivePage();
       if (page) {
         page.close();
       }
@@ -47,29 +40,55 @@ tabris.UIProxy.prototype = {
     return this;
   },
 
-  _install: function(target) {
-    target._uiProxy = this;
+  _properties: {
+    image: "image",
+    foreground: "color",
+    background: "color",
+    activePage: function(value) {
+      return value instanceof tabris.Page;
+    }
   },
 
-  setActivePage: function(page) {
-    this._pages.push(page);
-    this._ui.set("activePage", page._page);
+  _getProperty: {
+    activePage: function() {
+      return this._getActivePage();
+    }
   },
 
-  getActivePage: function() {
-    return this._pages[ this._pages.length - 1 ];
+  _setProperty: {
+    activePage: function(page) {
+      this._setActivePage(page);
+    }
   },
 
-  restoreLastActivePage: function() {
-    this._pages.pop();
-    var page = this.getActivePage();
-    if (page) {
-      this._ui.set("activePage", page._page);
+  _setActivePage: function(page) {
+    if (!(page instanceof tabris.Page)) {
+      throw new Error("Value for activePage is not a page");
+    }
+    if (page !== this._getActivePage()) {
+      page.on("dispose", this._pageClosed.bind(this, page));
+      this._pages.push(page);
+      this._setPropertyNative("activePage", page._page.id);
+    }
+  },
+
+  _getActivePage: function() {
+    return this._pages[this._pages.length - 1];
+  },
+
+  _pageClosed: function(closedPage) {
+    var oldActivePage = this._getActivePage();
+    this._pages = this._pages.filter(function(page) {
+      return page !== closedPage;
+    });
+    var newActivePage = this._getActivePage();
+    if (newActivePage && newActivePage !== oldActivePage) {
+      this._setPropertyNative("activePage", newActivePage._page.id);
     }
   }
 
-};
+});
 
 tabris.load(function() {
-  new tabris.UIProxy()._create()._install(tabris);
+  tabris.ui = tabris.create("_UI");
 });

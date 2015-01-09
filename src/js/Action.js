@@ -35,7 +35,7 @@ tabris.registerType("Action", {
 
   _create: function(properties) {
     this.super("_create", properties);
-    this._setPropertyNative("parent", tabris._uiProxy._ui.id);
+    this._setPropertyNative("parent", tabris.ui.id);
     return this;
   }
 

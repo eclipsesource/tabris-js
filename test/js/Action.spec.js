@@ -6,12 +6,11 @@ describe("Action", function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._start(nativeBridge);
-    tabris._uiProxy = new tabris.UIProxy();
-    tabris._uiProxy._ui = new tabris.Proxy();
+    tabris.ui = new tabris.create("_UI");
   });
 
   afterEach(function() {
-    delete tabris._uiProxy;
+    delete tabris.ui;
   });
 
   describe("create", function() {
@@ -28,7 +27,7 @@ describe("Action", function() {
     });
 
     it("created action's parent is set to tabris.UI", function() {
-      expect(actionCreateCalls[0].properties.parent).toEqual(tabris._uiProxy._ui.id);
+      expect(actionCreateCalls[0].properties.parent).toEqual(tabris.ui.id);
     });
 
     it("properties are passed to created action", function() {

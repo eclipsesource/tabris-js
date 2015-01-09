@@ -2,23 +2,18 @@ describe("Page", function() {
 
   var nativeBridge;
   var page;
-  var uiId;
 
   beforeEach(function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._start(nativeBridge);
-    tabris._shell = new tabris.Proxy("shellId");
-    tabris._uiProxy = jasmine.createSpyObj("uiProxy", ["setActivePage", "restoreLastActivePage"]);
-    tabris._uiProxy._ui = tabris.create("_UI", {
-      shell: tabris._shell
-    });
-    uiId = tabris._uiProxy._ui.id;
+    tabris.ui = tabris.create("_UI");
+    spyOn(tabris.ui, "set");
     nativeBridge.resetCalls();
   });
 
   afterEach(function() {
-    delete tabris._uiProxy;
+    delete tabris.ui;
   });
 
   describe("create", function() {
@@ -50,7 +45,7 @@ describe("Page", function() {
       });
 
       it("parent is shell", function() {
-        expect(properties.parent).toEqual(tabris._shell.id);
+        expect(properties.parent).toEqual(tabris.ui._shell.id);
       });
 
       it("is full-size", function() {
@@ -80,7 +75,7 @@ describe("Page", function() {
       });
 
       it("parent is set to tabris.UI", function() {
-        expect(properties.parent).toBe(uiId);
+        expect(properties.parent).toBe(tabris.ui.id);
       });
 
       it("control is set to composite", function() {
@@ -153,20 +148,12 @@ describe("Page", function() {
       it("sets active page", function() {
         page.open();
 
-        expect(tabris._uiProxy.setActivePage).toHaveBeenCalledWith(page);
+        expect(tabris.ui.set).toHaveBeenCalledWith("activePage", page);
       });
 
     });
 
     describe("close", function() {
-
-      it("restores previous active page", function() {
-        page.open();
-
-        page.close();
-
-        expect(tabris._uiProxy.restoreLastActivePage).toHaveBeenCalled();
-      });
 
       it("destroys composite and page", function() {
         page.open();

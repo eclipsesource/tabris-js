@@ -34,9 +34,9 @@
       this.super("_create",  util.extend(util.omit(properties, pageProperties), {
         layoutData: {left: 0, right: 0, top: 0, bottom: 0}
       }));
-      this._setPropertyNative("parent", tabris._shell.id);
+      this._setPropertyNative("parent", tabris.ui._shell.id);
       this._page = tabris.create("_Page", util.extend(util.pick(properties, pageProperties), {
-        parent: tabris._uiProxy._ui,
+        parent: tabris.ui,
         control: this
       }));
       this._page.widget = this;
@@ -49,12 +49,11 @@
     },
 
     open: function() {
-      tabris._uiProxy.setActivePage(this);
+      tabris.ui.set("activePage", this);
     },
 
     close: function() {
       this.dispose();
-      tabris._uiProxy.restoreLastActivePage();
     }
 
   });
