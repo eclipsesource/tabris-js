@@ -126,6 +126,10 @@ layoutData: {
 }
 ```
 
+## Z-Order
+
+When the layout definition results in widgets overlapping one another, the z-order is defined by the order in which the widgets are appended to their parent. New widgets will be rendered on top of those widgets that have already been appended.
+
 ## Device Independent Pixels
 
 The density of a device's display can be accessed by `window.devicePixelRatio`. The value represents the number of native pixels per Device Independent Pixel.
