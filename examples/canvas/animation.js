@@ -7,22 +7,14 @@ var page = tabris.create("Page", {
 
 var button = tabris.create("Button", {
   text: "Start",
-  layoutData: {
-    left: 10,
-    bottom: 10
-  }
+  layoutData: {left: 10, bottom: 10}
 }).on("selection", function() {
   var running = example.toggle();
   button.set("text", running ? "Stop" : "Start");
 }).appendTo(page);
 
 var canvas = tabris.create("Canvas", {
-  layoutData: {
-    left: 10,
-    top: 10,
-    right: 10,
-    bottom: [button, 10]
-  }
+  layoutData: {left: 10, top: 10, right: 10, bottom: [button, 10]}
 }).on("change:bounds", function() {
   var bounds = canvas.get("bounds");
   var width = bounds.width;
@@ -31,7 +23,10 @@ var canvas = tabris.create("Canvas", {
   example.init(ctx);
 }).appendTo(page);
 
-page.open();
+page.on("disappear", function() {
+  example.stop();
+  button.set("text", "Start");
+}).open();
 
 function Example() {
   var ctx, width, height, cx, cy, unit;

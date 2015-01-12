@@ -63,10 +63,11 @@ tabris.registerType("_UI", {
     if (!(page instanceof tabris.Page)) {
       throw new Error("Value for activePage is not a page");
     }
-    if (page !== this._getActivePage()) {
+    var activePage = this._getActivePage();
+    if (page !== activePage) {
       page.on("dispose", this._pageClosed.bind(this, page));
       this._pages.push(page);
-      this._setPropertyNative("activePage", page._page.id);
+      this._updateActivePage(activePage, page);
     }
   },
 
@@ -80,9 +81,17 @@ tabris.registerType("_UI", {
       return page !== closedPage;
     });
     var newActivePage = this._getActivePage();
-    if (newActivePage && newActivePage !== oldActivePage) {
-      this._setPropertyNative("activePage", newActivePage._page.id);
+    if (newActivePage !== oldActivePage) {
+      this._updateActivePage(oldActivePage, this._getActivePage());
     }
+  },
+
+  _updateActivePage: function(oldPage, newPage) {
+    if (oldPage) {
+      oldPage.trigger("disappear");
+    }
+    this._setPropertyNative("activePage", newPage._page.id);
+    newPage.trigger("appear");
   }
 
 });

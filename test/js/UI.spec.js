@@ -108,10 +108,30 @@ describe("UI", function() {
         expect(nativeBridge.calls({op: "set", id: ui.id}).length).toBe(0);
       });
 
+      it("setting 'activePage' triggers 'appear' and 'disappear' events on pages", function() {
+        ui.set("activePage", page1);
+        spyOn(page1, "trigger");
+        spyOn(page2, "trigger");
+
+        ui.set("activePage", page2);
+
+        expect(page1.trigger).toHaveBeenCalledWith("disappear");
+        expect(page2.trigger).toHaveBeenCalledWith("appear");
+      });
+
       it("setting 'activePage' issues a set operation", function() {
         ui.set("activePage", page1);
         var setCall = nativeBridge.calls({op: "set", id: ui.id}).pop();
         expect(setCall.properties.activePage).toBe(page1._page.id);
+      });
+
+      it("setting 'activePage' to current active page does not issue a set operation", function() {
+        ui.set("activePage", page1);
+        nativeBridge.resetCalls();
+
+        ui.set("activePage", page1);
+
+        expect(nativeBridge.calls({op: "set", id: ui.id}).length).toBe(0);
       });
 
       it("getting 'activePage' returns last set active page", function() {
@@ -130,6 +150,18 @@ describe("UI", function() {
         var lastSetCall = nativeBridge.calls({op: "set", id: ui.id}).pop();
         expect(lastSetCall.properties.activePage).toBe(page2._page.id);
         expect(ui.get("activePage")).toBe(page2);
+      });
+
+      it("when active page is closed, triggers 'appear' and 'disappear' events on pages", function() {
+        ui.set("activePage", page1);
+        ui.set("activePage", page2);
+        spyOn(page1, "trigger").and.callThrough();
+        spyOn(page2, "trigger").and.callThrough();
+
+        page2.close();
+
+        expect(page2.trigger).toHaveBeenCalledWith("disappear");
+        expect(page1.trigger).toHaveBeenCalledWith("appear");
       });
 
       it("when non active page is closed, it won't be restored later on", function() {
