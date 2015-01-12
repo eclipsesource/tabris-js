@@ -44,9 +44,7 @@ tabris.registerType("_UI", {
     image: "image",
     foreground: "color",
     background: "color",
-    activePage: function(value) {
-      return value instanceof tabris.Page;
-    }
+    activePage: true
   },
 
   _getProperty: {
