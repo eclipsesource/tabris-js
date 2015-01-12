@@ -68,9 +68,12 @@ Images are specified as objects with the following properties:
 * **scale**: *number (optional)*
     Image scale factor - the image will be scaled down by this factor. Ignored when width or height are set.
 
+A plain string can be used as a shorthand, e.g. `"image.jpg"` equals `{src: "image.jpg"}`.
+
 Examples:
 
 ```javascript
+"images/catseye.jpg"
 {src: "images/catseye.jpg", width: 300, height: 200}
 {src: "http://example.com/catseye.jpg", scale: 2}
 ```
