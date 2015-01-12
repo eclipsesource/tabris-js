@@ -1,12 +1,12 @@
 # Create Your First App
-[Download and extend the examples](http://tabrisjs.com/downloads/m6/examples.zip) to begin developing your first tabris.js app.
+[Clone or Download the Getting Started Project](https://github.com/eclipsesource/tabris-js-getting-started) to begin developing your first tabris.js app.
 
-    http://tabrisjs.com/downloads/m6/examples.zip
+    https://github.com/eclipsesource/tabris-js-getting-started/archive/master.zip
+    or
+    git clone https://github.com/eclipsesource/tabris-js-getting-started.git
 
 ## Hello, World!
-The first example you should look at is *Hello, World!*. You can run this directly from the Examples tab in the tabris.js developer app, or extend it and host it locally. This example demonstrates how to create a minimal tabris.js script, the core ingredients of your app.
-
-    [$] cd examples/hello
+The Getting Started Project contains a simple *Hello, World!*. You can run this directly from the Examples tab in the tabris.js developer app, or extend it and host it locally. This example provides a minimal tabris.js script, the core ingredients of your app.
 
 ### package.json
 The `package.json` file is used to describe the app, including the name, description, dependencies and a the main source files. Every tabris.js app should include a package.json.
@@ -19,7 +19,7 @@ The `package.json` file is used to describe the app, including the name, descrip
 ```
 
 ### hello.js
-The tabris.js Hello, World! example is contained in `examples/hello/hello.js`. Tabris.js apps can be developed using any text editor or IDE.
+The tabris.js Hello, World! example is contained in `hello.js`. Tabris.js apps can be developed using any text editor or IDE.
 
 ```js
 var page = tabris.create("Page", {
@@ -51,16 +51,16 @@ The Hello, World! example contains a *button* and a *label*. When the button is 
 ### Test drive your app
 The simplest way to test drive your app is to use the Tabris.js app on your device. The scripts that make up your app can be run on the device using a JavaScript runtime and our native widget bindings. On iOS the WebKit JavaScriptCore is used for JavaScript execution, on Android a V8 runtime is bundled with Tabris.js.
 
-To make your scripts available to the tabris.js app you need to run a  webserver on your local development machine. Node.js provides an easy to install tiny HTTP server. Download and install [node.js](http://nodejs.org/), and using the node package manager, install `http-server`. From your hello world directory, run:
+To make your scripts available to the tabris.js app you need to run a webserver on your local development machine. If you don't have one running on your system you can use a tiny Node.js HTTP server. Download and install [node.js](http://nodejs.org/), and using the node package manager, install `http-server`. From your hello world directory, run:
 
     [$] npm install http-server
-    [$] http-server ./ -p 7777
+    [$] http-server
 
 *You can also place your `package.json` and `hello.js` files on any other http-server, as long as it's accessible from your device.*
 
 Once your JavaScript files can be accessed by a http url, use the tabris.js developer app to test them. You can enter the url on the URL tab on the developer app. In the case of a node-js http-server running on your development machine, enter:
 
-    http://<development-machine-ip-address>:7777/
+    http://<development-machine-ip-address>:8080/
 
 The *My Scripts* page on [tabrisjs.com](http://tabrisjs.com) can also be used to configure the URLs available on your device, simply press the *Link Script* button. Then enter the URL of the web server that is hosting your tabris.js Script and save.
 
