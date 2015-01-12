@@ -57,6 +57,16 @@ describe("Device", function() {
       expect(target.device.version).toBe(23);
     });
 
+    it("provides device.language", function() {
+      expect(target.device.language).toBe(23);
+      expect(nativeBridge.get).toHaveBeenCalledWith("tabris.Device", "language");
+    });
+
+    it("prevents overwriting device.language", function() {
+      target.device.language = 42;
+      expect(target.device.language).toBe(23);
+    });
+
   });
 
   describe("window.devicePixelRatio", function() {
@@ -64,7 +74,7 @@ describe("Device", function() {
     beforeEach(function() {
       spyOn(nativeBridge, "get").and.returnValue(23);
       target = {};
-      tabris._addDeviceMethods(target);
+      tabris._addDevicePixelRatio(target);
     });
 
     it("provides scaleFactor", function() {
@@ -75,6 +85,26 @@ describe("Device", function() {
     it("prevents overwriting scaleFactor", function() {
       target.devicePixelRatio = 42;
       expect(target.devicePixelRatio).toBe(23);
+    });
+
+  });
+
+  describe("navigator.language", function() {
+
+    beforeEach(function() {
+      spyOn(nativeBridge, "get").and.returnValue(23);
+      target = {};
+      tabris._addDeviceLanguage(target);
+    });
+
+    it("provides language", function() {
+      expect(target.language).toBe(23);
+      expect(nativeBridge.get).toHaveBeenCalledWith("tabris.Device", "language");
+    });
+
+    it("prevents overwriting language", function() {
+      target.language = 42;
+      expect(target.language).toBe(23);
     });
 
   });

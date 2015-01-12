@@ -8,7 +8,7 @@
   tabris._addDeviceObject = function(target) {
     if (!("device" in target)) {
       var dev = {};
-      ["model", "platform", "version"].forEach(function(name) {
+      ["model", "platform", "version", "language"].forEach(function(name) {
         defineReadOnlyProperty(dev, name, function() {
           return tabris("_Device").get(name);
         });
@@ -19,10 +19,18 @@
     }
   };
 
-  tabris._addDeviceMethods = function(target) {
+  tabris._addDevicePixelRatio = function(target) {
     if (!("devicePixelRatio" in target)) {
       defineReadOnlyProperty(target, "devicePixelRatio", function() {
         return tabris("_Device").get("scaleFactor");
+      });
+    }
+  };
+
+  tabris._addDeviceLanguage = function(target) {
+    if (!("language" in target)) {
+      defineReadOnlyProperty(target, "language", function() {
+        return tabris("_Device").get("language");
       });
     }
   };
@@ -36,7 +44,10 @@
 
   if (typeof window !== "undefined") {
     tabris._addDeviceObject(window);
-    tabris._addDeviceMethods(window);
+    tabris._addDevicePixelRatio(window);
+  }
+  if (typeof navigator !== "undefined") {
+    tabris._addDeviceLanguage(navigator);
   }
 
 })();
