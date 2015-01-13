@@ -3,11 +3,12 @@
 Tabris.js is a mobile framework that lets you develop native iOS and Android apps entirely in JavaScript. You can develop your apps cross-platform, without the typical performance penalties you know from other cross-platform toolkits (no WebViews involved). You are more than welcome to use existing JavaScript libraries and native extensions to build upon the core functionality.
 
 ## Documentation
-- Working with [Widget objects](widgets)
-- Creating [Layouts](layout)
-- Working with the [Canvas](canvas) widget
-- Including [Cordova plug-ins](cordova)
-- Understand [touch events](touch-events) in tabris.js
+- [Modules](modules) - How to organize and load scripts.  
+- [Widgets](widgets) - Widgets basics.
+- [Layouts](layout) - Layouting widgets.
+- [Touch API](touch-events) - Processing widget touch events.
+- [Canvas](canvas) - Drawing with HTML Canvas API.
+- [Cordova Support](cordova) - Using cordova plug-ins in Tabris.js.
 
 ## API Reference
 - [Widgets types](widget-types)
