@@ -15,6 +15,10 @@
     "text": {
       "type": "string",
       "description": "The label text."
+    },
+    "maxLines": {
+      "type": "number|null?null",
+      "description": "Limit the number of lines to be displayed to the given maximum. `null` disables this limit."
     }
   },
   "links": [
