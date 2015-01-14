@@ -5,7 +5,7 @@ var page = tabris.create("Page", {
 
 tabris.create("Action", {
   title: "Action",
-  image: {src: "images/action_search.png"}
+  image: "images/share.png"
 }).on("selection", function() {
   console.log("Action selected.");
 });

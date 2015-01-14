@@ -74,6 +74,7 @@ module.exports = function(grunt) {
           "ScrollComposite.js",
           "Page.js",
           "Action.js",
+          "SearchAction.js",
           "TabFolder.js",
           "CanvasContext.js",
           "LegacyCanvasContext.js",

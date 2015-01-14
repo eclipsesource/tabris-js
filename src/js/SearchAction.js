@@ -1,6 +1,6 @@
-tabris.registerType("Action", {
+tabris.registerType("SearchAction", {
 
-  _type: "tabris.Action",
+  _type: "tabris.SearchAction",
 
   _properties: {
     enabled: "boolean",
@@ -8,32 +8,33 @@ tabris.registerType("Action", {
     image: "image",
     placementPriority: ["choice", {low: "LOW", high: "HIGH", normal: "NORMAL"}],
     title: "string",
-    visible: "boolean"
+    visible: "boolean",
+    proposals: true // array of strings
   },
 
   _setProperty: {
     visible: function(value) {
-      this._nativeSet("visibility", value);
+      this._setPropertyNative("visibility", value);
     }
   },
 
   _getProperty: {
     visible: function() {
-      return this._nativeGet("visibility");
+      return this._getPropertyNative("visibility");
     },
     placementPriority: function() {
-      var value = this._nativeGet("placementPriority");
+      var value = this._getPropertyNative("placementPriority");
       return value ? value.toLowerCase() : value;
     }
   },
 
-  _listen: {selection: "Selection"},
+  _listen: {selection: "Selection", modify: "Modify", submit: "Search"},
 
-  _trigger: {Selection: "selection"},
+  _trigger: {Selection: "selection", Modify: "modify", Search: "submit"},
 
   _create: function(properties) {
     this.super("_create", properties);
-    this._nativeSet("parent", tabris.ui.id);
+    this._setPropertyNative("parent", tabris.ui.id);
     return this;
   }
 
