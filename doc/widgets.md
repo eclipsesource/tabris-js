@@ -169,6 +169,9 @@ var selectionHandler = function() {
 };
 button.on("selection", selectionHandler);
 ```
+### `once(type, listener, context*)`
+
+Same as `on`, but removes the listener after it has been invoked by an event.
 
 ### `off(type*, listener*, context*)`
 

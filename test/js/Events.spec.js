@@ -47,6 +47,13 @@
           expect(callback).not.toHaveBeenCalled();
         });
 
+        it("should remove callback registered with once", function() {
+          object.once("foo", callback);
+          object.off("foo", callback);
+          object.trigger("foo");
+          expect(callback).not.toHaveBeenCalled();
+        });
+
         it("should remove duplicate callbacks", function() {
           object.on("foo", callback);
           object.on("foo", callback);
@@ -126,6 +133,51 @@
         it("should return context", function() {
           var result = object.off("foo", callback);
           expect(result).toBe(object);
+        });
+
+      });
+
+      describe("once", function() {
+
+        it("should attach callback", function() {
+          object.once("foo", callback);
+          object.trigger("foo");
+          expect(callback).toHaveBeenCalled();
+        });
+
+        it("should forward trigger arguments to wrapped callback", function() {
+          object.once("foo", callback);
+          object.trigger("foo", 1, 2, 3);
+          expect(callback).toHaveBeenCalledWith(1, 2, 3);
+        });
+
+        it("should use given context", function() {
+          var context = {};
+          object.once("foo", callback, context);
+          object.trigger("foo");
+          expect(callback.calls.first().object).toBe(context);
+        });
+
+        it("should not eliminate duplicate callbacks", function() {
+          object.once("foo", callback);
+          object.once("foo", callback);
+          object.trigger("foo");
+          expect(callback.calls.count()).toBe(2);
+        });
+
+        it("should return context", function() {
+          var result = object.once("foo", callback);
+          expect(result).toBe(object);
+        });
+
+        it("should remove callback after trigger", function() {
+          object.once("foo", callback);
+          object.trigger("foo");
+          callback.calls.reset();
+
+          object.trigger("foo");
+
+          expect(callback).not.toHaveBeenCalled();
         });
 
       });

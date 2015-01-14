@@ -79,7 +79,19 @@
       {
         "parameters": ["event", "listener", "context"],
         "returns": "Widget",
-        "description": "Removes all occurences of `listener` that are bound to `event` and `context` from this widget."
+        "description": "Removes all occurrences of `listener` that are bound to `event` and `context` from this widget."
+      }
+    ],
+    "once": [
+      {
+        "parameters": ["event", "listener"],
+        "returns": "Widget",
+        "description": "Same as `on`, but removes the listener after it has been invoked by an event."
+      },
+      {
+        "parameters": ["event", "listener", "context"],
+        "returns": "Widget",
+        "description": "Same as `on`, but removes the listener after it has been invoked by an event."
       }
     ],
     "animate": [

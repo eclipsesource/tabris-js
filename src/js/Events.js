@@ -20,9 +20,11 @@ tabris.Events = {
         if (!callback) {
           delete this._callbacks[type];
         } else {
-          var callbacks = this._callbacks[type];
+          var callbacks = this._callbacks[type].concat();
           for (var i = callbacks.length - 1; i >= 0; i--) {
-            if (callbacks[i].fn === callback && (!context || callbacks[i].ctx === context)) {
+            if ((callbacks[i].fn === callback || callbacks[i].fn._callback === callback) &&
+              (!context || callbacks[i].ctx === context))
+            {
               callbacks.splice(i, 1);
             }
           }
@@ -31,11 +33,23 @@ tabris.Events = {
             if (Object.keys(this._callbacks).length === 0) {
               delete this._callbacks;
             }
+          } else {
+            this._callbacks[type] = callbacks;
           }
         }
       }
     }
     return this;
+  },
+
+  once: function(type, callback, context) {
+    var self = this;
+    var wrappedCallback = function() {
+      self.off(type, wrappedCallback, context);
+      callback.apply(this, arguments);
+    };
+    wrappedCallback._callback = callback;
+    return this.on(type, wrappedCallback, context);
   },
 
   trigger: function(type /*, args* */) {
