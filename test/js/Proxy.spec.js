@@ -488,28 +488,28 @@ describe("Proxy", function() {
         expect(console.warn).toHaveBeenCalledWith(warning);
       });
 
-      it("raises no warning if _propertyCheck entry is true", function() {
+      it("raises no warning if _properties entry is true", function() {
         tabris.TestType._properties.knownProperty = true;
         proxy.set("knownProperty", true);
 
         expect(console.warn).not.toHaveBeenCalled();
       });
 
-      it("raises no warning if _propertyCheck itself is true", function() {
+      it("raises no warning if _properties itself is true", function() {
         tabris.TestType._properties = true;
         proxy.set("knownProperty", true);
 
         expect(console.warn).not.toHaveBeenCalled();
       });
 
-      it("raises no warning if _propertyCheck is a string", function() {
+      it("raises no warning if _properties entry is a string", function() {
         tabris.TestType._properties.knownProperty = "foo";
         proxy.set("knownProperty", true);
 
         expect(console.warn).not.toHaveBeenCalled();
       });
 
-      it("calls function if _propertyCheck is a string found in PropertyEncoding", function() {
+      it("calls function if _properties entry is a string found in PropertyEncoding", function() {
         tabris.TestType._properties.knownProperty = "boolean";
         spyOn(tabris.PropertyEncoding, "boolean").and.returnValue(true);
 
@@ -519,7 +519,7 @@ describe("Proxy", function() {
         expect(console.warn).not.toHaveBeenCalled();
       });
 
-      it("calls function with args if _propertyCheck is an array", function() {
+      it("calls function with args if _properties entry is an array", function() {
         tabris.TestType._properties.knownProperty = ["choice", ["a", "b", "c"]];
         spyOn(tabris.PropertyEncoding, "choice").and.returnValue(true);
 
@@ -529,7 +529,7 @@ describe("Proxy", function() {
         expect(console.warn).not.toHaveBeenCalled();
       });
 
-      it("raises a warning if _propertyCheck references a function that throws", function() {
+      it("raises a warning if _properties entry references a function that throws", function() {
         tabris.TestType._properties.knownProperty = "boolean";
         spyOn(tabris.PropertyEncoding, "boolean").and.throwError("My Error");
 
@@ -549,7 +549,7 @@ describe("Proxy", function() {
         expect(console.warn).toHaveBeenCalledWith(message);
       });
 
-      it("still sets the value if _propertyCheck is a function that throws", function() {
+      it("still sets the value if _properties entry is a function that throws", function() {
         // TODO: This will be flipped later to ignore the incorrect value
         tabris.TestType._properties.knownProperty = function() {
           throw new Error("My Error");
@@ -560,7 +560,7 @@ describe("Proxy", function() {
         expect(call.properties.knownProperty).toBe("foo");
       });
 
-      it("uses _propertyCheck entry to convert the value", function() {
+      it("uses _properties entry to convert the value", function() {
         tabris.TestType._properties.knownProperty = "boolean";
         spyOn(tabris.PropertyEncoding, "boolean").and.returnValue("foo");
 

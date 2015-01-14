@@ -104,7 +104,7 @@
     _properties: {
       alignment: ["choice", ["left", "right", "center"]],
       markupEnabled: "boolean",
-      maxLines: true, // TODO: check for positive integer or null
+      maxLines: ["nullable", "natural"],
       text: "string"
     }
   });

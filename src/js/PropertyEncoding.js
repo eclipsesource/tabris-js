@@ -106,6 +106,13 @@
         return value[0].id;
       }
       return value;
+    },
+
+    nullable: function(value, altCheck) {
+      if (value === null) {
+        return value;
+      }
+      return tabris.PropertyEncoding[altCheck](value);
     }
 
   };

@@ -313,4 +313,25 @@ describe("PropertyEncoding:", function() {
 
   });
 
+  describe("nullable", function() {
+
+    var check = tabris.PropertyEncoding.nullable;
+
+    it("allows null", function() {
+      expect(check(null)).toBeNull();
+    });
+
+    it("allows null or alternate check", function() {
+      expect(check(null, "natural")).toBeNull();
+      expect(check(1.1, "natural")).toBe(1);
+    });
+
+    it("rejects alternate check", function() {
+      expect(function() {
+        check(-1, "natural");
+      }).toThrow();
+    });
+
+  });
+
 });
