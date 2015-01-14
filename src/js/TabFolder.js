@@ -12,9 +12,9 @@
     _create: function(properties) {
       this.super("_create", util.omit(properties, "tabBarLocation"));
       if (properties.tabBarLocation === "top") {
-        this._setPropertyNative("style", ["TOP"]);
+        this._nativeSet("style", ["TOP"]);
       } else if (properties.tabBarLocation === "bottom") {
-        this._setPropertyNative("style", ["BOTTOM"]);
+        this._nativeSet("style", ["BOTTOM"]);
       }
       return this;
     },
@@ -34,17 +34,17 @@
     _setProperty: {
       paging: function(value) {
         this._paging = value;
-        this._setPropertyNative("data", {paging: value});
+        this._nativeSet("data", {paging: value});
       },
       selection: function(tab) {
-        this._setPropertyNative("selection", tab._tabItem.id);
+        this._nativeSet("selection", tab._tabItem.id);
       }
     },
 
     _getProperty: {
       paging: function() {return !!this._paging;},
       selection: function() {
-        var selection = this._getPropertyNative("selection");
+        var selection = this._nativeGet("selection");
         return selection ? tabris(selection)._tab : null;
       }
     },

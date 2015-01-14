@@ -12,7 +12,7 @@
       tabris._nativeBridge.create(this.id, type);
       if (this.constructor && this.constructor._internalProperties) {
         for (var name in this.constructor._internalProperties) {
-          this._setPropertyNative(name, this.constructor._internalProperties[name]);
+          this._nativeSet(name, this.constructor._internalProperties[name]);
         }
       }
       this._setProperties(properties);
@@ -192,7 +192,7 @@
         if (setProperty instanceof Function) {
           setProperty.call(this, encodedValue);
         } else {
-          this._setPropertyNative(name, tabris.PropertyEncoding.proxy(encodedValue));
+          this._nativeSet(name, tabris.PropertyEncoding.proxy(encodedValue));
         }
       } catch (error) {
         console.warn(this.type + ": Failed to set property \"" + name + "\" value: " + error.message);
@@ -233,18 +233,18 @@
       return type;
     },
 
-    _setPropertyNative: function(name, value) {
+    _nativeSet: function(name, value) {
       tabris._nativeBridge.set(this.id, name, value);
     },
 
     _getProperty: function(name) {
       var type = this._getPropertyType(name);
       var getProperty = this.constructor && this.constructor._getProperty && this.constructor._getProperty[name];
-      var value = getProperty ? getProperty.call(this) : this._getPropertyNative(name);
+      var value = getProperty ? getProperty.call(this) : this._nativeGet(name);
       return this._decodeProperty(value, type);
     },
 
-    _getPropertyNative: function(name) {
+    _nativeGet: function(name) {
       return tabris._nativeBridge.get(this.id, name);
     },
 

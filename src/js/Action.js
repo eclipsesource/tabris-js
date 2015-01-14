@@ -13,16 +13,16 @@ tabris.registerType("Action", {
 
   _setProperty: {
     visible: function(value) {
-      this._setPropertyNative("visibility", value);
+      this._nativeSet("visibility", value);
     }
   },
 
   _getProperty: {
     visible: function() {
-      return this._getPropertyNative("visibility");
+      return this._nativeGet("visibility");
     },
     placementPriority: function() {
-      var value = this._getPropertyNative("placementPriority");
+      var value = this._nativeGet("placementPriority");
       return value ? value.toLowerCase() : value;
     }
   },
@@ -35,7 +35,7 @@ tabris.registerType("Action", {
 
   _create: function(properties) {
     this.super("_create", properties);
-    this._setPropertyNative("parent", tabris.ui.id);
+    this._nativeSet("parent", tabris.ui.id);
     return this;
   }
 

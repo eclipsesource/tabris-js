@@ -28,14 +28,14 @@
       var scrollProps = util.omit(properties, ["direction"]);
       this.super("_create", scrollProps);
       var style = properties.direction === "horizontal" ? ["H_SCROLL"] : ["V_SCROLL"];
-      this._setPropertyNative("style", style);
+      this._nativeSet("style", style);
       this._scrollBar = tabris.create("_ScrollBar", {
         style: properties.direction === "horizontal" ? ["HORIZONTAL"] : ["VERTICAL"]
       });
       tabris._nativeBridge.set(this._scrollBar.id, "parent", this.id);
       this._composite = tabris.create("Composite");
       tabris._nativeBridge.set(this._composite.id, "parent", this.id);
-      this._setPropertyNative("content", this._composite.id);
+      this._nativeSet("content", this._composite.id);
       return this;
     },
 

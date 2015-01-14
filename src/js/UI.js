@@ -26,7 +26,7 @@ tabris.registerType("_UI", {
       this.dispose();
     });
     tabris.Proxy.prototype._create.call(this, {});
-    this._setPropertyNative("shell", this._shell.id);
+    this._nativeSet("shell", this._shell.id);
     this._pages = [];
     this.on("ShowPage", function(properties) {
       var page = tabris._proxies[properties.pageId];
@@ -90,7 +90,7 @@ tabris.registerType("_UI", {
     if (oldPage) {
       oldPage.trigger("disappear");
     }
-    this._setPropertyNative("activePage", newPage._page.id);
+    this._nativeSet("activePage", newPage._page.id);
     newPage.trigger("appear");
   }
 

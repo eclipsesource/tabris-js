@@ -41,12 +41,12 @@
     },
     _defaultSetProperty: {
       visible: function(value) {
-        this._setPropertyNative("visibility", value);
+        this._nativeSet("visibility", value);
       }
     },
     _defaultGetProperty: {
       visible: function() {
-        return this._getPropertyNative("visibility");
+        return this._nativeGet("visibility");
       }
     }
   });
@@ -139,7 +139,7 @@
     _create: function(properties) {
       var style = textTypeToStyle[properties.type] || textTypeToStyle["default"];
       var result = this.super("_create", properties);
-      this._setPropertyNative("style", style);
+      this._nativeSet("style", style);
       return result;
     },
     _listen: {
