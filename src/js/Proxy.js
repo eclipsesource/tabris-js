@@ -10,9 +10,9 @@
     _create: function(properties) {
       var type = this.constructor._type || this.type;
       tabris._nativeBridge.create(this.id, type);
-      if (this.constructor && this.constructor._internalProperties) {
-        for (var name in this.constructor._internalProperties) {
-          this._nativeSet(name, this.constructor._internalProperties[name]);
+      if (this.constructor && this.constructor._initProperties) {
+        for (var name in this.constructor._initProperties) {
+          this._nativeSet(name, this.constructor._initProperties[name]);
         }
       }
       this._setProperties(properties);

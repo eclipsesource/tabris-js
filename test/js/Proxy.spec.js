@@ -58,8 +58,8 @@ describe("Proxy", function() {
       expect(properties.foo).toBe("other-id");
     });
 
-    it("sends native set for extra properties", function() {
-      tabris.registerType("CustomType", {_internalProperties: {foo: 23}, _properties: true});
+    it("sends native set for init properties", function() {
+      tabris.registerType("CustomType", {_initProperties: {foo: 23}, _properties: true});
 
       tabris.create("CustomType", {bar: 42});
 
@@ -67,8 +67,8 @@ describe("Proxy", function() {
       expect(properties).toEqual({foo: 23, bar: 42});
     });
 
-    it("does not raise warning for extra properties", function() {
-      tabris.registerType("CustomType", {_internalProperties: {foo: 23}});
+    it("does not raise warning for init properties", function() {
+      tabris.registerType("CustomType", {_initProperties: {foo: 23}});
 
       tabris.create("CustomType", {});
 
@@ -76,11 +76,11 @@ describe("Proxy", function() {
     });
 
     it("does not modify prototype properties", function() {
-      tabris.registerType("CustomType", {_internalProperties: {}});
+      tabris.registerType("CustomType", {_initProperties: {}});
 
       tabris.create("CustomType", {foo: 23});
 
-      expect(tabris.CustomType._internalProperties).toEqual({});
+      expect(tabris.CustomType._initProperties).toEqual({});
     });
 
   });

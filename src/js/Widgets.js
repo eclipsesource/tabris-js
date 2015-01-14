@@ -53,7 +53,7 @@
 
   tabris.registerWidget("Button", {
     _type: "rwt.widgets.Button",
-    _internalProperties: {style: ["PUSH"]},
+    _initProperties: {style: ["PUSH"]},
     _listen: {selection: "Selection"},
     _trigger: {Selection: "selection"},
     _properties: {
@@ -71,7 +71,7 @@
 
   tabris.registerWidget("CheckBox", {
     _type: "rwt.widgets.Button",
-    _internalProperties: {style: ["CHECK"]},
+    _initProperties: {style: ["CHECK"]},
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
     _properties: {text: "string", selection: "boolean"}
@@ -100,7 +100,7 @@
 
   tabris.registerWidget("Label", {
     _type: "rwt.widgets.Label",
-    _internalProperties: {style: ["WRAP"]},
+    _initProperties: {style: ["WRAP"]},
     _properties: {
       alignment: ["choice", ["left", "right", "center"]],
       markupEnabled: "boolean",
@@ -121,7 +121,7 @@
 
   tabris.registerWidget("RadioButton", {
     _type: "rwt.widgets.Button",
-    _internalProperties: {style: ["RADIO"]},
+    _initProperties: {style: ["RADIO"]},
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
     _properties: {text: "string", selection: "boolean"}
@@ -172,7 +172,7 @@
 
   tabris.registerWidget("ToggleButton", {
     _type: "rwt.widgets.Button",
-    _internalProperties: {style: ["TOGGLE"]},
+    _initProperties: {style: ["TOGGLE"]},
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
     _properties: {
@@ -185,7 +185,7 @@
 
   tabris.registerWidget("Video", {
     _type: "tabris.widgets.Video",
-    _internalProperties: {controls_visible: true, repeat: false},
+    _initProperties: {controls_visible: true, repeat: false},
     _properties: {url: true}
   });
 

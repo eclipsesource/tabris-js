@@ -98,7 +98,7 @@
     "_listen": {},
     "_setProperty": {},
     "_getProperty": {},
-    "_internalProperties": {},
+    "_initProperties": {},
     "_type": null,
     "_properties": {},
     "_supportsChildren": false
