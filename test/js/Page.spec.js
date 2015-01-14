@@ -151,6 +151,12 @@ describe("Page", function() {
         expect(tabris.ui.set).toHaveBeenCalledWith("activePage", page);
       });
 
+      it("returns self to allow chaining", function() {
+        var result = page.open();
+
+        expect(result).toBe(page);
+      });
+
     });
 
     describe("close", function() {

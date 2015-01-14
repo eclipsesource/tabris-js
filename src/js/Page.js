@@ -55,6 +55,7 @@
 
     open: function() {
       tabris.ui.set("activePage", this);
+      return this;
     },
 
     close: function() {
