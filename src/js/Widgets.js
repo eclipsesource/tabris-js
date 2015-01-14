@@ -106,6 +106,11 @@
       markupEnabled: "boolean",
       maxLines: ["nullable", "natural"],
       text: "string"
+    },
+    _setProperty: {
+      maxLines: function(value) {
+        this._nativeSet("maxLines", value <= 0 ? null : value);
+      }
     }
   });
 

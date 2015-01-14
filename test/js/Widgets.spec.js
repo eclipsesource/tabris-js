@@ -289,6 +289,20 @@ describe("Widgets", function() {
       expect(create.properties).toEqual({style: ["WRAP"], text: "foo", maxLines: null});
     });
 
+    it("Label, maxLines: 0 is mapped to null", function() {
+      tabris.create("Label", {text: "foo", maxLines: 0});
+
+      var create = nativeBridge.calls({op: "create"})[0];
+      expect(create.properties.maxLines).toBeNull();
+    });
+
+    it("Label, maxLines: values <= 0 are mapped to null", function() {
+      tabris.create("Label", {text: "foo", maxLines: -1});
+
+      var create = nativeBridge.calls({op: "create"})[0];
+      expect(create.properties.maxLines).toBeNull();
+    });
+
     it("Slider", function() {
       tabris.create("Slider", {selection: 23});
 
