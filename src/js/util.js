@@ -68,9 +68,6 @@ util = {
     return util.extend(new Helper(), target, {
       "super": function(method) {
         return fn.prototype[ method ].apply(this, Array.prototype.slice.call(arguments, 1));
-      },
-      Super: function() {
-        fn.apply(this, arguments);
       }
     });
   }

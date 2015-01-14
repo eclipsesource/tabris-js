@@ -210,43 +210,6 @@ describe("util", function() {
       });
     });
 
-    describe("adds Super function that", function() {
-      it("calls the super constructor", function() {
-        Class1 = jasmine.createSpy();
-        Class2 = function() {
-          this.Super();
-        };
-        Class2.prototype = util.extendPrototype(Class1, {});
-        /*jshint nonew: false*/
-        new Class2();
-
-        expect(Class1).toHaveBeenCalled();
-      });
-
-      it("calls the super constructor with the instance as context", function() {
-        Class1 = jasmine.createSpy();
-        Class2 = function() {
-          this.Super();
-        };
-        Class2.prototype = util.extendPrototype(Class1, {});
-        var instance = new Class2();
-
-        expect(Class1.calls.all()[0].object).toBe(instance);
-      });
-
-      it("calls the super constructor with arguments", function() {
-        Class1 = jasmine.createSpy();
-        Class2 = function() {
-          this.Super(1, 2, 3);
-        };
-        Class2.prototype = util.extendPrototype(Class1, {});
-        /*jshint nonew: false*/
-        new Class2();
-
-        expect(Class1).toHaveBeenCalledWith(1, 2, 3);
-      });
-    });
-
   });
 
 });
