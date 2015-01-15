@@ -211,7 +211,7 @@ describe("PropertyEncoding:", function() {
     });
 
     it("fails for invalid numbers", function() {
-      var values = [-1, -0.1, NaN, 1 / 0, -1 / 0];
+      var values = [NaN, 1 / 0, -1 / 0];
       values.forEach(function(value) {
         expect(function() {
           check(value);
@@ -223,6 +223,11 @@ describe("PropertyEncoding:", function() {
       expect(check(0)).toBe(0);
       expect(check(1)).toBe(1);
       expect(check(10e10)).toBe(10e10);
+    });
+
+    it("normalizes negative values", function() {
+      expect(check(-1)).toBe(0);
+      expect(check(-1.5)).toBe(0);
     });
 
     it("rounds given value", function() {
@@ -328,7 +333,7 @@ describe("PropertyEncoding:", function() {
 
     it("rejects alternate check", function() {
       expect(function() {
-        check(-1, "natural");
+        check(NaN, "natural");
       }).toThrow();
     });
 

@@ -14,8 +14,11 @@
       if (typeof number !== "number") {
         throw new Error(typeof number + " is not a number: " + number);
       }
-      if (number < 0 || isNaN(number) || number === Infinity) {
+      if (isNaN(number) || number === Infinity || number === -Infinity) {
         throw new Error("Number is not a valid value: " + number);
+      }
+      if (number < 0) {
+        return 0;
       }
       return Math.round(number);
     },
