@@ -51,6 +51,8 @@
       tabris[type].prototype = util.extendPrototype(tabris.Proxy, superProto);
     },
 
+    version: "${VERSION}",
+
     _start: function(client) {
       tabris._nativeBridge = new tabris.NativeBridge(client);
       var i = 0;

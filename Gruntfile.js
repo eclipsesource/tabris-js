@@ -1,10 +1,11 @@
 module.exports = function(grunt) {
 
+  var pkg = grunt.file.readJSON("package.json");
+
   var banner = blockComment("tabris.js <%= grunt.template.today('yyyy-mm-dd') %>\n\n" +
                             grunt.file.read("LICENSE"));
 
   grunt.initConfig({
-    pkg: grunt.file.readJSON("package.json"),
     clean: ["build"],
     jshint: {
       options: {
@@ -47,7 +48,10 @@ module.exports = function(grunt) {
     concat: {
       options: {
         banner: banner,
-        stripBanners: true
+        stripBanners: true,
+        process: function(src) {
+          return src.replace(/\${VERSION}/g, pkg.version);
+        }
       },
       dist: {
         src: prefix("src/js/", [
