@@ -2,7 +2,6 @@
 
   tabris.NativeBridge = function(bridge) {
     this._bridge = bridge;
-    this.V8 = !!bridge.V8;
     this._operations = [];
     this._currentOperation = {id: null};
     tabris.on("flush", this.flush, this);
