@@ -465,6 +465,7 @@ describe("XMLHttpRequest", function() {
           xhr.onreadystatechange = jasmine.createSpy("onreadystatechange");
           proxy.trigger("StateChange", {state: entry});
           expect(xhr.onreadystatechange).toHaveBeenCalled();
+          sendRequest(xhr);
         });
       });
 
@@ -478,6 +479,7 @@ describe("XMLHttpRequest", function() {
           expect(xhr.onprogress).toHaveBeenCalled();
           expect(xhr[handler]).toHaveBeenCalled();
           expect(xhr.onloadend).toHaveBeenCalled();
+          sendRequest(xhr);
         });
       });
 
@@ -537,6 +539,24 @@ describe("XMLHttpRequest", function() {
           loaded: 50,
           total: 100
         }));
+      });
+
+      it("disposes of proxy on error proxy event states and 'finished'", function() {
+        requestErrors.concat("finished").forEach(function(state) {
+          xhr.onreadystatechange = jasmine.createSpy("onreadystatechange");
+          proxy.trigger("StateChange", {state: state});
+          expect(proxy._isDisposed).toBe(true);
+          sendRequest(xhr);
+        });
+      });
+
+      it("doesn't dispose of proxy on proxy event states 'headers' and 'loading'", function() {
+        ["headers", "loading"].forEach(function(state) {
+          xhr.onreadystatechange = jasmine.createSpy("onreadystatechange");
+          proxy.trigger("StateChange", {state: state});
+          expect(!proxy._isDisposed).toBe(true);
+          sendRequest(xhr);
+        });
       });
 
     });

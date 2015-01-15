@@ -515,6 +515,8 @@
       scope.uploadComplete = true;
       dispatchErrorProgressEvents(event, xhr.upload);
     }
+    scope.proxy.dispose();
+    scope.proxy = null;
   };
 
   // -----------------------------------------------------------------
