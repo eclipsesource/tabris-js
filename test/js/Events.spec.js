@@ -36,6 +36,14 @@
           expect(result).toBe(object);
         });
 
+        it("should not affect currently processed event", function() {
+          object.on("foo", function() {
+            object.on("foo", callback);
+          });
+          object.trigger("foo");
+          expect(callback).not.toHaveBeenCalled();
+        });
+
       });
 
       describe("off", function() {
@@ -60,6 +68,15 @@
           object.off("foo", callback);
           object.trigger("foo");
           expect(callback).not.toHaveBeenCalled();
+        });
+
+        it("should not affect currently processed event", function() {
+          object.on("foo", function() {
+            object.off("foo", callback);
+          });
+          object.on("foo", callback);
+          object.trigger("foo");
+          expect(callback).toHaveBeenCalled();
         });
 
         describe("if context is specified", function() {
@@ -186,15 +203,25 @@
 
         it("should trigger callback", function() {
           object.on("foo", callback);
+          object.trigger("foo");
+          expect(callback).toHaveBeenCalled();
+        });
+
+        it("should trigger callback with parameters", function() {
+          object.on("foo", callback);
           object.trigger("foo", 23, 42);
           expect(callback).toHaveBeenCalledWith(23, 42);
+        });
+
+        it("should trigger callback with default context", function() {
+          object.on("foo", callback);
+          object.trigger("foo");
           expect(callback.calls.first().object).toBe(object);
         });
 
-        it("should trigger callback with given context", function() {
+        it("should trigger callback with parameters and given context", function() {
           object.on("foo", callback, context);
-          object.trigger("foo", 23, 42);
-          expect(callback).toHaveBeenCalledWith(23, 42);
+          object.trigger("foo");
           expect(callback.calls.first().object).toBe(context);
         });
 

@@ -4,11 +4,10 @@ tabris.Events = {
     if (!this._callbacks) {
       this._callbacks = [];
     }
-    var callbacks = this._callbacks[type] || (this._callbacks[type] = []);
-    callbacks.push({
+    this._callbacks[type] = (this._callbacks[type] || []).concat([{
       fn: callback,
       ctx: context
-    });
+    }]);
     return this;
   },
 
