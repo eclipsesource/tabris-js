@@ -2,12 +2,6 @@
   "title": "Cordova Demo",
   "description": "Demonstrates using cordova plug-ins in Tabris.js",
   "category": "Cordova",
-  "tabris": "https://tabrisjs.com/downloads/preview-2014-12-19-M6/tabris.min.js",
-  "main": "app.js",
-  "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-contrib-clean": "^0.6.0",
-    "grunt-curl": "^2.0.3",
-    "grunt-zip": "^0.16.2"
-  }
+  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
+  "main": "app.js"
 }
