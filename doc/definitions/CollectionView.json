@@ -15,11 +15,26 @@
       "type": "function",
       "static": true,
       "description": "A callback used to initialize a collection cell. Cells are created by the framework and recycled on scrolling. This callback receives an empty collection cell as an argument and appends widgets to it. The cell triggers an `itemchange` event (*name subject to change*) with a single element from the items array as a callback argument."
+    },
+    "refreshEnabled": {
+      "type": "boolean?false",
+      "description": "Enables the user to trigger a refresh by using the pull-to-refresh gesture."
+    },
+    "refreshIndicator": {
+      "type": "boolean?false",
+      "description": "Whether the refresh indicator is currently visible. Will be set to `true` when a `refresh` event is triggered. Reset it to `false` when the refresh is finished."
+    },
+    "refreshMessage": {
+      "type": "string?\"\"",
+      "description": "The message text displayed together with the refresh indicator. Currently not supported on Android."
     }
   },
   "events": {
     "selection": {
       "description": "Fired when a collection item is selected. The event object includes a field `item` that contains the data item that is mapped to the selected cell."
+    },
+    "refresh": {
+      "description": "Fired when the user requested a refresh. An event listener should reset the `refreshIndicator` property when refresh is finished."
     }
   },
   "links": [

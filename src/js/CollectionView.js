@@ -7,7 +7,10 @@
     _properties: {
       itemHeight: "natural",
       items: true,
-      initializeCell: true
+      initializeCell: true,
+      refreshEnabled: "boolean",
+      refreshIndicator: "boolean",
+      refreshMessage: "string"
     },
 
     _create: function() {
@@ -40,7 +43,8 @@
     },
 
     _listen: {
-      selection: true
+      selection: true,
+      refresh: true
     },
 
     _trigger: {
