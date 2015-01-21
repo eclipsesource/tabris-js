@@ -5,17 +5,18 @@ var page = tabris.create("Page", {
   topLevel: true
 });
 
+var button = tabris.create("Button", {
+  text: "Animate"
+}).appendTo(page);
+
 var label = tabris.create("Label", {
   layoutData: {left: MARGIN, top: MARGIN},
   background: "#6aa",
   foreground: "white",
   text: "Hello World!"
-});
+}).appendTo(page);
 
-var button = tabris.create("Button", {
-  layoutData: {left: MARGIN, right: MARGIN, top: [label, MARGIN]},
-  text: "Animate"
-});
+button.set("layoutData", {left: MARGIN, right: MARGIN, top: [label, MARGIN]});
 
 button.on("selection", function() {
   label.animate({
@@ -36,5 +37,3 @@ button.on("selection", function() {
     easing: "ease-out" // "linear", "ease-in", "ease-out", "ease-in-out"
   });
 });
-
-page.append(label, button);

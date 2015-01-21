@@ -22,6 +22,18 @@ var page = tabris.create("Page", {
   topLevel: true
 });
 
+tabris.create("Label", {
+  layoutData: {left: MARGIN, right: MARGIN, top: MARGIN, bottom: MARGIN},
+  text: loremIpsum,
+  foreground: "#777"
+}).appendTo(page);
+
+var shade = tabris.create("Composite", {
+  layoutData: {left: 0, right: 0, top: 0, bottom: 0},
+  background: "black",
+  opacity: 0
+}).appendTo(page);
+
 var tray = tabris.create("Composite", {
   layoutData: {left: 0, right: 0, top: [30, 0], bottom: 0}
 }).appendTo(page);
@@ -51,18 +63,6 @@ tabris.create("Label", {
   font: "bold 24px",
   foreground: "white"
 }).appendTo(trayContent);
-
-var shade = tabris.create("Composite", {
-  layoutData: {left: 0, right: 0, top: 0, bottom: 0},
-  background: "black",
-  opacity: 0
-}).appendTo(page);
-
-tabris.create("Label", {
-  layoutData: {left: MARGIN, right: MARGIN, top: MARGIN, bottom: MARGIN},
-  text: loremIpsum,
-  foreground: "#777"
-}).appendTo(page);
 
 function updateShadeOpacity(translationY) {
   var traveled = translationY / verticalTrayOffset;
