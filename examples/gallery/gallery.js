@@ -25,17 +25,16 @@ var page = tabris.create("Page", {
   topLevel: true
 });
 
-var scrollComposite = tabris.create("ScrollComposite", {
-  direction: "horizontal",
-  data: {paging: true},
-  layoutData: {left: 0, right: 0, bottom: 0, height: 164},
-  background: "rgba(32, 32, 32, 0.6)"
-}).appendTo(page);
-
 var fullImage = tabris.create("ImageView", {
   layoutData: {top: 0, bottom: 0, left: 0, right: 0},
   image: {src: "images/" + imageNames[0] + ".jpg"},
   scaleMode: "auto"
+}).appendTo(page);
+
+var scrollComposite = tabris.create("ScrollComposite", {
+  direction: "horizontal",
+  layoutData: {left: 0, right: 0, bottom: 0, height: 164},
+  background: "rgba(32, 32, 32, 0.6)"
 }).appendTo(page);
 
 imageNames.forEach(function(image, index) {
