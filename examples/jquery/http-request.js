@@ -23,12 +23,4 @@ $.getJSON("http://www.telize.com/geoip", function(json) {
   createLabel("Longitude: " + json.longitude);
 });
 
-$.getJSON("https://data.itpir.wm.edu/deflate/api.php?val=100USD1986USA&json=true", function(json) {
-  createLabel("Value of 1986 100$ today: " + json.deflated_amount + "$");
-});
-
-$.getJSON("http://api.automeme.net/text.json", function(json) {
-  createLabel("Meme: " + json[0]);
-});
-
 page.open();
