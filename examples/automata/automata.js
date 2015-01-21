@@ -27,16 +27,6 @@ var page = tabris.create("Page", {
   background: "#000"
 });
 
-// TODO [rst] Move down when z-order is fixed
-var label = tabris.create("Label", {
-  bounds: {left: 0, top: 0, width: 80, height: 40},
-  background: "rgba(255, 0, 0, 0.8)",
-  foreground: "#fff",
-  text: "FPS"
-});
-
-page.append(label);
-
 function getNextState(x, y, alive) {
   var count = 0,
     xm1 = x > 0,
@@ -105,6 +95,13 @@ for (var x = 0; x < xSize; x++) {
     // universe.add(cells[x][y].proxy);
   }
 }
+
+var label = tabris.create("Label", {
+  bounds: {left: 0, top: 0, width: 80, height: 40},
+  background: "rgba(255, 0, 0, 0.8)",
+  foreground: "#fff",
+  text: "FPS"
+}).appendTo(page);
 
 // add FPS label
 // var label = Ti.UI.createLabel({
