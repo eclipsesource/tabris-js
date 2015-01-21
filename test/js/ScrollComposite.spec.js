@@ -61,8 +61,10 @@ describe("ScrollComposite", function() {
         listener = jasmine.createSpy();
         scrollBar = tabris(createCalls[1].id);
         scrollComposite.on("scroll", listener);
-        spyOn(scrollComposite, "get").and.callFake(function(name) {
-          return (name === "origin") ? [23, 42] : null;
+        spyOn(nativeBridge, "get").and.callFake(function(id, property) {
+          if (id === scrollComposite.id && property === "origin") {
+            return [23, 42];
+          }
         });
       });
 

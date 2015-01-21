@@ -40,7 +40,7 @@
     },
 
     _scrollBarListener: function() {
-      var selection = this.get("origin");
+      var selection = this._nativeGet("origin");
       this.trigger("scroll", {x: selection[0], y: selection[1]});
     },
 
