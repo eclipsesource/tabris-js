@@ -10,28 +10,11 @@ var scrollComposite = tabris.create("ScrollComposite", {
   layoutData: {left: 0, right: 0, top: 0, bottom: 0}
 }).appendTo(page);
 
-var titleComposite = tabris.create("Composite", {
-  background: "rgba(255,152,0,0.9)"
+var imageLabel = tabris.create("ImageView", {
+  layoutData: {left: 0, top: 0, right: 0}
 }).appendTo(scrollComposite);
 
-var teaserLabel = tabris.create("Label", {
-  markupEnabled: true,
-  text: "<b>The perfect side dish</b>",
-  font: "16px",
-  layoutData: {left: MARGIN, top: MARGIN, right: MARGIN},
-  foreground: "black"
-}).appendTo(titleComposite);
-
-tabris.create("Label", {
-  layoutData: {left: MARGIN, top: [teaserLabel, MARGIN_SMALL], right: MARGIN},
-  markupEnabled: true,
-  text: "<b>INDIAN SUMMER SALAD</b>",
-  font: "24px",
-  foreground: "white"
-}).appendTo(titleComposite);
-
 var contentComposite = tabris.create("Composite", {
-  layoutData: {left: 0, right: 0, top: [titleComposite, 0], height: 1000},
   background: "white"
 }).appendTo(scrollComposite);
 
@@ -55,9 +38,27 @@ tabris.create("Label", {
         "porttitor nec, sed lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus."
 }).appendTo(contentComposite);
 
-var imageLabel = tabris.create("ImageView", {
-  layoutData: {left: 0, top: 0, right: 0}
+var titleComposite = tabris.create("Composite", {
+  background: "rgba(255,152,0,0.9)"
 }).appendTo(scrollComposite);
+
+contentComposite.set("layoutData", {left: 0, right: 0, top: [titleComposite, 0], height: 1000});
+
+var teaserLabel = tabris.create("Label", {
+  markupEnabled: true,
+  text: "<b>The perfect side dish</b>",
+  font: "16px",
+  layoutData: {left: MARGIN, top: MARGIN, right: MARGIN},
+  foreground: "black"
+}).appendTo(titleComposite);
+
+tabris.create("Label", {
+  layoutData: {left: MARGIN, top: [teaserLabel, MARGIN_SMALL], right: MARGIN},
+  markupEnabled: true,
+  text: "<b>INDIAN SUMMER SALAD</b>",
+  font: "24px",
+  foreground: "white"
+}).appendTo(titleComposite);
 
 var titleCompY = 0;
 scrollComposite.on("change:bounds", function() {
