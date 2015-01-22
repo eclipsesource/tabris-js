@@ -28,7 +28,7 @@ var page = tabris.create("Page", {
 var fullImage = tabris.create("ImageView", {
   layoutData: {top: 0, bottom: 0, left: 0, right: 0},
   image: {src: "images/" + imageNames[0] + ".jpg"},
-  scaleMode: "fill"
+  scaleMode: "auto"
 }).appendTo(page);
 
 var scrollComposite = tabris.create("ScrollComposite", {
