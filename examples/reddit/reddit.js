@@ -58,17 +58,11 @@ $.getJSON("http://www.reddit.com/r/petpictures.json?limit=100", function(json) {
     }
   }).on("selection", function(event) {
     var detailPage = tabris.create("Page", {
+      background: "black",
+      title: event.item.data.title,
       topLevel: false
     });
     var url = event.item.data.url;
-    tabris.create("Label", {
-      text: event.item.data.title,
-      layoutData: {left: 0, right: 0, bottom: 0},
-      font: "24px",
-      foreground: "white",
-      background: "rgba(40,40,40,0.5)",
-      alignment: "center"
-    }).appendTo(detailPage);
     if (url.indexOf("jpg", url.length - 3) !== -1) {
       tabris.create("ImageView", {
         layoutData: {left: 0, top: 0, right: 0, bottom: 0},
