@@ -27,7 +27,8 @@ tabris.create("CollectionView", {
       layoutData: {top: 16, centerX: 0, width: 200, height: 200}
     }).appendTo(cell);
     var nameLabel = tabris.create("Label", {
-      layoutData: {top: [imageView, 16], centerX: 0}
+      layoutData: {left: 30, top: [imageView, 16], right: 30},
+      alignment: "center"
     }).appendTo(cell);
     cell.on("itemchange", function(person) {
       imageView.set("image", {src: person.image});
