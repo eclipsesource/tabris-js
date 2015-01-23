@@ -1,0 +1,7 @@
+{
+  "title": "Device Info",
+  "category": "Device",
+  "description": "Display available device information",
+  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
+  "main": "device.js"
+}
