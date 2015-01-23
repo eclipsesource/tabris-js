@@ -84,7 +84,18 @@ Parameters:
 
 Example:
 ```javascript
-label.animate({opacity: 0}, {duration: 1000});
+label.animate({
+  opacity: 0,
+  transform: {
+    translationX: 200,
+    translationY: 200,
+    scaleX: 0.1,
+    scaleY: 0.1
+  }
+}, {
+  duration: 1000,
+  easing: "ease-out"
+});
 ```
 
 ## The Widget Hierarchy
