@@ -14,6 +14,7 @@
     },
 
     _create: function() {
+      this._items = [];
       var result = tabris.Proxy.prototype._create.apply(this, arguments);
       this._nativeListen("createitem", true);
       this._nativeListen("populateitem", true);
@@ -38,7 +39,7 @@
 
     _getProperty: {
       items: function() {
-        return this._items || [];
+        return this._items;
       }
     },
 
@@ -59,31 +60,46 @@
       },
       populateitem: function(event) {
         var cell = tabris(event.widget);
-        var item = this._items ? this._items[event.index] : null;
+        var item = this._getItem(this._items, event.index);
         cell.trigger("itemchange", item, event.index);
       },
       selection: function(event) {
         this.trigger("selection", {
           index: event.index,
-          item: this._items ? this._items[event.index] : null
+          item: this._getItem(this._items, event.index)
         });
       }
     },
 
     _setItems: function(items) {
-      var oldItemCount = this._items ? this._items.length : 0;
-      this._items = items;
+      var oldItemCount = this._items.length;
+      this._items = items || [];
       var updateOperations = {};
       if (oldItemCount > 0) {
         updateOperations.remove = [0, oldItemCount];
       }
-      var newItemCount = items ? items.length : 0;
+      var newItemCount = this._items.length;
       if (newItemCount > 0) {
         updateOperations.insert = [0, newItemCount];
       }
       if (Object.keys(updateOperations).length) {
         this._updateOperations = updateOperations;
       }
+    },
+
+    _getItem: function(items, index) {
+      return items[index];
+    },
+
+    _insert: function(items) {
+      var length = this._items.length;
+      Array.prototype.push.apply(this._items, items);
+      this.call("update", {insert: [length, items.length]});
+    },
+
+    _remove: function(start, count) {
+      this._items.splice(start, count);
+      this.call("update", {remove: [start, count]});
     },
 
     _update: function() {
