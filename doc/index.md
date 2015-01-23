@@ -1,4 +1,4 @@
-# tabris.js
+# tabris.js - 0.9.0
 
 Tabris.js is a mobile framework that lets you develop native iOS and Android apps entirely in JavaScript. You can develop your apps cross-platform, without the typical performance penalties you know from other cross-platform toolkits (no WebViews involved). You are more than welcome to use existing JavaScript libraries and native extensions to build upon the core functionality.
 
