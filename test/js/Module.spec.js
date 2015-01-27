@@ -83,6 +83,12 @@ describe("tabris.Module", function() {
         expect(module.require("./foo")).toEqual({foo: 1, bar: 2});
       });
 
+      it("returns native module", function() {
+        var native = new tabris.Module("native", module, {});
+
+        expect(module.require("native")).toBe(native.exports);
+      });
+
       it("returns same exports from different modules", function() {
         tabris.Module.createLoader.and.returnValue(function(module, exports) {
           exports.bar = 1;
@@ -355,26 +361,12 @@ describe("tabris.Module", function() {
 
   describe("loadMain", function() {
 
-    it("requests package.json", function() {
-      spyOn(tabris.Module, "readJSON").and.returnValue({main: "foo.js"});
+    it("loads main module with global require", function() {
+      spyOn(tabris.Module, "require");
 
       tabris.Module.loadMain();
 
-      expect(tabris.Module.readJSON).toHaveBeenCalledWith("./package.json");
-      expect(tabris.Module.createLoader).toHaveBeenCalledWith("./foo.js");
-    });
-
-    it("loads main module with root module", function() {
-      spyOn(tabris.Module, "readJSON").and.returnValue({main: "foo.js"});
-      var main;
-      tabris.Module.createLoader.and.returnValue(function(module) {
-        main = module;
-      });
-
-      tabris.Module.loadMain();
-
-      expect(main.id).toBe("./foo.js");
-      expect(main.parent.parent).toBe(null);
+      expect(tabris.Module.require).toHaveBeenCalledWith("./");
     });
 
   });

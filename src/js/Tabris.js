@@ -1,6 +1,8 @@
 /*global tabris: true */
 
-(function() {
+(function(require) {
+
+  var util = require("tabris-util");
 
   tabris = util.extend(function(id) {
     if (!tabris._proxies[id] && !tabris[id]) {
@@ -109,4 +111,4 @@
     "_supportsChildren": false
   };
 
-})();
+})(tabris.Module.require);

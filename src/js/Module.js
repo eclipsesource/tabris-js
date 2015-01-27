@@ -1,5 +1,7 @@
 (function(exports) {
 
+  var module;
+
   var Module = exports.Module = function(id, parent, content) {
     this.id = id || null;
     this.parent = parent || null;
@@ -18,8 +20,11 @@
   Module.prototype = {
 
     require: function(request) {
-      var currentDir = dirname(this.id || "./");
+      var currentDir = dirname(this.id);
       if (request.slice(0, 1) !== ".") {
+        if (this._cache[request]) {
+          return this._cache[request].exports;
+        }
         currentDir = "./node_modules";
       }
       var postfixes = request.slice(-1) === "/" ? folderPostfixes : filePostfixes;
@@ -42,7 +47,7 @@
 
   Module.loadMain = function() {
     try {
-      new tabris.Module().require("./");
+      Module.require("./");
     } catch (error) {
       console.error("Could not load main module: " + error);
       console.log(error.stack);
@@ -76,6 +81,18 @@
     }
   };
 
+  Module.define = function(id, content) {
+    return new Module(id, module, content);
+  };
+
+  Module.require = function(id) {
+    return module.require(id);
+  };
+
+  module = Module.define("module", function(module) {
+    module.exports = Module;
+  });
+
   function getModule(path, postfix) {
     var url = path + postfix;
     if (url in this._cache) {
@@ -108,6 +125,9 @@
   }
 
   function dirname(id) {
+    if (!id || id.slice(0, 1) !== ".") {
+      return "./";
+    }
     return id.slice(0, id.lastIndexOf("/"));
   }
 

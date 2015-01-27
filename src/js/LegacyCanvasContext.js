@@ -1,4 +1,6 @@
-(function() {
+(function(require) {
+
+  var util = require("tabris-util");
 
   tabris.LegacyCanvasContext = function(gc) {
     this._gc = gc;
@@ -236,4 +238,4 @@
     });
   }
 
-})();
+})(tabris.Module.require);

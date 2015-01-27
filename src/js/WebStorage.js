@@ -1,4 +1,6 @@
-(function() {
+(function(require) {
+
+  var util = require("tabris-util");
 
   tabris.registerType("_ClientStore", {
     _type: "tabris.ClientStore"
@@ -63,4 +65,4 @@
     window.localStorage = new tabris.WebStorage();
   }
 
-}());
+}(tabris.Module.require));

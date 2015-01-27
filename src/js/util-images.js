@@ -1,4 +1,6 @@
-(function() {
+(function(require) {
+
+  var util = require("tabris-util");
 
   util.imageToArray = function(value) {
     return [value.src, checkValue(value.width), checkValue(value.height), checkValue(value.scale)];
@@ -22,4 +24,4 @@
     return value != null ? value : null;
   }
 
-}());
+}(tabris.Module.require));

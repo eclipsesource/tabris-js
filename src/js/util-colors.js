@@ -1,4 +1,6 @@
-(function() {
+(function(require) {
+
+  var util = require("tabris-util");
 
   util.colorArrayToString = function(array) {
     var r = array[0];
@@ -79,4 +81,4 @@
     aqua: [0, 255, 255]
   };
 
-})();
+})(tabris.Module.require);

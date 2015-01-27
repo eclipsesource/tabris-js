@@ -1,5 +1,7 @@
 describe("Widgets", function() {
 
+  var util = tabris.Module.require("tabris-util");
+
   var nativeBridge;
 
   beforeEach(function() {

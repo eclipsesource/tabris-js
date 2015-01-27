@@ -1,4 +1,6 @@
-(function() {
+(function(require) {
+
+  var util = require("tabris-util");
 
   tabris.Proxy = function(id) {
     this.id = id || generateId();
@@ -269,4 +271,4 @@
     return "o" + (idSequence++);
   }
 
-})();
+})(tabris.Module.require);

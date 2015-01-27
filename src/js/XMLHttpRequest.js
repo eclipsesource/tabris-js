@@ -5,7 +5,9 @@
 // Append the section tag to the URL above to get the link to the corresponding section.
 // Steps are referenced to with a number inside parentheses, e.g. (2)
 
-(function() {
+(function(require) {
+
+  var util = require("tabris-util");
 
   tabris.registerType("_HttpRequest", {
     _type: "tabris.HttpRequest",
@@ -668,4 +670,4 @@
     window.XMLHttpRequestProgressEvent = tabris.XMLHttpRequestProgressEvent;
   }
 
-})();
+})(tabris.Module.require);

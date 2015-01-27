@@ -1,4 +1,6 @@
-(function() {
+(function(require) {
+
+  var util = require("tabris-util");
 
   tabris.registerWidget("_ScrollBar", {
     _type: "rwt.widgets.ScrollBar",
@@ -50,4 +52,4 @@
 
   });
 
-})();
+})(tabris.Module.require);

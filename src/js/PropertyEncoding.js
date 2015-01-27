@@ -1,4 +1,6 @@
-(function() {
+(function(require) {
+
+  var util = require("tabris-util");
 
   tabris.PropertyEncoding = {
 
@@ -156,4 +158,4 @@
     return layoutData;
   }
 
-}());
+}(tabris.Module.require));

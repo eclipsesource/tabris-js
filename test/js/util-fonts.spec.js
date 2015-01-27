@@ -1,5 +1,7 @@
 describe("util-fonts", function() {
 
+  var util = tabris.Module.require("tabris-util");
+
   describe("fontStringToArray", function() {
 
     var parse = function(str) {

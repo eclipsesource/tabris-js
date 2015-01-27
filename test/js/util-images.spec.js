@@ -1,5 +1,7 @@
 describe("util-images", function() {
 
+  var util = tabris.Module.require("tabris-util");
+
   describe("imageToArray", function() {
 
     it("translates object to array", function() {

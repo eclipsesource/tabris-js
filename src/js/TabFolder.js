@@ -1,4 +1,6 @@
-(function() {
+(function(require) {
+
+  var util = require("tabris-util");
 
   tabris.registerType("_TabItem", {
     _type: "rwt.widgets.TabItem",
@@ -142,4 +144,4 @@
     return !isTab(child);
   }
 
-}());
+}(tabris.Module.require));

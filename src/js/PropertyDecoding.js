@@ -1,4 +1,6 @@
-(function() {
+(function(require) {
+
+  var util = require("tabris-util");
 
   tabris.PropertyDecoding = {
 
@@ -20,4 +22,4 @@
 
   };
 
-}());
+}(tabris.Module.require));

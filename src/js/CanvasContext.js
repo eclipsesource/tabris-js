@@ -1,4 +1,6 @@
-(function() {
+(function(require) {
+
+  var util = require("tabris-util");
 
   tabris.registerType("_GC", {
     _type: "rwt.widgets.GC",
@@ -332,4 +334,4 @@
     });
   }
 
-})();
+}(tabris.Module.require));

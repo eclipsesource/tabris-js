@@ -1,6 +1,4 @@
-/*global util: true */
-
-util = {
+tabris.Module.define("tabris-util", {
 
   extend: function(target) {
     for (var i = 1; i < arguments.length; i++) {
@@ -65,11 +63,11 @@ util = {
   extendPrototype: function(fn, target) {
     var Helper = function() {};
     Helper.prototype = fn.prototype;
-    return util.extend(new Helper(), target, {
+    return this.extend(new Helper(), target, {
       "super": function(method) {
         return fn.prototype[ method ].apply(this, Array.prototype.slice.call(arguments, 1));
       }
     });
   }
 
-};
+});

@@ -3,6 +3,8 @@
 
     describe("Backbone-like Events (" + provider + ")", function() {
 
+      var util = tabris.Module.require("tabris-util");
+
       var object;
       var context, context2;
       var callback, callback2;

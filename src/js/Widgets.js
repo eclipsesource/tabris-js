@@ -1,4 +1,6 @@
-(function() {
+(function(require) {
+
+  var util = require("tabris-util");
 
   tabris.registerWidget = function(type, members) {
     members = util.clone(members);
@@ -201,4 +203,4 @@
     _properties: {url: true, html: "string"}
   });
 
-}());
+}(tabris.Module.require));

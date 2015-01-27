@@ -1,5 +1,7 @@
 describe("Color", function() {
 
+  var util = tabris.Module.require("tabris-util");
+
   describe("colorArrayToString", function() {
 
     it("returns color string in rgba format", function() {
