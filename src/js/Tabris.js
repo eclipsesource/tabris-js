@@ -91,7 +91,7 @@
       this._proxies = {};
     }
 
-  });
+  }, tabris);
 
   function getDefault(member) {
     var value = staticMembers[member];

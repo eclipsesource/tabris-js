@@ -55,6 +55,7 @@ module.exports = function(grunt) {
       },
       dist: {
         src: prefix("src/js/", [
+          "Module.js",
           "util.js",
           "util-colors.js",
           "util-fonts.js",
@@ -62,7 +63,6 @@ module.exports = function(grunt) {
           "Tabris.js",
           "NativeBridge.js",
           "Events.js",
-          "Module.js",
           "Proxy.js",
           "ProxyCollection.js",
           "PropertyDecoding.js",

@@ -1,6 +1,6 @@
-(function() {
+(function(exports) {
 
-  tabris.Module = function(id, parent, content) {
+  var Module = exports.Module = function(id, parent, content) {
     this.id = id || null;
     this.parent = parent || null;
     this.exports = {};
@@ -15,7 +15,7 @@
     }
   };
 
-  tabris.Module.prototype = {
+  Module.prototype = {
 
     require: function(request) {
       var currentDir = dirname(this.id || "./");
@@ -40,7 +40,7 @@
   var filePostfixes = ["", ".js", ".json", "/package.json", "/index.js", "/index.json"];
   var folderPostfixes = ["/package.json", "/index.js", "/index.json"];
 
-  tabris.Module.loadMain = function() {
+  Module.loadMain = function() {
     try {
       new tabris.Module().require("./");
     } catch (error) {
@@ -49,7 +49,7 @@
     }
   };
 
-  tabris.Module.createLoader = function(url) {
+  Module.createLoader = function(url) {
     var bridge = tabris._nativeBridge._bridge;
     var src = bridge.load(url);
     if (src) {
@@ -64,7 +64,7 @@
     }
   };
 
-  tabris.Module.readJSON = function(url) {
+  Module.readJSON = function(url) {
     var bridge = tabris._nativeBridge._bridge;
     var src = bridge.load(url);
     if (src) {
@@ -82,22 +82,22 @@
       return this._cache[url] ? this._cache[url].exports : undefined;
     }
     if (url.slice(-5) === ".json") {
-      var data = tabris.Module.readJSON(url);
+      var data = Module.readJSON(url);
       if (data) {
         if (postfix === "/package.json" && data.main) {
           url = path + "/" + data.main;
-          var mainLoader = tabris.Module.createLoader(url);
+          var mainLoader = Module.createLoader(url);
           if (mainLoader) {
-            return new tabris.Module(url, this, mainLoader).exports;
+            return new Module(url, this, mainLoader).exports;
           }
         } else {
-          return new tabris.Module(url, this, data).exports;
+          return new Module(url, this, data).exports;
         }
       }
     } else {
-      var loader = tabris.Module.createLoader(url);
+      var loader = Module.createLoader(url);
       if (loader) {
-        return new tabris.Module(url, this, loader).exports;
+        return new Module(url, this, loader).exports;
       }
     }
     this._cache[url] = false;
@@ -128,4 +128,4 @@
     return segments.join("/");
   }
 
-}());
+}(window.tabris = {}));
