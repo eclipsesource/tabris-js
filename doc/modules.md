@@ -1,4 +1,4 @@
-## Modules
+# Modules
 
 All JavaScript files in a Tabris.js project, including the main script, are modules.
 
@@ -25,7 +25,7 @@ A module may be a `.js` file, a `.json` file, or a folder. The `require` method 
 
      var myModuleImport = require("./mymodule");
 
-**The leading dot is mandatory.** Without it the module is looked for elsewhere. (See [npm Support](#npm))
+**The leading dot is mandatory.** Without it the module is looked for elsewhere. (See [npm Support](#npm-support))
 
 Your modules may also be located in a different folder:
 
@@ -92,7 +92,7 @@ Folders can be used as a module if they contain one of the following files:
 
 A folder module may consist of multiple internal file modules, but only the first file found by going through the above list will be exported directly.
 
-## <a name="npm">npm Support</a>
+## npm Support
 
 Tabris.js supports loading [npm](https://www.npm.org) modules, though he compatibility of the module depends on the API it expects.
 

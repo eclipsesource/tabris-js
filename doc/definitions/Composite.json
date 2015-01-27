@@ -19,10 +19,10 @@
   },
   "events": {
     "add": {
-      "description": "Fired when a child is added. Arguments are (child, composite, {})."
+      "description": "Fired when a child is added. Arguments are `(child, composite, {})`."
     },
     "remove": {
-      "description": "Fired when a child is removed. Arguments are (child, composite, {index: number})."
+      "description": "Fired when a child is removed. Arguments are `(child, composite, {index: number})`."
     }
   }
 }

@@ -18,19 +18,19 @@
     "get": [
       {
         "parameters": ["property"],
-        "returns": ["value"],
+        "returns": "value",
         "description": "Gets the current value of the given property."
       }
     ],
     "children": [
       {
         "parameters": [],
-        "returns": ["WidgetCollection"],
+        "returns": "WidgetCollection",
         "description": "Returns a (possibly empty) collection of all children of this widget."
       },
       {
         "parameters": ["selector"],
-        "returns": ["WidgetCollection"],
+        "returns": "WidgetCollection",
         "description": "Returns a (possibly empty) collection of all children of this widget that match the selector."
       }
     ],
@@ -49,14 +49,14 @@
     "parent": [
       {
         "parameters": [],
-        "returns": ["Widget"],
+        "returns": "Widget",
         "description": "Returns the parent of this widget."
       }
     ],
     "appendTo": [
       {
         "parameters": ["Composite"],
-        "returns": ["Widget"],
+        "returns": "Widget",
         "description": "Appends this widget to the given parent. The parent widget must support children (like Page, Composite)."
       }
     ],
