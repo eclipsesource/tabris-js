@@ -13,6 +13,10 @@ describe("tabris.Module", function() {
 
   describe("constructor", function() {
 
+    it("is a Module", function() {
+      expect(tabris.Module.require("module")).toBe(tabris.Module);
+    });
+
     it("sets id and parent from arguments", function() {
       var parent = new tabris.Module("bar");
       var module = new tabris.Module("foo", parent);

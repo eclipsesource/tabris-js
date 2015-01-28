@@ -15,6 +15,10 @@ describe("tabris", function() {
     delete tabris.TestType;
   });
 
+  it("is a Module", function() {
+    expect(tabris.Module.require("tabris")).toBe(tabris);
+  });
+
   describe("when used as a function", function() {
 
     it("returns a proxy with the given string as id and type", function() {
