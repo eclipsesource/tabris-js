@@ -108,7 +108,7 @@ strap.on("touchend", function() {
 });
 
 function positionTrayInRestingState() {
-  var y = prevEvent.touches[0].pageY - prevPrevEvent.touches[0].pageY;
+  var y = prevPrevEvent ? (prevEvent.touches[0].pageY - prevPrevEvent.touches[0].pageY) : 0;
   var translationTarget = 0;
   if (y >= 0) {
     translationTarget = verticalTrayOffset;
