@@ -65,7 +65,7 @@ describe("ProxyCollection", function() {
       }).toArray()).toEqual([mocks[0], mocks[2]]);
     });
 
-    it("with type matcher", function() {
+    it("with type selector", function() {
       mocks[0].type = "Foo";
       mocks[1].type = "Bar";
       mocks[2].type = "Foo";
@@ -73,12 +73,20 @@ describe("ProxyCollection", function() {
       expect(collection.filter("Foo").toArray()).toEqual([mocks[0], mocks[2]]);
     });
 
-    it("with * matcher", function() {
+    it("with * selector", function() {
       mocks[0].type = "Foo";
       mocks[1].type = "Bar";
       mocks[2].type = "Foo";
 
       expect(collection.filter("*").toArray()).toEqual(mocks);
+    });
+
+    it("with # selectors", function() {
+      mocks[0].id = "foo";
+      mocks[1].id = "bar";
+      mocks[2].id = "bar";
+
+      expect(collection.filter("#bar").toArray()).toEqual([mocks[1], mocks[2]]);
     });
 
   });

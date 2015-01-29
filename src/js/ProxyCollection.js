@@ -85,7 +85,7 @@
     };
   });
 
-  var select = function(array, selector) {
+  function select(array, selector) {
     if (!array || array.length === 0) {
       return [];
     }
@@ -94,16 +94,25 @@
     }
     var filter = getFilter(selector);
     return array.filter(filter);
-  };
+  }
 
-  var getFilter = function(selector) {
-    return selector instanceof Function ? selector : function(proxy) {
-      return matcher(proxy, selector);
+  function getFilter(selector) {
+    return selector instanceof Function ? selector : createMatcher(selector);
+  }
+
+  function createMatcher(selector) {
+    if (selector.charAt(0) === "#") {
+      var expectedId = selector.slice(1);
+      return function(proxy) {
+        return expectedId === proxy.id;
+      };
+    }
+    if (selector === "*") {
+      return function() {return true;};
+    }
+    return function(proxy) {
+      return selector === proxy.type;
     };
-  };
-
-  var matcher = function(proxy, selector) {
-    return (selector === proxy.type) || (selector === "*");
-  };
+  }
 
 }());
