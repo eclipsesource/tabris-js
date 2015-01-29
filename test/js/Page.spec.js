@@ -45,7 +45,7 @@ describe("Page", function() {
       });
 
       it("parent is shell", function() {
-        expect(properties.parent).toEqual(tabris.ui._shell.id);
+        expect(properties.parent).toEqual(tabris.ui._shell.cid);
       });
 
       it("is full-size", function() {
@@ -75,11 +75,11 @@ describe("Page", function() {
       });
 
       it("parent is set to tabris.UI", function() {
-        expect(properties.parent).toBe(tabris.ui.id);
+        expect(properties.parent).toBe(tabris.ui.cid);
       });
 
       it("control is set to composite", function() {
-        expect(properties.control).toBe(page.id);
+        expect(properties.control).toBe(page.cid);
       });
 
       it("has title, image and topLevel properties", function() {
@@ -117,7 +117,7 @@ describe("Page", function() {
       });
 
       it("sets child's parent to the composite", function() {
-        var call = nativeBridge.calls({op: "set", id: child.id})[0];
+        var call = nativeBridge.calls({op: "set", id: child.cid})[0];
         expect(call.properties.parent).toEqual(compositeCreateCall.id);
       });
 
@@ -182,8 +182,8 @@ describe("Page", function() {
       });
 
       it("uses page's composite in 'set'", function() {
-        var call = nativeBridge.calls({op: "set", id: child.id})[0];
-        expect(call.properties.parent).toBe(page.id);
+        var call = nativeBridge.calls({op: "set", id: child.cid})[0];
+        expect(call.properties.parent).toBe(page.cid);
       });
 
     });

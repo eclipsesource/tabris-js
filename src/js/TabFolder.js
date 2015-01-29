@@ -39,7 +39,7 @@
         this._nativeSet("data", {paging: value});
       },
       selection: function(tab) {
-        this._nativeSet("selection", tab._tabItem.id);
+        this._nativeSet("selection", tab._tabItem.cid);
       }
     },
 
@@ -114,7 +114,7 @@
       }
       this.super("_setParent", parent);
       this._tabItem = tabris.create("_TabItem", util.extend({
-        control: this.id,
+        control: this.cid,
         index: parent._getItems().length
       }, this._itemProps)).appendTo(parent);
       this._tabItem._tab = this;

@@ -25,7 +25,7 @@ describe("tabris", function() {
       var result = tabris("TestType");
 
       expect(result).toEqual(jasmine.any(tabris.TestType));
-      expect(result.id).toBe("TestType");
+      expect(result.cid).toBe("TestType");
     });
 
     it("returns a proxy with translated id and type", function() {
@@ -33,7 +33,7 @@ describe("tabris", function() {
       var result = tabris("TestType");
 
       expect(result).toEqual(jasmine.any(tabris.TestType));
-      expect(result.id).toBe("CustomType");
+      expect(result.cid).toBe("CustomType");
     });
 
     it("returns same proxy instance for the same id", function() {
@@ -128,28 +128,28 @@ describe("tabris", function() {
     });
 
     it("notifies widget proxy", function() {
-      tabris._notify(proxy.id, "foo", {bar: 23});
+      tabris._notify(proxy.cid, "foo", {bar: 23});
 
       expect(proxy.trigger).toHaveBeenCalledWith("foo", {bar: 23});
     });
 
     it("notifies widget proxy with translated event name", function() {
       tabris.TestType._trigger.foo = "bar";
-      tabris._notify.call(window, proxy.id, "foo", {});
+      tabris._notify.call(window, proxy.cid, "foo", {});
 
       expect(proxy.trigger).toHaveBeenCalledWith("bar", {});
     });
 
     it("calls custom trigger", function() {
       tabris.TestType._trigger.foo = jasmine.createSpy();
-      tabris._notify.call(window, proxy.id, "foo", {bar: 23});
+      tabris._notify.call(window, proxy.cid, "foo", {bar: 23});
 
       expect(tabris.TestType._trigger.foo).toHaveBeenCalledWith({bar: 23});
     });
 
     it("ignores invalid custom trigger", function() {
       tabris.TestType._trigger.foo = true;
-      tabris._notify.call(window, proxy.id, "foo", {bar: 23});
+      tabris._notify.call(window, proxy.cid, "foo", {bar: 23});
 
       expect(proxy.trigger).toHaveBeenCalledWith("foo", {bar: 23});
     });
@@ -160,7 +160,7 @@ describe("tabris", function() {
     });
 
     it("can be called without a context", function() {
-      tabris._notify.call(null, proxy.id, "foo", [23, 42]);
+      tabris._notify.call(null, proxy.cid, "foo", [23, 42]);
 
       expect(proxy.trigger).toHaveBeenCalledWith("foo", [23, 42]);
     });
@@ -241,15 +241,15 @@ describe("tabris", function() {
     it("creates a non-empty widget id", function() {
       var proxy = tabris.create("TestType", {});
 
-      expect(typeof proxy.id).toBe("string");
-      expect(proxy.id.length).toBeGreaterThan(0);
+      expect(typeof proxy.cid).toBe("string");
+      expect(proxy.cid.length).toBeGreaterThan(0);
     });
 
     it("creates different widget ids for subsequent calls", function() {
       var proxy1 = tabris.create("TestType", {});
       var proxy2 = tabris.create("TestType", {});
 
-      expect(proxy1.id).not.toEqual(proxy2.id);
+      expect(proxy1.cid).not.toEqual(proxy2.cid);
     });
 
     it("returns a proxy object", function() {
@@ -271,7 +271,7 @@ describe("tabris", function() {
     it("triggers a create operation with type and properties", function() {
       var proxy = tabris.create("TestType", {foo: 23});
 
-      var createCall = nativeBridge.calls({op: "create", id: proxy.id})[0];
+      var createCall = nativeBridge.calls({op: "create", id: proxy.cid})[0];
 
       expect(createCall.type).toBe("TestType");
       expect(createCall.properties.foo).toBe(23);
@@ -280,7 +280,7 @@ describe("tabris", function() {
     it("executes type translations", function() {
       var proxy = tabris.create("CheckBox", {});
 
-      var createCall = nativeBridge.calls({op: "create", id: proxy.id})[0];
+      var createCall = nativeBridge.calls({op: "create", id: proxy.cid})[0];
 
       expect(createCall.type).toBe("rwt.widgets.Button");
     });

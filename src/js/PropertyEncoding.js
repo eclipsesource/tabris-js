@@ -105,10 +105,10 @@
 
     proxy: function(value) {
       if (value instanceof tabris.Proxy) {
-        return value.id;
+        return value.cid;
       }
       if (value instanceof tabris.ProxyCollection && value[0]) {
-        return value[0].id;
+        return value[0].cid;
       }
       return value;
     },

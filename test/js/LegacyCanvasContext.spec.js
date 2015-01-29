@@ -25,7 +25,7 @@ describe("Legacy CanvasContext", function() {
   }
 
   function getDrawOperations() {
-    var call = nativeBridge.calls({id: gc.id, op: "call", method: "draw"})[0];
+    var call = nativeBridge.calls({id: gc.cid, op: "call", method: "draw"})[0];
     return call ? call.parameters.operations : undefined;
   }
 

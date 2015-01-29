@@ -27,7 +27,7 @@ describe("Action", function() {
     });
 
     it("created action's parent is set to tabris.UI", function() {
-      expect(actionCreateCalls[0].properties.parent).toEqual(tabris.ui.id);
+      expect(actionCreateCalls[0].properties.parent).toEqual(tabris.ui.cid);
     });
 
     it("properties are passed to created action", function() {
@@ -76,7 +76,7 @@ describe("Action", function() {
 
       action.get("visible");
 
-      expect(nativeBridge.get).toHaveBeenCalledWith(action.id, "visibility");
+      expect(nativeBridge.get).toHaveBeenCalledWith(action.cid, "visibility");
     });
 
     it("translates placementPriority to lowercase", function() {

@@ -33,7 +33,7 @@ tabris.registerType("Action", {
 
   _create: function(properties) {
     this.super("_create", properties);
-    this._nativeSet("parent", tabris.ui.id);
+    this._nativeSet("parent", tabris.ui.cid);
     return this;
   }
 

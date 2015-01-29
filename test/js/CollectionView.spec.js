@@ -56,7 +56,7 @@ describe("CollectionView", function() {
         });
 
         it("calls native update with insert", function() {
-          var calls = nativeBridge.calls({op: "call", id: view.id, method: "update"});
+          var calls = nativeBridge.calls({op: "call", id: view.cid, method: "update"});
           expect(calls[0].parameters).toEqual({insert: [0, 3]});
         });
 
@@ -68,7 +68,7 @@ describe("CollectionView", function() {
           });
 
           it("calls native update with remove and insert", function() {
-            var calls = nativeBridge.calls({op: "call", id: view.id, method: "update"});
+            var calls = nativeBridge.calls({op: "call", id: view.cid, method: "update"});
             expect(calls[0].parameters).toEqual({remove: [0, 3], insert: [0, 2]});
           });
 
@@ -82,7 +82,7 @@ describe("CollectionView", function() {
           });
 
           it("calls native update with remove", function() {
-            var calls = nativeBridge.calls({op: "call", id: view.id, method: "update"});
+            var calls = nativeBridge.calls({op: "call", id: view.cid, method: "update"});
             expect(calls[0].parameters).toEqual({remove: [0, 3]});
           });
 
@@ -120,8 +120,8 @@ describe("CollectionView", function() {
           });
 
           it("creates a Cell and calls native addItem", function() {
-            var addItemCall = nativeBridge.calls({op: "call", id: view.id, method: "addItem"})[0];
-            expect(addItemCall.parameters).toEqual({widget: cell.id});
+            var addItemCall = nativeBridge.calls({op: "call", id: view.cid, method: "addItem"})[0];
+            expect(addItemCall.parameters).toEqual({widget: cell.cid});
           });
 
           it("calls initializeCell with the cell as parent", function() {
@@ -154,7 +154,7 @@ describe("CollectionView", function() {
             beforeEach(function() {
               listener = jasmine.createSpy("listener");
               cell.on("itemchange", listener);
-              view._trigger("populateitem", {widget: cell.id, index: 0});
+              view._trigger("populateitem", {widget: cell.cid, index: 0});
             });
 
             it("triggers itemchange event on the cell", function() {
@@ -180,10 +180,10 @@ describe("CollectionView", function() {
     });
 
     it("calls update after create and listen calls", function() {
-      var allCalls = nativeBridge.calls({id: view.id});
-      var listen1Call = nativeBridge.calls({op: "listen", event: "createitem", id: view.id})[0];
-      var listen2Call = nativeBridge.calls({op: "listen", event: "populateitem", id: view.id})[0];
-      var updateCall = nativeBridge.calls({op: "call", method: "update", id: view.id})[0];
+      var allCalls = nativeBridge.calls({id: view.cid});
+      var listen1Call = nativeBridge.calls({op: "listen", event: "createitem", id: view.cid})[0];
+      var listen2Call = nativeBridge.calls({op: "listen", event: "populateitem", id: view.cid})[0];
+      var updateCall = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
 
       expect(allCalls.indexOf(updateCall)).toBeGreaterThan(allCalls.indexOf(listen1Call));
       expect(allCalls.indexOf(updateCall)).toBeGreaterThan(allCalls.indexOf(listen2Call));

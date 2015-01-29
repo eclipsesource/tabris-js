@@ -25,7 +25,7 @@ describe("TabFolder", function() {
     });
 
     it("sets the 'data' property", function() {
-      var setOp = nativeBridge.calls({id: tabFolder.id, op: "create"})[0];
+      var setOp = nativeBridge.calls({id: tabFolder.cid, op: "create"})[0];
       expect(setOp.properties.data).toEqual({paging: true});
     });
 
@@ -51,7 +51,7 @@ describe("TabFolder", function() {
 
     it("creates a Composite", function() {
       expect(controlCreate.type).toBe("rwt.widgets.Composite");
-      expect(controlCreate.id).toBe(tab.id);
+      expect(controlCreate.id).toBe(tab.cid);
     });
 
     it("sets non-item properties on the Composite", function() {
@@ -90,12 +90,12 @@ describe("TabFolder", function() {
 
       it("sets the Composite's parent", function() {
         var call = nativeBridge.calls({op: "set", id: controlCreate.id})[0];
-        expect(call.properties.parent).toBe(tabFolder.id);
+        expect(call.properties.parent).toBe(tabFolder.cid);
       });
 
       it("creates a TabItem with the TabFolder as parent", function() {
         expect(itemCreate).toBeDefined();
-        expect(itemCreate.properties.parent).toBe(tabFolder.id);
+        expect(itemCreate.properties.parent).toBe(tabFolder.cid);
       });
 
       it("sets the composite as the TabItem's control", function() {
@@ -145,7 +145,7 @@ describe("TabFolder", function() {
         });
 
         it("then destroys the control", function() {
-          expect(nativeBridge.calls({op: "destroy", id: tab.id})[0]).toBeDefined();
+          expect(nativeBridge.calls({op: "destroy", id: tab.cid})[0]).toBeDefined();
         });
 
         it("then destroys the item", function() {
@@ -184,12 +184,12 @@ describe("TabFolder", function() {
     it("Setting a Tab SETs tabItem id", function() {
       tabFolder.set("selection", tab2);
 
-      var setCall = nativeBridge.calls({op: "set", id: tabFolder.id})[0];
-      expect(setCall.properties.selection).toBe(tab2._tabItem.id);
+      var setCall = nativeBridge.calls({op: "set", id: tabFolder.cid})[0];
+      expect(setCall.properties.selection).toBe(tab2._tabItem.cid);
     });
 
     it("Get returns Tab", function() {
-      spyOn(nativeBridge, "get").and.returnValue(tab2._tabItem.id);
+      spyOn(nativeBridge, "get").and.returnValue(tab2._tabItem.cid);
 
       expect(tabFolder.get("selection")).toBe(tab2);
     });
@@ -209,28 +209,28 @@ describe("TabFolder", function() {
     it("is omitted in create", function() {
       tabFolder = tabris.create("TabFolder", {tabBarLocation: "top"});
 
-      var properties = nativeBridge.calls({id: tabFolder.id, op: "create"})[0].properties;
+      var properties = nativeBridge.calls({id: tabFolder.cid, op: "create"})[0].properties;
       expect(properties.tabBarLocation).toBeUndefined();
     });
 
     it("sets style TOP for value 'top'", function() {
       tabFolder = tabris.create("TabFolder", {tabBarLocation: "top"});
 
-      var properties = nativeBridge.calls({id: tabFolder.id, op: "create"})[0].properties;
+      var properties = nativeBridge.calls({id: tabFolder.cid, op: "create"})[0].properties;
       expect(properties.style).toEqual(["TOP"]);
     });
 
     it("sets style BOTTOM for value 'bottom'", function() {
       tabFolder = tabris.create("TabFolder", {tabBarLocation: "bottom"});
 
-      var properties = nativeBridge.calls({id: tabFolder.id, op: "create"})[0].properties;
+      var properties = nativeBridge.calls({id: tabFolder.cid, op: "create"})[0].properties;
       expect(properties.style).toEqual(["BOTTOM"]);
     });
 
     it("sets no style for value 'default'", function() {
       tabFolder = tabris.create("TabFolder", {tabBarLocation: "default"});
 
-      var properties = nativeBridge.calls({id: tabFolder.id, op: "create"})[0].properties;
+      var properties = nativeBridge.calls({id: tabFolder.cid, op: "create"})[0].properties;
       expect(properties.style).toBeUndefined();
     });
 

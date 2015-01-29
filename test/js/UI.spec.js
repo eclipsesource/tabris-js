@@ -38,8 +38,8 @@ describe("UI", function() {
     });
 
     it("listens on tabris UI ShowPage and ShowPreviousPage events", function() {
-      expect(nativeBridge.calls({op: "listen", id: ui.id, event: "ShowPage"}).length).toBe(1);
-      expect(nativeBridge.calls({op: "listen", id: ui.id, event: "ShowPreviousPage"}).length).toBe(1);
+      expect(nativeBridge.calls({op: "listen", id: ui.cid, event: "ShowPage"}).length).toBe(1);
+      expect(nativeBridge.calls({op: "listen", id: ui.cid, event: "ShowPreviousPage"}).length).toBe(1);
     });
 
   });
@@ -81,14 +81,14 @@ describe("UI", function() {
       });
 
       it("ShowPreviousPage event closes page", function() {
-        tabris._notify(ui.id, "ShowPreviousPage", {});
+        tabris._notify(ui.cid, "ShowPreviousPage", {});
         expect(page.close).toHaveBeenCalled();
       });
 
       it("ShowPage sets activePage", function() {
-        tabris._notify(ui.id, "ShowPage", {pageId: page._page.id});
-        var setCall = nativeBridge.calls({op: "set", id: ui.id}).pop();
-        expect(setCall.properties.activePage).toBe(page._page.id);
+        tabris._notify(ui.cid, "ShowPage", {pageId: page._page.cid});
+        var setCall = nativeBridge.calls({op: "set", id: ui.cid}).pop();
+        expect(setCall.properties.activePage).toBe(page._page.cid);
       });
 
     });
@@ -105,7 +105,7 @@ describe("UI", function() {
 
       it("setting 'activePage' ignores widgets other than Page", function() {
         ui.set("activePage", tabris.create("Button"));
-        expect(nativeBridge.calls({op: "set", id: ui.id}).length).toBe(0);
+        expect(nativeBridge.calls({op: "set", id: ui.cid}).length).toBe(0);
       });
 
       it("setting 'activePage' triggers 'appear' and 'disappear' events on pages", function() {
@@ -121,8 +121,8 @@ describe("UI", function() {
 
       it("setting 'activePage' issues a set operation", function() {
         ui.set("activePage", page1);
-        var setCall = nativeBridge.calls({op: "set", id: ui.id}).pop();
-        expect(setCall.properties.activePage).toBe(page1._page.id);
+        var setCall = nativeBridge.calls({op: "set", id: ui.cid}).pop();
+        expect(setCall.properties.activePage).toBe(page1._page.cid);
       });
 
       it("setting 'activePage' to current active page does not issue a set operation", function() {
@@ -131,7 +131,7 @@ describe("UI", function() {
 
         ui.set("activePage", page1);
 
-        expect(nativeBridge.calls({op: "set", id: ui.id}).length).toBe(0);
+        expect(nativeBridge.calls({op: "set", id: ui.cid}).length).toBe(0);
       });
 
       it("getting 'activePage' returns last set active page", function() {
@@ -147,8 +147,8 @@ describe("UI", function() {
 
         page3.close();
 
-        var lastSetCall = nativeBridge.calls({op: "set", id: ui.id}).pop();
-        expect(lastSetCall.properties.activePage).toBe(page2._page.id);
+        var lastSetCall = nativeBridge.calls({op: "set", id: ui.cid}).pop();
+        expect(lastSetCall.properties.activePage).toBe(page2._page.cid);
         expect(ui.get("activePage")).toBe(page2);
       });
 
@@ -172,8 +172,8 @@ describe("UI", function() {
         page2.close();
         page3.close();
 
-        var lastSetCall = nativeBridge.calls({op: "set", id: ui.id}).pop();
-        expect(lastSetCall.properties.activePage).toBe(page1._page.id);
+        var lastSetCall = nativeBridge.calls({op: "set", id: ui.cid}).pop();
+        expect(lastSetCall.properties.activePage).toBe(page1._page.cid);
         expect(ui.get("activePage")).toBe(page1);
       });
 
@@ -181,7 +181,7 @@ describe("UI", function() {
 
     it("ShowPreviousPage does not fail without a page", function() {
       expect(function() {
-        tabris._notify(ui.id, "ShowPreviousPage", {});
+        tabris._notify(ui.cid, "ShowPreviousPage", {});
       }).not.toThrow();
     });
 

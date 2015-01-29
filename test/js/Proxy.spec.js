@@ -144,7 +144,7 @@ describe("Proxy", function() {
       it("sets the child's parent", function() {
         var calls = nativeBridge.calls();
         expect(calls.length).toBe(1);
-        expect(calls[0]).toEqual({op: "set", id: child.id, properties: {parent: proxy.id}});
+        expect(calls[0]).toEqual({op: "set", id: child.cid, properties: {parent: proxy.cid}});
       });
 
       it("returns self to allow chaining", function() {
@@ -182,7 +182,7 @@ describe("Proxy", function() {
       it("sets the children's parent", function() {
         var calls = nativeBridge.calls();
         expect(calls.length).toBe(2);
-        expect(calls[1]).toEqual({op: "set", id: child2.id, properties: {parent: proxy.id}});
+        expect(calls[1]).toEqual({op: "set", id: child2.cid, properties: {parent: proxy.cid}});
       });
 
       it("returns self to allow chaining", function() {
@@ -214,7 +214,7 @@ describe("Proxy", function() {
       it("sets the children's parent", function() {
         var calls = nativeBridge.calls();
         expect(calls.length).toBe(2);
-        expect(calls[1]).toEqual({op: "set", id: child2.id, properties: {parent: proxy.id}});
+        expect(calls[1]).toEqual({op: "set", id: child2.cid, properties: {parent: proxy.cid}});
       });
 
       it("returns self to allow chaining", function() {
@@ -281,8 +281,8 @@ describe("Proxy", function() {
       });
 
       it("sets the proxy's parent", function() {
-        var setCall = nativeBridge.calls({op: "set", id: proxy.id})[0];
-        expect(setCall.properties.parent).toEqual(parent1.id);
+        var setCall = nativeBridge.calls({op: "set", id: proxy.cid})[0];
+        expect(setCall.properties.parent).toEqual(parent1.cid);
       });
 
       it("is added to parent's children list", function() {
@@ -441,7 +441,7 @@ describe("Proxy", function() {
 
         proxy.set("foo", other);
 
-        var call = nativeBridge.calls({op: "set", id: proxy.id})[0];
+        var call = nativeBridge.calls({op: "set", id: proxy.cid})[0];
         expect(call.properties.foo).toBe("other-id");
       });
 
@@ -450,7 +450,7 @@ describe("Proxy", function() {
 
         proxy.set("foo", other);
 
-        var call = nativeBridge.calls({op: "set", id: proxy.id})[0];
+        var call = nativeBridge.calls({op: "set", id: proxy.cid})[0];
         expect(call.properties.foo).toBe("other-id");
       });
 
@@ -459,7 +459,7 @@ describe("Proxy", function() {
 
         proxy.set("foo", obj);
 
-        var properties = nativeBridge.calls({op: "set", id: proxy.id})[0].properties;
+        var properties = nativeBridge.calls({op: "set", id: proxy.cid})[0].properties;
         expect(properties.foo).toEqual(obj);
       });
 
@@ -477,7 +477,7 @@ describe("Proxy", function() {
 
         proxy.set("foo", "bar");
 
-        expect(nativeBridge.calls({op: "set", id: proxy.id}).length).toBe(0);
+        expect(nativeBridge.calls({op: "set", id: proxy.cid}).length).toBe(0);
         expect(tabris.TestType._setProperty.foo).toHaveBeenCalledWith("bar");
       });
 
@@ -758,7 +758,7 @@ describe("Proxy", function() {
       it("calls native destroy", function() {
         proxy.dispose();
 
-        var destroyCall = nativeBridge.calls({op: "destroy", id: proxy.id})[0];
+        var destroyCall = nativeBridge.calls({op: "destroy", id: proxy.cid})[0];
         expect(destroyCall).toBeDefined();
       });
 

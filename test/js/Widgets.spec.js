@@ -93,7 +93,7 @@ describe("Widgets", function() {
       widget.set("layoutData", {left: 23, right: other, top: [other, 42]});
 
       var call = nativeBridge.calls({op: "set"})[0];
-      var expected = {left: 23, right: other.id, top: [other.id, 42]};
+      var expected = {left: 23, right: other.cid, top: [other.cid, 42]};
       expect(call.properties.layoutData).toEqual(expected);
     });
 
@@ -216,7 +216,7 @@ describe("Widgets", function() {
 
       widget.get("visible");
 
-      expect(nativeBridge.get).toHaveBeenCalledWith(widget.id, "visibility");
+      expect(nativeBridge.get).toHaveBeenCalledWith(widget.cid, "visibility");
     });
 
   });

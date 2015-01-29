@@ -2,16 +2,16 @@
 
   var util = require("tabris-util");
 
-  tabris.Proxy = function(id) {
-    this.id = id || generateId();
-    tabris._proxies[this.id] = this;
+  tabris.Proxy = function(cid) {
+    this.cid = cid || generateId();
+    tabris._proxies[this.cid] = this;
   };
 
   util.extend(tabris.Proxy.prototype, tabris.Events, {
 
     _create: function(properties) {
       var type = this.constructor._type || this.type;
-      tabris._nativeBridge.create(this.id, type);
+      tabris._nativeBridge.create(this.cid, type);
       if (this.constructor && this.constructor._initProperties) {
         for (var name in this.constructor._initProperties) {
           this._nativeSet(name, this.constructor._initProperties[name]);
@@ -64,7 +64,7 @@
 
     call: function(method, parameters) {
       this._checkDisposed();
-      return tabris._nativeBridge.call(this.id, method, parameters);
+      return tabris._nativeBridge.call(this.cid, method, parameters);
     },
 
     on: function(event, listener, context) {
@@ -89,7 +89,7 @@
     dispose: function() {
       if (!this._isDisposed) {
         this._destroy();
-        tabris._nativeBridge.destroy(this.id);
+        tabris._nativeBridge.destroy(this.cid);
         if (this._parent) {
           this._parent._removeChild(this);
         }
@@ -119,7 +119,7 @@
     },
 
     _nativeListen: function(event, state) {
-      tabris._nativeBridge.listen(this.id, event, state);
+      tabris._nativeBridge.listen(this.cid, event, state);
     },
 
     _trigger: function(event, params) {
@@ -138,7 +138,7 @@
       this.trigger("dispose", {});
       this._destroyChildren();
       tabris.Events.off.call(this);
-      delete tabris._proxies[this.id];
+      delete tabris._proxies[this.cid];
     },
 
     _destroyChildren: function() {
@@ -236,7 +236,7 @@
     },
 
     _nativeSet: function(name, value) {
-      tabris._nativeBridge.set(this.id, name, value);
+      tabris._nativeBridge.set(this.cid, name, value);
     },
 
     _getProperty: function(name) {
@@ -247,7 +247,7 @@
     },
 
     _nativeGet: function(name) {
-      return tabris._nativeBridge.get(this.id, name);
+      return tabris._nativeBridge.get(this.cid, name);
     },
 
     _getContainer: function() {
@@ -255,7 +255,7 @@
     },
 
     _setParent: function(parent) {
-      tabris._nativeBridge.set(this.id, "parent", tabris.PropertyEncoding.proxy(parent._getContainer()));
+      tabris._nativeBridge.set(this.cid, "parent", tabris.PropertyEncoding.proxy(parent._getContainer()));
       if (this._parent) {
         this._parent._removeChild(this);
       }

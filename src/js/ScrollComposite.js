@@ -34,10 +34,10 @@
       this._scrollBar = tabris.create("_ScrollBar", {
         style: properties.direction === "horizontal" ? ["HORIZONTAL"] : ["VERTICAL"]
       });
-      tabris._nativeBridge.set(this._scrollBar.id, "parent", this.id);
+      tabris._nativeBridge.set(this._scrollBar.cid, "parent", this.cid);
       this._composite = tabris.create("Composite");
-      tabris._nativeBridge.set(this._composite.id, "parent", this.id);
-      this._nativeSet("content", this._composite.id);
+      tabris._nativeBridge.set(this._composite.cid, "parent", this.cid);
+      this._nativeSet("content", this._composite.cid);
       return this;
     },
 

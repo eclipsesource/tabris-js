@@ -50,7 +50,7 @@
     _trigger: {
       createitem: function() {
         var cell = tabris.create("_CollectionCell", {});
-        this.call("addItem", {widget: cell.id});
+        this.call("addItem", {widget: cell.cid});
         if (typeof this._initializeCell !== "function") {
           console.warn("initializeCell callback missing");
         } else {

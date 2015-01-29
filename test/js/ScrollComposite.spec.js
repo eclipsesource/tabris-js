@@ -43,8 +43,8 @@ describe("ScrollComposite", function() {
       });
 
       it("sets child's parent to the inner composite", function() {
-        var call = nativeBridge.calls({op: "set", id: child.id})[0];
-        expect(call.properties.parent).toBe(scrollComposite._composite.id);
+        var call = nativeBridge.calls({op: "set", id: child.cid})[0];
+        expect(call.properties.parent).toBe(scrollComposite._composite.cid);
       });
 
       it("returns self to allow chaining", function() {
@@ -62,7 +62,7 @@ describe("ScrollComposite", function() {
         scrollBar = tabris(createCalls[1].id);
         scrollComposite.on("scroll", listener);
         spyOn(nativeBridge, "get").and.callFake(function(id, property) {
-          if (id === scrollComposite.id && property === "origin") {
+          if (id === scrollComposite.cid && property === "origin") {
             return [23, 42];
           }
         });
@@ -106,8 +106,8 @@ describe("ScrollComposite", function() {
       });
 
       it("uses inner composite in 'set'", function() {
-        var call = nativeBridge.calls({op: "set", id: child.id})[0];
-        expect(call.properties.parent).toBe(scrollComposite._composite.id);
+        var call = nativeBridge.calls({op: "set", id: child.cid})[0];
+        expect(call.properties.parent).toBe(scrollComposite._composite.cid);
       });
 
     });
