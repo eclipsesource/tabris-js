@@ -128,17 +128,16 @@ describe("CollectionView", function() {
             expect(initializeCell).toHaveBeenCalledWith(cell);
           });
 
-          it("cell cannot be disposed", function() {
-          });
-
-          describe("when calling cell.dipose()", function() {
+          describe("when calling cell.dispose()", function() {
 
             beforeEach(function() {
               cell.dispose();
             });
 
             it("cell is not disposed", function() {
-              cell.get("foo"); // does not throw widget disposed
+              expect(function() {
+                cell.get("foo");
+              }).not.toThrow();
             });
 
             it("a warning is logged", function() {

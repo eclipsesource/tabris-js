@@ -68,7 +68,9 @@ describe("tabris", function() {
   describe("_start", function() {
 
     it("can be called without a context", function() {
-      tabris._start.call(null, nativeBridge);
+      expect(function() {
+        tabris._start.call(null, nativeBridge);
+      }).not.toThrow();
     });
 
     it("executes all load functions", function() {
@@ -154,10 +156,13 @@ describe("tabris", function() {
 
     it("silently ignores events for non-existing ids (does not crash)", function() {
       tabris._notify("no-id", "foo", [23, 42]);
+      expect(proxy.trigger).not.toHaveBeenCalled();
     });
 
     it("can be called without a context", function() {
-      tabris._notify.call("no-id", "foo", [23, 42]);
+      tabris._notify.call(null, proxy.id, "foo", [23, 42]);
+
+      expect(proxy.trigger).toHaveBeenCalledWith("foo", [23, 42]);
     });
 
   });

@@ -59,7 +59,7 @@ describe("XMLHttpRequest", function() {
       }).toThrowError("Only asynchronous request supported.");
     });
 
-    it("sets async to true when argument ommited", function() {
+    it("sets async to true when argument omitted", function() {
       xhr.open("GET", "http://foo.com");
     });
 

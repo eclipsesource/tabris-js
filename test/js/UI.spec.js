@@ -180,7 +180,9 @@ describe("UI", function() {
     });
 
     it("ShowPreviousPage does not fail without a page", function() {
-      tabris._notify(ui.id, "ShowPreviousPage", {});
+      expect(function() {
+        tabris._notify(ui.id, "ShowPreviousPage", {});
+      }).not.toThrow();
     });
 
   });

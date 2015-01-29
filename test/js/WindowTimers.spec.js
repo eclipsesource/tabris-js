@@ -123,7 +123,9 @@ describe("WindowTimers", function() {
         });
 
         it("tolerates unknown taskId", function() {
-          target.clearTimeout(taskId + 1);
+          expect(function() {
+            target.clearTimeout(taskId + 1);
+          }).not.toThrow();
         });
 
       });
@@ -145,7 +147,9 @@ describe("WindowTimers", function() {
         });
 
         it("tolerates unknown taskId", function() {
-          target.clearInterval(taskId + 1);
+          expect(function() {
+            target.clearInterval(taskId + 1);
+          }).not.toThrow();
         });
 
       });
@@ -241,7 +245,9 @@ describe("WindowTimers", function() {
         });
 
         it("tolerates unknown taskId", function() {
-          target.clearInterval(taskId + 1);
+          expect(function() {
+            target.clearInterval(taskId + 1);
+          }).not.toThrow();
         });
 
       });
