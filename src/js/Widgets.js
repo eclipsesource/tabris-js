@@ -39,16 +39,23 @@
       foreground: "color",
       opacity: true,
       transform: true,
-      highlightOnTouch: "boolean"
+      highlightOnTouch: "boolean",
+      id: "string"
     },
     _defaultSetProperty: {
       visible: function(value) {
         this._nativeSet("visibility", value);
+      },
+      id: function(value) {
+        this.id = value;
       }
     },
     _defaultGetProperty: {
       visible: function() {
         return this._nativeGet("visibility");
+      },
+      id: function() {
+        return this.id;
       }
     }
   });

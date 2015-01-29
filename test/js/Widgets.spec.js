@@ -77,7 +77,7 @@ describe("Widgets", function() {
 
   });
 
-  describe("set default encoding", function() {
+  describe("any", function() {
 
     var widget;
 
@@ -149,6 +149,18 @@ describe("Widgets", function() {
       expect(call.properties.foreground).toBeNull();
       expect(call.properties.background).toBeNull();
       expect(call.properties.font).toBeNull();
+    });
+
+    it("stores id property in proxy.id", function() {
+      widget.set("id", "foo");
+
+      expect(widget.id).toBe("foo");
+    });
+
+    it("gets id property from proxy.id", function() {
+      widget.set("id", "foo");
+
+      expect(widget.get("id")).toBe("foo");
     });
 
   });
