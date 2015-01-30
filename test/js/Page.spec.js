@@ -166,8 +166,10 @@ describe("Page", function() {
 
         page.close();
 
-        expect(nativeBridge.calls({op: "destroy", id: pageCreateCall.id}).length).toBe(1);
-        expect(nativeBridge.calls({op: "destroy", id: compositeCreateCall.id}).length).toBe(1);
+        var destroyCalls = nativeBridge.calls({op: "destroy"});
+        // page must be destroyed before composite, see issue 253
+        expect(destroyCalls[0].id).toBe(pageCreateCall.id);
+        expect(destroyCalls[1].id).toBe(compositeCreateCall.id);
       });
 
     });

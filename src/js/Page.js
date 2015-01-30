@@ -51,8 +51,8 @@
     },
 
     dispose: function() {
-      this.super("dispose");
       this._page.dispose();
+      this.super("dispose");
     },
 
     open: function() {
