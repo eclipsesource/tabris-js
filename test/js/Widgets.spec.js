@@ -295,23 +295,23 @@ describe("Widgets", function() {
       expect(create.properties).toEqual({style: ["TOGGLE"], text: "foo"});
     });
 
-    it("Label", function() {
-      tabris.create("Label", {text: "foo", maxLines: null});
+    it("TextView", function() {
+      tabris.create("TextView", {text: "foo", maxLines: null});
 
       var create = nativeBridge.calls({op: "create"})[0];
       expect(create.type).toEqual("rwt.widgets.Label");
       expect(create.properties).toEqual({style: ["WRAP"], text: "foo", maxLines: null});
     });
 
-    it("Label, maxLines: 0 is mapped to null", function() {
-      tabris.create("Label", {text: "foo", maxLines: 0});
+    it("TextView, maxLines: 0 is mapped to null", function() {
+      tabris.create("TextView", {text: "foo", maxLines: 0});
 
       var create = nativeBridge.calls({op: "create"})[0];
       expect(create.properties.maxLines).toBeNull();
     });
 
-    it("Label, maxLines: values <= 0 are mapped to null", function() {
-      tabris.create("Label", {text: "foo", maxLines: -1});
+    it("TextView, maxLines: values <= 0 are mapped to null", function() {
+      tabris.create("TextView", {text: "foo", maxLines: -1});
 
       var create = nativeBridge.calls({op: "create"})[0];
       expect(create.properties.maxLines).toBeNull();

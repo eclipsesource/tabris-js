@@ -135,7 +135,7 @@ describe("Proxy", function() {
 
       beforeEach(function() {
         listener = jasmine.createSpy();
-        child = tabris.create("Label", {});
+        child = tabris.create("TextView", {});
         nativeBridge.resetCalls();
         proxy.on("addchild", listener);
         result = proxy.append(child);
@@ -173,7 +173,7 @@ describe("Proxy", function() {
       var child1, child2, result;
 
       beforeEach(function() {
-        child1 = tabris.create("Label", {});
+        child1 = tabris.create("TextView", {});
         child2 = tabris.create("Button", {});
         nativeBridge.resetCalls();
         result = proxy.append(child1, child2);
@@ -195,7 +195,7 @@ describe("Proxy", function() {
       });
 
       it("children() with matcher contains filtered children", function() {
-        expect(proxy.children("Label").toArray()).toEqual([child1]);
+        expect(proxy.children("TextView").toArray()).toEqual([child1]);
         expect(proxy.children("Button").toArray()).toEqual([child2]);
       });
 
@@ -205,8 +205,8 @@ describe("Proxy", function() {
       var child1, child2, result;
 
       beforeEach(function() {
-        child1 = tabris.create("Label", {});
-        child2 = tabris.create("Label", {});
+        child1 = tabris.create("TextView", {});
+        child2 = tabris.create("TextView", {});
         nativeBridge.resetCalls();
         result = proxy.append(new tabris.ProxyCollection([child1, child2]));
       });
@@ -242,7 +242,7 @@ describe("Proxy", function() {
 
       it("throws an error", function() {
         tabris.TestType._supportsChildren = false;
-        var child = tabris.create("Label", {});
+        var child = tabris.create("TextView", {});
 
         expect(function() {
           proxy.append(child);
@@ -256,11 +256,11 @@ describe("Proxy", function() {
 
       it("logs an error", function() {
         tabris.TestType._supportsChildren = function() { return false; };
-        var child = tabris.create("Label", {});
+        var child = tabris.create("TextView", {});
 
         expect(function() {
           proxy.append(child);
-        }).toThrowError("TestType cannot contain children of type Label");
+        }).toThrowError("TestType cannot contain children of type TextView");
         expect(proxy.children()).not.toContain(child);
       });
 
@@ -846,7 +846,7 @@ describe("Proxy", function() {
       });
 
       it("unregisters from parent to allow garbage collection", function() {
-        var child = tabris.create("Label", {}).appendTo(proxy);
+        var child = tabris.create("TextView", {}).appendTo(proxy);
 
         child.dispose();
 

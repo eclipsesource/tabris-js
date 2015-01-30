@@ -107,7 +107,7 @@
     }
   });
 
-  tabris.registerWidget("Label", {
+  tabris.registerWidget("TextView", {
     _type: "rwt.widgets.Label",
     _initProperties: {style: ["WRAP"]},
     _properties: {
@@ -122,6 +122,7 @@
       }
     }
   });
+  tabris.Label = tabris.TextView;
 
   tabris.registerWidget("ProgressBar", {
     _type: "rwt.widgets.ProgressBar",
