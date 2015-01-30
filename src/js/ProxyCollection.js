@@ -64,6 +64,10 @@
       return new tabris.ProxyCollection(result, selector);
     },
 
+    find: function(selector) {
+      return new tabris.ProxyCollection(this.children()._array, selector, true);
+    },
+
     appendTo: function(parent) {
       parent.append(this);
     },
