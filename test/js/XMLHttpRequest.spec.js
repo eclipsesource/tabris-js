@@ -60,7 +60,9 @@ describe("XMLHttpRequest", function() {
     });
 
     it("sets async to true when argument omitted", function() {
-      xhr.open("GET", "http://foo.com");
+      expect(function() {
+        xhr.open("GET", "http://foo.com");
+      }).not.toThrow();
     });
 
     it("fails with method name containing space", function() {
@@ -70,7 +72,9 @@ describe("XMLHttpRequest", function() {
     });
 
     it("doesn't fail with method name containing '!'", function() {
-      xhr.open("ba!r", "http://foo.com");
+      expect(function() {
+        xhr.open("ba!r", "http://foo.com");
+      }).not.toThrow();
     });
 
     it("fails with method name containing (del)", function() {
@@ -80,7 +84,9 @@ describe("XMLHttpRequest", function() {
     });
 
     it("doesn't fail with method name containing '~'", function() {
-      xhr.open("ba~r", "http://foo.com");
+      expect(function() {
+        xhr.open("ba~r", "http://foo.com");
+      }).not.toThrow();
     });
 
     it("fails with forbidden method name", function() {
@@ -347,7 +353,9 @@ describe("XMLHttpRequest", function() {
       });
 
       it("doesn't fail when onreadystatechange not implemented", function() {
-        proxy.trigger("StateChange", {state: "finished", response: "foo"});
+        expect(function() {
+          proxy.trigger("StateChange", {state: "finished", response: "foo"});
+        }).not.toThrow();
       });
 
       it("sets readystatechange event type to 'readystatechange'", function() {
@@ -568,7 +576,9 @@ describe("XMLHttpRequest", function() {
     var handlers = ["onprogress", "onloadend", "onabort"];
 
     it("doesn't fail without proxy", function() {
-      xhr.abort();
+      expect(function() {
+        xhr.abort();
+      }).not.toThrow();
     });
 
     it("calls proxy abort", function() {
@@ -673,8 +683,10 @@ describe("XMLHttpRequest", function() {
     });
 
     it("doesn't fail with HTTP header values containing wildcards", function() {
-      xhr.open("GET", "http://foo.com");
-      xhr.setRequestHeader("Foo", "*/*");
+      expect(function() {
+        xhr.open("GET", "http://foo.com");
+        xhr.setRequestHeader("Foo", "*/*");
+      }).not.toThrow();
     });
 
     it("fails with case variant of forbidden header", function() {
@@ -799,13 +811,22 @@ describe("XMLHttpRequest", function() {
 
   describe("upload", function() {
 
-    it("is initialized with an empty object", function() {
-      expect(xhr.upload === JSON.stringify({}));
+    it("is an EventTarget", function() {
+      var handler1 = jasmine.createSpy("handler1");
+      var handler2 = jasmine.createSpy("handler2");
+      xhr.upload.addEventListener("foo", handler1);
+      xhr.upload.addEventListener("bar", handler2);
+      xhr.upload.removeEventListener("foo", handler1);
+      xhr.upload.dispatchEvent({type: "foo"});
+      xhr.upload.dispatchEvent({type: "bar"});
+      expect(handler2).toHaveBeenCalled();
+      expect(handler1).not.toHaveBeenCalled();
     });
 
     it("is readonly", function() {
-      xhr.upload = {Foo: "Bar"};
-      expect(xhr.upload === JSON.stringify({}));
+      var obj = {Foo: "Bar"};
+      xhr.upload = obj;
+      expect(xhr.upload).not.toBe(obj);
     });
 
   });
