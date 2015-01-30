@@ -1,7 +1,7 @@
 (function() {
 
-  tabris.ProxyCollection = function(arr, selector) {
-    this._array = select(arr, selector);
+  tabris.ProxyCollection = function(arr, selector, deep) {
+    this._array = select(arr, selector, deep);
     for (var i = 0; i < this._array.length; i++) {
       this[i] = this._array[i];
     }
@@ -85,7 +85,7 @@
     };
   });
 
-  function select(array, selector) {
+  function select(array, selector, deep) {
     if (!array || array.length === 0) {
       return [];
     }
@@ -93,7 +93,22 @@
       return array.concat();
     }
     var filter = getFilter(selector);
+    if (deep) {
+      return deepSelect([], array, filter);
+    }
     return array.filter(filter);
+  }
+
+  function deepSelect(result, array, filter) {
+    for (var i = 0; i < array.length; i++) {
+      if (filter(array[i])) {
+        result.push(array[i]);
+      }
+      if (array[i]._children) {
+        deepSelect(result, array[i]._children, filter);
+      }
+    }
+    return result;
   }
 
   function getFilter(selector) {

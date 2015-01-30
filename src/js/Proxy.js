@@ -105,6 +105,10 @@
       return new tabris.ProxyCollection(this._children, selector);
     },
 
+    find: function(selector) {
+      return new tabris.ProxyCollection(this._children, selector, true);
+    },
+
     _listen: function(event, state) {
       var listen = this.constructor && this.constructor._listen && this.constructor._listen[event];
       if (!listen) {

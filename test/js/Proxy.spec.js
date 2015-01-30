@@ -10,7 +10,7 @@ describe("Proxy", function() {
     log = [];
     tabris._reset();
     tabris._start(nativeBridge);
-    tabris.registerType("TestType", {
+    tabris.registerWidget("TestType", {
       _supportsChildren: true
     });
   });
@@ -851,6 +851,28 @@ describe("Proxy", function() {
         child.dispose();
 
         expect(proxy.children().toArray()).toEqual([]);
+      });
+
+    });
+
+    describe("find", function() {
+
+      var child1, child2, child1_1, child1_2, child1_2_1;
+
+      beforeEach(function() {
+        child1 = tabris.create("TestType", {id: "foo"}).appendTo(proxy);
+        child2 = tabris.create("TestType", {id: "bar"}).appendTo(proxy);
+        child1_1 = tabris.create("TestType", {}).appendTo(child1);
+        child1_2 = tabris.create("TestType", {}).appendTo(child1);
+        child1_2_1 = tabris.create("TestType", {id: "foo"}).appendTo(child1_2);
+      });
+
+      it("* selector returns all descendants", function() {
+        expect(proxy.find("*").toArray()).toEqual([child1, child1_1, child1_2, child1_2_1, child2]);
+      });
+
+      it("# selector returns all descendants with given id", function() {
+        expect(proxy.find("#foo").toArray()).toEqual([child1, child1_2_1]);
       });
 
     });
