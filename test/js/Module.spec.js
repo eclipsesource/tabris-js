@@ -236,16 +236,52 @@ describe("tabris.Module", function() {
       });
 
       it("requests modules from node_modules folder at top-level", function() {
-        module = new tabris.Module("./foo/bar.js");
+        module = new tabris.Module("./foo/script.js");
         tabris.Module.createLoader.and.returnValue(undefined);
         spyOn(tabris.Module, "readJSON").and.returnValue(undefined);
 
         try {
-          module.require("foo");
+          module.require("bar");
         } catch (error) {
         }
 
-        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./node_modules/foo");
+        expect(tabris.Module.readJSON).toHaveBeenCalledWith("./foo/node_modules/bar/package.json");
+        expect(tabris.Module.readJSON).toHaveBeenCalledWith("./node_modules/bar/package.json");
+      });
+
+      it("does not requests modules node_modules/node_modules folder", function() {
+        module = new tabris.Module("./node_modules/foo/script.js");
+        tabris.Module.createLoader.and.returnValue(undefined);
+        spyOn(tabris.Module, "readJSON").and.returnValue(undefined);
+
+        try {
+          module.require("bar");
+        } catch (error) {
+        }
+
+        expect(tabris.Module.readJSON).toHaveBeenCalledWith("./node_modules/foo/node_modules/bar/package.json");
+        expect(tabris.Module.readJSON).not.toHaveBeenCalledWith("./node_modules/node_modules/bar/package.json");
+        expect(tabris.Module.readJSON).toHaveBeenCalledWith("./node_modules/bar/package.json");
+      });
+
+      it("does not request module from node_modules folder at top-level", function() {
+        module = new tabris.Module("./foo/script.js");
+        tabris.Module.createLoader.and.callFake(function(path) {
+          if (path === "./foo/node_modules/bar/script2.js") {
+            return function(module) {module.exports = 2;};
+          }
+        });
+        spyOn(tabris.Module, "readJSON").and.callFake(function(path) {
+          if (path === "./foo/node_modules/bar/package.json") {
+            return {main: "script2.js"};
+          }
+        });
+
+        expect(module.require("bar")).toBe(2);
+
+        expect(tabris.Module.readJSON).toHaveBeenCalledWith("./foo/node_modules/bar/package.json");
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./foo/node_modules/bar/script2.js");
+        expect(tabris.Module.readJSON).not.toHaveBeenCalledWith("./node_modules/bar/package.json");
       });
 
       it("fails if module cannot be found", function() {

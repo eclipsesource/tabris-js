@@ -40,30 +40,16 @@
     Module.prototype = {
 
       require: function(request) {
-        var currentDir = dirname(this.id);
         if (request.slice(0, 1) !== ".") {
           if (this._cache[request]) {
             return this._cache[request].exports;
           }
-          currentDir = "./node_modules";
+          return findNodeModule.call(this, request);
         }
-        var postfixes = request.slice(-1) === "/" ? folderPostfixes : filePostfixes;
-        var path = normalizePath(currentDir + "/" + request);
-        if (path) {
-          for (var i = 0; i < postfixes.length; i++) {
-            var module = getModule.call(this, path, postfixes[i]);
-            if (module) {
-              return module;
-            }
-          }
-        }
-        throw new Error("Cannot find module '" + request + "'");
+        return findFileModule.call(this, request);
       }
 
     };
-
-    var filePostfixes = ["", ".js", ".json", "/package.json", "/index.js", "/index.json"];
-    var folderPostfixes = ["/package.json", "/index.js", "/index.json"];
 
     Module.loadMain = function() {
       try {
@@ -111,6 +97,45 @@
       module.exports = Module;
     });
 
+    function findFileModule(request) {
+      var path = normalizePath(dirname(this.id) + "/" + request);
+      var result = findModule.call(this, path, getPostfixes(request));
+      if (!result) {
+        throw new Error("Cannot find module '" + request + "'");
+      }
+      return result;
+    }
+
+    function findNodeModule(request) {
+      var currentDir = dirname(this.id);
+      var postfixes = getPostfixes(request);
+      var modulesPath = "/node_modules";
+      var filePath = modulesPath + "/" + request;
+      var result;
+      do {
+        result = findModule.call(this, normalizePath(currentDir + filePath), postfixes);
+        currentDir = normalizePath(currentDir + "/..");
+        if (currentDir.slice(-1 * modulesPath.length) === modulesPath) {
+          currentDir = normalizePath(currentDir + "/..");
+        }
+      } while (!result && currentDir);
+      if (!result) {
+        throw new Error("Cannot find module '" + request + "'");
+      }
+      return result;
+    }
+
+    function findModule(path, postfixes) {
+      if (path) {
+        for (var i = 0; i < postfixes.length; i++) {
+          var module = getModule.call(this, path, postfixes[i]);
+          if (module) {
+            return module;
+          }
+        }
+      }
+    }
+
     function getModule(path, postfix) {
       var url = path + postfix;
       if (url in this._cache) {
@@ -136,6 +161,10 @@
         }
       }
       this._cache[url] = false;
+    }
+
+    function getPostfixes(request) {
+      return request.slice(-1) === "/" ? folderPostfixes : filePostfixes;
     }
 
     function wrapSource(source) {
@@ -165,6 +194,9 @@
       }
       return segments.join("/");
     }
+
+    var filePostfixes = ["", ".js", ".json", "/package.json", "/index.js", "/index.json"];
+    var folderPostfixes = ["/package.json", "/index.js", "/index.json"];
 
   }
 
