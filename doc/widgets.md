@@ -79,7 +79,7 @@ Parameters:
   - *delay*: time to wait until the animation starts in ms, defaults to `0`
   - *duration*: duration of the animation in ms
   - *easing*: one of `linear`, `ease-in`, `ease-out`, `ease-in-out`
-  - *repeat*: number of times to repeat the animation, defaults to `1`
+  - *repeat*: number of times to repeat the animation, defaults to `0`
   - *reverse*: plays the animation backwards if set to `true`
 
 Example:
