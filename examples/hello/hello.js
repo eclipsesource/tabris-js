@@ -8,13 +8,13 @@ var button = tabris.create("Button", {
   layoutData: {centerX: 0, top: 100}
 }).appendTo(page);
 
-var label = tabris.create("Label", {
+var textView = tabris.create("TextView", {
   font: "24px",
   layoutData: {centerX: 0, top: [button, 50]}
 }).appendTo(page);
 
 button.on("selection", function() {
-  label.set("text", "Totally Rock!");
+  textView.set("text", "Totally Rock!");
 });
 
 page.open();
