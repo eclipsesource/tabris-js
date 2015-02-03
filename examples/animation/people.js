@@ -122,20 +122,20 @@ function createPersonDetail(parent, person, delay) {
     });
     animateInScaleUp(this, delay);
   });
-  var nameLabel = tabris.create("Label", {
+  var nameLabel = tabris.create("TextView", {
     layoutData: {left: [personImage, MARGIN], top: 0},
     text: person.firstName + " " + person.lastName,
     font: "bold 18px"
   });
-  var professionLabel = tabris.create("Label", {
+  var professionLabel = tabris.create("TextView", {
     layoutData: {left: [personImage, MARGIN], top: [nameLabel, MARGIN]},
     text: "Software developer"
   });
-  var companyLabel = tabris.create("Label", {
+  var companyLabel = tabris.create("TextView", {
     layoutData: {left: [personImage, MARGIN], top: [professionLabel, MARGIN_SMALL]},
     text: "EclipseSource"
   });
-  var mailLabel = tabris.create("Label", {
+  var mailLabel = tabris.create("TextView", {
     layoutData: {left: [personImage, MARGIN], top: [companyLabel, MARGIN]},
     text: "mail@eclipsesource.com",
     font: "italic 14px"
@@ -162,7 +162,7 @@ function createPersonThumbView(parent, person, thumbsize) {
   }).on("touchend", function() {
     animateOutLeftCreateCurrentPerson(person);
   }).appendTo(composite);
-  tabris.create("Label", {
+  tabris.create("TextView", {
     alignment: "center",
     layoutData: {left: 0, top: [personView, 0], width: thumbsize},
     text: person.firstName,

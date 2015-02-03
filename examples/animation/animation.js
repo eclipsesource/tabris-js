@@ -9,7 +9,7 @@ var button = tabris.create("Button", {
   text: "Animate"
 }).appendTo(page);
 
-var label = tabris.create("Label", {
+var label = tabris.create("TextView", {
   layoutData: {left: MARGIN, top: MARGIN},
   background: "#6aa",
   foreground: "white",

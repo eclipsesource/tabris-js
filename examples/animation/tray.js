@@ -22,7 +22,7 @@ var page = tabris.create("Page", {
   topLevel: true
 });
 
-tabris.create("Label", {
+tabris.create("TextView", {
   layoutData: {left: MARGIN, right: MARGIN, top: MARGIN, bottom: MARGIN},
   text: loremIpsum,
   foreground: "#777"
@@ -43,7 +43,7 @@ var strap = tabris.create("Composite", {
   background: "#259b24"
 }).appendTo(tray);
 
-var strapLabel = tabris.create("Label", {
+var strapLabel = tabris.create("TextView", {
   layoutData: {left: MARGIN, right: MARGIN, top: 10},
   alignment: "center",
   text: "⇧",
@@ -56,7 +56,7 @@ var trayContent = tabris.create("Composite", {
   background: "#8bc34a"
 }).appendTo(tray);
 
-tabris.create("Label", {
+tabris.create("TextView", {
   layoutData: {left: MARGIN, right: MARGIN, top: MARGIN},
   alignment: "center",
   text: "Tray content",
