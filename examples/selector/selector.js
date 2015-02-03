@@ -3,7 +3,7 @@ var page = tabris.create("Page", {
   topLevel: true
 });
 
-var matchers = ["*", "Button", "Label"];
+var matchers = ["*", "Button", "TextView"];
 
 tabris.create("Combo", {
   items: matchers,
@@ -27,13 +27,13 @@ tabris.create("Button", {
   layoutData: {left: 10, top: [page.children().last(), 10]}
 }).appendTo(page);
 
-tabris.create("Label", {
-  text: "Label 1",
+tabris.create("TextView", {
+  text: "TextView 1",
   layoutData: {left: 10, top: [page.children().last(), 10]}
 }).appendTo(page);
 
-tabris.create("Label", {
-  text: "Label 2",
+tabris.create("TextView", {
+  text: "TextView 2",
   layoutData: {left: 10, top: [page.children().last(), 10]}
 }).appendTo(page);
 
