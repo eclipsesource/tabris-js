@@ -9,18 +9,18 @@ var page = tabris.create("Page", {
   topLevel: true
 });
 
-var createLabel = function(labelText) {
-  tabris.create("Label", {
-    text: labelText,
+var createTextView = function(text) {
+  tabris.create("TextView", {
+    text: text,
     markupEnabled: true,
     layoutData: {left: MARGIN, right: MARGIN, top: [page.children().last() || 0, MARGIN]}
   }).appendTo(page);
 };
 
 $.getJSON("http://www.telize.com/geoip", function(json) {
-  createLabel("The IP address is: " + json.ip);
-  createLabel("Latitude: " + json.latitude);
-  createLabel("Longitude: " + json.longitude);
+  createTextView("The IP address is: " + json.ip);
+  createTextView("Latitude: " + json.latitude);
+  createTextView("Longitude: " + json.longitude);
 });
 
 page.open();
