@@ -96,7 +96,7 @@ for (var x = 0; x < xSize; x++) {
   }
 }
 
-var label = tabris.create("Label", {
+var textView = tabris.create("TextView", {
   bounds: {left: 0, top: 0, width: 80, height: 40},
   background: "rgba(255, 0, 0, 0.8)",
   foreground: "#fff",
@@ -159,7 +159,7 @@ var run = function() {
       var curTime = new Date().getTime();
       var diff = curTime - start;
       if (diff >= 1000) {
-        label.set("text", "FPS: " + count);
+        textView.set("text", "FPS: " + count);
         count = 0;
         start = curTime;
       }
@@ -170,6 +170,6 @@ var run = function() {
 };
 
 var offset = new Date().getTime() - time;
-label.set("text", "Load: " + offset);
+textView.set("text", "Load: " + offset);
 
-label.on("touchstart", run);
+textView.on("touchstart", run);
