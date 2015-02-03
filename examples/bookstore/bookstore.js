@@ -69,7 +69,7 @@ function createBookPage(book) {
   createTabFolder().set({
     layoutData: {top: [detailsComposite, 0], left: 0, right: 0, bottom: 0}
   }).appendTo(page);
-  tabris.create("Label", {
+  tabris.create("TextView", {
     layoutData: {height: 1, right: 0, left: 0, top: [detailsComposite, 0]},
     background: "rgba(0, 0, 0, 0.1)"
   }).appendTo(page);
@@ -90,17 +90,17 @@ function createDetailsView(book) {
     layoutData: {height: 160, width: 106, left: PAGE_MARGIN, top: PAGE_MARGIN},
     image: book.image
   }).appendTo(composite);
-  var titleLabel = tabris.create("Label", {
+  var titleTextView = tabris.create("TextView", {
     markupEnabled: true,
     text: "<b>" + book.title + "</b>",
     layoutData: {left: [coverView, PAGE_MARGIN], top: PAGE_MARGIN, right: PAGE_MARGIN}
   }).appendTo(composite);
-  var authorLabel = tabris.create("Label", {
-    layoutData: {left: [coverView, PAGE_MARGIN], top: [titleLabel, PAGE_MARGIN]},
+  var authorTextView = tabris.create("TextView", {
+    layoutData: {left: [coverView, PAGE_MARGIN], top: [titleTextView, PAGE_MARGIN]},
     text: book.author
   }).appendTo(composite);
-  tabris.create("Label", {
-    layoutData: {left: [coverView, PAGE_MARGIN], top: [authorLabel, PAGE_MARGIN]},
+  tabris.create("TextView", {
+    layoutData: {left: [coverView, PAGE_MARGIN], top: [authorTextView, PAGE_MARGIN]},
     foreground: "rgb(102, 153, 0)",
     text: "EUR 12,95"
   }).appendTo(composite);
@@ -112,7 +112,7 @@ function createTabFolder() {
   var relatedTab = tabris.create("Tab", {title: "Related"}).appendTo(tabFolder);
   createBooksList(books).appendTo(relatedTab);
   var commentsTab = tabris.create("Tab", {title: "Comments"}).appendTo(tabFolder);
-  tabris.create("Label", {
+  tabris.create("TextView", {
     layoutData: {left: PAGE_MARGIN, top: PAGE_MARGIN, right: PAGE_MARGIN, bottom: PAGE_MARGIN},
     text: "Great Book."
   }).appendTo(commentsTab);
@@ -129,19 +129,19 @@ function createBooksList(books) {
         layoutData: {left: PAGE_MARGIN, centerY: 0, width: 32, height: 48},
         scaleMode: "fit"
       }).appendTo(cell);
-      var titleLabel = tabris.create("Label", {
+      var titleTextView = tabris.create("TextView", {
         layoutData: {left: 64, right: PAGE_MARGIN, top: PAGE_MARGIN},
         markupEnabled: true,
         foreground: "#4a4a4a"
       }).appendTo(cell);
-      var authorLabel = tabris.create("Label", {
-        layoutData: {left: 64, right: PAGE_MARGIN, top: [titleLabel, 4]},
+      var authorTextView = tabris.create("TextView", {
+        layoutData: {left: 64, right: PAGE_MARGIN, top: [titleTextView, 4]},
         foreground: "#7b7b7b"
       }).appendTo(cell);
       cell.on("itemchange", function(book) {
         imageView.set("image", book.image);
-        titleLabel.set("text", book.title);
-        authorLabel.set("text", book.author);
+        titleTextView.set("text", book.title);
+        authorTextView.set("text", book.author);
       });
     }
   }).on("selection", function(event) {
@@ -155,14 +155,14 @@ function createReadBookPage(book) {
     layoutData: {left: 0, right: 0, top: 0, bottom: 0},
     direction: "vertical"
   }).appendTo(page);
-  var titleLabel = tabris.create("Label", {
+  var titleTextView = tabris.create("TextView", {
     layoutData: {left: PAGE_MARGIN, top: PAGE_MARGIN * 2, right: PAGE_MARGIN},
     foreground: "rgba(0, 0, 0, 0.5)",
     markupEnabled: true,
     text: "<b>" + book.title + "</b>"
   }).appendTo(composite);
-  tabris.create("Label", {
-    layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: [titleLabel, PAGE_MARGIN], bottom: PAGE_MARGIN},
+  tabris.create("TextView", {
+    layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: [titleTextView, PAGE_MARGIN], bottom: PAGE_MARGIN},
     text: [loremIpsum, loremIpsum, loremIpsum].join("\n\n")
   }).appendTo(composite);
   return page;
@@ -172,17 +172,17 @@ function createSettingsPage() {
   var page = tabris.create("Page", {
     title: "License"
   });
-  var settingsLabel = tabris.create("Label", {
+  var settingsTextView = tabris.create("TextView", {
     text: "Book covers come under CC BY 2.0",
     layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: PAGE_MARGIN}
   }).appendTo(page);
   var url = "https://www.flickr.com/photos/ajourneyroundmyskull/sets/72157626894978086/";
-  var linkLabel = tabris.create("Label", {
+  var linkTextView = tabris.create("TextView", {
     text: "<a href=\"" + url + "\">Covers on flickr</a>",
     markupEnabled: true,
-    layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: [settingsLabel, 10]}
+    layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: [settingsTextView, 10]}
   }).appendTo(page);
-  tabris.create("Label", {
+  tabris.create("TextView", {
     text: "<i>Authors of book covers:</i><br/>" +
       "Paula Rodriguez - 1984<br/>" +
       "Marc Storrs and Rob Morphy - Na Tropie Nieznanych<br/>" +
@@ -192,7 +192,7 @@ function createSettingsPage() {
       "Marc Storrs and Rob Morphy - Zegar Pomaranczowy Pracz<br/>" +
       "Andrew Evan Harner - Ksiega Dzungli",
     markupEnabled: true,
-    layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: [linkLabel, 10]}
+    layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: [linkTextView, 10]}
   }).appendTo(page);
   return page;
 }
