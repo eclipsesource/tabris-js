@@ -43,7 +43,7 @@ var strap = tabris.create("Composite", {
   background: "#259b24"
 }).appendTo(tray);
 
-var strapLabel = tabris.create("TextView", {
+var strapTextView = tabris.create("TextView", {
   layoutData: {left: MARGIN, right: MARGIN, top: 10},
   alignment: "center",
   text: "⇧",
@@ -69,9 +69,9 @@ function updateShadeOpacity(translationY) {
   shade.set("opacity", 0.75 - traveled);
 }
 
-function updateStrapLabelRotation(translationY) {
+function updateStrapTextViewRotation(translationY) {
   var traveled = translationY / verticalTrayOffset;
-  strapLabel.set("transform", {rotation: traveled * Math.PI - Math.PI});
+  strapTextView.set("transform", {rotation: traveled * Math.PI - Math.PI});
 }
 
 trayContent.on("change:bounds", function() {
@@ -79,7 +79,7 @@ trayContent.on("change:bounds", function() {
   verticalTrayOffset = bounds.height;
   tray.set("transform", {translationY: verticalTrayOffset});
   updateShadeOpacity(verticalTrayOffset);
-  updateStrapLabelRotation(verticalTrayOffset);
+  updateStrapTextViewRotation(verticalTrayOffset);
 });
 
 strap.on("touchstart", function(e) {
@@ -96,7 +96,7 @@ strap.on("touchmove", function(e) {
   var offsetY = tray.get("transform").translationY + y;
   tray.set("transform", {translationY: Math.min(Math.max(offsetY, 0), verticalTrayOffset)});
   updateShadeOpacity(offsetY);
-  updateStrapLabelRotation(offsetY);
+  updateStrapTextViewRotation(offsetY);
 });
 
 strap.on("touchcancel", function() {
@@ -129,13 +129,13 @@ function positionTrayInRestingState() {
   }).on("Progress", function() {
     var translationY = tray.get("transform").translationY;
     updateShadeOpacity(translationY);
-    updateStrapLabelRotation(translationY);
+    updateStrapTextViewRotation(translationY);
   }).on("Completion", function() {
     this.dispose();
     animation = undefined;
     // TODO remove the following workaround when tabris-ios #538 is implemented
     var offsetY = tray.get("transform").translationY;
     updateShadeOpacity(offsetY);
-    updateStrapLabelRotation(offsetY);
+    updateStrapTextViewRotation(offsetY);
   }).call("start");
 }

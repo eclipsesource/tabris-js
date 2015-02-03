@@ -9,17 +9,17 @@ var button = tabris.create("Button", {
   text: "Animate"
 }).appendTo(page);
 
-var label = tabris.create("TextView", {
+var textView = tabris.create("TextView", {
   layoutData: {left: MARGIN, top: MARGIN},
   background: "#6aa",
   foreground: "white",
   text: "Hello World!"
 }).appendTo(page);
 
-button.set("layoutData", {left: MARGIN, right: MARGIN, top: [label, MARGIN]});
+button.set("layoutData", {left: MARGIN, right: MARGIN, top: [textView, MARGIN]});
 
 button.on("selection", function() {
-  label.animate({
+  textView.animate({
     opacity: 0.25,
     transform: {
       rotation: 0.75 * Math.PI,
