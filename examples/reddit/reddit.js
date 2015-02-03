@@ -13,14 +13,14 @@ var progressBar = tabris.create("ProgressBar", {
 
 setProgress(20);
 
-var loadingLabel = tabris.create("Label", {
+var loadingTextView = tabris.create("TextView", {
   layoutData: {left: MARGIN, right: MARGIN, bottom: [progressBar, 20]},
   alignment: "center",
   text: "loading data from reddit ..."
 }).appendTo(page);
 
 $.getJSON("http://www.reddit.com/r/petpictures.json?limit=100", function(json) {
-  loadingLabel.set("visible", false);
+  loadingTextView.set("visible", false);
   progressBar.set("visible", false);
   tabris.create("CollectionView", {
     layoutData: {left: 0, top: 0, right: 0, bottom: 0},
@@ -32,14 +32,14 @@ $.getJSON("http://www.reddit.com/r/petpictures.json?limit=100", function(json) {
         layoutData: {left: MARGIN, top: 4, width: 76, height: 76},
         scaleMode: "fill"
       }).appendTo(cell);
-      var nameLabel = tabris.create("Label", {
+      var nameTextView = tabris.create("TextView", {
         layoutData: {left: [imageView, 16], top: 5, right: 16, height: 60}
       }).appendTo(cell);
-      var authorLabel = tabris.create("Label", {
+      var authorTextView = tabris.create("TextView", {
         layoutData: {left: [imageView, 16], bottom: 4, width: 200},
         foreground: "#234"
       }).appendTo(cell);
-      var commentsLabel = tabris.create("Label", {
+      var commentsTextView = tabris.create("TextView", {
         layoutData: {right: MARGIN, bottom: 4 , width: 200},
         alignment: "right",
         foreground: "green"
@@ -51,9 +51,9 @@ $.getJSON("http://www.reddit.com/r/petpictures.json?limit=100", function(json) {
       }).appendTo(cell);
       cell.on("itemchange", function(element) {
         imageView.set("image", {src: element.data.thumbnail});
-        nameLabel.set("text", element.data.title);
-        authorLabel.set("text", element.data.author);
-        commentsLabel.set("text", element.data.num_comments + " comments");
+        nameTextView.set("text", element.data.title);
+        authorTextView.set("text", element.data.author);
+        commentsTextView.set("text", element.data.num_comments + " comments");
       });
     }
   }).on("selection", function(event) {
