@@ -3,28 +3,28 @@ var page = tabris.create("Page", {
   topLevel: true
 });
 
-var keyLabel = tabris.create("Label", {
+var keyTextView = tabris.create("TextView", {
   layoutData: {left: 10, top: 20},
   text: "Key:"
 }).appendTo(page);
 
-var keyField = tabris.create("Text", {
-  layoutData: {left: [keyLabel, 20], baseline: keyLabel, right: 10},
+var keyField = tabris.create("TextInput", {
+  layoutData: {left: [keyTextView, 20], baseline: keyTextView, right: 10},
   text: "foo"
 }).appendTo(page);
 
-var valueLabel = tabris.create("Label", {
+var valueTextView = tabris.create("TextView", {
   layoutData: {left: 10, top: [keyField, 20]},
   text: "Value:"
 }).appendTo(page);
 
-var valueField = tabris.create("Text", {
-  layoutData: {left: [valueLabel, 20], baseline: valueLabel, right: 10},
+var valueField = tabris.create("TextInput", {
+  layoutData: {left: [valueTextView, 20], baseline: valueTextView, right: 10},
   text: localStorage.getItem("foo") || "bar"
 }).appendTo(page);
 
 var setButton = tabris.create("Button", {
-  layoutData: {left: 10, top: [valueLabel, 20]},
+  layoutData: {left: 10, top: [valueTextView, 20]},
   text: "Set"
 }).on("selection", function() {
   if (!keyField.get("text")) {
