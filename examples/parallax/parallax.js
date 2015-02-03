@@ -10,7 +10,7 @@ var scrollComposite = tabris.create("ScrollComposite", {
   layoutData: {left: 0, right: 0, top: 0, bottom: 0}
 }).appendTo(page);
 
-var imageLabel = tabris.create("ImageView", {
+var imageTextView = tabris.create("ImageView", {
   layoutData: {left: 0, top: 0, right: 0}
 }).appendTo(scrollComposite);
 
@@ -18,7 +18,7 @@ var contentComposite = tabris.create("Composite", {
   background: "white"
 }).appendTo(scrollComposite);
 
-tabris.create("Label", {
+tabris.create("TextView", {
   layoutData: {left: MARGIN, right: MARGIN, top: MARGIN},
   text: "Etiam nisl nisi, egestas quis lacus ut, tristique suscipit metus. In vehicula lectus " +
         "metus, at accumsan elit fringilla blandit. Integer et quam sed dolor pharetra " +
@@ -44,7 +44,7 @@ var titleComposite = tabris.create("Composite", {
 
 contentComposite.set("layoutData", {left: 0, right: 0, top: [titleComposite, 0], height: 1000});
 
-var teaserLabel = tabris.create("Label", {
+var teaserTextView = tabris.create("TextView", {
   markupEnabled: true,
   text: "<b>The perfect side dish</b>",
   font: "16px",
@@ -52,8 +52,8 @@ var teaserLabel = tabris.create("Label", {
   foreground: "black"
 }).appendTo(titleComposite);
 
-tabris.create("Label", {
-  layoutData: {left: MARGIN, top: [teaserLabel, MARGIN_SMALL], right: MARGIN},
+tabris.create("TextView", {
+  layoutData: {left: MARGIN, top: [teaserTextView, MARGIN_SMALL], right: MARGIN},
   markupEnabled: true,
   text: "<b>INDIAN SUMMER SALAD</b>",
   font: "24px",
@@ -66,7 +66,7 @@ scrollComposite.on("change:bounds", function() {
   var pageWidth = bounds.width;
   var pageHeight = bounds.height;
   var imageHeight = pageWidth / 1.4; // 1.4 is the image aspect ratio
-  imageLabel.set("image", {src: "images/salad.jpg", width: pageWidth, height: pageWidth});
+  imageTextView.set("image", {src: "images/salad.jpg", width: pageWidth, height: pageWidth});
   var titleCompHeight = titleComposite.get("bounds").height;
   // we need the offset of the title composite in each scroll event
   // it can only change when a change:bounds is triggered, wo thats when we assign it
@@ -75,7 +75,7 @@ scrollComposite.on("change:bounds", function() {
 });
 
 scrollComposite.on("scroll", function(offset) {
-  imageLabel.set("transform", {translationY: offset.y * 0.4});
+  imageTextView.set("transform", {translationY: offset.y * 0.4});
   if (titleCompY - offset.y < 0) {
     titleComposite.set("transform", {translationY: offset.y - titleCompY});
   } else {
