@@ -9,7 +9,7 @@ var page = new PluginPage("Dialog", "org.apache.cordova.dialogs", function(paren
     navigator.notification.alert(
       "You are the winner!", // message
       function() {
-        label.set("text", "Alert closed");
+        textView.set("text", "Alert closed");
       }, // callback
       "Game Over", // title
       "Done" // buttonName
@@ -23,10 +23,10 @@ var page = new PluginPage("Dialog", "org.apache.cordova.dialogs", function(paren
     navigator.notification.confirm(
         "You are the winner!", // message
          function(buttonIndex) {
-           label.set("text", "Confirm closed with code: " + buttonIndex);
+           textView.set("text", "Confirm closed with code: " + buttonIndex);
          }, // callback to invoke with index of button pressed
         "Game Over", // title
-        ["Restart", "Exit"] // buttonLabels
+        ["Restart", "Exit"] // buttonTextViews
     );
   });
 
@@ -37,10 +37,10 @@ var page = new PluginPage("Dialog", "org.apache.cordova.dialogs", function(paren
     navigator.notification.prompt(
         "Please enter your name", // message
         function(results) {
-          label.set("text", "You selected button number " + results.buttonIndex + " and entered " + results.input1);
+          textView.set("text", "You selected button number " + results.buttonIndex + " and entered " + results.input1);
         }, // callback to invoke
         "Registration", // title
-        ["Ok", "Exit"], // buttonLabels
+        ["Ok", "Exit"], // buttonTextViews
         "Jane Doe" // defaultText
     );
   });
@@ -52,7 +52,7 @@ var page = new PluginPage("Dialog", "org.apache.cordova.dialogs", function(paren
     navigator.notification.beep(2);
   });
 
-  var label = tabris.create("Label", {
+  var textView = tabris.create("TextView", {
     layoutData: {top: [buttonBeep, 20], left: 20, right: 20, bottom: 20}
   }).appendTo(parent);
 });

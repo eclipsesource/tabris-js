@@ -4,7 +4,7 @@ var page = new PluginPage("Badge", "de.appplant.cordova.plugin.badge", function(
 
   cordova.plugins.notification.badge.promptForPermission();
 
-  var input = tabris.create("Text", {
+  var input = tabris.create("TextInput", {
     text: "23",
     layoutData: {left: 10, top: 10, right: 10}
   }).appendTo(parent);

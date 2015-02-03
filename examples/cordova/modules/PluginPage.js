@@ -11,7 +11,7 @@ PluginPage.prototype.create = function() {
     topLevel: true
   });
 
-  tabris.create("Label", {
+  tabris.create("TextView", {
     text: "Plugin: " + this.pluginId,
     layoutData: {left: 10, top: 10, right: 10},
     foreground: "rgb(22, 126, 251)"

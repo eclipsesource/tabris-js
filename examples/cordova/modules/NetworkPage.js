@@ -17,10 +17,10 @@ var page = new PluginPage("Network", "org.apache.cordova.network-information", f
     text: "Get Network State"
   }).appendTo(parent).on("selection", function() {
     var networkState = navigator.connection.type;
-    label.set("text", states[networkState]);
+    textView.set("text", states[networkState]);
   });
 
-  var label = tabris.create("Label", {
+  var textView = tabris.create("TextView", {
     layoutData: {top: [button, 20], left: 20, right: 20, bottom: 20}
   }).appendTo(parent);
 });

@@ -2,7 +2,7 @@ var PluginPage = require("./PluginPage");
 
 var page = new PluginPage("Toast", "nl.x-services.plugins.toast", function(parent) {
 
-  var input = tabris.create("Text", {
+  var input = tabris.create("TextInput", {
     text: "your message",
     layoutData: {left: 10, top: 10, right: 10}
   }).appendTo(parent);
