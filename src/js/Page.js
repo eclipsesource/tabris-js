@@ -1,6 +1,4 @@
-(function(require) {
-
-  var util = require("tabris-util");
+(function() {
 
   var pageProperties = ["title", "image", "style", "topLevel"];
 
@@ -71,4 +69,4 @@
     tabris.Page._getProperty[property] = function() {return this._page.get(property);};
   });
 
-}(tabris.Module.require));
+}());

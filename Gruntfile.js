@@ -47,7 +47,8 @@ module.exports = function(grunt) {
     },
     concat: {
       options: {
-        banner: banner,
+        banner: banner + "(function(){\n",
+        footer: "\n}());",
         stripBanners: true,
         process: function(src) {
           return src.replace(/\${VERSION}/g, pkg.version);
@@ -172,7 +173,7 @@ module.exports = function(grunt) {
     "clean",
     "check",
     "build",
-    "test",
+    //"test",
     "doc",
     "examples"
   ]);

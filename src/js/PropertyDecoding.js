@@ -1,25 +1,19 @@
-(function(require) {
+tabris.PropertyDecoding = {
 
-  var util = require("tabris-util");
+  color: function(value) {
+    return util.colorArrayToString(value);
+  },
 
-  tabris.PropertyDecoding = {
+  font: function(value) {
+    return util.fontArrayToString(value);
+  },
 
-    color: function(value) {
-      return util.colorArrayToString(value);
-    },
+  image: function(value) {
+    return util.imageFromArray(value);
+  },
 
-    font: function(value) {
-      return util.fontArrayToString(value);
-    },
+  bounds: function(value) {
+    return {left: value[0], top: value[1], width: value[2], height: value[3]};
+  }
 
-    image: function(value) {
-      return util.imageFromArray(value);
-    },
-
-    bounds: function(value) {
-      return {left: value[0], top: value[1], width: value[2], height: value[3]};
-    }
-
-  };
-
-}(tabris.Module.require));
+};

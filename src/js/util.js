@@ -1,4 +1,6 @@
-tabris.Module.define("tabris-util", {
+/* global util: true */
+/* jshint unused: false */
+var util = {
 
   extend: function(target) {
     for (var i = 1; i < arguments.length; i++) {
@@ -41,7 +43,7 @@ tabris.Module.define("tabris-util", {
   rename: function(object, mapping) {
     var result = {};
     for (var key in object) {
-      result[ mapping[key] || key ] = object[key];
+      result[mapping[key] || key] = object[key];
     }
     return result;
   },
@@ -70,4 +72,4 @@ tabris.Module.define("tabris-util", {
     });
   }
 
-});
+};

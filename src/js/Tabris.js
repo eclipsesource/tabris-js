@@ -9,9 +9,7 @@
   window.tabris = Module.require("tabris");
   window.tabris.Module = Module;
 
-  function defineTabris(module, exports, require) {
-
-    var util = require("tabris-util");
+  function defineTabris(module) {
 
     module.exports = util.extend(function(id) {
       if (!tabris._proxies[id] && !tabris[id]) {

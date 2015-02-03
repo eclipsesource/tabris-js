@@ -1,7 +1,5 @@
 describe("util", function() {
 
-  var util = tabris.Module.require("tabris-util");
-
   describe("extend", function() {
 
     it("copies properties of all source objects into target object", function() {

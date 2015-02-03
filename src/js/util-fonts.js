@@ -1,6 +1,4 @@
-(function(require) {
-
-  var util = require("tabris-util");
+(function() {
 
   util.fontStringToArray = function(str) {
     var result = [[], 0, false, false];
@@ -55,4 +53,4 @@
     }
   };
 
-}(tabris.Module.require));
+}());
