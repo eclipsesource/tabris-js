@@ -26,13 +26,13 @@ tabris.create("CollectionView", {
     var imageView = tabris.create("ImageView", {
       layoutData: {top: 16, centerX: 0, width: 200, height: 200}
     }).appendTo(cell);
-    var nameLabel = tabris.create("Label", {
+    var nameTextView = tabris.create("TextView", {
       layoutData: {left: 30, top: [imageView, 16], right: 30},
       alignment: "center"
     }).appendTo(cell);
     cell.on("itemchange", function(person) {
       imageView.set("image", {src: person.image});
-      nameLabel.set("text", person.firstName);
+      nameTextView.set("text", person.firstName);
     });
   }
 }).on("selection", function(event) {

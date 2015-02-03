@@ -8,11 +8,11 @@ var view = tabris.create("CollectionView", {
   itemHeight: 25,
   refreshEnabled: true,
   initializeCell: function(cell) {
-    var label = tabris.create("Label", {
+    var textView = tabris.create("TextView", {
       layoutData: {top: 2, bottom: 2, left: 5, right: 5}
     }).appendTo(cell);
     cell.on("itemchange", function(item) {
-      label.set("text", item);
+      textView.set("text", item);
     });
   }
 }).on("refresh", function() {

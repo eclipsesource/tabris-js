@@ -1,7 +1,0 @@
-{
-  "title": "Labels",
-  "category": "Label",
-  "description": "Creating labels with different alignments",
-  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
-  "main": "label.js"
-}

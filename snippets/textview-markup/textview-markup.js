@@ -1,19 +1,19 @@
 var page = tabris.create("Page", {
-  title: "Label - Markup",
+  title: "TextView - Markup",
   topLevel: true
 });
 
 var markup = "<b>bold</b>, <i>italic</i>, <big>big</big>, <small>small</small>, " +
              "<ins>ins</ins>, <del>del</del>, <a>link</a>";
 
-tabris.create("Label", {
+tabris.create("TextView", {
   layoutData: {left: 10, top: 10, right: 10},
-  text: "Label with markup not enabled:\n" + markup
+  text: "TextView with markup not enabled:\n" + markup
 }).appendTo(page);
 
-tabris.create("Label", {
+tabris.create("TextView", {
   layoutData: {left: 10, top: [page.children().last(), 30], right: 10},
-  text: "Label with markup enabled:\n" + markup,
+  text: "TextView with markup enabled:\n" + markup,
   markupEnabled: true
 }).appendTo(page);
 

@@ -3,7 +3,7 @@ var page = tabris.create("Page", {
   topLevel: true
 });
 
-var logText = tabris.create("Text", {
+var logTextInput = tabris.create("TextInput", {
   layoutData: {left: 10, top: 20, right: 10},
   text: "Message",
   message: "Log message"
@@ -14,7 +14,7 @@ var logText = tabris.create("Text", {
     layoutData: {left: 10, right: 10, top: [page.children().last(), 10]},
     text: method
   }).on("selection", function() {
-    console[method](logText.get("text"));
+    console[method](logTextInput.get("text"));
   }).appendTo(page);
 });
 

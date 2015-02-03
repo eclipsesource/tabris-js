@@ -8,7 +8,7 @@ var composite1 = tabris.create("Composite", {
   background: "#f3f3f3"
 }).appendTo(page);
 
-tabris.create("Label", {
+tabris.create("TextView", {
   alignment: "center",
   layoutData: {left: 0, right: 0, top: [50, 0]},
   text: "Composite 1"
@@ -19,7 +19,7 @@ var composite2 = tabris.create("Composite", {
   background: "#eaeaea"
 }).appendTo(page);
 
-tabris.create("Label", {
+tabris.create("TextView", {
   alignment: "center",
   layoutData: {left: 0, right: 0, top: [50, 0]},
   text: "Composite 2"

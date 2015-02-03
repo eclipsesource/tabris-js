@@ -3,13 +3,13 @@ var page = tabris.create("Page", {
   topLevel: true
 });
 
-var label = tabris.create("Label", {
+var textView = tabris.create("TextView", {
   layoutData: {left: 20, top: 20},
   text: "Label:"
 }).appendTo(page);
 
-tabris.create("Text", {
-  layoutData: {left: [label, 10], width: 300, baseline: label},
+tabris.create("TextInput", {
+  layoutData: {left: [textView, 10], width: 300, baseline: textView},
   message: "Text"
 }).appendTo(page);
 

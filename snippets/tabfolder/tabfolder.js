@@ -13,7 +13,7 @@ var createTab = function(title, image) {
     title: title, // converted to upper-case on Android
     image: {src: image, scale: 2} // image only used by iOS
   }).appendTo(tabFolder);
-  tabris.create("Label", {
+  tabris.create("TextView", {
     layoutData: {centerX: 0, centerY: 0},
     text: "Content of Tab " + title
   }).appendTo(tab);

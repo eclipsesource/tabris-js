@@ -3,7 +3,7 @@ var page = tabris.create("Page", {
   topLevel: true
 });
 
-var urlInput = tabris.create("Text", {
+var urlInput = tabris.create("TextInput", {
   layoutData: {left: 8, right: 8, top: 8},
   message: "Enter URL...",
   text: "http://en.wikipedia.org"

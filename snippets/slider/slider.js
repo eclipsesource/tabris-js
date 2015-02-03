@@ -3,7 +3,7 @@ var page = tabris.create("Page", {
   topLevel: true
 });
 
-var label = tabris.create("Label", {
+var textView = tabris.create("TextView", {
   layoutData: {left: 10, right: 10, top: [30, 0]},
   alignment: "center",
   font: "22px sans-serif",
@@ -11,12 +11,12 @@ var label = tabris.create("Label", {
 }).appendTo(page);
 
 tabris.create("Slider", {
-  layoutData: {left: 50, top: [label, 20], right: 50},
+  layoutData: {left: 50, top: [textView, 20], right: 50},
   minimum: -50,
   selection: 50,
   maximum: 150
 }).on("change:selection", function() {
-  label.set("text", this.get("selection").toString());
+  textView.set("text", this.get("selection").toString());
 }).appendTo(page);
 
 page.open();

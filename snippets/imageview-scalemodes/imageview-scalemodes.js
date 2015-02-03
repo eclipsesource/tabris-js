@@ -14,24 +14,24 @@ var imageView = tabris.create("ImageView", {
   layoutData: {top: MARGIN, width: 200, height: 200, centerX: 0}
 }).appendTo(page);
 
-var imageSizeLabel = tabris.create("Label", {
+var imageSizeTextView = tabris.create("TextView", {
   layoutData: {left: MARGIN, top: [imageView, MARGIN_LARGE], width: 96},
   text: "Image"
 }).appendTo(page);
 
 var imageSizeCombo = tabris.create("Combo", {
-  layoutData: {right: MARGIN, left: [imageSizeLabel, 0], baseline: imageSizeLabel},
+  layoutData: {right: MARGIN, left: [imageSizeTextView, 0], baseline: imageSizeTextView},
   items: ["Large", "Small"],
   selectionIndex: 0
 }).appendTo(page);
 
-var scaleModeLabel = tabris.create("Label", {
-  layoutData: {left: MARGIN, top: [imageSizeLabel, MARGIN_LARGE], width: 96},
+var scaleModeTextView = tabris.create("TextView", {
+  layoutData: {left: MARGIN, top: [imageSizeTextView, MARGIN_LARGE], width: 96},
   text: "Scale mode"
 }).appendTo(page);
 
 var scaleModeCombo = tabris.create("Combo", {
-  layoutData: {right: MARGIN, left: [scaleModeLabel, 0], baseline: scaleModeLabel},
+  layoutData: {right: MARGIN, left: [scaleModeTextView, 0], baseline: scaleModeTextView},
   items: scaleModes,
   selectionIndex: 0
 }).appendTo(page);

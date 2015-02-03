@@ -5,7 +5,7 @@ var page = tabris.create("Page", {
 
 var proposals = ["baseball", "batman", "battleship", "bangkok", "bangladesh", "banana"];
 
-var label = tabris.create("Label", {
+var textView = tabris.create("TextView", {
   layoutData: {centerX: 0, centerY: 0}
 }).appendTo(page);
 
@@ -17,7 +17,7 @@ tabris.create("SearchAction", {
     return proposal.indexOf(event.query) !== -1;
   }));
 }).on("submit", function(event) {
-  label.set("text", "Selected '" + event.query + "'");
+  textView.set("text", "Selected '" + event.query + "'");
 });
 
 page.open();

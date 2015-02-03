@@ -10,7 +10,7 @@ var page = tabris.create("Page", {
   topLevel: true
 });
 
-var statusLabel = tabris.create("Label", {
+var statusTextView = tabris.create("TextView", {
   layoutData: {left: 10, right: 10, centerY: 0},
   alignment: "center",
   font: "22px sans-serif",
@@ -18,11 +18,11 @@ var statusLabel = tabris.create("Label", {
 }).appendTo(page);
 
 tabris("App").on("Pause", function() {
-  statusLabel.set("text", "App paused");
+  statusTextView.set("text", "App paused");
 }).on("Resume", function() {
-  statusLabel.set("text", "App resumed");
+  statusTextView.set("text", "App resumed");
 }).on("BackNavigation", function() {
-  statusLabel.set("text", "Back navigation consumed");
+  statusTextView.set("text", "Back navigation consumed");
 });
 
 page.open();

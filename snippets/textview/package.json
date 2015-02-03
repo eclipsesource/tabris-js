@@ -1,0 +1,7 @@
+{
+  "title": "TextViews",
+  "category": "TextView",
+  "description": "Creating text views with different alignments",
+  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
+  "main": "textview.js"
+}

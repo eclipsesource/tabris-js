@@ -3,13 +3,13 @@ var page = tabris.create("Page", {
   topLevel: true
 });
 
-var label = tabris.create("Label", {
+var textView = tabris.create("TextView", {
   layoutData: {left: 20, top: 20, right: 20},
   text: "Touch anywhere..."
 }).appendTo(page);
 
 var printXY = function(prefix, event) {
-  label.set("text", prefix + ": " + Math.round(event.touches[0].x) + " X " + Math.round(event.touches[0].y));
+  textView.set("text", prefix + ": " + Math.round(event.touches[0].x) + " X " + Math.round(event.touches[0].y));
 };
 
 page.on("touchstart", function(event) {

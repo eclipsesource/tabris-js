@@ -10,7 +10,7 @@ var scrollComposite = tabris.create("ScrollComposite", {
 }).appendTo(page);
 
 for (var i = 0; i < 50; i++) {
-  tabris.create("Label", {
+  tabris.create("TextView", {
     layoutData: {left: i * 30 + 20, centerY: 0, width: 30},
     text: i + "°",
     foreground: "white"

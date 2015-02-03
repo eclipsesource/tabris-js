@@ -13,7 +13,7 @@ tabris.create("TextInput", {
   this.set("background", "red");
 }).appendTo(page);
 
-tabris.create("Text", {
+tabris.create("TextInput", {
   layoutData: {top: [page.children().last(), 20], left: [20, 0], right: [20, 0]},
   message: "Another field to focus..."
 }).appendTo(page);

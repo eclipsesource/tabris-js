@@ -1,7 +1,0 @@
-{
-  "title": "Label with markup",
-  "category": "Label",
-  "description": "Creating labels with and without markup enabled",
-  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
-  "main": "label-markup.js"
-}
