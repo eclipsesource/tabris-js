@@ -40,7 +40,7 @@ describe("DOMDocument", function() {
     var listener = jasmine.createSpy();
     target.document.addEventListener("DOMContentLoaded", listener);
 
-    tabris._start(new NativeBridgeSpy());
+    tabris._init(new NativeBridgeSpy());
 
     expect(listener).toHaveBeenCalled();
     expect(target.document.readyState).toBe("complete"); // we skip "interactive"
@@ -69,7 +69,7 @@ describe("DOMDocument", function() {
       script2 = target.document.createElement("script");
       nonScript = target.document.createElement("div");
       nativeBridge = new NativeBridgeSpy();
-      tabris._start(nativeBridge);
+      tabris._init(nativeBridge);
       nativeBridge.load = jasmine.createSpy().and.returnValue(source);
       /*jshint evil: true */
       nativeBridge.runInThisContext = jasmine.createSpy().and.callFake(function(script) {

@@ -6,7 +6,7 @@ describe("Animation.animate", function() {
   beforeEach(function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
-    tabris._start(nativeBridge);
+    tabris._init(nativeBridge);
     proxy = new tabris.Proxy("proxy-id");
   });
 

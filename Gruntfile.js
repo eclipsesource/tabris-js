@@ -46,17 +46,16 @@ module.exports = function(grunt) {
       src: "build/tabris.js"
     },
     concat: {
-      options: {
-        banner: banner + "(function(){\n",
-        footer: "\n}());",
-        stripBanners: true,
-        process: function(src) {
-          return src.replace(/\${VERSION}/g, pkg.version);
-        }
-      },
-      dist: {
+      tabris: {
+        options: {
+          banner: banner + "(function(){\n",
+          footer: "\n}());",
+          stripBanners: true,
+          process: function(src) {
+            return src.replace(/\${VERSION}/g, pkg.version);
+          }
+        },
         src: prefix("src/js/", [
-          "Module.js",
           "util.js",
           "util-colors.js",
           "util-fonts.js",
@@ -87,15 +86,34 @@ module.exports = function(grunt) {
           "XMLHttpRequest.js"
         ]).concat("build/cordova.tabris.js"),
         dest: "build/tabris.js"
+      },
+      boot: {
+        options: {
+          banner: banner + "(function(){\n",
+          footer: "\n}());",
+          stripBanners: true,
+          process: function(src) {
+            return src.replace(/\${VERSION}/g, pkg.version);
+          }
+        },
+        src: prefix("src/js/", [
+          "Module.js",
+          "bootstrap.js"
+        ]),
+        dest: "build/boot.js"
       }
     },
     uglify: {
-      options: {
-        banner: banner
-      },
-      build: {
+      tabris: {
+        options: {
+          banner: banner
+        },
         src: "build/tabris.js",
         dest: "build/tabris.min.js"
+      },
+      boot: {
+        src: "build/boot.js",
+        dest: "build/boot.min.js"
       }
     },
     doc: {
@@ -147,9 +165,11 @@ module.exports = function(grunt) {
 
   /* concatenates and minifies code */
   grunt.registerTask("build", [
-    "curl",
-    "concat",
-    "uglify"
+    //"curl",
+    "concat:tabris",
+    "concat:boot",
+    "uglify:tabris",
+    "uglify:boot"
   ]);
 
   /* runs jasmine tests against the build output */

@@ -6,7 +6,7 @@ describe("WindowTimers", function() {
   beforeEach(function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
-    tabris._start(nativeBridge);
+    tabris._init(nativeBridge);
     target = {};
   });
 
@@ -53,7 +53,7 @@ describe("WindowTimers", function() {
         tabris._ready = false;
         taskId = target.setTimeout(callback, delay);
 
-        tabris._start(nativeBridge);
+        tabris._init(nativeBridge);
 
         createCall = nativeBridge.calls({op: "create", type: "tabris.Timer"})[0];
         expect(createCall).toBeDefined();

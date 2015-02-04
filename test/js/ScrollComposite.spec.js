@@ -5,7 +5,7 @@ describe("ScrollComposite", function() {
   beforeEach(function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
-    tabris._start(nativeBridge);
+    tabris._init(nativeBridge);
   });
 
   describe("when a ScrollComposite is created", function() {

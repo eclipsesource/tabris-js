@@ -7,7 +7,7 @@ describe("XMLHttpRequest", function() {
   beforeEach(function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
-    tabris._start(nativeBridge);
+    tabris._init(nativeBridge);
     var origCreate = tabris.create;
     spyOn(tabris, "create").and.callFake(function() {
       proxy = origCreate.apply(this, arguments);

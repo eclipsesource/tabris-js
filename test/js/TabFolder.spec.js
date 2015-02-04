@@ -5,7 +5,7 @@ describe("TabFolder", function() {
   beforeEach(function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
-    tabris._start(nativeBridge);
+    tabris._init(nativeBridge);
     parent = new tabris.Proxy("parent-id");
     tabFolder = tabris.create("TabFolder").appendTo(parent);
   });

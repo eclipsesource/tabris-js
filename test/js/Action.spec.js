@@ -5,7 +5,7 @@ describe("Action", function() {
   beforeEach(function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
-    tabris._start(nativeBridge);
+    tabris._init(nativeBridge);
     tabris.ui = new tabris.create("_UI");
   });
 

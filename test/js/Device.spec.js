@@ -11,7 +11,7 @@ describe("Device", function() {
       }
     });
     tabris._reset();
-    tabris._start(nativeBridge);
+    tabris._init(nativeBridge);
   });
 
   describe("when device exists", function() {

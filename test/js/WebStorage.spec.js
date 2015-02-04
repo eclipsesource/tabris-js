@@ -7,7 +7,7 @@ describe("LocalStorage", function() {
   beforeEach(function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
-    tabris._start(nativeBridge);
+    tabris._init(nativeBridge);
     spyOn(window, "tabris").and.callFake(function() {
       proxy = new tabris.Proxy();
       spyOn(proxy, "call").and.callFake(function(method, args) {

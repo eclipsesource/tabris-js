@@ -4,7 +4,7 @@ describe("tabris.Module", function() {
 
   beforeEach(function() {
     nativeBridge = new NativeBridgeSpy();
-    tabris._start(nativeBridge);
+    tabris._client = nativeBridge;
     spyOn(nativeBridge, "load");
     spyOn(tabris.Module, "createLoader").and.returnValue(function(module) {
       module.exports = module;
@@ -12,10 +12,6 @@ describe("tabris.Module", function() {
   });
 
   describe("constructor", function() {
-
-    it("is a Module", function() {
-      expect(tabris.Module.require("module")).toBe(tabris.Module);
-    });
 
     it("sets id and parent from arguments", function() {
       var parent = new tabris.Module("bar");
@@ -220,13 +216,29 @@ describe("tabris.Module", function() {
       });
 
       it("requests module from node_modules folder", function() {
+        spyOn(tabris.Module, "readJSON").and.returnValue(undefined);
+        tabris.Module.createLoader.and.callFake(function(path) {
+          if (path === "./node_modules/foo/index.js") {
+            return function() {};
+          }
+        });
+
+        module.require("foo");
+
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./node_modules/foo");
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./node_modules/foo.js");
+        expect(tabris.Module.readJSON).toHaveBeenCalledWith("./node_modules/foo.json");
+        expect(tabris.Module.readJSON).toHaveBeenCalledWith("./node_modules/foo/package.json");
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./node_modules/foo/index.js");
+      });
+
+      it("fails to requests module from node_modules folder with error", function() {
         tabris.Module.createLoader.and.returnValue(undefined);
         spyOn(tabris.Module, "readJSON").and.returnValue(undefined);
 
-        try {
+        expect(function() {
           module.require("foo");
-        } catch (error) {
-        }
+        }).toThrow(new Error("Cannot find module 'foo'"));
 
         expect(tabris.Module.createLoader).toHaveBeenCalledWith("./node_modules/foo");
         expect(tabris.Module.createLoader).toHaveBeenCalledWith("./node_modules/foo.js");
@@ -395,18 +407,6 @@ describe("tabris.Module", function() {
 
       });
 
-    });
-
-  });
-
-  describe("loadMain", function() {
-
-    it("loads main module with global require", function() {
-      spyOn(tabris.Module, "require");
-
-      tabris.Module.loadMain();
-
-      expect(tabris.Module.require).toHaveBeenCalledWith("./");
     });
 
   });

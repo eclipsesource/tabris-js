@@ -7,7 +7,7 @@ describe("tabris", function() {
     nativeBridge = new NativeBridgeSpy();
     log = [];
     tabris._reset();
-    tabris._start(nativeBridge);
+    tabris._init(nativeBridge);
     tabris.registerType("TestType", {});
   });
 
@@ -15,8 +15,8 @@ describe("tabris", function() {
     delete tabris.TestType;
   });
 
-  it("is a Module", function() {
-    expect(tabris.Module.require("tabris")).toBe(tabris);
+  it("exports tabris object", function() {
+    expect(module.exports).toBe(tabris);
   });
 
   describe("when used as a function", function() {
@@ -65,11 +65,11 @@ describe("tabris", function() {
 
   });
 
-  describe("_start", function() {
+  describe("_init", function() {
 
     it("can be called without a context", function() {
       expect(function() {
-        tabris._start.call(null, nativeBridge);
+        tabris._init.call(null, nativeBridge);
       }).not.toThrow();
     });
 
@@ -81,38 +81,20 @@ describe("tabris", function() {
         log.push("bar");
       });
 
-      tabris._start.call(null, nativeBridge);
+      tabris._init.call(null, nativeBridge);
 
       expect(log).toEqual(["foo", "bar"]);
     });
 
     it("load functions can access tabris functions", function() {
+      tabris._ready = false;
       tabris.load(function() {
         tabris.create("TestType");
       });
 
-      tabris._start.call(null, nativeBridge);
+      tabris._init.call(null, nativeBridge);
 
       expect(nativeBridge.calls({op: "create", type: "TestType"}).length).toBe(1);
-    });
-
-    it("loads main module", function() {
-      spyOn(tabris.Module, "loadMain");
-
-      tabris._start.call(null, nativeBridge);
-
-      expect(tabris.Module.loadMain).toHaveBeenCalled();
-    });
-
-    it("starts entry point instead of main module", function() {
-      spyOn(tabris.Module, "loadMain");
-      var listener = jasmine.createSpy();
-      tabris._setEntryPoint(listener);
-
-      tabris._start.call(null, nativeBridge);
-
-      expect(tabris.Module.loadMain).not.toHaveBeenCalled();
-      expect(listener).toHaveBeenCalled();
     });
 
   });
@@ -185,7 +167,7 @@ describe("tabris", function() {
       var fn = jasmine.createSpy();
 
       tabris.load(fn);
-      tabris._start(nativeBridge);
+      tabris._init(nativeBridge);
 
       expect(fn).toHaveBeenCalled();
     });
@@ -205,7 +187,7 @@ describe("tabris", function() {
       tabris.load(function() {
         log.push("2");
       });
-      tabris._start(nativeBridge);
+      tabris._init(nativeBridge);
 
       expect(log).toEqual(["1", "2", "1a", "1b"]);
     });
@@ -213,7 +195,7 @@ describe("tabris", function() {
     it("runs immediately if already started", function() {
       var fn = jasmine.createSpy();
 
-      tabris._start(nativeBridge);
+      tabris._init(nativeBridge);
       tabris.load(fn);
 
       expect(fn).toHaveBeenCalled();

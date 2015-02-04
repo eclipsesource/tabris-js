@@ -5,7 +5,7 @@ describe("Widgets", function() {
   beforeEach(function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
-    tabris._start(nativeBridge);
+    tabris._init(nativeBridge);
   });
 
   afterEach(function() {

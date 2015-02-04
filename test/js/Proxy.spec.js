@@ -9,7 +9,7 @@ describe("Proxy", function() {
     nativeBridge = new NativeBridgeSpy();
     log = [];
     tabris._reset();
-    tabris._start(nativeBridge);
+    tabris._init(nativeBridge);
     tabris.registerWidget("TestType", {
       _supportsChildren: true
     });

@@ -8,7 +8,7 @@ describe("CanvasContext", function() {
   beforeEach(function() {
     window.console = jasmine.createSpyObj("console", ["log", "info", "warn", "error"]);
     nativeBridge = new NativeBridgeSpy();
-    tabris._start(nativeBridge);
+    tabris._init(nativeBridge);
     gc = tabris.create("_GC");
     nativeBridge.resetCalls();
     ctx = new tabris.CanvasContext(gc);
