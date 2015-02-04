@@ -85,7 +85,7 @@ module.exports = function(grunt) {
           "WebStorage.js",
           "XMLHttpRequest.js"
         ]).concat("build/cordova.tabris.js"),
-        dest: "build/tabris.js"
+        dest: "build/tabris/tabris.js"
       },
       boot: {
         options: {
@@ -108,8 +108,8 @@ module.exports = function(grunt) {
         options: {
           banner: banner
         },
-        src: "build/tabris.js",
-        dest: "build/tabris.min.js"
+        src: "build/tabris/tabris.js",
+        dest: "build/tabris/tabris.min.js"
       },
       boot: {
         src: "build/boot.js",
@@ -129,12 +129,20 @@ module.exports = function(grunt) {
       }
     },
     compress: {
-      main: {
+      examples: {
         options: {
           archive: "build/examples.zip"
         },
         files: [
           {expand: true, cwd: "build/", src: ["examples/**"], filter: "isFile"}
+        ]
+      },
+      tabris: {
+        options: {
+          archive: "build/tabris.tgz"
+        },
+        files: [
+          {expand: true, cwd: "build/", src: ["tabris/**"], filter: "isFile"}
         ]
       }
     },
@@ -163,13 +171,24 @@ module.exports = function(grunt) {
     "jshint"
   ]);
 
+  grunt.registerTask("package", "create package.json", function() {
+    var stringify = require("format-json");
+    var pack = grunt.file.readJSON("package.json");
+    delete pack.devDependencies;
+    pack.private = true; // we don't want to publish this to npm yet
+    pack.main = "tabris.min.js";
+    grunt.file.write("build/tabris/package.json", stringify.plain(pack));
+  });
+
   /* concatenates and minifies code */
   grunt.registerTask("build", [
-    //"curl",
+    "curl",
     "concat:tabris",
     "concat:boot",
     "uglify:tabris",
-    "uglify:boot"
+    "uglify:boot",
+    "package",
+    "compress:tabris"
   ]);
 
   /* runs jasmine tests against the build output */
@@ -186,7 +205,7 @@ module.exports = function(grunt) {
   /* packages example code */
   grunt.registerTask("examples", [
     "copy-examples",
-    "compress"
+    "compress:examples"
   ]);
 
   grunt.registerTask("default", [
