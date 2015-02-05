@@ -323,8 +323,8 @@ describe("Widgets", function() {
       expect(create.properties).toEqual({selection: 23});
     });
 
-    it("Text", function() {
-      tabris.create("Text", {text: "foo"});
+    it("TextInput", function() {
+      tabris.create("TextInput", {text: "foo"});
 
       var create = nativeBridge.calls({op: "create"})[0];
       expect(create.type).toEqual("rwt.widgets.Text");
@@ -332,7 +332,7 @@ describe("Widgets", function() {
     });
 
     it("Text (type='password')", function() {
-      tabris.create("Text", {type: "password"});
+      tabris.create("TextInput", {type: "password"});
 
       var create = nativeBridge.calls({op: "create"})[0];
       expect(create.type).toEqual("rwt.widgets.Text");
@@ -340,7 +340,7 @@ describe("Widgets", function() {
     });
 
     it("Text (type='search')", function() {
-      tabris.create("Text", {type: "search"});
+      tabris.create("TextInput", {type: "search"});
 
       var create = nativeBridge.calls({op: "create"})[0];
       expect(create.type).toEqual("rwt.widgets.Text");
@@ -348,7 +348,7 @@ describe("Widgets", function() {
     });
 
     it("Text (type='multiline')", function() {
-      tabris.create("Text", {type: "multiline"});
+      tabris.create("TextInput", {type: "multiline"});
 
       var create = nativeBridge.calls({op: "create"})[0];
       expect(create.type).toEqual("rwt.widgets.Text");
