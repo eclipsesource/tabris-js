@@ -32,7 +32,7 @@ cordova plugin add org.apache.cordova.camera
 **Important:** You can install all available Cordova Plug-Ins. Most of the Plug-Ins will work out of the box but not all. This is because tabris.js uses a **native UI** and **no HTML5**. As a result all Plug-Ins that manipulate the DOM will not work.
 
 ## Default Plug-Ins in the Developer Apps
-If you are using the [tabris.js Developer Apps](https://tabrisjs.com/documentation/getting-started) you can use the following Plug-Ins without adding them:
+If you are using the [Tabris.js Developer Apps](https://tabrisjs.com/documentation/getting-started), your application can directly access the following pre-packaged plug-ins:
 
 * [Badge](http://plugins.cordova.io/#/package/de.appplant.cordova.plugin.badge)
 * [Camera](http://plugins.cordova.io/#/package/org.apache.cordova.camera)
