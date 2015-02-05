@@ -1,6 +1,6 @@
 {
-  "type": "Combo",
-  "description": "A widget with a drop-down list of items to choose from. *Name is subject to change.*",
+  "type": "Picker",
+  "description": "A widget with a drop-down list of items to choose from.",
   "include": ["Widget"],
   "properties": {
     "items": {
@@ -18,8 +18,8 @@
   },
   "links": [
     {
-      "title": "Simple Combo snippet",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/combo/combo.js"
+      "title": "Simple Picker snippet",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/picker/picker.js"
     }
   ]
 }

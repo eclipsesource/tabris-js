@@ -84,12 +84,13 @@
     _properties: {text: "string", selection: "boolean"}
   });
 
-  tabris.registerWidget("Combo", {
+  tabris.registerWidget("Picker", {
     _type: "rwt.widgets.Combo",
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
     _properties: {items: true, text: "string", selectionIndex: "natural"}
   });
+  tabris.Combo = tabris.Picker;
 
   tabris.registerWidget("Composite", {
     _type: "rwt.widgets.Composite",

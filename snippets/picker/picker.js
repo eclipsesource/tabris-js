@@ -1,11 +1,11 @@
 var page = tabris.create("Page", {
-  title: "Combo Box",
+  title: "Picker",
   topLevel: true
 });
 
 var items = ["North", "East", "South", "West"];
 
-tabris.create("Combo", {
+tabris.create("Picker", {
   layoutData: {left: 20, top: 20, right: 20},
   items: items,
   selectionIndex: 1

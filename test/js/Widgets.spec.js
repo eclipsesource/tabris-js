@@ -256,8 +256,8 @@ describe("Widgets", function() {
       expect(create.properties).toEqual({style: ["CHECK"], text: "foo"});
     });
 
-    it("Combo", function() {
-      tabris.create("Combo", {});
+    it("Picker", function() {
+      tabris.create("Picker", {});
 
       var create = nativeBridge.calls({op: "create"})[0];
       expect(create.type).toEqual("rwt.widgets.Combo");
