@@ -32,17 +32,16 @@
   };
 
   Module.createLoader = function(url) {
-    var src = tabris._client.load(url);
-    if (src) {
-      try {
-        return tabris._client.runInThisContext(wrapSource(src), url);
-      } catch (ex) {
-        // src may be an index.html
-        if (url.slice(-3) === ".js") {
-          throw new Error("Could not parse " + url);
-        }
-      }
+    var result;
+    try {
+      result = tabris._client.loadAndExecute(url, modulePrefix, modulePostfix);
+    } catch (ex) {
+      throw new Error("Could not parse " + url + ":" + ex);
     }
+    if (result.loadError) {
+      return null;
+    }
+    return result.executeResult;
   };
 
   Module.readJSON = function(url) {
@@ -126,9 +125,8 @@
     return request.slice(-1) === "/" ? folderPostfixes : filePostfixes;
   }
 
-  function wrapSource(source) {
-    return "(function (module, exports, require) { " + source + "\n});";
-  }
+  var modulePrefix = "(function (module, exports, require) { ";
+  var modulePostfix = "\n});";
 
   function dirname(id) {
     if (!id || id.slice(0, 1) !== ".") {

@@ -1,30 +1,36 @@
 tabris._start = function(client) {
-  tabris._client = client;
-  var rootModule = new tabris.Module();
   try {
-    rootModule.require("tabris");
-  } catch (error) {
-    console.error("Could not load tabris module: " + error);
-    console.log(error.stack);
-  }
-  if (tabris._init) {
-    tabris._init(client);
-  }
-  function loadMain() {
+    tabris._client = client;
+    var rootModule = new tabris.Module();
     try {
-      rootModule.require("./");
+      rootModule.require("tabris");
     } catch (error) {
-      console.error("Could not load main module: " + error);
+      console.error("Could not load tabris module: " + error);
       console.log(error.stack);
+      return;
     }
+    if (tabris._init) {
+      tabris._init(client);
+    }
+    var loadMain = function() {
+      try {
+        rootModule.require("./");
+      } catch (error) {
+        console.error("Could not load main module: " + error);
+        console.log(error.stack);
+      }
+    };
+    if (tabris._entryPoint) {
+      tabris._entryPoint(loadMain);
+      delete tabris._entryPoint;
+    } else {
+      loadMain();
+    }
+    tabris.trigger("flush");
+  } catch (ex) {
+    console.error(ex);
+    console.log(ex.stack);
   }
-  if (tabris._entryPoint) {
-    tabris._entryPoint(loadMain);
-    delete tabris._entryPoint;
-  } else {
-    loadMain();
-  }
-  tabris.trigger("flush");
 };
 
 tabris._notify = function() {

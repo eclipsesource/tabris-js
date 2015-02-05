@@ -54,18 +54,23 @@
 
   function handleElementInserted(parent, child) {
     if (parent.tagName === "HEAD" && child.tagName === "SCRIPT" && child.src) {
-      var bridge = tabris._nativeBridge._bridge;
-      // TODO: pushing big strings around is completely unnecessary, just parse it in load
-      var source = bridge.load(child.src);
-      if (typeof source === "string") {
-        bridge.runInThisContext(source, child.src);
-        if (typeof child.onload === "function") {
-          child.onload.call();
-        }
-      } else {
+      var result;
+      try {
+        result = tabris._client.loadAndExecute(child.src, "", "");
+      } catch (ex) {
+        console.error("Error in " + child.src + ": " + ex);
+        console.log(ex.stack);
         if (typeof child.onerror === "function") {
-          child.onerror.call();
+          child.onerror.call(window, ex);
         }
+        return;
+      }
+      if (result.loadError) {
+        if (typeof child.onerror === "function") {
+          child.onerror.call(window, new Error("Could not load " + child.src));
+        }
+      } else if (typeof child.onload === "function") {
+        child.onload.call(window);
       }
     }
   }

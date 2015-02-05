@@ -62,7 +62,6 @@ describe("DOMDocument", function() {
   describe("script element", function() {
 
     var script1, script2, nonScript, nativeBridge;
-    var source = "bar = 1;";
 
     beforeEach(function() {
       script1 = target.document.createElement("script");
@@ -70,15 +69,7 @@ describe("DOMDocument", function() {
       nonScript = target.document.createElement("div");
       nativeBridge = new NativeBridgeSpy();
       tabris._init(nativeBridge);
-      nativeBridge.load = jasmine.createSpy().and.returnValue(source);
-      /*jshint evil: true */
-      nativeBridge.runInThisContext = jasmine.createSpy().and.callFake(function(script) {
-        window.eval(script);
-      });
-    });
-
-    afterEach(function() {
-      delete window.bar;
+      nativeBridge.loadAndExecute = jasmine.createSpy().and.returnValue({});
     });
 
     it("getElementsByTagName returns scripts added to head", function() {
@@ -92,14 +83,13 @@ describe("DOMDocument", function() {
       expect(result).not.toContain(nonScript);
     });
 
-    it("loads and parses script", function() {
+    it("executes script", function() {
       script1.src = "foo.js";
 
       // Note: Unlike the browser we do this synchronously. This suffices for compatibility.
       target.document.head.appendChild(script1);
 
-      expect(window.bar).toBe(1);
-      expect(nativeBridge.runInThisContext).toHaveBeenCalledWith(source, "foo.js");
+      expect(nativeBridge.loadAndExecute).toHaveBeenCalledWith("foo.js", "", "");
     });
 
     it("does not load non-script element", function() {
@@ -108,7 +98,7 @@ describe("DOMDocument", function() {
       target.document.head.appendChild(nonScript);
 
       expect(window.bar).toBeUndefined();
-      expect(nativeBridge.runInThisContext).not.toHaveBeenCalled();
+      expect(nativeBridge.loadAndExecute).not.toHaveBeenCalled();
     });
 
     it("calls onload after successful load", function() {
@@ -118,13 +108,12 @@ describe("DOMDocument", function() {
 
       target.document.head.appendChild(script1);
 
-      expect(window.bar).toBe(1);
       expect(script1.onload).toHaveBeenCalled();
       expect(script1.onerror).not.toHaveBeenCalled();
     });
 
-    it("calls onerror when no script is returned", function() {
-      nativeBridge.load = jasmine.createSpy().and.returnValue(undefined);
+    it("calls onerror when script is not found", function() {
+      nativeBridge.loadAndExecute = jasmine.createSpy().and.returnValue({loadError: true});
       script1.src = "foo.js";
       script1.onload = jasmine.createSpy();
       script1.onerror = jasmine.createSpy();
@@ -132,7 +121,19 @@ describe("DOMDocument", function() {
       target.document.head.appendChild(script1);
 
       expect(script1.onload).not.toHaveBeenCalled();
-      expect(script1.onerror).toHaveBeenCalled();
+      expect(script1.onerror).toHaveBeenCalledWith(new Error("Could not load foo.js"));
+    });
+
+    it("calls onerror when script throws error", function() {
+      nativeBridge.loadAndExecute = jasmine.createSpy().and.throwError(new Error("foo"));
+      script1.src = "foo.js";
+      script1.onload = jasmine.createSpy();
+      script1.onerror = jasmine.createSpy();
+
+      target.document.head.appendChild(script1);
+
+      expect(script1.onload).not.toHaveBeenCalled();
+      expect(script1.onerror).toHaveBeenCalledWith(new Error("foo"));
     });
 
   });

@@ -66,16 +66,21 @@
     },
 
     _notify: function(id, event, param) {
-      var proxy = tabris._proxies[id];
-      if (proxy) {
-        try {
-          proxy._trigger(event, param);
-        } catch (error) {
-          console.error(error);
-          console.log(error.stack);
+      try {
+        var proxy = tabris._proxies[id];
+        if (proxy) {
+          try {
+            proxy._trigger(event, param);
+          } catch (error) {
+            console.error(error);
+            console.log(error.stack);
+          }
         }
+        tabris.trigger("flush");
+      } catch (ex) {
+        console.error(ex);
+        console.log(ex.stack);
       }
-      tabris.trigger("flush");
     },
 
     _reset: function() {
