@@ -36,14 +36,32 @@ module.exports = function(grunt) {
       }
     },
     jasmine: {
-      options: {
-        specs: "test/js/*.spec.js",
-        helpers: ["test/js/NativeBridgeSpy.js"],
-        version: "2.0.0",
-        display: "short",
-        summary: true
+      boot: {
+        options: {
+          specs: ["test/js/Module.spec.js"],
+          helpers: ["test/js/NativeBridgeSpy.js"],
+          version: "2.0.0",
+          display: "short",
+          summary: true
+        },
+        src: "build/boot.js"
       },
-      src: "build/tabris.js"
+      tabris: {
+        options: {
+          specs: grunt.file.expand("test/js/*.spec.js").filter(function(path) {
+            return path.indexOf("/util") === -1 && path.indexOf("/Module.spec.js") === -1;
+          }),
+          helpers: [
+            "test/js/NativeBridgeSpy.js",
+            "node_modules/underscore/underscore-min.js",
+            "test/js/FakeTabrisModule.js"
+          ],
+          version: "2.0.0",
+          display: "short",
+          summary: true
+        },
+        src: "build/tabris/tabris.js"
+      }
     },
     concat: {
       tabris: {
@@ -193,7 +211,8 @@ module.exports = function(grunt) {
 
   /* runs jasmine tests against the build output */
   grunt.registerTask("test", [
-    "jasmine"
+    "jasmine:boot",
+    "jasmine:tabris"
   ]);
 
   /* generates reference documentation */
@@ -212,7 +231,7 @@ module.exports = function(grunt) {
     "clean",
     "check",
     "build",
-    //"test",
+    "test",
     "doc",
     "examples"
   ]);

@@ -1,4 +1,5 @@
 describe("Widgets", function() {
+  /*globals _:false*/
 
   var nativeBridge;
 
@@ -42,7 +43,7 @@ describe("Widgets", function() {
       var custom = {foo: "bar", touchstart: false};
       tabris.registerWidget("TestType", {_listen: custom});
       expect(tabris.TestType._listen).toEqual(
-        util.extend({}, tabris.registerWidget._defaultListen, custom)
+        _.extend({}, tabris.registerWidget._defaultListen, custom)
       );
     });
 
@@ -50,7 +51,7 @@ describe("Widgets", function() {
       var custom = {foo: "bar", touchstart: false};
       tabris.registerWidget("TestType", {_trigger: custom});
       expect(tabris.TestType._trigger).toEqual(
-        util.extend({}, tabris.registerWidget._defaultTrigger, custom)
+        _.extend({}, tabris.registerWidget._defaultTrigger, custom)
       );
     });
 
@@ -64,7 +65,7 @@ describe("Widgets", function() {
       var custom = {foo: "bar", enabled: false};
       tabris.registerWidget("TestType", {_properties: custom});
       expect(tabris.TestType._properties).toEqual(
-        util.extend({}, tabris.registerWidget._defaultCheckProperty, custom)
+        _.extend({}, tabris.registerWidget._defaultCheckProperty, custom)
       );
     });
 

@@ -1,4 +1,6 @@
 ["Backbone", "tabris"].forEach(function(provider) {
+  /*globals _:false*/
+
   if (provider in window) {
 
     describe("Backbone-like Events (" + provider + ")", function() {
@@ -9,7 +11,7 @@
 
       beforeEach(function() {
         object = {};
-        util.extend(object, window[provider].Events);
+        _.extend(object, window[provider].Events);
         callback = jasmine.createSpy("callback");
         callback2 = jasmine.createSpy("callback");
         context = {};

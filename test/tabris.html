@@ -10,12 +10,9 @@
   <script type="text/javascript" src="../node_modules/jasmine-core/lib/jasmine-core/jasmine.js"></script>
   <script type="text/javascript" src="../node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js"></script>
   <script type="text/javascript" src="../node_modules/jasmine-core/lib/jasmine-core/boot.js"></script>
+  <script type="text/javascript" src="js/FakeTabrisModule.js"></script>
 
   <!-- source files -->
-  <script type="text/javascript">
-    window.module = { exports : {} };
-    window.require = function() {};
-  </script>
   <script type="text/javascript" src="../src/js/util.js"></script>
   <script type="text/javascript" src="../src/js/util-colors.js"></script>
   <script type="text/javascript" src="../src/js/util-fonts.js"></script>
@@ -47,6 +44,7 @@
 
   <!-- helper files -->
   <script type="text/javascript" src="js/NativeBridgeSpy.js"></script>
+  <script type="text/javascript" src="../node_modules/underscore/underscore-min.js"></script>
 
   <!-- catch specs that aren't executed due to load errors -->
   <script type="text/javascript">
