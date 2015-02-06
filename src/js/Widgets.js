@@ -107,8 +107,7 @@
   });
 
   tabris.registerWidget("TextView", {
-    _type: "rwt.widgets.Label",
-    _initProperties: {style: ["WRAP"]},
+    _type: "tabris.TextView",
     _properties: {
       alignment: ["choice", ["left", "right", "center"]],
       markupEnabled: "boolean",

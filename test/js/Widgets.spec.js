@@ -297,8 +297,8 @@ describe("Widgets", function() {
       tabris.create("TextView", {text: "foo", maxLines: null});
 
       var create = nativeBridge.calls({op: "create"})[0];
-      expect(create.type).toEqual("rwt.widgets.Label");
-      expect(create.properties).toEqual({style: ["WRAP"], text: "foo", maxLines: null});
+      expect(create.type).toEqual("tabris.TextView");
+      expect(create.properties).toEqual({text: "foo", maxLines: null});
     });
 
     it("TextView, maxLines: 0 is mapped to null", function() {
