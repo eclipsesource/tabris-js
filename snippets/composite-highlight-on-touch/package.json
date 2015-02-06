@@ -2,6 +2,8 @@
   "title": "Composite",
   "category": "Composite",
   "description": "Create a composite which gets highlighted on touch",
-  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
-  "main": "composite-highlight-on-touch.js"
+  "main": "composite-highlight-on-touch.js",
+  "dependencies": {
+    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+  }
 }

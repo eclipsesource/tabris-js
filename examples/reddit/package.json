@@ -2,6 +2,8 @@
   "title": "Reddit Pet Pictures",
   "description": "A small app using reddit API to show a listing of pet pictures",
   "category": "Small Apps",
-  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
-  "main": "reddit.js"
+  "main": "reddit.js",
+  "dependencies": {
+    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+  }
 }

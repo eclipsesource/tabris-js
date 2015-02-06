@@ -2,6 +2,8 @@
   "title": "Composite",
   "category": "Composite",
   "description": "Create composites and append children to them",
-  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
-  "main": "composite.js"
+  "main": "composite.js",
+  "dependencies": {
+    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+  }
 }

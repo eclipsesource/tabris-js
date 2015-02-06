@@ -2,6 +2,8 @@
   "title": "Z-Order",
   "category": "Layout",
   "description": "Overlapping widgets",
-  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
-  "main": "z-order.js"
+  "main": "z-order.js",
+  "dependencies": {
+    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+  }
 }

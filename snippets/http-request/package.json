@@ -2,6 +2,8 @@
   "title": "XMLHttpRequest",
   "category": "XMLHttpRequest",
   "description": "Use XMLHttpRequest to fetch JSON data from a web service",
-  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
-  "main": "http-request.js"
+  "main": "http-request.js",
+  "dependencies": {
+    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+  }
 }

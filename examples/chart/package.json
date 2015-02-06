@@ -3,8 +3,8 @@
   "description": "Embeds the chartjs.org charting library for simple charting",
   "category": "Web APIs",
   "dependencies": {
-    "chart.js": "*"
+    "chart.js": "*",
+    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
   },
-  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
   "main": "chartdemo.js"
 }

@@ -1,4 +1,6 @@
 {
-  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
-  "main": "selector.js"
+  "main": "selector.js",
+  "dependencies": {
+    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+  }
 }

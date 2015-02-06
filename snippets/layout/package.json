@@ -2,6 +2,8 @@
   "title": "Absolute Layout",
   "category": "Layout",
   "description": "Layout a widget with a fixed size and position",
-  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
-  "main": "layout.js"
+  "main": "layout.js",
+  "dependencies": {
+    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+  }
 }

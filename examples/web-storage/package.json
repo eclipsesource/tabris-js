@@ -2,6 +2,8 @@
   "title": "WebStorage",
   "description": "Showcases all feature of the persistent key/value store",
   "category": "Web APIs",
-  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
-  "main": "web-storage.js"
+  "main": "web-storage.js",
+  "dependencies": {
+    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+  }
 }

@@ -2,6 +2,8 @@
   "title": "Baseline Alignment",
   "category": "Layout",
   "description": "Align widgets on their baseline",
-  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
-  "main": "layout-baseline.js"
+  "main": "layout-baseline.js",
+  "dependencies": {
+    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+  }
 }

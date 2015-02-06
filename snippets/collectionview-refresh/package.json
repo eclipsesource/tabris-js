@@ -2,6 +2,8 @@
   "title": "Collection View with Pull-to-Refresh",
   "category": "Collection View",
   "description": "Create a collection view and enable pull-to-refresh",
-  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
-  "main": "collectionview-refresh.js"
+  "main": "collectionview-refresh.js",
+  "dependencies": {
+    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+  }
 }

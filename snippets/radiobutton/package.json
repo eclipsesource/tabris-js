@@ -2,6 +2,8 @@
   "title": "Radio Buttons",
   "category": "RadioButton",
   "description": "Create radio buttons with handlers",
-  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
-  "main": "radiobutton.js"
+  "main": "radiobutton.js",
+  "dependencies": {
+    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+  }
 }

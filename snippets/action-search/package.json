@@ -2,6 +2,8 @@
   "title": "Search Actions",
   "category": "Action",
   "description": "Create an action to perform a search with dynamic proposals",
-  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
-  "main": "search-action.js"
+  "main": "search-action.js",
+  "dependencies": {
+    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+  }
 }

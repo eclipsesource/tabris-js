@@ -2,6 +2,8 @@
   "title": "Text Input and Focus Listener",
   "category": "TextInput",
   "description": "Listen to focus events",
-  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
-  "main": "textinput-focus.js"
+  "main": "textinput-focus.js",
+  "dependencies": {
+    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+  }
 }

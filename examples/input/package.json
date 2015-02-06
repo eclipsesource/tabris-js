@@ -2,6 +2,8 @@
   "title": "Input Elements",
   "description": "Showcases various input elements like Text, Checkbox, Combo, ...",
   "category": "Small Apps",
-  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
-  "main": "input.js"
+  "main": "input.js",
+  "dependencies": {
+    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+  }
 }

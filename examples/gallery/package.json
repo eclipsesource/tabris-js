@@ -1,4 +1,6 @@
 {
-  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
-  "main": "gallery.js"
+  "main": "gallery.js",
+  "dependencies": {
+    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+  }
 }

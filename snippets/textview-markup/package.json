@@ -2,6 +2,8 @@
   "title": "TextView with markup",
   "category": "TextView",
   "description": "Creating text views with and without markup enabled",
-  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
-  "main": "textview-markup.js"
+  "main": "textview-markup.js",
+  "dependencies": {
+    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+  }
 }

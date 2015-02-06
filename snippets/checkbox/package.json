@@ -2,6 +2,8 @@
   "title": "Check Boxes",
   "category": "CheckBox",
   "description": "Create a check box with a handler",
-  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
-  "main": "checkbox.js"
+  "main": "checkbox.js",
+  "dependencies": {
+    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+  }
 }

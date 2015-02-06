@@ -2,6 +2,8 @@
   "title": "Cordova Demo",
   "description": "Demonstrates using cordova plug-ins in Tabris.js",
   "category": "Cordova",
-  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
-  "main": "app.js"
+  "main": "app.js",
+  "dependencies": {
+    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+  }
 }

@@ -2,8 +2,8 @@
   "name": "timezone-example",
   "version": "0.1.0",
   "main": "timezones.js",
-  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
   "dependencies": {
+    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz",
     "moment": "~2.8.4",
     "moment-timezone": "~0.2.5"
   }

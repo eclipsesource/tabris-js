@@ -2,6 +2,8 @@
   "title": "Text Input",
   "category": "TextInput",
   "description": "with listener",
-  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
-  "main": "textinput.js"
+  "main": "textinput.js",
+  "dependencies": {
+    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+  }
 }

@@ -2,6 +2,8 @@
   "title": "jQuery",
   "description": "Sample jQuery integration for using $.getJSON",
   "category": "Web APIs",
-  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
-  "main": "http-request.js"
+  "main": "http-request.js",
+  "dependencies": {
+    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+  }
 }

@@ -58,10 +58,11 @@ module.exports = function(grunt) {
   }
 
   function installDependencies(dir, manifest, callback) {
-    if (!("dependencies" in manifest)) {
+    preInstallTabris(dir, manifest);
+    if (Object.keys(manifest.dependencies).length === 0) {
       return callback();
     }
-    npm.load({prefix: dir}, function(err) {
+    npm.load({}, function(err) {
       if (err) {
         return callback(err);
       }
@@ -69,12 +70,19 @@ module.exports = function(grunt) {
       var modules = Object.keys(manifest.dependencies).map(function(key) {
         return key + "@" + manifest.dependencies[key];
       });
-      npm.commands.install(modules, callback);
+      npm.commands.install(dir, modules, callback);
     });
   }
 
   function exists(value) {
     return !!value;
+  }
+
+  function preInstallTabris(dir, manifest) {
+    delete manifest.dependencies.tabris;
+    grunt.file.copy("build/tabris/package.json", dir + "/node_modules/tabris/package.json");
+    grunt.file.copy("build/tabris/tabris.js", dir + "/node_modules/tabris/tabris.js");
+    grunt.file.copy("build/tabris/tabris.min.js", dir + "/node_modules/tabris/tabris.min.js");
   }
 
 };

@@ -2,6 +2,8 @@
   "title": "Video",
   "category": "Video",
   "description": "Play video",
-  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
-  "main": "video.js"
+  "main": "video.js",
+  "dependencies": {
+    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+  }
 }

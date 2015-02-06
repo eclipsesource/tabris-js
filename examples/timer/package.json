@@ -2,6 +2,8 @@
   "title": "Setting timers and intervals",
   "category": "Web APIs",
   "description": "Demonstrates using the tabris.js timer with the window.timer API",
-  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
-  "main": "timer.js"
+  "main": "timer.js",
+  "dependencies": {
+    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+  }
 }

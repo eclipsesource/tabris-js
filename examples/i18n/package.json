@@ -2,6 +2,8 @@
   "title": "Internationalization",
   "description": "Showcases internationalization by an example of a pizza app menu",
   "category": "Small Apps",
-  "tabris": "https://tabrisjs.com/downloads/nightly/tabris.min.js",
-  "main": "i18n.js"
+  "main": "i18n.js",
+  "dependencies": {
+    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+  }
 }
