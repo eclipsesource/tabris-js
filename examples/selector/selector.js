@@ -5,11 +5,11 @@ var page = tabris.create("Page", {
 
 var matchers = ["*", "Button", "TextView"];
 
-tabris.create("Combo", {
+tabris.create("Picker", {
   items: matchers,
   layoutData: {left: 10, top: 10}
 }).on("change:selection", function() {
-  var matcher = matchers[this.get("selectionIndex")]; // TODO: combo.get("text") not working??
+  var matcher = matchers[this.get("selectionIndex")]; // TODO: Picker.get("text") not working??
   var selected = page.children(matcher);
   selected.set("background", "red");
   window.setTimeout(function() {

@@ -50,7 +50,7 @@ var countryTextView = tabris.create("TextView", {
   text: "Country:"
 }).appendTo(page);
 
-tabris.create("Combo", {
+tabris.create("Picker", {
   layoutData: {left: [countryTextView, 10], right: 10, baseline: countryTextView},
   items: ["Germany", "Canada", "USA", "Bulgaria"],
   selectionIndex: 0
@@ -62,7 +62,7 @@ var classTextView = tabris.create("TextView", {
   text: "Class:"
 }).appendTo(page);
 
-tabris.create("Combo", {
+tabris.create("Picker", {
   layoutData: {left: [classTextView, 10], right: 10, baseline: classTextView},
   items: ["Business", "Economy", "Economy Plus"],
   selectionIndex: 0

@@ -19,7 +19,7 @@ var imageSizeTextView = tabris.create("TextView", {
   text: "Image"
 }).appendTo(page);
 
-var imageSizeCombo = tabris.create("Combo", {
+var imageSizePicker = tabris.create("Picker", {
   layoutData: {right: MARGIN, left: [imageSizeTextView, 0], baseline: imageSizeTextView},
   items: ["Large", "Small"],
   selectionIndex: 0
@@ -30,19 +30,19 @@ var scaleModeTextView = tabris.create("TextView", {
   text: "Scale mode"
 }).appendTo(page);
 
-var scaleModeCombo = tabris.create("Combo", {
+var scaleModePicker = tabris.create("Picker", {
   layoutData: {right: MARGIN, left: [scaleModeTextView, 0], baseline: scaleModeTextView},
   items: scaleModes,
   selectionIndex: 0
 }).appendTo(page);
 
-imageSizeCombo.on("change:selection", function() {
-  var index = imageSizeCombo.get("selectionIndex");
+imageSizePicker.on("change:selection", function() {
+  var index = imageSizePicker.get("selectionIndex");
   imageView.set("image", getImage(index));
 });
 
-scaleModeCombo.on("change:selection", function() {
-  var index = scaleModeCombo.get("selectionIndex");
+scaleModePicker.on("change:selection", function() {
+  var index = scaleModePicker.get("selectionIndex");
   imageView.set("scaleMode", scaleModes[index]);
 });
 
