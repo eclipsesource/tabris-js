@@ -1,9 +1,0 @@
-{
-  "title": "Creating a new page dynamically",
-  "category": "Page",
-  "description": "Demonstrates adding pages dynamically",
-  "main": "page-add-dynamically.js",
-  "dependencies": {
-    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
-  }
-}
