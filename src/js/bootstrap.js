@@ -9,6 +9,10 @@ tabris._start = function(client) {
       console.log(error.stack);
       return;
     }
+    tabris._client = client; // required by head.append
+    var cordovaScript = document.createElement("script");
+    cordovaScript.src = "./cordova.js";
+    document.head.appendChild(cordovaScript);
     if (tabris._init) {
       tabris._init(client);
     }
