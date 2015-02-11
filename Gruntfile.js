@@ -102,7 +102,7 @@ module.exports = function(grunt) {
           "LegacyCanvasContext.js",
           "WebStorage.js",
           "XMLHttpRequest.js"
-        ]).concat("build/cordova.tabris.js"),
+        ]),
         dest: "build/tabris/tabris.js"
       },
       boot: {
@@ -166,9 +166,6 @@ module.exports = function(grunt) {
     },
     examples: {
       src: ["snippets", "examples"]
-    },
-    curl: {
-      "build/cordova.tabris.js": "https://tabrisjs.com/downloads/nightly/cordova.tabris.js"
     }
   });
 
@@ -180,7 +177,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.loadNpmTasks("grunt-contrib-copy");
   grunt.loadNpmTasks("grunt-contrib-compress");
-  grunt.loadNpmTasks("grunt-curl");
   grunt.loadTasks("./grunt");
 
   /* runs static code analysis tools */
@@ -200,7 +196,6 @@ module.exports = function(grunt) {
 
   /* concatenates and minifies code */
   grunt.registerTask("build", [
-    "curl",
     "concat:tabris",
     "concat:boot",
     "uglify:tabris",
