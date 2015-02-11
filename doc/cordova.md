@@ -52,3 +52,18 @@ To get an application quickly just copy one of the [examples](https://github.com
 To run an app you can use the `cordova run` command as it is described in the [Cordova Emulator and Device Guide](http://cordova.apache.org/docs/en/edge/guide_cli_index.md.html#The%20Command-Line%20Interface_test_the_app_on_an_emulator_or_device).
 
 Building an app is also as simple as running one. You can use the `cordova build` command as it is described in the [Cordova Build Guide](http://cordova.apache.org/docs/en/edge/guide_cli_index.md.html#The%20Command-Line%20Interface_build_the_app).
+
+## Configuration
+You can configure the application using the `config.xml` file as it is described in the [Cordova config.xml Guide](http://cordova.apache.org/docs/en/edge/config_ref_index.md.html#The%20config.xml%20File).
+
+Tabris.js also make use of the following modified/additional attributes:
+
+### content
+The optional `<content>` element defines the app's starting page in ordinary Cordova apps. In Tabris.js you can use it to define the location of the `package.json` file within the `www` folder. E.g. `<content src="mySubFolder/package.json"/>`
+
+### preferences
+Tabris.js accepts the following custom preferences:
+
+| Name                    | Allowed Values | Default Value | Description |
+|-------------------------|----------------|---------------|-------------|
+| EnableDeveloperConsole  | true/false     | false         | Enables/Disables the [Tabris.js Developer Console](https://tabrisjs.com/documentation/getting-started#the-developer-console). |
