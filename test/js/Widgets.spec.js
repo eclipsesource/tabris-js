@@ -55,21 +55,21 @@ describe("Widgets", function() {
       );
     });
 
-    it("adds default checkProperty copy", function() {
+    it("adds default properties copy", function() {
       tabris.registerWidget("TestType", {});
-      expect(tabris.TestType._properties).toEqual(tabris.registerWidget._defaultCheckProperty);
-      expect(tabris.TestType._properties).not.toBe(tabris.registerWidget._defaultCheckProperty);
+      expect(tabris.TestType._properties).toEqual(tabris.registerWidget._defaultProperties);
+      expect(tabris.TestType._properties).not.toBe(tabris.registerWidget._defaultProperties);
     });
 
-    it("extends default checkProperty", function() {
+    it("extends default properties", function() {
       var custom = {foo: "bar", enabled: false};
       tabris.registerWidget("TestType", {_properties: custom});
       expect(tabris.TestType._properties).toEqual(
-        _.extend({}, tabris.registerWidget._defaultCheckProperty, custom)
+        _.extend({}, tabris.registerWidget._defaultProperties, custom)
       );
     });
 
-    it("keeps checkProperty true", function() {
+    it("keeps _properties true", function() {
       tabris.registerWidget("TestType", {_properties: true});
       expect(tabris.TestType._properties).toBe(true);
     });
@@ -160,6 +160,25 @@ describe("Widgets", function() {
       widget.set("id", "foo");
 
       expect(widget.get("id")).toBe("foo");
+    });
+
+    it("returns null for undefined layoutData", function() {
+      expect(widget.get("layoutData")).toBeNull();
+    });
+
+    it("stores layoutData property locally", function() {
+      var otherWidget = tabris.create("TestType");
+      widget.set("layoutData", {top: 10, left: [10, 20], right: [otherWidget, 10]});
+      expect(widget.get("layoutData")).toEqual({top: 10, left: [10, 20], right: [otherWidget, 10]});
+    });
+
+    it("replaced disposed proxies with 0 in returned layoutData", function() {
+      var otherWidget = tabris.create("TestType");
+
+      widget.set("layoutData", {top: 10, left: [10, 20], right: [otherWidget, 10]});
+      otherWidget.dispose();
+
+      expect(widget.get("layoutData")).toEqual({top: 10, left: [10, 20], right: [0, 10]});
     });
 
   });

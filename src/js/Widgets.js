@@ -7,8 +7,8 @@
     members._setProperty = util.extend({}, tabris.registerWidget._defaultSetProperty, members._setProperty || {});
     members._getProperty = util.extend({}, tabris.registerWidget._defaultGetProperty, members._getProperty || {});
     if (members._properties !== true) {
-      var defaultCheckProperty = tabris.registerWidget._defaultCheckProperty;
-      members._properties = util.extend({}, defaultCheckProperty, members._properties || {});
+      var defaultProperties = tabris.registerWidget._defaultProperties;
+      members._properties = util.extend({}, defaultProperties, members._properties || {});
     }
     tabris.registerType(type, members);
   };
@@ -26,7 +26,7 @@
     _defaultTrigger: {
       Resize: "change:bounds"
     },
-    _defaultCheckProperty: {
+    _defaultProperties: {
       enabled: "boolean",
       visible: "boolean",
       layoutData: "layoutData",
@@ -46,6 +46,10 @@
       },
       id: function(value) {
         this.id = value;
+      },
+      layoutData: function(value) {
+        this._layoutData = value;
+        this._nativeSet("layoutData", value);
       }
     },
     _defaultGetProperty: {
@@ -54,6 +58,9 @@
       },
       id: function() {
         return this.id;
+      },
+      layoutData: function() {
+        return this._layoutData;
       }
     }
   });
