@@ -13,17 +13,17 @@ tabris.create("CollectionView", {
   itemHeight: 100,
   layoutData: {left: 0, top: 0, right: 0, bottom: 0},
   initializeCell: function(cell) {
-    var price = tabris.create("Label", {
+    var price = tabris.create("TextView", {
       layoutData: {centerY: 0, right: MARGIN, width: 100},
       alignment: "right",
       font: "18px",
       foreground: "#a4c639"
     }).appendTo(cell);
-    var name = tabris.create("Label", {
+    var name = tabris.create("TextView", {
       layoutData: {left: MARGIN, top: MARGIN, right: [price, 0]},
       font: "bold 18px"
     }).appendTo(cell);
-    var description = tabris.create("Label", {
+    var description = tabris.create("TextView", {
       layoutData: {left: MARGIN, top: [name, MARGIN / 2], right: [price, 0]}
     }).appendTo(cell);
     tabris.create("Composite", {
