@@ -44,7 +44,7 @@ var titleComposite = tabris.create("Composite", {
 
 contentComposite.set("layoutData", {left: 0, right: 0, top: [titleComposite, 0], height: 1000});
 
-var teaserTextView = tabris.create("TextView", {
+tabris.create("TextView", {
   markupEnabled: true,
   text: "<b>The perfect side dish</b>",
   font: "16px",
@@ -53,7 +53,7 @@ var teaserTextView = tabris.create("TextView", {
 }).appendTo(titleComposite);
 
 tabris.create("TextView", {
-  layoutData: {left: MARGIN, top: [teaserTextView, MARGIN_SMALL], right: MARGIN},
+  layoutData: {left: MARGIN, bottom: MARGIN_SMALL, right: MARGIN},
   markupEnabled: true,
   text: "<b>INDIAN SUMMER SALAD</b>",
   font: "24px",
