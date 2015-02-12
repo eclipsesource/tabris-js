@@ -34,6 +34,18 @@
         "description": "Returns a (possibly empty) collection of all children of this widget that match the selector."
       }
     ],
+    "find": [
+      {
+        "parameters": [],
+        "returns": ["WidgetCollection"],
+        "description": "Returns a (possibly empty) collection of all descendants of this widget."
+      },
+      {
+        "parameters": ["selector"],
+        "returns": ["WidgetCollection"],
+        "description": "Returns a (possibly empty) collection of all descendants of this widget that match the selector."
+      }
+    ],
     "parent": [
       {
         "parameters": [],
@@ -108,6 +120,10 @@
     ]
   },
   "properties": {
+    "id": {
+      "type": "string",
+      "description": "A string to identify the widget by using selectors. Id's are optional. It is strongly recommended that they are unique within a page."
+    },
     "enabled": {
       "type": "boolean?true",
       "description": "Whether the widget can be operated."

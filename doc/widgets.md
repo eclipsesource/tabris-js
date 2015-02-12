@@ -143,7 +143,7 @@ Example:
 var parent = button.parent();
 ```
 
-### `children()`
+### `children(selector*)`
 
 Returns the list of children of this widget as a `WidgetCollection`. 
 
@@ -154,7 +154,22 @@ var firstChild = parent.children()[0];
 var lastChild = parent.children().last();
 ```
 
-A `WidgetCollection` provides a subset of the Array API (`length`, `forEach`, `filter`, and `indexOf`), as well as the additional methods `first`, `last`, and `toArray`. In addition, all common widget methods except `append` are available on a WidgetCollection.
+A `WidgetCollection` provides a subset of the Array API (`length`, `forEach`, `filter`, and `indexOf`), as well as the additional methods `first`, `last`, and `toArray`. In addition, all common widget methods except `append` are available on a WidgetCollection. When a selector is given only children that match the selector are returned:
+
+```javascript
+var allButtons = parent.children("Button");
+var myButton = parent.children("#myButton");
+```
+
+Parameters:
+- *selector (optional)* A selector to filter the list of children by.
+
+### `find(selector*)`
+
+Like `children`, but returns the list of all descendants of this widget as a `WidgetCollection`. 
+
+Parameters:
+- *selector (optional)* A selector to filter the list of descendants by.
 
 ## Events
 
@@ -180,6 +195,7 @@ var selectionHandler = function() {
 };
 button.on("selection", selectionHandler);
 ```
+
 ### `once(type, listener, context*)`
 
 Same as `on`, but removes the listener after it has been invoked by an event.

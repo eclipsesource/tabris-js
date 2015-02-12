@@ -103,3 +103,8 @@ Example:
 {scaleX: 2, scaleY: 2, rotation: Math.PI * 0.75}
 ```
 This transformation will make the widget twice as big and rotate it by 135&deg;.
+
+## Selector
+
+Selectors are used to filter a given list of widgets. It can be function returning a boolean for a given widget.
+However, more commonly a selector is a string that may either reference a widgets type (e.g. `"Button"`, `"TextView"`), or its id (`"#myButton"`, `"#myTextView"`).
