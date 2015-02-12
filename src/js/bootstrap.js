@@ -19,6 +19,7 @@ tabris._start = function(client) {
     var loadMain = function() {
       try {
         rootModule.require("./");
+        tabris.trigger("flush");
       } catch (error) {
         console.error("Could not load main module: " + error);
         console.log(error.stack);

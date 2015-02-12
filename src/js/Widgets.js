@@ -49,7 +49,14 @@
       },
       layoutData: function(value) {
         this._layoutData = value;
-        this._nativeSet("layoutData", value);
+        try {
+          renderLayoutData.call(this);
+        } catch (ex) {
+          if (!this._layoutDataPending) {
+            tabris.on("beforeFlush", renderLayoutListener, this);
+            this._layoutDataPending = true;
+          }
+        }
       }
     },
     _defaultGetProperty: {
@@ -60,10 +67,29 @@
         return this.id;
       },
       layoutData: function() {
-        return this._layoutData;
+        return this._layoutData ? this._layoutData() : null;
       }
     }
   });
+
+  function renderLayoutListener() {
+    try {
+      renderLayoutData.call(this);
+      tabris.off("beforeFlush", renderLayoutListener, this);
+      delete this._layoutDataPending;
+      delete this._hasPreliminaryLayout;
+    } catch (ex) {
+      if (!this._hasPreliminaryLayout) {
+        renderLayoutData.call(this, true);
+        this._hasPreliminaryLayout = true;
+
+      }
+    }
+  }
+
+  function renderLayoutData(force) {
+    this._nativeSet("layoutData", this._layoutData ? this._layoutData(this, force) : null);
+  }
 
   tabris.registerWidget("Button", {
     _type: "rwt.widgets.Button",

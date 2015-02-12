@@ -86,25 +86,6 @@ describe("Widgets", function() {
       nativeBridge.resetCalls();
     });
 
-    it("translates widgets to ids in layoutData", function() {
-      var other = new tabris.Proxy("other-id");
-
-      widget.set("layoutData", {left: 23, right: other, top: [other, 42]});
-
-      var call = nativeBridge.calls({op: "set"})[0];
-      var expected = {left: 23, right: other.cid, top: [other.cid, 42]};
-      expect(call.properties.layoutData).toEqual(expected);
-    });
-
-    it("translation does not modify layoutData", function() {
-      var other = new tabris.Proxy("other-id");
-      var layoutData = {left: 23, right: other, top: [other, 42]};
-
-      widget.set({layoutData: layoutData});
-
-      expect(layoutData.top).toEqual([other, 42]);
-    });
-
     it("translates foreground and background colors to arrays", function() {
       widget.set({foreground: "red", background: "rgba(1, 2, 3, 0.5)"});
 
@@ -160,25 +141,6 @@ describe("Widgets", function() {
       widget.set("id", "foo");
 
       expect(widget.get("id")).toBe("foo");
-    });
-
-    it("returns null for undefined layoutData", function() {
-      expect(widget.get("layoutData")).toBeNull();
-    });
-
-    it("stores layoutData property locally", function() {
-      var otherWidget = tabris.create("TestType");
-      widget.set("layoutData", {top: 10, left: [10, 20], right: [otherWidget, 10]});
-      expect(widget.get("layoutData")).toEqual({top: 10, left: [10, 20], right: [otherWidget, 10]});
-    });
-
-    it("replaced disposed proxies with 0 in returned layoutData", function() {
-      var otherWidget = tabris.create("TestType");
-
-      widget.set("layoutData", {top: 10, left: [10, 20], right: [otherWidget, 10]});
-      otherWidget.dispose();
-
-      expect(widget.get("layoutData")).toEqual({top: 10, left: [10, 20], right: [0, 10]});
     });
 
   });
@@ -247,6 +209,110 @@ describe("Widgets", function() {
       widget.get("visible");
 
       expect(nativeBridge.get).toHaveBeenCalledWith(widget.cid, "visibility");
+    });
+
+  });
+
+  describe("layoutData:", function() {
+
+    var parent, widget, other;
+
+    beforeEach(function() {
+      tabris.registerWidget("TestType", {});
+      parent = tabris.create("Composite");
+      widget = tabris.create("TestType").appendTo(parent);
+      other = tabris.create("TestType", {id: "other"}).appendTo(parent);
+      nativeBridge.resetCalls();
+    });
+
+    it("translate widgets to ids", function() {
+      widget.set("layoutData", {left: 23, right: other, top: [other, 42]});
+
+      var call = nativeBridge.calls({op: "set"})[0];
+      var expected = {left: 23, right: other.cid, top: [other.cid, 42]};
+      expect(call.properties.layoutData).toEqual(expected);
+    });
+
+    it("translate selector to ids", function() {
+      widget.set("layoutData", {left: 23, right: "#other", top: ["#other", 42]});
+
+      var call = nativeBridge.calls({op: "set"})[0];
+      var expected = {left: 23, right: other.cid, top: [other.cid, 42]};
+      expect(call.properties.layoutData).toEqual(expected);
+    });
+
+    it("translation does not modify layoutData", function() {
+      var layoutData = {left: 23, right: other, top: [other, 42]};
+
+      widget.set({layoutData: layoutData});
+
+      expect(layoutData.top).toEqual([other, 42]);
+    });
+
+    it("return null for undefined layoutData", function() {
+      expect(widget.get("layoutData")).toBeNull();
+    });
+
+    it("store layoutData property locally", function() {
+      widget.set("layoutData", {top: 10, left: [10, 20], right: [other, 10]});
+      expect(widget.get("layoutData")).toEqual({top: 10, left: [10, 20], right: [other, 10]});
+    });
+
+    it("getter does not translate selectors", function() {
+      widget.set("layoutData", {left: 23, right: "#other", top: ["#other", 42]});
+
+      var expected = {left: 23, right: "#other", top: ["#other", 42]};
+      expect(widget.get("layoutData")).toEqual(expected);
+    });
+
+    it("translate selector after other widget is added to parent", function() {
+      other.dispose();
+      widget.set("layoutData", {left: 23, right: "#other", top: ["#other", 42]});
+      other = tabris.create("TestType", {id: "other"}).appendTo(parent);
+
+      var call = nativeBridge.calls({op: "set"})[0];
+      var expected = {left: 23, right: other.cid, top: [other.cid, 42]};
+      expect(call.properties.layoutData).toEqual(expected);
+    });
+
+    it("translate selector after widget is added to parent", function() {
+      widget = tabris.create("TestType");
+
+      widget.set("layoutData", {left: 23, right: "#other", top: ["#other", 42]});
+      widget.appendTo(parent);
+
+      var call = nativeBridge.calls({op: "create"})[0];
+      var expected = {left: 23, right: other.cid, top: [other.cid, 42]};
+      expect(call.properties.layoutData).toEqual(expected);
+    });
+
+    it("translate non-matching selector to 0", function() {
+      widget.set("layoutData", {left: 23, right: "#mother", top: ["other", 42]});
+
+      var call = nativeBridge.calls({op: "set"})[0];
+      var expected = {left: 23, right: 0, top: [0, 42]};
+      expect(call.properties.layoutData).toEqual(expected);
+    });
+
+    it("set layoutData again until selector resolves", function() {
+      other.dispose();
+
+      widget.set("layoutData", {right: "#other"});
+      var calls1 = nativeBridge.calls({op: "set"});
+      nativeBridge.resetCalls();
+      var calls2 = nativeBridge.calls({op: "set"});
+      nativeBridge.resetCalls();
+      other = tabris.create("TestType", {id: "other"}).appendTo(parent);
+      var calls3 = nativeBridge.calls({op: "set"});
+      nativeBridge.resetCalls();
+      var calls4 = nativeBridge.calls({op: "set"});
+
+      expect(calls1.length).toBe(1);
+      expect(calls2.length).toBe(0);
+      expect(calls3.length).toBe(1);
+      expect(calls4.length).toBe(0);
+      expect(calls1[0].properties.layoutData).toEqual({right: 0});
+      expect(calls3[0].properties.layoutData).toEqual({right: other.cid});
     });
 
   });

@@ -16,6 +16,10 @@ All widgets support a property `layoutData` that defines how the widget should b
 - `width`
 - `height`
 
+If a widget is referenced in a layoutData, it has to be a sibling of the widget the layoutData is applied to. In place of a widget a `selector` string can also be given. The string is used to filter all siblings of the widget, using the first match as the reference. The selector may also reference a widget that will be added after the layoutData is set. However, once a widget is matched the selector will not be applied again. (The matching widget can not be replaced with another matching widget without re-applying the layoutData.)
+ 
+A widget reference that does not point to a current sibling will be treated as an offset of 0. 
+
 ### left
 Defines the position of the widget's left edge.
 Accepted values:

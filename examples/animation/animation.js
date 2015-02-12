@@ -6,17 +6,17 @@ var page = tabris.create("Page", {
 });
 
 var button = tabris.create("Button", {
-  text: "Animate"
+  text: "Animate",
+  layoutData: {left: MARGIN, right: MARGIN, top: ["#hello", MARGIN]}
 }).appendTo(page);
 
 var textView = tabris.create("TextView", {
+  id: "hello",
   layoutData: {left: MARGIN, top: MARGIN},
   background: "#6aa",
   foreground: "white",
   text: "Hello World!"
 }).appendTo(page);
-
-button.set("layoutData", {left: MARGIN, right: MARGIN, top: [textView, MARGIN]});
 
 button.on("selection", function() {
   textView.animate({

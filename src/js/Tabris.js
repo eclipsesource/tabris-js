@@ -52,6 +52,7 @@
     version: "${VERSION}",
 
     _init: function(client) {
+      tabris.off();
       tabris._client = client;
       tabris._nativeBridge = new tabris.NativeBridge(client);
       var i = 0;

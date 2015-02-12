@@ -37,16 +37,17 @@
     },
 
     get: function(id, name) {
-      this._operations.push(["get", id, name]);
-      return this.flush();
+      this.flush();
+      return this._bridge.get(id, name);
     },
 
     call: function(id, method, parameters) {
-      this._operations.push(["call", id, method, parameters]);
-      return this.flush();
+      this.flush();
+      return this._bridge.call(id, method, parameters);
     },
 
     flush: function() {
+      tabris.trigger("beforeFlush");
       var operations = this._operations;
       this._operations = [];
       this._currentOperation = {id: null};
@@ -67,11 +68,6 @@
             break;
           case "destroy":
             this._bridge.destroy(op[1]);
-            break;
-          case "get":
-            return this._bridge.get(op[1], op[2]);
-          case "call":
-            return this._bridge.call(op[1], op[2], op[3]);
         }
       }
     }

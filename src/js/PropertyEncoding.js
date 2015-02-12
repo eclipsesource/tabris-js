@@ -85,16 +85,11 @@
     },
 
     layoutData: function(value) {
-      var layoutData = checkLayoutData(value);
-      var result = {};
-      for (var key in layoutData) {
-        if (Array.isArray(layoutData[key])) {
-          result[key] = layoutData[key].map(tabris.PropertyEncoding.proxy);
-        } else {
-          result[key] = tabris.PropertyEncoding.proxy(layoutData[key]);
-        }
+      if (!value) {
+        return null;
       }
-      return result;
+      var layoutData = checkLayoutData(value);
+      return computeLayoutData.bind(window, layoutData);
     },
 
     bounds: function(value) {
@@ -105,8 +100,8 @@
       if (value instanceof tabris.Proxy) {
         return value.cid;
       }
-      if (value instanceof tabris.ProxyCollection && value[0]) {
-        return value[0].cid;
+      if (value instanceof tabris.ProxyCollection) {
+        return value[0] ? value[0].cid : null;
       }
       return value;
     },
@@ -155,5 +150,46 @@
     }
     return layoutData;
   }
+
+  function computeLayoutData(layoutData, targetWidget, force) {
+    if (!targetWidget) {
+      return layoutData;
+    }
+    var result = {};
+    var parent = targetWidget.parent() || emptyParent;
+    var proxyResolver = force ? toProxyIdForced : toProxyIdSave;
+    for (var key in layoutData) {
+      if (Array.isArray(layoutData[key])) {
+        result[key] = layoutData[key].map(proxyResolver, parent);
+      } else {
+        result[key] = proxyResolver.call(parent, layoutData[key]);
+      }
+    }
+    return result;
+  }
+
+  function toProxyIdForced(ref) {
+    if (typeof ref === "string") {
+      return tabris.PropertyEncoding.proxy(this.children(ref)) || 0;
+    }
+    return tabris.PropertyEncoding.proxy(ref) || 0;
+  }
+
+  function toProxyIdSave(ref) {
+    if (typeof ref === "string") {
+      var proxy = this.children(ref)[0];
+      if (!proxy) {
+        throw new Error();
+      }
+      return tabris.PropertyEncoding.proxy(proxy);
+    }
+    return tabris.PropertyEncoding.proxy(ref) || 0;
+  }
+
+  var emptyParent = {
+    children: function() {
+      return null;
+    }
+  };
 
 }());

@@ -12,7 +12,9 @@ describe("PropertyEncoding:", function() {
 
   describe("layoutData", function() {
 
-    var check = tabris.PropertyEncoding.layoutData;
+    var check = function(value) {
+      return value ? tabris.PropertyEncoding.layoutData(value)() : null;
+    };
 
     it("raises a warning for incomplete horizontal layoutData", function() {
       check({top: 0});
