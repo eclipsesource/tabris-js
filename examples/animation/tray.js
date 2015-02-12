@@ -23,7 +23,7 @@ var page = tabris.create("Page", {
 });
 
 tabris.create("TextView", {
-  layoutData: {left: MARGIN, right: MARGIN, top: MARGIN, bottom: MARGIN},
+  layoutData: {left: MARGIN, right: MARGIN, top: MARGIN},
   text: loremIpsum,
   foreground: "#777"
 }).appendTo(page);
