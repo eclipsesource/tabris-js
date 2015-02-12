@@ -113,7 +113,7 @@ function createTabFolder() {
   createBooksList(books).appendTo(relatedTab);
   var commentsTab = tabris.create("Tab", {title: "Comments"}).appendTo(tabFolder);
   tabris.create("TextView", {
-    layoutData: {left: PAGE_MARGIN, top: PAGE_MARGIN, right: PAGE_MARGIN, bottom: PAGE_MARGIN},
+    layoutData: {left: PAGE_MARGIN, top: PAGE_MARGIN, right: PAGE_MARGIN},
     text: "Great Book."
   }).appendTo(commentsTab);
   return tabFolder;
