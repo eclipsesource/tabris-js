@@ -1,8 +1,3 @@
-tabris.registerWidget("DateTime", {
-  _type: "rwt.widgets.DateTime",
-  _properties: {year: true, month: true, day: true}
-});
-
 var message;
 
 var page = tabris.create("Page", {
@@ -74,15 +69,6 @@ var dateTextView = tabris.create("TextView", {
   text: "Date:"
 }).appendTo(page);
 
-var current = new Date();
-var dateField = tabris.create("DateTime", {
-  style: ["DATE"],
-  layoutData: {left: [dateTextView, 10], right: 10, baseline: dateTextView},
-  year: current.getFullYear(),
-  month: current.getMonth(),
-  day: current.getDate()
-}).appendTo(page);
-
 var luggageTextView = tabris.create("TextView", {
   layoutData: {left: 10, top: [dateTextView, 18], width: 120},
   alignment: "left",
@@ -122,16 +108,12 @@ function populateMessage() {
   message = tabris.create("TextView", {
     layoutData: {left: 10, right: 10, top: [button, 10]},
     alignment: "left",
-    text: "Flight booked for: " + createName() + "\n" + "Departure: " + createDepartureDate()
+    text: "Flight booked for: " + createName() + "\n"
   }).appendTo(page);
 }
 
 function createName() {
   return [firstNameInput.get("text"), lastNameInput.get("text")].join(" ");
-}
-
-function createDepartureDate() {
-  return [dateField.get("year"), (dateField.get("month") + 1), dateField.get("day")].join("/");
 }
 
 page.open();
