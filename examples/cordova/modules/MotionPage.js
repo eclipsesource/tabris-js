@@ -32,7 +32,7 @@ var page = new PluginPage("Motion", "org.apache.cordova.device-motion", function
   });
 
   var textView = tabris.create("TextView", {
-    layoutData: {top: [buttonStopWatch, 20], left: 20, right: 20, bottom: 20}
+    layoutData: {top: [buttonStopWatch, 20], left: 20, right: 20}
   }).appendTo(parent);
 });
 

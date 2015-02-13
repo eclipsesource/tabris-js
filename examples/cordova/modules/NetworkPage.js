@@ -21,7 +21,7 @@ var page = new PluginPage("Network", "org.apache.cordova.network-information", f
   });
 
   var textView = tabris.create("TextView", {
-    layoutData: {top: [button, 20], left: 20, right: 20, bottom: 20}
+    layoutData: {top: [button, 20], left: 20, right: 20}
   }).appendTo(parent);
 });
 

@@ -53,7 +53,7 @@ var page = new PluginPage("Dialog", "org.apache.cordova.dialogs", function(paren
   });
 
   var textView = tabris.create("TextView", {
-    layoutData: {top: [buttonBeep, 20], left: 20, right: 20, bottom: 20}
+    layoutData: {top: [buttonBeep, 20], left: 20, right: 20}
   }).appendTo(parent);
 });
 
