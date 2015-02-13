@@ -15,6 +15,7 @@ var imageTextView = tabris.create("ImageView", {
 }).appendTo(scrollComposite);
 
 var contentComposite = tabris.create("Composite", {
+  layoutData: {left: 0, right: 0, top: ["#titleComposite", 0], height: 1000},
   background: "white"
 }).appendTo(scrollComposite);
 
@@ -39,10 +40,9 @@ tabris.create("TextView", {
 }).appendTo(contentComposite);
 
 var titleComposite = tabris.create("Composite", {
+  id: "titleComposite",
   background: "rgba(255,152,0,0.9)"
 }).appendTo(scrollComposite);
-
-contentComposite.set("layoutData", {left: 0, right: 0, top: [titleComposite, 0], height: 1000});
 
 tabris.create("TextView", {
   markupEnabled: true,
