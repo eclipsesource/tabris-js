@@ -32,28 +32,32 @@ $.getJSON("http://www.reddit.com/r/petpictures.json?limit=100", function(json) {
         layoutData: {left: MARGIN, top: 4, width: 76, height: 76},
         scaleMode: "fill"
       }).appendTo(cell);
-      var nameTextView = tabris.create("TextView", {
-        layoutData: {left: [imageView, 16], top: 5, right: 16, height: 60}
+      var nameText = tabris.create("TextView", {
+        maxLines: 2
       }).appendTo(cell);
-      var authorTextView = tabris.create("TextView", {
-        layoutData: {left: [imageView, 16], bottom: 4, width: 200},
+      var authorText = tabris.create("TextView", {
         foreground: "#234"
       }).appendTo(cell);
-      var commentsTextView = tabris.create("TextView", {
-        layoutData: {right: MARGIN, bottom: 4 , width: 200},
+      var commentsText = tabris.create("TextView", {
         alignment: "right",
         foreground: "green"
       }).appendTo(cell);
       // create a horizontal line
-      tabris.create("Composite", {
-        layoutData: {left: 0, right: 0, bottom: 0, height: 1},
+      var divider = tabris.create("Composite", {
         background: "rgba(20,20,20,0.3)"
       }).appendTo(cell);
       cell.on("itemchange", function(element) {
         imageView.set("image", {src: element.data.thumbnail});
-        nameTextView.set("text", element.data.title);
-        authorTextView.set("text", element.data.author);
-        commentsTextView.set("text", element.data.num_comments + " comments");
+        nameText.set("text", element.data.title);
+        authorText.set("text", element.data.author);
+        commentsText.set("text", element.data.num_comments + " comments");
+      }).on("change:bounds", function() {
+        var cellWidth = cell.get("bounds").width;
+        var textWidth = 200;
+        divider.set("layoutData", {top: 83, left: MARGIN, width: cellWidth - 2 * MARGIN, height: 1});
+        commentsText.set("layoutData", {top: 60, left: cellWidth - textWidth - MARGIN, height: 20, width: textWidth});
+        authorText.set("layoutData", {top: 60, left: 104, height: 20, width: textWidth});
+        nameText.set("layoutData", {left: 104, top: 5, width: cellWidth - textWidth - MARGIN});
       });
     }
   }).on("selection", function(event) {
