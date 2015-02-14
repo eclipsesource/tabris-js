@@ -1,28 +1,94 @@
-tabris.registerType("_Animation", {
-  _type: "tabris.Animation",
-  _listen: {Completion: true, Progress: true, Start: true},
-  _properties: true
-});
+(function() {
 
-tabris.Animation = {
+  tabris.registerType("_Animation", {
+    _type: "tabris.Animation",
+    _listen: {
+      completion: "Completion",
+      progress: "Progress",
+      start: "Start"
+    },
+    _trigger: {
+      Completion: "completion",
+      Progress: "progress",
+      Start: "start"
+    },
+    _properties: true
+  });
 
-  validOptions: {delay: true, duration: true, repeat: true, reverse: true, easing: true},
-
-  animate: function(target, properties, options) {
+  tabris.Animation = function(target, properties, options) {
     var validatedOptions = {};
+    var validatedProperties = {};
     for (var option in options) {
-      if (this.validOptions[option]) {
+      if (validOptions[option]) {
         validatedOptions[option] = options[option];
       } else {
         console.warn("Invalid animation option \"" + option + "\"");
       }
     }
-    tabris.create("_Animation", util.extend(validatedOptions, {
-      target: target,
-      properties: properties
-    })).on("Completion", function() {
-      this.dispose();
-    }).call("start");
-  }
+    for (var property in properties) {
+      if (validProperties[property]) {
+        validatedProperties[property] = properties[property];
+      } else {
+        console.warn("Invalid animation property \"" + property + "\"");
+      }
+    }
+    this._target = target;
+    // TODO: check/encode properties with PropertyEncoding.js
+    this._properties = validatedProperties;
+    this._options = validatedOptions;
+  };
 
-};
+  util.extend(tabris.Animation.prototype, tabris.Events, {
+
+    _start: function() {
+      var animation = this;
+      this._proxy = tabris.create("_Animation", util.extend(this._options, {
+        target: this._target,
+        properties: this._properties
+      }));
+      this._proxy._listen("completion", true);
+      var animation = this;
+      this._proxy.trigger = function() {
+        animation.trigger.apply(animation, arguments);
+        if (arguments[0] === "completion") {
+          this.dispose();
+          delete animation._proxy;
+        }
+      };
+      this._proxy.call("start");
+    },
+
+    cancel: function() {
+      if (this._proxy) {
+        this._proxy.call("cancel");
+      }
+    },
+
+    _listen: function(type) {
+      if (type !== "completion" && this._proxy) {
+        this._proxy._listen.apply(this._proxy, arguments);
+      }
+    }
+
+  });
+
+  tabris.Animation.animate = function(properties, options) {
+    var animation = new tabris.Animation(this, properties, options);
+    animation._start();
+    return animation;
+  };
+
+  var validOptions = {
+    delay: true,
+    duration: true,
+    repeat: true,
+    reverse: true,
+    easing: true
+  };
+
+  var validProperties = {
+    opacity: true,
+    transform: true
+  };
+
+}());

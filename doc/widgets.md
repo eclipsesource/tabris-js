@@ -70,33 +70,10 @@ label.set({
 
 ### `animate(properties, options)`
 
-Changes a number of widget properties with an animation. Currently, only the properties `transform` and `opacity` are supported. Does not yet return any value. 
+Changes one or more widget properties with an animation. See [Animations](animations). 
 
-Parameters:
 
-- *properties*: a set of widget properties to set (*object*)
-- *options*: the properties of the animation itself
-  - *delay*: time to wait until the animation starts in ms, defaults to `0`
-  - *duration*: duration of the animation in ms
-  - *easing*: one of `linear`, `ease-in`, `ease-out`, `ease-in-out`
-  - *repeat*: number of times to repeat the animation, defaults to `0`
-  - *reverse*: plays the animation backwards if set to `true`
 
-Example:
-```javascript
-label.animate({
-  opacity: 0,
-  transform: {
-    translationX: 200,
-    translationY: 200,
-    scaleX: 0.1,
-    scaleY: 0.1
-  }
-}, {
-  duration: 1000,
-  easing: "ease-out"
-});
-```
 
 ## The Widget Hierarchy
 

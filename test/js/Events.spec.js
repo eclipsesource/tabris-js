@@ -235,6 +235,7 @@
       });
 
       if (provider === "tabris") {
+
         describe("_isListening", function() {
 
           describe("when no callbacks are attached", function() {
@@ -273,6 +274,34 @@
               expect(object._isListening("foo")).toBe(false);
             });
           });
+        });
+
+        describe("_checkDisposed", function() {
+
+          beforeEach(function() {
+            spyOn(object, "_checkDisposed");
+          });
+
+          it("is called for 'on'", function() {
+            object.on("foo", function() {});
+            expect(object._checkDisposed).toHaveBeenCalled();
+          });
+
+          it("is called for 'off'", function() {
+            object.off("foo");
+            expect(object._checkDisposed).toHaveBeenCalled();
+          });
+
+          it("is called for 'once'", function() {
+            object.once("foo", function() {});
+            expect(object._checkDisposed).toHaveBeenCalled();
+          });
+
+          it("is called for 'trigger'", function() {
+            object.trigger("foo");
+            expect(object._checkDisposed).toHaveBeenCalled();
+          });
+
         });
       }
 

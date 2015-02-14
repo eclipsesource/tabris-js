@@ -1,7 +1,7 @@
 (function() {
 
   tabris.registerWidget = function(type, members) {
-    members = util.clone(members);
+    members = util.extend(util.clone(members), tabris.Animation);
     members._listen = util.extend({}, tabris.registerWidget._defaultListen, members._listen || {});
     members._trigger = util.extend({}, tabris.registerWidget._defaultTrigger, members._trigger || {});
     members._setProperty = util.extend({}, tabris.registerWidget._defaultSetProperty, members._setProperty || {});

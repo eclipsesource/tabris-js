@@ -56,32 +56,9 @@
       return this;
     },
 
-    animate: function(properties, options) {
-      tabris.Animation.animate(this, properties, options);
-    },
-
     call: function(method, parameters) {
       this._checkDisposed();
       return tabris._nativeBridge.call(this.cid, method, parameters);
-    },
-
-    on: function(event, listener, context) {
-      this._checkDisposed();
-      var wasListening = this._isListening(event);
-      tabris.Events.on.call(this, event, listener, context);
-      if (!wasListening) {
-        this._listen(event, true);
-      }
-      return this;
-    },
-
-    off: function(event, listener, context) {
-      this._checkDisposed();
-      tabris.Events.off.call(this, event, listener, context);
-      if (!this._isListening(event)) {
-        this._listen(event, false);
-      }
-      return this;
     },
 
     dispose: function() {

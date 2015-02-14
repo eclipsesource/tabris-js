@@ -587,19 +587,6 @@ describe("Proxy", function() {
 
     });
 
-    describe("animate", function() {
-
-      it("create internal animate", function() {
-        spyOn(tabris.Animation, "animate");
-
-        var result = proxy.animate({foo: "bar"}, {foo2: "bar2"});
-
-        expect(result).not.toBeDefined();
-        expect(tabris.Animation.animate).toHaveBeenCalledWith(proxy, {foo: "bar"}, {foo2: "bar2"});
-      });
-
-    });
-
     describe("call", function() {
 
       it("calls native call", function() {

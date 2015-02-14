@@ -1,6 +1,8 @@
 tabris.Events = {
 
   on: function(type, callback, context) {
+    this._checkDisposed();
+    var wasListening = this._isListening(type);
     if (!this._callbacks) {
       this._callbacks = [];
     }
@@ -10,10 +12,14 @@ tabris.Events = {
         ctx: context
       }
     ]);
+    if (!wasListening) {
+      this._listen(type, true);
+    }
     return this;
   },
 
   off: function(type, callback, context) {
+    this._checkDisposed();
     if (this._callbacks) {
       if (!type) {
         delete this._callbacks;
@@ -39,10 +45,14 @@ tabris.Events = {
         }
       }
     }
+    if (!this._isListening(type)) {
+      this._listen(type, false);
+    }
     return this;
   },
 
   once: function(type, callback, context) {
+    this._checkDisposed();
     var self = this;
     var wrappedCallback = function() {
       self.off(type, wrappedCallback, context);
@@ -53,6 +63,7 @@ tabris.Events = {
   },
 
   trigger: function(type /*, args* */) {
+    this._checkDisposed();
     if (this._callbacks && type in this._callbacks) {
       var callbacks = this._callbacks[type];
       var args = Array.prototype.slice.call(arguments, 1);
@@ -66,7 +77,10 @@ tabris.Events = {
 
   _isListening: function(type) {
     return !!this._callbacks && (!type || type in this._callbacks);
-  }
+  },
+
+  _checkDisposed: function() {},
+  _listen: function() {}
 
 };
 

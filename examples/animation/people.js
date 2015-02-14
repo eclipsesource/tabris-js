@@ -88,23 +88,17 @@ function animateInScaleUp(widget, delay) {
 }
 
 function animateOutLeftCreateCurrentPerson(person) {
-  // this animation uses internal api to get notified when the animation ended
-  // the callback will be exposed via official api soon
-  tabris.create("_Animation", {
-    target: personDetailView,
+  personDetailView.animate({
+    opacity: 0.0,
+    transform: {translationX: -64}
+  }, {
     duration: 500,
-    easing: "ease-out",
-    properties: {
-      opacity: 0.0,
-      transform: {
-        translationX: -64
-      }
-    }
-  }).on("Completion", function() {
+    easing: "ease-out"
+  }).on("completion", function() {
     this.dispose();
     personDetailView.dispose();
     personDetailView = createPersonDetail(personDetailsParent, person, 0);
-  }).call("start");
+  });
 }
 
 function createPersonDetail(parent, person, delay) {

@@ -85,7 +85,7 @@ trayContent.on("change:bounds", function() {
 strap.on("touchstart", function(e) {
   prevEvent = e;
   if (animation !== undefined) {
-    animation.call("cancel");
+    animation.cancel();
   }
 });
 
@@ -117,25 +117,19 @@ function positionTrayInRestingState() {
   if (duration < 0) {
     duration *= -1;
   }
-  animation = tabris.create("_Animation", {
-    target: tray,
+  animation = tray.animate({transform: {translationY: translationTarget}}, {
     duration: duration,
-    easing: "ease-out", // "linear", "ease-in", "ease-out", "ease-in-out"
-    properties: {
-      transform: {
-        translationY: translationTarget
-      }
-    }
-  }).on("Progress", function() {
+    easing: "ease-out" // "linear", "ease-in", "ease-out", "ease-in-out"
+  }).on("progress", function() {
     var translationY = tray.get("transform").translationY;
     updateShadeOpacity(translationY);
     updateStrapTextViewRotation(translationY);
-  }).on("Completion", function() {
+  }).on("completion", function() {
     this.dispose();
     animation = undefined;
     // TODO remove the following workaround when tabris-ios #538 is implemented
     var offsetY = tray.get("transform").translationY;
     updateShadeOpacity(offsetY);
     updateStrapTextViewRotation(offsetY);
-  }).call("start");
+  });
 }
