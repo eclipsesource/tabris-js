@@ -61,6 +61,25 @@
       return tabris._nativeBridge.call(this.cid, method, parameters);
     },
 
+    apply: function(sheet) {
+      var scope = new tabris.ProxyCollection(this._children.concat(this), "*", true);
+      if (sheet["*"]) {
+        scope.set(sheet["*"]);
+      }
+      var selector;
+      for (selector in sheet) {
+        if (selector !== "*" && selector[0] !== "#") {
+          scope.filter(selector).set(sheet[selector]);
+        }
+      }
+      for (selector in sheet) {
+        if (selector[0] === "#") {
+          scope.filter(selector).set(sheet[selector]);
+        }
+      }
+      return this;
+    },
+
     dispose: function() {
       if (!this._isDisposed) {
         this._destroy();

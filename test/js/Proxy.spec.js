@@ -834,24 +834,97 @@ describe("Proxy", function() {
 
     });
 
-    describe("find", function() {
+    describe("with children", function() {
 
       var child1, child2, child1_1, child1_2, child1_2_1;
 
       beforeEach(function() {
-        child1 = tabris.create("TestType", {id: "foo"}).appendTo(proxy);
+        tabris.registerWidget("TestType2", {
+          _supportsChildren: true
+        });
+        child1 = tabris.create("TestType2", {id: "foo"}).appendTo(proxy);
         child2 = tabris.create("TestType", {id: "bar"}).appendTo(proxy);
         child1_1 = tabris.create("TestType", {}).appendTo(child1);
-        child1_2 = tabris.create("TestType", {}).appendTo(child1);
-        child1_2_1 = tabris.create("TestType", {id: "foo"}).appendTo(child1_2);
       });
 
-      it("* selector returns all descendants", function() {
-        expect(proxy.find("*").toArray()).toEqual([child1, child1_1, child1_2, child1_2_1, child2]);
+      afterEach(function() {
+        delete tabris.TestType2;
       });
 
-      it("# selector returns all descendants with given id", function() {
-        expect(proxy.find("#foo").toArray()).toEqual([child1, child1_2_1]);
+      describe("find", function() {
+
+        beforeEach(function() {
+          child1_2 = tabris.create("TestType", {}).appendTo(child1);
+          child1_2_1 = tabris.create("TestType", {id: "foo"}).appendTo(child1_2);
+        });
+
+        it("* selector returns all descendants", function() {
+          expect(proxy.find("*").toArray()).toEqual([child1, child1_1, child1_2, child1_2_1, child2]);
+        });
+
+        it("# selector returns all descendants with given id", function() {
+          expect(proxy.find("#foo").toArray()).toEqual([child1, child1_2_1]);
+        });
+
+      });
+
+      describe("apply", function() {
+
+        var targets;
+
+        beforeEach(function() {
+          targets = [proxy, child1, child2, child1_1];
+          targets.forEach(function(target) {
+            target.set = jasmine.createSpy();
+          });
+        });
+
+        it("returns self", function() {
+          expect(proxy.apply({})).toBe(proxy);
+        });
+
+        it("applies properties to all children", function() {
+          var props = {prop1: "v1", prop2: "v2"};
+          proxy.apply({"*": props});
+
+          expect(proxy.set).toHaveBeenCalledWith(props);
+          expect(child1.set).toHaveBeenCalledWith(props);
+          expect(child2.set).toHaveBeenCalledWith(props);
+          expect(child1_1.set).toHaveBeenCalledWith(props);
+        });
+
+        it("applies properties to children with specific id", function() {
+          proxy.apply({"#foo": {prop1: "v1"}, "#bar": {prop2: "v2"}});
+
+          expect(proxy.set).not.toHaveBeenCalled();
+          expect(child1.set).toHaveBeenCalledWith({prop1: "v1"});
+          expect(child2.set).toHaveBeenCalledWith({prop2: "v2"});
+          expect(child1_1.set).not.toHaveBeenCalled();
+        });
+
+        it("applies properties to children with specific type", function() {
+          proxy.apply({"TestType2": {prop1: "v1"}});
+
+          expect(proxy.set).not.toHaveBeenCalled();
+          expect(child1.set).toHaveBeenCalledWith({prop1: "v1"});
+          expect(child2.set).not.toHaveBeenCalled();
+          expect(child1_1.set).not.toHaveBeenCalled();
+        });
+
+        it("applies properties in order *, Type, id", function() {
+          proxy.apply({
+            "#foo": {prop1: "v3"},
+            "TestType2": {prop1: "v2"},
+            "*": {prop1: "v1"}
+          });
+
+          expect(child1.set.calls.allArgs()).toEqual([
+            [{prop1: "v1"}],
+            [{prop1: "v2"}],
+            [{prop1: "v3"}]
+          ]);
+        });
+
       });
 
     });
