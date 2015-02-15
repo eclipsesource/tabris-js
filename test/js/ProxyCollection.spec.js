@@ -1,9 +1,12 @@
 describe("ProxyCollection", function() {
 
+  var counter = 0;
   var mockProxy = function() {
-    return jasmine.createSpyObj("Proxy",
+    var mock = jasmine.createSpyObj("Proxy",
       ["set", "get", "append", "appendTo", "on", "off", "parent", "children", "animate", "dispose"]
     );
+    mock.cid = "o" + counter++;
+    return mock;
   };
 
   var mocks, collection;
@@ -219,6 +222,20 @@ describe("ProxyCollection", function() {
 
       expect(collection.find("*").toArray().length).toEqual(children.length);
       expect(collection.find("*").toArray()).toEqual(children);
+    });
+
+    it("find() returns no duplicates", function() {
+      var children = [mockProxy(), mockProxy(), mockProxy(), mockProxy()];
+      mocks[0]._children = [children[0]];
+      children[0]._children = [children[1]];
+      children[1]._children = [children[2]];
+      children[2]._children = [children[3]];
+
+      var result = collection.find("*").find("*");
+      expect(result.length).toBe(3);
+      expect(result.indexOf(children[1])).not.toBe(-1);
+      expect(result.indexOf(children[2])).not.toBe(-1);
+      expect(result.indexOf(children[3])).not.toBe(-1);
     });
 
   });

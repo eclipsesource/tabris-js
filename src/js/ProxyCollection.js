@@ -116,7 +116,18 @@
   }
 
   function getFilter(selector) {
-    return selector instanceof Function ? selector : createMatcher(selector);
+    var matches = {};
+    var filter = selector instanceof Function ? selector : createMatcher(selector);
+    return function(widget) {
+      if (matches[widget.cid]) {
+        return false;
+      }
+      if (filter(widget)) {
+        matches[widget.cid] = true;
+        return true;
+      }
+      return false;
+    };
   }
 
   function createMatcher(selector) {
