@@ -181,41 +181,29 @@
   });
 
   tabris.registerWidget("TextInput", {
-    _type: "rwt.widgets.Text",
-    _create: function(properties) {
-      var style = textTypeToStyle[properties.type] || textTypeToStyle["default"];
-      var result = this.super("_create", properties);
-      this._nativeSet("style", style);
-      return result;
-    },
+    _type: "tabris.TextInput",
     _listen: {
-      focus: "FocusIn",
-      blur: "FocusOut",
-      accept: "DefaultSelection",
-      "change:text": "Modify"
+      focus: true,
+      blur: true,
+      accept: true,
+      "change:text": "modify"
     },
     _trigger: {
-      FocusIn: "focus",
-      FocusOut: "blur",
-      DefaultSelection: "accept",
-      Modify: "change:text"
+      modify: "change:text"
     },
     _properties: {
       type: ["choice", ["default", "password", "search", "multiline"]],
       text: "string",
       message: "string",
       editable: "boolean",
-      textLimit: "natural"
+      maxChars: "natural",
+      alignment: ["choice", ["left", "center", "right"]],
+      autoCorrect: "boolean",
+      autoCapitalize: "boolean",
+      keyboard: ["choice", ["ascii", "decimal", "email", "number", "numbersAndPunctuation", "phone", "url"]]
     }
   });
   tabris.Text = tabris.TextInput;
-
-  var textTypeToStyle = {
-    password: ["BORDER", "SINGLE", "PASSWORD"],
-    search: ["BORDER", "SINGLE", "SEARCH"],
-    multiline: ["BORDER", "MULTI"],
-    default: ["BORDER", "SINGLE"]
-  };
 
   tabris.registerWidget("ToggleButton", {
     _type: "rwt.widgets.Button",

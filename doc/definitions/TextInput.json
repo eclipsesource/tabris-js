@@ -18,8 +18,21 @@
     "editable": {
       "type": "boolean"
     },
-    "textLimit": {
-      "type": "number"
+    "maxChars": {
+      "type": "number",
+      "description": "The maximum number of characters that can be entered."
+    },
+    "alignment": {
+      "type": "string:left|right|center?left",
+      "description": "The horizontal alignment of the text."
+    },
+    "autoCorrect": {
+      "type": "boolean?false",
+      "description": "Enables the spell checker and auto-correction feature."
+    },
+    "autoCapitalize": {
+      "type": "boolean?false",
+      "description": "Automatically switch to capital letters after every key pressed."
     }
   },
   "events": {
@@ -38,8 +51,8 @@
   },
   "links": [
     {
-      "title": "Simple Text snippet",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/text/text.js"
+      "title": "Simple TextInput snippet",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/textinput/textinput.js"
     },
     {
       "title": "Example with Text and other input controls",

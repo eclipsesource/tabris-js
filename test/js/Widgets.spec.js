@@ -413,32 +413,8 @@ describe("Widgets", function() {
       tabris.create("TextInput", {text: "foo"});
 
       var create = nativeBridge.calls({op: "create"})[0];
-      expect(create.type).toEqual("rwt.widgets.Text");
-      expect(create.properties).toEqual({style: ["BORDER", "SINGLE"], text: "foo"});
-    });
-
-    it("Text (type='password')", function() {
-      tabris.create("TextInput", {type: "password"});
-
-      var create = nativeBridge.calls({op: "create"})[0];
-      expect(create.type).toEqual("rwt.widgets.Text");
-      expect(create.properties.style).toEqual(["BORDER", "SINGLE", "PASSWORD"]);
-    });
-
-    it("Text (type='search')", function() {
-      tabris.create("TextInput", {type: "search"});
-
-      var create = nativeBridge.calls({op: "create"})[0];
-      expect(create.type).toEqual("rwt.widgets.Text");
-      expect(create.properties.style).toEqual(["BORDER", "SINGLE", "SEARCH"]);
-    });
-
-    it("Text (type='multiline')", function() {
-      tabris.create("TextInput", {type: "multiline"});
-
-      var create = nativeBridge.calls({op: "create"})[0];
-      expect(create.type).toEqual("rwt.widgets.Text");
-      expect(create.properties.style).toEqual(["BORDER", "MULTI"]);
+      expect(create.type).toEqual("tabris.TextInput");
+      expect(create.properties).toEqual({text: "foo"});
     });
 
     it("WebView", function() {
