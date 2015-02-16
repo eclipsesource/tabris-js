@@ -110,8 +110,9 @@
     _listen: function(event, state) {
       var listen = this.constructor && this.constructor._listen && this.constructor._listen[event];
       if (!listen) {
-        console.info(this.type + ": Unknown event type " + event);
-      } else if (typeof listen === "string") {
+        return;
+      }
+      if (typeof listen === "string") {
         this._nativeListen(listen, state);
       } else if (listen instanceof Function) {
         listen.call(this, state);

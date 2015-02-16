@@ -646,14 +646,6 @@ describe("Proxy", function() {
         expect(call.listen).toEqual(true);
       });
 
-      it("only prints info for unknown event", function() {
-        proxy.on("unknown", listener);
-
-        expect(nativeBridge.calls({op: "listen", event: "unknown"}).length).toBe(0);
-        var warning = "TestType: Unknown event type unknown";
-        expect(console.info).toHaveBeenCalledWith(warning);
-      });
-
       it("calls native listen with translated event name", function() {
         tabris.TestType._listen.bar = "bar2";
         proxy.on("bar", listener);
