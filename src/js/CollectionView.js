@@ -91,6 +91,22 @@
       return items[index];
     },
 
+    refresh: function(index) {
+      if (arguments.length === 0) {
+        this.call("update", {reload: [0, this._items.length]});
+        return;
+      }
+      if (typeof index !== "number" || !isFinite(index)) {
+        throw new Error("Illegal index");
+      }
+      if (index < 0) {
+        index += this._items.length;
+      }
+      if (this._items[index]) {
+        this.call("update", {reload: [index, 1]});
+      }
+    },
+
     _insert: function(items) {
       var length = this._items.length;
       Array.prototype.push.apply(this._items, items);

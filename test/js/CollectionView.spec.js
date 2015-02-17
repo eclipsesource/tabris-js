@@ -176,7 +176,7 @@ describe("CollectionView", function() {
     var view;
 
     beforeEach(function() {
-      view = tabris.create("CollectionView", {items: [1, 2, 3]}).appendTo(parent);
+      view = tabris.create("CollectionView", {items: ["A", "B", "C"]}).appendTo(parent);
     });
 
     it("calls update after create and listen calls", function() {
@@ -187,6 +187,48 @@ describe("CollectionView", function() {
 
       expect(allCalls.indexOf(updateCall)).toBeGreaterThan(allCalls.indexOf(listen1Call));
       expect(allCalls.indexOf(updateCall)).toBeGreaterThan(allCalls.indexOf(listen2Call));
+    });
+
+    it("refresh without parameters calls native update", function() {
+      nativeBridge.resetCalls();
+
+      view.refresh();
+
+      var updateCall = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
+      expect(updateCall.parameters.reload).toEqual([0, 3]);
+    });
+
+    it("refresh calls native update", function() {
+      nativeBridge.resetCalls();
+
+      view.refresh(1);
+
+      var updateCall = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
+      expect(updateCall.parameters.reload).toEqual([1, 1]);
+    });
+
+    it("refresh accepts negative index", function() {
+      nativeBridge.resetCalls();
+
+      view.refresh(-1);
+
+      var updateCall = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
+      expect(updateCall.parameters.reload).toEqual([2, 1]);
+    });
+
+    it("refresh ignores out-of-bounds index", function() {
+      nativeBridge.resetCalls();
+
+      view.refresh(5);
+
+      var calls = nativeBridge.calls({op: "call", method: "update", id: view.cid});
+      expect(calls).toEqual([]);
+    });
+
+    it("refresh fails with invalid parameter", function() {
+      expect(function() {
+        view.refresh(NaN);
+      }).toThrow();
     });
 
   });

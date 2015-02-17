@@ -37,6 +37,18 @@
       "description": "Fired when the user requested a refresh. An event listener should reset the `refreshIndicator` property when refresh is finished."
     }
   },
+  "methods": {
+    "refresh": [
+      {
+        "parameters": [],
+        "description": "Triggers a refresh of all visible items. This will issue `itemchange` events on the corresponding cells."
+      },
+      {
+        "parameters": ["index"],
+        "description": "Triggers a refresh of the item with the given index. If the item is scrolled into view, an `itemchange` event will be issued on the corresponding cell."
+      }
+    ]
+  },
   "links": [
     {
       "title": "CollectionView example",
