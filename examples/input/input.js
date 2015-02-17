@@ -63,14 +63,8 @@ tabris.create("Picker", {
   selectionIndex: 0
 }).appendTo(page);
 
-var dateTextView = tabris.create("TextView", {
-  layoutData: {left: 10, top: [classTextView, 18], width: 120},
-  alignment: "left",
-  text: "Date:"
-}).appendTo(page);
-
 var luggageTextView = tabris.create("TextView", {
-  layoutData: {left: 10, top: [dateTextView, 18], width: 120},
+  layoutData: {left: 10, top: [classTextView, 18], width: 120},
   alignment: "left",
   text: "Luggage:"
 }).appendTo(page);
@@ -82,13 +76,13 @@ var luggageWeight = tabris.create("TextView", {
 }).appendTo(page);
 
 var luggage = tabris.create("Slider", {
-  layoutData: {left: [luggageTextView, 10], right: [luggageWeight, 10], top: [dateTextView, 18]}
+  layoutData: {left: [luggageTextView, 10], right: [luggageWeight, 10], top: [classTextView, 18]}
 }).on("change:selection", function() {
   luggageWeight.set("text", this.get("selection") + " Kg");
 }).appendTo(page);
 
 var checkbox = tabris.create("CheckBox", {
-  layoutData: {left: [dateTextView, 10], right: 10, top: [luggage, 10]},
+  layoutData: {left: [classTextView, 10], right: 10, top: [luggage, 10]},
   text: "Vegetarian"
 }).appendTo(page);
 
