@@ -18,10 +18,6 @@
     "editable": {
       "type": "boolean"
     },
-    "maxChars": {
-      "type": "number",
-      "description": "The maximum number of characters that can be entered."
-    },
     "alignment": {
       "type": "string:left|right|center?left",
       "description": "The horizontal alignment of the text."

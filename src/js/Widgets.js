@@ -196,7 +196,6 @@
       text: "string",
       message: "string",
       editable: "boolean",
-      maxChars: "natural",
       alignment: ["choice", ["left", "center", "right"]],
       autoCorrect: "boolean",
       autoCapitalize: "boolean",
