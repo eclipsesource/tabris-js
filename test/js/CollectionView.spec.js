@@ -50,14 +50,29 @@ describe("CollectionView", function() {
 
       describe("when items is set", function() {
 
+        var items;
+
         beforeEach(function() {
+          items = ["a", "b", "c"];
           nativeBridge.resetCalls();
-          view.set("items", ["a", "b", "c"]);
+          view.set("items", items);
         });
 
         it("calls native update with insert", function() {
           var calls = nativeBridge.calls({op: "call", id: view.cid, method: "update"});
           expect(calls[0].parameters).toEqual({insert: [0, 3]});
+        });
+
+        it("changes to items provided in setter have no effect (defensive copy)", function() {
+          items.push("d");
+
+          expect(view.get("items")).toEqual(["a", "b", "c"]);
+        });
+
+        it("changes to items returned by getter have no effect (defensive copy)", function() {
+          view.get("items").push("d");
+
+          expect(view.get("items")).toEqual(["a", "b", "c"]);
         });
 
         describe("when items is set again", function() {

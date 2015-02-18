@@ -39,7 +39,7 @@
 
     _getProperty: {
       items: function() {
-        return this._items;
+        return this._items.concat();
       }
     },
 
@@ -73,7 +73,7 @@
 
     _setItems: function(items) {
       var oldItemCount = this._items.length;
-      this._items = items || [];
+      this._items = items ? items.concat() : [];
       var updateOperations = {};
       if (oldItemCount > 0) {
         updateOperations.remove = [0, oldItemCount];
