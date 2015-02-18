@@ -506,8 +506,17 @@ describe("Proxy", function() {
 
         proxy.set("knownProperty", true);
 
-        var message = "TestType: Unsupported value for property \"knownProperty\": My Error";
+        var message = "TestType: Ignored unsupported value for property \"knownProperty\": My Error";
         expect(console.warn).toHaveBeenCalledWith(message);
+      });
+
+      it("do not SET the value if _properties entry references a function that throws", function() {
+        tabris.TestType._properties.knownProperty = "boolean";
+        spyOn(tabris.PropertyEncoding, "boolean").and.throwError("My Error");
+
+        proxy.set("knownProperty", "foo");
+
+        expect(nativeBridge.calls({op: "set"}).length).toBe(0);
       });
 
       it("raises a warning if _setProperty is a function that throws", function() {
@@ -519,17 +528,6 @@ describe("Proxy", function() {
           proxy.set("foo", true);
         }).toThrow();
         expect(console.warn).not.toHaveBeenCalled();
-      });
-
-      it("still sets the value if _properties entry is a function that throws", function() {
-        // TODO: This will be flipped later to ignore the incorrect value
-        tabris.TestType._properties.knownProperty = function() {
-          throw new Error("My Error");
-        };
-        proxy.set("knownProperty", "foo");
-
-        var call = nativeBridge.calls({op: "set"})[0];
-        expect(call.properties.knownProperty).toBe("foo");
       });
 
       it("uses _properties entry to convert the value", function() {

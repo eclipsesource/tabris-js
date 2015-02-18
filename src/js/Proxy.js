@@ -169,7 +169,13 @@
       if (!type) {
         return true;
       }
-      var encodedValue = this._encodeProperty(value, type, name);
+      var encodedValue;
+      try {
+        encodedValue = this._encodeProperty(value, type, name);
+      } catch (ex) {
+        console.warn(this.type + ": Ignored unsupported value for property \"" + name + "\": " + ex.message);
+        return false;
+      }
       var setProperty = this._getPropertySetter(name);
       if (setProperty instanceof Function) {
         setProperty.call(this, encodedValue);
@@ -178,19 +184,15 @@
       }
     },
 
-    _encodeProperty: function(value, type, name) {
-      try {
-        if (typeof type === "string" && tabris.PropertyEncoding[type]) {
-          return tabris.PropertyEncoding[type](value);
-        }
-        if (Array.isArray(type) && tabris.PropertyEncoding[type[0]]) {
-          var args = [value].concat(type.slice(1));
-          return tabris.PropertyEncoding[type[0]].apply(window, args);
-        }
-        return value;
-      } catch (ex) {
-        console.warn(this.type + ": Unsupported value for property \"" + name + "\": " + ex.message);
+    _encodeProperty: function(value, type) {
+      if (typeof type === "string" && tabris.PropertyEncoding[type]) {
+        return tabris.PropertyEncoding[type](value);
       }
+      if (Array.isArray(type) && tabris.PropertyEncoding[type[0]]) {
+        var args = [value].concat(type.slice(1));
+        return tabris.PropertyEncoding[type[0]].apply(window, args);
+      }
+      return value;
     },
 
     _decodeProperty: function(value, type) {
