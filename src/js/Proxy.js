@@ -171,14 +171,10 @@
       }
       var encodedValue = this._encodeProperty(value, type, name);
       var setProperty = this._getPropertySetter(name);
-      try {
-        if (setProperty instanceof Function) {
-          setProperty.call(this, encodedValue);
-        } else {
-          this._nativeSet(name, tabris.PropertyEncoding.proxy(encodedValue));
-        }
-      } catch (error) {
-        console.warn(this.type + ": Failed to set property \"" + name + "\" value: " + error.message);
+      if (setProperty instanceof Function) {
+        setProperty.call(this, encodedValue);
+      } else {
+        this._nativeSet(name, tabris.PropertyEncoding.proxy(encodedValue));
       }
     },
 
@@ -209,9 +205,6 @@
     },
 
     _getPropertyType: function(name) {
-      if (this.constructor && this.constructor._properties === true) {
-        return true; // TODO: Remove support for _properties: true
-      }
       return this.constructor && this.constructor._properties && this.constructor._properties[name];
     },
 

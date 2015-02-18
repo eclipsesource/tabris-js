@@ -1,12 +1,16 @@
 tabris.registerType("_Display", {
-  _type: "rwt.widgets.Display",
-  _properties: true
+  _type: "rwt.widgets.Display"
 });
 
 tabris.registerWidget("_Shell", {
   _type: "rwt.widgets.Shell",
   _listen: {Close: true},
-  _properties: true
+  _properties: {
+    style: true,
+    mode: true,
+    active: true,
+    visible: true
+  }
 });
 
 tabris.registerType("_UI", {

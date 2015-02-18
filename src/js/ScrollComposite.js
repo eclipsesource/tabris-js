@@ -1,7 +1,9 @@
 tabris.registerWidget("_ScrollBar", {
   _type: "rwt.widgets.ScrollBar",
   _listen: {Selection: true},
-  _properties: true
+  _properties: {
+    style: true
+  }
 });
 
 tabris.registerWidget("ScrollComposite", {

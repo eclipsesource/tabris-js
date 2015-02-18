@@ -2,7 +2,13 @@
 
   tabris.registerType("_TabItem", {
     _type: "rwt.widgets.TabItem",
-    _properties: true
+    _properties: {
+      text: true,
+      image: true,
+      badge: true,
+      control: true,
+      index: true
+    }
   });
 
   tabris.registerWidget("TabFolder", {

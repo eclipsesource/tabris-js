@@ -12,7 +12,15 @@
       Progress: "progress",
       Start: "start"
     },
-    _properties: true
+    _properties: {
+      properties: true,
+      delay: true,
+      duration: true,
+      repeat: true,
+      reverse: true,
+      easing: true,
+      target: "proxy"
+    }
   });
 
   tabris.Animation = function(target, properties, options) {

@@ -2,7 +2,13 @@
 
   tabris.registerType("_Device", {
     _type: "tabris.Device",
-    _properties: true
+    _properties: {
+      model: true,
+      platform: true,
+      version: true,
+      language: true,
+      scaleFactor: true
+    }
   });
 
   tabris._publishDeviceProperties = function(target) {

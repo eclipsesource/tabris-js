@@ -9,8 +9,8 @@
       image: "image",
       title: "string",
       topLevel: "boolean",
-      control: true,
-      parent: true,
+      control: "proxy",
+      parent: "proxy",
       style: true
     }
 

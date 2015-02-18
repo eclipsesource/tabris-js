@@ -52,6 +52,7 @@ describe("Proxy", function() {
 
     it("translates properties", function() {
       var other = new tabris.Proxy("other-id");
+      tabris.TestType._properties.foo = "proxy";
 
       proxy._create({foo: other});
 
@@ -60,7 +61,10 @@ describe("Proxy", function() {
     });
 
     it("sends native set for init properties", function() {
-      tabris.registerType("CustomType", {_initProperties: {foo: 23}, _properties: true});
+      tabris.registerType("CustomType", {
+        _initProperties: {foo: 23},
+        _properties: {bar: true}
+      });
 
       tabris.create("CustomType", {bar: 42});
 
@@ -379,27 +383,6 @@ describe("Proxy", function() {
         expect(console.warn).not.toHaveBeenCalled();
       });
 
-      it("raises no warning if _propertyCheck entry is a string", function() {
-        tabris.TestType._properties.knownProperty = "foo";
-        proxy.get("knownProperty", true);
-
-        expect(console.warn).not.toHaveBeenCalled();
-      });
-
-      it("raises no warning if _propertyCheck entry is true", function() {
-        tabris.TestType._properties.knownProperty = true;
-        proxy.get("knownProperty", true);
-
-        expect(console.warn).not.toHaveBeenCalled();
-      });
-
-      it("raises no warning if _propertyCheck itself is true", function() {
-        tabris.TestType._properties = true;
-        proxy.get("knownProperty", true);
-
-        expect(console.warn).not.toHaveBeenCalled();
-      });
-
       it("calls function if _propertyCheck is a string found in PropertyDecoding", function() {
         tabris.TestType._properties.knownProperty = "color";
         spyOn(nativeBridge, "get").and.returnValue(23);
@@ -438,6 +421,7 @@ describe("Proxy", function() {
 
       it("translates widgets to ids in properties", function() {
         var other = new tabris.Proxy("other-id");
+        tabris.TestType._properties.foo = "proxy";
 
         proxy.set("foo", other);
 
@@ -447,6 +431,7 @@ describe("Proxy", function() {
 
       it("translates widget collection to first ids in properties", function() {
         var other = new tabris.ProxyCollection([new tabris.Proxy("other-id")]);
+        tabris.TestType._properties.foo = "proxy";
 
         proxy.set("foo", other);
 
@@ -456,6 +441,7 @@ describe("Proxy", function() {
 
       it("does not translate objects with id field to ids", function() {
         var obj = {id: "23", name: "bar"};
+        tabris.TestType._properties.foo = "proxy";
 
         proxy.set("foo", obj);
 
@@ -528,10 +514,11 @@ describe("Proxy", function() {
         tabris.TestType._setProperty.foo = function() {
           throw new Error("My Error");
         };
-        proxy.set("foo", true);
 
-        var message = "TestType: Failed to set property \"foo\" value: My Error";
-        expect(console.warn).toHaveBeenCalledWith(message);
+        expect(function() {
+          proxy.set("foo", true);
+        }).toThrow();
+        expect(console.warn).not.toHaveBeenCalled();
       });
 
       it("still sets the value if _properties entry is a function that throws", function() {

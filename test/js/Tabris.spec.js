@@ -251,6 +251,7 @@ describe("tabris", function() {
     });
 
     it("triggers a create operation with type and properties", function() {
+      tabris.TestType._properties.foo = true;
       var proxy = tabris.create("TestType", {foo: 23});
 
       var createCall = nativeBridge.calls({op: "create", id: proxy.cid})[0];
