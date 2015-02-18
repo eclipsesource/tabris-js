@@ -11,7 +11,8 @@ describe("Proxy", function() {
     tabris._reset();
     tabris._init(nativeBridge);
     tabris.registerWidget("TestType", {
-      _supportsChildren: true
+      _supportsChildren: true,
+      _properties: {foo: true}
     });
   });
 
@@ -372,11 +373,10 @@ describe("Proxy", function() {
         expect(result).toBe(23);
       });
 
-      it("raises a warning for unknown property", function() {
+      it("raises no warning for unknown property", function() {
         proxy.get("unknownProperty", true);
 
-        var warning = "TestType: Unknown property \"unknownProperty\"";
-        expect(console.warn).toHaveBeenCalledWith(warning);
+        expect(console.warn).not.toHaveBeenCalled();
       });
 
       it("raises no warning if _propertyCheck entry is a string", function() {
@@ -481,32 +481,17 @@ describe("Proxy", function() {
         expect(tabris.TestType._setProperty.foo).toHaveBeenCalledWith("bar");
       });
 
-      it("raises a warning for unknown property", function() {
+      it("raises no warning for unknown property", function() {
         proxy.set("unknownProperty", true);
 
-        var warning = "TestType: Unknown property \"unknownProperty\"";
-        expect(console.warn).toHaveBeenCalledWith(warning);
-      });
-
-      it("raises no warning if _properties entry is true", function() {
-        tabris.TestType._properties.knownProperty = true;
-        proxy.set("knownProperty", true);
-
         expect(console.warn).not.toHaveBeenCalled();
       });
 
-      it("raises no warning if _properties itself is true", function() {
-        tabris.TestType._properties = true;
-        proxy.set("knownProperty", true);
+      it("stores unknown property loacally", function() {
+        proxy.set("unknownProperty", "foo");
 
-        expect(console.warn).not.toHaveBeenCalled();
-      });
-
-      it("raises no warning if _properties entry is a string", function() {
-        tabris.TestType._properties.knownProperty = "foo";
-        proxy.set("knownProperty", true);
-
-        expect(console.warn).not.toHaveBeenCalled();
+        expect(nativeBridge.calls({op: "set", id: proxy.cid}).length).toBe(0);
+        expect(proxy.get("unknownProperty")).toBe("foo");
       });
 
       it("calls function if _properties entry is a string found in PropertyEncoding", function() {
@@ -540,12 +525,12 @@ describe("Proxy", function() {
       });
 
       it("raises a warning if _setProperty is a function that throws", function() {
-        tabris.TestType._setProperty.knownProperty = function() {
+        tabris.TestType._setProperty.foo = function() {
           throw new Error("My Error");
         };
-        proxy.set("knownProperty", true);
+        proxy.set("foo", true);
 
-        var message = "TestType: Failed to set property \"knownProperty\" value: My Error";
+        var message = "TestType: Failed to set property \"foo\" value: My Error";
         expect(console.warn).toHaveBeenCalledWith(message);
       });
 

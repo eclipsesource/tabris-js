@@ -394,11 +394,11 @@ describe("Widgets", function() {
     });
 
     it("WebView", function() {
-      tabris.create("WebView", {text: "foo"});
+      tabris.create("WebView", {html: "foo"});
 
       var create = nativeBridge.calls({op: "create"})[0];
       expect(create.type).toEqual("rwt.widgets.Browser");
-      expect(create.properties).toEqual({text: "foo"});
+      expect(create.properties).toEqual({html: "foo"});
     });
 
   });

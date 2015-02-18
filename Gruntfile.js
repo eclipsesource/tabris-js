@@ -82,6 +82,7 @@ module.exports = function(grunt) {
           "NativeBridge.js",
           "Events.js",
           "Layout.js",
+          "Properties.js",
           "Proxy.js",
           "ProxyCollection.js",
           "PropertyDecoding.js",

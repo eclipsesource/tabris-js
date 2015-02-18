@@ -5,7 +5,7 @@
     tabris._proxies[this.cid] = this;
   };
 
-  util.extend(tabris.Proxy.prototype, tabris.Events, {
+  util.extend(tabris.Proxy.prototype, tabris.Events, tabris.Properties, {
 
     _create: function(properties) {
       var type = this.constructor._type || this.type;
@@ -38,21 +38,6 @@
         throw new Error("Cannot append to non-widget");
       }
       this._setParent(proxy);
-      return this;
-    },
-
-    get: function(name) {
-      this._checkDisposed();
-      return this._getProperty(name);
-    },
-
-    set: function(arg1, arg2) {
-      this._checkDisposed();
-      if (typeof arg1 === "string") {
-        this._setProperty(arg1, arg2);
-      } else {
-        this._setProperties(arg1);
-      }
       return this;
     },
 
@@ -179,16 +164,13 @@
       }
     },
 
-    _setProperties: function(properties) {
-      for (var name in properties) {
-        this._setProperty(name, properties[name]);
-      }
-    },
-
-    _setProperty: function(name, value) {
+    _applyProperty: function(name, value) {
       var type = this._getPropertyType(name);
+      if (!type) {
+        return true;
+      }
       var encodedValue = this._encodeProperty(value, type, name);
-      var setProperty = this.constructor && this.constructor._setProperty && this.constructor._setProperty[name];
+      var setProperty = this._getPropertySetter(name);
       try {
         if (setProperty instanceof Function) {
           setProperty.call(this, encodedValue);
@@ -227,18 +209,21 @@
     },
 
     _getPropertyType: function(name) {
-      var type = this.constructor && this.constructor._properties && this.constructor._properties[name];
-      if (!type && this.constructor._properties !== true) {
-        console.warn(this.type + ": Unknown property \"" + name + "\"");
+      if (this.constructor && this.constructor._properties === true) {
+        return true; // TODO: Remove support for _properties: true
       }
-      return type;
+      return this.constructor && this.constructor._properties && this.constructor._properties[name];
+    },
+
+    _getPropertySetter: function(name) {
+      return this.constructor && this.constructor._setProperty && this.constructor._setProperty[name];
     },
 
     _nativeSet: function(name, value) {
       tabris._nativeBridge.set(this.cid, name, value);
     },
 
-    _getProperty: function(name) {
+    _readProperty: function(name) {
       var type = this._getPropertyType(name);
       var getProperty = this.constructor && this.constructor._getProperty && this.constructor._getProperty[name];
       var value = getProperty ? getProperty.call(this) : this._nativeGet(name);

@@ -8,7 +8,7 @@ describe("tabris", function() {
     log = [];
     tabris._reset();
     tabris._init(nativeBridge);
-    tabris.registerType("TestType", {});
+    tabris.registerType("TestType", {_properties: {foo: true}});
   });
 
   afterEach(function() {

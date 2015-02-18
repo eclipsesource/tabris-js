@@ -42,6 +42,8 @@ var input = textField.get("text");
 
 Sets a widget property. Returns the widget itself.
 
+If the property is not supported by the widget, it will have no effect, but still be set. This can be used to attach arbitrary data to a widget. If the property is supported, but the given value is of the wrong type, the value will either be converted (if boolean or string are expected), or ignored with a printed warning.
+
 Parameters:
 
 - *name*: the property name (*string*)

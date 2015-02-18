@@ -61,7 +61,8 @@ tabris.registerType("_UI", {
 
   _setActivePage: function(page) {
     if (!(page instanceof tabris.Page)) {
-      throw new Error("Value for activePage is not a page");
+      console.warn("Value for activePage is not a page");
+      return;
     }
     var activePage = this._getActivePage();
     if (page !== activePage) {

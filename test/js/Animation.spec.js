@@ -16,9 +16,11 @@ describe("Animation", function() {
     tabris._reset();
     tabris._init(nativeBridge);
     proxy = new tabris.Proxy("proxy-id");
+    tabris.registerType("TestType", {_properties: {foo: true, opacity: true, transform: true}});
   });
 
   afterEach(function() {
+    delete tabris.TestType;
     window.console = consoleBackup;
   });
 
