@@ -288,9 +288,11 @@ describe("XMLHttpRequest", function() {
     it("resets uploadCompleted", function() {
       xhr.upload.onprogress = jasmine.createSpy("onprogress");
       xhr.open("POST", "http://foo.com");
+      xhr.send("foo");
       proxy.trigger("StateChange", {state: "headers"});
       proxy.trigger("StateChange", {state: "error"});
       expect(xhr.upload.onprogress).not.toHaveBeenCalled();
+      xhr.open("POST", "http://foo.com");
       xhr.send("foo");
       proxy.trigger("StateChange", {state: "error"});
       expect(xhr.upload.onprogress).toHaveBeenCalled();
@@ -465,6 +467,7 @@ describe("XMLHttpRequest", function() {
         requestErrors.forEach(function(entry) {
           proxy.trigger("StateChange", {state: entry});
           expect(xhr.readyState).toBe(xhr.DONE);
+          sendRequest(xhr);
         });
       });
 
