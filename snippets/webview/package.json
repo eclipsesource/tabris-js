@@ -4,6 +4,6 @@
   "description": "Create a web view to load a web page",
   "main": "webview.js",
   "dependencies": {
-    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+    "tabris": "https://tabrisjs.com/downloads/0.9.1/tabris.tgz"
   }
 }

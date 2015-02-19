@@ -4,6 +4,6 @@
   "description": "Layout a widget with a fixed size and position",
   "main": "layout.js",
   "dependencies": {
-    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+    "tabris": "https://tabrisjs.com/downloads/0.9.1/tabris.tgz"
   }
 }

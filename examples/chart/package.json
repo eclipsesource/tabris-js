@@ -4,7 +4,7 @@
   "category": "Web APIs",
   "dependencies": {
     "chart.js": "*",
-    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+    "tabris": "https://tabrisjs.com/downloads/0.9.1/tabris.tgz"
   },
   "main": "chartdemo.js"
 }

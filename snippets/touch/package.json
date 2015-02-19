@@ -4,6 +4,6 @@
   "description": "Demonstrates the tabris.js touch API",
   "main": "touch.js",
   "dependencies": {
-    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+    "tabris": "https://tabrisjs.com/downloads/0.9.1/tabris.tgz"
   }
 }

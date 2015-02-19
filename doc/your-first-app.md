@@ -14,7 +14,10 @@ The `package.json` file is used to describe the app, including the name, descrip
 {
   "name": "hello-world",
   "description": "Tabris.js - Hello, World!",
-  "main": "hello.js"
+  "main": "hello.js",
+  "dependencies": {
+    "tabris": "https://tabrisjs.com/downloads/0.9.1/tabris.tgz"
+  }
 }
 ```
 

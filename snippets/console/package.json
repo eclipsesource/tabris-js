@@ -4,6 +4,6 @@
   "description": "Print messages to the developer console using different log levels",
   "main": "console.js",
   "dependencies": {
-    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+    "tabris": "https://tabrisjs.com/downloads/0.9.1/tabris.tgz"
   }
 }

@@ -4,6 +4,6 @@
   "description": "Create an action with an image and a handler",
   "main": "action.js",
   "dependencies": {
-    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+    "tabris": "https://tabrisjs.com/downloads/0.9.1/tabris.tgz"
   }
 }

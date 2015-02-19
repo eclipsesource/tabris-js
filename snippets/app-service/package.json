@@ -4,6 +4,6 @@
   "description": "Attach listeners to Pause and Resume events and handle back navigation",
   "main": "app-service.js",
   "dependencies": {
-    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+    "tabris": "https://tabrisjs.com/downloads/0.9.1/tabris.tgz"
   }
 }
