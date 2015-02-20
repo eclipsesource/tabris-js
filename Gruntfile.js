@@ -81,6 +81,7 @@ module.exports = function(grunt) {
           "Tabris.js",
           "NativeBridge.js",
           "Events.js",
+          "Layout.js",
           "Proxy.js",
           "ProxyCollection.js",
           "PropertyDecoding.js",

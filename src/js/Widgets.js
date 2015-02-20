@@ -67,7 +67,7 @@
         return this.id;
       },
       layoutData: function() {
-        return this._layoutData ? this._layoutData() : null;
+        return this._layoutData || null;
       }
     }
   });
@@ -88,7 +88,11 @@
   }
 
   function renderLayoutData(force) {
-    this._nativeSet("layoutData", this._layoutData ? this._layoutData(this, force) : null);
+    if (this._layoutData) {
+      this._nativeSet("layoutData", tabris.Layout.encodeLayoutData(this._layoutData, this, force));
+    } else {
+      this._nativeSet("layoutData", null);
+    }
   }
 
   tabris.registerWidget("Button", {

@@ -225,30 +225,6 @@ describe("Widgets", function() {
       nativeBridge.resetCalls();
     });
 
-    it("translate widgets to ids", function() {
-      widget.set("layoutData", {left: 23, right: other, top: [other, 42]});
-
-      var call = nativeBridge.calls({op: "set"})[0];
-      var expected = {left: 23, right: other.cid, top: [other.cid, 42]};
-      expect(call.properties.layoutData).toEqual(expected);
-    });
-
-    it("translate selector to ids", function() {
-      widget.set("layoutData", {left: 23, right: "#other", top: ["#other", 42]});
-
-      var call = nativeBridge.calls({op: "set"})[0];
-      var expected = {left: 23, right: other.cid, top: [other.cid, 42]};
-      expect(call.properties.layoutData).toEqual(expected);
-    });
-
-    it("translation does not modify layoutData", function() {
-      var layoutData = {left: 23, right: other, top: [other, 42]};
-
-      widget.set({layoutData: layoutData});
-
-      expect(layoutData.top).toEqual([other, 42]);
-    });
-
     it("return null for undefined layoutData", function() {
       expect(widget.get("layoutData")).toBeNull();
     });
@@ -265,7 +241,7 @@ describe("Widgets", function() {
       expect(widget.get("layoutData")).toEqual(expected);
     });
 
-    it("translate selector after other widget is added to parent", function() {
+    it("SET layoutData after widget referenced by selector is added to parent", function() {
       other.dispose();
       widget.set("layoutData", {left: 23, right: "#other", top: ["#other", 42]});
       other = tabris.create("TestType", {id: "other"}).appendTo(parent);
@@ -275,7 +251,7 @@ describe("Widgets", function() {
       expect(call.properties.layoutData).toEqual(expected);
     });
 
-    it("translate selector after widget is added to parent", function() {
+    it("SET layoutData after self is added to parent", function() {
       widget = tabris.create("TestType");
 
       widget.set("layoutData", {left: 23, right: "#other", top: ["#other", 42]});
@@ -286,7 +262,7 @@ describe("Widgets", function() {
       expect(call.properties.layoutData).toEqual(expected);
     });
 
-    it("translate non-matching selector to 0", function() {
+    it("SET preliminary layoutData if selector does not resolve in flush", function() {
       widget.set("layoutData", {left: 23, right: "#mother", top: ["other", 42]});
 
       var call = nativeBridge.calls({op: "set"})[0];
@@ -294,7 +270,7 @@ describe("Widgets", function() {
       expect(call.properties.layoutData).toEqual(expected);
     });
 
-    it("set layoutData again until selector resolves", function() {
+    it("SET layoutData again until selector resolves", function() {
       other.dispose();
 
       widget.set("layoutData", {right: "#other"});

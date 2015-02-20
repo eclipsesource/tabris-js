@@ -12,61 +12,15 @@ describe("PropertyEncoding:", function() {
 
   describe("layoutData", function() {
 
-    var check = function(value) {
-      return value ? tabris.PropertyEncoding.layoutData(value)() : null;
-    };
+    it("calls tabris.Layout.checkLayoutData", function() {
+      var inValue = {};
+      var outValue = {};
+      spyOn(tabris.Layout, "checkLayoutData").and.returnValue(outValue);
 
-    it("raises a warning for incomplete horizontal layoutData", function() {
-      check({top: 0});
+      var result = tabris.PropertyEncoding.layoutData(inValue);
 
-      var warning = "Incomplete layoutData: either left, right or centerX should be specified";
-      expect(console.warn).toHaveBeenCalledWith(warning);
-    });
-
-    it("raises a warning for incomplete vertical layoutData", function() {
-      check({left: 0});
-
-      var warning = "Incomplete layoutData: either top, bottom, centerY, or baseline should be specified";
-      expect(console.warn).toHaveBeenCalledWith(warning);
-    });
-
-    it("raises a warning for inconsistent layoutData (centerX)", function() {
-      check({top: 0, left: 0, centerX: 0});
-
-      var warning = "Inconsistent layoutData: centerX overrides left and right";
-      expect(console.warn).toHaveBeenCalledWith(warning);
-    });
-
-    it("skips overridden properties from layoutData (centerX)", function() {
-      var result = check({top: 1, left: 2, right: 3, centerX: 4});
-
-      expect(result).toEqual({top: 1, centerX: 4});
-    });
-
-    it("raises a warning for inconsistent layoutData (centerY)", function() {
-      check({left: 0, top: 0, centerY: 0});
-
-      var warning = "Inconsistent layoutData: centerY overrides top and bottom";
-      expect(console.warn).toHaveBeenCalledWith(warning);
-    });
-
-    it("skips overridden properties from layoutData (centerY)", function() {
-      var result = check({left: 1, top: 2, bottom: 3, centerY: 4});
-
-      expect(result).toEqual({left: 1, centerY: 4});
-    });
-
-    it("raises a warning for inconsistent layoutData (baseline)", function() {
-      check({left: 0, top: 0, baseline: 0});
-
-      var warning = "Inconsistent layoutData: baseline overrides top, bottom, and centerY";
-      expect(console.warn).toHaveBeenCalledWith(warning);
-    });
-
-    it("skips overridden properties from layoutData (baseline)", function() {
-      var result = check({left: 1, top: 2, bottom: 3, centerY: 4, baseline: "other"});
-
-      expect(result).toEqual({left: 1, baseline: "other"});
+      expect(tabris.Layout.checkLayoutData).toHaveBeenCalledWith(inValue);
+      expect(result).toBe(outValue);
     });
 
   });
