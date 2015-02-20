@@ -243,30 +243,30 @@ describe("Widgets", function() {
 
     it("SET layoutData after widget referenced by selector is added to parent", function() {
       other.dispose();
-      widget.set("layoutData", {left: 23, right: "#other", top: ["#other", 42]});
+      widget.set("layoutData", {left: 23, centerY: "#other", right: ["#other", 42]});
       other = tabris.create("TestType", {id: "other"}).appendTo(parent);
 
       var call = nativeBridge.calls({op: "set"})[0];
-      var expected = {left: 23, right: other.cid, top: [other.cid, 42]};
+      var expected = {left: 23, centerY: other.cid, right: [other.cid, 42]};
       expect(call.properties.layoutData).toEqual(expected);
     });
 
     it("SET layoutData after self is added to parent", function() {
       widget = tabris.create("TestType");
 
-      widget.set("layoutData", {left: 23, right: "#other", top: ["#other", 42]});
+      widget.set("layoutData", {left: 23, centerY: "#other", right: ["#other", 42]});
       widget.appendTo(parent);
 
       var call = nativeBridge.calls({op: "create"})[0];
-      var expected = {left: 23, right: other.cid, top: [other.cid, 42]};
+      var expected = {left: 23, centerY: other.cid, right: [other.cid, 42]};
       expect(call.properties.layoutData).toEqual(expected);
     });
 
     it("SET preliminary layoutData if selector does not resolve in flush", function() {
-      widget.set("layoutData", {left: 23, right: "#mother", top: ["other", 42]});
+      widget.set("layoutData", {left: 23, centerY: "#mother", right: ["other", 42]});
 
       var call = nativeBridge.calls({op: "set"})[0];
-      var expected = {left: 23, right: 0, top: [0, 42]};
+      var expected = {left: 23, centerY: 0, right: [0, 42]};
       expect(call.properties.layoutData).toEqual(expected);
     });
 
@@ -287,8 +287,8 @@ describe("Widgets", function() {
       expect(calls2.length).toBe(0);
       expect(calls3.length).toBe(1);
       expect(calls4.length).toBe(0);
-      expect(calls1[0].properties.layoutData).toEqual({right: 0});
-      expect(calls3[0].properties.layoutData).toEqual({right: other.cid});
+      expect(calls1[0].properties.layoutData).toEqual({right: [0, 0]});
+      expect(calls3[0].properties.layoutData).toEqual({right: [other.cid, 0]});
     });
 
   });

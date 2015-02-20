@@ -158,7 +158,7 @@ function createPersonThumbView(parent, person, thumbsize) {
   }).appendTo(composite);
   tabris.create("TextView", {
     alignment: "center",
-    layoutData: {left: 0, top: [personView, 0], width: thumbsize},
+    layoutData: {left: 0, top: personView, width: thumbsize},
     text: person.firstName,
     font: font
   }).appendTo(composite);

@@ -75,6 +75,8 @@ describe("Layout:", function() {
     var parent, widget, other;
 
     beforeEach(function() {
+      tabris._reset();
+      tabris._init(new NativeBridgeSpy());
       tabris.registerWidget("TestType", {});
       parent = tabris.create("Composite");
       widget = tabris.create("TestType").appendTo(parent);
@@ -85,14 +87,50 @@ describe("Layout:", function() {
       delete tabris.TestType;
     });
 
-    it("translates widgets to ids", function() {
-      expect(encode({left: 23, right: other, top: [other, 42]}, widget))
-        .toEqual({left: 23, right: other.cid, top: [other.cid, 42]});
+    it("translates widget to ids", function() {
+      expect(encode({left: 23, centerY: other, right: [other, 42]}, widget))
+        .toEqual({left: 23, centerY: other.cid, right: [other.cid, 42]});
     });
 
-    it("translates selector to ids", function() {
-      expect(encode({left: 23, right: "#other", top: ["#other", 42]}, widget))
-        .toEqual({left: 23, right: other.cid, top: [other.cid, 42]});
+    it("translates selector in array to id", function() {
+      expect(encode({left: 23, centerY: "#other", right: ["#other", 42]}, widget))
+        .toEqual({left: 23, centerY: other.cid, right: [other.cid, 42]});
+    });
+
+    it("translates selector outside array to id array (offsets)", function() {
+      expect(encode({left: "#other", right: "#other", top: "#other", bottom: "#other"}, widget))
+        .toEqual({left: [other.cid, 0], right: [other.cid, 0], top: [other.cid, 0], bottom: [other.cid, 0]});
+    });
+
+    it("translates selector outside array to id (centerX/Y, baseline)", function() {
+      expect(encode({centerX: "#other", baseline: "#other"}, widget))
+        .toEqual({centerX: other.cid, baseline: other.cid});
+    });
+
+    it("translates percentage string in array to number", function() {
+      expect(encode({left: 23, right: ["12%", 34], top: ["0%", 42]}, widget))
+        .toEqual({left: 23, right: [12, 34], top: [0, 42]});
+    });
+
+    it("translates percentage string outside array to number array", function() {
+      expect(encode({left: 23, right: "12%", top: "0%"}, widget))
+        .toEqual({left: 23, right: [12, 0], top: [0, 0]});
+    });
+
+    it("warns against deprecated percentage syntax", function() {
+      expect(encode({left: 23, right: [12, 34], top: [0, 42]}, widget))
+        .toEqual({left: 23, right: [12, 34], top: [0, 42]});
+      var msg = "Deprecated layoutData syntax: Percentage must be a string";
+      expect(console.warn).toHaveBeenCalledWith(msg);
+    });
+
+    it("treats ambiguous string as selector", function() {
+      tabris.registerWidget("Foo%", {});
+      var freak1 = tabris.create("Foo%").appendTo(parent);
+      var freak2 = tabris.create("TestType", {id: "23%"}).appendTo(parent);
+
+      expect(encode({left: 23, right: "#23%", top: ["Foo%", 42]}, widget))
+        .toEqual({left: 23, right: [freak2.cid, 0], top: [freak1.cid, 42]});
     });
 
     it("translation does not modify layoutData", function() {
@@ -111,11 +149,11 @@ describe("Layout:", function() {
       }).toThrow();
     });
 
-    it("replaces unresolved selector to 0 if forced", function() {
+    it("replaces unresolved selector with 0 if forced ", function() {
       other.dispose();
 
-      expect(encode({left: 23, right: "#other", top: ["#other", 42]}, widget, true))
-        .toEqual({left: 23, right: 0, top: [0, 42]});
+      expect(encode({left: 23, right: "#noone", top: ["#noone", 42]}, widget, true))
+        .toEqual({left: 23, right: [0, 0], top: [0, 42]});
     });
 
   });

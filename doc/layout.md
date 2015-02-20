@@ -20,37 +20,19 @@ If a widget is referenced in a layoutData, it has to be a sibling of the widget 
  
 A widget reference that does not point to a current sibling will be treated as an offset of 0. 
 
-### left
-Defines the position of the widget's left edge.
+Offsets are given as a number.
+Percentages are given as a string, e.g. "50%".
+
+### top, right, bottom, left
+Defines the position of the widget's edge.
 Accepted values:
 
-- *offset*: the distance from the parent's left edge in pixels
-- [*percentage*, *offset*]: the distance from the parent's left edge in percent of the parent's width plus a fixed offset in pixels
-- [*widget*, *offset*]: the distance from the given widget's right edge in pixels
+- *offset*: the distance from the parent's opposing edge in pixels
+- *widget*: attach this edge to the given widget's opposing edge
+- *percentage*: the distance from the parent's opposing edge in percent of the parent's width
+- [*percentage*, *offset*]: the distance from the parent's opposing edge in percent of the parent's width plus a fixed offset in pixels
+- [*widget*, *offset*]: the distance from the given widget's opposing edge in pixels
 
-### right
-Defines the position of the widget's right edge.
-Accepted values:
-
-- *offset*: the distance from the parent's right edge in pixels
-- [*percentage*, *offset*]: the distance from the parent's right edge in percent of the parent's width plus a fixed offset in pixels
-- [*widget*, *offset*]: the distance from the given widget's left edge in pixels
-
-### top
-Defines the position of the widget's upper edge.
-Accepted values:
-
-- *offset*: the distance from the parent's upper edge in pixels
-- [*percentage*, *offset*]: the distance from the parent's upper edge in percent of the parent's height plus a fixed offset in pixels
-- [*widget*, *offset*]: the distance from the given widget's lower edge in pixels
-
-### bottom
-Defines the position of the widget's lower edge.
-Accepted values:
-
-- *offset*: the distance from the parent's lower edge in pixels
-- [*percentage*, *offset*]: the distance from the parent's lower edge in percent of the parent's height plus a fixed offset in pixels
-- [*widget*, *offset*]: the distance from the given widget's upper edge in pixels
 
 ### centerX
 Defines the horizontal position of the widget relative to the parent's center.
@@ -74,7 +56,7 @@ Accepted values:
 
 - *widget*: a reference to another widget to baseline-align with.
 
-At the moment, this property is only supported for widgets that contain text, i.e. both the actual and the referenced widget must be one of `Label`, `Button`, or `Text`.
+At the moment, this property is only supported for widgets that contain text, i.e. both the actual and the referenced widget must be one of `TextView`, `TextInput`, or `Button`.
 
 For multiline texts, the platforms currently differ: Android aligns on the first line, iOS on the last line.
 

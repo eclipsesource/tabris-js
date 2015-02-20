@@ -33,41 +33,66 @@
       }
       var result = {};
       var parent = targetWidget.parent() || emptyParent;
-      var proxyResolver = force ? toProxyIdForced : toProxyIdSave;
       for (var key in layoutData) {
-        if (Array.isArray(layoutData[key])) {
-          result[key] = layoutData[key].map(proxyResolver, parent);
-        } else {
-          result[key] = proxyResolver.call(parent, layoutData[key]);
-        }
+        result[key] = encodePart(layoutData[key], key, parent, force);
       }
       return result;
     }
 
   };
 
-  function toProxyIdForced(ref) {
+  function encodePart(part, name, parent, force) {
+    if (typeof part === "number") {
+      return part;
+    }
+    if (Array.isArray(part)) {
+      return encodeArrayPart(part, name, parent, force);
+    }
+    if (isPercentage(part)) {
+      return [parseInt(part), 0];
+    }
+    if (!directWidgetRef[name]) {
+      return [toProxyId(part, parent, force), 0];
+    }
+    return toProxyId(part, parent, force);
+  }
+
+  function encodeArrayPart(part, name, parent, force) {
+    if (typeof part[0] === "number") {
+      console.warn("Deprecated layoutData syntax: Percentage must be a string");
+      return part.concat();
+    }
+    if (isPercentage(part[0])) {
+      return [parseInt(part[0]), part[1]];
+    }
+    return [toProxyId(part[0], parent, force), part[1]];
+  }
+
+  function toProxyId(ref, parent, force) {
     if (typeof ref === "string") {
-      return tabris.PropertyEncoding.proxy(this.children(ref)) || 0;
+      var proxy = parent.children(ref)[0];
+      if (!proxy && !force) {
+        throw new Error();
+      }
+      return tabris.PropertyEncoding.proxy(proxy) || 0;
     }
     return tabris.PropertyEncoding.proxy(ref) || 0;
   }
 
-  function toProxyIdSave(ref) {
-    if (typeof ref === "string") {
-      var proxy = this.children(ref)[0];
-      if (!proxy) {
-        throw new Error();
-      }
-      return tabris.PropertyEncoding.proxy(proxy);
-    }
-    return tabris.PropertyEncoding.proxy(ref) || 0;
+  function isPercentage(value) {
+    return typeof value === "string" && value[value.length - 1] === "%" && !isNaN(parseInt(value));
   }
 
   var emptyParent = {
     children: function() {
       return null;
     }
+  };
+
+  var directWidgetRef = {
+    centerX: true,
+    centerY: true,
+    baseline: true
   };
 
 }());

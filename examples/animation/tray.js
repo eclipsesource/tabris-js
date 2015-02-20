@@ -35,11 +35,11 @@ var shade = tabris.create("Composite", {
 }).appendTo(page);
 
 var tray = tabris.create("Composite", {
-  layoutData: {left: 0, right: 0, top: [30, 0], bottom: 0}
+  layoutData: {left: 0, right: 0, top: ["30%", 0], bottom: 0}
 }).appendTo(page);
 
 var strap = tabris.create("Composite", {
-  layoutData: {left: [40, 0], right: [40, 0], top: 0, height: 48},
+  layoutData: {left: ["40%", 0], right: ["40%", 0], top: 0, height: 48},
   background: "#259b24"
 }).appendTo(tray);
 
