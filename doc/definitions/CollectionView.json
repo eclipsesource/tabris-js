@@ -9,7 +9,7 @@
     },
     "items": {
       "type": "mixed[]",
-      "description": "An array of data items to be displayed by the collection view."
+      "description": "An array of data items to be displayed by the collection view. For dynamic content, use the methods `insert` and `remove` instead of setting this property directly."
     },
     "initializeCell": {
       "type": "function",
@@ -38,6 +38,26 @@
     }
   },
   "methods": {
+    "insert": [
+      {
+        "parameters": ["items"],
+        "description": "Inserts the given items into this view. Items are added at the end. This operation will modify the `items` property."
+      },
+      {
+        "parameters": ["items", "index"],
+        "description": "Inserts the given items into this view at the given index. If a negative index is given, it is interpreted as relative to the end. If the given index is greater than the item count, new items will be appended at the end. This operation will modify the `items` property."
+      }
+    ],
+    "remove": [
+      {
+        "parameters": ["index"],
+        "description": "Removes the item at the given index from this view. If a negative index is given, it is interpreted as relative to the end. This operation will modify the `items` property."
+      },
+      {
+        "parameters": ["index", "count"],
+        "description": "Removes *count* items beginning with the given index from this view. If a negative index is given, it is interpreted as relative to the end. This operation will modify the `items` property."
+      }
+    ],
     "refresh": [
       {
         "parameters": [],

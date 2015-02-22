@@ -204,46 +204,202 @@ describe("CollectionView", function() {
       expect(allCalls.indexOf(updateCall)).toBeGreaterThan(allCalls.indexOf(listen2Call));
     });
 
-    it("refresh without parameters calls native update", function() {
-      nativeBridge.resetCalls();
+    describe("insert", function() {
+      beforeEach(function() {
+        nativeBridge.resetCalls();
+      });
 
-      view.refresh();
+      it("can prepend to items array", function() {
+        view.insert(["d", "e"], 0);
 
-      var updateCall = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
-      expect(updateCall.parameters.reload).toEqual([0, 3]);
+        expect(view.get("items")).toEqual(["d", "e", "A", "B", "C"]);
+      });
+
+      it("can append to items array", function() {
+        view.insert(["d", "e"], 3);
+
+        expect(view.get("items")).toEqual(["A", "B", "C", "d", "e"]);
+      });
+
+      it("calls native update", function() {
+        view.insert(["d", "e"], 1);
+
+        var updateCall = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
+        expect(updateCall.parameters).toEqual({insert: [1, 2]});
+      });
+
+      it("handles single parameter", function() {
+        view.insert(["d", "e"]);
+
+        var updateCall = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
+        expect(updateCall.parameters).toEqual({insert: [3, 2]});
+        expect(view.get("items")).toEqual(["A", "B", "C", "d", "e"]);
+      });
+
+      it("handles negative index", function() {
+        view.insert(["d", "e"], -1);
+
+        var updateCall = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
+        expect(updateCall.parameters).toEqual({insert: [2, 2]});
+        expect(view.get("items")).toEqual(["A", "B", "d", "e", "C"]);
+      });
+
+      it("adjusts index to bounds", function() {
+        view.insert(["x"], 5);
+
+        var call = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
+        expect(call.parameters).toEqual({insert: [3, 1]});
+        expect(view.get("items")).toEqual(["A", "B", "C", "x"]);
+      });
+
+      it("adjusts negative index to bounds", function() {
+        view.insert(["x"], -5);
+
+        var call = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
+        expect(call.parameters).toEqual({insert: [0, 1]});
+        expect(view.get("items")).toEqual(["x", "A", "B", "C"]);
+      });
+
+      it("fails when index is not a number", function() {
+        expect(function() {
+          view.insert(["d"], NaN);
+        }).toThrow();
+      });
+
+      it("fails when items is not an array", function() {
+        expect(function() {
+          view.insert({});
+        }).toThrow();
+      });
+
     });
 
-    it("refresh calls native update", function() {
-      nativeBridge.resetCalls();
+    describe("remove", function() {
+      beforeEach(function() {
+        nativeBridge.resetCalls();
+      });
 
-      view.refresh(1);
+      it("can remove beginning of items array", function() {
+        view.remove(0, 2);
 
-      var updateCall = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
-      expect(updateCall.parameters.reload).toEqual([1, 1]);
+        expect(view.get("items")).toEqual(["C"]);
+      });
+
+      it("can remove end of items array", function() {
+        view.remove(1, 2);
+
+        expect(view.get("items")).toEqual(["A"]);
+      });
+
+      it("calls native update", function() {
+        view.remove(1, 2);
+
+        var updateCall = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
+        expect(updateCall.parameters).toEqual({remove: [1, 2]});
+      });
+
+      it("handles single parameter", function() {
+        view.remove(1);
+
+        var updateCall = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
+        expect(updateCall.parameters).toEqual({remove: [1, 1]});
+        expect(view.get("items")).toEqual(["A", "C"]);
+      });
+
+      it("handles negative index", function() {
+        view.remove(-1, 1);
+
+        var updateCall = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
+        expect(updateCall.parameters).toEqual({remove: [2, 1]});
+        expect(view.get("items")).toEqual(["A", "B"]);
+      });
+
+      it("ignores index out of bounds", function() {
+        view.remove(5, 2);
+
+        var updateCalls = nativeBridge.calls({op: "call", method: "update", id: view.cid});
+        expect(updateCalls).toEqual([]);
+        expect(view.get("items")).toEqual(["A", "B", "C"]);
+      });
+
+      it("ignores negative index out of bounds", function() {
+        view.remove(-5, 2);
+
+        var updateCalls = nativeBridge.calls({op: "call", method: "update", id: view.cid});
+        expect(updateCalls).toEqual([]);
+        expect(view.get("items")).toEqual(["A", "B", "C"]);
+      });
+
+      it("repairs count if exceeding", function() {
+        view.remove(2, 5);
+
+        var updateCall = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
+        expect(updateCall.parameters).toEqual({remove: [2, 1]});
+        expect(view.get("items")).toEqual(["A", "B"]);
+      });
+
+      it("ignores zero count", function() {
+        view.remove(2, 0);
+
+        var updateCalls = nativeBridge.calls({op: "call", method: "update", id: view.cid});
+        expect(updateCalls).toEqual([]);
+        expect(view.get("items")).toEqual(["A", "B", "C"]);
+      });
+
+      it("fails when index is not a number", function() {
+        expect(function() {
+          view.remove(NaN);
+        }).toThrow();
+      });
+
+      it("fails when count is not a number", function() {
+        expect(function() {
+          view.remove(0, NaN);
+        }).toThrow();
+      });
+
     });
 
-    it("refresh accepts negative index", function() {
-      nativeBridge.resetCalls();
+    describe("refresh", function() {
 
-      view.refresh(-1);
+      beforeEach(function() {
+        nativeBridge.resetCalls();
+      });
 
-      var updateCall = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
-      expect(updateCall.parameters.reload).toEqual([2, 1]);
-    });
+      it("without parameters calls native update", function() {
+        view.refresh();
 
-    it("refresh ignores out-of-bounds index", function() {
-      nativeBridge.resetCalls();
+        var updateCall = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
+        expect(updateCall.parameters.reload).toEqual([0, 3]);
+      });
 
-      view.refresh(5);
+      it("calls native update", function() {
+        view.refresh(1);
 
-      var calls = nativeBridge.calls({op: "call", method: "update", id: view.cid});
-      expect(calls).toEqual([]);
-    });
+        var updateCall = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
+        expect(updateCall.parameters.reload).toEqual([1, 1]);
+      });
 
-    it("refresh fails with invalid parameter", function() {
-      expect(function() {
-        view.refresh(NaN);
-      }).toThrow();
+      it("accepts negative index", function() {
+        view.refresh(-1);
+
+        var updateCall = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
+        expect(updateCall.parameters.reload).toEqual([2, 1]);
+      });
+
+      it("ignores out-of-bounds index", function() {
+        view.refresh(5);
+
+        var calls = nativeBridge.calls({op: "call", method: "update", id: view.cid});
+        expect(calls).toEqual([]);
+      });
+
+      it("fails with invalid parameter", function() {
+        expect(function() {
+          view.refresh(NaN);
+        }).toThrow();
+      });
+
     });
 
   });

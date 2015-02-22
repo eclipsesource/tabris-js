@@ -96,26 +96,38 @@
         this.call("update", {reload: [0, this._items.length]});
         return;
       }
-      if (typeof index !== "number" || !isFinite(index)) {
-        throw new Error("Illegal index");
-      }
-      if (index < 0) {
-        index += this._items.length;
-      }
-      if (this._items[index]) {
+      index = this._checkIndex(index);
+      if (index >= 0 && index < this._items.length) {
         this.call("update", {reload: [index, 1]});
       }
     },
 
-    _insert: function(items) {
-      var length = this._items.length;
-      Array.prototype.push.apply(this._items, items);
-      this.call("update", {insert: [length, items.length]});
+    insert: function(items, index) {
+      if (!Array.isArray(items)) {
+        throw new Error("items is not an array");
+      }
+      if (arguments.length === 1) {
+        index = this._items.length;
+      } else {
+        index = Math.max(0, Math.min(this._items.length, this._checkIndex(index)));
+      }
+      Array.prototype.splice.apply(this._items, [index, 0].concat(items));
+      this.call("update", {insert: [index, items.length]});
     },
 
-    _remove: function(start, count) {
-      this._items.splice(start, count);
-      this.call("update", {remove: [start, count]});
+    remove: function(index, count) {
+      index = this._checkIndex(index);
+      if (arguments.length === 1) {
+        count = 1;
+      } else if (typeof count === "number" && isFinite(count) && count >= 0) {
+        count = Math.min(count, this._items.length - index);
+      } else {
+        throw new Error("illegal remove count");
+      }
+      if (index >= 0 && index < this._items.length && count > 0) {
+        this._items.splice(index, count);
+        this.call("update", {remove: [index, count]});
+      }
     },
 
     _update: function() {
@@ -125,6 +137,13 @@
         this.call("update", this._updateOperations);
         delete this._updateOperations;
       }
+    },
+
+    _checkIndex: function(index) {
+      if (typeof index !== "number" || !isFinite(index)) {
+        throw new Error("illegal index");
+      }
+      return index < 0 ? index + this._items.length : index;
     }
 
   });
