@@ -2,95 +2,100 @@ var MARGIN = 12;
 var $ = require("./lib/jquery.min.js");
 
 var page = tabris.create("Page", {
-  title: "Reddit",
+  title: "Reddit - Pets",
   topLevel: true
 });
 
-var progressBar = tabris.create("ProgressBar", {
-  layoutData: {left: 15, right: 15, centerY: 0},
-  maximum: 100
-}).appendTo(page);
-
-setProgress(20);
-
-var loadingTextView = tabris.create("TextView", {
-  layoutData: {left: MARGIN, right: MARGIN, bottom: [progressBar, 20]},
-  alignment: "center",
-  text: "loading data from reddit ..."
-}).appendTo(page);
-
-$.getJSON("http://www.reddit.com/r/petpictures.json?limit=100", function(json) {
-  loadingTextView.set("visible", false);
-  progressBar.set("visible", false);
-  tabris.create("CollectionView", {
-    layoutData: {left: 0, top: 0, right: 0, bottom: 0},
-    background: "white",
-    items: json.data.children,
-    itemHeight: 84,
-    initializeCell: function(cell) {
-      var imageView = tabris.create("ImageView", {
-        layoutData: {left: MARGIN, top: 4, width: 76, height: 76},
-        scaleMode: "fill"
-      }).appendTo(cell);
-      var nameText = tabris.create("TextView", {
-        maxLines: 2
-      }).appendTo(cell);
-      var authorText = tabris.create("TextView", {
-        foreground: "#234"
-      }).appendTo(cell);
-      var commentsText = tabris.create("TextView", {
-        alignment: "right",
-        foreground: "green"
-      }).appendTo(cell);
-      // create a horizontal line
-      var divider = tabris.create("Composite", {
-        background: "rgba(20,20,20,0.3)"
-      }).appendTo(cell);
-      cell.on("itemchange", function(element) {
-        imageView.set("image", {src: element.data.thumbnail});
-        nameText.set("text", element.data.title);
-        authorText.set("text", element.data.author);
-        commentsText.set("text", element.data.num_comments + " comments");
-      }).on("change:bounds", function() {
-        var cellWidth = cell.get("bounds").width;
-        var textWidth = 200;
-        divider.set("layoutData", {top: 83, left: MARGIN, width: cellWidth - 2 * MARGIN, height: 1});
-        commentsText.set("layoutData", {top: 60, left: cellWidth - textWidth - MARGIN, height: 20, width: textWidth});
-        authorText.set("layoutData", {top: 60, left: 104, height: 20, width: textWidth});
-        nameText.set("layoutData", {left: 104, top: 5, width: cellWidth - textWidth - MARGIN});
-      });
-    }
-  }).on("selection", function(event) {
-    var detailPage = tabris.create("Page", {
-      background: "black",
-      title: event.item.data.title,
-      topLevel: false
+var collectionView = tabris.create("CollectionView", {
+  layoutData: {left: 0, top: 0, right: 0, bottom: 0},
+  itemHeight: 82,
+  refreshEnabled: true,
+  initializeCell: function(cell) {
+    var imageView = tabris.create("ImageView", {
+      layoutData: {left: MARGIN, top: 6, width: 70, height: 70},
+      scaleMode: "fill"
+    }).appendTo(cell);
+    var nameView = tabris.create("TextView", {
+      maxLines: 2
+    }).appendTo(cell);
+    var authorView = tabris.create("TextView", {
+      foreground: "#234"
+    }).appendTo(cell);
+    var commentsView = tabris.create("TextView", {
+      alignment: "right",
+      foreground: "green"
+    }).appendTo(cell);
+    cell.on("itemchange", function(item) {
+      imageView.set("image", {src: item.data.thumbnail});
+      nameView.set("text", item.data.title);
+      authorView.set("text", item.data.author);
+      commentsView.set("text", item.data.num_comments + " comments");
+    }).on("change:bounds", function() {
+      var cellWidth = cell.get("bounds").width;
+      var textWidth = 200;
+      nameView.set("layoutData", {left: 104, top: 6, width: cellWidth - textWidth - MARGIN});
+      authorView.set("layoutData", {top: 54, left: 104, height: 20, width: textWidth});
+      commentsView.set("layoutData", {top: 54, left: cellWidth - textWidth - MARGIN, height: 20, width: textWidth});
     });
-    var url = event.item.data.url;
-    if (url.indexOf("jpg", url.length - 3) !== -1) {
-      tabris.create("ImageView", {
-        layoutData: {left: 0, top: 0, right: 0, bottom: 0},
-        image: {src: url},
-        scaleMode: "fit"
-      }).appendTo(detailPage);
-    } else {
-      tabris.create("WebView", {
-        layoutData: {left: 0, top: 0, right: 0, bottom: 0},
-        url: event.item.data.url
-      }).appendTo(detailPage);
-    }
-    detailPage.open();
-  }).appendTo(page);
-});
+  }
+}).on("refresh", function() {
+  loadNewData();
+}).on("selection", function(event) {
+  createDetailsPage(event.item.data);
+}).appendTo(page);
 
 page.open();
+loadData();
 
-function setProgress(timeout) {
-  setTimeout(function() {
-    var progress = progressBar.get("selection") + 1;
-    progressBar.set("selection", progress);
-    if (progress < 100) {
-      setProgress(timeout * 1.03);
-    }
-  }, timeout);
+function loadData() {
+  collectionView.set("refreshIndicator", true);
+  $.getJSON(createUrl({limit: 50}), function(json) {
+    collectionView.set("items", json.data.children);
+    collectionView.set("refreshIndicator", false);
+  });
+}
+
+function loadNewData() {
+  $.getJSON(createUrl({limit: 25, before: getFirstId()}), function(json) {
+    collectionView.insert(json.data.children, 0);
+    collectionView.reveal(0);
+    collectionView.set("refreshIndicator", false);
+  });
+}
+
+function createUrl(params) {
+  return "http://www.reddit.com/r/petpictures.json?" + Object.keys(params).map(function(key) {
+    return key + "=" + params[key];
+  }).join("&");
+}
+
+function getFirstId() {
+  if (collectionView._items) {
+    return getRedditId(collectionView._items[0]) || null;
+  }
+}
+
+function getRedditId(item) {
+  return item ? item.kind + "_" + item.data.id : null;
+}
+
+function createDetailsPage(data) {
+  var detailPage = tabris.create("Page", {
+    background: "black",
+    title: data.title,
+    topLevel: false
+  });
+  if (data.url.substr(-4, 4) === ".jpg") {
+    tabris.create("ImageView", {
+      layoutData: {left: 0, top: 0, right: 0, bottom: 0},
+      image: data.url,
+      scaleMode: "fit"
+    }).appendTo(detailPage);
+  } else {
+    tabris.create("WebView", {
+      layoutData: {left: 0, top: 0, right: 0, bottom: 0},
+      url: data.url
+    }).appendTo(detailPage);
+  }
+  detailPage.open();
 }
