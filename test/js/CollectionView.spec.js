@@ -58,9 +58,9 @@ describe("CollectionView", function() {
           view.set("items", items);
         });
 
-        it("calls native update with insert", function() {
-          var calls = nativeBridge.calls({op: "call", id: view.cid, method: "update"});
-          expect(calls[0].parameters).toEqual({insert: [0, 3]});
+        it("calls native reload with item count", function() {
+          var calls = nativeBridge.calls({op: "call", id: view.cid, method: "reload"});
+          expect(calls[0].parameters).toEqual({items: 3});
         });
 
         it("changes to items provided in setter have no effect (defensive copy)", function() {
@@ -82,9 +82,9 @@ describe("CollectionView", function() {
             view.set("items", ["e", "f"]);
           });
 
-          it("calls native update with remove and insert", function() {
-            var calls = nativeBridge.calls({op: "call", id: view.cid, method: "update"});
-            expect(calls[0].parameters).toEqual({remove: [0, 3], insert: [0, 2]});
+          it("calls native reload with item count", function() {
+            var calls = nativeBridge.calls({op: "call", id: view.cid, method: "reload"});
+            expect(calls[0].parameters).toEqual({items: 2});
           });
 
         });
@@ -96,9 +96,13 @@ describe("CollectionView", function() {
             view.set("items", null);
           });
 
-          it("calls native update with remove", function() {
-            var calls = nativeBridge.calls({op: "call", id: view.cid, method: "update"});
-            expect(calls[0].parameters).toEqual({remove: [0, 3]});
+          it("calls native reload with 0", function() {
+            var calls = nativeBridge.calls({op: "call", id: view.cid, method: "reload"});
+            expect(calls[0].parameters).toEqual({items: 0});
+          });
+
+          it("sets items to empty array", function() {
+            expect(view.get("items")).toEqual([]);
           });
 
         });
@@ -194,14 +198,14 @@ describe("CollectionView", function() {
       view = tabris.create("CollectionView", {items: ["A", "B", "C"]}).appendTo(parent);
     });
 
-    it("calls update after create and listen calls", function() {
+    it("calls reload after create and listen calls", function() {
       var allCalls = nativeBridge.calls({id: view.cid});
       var listen1Call = nativeBridge.calls({op: "listen", event: "createitem", id: view.cid})[0];
       var listen2Call = nativeBridge.calls({op: "listen", event: "populateitem", id: view.cid})[0];
-      var updateCall = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
+      var reloadCall = nativeBridge.calls({op: "call", method: "reload", id: view.cid})[0];
 
-      expect(allCalls.indexOf(updateCall)).toBeGreaterThan(allCalls.indexOf(listen1Call));
-      expect(allCalls.indexOf(updateCall)).toBeGreaterThan(allCalls.indexOf(listen2Call));
+      expect(allCalls.indexOf(reloadCall)).toBeGreaterThan(allCalls.indexOf(listen1Call));
+      expect(allCalls.indexOf(reloadCall)).toBeGreaterThan(allCalls.indexOf(listen2Call));
     });
 
     describe("insert", function() {

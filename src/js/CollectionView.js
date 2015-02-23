@@ -18,13 +18,15 @@
       var result = tabris.Proxy.prototype._create.apply(this, arguments);
       this._nativeListen("createitem", true);
       this._nativeListen("populateitem", true);
-      this._update();
+      // TODO call _reload on flush
+      this._reload();
       return result;
     },
 
     set: function() {
       var result = tabris.Proxy.prototype.set.apply(this, arguments);
-      this._update();
+      // TODO call _reload on flush, remove override
+      this._reload();
       return result;
     },
 
@@ -72,19 +74,8 @@
     },
 
     _setItems: function(items) {
-      var oldItemCount = this._items.length;
       this._items = items ? items.concat() : [];
-      var updateOperations = {};
-      if (oldItemCount > 0) {
-        updateOperations.remove = [0, oldItemCount];
-      }
-      var newItemCount = this._items.length;
-      if (newItemCount > 0) {
-        updateOperations.insert = [0, newItemCount];
-      }
-      if (Object.keys(updateOperations).length) {
-        this._updateOperations = updateOperations;
-      }
+      this._needsReload = true;
     },
 
     _getItem: function(items, index) {
@@ -130,12 +121,12 @@
       }
     },
 
-    _update: function() {
-      // We defer the update call until the end of create/set in order to ensure that
+    _reload: function() {
+      // We defer the reload call until the end of create/set in order to ensure that
       // we don't receive events before the listeners are attached
-      if (this._updateOperations) {
-        this.call("update", this._updateOperations);
-        delete this._updateOperations;
+      if (this._needsReload) {
+        this.call("reload", {"items": this._items.length});
+        delete this._needsReload;
       }
     },
 
