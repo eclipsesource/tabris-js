@@ -125,7 +125,6 @@ function positionTrayInRestingState() {
     updateShadeOpacity(translationY);
     updateStrapTextViewRotation(translationY);
   }).on("completion", function() {
-    this.dispose();
     animation = undefined;
     // TODO remove the following workaround when tabris-ios #538 is implemented
     var offsetY = tray.get("transform").translationY;
