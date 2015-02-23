@@ -18,7 +18,6 @@ var firstNameInput = tabris.create("TextInput", {
 
 var lastNameTextView = tabris.create("TextView", {
   layoutData: {left: 10, top: [firstNameTextView, 18], width: 120},
-  alignment: "left",
   text: "Last Name:"
 }).appendTo(page);
 
@@ -29,7 +28,6 @@ var lastNameInput = tabris.create("TextInput", {
 
 var passphraseTextView = tabris.create("TextView", {
   layoutData: {left: 10, top: [lastNameTextView, 18], width: 120},
-  alignment: "left",
   text: "Passphrase:"
 }).appendTo(page);
 
@@ -41,7 +39,6 @@ tabris.create("TextInput", {
 
 var countryTextView = tabris.create("TextView", {
   layoutData: {left: 10, top: [passphraseTextView, 18], width: 120},
-  alignment: "left",
   text: "Country:"
 }).appendTo(page);
 
@@ -53,7 +50,6 @@ tabris.create("Picker", {
 
 var classTextView = tabris.create("TextView", {
   layoutData: {left: 10, top: [countryTextView, 18], width: 120},
-  alignment: "left",
   text: "Class:"
 }).appendTo(page);
 
@@ -63,26 +59,49 @@ tabris.create("Picker", {
   selectionIndex: 0
 }).appendTo(page);
 
-var luggageTextView = tabris.create("TextView", {
+var seatTextView = tabris.create("TextView", {
   layoutData: {left: 10, top: [classTextView, 18], width: 120},
-  alignment: "left",
-  text: "Luggage:"
+  text: "Seat:"
 }).appendTo(page);
+
+var windowButton = tabris.create("RadioButton", {
+  layoutData: {left: [seatTextView, 10], right: 10, baseline: seatTextView},
+  text: "Window"
+}).appendTo(page);
+
+var aisleButton = tabris.create("RadioButton", {
+  layoutData: {left: [seatTextView, 10], right: 10, top: [seatTextView, 10]},
+  text: "Aisle"
+}).appendTo(page);
+
+var dontCareButton = tabris.create("RadioButton", {
+  layoutData: {left: [seatTextView, 10], right: 10, top: [aisleButton, 10]},
+  text: "Don't care",
+  selection: true
+}).appendTo(page);
+
+var luggagePanel = tabris.create("Composite", {
+  layoutData: {left: 10, top: [dontCareButton, 18], right: 10}
+}).appendTo(page);
+
+var luggageTextView = tabris.create("TextView", {
+  layoutData: {left: 0, centerY: 0, width: 120},
+  text: "Luggage:"
+}).appendTo(luggagePanel);
 
 var luggageWeight = tabris.create("TextView", {
-  layoutData: {right: 10, baseline: luggageTextView, width: 50},
-  alignment: "left",
+  layoutData: {right: 10, centerY: 0, width: 50},
   text: "0 Kg"
-}).appendTo(page);
+}).appendTo(luggagePanel);
 
-var luggage = tabris.create("Slider", {
-  layoutData: {left: [luggageTextView, 10], right: [luggageWeight, 10], top: [classTextView, 18]}
+tabris.create("Slider", {
+  layoutData: {left: [luggageTextView, 10], right: [luggageWeight, 10], centerY: 0}
 }).on("change:selection", function() {
   luggageWeight.set("text", this.get("selection") + " Kg");
-}).appendTo(page);
+}).appendTo(luggagePanel);
 
 var checkbox = tabris.create("CheckBox", {
-  layoutData: {left: [classTextView, 10], right: 10, top: [luggage, 10]},
+  layoutData: {left: [seatTextView, 10], right: 10, top: [luggagePanel, 10]},
   text: "Vegetarian"
 }).appendTo(page);
 
@@ -101,13 +120,22 @@ function populateMessage() {
   }
   message = tabris.create("TextView", {
     layoutData: {left: 10, right: 10, top: [button, 10]},
-    alignment: "left",
-    text: "Flight booked for: " + createName() + "\n"
+    text: "Flight booked for: " + createName() + "\nSeating: " + createSeating()
   }).appendTo(page);
 }
 
 function createName() {
   return [firstNameInput.get("text"), lastNameInput.get("text")].join(" ");
+}
+
+function createSeating() {
+  var seating = "Anywhere";
+  [windowButton, aisleButton].forEach(function(button) {
+    if (button.get("selection")) {
+      seating = button.get("text");
+    }
+  });
+  return seating;
 }
 
 page.open();
