@@ -406,6 +406,41 @@ describe("CollectionView", function() {
 
     });
 
+    describe("reveal", function() {
+
+      beforeEach(function() {
+        nativeBridge.resetCalls();
+      });
+
+      it("calls native reveal with index", function() {
+        view.reveal(1);
+
+        var call = nativeBridge.calls({op: "call", method: "reveal", id: view.cid})[0];
+        expect(call.parameters).toEqual({index: 1});
+      });
+
+      it("accepts negative index", function() {
+        view.reveal(-1);
+
+        var call = nativeBridge.calls({op: "call", method: "reveal", id: view.cid})[0];
+        expect(call.parameters).toEqual({index: 2});
+      });
+
+      it("ignores out-of-bounds index", function() {
+        view.reveal(5);
+
+        var calls = nativeBridge.calls({op: "call", method: "reveal", id: view.cid});
+        expect(calls).toEqual([]);
+      });
+
+      it("fails with invalid parameter", function() {
+        expect(function() {
+          view.refresh(NaN);
+        }).toThrow();
+      });
+
+    });
+
   });
 
 });

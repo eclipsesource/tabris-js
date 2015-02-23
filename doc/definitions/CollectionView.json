@@ -67,6 +67,12 @@
         "parameters": ["index"],
         "description": "Triggers a refresh of the item with the given index. If the item is scrolled into view, an `itemchange` event will be issued on the corresponding cell."
       }
+    ],
+    "reveal": [
+      {
+        "parameters": ["index"],
+        "description": "Scrolls the item with the given index into view. If a negative index is given, it is interpreted as relative to the end."
+      }
     ]
   },
   "links": [

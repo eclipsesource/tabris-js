@@ -82,6 +82,13 @@
       return items[index];
     },
 
+    reveal: function(index) {
+      index = this._checkIndex(index);
+      if (index >= 0 && index < this._items.length) {
+        this.call("reveal", {index: index});
+      }
+    },
+
     refresh: function(index) {
       if (arguments.length === 0) {
         this.call("update", {reload: [0, this._items.length]});
