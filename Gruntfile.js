@@ -145,6 +145,10 @@ module.exports = function(grunt) {
         cwd: "doc/",
         src: ["*.md", "img/*.*"],
         dest: "build/doc/"
+      },
+      readme: {
+        src: "README.md",
+        dest: "build/tabris/"
       }
     },
     compress: {
@@ -190,7 +194,6 @@ module.exports = function(grunt) {
     var stringify = require("format-json");
     var pack = grunt.file.readJSON("package.json");
     delete pack.devDependencies;
-    pack.private = true; // we don't want to publish this to npm yet
     pack.main = "tabris.min.js";
     grunt.file.write("build/tabris/package.json", stringify.plain(pack));
   });
@@ -202,6 +205,7 @@ module.exports = function(grunt) {
     "uglify:tabris",
     "uglify:boot",
     "package",
+    "copy:readme",
     "compress:tabris"
   ]);
 
