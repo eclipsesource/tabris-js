@@ -1,4 +1,4 @@
-var SPACE = Math.max(device.screen.width, device.screen.height) > 900 ? 15 : 5;
+var SPACE = Math.max(screen.width, screen.height) > 900 ? 15 : 5;
 
 module.exports = {
   "#red": {

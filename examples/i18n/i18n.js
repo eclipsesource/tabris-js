@@ -1,4 +1,4 @@
-var data = device.language === "de-DE" ? require("./de.json") : require("./en.json");
+var data = tabris.device.get("language") === "de-DE" ? require("./de.json") : require("./en.json");
 
 var MARGIN = 10;
 

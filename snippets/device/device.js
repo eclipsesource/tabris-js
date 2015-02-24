@@ -6,7 +6,7 @@ var page = tabris.create("Page", {
 ["platform", "version", "model", "language"].forEach(function(property) {
   tabris.create("TextView", {
     layoutData: {left: 10, right: 10, top: [page.children().last(), 10]},
-    text: property + ": " + device[property]
+    text: property + ": " + tabris.device.get(property)
   }).appendTo(page);
 });
 

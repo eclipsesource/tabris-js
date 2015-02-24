@@ -1,4 +1,64 @@
-describe("Device", function() {
+describe("tabris.device", function() {
+
+  var results, nativeBridge;
+
+  beforeEach(function() {
+    nativeBridge = new NativeBridgeSpy();
+    results = {};
+    spyOn(nativeBridge, "get").and.callFake(function(id, name) {
+      if (id === "tabris.Device") {
+        return results[name];
+      }
+    });
+    tabris._reset();
+    tabris._init(nativeBridge);
+  });
+
+  it("provides model", function() {
+    results.model = "x1";
+    expect(tabris.device.get("model")).toBe("x1");
+  });
+
+  it("provides platform", function() {
+    results.platform = "foo";
+    expect(tabris.device.get("platform")).toBe("foo");
+  });
+
+  it("provides version", function() {
+    results.version = "23";
+    expect(tabris.device.get("version")).toBe("23");
+  });
+
+  it("provides language", function() {
+    results.language = "es";
+    expect(tabris.device.get("language")).toBe("es");
+  });
+
+  it("provides screenWidth", function() {
+    results.screenWidth = 23;
+    expect(tabris.device.get("screenWidth")).toBe(23);
+  });
+
+  it("provides screenHeight", function() {
+    results.screenHeight = 23;
+    expect(tabris.device.get("screenHeight")).toBe(23);
+  });
+
+  it("prevents overwriting properties", function() {
+    results.language = "es";
+    tabris.device.set("language", "fr");
+    expect(tabris.device.get("language")).toBe("es");
+  });
+
+  it("can not be disposed", function() {
+    expect(function() {
+      tabris.device.dispose();
+    }).toThrow();
+  });
+
+});
+
+describe("publishDeviceProperties", function() {
 
   var target, results, nativeBridge;
 
@@ -16,15 +76,16 @@ describe("Device", function() {
 
   describe("when device exists", function() {
 
+    var orig;
+
     beforeEach(function() {
-      target = {
-        device: {}
-      };
+      orig = {};
+      target = {device: orig};
       tabris._publishDeviceProperties(target);
     });
 
     it("does not modify device", function() {
-      expect(target.device).toEqual({});
+      expect(target.device).toBe(orig);
     });
 
   });
@@ -77,45 +138,6 @@ describe("Device", function() {
       results.version = "23";
       target.device.version = "42";
       expect(target.device.version).toBe("23");
-    });
-
-    it("provides device.language", function() {
-      results.language = "es";
-      expect(target.device.language).toBe("es");
-    });
-
-    it("prevents overwriting device.language", function() {
-      results.language = "es";
-      target.device.language = "fr";
-      expect(target.device.language).toBe("es");
-    });
-
-    it("provides screen.width", function() {
-      results.screenWidth = 23;
-      expect(target.device.screen.width).toBe(23);
-    });
-
-    it("prevents overwriting screen.width", function() {
-      results.screenWidth = 23;
-      target.device.screen.width = 42;
-      expect(target.device.screen.width).toBe(23);
-    });
-
-    it("provides screen.height", function() {
-      results.screenHeight = 23;
-      expect(target.device.screen.height).toBe(23);
-    });
-
-    it("prevents overwriting screen.height", function() {
-      results.screenHeight = 23;
-      target.device.screen.height = 42;
-      expect(target.device.screen.height).toBe(23);
-    });
-
-    it("prevents overwriting screen", function() {
-      var scr = target.device.screen;
-      target.device.screen = {};
-      expect(target.device.screen).toBe(scr);
     });
 
   });
@@ -231,10 +253,6 @@ describe("Device", function() {
 
     it("creates screen", function() {
       expect(target.screen).toBeDefined();
-    });
-
-    it("screen is the same as device.screen", function() {
-      expect(target.screen).toBe(target.device.screen);
     });
 
     it("prevents overwriting screen", function() {
