@@ -95,7 +95,6 @@ function animateOutLeftCreateCurrentPerson(person) {
     duration: 500,
     easing: "ease-out"
   }).on("completion", function() {
-    this.dispose();
     personDetailView.dispose();
     personDetailView = createPersonDetail(personDetailsParent, person, 0);
   });
