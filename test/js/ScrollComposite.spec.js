@@ -37,7 +37,7 @@ describe("ScrollComposite", function() {
       var result, child;
 
       beforeEach(function() {
-        child = new tabris.Proxy("child");
+        child = tabris.create("Composite");
         nativeBridge.resetCalls();
         result = scrollComposite.append(child);
       });
@@ -100,7 +100,7 @@ describe("ScrollComposite", function() {
       var child;
 
       beforeEach(function() {
-        child = new tabris.Proxy();
+        child = tabris.create("Composite");
         nativeBridge.resetCalls();
         scrollComposite.append(child);
       });

@@ -9,7 +9,8 @@ describe("CollectionView", function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._init(nativeBridge);
-    parent = new tabris.Proxy("parent-id");
+    parent = tabris.create("Composite");
+    nativeBridge.resetCalls();
   });
 
   afterEach(function() {

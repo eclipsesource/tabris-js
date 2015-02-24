@@ -112,7 +112,8 @@ describe("Page", function() {
       var child;
 
       beforeEach(function() {
-        child = new tabris.Proxy("child");
+        child = tabris.create("Composite");
+        nativeBridge.resetCalls();
         page.append(child);
       });
 
@@ -178,7 +179,7 @@ describe("Page", function() {
       var child;
 
       beforeEach(function() {
-        child = new tabris.Proxy();
+        child = tabris.create("Composite");
         nativeBridge.resetCalls();
         page.append(child);
       });

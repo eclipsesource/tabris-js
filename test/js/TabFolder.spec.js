@@ -6,12 +6,13 @@ describe("TabFolder", function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._init(nativeBridge);
-    parent = new tabris.Proxy("parent-id");
+    parent = tabris.create("Composite");
+    nativeBridge.resetCalls();
     tabFolder = tabris.create("TabFolder").appendTo(parent);
   });
 
   it("children list is empty", function() {
-    expect(tabFolder.children()).toEqual([]);
+    expect(tabFolder.children().toArray()).toEqual([]);
   });
 
   it("paging is false", function() {

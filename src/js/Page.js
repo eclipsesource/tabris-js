@@ -2,7 +2,7 @@
 
   var pageProperties = ["title", "image", "style", "topLevel"];
 
-  tabris.registerType("_Page", {
+  tabris.registerWidget("_Page", {
     _type: "tabris.Page",
 
     _properties: {

@@ -1,6 +1,6 @@
 (function() {
 
-  tabris.registerType("_TabItem", {
+  tabris.registerWidget("_TabItem", {
     _type: "rwt.widgets.TabItem",
     _properties: {
       text: true,
@@ -56,11 +56,11 @@
     },
 
     _getItems: function() {
-      return this._children ? this._children.filter(isItem) : [];
+      return this._children ? this._children.filter(isItem) : new tabris.ProxyCollection();
     },
 
     children: function() {
-      return this._children ? this._children.filter(isTab) : [];
+      return this._children ? this._children.filter(isTab) : new tabris.ProxyCollection();
     }
 
   });
@@ -116,7 +116,7 @@
       if (!(parent instanceof tabris.TabFolder)) {
         throw new Error("Tab must be a child of TabFolder");
       }
-      this.super("_setParent", parent);
+      tabris.Widgets._setParent.call(this, parent);
       this._tabItem = tabris.create("_TabItem", util.extend({
         control: this.cid,
         index: parent._getItems().length

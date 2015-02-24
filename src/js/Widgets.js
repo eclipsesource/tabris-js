@@ -1,7 +1,110 @@
 (function() {
 
+  tabris.Widgets = {
+
+    append: function() {
+      this._checkDisposed();
+      var proxies = arguments[0] instanceof tabris.ProxyCollection ? arguments[0].toArray() : arguments;
+      for (var i = 0; i < proxies.length; i++) {
+        if (!(proxies[i] instanceof tabris.Proxy)) {
+          throw new Error("Cannot append non-widget");
+        }
+        proxies[i]._setParent(this);
+      }
+      return this;
+    },
+
+    appendTo: function(proxy) {
+      this._checkDisposed();
+      proxy = proxy instanceof tabris.ProxyCollection ? proxy.first() : proxy;
+      if (!(proxy instanceof tabris.Proxy)) {
+        throw new Error("Cannot append to non-widget");
+      }
+      this._setParent(proxy);
+      return this;
+    },
+
+    parent: function() {
+      return this._parent;
+    },
+
+    children: function(selector) {
+      return new tabris.ProxyCollection(this._children, selector);
+    },
+
+    find: function(selector) {
+      return new tabris.ProxyCollection(this._children, selector, true);
+    },
+
+    apply: function(sheet) {
+      var scope = new tabris.ProxyCollection(this._children.concat(this), "*", true);
+      if (sheet["*"]) {
+        scope.set(sheet["*"]);
+      }
+      var selector;
+      for (selector in sheet) {
+        if (selector !== "*" && selector[0] !== "#") {
+          scope.filter(selector).set(sheet[selector]);
+        }
+      }
+      for (selector in sheet) {
+        if (selector[0] === "#") {
+          scope.filter(selector).set(sheet[selector]);
+        }
+      }
+      return this;
+    },
+
+    _getContainer: function() {
+      return this;
+    },
+
+    _setParent: function(parent) {
+      tabris._nativeBridge.set(this.cid, "parent", tabris.PropertyEncoding.proxy(parent._getContainer()));
+      if (this._parent) {
+        this._parent._removeChild(this);
+      }
+      this._parent = parent;
+      this._parent._addChild(this);
+    },
+
+    _addChild: function(child) {
+      var check = this.constructor && this.constructor._supportsChildren;
+      if (check === false) {
+        throw new Error(this.type + " cannot contain children");
+      }
+      if (typeof check === "function" && !check(child)) {
+        throw new Error(this.type + " cannot contain children of type " + child.type);
+      }
+      if (!this._children) {
+        this._children = [];
+      }
+      this._children.push(child);
+      this.trigger("addchild", child, this, {});
+    },
+
+    _removeChild: function(child) {
+      if (this._children) {
+        var index = this._children.indexOf(child);
+        if (index !== -1) {
+          this._children.splice(index, 1);
+        }
+        this.trigger("removechild", child, this, {index: index});
+      }
+    },
+
+    _destroyChildren: function() {
+      if (this._children) {
+        for (var i = 0; i < this._children.length; i++) {
+          this._children[i]._destroy();
+        }
+      }
+    }
+
+  };
+
   tabris.registerWidget = function(type, members) {
-    members = util.extend(util.clone(members), tabris.Animation);
+    members = util.extend({}, tabris.Widgets, tabris.Animation, members);
     members._listen = util.extend({}, tabris.registerWidget._defaultListen, members._listen || {});
     members._trigger = util.extend({}, tabris.registerWidget._defaultTrigger, members._trigger || {});
     members._setProperty = util.extend({}, tabris.registerWidget._defaultSetProperty, members._setProperty || {});
