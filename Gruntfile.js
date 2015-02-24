@@ -93,6 +93,7 @@ module.exports = function(grunt) {
           "DOMDocument.js",
           "WindowTimers.js",
           "Device.js",
+          "App.js",
           "UI.js",
           "CollectionView.js",
           "ScrollComposite.js",

@@ -1,0 +1,9 @@
+{
+  "title": "App Object",
+  "category": "Device",
+  "description": "React to application hibernation and resume",
+  "main": "app.js",
+  "dependencies": {
+    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+  }
+}

@@ -28,12 +28,26 @@ describe("tabris", function() {
       expect(result.cid).toBe("TestType");
     });
 
-    it("returns a proxy with translated id and type", function() {
-      tabris.TestType._type = "CustomType";
-      var result = tabris("TestType");
+    it("returns a proxy with translated type", function() {
+      tabris.registerType("_TestType", {_type: "tabris.TestType"});
 
-      expect(result).toEqual(jasmine.any(tabris.TestType));
-      expect(result.cid).toBe("CustomType");
+      var result = tabris("_TestType");
+
+      expect(result).toEqual(jasmine.any(tabris._TestType));
+      expect(result.cid).toBe("tabris.TestType");
+      delete tabris._TestType;
+    });
+
+    it("makes proxy with translated type notifiable", function() {
+      tabris.registerType("_TestType", {_type: "tabris.TestType"});
+      var result = tabris("_TestType");
+      var listener = jasmine.createSpy();
+      result.on("foo", listener);
+
+      tabris._notify("tabris.TestType", "foo");
+
+      expect(listener).toHaveBeenCalled();
+      delete tabris._TestType;
     });
 
     it("returns same proxy instance for the same id", function() {
