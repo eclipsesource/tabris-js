@@ -4,7 +4,8 @@ var pages = [
   "./modules/MotionPage",
   "./modules/DialogPage",
   "./modules/NetworkPage",
-  "./modules/CameraPage"
+  "./modules/CameraPage",
+  "./modules/BarcodeScannerPage"
 ];
 
 require(pages[0]).create().open();
