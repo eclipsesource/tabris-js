@@ -1,6 +1,6 @@
-describe("tabris.device", function() {
+describe("Device", function() {
 
-  var results, nativeBridge;
+  var device, results, nativeBridge;
 
   beforeEach(function() {
     nativeBridge = new NativeBridgeSpy();
@@ -12,48 +12,74 @@ describe("tabris.device", function() {
     });
     tabris._reset();
     tabris._init(nativeBridge);
+    device = tabris("_Device");
   });
 
   it("provides model", function() {
     results.model = "x1";
-    expect(tabris.device.get("model")).toBe("x1");
+    expect(device.get("model")).toBe("x1");
   });
 
   it("provides platform", function() {
     results.platform = "foo";
-    expect(tabris.device.get("platform")).toBe("foo");
+    expect(device.get("platform")).toBe("foo");
   });
 
   it("provides version", function() {
     results.version = "23";
-    expect(tabris.device.get("version")).toBe("23");
+    expect(device.get("version")).toBe("23");
   });
 
   it("provides language", function() {
     results.language = "es";
-    expect(tabris.device.get("language")).toBe("es");
+    expect(device.get("language")).toBe("es");
   });
 
   it("provides screenWidth", function() {
     results.screenWidth = 23;
-    expect(tabris.device.get("screenWidth")).toBe(23);
+    expect(device.get("screenWidth")).toBe(23);
   });
 
   it("provides screenHeight", function() {
     results.screenHeight = 23;
-    expect(tabris.device.get("screenHeight")).toBe(23);
+    expect(device.get("screenHeight")).toBe(23);
+  });
+
+  it("provides orientation", function() {
+    results.orientation = "portrait";
+    expect(device.get("orientation")).toBe("portrait");
+  });
+
+  it("adds listener for orientationchange event", function() {
+    device.on("change:orientation", function() {});
+
+    var calls = nativeBridge.calls({id: "tabris.Device", op: "listen", event: "orientationchange"});
+    expect(calls[0].listen).toBe(true);
+  });
+
+  it("triggers change:orientation event", function() {
+    var listener = jasmine.createSpy("listener");
+    device.on("change:orientation", listener);
+
+    tabris._notify("tabris.Device", "orientationchange", {orientation: "portrait"});
+
+    expect(listener).toHaveBeenCalledWith({value: "portrait"});
   });
 
   it("prevents overwriting properties", function() {
     results.language = "es";
-    tabris.device.set("language", "fr");
-    expect(tabris.device.get("language")).toBe("es");
+    device.set("language", "fr");
+    expect(device.get("language")).toBe("es");
   });
 
   it("can not be disposed", function() {
     expect(function() {
-      tabris.device.dispose();
+      device.dispose();
     }).toThrow();
+  });
+
+  it("is available as tabris.device", function() {
+    expect(tabris.device).toEqual(jasmine.any(tabris._Device));
   });
 
 });

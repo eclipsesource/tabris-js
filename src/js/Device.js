@@ -7,11 +7,19 @@
       platform: true,
       version: true,
       language: true,
+      orientation: true,
       screenWidth: true,
       screenHeight: true,
       scaleFactor: true
     },
-    _setProperty: function() {
+    _setProperty: function() {},
+    _events: {
+      "change:orientation": {
+        name: "orientationchange",
+        trigger: function(event) {
+          this.trigger("change:orientation", {value: event.orientation});
+        }
+      }
     },
     dispose: function() {
       throw new Error("cannot dispose device object");
