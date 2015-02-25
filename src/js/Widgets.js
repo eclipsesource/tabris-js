@@ -105,8 +105,7 @@
 
   tabris.registerWidget = function(type, members) {
     members = util.extend({}, tabris.Widgets, tabris.Animation, members);
-    members._listen = util.extend({}, tabris.registerWidget._defaultListen, members._listen || {});
-    members._trigger = util.extend({}, tabris.registerWidget._defaultTrigger, members._trigger || {});
+    members._events = util.extend({}, tabris.registerWidget._defaultEvents, members._events || {});
     if (members._properties !== true) {
       var defaultProperties = tabris.registerWidget._defaultProperties;
       members._properties = util.extend({}, defaultProperties, members._properties || {});
@@ -115,7 +114,7 @@
   };
 
   util.extend(tabris.registerWidget, {
-    _defaultListen: {
+    _defaultEvents: {
       touchstart: true,
       touchmove: true,
       touchend: true,
@@ -123,9 +122,6 @@
       longpress: true,
       dispose: function() {},
       "change:bounds": "Resize"
-    },
-    _defaultTrigger: {
-      Resize: "change:bounds"
     },
     _defaultProperties: {
       enabled: "boolean",
@@ -201,8 +197,7 @@
   tabris.registerWidget("Button", {
     _type: "rwt.widgets.Button",
     _initProperties: {style: ["PUSH"]},
-    _listen: {selection: "Selection"},
-    _trigger: {Selection: "selection"},
+    _events: {selection: "Selection"},
     _properties: {
       alignment: ["choice", ["left", "right", "center"]],
       image: "image",
@@ -212,29 +207,25 @@
 
   tabris.registerWidget("Canvas", {
     _type: "rwt.widgets.Canvas",
-    _listen: {addchild: function() {}, removechild: function() {}},
     _supportsChildren: true
   });
 
   tabris.registerWidget("CheckBox", {
     _type: "rwt.widgets.Button",
     _initProperties: {style: ["CHECK"]},
-    _listen: {"change:selection": "Selection"},
-    _trigger: {Selection: "change:selection"},
+    _events: {"change:selection": "Selection"},
     _properties: {text: "string", selection: "boolean"}
   });
 
   tabris.registerWidget("Picker", {
     _type: "rwt.widgets.Combo",
-    _listen: {"change:selection": "Selection"},
-    _trigger: {Selection: "change:selection"},
+    _events: {"change:selection": "Selection"},
     _properties: {items: true, text: "string", selectionIndex: "natural"}
   });
   tabris.Combo = tabris.Picker;
 
   tabris.registerWidget("Composite", {
     _type: "rwt.widgets.Composite",
-    _listen: {addchild: function() {}, removechild: function() {}},
     _supportsChildren: true
   });
 
@@ -275,28 +266,23 @@
   tabris.registerWidget("RadioButton", {
     _type: "rwt.widgets.Button",
     _initProperties: {style: ["RADIO"]},
-    _listen: {"change:selection": "Selection"},
-    _trigger: {Selection: "change:selection"},
+    _events: {"change:selection": "Selection"},
     _properties: {text: "string", selection: "boolean"}
   });
 
   tabris.registerWidget("Slider", {
     _type: "rwt.widgets.Scale",
-    _listen: {"change:selection": "Selection"},
-    _trigger: {Selection: "change:selection"},
+    _events: {"change:selection": "Selection"},
     _properties: {minimum: "integer", maximum: "integer", selection: "integer"}
   });
 
   tabris.registerWidget("TextInput", {
     _type: "tabris.TextInput",
-    _listen: {
+    _events: {
       focus: true,
       blur: true,
       accept: true,
       "change:text": "modify"
-    },
-    _trigger: {
-      modify: "change:text"
     },
     _properties: {
       type: ["choice", ["default", "password", "search", "multiline"]],
@@ -314,8 +300,7 @@
   tabris.registerWidget("ToggleButton", {
     _type: "rwt.widgets.Button",
     _initProperties: {style: ["TOGGLE"]},
-    _listen: {"change:selection": "Selection"},
-    _trigger: {Selection: "change:selection"},
+    _events: {"change:selection": "Selection"},
     _properties: {
       text: "string",
       image: "image",
@@ -332,8 +317,7 @@
 
   tabris.registerWidget("WebView", {
     _type: "rwt.widgets.Browser",
-    _listen: {load: "Progress"},
-    _trigger: {Progress: "load"},
+    _events: {load: "Progress"},
     _properties: {url: true, html: "string"}
   });
 

@@ -2,15 +2,10 @@
 
   tabris.registerType("_Animation", {
     _type: "tabris.Animation",
-    _listen: {
+    _events: {
       completion: "Completion",
       progress: "Progress",
       start: "Start"
-    },
-    _trigger: {
-      Completion: "completion",
-      Progress: "progress",
-      Start: "start"
     },
     _properties: {
       properties: true,

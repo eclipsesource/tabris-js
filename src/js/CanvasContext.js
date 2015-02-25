@@ -2,7 +2,6 @@
 
   tabris.registerType("_GC", {
     _type: "rwt.widgets.GC",
-    _listen: {dispose: function() {}},
     _properties: {parent: true}
   });
 

@@ -4,7 +4,7 @@ tabris.registerType("_Display", {
 
 tabris.registerWidget("_Shell", {
   _type: "rwt.widgets.Shell",
-  _listen: {Close: true},
+  _events: {Close: true},
   _properties: {
     style: true,
     mode: true,
@@ -16,7 +16,7 @@ tabris.registerType("_UI", {
 
   _type: "tabris.UI",
 
-  _listen: {ShowPage: true, ShowPreviousPage: true},
+  _events: {ShowPage: true, ShowPreviousPage: true},
 
   _create: function() {
     tabris.create("_Display");

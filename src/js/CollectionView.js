@@ -41,31 +41,33 @@
       return result;
     },
 
-    _listen: {
-      selection: true,
-      refresh: true
-    },
-
-    _trigger: {
-      createitem: function() {
-        var cell = tabris.create("_CollectionCell", {});
-        this.call("addItem", {widget: cell.cid});
-        if (typeof this._initializeCell !== "function") {
-          console.warn("initializeCell callback missing");
-        } else {
-          this._initializeCell(cell);
+    _events: {
+      refresh: true,
+      createitem: {
+        trigger: function() {
+          var cell = tabris.create("_CollectionCell", {});
+          this.call("addItem", {widget: cell.cid});
+          if (typeof this._initializeCell !== "function") {
+            console.warn("initializeCell callback missing");
+          } else {
+            this._initializeCell(cell);
+          }
         }
       },
-      populateitem: function(event) {
-        var cell = tabris(event.widget);
-        var item = this._getItem(this._items, event.index);
-        cell.trigger("itemchange", item, event.index);
+      populateitem: {
+        trigger: function(event) {
+          var cell = tabris(event.widget);
+          var item = this._getItem(this._items, event.index);
+          cell.trigger("itemchange", item, event.index);
+        }
       },
-      selection: function(event) {
-        this.trigger("selection", {
-          index: event.index,
-          item: this._getItem(this._items, event.index)
-        });
+      selection: {
+        trigger: function(event) {
+          this.trigger("selection", {
+            index: event.index,
+            item: this._getItem(this._items, event.index)
+          });
+        }
       }
     },
 
@@ -145,8 +147,6 @@
   tabris.registerWidget("_CollectionCell", {
 
     _type: "rwt.widgets.Composite",
-
-    _listen: {itemchange: function() {}},
 
     _supportsChildren: true,
 

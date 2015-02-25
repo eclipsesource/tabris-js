@@ -1,6 +1,6 @@
 tabris.registerWidget("_ScrollBar", {
   _type: "rwt.widgets.ScrollBar",
-  _listen: {Selection: true},
+  _events: {Selection: true},
   _properties: {
     style: true
   }
@@ -12,16 +12,16 @@ tabris.registerWidget("ScrollComposite", {
 
   _supportsChildren: true,
 
-  _listen: {
-    scroll: function(listen) {
-      if (listen) {
-        this._scrollBar.on("Selection", this._scrollBarListener, this);
-      } else {
-        this._scrollBar.off("Selection", this._scrollBarListener, this);
+  _events: {
+    scroll: {
+      listen: function(listen) {
+        if (listen) {
+          this._scrollBar.on("Selection", this._scrollBarListener, this);
+        } else {
+          this._scrollBar.off("Selection", this._scrollBarListener, this);
+        }
       }
-    },
-    addchild: function() {},
-    removechild: function() {}
+    }
   },
 
   _create: function(properties) {

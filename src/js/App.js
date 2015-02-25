@@ -1,7 +1,6 @@
 tabris.registerType("_App", {
   _type: "tabris.App",
-  _listen: {pause: "Pause", resume: "Resume"},
-  _trigger: {Pause: "pause", Resume: "resume"},
+  _events: {pause: "Pause", resume: "Resume"},
   dispose: function() {
     throw new Error("tabris.app can not be disposed");
   }

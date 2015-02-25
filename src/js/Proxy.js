@@ -35,17 +35,15 @@
       }
     },
 
-    _listen: function(event, state) {
-      var listen = this.constructor && this.constructor._listen && this.constructor._listen[event];
-      if (!listen) {
+    _listen: function(type, state) {
+      var event = this.constructor && this.constructor._events && this.constructor._events[type];
+      if (!event) {
         return;
       }
-      if (typeof listen === "string") {
-        this._nativeListen(listen, state);
-      } else if (listen instanceof Function) {
-        listen.call(this, state);
+      if (event.listen) {
+        event.listen.call(this, state);
       } else {
-        this._nativeListen(event, state);
+        this._nativeListen(event.name, state);
       }
     },
 
@@ -55,11 +53,12 @@
 
     _trigger: function(event, params) {
       // TODO: all these && pre-checks can be removed once no one uses new tabris.Proxy anymore
-      var trigger = this.constructor && this.constructor._trigger && this.constructor._trigger[event];
+      var name = this.constructor && this.constructor._trigger && this.constructor._trigger[event];
+      var trigger = name && this.constructor._events[name].trigger;
       if (trigger instanceof Function) {
         trigger.call(this, params);
-      } else if (typeof trigger === "string") {
-        this.trigger(trigger, params);
+      } else if (name) {
+        this.trigger(name, params);
       } else {
         this.trigger(event, params);
       }

@@ -118,36 +118,33 @@ describe("tabris", function() {
     var proxy;
 
     beforeEach(function() {
-      tabris.TestType._trigger = {};
-      proxy = tabris.create("TestType", {});
+      tabris.registerType("CustomType", {_events: {bar: "foo"}});
+      proxy = tabris.create("CustomType", {});
       spyOn(proxy, "trigger");
     });
 
-    it("notifies widget proxy", function() {
-      tabris._notify(proxy.cid, "foo", {bar: 23});
+    afterEach(function() {
+      delete tabris.CustomType;
+    });
 
-      expect(proxy.trigger).toHaveBeenCalledWith("foo", {bar: 23});
+    it("notifies widget proxy", function() {
+      tabris._notify(proxy.cid, "type", {bar: 23});
+
+      expect(proxy.trigger).toHaveBeenCalledWith("type", {bar: 23});
     });
 
     it("notifies widget proxy with translated event name", function() {
-      tabris.TestType._trigger.foo = "bar";
       tabris._notify.call(window, proxy.cid, "foo", {});
 
       expect(proxy.trigger).toHaveBeenCalledWith("bar", {});
     });
 
     it("calls custom trigger", function() {
-      tabris.TestType._trigger.foo = jasmine.createSpy();
+      tabris.CustomType._events.bar.trigger = jasmine.createSpy();
+
       tabris._notify.call(window, proxy.cid, "foo", {bar: 23});
 
-      expect(tabris.TestType._trigger.foo).toHaveBeenCalledWith({bar: 23});
-    });
-
-    it("ignores invalid custom trigger", function() {
-      tabris.TestType._trigger.foo = true;
-      tabris._notify.call(window, proxy.cid, "foo", {bar: 23});
-
-      expect(proxy.trigger).toHaveBeenCalledWith("foo", {bar: 23});
+      expect(tabris.CustomType._events.bar.trigger).toHaveBeenCalledWith({bar: 23});
     });
 
     it("silently ignores events for non-existing ids (does not crash)", function() {
@@ -158,7 +155,7 @@ describe("tabris", function() {
     it("can be called without a context", function() {
       tabris._notify.call(null, proxy.cid, "foo", [23, 42]);
 
-      expect(proxy.trigger).toHaveBeenCalledWith("foo", [23, 42]);
+      expect(proxy.trigger).toHaveBeenCalledWith("bar", [23, 42]);
     });
 
   });
@@ -326,15 +323,6 @@ describe("tabris", function() {
       }).toThrowError("Type already registered: Button");
     });
 
-    it("adds _trigger to constructor", function() {
-      var fn = function() {};
-      tabris.registerType("CustomType", {_trigger: {foo: fn}});
-      var instance = tabris.create("CustomType");
-
-      expect(instance.constructor._trigger.foo).toBe(fn);
-      expect(instance._trigger).toBe(tabris.Proxy.prototype._trigger);
-    });
-
     it("adds empty trigger map to constructor", function() {
       tabris.registerType("CustomType", {});
       var instance = tabris.create("CustomType");
@@ -342,20 +330,19 @@ describe("tabris", function() {
       expect(instance.constructor._trigger).toEqual({});
     });
 
-    it("adds _listen to constructor", function() {
-      var fn = function() {};
-      tabris.registerType("CustomType", {_listen: {foo: fn}});
+    it("adds _events to constructor", function() {
+      tabris.registerType("CustomType", {_events: {foo: "bar"}});
       var instance = tabris.create("CustomType");
 
-      expect(instance.constructor._listen.foo).toBe(fn);
-      expect(instance._listen).toBe(tabris.Proxy.prototype._listen);
+      expect(instance.constructor._events.foo).toEqual({name: "bar"});
+      expect(instance._events).toBe(tabris.Proxy.prototype._events);
     });
 
-    it("adds empty listen map to constructor", function() {
+    it("adds empty events map to constructor", function() {
       tabris.registerType("CustomType", {});
       var instance = tabris.create("CustomType");
 
-      expect(instance.constructor._listen).toEqual({});
+      expect(instance.constructor._events).toEqual({});
     });
 
     it("adds _properties to constructor", function() {

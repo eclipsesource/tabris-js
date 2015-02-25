@@ -2,7 +2,7 @@
 
   tabris.registerType("_Timer", {
     _type: "tabris.Timer",
-    _listen: {Run: true},
+    _events: {Run: true},
     _properties: {delay: true, repeat: true}
   });
 

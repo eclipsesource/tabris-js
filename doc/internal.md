@@ -16,14 +16,13 @@ All fields on the `members` map will be inherited by the type instances (potenti
 * `_supportsChildren`: Unless this is set to true, the instance will throw exceptions when attempting to append any children.
 * `_properties`: A map where the keys are all names of the natively supported properties, and the values determine how the property values are handled. For properties not in the list no `set` and `get` operations will be issued.
 * `_initProperties`: A map with key-value pairs that are added to any `create` operation for that type, bypassing all checks, encoding and `_setProperty` handler.
-* `_listen`: A map where the keys are the names of all supported events, and the value determines how the native `listen` operation is issued. (See list below.) For events that are not in the map no `listen` operations are issued and a console info logged instead.
-* `_trigger`: A map where the keys are the names of events that may be issued in a `notify` operation, and the value determines how the operation is handled (see list below). For events that are not in the map, the operation's event name and parameters will be passed to the proxy's `trigger` method without any changes.
+* `_event`: A map where the keys are the names of all supported native events, and the value determines how the events are handled. (See list below.) For events that are not in the map no `listen` operations are issued.
 
 Valid values for the `_properties` map are:
 
 * `true`: Accepts any value.
 * A type identifier (see below).
-* A map with any of these entries:
+* A *map* with any of these entries:
     * `type`: A type identifier. Same effect as giving the type directly.
     * `set`: A function that is called instead of creating a `set` operation for this property change. The function is called with the (encoded) property value as the sole argument and the proxy as the context (`this`). It can use the `_nativeSet` method of the proxy if needed.
     * `get`: A function that is called instead of creating a `get` operation for this property. The function is called with the proxy as the context (`this`) and must return the current value of this property. It can use the `_nativeGet` method of the proxy if needed.
@@ -44,20 +43,18 @@ The type identifier determines how the property value is checked/encoded/convert
 
 Rejected values will not be passed on in a `set` operation and cause a console warning to be logged.
 
-Valid values for the `_listen` map are:
+Valid values for the `_events` map are:
 
 * `true`: passes the name of the event to the `listen` operation without any changes.
-* A *string*: will be used as the event name in the `listen` operation instead of the public event name.
-* A *function*: will be called with the new listen state (`true`/`false`) as the sole argument and the proxy as the context (`this`). It can use the `_nativeListen` method of the proxy if needed.
-
-Valid values for the `_trigger` map are:
-
-* A *string*: will be used as a public event name (as given in `_listen`) instead of the `notify` operation's event name.
-* A *function*: will be called instead of the proxy's `trigger` method, with the event object as the sole argument and the proxy as the context (`this`). It can use the `trigger` method of the proxy if needed.
+* A *string*: will be used as the event name in the `listen` operation instead of the public event name. Incoming notify calls with that name will be translated back to the public event name.
+* A *map* with any of these entries: 
+    * `name`: The internal event name. Same as giving the string directly (see above).
+    * `listen`: A function that will be called with the new listen state (`true`/`false`) as the sole argument and the proxy as the context (`this`). It can use the `_nativeListen` method of the proxy if needed.
+    * `trigger`: A function that will be called instead of proxy.trigger for this event type. 
 
 ## tabris.registerWidget
 
-Acts as wrapper for `tabris.registerType`. The API is identical, except that the `_properties`, `_setProperty`, `_getProperty`, `_listen` and `_trigger` maps are extended to add support for  properties and events common to all widgets.
+Acts as wrapper for `tabris.registerType`. The API is identical, except that the `_properties`, `_events` maps are extended to add support for properties and events common to all widgets.
 
 ## tabris.Proxy
 

@@ -26,9 +26,7 @@ tabris.registerType("SearchAction", {
     proposals: true // array of strings
   },
 
-  _listen: {selection: "Selection", modify: "Modify", submit: "Search"},
-
-  _trigger: {Selection: "selection", Modify: "modify", Search: "submit"},
+  _events: {selection: "Selection", modify: "Modify", submit: "Search"},
 
   _create: function(properties) {
     this.super("_create", properties);

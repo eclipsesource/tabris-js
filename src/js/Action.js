@@ -25,9 +25,7 @@ tabris.registerType("Action", {
     }
   },
 
-  _listen: {selection: "Selection"},
-
-  _trigger: {Selection: "selection"},
+  _events: {selection: "Selection"},
 
   _create: function(properties) {
     this.super("_create", properties);

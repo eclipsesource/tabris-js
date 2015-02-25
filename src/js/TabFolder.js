@@ -51,8 +51,7 @@
       return child.type === "Tab" || child.type === "_TabItem";
     },
 
-    _listen: {"change:selection": "Selection"},
-    _trigger: {Selection: "change:selection"},
+    _events: {"change:selection": "Selection"},
 
     _getItems: function() {
       return this._children ? this._children.filter(isItem) : new tabris.ProxyCollection();
@@ -88,8 +87,6 @@
         }
       }
     },
-
-    _listen: {addchild: function() {}, removechild: function() {}},
 
     _supportsChildren: true,
 

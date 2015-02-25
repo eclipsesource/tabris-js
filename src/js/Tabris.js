@@ -40,9 +40,16 @@
       tabris[type] = function() {
         tabris.Proxy.apply(this, arguments);
       };
+      if (members._listen && !members._events) {
+        // TODO: This can be removed once cordova is fixed
+        members._events = members._listen;
+        delete members._listen;
+      }
       for (var member in staticMembers) {
         tabris[type][member] = members[member] || getDefault(member);
       }
+      tabris[type]._events = normalizeEventsMap(tabris[type]._events);
+      tabris[type]._trigger = buildTriggerMap(tabris[type]._events);
       var superProto = util.omit(members, Object.keys(staticMembers));
       superProto.type = type;
       superProto.constructor = tabris[type]; // util.extendPrototype can not provide the original
@@ -91,14 +98,32 @@
 
   });
 
+  function normalizeEventsMap(events) {
+    var result = {};
+    for (var event in events) {
+      var entry = events[event];
+      result[event] = typeof entry === "object" ? entry : {};
+      result[event].name = typeof entry === "string" ? entry : event;
+    }
+    return result;
+  }
+
+  function buildTriggerMap(events) {
+    var result = {};
+    for (var event in events) {
+      var name = events[event].name;
+      result[name] = event;
+    }
+    return result;
+  }
+
   function getDefault(member) {
     var value = staticMembers[member];
     return value instanceof Object ? util.clone(value) : value;
   }
 
   var staticMembers = {
-    "_trigger": {},
-    "_listen": {},
+    "_events": {},
     "_initProperties": {},
     "_type": null,
     "_properties": {},

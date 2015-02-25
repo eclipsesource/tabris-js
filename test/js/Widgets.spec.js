@@ -15,31 +15,17 @@ describe("Widgets", function() {
 
   describe("tabris.registerWidget", function() {
 
-    it("adds default listen copy", function() {
+    it("adds default events copy", function() {
       tabris.registerWidget("TestType", {});
-      expect(tabris.TestType._listen).toEqual(tabris.registerWidget._defaultListen);
-      expect(tabris.TestType._listen).not.toBe(tabris.registerWidget._defaultListen);
+      expect(Object.keys(tabris.TestType._events)).toEqual(Object.keys(tabris.registerWidget._defaultEvents));
+      expect(tabris.TestType._events).not.toBe(tabris.registerWidget._defaultEvents);
     });
 
-    it("adds default trigger copy", function() {
-      tabris.registerWidget("TestType", {});
-      expect(tabris.TestType._trigger).toEqual(tabris.registerWidget._defaultTrigger);
-      expect(tabris.TestType._trigger).not.toBe(tabris.registerWidget._defaultTrigger);
-    });
-
-    it("extends default listen", function() {
-      var custom = {foo: "bar", touchstart: false};
-      tabris.registerWidget("TestType", {_listen: custom});
-      expect(tabris.TestType._listen).toEqual(
-        _.extend({}, tabris.registerWidget._defaultListen, custom)
-      );
-    });
-
-    it("extends default trigger", function() {
-      var custom = {foo: "bar", touchstart: false};
-      tabris.registerWidget("TestType", {_trigger: custom});
-      expect(tabris.TestType._trigger).toEqual(
-        _.extend({}, tabris.registerWidget._defaultTrigger, custom)
+    it("extends default events", function() {
+      var custom = {foo: {name: "bar"}, touchstart: {name: "touchstart"}};
+      tabris.registerWidget("TestType", {_events: custom});
+      expect(tabris.TestType._events).toEqual(
+        _.extend({}, tabris.TestType._events, custom)
       );
     });
 
