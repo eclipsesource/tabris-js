@@ -8,8 +8,7 @@ tabris.registerWidget("_Shell", {
   _properties: {
     style: true,
     mode: true,
-    active: true,
-    visible: true
+    active: true
   }
 });
 
@@ -48,18 +47,13 @@ tabris.registerType("_UI", {
     image: "image",
     foreground: "color",
     background: "color",
-    activePage: true
-  },
-
-  _getProperty: {
-    activePage: function() {
-      return this._getActivePage();
-    }
-  },
-
-  _setProperty: {
-    activePage: function(page) {
-      this._setActivePage(page);
+    activePage: {
+      set: function(page) {
+        this._setActivePage(page);
+      },
+      get: function() {
+        return this._getActivePage();
+      }
     }
   },
 

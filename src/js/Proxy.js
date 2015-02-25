@@ -15,7 +15,7 @@
           this._nativeSet(name, this.constructor._initProperties[name]);
         }
       }
-      this._setProperties(properties);
+      this._setProperties(properties || {});
       return this;
     },
 
@@ -124,11 +124,16 @@
     },
 
     _getPropertyType: function(name) {
-      return this.constructor && this.constructor._properties && this.constructor._properties[name];
+      var prop = this.constructor && this.constructor._properties && this.constructor._properties[name];
+      return typeof prop === "object" && prop.type ? prop.type : prop;
     },
 
     _getPropertySetter: function(name) {
-      return this.constructor && this.constructor._setProperty && this.constructor._setProperty[name];
+      var prop = this.constructor && this.constructor._properties && this.constructor._properties[name];
+      if (typeof prop === "object" && prop.set) {
+        return prop.set;
+      }
+      return null;
     },
 
     _nativeSet: function(name, value) {
@@ -137,9 +142,20 @@
 
     _readProperty: function(name) {
       var type = this._getPropertyType(name);
-      var getProperty = this.constructor && this.constructor._getProperty && this.constructor._getProperty[name];
+      if (!type) {
+        return;
+      }
+      var getProperty = this._getPropertyGetter(name);
       var value = getProperty ? getProperty.call(this) : this._nativeGet(name);
       return this._decodeProperty(value, type);
+    },
+
+    _getPropertyGetter: function(name) {
+      var prop = this.constructor && this.constructor._properties && this.constructor._properties[name];
+      if (typeof prop === "object" && prop.get) {
+        return prop.get;
+      }
+      return null;
     },
 
     _nativeGet: function(name) {

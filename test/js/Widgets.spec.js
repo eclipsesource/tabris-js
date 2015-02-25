@@ -27,18 +27,6 @@ describe("Widgets", function() {
       expect(tabris.TestType._trigger).not.toBe(tabris.registerWidget._defaultTrigger);
     });
 
-    it("adds default setProperty copy", function() {
-      tabris.registerWidget("TestType", {});
-      expect(tabris.TestType._setProperty).toEqual(tabris.registerWidget._defaultSetProperty);
-      expect(tabris.TestType._setProperty).not.toBe(tabris.registerWidget._defaultSetProperty);
-    });
-
-    it("adds default getProperty copy", function() {
-      tabris.registerWidget("TestType", {});
-      expect(tabris.TestType._getProperty).toEqual(tabris.registerWidget._defaultGetProperty);
-      expect(tabris.TestType._getProperty).not.toBe(tabris.registerWidget._defaultGetProperty);
-    });
-
     it("extends default listen", function() {
       var custom = {foo: "bar", touchstart: false};
       tabris.registerWidget("TestType", {_listen: custom});

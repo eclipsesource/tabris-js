@@ -6,8 +6,19 @@
 
     _properties: {
       itemHeight: "natural",
-      items: true,
-      initializeCell: true,
+      items: {
+        set: function(value) {
+          this._setItems(value);
+        },
+        get: function() {
+          return this._items.concat();
+        }
+      },
+      initializeCell: {
+        set: function(value) {
+          this._initializeCell = value;
+        }
+      },
       refreshEnabled: "boolean",
       refreshIndicator: "boolean",
       refreshMessage: "string"
@@ -28,21 +39,6 @@
       // TODO call _reload on flush, remove override
       this._reload();
       return result;
-    },
-
-    _setProperty: {
-      items: function(value) {
-        this._setItems(value);
-      },
-      initializeCell: function(value) {
-        this._initializeCell = value;
-      }
-    },
-
-    _getProperty: {
-      items: function() {
-        return this._items.concat();
-      }
     },
 
     _listen: {

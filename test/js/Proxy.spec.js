@@ -355,6 +355,12 @@ describe("Proxy", function() {
 
     describe("get", function() {
 
+      it("does not call native get for unknown properties", function() {
+        proxy.get("bar");
+
+        expect(nativeBridge.calls({op: "get"}).length).toBe(0);
+      });
+
       it("calls native get", function() {
         proxy.get("foo");
 
@@ -364,13 +370,13 @@ describe("Proxy", function() {
       it("returns value from native", function() {
         spyOn(nativeBridge, "get").and.returnValue(23);
 
-        var result = proxy.get("prop");
+        var result = proxy.get("foo");
 
         expect(result).toBe(23);
       });
 
-      it("returns value from custom _getProperty", function() {
-        tabris.TestType._getProperty.prop = function() { return 23; };
+      it("returns value from custom get function", function() {
+        tabris.TestType._properties.prop = {get: function() { return 23; }};
 
         var result = proxy.get("prop");
 
@@ -458,13 +464,13 @@ describe("Proxy", function() {
         expect(properties.foo).toBe(other);
       });
 
-      it("uses custom setProperty function", function() {
-        tabris.TestType._setProperty.foo = jasmine.createSpy();
+      it("uses custom set function", function() {
+        tabris.TestType._properties.foo = {set: jasmine.createSpy()};
 
         proxy.set("foo", "bar");
 
         expect(nativeBridge.calls({op: "set", id: proxy.cid}).length).toBe(0);
-        expect(tabris.TestType._setProperty.foo).toHaveBeenCalledWith("bar");
+        expect(tabris.TestType._properties.foo.set).toHaveBeenCalledWith("bar");
       });
 
       it("raises no warning for unknown property", function() {
@@ -482,6 +488,16 @@ describe("Proxy", function() {
 
       it("calls function if _properties entry is a string found in PropertyEncoding", function() {
         tabris.TestType._properties.knownProperty = "boolean";
+        spyOn(tabris.PropertyEncoding, "boolean").and.returnValue(true);
+
+        proxy.set("knownProperty", true);
+
+        expect(tabris.PropertyEncoding.boolean).toHaveBeenCalled();
+        expect(console.warn).not.toHaveBeenCalled();
+      });
+
+      it("calls function if _properties entry is has type string found in PropertyEncoding", function() {
+        tabris.TestType._properties.knownProperty = {type: "boolean"};
         spyOn(tabris.PropertyEncoding, "boolean").and.returnValue(true);
 
         proxy.set("knownProperty", true);
@@ -519,10 +535,10 @@ describe("Proxy", function() {
         expect(nativeBridge.calls({op: "set"}).length).toBe(0);
       });
 
-      it("raises a warning if _setProperty is a function that throws", function() {
-        tabris.TestType._setProperty.foo = function() {
+      it("raises a warning if setter is a function that throws", function() {
+        tabris.TestType._properties.foo = {set: function() {
           throw new Error("My Error");
-        };
+        }};
 
         expect(function() {
           proxy.set("foo", true);

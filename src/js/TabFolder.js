@@ -26,8 +26,25 @@
     },
 
     _properties: {
-      paging: tabris.PropertyEncoding.boolean,
-      selection: true
+      paging: {
+        type: "boolean",
+        set: function(value) {
+          this._paging = value;
+          this._nativeSet("data", {paging: value});
+        },
+        get: function() {
+          return !!this._paging;
+        }
+      },
+      selection: {
+        set: function(tab) {
+          this._nativeSet("selection", tab._tabItem.cid);
+        },
+        get: function() {
+          var selection = this._nativeGet("selection");
+          return selection ? tabris(selection)._tab : null;
+        }
+      }
     },
 
     _supportsChildren: function(child) {
@@ -36,24 +53,6 @@
 
     _listen: {"change:selection": "Selection"},
     _trigger: {Selection: "change:selection"},
-
-    _setProperty: {
-      paging: function(value) {
-        this._paging = value;
-        this._nativeSet("data", {paging: value});
-      },
-      selection: function(tab) {
-        this._nativeSet("selection", tab._tabItem.cid);
-      }
-    },
-
-    _getProperty: {
-      paging: function() {return !!this._paging;},
-      selection: function() {
-        var selection = this._nativeGet("selection");
-        return selection ? tabris(selection)._tab : null;
-      }
-    },
 
     _getItems: function() {
       return this._children ? this._children.filter(isItem) : new tabris.ProxyCollection();
@@ -70,9 +69,24 @@
     _type: "rwt.widgets.Composite",
 
     _properties: {
-      title: "string",
-      image: "image",
-      badge: "string"
+      title: {
+        type: "string",
+        set: function(value) {
+          this._setItemProperty("text", value);
+        }
+      },
+      image: {
+        type: "image",
+        set: function(value) {
+          this._setItemProperty("image", value);
+        }
+      },
+      badge: {
+        type: "string",
+        set: function(value) {
+          this._setItemProperty("badge", value);
+        }
+      }
     },
 
     _listen: {addchild: function() {}, removechild: function() {}},
@@ -82,12 +96,6 @@
     _create: function(properties) {
       this._itemProps = {};
       return this.super("_create", properties);
-    },
-
-    _setProperty: {
-      title: function(value) {this._setItemProperty("text", value);},
-      image: function(value) {this._setItemProperty("image", value);},
-      badge: function(value) {this._setItemProperty("badge", value);}
     },
 
     _setItemProperty: function(name, value) {

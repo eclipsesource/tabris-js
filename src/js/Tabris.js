@@ -99,8 +99,6 @@
   var staticMembers = {
     "_trigger": {},
     "_listen": {},
-    "_setProperty": {},
-    "_getProperty": {},
     "_initProperties": {},
     "_type": null,
     "_properties": {},

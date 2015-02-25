@@ -6,24 +6,22 @@ tabris.registerType("Action", {
     enabled: "boolean",
     foreground: "color",
     image: "image",
-    placementPriority: ["choice", {low: "LOW", high: "HIGH", normal: "NORMAL"}],
-    title: "string",
-    visible: "boolean"
-  },
-
-  _setProperty: {
-    visible: function(value) {
-      this._nativeSet("visibility", value);
-    }
-  },
-
-  _getProperty: {
-    visible: function() {
-      return this._nativeGet("visibility");
+    placementPriority: {
+      type: ["choice", {low: "LOW", high: "HIGH", normal: "NORMAL"}],
+      get: function() {
+        var value = this._nativeGet("placementPriority");
+        return value ? value.toLowerCase() : value;
+      }
     },
-    placementPriority: function() {
-      var value = this._nativeGet("placementPriority");
-      return value ? value.toLowerCase() : value;
+    title: "string",
+    visible: {
+      type: "boolean",
+      set: function(value) {
+        this._nativeSet("visibility", value);
+      },
+      get: function() {
+        return this._nativeGet("visibility");
+      }
     }
   },
 

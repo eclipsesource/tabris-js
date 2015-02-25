@@ -107,8 +107,6 @@
     members = util.extend({}, tabris.Widgets, tabris.Animation, members);
     members._listen = util.extend({}, tabris.registerWidget._defaultListen, members._listen || {});
     members._trigger = util.extend({}, tabris.registerWidget._defaultTrigger, members._trigger || {});
-    members._setProperty = util.extend({}, tabris.registerWidget._defaultSetProperty, members._setProperty || {});
-    members._getProperty = util.extend({}, tabris.registerWidget._defaultGetProperty, members._getProperty || {});
     if (members._properties !== true) {
       var defaultProperties = tabris.registerWidget._defaultProperties;
       members._properties = util.extend({}, defaultProperties, members._properties || {});
@@ -131,8 +129,32 @@
     },
     _defaultProperties: {
       enabled: "boolean",
-      visible: "boolean",
-      layoutData: "layoutData",
+      visible: {
+        type: "boolean",
+        set: function(value) {
+          this._nativeSet("visibility", value);
+        },
+        get: function() {
+          return this._nativeGet("visibility");
+        }
+      },
+      layoutData: {
+        type: "layoutData",
+        set: function(value) {
+          this._layoutData = value;
+          try {
+            renderLayoutData.call(this);
+          } catch (ex) {
+            if (!this._layoutDataPending) {
+              tabris.on("beforeFlush", renderLayoutListener, this);
+              this._layoutDataPending = true;
+            }
+          }
+        },
+        get: function() {
+          return this._layoutData || null;
+        }
+      },
       font: "font",
       backgroundImage: "image",
       bounds: "bounds",
@@ -141,36 +163,14 @@
       opacity: true,
       transform: true,
       highlightOnTouch: "boolean",
-      id: "string"
-    },
-    _defaultSetProperty: {
-      visible: function(value) {
-        this._nativeSet("visibility", value);
-      },
-      id: function(value) {
-        this.id = value;
-      },
-      layoutData: function(value) {
-        this._layoutData = value;
-        try {
-          renderLayoutData.call(this);
-        } catch (ex) {
-          if (!this._layoutDataPending) {
-            tabris.on("beforeFlush", renderLayoutListener, this);
-            this._layoutDataPending = true;
-          }
+      id: {
+        type: "string",
+        set: function(value) {
+          this.id = value;
+        },
+        get: function() {
+          return this.id;
         }
-      }
-    },
-    _defaultGetProperty: {
-      visible: function() {
-        return this._nativeGet("visibility");
-      },
-      id: function() {
-        return this.id;
-      },
-      layoutData: function() {
-        return this._layoutData || null;
       }
     }
   });
@@ -251,13 +251,13 @@
     _properties: {
       alignment: ["choice", ["left", "right", "center"]],
       markupEnabled: "boolean",
-      maxLines: ["nullable", "natural"],
+      maxLines: {
+        type: ["nullable", "natural"],
+        set: function(value) {
+          this._nativeSet("maxLines", value <= 0 ? null : value);
+        }
+      },
       text: "string"
-    },
-    _setProperty: {
-      maxLines: function(value) {
-        this._nativeSet("maxLines", value <= 0 ? null : value);
-      }
     }
   });
   tabris.Label = tabris.TextView;

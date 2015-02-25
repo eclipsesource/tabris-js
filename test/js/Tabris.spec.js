@@ -358,38 +358,6 @@ describe("tabris", function() {
       expect(instance.constructor._listen).toEqual({});
     });
 
-    it("adds _setProperty to constructor", function() {
-      var fn = function() {};
-      tabris.registerType("CustomType", {_setProperty: {foo: fn}});
-      var instance = tabris.create("CustomType");
-
-      expect(instance.constructor._setProperty.foo).toBe(fn);
-      expect(instance._setProperty).toBe(tabris.Proxy.prototype._setProperty);
-    });
-
-    it("adds empty setProperty map to constructor", function() {
-      tabris.registerType("CustomType", {});
-      var instance = tabris.create("CustomType");
-
-      expect(instance.constructor._setProperty).toEqual({});
-    });
-
-    it("adds _getProperty to constructor", function() {
-      var fn = function() {};
-      tabris.registerType("CustomType", {_getProperty: {foo: fn}});
-      var instance = tabris.create("CustomType");
-
-      expect(instance.constructor._getProperty.foo).toBe(fn);
-      expect(instance._getProperty).toBe(tabris.Proxy.prototype._getProperty);
-    });
-
-    it("adds empty getProperty map to constructor", function() {
-      tabris.registerType("CustomType", {});
-      var instance = tabris.create("CustomType");
-
-      expect(instance.constructor._getProperty).toEqual({});
-    });
-
     it("adds _properties to constructor", function() {
       var fn = function() {};
       tabris.registerType("CustomType", {_properties: {foo: fn}});
@@ -399,7 +367,7 @@ describe("tabris", function() {
       expect(instance._properties).toBe(tabris.Proxy.prototype._properties);
     });
 
-    it("adds empty checkProperty map to constructor", function() {
+    it("adds empty properties map to constructor", function() {
       tabris.registerType("CustomType", {});
       var instance = tabris.create("CustomType");
 

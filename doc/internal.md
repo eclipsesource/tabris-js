@@ -14,16 +14,22 @@ All fields on the `members` map will be inherited by the type instances (potenti
 
 * `_type`: The native type to be used in the `create` operation. If missing, the `type` name will be used.
 * `_supportsChildren`: Unless this is set to true, the instance will throw exceptions when attempting to append any children.
-* `_properties`: A map where the keys are all names of the supported properties, and the values determine how the property values are checked and encoded for `set` operations. (See list below.) For properties not in the list no `set` operations will be issued and a console warning is logged instead.
+* `_properties`: A map where the keys are all names of the natively supported properties, and the values determine how the property values are handled. For properties not in the list no `set` and `get` operations will be issued.
 * `_initProperties`: A map with key-value pairs that are added to any `create` operation for that type, bypassing all checks, encoding and `_setProperty` handler.
-* `_setProperty`: A map where the keys are the names of any of the supported properties (as given in `_properties`), and the value is a function that is called instead of creating a `set` operation for this property change. The function is called with the (encoded) property value as the sole argument and the proxy as the context (`this`). It can use the `_nativeSet` method of the proxy is needed.
-* `_getProperty`: A map where the keys are the names of any of the supported properties (as given in `_properties`), and the value is a function that is called instead of creating a `get` operation for this property. The function is called with the proxy as the context (`this`) and must return the current value of this property. It can use the `_nativeGet` method of the proxy is needed.
 * `_listen`: A map where the keys are the names of all supported events, and the value determines how the native `listen` operation is issued. (See list below.) For events that are not in the map no `listen` operations are issued and a console info logged instead.
 * `_trigger`: A map where the keys are the names of events that may be issued in a `notify` operation, and the value determines how the operation is handled (see list below). For events that are not in the map, the operation's event name and parameters will be passed to the proxy's `trigger` method without any changes.
 
 Valid values for the `_properties` map are:
 
 * `true`: Accepts any value.
+* A type identifier (see below).
+* A map with any of these entries:
+    * `type`: A type identifier. Same effect as giving the type directly.
+    * `set`: A function that is called instead of creating a `set` operation for this property change. The function is called with the (encoded) property value as the sole argument and the proxy as the context (`this`). It can use the `_nativeSet` method of the proxy if needed.
+    * `get`: A function that is called instead of creating a `get` operation for this property. The function is called with the proxy as the context (`this`) and must return the current value of this property. It can use the `_nativeGet` method of the proxy if needed.
+
+The type identifier determines how the property value is checked/encoded/converted before giving it to the native.
+
 * `"boolean"`: Accepts `true` or `false`, all other values are converted as determined by the JavaScript language ("truthy"/"falsy" values).
 * `"string"`:  Accepts any strings, any non-string is converted as determined by the JavaScript language (e.g. `23.0` becomes `"23"`).
 * `"natural"`: Accepts any number equal or greater than zero and smaller than infinity, with any non-round number being rounded. Any other value (including `NaN`) is rejected.

@@ -65,8 +65,12 @@
   });
 
   pageProperties.forEach(function(property) {
-    tabris.Page._setProperty[property] = function(value) {this._page.set(property, value);};
-    tabris.Page._getProperty[property] = function() {return this._page.get(property);};
+    var type = tabris.Page._properties[property];
+    tabris.Page._properties[property] = {
+      type: type,
+      set: function(value) {this._page.set(property, value);},
+      get: function() {return this._page.get(property);}
+    };
   });
 
 }());
