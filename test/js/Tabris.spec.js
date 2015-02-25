@@ -117,43 +117,75 @@ describe("tabris", function() {
 
     var proxy;
 
-    beforeEach(function() {
-      tabris.registerType("CustomType", {_events: {bar: "foo"}});
-      proxy = tabris.create("CustomType", {});
-      spyOn(proxy, "trigger");
-    });
-
     afterEach(function() {
       delete tabris.CustomType;
     });
 
     it("notifies widget proxy", function() {
-      tabris._notify(proxy.cid, "type", {bar: 23});
+      tabris.registerType("CustomType", {_events: {bar: true}});
+      proxy = tabris.create("CustomType", {});
+      spyOn(proxy, "trigger");
 
-      expect(proxy.trigger).toHaveBeenCalledWith("type", {bar: 23});
+      tabris._notify(proxy.cid, "bar", {bar: 23});
+
+      expect(proxy.trigger).toHaveBeenCalledWith("bar", {bar: 23});
     });
 
     it("notifies widget proxy with translated event name", function() {
-      tabris._notify.call(window, proxy.cid, "foo", {});
+      tabris.registerType("CustomType", {_events: {bar: "foo"}});
+      proxy = tabris.create("CustomType", {});
+      spyOn(proxy, "trigger");
+
+      tabris._notify(proxy.cid, "foo", {});
 
       expect(proxy.trigger).toHaveBeenCalledWith("bar", {});
     });
 
     it("calls custom trigger", function() {
-      tabris.CustomType._events.bar.trigger = jasmine.createSpy();
+      tabris.registerType("CustomType", {
+        _events: {
+          bar: {
+            trigger: jasmine.createSpy()
+          }
+        }
+      });
+      proxy = tabris.create("CustomType", {});
+      spyOn(proxy, "trigger");
 
-      tabris._notify.call(window, proxy.cid, "foo", {bar: 23});
+      tabris._notify(proxy.cid, "bar", {bar: 23});
+
+      expect(tabris.CustomType._events.bar.trigger).toHaveBeenCalledWith({bar: 23});
+    });
+
+    it("calls custom trigger of translated event", function() {
+      tabris.registerType("CustomType", {
+        _events: {
+          bar: {
+            name: "foo",
+            trigger: jasmine.createSpy()
+          }
+        }
+      });
+      proxy = tabris.create("CustomType", {});
+      spyOn(proxy, "trigger");
+
+      tabris._notify(proxy.cid, "foo", {bar: 23});
 
       expect(tabris.CustomType._events.bar.trigger).toHaveBeenCalledWith({bar: 23});
     });
 
     it("silently ignores events for non-existing ids (does not crash)", function() {
-      tabris._notify("no-id", "foo", [23, 42]);
-      expect(proxy.trigger).not.toHaveBeenCalled();
+      expect(function() {
+        tabris._notify("no-id", "foo", [23, 42]);
+      }).not.toThrow();
     });
 
     it("can be called without a context", function() {
-      tabris._notify.call(null, proxy.cid, "foo", [23, 42]);
+      tabris.registerType("CustomType", {_events: {bar: true}});
+      proxy = tabris.create("CustomType", {});
+      spyOn(proxy, "trigger");
+
+      tabris._notify.call(null, proxy.cid, "bar", [23, 42]);
 
       expect(proxy.trigger).toHaveBeenCalledWith("bar", [23, 42]);
     });

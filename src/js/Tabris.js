@@ -103,7 +103,9 @@
     for (var event in events) {
       var entry = events[event];
       result[event] = typeof entry === "object" ? entry : {};
-      result[event].name = typeof entry === "string" ? entry : event;
+      if (!result[event].name) {
+        result[event].name = typeof entry === "string" ? entry : event;
+      }
     }
     return result;
   }
