@@ -292,7 +292,7 @@
       alignment: ["choice", ["left", "center", "right"]],
       autoCorrect: "boolean",
       autoCapitalize: "boolean",
-      keyboard: ["choice", ["ascii", "decimal", "email", "number", "numbersAndPunctuation", "phone", "url"]]
+      keyboard: ["choice", ["ascii", "decimal", "email", "number", "numbersAndPunctuation", "phone", "url", "default"]]
     }
   });
   tabris.Text = tabris.TextInput;

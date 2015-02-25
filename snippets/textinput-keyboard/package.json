@@ -1,0 +1,9 @@
+{
+  "title": "Text Input - Keyboard",
+  "category": "TextInput",
+  "description": "TextInput widgets with different keyboard types",
+  "main": "textinput-keyboard.js",
+  "dependencies": {
+    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+  }
+}

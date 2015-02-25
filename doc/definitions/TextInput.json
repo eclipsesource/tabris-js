@@ -29,6 +29,10 @@
     "autoCapitalize": {
       "type": "boolean?false",
       "description": "Automatically switch to capital letters after every key pressed."
+    },
+    "keyboard": {
+      "type": "string:ascii|decimal|email|number|numbersAndPunctuation|phone|url|default?default",
+      "description": "Selects the keyboard type to use for editing this widget."
     }
   },
   "events": {
