@@ -26,10 +26,17 @@ var collectionView = tabris.create("CollectionView", {
       foreground: "green"
     }).appendTo(cell);
     cell.on("itemchange", function(item) {
-      imageView.set("image", {src: item.data.thumbnail});
-      nameView.set("text", item.data.title);
-      authorView.set("text", item.data.author);
-      commentsView.set("text", item.data.num_comments + " comments");
+      if (item.loading) {
+        cell.children().set("visible", false);
+        nameView.set({visible: true, text: "loading ..."});
+        loadMoreData();
+      } else {
+        cell.children().set("visible", true);
+        imageView.set("image", item.data.thumbnail);
+        nameView.set("text", item.data.title);
+        authorView.set("text", item.data.author);
+        commentsView.set("text", item.data.num_comments + " comments");
+      }
     }).on("change:bounds", function() {
       var cellWidth = cell.get("bounds").width;
       var textWidth = 200;
@@ -41,7 +48,9 @@ var collectionView = tabris.create("CollectionView", {
 }).on("refresh", function() {
   loadNewData();
 }).on("selection", function(event) {
-  createDetailsPage(event.item.data);
+  if (!event.item.loading) {
+    createDetailsPage(event.item.data);
+  }
 }).appendTo(page);
 
 page.open();
@@ -49,8 +58,9 @@ loadData();
 
 function loadData() {
   collectionView.set("refreshIndicator", true);
-  $.getJSON(createUrl({limit: 50}), function(json) {
-    collectionView.set("items", json.data.children);
+  $.getJSON(createUrl({limit: 25}), function(json) {
+    // add a placeholder item for loading new items
+    collectionView.set("items", json.data.children.concat({loading: true}));
     collectionView.set("refreshIndicator", false);
   });
 }
@@ -63,6 +73,15 @@ function loadNewData() {
   });
 }
 
+function loadMoreData() {
+  $.getJSON(createUrl({limit: 25, after: getLastId()}), function(json) {
+    // add new placeholder item for loading new items
+    collectionView.insert(json.data.children.concat({loading: true}), -1);
+    // remove old placeholder item
+    collectionView.remove(-1);
+  });
+}
+
 function createUrl(params) {
   return "http://www.reddit.com/r/petpictures.json?" + Object.keys(params).map(function(key) {
     return key + "=" + params[key];
@@ -70,9 +89,12 @@ function createUrl(params) {
 }
 
 function getFirstId() {
-  if (collectionView._items) {
-    return getRedditId(collectionView._items[0]) || null;
-  }
+  return getRedditId(collectionView.get("items")[0]) || null;
+}
+
+function getLastId() {
+  var items = collectionView.get("items");
+  return getRedditId(items[items.length - 2]) || null;
 }
 
 function getRedditId(item) {
