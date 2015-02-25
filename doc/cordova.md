@@ -64,6 +64,13 @@ The optional `<content>` element defines the app's starting page in ordinary Cor
 ### preferences
 Tabris.js accepts the following custom preferences:
 
-| Name                    | Allowed Values | Default Value | Description |
-|-------------------------|----------------|---------------|-------------|
-| EnableDeveloperConsole  | true/false     | false         | Enables/Disables the [Tabris.js Developer Console](https://tabrisjs.com/documentation/getting-started#the-developer-console). |
+| Name                   | Allowed Values | Default Value | Description |
+|------------------------|----------------|---------------|-------------|
+| EnableDeveloperConsole | true/false     | false         | Enables/Disables the [Tabris.js Developer Console](https://tabrisjs.com/documentation/getting-started#the-developer-console).             |
+| UseStrictSSL           | true/false     | true          | Activate/Deactivate ssl certificate validation. When disabled self signed ssl certificates are accepted. Should be enabled in production. |
+
+#### Android specific preferences
+
+| Name                    | Value |
+|-------------------------|-------|
+| Theme                   | <ul><li>`com.eclipsesource.tabris.android.R.style.Theme_Tabris`</li><li>`com.eclipsesource.tabris.android.R.style.Theme_Tabris_Light`</li><li>`com.eclipsesource.tabris.android.R.style.Theme_Tabris_Light_DarkActionBar` (Default)</ul>In addition to these three bundled themes, a reference to any other Android theme can be specified (must be a fully qualified name). |
