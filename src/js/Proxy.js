@@ -19,11 +19,6 @@
       return this;
     },
 
-    call: function(method, parameters) {
-      this._checkDisposed();
-      return tabris._nativeBridge.call(this.cid, method, parameters);
-    },
-
     dispose: function() {
       if (!this._isDisposed) {
         this._destroy();
@@ -159,6 +154,11 @@
 
     _nativeGet: function(name) {
       return tabris._nativeBridge.get(this.cid, name);
+    },
+
+    _nativeCall: function(method, parameters) {
+      this._checkDisposed();
+      return tabris._nativeBridge.call(this.cid, method, parameters);
     }
 
   });

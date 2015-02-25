@@ -46,7 +46,7 @@
       createitem: {
         trigger: function() {
           var cell = tabris.create("_CollectionCell", {});
-          this.call("addItem", {widget: cell.cid});
+          this._nativeCall("addItem", {widget: cell.cid});
           if (typeof this._initializeCell !== "function") {
             console.warn("initializeCell callback missing");
           } else {
@@ -83,18 +83,18 @@
     reveal: function(index) {
       index = this._checkIndex(index);
       if (index >= 0 && index < this._items.length) {
-        this.call("reveal", {index: index});
+        this._nativeCall("reveal", {index: index});
       }
     },
 
     refresh: function(index) {
       if (arguments.length === 0) {
-        this.call("update", {reload: [0, this._items.length]});
+        this._nativeCall("update", {reload: [0, this._items.length]});
         return;
       }
       index = this._checkIndex(index);
       if (index >= 0 && index < this._items.length) {
-        this.call("update", {reload: [index, 1]});
+        this._nativeCall("update", {reload: [index, 1]});
       }
     },
 
@@ -108,7 +108,7 @@
         index = Math.max(0, Math.min(this._items.length, this._checkIndex(index)));
       }
       Array.prototype.splice.apply(this._items, [index, 0].concat(items));
-      this.call("update", {insert: [index, items.length]});
+      this._nativeCall("update", {insert: [index, items.length]});
     },
 
     remove: function(index, count) {
@@ -122,7 +122,7 @@
       }
       if (index >= 0 && index < this._items.length && count > 0) {
         this._items.splice(index, count);
-        this.call("update", {remove: [index, count]});
+        this._nativeCall("update", {remove: [index, count]});
       }
     },
 
@@ -130,7 +130,7 @@
       // We defer the reload call until the end of create/set in order to ensure that
       // we don't receive events before the listeners are attached
       if (this._needsReload) {
-        this.call("reload", {"items": this._items.length});
+        this._nativeCall("reload", {"items": this._items.length});
         delete this._needsReload;
       }
     },

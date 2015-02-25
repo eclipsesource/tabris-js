@@ -30,7 +30,7 @@
             delete timers[taskId];
           }
         });
-        timer.call("start");
+        timer._nativeCall("start");
         timers[taskId] = timer;
       });
       return taskId;
@@ -47,7 +47,7 @@
     target.clearTimeout = target.clearInterval = function(taskId) {
       var timer = timers[taskId];
       if (timer) {
-        timer.call("cancel", {});
+        timer._nativeCall("cancel", {});
         timer.dispose();
         delete timers[taskId];
       }

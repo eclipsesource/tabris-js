@@ -163,7 +163,7 @@
     _init: function(width, height) {
       this.canvas.width = width;
       this.canvas.height = height;
-      this._gc.call("init", {
+      this._gc._nativeCall("init", {
         width: width,
         height: height,
         font: [["sans-serif"], 12, false, false],
@@ -174,7 +174,7 @@
 
     _flush: function() {
       if (this._operations.length > 0) {
-        this._gc.call("draw", {packedOperations: [
+        this._gc._nativeCall("draw", {packedOperations: [
           this._newOpCodes,
           this._operations,
           this._doubles,

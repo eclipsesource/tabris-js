@@ -10,7 +10,7 @@ describe("LocalStorage", function() {
     tabris._init(nativeBridge);
     spyOn(window, "tabris").and.callFake(function() {
       proxy = new tabris.Proxy();
-      spyOn(proxy, "call").and.callFake(function(method, args) {
+      spyOn(proxy, "_nativeCall").and.callFake(function(method, args) {
         if (method === "get" && args.key === "savedKey") {
           return "savedVal";
         }
@@ -48,17 +48,17 @@ describe("LocalStorage", function() {
 
     it("calls proxy add with key and value", function() {
       localStorage.setItem("foo", "bar");
-      expect(proxy.call).toHaveBeenCalledWith("add", {key: "foo", value: "bar"});
+      expect(proxy._nativeCall).toHaveBeenCalledWith("add", {key: "foo", value: "bar"});
     });
 
     it("doesn't call add when key not a string", function() {
       executeWithNonStringArgument(localStorage, "setItem", 0, "foo");
-      expect(proxy.call).not.toHaveBeenCalled();
+      expect(proxy._nativeCall).not.toHaveBeenCalled();
     });
 
     it("doesn't call add when value not a string", function() {
       executeWithNonStringArgument(localStorage, "setItem", 1, "foo");
-      expect(proxy.call).not.toHaveBeenCalled();
+      expect(proxy._nativeCall).not.toHaveBeenCalled();
     });
 
   });
@@ -67,12 +67,12 @@ describe("LocalStorage", function() {
 
     it("doesn't call get when key not a string", function() {
       executeWithNonStringArgument(localStorage, "getItem", 0);
-      expect(proxy.call).not.toHaveBeenCalled();
+      expect(proxy._nativeCall).not.toHaveBeenCalled();
     });
 
     it("calls proxy get with key", function() {
       localStorage.getItem("foo");
-      expect(proxy.call).toHaveBeenCalledWith("get", {key: "foo"});
+      expect(proxy._nativeCall).toHaveBeenCalledWith("get", {key: "foo"});
     });
 
     it("returns saved item", function() {
@@ -86,12 +86,12 @@ describe("LocalStorage", function() {
 
     it("doesn't call remove when key not a string", function() {
       executeWithNonStringArgument(localStorage, "removeItem", 0);
-      expect(proxy.call).not.toHaveBeenCalled();
+      expect(proxy._nativeCall).not.toHaveBeenCalled();
     });
 
     it("calls proxy remove with keys array", function() {
       localStorage.removeItem("savedKey");
-      expect(proxy.call).toHaveBeenCalledWith("remove", {keys: ["savedKey"]});
+      expect(proxy._nativeCall).toHaveBeenCalledWith("remove", {keys: ["savedKey"]});
     });
 
   });
@@ -100,7 +100,7 @@ describe("LocalStorage", function() {
 
     it("calls proxy clear", function() {
       localStorage.clear();
-      expect(proxy.call).toHaveBeenCalledWith("clear");
+      expect(proxy._nativeCall).toHaveBeenCalledWith("clear");
     });
 
   });

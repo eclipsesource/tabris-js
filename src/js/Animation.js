@@ -58,12 +58,12 @@
           delete animation._proxy;
         }
       };
-      this._proxy.call("start");
+      this._proxy._nativeCall("start");
     },
 
     cancel: function() {
       if (this._proxy) {
-        this._proxy.call("cancel");
+        this._proxy._nativeCall("cancel");
       }
     },
 

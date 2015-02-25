@@ -574,10 +574,10 @@ describe("Proxy", function() {
 
     });
 
-    describe("call", function() {
+    describe("_nativeCall", function() {
 
       it("calls native call", function() {
-        proxy.call("method", {foo: 23});
+        proxy._nativeCall("method", {foo: 23});
 
         var call = nativeBridge.calls()[0];
         expect(call.op).toEqual("call");
@@ -588,7 +588,7 @@ describe("Proxy", function() {
       it("returns value from native", function() {
         spyOn(nativeBridge, "call").and.returnValue(23);
 
-        var result = proxy.call("method", {});
+        var result = proxy._nativeCall("method", {});
 
         expect(result).toBe(23);
       });
@@ -597,7 +597,7 @@ describe("Proxy", function() {
         proxy.dispose();
 
         expect(function() {
-          proxy.call("foo", {});
+          proxy._nativeCall("foo", {});
         }).toThrowError("Object is disposed");
       });
 
