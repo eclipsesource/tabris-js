@@ -117,6 +117,13 @@
         "parameters": [""],
         "description": "Removes this widget from its parent and destroys it. Also disposes of all its children. Triggers a `remove` event on the parent and a `dispose` event on itself. The widget can no longer be used."
       }
+    ],
+    "isDisposed": [
+      {
+        "parameters": [""],
+        "returns": "boolean",
+        "description": "Returns `true` if the widget has been disposed, otherwise `false`."
+      }
     ]
   },
   "properties": {

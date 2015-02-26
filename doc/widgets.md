@@ -218,3 +218,7 @@ button.on("dispose", function() {
 });
 button.dispose();
 ```
+
+### `isDisposed()`
+
+Returns `true` if the widget has been disposed, otherwise `false`.

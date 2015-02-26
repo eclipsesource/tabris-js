@@ -109,9 +109,17 @@ describe("Proxy", function() {
       expect(proxy.children().length).toBe(0);
     });
 
+    it("isDisposed() returns false", function() {
+      expect(proxy.isDisposed()).toBe(false);
+    });
+
     describe("when disposed", function() {
       beforeEach(function() {
         proxy.dispose();
+      });
+
+      it("isDisposed returns true", function() {
+        expect(proxy.isDisposed()).toBe(true);
       });
 
       it("calling append fails", function() {

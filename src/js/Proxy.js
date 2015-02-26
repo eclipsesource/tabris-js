@@ -30,6 +30,10 @@
       }
     },
 
+    isDisposed: function() {
+      return !!this._isDisposed;
+    },
+
     _listen: function(type, state) {
       var event = this.constructor && this.constructor._events && this.constructor._events[type];
       if (!event) {
