@@ -13,7 +13,7 @@ var createTextView = function(text) {
   tabris.create("TextView", {
     text: text,
     markupEnabled: true,
-    layoutData: {left: MARGIN, right: MARGIN, top: [page.children().last() || 0, MARGIN]}
+    layoutData: {left: MARGIN, right: MARGIN, top: [page.children().last() || "0%", MARGIN]}
   }).appendTo(page);
 };
 

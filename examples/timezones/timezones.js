@@ -15,7 +15,7 @@ update();
 
 function createTextView(timezone, name) {
   var locationTextView = tabris.create("TextView", {
-    layoutData: {top: [page.children().last() || 0, 30], centerX: 0},
+    layoutData: {top: [page.children().last() || "0%", 30], centerX: 0},
     text: name
   }).appendTo(page);
   tabris.create("TextView", {
