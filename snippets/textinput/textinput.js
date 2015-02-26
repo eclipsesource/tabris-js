@@ -4,11 +4,11 @@ var page = tabris.create("Page", {
 });
 
 tabris.create("TextInput", {
-  layoutData: {top: 20, left: [20, 0], right: [20, 0]},
+  layoutData: {top: 20, left: "20%", right: "20%"},
   message: "Type here, press 'Done'"
 }).on("accept", function() {
   tabris.create("TextView", {
-    layoutData: {top: [page.children().last(), 20], left: [20, 0]},
+    layoutData: {top: [page.children().last(), 20], left: "20%"},
     text: this.get("text")
   }).appendTo(page);
 }).appendTo(page);

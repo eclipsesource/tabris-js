@@ -4,7 +4,7 @@ var page = tabris.create("Page", {
 });
 
 tabris.create("Composite", {
-  layoutData: {left: [30, 0], top: [30, 0], right: [30, 0], bottom: [30, 0]},
+  layoutData: {left: "30%", top: "30%", right: "30%", bottom: "30%"},
   highlightOnTouch: true,
   background: "gray"
 }).appendTo(page);

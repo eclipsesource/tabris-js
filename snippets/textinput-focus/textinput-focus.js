@@ -4,7 +4,7 @@ var page = tabris.create("Page", {
 });
 
 tabris.create("TextInput", {
-  layoutData: {top: 20, left: [20, 0], right: [20, 0]},
+  layoutData: {top: 20, left: "20%", right: "20%"},
   message: "Colorful typing...",
   font: "22px sans-serif"
 }).on("focus", function() {
@@ -14,7 +14,7 @@ tabris.create("TextInput", {
 }).appendTo(page);
 
 tabris.create("TextInput", {
-  layoutData: {top: [page.children().last(), 20], left: [20, 0], right: [20, 0]},
+  layoutData: {top: [page.children().last(), 20], left: "20%", right: "20%"},
   message: "Another field to focus..."
 }).appendTo(page);
 

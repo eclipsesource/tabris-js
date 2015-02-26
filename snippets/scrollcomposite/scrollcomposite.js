@@ -5,7 +5,7 @@ var page = tabris.create("Page", {
 
 var scrollComposite = tabris.create("ScrollComposite", {
   direction: "horizontal",
-  layoutData: {left: 0, top: [40, 0], right: 0, bottom: [40, 0]},
+  layoutData: {left: 0, top: "40%", right: 0, bottom: "40%"},
   background: "#234"
 }).appendTo(page);
 

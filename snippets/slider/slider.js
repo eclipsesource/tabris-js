@@ -4,7 +4,7 @@ var page = tabris.create("Page", {
 });
 
 var textView = tabris.create("TextView", {
-  layoutData: {left: 10, right: 10, top: [30, 0]},
+  layoutData: {left: 10, right: 10, top: "30%"},
   alignment: "center",
   font: "22px sans-serif",
   text: "50"

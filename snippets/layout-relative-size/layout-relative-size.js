@@ -4,12 +4,12 @@ var page = tabris.create("Page", {
 });
 
 tabris.create("Composite", {
-  layoutData: {left: 10, top: 10, right: 10, bottom: [70, 0]},
+  layoutData: {left: 10, top: 10, right: 10, bottom: "70%"},
   background: "red"
 }).appendTo(page);
 
 tabris.create("Composite", {
-  layoutData: {left: 10, top: [30, 10], right: 10, bottom: 10},
+  layoutData: {left: 10, top: ["30%", 10], right: 10, bottom: 10},
   background: "blue"
 }).appendTo(page);
 
