@@ -7,7 +7,7 @@ First of all you need a Cordova installation. Follow the [Cordova Installation G
 After the installation is completed you can create your first app. This can be done using the `cordova create` command as it is described in the [Cordova CLI Guide](http://cordova.apache.org/docs/en/edge/guide_cli_index.md.html#The%20Command-Line%20Interface_create_the_app). After creating the project you will have a typical Cordova project structure including the `www` directory. The default content which was created automatically is not needed and can be deleted.
 
 ## Adding tabris.js platforms
-Tabris.js ships two custom Cordova platforms. This includes platforms for iOS and Android. Visit the [tabris.js download page](https://tabrisjs.com/downloads) and download the platform of your choice.
+Tabris.js ships two custom Cordova platforms. This includes platforms for iOS and Android. Visit the [tabris.js download page](https://tabrisjs.com/download) and download the platform of your choice.
 
 Extract the content of the downloaded archive and add the platform to your project using the `cordova platform add` command. You need to append the path to the download platform. E.g.:
 
