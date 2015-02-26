@@ -113,6 +113,12 @@
     tabris.registerType(type, members);
   };
 
+  var hasAndroidResizeBug;
+  tabris.load(function() {
+    hasAndroidResizeBug = tabris.device.get("platform") === "Android" &&
+                          tabris.device.get("version") <= 17;
+  });
+
   util.extend(tabris.registerWidget, {
     _defaultEvents: {
       touchstart: true,
@@ -121,7 +127,19 @@
       touchcancel: true,
       longpress: true,
       dispose: function() {},
-      "change:bounds": "Resize"
+      "change:bounds": {
+        name: "Resize",
+        trigger: function(event) {
+          if (hasAndroidResizeBug) {
+            var self = this;
+            setTimeout(function() {
+              self.trigger("change:bounds", event);
+            }, 0);
+          } else {
+            this.trigger("change:bounds", event);
+          }
+        }
+      }
     },
     _defaultProperties: {
       enabled: "boolean",
