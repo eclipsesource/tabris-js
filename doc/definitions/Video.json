@@ -10,8 +10,8 @@
   },
   "links": [
     {
-      "title": "Example with video wigdet",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/examples/video/video.js"
+      "title": "Snippet for creating a video wigdet",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/video/video.js"
     }
   ]
 }
