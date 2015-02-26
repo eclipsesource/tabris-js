@@ -64,7 +64,7 @@ module.exports = function(grunt) {
     if (widget.include) {
       result.push("Includes ");
       result.push(widget.include.map(function(widget) {
-        var title = widget.title || widget.type;
+        var title = widget.type || widget.title;
         return "[" + title + "](#" + title.toLowerCase().replace(/\s/g, "-") + ")";
       }).join(", "));
       result.push("\n");
