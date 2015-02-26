@@ -1,7 +1,7 @@
 {
   "title": "Touch Event Handling",
   "category": "TouchEvents",
-  "description": "Demonstrates the tabris.js touch API",
+  "description": "Demonstrates the Tabris.js touch API",
   "main": "touch.js",
   "dependencies": {
     "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"

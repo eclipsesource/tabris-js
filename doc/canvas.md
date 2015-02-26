@@ -1,4 +1,4 @@
-tabris.js canvas
+Tabris.js Canvas
 ================
 
 Canvas is a composite which allows the user to draw on it using a canvas context. Canvas context provides a drawing API. It is a subset of the HTML5 CanvasRenderingContext2D.

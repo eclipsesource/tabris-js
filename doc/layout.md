@@ -1,6 +1,6 @@
 # Layout
 
-tabris.js uses the native platform capabilities to layout UIs. As display density widely varies among mobile devices the pixel measures in tabris.js are always expressed as [Device Independent Pixels](https://en.wikipedia.org/wiki/Device_independent_pixel).
+Tabris.js uses the native platform capabilities to layout UIs. As display density widely varies among mobile devices the pixel measures in Tabris.js are always expressed as [Device Independent Pixels](https://en.wikipedia.org/wiki/Device_independent_pixel).
 
 ## Layout Data
 

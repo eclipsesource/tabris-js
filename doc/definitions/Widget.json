@@ -194,11 +194,11 @@
   },
   "links": [
     {
-      "title": "Understanding layouts in tabris.js",
+      "title": "Understanding layouts in Tabris.js",
       "path": "https://tabrisjs.com/documentation/layouts"
     },
     {
-      "title": "Understanding touch events in tabris.js",
+      "title": "Understanding touch events in Tabris.js",
       "path": "https://tabrisjs.com/documentation/touch-events"
     }
   ]

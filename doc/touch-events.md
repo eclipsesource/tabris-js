@@ -1,7 +1,7 @@
 Touch Events
 ============
 
-Touch events in tabris.js follow the names and patterns established in HTML in order to support interoperability, e.g. with the HTML5 Canvas API. Currently, there are some known issues (see below).
+Touch events in Tabris.js follow the names and patterns established in HTML in order to support interoperability, e.g. with the HTML5 Canvas API. Currently, there are some known issues (see below).
 
 ## Event types
 

@@ -1,6 +1,6 @@
 {
   "title": "Canvas",
-  "description": "Demonstrates the tabris.js Canvas widget with HTML5 compatible API",
+  "description": "Demonstrates the Tabris.js Canvas widget with HTML5 compatible API",
   "category": "Web APIs",
   "main": "app.js",
   "dependencies": {

@@ -1,4 +1,4 @@
-This example showcases how jQuery's Ajax API can be used in tabris.js.
+This example showcases how jQuery's Ajax API can be used in Tabris.js.
 Since the DOM manipulations will not work in tabris, we use a custom jQuery
 lib that only contains the Ajax API. It's built with
 

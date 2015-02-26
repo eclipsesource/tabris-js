@@ -6,8 +6,8 @@ First of all you need a Cordova installation. Follow the [Cordova Installation G
 
 After the installation is completed you can create your first app. This can be done using the `cordova create` command as it is described in the [Cordova CLI Guide](http://cordova.apache.org/docs/en/edge/guide_cli_index.md.html#The%20Command-Line%20Interface_create_the_app). After creating the project you will have a typical Cordova project structure including the `www` directory. The default content which was created automatically is not needed and can be deleted.
 
-## Adding tabris.js platforms
-Tabris.js ships two custom Cordova platforms. This includes platforms for iOS and Android. Visit the [tabris.js download page](https://tabrisjs.com/download) and download the platform of your choice.
+## Adding Tabris.js platforms
+Tabris.js ships two custom Cordova platforms. This includes platforms for iOS and Android. Visit the [Tabris.js download page](https://tabrisjs.com/download) and download the platform of your choice.
 
 Extract the content of the downloaded archive and add the platform to your project using the `cordova platform add` command. You need to append the path to the download platform. E.g.:
 
@@ -29,7 +29,7 @@ An example of adding the [Cordova Camera Plug-In](http://plugins.cordova.io/#/pa
 cordova plugin add org.apache.cordova.camera
 ```
 
-**Important:** You can install all available Cordova Plug-Ins. Most of the Plug-Ins will work out of the box but not all. This is because tabris.js uses a **native UI** and **no HTML5**. As a result all Plug-Ins that manipulate the DOM will not work.
+**Important:** You can install all available Cordova Plug-Ins. Most of the Plug-Ins will work out of the box but not all. This is because Tabris.js uses a **native UI** and **no HTML5**. As a result all Plug-Ins that manipulate the DOM will not work.
 
 ## Default Plug-Ins in the Developer Apps
 If you are using the [Tabris.js Developer Apps](https://tabrisjs.com/documentation/getting-started), your application can directly access the following pre-packaged plug-ins:
@@ -44,7 +44,7 @@ If you are using the [Tabris.js Developer Apps](https://tabrisjs.com/documentati
 * [Touch Id](http://plugins.cordova.io/#/package/io.monaca.touchid)
 
 ## The Application Code
-The code of a Cordova Application is placed in the `www` directory. When using the Cordova CLI for tabris.js the application code must also be in the `www` folder. This means your `package.json` file must be placed directly in the `www` folder.
+The code of a Cordova Application is placed in the `www` directory. When using the Cordova CLI for Tabris.js the application code must also be in the `www` folder. This means your `package.json` file must be placed directly in the `www` folder.
 
 To get an application quickly just copy one of the [examples](https://github.com/eclipsesource/tabris-js/tree/master/examples) into the `www` directory.
 
