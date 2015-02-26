@@ -362,7 +362,7 @@
         dispatchProgressEvent("loadstart", xhr.upload); // (9.3)
       }
       // (10): only handling the same origin case
-      scope.proxy.call("send", { // request URL fetch
+      scope.proxy._nativeCall("send", { // request URL fetch
         url: scope.requestUrl.source,
         method: scope.requestMethod,
         timeout: xhr.timeout,
@@ -375,7 +375,7 @@
   var createAbortMethod = function(xhr, scope) {
     return function() { // #the-abort()-method
       if (scope.proxy) {
-        scope.proxy.call("abort"); // (1)
+        scope.proxy._nativeCall("abort"); // (1)
       }
       if (!([xhr.UNSENT, xhr.OPENED].indexOf(scope.readyState) > -1 && !scope.sendInvoked ||
           scope.readyState === xhr.DONE)) { // send() interrupted

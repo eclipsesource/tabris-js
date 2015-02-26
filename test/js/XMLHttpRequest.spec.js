@@ -11,7 +11,7 @@ describe("XMLHttpRequest", function() {
     var origCreate = tabris.create;
     spyOn(tabris, "create").and.callFake(function() {
       proxy = origCreate.apply(this, arguments);
-      proxy.call = jasmine.createSpy("call");
+      spyOn(proxy, "_nativeCall");
       return proxy;
     });
     xhr = new tabris.XMLHttpRequest();
@@ -123,12 +123,11 @@ describe("XMLHttpRequest", function() {
 
     it("resets requestHeaders", function() {
       sendRequest(xhr);
-      proxy.call = jasmine.createSpy("call");
       xhr.open("GET", "http://foo.com");
       xhr.setRequestHeader("Foo", "Bar");
       xhr.open("GET", "http://foo.com");
       xhr.send();
-      expect(proxy.call).toHaveBeenCalledWith("send", jasmine.objectContaining({
+      expect(proxy._nativeCall).toHaveBeenCalledWith("send", jasmine.objectContaining({
         headers: {}
       }));
     });
@@ -154,7 +153,7 @@ describe("XMLHttpRequest", function() {
       xhr.withCredentials = true;
       xhr.open("GET", "index.json", true, "user", "password");
       xhr.send();
-      expect(proxy.call).toHaveBeenCalledWith("send", jasmine.objectContaining({
+      expect(proxy._nativeCall).toHaveBeenCalledWith("send", jasmine.objectContaining({
         headers: {Authorization: "Basic user:password"}
       }));
     });
@@ -164,7 +163,7 @@ describe("XMLHttpRequest", function() {
       xhr.withCredentials = true;
       xhr.open("GET", "index.json", true, "user", null);
       xhr.send();
-      expect(proxy.call).not.toHaveBeenCalledWith("send", jasmine.objectContaining({
+      expect(proxy._nativeCall).not.toHaveBeenCalledWith("send", jasmine.objectContaining({
         headers: {Authorization: "Basic user:password"}
       }));
     });
@@ -196,79 +195,72 @@ describe("XMLHttpRequest", function() {
 
     it("calls proxy send with request URL specified as open argument", function() {
       sendRequest(xhr);
-      proxy.call = jasmine.createSpy("call");
       xhr.open("GET", "http://foo.com");
       xhr.send();
-      expect(proxy.call).toHaveBeenCalledWith("send", jasmine.objectContaining({
+      expect(proxy._nativeCall).toHaveBeenCalledWith("send", jasmine.objectContaining({
         url: "http://foo.com"
       }));
     });
 
     it("calls proxy send with method specified as open argument", function() {
       sendRequest(xhr);
-      proxy.call = jasmine.createSpy("call");
       xhr.open("GET", "http://foo.com");
       xhr.send();
-      expect(proxy.call).toHaveBeenCalledWith("send", jasmine.objectContaining({
+      expect(proxy._nativeCall).toHaveBeenCalledWith("send", jasmine.objectContaining({
         method: "GET"
       }));
     });
 
     it("calls proxy send with timeout property", function() {
       sendRequest(xhr);
-      proxy.call = jasmine.createSpy("call");
       xhr.open("GET", "http://foo.com");
       xhr.timeout = 2000;
       xhr.send();
-      expect(proxy.call).toHaveBeenCalledWith("send", jasmine.objectContaining({
+      expect(proxy._nativeCall).toHaveBeenCalledWith("send", jasmine.objectContaining({
         timeout: 2000
       }));
     });
 
     it("calls proxy send with headers property", function() {
       sendRequest(xhr);
-      proxy.call = jasmine.createSpy("call");
       xhr.open("GET", "http://foo.com");
       xhr.setRequestHeader("Foo", "Bar");
       xhr.send();
-      expect(proxy.call).toHaveBeenCalledWith("send", jasmine.objectContaining({
+      expect(proxy._nativeCall).toHaveBeenCalledWith("send", jasmine.objectContaining({
         headers: {Foo: "Bar"}
       }));
     });
 
     it("calls proxy send with data property", function() {
       sendRequest(xhr);
-      proxy.call = jasmine.createSpy("call");
       xhr.open("POST", "http://foo.com");
       xhr.send("foo");
-      expect(proxy.call).toHaveBeenCalledWith("send", jasmine.objectContaining({
+      expect(proxy._nativeCall).toHaveBeenCalledWith("send", jasmine.objectContaining({
         data: "foo"
       }));
     });
 
     it("calls proxy send with null data if request method is HEAD or GET", function() {
       sendRequest(xhr);
-      proxy.call = jasmine.createSpy("call");
       xhr.open("GET", "http://foo.com");
       xhr.send("foo");
-      expect(proxy.call).toHaveBeenCalledWith("send", jasmine.objectContaining({
+      expect(proxy._nativeCall).toHaveBeenCalledWith("send", jasmine.objectContaining({
         data: null
       }));
       xhr.open("HEAD", "http://foo.com");
       xhr.send("foo");
-      expect(proxy.call).toHaveBeenCalledWith("send", jasmine.objectContaining({
+      expect(proxy._nativeCall).toHaveBeenCalledWith("send", jasmine.objectContaining({
         data: null
       }));
     });
 
     it("calls proxy send with headers property and appended header", function() {
       sendRequest(xhr);
-      proxy.call = jasmine.createSpy("call");
       xhr.open("GET", "http://foo.com");
       xhr.setRequestHeader("Foo", "Bar");
       xhr.setRequestHeader("Foo", "Baz");
       xhr.send();
-      expect(proxy.call).toHaveBeenCalledWith("send", jasmine.objectContaining({
+      expect(proxy._nativeCall).toHaveBeenCalledWith("send", jasmine.objectContaining({
         headers: {Foo: "Bar, Baz"}
       }));
     });
@@ -323,7 +315,7 @@ describe("XMLHttpRequest", function() {
       xhr.withCredentials = true;
       xhr.open("GET", "http://user:password@foobar.com");
       xhr.send();
-      expect(proxy.call).toHaveBeenCalledWith("send", jasmine.objectContaining({
+      expect(proxy._nativeCall).toHaveBeenCalledWith("send", jasmine.objectContaining({
         headers: {Authorization: "Basic user:password"}
       }));
     });
@@ -331,7 +323,7 @@ describe("XMLHttpRequest", function() {
     it("doesn't send basic access authentication header when withCredentials false", function() {
       xhr.open("GET", "http://user:password@foobar.com");
       xhr.send();
-      expect(proxy.call).not.toHaveBeenCalledWith("send", jasmine.objectContaining({
+      expect(proxy._nativeCall).not.toHaveBeenCalledWith("send", jasmine.objectContaining({
         headers: {Authorization: "Basic user:password"}
       }));
     });
@@ -340,7 +332,7 @@ describe("XMLHttpRequest", function() {
       xhr.withCredentials = true;
       xhr.open("GET", "http://foobar.com");
       xhr.send();
-      expect(proxy.call).not.toHaveBeenCalledWith("send", jasmine.objectContaining({
+      expect(proxy._nativeCall).not.toHaveBeenCalledWith("send", jasmine.objectContaining({
         headers: {Authorization: "Basic user:password"}
       }));
     });
@@ -586,9 +578,8 @@ describe("XMLHttpRequest", function() {
 
     it("calls proxy abort", function() {
       sendRequest(xhr);
-      proxy.call = jasmine.createSpy("call");
       xhr.abort();
-      expect(proxy.call).toHaveBeenCalledWith("abort");
+      expect(proxy._nativeCall).toHaveBeenCalledWith("abort");
     });
 
     it("changes state to 'UNSENT' with states 'UNSENT' and 'OPENED' if send() not invoked", function() {
