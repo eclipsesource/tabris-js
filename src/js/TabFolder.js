@@ -38,6 +38,14 @@
       },
       selection: {
         set: function(tab) {
+          if (!(tab instanceof tabris.Tab)) {
+            console.warn("Can not set TabFolder selection to " + tab);
+            return;
+          }
+          if (tab._isDisposed) {
+            console.warn("Can not set TabFolder selection to disposed Tab");
+            return;
+          }
           this._nativeSet("selection", tab._tabItem.cid);
         },
         get: function() {

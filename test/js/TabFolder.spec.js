@@ -1,14 +1,20 @@
 describe("TabFolder", function() {
 
   var nativeBridge, tabFolder, parent;
+  var consoleBackup = window.console;
 
   beforeEach(function() {
+    window.console = jasmine.createSpyObj("console", ["log", "info", "warn", "error"]);
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._init(nativeBridge);
     parent = tabris.create("Composite");
     nativeBridge.resetCalls();
     tabFolder = tabris.create("TabFolder").appendTo(parent);
+  });
+
+  afterEach(function() {
+    window.console = consoleBackup;
   });
 
   it("children list is empty", function() {
@@ -187,6 +193,31 @@ describe("TabFolder", function() {
 
       var setCall = nativeBridge.calls({op: "set", id: tabFolder.cid})[0];
       expect(setCall.properties.selection).toBe(tab2._tabItem.cid);
+    });
+
+    it("Ignores setting null with warning", function() {
+      tabFolder.set("selection", null);
+
+      var calls = nativeBridge.calls({op: "set", id: tabFolder.cid});
+      expect(calls.length).toBe(0);
+      expect(console.warn).toHaveBeenCalledWith("Can not set TabFolder selection to null");
+    });
+
+    it("Ignores setting disposed tab with warning", function() {
+      tab2.dispose();
+      tabFolder.set("selection", tab2);
+
+      var calls = nativeBridge.calls({op: "set", id: tabFolder.cid});
+      expect(calls.length).toBe(0);
+      expect(console.warn).toHaveBeenCalledWith("Can not set TabFolder selection to disposed Tab");
+    });
+
+    it("Ignores setting non tab", function() {
+      tabFolder.set("selection", "foo");
+
+      var calls = nativeBridge.calls({op: "set", id: tabFolder.cid});
+      expect(calls.length).toBe(0);
+      expect(console.warn).toHaveBeenCalledWith("Can not set TabFolder selection to foo");
     });
 
     it("Get returns Tab", function() {
