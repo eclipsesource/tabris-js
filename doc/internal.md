@@ -16,7 +16,7 @@ All fields on the `members` map will be inherited by the type instances (potenti
 * `_supportsChildren`: Unless this is set to true, the instance will throw exceptions when attempting to append any children.
 * `_properties`: A map where the keys are all names of the natively supported properties, and the values determine how the property values are handled. For properties not in the list no `set` and `get` operations will be issued.
 * `_initProperties`: A map with key-value pairs that are added to any `create` operation for that type, bypassing all checks, encoding and `_setProperty` handler.
-* `_event`: A map where the keys are the names of all supported native events, and the value determines how the events are handled. (See list below.) For events that are not in the map no `listen` operations are issued.
+* `_events`: A map where the keys are the names of all supported native events, and the value determines how the events are handled. (See list below.) For events that are not in the map no `listen` operations are issued.
 
 Valid values for the `_properties` map are:
 
@@ -47,10 +47,10 @@ Valid values for the `_events` map are:
 
 * `true`: passes the name of the event to the `listen` operation without any changes.
 * A *string*: will be used as the event name in the `listen` operation instead of the public event name. Incoming notify calls with that name will be translated back to the public event name.
-* A *map* with any of these entries: 
+* A *map* with any of these entries:
     * `name`: The internal event name. Same as giving the string directly (see above).
     * `listen`: A function that will be called with the new listen state (`true`/`false`) as the sole argument and the proxy as the context (`this`). It can use the `_nativeListen` method of the proxy if needed.
-    * `trigger`: A function that will be called instead of proxy.trigger for this event type. 
+    * `trigger`: A function that will be called instead of proxy.trigger for this event type.
 
 ## tabris.registerWidget
 
