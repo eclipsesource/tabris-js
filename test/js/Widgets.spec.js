@@ -244,25 +244,41 @@ describe("Widgets", function() {
       expect(call.properties.layoutData).toEqual(expected);
     });
 
-    it("SET layoutData again until selector resolves", function() {
+    it("SET layoutData again until selector resolves by adding sibling", function() {
       other.dispose();
 
       widget.set("layoutData", {right: "#other"});
-      var calls1 = nativeBridge.calls({op: "set"});
-      nativeBridge.resetCalls();
-      var calls2 = nativeBridge.calls({op: "set"});
-      nativeBridge.resetCalls();
+      var withoutSibling = nativeBridge.calls({op: "set"});
+      var retry = nativeBridge.calls({op: "set"});
       other = tabris.create("TestType", {id: "other"}).appendTo(parent);
-      var calls3 = nativeBridge.calls({op: "set"});
-      nativeBridge.resetCalls();
-      var calls4 = nativeBridge.calls({op: "set"});
+      var withSibling = nativeBridge.calls({op: "set"});
+      var noRetry = nativeBridge.calls({op: "set"});
 
-      expect(calls1.length).toBe(1);
-      expect(calls2.length).toBe(0);
-      expect(calls3.length).toBe(1);
-      expect(calls4.length).toBe(0);
-      expect(calls1[0].properties.layoutData).toEqual({right: [0, 0]});
-      expect(calls3[0].properties.layoutData).toEqual({right: [other.cid, 0]});
+      expect(withoutSibling.length).toBe(1);
+      expect(retry.length).toBe(1);
+      expect(withSibling.length).toBe(2);
+      expect(noRetry.length).toBe(2);
+      expect(withoutSibling[0].properties.layoutData).toEqual({right: [0, 0]});
+      expect(withSibling[1].properties.layoutData).toEqual({right: [other.cid, 0]});
+    });
+
+    it("SET layoutData again until selector resolves by setting parent", function() {
+      widget = tabris.create("TestType");
+      nativeBridge.resetCalls();
+
+      widget.set("layoutData", {right: "#other"});
+      var withoutParent = nativeBridge.calls({op: "set"});
+      var retry = nativeBridge.calls({op: "set"});
+      widget.appendTo(parent);
+      var withParent = nativeBridge.calls({op: "set"});
+      var noRetry = nativeBridge.calls({op: "set"});
+
+      expect(withoutParent.length).toBe(1);
+      expect(retry.length).toBe(1);
+      expect(withParent.length).toBe(2);
+      expect(noRetry.length).toBe(2);
+      expect(withoutParent[0].properties.layoutData).toEqual({right: [0, 0]});
+      expect(withParent[1].properties.layoutData).toEqual({right: [other.cid, 0]});
     });
 
   });

@@ -141,7 +141,7 @@ describe("Layout:", function() {
       expect(layoutData.top).toEqual([other, 42]);
     });
 
-    it("throws if selector does not resolve", function() {
+    it("throws if selector does not resolve due to missing sibling", function() {
       other.dispose();
 
       expect(function() {
@@ -149,8 +149,23 @@ describe("Layout:", function() {
       }).toThrow();
     });
 
-    it("replaces unresolved selector with 0 if forced ", function() {
+    it("throws if selector does not resolve due to missing parent", function() {
+      widget = tabris.create("TestType");
+
+      expect(function() {
+        encode({left: 23, right: "#other", top: ["#other", 42]}, widget);
+      }).toThrow();
+    });
+
+    it("replaces selector not resolved due to missing sibling with 0", function() {
       other.dispose();
+
+      expect(encode({left: 23, right: "#noone", top: ["#noone", 42]}, widget, true))
+        .toEqual({left: 23, right: [0, 0], top: [0, 42]});
+    });
+
+    it("replaces selector not resolved due to missing parent with 0", function() {
+      widget = tabris.create("TestType");
 
       expect(encode({left: 23, right: "#noone", top: ["#noone", 42]}, widget, true))
         .toEqual({left: 23, right: [0, 0], top: [0, 42]});

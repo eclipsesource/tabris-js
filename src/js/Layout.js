@@ -85,7 +85,7 @@
 
   var emptyParent = {
     children: function() {
-      return null;
+      return [];
     }
   };
 
