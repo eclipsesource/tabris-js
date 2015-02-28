@@ -4,6 +4,6 @@
   "description": "Create a horizontal scroll composite and fill it with labels",
   "main": "scrollcomposite.js",
   "dependencies": {
-    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+    "tabris": "0.9.2"
   }
 }
