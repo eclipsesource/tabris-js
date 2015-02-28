@@ -4,6 +4,6 @@
   "description": "Use a timer to delay an action",
   "main": "timer.js",
   "dependencies": {
-    "tabris": "https://tabrisjs.com/downloads/nightly/tabris.tgz"
+    "tabris": "0.9.2"
   }
 }
