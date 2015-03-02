@@ -37,11 +37,11 @@
     }
 
     target.setTimeout = function(fn, delay) {
-      return createTimer(fn, delay, false);
+      return createTimer(fn, adjustDelay(delay), false);
     };
 
     target.setInterval = function(fn, delay) {
-      return createTimer(fn, delay, true);
+      return createTimer(fn, adjustDelay(delay), true);
     };
 
     target.clearTimeout = target.clearInterval = function(taskId) {
@@ -57,6 +57,10 @@
 
   if (typeof window !== "undefined") {
     tabris._addWindowTimerMethods(window);
+  }
+
+  function adjustDelay(value) {
+    return typeof value === "number" && isFinite(value) ? Math.max(0, Math.round(value)) : 0;
   }
 
 })();

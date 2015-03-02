@@ -64,6 +64,40 @@ describe("WindowTimers", function() {
         expect(createCall.properties.repeat).toBe(false);
       });
 
+      it("passes 0 delay when argument left out", function() {
+        nativeBridge.resetCalls();
+        target.setTimeout(callback);
+        createCall = nativeBridge.calls({op: "create", type: "tabris.Timer"})[0];
+
+        expect(createCall.properties.delay).toBe(0);
+      });
+
+      it("passes 0 delay when argument is not a number", function() {
+        [1 / 0, NaN, "", {}, false].forEach(function(value) {
+          nativeBridge.resetCalls();
+          target.setTimeout(callback, value);
+          createCall = nativeBridge.calls({op: "create", type: "tabris.Timer"})[0];
+
+          expect(createCall.properties.delay).toBe(0);
+        });
+      });
+
+      it("passes 0 delay when argument is negative", function() {
+        nativeBridge.resetCalls();
+        target.setTimeout(callback, -1);
+        createCall = nativeBridge.calls({op: "create", type: "tabris.Timer"})[0];
+
+        expect(createCall.properties.delay).toBe(0);
+      });
+
+      it("passes rounded delay", function() {
+        nativeBridge.resetCalls();
+        target.setTimeout(callback, 3.14);
+        createCall = nativeBridge.calls({op: "create", type: "tabris.Timer"})[0];
+
+        expect(createCall.properties.delay).toBe(3);
+      });
+
       it("listens on Run event of native Timer", function() {
         expect(listenCall).toBeDefined();
       });
@@ -178,6 +212,40 @@ describe("WindowTimers", function() {
       it("passes arguments to Timer creation", function() {
         expect(createCall.properties.delay).toBe(delay);
         expect(createCall.properties.repeat).toBe(true);
+      });
+
+      it("passes 0 delay when argument left out", function() {
+        nativeBridge.resetCalls();
+        target.setInterval(callback);
+        createCall = nativeBridge.calls({op: "create", type: "tabris.Timer"})[0];
+
+        expect(createCall.properties.delay).toBe(0);
+      });
+
+      it("passes 0 delay when argument is not a number", function() {
+        [1 / 0, NaN, "", {}, false].forEach(function(value) {
+          nativeBridge.resetCalls();
+          target.setInterval(callback, value);
+          createCall = nativeBridge.calls({op: "create", type: "tabris.Timer"})[0];
+
+          expect(createCall.properties.delay).toBe(0);
+        });
+      });
+
+      it("passes 0 delay when argument is negative", function() {
+        nativeBridge.resetCalls();
+        target.setInterval(callback, -1);
+        createCall = nativeBridge.calls({op: "create", type: "tabris.Timer"})[0];
+
+        expect(createCall.properties.delay).toBe(0);
+      });
+
+      it("passes rounded delay", function() {
+        nativeBridge.resetCalls();
+        target.setInterval(callback, 3.14);
+        createCall = nativeBridge.calls({op: "create", type: "tabris.Timer"})[0];
+
+        expect(createCall.properties.delay).toBe(3);
       });
 
       it("listens on Run event of native Timer", function() {
