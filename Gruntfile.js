@@ -2,7 +2,8 @@ module.exports = function(grunt) {
 
   var pkg = grunt.file.readJSON("package.json");
 
-  var banner = blockComment("tabris.js <%= grunt.template.today('yyyy-mm-dd') %>\n\n" +
+  var banner = blockComment("Tabris.js " + pkg.version +
+                            " (<%= grunt.template.today('yyyy-mm-dd HH:MM') %>)\n\n" +
                             grunt.file.read("LICENSE"));
 
   grunt.initConfig({
