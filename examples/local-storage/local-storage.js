@@ -9,7 +9,7 @@ var keyTextView = tabris.create("TextView", {
 }).appendTo(page);
 
 var keyField = tabris.create("TextInput", {
-  layoutData: {left: [keyTextView, 20], baseline: keyTextView, right: 10},
+  layoutData: {left: 60, baseline: keyTextView, right: 10},
   text: "foo"
 }).appendTo(page);
 
@@ -19,12 +19,12 @@ var valueTextView = tabris.create("TextView", {
 }).appendTo(page);
 
 var valueField = tabris.create("TextInput", {
-  layoutData: {left: [valueTextView, 20], baseline: valueTextView, right: 10},
+  layoutData: {left: 60, baseline: valueTextView, right: 10},
   text: localStorage.getItem("foo") || "bar"
 }).appendTo(page);
 
 var setButton = tabris.create("Button", {
-  layoutData: {left: 10, top: [valueTextView, 20]},
+  layoutData: {left: 10, right: ["50%", 10], top: [valueTextView, 20]},
   text: "Set"
 }).on("selection", function() {
   if (!keyField.get("text")) {
@@ -37,12 +37,12 @@ var setButton = tabris.create("Button", {
   }
 }).appendTo(page);
 
-var getButton = tabris.create("Button", {
-  layoutData: {left: [setButton, 10], baseline: setButton},
+tabris.create("Button", {
+  layoutData: {left: [setButton, 10], right: 10, baseline: setButton},
   text: "Get"
 }).on("selection", function() {
   if (!keyField.get("text")) {
-    console.error("They key cannot be empty.");
+    console.error("The key cannot be empty.");
   } else {
     valueField.set("text", "");
     valueField.set("text", localStorage.getItem(keyField.get("text")));
@@ -50,7 +50,7 @@ var getButton = tabris.create("Button", {
 }).appendTo(page);
 
 var removeButton = tabris.create("Button", {
-  layoutData: {left: [getButton, 10], baseline: setButton},
+  layoutData: {left: 10, right: ["50%", 10], top: [setButton, 20]},
   text: "Remove"
 }).on("selection", function() {
   localStorage.removeItem(keyField.get("text"));
@@ -58,7 +58,7 @@ var removeButton = tabris.create("Button", {
 }).appendTo(page);
 
 tabris.create("Button", {
-  layoutData: {left: [removeButton, 10], baseline: setButton},
+  layoutData: {left: [removeButton, 10], right: 10, baseline: removeButton},
   text: "Clear"
 }).on("selection", function() {
   localStorage.clear();
