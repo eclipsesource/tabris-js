@@ -153,7 +153,7 @@
     },
     "bounds": {
       "type": "Bounds",
-      "description": "The actual location and size of the widget, relative to its parent."
+      "description": "The actual location and size of the widget, relative to its parent. This property is read-only."
     },
     "background": {
       "type": "Color",

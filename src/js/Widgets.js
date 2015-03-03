@@ -178,7 +178,12 @@
       },
       font: "font",
       backgroundImage: "image",
-      bounds: "bounds",
+      bounds: {
+        type: "bounds",
+        set: function() {
+          console.warn(this.type + ": Can not set read-only property \"bounds\".");
+        }
+      },
       background: "color",
       foreground: "color",
       opacity: true,

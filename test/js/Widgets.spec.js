@@ -82,11 +82,14 @@ describe("Widgets", function() {
       expect(call.properties.backgroundImage).toEqual(["bar", 23, 42, null]);
     });
 
-    it("translates bounds to array", function() {
+    it("prints warning when attempting to set bounds", function() {
+      spyOn(console, "warn");
       widget.set("bounds", {left: 1, top: 2, width: 3, height: 4});
 
-      var call = nativeBridge.calls({op: "set"})[0];
-      expect(call.properties.bounds).toEqual([1, 2, 3, 4]);
+      expect(nativeBridge.calls({op: "set"}).length).toBe(0);
+      expect(console.warn).toHaveBeenCalledWith(
+        "TestType: Can not set read-only property \"bounds\"."
+      );
     });
 
     it("translates visible to visibility", function() {
