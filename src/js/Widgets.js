@@ -126,7 +126,6 @@
       touchend: true,
       touchcancel: true,
       longpress: true,
-      dispose: function() {},
       "change:bounds": {
         name: "Resize",
         trigger: function(event) {
