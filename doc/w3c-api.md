@@ -33,8 +33,8 @@ Tabris supports the `localStorage` object, which allows storing simple key-value
 
 *Tabris.js notes:*
 
-* `sessionStorage` is not supported, as it would serve no purpose in a non-browser environment.
-* The `key` and `event` fields are currently not supported.
+* Currently the localStorage supports the methods `setItem`, `getItem`, `removeItem`, and `clear`.
+* The `sessionStorage` is not supported, as it would serve no purpose in a non-browser environment.
 * The storage event is currently not supported.
 * The `localStorage` is only meant to store relatively short strings. To store larger amounts of data it is recommended to use the cordova [`FileSystem`](http://plugins.cordova.io/#/package/org.apache.cordova.file) plugin.
 
