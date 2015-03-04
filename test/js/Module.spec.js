@@ -324,6 +324,70 @@ describe("tabris.Module", function() {
         expect(tabris.Module.readJSON.calls.count()).toBe(0);
       });
 
+      it("supports loading a package.json directly", function() {
+        spyOn(tabris.Module, "readJSON").and.callFake(function(path) {
+          if (path === "./node_modules/foo/package.json") {
+            return {main: "foo.js"};
+          }
+        });
+
+        var exports = module.require("./node_modules/foo/package.json");
+
+        expect(exports).toEqual({main: "foo.js"});
+      });
+
+      it("caches node modules", function() {
+        spyOn(tabris.Module, "readJSON").and.callFake(function(url) {
+          if (url === "./foo/package.json") {
+            return {main: "foo.js"};
+          }
+        });
+        tabris.Module.createLoader.and.callFake(function(url) {
+          if (url === "./foo/foo.js") {
+            return function(module) {
+              module.exports = module;
+            };
+          }
+        });
+
+        var foo1 = module.require("./foo");
+        tabris.Module.createLoader.calls.reset();
+        tabris.Module.readJSON.calls.reset();
+        var foo2 = module.require("./foo");
+
+        expect(tabris.Module.createLoader).not.toHaveBeenCalled();
+        expect(tabris.Module.readJSON).not.toHaveBeenCalled();
+        expect(foo1).toBe(foo2);
+      });
+
+      it("supports node modules loading each other", function() {
+        spyOn(tabris.Module, "readJSON").and.callFake(function(path) {
+          if (path === "./node_modules/foo/package.json") {
+            return {main: "foo.js"};
+          }
+          if (path === "./node_modules/bar/package.json") {
+            return {main: "bar.js"};
+          }
+        });
+        tabris.Module.createLoader.and.callFake(function(path) {
+          if (path === "./node_modules/foo/foo.js") {
+            return function(module) {
+              module.exports.x = 1;
+              module.exports.y = module.require("bar");
+            };
+          }
+          if (path === "./node_modules/bar/bar.js") {
+            return function(module) {
+              module.exports = module.require("foo").x + 1;
+            };
+          }
+        });
+
+        var exports = module.require("foo");
+
+        expect(exports).toEqual({x: 1, y: 2});
+      });
+
       describe("from plain module", function() {
 
         it("creates module with id", function() {

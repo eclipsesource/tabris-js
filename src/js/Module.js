@@ -24,9 +24,9 @@
         if (this._cache[request]) {
           return this._cache[request].exports;
         }
-        return findNodeModule.call(this, request);
+        return findNodeModule.call(this, request).exports;
       }
-      return findFileModule.call(this, request);
+      return findFileModule.call(this, request).exports;
     }
 
   };
@@ -86,7 +86,10 @@
   function findModule(path, postfixes) {
     if (path) {
       for (var i = 0; i < postfixes.length; i++) {
-        var module = getModule.call(this, path, postfixes[i]);
+        var module = getModule.call(this, path + postfixes[i]);
+        if (postfixes[i] === "/package.json" && getMain(module)) {
+          module = getModule.call(this, path + "/" + getMain(module));
+        }
         if (module) {
           return module;
         }
@@ -94,28 +97,23 @@
     }
   }
 
-  function getModule(path, postfix) {
-    var url = path + postfix;
+  function getMain(module) {
+    return module && module.exports && module.exports.main;
+  }
+
+  function getModule(url) {
     if (url in this._cache) {
-      return this._cache[url] ? this._cache[url].exports : undefined;
+      return this._cache[url];
     }
     if (url.slice(-5) === ".json") {
       var data = Module.readJSON(url);
       if (data) {
-        if (postfix === "/package.json" && data.main) {
-          url = path + "/" + data.main;
-          var mainLoader = Module.createLoader(url);
-          if (mainLoader) {
-            return new Module(url, this, mainLoader).exports;
-          }
-        } else {
-          return new Module(url, this, data).exports;
-        }
+        return new Module(url, this, data);
       }
     } else {
       var loader = Module.createLoader(url);
       if (loader) {
-        return new Module(url, this, loader).exports;
+        return new Module(url, this, loader);
       }
     }
     this._cache[url] = false;
