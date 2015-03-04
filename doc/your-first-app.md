@@ -14,7 +14,10 @@ The `package.json` file is used to describe the app, including the name, descrip
 {
   "name": "hello-world",
   "description": "Tabris.js - Hello, World!",
-  "main": "hello.js"
+  "main": "hello.js",
+  "dependencies": {
+    "tabris": "0.9.2"
+  }
 }
 ```
 
@@ -32,7 +35,7 @@ var button = tabris.create("Button", {
   layoutData: {centerX: 0, top: 100}
 }).appendTo(page);
 
-var label = tabris.create("Label", {
+var label = tabris.create("TextView", {
   font: "24px",
   layoutData: {centerX: 0, top: [button, 50]}
 }).appendTo(page);
@@ -44,7 +47,7 @@ button.on("selection", function() {
 page.open();
 ```
 
-The Hello, World! example contains a *button* and a *label*. When the button is selected, the label is updated. Both the button and the label are placed on the *page* relative to one another.
+The Hello, World! example contains a *button* and a *text view*. When the button is selected, the text view is updated. Both the button and the label are placed on the *page* relative to one another.
 
 ![Android Developer App](img/hello.png)
 
