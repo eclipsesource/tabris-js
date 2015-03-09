@@ -47,10 +47,8 @@ describe("PropertyEncoding:", function() {
       expect(check("foo.jpg")).toEqual(["foo.jpg", null, null, null]);
     });
 
-    it("fails if image value is null", function() {
-      expect(function() {
-        check(null);
-      }).toThrow(new Error("Not an image: null"));
+    it("succeeds for null", function() {
+      expect(check(null)).toBeNull();
     });
 
     it("fails if image value is not an object", function() {

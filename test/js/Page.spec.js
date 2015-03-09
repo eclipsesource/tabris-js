@@ -95,6 +95,14 @@ describe("Page", function() {
         expect(properties.background).not.toBeDefined();
       });
 
+      it("supports getting image property", function() {
+        expect(page.get("image")).toEqual({src: "image"});
+      });
+
+      it("image property is nullable", function() {
+        expect(page.set("image", null).get("image")).toBeNull();
+      });
+
     });
 
   });

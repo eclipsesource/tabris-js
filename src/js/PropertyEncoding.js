@@ -61,10 +61,13 @@
     },
 
     image: function(value) {
+      if (!value) {
+        return null;
+      }
       if (typeof value === "string") {
         value = {src: value};
       }
-      if (!value || typeof value !== "object") {
+      if (typeof value !== "object") {
         throw new Error("Not an image: " + value);
       }
       if (typeof value.src !== "string") {

@@ -6,7 +6,16 @@
     _type: "tabris.Page",
 
     _properties: {
-      image: "image",
+      image: {
+        type: "image",
+        set: function(image) {
+          this._image = image;
+          this._nativeSet("image", image);
+        },
+        get: function() {
+          return this._image;
+        }
+      },
       title: "string",
       topLevel: "boolean",
       control: "proxy",
@@ -21,12 +30,6 @@
     _type: "rwt.widgets.Composite",
 
     _supportsChildren: true,
-
-    _properties: {
-      image: true,
-      title: true,
-      topLevel: true
-    },
 
     _create: function(properties) {
       this.super("_create",  util.extend(util.omit(properties, pageProperties), {
@@ -57,9 +60,7 @@
   });
 
   pageProperties.forEach(function(property) {
-    var type = tabris.Page._properties[property];
     tabris.Page._properties[property] = {
-      type: type,
       set: function(value) {this._page.set(property, value);},
       get: function() {return this._page.get(property);}
     };

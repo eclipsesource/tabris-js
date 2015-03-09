@@ -11,6 +11,9 @@
     },
 
     image: function(value) {
+      if (!value) {
+        return null;
+      }
       return util.imageFromArray(value);
     },
 

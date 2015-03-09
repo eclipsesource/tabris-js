@@ -71,7 +71,7 @@ describe("TabFolder", function() {
 
     it("getter returns item properties", function() {
       expect(tab.get("title")).toBe("foo");
-      expect(tab.get("image")).toEqual({src: "bar", width: null, height: null, scale: null});
+      expect(tab.get("image")).toEqual({src: "bar"});
       expect(tab.get("badge")).toBe("1");
     });
 

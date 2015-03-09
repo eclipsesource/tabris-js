@@ -6,13 +6,13 @@
 
   util.imageFromArray = function(value) {
     var result = {src: value[0]};
-    if (value.length > 1) {
+    if (value[1]) {
       result.width = value[1];
     }
-    if (value.length > 2) {
+    if (value[2]) {
       result.height = value[2];
     }
-    if (value.length > 3) {
+    if (value[3]) {
       result.scale = value[3];
     }
     return result;
