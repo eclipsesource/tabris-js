@@ -18,7 +18,6 @@ The animate method returns an `Animation` object supporting event handling. It's
 
 Supported Events:
 - *start*: Fired once the animation begins, i.e. after the time specified in `delay`
-- *progress*: Fired for each frame of the animation
 - *completion*: Fired after the animation finishes. Not fired if `cancel` is used
 
 While the animation runs the properties are continuously updated. Calling `get` will return the current value. When the animation stops (due to completion or by `cancel`) the properties will remain at their last animated value. 

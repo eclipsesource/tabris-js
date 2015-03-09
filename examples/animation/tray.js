@@ -1,9 +1,9 @@
 var MARGIN = 12;
 
-var verticalTrayOffset;
-var prevEvent;
-var prevPrevEvent;
-var animation;
+var trayHeight;
+var prevEvents;
+var state = "resting";
+var dragOffset;
 
 var loremIpsum = "Etiam nisl nisi, egestas quis lacus ut, tristique suscipit metus. In " +
                  "vehicula lectus metus, at accumsan elit fringilla blandit. Integer et quam " +
@@ -43,7 +43,7 @@ var strap = tabris.create("Composite", {
   background: "#259b24"
 }).appendTo(tray);
 
-var strapTextView = tabris.create("TextView", {
+var strapIcon = tabris.create("TextView", {
   layoutData: {left: MARGIN, right: MARGIN, top: 10},
   alignment: "center",
   text: "⇧",
@@ -64,39 +64,43 @@ tabris.create("TextView", {
   foreground: "white"
 }).appendTo(trayContent);
 
-function updateShadeOpacity(translationY) {
-  var traveled = translationY / verticalTrayOffset;
-  shade.set("opacity", 0.75 - traveled);
+function getShadeOpacity(translationY) {
+  var traveled = translationY / trayHeight;
+  return 0.75 - traveled;
 }
 
-function updateStrapTextViewRotation(translationY) {
-  var traveled = translationY / verticalTrayOffset;
-  strapTextView.set("transform", {rotation: traveled * Math.PI - Math.PI});
+function getStrapIconTransform(translationY) {
+  var traveled = translationY / trayHeight;
+  return {rotation: traveled * Math.PI - Math.PI};
 }
 
 trayContent.on("change:bounds", function() {
   var bounds = trayContent.get("bounds");
-  verticalTrayOffset = bounds.height;
-  tray.set("transform", {translationY: verticalTrayOffset});
-  updateShadeOpacity(verticalTrayOffset);
-  updateStrapTextViewRotation(verticalTrayOffset);
+  trayHeight = bounds.height;
+  tray.set("transform", {translationY: trayHeight});
 });
 
-strap.on("touchstart", function(e) {
-  prevEvent = e;
-  if (animation !== undefined) {
-    animation.cancel();
+strap.on("touchstart", function(event) {
+  if (state === "resting") {
+    state = "dragging";
+    dragOffset = tray.get("transform").translationY - event.touches[0].pageY;
+    prevEvents = [event, event];
   }
 });
 
-strap.on("touchmove", function(e) {
-  var y = e.touches[0].pageY - prevEvent.touches[0].pageY;
-  prevPrevEvent = prevEvent;
-  prevEvent = e;
-  var offsetY = tray.get("transform").translationY + y;
-  tray.set("transform", {translationY: Math.min(Math.max(offsetY, 0), verticalTrayOffset)});
-  updateShadeOpacity(offsetY);
-  updateStrapTextViewRotation(offsetY);
+function getMovementY() {
+  return prevEvents[0].touches[0].pageY - prevEvents[1].touches[0].pageY;
+}
+
+strap.on("touchmove", function(event) {
+  if (state === "dragging") {
+    prevEvents.unshift(event);
+    prevEvents.pop();
+    var offsetY = Math.min(Math.max(event.touches[0].pageY + dragOffset, 0), trayHeight);
+    tray.set("transform", {translationY: offsetY});
+    shade.set("opacity", getShadeOpacity(offsetY));
+    strapIcon.set("transform", getStrapIconTransform(offsetY));
+  }
 });
 
 strap.on("touchcancel", function() {
@@ -108,27 +112,14 @@ strap.on("touchend", function() {
 });
 
 function positionTrayInRestingState() {
-  var y = prevPrevEvent ? (prevEvent.touches[0].pageY - prevPrevEvent.touches[0].pageY) : 0;
-  var translationTarget = 0;
-  if (y >= 0) {
-    translationTarget = verticalTrayOffset;
+  if (state === "dragging") {
+    var translationY = getMovementY() >= 0 ? trayHeight : 0;
+    var options = {duration: Math.abs(trayHeight), easing: "ease-out"};
+    state = "animating";
+    shade.animate({opacity: getShadeOpacity(translationY)}, options);
+    strapIcon.animate({transform: getStrapIconTransform(translationY)}, options);
+    tray.animate({transform: {translationY: translationY}}, options).on("completion", function() {
+      state = "resting";
+    });
   }
-  var duration = verticalTrayOffset;
-  if (duration < 0) {
-    duration *= -1;
-  }
-  animation = tray.animate({transform: {translationY: translationTarget}}, {
-    duration: duration,
-    easing: "ease-out" // "linear", "ease-in", "ease-out", "ease-in-out"
-  }).on("progress", function() {
-    var translationY = tray.get("transform").translationY;
-    updateShadeOpacity(translationY);
-    updateStrapTextViewRotation(translationY);
-  }).on("completion", function() {
-    animation = undefined;
-    // TODO remove the following workaround when tabris-ios #538 is implemented
-    var offsetY = tray.get("transform").translationY;
-    updateShadeOpacity(offsetY);
-    updateStrapTextViewRotation(offsetY);
-  });
 }

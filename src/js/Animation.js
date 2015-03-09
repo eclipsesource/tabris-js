@@ -4,7 +4,6 @@
     _type: "tabris.Animation",
     _events: {
       completion: "Completion",
-      progress: "Progress",
       start: "Start"
     },
     _properties: {

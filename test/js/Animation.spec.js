@@ -103,17 +103,6 @@ describe("Animation", function() {
       }).toThrow();
     });
 
-    it("issues listen call for Progress", function() {
-      animation.on("progress", function() {});
-
-      expect(nativeBridge.calls({
-        op: "listen",
-        id: animationId(),
-        event: "Progress",
-        listen: true
-      }).length).toBe(1);
-    });
-
     it("issues listen call for Start", function() {
       animation.on("start", function() {});
 
@@ -139,12 +128,12 @@ describe("Animation", function() {
     it("does not issues listen call after completion", function() {
       tabris._notify(animationId(), "Completion", {});
 
-      animation.on("progress", function() {});
+      animation.on("start", function() {});
 
       expect(nativeBridge.calls({
         op: "listen",
         id: animationId(),
-        event: "Progress",
+        event: "Start",
         listen: true
       }).length).toBe(0);
     });
@@ -154,15 +143,6 @@ describe("Animation", function() {
       animation.on("start", listener);
 
       tabris._notify(animationId(), "Start", {});
-
-      expect(listener).toHaveBeenCalled();
-    });
-
-    it("receives animation Progress event", function() {
-      var listener = jasmine.createSpy();
-      animation.on("progress", listener);
-
-      tabris._notify(animationId(), "Progress", {});
 
       expect(listener).toHaveBeenCalled();
     });
