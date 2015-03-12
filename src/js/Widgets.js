@@ -93,6 +93,11 @@
       }
     },
 
+    _destroy: function() {
+      disposeRecognizers.call(this);
+      tabris.Proxy.prototype._destroy.call(this);
+    },
+
     _destroyChildren: function() {
       if (this._children) {
         for (var i = 0; i < this._children.length; i++) {
@@ -184,6 +189,22 @@
         get: function() {
           return this.id;
         }
+      },
+      gestures: {
+        set: function(gestures) {
+          this._gestures = gestures;
+          disposeRecognizers.call(this);
+          this._recognizers = [];
+          for (var name in gestures) {
+            var properties = util.extend({target: this}, gestures[name]);
+            var recognizer = tabris.create("_GestureRecognizer", properties)
+              .on("gesture", gestureListener, {target: this, name: name});
+            this._recognizers.push(recognizer);
+          }
+        },
+        get: function() {
+          return this._gestures || {};
+        }
       }
     }
   });
@@ -209,6 +230,16 @@
     } else {
       this._nativeSet("layoutData", null);
     }
+  }
+
+  function disposeRecognizers() {
+    (this._recognizers || []).forEach(function(recognizer) {
+      recognizer.dispose();
+    });
+  }
+
+  function gestureListener(event) {
+    this.target.trigger(this.name, event);
   }
 
   tabris.registerWidget("Button", {
