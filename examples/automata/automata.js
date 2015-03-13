@@ -76,8 +76,7 @@ for (var x = 0; x < xSize; x++) {
       layoutData: {left: x * CELL_SIZE, top: y * CELL_SIZE, width: CELL_SIZE, height: CELL_SIZE},
       background: "#fff",
       visible: alive
-    });
-    page.append(composite);
+    }).appendTo(page);
     cells[x][y] = {
       // proxy: Ti.UI.createView({
       //   height: CELL_SIZE,

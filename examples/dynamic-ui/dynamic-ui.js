@@ -13,7 +13,8 @@ var createPage = function(pageTitle, pageIsTopLevel) {
     topLevel: pageIsTopLevel
   });
 
-  var addRootPageButton = tabris.create("Button", {
+  tabris.create("Button", {
+    id: "addRootPage",
     layoutData: {left: 5, right: 5, top: 5},
     text: "Add Root Page",
     background: "green",
@@ -23,10 +24,11 @@ var createPage = function(pageTitle, pageIsTopLevel) {
     var page = createPage("Root Page: " + createRandomPageId(), true);
     topLevelPages.push(page);
     page.open();
-  });
+  }).appendTo(page);
 
-  var addPageButton = tabris.create("Button", {
-    layoutData: {left: 5, right: 5, top: [addRootPageButton, 5]},
+  tabris.create("Button", {
+    id: "addPage",
+    layoutData: {left: 5, right: 5, top: ["#addRootPage", 5]},
     text: "Add Page",
     background: "green",
     foreground: "white",
@@ -35,10 +37,10 @@ var createPage = function(pageTitle, pageIsTopLevel) {
     var page = createPage("Page: " + createRandomPageId(), false);
     pages.push(page);
     page.open();
-  });
+  }).appendTo(page);
 
-  var addGlobalActionButton = tabris.create("Button", {
-    layoutData: {left: 5, right: 5, top: [addPageButton, 5]},
+  tabris.create("Button", {
+    layoutData: {left: 5, right: 5, top: ["#addPage", 5]},
     text: "Add Global Action",
     background: "green",
     foreground: "white",
@@ -50,11 +52,12 @@ var createPage = function(pageTitle, pageIsTopLevel) {
     });
     // TODO: implement action
     actions.push(action);
-  });
+  }).appendTo(page);
 
   // TODO: add page actions to demo when implemented. See tabris-js issue #8.
 
-  var removeLastGlobalActionButton = tabris.create("Button", {
+  tabris.create("Button", {
+    id: "removeLastGlobalAction",
     layoutData: {left: 5, right: 5, bottom: 5},
     text: "Remove Last Global Action",
     background: "red",
@@ -65,10 +68,10 @@ var createPage = function(pageTitle, pageIsTopLevel) {
       actions[actions.length - 1].dispose();
       actions.pop();
     }
-  });
+  }).appendTo(page);
 
-  var removeLastRootPageButton = tabris.create("Button", {
-    layoutData: {left: 5, right: 5, bottom: [removeLastGlobalActionButton, 5]},
+  tabris.create("Button", {
+    layoutData: {left: 5, right: 5, bottom: ["#removeLastGlobalAction", 5]},
     text: "Remove Last Root Page",
     background: "red",
     foreground: "white",
@@ -78,10 +81,8 @@ var createPage = function(pageTitle, pageIsTopLevel) {
       topLevelPages[topLevelPages.length - 1].close();
       topLevelPages.pop();
     }
-  });
+  }).appendTo(page);
 
-  return page.append(addRootPageButton, addPageButton, addGlobalActionButton,
-    removeLastGlobalActionButton, removeLastRootPageButton);
 };
 
 var topLevelPage = createPage("Dynamic UI Start", true);

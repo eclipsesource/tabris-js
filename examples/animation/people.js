@@ -103,7 +103,7 @@ function animateOutLeftCreateCurrentPerson(person) {
 function createPersonDetail(parent, person, delay) {
   var composite = tabris.create("Composite", {
     layoutData: {left: 0, right: 0, top: 0, height: IMAGE_SIZE + MARGIN_LARGE}
-  });
+  }).appendTo(parent);
   var personImage = tabris.create("ImageView", {
     layoutData: {left: 0, top: 0, width: IMAGE_SIZE, height: IMAGE_SIZE},
     image: {src: person.image, width: IMAGE_SIZE, height: IMAGE_SIZE},
@@ -114,27 +114,25 @@ function createPersonDetail(parent, person, delay) {
       scaleY: 0.75
     });
     animateInScaleUp(this, delay);
-  });
+  }).appendTo(composite);
   var nameTextView = tabris.create("TextView", {
     layoutData: {left: [personImage, MARGIN], top: 0},
     text: person.firstName + " " + person.lastName,
     font: "bold 18px"
-  });
+  }).appendTo(composite);
   var professionTextView = tabris.create("TextView", {
     layoutData: {left: [personImage, MARGIN], top: [nameTextView, MARGIN]},
     text: "Software developer"
-  });
+  }).appendTo(composite);
   var companyTextView = tabris.create("TextView", {
     layoutData: {left: [personImage, MARGIN], top: [professionTextView, MARGIN_SMALL]},
     text: "EclipseSource"
-  });
+  }).appendTo(composite);
   var mailTextView = tabris.create("TextView", {
     layoutData: {left: [personImage, MARGIN], top: [companyTextView, MARGIN]},
     text: "mail@eclipsesource.com",
     font: "italic 14px"
-  });
-  parent.append(composite);
-  composite.append(personImage, nameTextView, professionTextView, companyTextView, mailTextView);
+  }).appendTo(composite);
   animateInFromRight(nameTextView, delay);
   animateInFromRight(professionTextView, 100 + delay);
   animateInFromRight(companyTextView, 200 + delay);
