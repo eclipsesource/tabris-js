@@ -3,7 +3,7 @@ var page = tabris.create("Page", {
   topLevel: true
 });
 
-var scrollComposite = tabris.create("ScrollComposite", {
+var scrollView = tabris.create("ScrollView", {
   direction: "horizontal",
   layoutData: {left: 0, top: "40%", right: 0, bottom: "40%"},
   background: "#234"
@@ -14,7 +14,7 @@ for (var i = 0; i < 50; i++) {
     layoutData: {left: i * 30 + 20, centerY: 0, width: 30},
     text: i + "°",
     foreground: "white"
-  }).appendTo(scrollComposite);
+  }).appendTo(scrollView);
 }
 
 page.open();

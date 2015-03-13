@@ -151,7 +151,7 @@ function createBooksList(books) {
 
 function createReadBookPage(book) {
   var page = tabris.create("Page", {title: book.title});
-  var composite = tabris.create("ScrollComposite", {
+  var scrollView = tabris.create("ScrollView", {
     layoutData: {left: 0, right: 0, top: 0, bottom: 0},
     direction: "vertical"
   }).appendTo(page);
@@ -160,11 +160,11 @@ function createReadBookPage(book) {
     foreground: "rgba(0, 0, 0, 0.5)",
     markupEnabled: true,
     text: "<b>" + book.title + "</b>"
-  }).appendTo(composite);
+  }).appendTo(scrollView);
   tabris.create("TextView", {
     layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: [titleTextView, PAGE_MARGIN], bottom: PAGE_MARGIN},
     text: [loremIpsum, loremIpsum, loremIpsum].join("\n\n")
-  }).appendTo(composite);
+  }).appendTo(scrollView);
   return page;
 }
 

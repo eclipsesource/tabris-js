@@ -51,4 +51,4 @@ widget.on("touchstart", function(event) {
 
 * Multiple touches are currently ignored.
 * Touch events do not yet "bubble", i.e. parents do not receive events when a child is touched.
-* On iOS, touch events on children of a ScrollComposite are only fired when their duration exceeds about 500ms.
+* On iOS, touch events on children of a ScrollView are only fired when their duration exceeds about 500ms.

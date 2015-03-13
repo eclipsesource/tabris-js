@@ -6,18 +6,18 @@ var page = tabris.create("Page", {
   title: "Aud'cuisine"
 });
 
-var scrollComposite = tabris.create("ScrollComposite", {
+var scrollView = tabris.create("ScrollView", {
   layoutData: {left: 0, right: 0, top: 0, bottom: 0}
 }).appendTo(page);
 
 var imageTextView = tabris.create("ImageView", {
   layoutData: {left: 0, top: 0, right: 0}
-}).appendTo(scrollComposite);
+}).appendTo(scrollView);
 
 var contentComposite = tabris.create("Composite", {
   layoutData: {left: 0, right: 0, top: ["#titleComposite", 0], height: 1000},
   background: "white"
-}).appendTo(scrollComposite);
+}).appendTo(scrollView);
 
 tabris.create("TextView", {
   layoutData: {left: MARGIN, right: MARGIN, top: MARGIN},
@@ -42,7 +42,7 @@ tabris.create("TextView", {
 var titleComposite = tabris.create("Composite", {
   id: "titleComposite",
   background: "rgba(255,152,0,0.9)"
-}).appendTo(scrollComposite);
+}).appendTo(scrollView);
 
 tabris.create("TextView", {
   markupEnabled: true,
@@ -61,8 +61,8 @@ tabris.create("TextView", {
 }).appendTo(titleComposite);
 
 var titleCompY = 0;
-scrollComposite.on("change:bounds", function() {
-  var bounds = scrollComposite.get("bounds");
+scrollView.on("change:bounds", function() {
+  var bounds = scrollView.get("bounds");
   var pageWidth = bounds.width;
   var pageHeight = bounds.height;
   var imageHeight = pageWidth / 1.4; // 1.4 is the image aspect ratio
@@ -74,7 +74,7 @@ scrollComposite.on("change:bounds", function() {
   titleComposite.set("layoutData", {left: 0, top: titleCompY, right: 0, height: 64});
 });
 
-scrollComposite.on("scroll", function(offset) {
+scrollView.on("scroll", function(offset) {
   imageTextView.set("transform", {translationY: offset.y * 0.4});
   if (titleCompY - offset.y < 0) {
     titleComposite.set("transform", {translationY: offset.y - titleCompY});

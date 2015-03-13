@@ -1,4 +1,4 @@
-describe("ScrollComposite", function() {
+describe("ScrollView", function() {
 
   var nativeBridge;
 
@@ -8,10 +8,10 @@ describe("ScrollComposite", function() {
     tabris._init(nativeBridge);
   });
 
-  describe("when a ScrollComposite is created", function() {
+  describe("when a ScrollView is created", function() {
     var scrollComposite, createCalls;
     beforeEach(function() {
-      scrollComposite = tabris.create("ScrollComposite", {});
+      scrollComposite = tabris.create("ScrollView", {});
       createCalls = nativeBridge.calls({op: "create"});
     });
 
@@ -114,10 +114,10 @@ describe("ScrollComposite", function() {
 
   });
 
-  describe("when a ScrollComposite is created with direction='vertical'", function() {
+  describe("when a ScrollView is created with direction='vertical'", function() {
     var createCalls;
     beforeEach(function() {
-      tabris.create("ScrollComposite", {direction: "vertical"});
+      tabris.create("ScrollView", {direction: "vertical"});
       createCalls = nativeBridge.calls({op: "create"});
     });
     it("the ScrolledComposite is vertical", function() {
@@ -128,10 +128,10 @@ describe("ScrollComposite", function() {
     });
   });
 
-  describe("when a ScrollComposite is created with direction='horizontal'", function() {
+  describe("when a ScrollView is created with direction='horizontal'", function() {
     var createCalls;
     beforeEach(function() {
-      tabris.create("ScrollComposite", {direction: "horizontal"});
+      tabris.create("ScrollView", {direction: "horizontal"});
       createCalls = nativeBridge.calls({op: "create"});
     });
     it("the ScrolledComposite is horizontal", function() {

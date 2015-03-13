@@ -1,6 +1,6 @@
 {
-  "type": "ScrollComposite",
-  "description": "A composite that allows its content to overflow either vertically (default) or horizontally. Children of a ScrollComposite may not be attached to its edge in scrolling direction (to the bottom for vertical scrolling, to the right for horizontal scrolling).",
+  "type": "ScrollView",
+  "description": "A composite that allows its content to overflow either vertically (default) or horizontally. Children of a ScrollView may not be attached to its edge in scrolling direction (to the bottom for vertical scrolling, to the right for horizontal scrolling).",
   "include": ["Composite"],
   "properties": {
     "direction": {
@@ -16,11 +16,11 @@
   },
   "links": [
     {
-      "title": "Simple ScrollComposite snippet",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/scrollcomposite/scrollcomposite.js"
+      "title": "Simple ScrollView snippet",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/scrollview/scrollview.js"
     },
     {
-      "title": "Example using a ScrollComposite",
+      "title": "Example using a ScrollView",
       "path": "https://github.com/eclipsesource/tabris-js/blob/master/examples/parallax/parallax.js"
     }
   ]

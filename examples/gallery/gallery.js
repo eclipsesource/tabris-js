@@ -31,7 +31,7 @@ var fullImage = tabris.create("ImageView", {
   scaleMode: "auto"
 }).appendTo(page);
 
-var scrollComposite = tabris.create("ScrollComposite", {
+var scrollView = tabris.create("ScrollView", {
   direction: "horizontal",
   layoutData: {left: 0, right: 0, bottom: 0, height: 164},
   background: "rgba(32, 32, 32, 0.6)"
@@ -44,7 +44,7 @@ imageNames.forEach(function(image, index) {
     highlightOnTouch: true
   }).on("touchend", function() {
     fullImage.set("image", {src: "images/" + image + ".jpg"});
-  }).appendTo(scrollComposite);
+  }).appendTo(scrollView);
 });
 
 var fullscreenAction = tabris.create("Action", {
@@ -61,12 +61,12 @@ var thumbnailsAction = tabris.create("Action", {
 page.open();
 
 function toggleAction() {
-  if (scrollComposite.get("visible")) {
-    scrollComposite.set("visible", false);
+  if (scrollView.get("visible")) {
+    scrollView.set("visible", false);
     thumbnailsAction.set("visible", true);
     fullscreenAction.set("visible", false);
   } else {
-    scrollComposite.set("visible", true);
+    scrollView.set("visible", true);
     thumbnailsAction.set("visible", false);
     fullscreenAction.set("visible", true);
   }

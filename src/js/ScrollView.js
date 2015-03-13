@@ -6,7 +6,7 @@ tabris.registerWidget("_ScrollBar", {
   }
 });
 
-tabris.registerWidget("ScrollComposite", {
+tabris.registerWidget("ScrollView", {
 
   _type: "rwt.widgets.ScrolledComposite",
 
@@ -49,3 +49,5 @@ tabris.registerWidget("ScrollComposite", {
   }
 
 });
+
+tabris.registerWidget("ScrollComposite", tabris.ScrollView);

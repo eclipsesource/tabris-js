@@ -1,9 +1,0 @@
-{
-  "title": "Horizontal Scrolling",
-  "category": "ScrollComposite",
-  "description": "Create a horizontal scroll composite and fill it with labels",
-  "main": "scrollcomposite.js",
-  "dependencies": {
-    "tabris": "0.9.2"
-  }
-}
