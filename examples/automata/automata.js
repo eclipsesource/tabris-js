@@ -73,7 +73,7 @@ for (var x = 0; x < xSize; x++) {
   for (var y = 0; y < ySize; y++) {
     var alive = Math.random() >= 0.5;
     var composite = tabris.create("Composite", {
-      bounds: {left: x * CELL_SIZE, top: y * CELL_SIZE, width: CELL_SIZE, height: CELL_SIZE},
+      layoutData: {left: x * CELL_SIZE, top: y * CELL_SIZE, width: CELL_SIZE, height: CELL_SIZE},
       background: "#fff",
       visible: alive
     });
@@ -97,7 +97,7 @@ for (var x = 0; x < xSize; x++) {
 }
 
 var textView = tabris.create("TextView", {
-  bounds: {left: 0, top: 0, width: 80, height: 40},
+  layoutData: {left: 0, top: 0, width: 80, height: 40},
   background: "rgba(255, 0, 0, 0.8)",
   foreground: "#fff",
   text: "FPS"
