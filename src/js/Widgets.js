@@ -60,7 +60,10 @@
     },
 
     _setParent: function(parent) {
-      tabris._nativeBridge.set(this.cid, "parent", tabris.PropertyEncoding.proxy(parent._getContainer()));
+      tabris._nativeBridge.set(
+        this.cid, "parent",
+        tabris.PropertyEncoding.proxy(parent._getContainer(this))
+      );
       if (this._parent) {
         this._parent._removeChild(this);
       }

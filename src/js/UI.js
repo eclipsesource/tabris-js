@@ -12,11 +12,13 @@ tabris.registerWidget("_Shell", {
   }
 });
 
-tabris.registerType("_UI", {
+tabris.registerWidget("_UI", {
 
   _type: "tabris.UI",
 
   _events: {ShowPage: true, ShowPreviousPage: true},
+
+  _supportsChildren: true,
 
   _create: function() {
     tabris.create("_Display");
@@ -31,6 +33,7 @@ tabris.registerType("_UI", {
     tabris.Proxy.prototype._create.call(this, {});
     this._nativeSet("shell", this._shell.cid);
     this._pages = [];
+    this._drawer = null;
     this.on("ShowPage", function(properties) {
       var page = tabris._proxies[properties.pageId];
       this._setActivePage(page.widget);
@@ -39,6 +42,10 @@ tabris.registerType("_UI", {
       if (page) {
         page.close();
       }
+    });
+    Object.defineProperty(this, "drawer", {
+      get: function() { return this._drawer;}.bind(this),
+      set: function() {}
     });
     return this;
   },
@@ -68,6 +75,22 @@ tabris.registerType("_UI", {
       this._pages.push(page);
       this._updateActivePage(activePage, page);
     }
+  },
+
+  _getContainer: function(child) {
+    switch (child.type) {
+      case "Drawer":
+        return child._drawer;
+      default:
+        return this._shell;
+    }
+  },
+
+  _setCurrentDrawer: function(drawer) {
+    if (this._drawer && drawer) {
+      throw new Error("Can not create multiple instances of Drawer");
+    }
+    this._drawer = drawer;
   },
 
   _getActivePage: function() {

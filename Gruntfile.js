@@ -99,6 +99,7 @@ module.exports = function(grunt) {
           "UI.js",
           "CollectionView.js",
           "ScrollComposite.js",
+          "Drawer.js",
           "Page.js",
           "Action.js",
           "SearchAction.js",
