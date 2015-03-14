@@ -91,6 +91,14 @@ describe("UI", function() {
         expect(setCall.properties.activePage).toBe(page._page.cid);
       });
 
+      it("has Page in children", function() {
+        expect(ui.children("Page")[0]).toBe(page);
+      });
+
+      it("does not have _Page in children", function() {
+        expect(ui.children("_Page").length).toBe(0);
+      });
+
     });
 
     describe("with multiple pages", function() {

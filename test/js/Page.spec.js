@@ -37,30 +37,32 @@ describe("Page", function() {
 
     describe("created Composite", function() {
 
-      var properties;
+      var createProps, setProps;
 
       beforeEach(function() {
         var createCall = nativeBridge.calls({op: "create", type: "rwt.widgets.Composite"})[0];
-        properties = createCall.properties;
+        createProps = createCall.properties;
+        var setCall = nativeBridge.calls({op: "set", id: createCall.id})[0];
+        setProps = setCall.properties;
       });
 
-      it("parent is shell", function() {
-        expect(properties.parent).toEqual(tabris.ui._shell.cid);
+      it("parent is set to shell after create", function() {
+        expect(setProps.parent).toEqual(tabris.ui._shell.cid);
       });
 
       it("is full-size", function() {
-        expect(properties.layoutData).toEqual({left: 0, right: 0, top: 0, bottom: 0});
+        expect(createProps.layoutData).toEqual({left: 0, right: 0, top: 0, bottom: 0});
       });
 
       it("does not inherit page properties", function() {
-        expect(properties.title).not.toBeDefined();
-        expect(properties.image).not.toBeDefined();
-        expect(properties.style).not.toBeDefined();
-        expect(properties.topLevel).not.toBeDefined();
+        expect(createProps.title).not.toBeDefined();
+        expect(createProps.image).not.toBeDefined();
+        expect(createProps.style).not.toBeDefined();
+        expect(createProps.topLevel).not.toBeDefined();
       });
 
       it("has non-page properties", function() {
-        expect(properties.background).toEqual([255, 0, 0, 255]);
+        expect(createProps.background).toEqual([255, 0, 0, 255]);
       });
 
     });

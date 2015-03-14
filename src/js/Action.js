@@ -1,10 +1,8 @@
-tabris.registerType("Action", {
+tabris.registerWidget("Action", {
 
   _type: "tabris.Action",
 
   _properties: {
-    enabled: "boolean",
-    foreground: "color",
     image: "image",
     placementPriority: {
       type: ["choice", {low: "LOW", high: "HIGH", normal: "NORMAL"}],
@@ -13,23 +11,14 @@ tabris.registerType("Action", {
         return value ? value.toLowerCase() : value;
       }
     },
-    title: "string",
-    visible: {
-      type: "boolean",
-      set: function(value) {
-        this._nativeSet("visibility", value);
-      },
-      get: function() {
-        return this._nativeGet("visibility");
-      }
-    }
+    title: "string"
   },
 
   _events: {selection: "Selection"},
 
   _create: function(properties) {
     this.super("_create", properties);
-    this._nativeSet("parent", tabris.ui.cid);
+    tabris.ui.append(this);
     return this;
   }
 

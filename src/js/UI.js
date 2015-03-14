@@ -81,6 +81,8 @@ tabris.registerWidget("_UI", {
     switch (child.type) {
       case "Drawer":
         return child._drawer;
+      case "Action":
+        return this;
       default:
         return this._shell;
     }
