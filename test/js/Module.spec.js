@@ -35,14 +35,16 @@ describe("tabris.Module", function() {
       expect(module.exports).toEqual({});
     });
 
-    it("runs loader with parameters", function() {
+    it("runs loader with parameters lazily", function() {
       var loader = jasmine.createSpy().and.callFake(function(module, exports) {
         exports.foo = "bar";
       });
+
       var module = new tabris.Module("foo", null, loader);
 
-      expect(loader).toHaveBeenCalledWith(module, module.exports, jasmine.any(Function));
+      expect(loader).not.toHaveBeenCalled();
       expect(module.exports).toEqual({foo: "bar"});
+      expect(loader).toHaveBeenCalledWith(module, module.exports, jasmine.any(Function));
     });
 
   });

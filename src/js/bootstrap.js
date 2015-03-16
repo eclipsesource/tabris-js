@@ -1,7 +1,8 @@
 tabris._start = function(client) {
   try {
     tabris._client = client;
-    var rootModule = new tabris.Module();
+    var Module = tabris.Module;
+    var rootModule = new Module();
     try {
       rootModule.require("tabris");
     } catch (error) {
@@ -9,6 +10,9 @@ tabris._start = function(client) {
       console.log(error.stack);
       return;
     }
+    tabris._defineModule = function(id, fn) {
+      return new Module(id, rootModule, fn);
+    };
     tabris._client = client; // required by head.append
     var cordovaScript = document.createElement("script");
     cordovaScript.src = "./cordova.js";

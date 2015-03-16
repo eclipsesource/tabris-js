@@ -5,16 +5,29 @@
   var Module = tabris.Module = function(id, parent, content) {
     this.id = id || null;
     this.parent = parent || null;
-    this.exports = {};
+    var exports = {};
+    var resolved = false;
+    var require = this.require.bind(this);
     this._cache = this.parent ? this.parent._cache : {};
     if (id) {
       this._cache[id] = this;
     }
-    if (typeof content === "function") {
-      content(this, this.exports, this.require.bind(this));
-    } else if (content instanceof Object) {
-      this.exports = content;
-    }
+    Object.defineProperty(this, "exports", {
+      set: function(value) {
+        exports = value;
+      },
+      get: function() {
+        if (!resolved) {
+          resolved = true;
+          if (typeof content === "function") {
+            content(this, exports, require);
+          } else if (content instanceof Object) {
+            exports = content;
+          }
+        }
+        return exports;
+      }
+    });
   };
 
   Module.prototype = {
