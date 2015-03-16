@@ -101,6 +101,7 @@ module.exports = function(grunt) {
           "ScrollView.js",
           "Drawer.js",
           "Page.js",
+          "PageSelector.js",
           "Action.js",
           "SearchAction.js",
           "TabFolder.js",
