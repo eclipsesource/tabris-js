@@ -1,4 +1,5 @@
-var texts = device.language === "de-DE" ? require("./de.json") : require("./en.json");
+var lang = tabris.device.get("language").replace(/-.*/, "");
+var texts = require("./" + lang + ".json") || require("./en.json");
 
 var MARGIN = 10;
 
