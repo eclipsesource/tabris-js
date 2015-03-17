@@ -37,17 +37,15 @@ describe("Page", function() {
 
     describe("created Composite", function() {
 
-      var createProps, setProps;
+      var createProps;
 
       beforeEach(function() {
         var createCall = nativeBridge.calls({op: "create", type: "rwt.widgets.Composite"})[0];
         createProps = createCall.properties;
-        var setCall = nativeBridge.calls({op: "set", id: createCall.id})[0];
-        setProps = setCall.properties;
       });
 
-      it("parent is set to shell after create", function() {
-        expect(setProps.parent).toEqual(tabris.ui._shell.cid);
+      it("parent is set to shell in create", function() {
+        expect(createProps.parent).toEqual(tabris.ui._shell.cid);
       });
 
       it("is full-size", function() {
