@@ -78,6 +78,7 @@ describe("UI", function() {
         page = tabris.create("Page", {title: "Foo"});
         ui.set("activePage", page);
         spyOn(page, "close");
+        nativeBridge.resetCalls();
       });
 
       it("ShowPreviousPage event closes page", function() {
@@ -86,9 +87,10 @@ describe("UI", function() {
       });
 
       it("ShowPage sets activePage", function() {
-        tabris._notify(ui.cid, "ShowPage", {pageId: page._page.cid});
+        var page2 = tabris.create("Page", {title: "Bar"});
+        tabris._notify(ui.cid, "ShowPage", {pageId: page2._page.cid});
         var setCall = nativeBridge.calls({op: "set", id: ui.cid}).pop();
-        expect(setCall.properties.activePage).toBe(page._page.cid);
+        expect(setCall.properties.activePage).toBe(page2._page.cid);
       });
 
       it("has Page in children", function() {

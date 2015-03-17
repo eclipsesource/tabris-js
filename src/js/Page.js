@@ -39,6 +39,7 @@
         parent: tabris.ui,
         control: this
       }));
+      this._page.widget = this;
       this._setParent(tabris.ui);
       return this;
     },
