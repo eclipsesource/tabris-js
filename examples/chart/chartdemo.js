@@ -66,6 +66,8 @@ createPage("PolarArea", pieData);
 createPage("Pie", pieData);
 createPage("Doughnut", pieData);
 
+tabris.create("Drawer").append(tabris.create("PageSelector"));
+
 function createPage(chartType, chartData) {
   var page = tabris.create("Page", {
     title: chartType + " Chart",

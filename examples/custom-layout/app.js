@@ -1,5 +1,7 @@
 var RowLayout = require("./RowLayout");
 
+tabris.create("Drawer").append(tabris.create("PageSelector"));
+
 var page = tabris.create("Page", {
   title: "Column Layout",
   topLevel: true

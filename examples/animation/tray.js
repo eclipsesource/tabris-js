@@ -20,7 +20,7 @@ var loremIpsum = "Etiam nisl nisi, egestas quis lacus ut, tristique suscipit met
 var page = tabris.create("Page", {
   title: "Tray",
   topLevel: true
-}).open();
+});
 
 tabris.create("TextView", {
   layoutData: {left: MARGIN, right: MARGIN, top: MARGIN},

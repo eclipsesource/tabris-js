@@ -1,5 +1,7 @@
 var PAGE_MARGIN = 16;
 
+tabris.create("Drawer").append(tabris.create("PageSelector"));
+
 var books = [
   ["1984", "H.G. Wells", "images/book_1984.jpg"],
   ["Na Tropie Nieznanych", "Bernard Heuvelmans", "images/book_na_tropie.jpg", false, true],

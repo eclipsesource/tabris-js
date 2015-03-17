@@ -2,6 +2,8 @@ var topLevelPages = [];
 var pages = [];
 var actions = [];
 
+tabris.create("Drawer").append(tabris.create("PageSelector"));
+
 var createRandomPageId = function() {
   return Math.floor(Math.random() * (99999) + 10000);
 };
