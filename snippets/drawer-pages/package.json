@@ -1,0 +1,9 @@
+{
+  "title": "Drawer with a Page Selector",
+  "category": "Drawer",
+  "description": "Create a drawer with a page selector and custom content",
+  "main": "drawer-pages.js",
+  "dependencies": {
+    "tabris": "0.9.3"
+  }
+}
