@@ -27,7 +27,7 @@ describe("PageSelector", function() {
     beforeEach(function() {
       page1 = tabris.create("Page");
       page2 = tabris.create("Page");
-      pageSelector = tabris.createPageSelector();
+      pageSelector = tabris.create("PageSelector");
     });
 
     it("creates a CollectionView", function() {
@@ -39,7 +39,7 @@ describe("PageSelector", function() {
     });
 
     it("allows to override properties", function() {
-      var pageSelector = tabris.createPageSelector({
+      var pageSelector = tabris.create("PageSelector", {
         layoutData: {left: 10, top: 20}
       });
 
@@ -47,7 +47,7 @@ describe("PageSelector", function() {
     });
 
     it("includes all pages as items", function() {
-      var pageSelector = tabris.createPageSelector();
+      var pageSelector = tabris.create("PageSelector");
 
       expect(pageSelector.get("items")).toEqual([page1, page2]);
     });
