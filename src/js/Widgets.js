@@ -107,6 +107,14 @@
           this._children[i]._destroy();
         }
       }
+    },
+
+    _getEventConfig: function(type) {
+      var result = tabris.Proxy.prototype._getEventConfig.call(this, type);
+      if (!result && this.get("gestures")[type]) {
+        return getGestureEventConfig(type);
+      }
+      return result;
     }
 
   };
@@ -201,14 +209,6 @@
       gestures: {
         set: function(gestures) {
           this._gestures = gestures;
-          disposeRecognizers.call(this);
-          this._recognizers = [];
-          for (var name in gestures) {
-            var properties = util.extend({target: this}, gestures[name]);
-            var recognizer = tabris.create("_GestureRecognizer", properties)
-              .on("gesture", gestureListener, {target: this, name: name});
-            this._recognizers.push(recognizer);
-          }
         },
         get: function() {
           return this._gestures || {};
@@ -241,9 +241,30 @@
   }
 
   function disposeRecognizers() {
-    (this._recognizers || []).forEach(function(recognizer) {
-      recognizer.dispose();
-    });
+    var recognizers = this._recognizers || {};
+    for (var recognizer in recognizers) {
+      recognizers[recognizer].dispose();
+    }
+  }
+
+  function getGestureEventConfig(name) {
+    return {
+      listen: function(state) {
+        var gestures = this.get("gestures");
+        if (state) {
+          var properties = util.extend({target: this}, gestures[name]);
+          var recognizer = tabris.create("_GestureRecognizer", properties)
+            .on("gesture", gestureListener, {target: this, name: name});
+          if (!this._recognizers) {
+            this._recognizers = {};
+          }
+          this._recognizers[name] = recognizer;
+        } else {
+          this._recognizers[name].dispose();
+          delete this._recognizers[name];
+        }
+      }
+    };
   }
 
   function gestureListener(event) {

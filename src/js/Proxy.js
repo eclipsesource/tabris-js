@@ -35,7 +35,7 @@
     },
 
     _listen: function(type, state) {
-      var event = this.constructor && this.constructor._events && this.constructor._events[type];
+      var event = this._getEventConfig(type);
       if (!event) {
         return;
       }
@@ -132,6 +132,10 @@
         return prop.set;
       }
       return null;
+    },
+
+    _getEventConfig: function(type) {
+      return this.constructor && this.constructor._events && this.constructor._events[type];
     },
 
     _nativeSet: function(name, value) {
