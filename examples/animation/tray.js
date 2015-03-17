@@ -20,7 +20,7 @@ var loremIpsum = "Etiam nisl nisi, egestas quis lacus ut, tristique suscipit met
 var page = tabris.create("Page", {
   title: "Tray",
   topLevel: true
-});
+}).open();
 
 tabris.create("TextView", {
   layoutData: {left: MARGIN, right: MARGIN, top: MARGIN},
@@ -118,7 +118,7 @@ function positionTrayInRestingState() {
     state = "animating";
     shade.animate({opacity: getShadeOpacity(translationY)}, options);
     strapIcon.animate({transform: getStrapIconTransform(translationY)}, options);
-    tray.animate({transform: {translationY: translationY}}, options).on("completion", function() {
+    tray.animate({transform: {translationY: translationY}}, options).on("animationend", function() {
       state = "resting";
     });
   }

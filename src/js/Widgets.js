@@ -112,7 +112,7 @@
   };
 
   tabris.registerWidget = function(type, members) {
-    members = util.extend({}, tabris.Widgets, tabris.Animation, members);
+    members = util.extend({animate: tabris._Animation.animate}, tabris.Widgets, members);
     members._events = util.extend({}, tabris.registerWidget._defaultEvents, members._events || {});
     if (members._properties !== true) {
       var defaultProperties = tabris.registerWidget._defaultProperties;

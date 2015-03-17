@@ -1,94 +1,79 @@
 (function() {
 
   tabris.registerType("_Animation", {
+
     _type: "tabris.Animation",
-    _events: {
-      completion: "Completion",
-      start: "Start"
+
+    _create: function(properties) {
+      tabris.Proxy.prototype._create.call(this, properties);
+      this._nativeListen("Start", true);
+      this._nativeListen("Completion", true);
+      return this;
     },
-    _properties: {
-      properties: true,
-      delay: true,
-      duration: true,
-      repeat: true,
-      reverse: true,
-      easing: true,
-      target: "proxy"
-    }
-  });
 
-  tabris.Animation = function(target, properties, options) {
-    var validatedOptions = {};
-    var validatedProperties = {};
-    for (var option in options) {
-      if (validOptions[option]) {
-        validatedOptions[option] = options[option];
-      } else {
-        console.warn("Invalid animation option \"" + option + "\"");
-      }
-    }
-    for (var property in properties) {
-      if (validProperties[property]) {
-        validatedProperties[property] = properties[property];
-      } else {
-        console.warn("Invalid animation property \"" + property + "\"");
-      }
-    }
-    this._target = target;
-    // TODO: check/encode properties with PropertyEncoding.js
-    this._properties = validatedProperties;
-    this._options = validatedOptions;
-  };
-
-  util.extend(tabris.Animation.prototype, tabris.Events, {
-
-    _start: function() {
-      var animation = this;
-      this._proxy = tabris.create("_Animation", util.extend(this._options, {
-        target: this._target,
-        properties: this._properties
-      }));
-      this._proxy._listen("completion", true);
-      var animation = this;
-      this._proxy.trigger = function() {
-        animation.trigger.apply(animation, arguments);
-        if (arguments[0] === "completion") {
-          this.dispose();
-          delete animation._proxy;
+    _events: {
+      Start: {
+        trigger: function() {
+          this._target.trigger("animationstart", {options: this._options});
         }
-      };
-      this._proxy._nativeCall("start");
+      },
+      Completion: {
+        trigger: function() {
+          this._target.trigger("animationend", {options: this._options});
+          this.dispose();
+        }
+      }
+    },
+
+    _properties: {
+      properties: {
+        set: function(value) {
+          var properties = {};
+          for (var property in value) {
+            if (animateable[property]) {
+              properties[property] = value[property];
+            } else {
+              console.warn("Invalid animation property \"" + property + "\"");
+            }
+          }
+          this._nativeSet("properties", properties);
+        }
+      },
+      delay: "natural",
+      duration: "natural",
+      repeat: "natural",
+      reverse: "boolean",
+      easing: ["choice", ["linear", "ease-in", "ease-out", "ease-in-out"]],
+      target: "proxy"
+    },
+
+    start: function() {
+      this._nativeCall("start");
     },
 
     cancel: function() {
-      if (this._proxy) {
-        this._proxy._nativeCall("cancel");
-      }
-    },
-
-    _listen: function(type) {
-      if (type !== "completion" && this._proxy) {
-        this._proxy._listen.apply(this._proxy, arguments);
-      }
+      this._nativeCall("cancel");
     }
 
   });
 
-  tabris.Animation.animate = function(properties, options) {
-    var animation = new tabris.Animation(this, properties, options);
-    animation._start();
-    return animation;
+  tabris._Animation.animate = function(properties, options) {
+    for (var option in options) {
+      if (!tabris._Animation._properties[option] && option !== "name") {
+        console.warn("Invalid animation option \"" + option + "\"");
+      }
+    }
+    var animation = tabris.create("_Animation", util.extend({}, options, {
+      target: this,
+      properties: properties
+    }));
+    animation._target = this;
+    animation._options = options;
+    animation.start();
+    return this;
   };
 
-  var validOptions = {
-    delay: true,
-    duration: true,
-    repeat: true,
-    reverse: true,
-    easing: true
-  };
-
-  var validProperties = {
+  var animateable = {
     opacity: true,
     transform: true
   };
