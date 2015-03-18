@@ -44,8 +44,7 @@ var countryTextView = tabris.create("TextView", {
 
 tabris.create("Picker", {
   layoutData: {left: [countryTextView, 10], right: 10, baseline: countryTextView},
-  items: ["Germany", "Canada", "USA", "Bulgaria"],
-  selectionIndex: 0
+  items: ["Germany", "Canada", "USA", "Bulgaria"]
 }).appendTo(page);
 
 var classTextView = tabris.create("TextView", {
@@ -55,8 +54,7 @@ var classTextView = tabris.create("TextView", {
 
 tabris.create("Picker", {
   layoutData: {left: [classTextView, 10], right: 10, baseline: classTextView},
-  items: ["Business", "Economy", "Economy Plus"],
-  selectionIndex: 0
+  items: ["Business", "Economy", "Economy Plus"]
 }).appendTo(page);
 
 var seatTextView = tabris.create("TextView", {
