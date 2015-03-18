@@ -85,7 +85,7 @@ function createDetailsView(book) {
   });
   tabris.create("Composite", {
     layoutData: {left: 0, right: 0, top: 0, height: 160 + 2 * PAGE_MARGIN}
-  }).on("touchend", function() {
+  }).on("tap", function() {
     createReadBookPage(book).open();
   }).appendTo(composite);
   var coverView = tabris.create("ImageView", {

@@ -6,11 +6,11 @@ var page = tabris.create("Page", {
 var drawer = tabris.create("Drawer");
 
 var arrow = String.fromCharCode(8592);
-createLabel(arrow + " Swipe from left or tap here").on("touchend", function() {
+createLabel(arrow + " Swipe from left or tap here").on("tap", function() {
   drawer.open();
 }).appendTo(page);
 
-createLabel("Thank you!").on("touchend", function() {
+createLabel("Thank you!").on("tap", function() {
   drawer.close();
 }).appendTo(drawer);
 

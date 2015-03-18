@@ -42,7 +42,7 @@ imageNames.forEach(function(image, index) {
     layoutData: {top: 7, left: index * 157, width: 150, height: 150},
     image: {src: "images/" + image + "_thumb.jpg", width: 150, height: 150},
     highlightOnTouch: true
-  }).on("touchend", function() {
+  }).on("tap", function() {
     fullImage.set("image", {src: "images/" + image + ".jpg"});
   }).appendTo(scrollView);
 });

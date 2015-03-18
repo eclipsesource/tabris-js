@@ -150,7 +150,7 @@ function createPersonThumbView(parent, person, thumbsize) {
     layoutData: {left: 0, top: 0, width: thumbsize, height: thumbsize},
     image: {src: person.image, width: thumbsize, height: thumbsize},
     highlightOnTouch: true
-  }).on("touchend", function() {
+  }).on("tap", function() {
     animateOutLeftCreateCurrentPerson(person);
   }).appendTo(composite);
   tabris.create("TextView", {
