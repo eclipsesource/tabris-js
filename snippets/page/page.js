@@ -1,3 +1,5 @@
+tabris.create("Drawer").append(tabris.create("PageSelector"));
+
 tabris.create("Page", {
   title: "Creating multiple top level pages",
   topLevel: true
