@@ -21,8 +21,7 @@ var imageSizeTextView = tabris.create("TextView", {
 
 var imageSizePicker = tabris.create("Picker", {
   layoutData: {right: MARGIN, left: [imageSizeTextView, 0], baseline: imageSizeTextView},
-  items: ["Large", "Small"],
-  selectionIndex: 0
+  items: ["Large", "Small"]
 }).appendTo(page);
 
 var scaleModeTextView = tabris.create("TextView", {
@@ -32,8 +31,7 @@ var scaleModeTextView = tabris.create("TextView", {
 
 var scaleModePicker = tabris.create("Picker", {
   layoutData: {right: MARGIN, left: [scaleModeTextView, 0], baseline: scaleModeTextView},
-  items: scaleModes,
-  selectionIndex: 0
+  items: scaleModes
 }).appendTo(page);
 
 imageSizePicker.on("change:selection", function() {
