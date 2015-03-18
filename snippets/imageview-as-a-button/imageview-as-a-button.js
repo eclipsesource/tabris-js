@@ -8,7 +8,7 @@ tabris.create("ImageView", {
   layoutData: {centerX: 0, centerY: 0},
   image: {src: "images/target_200.png"},
   highlightOnTouch: true
-}).on("touchend", function() {
+}).on("tap", function() {
   touched++;
   page.set("title", "touched " + touched + " times");
 }).appendTo(page);

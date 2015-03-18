@@ -208,14 +208,22 @@
       },
       gestures: {
         set: function(gestures) {
-          this._gestures = gestures;
+          this._gestures = util.extend({}, defaultGestures, gestures);
         },
         get: function() {
-          return this._gestures || {};
+          if (!this._gestures) {
+            this._gestures = util.extend({}, defaultGestures);
+          }
+          return this._gestures;
         }
       }
     }
   });
+
+  var defaultGestures = {
+    tap: {type: "tap"},
+    longpress: {type: "longpress"}
+  };
 
   function renderLayoutListener() {
     try {
