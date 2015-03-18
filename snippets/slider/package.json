@@ -4,6 +4,6 @@
   "description": "A slider",
   "main": "slider.js",
   "dependencies": {
-    "tabris": "0.9.2"
+    "tabris": "0.9.3"
   }
 }
