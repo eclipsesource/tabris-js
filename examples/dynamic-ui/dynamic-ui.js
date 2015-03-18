@@ -85,6 +85,8 @@ var createPage = function(pageTitle, pageIsTopLevel) {
     }
   }).appendTo(page);
 
+  return page;
+
 };
 
 var topLevelPage = createPage("Dynamic UI Start", true);
