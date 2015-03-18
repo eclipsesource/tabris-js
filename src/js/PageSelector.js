@@ -6,6 +6,8 @@
     return instance;
   };
 
+  tabris.PageSelector.prototype.type = "PageSelector";
+
   function _create(properties) {
     tabris.CollectionView.prototype._create.call(this, util.extend({
       items: getPages(),
