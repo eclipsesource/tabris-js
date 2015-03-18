@@ -1,8 +1,7 @@
 var MARGIN = 12;
 
 var trayHeight;
-var prevEvents;
-var state = "resting";
+var trayState = "down";
 var dragOffset;
 
 var loremIpsum = "Etiam nisl nisi, egestas quis lacus ut, tristique suscipit metus. In " +
@@ -39,12 +38,12 @@ var tray = tabris.create("Composite", {
 }).appendTo(page);
 
 var strap = tabris.create("Composite", {
-  layoutData: {left: ["40%", 0], right: ["40%", 0], top: 0, height: 48},
+  layoutData: {left: ["40%", 0], right: ["40%", 0], top: 0, height: 65},
   background: "#259b24"
 }).appendTo(tray);
 
 var strapIcon = tabris.create("TextView", {
-  layoutData: {left: MARGIN, right: MARGIN, top: 10},
+  layoutData: {left: MARGIN, right: MARGIN, top: 20},
   alignment: "center",
   text: "⇧",
   font: "bold 24px",
@@ -64,6 +63,52 @@ tabris.create("TextView", {
   foreground: "white"
 }).appendTo(trayContent);
 
+trayContent.on("change:bounds", function() {
+  var bounds = trayContent.get("bounds");
+  trayHeight = bounds.height;
+  if (trayState === "dragging") {
+    positionTrayInRestingState(2000);
+  } else {
+    tray.set("transform", {translationY: trayHeight});
+  }
+});
+
+strap.on("pan:vertical", function(event) {
+  if (event.state === "start" && (trayState === "up" || trayState === "down")) {
+    trayState = "dragging";
+    dragOffset = tray.get("transform").translationY - event.translation.y;
+  }
+  if (trayState === "dragging") {
+    var offsetY = Math.min(Math.max(event.translation.y + dragOffset, 0), trayHeight);
+    tray.set("transform", {translationY: offsetY});
+    shade.set("opacity", getShadeOpacity(offsetY));
+    strapIcon.set("transform", getStrapIconTransform(offsetY));
+  }
+  if (event.state === "end" && trayState === "dragging") {
+    positionTrayInRestingState(event.velocity.y);
+  }
+});
+
+strap.on("tap", function() {
+  if (trayState === "up" || trayState === "down") {
+    positionTrayInRestingState(trayState === "down" ? -1000 : 1000);
+  }
+});
+
+function positionTrayInRestingState(velocity) {
+  trayState = "animating";
+  var translationY = velocity > 0 ? trayHeight : 0;
+  var options = {
+    duration: Math.min(Math.abs(trayHeight / velocity * 1000), 800),
+    easing: Math.abs(velocity) >= 1000 ? "ease-out" : "ease-in-out"
+  };
+  shade.animate({opacity: getShadeOpacity(translationY)}, options);
+  strapIcon.animate({transform: getStrapIconTransform(translationY)}, options);
+  tray.animate({transform: {translationY: translationY}}, options).on("animationend", function() {
+    trayState = velocity > 0 ? "down" : "up";
+  });
+}
+
 function getShadeOpacity(translationY) {
   var traveled = translationY / trayHeight;
   return 0.75 - traveled;
@@ -72,54 +117,4 @@ function getShadeOpacity(translationY) {
 function getStrapIconTransform(translationY) {
   var traveled = translationY / trayHeight;
   return {rotation: traveled * Math.PI - Math.PI};
-}
-
-trayContent.on("change:bounds", function() {
-  var bounds = trayContent.get("bounds");
-  trayHeight = bounds.height;
-  tray.set("transform", {translationY: trayHeight});
-});
-
-strap.on("touchstart", function(event) {
-  if (state === "resting") {
-    state = "dragging";
-    dragOffset = tray.get("transform").translationY - event.touches[0].pageY;
-    prevEvents = [event, event];
-  }
-});
-
-function getMovementY() {
-  return prevEvents[0].touches[0].pageY - prevEvents[1].touches[0].pageY;
-}
-
-strap.on("touchmove", function(event) {
-  if (state === "dragging") {
-    prevEvents.unshift(event);
-    prevEvents.pop();
-    var offsetY = Math.min(Math.max(event.touches[0].pageY + dragOffset, 0), trayHeight);
-    tray.set("transform", {translationY: offsetY});
-    shade.set("opacity", getShadeOpacity(offsetY));
-    strapIcon.set("transform", getStrapIconTransform(offsetY));
-  }
-});
-
-strap.on("touchcancel", function() {
-  positionTrayInRestingState();
-});
-
-strap.on("touchend", function() {
-  positionTrayInRestingState();
-});
-
-function positionTrayInRestingState() {
-  if (state === "dragging") {
-    var translationY = getMovementY() >= 0 ? trayHeight : 0;
-    var options = {duration: Math.abs(trayHeight), easing: "ease-out"};
-    state = "animating";
-    shade.animate({opacity: getShadeOpacity(translationY)}, options);
-    strapIcon.animate({transform: getStrapIconTransform(translationY)}, options);
-    tray.animate({transform: {translationY: translationY}}, options).on("animationend", function() {
-      state = "resting";
-    });
-  }
 }

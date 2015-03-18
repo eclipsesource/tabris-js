@@ -222,7 +222,18 @@
 
   var defaultGestures = {
     tap: {type: "tap"},
-    longpress: {type: "longpress"}
+    longpress: {type: "longpress"},
+    pan: {type: "pan"},
+    "pan:left": {type: "pan", direction: "left"},
+    "pan:right": {type: "pan", direction: "right"},
+    "pan:up": {type: "pan", direction: "up"},
+    "pan:down": {type: "pan", direction: "down"},
+    "pan:horizontal": {type: "pan", direction: "horizontal"},
+    "pan:vertical": {type: "pan", direction: "vertical"},
+    "swipe:left": {type: "swipe", direction: "left"},
+    "swipe:right": {type: "swipe", direction: "right"},
+    "swipe:up": {type: "swipe", direction: "up"},
+    "swipe:down": {type: "swipe", direction: "down"}
   };
 
   function renderLayoutListener() {
