@@ -316,6 +316,7 @@ describe("Widgets", function() {
 
       var create = nativeBridge.calls({op: "create"})[0];
       expect(create.type).toEqual("rwt.widgets.Combo");
+      expect(create.properties).toEqual({selectionIndex: 0});
     });
 
     it("Composite", function() {

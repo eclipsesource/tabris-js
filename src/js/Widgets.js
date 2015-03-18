@@ -304,6 +304,7 @@
 
   tabris.registerWidget("Picker", {
     _type: "rwt.widgets.Combo",
+    _initProperties: {selectionIndex: 0},
     _events: {"change:selection": "Selection"},
     _properties: {items: true, text: "string", selectionIndex: "natural"}
   });
