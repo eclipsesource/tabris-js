@@ -8,34 +8,38 @@ Parameters:
 
 - *properties*: a set of widget properties to set (*object*). Currently, only the properties `transform` and `opacity` can be animated
 - *options*: the properties of the animation itself
-  - *delay*: time to wait until the animation starts in ms, defaults to `0`
-  - *duration*: duration of the animation in ms
-  - *easing*: one of `linear`, `ease-in`, `ease-out`, `ease-in-out`
-  - *repeat*: number of times to repeat the animation, defaults to `0` (i.e. play one, zero repeats).
-  - *reverse*: plays the animation backwards if set to `true`
+    - *delay*: time to wait until the animation starts in ms, defaults to `0`
+    - *duration*: duration of the animation in ms
+    - *easing*: one of `linear`, `ease-in`, `ease-out`, `ease-in-out`
+    - *repeat*: number of times to repeat the animation, defaults to `0` (i.e. play one, zero repeats).
+    - *reverse*: plays the animation backwards if set to `true`
+    - *name*: an arbitrary string that may be used to identify the animation in an animation event.
 
-The animate method returns an `Animation` object supporting event handling. It's methods `on`, `off`, `once` and `trigger` function just like on `Widget`. It also has a `cancel` method to stop the animation.
+The animate method returns the widget itself, supporting call chaining. Each animate call will be followed by up to two events fired on the widget:
 
-Supported Events:
-- *start*: Fired once the animation begins, i.e. after the time specified in `delay`
-- *completion*: Fired after the animation finishes. Not fired if `cancel` is used
+- *animationstart*: Fired once the animation begins, i.e. after the time specified in `delay`, or immediately on calling `animate`.
+- *animationend*: Fired after the animation finishes. Not fired if the widget is disposed before that.
 
-While the animation runs the properties are continuously updated. Calling `get` will return the current value. When the animation stops (due to completion or by `cancel`) the properties will remain at their last animated value. 
+The animation event listeners are called with an event object that contains the options provided in the `animate` method.
 
 Example:
+
 ```javascript
 label.animate({
   opacity: 0,
   transform: {
     translationX: 200,
-    translationY: 200,
-    scaleX: 0.1,
-    scaleY: 0.1
+    scaleX: 0.1
   }
 }, {
   duration: 1000,
-  easing: "ease-out"
-}).on("completion", function() {
-  label.dispose();
+  easing: "ease-out",
+  name: "my-remove-animation"
+}).on("animationend", function(event) {
+  if (event.options.name === "my-remove-animation") {
+    label.dispose();
+  }
 });
 ```
+
+The animated properties are set to their target value as soon as the animation starts. Therefore, calling `get` will always return either the start or target value, never one in between.

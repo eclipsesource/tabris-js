@@ -109,7 +109,8 @@
     "animate": [
       {
         "parameters": ["properties", "options"],
-        "description": "Starts an animation that transforms the given properties from their current values to the given ones. Currently, only the properties `transform` and `opacity` are supported. Supported `options` are: `delay` (time until the animation starts in ms, defaults to 0), `duration` (in ms), `easing` (one of linear, ease-in, ease-out, ease-in-out), `repeat` (number of times to repeat the animation, defaults to 0), `reverse` (true to play the animation backwards)"
+        "returns": "Widget",
+        "description": "Starts an animation that transforms the given properties from their current values to the given ones. Currently, only the properties `transform` and `opacity` are supported. Supported `options` are: `delay` (time until the animation starts in ms, defaults to 0), `duration` (in ms), `easing` (one of linear, ease-in, ease-out, ease-in-out), `repeat` (number of times to repeat the animation, defaults to 0), `reverse` (true to play the animation backwards), and `name` (no effect, but will be given in animation events)"
       }
     ],
     "dispose": [
@@ -206,6 +207,12 @@
     },
     "change:bounds": {
       "description": "Fired when the widget's size or position has changed."
+    },
+    "animationstart": {
+      "decription": "Fired when an animation starts playing."
+    },
+    "animationend": {
+      "description:": "Fired when an animation has completed."
     },
     "dispose": {
       "description": "Fired when the widget is about to be disposed."
