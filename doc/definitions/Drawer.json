@@ -1,0 +1,29 @@
+{
+  "type": "Drawer",
+  "description": "A navigation drawer that can be swiped in from the left edge of the screen. Can contain any kind of widgets. It may be useful to include a `PageSelector` that displays all top-level pages.",
+  "include": ["Composite"],
+  "methods": {
+    "open": [
+      {
+        "parameters": [],
+        "description": "Opens the drawer."
+      }
+    ],
+    "close": [
+      {
+        "parameters": [],
+        "description": "Closes the drawer."
+      }
+    ]
+  },
+  "properties": {
+  },
+  "events": {
+  },
+  "links": [
+    {
+      "title": "Snippet for creating a Drawer",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/drawer/drawer.js"
+    }
+  ]
+}
