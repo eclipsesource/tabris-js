@@ -144,25 +144,24 @@ describe("tabris.Module", function() {
       });
 
       it("requests file specified in /package.json", function() {
+        tabris.Module.createLoader.and.returnValue(undefined);
         spyOn(tabris.Module, "readJSON").and.callFake(function(url) {
           if (url === "./foo/package.json") {
             return {main: "bar"};
           }
-        });
-        tabris.Module.createLoader.and.callFake(function(url) {
-          if (url === "./foo/bar") {
-            return function(module) {
-              module.exports = module;
-            };
+          if (url === "./foo/bar/index.json") {
+            return {modulename: "bar"};
           }
         });
 
         var foo = module.require("./foo");
 
-        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./foo");
-        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./foo.js");
-        expect(tabris.Module.readJSON).toHaveBeenCalledWith("./foo.json");
-        expect(foo.id).toBe("./foo/bar");
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./foo/bar");
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./foo/bar.js");
+        expect(tabris.Module.readJSON).toHaveBeenCalledWith("./foo/bar.json");
+        expect(tabris.Module.readJSON).toHaveBeenCalledWith("./foo/bar/package.json");
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./foo/bar/index.js");
+        expect(foo).toEqual({modulename: "bar"});
       });
 
       it("requests alternate file name /index.js", function() {
