@@ -7,7 +7,7 @@ Tabris.js is a mobile framework that lets you develop native iOS and Android app
 - [Widgets](widgets) - Widgets basics.
 - [Layouts](layout) - Layouting widgets.
 - [Animations](animations) - Animating widgets.
-- [Touch API](touch-events) - Processing widget touch events.
+- [Touch API](touch-events) - Processing widget gesture/touch events.
 - [Canvas](canvas) - Drawing with HTML Canvas API.
 - [Cordova Support](cordova) - Using cordova plug-ins in Tabris.js.
 - [Device](device) - Access information about the current device.

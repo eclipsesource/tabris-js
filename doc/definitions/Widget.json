@@ -177,6 +177,21 @@
     }
   },
   "events": {
+    "tap": {
+      "description": "Fired when a widget is tapped. See [Gesture Events](touch-events)."
+    },
+    "longpress": {
+      "description": "Fired after pressing a widget for a specific amount of time (about a second). See [Gesture Events](touch-events)."
+    },
+    "pan": {
+      "description": "Fired when a finger starts moving in the widget. See [Gesture Events](touch-events)."
+    },
+    "pan:{direction}": {
+      "description": "Fired when a finger starts moving in the given direction. See [Gesture Events](touch-events)."
+    },
+    "swipe:{direction}": {
+      "description": "Fired when a finger moves quickly in the given direction. See [Gesture Events](touch-events)."
+    },
     "touchstart": {
       "description": "Fired when a widget is touched. See [Touch Events](touch-events)."
     },
@@ -188,9 +203,6 @@
     },
     "touchcancel": {
       "description": "Fired instead of touchend when the touch ends on another widget than it started on. See [Touch Events](touch-events)."
-    },
-    "longpress": {
-      "description": "Fired after pressing a widget for a specific amount of time (about a second). See [Touch Events](touch-events)."
     },
     "change:bounds": {
       "description": "Fired when the widget's size or position has changed."
