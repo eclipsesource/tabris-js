@@ -174,6 +174,17 @@ describe("tabris", function() {
       expect(tabris.CustomType._events.bar.trigger).toHaveBeenCalledWith({bar: 23});
     });
 
+    it("skips events for already disposed widgets", function() {
+      tabris.registerType("CustomType", {_events: {bar: true}});
+      proxy = tabris.create("CustomType", {});
+      proxy.dispose();
+      spyOn(proxy, "trigger");
+
+      tabris._notify(proxy.cid, "bar", {bar: 23});
+
+      expect(proxy.trigger).not.toHaveBeenCalled();
+    });
+
     it("silently ignores events for non-existing ids (does not crash)", function() {
       expect(function() {
         tabris._notify("no-id", "foo", [23, 42]);

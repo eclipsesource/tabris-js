@@ -14,15 +14,16 @@
     _events: {
       Start: {
         trigger: function() {
-          this._target.trigger("animationstart", {options: this._options});
-        }
+            this._target.trigger("animationstart", {options: this._options});
+          }
       },
       Completion: {
         trigger: function() {
-          this._target.trigger("animationend", {options: this._options});
-          this.dispose();
+            this._target._off("dispose", this.dispose, this);
+            this._target.trigger("animationend", {options: this._options});
+            this.dispose();
+          }
         }
-      }
     },
 
     _properties: {
@@ -49,10 +50,6 @@
 
     start: function() {
       this._nativeCall("start");
-    },
-
-    cancel: function() {
-      this._nativeCall("cancel");
     }
 
   });
@@ -69,6 +66,7 @@
     }));
     animation._target = this;
     animation._options = options;
+    this._on("dispose", animation.dispose, animation);
     animation.start();
     return this;
   };

@@ -31,6 +31,26 @@ describe("Animation", function() {
       expect(createOp().target).toBe(widget.cid);
     });
 
+    it("disposes Animation object on widget dispose", function() {
+      widget.animate({}, {});
+      var animation = tabris(animationId());
+
+      widget.dispose();
+
+      expect(animation.isDisposed()).toBe(true);
+    });
+
+    it("does not keep references to Animation object after completion", function() {
+      widget.animate({}, {});
+      var animation = tabris(animationId());
+      tabris._notify(animation.cid, "Completion", {});
+      spyOn(animation, "dispose");
+
+      widget.dispose();
+
+      expect(animation.dispose).not.toHaveBeenCalled();
+    });
+
     it("sets animated properties", function() {
       widget.animate({opacity: 0.4, transform: {rotation: 0.5}}, {});
       expect(createOp().properties).toEqual({opacity: 0.4, transform: {rotation: 0.5}});
