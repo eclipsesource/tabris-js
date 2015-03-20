@@ -6,6 +6,20 @@ Tabris implements a subset of popular W3C standards. This provides web developer
 
 In JavaScript there is always an object representing the global scope. All global variables are members of this object and vice versa. In Tabris, like in any browser, this object is named `window`. For example, the tabris object can be accessed either via `tabris` or `window.tabris`.
 
+## console object
+
+As in the browser, messages can be logged to the [developer console](getting-started#the-developer-console) using the global `console` object:
+
+```js
+console.log("A log message");
+console.error("An error Message");
+console.warn("A warning message");
+console.info("An info message");
+console.debug("A debug Message");
+```
+
+Calling `console.error` will also cause a message to pop up (even if the developer console is closed), but it won't interrupt script execution.  
+
 ## Timer
 
 ### [W3C](http://www.w3.org/TR/2011/WD-html5-20110525/timers.html#timers) / [MDN](https://developer.mozilla.org/en-US/Add-ons/Code_snippets/Timers)
