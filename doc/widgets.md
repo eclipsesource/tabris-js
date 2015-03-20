@@ -77,7 +77,7 @@ Changes one or more widget properties with an animation. See [Animations](animat
 
 
 
-## The Widget Hierarchy
+## The Widget Tree
 
 To be visible, a widget needs a parent. The top-level parent of every UI is a `Page`. Widgets can be included in the widget hierarchy using `append` or `appendTo`.
 
@@ -133,15 +133,11 @@ var firstChild = parent.children()[0];
 var lastChild = parent.children().last();
 ```
 
-A `WidgetCollection` provides a subset of the Array API (`length`, `forEach`, `filter`, and `indexOf`), as well as the additional methods `first`, `last`, and `toArray`. In addition, all common widget methods except `append` are available on a WidgetCollection. When a selector is given only children that match the selector are returned:
-
-```javascript
-var allButtons = parent.children("Button");
-var myButton = parent.children("#myButton");
-```
-
 Parameters:
-- *selector (optional)* A selector to filter the list of children by.
+- *selector (optional)* A selector to filter the list of children by. 
+
+See also: [selector](Selector API)
+
 
 ### `find(selector*)`
 
@@ -149,6 +145,8 @@ Like `children`, but returns the list of all descendants of this widget as a `Wi
 
 Parameters:
 - *selector (optional)* A selector to filter the list of descendants by.
+
+See also: [selector](Selector API)
 
 ## Events
 

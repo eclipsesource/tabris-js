@@ -5,6 +5,7 @@ Tabris.js is a mobile framework that lets you develop native iOS and Android app
 ## Documentation
 - [Modules](modules) - How to organize and load scripts.
 - [Widgets](widgets) - Widgets basics.
+- [Selector API](selector) - Working more efficiently with widgets. 
 - [Layouts](layout) - Layouting widgets.
 - [Animations](animations) - Animating widgets.
 - [Touch API](touch-events) - Processing widget gesture/touch events.
