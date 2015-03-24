@@ -1,26 +1,7 @@
 var PAGE_MARGIN = 16;
+var books = require("./books.json");
 
 tabris.create("Drawer").append(tabris.create("PageSelector"));
-
-var books = [
-  ["1984", "H.G. Wells", "images/book_1984.jpg"],
-  ["Na Tropie Nieznanych", "Bernard Heuvelmans", "images/book_na_tropie.jpg", false, true],
-  ["Stary Czlowiek I Morze", "Ernest Hemingway", "images/book_stary.jpg", true, true],
-  ["The Catcher In The Rye", "J.D. Salinger", "images/book_catcher.jpg", true, true],
-  ["Moby Dick", "Herman Melville", "images/book_moby_dick.jpg", false, true],
-  ["Hobbit", "J.R.R Tolkien", "images/book_hobbit.jpg", true, false],
-  ["Wojna Swiatow", "H.G. Wells", "images/book_wojna.jpg", true, true],
-  ["Zegar Pomaranczowy Pracz", "Anthony Burgess", "images/book_zegar.jpg", true, true],
-  ["Ksiega Dzungli", "Rudyard Kipling", "images/book_ksiega.jpg", true, true]
-].map(function(array) {
-  return {
-    title: array[0],
-    author: array[1],
-    image: {src: array[2]},
-    popular: array[3],
-    favorite: array[4]
-  };
-});
 
 var loremIpsum = "Etiam nisl nisi, egestas quis lacus ut, tristique suscipit metus. In " +
                  "vehicula lectus metus, at accumsan elit fringilla blandit. Integer et quam " +

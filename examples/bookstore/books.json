@@ -1,0 +1,65 @@
+[
+  {
+    "title": "1984",
+    "author": "H.G. Wells",
+    "image": "images/book_1984.jpg",
+    "popular": false,
+    "favorite": false
+  },
+  {
+    "title": "Na Tropie Nieznanych",
+    "author": "Bernard Heuvelmans",
+    "image": "images/book_na_tropie.jpg",
+    "popular": false,
+    "favorite": true
+  },
+  {
+    "title": "Stary Czlowiek I Morze",
+    "author": "Ernest Hemingway",
+    "image": "images/book_stary.jpg",
+    "popular": true,
+    "favorite": true
+  },
+  {
+    "title": "The Catcher In The Rye",
+    "author": "J.D. Salinger",
+    "image": "images/book_catcher.jpg",
+    "popular": true,
+    "favorite": true
+  },
+  {
+    "title": "Moby Dick",
+    "author": "Herman Melville",
+    "image": "images/book_moby_dick.jpg",
+    "popular": false,
+    "favorite": true
+  },
+  {
+    "title": "Hobbit",
+    "author": "J.R.R Tolkien",
+    "image": "images/book_hobbit.jpg",
+    "popular": true,
+    "favorite": false
+  },
+  {
+    "title": "Wojna Swiatow",
+    "author": "H.G. Wells",
+    "image": "images/book_wojna.jpg",
+    "popular": true,
+    "favorite": true
+  },
+  {
+    "title": "Zegar Pomaranczowy Pracz",
+    "author": "Anthony Burgess",
+    "image": "images/book_zegar.jpg",
+    "popular": true,
+    "favorite": true
+  },
+  {
+    "title": "Ksiega Dzungli",
+    "author": "Rudyard Kipling",
+    "image": "images/book_ksiega.jpg",
+    "popular": true,
+    "favorite": true
+  }
+]
