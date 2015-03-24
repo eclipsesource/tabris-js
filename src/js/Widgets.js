@@ -172,7 +172,7 @@
             renderLayoutData.call(this);
           } catch (ex) {
             if (!this._layoutDataPending) {
-              tabris.on("beforeFlush", renderLayoutListener, this);
+              tabris._on("beforeFlush", renderLayoutListener, this);
               this._layoutDataPending = true;
             }
           }
@@ -236,7 +236,7 @@
   function renderLayoutListener() {
     try {
       renderLayoutData.call(this);
-      tabris.off("beforeFlush", renderLayoutListener, this);
+      tabris._off("beforeFlush", renderLayoutListener, this);
       delete this._layoutDataPending;
       delete this._hasPreliminaryLayout;
     } catch (ex) {

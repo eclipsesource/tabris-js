@@ -34,10 +34,10 @@ tabris.registerWidget("_UI", {
     this._nativeSet("shell", this._shell.cid);
     this._pages = [];
     this._drawer = null;
-    this.on("ShowPage", function(properties) {
+    this._on("ShowPage", function(properties) {
       var page = tabris._proxies[properties.pageId];
       this._setActivePage(page.widget);
-    }).on("ShowPreviousPage", function() {
+    })._on("ShowPreviousPage", function() {
       var page = this._getActivePage();
       if (page) {
         page.close();

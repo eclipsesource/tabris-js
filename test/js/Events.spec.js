@@ -303,9 +303,38 @@
           });
 
         });
+
+        describe("Events._on", function() {
+
+          it("registers listener that can not be removed with off", function() {
+            object._on("foo", callback, context);
+
+            object.off("foo", callback, context);
+            object.off("foo", callback);
+            object.off("foo");
+            object.off();
+            object.trigger("foo", "argument");
+
+            expect(object._isListening("foo")).toBe(true);
+            expect(callback).toHaveBeenCalledWith("argument");
+          });
+
+          it("registers listener that can be removed with _off", function() {
+            object._on("foo", callback, context);
+
+            object._off("foo", callback, context);
+            object.trigger("foo", "argument");
+
+            expect(object._isListening("foo")).toBe(false);
+            expect(callback).not.toHaveBeenCalled();
+          });
+
+        });
+
       }
 
     });
 
   }
+
 });

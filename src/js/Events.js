@@ -1,12 +1,21 @@
 tabris.Events = {
 
   on: function(type, callback, context) {
+    return this._on(type, callback, context, true);
+  },
+
+  off: function(type, callback, context) {
+    return this._off(type, callback, context, true);
+  },
+
+  _on: function(type, callback, context, isPublic) {
     this._checkDisposed();
+    var store = isPublic ? "_callbacks" : "_privateCallbacks";
     var wasListening = this._isListening(type);
-    if (!this._callbacks) {
-      this._callbacks = [];
+    if (!this[store]) {
+      this[store] = [];
     }
-    this._callbacks[type] = (this._callbacks[type] || []).concat([
+    this[store][type] = (this[store][type] || []).concat([
       {
         fn: callback,
         ctx: context
@@ -18,16 +27,17 @@ tabris.Events = {
     return this;
   },
 
-  off: function(type, callback, context) {
+  _off: function(type, callback, context, isPublic) {
     this._checkDisposed();
-    if (this._callbacks) {
+    var store = isPublic ? "_callbacks" : "_privateCallbacks";
+    if (this[store]) {
       if (!type) {
-        delete this._callbacks;
-      } else if (type in this._callbacks) {
+        delete this[store];
+      } else if (type in this[store]) {
         if (!callback) {
-          delete this._callbacks[type];
+          delete this[store][type];
         } else {
-          var callbacks = this._callbacks[type].concat();
+          var callbacks = this[store][type].concat();
           for (var i = callbacks.length - 1; i >= 0; i--) {
             if ((callbacks[i].fn === callback || callbacks[i].fn._callback === callback) &&
               (!context || callbacks[i].ctx === context)) {
@@ -35,12 +45,12 @@ tabris.Events = {
             }
           }
           if (callbacks.length === 0) {
-            delete this._callbacks[type];
-            if (Object.keys(this._callbacks).length === 0) {
-              delete this._callbacks;
+            delete this[store][type];
+            if (Object.keys(this[store]).length === 0) {
+              delete this[store];
             }
           } else {
-            this._callbacks[type] = callbacks;
+            this[store][type] = callbacks;
           }
         }
       }
@@ -64,19 +74,26 @@ tabris.Events = {
 
   trigger: function(type /*, args* */) {
     this._checkDisposed();
-    if (this._callbacks && type in this._callbacks) {
-      var callbacks = this._callbacks[type];
-      var args = Array.prototype.slice.call(arguments, 1);
+    var args = Array.prototype.slice.call(arguments, 1);
+    this._callAll(type, args, false);
+    this._callAll(type, args, true);
+    return this;
+  },
+
+  _callAll: function(type, args, isPublic) {
+    var store = isPublic ? "_callbacks" : "_privateCallbacks";
+    if (this[store] && type in this[store]) {
+      var callbacks = this[store][type];
       for (var i = 0; i < callbacks.length; i++) {
         var callback = callbacks[i];
         callback.fn.apply(callback.ctx || this, args);
       }
     }
-    return this;
   },
 
   _isListening: function(type) {
-    return !!this._callbacks && (!type || type in this._callbacks);
+    return (!!this._callbacks && (!type || type in this._callbacks)) ||
+      (!!this._privateCallbacks && (!type || type in this._privateCallbacks));
   },
 
   _checkDisposed: function() {},
