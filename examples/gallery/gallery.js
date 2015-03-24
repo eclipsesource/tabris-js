@@ -1,23 +1,4 @@
-var imageNames = [
-  "catseye",
-  "heic0305a",
-  "heic0401a",
-  "heic0407a",
-  "heic0407b",
-  "heic0409a",
-  "heic0414a",
-  "heic0502a",
-  "heic0514a",
-  "heic0515a",
-  "heic0604a",
-  "heic0910e",
-  "IRS46_nasa",
-  "ngc4414",
-  "opo0110a",
-  "opo0505a",
-  "opo9901a",
-  "orion-nebula"
-];
+var imageNames = require("./images/index.json");
 
 var page = tabris.create("Page", {
   title: "The Big Bang Theory",
