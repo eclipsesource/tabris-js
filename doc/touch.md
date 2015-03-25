@@ -1,7 +1,7 @@
 Gesture and Touch Events
 ========================
 
-# Gesture Events
+## Gesture Events
 
 In Tabris.js there are 13 gesture events based on 4 basic gesture types:  
 
@@ -50,35 +50,35 @@ The **pan** gesture may be used without giving a direction, in which case it is 
 
 In a `ScrollView` (or `CollectionView`) a recognized **pan** or **swipe** gesture in a non-scrollable direction will prevent scrolling. Therefore, attaching a `pan:horizontal` listener to a widget in a vertically scrolling `ScrollView`, will prevent scrolling for any gesture that starts with a horizontal movement. When no pan listener is attached or the movement starts in a vertical direction, scrolling is still possible.
 
-# Touch Events
+## Touch Events
 Touch events are a low-level alternative to gesture events. They should only be used in case an interaction can not be accurately represented by a gesture. The API and behavior is also not yet considered stable.
 
 Touch events follow the names and patterns established in HTML in order to support interoperability, e.g. with the HTML5 Canvas API. Currently, there are some known issues (see below).
 
-## Event types
+### Event types
 
 The target of all touch events is the widget that was touched first.
 
-### touchstart
+#### touchstart
 Fired when a widget is touched.
 
-### touchmove
+#### touchmove
 Fired repeatedly while swiping across the screen after initiating a `touchstart` event. `touchmove` is only fired on the widget that received the `touchstart` event for the same touch.
 
-### touchend
+#### touchend
 Fired when the touch interaction ends (i.e. the finger is lifted up) on the same widget that received the `touchstart` event. `touchend` is only fired on the widget that received the `touchstart` event for the same touch.
 
-### touchcancel
+#### touchcancel
 Fired instead of `touchend` when the touch interaction ends on another widget than it started.
 
-## Event Object
+### Event Object
 
 Event handlers for touch events receive an event object as single parameter. This event object includes the following properties:
 
 - **time**: *number* - number of milliseconds since the start of the app
 - **touches**: *[touch, ...]* - an array of touch objects for all current touches. Since multiple touches are currently not supported, this array has always one element.
 
-### Touch Object
+#### Touch Object
 
 Every touch object has the following properties:
 
