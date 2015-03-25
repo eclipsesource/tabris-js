@@ -221,11 +221,11 @@
   "links": [
     {
       "title": "Understanding layouts in Tabris.js",
-      "path": "https://tabrisjs.com/documentation/layouts"
+      "path": "layouts"
     },
     {
       "title": "Understanding touch events in Tabris.js",
-      "path": "https://tabrisjs.com/documentation/touch-events"
+      "path": "touch"
     }
   ]
 }
