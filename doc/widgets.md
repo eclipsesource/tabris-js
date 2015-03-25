@@ -72,7 +72,7 @@ label.set({
 
 ### `animate(properties, options)`
 
-Changes one or more widget properties with an animation. See [Animations](animations). 
+Changes one or more widget properties with an animation. See [Animations](animations.md). 
 
 
 
@@ -136,7 +136,7 @@ var lastChild = parent.children().last();
 Parameters:
 - *selector (optional)* A selector to filter the list of children by. 
 
-See also: [selector](Selector API)
+See also: [Selector API](selector.md)
 
 
 ### `find(selector*)`
@@ -146,7 +146,7 @@ Like `children`, but returns the list of all descendants of this widget as a `Wi
 Parameters:
 - *selector (optional)* A selector to filter the list of descendants by.
 
-See also: [selector](Selector API)
+See also: [Selector API](selector.md)
 
 ## Events
 

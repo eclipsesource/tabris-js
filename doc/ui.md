@@ -1,6 +1,6 @@
 # The Widget Tree
 
-The UI of a Tabris.js app consists of native [Widgets](widgets). Every widget must have a parent to become visible on the screen. The top-level parent for all widgets is called *UI* and it is represented by the object `tabris.ui`.
+The UI of a Tabris.js app consists of native [Widgets](widgets.md). Every widget must have a parent to become visible on the screen. The top-level parent for all widgets is called *UI* and it is represented by the object `tabris.ui`.
 
 ![The Widget Tree](img/widget-tree.png)
 

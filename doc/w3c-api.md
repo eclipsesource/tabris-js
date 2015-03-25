@@ -36,7 +36,7 @@ Tabris supports the `XMLHttpRequest` to make HTTP request and to read resources 
 
 * Only asynchronous requests are supported. Attempting a synchronous request will cause an error to be thrown.
 * When a relative URL is given, Tabris will interpret it as a path relative to the applications `package.json`. This allows you to read static resources (files residing in your project folder).
-* To read a JSON file, the `require` method may be more convenient to use (see [Modules](modules)).
+* To read a JSON file, the `require` method may be more convenient to use (see [Modules](modules.md)).
 * When using a custom build developer client, a relative URL may be used to access local files (bundled with the client as a resources) as well as those residing in the remote project folder (from which the code is loaded via HTTP). Local files take precedence.
 
 ## Storage
@@ -57,4 +57,4 @@ Tabris supports the `localStorage` object, which allows storing simple key-value
 
 ### [W3C](http://www.w3.org/TR/2dcontext/) / [MDN](https://developer.mozilla.org/en/docs/Web/API/CanvasRenderingContext2D)
 
-The Tabris `Canvas` widget provides a HTML5 canvas compatible "2D Context" object. See [Canvas](Canvas).
+The Tabris `Canvas` widget provides a HTML5 canvas compatible "2D Context" object. See [Canvas](canvas.md).

@@ -1,7 +1,7 @@
 # Getting Started
 Welcome to Tabris.js, the framework for developing native apps in JavaScript. Before you get started, you should be logged in to http://tabrisjs.com. This site provides you with documentation and integrates with the Tabris.js App.
 
-**If you want to start coding right away, there is also the [Quickstart](quickstart) guide for the inpatient expert.**
+**If you want to start coding right away, there is also the [Quickstart](quickstart.md) guide for the inpatient expert.**
 
 # The Tabris.js Developer App
 The Tabris.js developer apps are available for free on the Apple App Store and Google Play respectively. Simply follow the links below or search for "Tabris.js" in the store on your mobile device.
@@ -68,7 +68,7 @@ The `package.json` file is used to describe the app, including the name, descrip
 ```
 
 ### hello.js
-The Tabris.js "Hello, World!" example is contained in `hello.js`. It contains a *button* and a *text view*. When the button is selected, the text view is updated. For further documentation on widgets, visit the [Widgets](widgets) article and [Widgets API reference](widget-types). 
+The Tabris.js "Hello, World!" example is contained in `hello.js`. It contains a *button* and a *text view*. When the button is selected, the text view is updated. For further documentation on widgets, visit the [Widgets](widgets.md) article and [Widgets API reference](widget-types). 
 
 ```js
 var page = tabris.create("Page", {
@@ -140,7 +140,7 @@ On tabrisjs.com choose *My Scripts* and *Link Script*. Enter the URL and select 
 
 ## Publishing your app
 
-For submission to the App / Play Stores you will need to bundle, build and brand your app. The publishing workflow is not yet supported on tabrisjs.com, we will offer both a local build (which will rely on having local SDKs) and a build service.
+For submission to the App / Play Stores you will need to bundle, build and brand your app. See "[Build your app](build.md)".
 
 ## Feedback
 Help us improve Tabris.js! [Feedback](mailto:care@eclipsesource.com?subject=Tabris.js%20feedback) is always welcome. Feel free to invite your friends if you find Tabris.js interesting.

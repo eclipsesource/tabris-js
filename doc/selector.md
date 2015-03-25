@@ -22,7 +22,7 @@ To find a widget anywhere in the current page, simply call `page.find(selector)`
 
 It is also possible to search through all widgets in the current widget tree, using `tabris.ui.find(selector)`. However, this is rarely practical. Instead, you may use `tabris.ui` to find all current pages (`tabris.ui.children("Page")`), actions (`tabris.ui.children("Action")`) or the drawer (`tabris.ui.children("Drawer")`).
 
-A selector may also be given in [LayoutData](layout) instead of a the widget itself. This even works if the referenced widget is not yet created.
+A selector may also be given in [LayoutData](layout.md) instead of a the widget itself. This even works if the referenced widget is not yet created.
 
 ## WidgetCollection
 

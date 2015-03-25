@@ -1,6 +1,6 @@
 # Tabris.js Quickstart
 
-This a guide for the impatient who want to start developing right away and are fine with figuring out the details later. If you run into trouble, try the [getting started guide](getting-started) instead.
+This a guide for the impatient who want to start developing right away and are fine with figuring out the details later. If you run into trouble, try the [getting started guide](getting-started.md) instead.
 
 ## What you need:
 
@@ -57,4 +57,4 @@ Run `npm install` in this directory to install the tabris module.
 
 The developer app will now download the script and execute it on your device. Swipe from the right edge of the screen to open the developer console, which lets you restart the script or go back to the developer app.
 
-And that's it. From here on you may want to have a look at the rest of the documentation and the Tabris.js snippets.
+And that's it. From here on you may want to have a look at the rest of the documentation and the Tabris.js snippets. When you are ready to build, read "[Build your app](build.md)".

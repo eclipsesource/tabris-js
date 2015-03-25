@@ -35,7 +35,7 @@ cordova plugin add org.apache.cordova.camera
 **Important:** You can install all available Cordova Plug-Ins. Most of the Plug-Ins will work out of the box but not all. This is because Tabris.js uses a **native UI** and **no HTML5**. As a result all Plug-Ins that manipulate the DOM will not work.
 
 ## Default Plug-Ins in the Developer Apps
-If you are using the [Tabris.js Developer Apps](getting-started), your application can directly access the following pre-packaged plug-ins:
+If you are using the [Tabris.js Developer Apps](getting-started.md), your application can directly access the following pre-packaged plug-ins:
 
 * [Badge](http://plugins.cordova.io/#/package/de.appplant.cordova.plugin.badge)
 * [Camera](http://plugins.cordova.io/#/package/org.apache.cordova.camera)
@@ -67,7 +67,7 @@ Tabris.js accepts the following custom preferences:
 
 | Name                   | Allowed Values | Default Value | Description |
 |------------------------|----------------|---------------|-------------|
-| EnableDeveloperConsole | true/false     | false         | Enables/Disables the [Tabris.js Developer Console](getting-started#the-developer-console).             |
+| EnableDeveloperConsole | true/false     | false         | Enables/Disables the [Tabris.js Developer Console](getting-started.md#the-developer-console).             |
 | UseStrictSSL           | true/false     | true          | Activate/Deactivate ssl certificate validation. When disabled self signed ssl certificates are accepted. Should be enabled in production. |
 
 #### Android specific preferences

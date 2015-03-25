@@ -142,7 +142,7 @@
     },
     "layoutData": {
       "type": "LayoutData",
-      "description": "Specifies how the widget should be arranged in a layout. See [Layout](layout)."
+      "description": "Specifies how the widget should be arranged in a layout. See [Layout](layout.md)."
     },
     "font": {
       "type": "Font",
@@ -179,31 +179,31 @@
   },
   "events": {
     "tap": {
-      "description": "Fired when a widget is tapped. See [Gesture Events](touch-events)."
+      "description": "Fired when a widget is tapped. See [Gesture Events](touch-events.md)."
     },
     "longpress": {
-      "description": "Fired after pressing a widget for a specific amount of time (about a second). See [Gesture Events](touch-events)."
+      "description": "Fired after pressing a widget for a specific amount of time (about a second). See [Gesture Events](touch-events.md)."
     },
     "pan": {
-      "description": "Fired when a finger starts moving in the widget. See [Gesture Events](touch-events)."
+      "description": "Fired when a finger starts moving in the widget. See [Gesture Events](touch-events.md)."
     },
     "pan:{direction}": {
-      "description": "Fired when a finger starts moving in the given direction. See [Gesture Events](touch-events)."
+      "description": "Fired when a finger starts moving in the given direction. See [Gesture Events](touch-events.md)."
     },
     "swipe:{direction}": {
-      "description": "Fired when a finger moves quickly in the given direction. See [Gesture Events](touch-events)."
+      "description": "Fired when a finger moves quickly in the given direction. See [Gesture Events](touch-events.md)."
     },
     "touchstart": {
-      "description": "Fired when a widget is touched. See [Touch Events](touch-events)."
+      "description": "Fired when a widget is touched. See [Touch Events](touch-events.md)."
     },
     "touchmove": {
-      "description": "Fired repeatedly while swiping across the screen. See [Touch Events](touch-events)."
+      "description": "Fired repeatedly while swiping across the screen. See [Touch Events](touch-events.md)."
     },
     "touchend": {
-      "description": "Fired when a touch ends on the same widget than it started on. See [Touch Events](touch-events)."
+      "description": "Fired when a touch ends on the same widget than it started on. See [Touch Events](touch-events.md)."
     },
     "touchcancel": {
-      "description": "Fired instead of touchend when the touch ends on another widget than it started on. See [Touch Events](touch-events)."
+      "description": "Fired instead of touchend when the touch ends on another widget than it started on. See [Touch Events](touch-events.md)."
     },
     "change:bounds": {
       "description": "Fired when the widget's size or position has changed."

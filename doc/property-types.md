@@ -80,7 +80,7 @@ Examples:
 
 ## LayoutData
 
-Used to define how a widget should be arranged within its parent. See [Layouts](layout).
+Used to define how a widget should be arranged within its parent. See [Layouts](layout.md).
 
 ## Transformation
 
