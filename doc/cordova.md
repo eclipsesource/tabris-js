@@ -10,7 +10,6 @@ While using the [Tabris.js Developer App](getting-started.md), your application 
 * [Camera](http://plugins.cordova.io/#/package/org.apache.cordova.camera)
 * [Device Motion](http://plugins.cordova.io/#/package/org.apache.cordova.device-motion)
 * [Dialogs](http://plugins.cordova.io/#/package/org.apache.cordova.dialogs)
-* [File API](http://plugins.cordova.io/#/package/org.apache.cordova.file)
 * [Network Information](http://plugins.cordova.io/#/package/org.apache.cordova.network-information)
 * [Toast](http://plugins.cordova.io/#/package/nl.x-services.plugins.toast)
 * [Touch Id](http://plugins.cordova.io/#/package/io.monaca.touchid)
