@@ -15,7 +15,7 @@ Tabris.js is a mobile framework that lets you develop native iOS and Android app
 - [Selector API](selector.md) - Working more efficiently with widgets. 
 - [Layouts](layout.md) - Layouting widgets.
 - [Animations](animations.md) - Animating widgets.
-- [Touch API](touch-events.md) - Processing widget gesture/touch events.
+- [Touch API](touch.md) - Processing widget gesture/touch events.
 - [Canvas](canvas.md) - Drawing with HTML Canvas API.
 - [Device](device.md) - Access information about the current device.
 - [App](app.md) - Access information about the application instance.
