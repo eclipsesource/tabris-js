@@ -80,10 +80,10 @@ A drawer can be opened by a swipe from the left edge of the screen or by tapping
 A drawer may contain any kind of widgets. To display a list of top-level pages, Tabris.js provides the type `PageSelector` for convenience. The page selector is a collection view that displays all top-level pages and allows to open one of them. It is pre-configured to be easily appendable to the drawer without setting any properties:
 
 ```js
-tabris.create("Drawer").append(tabris.create("PageNavigation"));
+tabris.create("Drawer").append(tabris.create("PageSelector"));
 ```
 
-Since PageNavigation extends CollectionView, it supports the same properties. For example, you can freely position the PageNavigation on the drawer by overwriting the `layoutData` property.
+Since PageSelector extends CollectionView, it supports the same properties. For example, you can freely position the PageSelector on the drawer by overwriting the `layoutData` property.
 
 ```js
 tabris.create("ImageView", {
