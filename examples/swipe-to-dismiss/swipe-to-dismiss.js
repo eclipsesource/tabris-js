@@ -60,20 +60,23 @@ function handlePan(event, container) {
 }
 
 function handlePanFinished(event, container) {
-  var translation = Math.abs(event.translation.x);
-  var velocity = Math.abs(event.velocity.x);
-  var consistentDirection = sign(event.translation.x) === sign(event.velocity.x);
-  var bounds = container.get("bounds");
-  if ((translation > bounds.width / 2 || velocity > 700) && consistentDirection) {
-    animateDismiss(event, container, bounds);
+  var beyondCenter = Math.abs(event.translation.x) > container.get("bounds").width / 2;
+  var fling = Math.abs(event.velocity.x) > 200;
+  var sameDirection = sign(event.velocity.x) === sign(event.translation.x);
+  // When swiped beyond the center, trigger dismiss if flinged in the same direction or let go.
+  // Otherwise, detect a dismiss only if flinged in the same direction.
+  var dismiss = beyondCenter ? sameDirection || !fling : sameDirection && fling;
+  if (dismiss) {
+    animateDismiss(event, container);
   } else {
     animateCancel(event, container);
   }
 }
 
-function animateDismiss(event, container, bounds) {
+function animateDismiss(event, container) {
+  var bounds = container.get("bounds");
   container.animate({
-    transform: {translationX: sign(event.velocity.x) * bounds.width}
+    transform: {translationX: sign(event.translation.x) * bounds.width}
   }, {duration: 200, easing: "ease-out"}).once("animationend", function() {
     var index = collectionView.get("items").indexOf(container.get("message"));
     collectionView.remove(index);
