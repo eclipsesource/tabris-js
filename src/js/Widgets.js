@@ -138,7 +138,6 @@
       touchmove: true,
       touchend: true,
       touchcancel: true,
-      longpress: true,
       "change:bounds": {
         name: "Resize",
         trigger: function(event) {
