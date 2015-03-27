@@ -37,15 +37,11 @@ describe("Widgets", function() {
 
     it("extends default properties", function() {
       var custom = {foo: "bar", enabled: false};
+      var normalized = tabris.registerType.normalizePropertiesMap(custom);
       tabris.registerWidget("TestType", {_properties: custom});
       expect(tabris.TestType._properties).toEqual(
-        _.extend({}, tabris.registerWidget._defaultProperties, custom)
+        _.extend({}, tabris.registerWidget._defaultProperties, normalized)
       );
-    });
-
-    it("keeps _properties true", function() {
-      tabris.registerWidget("TestType", {_properties: true});
-      expect(tabris.TestType._properties).toBe(true);
     });
 
   });

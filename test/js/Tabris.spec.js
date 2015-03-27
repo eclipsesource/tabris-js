@@ -305,7 +305,7 @@ describe("tabris", function() {
     });
 
     it("triggers a create operation with type and properties", function() {
-      tabris.TestType._properties.foo = true;
+      tabris.TestType._properties.foo = {type: true};
       var proxy = tabris.create("TestType", {foo: 23});
 
       var createCall = nativeBridge.calls({op: "create", id: proxy.cid})[0];
@@ -389,12 +389,17 @@ describe("tabris", function() {
     });
 
     it("adds _properties to constructor", function() {
-      var fn = function() {};
-      tabris.registerType("CustomType", {_properties: {foo: fn}});
+      tabris.registerType("CustomType", {_properties: {foo: {type: "bar"}}});
       var instance = tabris.create("CustomType");
 
-      expect(instance.constructor._properties.foo).toBe(fn);
-      expect(instance._properties).toBe(tabris.Proxy.prototype._properties);
+      expect(instance.constructor._properties.foo.type).toBe("bar");
+    });
+
+    it("adds normalized _properties to constructor", function() {
+      tabris.registerType("CustomType", {_properties: {foo: "bar"}});
+      var instance = tabris.create("CustomType");
+
+      expect(instance.constructor._properties.foo.type).toBe("bar");
     });
 
     it("adds empty properties map to constructor", function() {

@@ -53,7 +53,7 @@ describe("Proxy", function() {
 
     it("translates properties", function() {
       var other = new tabris.Proxy("other-id");
-      tabris.TestType._properties.foo = "proxy";
+      tabris.TestType._properties.foo = {type: "proxy"};
 
       proxy._create({foo: other});
 
@@ -385,7 +385,7 @@ describe("Proxy", function() {
       });
 
       it("returns value from custom get function", function() {
-        tabris.TestType._properties.prop = {get: function() { return 23; }};
+        tabris.TestType._properties.prop = {type: true, get: function() { return 23; }};
 
         var result = proxy.get("prop");
 
@@ -399,7 +399,7 @@ describe("Proxy", function() {
       });
 
       it("calls function if _propertyCheck is a string found in PropertyDecoding", function() {
-        tabris.TestType._properties.knownProperty = "color";
+        tabris.TestType._properties.knownProperty = {type: "color"};
         spyOn(nativeBridge, "get").and.returnValue(23);
         spyOn(tabris.PropertyDecoding, "color").and.returnValue("foo");
 
@@ -411,7 +411,7 @@ describe("Proxy", function() {
       });
 
       it("calls function if _propertyCheck is an array", function() {
-        tabris.TestType._properties.knownProperty = ["color", 1, 2, 3];
+        tabris.TestType._properties.knownProperty = {type: ["color", 1, 2, 3]};
         spyOn(nativeBridge, "get").and.returnValue(23);
         spyOn(tabris.PropertyDecoding, "color").and.returnValue("foo");
 
@@ -436,7 +436,7 @@ describe("Proxy", function() {
 
       it("translates widgets to ids in properties", function() {
         var other = new tabris.Proxy("other-id");
-        tabris.TestType._properties.foo = "proxy";
+        tabris.TestType._properties.foo = {type: "proxy"};
 
         proxy.set("foo", other);
 
@@ -446,7 +446,7 @@ describe("Proxy", function() {
 
       it("translates widget collection to first ids in properties", function() {
         var other = new tabris.ProxyCollection([new tabris.Proxy("other-id")]);
-        tabris.TestType._properties.foo = "proxy";
+        tabris.TestType._properties.foo = {type: "proxy"};
 
         proxy.set("foo", other);
 
@@ -456,7 +456,7 @@ describe("Proxy", function() {
 
       it("does not translate objects with id field to ids", function() {
         var obj = {id: "23", name: "bar"};
-        tabris.TestType._properties.foo = "proxy";
+        tabris.TestType._properties.foo = {type: "proxy"};
 
         proxy.set("foo", obj);
 
@@ -474,7 +474,7 @@ describe("Proxy", function() {
       });
 
       it("uses custom set function", function() {
-        tabris.TestType._properties.foo = {set: jasmine.createSpy()};
+        tabris.TestType._properties.foo = {type: true, set: jasmine.createSpy()};
 
         proxy.set("foo", "bar");
 
@@ -496,7 +496,7 @@ describe("Proxy", function() {
       });
 
       it("calls function if _properties entry is a string found in PropertyEncoding", function() {
-        tabris.TestType._properties.knownProperty = "boolean";
+        tabris.TestType._properties.knownProperty = {type: "boolean"};
         spyOn(tabris.PropertyEncoding, "boolean").and.returnValue(true);
 
         proxy.set("knownProperty", true);
@@ -516,7 +516,7 @@ describe("Proxy", function() {
       });
 
       it("calls function with args if _properties entry is an array", function() {
-        tabris.TestType._properties.knownProperty = ["choice", ["a", "b", "c"]];
+        tabris.TestType._properties.knownProperty = {type: ["choice", ["a", "b", "c"]]};
         spyOn(tabris.PropertyEncoding, "choice").and.returnValue(true);
 
         proxy.set("knownProperty", "a");
@@ -526,7 +526,7 @@ describe("Proxy", function() {
       });
 
       it("raises a warning if _properties entry references a function that throws", function() {
-        tabris.TestType._properties.knownProperty = "boolean";
+        tabris.TestType._properties.knownProperty = {type: "boolean"};
         spyOn(tabris.PropertyEncoding, "boolean").and.throwError("My Error");
 
         proxy.set("knownProperty", true);
@@ -536,7 +536,7 @@ describe("Proxy", function() {
       });
 
       it("do not SET the value if _properties entry references a function that throws", function() {
-        tabris.TestType._properties.knownProperty = "boolean";
+        tabris.TestType._properties.knownProperty = {type: "boolean"};
         spyOn(tabris.PropertyEncoding, "boolean").and.throwError("My Error");
 
         proxy.set("knownProperty", "foo");
@@ -545,7 +545,7 @@ describe("Proxy", function() {
       });
 
       it("raises a warning if setter is a function that throws", function() {
-        tabris.TestType._properties.foo = {set: function() {
+        tabris.TestType._properties.foo = {type: true, set: function() {
           throw new Error("My Error");
         }};
 
@@ -556,7 +556,7 @@ describe("Proxy", function() {
       });
 
       it("uses _properties entry to convert the value", function() {
-        tabris.TestType._properties.knownProperty = "boolean";
+        tabris.TestType._properties.knownProperty = {type: "boolean"};
         spyOn(tabris.PropertyEncoding, "boolean").and.returnValue("foo");
 
         proxy.set("knownProperty", "bar");

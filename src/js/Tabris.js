@@ -49,6 +49,7 @@
         tabris[type][member] = members[member] || getDefault(member);
       }
       tabris[type]._events = normalizeEventsMap(tabris[type]._events);
+      tabris[type]._properties = normalizePropertiesMap(tabris[type]._properties);
       tabris[type]._trigger = buildTriggerMap(tabris[type]._events);
       var superProto = util.omit(members, Object.keys(staticMembers));
       superProto.type = type;
@@ -99,7 +100,7 @@
 
   });
 
-  function normalizeEventsMap(events) {
+  var normalizeEventsMap = tabris.registerType.normalizeEventsMap = function(events) {
     var result = {};
     for (var event in events) {
       var entry = events[event];
@@ -109,7 +110,21 @@
       }
     }
     return result;
-  }
+  };
+
+  var normalizePropertiesMap = tabris.registerType.normalizePropertiesMap = function(properties) {
+    var result = {};
+    for (var property in properties) {
+      var entry = properties[property];
+      result[property] = typeof entry === "object" ? entry : {};
+      if (typeof entry !== "object") {
+        result[property].type = entry;
+      } else if (!result[property].type) {
+        result[property].type = true;
+      }
+    }
+    return result;
+  };
 
   function buildTriggerMap(events) {
     var result = {};

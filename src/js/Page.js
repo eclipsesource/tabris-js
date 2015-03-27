@@ -64,6 +64,7 @@
 
   pageProperties.forEach(function(property) {
     tabris.Page._properties[property] = {
+      type: true,
       set: function(value) {this._page.set(property, value);},
       get: function() {return this._page.get(property);}
     };

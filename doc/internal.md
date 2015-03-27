@@ -20,7 +20,6 @@ All fields on the `members` map will be inherited by the type instances (potenti
 
 Valid values for the `_properties` map are:
 
-* `true`: Accepts any value.
 * A type identifier (see below).
 * A *map* with any of these entries:
     * `type`: A type identifier. Same effect as giving the type directly.
@@ -29,6 +28,7 @@ Valid values for the `_properties` map are:
 
 The type identifier determines how the property value is checked/encoded/converted before giving it to the native.
 
+* `true`: Accepts any value. This should only be used for internal properties.
 * `"boolean"`: Accepts `true` or `false`, all other values are converted as determined by the JavaScript language ("truthy"/"falsy" values).
 * `"string"`:  Accepts any strings, any non-string is converted as determined by the JavaScript language (e.g. `23.0` becomes `"23"`).
 * `"natural"`: Accepts any number equal or greater than zero and smaller than infinity, with any non-round number being rounded. Any other value (including `NaN`) is rejected.

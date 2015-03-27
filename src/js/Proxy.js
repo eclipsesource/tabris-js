@@ -10,7 +10,7 @@
     _create: function(properties) {
       var type = this.constructor._type || this.type;
       tabris._nativeBridge.create(this.cid, type);
-      if (this.constructor && this.constructor._initProperties) {
+      if (this.constructor._initProperties) {
         for (var name in this.constructor._initProperties) {
           this._nativeSet(name, this.constructor._initProperties[name]);
         }
@@ -51,8 +51,7 @@
     },
 
     _trigger: function(event, params) {
-      // TODO: all these && pre-checks can be removed once no one uses new tabris.Proxy anymore
-      var name = this.constructor && this.constructor._trigger && this.constructor._trigger[event];
+      var name = this.constructor._trigger[event];
       var trigger = name && this.constructor._events[name].trigger;
       if (trigger instanceof Function) {
         trigger.call(this, params);
@@ -122,20 +121,17 @@
     },
 
     _getPropertyType: function(name) {
-      var prop = this.constructor && this.constructor._properties && this.constructor._properties[name];
-      return typeof prop === "object" && prop.type ? prop.type : prop;
+      var prop = this.constructor._properties[name];
+      return prop ? prop.type : null;
     },
 
     _getPropertySetter: function(name) {
-      var prop = this.constructor && this.constructor._properties && this.constructor._properties[name];
-      if (typeof prop === "object" && prop.set) {
-        return prop.set;
-      }
-      return null;
+      var prop = this.constructor._properties[name];
+      return prop ? prop.set : null;
     },
 
     _getEventConfig: function(type) {
-      return this.constructor && this.constructor._events && this.constructor._events[type];
+      return this.constructor._events[type];
     },
 
     _nativeSet: function(name, value) {
@@ -153,11 +149,8 @@
     },
 
     _getPropertyGetter: function(name) {
-      var prop = this.constructor && this.constructor._properties && this.constructor._properties[name];
-      if (typeof prop === "object" && prop.get) {
-        return prop.get;
-      }
-      return null;
+      var prop = this.constructor._properties[name];
+      return prop ? prop.get : null;
     },
 
     _nativeGet: function(name) {

@@ -69,7 +69,7 @@
     },
 
     _addChild: function(child) {
-      var check = this.constructor && this.constructor._supportsChildren;
+      var check = this.constructor._supportsChildren;
       if (check === false) {
         throw new Error(this.type + " cannot contain children");
       }
@@ -133,7 +133,7 @@
   });
 
   util.extend(tabris.registerWidget, {
-    _defaultEvents: {
+    _defaultEvents: tabris.registerType.normalizeEventsMap({
       touchstart: true,
       touchmove: true,
       touchend: true,
@@ -151,8 +151,8 @@
           }
         }
       }
-    },
-    _defaultProperties: {
+    }),
+    _defaultProperties: tabris.registerType.normalizePropertiesMap({
       enabled: "boolean",
       visible: {
         type: "boolean",
@@ -213,7 +213,7 @@
           return this._gestures;
         }
       }
-    }
+    })
   });
 
   var defaultGestures = {
