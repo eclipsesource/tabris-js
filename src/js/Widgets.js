@@ -186,12 +186,19 @@
         type: "bounds",
         set: function() {
           console.warn(this.type + ": Can not set read-only property \"bounds\".");
-        }
+        },
+        nocache: true
       },
       background: "color",
       foreground: "color",
-      opacity: true,
-      transform: true,
+      opacity: {
+        type: true,
+        nocache: true
+      },
+      transform: {
+        type: true,
+        nocache: true
+      },
       highlightOnTouch: "boolean",
       id: {
         type: "string",
@@ -211,7 +218,8 @@
             this._gestures = util.extend({}, defaultGestures);
           }
           return this._gestures;
-        }
+        },
+        nocache: true
       }
     })
   });
@@ -306,14 +314,21 @@
     _type: "rwt.widgets.Button",
     _initProperties: {style: ["CHECK"]},
     _events: {"change:selection": "Selection"},
-    _properties: {text: "string", selection: "boolean"}
+    _properties: {
+      text: "string",
+      selection: {type: "boolean", nocache: true}
+    }
   });
 
   tabris.registerWidget("Picker", {
     _type: "rwt.widgets.Combo",
     _initProperties: {selectionIndex: 0},
     _events: {"change:selection": "Selection"},
-    _properties: {items: true, text: "string", selectionIndex: "natural"}
+    _properties: {
+      items: true,
+      text: "string",
+      selectionIndex: {type: "natural", nocache: true}
+    }
   });
   tabris.Combo = tabris.Picker;
 
@@ -360,13 +375,20 @@
     _type: "rwt.widgets.Button",
     _initProperties: {style: ["RADIO"]},
     _events: {"change:selection": "Selection"},
-    _properties: {text: "string", selection: "boolean"}
+    _properties: {
+      text: "string",
+      selection: {type: "boolean", nocache: true}
+    }
   });
 
   tabris.registerWidget("Slider", {
     _type: "rwt.widgets.Scale",
     _events: {"change:selection": "Selection"},
-    _properties: {minimum: "integer", maximum: "integer", selection: "integer"}
+    _properties: {
+      minimum: "integer",
+      maximum: "integer",
+      selection: {type: "integer", nocache: true}
+    }
   });
 
   tabris.registerWidget("TextInput", {
@@ -379,7 +401,7 @@
     },
     _properties: {
       type: ["choice", ["default", "password", "search", "multiline"]],
-      text: "string",
+      text: {type: "string", nocache: true},
       message: "string",
       editable: "boolean",
       alignment: ["choice", ["left", "center", "right"]],
@@ -397,7 +419,7 @@
     _properties: {
       text: "string",
       image: "image",
-      selection: "boolean",
+      selection: {type: "boolean", nocache: true},
       alignment: ["choice", ["left", "right", "center"]]
     }
   });

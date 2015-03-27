@@ -376,12 +376,41 @@ describe("Proxy", function() {
         expect(nativeBridge.calls({op: "get", property: "foo"}).length).toBe(1);
       });
 
-      it("returns value from native", function() {
+      it("returns uncached value from native", function() {
         spyOn(nativeBridge, "get").and.returnValue(23);
 
         var result = proxy.get("foo");
 
         expect(result).toBe(23);
+      });
+
+      it("returns uncachable value from native", function() {
+        tabris.TestType._properties.foo.nocache = true;
+        proxy.set("foo", "bar");
+        spyOn(nativeBridge, "get").and.returnValue(23);
+
+        var result = proxy.get("foo");
+
+        expect(result).toBe(23);
+      });
+
+      it("returns cached value", function() {
+        proxy.set("foo", "bar");
+        spyOn(nativeBridge, "get");
+
+        var result = proxy.get("foo");
+
+        expect(nativeBridge.get).not.toHaveBeenCalled();
+        expect(result).toBe("bar");
+      });
+
+      it("returns cached value decoded", function() {
+        tabris.TestType._properties.foo.type = "color";
+        proxy.set("foo", "#ff00ff");
+
+        var result = proxy.get("foo");
+
+        expect(result).toBe("rgba(255, 0, 255, 1)");
       });
 
       it("returns value from custom get function", function() {

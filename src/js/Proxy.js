@@ -96,6 +96,7 @@
       } else {
         this._nativeSet(name, tabris.PropertyEncoding.proxy(encodedValue));
       }
+      this._cacheProperty(name, encodedValue);
     },
 
     _encodeProperty: function(value, type) {
@@ -143,6 +144,9 @@
       if (!type) {
         return;
       }
+      if (this._propertyCache && name in this._propertyCache) {
+        return this._decodeProperty(this._propertyCache[name], type);
+      }
       var getProperty = this._getPropertyGetter(name);
       var value = getProperty ? getProperty.call(this) : this._nativeGet(name);
       return this._decodeProperty(value, type);
@@ -160,6 +164,15 @@
     _nativeCall: function(method, parameters) {
       this._checkDisposed();
       return tabris._nativeBridge.call(this.cid, method, parameters);
+    },
+
+    _cacheProperty: function(name, value) {
+      if (!this.constructor._properties[name].nocache) {
+        if (!this._propertyCache) {
+          this._propertyCache = {};
+        }
+        this._propertyCache[name] = value;
+      }
     }
 
   });

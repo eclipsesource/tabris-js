@@ -3,9 +3,9 @@
   tabris.registerWidget("_TabItem", {
     _type: "rwt.widgets.TabItem",
     _properties: {
-      text: true,
-      image: true,
-      badge: true,
+      text: {type: true, nocache: true},
+      image: {type: true, nocache: true},
+      badge: {type: true, nocache: true},
       control: true,
       index: true
     }
@@ -51,7 +51,8 @@
         get: function() {
           var selection = this._nativeGet("selection");
           return selection ? tabris(selection)._tab : null;
-        }
+        },
+        nocache: true
       }
     },
 

@@ -60,7 +60,8 @@ tabris.registerWidget("_UI", {
       },
       get: function() {
         return this._getActivePage();
-      }
+      },
+      nocache: true
     }
   },
 

@@ -12,7 +12,8 @@
         },
         get: function() {
           return this._items.concat();
-        }
+        },
+        nocache: true
       },
       initializeCell: {
         set: function(value) {
