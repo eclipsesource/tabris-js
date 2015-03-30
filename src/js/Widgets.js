@@ -153,14 +153,15 @@
       }
     }),
     _defaultProperties: tabris.registerType.normalizePropertiesMap({
-      enabled: "boolean",
+      enabled: {
+        type: "boolean",
+        default: true
+      },
       visible: {
         type: "boolean",
+        default: true,
         set: function(value) {
           this._nativeSet("visibility", value);
-        },
-        get: function() {
-          return this._nativeGet("visibility");
         }
       },
       layoutData: {
@@ -199,7 +200,10 @@
         type: true,
         nocache: true
       },
-      highlightOnTouch: "boolean",
+      highlightOnTouch: {
+        type: "boolean",
+        default: false
+      },
       id: {
         type: "string",
         set: function(value) {
@@ -299,9 +303,9 @@
     _initProperties: {style: ["PUSH"]},
     _events: {selection: "Selection"},
     _properties: {
-      alignment: ["choice", ["left", "right", "center"]],
-      image: "image",
-      text: "string"
+      alignment: {type: ["choice", ["left", "right", "center"]], default: "center"},
+      image: {type: "image", default: null},
+      text: {type: "string", default: ""}
     }
   });
 
@@ -315,7 +319,7 @@
     _initProperties: {style: ["CHECK"]},
     _events: {"change:selection": "Selection"},
     _properties: {
-      text: "string",
+      text: {type: "string", default: ""},
       selection: {type: "boolean", nocache: true}
     }
   });
@@ -325,8 +329,8 @@
     _initProperties: {selectionIndex: 0},
     _events: {"change:selection": "Selection"},
     _properties: {
-      items: true,
-      text: "string",
+      items: {type: true, default: function() {return [];}},
+      text: "string", // TODO: readonly
       selectionIndex: {type: "natural", nocache: true}
     }
   });
@@ -340,23 +344,24 @@
   tabris.registerWidget("ImageView", {
     _type: "tabris.ImageView",
     _properties: {
-      image: "image",
-      scaleMode: ["choice", ["auto", "fit", "fill", "stretch", "none"]]
+      image: {type: "image", default: null},
+      scaleMode: {type: ["choice", ["auto", "fit", "fill", "stretch", "none"]], default: "auto"}
     }
   });
 
   tabris.registerWidget("TextView", {
     _type: "tabris.TextView",
     _properties: {
-      alignment: ["choice", ["left", "right", "center"]],
-      markupEnabled: "boolean",
+      alignment: {type: ["choice", ["left", "right", "center"]], default: "left"},
+      markupEnabled: {type: "boolean", default: false}, // TODO: readonly
       maxLines: {
         type: ["nullable", "natural"],
+        default: null,
         set: function(value) {
           this._nativeSet("maxLines", value <= 0 ? null : value);
         }
       },
-      text: "string"
+      text: {type: "string", default: ""}
     }
   });
   tabris.Label = tabris.TextView;
@@ -364,10 +369,10 @@
   tabris.registerWidget("ProgressBar", {
     _type: "rwt.widgets.ProgressBar",
     _properties: {
-      minimum: "integer",
-      maximum: "integer",
-      selection: "integer",
-      state: ["choice", ["normal", "paused", "error"]]
+      minimum: {type: "integer", default: 0},
+      maximum: {type: "integer", default: 100},
+      selection: {type: "integer", default: 0},
+      state: {type: ["choice", ["normal", "paused", "error"]], default: "normal"}
     }
   });
 
@@ -376,7 +381,7 @@
     _initProperties: {style: ["RADIO"]},
     _events: {"change:selection": "Selection"},
     _properties: {
-      text: "string",
+      text: {type: "string", default: ""},
       selection: {type: "boolean", nocache: true}
     }
   });
@@ -385,8 +390,8 @@
     _type: "rwt.widgets.Scale",
     _events: {"change:selection": "Selection"},
     _properties: {
-      minimum: "integer",
-      maximum: "integer",
+      minimum: {type: "integer", default: 0},
+      maximum: {type: "integer", default: 100},
       selection: {type: "integer", nocache: true}
     }
   });
@@ -402,12 +407,15 @@
     _properties: {
       type: ["choice", ["default", "password", "search", "multiline"]],
       text: {type: "string", nocache: true},
-      message: "string",
-      editable: "boolean",
-      alignment: ["choice", ["left", "center", "right"]],
-      autoCorrect: "boolean",
-      autoCapitalize: "boolean",
-      keyboard: ["choice", ["ascii", "decimal", "email", "number", "numbersAndPunctuation", "phone", "url", "default"]]
+      message: {type: "string", default: ""},
+      editable: {type: "boolean", default: true},
+      alignment: {type: ["choice", ["left", "center", "right"]], default: "left"},
+      autoCorrect: {type: "boolean", default: false},
+      autoCapitalize: {type: "boolean", default: false},
+      keyboard: {
+        type: ["choice", ["ascii", "decimal", "email", "number", "numbersAndPunctuation", "phone", "url", "default"]],
+        default: "default"
+      }
     }
   });
   tabris.Text = tabris.TextInput;
@@ -417,10 +425,10 @@
     _initProperties: {style: ["TOGGLE"]},
     _events: {"change:selection": "Selection"},
     _properties: {
-      text: "string",
-      image: "image",
+      text: {type: "string", default: ""},
+      image: {type: "image", default: null},
       selection: {type: "boolean", nocache: true},
-      alignment: ["choice", ["left", "right", "center"]]
+      alignment: {type: ["choice", ["left", "right", "center"]], default: "center"}
     }
   });
 
@@ -433,7 +441,10 @@
   tabris.registerWidget("WebView", {
     _type: "rwt.widgets.Browser",
     _events: {load: "Progress"},
-    _properties: {url: true, html: "string"}
+    _properties: {
+      url: {type: "string", nocache: true},
+      html: {type: "string", nocache: true}
+    }
   });
 
 }());

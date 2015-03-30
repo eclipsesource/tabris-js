@@ -3,27 +3,26 @@ tabris.registerType("SearchAction", {
   _type: "tabris.SearchAction",
 
   _properties: {
-    enabled: "boolean",
-    foreground: "color",
-    image: "image",
+    enabled: {type: "boolean", default: true},
+    foreground: {type: "color", nocache: true},
+    image: {type: "image", default: null},
     placementPriority: {
       type: ["choice", {low: "LOW", high: "HIGH", normal: "NORMAL"}],
+      nocache: true,
       get: function() {
         var value = this._nativeGet("placementPriority");
         return value ? value.toLowerCase() : value;
       }
     },
-    title: "string",
+    title: {type: "string", default: ""},
     visible: {
       type: "boolean",
+      default: true,
       set: function(value) {
         this._nativeSet("visibility", value);
-      },
-      get: function() {
-        return this._nativeGet("visibility");
       }
     },
-    proposals: true // array of strings
+    proposals: {default: function() {return [];}}
   },
 
   _events: {selection: "Selection", modify: "Modify", submit: "Search"},

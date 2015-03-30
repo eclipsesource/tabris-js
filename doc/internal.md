@@ -22,7 +22,7 @@ Valid values for the `_properties` map are:
 
 * A type identifier (see below).
 * A *map* with any of these entries:
-    * `type`: A type identifier. Same effect as giving the type directly.
+    * `type`: A type identifier. Same effect as giving the type directly. If omitted, any value is accepted.
     * `set`: A function that is called instead of creating a `set` operation for this property change. The function is called with the (encoded) property value as the sole argument and the proxy as the context (`this`). It can use the `_nativeSet` method of the proxy if needed.
     * `get`: A function that is called instead of creating a `get` operation for this property. The function is called with the proxy as the context (`this`) and must return the current value of this property. It can use the `_nativeGet` method of the proxy if needed.
 

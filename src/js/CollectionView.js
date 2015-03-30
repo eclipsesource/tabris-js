@@ -5,7 +5,7 @@
     _type: "tabris.CollectionView",
 
     _properties: {
-      itemHeight: "natural",
+      itemHeight: {type: "natural", default: 0},
       items: {
         set: function(value) {
           this._setItems(value);
@@ -18,11 +18,12 @@
       initializeCell: {
         set: function(value) {
           this._initializeCell = value;
-        }
+        },
+        default: null
       },
-      refreshEnabled: "boolean",
-      refreshIndicator: "boolean",
-      refreshMessage: "string"
+      refreshEnabled: {type: "boolean", default: false},
+      refreshIndicator: {type: "boolean", default: false},
+      refreshMessage: {type: "string", default: ""}
     },
 
     _create: function() {

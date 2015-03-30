@@ -16,7 +16,7 @@
           return this._image;
         }
       },
-      title: "string",
+      title: {type: "string", default: ""},
       topLevel: "boolean",
       control: "proxy",
       parent: "proxy",

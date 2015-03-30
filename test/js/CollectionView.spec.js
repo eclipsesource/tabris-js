@@ -40,6 +40,15 @@ describe("CollectionView", function() {
       expect(nativeBridge.calls({op: "listen", event: "populateitem"})[0].listen).toBe(true);
     });
 
+    it("returns default property values", function() {
+      expect(view.get("itemHeight")).toBe(0);
+      expect(view.get("items", [])).toEqual([]);
+      expect(view.get("initializeCell")).toBe(null);
+      expect(view.get("refreshEnabled")).toBe(false);
+      expect(view.get("refreshIndicator")).toBe(false);
+      expect(view.get("refreshMessage")).toBe("");
+    });
+
     describe("when initializeCell is set", function() {
 
       var initializeCell = jasmine.createSpy("callback");

@@ -3,9 +3,12 @@
   tabris.registerWidget("_TabItem", {
     _type: "rwt.widgets.TabItem",
     _properties: {
-      text: {type: true, nocache: true},
-      image: {type: true, nocache: true},
-      badge: {type: true, nocache: true},
+      title: {
+        set: function(value) {this._nativeSet("text", value);},
+        nocache: true
+      },
+      image: {nocache: true},
+      badge: {nocache: true},
       control: true,
       index: true
     }
@@ -28,12 +31,9 @@
     _properties: {
       paging: {
         type: "boolean",
+        default: false,
         set: function(value) {
-          this._paging = value;
           this._nativeSet("data", {paging: value});
-        },
-        get: function() {
-          return !!this._paging;
         }
       },
       selection: {
@@ -79,52 +79,34 @@
     _properties: {
       title: {
         type: "string",
+        default: "",
         set: function(value) {
-          this._setItemProperty("text", value);
+          if (this._tabItem) {
+            this._tabItem._setProperty("title", value);
+          }
         }
       },
       image: {
         type: "image",
+        default: null,
         set: function(value) {
-          this._setItemProperty("image", value);
+          if (this._tabItem) {
+            this._tabItem._setProperty("image", value);
+          }
         }
       },
       badge: {
         type: "string",
+        default: "",
         set: function(value) {
-          this._setItemProperty("badge", value);
+          if (this._tabItem) {
+            this._tabItem._setProperty("badge", value);
+          }
         }
       }
     },
 
     _supportsChildren: true,
-
-    _create: function(properties) {
-      this._itemProps = {};
-      return this.super("_create", properties);
-    },
-
-    _setItemProperty: function(name, value) {
-      if (this._tabItem) {
-        this._tabItem._setProperty(name, value);
-      } else {
-        this._itemProps[name] = value;
-      }
-    },
-
-    get: function(name) {
-      if (isItemProp(name)) {
-        if (this._tabItem) {
-          return this._tabItem.get(translateItemProp(name));
-        }
-        var result = this._itemProps[translateItemProp(name)];
-        if (name === "image") {
-          return tabris.PropertyDecoding.image(result);
-        }
-        return result;
-      }
-      return this.super("get", name);
-    },
 
     _setParent: function(parent) {
       if (!(parent instanceof tabris.TabFolder)) {
@@ -134,25 +116,29 @@
       this._tabItem = tabris.create("_TabItem", util.extend({
         control: this.cid,
         index: parent._getItems().length
-      }, this._itemProps)).appendTo(parent);
+      }, this._getItemProps())).appendTo(parent);
       this._tabItem._tab = this;
+    },
+
+    _getItemProps: function() {
+      var result = {};
+      for (var i = 0; i < itemProps.length; i++) {
+        var prop = itemProps[i];
+        if (this._isCachedProperty(prop)) {
+          result[prop] = this._getCachedProperty(prop);
+        }
+      }
+      return result;
     },
 
     _destroy: function() {
       if (this._tabItem) {
         this._tabItem.dispose();
       }
+      this.super("_destroy");
     }
 
   });
-
-  function isItemProp(name) {
-    return ["title", "image", "badge"].indexOf(name) !== -1;
-  }
-
-  function translateItemProp(name) {
-    return name === "title" ? "text" : name;
-  }
 
   function isTab(child) {
     return child instanceof tabris.Tab;
@@ -161,5 +147,7 @@
   function isItem(child) {
     return !isTab(child);
   }
+
+  var itemProps = ["title", "badge", "image"];
 
 }());

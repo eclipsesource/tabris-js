@@ -71,20 +71,20 @@ describe("SearchAction", function() {
       nativeBridge.resetCalls();
     });
 
-    it("translates visible to visibility", function() {
-      spyOn(nativeBridge, "get");
-
-      action.get("visible");
-
-      expect(nativeBridge.get).toHaveBeenCalledWith(action.cid, "visibility");
-    });
-
     it("translates placementPriority to lowercase", function() {
       spyOn(nativeBridge, "get").and.returnValue("LOW");
 
       var result = action.get("placementPriority");
 
       expect(result).toBe("low");
+    });
+
+    it("returns initial values", function() {
+      expect(action.get("enabled")).toBe(true);
+      expect(action.get("image")).toBe(null);
+      expect(action.get("title")).toBe("");
+      expect(action.get("visible")).toBe(true);
+      expect(action.get("proposals")).toEqual([]);
     });
 
   });

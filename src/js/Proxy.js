@@ -144,8 +144,10 @@
       if (!type) {
         return;
       }
-      if (this._propertyCache && name in this._propertyCache) {
-        return this._decodeProperty(this._propertyCache[name], type);
+      if (this._isCachedProperty(name)) {
+        return this._decodeProperty(this._getCachedProperty(name), type);
+      } else if ("default" in this.constructor._properties[name]) {
+        return valueOf(this.constructor._properties[name].default);
       }
       var getProperty = this._getPropertyGetter(name);
       var value = getProperty ? getProperty.call(this) : this._nativeGet(name);
@@ -173,6 +175,14 @@
         }
         this._propertyCache[name] = value;
       }
+    },
+
+    _isCachedProperty: function(name) {
+      return this._propertyCache && name in this._propertyCache;
+    },
+
+    _getCachedProperty: function(name) {
+      return this._propertyCache[name];
     }
 
   });
@@ -181,6 +191,10 @@
 
   function generateId() {
     return "o" + (idSequence++);
+  }
+
+  function valueOf(value) {
+    return value instanceof Function ? value() : value;
   }
 
 })();

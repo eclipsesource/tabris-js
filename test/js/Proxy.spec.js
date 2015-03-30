@@ -384,6 +384,22 @@ describe("Proxy", function() {
         expect(result).toBe(23);
       });
 
+      it("returns uncached value from default config", function() {
+        tabris.TestType._properties.foo.default = 23;
+
+        var result = proxy.get("foo");
+
+        expect(result).toBe(23);
+      });
+
+      it("returns cloned value from default function", function() {
+        tabris.TestType._properties.foo.default = function() {return [];};
+
+        proxy.get("foo").push(1);
+
+        expect(proxy.get("foo")).toEqual([]);
+      });
+
       it("returns uncachable value from native", function() {
         tabris.TestType._properties.foo.nocache = true;
         proxy.set("foo", "bar");

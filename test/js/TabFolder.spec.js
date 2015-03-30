@@ -25,6 +25,10 @@ describe("TabFolder", function() {
     expect(tabFolder.get("paging")).toBe(false);
   });
 
+  it("returns initial property values", function() {
+    expect(tabFolder.get("paging")).toBe(false);
+  });
+
   describe("when paging is set", function() {
 
     beforeEach(function() {
@@ -75,6 +79,13 @@ describe("TabFolder", function() {
       expect(tab.get("badge")).toBe("1");
     });
 
+    it("getter returns initial item properties", function() {
+      tab = tabris.create("Tab");
+      expect(tab.get("title")).toBe("");
+      expect(tab.get("image")).toBe(null);
+      expect(tab.get("badge")).toBe("");
+    });
+
     describe("and appended to an illegal parent", function() {
 
       it("crashes", function() {
@@ -119,11 +130,12 @@ describe("TabFolder", function() {
         expect(itemCreate.properties.index).toBe(0);
       });
 
-      it("getter delegates item properties to native", function() {
-        tab.get("title");
-        tab.get("badge");
+      it("getter gets item properties from cache", function() {
+        tab.set({title: "foo", "badge": "bar", image: "foobar.jpg"});
 
-        expect(nativeBridge.calls({op: "get", id: itemCreate.id}).length).toBe(2);
+        expect(tab.get("title")).toBe("foo");
+        expect(tab.get("badge")).toBe("bar");
+        expect(tab.get("image")).toEqual({src: "foobar.jpg"});
       });
 
       it("children list contains only the tab", function() {

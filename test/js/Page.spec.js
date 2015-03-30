@@ -116,6 +116,11 @@ describe("Page", function() {
       nativeBridge.resetCalls();
     });
 
+    it("returns default property values", function() {
+      expect(page.get("image")).toBe(null);
+      expect(page.get("title")).toBe("");
+    });
+
     describe("when a child is appended", function() {
       var child;
 
