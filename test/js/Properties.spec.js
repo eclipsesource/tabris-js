@@ -76,4 +76,35 @@ describe("Properties", function() {
 
   });
 
+  describe("with Events:", function() {
+
+    var listener;
+
+    beforeEach(function() {
+      _.extend(object, tabris.Events);
+      listener = jasmine.createSpy();
+    });
+
+    it ("set triggers change event", function() {
+      object.on("change:foo", listener);
+
+      object.set("foo", "bar");
+
+      expect(listener).toHaveBeenCalled();
+      expect(listener.calls.argsFor(0)[0]).toBe(object);
+      expect(listener.calls.argsFor(0)[1]).toBe("bar");
+      expect(listener.calls.argsFor(0)[2]).toEqual({});
+    });
+
+    it ("set triggers no change event if value is unchanged", function() {
+      object.set("foo", "bar");
+      object.on("change:foo", listener);
+
+      object.set("foo", "bar");
+
+      expect(listener).not.toHaveBeenCalled();
+    });
+
+  });
+
 });

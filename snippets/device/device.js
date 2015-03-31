@@ -11,8 +11,8 @@ var page = tabris.create("Page", {
   }).appendTo(page);
 });
 
-tabris.device.on("change:orientation", function(event) {
-  page.find("#orientation").set("text", "orientation: " + event.value);
+tabris.device.on("change:orientation", function(target, value) {
+  page.find("#orientation").set("text", "orientation: " + value);
 });
 
 page.open();

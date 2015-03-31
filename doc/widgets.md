@@ -50,6 +50,7 @@ Parameters:
 - *value*: the new value of the property
 
 Example:
+
 ```javascript
 label.set("text", "Hello World");
 ```
@@ -73,9 +74,6 @@ label.set({
 ### `animate(properties, options)`
 
 Changes one or more widget properties with an animation. See [Animations](animations.md). 
-
-
-
 
 ## The Widget Tree
 
@@ -201,6 +199,18 @@ Parameters:
 
 - *type*: the event type to trigger
 - *param (optional)*: A number of parameters to be passed to the listener functions
+
+### Property Change Events
+
+All widgets (actually, all tabris objects with event API, e.g. `device`) support property change events. Change events are fired for all property changes, not matter how or why the changed occurred, or if the property is supported by the widget. All change events are named `change:[propertyName]` and have the same parameters: `target`, `value`, `options`.
+
+Example:
+
+```javascript
+tabris.create("TextInput").on("change:text", function(textInput, text, options) {
+  console.log("The text has changed to: " + text);
+});
+```
 
 ## Disposing Of a Widget
 

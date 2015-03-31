@@ -242,6 +242,31 @@ describe("TabFolder", function() {
       expect(tabFolder.get("selection")).toBeNull();
     });
 
+    it("supports native change event", function() {
+      var listener = jasmine.createSpy();
+      tabFolder.on("change:selection", listener);
+
+      tabris._notify(tabFolder.cid, "Selection", {selection: tab2._tabItem.cid});
+
+      expect(listener.calls.count()).toBe(1);
+      expect(listener.calls.argsFor(0)[0]).toBe(tabFolder);
+      expect(listener.calls.argsFor(0)[1]).toBe(tab2);
+      expect(listener.calls.argsFor(0)[2]).toEqual({});
+    });
+
+    it("supports native legacy change event", function() {
+      var listener = jasmine.createSpy();
+      tabFolder.on("change:selection", listener);
+
+      // iOS still calls it "item", not "selection":
+      tabris._notify(tabFolder.cid, "Selection", {item: tab2._tabItem.cid});
+
+      expect(listener.calls.count()).toBe(1);
+      expect(listener.calls.argsFor(0)[0]).toBe(tabFolder);
+      expect(listener.calls.argsFor(0)[1]).toBe(tab2);
+      expect(listener.calls.argsFor(0)[2]).toEqual({});
+    });
+
   });
 
   describe("tabBarLocation property", function() {

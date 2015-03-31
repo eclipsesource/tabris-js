@@ -11,6 +11,10 @@
     },
 
     font: function(value) {
+      if (!value) {
+        // NOTE: workaround to allow triggering a change event when setting font to "initial"
+        return "initial";
+      }
       return util.fontArrayToString(value);
     },
 

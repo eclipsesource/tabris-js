@@ -63,7 +63,8 @@ describe("Device", function() {
 
     tabris._notify("tabris.Device", "orientationchange", {orientation: "portrait"});
 
-    expect(listener).toHaveBeenCalledWith({value: "portrait"});
+    expect(listener.calls.argsFor(0)[0]).toBe(device);
+    expect(listener.calls.argsFor(0)[1]).toBe("portrait");
   });
 
   it("prevents overwriting properties", function() {

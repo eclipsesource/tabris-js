@@ -15,8 +15,8 @@ tabris.create("Slider", {
   minimum: 50,
   selection: 100,
   maximum: 300
-}).on("change:selection", function() {
-  imageView.set("layoutData", {left: 20, top: 20, width: this.get("selection"), height: 250});
+}).on("change:selection", function(slider, selection) {
+  imageView.set("layoutData", {left: 20, top: 20, width: selection, height: 250});
 }).appendTo(page);
 
 page.open();

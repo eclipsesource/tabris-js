@@ -625,6 +625,94 @@ describe("Proxy", function() {
         }).toThrowError("Object is disposed");
       });
 
+      it ("triggers change event for known properties", function() {
+        tabris.TestType._properties.foo = {type: true, default: ""};
+        var listener = jasmine.createSpy();
+        proxy.on("change:foo", listener);
+
+        proxy.set("foo", "bar");
+
+        expect(listener).toHaveBeenCalled();
+        expect(listener.calls.argsFor(0)[0]).toBe(proxy);
+        expect(listener.calls.argsFor(0)[1]).toBe("bar");
+        expect(listener.calls.argsFor(0)[2]).toEqual({});
+      });
+
+      it ("triggers change event with decoded property value", function() {
+        tabris.TestType._properties.foo = {type: "color"};
+        var listener = jasmine.createSpy();
+        proxy.on("change:foo", listener);
+
+        proxy.set("foo", "#ff00ff");
+
+        expect(listener.calls.argsFor(0)[1]).toBe("rgba(255, 0, 255, 1)");
+      });
+
+      it ("triggers no change event if value is unchanged from default", function() {
+        tabris.TestType._properties.foo = {type: true, default: ""};
+        var listener = jasmine.createSpy();
+        proxy.on("change:foo", listener);
+
+        proxy.set("foo", "");
+
+        expect(listener).not.toHaveBeenCalled();
+
+      });
+
+      it ("triggers no change event if value is unchanged from previous value", function() {
+        tabris.TestType._properties.foo = {type: true, default: ""};
+        var listener = jasmine.createSpy();
+        proxy.set("foo", "bar");
+        proxy.on("change:foo", listener);
+
+        proxy.set("foo", "bar");
+
+        expect(listener).not.toHaveBeenCalled();
+      });
+
+      it ("triggers no change event if value is unchanged from previous encoded value", function() {
+        tabris.TestType._properties.foo = {type: "color", default: ""};
+        var listener = jasmine.createSpy();
+        proxy.set("foo", "#ff00ff");
+        proxy.on("change:foo", listener);
+
+        proxy.set("foo", "rgb(255, 0, 255)");
+
+        expect(listener).not.toHaveBeenCalled();
+      });
+
+      it ("triggers no change event if value is unchanged from previous object value", function() {
+        tabris.TestType._properties.foo = {type: "transform", default: ""};
+        var listener = jasmine.createSpy();
+        proxy.set("foo", {scaleX: 2});
+        proxy.on("change:foo", listener);
+
+        proxy.set("foo", {scaleX: 2, scaleY: 1});
+
+        expect(listener).not.toHaveBeenCalled();
+      });
+
+      it ("always triggers change event for uncached properties", function() {
+        tabris.TestType._properties.foo = {type: true, nocache: true};
+        var listener = jasmine.createSpy();
+        proxy.on("change:foo", listener);
+
+        proxy.set("foo", "bar");
+
+        expect(listener).toHaveBeenCalled();
+      });
+
+      it ("always triggers initial change event for cached properties without default", function() {
+        tabris.TestType._properties.foo = {type: true};
+        var listener = jasmine.createSpy();
+        proxy.on("change:foo", listener);
+
+        proxy.set("foo", "bar");
+        proxy.set("foo", "bar");
+
+        expect(listener.calls.count()).toBe(1);
+      });
+
     });
 
     describe("_nativeCall", function() {

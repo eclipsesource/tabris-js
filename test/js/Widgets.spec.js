@@ -297,14 +297,17 @@ describe("Widgets", function() {
 
   });
 
-  describe("registered types", function() {
+  describe("registered types:", function() {
+
+    var getCreate = function() {
+      return nativeBridge.calls({op: "create"})[0];
+    };
 
     it("Button", function() {
       var button = tabris.create("Button", {enabled: false});
 
-      var create = nativeBridge.calls({op: "create"})[0];
-      expect(create.type).toEqual("rwt.widgets.Button");
-      expect(create.properties).toEqual({style: ["PUSH"], enabled: false});
+      expect(getCreate().type).toEqual("rwt.widgets.Button");
+      expect(getCreate().properties).toEqual({style: ["PUSH"], enabled: false});
       expect(button.get("image")).toBe(null);
       expect(button.get("alignment")).toBe("center");
       expect(button.get("text")).toBe("");
@@ -313,40 +316,35 @@ describe("Widgets", function() {
     it("Canvas", function() {
       tabris.create("Canvas", {});
 
-      var create = nativeBridge.calls({op: "create"})[0];
-      expect(create.type).toEqual("rwt.widgets.Canvas");
+      expect(getCreate().type).toEqual("rwt.widgets.Canvas");
     });
 
     it("CheckBox", function() {
       var checkBox = tabris.create("CheckBox", {enabled: false});
 
-      var create = nativeBridge.calls({op: "create"})[0];
-      expect(create.type).toEqual("rwt.widgets.Button");
-      expect(create.properties).toEqual({style: ["CHECK"], enabled: false});
+      expect(getCreate().type).toEqual("rwt.widgets.Button");
+      expect(getCreate().properties).toEqual({style: ["CHECK"], enabled: false});
       expect(checkBox.get("text")).toBe("");
     });
 
     it("Picker", function() {
       var picker = tabris.create("Picker", {});
 
-      var create = nativeBridge.calls({op: "create"})[0];
-      expect(create.type).toEqual("rwt.widgets.Combo");
-      expect(create.properties).toEqual({selectionIndex: 0});
+      expect(getCreate().type).toEqual("rwt.widgets.Combo");
+      expect(getCreate().properties).toEqual({selectionIndex: 0});
       expect(picker.get("items")).toEqual([]);
     });
 
     it("Composite", function() {
       tabris.create("Composite", {});
 
-      var create = nativeBridge.calls({op: "create"})[0];
-      expect(create.type).toEqual("rwt.widgets.Composite");
+      expect(getCreate().type).toEqual("rwt.widgets.Composite");
     });
 
     it("ImageView", function() {
       var imageView = tabris.create("ImageView", {});
 
-      var create = nativeBridge.calls({op: "create"})[0];
-      expect(create.type).toEqual("tabris.ImageView");
+      expect(getCreate().type).toEqual("tabris.ImageView");
       expect(imageView.get("image")).toBe(null);
       expect(imageView.get("scaleMode")).toBe("auto");
     });
@@ -354,8 +352,7 @@ describe("Widgets", function() {
     it("ProgressBar", function() {
       var progressBar = tabris.create("ProgressBar");
 
-      var create = nativeBridge.calls({op: "create"})[0];
-      expect(create.type).toEqual("rwt.widgets.ProgressBar");
+      expect(getCreate().type).toEqual("rwt.widgets.ProgressBar");
       expect(progressBar.get("minimum")).toBe(0);
       expect(progressBar.get("maximum")).toBe(100);
       expect(progressBar.get("selection")).toBe(0);
@@ -365,18 +362,16 @@ describe("Widgets", function() {
     it("RadioButton", function() {
       var radioButton = tabris.create("RadioButton", {enabled: false});
 
-      var create = nativeBridge.calls({op: "create"})[0];
-      expect(create.type).toEqual("rwt.widgets.Button");
-      expect(create.properties).toEqual({style: ["RADIO"], enabled: false});
+      expect(getCreate().type).toEqual("rwt.widgets.Button");
+      expect(getCreate().properties).toEqual({style: ["RADIO"], enabled: false});
       expect(radioButton.get("text")).toBe("");
     });
 
     it("ToggleButton", function() {
       var toggleButton = tabris.create("ToggleButton", {enabled: false});
 
-      var create = nativeBridge.calls({op: "create"})[0];
-      expect(create.type).toEqual("rwt.widgets.Button");
-      expect(create.properties).toEqual({style: ["TOGGLE"], enabled: false});
+      expect(getCreate().type).toEqual("rwt.widgets.Button");
+      expect(getCreate().properties).toEqual({style: ["TOGGLE"], enabled: false});
       expect(toggleButton.get("text")).toBe("");
       expect(toggleButton.get("image")).toBe(null);
       expect(toggleButton.get("alignment")).toBe("center");
@@ -385,9 +380,8 @@ describe("Widgets", function() {
     it("TextView", function() {
       var textView = tabris.create("TextView", {text: "foo"});
 
-      var create = nativeBridge.calls({op: "create"})[0];
-      expect(create.type).toEqual("tabris.TextView");
-      expect(create.properties).toEqual({text: "foo"});
+      expect(getCreate().type).toEqual("tabris.TextView");
+      expect(getCreate().properties).toEqual({text: "foo"});
       expect(textView.get("alignment")).toBe("left");
       expect(textView.get("markupEnabled")).toBe(false);
       expect(textView.get("maxLines")).toBe(null);
@@ -396,23 +390,20 @@ describe("Widgets", function() {
     it("TextView, maxLines: 0 is mapped to null", function() {
       tabris.create("TextView", {text: "foo", maxLines: 0});
 
-      var create = nativeBridge.calls({op: "create"})[0];
-      expect(create.properties.maxLines).toBeNull();
+      expect(getCreate().properties.maxLines).toBeNull();
     });
 
     it("TextView, maxLines: values <= 0 are mapped to null", function() {
       tabris.create("TextView", {text: "foo", maxLines: -1});
 
-      var create = nativeBridge.calls({op: "create"})[0];
-      expect(create.properties.maxLines).toBeNull();
+      expect(getCreate().properties.maxLines).toBeNull();
     });
 
     it("Slider", function() {
       var slider = tabris.create("Slider", {selection: 23});
 
-      var create = nativeBridge.calls({op: "create"})[0];
-      expect(create.type).toEqual("rwt.widgets.Scale");
-      expect(create.properties).toEqual({selection: 23});
+      expect(getCreate().type).toEqual("rwt.widgets.Scale");
+      expect(getCreate().properties).toEqual({selection: 23});
       expect(slider.get("minimum")).toBe(0);
       expect(slider.get("maximum")).toBe(100);
     });
@@ -420,9 +411,8 @@ describe("Widgets", function() {
     it("TextInput", function() {
       var textInput = tabris.create("TextInput", {text: "foo"});
 
-      var create = nativeBridge.calls({op: "create"})[0];
-      expect(create.type).toEqual("tabris.TextInput");
-      expect(create.properties).toEqual({text: "foo"});
+      expect(getCreate().type).toEqual("tabris.TextInput");
+      expect(getCreate().properties).toEqual({text: "foo"});
       expect(textInput.get("message")).toBe("");
       expect(textInput.get("alignment")).toBe("left");
       expect(textInput.get("keyboard")).toBe("default");
@@ -433,9 +423,66 @@ describe("Widgets", function() {
     it("WebView", function() {
       tabris.create("WebView", {html: "foo"});
 
-      var create = nativeBridge.calls({op: "create"})[0];
-      expect(create.type).toEqual("rwt.widgets.Browser");
-      expect(create.properties).toEqual({html: "foo"});
+      expect(getCreate().type).toEqual("rwt.widgets.Browser");
+      expect(getCreate().properties).toEqual({html: "foo"});
+    });
+
+  });
+
+  describe("native events:", function() {
+
+    var listener, widget;
+    var checkEvent = function(value) {
+      expect(listener.calls.count()).toBe(1);
+      expect(listener.calls.argsFor(0)[0]).toBe(widget);
+      expect(listener.calls.argsFor(0)[1]).toEqual(value);
+      expect(listener.calls.argsFor(0)[2]).toEqual({});
+    };
+
+    beforeEach(function() {
+      listener = jasmine.createSpy();
+    });
+
+    it("Widget change:bounds", function() {
+      widget = tabris.create("CheckBox").on("change:bounds", listener);
+      tabris._notify(widget.cid, "Resize", {bounds: [1, 2, 3, 4]});
+      checkEvent({left: 1, top: 2, width: 3, height: 4});
+    });
+
+    it("CheckBox change:selection", function() {
+      widget = tabris.create("CheckBox").on("change:selection", listener);
+      tabris._notify(widget.cid, "Selection", {selection: true});
+      checkEvent(true);
+    });
+
+    it("Picker change:selection", function() {
+      widget = tabris.create("Picker").on("change:selection", listener);
+      tabris._notify(widget.cid, "Selection", {selectionIndex: 23});
+      checkEvent(23);
+    });
+
+    it("RadioButton change:selection", function() {
+      widget = tabris.create("RadioButton").on("change:selection", listener);
+      tabris._notify(widget.cid, "Selection", {selection: true});
+      checkEvent(true);
+    });
+
+    it("Slider change:selection", function() {
+      widget = tabris.create("RadioButton").on("change:selection", listener);
+      tabris._notify(widget.cid, "Selection", {selection: 23});
+      checkEvent(23);
+    });
+
+    it("TextInput change:text", function() {
+      widget = tabris.create("TextInput").on("change:text", listener);
+      tabris._notify(widget.cid, "modify", {text: "foo"});
+      checkEvent("foo");
+    });
+
+    it("ToggleButton change:selection", function() {
+      widget = tabris.create("ToggleButton").on("change:selection", listener);
+      tabris._notify(widget.cid, "Selection", {selection: true});
+      checkEvent(true);
     });
 
   });

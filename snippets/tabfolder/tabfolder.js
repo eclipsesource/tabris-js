@@ -24,3 +24,7 @@ createTab("Pay", "images/card.png");
 createTab("Statistic", "images/chart.png");
 
 page.open();
+
+tabFolder.on("change:selection", function(widget, tab) {
+  console.log(tab.get("title"));
+});

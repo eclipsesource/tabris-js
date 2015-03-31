@@ -144,10 +144,10 @@
           if (hasAndroidResizeBug) {
             var self = this;
             setTimeout(function() {
-              self.trigger("change:bounds", event);
+              self._triggerChangeEvent("bounds", event.bounds);
             }, 0);
           } else {
-            this.trigger("change:bounds", event);
+            this._triggerChangeEvent("bounds", event.bounds);
           }
         }
       }
@@ -325,7 +325,14 @@
   tabris.registerWidget("CheckBox", {
     _type: "rwt.widgets.Button",
     _initProperties: {style: ["CHECK"]},
-    _events: {"change:selection": "Selection"},
+    _events: {
+      "change:selection": {
+        name: "Selection",
+        trigger: function(event) {
+          this._triggerChangeEvent("selection", event.selection);
+        }
+      }
+    },
     _properties: {
       text: {type: "string", default: ""},
       selection: {type: "boolean", nocache: true}
@@ -335,7 +342,14 @@
   tabris.registerWidget("Picker", {
     _type: "rwt.widgets.Combo",
     _initProperties: {selectionIndex: 0},
-    _events: {"change:selection": "Selection"},
+    _events: {
+      "change:selection": {
+        name: "Selection",
+        trigger: function(event) {
+          this._triggerChangeEvent("selection", event.selectionIndex);
+        }
+      }
+    },
     _properties: {
       items: {type: true, default: function() {return [];}},
       text: "string", // TODO: readonly
@@ -387,7 +401,14 @@
   tabris.registerWidget("RadioButton", {
     _type: "rwt.widgets.Button",
     _initProperties: {style: ["RADIO"]},
-    _events: {"change:selection": "Selection"},
+    _events: {
+      "change:selection": {
+        name: "Selection",
+        trigger: function(event) {
+          this._triggerChangeEvent("selection", event.selection);
+        }
+      }
+    },
     _properties: {
       text: {type: "string", default: ""},
       selection: {type: "boolean", nocache: true}
@@ -396,7 +417,14 @@
 
   tabris.registerWidget("Slider", {
     _type: "rwt.widgets.Scale",
-    _events: {"change:selection": "Selection"},
+    _events: {
+      "change:selection": {
+        name: "Selection",
+        trigger: function(event) {
+          this._triggerChangeEvent("selection", event.selection);
+        }
+      }
+    },
     _properties: {
       minimum: {type: "integer", default: 0},
       maximum: {type: "integer", default: 100},
@@ -410,7 +438,12 @@
       focus: true,
       blur: true,
       accept: true,
-      "change:text": "modify"
+      "change:text": {
+        name: "modify",
+        trigger: function(event) {
+          this._triggerChangeEvent("text", event.text);
+        }
+      }
     },
     _properties: {
       type: ["choice", ["default", "password", "search", "multiline"]],
@@ -431,7 +464,14 @@
   tabris.registerWidget("ToggleButton", {
     _type: "rwt.widgets.Button",
     _initProperties: {style: ["TOGGLE"]},
-    _events: {"change:selection": "Selection"},
+    _events: {
+      "change:selection": {
+        name: "Selection",
+        trigger: function(event) {
+          this._triggerChangeEvent("selection", event.selection);
+        }
+      }
+    },
     _properties: {
       text: {type: "string", default: ""},
       image: {type: "image", default: null},

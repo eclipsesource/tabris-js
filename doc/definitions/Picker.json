@@ -14,7 +14,9 @@
     }
   },
   "events": {
-    "change:selection": {}
+    "change:selection": {
+      "description": "Fired when the selection property changes."
+    }
   },
   "links": [
     {

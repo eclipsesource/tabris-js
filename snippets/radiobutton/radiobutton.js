@@ -7,8 +7,10 @@ var page = tabris.create("Page", {
   tabris.create("RadioButton", {
     layoutData: {left: 10, top: [page.children().last(), 10]},
     text: title
-  }).on("change:selection", function() {
-    console.log(this.get("text") + " selected");
+  }).on("change:selection", function(widget, selection) {
+    if (selection) {
+      console.log(widget.get("text") + " selected");
+    }
   }).appendTo(page);
 });
 

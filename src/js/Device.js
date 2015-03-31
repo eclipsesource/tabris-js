@@ -17,7 +17,7 @@
       "change:orientation": {
         name: "orientationchange",
         trigger: function(event) {
-          this.trigger("change:orientation", {value: event.orientation});
+          this._triggerChangeEvent("orientation", event.orientation);
         }
       }
     },

@@ -5,7 +5,7 @@
     tabris._proxies[this.cid] = this;
   };
 
-  util.extend(tabris.Proxy.prototype, tabris.Events, tabris.Properties, {
+  util.extend(tabris.Proxy.prototype, tabris.Properties, tabris.Events, {
 
     _create: function(properties) {
       var type = this.constructor._type || this.type;
@@ -146,9 +146,8 @@
       }
       if (this._isCachedProperty(name)) {
         return this._decodeProperty(this._getCachedProperty(name), type);
-      } else if ("default" in this.constructor._properties[name]) {
-        return valueOf(this.constructor._properties[name].default);
       }
+      // TODO: cache read property, but add nocache to device properties first
       var getProperty = this._getPropertyGetter(name);
       var value = getProperty ? getProperty.call(this) : this._nativeGet(name);
       return this._decodeProperty(value, type);
@@ -173,16 +172,33 @@
         if (!this._propertyCache) {
           this._propertyCache = {};
         }
+        var cached = this._isCachedProperty(name);
+        var previous = cached ? this._getCachedProperty(name) : undefined;
         this._propertyCache[name] = value;
+        if (!cached || !propertyEquals(previous, value)) {
+          this._triggerChangeEvent(name, value);
+        }
+      } else {
+        this._triggerChangeEvent(name, value);
       }
     },
 
     _isCachedProperty: function(name) {
-      return this._propertyCache && name in this._propertyCache;
+      return (this._propertyCache && name in this._propertyCache) ||
+        "default" in this.constructor._properties[name];
     },
 
     _getCachedProperty: function(name) {
-      return this._propertyCache[name];
+      if (this._propertyCache && name in this._propertyCache) {
+        return this._propertyCache[name];
+      }
+      return valueOf(this.constructor._properties[name].default);
+    },
+
+    _triggerChangeEvent: function(propertyName, newEncodedValue) {
+      var type = this._getPropertyType(propertyName);
+      var decodedValue = this._decodeProperty(newEncodedValue, type);
+      this.trigger("change:" + propertyName, this, decodedValue, {});
     }
 
   });
@@ -195,6 +211,30 @@
 
   function valueOf(value) {
     return value instanceof Function ? value() : value;
+  }
+
+  function propertyEquals(value1, value2) {
+    // NOTE: this deep-compare is designed only for certain encoded properties (color, image, etc)
+    if (value1 === value2) {
+      return true;
+    }
+    if (value1 instanceof Array && value2 instanceof Array) {
+      for (var i = 0; i < value1.length; i++) {
+        if (value1[i] !== value2[i]) {
+          return false;
+        }
+      }
+      return true;
+    }
+    if (value1 instanceof Object && value2 instanceof Object) {
+      for (var key in value1) {
+        if (value1[key] !== value2[key]) {
+          return false;
+        }
+      }
+      return true;
+    }
+    return false;
   }
 
 })();

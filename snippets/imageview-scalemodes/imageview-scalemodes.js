@@ -34,13 +34,11 @@ var scaleModePicker = tabris.create("Picker", {
   items: scaleModes
 }).appendTo(page);
 
-imageSizePicker.on("change:selection", function() {
-  var index = imageSizePicker.get("selectionIndex");
+imageSizePicker.on("change:selection", function(widget, index) {
   imageView.set("image", getImage(index));
 });
 
-scaleModePicker.on("change:selection", function() {
-  var index = scaleModePicker.get("selectionIndex");
+scaleModePicker.on("change:selection", function(widget, index) {
   imageView.set("scaleMode", scaleModes[index]);
 });
 

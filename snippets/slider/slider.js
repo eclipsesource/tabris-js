@@ -15,8 +15,8 @@ tabris.create("Slider", {
   minimum: -50,
   selection: 50,
   maximum: 150
-}).on("change:selection", function() {
-  textView.set("text", this.get("selection").toString());
+}).on("change:selection", function(slider, selection) {
+  textView.set("text", selection);
 }).appendTo(page);
 
 page.open();

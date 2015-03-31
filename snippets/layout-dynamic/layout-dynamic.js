@@ -9,11 +9,6 @@ tabris.create("Composite", {id: "blue", background: "blue"}).appendTo(page);
 tabris.create("Composite", {id: "yellow", background: "yellow"}).appendTo(page);
 tabris.create("Composite", {id: "purple", background: "purple"}).appendTo(page);
 
-page.on("change:bounds", function() {
-  page.apply(require("./layout-" + orientation()));
+page.on("change:bounds", function(page, bounds) {
+  page.apply(require("./layout-" + (bounds.width > bounds.height ? "landscape" : "portrait")));
 }).open();
-
-function orientation() {
-  var bounds = page.get("bounds");
-  return (bounds.width > bounds.height) ? "landscape" : "portrait";
-}

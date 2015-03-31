@@ -60,7 +60,15 @@
       return child.type === "Tab" || child.type === "_TabItem";
     },
 
-    _events: {"change:selection": "Selection"},
+    _events: {
+      "change:selection": {
+        name: "Selection",
+        trigger: function(event) {
+          var tabId = event.selection || event.item;
+          this._triggerChangeEvent("selection", tabris(tabId)._tab);
+        }
+      }
+    },
 
     _getItems: function() {
       return this._children ? this._children.filter(isItem) : new tabris.ProxyCollection();

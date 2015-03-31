@@ -30,12 +30,17 @@ tabris.Properties = {
       if (!this._props) {
         this._props = {};
       }
+      var oldValue = this._props[name];
       this._props[name] = value;
+      if (oldValue !== value) {
+        this.trigger("change:" + name, this, value, {});
+      }
     }
   },
 
   _checkDisposed: function() {},
   _applyProperty: function() {return true;},
-  _readProperty: function() {return undefined;}
+  _readProperty: function() {return undefined;},
+  trigger: function() {}
 
 };
