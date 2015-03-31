@@ -15,7 +15,7 @@ describe("Animation", function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._init(nativeBridge);
-    tabris.registerWidget("TestType", {_properties: {foo: true, opacity: true, transform: true}});
+    tabris.registerWidget("TestType", {_properties: {foo: true}});
     widget = tabris.create("TestType");
   });
 
@@ -51,9 +51,39 @@ describe("Animation", function() {
       expect(animation.dispose).not.toHaveBeenCalled();
     });
 
-    it("sets animated properties", function() {
+    it("sets animated properties on animation", function() {
       widget.animate({opacity: 0.4, transform: {rotation: 0.5}}, {});
-      expect(createOp().properties).toEqual({opacity: 0.4, transform: {rotation: 0.5}});
+      var expected = {
+        opacity: 0.4,
+        transform: {rotation: 0.5, scaleX: 1, scaleY: 1, translationX: 0, translationY: 0}
+      };
+      expect(createOp().properties).toEqual(expected);
+    });
+
+    it("caches animated properties in widget", function() {
+      widget.animate({opacity: 0.4, transform: {rotation: 0.5}}, {});
+      expect(widget.get("opacity")).toBe(0.4);
+      expect(widget.get("transform")).toEqual({
+        rotation: 0.5,
+        scaleX: 1,
+        scaleY: 1,
+        translationX: 0,
+        translationY: 0
+      });
+    });
+
+    it("caches only valid properties in widget", function() {
+      widget.set("foo", 1);
+      widget.animate({opacity: 0.4, transform: {foo: 0.5}, foo: 2}, {});
+      expect(widget.get("foo")).toBe(1);
+      expect(widget.get("opacity")).toBe(0.4);
+      expect(widget.get("transform")).toEqual({
+        rotation: 0,
+        scaleX: 1,
+        scaleY: 1,
+        translationX: 0,
+        translationY: 0
+      });
     });
 
     it("sets valid options only", function() {
@@ -76,7 +106,7 @@ describe("Animation", function() {
 
       widget.animate({}, {foo: "bar"});
 
-      expect(console.warn).toHaveBeenCalledWith("Invalid animation option \"foo\"");
+      expect(console.warn).toHaveBeenCalledWith("TestType: Ignored invalid animation option \"foo\"");
     });
 
     it("warns against invalid properties", function() {
@@ -84,7 +114,15 @@ describe("Animation", function() {
 
       widget.animate({background: "#00ff00", opacity: 0}, {});
 
-      expect(console.warn).toHaveBeenCalledWith("Invalid animation property \"background\"");
+      expect(console.warn).toHaveBeenCalledWith("TestType: Ignored invalid animation property \"background\"");
+      expect(createOp().properties).toEqual({opacity: 0});
+    });
+
+    it("warns against invalid property values", function() {
+      window.console = jasmine.createSpyObj("console", ["log", "info", "warn", "error"]);
+      widget.animate({opacity: 0, transform: {foo: "bar"}}, {});
+
+      expect(console.warn).toHaveBeenCalledWith("TestType: Ignored invalid animation property value for \"transform\"");
       expect(createOp().properties).toEqual({opacity: 0});
     });
 

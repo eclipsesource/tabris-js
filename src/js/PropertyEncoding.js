@@ -11,12 +11,7 @@
     },
 
     natural: function(number) {
-      if (typeof number !== "number") {
-        throw new Error(typeof number + " is not a number: " + number);
-      }
-      if (isNaN(number) || number === Infinity || number === -Infinity) {
-        throw new Error("Number is not a valid value: " + number);
-      }
+      checkValidNumber(number);
       if (number < 0) {
         return 0;
       }
@@ -24,12 +19,7 @@
     },
 
     integer: function(number) {
-      if (typeof number !== "number") {
-        throw new Error(typeof number + " is not a number: " + number);
-      }
-      if (isNaN(number) || number === Infinity || number === -Infinity) {
-        throw new Error("Number is not a valid value: " + number);
-      }
+      checkValidNumber(number);
       return Math.round(number);
     },
 
@@ -110,6 +100,24 @@
         return value;
       }
       return tabris.PropertyEncoding[altCheck](value);
+    },
+
+    opacity: function(value) {
+      checkValidNumber(value);
+      if (value < 0 || value > 1) {
+        throw new Error("Number is out of bounds: " + value);
+      }
+      return value;
+    },
+
+    transform: function(value) {
+      for (var key in value) {
+        if (!(key in transformDefaults)) {
+          throw new Error("Not a valid transformation containing \"" + key + "\"");
+        }
+        checkValidNumber(value[key]);
+      }
+      return util.extend({}, transformDefaults, value);
     }
 
   };
@@ -124,5 +132,22 @@
     message.push("\", given was: \"", given + "\"");
     throw new Error(message.join(""));
   }
+
+  function checkValidNumber(number) {
+    if (typeof number !== "number") {
+      throw new Error(typeof number + " is not a number: " + number);
+    }
+    if (isNaN(number) || number === Infinity || number === -Infinity) {
+      throw new Error("Number is not a valid value: " + number);
+    }
+  }
+
+  var transformDefaults = {
+    rotation: 0,
+    scaleX: 1,
+    scaleY: 1,
+    translationX: 0,
+    translationY: 0
+  };
 
 }());

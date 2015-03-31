@@ -1,4 +1,5 @@
 describe("PropertyEncoding:", function() {
+  /*globals _:false*/
 
   var consoleBackup = window.console;
 
@@ -289,6 +290,103 @@ describe("PropertyEncoding:", function() {
       expect(function() {
         check(NaN, "natural");
       }).toThrow();
+    });
+
+  });
+
+  describe("opacity", function() {
+
+    var check = tabris.PropertyEncoding.opacity;
+
+    it("fails for non-numbers", function() {
+      var values = ["", "foo", "23", null, undefined, true, false, {}, []];
+      values.forEach(function(value) {
+        expect(function() {
+          check(value);
+        }).toThrow(new Error(typeof value + " is not a number: " + value));
+      });
+    });
+
+    it("fails for invalid numbers", function() {
+      var values = [NaN, 1 / 0, -1 / 0];
+      values.forEach(function(value) {
+        expect(function() {
+          check(value);
+        }).toThrow(new Error("Number is not a valid value: " + value));
+      });
+    });
+
+    it("fails for out-of-bounds numbers", function() {
+      var values = [-0.1, -1, 1.01, 2];
+      values.forEach(function(value) {
+        expect(function() {
+          check(value);
+        }).toThrow(new Error("Number is out of bounds: " + value));
+      });
+    });
+
+    it("accepts natural numbers between (including) zero and one", function() {
+      expect(check(0)).toBe(0);
+      expect(check(0.5)).toBe(0.5);
+      expect(check(1)).toBe(1);
+    });
+
+  });
+
+  describe("transform", function() {
+
+    var check = tabris.PropertyEncoding.transform;
+    var defaultValue = {
+      rotation: 0,
+      scaleX: 1,
+      scaleY: 1,
+      translationX: 0,
+      translationY: 0
+    };
+    var customValue = {
+      rotation: 1.2,
+      scaleX: 2,
+      scaleY: 0.5,
+      translationX: -40,
+      translationY: +40
+    };
+
+    it("accepts complete, valid values", function() {
+      expect(check(defaultValue)).toEqual(defaultValue);
+      expect(check(customValue)).toEqual(customValue);
+    });
+
+    it("auto-completes values", function() {
+      var value = _.omit(customValue, ["scaleX", "translationY"]);
+      var expected = {
+        rotation: 1.2,
+        scaleX: 1,
+        scaleY: 0.5,
+        translationX: -40,
+        translationY: 0
+      };
+      expect(check(value)).toEqual(expected);
+      expect(check({})).toEqual(defaultValue);
+    });
+
+    it("fails for invalid numbers", function() {
+      [
+        {rotation: null},
+        {scaleX: undefined},
+        {scaleY: NaN},
+        {translationX: 1 / 0},
+        {translationY: -1 / 0}
+      ].forEach(function(value) {
+        expect(function() {
+          check(value);
+        }).toThrow();
+      });
+    });
+
+    it("fails for unknown keys", function() {
+      expect(function() {
+        check({foo: 1});
+      }).toThrow(new Error("Not a valid transformation containing \"foo\""));
     });
 
   });

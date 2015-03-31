@@ -85,7 +85,7 @@
       }
       var encodedValue;
       try {
-        encodedValue = this._encodeProperty(value, type, name);
+        encodedValue = this._encodeProperty(value, type);
       } catch (ex) {
         console.warn(this.type + ": Ignored unsupported value for property \"" + name + "\": " + ex.message);
         return false;

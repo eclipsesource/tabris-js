@@ -27,19 +27,7 @@
     },
 
     _properties: {
-      properties: {
-        set: function(value) {
-          var properties = {};
-          for (var property in value) {
-            if (animateable[property]) {
-              properties[property] = value[property];
-            } else {
-              console.warn("Invalid animation property \"" + property + "\"");
-            }
-          }
-          this._nativeSet("properties", properties);
-        }
-      },
+      properties: true,
       delay: "natural",
       duration: "natural",
       repeat: "natural",
@@ -55,14 +43,28 @@
   });
 
   tabris._Animation.animate = function(properties, options) {
+    var animatedProps = {};
+    for (var property in properties) {
+      if (animatable[property]) {
+        try {
+          animatedProps[property] =
+            this._encodeProperty(properties[property], this._getPropertyType(property));
+          this._cacheProperty(property, animatedProps[property]);
+        } catch (ex) {
+          console.warn(this.type + ": Ignored invalid animation property value for \"" + property + "\"");
+        }
+      } else {
+        console.warn(this.type + ": Ignored invalid animation property \"" + property + "\"");
+      }
+    }
     for (var option in options) {
       if (!tabris._Animation._properties[option] && option !== "name") {
-        console.warn("Invalid animation option \"" + option + "\"");
+        console.warn(this.type + ": Ignored invalid animation option \"" + option + "\"");
       }
     }
     var animation = tabris.create("_Animation", util.extend({}, options, {
       target: this,
-      properties: properties
+      properties: animatedProps
     }));
     animation._target = this;
     animation._options = options;
@@ -71,7 +73,7 @@
     return this;
   };
 
-  var animateable = {
+  var animatable = {
     opacity: true,
     transform: true
   };
