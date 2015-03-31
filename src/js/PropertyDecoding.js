@@ -3,6 +3,10 @@
   tabris.PropertyDecoding = {
 
     color: function(value) {
+      if (!value) {
+        // NOTE: null is only returned for "background" where it means "no background"
+        return "rgba(0, 0, 0, 0)";
+      }
       return util.colorArrayToString(value);
     },
 

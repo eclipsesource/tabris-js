@@ -159,6 +159,14 @@ describe("Widgets", function() {
       expect(result).toBe("rgba(170, 255, 0, 0.5)");
     });
 
+    it("translates background null to string", function() {
+      spyOn(nativeBridge, "get").and.returnValue(null);
+
+      var result = widget.get("background");
+
+      expect(result).toBe("rgba(0, 0, 0, 0)");
+    });
+
     it("translates font to string", function() {
       spyOn(nativeBridge, "get").and.returnValue([["Arial"], 12, true, true]);
 
