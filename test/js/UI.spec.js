@@ -125,8 +125,10 @@ describe("UI", function() {
 
         ui.set("activePage", page2);
 
-        expect(page1.trigger).toHaveBeenCalledWith("disappear");
-        expect(page2.trigger).toHaveBeenCalledWith("appear");
+        expect(page1.trigger.calls.argsFor(0)[0]).toBe("disappear");
+        expect(page1.trigger.calls.argsFor(0)[1]).toBe(page1);
+        expect(page2.trigger.calls.argsFor(0)[0]).toBe("appear");
+        expect(page2.trigger.calls.argsFor(0)[1]).toBe(page2);
       });
 
       it("setting 'activePage' issues a set operation", function() {
@@ -170,8 +172,12 @@ describe("UI", function() {
 
         page2.close();
 
-        expect(page2.trigger).toHaveBeenCalledWith("disappear");
-        expect(page1.trigger).toHaveBeenCalledWith("appear");
+        expect(page2.trigger.calls.argsFor(0)[0]).toBe("dispose");
+        expect(page2.trigger.calls.argsFor(0)[1]).toBe(page2);
+        expect(page2.trigger.calls.argsFor(1)[0]).toBe("disappear");
+        expect(page2.trigger.calls.argsFor(1)[1]).toBe(page2);
+        expect(page1.trigger.calls.argsFor(0)[0]).toBe("appear");
+        expect(page1.trigger.calls.argsFor(0)[1]).toBe(page1);
       });
 
       it("when non active page is closed, it won't be restored later on", function() {

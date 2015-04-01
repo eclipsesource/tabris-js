@@ -20,7 +20,7 @@ The animate method returns the widget itself, supporting call chaining. Each ani
 - *animationstart*: Fired once the animation begins, i.e. after the time specified in `delay`, or immediately on calling `animate`.
 - *animationend*: Fired after the animation finishes. Not fired if the widget is disposed before that.
 
-The animation event listeners are called with an event object that contains the options provided in the `animate` method.
+The animation event listeners are called with the widget as the first parameter, and the options given to `animate` as the second.
 
 Example:
 
@@ -35,8 +35,8 @@ label.animate({
   duration: 1000,
   easing: "ease-out",
   name: "my-remove-animation"
-}).on("animationend", function(event) {
-  if (event.options.name === "my-remove-animation") {
+}).on("animationend", function(label, options) {
+  if (options.name === "my-remove-animation") {
     label.dispose();
   }
 });

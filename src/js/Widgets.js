@@ -80,7 +80,7 @@
         this._children = [];
       }
       this._children.push(child);
-      this.trigger("addchild", child, this, {});
+      this.trigger("addchild", this, child, {});
     },
 
     _removeChild: function(child) {
@@ -89,7 +89,7 @@
         if (index !== -1) {
           this._children.splice(index, 1);
         }
-        this.trigger("removechild", child, this, {index: index});
+        this.trigger("removechild", this, child, {index: index});
       }
     },
 
@@ -134,10 +134,10 @@
 
   util.extend(tabris.registerWidget, {
     _defaultEvents: tabris.registerType.normalizeEventsMap({
-      touchstart: true,
-      touchmove: true,
-      touchend: true,
-      touchcancel: true,
+      touchstart: {trigger: triggerWithTarget},
+      touchmove: {trigger: triggerWithTarget},
+      touchend: {trigger: triggerWithTarget},
+      touchcancel: {trigger: triggerWithTarget},
       "change:bounds": {
         name: "Resize",
         trigger: function(event) {
@@ -298,12 +298,17 @@
           this._recognizers[name].dispose();
           delete this._recognizers[name];
         }
-      }
+      },
+      trigger: triggerWithTarget
     };
   }
 
   function gestureListener(event) {
     this.target.trigger(this.name, event);
+  }
+
+  function triggerWithTarget(event, name) {
+    this.trigger(name, this, event);
   }
 
   tabris.registerWidget("Button", {
@@ -450,9 +455,9 @@
   tabris.registerWidget("TextInput", {
     _type: "tabris.TextInput",
     _events: {
-      focus: true,
-      blur: true,
-      accept: true,
+      focus: triggerWithTarget,
+      blur: triggerWithTarget,
+      accept: triggerWithTarget,
       "change:text": {
         name: "modify",
         trigger: function(event) {
@@ -503,7 +508,7 @@
 
   tabris.registerWidget("WebView", {
     _type: "rwt.widgets.Browser",
-    _events: {load: "Progress"},
+    _events: {load: {name: "Progress", trigger: triggerWithTarget}},
     _properties: {
       url: {type: "string", nocache: true},
       html: {type: "string", nocache: true}

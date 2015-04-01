@@ -154,7 +154,7 @@ describe("tabris", function() {
 
       tabris._notify(proxy.cid, "bar", {bar: 23});
 
-      expect(tabris.CustomType._events.bar.trigger).toHaveBeenCalledWith({bar: 23});
+      expect(tabris.CustomType._events.bar.trigger).toHaveBeenCalledWith({bar: 23}, "bar");
     });
 
     it("calls custom trigger of translated event", function() {
@@ -171,7 +171,7 @@ describe("tabris", function() {
 
       tabris._notify(proxy.cid, "foo", {bar: 23});
 
-      expect(tabris.CustomType._events.bar.trigger).toHaveBeenCalledWith({bar: 23});
+      expect(tabris.CustomType._events.bar.trigger).toHaveBeenCalledWith({bar: 23}, "bar");
     });
 
     it("skips events for already disposed widgets", function() {

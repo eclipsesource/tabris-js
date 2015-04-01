@@ -73,7 +73,7 @@ trayContent.on("change:bounds", function() {
   }
 });
 
-strap.on("pan:vertical", function(event) {
+strap.on("pan:vertical", function(widget, event) {
   if (event.state === "start" && (trayState === "up" || trayState === "down")) {
     trayState = "dragging";
     dragOffset = tray.get("transform").translationY - event.translation.y;

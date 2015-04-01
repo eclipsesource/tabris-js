@@ -9,9 +9,9 @@ describe("ScrollView", function() {
   });
 
   describe("when a ScrollView is created", function() {
-    var scrollComposite, createCalls;
+    var scrollView, createCalls;
     beforeEach(function() {
-      scrollComposite = tabris.create("ScrollView", {});
+      scrollView = tabris.create("ScrollView", {});
       createCalls = nativeBridge.calls({op: "create"});
     });
 
@@ -39,16 +39,16 @@ describe("ScrollView", function() {
       beforeEach(function() {
         child = tabris.create("Composite");
         nativeBridge.resetCalls();
-        result = scrollComposite.append(child);
+        result = scrollView.append(child);
       });
 
       it("sets child's parent to the inner composite", function() {
         var call = nativeBridge.calls({op: "set", id: child.cid})[0];
-        expect(call.properties.parent).toBe(scrollComposite._composite.cid);
+        expect(call.properties.parent).toBe(scrollView._composite.cid);
       });
 
       it("returns self to allow chaining", function() {
-        expect(result).toBe(scrollComposite);
+        expect(result).toBe(scrollView);
       });
 
     });
@@ -60,9 +60,9 @@ describe("ScrollView", function() {
       beforeEach(function() {
         listener = jasmine.createSpy();
         scrollBar = tabris(createCalls[1].id);
-        scrollComposite.on("scroll", listener);
+        scrollView.on("scroll", listener);
         spyOn(nativeBridge, "get").and.callFake(function(id, property) {
-          if (id === scrollComposite.cid && property === "origin") {
+          if (id === scrollView.cid && property === "origin") {
             return [23, 42];
           }
         });
@@ -71,27 +71,34 @@ describe("ScrollView", function() {
       it("is notified on ScrollBar change", function() {
         scrollBar.trigger("Selection", {});
         expect(listener).toHaveBeenCalled();
-        expect(listener.calls.first().args).toEqual([{x: 23, y: 42}]);
+        expect(listener.calls.first().args[0]).toBe(scrollView);
+        expect(listener.calls.first().args[1]).toEqual({x: 23, y: 42});
       });
 
       describe("when another listener is added", function() {
+
         beforeEach(function() {
-          scrollComposite.on("scroll", jasmine.createSpy());
+          scrollView.on("scroll", jasmine.createSpy());
         });
+
         it("is notified on ScrollBar change once", function() {
           scrollBar.trigger("Selection", {});
           expect(listener.calls.count()).toBe(1);
         });
+
       });
 
       describe("when the listener is removed", function() {
+
         beforeEach(function() {
-          scrollComposite.off("scroll", listener);
+          scrollView.off("scroll", listener);
         });
+
         it("is not notified on ScrollBar change anymore", function() {
           scrollBar.trigger("Selection", {});
           expect(listener.calls.count()).toBe(0);
         });
+
       });
 
     });
@@ -102,12 +109,12 @@ describe("ScrollView", function() {
       beforeEach(function() {
         child = tabris.create("Composite");
         nativeBridge.resetCalls();
-        scrollComposite.append(child);
+        scrollView.append(child);
       });
 
       it("uses inner composite in 'set'", function() {
         var call = nativeBridge.calls({op: "set", id: child.cid})[0];
-        expect(call.properties.parent).toBe(scrollComposite._composite.cid);
+        expect(call.properties.parent).toBe(scrollView._composite.cid);
       });
 
     });

@@ -62,7 +62,7 @@
       var name = this.constructor._trigger[event];
       var trigger = name && this.constructor._events[name].trigger;
       if (trigger instanceof Function) {
-        trigger.call(this, params);
+        trigger.call(this, params, name);
       } else if (name) {
         this.trigger(name, params);
       } else {
@@ -71,7 +71,7 @@
     },
 
     _destroy: function() {
-      this.trigger("dispose", {});
+      this.trigger("dispose", this, {});
       this._destroyChildren();
       tabris.Events.off.call(this);
       delete tabris._proxies[this.cid];

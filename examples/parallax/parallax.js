@@ -74,7 +74,7 @@ scrollView.on("change:bounds", function() {
   titleComposite.set("layoutData", {left: 0, top: titleCompY, right: 0, height: 64});
 });
 
-scrollView.on("scroll", function(offset) {
+scrollView.on("scroll", function(widget, offset) {
   imageTextView.set("transform", {translationY: offset.y * 0.4});
   if (titleCompY - offset.y < 0) {
     titleComposite.set("transform", {translationY: offset.y - titleCompY});

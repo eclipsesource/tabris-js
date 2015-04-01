@@ -44,7 +44,9 @@
     },
 
     _events: {
-      refresh: true,
+      refresh: {
+        trigger: function(event) {this.trigger("refresh", this, event);}
+      },
       createitem: {
         trigger: function() {
           var cell = tabris.create("_CollectionCell", {});

@@ -23,11 +23,11 @@
         value.open();
       }
     });
-    tabris.ui.on("addchild", function(child) {
+    tabris.ui.on("addchild", function(ui, child) {
       if (child instanceof tabris.Page && child.get("topLevel")) {
         this.insert([child]);
       }
-    }, this).on("removechild", function(child) {
+    }, this).on("removechild", function(ui, child) {
       var index = this.get("items").indexOf(child);
       if (index !== -1) {
         this.remove(index);

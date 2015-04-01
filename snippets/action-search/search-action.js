@@ -12,11 +12,11 @@ var textView = tabris.create("TextView", {
 tabris.create("SearchAction", {
   title: "Search",
   image: "images/search.png"
-}).on("modify", function(event) {
+}).on("modify", function(widget, event) {
   this.set("proposals", proposals.filter(function(proposal) {
     return proposal.indexOf(event.query) !== -1;
   }));
-}).on("submit", function(event) {
+}).on("submit", function(widget, event) {
   textView.set("text", "Selected '" + event.query + "'");
 });
 

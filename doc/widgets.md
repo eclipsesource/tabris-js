@@ -154,7 +154,7 @@ Widgets can fire a number of events, e.g. on touch or on modification. Event lis
 
 Binds a listener function to the widget. The listener will be invoked whenever an event of the given event type is fired.
 
-Note that event types are case sensitive. All Tabris.js event types are lowercase.
+Note that event types are case sensitive. All Tabris.js event types are lowercase and give the object dispatching the event as the first listener argument.
 
 Parameters:
 

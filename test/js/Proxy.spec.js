@@ -162,10 +162,10 @@ describe("Proxy", function() {
         expect(result).toBe(proxy);
       });
 
-      it("notifies add listeners with arguments child, parent, event", function() {
+      it("notifies add listeners with arguments parent, child, event", function() {
         var args = listener.calls.argsFor(0);
-        expect(args[0]).toBe(child);
-        expect(args[1]).toBe(proxy);
+        expect(args[0]).toBe(proxy);
+        expect(args[1]).toBe(child);
         expect(args[2]).toEqual({});
       });
 
@@ -989,8 +989,8 @@ describe("Proxy", function() {
         proxy.dispose();
 
         var args = listener.calls.argsFor(0);
-        expect(args[0]).toBe(proxy);
-        expect(args[1]).toBe(parent);
+        expect(args[0]).toBe(parent);
+        expect(args[1]).toBe(proxy);
         expect(args[2]).toEqual({index: 0});
       });
 
@@ -1001,7 +1001,8 @@ describe("Proxy", function() {
         proxy.dispose();
 
         expect(listener).toHaveBeenCalled();
-        expect(listener.calls.first().args).toEqual([{}]);
+        expect(listener.calls.first().args[0]).toBe(proxy);
+        expect(listener.calls.first().args[1]).toEqual({});
       });
 
       it("notifies dispose listeners before native destroy", function() {

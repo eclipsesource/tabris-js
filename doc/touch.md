@@ -22,7 +22,7 @@ In Tabris.js there are 13 gesture events based on 4 basic gesture types:
 Example:
 
 ```javascript
-widget.on("swipe:left", function(event) {
+widget.on("swipe:left", function(widget, event) {
   moveWidgetLeft();
 };
 ```
@@ -53,8 +53,6 @@ In a `ScrollView` (or `CollectionView`) a recognized **pan** or **swipe** gestur
 ## Touch Events
 Touch events are a low-level alternative to gesture events. They should only be used in case an interaction can not be accurately represented by a gesture. The API and behavior is also not yet considered stable.
 
-Touch events follow the names and patterns established in HTML in order to support interoperability, e.g. with the HTML5 Canvas API. Currently, there are some known issues (see below).
-
 ### Event types
 
 The target of all touch events is the widget that was touched first.
@@ -73,7 +71,7 @@ Fired instead of `touchend` when the touch interaction ends on another widget th
 
 ### Event Object
 
-Event handlers for touch events receive an event object as single parameter. This event object includes the following properties:
+Event handlers for touch events receive an event object as the second parameter. (This first is the widget.) This event object includes the following properties:
 
 - **time**: *number* - number of milliseconds since the start of the app
 - **touches**: *[touch, ...]* - an array of touch objects for all current touches. Since multiple touches are currently not supported, this array has always one element.
@@ -89,7 +87,7 @@ Every touch object has the following properties:
 
 Example:
 ```javascript
-widget.on("touchstart", function(event) {
+widget.on("touchstart", function(widget, event) {
   var x = event.touches[0].pageX;
   var y = event.touches[0].pageY;
   ...

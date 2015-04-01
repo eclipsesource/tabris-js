@@ -26,8 +26,8 @@ tabris.registerType("SearchAction", {
   },
 
   _events: {
-    modify: "Modify",
-    submit: "Search",
+    modify: {name: "Modify", trigger: triggerWithTarget},
+    submit: {name: "Search", trigger: triggerWithTarget},
     select: {
       name: "Selection",
       alias: "selection",
@@ -51,3 +51,7 @@ tabris.registerType("SearchAction", {
   }
 
 });
+
+function triggerWithTarget(event, name) {
+  this.trigger(name, this, event);
+}

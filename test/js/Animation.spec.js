@@ -177,7 +177,9 @@ describe("Animation", function() {
 
       tabris._notify(animationId(), "Start", {});
 
-      expect(listener).toHaveBeenCalledWith({options: {duration: 123, name: "bar"}});
+      expect(listener).toHaveBeenCalled();
+      expect(listener.calls.argsFor(0)[0]).toBe(widget);
+      expect(listener.calls.argsFor(0)[1]).toEqual({duration: 123, name: "bar"});
     });
 
     it("animationend", function() {
@@ -186,7 +188,9 @@ describe("Animation", function() {
 
       tabris._notify(animationId(), "Completion", {});
 
-      expect(listener).toHaveBeenCalledWith({options: {duration: 123, name: "bar"}});
+      expect(listener).toHaveBeenCalled();
+      expect(listener.calls.argsFor(0)[0]).toBe(widget);
+      expect(listener.calls.argsFor(0)[1]).toEqual({duration: 123, name: "bar"});
     });
 
   });

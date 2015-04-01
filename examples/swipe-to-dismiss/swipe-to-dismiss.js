@@ -25,7 +25,7 @@ var collectionView = tabris.create("CollectionView", {
     var container = tabris.create("Composite", {
       background: "white",
       layoutData: {left: 0, top: 0, bottom: 0, right: 0}
-    }).on("pan:horizontal", function(event) {
+    }).on("pan:horizontal", function(widget, event) {
       handlePan(event, container);
     }).appendTo(cell);
     var senderView = tabris.create("TextView", {

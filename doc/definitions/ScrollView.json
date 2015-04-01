@@ -11,7 +11,7 @@
   },
   "events": {
     "scroll": {
-      "description": "Fired on scrolling. The event handler receives an event object containing the properties `x` and `y` that indicate the scrolling position."
+      "description": "Fired on scrolling. As the second parameter the event handler receives an object containing the properties `x` and `y` that indicate the scrolling position."
     }
   },
   "links": [

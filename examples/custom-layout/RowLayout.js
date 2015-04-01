@@ -28,12 +28,12 @@ RowLayout.prototype = {
 
 };
 
-function onAddChild(child, parent) {
+function onAddChild(parent, child) {
   var children = parent.children();
   this.layoutChild(child, children.length - 1, children);
 }
 
-function onRemoveChild(child, parent, options) {
+function onRemoveChild(parent, child, options) {
   var children = parent.children();
   var next = children[options.index];
   if (next) {

@@ -113,10 +113,10 @@ tabris.registerWidget("_UI", {
 
   _updateActivePage: function(oldPage, newPage) {
     if (oldPage) {
-      oldPage.trigger("disappear");
+      oldPage.trigger("disappear", oldPage);
     }
     this._nativeSet("activePage", newPage._page.cid);
-    newPage.trigger("appear");
+    newPage.trigger("appear", newPage);
   }
 
 });

@@ -20,6 +20,9 @@ tabris.registerWidget("ScrollView", {
         } else {
           this._scrollBar.off("Selection", this._scrollBarListener, this);
         }
+      },
+      trigger: function(position) {
+        this.trigger(this, position, {});
       }
     }
   },
@@ -41,7 +44,7 @@ tabris.registerWidget("ScrollView", {
 
   _scrollBarListener: function() {
     var selection = this._nativeGet("origin");
-    this.trigger("scroll", {x: selection[0], y: selection[1]});
+    this.trigger("scroll", this, {x: selection[0], y: selection[1]});
   },
 
   _getContainer: function() {
