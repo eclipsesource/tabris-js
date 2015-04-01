@@ -15,12 +15,12 @@
       itemHeight: 60,
       layoutData: {left: 0, top: 0, right: 0, bottom: 0}
     }, properties));
-    this.on("selection", function(event) {
-      if (event.item instanceof tabris.Page) {
+    this.on("select", function(target, value) {
+      if (value instanceof tabris.Page) {
         if (tabris.ui.drawer) {
           tabris.ui.drawer.close();
         }
-        event.item.open();
+        value.open();
       }
     });
     tabris.ui.on("addchild", function(child) {

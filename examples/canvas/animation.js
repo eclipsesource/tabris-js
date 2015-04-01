@@ -8,7 +8,7 @@ var page = tabris.create("Page", {
 var button = tabris.create("Button", {
   text: "Start",
   layoutData: {left: 10, bottom: 10}
-}).on("selection", function() {
+}).on("select", function() {
   var running = example.toggle();
   button.set("text", running ? "Stop" : "Start");
 }).appendTo(page);

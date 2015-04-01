@@ -28,7 +28,7 @@ createBookListPage("Favorite", "images/page_favorite_books.png", function(book) 
 tabris.create("Action", {
   title: "Settings",
   image: {src: "images/action_settings.png", scale: 3}
-}).on("selection", function() {
+}).on("select", function() {
   createSettingsPage().open();
 });
 
@@ -127,8 +127,8 @@ function createBooksList(books) {
         authorTextView.set("text", book.author);
       });
     }
-  }).on("selection", function(event) {
-    createBookPage(event.item).open();
+  }).on("select", function(target, value) {
+    createBookPage(value).open();
   });
 }
 

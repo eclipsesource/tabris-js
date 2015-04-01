@@ -5,7 +5,7 @@ var page = new PluginPage("Dialog", "org.apache.cordova.dialogs", function(paren
   var buttonAlert = tabris.create("Button", {
     layoutData: {left: 10, top: 10, right: 10},
     text: "Show Alert Dialog"
-  }).appendTo(parent).on("selection", function() {
+  }).appendTo(parent).on("select", function() {
     navigator.notification.alert(
       "You are the winner!", // message
       function() {
@@ -19,7 +19,7 @@ var page = new PluginPage("Dialog", "org.apache.cordova.dialogs", function(paren
   var buttonConfirm = tabris.create("Button", {
     layoutData: {left: 10, top: [buttonAlert, 10], right: 10},
     text: "Show Confirm Dialog"
-  }).appendTo(parent).on("selection", function() {
+  }).appendTo(parent).on("select", function() {
     navigator.notification.confirm(
         "You are the winner!", // message
          function(buttonIndex) {
@@ -33,7 +33,7 @@ var page = new PluginPage("Dialog", "org.apache.cordova.dialogs", function(paren
   var buttonPrompt = tabris.create("Button", {
     layoutData: {left: 10, top: [buttonConfirm, 10], right: 10},
     text: "Show Prompt"
-  }).appendTo(parent).on("selection", function() {
+  }).appendTo(parent).on("select", function() {
     navigator.notification.prompt(
         "Please enter your name", // message
         function(results) {
@@ -48,7 +48,7 @@ var page = new PluginPage("Dialog", "org.apache.cordova.dialogs", function(paren
   var buttonBeep = tabris.create("Button", {
     layoutData: {left: 10, top: [buttonPrompt, 10], right: 10},
     text: "Beep twice"
-  }).appendTo(parent).on("selection", function() {
+  }).appendTo(parent).on("select", function() {
     navigator.notification.beep(2);
   });
 

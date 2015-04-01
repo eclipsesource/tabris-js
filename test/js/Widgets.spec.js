@@ -435,8 +435,12 @@ describe("Widgets", function() {
     var checkEvent = function(value) {
       expect(listener.calls.count()).toBe(1);
       expect(listener.calls.argsFor(0)[0]).toBe(widget);
-      expect(listener.calls.argsFor(0)[1]).toEqual(value);
-      expect(listener.calls.argsFor(0)[2]).toEqual({});
+      if (arguments.length === 1) {
+        expect(listener.calls.argsFor(0)[1]).toEqual(value);
+        expect(listener.calls.argsFor(0)[2]).toEqual({});
+      } else {
+        expect(listener.calls.argsFor(0)[1]).toEqual({});
+      }
     };
 
     beforeEach(function() {
@@ -447,6 +451,18 @@ describe("Widgets", function() {
       widget = tabris.create("CheckBox").on("change:bounds", listener);
       tabris._notify(widget.cid, "Resize", {bounds: [1, 2, 3, 4]});
       checkEvent({left: 1, top: 2, width: 3, height: 4});
+    });
+
+    it("Button select", function() {
+      widget = tabris.create("Button").on("select", listener);
+      tabris._notify(widget.cid, "Selection", {});
+      checkEvent();
+    });
+
+    it("Button selection (legacy)", function() {
+      widget = tabris.create("Button").on("selection", listener);
+      tabris._notify(widget.cid, "Selection", {});
+      checkEvent();
     });
 
     it("CheckBox change:selection", function() {

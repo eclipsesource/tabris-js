@@ -108,6 +108,10 @@
       if (!result[event].name) {
         result[event].name = typeof entry === "string" ? entry : event;
       }
+      if (result[event].alias) {
+        result[event].originalName = event;
+        result[result[event].alias] = result[event];
+      }
     }
     return result;
   };

@@ -4,7 +4,7 @@ var page = new PluginPage("Camera", "org.apache.cordova.camera", function(parent
   var button = tabris.create("Button", {
     layoutData: {left: 10, top: 10, right: 10},
     text: "Take a picture"
-  }).appendTo(parent).on("selection", function() {
+  }).appendTo(parent).on("select", function() {
     navigator.camera.getPicture(onSuccess, onFail, {
       quality: 50,
       targetWidth: 1024,

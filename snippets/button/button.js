@@ -8,7 +8,7 @@ var count = 0;
 tabris.create("Button", {
   layoutData: {left: 10, top: 10},
   text: "Button"
-}).on("selection", function() {
+}).on("select", function() {
   this.set("text", "Pressed " + (++count) + " times");
 }).appendTo(page);
 

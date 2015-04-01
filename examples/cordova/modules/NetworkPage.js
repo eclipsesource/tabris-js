@@ -15,7 +15,7 @@ var page = new PluginPage("Network", "org.apache.cordova.network-information", f
   var button = tabris.create("Button", {
     layoutData: {left: 10, top: 10, right: 10},
     text: "Get Network State"
-  }).appendTo(parent).on("selection", function() {
+  }).appendTo(parent).on("select", function() {
     var networkState = navigator.connection.type;
     textView.set("text", states[networkState]);
   });

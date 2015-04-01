@@ -42,7 +42,7 @@ var repeatCheckbox = tabris.create("CheckBox", {
 var startButton = tabris.create("Button", {
   text: "Start timer",
   layoutData: {left: ["50%", MARGIN / 4], top: [repeatCheckbox, MARGIN_LARGE], right: MARGIN}
-}).on("selection", function() {
+}).on("select", function() {
   var delay = parseInt(delayTextInput.get("text"));
   if (repeatCheckbox.get("selection")) {
     // starting a timer periocically
@@ -60,7 +60,7 @@ var startButton = tabris.create("Button", {
 var cancelButton = tabris.create("Button", {
   text: "Cancel timer",
   layoutData: {left: MARGIN, top: [repeatCheckbox, MARGIN_LARGE], right: ["50%", MARGIN / 4]}
-}).on("selection", function() {
+}).on("select", function() {
   // cancel a running timer
   clearTimeout(taskId);
   enableTimerStart(true);

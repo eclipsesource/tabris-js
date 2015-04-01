@@ -90,7 +90,7 @@ function createPage(chartType, chartData) {
     var height = Math.min(bounds.height, width);
     return tabris.getContext(canvas, width, height);
   };
-  button.on("selection", function() {
+  button.on("select", function() {
     var ctx = createCanvasContext();
     // workaround for scaling to native pixels by chart.js
     ctx.scale(1 / window.devicePixelRatio, 1 / window.devicePixelRatio);

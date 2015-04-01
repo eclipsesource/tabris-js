@@ -64,17 +64,17 @@ describe("PageSelector", function() {
       expect(pageSelector.get("items")).toEqual([page1]);
     });
 
-    it("opens page on selection", function() {
+    it("opens page on select", function() {
       spyOn(page1, "open");
-      pageSelector.trigger("selection", {item: page1});
+      pageSelector.trigger("select", pageSelector, page1);
 
       expect(page1.open).toHaveBeenCalled();
     });
 
-    it("closes drawer on selection", function() {
+    it("closes drawer on select", function() {
       var drawer = tabris.create("Drawer");
       spyOn(drawer, "close");
-      pageSelector.trigger("selection", {item: page1});
+      pageSelector.trigger("select", pageSelector, page1);
 
       expect(drawer.close).toHaveBeenCalled();
     });

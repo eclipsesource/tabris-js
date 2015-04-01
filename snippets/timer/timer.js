@@ -6,7 +6,7 @@ var page = tabris.create("Page", {
 tabris.create("Button", {
   layoutData: {centerX: 0, centerY: 0},
   text: "Press me!"
-}).on("selection", function() {
+}).on("select", function() {
   this.set("text", "Please wait...");
   setTimeout(function() {
     this.set("text", "Thank you!");

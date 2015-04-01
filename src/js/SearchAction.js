@@ -25,7 +25,24 @@ tabris.registerType("SearchAction", {
     proposals: {default: function() {return [];}}
   },
 
-  _events: {selection: "Selection", modify: "Modify", submit: "Search"},
+  _events: {
+    modify: "Modify",
+    submit: "Search",
+    select: {
+      name: "Selection",
+      alias: "selection",
+      listen: function(state, alias) {
+        this._nativeListen("selection", state);
+        if (alias) {
+          console.warn("Action event \"selection\" is deprecated, use \"select\"");
+        }
+      },
+      trigger: function(event) {
+        this.trigger("select", this, event);
+        this.trigger("selection", this, event);
+      }
+    }
+  },
 
   _create: function(properties) {
     this.super("_create", properties);

@@ -309,7 +309,22 @@
   tabris.registerWidget("Button", {
     _type: "rwt.widgets.Button",
     _initProperties: {style: ["PUSH"]},
-    _events: {selection: "Selection"},
+    _events: {
+      select: {
+        name: "Selection",
+        alias: "selection",
+        listen: function(state, alias) {
+          this._nativeListen("selection", state);
+          if (alias) {
+            console.warn("Button event \"selection\" is deprecated, use \"select\"");
+          }
+        },
+        trigger: function(event) {
+          this.trigger("select", this, event);
+          this.trigger("selection", this, event);
+        }
+      }
+    },
     _properties: {
       alignment: {type: ["choice", ["left", "right", "center"]], default: "center"},
       image: {type: "image", default: null},

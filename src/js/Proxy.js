@@ -34,16 +34,24 @@
       return !!this._isDisposed;
     },
 
-    _listen: function(type, state) {
-      var event = this._getEventConfig(type);
-      if (!event) {
+    _listen: function(event, state) {
+      var config = this._getEventConfig(event);
+      if (!config || this._isListeningToAlias(event, config)) {
         return;
       }
-      if (event.listen) {
-        event.listen.call(this, state);
+      if (config.listen) {
+        config.listen.call(this, state, config.alias === event);
       } else {
-        this._nativeListen(event.name, state);
+        this._nativeListen(config.name, state);
       }
+    },
+
+    _isListeningToAlias: function(event, config) {
+      if (!config.alias) {
+        return false;
+      }
+      var other = event === config.originalName ?  config.alias : config.originalName;
+      return this._isListening(other);
     },
 
     _nativeListen: function(event, state) {

@@ -20,6 +20,7 @@ describe("Proxy", function() {
   afterEach(function() {
     window.console = consoleBackup;
     delete tabris.TestType;
+    delete tabris.CustomType;
   });
 
   describe("create", function() {
@@ -29,10 +30,6 @@ describe("Proxy", function() {
     beforeEach(function() {
       proxy = tabris.create("TestType");
       nativeBridge.resetCalls();
-    });
-
-    afterEach(function() {
-      delete tabris.CustomType;
     });
 
     it("creates proxy for standard types", function() {
@@ -770,11 +767,33 @@ describe("Proxy", function() {
         delete tabris.CustomType;
       });
 
+      it("calls native listen (true) for first alias listener", function() {
+        tabris.registerType("CustomType", {_events: {foo: {name: "bar", alias: "foo1"}}});
+        proxy = tabris.create("CustomType");
+
+        proxy.on("foo1", listener);
+
+        var call = nativeBridge.calls({op: "listen", event: "bar"})[0];
+        expect(call.listen).toEqual(true);
+      });
+
       it("calls custom listen", function() {
         tabris.TestType._events.bar.listen = jasmine.createSpy();
+
         proxy.on("bar", listener);
 
-        expect(tabris.TestType._events.bar.listen).toHaveBeenCalled();
+        expect(tabris.TestType._events.bar.listen).toHaveBeenCalledWith(true, false);
+      });
+
+      it("calls custom listen with alias flag", function() {
+        tabris.registerType("CustomType", {
+          _events: {foo: {alias: "foo1", listen: jasmine.createSpy()}}
+        });
+        proxy = tabris.create("CustomType");
+
+        proxy.on("foo1", listener);
+
+        expect(tabris.CustomType._events.foo.listen).toHaveBeenCalledWith(true, true);
       });
 
       it("calls native listen for another listener for another event", function() {
@@ -790,6 +809,24 @@ describe("Proxy", function() {
       it("does not call native listen for subsequent listeners for the same event", function() {
         proxy.on("bar", listener);
         proxy.on("bar", listener);
+
+        expect(nativeBridge.calls({op: "listen"}).length).toBe(1);
+      });
+
+      it("does not call native listen for subsequent listeners for alias event", function() {
+        tabris.registerType("CustomType", {_events: {foo: {alias: "bar"}}});
+        proxy = tabris.create("CustomType");
+        proxy.on("foo", listener);
+        proxy.on("bar", listener);
+
+        expect(nativeBridge.calls({op: "listen"}).length).toBe(1);
+      });
+
+      it("does not call native listen for subsequent listeners for aliased event", function() {
+        tabris.registerType("CustomType", {_events: {foo: {alias: "bar"}}});
+        proxy = tabris.create("CustomType");
+        proxy.on("bar", listener);
+        proxy.on("foo", listener);
 
         expect(nativeBridge.calls({op: "listen"}).length).toBe(1);
       });
@@ -828,6 +865,17 @@ describe("Proxy", function() {
         expect(call.listen).toBe(false);
       });
 
+      it("calls native listen (false) for last alias listener removed", function() {
+        tabris.registerType("CustomType", {_events: {foo: {alias: "bar"}}});
+        proxy = tabris.create("CustomType");
+        proxy.on("bar", listener);
+
+        proxy.off("bar", listener);
+
+        var call = nativeBridge.calls({op: "listen", event: "foo"})[1];
+        expect(call.listen).toBe(false);
+      });
+
       it("calls native listen with translated event name", function() {
         tabris.registerType("CustomType", {_events: {foo: "bar"}});
         proxy = tabris.create("CustomType");
@@ -844,6 +892,56 @@ describe("Proxy", function() {
         proxy.off("bar", listener);
 
         expect(nativeBridge.calls().length).toBe(0);
+      });
+
+      it("does not call native listen when other listeners exist for alias event", function() {
+        tabris.registerType("CustomType", {_events: {foo: {alias: "bar"}}});
+        proxy = tabris.create("CustomType");
+        proxy.on("foo", listener);
+        proxy.on("bar", listener);
+        nativeBridge.resetCalls();
+
+        proxy.off("foo", listener);
+
+        expect(nativeBridge.calls().length).toBe(0);
+      });
+
+      it("does not call native listen when other listeners exist for aliased event", function() {
+        tabris.registerType("CustomType", {_events: {foo: {alias: "bar"}}});
+        proxy = tabris.create("CustomType");
+        proxy.on("foo", listener);
+        proxy.on("bar", listener);
+        nativeBridge.resetCalls();
+
+        proxy.off("bar", listener);
+
+        expect(nativeBridge.calls().length).toBe(0);
+      });
+
+      it("calls native listen when not other listeners exist for aliased or alias event", function() {
+        tabris.registerType("CustomType", {_events: {foo: {alias: "bar"}}});
+        proxy = tabris.create("CustomType");
+        proxy.on("foo", listener);
+        proxy.on("bar", listener);
+        nativeBridge.resetCalls();
+
+        proxy.off("bar", listener);
+        proxy.off("foo", listener);
+
+        expect(nativeBridge.calls().length).toBe(1);
+      });
+
+      it("calls native listen when not other listeners exist for aliased or alias event (reversed off)", function() {
+        tabris.registerType("CustomType", {_events: {foo: {alias: "bar"}}});
+        proxy = tabris.create("CustomType");
+        proxy.on("foo", listener);
+        proxy.on("bar", listener);
+        nativeBridge.resetCalls();
+
+        proxy.off("foo", listener);
+        proxy.off("bar", listener);
+
+        expect(nativeBridge.calls().length).toBe(1);
       });
 
       it("returns self to allow chaining", function() {

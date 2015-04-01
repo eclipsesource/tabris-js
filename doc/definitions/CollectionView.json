@@ -30,8 +30,8 @@
     }
   },
   "events": {
-    "selection": {
-      "description": "Fired when a collection item is selected. The event object includes a field `item` that contains the data item that is mapped to the selected cell."
+    "select": {
+      "description": "Fired when a collection item is selected. Parameters are: `collectionView`, `item`, `{index: number}`"
     },
     "refresh": {
       "description": "Fired when the user requested a refresh. An event listener should reset the `refreshIndicator` property when refresh is finished."

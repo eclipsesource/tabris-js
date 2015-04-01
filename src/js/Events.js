@@ -73,10 +73,11 @@ tabris.Events = {
   },
 
   trigger: function(type /*, args* */) {
-    this._checkDisposed();
-    var args = Array.prototype.slice.call(arguments, 1);
-    this._callAll(type, args, false);
-    this._callAll(type, args, true);
+    if (!this._isDisposed) {
+      var args = Array.prototype.slice.call(arguments, 1);
+      this._callAll(type, args, false);
+      this._callAll(type, args, true);
+    }
     return this;
   },
 

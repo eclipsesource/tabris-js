@@ -123,11 +123,24 @@ describe("CollectionView", function() {
 
           beforeEach(function() {
             listener = jasmine.createSpy("listener");
-            view.on("selection", listener);
-            view._trigger("selection", {index: 0});
           });
 
-          it("triggers selection on the collection view", function() {
+          it("triggers select on the collection view", function() {
+            view.on("select", listener);
+
+            view._trigger("selection", {index: 0});
+
+            expect(listener.calls.count()).toBe(1);
+            expect(listener.calls.argsFor(0)[0]).toBe(view);
+            expect(listener.calls.argsFor(0)[1]).toBe("a");
+            expect(listener.calls.argsFor(0)[2]).toEqual({index: 0});
+          });
+
+          it("triggers selection on the collection view (legacy)", function() {
+            view.on("selection", listener);
+
+            view._trigger("selection", {index: 0});
+
             expect(listener).toHaveBeenCalledWith({index: 0, item: "a"});
           });
 

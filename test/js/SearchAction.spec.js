@@ -89,4 +89,35 @@ describe("SearchAction", function() {
 
   });
 
+  describe("select event", function() {
+
+    var action, listener;
+
+    beforeEach(function() {
+      action = tabris.create("SearchAction");
+      listener = jasmine.createSpy();
+    });
+
+    it("is fired with parameters", function() {
+      action.on("select", listener);
+
+      tabris._notify(action.cid, "Selection", {});
+
+      expect(listener.calls.count()).toBe(1);
+      expect(listener.calls.argsFor(0)[0]).toBe(action);
+      expect(listener.calls.argsFor(0)[1]).toEqual({});
+    });
+
+    it("is fired with parameters (legacy)", function() {
+      action.on("selection", listener);
+
+      tabris._notify(action.cid, "Selection", {});
+
+      expect(listener.calls.count()).toBe(1);
+      expect(listener.calls.argsFor(0)[0]).toBe(action);
+      expect(listener.calls.argsFor(0)[1]).toEqual({});
+    });
+
+  });
+
 });

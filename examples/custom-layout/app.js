@@ -14,10 +14,10 @@ var composite = tabris.create("Composite", {
 var count = 1;
 tabris.create("Button", {
   text: "Add Button"
-}).on("selection", function() {
+}).on("select", function() {
   return tabris.create("Button", {
     text: "Button " + count++ + " (remove)"
-  }).on("selection", function() {
+  }).on("select", function() {
     this.dispose();
   }).appendTo(composite);
 }).appendTo(composite);

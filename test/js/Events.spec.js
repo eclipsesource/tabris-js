@@ -297,9 +297,9 @@
             expect(object._checkDisposed).toHaveBeenCalled();
           });
 
-          it("is called for 'trigger'", function() {
+          it("is not called for 'trigger'", function() {
             object.trigger("foo");
-            expect(object._checkDisposed).toHaveBeenCalled();
+            expect(object._checkDisposed).not.toHaveBeenCalled();
           });
 
         });

@@ -381,6 +381,16 @@ describe("tabris", function() {
       expect(instance._events).toBe(tabris.Proxy.prototype._events);
     });
 
+    it("adds normalized _events to constructor", function() {
+      tabris.registerType("CustomType", {_events: {foo: "bar", foo2: {alias: "foo3"}}});
+      var instance = tabris.create("CustomType");
+
+      expect(instance.constructor._events.foo).toEqual({name: "bar"});
+      expect(instance.constructor._events.foo2).toEqual({name: "foo2", alias: "foo3", originalName: "foo2"});
+      expect(instance.constructor._events.foo3).toBe(instance.constructor._events.foo2);
+      expect(instance._events).not.toBe(instance.constructor._events);
+    });
+
     it("adds empty events map to constructor", function() {
       tabris.registerType("CustomType", {});
       var instance = tabris.create("CustomType");

@@ -28,8 +28,8 @@
     }
   },
   "events": {
-    "selection": {
-      "description": "Fired when the action is invoked."
+    "select": {
+      "description": "Fired when the action is invoked. Gives the action as the first parameter."
     }
   },
   "links": [

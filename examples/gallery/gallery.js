@@ -31,13 +31,13 @@ imageNames.forEach(function(image, index) {
 var fullscreenAction = tabris.create("Action", {
   title: "Fullscreen",
   placementPriority: "high"
-}).on("selection", toggleAction);
+}).on("select", toggleAction);
 
 var thumbnailsAction = tabris.create("Action", {
   title: "Thumbnails",
   placementPriority: "high",
   visible: false
-}).on("selection", toggleAction);
+}).on("select", toggleAction);
 
 page.open();
 

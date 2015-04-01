@@ -6,7 +6,7 @@ var page = tabris.create("Page", {
 tabris.create("Action", {
   title: "Action",
   image: "images/share.png"
-}).on("selection", function() {
+}).on("select", function() {
   console.log("Action selected.");
 });
 

@@ -6,7 +6,7 @@ var page = tabris.create("Page", {
 tabris.create("Button", {
   layoutData: {left: 10, top: 10},
   text: "Find words starting with 'mobile'"
-}).on("selection", function() {
+}).on("select", function() {
   var xhr = new tabris.XMLHttpRequest();
   xhr.onreadystatechange = function() {
     if (xhr.readyState === xhr.DONE) {

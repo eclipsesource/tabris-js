@@ -108,7 +108,7 @@ var button = tabris.create("Button", {
   text: "Place Reservation",
   background: "#8b0000",
   foreground: "white"
-}).on("selection", function() {
+}).on("select", function() {
   populateMessage();
 }).appendTo(page);
 

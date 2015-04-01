@@ -63,12 +63,19 @@
           cell.trigger("itemchange", item, event.index);
         }
       },
-      selection: {
+      select: {
+        name: "selection",
+        alias: "selection",
+        listen: function(state, alias) {
+          this._nativeListen("selection", state);
+          if (alias) {
+            console.warn("CollectionView event \"selection\" is deprecated, use \"select\"");
+          }
+        },
         trigger: function(event) {
-          this.trigger("selection", {
-            index: event.index,
-            item: this._getItem(this._items, event.index)
-          });
+          var item = this._getItem(this._items, event.index);
+          this.trigger("select", this, item, {index: event.index});
+          this.trigger("selection", {index: event.index, item: item});
         }
       }
     },

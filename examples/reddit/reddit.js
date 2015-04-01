@@ -47,9 +47,9 @@ var collectionView = tabris.create("CollectionView", {
   }
 }).on("refresh", function() {
   loadNewData();
-}).on("selection", function(event) {
-  if (!event.item.loading) {
-    createDetailsPage(event.item.data);
+}).on("select", function(target, value) {
+  if (!value.loading) {
+    createDetailsPage(value.data);
   }
 }).appendTo(page);
 

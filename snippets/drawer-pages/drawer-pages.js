@@ -22,7 +22,7 @@ function createPage(title) {
   tabris.create("Button", {
     text: "Create another page",
     layoutData: {left: 20, right: 20, top: 20}
-  }).on("selection", function() {
+  }).on("select", function() {
     createPage("Another Page");
   }).appendTo(page);
   return page;

@@ -11,7 +11,7 @@ function createPage(title, topLevel) {
   tabris.create("Button", {
     layoutData: {left: 10, top: 10, right: 10},
     text: "Create another page"
-  }).on("selection", function() {
+  }).on("select", function() {
     createPage("Page " + (++pageCount), false);
   }).appendTo(page);
 }

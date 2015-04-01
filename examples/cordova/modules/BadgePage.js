@@ -10,7 +10,7 @@ var page = new PluginPage("Badge", "de.appplant.cordova.plugin.badge", function(
   tabris.create("Button", {
     layoutData: {left: 10, top: [input, 10], right: 10},
     text: "Set Badge"
-  }).appendTo(parent).on("selection", function() {
+  }).appendTo(parent).on("select", function() {
     var badge = input.get("text");
     cordova.plugins.notification.badge.set(badge);
   });

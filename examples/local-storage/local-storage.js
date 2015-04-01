@@ -26,7 +26,7 @@ var valueField = tabris.create("TextInput", {
 var setButton = tabris.create("Button", {
   layoutData: {left: 10, right: ["50%", 10], top: [valueTextView, 20]},
   text: "Set"
-}).on("selection", function() {
+}).on("select", function() {
   if (!keyField.get("text")) {
     console.error("They key cannot be empty.");
   } else if (!valueField.get("text")) {
@@ -40,7 +40,7 @@ var setButton = tabris.create("Button", {
 tabris.create("Button", {
   layoutData: {left: [setButton, 10], right: 10, baseline: setButton},
   text: "Get"
-}).on("selection", function() {
+}).on("select", function() {
   if (!keyField.get("text")) {
     console.error("The key cannot be empty.");
   } else {
@@ -52,7 +52,7 @@ tabris.create("Button", {
 var removeButton = tabris.create("Button", {
   layoutData: {left: 10, right: ["50%", 10], top: [setButton, 20]},
   text: "Remove"
-}).on("selection", function() {
+}).on("select", function() {
   localStorage.removeItem(keyField.get("text"));
   valueField.set("text", "");
 }).appendTo(page);
@@ -60,7 +60,7 @@ var removeButton = tabris.create("Button", {
 tabris.create("Button", {
   layoutData: {left: [removeButton, 10], right: 10, baseline: removeButton},
   text: "Clear"
-}).on("selection", function() {
+}).on("select", function() {
   localStorage.clear();
   valueField.set("text", "");
 }).appendTo(page);

@@ -13,7 +13,7 @@ var logTextInput = tabris.create("TextInput", {
   tabris.create("Button", {
     layoutData: {left: 10, right: 10, top: [page.children().last(), 10]},
     text: method
-  }).on("selection", function() {
+  }).on("select", function() {
     console[method](logTextInput.get("text"));
   }).appendTo(page);
 });

@@ -35,8 +35,8 @@ tabris.create("CollectionView", {
       nameTextView.set("text", person.firstName);
     });
   }
-}).on("selection", function(event) {
-  console.log("selected", event.item.firstName);
+}).on("select", function(target, value) {
+  console.log("selected", value.firstName);
 }).appendTo(page);
 
 page.open();

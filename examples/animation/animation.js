@@ -18,7 +18,7 @@ var textView = tabris.create("TextView", {
   text: "Hello World!"
 }).appendTo(page);
 
-button.on("selection", function() {
+button.on("select", function() {
   textView.animate({
     opacity: 0.25,
     transform: {

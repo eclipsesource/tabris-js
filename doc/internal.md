@@ -49,7 +49,8 @@ Valid values for the `_events` map are:
 * A *string*: will be used as the event name in the `listen` operation instead of the public event name. Incoming notify calls with that name will be translated back to the public event name.
 * A *map* with any of these entries:
     * `name`: The internal event name. Same as giving the string directly (see above).
-    * `listen`: A function that will be called with the new listen state (`true`/`false`) as the sole argument and the proxy as the context (`this`). It can use the `_nativeListen` method of the proxy if needed.
+    * `alias`: An alternative event name that is publicly available. There should be no event registered under this alias. This affects only the `listen` operations, use a `trigger` function to trigger the alias event as well as the original.
+    * `listen`: A function that will be called with the new listen state (`true`/`false`) as the first argument and the proxy as the context (`this`). It can use the `_nativeListen` method of the proxy if needed. The second argument is true if the listen was invoked by registering a listener using the event alias.
     * `trigger`: A function that will be called instead of proxy.trigger for this event type.
 
 ## tabris.registerWidget

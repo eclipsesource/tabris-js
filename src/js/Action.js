@@ -15,7 +15,22 @@ tabris.registerWidget("Action", {
     title: {type: "string", default: ""}
   },
 
-  _events: {selection: "Selection"},
+  _events: {
+    select: {
+      name: "Selection",
+      alias: "selection",
+      listen: function(state, alias) {
+        this._nativeListen("selection", state);
+        if (alias) {
+          console.warn("Action event \"selection\" is deprecated, use \"select\"");
+        }
+      },
+      trigger: function(event) {
+        this.trigger("select", this, event);
+        this.trigger("selection", this, event);
+      }
+    }
+  },
 
   _create: function(properties) {
     this.super("_create", properties);
