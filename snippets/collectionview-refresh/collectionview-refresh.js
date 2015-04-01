@@ -11,7 +11,7 @@ var view = tabris.create("CollectionView", {
     var textView = tabris.create("TextView", {
       layoutData: {top: 2, bottom: 2, left: 5, right: 5}
     }).appendTo(cell);
-    cell.on("itemchange", function(item) {
+    cell.on("change:item", function(widget, item) {
       textView.set("text", item);
     });
   }

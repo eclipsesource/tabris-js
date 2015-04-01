@@ -134,6 +134,7 @@ describe("CollectionView", function() {
             expect(listener.calls.argsFor(0)[0]).toBe(view);
             expect(listener.calls.argsFor(0)[1]).toBe("a");
             expect(listener.calls.argsFor(0)[2]).toEqual({index: 0});
+            expect(console.warn).not.toHaveBeenCalled();
           });
 
           it("triggers selection on the collection view (legacy)", function() {
@@ -142,6 +143,7 @@ describe("CollectionView", function() {
             view._trigger("selection", {index: 0});
 
             expect(listener).toHaveBeenCalledWith({index: 0, item: "a"});
+            expect(console.warn).toHaveBeenCalled();
           });
 
         });
@@ -195,12 +197,24 @@ describe("CollectionView", function() {
 
             beforeEach(function() {
               listener = jasmine.createSpy("listener");
-              cell.on("itemchange", listener);
-              view._trigger("populateitem", {widget: cell.cid, index: 0});
             });
 
-            it("triggers itemchange event on the cell", function() {
+            it("triggers change:item event on the cell", function() {
+              cell.on("change:item", listener);
+              view._trigger("populateitem", {widget: cell.cid, index: 0});
+              expect(listener).toHaveBeenCalled();
+              expect(listener.calls.argsFor(0)[0]).toBe(cell);
+              expect(listener.calls.argsFor(0)[1]).toBe("a");
+              expect(listener.calls.argsFor(0)[2]).toEqual({index: 0});
+              expect(cell.get("item")).toBe("a");
+              expect(console.warn).not.toHaveBeenCalled();
+            });
+
+            it("triggers itemchange event on the cell (legacy)", function() {
+              cell.on("itemchange", listener);
+              view._trigger("populateitem", {widget: cell.cid, index: 0});
               expect(listener).toHaveBeenCalledWith("a", 0);
+              expect(console.warn).toHaveBeenCalled();
             });
 
           });

@@ -1,11 +1,11 @@
 tabris.Properties = {
 
-  set: function(arg1, arg2) {
+  set: function(arg1, arg2, arg3) {
     this._checkDisposed();
     if (typeof arg1 === "string") {
-      this._setProperty(arg1, arg2);
+      this._setProperty(arg1, arg2, arg3 || {});
     } else {
-      this._setProperties(arg1);
+      this._setProperties(arg1, arg2 || {});
     }
     return this;
   },
@@ -18,14 +18,14 @@ tabris.Properties = {
     return this._readProperty(name);
   },
 
-  _setProperties: function(properties) {
+  _setProperties: function(properties, options) {
     for (var name in properties) {
-      this._setProperty(name, properties[name]);
+      this._setProperty(name, properties[name], options);
     }
   },
 
-  _setProperty: function(name, value) {
-    var accept = this._applyProperty(name, value);
+  _setProperty: function(name, value, options) {
+    var accept = this._applyProperty(name, value, options);
     if (accept) {
       if (!this._props) {
         this._props = {};
@@ -33,7 +33,7 @@ tabris.Properties = {
       var oldValue = this._props[name];
       this._props[name] = value;
       if (oldValue !== value) {
-        this.trigger("change:" + name, this, value, {});
+        this.trigger("change:" + name, this, value, options);
       }
     }
   },

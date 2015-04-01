@@ -1,6 +1,6 @@
 {
   "type": "CollectionView",
-  "description": "A scrollable list that displays data items in cells, one per row. Cells are created on demand and filled with widgets in the `initializeCell` callback. When a data item is mapped to a cell, the cell receives an `itemchange` event.",
+  "description": "A scrollable list that displays data items in cells, one per row. Cells are created on demand and filled with widgets in the `initializeCell` callback. When a data item is mapped to a cell, it is set as the property `item` and the cell receives an `change:item` event. ",
   "include": ["Widget"],
   "properties": {
     "itemHeight": {
@@ -61,11 +61,11 @@
     "refresh": [
       {
         "parameters": [],
-        "description": "Triggers a refresh of all visible items. This will issue `itemchange` events on the corresponding cells."
+        "description": "Triggers a refresh of all visible items. This will issue `change:item` events on the corresponding cells."
       },
       {
         "parameters": ["index"],
-        "description": "Triggers a refresh of the item with the given index. If the item is scrolled into view, an `itemchange` event will be issued on the corresponding cell."
+        "description": "Triggers a refresh of the item with the given index. If the item is scrolled into view, an `change:item` event will be issued on the corresponding cell."
       }
     ],
     "reveal": [

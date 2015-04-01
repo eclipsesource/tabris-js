@@ -55,7 +55,7 @@
       font: "20px",
       foreground: "#333"
     }).appendTo(cell);
-    cell.on("itemchange", function(page) {
+    cell.on("change:item", function(widget, page) {
       imageView.set("image", page.get("image"));
       textView.set("text", page.get("title"));
     });

@@ -25,7 +25,7 @@ var collectionView = tabris.create("CollectionView", {
       alignment: "right",
       foreground: "green"
     }).appendTo(cell);
-    cell.on("itemchange", function(item) {
+    cell.on("change:item", function(widget, item) {
       if (item.loading) {
         cell.children().set("visible", false);
         nameView.set({visible: true, text: "loading ..."});

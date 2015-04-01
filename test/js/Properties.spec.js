@@ -42,7 +42,14 @@ describe("Properties", function() {
       object.set("foo", "bar");
 
       expect(object.get("foo")).toBe("bar");
-      expect(object._applyProperty).toHaveBeenCalledWith("foo", "bar");
+      expect(object._applyProperty).toHaveBeenCalledWith("foo", "bar", {});
+    });
+
+    it ("set calls _applyProperty with options", function() {
+      object._applyProperty = jasmine.createSpy().and.returnValue(true);
+      object.set("foo", "bar", {foo2: "bar2"});
+
+      expect(object._applyProperty).toHaveBeenCalledWith("foo", "bar", {foo2: "bar2"});
     });
 
     it ("set does not store value if _applyProperty returns false", function() {
@@ -94,6 +101,28 @@ describe("Properties", function() {
       expect(listener.calls.argsFor(0)[0]).toBe(object);
       expect(listener.calls.argsFor(0)[1]).toBe("bar");
       expect(listener.calls.argsFor(0)[2]).toEqual({});
+    });
+
+    it ("set (two parameters) triggers change event with options", function() {
+      object.on("change:foo", listener);
+
+      object.set({foo: "bar"}, {foo2: "bar2"});
+
+      expect(listener).toHaveBeenCalled();
+      expect(listener.calls.argsFor(0)[0]).toBe(object);
+      expect(listener.calls.argsFor(0)[1]).toBe("bar");
+      expect(listener.calls.argsFor(0)[2]).toEqual({foo2: "bar2"});
+    });
+
+    it ("set (three parameters) triggers change event with options", function() {
+      object.on("change:foo", listener);
+
+      object.set("foo", "bar", {foo2: "bar2"});
+
+      expect(listener).toHaveBeenCalled();
+      expect(listener.calls.argsFor(0)[0]).toBe(object);
+      expect(listener.calls.argsFor(0)[1]).toBe("bar");
+      expect(listener.calls.argsFor(0)[2]).toEqual({foo2: "bar2"});
     });
 
     it ("set triggers no change event if value is unchanged", function() {

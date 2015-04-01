@@ -121,7 +121,7 @@ function createBooksList(books) {
         layoutData: {left: 64, right: PAGE_MARGIN, top: [titleTextView, 4]},
         foreground: "#7b7b7b"
       }).appendTo(cell);
-      cell.on("itemchange", function(book) {
+      cell.on("change:item", function(widget, book) {
         imageView.set("image", book.image);
         titleTextView.set("text", book.title);
         authorTextView.set("text", book.author);

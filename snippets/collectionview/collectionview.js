@@ -30,7 +30,7 @@ tabris.create("CollectionView", {
       layoutData: {left: 30, top: [imageView, 16], right: 30},
       alignment: "center"
     }).appendTo(cell);
-    cell.on("itemchange", function(person) {
+    cell.on("change:item", function(widget, person) {
       imageView.set("image", {src: person.image});
       nameTextView.set("text", person.firstName);
     });

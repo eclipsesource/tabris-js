@@ -635,6 +635,19 @@ describe("Proxy", function() {
         expect(listener.calls.argsFor(0)[2]).toEqual({});
       });
 
+      it ("triggers change event for known properties with options object", function() {
+        tabris.TestType._properties.foo = {type: true, default: ""};
+        var listener = jasmine.createSpy();
+        proxy.on("change:foo", listener);
+
+        proxy.set("foo", "bar", {foo2: "bar2"});
+
+        expect(listener).toHaveBeenCalled();
+        expect(listener.calls.argsFor(0)[0]).toBe(proxy);
+        expect(listener.calls.argsFor(0)[1]).toBe("bar");
+        expect(listener.calls.argsFor(0)[2]).toEqual({foo2: "bar2"});
+      });
+
       it ("triggers change event with decoded property value", function() {
         tabris.TestType._properties.foo = {type: "color"};
         var listener = jasmine.createSpy();

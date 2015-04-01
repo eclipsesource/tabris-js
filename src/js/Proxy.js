@@ -86,7 +86,7 @@
       }
     },
 
-    _applyProperty: function(name, value) {
+    _applyProperty: function(name, value, options) {
       var type = this._getPropertyType(name);
       if (!type) {
         return true;
@@ -104,7 +104,7 @@
       } else {
         this._nativeSet(name, tabris.PropertyEncoding.proxy(encodedValue));
       }
-      this._cacheProperty(name, encodedValue);
+      this._cacheProperty(name, encodedValue, options);
     },
 
     _encodeProperty: function(value, type) {
@@ -175,7 +175,7 @@
       return tabris._nativeBridge.call(this.cid, method, parameters);
     },
 
-    _cacheProperty: function(name, value) {
+    _cacheProperty: function(name, value, options) {
       if (!this.constructor._properties[name].nocache) {
         if (!this._propertyCache) {
           this._propertyCache = {};
@@ -184,10 +184,10 @@
         var previous = cached ? this._getCachedProperty(name) : undefined;
         this._propertyCache[name] = value;
         if (!cached || !propertyEquals(previous, value)) {
-          this._triggerChangeEvent(name, value);
+          this._triggerChangeEvent(name, value, options);
         }
       } else {
-        this._triggerChangeEvent(name, value);
+        this._triggerChangeEvent(name, value, options);
       }
     },
 
@@ -203,10 +203,10 @@
       return valueOf(this.constructor._properties[name].default);
     },
 
-    _triggerChangeEvent: function(propertyName, newEncodedValue) {
+    _triggerChangeEvent: function(propertyName, newEncodedValue, options) {
       var type = this._getPropertyType(propertyName);
       var decodedValue = this._decodeProperty(newEncodedValue, type);
-      this.trigger("change:" + propertyName, this, decodedValue, {});
+      this.trigger("change:" + propertyName, this, decodedValue, options || {});
     }
 
   });

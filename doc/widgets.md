@@ -38,11 +38,11 @@ Example:
 var input = textField.get("text");
 ```
 
-### `set(name, value)`
+### `set(name, value[, options])`
 
 Sets a widget property. Returns the widget itself.
 
-If the property is not supported by the widget, it will have no effect, but still be set. This can be used to attach arbitrary data to a widget. If the property is supported, but the given value is of the wrong type, the value will either be converted (if boolean or string are expected), or ignored with a printed warning.
+If the property is not supported by the widget, it will have no effect, but still be set. This can be used to attach arbitrary data to a widget. If the property is supported, but the given value is of the wrong type, the value will either be converted (if boolean or string are expected), or ignored with a printed warning. The options parameter is an object that will be given in the corresponding change event. 
 
 Parameters:
 
@@ -55,9 +55,9 @@ Example:
 label.set("text", "Hello World");
 ```
 
-### `set(properties)`
+### `set(properties[, options])`
 
-Sets a number of widget properties at once. Returns the widget itself.
+Sets a number of widget properties at once. Returns the widget itself. The options parameter is an object that will be given in the corresponding change event.
 
 Parameters:
 

@@ -43,7 +43,7 @@ var collectionView = tabris.create("CollectionView", {
       background: "#b8b8b8",
       layoutData: {left: 0, bottom: 0, right: 0, height: 1}
     }).appendTo(cell);
-    cell.on("itemchange", function(message) {
+    cell.on("change:item", function(widget, message) {
       container.set({transform: {}, message: message});
       senderView.set("text", message.sender);
       titleView.set("text", message.title);
