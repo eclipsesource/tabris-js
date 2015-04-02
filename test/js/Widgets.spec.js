@@ -542,6 +542,21 @@ describe("Widgets", function() {
       tabris._notify(widget.cid, "Selection", {selection: true});
       checkEvent(true);
       checkListen("Selection");
+
+    });
+
+    it("TextInput input", function() {
+      widget = tabris.create("TextInput").on("input", listener);
+      tabris._notify(widget.cid, "modify", {text: "foo"});
+      checkEvent("foo");
+      checkListen("modify");
+    });
+
+    it("TextInput accept", function() {
+      widget = tabris.create("TextInput").on("accept", listener);
+      tabris._notify(widget.cid, "accept", {text: "foo"});
+      checkEvent("foo");
+      checkListen("accept");
     });
 
     it("ToggleButton change:selection", function() {

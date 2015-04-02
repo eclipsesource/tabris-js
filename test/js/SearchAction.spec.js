@@ -89,7 +89,7 @@ describe("SearchAction", function() {
 
   });
 
-  describe("select event", function() {
+  describe("native events", function() {
 
     var action, listener;
 
@@ -98,33 +98,69 @@ describe("SearchAction", function() {
       listener = jasmine.createSpy();
     });
 
-    it("sends listen for Selection", function() {
-      action.on("select", listener);
-
+    var checkEvent = function(value) {
+      expect(listener.calls.count()).toBe(1);
+      expect(listener.calls.argsFor(0)[0]).toBe(action);
+      if (arguments.length === 1) {
+        expect(listener.calls.argsFor(0)[1]).toEqual(value);
+        expect(listener.calls.argsFor(0)[2]).toEqual({});
+      } else {
+        expect(listener.calls.argsFor(0)[1]).toEqual({});
+      }
+    };
+    var checkListen = function(event) {
       var listen = nativeBridge.calls({op: "listen", id: action.cid});
       expect(listen.length).toBe(1);
-      expect(listen[0].event).toBe("Selection");
+      expect(listen[0].event).toBe(event);
       expect(listen[0].listen).toBe(true);
-    });
+    };
 
-    it("is fired with parameters", function() {
+    it("select", function() {
       action.on("select", listener);
-
       tabris._notify(action.cid, "Selection", {});
 
-      expect(listener.calls.count()).toBe(1);
-      expect(listener.calls.argsFor(0)[0]).toBe(action);
-      expect(listener.calls.argsFor(0)[1]).toEqual({});
+      checkListen("Selection");
+      checkEvent();
     });
 
-    it("is fired with parameters (legacy)", function() {
+    it("selection (legacy)", function() {
       action.on("selection", listener);
-
       tabris._notify(action.cid, "Selection", {});
 
-      expect(listener.calls.count()).toBe(1);
-      expect(listener.calls.argsFor(0)[0]).toBe(action);
-      expect(listener.calls.argsFor(0)[1]).toEqual({});
+      checkListen("Selection");
+      checkEvent();
+    });
+
+    it("modify (legacy)", function() {
+      action.on("input", listener);
+      tabris._notify(action.cid, "Modify", {query: "foo"});
+
+      checkListen("Modify");
+      checkEvent("foo");
+    });
+
+    it("modify (legacy)", function() {
+      action.on("modify", listener);
+      tabris._notify(action.cid, "Modify", {query: "foo"});
+
+      checkListen("Modify");
+      checkEvent({query: "foo"});
+    });
+
+    it("accept", function() {
+      action.on("accept", listener);
+      tabris._notify(action.cid, "Search", {query: "foo"});
+
+      checkListen("Search");
+      checkEvent("foo");
+    });
+
+    it("submit (legacy)", function() {
+      action.on("submit", listener);
+      tabris._notify(action.cid, "Search", {query: "foo"});
+
+      checkListen("Search");
+      checkEvent({query: "foo"});
     });
 
   });

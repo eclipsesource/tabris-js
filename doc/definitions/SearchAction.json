@@ -9,11 +9,11 @@
     }
   },
   "events": {
-    "modify": {
-      "description": "Fired when the search text has changed. The current query text can be accessed using the event object's `query` field."
+    "input": {
+      "description": "Fired when the search text has changed. The current query text will be given as the second parameter."
     },
-    "submit": {
-      "description": "Fired when a text input has been submitted by pressing the keyboard's search key. The current query text can be accessed using the event object's `query` field."
+    "accept": {
+      "description": "Fired when a text input has been submitted by pressing the keyboard's search key. The current query text will be given as the second parameter."
     }
   },
   "links": [

@@ -9,15 +9,21 @@ var textView = tabris.create("TextView", {
   layoutData: {centerX: 0, centerY: 0}
 }).appendTo(page);
 
-tabris.create("SearchAction", {
+var action = tabris.create("SearchAction", {
   title: "Search",
   image: "images/search.png"
-}).on("modify", function(widget, event) {
-  this.set("proposals", proposals.filter(function(proposal) {
-    return proposal.indexOf(event.query) !== -1;
-  }));
-}).on("submit", function(widget, event) {
-  textView.set("text", "Selected '" + event.query + "'");
+}).on("input", function(widget, query) {
+  updateProposals(query);
+}).on("accept", function(widget, query) {
+  textView.set("text", "Selected '" + query + "'");
 });
 
+updateProposals("");
+
 page.open();
+
+function updateProposals(query) {
+  action.set("proposals", proposals.filter(function(proposal) {
+    return proposal.indexOf(query.toLowerCase()) !== -1;
+  }));
+}

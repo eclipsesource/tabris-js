@@ -26,8 +26,34 @@ tabris.registerType("SearchAction", {
   },
 
   _events: {
-    modify: {name: "Modify", trigger: triggerWithTarget},
-    submit: {name: "Search", trigger: triggerWithTarget},
+    input: {
+      name: "Modify",
+      alias: "modify",
+      listen: function(state, alias) {
+        this._nativeListen("Modify", state);
+        if (alias) {
+          console.warn("SearchAction event \"modify\" is deprecated, use \"input\"");
+        }
+      },
+      trigger: function(event) {
+        this.trigger("input", this, event.query, {});
+        this.trigger("modify", this, event, {});
+      }
+    },
+    accept: {
+      name: "Search",
+      alias: "submit",
+      listen: function(state, alias) {
+        this._nativeListen("Search", state);
+        if (alias) {
+          console.warn("SearchAction event \"submit\" is deprecated, use \"accept\"");
+        }
+      },
+      trigger: function(event) {
+        this.trigger("accept", this, event.query, {});
+        this.trigger("submit", this, event, {});
+      }
+    },
     select: {
       name: "Selection",
       alias: "selection",
@@ -51,7 +77,3 @@ tabris.registerType("SearchAction", {
   }
 
 });
-
-function triggerWithTarget(event, name) {
-  this.trigger(name, this, event);
-}

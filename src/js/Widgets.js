@@ -307,7 +307,7 @@
   }
 
   function triggerWithTarget(event, name) {
-    this.trigger(name, this, event);
+    this.trigger(name, this, event || {});
   }
 
   tabris.registerWidget("Button", {
@@ -462,13 +462,19 @@
   tabris.registerWidget("TextInput", {
     _type: "tabris.TextInput",
     _events: {
-      focus: triggerWithTarget,
-      blur: triggerWithTarget,
-      accept: triggerWithTarget,
-      "change:text": {
+      focus: {trigger: triggerWithTarget},
+      blur:  {trigger: triggerWithTarget},
+      accept: {
+        trigger: function(event) {
+          this.trigger("accept", this, event.text, {});
+        }
+      },
+      input: {
         name: "modify",
+        alias: "change:text",
         trigger: function(event) {
           this._triggerChangeEvent("text", event.text);
+          this.trigger("input", this, event.text, {});
         }
       }
     },
