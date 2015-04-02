@@ -298,13 +298,12 @@
           this._recognizers[name].dispose();
           delete this._recognizers[name];
         }
-      },
-      trigger: triggerWithTarget
+      }
     };
   }
 
   function gestureListener(event) {
-    this.target.trigger(this.name, event);
+    this.target.trigger(this.name, this.target, event);
   }
 
   function triggerWithTarget(event, name) {

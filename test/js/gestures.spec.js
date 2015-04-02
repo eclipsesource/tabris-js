@@ -124,7 +124,9 @@ describe("gestures:", function() {
 
           tabris._notify(gestureCreate()[0].id, "gesture", {state: "recognized"});
 
-          expect(listener).toHaveBeenCalledWith({state: "recognized"});
+          expect(listener.calls.count()).toBe(1);
+          expect(listener.calls.argsFor(0)[0]).toBe(widget);
+          expect(listener.calls.argsFor(0)[1]).toEqual({state: "recognized"});
         });
 
       });
