@@ -14,8 +14,11 @@
     }
   },
   "events": {
-    "change:selection": {
-      "description": "Fired when the selection property changes."
+    "change:selectionIndex": {
+      "description": "Fired when the selectionIndex property changes."
+    },
+    "select": {
+      "description": "Fired an item was selected by the user. Parameters are the same as in `change:selectionIndex`, i.e. `widget`, `selectionIndex`, `options`."
     }
   },
   "links": [

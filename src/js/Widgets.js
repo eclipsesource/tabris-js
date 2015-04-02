@@ -346,10 +346,12 @@
     _type: "rwt.widgets.Button",
     _initProperties: {style: ["CHECK"]},
     _events: {
-      "change:selection": {
+      select: {
         name: "Selection",
+        alias: "change:selection",
         trigger: function(event) {
           this._triggerChangeEvent("selection", event.selection);
+          this.trigger("select", this, event.selection, {});
         }
       }
     },
@@ -363,10 +365,12 @@
     _type: "rwt.widgets.Combo",
     _initProperties: {selectionIndex: 0},
     _events: {
-      "change:selection": {
+      select: {
         name: "Selection",
+        alias: "change:selectionIndex",
         trigger: function(event) {
-          this._triggerChangeEvent("selection", event.selectionIndex);
+          this._triggerChangeEvent("selectionIndex", event.selectionIndex);
+          this.trigger("select", this, event.selectionIndex, {});
         }
       }
     },
@@ -422,10 +426,12 @@
     _type: "rwt.widgets.Button",
     _initProperties: {style: ["RADIO"]},
     _events: {
-      "change:selection": {
+      select: {
         name: "Selection",
+        alias: "change:selection",
         trigger: function(event) {
           this._triggerChangeEvent("selection", event.selection);
+          this.trigger("select", this, event.selection, {});
         }
       }
     },
@@ -438,10 +444,12 @@
   tabris.registerWidget("Slider", {
     _type: "rwt.widgets.Scale",
     _events: {
-      "change:selection": {
+      select: {
         name: "Selection",
+        alias: "change:selection",
         trigger: function(event) {
           this._triggerChangeEvent("selection", event.selection);
+          this.trigger("select", this, event.selection, {});
         }
       }
     },
@@ -485,10 +493,12 @@
     _type: "rwt.widgets.Button",
     _initProperties: {style: ["TOGGLE"]},
     _events: {
-      "change:selection": {
+      select: {
         name: "Selection",
+        alias: "change:selection",
         trigger: function(event) {
           this._triggerChangeEvent("selection", event.selection);
+          this.trigger("select", this, event.selection, {});
         }
       }
     },

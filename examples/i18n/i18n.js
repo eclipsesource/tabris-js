@@ -10,7 +10,7 @@ var page = tabris.create("Page", {
 });
 
 tabris.create("Picker", {id: "langPicker", layoutData: {left: 10, top: 10, right: 10}})
-  .on("change:selection", function() {
+  .on("change:selectionIndex", function() {
     var selectionIndex = this.get("selectionIndex");
     if (selectionIndex > 0) {
       this.set("selectionIndex", 0);

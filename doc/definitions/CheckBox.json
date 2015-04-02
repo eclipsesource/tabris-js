@@ -15,6 +15,9 @@
   "events": {
     "change:selection": {
       "description": "Fired when the check box is checked or unchecked."
+    },
+    "select": {
+      "description": "Fired when the check box is checked or unchecked. Parameters are the same as in `change:selection`, i.e. `widget`, `selection`, `options`."
     }
   },
   "links": [

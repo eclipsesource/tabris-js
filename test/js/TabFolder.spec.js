@@ -242,9 +242,21 @@ describe("TabFolder", function() {
       expect(tabFolder.get("selection")).toBeNull();
     });
 
-    it("supports native change event", function() {
+    it("supports native event change:selection", function() {
       var listener = jasmine.createSpy();
       tabFolder.on("change:selection", listener);
+
+      tabris._notify(tabFolder.cid, "Selection", {selection: tab2._tabItem.cid});
+
+      expect(listener.calls.count()).toBe(1);
+      expect(listener.calls.argsFor(0)[0]).toBe(tabFolder);
+      expect(listener.calls.argsFor(0)[1]).toBe(tab2);
+      expect(listener.calls.argsFor(0)[2]).toEqual({});
+    });
+
+    it("supports native event select", function() {
+      var listener = jasmine.createSpy();
+      tabFolder.on("select", listener);
 
       tabris._notify(tabFolder.cid, "Selection", {selection: tab2._tabItem.cid});
 

@@ -474,6 +474,13 @@ describe("Widgets", function() {
       checkListen("Selection");
     });
 
+    it("CheckBox select", function() {
+      widget = tabris.create("CheckBox").on("select", listener);
+      tabris._notify(widget.cid, "Selection", {selection: true});
+      checkEvent(true);
+      checkListen("Selection");
+    });
+
     it("CheckBox change:selection", function() {
       widget = tabris.create("CheckBox").on("change:selection", listener);
       tabris._notify(widget.cid, "Selection", {selection: true});
@@ -481,10 +488,24 @@ describe("Widgets", function() {
       checkListen("Selection");
     });
 
-    it("Picker change:selection", function() {
-      widget = tabris.create("Picker").on("change:selection", listener);
+    it("Picker select", function() {
+      widget = tabris.create("Picker").on("select", listener);
       tabris._notify(widget.cid, "Selection", {selectionIndex: 23});
       checkEvent(23);
+      checkListen("Selection");
+    });
+
+    it("Picker change:selectionIndex", function() {
+      widget = tabris.create("Picker").on("change:selectionIndex", listener);
+      tabris._notify(widget.cid, "Selection", {selectionIndex: 23});
+      checkEvent(23);
+      checkListen("Selection");
+    });
+
+    it("RadioButton select", function() {
+      widget = tabris.create("RadioButton").on("select", listener);
+      tabris._notify(widget.cid, "Selection", {selection: true});
+      checkEvent(true);
       checkListen("Selection");
     });
 
@@ -492,6 +513,13 @@ describe("Widgets", function() {
       widget = tabris.create("RadioButton").on("change:selection", listener);
       tabris._notify(widget.cid, "Selection", {selection: true});
       checkEvent(true);
+      checkListen("Selection");
+    });
+
+    it("Slider select", function() {
+      widget = tabris.create("Slider").on("select", listener);
+      tabris._notify(widget.cid, "Selection", {selection: 23});
+      checkEvent(23);
       checkListen("Selection");
     });
 
@@ -507,6 +535,13 @@ describe("Widgets", function() {
       tabris._notify(widget.cid, "modify", {text: "foo"});
       checkEvent("foo");
       checkListen("modify");
+    });
+
+    it("ToggleButton select", function() {
+      widget = tabris.create("ToggleButton").on("select", listener);
+      tabris._notify(widget.cid, "Selection", {selection: true});
+      checkEvent(true);
+      checkListen("Selection");
     });
 
     it("ToggleButton change:selection", function() {

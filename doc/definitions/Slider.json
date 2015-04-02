@@ -16,6 +16,9 @@
   "events": {
     "change:selection": {
       "description": "Fired when the selection property changes."
+    },
+    "select": {
+      "description": "Fired when the selection property changes by user interaction. Parameters are the same as in `change:selection`, i.e. `widget`, `selection`, `options`."
     }
   },
   "links": [

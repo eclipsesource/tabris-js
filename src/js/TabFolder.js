@@ -61,11 +61,13 @@
     },
 
     _events: {
-      "change:selection": {
+      select: {
         name: "Selection",
+        alias: "change:selection",
         trigger: function(event) {
-          var tabId = event.selection || event.item;
-          this._triggerChangeEvent("selection", tabris(tabId)._tab);
+          var tab = tabris(event.selection || event.item)._tab;
+          this._triggerChangeEvent("selection", tab);
+          this.trigger("select", this, tab, {});
         }
       }
     },

@@ -9,7 +9,7 @@ tabris.create("Picker", {
   items: matchers,
   layoutData: {left: 10, top: 10},
   selectionIndex: 1
-}).on("change:selection", function() {
+}).on("change:selectionIndex", function() {
   var matcher = matchers[this.get("selectionIndex")]; // TODO: Picker.get("text") not working??
   var selected = page.children(matcher);
   selected.set("background", "red");
