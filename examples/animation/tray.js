@@ -111,7 +111,7 @@ function positionTrayInRestingState(velocity) {
 
 function getShadeOpacity(translationY) {
   var traveled = translationY / trayHeight;
-  return 0.75 - traveled;
+  return Math.max(0, 0.75 - traveled);
 }
 
 function getStrapIconTransform(translationY) {
