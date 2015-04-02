@@ -442,6 +442,12 @@ describe("Widgets", function() {
         expect(listener.calls.argsFor(0)[1]).toEqual({});
       }
     };
+    var checkListen = function(event) {
+      var listen = nativeBridge.calls({op: "listen", id: widget.cid});
+      expect(listen.length).toBe(1);
+      expect(listen[0].event).toBe(event);
+      expect(listen[0].listen).toBe(true);
+    };
 
     beforeEach(function() {
       listener = jasmine.createSpy();
@@ -451,54 +457,63 @@ describe("Widgets", function() {
       widget = tabris.create("CheckBox").on("change:bounds", listener);
       tabris._notify(widget.cid, "Resize", {bounds: [1, 2, 3, 4]});
       checkEvent({left: 1, top: 2, width: 3, height: 4});
+      checkListen("Resize");
     });
 
     it("Button select", function() {
       widget = tabris.create("Button").on("select", listener);
       tabris._notify(widget.cid, "Selection", {});
       checkEvent();
+      checkListen("Selection");
     });
 
     it("Button selection (legacy)", function() {
       widget = tabris.create("Button").on("selection", listener);
       tabris._notify(widget.cid, "Selection", {});
       checkEvent();
+      checkListen("Selection");
     });
 
     it("CheckBox change:selection", function() {
       widget = tabris.create("CheckBox").on("change:selection", listener);
       tabris._notify(widget.cid, "Selection", {selection: true});
       checkEvent(true);
+      checkListen("Selection");
     });
 
     it("Picker change:selection", function() {
       widget = tabris.create("Picker").on("change:selection", listener);
       tabris._notify(widget.cid, "Selection", {selectionIndex: 23});
       checkEvent(23);
+      checkListen("Selection");
     });
 
     it("RadioButton change:selection", function() {
       widget = tabris.create("RadioButton").on("change:selection", listener);
       tabris._notify(widget.cid, "Selection", {selection: true});
       checkEvent(true);
+      checkListen("Selection");
     });
 
     it("Slider change:selection", function() {
       widget = tabris.create("RadioButton").on("change:selection", listener);
       tabris._notify(widget.cid, "Selection", {selection: 23});
       checkEvent(23);
+      checkListen("Selection");
     });
 
     it("TextInput change:text", function() {
       widget = tabris.create("TextInput").on("change:text", listener);
       tabris._notify(widget.cid, "modify", {text: "foo"});
       checkEvent("foo");
+      checkListen("modify");
     });
 
     it("ToggleButton change:selection", function() {
       widget = tabris.create("ToggleButton").on("change:selection", listener);
       tabris._notify(widget.cid, "Selection", {selection: true});
       checkEvent(true);
+      checkListen("Selection");
     });
 
   });

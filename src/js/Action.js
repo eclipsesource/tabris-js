@@ -20,7 +20,7 @@ tabris.registerWidget("Action", {
       name: "Selection",
       alias: "selection",
       listen: function(state, alias) {
-        this._nativeListen("selection", state);
+        this._nativeListen("Selection", state);
         if (alias) {
           console.warn("Action event \"selection\" is deprecated, use \"select\"");
         }

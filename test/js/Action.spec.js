@@ -109,6 +109,15 @@ describe("Action", function() {
       listener = jasmine.createSpy();
     });
 
+    it("sends listen for Selection", function() {
+      action.on("select", listener);
+
+      var listen = nativeBridge.calls({op: "listen", id: action.cid});
+      expect(listen.length).toBe(1);
+      expect(listen[0].event).toBe("Selection");
+      expect(listen[0].listen).toBe(true);
+    });
+
     it("is fired with parameters", function() {
       action.on("select", listener);
 
