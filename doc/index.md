@@ -1,4 +1,4 @@
-# Tabris.js - 0.9.4
+# Tabris.js - 0.9.5
 
 ## Introduction
 
