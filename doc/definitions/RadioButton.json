@@ -16,7 +16,7 @@
     "change:selection": {
       "description": "Fired when the selection property changes."
     },
-    "input": {
+    "select": {
       "description": "Fired when the radio button is selected or deselected. Parameters are the same as in `change:selection`, i.e. `widget`, `selection`, `options`."
     }
   },
