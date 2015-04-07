@@ -128,6 +128,7 @@
         index: parent._getItems().length
       }, this._getItemProps())).appendTo(parent);
       this._tabItem._tab = this;
+      this._on("dispose", this._tabItem.dispose, this._tabItem);
     },
 
     _getItemProps: function() {
@@ -139,13 +140,6 @@
         }
       }
       return result;
-    },
-
-    _destroy: function() {
-      if (this._tabItem) {
-        this._tabItem.dispose();
-      }
-      this.super("_destroy");
     }
 
   });

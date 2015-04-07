@@ -93,11 +93,6 @@
       }
     },
 
-    _destroy: function() {
-      disposeRecognizers.call(this);
-      tabris.Proxy.prototype._destroy.call(this);
-    },
-
     _destroyChildren: function() {
       if (this._children) {
         for (var i = 0; i < this._children.length; i++) {
@@ -275,13 +270,6 @@
     }
   }
 
-  function disposeRecognizers() {
-    var recognizers = this._recognizers || {};
-    for (var recognizer in recognizers) {
-      recognizers[recognizer].dispose();
-    }
-  }
-
   function getGestureEventConfig(name) {
     return {
       listen: function(state) {
@@ -294,6 +282,7 @@
             this._recognizers = {};
           }
           this._recognizers[name] = recognizer;
+          this._on("dispose", recognizer.dispose, recognizer);
         } else {
           this._recognizers[name].dispose();
           delete this._recognizers[name];
