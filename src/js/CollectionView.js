@@ -4,6 +4,10 @@
 
     _type: "tabris.CollectionView",
 
+    _supportsChildren: function(child) {
+      return child instanceof tabris._CollectionCell;
+    },
+
     _properties: {
       itemHeight: {type: "natural", default: 0},
       items: {
@@ -50,6 +54,8 @@
       createitem: {
         trigger: function() {
           var cell = tabris.create("_CollectionCell", {});
+          cell._parent = this;
+          this._addChild(cell);
           this._nativeCall("addItem", {widget: cell.cid});
           if (typeof this._initializeCell !== "function") {
             console.warn("initializeCell callback missing");

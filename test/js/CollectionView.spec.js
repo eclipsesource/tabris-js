@@ -163,13 +163,22 @@ describe("CollectionView", function() {
             expect(cell).toEqual(jasmine.any(tabris._CollectionCell));
           });
 
-          it("creates a Cell and calls native addItem", function() {
+          it("calls native addItem with created cell", function() {
             var addItemCall = nativeBridge.calls({op: "call", id: view.cid, method: "addItem"})[0];
             expect(addItemCall.parameters).toEqual({widget: cell.cid});
           });
 
           it("calls initializeCell with the cell as parent", function() {
             expect(initializeCell).toHaveBeenCalledWith(cell);
+          });
+
+          it("returns cells as children", function() {
+            expect(view.children().length).toBe(1);
+            expect(view.children()[0]).toBe(cell);
+          });
+
+          it("cell has CollectionView as parent", function() {
+            expect(cell.parent()).toBe(view);
           });
 
           describe("when calling cell.dispose()", function() {
