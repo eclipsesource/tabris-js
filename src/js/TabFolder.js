@@ -65,7 +65,7 @@
         name: "Selection",
         alias: "change:selection",
         trigger: function(event) {
-          var tab = tabris(event.selection || event.item)._tab;
+          var tab = tabris(event.selection)._tab;
           this._triggerChangeEvent("selection", tab);
           this.trigger("select", this, tab, {});
         }

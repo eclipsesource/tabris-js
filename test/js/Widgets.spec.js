@@ -467,13 +467,6 @@ describe("Widgets", function() {
       checkListen("Selection");
     });
 
-    it("Button selection (legacy)", function() {
-      widget = tabris.create("Button").on("selection", listener);
-      tabris._notify(widget.cid, "Selection", {});
-      checkEvent();
-      checkListen("Selection");
-    });
-
     it("CheckBox select", function() {
       widget = tabris.create("CheckBox").on("select", listener);
       tabris._notify(widget.cid, "Selection", {selection: true});

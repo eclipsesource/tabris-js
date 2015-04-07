@@ -58,10 +58,6 @@
   }
 
   function encodeArrayPart(part, name, parent, force) {
-    if (typeof part[0] === "number") {
-      console.warn("Deprecated layoutData syntax: Percentage must be a string");
-      return part.concat();
-    }
     if (isPercentage(part[0])) {
       return [parseInt(part[0]), part[1]];
     }

@@ -18,16 +18,11 @@ tabris.registerWidget("Action", {
   _events: {
     select: {
       name: "Selection",
-      alias: "selection",
-      listen: function(state, alias) {
+      listen: function(state) {
         this._nativeListen("Selection", state);
-        if (alias) {
-          console.warn("Action event \"selection\" is deprecated, use \"select\"");
-        }
       },
       trigger: function(event) {
         this.trigger("select", this, event);
-        this.trigger("selection", this, event);
       }
     }
   },

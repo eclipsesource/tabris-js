@@ -123,44 +123,12 @@ describe("SearchAction", function() {
       checkEvent();
     });
 
-    it("selection (legacy)", function() {
-      action.on("selection", listener);
-      tabris._notify(action.cid, "Selection", {});
-
-      checkListen("Selection");
-      checkEvent();
-    });
-
-    it("modify (legacy)", function() {
-      action.on("input", listener);
-      tabris._notify(action.cid, "Modify", {query: "foo"});
-
-      checkListen("Modify");
-      checkEvent("foo");
-    });
-
-    it("modify (legacy)", function() {
-      action.on("modify", listener);
-      tabris._notify(action.cid, "Modify", {query: "foo"});
-
-      checkListen("Modify");
-      checkEvent({query: "foo"});
-    });
-
     it("accept", function() {
       action.on("accept", listener);
       tabris._notify(action.cid, "Search", {query: "foo"});
 
       checkListen("Search");
       checkEvent("foo");
-    });
-
-    it("submit (legacy)", function() {
-      action.on("submit", listener);
-      tabris._notify(action.cid, "Search", {query: "foo"});
-
-      checkListen("Search");
-      checkEvent({query: "foo"});
     });
 
   });

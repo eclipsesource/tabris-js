@@ -316,16 +316,11 @@
     _events: {
       select: {
         name: "Selection",
-        alias: "selection",
-        listen: function(state, alias) {
+        listen: function(state) {
           this._nativeListen("Selection", state);
-          if (alias) {
-            console.warn("Button event \"selection\" is deprecated, use \"select\"");
-          }
         },
         trigger: function(event) {
           this.trigger("select", this, event);
-          this.trigger("selection", this, event);
         }
       }
     },
@@ -379,7 +374,6 @@
       selectionIndex: {type: "natural", nocache: true}
     }
   });
-  tabris.Combo = tabris.Picker;
 
   tabris.registerWidget("Composite", {
     _type: "rwt.widgets.Composite",
@@ -409,7 +403,6 @@
       text: {type: "string", default: ""}
     }
   });
-  tabris.Label = tabris.TextView;
 
   tabris.registerWidget("ProgressBar", {
     _type: "rwt.widgets.ProgressBar",
@@ -492,7 +485,6 @@
       }
     }
   });
-  tabris.Text = tabris.TextInput;
 
   tabris.registerWidget("ToggleButton", {
     _type: "rwt.widgets.Button",

@@ -117,13 +117,6 @@ describe("Layout:", function() {
         .toEqual({left: 23, right: [12, 0], top: [0, 0]});
     });
 
-    it("warns against deprecated percentage syntax", function() {
-      expect(encode({left: 23, right: [12, 34], top: [0, 42]}, widget))
-        .toEqual({left: 23, right: [12, 34], top: [0, 42]});
-      var msg = "Deprecated layoutData syntax: Percentage must be a string";
-      expect(console.warn).toHaveBeenCalledWith(msg);
-    });
-
     it("treats ambiguous string as selector", function() {
       tabris.registerWidget("Foo%", {});
       var freak1 = tabris.create("Foo%").appendTo(parent);

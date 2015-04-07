@@ -137,15 +137,6 @@ describe("CollectionView", function() {
             expect(console.warn).not.toHaveBeenCalled();
           });
 
-          it("triggers selection on the collection view (legacy)", function() {
-            view.on("selection", listener);
-
-            view._trigger("selection", {index: 0});
-
-            expect(listener).toHaveBeenCalledWith({index: 0, item: "a"});
-            expect(console.warn).toHaveBeenCalled();
-          });
-
         });
 
         describe("when createitem event is received", function() {
@@ -217,13 +208,6 @@ describe("CollectionView", function() {
               expect(listener.calls.argsFor(0)[2]).toEqual({index: 0});
               expect(cell.get("item")).toBe("a");
               expect(console.warn).not.toHaveBeenCalled();
-            });
-
-            it("triggers itemchange event on the cell (legacy)", function() {
-              cell.on("itemchange", listener);
-              view._trigger("populateitem", {widget: cell.cid, index: 0});
-              expect(listener).toHaveBeenCalledWith("a", 0);
-              expect(console.warn).toHaveBeenCalled();
             });
 
           });

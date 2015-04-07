@@ -69,17 +69,12 @@
           var cell = tabris(event.widget);
           var item = this._getItem(this._items, event.index);
           cell.set("item", item, {index: event.index});
-          cell.trigger("itemchange", item, event.index);
         }
       },
       select: {
         name: "selection",
-        alias: "selection",
-        listen: function(state, alias) {
+        listen: function(state) {
           this._nativeListen("selection", state);
-          if (alias) {
-            console.warn("CollectionView event \"selection\" is deprecated, use \"select\"");
-          }
         },
         trigger: function(event) {
           var item = this._getItem(this._items, event.index);
@@ -167,14 +162,6 @@
     _type: "rwt.widgets.Composite",
 
     _supportsChildren: true,
-
-    _events: {
-      itemchange: {
-        listen: function() {
-          console.warn("CollectionView event \"itemchange\" is deprecated, use \"change:item\"");
-        }
-      }
-    },
 
     dispose: function() {
       console.warn("CollectionView cells are container-managed, they cannot be disposed of");
