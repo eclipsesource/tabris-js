@@ -61,7 +61,7 @@ module.exports = function(grunt) {
           display: "short",
           summary: true
         },
-        src: "build/tabris/tabris.js"
+        src: ["build/tabris/tabris.js", "test/js/jasmineToString.js"]
       }
     },
     concat: {
