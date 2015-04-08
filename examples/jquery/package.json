@@ -1,9 +1,0 @@
-{
-  "title": "jQuery",
-  "description": "Sample jQuery integration for using $.getJSON",
-  "category": "Web APIs",
-  "main": "http-request.js",
-  "dependencies": {
-    "tabris": "0.9.4"
-  }
-}

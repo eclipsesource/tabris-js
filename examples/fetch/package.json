@@ -1,0 +1,11 @@
+{
+  "title": "fetch()",
+  "description": "How to use fetch() and promises to make http requests",
+  "category": "Web APIs",
+  "main": "http-request.js",
+  "dependencies": {
+    "promise": "^6.1.0",
+    "tabris": "0.9.4",
+    "whatwg-fetch": "^0.7.0"
+  }
+}
