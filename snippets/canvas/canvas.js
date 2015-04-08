@@ -5,7 +5,7 @@ var page = tabris.create("Page", {
 
 tabris.create("Canvas", {
   layoutData: {left: 10, top: 10, right: 10, bottom: 10}
-}).on("change:bounds", function(canvas, bounds) {
+}).on("resize", function(canvas, bounds) {
   var ctx = tabris.getContext(canvas, bounds.width, bounds.height);
   ctx.strokeStyle = "rgb(78, 154, 217)";
   ctx.lineWidth = 10;

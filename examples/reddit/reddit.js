@@ -37,7 +37,7 @@ var collectionView = tabris.create("CollectionView", {
         authorView.set("text", item.data.author);
         commentsView.set("text", item.data.num_comments + " comments");
       }
-    }).on("change:bounds", function() {
+    }).on("resize", function() {
       var cellWidth = cell.get("bounds").width;
       var textWidth = 200;
       nameView.set("layoutData", {left: 104, top: 6, width: cellWidth - textWidth - MARGIN});

@@ -9,6 +9,6 @@ tabris.create("Composite", {id: "blue", background: "blue"}).appendTo(page);
 tabris.create("Composite", {id: "yellow", background: "yellow"}).appendTo(page);
 tabris.create("Composite", {id: "purple", background: "purple"}).appendTo(page);
 
-page.on("change:bounds", function(page, bounds) {
+page.on("resize", function(page, bounds) {
   page.apply(require("./layout-" + (bounds.width > bounds.height ? "landscape" : "portrait")));
 }).open();

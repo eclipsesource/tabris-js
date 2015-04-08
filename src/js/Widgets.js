@@ -134,25 +134,28 @@
   });
 
   util.extend(tabris.registerWidget, {
-    _defaultEvents: tabris.registerType.normalizeEventsMap({
+    _defaultEvents: {
       touchstart: {trigger: triggerWithTarget},
       touchmove: {trigger: triggerWithTarget},
       touchend: {trigger: triggerWithTarget},
       touchcancel: {trigger: triggerWithTarget},
-      "change:bounds": {
+      "resize": {
         name: "Resize",
+        alias: "change:bounds",
         trigger: function(event) {
           if (hasAndroidResizeBug) {
             var self = this;
             setTimeout(function() {
-              self._triggerChangeEvent("bounds", event.bounds);
+              self._triggerChangeEvent("bounds", event.bounds, {}, "resize");
+              self.trigger("resize", self, tabris.PropertyDecoding.bounds(event.bounds), {});
             }, 0);
           } else {
-            this._triggerChangeEvent("bounds", event.bounds);
+            this._triggerChangeEvent("bounds", event.bounds, {}, "resize");
+            this.trigger("resize", this, tabris.PropertyDecoding.bounds(event.bounds), {});
           }
         }
       }
-    }),
+    },
     _defaultProperties: tabris.registerType.normalizePropertiesMap({
       enabled: {
         type: "boolean",

@@ -205,8 +205,8 @@
     "touchcancel": {
       "description": "Fired instead of touchend when the touch ends on another widget than it started on. See [Touch Events](touch.md)."
     },
-    "change:bounds": {
-      "description": "Fired when the widget's size or position has changed."
+    "resize": {
+      "description": "Fired when the widget's size or position has changed. Parameters are `widget`, `bounds`, `options`"
     },
     "animationstart": {
       "decription": "Fired when an animation starts playing."

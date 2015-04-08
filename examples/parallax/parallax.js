@@ -61,7 +61,7 @@ tabris.create("TextView", {
 }).appendTo(titleComposite);
 
 var titleCompY = 0;
-scrollView.on("change:bounds", function() {
+scrollView.on("resize", function() {
   var bounds = scrollView.get("bounds");
   var pageWidth = bounds.width;
   var pageHeight = bounds.height;

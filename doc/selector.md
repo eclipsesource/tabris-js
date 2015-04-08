@@ -138,7 +138,7 @@ module.exports = texts[tabris.device.get("language")] || texts.en;
 The same pattern could be applied for e.g. colors based on the OS, font-sizes based on screen width, or layout data depending on device orientation:
 
 ```javascript
-page.on("change:bounds", function() {
+page.on("resize", function() {
   var bounds = page.get("bounds");
   page.apply(require("./layout-" + (bounds.width > bounds.height) ? "landscape" : "portrait"));
 });

@@ -31,7 +31,7 @@ var personDetailView = createPersonDetail(personDetailsParent, people[2], ANIMAT
 
 var peopleComposite = tabris.create("Composite", {
   layoutData: {left: 0, top: [personDetailsParent, MARGIN], right: 0, height: 96}
-}).on("change:bounds", function() {
+}).on("resize", function() {
   var thumbsize = Math.min(64, this.get("bounds").width / people.length - MARGIN);
   this.children().forEach(function(child) {
     child.dispose();

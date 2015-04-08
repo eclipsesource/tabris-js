@@ -63,7 +63,7 @@ tabris.create("TextView", {
   foreground: "white"
 }).appendTo(trayContent);
 
-trayContent.on("change:bounds", function() {
+trayContent.on("resize", function() {
   var bounds = trayContent.get("bounds");
   trayHeight = bounds.height;
   if (trayState === "dragging") {

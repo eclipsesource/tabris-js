@@ -17,7 +17,7 @@ describe("Widgets", function() {
 
     it("adds default events copy", function() {
       tabris.registerWidget("TestType", {});
-      expect(Object.keys(tabris.TestType._events)).toEqual(Object.keys(tabris.registerWidget._defaultEvents));
+      expect(tabris.TestType._events.resize).toEqual(jasmine.any(Object));
       expect(tabris.TestType._events).not.toBe(tabris.registerWidget._defaultEvents);
     });
 
@@ -455,6 +455,13 @@ describe("Widgets", function() {
 
     it("Widget change:bounds", function() {
       widget = tabris.create("CheckBox").on("change:bounds", listener);
+      tabris._notify(widget.cid, "Resize", {bounds: [1, 2, 3, 4]});
+      checkEvent({left: 1, top: 2, width: 3, height: 4});
+      checkListen("Resize");
+    });
+
+    it("Widget resize", function() {
+      widget = tabris.create("CheckBox").on("resize", listener);
       tabris._notify(widget.cid, "Resize", {bounds: [1, 2, 3, 4]});
       checkEvent({left: 1, top: 2, width: 3, height: 4});
       checkListen("Resize");
