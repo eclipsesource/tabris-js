@@ -4,6 +4,6 @@
   "description": "Count how many times the application was started.",
   "main": "web-storage.js",
   "dependencies": {
-    "tabris": "0.9.3"
+    "tabris": "0.9.4"
   }
 }

@@ -4,6 +4,6 @@
   "description": "Create a collection view, initialize its cells and fill it with items",
   "main": "collectionview.js",
   "dependencies": {
-    "tabris": "0.9.3"
+    "tabris": "0.9.4"
   }
 }

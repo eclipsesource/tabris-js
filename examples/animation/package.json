@@ -4,6 +4,6 @@
   "description": "Animations can be used to change properties",
   "main": "app.js",
   "dependencies": {
-    "tabris": "0.9.3"
+    "tabris": "0.9.4"
   }
 }

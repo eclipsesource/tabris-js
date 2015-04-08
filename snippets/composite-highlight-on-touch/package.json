@@ -4,6 +4,6 @@
   "description": "Create a composite which gets highlighted on touch",
   "main": "composite-highlight-on-touch.js",
   "dependencies": {
-    "tabris": "0.9.3"
+    "tabris": "0.9.4"
   }
 }
