@@ -1,5 +1,6 @@
 tabris._start = function(client) {
   try {
+    window.global = window.self = window;
     tabris._client = client;
     var Module = tabris.Module;
     var rootModule = new Module();
