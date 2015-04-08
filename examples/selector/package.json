@@ -1,6 +1,6 @@
 {
   "main": "selector.js",
   "dependencies": {
-    "tabris": "0.9.3"
+    "tabris": "0.9.4"
   }
 }
