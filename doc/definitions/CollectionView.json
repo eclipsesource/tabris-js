@@ -1,6 +1,6 @@
 {
   "type": "CollectionView",
-  "description": "A scrollable list that displays data items in cells, one per row. Cells are created on demand and filled with widgets in the `initializeCell` callback. When a data item is mapped to a cell, it is set as the property `item` and the cell receives an `change:item` event. ",
+  "description": "A scrollable list that displays data items in cells, one per row. Cells are created on demand and filled with widgets in the `initializeCell` callback.",
   "include": ["Widget"],
   "properties": {
     "itemHeight": {
@@ -14,7 +14,7 @@
     "initializeCell": {
       "type": "function",
       "static": true,
-      "description": "A callback used to initialize a collection cell. Cells are created by the framework and recycled on scrolling. This callback receives an empty collection cell as an argument and appends widgets to it. The cell triggers an `itemchange` event (*name subject to change*) with a single element from the items array as a callback argument."
+      "description": "A callback used to initialize a collection cell by attaching widget and `change:item` listener. Cells are created by the framework and recycled on scrolling. This callback receives the cell as the first argument."
     },
     "refreshEnabled": {
       "type": "boolean?false",

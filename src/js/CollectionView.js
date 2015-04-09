@@ -5,7 +5,7 @@
     _type: "tabris.CollectionView",
 
     _supportsChildren: function(child) {
-      return child instanceof tabris._CollectionCell;
+      return child instanceof tabris.Cell;
     },
 
     _properties: {
@@ -53,7 +53,7 @@
       },
       createitem: {
         trigger: function() {
-          var cell = tabris.create("_CollectionCell", {});
+          var cell = tabris.create("Cell", {});
           cell._parent = this;
           this._addChild(cell);
           this._nativeCall("addItem", {widget: cell.cid});
@@ -68,7 +68,8 @@
         trigger: function(event) {
           var cell = tabris(event.widget);
           var item = this._getItem(this._items, event.index);
-          cell.set("item", item, {index: event.index});
+          cell.set("itemIndex", event.index);
+          cell.set("item", item);
         }
       },
       select: {
@@ -121,6 +122,7 @@
         index = Math.max(0, Math.min(this._items.length, this._checkIndex(index)));
       }
       Array.prototype.splice.apply(this._items, [index, 0].concat(items));
+      this._adjustIndicies(index, items.length);
       this._nativeCall("update", {insert: [index, items.length]});
     },
 
@@ -135,6 +137,7 @@
       }
       if (index >= 0 && index < this._items.length && count > 0) {
         this._items.splice(index, count);
+        this._adjustIndicies(index + count, -count);
         this._nativeCall("update", {remove: [index, count]});
       }
     },
@@ -153,11 +156,22 @@
         throw new Error("illegal index");
       }
       return index < 0 ? index + this._items.length : index;
+    },
+
+    _adjustIndicies: function(offset, diff) {
+      var cells = this._children || [];
+      for (var i = 0; i < cells.length; i++) {
+        var cell = cells[i];
+        var itemIndex = cell.get("itemIndex");
+        if (itemIndex >= offset) {
+          cell.set("itemIndex", itemIndex + diff);
+        }
+      }
     }
 
   });
 
-  tabris.registerWidget("_CollectionCell", {
+  tabris.registerWidget("Cell", {
 
     _type: "rwt.widgets.Composite",
 

@@ -151,7 +151,7 @@ describe("CollectionView", function() {
 
           it("creates a Cell", function() {
             expect(cellCreateCall).toBeDefined();
-            expect(cell).toEqual(jasmine.any(tabris._CollectionCell));
+            expect(cell).toEqual(jasmine.any(tabris.Cell));
           });
 
           it("calls native addItem with created cell", function() {
@@ -224,8 +224,19 @@ describe("CollectionView", function() {
               expect(listener).toHaveBeenCalled();
               expect(listener.calls.argsFor(0)[0]).toBe(cell);
               expect(listener.calls.argsFor(0)[1]).toBe("a");
-              expect(listener.calls.argsFor(0)[2]).toEqual({index: 0});
+              expect(listener.calls.argsFor(0)[2]).toEqual({});
               expect(cell.get("item")).toBe("a");
+              expect(console.warn).not.toHaveBeenCalled();
+            });
+
+            it("triggers change:itemIndex event on the cell", function() {
+              cell.on("change:itemIndex", listener);
+              view._trigger("populateitem", {widget: cell.cid, index: 0});
+              expect(listener).toHaveBeenCalled();
+              expect(listener.calls.argsFor(0)[0]).toBe(cell);
+              expect(listener.calls.argsFor(0)[1]).toBe(0);
+              expect(listener.calls.argsFor(0)[2]).toEqual({});
+              expect(cell.get("itemIndex")).toBe(0);
               expect(console.warn).not.toHaveBeenCalled();
             });
 
@@ -242,6 +253,14 @@ describe("CollectionView", function() {
   describe("when created with items", function() {
 
     var view;
+
+    function createCell(item) {
+      view._trigger("createitem");
+      var createCalls = nativeBridge.calls({op: "create", type: "rwt.widgets.Composite"});
+      var cell = tabris(createCalls[createCalls.length - 1].id);
+      view._trigger("populateitem", {widget: cell.cid, index: view.get("items").indexOf(item)});
+      return cell;
+    }
 
     beforeEach(function() {
       view = tabris.create("CollectionView", {items: ["A", "B", "C"]}).appendTo(parent);
@@ -325,9 +344,27 @@ describe("CollectionView", function() {
         }).toThrow();
       });
 
+      it("adjusts cells itemIndex properties", function() {
+        view.set("items", ["A", "B", "C", "D", "E"]);
+        var a = createCell("A");
+        var b = createCell("B");
+        var c = createCell("C");
+        var d = createCell("D");
+        var e = createCell("E");
+
+        view.insert(["X", "Y"], 2);
+
+        expect(a.get("itemIndex")).toBe(0);
+        expect(b.get("itemIndex")).toBe(1);
+        expect(c.get("itemIndex")).toBe(4);
+        expect(d.get("itemIndex")).toBe(5);
+        expect(e.get("itemIndex")).toBe(6);
+      });
+
     });
 
     describe("remove", function() {
+
       beforeEach(function() {
         nativeBridge.resetCalls();
       });
@@ -409,6 +446,23 @@ describe("CollectionView", function() {
         expect(function() {
           view.remove(0, NaN);
         }).toThrow();
+      });
+
+      it("adjusts cells itemIndex properties", function() {
+        view.set("items", ["A", "B", "C", "D", "E"]);
+        var a = createCell("A");
+        var b = createCell("B");
+        var c = createCell("C");
+        var d = createCell("D");
+        var e = createCell("E");
+
+        view.remove(1, 2);
+
+        expect(a.get("itemIndex")).toBe(0);
+        expect(b.get("itemIndex")).toBe(1);
+        expect(c.get("itemIndex")).toBe(2);
+        expect(d.get("itemIndex")).toBe(1);
+        expect(e.get("itemIndex")).toBe(2);
       });
 
     });
