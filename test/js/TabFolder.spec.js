@@ -187,6 +187,18 @@ describe("TabFolder", function() {
 
       });
 
+      describe("and the TabFolder is disposed", function() {
+
+        beforeEach(function() {
+          tabFolder.dispose();
+        });
+
+        it("it disposes the Tab", function() {
+          expect(tab.isDisposed()).toBe(true);
+        });
+
+      });
+
     });
 
   });
