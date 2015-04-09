@@ -172,6 +172,15 @@ describe("CollectionView", function() {
             expect(cell.parent()).toBe(view);
           });
 
+          it("returns cells as children", function() {
+            expect(view.children().length).toBe(1);
+            expect(view.children()[0]).toBe(cell);
+          });
+
+          it("cell has CollectionView as parent", function() {
+            expect(cell.parent()).toBe(view);
+          });
+
           describe("when calling cell.dispose()", function() {
 
             beforeEach(function() {
@@ -179,14 +188,24 @@ describe("CollectionView", function() {
             });
 
             it("cell is not disposed", function() {
-              expect(function() {
-                cell.get("foo");
-              }).not.toThrow();
+              expect(cell.isDisposed()).toBe(false);
             });
 
             it("a warning is logged", function() {
               var warning = "CollectionView cells are container-managed, they cannot be disposed of";
               expect(console.warn).toHaveBeenCalledWith(warning);
+            });
+
+          });
+
+          describe("when view is disposed", function() {
+
+            beforeEach(function() {
+              view.dispose();
+            });
+
+            it("cells are disposed", function() {
+              expect(cell.isDisposed()).toBe(true);
             });
 
           });
