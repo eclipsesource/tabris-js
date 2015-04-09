@@ -977,6 +977,16 @@ describe("Proxy", function() {
         expect(nativeBridge.calls({op: "destroy"}).length).toBe(1);
       });
 
+      it("can be called from within a dispose listener", function() {
+        proxy.on("dispose", function() {
+          proxy.dispose();
+        });
+
+        expect(function() {
+          proxy.dispose();
+        }).not.toThrow();
+      });
+
     });
 
     describe("when disposed", function() {

@@ -24,7 +24,8 @@
     },
 
     _dispose: function(skipNative) {
-      if (!this._isDisposed) {
+      if (!this._isDisposed && !this._inDispose) {
+        this._inDispose = true;
         this.trigger("dispose", this, {});
         this._release();
         if (!skipNative) {
