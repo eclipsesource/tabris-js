@@ -43,12 +43,10 @@
       this._page.widget = this;
       this._parent = tabris.ui;
       tabris.ui._addChild(this);
+      this._on("dispose", function() {
+        this._page.dispose();
+      });
       return this;
-    },
-
-    dispose: function() {
-      this._page.dispose();
-      this.super("dispose");
     },
 
     open: function() {

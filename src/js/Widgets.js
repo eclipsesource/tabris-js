@@ -93,11 +93,17 @@
       }
     },
 
-    _destroyChildren: function() {
+    _release: function() {
       if (this._children) {
-        for (var i = 0; i < this._children.length; i++) {
-          this._children[i]._destroy();
+        var children = this._children.concat();
+        for (var i = 0; i < children.length; i++) {
+          children[i]._dispose(true);
         }
+        delete this._children;
+      }
+      if (this._parent) {
+        this._parent._removeChild(this);
+        delete this._parent;
       }
     },
 

@@ -20,14 +20,23 @@
     },
 
     dispose: function() {
+      this._dispose();
+    },
+
+    _dispose: function(skipNative) {
       if (!this._isDisposed) {
-        this._destroy();
-        tabris._nativeBridge.destroy(this.cid);
-        if (this._parent) {
-          this._parent._removeChild(this);
+        this.trigger("dispose", this, {});
+        this._release();
+        if (!skipNative) {
+          tabris._nativeBridge.destroy(this.cid);
         }
+        tabris.Events.off.call(this);
+        delete tabris._proxies[this.cid];
         this._isDisposed = true;
       }
+    },
+
+    _release: function() {
     },
 
     isDisposed: function() {
@@ -68,16 +77,6 @@
       } else {
         this.trigger(event, params);
       }
-    },
-
-    _destroy: function() {
-      this.trigger("dispose", this, {});
-      this._destroyChildren();
-      tabris.Events.off.call(this);
-      delete tabris._proxies[this.cid];
-    },
-
-    _destroyChildren: function() {
     },
 
     _checkDisposed: function() {

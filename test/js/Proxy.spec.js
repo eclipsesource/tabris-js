@@ -110,37 +110,6 @@ describe("Proxy", function() {
       expect(proxy.isDisposed()).toBe(false);
     });
 
-    describe("when disposed", function() {
-      beforeEach(function() {
-        proxy.dispose();
-      });
-
-      it("isDisposed returns true", function() {
-        expect(proxy.isDisposed()).toBe(true);
-      });
-
-      it("calling append fails", function() {
-        expect(function() {
-          proxy.append();
-        }).toThrowError("Object is disposed");
-      });
-
-      it("calling appendTo fails", function() {
-        expect(function() {
-          proxy.append();
-        }).toThrowError("Object is disposed");
-      });
-
-      it("parent() returns nothing", function() {
-        expect(proxy.parent()).not.toBeDefined();
-      });
-
-      it("children() returns empty collection", function() {
-        expect(proxy.children().toArray()).toEqual([]);
-      });
-
-    });
-
     describe("calling append with a proxy", function() {
       var child, result, listener;
 
@@ -982,18 +951,6 @@ describe("Proxy", function() {
         expect(destroyCall).toBeDefined();
       });
 
-      it("notifies parents remove listeners", function() {
-        var listener = jasmine.createSpy();
-        var parent = tabris.create("Composite").on("removechild", listener).append(proxy);
-
-        proxy.dispose();
-
-        var args = listener.calls.argsFor(0);
-        expect(args[0]).toBe(parent);
-        expect(args[1]).toBe(proxy);
-        expect(args[2]).toEqual({index: 0});
-      });
-
       it("notifies dispose listeners", function() {
         var listener = jasmine.createSpy();
         proxy.on("dispose", listener);
@@ -1013,52 +970,6 @@ describe("Proxy", function() {
         proxy.dispose();
       });
 
-      it("notifies all children's dispose listeners", function() {
-        var child1 = tabris.create("TestType", {}).appendTo(proxy);
-        var child2 = tabris.create("TestType", {}).appendTo(proxy);
-
-        proxy.on("dispose", function() {
-          log.push("parent");
-        });
-        child1.on("dispose", function() {
-          log.push("child1");
-        });
-        child2.on("dispose", function() {
-          log.push("child2");
-        });
-
-        proxy.dispose();
-
-        expect(log).toEqual(["parent", "child1", "child2"]);
-      });
-
-      it("notifies children's dispose listeners recursively", function() {
-        var parent = tabris.create("TestType", {});
-        var child = tabris.create("TestType", {}).appendTo(parent);
-        var grandchild = tabris.create("TestType", {}).appendTo(child);
-        parent.on("dispose", function() {
-          log.push("parent");
-        });
-        child.on("dispose", function() {
-          log.push("child");
-        });
-        grandchild.on("dispose", function() {
-          log.push("grandchild");
-        });
-
-        parent.dispose();
-
-        expect(log).toEqual(["parent", "child", "grandchild"]);
-      });
-
-      it("does not call native destroy on children", function() {
-        tabris.create("TestType", {parent: proxy});
-
-        proxy.dispose();
-
-        expect(nativeBridge.calls({op: "destroy"}).length).toBe(1);
-      });
-
       it("does not call native destroy twice when called twice", function() {
         proxy.dispose();
         proxy.dispose();
@@ -1066,12 +977,27 @@ describe("Proxy", function() {
         expect(nativeBridge.calls({op: "destroy"}).length).toBe(1);
       });
 
-      it("unregisters from parent to allow garbage collection", function() {
-        var child = tabris.create("TextView", {}).appendTo(proxy);
+    });
 
-        child.dispose();
+    describe("when disposed", function() {
+      beforeEach(function() {
+        proxy.dispose();
+      });
 
-        expect(proxy.children().toArray()).toEqual([]);
+      it("isDisposed returns true", function() {
+        expect(proxy.isDisposed()).toBe(true);
+      });
+
+      it("calling append fails", function() {
+        expect(function() {
+          proxy.append();
+        }).toThrowError("Object is disposed");
+      });
+
+      it("calling appendTo fails", function() {
+        expect(function() {
+          proxy.append();
+        }).toThrowError("Object is disposed");
       });
 
     });

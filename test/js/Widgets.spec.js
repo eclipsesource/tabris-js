@@ -561,4 +561,95 @@ describe("Widgets", function() {
 
   });
 
+  describe("dispose", function() {
+
+    var parent, child;
+
+    beforeEach(function() {
+      parent = tabris.create("Composite");
+      child = tabris.create("TextView").appendTo(parent);
+      nativeBridge.resetCalls();
+    });
+
+    it("disposes children", function() {
+      parent.dispose();
+
+      expect(child.isDisposed()).toBe(true);
+    });
+
+    it("removes from parent", function() {
+      child.dispose();
+
+      expect(parent.children().toArray()).toEqual([]);
+    });
+
+    it("removes parent", function() {
+      child.dispose();
+
+      expect(child.parent()).not.toBeDefined();
+    });
+
+    it("DESTROYs native widget", function() {
+      parent.dispose();
+
+      expect(nativeBridge.calls({op: "destroy", id: parent.cid}).length).toBe(1);
+    });
+
+    it("does not send native DESTROY for children", function() {
+      parent.dispose();
+
+      expect(nativeBridge.calls({op: "destroy", id: child.cid}).length).toBe(0);
+    });
+
+    it("notifies parent's remove listeners", function() {
+      var listener = jasmine.createSpy();
+      parent.on("removechild", listener);
+
+      child.dispose();
+
+      var args = listener.calls.argsFor(0);
+      expect(args[0]).toBe(parent);
+      expect(args[1]).toBe(child);
+      expect(args[2]).toEqual({index: 0});
+    });
+
+    it("notifies all children's dispose listeners", function() {
+      var log = [];
+      var child2 = tabris.create("TextView", {}).appendTo(parent);
+      parent.on("dispose", function() {
+        log.push("parent");
+      });
+      child.on("dispose", function() {
+        log.push("child");
+      });
+      child2.on("dispose", function() {
+        log.push("child2");
+      });
+
+      parent.dispose();
+
+      expect(log).toEqual(["parent", "child", "child2"]);
+    });
+
+    it("notifies children's dispose listeners recursively", function() {
+      var log = [];
+      child = tabris.create("Composite", {}).appendTo(parent);
+      var grandchild = tabris.create("TextView", {}).appendTo(child);
+      parent.on("dispose", function() {
+        log.push("parent");
+      });
+      child.on("dispose", function() {
+        log.push("child");
+      });
+      grandchild.on("dispose", function() {
+        log.push("grandchild");
+      });
+
+      parent.dispose();
+
+      expect(log).toEqual(["parent", "child", "grandchild"]);
+    });
+
+  });
+
 });
