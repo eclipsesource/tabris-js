@@ -6,10 +6,10 @@ Canvas is a composite which allows the user to draw on it using a canvas context
 To create the canvas context, invoke the following method:
 
 ```javascript
-tabris.getContext(canvas, width, height);
+canvas.getContext(contextType, width, height);
 ```
 
-* canvas - the canvas composite
+* contextType - the type of context. Must be `"2d"`.
 * width - the width of the drawable area
 * height - the height of the drawable area
 
@@ -19,7 +19,7 @@ Example:
 tabris.create("Canvas", {
   layoutData: {left: 0, top: 0, right: 0, bottom: 0}
 }).on("change:bounds", function(canvas, bounds) {
-  var ctx = tabris.getContext(canvas, bounds.width, bounds.height);
+  var ctx = canvas.getContext("2d", bounds.width, bounds.height);
   ctx.moveTo(0, 0);
   // ... 
 }).appendTo(page);

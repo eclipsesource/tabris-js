@@ -38,28 +38,32 @@ describe("CanvasContext", function() {
       nativeBridge.resetCalls();
     });
 
+    it("returns null without \"2d\" parameter", function() {
+      expect(canvas.getContext("foo", 100, 200)).toBe(null);
+    });
+
     it("creates a native GC", function() {
-      tabris.getContext(canvas, 100, 200);
+      canvas.getContext("2d", 100, 200);
 
       expect(nativeBridge.calls({op: "create", type: "rwt.widgets.GC"}).length).toBe(1);
     });
 
     it("creates and returns graphics context", function() {
-      var ctx = tabris.getContext(canvas, 100, 200);
+      var ctx = canvas.getContext("2d", 100, 200);
 
       expect(ctx).toEqual(jasmine.any(tabris.LegacyCanvasContext));
     });
 
     it("returns same instance everytime", function() {
-      var ctx1 = tabris.getContext(canvas, 100, 200);
+      var ctx1 = canvas.getContext("2d", 100, 200);
 
-      var ctx2 = tabris.getContext(canvas, 100, 200);
+      var ctx2 = canvas.getContext("2d", 100, 200);
 
       expect(ctx2).toBe(ctx1);
     });
 
     it("calls init", function() {
-      tabris.getContext(canvas, 100, 200);
+      canvas.getContext("2d", 100, 200);
 
       var call = nativeBridge.calls({op: "call", method: "init"})[0];
       expect(call.parameters.width).toEqual(100);
@@ -67,9 +71,9 @@ describe("CanvasContext", function() {
     });
 
     it("calls init everytime", function() {
-      tabris.getContext(canvas, 100, 200);
+      canvas.getContext("2d", 100, 200);
 
-      tabris.getContext(canvas, 200, 100);
+      canvas.getContext("2d", 200, 100);
 
       var call = nativeBridge.calls({op: "call", method: "init"})[1];
       expect(call.parameters.width).toEqual(200);
@@ -77,7 +81,7 @@ describe("CanvasContext", function() {
     });
 
     it("updates width and height in canvas dummy", function() {
-      ctx = tabris.getContext(canvas, 100, 200);
+      ctx = canvas.getContext("2d", 100, 200);
 
       expect(ctx.canvas.width).toEqual(100);
       expect(ctx.canvas.height).toEqual(200);

@@ -2,6 +2,19 @@
   "type": "Canvas",
   "description": "An empty widget to draw graphics on. Can also contain other widgets.",
   "include": ["Composite"],
+  "methods": {
+    "getContext": [
+      {
+        "parameters": [
+          "contextType",
+          "width",
+          "height"
+        ],
+        "description": "Returns the drawing context. The `contextType` must be `\"2d\"`.",
+        "returns": "CanvasContext"
+      }
+    ]
+  },
   "links": [
     {
       "title": "Example that shows animation on a canvas",

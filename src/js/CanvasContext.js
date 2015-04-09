@@ -200,7 +200,7 @@
     }
   };
 
-  tabris.getContext = function(canvas, width, height) {
+  tabris.CanvasContext.getContext = function(canvas, width, height) {
     if (!canvas._gc) {
       canvas._gc = tabris.create("_GC", {parent: canvas});
     }

@@ -88,7 +88,7 @@ function createPage(chartType, chartData) {
     var bounds = canvas.get("bounds");
     var width = bounds.width;
     var height = Math.min(bounds.height, width);
-    return tabris.getContext(canvas, width, height);
+    return canvas.getContext("2d", width, height);
   };
   button.on("select", function() {
     var ctx = createCanvasContext();

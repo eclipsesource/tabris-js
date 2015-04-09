@@ -19,7 +19,7 @@ var canvas = tabris.create("Canvas", {
   var bounds = canvas.get("bounds");
   var width = bounds.width;
   var height = Math.min(bounds.height, Math.floor(width / 2));
-  var ctx = tabris.getContext(canvas, width, height);
+  var ctx = canvas.getContext("2d", width, height);
   example.init(ctx);
 }).appendTo(page);
 

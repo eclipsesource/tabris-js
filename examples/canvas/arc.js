@@ -18,7 +18,7 @@ var checkBox = tabris.create("CheckBox", {
   drawArcs(checkBox.get("selection"));
 }).appendTo(page);
 
-var context = tabris.getContext(canvas, CANVAS_SIZE, CANVAS_SIZE);
+var context = canvas.getContext("2d", CANVAS_SIZE, CANVAS_SIZE);
 context.textAlign = "center";
 context.textBaseline = "top";
 

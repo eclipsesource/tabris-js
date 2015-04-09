@@ -7,7 +7,7 @@ var canvas = tabris.create("Canvas", {
   layoutData: {left: 10, top: 10, right: 10, bottom: 10}
 }).appendTo(page);
 
-var ctx = tabris.getContext(canvas, 400, 400);
+var ctx = canvas.getContext("2d", 400, 400);
 
 ctx.fillStyle = "rgba(255, 100, 100, 0.5)";
 ctx.fillRect(50, 20, 20, 80);
