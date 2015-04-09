@@ -359,26 +359,6 @@
     }
   });
 
-  tabris.registerWidget("Picker", {
-    _type: "rwt.widgets.Combo",
-    _initProperties: {selectionIndex: 0},
-    _events: {
-      select: {
-        name: "Selection",
-        alias: "change:selectionIndex",
-        trigger: function(event) {
-          this._triggerChangeEvent("selectionIndex", event.selectionIndex);
-          this.trigger("select", this, event.selectionIndex, {});
-        }
-      }
-    },
-    _properties: {
-      items: {type: true, default: function() {return [];}},
-      text: "string", // TODO: readonly
-      selectionIndex: {type: "natural", nocache: true}
-    }
-  });
-
   tabris.registerWidget("Composite", {
     _type: "rwt.widgets.Composite",
     _supportsChildren: true

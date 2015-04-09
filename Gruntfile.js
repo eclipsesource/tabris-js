@@ -91,6 +91,7 @@ module.exports = function(grunt) {
           "Animation.js",
           "GestureRecognizer.js",
           "Widgets.js",
+          "Picker.js",
           "DOMEvents.js",
           "DOMDocument.js",
           "WindowTimers.js",

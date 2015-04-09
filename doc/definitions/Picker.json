@@ -9,7 +9,7 @@
     "selectionIndex": {
       "type": "number"
     },
-    "text": {
+    "selection": {
       "type": "string"
     }
   },
@@ -17,8 +17,11 @@
     "change:selectionIndex": {
       "description": "Fired when the selectionIndex property changes."
     },
+    "change:selection": {
+      "description": "Fired when the selection property changes. The index of the selected item is given in the options object as `index`."
+    },
     "select": {
-      "description": "Fired an item was selected by the user. Parameters are the same as in `change:selectionIndex`, i.e. `widget`, `selectionIndex`, `options`."
+      "description": "Fired an item was selected by the user. Parameters are the same as in `change:selection`, i.e. `widget`, `selection`, `options`."
     }
   },
   "links": [

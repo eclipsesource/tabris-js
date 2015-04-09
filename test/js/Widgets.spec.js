@@ -327,14 +327,6 @@ describe("Widgets", function() {
       expect(checkBox.get("text")).toBe("");
     });
 
-    it("Picker", function() {
-      var picker = tabris.create("Picker", {});
-
-      expect(getCreate().type).toEqual("rwt.widgets.Combo");
-      expect(getCreate().properties).toEqual({selectionIndex: 0});
-      expect(picker.get("items")).toEqual([]);
-    });
-
     it("Composite", function() {
       tabris.create("Composite", {});
 
@@ -435,9 +427,9 @@ describe("Widgets", function() {
     var checkEvent = function(value) {
       expect(listener.calls.count()).toBe(1);
       expect(listener.calls.argsFor(0)[0]).toBe(widget);
-      if (arguments.length === 1) {
+      if (arguments.length > 0) {
         expect(listener.calls.argsFor(0)[1]).toEqual(value);
-        expect(listener.calls.argsFor(0)[2]).toEqual({});
+        expect(listener.calls.argsFor(0)[2]).toEqual(arguments[1] || {});
       } else {
         expect(listener.calls.argsFor(0)[1]).toEqual({});
       }
@@ -485,20 +477,6 @@ describe("Widgets", function() {
       widget = tabris.create("CheckBox").on("change:selection", listener);
       tabris._notify(widget.cid, "Selection", {selection: true});
       checkEvent(true);
-      checkListen("Selection");
-    });
-
-    it("Picker select", function() {
-      widget = tabris.create("Picker").on("select", listener);
-      tabris._notify(widget.cid, "Selection", {selectionIndex: 23});
-      checkEvent(23);
-      checkListen("Selection");
-    });
-
-    it("Picker change:selectionIndex", function() {
-      widget = tabris.create("Picker").on("change:selectionIndex", listener);
-      tabris._notify(widget.cid, "Selection", {selectionIndex: 23});
-      checkEvent(23);
       checkListen("Selection");
     });
 
