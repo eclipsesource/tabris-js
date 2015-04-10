@@ -13,7 +13,7 @@ for (var i = 0; i < 50; i++) {
   tabris.create("TextView", {
     layoutData: {left: i * 30 + 20, centerY: 0, width: 30},
     text: i + "°",
-    foreground: "white"
+    textColor: "white"
   }).appendTo(scrollView);
 }
 

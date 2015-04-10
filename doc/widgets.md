@@ -42,7 +42,7 @@ var input = textField.get("text");
 
 Sets a widget property. Returns the widget itself.
 
-If the property is not supported by the widget, it will have no effect, but still be set. This can be used to attach arbitrary data to a widget. If the property is supported, but the given value is of the wrong type, the value will either be converted (if boolean or string are expected), or ignored with a printed warning. The options parameter is an object that will be given in the corresponding change event. 
+If the property is not supported by the widget, it will have no effect, but still be set. This can be used to attach arbitrary data to a widget. If the property is supported, but the given value is of the wrong type, the value will either be converted (if boolean or string are expected), or ignored with a printed warning. The options parameter is an object that will be given in the corresponding change event.
 
 Parameters:
 
@@ -67,13 +67,13 @@ Example:
 ```javascript
 label.set({
   text: "There were errors!",
-  foreground: "red"
+  textColor: "red"
 });
 ```
 
 ### `animate(properties, options)`
 
-Changes one or more widget properties with an animation. See [Animations](animations.md). 
+Changes one or more widget properties with an animation. See [Animations](animations.md).
 
 ## The Widget Tree
 
@@ -122,7 +122,7 @@ var parent = button.parent();
 
 ### `children(selector*)`
 
-Returns the list of children of this widget as a `WidgetCollection`. 
+Returns the list of children of this widget as a `WidgetCollection`.
 
 Example:
 
@@ -132,14 +132,14 @@ var lastChild = parent.children().last();
 ```
 
 Parameters:
-- *selector (optional)* A selector to filter the list of children by. 
+- *selector (optional)* A selector to filter the list of children by.
 
 See also: [Selector API](selector.md)
 
 
 ### `find(selector*)`
 
-Like `children`, but returns the list of all descendants of this widget as a `WidgetCollection`. 
+Like `children`, but returns the list of all descendants of this widget as a `WidgetCollection`.
 
 Parameters:
 - *selector (optional)* A selector to filter the list of descendants by.

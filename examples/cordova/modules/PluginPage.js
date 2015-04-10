@@ -14,7 +14,7 @@ PluginPage.prototype.create = function() {
   tabris.create("TextView", {
     text: "Plugin: " + this.pluginId,
     layoutData: {left: 10, top: 10, right: 10},
-    foreground: "rgb(22, 126, 251)"
+    textColor: "rgb(22, 126, 251)"
   }).on("touchstart", function() {
     tabris.create("Page", {title: "Plugin Info"}).append(
       tabris.create("WebView", {

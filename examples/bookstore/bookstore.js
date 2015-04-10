@@ -84,7 +84,7 @@ function createDetailsView(book) {
   }).appendTo(composite);
   tabris.create("TextView", {
     layoutData: {left: [coverView, PAGE_MARGIN], top: [authorTextView, PAGE_MARGIN]},
-    foreground: "rgb(102, 153, 0)",
+    textColor: "rgb(102, 153, 0)",
     text: "EUR 12,95"
   }).appendTo(composite);
   return composite;
@@ -115,11 +115,11 @@ function createBooksList(books) {
       var titleTextView = tabris.create("TextView", {
         layoutData: {left: 64, right: PAGE_MARGIN, top: PAGE_MARGIN},
         markupEnabled: true,
-        foreground: "#4a4a4a"
+        textColor: "#4a4a4a"
       }).appendTo(cell);
       var authorTextView = tabris.create("TextView", {
         layoutData: {left: 64, right: PAGE_MARGIN, top: [titleTextView, 4]},
-        foreground: "#7b7b7b"
+        textColor: "#7b7b7b"
       }).appendTo(cell);
       cell.on("change:item", function(widget, book) {
         imageView.set("image", book.image);
@@ -140,7 +140,7 @@ function createReadBookPage(book) {
   }).appendTo(page);
   var titleTextView = tabris.create("TextView", {
     layoutData: {left: PAGE_MARGIN, top: PAGE_MARGIN * 2, right: PAGE_MARGIN},
-    foreground: "rgba(0, 0, 0, 0.5)",
+    textColor: "rgba(0, 0, 0, 0.5)",
     markupEnabled: true,
     text: "<b>" + book.title + "</b>"
   }).appendTo(scrollView);

@@ -36,7 +36,7 @@ var collectionView = tabris.create("CollectionView", {
       layoutData: {bottom: VERTICAL_MARGIN, left: HORIZONTAL_MARGIN}
     }).appendTo(container);
     var timeView = tabris.create("TextView", {
-      foreground: "#b8b8b8",
+      textColor: "#b8b8b8",
       layoutData: {top: VERTICAL_MARGIN, right: HORIZONTAL_MARGIN}
     }).appendTo(container);
     tabris.create("Composite", {

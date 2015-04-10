@@ -27,7 +27,7 @@ tabris.create("CollectionView", {
       layoutData: {centerY: 0, right: MARGIN, width: 100},
       alignment: "right",
       font: "18px",
-      foreground: "#a4c639"
+      textColor: "#a4c639"
     }).appendTo(cell);
     var name = tabris.create("TextView", {
       layoutData: {left: MARGIN, top: MARGIN, right: [price, 0]},

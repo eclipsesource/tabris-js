@@ -14,7 +14,7 @@ var textView = tabris.create("TextView", {
   id: "hello",
   layoutData: {left: MARGIN, top: MARGIN},
   background: "#6aa",
-  foreground: "white",
+  textColor: "white",
   text: "Hello World!"
 }).appendTo(page);
 

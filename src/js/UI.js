@@ -52,7 +52,12 @@ tabris.registerWidget("_UI", {
 
   _properties: {
     image: "image",
-    foreground: "color",
+    textColor: {
+      type: "color",
+      set: function(value) {
+        this._nativeSet("foreground", value);
+      }
+    },
     background: "color",
     activePage: {
       set: function(page) {

@@ -53,7 +53,7 @@
     var textView = tabris.create("TextView", {
       layoutData: {left: [imageView, 10], centerY: 0},
       font: "20px",
-      foreground: "#333"
+      textColor: "#333"
     }).appendTo(cell);
     cell.on("change:item", function(widget, page) {
       imageView.set("image", page.get("image"));

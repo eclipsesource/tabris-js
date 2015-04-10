@@ -49,7 +49,7 @@ tabris.create("TextView", {
   text: "<b>The perfect side dish</b>",
   font: "16px",
   layoutData: {left: MARGIN, top: MARGIN, right: MARGIN},
-  foreground: "black"
+  textColor: "black"
 }).appendTo(titleComposite);
 
 tabris.create("TextView", {
@@ -57,7 +57,7 @@ tabris.create("TextView", {
   markupEnabled: true,
   text: "<b>INDIAN SUMMER SALAD</b>",
   font: "24px",
-  foreground: "white"
+  textColor: "white"
 }).appendTo(titleComposite);
 
 var titleCompY = 0;

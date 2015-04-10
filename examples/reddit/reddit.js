@@ -19,11 +19,11 @@ var collectionView = tabris.create("CollectionView", {
       maxLines: 2
     }).appendTo(cell);
     var authorView = tabris.create("TextView", {
-      foreground: "#234"
+      textColor: "#234"
     }).appendTo(cell);
     var commentsView = tabris.create("TextView", {
       alignment: "right",
-      foreground: "green"
+      textColor: "green"
     }).appendTo(cell);
     cell.on("change:item", function(widget, item) {
       if (item.loading) {

@@ -195,7 +195,12 @@
         nocache: true
       },
       background: "color",
-      foreground: "color",
+      textColor: {
+        type: "color",
+        set: function(value) {
+          this._nativeSet("foreground", value);
+        }
+      },
       opacity: {
         type: "opacity",
         default: 1

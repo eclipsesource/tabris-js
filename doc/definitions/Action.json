@@ -6,7 +6,7 @@
       "type": "boolean",
       "description": "Whether the action can be invoked."
     },
-    "foreground": {
+    "textColor": {
       "type": "Color",
       "description": "Text color of the action."
     },

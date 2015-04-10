@@ -160,7 +160,7 @@
       "type": "Color",
       "description": "Background color of the widget."
     },
-    "foreground": {
+    "textColor": {
       "type": "Color",
       "description": "Text color of the widget."
     },

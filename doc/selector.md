@@ -1,6 +1,6 @@
 # Selector API
 
-Modifying a widget usually requires having direct access the object. This may not always be the most convenient or efficient way to work with complex UIs. The Tabris.js selector API allows referencing widgets without using an instance, and even manipulating multiple widgets at once. 
+Modifying a widget usually requires having direct access the object. This may not always be the most convenient or efficient way to work with complex UIs. The Tabris.js selector API allows referencing widgets without using an instance, and even manipulating multiple widgets at once.
 
 ## Selector Strings
 
@@ -10,7 +10,7 @@ A selector string describes an existing widget that we want to work with. There 
 - `"Type"` - Matches all widgets of the given type, e.g. `"Button"` matches all button widgets.
 - `"#id"` - Matches all widgets with the given id, e.g. `"#foo"` matches all widgets with the id "foo".
 
-The id of a widget is a property like any other. It's initial value is undefined, so you always have to assign one yourself, usually in the `create` call. 
+The id of a widget is a property like any other. It's initial value is undefined, so you always have to assign one yourself, usually in the `create` call.
 
     tabris.create("TextView", {id: "myLabel"});
 
@@ -18,7 +18,7 @@ Id's don't have to be unique, but it is strongly recommended that they are so wi
 
 ## Working with Selectors
 
-To find a widget anywhere in the current page, simply call `page.find(selector)`. This will return a [WidgetCollection](#WidgetCollection) with all widgets within the page that match the given selector. You can further narrow the search scope by using `page.children(selector)`, or by calling either of these methods on a container within the page. 
+To find a widget anywhere in the current page, simply call `page.find(selector)`. This will return a [WidgetCollection](#WidgetCollection) with all widgets within the page that match the given selector. You can further narrow the search scope by using `page.children(selector)`, or by calling either of these methods on a container within the page.
 
 It is also possible to search through all widgets in the current widget tree, using `tabris.ui.find(selector)`. However, this is rarely practical. Instead, you may use `tabris.ui` to find all current pages (`tabris.ui.children("Page")`), actions (`tabris.ui.children("Action")`) or the drawer (`tabris.ui.children("Drawer")`).
 
@@ -62,18 +62,18 @@ Unlike the normal Array, `WidgetCollection` also has these methods:
 ### How it works
 
 - `apply({<selector: properties>*})`
- 
+
 The apply method uses selectors to apply different sets of properties to different widgets in one call. It is available on all widgets, but most commonly used on `Page`.
 
 For example, to make all widgets within a page green you could call:
 
     page.apply({"*": {background: "green"}});
-    
+
 You can also set different properties on different widgets:
 
     page.apply({
       "#okbutton": {text: "OK!", background: "yellow"},
-      "#cancelbutton": {text: "Cancel!", foreground: "red"}
+      "#cancelbutton": {text: "Cancel!", textColor: "red"}
     });
 
 It's very important to note that the order in which these properties are applies depends solely on the selector used, not on the order in the object literal. The order is:
@@ -92,8 +92,8 @@ This will make all widgets within the page blue, except for the buttons, which a
 
 ### How to use it
 
-While we used object literals in the above examples, the apply method can be very effectively used with [modules](module), allowing most or all property values (except ids) to be extracted from your code. 
- 
+While we used object literals in the above examples, the apply method can be very effectively used with [modules](module), allowing most or all property values (except ids) to be extracted from your code.
+
 Imagine, for example, that you want to apply different texts to your widgets depending on your locale. You could do it like this:
 
 ```javascript
@@ -102,7 +102,7 @@ try {
   page.apply(module.require("./texts-" + lang));
 } catch() {
   // fallback if the desired language file does not exist:
-  page.apply(module.require("./texts-en")); 
+  page.apply(module.require("./texts-en"));
 }
 ```
 
@@ -129,9 +129,9 @@ var texts = {
   en: {
     "#okbutton": {text: "OK!"}
     "#cancelbutton": {text: "Cancel!"}
-  }, 
+  },
   //...
-};  
+};
 module.exports = texts[tabris.device.get("language")] || texts.en;
 ```
 

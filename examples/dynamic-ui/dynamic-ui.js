@@ -20,7 +20,7 @@ var createPage = function(pageTitle, pageIsTopLevel) {
     layoutData: {left: 5, right: 5, top: 5},
     text: "Add Root Page",
     background: "green",
-    foreground: "white",
+    textColor: "white",
     image: {src: "images/add_root_page.png", width: 24, height: 24}
   }).on("select", function() {
     var page = createPage("Root Page: " + createRandomPageId(), true);
@@ -33,7 +33,7 @@ var createPage = function(pageTitle, pageIsTopLevel) {
     layoutData: {left: 5, right: 5, top: ["#addRootPage", 5]},
     text: "Add Page",
     background: "green",
-    foreground: "white",
+    textColor: "white",
     image: {src: "images/add_page.png", width: 24, height: 24}
   }).on("select", function() {
     var page = createPage("Page: " + createRandomPageId(), false);
@@ -45,7 +45,7 @@ var createPage = function(pageTitle, pageIsTopLevel) {
     layoutData: {left: 5, right: 5, top: ["#addPage", 5]},
     text: "Add Global Action",
     background: "green",
-    foreground: "white",
+    textColor: "white",
     image: {src: "images/global_action.png", width: 24, height: 24}
   }).on("select", function() {
     var action = tabris.create("Action", {
@@ -63,7 +63,7 @@ var createPage = function(pageTitle, pageIsTopLevel) {
     layoutData: {left: 5, right: 5, bottom: 5},
     text: "Remove Last Global Action",
     background: "red",
-    foreground: "white",
+    textColor: "white",
     image: {src: "images/global_action.png", width: 24, height: 24}
   }).on("select", function() {
     if (actions.length - 1 >= 0) {
@@ -76,7 +76,7 @@ var createPage = function(pageTitle, pageIsTopLevel) {
     layoutData: {left: 5, right: 5, bottom: ["#removeLastGlobalAction", 5]},
     text: "Remove Last Root Page",
     background: "red",
-    foreground: "white",
+    textColor: "white",
     image: {src: "images/remove_root_page.png", width: 24, height: 24}
   }).on("select", function() {
     if (topLevelPages.length - 1 >= 0) {

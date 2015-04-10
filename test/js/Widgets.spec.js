@@ -56,8 +56,8 @@ describe("Widgets", function() {
       nativeBridge.resetCalls();
     });
 
-    it("translates foreground and background colors to arrays", function() {
-      widget.set({foreground: "red", background: "rgba(1, 2, 3, 0.5)"});
+    it("translates textColor and background colors to arrays", function() {
+      widget.set({textColor: "red", background: "rgba(1, 2, 3, 0.5)"});
 
       var call = nativeBridge.calls({op: "set"})[0];
       expect(call.properties.foreground).toEqual([255, 0, 0, 255]);
@@ -95,8 +95,8 @@ describe("Widgets", function() {
       expect(call.properties.visibility).toBe(true);
     });
 
-    it("support 'initial' for foreground, background and font", function() {
-      widget.set({foreground: "initial", background: "initial", font: "initial"});
+    it("support 'initial' for textColor, background and font", function() {
+      widget.set({textColor: "initial", background: "initial", font: "initial"});
 
       var call = nativeBridge.calls({op: "set"})[0];
       expect(call.properties.foreground).toBeNull();
@@ -143,10 +143,10 @@ describe("Widgets", function() {
       nativeBridge.resetCalls();
     });
 
-    it("translates foreground to string", function() {
+    it("translates textColor to string", function() {
       spyOn(nativeBridge, "get").and.returnValue([170, 255, 0, 128]);
 
-      var result = widget.get("foreground");
+      var result = widget.get("textColor");
 
       expect(result).toBe("rgba(170, 255, 0, 0.5)");
     });

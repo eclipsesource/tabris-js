@@ -98,7 +98,7 @@ for (var x = 0; x < xSize; x++) {
 var textView = tabris.create("TextView", {
   layoutData: {left: 0, top: 0, width: 80, height: 40},
   background: "rgba(255, 0, 0, 0.8)",
-  foreground: "#fff",
+  textColor: "#fff",
   text: "FPS"
 }).appendTo(page);
 

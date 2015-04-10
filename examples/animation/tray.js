@@ -24,7 +24,7 @@ var page = tabris.create("Page", {
 tabris.create("TextView", {
   layoutData: {left: MARGIN, right: MARGIN, top: MARGIN},
   text: loremIpsum,
-  foreground: "#777"
+  textColor: "#777"
 }).appendTo(page);
 
 var shade = tabris.create("Composite", {
@@ -47,7 +47,7 @@ var strapIcon = tabris.create("TextView", {
   alignment: "center",
   text: "⇧",
   font: "bold 24px",
-  foreground: "white"
+  textColor: "white"
 }).appendTo(strap);
 
 var trayContent = tabris.create("Composite", {
@@ -60,7 +60,7 @@ tabris.create("TextView", {
   alignment: "center",
   text: "Tray content",
   font: "bold 24px",
-  foreground: "white"
+  textColor: "white"
 }).appendTo(trayContent);
 
 trayContent.on("resize", function() {
