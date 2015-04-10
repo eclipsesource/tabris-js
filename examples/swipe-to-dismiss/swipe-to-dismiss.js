@@ -78,8 +78,7 @@ function animateDismiss(event, container) {
   container.animate({
     transform: {translationX: sign(event.translation.x) * bounds.width}
   }, {duration: 200, easing: "ease-out"}).once("animationend", function() {
-    var index = collectionView.get("items").indexOf(container.get("message"));
-    collectionView.remove(index);
+    collectionView.remove(container.parent().get("itemIndex"));
   });
 }
 
