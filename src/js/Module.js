@@ -20,7 +20,7 @@
         if (!resolved) {
           resolved = true;
           if (typeof content === "function") {
-            content(this, exports, require);
+            content(this, exports, require, id.slice(1), dirname(id).slice(1));
           } else if (content instanceof Object) {
             exports = content;
           }
@@ -136,7 +136,7 @@
     return request.slice(-1) === "/" ? folderPostfixes : filePostfixes;
   }
 
-  var modulePrefix = "(function (module, exports, require) { ";
+  var modulePrefix = "(function (module, exports, require, __filename, __dirname) { ";
   var modulePostfix = "\n});";
 
   function dirname(id) {
