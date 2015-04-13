@@ -35,13 +35,15 @@ tabris.registerWidget("_UI", {
     this._pages = [];
     this._drawer = null;
     this._on("ShowPreviousPage", function() {
-      var page = this._getActivePage();
+      var page = this.get("activePage");
       if (page) {
         page.close();
       }
     });
+    this._on("change:activePage", this._onChangeActivePage, this);
+    this._removedPages = [];
     Object.defineProperty(this, "drawer", {
-      get: function() { return this._drawer;}.bind(this),
+      get: function() { return this._drawer; }.bind(this),
       set: function() {}
     });
     return this;
@@ -58,25 +60,12 @@ tabris.registerWidget("_UI", {
     background: "color",
     activePage: {
       set: function(page) {
-        this._setActivePage(page);
-      },
-      get: function() {
-        return this._getActivePage();
-      },
-      nocache: true
-    }
-  },
-
-  _setActivePage: function(page) {
-    if (!(page instanceof tabris.Page)) {
-      console.warn("Value for activePage is not a page");
-      return;
-    }
-    var activePage = this._getActivePage();
-    if (page !== activePage) {
-      page.on("dispose", this._pageClosed.bind(this, page));
-      this._pages.push(page);
-      this._updateActivePage(activePage, page);
+        if (!(page instanceof tabris.Page)) {
+          console.warn("Value for activePage is not a page");
+          return;
+        }
+        this._nativeSet("activePage", page._page.cid);
+      }
     }
   },
 
@@ -98,27 +87,94 @@ tabris.registerWidget("_UI", {
     this._drawer = drawer;
   },
 
-  _getActivePage: function() {
+  _pageOpened: function(page) {
+    this.set("activePage", page);
+  },
+
+  _pageClosed: function(page) {
+    if (!this._isOnStack(page)) {
+      return;
+    }
+    if (!page._isTopLevel || page === this._getCurrentTopLevelPage()) {
+      this._removePagesOnTop(page);
+      this._pages.pop();
+    } else if (page._isTopLevel) {
+      this._removeFromStack(page);
+    }
+    this.set("activePage", this._getCurrentPage());
+  },
+
+  _onChangeActivePage: function(ui, page) {
+    if (page !== this._getCurrentPage()) {
+      var onStack = this._isOnStack(page);
+      if (onStack || page._isTopLevel) {
+        this._removePagesOnTop(page);
+        if (onStack && page._isTopLevel) {
+          this._removeFromStack(page);
+        }
+      }
+      if (page !== this._getCurrentPage()) {
+        this._pages.push(page);
+      }
+    }
+    this._updateActivePage(page);
+  },
+
+  _removePagesOnTop: function(page) {
+    var topPage = this._getCurrentPage();
+    while (topPage) {
+      if (topPage === page || topPage._isTopLevel) {
+        break;
+      }
+      this._removedPages.push(this._pages.pop());
+      topPage = this._getCurrentPage();
+    }
+  },
+
+  _getCurrentTopLevelPage: function() {
+    var index = this._pages.length - 1;
+    while (index > 0) {
+      var page = this._pages[index--];
+      if (page._isTopLevel) {
+        return page;
+      }
+    }
+  },
+
+  _getCurrentPage: function() {
     return this._pages[this._pages.length - 1];
   },
 
-  _pageClosed: function(closedPage) {
-    var oldActivePage = this._getActivePage();
-    this._pages = this._pages.filter(function(page) {
-      return page !== closedPage;
-    });
-    var newActivePage = this._getActivePage();
-    if (newActivePage !== oldActivePage) {
-      this._updateActivePage(oldActivePage, this._getActivePage());
+  _removeFromStack: function(page) {
+    var index = this._pages.indexOf(page);
+    if (index !== -1) {
+      this._pages.splice(index, 1);
     }
   },
 
-  _updateActivePage: function(oldPage, newPage) {
-    if (oldPage) {
-      oldPage.trigger("disappear", oldPage);
+  _isOnStack: function(page) {
+    return this._pages.indexOf(page) !== -1;
+  },
+
+  _updateActivePage: function(newPage) {
+    var oldPage = this._oldActivePage;
+    if (newPage !== oldPage) {
+      if (oldPage) {
+        oldPage.trigger("disappear", oldPage);
+      }
+      if (newPage) {
+        newPage.trigger("appear", newPage);
+      } // TODO else (when last page closed), send SET activePage null ? )
     }
-    this._nativeSet("activePage", newPage._page.cid);
-    newPage.trigger("appear", newPage);
+    this._closeRemovedPages();
+    this._oldActivePage = newPage;
+  },
+
+  _closeRemovedPages: function() {
+    this._removedPages.forEach(function(page) {
+      page.close();
+    });
+    this._removedPages = [];
   }
 
 });

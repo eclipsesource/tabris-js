@@ -44,13 +44,15 @@
       this._parent = tabris.ui;
       tabris.ui._addChild(this);
       this._on("dispose", function() {
+        tabris.ui._pageClosed(this);
         this._page.dispose();
       });
+      this._isTopLevel = !!properties.topLevel;
       return this;
     },
 
     open: function() {
-      tabris.ui.set("activePage", this);
+      tabris.ui._pageOpened(this);
       return this;
     },
 
