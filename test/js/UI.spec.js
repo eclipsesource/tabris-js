@@ -37,8 +37,7 @@ describe("UI", function() {
       expect(tabrisUiCreate.properties.shell).toBe(shellCreate.id);
     });
 
-    it("listens on tabris UI ShowPage and ShowPreviousPage events", function() {
-      expect(nativeBridge.calls({op: "listen", id: ui.cid, event: "ShowPage"}).length).toBe(1);
+    it("listens on tabris UI ShowPreviousPage event", function() {
       expect(nativeBridge.calls({op: "listen", id: ui.cid, event: "ShowPreviousPage"}).length).toBe(1);
     });
 
@@ -84,13 +83,6 @@ describe("UI", function() {
       it("ShowPreviousPage event closes page", function() {
         tabris._notify(ui.cid, "ShowPreviousPage", {});
         expect(page.close).toHaveBeenCalled();
-      });
-
-      it("ShowPage sets activePage", function() {
-        var page2 = tabris.create("Page", {title: "Bar"});
-        tabris._notify(ui.cid, "ShowPage", {pageId: page2._page.cid});
-        var setCall = nativeBridge.calls({op: "set", id: ui.cid}).pop();
-        expect(setCall.properties.activePage).toBe(page2._page.cid);
       });
 
       it("has Page in children", function() {

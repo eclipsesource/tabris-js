@@ -16,7 +16,7 @@ tabris.registerWidget("_UI", {
 
   _type: "tabris.UI",
 
-  _events: {ShowPage: true, ShowPreviousPage: true},
+  _events: {ShowPreviousPage: true},
 
   _supportsChildren: true,
 
@@ -34,10 +34,7 @@ tabris.registerWidget("_UI", {
     this._nativeSet("shell", this._shell.cid);
     this._pages = [];
     this._drawer = null;
-    this._on("ShowPage", function(properties) {
-      var page = tabris._proxies[properties.pageId];
-      this._setActivePage(page.widget);
-    })._on("ShowPreviousPage", function() {
+    this._on("ShowPreviousPage", function() {
       var page = this._getActivePage();
       if (page) {
         page.close();
