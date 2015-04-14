@@ -56,8 +56,7 @@
     var message = "Version mismatch: JavaScript module \"tabris\" (version " + tabris.version + ") ";
     if (tabrisJs[0] !== client[0]) {
       console.error(message + "is incompatible with this native tabris platform (different major version).");
-    }
-    if (tabrisJs[1] > client[1] || (tabrisJs[1] === client[1] && tabrisJs[2] > client[2])) {
+    } else if (tabrisJs[1] > client[1] || (tabrisJs[1] === client[1] && tabrisJs[2] > client[2])) {
       console.warn(message + "is newer than the native tabris platform. Some features may not work.");
     }
   }
