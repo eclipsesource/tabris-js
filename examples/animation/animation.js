@@ -6,11 +6,12 @@ var page = tabris.create("Page", {
 });
 
 tabris.create("Button", {
+  id: "animateButton",
   text: "Animate",
-  layoutData: {left: MARGIN, right: MARGIN, top: ["#hello", MARGIN]}
+  layoutData: {left: MARGIN, right: MARGIN, top: MARGIN}
 }).on("select", function(button) {
   button.set("enabled", false);
-  page.children("#hello").animate({
+  page.children("#helloLabel").animate({
     opacity: 0.25,
     transform: {
       rotation: 0.75 * Math.PI,
@@ -19,8 +20,7 @@ tabris.create("Button", {
       translationX: 100,
       translationY: 200
     }
-  },
-  {
+  }, {
     delay: 0,
     duration: 1000,
     repeat: 1,
@@ -32,10 +32,11 @@ tabris.create("Button", {
 }).appendTo(page);
 
 tabris.create("TextView", {
-  id: "hello",
-  layoutData: {left: MARGIN, top: MARGIN},
+  id: "helloLabel",
+  layoutData: {left: MARGIN, top: ["#animateButton", MARGIN]},
   background: "#6aa",
   textColor: "white",
+  font: "20px",
   text: "Hello World!"
 }).appendTo(page);
 
