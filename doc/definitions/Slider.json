@@ -1,6 +1,6 @@
 {
   "type": "Slider",
-  "description": "A widget representing a numeric value as an movable indicator on a horizontal line. *Known Issues: Selection event is only fired after indicator is released.*",
+  "description": "A widget representing a numeric value as an movable indicator on a horizontal line.",
   "include": ["Widget"],
   "properties": {
     "minimum": {

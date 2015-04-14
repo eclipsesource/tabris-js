@@ -170,7 +170,7 @@
     },
     "transform": {
       "type": "Transformation",
-      "description": "Modifications to the widget's shape, size, or position. Can be used for animations."
+      "description": "Modifications to the widget's shape, size, or position. Can be used for animations. *Note:* In Android the `transform` property does not affect the `bounds` property, while it does so in iOS."
     },
     "highlightOnTouch": {
       "type": "boolean?false",

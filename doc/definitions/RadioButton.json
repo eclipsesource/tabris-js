@@ -1,6 +1,6 @@
 {
   "type": "RadioButton",
-  "description": "A radio button. Selecting a radio button deselects all its siblings (i.e. all radio buttons within the same parent). *Known Issues: RadioButton is not automatically deselected on iOS*",
+  "description": "A radio button. Selecting a radio button de-selects all its siblings (i.e. all radio buttons within the same parent).",
   "include": ["Widget"],
   "properties": {
     "selection": {
