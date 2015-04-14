@@ -229,6 +229,20 @@ describe("CollectionView", function() {
               expect(console.warn).not.toHaveBeenCalled();
             });
 
+            it("triggers change:item event on the cell even if item is already set", function() {
+              view._trigger("populateitem", {widget: cell.cid, index: 0});
+              cell.on("change:item", listener);
+
+              view._trigger("populateitem", {widget: cell.cid, index: 0});
+
+              expect(listener).toHaveBeenCalled();
+              expect(listener.calls.argsFor(0)[0]).toBe(cell);
+              expect(listener.calls.argsFor(0)[1]).toBe("a");
+              expect(listener.calls.argsFor(0)[2]).toEqual({});
+              expect(cell.get("item")).toBe("a");
+              expect(console.warn).not.toHaveBeenCalled();
+            });
+
             it("triggers change:itemIndex event on the cell", function() {
               cell.on("change:itemIndex", listener);
               view._trigger("populateitem", {widget: cell.cid, index: 0});

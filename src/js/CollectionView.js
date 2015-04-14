@@ -69,7 +69,11 @@
           var cell = tabris(event.widget);
           var item = this._getItem(this._items, event.index);
           cell.set("itemIndex", event.index);
-          cell.set("item", item);
+          if (item !== cell.get("item")) {
+            cell.set("item", item);
+          } else {
+            cell.trigger("change:item", cell, item, {});
+          }
         }
       },
       select: {
