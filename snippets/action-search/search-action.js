@@ -12,6 +12,8 @@ var textView = tabris.create("TextView", {
 var action = tabris.create("SearchAction", {
   title: "Search",
   image: "images/search.png"
+}).on("select", function() {
+  this.set("text", "");
 }).on("input", function(widget, query) {
   updateProposals(query);
 }).on("accept", function(widget, query) {
