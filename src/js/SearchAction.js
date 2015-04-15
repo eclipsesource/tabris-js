@@ -32,7 +32,8 @@ tabris.registerType("SearchAction", {
       get: function() {
         return this._nativeGet("query");
       }
-    }
+    },
+    message: {type: "string", default: ""}
   },
 
   _events: {

@@ -9,11 +9,12 @@
       "description": "The type of the text widget."
     },
     "text": {
-      "type": "string"
+      "type": "string",
+      "description": "The text in the input field."
     },
     "message": {
       "type": "string",
-      "description": "Displayed only when the field is empty."
+      "description": "A hint text that is displayed when the input field is empty."
     },
     "editable": {
       "type": "boolean"

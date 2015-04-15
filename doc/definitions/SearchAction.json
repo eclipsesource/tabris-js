@@ -10,6 +10,10 @@
     "text": {
       "type": "string",
       "description": "The text in the search input field."
+    },
+    "message": {
+      "type": "string",
+      "description": "A hint text that is displayed when the search input is empty."
     }
   },
   "events": {
