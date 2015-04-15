@@ -22,7 +22,17 @@ tabris.registerType("SearchAction", {
         this._nativeSet("visibility", value);
       }
     },
-    proposals: {default: function() {return [];}}
+    proposals: {default: function() {return [];}},
+    text: {
+      type: "string",
+      nocache: true,
+      set: function(value) {
+        this._nativeSet("query", value);
+      },
+      get: function() {
+        return this._nativeGet("query");
+      }
+    }
   },
 
   _events: {
