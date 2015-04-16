@@ -4,6 +4,6 @@
   "description": "Specify a widget's bounds as percentage of the parent",
   "main": "layout-relative-size.js",
   "dependencies": {
-    "tabris": "0.9.4"
+    "tabris": "1.0.0"
   }
 }

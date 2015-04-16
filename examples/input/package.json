@@ -4,6 +4,6 @@
   "category": "Small Apps",
   "main": "input.js",
   "dependencies": {
-    "tabris": "0.9.4"
+    "tabris": "1.0.0"
   }
 }

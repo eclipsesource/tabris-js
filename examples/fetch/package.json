@@ -5,7 +5,7 @@
   "main": "http-request.js",
   "dependencies": {
     "promise": "^6.1.0",
-    "tabris": "0.9.4",
+    "tabris": "1.0.0",
     "whatwg-fetch": "^0.7.0"
   }
 }

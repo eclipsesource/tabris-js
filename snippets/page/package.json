@@ -4,6 +4,6 @@
   "description": "Demonstrates creating multiple top level pages",
   "main": "page.js",
   "dependencies": {
-    "tabris": "0.9.4"
+    "tabris": "1.0.0"
   }
 }

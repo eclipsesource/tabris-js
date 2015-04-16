@@ -4,6 +4,6 @@
   "description": "Demonstrates the Tabris.js touch API",
   "main": "touch.js",
   "dependencies": {
-    "tabris": "0.9.4"
+    "tabris": "1.0.0"
   }
 }

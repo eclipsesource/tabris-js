@@ -4,6 +4,6 @@
   "description": "Demonstrates using an image view as a button",
   "main": "imageview-as-a-button.js",
   "dependencies": {
-    "tabris": "0.9.4"
+    "tabris": "1.0.0"
   }
 }

@@ -4,6 +4,6 @@
   "description": "Demonstrates using pages in fullscreen mode",
   "main": "page-fullscreen.js",
   "dependencies": {
-    "tabris": "0.9.4"
+    "tabris": "1.0.0"
   }
 }

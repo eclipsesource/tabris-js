@@ -4,6 +4,6 @@
   "description": "Provides a sample implementation for a parallax scrolling effect",
   "main": "parallax.js",
   "dependencies": {
-    "tabris": "0.9.4"
+    "tabris": "1.0.0"
   }
 }

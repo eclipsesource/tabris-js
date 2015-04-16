@@ -4,6 +4,6 @@
   "description": "Display images with different scale modes",
   "main": "imageview.js",
   "dependencies": {
-    "tabris": "0.9.4"
+    "tabris": "1.0.0"
   }
 }

@@ -4,6 +4,6 @@
   "description": "Create composites and append children to them",
   "main": "composite.js",
   "dependencies": {
-    "tabris": "0.9.4"
+    "tabris": "1.0.0"
   }
 }

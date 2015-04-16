@@ -4,6 +4,6 @@
   "description": "Arrange a widget relative to another one",
   "main": "layout-relative-position.js",
   "dependencies": {
-    "tabris": "0.9.4"
+    "tabris": "1.0.0"
   }
 }

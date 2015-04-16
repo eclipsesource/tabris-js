@@ -4,6 +4,6 @@
   "description": "Align widgets on their baseline",
   "main": "layout-baseline.js",
   "dependencies": {
-    "tabris": "0.9.4"
+    "tabris": "1.0.0"
   }
 }

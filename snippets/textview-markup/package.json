@@ -4,6 +4,6 @@
   "description": "Creating text views with and without markup enabled",
   "main": "textview-markup.js",
   "dependencies": {
-    "tabris": "0.9.4"
+    "tabris": "1.0.0"
   }
 }
