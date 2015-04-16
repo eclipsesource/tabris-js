@@ -1,4 +1,4 @@
-require("./animation.js");
+require("./animation.js").open();
 require("./basic.js");
 require("./arc.js");
 require("./text.js");

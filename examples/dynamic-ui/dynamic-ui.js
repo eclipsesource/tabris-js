@@ -3,12 +3,9 @@ var pages = [];
 var actions = [];
 
 tabris.create("Drawer").append(tabris.create("PageSelector"));
+createPage("Dynamic UI Start", true).open();
 
-var createRandomPageId = function() {
-  return Math.floor(Math.random() * (99999) + 10000);
-};
-
-var createPage = function(pageTitle, pageIsTopLevel) {
+function createPage(pageTitle, pageIsTopLevel) {
 
   var page = tabris.create("Page", {
     title: pageTitle,
@@ -87,7 +84,8 @@ var createPage = function(pageTitle, pageIsTopLevel) {
 
   return page;
 
-};
+}
 
-var topLevelPage = createPage("Dynamic UI Start", true);
-topLevelPage.open();
+function createRandomPageId() {
+  return Math.floor(Math.random() * (99999) + 10000);
+}

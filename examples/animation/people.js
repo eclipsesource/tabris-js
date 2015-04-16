@@ -23,26 +23,23 @@ var page = tabris.create("Page", {
   topLevel: true
 });
 
-var personDetailsParent = tabris.create("Composite", {
+var detailsParent = tabris.create("Composite", {
   layoutData: {left: MARGIN, top: MARGIN_LARGE, right: MARGIN}
 }).appendTo(page);
 
-var personDetailView = createPersonDetail(personDetailsParent, people[2], ANIMATION_START_DELAY);
+var detailView = createPersonDetail(detailsParent, people[2], ANIMATION_START_DELAY);
 
-var peopleComposite = tabris.create("Composite", {
-  layoutData: {left: 0, top: [personDetailsParent, MARGIN], right: 0, height: 96}
-}).on("resize", function() {
-  var thumbsize = Math.min(64, this.get("bounds").width / people.length - MARGIN);
-  this.children().forEach(function(child) {
-    child.dispose();
-  });
+tabris.create("Composite", {
+  layoutData: {left: 0, top: [detailsParent, MARGIN], right: 0, height: 96}
+}).on("resize", function(widget, bounds) {
+  this.children().dispose();
+  var thumbsize = Math.min(64, bounds.width / people.length - MARGIN);
   people.forEach(function(person, index) {
-    var composite = createPersonThumbView(peopleComposite, person, thumbsize);
-    animateInFromBottom(composite, index);
+    animateInFromBottom(createPersonThumb(widget, person, thumbsize), index);
   });
 }).appendTo(page);
 
-page.open();
+module.exports = page;
 
 function animateInFromBottom(widget, index) {
   widget.set({
@@ -88,15 +85,15 @@ function animateInScaleUp(widget, delay) {
 }
 
 function animateOutLeftCreateCurrentPerson(person) {
-  personDetailView.animate({
+  detailView.animate({
     opacity: 0.0,
     transform: {translationX: -64}
   }, {
     duration: 500,
     easing: "ease-out"
   }).on("animationend", function() {
-    personDetailView.dispose();
-    personDetailView = createPersonDetail(personDetailsParent, person, 0);
+    detailView.dispose();
+    detailView = createPersonDetail(detailsParent, person, 0);
   });
 }
 
@@ -108,7 +105,7 @@ function createPersonDetail(parent, person, delay) {
     layoutData: {left: 0, top: 0, width: IMAGE_SIZE, height: IMAGE_SIZE},
     image: {src: person.image, width: IMAGE_SIZE, height: IMAGE_SIZE},
     opacity: 0.0
-  }).on("change:bounds", function listener() {
+  }).on("resize", function listener() {
     this.set("transform", {
       scaleX: 0.75,
       scaleY: 0.75
@@ -140,7 +137,7 @@ function createPersonDetail(parent, person, delay) {
   return composite;
 }
 
-function createPersonThumbView(parent, person, thumbsize) {
+function createPersonThumb(parent, person, thumbsize) {
   var neighbor = parent.children().last();
   var font = (thumbsize < 48) ? "9px" : "12px";
   var composite = tabris.create("Composite", {

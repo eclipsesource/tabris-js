@@ -95,6 +95,8 @@ strap.on("tap", function() {
   }
 });
 
+module.exports = page;
+
 function positionTrayInRestingState(velocity) {
   trayState = "animating";
   var translationY = velocity > 0 ? trayHeight : 0;

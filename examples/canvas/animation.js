@@ -1,32 +1,28 @@
 var example = new Example();
 
-var page = tabris.create("Page", {
+var page = module.exports = tabris.create("Page", {
   title: "Animation",
   topLevel: true
+}).on("disappear", function() {
+  page.children("#toggleRun").set("selection", false);
 });
 
-var button = tabris.create("Button", {
-  text: "Start",
-  layoutData: {left: 10, bottom: 10}
-}).on("select", function() {
-  var running = example.toggle();
-  button.set("text", running ? "Stop" : "Start");
-}).appendTo(page);
-
-var canvas = tabris.create("Canvas", {
-  layoutData: {left: 10, top: 10, right: 10, bottom: [button, 10]}
-}).on("change:bounds", function() {
-  var bounds = canvas.get("bounds");
-  var width = bounds.width;
-  var height = Math.min(bounds.height, Math.floor(width / 2));
-  var ctx = canvas.getContext("2d", width, height);
+tabris.create("Canvas", {
+  layoutData: {left: 10, top: 10, right: 10, bottom: ["#toggleRun", 10]}
+}).on("resize", function(canvas, bounds) {
+  var height = Math.min(bounds.height, Math.floor(bounds.width / 2));
+  var ctx = canvas.getContext("2d", bounds.width, height);
   example.init(ctx);
 }).appendTo(page);
 
-page.on("disappear", function() {
-  example.stop();
-  button.set("text", "Start");
-}).open();
+tabris.create("ToggleButton", {
+  text: "Start",
+  layoutData: {left: 10, bottom: 10},
+  id: "toggleRun"
+}).on("change:selection", function(button, selection) {
+  example.setRunning(selection);
+  button.set("text", selection ? "Stop" : "Start");
+}).appendTo(page);
 
 function Example() {
   var ctx, width, height, cx, cy, unit;
@@ -49,6 +45,14 @@ function Example() {
     }
   };
 
+  this.setRunning = function(value) {
+    if (value && !running) {
+      this.start();
+    } else if (!value && running) {
+      this.stop();
+    }
+  };
+
   this.start = function() {
     clearTimeout(timerId);
     running = true;
@@ -58,15 +62,6 @@ function Example() {
   this.stop = function() {
     clearTimeout(timerId);
     running = false;
-  };
-
-  this.toggle = function() {
-    if (running) {
-      this.stop();
-    } else {
-      this.start();
-    }
-    return running;
   };
 
   function draw() {

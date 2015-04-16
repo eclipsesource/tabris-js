@@ -14,41 +14,34 @@ var imageView = tabris.create("ImageView", {
   layoutData: {top: MARGIN, width: 200, height: 200, centerX: 0}
 }).appendTo(page);
 
-var imageSizeTextView = tabris.create("TextView", {
+tabris.create("TextView", {
+  id: "imageSizeLabel",
   layoutData: {left: MARGIN, top: [imageView, MARGIN_LARGE], width: 96},
   text: "Image"
 }).appendTo(page);
 
-var imageSizePicker = tabris.create("Picker", {
-  layoutData: {right: MARGIN, left: [imageSizeTextView, 0], baseline: imageSizeTextView},
+tabris.create("Picker", {
+  layoutData: {right: MARGIN, left: ["#imageSizeLabel", 0], baseline: "#imageSizeLabel"},
   items: ["Large", "Small"]
+}).on("change:selectionIndex", function(picker, index) {
+  imageView.set("image", getImage(index));
 }).appendTo(page);
 
-var scaleModeTextView = tabris.create("TextView", {
-  layoutData: {left: MARGIN, top: [imageSizeTextView, MARGIN_LARGE], width: 96},
+tabris.create("TextView", {
+  id: "scaleModeLabel",
+  layoutData: {left: MARGIN, top: ["#imageSizeLabel", MARGIN_LARGE], width: 96},
   text: "Scale mode"
 }).appendTo(page);
 
-var scaleModePicker = tabris.create("Picker", {
-  layoutData: {right: MARGIN, left: [scaleModeTextView, 0], baseline: scaleModeTextView},
+tabris.create("Picker", {
+  layoutData: {right: MARGIN, left: ["#scaleModeLabel", 0], baseline: "#scaleModeLabel"},
   items: scaleModes
+}).on("change:selectionIndex", function(picker, index) {
+  imageView.set("scaleMode", scaleModes[index]);
 }).appendTo(page);
 
-imageSizePicker.on("change:selectionIndex", function() {
-  var index = imageSizePicker.get("selectionIndex");
-  imageView.set("image", getImage(index));
-});
-
-scaleModePicker.on("change:selectionIndex", function() {
-  var index = scaleModePicker.get("selectionIndex");
-  imageView.set("scaleMode", scaleModes[index]);
-});
-
 function getImage(index) {
-  if (index === 0) {
-    return {src: "images/salad.jpg", scale: 3};
-  }
-  return {src: "images/landscape.jpg", scale: 3};
+  return index === 0 ? {src: "images/salad.jpg", scale: 3} :  {src: "images/landscape.jpg", scale: 3};
 }
 
 page.open();

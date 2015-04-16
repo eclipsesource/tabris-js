@@ -1,5 +1,8 @@
+/*globals Promise: true, fetch: false*/
+Promise = require("promise");
+require("whatwg-fetch");
+
 var MARGIN = 12;
-var $ = require("./lib/jquery.min.js");
 
 var page = tabris.create("Page", {
   title: "Reddit - Pets",
@@ -58,7 +61,7 @@ loadData();
 
 function loadData() {
   collectionView.set("refreshIndicator", true);
-  $.getJSON(createUrl({limit: 25}), function(json) {
+  getJSON(createUrl({limit: 25})).then(function(json) {
     // add a placeholder item for loading new items
     collectionView.set("items", json.data.children.concat({loading: true}));
     collectionView.set("refreshIndicator", false);
@@ -66,7 +69,7 @@ function loadData() {
 }
 
 function loadNewData() {
-  $.getJSON(createUrl({limit: 25, before: getFirstId()}), function(json) {
+  getJSON(createUrl({limit: 25, before: getFirstId()})).then(function(json) {
     collectionView.insert(json.data.children, 0);
     collectionView.reveal(0);
     collectionView.set("refreshIndicator", false);
@@ -74,7 +77,7 @@ function loadNewData() {
 }
 
 function loadMoreData() {
-  $.getJSON(createUrl({limit: 25, after: getLastId()}), function(json) {
+  getJSON(createUrl({limit: 25, after: getLastId()})).then(function(json) {
     // add new placeholder item for loading new items
     collectionView.insert(json.data.children.concat({loading: true}), -1);
     // remove old placeholder item
@@ -120,4 +123,10 @@ function createDetailsPage(data) {
     }).appendTo(detailPage);
   }
   detailPage.open();
+}
+
+function getJSON(url) {
+  return fetch(url).then(function(response) {
+    return response.json();
+  });
 }

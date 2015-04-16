@@ -1,4 +1,4 @@
-var pages = [
+[
   "./modules/ToastPage",
   "./modules/BadgePage",
   "./modules/MotionPage",
@@ -6,12 +6,9 @@ var pages = [
   "./modules/NetworkPage",
   "./modules/CameraPage",
   "./modules/BarcodeScannerPage"
-];
-
-require(pages[0]).create().open();
-
-for (var i = 1; i < pages.length; i++) {
-  require(pages[i]).create();
-}
+].forEach(function(page) {
+  require(page).create();
+});
 
 tabris.create("Drawer").append(tabris.create("PageSelector"));
+tabris.ui.children("Page")[0].open();

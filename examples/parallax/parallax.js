@@ -1,6 +1,8 @@
 var MARGIN_SMALL = 4;
 var MARGIN = 8;
 
+var titleCompY = 0;
+
 var page = tabris.create("Page", {
   topLevel: true,
   title: "Aud'cuisine"
@@ -60,17 +62,13 @@ tabris.create("TextView", {
   textColor: "white"
 }).appendTo(titleComposite);
 
-var titleCompY = 0;
-scrollView.on("resize", function() {
-  var bounds = scrollView.get("bounds");
-  var pageWidth = bounds.width;
-  var pageHeight = bounds.height;
-  var imageHeight = pageWidth / 1.4; // 1.4 is the image aspect ratio
-  imageTextView.set("image", {src: "images/salad.jpg", width: pageWidth, height: pageWidth});
+scrollView.on("resize", function(widget, bounds) {
+  var imageHeight = bounds.height / 1.4; // 1.4 is the image aspect ratio
+  imageTextView.set("image", {src: "images/salad.jpg", width: bounds.width, height: bounds.width});
   var titleCompHeight = titleComposite.get("bounds").height;
   // we need the offset of the title composite in each scroll event
   // it can only change when a change:bounds is triggered, wo thats when we assign it
-  titleCompY = Math.min(imageHeight - titleCompHeight, pageHeight / 2);
+  titleCompY = Math.min(imageHeight - titleCompHeight, bounds.height / 2);
   titleComposite.set("layoutData", {left: 0, top: titleCompY, right: 0, height: 64});
 });
 

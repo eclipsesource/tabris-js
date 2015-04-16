@@ -1,4 +1,4 @@
-var page = tabris.create("Page", {
+var page = module.exports = tabris.create("Page", {
   title: "Text",
   topLevel: true
 });

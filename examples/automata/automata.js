@@ -171,4 +171,4 @@ var run = function() {
 var offset = new Date().getTime() - time;
 textView.set("text", "Load: " + offset);
 
-textView.on("touchstart", run);
+textView.on("tap", run);

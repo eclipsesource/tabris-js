@@ -5,13 +5,12 @@ var page = tabris.create("Page", {
   topLevel: true
 });
 
-page.open();
-
 createTextView("Europe/Berlin", "Berlin");
 createTextView("America/New_York", "New York");
 createTextView("Asia/Tokyo", "Tokyo");
-
 update();
+
+page.open();
 
 function createTextView(timezone, name) {
   var locationTextView = tabris.create("TextView", {

@@ -4,6 +4,8 @@
   "category": "Small Apps",
   "main": "reddit.js",
   "dependencies": {
-    "tabris": "0.9.4"
+    "promise": "^6.1.0",
+    "tabris": "0.9.4",
+    "whatwg-fetch": "^0.7.0"
   }
 }

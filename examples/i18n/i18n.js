@@ -1,5 +1,11 @@
-var lang = tabris.device.get("language").replace(/-.*/, "");
-var texts = require("./" + lang + ".json") || require("./en.json");
+var texts = (function() {
+  var lang = tabris.device.get("language").replace(/-.*/, "");
+  try {
+    return require("./" + lang + ".json");
+  } catch (ex) {
+    return require("./en.json");
+  }
+}());
 
 var MARGIN = 10;
 
@@ -10,11 +16,10 @@ var page = tabris.create("Page", {
 });
 
 tabris.create("Picker", {id: "langPicker", layoutData: {left: 10, top: 10, right: 10}})
-  .on("change:selectionIndex", function() {
-    var selectionIndex = this.get("selectionIndex");
-    if (selectionIndex > 0) {
+  .on("change:selection", function(widget, selection, options) {
+    if (options.index > 0) {
       this.set("selectionIndex", 0);
-      page.apply(require("./" + this.get("items")[selectionIndex] + ".json"));
+      page.apply(require("./" + selection + ".json"));
     }
   }).appendTo(page);
 
@@ -48,6 +53,4 @@ tabris.create("CollectionView", {
   }
 }).appendTo(page);
 
-page.apply(texts);
-
-page.open();
+page.apply(texts).open();

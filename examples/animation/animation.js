@@ -5,21 +5,12 @@ var page = tabris.create("Page", {
   topLevel: true
 });
 
-var button = tabris.create("Button", {
+tabris.create("Button", {
   text: "Animate",
   layoutData: {left: MARGIN, right: MARGIN, top: ["#hello", MARGIN]}
-}).appendTo(page);
-
-var textView = tabris.create("TextView", {
-  id: "hello",
-  layoutData: {left: MARGIN, top: MARGIN},
-  background: "#6aa",
-  textColor: "white",
-  text: "Hello World!"
-}).appendTo(page);
-
-button.on("select", function() {
-  textView.animate({
+}).on("select", function(button) {
+  button.set("enabled", false);
+  page.children("#hello").animate({
     opacity: 0.25,
     transform: {
       rotation: 0.75 * Math.PI,
@@ -35,5 +26,17 @@ button.on("select", function() {
     repeat: 1,
     reverse: true,
     easing: "ease-out" // "linear", "ease-in", "ease-out", "ease-in-out"
+  }).on("animationend", function() {
+    button.set("enabled", true);
   });
-});
+}).appendTo(page);
+
+tabris.create("TextView", {
+  id: "hello",
+  layoutData: {left: MARGIN, top: MARGIN},
+  background: "#6aa",
+  textColor: "white",
+  text: "Hello World!"
+}).appendTo(page);
+
+module.exports = page;

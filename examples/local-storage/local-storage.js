@@ -23,8 +23,8 @@ var valueField = tabris.create("TextInput", {
   text: localStorage.getItem("foo") || "bar"
 }).appendTo(page);
 
-var setButton = tabris.create("Button", {
-  layoutData: {left: 10, right: ["50%", 10], top: [valueTextView, 20]},
+tabris.create("Button", {
+  layoutData: {left: 10, right: ["66%", 5], top: [valueTextView, 20]},
   text: "Set"
 }).on("select", function() {
   if (!keyField.get("text")) {
@@ -38,7 +38,7 @@ var setButton = tabris.create("Button", {
 }).appendTo(page);
 
 tabris.create("Button", {
-  layoutData: {left: [setButton, 10], right: 10, baseline: setButton},
+  layoutData: {left: ["33%", 5], right: ["33%", 5], top: [valueTextView, 20]},
   text: "Get"
 }).on("select", function() {
   if (!keyField.get("text")) {
@@ -49,19 +49,11 @@ tabris.create("Button", {
   }
 }).appendTo(page);
 
-var removeButton = tabris.create("Button", {
-  layoutData: {left: 10, right: ["50%", 10], top: [setButton, 20]},
+tabris.create("Button", {
+  layoutData: {left: ["66%", 5], right: 10, top: [valueTextView, 20]},
   text: "Remove"
 }).on("select", function() {
   localStorage.removeItem(keyField.get("text"));
-  valueField.set("text", "");
-}).appendTo(page);
-
-tabris.create("Button", {
-  layoutData: {left: [removeButton, 10], right: 10, baseline: removeButton},
-  text: "Clear"
-}).on("select", function() {
-  localStorage.clear();
   valueField.set("text", "");
 }).appendTo(page);
 

@@ -45,10 +45,8 @@ var startButton = tabris.create("Button", {
 }).on("select", function() {
   var delay = parseInt(delayTextInput.get("text"));
   if (repeatCheckbox.get("selection")) {
-    // starting a timer periocically
     taskId = setInterval(updateStatusTextViews, delay);
   } else {
-    // starting a timer once
     taskId = setTimeout(function() {
       updateStatusTextViews();
       enableTimerStart(true);
@@ -59,12 +57,14 @@ var startButton = tabris.create("Button", {
 
 var cancelButton = tabris.create("Button", {
   text: "Cancel timer",
+  selection: false,
   layoutData: {left: MARGIN, top: [repeatCheckbox, MARGIN_LARGE], right: ["50%", MARGIN / 4]}
 }).on("select", function() {
-  // cancel a running timer
   clearTimeout(taskId);
   enableTimerStart(true);
 }).appendTo(page);
+
+page.open();
 
 function updateStatusTextViews() {
   cpsCount++;
@@ -82,7 +82,3 @@ function enableTimerStart(available) {
   startButton.set("enabled", available);
   cancelButton.set("enabled", !available);
 }
-
-enableTimerStart(true);
-
-page.open();
