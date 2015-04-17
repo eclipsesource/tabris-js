@@ -12,7 +12,7 @@
     tabris.CollectionView.prototype._create.call(this, util.extend({
       items: getPages(),
       initializeCell: initializeCell,
-      itemHeight: 60,
+      itemHeight: device.platform === "iOS" ? 40 : 48,
       layoutData: {left: 0, top: 0, right: 0, bottom: 0}
     }, properties));
     this.on("select", function(target, value) {
@@ -51,9 +51,9 @@
       layoutData: {left: 10, top: 10, bottom: 10}
     }).appendTo(cell);
     var textView = tabris.create("TextView", {
-      layoutData: {left: [imageView, 10], centerY: 0},
-      font: "20px",
-      textColor: "#333"
+      layoutData: {left: 72, centerY: 0},
+      font: device.platform === "iOS" ? "17px .HelveticaNeueInterface-Regular" : "14px Roboto Medium",
+      textColor: device.platform === "iOS" ? "rgb(22, 126, 251)" : "#212121"
     }).appendTo(cell);
     cell.on("change:item", function(widget, page) {
       imageView.set("image", page.get("image"));
