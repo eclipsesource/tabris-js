@@ -67,14 +67,18 @@ The apply method uses selectors to apply different sets of properties to differe
 
 For example, to make all widgets within a page green you could call:
 
-    page.apply({"*": {background: "green"}});
+```javascript
+page.apply({"*": {background: "green"}});
+```
 
 You can also set different properties on different widgets:
 
-    page.apply({
-      "#okbutton": {text: "OK!", background: "yellow"},
-      "#cancelbutton": {text: "Cancel!", textColor: "red"}
-    });
+```javascript
+page.apply({
+  "#okbutton": {text: "OK!", background: "yellow"},
+  "#cancelbutton": {text: "Cancel!", textColor: "red"}
+});
+```
 
 It's very important to note that the order in which these properties are applies depends solely on the selector used, not on the order in the object literal. The order is:
 
@@ -82,11 +86,13 @@ It's very important to note that the order in which these properties are applies
 
 For example:
 
-    page.apply({
-      "#mybutton": {background: "red"},
-      "Button": {background: "green"},
-      "*": {background: "blue"}
-    });
+```javascript
+page.apply({
+  "#mybutton": {background: "red"},
+  "Button": {background: "green"},
+  "*": {background: "blue"}
+});
+```
 
 This will make all widgets within the page blue, except for the buttons, which are green, except for "#mybutton", which will be red.
 
