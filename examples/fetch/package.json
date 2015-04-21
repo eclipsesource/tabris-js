@@ -2,7 +2,7 @@
   "title": "fetch()",
   "description": "How to use fetch() and promises to make http requests",
   "category": "Web APIs",
-  "main": "http-request.js",
+  "main": "fetch.js",
   "dependencies": {
     "promise": "^6.1.0",
     "tabris": "1.0.0",
