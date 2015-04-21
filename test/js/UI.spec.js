@@ -107,8 +107,10 @@ describe("UI", function() {
         page3 = tabris.create("Page", {title: "Page 3"});
       });
 
-      it("setting 'activePage' ignores widgets other than Page", function() {
-        ui.set("activePage", tabris.create("Button"));
+      it("setting 'activePage' fails with widgets other than Page", function() {
+        expect(function() {
+          ui.set("activePage", tabris.create("Button"));
+        }).toThrow();
         expect(nativeBridge.calls({op: "set", id: ui.cid}).length).toBe(0);
       });
 
@@ -266,6 +268,7 @@ describe("UI", function() {
       });
 
       it("when a page on stack is closed, closes pages stacked upon it", function() {
+        topLevelPage1.open();
         page1.open();
         page2.open();
         page3.open();

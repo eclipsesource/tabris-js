@@ -61,8 +61,7 @@ tabris.registerWidget("_UI", {
     activePage: {
       set: function(page) {
         if (!(page instanceof tabris.Page)) {
-          console.warn("Value for activePage is not a page");
-          return;
+          throw new Error("Value for activePage is not a page");
         }
         this._nativeSet("activePage", page._page.cid);
       }
