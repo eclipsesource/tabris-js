@@ -109,6 +109,9 @@ tabris.registerWidget("_UI", {
 
   _onChangeActivePage: function(ui, page) {
     if (page !== this._getCurrentPage()) {
+      if (!this._getCurrentPage() && !page._isTopLevel) {
+        throw new Error("Opened page without a top-level page");
+      }
       var onStack = this._isOnStack(page);
       if (onStack || page._isTopLevel) {
         this._removePagesOnTop(page);

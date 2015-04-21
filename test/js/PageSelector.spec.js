@@ -25,8 +25,8 @@ describe("PageSelector", function() {
     var page1, page2, pageSelector;
 
     beforeEach(function() {
-      page1 = tabris.create("Page");
-      page2 = tabris.create("Page");
+      page1 = tabris.create("Page", {topLevel: true});
+      page2 = tabris.create("Page", {topLevel: true});
       pageSelector = tabris.create("PageSelector");
     });
 

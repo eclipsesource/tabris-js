@@ -74,7 +74,7 @@ describe("UI", function() {
       var page;
 
       beforeEach(function() {
-        page = tabris.create("Page", {title: "Foo"});
+        page = tabris.create("Page", {title: "Foo", topLevel: true});
         ui.set("activePage", page);
         spyOn(page, "close");
         nativeBridge.resetCalls();
@@ -115,34 +115,35 @@ describe("UI", function() {
       });
 
       it("setting 'activePage' triggers 'appear' and 'disappear' events on pages", function() {
-        ui.set("activePage", page1);
-        spyOn(page1, "trigger");
-        spyOn(page2, "trigger");
+        ui.set("activePage", topLevelPage1);
+        spyOn(topLevelPage1, "trigger");
+        spyOn(topLevelPage2, "trigger");
 
-        ui.set("activePage", page2);
+        ui.set("activePage", topLevelPage2);
 
-        expect(page1.trigger.calls.argsFor(0)[0]).toBe("disappear");
-        expect(page1.trigger.calls.argsFor(0)[1]).toBe(page1);
-        expect(page2.trigger.calls.argsFor(0)[0]).toBe("appear");
-        expect(page2.trigger.calls.argsFor(0)[1]).toBe(page2);
+        expect(topLevelPage1.trigger.calls.argsFor(0)[0]).toBe("disappear");
+        expect(topLevelPage1.trigger.calls.argsFor(0)[1]).toBe(topLevelPage1);
+        expect(topLevelPage2.trigger.calls.argsFor(0)[0]).toBe("appear");
+        expect(topLevelPage2.trigger.calls.argsFor(0)[1]).toBe(topLevelPage2);
       });
 
       it("setting 'activePage' issues a set operation", function() {
-        ui.set("activePage", page1);
+        ui.set("activePage", topLevelPage1);
         var setCall = nativeBridge.calls({op: "set", id: ui.cid}).pop();
-        expect(setCall.properties.activePage).toBe(page1._page.cid);
+        expect(setCall.properties.activePage).toBe(topLevelPage1._page.cid);
       });
 
       it("getting 'activePage' returns last set active page", function() {
-        ui.set("activePage", page1);
-        ui.set("activePage", page2);
+        ui.set("activePage", topLevelPage1);
+        ui.set("activePage", topLevelPage2);
 
-        expect(ui.get("activePage")).toBe(page2);
+        expect(ui.get("activePage")).toBe(topLevelPage2);
       });
 
       // OPENING PAGES
 
       it("when a page on stack is opened, closes pages stacked upon it", function() {
+        topLevelPage1.open();
         page1.open();
         page2.open();
         page3.open();
@@ -151,6 +152,12 @@ describe("UI", function() {
 
         expect(page2.isDisposed()).toBe(true);
         expect(page3.isDisposed()).toBe(true);
+      });
+
+      it("fails when a page is opened without a top-level page", function() {
+        expect(function() {
+          page1.open();
+        }).toThrow();
       });
 
       it("when a top-level page on stack is opened, closes all stacked pages", function() {
@@ -224,7 +231,7 @@ describe("UI", function() {
       // CLOSING PAGES
 
       it("when the active page is closed, restores last active page", function() {
-        page1.open();
+        topLevelPage1.open();
         page2.open();
         page3.open();
 
@@ -237,6 +244,7 @@ describe("UI", function() {
 
       it("when the active page is closed, triggers 'appear' and 'disappear' events on pages", function() {
         var log = [];
+        topLevelPage1.open();
         page1.open();
         page2.open();
         page1.on("appear", function() { log.push("page1 appear"); });
@@ -316,6 +324,7 @@ describe("UI", function() {
 
       it("when a page on stack is closed, sets activePage *before* disposing pages", function() {
         // Clients can fail when the active page is disposed before it is replaced
+        topLevelPage1.open();
         page1.open();
         page2.open();
         page2.on("dispose", function() {
