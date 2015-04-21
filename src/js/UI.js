@@ -100,7 +100,11 @@ tabris.registerWidget("_UI", {
     } else if (page._isTopLevel) {
       this._removeFromStack(page);
     }
-    this.set("activePage", this._getCurrentPage());
+    var newActivePage = this._getCurrentPage();
+    if (!newActivePage) {
+      throw new Error("Cannot close the last page");
+    }
+    this.set("activePage", newActivePage);
   },
 
   _onChangeActivePage: function(ui, page) {

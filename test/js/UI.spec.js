@@ -325,6 +325,14 @@ describe("UI", function() {
         page2.close();
       });
 
+      it("fails when closing the last page", function() {
+        topLevelPage1.open();
+
+        expect(function() {
+          topLevelPage1.close();
+        }).toThrowError("Cannot close the last page");
+      });
+
     });
 
     it("ShowPreviousPage does not fail without a page", function() {
