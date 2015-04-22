@@ -37,12 +37,12 @@
     "find": [
       {
         "parameters": [],
-        "returns": ["WidgetCollection"],
+        "returns": "WidgetCollection",
         "description": "Returns a (possibly empty) collection of all descendants of this widget."
       },
       {
         "parameters": ["selector"],
-        "returns": ["WidgetCollection"],
+        "returns": "WidgetCollection",
         "description": "Returns a (possibly empty) collection of all descendants of this widget that match the selector."
       }
     ],

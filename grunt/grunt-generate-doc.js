@@ -3,42 +3,47 @@ var _ = require("underscore");
 module.exports = function(grunt) {
 
   grunt.registerTask("generate-doc", function() {
-    var widgets = readJson();
-    resolveIncludes(widgets);
-    renderWidgets(widgets);
-    renderIndex(widgets);
+    var data = {
+      widgets: readJson(),
+      types:  readTypes()
+    };
+    resolveIncludes(data);
+    renderWidgets(data);
+    renderIndex(data);
   });
 
-  function renderWidgets(widgets) {
-    Object.keys(widgets).forEach(function(type) {
-      grunt.file.write(getTargetPath(type), renderWidget(widgets[type]));
+  function renderWidgets(data) {
+    Object.keys(data.widgets).forEach(function(type) {
+      grunt.file.write(getTargetPath(type), renderWidget(data, type));
     });
   }
 
-  function renderIndex(widgets) {
-    var types = ["Widget"].concat(_.chain(widgets).keys().without("Widget").value());
+  function renderIndex(data) {
+    var types = ["Widget"].concat(_.chain(data.widgets).keys().without("Widget").value());
     var result = [];
     types.forEach(function(type) {
       result.push("- [" + type + "](api/" + type.toLowerCase() + ".md)");
     });
-    var data = {data: {widgets: result.join("\n")}};
-    grunt.file.write(getIndexPath(), grunt.template.process(grunt.file.read(getIndexPath()), data));
+    var templData = {data: {widgets: result.join("\n")}};
+    grunt.file.write(getIndexPath(), grunt.template.process(grunt.file.read(getIndexPath()), templData));
   }
 
-  function renderWidget(widget) {
+  function renderWidget(data, type) {
+    var widget = data.widgets[type];
     var result = [];
     var title = widget.type || widget.title;
     grunt.log.verbose.writeln("Generating DOC for " + title);
     result.push("# " + title);
     result.push(renderDescription(widget));
-    result.push(renderMethods(widget));
-    result.push(renderProperties(widget));
+    result.push(renderMethods(widget, data));
+    result.push(renderProperties(widget, data));
     result.push(renderEvents(widget));
     result.push(renderLinks(widget));
     return result.filter(notEmpty).join("\n");
   }
 
-  function resolveIncludes(widgets) {
+  function resolveIncludes(data) {
+    var widgets = data.widgets;
     Object.keys(widgets).forEach(function(type) {
       var widget = widgets[type];
       if (widget.include) {
@@ -59,6 +64,13 @@ module.exports = function(grunt) {
       widgets[json.type] = json;
     });
     return widgets;
+  }
+
+  function readTypes() {
+    var md = grunt.file.read(grunt.config("doc").types);
+    return md.match(/^##\ *(.*)$/gm).map(function(heading) {
+      return heading.slice(3).toLowerCase();
+    });
   }
 
   function getTargetPath(type) {
@@ -83,7 +95,7 @@ module.exports = function(grunt) {
     return result.join("");
   }
 
-  function renderMethods(widget) {
+  function renderMethods(widget, data) {
     if (!widget.methods) {
       return "";
     }
@@ -91,17 +103,17 @@ module.exports = function(grunt) {
     result.push("## Methods\n");
     Object.keys(widget.methods).sort().forEach(function(name) {
       widget.methods[name].forEach(function(desc) {
-        result.push(renderMethod(name, desc));
+        result.push(renderMethod(name, desc, data));
       });
     });
     return result.join("");
   }
 
-  function renderMethod(name, desc) {
+  function renderMethod(name, desc, data) {
     var result = [];
-    result.push("### " + signature(name, desc.parameters) + "\n");
+    result.push("### " + signature(name, desc.parameters, data) + "\n");
     if (desc.returns) {
-      result.push("Returns: *" + desc.returns + "*\n");
+      result.push("Returns: *" + renderTypeLink(desc.returns, data) + "*\n");
     }
     if (desc.description) {
       result.push(desc.description);
@@ -110,11 +122,13 @@ module.exports = function(grunt) {
     return result.join("\n");
   }
 
-  function signature(methodName, parameters) {
-    return methodName + "(" + parameters.join(", ") + ")";
+  function signature(methodName, parameters, data) {
+    return methodName + "(" + parameters.map(function(param) {
+      return renderTypeLink(param, data);
+    }).join(", ") + ")";
   }
 
-  function renderProperties(widget) {
+  function renderProperties(widget, data) {
     if (!widget.properties) {
       return "";
     }
@@ -123,7 +137,7 @@ module.exports = function(grunt) {
     Object.keys(widget.properties).sort().forEach(function(name) {
       var property = widget.properties[name];
       result.push("### ", name, "\n");
-      result.push("Type: ", renderType(property.type), "\n");
+      result.push("Type: ", renderPropertyType(property.type, data), "\n");
       if (property.description) {
         result.push("\n" + property.description);
       }
@@ -136,11 +150,11 @@ module.exports = function(grunt) {
     return result.join("");
   }
 
-  function renderType(type) {
+  function renderPropertyType(type, data) {
     var name = type.split(":")[0].split("?")[0];
     var supValues = type.indexOf(":") !== -1 ? type.split(":")[1].split("?")[0] : "";
     var defValue = type.split("?")[1] || "";
-    var result = ["*", name + "*"];
+    var result = ["*", renderTypeLink(name, data), "*"];
     if (supValues) {
       result.push(", supported values: `" + supValues.split("|").join("`, `") + "`");
     }
@@ -148,6 +162,16 @@ module.exports = function(grunt) {
       result.push(", default: `" + defValue + "`");
     }
     return result.join("");
+  }
+
+  function renderTypeLink(name, data) {
+    if (data.types.indexOf(name.toLowerCase()) !== -1) {
+      return "[" + name + "](../property-types.md#" + name + ")";
+    } else if (data.widgets[name]) {
+      return "[" + name + "](" + name.toLowerCase() + ".md)";
+    } else {
+      return name;
+    }
   }
 
   function renderEvents(widget) {
