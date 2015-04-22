@@ -144,7 +144,8 @@ module.exports = function(grunt) {
     },
     doc: {
       json: "doc/definitions/*.json",
-      target: "build/doc/widget-types.md"
+      target: "build/doc/api/",
+      index: "build/doc/index.md"
     },
     copy: {
       doc: {
@@ -224,8 +225,8 @@ module.exports = function(grunt) {
 
   /* generates reference documentation */
   grunt.registerTask("doc", [
-    "generate-doc",
-    "copy:doc"
+    "copy:doc",
+    "generate-doc"
   ]);
 
   /* packages example code */

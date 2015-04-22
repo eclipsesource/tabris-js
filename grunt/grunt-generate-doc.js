@@ -3,19 +3,39 @@ var _ = require("underscore");
 module.exports = function(grunt) {
 
   grunt.registerTask("generate-doc", function() {
-    grunt.file.write(getTargetPath(), createOutput(readJson()));
+    var widgets = readJson();
+    resolveIncludes(widgets);
+    renderWidgets(widgets);
+    renderIndex(widgets);
   });
 
-  function createOutput(widgets) {
-    resolveIncludes(widgets);
-    var result = [];
-    result.push("# Widget Types\n");
-    result.push("This section describes the API specific to different types of widgets.\n\n");
-    var types = ["Widget"].concat(_.chain(widgets).keys().without("Widget").value());
-    types.forEach(function(type) {
-      result.push(renderWidget(widgets[type]));
+  function renderWidgets(widgets) {
+    Object.keys(widgets).forEach(function(type) {
+      grunt.file.write(getTargetPath(type), renderWidget(widgets[type]));
     });
-    return result.join("\n");
+  }
+
+  function renderIndex(widgets) {
+    var types = ["Widget"].concat(_.chain(widgets).keys().without("Widget").value());
+    var result = [];
+    types.forEach(function(type) {
+      result.push("- [" + type + "](api/" + type.toLowerCase() + ".md)");
+    });
+    var data = {data: {widgets: result.join("\n")}};
+    grunt.file.write(getIndexPath(), grunt.template.process(grunt.file.read(getIndexPath()), data));
+  }
+
+  function renderWidget(widget) {
+    var result = [];
+    var title = widget.type || widget.title;
+    grunt.log.verbose.writeln("Generating DOC for " + title);
+    result.push("# " + title);
+    result.push(renderDescription(widget));
+    result.push(renderMethods(widget));
+    result.push(renderProperties(widget));
+    result.push(renderEvents(widget));
+    result.push(renderLinks(widget));
+    return result.filter(notEmpty).join("\n");
   }
 
   function resolveIncludes(widgets) {
@@ -41,21 +61,12 @@ module.exports = function(grunt) {
     return widgets;
   }
 
-  function getTargetPath() {
-    return grunt.config("doc").target;
+  function getTargetPath(type) {
+    return grunt.config("doc").target + type.toLowerCase() + ".md";
   }
 
-  function renderWidget(widget) {
-    var title = widget.type || widget.title;
-    grunt.log.verbose.writeln("Generating DOC for " + title);
-    var result = [];
-    result.push("## " + title + "\n");
-    result.push(renderDescription(widget));
-    result.push(renderMethods(widget));
-    result.push(renderProperties(widget));
-    result.push(renderEvents(widget));
-    result.push(renderLinks(widget));
-    return result.filter(notEmpty).join("\n");
+  function getIndexPath() {
+    return grunt.config("doc").index;
   }
 
   function renderDescription(widget) {
@@ -77,7 +88,7 @@ module.exports = function(grunt) {
       return "";
     }
     var result = [];
-    result.push("#### Methods\n");
+    result.push("## Methods\n");
     Object.keys(widget.methods).sort().forEach(function(name) {
       widget.methods[name].forEach(function(desc) {
         result.push(renderMethod(name, desc));
@@ -88,15 +99,15 @@ module.exports = function(grunt) {
 
   function renderMethod(name, desc) {
     var result = [];
-    result.push("- **", signature(name, desc.parameters) + "**");
+    result.push("### " + signature(name, desc.parameters) + "\n");
     if (desc.returns) {
-      result.push(": *" + desc.returns + "*");
+      result.push("Returns: *" + desc.returns + "*\n");
     }
     if (desc.description) {
-      result.push("<br/>" + desc.description);
+      result.push(desc.description);
     }
     result.push("\n");
-    return result.join("");
+    return result.join("\n");
   }
 
   function signature(methodName, parameters) {
@@ -108,13 +119,13 @@ module.exports = function(grunt) {
       return "";
     }
     var result = [];
-    result.push("#### Properties\n");
+    result.push("## Properties\n");
     Object.keys(widget.properties).sort().forEach(function(name) {
       var property = widget.properties[name];
-      result.push("- **", name, "**: ");
-      result.push(renderType(property.type));
+      result.push("### ", name, "\n");
+      result.push("Type: ", renderType(property.type), "\n");
       if (property.description) {
-        result.push("<br/>" + property.description);
+        result.push("\n" + property.description);
       }
       if (property.static) {
         result.push("<br/>This property can only be set in the `tabris.create` method. " +
@@ -144,12 +155,12 @@ module.exports = function(grunt) {
       return "";
     }
     var result = [];
-    result.push("#### Events\n");
+    result.push("## Events\n");
     Object.keys(widget.events).sort().forEach(function(name) {
       var event = widget.events[name];
-      result.push("- **", name, "**");
+      result.push("### ", name + "\n");
       if (event.description) {
-        result.push("<br/>" + event.description);
+        result.push("\n" + event.description);
       }
       result.push("\n");
     });
@@ -161,7 +172,7 @@ module.exports = function(grunt) {
       return "";
     }
     var result = [];
-    result.push("#### See also\n");
+    result.push("## See also\n");
     widget.links.forEach(function(link) {
       result.push("- [", link.title, "](", link.path, ")\n");
     });
