@@ -1,7 +1,7 @@
 {
   "type": "Widget",
   "title": "Common Widget Methods, Properties and Events",
-  "description": "API supported by all widgets except Action.",
+  "description": "API supported by all widgets.",
   "methods": {
     "set": [
       {
