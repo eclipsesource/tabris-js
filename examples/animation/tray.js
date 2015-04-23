@@ -106,9 +106,11 @@ function positionTrayInRestingState(velocity) {
   };
   shade.animate({opacity: getShadeOpacity(translationY)}, options);
   strapIcon.animate({transform: getStrapIconTransform(translationY)}, options);
-  tray.animate({transform: {translationY: translationY}}, options).on("animationend", function() {
+  tray.once("animationend", function() {
     trayState = velocity > 0 ? "down" : "up";
-  });
+  }).animate({
+    transform: {translationY: translationY}
+  }, options);
 }
 
 function getShadeOpacity(translationY) {

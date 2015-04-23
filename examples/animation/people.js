@@ -62,14 +62,13 @@ function animateInFromRight(widget, delay) {
     transform: {translationX: 32}
   });
   widget.animate({
-      opacity: 1.0,
-      transform: {translationX: 0}
-    }, {
-      duration: 500,
-      delay: delay,
-      easing: "ease-out"
-    }
-  );
+    opacity: 1.0,
+    transform: {translationX: 0}
+  }, {
+    duration: 500,
+    delay: delay,
+    easing: "ease-out"
+  });
 }
 
 function animateInScaleUp(widget, delay) {
@@ -85,15 +84,15 @@ function animateInScaleUp(widget, delay) {
 }
 
 function animateOutLeftCreateCurrentPerson(person) {
-  detailView.animate({
+  detailView.once("animationend", function() {
+    detailView.dispose();
+    detailView = createPersonDetail(detailsParent, person, 0);
+  }).animate({
     opacity: 0.0,
     transform: {translationX: -64}
   }, {
     duration: 500,
     easing: "ease-out"
-  }).on("animationend", function() {
-    detailView.dispose();
-    detailView = createPersonDetail(detailsParent, person, 0);
   });
 }
 
