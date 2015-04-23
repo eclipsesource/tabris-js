@@ -155,7 +155,7 @@ Tabris.js accepts the following custom preferences:
 | Name                   | Allowed Values | Default Value | Description |
 |------------------------|----------------|---------------|-------------|
 | EnableDeveloperConsole | true/false     | false         | Enables/Disables the [Tabris.js Developer Console](getting-started.md#the-developer-console).             |
-| UseStrictSSL           | true/false     | true          | Activate/Deactivate ssl certificate validation. When disabled self signed ssl certificates are accepted. Should be enabled in production. |
+| UseStrictSSL           | true/false     | true          | Activate/Deactivate ssl certificate validation on [XHR](w3c-api.md#xmlhttprequest). When disabled self signed ssl certificates are accepted. Should be enabled in production. |
 
 ### Android specific preferences
 

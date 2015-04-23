@@ -38,6 +38,7 @@ Tabris supports the `XMLHttpRequest` to make HTTP request and to read resources 
 * When a relative URL is given, Tabris will interpret it as a path relative to the applications `package.json`. This allows you to read static resources (files residing in your project folder).
 * To read a JSON file, the `require` method may be more convenient to use (see [Modules](modules.md)).
 * When using a custom build developer client, a relative URL may be used to access local files (bundled with the client as a resources) as well as those residing in the remote project folder (from which the code is loaded via HTTP). Local files take precedence.
+* To enable access to SSL protected resources that use self signed certificates, use the `UseStrictSSL` preference in the config.xml. See the [Cordova documentation](cordova.md#preferences).
 
 ## Storage
 
