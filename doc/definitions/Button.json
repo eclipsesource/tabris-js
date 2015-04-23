@@ -18,7 +18,8 @@
   },
   "events": {
     "select": {
-      "description": "Fired when the button is pressed. Gives the button as the first parameter."
+      "parameters": ["button"],
+      "description": "Fired when the button is pressed."
     }
   },
   "links": [

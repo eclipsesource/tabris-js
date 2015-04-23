@@ -1,6 +1,6 @@
 {
   "type": "SearchAction",
-  "description": "An action that displays a search text field with dynamic proposals when selected. Add a listener on `selection` to implement the action. On `modify`, you may set a list of `proposals`.",
+  "description": "An action that displays a search text field with dynamic proposals when selected. Add a listener on *select* to implement the action. On *input*, you may set a list of *proposals*.",
   "include": ["Action"],
   "properties": {
     "proposals": {
@@ -18,10 +18,12 @@
   },
   "events": {
     "input": {
-      "description": "Fired when the search text has changed. The current query text will be given as the second parameter."
+      "parameters": ["searchAction", "[text](#text)", "options"],
+      "description": "Fired the user inputs text."
     },
     "accept": {
-      "description": "Fired when a text input has been submitted by pressing the keyboard's search key. The current query text will be given as the second parameter."
+      "parameters": ["searchAction", "[text](#text)", "options"],
+      "description": "Fired when a text input has been submitted by pressing the keyboard's search key."
     }
   },
   "links": [

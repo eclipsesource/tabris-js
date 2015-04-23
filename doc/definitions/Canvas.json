@@ -10,7 +10,7 @@
           "width",
           "height"
         ],
-        "description": "Returns the drawing context. The `contextType` must be `\"2d\"`.",
+        "description": "Returns the drawing context. The  *contextType* must be `\"2d\"`.",
         "returns": "CanvasContext"
       }
     ]

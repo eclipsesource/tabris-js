@@ -15,7 +15,7 @@
     "tabBarLocation": {
       "type": "string:top|bottom|auto?auto",
       "static": true,
-      "description": "The placement of the tab titles. When set to `auto`, the position is platform dependent."
+      "description": "The placement of the tab titles. When set to `\"auto\"`, the position is platform dependent."
     },
     "paging": {
       "type": "boolean",
@@ -27,10 +27,12 @@
   },
   "events": {
     "change:selection": {
+      "parameters": ["tabFolder", "[selection](#selection)", "options"],
       "description": "Fired when the selection property changes."
     },
     "select": {
-      "description": "Fired when the selection property changes by user interaction. Parameters are the same as in `change:selection`, i.e. `widget`, `tab`, `options`."
+      "parameters": ["tabFolder", "[selection](#selection)", "options"],
+      "description": "Fired when the selection property changes by user interaction."
     }
   },
   "links": [

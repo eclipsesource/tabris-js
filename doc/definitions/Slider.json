@@ -15,10 +15,12 @@
   },
   "events": {
     "change:selection": {
+      "parameters": ["slider", "[selection](#selection)", "options"],
       "description": "Fired when the selection property changes."
     },
     "select": {
-      "description": "Fired when the selection property changes by user interaction. Parameters are the same as in `change:selection`, i.e. `widget`, `selection`, `options`."
+      "parameters": ["slider", "[selection](#selection)", "options"],
+      "description": "Fired when the selection property is changed by the user."
     }
   },
   "links": [

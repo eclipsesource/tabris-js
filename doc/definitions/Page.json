@@ -28,13 +28,12 @@
     }
   },
   "events": {
-    "change:bounds": {
-      "description": "Fired when the bounds (i.e. size or orientation) of the page has changed."
-    },
     "appear": {
+      "parameters": ["page"],
       "description": "Fired when the page is about to become visible, i.e. it has become the active page."
     },
     "disappear": {
+      "parameters": ["page"],
       "description": "Fired when the page is no longer visible, i.e. another page has become the active page."
     }
   },

@@ -19,10 +19,12 @@
   },
   "events": {
     "addchild": {
-      "description": "Fired when a child is added. Arguments are `(child, composite, {})`."
+      "parameters": ["composite", "child", "options"],
+      "description": "Fired when a child is added to this widget."
     },
     "removechild": {
-      "description": "Fired when a child is removed. Arguments are `(child, composite, {index: number})`."
+      "parameters": ["composite", "child", "options"],
+      "description": "Fired when a child is removed from this widget. The *options* object contains the index of the removed child widget: `{index: number})`."
     }
   }
 }

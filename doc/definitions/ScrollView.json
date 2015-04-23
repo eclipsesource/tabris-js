@@ -11,7 +11,8 @@
   },
   "events": {
     "scroll": {
-      "description": "Fired on scrolling. As the second parameter the event handler receives an object containing the properties `x` and `y` that indicate the scrolling position."
+      "parameters": ["scrollView", "offset"],
+      "description": "Fired on scrolling. The *offset* object indicates the current scrolling position: `{x: number, y: number}`."
     }
   },
   "links": [

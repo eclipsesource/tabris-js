@@ -1,6 +1,6 @@
 {
   "type": "CollectionView",
-  "description": "A scrollable list that displays data items in cells, one per row. Cells are created on demand and filled with widgets in the `initializeCell` callback.",
+  "description": "A scrollable list that displays data items in cells, one per row. Cells are created on demand and filled with widgets in the *initializeCell* callback.",
   "include": ["Widget"],
   "properties": {
     "itemHeight": {
@@ -14,7 +14,7 @@
     "initializeCell": {
       "type": "function",
       "static": true,
-      "description": "A callback used to initialize a collection cell by attaching widget and `change:item` listener. Cells are created by the framework and recycled on scrolling. This callback receives the cell as the first argument."
+      "description": "A callback used to initialize a collection cell by attaching widget and *change:item* listener. Cells are created by the framework and recycled on scrolling. This callback receives the cell as the first argument."
     },
     "refreshEnabled": {
       "type": "boolean?false",
@@ -22,7 +22,7 @@
     },
     "refreshIndicator": {
       "type": "boolean?false",
-      "description": "Whether the refresh indicator is currently visible. Will be set to `true` when a `refresh` event is triggered. Reset it to `false` when the refresh is finished."
+      "description": "Whether the refresh indicator is currently visible. Will be set to `true` when a *refresh* event is triggered. Reset it to `false` when the refresh is finished."
     },
     "refreshMessage": {
       "type": "string?\"\"",
@@ -31,41 +31,43 @@
   },
   "events": {
     "select": {
-      "description": "Fired when a collection item is selected. Parameters are: `collectionView`, `item`, `{index: number}`"
+      "parameters": ["collectionView", "item", "options"],
+      "description": "Fired when a collection item is selected. The *options* object contains the index of the selected item: `{index: number}`"
     },
     "refresh": {
-      "description": "Fired when the user requested a refresh. An event listener should reset the `refreshIndicator` property when refresh is finished."
+      "parameters": ["collectionView"],
+      "description": "Fired when the user requested a refresh. An event listener should reset the *refreshIndicator* property when refresh is finished."
     }
   },
   "methods": {
     "insert": [
       {
         "parameters": ["items"],
-        "description": "Inserts the given items into this view. Items are added at the end. This operation will modify the `items` property."
+        "description": "Inserts the given items into this view. Items are added at the end. This operation will modify the *items* property."
       },
       {
         "parameters": ["items", "index"],
-        "description": "Inserts the given items into this view at the given index. If a negative index is given, it is interpreted as relative to the end. If the given index is greater than the item count, new items will be appended at the end. This operation will modify the `items` property."
+        "description": "Inserts the given items into this view at the given index. If a negative index is given, it is interpreted as relative to the end. If the given index is greater than the item count, new items will be appended at the end. This operation will modify the *items* property."
       }
     ],
     "remove": [
       {
         "parameters": ["index"],
-        "description": "Removes the item at the given index from this view. If a negative index is given, it is interpreted as relative to the end. This operation will modify the `items` property."
+        "description": "Removes the item at the given index from this view. If a negative index is given, it is interpreted as relative to the end. This operation will modify the *items* property."
       },
       {
         "parameters": ["index", "count"],
-        "description": "Removes *count* items beginning with the given index from this view. If a negative index is given, it is interpreted as relative to the end. This operation will modify the `items` property."
+        "description": "Removes *count* items beginning with the given index from this view. If a negative index is given, it is interpreted as relative to the end. This operation will modify the *items* property."
       }
     ],
     "refresh": [
       {
         "parameters": [],
-        "description": "Triggers a refresh of all visible items. This will issue `change:item` events on the corresponding cells."
+        "description": "Triggers a refresh of all visible items. This will issue *change:item* events on the corresponding cells."
       },
       {
         "parameters": ["index"],
-        "description": "Triggers a refresh of the item with the given index. If the item is scrolled into view, an `change:item` event will be issued on the corresponding cell."
+        "description": "Triggers a refresh of the item with the given index. If the item is scrolled into view, an *change:item* event will be issued on the corresponding cell."
       }
     ],
     "reveal": [

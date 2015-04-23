@@ -38,19 +38,24 @@
   },
   "events": {
     "accept": {
-      "description": "Fired when a text input has been finished by pressing the keyboard's Enter key. The label of this key may vary depending on the platform and locale. The second parameter contains the widgets text."
+      "parameters": ["textInput", "[text](#text)", "options"],
+      "description": "Fired when a text input has been finished by pressing the keyboard's Enter key. The label of this key may vary depending on the platform and locale."
     },
     "blur": {
+      "parameters": ["textInput"],
       "description": "Fired when the widget lost focus."
     },
     "focus": {
+      "parameters": ["textInput"],
       "description": "Fired when the widget gains focus."
     },
     "change:text": {
-      "description": "Fired when the text property changes, either by `set` or by the user."
+      "parameters": ["textInput", "[text](#text)", "options"],
+      "description": "Fired when the text property changes."
     },
     "input": {
-      "description": "Fired when the text changed by the user. Parameters are the same as in `change:text`, i.e. `widget`, `text`, `options`."
+      "parameters": ["textInput", "[text](#text)", "options"],
+      "description": "Fired when the text changed by the user."
     }
   },
   "links": [

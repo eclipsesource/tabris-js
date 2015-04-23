@@ -37,7 +37,7 @@ module.exports = function(grunt) {
     result.push(renderDescription(widget));
     result.push(renderMethods(widget, data));
     result.push(renderProperties(widget, data));
-    result.push(renderEvents(widget));
+    result.push(renderEvents(widget, data));
     result.push(renderLinks(widget));
     return result.filter(notEmpty).join("\n");
   }
@@ -111,7 +111,7 @@ module.exports = function(grunt) {
 
   function renderMethod(name, desc, data) {
     var result = [];
-    result.push("### " + signature(name, desc.parameters, data) + "\n");
+    result.push("### " + name + "(" + renderParamList(desc.parameters, data) + ")\n");
     if (desc.returns) {
       result.push("Returns: *" + renderTypeLink(desc.returns, data) + "*\n");
     }
@@ -120,12 +120,6 @@ module.exports = function(grunt) {
     }
     result.push("\n");
     return result.join("\n");
-  }
-
-  function signature(methodName, parameters, data) {
-    return methodName + "(" + parameters.map(function(param) {
-      return renderTypeLink(param, data);
-    }).join(", ") + ")";
   }
 
   function renderProperties(widget, data) {
@@ -167,14 +161,18 @@ module.exports = function(grunt) {
   function renderTypeLink(name, data) {
     if (data.types.indexOf(name.toLowerCase()) !== -1) {
       return "[" + name + "](../property-types.md#" + name + ")";
-    } else if (data.widgets[name]) {
+    } else if (data.widgets[firstCharUp(name)]) {
       return "[" + name + "](" + name.toLowerCase() + ".md)";
     } else {
       return name;
     }
   }
 
-  function renderEvents(widget) {
+  function firstCharUp(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  function renderEvents(widget, data) {
     if (!widget.events) {
       return "";
     }
@@ -183,12 +181,21 @@ module.exports = function(grunt) {
     Object.keys(widget.events).sort().forEach(function(name) {
       var event = widget.events[name];
       result.push("### ", name + "\n");
+      if (event.parameters) {
+        result.push("Parameters: *" + renderParamList(event.parameters, data) + "*\n");
+      }
       if (event.description) {
         result.push("\n" + event.description);
       }
       result.push("\n");
     });
     return result.join("");
+  }
+
+  function renderParamList(parameters, data) {
+    return parameters.map(function(param) {
+      return renderTypeLink(param, data);
+    }).join(", ");
   }
 
   function renderLinks(widget) {

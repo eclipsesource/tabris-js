@@ -19,7 +19,7 @@
       {
         "parameters": ["property"],
         "returns": "value",
-        "description": "Gets the current value of the given property."
+        "description": "Gets the current value of the given *property*."
       }
     ],
     "children": [
@@ -64,12 +64,12 @@
       {
         "parameters": ["event", "listener"],
         "returns": "Widget",
-        "description": "Adds a `listener` to the list of functions to be notified when `event` is fired. In the listener function, `this` will point to the widget itself."
+        "description": "Adds the *listener* to the list of functions to be notified when *event* is fired. In the listener function, `this` will point to the widget itself."
       },
       {
         "parameters": ["event", "listener", "context"],
         "returns": "Widget",
-        "description": "Adds a `listener` to the list of functions to be notified when `event` is fired. In the listener function, `this` will point to the `context` object."
+        "description": "Adds a *listener* to the list of functions to be notified when *event* is fired. In the listener function, `this` will point to the given *context* object."
       }
     ],
     "off": [
@@ -81,17 +81,17 @@
       {
         "parameters": ["event"],
         "returns": "Widget",
-        "description": "Removes all listeners for `event` from this widget."
+        "description": "Removes all listeners for *event* from this widget."
       },
       {
         "parameters": ["event", "listener"],
         "returns": "Widget",
-        "description": "Removes all occurrences of `listener` that are bound to `event` from this widget, regardless of their `context` parameter."
+        "description": "Removes all occurrences of *listener* that are bound to *event* from this widget, regardless of their *context* parameter."
       },
       {
         "parameters": ["event", "listener", "context"],
         "returns": "Widget",
-        "description": "Removes all occurrences of `listener` that are bound to `event` and `context` from this widget."
+        "description": "Removes all occurrences of *listener* that are bound to *event* and *context* from this widget."
       }
     ],
     "once": [
@@ -109,7 +109,7 @@
     "animate": [
       {
         "parameters": ["properties", "options"],
-        "description": "Starts an animation that transforms the given properties from their current values to the given ones. Currently, only the properties `transform` and `opacity` are supported. Supported `options` are: `delay` (time until the animation starts in ms, defaults to 0), `duration` (in ms), `easing` (one of linear, ease-in, ease-out, ease-in-out), `repeat` (number of times to repeat the animation, defaults to 0), `reverse` (true to play the animation backwards), and `name` (no effect, but will be given in animation events)"
+        "description": "Starts an animation that transforms the given properties from their current values to the given ones. Supported properties are *transform* and *opacity*. Supported options are:\n\n- *delay* - time until the animation starts in ms, defaults to `0`\n- *duration* - in ms,\n- *easing* - one of `linear`, `ease-in`, `ease-out`, `ease-in-out`\n- *repeat* - number of times to repeat the animation, defaults to `0`\n- *reverse* - `true` to alternate the direction of the animation on every repeat.\n- *name* - no effect, but will be given in animation events"
       }
     ],
     "dispose": [
@@ -169,7 +169,7 @@
     },
     "transform": {
       "type": "Transformation",
-      "description": "Modifications to the widget's shape, size, or position. Can be used for animations. *Note:* In Android the `transform` property does not affect the `bounds` property, while it does so in iOS."
+      "description": "Modifications to the widget's shape, size, or position. Can be used for animations. **Note:** In Android the *transform* property does not affect the *bounds* property, while it does so in iOS."
     },
     "highlightOnTouch": {
       "type": "boolean?false",
@@ -177,44 +177,61 @@
     }
   },
   "events": {
+    "change:{property}": {
+      "parameters": ["widget", "value", "options"],
+      "description": "Fired when the given property has changed. If the change was triggered programmatically the *options* object is the one given when `set` was called. Change events for specific properties will only be documented separately if they may be changed without calling `set`. "
+    },
     "tap": {
-      "description": "Fired when a widget is tapped. See [Gesture Events](touch.md)."
+      "parameters": ["widget", "[gesture](../touch.md#gesture_object)"],
+      "description": "Fired once when a finger briefly touched the widget."
     },
     "longpress": {
-      "description": "Fired after pressing a widget for a specific amount of time (about a second). See [Gesture Events](touch.md)."
+      "parameters": ["widget", "[gesture](../touch.md#gesture_object)"],
+      "description": "Fired after pressing a widget for a specific amount of time (about a second), and again on lifting the finger."
     },
     "pan": {
-      "description": "Fired when a finger starts moving in the widget. See [Gesture Events](touch.md)."
+      "parameters": ["widget", "[gesture](../touch.md#gesture_object)"],
+      "description": "Fired continuously after a finger touching the widget moved for a certain distance."
     },
     "pan:{direction}": {
-      "description": "Fired when a finger starts moving in the given direction. See [Gesture Events](touch.md)."
+      "parameters": ["widget", "[gesture](../touch.md#gesture_object)"],
+      "description": "Fired when a finger starts moving in the given direction. Values for {direction} are: `left`, `right`, `up`, `down`."
     },
     "swipe:{direction}": {
-      "description": "Fired when a finger moves quickly in the given direction. See [Gesture Events](touch.md)."
+      "parameters": ["widget", "[gesture](../touch.md#gesture_object)"],
+      "description": "Fired when a finger moves quickly in the given direction. Values for {direction} are: `left`, `right`, `up`, `down`."
     },
     "touchstart": {
+      "parameters": ["widget", "[touchEvent](../touch.md#touch_event_object)"],
       "description": "Fired when a widget is touched. See [Touch Events](touch.md)."
     },
     "touchmove": {
-      "description": "Fired repeatedly while swiping across the screen. See [Touch Events](touch.md)."
+      "parameters": ["widget", "[touchEvent](../touch.md#touch_event_object)"],
+      "description": "Fired repeatedly while swiping across the screen."
     },
     "touchend": {
-      "description": "Fired when a touch ends on the same widget than it started on. See [Touch Events](touch.md)."
+      "parameters": ["widget", "[touchEvent](../touch.md#touch_event_object)"],
+      "description": "Fired when a touch ends on the same widget than it started on."
     },
     "touchcancel": {
-      "description": "Fired instead of touchend when the touch ends on another widget than it started on. See [Touch Events](touch.md)."
+      "parameters": ["widget", "[touchEvent](../touch.md#touch_event_object)"],
+      "description": "Fired instead of touchend when the touch ends on another widget than it started on."
     },
     "resize": {
-      "description": "Fired when the widget's size or position has changed. Parameters are `widget`, `bounds`, `options`"
+      "parameters": ["widget", "[bounds](#bounds)", "options"],
+      "description": "Fired when the widget's size or position has changed. The *options* object is empty."
     },
     "animationstart": {
-      "decription": "Fired when an animation starts playing."
+      "parameters": ["widget", "options"],
+      "decription": "Fired when an animation starts playing. The *options* object is the one given [when `animate` was called](../animations.md)."
     },
     "animationend": {
-      "description:": "Fired when an animation has completed."
+      "parameters": ["widget", "options"],
+      "description:": "Fired when an animation has completed. The *options* object is the one given [when `animate` was called](../animations.md)."
     },
     "dispose": {
-      "description": "Fired when the widget is about to be disposed."
+      "parameters": ["widget", "options"],
+      "description": "Fired when the widget is about to be disposed. At this point the widget and its children are still accessible. The *options* object is empty."
     }
   },
   "links": [
@@ -223,7 +240,7 @@
       "path": "layouts"
     },
     {
-      "title": "Understanding touch events in Tabris.js",
+      "title": "Understanding gesture events in Tabris.js",
       "path": "touch"
     }
   ]

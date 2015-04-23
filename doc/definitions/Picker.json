@@ -15,13 +15,16 @@
   },
   "events": {
     "change:selectionIndex": {
+      "parameters": ["picker", "[selectionIndex](#selectionIndex)", "options"],
       "description": "Fired when the selectionIndex property changes."
     },
     "change:selection": {
-      "description": "Fired when the selection property changes. The index of the selected item is given in the options object as `index`."
+      "parameters": ["picker", "[selectionIndex](#selection)", "options"],
+      "description": "Fired when the selection property changes."
     },
     "select": {
-      "description": "Fired an item was selected by the user. Parameters are the same as in `change:selection`, i.e. `widget`, `selection`, `options`."
+      "parameters": ["picker", "[selection](#selection)", "options"],
+      "description": "Fired an item was selected by the user. The index of the selected item is given in the options object: `{index: number}`."
     }
   },
   "links": [

@@ -1,6 +1,6 @@
 {
   "type": "Action",
-  "description": "An executable item that is integrated in the application's navigation menu. Add a listener on `selection` to implement the action.",
+  "description": "An executable item that is integrated in the application's navigation menu. Add a listener on *select* to implement the action.",
   "properties": {
     "enabled": {
       "type": "boolean",
@@ -29,7 +29,8 @@
   },
   "events": {
     "select": {
-      "description": "Fired when the action is invoked. Gives the action as the first parameter."
+      "parameters": ["action"],
+      "description": "Fired when the action is invoked."
     }
   },
   "links": [

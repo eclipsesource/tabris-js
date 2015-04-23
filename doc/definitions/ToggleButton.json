@@ -22,10 +22,12 @@
   },
   "events": {
     "change:selection": {
+      "parameters": ["toggleButton", "[selection](#selection)", "options"],
       "description": "Fired when the selection property changes."
     },
     "select": {
-      "description": "Fired when the toggle button is selected or deselected. Parameters are the same as in `change:selection`, i.e. `widget`, `selection`, `options`."
+      "parameters": ["toggleButton", "[selection](#selection)", "options"],
+      "description": "Fired when the toggle button is selected or deselected by the user."
     }
   },
   "links": [
