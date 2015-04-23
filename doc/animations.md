@@ -15,7 +15,7 @@ Parameters:
     - *reverse*: plays the animation backwards if set to `true`
     - *name*: an arbitrary string that may be used to identify the animation in an animation event.
 
-The animate method returns the widget itself, supporting call chaining. Each animate call will be followed by up to two events fired on the widget:
+Each animate call will be followed by up to two events fired on the widget:
 
 - *animationstart*: Fired once the animation begins, i.e. after the time specified in `delay`, or immediately on calling `animate`.
 - *animationend*: Fired after the animation finishes. Not fired if the widget is disposed before that.
@@ -25,6 +25,12 @@ The animation event listeners are called with the widget as the first parameter,
 Example:
 
 ```javascript
+label.once("animationend", function(label, options) {
+  if (options.name === "my-remove-animation") {
+    label.dispose();
+  }
+});
+
 label.animate({
   opacity: 0,
   transform: {
@@ -35,10 +41,6 @@ label.animate({
   duration: 1000,
   easing: "ease-out",
   name: "my-remove-animation"
-}).on("animationend", function(label, options) {
-  if (options.name === "my-remove-animation") {
-    label.dispose();
-  }
 });
 ```
 

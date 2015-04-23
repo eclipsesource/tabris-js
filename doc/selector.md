@@ -47,7 +47,7 @@ Unlike the normal Array, `WidgetCollection` also has these methods:
 - `set(property, value)` - Sets the given property on all widgets in this collection. Returns the collection.
 - `set(properties)` - Sets the given properties on all widgets in this collection. Returns the collection.
 - `get(property)` - Returns the value of the property of the first widget in this collection.
-- `animate(properties, options)` - Animates all widgets in this collection. Returns the collection.
+- `animate(properties, options)` - Animates all widgets in this collection.
 - `on(event, listener[, context])` - Attaches the listener to all widgets in this collection. Returns the collection.
 - `off([event, [listener[, context]]])` - Removes listener form all widgets in this collection. Returns the collection.
 - `parent()` - Returns a collection containing all parents of all widgets in this collection

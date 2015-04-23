@@ -70,7 +70,6 @@
     animation._options = options;
     this._on("dispose", animation.dispose, animation);
     animation.start();
-    return this;
   };
 
   var animatable = {

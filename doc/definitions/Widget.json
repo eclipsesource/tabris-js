@@ -109,7 +109,6 @@
     "animate": [
       {
         "parameters": ["properties", "options"],
-        "returns": "Widget",
         "description": "Starts an animation that transforms the given properties from their current values to the given ones. Currently, only the properties `transform` and `opacity` are supported. Supported `options` are: `delay` (time until the animation starts in ms, defaults to 0), `duration` (in ms), `easing` (one of linear, ease-in, ease-out, ease-in-out), `repeat` (number of times to repeat the animation, defaults to 0), `reverse` (true to play the animation backwards), and `name` (no effect, but will be given in animation events)"
       }
     ],

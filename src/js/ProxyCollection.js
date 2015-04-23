@@ -85,7 +85,9 @@
       for (var i = 0; i < this._array.length; i++) {
         this._array[i][key].apply(this._array[i], arguments);
       }
-      return this;
+      if (key !== "animate") {
+        return this;
+      }
     };
   });
 

@@ -118,8 +118,8 @@ describe("ProxyCollection", function() {
       expect(mocks[2].animate).toHaveBeenCalledWith(props, options);
     });
 
-    it("animate() returns collection", function() {
-      expect(collection.animate({}, {})).toBe(collection);
+    it("animate() returns nothing", function() {
+      expect(collection.animate({}, {})).not.toBeDefined();
     });
 
     it("on() is delegated", function() {

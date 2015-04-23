@@ -159,8 +159,8 @@ describe("Animation", function() {
       expect(nativeBridge.calls({op: "destroy", id: animationId()}).length).toBe(1);
     });
 
-    it("returns widget", function() {
-      expect(widget.animate({}, {})).toBe(widget);
+    it("returns nothing", function() {
+      expect(widget.animate({}, {})).not.toBeDefined();
     });
 
   });
