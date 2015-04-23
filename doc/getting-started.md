@@ -18,13 +18,13 @@ The Tabris.js examples are a collection of small apps that demonstrate the power
 
 ![Android Examples Tab](img/examples.png)
 
-Just tap an example app and it will run within the developer app. You can go back to the examples selection by using the back button in Android or [the Developer Console](#the-developer-console) on either platform.
+Just tap an example and it will run within the developer app. You can go back to the examples selection by using the back button in Android or [the Developer Console](#the-developer-console) on either platform.
 
 ![Android Back](img/back-android.png)         ![iOS Back](img/back-ios.png)
 
 ## The Developer Console
 
-While running a Tabris.js app within the developer app, you can open a developer console by sliding from the right edge of the screen to the left. On iOS you may have to start sliding from the edge itself, while Android is less fussy about where you start.
+While running Tabris.js scripts in the developer app, you can open a developer console by sliding from the right edge of the screen to the left. On iOS you may have to start sliding from the edge itself, while Android is less fussy about where you start.
 
 Here you will see messages and errors logged while running a script. You can filter the log or even share it (e.g. by e-mail). The console also lets you go back to the developer app, or just restart the script instantly.
 
@@ -86,7 +86,7 @@ var label = tabris.create("TextView", {
   layoutData: {centerX: 0, top: [button, 50]}
 }).appendTo(page);
 
-button.on("selection", function() {
+button.on("select", function() {
   label.set("text", "Totally Rock!");
 });
 
@@ -101,10 +101,10 @@ First, make sure the following prerequisites are met:
  - You have [node.js](http://nodejs.org/) installed on your development machine and you can execute the `npm` command from the command line. 
  
 In your Tabris.js project directory, type the following:
- 
-    [$] npm install http-server -g
-    [$] npm install
-    [$] http-server
+
+    npm install http-server -g
+    npm install
+    http-server
 
 The first line installs the http-server we use. You only need to do this once.
 The second line installs Tabris.js (the version given in the `package.json`) in your project. You need to do this once per project. 
