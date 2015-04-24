@@ -13,7 +13,7 @@ Tabris.js is a mobile framework that lets you develop native iOS and Android app
 - [Property types](property-types.md)
 - [Widget Basics](widgets.md) - Native widget handling.
 - [UI Model](ui.md) - Pages, Actions and the Drawer.
-- [Selector API](selector.md) - Working more efficiently with widgets. 
+- [Selector API](selector.md) - Working more efficiently with widgets.
 - [Layouts](layout.md) - Layouting widgets.
 - [Animations](animations.md) - Animating widgets.
 - [Touch API](touch.md) - Processing widget gesture/touch events.
@@ -38,3 +38,8 @@ This blog post series takes a closer look at the examples.
 - [Hello World!](http://eclipsesource.com/blogs/2015/02/20/tabris-js-examples-hello-world/)
 - [User Input](http://eclipsesource.com/blogs/2015/02/25/tabris-js-examples-user-input/)
 - [Local Storage](http://eclipsesource.com/blogs/2015/03/04/tabris-js-examples-local-storage/)
+- [Images](http://eclipsesource.com/blogs/2015/03/10/tabris-js-examples-images/)
+- [Parallax Scrolling](http://eclipsesource.com/blogs/2015/03/24/tabris-js-examples-parallax-scrolling/)
+- [Animations](http://eclipsesource.com/blogs/2015/04/14/tabris-js-examples-animations/)
+- [Drawing on the Canvas](http://eclipsesource.com/blogs/2015/04/15/tabris-js-examples-drawing-on-the-canvas/)
+- [Network Access](http://eclipsesource.com/blogs/2015/04/24/tabris-js-examples-network-access/)
