@@ -10,7 +10,6 @@ Tabris.js is a mobile framework that lets you develop native iOS and Android app
 
 ## Documentation
 - [Modules](modules.md) - How to organize and load scripts.
-- [Property types](property-types.md)
 - [Widget Basics](widgets.md) - Native widget handling.
 - [UI Model](ui.md) - Pages, Actions and the Drawer.
 - [Selector API](selector.md) - Working more efficiently with widgets.
@@ -26,6 +25,9 @@ Tabris.js is a mobile framework that lets you develop native iOS and Android app
 
 ## Widgets
 <%= widgets %>
+
+## Other API
+- [Miscellaneous Types](types.md)
 
 ## Articles
 - [Apache Cordova vs. Tabris.js](http://eclipsesource.com/blogs/2015/03/02/apache-cordova-vs-tabris-js/) - How to use Cordova's build tooling to create Tabris.js apps.

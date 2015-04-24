@@ -5,9 +5,12 @@
   "methods": {
     "append": [
       {
-        "parameters": ["TabItem", "TabItem*" ],
+        "parameters": [
+          {"name": "child", "type": "Tab"},
+          {"name": "child*", "type": "Tab"}
+        ],
         "returns": "TabFolder",
-        "description": "Adds the given TabItem widgets in the given order to the TabFolder"
+        "description": "Adds the given tabs in the given order to the TabFolder"
       }
     ]
   },
@@ -27,11 +30,19 @@
   },
   "events": {
     "change:selection": {
-      "parameters": ["tabFolder", "[selection](#selection)", "options"],
+      "parameters": [
+        {"name": "widget", "type": "TabFolder"},
+        {"name": "selection", "type": "Tab", "description": "The new value of *selection*."},
+        {"name": "options", "type": "Object"}
+      ],
       "description": "Fired when the selection property changes."
     },
     "select": {
-      "parameters": ["tabFolder", "[selection](#selection)", "options"],
+      "parameters": [
+        {"name": "widget", "type": "TabFolder"},
+        {"name": "selection", "type": "Tab", "description": "The new value of *selection*."},
+        {"name": "options", "type": "Object"}
+      ],
       "description": "Fired when the selection property changes by user interaction."
     }
   },

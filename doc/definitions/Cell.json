@@ -14,11 +14,19 @@
   },
   "events": {
     "change:item": {
-      "parameters": ["cell", "[item](#item)", "options"],
+      "parameters": [
+        {"name": "widget", "type": "Cell"},
+        {"name": "item", "type": "mixed", "description": "The new value of *[item](#item)*."},
+        {"name": "options", "type": "Object"}
+      ],
       "description": "Fired when a collection item is assigned to this cell. Use this event to configure the widgets in this cell to represent the assigned item."
     },
     "change:itemIndex": {
-      "parameters": ["cell", "[itemIndex](#itemIndex)", "options"],
+      "parameters": [
+        {"name": "widget", "type": "Cell"},
+        {"name": "itemIndex", "type": "number", "description": "The new value of *[itemIndex](#indexIndex)*."},
+        {"name": "options", "type": "Object"}
+      ],
       "description": "Fired when the index of the assigned item changes, either by assigning a new item or by inserting/removing items above the current item."
     }
   },

@@ -146,7 +146,7 @@ module.exports = function(grunt) {
       json: "doc/definitions/*.json",
       target: "build/doc/api/",
       index: "build/doc/index.md",
-      types: "build/doc/property-types.md"
+      types: "build/doc/types.md"
     },
     copy: {
       doc: {

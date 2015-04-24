@@ -8,7 +8,7 @@
       "description": "The height of a collection cell."
     },
     "items": {
-      "type": "mixed[]",
+      "type": "Array",
       "description": "An array of data items to be displayed by the collection view. For dynamic content, use the methods `insert` and `remove` instead of setting this property directly."
     },
     "initializeCell": {
@@ -31,33 +31,49 @@
   },
   "events": {
     "select": {
-      "parameters": ["collectionView", "item", "options"],
-      "description": "Fired when a collection item is selected. The *options* object contains the index of the selected item: `{index: number}`"
+      "parameters": [
+        {"name": "widget", "type": "CollectionView"},
+        {"name": "item", "type": "mixed", "description": "The item that was selected."},
+        {"name": "options", "type": "Object", "description": "Contains the index of the selected item: `{index: number}`"}
+      ],
+      "description": "Fired when a collection item is selected."
     },
     "refresh": {
-      "parameters": ["collectionView"],
+      "parameters": [
+        {"name": "widget", "type": "CollectionView"}
+      ],
       "description": "Fired when the user requested a refresh. An event listener should reset the *refreshIndicator* property when refresh is finished."
     }
   },
   "methods": {
     "insert": [
       {
-        "parameters": ["items"],
+        "parameters": [
+          {"name": "items", "type": "Array"}
+        ],
         "description": "Inserts the given items into this view. Items are added at the end. This operation will modify the *items* property."
       },
       {
-        "parameters": ["items", "index"],
-        "description": "Inserts the given items into this view at the given index. If a negative index is given, it is interpreted as relative to the end. If the given index is greater than the item count, new items will be appended at the end. This operation will modify the *items* property."
+        "parameters": [
+          {"name": "items", "type": "Array"},
+          {"name": "index", "type": "number", "description": "The position to insert the items at. If a negative index is given, it is interpreted as relative to the end. If the given index is greater than the item count, new items will be appended at the end. "}
+        ],
+        "description": "Inserts the given items into this view at the given index. This operation will modify the *items* property."
       }
     ],
     "remove": [
       {
-        "parameters": ["index"],
-        "description": "Removes the item at the given index from this view. If a negative index is given, it is interpreted as relative to the end. This operation will modify the *items* property."
+        "parameters": [
+          {"name": "index", "type": "number", "description": "The index of the item to remove. If this is negative, it is interpreted as relative to the end."}
+        ],
+        "description": "Removes the item at the given index from this view. This operation will modify the *items* property."
       },
       {
-        "parameters": ["index", "count"],
-        "description": "Removes *count* items beginning with the given index from this view. If a negative index is given, it is interpreted as relative to the end. This operation will modify the *items* property."
+        "parameters": [
+          {"name": "index", "type": "number", "description": "The index of the first item to remove. If this is negative, it is interpreted as relative to the end."},
+          {"name": "count", "type": "number", "description": "The number of items to remove."}
+        ],
+        "description": "Removes *count* items beginning with the given index from this view. This operation will modify the *items* property."
       }
     ],
     "refresh": [
@@ -66,14 +82,18 @@
         "description": "Triggers a refresh of all visible items. This will issue *change:item* events on the corresponding cells."
       },
       {
-        "parameters": ["index"],
+        "parameters": [
+          {"name": "index", "type": "number", "description": "The index of the item that was changed."}
+        ],
         "description": "Triggers a refresh of the item with the given index. If the item is scrolled into view, an *change:item* event will be issued on the corresponding cell."
       }
     ],
     "reveal": [
       {
-        "parameters": ["index"],
-        "description": "Scrolls the item with the given index into view. If a negative index is given, it is interpreted as relative to the end."
+        "parameters": [
+          {"name": "index", "type": "number", "description": "The index of the item to reveal. If this is negative, it is interpreted as relative to the end"}
+        ],
+        "description": "Scrolls the item with the given index into view."
       }
     ]
   },

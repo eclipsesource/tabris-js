@@ -29,7 +29,9 @@
   },
   "events": {
     "select": {
-      "parameters": ["action"],
+      "parameters": [
+        {"name": "widget", "type": "Action"}
+      ],
       "description": "Fired when the action is invoked."
     }
   },

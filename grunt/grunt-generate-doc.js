@@ -1,4 +1,5 @@
 var _ = require("underscore");
+var path = require("path");
 
 module.exports = function(grunt) {
 
@@ -112,8 +113,11 @@ module.exports = function(grunt) {
   function renderMethod(name, desc, data) {
     var result = [];
     result.push("### " + name + "(" + renderParamList(desc.parameters, data) + ")\n");
+    if (desc.parameters) {
+      result.push("\n**Parameters:** " + renderParamList(desc.parameters, data, true) + "\n");
+    }
     if (desc.returns) {
-      result.push("Returns: *" + renderTypeLink(desc.returns, data) + "*\n");
+      result.push("**Returns:** *" + renderTypeLink(desc.returns, data) + "*\n");
     }
     if (desc.description) {
       result.push(desc.description);
@@ -158,20 +162,6 @@ module.exports = function(grunt) {
     return result.join("");
   }
 
-  function renderTypeLink(name, data) {
-    if (data.types.indexOf(name.toLowerCase()) !== -1) {
-      return "[" + name + "](../property-types.md#" + name + ")";
-    } else if (data.widgets[firstCharUp(name)]) {
-      return "[" + name + "](" + name.toLowerCase() + ".md)";
-    } else {
-      return name;
-    }
-  }
-
-  function firstCharUp(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
-
   function renderEvents(widget, data) {
     if (!widget.events) {
       return "";
@@ -180,22 +170,31 @@ module.exports = function(grunt) {
     result.push("## Events\n");
     Object.keys(widget.events).sort().forEach(function(name) {
       var event = widget.events[name];
-      result.push("### ", name + "\n");
+      result.push("### \"", name, "\" (" + renderParamList(event.parameters, data) + ")\n");
       if (event.parameters) {
-        result.push("Parameters: *" + renderParamList(event.parameters, data) + "*\n");
+        result.push("\n**Parameters:** " + renderParamList(event.parameters, data, true) + "\n");
       }
       if (event.description) {
-        result.push("\n" + event.description);
+        result.push("\n" + event.description + "\n");
       }
       result.push("\n");
     });
     return result.join("");
   }
 
-  function renderParamList(parameters, data) {
-    return parameters.map(function(param) {
-      return renderTypeLink(param, data);
-    }).join(", ");
+  function renderParamList(parameters, data, detailed) {
+    if (!detailed) {
+      return parameters.map(function(param) {
+        return typeof param === "object" ? param.name : param;
+      }).join(", ");
+    }
+    return "\n\n" + parameters.map(function(param) {
+      var name = typeof param === "object" ? param.name : param;
+      var type = typeof param === "object" ? param.type : null;
+      var desc = typeof param === "object" ? param.description : null;
+      return "- " + name + ": " + (type ? "*" + renderTypeLink(type, data) + "*" : "") +
+        (desc ? (", " + firstCharLower(desc)) : "");
+    }).join("\n");
   }
 
   function renderLinks(widget) {
@@ -210,8 +209,32 @@ module.exports = function(grunt) {
     return result.join("");
   }
 
+  function renderTypeLink(name, data) {
+    if (data.types.indexOf(name.toLowerCase()) !== -1) {
+      return "[" + name + "](" + getTypeDocPath() + "#" + name + ")";
+    } else if (data.widgets[firstCharUp(name)]) {
+      return "[" + name + "](" + name.toLowerCase() + ".md)";
+    } else {
+      return name;
+    }
+  }
+
   function notEmpty(value) {
     return !!value;
+  }
+
+  function getTypeDocPath() {
+    var types = grunt.config("doc").types;
+    var target = grunt.config("doc").target;
+    return path.relative(target, types).replace(path.sep, "/");
+  }
+
+  function firstCharUp(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  function firstCharLower(str) {
+    return str.charAt(0).toLowerCase() + str.slice(1);
   }
 
 };

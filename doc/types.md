@@ -55,6 +55,10 @@ Examples:
 "initial"
 ```
 
+## GestureObject
+
+Object containing information about the currently performed gesture. See ["Touch API"](touch.md#gesture_object). 
+
 ## Image
 
 Images are specified as objects with the following properties:
@@ -80,7 +84,11 @@ Examples:
 
 ## LayoutData
 
-Used to define how a widget should be arranged within its parent. See [Layouts](layout.md).
+Used to define how a widget should be arranged within its parent. See ["Layouts"](layout.md).
+
+## TouchEvent
+
+Object containing information about the currently performed gesture. See ["Touch API"](touch.md#touch_event_object). 
 
 ## Transformation
 
@@ -108,3 +116,4 @@ This transformation will make the widget twice as big and rotate it by 135&deg;.
 
 Selectors are used to filter a given list of widgets. It can be function returning a boolean for a given widget.
 However, more commonly a selector is a string that may either reference a widgets type (e.g. `"Button"`, `"TextView"`), or its id (`"#myButton"`, `"#myTextView"`).
+

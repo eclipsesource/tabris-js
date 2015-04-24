@@ -14,11 +14,19 @@
   },
   "events": {
     "change:selection": {
-      "parameters": ["checkBox", "[selection](#selection)", "options"],
+      "parameters": [
+        {"name": "widget", "type": "CheckBox"},
+        {"name": "selection", "type": "boolean", "description": "The new value of *[selection](#selection)*."},
+        {"name": "options", "type": "Object"}
+      ],
       "description": "Fired when the check box is checked or unchecked."
     },
     "select": {
-      "parameters": ["checkBox", "[selection](#selection)", "options"],
+      "parameters": [
+        {"name": "widget", "type": "CheckBox"},
+        {"name": "selection", "type": "boolean", "description": "The new value of *[selection](#selection)*."},
+        {"name": "options", "type": "Object"}
+      ],
       "description": "Fired when the check box is checked or unchecked by the user."
     }
   },

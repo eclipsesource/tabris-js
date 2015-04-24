@@ -18,11 +18,19 @@
   },
   "events": {
     "input": {
-      "parameters": ["searchAction", "[text](#text)", "options"],
+      "parameters": [
+        {"name": "widget", "type": "SearchAction"},
+        {"name": "text", "type": "string", "description": "The new value of *[text](#text)*."},
+        {"name": "options", "type": "Object"}
+      ],
       "description": "Fired the user inputs text."
     },
     "accept": {
-      "parameters": ["searchAction", "[text](#text)", "options"],
+      "parameters": [
+        {"name": "widget", "type": "SearchAction"},
+        {"name": "text", "type": "string", "description": "The current value of *[text](#text)*."},
+        {"name": "options", "type": "Object"}
+      ],
       "description": "Fired when a text input has been submitted by pressing the keyboard's search key."
     }
   },

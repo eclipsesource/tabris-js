@@ -22,11 +22,19 @@
   },
   "events": {
     "change:selection": {
-      "parameters": ["toggleButton", "[selection](#selection)", "options"],
+      "parameters": [
+        {"name": "widget", "type": "ToggleButton"},
+        {"name": "selection", "type": "boolean", "description": "The current value of *[selection](#selection)*."},
+        {"name": "options", "type": "Object"}
+      ],
       "description": "Fired when the selection property changes."
     },
     "select": {
-      "parameters": ["toggleButton", "[selection](#selection)", "options"],
+      "parameters": [
+        {"name": "widget", "type": "ToggleButton"},
+        {"name": "selection", "type": "boolean", "description": "The current value of *[selection](#selection)*."},
+        {"name": "options", "type": "Object"}
+      ],
       "description": "Fired when the toggle button is selected or deselected by the user."
     }
   },

@@ -6,11 +6,11 @@
     "getContext": [
       {
         "parameters": [
-          "contextType",
-          "width",
-          "height"
+          {"name": "contextType", "type": "string", "description": "This must be `\"2d\"`"},
+          {"name": "width", "type": "number"},
+          {"name": "height", "type": "number"}
         ],
-        "description": "Returns the drawing context. The  *contextType* must be `\"2d\"`.",
+        "description": "Returns the drawing context.",
         "returns": "CanvasContext"
       }
     ]

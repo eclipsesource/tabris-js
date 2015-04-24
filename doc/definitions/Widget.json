@@ -5,7 +5,10 @@
   "methods": {
     "set": [
       {
-        "parameters": ["property", "value"],
+        "parameters": [
+          {"name": "property", "type": "string"},
+          {"name": "value", "type": "mixed"}
+        ],
         "description": "Sets the given property.",
         "returns": "Widget"
       },
@@ -17,7 +20,9 @@
     ],
     "get": [
       {
-        "parameters": ["property"],
+        "parameters": [
+          {"name": "property", "type": "string"}
+        ],
         "returns": "value",
         "description": "Gets the current value of the given *property*."
       }
@@ -29,7 +34,9 @@
         "description": "Returns a (possibly empty) collection of all children of this widget."
       },
       {
-        "parameters": ["selector"],
+        "parameters": [
+          {"name": "selector", "type": "Selector"}
+        ],
         "returns": "WidgetCollection",
         "description": "Returns a (possibly empty) collection of all children of this widget that match the selector."
       }
@@ -41,7 +48,9 @@
         "description": "Returns a (possibly empty) collection of all descendants of this widget."
       },
       {
-        "parameters": ["selector"],
+        "parameters": [
+          {"name": "selector", "type": "Selector"}
+        ],
         "returns": "WidgetCollection",
         "description": "Returns a (possibly empty) collection of all descendants of this widget that match the selector."
       }
@@ -55,21 +64,30 @@
     ],
     "appendTo": [
       {
-        "parameters": ["Composite"],
+        "parameters": [
+          {"name": "parent", "type": "Composite"}
+        ],
         "returns": "Widget",
-        "description": "Appends this widget to the given parent. The parent widget must support children (like Page, Composite)."
+        "description": "Appends this widget to the given parent. The parent widget must support children (extending *Composite*)."
       }
     ],
     "on": [
       {
-        "parameters": ["event", "listener"],
+        "parameters": [
+          {"name": "event", "type": "string"},
+          {"name": "listener", "type": "Function"}
+        ],
         "returns": "Widget",
         "description": "Adds the *listener* to the list of functions to be notified when *event* is fired. In the listener function, `this` will point to the widget itself."
       },
       {
-        "parameters": ["event", "listener", "context"],
+        "parameters": [
+          {"name": "event", "type": "string"},
+          {"name": "listener", "type": "Function"},
+          {"name": "context", "type": "Object", "description": "In the listener function, `this` will point to this object."}
+        ],
         "returns": "Widget",
-        "description": "Adds a *listener* to the list of functions to be notified when *event* is fired. In the listener function, `this` will point to the given *context* object."
+        "description": "Adds a *listener* to the list of functions to be notified when *event* is fired."
       }
     ],
     "off": [
@@ -79,48 +97,67 @@
         "description": "Removes all listeners for all events from this widget."
       },
       {
-        "parameters": ["event"],
+        "parameters": [
+          {"name": "event", "type": "string"}
+        ],
         "returns": "Widget",
         "description": "Removes all listeners for *event* from this widget."
       },
       {
-        "parameters": ["event", "listener"],
+        "parameters": [
+          {"name": "event", "type": "string"},
+          {"name": "listener", "type": "Function"}
+        ],
         "returns": "Widget",
         "description": "Removes all occurrences of *listener* that are bound to *event* from this widget, regardless of their *context* parameter."
       },
       {
-        "parameters": ["event", "listener", "context"],
+        "parameters": [
+          {"name": "event", "type": "string"},
+          {"name": "listener", "type": "Function"},
+          {"name": "context", "type": "Object"}
+        ],
         "returns": "Widget",
         "description": "Removes all occurrences of *listener* that are bound to *event* and *context* from this widget."
       }
     ],
     "once": [
       {
-        "parameters": ["event", "listener"],
+        "parameters": [
+          {"name": "event", "type": "string"},
+          {"name": "listener", "type": "Function"}
+        ],
         "returns": "Widget",
         "description": "Same as `on`, but removes the listener after it has been invoked by an event."
       },
       {
-        "parameters": ["event", "listener", "context"],
+        "parameters": [
+          {"name": "event", "type": "string"},
+          {"name": "listener", "type": "Function"},
+          {"name": "context", "type": "Object", "description": "In the listener function, `this` will point to this object."}
+        ],
         "returns": "Widget",
         "description": "Same as `on`, but removes the listener after it has been invoked by an event."
       }
     ],
     "animate": [
       {
-        "parameters": ["properties", "options"],
+        "parameters": [
+          {"name": "properties", "type": "Object", "description": "The properties and target values to animate."},
+          {"name": "options", "type": "Object", "description": "Configures the animation itself."}
+        ],
         "description": "Starts an animation that transforms the given properties from their current values to the given ones. Supported properties are *transform* and *opacity*. Supported options are:\n\n- *delay* - time until the animation starts in ms, defaults to `0`\n- *duration* - in ms,\n- *easing* - one of `linear`, `ease-in`, `ease-out`, `ease-in-out`\n- *repeat* - number of times to repeat the animation, defaults to `0`\n- *reverse* - `true` to alternate the direction of the animation on every repeat.\n- *name* - no effect, but will be given in animation events"
       }
     ],
     "dispose": [
       {
-        "parameters": [""],
+        "parameters": [],
         "description": "Removes this widget from its parent and destroys it. Also disposes of all its children. Triggers a `remove` event on the parent and a `dispose` event on itself. The widget can no longer be used."
       }
     ],
     "isDisposed": [
       {
-        "parameters": [""],
+        "parameters": [],
         "returns": "boolean",
         "description": "Returns `true` if the widget has been disposed, otherwise `false`."
       }
@@ -178,60 +215,103 @@
   },
   "events": {
     "change:{property}": {
-      "parameters": ["widget", "value", "options"],
-      "description": "Fired when the given property has changed. If the change was triggered programmatically the *options* object is the one given when `set` was called. Change events for specific properties will only be documented separately if they may be changed without calling `set`. "
+      "parameters": [
+        {"name": "widget", "type": "Widget"},
+        {"name": "value", "type": "mixed", "description": "The new value of this given property."},
+        {"name": "options", "type": "Object", "description": "This is the options object given to the [`set`](#set) method."}
+      ],
+      "description": "Fired when the given property has changed. Change events for specific properties will only be documented separately if they may be triggered without calling `set`. "
     },
     "tap": {
-      "parameters": ["widget", "[gesture](../touch.md#gesture_object)"],
+      "parameters": [
+        {"name": "widget", "type": "Widget"},
+        {"name": "gesture", "type": "GestureObject"}
+      ],
       "description": "Fired once when a finger briefly touched the widget."
     },
     "longpress": {
-      "parameters": ["widget", "[gesture](../touch.md#gesture_object)"],
+      "parameters": [
+        {"name": "widget", "type": "Widget"},
+        {"name": "gesture", "type": "GestureObject"}
+      ],
       "description": "Fired after pressing a widget for a specific amount of time (about a second), and again on lifting the finger."
     },
     "pan": {
-      "parameters": ["widget", "[gesture](../touch.md#gesture_object)"],
+      "parameters": [
+        {"name": "widget", "type": "Widget"},
+        {"name": "gesture", "type": "GestureObject"}
+      ],
       "description": "Fired continuously after a finger touching the widget moved for a certain distance."
     },
     "pan:{direction}": {
-      "parameters": ["widget", "[gesture](../touch.md#gesture_object)"],
+      "parameters": [
+        {"name": "widget", "type": "Widget"},
+        {"name": "gesture", "type": "GestureObject"}
+      ],
       "description": "Fired when a finger starts moving in the given direction. Values for {direction} are: `left`, `right`, `up`, `down`."
     },
     "swipe:{direction}": {
-      "parameters": ["widget", "[gesture](../touch.md#gesture_object)"],
+      "parameters": [
+        {"name": "widget", "type": "Widget"},
+        {"name": "gesture", "type": "GestureObject"}
+      ],
       "description": "Fired when a finger moves quickly in the given direction. Values for {direction} are: `left`, `right`, `up`, `down`."
     },
     "touchstart": {
-      "parameters": ["widget", "[touchEvent](../touch.md#touch_event_object)"],
+      "parameters": [
+        {"name": "widget", "type": "Widget"},
+        {"name": "gesture", "type": "TouchEvent"}
+      ],
       "description": "Fired when a widget is touched. See [Touch Events](touch.md)."
     },
     "touchmove": {
-      "parameters": ["widget", "[touchEvent](../touch.md#touch_event_object)"],
+      "parameters": [
+        {"name": "widget", "type": "Widget"},
+        {"name": "gesture", "type": "TouchEvent"}
+      ],
       "description": "Fired repeatedly while swiping across the screen."
     },
     "touchend": {
-      "parameters": ["widget", "[touchEvent](../touch.md#touch_event_object)"],
+      "parameters": [
+        {"name": "widget", "type": "Widget"},
+        {"name": "gesture", "type": "TouchEvent"}
+      ],
       "description": "Fired when a touch ends on the same widget than it started on."
     },
     "touchcancel": {
-      "parameters": ["widget", "[touchEvent](../touch.md#touch_event_object)"],
+      "parameters": [
+        {"name": "widget", "type": "Widget"},
+        {"name": "gesture", "type": "TouchEvent"}
+      ],
       "description": "Fired instead of touchend when the touch ends on another widget than it started on."
     },
     "resize": {
-      "parameters": ["widget", "[bounds](#bounds)", "options"],
-      "description": "Fired when the widget's size or position has changed. The *options* object is empty."
+      "parameters": [
+        {"name": "widget", "type": "Widget"},
+        {"name": "bounds", "type": "Bounds", "description": "The new value of the (*bounds*)[#bounds] property."},
+        {"name": "options", "type": "Object"}
+      ],
+      "description": "Fired when the widget's size has changed. You can use this event to apply new (*layoutData*)[#layoutData]."
     },
     "animationstart": {
-      "parameters": ["widget", "options"],
-      "decription": "Fired when an animation starts playing. The *options* object is the one given [when `animate` was called](../animations.md)."
+      "parameters": [
+        {"name": "widget", "type": "Widget"},
+        {"name": "options", "type": "Object", "description": "The *options* object given [when `animate` was called](../animations.md)."}
+      ],
+      "decription": "Fired when an animation starts playing."
     },
     "animationend": {
-      "parameters": ["widget", "options"],
-      "description:": "Fired when an animation has completed. The *options* object is the one given [when `animate` was called](../animations.md)."
+      "parameters": [
+        {"name": "widget", "type": "Widget"},
+        {"name": "options", "type": "Object", "description": "The *options* object given [when `animate` was called](../animations.md)."}
+      ],
+      "description:": "Fired when an animation has completed."
     },
     "dispose": {
-      "parameters": ["widget", "options"],
-      "description": "Fired when the widget is about to be disposed. At this point the widget and its children are still accessible. The *options* object is empty."
+      "parameters": [
+        {"name": "widget", "type": "Widget"}
+      ],
+      "description": "Fired when the widget is about to be disposed. At this point the widget and its children are still accessible."
     }
   },
   "links": [

@@ -38,24 +38,40 @@
   },
   "events": {
     "accept": {
-      "parameters": ["textInput", "[text](#text)", "options"],
+      "parameters": [
+        {"name": "widget", "type": "TextInput"},
+        {"name": "text", "type": "string", "description": "The current value of *[text](#text)*."},
+        {"name": "options", "type": "Object"}
+      ],
       "description": "Fired when a text input has been finished by pressing the keyboard's Enter key. The label of this key may vary depending on the platform and locale."
     },
     "blur": {
-      "parameters": ["textInput"],
+      "parameters": [
+        {"name": "widget", "type": "TextInput"}
+      ],
       "description": "Fired when the widget lost focus."
     },
     "focus": {
-      "parameters": ["textInput"],
+      "parameters": [
+        {"name": "widget", "type": "TextInput"}
+      ],
       "description": "Fired when the widget gains focus."
     },
     "change:text": {
-      "parameters": ["textInput", "[text](#text)", "options"],
+      "parameters": [
+        {"name": "widget", "type": "TextInput"},
+        {"name": "text", "type": "string", "description": "The new value of *[text](#text)*."},
+        {"name": "options", "type": "Object"}
+      ],
       "description": "Fired when the text property changes."
     },
     "input": {
-      "parameters": ["textInput", "[text](#text)", "options"],
-      "description": "Fired when the text changed by the user."
+      "parameters": [
+        {"name": "widget", "type": "TextInput"},
+        {"name": "text", "type": "string", "description": "The new value of *[text](#text)*."},
+        {"name": "options", "type": "Object"}
+      ],
+      "description": "Fired when the text was changed by the user."
     }
   },
   "links": [

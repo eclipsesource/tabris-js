@@ -18,7 +18,9 @@
   },
   "events": {
     "select": {
-      "parameters": ["button"],
+      "parameters": [
+        {"name": "widget", "type": "Button"}
+      ],
       "description": "Fired when the button is pressed."
     }
   },
