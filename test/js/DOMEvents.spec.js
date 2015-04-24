@@ -94,6 +94,13 @@ describe("DOMEvents", function() {
         expect(listener).not.toHaveBeenCalled();
       });
 
+      it("it is notified with Events with listener target", function() {
+        var event = {type: "foo"};
+        target.dispatchEvent(event);
+        expect(listener).toHaveBeenCalledWith({type: "foo", target: target});
+        expect(event.target).toBe(target);
+      });
+
       describe("and removed", function() {
 
         beforeEach(function() {

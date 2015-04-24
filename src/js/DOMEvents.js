@@ -74,6 +74,7 @@
     target.dispatchEvent = function(event) {
       if (listeners && event.type in listeners) {
         var eventListeners = listeners[event.type];
+        event.target = target;
         for (var i = 0; i < eventListeners.length; i++) {
           eventListeners[i].call(this, event);
         }
