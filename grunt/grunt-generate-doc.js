@@ -50,6 +50,9 @@ module.exports = function (grunt) {
     var result = [];
     result.push("# " + title(json));
     result.push(renderDescription(json));
+    if (grunt.file.isFile(getTargetPath(json))) {
+      result.push(grunt.file.read(getTargetPath(json)));
+    }
     result.push(renderMethods(json, data));
     result.push(renderFields(json, data));
     result.push(renderProperties(json, data));

@@ -1,24 +1,9 @@
-Tabris.js Canvas
-================
-
-Canvas is a composite which allows the user to draw on it using a canvas context. Canvas context provides a drawing API. It is a subset of the HTML5 [CanvasRenderingContext2D](https://developer.mozilla.org/en/docs/Web/API/CanvasRenderingContext2D).
-
-To create the canvas context, invoke the following method:
-
-```javascript
-canvas.getContext(contextType, width, height);
-```
-
-* contextType - the type of context. Must be `"2d"`.
-* width - the width of the drawable area
-* height - the height of the drawable area
-
 Example:
 
 ```javascript
 tabris.create("Canvas", {
   layoutData: {left: 0, top: 0, right: 0, bottom: 0}
-}).on("change:bounds", function(canvas, bounds) {
+}).on("resize", function(canvas, bounds) {
   var ctx = canvas.getContext("2d", bounds.width, bounds.height);
   ctx.moveTo(0, 0);
   // ... 
@@ -51,7 +36,7 @@ The following CanvasRenderingContext2D methods are supported:
 * stroke
 * measureText
 
-Supported properties:
+The following CanvasRenderingContext2D properties are supported:
 
 * lineWidth
 * lineCap

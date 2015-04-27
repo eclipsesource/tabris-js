@@ -1,0 +1,19 @@
+{
+  "object": "tabris.app",
+  "include": ["Events"],
+  "description": "The object `tabris.app` provides information about the application.",
+  "events": {
+    "pause": {
+      "parameters": [
+        {"name": "app", "value": "tabris.app"}
+      ],
+      "description": "Fired before the application goes into hibernation."
+    },
+    "resume": {
+      "parameters": [
+        {"name": "app", "value": "tabris.app"}
+      ],
+      "description": "Fired after the application returned from hibernation."
+    }
+  }
+}

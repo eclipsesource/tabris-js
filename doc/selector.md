@@ -18,44 +18,11 @@ Id's don't have to be unique, but it is strongly recommended that they are so wi
 
 ## Working with Selectors
 
-To find a widget anywhere in the current page, simply call `page.find(selector)`. This will return a [WidgetCollection](#WidgetCollection) with all widgets within the page that match the given selector. You can further narrow the search scope by using `page.children(selector)`, or by calling either of these methods on a container within the page.
+To find a widget anywhere in the current page, simply call `page.find(selector)`. This will return a [WidgetCollection](api/WidgetCollection.md) with all widgets within the page that match the given selector. You can further narrow the search scope by using `page.children(selector)`, or by calling either of these methods on a container within the page.
 
 It is also possible to search through all widgets in the current widget tree, using `tabris.ui.find(selector)`. However, this is rarely practical. Instead, you may use `tabris.ui` to find all current pages (`tabris.ui.children("Page")`), actions (`tabris.ui.children("Action")`) or the drawer (`tabris.ui.children("Drawer")`).
 
 A selector may also be given in [LayoutData](layout.md) instead of a the widget itself. This even works if the referenced widget is not yet created.
-
-## WidgetCollection
-
-A `WidgetCollection` is an array-like object that represents any number of widgets - it can also be empty. It
-combines a subset of the JavaScript Array API with a subset of the Tabris.js Widget API. Like an array, the widgets within the collection may be accessed directly using the `[index]` syntax. Instances of `WidgetCollection` are immutable.
-
-### Array-Like API
-- `length`
-- `forEach(callback)`
-- `filter(selector)`
-- `indexOf(widget)`
-
-These work like on any array, with the exception that `filter` also accepts Tabris.js selectors, not just functions.
-
-Unlike the normal Array, `WidgetCollection` also has these methods:
-
-- `first()` - Same as `collection[0]`
-- `last()` - Same as `collection[collection.length - 1]`
-- `toArray()` - Return an Array containing all widgets in the collection.
-
-### Widget-Like API
-- `set(property, value)` - Sets the given property on all widgets in this collection. Returns the collection.
-- `set(properties)` - Sets the given properties on all widgets in this collection. Returns the collection.
-- `get(property)` - Returns the value of the property of the first widget in this collection.
-- `animate(properties, options)` - Animates all widgets in this collection.
-- `on(event, listener[, context])` - Attaches the listener to all widgets in this collection. Returns the collection.
-- `off([event, [listener[, context]]])` - Removes listener form all widgets in this collection. Returns the collection.
-- `parent()` - Returns a collection containing all parents of all widgets in this collection
-- `children()` - Returns a collection containing all children of all widgets in this collection.
-- `children(selector)` - Same as `collection.children().filter(selector)`.
-- `find(selector)` - Returns a collection containing all descendants of all widgets in this collection that match the given selector.
-- `appendTo(parent)` - Append all widgets in this collection to the given widget.
-- `dispose()` - Disposes all widgets in this collection.
 
 ## The apply method
 

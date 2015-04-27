@@ -1,0 +1,113 @@
+{
+  "type": "WidgetCollection",
+  "include": ["Events", "Properties"],
+  "methods": {
+    "children": [
+      {
+        "parameters": [],
+        "returns": "WidgetCollection",
+        "description": "Returns a collection containing all children of all widgets in this collection."
+      },
+      {
+        "parameters": [
+          {"name": "selector", "type": "Selector"}
+        ],
+        "returns": "WidgetCollection",
+        "description": "Same as `collection.children().filter(selector)`."
+      }
+    ],
+    "find": [
+      {
+        "parameters": [],
+        "returns": "WidgetCollection",
+        "description": "Returns a collection containing all descendants of all widgets in this collection."
+      },
+      {
+        "parameters": [
+          {"name": "selector", "type": "Selector"}
+        ],
+        "returns": "WidgetCollection",
+        "description": "Returns a collection containing all descendants of all widgets in this collection that match the given selector."
+      }
+    ],
+    "parent": [
+      {
+        "parameters": [],
+        "returns": "WidgetCollection",
+        "description": "Returns a collection containing all direct parents of all widgets in this collection."
+      }
+    ],
+    "appendTo": [
+      {
+        "parameters": [
+          {"name": "parent", "type": "Composite"}
+        ],
+        "returns": "WidgetCollection",
+        "description": "Append all widgets in this collection to the given widget."
+      }
+    ],
+    "animate": [
+      {
+        "parameters": [
+          {"name": "properties", "type": "Object", "description": "The properties and target values to animate."},
+          {"name": "options", "type": "Object", "description": "Configures the animation itself."}
+        ],
+        "description": "Animates all widgets in this collection."
+      }
+    ],
+    "dispose": [
+      {
+        "parameters": [],
+        "description": "Disposes all widgets in this collection."
+      }
+    ],
+    "isDisposed": [
+      {
+        "parameters": [],
+        "returns": "boolean",
+        "description": "Returns `true` if the widget has been disposed, otherwise `false`."
+      }
+    ],
+    "first": {
+      "parameters": [],
+      "returns": "Widget",
+      "description": "Returns the first widget in the collection. Same as `collection[0]`."
+    },
+    "last": {
+      "parameters": [],
+      "returns": "Widget",
+      "description": "Returns the last widget in the collection. Same as `collection[collection.length - 1]`."
+    },
+    "toArray": {
+      "parameters": [],
+      "returns": "widget[]",
+      "description": "Return an Array containing all widgets in the collection."
+    },
+    "forEach": {
+      "parameters": [
+        {"name": "callback", "type": "Function", "description": "The function to call. The arguments are: *widget*, *index*, *WidgetCollection*"}
+      ],
+      "description": "Calls the given callback for each widget in the collection."
+    },
+    "filter": {
+      "parameters": [
+        {"name": "selector", "type": "Selector"}
+      ],
+      "returns": "WidgetCollection",
+      "description": "Returns a new *WidgetCollection* containing all widgets in this collection that match the given selector."
+    },
+    "indexOf": {
+      "parameters": [
+        {"name": "widget", "type": "Widget"}
+      ],
+      "returns": "number",
+      "description": "Returns the index of the given widget within the collection. If there is not match the return value is `-1`."
+    }
+  },
+  "fields": {
+    "length": {
+      "type": "number",
+      "description": "A read-only field containing the number of widgets in the collection."
+    }
+  }
+}
