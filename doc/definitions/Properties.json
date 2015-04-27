@@ -1,0 +1,60 @@
+{
+  "type": "Properties",
+  "title": "Properties API",
+  "description": "Properties API supported by all widgets and various other objects.",
+  "methods": {
+    "set": [
+      {
+        "parameters": [
+          {"name": "property", "type": "string"},
+          {"name": "value", "type": "mixed"}
+        ],
+        "description": "Sets the given property. Supports chaining.",
+        "returns": "Object"
+      },
+      {
+        "parameters": [
+          {"name": "property", "type": "string"},
+          {"name": "value", "type": "mixed"},
+          {"name": "options", "type": "Object", "description": "This object is given in the change event resulting from this method call."}
+        ],
+        "description": "Sets the given property. Supports chaining.",
+        "returns": "Object"
+      },
+      {
+        "parameters": [
+          {"name": "properties", "type": "Object"}
+        ],
+        "description": "Sets all key-value pairs in the properties object as widget properties. Supports chaining.",
+        "returns": "Object"
+      },
+      {
+        "parameters": [
+          {"name": "properties", "type": "Object"},
+          {"name": "options", "type": "Object", "description": "This object is given in the change event(s) resulting from this method call."}
+        ],
+        "description": "Sets all key-value pairs in the properties object as widget properties. Supports chaining.",
+        "returns": "Object"
+      }
+    ],
+    "get": [
+      {
+        "parameters": [
+          {"name": "property", "type": "string"}
+        ],
+        "returns": "mixed",
+        "description": "Gets the current value of the given *property*."
+      }
+    ]
+  },
+  "events": {
+    "change:{property}": {
+      "parameters": [
+        {"name": "target", "type": "Object", "description": "The object that fired the change event."},
+        {"name": "value", "type": "mixed", "description": "The new value of the given property."},
+        {"name": "options", "type": "Object", "description": "This is the options object given to the [`set`](#set) method."}
+      ],
+      "description": "Fired when the given property has changed. Change events for specific properties will only be documented separately if they may be triggered without calling `set`. "
+    }
+  }
+}

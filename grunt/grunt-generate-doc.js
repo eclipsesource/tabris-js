@@ -1,21 +1,29 @@
 var _ = require("underscore");
 var path = require("path");
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
-  grunt.registerTask("generate-doc", function() {
+  grunt.registerTask("generate-doc", function () {
     var data = {
+      api: readAPI(),
       widgets: readWidgets(),
       types: readTypes()
     };
     resolveIncludes(data);
     renderWidgets(data);
+    renderAPI(data);
     renderIndex(data);
   });
 
   function renderWidgets(data) {
-    Object.keys(data.widgets).forEach(function(type) {
+    Object.keys(data.widgets).forEach(function (type) {
       grunt.file.write(getTargetPath(data.widgets[type]), renderDocument(data, type));
+    });
+  }
+
+  function renderAPI(data) {
+    Object.keys(data.api).forEach(function (type) {
+      grunt.file.write(getTargetPath(data.api[type]), renderDocument(data, type));
     });
   }
 
@@ -23,24 +31,27 @@ module.exports = function(grunt) {
     grunt.log.verbose.writeln("Generating index");
     var widgets = ["Widget"].concat(_.chain(data.widgets).keys().without("Widget").value());
     var widgetIndex = [];
-    widgets.forEach(function(type) {
+    widgets.forEach(function (type) {
       var json = data.widgets[type];
       widgetIndex.push("- [" + title(json) + "](api/" + baseFileName(json.file) + ".md)");
     });
-    var templData = {data: {widgets: widgetIndex.join("\n")}};
+    var apiIndex = [];
+    Object.keys(data.api).forEach(function (type) {
+      var json = data.api[type];
+      apiIndex.push("- [" + title(json) + "](api/" + baseFileName(json.file) + ".md)");
+    });
+    var templData = {data: {widgets: widgetIndex.join("\n"), api: apiIndex.join("\n")}};
     grunt.file.write(getIndexPath(), grunt.template.process(grunt.file.read(getIndexPath()), templData));
   }
 
   function renderDocument(data, type) {
     grunt.log.verbose.writeln("Generating DOC for " + type);
-    var json = data.widgets[type];
+    var json = data.widgets[type] || data.api[type];
     var result = [];
     result.push("# " + title(json));
     result.push(renderDescription(json));
-    if (grunt.file.isFile(getTargetPath(json))) {
-      result.push(grunt.file.read(getTargetPath(json)));
-    }
     result.push(renderMethods(json, data));
+    result.push(renderFields(json, data));
     result.push(renderProperties(json, data));
     result.push(renderEvents(json, data));
     result.push(renderLinks(json));
@@ -48,11 +59,11 @@ module.exports = function(grunt) {
   }
 
   function resolveIncludes(data) {
-    Object.keys(data.widgets).forEach(function(type) {
-      var json = data.widgets[type];
+    Object.keys(data.widgets).concat(Object.keys(data.api)).forEach(function (type) {
+      var json = data.widgets[type] || data.api[type];
       if (json.include) {
-        json.include = json.include.map(function(type) {
-          var include = data.widgets[type];
+        json.include = json.include.map(function (type) {
+          var include = data.widgets[type] || data.api[type];
           if (!include) {
             throw new Error("Could not find included type " + type);
           }
@@ -64,7 +75,7 @@ module.exports = function(grunt) {
 
   function readWidgets() {
     var widgets = {};
-    grunt.file.expand(grunt.config("doc").widgets).forEach(function(file) {
+    grunt.file.expand(grunt.config("doc").widgets).forEach(function (file) {
       var json = grunt.file.readJSON(file);
       json.file = file;
       widgets[json.type] = json;
@@ -72,9 +83,19 @@ module.exports = function(grunt) {
     return widgets;
   }
 
+  function readAPI() {
+    var api = {};
+    grunt.file.expand(grunt.config("doc").api).forEach(function (file) {
+      var json = grunt.file.readJSON(file);
+      json.file = file;
+      api[json.type || json.object] = json;
+    });
+    return api;
+  }
+
   function readTypes() {
     var md = grunt.file.read(grunt.config("doc").types);
-    return md.match(/^##\ *(.*)$/gm).map(function(heading) {
+    return md.match(/^##\ *(.*)$/gm).map(function (heading) {
       return heading.slice(3).toLowerCase();
     });
   }
@@ -94,7 +115,7 @@ module.exports = function(grunt) {
     }
     if (json.include) {
       result.push("Includes ");
-      result.push(json.include.map(function(widget) {
+      result.push(json.include.map(function (widget) {
         return "[" + title(widget) + "](" + widget.type.toLowerCase() + ".md)";
       }).join(", "));
       result.push("\n");
@@ -108,8 +129,8 @@ module.exports = function(grunt) {
     }
     var result = [];
     result.push("## Methods\n");
-    Object.keys(json.methods).sort().forEach(function(name) {
-      Array.prototype.forEach.call(json.methods[name], function(desc) {
+    Object.keys(json.methods).sort().forEach(function (name) {
+      Array.prototype.forEach.call(json.methods[name], function (desc) {
         result.push(renderMethod(name, desc, data));
       });
     });
@@ -138,7 +159,7 @@ module.exports = function(grunt) {
     }
     var result = [];
     result.push("## Properties\n");
-    Object.keys(json.properties).sort().forEach(function(name) {
+    Object.keys(json.properties).sort().forEach(function (name) {
       var property = json.properties[name];
       result.push("### ", name, "\n");
       result.push("Type: ", renderPropertyType(property.type, data), "\n");
@@ -148,6 +169,24 @@ module.exports = function(grunt) {
       if (property.static) {
         result.push("<br/>This property can only be set in the `tabris.create` method. " +
         "It cannot be changed after widget creation.");
+      }
+      result.push("\n");
+    });
+    return result.join("");
+  }
+
+  function renderFields(json, data) {
+    if (!json.fields) {
+      return "";
+    }
+    var result = [];
+    result.push("## Fields\n");
+    Object.keys(json.fields).sort().forEach(function (name) {
+      var field = json.fields[name];
+      result.push("### ", name, "\n");
+      result.push("Type: ", renderPropertyType(field.type, data), "\n");
+      if (field.description) {
+        result.push("\n" + field.description);
       }
       result.push("\n");
     });
@@ -174,7 +213,7 @@ module.exports = function(grunt) {
     }
     var result = [];
     result.push("## Events\n");
-    Object.keys(json.events).sort().forEach(function(name) {
+    Object.keys(json.events).sort().forEach(function (name) {
       var event = json.events[name];
       result.push("### \"", name, "\" (" + renderParamList(event.parameters, data) + ")\n");
       if (event.parameters) {
@@ -190,11 +229,11 @@ module.exports = function(grunt) {
 
   function renderParamList(parameters, data, detailed) {
     if (!detailed) {
-      return parameters.map(function(param) {
+      return parameters.map(function (param) {
         return typeof param === "object" ? param.name : param;
       }).join(", ");
     }
-    return "\n\n" + parameters.map(function(param) {
+    return "\n\n" + parameters.map(function (param) {
         var result = ["- ", param.name, ": "];
         if (param.type) {
           result.push("*", renderTypeLink(param.type, data), "*");
@@ -214,7 +253,7 @@ module.exports = function(grunt) {
     }
     var result = [];
     result.push("## See also\n");
-    json.links.forEach(function(link) {
+    json.links.forEach(function (link) {
       result.push("- [", link.title, "](", link.path, ")\n");
     });
     return result.join("");
@@ -224,6 +263,8 @@ module.exports = function(grunt) {
     if (data.types.indexOf(name.toLowerCase()) !== -1) {
       return "[" + name + "](" + getTypeDocPath() + "#" + name + ")";
     } else if (data.widgets[firstCharUp(name)]) {
+      return "[" + name + "](" + name.toLowerCase() + ".md)";
+    } else if (data.api[firstCharUp(name)]) {
       return "[" + name + "](" + name.toLowerCase() + ".md)";
     } else {
       return name;

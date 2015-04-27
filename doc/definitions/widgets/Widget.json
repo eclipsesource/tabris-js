@@ -1,32 +1,9 @@
 {
   "type": "Widget",
-  "title": "Common Widget Methods, Properties and Events",
+  "title": "Widget API",
+  "include": ["Events", "Properties"],
   "description": "API supported by all widgets.",
   "methods": {
-    "set": [
-      {
-        "parameters": [
-          {"name": "property", "type": "string"},
-          {"name": "value", "type": "mixed"}
-        ],
-        "description": "Sets the given property.",
-        "returns": "Widget"
-      },
-      {
-        "parameters": ["properties"],
-        "description": "Sets the all given properties-value pairs.",
-        "returns": "Widget"
-      }
-    ],
-    "get": [
-      {
-        "parameters": [
-          {"name": "property", "type": "string"}
-        ],
-        "returns": "value",
-        "description": "Gets the current value of the given *property*."
-      }
-    ],
     "children": [
       {
         "parameters": [],
@@ -69,75 +46,6 @@
         ],
         "returns": "Widget",
         "description": "Appends this widget to the given parent. The parent widget must support children (extending *Composite*)."
-      }
-    ],
-    "on": [
-      {
-        "parameters": [
-          {"name": "event", "type": "string"},
-          {"name": "listener", "type": "Function"}
-        ],
-        "returns": "Widget",
-        "description": "Adds the *listener* to the list of functions to be notified when *event* is fired. In the listener function, `this` will point to the widget itself."
-      },
-      {
-        "parameters": [
-          {"name": "event", "type": "string"},
-          {"name": "listener", "type": "Function"},
-          {"name": "context", "type": "Object", "description": "In the listener function, `this` will point to this object."}
-        ],
-        "returns": "Widget",
-        "description": "Adds a *listener* to the list of functions to be notified when *event* is fired."
-      }
-    ],
-    "off": [
-      {
-        "parameters": [],
-        "returns": "Widget",
-        "description": "Removes all listeners for all events from this widget."
-      },
-      {
-        "parameters": [
-          {"name": "event", "type": "string"}
-        ],
-        "returns": "Widget",
-        "description": "Removes all listeners for *event* from this widget."
-      },
-      {
-        "parameters": [
-          {"name": "event", "type": "string"},
-          {"name": "listener", "type": "Function"}
-        ],
-        "returns": "Widget",
-        "description": "Removes all occurrences of *listener* that are bound to *event* from this widget, regardless of their *context* parameter."
-      },
-      {
-        "parameters": [
-          {"name": "event", "type": "string"},
-          {"name": "listener", "type": "Function"},
-          {"name": "context", "type": "Object"}
-        ],
-        "returns": "Widget",
-        "description": "Removes all occurrences of *listener* that are bound to *event* and *context* from this widget."
-      }
-    ],
-    "once": [
-      {
-        "parameters": [
-          {"name": "event", "type": "string"},
-          {"name": "listener", "type": "Function"}
-        ],
-        "returns": "Widget",
-        "description": "Same as `on`, but removes the listener after it has been invoked by an event."
-      },
-      {
-        "parameters": [
-          {"name": "event", "type": "string"},
-          {"name": "listener", "type": "Function"},
-          {"name": "context", "type": "Object", "description": "In the listener function, `this` will point to this object."}
-        ],
-        "returns": "Widget",
-        "description": "Same as `on`, but removes the listener after it has been invoked by an event."
       }
     ],
     "animate": [
