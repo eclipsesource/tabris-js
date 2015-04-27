@@ -19,4 +19,4 @@ These plug-ins have tested with Tabris.js and a [demo](https://github.com/eclips
 ## Other Cordova Plug-Ins
 To use Cordova Plug-Ins not part of the Developer App you need to add them during the [build](build.md) process. Most of the Plug-Ins will work out of the box but not all. This is because Tabris.js uses a **native UI** and **no HTML5**. As a result all Plug-Ins that manipulate the DOM will not work.
 
-Plug-Ins that have tested with Tabris.js are tracked as [GitHub issues](https://github.com/eclipsesource/tabris-js/issues?utf8=%E2%9C%93&q=label%3Acompatibility+cordova). Please feel free to add Plug-Ins if you have tested them successfully. 
+Plug-Ins that have been tested with Tabris.js are tracked as [GitHub issues](https://github.com/eclipsesource/tabris-js/issues?utf8=%E2%9C%93&q=label%3A%22compatibility+cordova%22). If the Plug-In is confirmed to work the issue is closed. Please feel free to add issues for Plug-Ins that you tested.
