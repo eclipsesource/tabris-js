@@ -39,7 +39,7 @@ Create a directory with two files:
 ```js
 var page = tabris.create("Page", {
   topLevel: true,
-  title: "myapp
+  title: "myapp"
 });
 tabris.create("TextView", {
   layoutData: {centerX: 0, centerY: 0},
@@ -51,10 +51,11 @@ Run `npm install` in this directory to install the tabris module.
 
 ## Run the app
 
-- In the project directory, type "`http-server`". Let the server run as long as you are testing your app.
-- In the developer app URL tab, enter "`http://<development-machine-ip-address>:8080/`"
+- In the project directory, type `http-server`. Let the server run as long as you are testing your app.
+- In the developer app, go to the URL tab and enter `http://<development-machine-ip-address>:8080/`
 - Tap *Connect*.
 
 The developer app will now download the script and execute it on your device. Swipe from the right edge of the screen to open the developer console, which lets you restart the script or go back to the developer app.
 
-And that's it. From here on you may want to have a look at the rest of the documentation and the Tabris.js snippets. When you are ready to build, read "[Build your app](build.md)".
+That's it. Now you may want to have a look at the rest of the documentation and the Tabris.js snippets. When you are ready to build, read [Build your app](build.md).
+
