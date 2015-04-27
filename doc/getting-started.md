@@ -1,5 +1,5 @@
 # Getting Started
-Welcome to Tabris.js, the framework for developing native apps in JavaScript. Before you get started, you should be logged in to http://tabrisjs.com. This site provides you with documentation and integrates with the Tabris.js App.
+Welcome to Tabris.js, the framework for developing native apps in JavaScript. Before you get started, you should be logged in to http://tabrisjs.com. This site provides you with documentation and integrates with the Tabris.js Developer App.
 
 **If you want to start coding right away, there is also the [Quickstart](quickstart.md) guide for the inpatient expert.**
 
@@ -24,25 +24,25 @@ Just tap an example and it will run within the developer app. You can go back to
 
 ## The Developer Console
 
-While running Tabris.js scripts in the developer app, you can open a developer console by sliding from the right edge of the screen to the left. On iOS you may have to start sliding from the edge itself, while Android is less fussy about where you start.
+While running Tabris.js scripts in the developer app, you can open a developer console by sliding from the right edge of the screen to the left. On iOS you may have to start sliding from the edge itself to open the drawer.
 
-Here you will see messages and errors logged while running a script. You can filter the log or even share it (e.g. by e-mail). The console also lets you go back to the developer app, or just restart the script instantly.
+Here you will see messages and errors logged while running a script. You can filter the log or even share it (e.g. by email). The console also lets you go back to the developer app, or reload the script instantly.
 
 ![Developer Console](img/console-android.png)
 
 ## Play with the Scratchpad 
 
-On tabrisjs.com, click **My Scratchpad** on the left. Here you will find a simple, editable Tabris.js script. You can run this script immediately (no need to save) on the Tabris.js developer app by going to the *My Scripts* tab and selecting *My Scratchpad*. By default the scratchpad contains the "Hello World" example explained [below](#hello-js).
+On tabrisjs.com, click **My Scratchpad** on the left. Here you will find a simple, editable Tabris.js script. You can run this script immediately (no need to save) in the Tabris.js Developer App by going to the *My Scripts* tab and selecting *My Scratchpad*. By default the scratchpad contains the "Hello World" example explained [below](#hello-js).
 
 ## The Tabris.js Snippets 
 
-On the [tabrisjs.com snippets page](https://tabrisjs.com/snippets/) you can find a code snippet for nearly every feature in Tabris.js. You can run a snippet immediately on your device by clicking the **link** button next to it...  
+On the [tabrisjs.com snippets page](https://tabrisjs.com/snippets/) you can find a code snippet for nearly every feature in Tabris.js. You can run a snippet immediately on your device by clicking the **link** button next to it...
 
 ![Android Developer App](img/button-unlinked.png)
 
 ... and then select it from the **My Scripts** list of the developer app. You may have to refresh the list by swiping down on Android or by switching tabs on iOS.
 
-If you like to play with the snippet, simply copy and paste it to the scratchpad and run it from there. 
+If you like to play with the snippet, simply copy and paste it to the scratchpad and run it from there.
 
 # Create Your First App
 Tabris.js scripts can be developed using any text editor or IDE.
@@ -114,7 +114,7 @@ In the URL tab of the developer app, enter:
 
     http://<development-machine-ip-address>:8080/
 
-Now tap "Connect" to run the app:
+Now tap *Connect* to run the app:
 
 ![Android Developer App](img/hello.png)
 
@@ -124,23 +124,9 @@ If the URL of your developer machine is stable, you can also use the *My Scripts
 
 ![Link A Script](img/link-app.png)
 
-## Share
-All GitHub repositories that contain a Tabris.js scripts (a `package.json` and the JavaScript files) can be directly accessed from your device. Just go to the *My Scripts* page on Tabris.js.com and turn sharing ON. The app will then appear on your device on the *My Scripts* tab.
-
-![Developer Console](img/link-github.png)
-
-Note that scripts shared this way are loaded directly from GitHub, so very large projects may take a longer time to load. Also, *currently* all modules in the `node_modules` folder (which includes tabris itself) need to be checked in with the project.
-
-If a Tabris.js script is accessible at a public URL (e.g. a public GitHub repository) you can also share it with the rest of the community. 
-
-On tabrisjs.com choose *My Scripts* and *Link Script*. Enter the URL and select the checkbox *Make Script public*. Publicly available Tabris.js apps will appear on the *Grand Central* page on tabrisjs.com, where anyone may link it to their own device. This is a great way to share examples, snippets or demos that may be interesting to other developers.
-
-![Developer Console](img/share-public.png)
-
-
 ## Publishing your app
 
-For submission to the App / Play Stores you will need to bundle, build and brand your app. See "[Build your app](build.md)".
+For submission to the App / Play Stores you will need to bundle, brand and build your app, either using the free online build service or using local tools. This process is explained in [Build your app](build.md).
 
 ## Feedback
 Help us improve Tabris.js! [Feedback](mailto:care@eclipsesource.com?subject=Tabris.js%20feedback) is always welcome. Feel free to invite your friends if you find Tabris.js interesting.
