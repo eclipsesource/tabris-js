@@ -1,6 +1,6 @@
 {
   "type": "Canvas",
-  "description": "An empty widget to draw graphics on. Can also contain other widgets.",
+  "description": "Canvas is a widget which allows drawing on it using a canvas context. Canvas context is a subset of the HTML5 [CanvasRenderingContext2D](https://developer.mozilla.org/en/docs/Web/API/CanvasRenderingContext2D). ",
   "include": ["Composite"],
   "methods": {
     "getContext": [

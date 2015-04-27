@@ -2,12 +2,6 @@
   "type": "PageSelector",
   "description": "A CollectionView that contains all top-level pages and allows to open them. New top-level pages are added dynamically.",
   "include": ["CollectionView"],
-  "methods": {
-  },
-  "properties": {
-  },
-  "events": {
-  },
   "links": [
     {
       "title": "Snippet that includes a PageSelector in the navigation drawer",

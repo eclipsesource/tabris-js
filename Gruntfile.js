@@ -143,7 +143,8 @@ module.exports = function(grunt) {
       }
     },
     doc: {
-      json: "doc/definitions/*.json",
+      widgets: "doc/definitions/widgets/*.json",
+      api: "doc/definitions/*.json",
       target: "build/doc/api/",
       index: "build/doc/index.md",
       types: "build/doc/types.md"
@@ -152,7 +153,7 @@ module.exports = function(grunt) {
       doc: {
         expand: true,
         cwd: "doc/",
-        src: ["*.md", "img/*.*"],
+        src: ["*.md", "api/*.md", "img/*.*"],
         dest: "build/doc/"
       },
       readme: {

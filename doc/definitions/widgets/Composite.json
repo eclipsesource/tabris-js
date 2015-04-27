@@ -1,7 +1,6 @@
 {
   "type": "Composite",
   "description": "An empty widget that can contain other widgets.",
-  "title": "Composite events",
   "include": ["Widget"],
   "methods": {
     "append": [

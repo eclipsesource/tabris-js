@@ -5,8 +5,8 @@ module.exports = function(grunt) {
 
   grunt.registerTask("generate-doc", function() {
     var data = {
-      widgets: readJson(),
-      types:  readTypes()
+      widgets: readWidgets(),
+      types: readTypes()
     };
     resolveIncludes(data);
     renderWidgets(data);
@@ -15,53 +15,58 @@ module.exports = function(grunt) {
 
   function renderWidgets(data) {
     Object.keys(data.widgets).forEach(function(type) {
-      grunt.file.write(getTargetPath(type), renderWidget(data, type));
+      grunt.file.write(getTargetPath(data.widgets[type]), renderDocument(data, type));
     });
   }
 
   function renderIndex(data) {
-    var types = ["Widget"].concat(_.chain(data.widgets).keys().without("Widget").value());
-    var result = [];
-    types.forEach(function(type) {
-      result.push("- [" + type + "](api/" + type.toLowerCase() + ".md)");
+    grunt.log.verbose.writeln("Generating index");
+    var widgets = ["Widget"].concat(_.chain(data.widgets).keys().without("Widget").value());
+    var widgetIndex = [];
+    widgets.forEach(function(type) {
+      var json = data.widgets[type];
+      widgetIndex.push("- [" + title(json) + "](api/" + baseFileName(json.file) + ".md)");
     });
-    var templData = {data: {widgets: result.join("\n")}};
+    var templData = {data: {widgets: widgetIndex.join("\n")}};
     grunt.file.write(getIndexPath(), grunt.template.process(grunt.file.read(getIndexPath()), templData));
   }
 
-  function renderWidget(data, type) {
-    var widget = data.widgets[type];
+  function renderDocument(data, type) {
+    grunt.log.verbose.writeln("Generating DOC for " + type);
+    var json = data.widgets[type];
     var result = [];
-    var title = widget.type || widget.title;
-    grunt.log.verbose.writeln("Generating DOC for " + title);
-    result.push("# " + title);
-    result.push(renderDescription(widget));
-    result.push(renderMethods(widget, data));
-    result.push(renderProperties(widget, data));
-    result.push(renderEvents(widget, data));
-    result.push(renderLinks(widget));
+    result.push("# " + title(json));
+    result.push(renderDescription(json));
+    if (grunt.file.isFile(getTargetPath(json))) {
+      result.push(grunt.file.read(getTargetPath(json)));
+    }
+    result.push(renderMethods(json, data));
+    result.push(renderProperties(json, data));
+    result.push(renderEvents(json, data));
+    result.push(renderLinks(json));
     return result.filter(notEmpty).join("\n");
   }
 
   function resolveIncludes(data) {
-    var widgets = data.widgets;
-    Object.keys(widgets).forEach(function(type) {
-      var widget = widgets[type];
-      if (widget.include) {
-        widget.include = widget.include.map(function(type) {
-          if (!widgets[type]) {
+    Object.keys(data.widgets).forEach(function(type) {
+      var json = data.widgets[type];
+      if (json.include) {
+        json.include = json.include.map(function(type) {
+          var include = data.widgets[type];
+          if (!include) {
             throw new Error("Could not find included type " + type);
           }
-          return widgets[type];
+          return include;
         });
       }
     });
   }
 
-  function readJson() {
+  function readWidgets() {
     var widgets = {};
-    grunt.file.expand(grunt.config("doc").json).forEach(function(file) {
+    grunt.file.expand(grunt.config("doc").widgets).forEach(function(file) {
       var json = grunt.file.readJSON(file);
+      json.file = file;
       widgets[json.type] = json;
     });
     return widgets;
@@ -74,36 +79,37 @@ module.exports = function(grunt) {
     });
   }
 
-  function getTargetPath(type) {
-    return grunt.config("doc").target + type.toLowerCase() + ".md";
+  function getTargetPath(json) {
+    return grunt.config("doc").target + baseFileName(json.file) + ".md";
   }
 
   function getIndexPath() {
     return grunt.config("doc").index;
   }
 
-  function renderDescription(widget) {
+  function renderDescription(json) {
     var result = [];
-    result.push(widget.description + "\n");
-    if (widget.include) {
+    if (json.description) {
+      result.push(json.description + "\n");
+    }
+    if (json.include) {
       result.push("Includes ");
-      result.push(widget.include.map(function(widget) {
-        var title = widget.type || widget.title;
-        return "[" + title + "](#" + title.toLowerCase().replace(/\s/g, "-") + ")";
+      result.push(json.include.map(function(widget) {
+        return "[" + title(widget) + "](" + widget.type.toLowerCase() + ".md)";
       }).join(", "));
       result.push("\n");
     }
     return result.join("");
   }
 
-  function renderMethods(widget, data) {
-    if (!widget.methods) {
+  function renderMethods(json, data) {
+    if (!json.methods) {
       return "";
     }
     var result = [];
     result.push("## Methods\n");
-    Object.keys(widget.methods).sort().forEach(function(name) {
-      widget.methods[name].forEach(function(desc) {
+    Object.keys(json.methods).sort().forEach(function(name) {
+      Array.prototype.forEach.call(json.methods[name], function(desc) {
         result.push(renderMethod(name, desc, data));
       });
     });
@@ -126,14 +132,14 @@ module.exports = function(grunt) {
     return result.join("\n");
   }
 
-  function renderProperties(widget, data) {
-    if (!widget.properties) {
+  function renderProperties(json, data) {
+    if (!json.properties) {
       return "";
     }
     var result = [];
     result.push("## Properties\n");
-    Object.keys(widget.properties).sort().forEach(function(name) {
-      var property = widget.properties[name];
+    Object.keys(json.properties).sort().forEach(function(name) {
+      var property = json.properties[name];
       result.push("### ", name, "\n");
       result.push("Type: ", renderPropertyType(property.type, data), "\n");
       if (property.description) {
@@ -141,7 +147,7 @@ module.exports = function(grunt) {
       }
       if (property.static) {
         result.push("<br/>This property can only be set in the `tabris.create` method. " +
-                    "It cannot be changed after widget creation.");
+        "It cannot be changed after widget creation.");
       }
       result.push("\n");
     });
@@ -162,14 +168,14 @@ module.exports = function(grunt) {
     return result.join("");
   }
 
-  function renderEvents(widget, data) {
-    if (!widget.events) {
+  function renderEvents(json, data) {
+    if (!json.events) {
       return "";
     }
     var result = [];
     result.push("## Events\n");
-    Object.keys(widget.events).sort().forEach(function(name) {
-      var event = widget.events[name];
+    Object.keys(json.events).sort().forEach(function(name) {
+      var event = json.events[name];
       result.push("### \"", name, "\" (" + renderParamList(event.parameters, data) + ")\n");
       if (event.parameters) {
         result.push("\n**Parameters:** " + renderParamList(event.parameters, data, true) + "\n");
@@ -189,21 +195,26 @@ module.exports = function(grunt) {
       }).join(", ");
     }
     return "\n\n" + parameters.map(function(param) {
-      var name = typeof param === "object" ? param.name : param;
-      var type = typeof param === "object" ? param.type : null;
-      var desc = typeof param === "object" ? param.description : null;
-      return "- " + name + ": " + (type ? "*" + renderTypeLink(type, data) + "*" : "") +
-        (desc ? (", " + firstCharLower(desc)) : "");
-    }).join("\n");
+        var result = ["- ", param.name, ": "];
+        if (param.type) {
+          result.push("*", renderTypeLink(param.type, data), "*");
+        } else if (param.value) {
+          result.push("`", param.value, "`");
+        }
+        if (param.description) {
+          result.push(", " + firstCharLower(param.description));
+        }
+        return result.join("");
+      }).join("\n");
   }
 
-  function renderLinks(widget) {
-    if (!widget.links) {
+  function renderLinks(json) {
+    if (!json.links) {
       return "";
     }
     var result = [];
     result.push("## See also\n");
-    widget.links.forEach(function(link) {
+    json.links.forEach(function(link) {
       result.push("- [", link.title, "](", link.path, ")\n");
     });
     return result.join("");
@@ -235,6 +246,14 @@ module.exports = function(grunt) {
 
   function firstCharLower(str) {
     return str.charAt(0).toLowerCase() + str.slice(1);
+  }
+
+  function title(json) {
+    return json.title || json.type || json.object;
+  }
+
+  function baseFileName(file) {
+    return file.slice(file.lastIndexOf("/") + 1, file.lastIndexOf("."));
   }
 
 };
