@@ -121,6 +121,20 @@
       "description": "Whether the entire widget should be highlighted while touched."
     }
   },
+  "fields": {
+    "id": {
+      "type": "string",
+      "description": "Direct access to the value of the property of the same name. May be used instead of `widget.get(\"id\");` Do not use this field to change the value, instead use `widget.set(\"id\", id);`."
+    },
+    "cid": {
+      "type": "string",
+      "description": "An application-wide unique identifier automatically assigned to all widgets on creation. Do not change it."
+    },
+    "type": {
+      "type": "string",
+      "description": "The exact string that was used to create this widget using the `tabris.create` method."
+    }
+  },
   "events": {
     "change:{property}": {
       "parameters": [
