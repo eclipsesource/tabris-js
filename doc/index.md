@@ -19,11 +19,14 @@ Tabris.js is a mobile framework that lets you develop native iOS and Android app
 - [Cordova Support](cordova.md) - Using Cordova plug-ins, including Dialogs, File and Camera
 - [Build your app](build.md) - Create a standalone app from your Tabris.js project files
 
-## Widgets
-<%= widgets %>
 
-## Other API
-- [Miscellaneous Types](types.md)
+## API Reference
+
+<%= api %>
+- [Data Types](types.md)
+
+### Widgets
+<%= widgets %>
 
 ## Articles
 - [Apache Cordova vs. Tabris.js](http://eclipsesource.com/blogs/2015/03/02/apache-cordova-vs-tabris-js/) - How to use Cordova's build tooling to create Tabris.js apps.
