@@ -143,8 +143,8 @@ module.exports = function(grunt) {
       }
     },
     doc: {
-      widgets: "doc/definitions/widgets/*.json",
-      api: "doc/definitions/*.json",
+      widgets: "doc/api/widgets/*.json",
+      api: "doc/api/*.json",
       target: "build/doc/api/",
       index: "build/doc/index.md",
       types: "build/doc/types.md"
