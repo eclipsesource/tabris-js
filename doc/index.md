@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Tabris.js is a mobile framework that lets you develop native iOS and Android apps entirely in JavaScript. You can develop your apps cross-platform, without the typical performance penalties you know from other cross-platform toolkits (no WebViews involved). You are more than welcome to use existing JavaScript libraries and native extensions to build upon the core functionality.
+Tabris.js is a mobile framework that lets you develop native iOS and Android apps from a single code base written entirely in JavaScript. Tabris.js is a good choice when you are looking for native performance and look & feel while leveraging your JavaScript know-how. Tabris.js has been crafted with web APIs and extensibility on our minds. You can use existing JavaScript libraries and native extensions to extend the core functionality.
 
 ## For Beginners
 - [Getting Started](getting-started.md) - Detailed instructions for the full Tabris.js experience
