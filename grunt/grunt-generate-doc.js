@@ -119,7 +119,7 @@ module.exports = function (grunt) {
     if (json.include) {
       result.push("Includes ");
       result.push(json.include.map(function (widget) {
-        return "[" + title(widget) + "](" + widget.type.toLowerCase() + ".md)";
+        return "[" + title(widget) + "](" + widget.type + ".md)";
       }).join(", "));
       result.push("\n");
     }
@@ -266,9 +266,9 @@ module.exports = function (grunt) {
     if (data.types.indexOf(name.toLowerCase()) !== -1) {
       return "[" + name + "](" + getTypeDocPath() + "#" + name + ")";
     } else if (data.widgets[firstCharUp(name)]) {
-      return "[" + name + "](" + name.toLowerCase() + ".md)";
+      return "[" + name + "](" + name + ".md)";
     } else if (data.api[firstCharUp(name)]) {
-      return "[" + name + "](" + name.toLowerCase() + ".md)";
+      return "[" + name + "](" + name + ".md)";
     } else {
       return name;
     }
