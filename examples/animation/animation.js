@@ -11,7 +11,7 @@ tabris.create("Button", {
   layoutData: {left: MARGIN, right: MARGIN, top: MARGIN}
 }).on("select", function(button) {
   button.set("enabled", false);
-  page.children("#helloLabel").once("animationend", function() {
+  page.children("#helloLabel").first().once("animationend", function() {
     button.set("enabled", true);
   }).animate({
     opacity: 0.25,
