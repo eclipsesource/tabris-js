@@ -1,12 +1,18 @@
 # Tabris.js release engineering
 
+### Check versions
+
+When the minor or major version has been changed, ensure that the version number in the documentation matches. Only the major.minor version is relevant for the documentation, because patch versions do not affect the feature set.
+
+Adjust dependencies in snippets / examples if needed.
+
 ### Set an *annotated* tag
 
-    git tag -a v0.x.x
+    git tag -a v1.x.x
 
 ### Push it to github (gerrit does not yet allow for tags)
 
-    git push origin v0.x.x
+    git push github v1.x.x
 
 ### Trigger a Jenkins build and keep it
 
@@ -25,17 +31,11 @@ https://build.eclipsesource.com/tabris/jenkins/job/tabris-js
 
     cd build/tabris
     npm login
+    npm whoami (should be eclipsesource)
     npm publish .
 
 The tgz archive transmitted to npm can be found in `~/.npm/tabris/0.x.x/package.tgz`.
 
-### Increment patch version
+### Increment patch version in package.json
 
 According to [Semantic Versioning](http://semver.org), backwards-compatible fixes must increment the patch version. Doing this before any changes ensures that it won't be forgotten.
-
-Increment the version in:
-
-- package.json
-- documentation
-
-Snippets / examples dependencies should be adjusted as needed.
