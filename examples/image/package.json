@@ -4,6 +4,6 @@
   "category": "Image, Video",
   "main": "image.js",
   "dependencies": {
-    "tabris": "1.0.0"
+    "tabris": "^1.0.0"
   }
 }

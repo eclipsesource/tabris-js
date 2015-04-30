@@ -4,6 +4,6 @@
   "description": "Play video",
   "main": "video.js",
   "dependencies": {
-    "tabris": "1.0.0"
+    "tabris": "^1.0.0"
   }
 }

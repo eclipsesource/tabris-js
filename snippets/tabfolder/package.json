@@ -4,6 +4,6 @@
   "description": "A swipe enabled Tab Folder with 3 tabs",
   "main": "tabfolder.js",
   "dependencies": {
-    "tabris": "1.0.0"
+    "tabris": "^1.0.0"
   }
 }

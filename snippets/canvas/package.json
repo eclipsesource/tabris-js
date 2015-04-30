@@ -4,6 +4,6 @@
   "description": "Draw shapes on a canvas using HTML5 Canvas API",
   "main": "canvas.js",
   "dependencies": {
-    "tabris": "1.0.0"
+    "tabris": "^1.0.0"
   }
 }

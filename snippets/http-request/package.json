@@ -4,6 +4,6 @@
   "description": "Use XMLHttpRequest to fetch JSON data from a web service",
   "main": "http-request.js",
   "dependencies": {
-    "tabris": "1.0.0"
+    "tabris": "^1.0.0"
   }
 }

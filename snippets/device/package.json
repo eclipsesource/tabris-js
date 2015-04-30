@@ -4,6 +4,6 @@
   "description": "Display available device information",
   "main": "device.js",
   "dependencies": {
-    "tabris": "1.0.0"
+    "tabris": "^1.0.0"
   }
 }

@@ -4,6 +4,6 @@
   "description": "Creating text views with different alignments",
   "main": "textview.js",
   "dependencies": {
-    "tabris": "1.0.0"
+    "tabris": "^1.0.0"
   }
 }

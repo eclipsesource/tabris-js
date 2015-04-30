@@ -4,6 +4,6 @@
   "description": "Overlapping widgets",
   "main": "z-order.js",
   "dependencies": {
-    "tabris": "1.0.0"
+    "tabris": "^1.0.0"
   }
 }
