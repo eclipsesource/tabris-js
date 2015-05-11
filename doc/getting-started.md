@@ -93,22 +93,30 @@ button.on("select", function() {
 page.open();
 ```
 
+### Install the tabris module
+
+The *tabris* module is available on [npm](https://www.npmjs.com/package/tabris). It can be installed using the `npm` command line interface that is available when you have [node.js](http://nodejs.org/) installed on your development machine.
+
+Change to a command line in your project directory and run:
+
+    npm install
+
+This will install the tabris module (the version specified in the `package.json`) in a folder named `node_modules` in your project. You need to do this once for every project.
+
 ### Test your app
 
-First, make sure the following prerequisites are met:
+You can test your app on an Android or iOS device (real or emulated) if the following preconditions are met:
 
- - Your target Android/iOS device (real or emulated) is connected to the same network as your development machine. You have the developer app installed and are logged in with your GitHub account. 
- - You have [node.js](http://nodejs.org/) installed on your development machine and you can execute the `npm` command from the command line. 
- 
+* you have the developer app installed on the device
+* you are logged in with your GitHub account
+* your device is connected to the same network as your development machine
+
 In your Tabris.js project directory, type the following:
 
     npm install http-server -g
-    npm install
     http-server
 
-The first line installs the http-server we use. You only need to do this once.
-The second line installs Tabris.js (the version given in the `package.json`) in your project. You need to do this once per project. 
-The third line starts the http-server. The server needs to run as long as you test the application.
+The first line installs a simple http-server on your system. You only need to do this once. The second line starts the http-server in the working directory. Keep it running as long as you test the application.
 
 In the URL tab of the developer app, enter:
 
