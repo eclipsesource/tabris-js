@@ -44,6 +44,8 @@ Every module is loaded exactly once, no matter how often it is imported. Therefo
 
 This is also true when the module imported using different identifier strings, i.e. with and without extension, or from different scripts.
 
+The Developer App usually loads modules from an HTTP server. For some larger modules this may slow down the application significantly. However, you can [build your own developer app](build.md) and include any number of files. When a requested module is available on the device, the local resource will be used and no HTTP request will be issued.
+
 ## Module Types
 
 ### Script Modules
