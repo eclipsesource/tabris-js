@@ -1,5 +1,5 @@
 # Cordova Plug-Ins Support
-The Tabris.js API is primarily a UI/widget library, with some [additional browser-inspired APIs](w3c-api.md.md). To provide features not covered by either of these, Tabris.js can be extended with [Apache Cordova](http://cordova.apache.org/) plug-ins.
+The Tabris.js API is primarily a UI/widget library, with some [additional browser-inspired APIs](w3c-api.md). To provide features not covered by either of these, Tabris.js can be extended with [Apache Cordova](http://cordova.apache.org/) plug-ins.
 
 The JavaScript API documentation of a Cordova plug-ins is also valid in Tabris.js, with one minor exception: It is **not** necessary to listen to the `deviceready` event before accessing plug-in API. All plug-ins will be ready when the applications main module is loaded.
 
