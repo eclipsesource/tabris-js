@@ -1,5 +1,7 @@
 # Tabris.js
 
+[![Join the chat at https://gitter.im/eclipsesource/tabris-js](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/eclipsesource/tabris-js?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Tabris.js is a cross-platform mobile framework that uses native widgets. Snippets and examples can be found on [tabrisjs.com](http://tabrisjs.com).
 
 ## Source code
