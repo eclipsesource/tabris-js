@@ -12,6 +12,13 @@ var label = tabris.create("TextView", {
   text: "Pause and resume this app!"
 }).appendTo(page);
 
+tabris.create("Button", {
+  layoutData: {centerX: 0, bottom: 32},
+  text: "Reload"
+}).on("select", function() {
+  tabris.app.reload();
+}).appendTo(page);
+
 tabris.app.on("pause", function() {
   paused = Date.now();
 }).on("resume", function() {

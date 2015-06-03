@@ -52,4 +52,14 @@ describe("App", function() {
     }).toThrow();
   });
 
+  describe("reload", function() {
+    it("issues CALL to reload", function() {
+      spyOn(nativeBridge, "call");
+
+      app.reload();
+
+      expect(nativeBridge.call).toHaveBeenCalledWith("tabris.App", "reload", {});
+    });
+  });
+
 });

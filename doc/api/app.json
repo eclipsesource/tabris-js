@@ -15,5 +15,13 @@
       ],
       "description": "Fired after the application returned from hibernation."
     }
+  },
+  "methods": {
+    "reload": [
+      {
+        "parameters": [],
+        "description": "Forces the running application to reload the main module and start over."
+      }
+    ]
   }
 }

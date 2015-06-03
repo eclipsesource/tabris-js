@@ -6,6 +6,9 @@ tabris.registerType("_App", {
   },
   dispose: function() {
     throw new Error("tabris.app can not be disposed");
+  },
+  reload: function() {
+    this._nativeCall("reload", {});
   }
 });
 
