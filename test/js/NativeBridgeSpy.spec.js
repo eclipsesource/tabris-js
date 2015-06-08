@@ -76,10 +76,6 @@ describe("NativeBridgeSpy", function() {
       expect(nativeBridge.calls().length).toBe(0);
     });
 
-    it("result list supports select", function() {
-      expect(nativeBridge.calls().select().length).toBe(0);
-    });
-
   });
 
   describe("when calls have been made", function() {
@@ -97,10 +93,6 @@ describe("NativeBridgeSpy", function() {
 
     it("result list can be filtered", function() {
       expect(nativeBridge.calls({id: "id1"}).length).toBe(2);
-    });
-
-    it("filtered result list supports select", function() {
-      expect(nativeBridge.calls({id: "id1"}).select({op: "set"}).length).toBe(1);
     });
 
   });

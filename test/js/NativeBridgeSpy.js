@@ -4,7 +4,6 @@
 
   NativeBridgeSpy = function() {
     this._calls = [];
-    this._calls.select = select;
   };
 
   NativeBridgeSpy.prototype = {
@@ -65,19 +64,18 @@
 
     calls: function(filterProperties) {
       tabris._nativeBridge.flush();
-      return this._calls.select(filterProperties);
+      return select.call(this._calls, filterProperties);
     },
 
     resetCalls: function() {
       tabris._nativeBridge.flush();
       this._calls = [];
-      this._calls.select = select;
     }
 
   };
 
-  var select = function(filterProperties) {
-    var result = this.filter(function(call) {
+  function select(filterProperties) {
+    return this.filter(function(call) {
       for (var key in filterProperties) {
         if (filterProperties[key] !== call[key]) {
           return false;
@@ -85,8 +83,6 @@
       }
       return true;
     });
-    result.select = this.select;
-    return result;
-  };
+  }
 
 }());
