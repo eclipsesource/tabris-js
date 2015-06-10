@@ -1,0 +1,66 @@
+{
+  "object": "window",
+  "description": "The object `window` is the global object. All fields of windows are also global variables and vice versa. For compatibility it is also known as `global` and `self`.",
+  "methods": {
+    "setTimeout": [
+      {
+        "parameters": [
+          {"name": "callback", "type": "Function", "description": "The function to call."}
+        ],
+        "description": "Calls the given function as soon as the current javascript thread is no longer busy. Same as `setTimeout(callback, 0)`.",
+        "returns": "timeoutID"
+      },
+      {
+        "parameters": [
+          {"name": "callback", "type": "Function", "description": "The function to call."},
+          {"name": "delay", "type": "number", "description": "The delay in milliseconds."}
+        ],
+        "description": "Calls the given function after the specified delay. The actual delay may be slightly longer than the given one.",
+        "returns": "timeoutID"
+      },
+      {
+        "parameters": [
+          {"name": "callback", "type": "Function", "description": "The function to call."},
+          {"name": "delay", "type": "number", "description": "The delay in milliseconds."},
+          {"name": "param*", "type": "mixed", "description": "One ore more values passed on to the callback."}
+        ],
+        "description": "Calls the given function with `param` (and all following parameters) after the specified delay. The actual delay may be slightly longer than the given one.",
+        "returns": "timeoutID"
+      }
+    ],
+    "setInterval": [
+      {
+        "parameters": [
+          {"name": "callback", "type": "Function", "description": "The function to call."},
+          {"name": "delay", "type": "number", "description": "The delay in milliseconds."}
+        ],
+        "description": "Calls the given function repeatedly, each times waiting the given delay. The actual delay may be slightly longer than the given one.",
+        "returns": "intervalID"
+      },
+      {
+        "parameters": [
+          {"name": "callback", "type": "Function", "description": "The function to call."},
+          {"name": "delay", "type": "number", "description": "The delay in milliseconds."},
+          {"name": "param*", "type": "mixed", "description": "One ore more values passed on to the callback."}
+        ],
+        "description": "Calls the given function repeatedly, each times waiting the given delay. The actual delay may be slightly longer than the given one.",
+        "returns": "intervalID"
+      }
+    ],
+    "clearTimeout": [
+      {
+        "parameters": [
+          {"name": "id", "type": "timeoutID", "description": "The ID that was returned by `setTimeout`."}
+        ],
+        "description": "Cancels the running timeout associated with the given id. When given an invalid ID, nothing happens."
+      }
+    ],
+    "clearInterval": [
+      {
+        "parameters": [
+          {"name": "id", "type": "intervalID", "description": "The ID that was returned by `setInterval`."}
+        ],
+        "description": "Cancels the running interval associated with the given id. When given an invalid ID, nothing happens."
+      }
+    ]
+  }}

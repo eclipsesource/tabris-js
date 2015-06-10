@@ -180,6 +180,27 @@ describe("WindowTimers", function() {
           expect(createCall().properties.delay).toBe(3);
         });
 
+        it("passes zero parameters to callback", function() {
+          target[method](callback, delay);
+          tabris._notify(createCall().id, "Run", {});
+
+          expect(callback).toHaveBeenCalledWith();
+        });
+
+        it("passes one parameter to callback", function() {
+          target[method](callback, delay, 1);
+          tabris._notify(createCall().id, "Run", {});
+
+          expect(callback).toHaveBeenCalledWith(1);
+        });
+
+        it("passes four parameter to callback", function() {
+          target[method](callback, delay, 1, 2, 3, 4);
+          tabris._notify(createCall().id, "Run", {});
+
+          expect(callback).toHaveBeenCalledWith(1, 2, 3, 4);
+        });
+
       });
 
     });

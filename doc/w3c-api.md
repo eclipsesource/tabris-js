@@ -22,7 +22,7 @@ Calling `console.error` will also cause a message to pop up (even if the develop
 
 ## Timer
 
-Tabris supports the timer methods `setTimeout`, `setInterval` and `clearTimeout`.
+Tabris supports the timer methods `setTimeout`, `setInterval`, `clearTimeout` and `clearInterval`. See [window](api/window.md).
 
 See [W3C](http://www.w3.org/TR/2011/WD-html5-20110525/timers.html#timers) / [MDN](https://developer.mozilla.org/en-US/Add-ons/Code_snippets/Timers)
 
@@ -55,7 +55,7 @@ See [W3C](http://dev.w3.org/html5/webstorage/) / [MDN](https://developer.mozilla
 
 ## Canvas Context
 
-The `Canvas` widget provides an HTML5 canvas compatible "2D Context" object. See [Canvas](canvas.md).
+The `Canvas` widget provides an HTML5 canvas compatible "2D Context" object. See [Canvas](api/canvas.md).
 
 See [W3C](http://www.w3.org/TR/2dcontext/) / [MDN](https://developer.mozilla.org/en/docs/Web/API/CanvasRenderingContext2D)
 

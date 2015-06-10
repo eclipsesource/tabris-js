@@ -15,7 +15,7 @@
     var taskSequence = 0;
     var timers = {};
 
-    function createTimer(fn, delay, repeat) {
+    function createTimer(fn, delay, repeat, args) {
       var taskId = taskSequence++;
       // If tabris is not ready, create the timer on load.
       // However, clearTimeout won't work until after load.
@@ -24,7 +24,7 @@
           delay: delay,
           repeat: repeat
         }).on("Run", function() {
-          fn.call();
+          fn.apply(window, args);
           if (!repeat) {
             timer.dispose();
             delete timers[taskId];
@@ -37,11 +37,13 @@
     }
 
     target.setTimeout = function(fn, delay) {
-      return createTimer(fn, adjustDelay(delay), false);
+      var args = Array.prototype.slice.call(arguments, 2);
+      return createTimer(fn, adjustDelay(delay), false, args);
     };
 
     target.setInterval = function(fn, delay) {
-      return createTimer(fn, adjustDelay(delay), true);
+      var args = Array.prototype.slice.call(arguments, 2);
+      return createTimer(fn, adjustDelay(delay), true, args);
     };
 
     target.clearTimeout = target.clearInterval = function(taskId) {
