@@ -24,298 +24,160 @@ describe("WindowTimers", function() {
     expect(target.clearInterval).toBe(clearInterval);
   });
 
-  describe("created methods", function() {
+  describe("created methods:", function() {
+
+    var delay = 23;
+    var taskId;
+    var callback;
+    var createCall = function() { return nativeBridge.calls({op: "create", type: "tabris.Timer"})[0]; };
+    var listenCall = function() { return nativeBridge.calls({id: createCall().id, op: "listen", event: "Run"})[0]; };
+    var startCall = function() { return nativeBridge.calls({id: createCall().id, op: "call", method: "start"})[0]; };
 
     beforeEach(function() {
       tabris._addWindowTimerMethods(target);
+      callback = jasmine.createSpy("callback");
     });
 
-    describe("setTimeout", function() {
+    ["setTimeout", "setInterval"].forEach(function(method) {
 
-      var delay = 23;
-      var taskId;
-      var callback;
-      var createCall, listenCall, startCall;
+      var isInterval = method === "setInterval";
 
-      beforeEach(function() {
-        callback = jasmine.createSpy("callback");
-        taskId = target.setTimeout(callback, delay);
-        createCall = nativeBridge.calls({op: "create", type: "tabris.Timer"})[0];
-        listenCall = nativeBridge.calls({id: createCall.id, op: "listen", event: "Run"})[0];
-        startCall = nativeBridge.calls({id: createCall.id, op: "call", method: "start"})[0];
-      });
+      describe(method, function() {
 
-      it("creates native Timer", function() {
-        expect(createCall).toBeDefined();
-      });
+        describe("when called with delay", function() {
 
-      it("creates native Timer when tabris is being started", function() {
-        tabris._ready = false;
-        taskId = target.setTimeout(callback, delay);
+          beforeEach(function() {
+            taskId = target[method](callback, delay);
+          });
 
-        tabris._init(nativeBridge);
+          it("creates native Timer", function() {
+            expect(createCall()).toBeDefined();
+          });
 
-        createCall = nativeBridge.calls({op: "create", type: "tabris.Timer"})[0];
-        expect(createCall).toBeDefined();
-      });
+          it("passes arguments to Timer creation", function() {
+            expect(createCall().properties.delay).toBe(delay);
+            expect(createCall().properties.repeat).toBe(isInterval);
+          });
 
-      it("passes arguments to Timer creation", function() {
-        expect(createCall.properties.delay).toBe(delay);
-        expect(createCall.properties.repeat).toBe(false);
-      });
+          it("listens on Run event of native Timer", function() {
+            expect(listenCall()).toBeDefined();
+          });
 
-      it("passes 0 delay when argument left out", function() {
-        nativeBridge.resetCalls();
-        target.setTimeout(callback);
-        createCall = nativeBridge.calls({op: "create", type: "tabris.Timer"})[0];
+          it("starts the native Timer", function() {
+            expect(startCall()).toBeDefined();
+          });
 
-        expect(createCall.properties.delay).toBe(0);
-      });
+          it("create, listen, start are called in this order", function() {
+            var createPosition = nativeBridge.calls().indexOf(createCall());
+            var listenPosition = nativeBridge.calls().indexOf(listenCall());
+            var startPosition = nativeBridge.calls().indexOf(startCall());
+            expect(listenPosition).toBeGreaterThan(createPosition);
+            expect(startPosition).toBeGreaterThan(listenPosition);
+          });
 
-      it("passes 0 delay when argument is not a number", function() {
-        [1 / 0, NaN, "", {}, false].forEach(function(value) {
-          nativeBridge.resetCalls();
-          target.setTimeout(callback, value);
-          createCall = nativeBridge.calls({op: "create", type: "tabris.Timer"})[0];
+          it("returns a number", function() {
+            expect(typeof taskId).toBe("number");
+          });
 
-          expect(createCall.properties.delay).toBe(0);
-        });
-      });
+          it("returns ascending numbers", function() {
+            var nextTaskId = target[method](callback, 23);
+            expect(nextTaskId).toBeGreaterThan(taskId);
+          });
 
-      it("passes 0 delay when argument is negative", function() {
-        nativeBridge.resetCalls();
-        target.setTimeout(callback, -1);
-        createCall = nativeBridge.calls({op: "create", type: "tabris.Timer"})[0];
+          it("returned numbers don't clash with other method", function() {
+            var otherMethod = isInterval ? "setTimeout" : "setInterval";
+            var timeoutTaskId = target[otherMethod](callback, delay);
+            expect(timeoutTaskId).toBeGreaterThan(taskId);
+          });
 
-        expect(createCall.properties.delay).toBe(0);
-      });
+          describe("and timer is notified, ", function() {
 
-      it("passes rounded delay", function() {
-        nativeBridge.resetCalls();
-        target.setTimeout(callback, 3.14);
-        createCall = nativeBridge.calls({op: "create", type: "tabris.Timer"})[0];
+            beforeEach(function() {
+              tabris._notify(createCall().id, "Run", {});
+            });
 
-        expect(createCall.properties.delay).toBe(3);
-      });
+            it("callback is called", function() {
+              expect(callback).toHaveBeenCalled();
+            });
 
-      it("listens on Run event of native Timer", function() {
-        expect(listenCall).toBeDefined();
-      });
+            if (isInterval) {
+              it("timer is not disposed", function() {
+                var destroyCall = nativeBridge.calls({id: createCall().id, op: "destroy"})[0];
+                expect(destroyCall).not.toBeDefined();
+              });
+            } else {
+              it("timer is disposed", function() {
+                var destroyCall = nativeBridge.calls({id: createCall().id, op: "destroy"})[0];
+                expect(destroyCall).toBeDefined();
+              });
+            }
 
-      it("starts the native Timer", function() {
-        expect(startCall).toBeDefined();
-      });
+          });
 
-      it("create, listen, start are called in this order", function() {
-        var createPosition = nativeBridge.calls().indexOf(createCall);
-        var listenPosition = nativeBridge.calls().indexOf(listenCall);
-        var startPosition = nativeBridge.calls().indexOf(startCall);
-        expect(listenPosition).toBeGreaterThan(createPosition);
-        expect(startPosition).toBeGreaterThan(listenPosition);
-      });
+          ["clearTimeout", "clearInterval"].forEach(function(clearMethod) {
 
-      it("returns a number", function() {
-        expect(typeof taskId).toBe("number");
-      });
+            describe("and " + clearMethod + " is called", function() {
 
-      it("returns ascending numbers", function() {
-        var nextTaskId = target.setTimeout(callback, 23);
-        expect(nextTaskId).toBeGreaterThan(taskId);
-      });
+              beforeEach(function() {
+                target[clearMethod](taskId);
+              });
 
-      describe("when notified", function() {
+              it("calls native cancelTask", function() {
+                var cancelCall = nativeBridge.calls({id: createCall().id, op: "call", method: "cancel"})[0];
+                expect(cancelCall).toBeDefined();
+              });
 
-        beforeEach(function() {
-          tabris._notify(createCall.id, "Run", {});
-        });
+              it("destroys native timer", function() {
+                var destroyCall = nativeBridge.calls({id: createCall().id, op: "destroy"})[0];
+                expect(destroyCall).toBeDefined();
+              });
 
-        it("callback is called", function() {
-          expect(callback).toHaveBeenCalled();
-        });
+              it("tolerates unknown taskId", function() {
+                expect(function() {
+                  target.clearInterval(taskId + 1);
+                }).not.toThrow();
+              });
 
-        it("timer is disposed", function() {
-          var destroyCall = nativeBridge.calls({id: createCall.id, op: "destroy"})[0];
-          expect(destroyCall).toBeDefined();
+            });
+
+          });
+
         });
 
-      });
+        it("creates native Timer when tabris is being started", function() {
+          tabris._ready = false;
+          taskId = target[method](callback, delay);
 
-      describe("clearTimeout", function() {
+          tabris._init(nativeBridge);
 
-        beforeEach(function() {
-          target.clearTimeout(taskId);
+          expect(createCall()).toBeDefined();
         });
 
-        it("calls native cancelTask", function() {
-          var cancelCall = nativeBridge.calls({id: createCall.id, op: "call", method: "cancel"})[0];
-          expect(cancelCall).toBeDefined();
+        it("passes 0 delay when argument is left out", function() {
+          target[method](callback);
+
+          expect(createCall().properties.delay).toBe(0);
         });
 
-        it("destroys native timer", function() {
-          var destroyCall = nativeBridge.calls({id: createCall.id, op: "destroy"})[0];
-          expect(destroyCall).toBeDefined();
+        it("passes 0 delay when argument is not a number", function() {
+          [1 / 0, NaN, "", {}, false].forEach(function(value) {
+            nativeBridge.resetCalls();
+            target[method](callback, value);
+
+            expect(createCall().properties.delay).toBe(0);
+          });
         });
 
-        it("tolerates unknown taskId", function() {
-          expect(function() {
-            target.clearTimeout(taskId + 1);
-          }).not.toThrow();
+        it("passes 0 delay when argument is negative", function() {
+          target[method](callback, -1);
+
+          expect(createCall().properties.delay).toBe(0);
         });
 
-      });
+        it("passes rounded delay", function() {
+          target[method](callback, 3.14);
 
-      describe("clearInterval", function() {
-
-        beforeEach(function() {
-          target.clearInterval(taskId);
-        });
-
-        it("calls native cancelTask", function() {
-          var cancelCall = nativeBridge.calls({id: createCall.id, op: "call", method: "cancel"})[0];
-          expect(cancelCall).toBeDefined();
-        });
-
-        it("destroys native timer", function() {
-          var destroyCall = nativeBridge.calls({id: createCall.id, op: "destroy"})[0];
-          expect(destroyCall).toBeDefined();
-        });
-
-        it("tolerates unknown taskId", function() {
-          expect(function() {
-            target.clearInterval(taskId + 1);
-          }).not.toThrow();
-        });
-
-      });
-
-    });
-
-    describe("setInterval", function() {
-
-      var delay = 23;
-      var taskId;
-      var callback;
-      var createCall, listenCall, startCall;
-
-      beforeEach(function() {
-        callback = jasmine.createSpy("callback");
-        taskId = target.setInterval(callback, delay);
-        createCall = nativeBridge.calls({op: "create", type: "tabris.Timer"})[0];
-        listenCall = nativeBridge.calls({id: createCall.id, op: "listen", event: "Run"})[0];
-        startCall = nativeBridge.calls({id: createCall.id, op: "call", method: "start"})[0];
-      });
-
-      it("creates native Timer", function() {
-        expect(createCall).toBeDefined();
-      });
-
-      it("passes arguments to Timer creation", function() {
-        expect(createCall.properties.delay).toBe(delay);
-        expect(createCall.properties.repeat).toBe(true);
-      });
-
-      it("passes 0 delay when argument left out", function() {
-        nativeBridge.resetCalls();
-        target.setInterval(callback);
-        createCall = nativeBridge.calls({op: "create", type: "tabris.Timer"})[0];
-
-        expect(createCall.properties.delay).toBe(0);
-      });
-
-      it("passes 0 delay when argument is not a number", function() {
-        [1 / 0, NaN, "", {}, false].forEach(function(value) {
-          nativeBridge.resetCalls();
-          target.setInterval(callback, value);
-          createCall = nativeBridge.calls({op: "create", type: "tabris.Timer"})[0];
-
-          expect(createCall.properties.delay).toBe(0);
-        });
-      });
-
-      it("passes 0 delay when argument is negative", function() {
-        nativeBridge.resetCalls();
-        target.setInterval(callback, -1);
-        createCall = nativeBridge.calls({op: "create", type: "tabris.Timer"})[0];
-
-        expect(createCall.properties.delay).toBe(0);
-      });
-
-      it("passes rounded delay", function() {
-        nativeBridge.resetCalls();
-        target.setInterval(callback, 3.14);
-        createCall = nativeBridge.calls({op: "create", type: "tabris.Timer"})[0];
-
-        expect(createCall.properties.delay).toBe(3);
-      });
-
-      it("listens on Run event of native Timer", function() {
-        expect(listenCall).toBeDefined();
-      });
-
-      it("starts the native Timer", function() {
-        expect(startCall).toBeDefined();
-      });
-
-      it("create, listen, start are called in this order", function() {
-        var createPosition = nativeBridge.calls().indexOf(createCall);
-        var listenPosition = nativeBridge.calls().indexOf(listenCall);
-        var startPosition = nativeBridge.calls().indexOf(startCall);
-        expect(listenPosition).toBeGreaterThan(createPosition);
-        expect(startPosition).toBeGreaterThan(listenPosition);
-      });
-
-      it("returns a number", function() {
-        expect(typeof taskId).toBe("number");
-      });
-
-      it("returns ascending numbers", function() {
-        var nextTaskId = target.setInterval(callback, delay);
-        expect(nextTaskId).toBeGreaterThan(taskId);
-      });
-
-      it("returned numbers don't clash with getTimeout", function() {
-        var timeoutTaskId = target.setTimeout(callback, delay);
-        expect(timeoutTaskId).toBeGreaterThan(taskId);
-      });
-
-      describe("when notified", function() {
-
-        beforeEach(function() {
-          tabris._notify(createCall.id, "Run", {});
-        });
-
-        it("callback is called", function() {
-          expect(callback).toHaveBeenCalled();
-        });
-
-        it("callback is called on subsequent Run events", function() {
-          tabris._notify(createCall.id, "Run", {});
-
-          expect(callback.calls.count()).toBe(2);
-        });
-
-      });
-
-      describe("clearInterval", function() {
-
-        beforeEach(function() {
-          target.clearInterval(taskId);
-        });
-
-        it("calls native cancelTask", function() {
-          var calls = nativeBridge.calls({id: createCall.id, op: "call", method: "cancel"});
-          expect(calls.length).toBe(1);
-        });
-
-        it("destroys native timer", function() {
-          var destroyCall = nativeBridge.calls({id: createCall.id, op: "destroy"})[0];
-          expect(destroyCall).toBeDefined();
-        });
-
-        it("tolerates unknown taskId", function() {
-          expect(function() {
-            target.clearInterval(taskId + 1);
-          }).not.toThrow();
+          expect(createCall().properties.delay).toBe(3);
         });
 
       });
