@@ -18,6 +18,8 @@ A page can also be removed from the stack by calling its `close()` method. When 
 
 ![Closing a page on the stack](img/page-close.png)
 
+There must always be one active page remaining in an application. Because of that, closing the last page on the stack will lead to an error.
+
 Just like other widgets, a page is created using the `tabris.create()` method. All pages are automatically children of `tabris.ui`, so they don't have to be added to a parent.
 
 ```js
