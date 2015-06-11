@@ -177,6 +177,20 @@ describe("gestures:", function() {
 
   });
 
+  describe("when no gestures are configured", function() {
+
+    beforeEach(function() {
+      widget = tabris.create("TestType", {});
+    });
+
+    it("ignores removing a gesture listener (see #368)", function() {
+      expect(function() {
+        widget.off("pan", function() {});
+      }).not.toThrow();
+    });
+
+  });
+
   // TODO: test setting invalid gestures values
   // TODO: test setting invalid gestures configuration (not object, no type)
 
