@@ -22,6 +22,23 @@
         "parameters": [],
         "description": "Forces the running application to reload the main module and start over."
       }
+    ],
+    "installPatch": [
+      {
+        "parameters": [
+          {
+            "name": "url",
+            "type": "string",
+            "description": "The URL to fetch a patch from."
+          },
+          {
+            "name": "callback",
+            "type": "function",
+            "description": "A callback function to be called when the installation has finished or failed. In case of a failure, the callback will receive a parameter `error` that contains an Error object. If the installation succeeds, this parameter will be `undefined` and a second parameter will contain the parsed content of the file `patch.json` from the installed patch."
+          }
+        ],
+        "description": "Installs a patch from the given URL. When the patch is successfully installed, it will remain inactive until the application is reloaded."
+      }
     ]
   }
 }
