@@ -3,7 +3,7 @@ describe("ProxyCollection", function() {
   var counter = 0;
   var mockProxy = function() {
     var mock = jasmine.createSpyObj("Proxy",
-      ["set", "get", "append", "appendTo", "on", "off", "parent", "children", "animate", "dispose"]
+      ["set", "get", "append", "appendTo", "on", "off", "once", "parent", "children", "animate", "dispose"]
     );
     mock.cid = "o" + counter++;
     return mock;
@@ -133,6 +133,19 @@ describe("ProxyCollection", function() {
 
     it("on() returns collection", function() {
       expect(collection.on("foo", function() {})).toBe(collection);
+    });
+
+    it("once() is delegated", function() {
+      var listener = function() {};
+      collection.once("foo", listener);
+
+      expect(mocks[0].once).toHaveBeenCalledWith("foo", listener);
+      expect(mocks[1].once).toHaveBeenCalledWith("foo", listener);
+      expect(mocks[2].once).toHaveBeenCalledWith("foo", listener);
+    });
+
+    it("once() returns collection", function() {
+      expect(collection.once("foo", function() {})).toBe(collection);
     });
 
     it("off() is delegated", function() {

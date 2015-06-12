@@ -80,7 +80,7 @@
 
   };
 
-  ["set", "animate", "on", "off"].forEach(function(key) {
+  ["set", "animate", "on", "off", "once"].forEach(function(key) {
     proto[key] = function() {
       for (var i = 0; i < this._array.length; i++) {
         this._array[i][key].apply(this._array[i], arguments);
