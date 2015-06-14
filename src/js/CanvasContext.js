@@ -12,11 +12,10 @@
     this._opCodes = [];
     this._newOpCodes = [];
     this._operations = [];
-    this._ints = [];
     this._doubles = [];
     this._booleans = [];
     this._strings = [];
-
+    this._ints = [];
     this.canvas = {
       width: 0,
       height: 0,
@@ -33,92 +32,11 @@
 
   tabris.CanvasContext.prototype = {
 
-    save: function() {
-      this._pushOperation("save");
-      this._savedStates.push(util.clone(this._state));
-    },
-
-    restore: function() {
-      this._pushOperation("restore");
-      this._state = this._savedStates.pop() || this._state;
-    },
-
-    // Path operations
-
-    beginPath: function() {
-      this._pushOperation("beginPath");
-    },
-
-    closePath: function() {
-      this._pushOperation("closePath");
-    },
-
-    lineTo: function(x, y) {
-      this._pushOperation("lineTo");
-      this._doubles.push(x, y);
-    },
-
-    moveTo: function(x, y) {
-      this._pushOperation("moveTo");
-      this._doubles.push(x, y);
-    },
-
-    bezierCurveTo: function(cp1x, cp1y, cp2x, cp2y, x, y) {
-      this._pushOperation("bezierCurveTo");
-      this._doubles.push(cp1x, cp1y, cp2x, cp2y, x, y);
-    },
-
-    quadraticCurveTo: function(cpx, cpy, x, y) {
-      this._pushOperation("quadraticCurveTo");
-      this._doubles.push(cpx, cpy, x, y);
-    },
-
-    rect: function(x, y, width, height) {
-      this._pushOperation("rect");
-      this._doubles.push(x, y, width, height);
-    },
-
-    arc: function(x, y, radius, startAngle, endAngle, anticlockwise) {
-      this._pushOperation("arc");
-      this._doubles.push(x, y, radius, startAngle, endAngle);
-      this._booleans.push(!!anticlockwise);
-    },
-
-    // Transformations
-
-    scale: function(x, y) {
-      this._pushOperation("scale");
-      this._doubles.push(x, y);
-    },
-
-    rotate: function(angle) {
-      this._pushOperation("rotate");
-      this._doubles.push(angle);
-    },
-
-    translate: function(x, y) {
-      this._pushOperation("translate");
-      this._doubles.push(x, y);
-    },
-
-    transform: function(a, b, c, d, e, f) {
-      this._pushOperation("transform");
-      this._doubles.push(a, b, c, d, e, f);
-    },
-
-    setTransform: function(a, b, c, d, e, f) {
-      this._pushOperation("setTransform");
-      this._doubles.push(a, b, c, d, e, f);
-    },
-
-    // Drawing operations
-
-    clearRect: function(x, y, width, height) {
-      this._pushOperation("clearRect");
-      this._doubles.push(x, y, width, height);
-    },
-
     fillRect: function(x, y, width, height) {
+      // TODO: delegate to native function, once it is implemented (#493)
+      if (arguments.length < 4) {
+        throw new Error("Not enough arguments to CanvasContext.fillRect");
+      }
       this._pushOperation("beginPath");
       this._pushOperation("rect");
       this._doubles.push(x, y, width, height);
@@ -126,37 +44,18 @@
     },
 
     strokeRect: function(x, y, width, height) {
+      // TODO: delegate to native function, once it is implemented (#493)
+      if (arguments.length < 4) {
+        throw new Error("Not enough arguments to CanvasContext.strokeRect");
+      }
       this._pushOperation("beginPath");
       this._pushOperation("rect");
       this._doubles.push(x, y, width, height);
       this.stroke();
     },
 
-    fillText: function(text, x, y /* , maxWidth */) {
-      this._pushOperation("fillText");
-      this._strings.push(text);
-      this._booleans.push(false, false, false);
-      this._doubles.push(x, y);
-
-    },
-
-    strokeText: function(text, x, y /* , maxWidth */) {
-      this._pushOperation("strokeText");
-      this._strings.push(text);
-      this._booleans.push(false, false, false);
-      this._doubles.push(x, y);
-    },
-
-    fill: function() {
-      this._pushOperation("fill");
-    },
-
-    stroke: function() {
-      this._pushOperation("stroke");
-    },
-
     measureText: function(text) {
-      // TODO wire to native function
+      // TODO: delegate to native function, once it is implemented (#56)
       return {width: text.length * 5 + 5};
     },
 
@@ -182,12 +81,12 @@
           this._strings,
           this._ints
         ]});
+        this._newOpCodes = [];
         this._operations = [];
         this._doubles = [];
         this._booleans = [];
         this._strings = [];
         this._ints = [];
-        this._newOpCodes = [];
       }
     },
 
@@ -198,7 +97,93 @@
       }
       this._operations.push(this._opCodes.indexOf(operation));
     }
+
   };
+
+  // State operations
+
+  defineMethod("save", 0, function() {
+    this._savedStates.push(util.clone(this._state));
+  });
+
+  defineMethod("restore", 0, function() {
+    this._state = this._savedStates.pop() || this._state;
+  });
+
+  // Path operations
+
+  defineMethod("beginPath");
+
+  defineMethod("closePath");
+
+  defineMethod("lineTo", 2, function(x, y) {
+    this._doubles.push(x, y);
+  });
+
+  defineMethod("moveTo", 2, function(x, y) {
+    this._doubles.push(x, y);
+  });
+
+  defineMethod("bezierCurveTo", 6, function(cp1x, cp1y, cp2x, cp2y, x, y) {
+    this._doubles.push(cp1x, cp1y, cp2x, cp2y, x, y);
+  });
+
+  defineMethod("quadraticCurveTo", 4, function(cpx, cpy, x, y) {
+    this._doubles.push(cpx, cpy, x, y);
+  });
+
+  defineMethod("rect", 4, function(x, y, width, height) {
+    this._doubles.push(x, y, width, height);
+  });
+
+  defineMethod("arc", 5, function(x, y, radius, startAngle, endAngle, anticlockwise) {
+    this._doubles.push(x, y, radius, startAngle, endAngle);
+    this._booleans.push(!!anticlockwise);
+  });
+
+  // Transformations
+
+  defineMethod("scale", 2, function(x, y) {
+    this._doubles.push(x, y);
+  });
+
+  defineMethod("rotate", 1, function(angle) {
+    this._doubles.push(angle);
+  });
+
+  defineMethod("translate", 2, function(x, y) {
+    this._doubles.push(x, y);
+  });
+
+  defineMethod("transform", 6, function(a, b, c, d, e, f) {
+    this._doubles.push(a, b, c, d, e, f);
+  });
+
+  defineMethod("setTransform", 6, function(a, b, c, d, e, f) {
+    this._doubles.push(a, b, c, d, e, f);
+  });
+
+  // Drawing operations
+
+  defineMethod("clearRect", 4, function(x, y, width, height) {
+    this._doubles.push(x, y, width, height);
+  });
+
+  defineMethod("fillText", 3, function(text, x, y /* , maxWidth */) {
+    this._strings.push(text);
+    this._booleans.push(false, false, false);
+    this._doubles.push(x, y);
+  });
+
+  defineMethod("strokeText", 3, function(text, x, y /* , maxWidth */) {
+    this._strings.push(text);
+    this._booleans.push(false, false, false);
+    this._doubles.push(x, y);
+  });
+
+  defineMethod("fill");
+
+  defineMethod("stroke");
 
   tabris.CanvasContext.getContext = function(canvas, width, height) {
     if (!canvas._gc) {
@@ -223,7 +208,6 @@
       },
       decode: passThrough,
       addOperations: function(context, value) {
-        context._pushOperation("lineWidth");
         context._doubles.push(value);
       }
     },
@@ -233,7 +217,6 @@
       encode: checkValue,
       decode: passThrough,
       addOperations: function(context, value) {
-        context._pushOperation("lineCap");
         context._strings.push(value);
       }
     },
@@ -243,7 +226,6 @@
       encode: checkValue,
       decode: passThrough,
       addOperations: function(context, value) {
-        context._pushOperation("lineJoin");
         context._strings.push(value);
       }
     },
@@ -252,7 +234,6 @@
       encode: util.colorStringToArray,
       decode: util.colorArrayToString,
       addOperations: function(context, value) {
-        context._pushOperation("fillStyle");
         context._ints.push(value[0], value[1], value[2], value[3]);
       }
     },
@@ -261,7 +242,6 @@
       encode: util.colorStringToArray,
       decode: util.colorArrayToString,
       addOperations: function(context, value) {
-        context._pushOperation("strokeStyle");
         context._ints.push(value[0], value[1], value[2], value[3]);
       }
     },
@@ -271,7 +251,6 @@
       encode: checkValue,
       decode: passThrough,
       addOperations: function(context, value) {
-        context._pushOperation("textAlign");
         context._strings.push(value);
       }
     },
@@ -281,7 +260,6 @@
       encode: checkValue,
       decode: passThrough,
       addOperations: function(context, value) {
-        context._pushOperation("textBaseline");
         context._strings.push(value);
       }
     }
@@ -314,6 +292,18 @@
     return state;
   }
 
+  function defineMethod(name, reqArgCount, fn) {
+    tabris.CanvasContext.prototype[name] = function() {
+      if (reqArgCount && arguments.length < reqArgCount) {
+        throw new Error("Not enough arguments to CanvasContext." + name);
+      }
+      this._pushOperation(name);
+      if (fn) {
+        fn.apply(this, arguments);
+      }
+    };
+  }
+
   function defineProperty(context, name) {
     var prop = properties[name];
     Object.defineProperty(context, name, {
@@ -323,6 +313,7 @@
       set: function(value) {
         try {
           context._state[name] = prop.encode(value);
+          context._pushOperation(name);
           prop.addOperations(context, context._state[name]);
         } catch (error) {
           console.warn("Unsupported value for " + name + ": " + value);

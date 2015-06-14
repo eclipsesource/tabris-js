@@ -21,9 +21,29 @@ describe("CanvasContext", function() {
     tabris.trigger("flush");
   }
 
-  function getDrawOperations() {
-    var call = nativeBridge.calls({id: gc.cid, op: "call", method: "draw"})[0];
-    return call ? call.parameters.packedOperations : undefined;
+  function getLastPacket() {
+    var calls = nativeBridge.calls({id: gc.cid, op: "call", method: "draw"});
+    return calls.length ? calls[calls.length - 1].parameters.packedOperations : undefined;
+  }
+
+  function decodeLastPacket() {
+    var calls = nativeBridge.calls({id: gc.cid, op: "call", method: "draw"});
+    return calls.length ? decode(calls[calls.length - 1].parameters.packedOperations) : {};
+  }
+
+  function decode(packet) {
+    var values = {};
+    var opcodes = packet[0];
+    values.ops = packet[1].map(function(opIndex) {
+      return opcodes[opIndex];
+    });
+    ["doubles", "booleans", "strings", "ints"].forEach(function(name, index) {
+      var slot = packet[index + 2];
+      if (slot.length) {
+        values[name] = slot;
+      }
+    });
+    return values;
   }
 
   describe("getContext", function() {
@@ -92,276 +112,266 @@ describe("CanvasContext", function() {
 
   });
 
-  describe("lineWidth", function() {
+  describe("property", function() {
 
-    it("defaults to 1", function() {
-      expect(ctx.lineWidth).toEqual(1);
+    describe("lineWidth", function() {
+
+      it("defaults to 1", function() {
+        expect(ctx.lineWidth).toEqual(1);
+      });
+
+      it("accepts changes", function() {
+        ctx.lineWidth = 2;
+
+        expect(ctx.lineWidth).toEqual(2);
+      });
+
+      it("renders changes", function() {
+        ctx.lineWidth = 2;
+        flush();
+
+        expect(decodeLastPacket()).toEqual({ops: ["lineWidth"], doubles: [2]});
+      });
+
+      it("ignores zero and negative values", function() {
+        ctx.lineWidth = 3;
+
+        ctx.lineWidth = 0;
+        ctx.lineWidth = -1;
+
+        expect(ctx.lineWidth).toEqual(3);
+      });
+
+      it("issues a warning for invalid values", function() {
+        spyOn(console, "warn");
+
+        ctx.lineWidth = -1;
+
+        expect(console.warn).toHaveBeenCalledWith("Unsupported value for lineWidth: -1");
+      });
+
     });
 
-    it("accepts changes", function() {
-      ctx.lineWidth = 2;
+    describe("lineCap", function() {
 
-      expect(ctx.lineWidth).toEqual(2);
+      it("defaults to 'butt'", function() {
+        expect(ctx.lineCap).toEqual("butt");
+      });
+
+      it("accepts changes", function() {
+        ctx.lineCap = "round";
+
+        expect(ctx.lineCap).toEqual("round");
+      });
+
+      it("renders changes", function() {
+        ctx.lineCap = "round";
+        flush();
+
+        expect(decodeLastPacket()).toEqual({ops: ["lineCap"], strings: ["round"]});
+      });
+
+      it("ignores unknown values", function() {
+        ctx.lineCap = "round";
+
+        ctx.lineCap = "unknown";
+
+        expect(ctx.lineCap).toEqual("round");
+      });
+
+      it("issues a warning for invalid values", function() {
+        spyOn(console, "warn");
+
+        ctx.lineCap = "foo";
+
+        expect(console.warn).toHaveBeenCalledWith("Unsupported value for lineCap: foo");
+      });
+
     });
 
-    it("renders changes", function() {
-      ctx.lineWidth = 2;
-      flush();
+    describe("lineJoin", function() {
 
-      expect(getDrawOperations()).toEqual(
-        [["lineWidth"], [0], [2], [], [], []]
-      );
+      it("defaults to 'miter'", function() {
+        expect(ctx.lineJoin).toEqual("miter");
+      });
+
+      it("accepts changes", function() {
+        ctx.lineJoin = "round";
+
+        expect(ctx.lineJoin).toEqual("round");
+      });
+
+      it("renders changes", function() {
+        ctx.lineJoin = "round";
+        flush();
+
+        expect(decodeLastPacket()).toEqual({ops: ["lineJoin"], strings: ["round"]});
+      });
+
+      it("ignores unknown values", function() {
+        ctx.lineJoin = "round";
+
+        ctx.lineJoin = "unknown";
+
+        expect(ctx.lineJoin).toEqual("round");
+      });
+
+      it("issues a warning for invalid values", function() {
+        spyOn(console, "warn");
+
+        ctx.lineJoin = "foo";
+
+        expect(console.warn).toHaveBeenCalledWith("Unsupported value for lineJoin: foo");
+      });
+
     });
 
-    it("ignores zero and negative values", function() {
-      ctx.lineWidth = 3;
+    describe("fillStyle", function() {
 
-      ctx.lineWidth = 0;
-      ctx.lineWidth = -1;
+      it("defaults to black", function() {
+        expect(ctx.fillStyle).toEqual("rgba(0, 0, 0, 1)");
+      });
 
-      expect(ctx.lineWidth).toEqual(3);
+      it("accepts changes", function() {
+        ctx.fillStyle = "red";
+
+        expect(ctx.fillStyle).toEqual("rgba(255, 0, 0, 1)");
+      });
+
+      it("renders changes", function() {
+        ctx.fillStyle = "red";
+        flush();
+
+        expect(decodeLastPacket()).toEqual({ops: ["fillStyle"], ints: [255, 0, 0, 255]});
+      });
+
+      it("ignores invalid color strings", function() {
+        ctx.fillStyle = "red";
+
+        ctx.fillStyle = "no-such-color";
+
+        expect(ctx.fillStyle).toEqual("rgba(255, 0, 0, 1)");
+      });
+
+      it("issues a warning for invalid color strings", function() {
+        spyOn(console, "warn");
+
+        ctx.fillStyle = "no-such-color";
+
+        expect(console.warn).toHaveBeenCalledWith("Unsupported value for fillStyle: no-such-color");
+      });
+
     });
 
-    it("issues a warning for invalid values", function() {
-      spyOn(console, "warn");
+    describe("strokeStyle", function() {
 
-      ctx.lineWidth = -1;
+      it("defaults to black", function() {
+        expect(ctx.strokeStyle).toEqual("rgba(0, 0, 0, 1)");
+      });
 
-      expect(console.warn).toHaveBeenCalledWith("Unsupported value for lineWidth: -1");
+      it("accepts changes", function() {
+        ctx.strokeStyle = "red";
+
+        expect(ctx.strokeStyle).toEqual("rgba(255, 0, 0, 1)");
+      });
+
+      it("renders changes", function() {
+        ctx.strokeStyle = "red";
+        flush();
+
+        expect(decodeLastPacket()).toEqual({ops: ["strokeStyle"], ints: [255, 0, 0, 255]});
+      });
+
+      it("ignores invalid color strings", function() {
+        ctx.strokeStyle = "red";
+
+        ctx.strokeStyle = "no-such-color";
+
+        expect(ctx.strokeStyle).toEqual("rgba(255, 0, 0, 1)");
+      });
+
+      it("issues a warning for invalid color strings", function() {
+        spyOn(console, "warn");
+
+        ctx.strokeStyle = "no-such-color";
+
+        expect(console.warn).toHaveBeenCalledWith("Unsupported value for strokeStyle: no-such-color");
+      });
+
     });
 
-  });
+    describe("textAlign", function() {
 
-  describe("lineCap", function() {
+      it("defaults to 'start'", function() {
+        expect(ctx.textAlign).toEqual("start");
+      });
 
-    it("defaults to 'butt'", function() {
-      expect(ctx.lineCap).toEqual("butt");
+      it("accepts changes", function() {
+        ctx.textAlign = "center";
+
+        expect(ctx.textAlign).toEqual("center");
+      });
+
+      it("renders changes", function() {
+        ctx.textAlign = "center";
+        flush();
+
+        expect(decodeLastPacket()).toEqual({ops: ["textAlign"], strings: ["center"]});
+      });
+
+      it("ignores unknown values", function() {
+        ctx.textAlign = "center";
+
+        ctx.textAlign = "unknown";
+
+        expect(ctx.textAlign).toEqual("center");
+      });
+
+      it("issues a warning for invalid values", function() {
+        spyOn(console, "warn");
+
+        ctx.textAlign = "foo";
+
+        expect(console.warn).toHaveBeenCalledWith("Unsupported value for textAlign: foo");
+      });
+
     });
 
-    it("accepts changes", function() {
-      ctx.lineCap = "round";
+    describe("textBaseline", function() {
 
-      expect(ctx.lineCap).toEqual("round");
-    });
+      it("defaults to 'alphabetic'", function() {
+        expect(ctx.textBaseline).toEqual("alphabetic");
+      });
 
-    it("renders changes", function() {
-      ctx.lineCap = "round";
-      flush();
+      it("accepts changes", function() {
+        ctx.textBaseline = "middle";
 
-      expect(getDrawOperations()).toEqual(
-        [["lineCap"], [0], [], [], ["round"], []]
-      );
-    });
+        expect(ctx.textBaseline).toEqual("middle");
+      });
 
-    it("ignores unknown values", function() {
-      ctx.lineCap = "round";
+      it("renders changes", function() {
+        ctx.textBaseline = "middle";
+        flush();
 
-      ctx.lineCap = "unknown";
+        expect(decodeLastPacket()).toEqual({ops: ["textBaseline"], strings: ["middle"]});
+      });
 
-      expect(ctx.lineCap).toEqual("round");
-    });
+      it("ignores unknown values", function() {
+        ctx.textBaseline = "middle";
 
-    it("issues a warning for invalid values", function() {
-      spyOn(console, "warn");
+        ctx.textBaseline = "unknown";
 
-      ctx.lineCap = "foo";
+        expect(ctx.textBaseline).toEqual("middle");
+      });
 
-      expect(console.warn).toHaveBeenCalledWith("Unsupported value for lineCap: foo");
-    });
+      it("issues a warning for invalid values", function() {
+        spyOn(console, "warn");
 
-  });
+        ctx.textBaseline = "foo";
 
-  describe("lineJoin", function() {
+        expect(console.warn).toHaveBeenCalledWith("Unsupported value for textBaseline: foo");
+      });
 
-    it("defaults to 'miter'", function() {
-      expect(ctx.lineJoin).toEqual("miter");
-    });
-
-    it("accepts changes", function() {
-      ctx.lineJoin = "round";
-
-      expect(ctx.lineJoin).toEqual("round");
-    });
-
-    it("renders changes", function() {
-      ctx.lineJoin = "round";
-      flush();
-
-      expect(getDrawOperations()).toEqual(
-        [["lineJoin"], [0], [], [], ["round"], []]
-      );
-    });
-
-    it("ignores unknown values", function() {
-      ctx.lineJoin = "round";
-
-      ctx.lineJoin = "unknown";
-
-      expect(ctx.lineJoin).toEqual("round");
-    });
-
-    it("issues a warning for invalid values", function() {
-      spyOn(console, "warn");
-
-      ctx.lineJoin = "foo";
-
-      expect(console.warn).toHaveBeenCalledWith("Unsupported value for lineJoin: foo");
-    });
-
-  });
-
-  describe("fillStyle", function() {
-
-    it("defaults to black", function() {
-      expect(ctx.fillStyle).toEqual("rgba(0, 0, 0, 1)");
-    });
-
-    it("accepts changes", function() {
-      ctx.fillStyle = "red";
-
-      expect(ctx.fillStyle).toEqual("rgba(255, 0, 0, 1)");
-    });
-
-    it("renders changes", function() {
-      ctx.fillStyle = "red";
-      flush();
-
-      expect(getDrawOperations()).toEqual(
-        [["fillStyle"], [0], [], [], [], [255, 0, 0, 255]]
-      );
-    });
-
-    it("ignores invalid color strings", function() {
-      ctx.fillStyle = "red";
-
-      ctx.fillStyle = "no-such-color";
-
-      expect(ctx.fillStyle).toEqual("rgba(255, 0, 0, 1)");
-    });
-
-    it("issues a warning for invalid color strings", function() {
-      spyOn(console, "warn");
-
-      ctx.fillStyle = "no-such-color";
-
-      expect(console.warn).toHaveBeenCalledWith("Unsupported value for fillStyle: no-such-color");
-    });
-
-  });
-
-  describe("strokeStyle", function() {
-
-    it("defaults to black", function() {
-      expect(ctx.strokeStyle).toEqual("rgba(0, 0, 0, 1)");
-    });
-
-    it("accepts changes", function() {
-      ctx.strokeStyle = "red";
-
-      expect(ctx.strokeStyle).toEqual("rgba(255, 0, 0, 1)");
-    });
-
-    it("renders changes", function() {
-      ctx.strokeStyle = "red";
-      flush();
-
-      expect(getDrawOperations()).toEqual(
-        [["strokeStyle"], [0], [], [], [], [255, 0, 0, 255]]
-      );
-    });
-
-    it("ignores invalid color strings", function() {
-      ctx.strokeStyle = "red";
-
-      ctx.strokeStyle = "no-such-color";
-
-      expect(ctx.strokeStyle).toEqual("rgba(255, 0, 0, 1)");
-    });
-
-    it("issues a warning for invalid color strings", function() {
-      spyOn(console, "warn");
-
-      ctx.strokeStyle = "no-such-color";
-
-      expect(console.warn).toHaveBeenCalledWith("Unsupported value for strokeStyle: no-such-color");
-    });
-
-  });
-
-  describe("textAlign", function() {
-
-    it("defaults to 'start'", function() {
-      expect(ctx.textAlign).toEqual("start");
-    });
-
-    it("accepts changes", function() {
-      ctx.textAlign = "center";
-
-      expect(ctx.textAlign).toEqual("center");
-    });
-
-    it("renders changes", function() {
-      ctx.textAlign = "center";
-      flush();
-
-      expect(getDrawOperations()).toEqual(
-        [["textAlign"], [0], [], [], ["center"], []]
-      );
-    });
-
-    it("ignores unknown values", function() {
-      ctx.textAlign = "center";
-
-      ctx.textAlign = "unknown";
-
-      expect(ctx.textAlign).toEqual("center");
-    });
-
-    it("issues a warning for invalid values", function() {
-      spyOn(console, "warn");
-
-      ctx.textAlign = "foo";
-
-      expect(console.warn).toHaveBeenCalledWith("Unsupported value for textAlign: foo");
-    });
-
-  });
-
-  describe("textBaseline", function() {
-
-    it("defaults to 'alphabetic'", function() {
-      expect(ctx.textBaseline).toEqual("alphabetic");
-    });
-
-    it("accepts changes", function() {
-      ctx.textBaseline = "middle";
-
-      expect(ctx.textBaseline).toEqual("middle");
-    });
-
-    it("renders changes", function() {
-      ctx.textBaseline = "middle";
-      flush();
-
-      expect(getDrawOperations()).toEqual(
-        [["textBaseline"], [0], [], [], ["middle"], []]
-      );
-    });
-
-    it("ignores unknown values", function() {
-      ctx.textBaseline = "middle";
-
-      ctx.textBaseline = "unknown";
-
-      expect(ctx.textBaseline).toEqual("middle");
-    });
-
-    it("issues a warning for invalid values", function() {
-      spyOn(console, "warn");
-
-      ctx.textBaseline = "foo";
-
-      expect(console.warn).toHaveBeenCalledWith("Unsupported value for textBaseline: foo");
     });
 
   });
@@ -379,9 +389,7 @@ describe("CanvasContext", function() {
       ctx.save();
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["save"], [0], [], [], [], []]
-      );
+      expect(decodeLastPacket()).toEqual({ops: ["save"]});
     });
 
   });
@@ -422,9 +430,7 @@ describe("CanvasContext", function() {
       ctx.restore();
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["restore"], [0], [], [], [], []]
-      );
+      expect(decodeLastPacket()).toEqual({ops: ["restore"]});
     });
 
   });
@@ -441,7 +447,7 @@ describe("CanvasContext", function() {
       ctx.bezierCurveTo(50, 70, 60, 80, 70, 80);
       ctx.closePath();
 
-      expect(getDrawOperations()).not.toBeDefined();
+      expect(getLastPacket()).not.toBeDefined();
     });
 
     it("are rendered on flush", function() {
@@ -456,9 +462,8 @@ describe("CanvasContext", function() {
 
       flush();
 
-      expect(getDrawOperations()[0].length).toEqual(8);
-      expect(getDrawOperations()[0][0]).toEqual("beginPath");
-      expect(getDrawOperations()[0][7]).toEqual("closePath");
+      expect(decodeLastPacket().ops).toEqual(["beginPath", "moveTo", "lineTo", "rect", "arc",
+                                              "quadraticCurveTo", "bezierCurveTo", "closePath"]);
     });
 
     it("are not rendered after gc disposal anymore", function() {
@@ -467,70 +472,7 @@ describe("CanvasContext", function() {
       gc.dispose();
       flush();
 
-      expect(getDrawOperations()).not.toBeDefined();
-    });
-
-    it("moveTo", function() {
-      ctx.moveTo(10, 20);
-      flush();
-
-      expect(getDrawOperations()).toEqual(
-        [["moveTo"], [0], [10, 20], [], [], []]
-      );
-    });
-
-    it("lineTo", function() {
-      ctx.lineTo(10, 20);
-      flush();
-
-      expect(getDrawOperations()).toEqual(
-        [["lineTo"], [0], [10, 20], [], [], []]
-      );
-    });
-
-    it("rect", function() {
-      ctx.rect(10, 20, 30, 40);
-      flush();
-
-      expect(getDrawOperations()).toEqual(
-        [["rect"], [0], [10, 20, 30, 40], [], [], []]
-      );
-    });
-
-    it("arc", function() {
-      ctx.arc(10, 20, 5, 1, 2);
-      flush();
-
-      expect(getDrawOperations()).toEqual(
-        [["arc"], [0], [10, 20, 5, 1, 2], [false], [], []]
-      );
-    });
-
-    it("arc with anticlockwise", function() {
-      ctx.arc(10, 20, 5, 1, 2, true);
-      flush();
-
-      expect(getDrawOperations()).toEqual(
-        [["arc"], [0], [10, 20, 5, 1, 2], [true], [], []]
-      );
-    });
-
-    it("quadraticCurve", function() {
-      ctx.quadraticCurveTo(10, 20, 30, 40);
-      flush();
-
-      expect(getDrawOperations()).toEqual(
-        [["quadraticCurveTo"], [0], [10, 20, 30, 40], [], [], []]
-      );
-    });
-
-    it("bezierCurve", function() {
-      ctx.bezierCurveTo(10, 20, 30, 40, 50, 60);
-      flush();
-
-      expect(getDrawOperations()).toEqual(
-        [["bezierCurveTo"], [0], [10, 20, 30, 40, 50, 60], [], [], []]
-      );
+      expect(getLastPacket()).not.toBeDefined();
     });
 
   });
@@ -544,7 +486,7 @@ describe("CanvasContext", function() {
       ctx.rotate(3.14);
       ctx.scale(2, 3);
 
-      expect(getDrawOperations()).not.toBeDefined();
+      expect(getLastPacket()).not.toBeDefined();
     });
 
     it("are rendered on flush", function() {
@@ -556,145 +498,8 @@ describe("CanvasContext", function() {
 
       flush();
 
-      expect(getDrawOperations()[0].length).toEqual(5);
-      expect(getDrawOperations()[0][0]).toEqual("setTransform");
-      expect(getDrawOperations()[0][4]).toEqual("scale");
-    });
-
-    it("scale", function() {
-      ctx.scale(2, 3);
-      flush();
-
-      expect(getDrawOperations()).toEqual(
-        [["scale"], [0], [2, 3], [], [], []]
-      );
-    });
-
-    it("rotate", function() {
-      ctx.rotate(3.14);
-      flush();
-
-      expect(getDrawOperations()).toEqual(
-        [["rotate"], [0], [3.14], [], [], []]
-      );
-    });
-
-    it("translate", function() {
-      ctx.translate(23, 42);
-      flush();
-
-      expect(getDrawOperations()).toEqual(
-        [["translate"], [0], [23, 42], [], [], []]
-      );
-    });
-
-    it("transform", function() {
-      ctx.transform(1, 2, 3, 4, 5, 6);
-      flush();
-
-      expect(getDrawOperations()).toEqual(
-        [["transform"], [0], [1, 2, 3, 4, 5, 6], [], [], []]
-      );
-    });
-
-    it("setTransform", function() {
-      ctx.setTransform(1, 2, 3, 4, 5, 6);
-      flush();
-
-      expect(getDrawOperations()).toEqual(
-        [["setTransform"], [0], [1, 2, 3, 4, 5, 6], [], [], []]
-      );
-    });
-
-  });
-
-  describe("fill", function() {
-
-    it("is rendered", function() {
-      ctx.fill();
-      flush();
-
-      expect(getDrawOperations()).toEqual(
-        [["fill"], [0], [], [], [], []]
-      );
-    });
-
-  });
-
-  describe("stroke", function() {
-
-    it("is rendered", function() {
-      ctx.stroke();
-      flush();
-
-      expect(getDrawOperations()).toEqual(
-        [["stroke"], [0], [], [], [], []]
-      );
-    });
-
-  });
-
-  describe("clearRect", function() {
-
-    it("is rendered", function() {
-      ctx.clearRect(10, 20, 30, 40);
-      flush();
-
-      expect(getDrawOperations()).toEqual(
-        [["clearRect"], [0], [10, 20, 30, 40], [], [], []]
-      );
-    });
-
-  });
-
-  describe("fillRect", function() {
-
-    it("is rendered", function() {
-      ctx.fillRect(10, 20, 30, 40);
-      flush();
-
-      expect(getDrawOperations()).toEqual(
-        [["beginPath", "rect", "fill"], [0, 1, 2], [10, 20, 30, 40], [], [], []]
-      );
-    });
-
-  });
-
-  describe("strokeRect", function() {
-
-    it("is rendered", function() {
-      ctx.strokeRect(10, 20, 30, 40);
-      flush();
-
-      expect(getDrawOperations()).toEqual(
-        [["beginPath", "rect", "stroke"], [0, 1, 2], [10, 20, 30, 40], [], [], []]
-      );
-    });
-
-  });
-
-  describe("fillText", function() {
-
-    it("is rendered", function() {
-      ctx.fillText("foo", 10, 20);
-      flush();
-
-      expect(getDrawOperations()).toEqual(
-        [["fillText"], [0], [10, 20], [false, false, false], ["foo"], []]
-      );
-    });
-
-  });
-
-  describe("strokeText", function() {
-
-    it("is rendered", function() {
-      ctx.strokeText("foo", 10, 20);
-      flush();
-
-      expect(getDrawOperations()).toEqual(
-        [["strokeText"], [0], [10, 20], [false, false, false], ["foo"], []]
-      );
+      expect(decodeLastPacket().ops).toEqual(["setTransform", "transform", "translate",
+                                              "rotate", "scale"]);
     });
 
   });
@@ -706,9 +511,8 @@ describe("CanvasContext", function() {
       ctx.moveTo(30, 40);
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["lineTo", "moveTo"], [0, 1], [10, 20, 30, 40], [], [], []]
-      );
+      expect(getLastPacket()[0]).toEqual(["lineTo", "moveTo"]);
+      expect(getLastPacket()[1]).toEqual([0, 1]);
     });
 
     it("are not rendered again", function() {
@@ -716,13 +520,13 @@ describe("CanvasContext", function() {
       ctx.moveTo(30, 40);
       flush();
       nativeBridge.resetCalls();
+
       ctx.lineTo(50, 60);
       ctx.moveTo(70, 80);
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [[], [0, 1], [50, 60, 70, 80], [], [], []]
-      );
+      expect(getLastPacket()[0]).toEqual([]);
+      expect(getLastPacket()[1]).toEqual([0, 1]);
     });
 
     it("are appended to existing operations", function() {
@@ -730,12 +534,97 @@ describe("CanvasContext", function() {
       ctx.moveTo(30, 40);
       flush();
       nativeBridge.resetCalls();
+
       ctx.rect(10, 20, 30, 40);
       flush();
 
-      expect(getDrawOperations()).toEqual(
-        [["rect"], [2], [10, 20, 30, 40], [], [], []]
-      );
+      expect(getLastPacket()[0]).toEqual(["rect"]);
+      expect(getLastPacket()[1]).toEqual([2]);
+    });
+
+  });
+
+  describe("scale", function() {
+
+    it("is rendered", function() {
+      ctx.scale(2, 3);
+      flush();
+
+      expect(decodeLastPacket()).toEqual({ops: ["scale"], doubles: [2, 3]});
+    });
+
+    it("raises error if parameters missing", function() {
+      expect(function() {
+        ctx.scale(2);
+      }).toThrowError("Not enough arguments to CanvasContext.scale");
+    });
+
+  });
+
+  describe("rotate", function() {
+
+    it("is rendered", function() {
+      ctx.rotate(3.14);
+      flush();
+
+      expect(decodeLastPacket()).toEqual({ops: ["rotate"], doubles: [3.14]});
+    });
+
+    it("raises error if parameters missing", function() {
+      expect(function() {
+        ctx.rotate();
+      }).toThrowError("Not enough arguments to CanvasContext.rotate");
+    });
+
+  });
+
+  describe("translate", function() {
+
+    it("is rendered", function() {
+      ctx.translate(23, 42);
+      flush();
+
+      expect(decodeLastPacket()).toEqual({ops: ["translate"], doubles: [23, 42]});
+    });
+
+    it("raises error if parameters missing", function() {
+      expect(function() {
+        ctx.translate(23);
+      }).toThrowError("Not enough arguments to CanvasContext.translate");
+    });
+
+  });
+
+  describe("transform", function() {
+
+    it("is rendered", function() {
+      ctx.transform(1, 2, 3, 4, 5, 6);
+      flush();
+
+      expect(decodeLastPacket()).toEqual({ops: ["transform"], doubles: [1, 2, 3, 4, 5, 6]});
+    });
+
+    it("raises error if parameters missing", function() {
+      expect(function() {
+        ctx.transform();
+      }).toThrowError("Not enough arguments to CanvasContext.transform");
+    });
+
+  });
+
+  describe("setTransform", function() {
+
+    it("is rendered", function() {
+      ctx.setTransform(1, 2, 3, 4, 5, 6);
+      flush();
+
+      expect(decodeLastPacket()).toEqual({ops: ["setTransform"], doubles: [1, 2, 3, 4, 5, 6]});
+    });
+
+    it("raises error if parameters missing", function() {
+      expect(function() {
+        ctx.setTransform();
+      }).toThrowError("Not enough arguments to CanvasContext.setTransform");
     });
 
   });
@@ -744,6 +633,260 @@ describe("CanvasContext", function() {
 
     it("is rendered", function() {
       expect(ctx.measureText("foo").width).toBeGreaterThan("foo".length);
+    });
+
+  });
+
+  describe("beginPath", function() {
+
+    it("is rendered", function() {
+      ctx.beginPath();
+      flush();
+
+      expect(decodeLastPacket()).toEqual({ops: ["beginPath"]});
+    });
+
+  });
+
+  describe("closePath", function() {
+
+    it("is rendered", function() {
+      ctx.closePath();
+      flush();
+
+      expect(decodeLastPacket()).toEqual({ops: ["closePath"]});
+    });
+
+  });
+
+  describe("lineTo", function() {
+
+    it("is rendered", function() {
+      ctx.lineTo(10, 20);
+      flush();
+
+      expect(decodeLastPacket()).toEqual({ops: ["lineTo"], doubles: [10, 20]});
+    });
+
+    it("raises error if parameters missing", function() {
+      expect(function() {
+        ctx.lineTo(1);
+      }).toThrowError("Not enough arguments to CanvasContext.lineTo");
+    });
+
+  });
+
+  describe("moveTo", function() {
+
+    it("is rendered", function() {
+      ctx.moveTo(10, 20);
+      flush();
+
+      expect(decodeLastPacket()).toEqual({ops: ["moveTo"], doubles: [10, 20]});
+    });
+
+    it("raises error if parameters missing", function() {
+      expect(function() {
+        ctx.moveTo(1);
+      }).toThrowError("Not enough arguments to CanvasContext.moveTo");
+    });
+
+  });
+
+  describe("bezierCurveTo", function() {
+
+    it("is rendered", function() {
+      ctx.bezierCurveTo(1, 2, 3, 4, 5, 6);
+      flush();
+
+      expect(decodeLastPacket()).toEqual({ops: ["bezierCurveTo"], doubles: [1, 2, 3, 4, 5, 6]});
+    });
+
+    it("raises error if parameters missing", function() {
+      expect(function() {
+        ctx.bezierCurveTo(1, 2, 3, 4, 5);
+      }).toThrowError("Not enough arguments to CanvasContext.bezierCurveTo");
+    });
+
+  });
+
+  describe("quadraticCurveTo", function() {
+
+    it("is rendered", function() {
+      ctx.quadraticCurveTo(1, 2, 3, 4);
+      flush();
+
+      expect(decodeLastPacket()).toEqual({ops: ["quadraticCurveTo"], doubles: [1, 2, 3, 4]});
+    });
+
+    it("raises error if parameters missing", function() {
+      expect(function() {
+        ctx.quadraticCurveTo(1, 2, 3);
+      }).toThrowError("Not enough arguments to CanvasContext.quadraticCurveTo");
+    });
+
+  });
+
+  describe("arc", function() {
+
+    it("is rendered with counterclockwise default", function() {
+      ctx.arc(1, 2, 3, 4, 5);
+      flush();
+
+      expect(decodeLastPacket()).toEqual({ops: ["arc"], doubles: [1, 2, 3, 4, 5], booleans: [false]});
+    });
+
+    it("is rendered with counterclockwise parameter", function() {
+      ctx.arc(1, 2, 3, 4, 5, true);
+      flush();
+
+      expect(decodeLastPacket()).toEqual({ops: ["arc"], doubles: [1, 2, 3, 4, 5], booleans: [true]});
+    });
+
+    it("raises error if parameters missing", function() {
+      expect(function() {
+        ctx.arc(1, 2, 3, 4);
+      }).toThrowError("Not enough arguments to CanvasContext.arc");
+    });
+
+  });
+
+  describe("rect", function() {
+
+    it("is rendered", function() {
+      ctx.rect(1, 2, 3, 4);
+      flush();
+
+      expect(decodeLastPacket()).toEqual({ops: ["rect"], doubles: [1, 2, 3, 4]});
+    });
+
+    it("raises error if parameters missing", function() {
+      expect(function() {
+        ctx.rect(1, 2, 3);
+      }).toThrowError("Not enough arguments to CanvasContext.rect");
+    });
+
+  });
+
+  describe("fill", function() {
+
+    it("is rendered", function() {
+      ctx.fill();
+      flush();
+
+      expect(decodeLastPacket()).toEqual({ops: ["fill"]});
+    });
+
+  });
+
+  describe("stroke", function() {
+
+    it("is rendered", function() {
+      ctx.stroke();
+      flush();
+
+      expect(decodeLastPacket()).toEqual({ops: ["stroke"]});
+    });
+
+  });
+
+  describe("clearRect", function() {
+
+    it("is rendered", function() {
+      ctx.clearRect(10, 20, 30, 40);
+      flush();
+
+      expect(decodeLastPacket()).toEqual({ops: ["clearRect"], doubles: [10, 20, 30, 40]});
+    });
+
+    it("raises error if parameters missing", function() {
+      expect(function() {
+        ctx.clearRect(1, 2, 3);
+      }).toThrowError("Not enough arguments to CanvasContext.clearRect");
+    });
+
+  });
+
+  describe("fillRect", function() {
+
+    it("is rendered", function() {
+      ctx.fillRect(10, 20, 30, 40);
+      flush();
+
+      expect(decodeLastPacket()).toEqual({
+        ops: ["beginPath", "rect", "fill"],
+        doubles: [10, 20, 30, 40]
+      });
+    });
+
+    it("raises error if parameters missing", function() {
+      expect(function() {
+        ctx.fillRect(1, 2, 3);
+      }).toThrowError("Not enough arguments to CanvasContext.fillRect");
+    });
+
+  });
+
+  describe("strokeRect", function() {
+
+    it("is rendered", function() {
+      ctx.strokeRect(10, 20, 30, 40);
+      flush();
+
+      expect(decodeLastPacket()).toEqual({
+        ops: ["beginPath", "rect", "stroke"],
+        doubles: [10, 20, 30, 40]
+      });
+    });
+
+    it("raises error if parameters missing", function() {
+      expect(function() {
+        ctx.strokeRect(1, 2, 3);
+      }).toThrowError("Not enough arguments to CanvasContext.strokeRect");
+    });
+
+  });
+
+  describe("fillText", function() {
+
+    it("is rendered", function() {
+      ctx.fillText("foo", 10, 20);
+      flush();
+
+      expect(decodeLastPacket()).toEqual({
+        ops: ["fillText"],
+        doubles: [10, 20],
+        booleans: [false, false, false],
+        strings: ["foo"]
+      });
+    });
+
+    it("raises error if parameters missing", function() {
+      expect(function() {
+        ctx.fillText("foo", 2);
+      }).toThrowError("Not enough arguments to CanvasContext.fillText");
+    });
+
+  });
+
+  describe("strokeText", function() {
+
+    it("is rendered", function() {
+      ctx.strokeText("foo", 10, 20);
+      flush();
+
+      expect(decodeLastPacket()).toEqual({
+        ops: ["strokeText"],
+        doubles: [10, 20],
+        booleans: [false, false, false],
+        strings: ["foo"]
+      });
+    });
+
+    it("raises error if parameters missing", function() {
+      expect(function() {
+        ctx.strokeText("foo", 2);
+      }).toThrowError("Not enough arguments to CanvasContext.strokeText");
     });
 
   });
