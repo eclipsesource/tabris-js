@@ -1,20 +1,14 @@
 describe("TabFolder", function() {
 
   var nativeBridge, tabFolder, parent;
-  var consoleBackup = window.console;
 
   beforeEach(function() {
-    window.console = jasmine.createSpyObj("console", ["log", "info", "warn", "error"]);
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._init(nativeBridge);
     parent = tabris.create("Composite");
     nativeBridge.resetCalls();
     tabFolder = tabris.create("TabFolder").appendTo(parent);
-  });
-
-  afterEach(function() {
-    window.console = consoleBackup;
   });
 
   it("children list is empty", function() {
@@ -220,6 +214,8 @@ describe("TabFolder", function() {
     });
 
     it("Ignores setting null with warning", function() {
+      spyOn(console, "warn");
+
       tabFolder.set("selection", null);
 
       var calls = nativeBridge.calls({op: "set", id: tabFolder.cid});
@@ -228,7 +224,9 @@ describe("TabFolder", function() {
     });
 
     it("Ignores setting disposed tab with warning", function() {
+      spyOn(console, "warn");
       tab2.dispose();
+
       tabFolder.set("selection", tab2);
 
       var calls = nativeBridge.calls({op: "set", id: tabFolder.cid});
@@ -237,6 +235,8 @@ describe("TabFolder", function() {
     });
 
     it("Ignores setting non tab", function() {
+      spyOn(console, "warn");
+
       tabFolder.set("selection", "foo");
 
       var calls = nativeBridge.calls({op: "set", id: tabFolder.cid});

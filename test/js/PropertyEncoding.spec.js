@@ -1,16 +1,6 @@
 describe("PropertyEncoding:", function() {
   /*globals _:false*/
 
-  var consoleBackup = window.console;
-
-  beforeEach(function() {
-    window.console = jasmine.createSpyObj("console", ["log", "info", "warn", "error"]);
-  });
-
-  afterEach(function() {
-    window.console = consoleBackup;
-  });
-
   describe("layoutData", function() {
 
     it("calls tabris.Layout.checkLayoutData", function() {
@@ -31,6 +21,8 @@ describe("PropertyEncoding:", function() {
     var check = tabris.PropertyEncoding.image;
 
     it("succeeds for minimal image value", function() {
+      spyOn(console, "warn");
+
       var result = check({src: "foo.png"});
 
       expect(result).toEqual(["foo.png", null, null, null]);
@@ -38,6 +30,8 @@ describe("PropertyEncoding:", function() {
     });
 
     it("succeeds for image with width and height", function() {
+      spyOn(console, "warn");
+
       var result = check({src: "foo.png", width: 10, height: 10});
 
       expect(result).toEqual(["foo.png", 10, 10, null]);
@@ -92,6 +86,8 @@ describe("PropertyEncoding:", function() {
     });
 
     it("warns if scale and width are given", function() {
+      spyOn(console, "warn");
+
       check({src: "foo.png", width: 23, scale: 2});
 
       var warning = "Image scale is ignored if width or height are given";
@@ -99,6 +95,8 @@ describe("PropertyEncoding:", function() {
     });
 
     it("warns if scale and height are given", function() {
+      spyOn(console, "warn");
+
       check({src: "foo.png", height: 23, scale: 2});
 
       var warning = "Image scale is ignored if width or height are given";

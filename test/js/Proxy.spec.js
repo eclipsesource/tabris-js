@@ -1,11 +1,9 @@
 describe("Proxy", function() {
 
-  var consoleBackup = window.console;
   var nativeBridge;
   var log;
 
   beforeEach(function() {
-    window.console = jasmine.createSpyObj("console", ["log", "info", "warn", "error"]);
     nativeBridge = new NativeBridgeSpy();
     log = [];
     tabris._reset();
@@ -18,7 +16,6 @@ describe("Proxy", function() {
   });
 
   afterEach(function() {
-    window.console = consoleBackup;
     delete tabris.TestType;
     delete tabris.CustomType;
   });
@@ -72,6 +69,7 @@ describe("Proxy", function() {
 
     it("does not raise warning for init properties", function() {
       tabris.registerType("CustomType", {_initProperties: {foo: 23}});
+      spyOn(console, "warn");
 
       tabris.create("CustomType", {});
 
@@ -404,6 +402,8 @@ describe("Proxy", function() {
       });
 
       it("raises no warning for unknown property", function() {
+        spyOn(console, "warn");
+
         proxy.get("unknownProperty", true);
 
         expect(console.warn).not.toHaveBeenCalled();
@@ -413,6 +413,7 @@ describe("Proxy", function() {
         tabris.TestType._properties.knownProperty = {type: "color"};
         spyOn(nativeBridge, "get").and.returnValue(23);
         spyOn(tabris.PropertyDecoding, "color").and.returnValue("foo");
+        spyOn(console, "warn");
 
         var result = proxy.get("knownProperty");
 
@@ -425,6 +426,7 @@ describe("Proxy", function() {
         tabris.TestType._properties.knownProperty = {type: ["color", 1, 2, 3]};
         spyOn(nativeBridge, "get").and.returnValue(23);
         spyOn(tabris.PropertyDecoding, "color").and.returnValue("foo");
+        spyOn(console, "warn");
 
         var result = proxy.get("knownProperty");
 
@@ -494,6 +496,8 @@ describe("Proxy", function() {
       });
 
       it("raises no warning for unknown property", function() {
+        spyOn(console, "warn");
+
         proxy.set("unknownProperty", true);
 
         expect(console.warn).not.toHaveBeenCalled();
@@ -509,6 +513,7 @@ describe("Proxy", function() {
       it("calls function if _properties entry is a string found in PropertyEncoding", function() {
         tabris.TestType._properties.knownProperty = {type: "boolean"};
         spyOn(tabris.PropertyEncoding, "boolean").and.returnValue(true);
+        spyOn(console, "warn");
 
         proxy.set("knownProperty", true);
 
@@ -519,6 +524,7 @@ describe("Proxy", function() {
       it("calls function if _properties entry is has type string found in PropertyEncoding", function() {
         tabris.TestType._properties.knownProperty = {type: "boolean"};
         spyOn(tabris.PropertyEncoding, "boolean").and.returnValue(true);
+        spyOn(console, "warn");
 
         proxy.set("knownProperty", true);
 
@@ -529,6 +535,7 @@ describe("Proxy", function() {
       it("calls function with args if _properties entry is an array", function() {
         tabris.TestType._properties.knownProperty = {type: ["choice", ["a", "b", "c"]]};
         spyOn(tabris.PropertyEncoding, "choice").and.returnValue(true);
+        spyOn(console, "warn");
 
         proxy.set("knownProperty", "a");
 
@@ -539,6 +546,7 @@ describe("Proxy", function() {
       it("raises a warning if _properties entry references a function that throws", function() {
         tabris.TestType._properties.knownProperty = {type: "boolean"};
         spyOn(tabris.PropertyEncoding, "boolean").and.throwError("My Error");
+        spyOn(console, "warn");
 
         proxy.set("knownProperty", true);
 
@@ -559,6 +567,7 @@ describe("Proxy", function() {
         tabris.TestType._properties.foo = {type: true, set: function() {
           throw new Error("My Error");
         }};
+        spyOn(console, "warn");
 
         expect(function() {
           proxy.set("foo", true);

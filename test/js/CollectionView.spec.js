@@ -1,20 +1,14 @@
 describe("CollectionView", function() {
 
-  var consoleBackup = window.console;
   var nativeBridge;
   var parent;
 
   beforeEach(function() {
-    window.console = jasmine.createSpyObj("console", ["log", "info", "warn", "error"]);
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._init(nativeBridge);
     parent = tabris.create("Composite");
     nativeBridge.resetCalls();
-  });
-
-  afterEach(function() {
-    window.console = consoleBackup;
   });
 
   describe("when created", function() {
@@ -127,6 +121,7 @@ describe("CollectionView", function() {
 
           it("triggers select on the collection view", function() {
             view.on("select", listener);
+            spyOn(console, "warn");
 
             view._trigger("selection", {index: 0});
 
@@ -184,6 +179,7 @@ describe("CollectionView", function() {
           describe("when calling cell.dispose()", function() {
 
             beforeEach(function() {
+              spyOn(console, "warn");
               cell.dispose();
             });
 
@@ -220,7 +216,10 @@ describe("CollectionView", function() {
 
             it("triggers change:item event on the cell", function() {
               cell.on("change:item", listener);
+              spyOn(console, "warn");
+
               view._trigger("populateitem", {widget: cell.cid, index: 0});
+
               expect(listener).toHaveBeenCalled();
               expect(listener.calls.argsFor(0)[0]).toBe(cell);
               expect(listener.calls.argsFor(0)[1]).toBe("a");
@@ -232,6 +231,7 @@ describe("CollectionView", function() {
             it("triggers change:item event on the cell even if item is already set", function() {
               view._trigger("populateitem", {widget: cell.cid, index: 0});
               cell.on("change:item", listener);
+              spyOn(console, "warn");
 
               view._trigger("populateitem", {widget: cell.cid, index: 0});
 
@@ -245,7 +245,10 @@ describe("CollectionView", function() {
 
             it("triggers change:itemIndex event on the cell", function() {
               cell.on("change:itemIndex", listener);
+              spyOn(console, "warn");
+
               view._trigger("populateitem", {widget: cell.cid, index: 0});
+
               expect(listener).toHaveBeenCalled();
               expect(listener.calls.argsFor(0)[0]).toBe(cell);
               expect(listener.calls.argsFor(0)[1]).toBe(0);

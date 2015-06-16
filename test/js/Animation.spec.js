@@ -1,7 +1,6 @@
 describe("Animation", function() {
 
   var widget, nativeBridge;
-  var consoleBackup = window.console;
 
   function animationId() {
     return nativeBridge.calls({op: "create", type: "tabris.Animation"}).pop().id;
@@ -21,7 +20,6 @@ describe("Animation", function() {
 
   afterEach(function() {
     delete tabris.TestType;
-    window.console = consoleBackup;
   });
 
   describe("widget.animate", function() {
@@ -102,7 +100,7 @@ describe("Animation", function() {
     });
 
     it("warns against invalid options", function() {
-      window.console = jasmine.createSpyObj("console", ["log", "info", "warn", "error"]);
+      spyOn(console, "warn");
 
       widget.animate({}, {foo: "bar"});
 
@@ -110,7 +108,7 @@ describe("Animation", function() {
     });
 
     it("warns against invalid properties", function() {
-      window.console = jasmine.createSpyObj("console", ["log", "info", "warn", "error"]);
+      spyOn(console, "warn");
 
       widget.animate({background: "#00ff00", opacity: 0}, {});
 
@@ -119,7 +117,8 @@ describe("Animation", function() {
     });
 
     it("warns against invalid property values", function() {
-      window.console = jasmine.createSpyObj("console", ["log", "info", "warn", "error"]);
+      spyOn(console, "warn");
+
       widget.animate({opacity: 0, transform: {foo: "bar"}}, {});
 
       expect(console.warn).toHaveBeenCalledWith("TestType: Ignored invalid animation property value for \"transform\"");

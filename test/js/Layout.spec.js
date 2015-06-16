@@ -1,20 +1,12 @@
 describe("Layout:", function() {
 
-  var consoleBackup = window.console;
-
-  beforeEach(function() {
-    window.console = jasmine.createSpyObj("console", ["log", "info", "warn", "error"]);
-  });
-
-  afterEach(function() {
-    window.console = consoleBackup;
-  });
-
   describe("checkLayoutData", function() {
 
     var check = tabris.Layout.checkLayoutData;
 
     it("raises a warning for incomplete horizontal layoutData", function() {
+      spyOn(console, "warn");
+
       check({top: 0});
 
       var warning = "Incomplete layoutData: either left, right or centerX should be specified";
@@ -22,6 +14,8 @@ describe("Layout:", function() {
     });
 
     it("raises a warning for incomplete vertical layoutData", function() {
+      spyOn(console, "warn");
+
       check({left: 0});
 
       var warning = "Incomplete layoutData: either top, bottom, centerY, or baseline should be specified";
@@ -29,6 +23,8 @@ describe("Layout:", function() {
     });
 
     it("raises a warning for inconsistent layoutData (centerX)", function() {
+      spyOn(console, "warn");
+
       check({top: 0, left: 0, centerX: 0});
 
       var warning = "Inconsistent layoutData: centerX overrides left and right";
@@ -42,6 +38,8 @@ describe("Layout:", function() {
     });
 
     it("raises a warning for inconsistent layoutData (centerY)", function() {
+      spyOn(console, "warn");
+
       check({left: 0, top: 0, centerY: 0});
 
       var warning = "Inconsistent layoutData: centerY overrides top and bottom";
@@ -55,6 +53,8 @@ describe("Layout:", function() {
     });
 
     it("raises a warning for inconsistent layoutData (baseline)", function() {
+      spyOn(console, "warn");
+
       check({left: 0, top: 0, baseline: 0});
 
       var warning = "Inconsistent layoutData: baseline overrides top, bottom, and centerY";

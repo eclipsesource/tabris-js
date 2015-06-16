@@ -1,12 +1,10 @@
 describe("Legacy CanvasContext", function() {
 
-  var consoleBackup = window.console;
   var nativeBridge;
   var ctx;
   var gc;
 
   beforeEach(function() {
-    window.console = jasmine.createSpyObj("console", ["log", "info", "warn", "error"]);
     nativeBridge = new NativeBridgeSpy();
     tabris._init(nativeBridge);
     gc = tabris.create("_GC");
@@ -16,7 +14,6 @@ describe("Legacy CanvasContext", function() {
   });
 
   afterEach(function() {
-    window.console = consoleBackup;
     gc.dispose();
   });
 
@@ -60,9 +57,11 @@ describe("Legacy CanvasContext", function() {
     });
 
     it("issues a warning for invalid values", function() {
+      spyOn(console, "warn");
+
       ctx.lineWidth = -1;
 
-      expect(window.console.warn).toHaveBeenCalledWith("Unsupported value for lineWidth: -1");
+      expect(console.warn).toHaveBeenCalledWith("Unsupported value for lineWidth: -1");
     });
 
   });
@@ -97,9 +96,11 @@ describe("Legacy CanvasContext", function() {
     });
 
     it("issues a warning for invalid values", function() {
+      spyOn(console, "warn");
+
       ctx.lineCap = "foo";
 
-      expect(window.console.warn).toHaveBeenCalledWith("Unsupported value for lineCap: foo");
+      expect(console.warn).toHaveBeenCalledWith("Unsupported value for lineCap: foo");
     });
 
   });
@@ -134,9 +135,11 @@ describe("Legacy CanvasContext", function() {
     });
 
     it("issues a warning for invalid values", function() {
+      spyOn(console, "warn");
+
       ctx.lineJoin = "foo";
 
-      expect(window.console.warn).toHaveBeenCalledWith("Unsupported value for lineJoin: foo");
+      expect(console.warn).toHaveBeenCalledWith("Unsupported value for lineJoin: foo");
     });
 
   });
@@ -171,10 +174,11 @@ describe("Legacy CanvasContext", function() {
     });
 
     it("issues a warning for invalid color strings", function() {
+      spyOn(console, "warn");
+
       ctx.fillStyle = "no-such-color";
 
-      expect(window.console.warn)
-          .toHaveBeenCalledWith("Unsupported value for fillStyle: no-such-color");
+      expect(console.warn).toHaveBeenCalledWith("Unsupported value for fillStyle: no-such-color");
     });
 
   });
@@ -209,10 +213,11 @@ describe("Legacy CanvasContext", function() {
     });
 
     it("issues a warning for invalid color strings", function() {
+      spyOn(console, "warn");
+
       ctx.strokeStyle = "no-such-color";
 
-      expect(window.console.warn)
-          .toHaveBeenCalledWith("Unsupported value for strokeStyle: no-such-color");
+      expect(console.warn).toHaveBeenCalledWith("Unsupported value for strokeStyle: no-such-color");
     });
 
   });
@@ -247,9 +252,11 @@ describe("Legacy CanvasContext", function() {
     });
 
     it("issues a warning for invalid values", function() {
+      spyOn(console, "warn");
+
       ctx.textAlign = "foo";
 
-      expect(window.console.warn).toHaveBeenCalledWith("Unsupported value for textAlign: foo");
+      expect(console.warn).toHaveBeenCalledWith("Unsupported value for textAlign: foo");
     });
 
   });
@@ -284,9 +291,11 @@ describe("Legacy CanvasContext", function() {
     });
 
     it("issues a warning for invalid values", function() {
+      spyOn(console, "warn");
+
       ctx.textBaseline = "foo";
 
-      expect(window.console.warn).toHaveBeenCalledWith("Unsupported value for textBaseline: foo");
+      expect(console.warn).toHaveBeenCalledWith("Unsupported value for textBaseline: foo");
     });
 
   });
