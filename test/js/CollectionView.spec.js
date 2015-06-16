@@ -29,7 +29,8 @@ describe("CollectionView", function() {
       expect(createCalls[0].properties.background).toEqual([255, 255, 0, 255]);
     });
 
-    it("listens on native events createitem and populateitem", function() {
+    it("listens on native events `requestinfo`, `createitem`, and `populateitem`", function() {
+      expect(nativeBridge.calls({op: "listen", event: "requestinfo"})[0].listen).toBe(true);
       expect(nativeBridge.calls({op: "listen", event: "createitem"})[0].listen).toBe(true);
       expect(nativeBridge.calls({op: "listen", event: "populateitem"})[0].listen).toBe(true);
     });
@@ -38,9 +39,90 @@ describe("CollectionView", function() {
       expect(view.get("itemHeight")).toBe(0);
       expect(view.get("items", [])).toEqual([]);
       expect(view.get("initializeCell")).toBe(null);
+      expect(view.get("cellType")).toBe(null);
       expect(view.get("refreshEnabled")).toBe(false);
       expect(view.get("refreshIndicator")).toBe(false);
       expect(view.get("refreshMessage")).toBe("");
+    });
+
+    describe("when cellType is set to a function", function() {
+
+      var cellTypeFn = jasmine.createSpy("cellType");
+
+      beforeEach(function() {
+        nativeBridge.resetCalls();
+        spyOn(nativeBridge, "set");
+        view.set("cellType", cellTypeFn);
+        tabris.trigger("flush");
+      });
+
+      it("returns the given function", function() {
+        expect(view.get("cellType")).toBe(cellTypeFn);
+      });
+
+      it("does not SET native property", function() {
+        expect(nativeBridge.set).not.toHaveBeenCalled();
+      });
+
+    });
+
+    describe("when cellType is set to a string", function() {
+
+      beforeEach(function() {
+        nativeBridge.resetCalls();
+        spyOn(nativeBridge, "set");
+        view.set("cellType", "foo");
+        tabris.trigger("flush");
+      });
+
+      it("returns the given string", function() {
+        expect(view.get("cellType")).toBe("foo");
+      });
+
+      it("does not SET native property", function() {
+        expect(nativeBridge.set).not.toHaveBeenCalled();
+      });
+
+    });
+
+    describe("when itemHeight is set to a function", function() {
+
+      var itemHeightFn = jasmine.createSpy("itemHeight");
+
+      beforeEach(function() {
+        nativeBridge.resetCalls();
+        spyOn(nativeBridge, "set");
+        view.set("itemHeight", itemHeightFn);
+        tabris.trigger("flush");
+      });
+
+      it("returns the given function", function() {
+        expect(view.get("itemHeight")).toBe(itemHeightFn);
+      });
+
+      it("does not SET native property", function() {
+        expect(nativeBridge.set).not.toHaveBeenCalled();
+      });
+
+    });
+
+    describe("when itemHeight is set to a number", function() {
+
+      beforeEach(function() {
+        nativeBridge.resetCalls();
+        view.set("itemHeight", 23);
+        tabris.trigger("flush");
+      });
+
+      it("returns the given number", function() {
+        expect(view.get("itemHeight")).toBe(23);
+      });
+
+      it("SETs native property", function() {
+        var calls = nativeBridge.calls({op: "set"});
+        expect(calls[0].properties.itemHeight).toBe(23);
+      });
+
     });
 
     describe("when initializeCell is set", function() {
@@ -77,6 +159,140 @@ describe("CollectionView", function() {
           view.get("items").push("d");
 
           expect(view.get("items")).toEqual(["a", "b", "c"]);
+        });
+
+        describe("when requestinfo event is received", function() {
+
+          var cellTypeFn, itemHeightFn, describeCalls;
+
+          beforeEach(function() {
+            cellTypeFn = jasmine.createSpy().and.callFake(function(item) {
+              return item.charCodeAt(0) % 2 === 0 ? "bar" : "foo";
+            });
+            itemHeightFn = jasmine.createSpy().and.callFake(function(item) {
+              return item.charCodeAt(0) % 2 === 0 ? 80 : 50;
+            });
+          });
+
+          describe("when cellType is set to a function", function() {
+
+            beforeEach(function() {
+              view.set("cellType", cellTypeFn);
+              view.set("itemHeight", 50);
+              tabris.trigger("flush");
+              view._trigger("requestinfo", {index: 0});
+              view._trigger("requestinfo", {index: 1});
+              view._trigger("requestinfo", {index: 2});
+              describeCalls = nativeBridge.calls({op: "call", method: "describeItem"});
+            });
+
+            it("executes `cellType` function", function() {
+              expect(cellTypeFn).toHaveBeenCalledWith("a");
+              expect(cellTypeFn).toHaveBeenCalledWith("b");
+              expect(cellTypeFn).toHaveBeenCalledWith("c");
+            });
+
+            it("CALLs `describeItem` with index, type, and fixed height", function() {
+              expect(describeCalls[0].parameters).toEqual({index: 0, type: 0, height: 50});
+              expect(describeCalls[1].parameters).toEqual({index: 1, type: 1, height: 50});
+              expect(describeCalls[2].parameters).toEqual({index: 2, type: 0, height: 50});
+            });
+
+            describe("when createitem event is received with item type", function() {
+
+              beforeEach(function() {
+                view._trigger("createitem", {type: 0});
+              });
+
+              it("calls `initializeCell` function with cell type", function() {
+                expect(initializeCell).toHaveBeenCalledWith(jasmine.any(tabris.Cell), "foo");
+              });
+
+            });
+
+          });
+
+          describe("when cellType is set to a string", function() {
+
+            beforeEach(function() {
+              view.set("cellType", "foo");
+              tabris.trigger("flush");
+              view._trigger("requestinfo", {index: 0});
+              describeCalls = nativeBridge.calls({op: "call", method: "describeItem"});
+            });
+
+            it("CALLs `describeItem` with type set to zero", function() {
+              expect(describeCalls[0].parameters.type).toBe(0);
+            });
+
+          });
+
+          describe("when itemHeight is set to a function", function() {
+
+            beforeEach(function() {
+              view.set("itemHeight", itemHeightFn);
+              tabris.trigger("flush");
+              view._trigger("requestinfo", {index: 0});
+              view._trigger("requestinfo", {index: 1});
+              view._trigger("requestinfo", {index: 2});
+              describeCalls = nativeBridge.calls({op: "call", method: "describeItem"});
+            });
+
+            it("executes `itemHeight` function", function() {
+              expect(itemHeightFn).toHaveBeenCalledWith("a", null);
+              expect(itemHeightFn).toHaveBeenCalledWith("b", null);
+              expect(itemHeightFn).toHaveBeenCalledWith("c", null);
+            });
+
+            it("CALLs `describeItem` with index, default type, and height", function() {
+              expect(describeCalls[0].parameters).toEqual({index: 0, type: 0, height: 50});
+              expect(describeCalls[1].parameters).toEqual({index: 1, type: 0, height: 80});
+              expect(describeCalls[2].parameters).toEqual({index: 2, type: 0, height: 50});
+            });
+
+          });
+
+          describe("when both cellType and itemHeight is set to a function", function() {
+
+            beforeEach(function() {
+              view.set("cellType", cellTypeFn);
+              view.set("itemHeight", itemHeightFn);
+              tabris.trigger("flush");
+              view._trigger("requestinfo", {index: 0});
+              view._trigger("requestinfo", {index: 1});
+              view._trigger("requestinfo", {index: 2});
+              describeCalls = nativeBridge.calls({op: "call", method: "describeItem"});
+            });
+
+            it("executes `itemHeight` function", function() {
+              expect(itemHeightFn).toHaveBeenCalledWith("a", "foo");
+              expect(itemHeightFn).toHaveBeenCalledWith("b", "bar");
+              expect(itemHeightFn).toHaveBeenCalledWith("c", "foo");
+            });
+
+            it("CALLs `describeItem` with index, type, and height", function() {
+              expect(describeCalls[0].parameters).toEqual({index: 0, type: 0, height: 50});
+              expect(describeCalls[1].parameters).toEqual({index: 1, type: 1, height: 80});
+              expect(describeCalls[2].parameters).toEqual({index: 2, type: 0, height: 50});
+            });
+
+          });
+
+          describe("when itemHeight is set to a number", function() {
+
+            beforeEach(function() {
+              view.set("itemHeight", 23);
+              tabris.trigger("flush");
+              view._trigger("requestinfo", {index: 0});
+              describeCalls = nativeBridge.calls({op: "call", method: "describeItem"});
+            });
+
+            it("doesn't CALL `describeItem`", function() {
+              expect(describeCalls[0].parameters.height).toBe(23);
+            });
+
+          });
+
         });
 
         describe("when items is set again", function() {
@@ -120,8 +336,8 @@ describe("CollectionView", function() {
           });
 
           it("triggers select on the collection view", function() {
-            view.on("select", listener);
             spyOn(console, "warn");
+            view.on("select", listener);
 
             view._trigger("selection", {index: 0});
 
@@ -139,7 +355,7 @@ describe("CollectionView", function() {
           var cellCreateCall, cell;
 
           beforeEach(function() {
-            view._trigger("createitem");
+            view._trigger("createitem", {});
             cellCreateCall = nativeBridge.calls({op: "create", type: "rwt.widgets.Composite"})[0];
             cell = tabris(cellCreateCall.id);
           });
@@ -155,7 +371,7 @@ describe("CollectionView", function() {
           });
 
           it("calls initializeCell with the cell as parent", function() {
-            expect(initializeCell).toHaveBeenCalledWith(cell);
+            expect(initializeCell).toHaveBeenCalledWith(cell, undefined);
           });
 
           it("returns cells as children", function() {
@@ -215,44 +431,35 @@ describe("CollectionView", function() {
             });
 
             it("triggers change:item event on the cell", function() {
-              cell.on("change:item", listener);
               spyOn(console, "warn");
+              cell.on("change:item", listener);
 
               view._trigger("populateitem", {widget: cell.cid, index: 0});
 
-              expect(listener).toHaveBeenCalled();
-              expect(listener.calls.argsFor(0)[0]).toBe(cell);
-              expect(listener.calls.argsFor(0)[1]).toBe("a");
-              expect(listener.calls.argsFor(0)[2]).toEqual({});
+              expect(listener).toHaveBeenCalledWith(cell, "a", {});
               expect(cell.get("item")).toBe("a");
               expect(console.warn).not.toHaveBeenCalled();
             });
 
             it("triggers change:item event on the cell even if item is already set", function() {
+              spyOn(console, "warn");
               view._trigger("populateitem", {widget: cell.cid, index: 0});
               cell.on("change:item", listener);
-              spyOn(console, "warn");
 
               view._trigger("populateitem", {widget: cell.cid, index: 0});
 
-              expect(listener).toHaveBeenCalled();
-              expect(listener.calls.argsFor(0)[0]).toBe(cell);
-              expect(listener.calls.argsFor(0)[1]).toBe("a");
-              expect(listener.calls.argsFor(0)[2]).toEqual({});
+              expect(listener).toHaveBeenCalledWith(cell, "a", {});
               expect(cell.get("item")).toBe("a");
               expect(console.warn).not.toHaveBeenCalled();
             });
 
             it("triggers change:itemIndex event on the cell", function() {
-              cell.on("change:itemIndex", listener);
               spyOn(console, "warn");
+              cell.on("change:itemIndex", listener);
 
               view._trigger("populateitem", {widget: cell.cid, index: 0});
 
-              expect(listener).toHaveBeenCalled();
-              expect(listener.calls.argsFor(0)[0]).toBe(cell);
-              expect(listener.calls.argsFor(0)[1]).toBe(0);
-              expect(listener.calls.argsFor(0)[2]).toEqual({});
+              expect(listener).toHaveBeenCalledWith(cell, 0, {});
               expect(cell.get("itemIndex")).toBe(0);
               expect(console.warn).not.toHaveBeenCalled();
             });

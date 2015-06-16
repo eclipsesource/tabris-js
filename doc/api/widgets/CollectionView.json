@@ -4,8 +4,8 @@
   "include": ["Widget"],
   "properties": {
     "itemHeight": {
-      "type": "number",
-      "description": "The height of a collection cell."
+      "type": "number|function",
+      "description": "The height of a collection cell. If set to a function, this function will be called for every item, providing the item and the cell type as parameters, and must return the item height for the given item."
     },
     "items": {
       "type": "Array",
@@ -14,7 +14,11 @@
     "initializeCell": {
       "type": "function",
       "static": true,
-      "description": "A callback used to initialize a collection cell by attaching widget and *change:item* listener. Cells are created by the framework and recycled on scrolling. This callback receives the cell as the first argument."
+      "description": "A callback used to initialize a collection cell by attaching widget and *change:item* listener. Cells are created by the framework and recycled on scrolling. This callback receives the cell as the first and the cell type as second parameter."
+    },
+    "cellType": {
+      "type": "string|function",
+      "description": "The name of the cell type to use for a given item. This name will be passed to the `initializeCell` and `itemHeight` functions. Cells will be reused only by items that require the same cell type. If set to a function, this function will be called for every item, providing the item as a parameter, and must return a name for the cell type to use for the given item."
     },
     "refreshEnabled": {
       "type": "boolean?false",

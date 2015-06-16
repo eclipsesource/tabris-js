@@ -9,7 +9,16 @@
     },
 
     _properties: {
-      itemHeight: {type: "natural", default: 0},
+      itemHeight: {
+        type: "function|natural",
+        default: 0,
+        set: function(value) {
+          if (typeof value !== "function") {
+            // Required for 1.0 compatibility
+            this._nativeSet("itemHeight", value);
+          }
+        }
+      },
       items: {
         set: function(value) {
           this._setItems(value);
@@ -19,11 +28,11 @@
         },
         nocache: true
       },
-      initializeCell: {
-        set: function(value) {
-          this._initializeCell = value;
-        },
-        default: null
+      initializeCell: {default: null},
+      cellType: {
+        type: "string|function",
+        default: null,
+        set: function() {}
       },
       refreshEnabled: {type: "boolean", default: false},
       refreshIndicator: {type: "boolean", default: false},
@@ -33,6 +42,7 @@
     _create: function() {
       this._items = [];
       var result = tabris.Proxy.prototype._create.apply(this, arguments);
+      this._nativeListen("requestinfo", true);
       this._nativeListen("createitem", true);
       this._nativeListen("populateitem", true);
       // TODO call _reload on flush
@@ -51,16 +61,26 @@
       refresh: {
         trigger: function(event) {this.trigger("refresh", this, event);}
       },
+      requestinfo: {
+        trigger: function(event) {
+          var item = this._getItem(this._items, event.index);
+          var type = resolveProperty(this, "cellType", item);
+          var height = resolveProperty(this, "itemHeight", item, type);
+          var typeId = encodeCellType(this, type);
+          this._nativeCall("describeItem", {index: event.index, type: typeId, height: height});
+        }
+      },
       createitem: {
-        trigger: function() {
+        trigger: function(event) {
           var cell = tabris.create("Cell", {});
           cell._parent = this;
           this._addChild(cell);
           this._nativeCall("addItem", {widget: cell.cid});
-          if (typeof this._initializeCell !== "function") {
+          var initializeCell = this.get("initializeCell");
+          if (typeof initializeCell !== "function") {
             console.warn("initializeCell callback missing");
           } else {
-            this._initializeCell(cell);
+            initializeCell(cell, decodeCellType(this, event.type));
           }
         }
       },
@@ -174,6 +194,28 @@
     }
 
   });
+
+  function resolveProperty(ctx, name) {
+    var value = ctx.get(name);
+    if (typeof value === "function") {
+      return value.apply(null, Array.prototype.slice.call(arguments, 2));
+    }
+    return value;
+  }
+
+  function encodeCellType(ctx, type) {
+    var cellTypes = ctx._cellTypes || (ctx._cellTypes = []);
+    var index = cellTypes.indexOf(type);
+    if (index === -1) {
+      index += cellTypes.push(type);
+    }
+    return index;
+  }
+
+  function decodeCellType(ctx, type) {
+    var cellTypes = ctx._cellTypes || [];
+    return cellTypes[type];
+  }
 
   tabris.registerWidget("Cell", {
 
