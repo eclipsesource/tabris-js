@@ -1,5 +1,7 @@
 var Chart = require("chart.js/Chart.min.js");
 
+var MARGIN = 16;
+
 var data = {
   labels: ["January", "February", "March", "April", "May", "June", "July"],
   datasets: [
@@ -73,16 +75,16 @@ function createPage(chartType, chartData) {
     title: chartType + " Chart",
     topLevel: true
   });
-  var checkboxAnimate = tabris.create("CheckBox", {
-    text: "Animate",
-    layoutData: {top: 10, right: 10, height: 40, width: 100}
-  }).appendTo(page);
   var button = tabris.create("Button", {
     text: "Draw graph",
-    layoutData: {left: 10, top: 10, right: [checkboxAnimate, 10], height: 40}
+    layoutData: {left: MARGIN, top: MARGIN}
+  }).appendTo(page);
+  var checkboxAnimate = tabris.create("CheckBox", {
+    text: "Animate",
+    layoutData: {right: MARGIN, left: [button, MARGIN], baseline: button}
   }).appendTo(page);
   var canvas = tabris.create("Canvas", {
-    layoutData: {left: 10, top: 60, right: 10, bottom: 10}
+    layoutData: {left: MARGIN, top: [button, MARGIN], right: MARGIN, bottom: MARGIN}
   }).appendTo(page);
   var createCanvasContext = function() {
     var bounds = canvas.get("bounds");
