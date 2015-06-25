@@ -47,20 +47,14 @@ describe("Legacy CanvasContext", function() {
       ]);
     });
 
-    it("ignores zero and negative values", function() {
+    it("ignores zero and negative values, but prints a warning", function() {
+      spyOn(console, "warn");
       ctx.lineWidth = 3;
 
       ctx.lineWidth = 0;
       ctx.lineWidth = -1;
 
       expect(ctx.lineWidth).toEqual(3);
-    });
-
-    it("issues a warning for invalid values", function() {
-      spyOn(console, "warn");
-
-      ctx.lineWidth = -1;
-
       expect(console.warn).toHaveBeenCalledWith("Unsupported value for lineWidth: -1");
     });
 
@@ -87,19 +81,13 @@ describe("Legacy CanvasContext", function() {
       ]);
     });
 
-    it("ignores unknown values", function() {
-      ctx.lineCap = "round";
-
-      ctx.lineCap = "unknown";
-
-      expect(ctx.lineCap).toEqual("round");
-    });
-
-    it("issues a warning for invalid values", function() {
+    it("ignores unknown values, but prints a warning", function() {
       spyOn(console, "warn");
+      ctx.lineCap = "round";
 
       ctx.lineCap = "foo";
 
+      expect(ctx.lineCap).toEqual("round");
       expect(console.warn).toHaveBeenCalledWith("Unsupported value for lineCap: foo");
     });
 
@@ -126,19 +114,13 @@ describe("Legacy CanvasContext", function() {
       ]);
     });
 
-    it("ignores unknown values", function() {
-      ctx.lineJoin = "round";
-
-      ctx.lineJoin = "unknown";
-
-      expect(ctx.lineJoin).toEqual("round");
-    });
-
-    it("issues a warning for invalid values", function() {
+    it("ignores unknown values, but prints a warning", function() {
       spyOn(console, "warn");
+      ctx.lineJoin = "round";
 
       ctx.lineJoin = "foo";
 
+      expect(ctx.lineJoin).toEqual("round");
       expect(console.warn).toHaveBeenCalledWith("Unsupported value for lineJoin: foo");
     });
 
@@ -165,19 +147,13 @@ describe("Legacy CanvasContext", function() {
       ]);
     });
 
-    it("ignores invalid color strings", function() {
+    it("ignores invalid color strings, but prints a warning", function() {
+      spyOn(console, "warn");
       ctx.fillStyle = "red";
 
       ctx.fillStyle = "no-such-color";
 
       expect(ctx.fillStyle).toEqual("rgba(255, 0, 0, 1)");
-    });
-
-    it("issues a warning for invalid color strings", function() {
-      spyOn(console, "warn");
-
-      ctx.fillStyle = "no-such-color";
-
       expect(console.warn).toHaveBeenCalledWith("Unsupported value for fillStyle: no-such-color");
     });
 
@@ -204,19 +180,13 @@ describe("Legacy CanvasContext", function() {
       ]);
     });
 
-    it("ignores invalid color strings", function() {
+    it("ignores invalid color strings, but prints a warning", function() {
+      spyOn(console, "warn");
       ctx.strokeStyle = "red";
 
       ctx.strokeStyle = "no-such-color";
 
       expect(ctx.strokeStyle).toEqual("rgba(255, 0, 0, 1)");
-    });
-
-    it("issues a warning for invalid color strings", function() {
-      spyOn(console, "warn");
-
-      ctx.strokeStyle = "no-such-color";
-
       expect(console.warn).toHaveBeenCalledWith("Unsupported value for strokeStyle: no-such-color");
     });
 
@@ -243,19 +213,13 @@ describe("Legacy CanvasContext", function() {
       ]);
     });
 
-    it("ignores unknown values", function() {
-      ctx.textAlign = "center";
-
-      ctx.textAlign = "unknown";
-
-      expect(ctx.textAlign).toEqual("center");
-    });
-
-    it("issues a warning for invalid values", function() {
+    it("ignores unknown values, but prints a warning", function() {
       spyOn(console, "warn");
+      ctx.textAlign = "center";
 
       ctx.textAlign = "foo";
 
+      expect(ctx.textAlign).toEqual("center");
       expect(console.warn).toHaveBeenCalledWith("Unsupported value for textAlign: foo");
     });
 
@@ -282,19 +246,13 @@ describe("Legacy CanvasContext", function() {
       ]);
     });
 
-    it("ignores unknown values", function() {
-      ctx.textBaseline = "middle";
-
-      ctx.textBaseline = "unknown";
-
-      expect(ctx.textBaseline).toEqual("middle");
-    });
-
-    it("issues a warning for invalid values", function() {
+    it("ignores unknown values, but prints a warning", function() {
       spyOn(console, "warn");
+      ctx.textBaseline = "middle";
 
       ctx.textBaseline = "foo";
 
+      expect(ctx.textBaseline).toEqual("middle");
       expect(console.warn).toHaveBeenCalledWith("Unsupported value for textBaseline: foo");
     });
 
