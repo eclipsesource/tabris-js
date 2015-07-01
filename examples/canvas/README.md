@@ -4,7 +4,7 @@ The Canvas example consists of four parts, each part is on a separate tabris pag
 ## Animation
 The example showcases an animated canvas. Animation is done with a timer function. The example also displays the framerate the animation achieves on your device.
 
-![Canvas Animation](https://raw.githubusercontent.com/eclipsesource/tabris-js/master/examples/canvas/images/canvas-animation-android.gif)
+![Canvas Animation](https://tabrisjs.com/assets/public-content/img/examples/canvas-animation-android.gif)
 
 ## Basic Shapes
 Demonstrates basic drawing functions with different shape types, path and transparency.
