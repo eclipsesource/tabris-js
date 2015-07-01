@@ -2,4 +2,4 @@
 
 Our interactive Hello World. Also a good template for your first own app. [This article](http://eclipsesource.com/blogs/2015/02/20/tabris-js-examples-hello-world/) discusses the example in detail.
 
-![Animations at work](https://tabrisjs.com/assets/public-content/img/examples/hello-world-android-ios.png)
+![Hello world](https://tabrisjs.com/assets/public-content/img/examples/hello-world-android-ios.png)
