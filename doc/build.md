@@ -1,6 +1,6 @@
 # Building a Tabris.js App
 
-Tabris.js utilizes [Apache Cordova](http://cordova.apache.org) to build and package apps. Apps can be built without any local setup using the free online build service on tabrisjs.com. To build an app on your local machine, you need to setup developer tools like Xcode or the Android SDK. The following features are supported by the two different build types.
+Tabris.js utilizes [Apache Cordova](http://cordova.apache.org) to build and package apps. Apps can be built without any local setup using the free online build service on tabrisjs.com. To [build an app on your local machine](local-build.md), you need to setup developer tools like Xcode or the Android SDK. The following features are supported by the two different build types.
 
 |                           | Build Service | Local Build |
 | :------------------------ |:---------------:| :---------------: |
@@ -13,7 +13,7 @@ Tabris.js utilizes [Apache Cordova](http://cordova.apache.org) to build and pack
 | Using own build hardware  |              |       ✓      |
 | Other SCMs than Git       |              |       ✓      |
 
-> **Note:** The online build service is free for public GitHub repositories. To built from a private repository, you need a [developer account](https://tabrisjs.com/pricing/). To build an app locally you need a [pro account](https://tabrisjs.com/pricing/).
+> **Note:** The online build service is free for public GitHub repositories. To built from a private repository, you need a [developer account](https://tabrisjs.com/pricing/). To build an app locally you need a [pro account](https://tabrisjs.com/pricing/). To build locally you need to follow the [local build guide](local-build.md).
 
 ## Project Layout
 
@@ -72,81 +72,25 @@ After your app has become valid, you are ready to execute the first build. Just 
 * **App Directory:** The directory within your repository that contains your Tabris.js app. The value must be relative to the repository root.
 * **iOS Signing Key:** iOS apps can not be deployed to a mobile device without being signed. If you want to build an iOS app you need an Apple Developer account and provide the certificate together with the provisioning profile. A very good tutorial on how to get these files can be found in the [Phonegap Build documentation](http://docs.build.phonegap.com/en_US/signing_signing-ios.md.html#iOS%20Signing).
 * **Android Signing Key:** Android apps needs to be signed with a certificate only if you want to deploy them to Google Play. You can find a very good tutorial in the [Phonegap Build documentation](http://docs.build.phonegap.com/en_US/signing_signing-android.md.html#Android%20Signing) as well.
+* **Environment Variables:** Key/Value pairs that will be stored and transferred encrypted to the build machines. They can be used within the config.xml or custom hooks. Use cases are adding plugins from private git repositories or handling access keys.
+* **Builds to keep:** Specifies the number of builds that should be kept before deleting them automatically.
 * **Tabris.js Version:** The Tabris.js *client* version to use in the app. In contrast to the "tabris" dependency to your `package.json` which defines the version of the JavaScript module, this setting defines the version of the native client that will interpret your JavaScript code. In most cases, the value `latest` is good enough here. But if you want to stick to a fixed Tabris.js version you can configure it here.
 * **Debug:** Enables the *debug mode*. If set to `ON`, your app will be built including debug symbols and it will be packaged into the Tabris.js developer app to make development easier. This allows you to use all the benefits like the developer console or the reload also with your own app. Please be aware that debug versions can not be submitted to the app stores. Debug `OFF` means your app will be built to be ready for release: no developer app, no console, no reload. Only your JavaScript code is executed.
 
 ### Adding Plugins
-To add a set of Apache Cordova Plugins you only need to add them to the `config.xml`. The online build supports the [`<gap:plugin />`](http://docs.build.phonegap.com/en_US/configuring_plugins.md.html#Plugins) tag that you might already know from Phonegap Build. This tag allows you to add plugins using an ID, an HTTP or a git URL. A sample `config.xml` including two Cordova plugins could look like this:
+To add a set of Apache Cordova Plugins you only need to add them to the `config.xml`. The online build supports the Cordova `<plugin />` tag. This tag allows you to add plugins using an ID, an HTTP or a git URL. A sample `config.xml` including two Cordova plugins could look like this:
 ```xml
 <?xml version='1.0' encoding='utf-8'?>
 <widget
     id="my.first.app"
     version="1.0.0"
-    xmlns:gap="http://phonegap.com/ns/1.0"
     xmlns="http://www.w3.org/ns/widgets"
     xmlns:cdv="http://cordova.apache.org/ns/1.0">
     ...
-  <gap:plugin name="org.apache.cordova.camera" />
-  <gap:plugin name="org.apache.cordova.dialogs" />
+  <plugin name="cordova-plugin-camera" version="1.2.0" />
+  <plugin name="cordova-plugin-dialogs" version="1.1.1" />
 </widget>
 ```
-> **Please Note:** You need to include the gap XML namespace in the root element of your `config.xml` file, as seen in the example above.
-
-## Local Build
-
-You can build Tabris.js apps on your local machine using the [Cordova command line interface](http://cordova.apache.org/docs/en/edge/guide_cli_index.md.html#The%20Command-Line%20Interface).
-
-### Prerequisites
-
-If you're targeting iOS you will need MacOS, while Android apps can be build on any OS that is supported by the Android SDK.
-
-You also need a Cordova installation. Follow the [Cordova Installation Guide](http://cordova.apache.org/docs/en/edge/guide_cli_index.md.html#The%20Command-Line%20Interface_installing_the_cordova_cli) and install the latest Cordova version on your system.
-
-The Cordova CLI expects a [standard directory layout](https://cordova.apache.org/docs/en/4.0.0/guide_cli_index.md.html#The%20Command-Line%20Interface_create_the_app). That is, the `config.xml` is required at the root of the project and a `www` folder must exist which contains your actual Tabris.js app.
-```
-/
-|- config.xml
-|- www
-    |-- package.json
-    |-- app.js
-```
-
-This directory structure can easily be created using the `cordova create` command as described in the [Cordova CLI Guide](http://cordova.apache.org/docs/en/edge/guide_cli_index.md.html#The%20Command-Line%20Interface_create_the_app). After creating the project you will have a typical Cordova project layout including the `www` directory. The default content which was created automatically is not needed and can be deleted.
-
-### Adding Tabris.js platforms
-Tabris.js ships two custom Cordova platforms. This includes platforms for iOS and Android. Visit the [Tabris.js download page](https://tabrisjs.com/download) and download the platform of your choice.
-
-> **Please Note:** Local builds are a [Pro feature](https://tabrisjs.com/pricing/). If you don't see the download you are probably not on a Pro plan.
-
-Extract the content of the downloaded archive and add the platform to your project using the `cordova platform add` command. You need to append the path to the download platform. E.g.:
-
-```
-cordova platform add /Users/Me/Downloads/tabris-ios
-cordova platform add /Users/Me/Downloads/tabris-android
-```
-or for Windows users:
-```
-cordova platform add c:\MyDownloads\tabris-ios
-cordova platform add c:\MyDownloads\tabris-android
-```
-
-### Integrate Cordova Plugins
-You can integrate all available [Cordova Plugins](http://plugins.cordova.io/#/) using the `cordova plugin add` command. Read the [Cordova Plugin Installation Guide](http://cordova.apache.org/docs/en/edge/guide_cli_index.md.html#The%20Command-Line%20Interface_add_plugin_features) for a detailed description of this command.
-
-An example of adding the [Cordova Camera Plugin](http://plugins.cordova.io/#/package/org.apache.cordova.camera) will result in this command:
-```
-cordova plugin add org.apache.cordova.camera
-```
-
-**Important:** You can install all available Cordova Plugins. Most of the Plugins will work out of the box but not all. This is because Tabris.js uses a **native UI** and **no HTML5**. As a result all Plugins that manipulate the DOM will not work.
-
-### The Application Code
-The code of a Cordova Application is placed in the `www` directory. This is where you need to place your Tabris.js project files (`package.json`, `node_modules` folder, and all your own modules and resources).
-
-### Building/Running an App
-To run an app, use the `cordova run` command as described in the [Cordova Emulator and Device Guide](http://cordova.apache.org/docs/en/edge/guide_cli_index.md.html#The%20Command-Line%20Interface_test_the_app_on_an_emulator_or_device).
-
-Building an app is just as simple. Use the `cordova build` command as described in the [Cordova Build Guide](http://cordova.apache.org/docs/en/edge/guide_cli_index.md.html#The%20Command-Line%20Interface_build_the_app).
 
 ## Configuration
 

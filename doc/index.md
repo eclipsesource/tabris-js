@@ -18,6 +18,7 @@ Tabris.js is a mobile framework that lets you develop native iOS and Android app
 - [W3C Compatibility](w3c-api.md) - XMLHttpRequest, LocalStorage and timer.
 - [Cordova Support](cordova.md) - Using Cordova plug-ins, including Dialogs, File and Camera
 - [Build your app](build.md) - Create a standalone app from your Tabris.js project files
+- [Local Build](local-build.md) - Build your Tabris.js app locally
 
 
 ## API Reference
