@@ -1,5 +1,5 @@
 # Animation Examples
-The animation examples consists of three parts, each part is on a separate tabris page.
+The animation examples consist of three parts, each part is on a separate Tabris page.
 
 ## Easings
 Animations with different easings make up this example. 
