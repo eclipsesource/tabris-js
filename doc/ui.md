@@ -1,12 +1,12 @@
 # The Widget Tree
 
-The UI of a Tabris.js app consists of native [Widgets](widgets.md). Every widget must have a parent to become visible on the screen. The top-level parent for all widgets is called *UI* and it is represented by the object `tabris.ui`.
+The UI of a Tabris.js app consists of native [Widgets](widget-basics.md). Every widget must have a parent to become visible on the screen. The top-level parent for all widgets is called *UI* and it is represented by the object `tabris.ui`.
 
 ![The Widget Tree](img/widget-tree.png)
 
 ## The Page Stack
 
-Most widgets are contained in a [*Page*](widget-types#page). An app can contain one or more pages. Only a single page is visible at a time, this is called the *active page*. A page can be activated by calling its `open()` method. Opening a page will put it on a *page stack*, covering the current active page.
+Most widgets are contained in a [*Page*](api/Page.md). An app can contain one or more pages. Only a single page is visible at a time, this is called the *active page*. A page can be activated by calling its `open()` method. Opening a page will put it on a *page stack*, covering the current active page.
 
 ![Opening a page](img/page-open.png)
 
