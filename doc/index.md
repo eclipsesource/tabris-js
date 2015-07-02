@@ -12,14 +12,14 @@ Tabris.js is a mobile framework that lets you develop native iOS and Android app
 - [Module System](modules.md) - How to organize and load scripts.
 - [Widget Basics](widget-basics.md) - Native widget handling.
 - [UI Model](ui.md) - Pages, Actions and Drawer.
-- [Using Selectors](selector.md) - Working more efficiently with widgets. 
+- [Using Selectors](selector.md) - Working more efficiently with widgets.
 - [Layouts](layout.md) - Layouting widgets.
 - [Touch Events](touch.md) - Processing widget gesture/touch events.
 - [W3C Compatibility](w3c-api.md) - XMLHttpRequest, LocalStorage and timer.
-- [Cordova Support](cordova.md) - Using Cordova plug-ins, including Dialogs, File and Camera
-- [Build your app](build.md) - Create a standalone app from your Tabris.js project files
-- [Local Build](local-build.md) - Build your Tabris.js app locally
-
+- [Cordova Support](cordova.md) - Using Cordova plug-ins, including Dialogs, File and Camera.
+- [Build your app](build.md) - Create a standalone app from your Tabris.js project files.
+- [Local Build](local-build.md) - Build your Tabris.js app locally.
+- [Patch your app](patch.md) - Hotfix critical issues without waiting for app store submission.
 
 ## API Reference
 
