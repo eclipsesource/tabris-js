@@ -1029,7 +1029,7 @@ describe("Proxy", function() {
         tabris.registerWidget("TestType2", {
           _supportsChildren: true
         });
-        child1 = tabris.create("TestType2", {id: "foo"}).appendTo(proxy);
+        child1 = tabris.create("TestType2", {id: "foo", class: "myclass"}).appendTo(proxy);
         child2 = tabris.create("TestType", {id: "bar"}).appendTo(proxy);
         child1_1 = tabris.create("TestType", {}).appendTo(child1);
       });
@@ -1041,8 +1041,9 @@ describe("Proxy", function() {
       describe("find", function() {
 
         beforeEach(function() {
-          child1_2 = tabris.create("TestType", {}).appendTo(child1);
-          child1_2_1 = tabris.create("TestType", {id: "foo"}).appendTo(child1_2);
+          child1_1.set({class: "bar"});
+          child1_2 = tabris.create("TestType", {class: "bar"}).appendTo(child1);
+          child1_2_1 = tabris.create("TestType", {id: "foo", class: "bar2"}).appendTo(child1_2);
         });
 
         it("* selector returns all descendants", function() {
@@ -1051,6 +1052,10 @@ describe("Proxy", function() {
 
         it("# selector returns all descendants with given id", function() {
           expect(proxy.find("#foo").toArray()).toEqual([child1, child1_2_1]);
+        });
+
+        it(". selector returns all descendants with given class", function() {
+          expect(proxy.find(".bar").toArray()).toEqual([child1_1, child1_2]);
         });
 
       });
@@ -1098,9 +1103,10 @@ describe("Proxy", function() {
           expect(child1_1.set).not.toHaveBeenCalled();
         });
 
-        it("applies properties in order *, Type, id", function() {
+        it("applies properties in order *, Type, class, id", function() {
           proxy.apply({
-            "#foo": {prop1: "v3"},
+            "#foo": {prop1: "v4"},
+            ".myclass": {prop1: "v3"},
             "TestType2": {prop1: "v2"},
             "*": {prop1: "v1"}
           });
@@ -1108,7 +1114,8 @@ describe("Proxy", function() {
           expect(child1.set.calls.allArgs()).toEqual([
             [{prop1: "v1"}],
             [{prop1: "v2"}],
-            [{prop1: "v3"}]
+            [{prop1: "v3"}],
+            [{prop1: "v4"}]
           ]);
         });
 

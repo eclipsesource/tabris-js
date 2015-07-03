@@ -1,0 +1,9 @@
+{
+  "title": "Styling",
+  "category": "TextView",
+  "description": "Using the apply method to style widgets",
+  "main": "styling.js",
+  "dependencies": {
+    "tabris": "^1.1.0"
+  }
+}

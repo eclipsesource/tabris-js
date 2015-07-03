@@ -8,6 +8,7 @@ A selector string describes an existing widget that we want to work with. There 
 
 - `"*"` - Matches all widgets.
 - `"Type"` - Matches all widgets of the given type, e.g. `"Button"` matches all button widgets.
+- `".class"` - Matches all widgets that have the given class in their class list, e.g. `".foo"` matches a widget with `class` set to `"foo"` or `"foo bar`".
 - `"#id"` - Matches all widgets with the given id, e.g. `"#foo"` matches all widgets with the id "foo".
 
 The id of a widget is a property like any other. It's initial value is undefined, so you always have to assign one yourself, usually in the `create` call.
@@ -15,6 +16,12 @@ The id of a widget is a property like any other. It's initial value is undefined
     tabris.create("TextView", {id: "myLabel"});
 
 Id's don't have to be unique, but it is strongly recommended that they are so within a page.
+
+The `class` property is a string containing a whitespace separated list of "classes". A class is an arbitrary name for a state or category the widget should be identifiable by. It may only contain alphanumeric characters, "_" and "-".
+
+    tabris.create("TextView", {class: "label important"});
+
+Classes may be freely mixed, re-used and changed on any widget at any time.
 
 ## Working with Selectors
 
@@ -49,7 +56,7 @@ page.apply({
 
 It's very important to note that the order in which these properties are applies depends solely on the selector used, not on the order in the object literal. The order is:
 
-- `"*"` > `"Type"` > `"#id"`
+- `"*"` > `"Type"` > `".class"` > `"#id"`
 
 For example:
 

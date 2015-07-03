@@ -43,7 +43,12 @@
       }
       var selector;
       for (selector in sheet) {
-        if (selector !== "*" && selector[0] !== "#") {
+        if (selector !== "*" && selector[0] !== "#" && selector[0] !== ".") {
+          scope.filter(selector).set(sheet[selector]);
+        }
+      }
+      for (selector in sheet) {
+        if (selector[0] === ".") {
           scope.filter(selector).set(sheet[selector]);
         }
       }
@@ -113,6 +118,18 @@
         return getGestureEventConfig(type);
       }
       return result;
+    },
+
+    classList: {
+      get length() {
+        return 0;
+      },
+      indexOf: function() {
+        return -1;
+      },
+      join: function() {
+        return "";
+      }
     }
 
   };
@@ -222,12 +239,23 @@
         default: false
       },
       id: {
+        nocache: true,
         type: "string",
         set: function(value) {
           this.id = value;
         },
         get: function() {
           return this.id;
+        }
+      },
+      class: {
+        nocache: true,
+        type: "string",
+        set: function(value) {
+          this.classList = value.trim().split(/\s+/);
+        },
+        get: function() {
+          return this.classList.join(" ");
         }
       },
       gestures: {

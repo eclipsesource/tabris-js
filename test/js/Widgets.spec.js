@@ -116,6 +116,23 @@ describe("Widgets", function() {
       expect(widget.get("id")).toBe("foo");
     });
 
+    it("stores class property in proxy.classList", function() {
+      widget.set("class", "foo bar");
+
+      expect(widget.classList).toEqual(["foo", "bar"]);
+    });
+
+    it("normalizes class property", function() {
+      widget.set("class", " foo bar   foobar  ");
+
+      expect(widget.get("class")).toBe("foo bar foobar");
+    });
+
+    it("has default class property value", function() {
+      expect(widget.get("class")).toBe("");
+      expect(widget.classList.length).toBe(0);
+    });
+
     it("returns default initial default values", function() {
       expect(widget.get("highlightOnTouch")).toBe(false);
       expect(widget.get("enabled")).toBe(true);

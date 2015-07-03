@@ -139,6 +139,12 @@
         return expectedId === proxy.id;
       };
     }
+    if (selector.charAt(0) === ".") {
+      var expectedClass = selector.slice(1);
+      return function(proxy) {
+        return proxy.classList.indexOf(expectedClass) !== -1;
+      };
+    }
     if (selector === "*") {
       return function() {return true;};
     }
