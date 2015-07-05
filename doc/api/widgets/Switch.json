@@ -1,0 +1,29 @@
+{
+  "type": "Switch",
+  "description": "A switch widget that can be toggled.",
+  "include": ["Widget"],
+  "properties": {
+    "selection": {
+      "type": "boolean?false",
+      "description": "The checked state of the switch."
+    }
+  },
+  "events": {
+    "change:selection": {
+      "parameters": [
+        {"name": "widget", "type": "Switch"},
+        {"name": "selection", "type": "boolean", "description": "The current value of *[selection](#selection)*."},
+        {"name": "options", "type": "Object"}
+      ],
+      "description": "Fired when the selection property changes."
+    },
+    "select": {
+      "parameters": [
+        {"name": "widget", "type": "Switch"},
+        {"name": "selection", "type": "boolean", "description": "The current value of *[selection](#selection)*."},
+        {"name": "options", "type": "Object"}
+      ],
+      "description": "Fired when the switch is toggled by the user."
+    }
+  }
+}

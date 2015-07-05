@@ -436,6 +436,13 @@ describe("Widgets", function() {
       expect(getCreate().properties).toEqual({html: "foo"});
     });
 
+    it("Switch", function() {
+      tabris.create("Switch", {selection: true});
+
+      expect(getCreate().type).toEqual("tabris.Switch");
+      expect(getCreate().properties).toEqual({checked: true});
+    });
+
   });
 
   describe("native events:", function() {
@@ -559,6 +566,32 @@ describe("Widgets", function() {
       tabris._notify(widget.cid, "Selection", {selection: true});
       checkEvent(true);
       checkListen("Selection");
+    });
+
+    it("Switch change:selection", function() {
+      widget = tabris.create("Switch").on("change:selection", listener);
+
+      tabris._notify(widget.cid, "toggle", {checked: true});
+
+      checkEvent(true);
+      checkListen("toggle");
+    });
+
+    it("Switch change:selection on property change", function() {
+      widget = tabris.create("Switch").on("change:selection", listener);
+
+      widget.set("selection", true);
+
+      checkEvent(true);
+    });
+
+    it("Switch select", function() {
+      widget = tabris.create("Switch").on("select", listener);
+
+      tabris._notify(widget.cid, "toggle", {checked: true});
+
+      checkEvent(true);
+      checkListen("toggle");
     });
 
   });

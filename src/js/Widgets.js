@@ -539,4 +539,30 @@
     }
   });
 
+  tabris.registerWidget("Switch", {
+    _type: "tabris.Switch",
+    _events: {
+      select: {
+        name: "toggle",
+        alias: "change:selection",
+        trigger: function(event) {
+          this._triggerChangeEvent("selection", event.checked);
+          this.trigger("select", this, event.checked, {});
+        }
+      }
+    },
+    _properties: {
+      type: "boolean",
+      selection: {
+        get: function() {
+          return this._nativeGet("checked");
+        },
+        set: function(value) {
+          this._nativeSet("checked", value);
+        },
+        nocache: true
+      }
+    }
+  });
+
 }());
