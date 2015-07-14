@@ -14,16 +14,16 @@
     _events: {
       Start: {
         trigger: function() {
-            this._target.trigger("animationstart", this._target, this._options);
-          }
+          this._target.trigger("animationstart", this._target, this._options);
+        }
       },
       Completion: {
         trigger: function() {
-            this._target._off("dispose", this.dispose, this);
-            this._target.trigger("animationend", this._target, this._options);
-            this.dispose();
-          }
+          this._target._off("dispose", this.dispose, this);
+          this._target.trigger("animationend", this._target, this._options);
+          this.dispose();
         }
+      }
     },
 
     _properties: {

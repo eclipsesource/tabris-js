@@ -65,7 +65,9 @@ tabris.Events = {
     this._checkDisposed();
     var self = this;
     var wrappedCallback = function() {
-      self.off(type, wrappedCallback, context);
+      if (!self._isDisposed) {
+        self.off(type, wrappedCallback, context);
+      }
       callback.apply(this, arguments);
     };
     wrappedCallback._callback = callback;

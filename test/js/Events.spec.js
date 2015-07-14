@@ -228,7 +228,7 @@
         });
 
         it("should return context", function() {
-          var result = object.trigger("foo", callback);
+          var result = object.trigger("foo");
           expect(result).toBe(object);
         });
 
@@ -300,6 +300,22 @@
           it("is not called for 'trigger'", function() {
             object.trigger("foo");
             expect(object._checkDisposed).not.toHaveBeenCalled();
+          });
+
+          it("is not called inside 'once' when disposed during event processing", function() {
+            // See #531
+            object._checkDisposed.and.callFake(function() {
+              expect(this._isDisposed).toBeFalsy();
+            });
+            callback.and.callFake(function() {
+              this._isDisposed = true;
+            });
+            object.once("foo", callback);
+            object.once("foo", callback);
+
+            object.trigger("foo", callback);
+
+            expect(callback.calls.count()).toBe(2);
           });
 
         });
