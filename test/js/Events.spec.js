@@ -227,6 +227,16 @@
           expect(callback.calls.first().object).toBe(context);
         });
 
+        it("should not trigger callbacks when disposed", function() {
+          object.on("foo", callback);
+          object._on("foo", callback);
+
+          object._isDisposed = true;
+          object.trigger("foo");
+
+          expect(callback).not.toHaveBeenCalled();
+        });
+
         it("should return context", function() {
           var result = object.trigger("foo");
           expect(result).toBe(object);

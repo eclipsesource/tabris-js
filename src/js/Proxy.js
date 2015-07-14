@@ -31,7 +31,6 @@
         if (!skipNative) {
           tabris._nativeBridge.destroy(this.cid);
         }
-        tabris.Events.off.call(this);
         delete tabris._proxies[this.cid];
         this._isDisposed = true;
       }
