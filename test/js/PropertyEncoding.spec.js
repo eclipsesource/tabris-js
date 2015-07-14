@@ -389,4 +389,44 @@ describe("PropertyEncoding:", function() {
 
   });
 
+  describe("array", function() {
+
+    var check = tabris.PropertyEncoding.array;
+
+    it("passes any array", function() {
+      expect(check([1, "a", true])).toEqual([1, "a", true]);
+    });
+
+    it("converts null to empty array", function() {
+      expect(check(null)).toEqual([]);
+    });
+
+    it("converts undefined to empty array", function() {
+      expect(check(undefined)).toEqual([]);
+    });
+
+    it("create a save copy", function() {
+      var input = [1, 2, 3];
+      expect(check(input)).toEqual(input);
+      expect(check(input)).not.toBe(input);
+    });
+
+    it("fails for non-arrays", function() {
+      var values = [0, 1, "", "foo", false, true, {}, {length: 0}];
+      values.forEach(function(value) {
+        expect(function() {
+          check(value);
+        }).toThrow(new Error(typeof value + " is not an array: " + value));
+      });
+    });
+
+    it("performs optional item checks", function() {
+      expect(check(["foo", 1, true], "string")).toEqual(["foo", "1", "true"]);
+      expect(function() {
+        check(["foo"], "integer");
+      }).toThrow(new Error("string is not a number: foo"));
+    });
+
+  });
+
 });

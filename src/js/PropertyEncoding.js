@@ -118,6 +118,19 @@
         checkValidNumber(value[key]);
       }
       return util.extend({}, transformDefaults, value);
+    },
+
+    array: function(value, type) {
+      if (value == null) {
+        return [];
+      }
+      if (!(value instanceof Array)) {
+        throw new Error(typeof value + " is not an array: " + value);
+      }
+      if (type) {
+        return value.map(tabris.PropertyEncoding[type]);
+      }
+      return value.concat();
     }
 
   };

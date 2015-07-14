@@ -27,7 +27,7 @@
     },
 
     _properties: {
-      items: {default: function() {return [];}},
+      items: {type: ["array", "string"], default: function() {return [];}},
       selectionIndex: {type: "natural", nocache: true},
       selection: {
         nocache: true,

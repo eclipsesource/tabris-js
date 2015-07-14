@@ -20,6 +20,7 @@
         }
       },
       items: {
+        type: "array",
         set: function(value) {
           this._setItems(value);
         },
@@ -110,7 +111,7 @@
     },
 
     _setItems: function(items) {
-      this._items = items ? items.concat() : [];
+      this._items = items || [];
       this._needsReload = true;
     },
 

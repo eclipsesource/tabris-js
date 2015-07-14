@@ -82,6 +82,14 @@ describe("Picker", function() {
         expect(picker.get("items")).toEqual([]);
       });
 
+      it("converts null to empty array", function() {
+        expect(picker.set("items", null).get("items")).toEqual([]);
+      });
+
+      it("converts numbers to string array", function() {
+        expect(picker.set("items", [1, 2, 3]).get("items")).toEqual(["1", "2", "3"]);
+      });
+
     });
 
     describe("selectionIndex", function() {

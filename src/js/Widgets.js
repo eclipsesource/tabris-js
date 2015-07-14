@@ -527,7 +527,7 @@
   tabris.registerWidget("Video", {
     _type: "tabris.widgets.Video",
     _initProperties: {controls_visible: true, repeat: false},
-    _properties: {url: true}
+    _properties: {url: "string"}
   });
 
   tabris.registerWidget("WebView", {
