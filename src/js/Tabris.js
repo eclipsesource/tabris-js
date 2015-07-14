@@ -2,10 +2,10 @@
 
   window.tabris = module.exports = util.extend(function(id) {
     if (!tabris._proxies[id] && !tabris[id]) {
-      throw new Error("No native object with id or type " + id);
+      throw new Error("No native object with cid or type " + id);
     }
-    var nativeId = tabris[id] && tabris[id]._type ? tabris[id]._type : id;
-    return nativeId in tabris._proxies ? tabris._proxies[nativeId] : new tabris[id](nativeId);
+    var cid = tabris[id] && tabris[id]._type ? tabris[id]._type : id;
+    return cid in tabris._proxies ? tabris._proxies[cid] : new tabris[id](cid);
   }, {
 
     _loadFunctions: [],
@@ -75,9 +75,9 @@
       this._entryPoint = entryPoint;
     },
 
-    _notify: function(id, event, param) {
+    _notify: function(cid, event, param) {
       try {
-        var proxy = tabris._proxies[id];
+        var proxy = tabris._proxies[cid];
         if (proxy) {
           try {
             proxy._trigger(event, param);
