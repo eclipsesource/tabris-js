@@ -11,6 +11,8 @@ To start developing Tabris.js applications, log in to [tabrisjs.com](http://tabr
 
 The code of the application is loaded dynamically - nothing is precompiled. JavaScript is executed Just-in-Time and passed via a native bridge to the device. Tabris.js accesses native controls and does not depend on webviews to render the app's UI. As a result, the performance of the apps cannot be distinguished from apps developed directly in native code of the platforms.
 
+![Native UI demo](https://tabrisjs.com/assets/public-content/img/examples/bookstore.gif)
+
 ## Online build
 
 Tabris.js features an online build service, which means there is no need to download huge SDKs or use specific hardware for development (e.g. a Mac machine to build for iOS). A local build is also available as an option.
