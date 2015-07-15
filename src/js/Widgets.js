@@ -29,11 +29,11 @@
     },
 
     children: function(selector) {
-      return new tabris.ProxyCollection(this._children, selector);
+      return new tabris.ProxyCollection(this._getSelectableChildren(), selector);
     },
 
     find: function(selector) {
-      return new tabris.ProxyCollection(this._children, selector, true);
+      return new tabris.ProxyCollection(this._getSelectableChildren(), selector, true);
     },
 
     apply: function(sheet) {
@@ -62,6 +62,10 @@
 
     _getContainer: function() {
       return this;
+    },
+
+    _getSelectableChildren: function() {
+      return this._children;
     },
 
     _setParent: function(parent) {

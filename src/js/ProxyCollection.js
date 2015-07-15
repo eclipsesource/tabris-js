@@ -1,7 +1,7 @@
 (function() {
 
   tabris.ProxyCollection = function(arr, selector, deep) {
-    this._array = select(arr, selector, deep);
+    this._array = select(arr, selector || "*", deep);
     for (var i = 0; i < this._array.length; i++) {
       this[i] = this._array[i];
     }
@@ -59,7 +59,7 @@
     children: function(selector) {
       var result = [];
       for (var i = 0; i < this._array.length; i++) {
-        result.push.apply(result, this._array[i]._children || []);
+        result.push.apply(result, this._array[i]._getSelectableChildren() || []);
       }
       return new tabris.ProxyCollection(result, selector);
     },
@@ -95,7 +95,7 @@
     if (!array || array.length === 0) {
       return [];
     }
-    if (!selector) {
+    if (selector === "*" && !deep) {
       return array.concat();
     }
     var filter = getFilter(selector);
@@ -111,7 +111,7 @@
         result.push(array[i]);
       }
       if (array[i]._children) {
-        deepSelect(result, array[i]._children, filter);
+        deepSelect(result, array[i]._getSelectableChildren(), filter);
       }
     }
     return result;

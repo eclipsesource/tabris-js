@@ -6,6 +6,9 @@ describe("ProxyCollection", function() {
       ["set", "get", "append", "appendTo", "on", "off", "once", "parent", "children", "animate", "dispose"]
     );
     mock.cid = "o" + counter++;
+    mock._getSelectableChildren = function() {
+      return this._children;
+    };
     return mock;
   };
 
@@ -227,7 +230,7 @@ describe("ProxyCollection", function() {
       expect(collection.children("Foo").toArray()).toEqual([children[0], children[2]]);
     });
 
-    it("find() returns descendants from all proxies in collection", function() {
+    it("find(\"*\") returns descendants from all proxies in collection", function() {
       var children = [mockProxy(), mockProxy(), mockProxy(), mockProxy()];
       mocks[0]._children = [children[0]];
       mocks[2]._children = [children[1]];
@@ -235,6 +238,16 @@ describe("ProxyCollection", function() {
 
       expect(collection.find("*").toArray().length).toEqual(children.length);
       expect(collection.find("*").toArray()).toEqual(children);
+    });
+
+    it("find() returns descendants from all proxies in collection", function() {
+      var children = [mockProxy(), mockProxy(), mockProxy(), mockProxy()];
+      mocks[0]._children = [children[0]];
+      mocks[2]._children = [children[1]];
+      children[1]._children = children.slice(2, 4);
+
+      expect(collection.find().toArray().length).toEqual(children.length);
+      expect(collection.find().toArray()).toEqual(children);
     });
 
     it("find() returns no duplicates", function() {

@@ -76,8 +76,8 @@
       return this._children ? this._children.filter(isItem) : new tabris.ProxyCollection();
     },
 
-    children: function() {
-      return this._children ? this._children.filter(isTab) : new tabris.ProxyCollection();
+    _getSelectableChildren: function() {
+      return this._children ? this._children.filter(isTab) : undefined;
     }
 
   });

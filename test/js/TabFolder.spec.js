@@ -133,7 +133,29 @@ describe("TabFolder", function() {
       });
 
       it("children list contains only the tab", function() {
-        expect(tabFolder.children()).toEqual([tab]);
+        expect(tabFolder.children().toArray()).toEqual([tab]);
+      });
+
+      it("find list contains only the tab", function() {
+        expect(tabFolder.find().toArray()).toEqual([tab]);
+      });
+
+      it("parent find list contains only the TabFolder and tab", function() {
+        expect(tabFolder.parent().find().toArray()).toEqual([tabFolder, tab]);
+      });
+
+      it("parent childrens children list contains only the tab", function() {
+        expect(tabFolder.parent().children().children().toArray()).toEqual([tab]);
+      });
+
+      it("children can be filtered with id selector", function() {
+        var tab2 = tabris.create("Tab", {id: "foo"}).appendTo(tabFolder);
+        expect(tabFolder.children("#foo").toArray()).toEqual([tab2]);
+      });
+
+      it("find list can be filtered with id selector", function() {
+        var tab2 = tabris.create("Tab", {id: "foo"}).appendTo(tabFolder);
+        expect(tabFolder.parent().find("#foo").toArray()).toEqual([tab2]);
       });
 
       describe("and another tab is created", function() {
