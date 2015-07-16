@@ -2,13 +2,14 @@
 
 Publishing a new app version to the app stores can take time. Tabris.js allows you to deploy hotfixes to your users immediately, without waiting for an app store update.
 
-Please note that the patched code must not change the primary purpose of the app or introduce new features or functionality to comply with the Apple App Store's guidelines.
+Please note that in order to comply with the Apple App Store rules, a patch must *“[…] not change the primary purpose of the app by providing features or functionality that are inconsistent with the intended and advertised purpose”
+– (iOS Developer Program License Agreement section 3.3.2)*.
 
 ## The Patch Format
 
-A patch is made available as a .zip archive that contains the app files to be modified or added, and an optional descriptor file named `patch.json`. See below for more information on the *patch.json* descriptor file.
+A patch is made available as a zip archive that contains the app files to be modified or added, and an optional descriptor file named `patch.json`. See below for more information on the *patch.json* descriptor file.
 
-You can patch any file included in your application. The root of the zip archive corresponds to the root of your Tabris.js project. For example, to update a file *app.js* and add another file *img/image.jpg* a patch could look like this:
+You can patch any file in your application, including scripts, images, and even modules in the `node_modules` folder. The root of the zip archive corresponds to the root of your Tabris.js project. For example, to update a file *app.js* and add another file *img/image.jpg* a patch could look like this:
 
 **Example project structure**
 
@@ -36,7 +37,7 @@ patch.json
 
 Once you've created a patch, you have to make it available at a URL of your choice. The app can then discover the patch and download it.
 
-You are free to implement the patch detection however you wish. For example, you could provide a REST service that provides information on available patches for a given application, platform, and version. Your application could check this service at regular intervals. You could also decide to use push notifications to inform apps of available patches.
+You are free to implement the patch detection however you wish. For example, you could set up a REST service that provides information on available patches for a given application, platform, and version. Your application could check this service at regular intervals. You could also decide to use push notifications to inform apps of available patches.
 
 ## Installing a Patch
 
@@ -58,3 +59,7 @@ tabris.app.installPatch(patchUrl, function(error, patch) {
   }
 });
 ```
+
+Multiple patches can be applied on top of each other. If an application has been patched before, subsequent patches will overlay previous ones.
+
+Please note that this feature is considered provisional and the API described here may be adjusted in a future release.
