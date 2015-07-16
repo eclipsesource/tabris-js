@@ -51,28 +51,28 @@ describe("LocalStorage", function() {
       expect(proxy._nativeCall).toHaveBeenCalledWith("add", {key: "foo", value: "bar"});
     });
 
-    it("doesn't call add when key not a string", function() {
-      executeWithNonStringArgument(localStorage, "setItem", 0, "foo");
-      expect(proxy._nativeCall).not.toHaveBeenCalled();
+    it("call proxy add with stringified key", function() {
+      localStorage.setItem(2, "bar");
+      expect(proxy._nativeCall).toHaveBeenCalledWith("add", {key: "2", value: "bar"});
     });
 
-    it("doesn't call add when value not a string", function() {
-      executeWithNonStringArgument(localStorage, "setItem", 1, "foo");
-      expect(proxy._nativeCall).not.toHaveBeenCalled();
+    it("calls add with stringified value", function() {
+      localStorage.setItem("foo", 2);
+      expect(proxy._nativeCall).toHaveBeenCalledWith("add", {key: "foo", value: "2"});
     });
 
   });
 
   describe("getItem", function() {
 
-    it("doesn't call get when key not a string", function() {
-      executeWithNonStringArgument(localStorage, "getItem", 0);
-      expect(proxy._nativeCall).not.toHaveBeenCalled();
-    });
-
     it("calls proxy get with key", function() {
       localStorage.getItem("foo");
       expect(proxy._nativeCall).toHaveBeenCalledWith("get", {key: "foo"});
+    });
+
+    it("calls get with stringified key", function() {
+      localStorage.getItem(5);
+      expect(proxy._nativeCall).toHaveBeenCalledWith("get", {key: "5"});
     });
 
     it("returns saved item", function() {
@@ -84,14 +84,14 @@ describe("LocalStorage", function() {
 
   describe("removeItem", function() {
 
-    it("doesn't call remove when key not a string", function() {
-      executeWithNonStringArgument(localStorage, "removeItem", 0);
-      expect(proxy._nativeCall).not.toHaveBeenCalled();
-    });
-
     it("calls proxy remove with keys array", function() {
       localStorage.removeItem("savedKey");
       expect(proxy._nativeCall).toHaveBeenCalledWith("remove", {keys: ["savedKey"]});
+    });
+
+    it("calls proxy remove with keys array with stringified key", function() {
+      localStorage.removeItem(3);
+      expect(proxy._nativeCall).toHaveBeenCalledWith("remove", {keys: ["3"]});
     });
 
   });
@@ -139,26 +139,5 @@ describe("LocalStorage", function() {
       expect(storageEvent.type).toBe("type");
     });
   });
-
-  var executeWithNonStringArgument = function(target, method, nonStringIndex) {
-    var functionArgs = arguments;
-    [function() {}, 2, true, {foo: "bar"}].forEach(function(nonString) {
-      var args = [];
-      args[nonStringIndex] = nonString;
-      fillInFunctionArgsInTargetMethodArgs(args, nonStringIndex, functionArgs);
-      target[method].apply(this, args);
-    });
-  };
-
-  var fillInFunctionArgsInTargetMethodArgs = function(args, nonStringIndex, functionArgs) {
-    var pos = 0;
-    for (var i = 3; i < functionArgs.length; i++) {
-      if (pos < nonStringIndex) {
-        args[pos++] = functionArgs[i];
-      } else {
-        args.push(functionArgs[i]);
-      }
-    }
-  };
 
 });

@@ -20,22 +20,19 @@
       if (!value) {
         throw new TypeError("Value argument must be specified to execute 'setItem'");
       }
-      if (typeof key === "string" && typeof value === "string") {
-        proxy._nativeCall("add", {key: key, value: value});
-      }
+      proxy._nativeCall("add", {
+        key: tabris.PropertyEncoding.string(key),
+        value: tabris.PropertyEncoding.string(value)
+      });
     },
 
     getItem: function(key) {
       // Note: the client implementation should return "null" when the item was not found
-      if (typeof key === "string") {
-        return proxy._nativeCall("get", {key: key});
-      }
+      return proxy._nativeCall("get", {key: tabris.PropertyEncoding.string(key)});
     },
 
     removeItem: function(key) {
-      if (typeof key === "string") {
-        proxy._nativeCall("remove", {keys: [key]});
-      }
+      proxy._nativeCall("remove", {keys: [tabris.PropertyEncoding.string(key)]});
     },
 
     clear: function() {
