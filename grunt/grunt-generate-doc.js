@@ -149,6 +149,9 @@ module.exports = function (grunt) {
     if (desc.returns) {
       result.push("**Returns:** *" + renderTypeLink(desc.returns, data) + "*\n");
     }
+    if (desc.provisional) {
+      result.push(provisionalNote);
+    }
     if (desc.description) {
       result.push(desc.description);
     }
@@ -166,6 +169,9 @@ module.exports = function (grunt) {
       var property = json.properties[name];
       result.push("### ", name, "\n");
       result.push("Type: ", renderPropertyType(property.type, data), "\n");
+      if (property.provisional) {
+        result.push(provisionalNote);
+      }
       if (property.description) {
         result.push("\n" + property.description);
       }
@@ -188,6 +194,9 @@ module.exports = function (grunt) {
       var field = json.fields[name];
       result.push("### ", name, "\n");
       result.push("Type: ", renderPropertyType(field.type, data), "\n");
+      if (field.provisional) {
+        result.push(provisionalNote);
+      }
       if (field.description) {
         result.push("\n" + field.description);
       }
@@ -221,6 +230,9 @@ module.exports = function (grunt) {
       result.push("### \"", name, "\" (" + renderParamList(event.parameters, data) + ")\n");
       if (event.parameters) {
         result.push("\n**Parameters:** " + renderParamList(event.parameters, data, true) + "\n");
+      }
+      if (event.provisional) {
+        result.push(provisionalNote);
       }
       if (event.description) {
         result.push("\n" + event.description + "\n");
@@ -299,5 +311,7 @@ module.exports = function (grunt) {
   function baseFileName(file) {
     return file.slice(file.lastIndexOf("/") + 1, file.lastIndexOf("."));
   }
+
+  var provisionalNote = "\n**Note:** this API is provisional and may change in a future release.\n";
 
 };
