@@ -162,6 +162,14 @@ module.exports = function(grunt) {
       }
     },
     compress: {
+      doc: {
+        options: {
+          archive: "build/doc.zip"
+        },
+        files: [
+          {expand: true, cwd: "build", src: ["doc/**"], filter: "isFile"}
+        ]
+      },
       examples: {
         options: {
           archive: "build/examples.zip"
@@ -228,7 +236,8 @@ module.exports = function(grunt) {
   /* generates reference documentation */
   grunt.registerTask("doc", [
     "copy:doc",
-    "generate-doc"
+    "generate-doc",
+    "compress:doc"
   ]);
 
   /* packages example code */
