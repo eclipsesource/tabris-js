@@ -41,7 +41,7 @@ You are free to implement the patch detection however you wish. For example, you
 
 ## Installing a Patch
 
-To install a patch, call the method `tabris.app.installPatch` with the URL of the patch file and a callback function with two parameters, *error* and *patch*. The patch file will be downloaded and installed in the background, but it won't have an effect before the app is reloaded.
+To install a patch, call the method `tabris.app.installPatch` with the URL of the patch file and a callback function with two parameters, *error* and *patch*. The patch file will be downloaded and installed in the background, but it won't have an effect before the app is reloaded. _Note: Tabris.js supports cache-control headers. If new updates are not being found by Tabris.js, check the cache invalidation settings of your HTTP server._
 
 In case of an error, the callback is called with an [Error object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error) as the first parameter. The `error.message` field will contain an error message. If the patch has been installed successfully, the second argument will contain the parsed content of the *patch.json* file included in the patch archive, if present.
 
