@@ -32,7 +32,7 @@ Here you will see messages and errors logged while running a script. You can fil
 
 ## Play with the Scratchpad 
 
-On tabrisjs.com, click **My Scratchpad** on the left. Here you will find a simple, editable Tabris.js script. You can run this script immediately (no need to save) in the Tabris.js Developer App by going to the *My Scripts* tab and selecting *My Scratchpad*. By default the scratchpad contains the "Hello World" example explained [below](#hello-js).
+On tabrisjs.com, click **My Scratchpad** on the left. Here you will find a simple, editable Tabris.js script. You can run this script immediately (no need to save) in the Tabris.js Developer App by going to the *My Scripts* tab and selecting *My Scratchpad*. By default the scratchpad contains the "Hello World" example explained [below](#hellojs).
 
 ## The Tabris.js Snippets 
 
@@ -68,7 +68,7 @@ The `package.json` file is used to describe the app, including the name, descrip
 ```
 
 ### hello.js
-The Tabris.js "Hello, World!" example is contained in `hello.js`. It contains a *button* and a *text view*. When the button is selected, the text view is updated. For further documentation on widgets, visit the [Widgets](widgets.md) article and [Widgets API reference](widget-types). 
+The Tabris.js "Hello, World!" example is contained in `hello.js`. It contains a *button* and a *text view*. When the button is selected, the text view is updated. For further documentation on widgets, visit the [Widgets](widget-basics.md) article and [Widgets API reference](api/Widget.md). 
 
 ```js
 var page = tabris.create("Page", {
