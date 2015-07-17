@@ -24,7 +24,7 @@
       } else if (!("top" in layoutData) && !("bottom" in layoutData)) {
         console.warn("Incomplete layoutData: either top, bottom, centerY, or baseline should be specified");
       }
-      return layoutData;
+      return util.clone(layoutData);
     },
 
     encodeLayoutData: function(layoutData, targetWidget, force) {

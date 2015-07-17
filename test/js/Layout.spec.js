@@ -4,6 +4,13 @@ describe("Layout:", function() {
 
     var check = tabris.Layout.checkLayoutData;
 
+    it("always creates a safe copy", function() {
+      var input = {top: 0, left: 0};
+      var output = check(input);
+      expect(output).toEqual(input);
+      expect(output).not.toBe(input);
+    });
+
     it("raises a warning for incomplete horizontal layoutData", function() {
       spyOn(console, "warn");
 
