@@ -32,26 +32,28 @@ Tabris supports the `XMLHttpRequest` to make HTTP request and to read resources 
 
 See [W3C](http://www.w3.org/TR/XMLHttpRequest/) / [MDN](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)
 
-*Tabris.js notes:*
+*Tabris.js specifics:*
 
 * Only asynchronous requests are supported. Attempting a synchronous request will cause an error.
 * When a relative URL is given, Tabris.js will interpret it as a path relative to the application's `package.json`. This allows you to read static resources (files residing in your project folder).
-* To read a JSON file, the `require` method may be more convenient to use (see [Modules](modules.md)).
 * When using a custom built developer client, a relative URL may be used to access local files (bundled with the client as a resource) as well as those residing in the remote project folder (from which the code is loaded via HTTP). Local files take precedence.
 * To enable access to SSL protected resources that use self signed certificates, use the `UseStrictSSL` preference in the config.xml. See the [Cordova documentation](cordova.md#preferences).
+
+> <img align="left" src="img/note.png"> <i>To load static resources, working with URLs relative to the current [module](modules.md) may be more convenient. In the case of a JSON file, this can be done simply by using the `require` method instead of XHR. For other types of files, use the `__dirname` variable, e.g. `xhr.open("GET", __dirname + "/foo.txt");`. You may also want to use the [fetch module](https://www.npmjs.com/package/whatwg-fetch), which provides a more modern API than XHR.</i>
 
 ## Storage
 
 Tabris supports the `localStorage` object, which allows storing simple key-value pairs.
 
-*Tabris.js notes:*
+See [W3C](http://dev.w3.org/html5/webstorage/) / [MDN](https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Storage)
+
+*Tabris.js specifics:*
 
 * Currently the localStorage supports the methods `setItem`, `getItem`, `removeItem`, and `clear`.
 * The `sessionStorage` is not supported, as it would serve no purpose in a non-browser environment.
 * The storage event is currently not supported.
-* The `localStorage` is only meant to store relatively short strings. To store larger amounts of data it is recommended to use the cordova [`FileSystem`](http://plugins.cordova.io/#/package/org.apache.cordova.file) plugin.
 
-See [W3C](http://dev.w3.org/html5/webstorage/) / [MDN](https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Storage)
+> <img align="left" src="img/note.png"> <i>The `localStorage` is only meant to store relatively short strings. To store larger amounts of data it is recommended to use the cordova [`FileSystem`](http://plugins.cordova.io/#/package/org.apache.cordova.file) plugin.</i>
 
 ## Canvas Context
 

@@ -2,8 +2,7 @@
 
 Publishing a new app version to the app stores can take time. Tabris.js allows you to deploy hotfixes to your users immediately, without waiting for an app store update.
 
-Please note that in order to comply with the Apple App Store rules, a patch must *“[…] not change the primary purpose of the app by providing features or functionality that are inconsistent with the intended and advertised purpose”
-– (iOS Developer Program License Agreement section 3.3.2)*.
+> <img align="left" src="img/note.png"> <i>In order to comply with the Apple App Store rules, a patch must *“[…] not change the primary purpose of the app by providing features or functionality that are inconsistent with the intended and advertised purpose” (iOS Developer Program License Agreement section 3.3.2)*.</i>
 
 ## The Patch Format
 
@@ -31,7 +30,7 @@ img
 patch.json
 ```
 
-**Note:** If you have a local cordova build, you may have pre-process your source files before copying them to the folder `cordova/www`. In this case, the patch must correspond to the files that end up in `cordova/www`.
+> <img align="left" src="img/note.png"> <i>If you have a local cordova build, you may have pre-process your source files before copying them to the folder `cordova/www`. In this case, the patch must correspond to the files that end up in `cordova/www`.</i>
 
 ## Discovering a Patch
 
@@ -41,7 +40,9 @@ You are free to implement the patch detection however you wish. For example, you
 
 ## Installing a Patch
 
-To install a patch, call the method `tabris.app.installPatch` with the URL of the patch file and a callback function with two parameters, *error* and *patch*. The patch file will be downloaded and installed in the background, but it won't have an effect before the app is reloaded. _Note: Tabris.js supports cache-control headers. If new updates are not being found by Tabris.js, check the cache invalidation settings of your HTTP server._
+To install a patch, call the method `tabris.app.installPatch` with the URL of the patch file and a callback function with two parameters, *error* and *patch*. The patch file will be downloaded and installed in the background, but it won't have an effect before the app is reloaded. 
+
+> <img align="left" src="img/note.png"> <i>Tabris.js supports cache-control headers. If new updates are not being found by Tabris.js, check the cache invalidation settings of your HTTP server.</i>
 
 In case of an error, the callback is called with an [Error object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error) as the first parameter. The `error.message` field will contain an error message. If the patch has been installed successfully, the second argument will contain the parsed content of the *patch.json* file included in the patch archive, if present.
 
@@ -62,4 +63,4 @@ tabris.app.installPatch(patchUrl, function(error, patch) {
 
 Multiple patches can be applied on top of each other. If an application has been patched before, subsequent patches will overlay previous ones.
 
-Please note that this feature is considered provisional and the API described here may be adjusted in a future release.
+> <img align="left" src="img/note.png"> <i>This feature is considered provisional and the API described here may be adjusted in a future release. </i>

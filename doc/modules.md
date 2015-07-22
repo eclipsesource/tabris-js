@@ -98,10 +98,13 @@ A folder module may consist of multiple internal file modules, but only the firs
 
 Tabris.js supports loading [npm](https://www.npm.org) modules, though he compatibility of the module depends on the API it expects.
 
-Use the [npm command line interface](https://www.npmjs.org/doc/) to install any Tabris.js compatible module into your project folder. Note that Tabris.js does *not* support globally installed npm modules, only those installed locally in the projects `node_modules` folder.
+Use the [npm command line interface](https://www.npmjs.org/doc/) to install any Tabris.js compatible module into your project folder.
+
+> <img align="left" src="img/note.png"> <i>Tabris.js does *not* support globally installed npm modules, only those installed locally in the projects `node_modules` folder.</i>
 
 To load a locally installed npm module, simply use its name as the identifier string, with no leading dot. For example:
 
     var _ = require("underscore");
 
 Modules that have been tested with Tabris.js are tracked as [GitHub issues](https://github.com/eclipsesource/tabris-js/issues?q=label%3A%22compatibility+npm%22). If the module is confirmed to work the issue is closed. Please feel free to add issues for modules that you tested.
+

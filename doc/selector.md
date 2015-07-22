@@ -54,7 +54,7 @@ page.apply({
 });
 ```
 
-It's very important to note that the order in which these properties are applies depends solely on the selector used, not on the order in the object literal. The order is:
+The order in which these properties are applied depends on the selector used. The order is:
 
 - `"*"` > `"Type"` > `".class"` > `"#id"`
 
@@ -69,6 +69,8 @@ page.apply({
 ```
 
 This will make all widgets within the page blue, except for the buttons, which are green, except for "#mybutton", which will be red.
+
+> <img align="left" src="img/note.png"> <i>The on-screen order of the properties in the object literal is meaningless. According to the EcmaScript standard the members of a JavaScript object do not have a defined order.</i> 
 
 ### How to use it
 
@@ -124,4 +126,4 @@ page.on("resize", function() {
 });
 ```
 
-Note that it is better to use the aspect ratio of the page as a basis for selecting a layout than the device orientation. This is because when the device is re-oriented, the page is first re-sized, and then rotated in an animation. Also, in future Tabris.js versions a page may not always have the same aspect ratio as the screen.
+> <img align="left" src="img/note.png"> <i>It is better to use the aspect ratio of the page as a basis for selecting a layout than the device orientation. This is because when the device is re-oriented, the page is first re-sized, and then rotated in an animation. Also, in future Tabris.js versions a page may not always have the same aspect ratio as the screen.</i>

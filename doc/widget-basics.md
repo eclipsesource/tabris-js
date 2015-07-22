@@ -74,7 +74,9 @@ var selectionHandler = function(button) {
 button.on("select", selectionHandler);
 ```
 
-Note that event types are case sensitive. All Tabris.js event types are lowercase. Depending on the event type the listener function is called with a list of parameter, where the first parameter is usually the widget itself. 
+Depending on the event type the listener function is called with a list of parameter, where the first parameter is usually the widget itself.
+
+> <img align="left" src="img/note.png"> <i>Event types are case sensitive. All Tabris.js event types are lowercase.</i> 
 
 An "context" object may be given as the third `on` parameter. This object will then be available as `this` inside the listener function.
 

@@ -13,7 +13,7 @@ Tabris.js utilizes [Apache Cordova](http://cordova.apache.org) to build and pack
 | Using own build hardware  |              |       ✓      |
 | Other SCMs than Git       |              |       ✓      |
 
-> **Note:** The online build service is free for public GitHub repositories. To built from a private repository, you need a [developer account](https://tabrisjs.com/pricing/). To build an app locally you need a [pro account](https://tabrisjs.com/pricing/). To build locally you need to follow the [local build guide](local-build.md).
+> <img align="left" src="img/note.png"> <i>The online build service is free for public GitHub repositories. To built from a private repository, you need a [developer account](https://tabrisjs.com/pricing/). To build an app locally you need a [pro account](https://tabrisjs.com/pricing/). To build locally you need to follow the [local build guide](local-build.md).</i>
 
 ## Project Layout
 
@@ -51,7 +51,7 @@ The minimal build configuration you need is a `config.xml` file that describes y
 
 The build service packages the contents of your project into the app. You can exclude certain files or directories that are not required in the packaged app, such as tests or developer documentation. Files and directories to be ignored by the build can be listed in a file named `.tabrisignore`. The format of this ignore file follows the same rules as a [`.gitignore`](http://git-scm.com/docs/gitignore) file.
 
-> **Note:** The .tabrisignore file is only relevant for the build service. In a local build, you have to manage the packaged files yourself (see below).
+> <img align="left" src="img/note.png"> <i>The .tabrisignore file is only relevant for the build service. In a local build, you have to manage the packaged files yourself (see below).</i>
 
 ## Build Service
 
@@ -61,7 +61,7 @@ After you have selected your repository it’s going to be validated. The valida
 ![Valid App](img/build-valid-app.png)
 After your app has become valid, you are ready to execute the first build. Just select the newly created app and click the "Start Android Build" button. A few minutes later you will get an Android .apk file which is ready to be installed on your device. But what about iOS, production builds and signing? All these things can be configured using the "Settings".
 
-> **Note:** The build service installs the dependencies specified in your package.json from npm (except devDependencies). As a result, you don't have to put the `node_modules` folder under version control.
+> <img align="left" src="img/note.png"> <i>The build service installs the dependencies specified in your package.json from npm (except devDependencies). As a result, you don't have to put the `node_modules` folder under version control.</i>
 
 ### Settings
 ![App Settings](img/build-app-settings.png)
