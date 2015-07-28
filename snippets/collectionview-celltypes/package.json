@@ -4,6 +4,6 @@
   "description": "Create a collection with differerent cell types",
   "main": "collectionview-celltypes.js",
   "dependencies": {
-    "tabris": "^1.0.0"
+    "tabris": "^1.1.0"
   }
 }
