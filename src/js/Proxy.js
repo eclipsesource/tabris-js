@@ -86,51 +86,16 @@
     },
 
     _applyProperty: function(name, value, options) {
-      var type = this._getPropertyType(name);
-      if (!type) {
+      if (!this._getPropertyType(name)) {
         return true;
-      }
-      var encodedValue;
-      try {
-        encodedValue = this._encodeProperty(value, type);
-      } catch (ex) {
-        console.warn(this.type + ": Ignored unsupported value for property \"" + name + "\": " + ex.message);
-        return false;
       }
       var setProperty = this._getPropertySetter(name);
       if (setProperty instanceof Function) {
-        setProperty.call(this, encodedValue);
+        setProperty.call(this, value);
       } else {
-        this._nativeSet(name, tabris.PropertyEncoding.proxy(encodedValue));
+        this._nativeSet(name, value);
       }
-      this._cacheProperty(name, encodedValue, options);
-    },
-
-    _encodeProperty: function(value, type) {
-      if (typeof type === "string" && tabris.PropertyEncoding[type]) {
-        return tabris.PropertyEncoding[type](value);
-      }
-      if (Array.isArray(type) && tabris.PropertyEncoding[type[0]]) {
-        var args = [value].concat(type.slice(1));
-        return tabris.PropertyEncoding[type[0]].apply(window, args);
-      }
-      return value;
-    },
-
-    _decodeProperty: function(value, type) {
-      if (typeof type === "string" && tabris.PropertyDecoding[type]) {
-        return tabris.PropertyDecoding[type](value);
-      }
-      if (Array.isArray(type) && tabris.PropertyDecoding[type[0]]) {
-        var args = [value].concat(type.slice(1));
-        return tabris.PropertyDecoding[type[0]].apply(window, args);
-      }
-      return value;
-    },
-
-    _getPropertyType: function(name) {
-      var prop = this.constructor._properties[name];
-      return prop ? prop.type : null;
+      this._cacheProperty(name, value, options);
     },
 
     _getPropertySetter: function(name) {
@@ -147,17 +112,15 @@
     },
 
     _readProperty: function(name) {
-      var type = this._getPropertyType(name);
-      if (!type) {
+      if (!this._getPropertyType(name)) {
         return;
       }
       if (this._isCachedProperty(name)) {
-        return this._decodeProperty(this._getCachedProperty(name), type);
+        return this._getCachedProperty(name);
       }
       // TODO: cache read property, but add nocache to device properties first
       var getProperty = this._getPropertyGetter(name);
-      var value = getProperty ? getProperty.call(this) : this._nativeGet(name);
-      return this._decodeProperty(value, type);
+      return getProperty ? getProperty.call(this) : this._nativeGet(name);
     },
 
     _getPropertyGetter: function(name) {
@@ -206,6 +169,10 @@
       var type = this._getPropertyType(propertyName);
       var decodedValue = this._decodeProperty(newEncodedValue, type);
       this.trigger("change:" + propertyName, this, decodedValue, options || {});
+    },
+
+    toString: function() {
+      return this.type;
     }
 
   });

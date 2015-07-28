@@ -510,50 +510,6 @@ describe("Proxy", function() {
         expect(proxy.get("unknownProperty")).toBe("foo");
       });
 
-      it("calls function if _properties entry is a string found in PropertyEncoding", function() {
-        tabris.TestType._properties.knownProperty = {type: "boolean"};
-        spyOn(tabris.PropertyEncoding, "boolean").and.returnValue(true);
-        spyOn(console, "warn");
-
-        proxy.set("knownProperty", true);
-
-        expect(tabris.PropertyEncoding.boolean).toHaveBeenCalled();
-        expect(console.warn).not.toHaveBeenCalled();
-      });
-
-      it("calls function if _properties entry is has type string found in PropertyEncoding", function() {
-        tabris.TestType._properties.knownProperty = {type: "boolean"};
-        spyOn(tabris.PropertyEncoding, "boolean").and.returnValue(true);
-        spyOn(console, "warn");
-
-        proxy.set("knownProperty", true);
-
-        expect(tabris.PropertyEncoding.boolean).toHaveBeenCalled();
-        expect(console.warn).not.toHaveBeenCalled();
-      });
-
-      it("calls function with args if _properties entry is an array", function() {
-        tabris.TestType._properties.knownProperty = {type: ["choice", ["a", "b", "c"]]};
-        spyOn(tabris.PropertyEncoding, "choice").and.returnValue(true);
-        spyOn(console, "warn");
-
-        proxy.set("knownProperty", "a");
-
-        expect(tabris.PropertyEncoding.choice).toHaveBeenCalledWith("a", ["a", "b", "c"]);
-        expect(console.warn).not.toHaveBeenCalled();
-      });
-
-      it("raises a warning if _properties entry references a function that throws", function() {
-        tabris.TestType._properties.knownProperty = {type: "boolean"};
-        spyOn(tabris.PropertyEncoding, "boolean").and.throwError("My Error");
-        spyOn(console, "warn");
-
-        proxy.set("knownProperty", true);
-
-        var message = "TestType: Ignored unsupported value for property \"knownProperty\": My Error";
-        expect(console.warn).toHaveBeenCalledWith(message);
-      });
-
       it("do not SET the value if _properties entry references a function that throws", function() {
         tabris.TestType._properties.knownProperty = {type: "boolean"};
         spyOn(tabris.PropertyEncoding, "boolean").and.throwError("My Error");

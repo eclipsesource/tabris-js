@@ -2,9 +2,15 @@ describe("Properties", function() {
   /*globals _:false*/
 
   var object;
+  var TestType;
 
   beforeEach(function() {
-    object = {};
+    TestType = function() {};
+    TestType._properties = {};
+    object = new TestType();
+    object.toString = function() {
+      return "TestType";
+    };
     _.extend(object, tabris.Properties);
   });
 
@@ -81,6 +87,51 @@ describe("Properties", function() {
       expect(object.get("foo")).toBe("bar2");
     });
 
+    it("calls encoding function if type is found in PropertyEncoding", function() {
+      TestType._properties.knownProperty = {type: "boolean"};
+      spyOn(tabris.PropertyEncoding, "boolean").and.returnValue(true);
+      spyOn(console, "warn");
+
+      object.set("knownProperty", true);
+
+      expect(tabris.PropertyEncoding.boolean).toHaveBeenCalled();
+      expect(console.warn).not.toHaveBeenCalled();
+    });
+
+    it("calls encoding function with arguments if type is given as an array", function() {
+      TestType._properties.knownProperty = {type: ["choice", ["a", "b", "c"]]};
+      spyOn(tabris.PropertyEncoding, "choice").and.returnValue(true);
+      spyOn(console, "warn");
+
+      object.set("knownProperty", "a");
+
+      expect(tabris.PropertyEncoding.choice).toHaveBeenCalledWith("a", ["a", "b", "c"]);
+      expect(console.warn).not.toHaveBeenCalled();
+    });
+
+    it("raises a warning if encoding function throws", function() {
+      TestType._properties.knownProperty = {type: "boolean"};
+      spyOn(tabris.PropertyEncoding, "boolean").and.throwError("My Error");
+      spyOn(console, "warn");
+
+      object.set("knownProperty", true);
+
+      var message = "TestType: Ignored unsupported value for property \"knownProperty\": My Error";
+      expect(console.warn).toHaveBeenCalledWith(message);
+    });
+
+    it ("get returns value from decoding function", function() {
+      TestType._properties.foo = {type: "color"};
+      spyOn(tabris.PropertyDecoding, "color").and.returnValue("bar");
+
+      object.set("foo", "rgba(1, 2, 3, 1)");
+
+      var value = object.get("foo");
+
+      expect(tabris.PropertyDecoding.color).toHaveBeenCalledWith([1, 2, 3, 255]);
+      expect(value).toBe("bar");
+    });
+
   });
 
   describe("with Events:", function() {
@@ -100,6 +151,18 @@ describe("Properties", function() {
       expect(listener).toHaveBeenCalled();
       expect(listener.calls.argsFor(0)[0]).toBe(object);
       expect(listener.calls.argsFor(0)[1]).toBe("bar");
+      expect(listener.calls.argsFor(0)[2]).toEqual({});
+    });
+
+    it ("set triggers change event with decoded value", function() {
+      TestType._properties.foo = {type: "boolean"};
+      object.on("change:foo", listener);
+
+      object.set("foo", "bar");
+
+      expect(listener).toHaveBeenCalled();
+      expect(listener.calls.argsFor(0)[0]).toBe(object);
+      expect(listener.calls.argsFor(0)[1]).toBe(true);
       expect(listener.calls.argsFor(0)[2]).toEqual({});
     });
 
@@ -127,6 +190,16 @@ describe("Properties", function() {
 
     it ("set triggers no change event if value is unchanged", function() {
       object.set("foo", "bar");
+      object.on("change:foo", listener);
+
+      object.set("foo", "bar");
+
+      expect(listener).not.toHaveBeenCalled();
+    });
+
+    it ("set triggers no change event if encoded value is unchanged", function() {
+      TestType._properties.foo = {type: "boolean"};
+      object.set("foo", true);
       object.on("change:foo", listener);
 
       object.set("foo", "bar");
