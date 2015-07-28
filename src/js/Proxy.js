@@ -87,7 +87,7 @@
 
     _applyProperty: function(name, value, options) {
       if (!this._getPropertyType(name)) {
-        return true;
+        return value;
       }
       var setProperty = this._getPropertySetter(name);
       if (setProperty instanceof Function) {
@@ -95,7 +95,11 @@
       } else {
         this._nativeSet(name, value);
       }
-      this._cacheProperty(name, value, options);
+      if (this.constructor._properties[name].nocache) {
+        this._triggerChangeEvent(name, value, options);
+      } else {
+        return value === this._getDefaultPropertyValue(name) ? undefined : value;
+      }
     },
 
     _getPropertySetter: function(name) {
@@ -111,16 +115,20 @@
       tabris._nativeBridge.set(this.cid, name, value);
     },
 
-    _readProperty: function(name) {
+    _readProperty: function(name, value) {
       if (!this._getPropertyType(name)) {
-        return;
+        return value;
       }
-      if (this._isCachedProperty(name)) {
-        return this._getCachedProperty(name);
+      var result = value;
+      if (result === undefined) {
+        result = this._getDefaultPropertyValue(name);
       }
-      // TODO: cache read property, but add nocache to device properties first
-      var getProperty = this._getPropertyGetter(name);
-      return getProperty ? getProperty.call(this) : this._nativeGet(name);
+      if (result === undefined) {
+        // TODO: cache read property, but add nocache to device properties first
+        var getProperty = this._getPropertyGetter(name);
+        result = getProperty ? getProperty.call(this) : this._nativeGet(name);
+      }
+      return result;
     },
 
     _getPropertyGetter: function(name) {
@@ -137,31 +145,7 @@
       return tabris._nativeBridge.call(this.cid, method, parameters);
     },
 
-    _cacheProperty: function(name, value, options) {
-      if (!this.constructor._properties[name].nocache) {
-        if (!this._propertyCache) {
-          this._propertyCache = {};
-        }
-        var cached = this._isCachedProperty(name);
-        var previous = cached ? this._getCachedProperty(name) : undefined;
-        this._propertyCache[name] = value;
-        if (!cached || !propertyEquals(previous, value)) {
-          this._triggerChangeEvent(name, value, options);
-        }
-      } else {
-        this._triggerChangeEvent(name, value, options);
-      }
-    },
-
-    _isCachedProperty: function(name) {
-      return (this._propertyCache && name in this._propertyCache) ||
-        "default" in this.constructor._properties[name];
-    },
-
-    _getCachedProperty: function(name) {
-      if (this._propertyCache && name in this._propertyCache) {
-        return this._propertyCache[name];
-      }
+    _getDefaultPropertyValue: function(name) {
       return valueOf(this.constructor._properties[name].default);
     },
 
@@ -185,30 +169,6 @@
 
   function valueOf(value) {
     return value instanceof Function ? value() : value;
-  }
-
-  function propertyEquals(value1, value2) {
-    // NOTE: this deep-compare is designed only for certain encoded properties (color, image, etc)
-    if (value1 === value2) {
-      return true;
-    }
-    if (value1 instanceof Array && value2 instanceof Array) {
-      for (var i = 0; i < value1.length; i++) {
-        if (value1[i] !== value2[i]) {
-          return false;
-        }
-      }
-      return true;
-    }
-    if (value1 instanceof Object && value2 instanceof Object) {
-      for (var key in value1) {
-        if (value1[key] !== value2[key]) {
-          return false;
-        }
-      }
-      return true;
-    }
-    return false;
   }
 
 })();

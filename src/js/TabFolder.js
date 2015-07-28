@@ -135,8 +135,8 @@
       var result = {};
       for (var i = 0; i < itemProps.length; i++) {
         var prop = itemProps[i];
-        if (this._isCachedProperty(prop)) {
-          result[prop] = this._getCachedProperty(prop);
+        if (this._getStoredProperty(prop) !== undefined) {
+          result[prop] = this._getStoredProperty(prop);
         }
       }
       return result;

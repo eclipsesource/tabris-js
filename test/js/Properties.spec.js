@@ -47,8 +47,14 @@ describe("Properties", function() {
       object._applyProperty = jasmine.createSpy().and.returnValue(true);
       object.set("foo", "bar");
 
-      expect(object.get("foo")).toBe("bar");
       expect(object._applyProperty).toHaveBeenCalledWith("foo", "bar", {});
+    });
+
+    it ("set stores value returend by _applyProperty", function() {
+      object._applyProperty = jasmine.createSpy().and.returnValue(true);
+      object.set("foo", "bar");
+
+      expect(object.get("foo")).toBe(true);
     });
 
     it ("set calls _applyProperty with options", function() {
@@ -58,30 +64,30 @@ describe("Properties", function() {
       expect(object._applyProperty).toHaveBeenCalledWith("foo", "bar", {foo2: "bar2"});
     });
 
-    it ("set does not store value if _applyProperty returns false", function() {
-      object._applyProperty = function() {return false;};
+    it ("set does store what _applyProperty returns", function() {
+      object._applyProperty = function() {return "x";};
       object.set("foo", "bar");
 
-      expect(object.get("foo")).toBeUndefined();
+      expect(object.get("foo")).toBe("x");
     });
 
-    it ("get does not call _readProperty if value is set", function() {
+    it ("get does call _readProperty with stored value", function() {
       object.set("foo", "bar");
-      object._readProperty = jasmine.createSpy();
-
-      expect(object.get("foo")).toBe("bar");
-      expect(object._readProperty).not.toHaveBeenCalled();
-    });
-
-    it ("get calls _readProperty if value is unset", function() {
       object._readProperty = jasmine.createSpy();
 
       object.get("foo");
 
-      expect(object._readProperty).toHaveBeenCalledWith("foo");
+      expect(object._readProperty).toHaveBeenCalledWith("foo", "bar");
+    });
+
+    it ("get does call _readProperty with undefined value", function() {
+      object._readProperty = jasmine.createSpy();
+      object.get("foo");
+      expect(object._readProperty).toHaveBeenCalledWith("foo", undefined);
     });
 
     it ("get returns value returned by _readProperty", function() {
+      object.set("foo", "bar");
       object._readProperty = function() {return "bar2";};
 
       expect(object.get("foo")).toBe("bar2");

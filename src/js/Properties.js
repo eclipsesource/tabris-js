@@ -12,13 +12,13 @@ tabris.Properties = {
 
   get: function(name) {
     this._checkDisposed();
-    var value;
-    if (this._props && name in this._props) {
-      value = this._props[name];
-    } else {
-      value = this._readProperty(name);
-    }
+    var value = this._getStoredProperty(name);
+    value = this._readProperty(name, value);
     return this._decodeProperty(value, this._getPropertyType(name));
+  },
+
+  _getStoredProperty: function(name) {
+    return this._props ? this._props[name] : undefined;
   },
 
   _setProperties: function(properties, options) {
@@ -34,19 +34,29 @@ tabris.Properties = {
       encodedValue = this._encodeProperty(value, type);
     } catch (ex) {
       console.warn(this.toString() + ": Ignored unsupported value for property \"" + name + "\": " + ex.message);
+      return;
+    }
+    encodedValue = this._applyProperty(name, encodedValue, options);
+    var changed = this._storeProperty(name, encodedValue, options);
+    if (changed) {
+      this.trigger("change:" + name, this, this._decodeProperty(encodedValue, type), options);
+    }
+  },
+
+  _storeProperty: function(name, encodedValue) {
+    var oldEncodedValue = this._props ? this._props[name] : undefined;
+    if (encodedValue === oldEncodedValue) {
       return false;
     }
-    var accept = this._applyProperty(name, encodedValue, options);
-    if (accept) {
+    if (encodedValue === undefined && this._props) {
+      delete this._props[name];
+    } else {
       if (!this._props) {
         this._props = {};
       }
-      var oldValue = this._props[name];
       this._props[name] = encodedValue;
-      if (oldValue !== encodedValue) {
-        this.trigger("change:" + name, this, this._decodeProperty(encodedValue, type), options);
-      }
     }
+    return true;
   },
 
   _getPropertyType: function(name) {
@@ -77,8 +87,8 @@ tabris.Properties = {
   },
 
   _checkDisposed: function() {},
-  _applyProperty: function() {return true;},
-  _readProperty: function() {return undefined;},
+  _applyProperty: function(name, value) {return value;},
+  _readProperty: function(name, value) {return value;},
   trigger: function() {}
 
 };

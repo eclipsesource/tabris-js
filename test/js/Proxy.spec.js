@@ -614,28 +614,6 @@ describe("Proxy", function() {
         expect(listener).not.toHaveBeenCalled();
       });
 
-      it ("triggers no change event if value is unchanged from previous encoded value", function() {
-        tabris.TestType._properties.foo = {type: "color", default: ""};
-        var listener = jasmine.createSpy();
-        proxy.set("foo", "#ff00ff");
-        proxy.on("change:foo", listener);
-
-        proxy.set("foo", "rgb(255, 0, 255)");
-
-        expect(listener).not.toHaveBeenCalled();
-      });
-
-      it ("triggers no change event if value is unchanged from previous object value", function() {
-        tabris.TestType._properties.foo = {type: "transform", default: ""};
-        var listener = jasmine.createSpy();
-        proxy.set("foo", {scaleX: 2});
-        proxy.on("change:foo", listener);
-
-        proxy.set("foo", {scaleX: 2, scaleY: 1});
-
-        expect(listener).not.toHaveBeenCalled();
-      });
-
       it ("always triggers change event for uncached properties", function() {
         tabris.TestType._properties.foo = {type: true, nocache: true};
         var listener = jasmine.createSpy();
