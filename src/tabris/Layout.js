@@ -30,8 +30,6 @@
         console.warn("Inconsistent layoutData: centerX overrides left and right");
         return util.omit(layoutData, ["left", "right"]);
       }
-    } else if (!("left" in layoutData) && !("right" in layoutData)) {
-      console.warn("Incomplete layoutData: either left, right or centerX should be specified");
     }
     if ("baseline" in layoutData) {
       if (("top" in layoutData) || ("bottom" in layoutData) || ("centerY" in layoutData)) {
@@ -43,8 +41,6 @@
         console.warn("Inconsistent layoutData: centerY overrides top and bottom");
         return util.omit(layoutData, ["top", "bottom"]);
       }
-    } else if (!("top" in layoutData) && !("bottom" in layoutData)) {
-      console.warn("Incomplete layoutData: either top, bottom, centerY, or baseline should be specified");
     }
     return layoutData;
   }

@@ -20,24 +20,6 @@ describe("Layout:", function() {
       expect(output.left).not.toBe(input.left);
     });
 
-    it("raises a warning for incomplete horizontal layoutData", function() {
-      spyOn(console, "warn");
-
-      encode({top: 0});
-
-      var warning = "Incomplete layoutData: either left, right or centerX should be specified";
-      expect(console.warn).toHaveBeenCalledWith(warning);
-    });
-
-    it("raises a warning for incomplete vertical layoutData", function() {
-      spyOn(console, "warn");
-
-      encode({left: 0});
-
-      var warning = "Incomplete layoutData: either top, bottom, centerY, or baseline should be specified";
-      expect(console.warn).toHaveBeenCalledWith(warning);
-    });
-
     it("raises a warning for inconsistent layoutData (centerX)", function() {
       spyOn(console, "warn");
 
