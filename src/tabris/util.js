@@ -56,12 +56,6 @@ var util = {
     return result;
   },
 
-  bind: function(fn, context) {
-    return function() {
-      return fn.apply(context, arguments);
-    };
-  },
-
   extendPrototype: function(fn, target) {
     var Helper = function() {};
     Helper.prototype = fn.prototype;
