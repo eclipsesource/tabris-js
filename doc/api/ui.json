@@ -7,6 +7,10 @@
       "type": "Color",
       "description": "Background color for the navigation elements"
     },
+    "textColor": {
+      "type": "Color",
+      "description": "Text color for the navigation elements"
+    },
     "activePage": {
       "type": "Page",
       "description": "The currently visible page."
