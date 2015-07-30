@@ -1,20 +1,29 @@
 describe("Layout:", function() {
 
-  describe("checkLayoutData", function() {
+  describe("encodeLayoutData", function() {
 
-    var check = tabris.Layout.checkLayoutData;
+    var encode = tabris.Layout.encodeLayoutData;
 
-    it("always creates a safe copy", function() {
+    it("creates a safe copy", function() {
       var input = {top: 0, left: 0};
-      var output = check(input);
+      var output = encode(input);
+
       expect(output).toEqual(input);
       expect(output).not.toBe(input);
+    });
+
+    it("creates a safe copy of arrays", function() {
+      var input = {left: [30, 10], top: [70, 20]};
+      var output = encode(input);
+
+      expect(output.left).toEqual(input.left);
+      expect(output.left).not.toBe(input.left);
     });
 
     it("raises a warning for incomplete horizontal layoutData", function() {
       spyOn(console, "warn");
 
-      check({top: 0});
+      encode({top: 0});
 
       var warning = "Incomplete layoutData: either left, right or centerX should be specified";
       expect(console.warn).toHaveBeenCalledWith(warning);
@@ -23,7 +32,7 @@ describe("Layout:", function() {
     it("raises a warning for incomplete vertical layoutData", function() {
       spyOn(console, "warn");
 
-      check({left: 0});
+      encode({left: 0});
 
       var warning = "Incomplete layoutData: either top, bottom, centerY, or baseline should be specified";
       expect(console.warn).toHaveBeenCalledWith(warning);
@@ -32,14 +41,14 @@ describe("Layout:", function() {
     it("raises a warning for inconsistent layoutData (centerX)", function() {
       spyOn(console, "warn");
 
-      check({top: 0, left: 0, centerX: 0});
+      encode({top: 0, left: 0, centerX: 0});
 
       var warning = "Inconsistent layoutData: centerX overrides left and right";
       expect(console.warn).toHaveBeenCalledWith(warning);
     });
 
     it("skips overridden properties from layoutData (centerX)", function() {
-      var result = check({top: 1, left: 2, right: 3, centerX: 4});
+      var result = encode({top: 1, left: 2, right: 3, centerX: 4});
 
       expect(result).toEqual({top: 1, centerX: 4});
     });
@@ -47,14 +56,14 @@ describe("Layout:", function() {
     it("raises a warning for inconsistent layoutData (centerY)", function() {
       spyOn(console, "warn");
 
-      check({left: 0, top: 0, centerY: 0});
+      encode({left: 0, top: 0, centerY: 0});
 
       var warning = "Inconsistent layoutData: centerY overrides top and bottom";
       expect(console.warn).toHaveBeenCalledWith(warning);
     });
 
     it("skips overridden properties from layoutData (centerY)", function() {
-      var result = check({left: 1, top: 2, bottom: 3, centerY: 4});
+      var result = encode({left: 1, top: 2, bottom: 3, centerY: 4});
 
       expect(result).toEqual({left: 1, centerY: 4});
     });
@@ -62,23 +71,137 @@ describe("Layout:", function() {
     it("raises a warning for inconsistent layoutData (baseline)", function() {
       spyOn(console, "warn");
 
-      check({left: 0, top: 0, baseline: 0});
+      encode({left: 0, top: 0, baseline: "#other"});
 
       var warning = "Inconsistent layoutData: baseline overrides top, bottom, and centerY";
       expect(console.warn).toHaveBeenCalledWith(warning);
     });
 
     it("skips overridden properties from layoutData (baseline)", function() {
-      var result = check({left: 1, top: 2, bottom: 3, centerY: 4, baseline: "other"});
+      var result = encode({left: 1, top: 2, bottom: 3, centerY: 4, baseline: "other"});
 
       expect(result).toEqual({left: 1, baseline: "other"});
     });
 
+    ["width", "height", "centerX", "centerY"].forEach(function(attr) {
+
+      it("fails if '" + attr + "' is not a number", function() {
+        expect(function() {
+          var layoutData = {};
+          layoutData[attr] = "23";
+          encode(layoutData);
+        }).toThrowError("Invalid value for '" + attr + "': must be a number");
+      });
+
+    });
+
+    ["left", "right", "top", "bottom"].forEach(function(attr) {
+
+      it("fails if '" + attr + "' is an object", function() {
+        expect(function() {
+          var layoutData = {};
+          layoutData[attr] = {};
+          encode(layoutData);
+        }).toThrowError("Invalid value for '" + attr + "': invalid type");
+      });
+
+      it("fails if '" + attr + "' is an invalid array", function() {
+        expect(function() {
+          var layoutData = {};
+          layoutData[attr] = [23];
+          encode(layoutData);
+        }).toThrowError("Invalid value for '" + attr + "': array length must be 2");
+      });
+
+    });
+
+    it("fails if 'baseline' is a number", function() {
+      expect(function() {
+        encode({left: 0, baseline: 23});
+      }).toThrowError("Invalid value for 'baseline': must be a widget reference");
+    });
+
+    it("fails if 'baseline' is a percentage", function() {
+      expect(function() {
+        encode({left: 0, baseline: "23%"});
+      }).toThrowError("Invalid value for 'baseline': must be a widget reference");
+    });
+
+    it("fails for unknown attribute", function() {
+      expect(function() {
+        encode({left: 0, foo: "23"});
+      }).toThrowError("Invalid key 'foo' in layoutData");
+    });
+
+    it("translates percentage strings to arrays", function() {
+      expect(encode({left: "30%", top: "0%"})).toEqual({left: [30, 0], top: 0});
+    });
+
+    it("translates percentages in arrays to numbers", function() {
+      var input = {left: ["30%", 0]};
+      var output = encode(input);
+
+      expect(output.left).toEqual([30, 0]);
+    });
+
+    it("translates selector to array", function() {
+      var input = {left: "#other", top: "#other"};
+      var expected = {left: ["#other", 0], top: ["#other", 0]};
+
+      expect(encode(input)).toEqual(expected);
+    });
+
+    it("translates zero percentage to offset", function() {
+      expect(encode({left: "0%", top: ["0%", 23]}))
+        .toEqual({left: 0, top: 23});
+    });
+
+    it("does not encode widget refs", function() {
+      var input = {left: ["#other", 0]};
+      var output = encode(input);
+
+      expect(output.left).toEqual(["#other", 0]);
+    });
+
   });
 
-  describe("encodeLayoutData", function() {
+  describe("decodeLayoutData", function() {
 
-    var encode = tabris.Layout.encodeLayoutData;
+    var decode = tabris.Layout.decodeLayoutData;
+
+    it("creates a safe copy", function() {
+      var input = {top: 0, left: 0};
+      var output = decode(input);
+
+      expect(output).toEqual(input);
+      expect(output).not.toBe(input);
+    });
+
+    it("creates a safe copy of arrays", function() {
+      var input = {left: ["30%", 10]};
+      var output = decode(input);
+
+      expect(output.left).toEqual(input.left);
+      expect(output.left).not.toBe(input.left);
+    });
+
+    it("translates to percentage strings", function() {
+      expect(decode({left: [30, 10]})).toEqual({left: ["30%", 10]});
+    });
+
+    it("translates arrays with zero percentage to offset", function() {
+      expect(decode({left: [0, 23]})).toEqual({left: 23});
+    });
+
+    it("translates arrays with zero offset to scalars", function() {
+      expect(decode({left: [23, 0], top: ["#other", 0]})).toEqual({left: "23%", top: "#other"});
+    });
+
+  });
+
+  describe("resolveReferences", function() {
+
+    var resolve = tabris.Layout.resolveReferences;
     var parent, widget, other;
 
     beforeEach(function() {
@@ -95,33 +218,24 @@ describe("Layout:", function() {
     });
 
     it("translates widget to ids", function() {
-      expect(encode({left: 23, centerY: other, right: [other, 42]}, widget))
-        .toEqual({left: 23, centerY: other.cid, right: [other.cid, 42]});
+      var input = {centerY: other, left: [other, 42]};
+      var expected = {centerY: other.cid, left: [other.cid, 42]};
+
+      expect(resolve(input, widget)).toEqual(expected);
     });
 
-    it("translates selector in array to id", function() {
-      expect(encode({left: 23, centerY: "#other", right: ["#other", 42]}, widget))
-        .toEqual({left: 23, centerY: other.cid, right: [other.cid, 42]});
+    it("translates selectors to ids", function() {
+      var input = {baseline: "#other", left: ["#other", 42]};
+      var expected = {baseline: other.cid, left: [other.cid, 42]};
+
+      expect(resolve(input, widget)).toEqual(expected);
     });
 
-    it("translates selector outside array to id array (offsets)", function() {
-      expect(encode({left: "#other", right: "#other", top: "#other", bottom: "#other"}, widget))
-        .toEqual({left: [other.cid, 0], right: [other.cid, 0], top: [other.cid, 0], bottom: [other.cid, 0]});
-    });
+    it("does not modify numbers", function() {
+      var input = {centerX: 23, left: [30, 42]};
+      var expected = {centerX: 23, left: [30, 42]};
 
-    it("translates selector outside array to id (centerX/Y, baseline)", function() {
-      expect(encode({centerX: "#other", baseline: "#other"}, widget))
-        .toEqual({centerX: other.cid, baseline: other.cid});
-    });
-
-    it("translates percentage string in array to number", function() {
-      expect(encode({left: 23, right: ["12%", 34], top: ["0%", 42]}, widget))
-        .toEqual({left: 23, right: [12, 34], top: [0, 42]});
-    });
-
-    it("translates percentage string outside array to number array", function() {
-      expect(encode({left: 23, right: "12%", top: "0%"}, widget))
-        .toEqual({left: 23, right: [12, 0], top: [0, 0]});
+      expect(resolve(input, widget)).toEqual(expected);
     });
 
     it("treats ambiguous string as selector", function() {
@@ -129,23 +243,15 @@ describe("Layout:", function() {
       var freak1 = tabris.create("Foo%").appendTo(parent);
       var freak2 = tabris.create("TestType", {id: "23%"}).appendTo(parent);
 
-      expect(encode({left: 23, right: "#23%", top: ["Foo%", 42]}, widget))
-        .toEqual({left: 23, right: [freak2.cid, 0], top: [freak1.cid, 42]});
-    });
-
-    it("translation does not modify layoutData", function() {
-      var layoutData = {left: 23, right: other, top: [other, 42]};
-
-      encode(layoutData, widget);
-
-      expect(layoutData.top).toEqual([other, 42]);
+      expect(resolve({left: ["Foo%", 23], top: ["#23%", 42]}, widget))
+        .toEqual({left: [freak1.cid, 23], top: [freak2.cid, 42]});
     });
 
     it("throws if selector does not resolve due to missing sibling", function() {
       other.dispose();
 
       expect(function() {
-        encode({left: 23, right: "#other", top: ["#other", 42]}, widget);
+        resolve({left: 23, right: "#other", top: ["#other", 42]}, widget);
       }).toThrow();
     });
 
@@ -153,22 +259,22 @@ describe("Layout:", function() {
       widget = tabris.create("TestType");
 
       expect(function() {
-        encode({left: 23, right: "#other", top: ["#other", 42]}, widget);
+        resolve({left: 23, right: "#other", top: ["#other", 42]}, widget);
       }).toThrow();
     });
 
-    it("replaces selector not resolved due to missing sibling with 0", function() {
+    it("replaces unresolved selector (due to missing sibling) with 0", function() {
       other.dispose();
 
-      expect(encode({left: 23, right: "#noone", top: ["#noone", 42]}, widget, true))
-        .toEqual({left: 23, right: [0, 0], top: [0, 42]});
+      expect(resolve({baseline: "#noone", left: ["#noone", 42]}, widget, true))
+        .toEqual({baseline: 0, left: [0, 42]});
     });
 
-    it("replaces selector not resolved due to missing parent with 0", function() {
+    it("replaces unresolved selector (due to missing parent) with 0", function() {
       widget = tabris.create("TestType");
 
-      expect(encode({left: 23, right: "#noone", top: ["#noone", 42]}, widget, true))
-        .toEqual({left: 23, right: [0, 0], top: [0, 42]});
+      expect(resolve({baseline: "#noone", left: ["#noone", 42]}, widget, true))
+        .toEqual({baseline: 0, left: [0, 42]});
     });
 
   });

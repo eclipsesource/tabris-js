@@ -310,7 +310,7 @@
 
   function renderLayoutData(force) {
     if (this._layoutData) {
-      this._nativeSet("layoutData", tabris.Layout.encodeLayoutData(this._layoutData, this, force));
+      this._nativeSet("layoutData", tabris.Layout.resolveReferences(this._layoutData, this, force));
     } else {
       this._nativeSet("layoutData", null);
     }

@@ -78,7 +78,7 @@
     },
 
     layoutData: function(value) {
-      return tabris.Layout.checkLayoutData(value);
+      return tabris.Layout.encodeLayoutData(value);
     },
 
     bounds: function(value) {

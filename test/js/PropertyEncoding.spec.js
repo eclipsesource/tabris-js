@@ -3,14 +3,14 @@ describe("PropertyEncoding:", function() {
 
   describe("layoutData", function() {
 
-    it("calls tabris.Layout.checkLayoutData", function() {
+    it("calls tabris.Layout.encodeLayoutData", function() {
       var inValue = {};
       var outValue = {};
-      spyOn(tabris.Layout, "checkLayoutData").and.returnValue(outValue);
+      spyOn(tabris.Layout, "encodeLayoutData").and.returnValue(outValue);
 
       var result = tabris.PropertyEncoding.layoutData(inValue);
 
-      expect(tabris.Layout.checkLayoutData).toHaveBeenCalledWith(inValue);
+      expect(tabris.Layout.encodeLayoutData).toHaveBeenCalledWith(inValue);
       expect(result).toBe(outValue);
     });
 

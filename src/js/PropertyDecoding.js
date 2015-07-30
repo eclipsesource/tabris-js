@@ -27,6 +27,10 @@
 
     bounds: function(value) {
       return {left: value[0], top: value[1], width: value[2], height: value[3]};
+    },
+
+    layoutData: function(value) {
+      return tabris.Layout.decodeLayoutData(value);
     }
 
   };

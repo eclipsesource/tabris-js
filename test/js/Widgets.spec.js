@@ -235,43 +235,73 @@ describe("Widgets", function() {
     });
 
     it("store layoutData property locally", function() {
-      widget.set("layoutData", {top: 10, left: [10, 20], right: [other, 10]});
-      expect(widget.get("layoutData")).toEqual({top: 10, left: [10, 20], right: [other, 10]});
+      widget.set("layoutData", {top: 10, left: ["#other", 10]});
+
+      expect(widget.get("layoutData")).toEqual({top: 10, left: ["#other", 10]});
     });
 
     it("getter does not translate selectors", function() {
-      widget.set("layoutData", {left: 23, right: "#other", top: ["#other", 42]});
+      widget.set("layoutData", {top: "#other", left: ["#other", 42]});
 
-      var expected = {left: 23, right: "#other", top: ["#other", 42]};
-      expect(widget.get("layoutData")).toEqual(expected);
+      expect(widget.get("layoutData")).toEqual({top: "#other", left: ["#other", 42]});
+    });
+
+    it("getter does not translate widgets", function() {
+      widget.set("layoutData", {top: other, left: [other, 42]});
+
+      expect(widget.get("layoutData")).toEqual({top: other, left: [other, 42]});
+    });
+
+    it("getter returns normalized percentages in arrays", function() {
+      widget.set("layoutData", {left: "32%", top: [23, 42]});
+
+      expect(widget.get("layoutData")).toEqual({left: "32%", top: ["23%", 42]});
+    });
+
+    it("getter returns arrays with zero percentage as plain offset", function() {
+      widget.set("layoutData", {left: "32%", top: [0, 42]});
+
+      expect(widget.get("layoutData")).toEqual({left: "32%", top: 42});
+    });
+
+    it("getter normalizes arrays with zero offset", function() {
+      widget.set("layoutData", {left: ["#other", 0], top: [33, 0]});
+
+      expect(widget.get("layoutData")).toEqual({left: "#other", top: "33%"});
+    });
+
+    it("getter replaces zero percentage", function() {
+      widget.set("layoutData", {left: "0%", top: ["0%", 23]});
+
+      expect(widget.get("layoutData")).toEqual({left: 0, top: 23});
     });
 
     it("SET layoutData after widget referenced by selector is added to parent", function() {
       other.dispose();
-      widget.set("layoutData", {left: 23, centerY: "#other", right: ["#other", 42]});
+      widget.set("layoutData", {left: 23, baseline: "#other", right: ["#other", 42]});
       other = tabris.create("TestType", {id: "other"}).appendTo(parent);
 
       var call = nativeBridge.calls({op: "set"})[0];
-      var expected = {left: 23, centerY: other.cid, right: [other.cid, 42]};
+      var expected = {left: 23, baseline: other.cid, right: [other.cid, 42]};
       expect(call.properties.layoutData).toEqual(expected);
     });
 
     it("SET layoutData after self is added to parent", function() {
       widget = tabris.create("TestType");
 
-      widget.set("layoutData", {left: 23, centerY: "#other", right: ["#other", 42]});
+      widget.set("layoutData", {left: 23, baseline: "#other", right: ["#other", 42]});
       widget.appendTo(parent);
 
       var call = nativeBridge.calls({op: "create"})[0];
-      var expected = {left: 23, centerY: other.cid, right: [other.cid, 42]};
+      var expected = {left: 23, baseline: other.cid, right: [other.cid, 42]};
       expect(call.properties.layoutData).toEqual(expected);
     });
 
     it("SET preliminary layoutData if selector does not resolve in flush", function() {
-      widget.set("layoutData", {left: 23, centerY: "#mother", right: ["other", 42]});
+      widget.set("layoutData", {left: 23, baseline: "#mother", right: ["other", 42]});
 
       var call = nativeBridge.calls({op: "set"})[0];
-      var expected = {left: 23, centerY: 0, right: [0, 42]};
+      var expected = {left: 23, baseline: 0, right: [0, 42]};
       expect(call.properties.layoutData).toEqual(expected);
     });
 
