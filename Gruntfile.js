@@ -39,8 +39,8 @@ module.exports = function(grunt) {
     jasmine: {
       boot: {
         options: {
-          specs: "test/js/boot/*.spec.js",
-          helpers: ["test/js/NativeBridgeSpy.js"],
+          specs: "test/boot/*.spec.js",
+          helpers: ["test/tabris/NativeBridgeSpy.js"],
           version: "2.3.0",
           display: "short",
           summary: true
@@ -49,19 +49,19 @@ module.exports = function(grunt) {
       },
       tabris: {
         options: {
-          specs: grunt.file.expand("test/js/*.spec.js").filter(function(path) {
+          specs: grunt.file.expand("test/tabris/*.spec.js").filter(function(path) {
             return path.indexOf("/util") === -1;
           }),
           helpers: [
-            "test/js/NativeBridgeSpy.js",
+            "test/tabris/NativeBridgeSpy.js",
             "node_modules/underscore/underscore-min.js",
-            "test/js/FakeTabrisModule.js"
+            "test/tabris/FakeTabrisModule.js"
           ],
           version: "2.3.0",
           display: "short",
           summary: true
         },
-        src: ["build/tabris/tabris.js", "test/js/jasmineToString.js"]
+        src: ["build/tabris/tabris.js", "test/tabris/jasmineToString.js"]
       }
     },
     concat: {
@@ -74,7 +74,7 @@ module.exports = function(grunt) {
             return src.replace(/\${VERSION}/g, pkg.version);
           }
         },
-        src: prefix("src/js/", [
+        src: prefix("src/tabris/", [
           "util.js",
           "util-colors.js",
           "util-fonts.js",
@@ -122,7 +122,7 @@ module.exports = function(grunt) {
             return src.replace(/\${VERSION}/g, pkg.version);
           }
         },
-        src: prefix("src/js/", [
+        src: prefix("src/boot/", [
           "Module.js",
           "bootstrap.js"
         ]),
