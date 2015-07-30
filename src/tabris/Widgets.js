@@ -139,11 +139,11 @@
   };
 
   tabris.registerWidget = function(type, members) {
-    members = util.extend({animate: tabris._Animation.animate}, tabris.Widgets, members);
-    members._events = util.extend({}, tabris.registerWidget._defaultEvents, members._events || {});
+    members = _.extend({animate: tabris._Animation.animate}, tabris.Widgets, members);
+    members._events = _.extend({}, tabris.registerWidget._defaultEvents, members._events || {});
     if (members._properties !== true) {
       var defaultProperties = tabris.registerWidget._defaultProperties;
-      members._properties = util.extend({}, defaultProperties, members._properties || {});
+      members._properties = _.extend({}, defaultProperties, members._properties || {});
     }
     tabris.registerType(type, members);
   };
@@ -154,7 +154,7 @@
                           tabris.device.get("version") <= 17;
   });
 
-  util.extend(tabris.registerWidget, {
+  _.extend(tabris.registerWidget, {
     _defaultEvents: {
       touchstart: {trigger: triggerWithTarget},
       touchmove: {trigger: triggerWithTarget},
@@ -264,11 +264,11 @@
       },
       gestures: {
         set: function(gestures) {
-          this._gestures = util.extend({}, defaultGestures, gestures);
+          this._gestures = _.extend({}, defaultGestures, gestures);
         },
         get: function() {
           if (!this._gestures) {
-            this._gestures = util.extend({}, defaultGestures);
+            this._gestures = _.extend({}, defaultGestures);
           }
           return this._gestures;
         },
@@ -321,7 +321,7 @@
       listen: function(state) {
         var gestures = this.get("gestures");
         if (state) {
-          var properties = util.extend({target: this}, gestures[name]);
+          var properties = _.extend({target: this}, gestures[name]);
           var recognizer = tabris.create("_GestureRecognizer", properties)
             .on("gesture", gestureListener, {target: this, name: name});
           if (!this._recognizers) {

@@ -1,6 +1,6 @@
 (function() {
 
-  util.fontStringToArray = function(str) {
+  _.fontStringToArray = function(str) {
     var result = [[], 0, false, false];
     var parts = str.split(/(?:\s|^)\d+px(?:\s|$)/);
     checkTruthy(parts.length === 2 || parts.length === 1, "Invalid font syntax");
@@ -10,7 +10,7 @@
     return result;
   };
 
-  util.fontArrayToString = function(fontArr) {
+  _.fontArrayToString = function(fontArr) {
     return (fontArr[3] ? "italic " : "") + (fontArr[2] ? "bold " : "") +
         (fontArr[1] + "px") + (fontArr[0][0] ? " " : "") + (fontArr[0].join(", "));
   };

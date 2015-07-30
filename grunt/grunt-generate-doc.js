@@ -1,3 +1,4 @@
+/* global _: true */
 var _ = require("underscore");
 var path = require("path");
 

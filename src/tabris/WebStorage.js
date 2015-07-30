@@ -45,7 +45,7 @@
     this.type = type;
   };
 
-  tabris.StorageEvent.prototype = util.extendPrototype(tabris.DOMEvent, {
+  tabris.StorageEvent.prototype = _.extendPrototype(tabris.DOMEvent, {
     bubbles: false,
     cancelable: false,
     key: "",

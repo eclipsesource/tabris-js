@@ -1,6 +1,6 @@
-/* global util: true */
+/* global _: true */
 /* jshint unused: false */
-var util = {
+var _ = {
 
   extend: function(target) {
     for (var i = 1; i < arguments.length; i++) {

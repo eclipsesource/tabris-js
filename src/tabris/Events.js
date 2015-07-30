@@ -104,4 +104,4 @@ tabris.Events = {
 
 };
 
-util.extend(tabris, tabris.Events);
+_.extend(tabris, tabris.Events);

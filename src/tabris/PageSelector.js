@@ -9,7 +9,7 @@
   tabris.PageSelector.prototype.type = "PageSelector";
 
   function _create(properties) {
-    tabris.CollectionView.prototype._create.call(this, util.extend({
+    tabris.CollectionView.prototype._create.call(this, _.extend({
       items: getPages(),
       initializeCell: initializeCell,
       itemHeight: device.platform === "iOS" ? 40 : 48,

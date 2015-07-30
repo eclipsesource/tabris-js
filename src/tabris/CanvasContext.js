@@ -103,7 +103,7 @@
   // State operations
 
   defineMethod("save", 0, function() {
-    this._savedStates.push(util.clone(this._state));
+    this._savedStates.push(_.clone(this._state));
   });
 
   defineMethod("restore", 0, function() {
@@ -231,16 +231,16 @@
     },
     fillStyle: {
       init: [0, 0, 0, 255],
-      encode: util.colorStringToArray,
-      decode: util.colorArrayToString,
+      encode: _.colorStringToArray,
+      decode: _.colorArrayToString,
       addOperations: function(context, value) {
         context._ints.push(value[0], value[1], value[2], value[3]);
       }
     },
     strokeStyle: {
       init: [0, 0, 0, 255],
-      encode: util.colorStringToArray,
-      decode: util.colorArrayToString,
+      encode: _.colorStringToArray,
+      decode: _.colorArrayToString,
       addOperations: function(context, value) {
         context._ints.push(value[0], value[1], value[2], value[3]);
       }

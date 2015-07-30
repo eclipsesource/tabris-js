@@ -58,7 +58,7 @@
     this.type = type;
   };
 
-  tabris.XMLHttpRequestProgressEvent.prototype = util.extendPrototype(tabris.DOMEvent, {
+  tabris.XMLHttpRequestProgressEvent.prototype = _.extendPrototype(tabris.DOMEvent, {
     lengthComputable: false,
     loaded: 0,
     total: 0

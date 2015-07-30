@@ -7,7 +7,7 @@
         // NOTE: null is only returned for "background" where it means "no background"
         return "rgba(0, 0, 0, 0)";
       }
-      return util.colorArrayToString(value);
+      return _.colorArrayToString(value);
     },
 
     font: function(value) {
@@ -15,14 +15,14 @@
         // NOTE: workaround to allow triggering a change event when setting font to "initial"
         return "initial";
       }
-      return util.fontArrayToString(value);
+      return _.fontArrayToString(value);
     },
 
     image: function(value) {
       if (!value) {
         return null;
       }
-      return util.imageFromArray(value);
+      return _.imageFromArray(value);
     },
 
     bounds: function(value) {

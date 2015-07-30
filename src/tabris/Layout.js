@@ -28,18 +28,18 @@
     if ("centerX" in layoutData) {
       if (("left" in layoutData) || ("right" in layoutData)) {
         console.warn("Inconsistent layoutData: centerX overrides left and right");
-        return util.omit(layoutData, ["left", "right"]);
+        return _.omit(layoutData, ["left", "right"]);
       }
     }
     if ("baseline" in layoutData) {
       if (("top" in layoutData) || ("bottom" in layoutData) || ("centerY" in layoutData)) {
         console.warn("Inconsistent layoutData: baseline overrides top, bottom, and centerY");
-        return util.omit(layoutData, ["top", "bottom", "centerY"]);
+        return _.omit(layoutData, ["top", "bottom", "centerY"]);
       }
     } else if ("centerY" in layoutData) {
       if (("top" in layoutData) || ("bottom" in layoutData)) {
         console.warn("Inconsistent layoutData: centerY overrides top and bottom");
-        return util.omit(layoutData, ["top", "bottom"]);
+        return _.omit(layoutData, ["top", "bottom"]);
       }
     }
     return layoutData;

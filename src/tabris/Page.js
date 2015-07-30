@@ -32,11 +32,11 @@
     _supportsChildren: true,
 
     _create: function(properties) {
-      this.super("_create",  util.extend(util.omit(properties, pageProperties), {
+      this.super("_create",  _.extend(_.omit(properties, pageProperties), {
         layoutData: {left: 0, right: 0, top: 0, bottom: 0}
       }));
       this._nativeSet("parent", tabris.ui._shell.cid);
-      this._page = tabris.create("_Page", util.extend(util.pick(properties, pageProperties), {
+      this._page = tabris.create("_Page", _.extend(_.pick(properties, pageProperties), {
         parent: tabris.ui,
         control: this
       }));

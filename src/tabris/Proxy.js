@@ -5,7 +5,7 @@
     tabris._proxies[this.cid] = this;
   };
 
-  util.extend(tabris.Proxy.prototype, tabris.Properties, tabris.Events, {
+  _.extend(tabris.Proxy.prototype, tabris.Properties, tabris.Events, {
 
     _create: function(properties) {
       var type = this.constructor._type || this.type;

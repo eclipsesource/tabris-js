@@ -19,7 +19,7 @@
     _type: "rwt.widgets.TabFolder",
 
     _create: function(properties) {
-      this.super("_create", util.omit(properties, "tabBarLocation"));
+      this.super("_create", _.omit(properties, "tabBarLocation"));
       if (properties.tabBarLocation === "top") {
         this._nativeSet("style", ["TOP"]);
       } else if (properties.tabBarLocation === "bottom") {
@@ -123,7 +123,7 @@
         throw new Error("Tab must be a child of TabFolder");
       }
       tabris.Widgets._setParent.call(this, parent);
-      this._tabItem = tabris.create("_TabItem", util.extend({
+      this._tabItem = tabris.create("_TabItem", _.extend({
         control: this.cid,
         index: parent._getItems().length
       }, this._getItemProps())).appendTo(parent);

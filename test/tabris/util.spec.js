@@ -5,7 +5,7 @@ describe("util", function() {
     it("copies properties of all source objects into target object", function() {
       var target = {a: 1, b: 1};
 
-      util.extend(target, {b: 2, c: 2}, {c: 3});
+      _.extend(target, {b: 2, c: 2}, {c: 3});
 
       expect(target).toEqual({a: 1, b: 2, c: 3});
     });
@@ -13,7 +13,7 @@ describe("util", function() {
     it("returns target object", function() {
       var object = {};
 
-      var result = util.extend(object, {a: 1});
+      var result = _.extend(object, {a: 1});
 
       expect(result).toBe(object);
     });
@@ -25,13 +25,13 @@ describe("util", function() {
     it("returns a copy", function() {
       var original = {a: 1};
 
-      var result = util.pick(original, ["a"]);
+      var result = _.pick(original, ["a"]);
 
       expect(result).not.toBe(original);
     });
 
     it("copies all properties that are in the list", function() {
-      var result = util.pick({a: 1, b: 2, c: 3}, ["a", "c", "x"]);
+      var result = _.pick({a: 1, b: 2, c: 3}, ["a", "c", "x"]);
 
       expect(result).toEqual({a: 1, c: 3});
     });
@@ -43,13 +43,13 @@ describe("util", function() {
     it("returns a copy", function() {
       var original = {a: 1};
 
-      var result = util.omit(original, ["b"]);
+      var result = _.omit(original, ["b"]);
 
       expect(result).not.toBe(original);
     });
 
     it("copies all properties that are not in the list", function() {
-      var result = util.omit({a: 1, b: 2, c: 3}, ["a", "c", "x"]);
+      var result = _.omit({a: 1, b: 2, c: 3}, ["a", "c", "x"]);
 
       expect(result).toEqual({b: 2});
     });
@@ -61,13 +61,13 @@ describe("util", function() {
     it("returns a copy of object", function() {
       var original = {a: 1};
 
-      var result = util.clone(original);
+      var result = _.clone(original);
 
       expect(result).not.toBe(original);
     });
 
     it("copies all properties", function() {
-      var result = util.clone({a: 1, b: 2});
+      var result = _.clone({a: 1, b: 2});
 
       expect(result).toEqual({a: 1, b: 2});
     });
@@ -77,7 +77,7 @@ describe("util", function() {
   describe("invert", function() {
 
     it("inverts object with string values", function() {
-      var result = util.invert({Moe: "Moses", Larry: "Louis", Curly: "Jerome"});
+      var result = _.invert({Moe: "Moses", Larry: "Louis", Curly: "Jerome"});
       expect(result).toEqual({Moses: "Moe", Louis: "Larry", Jerome: "Curly"});
     });
 
@@ -87,13 +87,13 @@ describe("util", function() {
 
     it("renames keys on resulting object", function() {
       var original = {foo1: "bar1", foo2: "bar2", foo3: "bar3"};
-      var result = util.rename(original, {foo1: "foo4", foo2: "foo5", foox: "fooy"});
+      var result = _.rename(original, {foo1: "foo4", foo2: "foo5", foox: "fooy"});
       expect(result).toEqual({foo4: "bar1", foo5: "bar2", foo3: "bar3"});
     });
 
     it("does not modify existing object", function() {
       var original = {foo1: "bar1", foo2: "bar2", foo3: "bar3"};
-      util.rename(original, {foo1: "foo4", foo2: "foo5", foox: "fooy"});
+      _.rename(original, {foo1: "foo4", foo2: "foo5", foox: "fooy"});
       expect(original).toEqual({foo1: "bar1", foo2: "bar2", foo3: "bar3"});
     });
 
@@ -110,14 +110,14 @@ describe("util", function() {
 
     it("returns object with source function prototype as prototype", function() {
       Class1.prototype = {a: 1};
-      var object = util.extendPrototype(Class1, {});
+      var object = _.extendPrototype(Class1, {});
 
       expect(object.a).toBe(1);
       expect(object.hasOwnProperty("a")).toBeFalsy();
     });
 
     it("returns object with target object properties", function() {
-      var object = util.extendPrototype(function() {}, {a: 1});
+      var object = _.extendPrototype(function() {}, {a: 1});
 
       expect(object.a).toBe(1);
       expect(object.hasOwnProperty("a")).toBeTruthy();
@@ -125,7 +125,7 @@ describe("util", function() {
 
     it("works with instanceof", function() {
 
-      Class2.prototype = util.extendPrototype(Class1, {});
+      Class2.prototype = _.extendPrototype(Class1, {});
       var object = new Class2();
 
       expect(object instanceof Class2).toBeTruthy();
@@ -136,7 +136,7 @@ describe("util", function() {
       it("calls overwritten methods", function() {
         Class1.prototype.myFunction = jasmine.createSpy();
 
-        Class2.prototype = util.extendPrototype(Class1, {
+        Class2.prototype = _.extendPrototype(Class1, {
           myFunction: function() {
             this.super("myFunction");
           }
@@ -149,7 +149,7 @@ describe("util", function() {
       it("calls overwritten methods with arguments", function() {
         Class1.prototype.myFunction = jasmine.createSpy();
 
-        Class2.prototype = util.extendPrototype(Class1, {
+        Class2.prototype = _.extendPrototype(Class1, {
           myFunction: function() {
             this.super("myFunction", 1, 2, 3);
           }
@@ -162,7 +162,7 @@ describe("util", function() {
       it("calls overwritten methods with context", function() {
         Class1.prototype.myFunction = jasmine.createSpy();
 
-        Class2.prototype = util.extendPrototype(Class1, {
+        Class2.prototype = _.extendPrototype(Class1, {
           myFunction: function() {
             this.super("myFunction");
           }
@@ -177,7 +177,7 @@ describe("util", function() {
           return 23;
         };
 
-        Class2.prototype = util.extendPrototype(Class1, {
+        Class2.prototype = _.extendPrototype(Class1, {
           myFunction: function() {
             return this.super("myFunction") + 1;
           }

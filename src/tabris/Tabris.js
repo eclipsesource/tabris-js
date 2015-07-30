@@ -1,6 +1,6 @@
 (function(module) {
 
-  window.tabris = module.exports = util.extend(function(id) {
+  window.tabris = module.exports = _.extend(function(id) {
     if (!tabris._proxies[id] && !tabris[id]) {
       throw new Error("No native object with cid or type " + id);
     }
@@ -51,10 +51,10 @@
       tabris[type]._events = normalizeEventsMap(tabris[type]._events);
       tabris[type]._properties = normalizePropertiesMap(tabris[type]._properties);
       tabris[type]._trigger = buildTriggerMap(tabris[type]._events);
-      var superProto = util.omit(members, Object.keys(staticMembers));
+      var superProto = _.omit(members, Object.keys(staticMembers));
       superProto.type = type;
-      superProto.constructor = tabris[type]; // util.extendPrototype can not provide the original
-      tabris[type].prototype = util.extendPrototype(tabris.Proxy, superProto);
+      superProto.constructor = tabris[type]; // _.extendPrototype can not provide the original
+      tabris[type].prototype = _.extendPrototype(tabris.Proxy, superProto);
     },
 
     version: "${VERSION}",
@@ -141,7 +141,7 @@
 
   function getDefault(member) {
     var value = staticMembers[member];
-    return value instanceof Object ? util.clone(value) : value;
+    return value instanceof Object ? _.clone(value) : value;
   }
 
   var staticMembers = {

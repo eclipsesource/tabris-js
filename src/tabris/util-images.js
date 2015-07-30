@@ -1,10 +1,10 @@
 (function() {
 
-  util.imageToArray = function(value) {
+  _.imageToArray = function(value) {
     return [value.src, checkValue(value.width), checkValue(value.height), checkValue(value.scale)];
   };
 
-  util.imageFromArray = function(value) {
+  _.imageFromArray = function(value) {
     var result = {src: value[0]};
     if (value[1]) {
       result.width = value[1];

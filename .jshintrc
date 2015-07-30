@@ -24,7 +24,7 @@
   "globals": {
     "console": false,
     "tabris": false,
-    "util": false,
+    "_": false,
     "device": false,
     "NativeBridgeSpy": false,
 

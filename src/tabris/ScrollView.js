@@ -28,7 +28,7 @@ tabris.registerWidget("ScrollView", {
   },
 
   _create: function(properties) {
-    var scrollProps = util.omit(properties, ["direction"]);
+    var scrollProps = _.omit(properties, ["direction"]);
     this.super("_create", scrollProps);
     var style = properties.direction === "horizontal" ? ["H_SCROLL"] : ["V_SCROLL"];
     this._nativeSet("style", style);

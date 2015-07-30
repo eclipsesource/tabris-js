@@ -13,7 +13,7 @@
     _create: function(properties) {
       tabris.ui._setCurrentDrawer(this);
       this._drawer = tabris.create("_Drawer", {});
-      this.super("_create",  util.extend(properties, {
+      this.super("_create",  _.extend(properties, {
         layoutData: {left: 0, right: 0, top: 0, bottom: 0}
       }));
       this._setParent(tabris.ui);

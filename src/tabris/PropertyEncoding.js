@@ -40,14 +40,14 @@
       if (value === "initial") {
         return null;
       }
-      return util.colorStringToArray(value);
+      return _.colorStringToArray(value);
     },
 
     font: function(value) {
       if (value === "initial") {
         return null;
       }
-      return util.fontStringToArray(value);
+      return _.fontStringToArray(value);
     },
 
     image: function(value) {
@@ -74,7 +74,7 @@
       if ("scale" in value && ("width" in value || "height" in value)) {
         console.warn("Image scale is ignored if width or height are given");
       }
-      return util.imageToArray(value);
+      return _.imageToArray(value);
     },
 
     layoutData: function(value) {
@@ -117,7 +117,7 @@
         }
         checkValidNumber(value[key]);
       }
-      return util.extend({}, transformDefaults, value);
+      return _.extend({}, transformDefaults, value);
     },
 
     array: function(value, type) {

@@ -1,6 +1,6 @@
 (function() {
 
-  util.colorArrayToString = function(array) {
+  _.colorArrayToString = function(array) {
     var r = array[0];
     var g = array[1];
     var b = array[2];
@@ -8,7 +8,7 @@
     return "rgba(" + r + ", " + g + ", " + b + ", " + a + ")";
   };
 
-  util.colorStringToArray = function(str) {
+  _.colorStringToArray = function(str) {
     if (str === "transparent") {
       return [0, 0, 0, 0];
     }

@@ -23,7 +23,7 @@
 
     save: function() {
       this._operations.push(["save"]);
-      this._savedStates.push(util.clone(this._state));
+      this._savedStates.push(_.clone(this._state));
     },
 
     restore: function() {
@@ -170,13 +170,13 @@
     },
     fillStyle: {
       init: [0, 0, 0, 255],
-      encode: util.colorStringToArray,
-      decode: util.colorArrayToString
+      encode: _.colorStringToArray,
+      decode: _.colorArrayToString
     },
     strokeStyle: {
       init: [0, 0, 0, 255],
-      encode: util.colorStringToArray,
-      decode: util.colorArrayToString
+      encode: _.colorStringToArray,
+      decode: _.colorArrayToString
     },
     textAlign: {
       init: "start",

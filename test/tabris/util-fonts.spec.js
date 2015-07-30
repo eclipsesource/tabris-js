@@ -1,14 +1,14 @@
-describe("util-fonts", function() {
+describe("_-fonts", function() {
 
   describe("fontStringToArray", function() {
 
     var parse = function(str) {
-      return util.fontStringToArray(str);
+      return _.fontStringToArray(str);
     };
 
     var parsing = function(str) {
       return function() {
-        return util.fontStringToArray(str);
+        return _.fontStringToArray(str);
       };
     };
 
@@ -105,7 +105,7 @@ describe("util-fonts", function() {
   describe("fontArrayToString", function() {
 
     var decode = function(arr) {
-      return util.fontArrayToString(arr);
+      return _.fontArrayToString(arr);
     };
 
     it("creates string from array", function() {

@@ -62,7 +62,7 @@
         console.warn(this.type + ": Ignored invalid animation option \"" + option + "\"");
       }
     }
-    var animation = tabris.create("_Animation", util.extend({}, options, {
+    var animation = tabris.create("_Animation", _.extend({}, options, {
       target: this,
       properties: animatedProps
     }));
