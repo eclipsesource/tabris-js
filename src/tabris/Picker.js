@@ -31,7 +31,7 @@
       selectionIndex: {type: "natural", nocache: true},
       selection: {
         nocache: true,
-        set: function(item) {
+        set: function(name, item) {
           var index = this._getItemIndex(item);
           if (index !== -1) {
             this.set("selectionIndex", index);

@@ -91,7 +91,7 @@
       }
       var setProperty = this._getPropertySetter(name);
       if (setProperty instanceof Function) {
-        setProperty.call(this, value);
+        setProperty.call(this, name, value);
       } else {
         this._nativeSet(name, value);
       }
@@ -126,7 +126,7 @@
       if (result === undefined) {
         // TODO: cache read property, but add nocache to device properties first
         var getProperty = this._getPropertyGetter(name);
-        result = getProperty ? getProperty.call(this) : this._nativeGet(name);
+        result = getProperty ? getProperty.call(this, name) : this._nativeGet(name);
       }
       return result;
     },

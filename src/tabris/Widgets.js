@@ -185,13 +185,13 @@
       visible: {
         type: "boolean",
         default: true,
-        set: function(value) {
+        set: function(name, value) {
           this._nativeSet("visibility", value);
         }
       },
       layoutData: {
         type: "layoutData",
-        set: function(value) {
+        set: function(name, value) {
           this._layoutData = value;
           try {
             renderLayoutData.call(this);
@@ -218,7 +218,7 @@
       background: "color",
       textColor: {
         type: "color",
-        set: function(value) {
+        set: function(name, value) {
           this._nativeSet("foreground", value);
         }
       },
@@ -245,7 +245,7 @@
       id: {
         nocache: true,
         type: "string",
-        set: function(value) {
+        set: function(name, value) {
           this.id = value;
         },
         get: function() {
@@ -255,7 +255,7 @@
       class: {
         nocache: true,
         type: "string",
-        set: function(value) {
+        set: function(name, value) {
           this.classList = value.trim().split(/\s+/);
         },
         get: function() {
@@ -263,7 +263,7 @@
         }
       },
       gestures: {
-        set: function(gestures) {
+        set: function(name, gestures) {
           this._gestures = _.extend({}, defaultGestures, gestures);
         },
         get: function() {
@@ -417,7 +417,7 @@
       maxLines: {
         type: ["nullable", "natural"],
         default: null,
-        set: function(value) {
+        set: function(name, value) {
           this._nativeSet("maxLines", value <= 0 ? null : value);
         }
       },
@@ -561,7 +561,7 @@
         get: function() {
           return this._nativeGet("checked");
         },
-        set: function(value) {
+        set: function(name, value) {
           this._nativeSet("checked", value);
         },
         nocache: true

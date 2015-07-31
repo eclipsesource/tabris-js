@@ -53,13 +53,13 @@ tabris.registerWidget("_UI", {
     image: "image",
     textColor: {
       type: "color",
-      set: function(value) {
+      set: function(name, value) {
         this._nativeSet("foreground", value);
       }
     },
     background: "color",
     activePage: {
-      set: function(page) {
+      set: function(name, page) {
         if (!(page instanceof tabris.Page)) {
           throw new Error("Value for activePage is not a page");
         }

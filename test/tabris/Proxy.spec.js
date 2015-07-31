@@ -393,6 +393,14 @@ describe("Proxy", function() {
         expect(result).toBe("rgba(255, 0, 255, 1)");
       });
 
+      it("calls custom get function with property name", function() {
+        tabris.TestType._properties.prop = {type: true, get: jasmine.createSpy()};
+
+        proxy.get("prop");
+
+        expect(tabris.TestType._properties.prop.get).toHaveBeenCalledWith("prop");
+      });
+
       it("returns value from custom get function", function() {
         tabris.TestType._properties.prop = {type: true, get: function() { return 23; }};
 
@@ -492,7 +500,7 @@ describe("Proxy", function() {
         proxy.set("foo", "bar");
 
         expect(nativeBridge.calls({op: "set", id: proxy.cid}).length).toBe(0);
-        expect(tabris.TestType._properties.foo.set).toHaveBeenCalledWith("bar");
+        expect(tabris.TestType._properties.foo.set).toHaveBeenCalledWith("foo", "bar");
       });
 
       it("raises no warning for unknown property", function() {

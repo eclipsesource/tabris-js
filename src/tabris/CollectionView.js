@@ -12,7 +12,7 @@
       itemHeight: {
         type: "function|natural",
         default: 0,
-        set: function(value) {
+        set: function(name, value) {
           if (typeof value !== "function") {
             // Required for 1.0 compatibility
             this._nativeSet("itemHeight", value);
@@ -21,7 +21,7 @@
       },
       items: {
         type: "array",
-        set: function(value) {
+        set: function(name, value) {
           this._setItems(value);
         },
         get: function() {

@@ -18,7 +18,7 @@ tabris.registerType("SearchAction", {
     visible: {
       type: "boolean",
       default: true,
-      set: function(value) {
+      set: function(name, value) {
         this._nativeSet("visibility", value);
       }
     },
@@ -26,7 +26,7 @@ tabris.registerType("SearchAction", {
     text: {
       type: "string",
       nocache: true,
-      set: function(value) {
+      set: function(name, value) {
         this._nativeSet("query", value);
       },
       get: function() {

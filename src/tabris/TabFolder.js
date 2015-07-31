@@ -4,7 +4,7 @@
     _type: "rwt.widgets.TabItem",
     _properties: {
       title: {
-        set: function(value) {this._nativeSet("text", value);},
+        set: function(name, value) {this._nativeSet("text", value);},
         nocache: true
       },
       image: {nocache: true},
@@ -32,12 +32,12 @@
       paging: {
         type: "boolean",
         default: false,
-        set: function(value) {
+        set: function(name, value) {
           this._nativeSet("data", {paging: value});
         }
       },
       selection: {
-        set: function(tab) {
+        set: function(name, tab) {
           if (!(tab instanceof tabris.Tab)) {
             console.warn("Can not set TabFolder selection to " + tab);
             return;
@@ -90,7 +90,7 @@
       title: {
         type: "string",
         default: "",
-        set: function(value) {
+        set: function(name, value) {
           if (this._tabItem) {
             this._tabItem._setProperty("title", value);
           }
@@ -99,7 +99,7 @@
       image: {
         type: "image",
         default: null,
-        set: function(value) {
+        set: function(name, value) {
           if (this._tabItem) {
             this._tabItem._setProperty("image", value);
           }
@@ -108,7 +108,7 @@
       badge: {
         type: "string",
         default: "",
-        set: function(value) {
+        set: function(name, value) {
           if (this._tabItem) {
             this._tabItem._setProperty("badge", value);
           }
