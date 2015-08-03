@@ -157,6 +157,22 @@ describe("tabris", function() {
       expect(tabris.CustomType._events.bar.trigger).toHaveBeenCalledWith({bar: 23}, "bar");
     });
 
+    it("returns return value from custom trigger", function() {
+      tabris.registerType("CustomType", {
+        _events: {
+          bar: {
+            trigger: jasmine.createSpy().and.returnValue("foo")
+          }
+        }
+      });
+      proxy = tabris.create("CustomType", {});
+      spyOn(proxy, "trigger");
+
+      var returnValue = tabris._notify(proxy.cid, "bar");
+
+      expect(returnValue).toBe("foo");
+    });
+
     it("calls custom trigger of translated event", function() {
       tabris.registerType("CustomType", {
         _events: {
@@ -172,6 +188,23 @@ describe("tabris", function() {
       tabris._notify(proxy.cid, "foo", {bar: 23});
 
       expect(tabris.CustomType._events.bar.trigger).toHaveBeenCalledWith({bar: 23}, "bar");
+    });
+
+    it("returns return value from custom trigger with translated event", function() {
+      tabris.registerType("CustomType", {
+        _events: {
+          bar: {
+            name: "foo",
+            trigger: jasmine.createSpy().and.returnValue("foobar")
+          }
+        }
+      });
+      proxy = tabris.create("CustomType", {});
+      spyOn(proxy, "trigger");
+
+      var returnValue = tabris._notify(proxy.cid, "foo");
+
+      expect(returnValue).toBe("foobar");
     });
 
     it("skips events for already disposed widgets", function() {

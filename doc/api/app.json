@@ -14,6 +14,13 @@
         {"name": "app", "value": "tabris.app"}
       ],
       "description": "Fired after the application returned from hibernation."
+    },
+    "backnavigation": {
+      "parameters": [
+        {"name": "app", "value": "tabris.app"},
+        {"name": "options", "type": "Object"}
+      ],
+      "description": "Fired when the back button is pressed on Android. To suppress the default back navigation behavior, set `options.preventDefault` to `true`."
     }
   },
   "methods": {

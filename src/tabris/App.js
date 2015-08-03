@@ -3,7 +3,14 @@ tabris.registerType("_App", {
   _events: {
     pause: {name: "Pause", trigger: triggerWithTarget},
     resume: {name: "Resume", trigger: triggerWithTarget},
-    patchInstall: {trigger: notifyPatchCallback}
+    patchInstall: {trigger: notifyPatchCallback},
+    backnavigation: {
+      trigger: function() {
+        var options = {};
+        this.trigger("backnavigation", this, options);
+        return options.preventDefault === true;
+      }
+    }
   },
   dispose: function() {
     throw new Error("tabris.app can not be disposed");

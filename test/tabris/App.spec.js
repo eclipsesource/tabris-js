@@ -49,6 +49,40 @@ describe("App", function() {
     }).toThrow();
   });
 
+  it("listens for backnavigation event", function() {
+    app.on("backnavigation", jasmine.createSpy());
+
+    var calls = nativeBridge.calls({id: app.cid, op: "listen", event: "backnavigation"});
+    expect(calls[0].listen).toBe(true);
+  });
+
+  it("triggers backnavigation event", function() {
+    var listener = jasmine.createSpy();
+    app.on("backnavigation", listener);
+
+    tabris._notify(app.cid, "backnavigation");
+
+    expect(listener).toHaveBeenCalledWith(app, {});
+  });
+
+  it("backnavigation event returns false by default", function() {
+    app.on("backnavigation", jasmine.createSpy());
+
+    var returnValue = tabris._notify(app.cid, "backnavigation");
+
+    expect(returnValue).toBe(false);
+  });
+
+  it("backnavigation event returns true if preventDefault is true", function() {
+    app.on("backnavigation", function(app, options) {
+      options.preventDefault = true;
+    });
+
+    var returnValue = tabris._notify(app.cid, "backnavigation");
+
+    expect(returnValue).toBe(true);
+  });
+
   describe("reload", function() {
 
     it("CALLs `reload`", function() {

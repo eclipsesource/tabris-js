@@ -71,11 +71,12 @@
     },
 
     _notify: function(cid, event, param) {
+      var returnValue;
       try {
         var proxy = tabris._proxies[cid];
         if (proxy) {
           try {
-            proxy._trigger(event, param);
+            returnValue = proxy._trigger(event, param);
           } catch (error) {
             console.error(error);
             console.log(error.stack);
@@ -86,6 +87,7 @@
         console.error(ex);
         console.log(ex.stack);
       }
+      return returnValue;
     },
 
     _reset: function() {

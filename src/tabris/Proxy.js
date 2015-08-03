@@ -71,7 +71,7 @@
       var name = this.constructor._trigger[event];
       var trigger = name && this.constructor._events[name].trigger;
       if (trigger instanceof Function) {
-        trigger.call(this, params, name);
+        return trigger.call(this, params, name);
       } else if (name) {
         this.trigger(name, params);
       } else {

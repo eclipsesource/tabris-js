@@ -26,4 +26,9 @@ tabris.app.on("pause", function() {
   label.set("text", " Welcome back!\n You were gone for " + (diff / 1000).toFixed(1) + " seconds.");
 });
 
+tabris.app.on("backnavigation", function(app, options) {
+  options.preventDefault = true;
+  label.set("text", "Back navigation prevented.");
+});
+
 page.open();
