@@ -10,19 +10,32 @@
       return decodeAttributes(layoutData);
     },
 
-    resolveReferences: function(layoutData, targetWidget, force) {
+    resolveReferences: function(layoutData, targetWidget) {
       if (!targetWidget) {
         return layoutData;
       }
       var result = {};
       var parent = targetWidget.parent() || emptyParent;
       for (var key in layoutData) {
-        result[key] = resolveAttribute(layoutData[key], parent, force);
+        result[key] = resolveAttribute(layoutData[key], parent);
       }
       return result;
+    },
+
+    addToQueue: function(parent) {
+      layoutQueue[parent.cid] = parent;
+    },
+
+    flushQueue: function() {
+      for (var cid in layoutQueue) {
+        layoutQueue[cid]._flushLayout();
+      }
+      layoutQueue = {};
     }
 
   };
+
+  var layoutQueue = {};
 
   function checkConsistency(layoutData) {
     if ("centerX" in layoutData) {
@@ -145,29 +158,26 @@
     return [isNumber(array[0]) ? array[0] + "%" : array[0], array[1]];
   }
 
-  function resolveAttribute(value, parent, force) {
+  function resolveAttribute(value, parent) {
     if (Array.isArray(value)) {
-      return resolveArray(value, parent, force);
+      return resolveArray(value, parent);
     }
     if (isNumber(value)) {
       return value;
     }
-    return toProxyId(value, parent, force);
+    return toProxyId(value, parent);
   }
 
-  function resolveArray(array, parent, force) {
+  function resolveArray(array, parent) {
     if (isNumber(array[0])) {
       return array;
     }
-    return [toProxyId(array[0], parent, force), array[1]];
+    return [toProxyId(array[0], parent), array[1]];
   }
 
-  function toProxyId(ref, parent, force) {
+  function toProxyId(ref, parent) {
     if (typeof ref === "string") {
       var proxy = parent.children(ref)[0];
-      if (!proxy && !force) {
-        throw new Error();
-      }
       return tabris.PropertyEncoding.proxy(proxy) || 0;
     }
     return tabris.PropertyEncoding.proxy(ref) || 0;

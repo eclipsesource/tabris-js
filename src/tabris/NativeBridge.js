@@ -47,7 +47,7 @@
     },
 
     flush: function() {
-      tabris.trigger("beforeFlush");
+      tabris.Layout.flushQueue();
       var operations = this._operations;
       this._operations = [];
       this._currentOperation = {id: null};

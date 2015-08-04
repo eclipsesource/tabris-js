@@ -281,7 +281,7 @@ describe("Widgets", function() {
       widget.set("layoutData", {left: 23, baseline: "#other", right: ["#other", 42]});
       other = tabris.create("TestType", {id: "other"}).appendTo(parent);
 
-      var call = nativeBridge.calls({op: "set"})[0];
+      var call = nativeBridge.calls({op: "set"})[1];
       var expected = {left: 23, baseline: other.cid, right: [other.cid, 42]};
       expect(call.properties.layoutData).toEqual(expected);
     });
@@ -340,6 +340,67 @@ describe("Widgets", function() {
       expect(noRetry.length).toBe(2);
       expect(withoutParent[0].properties.layoutData).toEqual({right: [0, 0]});
       expect(withParent[1].properties.layoutData).toEqual({right: [other.cid, 0]});
+    });
+
+  });
+
+  describe("flushLayout", function() {
+
+    var parent, child;
+
+    beforeEach(function() {
+      parent = tabris.create("Composite", {});
+      tabris.Layout.flushQueue();
+    });
+
+    it("calls renderLayoutData on children", function() {
+      child = tabris.create("Button", {
+        layoutData: {left: 23, top: 42}
+      }).appendTo(parent);
+      nativeBridge.resetCalls();
+
+      parent._flushLayout();
+
+      var call = nativeBridge.calls({op: "set", id: child.cid})[0];
+      expect(call.properties.layoutData).toEqual({left: 23, top: 42});
+    });
+
+    it("does not fail when there are no children", function() {
+      expect(function() {
+        parent._flushLayout();
+      }).not.toThrow();
+    });
+
+    it("is triggered by appending a child", function() {
+      spyOn(parent, "_flushLayout");
+      child = tabris.create("Button", {});
+
+      child.appendTo(parent);
+      tabris.Layout.flushQueue();
+
+      expect(parent._flushLayout).toHaveBeenCalled();
+    });
+
+    it("is triggered by re-parenting a child", function() {
+      var parent2 = tabris.create("Composite", {});
+      child = tabris.create("Button", {}).appendTo(parent);
+      spyOn(parent, "_flushLayout");
+      spyOn(parent2, "_flushLayout");
+
+      child.appendTo(parent2);
+      tabris.Layout.flushQueue();
+
+      expect(parent._flushLayout).toHaveBeenCalled();
+    });
+
+    it("is triggered by disposing of a child", function() {
+      child = tabris.create("Button", {}).appendTo(parent);
+      spyOn(parent, "_flushLayout");
+
+      child.dispose();
+      tabris.Layout.flushQueue();
+
+      expect(parent._flushLayout).toHaveBeenCalled();
     });
 
   });

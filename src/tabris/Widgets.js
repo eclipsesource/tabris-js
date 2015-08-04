@@ -72,9 +72,11 @@
       this._nativeSet("parent", tabris.PropertyEncoding.proxy(parent._getContainer(this)));
       if (this._parent) {
         this._parent._removeChild(this);
+        tabris.Layout.addToQueue(this._parent);
       }
       this._parent = parent;
       this._parent._addChild(this);
+      tabris.Layout.addToQueue(this._parent);
     },
 
     _addChild: function(child) {
@@ -112,6 +114,7 @@
       }
       if (this._parent) {
         this._parent._removeChild(this);
+        tabris.Layout.addToQueue(this._parent);
         delete this._parent;
       }
     },
@@ -122,6 +125,14 @@
         return getGestureEventConfig(type);
       }
       return result;
+    },
+
+    _flushLayout: function() {
+      if (this._children) {
+        this._children.forEach(function(child) {
+          renderLayoutData.call(child);
+        });
+      }
     },
 
     classList: {
@@ -194,14 +205,7 @@
         type: "layoutData",
         set: function(name, value) {
           this._layoutData = value;
-          try {
-            renderLayoutData.call(this);
-          } catch (ex) {
-            if (!this._layoutDataPending) {
-              tabris._on("beforeFlush", renderLayoutListener, this);
-              this._layoutDataPending = true;
-            }
-          }
+          renderLayoutData.call(this);
         },
         get: function() {
           return this._layoutData || null;
@@ -291,26 +295,9 @@
     "swipe:down": {type: "swipe", direction: "down"}
   };
 
-  function renderLayoutListener() {
-    try {
-      renderLayoutData.call(this);
-      tabris._off("beforeFlush", renderLayoutListener, this);
-      delete this._layoutDataPending;
-      delete this._hasPreliminaryLayout;
-    } catch (ex) {
-      if (!this._hasPreliminaryLayout) {
-        renderLayoutData.call(this, true);
-        this._hasPreliminaryLayout = true;
-
-      }
-    }
-  }
-
-  function renderLayoutData(force) {
+  function renderLayoutData() {
     if (this._layoutData) {
-      this._nativeSet("layoutData", tabris.Layout.resolveReferences(this._layoutData, this, force));
-    } else {
-      this._nativeSet("layoutData", null);
+      this._nativeSet("layoutData", tabris.Layout.resolveReferences(this._layoutData, this));
     }
   }
 

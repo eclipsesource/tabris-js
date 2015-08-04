@@ -116,11 +116,13 @@ describe("NativeBridge", function() {
       expect(log).toEqual(["set", "get"]);
     });
 
-    it("allows operation to be added in beforeFlush event", function() {
-      tabris.on("beforeFlush", function() {
+    it("flushes layout queue first", function() {
+      spyOn(tabris.Layout, "flushQueue").and.callFake(function() {
         bridge.set("id2", {bar: 23});
       });
+
       bridge.get("id", "foo");
+
       expect(log).toEqual(["set", "set", "get"]);
     });
   });
@@ -146,10 +148,12 @@ describe("NativeBridge", function() {
     });
 
     it("allows operation to be added in beforeFlush event", function() {
-      tabris.on("beforeFlush", function() {
+      spyOn(tabris.Layout, "flushQueue").and.callFake(function() {
         bridge.set("id2", {bar: 23});
       });
+
       bridge.call("id", "foo", {foo: 23});
+
       expect(log).toEqual(["set", "set", "call"]);
     });
   });

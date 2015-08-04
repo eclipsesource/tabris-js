@@ -229,34 +229,35 @@ describe("Layout:", function() {
         .toEqual({left: [freak1.cid, 23], top: [freak2.cid, 42]});
     });
 
-    it("throws if selector does not resolve due to missing sibling", function() {
-      other.dispose();
-
-      expect(function() {
-        resolve({left: 23, right: "#other", top: ["#other", 42]}, widget);
-      }).toThrow();
-    });
-
-    it("throws if selector does not resolve due to missing parent", function() {
-      widget = tabris.create("TestType");
-
-      expect(function() {
-        resolve({left: 23, right: "#other", top: ["#other", 42]}, widget);
-      }).toThrow();
-    });
-
     it("replaces unresolved selector (due to missing sibling) with 0", function() {
       other.dispose();
 
-      expect(resolve({baseline: "#noone", left: ["#noone", 42]}, widget, true))
+      expect(resolve({baseline: "#noone", left: ["#noone", 42]}, widget))
         .toEqual({baseline: 0, left: [0, 42]});
     });
 
     it("replaces unresolved selector (due to missing parent) with 0", function() {
       widget = tabris.create("TestType");
 
-      expect(resolve({baseline: "#noone", left: ["#noone", 42]}, widget, true))
+      expect(resolve({baseline: "#noone", left: ["#noone", 42]}, widget))
         .toEqual({baseline: 0, left: [0, 42]});
+    });
+
+  });
+
+  describe("layoutQueue", function() {
+
+    it("calls '_flushLayout' on registered widgets once", function() {
+      var widget = {
+        _flushLayout: jasmine.createSpy()
+      };
+      tabris.Layout.addToQueue(widget);
+
+      tabris.Layout.flushQueue(widget);
+      tabris.Layout.flushQueue(widget);
+
+      expect(widget._flushLayout).toHaveBeenCalled();
+      expect(widget._flushLayout.calls.count()).toBe(1);
     });
 
   });
