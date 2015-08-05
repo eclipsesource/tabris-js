@@ -4,8 +4,10 @@
     _type: "rwt.widgets.TabItem",
     _properties: {
       title: {
-        set: function(name, value) {this._nativeSet("text", value);},
-        nocache: true
+        set: function(name, value, options) {
+          this._nativeSet("text", value);
+          this._triggerChangeEvent(name, value, options);
+        }
       },
       image: {nocache: true},
       badge: {nocache: true},
@@ -32,12 +34,13 @@
       paging: {
         type: "boolean",
         default: false,
-        set: function(name, value) {
+        set: function(name, value, options) {
           this._nativeSet("data", {paging: value});
+          this._storeProperty(name, value, options);
         }
       },
       selection: {
-        set: function(name, tab) {
+        set: function(name, tab, options) {
           if (!(tab instanceof tabris.Tab)) {
             console.warn("Can not set TabFolder selection to " + tab);
             return;
@@ -47,12 +50,12 @@
             return;
           }
           this._nativeSet("selection", tab._tabItem.cid);
+          this._triggerChangeEvent("selection", tab, options);
         },
         get: function() {
           var selection = this._nativeGet("selection");
           return selection ? tabris(selection)._tab : null;
-        },
-        nocache: true
+        }
       }
     },
 
@@ -90,28 +93,31 @@
       title: {
         type: "string",
         default: "",
-        set: function(name, value) {
+        set: function(name, value, options) {
           if (this._tabItem) {
             this._tabItem._setProperty("title", value);
           }
+          this._storeProperty(name, value, options);
         }
       },
       image: {
         type: "image",
         default: null,
-        set: function(name, value) {
+        set: function(name, value, options) {
           if (this._tabItem) {
             this._tabItem._setProperty("image", value);
           }
+          this._storeProperty(name, value, options);
         }
       },
       badge: {
         type: "string",
         default: "",
-        set: function(name, value) {
+        set: function(name, value, options) {
           if (this._tabItem) {
             this._tabItem._setProperty("badge", value);
           }
+          this._storeProperty(name, value, options);
         }
       }
     },

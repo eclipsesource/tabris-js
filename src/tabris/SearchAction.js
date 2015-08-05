@@ -18,16 +18,17 @@ tabris.registerType("SearchAction", {
     visible: {
       type: "boolean",
       default: true,
-      set: function(name, value) {
+      set: function(name, value, options) {
         this._nativeSet("visibility", value);
+        this._storeProperty(name, value, options);
       }
     },
     proposals: {default: function() {return [];}},
     text: {
       type: "string",
-      nocache: true,
-      set: function(name, value) {
+      set: function(name, value, options) {
         this._nativeSet("query", value);
+        this._triggerChangeEvent(name, value, options);
       },
       get: function() {
         return this._nativeGet("query");

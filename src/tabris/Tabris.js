@@ -126,9 +126,29 @@
       } else if (!result[property].type) {
         result[property].type = true;
       }
+      result[property].set = result[property].set || defaultSetter;
+      result[property].get = result[property].get || defaultGetter;
     }
     return result;
   };
+
+  function defaultSetter(name, value, options) {
+    this._nativeSet(name, value);
+    if (this.constructor._properties[name].nocache) {
+      this._triggerChangeEvent(name, value, options);
+    } else {
+      this._storeProperty(name, value, options);
+    }
+  }
+
+  function defaultGetter(name) {
+    var result = this._getStoredProperty(name);
+    if (result === undefined) {
+      // TODO: cache read property, but not for device properties
+      result = this._nativeGet(name);
+    }
+    return result;
+  }
 
   function buildTriggerMap(events) {
     var result = {};

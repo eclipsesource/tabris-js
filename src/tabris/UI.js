@@ -53,17 +53,19 @@ tabris.registerWidget("_UI", {
     image: "image",
     textColor: {
       type: "color",
-      set: function(name, value) {
+      set: function(name, value, options) {
         this._nativeSet("foreground", value);
+        this._storeProperty(name, value, options);
       }
     },
     background: "color",
     activePage: {
-      set: function(name, page) {
+      set: function(name, page, options) {
         if (!(page instanceof tabris.Page)) {
           throw new Error("Value for activePage is not a page");
         }
         this._nativeSet("activePage", page._page.cid);
+        this._storeProperty(name, page, options);
       }
     }
   },

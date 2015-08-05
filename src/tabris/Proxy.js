@@ -84,56 +84,12 @@
         throw new Error("Object is disposed");
       }
     },
-
-    _applyProperty: function(name, value, options) {
-      if (!this._getPropertyType(name)) {
-        return value;
-      }
-      var setProperty = this._getPropertySetter(name);
-      if (setProperty instanceof Function) {
-        setProperty.call(this, name, value);
-      } else {
-        this._nativeSet(name, value);
-      }
-      if (this.constructor._properties[name].nocache) {
-        this._triggerChangeEvent(name, value, options);
-      } else {
-        return value === this._getDefaultPropertyValue(name) ? undefined : value;
-      }
-    },
-
-    _getPropertySetter: function(name) {
-      var prop = this.constructor._properties[name];
-      return prop ? prop.set : null;
-    },
-
     _getEventConfig: function(type) {
       return this.constructor._events[type];
     },
 
     _nativeSet: function(name, value) {
       tabris._nativeBridge.set(this.cid, name, value);
-    },
-
-    _readProperty: function(name, value) {
-      if (!this._getPropertyType(name)) {
-        return value;
-      }
-      var result = value;
-      if (result === undefined) {
-        result = this._getDefaultPropertyValue(name);
-      }
-      if (result === undefined) {
-        // TODO: cache read property, but add nocache to device properties first
-        var getProperty = this._getPropertyGetter(name);
-        result = getProperty ? getProperty.call(this, name) : this._nativeGet(name);
-      }
-      return result;
-    },
-
-    _getPropertyGetter: function(name) {
-      var prop = this.constructor._properties[name];
-      return prop ? prop.get : null;
     },
 
     _nativeGet: function(name) {
@@ -143,16 +99,6 @@
     _nativeCall: function(method, parameters) {
       this._checkDisposed();
       return tabris._nativeBridge.call(this.cid, method, parameters);
-    },
-
-    _getDefaultPropertyValue: function(name) {
-      return valueOf(this.constructor._properties[name].default);
-    },
-
-    _triggerChangeEvent: function(propertyName, newEncodedValue, options) {
-      var type = this._getPropertyType(propertyName);
-      var decodedValue = this._decodeProperty(newEncodedValue, type);
-      this.trigger("change:" + propertyName, this, decodedValue, options || {});
     },
 
     toString: function() {
@@ -165,10 +111,6 @@
 
   function generateId() {
     return "o" + (idSequence++);
-  }
-
-  function valueOf(value) {
-    return value instanceof Function ? value() : value;
   }
 
 })();

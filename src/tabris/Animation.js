@@ -49,7 +49,7 @@
         try {
           animatedProps[property] =
             this._encodeProperty(properties[property], this._getPropertyType(property));
-          this._storeProperty(property, animatedProps[property]);
+          this._storeProperty(property, animatedProps[property], options);
         } catch (ex) {
           console.warn(this.type + ": Ignored invalid animation property value for \"" + property + "\"");
         }

@@ -12,11 +12,12 @@
       itemHeight: {
         type: "function|natural",
         default: 0,
-        set: function(name, value) {
+        set: function(name, value, options) {
           if (typeof value !== "function") {
             // Required for 1.0 compatibility
             this._nativeSet("itemHeight", value);
           }
+          this._storeProperty(name, value, options);
         }
       },
       items: {
@@ -26,14 +27,15 @@
         },
         get: function() {
           return this._items.concat();
-        },
-        nocache: true
+        }
       },
       initializeCell: {default: null},
       cellType: {
         type: "string|function",
         default: null,
-        set: function() {}
+        set: function(name, value, options) {
+          this._storeProperty(name, value, options);
+        }
       },
       refreshEnabled: {type: "boolean", default: false},
       refreshIndicator: {type: "boolean", default: false},

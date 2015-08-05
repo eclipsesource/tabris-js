@@ -28,13 +28,19 @@
 
     _properties: {
       items: {type: ["array", "string"], default: function() {return [];}},
-      selectionIndex: {type: "natural", nocache: true},
+      selectionIndex: {
+        type: "natural",
+        set: function(name, value, options) {
+          this._nativeSet(name, value);
+          this._triggerChangeEvent(name, value, options);
+        }
+      },
       selection: {
-        nocache: true,
-        set: function(name, item) {
+        set: function(name, item, options) {
           var index = this._getItemIndex(item);
           if (index !== -1) {
             this.set("selectionIndex", index);
+            this._triggerChangeEvent(name, item, options);
           } else {
             console.warn("Could not set picker selection " + item + ": item not found");
           }

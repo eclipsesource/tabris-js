@@ -185,8 +185,9 @@
       visible: {
         type: "boolean",
         default: true,
-        set: function(name, value) {
+        set: function(name, value, options) {
           this._nativeSet("visibility", value);
+          this._storeProperty(name, value, options);
         }
       },
       layoutData: {
@@ -212,14 +213,14 @@
         type: "bounds",
         set: function() {
           console.warn(this.type + ": Can not set read-only property \"bounds\".");
-        },
-        nocache: true
+        }
       },
       background: "color",
       textColor: {
         type: "color",
-        set: function(name, value) {
+        set: function(name, value, options) {
           this._nativeSet("foreground", value);
+          this._storeProperty(name, value, options);
         }
       },
       opacity: {
@@ -243,7 +244,6 @@
         default: false
       },
       id: {
-        nocache: true,
         type: "string",
         set: function(name, value) {
           this.id = value;
@@ -253,7 +253,6 @@
         }
       },
       class: {
-        nocache: true,
         type: "string",
         set: function(name, value) {
           this.classList = value.trim().split(/\s+/);
@@ -271,8 +270,7 @@
             this._gestures = _.extend({}, defaultGestures);
           }
           return this._gestures;
-        },
-        nocache: true
+        }
       }
     })
   });
@@ -417,8 +415,9 @@
       maxLines: {
         type: ["nullable", "natural"],
         default: null,
-        set: function(name, value) {
-          this._nativeSet("maxLines", value <= 0 ? null : value);
+        set: function(name, value, options) {
+          this._nativeSet(name, value <= 0 ? null : value);
+          this._storeProperty(name, value, options);
         }
       },
       text: {type: "string", default: ""}
@@ -561,10 +560,10 @@
         get: function() {
           return this._nativeGet("checked");
         },
-        set: function(name, value) {
+        set: function(name, value, options) {
           this._nativeSet("checked", value);
-        },
-        nocache: true
+          this._triggerChangeEvent(name, value, options);
+        }
       }
     }
   });

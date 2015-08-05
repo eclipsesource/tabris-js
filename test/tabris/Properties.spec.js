@@ -43,54 +43,54 @@ describe("Properties", function() {
       expect(object.get("foo")).toBeUndefined();
     });
 
-    it ("set calls _applyProperty", function() {
-      object._applyProperty = jasmine.createSpy().and.returnValue(true);
+    it ("set calls custom setter", function() {
+      TestType._properties.foo = {set: jasmine.createSpy()};
       object.set("foo", "bar");
 
-      expect(object._applyProperty).toHaveBeenCalledWith("foo", "bar", {});
+      expect(TestType._properties.foo.set).toHaveBeenCalledWith("foo", "bar", {});
     });
 
-    it ("set stores value returend by _applyProperty", function() {
-      object._applyProperty = jasmine.createSpy().and.returnValue(true);
+    it ("set stores nothing if custom setter exists", function() {
+      TestType._properties.foo = {set: function() {}};
       object.set("foo", "bar");
 
-      expect(object.get("foo")).toBe(true);
+      expect(object.get("foo")).toBe(undefined);
     });
 
-    it ("set calls _applyProperty with options", function() {
-      object._applyProperty = jasmine.createSpy().and.returnValue(true);
+    it ("set calls custom setter with options", function() {
+      TestType._properties.foo = {set: jasmine.createSpy().and.returnValue(true)};
       object.set("foo", "bar", {foo2: "bar2"});
 
-      expect(object._applyProperty).toHaveBeenCalledWith("foo", "bar", {foo2: "bar2"});
+      expect(TestType._properties.foo.set).toHaveBeenCalledWith("foo", "bar", {foo2: "bar2"});
     });
 
-    it ("set does store what _applyProperty returns", function() {
-      object._applyProperty = function() {return "x";};
+    it ("get calls custom getter with property name", function() {
       object.set("foo", "bar");
-
-      expect(object.get("foo")).toBe("x");
-    });
-
-    it ("get does call _readProperty with stored value", function() {
-      object.set("foo", "bar");
-      object._readProperty = jasmine.createSpy();
+      TestType._properties.foo = {get: jasmine.createSpy()};
 
       object.get("foo");
 
-      expect(object._readProperty).toHaveBeenCalledWith("foo", "bar");
+      expect(TestType._properties.foo.get).toHaveBeenCalledWith("foo");
     });
 
-    it ("get does call _readProperty with undefined value", function() {
-      object._readProperty = jasmine.createSpy();
-      object.get("foo");
-      expect(object._readProperty).toHaveBeenCalledWith("foo", undefined);
+    it ("get returns value from custom getter", function() {
+      TestType._properties.foo = {get: jasmine.createSpy().and.returnValue("bar")};
+
+      expect(object.get("foo")).toBe("bar");
     });
 
-    it ("get returns value returned by _readProperty", function() {
-      object.set("foo", "bar");
-      object._readProperty = function() {return "bar2";};
+    it ("get returns default value if nothing was set", function() {
+      TestType._properties.foo = {default: "bar"};
 
-      expect(object.get("foo")).toBe("bar2");
+      expect(object.get("foo")).toBe("bar");
+    });
+
+    it ("get does not return default value if something was set", function() {
+      TestType._properties.foo = {default: "bar"};
+
+      object.set("foo", "something else");
+
+      expect(object.get("foo")).toBe("something else");
     });
 
     it("calls encoding function if type is found in PropertyEncoding", function() {
