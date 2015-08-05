@@ -178,9 +178,9 @@
   function toProxyId(ref, parent) {
     if (typeof ref === "string") {
       var proxy = parent.children(ref)[0];
-      return tabris.PropertyEncoding.proxy(proxy) || 0;
+      return tabris.PropertyTypes.proxy.encode(proxy) || 0;
     }
-    return tabris.PropertyEncoding.proxy(ref) || 0;
+    return tabris.PropertyTypes.proxy.encode(ref) || 0;
   }
 
   function isPercentage(value) {

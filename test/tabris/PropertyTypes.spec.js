@@ -1,4 +1,4 @@
-describe("PropertyEncoding:", function() {
+describe("PropertyTypes:", function() {
   /*globals _:false*/
 
   describe("layoutData", function() {
@@ -8,7 +8,7 @@ describe("PropertyEncoding:", function() {
       var outValue = {};
       spyOn(tabris.Layout, "encodeLayoutData").and.returnValue(outValue);
 
-      var result = tabris.PropertyEncoding.layoutData(inValue);
+      var result = tabris.PropertyTypes.layoutData.encode(inValue);
 
       expect(tabris.Layout.encodeLayoutData).toHaveBeenCalledWith(inValue);
       expect(result).toBe(outValue);
@@ -18,7 +18,7 @@ describe("PropertyEncoding:", function() {
 
   describe("image", function() {
 
-    var check = tabris.PropertyEncoding.image;
+    var check = tabris.PropertyTypes.image.encode;
 
     it("succeeds for minimal image value", function() {
       spyOn(console, "warn");
@@ -107,7 +107,7 @@ describe("PropertyEncoding:", function() {
 
   describe("any", function() {
 
-    var check = tabris.PropertyEncoding.any;
+    var check = tabris.PropertyTypes.any.encode;
 
     it("passes through any value", function() {
       expect(check(23)).toBe(23);
@@ -121,7 +121,7 @@ describe("PropertyEncoding:", function() {
 
   describe("boolean", function() {
 
-    var check = tabris.PropertyEncoding.boolean;
+    var check = tabris.PropertyTypes.boolean.encode;
 
     it("passes through true", function() {
       expect(check(true)).toBe(true);
@@ -149,7 +149,7 @@ describe("PropertyEncoding:", function() {
 
   describe("string", function() {
 
-    var check = tabris.PropertyEncoding.string;
+    var check = tabris.PropertyTypes.string.encode;
 
     it("translates any value to string", function() {
       expect(check("str")).toBe("str");
@@ -166,7 +166,7 @@ describe("PropertyEncoding:", function() {
 
   describe("natural", function() {
 
-    var check = tabris.PropertyEncoding.natural;
+    var check = tabris.PropertyTypes.natural.encode;
 
     it("fails for non-numbers", function() {
       var values = ["", "foo", "23", null, undefined, true, false, {}, []];
@@ -207,7 +207,7 @@ describe("PropertyEncoding:", function() {
 
   describe("integer", function() {
 
-    var check = tabris.PropertyEncoding.integer;
+    var check = tabris.PropertyTypes.integer.encode;
 
     it("fails for non-numbers", function() {
       var values = ["", "foo", "23", null, undefined, true, false, {}, []];
@@ -248,7 +248,7 @@ describe("PropertyEncoding:", function() {
 
   describe("choice", function() {
 
-    var check = tabris.PropertyEncoding.choice;
+    var check = tabris.PropertyTypes.choice.encode;
 
     it("allows string values given in array", function() {
       var accepted = ["1", "foo", "bar"];
@@ -287,7 +287,7 @@ describe("PropertyEncoding:", function() {
 
   describe("nullable", function() {
 
-    var check = tabris.PropertyEncoding.nullable;
+    var check = tabris.PropertyTypes.nullable.encode;
 
     it("allows null", function() {
       expect(check(null)).toBeNull();
@@ -308,7 +308,7 @@ describe("PropertyEncoding:", function() {
 
   describe("opacity", function() {
 
-    var check = tabris.PropertyEncoding.opacity;
+    var check = tabris.PropertyTypes.opacity.encode;
 
     it("fails for non-numbers", function() {
       var values = ["", "foo", "23", null, undefined, true, false, {}, []];
@@ -347,7 +347,7 @@ describe("PropertyEncoding:", function() {
 
   describe("transform", function() {
 
-    var check = tabris.PropertyEncoding.transform;
+    var check = tabris.PropertyTypes.transform.encode;
     var defaultValue = {
       rotation: 0,
       scaleX: 1,
@@ -405,7 +405,7 @@ describe("PropertyEncoding:", function() {
 
   describe("array", function() {
 
-    var check = tabris.PropertyEncoding.array;
+    var check = tabris.PropertyTypes.array.encode;
 
     it("passes any array", function() {
       expect(check([1, "a", true])).toEqual([1, "a", true]);

@@ -21,18 +21,18 @@
         throw new TypeError("Value argument must be specified to execute 'setItem'");
       }
       proxy._nativeCall("add", {
-        key: tabris.PropertyEncoding.string(key),
-        value: tabris.PropertyEncoding.string(value)
+        key: tabris.PropertyTypes.string.encode(key),
+        value: tabris.PropertyTypes.string.encode(value)
       });
     },
 
     getItem: function(key) {
       // Note: the client implementation should return "null" when the item was not found
-      return proxy._nativeCall("get", {key: tabris.PropertyEncoding.string(key)});
+      return proxy._nativeCall("get", {key: tabris.PropertyTypes.string.encode(key)});
     },
 
     removeItem: function(key) {
-      proxy._nativeCall("remove", {keys: [tabris.PropertyEncoding.string(key)]});
+      proxy._nativeCall("remove", {keys: [tabris.PropertyTypes.string.encode(key)]});
     },
 
     clear: function() {

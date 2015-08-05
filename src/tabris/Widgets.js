@@ -69,7 +69,7 @@
     },
 
     _setParent: function(parent) {
-      this._nativeSet("parent", tabris.PropertyEncoding.proxy(parent._getContainer(this)));
+      this._nativeSet("parent", tabris.PropertyTypes.proxy.encode(parent._getContainer(this)));
       if (this._parent) {
         this._parent._removeChild(this);
         tabris.Layout.addToQueue(this._parent);
@@ -179,11 +179,11 @@
             var self = this;
             setTimeout(function() {
               self._triggerChangeEvent("bounds", event.bounds, {}, "resize");
-              self.trigger("resize", self, tabris.PropertyDecoding.bounds(event.bounds), {});
+              self.trigger("resize", self, tabris.PropertyTypes.bounds.decode(event.bounds), {});
             }, 0);
           } else {
             this._triggerChangeEvent("bounds", event.bounds, {}, "resize");
-            this.trigger("resize", this, tabris.PropertyDecoding.bounds(event.bounds), {});
+            this.trigger("resize", this, tabris.PropertyTypes.bounds.decode(event.bounds), {});
           }
         }
       }

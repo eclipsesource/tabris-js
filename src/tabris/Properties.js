@@ -74,11 +74,11 @@
 
     _encodeProperty: function(value, type) {
       if (typeof type === "string") {
-        return tabris.PropertyEncoding[type](value);
+        return tabris.PropertyTypes[type].encode(value);
       }
-      if (Array.isArray(type) && tabris.PropertyEncoding[type[0]]) {
+      if (Array.isArray(type)) {
         var args = [value].concat(type.slice(1));
-        return tabris.PropertyEncoding[type[0]].apply(window, args);
+        return tabris.PropertyTypes[type[0]].encode.apply(window, args);
       }
       return value;
     },
@@ -90,12 +90,14 @@
     },
 
     _decodeProperty: function(value, type) {
-      if (typeof type === "string" && tabris.PropertyDecoding[type]) {
-        return tabris.PropertyDecoding[type](value);
+      if (typeof type === "string") {
+        var decoder = tabris.PropertyTypes[type].decode;
+        return decoder ? decoder(value) : value;
       }
-      if (Array.isArray(type) && tabris.PropertyDecoding[type[0]]) {
+      if (Array.isArray(type)) {
         var args = [value].concat(type.slice(1));
-        return tabris.PropertyDecoding[type[0]].apply(window, args);
+        var decoder = tabris.PropertyTypes[type[0]].decode;
+        return decoder ? decoder.apply(window, args) : value;
       }
       return value;
     },

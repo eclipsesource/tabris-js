@@ -93,31 +93,31 @@ describe("Properties", function() {
       expect(object.get("foo")).toBe("something else");
     });
 
-    it("calls encoding function if type is found in PropertyEncoding", function() {
+    it("calls encoding function if type is found in PropertyTypes", function() {
       TestType._properties.knownProperty = {type: "boolean"};
-      spyOn(tabris.PropertyEncoding, "boolean").and.returnValue(true);
+      spyOn(tabris.PropertyTypes.boolean, "encode").and.returnValue(true);
       spyOn(console, "warn");
 
       object.set("knownProperty", true);
 
-      expect(tabris.PropertyEncoding.boolean).toHaveBeenCalled();
+      expect(tabris.PropertyTypes.boolean.encode).toHaveBeenCalled();
       expect(console.warn).not.toHaveBeenCalled();
     });
 
     it("calls encoding function with arguments if type is given as an array", function() {
       TestType._properties.knownProperty = {type: ["choice", ["a", "b", "c"]]};
-      spyOn(tabris.PropertyEncoding, "choice").and.returnValue(true);
+      spyOn(tabris.PropertyTypes.choice, "encode").and.returnValue(true);
       spyOn(console, "warn");
 
       object.set("knownProperty", "a");
 
-      expect(tabris.PropertyEncoding.choice).toHaveBeenCalledWith("a", ["a", "b", "c"]);
+      expect(tabris.PropertyTypes.choice.encode).toHaveBeenCalledWith("a", ["a", "b", "c"]);
       expect(console.warn).not.toHaveBeenCalled();
     });
 
     it("raises a warning if encoding function throws", function() {
       TestType._properties.knownProperty = {type: "boolean"};
-      spyOn(tabris.PropertyEncoding, "boolean").and.throwError("My Error");
+      spyOn(tabris.PropertyTypes.boolean, "encode").and.throwError("My Error");
       spyOn(console, "warn");
 
       object.set("knownProperty", true);
@@ -128,13 +128,13 @@ describe("Properties", function() {
 
     it ("get returns value from decoding function", function() {
       TestType._properties.foo = {type: "color"};
-      spyOn(tabris.PropertyDecoding, "color").and.returnValue("bar");
+      spyOn(tabris.PropertyTypes.color, "decode").and.returnValue("bar");
 
       object.set("foo", "rgba(1, 2, 3, 1)");
 
       var value = object.get("foo");
 
-      expect(tabris.PropertyDecoding.color).toHaveBeenCalledWith([1, 2, 3, 255]);
+      expect(tabris.PropertyTypes.color.decode).toHaveBeenCalledWith([1, 2, 3, 255]);
       expect(value).toBe("bar");
     });
 

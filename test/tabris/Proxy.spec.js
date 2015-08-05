@@ -407,29 +407,29 @@ describe("Proxy", function() {
         expect(console.warn).not.toHaveBeenCalled();
       });
 
-      it("calls function if _propertyCheck is a string found in PropertyDecoding", function() {
+      it("decodes value if there is a decoder", function() {
         tabris.TestType._properties.foo.type = "color";
         spyOn(nativeBridge, "get").and.returnValue(23);
-        spyOn(tabris.PropertyDecoding, "color").and.returnValue("bar");
+        spyOn(tabris.PropertyTypes.color, "decode").and.returnValue("bar");
         spyOn(console, "warn");
 
         var result = proxy.get("foo");
 
         expect(result).toBe("bar");
-        expect(tabris.PropertyDecoding.color).toHaveBeenCalledWith(23);
+        expect(tabris.PropertyTypes.color.decode).toHaveBeenCalledWith(23);
         expect(console.warn).not.toHaveBeenCalled();
       });
 
-      it("calls function if _propertyCheck is an array", function() {
+      it("decodes value if there is a decoder with array syntax", function() {
         tabris.TestType._properties.foo.type = ["color", 1, 2, 3];
         spyOn(nativeBridge, "get").and.returnValue(23);
-        spyOn(tabris.PropertyDecoding, "color").and.returnValue("bar");
+        spyOn(tabris.PropertyTypes.color, "decode").and.returnValue("bar");
         spyOn(console, "warn");
 
         var result = proxy.get("foo");
 
         expect(result).toBe("bar");
-        expect(tabris.PropertyDecoding.color).toHaveBeenCalledWith(23, 1, 2, 3);
+        expect(tabris.PropertyTypes.color.decode).toHaveBeenCalledWith(23, 1, 2, 3);
         expect(console.warn).not.toHaveBeenCalled();
       });
 
@@ -511,7 +511,7 @@ describe("Proxy", function() {
 
       it("do not SET the value if _properties entry references a function that throws", function() {
         tabris.TestType._properties.knownProperty = {type: "boolean"};
-        spyOn(tabris.PropertyEncoding, "boolean").and.throwError("My Error");
+        spyOn(tabris.PropertyTypes.boolean, "encode").and.throwError("My Error");
 
         proxy.set("knownProperty", "foo");
 
@@ -532,11 +532,11 @@ describe("Proxy", function() {
 
       it("uses _properties entry to convert the value", function() {
         tabris.TestType._properties.foo.type = "boolean";
-        spyOn(tabris.PropertyEncoding, "boolean").and.returnValue("bar2");
+        spyOn(tabris.PropertyTypes.boolean, "encode").and.returnValue("bar2");
 
         proxy.set("foo", "bar");
 
-        expect(tabris.PropertyEncoding.boolean).toHaveBeenCalledWith("bar");
+        expect(tabris.PropertyTypes.boolean.encode).toHaveBeenCalledWith("bar");
         var call = nativeBridge.calls({op: "set"})[0];
         expect(call.properties.foo).toBe("bar2");
       });
