@@ -11,8 +11,8 @@
       },
       image: {nocache: true},
       badge: {nocache: true},
-      control: true,
-      index: true
+      control: "any",
+      index: "any"
     }
   });
 

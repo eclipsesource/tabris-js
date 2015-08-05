@@ -3,7 +3,7 @@
   tabris.registerType("_Timer", {
     _type: "tabris.Timer",
     _events: {Run: true},
-    _properties: {delay: true, repeat: true}
+    _properties: {delay: "any", repeat: "any"}
   });
 
   tabris._addWindowTimerMethods = function(target) {

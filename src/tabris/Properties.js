@@ -73,7 +73,7 @@
     },
 
     _encodeProperty: function(value, type) {
-      if (typeof type === "string" && tabris.PropertyEncoding[type]) {
+      if (typeof type === "string") {
         return tabris.PropertyEncoding[type](value);
       }
       if (Array.isArray(type) && tabris.PropertyEncoding[type[0]]) {

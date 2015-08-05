@@ -10,7 +10,7 @@
 
     _properties: {
       itemHeight: {
-        type: "function|natural",
+        type: "any", // "function|natural",
         default: 0,
         set: function(name, value, options) {
           if (typeof value !== "function") {
@@ -31,7 +31,7 @@
       },
       initializeCell: {default: null},
       cellType: {
-        type: "string|function",
+        type: "any", // "string|function",
         default: null,
         set: function(name, value, options) {
           this._storeProperty(name, value, options);

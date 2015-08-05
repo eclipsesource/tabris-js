@@ -6,9 +6,9 @@ tabris.registerWidget("_Shell", {
   _type: "rwt.widgets.Shell",
   _events: {Close: true},
   _properties: {
-    style: true,
-    mode: true,
-    active: true
+    style: "any",
+    mode: "any",
+    active: "any"
   }
 });
 

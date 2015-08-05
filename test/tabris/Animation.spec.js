@@ -14,7 +14,7 @@ describe("Animation", function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._init(nativeBridge);
-    tabris.registerWidget("TestType", {_properties: {foo: true}});
+    tabris.registerWidget("TestType", {_properties: {foo: "any"}});
     widget = tabris.create("TestType");
   });
 

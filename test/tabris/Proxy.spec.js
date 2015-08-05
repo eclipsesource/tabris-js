@@ -10,7 +10,7 @@ describe("Proxy", function() {
     tabris._init(nativeBridge);
     tabris.registerWidget("TestType", {
       _supportsChildren: true,
-      _properties: {foo: true},
+      _properties: {foo: "any"},
       _events: {bar: true}
     });
   });
@@ -384,7 +384,7 @@ describe("Proxy", function() {
       });
 
       it("calls custom get function with property name", function() {
-        tabris.TestType._properties.prop = {type: true, get: jasmine.createSpy()};
+        tabris.TestType._properties.prop = {type: "any", get: jasmine.createSpy()};
 
         proxy.get("prop");
 
@@ -392,7 +392,7 @@ describe("Proxy", function() {
       });
 
       it("returns value from custom get function", function() {
-        tabris.TestType._properties.prop = {type: true, get: function() { return 23; }};
+        tabris.TestType._properties.prop = {type: "any", get: function() { return 23; }};
 
         var result = proxy.get("prop");
 
@@ -485,7 +485,7 @@ describe("Proxy", function() {
       });
 
       it("uses custom set function", function() {
-        tabris.TestType._properties.foo = {type: true, set: jasmine.createSpy()};
+        tabris.TestType._properties.foo = {type: "any", set: jasmine.createSpy()};
         var options = {option: "myOption"};
 
         proxy.set("foo", "bar", options);
@@ -519,7 +519,7 @@ describe("Proxy", function() {
       });
 
       it("raises a warning if setter is a function that throws", function() {
-        tabris.TestType._properties.foo = {type: true, set: function() {
+        tabris.TestType._properties.foo = {type: "any", set: function() {
           throw new Error("My Error");
         }};
         spyOn(console, "warn");
@@ -556,7 +556,7 @@ describe("Proxy", function() {
       });
 
       it ("triggers change event for known properties", function() {
-        tabris.TestType._properties.foo = {type: true, default: ""};
+        tabris.TestType._properties.foo = {type: "any", default: ""};
         var listener = jasmine.createSpy();
         proxy.on("change:foo", listener);
 
@@ -569,7 +569,7 @@ describe("Proxy", function() {
       });
 
       it ("triggers change event for known properties with options object", function() {
-        tabris.TestType._properties.foo = {type: true, default: ""};
+        tabris.TestType._properties.foo = {type: "any", default: ""};
         var listener = jasmine.createSpy();
         proxy.on("change:foo", listener);
 
@@ -592,7 +592,7 @@ describe("Proxy", function() {
       });
 
       it ("triggers no change event if value is unchanged from default", function() {
-        tabris.TestType._properties.foo = {type: true, default: ""};
+        tabris.TestType._properties.foo = {type: "any", default: ""};
         var listener = jasmine.createSpy();
         proxy.on("change:foo", listener);
 
@@ -603,7 +603,7 @@ describe("Proxy", function() {
       });
 
       it ("triggers no change event if value is unchanged from previous value", function() {
-        tabris.TestType._properties.foo = {type: true, default: ""};
+        tabris.TestType._properties.foo = {type: "any", default: ""};
         var listener = jasmine.createSpy();
         proxy.set("foo", "bar");
         proxy.on("change:foo", listener);
@@ -614,7 +614,7 @@ describe("Proxy", function() {
       });
 
       it ("always triggers initial change event for cached properties without default", function() {
-        tabris.TestType._properties.foo = {type: true};
+        tabris.TestType._properties.foo = {type: "any"};
         var listener = jasmine.createSpy();
         proxy.on("change:foo", listener);
 

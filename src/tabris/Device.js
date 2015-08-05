@@ -3,14 +3,14 @@
   tabris.registerType("_Device", {
     _type: "tabris.Device",
     _properties: {
-      model: true,
-      platform: true,
-      version: true,
-      language: true,
-      orientation: true,
-      screenWidth: true,
-      screenHeight: true,
-      scaleFactor: true
+      model: "any",
+      platform: "any",
+      version: "any",
+      language: "any",
+      orientation: "any",
+      screenWidth: "any",
+      screenHeight: "any",
+      scaleFactor: "any"
     },
     _setProperty: function() {},
     _events: {

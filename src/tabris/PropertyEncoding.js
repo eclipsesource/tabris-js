@@ -2,6 +2,10 @@
 
   tabris.PropertyEncoding = {
 
+    any: function(value) {
+      return value;
+    },
+
     boolean: function(bool) {
       return !!bool;
     },

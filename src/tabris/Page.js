@@ -20,7 +20,7 @@
       topLevel: "boolean",
       control: "proxy",
       parent: "proxy",
-      style: true
+      style: "any"
     }
 
   });
@@ -64,7 +64,7 @@
 
   pageProperties.forEach(function(property) {
     tabris.Page._properties[property] = {
-      type: true,
+      type: "any",
       set: function(name, value) {this._page.set(property, value);},
       get: function() {return this._page.get(property);}
     };

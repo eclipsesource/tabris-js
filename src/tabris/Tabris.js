@@ -124,7 +124,7 @@
       if (typeof entry !== "object") {
         result[property].type = entry;
       } else if (!result[property].type) {
-        result[property].type = true;
+        result[property].type = "any";
       }
       result[property].set = result[property].set || defaultSetter;
       result[property].get = result[property].get || defaultGetter;

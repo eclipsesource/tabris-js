@@ -2,7 +2,7 @@ tabris.registerWidget("_ScrollBar", {
   _type: "rwt.widgets.ScrollBar",
   _events: {Selection: true},
   _properties: {
-    style: true
+    style: "any"
   }
 });
 

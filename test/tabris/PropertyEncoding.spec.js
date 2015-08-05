@@ -105,6 +105,20 @@ describe("PropertyEncoding:", function() {
 
   });
 
+  describe("any", function() {
+
+    var check = tabris.PropertyEncoding.any;
+
+    it("passes through any value", function() {
+      expect(check(23)).toBe(23);
+      expect(check(true)).toBe(true);
+      expect(check("foo")).toBe("foo");
+      expect(check(null)).toBe(null);
+      expect(check({})).toEqual({});
+    });
+
+  });
+
   describe("boolean", function() {
 
     var check = tabris.PropertyEncoding.boolean;

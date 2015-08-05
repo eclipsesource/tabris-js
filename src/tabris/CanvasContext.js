@@ -2,7 +2,7 @@
 
   tabris.registerType("_GC", {
     _type: "rwt.widgets.GC",
-    _properties: {parent: true}
+    _properties: {parent: "any"}
   });
 
   tabris.CanvasContext = function(gc) {
