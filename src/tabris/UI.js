@@ -59,6 +59,7 @@ tabris.registerWidget("_UI", {
       }
     },
     background: "color",
+    toolbarVisible: {type: "boolean", default: true},
     activePage: {
       set: function(name, page, options) {
         if (!(page instanceof tabris.Page)) {

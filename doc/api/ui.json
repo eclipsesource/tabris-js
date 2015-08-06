@@ -11,6 +11,10 @@
       "type": "Color",
       "description": "Text color for the navigation elements"
     },
+    "toolbarVisible": {
+      "type": "boolean?true",
+      "description": "Whether the toolbars above and below pages are visible."
+    },
     "activePage": {
       "type": "Page",
       "description": "The currently visible page."
