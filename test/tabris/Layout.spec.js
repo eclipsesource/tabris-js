@@ -213,6 +213,20 @@ describe("Layout:", function() {
       expect(resolve(input, widget)).toEqual(expected);
     });
 
+    it("translates 'prev()' selector to id", function() {
+      var input = {baseline: "prev()", left: ["prev()", 42]};
+      var expected = {baseline: widget.cid, left: [widget.cid, 42]};
+
+      expect(resolve(input, other)).toEqual(expected);
+    });
+
+    it("translates 'prev()' selector to 0 on first widget", function() {
+      var input = {baseline: "prev()", left: ["prev()", 42]};
+      var expected = {baseline: 0, left: [0, 42]};
+
+      expect(resolve(input, widget)).toEqual(expected);
+    });
+
     it("does not modify numbers", function() {
       var input = {centerX: 23, left: [30, 42]};
       var expected = {centerX: 23, left: [30, 42]};

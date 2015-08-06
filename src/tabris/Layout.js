@@ -15,9 +15,8 @@
         return layoutData;
       }
       var result = {};
-      var parent = targetWidget.parent() || emptyParent;
       for (var key in layoutData) {
-        result[key] = resolveAttribute(layoutData[key], parent);
+        result[key] = resolveAttribute(layoutData[key], targetWidget);
       }
       return result;
     },
@@ -158,26 +157,34 @@
     return [isNumber(array[0]) ? array[0] + "%" : array[0], array[1]];
   }
 
-  function resolveAttribute(value, parent) {
+  function resolveAttribute(value, widget) {
     if (Array.isArray(value)) {
-      return resolveArray(value, parent);
+      return resolveArray(value, widget);
     }
     if (isNumber(value)) {
       return value;
     }
-    return toProxyId(value, parent);
+    return toProxyId(value, widget);
   }
 
-  function resolveArray(array, parent) {
+  function resolveArray(array, widget) {
     if (isNumber(array[0])) {
       return array;
     }
-    return [toProxyId(array[0], parent), array[1]];
+    return [toProxyId(array[0], widget), array[1]];
   }
 
-  function toProxyId(ref, parent) {
+  function toProxyId(ref, widget) {
+    if (ref === "prev()") {
+      var children = getParent(widget).children();
+      var index = children.indexOf(widget);
+      if (index > 0) {
+        return tabris.PropertyTypes.proxy.encode(children[index - 1]) || 0;
+      }
+      return 0;
+    }
     if (typeof ref === "string") {
-      var proxy = parent.children(ref)[0];
+      var proxy = getParent(widget).children(ref)[0];
       return tabris.PropertyTypes.proxy.encode(proxy) || 0;
     }
     return tabris.PropertyTypes.proxy.encode(ref) || 0;
@@ -196,9 +203,13 @@
       return true;
     }
     if (typeof value === "string") {
-      return selectorRegex.test(value);
+      return value === "prev()" || selectorRegex.test(value);
     }
     return false;
+  }
+
+  function getParent(widget) {
+    return widget.parent() || emptyParent;
   }
 
   var selectorRegex = /^(\*|([#.]?[A-Za-z0-9_-]+))$/;
