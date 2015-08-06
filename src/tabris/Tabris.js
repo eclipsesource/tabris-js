@@ -40,11 +40,6 @@
       tabris[type] = function() {
         tabris.Proxy.apply(this, arguments);
       };
-      if (members._listen && !members._events) {
-        // TODO: This can be removed once cordova is fixed
-        members._events = members._listen;
-        delete members._listen;
-      }
       for (var member in staticMembers) {
         tabris[type][member] = members[member] || getDefault(member);
       }
@@ -120,17 +115,52 @@
     var result = {};
     for (var property in properties) {
       var entry = properties[property];
-      result[property] = typeof entry === "object" ? entry : {};
-      if (typeof entry !== "object") {
-        result[property].type = entry;
-      } else if (!result[property].type) {
+      var shortHand = (typeof entry === "string" || Array.isArray(entry));
+      result[property] = shortHand ? {type: entry} : entry;
+      if (result[property] === true) {
+        // TODO: Remove this block once current tabris.js is considered incompatible with developer
+        //       apps older than tabris 1.2 (which have cordova.js files built in using this syntax)
+        console.warn("A custom component uses deprecated property type value 'true'");
+        result[property] = {type: "any"};
+      }
+      if (!result[property].type) {
         result[property].type = "any";
       }
+      result[property].type = resolveType(result[property].type);
       result[property].set = result[property].set || defaultSetter;
       result[property].get = result[property].get || defaultGetter;
     }
     return result;
   };
+
+  function resolveType(type) {
+    var typeDef = type;
+    if (typeof type === "string") {
+      typeDef = tabris.PropertyTypes[type];
+    } else if (Array.isArray(type)) {
+      typeDef = tabris.PropertyTypes[type[0]];
+    }
+    if (typeof typeDef !== "object") {
+      throw new Error("Can not find property type " + type);
+    }
+    if (Array.isArray(type)) {
+      typeDef = _.clone(typeDef);
+      var args = type.slice(1);
+      if (typeDef.encode) {
+        typeDef.encode = wrapCoder(typeDef.encode, args);
+      }
+      if (typeDef.decode) {
+        typeDef.decode = wrapCoder(typeDef.decode, args);
+      }
+    }
+    return typeDef;
+  }
+
+  function wrapCoder(fn, args) {
+    return function(value) {
+      return fn.apply(window, [value].concat(args));
+    };
+  }
 
   function defaultSetter(name, value, options) {
     this._nativeSet(name, value);

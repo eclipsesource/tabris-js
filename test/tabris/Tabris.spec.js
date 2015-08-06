@@ -398,17 +398,59 @@ describe("tabris", function() {
     });
 
     it("adds _properties to constructor", function() {
-      tabris.registerType("CustomType", {_properties: {foo: {type: "bar"}}});
+      var type = {encode: function() {}, decode: function() {}};
+      tabris.registerType("CustomType", {_properties: {foo: {type: type}}});
       var instance = tabris.create("CustomType");
 
-      expect(instance.constructor._properties.foo.type).toBe("bar");
+      expect(instance.constructor._properties.foo.type).toBe(type);
+    });
+
+    it("replaces type strings with type definition object", function() {
+      tabris.registerType("CustomType", {_properties: {foo: {type: "boolean"}}});
+      var instance = tabris.create("CustomType");
+
+      expect(instance.constructor._properties.foo.type).toBe(tabris.PropertyTypes.boolean);
+    });
+
+    it("wraps encode function if type is given as an array", function() {
+      var type = ["choice", ["a", "b", "c"]];
+      spyOn(tabris.PropertyTypes.choice, "encode");
+      tabris.registerType("CustomType", {_properties: {foo: type}});
+      var instance = tabris.create("CustomType");
+
+      instance.set("foo", "bar");
+
+      expect(tabris.PropertyTypes.choice.encode).toHaveBeenCalledWith("bar", ["a", "b", "c"]);
+      expect(instance.constructor._properties.foo.type.encode)
+        .not.toBe(tabris.PropertyTypes.choice.encode);
+    });
+
+    it("wraps decode function if type is given as an array", function() {
+      var type = ["bounds", ["customarg"]];
+      spyOn(tabris.PropertyTypes.bounds, "encode").and.returnValue("bar");
+      spyOn(tabris.PropertyTypes.bounds, "decode");
+      tabris.registerType("CustomType", {_properties: {foo: type}});
+      var instance = tabris.create("CustomType");
+      instance.set("foo", "bar");
+
+      instance.get("foo");
+
+      expect(tabris.PropertyTypes.bounds.decode).toHaveBeenCalledWith("bar", ["customarg"]);
+      expect(instance.constructor._properties.foo.type.decode)
+        .not.toBe(tabris.PropertyTypes.bounds.decode);
+    });
+
+    it("throws if type string is not found in PropertyTypes object", function() {
+      expect(function() {
+        tabris.registerType("CustomType", {_properties: {foo: {type: "nothing"}}});
+      }).toThrow();
     });
 
     it("adds normalized _properties to constructor", function() {
-      tabris.registerType("CustomType", {_properties: {foo: "bar"}});
+      tabris.registerType("CustomType", {_properties: {foo: "boolean"}});
       var instance = tabris.create("CustomType");
 
-      expect(instance.constructor._properties.foo.type).toBe("bar");
+      expect(instance.constructor._properties.foo.type).toBe(tabris.PropertyTypes.boolean);
     });
 
     it("adds empty properties map to constructor", function() {

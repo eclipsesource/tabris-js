@@ -36,7 +36,7 @@ describe("Widgets", function() {
     });
 
     it("extends default properties", function() {
-      var custom = {foo: "bar", enabled: false};
+      var custom = {foo: "any", enabled: {type: "color"}};
       var normalized = tabris.registerType.normalizePropertiesMap(custom);
       tabris.registerWidget("TestType", {_properties: custom});
       expect(tabris.TestType._properties).toEqual(

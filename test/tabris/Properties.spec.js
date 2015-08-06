@@ -93,31 +93,22 @@ describe("Properties", function() {
       expect(object.get("foo")).toBe("something else");
     });
 
-    it("calls encoding function if type is found in PropertyTypes", function() {
-      TestType._properties.knownProperty = {type: "boolean"};
-      spyOn(tabris.PropertyTypes.boolean, "encode").and.returnValue(true);
+    it("calls encoding function if present", function() {
+      TestType._properties.knownProperty = {type: {
+        encode: jasmine.createSpy().and.returnValue(true)
+      }};
       spyOn(console, "warn");
 
       object.set("knownProperty", true);
 
-      expect(tabris.PropertyTypes.boolean.encode).toHaveBeenCalled();
-      expect(console.warn).not.toHaveBeenCalled();
-    });
-
-    it("calls encoding function with arguments if type is given as an array", function() {
-      TestType._properties.knownProperty = {type: ["choice", ["a", "b", "c"]]};
-      spyOn(tabris.PropertyTypes.choice, "encode").and.returnValue(true);
-      spyOn(console, "warn");
-
-      object.set("knownProperty", "a");
-
-      expect(tabris.PropertyTypes.choice.encode).toHaveBeenCalledWith("a", ["a", "b", "c"]);
+      expect(TestType._properties.knownProperty.type.encode).toHaveBeenCalled();
       expect(console.warn).not.toHaveBeenCalled();
     });
 
     it("raises a warning if encoding function throws", function() {
-      TestType._properties.knownProperty = {type: "boolean"};
-      spyOn(tabris.PropertyTypes.boolean, "encode").and.throwError("My Error");
+      TestType._properties.knownProperty = {type: {
+        encode: jasmine.createSpy().and.throwError("My Error")
+      }};
       spyOn(console, "warn");
 
       object.set("knownProperty", true);
@@ -126,16 +117,17 @@ describe("Properties", function() {
       expect(console.warn).toHaveBeenCalledWith(message);
     });
 
-    it ("get returns value from decoding function", function() {
-      TestType._properties.foo = {type: "color"};
-      spyOn(tabris.PropertyTypes.color, "decode").and.returnValue("bar");
+    it ("get returns value from decoding function if present", function() {
+      TestType._properties.foo = {type: {
+        decode: jasmine.createSpy().and.returnValue("bar2")
+      }};
 
-      object.set("foo", "rgba(1, 2, 3, 1)");
+      object.set("foo", "bar");
 
       var value = object.get("foo");
 
-      expect(tabris.PropertyTypes.color.decode).toHaveBeenCalledWith([1, 2, 3, 255]);
-      expect(value).toBe("bar");
+      expect(TestType._properties.foo.type.decode).toHaveBeenCalledWith("bar");
+      expect(value).toBe("bar2");
     });
 
   });
@@ -161,7 +153,7 @@ describe("Properties", function() {
     });
 
     it ("set triggers change event with decoded value", function() {
-      TestType._properties.foo = {type: "boolean"};
+      TestType._properties.foo = {type: tabris.PropertyTypes.boolean};
       object.on("change:foo", listener);
 
       object.set("foo", "bar");
@@ -204,7 +196,7 @@ describe("Properties", function() {
     });
 
     it ("set triggers no change event if encoded value is unchanged", function() {
-      TestType._properties.foo = {type: "boolean"};
+      TestType._properties.foo = {type: tabris.PropertyTypes.boolean};
       object.set("foo", true);
       object.on("change:foo", listener);
 

@@ -47,7 +47,7 @@ describe("Proxy", function() {
 
     it("translates properties", function() {
       var other = new tabris.Proxy("other-id");
-      tabris.TestType._properties.foo.type = "proxy";
+      tabris.TestType._properties.foo.type = tabris.PropertyTypes.proxy;
 
       proxy._create({foo: other});
 
@@ -58,7 +58,7 @@ describe("Proxy", function() {
     it("sends native set for init properties", function() {
       tabris.registerType("CustomType", {
         _initProperties: {foo: 23},
-        _properties: {bar: true}
+        _properties: {bar: "any"}
       });
 
       tabris.create("CustomType", {bar: 42});
@@ -375,7 +375,7 @@ describe("Proxy", function() {
       });
 
       it("returns cached value decoded", function() {
-        tabris.TestType._properties.foo.type = "color";
+        tabris.TestType._properties.foo.type = tabris.PropertyTypes.color;
         proxy.set("foo", "#ff00ff");
 
         var result = proxy.get("foo");
@@ -408,28 +408,16 @@ describe("Proxy", function() {
       });
 
       it("decodes value if there is a decoder", function() {
-        tabris.TestType._properties.foo.type = "color";
+        tabris.TestType._properties.foo.type = {
+          decode: jasmine.createSpy().and.returnValue("bar")
+        };
         spyOn(nativeBridge, "get").and.returnValue(23);
-        spyOn(tabris.PropertyTypes.color, "decode").and.returnValue("bar");
         spyOn(console, "warn");
 
         var result = proxy.get("foo");
 
         expect(result).toBe("bar");
-        expect(tabris.PropertyTypes.color.decode).toHaveBeenCalledWith(23);
-        expect(console.warn).not.toHaveBeenCalled();
-      });
-
-      it("decodes value if there is a decoder with array syntax", function() {
-        tabris.TestType._properties.foo.type = ["color", 1, 2, 3];
-        spyOn(nativeBridge, "get").and.returnValue(23);
-        spyOn(tabris.PropertyTypes.color, "decode").and.returnValue("bar");
-        spyOn(console, "warn");
-
-        var result = proxy.get("foo");
-
-        expect(result).toBe("bar");
-        expect(tabris.PropertyTypes.color.decode).toHaveBeenCalledWith(23, 1, 2, 3);
+        expect(tabris.TestType._properties.foo.type.decode).toHaveBeenCalledWith(23);
         expect(console.warn).not.toHaveBeenCalled();
       });
 
@@ -444,36 +432,6 @@ describe("Proxy", function() {
     });
 
     describe("set", function() {
-
-      it("translates widgets to ids in properties", function() {
-        var other = new tabris.Proxy("other-id");
-        tabris.TestType._properties.foo.type = "proxy";
-
-        proxy.set("foo", other);
-
-        var call = nativeBridge.calls({op: "set", id: proxy.cid})[0];
-        expect(call.properties.foo).toBe("other-id");
-      });
-
-      it("translates widget collection to first ids in properties", function() {
-        var other = new tabris.ProxyCollection([new tabris.Proxy("other-id")]);
-        tabris.TestType._properties.foo.type = "proxy";
-
-        proxy.set("foo", other);
-
-        var call = nativeBridge.calls({op: "set", id: proxy.cid})[0];
-        expect(call.properties.foo).toBe("other-id");
-      });
-
-      it("does not translate objects with id field to ids", function() {
-        var obj = {id: "23", name: "bar"};
-        tabris.TestType._properties.foo.type = "proxy";
-
-        proxy.set("foo", obj);
-
-        var properties = nativeBridge.calls({op: "set", id: proxy.cid})[0].properties;
-        expect(properties.foo).toEqual(obj);
-      });
 
       it("translation does not modify properties", function() {
         var other = new tabris.Proxy("other-id");
@@ -530,17 +488,6 @@ describe("Proxy", function() {
         expect(console.warn).not.toHaveBeenCalled();
       });
 
-      it("uses _properties entry to convert the value", function() {
-        tabris.TestType._properties.foo.type = "boolean";
-        spyOn(tabris.PropertyTypes.boolean, "encode").and.returnValue("bar2");
-
-        proxy.set("foo", "bar");
-
-        expect(tabris.PropertyTypes.boolean.encode).toHaveBeenCalledWith("bar");
-        var call = nativeBridge.calls({op: "set"})[0];
-        expect(call.properties.foo).toBe("bar2");
-      });
-
       it("returns self to allow chaining", function() {
         var result = proxy.set("foo", 23);
 
@@ -582,7 +529,7 @@ describe("Proxy", function() {
       });
 
       it ("triggers change event with decoded property value", function() {
-        tabris.TestType._properties.foo = {type: "color"};
+        tabris.TestType._properties.foo = {type: tabris.PropertyTypes.color};
         var listener = jasmine.createSpy();
         proxy.on("change:foo", listener);
 

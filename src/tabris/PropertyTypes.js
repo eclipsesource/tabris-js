@@ -2,11 +2,7 @@
 
   tabris.PropertyTypes = {
 
-    any: {
-      encode: function(value) {
-        return value;
-      }
-    },
+    any: {},
 
     boolean: {
       encode: function(bool) {
@@ -145,6 +141,7 @@
         if (value instanceof tabris.ProxyCollection) {
           return value[0] ? value[0].cid : null;
         }
+        // TODO: Should throw error instead
         return value;
       }
     },

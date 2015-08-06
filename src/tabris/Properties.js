@@ -16,7 +16,7 @@
       this._checkDisposed();
       var getter = this._getPropertyGetter(name) || this._getStoredProperty;
       var value = getter.call(this, name);
-      return this._decodeProperty(value, this._getPropertyType(name));
+      return this._decodeProperty(this._getTypeDef(name), value);
     },
 
     _setProperties: function(properties, options) {
@@ -26,10 +26,10 @@
     },
 
     _setProperty: function(name, value, options) {
-      var type = this._getPropertyType(name);
+      var typeDef = this._getTypeDef(name);
       var encodedValue;
       try {
-        encodedValue = this._encodeProperty(value, type);
+        encodedValue = this._encodeProperty(typeDef, value);
       } catch (ex) {
         console.warn(this.toString() + ": Ignored unsupported value for property \"" + name + "\": " + ex.message);
         return;
@@ -62,7 +62,7 @@
       return result;
     },
 
-    _getPropertyType: function(name) {
+    _getTypeDef: function(name) {
       var prop = this.constructor._properties[name];
       return prop ? prop.type : null;
     },
@@ -72,34 +72,12 @@
       return prop ? valueOf(prop.default) : undefined;
     },
 
-    _encodeProperty: function(value, type) {
-      if (typeof type === "string") {
-        return tabris.PropertyTypes[type].encode(value);
-      }
-      if (Array.isArray(type)) {
-        var args = [value].concat(type.slice(1));
-        return tabris.PropertyTypes[type[0]].encode.apply(window, args);
-      }
-      return value;
+    _encodeProperty: function(typeDef, value) {
+      return (typeDef && typeDef.encode) ? typeDef.encode(value) : value;
     },
 
-    _triggerChangeEvent: function(propertyName, newEncodedValue, options) {
-      var type = this._getPropertyType(propertyName);
-      var decodedValue = this._decodeProperty(newEncodedValue, type);
-      this.trigger("change:" + propertyName, this, decodedValue, options || {});
-    },
-
-    _decodeProperty: function(value, type) {
-      if (typeof type === "string") {
-        var decoder = tabris.PropertyTypes[type].decode;
-        return decoder ? decoder(value) : value;
-      }
-      if (Array.isArray(type)) {
-        var args = [value].concat(type.slice(1));
-        var decoder = tabris.PropertyTypes[type[0]].decode;
-        return decoder ? decoder.apply(window, args) : value;
-      }
-      return value;
+    _decodeProperty: function(typeDef, value) {
+      return (typeDef && typeDef.decode) ? typeDef.decode(value) : value;
     },
 
     _getPropertyGetter: function(name) {
@@ -110,6 +88,12 @@
     _getPropertySetter: function(name) {
       var prop = this.constructor._properties[name];
       return prop ? prop.set : undefined;
+    },
+
+    _triggerChangeEvent: function(propertyName, newEncodedValue, options) {
+      var typeDef = this._getTypeDef(propertyName);
+      var decodedValue = this._decodeProperty(typeDef, newEncodedValue);
+      this.trigger("change:" + propertyName, this, decodedValue, options || {});
     },
 
     _checkDisposed: function() {},

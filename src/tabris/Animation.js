@@ -27,7 +27,7 @@
     },
 
     _properties: {
-      properties: true,
+      properties: "any",
       delay: "natural",
       duration: "natural",
       repeat: "natural",
@@ -48,7 +48,7 @@
       if (animatable[property]) {
         try {
           animatedProps[property] =
-            this._encodeProperty(properties[property], this._getPropertyType(property));
+            this._encodeProperty(this._getTypeDef(property), properties[property]);
           this._storeProperty(property, animatedProps[property], options);
         } catch (ex) {
           console.warn(this.type + ": Ignored invalid animation property value for \"" + property + "\"");
