@@ -17,7 +17,7 @@ While using the [Tabris.js Developer App](getting-started.md), your application 
 These plug-ins have tested with Tabris.js and a [demo](https://github.com/eclipsesource/tabris-js/tree/master/examples/cordova) can be found among the Tabris.js examples.
 
 ## Other Cordova Plug-Ins
-To use Cordova Plug-Ins not part of the Developer App you need to add them during the [build](build.md) process. Plug-Ins that are added during the build process cannot be tested with the Developer App.
+To use Cordova Plug-Ins not part of the Developer App you need to add them during the [build](build.md) process. Once you have created a build, you can continue to load new application code using the developer console if you set the build setting *debug* mode to `ON` and `EnableDeveloperConsole` to `true` in your [`config.xml`](build.md#configuration).
 
 Most of the Plug-Ins will work out of the box but not all. This is because Tabris.js uses a **native UI** and **no HTML5**. As a result all Plug-Ins that manipulate the DOM will not work.
 
