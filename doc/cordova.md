@@ -13,6 +13,10 @@ While using the [Tabris.js Developer App](getting-started.md), your application 
 * [Network Information](http://plugins.cordova.io/#/package/org.apache.cordova.network-information)
 * [Toast](http://plugins.cordova.io/#/package/nl.x-services.plugins.toast)
 * [Touch Id](http://plugins.cordova.io/#/package/io.monaca.touchid)
+* [BarcodeScanner](http://plugins.cordova.io/#/package/com.phonegap.plugins.barcodescanner)
+* [Device motion](http://plugins.cordova.io/#/package/org.apache.cordova.device-motion)
+* [Google Analytics](http://plugins.cordova.io/#/package/com.cmackay.plugins.googleanalytics)
+* [Google Play Services](http://plugins.cordova.io/#/package/com.google.playservices)
 
 These plug-ins have tested with Tabris.js and a [demo](https://github.com/eclipsesource/tabris-js/tree/master/examples/cordova) can be found among the Tabris.js examples.
 
