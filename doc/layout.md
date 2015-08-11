@@ -4,7 +4,7 @@ Tabris.js uses the native platform capabilities to layout UIs. As display densit
 
 ## Layout Data
 
-All widgets support a property `layoutData` that defines how the widget should be arranged. The value of `layoutData` must be an object with a combination of the following keys:
+All widgets support a property `layoutData` that defines how the widget should be arranged. The value of `layoutData` must be an object with a combination of the following attributes:
 
 - `left`
 - `right`
@@ -16,12 +16,13 @@ All widgets support a property `layoutData` that defines how the widget should b
 - `width`
 - `height`
 
-If a widget is referenced in a layoutData, it has to be a sibling of the widget the layoutData is applied to. In place of a widget a `selector` string can also be given. The string is used to filter all siblings of the widget, using the first match as the reference. The selector may also reference a widget that will be added after the layoutData is set. However, once a widget is matched the selector will not be applied again. (The matching widget can not be replaced with another matching widget without re-applying the layoutData.)
- 
-A widget reference that does not point to a current sibling will be treated as an offset of 0. 
+All **size and distance** values are specified as numbers in *device independent pixels*.
 
-Offsets are given as a number.
-Percentages are given as a string, e.g. "50%".
+Some attributes also accept **percentages** of the parent's size. These are provided as stings with a percent suffix, e.g. `"50%"`.
+
+Some properties support **references to other widgets**. If another widget is referenced in a layoutData attribute, it has to be a sibling of the widget the layoutData is applied to. In place of a widget reference, a [selector string](selector.md) can also be given. This selector string is then used to filter all siblings of the widget, using the first match as the reference. In addition to that, the symbolic reference `"prev()"` can be used to refer to the preceding sibling.
+
+Widget references are resolved dynamically, that is, if a referenced widget is added or removed later, the layout will adjust. When a widget reference does not match any of the current siblings, it will be treated like an offset of zero.
 
 ### top, right, bottom, left
 Defines the position of the widget's edge.
@@ -32,7 +33,6 @@ Accepted values:
 - *percentage*: the distance from the parent's opposing edge in percent of the parent's width
 - [*percentage*, *offset*]: the distance from the parent's opposing edge in percent of the parent's width plus a fixed offset in pixels
 - [*widget*, *offset*]: the distance from the given widget's opposing edge in pixels
-
 
 ### centerX
 Defines the horizontal position of the widget relative to the parent's center.
@@ -82,7 +82,7 @@ When `width` is not specified, the width is defined by the difference between `r
 
 When `height` is not specified, the height is defined by the difference between `bottom` and `top`. When either `top` or `bottom` is also missing, the widget will shrink to its intrinsic height, i.e. the minimal height required to display its content.
 
-### Position
+### Fallback position
 
 When neither of `left`, `right`, and `centerX` is specified, the widget will be aligned on the parent's left edge.
 
@@ -103,12 +103,12 @@ When `baseline` is specified, the properties `top`, `bottom`, and `centerY` will
 
 ## Example
 
-```javascript
+```js
 layoutData: {
-  left: 10,          // 10px from left edge
-  top: [label, 10],  // label's bottom edge + 10px, i.e. 10px below label
-  right: [30, 10]    // 30% + 10px from right edge, i.e. at 70% - 10px
-                     // no height or bottom given, i.e. auto-height
+  left: 10,            // 10px from left edge
+  top: ["#label", 10], // label's bottom edge + 10px, i.e. 10px below label
+  right: ["30%", 10]   // 30% + 10px from right edge, i.e. at 70% - 10px
+                       // no height or bottom given, i.e. auto-height
 }
 ```
 
