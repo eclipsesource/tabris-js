@@ -7,7 +7,7 @@ Tabris.js utilizes [Apache Cordova](http://cordova.apache.org) to build and pack
 | Building iOS Apps         |       ✓         |       ✓      |
 | Building Android Apps     |       ✓         |       ✓      |
 | [Integrate Cordova Plugins](cordova.md)     |       ✓      |       ✓      |
-| [Cordova Build Hooks](https://github.com/apache/cordova-app-hello-world/blob/master/hooks/README.md)       |       ✓      |       ✓      |
+| [Cordova Build Hooks](http://cordova.apache.org/docs/en/edge/guide_appdev_hooks_index.md.html#Hooks%20Guide)       |       ✓      |       ✓      |
 | Custom Project Structure  |       ✓      |       ✓      |
 | Own Build Scripts         |              |       ✓      |
 | Using own build hardware  |              |       ✓      |
