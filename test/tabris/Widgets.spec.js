@@ -281,7 +281,7 @@ describe("Widgets", function() {
       widget.set("layoutData", {left: 23, baseline: "#other", right: ["#other", 42]});
       other = tabris.create("TestType", {id: "other"}).appendTo(parent);
 
-      var call = nativeBridge.calls({op: "set"})[1];
+      var call = nativeBridge.calls({op: "set", id: widget.cid})[0];
       var expected = {left: 23, baseline: other.cid, right: [other.cid, 42]};
       expect(call.properties.layoutData).toEqual(expected);
     });
@@ -325,6 +325,8 @@ describe("Widgets", function() {
 
     it("SET layoutData again until selector resolves by setting parent", function() {
       widget = tabris.create("TestType");
+      var oldParent = tabris.create("Composite");
+      widget.appendTo(oldParent);
       nativeBridge.resetCalls();
 
       widget.set("layoutData", {right: "#other"});
@@ -340,6 +342,125 @@ describe("Widgets", function() {
       expect(noRetry.length).toBe(2);
       expect(withoutParent[0].properties.layoutData).toEqual({right: [0, 0]});
       expect(withParent[1].properties.layoutData).toEqual({right: [other.cid, 0]});
+    });
+
+  });
+
+  describe("layout attributes", function() {
+
+    var parent, widget, other;
+
+    beforeEach(function() {
+      parent = tabris.create("Composite");
+      other = tabris.create("TextView", {id: "other"}).appendTo(parent);
+      widget = tabris.create("TextView").appendTo(parent);
+      nativeBridge.resetCalls();
+    });
+
+    ["left", "right", "top", "bottom"].forEach(function(attr) {
+
+      it("modifies layoutData", function() {
+        widget.set(attr, ["#other", 10]);
+
+        expect(widget.get("layoutData")[attr]).toEqual(["#other", 10]);
+      });
+
+      it("resets layoutData properties", function() {
+        var layoutData = {left: 1, right: 2, top: 3, bottom: 4};
+        widget.set("layoutData", layoutData);
+        widget.set(attr, null);
+
+        expect(widget.get("layoutData")).toEqual(_.omit(layoutData, attr));
+      });
+
+      it("getter does not translate selectors", function() {
+        widget.set(attr, ["#other", 10]);
+
+        expect(widget.get(attr)).toEqual(["#other", 10]);
+      });
+
+      it("getter does not translate widgets", function() {
+        widget.set(attr, [other, 42]);
+
+        expect(widget.get(attr)).toEqual([other, 42]);
+      });
+
+      it("getter returns normalized percentages in arrays", function() {
+        widget.set(attr, [23, 42]);
+
+        expect(widget.get(attr)).toEqual(["23%", 42]);
+      });
+
+      it("getter returns arrays with zero percentage as plain offset", function() {
+        widget.set(attr, [0, 42]);
+
+        expect(widget.get(attr)).toBe(42);
+      });
+
+      it("getter normalizes arrays with zero offset", function() {
+        widget.set(attr, ["#other", 0]);
+
+        expect(widget.get(attr)).toBe("#other");
+      });
+
+      it("SETs layoutData", function() {
+        widget.set(attr, 23);
+
+        var call = nativeBridge.calls({op: "set"})[0];
+        var expected = {};
+        expected[attr] = 23;
+        expect(call.properties.layoutData).toEqual(expected);
+      });
+
+    });
+
+    ["width", "height", "centerX", "centerY"].forEach(function(attr) {
+
+      it("modifies layoutData", function() {
+        widget.set(attr, 23);
+
+        expect(widget.get("layoutData")[attr]).toBe(23);
+      });
+
+      it("resets layoutData properties", function() {
+        var layoutData = {centerX: 0, centerY: 0, width: 100, height: 200};
+        widget.set("layoutData", layoutData);
+        widget.set(attr, null);
+
+        expect(widget.get("layoutData")).toEqual(_.omit(layoutData, attr));
+      });
+
+      it("SETs layoutData", function() {
+        widget.set(attr, 23);
+
+        var call = nativeBridge.calls({op: "set"})[0];
+        var expected = {};
+        expected[attr] = 23;
+        expect(call.properties.layoutData).toEqual(expected);
+      });
+
+    });
+
+    it("contradicting attributes can be set temporarily without warning", function() {
+      spyOn(console, "warn");
+
+      widget.set("left", 10).set("width", 10).set("right", 10).set("left", null);
+
+      var call = nativeBridge.calls({op: "set"})[0];
+      var expected = {right: 10, width: 10};
+      expect(call.properties.layoutData).toEqual(expected);
+      expect(console.warn).not.toHaveBeenCalled();
+    });
+
+    it("contradicting attributes will be warned against on flush", function() {
+      spyOn(console, "warn");
+
+      widget.set("left", 10).set("width", 10).set("right", 10);
+
+      var call = nativeBridge.calls({op: "set"})[0];
+      var expected = {right: 10, left: 10};
+      expect(call.properties.layoutData).toEqual(expected);
+      expect(console.warn).toHaveBeenCalled();
     });
 
   });

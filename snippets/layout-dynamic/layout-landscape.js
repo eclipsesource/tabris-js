@@ -2,44 +2,36 @@ var SPACE = Math.max(screen.width, screen.height) > 900 ? 15 : 5;
 
 module.exports = {
   "#red": {
-    layoutData: {
-      left: SPACE,
-      top: SPACE,
-      height: 80,
-      right: ["#blue", SPACE]
-    }
+    left: SPACE,
+    top: SPACE,
+    right: ["#blue", SPACE],
+    height: 80
   },
   "#green": {
-    layoutData: {
-      left: SPACE,
-      top: ["#red", SPACE],
-      right: ["#purple", SPACE],
-      bottom: SPACE
-    }
-  },
-  "#purple": {
-    layoutData: {
-      top: ["#red", SPACE],
-      right: ["#yellow", SPACE],
-      bottom: SPACE,
-      width: 80
-    }
+    left: SPACE,
+    top: ["#red", SPACE],
+    right: ["#purple", SPACE],
+    bottom: SPACE
   },
   "#yellow": {
-    layoutData: {
-      top: ["#red", SPACE],
-      bottom: SPACE,
-      right: ["#blue", SPACE],
-      width: 80
-    }
+    top: ["#red", SPACE],
+    bottom: SPACE,
+    right: ["#blue", SPACE],
+    width: 80
+  },
+  "#purple": {
+    top: ["#red", SPACE],
+    left: null,
+    right: ["#yellow", SPACE],
+    bottom: SPACE,
+    width: 80,
+    height: null
   },
   "#blue": {
     visible: true,
-    layoutData: {
-      top: SPACE,
-      right: SPACE,
-      bottom: SPACE,
-      width: 80
-    }
+    top: SPACE,
+    right: SPACE,
+    bottom: SPACE,
+    width: 80
   }
 };

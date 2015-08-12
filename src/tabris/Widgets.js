@@ -165,6 +165,25 @@
                           tabris.device.get("version") <= 17;
   });
 
+  var layoutAccess = {
+    set: function(name, value) {
+      if (!this._layoutData) {
+        this._layoutData = {};
+      }
+      if (value == null) {
+        delete this._layoutData[name];
+      } else {
+        this._layoutData[name] = value;
+      }
+      if (this._parent) {
+        tabris.Layout.addToQueue(this._parent);
+      }
+    },
+    get: function(name) {
+      return this._layoutData ? this._layoutData[name] || null : null;
+    }
+  };
+
   _.extend(tabris.registerWidget, {
     _defaultEvents: {
       touchstart: {trigger: triggerWithTarget},
@@ -208,12 +227,50 @@
         access: {
           set: function(name, value) {
             this._layoutData = value;
-            renderLayoutData.call(this);
+            if (this._parent) {
+              tabris.Layout.addToQueue(this._parent);
+            }
           },
           get: function() {
             return this._layoutData || null;
           }
         }
+      },
+      left: {
+        type: "edge",
+        access: layoutAccess
+      },
+      right: {
+        type: "edge",
+        access: layoutAccess
+      },
+      top: {
+        type: "edge",
+        access: layoutAccess
+      },
+      bottom: {
+        type: "edge",
+        access: layoutAccess
+      },
+      width: {
+        type: "dimension",
+        access: layoutAccess
+      },
+      height: {
+        type: "dimension",
+        access: layoutAccess
+      },
+      centerX: {
+        type: "dimension",
+        access: layoutAccess
+      },
+      centerY: {
+        type: "dimension",
+        access: layoutAccess
+      },
+      baseline: {
+        type: "sibling",
+        access: layoutAccess
       },
       font: "font",
       backgroundImage: "image",
@@ -309,18 +366,10 @@
     "swipe:down": {type: "swipe", direction: "down"}
   };
 
-  var isIOS = false;
-  tabris.load(function() {
-    isIOS = tabris.device.get("platform") === "iOS";
-  });
-
   function renderLayoutData() {
-    if (isIOS && this.type === "Page") {
-      // Temporary workaround for #583. Rendering layoutData for Page can make it disappear in iOS.
-      return;
-    }
     if (this._layoutData) {
-      this._nativeSet("layoutData", tabris.Layout.resolveReferences(this._layoutData, this));
+      var checkedData = tabris.Layout.checkConsistency(this._layoutData);
+      this._nativeSet("layoutData", tabris.Layout.resolveReferences(checkedData, this));
     }
   }
 

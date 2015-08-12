@@ -2,12 +2,95 @@
 
   tabris.Layout = {
 
+    checkConsistency: function(layoutData) {
+      var result = layoutData;
+      if ("centerX" in result) {
+        if (("left" in result) || ("right" in result)) {
+          console.warn("Inconsistent layoutData: centerX overrides left and right");
+          result = _.omit(result, ["left", "right"]);
+        }
+      }
+      if ("baseline" in result) {
+        if (("top" in result) || ("bottom" in result) || ("centerY" in result)) {
+          console.warn("Inconsistent layoutData: baseline overrides top, bottom, and centerY");
+          result = _.omit(result, ["top", "bottom", "centerY"]);
+        }
+      } else if ("centerY" in result) {
+        if (("top" in result) || ("bottom" in result)) {
+          console.warn("Inconsistent layoutData: centerY overrides top and bottom");
+          result = _.omit(result, ["top", "bottom"]);
+        }
+      }
+      if ("left" in result && "right" in result && "width" in result) {
+        console.warn("Inconsistent layoutData: left and right are set, ignore width");
+        result = _.omit(result, ["width"]);
+      }
+      if ("top" in result && "bottom" in result && "height" in result) {
+        console.warn("Inconsistent layoutData: top and bottom are set, ignore height");
+        result = _.omit(result, ["height"]);
+      }
+      return result;
+    },
+
     encodeLayoutData: function(layoutData) {
-      return encodeAttributes(checkConsistency(layoutData));
+      var result = {};
+      for (var key in layoutData) {
+        if (!(key in encoders)) {
+          throw new Error("Invalid key '" + key + "' in layoutData");
+        }
+        try {
+          result[key] = encoders[key](layoutData[key]);
+        } catch (error) {
+          throw new Error("Invalid value for '" + key + "': " + error.message);
+        }
+      }
+      return result;
+    },
+
+    encodeEdge: function(value) {
+      if (Array.isArray(value)) {
+        return encodeArray(value);
+      }
+      if (isNumber(value)) {
+        return value;
+      }
+      if (isPercentage(value)) {
+        var percentage = parseInt(value);
+        return percentage === 0 ? 0 : [percentage, 0];
+      }
+      if (isWidgetRef(value)) {
+        return [value, 0];
+      }
+      throw new Error("invalid type");
+    },
+
+    encodeSize: function(value) {
+      if (!isNumber(value)) {
+        throw new Error("must be a number");
+      }
+      return value;
+    },
+
+    encodeRef: function(value) {
+      if (!isWidgetRef(value)) {
+        throw new Error("must be a widget reference");
+      }
+      return value;
     },
 
     decodeLayoutData: function(layoutData) {
-      return decodeAttributes(layoutData);
+      if (!layoutData) {
+        return null;
+      }
+      var result = {};
+      for (var key in layoutData) {
+        result[key] = tabris.Layout.decodeAttribute(layoutData[key]);
+      }
+      return result;
+    },
+
+    decodeAttribute: function(value) {
+      return Array.isArray(value) ? decodeArray(value) : value;
     },
 
     resolveReferences: function(layoutData, targetWidget) {
@@ -36,70 +119,17 @@
 
   var layoutQueue = {};
 
-  function checkConsistency(layoutData) {
-    if ("centerX" in layoutData) {
-      if (("left" in layoutData) || ("right" in layoutData)) {
-        console.warn("Inconsistent layoutData: centerX overrides left and right");
-        return _.omit(layoutData, ["left", "right"]);
-      }
-    }
-    if ("baseline" in layoutData) {
-      if (("top" in layoutData) || ("bottom" in layoutData) || ("centerY" in layoutData)) {
-        console.warn("Inconsistent layoutData: baseline overrides top, bottom, and centerY");
-        return _.omit(layoutData, ["top", "bottom", "centerY"]);
-      }
-    } else if ("centerY" in layoutData) {
-      if (("top" in layoutData) || ("bottom" in layoutData)) {
-        console.warn("Inconsistent layoutData: centerY overrides top and bottom");
-        return _.omit(layoutData, ["top", "bottom"]);
-      }
-    }
-    return layoutData;
-  }
-
-  function encodeAttributes(layoutData) {
-    var result = {};
-    for (var key in layoutData) {
-      if (!(key in encoders)) {
-        throw new Error("Invalid key '" + key + "' in layoutData");
-      }
-      try {
-        result[key] = encoders[key](layoutData[key]);
-      } catch (error) {
-        throw new Error("Invalid value for '" + key + "': " + error.message);
-      }
-    }
-    return result;
-  }
-
   var encoders = {
-    width: encodeSize,
-    height: encodeSize,
-    left: encodeEdge,
-    right: encodeEdge,
-    top: encodeEdge,
-    bottom: encodeEdge,
-    centerX: encodeSize,
-    centerY: encodeSize,
-    baseline: encodeRef
+    width: tabris.Layout.encodeSize,
+    height: tabris.Layout.encodeSize,
+    left: tabris.Layout.encodeEdge,
+    right: tabris.Layout.encodeEdge,
+    top: tabris.Layout.encodeEdge,
+    bottom: tabris.Layout.encodeEdge,
+    centerX: tabris.Layout.encodeSize,
+    centerY: tabris.Layout.encodeSize,
+    baseline: tabris.Layout.encodeRef
   };
-
-  function encodeEdge(value) {
-    if (Array.isArray(value)) {
-      return encodeArray(value);
-    }
-    if (isNumber(value)) {
-      return value;
-    }
-    if (isPercentage(value)) {
-      var percentage = parseInt(value);
-      return percentage === 0 ? 0 : [percentage, 0];
-    }
-    if (isWidgetRef(value)) {
-      return [value, 0];
-    }
-    throw new Error("invalid type");
-  }
 
   function encodeArray(array) {
     if (array.length !== 2) {
@@ -116,35 +146,6 @@
       throw new Error("second element must be a number");
     }
     return ref === 0 ? offset : [ref, offset];
-  }
-
-  function encodeSize(value) {
-    if (!isNumber(value)) {
-      throw new Error("must be a number");
-    }
-    return value;
-  }
-
-  function encodeRef(value) {
-    if (!isWidgetRef(value)) {
-      throw new Error("must be a widget reference");
-    }
-    return value;
-  }
-
-  function decodeAttributes(layoutData) {
-    if (!layoutData) {
-      return null;
-    }
-    var result = {};
-    for (var key in layoutData) {
-      result[key] = decodeAttribute(layoutData[key]);
-    }
-    return result;
-  }
-
-  function decodeAttribute(value) {
-    return Array.isArray(value) ? decodeArray(value) : value;
   }
 
   function decodeArray(array) {

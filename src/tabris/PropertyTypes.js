@@ -124,6 +124,33 @@
       }
     },
 
+    edge: {
+      encode: function(value) {
+        return value == null ? null : tabris.Layout.encodeEdge(value);
+      },
+      decode: function(value) {
+        return tabris.Layout.decodeAttribute(value);
+      }
+    },
+
+    dimension: {
+      encode: function(value) {
+        return value == null ? null : tabris.Layout.encodeSize(value);
+      },
+      decode: function(value) {
+        return tabris.Layout.decodeAttribute(value);
+      }
+    },
+
+    sibling: {
+      encode: function(value) {
+        return value == null ? null : tabris.Layout.encodeRef(value);
+      },
+      decode: function(value) {
+        return tabris.Layout.decodeAttribute(value);
+      }
+    },
+
     bounds: {
       encode: function(value) {
         return [value.left, value.top, value.width, value.height];
