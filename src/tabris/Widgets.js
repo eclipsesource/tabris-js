@@ -196,35 +196,43 @@
       visible: {
         type: "boolean",
         default: true,
-        set: function(name, value, options) {
-          this._nativeSet("visibility", value);
-          this._storeProperty(name, value, options);
+        access: {
+          set: function(name, value, options) {
+            this._nativeSet("visibility", value);
+            this._storeProperty(name, value, options);
+          }
         }
       },
       layoutData: {
         type: "layoutData",
-        set: function(name, value) {
-          this._layoutData = value;
-          renderLayoutData.call(this);
-        },
-        get: function() {
-          return this._layoutData || null;
+        access: {
+          set: function(name, value) {
+            this._layoutData = value;
+            renderLayoutData.call(this);
+          },
+          get: function() {
+            return this._layoutData || null;
+          }
         }
       },
       font: "font",
       backgroundImage: "image",
       bounds: {
         type: "bounds",
-        set: function() {
-          console.warn(this.type + ": Can not set read-only property \"bounds\".");
+        access: {
+          set: function() {
+            console.warn(this.type + ": Can not set read-only property \"bounds\".");
+          }
         }
       },
       background: "color",
       textColor: {
         type: "color",
-        set: function(name, value, options) {
-          this._nativeSet("foreground", value);
-          this._storeProperty(name, value, options);
+        access: {
+          set: function(name, value, options) {
+            this._nativeSet("foreground", value);
+            this._storeProperty(name, value, options);
+          }
         }
       },
       opacity: {
@@ -249,31 +257,37 @@
       },
       id: {
         type: "string",
-        set: function(name, value) {
-          this.id = value;
-        },
-        get: function() {
-          return this.id;
+        access: {
+          set: function(name, value) {
+            this.id = value;
+          },
+          get: function() {
+            return this.id;
+          }
         }
       },
       class: {
         type: "string",
-        set: function(name, value) {
-          this.classList = value.trim().split(/\s+/);
-        },
-        get: function() {
-          return this.classList.join(" ");
+        access: {
+          set: function(name, value) {
+            this.classList = value.trim().split(/\s+/);
+          },
+          get: function() {
+            return this.classList.join(" ");
+          }
         }
       },
       gestures: {
-        set: function(name, gestures) {
-          this._gestures = _.extend({}, defaultGestures, gestures);
-        },
-        get: function() {
-          if (!this._gestures) {
-            this._gestures = _.extend({}, defaultGestures);
+        access: {
+          set: function(name, gestures) {
+            this._gestures = _.extend({}, defaultGestures, gestures);
+          },
+          get: function() {
+            if (!this._gestures) {
+              this._gestures = _.extend({}, defaultGestures);
+            }
+            return this._gestures;
           }
-          return this._gestures;
         }
       }
     })
@@ -411,9 +425,11 @@
       maxLines: {
         type: ["nullable", "natural"],
         default: null,
-        set: function(name, value, options) {
-          this._nativeSet(name, value <= 0 ? null : value);
-          this._storeProperty(name, value, options);
+        access: {
+          set: function(name, value, options) {
+            this._nativeSet(name, value <= 0 ? null : value);
+            this._storeProperty(name, value, options);
+          }
         }
       },
       text: {type: "string", default: ""}
@@ -553,12 +569,14 @@
     _properties: {
       type: "boolean",
       selection: {
-        get: function() {
-          return this._nativeGet("checked");
-        },
-        set: function(name, value, options) {
-          this._nativeSet("checked", value);
-          this._triggerChangeEvent(name, value, options);
+        access: {
+          get: function() {
+            return this._nativeGet("checked");
+          },
+          set: function(name, value, options) {
+            this._nativeSet("checked", value);
+            this._triggerChangeEvent(name, value, options);
+          }
         }
       }
     }

@@ -9,29 +9,35 @@ tabris.registerType("SearchAction", {
     placementPriority: {
       type: ["choice", {low: "LOW", high: "HIGH", normal: "NORMAL"}],
       nocache: true,
-      get: function() {
-        var value = this._nativeGet("placementPriority");
-        return value ? value.toLowerCase() : value;
+      access: {
+        get: function() {
+          var value = this._nativeGet("placementPriority");
+          return value ? value.toLowerCase() : value;
+        }
       }
     },
     title: {type: "string", default: ""},
     visible: {
       type: "boolean",
       default: true,
-      set: function(name, value, options) {
-        this._nativeSet("visibility", value);
-        this._storeProperty(name, value, options);
+      access: {
+        set: function(name, value, options) {
+          this._nativeSet("visibility", value);
+          this._storeProperty(name, value, options);
+        }
       }
     },
     proposals: {default: function() {return [];}},
     text: {
       type: "string",
-      set: function(name, value, options) {
-        this._nativeSet("query", value);
-        this._triggerChangeEvent(name, value, options);
-      },
-      get: function() {
-        return this._nativeGet("query");
+      access: {
+        set: function(name, value, options) {
+          this._nativeSet("query", value);
+          this._triggerChangeEvent(name, value, options);
+        },
+        get: function() {
+          return this._nativeGet("query");
+        }
       }
     },
     message: {type: "string", default: ""}

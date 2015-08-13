@@ -12,29 +12,35 @@
       itemHeight: {
         type: "any", // "function|natural",
         default: 0,
-        set: function(name, value, options) {
-          if (typeof value !== "function") {
-            // Required for 1.0 compatibility
-            this._nativeSet("itemHeight", value);
+        access: {
+          set: function(name, value, options) {
+            if (typeof value !== "function") {
+              // Required for 1.0 compatibility
+              this._nativeSet("itemHeight", value);
+            }
+            this._storeProperty(name, value, options);
           }
-          this._storeProperty(name, value, options);
         }
       },
       items: {
         type: "array",
-        set: function(name, value) {
-          this._setItems(value);
-        },
-        get: function() {
-          return this._items.concat();
+        access: {
+          set: function(name, value) {
+            this._setItems(value);
+          },
+          get: function() {
+            return this._items.concat();
+          }
         }
       },
       initializeCell: {default: null},
       cellType: {
         type: "any", // "string|function",
         default: null,
-        set: function(name, value, options) {
-          this._storeProperty(name, value, options);
+        access: {
+          set: function(name, value, options) {
+            this._storeProperty(name, value, options);
+          }
         }
       },
       refreshEnabled: {type: "boolean", default: false},

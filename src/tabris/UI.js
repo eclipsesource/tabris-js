@@ -53,20 +53,24 @@ tabris.registerWidget("_UI", {
     image: "image",
     textColor: {
       type: "color",
-      set: function(name, value, options) {
-        this._nativeSet("foreground", value);
-        this._storeProperty(name, value, options);
+      access: {
+        set: function(name, value, options) {
+          this._nativeSet("foreground", value);
+          this._storeProperty(name, value, options);
+        }
       }
     },
     background: "color",
     toolbarVisible: {type: "boolean", default: true},
     activePage: {
-      set: function(name, page, options) {
-        if (!(page instanceof tabris.Page)) {
-          throw new Error("Value for activePage is not a page");
+      access: {
+        set: function(name, page, options) {
+          if (!(page instanceof tabris.Page)) {
+            throw new Error("Value for activePage is not a page");
+          }
+          this._nativeSet("activePage", page._page.cid);
+          this._storeProperty(name, page, options);
         }
-        this._nativeSet("activePage", page._page.cid);
-        this._storeProperty(name, page, options);
       }
     }
   },

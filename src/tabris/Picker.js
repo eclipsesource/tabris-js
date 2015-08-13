@@ -30,23 +30,27 @@
       items: {type: ["array", "string"], default: function() {return [];}},
       selectionIndex: {
         type: "natural",
-        set: function(name, value, options) {
-          this._nativeSet(name, value);
-          this._triggerChangeEvent(name, value, options);
+        access: {
+          set: function(name, value, options) {
+            this._nativeSet(name, value);
+            this._triggerChangeEvent(name, value, options);
+          }
         }
       },
       selection: {
-        set: function(name, item, options) {
-          var index = this._getItemIndex(item);
-          if (index !== -1) {
-            this.set("selectionIndex", index);
-            this._triggerChangeEvent(name, item, options);
-          } else {
-            console.warn("Could not set picker selection " + item + ": item not found");
+        access: {
+          set: function(name, item, options) {
+            var index = this._getItemIndex(item);
+            if (index !== -1) {
+              this.set("selectionIndex", index);
+              this._triggerChangeEvent(name, item, options);
+            } else {
+              console.warn("Could not set picker selection " + item + ": item not found");
+            }
+          },
+          get: function() {
+            return this._getItem(this.get("selectionIndex"));
           }
-        },
-        get: function() {
-          return this._getItem(this.get("selectionIndex"));
         }
       }
     },

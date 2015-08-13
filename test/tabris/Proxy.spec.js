@@ -10,7 +10,7 @@ describe("Proxy", function() {
     tabris._init(nativeBridge);
     tabris.registerWidget("TestType", {
       _supportsChildren: true,
-      _properties: {foo: "any"},
+      _properties: {foo: "any", uncachedProperty: {type: "any", nocache: true}},
       _events: {bar: true}
     });
   });
@@ -342,8 +342,9 @@ describe("Proxy", function() {
 
       it("returns uncached value from native", function() {
         spyOn(nativeBridge, "get").and.returnValue(23);
+        proxy.set("uncachedProperty", 12);
 
-        var result = proxy.get("foo");
+        var result = proxy.get("uncachedProperty");
 
         expect(result).toBe(23);
       });
@@ -381,22 +382,6 @@ describe("Proxy", function() {
         var result = proxy.get("foo");
 
         expect(result).toBe("rgba(255, 0, 255, 1)");
-      });
-
-      it("calls custom get function with property name", function() {
-        tabris.TestType._properties.prop = {type: "any", get: jasmine.createSpy()};
-
-        proxy.get("prop");
-
-        expect(tabris.TestType._properties.prop.get).toHaveBeenCalledWith("prop");
-      });
-
-      it("returns value from custom get function", function() {
-        tabris.TestType._properties.prop = {type: "any", get: function() { return 23; }};
-
-        var result = proxy.get("prop");
-
-        expect(result).toBe(23);
       });
 
       it("raises no warning for unknown property", function() {
@@ -442,16 +427,6 @@ describe("Proxy", function() {
         expect(properties.foo).toBe(other);
       });
 
-      it("uses custom set function", function() {
-        tabris.TestType._properties.foo = {type: "any", set: jasmine.createSpy()};
-        var options = {option: "myOption"};
-
-        proxy.set("foo", "bar", options);
-
-        expect(nativeBridge.calls({op: "set", id: proxy.cid}).length).toBe(0);
-        expect(tabris.TestType._properties.foo.set).toHaveBeenCalledWith("foo", "bar", options);
-      });
-
       it("raises no warning for unknown property", function() {
         spyOn(console, "warn");
 
@@ -474,18 +449,6 @@ describe("Proxy", function() {
         proxy.set("knownProperty", "foo");
 
         expect(nativeBridge.calls({op: "set"}).length).toBe(0);
-      });
-
-      it("raises a warning if setter is a function that throws", function() {
-        tabris.TestType._properties.foo = {type: "any", set: function() {
-          throw new Error("My Error");
-        }};
-        spyOn(console, "warn");
-
-        expect(function() {
-          proxy.set("foo", true);
-        }).toThrow();
-        expect(console.warn).not.toHaveBeenCalled();
       });
 
       it("returns self to allow chaining", function() {

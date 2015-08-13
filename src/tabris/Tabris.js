@@ -115,20 +115,22 @@
     var result = {};
     for (var property in properties) {
       var entry = properties[property];
-      var shortHand = (typeof entry === "string" || Array.isArray(entry));
-      result[property] = shortHand ? {type: entry} : entry;
-      if (result[property] === true) {
+      if (entry === true) {
         // TODO: Remove this block once current tabris.js is considered incompatible with developer
         //       apps older than tabris 1.2 (which have cordova.js files built in using this syntax)
         console.warn("A custom component uses deprecated property type value 'true'");
-        result[property] = {type: "any"};
+        entry = "any";
       }
-      if (!result[property].type) {
-        result[property].type = "any";
-      }
-      result[property].type = resolveType(result[property].type);
-      result[property].set = result[property].set || defaultSetter;
-      result[property].get = result[property].get || defaultGetter;
+      var shortHand = (typeof entry === "string" || Array.isArray(entry));
+      result[property] = {
+        type: resolveType((shortHand ? entry : entry.type) || "any"),
+        default: entry.default,
+        nocache: entry.nocache,
+        access: {
+          set: entry.access && entry.access.set || defaultSetter,
+          get: entry.access && entry.access.get || defaultGetter
+        }
+      };
     }
     return result;
   };

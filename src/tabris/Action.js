@@ -6,9 +6,11 @@ tabris.registerWidget("Action", {
     image: {type: "image", default: null},
     placementPriority: {
       type: ["choice", {low: "LOW", high: "HIGH", normal: "NORMAL"}],
-      get: function() {
-        var value = this._nativeGet("placementPriority");
-        return value ? value.toLowerCase() : value;
+      access: {
+        get: function() {
+          var value = this._nativeGet("placementPriority");
+          return value ? value.toLowerCase() : value;
+        }
       },
       nocache: true
     },

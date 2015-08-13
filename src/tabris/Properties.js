@@ -82,12 +82,12 @@
 
     _getPropertyGetter: function(name) {
       var prop = this.constructor._properties[name];
-      return prop ? prop.get : undefined;
+      return prop && prop.access ? prop.access.get : undefined;
     },
 
     _getPropertySetter: function(name) {
       var prop = this.constructor._properties[name];
-      return prop ? prop.set : undefined;
+      return prop && prop.access ? prop.access.set : undefined;
     },
 
     _triggerChangeEvent: function(propertyName, newEncodedValue, options) {
