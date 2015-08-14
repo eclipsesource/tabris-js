@@ -1,7 +1,7 @@
 # Tabris.js
 
 Tabris.js is a framework for developing mobile apps with native UIs in JavaScript.
-iOS and Android apps can be built entirely from one code base, which frees developers from the task of managing code for the two platforms individually.
+iOS and Android apps can be built entirely from one code base, which frees you from the task of managing code for the two platforms individually.
 
 ## Getting Started
 
@@ -19,7 +19,13 @@ Tabris.js features an online build service, which means there is no need to down
 
 ## Web APIs
 
-Whenever needed Tabris.js makes use of web technologies to enhance functionality or make development easier. Tabris.js can integrate with existing JavaScript libraries, node modules and Cordova plugins. Using Cordova plugins is not associated with any performance penalties as only native code is used (no WebViews involved). Tabris.js fluent programming model inspired by Backbone makes the development easy even for programmers who are new to JavaScript, while Common.js and npm provide an easy to comprehend, familiar project structure. In addition, Tabris.js maintains W3C compatibility and is able to implement many APIs core to web applications, e.g. XMLHttpRequest or the 2d canvas.
+Tabris.js provides many web APIs, including:
+
+* Canvas 2d context
+* XMLHttpRequest
+* localStorage
+
+Tabris.js also makes use of Cordova plugins, Cordova build, npm and the CommonJS module system. The programming model is inspired, among others, by Backbone and jQuery.
 
 ## Build tabris module
 
