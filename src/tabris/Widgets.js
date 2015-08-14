@@ -295,7 +295,16 @@
     "swipe:down": {type: "swipe", direction: "down"}
   };
 
+  var isIOS = false;
+  tabris.load(function() {
+    isIOS = tabris.device.get("platform") === "iOS";
+  });
+
   function renderLayoutData() {
+    if (isIOS && this.type === "Page") {
+      // Temporary workaround for #583. Rendering layoutData for Page can make it disappear in iOS.
+      return;
+    }
     if (this._layoutData) {
       this._nativeSet("layoutData", tabris.Layout.resolveReferences(this._layoutData, this));
     }
