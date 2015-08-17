@@ -46,3 +46,8 @@ This blog post series takes a closer look at the examples.
 - [Animations](http://eclipsesource.com/blogs/2015/04/14/tabris-js-examples-animations/)
 - [Drawing on the Canvas](http://eclipsesource.com/blogs/2015/04/15/tabris-js-examples-drawing-on-the-canvas/)
 - [Network Access](http://eclipsesource.com/blogs/2015/04/24/tabris-js-examples-network-access/)
+
+## Custom Widget Documentation (provisional)
+- [Custom Widgets](custom-widgets.md) - JavaScript implementation
+- [Custom Widgets - Android](custom-widgets-android.md) - Android implementation
+

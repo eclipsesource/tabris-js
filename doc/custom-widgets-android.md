@@ -1,6 +1,6 @@
 # Custom Widgets Android
 
-:exclamation: **The custom widget API is not final and may change without prior notice.**
+> <img align="left" src="img/note.png"> <i>The custom widget API is not final yet. It may change without prior notice!</i>
 
 A Tabris.js widget consists of a [JavaScript API](custom-widgets.js) and a native client side implementation. This document describes how to create the native implementation for a custom widget on the Android platform.
 
