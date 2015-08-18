@@ -59,10 +59,12 @@ describe("CanvasContext", function() {
       expect(canvas.getContext("foo", 100, 200)).toBe(null);
     });
 
-    it("creates a native GC", function() {
+    it("creates a native GC with parent", function() {
       canvas.getContext("2d", 100, 200);
 
-      expect(nativeBridge.calls({op: "create", type: "rwt.widgets.GC"}).length).toBe(1);
+      var createCalls = nativeBridge.calls({op: "create", type: "rwt.widgets.GC"});
+      expect(createCalls.length).toBe(1);
+      expect(createCalls[0].properties.parent).toBe(canvas.cid);
     });
 
     it("creates and returns graphics context", function() {
