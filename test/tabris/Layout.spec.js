@@ -128,7 +128,7 @@ describe("Layout:", function() {
           var layoutData = {};
           layoutData[attr] = [23];
           encode(layoutData);
-        }).toThrowError("Invalid value for '" + attr + "': array length must be 2");
+        }).toThrowError("Invalid value for '" + attr + "': list length must be 2");
       });
 
     });
@@ -172,6 +172,20 @@ describe("Layout:", function() {
     it("translates zero percentage to offset", function() {
       expect(encode({left: "0%", top: ["0%", 23]}))
         .toEqual({left: 0, top: 23});
+    });
+
+    it("translates `percentage offset` strings to arrays", function() {
+      var input = {left: "30%   5", top: "1% -7", bottom: "-5% +9", right: "100% -10.4"};
+      var expected = {left: [30, 5], top: [1, -7], bottom: [-5, 9], right: [100, -10.4]};
+
+      expect(encode(input)).toEqual(expected);
+    });
+
+    it("translates `selector offset` strings to arrays", function() {
+      var input = {left: "#foo   5", top: "#bar -7", bottom: "#boo +9", right: "#far -10.4"};
+      var expected = {left: ["#foo", 5], top: ["#bar", -7], bottom: ["#boo", 9], right: ["#far", -10.4]};
+
+      expect(encode(input)).toEqual(expected);
     });
 
     it("does not encode widget refs", function() {

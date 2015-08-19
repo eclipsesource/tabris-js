@@ -48,6 +48,9 @@
     },
 
     encodeEdge: function(value) {
+      if (isStringList(value)) {
+        return encodeStringList(value);
+      }
       if (Array.isArray(value)) {
         return encodeArray(value);
       }
@@ -131,9 +134,15 @@
     baseline: tabris.Layout.encodeRef
   };
 
+  function encodeStringList(value) {
+    var array = value.split(/\s+/);
+    array[1] = parseFloat(array[1]);
+    return encodeArray(array);
+  }
+
   function encodeArray(array) {
     if (array.length !== 2) {
-      throw new Error("array length must be 2");
+      throw new Error("list length must be 2");
     }
     var ref = array[0];
     var offset = array[1];
@@ -191,6 +200,9 @@
     return tabris.PropertyTypes.proxy.encode(ref) || 0;
   }
 
+  function isStringList(value) {
+    return typeof value === "string" && value.indexOf(" ") !== -1;
+  }
   function isPercentage(value) {
     return typeof value === "string" && value[value.length - 1] === "%" && !isNaN(parseInt(value));
   }

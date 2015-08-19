@@ -32,7 +32,9 @@ Accepted values:
 - *widget*: attach this edge to the given widget's opposing edge
 - *percentage*: the distance from the parent's opposing edge in percent of the parent's width
 - [*percentage*, *offset*]: the distance from the parent's opposing edge in percent of the parent's width plus a fixed offset in pixels
+- "*percentage* *offset*": Same as above, but as space-separated string list instead of array
 - [*widget*, *offset*]: the distance from the given widget's opposing edge in pixels
+- "*widget* *offset*": Same as above, but as space-separated string list instead of array. Widget can be given as selector or `"prev()"`.
 
 ### centerX
 Defines the horizontal position of the widget relative to the parent's center.

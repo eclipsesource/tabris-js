@@ -19,13 +19,13 @@ tabris.create("Composite", {
 // ... by id ...
 
 tabris.create("Composite", {
-  layoutData: {left: ["#bluebox", 10], top: ["#bluebox", 10], width: 100, height: 100},
+  layoutData: {left: "#bluebox 10", top: "#bluebox 10", width: 100, height: 100},
   background: "green"
 }).appendTo(page);
 
 // ... or by a symbolic reference to the preceeding sibling
 
 tabris.create("Composite", {
-  layoutData: {left: ["prev()", 10], top: ["prev()", 10], width: 100, height: 100},
+  layoutData: {left: "prev() 10", top: "prev() 10", width: 100, height: 100},
   background: "yellow"
 }).appendTo(page);
