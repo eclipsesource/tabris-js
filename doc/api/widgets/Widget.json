@@ -99,7 +99,7 @@
     },
     "layoutData": {
       "type": "LayoutData",
-      "description": "Specifies how the widget should be arranged in a layout. See [Layout](layout.md)."
+      "description": "Specifies how the widget should be arranged in a layout. See [Layout](../layout.md)."
     },
     "font": {
       "type": "Font",
@@ -197,7 +197,7 @@
         {"name": "widget", "type": "Widget"},
         {"name": "gesture", "type": "TouchEvent"}
       ],
-      "description": "Fired when a widget is touched. See [Touch Events](touch.md)."
+      "description": "Fired when a widget is touched. See [Touch Events](../touch.md)."
     },
     "touchmove": {
       "parameters": [
