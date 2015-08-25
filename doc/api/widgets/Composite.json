@@ -34,7 +34,7 @@
       "parameters": [
         {"name": "widget", "type": "Composite"},
         {"name": "child", "type": "Widget", "description": "The widget that was removed."},
-        {"name": "options", "type": "Object", "description": "Contains the index of the removed child widget: `{index: number})`"}
+        {"name": "options", "type": "Object", "description": "Contains the index of the removed child widget, e.g. `{index: number}`"}
       ],
       "description": "Fired when a child is removed from this widget."
     }

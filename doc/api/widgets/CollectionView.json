@@ -38,7 +38,7 @@
       "parameters": [
         {"name": "widget", "type": "CollectionView"},
         {"name": "item", "type": "mixed", "description": "The item that was selected."},
-        {"name": "options", "type": "Object", "description": "Contains the index of the selected item: `{index: number}`"}
+        {"name": "options", "type": "Object", "description": "Contains the index of the selected item, e.g. `{index: number}`"}
       ],
       "description": "Fired when a collection item is selected."
     },

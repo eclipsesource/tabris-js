@@ -34,7 +34,7 @@
       "parameters": [
         {"name": "widget", "type": "Picker"},
         {"name": "selection", "type": "string", "description": "The new value of *[selection](#selection)*."},
-        {"name": "options", "type": "Object", "description": "Contains the index of the selected item: `{index: number}`"}
+        {"name": "options", "type": "Object", "description": "Contains the index of the selected item, e.g. `{index: number}`"}
       ],
       "description": "Fired an item was selected by the user."
     }
