@@ -11,8 +11,11 @@
   },
   "events": {
     "scroll": {
-      "parameters": ["scrollView", "offset"],
-      "description": "Fired on scrolling. The *offset* object indicates the current scrolling position: `{x: number, y: number}`."
+      "parameters": [
+        {"name": "widget", "type": "ScrollView"},
+        {"name": "offset", "type": "Object", "description": "Indicates the current scrolling position, e.g. `{x: number, y: number}`"}
+      ],
+      "description": "Fired on scrolling."
     }
   },
   "links": [
