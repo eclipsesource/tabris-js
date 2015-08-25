@@ -23,12 +23,12 @@
   },
   "links": [
     {
-      "title": "Simple Label snippet",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/label/label.js"
+      "title": "Simple TextView snippet",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/textview/textview.js"
     },
     {
-      "title": "Snippet for Label with markup",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/label-markup/label-markup.js"
+      "title": "Snippet for TextView with markup",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/textview-markup/textview-markup.js"
     }
   ]
 }
