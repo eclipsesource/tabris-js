@@ -289,6 +289,13 @@
           set: function(name, value, options) {
             this._nativeSet("foreground", value);
             this._storeProperty(name, value, options);
+          },
+          get: function(name) {
+            var result = this._getStoredProperty(name);
+            if (result === undefined) {
+              result = this._nativeGet("foreground");
+            }
+            return result;
           }
         }
       },

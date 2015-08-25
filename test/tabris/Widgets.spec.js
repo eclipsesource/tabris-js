@@ -161,7 +161,11 @@ describe("Widgets", function() {
     });
 
     it("translates textColor to string", function() {
-      spyOn(nativeBridge, "get").and.returnValue([170, 255, 0, 128]);
+      spyOn(nativeBridge, "get").and.callFake(function(id, name) {
+        if (name === "foreground") {
+          return [170, 255, 0, 128];
+        }
+      });
 
       var result = widget.get("textColor");
 
@@ -169,7 +173,11 @@ describe("Widgets", function() {
     });
 
     it("translates background to string", function() {
-      spyOn(nativeBridge, "get").and.returnValue([170, 255, 0, 128]);
+      spyOn(nativeBridge, "get").and.callFake(function(id, name) {
+        if (name === "background") {
+          return [170, 255, 0, 128];
+        }
+      });
 
       var result = widget.get("background");
 
