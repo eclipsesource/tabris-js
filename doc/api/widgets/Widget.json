@@ -231,14 +231,14 @@
     "animationstart": {
       "parameters": [
         {"name": "widget", "type": "Widget"},
-        {"name": "options", "type": "Object", "description": "The *options* object given [when `animate` was called](../animations.md)."}
+        {"name": "options", "type": "Object", "description": "The *options* object given [when `animate` was called](#animateproperties-options)."}
       ],
       "decription": "Fired when an animation starts playing."
     },
     "animationend": {
       "parameters": [
         {"name": "widget", "type": "Widget"},
-        {"name": "options", "type": "Object", "description": "The *options* object given [when `animate` was called](../animations.md)."}
+        {"name": "options", "type": "Object", "description": "The *options* object given [when `animate` was called](#animateproperties-options)."}
       ],
       "description:": "Fired when an animation has completed."
     },
