@@ -272,7 +272,15 @@
         type: "sibling",
         access: layoutAccess
       },
-      font: "font",
+      font: {
+        type: "font",
+        access: {
+          set: function(name, value, options) {
+            this._nativeSet(name, value === undefined ? null : value);
+            this._storeProperty(name, value, options);
+          }
+        }
+      },
       backgroundImage: "image",
       bounds: {
         type: "bounds",
@@ -282,12 +290,20 @@
           }
         }
       },
-      background: "color",
+      background: {
+        type: "color",
+        access: {
+          set: function(name, value, options) {
+            this._nativeSet(name, value === undefined ? null : value);
+            this._storeProperty(name, value, options);
+          }
+        }
+      },
       textColor: {
         type: "color",
         access: {
           set: function(name, value, options) {
-            this._nativeSet("foreground", value);
+            this._nativeSet("foreground", value === undefined ? null : value);
             this._storeProperty(name, value, options);
           },
           get: function(name) {

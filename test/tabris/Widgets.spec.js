@@ -96,6 +96,8 @@ describe("Widgets", function() {
     });
 
     it("support 'initial' for textColor, background and font", function() {
+      widget.set({textColor: "red", background: "green", font: "23px Arial"});
+      nativeBridge.resetCalls();
       widget.set({textColor: "initial", background: "initial", font: "initial"});
 
       var call = nativeBridge.calls({op: "set"})[0];
@@ -161,11 +163,7 @@ describe("Widgets", function() {
     });
 
     it("translates textColor to string", function() {
-      spyOn(nativeBridge, "get").and.callFake(function(id, name) {
-        if (name === "foreground") {
-          return [170, 255, 0, 128];
-        }
-      });
+      spyOn(nativeBridge, "get").and.returnValue([170, 255, 0, 128]);
 
       var result = widget.get("textColor");
 
@@ -173,11 +171,7 @@ describe("Widgets", function() {
     });
 
     it("translates background to string", function() {
-      spyOn(nativeBridge, "get").and.callFake(function(id, name) {
-        if (name === "background") {
-          return [170, 255, 0, 128];
-        }
-      });
+      spyOn(nativeBridge, "get").and.returnValue([170, 255, 0, 128]);
 
       var result = widget.get("background");
 

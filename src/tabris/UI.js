@@ -51,16 +51,6 @@ tabris.registerWidget("_UI", {
 
   _properties: {
     image: "image",
-    textColor: {
-      type: "color",
-      access: {
-        set: function(name, value, options) {
-          this._nativeSet("foreground", value);
-          this._storeProperty(name, value, options);
-        }
-      }
-    },
-    background: "color",
     toolbarVisible: {type: "boolean", default: true},
     activePage: {
       access: {

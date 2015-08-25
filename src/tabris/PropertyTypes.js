@@ -51,7 +51,7 @@
     color: {
       encode: function(value) {
         if (value === "initial") {
-          return null;
+          return undefined;
         }
         return _.colorStringToArray(value);
       },
@@ -67,7 +67,7 @@
     font: {
       encode: function(value) {
         if (value === "initial") {
-          return null;
+          return undefined;
         }
         return _.fontStringToArray(value);
       },

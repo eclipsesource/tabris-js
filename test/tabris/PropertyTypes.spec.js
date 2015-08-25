@@ -16,6 +16,30 @@ describe("PropertyTypes:", function() {
 
   });
 
+  describe("color", function() {
+
+    it("encode translates initial to undefined", function() {
+      var inValue = "initial";
+
+      var result = tabris.PropertyTypes.color.encode(inValue);
+
+      expect(result).toBe(undefined);
+    });
+
+  });
+
+  describe("font", function() {
+
+    it("encode translates initial to undefined", function() {
+      var inValue = "initial";
+
+      var result = tabris.PropertyTypes.font.encode(inValue);
+
+      expect(result).toBe(undefined);
+    });
+
+  });
+
   describe("proxy", function() {
 
     var check = tabris.PropertyTypes.proxy.encode;
