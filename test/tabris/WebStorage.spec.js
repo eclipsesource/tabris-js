@@ -3,8 +3,10 @@ describe("LocalStorage", function() {
   var nativeBridge;
   var proxy;
   var localStorage;
+  var returnValue;
 
   beforeEach(function() {
+    returnValue = "savedVal";
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._init(nativeBridge);
@@ -12,7 +14,7 @@ describe("LocalStorage", function() {
       proxy = new tabris.Proxy();
       spyOn(proxy, "_nativeCall").and.callFake(function(method, args) {
         if (method === "get" && args.key === "savedKey") {
-          return "savedVal";
+          return returnValue;
         }
         return null;
       });
@@ -78,6 +80,12 @@ describe("LocalStorage", function() {
     it("returns saved item", function() {
       var item = localStorage.getItem("savedKey");
       expect(item).toBe("savedVal");
+    });
+
+    it("returns null for undefined", function() {
+      returnValue = undefined;
+      var item = localStorage.getItem("savedKey");
+      expect(item).toBe(null);
     });
 
   });

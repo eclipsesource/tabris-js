@@ -27,8 +27,9 @@
     },
 
     getItem: function(key) {
-      // Note: the client implementation should return "null" when the item was not found
-      return proxy._nativeCall("get", {key: tabris.PropertyTypes.string.encode(key)});
+      var result = proxy._nativeCall("get", {key: tabris.PropertyTypes.string.encode(key)});
+      // Note: iOS can not return null, only undefined:
+      return result === undefined ? null : result;
     },
 
     removeItem: function(key) {
