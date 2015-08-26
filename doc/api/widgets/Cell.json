@@ -24,7 +24,7 @@
     "change:itemIndex": {
       "parameters": [
         {"name": "widget", "type": "Cell"},
-        {"name": "itemIndex", "type": "number", "description": "The new value of *[itemIndex](#indexIndex)*."},
+        {"name": "itemIndex", "type": "number", "description": "The new value of *[itemIndex](#indexindex)*."},
         {"name": "options", "type": "Object"}
       ],
       "description": "Fired when the index of the assigned item changes, either by assigning a new item or by inserting/removing items above the current item."

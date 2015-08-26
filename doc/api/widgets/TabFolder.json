@@ -1,6 +1,6 @@
 {
   "type": "TabFolder",
-  "description": "A widget that can switch between [tabs](#Tab).",
+  "description": "A widget that can switch between [tabs](#tab).",
   "include": ["Widget"],
   "methods": {
     "append": [

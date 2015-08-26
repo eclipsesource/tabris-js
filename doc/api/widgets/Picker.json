@@ -17,7 +17,7 @@
     "change:selectionIndex": {
       "parameters": [
         {"name": "widget", "type": "Picker"},
-        {"name": "selectionIndex", "type": "number", "description": "The new value of *[selectionIndex](#selectionIndex)*."},
+        {"name": "selectionIndex", "type": "number", "description": "The new value of *[selectionIndex](#selectionindex)*."},
         {"name": "options", "type": "Object"}
       ],
       "description": "Fired when the selectionIndex property changes."

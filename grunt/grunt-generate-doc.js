@@ -277,7 +277,7 @@ module.exports = function (grunt) {
 
   function renderTypeLink(name, data) {
     if (data.types.indexOf(name.toLowerCase()) !== -1) {
-      return "[" + name + "](" + getTypeDocPath() + "#" + name + ")";
+      return "[" + name + "](" + getTypeDocPath() + "#" + name.toLowerCase() + ")";
     } else if (data.widgets[firstCharUp(name)]) {
       return "[" + name + "](" + name + ".md)";
     } else if (data.api[firstCharUp(name)]) {

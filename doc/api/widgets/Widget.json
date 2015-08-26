@@ -226,7 +226,7 @@
         {"name": "bounds", "type": "Bounds", "description": "The new value of the [*bounds*](#bounds) property."},
         {"name": "options", "type": "Object"}
       ],
-      "description": "Fired when the widget's size has changed. You can use this event to apply new [*layoutData*](#layoutData)."
+      "description": "Fired when the widget's size has changed. You can use this event to apply new [*layoutData*](#layoutdata)."
     },
     "animationstart": {
       "parameters": [
