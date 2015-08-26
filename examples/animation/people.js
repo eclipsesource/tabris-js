@@ -137,10 +137,9 @@ function createPersonDetail(parent, person, delay) {
 }
 
 function createPersonThumb(parent, person, thumbsize) {
-  var neighbor = parent.children().last();
   var font = (thumbsize < 48) ? "9px" : "12px";
   var composite = tabris.create("Composite", {
-    layoutData: {left: neighbor ? [neighbor, MARGIN] : MARGIN, top: 0}
+    layoutData: {left: ["prev()", MARGIN], top: 0}
   }).appendTo(parent);
   var personView = tabris.create("ImageView", {
     layoutData: {left: 0, top: 0, width: thumbsize, height: thumbsize},
