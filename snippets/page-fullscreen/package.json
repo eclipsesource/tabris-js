@@ -1,9 +1,0 @@
-{
-  "title": "Creating a fullscreen page",
-  "category": "Page",
-  "description": "Demonstrates using pages in fullscreen mode",
-  "main": "page-fullscreen.js",
-  "dependencies": {
-    "tabris": "^1.0.0"
-  }
-}

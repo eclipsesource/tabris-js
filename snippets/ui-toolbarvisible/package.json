@@ -1,0 +1,9 @@
+{
+  "title": "Toggling UI toolbar visibility",
+  "category": "UI",
+  "description": "Demonstrates toggling UI toolbar visibility.",
+  "main": "ui-toolbarvisible.js",
+  "dependencies": {
+    "tabris": "^1.2.0"
+  }
+}
