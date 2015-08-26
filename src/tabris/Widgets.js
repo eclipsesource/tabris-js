@@ -180,7 +180,7 @@
       }
     },
     get: function(name) {
-      return this._layoutData ? this._layoutData[name] || null : null;
+      return this._layoutData && this._layoutData[name] != null ? this._layoutData[name] : null;
     }
   };
 
@@ -236,42 +236,15 @@
           }
         }
       },
-      left: {
-        type: "edge",
-        access: layoutAccess
-      },
-      right: {
-        type: "edge",
-        access: layoutAccess
-      },
-      top: {
-        type: "edge",
-        access: layoutAccess
-      },
-      bottom: {
-        type: "edge",
-        access: layoutAccess
-      },
-      width: {
-        type: "dimension",
-        access: layoutAccess
-      },
-      height: {
-        type: "dimension",
-        access: layoutAccess
-      },
-      centerX: {
-        type: "dimension",
-        access: layoutAccess
-      },
-      centerY: {
-        type: "dimension",
-        access: layoutAccess
-      },
-      baseline: {
-        type: "sibling",
-        access: layoutAccess
-      },
+      left: {type: "edge", access: layoutAccess},
+      right: {type: "edge", access: layoutAccess},
+      top: {type: "edge", access: layoutAccess},
+      bottom: {type: "edge", access: layoutAccess},
+      width: {type: "dimension", access: layoutAccess},
+      height: {type: "dimension", access: layoutAccess},
+      centerX: {type: "dimension", access: layoutAccess},
+      centerY: {type: "dimension", access: layoutAccess},
+      baseline: {type: "sibling", access: layoutAccess},
       font: {
         type: "font",
         access: {

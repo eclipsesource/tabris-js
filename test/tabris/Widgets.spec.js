@@ -399,6 +399,12 @@ describe("Widgets", function() {
         expect(widget.get(attr)).toBe(42);
       });
 
+      it("getter returns offset 0 as plain 0", function() {
+        widget.set(attr, 0);
+
+        expect(widget.get(attr)).toBe(0);
+      });
+
       it("getter normalizes arrays with zero offset", function() {
         widget.set(attr, ["#other", 0]);
 
