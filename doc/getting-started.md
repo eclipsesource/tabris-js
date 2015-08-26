@@ -6,7 +6,7 @@ Welcome to Tabris.js, the framework for developing native apps in JavaScript. Be
 # The Tabris.js Developer App
 The Tabris.js developer apps are available for free on the Apple App Store and Google Play respectively. Simply follow the links below or search for "Tabris.js" in the store on your mobile device.
 
-[![Tabris.js on Google play](https://tabrisjs.com/assets/img/playstore-badge.png)](https://play.google.com/store/apps/details?id=com.eclipsesource.tabris.js) [![Tabris.js on Apple App Store](https://tabrisjs.com/assets/img/appstore-badge.png)](https://itunes.apple.com/us/app/tabris.js/id939600018?mt=8) 
+[![Tabris.js on Google play](https://tabrisjs.com/assets/img/playstore-badge.png)](https://play.google.com/store/apps/details?id=com.eclipsesource.tabris.js) [![Tabris.js on Apple App Store](https://tabrisjs.com/assets/img/appstore-badge.png)](https://itunes.apple.com/us/app/tabris.js/id939600018?mt=8)
 
 After launching the app you should sign-in with your GitHub account (the same you use on tabrisjs.com) and switch to the **Examples** tab.
 
@@ -14,7 +14,7 @@ After launching the app you should sign-in with your GitHub account (the same yo
 
 ## Try the Examples
 
-The Tabris.js examples are a collection of small apps that demonstrate the power and flexibility of the framework. They are part of the Tabris.js [GitHub repository](https://github.com/eclipsesource/tabris-js/tree/master/examples) and are developed entirely in JavaScript. 
+The Tabris.js examples are a collection of small apps that demonstrate the power and flexibility of the framework. They are part of the Tabris.js [GitHub repository](https://github.com/eclipsesource/tabris-js/tree/master/examples) and are developed entirely in JavaScript.
 
 ![Android Examples Tab](img/examples.png)
 
@@ -30,11 +30,11 @@ Here you will see messages and errors logged while running a script. You can fil
 
 ![Developer Console](img/console-android.png)
 
-## Play with the Scratchpad 
+## Play with the Scratchpad
 
 On tabrisjs.com, click **My Scratchpad** on the left. Here you will find a simple, editable Tabris.js script. You can run this script immediately (no need to save) in the Tabris.js Developer App by going to the *My Scripts* tab and selecting *My Scratchpad*. By default the scratchpad contains the "Hello World" example explained [below](#hellojs).
 
-## The Tabris.js Snippets 
+## The Tabris.js Snippets
 
 On the [tabrisjs.com snippets page](https://tabrisjs.com/snippets/) you can find a code snippet for nearly every feature in Tabris.js. You can run a snippet immediately on your device by clicking the **link** button next to it...
 
@@ -62,13 +62,13 @@ The `package.json` file is used to describe the app, including the name, descrip
   "description": "Tabris.js - Hello, World!",
   "main": "hello.js",
   "dependencies": {
-    "tabris": "^1.1.0"
+    "tabris": "^1.2.0"
   }
 }
 ```
 
 ### hello.js
-The Tabris.js "Hello, World!" example is contained in `hello.js`. It contains a *button* and a *text view*. When the button is selected, the text view is updated. For further documentation on widgets, visit the [Widgets](widget-basics.md) article and [Widgets API reference](api/Widget.md). 
+The Tabris.js "Hello, World!" example is contained in `hello.js`. It contains a *button* and a *text view*. When the button is selected, the text view is updated. For further documentation on widgets, visit the [Widgets](widget-basics.md) article and [Widgets API reference](api/Widget.md).
 
 ```js
 var page = tabris.create("Page", {
@@ -126,9 +126,9 @@ Now tap *Connect* to run the app:
 
 ![Android Developer App](img/hello.png)
 
-Each time the your app is started, the sources are downloaded to the device. While this happens you will see a blank screen. Once you've [built](#publishing-your-app) the app, this delay will be gone, because the sources are then bundled with the app. 
+Each time the your app is started, the sources are downloaded to the device. While this happens you will see a blank screen. Once you've [built](#publishing-your-app) the app, this delay will be gone, because the sources are then bundled with the app.
 
-If the URL of your developer machine is stable, you can also use the *My Scripts* page on [tabrisjs.com](http://tabrisjs.com) to add it permanently to the **My Scripts** tab. 
+If the URL of your developer machine is stable, you can also use the *My Scripts* page on [tabrisjs.com](http://tabrisjs.com) to add it permanently to the **My Scripts** tab.
 
 ![Link A Script](img/link-app.png)
 
