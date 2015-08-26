@@ -19,6 +19,8 @@ Example:
 var buttonWidth = button.get("bounds").width;
 ```
 
+See also [Layout](Layout.md).
+
 ## Color
 
 Colors are specified as strings using one of the following formats:
@@ -42,6 +44,31 @@ Examples:
 "initial"
 ```
 
+## Dimension
+
+A positive float, or 0, representing device independent pixels.
+
+See also [Layout](Layout.md).
+
+## Margin
+
+Distance to a parent's or sibling's opposing edge in one of these formats:
+
+* [`offset`](#offset)
+* [`percentage`](#percentage)
+* [`Widget`](api/Widget.md)
+* [`"selector"`](#selector)
+* `"prev()"`
+* `"percentage offset"`
+* `"selector offset"`
+* `"prev() offset"`
+* `[Widget, offset]`
+* `[percentage, offset]`
+* `[selector, offset]`
+* `["prev()", offset]`
+
+See also [Layout](Layout.md).
+
 ## Font
 
 Fonts are specified as strings using the shorthand syntax known from CSS. The font family may be omitted, in this case the default system font will be used. The value `"initial"` resets the font to its (platform-dependent) default.
@@ -57,7 +84,7 @@ Examples:
 
 ## GestureObject
 
-Object containing information about the currently performed gesture. See ["Touch API"](touch.md#gesture_object). 
+Object containing information about the currently performed gesture. See ["Touch API"](touch.md#gesture_object).
 
 ## Image
 
@@ -86,9 +113,21 @@ Examples:
 
 Used to define how a widget should be arranged within its parent. See ["Layouts"](layout.md).
 
+## Offset
+
+A positive or negative float, or 0, representing device independent pixels.
+
+See also [Layout](Layout.md).
+
+## Percentage
+
+A string starting with a number (int) followed directly by "%". May be negative.
+
+See also [Layout](Layout.md).
+
 ## TouchEvent
 
-Object containing information about the currently performed gesture. See ["Touch API"](touch.md#touch_event_object). 
+Object containing information about the currently performed gesture. See ["Touch API"](touch.md#touch_event_object).
 
 ## Transformation
 
@@ -105,7 +144,7 @@ Transformations are specified as an object with the following properties:
 * **translationY**: *number*, default: `0`
     Vertical translation (shift) in dip.
 
-Example: 
+Example:
 
 ```javascript
 {scaleX: 2, scaleY: 2, rotation: Math.PI * 0.75}

@@ -99,7 +99,43 @@
     },
     "layoutData": {
       "type": "LayoutData",
-      "description": "Specifies how the widget should be arranged in a layout. See [Layout](../layout.md)."
+      "description": "Shorthand for all layout properties. See [Layout](../layout.md)."
+    },
+    "left": {
+      "type": "margin",
+      "description": "The position of the widget's left edge relative to the parent or a sibling widget."
+    },
+    "right": {
+      "type": "margin",
+      "description": "The position of the widget's right edge relative to the parent or a sibling widget."
+    },
+    "top": {
+      "type": "margin",
+      "description": "The position of the widget's top edge relative to the parent or a sibling widget."
+    },
+    "bottom": {
+      "type": "margin",
+      "description": "The position of the widget's bottom edge relative to the parent or a sibling widget."
+    },
+    "width": {
+      "type": "dimension",
+      "description": "The width of the widget."
+    },
+    "height": {
+      "type": "dimension",
+      "description": "The height of the widget."
+    },
+    "centerX": {
+      "type": "offset",
+      "description": "The horizontal position of the widget's center relative to the parent's center."
+    },
+    "centerY": {
+      "type": "offset",
+      "description": "The vertical position of the widget's center relative to the parent's center."
+    },
+    "baseline": {
+      "type": "Widget",
+      "description": "The vertical position of the widget's baseline relative to a sibling widget."
     },
     "font": {
       "type": "Font",

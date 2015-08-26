@@ -16,31 +16,29 @@ All widgets support a property `layoutData` that defines how the widget should b
 - `width`
 - `height`
 
-All **size and distance** values are specified as numbers in *device independent pixels*.
-
-Some attributes also accept **percentages** of the parent's size. These are provided as stings with a percent suffix, e.g. `"50%"`.
-
-Some properties support **references to other widgets**. If another widget is referenced in a layoutData attribute, it has to be a sibling of the widget the layoutData is applied to. In place of a widget reference, a [selector string](selector.md) can also be given. This selector string is then used to filter all siblings of the widget, using the first match as the reference. In addition to that, the symbolic reference `"prev()"` can be used to refer to the preceding sibling.
-
-Widget references are resolved dynamically, that is, if a referenced widget is added or removed later, the layout will adjust. When a widget reference does not match any of the current siblings, it will be treated like an offset of zero.
+> <img align="left" src="img/note.png"> <i>All layout attributes can also be set directly on the widget as a normal property. The advantage of using the `layoutData` property is that all currently set layout attributes not in the new `layoutData` object will be implicitly reset to null (i.e. "not specified").</i>
 
 ### top, right, bottom, left
 Defines the position of the widget's edge.
 Accepted values:
 
-- *offset*: the distance from the parent's opposing edge in pixels
-- *widget*: attach this edge to the given widget's opposing edge
+- *offset*: the distance from the parent's opposing edge in device independent pixels
+- *widget*: attach this edge to the given siblings's opposing edge
 - *percentage*: the distance from the parent's opposing edge in percent of the parent's width
 - [*percentage*, *offset*]: the distance from the parent's opposing edge in percent of the parent's width plus a fixed offset in pixels
 - "*percentage* *offset*": Same as above, but as space-separated string list instead of array
-- [*widget*, *offset*]: the distance from the given widget's opposing edge in pixels
-- "*widget* *offset*": Same as above, but as space-separated string list instead of array. Widget can be given as selector or `"prev()"`.
+- [*widget*, *offset*]: the distance from the given widget's opposing edge in pixel
+- "*widget* *offset*": Same as above, but as space-separated string list instead of array. Since this is a string the widget can be a selector or `"prev()"`, but not a direct reference.
+
+All **percentages** are provided as strings with a percent suffix, e.g. `"50%"`.
+
+**References to other widgets** can be given as a variable, a [selector string](selector.md) (filtering all siblings of the widget), or the symbolic reference `"prev()" (used to refer to the preceding sibling). Widget references are resolved dynamically, that is, if a referenced widget is added or removed later, the layout will adjust. When a widget reference does not match any of the current siblings, it will be treated like an offset of zero.
 
 ### centerX
 Defines the horizontal position of the widget relative to the parent's center.
 Accepted values:
 
-- *offset*: the distance of this widget's horizontal center line from the parent's horizontal center
+- *offset*: the distance of this widget's horizontal center line from the parent's horizontal center in device independent pixel
 
 This property cannot be used in combination with either of `left` and `right`.
 
@@ -48,7 +46,7 @@ This property cannot be used in combination with either of `left` and `right`.
 Defines the vertical position of the widget relative to the parent's center.
 Accepted values:
 
-- *offset*: the distance of this widget's vertical center line from the parent's vertical center
+- *offset*: the distance of this widget's vertical center line from the parent's vertical center in device independent pixel
 
 This property cannot be used in combination with either of `top`, `bottom`, and `baseline`.
 
@@ -56,7 +54,9 @@ This property cannot be used in combination with either of `top`, `bottom`, and 
 Defines the vertical position of the widget relative to another widget's text baseline.
 Accepted values:
 
-- *widget*: a reference to another widget to baseline-align with.
+- *widget*: a reference to another widget to baseline-align
+
+The widget may be referenced with a variable, a [selector string](selector.md), or with `"prev()"`.
 
 At the moment, this property is only supported for widgets that contain text, i.e. both the actual and the referenced widget must be one of `TextView`, `TextInput`, or `Button`.
 
@@ -68,13 +68,13 @@ This property cannot be used in combination with either of `top`, `bottom`, and 
 Defines the width of the widget.
 Accepted values:
 
-- *width*: the width of the widget in pixels
+- *width*: the width of the widget in device independent pixel
 
 ### height
 Defines the height of the widget.
 Accepted values:
 
-- *height*: the height of the widget in pixels
+- *height*: the height of the widget in device independent pixel
 
 ## Layout calculation
 
