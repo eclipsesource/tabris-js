@@ -28,9 +28,9 @@ tabris.create("Button", {
   text: "Set"
 }).on("select", function() {
   if (!keyField.get("text")) {
-    console.error("They key cannot be empty.");
+    console.error("The key cannot be empty.");
   } else if (!valueField.get("text")) {
-    console.error("They value cannot be empty.");
+    console.error("The value cannot be empty.");
   } else {
     localStorage.setItem(keyField.get("text"), valueField.get("text"));
     valueField.set("text", "");
