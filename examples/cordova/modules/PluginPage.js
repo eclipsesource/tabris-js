@@ -25,7 +25,7 @@ PluginPage.prototype.create = function() {
   }, this).appendTo(this.page);
 
   var content = tabris.create("Composite", {
-    layoutData: {left: 10, top: ["prev()", 10], right: 10, bottom: 0}
+    layoutData: {left: 10, top: "prev() 10", right: 10, bottom: 0}
   }).appendTo(this.page);
 
   this.createCallback(content);

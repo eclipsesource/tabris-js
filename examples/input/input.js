@@ -114,25 +114,25 @@ tabris.create("Button", {
 
 page.apply({
   "#firstNameLabel": {layoutData: {left: 10, top: 18, width: 120}},
-  "#firstNameInput": {layoutData: {left: ["#firstNameLabel", 10], right: 10, baseline: "#firstNameLabel"}},
-  "#lastNameLabel": {layoutData: {left: 10, top: ["#firstNameLabel", 18], width: 120}},
-  "#lastNameInput": {layoutData: {left: ["#lastNameLabel", 10], right: 10, baseline: "#lastNameLabel"}},
-  "#passphraseLabel": {layoutData: {left: 10, top: ["#lastNameLabel", 18], width: 120}},
-  "#passphraseInput": {layoutData: {left: ["#passphraseLabel", 10], right: 10, baseline: "#passphraseLabel"}},
-  "#countryLabel": {layoutData: {left: 10, top: ["#passphraseLabel", 18], width: 120}},
-  "#countryPicker": {layoutData: {left: ["#countryLabel", 10], right: 10, baseline: "#countryLabel"}},
-  "#seatLabel": {layoutData: {left: 10, top: ["#classLabel", 18], width: 120}},
-  "#window": {layoutData: {left: ["#seatLabel", 10], right: 10, baseline: "#seatLabel"}},
-  "#aisle": {layoutData: {left: ["#seatLabel", 10], right: 10, top: ["#seatLabel", 10]}},
-  "#classLabel": {layoutData: {left: 10, top: ["#countryLabel", 18], width: 120}},
-  "#classPicker": {layoutData: {left: ["#classLabel", 10], right: 10, baseline: "#classLabel"}},
-  "#dontCareButton": {layoutData: {left: ["#seatLabel", 10], right: 10, top: ["#aisle", 10]}},
-  "#luggagePanel": {layoutData: {left: 10, top: ["#dontCareButton", 18], right: 10}},
+  "#firstNameInput": {layoutData: {left: "#firstNameLabel 10", right: 10, baseline: "#firstNameLabel"}},
+  "#lastNameLabel": {layoutData: {left: 10, top: "#firstNameLabel 18", width: 120}},
+  "#lastNameInput": {layoutData: {left: "#lastNameLabel 10", right: 10, baseline: "#lastNameLabel"}},
+  "#passphraseLabel": {layoutData: {left: 10, top: "#lastNameLabel 18", width: 120}},
+  "#passphraseInput": {layoutData: {left: "#passphraseLabel 10", right: 10, baseline: "#passphraseLabel"}},
+  "#countryLabel": {layoutData: {left: 10, top: "#passphraseLabel 18", width: 120}},
+  "#countryPicker": {layoutData: {left: "#countryLabel 10", right: 10, baseline: "#countryLabel"}},
+  "#seatLabel": {layoutData: {left: 10, top: "#classLabel 18", width: 120}},
+  "#window": {layoutData: {left: "#seatLabel 10", right: 10, baseline: "#seatLabel"}},
+  "#aisle": {layoutData: {left: "#seatLabel 10", right: 10, top: "#seatLabel 10"}},
+  "#classLabel": {layoutData: {left: 10, top: "#countryLabel 18", width: 120}},
+  "#classPicker": {layoutData: {left: "#classLabel 10", right: 10, baseline: "#classLabel"}},
+  "#dontCareButton": {layoutData: {left: "#seatLabel 10", right: 10, top: "#aisle 10"}},
+  "#luggagePanel": {layoutData: {left: 10, top: "#dontCareButton 18", right: 10}},
   "#luggageLabel": {layoutData: {left: 0, centerY: 0, width: 120}},
   "#luggageWeight": {layoutData: {right: 10, centerY: 0, width: 50}},
-  "#luggageSlider": {layoutData: {left: ["#luggageLabel", 10], right: ["#luggageWeight", 10], centerY: 0}},
-  "#veggie": {layoutData: {left: ["#seatLabel", 10], right: 10, top: ["#luggagePanel", 10]}},
-  "#done": {layoutData: {left: 10, right: 10, top: ["#veggie", 18]}}
+  "#luggageSlider": {layoutData: {left: "#luggageLabel 10", right: "#luggageWeight 10", centerY: 0}},
+  "#veggie": {layoutData: {left: "#seatLabel 10", right: 10, top: "#luggagePanel 10"}},
+  "#done": {layoutData: {left: 10, right: 10, top: "#veggie 18"}}
 });
 
 function populateMessage() {
@@ -140,7 +140,7 @@ function populateMessage() {
     message.dispose();
   }
   message = tabris.create("TextView", {
-    layoutData: {left: 10, right: 10, top: ["#done", 10]},
+    layoutData: {left: 10, right: 10, top: "#done 10"},
     text: "Flight booked for: " + createName() + "\nSeating: " + createSeating()
   }).appendTo(page);
 }

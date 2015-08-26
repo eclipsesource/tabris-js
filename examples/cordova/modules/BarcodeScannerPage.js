@@ -8,7 +8,7 @@ var page = new PluginPage("BarcodeScanner", "com.phonegap.plugins.barcodescanner
   }).on("select", scanBarcode).appendTo(parent);
 
   var resultView = tabris.create("TextView", {
-    layoutData: {top: ["prev()", 20], left: 20, right: 20},
+    layoutData: {top: "prev() 20", left: 20, right: 20},
     markupEnabled: true
   }).appendTo(parent);
 

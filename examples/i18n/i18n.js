@@ -26,7 +26,7 @@ tabris.create("Picker", {id: "langPicker", layoutData: {left: 10, top: 10, right
 tabris.create("CollectionView", {
   id: "menuItemsCV",
   itemHeight: 100,
-  layoutData: {left: 0, top: ["#langPicker", 10], right: 0, bottom: 0},
+  layoutData: {left: 0, top: "#langPicker 10", right: 0, bottom: 0},
   initializeCell: function(cell) {
     var price = tabris.create("TextView", {
       layoutData: {centerY: 0, right: MARGIN, width: 100},

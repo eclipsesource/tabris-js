@@ -17,7 +17,7 @@ var imageTextView = tabris.create("ImageView", {
 }).appendTo(scrollView);
 
 var contentComposite = tabris.create("Composite", {
-  layoutData: {left: 0, right: 0, top: ["#titleComposite", 0], height: 1000},
+  layoutData: {left: 0, right: 0, top: "#titleComposite", height: 1000},
   background: "white"
 }).appendTo(scrollView);
 

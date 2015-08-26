@@ -8,7 +8,7 @@ var page = module.exports = tabris.create("Page", {
 });
 
 tabris.create("Canvas", {
-  layoutData: {left: 10, top: 10, right: 10, bottom: ["#toggleRun", 10]}
+  layoutData: {left: 10, top: 10, right: 10, bottom: "#toggleRun 10"}
 }).on("resize", function(canvas, bounds) {
   var height = Math.min(bounds.height, Math.floor(bounds.width / 2));
   var ctx = canvas.getContext("2d", bounds.width, height);

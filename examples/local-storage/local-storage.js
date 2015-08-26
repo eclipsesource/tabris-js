@@ -24,7 +24,7 @@ var valueField = tabris.create("TextInput", {
 }).appendTo(page);
 
 tabris.create("Button", {
-  layoutData: {left: 10, right: ["66%", 5], top: [valueTextView, 20]},
+  layoutData: {left: 10, right: "66% 5", top: [valueTextView, 20]},
   text: "Set"
 }).on("select", function() {
   if (!keyField.get("text")) {
@@ -38,7 +38,7 @@ tabris.create("Button", {
 }).appendTo(page);
 
 tabris.create("Button", {
-  layoutData: {left: ["33%", 5], right: ["33%", 5], top: [valueTextView, 20]},
+  layoutData: {left: "33% 5", right: "33% 5", top: [valueTextView, 20]},
   text: "Get"
 }).on("select", function() {
   if (!keyField.get("text")) {
@@ -50,7 +50,7 @@ tabris.create("Button", {
 }).appendTo(page);
 
 tabris.create("Button", {
-  layoutData: {left: ["66%", 5], right: 10, top: [valueTextView, 20]},
+  layoutData: {left: "66% 5", right: 10, top: [valueTextView, 20]},
   text: "Remove"
 }).on("select", function() {
   localStorage.removeItem(keyField.get("text"));

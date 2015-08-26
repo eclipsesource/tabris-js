@@ -27,7 +27,7 @@ function createPage(pageTitle, pageIsTopLevel) {
 
   tabris.create("Button", {
     id: "addPage",
-    layoutData: {left: 5, right: 5, top: ["#addRootPage", 5]},
+    layoutData: {left: 5, right: 5, top: "#addRootPage 5"},
     text: "Add Page",
     background: "green",
     textColor: "white",
@@ -39,7 +39,7 @@ function createPage(pageTitle, pageIsTopLevel) {
   }).appendTo(page);
 
   tabris.create("Button", {
-    layoutData: {left: 5, right: 5, top: ["#addPage", 5]},
+    layoutData: {left: 5, right: 5, top: "#addPage 5"},
     text: "Add Global Action",
     background: "green",
     textColor: "white",
@@ -70,7 +70,7 @@ function createPage(pageTitle, pageIsTopLevel) {
   }).appendTo(page);
 
   tabris.create("Button", {
-    layoutData: {left: 5, right: 5, bottom: ["#removeLastGlobalAction", 5]},
+    layoutData: {left: 5, right: 5, bottom: "#removeLastGlobalAction 5"},
     text: "Remove Last Root Page",
     background: "red",
     textColor: "white",
