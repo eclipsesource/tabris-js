@@ -14,7 +14,7 @@ tabris.create("TextInput", {
 }).appendTo(page);
 
 tabris.create("TextInput", {
-  layoutData: {top: [page.children().last(), 20], left: "20%", right: "20%"},
+  layoutData: {top: "prev() 20", left: "20%", right: "20%"},
   message: "Another field to focus..."
 }).appendTo(page);
 

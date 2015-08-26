@@ -10,13 +10,13 @@ tabris.create("TextView", {
 }).appendTo(page);
 
 tabris.create("TextView", {
-  layoutData: {left: 10, top: [page.children().last(), 10], right: 10},
+  layoutData: {left: 10, top: "prev() 10", right: 10},
   text: "Center",
   alignment: "center"
 }).appendTo(page);
 
 tabris.create("TextView", {
-  layoutData: {left: 10, top: [page.children().last(), 10], right: 10},
+  layoutData: {left: 10, top: "prev() 10", right: 10},
   text: "Right",
   alignment: "right"
 }).appendTo(page);

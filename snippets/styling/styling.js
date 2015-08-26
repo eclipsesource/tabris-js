@@ -5,7 +5,7 @@ var page = tabris.create("Page", {
 
 ["normal", "interactive", "prio-high", "missing", "prio-high missing"].forEach(function(style) {
   tabris.create("TextView", {
-    layoutData: {left: 10, top: [page.children().last(), 10]},
+    layoutData: {left: 10, top: "prev() 10"},
     class: style,
     text: "class \"" + style + "\""
   }).appendTo(page);

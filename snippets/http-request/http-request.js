@@ -11,7 +11,7 @@ tabris.create("Button", {
   xhr.onreadystatechange = function() {
     if (xhr.readyState === xhr.DONE) {
       tabris.create("TextView", {
-        layoutData: {left: 10, right: 10, top: [page.children().last(), 10]},
+        layoutData: {left: 10, right: 10, top: "prev() 10"},
         text: JSON.parse(xhr.responseText)[1].join(", ")
       }).appendTo(page);
     }

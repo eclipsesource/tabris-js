@@ -12,7 +12,7 @@ tabris.create("TextView", {
 }).appendTo(page);
 
 tabris.create("TextView", {
-  layoutData: {left: 10, top: [page.children().last(), 30], right: 10},
+  layoutData: {left: 10, top: "prev() 30", right: 10},
   text: "TextView with markup enabled:\n" + markup,
   markupEnabled: true
 }).appendTo(page);

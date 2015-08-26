@@ -5,7 +5,7 @@ var page = tabris.create("Page", {
 
 ["One", "Two", "Three"].forEach(function(title) {
   tabris.create("RadioButton", {
-    layoutData: {left: 10, top: [page.children().last(), 10]},
+    layoutData: {left: 10, top: "prev() 10"},
     text: title
   }).on("change:selection", function(widget, selection) {
     if (selection) {

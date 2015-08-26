@@ -10,7 +10,7 @@ tabris.create("TextInput", {
 
 ["ascii", "decimal", "number", "numbersAndPunctuation", "phone", "email", "url"].forEach(function(mode) {
   tabris.create("TextInput", {
-    layoutData: {top: [page.children().last(), 10], left: "20%", right: "20%"},
+    layoutData: {top: "prev() 10", left: "20%", right: "20%"},
     keyboard: mode,
     message: mode
   }).appendTo(page);

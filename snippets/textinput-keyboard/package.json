@@ -4,6 +4,6 @@
   "description": "TextInput widgets with different keyboard types",
   "main": "textinput-keyboard.js",
   "dependencies": {
-    "tabris": "^1.0.0"
+    "tabris": "^1.2.0"
   }
 }

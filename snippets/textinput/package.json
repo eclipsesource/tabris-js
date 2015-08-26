@@ -4,6 +4,6 @@
   "description": "with listener",
   "main": "textinput.js",
   "dependencies": {
-    "tabris": "^1.0.0"
+    "tabris": "^1.2.0"
   }
 }
