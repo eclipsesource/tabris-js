@@ -24,7 +24,7 @@ Tabris.js is a mobile framework that lets you develop native iOS and Android app
 ## API Reference
 
 <%= api %>
-- [Data Types](types.md)
+- [Property Types](types.md)
 
 ### Widgets
 <%= widgets %>
@@ -50,4 +50,3 @@ This blog post series takes a closer look at the examples.
 ## Custom Widget Documentation (provisional)
 - [Custom Widgets](custom-widgets.md) - JavaScript implementation
 - [Custom Widgets - Android](custom-widgets-android.md) - Android implementation
-
