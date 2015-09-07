@@ -16,6 +16,13 @@
       }
     },
 
+    number: {
+      encode: function(number) {
+        checkValidNumber(number);
+        return number;
+      }
+    },
+
     natural: {
       encode: function(number) {
         checkValidNumber(number);

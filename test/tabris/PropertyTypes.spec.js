@@ -198,6 +198,38 @@ describe("PropertyTypes:", function() {
 
   });
 
+  describe("number", function() {
+
+    var check = tabris.PropertyTypes.number.encode;
+
+    it("fails for non-numbers", function() {
+      var values = ["", "foo", "23", null, undefined, true, false, {}, []];
+      values.forEach(function(value) {
+        expect(function() {
+          check(value);
+        }).toThrow(new Error(typeof value + " is not a number: " + value));
+      });
+    });
+
+    it("fails for invalid numbers", function() {
+      var values = [NaN, 1 / 0, -1 / 0];
+      values.forEach(function(value) {
+        expect(function() {
+          check(value);
+        }).toThrow(new Error("Number is not a valid value: " + value));
+      });
+    });
+
+    it("accepts all valid kinds of numbers", function() {
+      expect(check(0)).toBe(0);
+      expect(check(1)).toBe(1);
+      expect(check(-1)).toBe(-1);
+      expect(check(10e10)).toBe(10e10);
+      expect(check(10e-10)).toBe(10e-10);
+    });
+
+  });
+
   describe("natural", function() {
 
     var check = tabris.PropertyTypes.natural.encode;
