@@ -49,7 +49,8 @@ describe("TabFolder", function() {
         title: "foo",
         image: {src: "bar"},
         badge: "1",
-        background: "#010203"
+        background: "#010203",
+        visible: false
       });
       controlCreate = nativeBridge.calls({op: "create"})[1];
     });
@@ -71,6 +72,7 @@ describe("TabFolder", function() {
       expect(tab.get("title")).toBe("foo");
       expect(tab.get("image")).toEqual({src: "bar"});
       expect(tab.get("badge")).toBe("1");
+      expect(tab.get("visible")).toBe(false);
     });
 
     it("getter returns initial item properties", function() {
@@ -78,6 +80,7 @@ describe("TabFolder", function() {
       expect(tab.get("title")).toBe("");
       expect(tab.get("image")).toBe(null);
       expect(tab.get("badge")).toBe("");
+      expect(tab.get("visible")).toBe(true);
     });
 
     describe("and appended to an illegal parent", function() {
@@ -118,6 +121,7 @@ describe("TabFolder", function() {
         expect(itemCreate.properties.text).toBe("foo");
         expect(itemCreate.properties.image).toEqual(["bar", null, null, null]);
         expect(itemCreate.properties.badge).toBe("1");
+        expect(itemCreate.properties.visibility).toBe(false);
       });
 
       it("sets the TabItem index", function() {
@@ -334,6 +338,49 @@ describe("TabFolder", function() {
 
       var properties = nativeBridge.calls({id: tabFolder.cid, op: "create"})[0].properties;
       expect(properties.style).toBeUndefined();
+    });
+
+  });
+
+});
+
+describe("Tab", function() {
+
+  var nativeBridge, tabFolder;
+
+  beforeEach(function() {
+    nativeBridge = new NativeBridgeSpy();
+    tabris._reset();
+    tabris._init(nativeBridge);
+    tabFolder = tabris.create("TabFolder");
+    nativeBridge.resetCalls();
+  });
+
+  describe("property 'visible'", function() {
+
+    it("is not rendered by default", function() {
+      var tab = tabris.create("Tab", {}).appendTo(tabFolder);
+
+      var properties = nativeBridge.calls({id: tab.cid, op: "create"})[0].properties;
+
+      expect(properties.visibile).not.toBeDefined();
+      expect(properties.visibility).not.toBeDefined();
+    });
+
+    it("is not rendered on Composite", function() {
+      var tab = tabris.create("Tab", {visible: false}).appendTo(tabFolder);
+
+      var properties = nativeBridge.calls({id: tab.cid, op: "create"})[0].properties;
+
+      expect(properties.visibility).not.toBeDefined();
+    });
+
+    it("is rendered as 'visibility' on TabItem", function() {
+      var tab = tabris.create("Tab", {visible: false}).appendTo(tabFolder);
+
+      var properties = nativeBridge.calls({id: tab._tabItem.cid, op: "create"})[0].properties;
+
+      expect(properties.visibility).toBe(false);
     });
 
   });

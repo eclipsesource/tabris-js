@@ -131,6 +131,18 @@
             this._storeProperty(name, value, options);
           }
         }
+      },
+      visible: {
+        type: "boolean",
+        default: true,
+        access: {
+          set: function(name, value, options) {
+            if (this._tabItem) {
+              this._tabItem._setProperty("visibility", value);
+            }
+            this._storeProperty(name, value, options);
+          }
+        }
       }
     },
 
@@ -170,6 +182,6 @@
     return !isTab(child);
   }
 
-  var itemProps = ["title", "badge", "image"];
+  var itemProps = ["title", "badge", "image", "visible"];
 
 }());
