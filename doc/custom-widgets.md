@@ -48,14 +48,15 @@ properties: {
 
 #### Available property types
 
-* `"any"`: Accepts any value. The value is not checked or converted.
-* `"boolean"`: Accepts `true` or `false`, all other values are converted as determined by the JavaScript language ("truthy"/"falsy" values).
-* `"string"`:  Accepts any strings, any non-string is converted as determined by the JavaScript language (e.g. `23.0` becomes `"23"`).
-* `"natural"`: Accepts any number equal or greater than zero and smaller than infinity, with any non-round number being rounded. Any other value (including `NaN`) is rejected.
-* `"integer"`: Accepts any number equal or greater than -infinity and smaller than infinity, with any non-round number being rounded. Any other value (including `NaN`) is rejected.
-* `"color"`: Accepts any value describing a color as outlined in the Tabris.js documentation, other values are rejected. Will be passed as an [r, g, b, a] array to the native side.
-* `"font"`: Accepts any value describing a font as outlined in the Tabris.js documentation, other values are rejected. Will be passed as an [[family*], size, bold, italic] array to the native side.
-* `"image"`: Accepts any value describing an image as outlined in the Tabris.js documentation, other values are rejected. Will be passed to the native side as an object as described in the Tabris.js documentation.
+* `"any"`: Accepts any value. The value is neither checked nor converted.
+* `"boolean"`: Accepts `true` or `false`. Other values are converted to boolean as determined by the JavaScript language ("truthy"/"falsy" values).
+* `"string"`:  Accepts any string. Other values are converted to strings as determined by the JavaScript language (e.g. `23.0` becomes `"23"`).
+* `"number"`: Accepts any finite number. Other values (including `NaN`) are rejected.
+* `"natural"`: Accepts any finite number equal or greater than zero. Floating-point numbers will be rounded. Other values (including `NaN`) are rejected.
+* `"integer"`: Accepts any finite number. Floating-point numbers will be rounded. Other values (including `NaN`) are rejected.
+* `"color"`: Accepts any value describing a color as outlined in the Tabris.js documentation. Other values are rejected. Will be passed as an [r, g, b, a] array to the native side.
+* `"font"`: Accepts any value describing a font as outlined in the Tabris.js documentation. Other values are rejected. Will be passed as an [[family*], size, bold, italic] array to the native side.
+* `"image"`: Accepts any value describing an image as outlined in the Tabris.js documentation. Other values are rejected. Will be passed to the native side as an object as described in the Tabris.js documentation.
 * `["choice", ["op1", "op2", ...]]` allows `"op1"`, `"op2"`, etc. Other values are rejected.
 * `["choice", ["op1": "encodedOp1", ...}]` allows `"op1"` and encodes it as `"encodedOp1"`. Other values are rejected.
 * `"array"`: Accepts any array.
