@@ -20,11 +20,11 @@
       "description": "The user language configured on the device as an [RFC 4646](http://tools.ietf.org/html/rfc4646) compliant string. For example `\"de\"`, `\"es-ES\"`, etc. This property is also available globally as `navigator.language`."
     },
     "screenWidth": {
-      "type": "string",
+      "type": "number",
       "description": "The entire width of the device's screen in device independent pixel. Depends on the current device orientation. This property is also available as globally as [screen.width](https://developer.mozilla.org/en-US/docs/Web/API/Screen.width)."
     },
     "screenHeight": {
-      "type": "string",
+      "type": "number",
       "description": "The entire height of the device's screen in device independent pixel. Depends on the current device orientation. This property is also available globally as [screen.height](https://developer.mozilla.org/en-US/docs/Web/API/Screen.height)."
     },
     "scaleFactor": {
