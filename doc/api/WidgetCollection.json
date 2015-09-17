@@ -62,13 +62,6 @@
         "description": "Disposes all widgets in this collection."
       }
     ],
-    "isDisposed": [
-      {
-        "parameters": [],
-        "returns": "boolean",
-        "description": "Returns `true` if the widget has been disposed, otherwise `false`."
-      }
-    ],
     "first": {
       "parameters": [],
       "returns": "Widget",
