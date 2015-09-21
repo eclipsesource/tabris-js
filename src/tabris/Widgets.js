@@ -640,8 +640,8 @@
       }
     },
     _properties: {
-      type: "boolean",
       selection: {
+        type: "boolean",
         access: {
           get: function() {
             return this._nativeGet("checked");
@@ -651,6 +651,18 @@
             this._triggerChangeEvent(name, value, options);
           }
         }
+      },
+      thumbOnColor: {
+        type: "color"
+      },
+      thumbOffColor: {
+        type: "color"
+      },
+      trackOnColor: {
+        type: "color"
+      },
+      trackOffColor: {
+        type: "color"
       }
     }
   });

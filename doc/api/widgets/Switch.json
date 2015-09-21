@@ -6,6 +6,22 @@
     "selection": {
       "type": "boolean?false",
       "description": "The checked state of the switch."
+    },
+    "thumbOnColor": {
+      "type": "Color",
+      "description": "The color of the movable thumb, when switched *on*."
+    },
+    "thumbOffColor": {
+      "type": "Color",
+      "description": "The color of the movable thumb, when switched *off*."
+    },
+    "trackOnColor": {
+      "type": "Color",
+      "description": "The color of the track that holds the thumb, when switched *on*."
+    },
+    "trackOffColor": {
+      "type": "Color",
+      "description": "The color of the track that holds the thumb, when switched *off*."
     }
   },
   "events": {
