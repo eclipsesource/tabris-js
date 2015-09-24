@@ -3,6 +3,7 @@ tabris.registerType("_App", {
   _events: {
     pause: {name: "Pause", trigger: triggerWithTarget},
     resume: {name: "Resume", trigger: triggerWithTarget},
+    open: {name: "Open", trigger: triggerWithTarget},
     patchInstall: {trigger: notifyPatchCallback},
     backnavigation: {
       trigger: function() {
