@@ -24,6 +24,30 @@
       return this;
     },
 
+    insertBefore: function(proxy) {
+      this._checkDisposed();
+      proxy = proxy instanceof tabris.ProxyCollection ? proxy.first() : proxy;
+      if (!(proxy instanceof tabris.Proxy)) {
+        throw new Error("Cannot insert before non-widget");
+      }
+      var parent = proxy.parent();
+      var index = parent._children.indexOf(proxy);
+      this._setParent(parent, index);
+      return this;
+    },
+
+    insertAfter: function(proxy) {
+      this._checkDisposed();
+      proxy = proxy instanceof tabris.ProxyCollection ? proxy.first() : proxy;
+      if (!(proxy instanceof tabris.Proxy)) {
+        throw new Error("Cannot insert after non-widget");
+      }
+      var parent = proxy.parent();
+      var index = parent._children.indexOf(proxy);
+      this._setParent(parent, index + 1);
+      return this;
+    },
+
     parent: function() {
       return this._parent;
     },
@@ -68,18 +92,18 @@
       return this._children;
     },
 
-    _setParent: function(parent) {
+    _setParent: function(parent, index) {
       this._nativeSet("parent", tabris.PropertyTypes.proxy.encode(parent._getContainer(this)));
       if (this._parent) {
         this._parent._removeChild(this);
         tabris.Layout.addToQueue(this._parent);
       }
       this._parent = parent;
-      this._parent._addChild(this);
+      this._parent._addChild(this, index);
       tabris.Layout.addToQueue(this._parent);
     },
 
-    _addChild: function(child) {
+    _addChild: function(child, index) {
       var check = this.constructor._supportsChildren;
       if (check === false) {
         throw new Error(this.type + " cannot contain children");
@@ -90,7 +114,11 @@
       if (!this._children) {
         this._children = [];
       }
-      this._children.push(child);
+      if (typeof index === "number") {
+        this._children.splice(index, 0, child);
+      } else {
+        this._children.push(child);
+      }
       this.trigger("addchild", this, child, {});
     },
 

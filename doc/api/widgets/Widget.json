@@ -58,7 +58,25 @@
           {"name": "parent", "type": "Composite"}
         ],
         "returns": "Widget",
-        "description": "Appends this widget to the given parent. The parent widget must support children (extending *Composite*)."
+        "description": "Appends this widget to the given parent. The parent widget must support children (extending *Composite*). If the widget already has a parent, it is removed from the old parent."
+      }
+    ],
+    "insertBefore": [
+      {
+        "parameters": [
+          {"name": "widget", "type": "Widget"}
+        ],
+        "returns": "Widget",
+        "description": "Inserts this widget directly before the given widget. If the widget already has a parent, it is removed from the old parent."
+      }
+    ],
+    "insertAfter": [
+      {
+        "parameters": [
+          {"name": "widget", "type": "Widget"}
+        ],
+        "returns": "Widget",
+        "description": "Inserts this widget directly after the given widget. If the widget already has a parent, it is removed from the old parent."
       }
     ],
     "animate": [

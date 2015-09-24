@@ -108,7 +108,7 @@ describe("Proxy", function() {
       expect(proxy.isDisposed()).toBe(false);
     });
 
-    describe("calling append with a proxy", function() {
+    describe("append with a proxy", function() {
       var child, result, listener;
 
       beforeEach(function() {
@@ -244,7 +244,7 @@ describe("Proxy", function() {
 
     });
 
-    describe("calling appendTo with a parent", function() {
+    describe("appendTo with a parent", function() {
 
       var parent1, result;
 
@@ -271,7 +271,7 @@ describe("Proxy", function() {
         expect(result.parent()).toBe(parent1);
       });
 
-      describe("calling appendTo with another parent", function() {
+      describe("appendTo with another parent", function() {
 
         var parent2;
 
@@ -291,7 +291,7 @@ describe("Proxy", function() {
 
     });
 
-    describe("calling appendTo with a collection", function() {
+    describe("appendTo with a collection", function() {
 
       var parent1, parent2, result;
 
@@ -322,6 +322,170 @@ describe("Proxy", function() {
         expect(function() {
           proxy.appendTo({});
         }).toThrowError("Cannot append to non-widget");
+      });
+
+    });
+
+    describe("insertBefore", function() {
+
+      var parent1, parent2, other;
+
+      beforeEach(function() {
+        parent1 = tabris.create("Composite", {});
+        parent2 = tabris.create("Composite", {});
+      });
+
+      it("throws when disposed", function() {
+        expect(function() {
+          proxy.insertBefore({});
+        }).toThrowError("Cannot insert before non-widget");
+      });
+
+      it("throws when called with a non-widget", function() {
+        expect(function() {
+          proxy.insertBefore({});
+        }).toThrowError("Cannot insert before non-widget");
+      });
+
+      it("throws when called with an empty widget collection", function() {
+        expect(function() {
+          proxy.insertBefore(parent1.find(".missing"));
+        }).toThrowError("Cannot insert before non-widget");
+      });
+
+      describe("with a widget", function() {
+
+        beforeEach(function() {
+          proxy.appendTo(parent1);
+          other = tabris.create("Button", {}).appendTo(parent2);
+          proxy.insertBefore(other);
+        });
+
+        it("removes widget from its old parent's children list", function() {
+          expect(parent1.children()).not.toContain(proxy);
+        });
+
+        it("adds widget to new parent's children list", function() {
+          expect(parent2.children()).toContain(proxy);
+        });
+
+        it("adds widget directly before the given widget", function() {
+          var children = parent2.children();
+          expect(children.indexOf(proxy)).toBe(children.indexOf(other) - 1);
+        });
+
+      });
+
+      describe("with a sibling widget", function() {
+
+        beforeEach(function() {
+          other = tabris.create("Button", {}).appendTo(parent1);
+          proxy.appendTo(parent1);
+          proxy.insertBefore(other);
+        });
+
+        it("re-orders widgets", function() {
+          expect(parent1.children().toArray()).toEqual([proxy, other]);
+        });
+
+      });
+
+      describe("with a widget collection", function() {
+
+        beforeEach(function() {
+          tabris.create("Button", {}).appendTo(parent1);
+          tabris.create("Button", {}).appendTo(parent2);
+          var grandparent = tabris.create("Composite", {}).append(parent1, parent2);
+          proxy.insertBefore(grandparent.find("Button"));
+        });
+
+        it("inserts only before the first the widget of the collection", function() {
+          expect(parent1.children()).toContain(proxy);
+          expect(parent2.children()).not.toContain(proxy);
+        });
+
+      });
+
+    });
+
+    describe("insertAfter", function() {
+
+      var parent1, parent2, other;
+
+      beforeEach(function() {
+        parent1 = tabris.create("Composite", {});
+        parent2 = tabris.create("Composite", {});
+      });
+
+      it("throws when disposed", function() {
+        expect(function() {
+          proxy.insertAfter({});
+        }).toThrowError("Cannot insert after non-widget");
+      });
+
+      it("throws when called with a non-widget", function() {
+        expect(function() {
+          proxy.insertAfter({});
+        }).toThrowError("Cannot insert after non-widget");
+      });
+
+      it("throws when called with an empty widget collection", function() {
+        expect(function() {
+          proxy.insertAfter(parent1.find(".missing"));
+        }).toThrowError("Cannot insert after non-widget");
+      });
+
+      describe("with a widget", function() {
+
+        beforeEach(function() {
+          proxy.appendTo(parent1);
+          other = tabris.create("Button", {}).appendTo(parent2);
+          proxy.insertAfter(other);
+        });
+
+        it("removes widget from its old parent's children list", function() {
+          expect(parent1.children()).not.toContain(proxy);
+        });
+
+        it("adds widget to new parent's children list", function() {
+          expect(parent2.children()).toContain(proxy);
+        });
+
+        it("adds widget directly after the given widget", function() {
+          var children = parent2.children();
+          expect(children.indexOf(proxy)).toBe(children.indexOf(other) + 1);
+        });
+
+      });
+
+      describe("with a sibling widget", function() {
+
+        beforeEach(function() {
+          proxy.appendTo(parent1);
+          other = tabris.create("Button", {}).appendTo(parent1);
+          proxy.insertAfter(other);
+        });
+
+        it("re-orders widgets", function() {
+          expect(parent1.children().toArray()).toEqual([other, proxy]);
+        });
+
+      });
+
+      describe("with a widget collection", function() {
+
+        beforeEach(function() {
+          tabris.create("Button", {}).appendTo(parent1);
+          tabris.create("Button", {}).appendTo(parent2);
+          var grandparent = tabris.create("Composite", {}).append(parent1, parent2);
+          proxy.insertAfter(grandparent.find("Button"));
+        });
+
+        it("inserts only before the first the widget of the collection", function() {
+          expect(parent1.children()).toContain(proxy);
+          expect(parent2.children()).not.toContain(proxy);
+        });
+
       });
 
     });
