@@ -11,8 +11,12 @@
         name: "Selection",
         alias: "change:selectionIndex",
         trigger: function(event) {
-          this._triggerChangeEvent("selectionIndex", event.selectionIndex);
-          this.trigger("select", this, this._getItem(event.selectionIndex), {index: event.selectionIndex});
+          // only trigger events if the selectionIndex actually changed (fix #355)
+          if (event.selectionIndex !== this._selectionIndex) {
+            this._triggerChangeEvent("selectionIndex", event.selectionIndex);
+            this.trigger("select", this, this._getItem(event.selectionIndex), {index: event.selectionIndex});
+            this._selectionIndex = event.selectionIndex;
+          }
         }
       },
       "change:selection": {
@@ -32,6 +36,7 @@
         type: "natural",
         access: {
           set: function(name, value, options) {
+            this._selectionIndex = value;
             this._nativeSet(name, value);
             this._triggerChangeEvent(name, value, options);
           }

@@ -45,7 +45,7 @@ describe("Picker", function() {
       listener = jasmine.createSpy();
     });
 
-    it("Picker select", function() {
+    it("select", function() {
       picker.on("select", listener);
       picker.set("items", ["foo", "bar"]);
       tabris._notify(picker.cid, "Selection", {selectionIndex: 1});
@@ -53,7 +53,7 @@ describe("Picker", function() {
       checkListen("Selection");
     });
 
-    it("Picker change:selection", function() {
+    it("change:selection", function() {
       picker.on("change:selection", listener);
       picker.set("items", ["foo", "bar"]);
       tabris._notify(picker.cid, "Selection", {selectionIndex: 1});
@@ -61,11 +61,29 @@ describe("Picker", function() {
       checkListen("Selection");
     });
 
-    it("Picker change:selectionIndex", function() {
+    it("change:selectionIndex", function() {
       picker.on("change:selectionIndex", listener);
       tabris._notify(picker.cid, "Selection", {selectionIndex: 23});
       checkEvent(23);
       checkListen("Selection");
+    });
+
+    it("change:selectionIndex does not fire if unchanged", function() {
+      picker.set("selectionIndex", 23);
+      picker.on("change:selectionIndex", listener);
+
+      tabris._notify(picker.cid, "Selection", {selectionIndex: 23});
+
+      expect(listener).not.toHaveBeenCalled();
+    });
+
+    it("change:selectionIndex does not fire on redundant events", function() {
+      picker.on("change:selectionIndex", listener);
+
+      tabris._notify(picker.cid, "Selection", {selectionIndex: 23});
+      tabris._notify(picker.cid, "Selection", {selectionIndex: 23});
+
+      expect(listener.calls.count()).toBe(1);
     });
 
   });
