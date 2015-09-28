@@ -13,6 +13,13 @@ tabris.registerType("_App", {
       }
     }
   },
+  getResourceLocation: function(path) {
+    if (!this._resourceBaseUrl) {
+      this._resourceBaseUrl = this._nativeGet("resourceBaseUrl");
+    }
+    var subPath = path != null ? "/" + normalizePath("" + path) : "";
+    return this._resourceBaseUrl + subPath;
+  },
   dispose: function() {
     throw new Error("tabris.app can not be disposed");
   },
@@ -57,4 +64,18 @@ function notifyPatchCallback(event) {
       }
     }
   }
+}
+
+function normalizePath(path) {
+  return path.split(/\/+/).map(function(segment) {
+    if (segment === "..") {
+      throw new Error("Path must not contain '..'");
+    }
+    if (segment === ".") {
+      return "";
+    }
+    return segment;
+  }).filter(function(string) {
+    return !!string;
+  }).join("/");
 }

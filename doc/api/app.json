@@ -30,6 +30,17 @@
         "description": "Forces the running application to reload the main module and start over."
       }
     ],
+    "getResourceLocation": [
+      {
+        "parameters": [{
+          "name": "path",
+          "type": "string",
+          "description": "The path of a resource relative to the application root."
+        }],
+        "returns": "string",
+        "description": "Returns the URL for a given resource that is bundled with the app. Can be used to access app resources like images, videos, etc."
+      }
+    ],
     "installPatch": [
       {
         "parameters": [

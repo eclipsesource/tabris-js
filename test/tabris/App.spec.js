@@ -95,6 +95,51 @@ describe("App", function() {
 
   });
 
+  describe("getResourceLocation", function() {
+
+    beforeEach(function() {
+      spyOn(nativeBridge, "get").and.returnValue("/root");
+    });
+
+    it("GETs 'resourceBaseUrl'", function() {
+      app.getResourceLocation();
+
+      expect(nativeBridge.get).toHaveBeenCalledWith(app.cid, "resourceBaseUrl");
+    });
+
+    it("GETs 'resourceBaseUrl' only once", function() {
+      app.getResourceLocation();
+      app.getResourceLocation();
+
+      expect(nativeBridge.get.calls.count()).toBe(1);
+    });
+
+    it("appends normalized parameter", function() {
+      var result = app.getResourceLocation("foo//bar");
+
+      expect(result).toBe("/root/foo/bar");
+    });
+
+    it("strips leading and trailing slash", function() {
+      var result = app.getResourceLocation("/foo/bar/");
+
+      expect(result).toBe("/root/foo/bar");
+    });
+
+    it("ignores '.' segments", function() {
+      var result = app.getResourceLocation("./foo/bar");
+
+      expect(result).toBe("/root/foo/bar");
+    });
+
+    it("throws on '..'", function() {
+      expect(function() {
+        app.getResourceLocation("../foo");
+      }).toThrowError("Path must not contain '..'");
+    });
+
+  });
+
   describe("installPatch", function() {
 
     var callback, error;
