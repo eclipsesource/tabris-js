@@ -9,20 +9,44 @@ var page = tabris.create("Page", {
 });
 
 var scrollView = tabris.create("ScrollView", {
-  layoutData: {left: 0, right: 0, top: 0, bottom: 0}
+  left: 0, right: 0, top: 0, bottom: 0
 }).appendTo(page);
 
-var imageTextView = tabris.create("ImageView", {
-  layoutData: {left: 0, top: 0, right: 0}
+var imageView = tabris.create("ImageView", {
+  left: 0, top: 0, right: 0,
+  image: "images/salad.jpg",
+  scaleMode: "fill"
 }).appendTo(scrollView);
 
+var titleComposite = tabris.create("Composite", {
+  left: 0, right: 0,
+  id: "titleComposite",
+  background: "rgba(255,152,0,0.9)"
+}).appendTo(scrollView);
+
+tabris.create("TextView", {
+  left: MARGIN, top: MARGIN, right: MARGIN,
+  markupEnabled: true,
+  text: "<b>The perfect side dish</b>",
+  font: "16px",
+  textColor: "black"
+}).appendTo(titleComposite);
+
+tabris.create("TextView", {
+  left: MARGIN, bottom: MARGIN_SMALL, right: MARGIN, top: "prev()",
+  markupEnabled: true,
+  text: "<b>INDIAN SUMMER SALAD</b>",
+  font: "24px",
+  textColor: "white"
+}).appendTo(titleComposite);
+
 var contentComposite = tabris.create("Composite", {
-  layoutData: {left: 0, right: 0, top: "#titleComposite", height: 1000},
+  left: 0, right: 0, top: "#titleComposite", height: 1000,
   background: "white"
 }).appendTo(scrollView);
 
 tabris.create("TextView", {
-  layoutData: {left: MARGIN, right: MARGIN, top: MARGIN},
+  left: MARGIN, right: MARGIN, top: MARGIN,
   text: "Etiam nisl nisi, egestas quis lacus ut, tristique suscipit metus. In vehicula lectus " +
         "metus, at accumsan elit fringilla blandit. Integer et quam sed dolor pharetra " +
         "molestie id eget dui. Donec ac libero eu lectus dapibus placerat eu a tellus. Fusce " +
@@ -41,44 +65,19 @@ tabris.create("TextView", {
         "porttitor nec, sed lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus."
 }).appendTo(contentComposite);
 
-var titleComposite = tabris.create("Composite", {
-  id: "titleComposite",
-  background: "rgba(255,152,0,0.9)"
-}).appendTo(scrollView);
-
-tabris.create("TextView", {
-  markupEnabled: true,
-  text: "<b>The perfect side dish</b>",
-  font: "16px",
-  layoutData: {left: MARGIN, top: MARGIN, right: MARGIN},
-  textColor: "black"
-}).appendTo(titleComposite);
-
-tabris.create("TextView", {
-  layoutData: {left: MARGIN, bottom: MARGIN_SMALL, right: MARGIN},
-  markupEnabled: true,
-  text: "<b>INDIAN SUMMER SALAD</b>",
-  font: "24px",
-  textColor: "white"
-}).appendTo(titleComposite);
-
 scrollView.on("resize", function(widget, bounds) {
-  var imageHeight = bounds.height / 1.4; // 1.4 is the image aspect ratio
-  imageTextView.set("image", {src: "images/salad.jpg", width: bounds.width, height: bounds.width});
+  var imageHeight = bounds.height / 2;
+  imageView.set("height", imageHeight);
   var titleCompHeight = titleComposite.get("bounds").height;
-  // we need the offset of the title composite in each scroll event
-  // it can only change when a change:bounds is triggered, wo thats when we assign it
+  // We need the offset of the title composite in each scroll event.
+  // As it can only change on resize, we assign it here.
   titleCompY = Math.min(imageHeight - titleCompHeight, bounds.height / 2);
-  titleComposite.set("layoutData", {left: 0, top: titleCompY, right: 0, height: 64});
+  titleComposite.set("top", titleCompY);
 });
 
 scrollView.on("scroll", function(widget, offset) {
-  imageTextView.set("transform", {translationY: offset.y * 0.4});
-  if (titleCompY - offset.y < 0) {
-    titleComposite.set("transform", {translationY: offset.y - titleCompY});
-  } else {
-    titleComposite.set("transform", {translationY: 0});
-  }
+  imageView.set("transform", {translationY: Math.max(0, offset.y * 0.4)});
+  titleComposite.set("transform", {translationY: Math.max(0, offset.y - titleCompY)});
 });
 
 page.open();
