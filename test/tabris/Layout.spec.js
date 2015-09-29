@@ -93,6 +93,27 @@ describe("Layout:", function() {
       expect(output).not.toBe(input);
     });
 
+    it("skips null entries", function() {
+      var input = {top: 0, bottom: null, width: 0, height: null, centerX: 0, centerY: null};
+      var output = encode(input);
+
+      expect(output).toEqual({top: 0, width: 0, centerX: 0});
+    });
+
+    it("skips undefined entries", function() {
+      var input = {
+        top: 0,
+        bottom: undefined,
+        width: 0,
+        height: undefined,
+        centerX: 0,
+        centerY: undefined
+      };
+      var output = encode(input);
+
+      expect(output).toEqual({top: 0, width: 0, centerX: 0});
+    });
+
     it("creates a safe copy of arrays", function() {
       var input = {left: [30, 10], top: [70, 20]};
       var output = encode(input);

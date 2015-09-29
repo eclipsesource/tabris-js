@@ -35,13 +35,15 @@
     encodeLayoutData: function(layoutData) {
       var result = {};
       for (var key in layoutData) {
-        if (!(key in encoders)) {
-          throw new Error("Invalid key '" + key + "' in layoutData");
-        }
-        try {
-          result[key] = encoders[key](layoutData[key]);
-        } catch (error) {
-          throw new Error("Invalid value for '" + key + "': " + error.message);
+        if (layoutData[key] != null) {
+          if (!(key in encoders)) {
+            throw new Error("Invalid key '" + key + "' in layoutData");
+          }
+          try {
+            result[key] = encoders[key](layoutData[key]);
+          } catch (error) {
+            throw new Error("Invalid value for '" + key + "': " + error.message);
+          }
         }
       }
       return result;
