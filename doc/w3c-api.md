@@ -57,7 +57,7 @@ See [W3C](http://dev.w3.org/html5/webstorage/) / [MDN](https://developer.mozilla
 
 ## Canvas Context
 
-The `Canvas` widget provides an HTML5 canvas compatible "2D Context" object. See [Canvas](api/canvas.md).
+The `Canvas` widget provides an HTML5 canvas compatible "2D Context" object. See [Canvas](api/Canvas.md).
 
 See [W3C](http://www.w3.org/TR/2dcontext/) / [MDN](https://developer.mozilla.org/en/docs/Web/API/CanvasRenderingContext2D)
 

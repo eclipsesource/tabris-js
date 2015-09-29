@@ -6,11 +6,11 @@ tabris.create("Canvas", {
 }).on("resize", function(canvas, bounds) {
   var ctx = canvas.getContext("2d", bounds.width, bounds.height);
   ctx.moveTo(0, 0);
-  // ... 
+  // ...
 }).appendTo(page);
 ```
 
-The following CanvasRenderingContext2D methods are supported:
+The following `CanvasRenderingContext2D` methods are supported:
 
 * save
 * restore
@@ -36,7 +36,7 @@ The following CanvasRenderingContext2D methods are supported:
 * stroke
 * measureText
 
-The following CanvasRenderingContext2D properties are supported:
+The following `CanvasRenderingContext2D` properties are supported:
 
 * lineWidth
 * lineCap
