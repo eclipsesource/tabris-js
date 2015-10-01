@@ -38,7 +38,7 @@
           "description": "The path of a resource relative to the application root."
         }],
         "returns": "string",
-        "description": "Returns the URL for a given resource that is bundled with the app. Can be used to access app resources like images, videos, etc."
+        "description": "Returns the URL for a given resource that is bundled with the app. Can be used to access app resources like images, videos, etc. Note that these resources can only be accessed in read-only mode."
       }
     ],
     "installPatch": [
