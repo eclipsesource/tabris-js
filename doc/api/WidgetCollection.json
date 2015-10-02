@@ -95,7 +95,7 @@
         {"name": "widget", "type": "Widget"}
       ],
       "returns": "number",
-      "description": "Returns the index of the given widget within the collection. If there is not match the return value is `-1`."
+      "description": "Returns the index of the given widget within the collection. If there is no match, the return value is `-1`."
     }
   },
   "fields": {
