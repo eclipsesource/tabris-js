@@ -232,19 +232,61 @@
       ],
       "description": "Fired continuously after a finger touching the widget moved for a certain distance."
     },
-    "pan:{direction}": {
+    "pan:up": {
       "parameters": [
         {"name": "widget", "type": "Widget"},
         {"name": "gesture", "type": "GestureObject"}
       ],
-      "description": "Fired when a finger starts moving in the given direction. Values for {direction} are: `left`, `right`, `up`, `down`."
+      "description": "Fired when a finger starts moving up."
     },
-    "swipe:{direction}": {
+    "pan:down": {
       "parameters": [
         {"name": "widget", "type": "Widget"},
         {"name": "gesture", "type": "GestureObject"}
       ],
-      "description": "Fired when a finger moves quickly in the given direction. Values for {direction} are: `left`, `right`, `up`, `down`."
+      "description": "Fired when a finger starts moving down."
+    },
+    "pan:left": {
+      "parameters": [
+        {"name": "widget", "type": "Widget"},
+        {"name": "gesture", "type": "GestureObject"}
+      ],
+      "description": "Fired when a finger starts moving left."
+    },
+    "pan:right": {
+      "parameters": [
+        {"name": "widget", "type": "Widget"},
+        {"name": "gesture", "type": "GestureObject"}
+      ],
+      "description": "Fired when a finger starts moving right."
+    },
+    "swipe:up": {
+      "parameters": [
+        {"name": "widget", "type": "Widget"},
+        {"name": "gesture", "type": "GestureObject"}
+      ],
+      "description": "Fired when a finger moves up quickly."
+    },
+    "swipe:down": {
+      "parameters": [
+        {"name": "widget", "type": "Widget"},
+        {"name": "gesture", "type": "GestureObject"}
+      ],
+      "description": "Fired when a finger moves down quickly."
+    },
+    "swipe:left": {
+      "parameters": [
+        {"name": "widget", "type": "Widget"},
+        {"name": "gesture", "type": "GestureObject"}
+      ],
+      "description": "Fired when a finger moves left quickly."
+    },
+    "swipe:right": {
+      "parameters": [
+        {"name": "widget", "type": "Widget"},
+        {"name": "gesture", "type": "GestureObject"}
+      ],
+      "description": "Fired when a finger moves right quickly."
     },
     "touchstart": {
       "parameters": [
