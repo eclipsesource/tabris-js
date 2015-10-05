@@ -92,7 +92,7 @@ module.exports = function (grunt) {
     grunt.file.expand(grunt.config("doc").api).forEach(function (file) {
       var json = grunt.file.readJSON(file);
       json.file = file;
-      api[json.type || json.object] = json;
+      api[json.type] = json;
     });
     return api;
   }
@@ -306,7 +306,7 @@ module.exports = function (grunt) {
   }
 
   function title(json) {
-    return json.title || json.type || json.object;
+    return json.title || json.object || json.type;
   }
 
   function baseFileName(file) {
