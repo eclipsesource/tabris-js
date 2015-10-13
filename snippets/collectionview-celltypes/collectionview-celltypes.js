@@ -10,12 +10,13 @@ tabris.create("CollectionView", {
     return item.type;
   },
   itemHeight: function(item, type) {
-    return type === "section" ? 30 : 24;
+    return type === "section" ? 48 : 24;
   },
   initializeCell: function(cell, type) {
     var textView = tabris.create("TextView", {
       layoutData: {top: 2, bottom: 2, left: 5, right: 5},
-      font: type === "section" ? "bold 18px" : "14px"
+      font: type === "section" ? "bold 28px" : "14px",
+      alignment: type === "section" ? "center" : "left"
     }).appendTo(cell);
     if (type === "section") {
       cell.set("background", "#cecece");
