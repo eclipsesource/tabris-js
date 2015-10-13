@@ -312,6 +312,26 @@ describe("PropertyTypes:", function() {
 
   });
 
+  describe("function", function() {
+
+    var check = tabris.PropertyTypes.function.encode;
+
+    it("accepts functions", function() {
+      var fn = function() {};
+      expect(check(fn)).toBe(fn);
+    });
+
+    it("fails for non-functions", function() {
+      var values = ["", "foo", 23, null, undefined, true, false, {}, []];
+      values.forEach(function(value) {
+        expect(function() {
+          check(value);
+        }).toThrow(new Error(typeof value + " is not a function: " + value));
+      });
+    });
+
+  });
+
   describe("choice", function() {
 
     var check = tabris.PropertyTypes.choice.encode;

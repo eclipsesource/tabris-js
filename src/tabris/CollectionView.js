@@ -33,7 +33,10 @@
           }
         }
       },
-      initializeCell: {default: null},
+      initializeCell: {
+        type: "function",
+        default: null
+      },
       cellType: {
         type: "any", // "string|function",
         default: null,

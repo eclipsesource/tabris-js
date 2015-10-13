@@ -40,6 +40,15 @@
       }
     },
 
+    function: {
+      encode: function(value) {
+        if ("function" !== typeof value) {
+          throw new Error(typeof value + " is not a function: " + value);
+        }
+        return value;
+      }
+    },
+
     choice: {
       encode: function(value, acceptable) {
         if (Array.isArray(acceptable)) {
