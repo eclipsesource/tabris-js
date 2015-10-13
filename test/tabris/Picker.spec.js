@@ -100,12 +100,50 @@ describe("Picker", function() {
         expect(picker.get("items")).toEqual([]);
       });
 
+      it("initial value is a safe copy", function() {
+        picker.get("items").push(23);
+
+        expect(picker.get("items")).toEqual([]);
+      });
+
       it("converts null to empty array", function() {
         expect(picker.set("items", null).get("items")).toEqual([]);
       });
 
-      it("converts numbers to string array", function() {
-        expect(picker.set("items", [1, 2, 3]).get("items")).toEqual(["1", "2", "3"]);
+      it("set SETs items property", function() {
+        picker.set("items", ["a", "b", "c"]);
+
+        var call = nativeBridge.calls({op: "set", id: picker.cid})[0];
+        expect(call.properties).toEqual({items: ["a", "b", "c"]});
+      });
+
+      it("get does not GET from client", function() {
+        picker.get("items");
+
+        expect(nativeBridge.calls({op: "get", id: picker.cid}).length).toBe(0);
+      });
+
+    });
+
+    describe("itemText", function() {
+
+      it("initial value is function", function() {
+        expect(picker.get("itemText")).toEqual(jasmine.any(Function));
+      });
+
+      it("initial function translates to string", function() {
+        var fn = picker.get("itemText");
+
+        expect(fn("foo")).toBe("foo");
+        expect(fn(23)).toBe("23");
+        expect(fn(null)).toBe("");
+        expect(fn()).toBe("");
+      });
+
+      it("does not SET property on client", function() {
+        picker.set("itemText", function(item) { return item.name; });
+
+        expect(nativeBridge.calls({op: "set", id: picker.cid}).length).toBe(0);
       });
 
     });

@@ -31,7 +31,32 @@
     },
 
     _properties: {
-      items: {type: ["array", "string"], default: function() {return [];}},
+      items: {
+        type: "array",
+        default: function() {
+          return [];
+        },
+        access: {
+          set: function(name, value, options) {
+            this._storeProperty(name, value, options);
+            var getText = this.get("itemText");
+            this._nativeSet("items", value.map(getText));
+          }
+        }
+      },
+      itemText: {
+        type: "function",
+        default: function() {
+          return function(item) {
+            return item == null ? "" : item.toString();
+          };
+        },
+        access: {
+          set: function(name, value, options) {
+            this._storeProperty(name, value, options);
+          }
+        }
+      },
       selectionIndex: {
         type: "natural",
         access: {
@@ -61,10 +86,14 @@
     },
 
     _setProperties: function(properties, options) {
-      if ("items" in properties) {
-        this._setProperty("items", properties.items, options);
-      }
-      this.super("_setProperties", properties, options);
+      // items property depends on itemText, selection/selectionIndex depend on items
+      var deferred = ["items", "selection", "selectionIndex"];
+      this.super("_setProperties", _.omit(properties, deferred), options);
+      deferred.forEach(function(name) {
+        if (name in properties) {
+          this._setProperty(name, properties[name], options);
+        }
+      }, this);
     },
 
     _getItem: function(index) {
