@@ -8,7 +8,9 @@
       "description": "Icon image for the action."
     },
     "placementPriority": {
-      "type": "string:low|high|normal?normal",
+      "type": "string",
+      "values": ["low", "high", "normal"],
+      "default": "normal",
       "description": "Actions with higher placement priority will be placed at a more significant position in the UI, e.g. low priority actions could go into a menu instead of being included in a toolbar."
     },
     "title": {

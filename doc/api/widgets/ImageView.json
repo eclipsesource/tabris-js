@@ -7,7 +7,9 @@
       "type": "Image"
     },
     "scaleMode": {
-      "type": "string:auto|fit|fill|stretch|none?auto"
+      "type": "string",
+      "values": ["auto", "fit", "fill", "stretch", "none"],
+      "default": "auto"
     }
   },
   "links": [

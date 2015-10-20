@@ -4,16 +4,21 @@
   "include": ["Widget"],
   "properties": {
     "minimum": {
-      "type": "number?0"
+      "type": "number",
+      "default": "0"
     },
     "maximum": {
-      "type": "number?100"
+      "type": "number",
+      "default": "100"
     },
     "selection": {
-      "type": "number?0"
+      "type": "number",
+      "default": "0"
     },
     "state": {
-      "type": "string:normal|paused|error?normal"
+      "type": "string",
+      "values": ["normal", "paused", "error"],
+      "default": "normal"
     }
   },
   "links": [

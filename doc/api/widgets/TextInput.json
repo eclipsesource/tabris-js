@@ -4,7 +4,9 @@
   "include": ["Widget"],
   "properties": {
     "type": {
-      "type": "string:default|password|search|multiline?default",
+      "type": "string",
+      "values": ["default", "password", "search", "multiline"],
+      "default": "default",
       "static": true,
       "description": "The type of the text widget."
     },
@@ -20,19 +22,25 @@
       "type": "boolean"
     },
     "alignment": {
-      "type": "string:left|right|center?left",
+      "type": "string",
+      "values": ["left", "right", "center"],
+      "default": "left",
       "description": "The horizontal alignment of the text."
     },
     "autoCorrect": {
-      "type": "boolean?false",
+      "type": "boolean",
+      "default": "false",
       "description": "Enables the spell checker and auto-correction feature."
     },
     "autoCapitalize": {
-      "type": "boolean?false",
+      "type": "boolean",
+      "default": "false",
       "description": "Automatically switch to capital letters after every key pressed."
     },
     "keyboard": {
-      "type": "string:ascii|decimal|email|number|numbersAndPunctuation|phone|url|default?default",
+      "type": "string",
+      "values": ["ascii", "decimal", "email", "number", "numbersAndPunctuation", "phone", "url", "default"],
+      "default": "default",
       "description": "Selects the keyboard type to use for editing this widget."
     }
   },

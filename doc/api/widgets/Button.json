@@ -4,7 +4,9 @@
   "include": ["Widget"],
   "properties": {
     "alignment": {
-      "type": "string:left|right|center?center",
+      "type": "string",
+      "values": ["left", "right", "center"],
+      "default": "center",
       "description": "The horizontal alignment of the button text."
     },
     "image": {

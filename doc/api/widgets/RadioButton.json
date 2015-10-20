@@ -4,7 +4,8 @@
   "include": ["Widget"],
   "properties": {
     "selection": {
-      "type": "boolean?false",
+      "type": "boolean",
+      "default": "false",
       "description": "The checked state of the radio button."
     },
     "text": {

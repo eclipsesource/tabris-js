@@ -4,7 +4,7 @@
   "include": ["Composite"],
   "properties": {
     "item": {
-      "type": "mixed",
+      "type": "any",
       "description": "The item that is currently represented by this cell. This property is not set by the application but by the *CollectionView* widget."
     },
     "itemIndex": {
@@ -16,7 +16,7 @@
     "change:item": {
       "parameters": [
         {"name": "widget", "type": "Cell"},
-        {"name": "item", "type": "mixed", "description": "The new value of *[item](#item)*."},
+        {"name": "item", "type": "any", "description": "The new value of *[item](#item)*."},
         {"name": "options", "type": "Object"}
       ],
       "description": "Fired when a collection item is assigned to this cell. Use this event to configure the widgets in this cell to represent the assigned item."

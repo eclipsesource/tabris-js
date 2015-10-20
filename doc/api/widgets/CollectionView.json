@@ -8,7 +8,7 @@
       "description": "The height of a collection cell. If set to a function, this function will be called for every item, providing the item and the cell type as parameters, and must return the item height for the given item."
     },
     "items": {
-      "type": "Array",
+      "type": "any[]",
       "description": "An array of data items to be displayed by the collection view. For dynamic content, use the methods `insert` and `remove` instead of setting this property directly."
     },
     "initializeCell": {
@@ -21,15 +21,18 @@
       "description": "The name of the cell type to use for a given item. This name will be passed to the `initializeCell` and `itemHeight` functions. Cells will be reused only by items that require the same cell type. If set to a function, this function will be called for every item, providing the item as a parameter, and must return a name for the cell type to use for the given item."
     },
     "refreshEnabled": {
-      "type": "boolean?false",
+      "type": "boolean",
+      "default": "false",
       "description": "Enables the user to trigger a refresh by using the pull-to-refresh gesture."
     },
     "refreshIndicator": {
-      "type": "boolean?false",
+      "type": "boolean",
+      "default": "false",
       "description": "Whether the refresh indicator is currently visible. Will be set to `true` when a *refresh* event is triggered. Reset it to `false` when the refresh is finished."
     },
     "refreshMessage": {
-      "type": "string?\"\"",
+      "type": "string",
+      "default": "\"\"",
       "description": "The message text displayed together with the refresh indicator. Currently not supported on Android."
     },
     "firstVisibleIndex": {
@@ -45,7 +48,7 @@
     "select": {
       "parameters": [
         {"name": "widget", "type": "CollectionView"},
-        {"name": "item", "type": "mixed", "description": "The item that was selected."},
+        {"name": "item", "type": "any", "description": "The item that was selected."},
         {"name": "options", "type": "Object", "description": "Contains the index of the selected item, e.g. `{index: number}`"}
       ],
       "description": "Fired when a collection item is selected."
@@ -68,13 +71,13 @@
     "insert": [
       {
         "parameters": [
-          {"name": "items", "type": "Array"}
+          {"name": "items", "type": "any[]"}
         ],
         "description": "Inserts the given items into this view. Items are added at the end. This operation will modify the *items* property."
       },
       {
         "parameters": [
-          {"name": "items", "type": "Array"},
+          {"name": "items", "type": "any[]"},
           {"name": "index", "type": "number", "description": "The position to insert the items at. If a negative index is given, it is interpreted as relative to the end. If the given index is greater than the item count, new items will be appended at the end. "}
         ],
         "description": "Inserts the given items into this view at the given index. This operation will modify the *items* property."

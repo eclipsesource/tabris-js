@@ -13,7 +13,8 @@
       "description": "Text color for the navigation elements"
     },
     "toolbarVisible": {
-      "type": "boolean?true",
+      "type": "boolean",
+      "default": "true",
       "description": "Whether the toolbars above and below pages are visible."
     },
     "activePage": {

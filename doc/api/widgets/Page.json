@@ -24,7 +24,8 @@
       "type": "string"
     },
     "topLevel": {
-      "type": "boolean?false"
+      "type": "boolean",
+      "default": "false"
     }
   },
   "events": {

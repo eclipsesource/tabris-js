@@ -4,13 +4,16 @@
   "include": ["Widget"],
   "properties": {
     "minimum": {
-      "type": "number?0"
+      "type": "number",
+      "default": "0"
     },
     "maximum": {
-      "type": "number?100"
+      "type": "number",
+      "default": "100"
     },
     "selection": {
-      "type": "number?0"
+      "type": "number",
+      "default": "0"
     }
   },
   "events": {

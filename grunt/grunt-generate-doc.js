@@ -169,7 +169,7 @@ module.exports = function (grunt) {
     Object.keys(json.properties).sort().forEach(function (name) {
       var property = json.properties[name];
       result.push("### ", name, "\n");
-      result.push("Type: ", renderPropertyType(property.type, data), "\n");
+      result.push("Type: ", renderPropertyType(property, data), "\n");
       if (property.provisional) {
         result.push(provisionalNote);
       }
@@ -194,7 +194,7 @@ module.exports = function (grunt) {
     Object.keys(json.fields).sort().forEach(function (name) {
       var field = json.fields[name];
       result.push("### ", name, "\n");
-      result.push("Type: ", renderPropertyType(field.type, data), "\n");
+      result.push("Type: ", renderPropertyType(field, data), "\n");
       if (field.provisional) {
         result.push(provisionalNote);
       }
@@ -206,16 +206,14 @@ module.exports = function (grunt) {
     return result.join("");
   }
 
-  function renderPropertyType(type, data) {
-    var name = type.split(":")[0].split("?")[0];
-    var supValues = type.indexOf(":") !== -1 ? type.split(":")[1].split("?")[0] : "";
-    var defValue = type.split("?")[1] || "";
+  function renderPropertyType(property, data) {
+    var name = property.type;
     var result = ["*", renderTypeLink(name, data), "*"];
-    if (supValues) {
-      result.push(", supported values: `" + supValues.split("|").join("`, `") + "`");
+    if (property.values) {
+      result.push(", supported values: `" + property.values.join("`, `") + "`");
     }
-    if (defValue) {
-      result.push(", default: `" + defValue + "`");
+    if (property.default) {
+      result.push(", default: `" + property.default + "`");
     }
     return result.join("");
   }

@@ -16,7 +16,9 @@
   },
   "properties": {
     "tabBarLocation": {
-      "type": "string:top|bottom|auto?auto",
+      "type": "string",
+      "values": ["top", "bottom", "auto"],
+      "default": "auto",
       "static": true,
       "description": "The placement of the tab titles. When set to `\"auto\"`, the position is platform dependent."
     },

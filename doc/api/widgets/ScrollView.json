@@ -4,7 +4,9 @@
   "include": ["Composite"],
   "properties": {
     "direction": {
-      "type": "string:vertical|horizontal?vertical",
+      "type": "string",
+      "values": ["vertical", "horizontal"],
+      "default": "vertical",
       "static": true,
       "description": "Specifies the scrolling direction of the scroll composite."
     }

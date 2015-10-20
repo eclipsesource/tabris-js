@@ -108,11 +108,13 @@
       "description": "A string to identify the widget by using selectors. Id's are optional. It is strongly recommended that they are unique within a page."
     },
     "enabled": {
-      "type": "boolean?true",
+      "type": "boolean",
+      "default": "true",
       "description": "Whether the widget can be operated."
     },
     "visible": {
-      "type": "boolean?true",
+      "type": "boolean",
+      "default": "true",
       "description": "Whether the widget is visible."
     },
     "layoutData": {
@@ -180,15 +182,17 @@
       "description": "Text color of the widget."
     },
     "opacity": {
-      "type": "number:0..1?1",
-      "description": "Opacity of the entire widget. Can be used for fade animations."
+      "type": "number",
+      "default": "1",
+      "description": "Opacity of the entire widget, in the range `[0..1]`. Can be used for fade animations."
     },
     "transform": {
       "type": "Transformation",
       "description": "Modifications to the widget's shape, size, or position. Can be used for animations. **Note:** In Android the *transform* property does not affect the *bounds* property, while it does so in iOS."
     },
     "highlightOnTouch": {
-      "type": "boolean?false",
+      "type": "boolean",
+      "default": "false",
       "description": "Whether the entire widget should be highlighted while touched."
     }
   },
@@ -210,7 +214,7 @@
     "change:{property}": {
       "parameters": [
         {"name": "widget", "type": "Widget"},
-        {"name": "value", "type": "mixed", "description": "The new value of this given property."},
+        {"name": "value", "type": "any", "description": "The new value of this given property."},
         {"name": "options", "type": "Object", "description": "This is the options object given to the [`set`](#set) method."}
       ],
       "description": "Fired when the given property has changed. Change events for specific properties will only be documented separately if they may be triggered without calling `set`. "

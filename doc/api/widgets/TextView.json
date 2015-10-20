@@ -4,7 +4,9 @@
   "include": ["Widget"],
   "properties": {
     "alignment": {
-      "type": "string:left|right|center?left",
+      "type": "string",
+      "values": ["left", "right", "center"],
+      "default": "left",
       "description": "The horizontal alignment of the text."
     },
     "markupEnabled": {
@@ -17,7 +19,8 @@
       "description": "The text to display."
     },
     "maxLines": {
-      "type": "number|null?null",
+      "type": "number|null",
+      "default": "null",
       "description": "Limit the number of lines to be displayed to the given maximum. `null` disables this limit."
     }
   },

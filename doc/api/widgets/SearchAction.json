@@ -12,7 +12,8 @@
   },
   "properties": {
     "proposals": {
-      "type": "[string]?[]",
+      "type": "string[]",
+      "default": "[]",
       "description": "The list of proposals to display."
     },
     "text": {
