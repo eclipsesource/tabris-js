@@ -134,6 +134,14 @@ describe("CollectionView", function() {
         view.set("initializeCell", initializeCell);
       });
 
+      it("returns same function in get", function() {
+        expect(view.get("initializeCell")).toBe(initializeCell);
+      });
+
+      it("does not SET property on client", function() {
+        expect(nativeBridge.calls({op: "set", id: view.cid}).length).toBe(0);
+      });
+
       describe("when items is set", function() {
 
         var items;

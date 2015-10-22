@@ -35,7 +35,12 @@
       },
       initializeCell: {
         type: "function",
-        default: null
+        default: null,
+        access: {
+          set: function(name, value) {
+            this._storeProperty(name, value);
+          }
+        }
       },
       cellType: {
         type: "any", // "string|function",
