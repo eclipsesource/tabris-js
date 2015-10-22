@@ -467,7 +467,7 @@ describe("CollectionView", function() {
           var cellCreateCall, cell;
 
           beforeEach(function() {
-            view._trigger("createitem", {});
+            view._trigger("createitem", {type: 0});
             cellCreateCall = nativeBridge.calls({op: "create", type: "rwt.widgets.Composite"})[0];
             cell = tabris(cellCreateCall.id);
           });
@@ -591,7 +591,7 @@ describe("CollectionView", function() {
     var view;
 
     function createCell(item) {
-      view._trigger("createitem");
+      view._trigger("createitem", {type: 0});
       var createCalls = nativeBridge.calls({op: "create", type: "rwt.widgets.Composite"});
       var cell = tabris(createCalls[createCalls.length - 1].id);
       view._trigger("populateitem", {widget: cell.cid, index: view.get("items").indexOf(item)});
@@ -599,7 +599,10 @@ describe("CollectionView", function() {
     }
 
     beforeEach(function() {
-      view = tabris.create("CollectionView", {items: ["A", "B", "C"]}).appendTo(parent);
+      view = tabris.create("CollectionView", {
+        items: ["A", "B", "C"],
+        initializeCell: function() {}
+      }).appendTo(parent);
     });
 
     it("calls reload after create and listen calls", function() {
