@@ -47,6 +47,13 @@
         {"name": "widget", "type": "CollectionView"}
       ],
       "description": "Fired when the user requested a refresh. An event listener should reset the *refreshIndicator* property when refresh is finished."
+    },
+    "scroll": {
+      "parameters": [
+        {"name": "widget", "type": "CollectionView"},
+        {"name": "event", "type": "Object", "description": "Contains the scroll delta of this scroll event `{deltaX: number, deltaY: number}`. The value of `deltaY` will be positive when scrolling up and negative when scrolling down."}
+      ],
+      "description": "Fired while the collection view is scrolling."
     }
   },
   "methods": {

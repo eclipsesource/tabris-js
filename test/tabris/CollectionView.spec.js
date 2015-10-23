@@ -358,6 +358,25 @@ describe("CollectionView", function() {
 
         });
 
+        describe("when 'scroll' event is received", function() {
+
+          var listener;
+
+          beforeEach(function() {
+            listener = jasmine.createSpy("listener");
+          });
+
+          it("triggers 'scroll' on collection view", function() {
+            view.on("scroll", listener);
+
+            view._trigger("scroll", {deltaX: 23, deltaY: 42});
+
+            expect(listener.calls.count()).toBe(1);
+            expect(listener.calls.argsFor(0)).toEqual([view, {deltaX: 23, deltaY: 42}]);
+          });
+
+        });
+
         describe("when createitem event is received", function() {
 
           var cellCreateCall, cell;

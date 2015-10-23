@@ -123,6 +123,11 @@
           this.trigger("select", this, item, {index: event.index});
           this.trigger("selection", {index: event.index, item: item});
         }
+      },
+      scroll: {
+        trigger: function(event) {
+          this.trigger("scroll", this, event);
+        }
       }
     },
 
