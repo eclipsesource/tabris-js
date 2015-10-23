@@ -58,7 +58,7 @@
       try {
         result = tabris._client.loadAndExecute(child.src, "", "");
       } catch (ex) {
-        console.error("Error loading " + child.src + ": " + ex);
+        console.error("Error loading " + child.src + ":", ex);
         console.log(ex.stack);
         if (typeof child.onerror === "function") {
           child.onerror.call(window, ex);

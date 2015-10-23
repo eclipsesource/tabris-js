@@ -125,15 +125,20 @@ describe("DOMDocument", function() {
     });
 
     it("calls onerror when script throws error", function() {
-      nativeBridge.loadAndExecute = jasmine.createSpy().and.throwError(new Error("foo"));
+      var error = new Error("bang");
+      nativeBridge.loadAndExecute = jasmine.createSpy().and.throwError(error);
       script1.src = "foo.js";
       script1.onload = jasmine.createSpy();
       script1.onerror = jasmine.createSpy();
+      spyOn(console, "error");
+      spyOn(console, "log");
 
       target.document.head.appendChild(script1);
 
+      expect(console.error).toHaveBeenCalledWith("Error loading foo.js:", error);
+      expect(console.log).toHaveBeenCalledWith(error.stack);
       expect(script1.onload).not.toHaveBeenCalled();
-      expect(script1.onerror).toHaveBeenCalledWith(new Error("foo"));
+      expect(script1.onerror).toHaveBeenCalledWith(error);
     });
 
   });
