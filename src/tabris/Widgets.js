@@ -624,6 +624,14 @@
     _properties: {
       url: {type: "string", nocache: true},
       html: {type: "string", nocache: true}
+    },
+    _create: function(properties) {
+      this._on("dispose", function(){
+        this.set('url','');
+        this.set('html','');
+      });
+      this.super("_create", properties);
+      return this;
     }
   });
 
