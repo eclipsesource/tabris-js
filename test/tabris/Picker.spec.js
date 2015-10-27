@@ -55,7 +55,7 @@ describe("Picker", function() {
       checkListen("Selection");
     });
 
-    it("change:selection", function() {
+    it("change:selection on interactive change", function() {
       picker.on("change:selection", listener);
       picker.set("items", ["foo", "bar"]);
 
@@ -63,6 +63,16 @@ describe("Picker", function() {
 
       checkEvent("bar", {index: 1});
       checkListen("Selection");
+    });
+
+    it("change:selection on programmatic change", function() {
+      picker.on("change:selection", listener);
+      picker.set("items", ["foo", "bar"]);
+
+      picker.set("selection", "foo", {custom: 23});
+
+      expect(listener).toHaveBeenCalledWith(picker, "foo", {custom: 23, index: 0});
+      expect(listener.calls.count()).toBe(1);
     });
 
     it("change:selectionIndex", function() {

@@ -67,8 +67,7 @@
           set: function(name, item, options) {
             var index = this._getItemIndex(item);
             if (index !== -1) {
-              this.set("selectionIndex", index);
-              this._triggerChangeEvent(name, item, options);
+              this.set("selectionIndex", index, options);
             } else {
               console.warn("Could not set picker selection " + item + ": item not found");
             }
@@ -101,8 +100,8 @@
 
   });
 
-  function triggerSelectionChange(widget, index) {
-    widget._triggerChangeEvent("selection", widget._getItem(index), {index: index});
+  function triggerSelectionChange(widget, index, options) {
+    widget._triggerChangeEvent("selection", widget._getItem(index), _.extend({index: index}, options));
   }
 
 }());
