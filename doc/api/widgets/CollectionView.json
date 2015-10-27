@@ -31,6 +31,14 @@
     "refreshMessage": {
       "type": "string?\"\"",
       "description": "The message text displayed together with the refresh indicator. Currently not supported on Android."
+    },
+    "firstVisibleIndex": {
+      "type": "number",
+      "description": "The first item that is currently visible on screen. This property is read-only."
+    },
+    "lastVisibleIndex": {
+      "type": "number",
+      "description": "The last item that is currently visible on screen. This property is read-only."
     }
   },
   "events": {

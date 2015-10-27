@@ -45,6 +45,91 @@ describe("CollectionView", function() {
       expect(view.get("refreshMessage")).toBe("");
     });
 
+    ["firstVisibleIndex", "lastVisibleIndex"].forEach(function(prop) {
+
+      describe(prop, function() {
+
+        it("GETs property from client", function() {
+          spyOn(nativeBridge, "get").and.returnValue(23);
+
+          var result = view.get(prop);
+
+          expect(result).toBe(23);
+          expect(nativeBridge.get).toHaveBeenCalled();
+        });
+
+        it("prevents setting the property", function() {
+          spyOn(console, "warn");
+          spyOn(nativeBridge, "set");
+
+          view.set(prop, 23);
+
+          expect(nativeBridge.set).not.toHaveBeenCalled();
+          expect(console.warn).toHaveBeenCalled();
+          expect(console.warn.calls.argsFor(0)[0])
+            .toContain("Cannot set read-only property '" + prop + "'");
+        });
+
+      });
+
+      var changeEvent = "change:" + prop;
+
+      describe(changeEvent, function() {
+
+        it("issues native listen once", function() {
+          var listener = jasmine.createSpy();
+
+          view.on(changeEvent, listener);
+          view.on(changeEvent, listener);
+
+          expect(nativeBridge.calls({op: "listen", id: view.cid, event: "scroll"}).length).toBe(1);
+        });
+
+        it("listener is notified once for every new index", function() {
+          var listener = jasmine.createSpy();
+          var index = 23;
+          view.on(changeEvent, listener);
+          spyOn(nativeBridge, "get").and.callFake(function() { return index; });
+
+          view._trigger("scroll", {});
+          view._trigger("scroll", {});
+          view._trigger("scroll", {});
+          index = 24;
+          view._trigger("scroll", {});
+          view._trigger("scroll", {});
+
+          expect(listener.calls.count()).toBe(2);
+          expect(listener.calls.argsFor(0)).toEqual([view, 23, {}]);
+          expect(listener.calls.argsFor(1)).toEqual([view, 24, {}]);
+        });
+
+        it("listener is notified once even if other listeners are attached", function() {
+          var listener = jasmine.createSpy();
+          view.on(changeEvent, listener);
+          view.on(changeEvent, function() {});
+          spyOn(nativeBridge, "get").and.returnValue(23);
+
+          view._trigger("scroll", {});
+
+          expect(listener.calls.count()).toBe(1);
+        });
+
+        it("listener is notified once after on-off-on", function() {
+          var listener = jasmine.createSpy();
+          view.on(changeEvent, listener);
+          view.off(changeEvent, listener);
+          view.on(changeEvent, listener);
+          spyOn(nativeBridge, "get").and.returnValue(23);
+
+          view._trigger("scroll", {});
+
+          expect(listener.calls.count()).toBe(1);
+        });
+
+      });
+
+    });
+
     describe("when cellType is set to a function", function() {
 
       var cellTypeFn = jasmine.createSpy("cellType");

@@ -53,7 +53,23 @@
       },
       refreshEnabled: {type: "boolean", default: false},
       refreshIndicator: {type: "boolean", default: false},
-      refreshMessage: {type: "string", default: ""}
+      refreshMessage: {type: "string", default: ""},
+      firstVisibleIndex: {
+        type: "number",
+        access: {
+          set: function(name) {
+            console.warn(this.type + ": Cannot set read-only property '" + name + "'.");
+          }
+        }
+      },
+      lastVisibleIndex: {
+        type: "number",
+        access: {
+          set: function(name) {
+            console.warn(this.type + ": Cannot set read-only property '" + name + "'.");
+          }
+        }
+      }
     },
 
     _create: function() {
@@ -127,6 +143,24 @@
       scroll: {
         trigger: function(event) {
           this.trigger("scroll", this, event);
+        }
+      },
+      "change:firstVisibleIndex": {
+        listen: function(state) {
+          if (state) {
+            this._on("scroll", triggerChangeFirstVisibleIndex);
+          } else {
+            this._off("scroll", triggerChangeFirstVisibleIndex);
+          }
+        }
+      },
+      "change:lastVisibleIndex": {
+        listen: function(state) {
+          if (state) {
+            this._on("scroll", triggerChangeLastVisibleIndex);
+          } else {
+            this._off("scroll", triggerChangeLastVisibleIndex);
+          }
         }
       }
     },
@@ -238,6 +272,19 @@
   function decodeCellType(ctx, type) {
     var cellTypes = ctx._cellTypes || [];
     return cellTypes[type];
+  }
+
+  var triggerChangeFirstVisibleIndex = createDelegate("firstVisibleIndex");
+  var triggerChangeLastVisibleIndex = createDelegate("lastVisibleIndex");
+
+  function createDelegate(prop) {
+    return function() {
+      var actual = this.get(prop);
+      if (actual !== this["_prev:" + prop]) {
+        this._triggerChangeEvent(prop, actual);
+      }
+      this["_prev:" + prop] = actual;
+    };
   }
 
   tabris.registerWidget("Cell", {
