@@ -71,6 +71,11 @@ tabris.registerType("SearchAction", {
     this.super("_create", properties);
     this._nativeSet("parent", tabris.ui.cid);
     return this;
+  },
+
+  open: function() {
+    this._nativeCall("open", {});
+    return this;
   }
 
 });

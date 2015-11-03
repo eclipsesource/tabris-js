@@ -133,4 +133,26 @@ describe("SearchAction", function() {
 
   });
 
+  describe("open", function() {
+
+    var action;
+
+    beforeEach(function() {
+      action = tabris.create("SearchAction");
+      nativeBridge.resetCalls();
+    });
+
+    it("invokes 'open' call operation on native bridge", function() {
+      action.open();
+
+      nativeBridge.calls({op: "call", method: "open"});
+    });
+
+    it("returns self to allow chaining", function() {
+      var result = action.open();
+
+      expect(result).toBe(action);
+    });
+
+  });
 });

@@ -22,6 +22,13 @@ var action = tabris.create("SearchAction", {
 
 updateProposals("");
 
+tabris.create("Button", {
+  text: "Open Search",
+  layoutData: {centerX: 0, centerY: 0}
+}).on("select", function() {
+  action.open();
+}).appendTo(page);
+
 page.open();
 
 function updateProposals(query) {
