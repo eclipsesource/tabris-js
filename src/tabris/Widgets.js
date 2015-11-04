@@ -273,6 +273,10 @@
       centerX: {type: "dimension", access: layoutAccess},
       centerY: {type: "dimension", access: layoutAccess},
       baseline: {type: "sibling", access: layoutAccess},
+      elevation: {
+        type: "number",
+        default: 0
+      },
       font: {
         type: "font",
         access: {

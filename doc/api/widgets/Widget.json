@@ -155,6 +155,10 @@
       "type": "Widget",
       "description": "The vertical position of the widget's baseline relative to a sibling widget."
     },
+    "elevation": {
+      "type": "number",
+      "description": "The position of the widget on the x-axis. Currently only supported on Android 5.0+."
+    },
     "font": {
       "type": "Font",
       "description": "The font used for the widget."

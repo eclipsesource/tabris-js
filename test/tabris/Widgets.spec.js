@@ -88,6 +88,13 @@ describe("Widgets", function() {
       );
     });
 
+    it("sets elevation to value", function() {
+      widget.set("elevation", 8);
+
+      var call = nativeBridge.calls({op: "set"})[0];
+      expect(call.properties.elevation).toBe(8);
+    });
+
     it("translates visible to visibility", function() {
       widget.set("visible", true);
 
@@ -140,6 +147,7 @@ describe("Widgets", function() {
       expect(widget.get("enabled")).toBe(true);
       expect(widget.get("visible")).toBe(true);
       expect(widget.get("layoutData")).toBe(null);
+      expect(widget.get("elevation")).toBe(0);
       expect(widget.get("opacity")).toBe(1);
       expect(widget.get("transform")).toEqual({
         rotation: 0,
