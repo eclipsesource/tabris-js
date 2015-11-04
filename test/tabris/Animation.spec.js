@@ -53,7 +53,7 @@ describe("Animation", function() {
       widget.animate({opacity: 0.4, transform: {rotation: 0.5}}, {});
       var expected = {
         opacity: 0.4,
-        transform: {rotation: 0.5, scaleX: 1, scaleY: 1, translationX: 0, translationY: 0}
+        transform: {rotation: 0.5, scaleX: 1, scaleY: 1, translationX: 0, translationY: 0, translationZ: 0}
       };
       expect(createOp().properties).toEqual(expected);
     });
@@ -66,7 +66,8 @@ describe("Animation", function() {
         scaleX: 1,
         scaleY: 1,
         translationX: 0,
-        translationY: 0
+        translationY: 0,
+        translationZ: 0
       });
     });
 
@@ -80,7 +81,8 @@ describe("Animation", function() {
         scaleX: 1,
         scaleY: 1,
         translationX: 0,
-        translationY: 0
+        translationY: 0,
+        translationZ: 0
       });
     });
 

@@ -439,14 +439,16 @@ describe("PropertyTypes:", function() {
       scaleX: 1,
       scaleY: 1,
       translationX: 0,
-      translationY: 0
+      translationY: 0,
+      translationZ: 0
     };
     var customValue = {
       rotation: 1.2,
       scaleX: 2,
       scaleY: 0.5,
       translationX: -40,
-      translationY: +40
+      translationY: +40,
+      translationZ: +20
     };
 
     it("accepts complete, valid values", function() {
@@ -461,7 +463,8 @@ describe("PropertyTypes:", function() {
         scaleX: 1,
         scaleY: 0.5,
         translationX: -40,
-        translationY: 0
+        translationY: 0,
+        translationZ: +20
       };
       expect(check(value)).toEqual(expected);
       expect(check({})).toEqual(defaultValue);
@@ -473,7 +476,8 @@ describe("PropertyTypes:", function() {
         {scaleX: undefined},
         {scaleY: NaN},
         {translationX: 1 / 0},
-        {translationY: -1 / 0}
+        {translationY: -1 / 0},
+        {translationZ: 1 / 0}
       ].forEach(function(value) {
         expect(function() {
           check(value);

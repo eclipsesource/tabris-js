@@ -58,6 +58,11 @@ declare module tabris {
      */
     translationY: number;
 
+    /**
+     * Z-axis translation (shift) in dip. Defaults to `0`. Android 5.0+ only.
+     */
+    translationZ: number;
+
   }
 
   // TODO A plain string can be used as a shorthand, e.g. `"image.jpg"` equals `{src: "image.jpg"}`.

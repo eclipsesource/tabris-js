@@ -143,6 +143,8 @@ Transformations are specified as an object with the following properties:
     Horizontal translation (shift) in dip.
 * **translationY**: *number*, default: `0`
     Vertical translation (shift) in dip.
+* **translationZ**: *number*, default: `0`
+    Z-axis translation (shift) in dip. Android 5.0+ only.
 
 Example:
 
@@ -155,4 +157,3 @@ This transformation will make the widget twice as big and rotate it by 135&deg;.
 
 Selectors are used to filter a given list of widgets. It can be function returning a boolean for a given widget.
 However, more commonly a selector is a string that may either reference a widgets type (e.g. `"Button"`, `"TextView"`), or its id (`"#myButton"`, `"#myTextView"`).
-
