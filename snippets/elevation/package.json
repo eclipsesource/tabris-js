@@ -4,6 +4,6 @@
   "description": "Use elevation to raise a widget on the z-axis",
   "main": "elevation.js",
   "dependencies": {
-    "tabris": "^1.0.0"
+    "tabris": "^1.5.0"
   }
 }
