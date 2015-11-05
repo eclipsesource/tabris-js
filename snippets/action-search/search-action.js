@@ -5,9 +5,11 @@ var page = tabris.create("Page", {
 
 var proposals = ["baseball", "batman", "battleship", "bangkok", "bangladesh", "banana"];
 
-var textView = tabris.create("TextView", {
+var searchBox = tabris.create("Composite", {
   layoutData: {centerX: 0, centerY: 0}
 }).appendTo(page);
+
+var textView = tabris.create("TextView").appendTo(searchBox);
 
 var action = tabris.create("SearchAction", {
   title: "Search",
@@ -24,10 +26,11 @@ updateProposals("");
 
 tabris.create("Button", {
   text: "Open Search",
-  layoutData: {centerX: 0, centerY: 0}
+  centerX: 0,
+  top: "prev() 10"
 }).on("select", function() {
   action.open();
-}).appendTo(page);
+}).appendTo(searchBox);
 
 page.open();
 
