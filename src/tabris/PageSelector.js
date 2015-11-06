@@ -23,17 +23,25 @@
         value.open();
       }
     });
-    tabris.ui.on("addchild", function(ui, child) {
-      if (child instanceof tabris.Page && child.get("topLevel")) {
-        this.insert([child]);
-      }
-    }, this).on("removechild", function(ui, child) {
-      var index = this.get("items").indexOf(child);
-      if (index !== -1) {
-        this.remove(index);
-      }
-    }, this);
+    tabris.ui.on("addchild", insertPage, this).on("removechild", removePage, this);
+    this.on("dispose", function() {
+      tabris.ui.off("addchild", insertPage);
+      tabris.ui.off("removechild", removePage);
+    });
     return this;
+  }
+
+  function insertPage(ui, child) {
+    if (child instanceof tabris.Page && child.get("topLevel")) {
+      this.insert([child]);
+    }
+  }
+
+  function removePage(ui, child) {
+    var index = this.get("items").indexOf(child);
+    if (index !== -1) {
+      this.remove(index);
+    }
   }
 
   function getPages() {

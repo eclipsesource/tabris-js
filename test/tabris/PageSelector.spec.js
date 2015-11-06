@@ -79,6 +79,14 @@ describe("PageSelector", function() {
       expect(drawer.close).toHaveBeenCalled();
     });
 
+    it("removes tabris.ui event callbacks on dispose", function() {
+      spyOn(tabris.ui, "off");
+      pageSelector.dispose();
+
+      expect(tabris.ui.off).toHaveBeenCalledWith("addchild", jasmine.any(Function));
+      expect(tabris.ui.off).toHaveBeenCalledWith("removechild", jasmine.any(Function));
+    });
+
   });
 
 });
