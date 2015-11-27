@@ -356,11 +356,11 @@
   "links": [
     {
       "title": "Understanding layouts in Tabris.js",
-      "path": "layouts"
+      "path": "../layout.md"
     },
     {
       "title": "Understanding gesture events in Tabris.js",
-      "path": "touch"
+      "path": "../touch.md"
     }
   ]
 }
