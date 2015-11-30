@@ -12,6 +12,14 @@
       "description": "A complete HTML document to display. Always returns the last set value."
     }
   },
+  "events": {
+    "load": {
+      "parameters": [
+        {"name": "widget", "type": "WebView"}
+      ],
+      "description": "Fired when the url has been loaded."
+    }
+  },
   "links": [
     {
       "title": "Simple WebView snippet",
