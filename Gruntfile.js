@@ -41,6 +41,7 @@ module.exports = function(grunt) {
           "WindowTimers.js",
           "App.js",
           "UI.js",
+          "ImageData.js",
           "CanvasContext.js",
           "LegacyCanvasContext.js",
           "WebStorage.js",

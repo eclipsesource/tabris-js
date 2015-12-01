@@ -17,7 +17,9 @@
     "fetch": false,
     "localStorage": false,
     "cordova": false,
-    "_": false
+    "_": false,
+    "ImageData": false,
+    "Uint8ClampedArray": false
   },
   "rules": {
     "no-empty": 0,

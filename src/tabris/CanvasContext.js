@@ -181,6 +181,48 @@
     this._doubles.push(x, y);
   });
 
+  // ImageData operations
+
+  tabris.CanvasContext.prototype.getImageData = function(x, y, width, height) {
+    if (arguments.length < 4) {
+      throw new Error("Not enough arguments to CanvasContext.getImageData");
+    }
+    this._flush();
+    // TODO check validity of args
+    var array = this._gc._nativeCall("getImageData", {
+      x: x,
+      y: y,
+      width: width,
+      height: height
+    });
+    return new tabris.ImageData(new Uint8ClampedArray(array), width, height);
+  };
+
+  tabris.CanvasContext.prototype.putImageData = function(imageData, x, y) {
+    if (arguments.length < 3) {
+      throw new Error("Not enough arguments to CanvasContext.putImageData");
+    }
+    this._flush();
+    this._gc._nativeCall("putImageData", {
+      data: imageData.data,
+      width: imageData.width,
+      height: imageData.height,
+      x: x,
+      y: y
+    });
+  };
+
+  tabris.CanvasContext.prototype.createImageData = function(width, height) {
+    if (arguments[0] instanceof tabris.ImageData) {
+      var data = arguments[0];
+      width = data.width;
+      height = data.height;
+    } else if (arguments.length < 2) {
+      throw new Error("Not enough arguments to CanvasContext.createImageData");
+    }
+    return new tabris.ImageData(width, height);
+  };
+
   defineMethod("fill");
 
   defineMethod("stroke");

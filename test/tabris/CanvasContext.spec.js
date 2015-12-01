@@ -850,4 +850,97 @@ describe("CanvasContext", function() {
 
   });
 
+  describe("createImageData", function() {
+
+    it("creates ImageData from width and height", function() {
+      var result = ctx.createImageData(10, 20);
+
+      expect(result).toEqual(jasmine.any(tabris.ImageData));
+      expect(result.width).toBe(10);
+      expect(result.height).toBe(20);
+    });
+
+    it("creates ImageData from ImageData", function() {
+      var array = new Uint8ClampedArray(60).fill(128);
+      var input = new tabris.ImageData(array, 3, 5);
+
+      var result = ctx.createImageData(input);
+
+      expect(result).toEqual(jasmine.any(tabris.ImageData));
+      expect(result.width).toBe(3);
+      expect(result.height).toBe(5);
+      expect(result.data[0]).toBe(0);
+    });
+
+    it("raises error if parameters missing", function() {
+      expect(function() {
+        ctx.createImageData(10);
+      }).toThrowError("Not enough arguments to CanvasContext.createImageData");
+    });
+
+  });
+
+  describe("getImageData", function() {
+
+    var array;
+
+    beforeEach(function() {
+      array = new Uint8ClampedArray(60);
+      spyOn(nativeBridge, "call").and.returnValue(array);
+    });
+
+    it("is rendered", function() {
+      ctx.getImageData(10, 20, 5, 3);
+
+      expect(nativeBridge.call).toHaveBeenCalledWith(gc.cid, "getImageData", {
+        x: 10,
+        y: 20,
+        width: 5,
+        height: 3
+      });
+    });
+
+    it("returns value from native", function() {
+      var result = ctx.getImageData(10, 20, 5, 3);
+
+      expect(result.data).toEqual(array);
+    });
+
+    it("raises error if parameters missing", function() {
+      expect(function() {
+        ctx.getImageData(10, 20, 100);
+      }).toThrowError("Not enough arguments to CanvasContext.getImageData");
+    });
+
+  });
+
+  describe("putImageData", function() {
+
+    var imageData;
+
+    beforeEach(function() {
+      imageData = new tabris.ImageData(3, 5);
+      spyOn(nativeBridge, "call");
+    });
+
+    it("is rendered", function() {
+      ctx.putImageData(imageData, 10, 20);
+
+      expect(nativeBridge.call).toHaveBeenCalledWith(gc.cid, "putImageData", {
+        data: imageData.data,
+        x: 10,
+        y: 20,
+        width: 3,
+        height: 5
+      });
+    });
+
+    it("raises error if parameters missing", function() {
+      expect(() => {
+        ctx.putImageData(imageData, 10);
+      }).toThrowError("Not enough arguments to CanvasContext.putImageData");
+    });
+
+  });
+
 });
