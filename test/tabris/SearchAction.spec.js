@@ -139,13 +139,14 @@ describe("SearchAction", function() {
 
     beforeEach(function() {
       action = tabris.create("SearchAction");
-      nativeBridge.resetCalls();
     });
 
     it("invokes 'open' call operation on native bridge", function() {
+      spyOn(nativeBridge, "call");
+
       action.open();
 
-      nativeBridge.calls({op: "call", method: "open"});
+      expect(nativeBridge.call).toHaveBeenCalledWith(action.cid, "open", {});
     });
 
     it("returns self to allow chaining", function() {
@@ -155,4 +156,5 @@ describe("SearchAction", function() {
     });
 
   });
+
 });
