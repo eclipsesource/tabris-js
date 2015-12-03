@@ -1,5 +1,7 @@
 (function() {
 
+  var itemProps = ["title", "badge", "image", "visible"];
+
   tabris.registerWidget("_TabItem", {
     _type: "rwt.widgets.TabItem",
     _properties: {
@@ -23,7 +25,7 @@
     _type: "rwt.widgets.TabFolder",
 
     _create: function(properties) {
-      this.super("_create", _.omit(properties, "tabBarLocation"));
+      this.super("_create", properties);
       if (properties.tabBarLocation === "top") {
         this._nativeSet("style", ["TOP"]);
       } else if (properties.tabBarLocation === "bottom") {
@@ -62,6 +64,10 @@
             return selection ? tabris(selection)._tab : null;
           }
         }
+      },
+      tabBarLocation: {
+        type: ["choice", ["top", "bottom", "hidden", "auto"]],
+        default: "auto"
       }
     },
 
@@ -181,7 +187,5 @@
   function isItem(child) {
     return !isTab(child);
   }
-
-  var itemProps = ["title", "badge", "image", "visible"];
 
 }());

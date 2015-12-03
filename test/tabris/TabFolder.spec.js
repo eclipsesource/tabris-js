@@ -312,11 +312,21 @@ describe("TabFolder", function() {
       nativeBridge.resetCalls();
     });
 
-    it("is omitted in create", function() {
+    it("passes property to client", function() {
       tabFolder = tabris.create("TabFolder", {tabBarLocation: "top"});
 
       var properties = nativeBridge.calls({id: tabFolder.cid, op: "create"})[0].properties;
-      expect(properties.tabBarLocation).toBeUndefined();
+      expect(properties.tabBarLocation).toBe("top");
+    });
+
+    it("property is cached", function() {
+      spyOn(nativeBridge, "get");
+      tabFolder = tabris.create("TabFolder", {tabBarLocation: "top"});
+
+      var result = tabFolder.get("tabBarLocation");
+
+      expect(nativeBridge.get).not.toHaveBeenCalled();
+      expect(result).toBe("top");
     });
 
     it("sets style TOP for value 'top'", function() {
@@ -333,8 +343,15 @@ describe("TabFolder", function() {
       expect(properties.style).toEqual(["BOTTOM"]);
     });
 
-    it("sets no style for value 'default'", function() {
-      tabFolder = tabris.create("TabFolder", {tabBarLocation: "default"});
+    it("sets no style for value 'hidden'", function() {
+      tabFolder = tabris.create("TabFolder", {tabBarLocation: "hidden"});
+
+      var properties = nativeBridge.calls({id: tabFolder.cid, op: "create"})[0].properties;
+      expect(properties.style).toBeUndefined();
+    });
+
+    it("sets no style for value 'auto'", function() {
+      tabFolder = tabris.create("TabFolder", {tabBarLocation: "auto"});
 
       var properties = nativeBridge.calls({id: tabFolder.cid, op: "create"})[0].properties;
       expect(properties.style).toBeUndefined();
