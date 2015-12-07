@@ -3,6 +3,7 @@ Promise = require("promise");
 require("whatwg-fetch");
 
 var MARGIN = 12;
+var loading;
 
 var page = tabris.create("Page", {
   title: "Reddit - Pets",
@@ -25,6 +26,13 @@ var collectionView = tabris.create("CollectionView", {
   }
 }).on("refresh", function() {
   loadNewItems();
+}).on("scroll", function(view, scroll) {
+  if (scroll.deltaY > 0) {
+    var remaining = view.get("items").length - view.get("lastVisibleIndex");
+    if (remaining < 20) {
+      loadMoreItems();
+    }
+  }
 }).on("select", function(target, value) {
   if (!value.loading) {
     createDetailsPage(value.data);
@@ -32,7 +40,7 @@ var collectionView = tabris.create("CollectionView", {
 }).appendTo(page);
 
 page.open();
-loadItems();
+loadInitialItems();
 
 function initializeStandardCell(cell) {
   var imageView = tabris.create("ImageView", {
@@ -69,35 +77,41 @@ function initializeLoadingCell(cell) {
     alignment: "center",
     text: "loading ..."
   }).appendTo(cell);
-  cell.on("change:item", function() {
-    loadMoreItems();
-  });
 }
 
-function loadItems() {
+function loadInitialItems() {
   collectionView.set("refreshIndicator", true);
   getJSON(createUrl({limit: 25})).then(function(json) {
-    // add a placeholder item for loading new items
-    collectionView.set("items", json.data.children.concat({loading: true}));
+    collectionView.set("items", json.data.children);
     collectionView.set("refreshIndicator", false);
   });
 }
 
 function loadNewItems() {
-  getJSON(createUrl({limit: 25, before: getFirstId()})).then(function(json) {
-    collectionView.insert(json.data.children, 0);
-    collectionView.reveal(0);
-    collectionView.set("refreshIndicator", false);
-  });
+  if (!loading) {
+    loading = true;
+    getJSON(createUrl({limit: 25, before: getFirstId()})).then(function(json) {
+      collectionView.insert(json.data.children, 0);
+      collectionView.reveal(0);
+      collectionView.set("refreshIndicator", false);
+      loading = false;
+    });
+  }
 }
 
 function loadMoreItems() {
-  getJSON(createUrl({limit: 25, after: getLastId()})).then(function(json) {
-    // add new placeholder item for loading new items
-    collectionView.insert(json.data.children.concat({loading: true}), -1);
-    // remove old placeholder item
-    collectionView.remove(-1);
-  });
+  if (!loading) {
+    loading = true;
+    var lastId = getLastId();
+    // insert placeholder item
+    collectionView.insert([{loading: true}], -1);
+    getJSON(createUrl({limit: 25, after: lastId})).then(function(json) {
+      // remove placeholder item
+      collectionView.remove(-1);
+      collectionView.insert(json.data.children, -1);
+      loading = false;
+    });
+  }
 }
 
 function createUrl(params) {
