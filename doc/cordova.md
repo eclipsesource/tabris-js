@@ -19,6 +19,8 @@ While using the [Tabris.js Developer App](getting-started.md), your application 
 
 These plug-ins have tested with Tabris.js and a [demo](https://github.com/eclipsesource/tabris-js/tree/master/examples/cordova) can be found among the Tabris.js examples.
 
+Please note, default plug-ins are only included in the debug version of an app. If you want to use them in the release version, you should add them via `<plugin>` tags in the Cordova `config.xml` file: [Adding Plug-Ins](build.md#adding-plugins).
+
 ## Other Cordova Plug-Ins
 To use Cordova Plug-Ins not part of the Tabris.js developer app you need to add them during the [build](build.md) process. You can either create a release-ready version of your own app, or a enhanced version of the developer app that contains the additional Plug-Ins (set *debug* mode to `ON`).
 
