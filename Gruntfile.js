@@ -61,7 +61,11 @@ module.exports = function(grunt) {
           display: "short",
           summary: true
         },
-        src: ["build/tabris/tabris.js", "test/tabris/jasmineToString.js"]
+        src: [
+          "build/tabris/tabris.js",
+          "test/tabris/jasmineToString.js",
+          "test/tabris/tabris-init.js"
+        ]
       }
     },
     concat: {
@@ -105,6 +109,7 @@ module.exports = function(grunt) {
           "Action.js",
           "SearchAction.js",
           "TabFolder.js",
+          "TabFolder-legacy.js",
           "CanvasContext.js",
           "LegacyCanvasContext.js",
           "WebStorage.js",
