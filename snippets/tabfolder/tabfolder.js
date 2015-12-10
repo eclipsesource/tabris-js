@@ -11,7 +11,7 @@ var tabFolder = tabris.create("TabFolder", {
 var createTab = function(title, image) {
   var tab = tabris.create("Tab", {
     title: title, // converted to upper-case on Android
-    image: {src: image, scale: 2} // image only used by iOS
+    image: {src: image, scale: 2}
   }).appendTo(tabFolder);
   tabris.create("TextView", {
     layoutData: {centerX: 0, centerY: 0},
