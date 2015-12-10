@@ -1,6 +1,6 @@
 {
   "type": "Page",
-  "description": "Pages contain an application's UI. Top-level pages are included in the application's main menu.",
+  "description": "Pages contain an application's UI. Top-level pages can have a stack of non-top-level pages on top.",
   "include": ["Composite"],
   "methods": {
     "open": [
@@ -44,7 +44,7 @@
   },
   "links": [
     {
-      "title": "Simple Page snippet",
+      "title": "Simple Page snippet with multiple top-level pages including a PageSelector (aka Burger Menu)",
       "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/page/page.js"
     },
     {
