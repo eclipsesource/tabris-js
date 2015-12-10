@@ -159,7 +159,7 @@
     },
     "elevation": {
       "type": "number",
-      "description": "The position of the widget on the x-axis. Currently only supported on Android 5.0+."
+      "description": "The position of the widget on the z-axis. Currently only supported on Android 5.0+."
     },
     "font": {
       "type": "Font",
