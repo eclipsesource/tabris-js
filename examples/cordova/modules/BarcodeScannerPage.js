@@ -1,6 +1,6 @@
 var PluginPage = require("./PluginPage");
 
-var page = new PluginPage("BarcodeScanner", "com.phonegap.plugins.barcodescanner", function(parent) {
+var page = new PluginPage("BarcodeScanner", "phonegap-plugin-barcodescanner", function(parent) {
 
   tabris.create("Button", {
     layoutData: {left: 10, top: 10, right: 10},

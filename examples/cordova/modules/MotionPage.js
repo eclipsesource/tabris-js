@@ -1,6 +1,6 @@
 var PluginPage = require("./PluginPage");
 
-var page = new PluginPage("Motion", "org.apache.cordova.device-motion", function(parent) {
+var page = new PluginPage("Motion", "cordova-plugin-device-motion", function(parent) {
 
   var watchID = "";
 

@@ -1,6 +1,6 @@
 var PluginPage = require("./PluginPage");
 
-var page = new PluginPage("Camera", "org.apache.cordova.camera", function(parent) {
+var page = new PluginPage("Camera", "cordova-plugin-camera", function(parent) {
   var button = tabris.create("Button", {
     layoutData: {left: 10, top: 10, right: 10},
     text: "Take a picture"

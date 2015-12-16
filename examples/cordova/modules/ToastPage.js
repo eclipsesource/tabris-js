@@ -1,6 +1,6 @@
 var PluginPage = require("./PluginPage");
 
-var page = new PluginPage("Toast", "nl.x-services.plugins.toast", function(parent) {
+var page = new PluginPage("Toast", "cordova-plugin-x-toast", function(parent) {
 
   var input = tabris.create("TextInput", {
     text: "your message",

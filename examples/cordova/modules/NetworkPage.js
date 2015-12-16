@@ -1,6 +1,6 @@
 var PluginPage = require("./PluginPage");
 
-var page = new PluginPage("Network", "org.apache.cordova.network-information", function(parent) {
+var page = new PluginPage("Network", "cordova-plugin-network-information", function(parent) {
 
   var states = {};
   states[window.Connection.UNKNOWN]  = "Unknown connection";

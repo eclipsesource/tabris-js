@@ -1,6 +1,6 @@
 var PluginPage = require("./PluginPage");
 
-var page = new PluginPage("Dialog", "org.apache.cordova.dialogs", function(parent) {
+var page = new PluginPage("Dialog", "cordova-plugin-dialogs", function(parent) {
 
   var buttonAlert = tabris.create("Button", {
     layoutData: {left: 10, top: 10, right: 10},
