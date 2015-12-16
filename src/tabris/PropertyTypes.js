@@ -186,7 +186,8 @@
         }
         // TODO: Should throw error instead
         return value;
-      }
+      },
+      decode: tabris
     },
 
     nullable: {

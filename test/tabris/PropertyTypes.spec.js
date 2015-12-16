@@ -42,24 +42,31 @@ describe("PropertyTypes:", function() {
 
   describe("proxy", function() {
 
-    var check = tabris.PropertyTypes.proxy.encode;
+    var encode = tabris.PropertyTypes.proxy.encode;
+    var decode = tabris.PropertyTypes.proxy.decode;
 
     it("translates widgets to ids in properties", function() {
       var value = new tabris.Proxy("other-id");
 
-      expect(check(value)).toBe("other-id");
+      expect(encode(value)).toBe("other-id");
     });
 
     it("translates widget collection to first ids in properties", function() {
       var value = new tabris.ProxyCollection([new tabris.Proxy("other-id")]);
 
-      expect(check(value)).toBe("other-id");
+      expect(encode(value)).toBe("other-id");
     });
 
     it("does not translate objects with id field to ids", function() {
       var value = {id: "23", name: "bar"};
 
-      expect(check(value)).toBe(value);
+      expect(encode(value)).toBe(value);
+    });
+
+    it("translates ids to widgets", function() {
+      var value = new tabris.Proxy("other-id");
+
+      expect(decode("other-id")).toBe(value);
     });
 
   });
