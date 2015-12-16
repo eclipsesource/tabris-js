@@ -509,10 +509,9 @@ describe("PropertyTypes:", function() {
       expect(check(undefined)).toEqual([]);
     });
 
-    it("create a save copy", function() {
+    it("does not copy array", function() {
       var input = [1, 2, 3];
-      expect(check(input)).toEqual(input);
-      expect(check(input)).not.toBe(input);
+      expect(check(input)).toBe(input);
     });
 
     it("fails for non-arrays", function() {

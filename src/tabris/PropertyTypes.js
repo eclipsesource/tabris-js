@@ -231,7 +231,7 @@
         if (type) {
           return value.map(tabris.PropertyTypes[type].encode);
         }
-        return value.concat();
+        return value;
       }
     }
 

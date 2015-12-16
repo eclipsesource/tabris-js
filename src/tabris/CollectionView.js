@@ -29,7 +29,7 @@
             this._setItems(value, options);
           },
           get: function() {
-            return this._items.concat();
+            return this._items;
           }
         }
       },
@@ -167,7 +167,7 @@
 
     _setItems: function(items, options) {
       this._items = items || [];
-      this._triggerChangeEvent("items", this._items.concat(), options);
+      this._triggerChangeEvent("items", this._items, options);
       this._needsReload = true;
     },
 

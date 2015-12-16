@@ -242,16 +242,8 @@ describe("CollectionView", function() {
           expect(calls[0].parameters).toEqual({items: 3});
         });
 
-        it("changes to items provided in setter have no effect (defensive copy)", function() {
-          items.push("d");
-
-          expect(view.get("items")).toEqual(["a", "b", "c"]);
-        });
-
-        it("changes to items returned by getter have no effect (defensive copy)", function() {
-          view.get("items").push("d");
-
-          expect(view.get("items")).toEqual(["a", "b", "c"]);
+        it("items are kept by reference (no defensive copy)", function() {
+          expect(view.get("items")).toBe(items);
         });
 
         describe("when requestinfo event is received", function() {
