@@ -12,6 +12,39 @@ tabris.registerWidget("ScrollView", {
 
   _supportsChildren: true,
 
+  _properties: {
+    direction: {
+      type: ["choice", ["horizontal", "vertical"]],
+      default: "vertical"
+    },
+    scrollX: {
+      type: "number",
+      access: {
+        set: function(name, value) {
+          if (this.get("direction") === "horizontal") {
+            this._nativeSet("origin", [value, 0]);
+          }
+        },
+        get: function() {
+          return this.get("direction") === "horizontal" ? this._nativeGet("origin")[0] : 0;
+        }
+      }
+    },
+    scrollY: {
+      type: "number",
+      access: {
+        set: function(name, value) {
+          if (this.get("direction") === "vertical") {
+            this._nativeSet("origin", [0, value]);
+          }
+        },
+        get: function() {
+          return this.get("direction") === "vertical" ? this._nativeGet("origin")[1] : 0;
+        }
+      }
+    }
+  },
+
   _events: {
     scroll: {
       listen: function(listen) {
@@ -28,8 +61,7 @@ tabris.registerWidget("ScrollView", {
   },
 
   _create: function(properties) {
-    var scrollProps = _.omit(properties, ["direction"]);
-    this.super("_create", scrollProps);
+    this.super("_create", properties);
     var style = properties.direction === "horizontal" ? ["H_SCROLL"] : ["V_SCROLL"];
     this._nativeSet("style", style);
     this._scrollBar = tabris.create("_ScrollBar", {
@@ -43,8 +75,8 @@ tabris.registerWidget("ScrollView", {
   },
 
   _scrollBarListener: function() {
-    var selection = this._nativeGet("origin");
-    this.trigger("scroll", this, {x: selection[0], y: selection[1]});
+    var origin = this._nativeGet("origin");
+    this.trigger("scroll", this, {x: origin[0], y: origin[1]});
   },
 
   _getContainer: function() {

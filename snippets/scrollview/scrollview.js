@@ -4,17 +4,24 @@ var page = tabris.create("Page", {
 });
 
 var scrollView = tabris.create("ScrollView", {
+  left: 0, right: 0, top: "40%", bottom: "40%",
   direction: "horizontal",
-  layoutData: {left: 0, top: "40%", right: 0, bottom: "40%"},
   background: "#234"
 }).appendTo(page);
 
-for (var i = 0; i < 50; i++) {
+for (var i = 0; i <= 50; i++) {
   tabris.create("TextView", {
     layoutData: {left: i * 30 + 20, centerY: 0, width: 30},
-    text: i + "°",
-    textColor: "white"
+    textColor: "white",
+    text: i + "°"
   }).appendTo(scrollView);
 }
+
+tabris.create("Button", {
+  left: 10, bottom: 10,
+  text: "scroll"
+}).on("select", function() {
+  scrollView.set("scrollX", 310);
+}).appendTo(page);
 
 page.open();

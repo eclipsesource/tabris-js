@@ -9,6 +9,14 @@
       "default": "vertical",
       "static": true,
       "description": "Specifies the scrolling direction of the scroll composite."
+    },
+    "scrollX": {
+      "type": "number",
+      "description": "The horizontal scrolling position."
+    },
+    "scrollY": {
+      "type": "number",
+      "description": "The vertical scrolling position."
     }
   },
   "events": {
