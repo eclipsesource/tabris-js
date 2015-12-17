@@ -4,9 +4,11 @@ describe("Layout:", function() {
 
     var check = tabris.Layout.checkConsistency;
 
-    it("raises a warning for inconsistent layoutData (width)", function() {
+    beforeEach(function() {
       spyOn(console, "warn");
+    });
 
+    it("raises a warning for inconsistent layoutData (width)", function() {
       check({top: 0, left: 0, right: 0, width: 100});
 
       var warning = "Inconsistent layoutData: left and right are set, ignore width";
@@ -20,8 +22,6 @@ describe("Layout:", function() {
     });
 
     it("raises a warning for inconsistent layoutData (height)", function() {
-      spyOn(console, "warn");
-
       check({top: 0, left: 0, bottom: 0, height: 100});
 
       var warning = "Inconsistent layoutData: top and bottom are set, ignore height";
@@ -35,8 +35,6 @@ describe("Layout:", function() {
     });
 
     it("raises a warning for inconsistent layoutData (centerX)", function() {
-      spyOn(console, "warn");
-
       check({top: 0, left: 0, centerX: 0});
 
       var warning = "Inconsistent layoutData: centerX overrides left and right";
@@ -50,8 +48,6 @@ describe("Layout:", function() {
     });
 
     it("raises a warning for inconsistent layoutData (centerY)", function() {
-      spyOn(console, "warn");
-
       check({left: 0, top: 0, centerY: 0});
 
       var warning = "Inconsistent layoutData: centerY overrides top and bottom";
@@ -65,8 +61,6 @@ describe("Layout:", function() {
     });
 
     it("raises a warning for inconsistent layoutData (baseline)", function() {
-      spyOn(console, "warn");
-
       check({left: 0, top: 0, baseline: "#other"});
 
       var warning = "Inconsistent layoutData: baseline overrides top, bottom, and centerY";

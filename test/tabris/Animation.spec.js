@@ -72,8 +72,11 @@ describe("Animation", function() {
     });
 
     it("caches only valid properties in widget", function() {
+      spyOn(console, "warn");
       widget.set("foo", 1);
+
       widget.animate({opacity: 0.4, transform: {foo: 0.5}, foo: 2}, {});
+
       expect(widget.get("foo")).toBe(1);
       expect(widget.get("opacity")).toBe(0.4);
       expect(widget.get("transform")).toEqual({
@@ -87,9 +90,12 @@ describe("Animation", function() {
     });
 
     it("sets valid options only", function() {
+      spyOn(console, "warn");
+
       widget.animate({}, {
         delay: 10, duration: 100, repeat: 1, reverse: true, easing: "ease-out", foo: "bar"
       });
+
       expect(createOp()).toEqual({
         delay: 10,
         duration: 100,
