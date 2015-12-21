@@ -20,6 +20,12 @@
     "activePage": {
       "type": "Page",
       "description": "The currently visible page."
+    },
+    "displayMode": {
+      "type": "string",
+      "values": ["normal", "fullscreen"],
+      "default": "normal",
+      "description": "Allows to switch the UI to full screen."
     }
   },
   "events": {

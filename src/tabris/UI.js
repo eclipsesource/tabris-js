@@ -52,6 +52,10 @@ tabris.registerWidget("_UI", {
   _properties: {
     image: "image",
     toolbarVisible: {type: "boolean", default: true},
+    displayMode: {
+      type: ["choice", ["normal", "fullscreen"]],
+      default: "normal"
+    },
     activePage: {
       access: {
         set: function(name, page, options) {
