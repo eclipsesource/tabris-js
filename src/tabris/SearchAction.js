@@ -1,14 +1,11 @@
-tabris.registerType("SearchAction", {
+tabris.registerWidget("SearchAction", {
 
   _type: "tabris.SearchAction",
 
   _properties: {
-    enabled: {type: "boolean", default: true},
-    foreground: {type: "color", nocache: true},
     image: {type: "image", default: null},
     placementPriority: {
       type: ["choice", {low: "LOW", high: "HIGH", normal: "NORMAL"}],
-      nocache: true,
       access: {
         get: function() {
           var value = this._nativeGet("placementPriority");
@@ -17,16 +14,6 @@ tabris.registerType("SearchAction", {
       }
     },
     title: {type: "string", default: ""},
-    visible: {
-      type: "boolean",
-      default: true,
-      access: {
-        set: function(name, value, options) {
-          this._nativeSet("visibility", value);
-          this._storeProperty(name, value, options);
-        }
-      }
-    },
     proposals: {default: function() {return [];}},
     text: {
       type: "string",
@@ -69,7 +56,7 @@ tabris.registerType("SearchAction", {
 
   _create: function(properties) {
     this.super("_create", properties);
-    this._nativeSet("parent", tabris.ui.cid);
+    tabris.ui.append(this);
     return this;
   },
 

@@ -70,6 +70,7 @@ tabris.registerWidget("_UI", {
       case "Drawer":
         return child._drawer;
       case "Action":
+      case "SearchAction":
         return this;
       default:
         return this._shell;

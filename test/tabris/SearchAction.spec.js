@@ -26,8 +26,12 @@ describe("SearchAction", function() {
       expect(actionCreateCalls.length).toBe(1);
     });
 
-    it("created action's parent is set to tabris.UI", function() {
+    it("created action's parent is set to tabris.ui", function() {
       expect(actionCreateCalls[0].properties.parent).toEqual(tabris.ui.cid);
+    });
+
+    it("tabris.ui.children has SearchAction", function() {
+      expect(tabris.ui.children("SearchAction").length).toBe(1);
     });
 
     it("properties are passed to created action", function() {
