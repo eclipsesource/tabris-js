@@ -15,7 +15,7 @@
         (fontArr[1] + "px") + (fontArr[0][0] ? " " : "") + (fontArr[0].join(", "));
   };
 
-  var parseStyles = function(fontArr, styles) {
+  function parseStyles(fontArr, styles) {
     var styleArr = styles.trim().split(/\s+/);
     checkTruthy(styleArr.length <= 2, "Too many font styles");
     styleArr.forEach(function(property) {
@@ -35,9 +35,9 @@
           throw new Error("Unknown font property: " + property.trim());
       }
     });
-  };
+  }
 
-  var parseFamily = function(fontArr, family) {
+  function parseFamily(fontArr, family) {
     // NOTE: Currently family is optional to allow for default fonts, but this is
     //       not CSS font syntax. See https://github.com/eclipsesource/tabris-js/issues/24
     (family ? family.split(",") : []).forEach(function(name) {
@@ -45,12 +45,12 @@
       checkTruthy(valid, "Invalid font family: " + name);
       fontArr[0].push(/^\s*[\"\']?([^\"\']*)/.exec(name)[1].trim());
     });
-  };
+  }
 
-  var checkTruthy = function(value, message) {
+  function checkTruthy(value, message) {
     if (!value) {
       throw new Error(message);
     }
-  };
+  }
 
 }());

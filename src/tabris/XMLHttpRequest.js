@@ -67,7 +67,7 @@
   // -----------------------------------------------------------------
   // Properties
 
-  var createScopeObject = function(xhr) {
+  function createScopeObject(xhr) {
     var scope = {};
     scope.proxy = null;
     scope.authorRequestHeaders = {};
@@ -86,36 +86,36 @@
     scope.error = false;
     scope.uploadComplete = false;
     return scope;
-  };
+  }
 
-  var initializeEventHandlers = function(scope) {
+  function initializeEventHandlers(scope) {
     eventTypes.forEach(function(eventType) {
       scope["on" + eventType] = null;
     });
     uploadEventTypes.forEach(function(eventType) {
       scope.uploadListeners["on" + eventType] = null;
     });
-  };
+  }
 
-  var definePropertyUpload = function(xhr, scope) {
+  function definePropertyUpload(xhr, scope) {
     Object.defineProperty(xhr, "upload", {
       get: function() {
         return scope.uploadEventTarget;
       },
       set: function() {}
     });
-  };
+  }
 
-  var definePropertyReadyState = function(xhr, scope) {
+  function definePropertyReadyState(xhr, scope) {
     Object.defineProperty(xhr, "readyState", {
       get: function() {
         return scope.readyState;
       },
       set: function() {}
     });
-  };
+  }
 
-  var definePropertyTimeout = function(xhr, scope) {
+  function definePropertyTimeout(xhr, scope) {
     Object.defineProperty(xhr, "timeout", { // #the-timeout-attribute
       get: function() {
         return scope.timeout;
@@ -127,9 +127,9 @@
         }
       }
     });
-  };
+  }
 
-  var definePropertyResponseText = function(xhr, scope) {
+  function definePropertyResponseText(xhr, scope) {
     Object.defineProperty(xhr, "responseText", { // #dom-xmlhttprequest-responsetext
       get: function() {
         // Steps merged with #text-response-entity-body, entity body steps marked with '*'
@@ -150,9 +150,9 @@
       },
       set: function() {}
     });
-  };
+  }
 
-  var definePropertyResponse = function(xhr, scope) {
+  function definePropertyResponse(xhr, scope) {
     Object.defineProperty(xhr, "response", { // #dom-xmlhttprequest-responsetext
       get: function() {
         // Note: only the if-statement implemented, as response types different than 'text' are
@@ -167,9 +167,9 @@
       },
       set: function() {}
     });
-  };
+  }
 
-  var definePropertyResponseType = function(xhr, scope) {
+  function definePropertyResponseType(xhr, scope) {
     Object.defineProperty(xhr, "responseType", { // #dom-xmlhttprequest-responsetype
       get: function() {
         return scope.responseType;
@@ -193,18 +193,18 @@
         scope.responseType = value;
       }
     });
-  };
+  }
 
-  var defineEventHandlers = function(xhr, scope) {
+  function defineEventHandlers(xhr, scope) {
     eventTypes.forEach(function(eventType) {
       defineEventHandler(eventType, xhr, scope);
     });
     uploadEventTypes.forEach(function(eventType) {
       defineEventHandler(eventType, scope.uploadEventTarget, scope.uploadListeners);
     });
-  };
+  }
 
-  var defineEventHandler = function(eventType, target, listeners) {
+  function defineEventHandler(eventType, target, listeners) {
     var handler = "on" + eventType;
     Object.defineProperty(target, handler, {
       get: function() {
@@ -219,9 +219,9 @@
         }
       }
     });
-  };
+  }
 
-  var definePropertyStatus = function(xhr, scope) {
+  function definePropertyStatus(xhr, scope) {
     Object.defineProperty(xhr, "status", { // #the-status-attribute
       get: function() {
         if ([xhr.OPENED, xhr.UNSENT].indexOf(scope.readyState) > -1) { // (1)
@@ -234,9 +234,9 @@
       },
       set: function() {}
     });
-  };
+  }
 
-  var definePropertyStatusText = function(xhr, scope) {
+  function definePropertyStatusText(xhr, scope) {
     Object.defineProperty(xhr, "statusText", {
       get: function() { // #the-statustext-attribute
         if ([xhr.OPENED, xhr.UNSENT].indexOf(scope.readyState) > -1) { // (1)
@@ -249,9 +249,9 @@
       },
       set: function() {}
     });
-  };
+  }
 
-  var definePropertyWithCredentials = function(xhr, scope) {
+  function definePropertyWithCredentials(xhr, scope) {
     Object.defineProperty(xhr, "withCredentials", { // #the-withcredentials-attribute
       set: function(value) {
         if (scope.readyState !== xhr.UNSENT && scope.readyState !== xhr.OPENED) { // (1)
@@ -272,12 +272,12 @@
         return scope.withCredentials;
       }
     });
-  };
+  }
 
   // -----------------------------------------------------------------
   // Methods
 
-  var createOpenMethod = function(xhr, scope) {
+  function createOpenMethod(xhr, scope) {
     return function(method, url, async, username, password) { // #dom-xmlhttprequest-open
       var parsedUrl = {};
       // (2), (3), (4): we don't implement the 'settings' object
@@ -315,9 +315,9 @@
         dispatchXHREvent("readystatechange", xhr);
       }
     };
-  };
+  }
 
-  var createSendMethod = function(xhr, scope) {
+  function createSendMethod(xhr, scope) {
     return function(data) { // #the-send()-method
       scope.proxy = tabris.create("_HttpRequest");
       scope.proxy.on("StateChange", function(e) {
@@ -370,9 +370,9 @@
         data: scope.requestBody
       });
     };
-  };
+  }
 
-  var createAbortMethod = function(xhr, scope) {
+  function createAbortMethod(xhr, scope) {
     return function() { // #the-abort()-method
       if (scope.proxy) {
         scope.proxy._nativeCall("abort"); // (1)
@@ -390,9 +390,9 @@
       }
       scope.readyState = xhr.UNSENT; // (3)
     };
-  };
+  }
 
-  var createSetRequestHeaderMethod = function(xhr, scope) {
+  function createSetRequestHeaderMethod(xhr, scope) {
     return function(header, value) { // #dom-xmlhttprequest-setrequestheader
       if (scope.readyState !== xhr.OPENED) { // (1)
         throw new Error("InvalidStateError: " +
@@ -417,9 +417,9 @@
         scope.authorRequestHeaders[header] = value; // (8)
       }
     };
-  };
+  }
 
-  var createGetResponseHeaderMethod = function(xhr, scope) {
+  function createGetResponseHeaderMethod(xhr, scope) {
     return function(header) { // #the-getresponseheader()-method
       if ([xhr.UNSENT, xhr.OPENED].indexOf(xhr.readyState) > -1) { // (1)
         return null;
@@ -438,9 +438,9 @@
       }
       return null; // (6)
     };
-  };
+  }
 
-  var createGetAllResponseHeadersMethod = function(xhr, scope) {
+  function createGetAllResponseHeadersMethod(xhr, scope) {
     return function() { // #the-getallresponseheaders()-method
       if ([xhr.UNSENT, xhr.OPENED].indexOf(xhr.readyState) > -1) { // (1)
         return "";
@@ -450,9 +450,9 @@
       }
       return stringifyResponseHeaders(scope.responseHeaders); // (3)
     };
-  };
+  }
 
-  var stringifyResponseHeaders = function(headers) {
+  function stringifyResponseHeaders(headers) {
     var string = [];
     var forbiddenHeaders = ["set-cookie", "set-cookie2", "status"];
     for (var key in headers) {
@@ -461,12 +461,12 @@
       }
     }
     return string.join("\n");
-  };
+  }
 
   // -----------------------------------------------------------------
   // Event handler
 
-  var stateChangeHandler = function(e, xhr, scope) { // #infrastructure-for-the-send()-method
+  function stateChangeHandler(e, xhr, scope) { // #infrastructure-for-the-send()-method
     // Note: we supply lengthComputable, loaded and total only with the "progress" event types
     switch (e.state) {
       case "headers":
@@ -502,9 +502,9 @@
         handleRequestError("abort", xhr, scope);
         break;
     }
-  };
+  }
 
-  var handleRequestError = function(event, xhr, scope) { // #request-error
+  function handleRequestError(event, xhr, scope) { // #request-error
     scope.error = true; // (1*) (#terminate-the-request)
     scope.readyState = xhr.DONE; // (1)
     // (2): superfluous as we don't support synchronous requests
@@ -516,12 +516,12 @@
     }
     scope.proxy.dispose();
     scope.proxy = null;
-  };
+  }
 
   // -----------------------------------------------------------------
   // Validators
 
-  var validateRequiredOpenArgs = function(method, url) {
+  function validateRequiredOpenArgs(method, url) {
     if (!method) {
       throw new TypeError("Method argument should be specified to execute 'open'");
     }
@@ -531,9 +531,9 @@
     validateMethod(method);
     // TODO: URL validation commented out as Rhino crashes with an OOM-error with several URLs
     // validateUrl(url);
-  };
+  }
 
-  var validateMethod = function(method) {
+  function validateMethod(method) {
     if (!validHttpToken(method)) {
       throw new TypeError("Invalid HTTP method, failed to execute 'open'");
     }
@@ -549,36 +549,36 @@
               "SecurityError: '" + method + "' HTTP method is not secure, failed to execute 'open'"
       );
     }
-  };
+  }
 
-  var validHttpToken = function(httpToken) {
+  function validHttpToken(httpToken) {
     // RFC-compliant validation for HTTP tokens ported from Chromium:
     // https://chromium.googlesource.com/chromium/blink.git/+/master/Source/platform/network/HTTPParsers.cpp
     var forbiddenCharacters = ["(", ")", "<", ">", "@", ",", ";", ":", "\\", "\"", "\/", "[", "]",
         "?", "=", "{", "}"];
     return !(/[^\x21-\x7E]/.test(httpToken) || forbiddenCharacters.indexOf(httpToken) >= 0);
-  };
+  }
 
-  var isValidHttpHeaderValue = function(value) {
+  function isValidHttpHeaderValue(value) {
     // non-RFC compliant validation for HTTP header values ported from Chromium:
     // https://chromium.googlesource.com/chromium/blink.git/+/master/Source/platform/network/HTTPParsers.cpp
     // Regex for Latin-1 characters only: https://gist.github.com/LeoDutra/3044325
     return !(!(/[*A-z\u00C0-\u00ff]+/g).test(value) || value.indexOf("\n") > -1 ||
         value.indexOf("\r") > -1);
-  };
+  }
 
-  var isForbiddenHeader = function(header) {
+  function isForbiddenHeader(header) {
     return forbiddenHeaders.indexOf(header.toLowerCase()) > -1;
-  };
+  }
 
   // URL validation commented out as Rhino crashes with an OOM-error with several URLs
-  // var validateUrl = function(url) {
+  // function validateUrl(url) {
   //   // TODO: rewrite (8),(9)
   //   // taken from https://gist.github.com/dperini/729294
   //   if(!urlValidationRegex.test(url)){
   //     throw new SyntaxError("Malformed URI, failed to execute 'open'");
   //   }
-  // };
+  // }
 
   var forbiddenHeaders = [
     "accept-charset",
@@ -611,29 +611,29 @@
   // -----------------------------------------------------------------
   // Event dispatcher
 
-  var dispatchProgressEvent = function(type, target, lengthComputable, loaded, total) {
+  function dispatchProgressEvent(type, target, lengthComputable, loaded, total) {
     target.dispatchEvent(initXhrProgressEvent(type, target, lengthComputable, loaded, total));
-  };
+  }
 
-  var dispatchAbortProgressEvents = function(context) {
+  function dispatchAbortProgressEvents(context) {
     dispatchProgressEvent("progress", context);
     dispatchProgressEvent("abort", context);
     dispatchProgressEvent("loadend", context);
-  };
+  }
 
-  var dispatchErrorProgressEvents = function(event, context) {
+  function dispatchErrorProgressEvents(event, context) {
     dispatchProgressEvent("progress", context);
     dispatchProgressEvent(event, context);
     dispatchProgressEvent("loadend", context);
-  };
+  }
 
-  var dispatchFinishedProgressEvents = function(context) {
+  function dispatchFinishedProgressEvents(context) {
     // Note: progress event is dispatched separately by the DownloadProgress/UploadProgress callbacks
     dispatchProgressEvent("load", context);
     dispatchProgressEvent("loadend", context);
-  };
+  }
 
-  var initXhrProgressEvent = function(type, target, lengthComputable, loaded, total) {
+  function initXhrProgressEvent(type, target, lengthComputable, loaded, total) {
     var xhrProgressEvent = new tabris.XMLHttpRequestProgressEvent(type);
     xhrProgressEvent.currentTarget = xhrProgressEvent.target = target;
     if (lengthComputable) {
@@ -646,18 +646,18 @@
       xhrProgressEvent.total = total;
     }
     return xhrProgressEvent;
-  };
+  }
 
-  var dispatchXHREvent = function(type, target) {
+  function dispatchXHREvent(type, target) {
     var xhrEvent = initXhrEvent(type, target);
     target.dispatchEvent(xhrEvent);
-  };
+  }
 
-  var initXhrEvent = function(type, target) {
+  function initXhrEvent(type, target) {
     var xhrEvent = new tabris.DOMEvent(type);
     xhrEvent.currentTarget = xhrEvent.target = target;
     return xhrEvent;
-  };
+  }
 
   // -----------------------------------------------------------------
   // Export
