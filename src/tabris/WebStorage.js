@@ -4,6 +4,7 @@
     _type: "tabris.ClientStore"
   });
 
+  var encode = tabris.PropertyTypes.string.encode;
   var proxy;
 
   tabris.WebStorage = function() {
@@ -14,26 +15,29 @@
     // Note: key and length methods currently not supported
 
     setItem: function(key, value) {
-      if (!key) {
-        throw new TypeError("Key argument must be specified to execute 'setItem'");
-      }
-      if (!value) {
-        throw new TypeError("Value argument must be specified to execute 'setItem'");
+      if (arguments.length < 2) {
+        throw new TypeError("Not enough arguments to 'setItem'");
       }
       proxy._nativeCall("add", {
-        key: tabris.PropertyTypes.string.encode(key),
-        value: tabris.PropertyTypes.string.encode(value)
+        key: encode(key),
+        value: encode(value)
       });
     },
 
     getItem: function(key) {
-      var result = proxy._nativeCall("get", {key: tabris.PropertyTypes.string.encode(key)});
+      if (arguments.length < 1) {
+        throw new TypeError("Not enough arguments to 'getItem'");
+      }
+      var result = proxy._nativeCall("get", {key: encode(key)});
       // Note: iOS can not return null, only undefined:
       return result === undefined ? null : result;
     },
 
     removeItem: function(key) {
-      proxy._nativeCall("remove", {keys: [tabris.PropertyTypes.string.encode(key)]});
+      if (arguments.length < 1) {
+        throw new TypeError("Not enough arguments to 'removeItem'");
+      }
+      proxy._nativeCall("remove", {keys: [encode(key)]});
     },
 
     clear: function() {
