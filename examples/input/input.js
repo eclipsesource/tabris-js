@@ -103,6 +103,19 @@ tabris.create("CheckBox", {
   text: "Vegetarian"
 }).appendTo(page);
 
+tabris.create("Composite", {
+  id: "milesPanel"
+}).append(
+  tabris.create("TextView", {
+    id: "milesLabel",
+    text: "Book with miles:"
+  })
+).append(
+  tabris.create("Switch", {
+    id: "milesSwitch"
+  })
+).appendTo(page);
+
 tabris.create("Button", {
   id: "done",
   text: "Place Reservation",
@@ -132,7 +145,10 @@ page.apply({
   "#luggageWeight": {layoutData: {right: 10, centerY: 0, width: 50}},
   "#luggageSlider": {layoutData: {left: "#luggageLabel 10", right: "#luggageWeight 10", centerY: 0}},
   "#veggie": {layoutData: {left: "#seatLabel 10", right: 10, top: "#luggagePanel 10"}},
-  "#done": {layoutData: {left: 10, right: 10, top: "#veggie 18"}}
+  "#milesPanel": {layoutData: {left: 10, top: "#veggie 10", right: 10}},
+  "#milesLabel": {layoutData: {left: 0, centerY: 0, width: 120}},
+  "#milesSwitch": {layoutData: {left: 120, centerY: 0}},
+  "#done": {layoutData: {left: 10, right: 10, top: "#milesPanel 18"}}
 });
 
 function populateMessage() {
