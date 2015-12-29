@@ -108,7 +108,7 @@ tabris.create("Composite", {
 }).append(
   tabris.create("TextView", {
     id: "milesLabel",
-    text: "Book with miles:"
+    text: "Redeem miles:"
   })
 ).append(
   tabris.create("Switch", {
