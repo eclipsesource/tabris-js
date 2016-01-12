@@ -19,9 +19,9 @@
     "backnavigation": {
       "parameters": [
         {"name": "app", "value": "tabris.app"},
-        {"name": "options", "type": "Object"}
+        {"name": "event", "type": "Object"}
       ],
-      "description": "Fired when the back button is pressed on Android. To suppress the default back navigation behavior, set `options.preventDefault` to `true`."
+      "description": "Fired when the back button is pressed on Android. To suppress the default back navigation behavior, call `event.preventDefault()`."
     }
   },
   "methods": {

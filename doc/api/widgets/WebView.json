@@ -13,6 +13,13 @@
     }
   },
   "events": {
+    "navigate": {
+      "parameters": [
+        {"name": "widget", "type": "WebView"},
+        {"name": "event", "type": "Object"}
+      ],
+      "description": "Fired when the WebView is about to navigate to a new URL. Listeners can intercept the navigation by calling `event.preventDefault()`."
+    },
     "load": {
       "parameters": [
         {"name": "widget", "type": "WebView"}

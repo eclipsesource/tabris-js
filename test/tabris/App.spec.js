@@ -62,7 +62,7 @@ describe("App", function() {
 
     tabris._notify(app.cid, "backnavigation");
 
-    expect(listener).toHaveBeenCalledWith(app, {});
+    expect(listener).toHaveBeenCalledWith(app, jasmine.any(Object));
   });
 
   it("backnavigation event returns false by default", function() {
@@ -73,9 +73,19 @@ describe("App", function() {
     expect(returnValue).toBe(false);
   });
 
-  it("backnavigation event returns true if preventDefault is true", function() {
-    app.on("backnavigation", function(app, options) {
-      options.preventDefault = true;
+  it("backnavigation event returns true if preventDefault is called", function() {
+    app.on("backnavigation", function(app, event) {
+      event.preventDefault = true;
+    });
+
+    var returnValue = tabris._notify(app.cid, "backnavigation");
+
+    expect(returnValue).toBe(true);
+  });
+
+  it("backnavigation event returns true if preventDefault is set to true", function() {
+    app.on("backnavigation", function(app, event) {
+      event.preventDefault();
     });
 
     var returnValue = tabris._notify(app.cid, "backnavigation");

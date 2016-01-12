@@ -7,9 +7,14 @@ tabris.registerType("_App", {
     patchInstall: {trigger: notifyPatchCallback},
     backnavigation: {
       trigger: function() {
-        var options = {};
-        this.trigger("backnavigation", this, options);
-        return options.preventDefault === true;
+        var intercepted = false;
+        var event = {};
+        event.preventDefault = function() {
+          intercepted = true;
+        };
+        this.trigger("backnavigation", this, event);
+        // TODO [2.0]: Remove compat support for setting preventDefault to false
+        return intercepted || (event.preventDefault === true);
       }
     }
   },
