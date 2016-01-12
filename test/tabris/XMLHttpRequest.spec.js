@@ -103,12 +103,11 @@ describe("XMLHttpRequest", function() {
                       "'CONNECT' HTTP method is not secure, failed to execute 'open'");
     });
 
-    // URL validation commented out as Rhino crashes with an OOM-error with several URLs
-    // it("fails with malformed URI", function() {
-    //   expect(function() {
-    //     xhr.open("GET", "http://-");
-    //   }).toThrowError("Malformed URI, failed to execute 'open'");
-    // });
+    it("fails with unsupported URL scheme", function() {
+      expect(function() {
+        xhr.open("GET", "foo:bar");
+      }).toThrowError("Unsupported URL scheme, failed to execute 'open'");
+    });
 
     it("sets object state to 'OPENED'", function() {
       xhr.open("GET", "http://foo.com");

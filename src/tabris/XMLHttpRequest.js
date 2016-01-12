@@ -529,8 +529,7 @@
       throw new TypeError("URL argument should be specified to execute 'open'");
     }
     validateMethod(method);
-    // TODO: URL validation commented out as Rhino crashes with an OOM-error with several URLs
-    // validateUrl(url);
+    validateUrl(url);
   }
 
   function validateMethod(method) {
@@ -571,14 +570,20 @@
     return forbiddenHeaders.indexOf(header.toLowerCase()) > -1;
   }
 
-  // URL validation commented out as Rhino crashes with an OOM-error with several URLs
-  // function validateUrl(url) {
-  //   // TODO: rewrite (8),(9)
-  //   // taken from https://gist.github.com/dperini/729294
-  //   if(!urlValidationRegex.test(url)){
-  //     throw new SyntaxError("Malformed URI, failed to execute 'open'");
-  //   }
-  // }
+  var supportedSchemes = ["http", "https", "file"];
+
+  function validateUrl(url) {
+    // TODO: rewrite (8),(9)
+    var scheme = extractScheme(url);
+    if (scheme && (supportedSchemes.indexOf(scheme) === -1)) {
+      throw new SyntaxError("Unsupported URL scheme, failed to execute 'open'");
+    }
+  }
+
+  function extractScheme(url) {
+    var match = /^(\S+?):/.exec(url);
+    return match ? match[1] : null;
+  }
 
   var forbiddenHeaders = [
     "accept-charset",
@@ -602,11 +607,6 @@
     "user-agent",
     "via"
   ];
-
-  // URL validation commented out as Rhino crashes with an OOM-error with several URLs
-  // Taken from https://gist.github.com/dperini/729294
-  // TODO: add to copyright header
-  // var urlValidationRegex = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/i;
 
   // -----------------------------------------------------------------
   // Event dispatcher
