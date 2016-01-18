@@ -55,6 +55,7 @@ module.exports = function(grunt) {
           helpers: [
             "test/tabris/NativeBridgeSpy.js",
             "node_modules/underscore/underscore-min.js",
+            "node_modules/backbone/backbone-min.js",
             "test/tabris/FakeTabrisModule.js"
           ],
           version: "2.3.0",

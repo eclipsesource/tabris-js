@@ -21,6 +21,7 @@
     "grunt-jscs": "^2.5.0",
     "jasmine-core": "^2.3.0",
     "npm": "^3.5.0",
-    "underscore": "^1.7.0"
+    "backbone": "^1.2.0",
+    "underscore": "^1.8.0"
   }
 }
