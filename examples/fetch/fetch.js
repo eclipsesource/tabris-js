@@ -15,10 +15,12 @@ var createTextView = function(text) {
   }).appendTo(page);
 };
 
-fetch("http://www.telize.com/geoip").then(function(response) {
+fetch("https://freegeoip.net/json/").then(function(response) {
   return response.json();
 }).then(function(json) {
   createTextView("The IP address is: " + json.ip);
+  createTextView("City: " + json.city);
+  createTextView("Country: " + json.country_name);
   createTextView("Latitude: " + json.latitude);
   createTextView("Longitude: " + json.longitude);
 });
