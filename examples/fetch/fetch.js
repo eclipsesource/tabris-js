@@ -11,7 +11,7 @@ var createTextView = function(text) {
   tabris.create("TextView", {
     text: text,
     markupEnabled: true,
-    layoutData: {left: 12, right: 12, top: "prev() 12"}
+    layoutData: {left: 16, right: 16, top: "prev() 12"}
   }).appendTo(page);
 };
 
