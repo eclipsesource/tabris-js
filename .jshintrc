@@ -34,6 +34,7 @@
     "require": false,
 
     "cordova": false,
+    "Media": false,
 
     // jasmine
     "describe": false,
