@@ -3,6 +3,9 @@ var PluginPage = require("./PluginPage");
 var page = new PluginPage("Media", "cordova-media", function(parent) {
 
   var path = tabris.app.getResourceLocation("audio/media.wav");
+  if (tabris.device.get("platform") === "iOS") {
+    path = path.substr(path.indexOf("/www/") + 5);
+  }
 
   var media = new Media(path, function() {
     console.log("Audio file loaded successfully");
