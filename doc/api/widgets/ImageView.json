@@ -4,7 +4,8 @@
   "include": ["Widget"],
   "properties": {
     "image": {
-      "type": "Image"
+      "type": "Image",
+      "description": "Providing width and height on the image will resize it internally. When no dimensions are given the image will be loaded with its original width and height. Since the full size image might occupy a lot of memory, it is encouraged to provide exact dimensions."
     },
     "scaleMode": {
       "type": "string",
