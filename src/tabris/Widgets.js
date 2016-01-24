@@ -431,6 +431,17 @@
     this.trigger(name, this, event || {});
   }
 
+  tabris.registerWidget("ActivityIndicator", {
+    _type: "rwt.widgets.ProgressBar",
+    _initProperties: {style: ["INDETERMINATE"]},
+    _layoutData: {height: 7, left: 0, right: 0},
+    _properties: {
+      data: {
+        spinningIndicator: true
+      }
+    }
+  });
+
   tabris.registerWidget("Button", {
     _type: "rwt.widgets.Button",
     _initProperties: {style: ["PUSH"]},
@@ -511,17 +522,6 @@
         }
       },
       text: {type: "string", default: ""}
-    }
-  });
-
-  tabris.registerWidget("ActivityIndicator", {
-    _type: "rwt.widgets.ProgressBar",
-    _initProperties: {style: ["INDETERMINATE"]},
-    _layoutData: {height: 7, left: 0, right: 0},
-    _properties: {
-      data: {
-        spinningIndicator: true
-      }
     }
   });
 
