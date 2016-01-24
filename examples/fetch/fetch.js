@@ -19,13 +19,18 @@ var createTextView = function(text) {
 var reloadButton;
 
 var loadData = function(){
-  var activityIndicator = tabris.create("ActivityIndicator").appendTo(page);
+  // Dispose existing elements
   page.children(".location-data").dispose();
   page.children(".reload-button").dispose();
+
+  // Create loading indicator
+  var activityIndicator = tabris.create("ActivityIndicator").appendTo(page);
 
 
   fetch("https://freegeoip.net/json/").then(function(response) {
     return response.json();
+  }).catch(function(err){
+    console.log(err || "Error loading geo-data");
   }).then(function(json) {
     // Hide the loader
     activityIndicator.dispose();
@@ -37,7 +42,7 @@ var loadData = function(){
     createTextView("Latitude: " + json.latitude);
     createTextView("Longitude: " + json.longitude);
 
-    // Init the reload button
+    // Create the reload button
     reloadButton = tabris.create("Button", {
       layoutData: {left: 16, right: 16, top: "prev() 12"},
       text: "Reload Geo-Data",
