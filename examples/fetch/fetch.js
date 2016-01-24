@@ -2,12 +2,13 @@
 Promise = require("promise");
 require("whatwg-fetch");
 
+var reloadButton, loadData, createReloadButton, createTextView;
 var page = tabris.create("Page", {
   title: "XMLHttpRequest via fetch()",
   topLevel: true
 });
 
-var createTextView = function(text) {
+createTextView = function(text) {
   tabris.create("TextView", {
     text: text,
     markupEnabled: true,
@@ -16,9 +17,17 @@ var createTextView = function(text) {
   }).appendTo(page);
 };
 
-var reloadButton;
+createReloadButton = function() {
+  reloadButton = tabris.create("Button", {
+    layoutData: {left: 16, right: 16, top: "prev() 12"},
+    text: "Reload Geo-Data",
+    class: "reload-button"
+  }).on("select", function() {
+    loadData();
+  }).appendTo(page);
+};
 
-var loadData = function(){
+loadData = function() {
   // Dispose existing elements via the class selector
   page.children(".location-data").dispose();
   page.children(".reload-button").dispose();
@@ -28,7 +37,7 @@ var loadData = function(){
 
   fetch("https://freegeoip.net/json/").then(function(response) {
     return response.json();
-  }).catch(function(err){
+  }).catch(function(err) {
 
     // On error show want went wrong and reload button.
     createTextView("Failure: " + err || "Error loading geo-data");
@@ -48,20 +57,7 @@ var loadData = function(){
     // Create the reload button
     createReloadButton();
   });
-}
-
-var createReloadButton = function(){
-  reloadButton = tabris.create("Button", {
-    layoutData: {left: 16, right: 16, top: "prev() 12"},
-    text: "Reload Geo-Data",
-    class: "reload-button"
-  }).on("select", function() {
-    loadData();
-  }).appendTo(page);
 };
 
 page.open();
 loadData();
-
-
-
