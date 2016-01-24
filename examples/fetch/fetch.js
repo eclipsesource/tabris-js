@@ -15,6 +15,10 @@ var createTextView = function(text) {
   }).appendTo(page);
 };
 
+tabris.create("ActivityIndicator").appendTo(page);
+
+page.open();
+
 fetch("https://freegeoip.net/json/").then(function(response) {
   return response.json();
 }).then(function(json) {
@@ -24,5 +28,3 @@ fetch("https://freegeoip.net/json/").then(function(response) {
   createTextView("Latitude: " + json.latitude);
   createTextView("Longitude: " + json.longitude);
 });
-
-page.open();
