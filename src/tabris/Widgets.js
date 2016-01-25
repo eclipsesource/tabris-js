@@ -431,6 +431,11 @@
     this.trigger(name, this, event || {});
   }
 
+  tabris.registerWidget("ActivityIndicator", {
+    _type: "rwt.widgets.ProgressBar",
+    _initProperties: {style: ["INDETERMINATE"], data: {spinningIndicator: true}}
+  });
+
   tabris.registerWidget("Button", {
     _type: "rwt.widgets.Button",
     _initProperties: {style: ["PUSH"]},

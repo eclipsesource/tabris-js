@@ -1,0 +1,9 @@
+{
+  "title": "Activity Indicator when loading",
+  "category": "ActivityIndicator",
+  "description": "Use an activity indicator when waiting for long running task",
+  "main": "activityindicator.js",
+  "dependencies": {
+    "tabris": "^1.6.0"
+  }
+}

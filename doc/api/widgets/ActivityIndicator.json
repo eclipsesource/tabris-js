@@ -1,0 +1,11 @@
+{
+  "type": "ActivityIndicator",
+  "description": "A widget representing a spinning indicator for indeterminate loading / processing time.",
+  "include": ["Widget"],
+  "links": [
+    {
+      "title" : "Simple ActivityIndicator snippet",
+      "path" : "https://github.com/eclipsesource/tabris-js/blob/master/snippets/activity-indicator/activityindicator.js"
+    }
+  ]
+}

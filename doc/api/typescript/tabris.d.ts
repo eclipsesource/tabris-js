@@ -459,6 +459,20 @@ declare module tabris {
 
   }
 
+  // ActivityIndicator
+
+  function create (type: "ActivityIndicator", properties: WidgetProperties): ActivityIndicator;
+
+  /**
+   * A widget representing a spinning indicator for indeterminate loading / processing time.
+   */
+  interface ActivityIndicator extends Widget <ActivityIndicator> {
+
+    set (property: string, value: any, options?: Object): ActivityIndicator;
+
+  }
+
+
   // Button
 
   function create (type: "Button", properties: ButtonProperties): Button;

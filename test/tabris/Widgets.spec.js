@@ -549,6 +549,13 @@ describe("Widgets", function() {
       return nativeBridge.calls({op: "create"})[0];
     };
 
+    it("ActivityIndicator", function() {
+      tabris.create("ActivityIndicator");
+
+      expect(getCreate().type).toEqual("rwt.widgets.ProgressBar");
+      expect(getCreate().properties).toEqual({style: ["INDETERMINATE"], data: {spinningIndicator: true}});
+    });
+
     it("Button", function() {
       var button = tabris.create("Button", {enabled: false});
 
