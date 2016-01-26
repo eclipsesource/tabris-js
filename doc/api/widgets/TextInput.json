@@ -19,7 +19,8 @@
       "description": "A hint text that is displayed when the input field is empty."
     },
     "editable": {
-      "type": "boolean"
+      "type": "boolean",
+      "description": "Whether the text can be edited or not."
     },
     "alignment": {
       "type": "string",

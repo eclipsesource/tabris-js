@@ -5,15 +5,18 @@
   "properties": {
     "minimum": {
       "type": "number",
-      "default": "0"
+      "default": "0",
+      "description": "The minimum value."
     },
     "maximum": {
       "type": "number",
-      "default": "100"
+      "default": "100",
+      "description": "The maximum value."
     },
     "selection": {
       "type": "number",
-      "default": "0"
+      "default": "0",
+      "description": "The actual value."
     }
   },
   "events": {

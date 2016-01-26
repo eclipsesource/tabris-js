@@ -6,19 +6,19 @@
   "events": {
     "pause": {
       "parameters": [
-        {"name": "app", "value": "tabris.app"}
+        {"name": "app", "type": "tabris.app"}
       ],
       "description": "Fired before the application goes into hibernation."
     },
     "resume": {
       "parameters": [
-        {"name": "app", "value": "tabris.app"}
+        {"name": "app", "type": "tabris.app"}
       ],
       "description": "Fired after the application returned from hibernation."
     },
     "backnavigation": {
       "parameters": [
-        {"name": "app", "value": "tabris.app"},
+        {"name": "app", "type": "tabris.app"},
         {"name": "event", "type": "Object"}
       ],
       "description": "Fired when the back button is pressed on Android. To suppress the default back navigation behavior, call `event.preventDefault()`."

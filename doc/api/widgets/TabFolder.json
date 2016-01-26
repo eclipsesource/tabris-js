@@ -20,14 +20,15 @@
       "values": ["top", "bottom", "hidden", "auto"],
       "default": "auto",
       "static": true,
-      "description": "The placement of the tab titles. When set to \"hidden\" the tab bar will not be visible. When set to `\"auto\"`, the position is platform dependent."
+      "description": "The placement of the tab titles. When set to `\"hidden\"`, the tab bar will not be visible. When set to `\"auto\"`, the position is platform dependent."
     },
     "paging": {
       "type": "boolean",
       "description": "Enables swiping through tabs."
     },
     "selection": {
-      "type": "Tab"
+      "type": "Tab",
+      "description": "The currently selected tab."
     }
   },
   "events": {

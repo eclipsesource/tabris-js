@@ -42,7 +42,7 @@
       "parameters": [
         {
           "name": "device",
-          "value": "tabris.device"
+          "type": "tabris.device"
         },
         {
           "name": "orientation",

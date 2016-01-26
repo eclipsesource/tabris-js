@@ -33,7 +33,7 @@
       "parameters": [
         {
           "name": "ui",
-          "value": "tabris.ui"
+          "type": "tabris.ui"
         },
         {
           "name": "page",
@@ -45,7 +45,7 @@
           "type": "Object"
         }
       ],
-      "description": ""
+      "description": "Fired when the active page changes."
     }
   }
 }

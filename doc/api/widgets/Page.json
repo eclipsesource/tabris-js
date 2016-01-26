@@ -1,6 +1,6 @@
 {
   "type": "Page",
-  "description": "Pages contain an application's UI. Top-level pages can have a stack of non-top-level pages on top.",
+  "description": "Pages contain an application's UI. Top-level pages can have a stack of non-top-level pages on top. See [Widget Tree](../ui)",
   "include": ["Composite"],
   "methods": {
     "open": [
@@ -18,14 +18,17 @@
   },
   "properties": {
     "image": {
-      "type": "Image"
+      "type": "Image",
+      "description": "An image to be displayed in the navigation bar. Not supported anymore, don't use it."
     },
     "title": {
-      "type": "string"
+      "type": "string",
+      "description": "The page title to be displayed in the navigation bar."
     },
     "topLevel": {
       "type": "boolean",
-      "default": "false"
+      "default": "false",
+      "description": "Defines whether this is a top level page."
     }
   },
   "events": {

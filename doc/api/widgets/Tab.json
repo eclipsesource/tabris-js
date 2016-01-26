@@ -4,13 +4,16 @@
   "include": ["Composite"],
   "properties": {
     "title": {
-      "type": "string"
+      "type": "string",
+      "description": "The title to be displayed on the tab."
     },
     "image": {
-      "type": "Image"
+      "type": "Image",
+      "description": "An image to be displayed on the tab."
     },
     "badge": {
-      "type": "string"
+      "type": "string",
+      "description": "A badge to attach to the tab. Only supported on iOS."
     }
   },
   "links": [
