@@ -93,9 +93,9 @@ Images are specified as objects with the following properties:
 * **src**: *string*
     Image path or URL.
 * **width**: *number (optional)*
-    Image width, extracted from the image file when missing.
+    Image width in dip, extracted from the image file when missing.
 * **height**: *number (optional)*
-    Image height, extracted from the image file when missing.
+    Image height in dip, extracted from the image file when missing.
 * **scale**: *number (optional)*
     Image scale factor - the image will be scaled down by this factor. Ignored when width or height are set.
 
