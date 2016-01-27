@@ -31,16 +31,17 @@ function createBookPage(book) {
   var page = tabris.create("Page", {
     title: book.title
   });
-  var detailsComposite = createDetailsView(book)
+  createDetailsView(book)
     .set("layoutData", {top: 0, height: 192, left: 0, right: 0})
     .appendTo(page);
-  createTabFolder().set({
-    layoutData: {top: [detailsComposite, 0], left: 0, right: 0, bottom: 0}
-  }).appendTo(page);
+
   tabris.create("TextView", {
-    layoutData: {height: 1, right: 0, left: 0, top: [detailsComposite, 0]},
+    layoutData: {height: 1, right: 0, left: 0, top: "prev()"},
     background: "rgba(0, 0, 0, 0.1)"
   }).appendTo(page);
+
+  createTabFolder().appendTo(page);
+
   return page;
 }
 
@@ -58,17 +59,18 @@ function createDetailsView(book) {
     layoutData: {height: 160, width: 106, left: PAGE_MARGIN, top: PAGE_MARGIN},
     image: book.image
   }).appendTo(composite);
-  var titleTextView = tabris.create("TextView", {
+
+  tabris.create("TextView", {
     markupEnabled: true,
-    text: "<b>" + book.title + "</b>",
+    text: `<b>${book.title}</b>`,
     layoutData: {left: [coverView, PAGE_MARGIN], top: PAGE_MARGIN, right: PAGE_MARGIN}
   }).appendTo(composite);
-  var authorTextView = tabris.create("TextView", {
-    layoutData: {left: [coverView, PAGE_MARGIN], top: [titleTextView, PAGE_MARGIN]},
+  tabris.create("TextView", {
+    layoutData: {left: [coverView, PAGE_MARGIN], top: ["prev()",PAGE_MARGIN]},
     text: book.author
   }).appendTo(composite);
   tabris.create("TextView", {
-    layoutData: {left: [coverView, PAGE_MARGIN], top: [authorTextView, PAGE_MARGIN]},
+    layoutData: {left: [coverView, PAGE_MARGIN], top: ["prev()",PAGE_MARGIN]},
     textColor: "rgb(102, 153, 0)",
     text: "EUR 12,95"
   }).appendTo(composite);
@@ -76,7 +78,11 @@ function createDetailsView(book) {
 }
 
 function createTabFolder() {
-  var tabFolder = tabris.create("TabFolder", {tabBarLocation: "top", paging: true});
+  var tabFolder = tabris.create("TabFolder", {
+    tabBarLocation: "top",
+    paging: true,
+    layoutData: {top: "prev()", left: 0, right: 0, bottom: 0}
+  });
   var relatedTab = tabris.create("Tab", {title: "Related"}).appendTo(tabFolder);
   createBooksList(books).appendTo(relatedTab);
   var commentsTab = tabris.create("Tab", {title: "Comments"}).appendTo(tabFolder);
@@ -120,7 +126,7 @@ function createBooksList(books) {
 function createReadBookPage(book) {
   var page = tabris.create("Page", {title: book.title});
   var scrollView = tabris.create("ScrollView", {
-    layoutData: {left: 0, right: 0, top: 0, bottom: 0},
+    layoutData: styles.full,
     direction: "vertical"
   }).appendTo(page);
   var titleTextView = tabris.create("TextView", {
@@ -136,23 +142,26 @@ function createReadBookPage(book) {
   return page;
 }
 
+
+
+
 function createLicensePage() {
   var page = tabris.create("Page", {
     title: "License"
   });
-  var settingsTextView = tabris.create("TextView", {
+  tabris.create("TextView", {
     text: license.header ,
-    layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: PAGE_MARGIN}
+    layoutData: styles.license.item
   }).appendTo(page);
-  var linkTextView = tabris.create("TextView", {
+  tabris.create("TextView", {
     text: `<a href=\"${license.link.url}\">${license.link.caption}</a>`,
     markupEnabled: true,
-    layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: [settingsTextView, 10]}
+    layoutData: styles.license.item
   }).on("tap", openLicenseWebPage ).appendTo(page);
   tabris.create("TextView", {
     text: license.authors,
     markupEnabled: true,
-    layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: [linkTextView, 10]}
+    layoutData: styles.license.item
   }).appendTo(page);
   return page;
 }
@@ -162,9 +171,47 @@ function openLicenseWebPage() {
     title: license.link.caption
   });
   tabris.create("WebView", {
-    layoutData: {left: 0, top: 0, right: 0, bottom: 0},
+    layoutData: styles.full,
     url: license.link.url
   }).appendTo(page);
   page.open();
   return page;
 }
+
+
+
+var styles = {
+  license: {
+    item: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: ["prev()", 10]}
+  },
+
+  stack:{top: "prev()", left: 0, right: 0},
+  full: {left: 0, top: 0, right: 0, bottom: 0},
+};
+
+
+
+
+
+//function RenderElement (elem = "Composite", params= {}) {
+//  return tabris.create(elem, params);
+//}
+//
+//
+//
+////function RenderTree (elem = "Composite", params= {}, children = []) {
+////  let elem = RenderElement(elem,params);
+////  children.forEach((child) => {
+////    RenderElement
+////  })
+////}
+//
+//
+//
+//function Page (params = {}, children = []){
+//  let page = RenderElement("Page", params);
+//  children.forEach(child => {
+//    child.appendTo(page);
+//  });
+//  return page;
+//}
