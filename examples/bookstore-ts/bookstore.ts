@@ -2,23 +2,15 @@ declare var require: any;
 declare var tabris: any;
 
 const PAGE_MARGIN = 16;
-tabris.create("Drawer").append(tabris.create("PageSelector"));
-
 import { loremIpsum , license } from './texts';
-
 const books = require("./books.json");
 
-var bookStorePage = createBookListPage("TS Book Store", "images/page_all_books.png", () => {
-  return true;
-});
+tabris.create("Drawer").append(tabris.create("PageSelector"));
 
-createBookListPage("Popular", "images/page_popular_books.png", book => {
-  return book.popular;
-});
 
-createBookListPage("Favorite", "images/page_favorite_books.png", book => {
-  return book.favorite;
-});
+var bookStorePage = createBookListPage("TS Book Store", "images/page_all_books.png", () => true);
+createBookListPage("Popular", "images/page_popular_books.png", book => book.popular);
+createBookListPage("Favorite", "images/page_favorite_books.png", book => book.favorite);
 
 tabris.create("Action", {
   title: "Settings",
@@ -156,11 +148,23 @@ function createLicensePage() {
     text: `<a href=\"${license.link.url}\">${license.link.caption}</a>`,
     markupEnabled: true,
     layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: [settingsTextView, 10]}
-  }).appendTo(page);
+  }).on("tap", openLicenseWebPage ).appendTo(page);
   tabris.create("TextView", {
     text: license.authors,
     markupEnabled: true,
     layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: [linkTextView, 10]}
   }).appendTo(page);
+  return page;
+}
+
+function openLicenseWebPage() {
+  var page = tabris.create("Page", {
+    title: license.link.caption
+  });
+  tabris.create("WebView", {
+    layoutData: {left: 0, top: 0, right: 0, bottom: 0},
+    url: license.link.url
+  }).appendTo(page);
+  page.open();
   return page;
 }

@@ -1,16 +1,10 @@
 var PAGE_MARGIN = 16;
-tabris.create("Drawer").append(tabris.create("PageSelector"));
 var texts_1 = require('./texts');
 var books = require("./books.json");
-var bookStorePage = createBookListPage("TS Book Store", "images/page_all_books.png", function () {
-    return true;
-});
-createBookListPage("Popular", "images/page_popular_books.png", function (book) {
-    return book.popular;
-});
-createBookListPage("Favorite", "images/page_favorite_books.png", function (book) {
-    return book.favorite;
-});
+tabris.create("Drawer").append(tabris.create("PageSelector"));
+var bookStorePage = createBookListPage("TS Book Store", "images/page_all_books.png", function () { return true; });
+createBookListPage("Popular", "images/page_popular_books.png", function (book) { return book.popular; });
+createBookListPage("Favorite", "images/page_favorite_books.png", function (book) { return book.favorite; });
 tabris.create("Action", {
     title: "Settings",
     image: { src: "images/action_settings.png", scale: 3 }
@@ -139,11 +133,22 @@ function createLicensePage() {
         text: "<a href=\"" + texts_1.license.link.url + "\">" + texts_1.license.link.caption + "</a>",
         markupEnabled: true,
         layoutData: { left: PAGE_MARGIN, right: PAGE_MARGIN, top: [settingsTextView, 10] }
-    }).appendTo(page);
+    }).on("tap", openLicenseWebPage).appendTo(page);
     tabris.create("TextView", {
         text: texts_1.license.authors,
         markupEnabled: true,
         layoutData: { left: PAGE_MARGIN, right: PAGE_MARGIN, top: [linkTextView, 10] }
     }).appendTo(page);
+    return page;
+}
+function openLicenseWebPage() {
+    var page = tabris.create("Page", {
+        title: texts_1.license.link.caption
+    });
+    tabris.create("WebView", {
+        layoutData: { left: 0, top: 0, right: 0, bottom: 0 },
+        url: texts_1.license.link.url
+    }).appendTo(page);
+    page.open();
     return page;
 }
