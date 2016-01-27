@@ -2,10 +2,11 @@ declare var require: any;
 declare var tabris: any;
 
 const PAGE_MARGIN = 16;
+
+import { Page, WebView, TextView, Text, ScrollView, TabFolder, Tab, Composite, ImageView, CollectionView, Action, Drawer, PageSelector} from './tabris-components'
+import { Spacer } from './custom-components';
 import { loremIpsum , license } from './texts';
 const books = require("./books.json");
-
-
 
 /*************************
  * Application Start
@@ -47,18 +48,9 @@ function openBookPage(book) {
   return (
       Page ({title: book.title}, [
         BookDetails(book),
-        Spacer(),
+        Spacer,
         BookTabs(book),
       ]).open()
-  )
-}
-
-function Spacer(config : {height:number, color:string} = {}) {
-  return (
-      Composite({
-        layoutData: {height: config.height || 1, right: 0, left: 0, top: "prev()"},
-        background: config.color || "rgba(0, 0, 0, 0.1)"
-      })
   )
 }
 
@@ -66,7 +58,6 @@ function openReadBookPage(book) {
   return (
       Page ({title: book.title}, [
         ScrollView({layoutData: styles.full, direction: "vertical"}, [
-
           Text({
             layoutData: {left: PAGE_MARGIN, top: PAGE_MARGIN * 2, right: PAGE_MARGIN},
             textColor: "rgba(0, 0, 0, 0.5)",
@@ -83,31 +74,10 @@ function openReadBookPage(book) {
   )
 }
 
+
 /*************************
  * Book Sub-components
  *************************/
-
-function BookTabs(book) {
-  return (
-      TabFolder ({
-        tabBarLocation: "top",
-        paging: true,
-        layoutData: {top: "prev()", left: 0, right: 0, bottom: 0}
-      }, [
-        // Related Tab
-        Tab({title: "Related"},[
-          BooksList(books)
-        ]),
-        // Comments Tab
-        Tab({title: "Comments"},[
-          Text({
-            layoutData: {left: PAGE_MARGIN, top: PAGE_MARGIN, right: PAGE_MARGIN},
-            text: "Great Book."
-          })
-        ])
-      ])
-  )
-}
 
 function BooksList(books) {
   return (
@@ -175,6 +145,28 @@ function BookDetails(book) {
   )
 }
 
+function BookTabs(book) {
+  return (
+      TabFolder ({
+        tabBarLocation: "top",
+        paging: true,
+        layoutData: {top: "prev()", left: 0, right: 0, bottom: 0}
+      }, [
+        // Related Tab
+        Tab({title: "Related"},[
+          BooksList(books)
+        ]),
+        // Comments Tab
+        Tab({title: "Comments"},[
+          Text({
+            layoutData: {left: PAGE_MARGIN, top: PAGE_MARGIN, right: PAGE_MARGIN},
+            text: "Great Book."
+          })
+        ])
+      ])
+  )
+}
+
 
 /*************************
  * License Pages
@@ -223,79 +215,3 @@ var styles = {
   stack:{top: "prev()", left: 0, right: 0},
   full: {left: 0, top: 0, right: 0, bottom: 0},
 };
-
-
-
-function RenderElement (elem = "Composite", params= {}) {
-  return tabris.create(elem, params);
-}
-
-function RenderTree (elemName = "Composite", params= {}, children = []) {
-  let elem = RenderElement(elemName,params);
-  children.forEach((child) => {
-    if(typeof child === 'function'){
-      child().appendTo(elem);
-    }
-    else {
-      child.appendTo(elem);
-    }
-  })
-  return elem;
-}
-
-
-
-
-function Page (params = {}, children = []){
-  return RenderTree("Page", params,children);
-}
-
-function WebView (params = {}, children = []){
-  return RenderTree("WebView", params,children);
-}
-
-function TextView (params = {}, children = []){
-  return RenderTree("TextView", params,children);
-}
-
-function Text (params = {}, children = []){
-  return RenderTree("TextView", params,children);
-}
-
-function ScrollView (params = {}, children = []){
-  return RenderTree("ScrollView", params,children);
-}
-
-function TabFolder (params = {}, children = []){
-  return RenderTree("TabFolder", params,children);
-}
-
-function Tab (params = {}, children = []){
-  return RenderTree("Tab", params,children);
-}
-
-function Composite (params = {}, children = []){
-  return RenderTree("Composite", params,children);
-}
-
-function ImageView (params = {}, children = []){
-  return RenderTree("ImageView", params,children);
-}
-
-function CollectionView (params = {}, children = []){
-  return RenderTree("CollectionView", params,children);
-}
-
-function Action (params = {}, children = []){
-  return RenderTree("Action", params,children);
-}
-
-function Drawer (params = {}, children = []){
-  return RenderTree("Drawer", params,children);
-}
-
-function PageSelector (params = {}, children = []){
-  return RenderTree("PageSelector", params,children);
-}
-
-
