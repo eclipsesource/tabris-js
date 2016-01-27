@@ -15,7 +15,7 @@ createBookListPage("Favorite", "images/page_favorite_books.png", book => book.fa
 tabris.create("Action", {
   title: "Settings",
   image: {src: "images/action_settings.png", scale: 3}
-}).on("select", () => createLicensePage().open() );
+}).on("select", () => openLicensePage);
 
 bookStorePage.open();
 
@@ -46,51 +46,53 @@ function createBookPage(book) {
 }
 
 function createDetailsView(book) {
-  var composite = tabris.create("Composite", {
-    background: "white",
-    highlightOnTouch: true
-  });
-  tabris.create("Composite", {
-    layoutData: {left: 0, right: 0, top: 0, height: 160 + 2 * PAGE_MARGIN}
-  }).on("tap", () => {
-    createReadBookPage(book).open();
-  }).appendTo(composite);
-  var coverView = tabris.create("ImageView", {
-    layoutData: {height: 160, width: 106, left: PAGE_MARGIN, top: PAGE_MARGIN},
-    image: book.image
-  }).appendTo(composite);
-
-  tabris.create("TextView", {
-    markupEnabled: true,
-    text: `<b>${book.title}</b>`,
-    layoutData: {left: [coverView, PAGE_MARGIN], top: PAGE_MARGIN, right: PAGE_MARGIN}
-  }).appendTo(composite);
-  tabris.create("TextView", {
-    layoutData: {left: [coverView, PAGE_MARGIN], top: ["prev()",PAGE_MARGIN]},
-    text: book.author
-  }).appendTo(composite);
-  tabris.create("TextView", {
-    layoutData: {left: [coverView, PAGE_MARGIN], top: ["prev()",PAGE_MARGIN]},
-    textColor: "rgb(102, 153, 0)",
-    text: "EUR 12,95"
-  }).appendTo(composite);
-  return composite;
+  return (
+    Composite({background: "white", highlightOnTouch: true},[
+      ImageView({
+        layoutData: {height: 160, width: 106, left: PAGE_MARGIN, top: PAGE_MARGIN},
+        image: book.image
+      }),
+      Composite({left: ["prev()", PAGE_MARGIN], top: PAGE_MARGIN, right: PAGE_MARGIN},[
+          TextView({
+            markupEnabled: true,
+            text: book.title,
+            font: "bold 20px",
+            layoutData: {left: 0, top: "prev()", right: 0}
+          }),
+          TextView({
+            layoutData: {left: 0, top: "prev()", right: 0}
+            text: book.author
+          }),
+          TextView({
+            layoutData: {left: 0, top: ["prev()",PAGE_MARGIN]},
+            textColor: "rgb(102, 153, 0)",
+            text: "EUR 12,95"
+          })
+      ])
+    ])
+  )
 }
 
 function createTabFolder() {
-  var tabFolder = tabris.create("TabFolder", {
-    tabBarLocation: "top",
-    paging: true,
-    layoutData: {top: "prev()", left: 0, right: 0, bottom: 0}
-  });
-  var relatedTab = tabris.create("Tab", {title: "Related"}).appendTo(tabFolder);
-  createBooksList(books).appendTo(relatedTab);
-  var commentsTab = tabris.create("Tab", {title: "Comments"}).appendTo(tabFolder);
-  tabris.create("TextView", {
-    layoutData: {left: PAGE_MARGIN, top: PAGE_MARGIN, right: PAGE_MARGIN},
-    text: "Great Book."
-  }).appendTo(commentsTab);
-  return tabFolder;
+  return (
+      TabFolder ({
+        tabBarLocation: "top",
+        paging: true,
+        layoutData: {top: "prev()", left: 0, right: 0, bottom: 0}
+      }, [
+        // Related Tab
+        Tab({title: "Related"},[
+          createBooksList(books)
+        ]),
+        // Comments Tab
+        Tab({title: "Comments"},[
+            TextView({
+              layoutData: {left: PAGE_MARGIN, top: PAGE_MARGIN, right: PAGE_MARGIN},
+              text: "Great Book."
+            })
+        ])
+      ])
+  )
 }
 
 function createBooksList(books) {
@@ -123,59 +125,57 @@ function createBooksList(books) {
   });
 }
 
-function createReadBookPage(book) {
-  var page = tabris.create("Page", {title: book.title});
-  var scrollView = tabris.create("ScrollView", {
-    layoutData: styles.full,
-    direction: "vertical"
-  }).appendTo(page);
-  var titleTextView = tabris.create("TextView", {
-    layoutData: {left: PAGE_MARGIN, top: PAGE_MARGIN * 2, right: PAGE_MARGIN},
-    textColor: "rgba(0, 0, 0, 0.5)",
-    markupEnabled: true,
-    text: "<b>" + book.title + "</b>"
-  }).appendTo(scrollView);
-  tabris.create("TextView", {
-    layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: [titleTextView, PAGE_MARGIN], bottom: PAGE_MARGIN},
-    text: loremIpsum
-  }).appendTo(scrollView);
-  return page;
+function openReadBookPage(book) {
+  return (
+      Page ({title: book.title}, [
+        ScrollView({layoutData: styles.full, direction: "vertical"}, [
+
+          TextView({
+            layoutData: {left: PAGE_MARGIN, top: PAGE_MARGIN * 2, right: PAGE_MARGIN},
+            textColor: "rgba(0, 0, 0, 0.5)",
+            markupEnabled: true,
+            text: "<b>" + book.title + "</b>"
+          }),
+
+          TextView({
+            layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: ["prev()", PAGE_MARGIN], bottom: PAGE_MARGIN},
+            text: loremIpsum
+          })
+        ]),
+      ]).open()
+  )
 }
 
 
+function openLicensePage() {
+  return (
+      Page ({title: "License"}, [
+        TextView({text: license.header, layoutData: styles.license.item}),
 
+        TextView({
+          text: license.link.caption,
+          textColor: "rgba(71, 161, 238, 0.75)",
+          layoutData: styles.license.item
+        }).on("tap", openLicenseWebPage ),
 
-function createLicensePage() {
-  var page = tabris.create("Page", {
-    title: "License"
-  });
-  tabris.create("TextView", {
-    text: license.header ,
-    layoutData: styles.license.item
-  }).appendTo(page);
-  tabris.create("TextView", {
-    text: `<a href=\"${license.link.url}\">${license.link.caption}</a>`,
-    markupEnabled: true,
-    layoutData: styles.license.item
-  }).on("tap", openLicenseWebPage ).appendTo(page);
-  tabris.create("TextView", {
-    text: license.authors,
-    markupEnabled: true,
-    layoutData: styles.license.item
-  }).appendTo(page);
-  return page;
+        TextView({
+          text: license.authors,
+          markupEnabled: true,
+          layoutData: styles.license.item
+        }),
+      ]).open()
+  )
 }
 
 function openLicenseWebPage() {
-  var page = tabris.create("Page", {
-    title: license.link.caption
-  });
-  tabris.create("WebView", {
-    layoutData: styles.full,
-    url: license.link.url
-  }).appendTo(page);
-  page.open();
-  return page;
+  return (
+    Page ({title: license.link.caption},[
+      WebView ({
+        layoutData: styles.full,
+        url: license.link.url
+      })
+    ]).open()
+  )
 }
 
 
@@ -191,27 +191,47 @@ var styles = {
 
 
 
+function RenderElement (elem = "Composite", params= {}) {
+  return tabris.create(elem, params);
+}
+
+function RenderTree (elemName = "Composite", params= {}, children = []) {
+  let elem = RenderElement(elemName,params);
+  children.forEach((child) => {
+    child.appendTo(elem);
+  })
+  return elem;
+}
 
 
-//function RenderElement (elem = "Composite", params= {}) {
-//  return tabris.create(elem, params);
-//}
-//
-//
-//
-////function RenderTree (elem = "Composite", params= {}, children = []) {
-////  let elem = RenderElement(elem,params);
-////  children.forEach((child) => {
-////    RenderElement
-////  })
-////}
-//
-//
-//
-//function Page (params = {}, children = []){
-//  let page = RenderElement("Page", params);
-//  children.forEach(child => {
-//    child.appendTo(page);
-//  });
-//  return page;
-//}
+function Page (params = {}, children = []){
+  return RenderTree("Page", params,children);
+}
+
+function WebView (params = {}, children = []){
+  return RenderTree("WebView", params,children);
+}
+
+function TextView (params = {}, children = []){
+  return RenderTree("TextView", params,children);
+}
+
+function ScrollView (params = {}, children = []){
+  return RenderTree("ScrollView", params,children);
+}
+
+function TabFolder (params = {}, children = []){
+  return RenderTree("TabFolder", params,children);
+}
+
+function Tab (params = {}, children = []){
+  return RenderTree("Tab", params,children);
+}
+
+function Composite (params = {}, children = []){
+  return RenderTree("Composite", params,children);
+}
+
+function ImageView (params = {}, children = []){
+  return RenderTree("ImageView", params,children);
+}
