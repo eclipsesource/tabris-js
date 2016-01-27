@@ -1,6 +1,12 @@
 var PAGE_MARGIN = 16;
+/*************************
+ * Import Components
+ *************************/
 var tabris_components_1 = require('./tabris-components');
 var custom_components_1 = require('./custom-components');
+/*************************
+ * Import Services
+ *************************/
 var texts_1 = require('./texts');
 var books = require("./books.json");
 var commentsLL = [
@@ -153,43 +159,39 @@ function BookTabs(book) {
     ]));
 }
 function CommentsList(comments) {
-    // console.log("Creating book list for "+books.length);
-    return (tabris_components_1.CollectionView({
-        layoutData: styles.full,
-        itemHeight: 172,
-        items: comments,
-        initializeCell: function (cell) {
-            [
-                tabris_components_1.ImageView({
-                    layoutData: { left: PAGE_MARGIN, top: 10, width: 32, height: 48 },
-                    class: "commenterAvatar",
-                    scaleMode: "fit"
-                }),
-                tabris_components_1.Text({
-                    layoutData: { left: 64, right: PAGE_MARGIN, top: 15 },
-                    class: "commentAuthor",
-                    textColor: "#000000"
-                }),
-                tabris_components_1.Text({
-                    layoutData: { left: 64, right: PAGE_MARGIN, top: "prev()" },
-                    class: "commentText",
-                    textColor: "#7b7b7b"
-                })
-            ].forEach(function (elem) { return elem.appendTo(cell); });
-            cell.on("change:item", function (widget, comment) {
-                cell.children(".commenterAvatar").set("image", comment.user.avatar);
-                cell.children(".commentAuthor").set("text", comment.user.name);
-                cell.children(".commentText").set("text", comment.text);
-            });
-        }
-    }).on("select", function (target, value) { openBookPage(value); }));
+    return (tabris_components_1.ScrollView(styles.full, comments.map(CommentItem)));
+}
+function CommentItem(comment) {
+    return (tabris_components_1.Composite({ left: PAGE_MARGIN, top: "prev()", right: PAGE_MARGIN }, [
+        tabris_components_1.ImageView({
+            layoutData: { left: PAGE_MARGIN, top: 10, width: 32, height: 48 },
+            class: "commenterAvatar",
+            scaleMode: "fit",
+            image: comment.user.avatar
+        }),
+        tabris_components_1.Text({
+            layoutData: { left: 64, right: PAGE_MARGIN, top: 15 },
+            class: "commentAuthor",
+            textColor: "#000000",
+            text: comment.user.name
+        }),
+        tabris_components_1.Text({
+            layoutData: { left: 64, right: PAGE_MARGIN, top: "prev()" },
+            class: "commentText",
+            textColor: "#7b7b7b",
+            text: comment.text
+        })
+    ]));
 }
 /*************************
  * License Pages
  *************************/
 function openLicensePage() {
     return (tabris_components_1.Page({ title: "License" }, [
-        tabris_components_1.Text({ text: texts_1.license.header, layoutData: styles.license.item }),
+        tabris_components_1.Text({
+            text: texts_1.license.header,
+            layoutData: styles.license.item
+        }),
         tabris_components_1.Text({
             text: texts_1.license.link.caption,
             textColor: "rgba(71, 161, 238, 0.75)",

@@ -3,8 +3,15 @@ declare var tabris: any;
 
 const PAGE_MARGIN = 16;
 
+/*************************
+ * Import Components
+ *************************/
 import { Page, WebView, TextView, Text, ScrollView, TabFolder, Tab, Composite, ImageView, CollectionView, Action, Drawer, PageSelector} from './tabris-components'
 import { Spacer } from './custom-components';
+
+/*************************
+ * Import Services
+ *************************/
 import { loremIpsum , license } from './texts';
 const books = require("./books.json");
 
@@ -191,39 +198,36 @@ function BookTabs(book) {
 }
 
 function CommentsList(comments) {
-  // console.log("Creating book list for "+books.length);
   return (
-      CollectionView({
-        layoutData: styles.full,
-        itemHeight: 172,
-        items: comments,
-        initializeCell: (cell) => {
-          [
-            ImageView({
-              layoutData: {left: PAGE_MARGIN, top: 10, width: 32, height: 48},
-              class: "commenterAvatar",
-              scaleMode: "fit"
-            }),
-            Text({
-              layoutData: {left: 64, right: PAGE_MARGIN, top: 15},
-              class: "commentAuthor",
-              textColor: "#000000"
+      ScrollView(styles.full,
+        comments.map( CommentItem )
+      )
+  )
+}
 
-            }),
-            Text({
-              layoutData: {left: 64, right: PAGE_MARGIN, top: "prev()"},
-              class: "commentText",
-              textColor: "#7b7b7b"
-            })
-          ].forEach(elem => elem.appendTo(cell))
+function CommentItem(comment) {
+  return (
+      Composite({left: PAGE_MARGIN, top: "prev()", right: PAGE_MARGIN}, [
+          ImageView({
+            layoutData: {left: PAGE_MARGIN, top: 10, width: 32, height: 48},
+            class: "commenterAvatar",
+            scaleMode: "fit",
+            image: comment.user.avatar
+          }),
+          Text({
+            layoutData: {left: 64, right: PAGE_MARGIN, top: 15},
+            class: "commentAuthor",
+            textColor: "#000000",
+            text: comment.user.name
 
-          cell.on("change:item", function(widget, comment) {
-            cell.children(".commenterAvatar").set("image",comment.user.avatar);
-            cell.children(".commentAuthor").set("text",comment.user.name);
-            cell.children(".commentText").set("text",comment.text);
-          });
-        }
-      }).on("select", (target, value) => { openBookPage(value) })
+          }),
+          Text({
+            layoutData: {left: 64, right: PAGE_MARGIN, top: "prev()"},
+            class: "commentText",
+            textColor: "#7b7b7b",
+            text: comment.text
+          })
+        ])
   )
 }
 
@@ -235,7 +239,10 @@ function CommentsList(comments) {
 function openLicensePage() {
   return (
       Page ({title: "License"}, [
-        Text({text: license.header, layoutData: styles.license.item}),
+        Text({
+          text: license.header,
+          layoutData: styles.license.item
+        }),
 
         Text({
           text: license.link.caption,
