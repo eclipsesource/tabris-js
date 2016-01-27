@@ -8,67 +8,32 @@ const books = require("./books.json");
 tabris.create("Drawer").append(tabris.create("PageSelector"));
 
 
-var bookStorePage = createBookListPage("TS Book Store", "images/page_all_books.png", () => true);
-createBookListPage("Popular", "images/page_popular_books.png", book => book.popular);
-createBookListPage("Favorite", "images/page_favorite_books.png", book => book.favorite);
+var bookStorePage = BookListPage("TS Book Store", "images/page_all_books.png", () => true);
+BookListPage("Popular", "images/page_popular_books.png", book => book.popular);
+BookListPage("Favorite", "images/page_favorite_books.png", book => book.favorite);
 
-tabris.create("Action", {
+Action({
   title: "Settings",
   image: {src: "images/action_settings.png", scale: 3}
-}).on("select", () => openLicensePage);
+}).on("select", openLicensePage);
 
 bookStorePage.open();
-
-
-function BookDetails(book) {
-  return (
-    Composite({
-      background: "white",
-      highlightOnTouch: true,
-      layoutData:{top: 0, height: 192, left: 0, right: 0}
-    },[
-      ImageView({
-        layoutData: {height: 160, width: 106, left: PAGE_MARGIN, top: PAGE_MARGIN},
-        image: book.image
-      }),
-      Composite({left: ["prev()", PAGE_MARGIN], top: PAGE_MARGIN, right: PAGE_MARGIN},[
-          TextView({
-            text: book.title,
-            font: "bold 20px",
-            layoutData: {left: 0, top: "prev()", right: 0}
-          }),
-          TextView({
-            layoutData: {left: 0, top: "prev()", right: 0},
-            text: book.author
-          }),
-          TextView({
-            layoutData: {left: 0, top: ["prev()",PAGE_MARGIN]},
-            textColor: "rgb(102, 153, 0)",
-            text: book.price
-          })
-      ])
-    ]).on("tap",  () => { openReadBookPage(book) })
-  )
-}
-
 
 
 /*************************
  * Book Pages
  *************************/
-function createBookListPage(title, image, filter) {
+function BookListPage(title, image, filter) {
   return (
       Page ({
         title: title,
         topLevel: true,
         image: {src: image, scale: 3}
       }, [
-        createBooksList(books.filter(filter)),
+        BooksList(books.filter(filter)),
       ])
   )
 }
-
-
 
 function openBookPage(book) {
   return (
@@ -81,60 +46,6 @@ function openBookPage(book) {
         BookTabs(book),
       ]).open()
   )
-}
-
-/*************************
- * Book Sub-components
- *************************/
-
-function BookTabs(book) {
-  return (
-      TabFolder ({
-        tabBarLocation: "top",
-        paging: true,
-        layoutData: {top: "prev()", left: 0, right: 0, bottom: 0}
-      }, [
-        // Related Tab
-        Tab({title: "Related"},[
-          createBooksList(books)
-        ]),
-        // Comments Tab
-        Tab({title: "Comments"},[
-          TextView({
-            layoutData: {left: PAGE_MARGIN, top: PAGE_MARGIN, right: PAGE_MARGIN},
-            text: "Great Book."
-          })
-        ])
-      ])
-  )
-}
-
-function createBooksList(books) {
-  return tabris.create("CollectionView", {
-    layoutData: {left: 0, right: 0, top: 0, bottom: 0},
-    itemHeight: 72,
-    items: books,
-    initializeCell: (cell) => {
-      var imageView = tabris.create("ImageView", {
-        layoutData: {left: PAGE_MARGIN, centerY: 0, width: 32, height: 48},
-        scaleMode: "fit"
-      }).appendTo(cell);
-      var titleTextView = tabris.create("TextView", {
-        layoutData: {left: 64, right: PAGE_MARGIN, top: PAGE_MARGIN},
-        markupEnabled: true,
-        textColor: "#4a4a4a"
-      }).appendTo(cell);
-      var authorTextView = tabris.create("TextView", {
-        layoutData: {left: 64, right: PAGE_MARGIN, top: [titleTextView, 4]},
-        textColor: "#7b7b7b"
-      }).appendTo(cell);
-      cell.on("change:item", function(widget, book) {
-        imageView.set("image", book.image);
-        titleTextView.set("text", book.title);
-        authorTextView.set("text", book.author);
-      });
-    }
-  }).on("select", (target, value) => { openBookPage(value) });
 }
 
 function openReadBookPage(book) {
@@ -155,6 +66,98 @@ function openReadBookPage(book) {
           })
         ]),
       ]).open()
+  )
+}
+
+/*************************
+ * Book Sub-components
+ *************************/
+
+function BookTabs(book) {
+  return (
+      TabFolder ({
+        tabBarLocation: "top",
+        paging: true,
+        layoutData: {top: "prev()", left: 0, right: 0, bottom: 0}
+      }, [
+        // Related Tab
+        Tab({title: "Related"},[
+          BooksList(books)
+        ]),
+        // Comments Tab
+        Tab({title: "Comments"},[
+          TextView({
+            layoutData: {left: PAGE_MARGIN, top: PAGE_MARGIN, right: PAGE_MARGIN},
+            text: "Great Book."
+          })
+        ])
+      ])
+  )
+}
+
+function BooksList(books) {
+  return (
+      CollectionView({
+        layoutData: {left: 0, right: 0, top: 0, bottom: 0},
+        itemHeight: 72,
+        items: books,
+        initializeCell: (cell) => {
+          [
+            ImageView({
+              layoutData: {left: PAGE_MARGIN, centerY: 0, width: 32, height: 48},
+              class: "bookImage",
+              scaleMode: "fit"
+            }),
+            TextView({
+              layoutData: {left: 64, right: PAGE_MARGIN, top: PAGE_MARGIN},
+              class: "bookTitle",
+              textColor: "#4a4a4a"
+            }),
+            TextView({
+              layoutData: {left: 64, right: PAGE_MARGIN, top: ["prev()", 4]},
+              class: "bookAuthor",
+              textColor: "#7b7b7b"
+            })
+          ].forEach(elem => elem.appendTo(cell))
+
+          cell.on("change:item", function(widget, book) {
+            cell.children(".bookImage").set("image",book.image);
+            cell.children(".bookTitle").set("text",book.title);
+            cell.children(".bookAuthor").set("text",book.author);
+          });
+        }
+      }).on("select", (target, value) => { openBookPage(value) })
+  )
+}
+
+function BookDetails(book) {
+  return (
+      Composite({
+        background: "white",
+        highlightOnTouch: true,
+        layoutData:{top: 0, height: 192, left: 0, right: 0}
+      },[
+        ImageView({
+          layoutData: {height: 160, width: 106, left: PAGE_MARGIN, top: PAGE_MARGIN},
+          image: book.image
+        }),
+        Composite({left: ["prev()", PAGE_MARGIN], top: PAGE_MARGIN, right: PAGE_MARGIN},[
+          TextView({
+            text: book.title,
+            font: "bold 20px",
+            layoutData: {left: 0, top: "prev()", right: 0}
+          }),
+          TextView({
+            layoutData: {left: 0, top: "prev()", right: 0},
+            text: book.author
+          }),
+          TextView({
+            layoutData: {left: 0, top: ["prev()",PAGE_MARGIN]},
+            textColor: "rgb(102, 153, 0)",
+            text: book.price
+          })
+        ])
+      ]).on("tap",  () => { openReadBookPage(book) })
   )
 }
 
@@ -255,3 +258,13 @@ function Composite (params = {}, children = []){
 function ImageView (params = {}, children = []){
   return RenderTree("ImageView", params,children);
 }
+
+function CollectionView (params = {}, children = []){
+  return RenderTree("CollectionView", params,children);
+}
+
+function Action (params = {}, children = []){
+  return RenderTree("Action", params,children);
+}
+
+

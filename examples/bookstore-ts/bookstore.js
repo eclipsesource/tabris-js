@@ -2,14 +2,105 @@ var PAGE_MARGIN = 16;
 var texts_1 = require('./texts');
 var books = require("./books.json");
 tabris.create("Drawer").append(tabris.create("PageSelector"));
-var bookStorePage = createBookListPage("TS Book Store", "images/page_all_books.png", function () { return true; });
-createBookListPage("Popular", "images/page_popular_books.png", function (book) { return book.popular; });
-createBookListPage("Favorite", "images/page_favorite_books.png", function (book) { return book.favorite; });
-tabris.create("Action", {
+var bookStorePage = BookListPage("TS Book Store", "images/page_all_books.png", function () { return true; });
+BookListPage("Popular", "images/page_popular_books.png", function (book) { return book.popular; });
+BookListPage("Favorite", "images/page_favorite_books.png", function (book) { return book.favorite; });
+Action({
     title: "Settings",
     image: { src: "images/action_settings.png", scale: 3 }
-}).on("select", function () { return openLicensePage; });
+}).on("select", openLicensePage);
 bookStorePage.open();
+/*************************
+ * Book Pages
+ *************************/
+function BookListPage(title, image, filter) {
+    return (Page({
+        title: title,
+        topLevel: true,
+        image: { src: image, scale: 3 }
+    }, [
+        BooksList(books.filter(filter)),
+    ]));
+}
+function openBookPage(book) {
+    return (Page({ title: book.title }, [
+        BookDetails(book),
+        TextView({
+            layoutData: { height: 1, right: 0, left: 0, top: "prev()" },
+            background: "rgba(0, 0, 0, 0.1)"
+        }),
+        BookTabs(book),
+    ]).open());
+}
+function openReadBookPage(book) {
+    return (Page({ title: book.title }, [
+        ScrollView({ layoutData: styles.full, direction: "vertical" }, [
+            TextView({
+                layoutData: { left: PAGE_MARGIN, top: PAGE_MARGIN * 2, right: PAGE_MARGIN },
+                textColor: "rgba(0, 0, 0, 0.5)",
+                markupEnabled: true,
+                text: "<b>" + book.title + "</b>"
+            }),
+            TextView({
+                layoutData: { left: PAGE_MARGIN, right: PAGE_MARGIN, top: ["prev()", PAGE_MARGIN], bottom: PAGE_MARGIN },
+                text: texts_1.loremIpsum
+            })
+        ]),
+    ]).open());
+}
+/*************************
+ * Book Sub-components
+ *************************/
+function BookTabs(book) {
+    return (TabFolder({
+        tabBarLocation: "top",
+        paging: true,
+        layoutData: { top: "prev()", left: 0, right: 0, bottom: 0 }
+    }, [
+        // Related Tab
+        Tab({ title: "Related" }, [
+            BooksList(books)
+        ]),
+        // Comments Tab
+        Tab({ title: "Comments" }, [
+            TextView({
+                layoutData: { left: PAGE_MARGIN, top: PAGE_MARGIN, right: PAGE_MARGIN },
+                text: "Great Book."
+            })
+        ])
+    ]));
+}
+function BooksList(books) {
+    return (CollectionView({
+        layoutData: { left: 0, right: 0, top: 0, bottom: 0 },
+        itemHeight: 72,
+        items: books,
+        initializeCell: function (cell) {
+            [
+                ImageView({
+                    layoutData: { left: PAGE_MARGIN, centerY: 0, width: 32, height: 48 },
+                    class: "bookImage",
+                    scaleMode: "fit"
+                }),
+                TextView({
+                    layoutData: { left: 64, right: PAGE_MARGIN, top: PAGE_MARGIN },
+                    class: "bookTitle",
+                    textColor: "#4a4a4a"
+                }),
+                TextView({
+                    layoutData: { left: 64, right: PAGE_MARGIN, top: ["prev()", 4] },
+                    class: "bookAuthor",
+                    textColor: "#7b7b7b"
+                })
+            ].forEach(function (elem) { return elem.appendTo(cell); });
+            cell.on("change:item", function (widget, book) {
+                cell.children(".bookImage").set("image", book.image);
+                cell.children(".bookTitle").set("text", book.title);
+                cell.children(".bookAuthor").set("text", book.author);
+            });
+        }
+    }).on("select", function (target, value) { openBookPage(value); }));
+}
 function BookDetails(book) {
     return (Composite({
         background: "white",
@@ -37,93 +128,6 @@ function BookDetails(book) {
             })
         ])
     ]).on("tap", function () { openReadBookPage(book); }));
-}
-/*************************
- * Book Pages
- *************************/
-function createBookListPage(title, image, filter) {
-    return (Page({
-        title: title,
-        topLevel: true,
-        image: { src: image, scale: 3 }
-    }, [
-        createBooksList(books.filter(filter)),
-    ]));
-}
-function openBookPage(book) {
-    return (Page({ title: book.title }, [
-        BookDetails(book),
-        TextView({
-            layoutData: { height: 1, right: 0, left: 0, top: "prev()" },
-            background: "rgba(0, 0, 0, 0.1)"
-        }),
-        BookTabs(book),
-    ]).open());
-}
-/*************************
- * Book Sub-components
- *************************/
-function BookTabs(book) {
-    return (TabFolder({
-        tabBarLocation: "top",
-        paging: true,
-        layoutData: { top: "prev()", left: 0, right: 0, bottom: 0 }
-    }, [
-        // Related Tab
-        Tab({ title: "Related" }, [
-            createBooksList(books)
-        ]),
-        // Comments Tab
-        Tab({ title: "Comments" }, [
-            TextView({
-                layoutData: { left: PAGE_MARGIN, top: PAGE_MARGIN, right: PAGE_MARGIN },
-                text: "Great Book."
-            })
-        ])
-    ]));
-}
-function createBooksList(books) {
-    return tabris.create("CollectionView", {
-        layoutData: { left: 0, right: 0, top: 0, bottom: 0 },
-        itemHeight: 72,
-        items: books,
-        initializeCell: function (cell) {
-            var imageView = tabris.create("ImageView", {
-                layoutData: { left: PAGE_MARGIN, centerY: 0, width: 32, height: 48 },
-                scaleMode: "fit"
-            }).appendTo(cell);
-            var titleTextView = tabris.create("TextView", {
-                layoutData: { left: 64, right: PAGE_MARGIN, top: PAGE_MARGIN },
-                markupEnabled: true,
-                textColor: "#4a4a4a"
-            }).appendTo(cell);
-            var authorTextView = tabris.create("TextView", {
-                layoutData: { left: 64, right: PAGE_MARGIN, top: [titleTextView, 4] },
-                textColor: "#7b7b7b"
-            }).appendTo(cell);
-            cell.on("change:item", function (widget, book) {
-                imageView.set("image", book.image);
-                titleTextView.set("text", book.title);
-                authorTextView.set("text", book.author);
-            });
-        }
-    }).on("select", function (target, value) { openBookPage(value); });
-}
-function openReadBookPage(book) {
-    return (Page({ title: book.title }, [
-        ScrollView({ layoutData: styles.full, direction: "vertical" }, [
-            TextView({
-                layoutData: { left: PAGE_MARGIN, top: PAGE_MARGIN * 2, right: PAGE_MARGIN },
-                textColor: "rgba(0, 0, 0, 0.5)",
-                markupEnabled: true,
-                text: "<b>" + book.title + "</b>"
-            }),
-            TextView({
-                layoutData: { left: PAGE_MARGIN, right: PAGE_MARGIN, top: ["prev()", PAGE_MARGIN], bottom: PAGE_MARGIN },
-                text: texts_1.loremIpsum
-            })
-        ]),
-    ]).open());
 }
 /*************************
  * License Pages
@@ -215,4 +219,14 @@ function ImageView(params, children) {
     if (params === void 0) { params = {}; }
     if (children === void 0) { children = []; }
     return RenderTree("ImageView", params, children);
+}
+function CollectionView(params, children) {
+    if (params === void 0) { params = {}; }
+    if (children === void 0) { children = []; }
+    return RenderTree("CollectionView", params, children);
+}
+function Action(params, children) {
+    if (params === void 0) { params = {}; }
+    if (children === void 0) { children = []; }
+    return RenderTree("Action", params, children);
 }
