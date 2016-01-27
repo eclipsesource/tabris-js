@@ -30,10 +30,6 @@ export function TextView (params = {}, children = []){
     return RenderTree("TextView", params,children);
 }
 
-export function Text (params = {}, children = []){
-    return RenderTree("TextView", params,children);
-}
-
 export function ScrollView (params = {}, children = []){
     return RenderTree("ScrollView", params,children);
 }
@@ -68,4 +64,10 @@ export function Drawer (params = {}, children = []){
 
 export function PageSelector (params = {}, children = []){
     return RenderTree("PageSelector", params,children);
+}
+
+
+/* Alias */
+export function Text (params = {}, children = []){
+    return TextView(params,children);
 }

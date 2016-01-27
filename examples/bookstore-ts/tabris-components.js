@@ -36,12 +36,6 @@ function TextView(params, children) {
     return RenderTree("TextView", params, children);
 }
 exports.TextView = TextView;
-function Text(params, children) {
-    if (params === void 0) { params = {}; }
-    if (children === void 0) { children = []; }
-    return RenderTree("TextView", params, children);
-}
-exports.Text = Text;
 function ScrollView(params, children) {
     if (params === void 0) { params = {}; }
     if (children === void 0) { children = []; }
@@ -96,3 +90,10 @@ function PageSelector(params, children) {
     return RenderTree("PageSelector", params, children);
 }
 exports.PageSelector = PageSelector;
+/* Alias */
+function Text(params, children) {
+    if (params === void 0) { params = {}; }
+    if (children === void 0) { children = []; }
+    return TextView(params, children);
+}
+exports.Text = Text;
