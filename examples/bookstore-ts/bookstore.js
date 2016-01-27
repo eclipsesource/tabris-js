@@ -1,14 +1,21 @@
 var PAGE_MARGIN = 16;
 var texts_1 = require('./texts');
 var books = require("./books.json");
-tabris.create("Drawer").append(tabris.create("PageSelector"));
+/*************************
+ * Application Start
+ *************************/
+// Drawer Init
+Drawer({}, [
+    PageSelector
+]);
+// Action init
+Action({
+    title: "License",
+    image: { src: "images/action_settings.png", scale: 3 }
+}).on("select", openLicensePage);
 var bookStorePage = BookListPage("TS Book Store", "images/page_all_books.png", function () { return true; });
 BookListPage("Popular", "images/page_popular_books.png", function (book) { return book.popular; });
 BookListPage("Favorite", "images/page_favorite_books.png", function (book) { return book.favorite; });
-Action({
-    title: "Settings",
-    image: { src: "images/action_settings.png", scale: 3 }
-}).on("select", openLicensePage);
 bookStorePage.open();
 /*************************
  * Book Pages
@@ -25,23 +32,27 @@ function BookListPage(title, image, filter) {
 function openBookPage(book) {
     return (Page({ title: book.title }, [
         BookDetails(book),
-        TextView({
-            layoutData: { height: 1, right: 0, left: 0, top: "prev()" },
-            background: "rgba(0, 0, 0, 0.1)"
-        }),
+        Spacer(),
         BookTabs(book),
     ]).open());
+}
+function Spacer(config) {
+    if (config === void 0) { config = {}; }
+    return (Composite({
+        layoutData: { height: config.height || 1, right: 0, left: 0, top: "prev()" },
+        background: config.color || "rgba(0, 0, 0, 0.1)"
+    }));
 }
 function openReadBookPage(book) {
     return (Page({ title: book.title }, [
         ScrollView({ layoutData: styles.full, direction: "vertical" }, [
-            TextView({
+            Text({
                 layoutData: { left: PAGE_MARGIN, top: PAGE_MARGIN * 2, right: PAGE_MARGIN },
                 textColor: "rgba(0, 0, 0, 0.5)",
-                markupEnabled: true,
-                text: "<b>" + book.title + "</b>"
+                font: "bold 20px",
+                text: book.title
             }),
-            TextView({
+            Text({
                 layoutData: { left: PAGE_MARGIN, right: PAGE_MARGIN, top: ["prev()", PAGE_MARGIN], bottom: PAGE_MARGIN },
                 text: texts_1.loremIpsum
             })
@@ -63,7 +74,7 @@ function BookTabs(book) {
         ]),
         // Comments Tab
         Tab({ title: "Comments" }, [
-            TextView({
+            Text({
                 layoutData: { left: PAGE_MARGIN, top: PAGE_MARGIN, right: PAGE_MARGIN },
                 text: "Great Book."
             })
@@ -82,12 +93,12 @@ function BooksList(books) {
                     class: "bookImage",
                     scaleMode: "fit"
                 }),
-                TextView({
+                Text({
                     layoutData: { left: 64, right: PAGE_MARGIN, top: PAGE_MARGIN },
                     class: "bookTitle",
                     textColor: "#4a4a4a"
                 }),
-                TextView({
+                Text({
                     layoutData: { left: 64, right: PAGE_MARGIN, top: ["prev()", 4] },
                     class: "bookAuthor",
                     textColor: "#7b7b7b"
@@ -112,16 +123,16 @@ function BookDetails(book) {
             image: book.image
         }),
         Composite({ left: ["prev()", PAGE_MARGIN], top: PAGE_MARGIN, right: PAGE_MARGIN }, [
-            TextView({
+            Text({
                 text: book.title,
                 font: "bold 20px",
                 layoutData: { left: 0, top: "prev()", right: 0 }
             }),
-            TextView({
+            Text({
                 layoutData: { left: 0, top: "prev()", right: 0 },
                 text: book.author
             }),
-            TextView({
+            Text({
                 layoutData: { left: 0, top: ["prev()", PAGE_MARGIN] },
                 textColor: "rgb(102, 153, 0)",
                 text: book.price
@@ -134,13 +145,13 @@ function BookDetails(book) {
  *************************/
 function openLicensePage() {
     return (Page({ title: "License" }, [
-        TextView({ text: texts_1.license.header, layoutData: styles.license.item }),
-        TextView({
+        Text({ text: texts_1.license.header, layoutData: styles.license.item }),
+        Text({
             text: texts_1.license.link.caption,
             textColor: "rgba(71, 161, 238, 0.75)",
             layoutData: styles.license.item
         }).on("tap", openLicenseWebPage),
-        TextView({
+        Text({
             text: texts_1.license.authors,
             markupEnabled: true,
             layoutData: styles.license.item
@@ -176,7 +187,12 @@ function RenderTree(elemName, params, children) {
     if (children === void 0) { children = []; }
     var elem = RenderElement(elemName, params);
     children.forEach(function (child) {
-        child.appendTo(elem);
+        if (typeof child === 'function') {
+            child().appendTo(elem);
+        }
+        else {
+            child.appendTo(elem);
+        }
     });
     return elem;
 }
@@ -191,6 +207,11 @@ function WebView(params, children) {
     return RenderTree("WebView", params, children);
 }
 function TextView(params, children) {
+    if (params === void 0) { params = {}; }
+    if (children === void 0) { children = []; }
+    return RenderTree("TextView", params, children);
+}
+function Text(params, children) {
     if (params === void 0) { params = {}; }
     if (children === void 0) { children = []; }
     return RenderTree("TextView", params, children);
@@ -229,4 +250,14 @@ function Action(params, children) {
     if (params === void 0) { params = {}; }
     if (children === void 0) { children = []; }
     return RenderTree("Action", params, children);
+}
+function Drawer(params, children) {
+    if (params === void 0) { params = {}; }
+    if (children === void 0) { children = []; }
+    return RenderTree("Drawer", params, children);
+}
+function PageSelector(params, children) {
+    if (params === void 0) { params = {}; }
+    if (children === void 0) { children = []; }
+    return RenderTree("PageSelector", params, children);
 }
