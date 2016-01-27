@@ -17,29 +17,28 @@ function createBookListPage(title, image, filter) {
         image: { src: image, scale: 3 }
     }).append(createBooksList(books.filter(filter)));
 }
-function createBookPage(book) {
-    var page = tabris.create("Page", {
-        title: book.title
-    });
-    createDetailsView(book)
-        .set("layoutData", { top: 0, height: 192, left: 0, right: 0 })
-        .appendTo(page);
-    tabris.create("TextView", {
-        layoutData: { height: 1, right: 0, left: 0, top: "prev()" },
-        background: "rgba(0, 0, 0, 0.1)"
-    }).appendTo(page);
-    createTabFolder().appendTo(page);
-    return page;
+function openBookPage(book) {
+    return (Page({ title: book.title }, [
+        BookDetails(book),
+        TextView({
+            layoutData: { height: 1, right: 0, left: 0, top: "prev()" },
+            background: "rgba(0, 0, 0, 0.1)"
+        }),
+        BookTabs(book),
+    ]).open());
 }
-function createDetailsView(book) {
-    return (Composite({ background: "white", highlightOnTouch: true }, [
+function BookDetails(book) {
+    return (Composite({
+        background: "white",
+        highlightOnTouch: true,
+        layoutData: { top: 0, height: 192, left: 0, right: 0 }
+    }, [
         ImageView({
             layoutData: { height: 160, width: 106, left: PAGE_MARGIN, top: PAGE_MARGIN },
             image: book.image
         }),
         Composite({ left: ["prev()", PAGE_MARGIN], top: PAGE_MARGIN, right: PAGE_MARGIN }, [
             TextView({
-                markupEnabled: true,
                 text: book.title,
                 font: "bold 20px",
                 layoutData: { left: 0, top: "prev()", right: 0 }
@@ -54,9 +53,9 @@ function createDetailsView(book) {
                 text: "EUR 12,95"
             })
         ])
-    ]));
+    ]).on("tap", function () { openReadBookPage(book); }));
 }
-function createTabFolder() {
+function BookTabs(book) {
     return (TabFolder({
         tabBarLocation: "top",
         paging: true,
@@ -100,9 +99,7 @@ function createBooksList(books) {
                 authorTextView.set("text", book.author);
             });
         }
-    }).on("select", function (target, value) {
-        createBookPage(value).open();
-    });
+    }).on("select", function (target, value) { openBookPage(value); });
 }
 function openReadBookPage(book) {
     return (Page({ title: book.title }, [
