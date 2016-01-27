@@ -10,23 +10,6 @@ tabris.create("Action", {
     image: { src: "images/action_settings.png", scale: 3 }
 }).on("select", function () { return openLicensePage; });
 bookStorePage.open();
-function createBookListPage(title, image, filter) {
-    return tabris.create("Page", {
-        title: title,
-        topLevel: true,
-        image: { src: image, scale: 3 }
-    }).append(createBooksList(books.filter(filter)));
-}
-function openBookPage(book) {
-    return (Page({ title: book.title }, [
-        BookDetails(book),
-        TextView({
-            layoutData: { height: 1, right: 0, left: 0, top: "prev()" },
-            background: "rgba(0, 0, 0, 0.1)"
-        }),
-        BookTabs(book),
-    ]).open());
-}
 function BookDetails(book) {
     return (Composite({
         background: "white",
@@ -50,11 +33,36 @@ function BookDetails(book) {
             TextView({
                 layoutData: { left: 0, top: ["prev()", PAGE_MARGIN] },
                 textColor: "rgb(102, 153, 0)",
-                text: "EUR 12,95"
+                text: book.price
             })
         ])
     ]).on("tap", function () { openReadBookPage(book); }));
 }
+/*************************
+ * Book Pages
+ *************************/
+function createBookListPage(title, image, filter) {
+    return (Page({
+        title: title,
+        topLevel: true,
+        image: { src: image, scale: 3 }
+    }, [
+        createBooksList(books.filter(filter)),
+    ]));
+}
+function openBookPage(book) {
+    return (Page({ title: book.title }, [
+        BookDetails(book),
+        TextView({
+            layoutData: { height: 1, right: 0, left: 0, top: "prev()" },
+            background: "rgba(0, 0, 0, 0.1)"
+        }),
+        BookTabs(book),
+    ]).open());
+}
+/*************************
+ * Book Sub-components
+ *************************/
 function BookTabs(book) {
     return (TabFolder({
         tabBarLocation: "top",
@@ -117,6 +125,9 @@ function openReadBookPage(book) {
         ]),
     ]).open());
 }
+/*************************
+ * License Pages
+ *************************/
 function openLicensePage() {
     return (Page({ title: "License" }, [
         TextView({ text: texts_1.license.header, layoutData: styles.license.item }),
@@ -140,6 +151,9 @@ function openLicenseWebPage() {
         })
     ]).open());
 }
+/*************************
+ * Styles
+ *************************/
 var styles = {
     license: {
         item: { left: PAGE_MARGIN, right: PAGE_MARGIN, top: ["prev()", 10] }

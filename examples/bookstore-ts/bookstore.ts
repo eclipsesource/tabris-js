@@ -19,26 +19,6 @@ tabris.create("Action", {
 
 bookStorePage.open();
 
-function createBookListPage(title, image, filter) {
-  return tabris.create("Page", {
-    title: title,
-    topLevel: true,
-    image: {src: image, scale: 3}
-  }).append(createBooksList(books.filter(filter)));
-}
-
-function openBookPage(book) {
-  return (
-      Page ({title: book.title}, [
-        BookDetails(book),
-        TextView({
-          layoutData: {height: 1, right: 0, left: 0, top: "prev()"},
-          background: "rgba(0, 0, 0, 0.1)"
-        }),
-        BookTabs(book),
-      ]).open()
-  )
-}
 
 function BookDetails(book) {
   return (
@@ -64,12 +44,48 @@ function BookDetails(book) {
           TextView({
             layoutData: {left: 0, top: ["prev()",PAGE_MARGIN]},
             textColor: "rgb(102, 153, 0)",
-            text: "EUR 12,95"
+            text: book.price
           })
       ])
     ]).on("tap",  () => { openReadBookPage(book) })
   )
 }
+
+
+
+/*************************
+ * Book Pages
+ *************************/
+function createBookListPage(title, image, filter) {
+  return (
+      Page ({
+        title: title,
+        topLevel: true,
+        image: {src: image, scale: 3}
+      }, [
+        createBooksList(books.filter(filter)),
+      ])
+  )
+}
+
+
+
+function openBookPage(book) {
+  return (
+      Page ({title: book.title}, [
+        BookDetails(book),
+        TextView({
+          layoutData: {height: 1, right: 0, left: 0, top: "prev()"},
+          background: "rgba(0, 0, 0, 0.1)"
+        }),
+        BookTabs(book),
+      ]).open()
+  )
+}
+
+/*************************
+ * Book Sub-components
+ *************************/
 
 function BookTabs(book) {
   return (
@@ -84,10 +100,10 @@ function BookTabs(book) {
         ]),
         // Comments Tab
         Tab({title: "Comments"},[
-            TextView({
-              layoutData: {left: PAGE_MARGIN, top: PAGE_MARGIN, right: PAGE_MARGIN},
-              text: "Great Book."
-            })
+          TextView({
+            layoutData: {left: PAGE_MARGIN, top: PAGE_MARGIN, right: PAGE_MARGIN},
+            text: "Great Book."
+          })
         ])
       ])
   )
@@ -143,6 +159,10 @@ function openReadBookPage(book) {
 }
 
 
+/*************************
+ * License Pages
+ *************************/
+
 function openLicensePage() {
   return (
       Page ({title: "License"}, [
@@ -174,7 +194,9 @@ function openLicenseWebPage() {
   )
 }
 
-
+/*************************
+ * Styles
+ *************************/
 
 var styles = {
   license: {
@@ -198,6 +220,8 @@ function RenderTree (elemName = "Composite", params= {}, children = []) {
   })
   return elem;
 }
+
+
 
 
 function Page (params = {}, children = []){
