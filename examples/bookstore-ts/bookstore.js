@@ -43,7 +43,7 @@ function BookListPage(title, image, filter) {
 function openBookPage(book) {
     return (tabris_components_1.Page({ title: book.title }, [
         BookDetails(book),
-        custom_components_1.Spacer,
+        custom_components_1.Spacer({ height: 20, color: "red" }),
         BookTabs(book),
     ]).open());
 }

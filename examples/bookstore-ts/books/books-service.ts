@@ -10,7 +10,7 @@ export function getBooks(filter? : Function = () => true) {
 
 export function getRelatedBooks(bookId: string) {
   return books.filter( book => {
-    return (book.id !== bookId && Math.random() > 0.7);
+    return (book.id !== bookId && Math.random() > 0.5);
   })
 };
 

@@ -62,7 +62,7 @@ function openBookPage(book) {
   return (
       Page ({title: book.title}, [
         BookDetails(book),
-        Spacer,
+        Spacer({height:20,color:"red"}),
         BookTabs(book),
       ]).open()
   )

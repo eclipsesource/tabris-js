@@ -8,7 +8,7 @@ exports.getBooks = getBooks;
 ;
 function getRelatedBooks(bookId) {
     return books.filter(function (book) {
-        return (book.id !== bookId && Math.random() > 0.7);
+        return (book.id !== bookId && Math.random() > 0.5);
     });
 }
 exports.getRelatedBooks = getRelatedBooks;
