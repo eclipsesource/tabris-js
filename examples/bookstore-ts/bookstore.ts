@@ -33,7 +33,7 @@ function AppNavigationStart(){
     image: {src: "images/action_settings.png", scale: 3}
   }).on("select", openLicensePage);
 
-  let bookStorePage = BookListPage("TS Book Store", "images/page_all_books.png");
+  let bookStorePage = BookListPage("Book Store", "images/page_all_books.png");
   BookListPage("Popular", "images/page_popular_books.png", book => book.popular);
   BookListPage("Favorite", "images/page_favorite_books.png", book => book.favorite);
 
