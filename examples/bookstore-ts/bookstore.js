@@ -22,7 +22,7 @@ function AppNavigationStart() {
         title: "License",
         image: { src: "images/action_settings.png", scale: 3 }
     }).on("select", openLicensePage);
-    var bookStorePage = BookListPage("TS Book Store", "images/page_all_books.png");
+    var bookStorePage = BookListPage("Book Store", "images/page_all_books.png");
     BookListPage("Popular", "images/page_popular_books.png", function (book) { return book.popular; });
     BookListPage("Favorite", "images/page_favorite_books.png", function (book) { return book.favorite; });
     bookStorePage.open();
