@@ -97,3 +97,9 @@ function Text(params, children) {
     return TextView(params, children);
 }
 exports.Text = Text;
+function Image(params, children) {
+    if (params === void 0) { params = {}; }
+    if (children === void 0) { children = []; }
+    return ImageView(params, children);
+}
+exports.Image = Image;

@@ -7,3 +7,8 @@ function Spacer(config) {
     }));
 }
 exports.Spacer = Spacer;
+function Each(ArrayToIterate, ComponentForEachItem, FallbackComponent) {
+    if (ArrayToIterate === void 0) { ArrayToIterate = []; }
+    return (ArrayToIterate.length > 0 ? ArrayToIterate.map(ComponentForEachItem) : (FallbackComponent ? [FallbackComponent] : []));
+}
+exports.Each = Each;

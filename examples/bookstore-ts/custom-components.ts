@@ -8,3 +8,9 @@ export function Spacer(config? : {height?:number, color?:string} = {}) {
       })
   )
 }
+
+export function Each(ArrayToIterate : any[] = [], ComponentForEachItem, FallbackComponent?) {
+  return (
+      ArrayToIterate.length > 0 ? ArrayToIterate.map( ComponentForEachItem ) : (FallbackComponent ? [FallbackComponent] : [])
+  )
+}

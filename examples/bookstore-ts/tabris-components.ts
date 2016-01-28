@@ -71,3 +71,7 @@ export function PageSelector (params = {}, children = []){
 export function Text (params = {}, children = []){
     return TextView(params,children);
 }
+
+export function Image (params = {}, children = []){
+    return ImageView(params,children);
+}
