@@ -1,0 +1,9 @@
+{
+  "title": "Image View",
+  "category": "ImageView",
+  "description": "Display images with different tint colors",
+  "main": "imageview-tintcolor.js",
+  "dependencies": {
+    "tabris": "^1.8.0"
+  }
+}
