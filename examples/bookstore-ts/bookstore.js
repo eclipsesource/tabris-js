@@ -61,7 +61,7 @@ function openBookPage(book) {
     ]).open());
 }
 function openReadBookPage(book) {
-    return (tabris_components_1.Page({ title: book.title }, [
+    return (tabris_components_1.Page(book.title, [
         tabris_components_1.ScrollView({ layoutData: styles.full, direction: "vertical" }, [
             tabris_components_1.Text('.bookTitle', book.title),
             tabris_components_1.Text('.bookChapter', books_service_1.getBookPreview(book.id))
@@ -88,19 +88,16 @@ function BooksList(books) {
         items: books,
         initializeCell: function (cell) {
             [
-                tabris_components_1.Image({
+                tabris_components_1.Image('.bookImage', {
                     layoutData: { left: PAGE_MARGIN, centerY: 0, width: 32, height: 48 },
-                    class: "bookImage",
                     scaleMode: "fit"
                 }),
-                tabris_components_1.Text({
+                tabris_components_1.Text('.bookTitle', {
                     layoutData: { left: 64, right: PAGE_MARGIN, top: PAGE_MARGIN },
-                    class: "bookTitle",
                     textColor: "#4a4a4a"
                 }),
-                tabris_components_1.Text({
+                tabris_components_1.Text('.bookAuthor', {
                     layoutData: { left: 64, right: PAGE_MARGIN, top: ["prev()", 4] },
-                    class: "bookAuthor",
                     textColor: "#7b7b7b"
                 })
             ].forEach(function (elem) { return elem.appendTo(cell); });
@@ -113,33 +110,56 @@ function BooksList(books) {
     }).on("select", function (target, value) { openBookPage(value); }));
 }
 function BookDetails(book) {
-    return (tabris_components_1.Composite({
-        background: "white",
-        highlightOnTouch: true,
-        layoutData: { top: 0, height: 192, left: 0, right: 0 }
-    }, [
-        tabris_components_1.Image({
-            layoutData: { height: 160, width: 106, left: PAGE_MARGIN, top: PAGE_MARGIN },
-            image: book.image
-        }),
-        tabris_components_1.Composite({ left: ["prev()", PAGE_MARGIN], top: PAGE_MARGIN, right: PAGE_MARGIN }, [
-            tabris_components_1.Text({
-                text: book.title,
-                font: "bold 20px",
-                layoutData: { left: 0, top: "prev()", right: 0 }
-            }),
-            tabris_components_1.Text({
-                layoutData: { left: 0, top: "prev()", right: 0 },
-                text: book.author
-            }),
-            tabris_components_1.Text({
-                layoutData: { left: 0, top: ["prev()", PAGE_MARGIN] },
-                textColor: "rgb(102, 153, 0)",
-                text: book.price
-            })
+    return (tabris_components_1.Composite(bookDetailsStyle.container, [
+        tabris_components_1.Image(book.image, bookDetailsStyle.image),
+        tabris_components_1.Composite(bookDetailsStyle.textContainer, [
+            animateInFromRight(tabris_components_1.Text(book.title, bookDetailsStyle.title), 100),
+            animateInFromRight(tabris_components_1.Text(book.author, bookDetailsStyle.author), 300),
+            animateInFromRight(tabris_components_1.Text(book.price, bookDetailsStyle.price), 400)
         ])
     ]).on("tap", function () { openReadBookPage(book); }));
 }
+function animateInFromRight(widget, delay) {
+    widget.set({
+        opacity: 0.0,
+        transform: { translationX: 32 }
+    });
+    widget.animate({
+        opacity: 1.0,
+        transform: { translationX: 0 }
+    }, {
+        duration: 500,
+        delay: delay,
+        easing: "ease-out"
+    });
+    return widget;
+}
+var bookDetailsStyle = {
+    container: {
+        background: "white",
+        highlightOnTouch: true,
+        top: 0, height: 192, left: 0, right: 0
+    },
+    image: {
+        height: 160, width: 106, left: PAGE_MARGIN, top: PAGE_MARGIN
+    },
+    textContainer: {
+        left: ["prev()", PAGE_MARGIN],
+        top: PAGE_MARGIN,
+        right: PAGE_MARGIN
+    },
+    title: {
+        font: "bold 20px",
+        left: 0, top: "prev()", right: 0
+    },
+    author: {
+        left: 0, top: "prev()", right: 0
+    },
+    price: {
+        left: 0, top: ["prev()", PAGE_MARGIN],
+        textColor: "rgb(102, 153, 0)"
+    }
+};
 function BookTabs(book) {
     return (tabris_components_1.TabFolder({
         tabBarLocation: "top",
@@ -147,11 +167,11 @@ function BookTabs(book) {
         layoutData: { top: "prev()", left: 0, right: 0, bottom: 0 }
     }, [
         // Related Tab
-        tabris_components_1.Tab("Related", [
+        tabris_components_1.Tab('Related', [
             BooksList(books_service_1.getRelatedBooks(book.id))
         ]),
         // Comments Tab
-        tabris_components_1.Tab("Comments", [
+        tabris_components_1.Tab('Comments', [
             CommentsList(books_service_1.getBookComments(book.id))
         ])
     ]));
