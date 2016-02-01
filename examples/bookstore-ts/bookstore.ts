@@ -9,6 +9,12 @@ import { Page, WebView, TextView, Text, ScrollView, TabFolder, Tab, Composite, I
 import { Spacer, Each } from './custom-components';
 
 /*************************
+ * Import Mixins
+ *************************/
+import { fadeIn, fadeInRight , fadeInLeft, fadeInDown, fadeInUp} from './tabris-animations';
+
+
+/*************************
  * Import Services
  *************************/
 import {getBooks, getRelatedBooks, getBookComments, getBookPreview} from "./books/books-service"
@@ -87,8 +93,8 @@ function openReadBookPage(book) {
   return (
       Page ( book.title , [
         ScrollView({layoutData: styles.full, direction: "vertical"}, [
-          Text('.bookTitle', book.title),
-          Text('.bookChapter',getBookPreview(book.id))
+          Text('.bookTitle', book.title , fadeIn(1000) ),
+          Text('.bookChapter',getBookPreview(book.id), fadeIn(3000,500) )
         ]),
       ]).apply(readBookPageStyles).open()
   )
@@ -143,32 +149,15 @@ function BooksList(books) {
 
 function BookDetails(book) {
   return (
-      Composite(bookDetailsStyle.container,[
-        Image(book.image, bookDetailsStyle.image),
-        Composite(bookDetailsStyle.textContainer , [
-            Text(book.title,bookDetailsStyle.title , fadeInRight(500, 100) ),
-            Text(book.author, bookDetailsStyle.author , fadeInRight(500, 300) ),
-            Text(book.price, bookDetailsStyle.price , fadeInRight(600, 500))
+      Composite( bookDetailsStyle.container,[
+        Image( book.image, bookDetailsStyle.image, fadeIn(800) ),
+        Composite( bookDetailsStyle.textContainer , [
+            Text( book.title , bookDetailsStyle.title  , fadeInRight(500, 100) ),
+            Text( book.author, bookDetailsStyle.author , fadeInRight(500, 300) ),
+            Text( book.price , bookDetailsStyle.price  , fadeInRight(500, 500) )
         ])
       ]).on("tap",  () => { openReadBookPage(book) })
   )
-}
-
-function fadeInRight(duration, delay = 0) {
-    return (widget) => {
-        widget.set({
-            opacity: 0.0,
-            transform: {translationX: 32}
-        });
-        widget.animate({
-            opacity: 1.0,
-            transform: {translationX: 0}
-        }, {
-            duration: duration,
-            delay: delay,
-            easing: "ease-out"
-        });
-    }
 }
 
 

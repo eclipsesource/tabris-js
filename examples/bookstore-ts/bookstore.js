@@ -5,6 +5,10 @@ var PAGE_MARGIN = 16;
 var tabris_components_1 = require('./tabris-components');
 var custom_components_1 = require('./custom-components');
 /*************************
+ * Import Mixins
+ *************************/
+var tabris_animations_1 = require('./tabris-animations');
+/*************************
  * Import Services
  *************************/
 var books_service_1 = require("./books/books-service");
@@ -63,8 +67,8 @@ function openBookPage(book) {
 function openReadBookPage(book) {
     return (tabris_components_1.Page(book.title, [
         tabris_components_1.ScrollView({ layoutData: styles.full, direction: "vertical" }, [
-            tabris_components_1.Text('.bookTitle', book.title),
-            tabris_components_1.Text('.bookChapter', books_service_1.getBookPreview(book.id))
+            tabris_components_1.Text('.bookTitle', book.title, tabris_animations_1.fadeIn(1000)),
+            tabris_components_1.Text('.bookChapter', books_service_1.getBookPreview(book.id), tabris_animations_1.fadeIn(3000, 500))
         ]),
     ]).apply(readBookPageStyles).open());
 }
@@ -111,30 +115,13 @@ function BooksList(books) {
 }
 function BookDetails(book) {
     return (tabris_components_1.Composite(bookDetailsStyle.container, [
-        tabris_components_1.Image(book.image, bookDetailsStyle.image),
+        tabris_components_1.Image(book.image, bookDetailsStyle.image, tabris_animations_1.fadeIn(800)),
         tabris_components_1.Composite(bookDetailsStyle.textContainer, [
-            tabris_components_1.Text(book.title, bookDetailsStyle.title, fadeInRight(500, 100)),
-            tabris_components_1.Text(book.author, bookDetailsStyle.author, fadeInRight(500, 300)),
-            tabris_components_1.Text(book.price, bookDetailsStyle.price, fadeInRight(600, 500))
+            tabris_components_1.Text(book.title, bookDetailsStyle.title, tabris_animations_1.fadeInRight(500, 100)),
+            tabris_components_1.Text(book.author, bookDetailsStyle.author, tabris_animations_1.fadeInRight(500, 300)),
+            tabris_components_1.Text(book.price, bookDetailsStyle.price, tabris_animations_1.fadeInRight(500, 500))
         ])
     ]).on("tap", function () { openReadBookPage(book); }));
-}
-function fadeInRight(duration, delay) {
-    if (delay === void 0) { delay = 0; }
-    return function (widget) {
-        widget.set({
-            opacity: 0.0,
-            transform: { translationX: 32 }
-        });
-        widget.animate({
-            opacity: 1.0,
-            transform: { translationX: 0 }
-        }, {
-            duration: duration,
-            delay: delay,
-            easing: "ease-out"
-        });
-    };
 }
 var bookDetailsStyle = {
     container: {
