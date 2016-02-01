@@ -25,15 +25,6 @@ const inputType =
     param =>
     Array.isArray(param)? 'array' : typeof param;
 
-//
-//export function testElem (...elements) {
-//    elements.forEach(element =>{
-//        console.log(inputType (element) );
-//    });
-//}
-
-
-
 const isValidString =
     param =>
     typeof param === 'string' && param.length > 0;
@@ -50,7 +41,7 @@ const isSelector =
 const createRender = function(tagName){
     return (...rest) => {
         let children = [], params= {};
-        //
+        // TODO: clean up these functions
         rest.forEach(element =>{
             let elemType = inputType (element);
             if(elemType === 'array'){
@@ -60,38 +51,33 @@ const createRender = function(tagName){
                 params = element;
             }
         });
+        rest.forEach(element =>{
+            let elemType = inputType (element);
+            // TODO: clean up these functions
+            if(elemType === 'array'){
+                children = element;
+            }
+            else if(elemType === 'object'){
+                params = element;
+            }
+            else if(isSelector(element)){
+                // TODO: support both id and class
+                if(startsWith(element, '#')){
+                    params['id'] = element.slice(1);
+                }
+                if(startsWith(element, '.')){
+                    params['class'] = element.slice(1);
+                }
+            }
+            else if(isValidString(element)){
+                if(resolvers[tagName]){
+                    resolvers[tagName](params, element);
+                }
+            }
+        });
         return RenderTree(tagName, params, children);
-
-        //if (isSelector(first)) {
-        //    return RenderTree(tagName, first, ...rest);
-        //} else {
-        //    return RenderTree(tagName, params, children);
-        //}
     };
-
 }
-    //() =>
-    //    tagName =>
-    //        (first, ...rest) => {
-    //            if (isSelector(first)) {
-    //                return RenderTree(tagName + first, ...rest);
-    //            } else {
-    //                return RenderTree(tagName, first, ...rest);
-    //            }
-    //        };
-
-
-//export default
-//h => {
-//    const createTag = node();
-//    const exported = { TAG_NAMES, isSelector, createTag };
-//    TAG_NAMES.forEach(n => {
-//        exported[n] = createTag(n);
-//    });
-//    return exported;
-//};
-
-
 
 
 export const Page = createRender ("Page");
@@ -110,3 +96,14 @@ export const PageSelector = createRender ("PageSelector");
 /* Alias */
 export const Text = createRender ("TextView");
 export const Image = createRender ("ImageView");
+
+
+/* Wildcard resolvers */
+const resolvers = {
+    Text: ( params, element ) => params["text"] = element,
+    TextView: ( params, element ) => params["text"] = element,
+    Image: ( params, element ) => params["image"] = element,
+    ImageView: ( params, element ) => params["image"] = element,
+    Tab: ( params, element ) => params["title"] = element,
+    Page: ( params, element ) => params["title"] = element,
+}

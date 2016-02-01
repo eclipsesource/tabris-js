@@ -23,12 +23,6 @@ function RenderTree(elemName, params, children) {
 var inputType = function (param) {
     return Array.isArray(param) ? 'array' : typeof param;
 };
-//
-//export function testElem (...elements) {
-//    elements.forEach(element =>{
-//        console.log(inputType (element) );
-//    });
-//}
 var isValidString = function (param) {
     return typeof param === 'string' && param.length > 0;
 };
@@ -45,7 +39,7 @@ var createRender = function (tagName) {
             rest[_i - 0] = arguments[_i];
         }
         var children = [], params = {};
-        //
+        // TODO: clean up these functions
         rest.forEach(function (element) {
             var elemType = inputType(element);
             if (elemType === 'array') {
@@ -55,32 +49,33 @@ var createRender = function (tagName) {
                 params = element;
             }
         });
+        rest.forEach(function (element) {
+            var elemType = inputType(element);
+            // TODO: clean up these functions
+            if (elemType === 'array') {
+                children = element;
+            }
+            else if (elemType === 'object') {
+                params = element;
+            }
+            else if (isSelector(element)) {
+                // TODO: support both id and class
+                if (startsWith(element, '#')) {
+                    params['id'] = element.slice(1);
+                }
+                if (startsWith(element, '.')) {
+                    params['class'] = element.slice(1);
+                }
+            }
+            else if (isValidString(element)) {
+                if (resolvers[tagName]) {
+                    resolvers[tagName](params, element);
+                }
+            }
+        });
         return RenderTree(tagName, params, children);
-        //if (isSelector(first)) {
-        //    return RenderTree(tagName, first, ...rest);
-        //} else {
-        //    return RenderTree(tagName, params, children);
-        //}
     };
 };
-//() =>
-//    tagName =>
-//        (first, ...rest) => {
-//            if (isSelector(first)) {
-//                return RenderTree(tagName + first, ...rest);
-//            } else {
-//                return RenderTree(tagName, first, ...rest);
-//            }
-//        };
-//export default
-//h => {
-//    const createTag = node();
-//    const exported = { TAG_NAMES, isSelector, createTag };
-//    TAG_NAMES.forEach(n => {
-//        exported[n] = createTag(n);
-//    });
-//    return exported;
-//};
 exports.Page = createRender("Page");
 exports.WebView = createRender("WebView");
 exports.TextView = createRender("TextView");
@@ -96,3 +91,12 @@ exports.PageSelector = createRender("PageSelector");
 /* Alias */
 exports.Text = createRender("TextView");
 exports.Image = createRender("ImageView");
+/* Wildcard resolvers */
+var resolvers = {
+    Text: function (params, element) { return params["text"] = element; },
+    TextView: function (params, element) { return params["text"] = element; },
+    Image: function (params, element) { return params["image"] = element; },
+    ImageView: function (params, element) { return params["image"] = element; },
+    Tab: function (params, element) { return params["title"] = element; },
+    Page: function (params, element) { return params["title"] = element; }
+};

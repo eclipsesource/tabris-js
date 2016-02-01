@@ -15,6 +15,23 @@ import {getBooks, getRelatedBooks, getBookComments, getBookPreview} from "./book
 import { license } from './texts';
 
 
+/*************************
+ * Styles
+ *************************/
+
+const styles = {
+    stackMargin: {left: PAGE_MARGIN, top: "prev()", right: PAGE_MARGIN},
+    stack:{top: "prev()", left: 0, right: 0},
+
+    full: {left: 0, top: 0, right: 0, bottom: 0},
+};
+
+const generalStyles= {
+    '#appDrawer': {
+        background: 'blue'
+    }
+};
+
 
 /*************************
  * Application Start
@@ -22,9 +39,9 @@ import { license } from './texts';
 
 function AppNavigationStart(){
   // Drawer Init
-  Drawer({},[
+  Drawer('#appDrawer',[
     PageSelector,
-  ]);
+  ]).apply(generalStyles);
 
   // Action init
   Action({
@@ -39,7 +56,6 @@ function AppNavigationStart(){
   bookStorePage.open();
   // tabris.ui.children("Page")[0].open();
 }
-
 
 
 /*************************
@@ -71,22 +87,23 @@ function openReadBookPage(book) {
   return (
       Page ({title: book.title}, [
         ScrollView({layoutData: styles.full, direction: "vertical"}, [
-          Text({
-            layoutData: {left: PAGE_MARGIN, top: PAGE_MARGIN * 2, right: PAGE_MARGIN},
-            textColor: "rgba(0, 0, 0, 0.5)",
-            font: "bold 20px",
-            text: book.title
-          }),
-
-          Text({
-            layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: ["prev()", PAGE_MARGIN], bottom: PAGE_MARGIN},
-            text: getBookPreview(book.id)
-          })
+          Text('.bookTitle', book.title),
+          Text('.bookChapter',getBookPreview(book.id))
         ]),
-      ]).open()
+      ]).apply(readBookPageStyles).open()
   )
 }
 
+const readBookPageStyles = {
+    '.bookTitle':{
+        layoutData: {left: PAGE_MARGIN, top: PAGE_MARGIN * 2, right: PAGE_MARGIN},
+        textColor: "rgba(0, 0, 0, 0.5)",
+            font: "bold 20px",
+    },
+    '.bookChapter':{
+        layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: ["prev()", PAGE_MARGIN], bottom: PAGE_MARGIN},
+    }
+};
 
 /*************************
  * Book Sub-components
@@ -166,11 +183,11 @@ function BookTabs(book) {
         layoutData: {top: "prev()", left: 0, right: 0, bottom: 0}
       }, [
         // Related Tab
-        Tab({title: "Related"},[
+        Tab("Related",[
           BooksList(getRelatedBooks(book.id))
         ]),
         // Comments Tab
-        Tab({title: "Comments"},[
+        Tab("Comments",[
           CommentsList(getBookComments(book.id))
         ])
       ])
@@ -187,41 +204,50 @@ function CommentsList(comments : any[] = []) {
 
 function CommentItem(comment) {
   return (
-      Composite({left: PAGE_MARGIN, top: "prev()", right: PAGE_MARGIN}, [
-          Image({
-            layoutData: {left: PAGE_MARGIN, top: 10, width: 32, height: 48},
-            class: "commenterAvatar",
-            scaleMode: "fit",
-            image: comment.user.avatar
-          }),
-          Text({
-            layoutData: {left: 64, right: PAGE_MARGIN, top: 15},
-            class: "commentAuthor",
-            textColor: "#000000",
-            text: comment.user.name
-
-          }),
-          Text({
-            layoutData: {left: 64, right: PAGE_MARGIN, top: "prev()"},
-            class: "commentText",
-            textColor: "#7b7b7b",
-            text: comment.text
-          })
-        ])
+      Composite('.commentContainer', [
+          Image('.commenterAvatar', comment.user.avatar),
+          Text('.commentAuthor', comment.user.name),
+          Text('.commentText',comment.text)
+        ]).apply(commentStyling)
   )
 }
 
 function NoComments() {
   return (
-      Composite({left: PAGE_MARGIN, top: "prev()", right: PAGE_MARGIN}, [
-        Text({
-          layoutData: {left: 64, right: PAGE_MARGIN, top: 15},
-          textColor: "#000000",
-          font: "bold 16px",
-          text: "No comments yet for this item :("
-        }),
+      Composite('.commentContainer', [
+        Text('.noComments','No comments yet for this item :('),
       ])
   )
+}
+
+const commentStyling = {
+    '.commentContainer': styles.stackMargin,
+    '.commenterAvatar': {
+        left: PAGE_MARGIN,
+        top: 10,
+        width: 32,
+        height: 48,
+        scaleMode: "fit",
+    },
+    '.commentText':{
+        left: 64,
+        right: PAGE_MARGIN,
+        top: "prev()",
+        textColor: "#7b7b7b",
+    },
+    '.commentAuthor': {
+        left: 64,
+        right: PAGE_MARGIN,
+        top: 15,
+        textColor: "#000000",
+    },
+    '.noComments': {
+        left: 64,
+        right: PAGE_MARGIN,
+        top: 15,
+        textColor: "#000000",
+        font: "bold 16px",
+    }
 }
 
 
@@ -229,32 +255,33 @@ function NoComments() {
  * License Pages
  *************************/
 
+const licenseConfig = {
+    header: {
+        layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: ["prev()", 10]},
+    },
+    caption: {
+        textColor: "rgba(71, 161, 238, 0.75)",
+        layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: ["prev()", 10]}
+    },
+    authors: {
+        markupEnabled: true,
+        layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: ["prev()", 10]}
+    }
+}
+
 function openLicensePage() {
   return (
-      Page ({title: "License"}, [
-        Text({
-          text: license.header,
-          layoutData: styles.license.item
-        }),
-
-        Text({
-          text: license.link.caption,
-          textColor: "rgba(71, 161, 238, 0.75)",
-          layoutData: styles.license.item
-        }).on("tap", openLicenseWebPage ),
-
-        Text({
-          text: license.authors,
-          markupEnabled: true,
-          layoutData: styles.license.item
-        }),
+      Page ("License", [
+        Text(license.header, licenseConfig.header),
+        Text(license.link.caption, licenseConfig.caption).on("tap", openLicenseWebPage ),
+        Text(license.authors, licenseConfig.authors)
       ]).open()
   )
 }
 
 function openLicenseWebPage() {
   return (
-    Page ({title: license.link.caption},[
+    Page (license.link.caption,[
       WebView ({
         layoutData: styles.full,
         url: license.link.url
@@ -263,18 +290,8 @@ function openLicenseWebPage() {
   )
 }
 
-/*************************
- * Styles
- *************************/
 
-const styles = {
-  license: {
-    item: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: ["prev()", 10]}
-  },
 
-  stack:{top: "prev()", left: 0, right: 0},
-  full: {left: 0, top: 0, right: 0, bottom: 0},
-};
 
 /*************************
  * Main

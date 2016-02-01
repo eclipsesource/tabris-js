@@ -10,13 +10,26 @@ var custom_components_1 = require('./custom-components');
 var books_service_1 = require("./books/books-service");
 var texts_1 = require('./texts');
 /*************************
+ * Styles
+ *************************/
+var styles = {
+    stackMargin: { left: PAGE_MARGIN, top: "prev()", right: PAGE_MARGIN },
+    stack: { top: "prev()", left: 0, right: 0 },
+    full: { left: 0, top: 0, right: 0, bottom: 0 }
+};
+var generalStyles = {
+    '#appDrawer': {
+        background: 'blue'
+    }
+};
+/*************************
  * Application Start
  *************************/
 function AppNavigationStart() {
     // Drawer Init
-    tabris_components_1.Drawer({}, [
+    tabris_components_1.Drawer('#appDrawer', [
         tabris_components_1.PageSelector,
-    ]);
+    ]).apply(generalStyles);
     // Action init
     tabris_components_1.Action({
         title: "License",
@@ -50,19 +63,21 @@ function openBookPage(book) {
 function openReadBookPage(book) {
     return (tabris_components_1.Page({ title: book.title }, [
         tabris_components_1.ScrollView({ layoutData: styles.full, direction: "vertical" }, [
-            tabris_components_1.Text({
-                layoutData: { left: PAGE_MARGIN, top: PAGE_MARGIN * 2, right: PAGE_MARGIN },
-                textColor: "rgba(0, 0, 0, 0.5)",
-                font: "bold 20px",
-                text: book.title
-            }),
-            tabris_components_1.Text({
-                layoutData: { left: PAGE_MARGIN, right: PAGE_MARGIN, top: ["prev()", PAGE_MARGIN], bottom: PAGE_MARGIN },
-                text: books_service_1.getBookPreview(book.id)
-            })
+            tabris_components_1.Text('.bookTitle', book.title),
+            tabris_components_1.Text('.bookChapter', books_service_1.getBookPreview(book.id))
         ]),
-    ]).open());
+    ]).apply(readBookPageStyles).open());
 }
+var readBookPageStyles = {
+    '.bookTitle': {
+        layoutData: { left: PAGE_MARGIN, top: PAGE_MARGIN * 2, right: PAGE_MARGIN },
+        textColor: "rgba(0, 0, 0, 0.5)",
+        font: "bold 20px"
+    },
+    '.bookChapter': {
+        layoutData: { left: PAGE_MARGIN, right: PAGE_MARGIN, top: ["prev()", PAGE_MARGIN], bottom: PAGE_MARGIN }
+    }
+};
 /*************************
  * Book Sub-components
  *************************/
@@ -132,11 +147,11 @@ function BookTabs(book) {
         layoutData: { top: "prev()", left: 0, right: 0, bottom: 0 }
     }, [
         // Related Tab
-        tabris_components_1.Tab({ title: "Related" }, [
+        tabris_components_1.Tab("Related", [
             BooksList(books_service_1.getRelatedBooks(book.id))
         ]),
         // Comments Tab
-        tabris_components_1.Tab({ title: "Comments" }, [
+        tabris_components_1.Tab("Comments", [
             CommentsList(books_service_1.getBookComments(book.id))
         ])
     ]));
@@ -146,76 +161,77 @@ function CommentsList(comments) {
     return (tabris_components_1.ScrollView(styles.full, custom_components_1.Each(comments, CommentItem, NoComments)));
 }
 function CommentItem(comment) {
-    return (tabris_components_1.Composite({ left: PAGE_MARGIN, top: "prev()", right: PAGE_MARGIN }, [
-        tabris_components_1.Image({
-            layoutData: { left: PAGE_MARGIN, top: 10, width: 32, height: 48 },
-            class: "commenterAvatar",
-            scaleMode: "fit",
-            image: comment.user.avatar
-        }),
-        tabris_components_1.Text({
-            layoutData: { left: 64, right: PAGE_MARGIN, top: 15 },
-            class: "commentAuthor",
-            textColor: "#000000",
-            text: comment.user.name
-        }),
-        tabris_components_1.Text({
-            layoutData: { left: 64, right: PAGE_MARGIN, top: "prev()" },
-            class: "commentText",
-            textColor: "#7b7b7b",
-            text: comment.text
-        })
-    ]));
+    return (tabris_components_1.Composite('.commentContainer', [
+        tabris_components_1.Image('.commenterAvatar', comment.user.avatar),
+        tabris_components_1.Text('.commentAuthor', comment.user.name),
+        tabris_components_1.Text('.commentText', comment.text)
+    ]).apply(commentStyling));
 }
 function NoComments() {
-    return (tabris_components_1.Composite({ left: PAGE_MARGIN, top: "prev()", right: PAGE_MARGIN }, [
-        tabris_components_1.Text({
-            layoutData: { left: 64, right: PAGE_MARGIN, top: 15 },
-            textColor: "#000000",
-            font: "bold 16px",
-            text: "No comments yet for this item :("
-        }),
+    return (tabris_components_1.Composite('.commentContainer', [
+        tabris_components_1.Text('.noComments', 'No comments yet for this item :('),
     ]));
 }
+var commentStyling = {
+    '.commentContainer': styles.stackMargin,
+    '.commenterAvatar': {
+        left: PAGE_MARGIN,
+        top: 10,
+        width: 32,
+        height: 48,
+        scaleMode: "fit"
+    },
+    '.commentText': {
+        left: 64,
+        right: PAGE_MARGIN,
+        top: "prev()",
+        textColor: "#7b7b7b"
+    },
+    '.commentAuthor': {
+        left: 64,
+        right: PAGE_MARGIN,
+        top: 15,
+        textColor: "#000000"
+    },
+    '.noComments': {
+        left: 64,
+        right: PAGE_MARGIN,
+        top: 15,
+        textColor: "#000000",
+        font: "bold 16px"
+    }
+};
 /*************************
  * License Pages
  *************************/
+var licenseConfig = {
+    header: {
+        layoutData: { left: PAGE_MARGIN, right: PAGE_MARGIN, top: ["prev()", 10] }
+    },
+    caption: {
+        textColor: "rgba(71, 161, 238, 0.75)",
+        layoutData: { left: PAGE_MARGIN, right: PAGE_MARGIN, top: ["prev()", 10] }
+    },
+    authors: {
+        markupEnabled: true,
+        layoutData: { left: PAGE_MARGIN, right: PAGE_MARGIN, top: ["prev()", 10] }
+    }
+};
 function openLicensePage() {
-    return (tabris_components_1.Page({ title: "License" }, [
-        tabris_components_1.Text({
-            text: texts_1.license.header,
-            layoutData: styles.license.item
-        }),
-        tabris_components_1.Text({
-            text: texts_1.license.link.caption,
-            textColor: "rgba(71, 161, 238, 0.75)",
-            layoutData: styles.license.item
-        }).on("tap", openLicenseWebPage),
-        tabris_components_1.Text({
-            text: texts_1.license.authors,
-            markupEnabled: true,
-            layoutData: styles.license.item
-        }),
+    return (tabris_components_1.Page("License", [
+        tabris_components_1.Text(texts_1.license.header, licenseConfig.header),
+        tabris_components_1.Text(texts_1.license.link.caption, licenseConfig.caption).on("tap", openLicenseWebPage),
+        tabris_components_1.Text(texts_1.license.authors, licenseConfig.authors)
     ]).open());
 }
 function openLicenseWebPage() {
-    return (tabris_components_1.Page({ title: texts_1.license.link.caption }, [
+    return (tabris_components_1.Page(texts_1.license.link.caption, [
         tabris_components_1.WebView({
             layoutData: styles.full,
             url: texts_1.license.link.url
         })
     ]).open());
 }
-/*************************
- * Styles
- *************************/
-var styles = {
-    license: {
-        item: { left: PAGE_MARGIN, right: PAGE_MARGIN, top: ["prev()", 10] }
-    },
-    stack: { top: "prev()", left: 0, right: 0 },
-    full: { left: 0, top: 0, right: 0, bottom: 0 }
-};
 /*************************
  * Main
  *************************/
