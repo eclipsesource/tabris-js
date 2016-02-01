@@ -113,26 +113,28 @@ function BookDetails(book) {
     return (tabris_components_1.Composite(bookDetailsStyle.container, [
         tabris_components_1.Image(book.image, bookDetailsStyle.image),
         tabris_components_1.Composite(bookDetailsStyle.textContainer, [
-            animateInFromRight(tabris_components_1.Text(book.title, bookDetailsStyle.title), 100),
-            animateInFromRight(tabris_components_1.Text(book.author, bookDetailsStyle.author), 300),
-            animateInFromRight(tabris_components_1.Text(book.price, bookDetailsStyle.price), 400)
+            tabris_components_1.Text(book.title, bookDetailsStyle.title, fadeInRight(500, 100)),
+            tabris_components_1.Text(book.author, bookDetailsStyle.author, fadeInRight(500, 300)),
+            tabris_components_1.Text(book.price, bookDetailsStyle.price, fadeInRight(600, 500))
         ])
     ]).on("tap", function () { openReadBookPage(book); }));
 }
-function animateInFromRight(widget, delay) {
-    widget.set({
-        opacity: 0.0,
-        transform: { translationX: 32 }
-    });
-    widget.animate({
-        opacity: 1.0,
-        transform: { translationX: 0 }
-    }, {
-        duration: 500,
-        delay: delay,
-        easing: "ease-out"
-    });
-    return widget;
+function fadeInRight(duration, delay) {
+    if (delay === void 0) { delay = 0; }
+    return function (widget) {
+        widget.set({
+            opacity: 0.0,
+            transform: { translationX: 32 }
+        });
+        widget.animate({
+            opacity: 1.0,
+            transform: { translationX: 0 }
+        }, {
+            duration: duration,
+            delay: delay,
+            easing: "ease-out"
+        });
+    };
 }
 var bookDetailsStyle = {
     container: {

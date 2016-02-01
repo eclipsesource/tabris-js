@@ -146,28 +146,29 @@ function BookDetails(book) {
       Composite(bookDetailsStyle.container,[
         Image(book.image, bookDetailsStyle.image),
         Composite(bookDetailsStyle.textContainer , [
-          animateInFromRight(Text(book.title,bookDetailsStyle.title),100),
-          animateInFromRight(Text(book.author, bookDetailsStyle.author),300),
-          animateInFromRight(Text(book.price, bookDetailsStyle.price),400)
+            Text(book.title,bookDetailsStyle.title , fadeInRight(500, 100) ),
+            Text(book.author, bookDetailsStyle.author , fadeInRight(500, 300) ),
+            Text(book.price, bookDetailsStyle.price , fadeInRight(600, 500))
         ])
       ]).on("tap",  () => { openReadBookPage(book) })
   )
 }
 
-function animateInFromRight(widget, delay) {
-    widget.set({
-        opacity: 0.0,
-        transform: {translationX: 32}
-    });
-    widget.animate({
-        opacity: 1.0,
-        transform: {translationX: 0}
-    }, {
-        duration: 500,
-        delay: delay,
-        easing: "ease-out"
-    });
-    return widget;
+function fadeInRight(duration, delay = 0) {
+    return (widget) => {
+        widget.set({
+            opacity: 0.0,
+            transform: {translationX: 32}
+        });
+        widget.animate({
+            opacity: 1.0,
+            transform: {translationX: 0}
+        }, {
+            duration: duration,
+            delay: delay,
+            easing: "ease-out"
+        });
+    }
 }
 
 

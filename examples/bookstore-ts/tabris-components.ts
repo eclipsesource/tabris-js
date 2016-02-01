@@ -4,7 +4,7 @@ function RenderElement (elem = "Composite", params= {}) {
     return tabris.create(elem, params);
 }
 
-function RenderTree (elemName = "Composite", params= {}, children = []) {
+function RenderTree (elemName = "Composite", params= {}, children = [], mixins = []) {
     let elem = RenderElement(elemName,params);
     children.forEach((child) => {
         if(typeof child === 'function'){
@@ -16,7 +16,13 @@ function RenderTree (elemName = "Composite", params= {}, children = []) {
         else {
             child.appendTo(elem);
         }
-    })
+    });
+
+    mixins.forEach((mixin) => {
+        if(typeof mixin === 'function'){
+            mixin(elem);
+        }
+    });
     return elem;
 }
 
@@ -40,7 +46,7 @@ const isSelector =
 
 const createRender = function(tagName){
     return (...rest) => {
-        let children = [], params= {};
+        let children = [], params= {}, mixins =[];
         // TODO: clean up these functions
         rest.forEach(element =>{
             let elemType = inputType (element);
@@ -49,6 +55,9 @@ const createRender = function(tagName){
             }
             else if(elemType === 'object'){
                 params = element;
+            }
+            else if(elemType === 'function'){
+                mixins.push(element);
             }
         });
         rest.forEach(element =>{
@@ -75,7 +84,7 @@ const createRender = function(tagName){
                 }
             }
         });
-        return RenderTree(tagName, params, children);
+        return RenderTree(tagName, params, children, mixins);
     };
 }
 

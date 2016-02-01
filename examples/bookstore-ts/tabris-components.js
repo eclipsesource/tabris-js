@@ -3,10 +3,11 @@ function RenderElement(elem, params) {
     if (params === void 0) { params = {}; }
     return tabris.create(elem, params);
 }
-function RenderTree(elemName, params, children) {
+function RenderTree(elemName, params, children, mixins) {
     if (elemName === void 0) { elemName = "Composite"; }
     if (params === void 0) { params = {}; }
     if (children === void 0) { children = []; }
+    if (mixins === void 0) { mixins = []; }
     var elem = RenderElement(elemName, params);
     children.forEach(function (child) {
         if (typeof child === 'function') {
@@ -16,6 +17,11 @@ function RenderTree(elemName, params, children) {
         }
         else {
             child.appendTo(elem);
+        }
+    });
+    mixins.forEach(function (mixin) {
+        if (typeof mixin === 'function') {
+            mixin(elem);
         }
     });
     return elem;
@@ -38,7 +44,7 @@ var createRender = function (tagName) {
         for (var _i = 0; _i < arguments.length; _i++) {
             rest[_i - 0] = arguments[_i];
         }
-        var children = [], params = {};
+        var children = [], params = {}, mixins = [];
         // TODO: clean up these functions
         rest.forEach(function (element) {
             var elemType = inputType(element);
@@ -47,6 +53,9 @@ var createRender = function (tagName) {
             }
             else if (elemType === 'object') {
                 params = element;
+            }
+            else if (elemType === 'function') {
+                mixins.push(element);
             }
         });
         rest.forEach(function (element) {
@@ -73,7 +82,7 @@ var createRender = function (tagName) {
                 }
             }
         });
-        return RenderTree(tagName, params, children);
+        return RenderTree(tagName, params, children, mixins);
     };
 };
 exports.Page = createRender("Page");
