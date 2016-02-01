@@ -843,12 +843,17 @@ declare module tabris {
 
   interface PickerProperties extends WidgetProperties {
 
-    items?: string[];
+    items?: any[];
 
-    selection?: string;
+    selection?: any;
 
     selectionIndex?: number;
 
+    itemText? : ItemText;
+  }
+
+  interface ItemText {
+      ( item : any) : string;
   }
 
   // ProgressBar
