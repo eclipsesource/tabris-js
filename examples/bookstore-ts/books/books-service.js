@@ -1,7 +1,10 @@
 var books = require("./books.json");
 var texts_1 = require('./../texts');
 function getBooks(filter) {
-    if (filter === void 0) { filter = function () { return true; }; }
+    if (!filter) {
+        return books;
+    }
+    ;
     return books.filter(filter);
 }
 exports.getBooks = getBooks;

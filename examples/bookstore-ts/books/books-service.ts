@@ -4,7 +4,8 @@ const books = require("./books.json");
 import { loremIpsum  } from './../texts';
 
 
-export function getBooks(filter? : Function = () => true) {
+export function getBooks(filter? : Function) {
+  if(!filter) {return books};
   return books.filter(filter)
 };
 
