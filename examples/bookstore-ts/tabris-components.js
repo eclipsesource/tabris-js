@@ -12,94 +12,87 @@ function RenderTree(elemName, params, children) {
         if (typeof child === 'function') {
             child().appendTo(elem);
         }
+        else if (typeof child === 'undefined') {
+        }
         else {
             child.appendTo(elem);
         }
     });
     return elem;
 }
-function Page(params, children) {
-    if (params === void 0) { params = {}; }
-    if (children === void 0) { children = []; }
-    return RenderTree("Page", params, children);
-}
-exports.Page = Page;
-function WebView(params, children) {
-    if (params === void 0) { params = {}; }
-    if (children === void 0) { children = []; }
-    return RenderTree("WebView", params, children);
-}
-exports.WebView = WebView;
-function TextView(params, children) {
-    if (params === void 0) { params = {}; }
-    if (children === void 0) { children = []; }
-    return RenderTree("TextView", params, children);
-}
-exports.TextView = TextView;
-function ScrollView(params, children) {
-    if (params === void 0) { params = {}; }
-    if (children === void 0) { children = []; }
-    return RenderTree("ScrollView", params, children);
-}
-exports.ScrollView = ScrollView;
-function TabFolder(params, children) {
-    if (params === void 0) { params = {}; }
-    if (children === void 0) { children = []; }
-    return RenderTree("TabFolder", params, children);
-}
-exports.TabFolder = TabFolder;
-function Tab(params, children) {
-    if (params === void 0) { params = {}; }
-    if (children === void 0) { children = []; }
-    return RenderTree("Tab", params, children);
-}
-exports.Tab = Tab;
-function Composite(params, children) {
-    if (params === void 0) { params = {}; }
-    if (children === void 0) { children = []; }
-    return RenderTree("Composite", params, children);
-}
-exports.Composite = Composite;
-function ImageView(params, children) {
-    if (params === void 0) { params = {}; }
-    if (children === void 0) { children = []; }
-    return RenderTree("ImageView", params, children);
-}
-exports.ImageView = ImageView;
-function CollectionView(params, children) {
-    if (params === void 0) { params = {}; }
-    if (children === void 0) { children = []; }
-    return RenderTree("CollectionView", params, children);
-}
-exports.CollectionView = CollectionView;
-function Action(params, children) {
-    if (params === void 0) { params = {}; }
-    if (children === void 0) { children = []; }
-    return RenderTree("Action", params, children);
-}
-exports.Action = Action;
-function Drawer(params, children) {
-    if (params === void 0) { params = {}; }
-    if (children === void 0) { children = []; }
-    return RenderTree("Drawer", params, children);
-}
-exports.Drawer = Drawer;
-function PageSelector(params, children) {
-    if (params === void 0) { params = {}; }
-    if (children === void 0) { children = []; }
-    return RenderTree("PageSelector", params, children);
-}
-exports.PageSelector = PageSelector;
+var inputType = function (param) {
+    return Array.isArray(param) ? 'array' : typeof param;
+};
+//
+//export function testElem (...elements) {
+//    elements.forEach(element =>{
+//        console.log(inputType (element) );
+//    });
+//}
+var isValidString = function (param) {
+    return typeof param === 'string' && param.length > 0;
+};
+var startsWith = function (string, start) {
+    return string[0] === start;
+};
+var isSelector = function (param) {
+    return isValidString(param) && (startsWith(param, '.') || startsWith(param, '#'));
+};
+var createRender = function (tagName) {
+    return function () {
+        var rest = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            rest[_i - 0] = arguments[_i];
+        }
+        var children = [], params = {};
+        //
+        rest.forEach(function (element) {
+            var elemType = inputType(element);
+            if (elemType === 'array') {
+                children = element;
+            }
+            else if (elemType === 'object') {
+                params = element;
+            }
+        });
+        return RenderTree(tagName, params, children);
+        //if (isSelector(first)) {
+        //    return RenderTree(tagName, first, ...rest);
+        //} else {
+        //    return RenderTree(tagName, params, children);
+        //}
+    };
+};
+//() =>
+//    tagName =>
+//        (first, ...rest) => {
+//            if (isSelector(first)) {
+//                return RenderTree(tagName + first, ...rest);
+//            } else {
+//                return RenderTree(tagName, first, ...rest);
+//            }
+//        };
+//export default
+//h => {
+//    const createTag = node();
+//    const exported = { TAG_NAMES, isSelector, createTag };
+//    TAG_NAMES.forEach(n => {
+//        exported[n] = createTag(n);
+//    });
+//    return exported;
+//};
+exports.Page = createRender("Page");
+exports.WebView = createRender("WebView");
+exports.TextView = createRender("TextView");
+exports.ScrollView = createRender("ScrollView");
+exports.TabFolder = createRender("TabFolder");
+exports.Tab = createRender("Tab");
+exports.Composite = createRender("Composite");
+exports.ImageView = createRender("ImageView");
+exports.CollectionView = createRender("CollectionView");
+exports.Action = createRender("Action");
+exports.Drawer = createRender("Drawer");
+exports.PageSelector = createRender("PageSelector");
 /* Alias */
-function Text(params, children) {
-    if (params === void 0) { params = {}; }
-    if (children === void 0) { children = []; }
-    return TextView(params, children);
-}
-exports.Text = Text;
-function Image(params, children) {
-    if (params === void 0) { params = {}; }
-    if (children === void 0) { children = []; }
-    return ImageView(params, children);
-}
-exports.Image = Image;
+exports.Text = createRender("TextView");
+exports.Image = createRender("ImageView");

@@ -6,14 +6,13 @@ const PAGE_MARGIN = 16;
  * Import Components
  *************************/
 import { Page, WebView, TextView, Text, ScrollView, TabFolder, Tab, Composite, Image, ImageView, CollectionView, Action, Drawer, PageSelector} from './tabris-components'
-import { Spacer , Each } from './custom-components';
+import { Spacer, Each } from './custom-components';
 
 /*************************
  * Import Services
  *************************/
 import {getBooks, getRelatedBooks, getBookComments, getBookPreview} from "./books/books-service"
 import { license } from './texts';
-
 
 
 
@@ -24,7 +23,7 @@ import { license } from './texts';
 function AppNavigationStart(){
   // Drawer Init
   Drawer({},[
-    PageSelector
+    PageSelector,
   ]);
 
   // Action init
@@ -62,7 +61,7 @@ function openBookPage(book) {
   return (
       Page ({title: book.title}, [
         BookDetails(book),
-        Spacer({height:20,color:"red"}),
+        Spacer(),
         BookTabs(book),
       ]).open()
   )

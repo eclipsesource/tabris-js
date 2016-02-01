@@ -10,6 +10,9 @@ function RenderTree (elemName = "Composite", params= {}, children = []) {
         if(typeof child === 'function'){
             child().appendTo(elem);
         }
+        else if(typeof child === 'undefined'){
+            // Don't do anything without an element
+        }
         else {
             child.appendTo(elem);
         }
@@ -18,60 +21,92 @@ function RenderTree (elemName = "Composite", params= {}, children = []) {
 }
 
 
-export function Page (params = {}, children = []){
-    return RenderTree("Page", params,children);
-}
+const inputType =
+    param =>
+    Array.isArray(param)? 'array' : typeof param;
 
-export function WebView (params = {}, children = []){
-    return RenderTree("WebView", params,children);
-}
+//
+//export function testElem (...elements) {
+//    elements.forEach(element =>{
+//        console.log(inputType (element) );
+//    });
+//}
 
-export function TextView (params = {}, children = []){
-    return RenderTree("TextView", params,children);
-}
 
-export function ScrollView (params = {}, children = []){
-    return RenderTree("ScrollView", params,children);
-}
 
-export function TabFolder (params = {}, children = []){
-    return RenderTree("TabFolder", params,children);
-}
+const isValidString =
+    param =>
+    typeof param === 'string' && param.length > 0;
 
-export function Tab (params = {}, children = []){
-    return RenderTree("Tab", params,children);
-}
+const startsWith =
+    (string, start) =>
+    string[0] === start;
 
-export function Composite (params = {}, children = []){
-    return RenderTree("Composite", params,children);
-}
+const isSelector =
+    param =>
+    isValidString(param) && (startsWith(param, '.') || startsWith(param, '#'));
 
-export function ImageView (params = {}, children = []){
-    return RenderTree("ImageView", params,children);
-}
 
-export function CollectionView (params = {}, children = []){
-    return RenderTree("CollectionView", params,children);
-}
+const createRender = function(tagName){
+    return (...rest) => {
+        let children = [], params= {};
+        //
+        rest.forEach(element =>{
+            let elemType = inputType (element);
+            if(elemType === 'array'){
+                children = element;
+            }
+            else if(elemType === 'object'){
+                params = element;
+            }
+        });
+        return RenderTree(tagName, params, children);
 
-export function Action (params = {}, children = []){
-    return RenderTree("Action", params,children);
-}
+        //if (isSelector(first)) {
+        //    return RenderTree(tagName, first, ...rest);
+        //} else {
+        //    return RenderTree(tagName, params, children);
+        //}
+    };
 
-export function Drawer (params = {}, children = []){
-    return RenderTree("Drawer", params,children);
 }
+    //() =>
+    //    tagName =>
+    //        (first, ...rest) => {
+    //            if (isSelector(first)) {
+    //                return RenderTree(tagName + first, ...rest);
+    //            } else {
+    //                return RenderTree(tagName, first, ...rest);
+    //            }
+    //        };
 
-export function PageSelector (params = {}, children = []){
-    return RenderTree("PageSelector", params,children);
-}
 
+//export default
+//h => {
+//    const createTag = node();
+//    const exported = { TAG_NAMES, isSelector, createTag };
+//    TAG_NAMES.forEach(n => {
+//        exported[n] = createTag(n);
+//    });
+//    return exported;
+//};
+
+
+
+
+export const Page = createRender ("Page");
+export const WebView = createRender ("WebView");
+export const TextView = createRender ("TextView");
+export const ScrollView = createRender ("ScrollView");
+export const TabFolder = createRender ("TabFolder");
+export const Tab = createRender ("Tab");
+export const Composite = createRender ("Composite");
+export const ImageView = createRender ("ImageView");
+export const CollectionView = createRender ("CollectionView");
+export const Action = createRender ("Action");
+export const Drawer = createRender ("Drawer");
+export const PageSelector = createRender ("PageSelector");
 
 /* Alias */
-export function Text (params = {}, children = []){
-    return TextView(params,children);
-}
-
-export function Image (params = {}, children = []){
-    return ImageView(params,children);
-}
+export const Text = createRender ("TextView");
+export const Image = createRender ("ImageView");

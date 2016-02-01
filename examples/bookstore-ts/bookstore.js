@@ -15,7 +15,7 @@ var texts_1 = require('./texts');
 function AppNavigationStart() {
     // Drawer Init
     tabris_components_1.Drawer({}, [
-        tabris_components_1.PageSelector
+        tabris_components_1.PageSelector,
     ]);
     // Action init
     tabris_components_1.Action({
@@ -43,7 +43,7 @@ function BookListPage(title, image, filter) {
 function openBookPage(book) {
     return (tabris_components_1.Page({ title: book.title }, [
         BookDetails(book),
-        custom_components_1.Spacer({ height: 20, color: "red" }),
+        custom_components_1.Spacer(),
         BookTabs(book),
     ]).open());
 }
