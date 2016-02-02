@@ -5,7 +5,8 @@
   "./modules/DialogPage",
   "./modules/NetworkPage",
   "./modules/CameraPage",
-  "./modules/BarcodeScannerPage"
+  "./modules/BarcodeScannerPage",
+  "./modules/MediaPage"
 ].forEach(function(page) {
   require(page).create();
 });
