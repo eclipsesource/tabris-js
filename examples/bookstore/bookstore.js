@@ -26,7 +26,9 @@ createBookListPage("Favorite", "images/page_favorite_books.png", function(book) 
 });
 
 tabris.create("Action", {
+  id: "licenseToggler",
   title: "Settings",
+  placementPriority: "high",
   image: {src: "images/action_settings.png", scale: 3}
 }).on("select", function() {
   createSettingsPage().open();
@@ -154,16 +156,19 @@ function createReadBookPage(book) {
 function createSettingsPage() {
   var page = tabris.create("Page", {
     title: "License"
-  });
+  })
+  .on("appear", function() { actionVisbility(false); })
+  .on("disappear", function() { actionVisbility(true); });
   var settingsTextView = tabris.create("TextView", {
-    text: "Book covers come under CC BY 2.0",
+    text: "Book covers under CC BY 2.0",
     layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: PAGE_MARGIN}
   }).appendTo(page);
-  var url = "https://www.flickr.com/photos/ajourneyroundmyskull/sets/72157626894978086/";
   var linkTextView = tabris.create("TextView", {
-    text: "<a href=\"" + url + "\">Covers on flickr</a>",
-    markupEnabled: true,
+    text: "Covers on flickr",
+    textColor: "rgba(71, 161, 238, 0.75)",
     layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: [settingsTextView, 10]}
+  }).on("tap", function() {
+    createLicenseWebviewPage().open();
   }).appendTo(page);
   tabris.create("TextView", {
     text: "<i>Authors of book covers:</i><br/>" +
@@ -178,4 +183,20 @@ function createSettingsPage() {
     layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: [linkTextView, 10]}
   }).appendTo(page);
   return page;
+}
+
+function createLicenseWebviewPage() {
+  var page = tabris.create("Page", {
+    title: "Book covers license"
+  })
+  .on("appear", function() { actionVisbility(false); });
+  tabris.create("WebView", {
+    url: "https://www.flickr.com/photos/ajourneyroundmyskull/sets/72157626894978086/",
+    layoutData: {left: 0, right: 0, top: 0, bottom: 0}
+  }).appendTo(page);
+  return page;
+}
+
+function actionVisbility(isVisible) {
+  tabris.ui.children("#licenseToggler").set("visible",isVisible);
 }
