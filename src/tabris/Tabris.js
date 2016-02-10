@@ -27,9 +27,6 @@
       if (!(type in tabris)) {
         throw new Error("Unknown type " + type);
       }
-      if (tabris[type].prototype.type !== type) {
-        console.warn("\"" + type + "\" is deprecated, use \"" + tabris[type].prototype.type + "\"");
-      }
       return new tabris[type]()._create(properties || {});
     },
 
