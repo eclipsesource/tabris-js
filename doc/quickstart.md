@@ -29,7 +29,7 @@ Create a directory with two files:
 {
   "main": "myapp.js",
   "dependencies": {
-    "tabris": "^1.6.0"
+    "tabris": "^1.7.0"
   }
 }
 ```
