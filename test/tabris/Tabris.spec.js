@@ -290,45 +290,40 @@ describe("tabris", function() {
 
   });
 
-  describe("create", function() {
+  describe("constructors", function() {
+    /*jshint nonew: false*/
 
     it("fails if tabris.js not yet started", function() {
       tabris._ready = false;
       delete tabris._nativeBridge;
 
       expect(function() {
-        tabris.create("TestType", {});
+        new tabris.TestType();
       }).toThrowError("tabris.js not started");
     });
 
-    it("fails if type is unknown", function() {
-      expect(function() {
-        tabris.create("UnknownType", {});
-      }).toThrowError("Unknown type UnknownType");
-    });
-
     it("creates a non-empty widget id", function() {
-      var proxy = tabris.create("TestType", {});
+      var proxy = new tabris.TestType();
 
       expect(typeof proxy.cid).toBe("string");
       expect(proxy.cid.length).toBeGreaterThan(0);
     });
 
     it("creates different widget ids for subsequent calls", function() {
-      var proxy1 = tabris.create("TestType", {});
-      var proxy2 = tabris.create("TestType", {});
+      var proxy1 = new tabris.TestType();
+      var proxy2 = new tabris.TestType();
 
       expect(proxy1.cid).not.toEqual(proxy2.cid);
     });
 
-    it("returns a proxy object", function() {
-      var result = tabris.create("TestType", {});
+    it("creates an instance of Proxy", function() {
+      var result = new tabris.TestType();
 
       expect(result).toEqual(jasmine.any(tabris.Proxy));
     });
 
     it("triggers a create operation with type and properties", function() {
-      var proxy = tabris.create("TestType", {foo: 23});
+      var proxy = new tabris.TestType({foo: 23});
 
       var createCall = nativeBridge.calls({op: "create", id: proxy.cid})[0];
 
@@ -336,12 +331,21 @@ describe("tabris", function() {
       expect(createCall.properties.foo).toBe(23);
     });
 
-    it("executes type translations", function() {
-      var proxy = tabris.create("CheckBox", {});
+  });
 
-      var createCall = nativeBridge.calls({op: "create", id: proxy.cid})[0];
+  describe("create", function() {
 
-      expect(createCall.type).toBe("rwt.widgets.Button");
+    it("fails if type is unknown", function() {
+      expect(function() {
+        tabris.create("UnknownType", {});
+      }).toThrowError("Unknown type UnknownType");
+    });
+
+    it("delegates to constructor", function() {
+      var result = tabris.create("TestType", {foo: 23});
+
+      expect(result).toEqual(jasmine.any(tabris.TestType));
+      expect(result.get("foo")).toBe(23);
     });
 
   });
@@ -355,15 +359,28 @@ describe("tabris", function() {
     it("allows to register a new type", function() {
       var members = {foo: 23};
       tabris.registerType("CustomType", members);
+
       var instance = tabris.create("CustomType");
+
       expect(instance).toEqual(jasmine.any(tabris.Proxy));
       expect(instance).toEqual(jasmine.any(tabris.CustomType));
+    });
+
+    it("creates a constructor", function() {
+      tabris.registerType("CustomType", {foo: 23});
+
+      var instance = new tabris.CustomType({foo: 42});
+
+      expect(instance).toEqual(jasmine.any(tabris.CustomType));
+      expect(instance.get("foo")).toBe(42);
     });
 
     it("adds members to new type", function() {
       var members = {foo: 23};
       tabris.registerType("CustomType", members);
+
       var instance = tabris.create("CustomType");
+
       expect(instance.foo).toBe(23);
       expect(instance.type).toBe("CustomType");
     });

@@ -27,7 +27,7 @@ describe("PageSelector", function() {
     beforeEach(function() {
       page1 = tabris.create("Page", {topLevel: true});
       page2 = tabris.create("Page", {topLevel: true});
-      pageSelector = tabris.create("PageSelector");
+      pageSelector = new tabris.PageSelector();
     });
 
     it("creates a CollectionView", function() {

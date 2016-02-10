@@ -1,8 +1,8 @@
 (function() {
 
-  tabris.PageSelector = function() {
+  tabris.PageSelector = function(properties) {
     var instance = new tabris.CollectionView();
-    instance._create = _create;
+    _create.call(instance, properties);
     return instance;
   };
 

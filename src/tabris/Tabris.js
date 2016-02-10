@@ -21,21 +21,29 @@
     },
 
     create: function(type, properties) {
-      if (!tabris._nativeBridge) {
-        throw new Error("tabris.js not started");
-      }
       if (!(type in tabris)) {
         throw new Error("Unknown type " + type);
       }
-      return new tabris[type]()._create(properties || {});
+      return new tabris[type](properties || {});
     },
 
     registerType: function(type, members) {
       if (type in tabris) {
         throw new Error("Type already registered: " + type);
       }
-      tabris[type] = function() {
-        tabris.Proxy.apply(this, arguments);
+      tabris[type] = function(arg) {
+        if (typeof arg === "string") {
+          // internal use with cid
+          tabris.Proxy.call(this, arg);
+        } else {
+          if (!tabris._nativeBridge) {
+            throw new Error("tabris.js not started");
+          }
+          tabris.Proxy.call(this);
+          if (typeof arg === "object") {
+            this._create(arg);
+          }
+        }
       };
       for (var member in staticMembers) {
         tabris[type][member] = members[member] || getDefault(member);
