@@ -11,11 +11,7 @@ describe("UI", function() {
     ui = new tabris._UI();
   });
 
-  describe("create", function() {
-
-    beforeEach(function() {
-      ui._create();
-    });
+  describe("creation", function() {
 
     it("creates Display, Shell, and tabris UI", function() {
       var createCalls = nativeBridge.calls({op: "create"});
@@ -46,7 +42,6 @@ describe("UI", function() {
   describe("instance", function() {
 
     beforeEach(function() {
-      ui._create();
       tabris.ui = ui;
       shellId = nativeBridge.calls({op: "create", type: "rwt.widgets.Shell"})[0].id;
       nativeBridge.resetCalls();

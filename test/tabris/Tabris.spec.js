@@ -21,57 +21,15 @@ describe("tabris", function() {
 
   describe("when used as a function", function() {
 
-    it("returns a proxy with the given string as id and type", function() {
-      var result = tabris("TestType");
+    it("returns proxy instance for a given cid", function() {
+      var instance = new tabris.TestType();
 
-      expect(result).toEqual(jasmine.any(tabris.TestType));
-      expect(result.cid).toBe("TestType");
+      var result = tabris(instance.cid);
+
+      expect(result).toBe(instance);
     });
 
-    it("returns a proxy with translated type", function() {
-      tabris.registerType("_TestType", {_type: "tabris.TestType"});
-
-      var result = tabris("_TestType");
-
-      expect(result).toEqual(jasmine.any(tabris._TestType));
-      expect(result.cid).toBe("tabris.TestType");
-      delete tabris._TestType;
-    });
-
-    it("makes proxy with translated type notifiable", function() {
-      tabris.registerType("_TestType", {_type: "tabris.TestType"});
-      var result = tabris("_TestType");
-      var listener = jasmine.createSpy();
-      result.on("foo", listener);
-
-      tabris._notify("tabris.TestType", "foo");
-
-      expect(listener).toHaveBeenCalled();
-      delete tabris._TestType;
-    });
-
-    it("returns same proxy instance for the same id", function() {
-      tabris.TestType._type = "CustomType";
-      var result1 = tabris("TestType");
-      var result2 = tabris("TestType");
-
-      expect(result1).toBe(result2);
-    });
-
-    it("returns same proxy instance for the same translated id", function() {
-      var result1 = tabris("TestType");
-      var result2 = tabris("TestType");
-
-      expect(result1).toBe(result2);
-    });
-
-    it("does not call create on native bridge", function() {
-      tabris("TestType");
-
-      expect(nativeBridge.calls().length).toBe(0);
-    });
-
-    it("fails for unknown types", function() {
+    it("fails for unknown cids", function() {
       expect(function() {
         tabris("foo");
       }).toThrow();
@@ -302,14 +260,14 @@ describe("tabris", function() {
       }).toThrowError("tabris.js not started");
     });
 
-    it("creates a non-empty widget id", function() {
+    it("creates a non-empty cid", function() {
       var proxy = new tabris.TestType();
 
       expect(typeof proxy.cid).toBe("string");
       expect(proxy.cid.length).toBeGreaterThan(0);
     });
 
-    it("creates different widget ids for subsequent calls", function() {
+    it("creates different cids for subsequent calls", function() {
       var proxy1 = new tabris.TestType();
       var proxy2 = new tabris.TestType();
 
@@ -329,6 +287,40 @@ describe("tabris", function() {
 
       expect(createCall.type).toBe("TestType");
       expect(createCall.properties.foo).toBe(23);
+    });
+
+  });
+
+  describe("constructors for singletons", function() {
+    /*jshint nonew: false*/
+
+    beforeEach(function() {
+      tabris.registerType("ServiceType", {_cid: "foo"});
+    });
+
+    afterEach(function() {
+      delete tabris.ServiceType;
+    });
+
+    it("respects _cid", function() {
+      var instance = new tabris.ServiceType();
+
+      expect(instance).toEqual(jasmine.any(tabris.ServiceType));
+      expect(instance.cid).toBe("foo");
+    });
+
+    it("does not call create for service objects", function() {
+      new tabris.ServiceType();
+
+      expect(nativeBridge.calls({op: "create"}).length).toBe(0);
+    });
+
+    it("prevents multiple instances", function() {
+      new tabris.ServiceType();
+
+      expect(function() {
+        new tabris.ServiceType();
+      }).toThrowError(/cid.*foo/);
     });
 
   });

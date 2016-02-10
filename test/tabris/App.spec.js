@@ -6,7 +6,7 @@ describe("App", function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._init(nativeBridge);
-    app = tabris.create("_App");
+    app = new tabris._App();
   });
 
   it("listens for Pause event", function() {

@@ -52,9 +52,9 @@ describe("PropertyTypes:", function() {
     });
 
     it("translates widget collection to first ids in properties", function() {
-      var value = new tabris.ProxyCollection([new tabris.Proxy("other-id")]);
+      var value = new tabris.ProxyCollection([new tabris.Proxy("cid-23")]);
 
-      expect(encode(value)).toBe("other-id");
+      expect(encode(value)).toBe("cid-23");
     });
 
     it("does not translate objects with id field to ids", function() {
@@ -64,9 +64,9 @@ describe("PropertyTypes:", function() {
     });
 
     it("translates ids to widgets", function() {
-      var value = new tabris.Proxy("other-id");
+      var value = new tabris.Proxy("cid-42");
 
-      expect(decode("other-id")).toBe(value);
+      expect(decode("cid-42")).toBe(value);
     });
 
   });

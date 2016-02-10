@@ -2,6 +2,9 @@
 
   tabris.Proxy = function(cid) {
     this.cid = cid || generateId();
+    if (cid in tabris._proxies) {
+      throw new Error("cid already in use: " + cid);
+    }
     tabris._proxies[this.cid] = this;
   };
 

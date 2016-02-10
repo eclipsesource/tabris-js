@@ -1,14 +1,14 @@
 (function() {
 
   tabris.registerType("_ClientStore", {
-    _type: "tabris.ClientStore"
+    _cid: "tabris.ClientStore"
   });
 
   var encode = tabris.PropertyTypes.string.encode;
   var proxy;
 
   tabris.WebStorage = function() {
-    proxy = tabris("_ClientStore");
+    proxy = new tabris._ClientStore();
   };
 
   tabris.WebStorage.prototype = {

@@ -1,7 +1,7 @@
 (function() {
 
   tabris.registerType("_Device", {
-    _type: "tabris.Device",
+    _cid: "tabris.Device",
     _properties: {
       model: "any",
       platform: "any",
@@ -41,7 +41,7 @@
     }
   };
 
-  tabris.device = tabris("_Device");
+  tabris.device = new tabris._Device();
 
   if (typeof window !== "undefined") {
     tabris._publishDeviceProperties(window);

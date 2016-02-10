@@ -12,7 +12,7 @@ describe("Device", function() {
     });
     tabris._reset();
     tabris._init(nativeBridge);
-    device = tabris("_Device");
+    device = new tabris._Device();
   });
 
   it("provides model", function() {
