@@ -27,7 +27,7 @@ tabris.load(function() {
       _type: "rwt.widgets.TabFolder",
 
       _create: function(properties) {
-        this.super("_create", properties);
+        this._super("_create", arguments);
         if (properties.tabBarLocation === "top") {
           this._nativeSet("style", ["TOP"]);
         } else if (properties.tabBarLocation === "bottom") {

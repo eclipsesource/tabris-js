@@ -148,7 +148,7 @@
     },
 
     _getEventConfig: function(type) {
-      var result = tabris.Proxy.prototype._getEventConfig.call(this, type);
+      var result = this._super("_getEventConfig", arguments);
       if (!result && this.get("gestures")[type]) {
         return getGestureEventConfig(type);
       }

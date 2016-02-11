@@ -8,9 +8,9 @@ tabris.load(function() {
 
       _supportsChildren: true,
 
-      _create: function(properties) {
+      _create: function() {
         tabris.ui._setCurrentDrawer(this);
-        this.super("_create", properties);
+        this._super("_create", arguments);
         this._setParent(tabris.ui);
         return this;
       },
@@ -27,7 +27,7 @@ tabris.load(function() {
 
       dispose: function() {
         tabris.ui._setCurrentDrawer(null);
-        this.super("dispose");
+        this._super("dispose", arguments);
       }
 
     });

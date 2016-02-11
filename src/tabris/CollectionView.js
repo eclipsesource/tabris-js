@@ -74,7 +74,7 @@
 
     _create: function() {
       this._items = [];
-      var result = tabris.Proxy.prototype._create.apply(this, arguments);
+      var result = this._super("_create", arguments);
       this._nativeListen("requestinfo", true);
       this._nativeListen("createitem", true);
       this._nativeListen("populateitem", true);
@@ -84,7 +84,7 @@
     },
 
     set: function() {
-      var result = tabris.Proxy.prototype.set.apply(this, arguments);
+      var result = this._super("set", arguments);
       // TODO call _reload on flush, remove override
       this._reload();
       return result;

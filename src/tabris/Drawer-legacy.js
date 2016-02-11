@@ -15,9 +15,9 @@ tabris.load(function() {
       _create: function(properties) {
         tabris.ui._setCurrentDrawer(this);
         this._drawer = tabris.create("_Drawer", {});
-        this.super("_create",  _.extend(properties, {
+        this._super("_create", [_.extend(properties, {
           layoutData: {left: 0, right: 0, top: 0, bottom: 0}
-        }));
+        })].concat(_.drop(arguments)));
         this._setParent(tabris.ui);
         return this;
       },
@@ -35,7 +35,7 @@ tabris.load(function() {
       dispose: function() {
         tabris.ui._setCurrentDrawer(null);
         this._drawer.dispose();
-        this.super("dispose");
+        this._super("dispose", arguments);
       }
 
     });

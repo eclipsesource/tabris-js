@@ -56,6 +56,43 @@ describe("util", function() {
 
   });
 
+  describe("drop", function() {
+
+    it("returns copy, does not modify original", function() {
+      var original = [0, 1, 2, 3, 4];
+
+      var result = _.drop(original);
+
+      expect(result).not.toBe(original);
+      expect(original).toEqual([0, 1, 2, 3, 4]);
+    });
+
+    it("skips the first element without parameter", function() {
+      var result = _.drop([0, 1, 2, 3, 4]);
+
+      expect(result).toEqual([1, 2, 3, 4]);
+    });
+
+    it("returns copy with parameter 0", function() {
+      var result = _.drop([0, 1, 2, 3, 4], 0);
+
+      expect(result).toEqual([0, 1, 2, 3, 4]);
+    });
+
+    it("skips n elements with parameter n", function() {
+      var result = _.drop([0, 1, 2, 3, 4], 2);
+
+      expect(result).toEqual([2, 3, 4]);
+    });
+
+    it("supports negative parameter", function() {
+      var result = _.drop([0, 1, 2, 3, 4], -2);
+
+      expect(result).toEqual([3, 4]);
+    });
+
+  });
+
   describe("clone", function() {
 
     it("returns a copy of object", function() {
@@ -132,13 +169,14 @@ describe("util", function() {
       expect(object instanceof Class1).toBeTruthy();
     });
 
-    describe("adds super function that", function() {
+    describe("adds _super function that", function() {
+
       it("calls overwritten methods", function() {
         Class1.prototype.myFunction = jasmine.createSpy();
 
         Class2.prototype = _.extendPrototype(Class1, {
           myFunction: function() {
-            this.super("myFunction");
+            this._super("myFunction");
           }
         });
         (new Class2()).myFunction();
@@ -151,7 +189,7 @@ describe("util", function() {
 
         Class2.prototype = _.extendPrototype(Class1, {
           myFunction: function() {
-            this.super("myFunction", 1, 2, 3);
+            this._super("myFunction", [1, 2, 3]);
           }
         });
         (new Class2()).myFunction();
@@ -164,7 +202,7 @@ describe("util", function() {
 
         Class2.prototype = _.extendPrototype(Class1, {
           myFunction: function() {
-            this.super("myFunction");
+            this._super("myFunction");
           }
         });
         var instance = new Class2();
@@ -179,13 +217,14 @@ describe("util", function() {
 
         Class2.prototype = _.extendPrototype(Class1, {
           myFunction: function() {
-            return this.super("myFunction") + 1;
+            return this._super("myFunction") + 1;
           }
         });
         var instance = new Class2();
         var result = instance.myFunction();
         expect(result).toBe(24);
       });
+
     });
 
   });

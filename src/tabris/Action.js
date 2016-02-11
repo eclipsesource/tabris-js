@@ -29,8 +29,8 @@ tabris.registerWidget("Action", {
     }
   },
 
-  _create: function(properties) {
-    this.super("_create", properties);
+  _create: function() {
+    this._super("_create", arguments);
     tabris.ui.append(this);
     return this;
   }

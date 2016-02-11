@@ -82,7 +82,7 @@
     _setProperties: function(properties, options) {
       // items property depends on itemText, selection/selectionIndex depend on items
       var deferred = ["items", "selection", "selectionIndex"];
-      this.super("_setProperties", _.omit(properties, deferred), options);
+      this._super("_setProperties", [_.omit(properties, deferred)].concat(_.drop(arguments)));
       deferred.forEach(function(name) {
         if (name in properties) {
           this._setProperty(name, properties[name], options);

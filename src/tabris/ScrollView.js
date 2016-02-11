@@ -61,7 +61,7 @@ tabris.registerWidget("ScrollView", {
   },
 
   _create: function(properties) {
-    this.super("_create", properties);
+    this._super("_create", arguments);
     var style = properties.direction === "horizontal" ? ["H_SCROLL"] : ["V_SCROLL"];
     this._nativeSet("style", style);
     this._scrollBar = tabris.create("_ScrollBar", {
