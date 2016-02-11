@@ -1,18 +1,17 @@
 (function() {
 
-  _.fontStringToArray = function(str) {
-    var result = [[], 0, false, false];
+  _.fontStringToObject = function(str) {
+    var result = {family: [], size: 0, style: "normal", weight: "normal"};
     var parts = str.split(/(?:\s|^)\d+px(?:\s|$)/);
     checkTruthy(parts.length === 2 || parts.length === 1, "Invalid font syntax");
-    result[1] = parseInt(/(?:\s|^)(\d+)px(?:\s|$)/.exec(str)[1], 10);
+    result.size = parseInt(/(?:\s|^)(\d+)px(?:\s|$)/.exec(str)[1], 10);
     parseStyles(result, parts[0]);
     parseFamily(result, parts[1]);
     return result;
   };
 
-  _.fontArrayToString = function(fontArr) {
-    return (fontArr[3] ? "italic " : "") + (fontArr[2] ? "bold " : "") +
-        (fontArr[1] + "px") + (fontArr[0][0] ? " " : "") + (fontArr[0].join(", "));
+  _.fontObjectToString = function(font) {
+    return [font.style, font.weight, font.size + "px", font.family.join(", ")].join(" ").trim();
   };
 
   function parseStyles(fontArr, styles) {
@@ -21,12 +20,16 @@
     styleArr.forEach(function(property) {
       switch (property.trim()) {
         case "italic":
-          checkTruthy(fontArr[3] === false, "Invalid font variant");
-          fontArr[3] = true;
+          checkTruthy(fontArr.style === "normal", "Invalid font variant");
+          fontArr.style = "italic";
           break;
+        case "black":
         case "bold":
-          checkTruthy(fontArr[2] === false, "Invalid font weight");
-          fontArr[2] = true;
+        case "medium":
+        case "thin":
+        case "light":
+          checkTruthy(fontArr.weight === "normal", "Invalid font weight");
+          fontArr.weight = property.trim();
           break;
         case "normal":
         case "":
@@ -43,7 +46,7 @@
     (family ? family.split(",") : []).forEach(function(name) {
       var valid = /(?:^\s*[^\"\']+\s*$)|(?:^\s*\"[^\"\']+\"\s*$)|(?:^\s*\'[^\"\']+\'\s*$)/.exec(name);
       checkTruthy(valid, "Invalid font family: " + name);
-      fontArr[0].push(/^\s*[\"\']?([^\"\']*)/.exec(name)[1].trim());
+      fontArr.family.push(/^\s*[\"\']?([^\"\']*)/.exec(name)[1].trim());
     });
   }
 

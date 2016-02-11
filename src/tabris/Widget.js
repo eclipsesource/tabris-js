@@ -305,7 +305,8 @@
             this._nativeSet(name, value === undefined ? null : value);
             this._storeProperty(name, value, options);
           }
-        }
+        },
+        default: null
       },
       backgroundImage: "image",
       bounds: {

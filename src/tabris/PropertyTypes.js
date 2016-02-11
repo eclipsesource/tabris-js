@@ -85,14 +85,14 @@
         if (value === "initial") {
           return undefined;
         }
-        return _.fontStringToArray(value);
+        return _.fontStringToObject(value);
       },
       decode: function(value) {
         if (!value) {
           // NOTE: workaround to allow triggering a change event when setting font to "initial"
           return "initial";
         }
-        return _.fontArrayToString(value);
+        return _.fontObjectToString(value);
       }
     },
 

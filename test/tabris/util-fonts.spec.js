@@ -1,29 +1,29 @@
 describe("_-fonts", function() {
 
-  describe("fontStringToArray", function() {
+  describe("fontStringToObject", function() {
 
     var parse = function(str) {
-      return _.fontStringToArray(str);
+      return _.fontStringToObject(str);
     };
 
     var parsing = function(str) {
       return function() {
-        return _.fontStringToArray(str);
+        return _.fontStringToObject(str);
       };
     };
 
     it("parses valid sizes", function() {
-      expect(parse("12px")[1]).toBe(12);
-      expect(parse("12px 20px")[1]).toBe(12);
-      expect(parse("8px ")[1]).toBe(8);
-      expect(parse(" 18px")[1]).toBe(18);
-      expect(parse("  50px  ")[1]).toBe(50);
-      expect(parse("12px")[1]).toBe(12);
-      expect(parse("italic 12px")[1]).toBe(12);
-      expect(parse("bold italic 12px")[1]).toBe(12);
-      expect(parse("12px Arial, Fantasy")[1]).toBe(12);
-      expect(parse("12px 'Times New Roman', Arial")[1]).toBe(12);
-      expect(parse("12px \"Times New Roman\", Arial")[1]).toBe(12);
+      expect(parse("12px").size).toBe(12);
+      expect(parse("12px 20px").size).toBe(12);
+      expect(parse("8px ").size).toBe(8);
+      expect(parse(" 18px").size).toBe(18);
+      expect(parse("  50px  ").size).toBe(50);
+      expect(parse("12px").size).toBe(12);
+      expect(parse("italic 12px").size).toBe(12);
+      expect(parse("bold italic 12px").size).toBe(12);
+      expect(parse("12px Arial, Fantasy").size).toBe(12);
+      expect(parse("12px 'Times New Roman', Arial").size).toBe(12);
+      expect(parse("12px \"Times New Roman\", Arial").size).toBe(12);
     });
 
     it("throws error for strings without valid size", function() {
@@ -38,27 +38,28 @@ describe("_-fonts", function() {
     });
 
     it("parses valid styles", function() {
-      expect(parse("italic 12px")[3]).toBe(true);
-      expect(parse("bold italic 12px")[3]).toBe(true);
-      expect(parse("italic bold 12px")[3]).toBe(true);
-      expect(parse("italic bold 12px Arial, Times")[3]).toBe(true);
-      expect(parse("normal normal 12px")[3]).toBe(false);
-      expect(parse("bold normal 12px")[3]).toBe(false);
-      expect(parse("normal 12px")[3]).toBe(false);
-      expect(parse("12px")[3]).toBe(false);
-      expect(parse("12px italic")[3]).toBe(false);
+      expect(parse("italic 12px").style).toBe("italic");
+      expect(parse("bold italic 12px").style).toBe("italic");
+      expect(parse("italic bold 12px").style).toBe("italic");
+      expect(parse("italic bold 12px Arial, Times").style).toBe("italic");
+      expect(parse("normal normal 12px").style).toBe("normal");
+      expect(parse("bold normal 12px").style).toBe("normal");
+      expect(parse("normal 12px").style).toBe("normal");
+      expect(parse("12px").style).toBe("normal");
+      expect(parse("12px italic").style).toBe("normal");
     });
 
     it("parses valid weight", function() {
-      expect(parse("bold 12px")[2]).toBe(true);
-      expect(parse("bold   italic 12px")[2]).toBe(true);
-      expect(parse("  italic bold 12px")[2]).toBe(true);
-      expect(parse(" italic  bold 12px Arial, Times")[2]).toBe(true);
-      expect(parse("normal normal 12px")[2]).toBe(false);
-      expect(parse("italic normal 12px")[2]).toBe(false);
-      expect(parse("normal 12px")[2]).toBe(false);
-      expect(parse("12px")[2]).toBe(false);
-      expect(parse("12px bold")[2]).toBe(false);
+      expect(parse("bold 12px").weight).toBe("bold");
+      expect(parse("black 12px").weight).toBe("black");
+      expect(parse("light   italic 12px").weight).toBe("light");
+      expect(parse("  italic thin 12px").weight).toBe("thin");
+      expect(parse(" italic  medium 12px Arial, Times").weight).toBe("medium");
+      expect(parse("normal normal 12px").weight).toBe("normal");
+      expect(parse("italic normal 12px").weight).toBe("normal");
+      expect(parse("normal 12px").weight).toBe("normal");
+      expect(parse("12px").weight).toBe("normal");
+      expect(parse("12px bold").weight).toBe("normal");
     });
 
     it("throws error for strings with invalid styles", function() {
@@ -74,16 +75,16 @@ describe("_-fonts", function() {
     });
 
     it("parses valid font families", function() {
-      expect(parse("12px  ")[0]).toEqual([""]);
-      expect(parse("12px Arial")[0]).toEqual(["Arial"]);
-      expect(parse("bold italic 12px Arial")[0]).toEqual(["Arial"]);
-      expect(parse("12px Arial, Fantasy")[0]).toEqual(["Arial", "Fantasy"]);
-      expect(parse("12px Times New Roman,Fantasy")[0]).toEqual(["Times New Roman", "Fantasy"]);
-      expect(parse("12px   Arial ,   Fantasy")[0]).toEqual(["Arial", "Fantasy"]);
-      expect(parse("12px bold italic")[0]).toEqual(["bold italic"]);
-      expect(parse("12px Arial, Times New Roman ,Fantasy")[0])
+      expect(parse("12px  ").family).toEqual([""]);
+      expect(parse("12px Arial").family).toEqual(["Arial"]);
+      expect(parse("bold italic 12px Arial").family).toEqual(["Arial"]);
+      expect(parse("12px Arial, Fantasy").family).toEqual(["Arial", "Fantasy"]);
+      expect(parse("12px Times New Roman,Fantasy").family).toEqual(["Times New Roman", "Fantasy"]);
+      expect(parse("12px   Arial ,   Fantasy").family).toEqual(["Arial", "Fantasy"]);
+      expect(parse("12px bold italic").family).toEqual(["bold italic"]);
+      expect(parse("12px Arial, Times New Roman ,Fantasy").family)
           .toEqual(["Arial", "Times New Roman", "Fantasy"]);
-      expect(parse("12px ' Arial ', \"Times New Roman\",Fantasy")[0])
+      expect(parse("12px ' Arial ', \"Times New Roman\",Fantasy").family)
           .toEqual(["Arial", "Times New Roman", "Fantasy"]);
     });
 
@@ -102,21 +103,31 @@ describe("_-fonts", function() {
 
   });
 
-  describe("fontArrayToString", function() {
+  describe("fontObjectToString", function() {
 
     var decode = function(arr) {
-      return _.fontArrayToString(arr);
+      return _.fontObjectToString(arr);
     };
 
-    it("creates string from array", function() {
-      expect(decode([["Arial"], 12, false, false])).toBe("12px Arial");
-      expect(decode([["Arial", "Times New Roman"], 12, false, false]))
-          .toBe("12px Arial, Times New Roman");
-      expect(decode([[""], 12, false, false])).toBe("12px");
-      expect(decode([[""], 12, true, false])).toBe("bold 12px");
-      expect(decode([[""], 12, false, true])).toBe("italic 12px");
-      expect(decode([[""], 12, true, true])).toBe("italic bold 12px");
-      expect(decode([["Arial"], 12, true, true])).toBe("italic bold 12px Arial");
+    it("creates string from object", function() {
+      expect(decode({family: ["Arial"], size: 12, weight: "normal", style: "normal"}))
+        .toBe("normal normal 12px Arial");
+      expect(decode({
+        family: ["Arial", "Times New Roman"],
+        size: 12,
+        weight: "normal",
+        style: "normal"
+      })).toBe("normal normal 12px Arial, Times New Roman");
+      expect(decode({family: [""], size: 12, weight: "normal", style: "normal"}))
+        .toBe("normal normal 12px");
+      expect(decode({family: [""], size: 12, weight: "bold", style: "normal"}))
+        .toBe("normal bold 12px");
+      expect(decode({family: [""], size: 12, weight: "normal", style: "italic"}))
+        .toBe("italic normal 12px");
+      expect(decode({family: [""], size: 12, weight: "thin", style: "italic"}))
+        .toBe("italic thin 12px");
+      expect(decode({family: ["Arial"], size: 12, weight: "medium", style: "italic"}))
+        .toBe("italic medium 12px Arial");
     });
 
   });

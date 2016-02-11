@@ -47,11 +47,25 @@ describe("Widget", function() {
       expect(call.properties.background).toEqual([1, 2, 3, 128]);
     });
 
-    it("translates font string to array", function() {
+    it("translates font string to object", function() {
       widget.set({font: "12px Arial"});
 
       var call = nativeBridge.calls({op: "set"})[0];
-      expect(call.properties.font).toEqual([["Arial"], 12, false, false]);
+      expect(call.properties.font)
+        .toEqual({family: ["Arial"], size: 12, style: "normal", weight: "normal"});
+    });
+
+    it("normalizes font string", function() {
+      widget.set({font: "bold italic   12px Arial"});
+
+      expect(widget.get("font")).toEqual("italic bold 12px Arial");
+    });
+
+    it("returns 'initial' when no value is cached", function() {
+      spyOn(nativeBridge, "get");
+
+      expect(widget.get("font")).toEqual("initial");
+      expect(nativeBridge.get).not.toHaveBeenCalled();
     });
 
     it("translates backgroundImage to array", function() {
@@ -730,14 +744,6 @@ describe("Widget", function() {
       var result = widget.get("background");
 
       expect(result).toBe("rgba(0, 0, 0, 0)");
-    });
-
-    it("translates font to string", function() {
-      spyOn(nativeBridge, "get").and.returnValue([["Arial"], 12, true, true]);
-
-      var result = widget.get("font");
-
-      expect(result).toBe("italic bold 12px Arial");
     });
 
     it("translates bounds to object", function() {
