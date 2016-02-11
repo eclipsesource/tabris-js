@@ -31,6 +31,9 @@
         throw new Error("Type already registered: " + type);
       }
       tabris[type] = function(properties) {
+        if (!(this instanceof tabris[type])) {
+          return new tabris[type](properties);
+        }
         if (tabris[type]._cid) {
           tabris.Proxy.call(this, tabris[type]._cid);
         } else {

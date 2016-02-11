@@ -289,6 +289,13 @@ describe("tabris", function() {
       expect(createCall.properties.foo).toBe(23);
     });
 
+    it("can be used as factory", function() {
+      var instance = tabris.TestType({foo: 42});
+
+      expect(instance).toEqual(jasmine.any(tabris.TestType));
+      expect(instance.get("foo")).toBe(42);
+    });
+
   });
 
   describe("constructors for singletons", function() {
