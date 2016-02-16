@@ -189,8 +189,7 @@
 
   var hasAndroidResizeBug;
   tabris.load(function() {
-    hasAndroidResizeBug = tabris.device.get("platform") === "Android" &&
-                          tabris.device.get("version") <= 17;
+    hasAndroidResizeBug = device.platform === "Android" && device.version <= 17;
   });
 
   var layoutAccess = {
