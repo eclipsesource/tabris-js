@@ -1,6 +1,13 @@
 {
   "name": "tabris",
   "version": "1.7.0",
+  "description": "Mobile apps with native UIs in JavaScript",
+  "keywords": [
+    "native",
+    "mobile",
+    "ios",
+    "android"
+  ],
   "license": "BSD-3-Clause",
   "homepage": "http://tabrisjs.com/",
   "repository": {
