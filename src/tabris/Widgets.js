@@ -1,6 +1,12 @@
 (function() {
 
-  tabris.Widgets = {
+  tabris.Widget = function() {
+    throw new Error("Cannot instantiate abstract Widget");
+  };
+
+  var superProto = tabris.Proxy.prototype;
+
+  tabris.Widget.prototype = _.extendPrototype(tabris.Proxy, {
 
     append: function() {
       this._checkDisposed();
@@ -148,7 +154,7 @@
     },
 
     _getEventConfig: function(type) {
-      var result = this._super("_getEventConfig", arguments);
+      var result = superProto._getEventConfig.apply(this, arguments);
       if (!result && this.get("gestures")[type]) {
         return getGestureEventConfig(type);
       }
@@ -173,18 +179,20 @@
       join: function() {
         return "";
       }
-    }
+    },
 
-  };
+    animate: tabris._Animation.animate
+
+  });
 
   tabris.registerWidget = function(type, members) {
-    members = _.extend({animate: tabris._Animation.animate}, tabris.Widgets, members);
+    members = _.extend({}, members);
     members._events = _.extend({}, tabris.registerWidget._defaultEvents, members._events || {});
     if (members._properties !== true) {
       var defaultProperties = tabris.registerWidget._defaultProperties;
       members._properties = _.extend({}, defaultProperties, members._properties || {});
     }
-    tabris.registerType(type, members);
+    tabris.registerType(type, members, tabris.Widget);
   };
 
   var hasAndroidResizeBug;

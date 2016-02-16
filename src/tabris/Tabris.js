@@ -26,7 +26,7 @@
       return new tabris[type](properties || {});
     },
 
-    registerType: function(type, members) {
+    registerType: function(type, members, superType) {
       if (type in tabris) {
         throw new Error("Type already registered: " + type);
       }
@@ -53,7 +53,7 @@
       var superProto = _.omit(members, Object.keys(staticMembers));
       superProto.type = type;
       superProto.constructor = tabris[type]; // _.extendPrototype can not provide the original
-      tabris[type].prototype = _.extendPrototype(tabris.Proxy, superProto);
+      tabris[type].prototype = _.extendPrototype(superType || tabris.Proxy, superProto);
     },
 
     version: "${VERSION}",

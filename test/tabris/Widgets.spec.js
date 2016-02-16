@@ -44,9 +44,17 @@ describe("Widgets", function() {
       );
     });
 
+    it("created widgets are instanceof Widget", function() {
+      tabris.registerWidget("TestType", {});
+
+      var instance = new tabris.TestType();
+
+      expect(instance).toEqual(jasmine.any(tabris.Widget));
+    });
+
   });
 
-  describe("any", function() {
+  describe("Widget", function() {
 
     var widget;
 
@@ -54,6 +62,17 @@ describe("Widgets", function() {
       tabris.registerWidget("TestType", {});
       widget = tabris.create("TestType");
       nativeBridge.resetCalls();
+    });
+
+    it("constructor prevents instantiation", function() {
+      expect(function() {
+        /*jshint nonew: false */
+        new tabris.Widget();
+      }).toThrowError("Cannot instantiate abstract Widget");
+    });
+
+    it("is a Proxy instance", function() {
+      expect(widget).toEqual(jasmine.any(tabris.Widget));
     });
 
     it("translates textColor and background colors to arrays", function() {

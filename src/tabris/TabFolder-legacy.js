@@ -160,7 +160,7 @@ tabris.load(function() {
         if (!(parent instanceof tabris.TabFolder)) {
           throw new Error("Tab must be a child of TabFolder");
         }
-        tabris.Widgets._setParent.call(this, parent);
+        tabris.Widget.prototype._setParent.call(this, parent);
         this._tabItem = tabris.create("_TabItem", _.extend({
           control: this.cid,
           index: parent._getItems().length

@@ -1,8 +1,7 @@
 {
   "type": "Widget",
-  "title": "Widget API",
+  "description": "Base class for all widgets",
   "include": ["Events", "Properties"],
-  "description": "API supported by all widgets.",
   "methods": {
     "children": [
       {
