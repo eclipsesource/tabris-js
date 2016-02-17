@@ -5,7 +5,7 @@
   "properties": {
     "url": {
       "type": "string",
-      "description": "The URL of the web page to display. Returns empty string when content from *html* property is displayed."
+      "description": "The URL of the web page to display. Relative URLs are resolved relative to 'package.json'. Returns empty string when content from *html* property is displayed."
     },
     "html": {
       "type": "string",
