@@ -41,11 +41,12 @@
     }
   };
 
-  tabris.device = new tabris._Device();
-
-  if (typeof window !== "undefined") {
-    tabris._publishDeviceProperties(window);
-  }
+  tabris.load(function() {
+    tabris.device = new tabris._Device();
+    if (typeof window !== "undefined") {
+      tabris._publishDeviceProperties(window);
+    }
+  });
 
   function createDeviceObject() {
     var dev = {};
