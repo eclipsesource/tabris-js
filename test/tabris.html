@@ -30,27 +30,43 @@
   <script type="text/javascript" src="../src/tabris/Animation.js"></script>
   <script type="text/javascript" src="../src/tabris/GestureRecognizer.js"></script>
   <script type="text/javascript" src="../src/tabris/Device.js"></script>
-  <script type="text/javascript" src="../src/tabris/Widgets.js"></script>
-  <script type="text/javascript" src="../src/tabris/Picker.js"></script>
+  <script type="text/javascript" src="../src/tabris/Widget.js"></script>
   <script type="text/javascript" src="../src/tabris/DOMEvents.js"></script>
   <script type="text/javascript" src="../src/tabris/DOMDocument.js"></script>
   <script type="text/javascript" src="../src/tabris/App.js"></script>
   <script type="text/javascript" src="../src/tabris/WindowTimers.js"></script>
   <script type="text/javascript" src="../src/tabris/WebStorage.js"></script>
   <script type="text/javascript" src="../src/tabris/UI.js"></script>
-  <script type="text/javascript" src="../src/tabris/Drawer.js"></script>
-  <script type="text/javascript" src="../src/tabris/Drawer-legacy.js"></script>
-  <script type="text/javascript" src="../src/tabris/Page.js"></script>
-  <script type="text/javascript" src="../src/tabris/PageSelector.js"></script>
-  <script type="text/javascript" src="../src/tabris/Action.js"></script>
-  <script type="text/javascript" src="../src/tabris/SearchAction.js"></script>
-  <script type="text/javascript" src="../src/tabris/CollectionView.js"></script>
-  <script type="text/javascript" src="../src/tabris/ScrollView.js"></script>
-  <script type="text/javascript" src="../src/tabris/TabFolder.js"></script>
-  <script type="text/javascript" src="../src/tabris/TabFolder-legacy.js"></script>
   <script type="text/javascript" src="../src/tabris/CanvasContext.js"></script>
   <script type="text/javascript" src="../src/tabris/LegacyCanvasContext.js"></script>
   <script type="text/javascript" src="../src/tabris/XMLHttpRequest.js"></script>
+
+  <script type="text/javascript" src="../src/tabris/widgets/Action.js"></script>
+  <script type="text/javascript" src="../src/tabris/widgets/ActivityIndicator.js"></script>
+  <script type="text/javascript" src="../src/tabris/widgets/Button.js"></script>
+  <script type="text/javascript" src="../src/tabris/widgets/Canvas.js"></script>
+  <script type="text/javascript" src="../src/tabris/widgets/CheckBox.js"></script>
+  <script type="text/javascript" src="../src/tabris/widgets/CollectionView.js"></script>
+  <script type="text/javascript" src="../src/tabris/widgets/Composite.js"></script>
+  <script type="text/javascript" src="../src/tabris/widgets/Drawer.js"></script>
+  <script type="text/javascript" src="../src/tabris/widgets/Drawer-legacy.js"></script>
+  <script type="text/javascript" src="../src/tabris/widgets/ImageView.js"></script>
+  <script type="text/javascript" src="../src/tabris/widgets/Page.js"></script>
+  <script type="text/javascript" src="../src/tabris/widgets/PageSelector.js"></script>
+  <script type="text/javascript" src="../src/tabris/widgets/Picker.js"></script>
+  <script type="text/javascript" src="../src/tabris/widgets/ProgressBar.js"></script>
+  <script type="text/javascript" src="../src/tabris/widgets/RadioButton.js"></script>
+  <script type="text/javascript" src="../src/tabris/widgets/ScrollView.js"></script>
+  <script type="text/javascript" src="../src/tabris/widgets/SearchAction.js"></script>
+  <script type="text/javascript" src="../src/tabris/widgets/Slider.js"></script>
+  <script type="text/javascript" src="../src/tabris/widgets/Switch.js"></script>
+  <script type="text/javascript" src="../src/tabris/widgets/TabFolder.js"></script>
+  <script type="text/javascript" src="../src/tabris/widgets/TabFolder-legacy.js"></script>
+  <script type="text/javascript" src="../src/tabris/widgets/TextInput.js"></script>
+  <script type="text/javascript" src="../src/tabris/widgets/TextView.js"></script>
+  <script type="text/javascript" src="../src/tabris/widgets/ToggleButton.js"></script>
+  <script type="text/javascript" src="../src/tabris/widgets/Video.js"></script>
+  <script type="text/javascript" src="../src/tabris/widgets/WebView.js"></script>
 
   <!-- helper files -->
   <script type="text/javascript" src="tabris/jasmineToString.js"></script>
@@ -85,8 +101,7 @@
   <script type="text/javascript" src="tabris/Tabris.spec.js"></script>
   <script type="text/javascript" src="tabris/Proxy.spec.js"></script>
   <script type="text/javascript" src="tabris/Animation.spec.js"></script>
-  <script type="text/javascript" src="tabris/Widgets.spec.js"></script>
-  <script type="text/javascript" src="tabris/Picker.spec.js"></script>
+  <script type="text/javascript" src="tabris/Widget.spec.js"></script>
   <script type="text/javascript" src="tabris/DOMEvents.spec.js"></script>
   <script type="text/javascript" src="tabris/DOMDocument.spec.js"></script>
   <script type="text/javascript" src="tabris/WindowTimers.spec.js"></script>
@@ -96,18 +111,19 @@
   <script type="text/javascript" src="tabris/Layout.spec.js"></script>
   <script type="text/javascript" src="tabris/ProxyCollection.spec.js"></script>
   <script type="text/javascript" src="tabris/UI.spec.js"></script>
-  <script type="text/javascript" src="tabris/Page.spec.js"></script>
-  <script type="text/javascript" src="tabris/PageSelector.spec.js"></script>
-  <script type="text/javascript" src="tabris/Action.spec.js"></script>
-  <script type="text/javascript" src="tabris/SearchAction.spec.js"></script>
-  <script type="text/javascript" src="tabris/CollectionView.spec.js"></script>
-  <script type="text/javascript" src="tabris/ScrollView.spec.js"></script>
-  <script type="text/javascript" src="tabris/TabFolder.spec.js"></script>
   <script type="text/javascript" src="tabris/CanvasContext.spec.js"></script>
   <script type="text/javascript" src="tabris/LegacyCanvasContext.spec.js"></script>
   <script type="text/javascript" src="tabris/XMLHttpRequest.spec.js"></script>
   <script type="text/javascript" src="tabris/gestures.spec.js"></script>
-  <script type="text/javascript" src="tabris/Drawer.spec.js"></script>
+  <script type="text/javascript" src="tabris/widgets/Action.spec.js"></script>
+  <script type="text/javascript" src="tabris/widgets/CollectionView.spec.js"></script>
+  <script type="text/javascript" src="tabris/widgets/Drawer.spec.js"></script>
+  <script type="text/javascript" src="tabris/widgets/Page.spec.js"></script>
+  <script type="text/javascript" src="tabris/widgets/PageSelector.spec.js"></script>
+  <script type="text/javascript" src="tabris/widgets/Picker.spec.js"></script>
+  <script type="text/javascript" src="tabris/widgets/ScrollView.spec.js"></script>
+  <script type="text/javascript" src="tabris/widgets/SearchAction.spec.js"></script>
+  <script type="text/javascript" src="tabris/widgets/TabFolder.spec.js"></script>
 
 </head>
 
