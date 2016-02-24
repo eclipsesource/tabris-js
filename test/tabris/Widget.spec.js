@@ -232,28 +232,27 @@ describe("Widget", function() {
 
     describe("append", function() {
 
-      var widget;
+      var widget, child1, child2, listener, result;
 
       beforeEach(function() {
         widget = new tabris.TestType();
+        child1 = new tabris.TextView();
+        child2 = new tabris.Button();
         nativeBridge.resetCalls();
+        listener = jasmine.createSpy();
       });
 
       describe("when called with a widget", function() {
-        var child, result, listener;
 
         beforeEach(function() {
-          listener = jasmine.createSpy();
-          child = new tabris.TextView();
-          nativeBridge.resetCalls();
           widget.on("addchild", listener);
-          result = widget.append(child);
+          result = widget.append(child1);
         });
 
         it("sets the child's parent", function() {
           var calls = nativeBridge.calls();
           expect(calls.length).toBe(1);
-          expect(calls[0]).toEqual({op: "set", id: child.cid, properties: {parent: widget.cid}});
+          expect(calls[0]).toEqual({op: "set", id: child1.cid, properties: {parent: widget.cid}});
         });
 
         it("returns self to allow chaining", function() {
@@ -263,28 +262,24 @@ describe("Widget", function() {
         it("notifies add listeners with arguments parent, child, event", function() {
           var args = listener.calls.argsFor(0);
           expect(args[0]).toBe(widget);
-          expect(args[1]).toBe(child);
+          expect(args[1]).toBe(child1);
           expect(args[2]).toEqual({});
         });
 
         it("children() contains appended child", function() {
-          expect(widget.children()).toContain(child);
+          expect(widget.children()).toContain(child1);
         });
 
         it("children() returns a safe copy", function() {
           widget.children()[0] = null;
-          expect(widget.children()).toContain(child);
+          expect(widget.children()).toContain(child1);
         });
 
       });
 
       describe("when called with multiple proxies", function() {
-        var child1, child2, result;
 
         beforeEach(function() {
-          child1 = new tabris.TextView();
-          child2 = new tabris.Button();
-          nativeBridge.resetCalls();
           result = widget.append(child1, child2);
         });
 
@@ -310,29 +305,48 @@ describe("Widget", function() {
 
       });
 
-      describe("when called with widget collection", function() {
-        var child1, child2, result;
+      describe("when called with an array of widgets", function() {
 
         beforeEach(function() {
-          child1 = new tabris.TextView();
-          child2 = new tabris.TextView();
-          nativeBridge.resetCalls();
-          result = widget.append(new tabris.ProxyCollection([child1, child2]));
+          result = widget.append([child1, child2]);
         });
 
-        it("sets the children's parent", function() {
+        it("sets the widgets' parent", function() {
           var calls = nativeBridge.calls();
           expect(calls.length).toBe(2);
+          expect(calls[0]).toEqual({op: "set", id: child1.cid, properties: {parent: widget.cid}});
           expect(calls[1]).toEqual({op: "set", id: child2.cid, properties: {parent: widget.cid}});
+        });
+
+        it("adds the widgets to children list", function() {
+          expect(widget.children().toArray()).toEqual([child1, child2]);
         });
 
         it("returns self to allow chaining", function() {
           expect(result).toBe(widget);
         });
 
-        it("children() contains appended children", function() {
-          expect(widget.children()).toContain(child1);
-          expect(widget.children()).toContain(child2);
+      });
+
+      describe("when called with a widget collection", function() {
+
+        beforeEach(function() {
+          result = widget.append(new tabris.ProxyCollection([child1, child2]));
+        });
+
+        it("sets the widgets' parent", function() {
+          var calls = nativeBridge.calls();
+          expect(calls.length).toBe(2);
+          expect(calls[0]).toEqual({op: "set", id: child1.cid, properties: {parent: widget.cid}});
+          expect(calls[1]).toEqual({op: "set", id: child2.cid, properties: {parent: widget.cid}});
+        });
+
+        it("adds the widgets to children list", function() {
+          expect(widget.children().toArray()).toEqual([child1, child2]);
+        });
+
+        it("returns self to allow chaining", function() {
+          expect(result).toBe(widget);
         });
 
       });

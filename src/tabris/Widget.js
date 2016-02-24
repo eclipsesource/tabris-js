@@ -10,12 +10,18 @@
 
     append: function() {
       this._checkDisposed();
-      var proxies = arguments[0] instanceof tabris.ProxyCollection ? arguments[0].toArray() : arguments;
-      for (var i = 0; i < proxies.length; i++) {
-        if (!(proxies[i] instanceof tabris.Proxy)) {
+      var accept = function(proxy) {
+        if (!(proxy instanceof tabris.Proxy)) {
           throw new Error("Cannot append non-widget");
         }
-        proxies[i]._setParent(this);
+        proxy._setParent(this);
+      }.bind(this);
+      if (arguments[0] instanceof tabris.ProxyCollection) {
+        arguments[0].toArray().forEach(accept);
+      } else if (Array.isArray(arguments[0])) {
+        arguments[0].forEach(accept);
+      } else {
+        Array.prototype.forEach.call(arguments, accept);
       }
       return this;
     },
