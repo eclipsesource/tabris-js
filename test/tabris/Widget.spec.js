@@ -1,75 +1,36 @@
-describe("Widgets", function() {
+describe("Widget", function() {
   /*globals _:false*/
 
+  var widget;
   var nativeBridge;
 
   beforeEach(function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._init(nativeBridge);
+    tabris.registerWidget("TestType", {
+      _supportsChildren: true
+    });
+    widget = new tabris.TestType();
+    nativeBridge.resetCalls();
   });
 
   afterEach(function() {
     delete tabris.TestType;
   });
 
-  describe("tabris.registerWidget", function() {
+  describe("constructor", function() {
 
-    it("adds default events copy", function() {
-      tabris.registerWidget("TestType", {});
-      expect(tabris.TestType._events.resize).toEqual(jasmine.any(Object));
-      expect(tabris.TestType._events).not.toBe(tabris.registerWidget._defaultEvents);
-    });
-
-    it("extends default events", function() {
-      var custom = {foo: {name: "bar"}, touchstart: {name: "touchstart"}};
-      tabris.registerWidget("TestType", {_events: custom});
-      expect(tabris.TestType._events).toEqual(
-        _.extend({}, tabris.TestType._events, custom)
-      );
-    });
-
-    it("adds default properties copy", function() {
-      tabris.registerWidget("TestType", {});
-      expect(tabris.TestType._properties).toEqual(tabris.registerWidget._defaultProperties);
-      expect(tabris.TestType._properties).not.toBe(tabris.registerWidget._defaultProperties);
-    });
-
-    it("extends default properties", function() {
-      var custom = {foo: "any", enabled: {type: "color"}};
-      var normalized = tabris.registerType.normalizePropertiesMap(custom);
-      tabris.registerWidget("TestType", {_properties: custom});
-      expect(tabris.TestType._properties).toEqual(
-        _.extend({}, tabris.registerWidget._defaultProperties, normalized)
-      );
-    });
-
-    it("created widgets are instanceof Widget", function() {
-      tabris.registerWidget("TestType", {});
-
-      var instance = new tabris.TestType();
-
-      expect(instance).toEqual(jasmine.any(tabris.Widget));
-    });
-
-  });
-
-  describe("Widget", function() {
-
-    var widget;
-
-    beforeEach(function() {
-      tabris.registerWidget("TestType", {});
-      widget = tabris.create("TestType");
-      nativeBridge.resetCalls();
-    });
-
-    it("constructor prevents instantiation", function() {
+    it("prevents instantiation", function() {
       expect(function() {
         /*jshint nonew: false */
         new tabris.Widget();
       }).toThrowError("Cannot instantiate abstract Widget");
     });
+
+  });
+
+  describe("instance", function() {
 
     it("is a Proxy instance", function() {
       expect(widget).toEqual(jasmine.any(tabris.Widget));
@@ -132,19 +93,19 @@ describe("Widgets", function() {
       expect(call.properties.font).toBeNull();
     });
 
-    it("stores id property in proxy.id", function() {
+    it("stores id property in widget.id", function() {
       widget.set("id", "foo");
 
       expect(widget.id).toBe("foo");
     });
 
-    it("gets id property from proxy.id", function() {
+    it("gets id property from widget.id", function() {
       widget.set("id", "foo");
 
       expect(widget.get("id")).toBe("foo");
     });
 
-    it("stores class property in proxy.classList", function() {
+    it("stores class property in widget.classList", function() {
       widget.set("class", "foo bar");
 
       expect(widget.classList).toEqual(["foo", "bar"]);
@@ -178,6 +139,494 @@ describe("Widgets", function() {
       });
     });
 
+    describe("dispose", function() {
+
+      var parent, child;
+
+      beforeEach(function() {
+        parent = new tabris.Composite();
+        child = new tabris.TextView().appendTo(parent);
+        nativeBridge.resetCalls();
+      });
+
+      it("disposes children", function() {
+        parent.dispose();
+
+        expect(child.isDisposed()).toBe(true);
+      });
+
+      it("removes from parent", function() {
+        child.dispose();
+
+        expect(parent.children().toArray()).toEqual([]);
+      });
+
+      it("removes parent", function() {
+        child.dispose();
+
+        expect(child.parent()).not.toBeDefined();
+      });
+
+      it("DESTROYs native widget", function() {
+        parent.dispose();
+
+        expect(nativeBridge.calls({op: "destroy", id: parent.cid}).length).toBe(1);
+      });
+
+      it("does not send native DESTROY for children", function() {
+        parent.dispose();
+
+        expect(nativeBridge.calls({op: "destroy", id: child.cid}).length).toBe(0);
+      });
+
+      it("notifies parent's remove listeners", function() {
+        var listener = jasmine.createSpy();
+        parent.on("removechild", listener);
+
+        child.dispose();
+
+        var args = listener.calls.argsFor(0);
+        expect(args[0]).toBe(parent);
+        expect(args[1]).toBe(child);
+        expect(args[2]).toEqual({index: 0});
+      });
+
+      it("notifies all children's dispose listeners", function() {
+        var log = [];
+        var child2 = new tabris.TextView().appendTo(parent);
+        parent.on("dispose", function() {
+          log.push("parent");
+        });
+        child.on("dispose", function() {
+          log.push("child");
+        });
+        child2.on("dispose", function() {
+          log.push("child2");
+        });
+
+        parent.dispose();
+
+        expect(log).toEqual(["parent", "child", "child2"]);
+      });
+
+      it("notifies children's dispose listeners recursively", function() {
+        var log = [];
+        child = new tabris.Composite().appendTo(parent);
+        var grandchild = new tabris.TextView().appendTo(child);
+        parent.on("dispose", function() {
+          log.push("parent");
+        });
+        child.on("dispose", function() {
+          log.push("child");
+        });
+        grandchild.on("dispose", function() {
+          log.push("grandchild");
+        });
+
+        parent.dispose();
+
+        expect(log).toEqual(["parent", "child", "grandchild"]);
+      });
+
+    });
+
+    describe("append", function() {
+
+      var widget;
+
+      beforeEach(function() {
+        widget = new tabris.TestType();
+        nativeBridge.resetCalls();
+      });
+
+      describe("when called with a widget", function() {
+        var child, result, listener;
+
+        beforeEach(function() {
+          listener = jasmine.createSpy();
+          child = new tabris.TextView();
+          nativeBridge.resetCalls();
+          widget.on("addchild", listener);
+          result = widget.append(child);
+        });
+
+        it("sets the child's parent", function() {
+          var calls = nativeBridge.calls();
+          expect(calls.length).toBe(1);
+          expect(calls[0]).toEqual({op: "set", id: child.cid, properties: {parent: widget.cid}});
+        });
+
+        it("returns self to allow chaining", function() {
+          expect(result).toBe(widget);
+        });
+
+        it("notifies add listeners with arguments parent, child, event", function() {
+          var args = listener.calls.argsFor(0);
+          expect(args[0]).toBe(widget);
+          expect(args[1]).toBe(child);
+          expect(args[2]).toEqual({});
+        });
+
+        it("children() contains appended child", function() {
+          expect(widget.children()).toContain(child);
+        });
+
+        it("children() returns a safe copy", function() {
+          widget.children()[0] = null;
+          expect(widget.children()).toContain(child);
+        });
+
+      });
+
+      describe("when called with multiple proxies", function() {
+        var child1, child2, result;
+
+        beforeEach(function() {
+          child1 = new tabris.TextView();
+          child2 = new tabris.Button();
+          nativeBridge.resetCalls();
+          result = widget.append(child1, child2);
+        });
+
+        it("sets the children's parent", function() {
+          var calls = nativeBridge.calls();
+          expect(calls.length).toBe(2);
+          expect(calls[1]).toEqual({op: "set", id: child2.cid, properties: {parent: widget.cid}});
+        });
+
+        it("returns self to allow chaining", function() {
+          expect(result).toBe(widget);
+        });
+
+        it("children() contains appended children", function() {
+          expect(widget.children()).toContain(child1);
+          expect(widget.children()).toContain(child2);
+        });
+
+        it("children() with matcher contains filtered children", function() {
+          expect(widget.children("TextView").toArray()).toEqual([child1]);
+          expect(widget.children("Button").toArray()).toEqual([child2]);
+        });
+
+      });
+
+      describe("when called with widget collection", function() {
+        var child1, child2, result;
+
+        beforeEach(function() {
+          child1 = new tabris.TextView();
+          child2 = new tabris.TextView();
+          nativeBridge.resetCalls();
+          result = widget.append(new tabris.ProxyCollection([child1, child2]));
+        });
+
+        it("sets the children's parent", function() {
+          var calls = nativeBridge.calls();
+          expect(calls.length).toBe(2);
+          expect(calls[1]).toEqual({op: "set", id: child2.cid, properties: {parent: widget.cid}});
+        });
+
+        it("returns self to allow chaining", function() {
+          expect(result).toBe(widget);
+        });
+
+        it("children() contains appended children", function() {
+          expect(widget.children()).toContain(child1);
+          expect(widget.children()).toContain(child2);
+        });
+
+      });
+
+      describe("when called with non-widget", function() {
+
+        it("throws an error", function() {
+          expect(function() {
+            widget.append({});
+          }).toThrowError("Cannot append non-widget");
+        });
+
+      });
+
+      describe("when children are not supported", function() {
+
+        it("throws an error", function() {
+          tabris.TestType._supportsChildren = false;
+          var child = new tabris.TextView();
+
+          expect(function() {
+            widget.append(child);
+          }).toThrowError("TestType cannot contain children");
+          expect(widget.children()).not.toContain(child);
+        });
+
+      });
+
+      describe("when called with children of unsupported type", function() {
+
+        it("logs an error", function() {
+          tabris.TestType._supportsChildren = function() { return false; };
+          var child = new tabris.TextView();
+
+          expect(function() {
+            widget.append(child);
+          }).toThrowError("TestType cannot contain children of type TextView");
+          expect(widget.children()).not.toContain(child);
+        });
+
+      });
+
+    });
+
+    describe("appendTo", function() {
+
+      var parent1, result;
+
+      beforeEach(function() {
+        parent1 = new tabris.Composite();
+        nativeBridge.resetCalls();
+        result = widget.appendTo(parent1);
+      });
+
+      describe("when called with a parent", function() {
+
+        it("returns self to allow chaining", function() {
+          expect(result).toBe(widget);
+        });
+
+        it("sets the widget's parent", function() {
+          var setCall = nativeBridge.calls({op: "set", id: widget.cid})[0];
+          expect(setCall.properties.parent).toEqual(parent1.cid);
+        });
+
+        it("is added to parent's children list", function() {
+          expect(parent1.children()).toContain(widget);
+        });
+
+        it("parent() returns new parent", function() {
+          expect(result.parent()).toBe(parent1);
+        });
+
+      });
+
+      describe("when called with another parent", function() {
+
+        var parent2;
+
+        beforeEach(function() {
+          parent2 = new tabris.Composite();
+          widget.appendTo(parent2);
+        });
+
+        it("is removed from old parent's children list", function() {
+          expect(parent1.children()).not.toContain(widget);
+        });
+
+        it("is added to new parent's children list", function() {
+          expect(parent2.children()).toContain(widget);
+        });
+      });
+
+      describe("when called with a collection", function() {
+
+        var parent1, parent2, result;
+
+        beforeEach(function() {
+          parent1 = new tabris.Composite();
+          parent2 = new tabris.Composite();
+          nativeBridge.resetCalls();
+          result = widget.appendTo(new tabris.ProxyCollection([parent1, parent2]));
+        });
+
+        it("returns self to allow chaining", function() {
+          expect(result).toBe(widget);
+        });
+
+        it("first entry is added to parent's children list", function() {
+          expect(parent1.children()).toContain(widget);
+        });
+
+        it("other entry not added to parent's children list", function() {
+          expect(parent2.children()).not.toContain(widget);
+        });
+
+      });
+
+      describe("when called with non-widget", function() {
+
+        it("throws an error", function() {
+          expect(function() {
+            widget.appendTo({});
+          }).toThrowError("Cannot append to non-widget");
+        });
+
+      });
+
+    });
+
+    describe("insertBefore", function() {
+
+      var parent1, parent2, other;
+
+      beforeEach(function() {
+        parent1 = new tabris.Composite();
+        parent2 = new tabris.Composite();
+      });
+
+      it("throws when disposed", function() {
+        expect(function() {
+          widget.insertBefore({});
+        }).toThrowError("Cannot insert before non-widget");
+      });
+
+      it("throws when called with a non-widget", function() {
+        expect(function() {
+          widget.insertBefore({});
+        }).toThrowError("Cannot insert before non-widget");
+      });
+
+      it("throws when called with an empty widget collection", function() {
+        expect(function() {
+          widget.insertBefore(parent1.find(".missing"));
+        }).toThrowError("Cannot insert before non-widget");
+      });
+
+      describe("when called with a widget", function() {
+
+        beforeEach(function() {
+          widget.appendTo(parent1);
+          other = new tabris.Button().appendTo(parent2);
+          widget.insertBefore(other);
+        });
+
+        it("removes widget from its old parent's children list", function() {
+          expect(parent1.children()).not.toContain(widget);
+        });
+
+        it("adds widget to new parent's children list", function() {
+          expect(parent2.children()).toContain(widget);
+        });
+
+        it("adds widget directly before the given widget", function() {
+          var children = parent2.children();
+          expect(children.indexOf(widget)).toBe(children.indexOf(other) - 1);
+        });
+
+      });
+
+      describe("when called with a sibling widget", function() {
+
+        beforeEach(function() {
+          other = new tabris.Button().appendTo(parent1);
+          widget.appendTo(parent1);
+          widget.insertBefore(other);
+        });
+
+        it("re-orders widgets", function() {
+          expect(parent1.children().toArray()).toEqual([widget, other]);
+        });
+
+      });
+
+      describe("when called with a widget collection", function() {
+
+        beforeEach(function() {
+          new tabris.Button().appendTo(parent1);
+          new tabris.Button().appendTo(parent2);
+          var grandparent = new tabris.Composite().append(parent1, parent2);
+          widget.insertBefore(grandparent.find("Button"));
+        });
+
+        it("inserts only before the first the widget of the collection", function() {
+          expect(parent1.children()).toContain(widget);
+          expect(parent2.children()).not.toContain(widget);
+        });
+
+      });
+
+    });
+
+    describe("insertAfter", function() {
+
+      var parent1, parent2, other;
+
+      beforeEach(function() {
+        parent1 = new tabris.Composite();
+        parent2 = new tabris.Composite();
+      });
+
+      it("throws when disposed", function() {
+        expect(function() {
+          widget.insertAfter({});
+        }).toThrowError("Cannot insert after non-widget");
+      });
+
+      it("throws when called with a non-widget", function() {
+        expect(function() {
+          widget.insertAfter({});
+        }).toThrowError("Cannot insert after non-widget");
+      });
+
+      it("throws when called with an empty widget collection", function() {
+        expect(function() {
+          widget.insertAfter(parent1.find(".missing"));
+        }).toThrowError("Cannot insert after non-widget");
+      });
+
+      describe("when called with a widget", function() {
+
+        beforeEach(function() {
+          widget.appendTo(parent1);
+          other = new tabris.Button().appendTo(parent2);
+          widget.insertAfter(other);
+        });
+
+        it("removes widget from its old parent's children list", function() {
+          expect(parent1.children()).not.toContain(widget);
+        });
+
+        it("adds widget to new parent's children list", function() {
+          expect(parent2.children()).toContain(widget);
+        });
+
+        it("adds widget directly after the given widget", function() {
+          var children = parent2.children();
+          expect(children.indexOf(widget)).toBe(children.indexOf(other) + 1);
+        });
+
+      });
+
+      describe("when called with a sibling widget", function() {
+
+        beforeEach(function() {
+          widget.appendTo(parent1);
+          other = new tabris.Button().appendTo(parent1);
+          widget.insertAfter(other);
+        });
+
+        it("re-orders widgets", function() {
+          expect(parent1.children().toArray()).toEqual([other, widget]);
+        });
+
+      });
+
+      describe("when called with a widget collection", function() {
+
+        beforeEach(function() {
+          new tabris.Button().appendTo(parent1);
+          new tabris.Button().appendTo(parent2);
+          var grandparent = new tabris.Composite().append(parent1, parent2);
+          widget.insertAfter(grandparent.find("Button"));
+        });
+
+        it("inserts only before the first the widget of the collection", function() {
+          expect(parent1.children()).toContain(widget);
+          expect(parent2.children()).not.toContain(widget);
+        });
+
+      });
+
+    });
+
   });
 
   describe("get default decoding", function() {
@@ -185,8 +634,7 @@ describe("Widgets", function() {
     var widget;
 
     beforeEach(function() {
-      tabris.registerWidget("TestType", {});
-      widget = tabris.create("TestType");
+      widget = new tabris.TestType();
       nativeBridge.resetCalls();
     });
 
@@ -253,10 +701,9 @@ describe("Widgets", function() {
     var parent, widget, other;
 
     beforeEach(function() {
-      tabris.registerWidget("TestType", {});
-      parent = tabris.create("Composite");
-      widget = tabris.create("TestType").appendTo(parent);
-      other = tabris.create("TestType", {id: "other"}).appendTo(parent);
+      parent = new tabris.Composite();
+      widget = new tabris.TestType().appendTo(parent);
+      other = new tabris.TestType({id: "other"}).appendTo(parent);
       nativeBridge.resetCalls();
     });
 
@@ -309,7 +756,7 @@ describe("Widgets", function() {
     it("SET layoutData after widget referenced by selector is added to parent", function() {
       other.dispose();
       widget.set("layoutData", {left: 23, baseline: "#other", right: ["#other", 42]});
-      other = tabris.create("TestType", {id: "other"}).appendTo(parent);
+      other = new tabris.TestType({id: "other"}).appendTo(parent);
 
       var call = nativeBridge.calls({op: "set", id: widget.cid})[0];
       var expected = {left: 23, baseline: other.cid, right: [other.cid, 42]};
@@ -317,7 +764,7 @@ describe("Widgets", function() {
     });
 
     it("SET layoutData after self is added to parent", function() {
-      widget = tabris.create("TestType");
+      widget = new tabris.TestType();
 
       widget.set("layoutData", {left: 23, baseline: "#other", right: ["#other", 42]});
       widget.appendTo(parent);
@@ -341,7 +788,7 @@ describe("Widgets", function() {
       widget.set("layoutData", {right: "#other"});
       var withoutSibling = nativeBridge.calls({op: "set"});
       var retry = nativeBridge.calls({op: "set"});
-      other = tabris.create("TestType", {id: "other"}).appendTo(parent);
+      other = new tabris.TestType({id: "other"}).appendTo(parent);
       var withSibling = nativeBridge.calls({op: "set"});
       var noRetry = nativeBridge.calls({op: "set"});
 
@@ -354,8 +801,8 @@ describe("Widgets", function() {
     });
 
     it("SET layoutData again until selector resolves by setting parent", function() {
-      widget = tabris.create("TestType");
-      var oldParent = tabris.create("Composite");
+      widget = new tabris.TestType();
+      var oldParent = new tabris.Composite();
       widget.appendTo(oldParent);
       nativeBridge.resetCalls();
 
@@ -381,9 +828,9 @@ describe("Widgets", function() {
     var parent, widget, other;
 
     beforeEach(function() {
-      parent = tabris.create("Composite");
-      other = tabris.create("TextView", {id: "other"}).appendTo(parent);
-      widget = tabris.create("TextView").appendTo(parent);
+      parent = new tabris.Composite();
+      other = new tabris.TextView({id: "other"}).appendTo(parent);
+      widget = new tabris.TextView().appendTo(parent);
       nativeBridge.resetCalls();
     });
 
@@ -506,12 +953,12 @@ describe("Widgets", function() {
     var parent, child;
 
     beforeEach(function() {
-      parent = tabris.create("Composite", {});
+      parent = new tabris.Composite();
       tabris.Layout.flushQueue();
     });
 
     it("calls renderLayoutData on children", function() {
-      child = tabris.create("Button", {
+      child = new tabris.Button({
         layoutData: {left: 23, top: 42}
       }).appendTo(parent);
       nativeBridge.resetCalls();
@@ -530,7 +977,7 @@ describe("Widgets", function() {
 
     it("is triggered by appending a child", function() {
       spyOn(parent, "_flushLayout");
-      child = tabris.create("Button", {});
+      child = new tabris.Button();
 
       child.appendTo(parent);
       tabris.Layout.flushQueue();
@@ -539,8 +986,8 @@ describe("Widgets", function() {
     });
 
     it("is triggered by re-parenting a child", function() {
-      var parent2 = tabris.create("Composite", {});
-      child = tabris.create("Button", {}).appendTo(parent);
+      var parent2 = new tabris.Composite();
+      child = new tabris.Button().appendTo(parent);
       spyOn(parent, "_flushLayout");
       spyOn(parent2, "_flushLayout");
 
@@ -551,7 +998,7 @@ describe("Widgets", function() {
     });
 
     it("is triggered by disposing of a child", function() {
-      child = tabris.create("Button", {}).appendTo(parent);
+      child = new tabris.Button().appendTo(parent);
       spyOn(parent, "_flushLayout");
 
       child.dispose();
@@ -562,148 +1009,11 @@ describe("Widgets", function() {
 
   });
 
-  describe("registered types:", function() {
-
-    var getCreate = function() {
-      return nativeBridge.calls({op: "create"})[0];
-    };
-
-    it("ActivityIndicator", function() {
-      tabris.create("ActivityIndicator");
-
-      expect(getCreate().type).toEqual("rwt.widgets.ProgressBar");
-      expect(getCreate().properties).toEqual({style: ["INDETERMINATE"], data: {spinningIndicator: true}});
-    });
-
-    it("Button", function() {
-      var button = tabris.create("Button", {enabled: false});
-
-      expect(getCreate().type).toEqual("rwt.widgets.Button");
-      expect(getCreate().properties).toEqual({style: ["PUSH"], enabled: false});
-      expect(button.get("image")).toBe(null);
-      expect(button.get("alignment")).toBe("center");
-      expect(button.get("text")).toBe("");
-    });
-
-    it("Canvas", function() {
-      tabris.create("Canvas", {});
-
-      expect(getCreate().type).toEqual("rwt.widgets.Canvas");
-    });
-
-    it("CheckBox", function() {
-      var checkBox = tabris.create("CheckBox", {enabled: false});
-
-      expect(getCreate().type).toEqual("rwt.widgets.Button");
-      expect(getCreate().properties).toEqual({style: ["CHECK"], enabled: false});
-      expect(checkBox.get("text")).toBe("");
-    });
-
-    it("Composite", function() {
-      tabris.create("Composite", {});
-
-      expect(getCreate().type).toEqual("rwt.widgets.Composite");
-    });
-
-    it("ImageView", function() {
-      var imageView = tabris.create("ImageView", {});
-
-      expect(getCreate().type).toEqual("tabris.ImageView");
-      expect(imageView.get("image")).toBe(null);
-      expect(imageView.get("scaleMode")).toBe("auto");
-    });
-
-    it("ProgressBar", function() {
-      var progressBar = tabris.create("ProgressBar");
-
-      expect(getCreate().type).toEqual("rwt.widgets.ProgressBar");
-      expect(progressBar.get("minimum")).toBe(0);
-      expect(progressBar.get("maximum")).toBe(100);
-      expect(progressBar.get("selection")).toBe(0);
-      expect(progressBar.get("state")).toBe("normal");
-    });
-
-    it("RadioButton", function() {
-      var radioButton = tabris.create("RadioButton", {enabled: false});
-
-      expect(getCreate().type).toEqual("rwt.widgets.Button");
-      expect(getCreate().properties).toEqual({style: ["RADIO"], enabled: false});
-      expect(radioButton.get("text")).toBe("");
-    });
-
-    it("ToggleButton", function() {
-      var toggleButton = tabris.create("ToggleButton", {enabled: false});
-
-      expect(getCreate().type).toEqual("rwt.widgets.Button");
-      expect(getCreate().properties).toEqual({style: ["TOGGLE"], enabled: false});
-      expect(toggleButton.get("text")).toBe("");
-      expect(toggleButton.get("image")).toBe(null);
-      expect(toggleButton.get("alignment")).toBe("center");
-    });
-
-    it("TextView", function() {
-      var textView = tabris.create("TextView", {text: "foo"});
-
-      expect(getCreate().type).toEqual("tabris.TextView");
-      expect(getCreate().properties).toEqual({text: "foo"});
-      expect(textView.get("alignment")).toBe("left");
-      expect(textView.get("markupEnabled")).toBe(false);
-      expect(textView.get("maxLines")).toBe(null);
-    });
-
-    it("TextView, maxLines: 0 is mapped to null", function() {
-      tabris.create("TextView", {text: "foo", maxLines: 0});
-
-      expect(getCreate().properties.maxLines).toBeNull();
-    });
-
-    it("TextView, maxLines: values <= 0 are mapped to null", function() {
-      tabris.create("TextView", {text: "foo", maxLines: -1});
-
-      expect(getCreate().properties.maxLines).toBeNull();
-    });
-
-    it("Slider", function() {
-      var slider = tabris.create("Slider", {selection: 23});
-
-      expect(getCreate().type).toEqual("rwt.widgets.Scale");
-      expect(getCreate().properties).toEqual({selection: 23});
-      expect(slider.get("minimum")).toBe(0);
-      expect(slider.get("maximum")).toBe(100);
-    });
-
-    it("TextInput", function() {
-      var textInput = tabris.create("TextInput", {text: "foo"});
-
-      expect(getCreate().type).toEqual("tabris.TextInput");
-      expect(getCreate().properties).toEqual({text: "foo"});
-      expect(textInput.get("message")).toBe("");
-      expect(textInput.get("alignment")).toBe("left");
-      expect(textInput.get("keyboard")).toBe("default");
-      expect(textInput.get("autoCorrect")).toBe(false);
-      expect(textInput.get("autoCapitalize")).toBe(false);
-    });
-
-    it("WebView", function() {
-      tabris.create("WebView", {html: "foo"});
-
-      expect(getCreate().type).toEqual("rwt.widgets.Browser");
-      expect(getCreate().properties).toEqual({html: "foo"});
-    });
-
-    it("Switch", function() {
-      tabris.create("Switch", {selection: true});
-
-      expect(getCreate().type).toEqual("tabris.Switch");
-      expect(getCreate().properties).toEqual({checked: true});
-    });
-
-  });
-
   describe("native events:", function() {
 
     var listener, widget;
-    var checkEvent = function(value) {
+
+    function checkEvent(value) {
       expect(listener.calls.count()).toBe(1);
       expect(listener.calls.argsFor(0)[0]).toBe(widget);
       if (arguments.length > 0) {
@@ -712,234 +1022,88 @@ describe("Widgets", function() {
       } else {
         expect(listener.calls.argsFor(0)[1]).toEqual({});
       }
-    };
-    var checkListen = function(event) {
+    }
+
+    function checkListen(event) {
       var listen = nativeBridge.calls({op: "listen", id: widget.cid});
       expect(listen.length).toBe(1);
       expect(listen[0].event).toBe(event);
       expect(listen[0].listen).toBe(true);
-    };
+    }
 
     beforeEach(function() {
       listener = jasmine.createSpy();
     });
 
-    it("Widget change:bounds", function() {
-      widget = tabris.create("CheckBox").on("change:bounds", listener);
+    it("change:bounds", function() {
+      widget = new tabris.CheckBox().on("change:bounds", listener);
+
       tabris._notify(widget.cid, "Resize", {bounds: [1, 2, 3, 4]});
+
       checkEvent({left: 1, top: 2, width: 3, height: 4});
       checkListen("Resize");
     });
 
-    it("Widget resize", function() {
-      widget = tabris.create("CheckBox").on("resize", listener);
+    it("resize", function() {
+      widget = new tabris.CheckBox().on("resize", listener);
+
       tabris._notify(widget.cid, "Resize", {bounds: [1, 2, 3, 4]});
+
       checkEvent({left: 1, top: 2, width: 3, height: 4});
       checkListen("Resize");
-    });
-
-    it("Button select", function() {
-      widget = tabris.create("Button").on("select", listener);
-      tabris._notify(widget.cid, "Selection", {});
-      checkEvent();
-      checkListen("Selection");
-    });
-
-    it("CheckBox select", function() {
-      widget = tabris.create("CheckBox").on("select", listener);
-      tabris._notify(widget.cid, "Selection", {selection: true});
-      checkEvent(true);
-      checkListen("Selection");
-    });
-
-    it("CheckBox change:selection", function() {
-      widget = tabris.create("CheckBox").on("change:selection", listener);
-      tabris._notify(widget.cid, "Selection", {selection: true});
-      checkEvent(true);
-      checkListen("Selection");
-    });
-
-    it("RadioButton select", function() {
-      widget = tabris.create("RadioButton").on("select", listener);
-      tabris._notify(widget.cid, "Selection", {selection: true});
-      checkEvent(true);
-      checkListen("Selection");
-    });
-
-    it("RadioButton change:selection", function() {
-      widget = tabris.create("RadioButton").on("change:selection", listener);
-      tabris._notify(widget.cid, "Selection", {selection: true});
-      checkEvent(true);
-      checkListen("Selection");
-    });
-
-    it("Slider select", function() {
-      widget = tabris.create("Slider").on("select", listener);
-      tabris._notify(widget.cid, "Selection", {selection: 23});
-      checkEvent(23);
-      checkListen("Selection");
-    });
-
-    it("Slider change:selection", function() {
-      widget = tabris.create("RadioButton").on("change:selection", listener);
-      tabris._notify(widget.cid, "Selection", {selection: 23});
-      checkEvent(23);
-      checkListen("Selection");
-    });
-
-    it("TextInput change:text", function() {
-      widget = tabris.create("TextInput").on("change:text", listener);
-      tabris._notify(widget.cid, "modify", {text: "foo"});
-      checkEvent("foo");
-      checkListen("modify");
-    });
-
-    it("ToggleButton select", function() {
-      widget = tabris.create("ToggleButton").on("select", listener);
-      tabris._notify(widget.cid, "Selection", {selection: true});
-      checkEvent(true);
-      checkListen("Selection");
-
-    });
-
-    it("TextInput input", function() {
-      widget = tabris.create("TextInput").on("input", listener);
-      tabris._notify(widget.cid, "modify", {text: "foo"});
-      checkEvent("foo");
-      checkListen("modify");
-    });
-
-    it("TextInput accept", function() {
-      widget = tabris.create("TextInput").on("accept", listener);
-      tabris._notify(widget.cid, "accept", {text: "foo"});
-      checkEvent("foo");
-      checkListen("accept");
-    });
-
-    it("ToggleButton change:selection", function() {
-      widget = tabris.create("ToggleButton").on("change:selection", listener);
-      tabris._notify(widget.cid, "Selection", {selection: true});
-      checkEvent(true);
-      checkListen("Selection");
-    });
-
-    it("Switch change:selection", function() {
-      widget = tabris.create("Switch").on("change:selection", listener);
-
-      tabris._notify(widget.cid, "toggle", {checked: true});
-
-      checkEvent(true);
-      checkListen("toggle");
-    });
-
-    it("Switch change:selection on property change", function() {
-      widget = tabris.create("Switch").on("change:selection", listener);
-
-      widget.set("selection", true);
-
-      checkEvent(true);
-    });
-
-    it("Switch select", function() {
-      widget = tabris.create("Switch").on("select", listener);
-
-      tabris._notify(widget.cid, "toggle", {checked: true});
-
-      checkEvent(true);
-      checkListen("toggle");
     });
 
   });
 
-  describe("dispose", function() {
+});
 
-    var parent, child;
+describe("tabris.registerWidget", function() {
 
-    beforeEach(function() {
-      parent = tabris.create("Composite");
-      child = tabris.create("TextView").appendTo(parent);
-      nativeBridge.resetCalls();
-    });
+  afterEach(function() {
+    delete tabris.TestType;
+  });
 
-    it("disposes children", function() {
-      parent.dispose();
+  it("adds default events copy", function() {
+    tabris.registerWidget("TestType", {});
 
-      expect(child.isDisposed()).toBe(true);
-    });
+    expect(tabris.TestType._events.resize).toEqual(jasmine.any(Object));
+    expect(tabris.TestType._events).not.toBe(tabris.registerWidget._defaultEvents);
+  });
 
-    it("removes from parent", function() {
-      child.dispose();
+  it("extends default events", function() {
+    var custom = {foo: {name: "bar"}, touchstart: {name: "touchstart"}};
 
-      expect(parent.children().toArray()).toEqual([]);
-    });
+    tabris.registerWidget("TestType", {_events: custom});
 
-    it("removes parent", function() {
-      child.dispose();
+    expect(tabris.TestType._events).toEqual(
+      _.extend({}, tabris.TestType._events, custom)
+    );
+  });
 
-      expect(child.parent()).not.toBeDefined();
-    });
+  it("adds default properties copy", function() {
+    tabris.registerWidget("TestType", {});
 
-    it("DESTROYs native widget", function() {
-      parent.dispose();
+    expect(tabris.TestType._properties).toEqual(tabris.registerWidget._defaultProperties);
+    expect(tabris.TestType._properties).not.toBe(tabris.registerWidget._defaultProperties);
+  });
 
-      expect(nativeBridge.calls({op: "destroy", id: parent.cid}).length).toBe(1);
-    });
+  it("extends default properties", function() {
+    var custom = {foo: "any", enabled: {type: "color"}};
+    var normalized = tabris.registerType.normalizePropertiesMap(custom);
 
-    it("does not send native DESTROY for children", function() {
-      parent.dispose();
+    tabris.registerWidget("TestType", {_properties: custom});
 
-      expect(nativeBridge.calls({op: "destroy", id: child.cid}).length).toBe(0);
-    });
+    expect(tabris.TestType._properties).toEqual(
+      _.extend({}, tabris.registerWidget._defaultProperties, normalized)
+    );
+  });
 
-    it("notifies parent's remove listeners", function() {
-      var listener = jasmine.createSpy();
-      parent.on("removechild", listener);
+  it("created widgets are instanceof Widget", function() {
+    tabris.registerWidget("TestType", {});
 
-      child.dispose();
+    var instance = new tabris.TestType();
 
-      var args = listener.calls.argsFor(0);
-      expect(args[0]).toBe(parent);
-      expect(args[1]).toBe(child);
-      expect(args[2]).toEqual({index: 0});
-    });
-
-    it("notifies all children's dispose listeners", function() {
-      var log = [];
-      var child2 = tabris.create("TextView", {}).appendTo(parent);
-      parent.on("dispose", function() {
-        log.push("parent");
-      });
-      child.on("dispose", function() {
-        log.push("child");
-      });
-      child2.on("dispose", function() {
-        log.push("child2");
-      });
-
-      parent.dispose();
-
-      expect(log).toEqual(["parent", "child", "child2"]);
-    });
-
-    it("notifies children's dispose listeners recursively", function() {
-      var log = [];
-      child = tabris.create("Composite", {}).appendTo(parent);
-      var grandchild = tabris.create("TextView", {}).appendTo(child);
-      parent.on("dispose", function() {
-        log.push("parent");
-      });
-      child.on("dispose", function() {
-        log.push("child");
-      });
-      grandchild.on("dispose", function() {
-        log.push("grandchild");
-      });
-
-      parent.dispose();
-
-      expect(log).toEqual(["parent", "child", "grandchild"]);
-    });
-
+    expect(instance).toEqual(jasmine.any(tabris.Widget));
   });
 
 });
