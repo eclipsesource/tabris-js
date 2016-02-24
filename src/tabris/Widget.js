@@ -68,6 +68,14 @@
       return new tabris.ProxyCollection(this._getSelectableChildren(), selector);
     },
 
+    siblings: function(selector) {
+      var siblings = (this._parent ? this._parent._getSelectableChildren() : []);
+      var filtered = siblings.filter(function(widget) {
+        return widget !== this;
+      }.bind(this));
+      return new tabris.ProxyCollection(filtered, selector);
+    },
+
     find: function(selector) {
       return new tabris.ProxyCollection(this._getSelectableChildren(), selector, true);
     },

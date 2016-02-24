@@ -17,6 +17,20 @@
         "description": "Returns a (possibly empty) collection of all children of this widget that match the selector."
       }
     ],
+    "siblings": [
+      {
+        "parameters": [],
+        "returns": "WidgetCollection",
+        "description": "Returns a (possibly empty) collection of all siblings of this widget."
+      },
+      {
+        "parameters": [
+          {"name": "selector", "type": "Selector"}
+        ],
+        "returns": "WidgetCollection",
+        "description": "Returns a (possibly empty) collection of all siblings of this widget that match the selector."
+      }
+    ],
     "find": [
       {
         "parameters": [],

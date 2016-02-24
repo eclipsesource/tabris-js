@@ -1,7 +1,6 @@
 describe("Widget", function() {
   /*globals _:false*/
 
-  var widget;
   var nativeBridge;
 
   beforeEach(function() {
@@ -11,8 +10,6 @@ describe("Widget", function() {
     tabris.registerWidget("TestType", {
       _supportsChildren: true
     });
-    widget = new tabris.TestType();
-    nativeBridge.resetCalls();
   });
 
   afterEach(function() {
@@ -31,6 +28,13 @@ describe("Widget", function() {
   });
 
   describe("instance", function() {
+
+    var widget;
+
+    beforeEach(function() {
+      widget = new tabris.TestType();
+      nativeBridge.resetCalls();
+    });
 
     it("is a Proxy instance", function() {
       expect(widget).toEqual(jasmine.any(tabris.Widget));
@@ -569,9 +573,11 @@ describe("Widget", function() {
       });
 
       it("throws when disposed", function() {
+        widget.dispose();
+
         expect(function() {
           widget.insertAfter({});
-        }).toThrowError("Cannot insert after non-widget");
+        }).toThrowError("Object is disposed");
       });
 
       it("throws when called with a non-widget", function() {
@@ -637,6 +643,49 @@ describe("Widget", function() {
           expect(parent2.children()).not.toContain(widget);
         });
 
+      });
+
+    });
+
+    describe("siblings", function() {
+
+      var child1, child2, child3;
+
+      beforeEach(function() {
+        child1 = new tabris.Composite();
+        child2 = new tabris.Composite();
+        child3 = new tabris.Composite();
+      });
+
+      it("returns empty collection when called without a parent", function() {
+        expect(widget.siblings().toArray()).toEqual([]);
+      });
+
+      it("returns empty collection when there are no siblings", function() {
+        widget.append(child1);
+
+        expect(child1.siblings().toArray()).toEqual([]);
+      });
+
+      it("returns collection with all siblings", function() {
+        widget.append(child1, child2, child3);
+
+        expect(child2.siblings().toArray()).toEqual([child1, child3]);
+      });
+
+      it("does not include grand children", function() {
+        widget.append(child1, child2);
+        child2.append(child3);
+
+        expect(child1.siblings().toArray()).toEqual([child2]);
+      });
+
+      it("returns filtered list when called with a selector", function() {
+        var button1 = new tabris.Button();
+        var button2 = new tabris.Button();
+        widget.append(child1, button1, child2, button2, child3);
+
+        expect(child1.siblings("Button").toArray()).toEqual([button1, button2]);
       });
 
     });
