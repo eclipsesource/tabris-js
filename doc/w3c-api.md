@@ -46,6 +46,19 @@ As of Tabris.js 1.7, an implementation of this API is included.
 
 > <img align="left" src="img/note.png"> <i>To load static resources, working with URLs relative to the current [module](modules.md) may be more convenient. In the case of a JSON file, this can be done simply by using the `require` method instead of XHR. For other types of files, use the `__dirname` variable, e.g. `xhr.open("GET", __dirname + "/foo.txt");`.</i>
 
+## WebSocket
+
+WebSockets are an advanced technology that makes it possible to open an interactive communication session between the user's client and a server. With this API, you can send messages to a server and receive event-driven responses without having to poll the server for a reply.
+
+As of Tabris.js 1.10, an implementation of this API is included.
+
+> The Tabris.js implementation supports to send and receive text messages as well as binary data in the form of `TypedArray` and `ArrayBuffer`. We currently do not support to receive data as `Blob`.
+
+Further documentation:
+
+* https://tools.ietf.org/html/rfc6455
+* https://html.spec.whatwg.org/multipage/comms.html#websocket
+
 ## Persistent Storage
 
 Tabris supports the global object `localStorage`, which allows storing key-value pairs in a persistent store. Both keys and values are stored as strings.

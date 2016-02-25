@@ -47,6 +47,7 @@ module.exports = function(grunt) {
           "CanvasContext.js",
           "LegacyCanvasContext.js",
           "WebStorage.js",
+          "WebSocket.js",
           "XMLHttpRequest.js",
           "widgets/Action.js",
           "widgets/ActivityIndicator.js",
