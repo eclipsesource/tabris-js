@@ -32,7 +32,7 @@
       }
       tabris[type] = function(properties) {
         if (!(this instanceof tabris[type])) {
-          return new tabris[type](properties);
+          throw new Error("Cannot call constructor as a function");
         }
         if (tabris[type]._cid) {
           tabris.Proxy.call(this, tabris[type]._cid);
