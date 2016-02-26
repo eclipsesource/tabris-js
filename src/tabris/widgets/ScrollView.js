@@ -68,7 +68,7 @@ tabris.registerWidget("ScrollView", {
       style: properties.direction === "horizontal" ? ["HORIZONTAL"] : ["VERTICAL"]
     });
     this._scrollBar._nativeSet("parent", this.cid);
-    this._composite = tabris.create("Composite");
+    this._composite = new tabris.Composite();
     this._composite._nativeSet("parent", this.cid);
     this._nativeSet("content", this._composite.cid);
     return this;

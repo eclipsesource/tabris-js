@@ -51,14 +51,14 @@
   }
 
   function initializeCell(cell) {
-    tabris.create("Composite", {
+    new tabris.Composite({
       layoutData: {left: 0, right: 0, bottom: 0, height: 1},
       background: "#bbb"
     }).appendTo(cell);
-    var imageView = tabris.create("ImageView", {
+    var imageView = new tabris.ImageView({
       layoutData: {left: 10, top: 10, bottom: 10}
     }).appendTo(cell);
-    var textView = tabris.create("TextView", {
+    var textView = new tabris.TextView({
       layoutData: {left: 72, centerY: 0},
       font: device.platform === "iOS" ? "17px .HelveticaNeueInterface-Regular" : "14px Roboto Medium",
       textColor: device.platform === "iOS" ? "rgb(22, 126, 251)" : "#212121"

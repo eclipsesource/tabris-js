@@ -105,7 +105,7 @@
       },
       createitem: {
         trigger: function(event) {
-          var cell = tabris.create("Cell", {});
+          var cell = new tabris.Cell();
           cell._parent = this;
           this._addChild(cell);
           this._nativeCall("addItem", {widget: cell.cid});
