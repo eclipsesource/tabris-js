@@ -220,7 +220,7 @@
     },
     "type": {
       "type": "string",
-      "description": "The exact string that was used to create this widget using the `tabris.create` method."
+      "description": "The widget type without the 'tabris' namespace."
     }
   },
   "events": {

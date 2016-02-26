@@ -6,13 +6,13 @@ Custom widgets are written in JavaScript the language available for the native p
 
 ## Registering a Custom Widget in JavaScript
 
-Custom widgets must be registered in JavaScript in order to allow creating instances using the `tabris.create()` method and to let the JavaScipt part communicate with your native implementation. This is done using the method `registerWidget`:
+Custom widgets must be registered in JavaScript in order to make their constructor available on the `tabris` object and to set up the communication with the native implementation. This is done using the method `registerWidget`:
 
 ```javascript
     tabris.registerWidget(type, definition);
 ```
 
-The parameter `type` is the name of the widget that is used to create instances using `tabris.create()`. Type names should begin with an upper-case character, internal types are prefixed with an underscore, e.g. "_myInternalWidget".
+The parameter `type` is the name of the widget constructor. Type names should begin with an upper-case character, internal types are prefixed with an underscore, e.g. "_MyInternalWidget".
 
 The second parameter `definition` is an object with the following members:
 

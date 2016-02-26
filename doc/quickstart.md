@@ -37,11 +37,11 @@ Create a directory with two files:
 ### myapp.js
 
 ```js
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   topLevel: true,
   title: "myapp"
 });
-tabris.create("TextView", {
+new tabris.TextView({
   layoutData: {centerX: 0, centerY: 0},
   text: "My First App"
 }).appendTo(page);
@@ -59,4 +59,3 @@ Run `npm install` in this directory to install the tabris module.
 The developer app will now download the script and execute it on your device. Swipe from the right edge of the screen to open the developer console, which lets you restart the script or go back to the developer app.
 
 That's it. Now you may want to have a look at the rest of the documentation and the Tabris.js snippets. When you are ready to build, read [Build your app](build.md).
-

@@ -71,17 +71,17 @@ The `package.json` file is used to describe the app, including the name, descrip
 The Tabris.js "Hello, World!" example is contained in `hello.js`. It contains a *button* and a *text view*. When the button is selected, the text view is updated. For further documentation on widgets, visit the [Widgets](widget-basics.md) article and [Widgets API reference](api/Widget.md).
 
 ```js
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Hello, World!",
   topLevel: true
 });
 
-var button = tabris.create("Button", {
+var button = new tabris.Button({
   text: "Native Widgets",
   layoutData: {centerX: 0, top: 100}
 }).appendTo(page);
 
-var label = tabris.create("TextView", {
+var label = new tabris.TextView({
   font: "24px",
   layoutData: {centerX: 0, top: [button, 50]}
 }).appendTo(page);
