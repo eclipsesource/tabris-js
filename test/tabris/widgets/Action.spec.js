@@ -18,7 +18,7 @@ describe("Action", function() {
     var actionCreateCalls;
 
     beforeEach(function() {
-      tabris.create("Action", {title: "Foo", enabled: true});
+      new tabris.Action({title: "Foo", enabled: true});
       actionCreateCalls = nativeBridge.calls({op: "create", type: "tabris.Action"});
     });
 
@@ -46,7 +46,7 @@ describe("Action", function() {
     var action;
 
     beforeEach(function() {
-      action = tabris.create("Action");
+      action = new tabris.Action();
       nativeBridge.resetCalls();
     });
 
@@ -71,7 +71,7 @@ describe("Action", function() {
     var action;
 
     beforeEach(function() {
-      action = tabris.create("Action");
+      action = new tabris.Action();
       nativeBridge.resetCalls();
     });
 
@@ -105,7 +105,7 @@ describe("Action", function() {
     var action, listener;
 
     beforeEach(function() {
-      action = tabris.create("Action");
+      action = new tabris.Action();
       listener = jasmine.createSpy();
     });
 

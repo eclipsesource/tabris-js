@@ -12,7 +12,7 @@ describe("ScrollView", function() {
     var scrollView, createCalls;
 
     beforeEach(function() {
-      scrollView = tabris.create("ScrollView");
+      scrollView = new tabris.ScrollView();
       createCalls = nativeBridge.calls({op: "create"});
     });
 
@@ -41,7 +41,7 @@ describe("ScrollView", function() {
       var result, child;
 
       beforeEach(function() {
-        child = tabris.create("Composite");
+        child = new tabris.Composite();
         nativeBridge.resetCalls();
         result = scrollView.append(child);
       });
@@ -111,7 +111,7 @@ describe("ScrollView", function() {
       var child;
 
       beforeEach(function() {
-        child = tabris.create("Composite");
+        child = new tabris.Composite();
         nativeBridge.resetCalls();
         scrollView.append(child);
       });
@@ -130,7 +130,7 @@ describe("ScrollView", function() {
     var scrollView, createCalls;
 
     beforeEach(function() {
-      scrollView = tabris.create("ScrollView", {direction: "vertical"});
+      scrollView = new tabris.ScrollView({direction: "vertical"});
       createCalls = nativeBridge.calls({op: "create"});
       nativeBridge.resetCalls();
     });
@@ -176,7 +176,7 @@ describe("ScrollView", function() {
     var scrollView, createCalls;
 
     beforeEach(function() {
-      scrollView = tabris.create("ScrollView", {direction: "horizontal"});
+      scrollView = new tabris.ScrollView({direction: "horizontal"});
       createCalls = nativeBridge.calls({op: "create"});
       nativeBridge.resetCalls();
     });
@@ -222,7 +222,7 @@ describe("ScrollView", function() {
     var scrollView, createCalls;
 
     beforeEach(function() {
-      scrollView = tabris.create("ScrollView");
+      scrollView = new tabris.ScrollView();
       createCalls = nativeBridge.calls({op: "create"});
     });
 

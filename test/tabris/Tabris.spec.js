@@ -61,7 +61,7 @@ describe("tabris", function() {
     it("load functions can access tabris functions", function() {
       tabris._ready = false;
       tabris.load(function() {
-        tabris.create("TestType");
+        new tabris.TestType();
       });
 
       tabris._init.call(null, nativeBridge);
@@ -81,7 +81,7 @@ describe("tabris", function() {
 
     it("notifies widget proxy", function() {
       tabris.registerType("CustomType", {_events: {bar: true}});
-      proxy = tabris.create("CustomType", {});
+      proxy = new tabris.CustomType();
       spyOn(proxy, "trigger");
 
       tabris._notify(proxy.cid, "bar", {bar: 23});
@@ -91,7 +91,7 @@ describe("tabris", function() {
 
     it("notifies widget proxy with translated event name", function() {
       tabris.registerType("CustomType", {_events: {bar: "foo"}});
-      proxy = tabris.create("CustomType", {});
+      proxy = new tabris.CustomType();
       spyOn(proxy, "trigger");
 
       tabris._notify(proxy.cid, "foo", {});
@@ -107,7 +107,7 @@ describe("tabris", function() {
           }
         }
       });
-      proxy = tabris.create("CustomType", {});
+      proxy = new tabris.CustomType();
       spyOn(proxy, "trigger");
 
       tabris._notify(proxy.cid, "bar", {bar: 23});
@@ -123,7 +123,7 @@ describe("tabris", function() {
           }
         }
       });
-      proxy = tabris.create("CustomType", {});
+      proxy = new tabris.CustomType();
       spyOn(proxy, "trigger");
 
       var returnValue = tabris._notify(proxy.cid, "bar");
@@ -140,7 +140,7 @@ describe("tabris", function() {
           }
         }
       });
-      proxy = tabris.create("CustomType", {});
+      proxy = new tabris.CustomType();
       spyOn(proxy, "trigger");
 
       tabris._notify(proxy.cid, "foo", {bar: 23});
@@ -157,7 +157,7 @@ describe("tabris", function() {
           }
         }
       });
-      proxy = tabris.create("CustomType", {});
+      proxy = new tabris.CustomType();
       spyOn(proxy, "trigger");
 
       var returnValue = tabris._notify(proxy.cid, "foo");
@@ -167,7 +167,7 @@ describe("tabris", function() {
 
     it("skips events for already disposed widgets", function() {
       tabris.registerType("CustomType", {_events: {bar: true}});
-      proxy = tabris.create("CustomType", {});
+      proxy = new tabris.CustomType();
       proxy.dispose();
       spyOn(proxy, "trigger");
 
@@ -184,7 +184,7 @@ describe("tabris", function() {
 
     it("can be called without a context", function() {
       tabris.registerType("CustomType", {_events: {bar: true}});
-      proxy = tabris.create("CustomType", {});
+      proxy = new tabris.CustomType();
       spyOn(proxy, "trigger");
 
       tabris._notify.call(null, proxy.cid, "bar", [23, 42]);
@@ -356,7 +356,7 @@ describe("tabris", function() {
       var members = {foo: 23};
       tabris.registerType("CustomType", members);
 
-      var instance = tabris.create("CustomType");
+      var instance = new tabris.CustomType();
 
       expect(instance).toEqual(jasmine.any(tabris.Proxy));
       expect(instance).toEqual(jasmine.any(tabris.CustomType));
@@ -375,7 +375,7 @@ describe("tabris", function() {
       var members = {foo: 23};
       tabris.registerType("CustomType", members);
 
-      var instance = tabris.create("CustomType");
+      var instance = new tabris.CustomType();
 
       expect(instance.foo).toBe(23);
       expect(instance.type).toBe("CustomType");
@@ -383,14 +383,14 @@ describe("tabris", function() {
 
     it("calls 'create' with type", function() {
       tabris.registerType("CustomType", {});
-      tabris.create("CustomType");
+      new tabris.CustomType();
 
       expect(nativeBridge.calls({op: "create"})[0].type).toBe("CustomType");
     });
 
     it("calls 'create' with _type if present", function() {
       tabris.registerType("CustomType", {_type: "foo.Type"});
-      tabris.create("CustomType");
+      new tabris.CustomType();
 
       expect(nativeBridge.calls({op: "create"})[0].type).toBe("foo.Type");
     });
@@ -403,14 +403,14 @@ describe("tabris", function() {
 
     it("adds empty trigger map to constructor", function() {
       tabris.registerType("CustomType", {});
-      var instance = tabris.create("CustomType");
+      var instance = new tabris.CustomType();
 
       expect(instance.constructor._trigger).toEqual({});
     });
 
     it("adds _events to constructor", function() {
       tabris.registerType("CustomType", {_events: {foo: "bar"}});
-      var instance = tabris.create("CustomType");
+      var instance = new tabris.CustomType();
 
       expect(instance.constructor._events.foo).toEqual({name: "bar"});
       expect(instance._events).toBe(tabris.Proxy.prototype._events);
@@ -418,7 +418,7 @@ describe("tabris", function() {
 
     it("adds normalized _events to constructor", function() {
       tabris.registerType("CustomType", {_events: {foo: "bar", foo2: {alias: "foo3"}}});
-      var instance = tabris.create("CustomType");
+      var instance = new tabris.CustomType();
 
       expect(instance.constructor._events.foo).toEqual({name: "bar"});
       expect(instance.constructor._events.foo2).toEqual({name: "foo2", alias: "foo3", originalName: "foo2"});
@@ -428,7 +428,7 @@ describe("tabris", function() {
 
     it("adds empty events map to constructor", function() {
       tabris.registerType("CustomType", {});
-      var instance = tabris.create("CustomType");
+      var instance = new tabris.CustomType();
 
       expect(instance.constructor._events).toEqual({});
     });
@@ -436,14 +436,14 @@ describe("tabris", function() {
     it("adds _properties to constructor", function() {
       var type = {encode: function() {}, decode: function() {}};
       tabris.registerType("CustomType", {_properties: {foo: {type: type}}});
-      var instance = tabris.create("CustomType");
+      var instance = new tabris.CustomType();
 
       expect(instance.constructor._properties.foo.type).toBe(type);
     });
 
     it("replaces type strings with type definition object", function() {
       tabris.registerType("CustomType", {_properties: {foo: {type: "boolean"}}});
-      var instance = tabris.create("CustomType");
+      var instance = new tabris.CustomType();
 
       expect(instance.constructor._properties.foo.type).toBe(tabris.PropertyTypes.boolean);
     });
@@ -452,7 +452,7 @@ describe("tabris", function() {
       var type = ["choice", ["a", "b", "c"]];
       spyOn(tabris.PropertyTypes.choice, "encode");
       tabris.registerType("CustomType", {_properties: {foo: type}});
-      var instance = tabris.create("CustomType");
+      var instance = new tabris.CustomType();
 
       instance.set("foo", "bar");
 
@@ -466,7 +466,7 @@ describe("tabris", function() {
       spyOn(tabris.PropertyTypes.bounds, "encode").and.returnValue("bar");
       spyOn(tabris.PropertyTypes.bounds, "decode");
       tabris.registerType("CustomType", {_properties: {foo: type}});
-      var instance = tabris.create("CustomType");
+      var instance = new tabris.CustomType();
       instance.set("foo", "bar");
 
       instance.get("foo");
@@ -484,21 +484,21 @@ describe("tabris", function() {
 
     it("adds normalized _properties to constructor", function() {
       tabris.registerType("CustomType", {_properties: {foo: "boolean"}});
-      var instance = tabris.create("CustomType");
+      var instance = new tabris.CustomType();
 
       expect(instance.constructor._properties.foo.type).toBe(tabris.PropertyTypes.boolean);
     });
 
     it("adds empty properties map to constructor", function() {
       tabris.registerType("CustomType", {});
-      var instance = tabris.create("CustomType");
+      var instance = new tabris.CustomType();
 
       expect(instance.constructor._properties).toEqual({});
     });
 
     it("adds _type to constructor", function() {
       tabris.registerType("CustomType", {_type: "foo"});
-      var instance = tabris.create("CustomType");
+      var instance = new tabris.CustomType();
 
       expect(instance.constructor._type).toBe("foo");
       expect(instance._type).toBeUndefined();

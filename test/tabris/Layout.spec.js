@@ -255,9 +255,9 @@ describe("Layout:", function() {
       tabris._reset();
       tabris._init(new NativeBridgeSpy());
       tabris.registerWidget("TestType", {});
-      parent = tabris.create("Composite");
-      widget = tabris.create("TestType").appendTo(parent);
-      other = tabris.create("TestType", {id: "other"}).appendTo(parent);
+      parent = new tabris.Composite();
+      widget = new tabris.TestType().appendTo(parent);
+      other = new tabris.TestType({id: "other"}).appendTo(parent);
     });
 
     afterEach(function() {
@@ -302,7 +302,7 @@ describe("Layout:", function() {
     it("treats ambiguous string as selector", function() {
       tabris.registerWidget("Foo%", {});
       var freak1 = tabris.create("Foo%").appendTo(parent);
-      var freak2 = tabris.create("TestType", {id: "23%"}).appendTo(parent);
+      var freak2 = new tabris.TestType({id: "23%"}).appendTo(parent);
 
       expect(resolve({left: ["Foo%", 23], top: ["#23%", 42]}, widget))
         .toEqual({left: [freak1.cid, 23], top: [freak2.cid, 42]});
@@ -316,7 +316,7 @@ describe("Layout:", function() {
     });
 
     it("replaces unresolved selector (due to missing parent) with 0", function() {
-      widget = tabris.create("TestType");
+      widget = new tabris.TestType();
 
       expect(resolve({baseline: "#noone", left: ["#noone", 42]}, widget))
         .toEqual({baseline: 0, left: [0, 42]});

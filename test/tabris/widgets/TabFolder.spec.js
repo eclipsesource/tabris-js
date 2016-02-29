@@ -6,9 +6,9 @@ describe("TabFolder", function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._init(nativeBridge);
-    parent = tabris.create("Composite");
+    parent = new tabris.Composite();
     nativeBridge.resetCalls();
-    tabFolder = tabris.create("TabFolder").appendTo(parent);
+    tabFolder = new tabris.TabFolder().appendTo(parent);
   });
 
   it("children list is empty", function() {
@@ -45,7 +45,7 @@ describe("TabFolder", function() {
     var tab, controlCreate;
 
     beforeEach(function() {
-      tab = tabris.create("Tab", {
+      tab = new tabris.Tab({
         title: "foo",
         image: {src: "bar"},
         badge: "1",
@@ -76,7 +76,7 @@ describe("TabFolder", function() {
     });
 
     it("getter returns initial item properties", function() {
-      tab = tabris.create("Tab");
+      tab = new tabris.Tab();
       expect(tab.get("title")).toBe("");
       expect(tab.get("image")).toBe(null);
       expect(tab.get("badge")).toBe("");
@@ -87,7 +87,7 @@ describe("TabFolder", function() {
 
       it("crashes", function() {
         expect(function() {
-          tab.appendTo(tabris.create("Composite"));
+          tab.appendTo(new tabris.Composite());
         }).toThrow(new Error("Tab must be a child of TabFolder"));
       });
 
@@ -153,12 +153,12 @@ describe("TabFolder", function() {
       });
 
       it("children can be filtered with id selector", function() {
-        var tab2 = tabris.create("Tab", {id: "foo"}).appendTo(tabFolder);
+        var tab2 = new tabris.Tab({id: "foo"}).appendTo(tabFolder);
         expect(tabFolder.children("#foo").toArray()).toEqual([tab2]);
       });
 
       it("find list can be filtered with id selector", function() {
-        var tab2 = tabris.create("Tab", {id: "foo"}).appendTo(tabFolder);
+        var tab2 = new tabris.Tab({id: "foo"}).appendTo(tabFolder);
         expect(tabFolder.parent().find("#foo").toArray()).toEqual([tab2]);
       });
 
@@ -166,7 +166,7 @@ describe("TabFolder", function() {
 
         beforeEach(function() {
           nativeBridge.resetCalls();
-          tabris.create("Tab", {}).appendTo(tabFolder);
+          new tabris.Tab().appendTo(tabFolder);
         });
 
         it("creates TabItem with incremented index", function() {
@@ -195,7 +195,7 @@ describe("TabFolder", function() {
 
           beforeEach(function() {
             nativeBridge.resetCalls();
-            tabris.create("Tab", {}).appendTo(tabFolder);
+            new tabris.Tab().appendTo(tabFolder);
           });
 
           it("then it creates a TabItem with the same index", function() {
@@ -228,8 +228,8 @@ describe("TabFolder", function() {
     var tab1, tab2;
 
     beforeEach(function() {
-      tab1 = tabris.create("Tab", {}).appendTo(tabFolder);
-      tab2 = tabris.create("Tab", {}).appendTo(tabFolder);
+      tab1 = new tabris.Tab().appendTo(tabFolder);
+      tab2 = new tabris.Tab().appendTo(tabFolder);
     });
 
     it("Setting a Tab SETs tabItem id", function() {
@@ -313,7 +313,7 @@ describe("TabFolder", function() {
     });
 
     it("passes property to client", function() {
-      tabFolder = tabris.create("TabFolder", {tabBarLocation: "top"});
+      tabFolder = new tabris.TabFolder({tabBarLocation: "top"});
 
       var properties = nativeBridge.calls({id: tabFolder.cid, op: "create"})[0].properties;
       expect(properties.tabBarLocation).toBe("top");
@@ -321,7 +321,7 @@ describe("TabFolder", function() {
 
     it("property is cached", function() {
       spyOn(nativeBridge, "get");
-      tabFolder = tabris.create("TabFolder", {tabBarLocation: "top"});
+      tabFolder = new tabris.TabFolder({tabBarLocation: "top"});
 
       var result = tabFolder.get("tabBarLocation");
 
@@ -330,28 +330,28 @@ describe("TabFolder", function() {
     });
 
     it("sets style TOP for value 'top'", function() {
-      tabFolder = tabris.create("TabFolder", {tabBarLocation: "top"});
+      tabFolder = new tabris.TabFolder({tabBarLocation: "top"});
 
       var properties = nativeBridge.calls({id: tabFolder.cid, op: "create"})[0].properties;
       expect(properties.style).toEqual(["TOP"]);
     });
 
     it("sets style BOTTOM for value 'bottom'", function() {
-      tabFolder = tabris.create("TabFolder", {tabBarLocation: "bottom"});
+      tabFolder = new tabris.TabFolder({tabBarLocation: "bottom"});
 
       var properties = nativeBridge.calls({id: tabFolder.cid, op: "create"})[0].properties;
       expect(properties.style).toEqual(["BOTTOM"]);
     });
 
     it("sets no style for value 'hidden'", function() {
-      tabFolder = tabris.create("TabFolder", {tabBarLocation: "hidden"});
+      tabFolder = new tabris.TabFolder({tabBarLocation: "hidden"});
 
       var properties = nativeBridge.calls({id: tabFolder.cid, op: "create"})[0].properties;
       expect(properties.style).toBeUndefined();
     });
 
     it("sets no style for value 'auto'", function() {
-      tabFolder = tabris.create("TabFolder", {tabBarLocation: "auto"});
+      tabFolder = new tabris.TabFolder({tabBarLocation: "auto"});
 
       var properties = nativeBridge.calls({id: tabFolder.cid, op: "create"})[0].properties;
       expect(properties.style).toBeUndefined();
@@ -369,14 +369,14 @@ describe("Tab", function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._init(nativeBridge);
-    tabFolder = tabris.create("TabFolder");
+    tabFolder = new tabris.TabFolder();
     nativeBridge.resetCalls();
   });
 
   describe("property 'visible'", function() {
 
     it("is not rendered by default", function() {
-      var tab = tabris.create("Tab", {}).appendTo(tabFolder);
+      var tab = new tabris.Tab().appendTo(tabFolder);
 
       var properties = nativeBridge.calls({id: tab.cid, op: "create"})[0].properties;
 
@@ -385,7 +385,7 @@ describe("Tab", function() {
     });
 
     it("is not rendered on Composite", function() {
-      var tab = tabris.create("Tab", {visible: false}).appendTo(tabFolder);
+      var tab = new tabris.Tab({visible: false}).appendTo(tabFolder);
 
       var properties = nativeBridge.calls({id: tab.cid, op: "create"})[0].properties;
 
@@ -393,7 +393,7 @@ describe("Tab", function() {
     });
 
     it("is rendered as 'visibility' on TabItem", function() {
-      var tab = tabris.create("Tab", {visible: false}).appendTo(tabFolder);
+      var tab = new tabris.Tab({visible: false}).appendTo(tabFolder);
 
       var properties = nativeBridge.calls({id: tab._tabItem.cid, op: "create"})[0].properties;
 

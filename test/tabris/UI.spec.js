@@ -69,7 +69,7 @@ describe("UI", function() {
       var page;
 
       beforeEach(function() {
-        page = tabris.create("Page", {title: "Foo", topLevel: true});
+        page = new tabris.Page({title: "Foo", topLevel: true});
         ui.set("activePage", page);
         spyOn(page, "close");
         nativeBridge.resetCalls();
@@ -95,16 +95,16 @@ describe("UI", function() {
       var topLevelPage1, topLevelPage2, page1, page2, page3;
 
       beforeEach(function() {
-        topLevelPage1 = tabris.create("Page", {title: "Top-level Page 1", topLevel: true});
-        topLevelPage2 = tabris.create("Page", {title: "Top-level Page 2", topLevel: true});
-        page1 = tabris.create("Page", {title: "Page 1"});
-        page2 = tabris.create("Page", {title: "Page 2"});
-        page3 = tabris.create("Page", {title: "Page 3"});
+        topLevelPage1 = new tabris.Page({title: "Top-level Page 1", topLevel: true});
+        topLevelPage2 = new tabris.Page({title: "Top-level Page 2", topLevel: true});
+        page1 = new tabris.Page({title: "Page 1"});
+        page2 = new tabris.Page({title: "Page 2"});
+        page3 = new tabris.Page({title: "Page 3"});
       });
 
       it("setting 'activePage' fails with widgets other than Page", function() {
         expect(function() {
-          ui.set("activePage", tabris.create("Button"));
+          ui.set("activePage", new tabris.Button());
         }).toThrow();
         expect(nativeBridge.calls({op: "set", id: ui.cid}).length).toBe(0);
       });

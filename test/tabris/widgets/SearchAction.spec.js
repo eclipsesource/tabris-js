@@ -18,7 +18,7 @@ describe("SearchAction", function() {
     var actionCreateCalls;
 
     beforeEach(function() {
-      tabris.create("SearchAction", {title: "Foo", enabled: true});
+      new tabris.SearchAction({title: "Foo", enabled: true});
       actionCreateCalls = nativeBridge.calls({op: "create", type: "tabris.SearchAction"});
     });
 
@@ -46,7 +46,7 @@ describe("SearchAction", function() {
     var action;
 
     beforeEach(function() {
-      action = tabris.create("SearchAction");
+      action = new tabris.SearchAction();
       nativeBridge.resetCalls();
     });
 
@@ -71,7 +71,7 @@ describe("SearchAction", function() {
     var action;
 
     beforeEach(function() {
-      action = tabris.create("SearchAction");
+      action = new tabris.SearchAction();
       nativeBridge.resetCalls();
     });
 
@@ -98,7 +98,7 @@ describe("SearchAction", function() {
     var action, listener;
 
     beforeEach(function() {
-      action = tabris.create("SearchAction");
+      action = new tabris.SearchAction();
       listener = jasmine.createSpy();
     });
 
@@ -142,7 +142,7 @@ describe("SearchAction", function() {
     var action;
 
     beforeEach(function() {
-      action = tabris.create("SearchAction");
+      action = new tabris.SearchAction();
     });
 
     it("invokes 'open' call operation on native bridge", function() {

@@ -7,7 +7,7 @@ describe("CollectionView", function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._init(nativeBridge);
-    parent = tabris.create("Composite");
+    parent = new tabris.Composite();
     nativeBridge.resetCalls();
   });
 
@@ -15,7 +15,7 @@ describe("CollectionView", function() {
     var view;
 
     beforeEach(function() {
-      view = tabris.create("CollectionView", {background: "yellow"}).appendTo(parent);
+      view = new tabris.CollectionView({background: "yellow"}).appendTo(parent);
     });
 
     it("creates a native view", function() {
@@ -591,7 +591,7 @@ describe("CollectionView", function() {
     }
 
     beforeEach(function() {
-      view = tabris.create("CollectionView", {
+      view = new tabris.CollectionView({
         items: ["A", "B", "C"],
         initializeCell: function() {}
       }).appendTo(parent);

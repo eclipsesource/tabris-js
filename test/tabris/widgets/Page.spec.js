@@ -19,7 +19,7 @@ describe("Page", function() {
   describe("create", function() {
 
     beforeEach(function() {
-      page = tabris.create("Page", {
+      page = new tabris.Page({
         title: "title",
         image: {src: "image"},
         style: "fullscreen",
@@ -110,7 +110,7 @@ describe("Page", function() {
     var compositeCreateCall;
 
     beforeEach(function() {
-      page = tabris.create("Page");
+      page = new tabris.Page();
       pageCreateCall = nativeBridge.calls({op: "create", type: "tabris.Page"})[0];
       compositeCreateCall = nativeBridge.calls({op: "create", type: "rwt.widgets.Composite"})[0];
       nativeBridge.resetCalls();
@@ -125,7 +125,7 @@ describe("Page", function() {
       var child;
 
       beforeEach(function() {
-        child = tabris.create("Composite");
+        child = new tabris.Composite();
         nativeBridge.resetCalls();
         page.append(child);
       });
@@ -192,7 +192,7 @@ describe("Page", function() {
       var child;
 
       beforeEach(function() {
-        child = tabris.create("Composite");
+        child = new tabris.Composite();
         nativeBridge.resetCalls();
         page.append(child);
       });

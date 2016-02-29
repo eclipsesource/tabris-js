@@ -67,7 +67,7 @@ describe("Common Widgets", function() {
   });
 
   it("Canvas", function() {
-    new tabris.Canvas({});
+    new tabris.Canvas();
 
     expect(getCreate().type).toEqual("rwt.widgets.Canvas");
   });
@@ -95,13 +95,13 @@ describe("Common Widgets", function() {
   });
 
   it("Composite", function() {
-    new tabris.Composite({});
+    new tabris.Composite();
 
     expect(getCreate().type).toEqual("rwt.widgets.Composite");
   });
 
   it("ImageView", function() {
-    var imageView = new tabris.ImageView({});
+    var imageView = new tabris.ImageView();
 
     expect(getCreate().type).toEqual("tabris.ImageView");
     expect(imageView.get("image")).toBe(null);

@@ -9,7 +9,7 @@ describe("Drawer", function() {
     tabris._init(nativeBridge);
     tabris.ui = tabris.create("_UI");
     nativeBridge.resetCalls();
-    drawer = tabris.create("Drawer", {background: "#ff0000"});
+    drawer = new tabris.Drawer({background: "#ff0000"});
     _drawer = tabris(nativeBridge.calls({op: "create", type: "tabris.Drawer"})[0].id);
   });
 
@@ -35,7 +35,7 @@ describe("Drawer", function() {
     });
 
     it("fails when a drawer already exists", function() {
-      expect(function() {tabris.create("Drawer");}).toThrow();
+      expect(function() {new tabris.Drawer();}).toThrow();
       expect(nativeBridge.calls({op: "create", type: "tabris.Drawer"}).length).toBe(1);
     });
 
@@ -93,7 +93,7 @@ describe("Drawer", function() {
       var child;
 
       beforeEach(function() {
-        child = tabris.create("TextView");
+        child = new tabris.TextView();
         nativeBridge.resetCalls();
         drawer.append(child);
       });
@@ -139,7 +139,7 @@ describe("Drawer", function() {
       });
 
       it("allows new drawer to be created", function() {
-        expect(function() {tabris.create("Drawer");}).not.toThrow();
+        expect(function() {new tabris.Drawer();}).not.toThrow();
         expect(nativeBridge.calls({op: "create", type: "tabris.Drawer"}).length).toBe(1);
       });
 

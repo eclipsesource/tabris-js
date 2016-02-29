@@ -22,7 +22,7 @@ describe("gestures:", function() {
   }
 
   it("get returns object with pre-configured gestures as initial value", function() {
-    var gestures = tabris.create("TestType").get("gestures");
+    var gestures = new tabris.TestType().get("gestures");
     expect(gestures.tap).toEqual({type: "tap"});
     expect(gestures.longpress).toEqual({type: "longpress"});
   });
@@ -30,7 +30,7 @@ describe("gestures:", function() {
   describe("setting single gesture", function() {
 
     beforeEach(function() {
-      widget = tabris.create("TestType", {
+      widget = new tabris.TestType({
         gestures: {foo: {type: "tap", fingers: 2}}
       });
 
@@ -51,9 +51,9 @@ describe("gestures:", function() {
     });
 
     it("prevent overwriting global default gestures", function() {
-      var defaultGestures = tabris.create("TestType").get("gestures");
+      var defaultGestures = new tabris.TestType().get("gestures");
       defaultGestures.tap = false;
-      expect(tabris.create("TestType").get("gestures").tap).toEqual({type: "tap"});
+      expect(new tabris.TestType().get("gestures").tap).toEqual({type: "tap"});
     });
 
     it("allows overwriting pre-configured gestures", function() {
@@ -150,7 +150,7 @@ describe("gestures:", function() {
   describe("listening to multiple gestures", function() {
 
     beforeEach(function() {
-      widget = tabris.create("TestType", {
+      widget = new tabris.TestType({
         gestures: {foo: {type: "tap", fingers: 2}, bar: {type: "pan", fingers: 3}}
       });
       widget.on("foo", function() {}).on("bar", function() {});
@@ -180,7 +180,7 @@ describe("gestures:", function() {
   describe("when no gestures are configured", function() {
 
     beforeEach(function() {
-      widget = tabris.create("TestType", {});
+      widget = new tabris.TestType();
     });
 
     it("ignores removing a gesture listener (see #368)", function() {

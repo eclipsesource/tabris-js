@@ -51,7 +51,7 @@ describe("CanvasContext", function() {
     var canvas;
 
     beforeEach(function() {
-      canvas = tabris.create("Canvas");
+      canvas = new tabris.Canvas();
       nativeBridge.resetCalls();
     });
 

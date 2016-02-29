@@ -25,8 +25,8 @@ describe("PageSelector", function() {
     var page1, page2, pageSelector;
 
     beforeEach(function() {
-      page1 = tabris.create("Page", {topLevel: true});
-      page2 = tabris.create("Page", {topLevel: true});
+      page1 = new tabris.Page({topLevel: true});
+      page2 = new tabris.Page({topLevel: true});
       pageSelector = new tabris.PageSelector();
     });
 
@@ -39,7 +39,7 @@ describe("PageSelector", function() {
     });
 
     it("allows to override properties", function() {
-      var pageSelector = tabris.create("PageSelector", {
+      var pageSelector = new tabris.PageSelector({
         layoutData: {left: 10, top: 20}
       });
 
@@ -47,13 +47,13 @@ describe("PageSelector", function() {
     });
 
     it("includes all pages as items", function() {
-      var pageSelector = tabris.create("PageSelector");
+      var pageSelector = new tabris.PageSelector();
 
       expect(pageSelector.get("items")).toEqual([page1, page2]);
     });
 
     it("adds pages dynamically", function() {
-      var page3 = tabris.create("Page");
+      var page3 = new tabris.Page();
 
       expect(pageSelector.get("items")).toEqual([page1, page2, page3]);
     });
@@ -72,7 +72,7 @@ describe("PageSelector", function() {
     });
 
     it("closes drawer on select", function() {
-      var drawer = tabris.create("Drawer");
+      var drawer = new tabris.Drawer();
       spyOn(drawer, "close");
       pageSelector.trigger("select", pageSelector, page1);
 

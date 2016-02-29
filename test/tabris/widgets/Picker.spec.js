@@ -6,7 +6,7 @@ describe("Picker", function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._init(nativeBridge);
-    picker = tabris.create("Picker", {});
+    picker = new tabris.Picker();
   });
 
   describe("creation", function() {
