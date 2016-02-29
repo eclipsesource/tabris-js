@@ -1,122 +1,122 @@
 var message;
 
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Oceanic Flight 815 Booking",
   topLevel: true
 });
 
-tabris.create("TextView", {
+new tabris.TextView({
   id: "firstNameLabel",
   alignment: "left",
   text: "First Name:"
 }).appendTo(page);
 
-tabris.create("TextInput", {
+new tabris.TextInput({
   id: "firstNameInput",
   message: "First Name"
 }).appendTo(page);
 
-tabris.create("TextView", {
+new tabris.TextView({
   id: "lastNameLabel",
   text: "Last Name:"
 }).appendTo(page);
 
-tabris.create("TextInput", {
+new tabris.TextInput({
   id: "lastNameInput",
   message: "Last Name"
 }).appendTo(page);
 
-tabris.create("TextView", {
+new tabris.TextView({
   id: "passphraseLabel",
   text: "Passphrase:"
 }).appendTo(page);
 
-tabris.create("TextInput", {
+new tabris.TextInput({
   id: "passphraseInput",
   type: "password",
   message: "Passphrase"
 }).appendTo(page);
 
-tabris.create("TextView", {
+new tabris.TextView({
   id: "countryLabel",
   text: "Country:"
 }).appendTo(page);
 
-tabris.create("Picker", {
+new tabris.Picker({
   id: "countryPicker",
   items: ["Germany", "Canada", "USA", "Bulgaria"]
 }).appendTo(page);
 
-tabris.create("TextView", {
+new tabris.TextView({
   id: "classLabel",
   text: "Class:"
 }).appendTo(page);
 
-tabris.create("Picker", {
+new tabris.Picker({
   id: "classPicker",
   items: ["Business", "Economy", "Economy Plus"]
 }).appendTo(page);
 
-tabris.create("TextView", {
+new tabris.TextView({
   id: "seatLabel",
   text: "Seat:"
 }).appendTo(page);
 
-tabris.create("RadioButton", {
+new tabris.RadioButton({
   id: "window",
   text: "Window"
 }).appendTo(page);
 
-tabris.create("RadioButton", {
+new tabris.RadioButton({
   id: "aisle",
   text: "Aisle"
 }).appendTo(page);
 
-tabris.create("RadioButton", {
+new tabris.RadioButton({
   id: "dontCareButton",
   text: "Don't care",
   selection: true
 }).appendTo(page);
 
-tabris.create("Composite", {
+new tabris.Composite({
   id: "luggagePanel"
 }).append(
-  tabris.create("TextView", {
+  new tabris.TextView({
     id: "luggageLabel",
     text: "Luggage:"
   })
 ).append(
-  tabris.create("TextView", {
+  new tabris.TextView({
     id: "luggageWeight",
     text: "0 Kg"
   })
 ).append(
-  tabris.create("Slider", {
+  new tabris.Slider({
     id: "luggageSlider"
   }).on("change:selection", function(widget, selection) {
     page.find("#luggageWeight").set("text", selection + " Kg");
   })
 ).appendTo(page);
 
-tabris.create("CheckBox", {
+new tabris.CheckBox({
   id: "veggie",
   text: "Vegetarian"
 }).appendTo(page);
 
-tabris.create("Composite", {
+new tabris.Composite({
   id: "milesPanel"
 }).append(
-  tabris.create("TextView", {
+  new tabris.TextView({
     id: "milesLabel",
     text: "Redeem miles:"
   })
 ).append(
-  tabris.create("Switch", {
+  new tabris.Switch({
     id: "milesSwitch"
   })
 ).appendTo(page);
 
-tabris.create("Button", {
+new tabris.Button({
   id: "done",
   text: "Place Reservation",
   background: "#8b0000",
@@ -155,7 +155,7 @@ function populateMessage() {
   if (message) {
     message.dispose();
   }
-  message = tabris.create("TextView", {
+  message = new tabris.TextView({
     layoutData: {left: 10, right: 10, top: "#done 10"},
     text: "Flight booked for: " + createName() + "\nSeating: " + createSeating()
   }).appendTo(page);

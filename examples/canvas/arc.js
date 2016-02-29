@@ -1,16 +1,16 @@
 var CANVAS_SIZE = 300;
 var ARC_RADIUS = 20;
 
-var page = module.exports = tabris.create("Page", {
+var page = module.exports = new tabris.Page({
   title: "Arcs",
   topLevel: true
 });
 
-var canvas = tabris.create("Canvas", {
+var canvas = new tabris.Canvas({
   layoutData: {left: 10, top: 10, width: CANVAS_SIZE, height: CANVAS_SIZE}
 }).appendTo(page);
 
-tabris.create("CheckBox", {
+new tabris.CheckBox({
   text: "Counterclockwise",
   layoutData: {left: 10, right: 10, top: [canvas, 8]}
 }).on("change:selection", function(checkBox, selection) {

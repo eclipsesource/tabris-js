@@ -9,14 +9,14 @@ tabris.ui.set({
   textColor: "white"
 });
 
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "CollectionView Scrolling",
   topLevel: true
 });
 
 var floatingSection = createSectionView("section").set("text", "Section 1");
 
-tabris.create("CollectionView", {
+new tabris.CollectionView({
   layoutData: {left: 0, top: 0, right: 0, bottom: 0},
   items: items,
   cellType: function(item) {
@@ -77,7 +77,7 @@ function getCurrentSection(firstVisibleItem) {
 }
 
 function createSectionView() {
-  return tabris.create("TextView", {
+  return new tabris.TextView({
     layoutData: {top: 0, height: SECTION_HEIGHT, left: 0, right: 0},
     background: "#aaaaaa",
     textColor: "white",
@@ -87,7 +87,7 @@ function createSectionView() {
 }
 
 function createItemView() {
-  return tabris.create("TextView", {
+  return new tabris.TextView({
     layoutData: {top: 2, bottom: 2, left: 5, right: 5},
     font: "14px",
     alignment: "left"

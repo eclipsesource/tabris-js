@@ -4,6 +4,6 @@
   "description": "Arrange widgets depending on orientation",
   "main": "layout-dynamic.js",
   "dependencies": {
-    "tabris": "^1.0.0"
+    "tabris": "^1.7.0"
   }
 }

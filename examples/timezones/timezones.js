@@ -1,6 +1,6 @@
 var moment = require("moment-timezone");
 
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Timezones",
   topLevel: true
 });
@@ -13,11 +13,11 @@ update();
 page.open();
 
 function createTextView(timezone, name) {
-  var locationTextView = tabris.create("TextView", {
+  var locationTextView = new tabris.TextView({
     layoutData: {top: "prev() 30", centerX: 0},
     text: name
   }).appendTo(page);
-  tabris.create("TextView", {
+  new tabris.TextView({
     layoutData: {top: [locationTextView, 10], centerX: 0},
     font: "bold 50px sans-serif"
   }).on("update", function() {

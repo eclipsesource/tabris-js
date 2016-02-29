@@ -1,16 +1,16 @@
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "ActivityIndicator",
   topLevel: true
 });
 
 // Create the activity indicator centered in the page
-var activityIndicator = tabris.create("ActivityIndicator", {
+var activityIndicator = new tabris.ActivityIndicator({
   centerX: 0,
   centerY: 0
 }).appendTo(page);
 
 // Create reload button
-var reloadButton = tabris.create("Button", {
+var reloadButton = new tabris.Button({
   layoutData: {centerX: 0, centerY: 0},
   text: "Run Task"
 }).on("select", function() {

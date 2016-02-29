@@ -16,33 +16,33 @@ var loremIpsum = "Etiam nisl nisi, egestas quis lacus ut, tristique suscipit met
                  "neque. Proin vel elementum augue. Quisque gravida nulla nisl, at fermentum " +
                  "turpis euismod in. ";
 
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Tray",
   topLevel: true
 });
 
-tabris.create("TextView", {
+new tabris.TextView({
   layoutData: {left: MARGIN, right: MARGIN, top: MARGIN},
   text: loremIpsum,
   textColor: "#777"
 }).appendTo(page);
 
-var shade = tabris.create("Composite", {
+var shade = new tabris.Composite({
   layoutData: {left: 0, right: 0, top: 0, bottom: 0},
   background: "black",
   opacity: 0
 }).appendTo(page);
 
-var tray = tabris.create("Composite", {
+var tray = new tabris.Composite({
   layoutData: {left: 0, right: 0, top: "30%", bottom: 0}
 }).appendTo(page);
 
-var strap = tabris.create("Composite", {
+var strap = new tabris.Composite({
   layoutData: {left: "40%", right: "40%", top: 0, height: 65},
   background: "#259b24"
 }).appendTo(tray);
 
-var strapIcon = tabris.create("TextView", {
+var strapIcon = new tabris.TextView({
   layoutData: {left: MARGIN, right: MARGIN, top: 20},
   alignment: "center",
   text: "⇧",
@@ -50,12 +50,12 @@ var strapIcon = tabris.create("TextView", {
   textColor: "white"
 }).appendTo(strap);
 
-var trayContent = tabris.create("Composite", {
+var trayContent = new tabris.Composite({
   layoutData: {left: MARGIN, right: MARGIN, top: [strap, 0], bottom: 0},
   background: "#8bc34a"
 }).appendTo(tray);
 
-tabris.create("TextView", {
+new tabris.TextView({
   layoutData: {left: MARGIN, right: MARGIN, top: MARGIN},
   alignment: "center",
   text: "Tray content",

@@ -4,6 +4,6 @@
   "description": "Create a collection view with fixed section headers",
   "main": "collectionview-scroll.js",
   "dependencies": {
-    "tabris": "^1.4.0"
+    "tabris": "^1.7.0"
   }
 }

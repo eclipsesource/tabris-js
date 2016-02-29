@@ -1,9 +1,9 @@
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "ProgressBar",
   topLevel: true
 });
 
-var progressBar = tabris.create("ProgressBar", {
+var progressBar = new tabris.ProgressBar({
   layoutData: {left: 15, right: 15, centerY: 0},
   maximum: 300,
   selection: 100

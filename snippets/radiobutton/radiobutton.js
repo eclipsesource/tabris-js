@@ -1,10 +1,10 @@
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Radio Buttons",
   topLevel: true
 });
 
 ["One", "Two", "Three"].forEach(function(title) {
-  tabris.create("RadioButton", {
+  new tabris.RadioButton({
     layoutData: {left: 10, top: "prev() 10"},
     text: title
   }).on("change:selection", function(widget, selection) {

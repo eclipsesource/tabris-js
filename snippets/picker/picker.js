@@ -1,4 +1,4 @@
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Picker",
   topLevel: true
 });
@@ -18,7 +18,7 @@ var airports = [
   }
 ];
 
-tabris.create("Picker", {
+new tabris.Picker({
   layoutData: {left: 20, top: 20, right: 20},
   items: airports,
   itemText: function(airport) {

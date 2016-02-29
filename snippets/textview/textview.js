@@ -1,21 +1,21 @@
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "TextView",
   topLevel: true
 });
 
-tabris.create("TextView", {
+new tabris.TextView({
   layoutData: {left: 10, top: 10, right: 10},
   text: "Left",
   alignment: "left"
 }).appendTo(page);
 
-tabris.create("TextView", {
+new tabris.TextView({
   layoutData: {left: 10, top: "prev() 10", right: 10},
   text: "Center",
   alignment: "center"
 }).appendTo(page);
 
-tabris.create("TextView", {
+new tabris.TextView({
   layoutData: {left: 10, top: "prev() 10", right: 10},
   text: "Right",
   alignment: "right"

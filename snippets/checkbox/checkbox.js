@@ -1,9 +1,9 @@
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Check Boxes",
   topLevel: true
 });
 
-tabris.create("CheckBox", {
+new tabris.CheckBox({
   layoutData: {left: 10, top: 10},
   selection: true,
   text: "selected"

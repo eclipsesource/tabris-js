@@ -1,25 +1,25 @@
 createPage("Page 1").open();
 createPage("Page 2");
 
-var drawer = tabris.create("Drawer");
+var drawer = new tabris.Drawer();
 
-tabris.create("ImageView", {
+new tabris.ImageView({
   image: "images/cover.jpg",
   scaleMode: "fill",
   layoutData: {left: 0, right: 0, top: 0, height: 200}
 }).appendTo(drawer);
 
-tabris.create("PageSelector", {
+new tabris.PageSelector({
   layoutData: {left: 0, top: 200, right: 0, bottom: 0}
 }).appendTo(drawer);
 
 function createPage(title) {
-  var page = tabris.create("Page", {
+  var page = new tabris.Page({
     title: title,
     image: "images/page.png",
     topLevel: true
   });
-  tabris.create("Button", {
+  new tabris.Button({
     text: "Create another page",
     layoutData: {left: 20, right: 20, top: 20}
   }).on("select", function() {

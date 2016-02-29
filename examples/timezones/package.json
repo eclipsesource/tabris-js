@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "main": "timezones.js",
   "dependencies": {
-    "tabris": "^1.2.0",
+    "tabris": "^1.7.0",
     "moment": "~2.8.4",
     "moment-timezone": "~0.2.5"
   }

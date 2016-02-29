@@ -68,22 +68,22 @@ createPage("PolarArea", pieData);
 createPage("Pie", pieData);
 createPage("Doughnut", pieData);
 
-tabris.create("Drawer").append(tabris.create("PageSelector"));
+new tabris.Drawer().append(new tabris.PageSelector());
 
 function createPage(chartType, chartData) {
-  var page = tabris.create("Page", {
+  var page = new tabris.Page({
     title: chartType + " Chart",
     topLevel: true
   });
-  var button = tabris.create("Button", {
+  var button = new tabris.Button({
     text: "Draw graph",
     layoutData: {left: MARGIN, top: MARGIN}
   }).appendTo(page);
-  var checkboxAnimate = tabris.create("CheckBox", {
+  var checkboxAnimate = new tabris.CheckBox({
     text: "Animate",
     layoutData: {right: MARGIN, left: [button, MARGIN], baseline: button}
   }).appendTo(page);
-  var canvas = tabris.create("Canvas", {
+  var canvas = new tabris.Canvas({
     layoutData: {left: MARGIN, top: [button, MARGIN], right: MARGIN, bottom: MARGIN}
   }).appendTo(page);
   var createCanvasContext = function() {

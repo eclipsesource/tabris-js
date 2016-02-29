@@ -1,13 +1,13 @@
 var example = new Example();
 
-var page = module.exports = tabris.create("Page", {
+var page = module.exports = new tabris.Page({
   title: "Animation",
   topLevel: true
 }).on("disappear", function() {
   page.children("#toggleRun").set("selection", false);
 });
 
-tabris.create("Canvas", {
+new tabris.Canvas({
   layoutData: {left: 10, top: 10, right: 10, bottom: "#toggleRun 10"}
 }).on("resize", function(canvas, bounds) {
   var height = Math.min(bounds.height, Math.floor(bounds.width / 2));
@@ -15,7 +15,7 @@ tabris.create("Canvas", {
   example.init(ctx);
 }).appendTo(page);
 
-tabris.create("ToggleButton", {
+new tabris.ToggleButton({
   text: "Start",
   layoutData: {left: 10, bottom: 10},
   id: "toggleRun"

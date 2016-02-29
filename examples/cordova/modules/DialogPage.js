@@ -2,7 +2,7 @@ var PluginPage = require("./PluginPage");
 
 var page = new PluginPage("Dialog", "cordova-plugin-dialogs", function(parent) {
 
-  var buttonAlert = tabris.create("Button", {
+  var buttonAlert = new tabris.Button({
     layoutData: {left: 10, top: 10, right: 10},
     text: "Show Alert Dialog"
   }).appendTo(parent).on("select", function() {
@@ -16,7 +16,7 @@ var page = new PluginPage("Dialog", "cordova-plugin-dialogs", function(parent) {
     );
   });
 
-  var buttonConfirm = tabris.create("Button", {
+  var buttonConfirm = new tabris.Button({
     layoutData: {left: 10, top: [buttonAlert, 10], right: 10},
     text: "Show Confirm Dialog"
   }).appendTo(parent).on("select", function() {
@@ -30,7 +30,7 @@ var page = new PluginPage("Dialog", "cordova-plugin-dialogs", function(parent) {
     );
   });
 
-  var buttonPrompt = tabris.create("Button", {
+  var buttonPrompt = new tabris.Button({
     layoutData: {left: 10, top: [buttonConfirm, 10], right: 10},
     text: "Show Prompt"
   }).appendTo(parent).on("select", function() {
@@ -45,14 +45,14 @@ var page = new PluginPage("Dialog", "cordova-plugin-dialogs", function(parent) {
     );
   });
 
-  var buttonBeep = tabris.create("Button", {
+  var buttonBeep = new tabris.Button({
     layoutData: {left: 10, top: [buttonPrompt, 10], right: 10},
     text: "Beep twice"
   }).appendTo(parent).on("select", function() {
     navigator.notification.beep(2);
   });
 
-  var textView = tabris.create("TextView", {
+  var textView = new tabris.TextView({
     layoutData: {top: [buttonBeep, 20], left: 20, right: 20}
   }).appendTo(parent);
 });

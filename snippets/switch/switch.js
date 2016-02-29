@@ -1,11 +1,11 @@
 var MARGIN = 16;
 
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Switch",
   topLevel: true
 });
 
-tabris.create("Switch", {
+new tabris.Switch({
   id: "switch",
   selection: true,
   layoutData: {left: MARGIN, top: MARGIN}
@@ -13,13 +13,13 @@ tabris.create("Switch", {
   page.find("#stateView").set("text", selection ? "State: checked" : "State: unchecked");
 }).appendTo(page);
 
-tabris.create("TextView", {
+new tabris.TextView({
   id: "stateView",
   text: "State: checked",
   layoutData: {left: ["#switch", MARGIN], baseline: "#switch"}
 }).appendTo(page);
 
-tabris.create("Button", {
+new tabris.Button({
   text: "Toggle Switch",
   layoutData: {left: MARGIN, top: ["#switch", MARGIN]}
 }).on("select", function() {

@@ -10,5 +10,5 @@
   require(page).create();
 });
 
-tabris.create("Drawer").append(tabris.create("PageSelector"));
+new tabris.Drawer().append(new tabris.PageSelector());
 tabris.ui.children("Page")[0].open();

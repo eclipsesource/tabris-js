@@ -1,9 +1,9 @@
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Composite highlighted on touch",
   topLevel: true
 });
 
-tabris.create("Composite", {
+new tabris.Composite({
   layoutData: {left: "30%", top: "30%", right: "30%", bottom: "30%"},
   highlightOnTouch: true,
   background: "gray"

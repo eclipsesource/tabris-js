@@ -4,6 +4,6 @@
   "description": "A progress bar that is animated using a timer",
   "main": "progressbar.js",
   "dependencies": {
-    "tabris": "^1.0.0"
+    "tabris": "^1.7.0"
   }
 }

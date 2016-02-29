@@ -1,7 +1,7 @@
 var PluginPage = require("./PluginPage");
 
 var page = new PluginPage("Camera", "cordova-plugin-camera", function(parent) {
-  var button = tabris.create("Button", {
+  var button = new tabris.Button({
     layoutData: {left: 10, top: 10, right: 10},
     text: "Take a picture"
   }).appendTo(parent).on("select", function() {
@@ -19,7 +19,7 @@ var page = new PluginPage("Camera", "cordova-plugin-camera", function(parent) {
     }
   });
 
-  var imageView = tabris.create("ImageView", {
+  var imageView = new tabris.ImageView({
     layoutData: {top: [button, 20], left: 20, right: 20, bottom: 20}
   }).appendTo(parent);
 });

@@ -1,6 +1,6 @@
 {
   "main": "gallery.js",
   "dependencies": {
-    "tabris": "^1.0.0"
+    "tabris": "^1.7.0"
   }
 }

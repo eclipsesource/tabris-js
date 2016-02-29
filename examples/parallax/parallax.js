@@ -7,29 +7,29 @@ var titleCompY = 0;
 
 tabris.ui.set("background", rgba(255, 152, 0, 1));
 
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   topLevel: true,
   title: "Aud'cuisine"
 }).once("resize", function() { // TODO: used "resize" event as workaround for tabris-js#597
   tabris.ui.set("toolbarVisible", false);
 });
 
-var scrollView = tabris.create("ScrollView", {
+var scrollView = new tabris.ScrollView({
   left: 0, right: 0, top: 0, bottom: 0
 }).appendTo(page);
 
-var imageView = tabris.create("ImageView", {
+var imageView = new tabris.ImageView({
   left: 0, top: 0, right: 0,
   image: "images/salad.jpg",
   scaleMode: "fill"
 }).appendTo(scrollView);
 
-var contentComposite = tabris.create("Composite", {
+var contentComposite = new tabris.Composite({
   left: 0, right: 0, top: "#titleComposite", height: 1000,
   background: "white"
 }).appendTo(scrollView);
 
-tabris.create("TextView", {
+new tabris.TextView({
   left: MARGIN, right: MARGIN, top: MARGIN,
   text: "Etiam nisl nisi, egestas quis lacus ut, tristique suscipit metus. In vehicula lectus " +
         "metus, at accumsan elit fringilla blandit. Integer et quam sed dolor pharetra " +
@@ -49,13 +49,13 @@ tabris.create("TextView", {
         "porttitor nec, sed lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus."
 }).appendTo(contentComposite);
 
-var titleComposite = tabris.create("Composite", {
+var titleComposite = new tabris.Composite({
   left: 0, right: 0, height: 78,
   id: "titleComposite",
   background: rgba(255, 152, 0, INITIAL_TITLE_COMPOSITE_OPACITY)
 }).appendTo(scrollView);
 
-tabris.create("TextView", {
+new tabris.TextView({
   left: MARGIN, top: MARGIN, right: MARGIN,
   markupEnabled: true,
   text: "<b>The perfect side dish</b>",
@@ -63,7 +63,7 @@ tabris.create("TextView", {
   textColor: "black"
 }).appendTo(titleComposite);
 
-tabris.create("TextView", {
+new tabris.TextView({
   left: MARGIN, bottom: MARGIN_SMALL, right: MARGIN, top: "prev()",
   markupEnabled: true,
   text: "<b>INDIAN SUMMER SALAD</b>",

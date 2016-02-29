@@ -1,9 +1,9 @@
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Actions",
   topLevel: true
 });
 
-tabris.create("Action", {
+new tabris.Action({
   title: "Action",
   image: "images/share.png"
 }).on("select", function() {

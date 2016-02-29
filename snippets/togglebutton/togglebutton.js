@@ -1,9 +1,9 @@
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Toggle Buttons",
   topLevel: true
 });
 
-tabris.create("ToggleButton", {
+new tabris.ToggleButton({
   layoutData: {left: 10, top: 10},
   text: "selected",
   selection: true

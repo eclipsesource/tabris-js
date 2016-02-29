@@ -1,9 +1,9 @@
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Canvas",
   topLevel: true
 });
 
-tabris.create("Canvas", {
+new tabris.Canvas({
   layoutData: {left: 10, top: 10, right: 10, bottom: 10}
 }).on("resize", function(canvas, bounds) {
   var ctx = canvas.getContext("2d", bounds.width, bounds.height);

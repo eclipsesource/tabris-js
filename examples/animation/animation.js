@@ -1,11 +1,11 @@
 var MARGIN = 12;
 
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Simple Animation",
   topLevel: true
 });
 
-tabris.create("Button", {
+new tabris.Button({
   id: "animateButton",
   text: "Animate",
   layoutData: {left: MARGIN, right: MARGIN, top: MARGIN}
@@ -31,7 +31,7 @@ tabris.create("Button", {
   });
 }).appendTo(page);
 
-tabris.create("TextView", {
+new tabris.TextView({
   id: "helloLabel",
   layoutData: {left: MARGIN, top: ["#animateButton", MARGIN]},
   background: "#6aa",

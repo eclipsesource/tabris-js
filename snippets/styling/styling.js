@@ -1,10 +1,10 @@
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Styling with class selector",
   topLevel: true
 });
 
 ["normal", "interactive", "prio-high", "missing", "prio-high missing"].forEach(function(style) {
-  tabris.create("TextView", {
+  new tabris.TextView({
     layoutData: {left: 10, top: "prev() 10"},
     class: style,
     text: "class \"" + style + "\""

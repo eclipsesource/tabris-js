@@ -4,6 +4,6 @@
   "category": "Small Apps",
   "main": "swipe-to-dismiss.js",
   "dependencies": {
-    "tabris": "^1.0.0"
+    "tabris": "^1.7.0"
   }
 }

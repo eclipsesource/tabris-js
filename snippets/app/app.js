@@ -1,18 +1,18 @@
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "App Info",
   topLevel: true
 });
 
 var paused = 0;
 
-var label = tabris.create("TextView", {
+var label = new tabris.TextView({
   layoutData: {left: 25, right: 25, centerY: 0},
   font: "32px sans-serif",
   alignment: "center",
   text: "Pause and resume this app!"
 }).appendTo(page);
 
-tabris.create("Button", {
+new tabris.Button({
   layoutData: {centerX: 0, bottom: 32},
   text: "Reload"
 }).on("select", function() {
