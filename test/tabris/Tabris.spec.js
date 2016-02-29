@@ -249,7 +249,6 @@ describe("tabris", function() {
   });
 
   describe("constructors", function() {
-    /*jshint nonew: false*/
 
     it("fails if tabris.js not yet started", function() {
       tabris._ready = false;
@@ -298,7 +297,6 @@ describe("tabris", function() {
   });
 
   describe("constructors for singletons", function() {
-    /*jshint nonew: false*/
 
     beforeEach(function() {
       tabris.registerType("ServiceType", {_cid: "foo"});

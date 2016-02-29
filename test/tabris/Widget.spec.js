@@ -20,7 +20,6 @@ describe("Widget", function() {
 
     it("prevents instantiation", function() {
       expect(function() {
-        /*jshint nonew: false */
         new tabris.Widget();
       }).toThrowError("Cannot instantiate abstract Widget");
     });

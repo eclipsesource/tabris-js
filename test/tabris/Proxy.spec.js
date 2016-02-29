@@ -1,5 +1,4 @@
 describe("Proxy", function() {
-  /*jshint nonew: false */
 
   var nativeBridge;
   var log;

@@ -9,7 +9,6 @@
   "latedef": "nofunc", // prohibit the use of a variable before it was defined
   "newcap": true, // enforce capitalized names of constructor functions
   "noarg": true, // prohibit the use of arguments.caller and arguments.callee
-  "nonew": true, // prohibit the use of constructor functions for side-effects
   "undef": true, // prohibit the use of explicitly undeclared variables
   "unused": true, // prohibit the declaration of variables that are never used
 

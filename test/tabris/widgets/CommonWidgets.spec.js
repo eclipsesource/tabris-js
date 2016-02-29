@@ -1,5 +1,4 @@
 describe("Common Widgets", function() {
-  /*jshint nonew: false*/
 
   var nativeBridge;
   var widget;
