@@ -362,6 +362,10 @@
         type: "boolean",
         default: false
       },
+      cornerRadius: {
+        type: "number",
+        default: 0
+      },
       id: {
         type: "string",
         access: {

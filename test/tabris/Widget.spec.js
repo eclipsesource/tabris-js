@@ -78,6 +78,13 @@ describe("Widget", function() {
       expect(call.properties.elevation).toBe(8);
     });
 
+    it("sets cornerRadius to value", function() {
+      widget.set("cornerRadius", 4);
+
+      var call = nativeBridge.calls({op: "set"})[0];
+      expect(call.properties.cornerRadius).toBe(4);
+    });
+
     it("translates visible to visibility", function() {
       widget.set("visible", true);
 
@@ -131,6 +138,7 @@ describe("Widget", function() {
       expect(widget.get("visible")).toBe(true);
       expect(widget.get("layoutData")).toBe(null);
       expect(widget.get("elevation")).toBe(0);
+      expect(widget.get("cornerRadius")).toBe(0);
       expect(widget.get("opacity")).toBe(1);
       expect(widget.get("transform")).toEqual({
         rotation: 0,

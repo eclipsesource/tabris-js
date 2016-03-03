@@ -349,6 +349,11 @@ declare module tabris {
     elevation?: number;
 
     /**
+     * Configure a widget to have rounded corners. Each corner is affected equally.
+     */
+    cornerRadius?: number;
+
+    /**
      * Whether the widget can be operated.
      */
     enabled?: boolean;
