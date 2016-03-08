@@ -56,6 +56,10 @@ tabris.registerWidget("_UI", {
       type: ["choice", ["normal", "fullscreen"]],
       default: "normal"
     },
+    statusBarTheme: {
+      type: ["choice", ["light", "dark", "default"]],
+      default: "default"
+    },
     activePage: {
       access: {
         set: function(name, page, options) {

@@ -26,6 +26,12 @@
       "values": ["normal", "fullscreen"],
       "default": "normal",
       "description": "Allows to switch the UI to full screen."
+    },
+    "statusBarTheme": {
+      "type": "string",
+      "values": ["light", "dark", "default"],
+      "default": "default",
+      "description": "The theme to use for the system status bar. The value \"default\" selects the platform default. This property will only control the foreground text and icons. The 'light' theme will result in *dark* foreground. Only supported on iOS and Android 6+."
     }
   },
   "events": {

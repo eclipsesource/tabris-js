@@ -1,0 +1,9 @@
+{
+  "title": "Toogle status bar theme",
+  "category": "UI",
+  "description": "Demonstrates status bar theme options",
+  "main": "ui-statusbar",
+  "dependencies": {
+    "tabris": "^1.7.0"
+  }
+}
