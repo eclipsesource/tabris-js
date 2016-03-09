@@ -172,6 +172,27 @@ describe("tabris.Module", function() {
         expect(foo).toEqual({modulename: "bar"});
       });
 
+      it("requests file specified in /package.json containing '.' segment", function() {
+        tabris.Module.createLoader.and.returnValue(undefined);
+        spyOn(tabris.Module, "readJSON").and.callFake(function(url) {
+          if (url === "./foo/package.json") {
+            return {main: "./bar"};
+          }
+          if (url === "./foo/bar/index.json") {
+            return {modulename: "bar"};
+          }
+        });
+
+        var foo = module.require("./foo");
+
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./foo/bar");
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./foo/bar.js");
+        expect(tabris.Module.readJSON).toHaveBeenCalledWith("./foo/bar.json");
+        expect(tabris.Module.readJSON).toHaveBeenCalledWith("./foo/bar/package.json");
+        expect(tabris.Module.createLoader).toHaveBeenCalledWith("./foo/bar/index.js");
+        expect(foo).toEqual({modulename: "bar"});
+      });
+
       it("requests alternate file name /index.js", function() {
         spyOn(tabris.Module, "readJSON");
         tabris.Module.createLoader.and.callFake(function(path) {
