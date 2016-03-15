@@ -47,7 +47,7 @@
 
   tabris._notify = function() {
     // client may get the reference to _notify before tabris has been loaded
-    tabris._notify.apply(this, arguments);
+    return tabris._notify.apply(this, arguments);
   };
 
   function checkVersion() {
