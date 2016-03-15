@@ -1,7 +1,3 @@
-/* globals fetch: false, Promise: true*/
-Promise = require("promise");
-require("whatwg-fetch");
-
 var page = new tabris.Page({
   title: "XMLHttpRequest via fetch()",
   topLevel: true

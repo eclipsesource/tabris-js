@@ -1,7 +1,3 @@
-/*globals Promise: true, fetch: false*/
-Promise = require("promise");
-require("whatwg-fetch");
-
 var MARGIN = 12;
 var loading;
 
