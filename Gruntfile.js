@@ -80,6 +80,7 @@ module.exports = function(grunt) {
           }
         },
         src: prefix("src/tabris/", [
+          "load-polyfill.js",
           "util.js",
           "util-colors.js",
           "util-fonts.js",
@@ -161,6 +162,10 @@ module.exports = function(grunt) {
       boot: {
         src: "build/boot.js",
         dest: "build/boot.min.js"
+      },
+      polyfill: {
+        src: "build/tabris/polyfill.js",
+        dest: "build/tabris/polyfill.min.js"
       }
     },
     doc: {
@@ -208,6 +213,16 @@ module.exports = function(grunt) {
         ]
       }
     },
+    webpack: {
+      polyfill: {
+        entry: "./src/polyfill.js",
+        output: {
+          filename: "build/tabris/polyfill.js",
+          library: "polyfill",
+          libraryTarget: "commonjs2"
+        }
+      }
+    },
     examples: {
       src: ["snippets", "examples"]
     }
@@ -221,6 +236,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.loadNpmTasks("grunt-contrib-copy");
   grunt.loadNpmTasks("grunt-contrib-compress");
+  grunt.loadNpmTasks("grunt-webpack");
   grunt.loadTasks("./grunt");
 
   /* runs static code analysis tools */
@@ -241,8 +257,10 @@ module.exports = function(grunt) {
   grunt.registerTask("build", [
     "concat:tabris",
     "concat:boot",
+    "webpack:polyfill",
     "uglify:tabris",
     "uglify:boot",
+    "uglify:polyfill",
     "package",
     "copy:readme",
     "compress:tabris"

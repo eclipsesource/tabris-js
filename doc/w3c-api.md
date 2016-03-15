@@ -39,7 +39,12 @@ See [W3C](http://www.w3.org/TR/XMLHttpRequest/) / [MDN](https://developer.mozill
 * When using a custom built developer client, a relative URL may be used to access local files (bundled with the client as a resource) as well as those residing in the remote project folder (from which the code is loaded via HTTP). Local files take precedence.
 * To enable access to SSL protected resources that use self signed certificates, use the `UseStrictSSL` preference in the config.xml. See the [Cordova documentation](cordova.md#preferences).
 
-> <img align="left" src="img/note.png"> <i>To load static resources, working with URLs relative to the current [module](modules.md) may be more convenient. In the case of a JSON file, this can be done simply by using the `require` method instead of XHR. For other types of files, use the `__dirname` variable, e.g. `xhr.open("GET", __dirname + "/foo.txt");`. You may also want to use the [fetch module](https://www.npmjs.com/package/whatwg-fetch), which provides a more modern API than XHR.</i>
+## Fetch
+
+As a more powerful and flexible alternative to XHR, you can also use the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
+As of Tabris.js 1.7, an implementation of this API is included.
+
+> <img align="left" src="img/note.png"> <i>To load static resources, working with URLs relative to the current [module](modules.md) may be more convenient. In the case of a JSON file, this can be done simply by using the `require` method instead of XHR. For other types of files, use the `__dirname` variable, e.g. `xhr.open("GET", __dirname + "/foo.txt");`.</i>
 
 ## Storage
 
