@@ -44,26 +44,23 @@ function initializeStandardCell(cell) {
     scaleMode: "fill"
   }).appendTo(cell);
   var nameView = new tabris.TextView({
+    top: 6, left: 104, right: MARGIN,
     maxLines: 2
   }).appendTo(cell);
-  var authorView = new tabris.TextView({
-    textColor: "#234"
-  }).appendTo(cell);
   var commentsView = new tabris.TextView({
+    top: 54, right: MARGIN,
     alignment: "right",
     textColor: "green"
   }).appendTo(cell);
+  var authorView = new tabris.TextView({
+    top: 54, left: 104, height: 20, right: [commentsView, MARGIN],
+    textColor: "#234"
+  }).appendTo(cell);
   cell.on("change:item", function(widget, item) {
-    imageView.set("image", item.data.thumbnail);
+    imageView.set("image", {src: item.data.thumbnail, width: 70, height: 70});
     nameView.set("text", item.data.title);
     authorView.set("text", item.data.author);
     commentsView.set("text", item.data.num_comments + " comments");
-  }).on("resize", function() {
-    var cellWidth = cell.get("bounds").width;
-    var textWidth = 200;
-    nameView.set({left: 104, top: 6, width: cellWidth - textWidth - MARGIN});
-    authorView.set({top: 54, left: 104, height: 20, width: textWidth});
-    commentsView.set({top: 54, left: cellWidth - textWidth - MARGIN, height: 20, width: textWidth});
   });
 }
 
