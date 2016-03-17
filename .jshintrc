@@ -15,6 +15,7 @@
 
   "shadow": true, // tolerate variable shadowing, i.e. re-define variables that have already be defined
   "eqnull": true, // suppress warnings about == null comparisons
+  "esversion": 6, // allow ES6 syntax
 
   // Globals
 
