@@ -176,7 +176,7 @@
     },
     "cornerRadius": {
       "type": "number",
-      "description": "Configure a widget to have rounded corners. Each corner is affected equally."
+      "description": "Configure a widget to have rounded corners. Each corner is affected equally. Supported on iOS and Android 5.0+."
     },
     "font": {
       "type": "Font",

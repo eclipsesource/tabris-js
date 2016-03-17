@@ -349,7 +349,7 @@ declare module tabris {
     elevation?: number;
 
     /**
-     * Configure a widget to have rounded corners. Each corner is affected equally.
+     * Configure a widget to have rounded corners. Each corner is affected equally. Supported on iOS and Android 5.0+.
      */
     cornerRadius?: number;
 
