@@ -1,4 +1,4 @@
-# Tabris.js - 1.7
+# Tabris.js - 1.8
 
 ## Introduction
 
