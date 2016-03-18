@@ -22,6 +22,11 @@
       "type": "number|Function",
       "default": "null",
       "description": "Limit the number of lines to be displayed to the given maximum. `null` disables this limit."
+    },
+    "lineSpacing": {
+      "type": "number",
+      "default": "1.0",
+      "description": "The amount of space between each line of text. The `lineSpacing` property is a factor with a default value of `1.0`."
     }
   },
   "links": [
