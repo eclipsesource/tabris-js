@@ -1,9 +1,9 @@
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Layout - Centering",
   topLevel: true
 });
 
-tabris.create("Composite", {
+new tabris.Composite({
   layoutData: {centerX: 0, centerY: 0, width: 100, height: 100},
   background: "red"
 }).appendTo(page);

@@ -4,6 +4,6 @@
   "description": "A Switch Widget that can be Toggled",
   "main": "switch.js",
   "dependencies": {
-    "tabris": "^1.1.0"
+    "tabris": "^1.7.0"
   }
 }

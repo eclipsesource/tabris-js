@@ -1,10 +1,10 @@
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Device Info",
   topLevel: true
 });
 
 ["platform", "version", "model", "language", "orientation"].forEach(function(property) {
-  tabris.create("TextView", {
+  new tabris.TextView({
     id: property,
     layoutData: {left: 10, right: 10, top: "prev() 10"},
     text: property + ": " + tabris.device.get(property)

@@ -30,7 +30,7 @@ tabris.registerWidget("_UI", {
     }).on("Close", function() {
       this.dispose();
     });
-    tabris.Proxy.prototype._create.call(this, {});
+    this._super("_create", arguments);
     this._nativeSet("shell", this._shell.cid);
     this._pages = [];
     this._drawer = null;
@@ -55,6 +55,10 @@ tabris.registerWidget("_UI", {
     displayMode: {
       type: ["choice", ["normal", "fullscreen"]],
       default: "normal"
+    },
+    statusBarTheme: {
+      type: ["choice", ["light", "dark", "default"]],
+      default: "default"
     },
     activePage: {
       access: {

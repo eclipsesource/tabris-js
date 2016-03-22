@@ -32,6 +32,10 @@ var _ = {
     return result;
   },
 
+  drop: function(array, index) {
+    return Array.prototype.slice.call(array, arguments.length > 1 ? index : 1);
+  },
+
   clone: function(object) {
     var result = {};
     for (var key in object) {
@@ -59,9 +63,9 @@ var _ = {
   extendPrototype: function(fn, target) {
     var Helper = function() {};
     Helper.prototype = fn.prototype;
-    return this.extend(new Helper(), target, {
-      "super": function(method) {
-        return fn.prototype[ method ].apply(this, Array.prototype.slice.call(arguments, 1));
+    return _.extend(new Helper(), target, {
+      "_super": function(method, params) {
+        return fn.prototype[method].apply(this, params);
       }
     });
   }

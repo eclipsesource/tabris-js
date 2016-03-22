@@ -20,10 +20,10 @@ A page can also be removed from the stack by calling its `close()` method. When 
 
 There must always be one active page remaining in an application. Because of that, closing the last page on the stack will lead to an error.
 
-Just like other widgets, a page is created using the `tabris.create()` method. All pages are automatically children of `tabris.ui`, so they don't have to be added to a parent.
+All pages are automatically children of `tabris.ui`, so they don't have to be added to a parent.
 
 ```js
-tabris.create("Page", {
+new tabris.Page({
   title: "My Page",
   image: "images/my-page.png"
 });
@@ -40,7 +40,7 @@ There's a special kind of pages used for the main navigation, called *top-level*
 To create a top-level page, set the property `topLevel` to `true` when creation the page:
 
 ```js
-tabris.create("Page", {
+new tabris.Page({
   title: "My Page",
   image: "images/my-page.png",
   topLevel: true
@@ -72,7 +72,7 @@ The current active page is visible in the app's navigation bar. A page can have 
 The "Drawer" is a common component of mobile applications. It's a container that can be slid in form the left edge of the screen, often used for top-level navigation. In Tabris.js, such a drawer can be created by instantiating the type `Drawer`:
 
 ```js
-tabris.create("Drawer");
+new tabris.Drawer();
 ```
 
 Similar to pages, the drawer does not need to be appended to a parent, it is always a child of `tabris.ui` and can be accessed using `tabris.ui.children("Drawer")`.
@@ -82,19 +82,19 @@ A drawer can be opened by a swipe from the left edge of the screen or by tapping
 A drawer may contain any kind of widgets. To display a list of top-level pages, Tabris.js provides the type `PageSelector` for convenience. The page selector is a collection view that displays all top-level pages and allows to open one of them. It is pre-configured to be easily appendable to the drawer without setting any properties:
 
 ```js
-tabris.create("Drawer").append(tabris.create("PageSelector"));
+new tabris.Drawer().append(new tabris.PageSelector());
 ```
 
 Since PageSelector extends CollectionView, it supports the same properties. For example, you can freely position the PageSelector on the drawer by overwriting the `layoutData` property.
 
 ```js
-tabris.create("ImageView", {
+new tabris.ImageView({
   image: "images/my-logo.png",
   scaleMode: "fill",
   layoutData: {left: 0, right: 0, top: 0, height: 200}
 }).appendTo(drawer);
 
-tabris.create("PageSelector", {
+new tabris.PageSelector({
   layoutData: {left: 0, top: 200, right: 0, bottom: 0}
 }).appendTo(drawer);
 ```

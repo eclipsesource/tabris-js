@@ -4,6 +4,6 @@
   "description": "Use an activity indicator when waiting for long running task",
   "main": "activityindicator.js",
   "dependencies": {
-    "tabris": "^1.6.0"
+    "tabris": "^1.7.0"
   }
 }

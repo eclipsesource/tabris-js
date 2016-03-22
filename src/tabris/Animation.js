@@ -4,8 +4,8 @@
 
     _type: "tabris.Animation",
 
-    _create: function(properties) {
-      tabris.Proxy.prototype._create.call(this, properties);
+    _create: function() {
+      this._super("_create", arguments);
       this._nativeListen("Start", true);
       this._nativeListen("Completion", true);
       return this;

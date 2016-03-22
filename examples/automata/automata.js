@@ -21,7 +21,7 @@ var ySize = height / CELL_SIZE;
 //  modal: false,
 //  exitOnClose: true
 // });
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Automata",
   topLevel: true,
   background: "#000"
@@ -72,7 +72,7 @@ for (var x = 0; x < xSize; x++) {
   cells[x] = [];
   for (var y = 0; y < ySize; y++) {
     var alive = Math.random() >= 0.5;
-    var composite = tabris.create("Composite", {
+    var composite = new tabris.Composite({
       layoutData: {left: x * CELL_SIZE, top: y * CELL_SIZE, width: CELL_SIZE, height: CELL_SIZE},
       background: "#fff",
       visible: alive
@@ -95,7 +95,7 @@ for (var x = 0; x < xSize; x++) {
   }
 }
 
-var textView = tabris.create("TextView", {
+var textView = new tabris.TextView({
   layoutData: {left: 0, top: 0, width: 80, height: 40},
   background: "rgba(255, 0, 0, 0.8)",
   textColor: "#fff",

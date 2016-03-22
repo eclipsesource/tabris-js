@@ -80,6 +80,7 @@ module.exports = function(grunt) {
           }
         },
         src: prefix("src/tabris/", [
+          "load-polyfill.js",
           "util.js",
           "util-colors.js",
           "util-fonts.js",
@@ -94,28 +95,43 @@ module.exports = function(grunt) {
           "PropertyTypes.js",
           "Animation.js",
           "GestureRecognizer.js",
-          "Widgets.js",
-          "Picker.js",
+          "Device.js",
+          "Widget.js",
           "DOMEvents.js",
           "DOMDocument.js",
           "WindowTimers.js",
-          "Device.js",
           "App.js",
           "UI.js",
-          "CollectionView.js",
-          "ScrollView.js",
-          "Drawer.js",
-          "Drawer-legacy.js",
-          "Page.js",
-          "PageSelector.js",
-          "Action.js",
-          "SearchAction.js",
-          "TabFolder.js",
-          "TabFolder-legacy.js",
           "CanvasContext.js",
           "LegacyCanvasContext.js",
           "WebStorage.js",
-          "XMLHttpRequest.js"
+          "XMLHttpRequest.js",
+          "widgets/Action.js",
+          "widgets/ActivityIndicator.js",
+          "widgets/Button.js",
+          "widgets/Canvas.js",
+          "widgets/CheckBox.js",
+          "widgets/CollectionView.js",
+          "widgets/Composite.js",
+          "widgets/Drawer.js",
+          "widgets/Drawer-legacy.js",
+          "widgets/ImageView.js",
+          "widgets/Page.js",
+          "widgets/PageSelector.js",
+          "widgets/Picker.js",
+          "widgets/ProgressBar.js",
+          "widgets/RadioButton.js",
+          "widgets/ScrollView.js",
+          "widgets/SearchAction.js",
+          "widgets/Slider.js",
+          "widgets/Switch.js",
+          "widgets/TabFolder.js",
+          "widgets/TabFolder-legacy.js",
+          "widgets/TextInput.js",
+          "widgets/TextView.js",
+          "widgets/ToggleButton.js",
+          "widgets/Video.js",
+          "widgets/WebView.js"
         ]),
         dest: "build/tabris/tabris.js"
       },
@@ -146,6 +162,10 @@ module.exports = function(grunt) {
       boot: {
         src: "build/boot.js",
         dest: "build/boot.min.js"
+      },
+      polyfill: {
+        src: "build/tabris/polyfill.js",
+        dest: "build/tabris/polyfill.min.js"
       }
     },
     doc: {
@@ -193,6 +213,16 @@ module.exports = function(grunt) {
         ]
       }
     },
+    webpack: {
+      polyfill: {
+        entry: "./src/polyfill.js",
+        output: {
+          filename: "build/tabris/polyfill.js",
+          library: "polyfill",
+          libraryTarget: "commonjs2"
+        }
+      }
+    },
     examples: {
       src: ["snippets", "examples"]
     }
@@ -206,6 +236,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.loadNpmTasks("grunt-contrib-copy");
   grunt.loadNpmTasks("grunt-contrib-compress");
+  grunt.loadNpmTasks("grunt-webpack");
   grunt.loadTasks("./grunt");
 
   /* runs static code analysis tools */
@@ -226,8 +257,10 @@ module.exports = function(grunt) {
   grunt.registerTask("build", [
     "concat:tabris",
     "concat:boot",
+    "webpack:polyfill",
     "uglify:tabris",
     "uglify:boot",
+    "uglify:polyfill",
     "package",
     "copy:readme",
     "compress:tabris"

@@ -177,8 +177,8 @@ module.exports = function (grunt) {
         result.push("\n" + property.description);
       }
       if (property.static) {
-        result.push("<br/>This property can only be set in the `tabris.create` method. " +
-        "It cannot be changed after widget creation.");
+        result.push("<br/>This property can only be set on widget creation. " +
+        "Once set, it cannot be changed anymore.");
       }
       result.push("\n");
     });

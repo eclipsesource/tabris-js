@@ -1,16 +1,12 @@
-/*globals Promise: true, fetch: false*/
-Promise = require("promise");
-require("whatwg-fetch");
-
 var MARGIN = 12;
 var loading;
 
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Reddit - Pets",
   topLevel: true
 });
 
-var collectionView = tabris.create("CollectionView", {
+var collectionView = new tabris.CollectionView({
   left: 0, top: 0, right: 0, bottom: 0,
   itemHeight: 82,
   refreshEnabled: true,
@@ -43,17 +39,17 @@ page.open();
 loadInitialItems();
 
 function initializeStandardCell(cell) {
-  var imageView = tabris.create("ImageView", {
+  var imageView = new tabris.ImageView({
     left: MARGIN, top: 6, width: 70, height: 70,
     scaleMode: "fill"
   }).appendTo(cell);
-  var nameView = tabris.create("TextView", {
+  var nameView = new tabris.TextView({
     maxLines: 2
   }).appendTo(cell);
-  var authorView = tabris.create("TextView", {
+  var authorView = new tabris.TextView({
     textColor: "#234"
   }).appendTo(cell);
-  var commentsView = tabris.create("TextView", {
+  var commentsView = new tabris.TextView({
     alignment: "right",
     textColor: "green"
   }).appendTo(cell);
@@ -72,7 +68,7 @@ function initializeStandardCell(cell) {
 }
 
 function initializeLoadingCell(cell) {
-  tabris.create("TextView", {
+  new tabris.TextView({
     left: 12, right: 12, centerY: 0,
     alignment: "center",
     text: "loading ..."
@@ -134,19 +130,19 @@ function getRedditId(item) {
 }
 
 function createDetailsPage(data) {
-  var detailPage = tabris.create("Page", {
+  var detailPage = new tabris.Page({
     background: "black",
     title: data.title,
     topLevel: false
   });
   if (data.url.substr(-4, 4) === ".jpg") {
-    tabris.create("ImageView", {
+    new tabris.ImageView({
       left: 0, top: 0, right: 0, bottom: 0,
       image: data.url,
       scaleMode: "fit"
     }).appendTo(detailPage);
   } else {
-    tabris.create("WebView", {
+    new tabris.WebView({
       left: 0, top: 0, right: 0, bottom: 0,
       url: data.url
     }).appendTo(detailPage);

@@ -12,7 +12,7 @@ var page = new PluginPage("Network", "cordova-plugin-network-information", funct
   states[window.Connection.CELL]     = "Cell generic connection";
   states[window.Connection.NONE]     = "No network connection";
 
-  var button = tabris.create("Button", {
+  var button = new tabris.Button({
     layoutData: {left: 10, top: 10, right: 10},
     text: "Get Network State"
   }).appendTo(parent).on("select", function() {
@@ -20,7 +20,7 @@ var page = new PluginPage("Network", "cordova-plugin-network-information", funct
     textView.set("text", states[networkState]);
   });
 
-  var textView = tabris.create("TextView", {
+  var textView = new tabris.TextView({
     layoutData: {top: [button, 20], left: 20, right: 20}
   }).appendTo(parent);
 });

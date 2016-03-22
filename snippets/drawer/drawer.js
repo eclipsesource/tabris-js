@@ -1,9 +1,9 @@
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Drawer",
   topLevel: true
 });
 
-var drawer = tabris.create("Drawer");
+var drawer = new tabris.Drawer();
 
 var arrow = String.fromCharCode(8592);
 createLabel(arrow + " Swipe from left or tap here").on("tap", function() {
@@ -17,7 +17,7 @@ createLabel("Thank you!").on("tap", function() {
 page.open();
 
 function createLabel(text) {
-  return tabris.create("TextView", {
+  return new tabris.TextView({
     layoutData: {left: 10, centerY: 0},
     text: text,
     font: "22px Arial"

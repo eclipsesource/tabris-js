@@ -1,7 +1,7 @@
 (function() {
 
   tabris.registerType("_Device", {
-    _type: "tabris.Device",
+    _cid: "tabris.Device",
     _properties: {
       model: "any",
       platform: "any",
@@ -28,24 +28,25 @@
 
   tabris._publishDeviceProperties = function(target) {
     if (!("device" in target)) {
-      defineReadOnlyProperty(target, "device", fix(createDeviceObject()));
+      target.device = createDeviceObject();
     }
     if (!("screen" in target)) {
-      defineReadOnlyProperty(target, "screen", fix(createScreenObject()));
+      target.screen = createScreenObject();
     }
     if (("navigator" in target) && !("language" in target.navigator)) {
       defineReadOnlyProperty(target.navigator, "language", getDevicePropertyFn("language"));
     }
     if (!("devicePixelRatio" in target)) {
-      defineReadOnlyProperty(target, "devicePixelRatio", getDevicePropertyFn("scaleFactor"));
+      target.devicePixelRatio = tabris.device.get("scaleFactor");
     }
   };
 
-  tabris.device = tabris("_Device");
-
-  if (typeof window !== "undefined") {
-    tabris._publishDeviceProperties(window);
-  }
+  tabris.load(function() {
+    tabris.device = new tabris._Device();
+    if (typeof window !== "undefined") {
+      tabris._publishDeviceProperties(window);
+    }
+  });
 
   function createDeviceObject() {
     var dev = {};
@@ -72,12 +73,6 @@
   function getDevicePropertyFn(name) {
     return function() {
       return tabris.device.get(name);
-    };
-  }
-
-  function fix(value) {
-    return function() {
-      return value;
     };
   }
 

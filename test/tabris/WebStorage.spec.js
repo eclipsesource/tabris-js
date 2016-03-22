@@ -1,36 +1,23 @@
 describe("LocalStorage", function() {
 
   var nativeBridge;
-  var proxy;
   var localStorage;
   var returnValue;
+  var cid = "tabris.ClientStore";
 
   beforeEach(function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._init(nativeBridge);
-    spyOn(window, "tabris").and.callFake(function() {
-      proxy = new tabris.Proxy();
-      spyOn(proxy, "_nativeCall").and.callFake(function(method) {
-        if (method === "get") {
-          return returnValue;
-        }
-        return null;
-      });
-      return proxy;
-    });
     localStorage = new tabris.WebStorage();
+    spyOn(nativeBridge, "call").and.callFake(function() {
+      return returnValue;
+    });
   });
 
   afterEach(function() {
     nativeBridge = null;
     localStorage = null;
-  });
-
-  describe("constructor", function() {
-    it("creates proxy", function() {
-      expect(tabris).toHaveBeenCalledWith("_ClientStore");
-    });
   });
 
   describe("setItem", function() {
@@ -43,24 +30,28 @@ describe("LocalStorage", function() {
 
     it("calls proxy add with key and value", function() {
       localStorage.setItem("foo", "bar");
-      expect(proxy._nativeCall).toHaveBeenCalledWith("add", {key: "foo", value: "bar"});
+
+      expect(nativeBridge.call).toHaveBeenCalledWith(cid, "add", {key: "foo", value: "bar"});
     });
 
     it("call proxy add with stringified key", function() {
       localStorage.setItem(2, "bar");
-      expect(proxy._nativeCall).toHaveBeenCalledWith("add", {key: "2", value: "bar"});
+
+      expect(nativeBridge.call).toHaveBeenCalledWith(cid, "add", {key: "2", value: "bar"});
     });
 
     it("calls add with stringified value", function() {
       localStorage.setItem("foo", 2);
-      expect(proxy._nativeCall).toHaveBeenCalledWith("add", {key: "foo", value: "2"});
+
+      expect(nativeBridge.call).toHaveBeenCalledWith(cid, "add", {key: "foo", value: "2"});
     });
 
     it("works with falsy keys and values", function() {
       localStorage.setItem(false, false);
       localStorage.setItem(undefined, undefined);
-      expect(proxy._nativeCall).toHaveBeenCalledWith("add", {key: "false", value: "false"});
-      expect(proxy._nativeCall).toHaveBeenCalledWith("add", {key: "undefined", value: "undefined"});
+
+      expect(nativeBridge.call).toHaveBeenCalledWith(cid, "add", {key: "false", value: "false"});
+      expect(nativeBridge.call).toHaveBeenCalledWith(cid, "add", {key: "undefined", value: "undefined"});
     });
 
   });
@@ -75,30 +66,37 @@ describe("LocalStorage", function() {
 
     it("calls proxy get with key", function() {
       localStorage.getItem("foo");
-      expect(proxy._nativeCall).toHaveBeenCalledWith("get", {key: "foo"});
+
+      expect(nativeBridge.call).toHaveBeenCalledWith(cid, "get", {key: "foo"});
     });
 
     it("calls get with stringified key", function() {
       localStorage.getItem(5);
-      expect(proxy._nativeCall).toHaveBeenCalledWith("get", {key: "5"});
+
+      expect(nativeBridge.call).toHaveBeenCalledWith(cid, "get", {key: "5"});
     });
 
     it("works with falsy keys", function() {
       localStorage.getItem(false);
       localStorage.getItem(undefined);
-      expect(proxy._nativeCall).toHaveBeenCalledWith("get", {key: "false"});
-      expect(proxy._nativeCall).toHaveBeenCalledWith("get", {key: "undefined"});
+
+      expect(nativeBridge.call).toHaveBeenCalledWith(cid, "get", {key: "false"});
+      expect(nativeBridge.call).toHaveBeenCalledWith(cid, "get", {key: "undefined"});
     });
 
     it("returns saved item", function() {
       returnValue = "bar";
+
       var item = localStorage.getItem("foo");
+
       expect(item).toBe("bar");
     });
 
     it("returns null for undefined", function() {
       returnValue = undefined;
+
       var item = localStorage.getItem("foo");
+
       expect(item).toBe(null);
     });
 
@@ -114,19 +112,22 @@ describe("LocalStorage", function() {
 
     it("calls proxy remove with keys array", function() {
       localStorage.removeItem("foo");
-      expect(proxy._nativeCall).toHaveBeenCalledWith("remove", {keys: ["foo"]});
+
+      expect(nativeBridge.call).toHaveBeenCalledWith(cid, "remove", {keys: ["foo"]});
     });
 
     it("calls proxy remove with keys array with stringified key", function() {
       localStorage.removeItem(3);
-      expect(proxy._nativeCall).toHaveBeenCalledWith("remove", {keys: ["3"]});
+
+      expect(nativeBridge.call).toHaveBeenCalledWith(cid, "remove", {keys: ["3"]});
     });
 
     it("works with falsy keys", function() {
       localStorage.removeItem(false);
       localStorage.removeItem(undefined);
-      expect(proxy._nativeCall).toHaveBeenCalledWith("remove", {keys: ["false"]});
-      expect(proxy._nativeCall).toHaveBeenCalledWith("remove", {keys: ["undefined"]});
+
+      expect(nativeBridge.call).toHaveBeenCalledWith(cid, "remove", {keys: ["false"]});
+      expect(nativeBridge.call).toHaveBeenCalledWith(cid, "remove", {keys: ["undefined"]});
     });
 
   });
@@ -135,7 +136,8 @@ describe("LocalStorage", function() {
 
     it("calls proxy clear", function() {
       localStorage.clear();
-      expect(proxy._nativeCall).toHaveBeenCalledWith("clear");
+
+      expect(nativeBridge.call).toHaveBeenCalledWith(cid, "clear", undefined);
     });
 
   });

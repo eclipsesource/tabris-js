@@ -1,4 +1,4 @@
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Web Storage",
   topLevel: true
 });
@@ -7,7 +7,7 @@ var KEY = "localStorageSnippetCount";
 
 var startCount = parseInt(localStorage.getItem(KEY) || "0") + 1;
 localStorage.setItem(KEY, startCount.toString());
-tabris.create("TextView", {
+new tabris.TextView({
   layoutData: {left: 10, right: 10, centerY: 0},
   alignment: "center",
   font: "22px sans-serif",

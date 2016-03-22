@@ -1,9 +1,9 @@
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Touch Events",
   topLevel: true
 });
 
-var textView = tabris.create("TextView", {
+var textView = new tabris.TextView({
   layoutData: {left: 20, top: 20, right: 20},
   text: "Touch anywhere..."
 }).appendTo(page);

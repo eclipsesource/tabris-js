@@ -101,7 +101,8 @@
       for (var i = 0; i < postfixes.length; i++) {
         var module = getModule.call(this, path + postfixes[i]);
         if (postfixes[i] === "/package.json" && getMain(module)) {
-          module = findModule.call(this, path + "/" + getMain(module), filePostfixes);
+          var normalizedPath = normalizePath(path + "/" + getMain(module));
+          module = findModule.call(this, normalizedPath, filePostfixes);
         }
         if (module) {
           return module;

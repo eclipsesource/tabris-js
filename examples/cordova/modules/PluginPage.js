@@ -6,25 +6,25 @@ var PluginPage = function(pageName, pluginId, createCallback) {
 
 PluginPage.prototype.create = function() {
 
-  this.page = tabris.create("Page", {
+  this.page = new tabris.Page({
     title: this.pageName,
     topLevel: true
   });
 
-  tabris.create("TextView", {
+  new tabris.TextView({
     text: "Plugin: " + this.pluginId,
     layoutData: {left: 10, top: 10, right: 10},
     textColor: "rgb(22, 126, 251)"
   }).on("tap", function() {
-    tabris.create("Page", {title: "Plugin Info"}).append(
-      tabris.create("WebView", {
+    new tabris.Page({title: "Plugin Info"}).append(
+      new tabris.WebView({
         layoutData: {left: 0, top: 0, right: 0, bottom: 0},
         url: "http://plugins.cordova.io/#/package/" + this.pluginId
       })
     ).open();
   }, this).appendTo(this.page);
 
-  var content = tabris.create("Composite", {
+  var content = new tabris.Composite({
     layoutData: {left: 10, top: "prev() 10", right: 10, bottom: 0}
   }).appendTo(this.page);
 

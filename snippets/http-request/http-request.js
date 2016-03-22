@@ -1,16 +1,16 @@
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "XMLHttpRequest",
   topLevel: true
 });
 
-tabris.create("Button", {
+new tabris.Button({
   layoutData: {left: 10, top: 10},
   text: "Find words starting with 'mobile'"
 }).on("select", function() {
   var xhr = new tabris.XMLHttpRequest();
   xhr.onreadystatechange = function() {
     if (xhr.readyState === xhr.DONE) {
-      tabris.create("TextView", {
+      new tabris.TextView({
         layoutData: {left: 10, right: 10, top: "prev() 10"},
         text: JSON.parse(xhr.responseText)[1].join(", ")
       }).appendTo(page);

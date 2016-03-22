@@ -2,12 +2,12 @@ var PluginPage = require("./PluginPage");
 
 var page = new PluginPage("BarcodeScanner", "phonegap-plugin-barcodescanner", function(parent) {
 
-  tabris.create("Button", {
+  new tabris.Button({
     layoutData: {left: 10, top: 10, right: 10},
     text: "Scan Barcode"
   }).on("select", scanBarcode).appendTo(parent);
 
-  var resultView = tabris.create("TextView", {
+  var resultView = new tabris.TextView({
     layoutData: {top: "prev() 20", left: 20, right: 20},
     markupEnabled: true
   }).appendTo(parent);

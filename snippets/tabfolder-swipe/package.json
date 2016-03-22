@@ -4,6 +4,6 @@
   "description": "A TabFolder without tab bar, used as a swipe control",
   "main": "tabfolder-swipe.js",
   "dependencies": {
-    "tabris": "^1.5.0"
+    "tabris": "^1.7.0"
   }
 }

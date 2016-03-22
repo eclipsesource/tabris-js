@@ -1,5 +1,5 @@
 tabris.registerType("_App", {
-  _type: "tabris.App",
+  _cid: "tabris.App",
   _events: {
     pause: {name: "Pause", trigger: triggerWithTarget},
     resume: {name: "Resume", trigger: triggerWithTarget},
@@ -46,7 +46,7 @@ tabris.registerType("_App", {
 });
 
 tabris.load(function() {
-  tabris.app = tabris("_App");
+  tabris.app = new tabris._App();
 });
 
 function triggerWithTarget(event, name) {

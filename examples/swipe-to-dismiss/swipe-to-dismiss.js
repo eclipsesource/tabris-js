@@ -1,7 +1,7 @@
 var HORIZONTAL_MARGIN = 16;
 var VERTICAL_MARGIN = 8;
 
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Swipe to dismiss",
   topLevel: true
 });
@@ -16,30 +16,30 @@ var items = [
   {title: "Fraud mail", sender: "Unsuspicious Jack", time: "yesterday"}
 ];
 
-var collectionView = tabris.create("CollectionView", {
+var collectionView = new tabris.CollectionView({
   layoutData: {left: 0, right: 0, top: 0, bottom: 0},
   itemHeight: 64,
   items: items,
   initializeCell: function(cell) {
     cell.set("background", "#d0d0d0");
-    var container = tabris.create("Composite", {
+    var container = new tabris.Composite({
       background: "white",
       layoutData: {left: 0, top: 0, bottom: 0, right: 0}
     }).on("pan:horizontal", function(widget, event) {
       handlePan(event, container);
     }).appendTo(cell);
-    var senderView = tabris.create("TextView", {
+    var senderView = new tabris.TextView({
       font: "bold 18px",
       layoutData: {top: VERTICAL_MARGIN, left: HORIZONTAL_MARGIN}
     }).appendTo(container);
-    var titleView = tabris.create("TextView", {
+    var titleView = new tabris.TextView({
       layoutData: {bottom: VERTICAL_MARGIN, left: HORIZONTAL_MARGIN}
     }).appendTo(container);
-    var timeView = tabris.create("TextView", {
+    var timeView = new tabris.TextView({
       textColor: "#b8b8b8",
       layoutData: {top: VERTICAL_MARGIN, right: HORIZONTAL_MARGIN}
     }).appendTo(container);
-    tabris.create("Composite", {
+    new tabris.Composite({
       background: "#b8b8b8",
       layoutData: {left: 0, bottom: 0, right: 0, height: 1}
     }).appendTo(cell);

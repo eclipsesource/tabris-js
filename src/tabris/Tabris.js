@@ -1,11 +1,10 @@
 (function(module) {
 
-  window.tabris = module.exports = _.extend(function(id) {
-    if (!tabris._proxies[id] && !tabris[id]) {
-      throw new Error("No native object with cid or type " + id);
+  window.tabris = module.exports = _.extend(function(cid) {
+    if (!tabris._proxies[cid]) {
+      throw new Error("No native object with cid " + cid);
     }
-    var cid = tabris[id] && tabris[id]._type ? tabris[id]._type : id;
-    return cid in tabris._proxies ? tabris._proxies[cid] : new tabris[id](cid);
+    return tabris._proxies[cid];
   }, {
 
     _loadFunctions: [],
@@ -27,22 +26,22 @@
       return new tabris[type](properties || {});
     },
 
-    registerType: function(type, members) {
+    registerType: function(type, members, superType) {
       if (type in tabris) {
         throw new Error("Type already registered: " + type);
       }
-      tabris[type] = function(arg) {
-        if (typeof arg === "string") {
-          // internal use with cid
-          tabris.Proxy.call(this, arg);
+      tabris[type] = function(properties) {
+        if (!(this instanceof tabris[type])) {
+          throw new Error("Cannot call constructor as a function");
+        }
+        if (tabris[type]._cid) {
+          tabris.Proxy.call(this, tabris[type]._cid);
         } else {
           if (!tabris._nativeBridge) {
             throw new Error("tabris.js not started");
           }
           tabris.Proxy.call(this);
-          if (typeof arg === "object") {
-            this._create(arg);
-          }
+          this._create(properties || {});
         }
       };
       for (var member in staticMembers) {
@@ -54,7 +53,7 @@
       var superProto = _.omit(members, Object.keys(staticMembers));
       superProto.type = type;
       superProto.constructor = tabris[type]; // _.extendPrototype can not provide the original
-      tabris[type].prototype = _.extendPrototype(tabris.Proxy, superProto);
+      tabris[type].prototype = _.extendPrototype(superType || tabris.Proxy, superProto);
     },
 
     version: "${VERSION}",
@@ -207,6 +206,7 @@
     "_events": {},
     "_initProperties": {},
     "_type": null,
+    "_cid": null,
     "_properties": {},
     "_supportsChildren": false
   };

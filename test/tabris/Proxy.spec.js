@@ -25,12 +25,12 @@ describe("Proxy", function() {
     var proxy;
 
     beforeEach(function() {
-      proxy = tabris.create("TestType");
+      proxy = new tabris.TestType();
       nativeBridge.resetCalls();
     });
 
     it("creates proxy for standard types", function() {
-      tabris.create("Button", {text: "foo"});
+      new tabris.Button({text: "foo"});
 
       var create = nativeBridge.calls({op: "create"})[0];
       expect(create.type).toEqual("rwt.widgets.Button");
@@ -61,7 +61,7 @@ describe("Proxy", function() {
         _properties: {bar: "any"}
       });
 
-      tabris.create("CustomType", {bar: 42});
+      new tabris.CustomType({bar: 42});
 
       var properties = nativeBridge.calls({op: "create", type: "CustomType"})[0].properties;
       expect(properties).toEqual({foo: 23, bar: 42});
@@ -71,7 +71,7 @@ describe("Proxy", function() {
       tabris.registerType("CustomType", {_initProperties: {foo: 23}});
       spyOn(console, "warn");
 
-      tabris.create("CustomType", {});
+      new tabris.CustomType();
 
       expect(console.warn).not.toHaveBeenCalled();
     });
@@ -79,7 +79,7 @@ describe("Proxy", function() {
     it("does not modify prototype properties", function() {
       tabris.registerType("CustomType", {_initProperties: {}});
 
-      tabris.create("CustomType", {foo: 23});
+      new tabris.CustomType({foo: 23});
 
       expect(tabris.CustomType._initProperties).toEqual({});
     });
@@ -91,7 +91,7 @@ describe("Proxy", function() {
     var proxy;
 
     beforeEach(function() {
-      proxy = tabris.create("TestType");
+      proxy = new tabris.TestType();
       nativeBridge.resetCalls();
     });
 
@@ -106,388 +106,6 @@ describe("Proxy", function() {
 
     it("isDisposed() returns false", function() {
       expect(proxy.isDisposed()).toBe(false);
-    });
-
-    describe("append with a proxy", function() {
-      var child, result, listener;
-
-      beforeEach(function() {
-        listener = jasmine.createSpy();
-        child = tabris.create("TextView", {});
-        nativeBridge.resetCalls();
-        proxy.on("addchild", listener);
-        result = proxy.append(child);
-      });
-
-      it("sets the child's parent", function() {
-        var calls = nativeBridge.calls();
-        expect(calls.length).toBe(1);
-        expect(calls[0]).toEqual({op: "set", id: child.cid, properties: {parent: proxy.cid}});
-      });
-
-      it("returns self to allow chaining", function() {
-        expect(result).toBe(proxy);
-      });
-
-      it("notifies add listeners with arguments parent, child, event", function() {
-        var args = listener.calls.argsFor(0);
-        expect(args[0]).toBe(proxy);
-        expect(args[1]).toBe(child);
-        expect(args[2]).toEqual({});
-      });
-
-      it("children() contains appended child", function() {
-        expect(proxy.children()).toContain(child);
-      });
-
-      it("children() returns a safe copy", function() {
-        proxy.children()[0] = null;
-        expect(proxy.children()).toContain(child);
-      });
-
-    });
-
-    describe("append with multiple proxies", function() {
-      var child1, child2, result;
-
-      beforeEach(function() {
-        child1 = tabris.create("TextView", {});
-        child2 = tabris.create("Button", {});
-        nativeBridge.resetCalls();
-        result = proxy.append(child1, child2);
-      });
-
-      it("sets the children's parent", function() {
-        var calls = nativeBridge.calls();
-        expect(calls.length).toBe(2);
-        expect(calls[1]).toEqual({op: "set", id: child2.cid, properties: {parent: proxy.cid}});
-      });
-
-      it("returns self to allow chaining", function() {
-        expect(result).toBe(proxy);
-      });
-
-      it("children() contains appended children", function() {
-        expect(proxy.children()).toContain(child1);
-        expect(proxy.children()).toContain(child2);
-      });
-
-      it("children() with matcher contains filtered children", function() {
-        expect(proxy.children("TextView").toArray()).toEqual([child1]);
-        expect(proxy.children("Button").toArray()).toEqual([child2]);
-      });
-
-    });
-
-    describe("append with proxy collection", function() {
-      var child1, child2, result;
-
-      beforeEach(function() {
-        child1 = tabris.create("TextView", {});
-        child2 = tabris.create("TextView", {});
-        nativeBridge.resetCalls();
-        result = proxy.append(new tabris.ProxyCollection([child1, child2]));
-      });
-
-      it("sets the children's parent", function() {
-        var calls = nativeBridge.calls();
-        expect(calls.length).toBe(2);
-        expect(calls[1]).toEqual({op: "set", id: child2.cid, properties: {parent: proxy.cid}});
-      });
-
-      it("returns self to allow chaining", function() {
-        expect(result).toBe(proxy);
-      });
-
-      it("children() contains appended children", function() {
-        expect(proxy.children()).toContain(child1);
-        expect(proxy.children()).toContain(child2);
-      });
-
-    });
-
-    describe("append with non-widget", function() {
-
-      it("throws an error", function() {
-        expect(function() {
-          proxy.append({});
-        }).toThrowError("Cannot append non-widget");
-      });
-
-    });
-
-    describe("append when children are not supported", function() {
-
-      it("throws an error", function() {
-        tabris.TestType._supportsChildren = false;
-        var child = tabris.create("TextView", {});
-
-        expect(function() {
-          proxy.append(child);
-        }).toThrowError("TestType cannot contain children");
-        expect(proxy.children()).not.toContain(child);
-      });
-
-    });
-
-    describe("append children of unsupported type", function() {
-
-      it("logs an error", function() {
-        tabris.TestType._supportsChildren = function() { return false; };
-        var child = tabris.create("TextView", {});
-
-        expect(function() {
-          proxy.append(child);
-        }).toThrowError("TestType cannot contain children of type TextView");
-        expect(proxy.children()).not.toContain(child);
-      });
-
-    });
-
-    describe("appendTo with a parent", function() {
-
-      var parent1, result;
-
-      beforeEach(function() {
-        parent1 = tabris.create("Composite", {});
-        nativeBridge.resetCalls();
-        result = proxy.appendTo(parent1);
-      });
-
-      it("returns self to allow chaining", function() {
-        expect(result).toBe(proxy);
-      });
-
-      it("sets the proxy's parent", function() {
-        var setCall = nativeBridge.calls({op: "set", id: proxy.cid})[0];
-        expect(setCall.properties.parent).toEqual(parent1.cid);
-      });
-
-      it("is added to parent's children list", function() {
-        expect(parent1.children()).toContain(proxy);
-      });
-
-      it("parent() returns new parent", function() {
-        expect(result.parent()).toBe(parent1);
-      });
-
-      describe("appendTo with another parent", function() {
-
-        var parent2;
-
-        beforeEach(function() {
-          parent2 = tabris.create("Composite", {});
-          proxy.appendTo(parent2);
-        });
-
-        it("is removed from old parent's children list", function() {
-          expect(parent1.children()).not.toContain(proxy);
-        });
-
-        it("is added to new parent's children list", function() {
-          expect(parent2.children()).toContain(proxy);
-        });
-      });
-
-    });
-
-    describe("appendTo with a collection", function() {
-
-      var parent1, parent2, result;
-
-      beforeEach(function() {
-        parent1 = tabris.create("Composite", {});
-        parent2 = tabris.create("Composite", {});
-        nativeBridge.resetCalls();
-        result = proxy.appendTo(new tabris.ProxyCollection([parent1, parent2]));
-      });
-
-      it("returns self to allow chaining", function() {
-        expect(result).toBe(proxy);
-      });
-
-      it("first entry is added to parent's children list", function() {
-        expect(parent1.children()).toContain(proxy);
-      });
-
-      it("other entry not added to parent's children list", function() {
-        expect(parent2.children()).not.toContain(proxy);
-      });
-
-    });
-
-    describe("appendTo with non-widget", function() {
-
-      it("throws an error", function() {
-        expect(function() {
-          proxy.appendTo({});
-        }).toThrowError("Cannot append to non-widget");
-      });
-
-    });
-
-    describe("insertBefore", function() {
-
-      var parent1, parent2, other;
-
-      beforeEach(function() {
-        parent1 = tabris.create("Composite", {});
-        parent2 = tabris.create("Composite", {});
-      });
-
-      it("throws when disposed", function() {
-        expect(function() {
-          proxy.insertBefore({});
-        }).toThrowError("Cannot insert before non-widget");
-      });
-
-      it("throws when called with a non-widget", function() {
-        expect(function() {
-          proxy.insertBefore({});
-        }).toThrowError("Cannot insert before non-widget");
-      });
-
-      it("throws when called with an empty widget collection", function() {
-        expect(function() {
-          proxy.insertBefore(parent1.find(".missing"));
-        }).toThrowError("Cannot insert before non-widget");
-      });
-
-      describe("with a widget", function() {
-
-        beforeEach(function() {
-          proxy.appendTo(parent1);
-          other = tabris.create("Button", {}).appendTo(parent2);
-          proxy.insertBefore(other);
-        });
-
-        it("removes widget from its old parent's children list", function() {
-          expect(parent1.children()).not.toContain(proxy);
-        });
-
-        it("adds widget to new parent's children list", function() {
-          expect(parent2.children()).toContain(proxy);
-        });
-
-        it("adds widget directly before the given widget", function() {
-          var children = parent2.children();
-          expect(children.indexOf(proxy)).toBe(children.indexOf(other) - 1);
-        });
-
-      });
-
-      describe("with a sibling widget", function() {
-
-        beforeEach(function() {
-          other = tabris.create("Button", {}).appendTo(parent1);
-          proxy.appendTo(parent1);
-          proxy.insertBefore(other);
-        });
-
-        it("re-orders widgets", function() {
-          expect(parent1.children().toArray()).toEqual([proxy, other]);
-        });
-
-      });
-
-      describe("with a widget collection", function() {
-
-        beforeEach(function() {
-          tabris.create("Button", {}).appendTo(parent1);
-          tabris.create("Button", {}).appendTo(parent2);
-          var grandparent = tabris.create("Composite", {}).append(parent1, parent2);
-          proxy.insertBefore(grandparent.find("Button"));
-        });
-
-        it("inserts only before the first the widget of the collection", function() {
-          expect(parent1.children()).toContain(proxy);
-          expect(parent2.children()).not.toContain(proxy);
-        });
-
-      });
-
-    });
-
-    describe("insertAfter", function() {
-
-      var parent1, parent2, other;
-
-      beforeEach(function() {
-        parent1 = tabris.create("Composite", {});
-        parent2 = tabris.create("Composite", {});
-      });
-
-      it("throws when disposed", function() {
-        expect(function() {
-          proxy.insertAfter({});
-        }).toThrowError("Cannot insert after non-widget");
-      });
-
-      it("throws when called with a non-widget", function() {
-        expect(function() {
-          proxy.insertAfter({});
-        }).toThrowError("Cannot insert after non-widget");
-      });
-
-      it("throws when called with an empty widget collection", function() {
-        expect(function() {
-          proxy.insertAfter(parent1.find(".missing"));
-        }).toThrowError("Cannot insert after non-widget");
-      });
-
-      describe("with a widget", function() {
-
-        beforeEach(function() {
-          proxy.appendTo(parent1);
-          other = tabris.create("Button", {}).appendTo(parent2);
-          proxy.insertAfter(other);
-        });
-
-        it("removes widget from its old parent's children list", function() {
-          expect(parent1.children()).not.toContain(proxy);
-        });
-
-        it("adds widget to new parent's children list", function() {
-          expect(parent2.children()).toContain(proxy);
-        });
-
-        it("adds widget directly after the given widget", function() {
-          var children = parent2.children();
-          expect(children.indexOf(proxy)).toBe(children.indexOf(other) + 1);
-        });
-
-      });
-
-      describe("with a sibling widget", function() {
-
-        beforeEach(function() {
-          proxy.appendTo(parent1);
-          other = tabris.create("Button", {}).appendTo(parent1);
-          proxy.insertAfter(other);
-        });
-
-        it("re-orders widgets", function() {
-          expect(parent1.children().toArray()).toEqual([other, proxy]);
-        });
-
-      });
-
-      describe("with a widget collection", function() {
-
-        beforeEach(function() {
-          tabris.create("Button", {}).appendTo(parent1);
-          tabris.create("Button", {}).appendTo(parent2);
-          var grandparent = tabris.create("Composite", {}).append(parent1, parent2);
-          proxy.insertAfter(grandparent.find("Button"));
-        });
-
-        it("inserts only before the first the widget of the collection", function() {
-          expect(parent1.children()).toContain(proxy);
-          expect(parent2.children()).not.toContain(proxy);
-        });
-
-      });
-
     });
 
     describe("get", function() {
@@ -747,7 +365,7 @@ describe("Proxy", function() {
 
       it("calls native listen with translated event name", function() {
         tabris.registerType("CustomType", {_events: {foo: "bar"}});
-        proxy = tabris.create("CustomType");
+        proxy = new tabris.CustomType();
         proxy.on("foo", listener);
 
         var call = nativeBridge.calls({op: "listen"})[0];
@@ -757,7 +375,7 @@ describe("Proxy", function() {
 
       it("calls native listen (true) for first alias listener", function() {
         tabris.registerType("CustomType", {_events: {foo: {name: "bar", alias: "foo1"}}});
-        proxy = tabris.create("CustomType");
+        proxy = new tabris.CustomType();
 
         proxy.on("foo1", listener);
 
@@ -777,7 +395,7 @@ describe("Proxy", function() {
         tabris.registerType("CustomType", {
           _events: {foo: {alias: "foo1", listen: jasmine.createSpy()}}
         });
-        proxy = tabris.create("CustomType");
+        proxy = new tabris.CustomType();
 
         proxy.on("foo1", listener);
 
@@ -803,7 +421,7 @@ describe("Proxy", function() {
 
       it("does not call native listen for subsequent listeners for alias event", function() {
         tabris.registerType("CustomType", {_events: {foo: {alias: "bar"}}});
-        proxy = tabris.create("CustomType");
+        proxy = new tabris.CustomType();
         proxy.on("foo", listener);
         proxy.on("bar", listener);
 
@@ -812,7 +430,7 @@ describe("Proxy", function() {
 
       it("does not call native listen for subsequent listeners for aliased event", function() {
         tabris.registerType("CustomType", {_events: {foo: {alias: "bar"}}});
-        proxy = tabris.create("CustomType");
+        proxy = new tabris.CustomType();
         proxy.on("bar", listener);
         proxy.on("foo", listener);
 
@@ -855,7 +473,7 @@ describe("Proxy", function() {
 
       it("calls native listen (false) for last alias listener removed", function() {
         tabris.registerType("CustomType", {_events: {foo: {alias: "bar"}}});
-        proxy = tabris.create("CustomType");
+        proxy = new tabris.CustomType();
         proxy.on("bar", listener);
 
         proxy.off("bar", listener);
@@ -866,7 +484,7 @@ describe("Proxy", function() {
 
       it("calls native listen with translated event name", function() {
         tabris.registerType("CustomType", {_events: {foo: "bar"}});
-        proxy = tabris.create("CustomType");
+        proxy = new tabris.CustomType();
         proxy.on("foo", listener);
         proxy.off("foo", listener);
 
@@ -884,7 +502,7 @@ describe("Proxy", function() {
 
       it("does not call native listen when other listeners exist for alias event", function() {
         tabris.registerType("CustomType", {_events: {foo: {alias: "bar"}}});
-        proxy = tabris.create("CustomType");
+        proxy = new tabris.CustomType();
         proxy.on("foo", listener);
         proxy.on("bar", listener);
         nativeBridge.resetCalls();
@@ -896,7 +514,7 @@ describe("Proxy", function() {
 
       it("does not call native listen when other listeners exist for aliased event", function() {
         tabris.registerType("CustomType", {_events: {foo: {alias: "bar"}}});
-        proxy = tabris.create("CustomType");
+        proxy = new tabris.CustomType();
         proxy.on("foo", listener);
         proxy.on("bar", listener);
         nativeBridge.resetCalls();
@@ -908,7 +526,7 @@ describe("Proxy", function() {
 
       it("calls native listen when not other listeners exist for aliased or alias event", function() {
         tabris.registerType("CustomType", {_events: {foo: {alias: "bar"}}});
-        proxy = tabris.create("CustomType");
+        proxy = new tabris.CustomType();
         proxy.on("foo", listener);
         proxy.on("bar", listener);
         nativeBridge.resetCalls();
@@ -921,7 +539,7 @@ describe("Proxy", function() {
 
       it("calls native listen when not other listeners exist for aliased or alias event (reversed off)", function() {
         tabris.registerType("CustomType", {_events: {foo: {alias: "bar"}}});
-        proxy = tabris.create("CustomType");
+        proxy = new tabris.CustomType();
         proxy.on("foo", listener);
         proxy.on("bar", listener);
         nativeBridge.resetCalls();
@@ -1026,9 +644,9 @@ describe("Proxy", function() {
         tabris.registerWidget("TestType2", {
           _supportsChildren: true
         });
-        child1 = tabris.create("TestType2", {id: "foo", class: "myclass"}).appendTo(proxy);
-        child2 = tabris.create("TestType", {id: "bar"}).appendTo(proxy);
-        child1_1 = tabris.create("TestType", {}).appendTo(child1);
+        child1 = new tabris.TestType2({id: "foo", class: "myclass"}).appendTo(proxy);
+        child2 = new tabris.TestType({id: "bar"}).appendTo(proxy);
+        child1_1 = new tabris.TestType().appendTo(child1);
       });
 
       afterEach(function() {
@@ -1039,8 +657,8 @@ describe("Proxy", function() {
 
         beforeEach(function() {
           child1_1.set({class: "bar"});
-          child1_2 = tabris.create("TestType", {class: "bar"}).appendTo(child1);
-          child1_2_1 = tabris.create("TestType", {id: "foo", class: "bar2"}).appendTo(child1_2);
+          child1_2 = new tabris.TestType({class: "bar"}).appendTo(child1);
+          child1_2_1 = new tabris.TestType({id: "foo", class: "bar2"}).appendTo(child1_2);
         });
 
         it("* selector returns all descendants", function() {

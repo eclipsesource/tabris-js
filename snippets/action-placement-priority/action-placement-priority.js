@@ -1,10 +1,10 @@
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Actions - Placement",
   topLevel: true
 });
 
 var createAction = function(title, imageName, placementPriority) {
-  tabris.create("Action", {
+  new tabris.Action({
     title: title,
     placementPriority: placementPriority,
     image: {src: "images/" + imageName}

@@ -561,9 +561,8 @@
   function isValidHttpHeaderValue(value) {
     // non-RFC compliant validation for HTTP header values ported from Chromium:
     // https://chromium.googlesource.com/chromium/blink.git/+/master/Source/platform/network/HTTPParsers.cpp
-    // Regex for Latin-1 characters only: https://gist.github.com/LeoDutra/3044325
-    return !(!(/[*A-z\u00C0-\u00ff]+/g).test(value) || value.indexOf("\n") > -1 ||
-        value.indexOf("\r") > -1);
+    // Regex for Latin-1 characters based on: http://www.ic.unicamp.br/~stolfi/EXPORT/www/ISO-8859-1-Encoding.html
+    return /^[\x09\x0A\x0D\x20-\x7E\xA0-\xFF]*$/.test(value) && value.indexOf("\n") < 0 && value.indexOf("\r") < 0;
   }
 
   function isForbiddenHeader(header) {

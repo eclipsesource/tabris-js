@@ -1,8 +1,7 @@
 {
   "type": "Widget",
-  "title": "Widget API",
+  "description": "Base class for all widgets",
   "include": ["Events", "Properties"],
-  "description": "API supported by all widgets.",
   "methods": {
     "children": [
       {
@@ -16,6 +15,20 @@
         ],
         "returns": "WidgetCollection",
         "description": "Returns a (possibly empty) collection of all children of this widget that match the selector."
+      }
+    ],
+    "siblings": [
+      {
+        "parameters": [],
+        "returns": "WidgetCollection",
+        "description": "Returns a (possibly empty) collection of all siblings of this widget."
+      },
+      {
+        "parameters": [
+          {"name": "selector", "type": "Selector"}
+        ],
+        "returns": "WidgetCollection",
+        "description": "Returns a (possibly empty) collection of all siblings of this widget that match the selector."
       }
     ],
     "find": [
@@ -161,6 +174,10 @@
       "type": "number",
       "description": "The position of the widget on the z-axis. Currently only supported on Android 5.0+."
     },
+    "cornerRadius": {
+      "type": "number",
+      "description": "Configure a widget to have rounded corners. Each corner is affected equally. Supported on iOS and Android 5.0+."
+    },
     "font": {
       "type": "Font",
       "description": "The font used for the widget."
@@ -207,7 +224,7 @@
     },
     "type": {
       "type": "string",
-      "description": "The exact string that was used to create this widget using the `tabris.create` method."
+      "description": "The widget type without the 'tabris' namespace."
     }
   },
   "events": {

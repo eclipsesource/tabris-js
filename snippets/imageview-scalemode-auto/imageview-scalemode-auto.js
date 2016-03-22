@@ -1,16 +1,16 @@
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Image View - Scale mode 'auto'",
   topLevel: true
 });
 
-var imageView = tabris.create("ImageView", {
+var imageView = new tabris.ImageView({
   layoutData: {left: 20, top: 20, width: 100, height: 250},
   image: {src: "images/target_200.png"},
   background: "#aaaaaa",
   scaleMode: "auto"
 }).appendTo(page);
 
-tabris.create("Slider", {
+new tabris.Slider({
   layoutData: {left: 20, top: [imageView, 20], right: 100},
   minimum: 50,
   selection: 100,

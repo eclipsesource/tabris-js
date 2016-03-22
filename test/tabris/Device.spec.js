@@ -12,7 +12,7 @@ describe("Device", function() {
     });
     tabris._reset();
     tabris._init(nativeBridge);
-    device = tabris("_Device");
+    device = new tabris._Device();
   });
 
   it("provides model", function() {
@@ -128,10 +128,10 @@ describe("publishDeviceProperties", function() {
       expect(target.device).toBeDefined();
     });
 
-    it("prevents overwriting device", function() {
-      var dev = target.device;
+    it("allows overwriting device", function() {
+      // See #785
       target.device = 42;
-      expect(target.device).toBe(dev);
+      expect(target.device).toBe(42);
     });
 
     it("provides device.model", function() {
@@ -188,18 +188,18 @@ describe("publishDeviceProperties", function() {
 
     beforeEach(function() {
       target = {};
+      results.scaleFactor = 23;
       tabris._publishDeviceProperties(target);
     });
 
     it("provides devicePixelRatio", function() {
-      results.scaleFactor = 23;
       expect(target.devicePixelRatio).toBe(23);
     });
 
-    it("prevents overwriting devicePixelRatio", function() {
-      results.scaleFactor = 23;
+    it("allows overwriting devicePixelRatio", function() {
+      // Browsers also allow overwriting
       target.devicePixelRatio = 42;
-      expect(target.devicePixelRatio).toBe(23);
+      expect(target.devicePixelRatio).toBe(42);
     });
 
   });
@@ -282,10 +282,10 @@ describe("publishDeviceProperties", function() {
       expect(target.screen).toBeDefined();
     });
 
-    it("prevents overwriting screen", function() {
-      var scr = target.screen;
-      target.screen = {};
-      expect(target.screen).toBe(scr);
+    it("allows overwriting screen", function() {
+      // Browsers also allow overwriting
+      target.screen = 23;
+      expect(target.screen).toBe(23);
     });
 
   });

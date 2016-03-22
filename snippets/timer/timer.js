@@ -1,9 +1,9 @@
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Timer",
   topLevel: true
 });
 
-tabris.create("Button", {
+new tabris.Button({
   layoutData: {centerX: 0, centerY: 0},
   text: "Press me!"
 }).on("select", function(widget) {

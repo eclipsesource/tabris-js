@@ -1,14 +1,14 @@
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Layout - Baseline Alignment",
   topLevel: true
 });
 
-var textView = tabris.create("TextView", {
+var textView = new tabris.TextView({
   layoutData: {left: 20, top: 20},
   text: "Label:"
 }).appendTo(page);
 
-tabris.create("TextInput", {
+new tabris.TextInput({
   layoutData: {left: [textView, 10], width: 300, baseline: textView},
   message: "Text"
 }).appendTo(page);

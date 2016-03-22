@@ -1,7 +1,7 @@
 {
   "type": "WidgetCollection",
   "include": ["Events", "Properties"],
-  "description": ["A `WidgetCollection` is an array-like object representing a set of widgets, as returned by the widget methods `children` and `find`."],
+  "description": "A `WidgetCollection` is an array-like object representing a set of widgets, as returned by the widget methods `children` and `find`.",
   "methods": {
     "children": [
       {

@@ -3,33 +3,33 @@ var MARGIN_LARGE = 32;
 
 var scaleModes = ["auto", "fit", "fill", "stretch", "none"];
 
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Using different image view scale modes",
   topLevel: true
 });
 
-var imageView = tabris.create("ImageView", {
+var imageView = new tabris.ImageView({
   image: getImage(0),
   background: "rgb(220, 220, 220)",
   layoutData: {top: MARGIN, width: 200, height: 200, centerX: 0}
 }).appendTo(page);
 
-var imageSizeLabel = tabris.create("TextView", {
+var imageSizeLabel = new tabris.TextView({
   layoutData: {left: MARGIN, top: [imageView, MARGIN_LARGE], width: 96},
   text: "Image"
 }).appendTo(page);
 
-var imageSizePicker = tabris.create("Picker", {
+var imageSizePicker = new tabris.Picker({
   layoutData: {right: MARGIN, left: [imageSizeLabel, 0], baseline: imageSizeLabel},
   items: ["Large", "Small"]
 }).appendTo(page);
 
-var scaleModeTextView = tabris.create("TextView", {
+var scaleModeTextView = new tabris.TextView({
   layoutData: {left: MARGIN, top: [imageSizeLabel, MARGIN_LARGE], width: 96},
   text: "Scale mode"
 }).appendTo(page);
 
-var scaleModePicker = tabris.create("Picker", {
+var scaleModePicker = new tabris.Picker({
   layoutData: {right: MARGIN, left: [scaleModeTextView, 0], baseline: scaleModeTextView},
   items: scaleModes
 }).appendTo(page);

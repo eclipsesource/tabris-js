@@ -4,7 +4,7 @@ var page = new PluginPage("Motion", "cordova-plugin-device-motion", function(par
 
   var watchID = "";
 
-  var buttonWatch = tabris.create("Button", {
+  var buttonWatch = new tabris.Button({
     layoutData: {left: 10, top: 10, right: 10},
     text: "Start Watch Acceleration"
   }).appendTo(parent).on("select", function() {
@@ -24,14 +24,14 @@ var page = new PluginPage("Motion", "cordova-plugin-device-motion", function(par
     watchID = navigator.accelerometer.watchAcceleration(onSuccess, onError, options);
   });
 
-  var buttonStopWatch = tabris.create("Button", {
+  var buttonStopWatch = new tabris.Button({
     layoutData: {left: 10, top: [buttonWatch, 10], right: 10},
     text: "Stop Watch Acceleration"
   }).appendTo(parent).on("select", function() {
     navigator.accelerometer.clearWatch(watchID);
   });
 
-  var textView = tabris.create("TextView", {
+  var textView = new tabris.TextView({
     layoutData: {top: [buttonStopWatch, 20], left: 20, right: 20}
   }).appendTo(parent);
 });

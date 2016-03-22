@@ -15,7 +15,7 @@ var page = new PluginPage("Media", "cordova-media", function(parent) {
     console.log("Unable to play audio file: " + err.code + " - " + err.message);
   });
 
-  tabris.create("Button", {
+  new tabris.Button({
     layoutData: {left: 10, top: 10, right: 10},
     text: "Play"
   }).appendTo(parent).on("select", function() {

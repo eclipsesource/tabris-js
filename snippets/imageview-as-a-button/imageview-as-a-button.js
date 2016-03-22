@@ -1,10 +1,10 @@
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Using an image view as a button",
   topLevel: true
 });
 
 var touched = 0;
-tabris.create("ImageView", {
+new tabris.ImageView({
   layoutData: {centerX: 0, centerY: 0},
   image: {src: "images/target_200.png"},
   highlightOnTouch: true

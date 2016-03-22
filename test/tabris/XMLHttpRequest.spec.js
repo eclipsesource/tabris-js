@@ -675,6 +675,13 @@ describe("XMLHttpRequest", function() {
       );
     });
 
+    it("doesn't fail with HTTP header values containing numbers", function() {
+      xhr.open("GET", "http://foo.com");
+      expect(function() {
+        xhr.setRequestHeader("Foo", "1234");
+      }).not.toThrow();
+    });
+
     it("doesn't fail with HTTP header values containing wildcards", function() {
       expect(function() {
         xhr.open("GET", "http://foo.com");

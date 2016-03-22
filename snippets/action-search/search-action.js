@@ -1,17 +1,17 @@
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Actions",
   topLevel: true
 });
 
 var proposals = ["baseball", "batman", "battleship", "bangkok", "bangladesh", "banana"];
 
-var searchBox = tabris.create("Composite", {
+var searchBox = new tabris.Composite({
   layoutData: {centerX: 0, centerY: 0}
 }).appendTo(page);
 
-var textView = tabris.create("TextView").appendTo(searchBox);
+var textView = new tabris.TextView().appendTo(searchBox);
 
-var action = tabris.create("SearchAction", {
+var action = new tabris.SearchAction({
   title: "Search",
   image: "images/search.png"
 }).on("select", function() {
@@ -24,7 +24,7 @@ var action = tabris.create("SearchAction", {
 
 updateProposals("");
 
-tabris.create("Button", {
+new tabris.Button({
   text: "Open Search",
   centerX: 0,
   top: "prev() 10"

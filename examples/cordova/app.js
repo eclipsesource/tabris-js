@@ -1,14 +1,16 @@
 [
+  "./modules/SharingPage",
   "./modules/ToastPage",
   "./modules/MotionPage",
   "./modules/DialogPage",
   "./modules/NetworkPage",
   "./modules/CameraPage",
   "./modules/BarcodeScannerPage",
-  "./modules/MediaPage"
+  "./modules/MediaPage",
+  "./modules/ActionSheetPage"
 ].forEach(function(page) {
   require(page).create();
 });
 
-tabris.create("Drawer").append(tabris.create("PageSelector"));
+new tabris.Drawer().append(new tabris.PageSelector());
 tabris.ui.children("Page")[0].open();

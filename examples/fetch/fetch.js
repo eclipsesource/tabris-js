@@ -1,14 +1,10 @@
-/* globals fetch: false, Promise: true*/
-Promise = require("promise");
-require("whatwg-fetch");
-
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "XMLHttpRequest via fetch()",
   topLevel: true
 });
 
 function createTextView(text) {
-  tabris.create("TextView", {
+  new tabris.TextView({
     text: text,
     markupEnabled: true,
     layoutData: {left: 16, right: 16, top: "prev() 12"},
@@ -17,7 +13,7 @@ function createTextView(text) {
 }
 
 function createReloadButton() {
-  tabris.create("Button", {
+  new tabris.Button({
     layoutData: {left: 16, right: 16, top: "prev() 12"},
     text: "Reload Geo-Data",
     id: "reloadButton"
@@ -30,7 +26,7 @@ function loadData() {
   page.children("#reloadButton").dispose();
 
   // Create loading indicator
-  var activityIndicator = tabris.create("ActivityIndicator", {centerX: 0, centerY: 0}).appendTo(page);
+  var activityIndicator = new tabris.ActivityIndicator({centerX: 0, centerY: 0}).appendTo(page);
 
   // Run async remote request with fetch
   fetch("https://freegeoip.net/json/").then(function(response) {

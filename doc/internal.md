@@ -2,7 +2,7 @@
 
 ## tabris.registerType
 
-This method registers a new native type (a proxy) that can be instantiated via `tabris.create`. If the registered type is a widget, use `tabris.registerWidget`.
+This method registers a new native type (a proxy) and publishes the constructor on the `tabris` object. If the registered type is a widget, use `tabris.registerWidget`.
 
 Usage:
 
@@ -59,7 +59,7 @@ Acts as wrapper for `tabris.registerType`. The API is identical, except that the
 
 ## tabris.Proxy
 
-All objects created with `tabris.create` extend this type. Aside from the public methods described in the Tabris.js documentation as widget API, it has the following internal methods that may be useful:
+All types that represent a native object extend this type. Aside from the public methods described in the Tabris.js documentation as widget API, it has the following internal methods that may be useful:
 
  * `_create(properties)`: Called once to issue the `create` operation for this instance. May be overwritten to execute some additional tasks or modify the operation, but a super call should always be included in the new implementation, e.g. `this.super("_create", properties)`.
  * `_setParent(parent)`: Called when the proxy is appended to another proxy. Issues a `set` parent operation and adds the proxy to the parent's children list. May be overwritten to execute some additional tasks or to replace/reject the parent. A super call may be included in the new implementation, e.g. `this.super("_setParent", parent)`.

@@ -14,7 +14,14 @@
       },
       {
         "parameters": [
-          {"name": "collection", "type": "WidgetCollection"}
+          {"name": "widgets", "type": "Widget[]"}
+        ],
+        "returns": "Widget",
+        "description": "Adds all widgets in the given array to the composite."
+      },
+      {
+        "parameters": [
+          {"name": "widgets", "type": "WidgetCollection"}
         ],
         "returns": "Widget",
         "description": "Adds all widgets in the given collection to the composite."

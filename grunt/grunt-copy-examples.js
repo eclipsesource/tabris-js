@@ -81,8 +81,8 @@ module.exports = function(grunt) {
   function preInstallTabris(dir, manifest) {
     delete manifest.dependencies.tabris;
     grunt.file.copy("build/tabris/package.json", dir + "/node_modules/tabris/package.json");
-    grunt.file.copy("build/tabris/tabris.js", dir + "/node_modules/tabris/tabris.js");
     grunt.file.copy("build/tabris/tabris.min.js", dir + "/node_modules/tabris/tabris.min.js");
+    grunt.file.copy("build/tabris/polyfill.min.js", dir + "/node_modules/tabris/polyfill.min.js");
   }
 
 };

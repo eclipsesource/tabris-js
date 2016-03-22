@@ -1,0 +1,8 @@
+{
+  "title": "Corner Radius",
+  "description": "An example for the cornerRadius property on a widget",
+  "main": "cornerradius.js",
+  "dependencies": {
+    "tabris": "^1.7.0"
+  }
+}

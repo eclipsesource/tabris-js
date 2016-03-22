@@ -2,17 +2,17 @@ var topLevelPages = [];
 var pages = [];
 var actions = [];
 
-tabris.create("Drawer").append(tabris.create("PageSelector"));
+new tabris.Drawer().append(new tabris.PageSelector());
 createPage("Dynamic UI Start", true).open();
 
 function createPage(pageTitle, pageIsTopLevel) {
 
-  var page = tabris.create("Page", {
+  var page = new tabris.Page({
     title: pageTitle,
     topLevel: pageIsTopLevel
   });
 
-  tabris.create("Button", {
+  new tabris.Button({
     id: "addRootPage",
     layoutData: {left: 5, right: 5, top: 5},
     text: "Add Root Page",
@@ -25,7 +25,7 @@ function createPage(pageTitle, pageIsTopLevel) {
     page.open();
   }).appendTo(page);
 
-  tabris.create("Button", {
+  new tabris.Button({
     id: "addPage",
     layoutData: {left: 5, right: 5, top: "#addRootPage 5"},
     text: "Add Page",
@@ -38,14 +38,14 @@ function createPage(pageTitle, pageIsTopLevel) {
     page.open();
   }).appendTo(page);
 
-  tabris.create("Button", {
+  new tabris.Button({
     layoutData: {left: 5, right: 5, top: "#addPage 5"},
     text: "Add Global Action",
     background: "green",
     textColor: "white",
     image: {src: "images/global_action.png", width: 24, height: 24}
   }).on("select", function() {
-    var action = tabris.create("Action", {
+    var action = new tabris.Action({
       title: "Share",
       image: {src: "images/action_share.png", width: 24, height: 24}
     });
@@ -55,7 +55,7 @@ function createPage(pageTitle, pageIsTopLevel) {
 
   // TODO: add page actions to demo when implemented. See tabris-js issue #8.
 
-  tabris.create("Button", {
+  new tabris.Button({
     id: "removeLastGlobalAction",
     layoutData: {left: 5, right: 5, bottom: 5},
     text: "Remove Last Global Action",
@@ -69,7 +69,7 @@ function createPage(pageTitle, pageIsTopLevel) {
     }
   }).appendTo(page);
 
-  tabris.create("Button", {
+  new tabris.Button({
     layoutData: {left: 5, right: 5, bottom: "#removeLastGlobalAction 5"},
     text: "Remove Last Root Page",
     background: "red",

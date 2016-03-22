@@ -1,13 +1,13 @@
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "Text Input",
   topLevel: true
 });
 
-tabris.create("TextInput", {
+new tabris.TextInput({
   layoutData: {top: 20, left: "20%", right: "20%"},
   message: "Type here, then confirm"
 }).on("accept", function(widget, text) {
-  tabris.create("TextView", {
+  new tabris.TextView({
     layoutData: {top: "prev() 20", left: "20%"},
     text: text
   }).appendTo(page);

@@ -1,9 +1,9 @@
-var page = module.exports = tabris.create("Page", {
+var page = module.exports = new tabris.Page({
   title: "Basic Shapes",
   topLevel: true
 });
 
-var canvas = tabris.create("Canvas", {
+var canvas = new tabris.Canvas({
   layoutData: {left: 10, top: 10, right: 10, bottom: 10}
 }).appendTo(page);
 
