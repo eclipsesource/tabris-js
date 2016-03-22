@@ -84,17 +84,17 @@ new tabris.RadioButton({
 new tabris.Composite({
   id: "luggagePanel"
 }).append(
-    new tabris.TextView({
+  new tabris.TextView({
     id: "luggageLabel",
     text: "Luggage:"
   })
 ).append(
-    new tabris.TextView({
+  new tabris.TextView({
     id: "luggageWeight",
     text: "0 Kg"
   })
 ).append(
-    new tabris.Slider({
+  new tabris.Slider({
     id: "luggageSlider"
   }).on("change:selection", function(widget, selection) {
     scrollView.find("#luggageWeight").set("text", selection + " Kg");
@@ -109,12 +109,12 @@ new tabris.CheckBox({
 new tabris.Composite({
   id: "milesPanel"
 }).append(
-    new tabris.TextView({
+  new tabris.TextView({
     id: "milesLabel",
     text: "Redeem miles:"
   })
 ).append(
-    new tabris.Switch({
+  new tabris.Switch({
     id: "milesSwitch"
   })
 ).appendTo(scrollView);
