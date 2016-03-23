@@ -1,6 +1,6 @@
 tabris.load(function() {
 
-  if (device.platform !== "UWP") {
+  if (device.platform !== "windows") {
 
     tabris.registerWidget("_Drawer", {
       _type: "tabris.Drawer"
