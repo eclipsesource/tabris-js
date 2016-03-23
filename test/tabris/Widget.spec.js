@@ -99,6 +99,27 @@ describe("Widget", function() {
       expect(call.properties.cornerRadius).toBe(4);
     });
 
+    ["light", "dark", "default"].forEach(function(value) {
+
+      it("sets win_theme to valid value", function() {
+        widget.set("win_theme", value);
+
+        var call = nativeBridge.calls({op: "set"})[0];
+        expect(call.properties.win_theme).toBe(value);
+      });
+
+    });
+
+    it("ignores setting win_theme to invalid value", function() {
+      widget.set("win_theme", "foo");
+
+      expect(nativeBridge.calls({op: "set"}).length).toBe(0);
+    });
+
+    it("returns win_theme default value", function() {
+      expect(widget.get("win_theme")).toBe("default");
+    });
+
     it("translates visible to visibility", function() {
       widget.set("visible", true);
 

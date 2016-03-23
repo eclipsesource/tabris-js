@@ -70,6 +70,10 @@ tabris.registerWidget("_UI", {
           this._storeProperty(name, page, options);
         }
       }
+    },
+    win_toolbarTheme: {
+      type: ["choice", ["default", "light", "dark"]],
+      default: "default"
     }
   },
 

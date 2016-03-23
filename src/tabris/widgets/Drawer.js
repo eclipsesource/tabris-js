@@ -15,6 +15,17 @@ tabris.load(function() {
         return this;
       },
 
+      _properties: {
+        win_displayMode: {
+          type: ["choice", ["overlay", "compactOverlay"]],
+          default: "overlay"
+        },
+        win_buttonBackground: {
+          type: "color",
+          default: null
+        }
+      },
+
       open: function() {
         this._nativeCall("open", {});
         return this;

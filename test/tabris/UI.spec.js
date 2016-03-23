@@ -64,6 +64,27 @@ describe("UI", function() {
 
     });
 
+    ["light", "dark", "default"].forEach(function(value) {
+
+      it("sets win_toolbarTheme to valid value", function() {
+        ui.set("win_toolbarTheme", value);
+
+        var call = nativeBridge.calls({op: "set"})[0];
+        expect(call.properties.win_toolbarTheme).toBe(value);
+      });
+
+    });
+
+    it("ignores setting win_toolbarTheme to invalid value", function() {
+      ui.set("win_toolbarTheme", "foo");
+
+      expect(nativeBridge.calls({op: "set"}).length).toBe(0);
+    });
+
+    it("returns win_toolbarTheme default value", function() {
+      expect(ui.get("win_toolbarTheme")).toBe("default");
+    });
+
     describe("with a page", function() {
 
       var page;
