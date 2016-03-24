@@ -39,7 +39,7 @@ module.exports = function(grunt) {
     jasmine: {
       boot: {
         options: {
-          specs: "test/boot/*.spec.js",
+          specs: "test/boot/**/*.spec.js",
           helpers: ["test/tabris/NativeBridgeSpy.js"],
           version: "2.3.0",
           display: "short",
@@ -49,7 +49,7 @@ module.exports = function(grunt) {
       },
       tabris: {
         options: {
-          specs: grunt.file.expand("test/tabris/*.spec.js").filter(function(path) {
+          specs: grunt.file.expand("test/tabris/**/*.spec.js").filter(function(path) {
             return path.indexOf("/util") === -1;
           }),
           helpers: [
