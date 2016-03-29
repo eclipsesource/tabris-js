@@ -6,8 +6,7 @@
     "append": [
       {
         "parameters": [
-          {"name": "child", "type": "Tab"},
-          {"name": "child*", "type": "Tab"}
+          {"name": "...tabs", "type": "Tab[]"}
         ],
         "returns": "TabFolder",
         "description": "Adds the given tabs in the given order to the TabFolder"

@@ -6,7 +6,8 @@
     "open": [
       {
         "parameters": [],
-        "description": "Opens the page, i.e. makes it the active page."
+        "description": "Opens the page, i.e. makes it the active page.",
+        "returns": "this"
       }
     ],
     "close": [

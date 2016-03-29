@@ -6,24 +6,23 @@
     "append": [
       {
         "parameters": [
-          {"name": "child", "type": "Widget"},
-          {"name": "child*", "type": "Widget"}
+          {"name": "...widgets", "type": "Widget[]"}
         ],
-        "returns": "Widget",
-        "description": "Adds the given widget(s) in the given order to the composite."
+        "returns": "this",
+        "description": "Adds the given widgets to the composite."
       },
       {
         "parameters": [
           {"name": "widgets", "type": "Widget[]"}
         ],
-        "returns": "Widget",
+        "returns": "this",
         "description": "Adds all widgets in the given array to the composite."
       },
       {
         "parameters": [
           {"name": "widgets", "type": "WidgetCollection"}
         ],
-        "returns": "Widget",
+        "returns": "this",
         "description": "Adds all widgets in the given collection to the composite."
       }
     ]

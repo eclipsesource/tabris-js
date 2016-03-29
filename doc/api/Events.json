@@ -7,32 +7,24 @@
       {
         "parameters": [
           {"name": "event", "type": "string"},
-          {"name": "listener", "type": "Function"}
-        ],
-        "returns": "Object",
-        "description": "Adds the *listener* to the list of functions to be notified when *event* is fired. In the listener function, `this` will point to the object itself. Supports chaining."
-      },
-      {
-        "parameters": [
-          {"name": "event", "type": "string"},
           {"name": "listener", "type": "Function"},
-          {"name": "context", "type": "Object", "description": "In the listener function, `this` will point to this object."}
+          {"name": "context?", "type": "this", "description": "In the listener function, `this` will point to this object."}
         ],
-        "returns": "Object",
-        "description": "Adds a *listener* to the list of functions to be notified when *event* is fired. Supports chaining."
+        "returns": "this",
+        "description": "Adds a *listener* to the list of functions to be notified when *event* is fired. If the context parameter is not present, the listener will be called in the context of this object. Supports chaining."
       }
     ],
     "off": [
       {
         "parameters": [],
-        "returns": "Object",
+        "returns": "this",
         "description": "Removes all listeners for all events from this widget. Supports chaining."
       },
       {
         "parameters": [
           {"name": "event", "type": "string"}
         ],
-        "returns": "Object",
+        "returns": "this",
         "description": "Removes all listeners for *event* from this widget. Supports chaining."
       },
       {
@@ -40,16 +32,16 @@
           {"name": "event", "type": "string"},
           {"name": "listener", "type": "Function"}
         ],
-        "returns": "Object",
+        "returns": "this",
         "description": "Removes all occurrences of *listener* that are bound to *event* from this widget, regardless of their *context* parameter. Supports chaining."
       },
       {
         "parameters": [
           {"name": "event", "type": "string"},
           {"name": "listener", "type": "Function"},
-          {"name": "context", "type": "Object"}
+          {"name": "context", "type": "this"}
         ],
-        "returns": "Object",
+        "returns": "this",
         "description": "Removes all occurrences of *listener* that are bound to *event* and *context* from this widget. Supports chaining."
       }
     ],
@@ -59,17 +51,27 @@
           {"name": "event", "type": "string"},
           {"name": "listener", "type": "Function"}
         ],
-        "returns": "Object",
+        "returns": "this",
         "description": "Same as `on`, but removes the listener after it has been invoked by an event. Supports chaining."
       },
       {
         "parameters": [
           {"name": "event", "type": "string"},
           {"name": "listener", "type": "Function"},
-          {"name": "context", "type": "Object", "description": "In the listener function, `this` will point to this object."}
+          {"name": "context", "type": "this", "description": "In the listener function, `this` will point to this object."}
         ],
-        "returns": "Object",
+        "returns": "this",
         "description": "Same as `on`, but removes the listener after it has been invoked by an event. Supports chaining."
+      }
+    ],
+    "trigger": [
+      {
+        "parameters": [
+          {"name": "event", "type": "string"},
+          {"name": "...params", "type": "any[]"}
+        ],
+        "returns": "this",
+        "description": "Triggers an event of the given type. All registered listeners will be notified. Additional parameters will be passed to the listeners."
       }
     ]
   }

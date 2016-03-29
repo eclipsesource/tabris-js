@@ -19,7 +19,7 @@
       "description": "The text to display."
     },
     "maxLines": {
-      "type": "number|null",
+      "type": "number|Function",
       "default": "null",
       "description": "Limit the number of lines to be displayed to the given maximum. `null` disables this limit."
     }

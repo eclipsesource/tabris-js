@@ -1,6 +1,6 @@
 {
   "type": "UI",
-  "object": "tabris.ui",
+  "object": "ui",
   "description": "The object `tabris.ui` is the root element for all widgets. This is the parent for all top-level pages, *actions* and the *drawer*.",
   "include": ["Events", "Properties"],
   "properties": {
@@ -39,7 +39,7 @@
       "parameters": [
         {
           "name": "ui",
-          "type": "tabris.ui"
+          "type": "UI"
         },
         {
           "name": "page",
