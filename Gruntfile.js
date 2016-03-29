@@ -250,6 +250,7 @@ module.exports = function(grunt) {
     var pack = grunt.file.readJSON("package.json");
     delete pack.devDependencies;
     pack.main = "tabris.min.js";
+    pack.typings = "tabris.d.ts";
     grunt.file.write("build/tabris/package.json", stringify.plain(pack));
   });
 
@@ -276,6 +277,7 @@ module.exports = function(grunt) {
   grunt.registerTask("doc", [
     "copy:doc",
     "generate-doc",
+    "generate-tsd",
     "compress:doc"
   ]);
 

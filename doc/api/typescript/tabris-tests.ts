@@ -1,10 +1,43 @@
-/// <reference path="./tabris.d.ts" />
+import {
+    Action,
+    Button,
+    Canvas,
+    Composite,
+    CheckBox,
+    Cell,
+    CollectionView,
+    Page,
+    Drawer,
+    ImageView,
+    PageSelector,
+    Picker,
+    RadioButton,
+    ScrollView,
+    SearchAction,
+    Slider,
+    Switch,
+    TabFolder,
+    Tab,
+    TextInput,
+    TextView,
+    ToggleButton,
+    ProgressBar,
+    Video,
+    WebView,
+    WidgetCollection,
+    app,
+    App,
+    device,
+    Device,
+    ui,
+    UI,
+} from "tabris";
 
-var page = tabris.create("Page", {});
+var page: Page = new Page();
 
 function test_events() {
   var listener = () => console.log("triggered");
-  var widget = tabris.create("Composite", {});
+  var widget = new Composite();
   widget.on("foo", listener);
   widget.trigger("foo", "details");
   widget.off("foo", listener);
@@ -14,18 +47,18 @@ function test_events() {
 }
 
 function test_Action() {
-  var widget: tabris.Action = tabris.create("Action", {});
+  var widget: Action = new Action();
   widget.set("foo", 23);
   widget.set({
     image: {src: "http://example.org"},
     title: "foo",
     placementPriority: "high"
   });
-  var self: tabris.Action = widget.on("event", function(widget: tabris.Action) {});
+  var self: Action = widget.on("event", function(widget: Action) {});
 }
 
 function test_Button() {
-  var widget: tabris.Button = tabris.create("Button", {});
+  var widget: Button = new Button();
   widget.set("foo", 23);
   widget.set({
     width: 200,
@@ -37,7 +70,7 @@ function test_Button() {
 }
 
 function test_CheckBox() {
-  var widget: tabris.CheckBox = tabris.create("CheckBox", {});
+  var widget: CheckBox = new CheckBox();
   widget.set("foo", 23);
   widget.set({
     selection: true,
@@ -46,26 +79,26 @@ function test_CheckBox() {
 }
 
 function test_Canvas() {
-  var widget: tabris.Canvas = tabris.create("Canvas", {});
+  var widget: Canvas = new Canvas();
   widget.set("foo", 23);
   widget.set({
   });
-  var ctx: tabris.CanvasContext = widget.getContext("2d", 200, 300);
+  var ctx: CanvasContext = widget.getContext("2d", 200, 300);
 }
 
 function test_Cell() {
-  var widget: tabris.Cell = tabris.create("Cell", {});
+  var widget: Cell = new Cell();
   widget.set("foo", 23);
   widget.set({
   });
 }
 
 function test_CollectionView() {
-  var widget: tabris.CollectionView = tabris.create("CollectionView", {});
+  var widget: CollectionView = new CollectionView();
   widget.set("foo", 23);
   widget.set({
     cellType: (item: any) => "foo",
-    initializeCell: (cell: tabris.Cell, type: string) => {},
+    initializeCell: (cell: Cell, type: string) => {},
     itemHeight: (item: any, type: string) => 23,
     items: ["foo", "bar", "baz"],
     refreshEnabled: true,
@@ -82,23 +115,23 @@ function test_CollectionView() {
 }
 
 function test_Composite() {
-  var widget: tabris.Composite = tabris.create("Composite", {});
+  var widget: Composite = new Composite();
   widget.set("foo", 23);
   widget.set({
   });
 }
 
 function test_Drawer() {
-  var widget: tabris.Drawer = tabris.create("Drawer", {});
+  var widget: Drawer = new Drawer();
   widget.set("foo", 23);
   widget.set({
   });
-  var same: tabris.Drawer = widget.open();
-  var same: tabris.Drawer = widget.close();
+  var same: Drawer = widget.open();
+  var same: Drawer = widget.close();
 }
 
 function test_ImageView() {
-  var widget: tabris.ImageView = tabris.create("ImageView", {});
+  var widget: ImageView = new ImageView();
   widget.set("foo", 23);
   widget.set({
     image: {src: "http://example.com"},
@@ -107,7 +140,7 @@ function test_ImageView() {
 }
 
 function test_Page() {
-  var page: tabris.Page = tabris.create("Page", {});
+  var page: Page = new Page();
   page.set("foo", 23);
   page.set({
     image: {src: "http://example.com"},
@@ -118,14 +151,14 @@ function test_Page() {
 }
 
 function test_PageSelector() {
-  var widget: tabris.PageSelector = tabris.create("PageSelector", {});
+  var widget: PageSelector = new PageSelector();
   widget.set("foo", 23);
   widget.set({
   });
 }
 
 function test_Picker() {
-  var widget: tabris.Picker = tabris.create("Picker", {});
+  var widget: Picker = new Picker();
   widget.set("foo", 23);
   widget.set({
     selection: "foo",
@@ -135,7 +168,7 @@ function test_Picker() {
 }
 
 function test_ProgressBar() {
-  var widget: tabris.ProgressBar = tabris.create("ProgressBar", {});
+  var widget: ProgressBar = new ProgressBar();
   widget.set("foo", 23);
   widget.set({
     minimum: 0,
@@ -146,7 +179,7 @@ function test_ProgressBar() {
 }
 
 function test_RadioButton() {
-  var widget: tabris.RadioButton = tabris.create("RadioButton", {});
+  var widget: RadioButton = new RadioButton();
   widget.set("foo", 23);
   widget.set({
     selection: true,
@@ -155,7 +188,7 @@ function test_RadioButton() {
 }
 
 function test_ScrollView() {
-  var widget: tabris.ScrollView = tabris.create("ScrollView", {});
+  var widget: ScrollView = new ScrollView();
   widget.set("foo", 23);
   widget.set({
     direction: "horizontal"
@@ -163,7 +196,7 @@ function test_ScrollView() {
 }
 
 function test_SearchAction() {
-  var widget: tabris.SearchAction = tabris.create("SearchAction", {});
+  var widget: SearchAction = new SearchAction();
   widget.set("foo", 23);
   widget.set({
     message: "foo",
@@ -173,7 +206,7 @@ function test_SearchAction() {
 }
 
 function test_Slider() {
-  var widget: tabris.Slider = tabris.create("Slider", {});
+  var widget: Slider = new Slider();
   widget.set("foo", 23);
   widget.set({
     minimum: 0,
@@ -183,7 +216,7 @@ function test_Slider() {
 }
 
 function test_Switch() {
-  var widget: tabris.Switch = tabris.create("Switch", {});
+  var widget: Switch = new Switch();
   widget.set("foo", 23);
   widget.set({
     selection: true
@@ -191,7 +224,7 @@ function test_Switch() {
 }
 
 function test_TextInput() {
-  var widget: tabris.TextInput = tabris.create("TextInput", {});
+  var widget: TextInput = new TextInput();
   widget.set("foo", 23);
   widget.set({
     alignment: "center",
@@ -206,7 +239,7 @@ function test_TextInput() {
 }
 
 function test_Tab() {
-  var widget: tabris.Tab = tabris.create("Tab", {});
+  var widget: Tab = new Tab();
   widget.set("foo", 23);
   widget.set({
     badge: "foo",
@@ -216,19 +249,19 @@ function test_Tab() {
 }
 
 function test_TabFolder() {
-  var widget: tabris.TabFolder = tabris.create("TabFolder", {});
+  var widget: TabFolder = new TabFolder();
   widget.set("foo", 23);
   widget.set({
     paging: true,
     tabBarLocation: "auto",
     selection: tab1
   });
-  var tab1: tabris.Tab, tab2: tabris.Tab;
-  var same: tabris.TabFolder = widget.append(tab1, tab2);
+  var tab1: Tab, tab2: Tab;
+  var same: TabFolder = widget.append(tab1, tab2);
 }
 
 function test_TextView() {
-  var widget: tabris.TextView = tabris.create("TextView", {});
+  var widget: TextView = new TextView();
   widget.set("foo", 23);
   widget.set({
     alignment: "center",
@@ -236,10 +269,12 @@ function test_TextView() {
     maxLines: 23,
     text: "foo"
   });
+  widget.set("maxLines", 23);
+  widget.set("maxLines", () => 42);
 }
 
 function test_ToggleButton() {
-  var widget: tabris.ToggleButton = tabris.create("ToggleButton", {});
+  var widget: ToggleButton = new ToggleButton();
   widget.set("foo", 23);
   widget.set({
     alignment: "center",
@@ -250,7 +285,7 @@ function test_ToggleButton() {
 }
 
 function test_Video() {
-  var widget: tabris.Video = tabris.create("Video", {});
+  var widget: Video = new Video();
   widget.set("foo", 23);
   widget.set({
     url: "http://example.org"
@@ -258,7 +293,7 @@ function test_Video() {
 }
 
 function test_WebView() {
-  var widget: tabris.WebView = tabris.create("WebView", {});
+  var widget: WebView = new WebView();
   widget.set("foo", 23);
   widget.set({
     html: "<html>",
@@ -267,36 +302,36 @@ function test_WebView() {
 }
 
 function test_WidgetCollection() {
-  var collection: tabris.WidgetCollection = page.find();
+  var collection: WidgetCollection = page.find();
   var length: number = collection.length;
-  var grandParents: tabris.WidgetCollection = collection.parent().parent();
-  var grandChildren: tabris.WidgetCollection = collection.children().children();
-  var found: tabris.WidgetCollection = collection.find().find(".class");
+  var grandParents: WidgetCollection = collection.parent().parent();
+  var grandChildren: WidgetCollection = collection.children().children();
+  var found: WidgetCollection = collection.find().find(".class");
   collection.appendTo(page);
   collection.dispose();
 }
 
 function test_tabris_app() {
-  tabris.app.installPatch("url", (error: Error, patch: Object) => {});
-  tabris.app.reload();
+  app.installPatch("url", (error: Error, patch: Object) => {});
+  app.reload();
 }
 
 function test_tabris_device() {
-  var lang: string = tabris.device.get("language");
-  var model: string = tabris.device.get("model");
-  var orient: string = tabris.device.get("orientation");
-  var platform: string = tabris.device.get("platform");
-  var factor: number = tabris.device.get("scaleFactor");
-  var height: number = tabris.device.get("screenHeight");
-  var width: number = tabris.device.get("screenWidth");
-  var version: string = tabris.device.get("version");
-  var same: tabris.Device = tabris.device.on("change:orientation", () => {}).off("change:orientation");
+  var lang: string = device.get("language");
+  var model: string = device.get("model");
+  var orient: string = device.get("orientation");
+  var platform: string = device.get("platform");
+  var factor: number = device.get("scaleFactor");
+  var height: number = device.get("screenHeight");
+  var width: number = device.get("screenWidth");
+  var version: string = device.get("version");
+  var same: Device = device.on("change:orientation", () => {}).off("change:orientation");
 }
 
 function test_tabris_ui() {
-  var page: tabris.Page = tabris.ui.get("activePage");
-  var bg: string = tabris.ui.get("background");
-  var tc: string = tabris.ui.get("textColor");
-  var visible: boolean = tabris.ui.get("toolbarVisible");
-  var same: tabris.UI = tabris.ui.on("change:activePage", () => {}).off("change:activePage");
+  var page: Page = ui.get("activePage");
+  var bg: string = ui.get("background");
+  var tc: string = ui.get("textColor");
+  var visible: boolean = ui.get("toolbarVisible");
+  var same: UI = ui.on("change:activePage", () => {}).off("change:activePage");
 }
