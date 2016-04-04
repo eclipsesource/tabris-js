@@ -54,7 +54,7 @@
             "description": "An object in the format `{Selector: {property: value, property: value, ... }, Selector: ...}`"
           }
         ],
-        "returns": "Widget",
+        "returns": "this",
         "description": "Applies the given properties to all descendants that match the associated selector(s)."
       }
     ],
@@ -70,7 +70,7 @@
         "parameters": [
           {"name": "parent", "type": "Composite"}
         ],
-        "returns": "Widget",
+        "returns": "this",
         "description": "Appends this widget to the given parent. The parent widget must support children (extending *Composite*). If the widget already has a parent, it is removed from the old parent."
       }
     ],
@@ -79,7 +79,7 @@
         "parameters": [
           {"name": "widget", "type": "Widget"}
         ],
-        "returns": "Widget",
+        "returns": "this",
         "description": "Inserts this widget directly before the given widget. If the widget already has a parent, it is removed from the old parent."
       }
     ],
@@ -88,7 +88,7 @@
         "parameters": [
           {"name": "widget", "type": "Widget"}
         ],
-        "returns": "Widget",
+        "returns": "this",
         "description": "Inserts this widget directly after the given widget. If the widget already has a parent, it is removed from the old parent."
       }
     ],
