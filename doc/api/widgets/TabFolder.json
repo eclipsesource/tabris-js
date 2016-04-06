@@ -1,18 +1,7 @@
 {
   "type": "TabFolder",
-  "description": "A widget that can switch between [tabs](Tab).",
-  "include": ["Widget"],
-  "methods": {
-    "append": [
-      {
-        "parameters": [
-          {"name": "...tabs", "type": "Tab[]"}
-        ],
-        "returns": "TabFolder",
-        "description": "Adds the given tabs in the given order to the TabFolder"
-      }
-    ]
-  },
+  "description": "A widget that can switch between [tabs](Tab). Only children of type `Tab` are supported.",
+  "include": ["Composite"],
   "properties": {
     "tabBarLocation": {
       "type": "string",

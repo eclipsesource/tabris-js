@@ -239,13 +239,15 @@ function test_TextInput() {
 }
 
 function test_Tab() {
-  var widget: Tab = new Tab();
-  widget.set("foo", 23);
-  widget.set({
+  var tab: Tab = new Tab();
+  tab.set("foo", 23);
+  tab.set({
     badge: "foo",
     title: "bar",
     image: {src: "http://example.org"}
   });
+  var folder = new TabFolder();
+  tab.appendTo(folder);
 }
 
 function test_TabFolder() {
