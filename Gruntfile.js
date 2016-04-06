@@ -185,6 +185,16 @@ module.exports = function(grunt) {
       readme: {
         src: "README.md",
         dest: "build/tabris/"
+      },
+      typings: {
+        src: "build/typescript/tabris.d.ts",
+        dest: "build/tabris/tabris.d.ts"
+      },
+      test_ts: {
+        expand: true,
+        cwd: "test/typescript/",
+        src: "**/*.test.ts",
+        dest: "build/typescript/"
       }
     },
     compress: {
@@ -223,6 +233,12 @@ module.exports = function(grunt) {
         }
       }
     },
+    exec: {
+      test_typings: {
+        cmd: "../../node_modules/.bin/tsc --noImplicitAny tabris.*.ts",
+        cwd: "build/typescript"
+      }
+    },
     examples: {
       src: ["snippets", "examples"]
     }
@@ -237,6 +253,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-contrib-copy");
   grunt.loadNpmTasks("grunt-contrib-compress");
   grunt.loadNpmTasks("grunt-webpack");
+  grunt.loadNpmTasks("grunt-exec");
   grunt.loadTasks("./grunt");
 
   /* runs static code analysis tools */
@@ -264,20 +281,23 @@ module.exports = function(grunt) {
     "uglify:polyfill",
     "package",
     "copy:readme",
+    "generate-tsd",
+    "copy:typings",
     "compress:tabris"
   ]);
 
   /* runs jasmine tests against the build output */
   grunt.registerTask("test", [
     "jasmine:boot",
-    "jasmine:tabris"
+    "jasmine:tabris",
+    "copy:test_ts",
+    "exec:test_typings"
   ]);
 
   /* generates reference documentation */
   grunt.registerTask("doc", [
     "copy:doc",
     "generate-doc",
-    "generate-tsd",
     "compress:doc"
   ]);
 

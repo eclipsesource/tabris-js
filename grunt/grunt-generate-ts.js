@@ -81,7 +81,7 @@ interface Transformation {
    */
   scaleX: number;
 
-  /*
+  /**
    * Vertical scale factor. Defaults to \`1\`.
    */
   scaleY: number;
@@ -127,7 +127,7 @@ module.exports = function(grunt) {
   grunt.registerTask("generate-tsd", function() {
     let defs = readJsonDefs();
     let tsd = createTypeDefs(defs);
-    grunt.file.write("build/tabris/tabris.d.ts", tsd);
+    grunt.file.write("build/typescript/tabris.d.ts", tsd);
   });
 
   function readJsonDefs() {
