@@ -76,6 +76,7 @@ describe("UI", function() {
     });
 
     it("ignores setting win_toolbarTheme to invalid value", function() {
+      spyOn(console, "warn");
       ui.set("win_toolbarTheme", "foo");
 
       expect(nativeBridge.calls({op: "set"}).length).toBe(0);

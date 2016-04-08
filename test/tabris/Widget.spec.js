@@ -111,6 +111,7 @@ describe("Widget", function() {
     });
 
     it("ignores setting win_theme to invalid value", function() {
+      spyOn(console, "warn");
       widget.set("win_theme", "foo");
 
       expect(nativeBridge.calls({op: "set"}).length).toBe(0);
