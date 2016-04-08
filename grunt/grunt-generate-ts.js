@@ -50,22 +50,22 @@ interface Bounds {
   /**
    * the horizontal offset from the parent's left edge in dip
    */
-  left: number;
+  left?: number;
 
   /**
    * the vertical offset from the parent's top edge in dip
    */
-  top: number;
+  top?: number;
 
   /**
    * the width of the widget in dip
    */
-  width: number;
+  width?: number;
 
   /**
    * the height of the widget in dip
    */
-  height: number;
+  height?: number;
 
 }
 
@@ -74,32 +74,32 @@ interface Transformation {
   /**
    * Clock-wise rotation in radians. Defaults to \`0\`.
    */
-   rotation: number;
+   rotation?: number;
 
   /**
    * Horizontal scale factor. Defaults to \`1\`.
    */
-  scaleX: number;
+  scaleX?: number;
 
   /**
    * Vertical scale factor. Defaults to \`1\`.
    */
-  scaleY: number;
+  scaleY?: number;
 
   /**
    * Horizontal translation (shift) in dip. Defaults to \`0\`.
    */
-  translationX: number;
+  translationX?: number;
 
   /**
    * Vertical translation (shift) in dip. Defaults to \`0\`.
    */
-  translationY: number;
+  translationY?: number;
 
   /**
    * Z-axis translation (shift) in dip. Defaults to \`0\`. Android 5.0+ only.
    */
-  translationZ: number;
+  translationZ?: number;
 
 }
 
