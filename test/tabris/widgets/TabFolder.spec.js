@@ -241,6 +241,7 @@ describe("TabFolder", function() {
 
     it("Ignores setting null with warning", function() {
       spyOn(console, "warn");
+      nativeBridge.resetCalls();
 
       tabFolder.set("selection", null);
 
@@ -252,6 +253,7 @@ describe("TabFolder", function() {
     it("Ignores setting disposed tab with warning", function() {
       spyOn(console, "warn");
       tab2.dispose();
+      nativeBridge.resetCalls();
 
       tabFolder.set("selection", tab2);
 
@@ -262,6 +264,7 @@ describe("TabFolder", function() {
 
     it("Ignores setting non tab", function() {
       spyOn(console, "warn");
+      nativeBridge.resetCalls();
 
       tabFolder.set("selection", "foo");
 

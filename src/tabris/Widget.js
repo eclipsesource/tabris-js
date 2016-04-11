@@ -426,9 +426,9 @@
   };
 
   function renderLayoutData() {
-    if (this._layoutData) {
-      var checkedData = tabris.Layout.checkConsistency(this._layoutData);
-      this._nativeSet("layoutData", tabris.Layout.resolveReferences(checkedData, this));
+    if (this._parent) {
+      var layoutData = tabris.Layout.normalize(this._layoutData);
+      this._nativeSet("layoutData", tabris.Layout.resolveReferences(layoutData, this));
     }
   }
 

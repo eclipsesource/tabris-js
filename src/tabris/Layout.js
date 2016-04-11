@@ -2,8 +2,8 @@
 
   tabris.Layout = {
 
-    checkConsistency: function(layoutData) {
-      var result = layoutData;
+    normalize: function(layoutData) {
+      var result = layoutData || {};
       if ("centerX" in result) {
         if (("left" in result) || ("right" in result)) {
           console.warn("Inconsistent layoutData: centerX overrides left and right");
@@ -24,10 +24,14 @@
       if ("left" in result && "right" in result && "width" in result) {
         console.warn("Inconsistent layoutData: left and right are set, ignore width");
         result = _.omit(result, ["width"]);
+      } else if (!("left" in result || "right" in result || "centerX" in result)) {
+        result.left = 0;
       }
       if ("top" in result && "bottom" in result && "height" in result) {
         console.warn("Inconsistent layoutData: top and bottom are set, ignore height");
         result = _.omit(result, ["height"]);
+      } else if (!("top" in result || "bottom" in result || "centerY" in result || "baseline" in result)) {
+        result.top = 0;
       }
       return result;
     },
