@@ -1,6 +1,5 @@
 /* global _: true */
-/* jshint unused: false */
-var _ = {
+_ = {
 
   extend: function(target) {
     for (var i = 1; i < arguments.length; i++) {

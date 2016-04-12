@@ -15,10 +15,6 @@ describe("tabris", function() {
     delete tabris.TestType;
   });
 
-  it("exports tabris object", function() {
-    expect(module.exports).toBe(tabris);
-  });
-
   describe("when used as a function", function() {
 
     it("returns proxy instance for a given cid", function() {

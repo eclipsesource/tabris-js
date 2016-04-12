@@ -36,39 +36,6 @@ module.exports = function(grunt) {
         config: true
       }
     },
-    jasmine: {
-      boot: {
-        options: {
-          specs: "test/boot/**/*.spec.js",
-          helpers: ["test/tabris/NativeBridgeSpy.js"],
-          version: "2.3.0",
-          display: "short",
-          summary: true
-        },
-        src: "build/boot.js"
-      },
-      tabris: {
-        options: {
-          specs: grunt.file.expand("test/tabris/**/*.spec.js").filter(function(path) {
-            return path.indexOf("/util") === -1;
-          }),
-          helpers: [
-            "test/tabris/NativeBridgeSpy.js",
-            "node_modules/underscore/underscore-min.js",
-            "node_modules/backbone/backbone-min.js",
-            "test/tabris/FakeTabrisModule.js"
-          ],
-          version: "2.3.0",
-          display: "short",
-          summary: true
-        },
-        src: [
-          "build/tabris/tabris.js",
-          "test/tabris/jasmineToString.js",
-          "test/tabris/tabris-init.js"
-        ]
-      }
-    },
     concat: {
       tabris: {
         options: {
@@ -237,6 +204,12 @@ module.exports = function(grunt) {
       test_typings: {
         cmd: "../../node_modules/.bin/tsc --noImplicitAny tabris.*.ts",
         cwd: "build/typescript"
+      },
+      test_boot: {
+        cmd: "node test/boot/run-tests.js"
+      },
+      test_tabris: {
+        cmd: "node test/tabris/run-tests.js"
       }
     },
     examples: {
@@ -248,7 +221,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-contrib-concat");
   grunt.loadNpmTasks("grunt-contrib-jshint");
   grunt.loadNpmTasks("grunt-jscs");
-  grunt.loadNpmTasks("grunt-contrib-jasmine");
   grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.loadNpmTasks("grunt-contrib-copy");
   grunt.loadNpmTasks("grunt-contrib-compress");
@@ -286,10 +258,10 @@ module.exports = function(grunt) {
     "compress:tabris"
   ]);
 
-  /* runs jasmine tests against the build output */
+  /* runs tests against the build output */
   grunt.registerTask("test", [
-    "jasmine:boot",
-    "jasmine:tabris",
+    "exec:test_boot",
+    "exec:test_tabris",
     "copy:test_ts",
     "exec:test_typings"
   ]);
