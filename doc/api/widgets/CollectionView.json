@@ -42,6 +42,11 @@
     "lastVisibleIndex": {
       "type": "number",
       "description": "The last item that is currently visible on screen. This property is read-only."
+    },
+    "columnCount": {
+      "type": "number",
+      "default": 1,
+      "description": "The number of columns to display in the collection view. If set to a value `n > 1`, each row will contain `n` items. The available space will be equally distributed between columns."
     }
   },
   "events": {
