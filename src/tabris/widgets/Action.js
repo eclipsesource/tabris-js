@@ -14,7 +14,8 @@ tabris.registerWidget("Action", {
       },
       nocache: true
     },
-    title: {type: "string", default: ""}
+    title: {type: "string", default: ""},
+    win_symbol: {type: "string", default: ""}
   },
 
   _events: {
