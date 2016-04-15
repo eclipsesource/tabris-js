@@ -1,94 +1,76 @@
 describe("Layout:", function() {
 
-  describe("normalize", function() {
+  describe("checkConsistency", function() {
 
-    var normalize = tabris.Layout.normalize;
+    var check = tabris.Layout.checkConsistency;
 
     beforeEach(function() {
       spyOn(console, "warn");
     });
 
     it("raises a warning for inconsistent layoutData (width)", function() {
-      normalize({top: 0, left: 0, right: 0, width: 100});
+      check({top: 0, left: 0, right: 0, width: 100});
 
       var warning = "Inconsistent layoutData: left and right are set, ignore width";
       expect(console.warn).toHaveBeenCalledWith(warning);
     });
 
     it("skips overridden properties from layoutData (width)", function() {
-      var result = normalize({top: 0, left: 0, right: 0, width: 100});
+      var result = check({top: 0, left: 0, right: 0, width: 100});
 
       expect(result).toEqual({top: 0, left: 0, right: 0});
     });
 
     it("raises a warning for inconsistent layoutData (height)", function() {
-      normalize({top: 0, left: 0, bottom: 0, height: 100});
+      check({top: 0, left: 0, bottom: 0, height: 100});
 
       var warning = "Inconsistent layoutData: top and bottom are set, ignore height";
       expect(console.warn).toHaveBeenCalledWith(warning);
     });
 
     it("skips overridden properties from layoutData (height)", function() {
-      var result = normalize({top: 0, left: 0, bottom: 0, height: 100});
+      var result = check({top: 0, left: 0, bottom: 0, height: 100});
 
       expect(result).toEqual({top: 0, left: 0, bottom: 0});
     });
 
     it("raises a warning for inconsistent layoutData (centerX)", function() {
-      normalize({top: 0, left: 0, centerX: 0});
+      check({top: 0, left: 0, centerX: 0});
 
       var warning = "Inconsistent layoutData: centerX overrides left and right";
       expect(console.warn).toHaveBeenCalledWith(warning);
     });
 
     it("skips overridden properties from layoutData (centerX)", function() {
-      var result = normalize({top: 1, left: 2, right: 3, centerX: 4});
+      var result = check({top: 1, left: 2, right: 3, centerX: 4});
 
       expect(result).toEqual({top: 1, centerX: 4});
     });
 
     it("raises a warning for inconsistent layoutData (centerY)", function() {
-      normalize({left: 0, top: 0, centerY: 0});
+      check({left: 0, top: 0, centerY: 0});
 
       var warning = "Inconsistent layoutData: centerY overrides top and bottom";
       expect(console.warn).toHaveBeenCalledWith(warning);
     });
 
     it("skips overridden properties from layoutData (centerY)", function() {
-      var result = normalize({left: 1, top: 2, bottom: 3, centerY: 4});
+      var result = check({left: 1, top: 2, bottom: 3, centerY: 4});
 
       expect(result).toEqual({left: 1, centerY: 4});
     });
 
     it("raises a warning for inconsistent layoutData (baseline)", function() {
-      normalize({left: 0, top: 0, baseline: "#other"});
+      check({left: 0, top: 0, baseline: "#other"});
 
       var warning = "Inconsistent layoutData: baseline overrides top, bottom, and centerY";
       expect(console.warn).toHaveBeenCalledWith(warning);
     });
 
     it("skips overridden properties from layoutData (baseline)", function() {
-      var result = normalize({left: 1, top: 2, bottom: 3, centerY: 4, baseline: "other"});
+      var result = check({left: 1, top: 2, bottom: 3, centerY: 4, baseline: "other"});
 
       expect(result).toEqual({left: 1, baseline: "other"});
-    });
-
-    it("inserts `left: 0` for missing horizontal properties", function() {
-      var result = normalize({top: 1, bottom: 2});
-
-      expect(result).toEqual({left: 0, top: 1, bottom: 2});
-    });
-
-    it("inserts `top: 0` for missing vertical properties", function() {
-      var result = normalize({left: 1, right: 2});
-
-      expect(result).toEqual({top: 0, left: 1, right: 2});
-    });
-
-    it("returns default layoutData for null", function() {
-      var result = normalize();
-
-      expect(result).toEqual({top: 0, left: 0});
     });
 
   });

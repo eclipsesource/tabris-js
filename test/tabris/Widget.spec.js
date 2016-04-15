@@ -296,10 +296,10 @@ describe("Widget", function() {
           result = widget.append(child1);
         });
 
-        it("SETs the child's parent", function() {
-          var calls = nativeBridge.calls({op: "set", id: child1.cid});
+        it("sets the child's parent", function() {
+          var calls = nativeBridge.calls();
           expect(calls.length).toBe(1);
-          expect(calls[0].properties.parent).toBe(widget.cid);
+          expect(calls[0]).toEqual({op: "set", id: child1.cid, properties: {parent: widget.cid}});
         });
 
         it("returns self to allow chaining", function() {
@@ -330,10 +330,10 @@ describe("Widget", function() {
           result = widget.append(child1, child2);
         });
 
-        it("SETs the children's parent", function() {
-          var calls = nativeBridge.calls({op: "set", id: child2.cid});
+        it("sets the children's parent", function() {
+          var calls = nativeBridge.calls();
           expect(calls.length).toBe(2);
-          expect(calls[0].properties.parent).toBe(widget.cid);
+          expect(calls[1]).toEqual({op: "set", id: child2.cid, properties: {parent: widget.cid}});
         });
 
         it("returns self to allow chaining", function() {
@@ -358,11 +358,11 @@ describe("Widget", function() {
           result = widget.append([child1, child2]);
         });
 
-        it("SETs the widgets' parent", function() {
-          var set1 = nativeBridge.calls({op: "set", id: child1.cid})[0];
-          var set2 = nativeBridge.calls({op: "set", id: child2.cid})[0];
-          expect(set1.properties.parent).toBe(widget.cid);
-          expect(set2.properties.parent).toBe(widget.cid);
+        it("sets the widgets' parent", function() {
+          var calls = nativeBridge.calls();
+          expect(calls.length).toBe(2);
+          expect(calls[0]).toEqual({op: "set", id: child1.cid, properties: {parent: widget.cid}});
+          expect(calls[1]).toEqual({op: "set", id: child2.cid, properties: {parent: widget.cid}});
         });
 
         it("adds the widgets to children list", function() {
@@ -381,11 +381,11 @@ describe("Widget", function() {
           result = widget.append(new tabris.ProxyCollection([child1, child2]));
         });
 
-        it("SETs the widgets' parent", function() {
-          var set1 = nativeBridge.calls({op: "set", id: child1.cid})[0];
-          var set2 = nativeBridge.calls({op: "set", id: child2.cid})[0];
-          expect(set1.properties.parent).toBe(widget.cid);
-          expect(set2.properties.parent).toBe(widget.cid);
+        it("sets the widgets' parent", function() {
+          var calls = nativeBridge.calls();
+          expect(calls.length).toBe(2);
+          expect(calls[0]).toEqual({op: "set", id: child1.cid, properties: {parent: widget.cid}});
+          expect(calls[1]).toEqual({op: "set", id: child2.cid, properties: {parent: widget.cid}});
         });
 
         it("adds the widgets to children list", function() {
@@ -867,7 +867,7 @@ describe("Widget", function() {
       widget.set("layoutData", {left: 23, baseline: "#other", right: ["#other", 42]});
       widget.appendTo(parent);
 
-      var call = nativeBridge.calls({op: "set", id: widget.cid})[0];
+      var call = nativeBridge.calls({op: "create"})[0];
       var expected = {left: 23, baseline: other.cid, right: [other.cid, 42]};
       expect(call.properties.layoutData).toEqual(expected);
     });
@@ -880,36 +880,43 @@ describe("Widget", function() {
       expect(call.properties.layoutData).toEqual(expected);
     });
 
-    it("SETs layoutData again when selector resolves by adding sibling", function() {
+    it("SET layoutData again until selector resolves by adding sibling", function() {
       other.dispose();
 
       widget.set("layoutData", {right: "#other"});
-      var withoutSibling = nativeBridge.calls({op: "set", id: widget.cid});
-      nativeBridge.resetCalls();
+      var withoutSibling = nativeBridge.calls({op: "set"});
+      var retry = nativeBridge.calls({op: "set"});
       other = new tabris.TestType({id: "other"}).appendTo(parent);
-      var withSibling = nativeBridge.calls({op: "set", id: widget.cid});
+      var withSibling = nativeBridge.calls({op: "set"});
+      var noRetry = nativeBridge.calls({op: "set"});
 
       expect(withoutSibling.length).toBe(1);
-      expect(withSibling.length).toBe(1);
-      expect(withoutSibling[0].properties.layoutData).toEqual({top: 0, right: [0, 0]});
-      expect(withSibling[0].properties.layoutData).toEqual({top: 0, right: [other.cid, 0]});
+      expect(retry.length).toBe(1);
+      expect(withSibling.length).toBe(2);
+      expect(noRetry.length).toBe(2);
+      expect(withoutSibling[0].properties.layoutData).toEqual({right: [0, 0]});
+      expect(withSibling[1].properties.layoutData).toEqual({right: [other.cid, 0]});
     });
 
-    it("SETs layoutData again when selector resolves by setting parent", function() {
+    it("SET layoutData again until selector resolves by setting parent", function() {
       widget = new tabris.TestType();
       var oldParent = new tabris.Composite();
       widget.appendTo(oldParent);
+      nativeBridge.resetCalls();
 
       widget.set("layoutData", {right: "#other"});
-      var withoutParent = nativeBridge.calls({op: "set", id: widget.cid});
-      nativeBridge.resetCalls();
+      var withoutParent = nativeBridge.calls({op: "set"});
+      var retry = nativeBridge.calls({op: "set"});
       widget.appendTo(parent);
-      var withParent = nativeBridge.calls({op: "set", id: widget.cid});
+      var withParent = nativeBridge.calls({op: "set"});
+      var noRetry = nativeBridge.calls({op: "set"});
 
       expect(withoutParent.length).toBe(1);
+      expect(retry.length).toBe(1);
       expect(withParent.length).toBe(2);
-      expect(withoutParent[0].properties.layoutData).toEqual({top: 0, right: [0, 0]});
-      expect(withParent[1].properties.layoutData).toEqual({top: 0, right: [other.cid, 0]});
+      expect(noRetry.length).toBe(2);
+      expect(withoutParent[0].properties.layoutData).toEqual({right: [0, 0]});
+      expect(withParent[1].properties.layoutData).toEqual({right: [other.cid, 0]});
     });
 
   });
@@ -977,17 +984,13 @@ describe("Widget", function() {
         expect(widget.get(attr)).toBe("#other");
       });
 
-      it("SETs normalized layoutData", function() {
+      it("SETs layoutData", function() {
         widget.set(attr, 23);
 
-        var call = nativeBridge.calls({op: "set", id: widget.cid})[0];
-        var expected = {
-          left: {left: 23, top: 0},
-          right: {right: 23, top: 0},
-          top: {top: 23, left: 0},
-          bottom: {bottom: 23, left: 0}
-        };
-        expect(call.properties.layoutData).toEqual(expected[attr]);
+        var call = nativeBridge.calls({op: "set"})[0];
+        var expected = {};
+        expected[attr] = 23;
+        expect(call.properties.layoutData).toEqual(expected);
       });
 
     });
@@ -1008,17 +1011,13 @@ describe("Widget", function() {
         expect(widget.get("layoutData")).toEqual(_.omit(layoutData, attr));
       });
 
-      it("SETs normalized layoutData", function() {
+      it("SETs layoutData", function() {
         widget.set(attr, 23);
 
-        var call = nativeBridge.calls({op: "set", id: widget.cid})[0];
-        var expected = {
-          width: {width: 23, left: 0, top: 0},
-          height: {height: 23, left: 0, top: 0},
-          centerX: {centerX: 23, top: 0},
-          centerY: {centerY: 23, left: 0}
-        };
-        expect(call.properties.layoutData).toEqual(expected[attr]);
+        var call = nativeBridge.calls({op: "set"})[0];
+        var expected = {};
+        expected[attr] = 23;
+        expect(call.properties.layoutData).toEqual(expected);
       });
 
     });
@@ -1028,8 +1027,8 @@ describe("Widget", function() {
 
       widget.set("left", 10).set("width", 10).set("right", 10).set("left", null);
 
-      var call = nativeBridge.calls({op: "set", id: widget.cid})[0];
-      var expected = {top: 0, right: 10, width: 10};
+      var call = nativeBridge.calls({op: "set"})[0];
+      var expected = {right: 10, width: 10};
       expect(call.properties.layoutData).toEqual(expected);
       expect(console.warn).not.toHaveBeenCalled();
     });
@@ -1039,8 +1038,8 @@ describe("Widget", function() {
 
       widget.set("left", 10).set("width", 10).set("right", 10);
 
-      var call = nativeBridge.calls({op: "set", id: widget.cid})[0];
-      var expected = {top: 0, right: 10, left: 10};
+      var call = nativeBridge.calls({op: "set"})[0];
+      var expected = {right: 10, left: 10};
       expect(call.properties.layoutData).toEqual(expected);
       expect(console.warn).toHaveBeenCalled();
     });
