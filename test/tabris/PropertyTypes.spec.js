@@ -361,21 +361,6 @@ describe("PropertyTypes:", function() {
       });
     });
 
-    it("translates values given in map", function() {
-      expect(check("1", {1: "2", 3: "4"})).toBe("2");
-      expect(check("3", {1: "2", 3: "4"})).toBe("4");
-    });
-
-    it("rejects string values not given in map", function() {
-      var accepted = {x: true, y: true, z: true};
-
-      ["1", "foo", "bar"].forEach(function(value) {
-        expect(function() {
-          check(value, accepted);
-        }).toThrow(new Error("Accepting \"x\", \"y\", \"z\", given was: \"" + value + "\""));
-      });
-    });
-
   });
 
   describe("nullable", function() {

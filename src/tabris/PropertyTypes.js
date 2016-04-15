@@ -51,16 +51,10 @@
 
     choice: {
       encode: function(value, acceptable) {
-        if (Array.isArray(acceptable)) {
-          if (acceptable.indexOf(value) === -1) {
-            throwNotAcceptedError(acceptable, value);
-          }
-          return value;
+        if (acceptable.indexOf(value) === -1) {
+          throwNotAcceptedError(acceptable, value);
         }
-        if (!(value in acceptable)) {
-          throwNotAcceptedError(Object.keys(acceptable), value);
-        }
-        return acceptable[value];
+        return value;
       }
     },
 
