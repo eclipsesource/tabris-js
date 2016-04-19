@@ -116,18 +116,13 @@ interface margin {
 }
 `.trim();
 
-let footer = `
-declare module "tabris" {
-  export = tabris;
-}
-`.trim();
 
 module.exports = function(grunt) {
 
   grunt.registerTask("generate-tsd", function() {
     let defs = readJsonDefs();
     let tsd = createTypeDefs(defs);
-    grunt.file.write("build/typescript/tabris.d.ts", tsd);
+    grunt.file.write("build/tabris/tabris.d.ts", tsd);
   });
 
   function readJsonDefs() {
@@ -147,16 +142,10 @@ module.exports = function(grunt) {
     let result = new Text();
     result.append(header);
     result.append("");
-    result.append("declare module tabris {");
-    result.append("");
-    result.indent++;
     Object.keys(defs).forEach((name) => {
       createTypeDef(result, defs[name], name);
     });
-    result.indent--;
-    result.append("}");
     result.append("");
-    result.append(footer);
     return result.toString();
   }
 
@@ -188,7 +177,7 @@ module.exports = function(grunt) {
   function addInstance(result, def, name) {
     if (def.object) {
       result.append("");
-      result.append(`let ${def.object}: ${name};`);
+      result.append(`declare let ${def.object}: ${name};`);
     }
   }
 
@@ -210,7 +199,7 @@ module.exports = function(grunt) {
   }
 
   function createClassDef(name, def) {
-    let str = "class " + name;
+    let str = "export class " + name;
     let superClass = getSuperClass(name, def);
     if (superClass) {
       str += " extends " + superClass;

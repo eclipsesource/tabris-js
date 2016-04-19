@@ -2,6 +2,7 @@ import {
   Action,
   Button,
   Canvas,
+  CanvasContext,
   Composite,
   CheckBox,
   Cell,

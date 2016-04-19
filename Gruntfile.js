@@ -153,14 +153,10 @@ module.exports = function(grunt) {
         src: "README.md",
         dest: "build/tabris/"
       },
-      typings: {
-        src: "build/typescript/tabris.d.ts",
-        dest: "build/tabris/tabris.d.ts"
-      },
       test_ts: {
         expand: true,
         cwd: "test/typescript/",
-        src: "**/*.test.ts",
+        src: ["**/*.test.ts", "package.json"],
         dest: "build/typescript/"
       }
     },
@@ -202,7 +198,7 @@ module.exports = function(grunt) {
     },
     exec: {
       test_typings: {
-        cmd: "../../node_modules/.bin/tsc --noImplicitAny tabris.*.ts",
+        cmd: "npm install && node_modules/.bin/tsc --noImplicitAny tabris.*.ts",
         cwd: "build/typescript"
       },
       test_boot: {
@@ -254,7 +250,6 @@ module.exports = function(grunt) {
     "package",
     "copy:readme",
     "generate-tsd",
-    "copy:typings",
     "compress:tabris"
   ]);
 
