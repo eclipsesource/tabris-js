@@ -33,17 +33,13 @@ interface CanvasContext {
   // TODO
 }
 
-interface Color {
-}
+type Color = string;
 
-interface Font {
-}
+type Font = string;
 
-interface LayoutData {
-}
+type LayoutData = any;
 
-interface GestureObject {
-}
+type GestureObject = any;
 
 interface Bounds {
 
@@ -103,17 +99,13 @@ interface Transformation {
 
 }
 
-interface Selector {
-}
+type Selector = string;
 
-interface dimension {
-}
+type dimension = number;
 
-interface offset {
-}
+type offset = number;
 
-interface margin {
-}
+type margin = any;
 `.trim();
 
 
@@ -189,6 +181,7 @@ module.exports = function(grunt) {
     addFields(result, def);
     addMethods(result, def);
     addEvents(result, def);
+    addPropertyApi(result, def, name);
     result.indent--;
     result.append("}");
   }
@@ -272,6 +265,61 @@ module.exports = function(grunt) {
         result.append(createEvent(event, def.events[event]));
       });
     }
+  }
+
+  function addPropertyApi(result, def, name) {
+    if (def.properties) {
+      result.append("");
+      result.append("/**\n"
+                  + " * Gets the current value of the given *property*.\n"
+                  + " * @param property\n"
+                  + " */\n"
+                  + "get(property: string): any;");
+      addGetters(result, def, name);
+      result.append("");
+      result.append("/**\n"
+                  + " * Sets the given property. Supports chaining.\n"
+                  + " * @param property\n"
+                  + " * @param value\n"
+                  + " */\n"
+                  + "set(property: string, value: any): this;");
+      result.append("");
+      result.append("/**\n"
+                  + " * Sets all key-value pairs in the properties object as widget properties. Supports chaining."
+                  + " * @param properties\n"
+                  + "*/\n"
+                  + `set(properties: ${name}Properties): this;`);
+      addSetters(result, def, name);
+    }
+  }
+
+  function addGetters(result, def, name) {
+    Object.keys(def.properties || []).sort().forEach((name) => {
+      result.append("");
+      result.append(createGetter(name, def.properties[name]));
+    });
+  }
+
+  function createGetter(name, def) {
+    let result = [];
+    result.push(createDoc(def));
+    result.push(`get(property: "${name}"): ${def.type};`);
+    return result.join("\n");
+  }
+
+  function addSetters(result, def, name) {
+    result.append("");
+    Object.keys(def.properties || []).sort().forEach((name) => {
+      result.append("");
+      result.append(createSetter(name, def.properties[name]));
+    });
+  }
+
+  function createSetter(name, def) {
+    let result = [];
+    result.push(createDoc(def));
+    result.push(`set(property: "${name}", value: ${def.type}): this;`);
+    return result.join("\n");
   }
 
   function createField(name, def) {
