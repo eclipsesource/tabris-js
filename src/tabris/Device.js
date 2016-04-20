@@ -10,7 +10,9 @@
       orientation: "any",
       screenWidth: "any",
       screenHeight: "any",
-      scaleFactor: "any"
+      scaleFactor: "any",
+      win_keyboardPresent: "any",
+      win_primaryInput: "any"
     },
     _setProperty: function() {},
     _events: {
