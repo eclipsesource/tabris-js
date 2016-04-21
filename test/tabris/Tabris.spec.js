@@ -26,7 +26,7 @@ describe("tabris", function() {
     });
 
     it("fails for unknown cids", function() {
-      expect(function() {
+      expect(() => {
         tabris("foo");
       }).toThrow();
     });
@@ -36,7 +36,7 @@ describe("tabris", function() {
   describe("_init", function() {
 
     it("can be called without a context", function() {
-      expect(function() {
+      expect(() => {
         tabris._init.call(null, nativeBridge);
       }).not.toThrow();
     });
@@ -173,7 +173,7 @@ describe("tabris", function() {
     });
 
     it("silently ignores events for non-existing ids (does not crash)", function() {
-      expect(function() {
+      expect(() => {
         tabris._notify("no-id", "foo", [23, 42]);
       }).not.toThrow();
     });
@@ -250,7 +250,7 @@ describe("tabris", function() {
       tabris._ready = false;
       delete tabris._nativeBridge;
 
-      expect(function() {
+      expect(() => {
         new tabris.TestType();
       }).toThrowError("tabris.js not started");
     });
@@ -285,7 +285,7 @@ describe("tabris", function() {
     });
 
     it("cannot be called as a function", function() {
-      expect(function() {
+      expect(() => {
         tabris.TestType({foo: 42});
       }).toThrowError("Cannot call constructor as a function");
     });
@@ -318,7 +318,7 @@ describe("tabris", function() {
     it("prevents multiple instances", function() {
       new tabris.ServiceType();
 
-      expect(function() {
+      expect(() => {
         new tabris.ServiceType();
       }).toThrowError(/cid.*foo/);
     });
@@ -328,7 +328,7 @@ describe("tabris", function() {
   describe("create", function() {
 
     it("fails if type is unknown", function() {
-      expect(function() {
+      expect(() => {
         tabris.create("UnknownType", {});
       }).toThrowError("Unknown type UnknownType");
     });
@@ -392,7 +392,7 @@ describe("tabris", function() {
     });
 
     it("prevents to overwrite already registered types", function() {
-      expect(function() {
+      expect(() => {
         tabris.registerType("Button", {});
       }).toThrowError("Type already registered: Button");
     });
@@ -473,7 +473,7 @@ describe("tabris", function() {
     });
 
     it("throws if type string is not found in PropertyTypes object", function() {
-      expect(function() {
+      expect(() => {
         tabris.registerType("CustomType", {_properties: {foo: {type: "nothing"}}});
       }).toThrow();
     });

@@ -19,7 +19,7 @@ describe("Widget", function() {
   describe("constructor", function() {
 
     it("prevents instantiation", function() {
-      expect(function() {
+      expect(() => {
         new tabris.Widget();
       }).toThrowError("Cannot instantiate abstract Widget");
     });
@@ -99,7 +99,7 @@ describe("Widget", function() {
       expect(call.properties.cornerRadius).toBe(4);
     });
 
-    ["light", "dark", "default"].forEach(function(value) {
+    ["light", "dark", "default"].forEach((value) => {
 
       it("sets win_theme to valid value", function() {
         widget.set("win_theme", value);
@@ -401,7 +401,7 @@ describe("Widget", function() {
       describe("when called with non-widget", function() {
 
         it("throws an error", function() {
-          expect(function() {
+          expect(() => {
             widget.append({});
           }).toThrowError("Cannot append non-widget");
         });
@@ -414,7 +414,7 @@ describe("Widget", function() {
           tabris.TestType._supportsChildren = false;
           var child = new tabris.TextView();
 
-          expect(function() {
+          expect(() => {
             widget.append(child);
           }).toThrowError("TestType cannot contain children");
           expect(widget.children()).not.toContain(child);
@@ -428,7 +428,7 @@ describe("Widget", function() {
           tabris.TestType._supportsChildren = function() { return false; };
           var child = new tabris.TextView();
 
-          expect(function() {
+          expect(() => {
             widget.append(child);
           }).toThrowError("TestType cannot contain children of type TextView");
           expect(widget.children()).not.toContain(child);
@@ -515,7 +515,7 @@ describe("Widget", function() {
       describe("when called with non-widget", function() {
 
         it("throws an error", function() {
-          expect(function() {
+          expect(() => {
             widget.appendTo({});
           }).toThrowError("Cannot append to non-widget");
         });
@@ -534,19 +534,19 @@ describe("Widget", function() {
       });
 
       it("throws when disposed", function() {
-        expect(function() {
+        expect(() => {
           widget.insertBefore({});
         }).toThrowError("Cannot insert before non-widget");
       });
 
       it("throws when called with a non-widget", function() {
-        expect(function() {
+        expect(() => {
           widget.insertBefore({});
         }).toThrowError("Cannot insert before non-widget");
       });
 
       it("throws when called with an empty widget collection", function() {
-        expect(function() {
+        expect(() => {
           widget.insertBefore(parent1.find(".missing"));
         }).toThrowError("Cannot insert before non-widget");
       });
@@ -618,19 +618,19 @@ describe("Widget", function() {
       it("throws when disposed", function() {
         widget.dispose();
 
-        expect(function() {
+        expect(() => {
           widget.insertAfter({});
         }).toThrowError("Object is disposed");
       });
 
       it("throws when called with a non-widget", function() {
-        expect(function() {
+        expect(() => {
           widget.insertAfter({});
         }).toThrowError("Cannot insert after non-widget");
       });
 
       it("throws when called with an empty widget collection", function() {
-        expect(function() {
+        expect(() => {
           widget.insertAfter(parent1.find(".missing"));
         }).toThrowError("Cannot insert after non-widget");
       });
@@ -932,7 +932,7 @@ describe("Widget", function() {
       nativeBridge.resetCalls();
     });
 
-    ["left", "right", "top", "bottom"].forEach(function(attr) {
+    ["left", "right", "top", "bottom"].forEach((attr) => {
 
       it("modifies layoutData", function() {
         widget.set(attr, ["#other", 10]);
@@ -995,7 +995,7 @@ describe("Widget", function() {
 
     });
 
-    ["width", "height", "centerX", "centerY"].forEach(function(attr) {
+    ["width", "height", "centerX", "centerY"].forEach((attr) => {
 
       it("modifies layoutData", function() {
         widget.set(attr, 23);
@@ -1068,7 +1068,7 @@ describe("Widget", function() {
     });
 
     it("does not fail when there are no children", function() {
-      expect(function() {
+      expect(() => {
         parent._flushLayout();
       }).not.toThrow();
     });

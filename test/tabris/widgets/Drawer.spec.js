@@ -35,7 +35,7 @@ describe("Drawer", function() {
     });
 
     it("fails when a drawer already exists", function() {
-      expect(function() {new tabris.Drawer();}).toThrow();
+      expect(() => { new tabris.Drawer(); }).toThrow();
       expect(nativeBridge.calls({op: "create", type: "tabris.Drawer"}).length).toBe(1);
     });
 
@@ -139,7 +139,7 @@ describe("Drawer", function() {
       });
 
       it("allows new drawer to be created", function() {
-        expect(function() {new tabris.Drawer();}).not.toThrow();
+        expect(() => { new tabris.Drawer(); }).not.toThrow();
         expect(nativeBridge.calls({op: "create", type: "tabris.Drawer"}).length).toBe(1);
       });
 

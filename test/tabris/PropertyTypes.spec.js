@@ -102,21 +102,21 @@ describe("PropertyTypes:", function() {
     });
 
     it("fails if image value is not an object", function() {
-      expect(function() {
+      expect(() => {
         check(23);
-      }).toThrow(new Error("Not an image: 23"));
+      }).toThrowError("Not an image: 23");
     });
 
     it("fails if src is undefined", function() {
-      expect(function() {
+      expect(() => {
         check({});
-      }).toThrow(new Error("image.src is not a string"));
+      }).toThrowError("image.src is not a string");
     });
 
     it("fails if src is empty string", function() {
-      expect(function() {
+      expect(() => {
         check({src: ""});
-      }).toThrow(new Error("image.src is an empty string"));
+      }).toThrowError("image.src is an empty string");
     });
 
     it("fails if width/height/scale values are invalid number", function() {
@@ -129,13 +129,13 @@ describe("PropertyTypes:", function() {
         check(image);
       };
 
-      props.forEach(function(prop) {
-        goodValues.forEach(function(value) {
-          expect(function() { checkWith(prop, value); }).not.toThrow();
+      props.forEach((prop) => {
+        goodValues.forEach((value) => {
+          expect(() => { checkWith(prop, value); }).not.toThrow();
         });
-        badValues.forEach(function(value) {
+        badValues.forEach((value) => {
           var error = new Error("image." + prop + " is not a dimension: " + value);
-          expect(function() { checkWith(prop, value); }).toThrow(error);
+          expect(() => { checkWith(prop, value); }).toThrow(error);
         });
       });
     });
@@ -211,19 +211,19 @@ describe("PropertyTypes:", function() {
 
     it("fails for non-numbers", function() {
       var values = ["", "foo", "23", null, undefined, true, false, {}, []];
-      values.forEach(function(value) {
-        expect(function() {
+      values.forEach((value) => {
+        expect(() => {
           check(value);
-        }).toThrow(new Error(typeof value + " is not a number: " + value));
+        }).toThrowError(typeof value + " is not a number: " + value);
       });
     });
 
     it("fails for invalid numbers", function() {
       var values = [NaN, 1 / 0, -1 / 0];
-      values.forEach(function(value) {
-        expect(function() {
+      values.forEach((value) => {
+        expect(() => {
           check(value);
-        }).toThrow(new Error("Number is not a valid value: " + value));
+        }).toThrowError("Number is not a valid value: " + value);
       });
     });
 
@@ -243,19 +243,19 @@ describe("PropertyTypes:", function() {
 
     it("fails for non-numbers", function() {
       var values = ["", "foo", "23", null, undefined, true, false, {}, []];
-      values.forEach(function(value) {
-        expect(function() {
+      values.forEach((value) => {
+        expect(() => {
           check(value);
-        }).toThrow(new Error(typeof value + " is not a number: " + value));
+        }).toThrowError(typeof value + " is not a number: " + value);
       });
     });
 
     it("fails for invalid numbers", function() {
       var values = [NaN, 1 / 0, -1 / 0];
-      values.forEach(function(value) {
-        expect(function() {
+      values.forEach((value) => {
+        expect(() => {
           check(value);
-        }).toThrow(new Error("Number is not a valid value: " + value));
+        }).toThrowError("Number is not a valid value: " + value);
       });
     });
 
@@ -284,19 +284,19 @@ describe("PropertyTypes:", function() {
 
     it("fails for non-numbers", function() {
       var values = ["", "foo", "23", null, undefined, true, false, {}, []];
-      values.forEach(function(value) {
-        expect(function() {
+      values.forEach((value) => {
+        expect(() => {
           check(value);
-        }).toThrow(new Error(typeof value + " is not a number: " + value));
+        }).toThrowError(typeof value + " is not a number: " + value);
       });
     });
 
     it("fails for invalid numbers", function() {
       var values = [NaN, 1 / 0, -1 / 0];
-      values.forEach(function(value) {
-        expect(function() {
+      values.forEach((value) => {
+        expect(() => {
           check(value);
-        }).toThrow(new Error("Number is not a valid value: " + value));
+        }).toThrowError("Number is not a valid value: " + value);
       });
     });
 
@@ -330,10 +330,10 @@ describe("PropertyTypes:", function() {
 
     it("fails for non-functions", function() {
       var values = ["", "foo", 23, null, undefined, true, false, {}, []];
-      values.forEach(function(value) {
-        expect(function() {
+      values.forEach((value) => {
+        expect(() => {
           check(value);
-        }).toThrow(new Error(typeof value + " is not a function: " + value));
+        }).toThrowError(typeof value + " is not a function: " + value);
       });
     });
 
@@ -354,10 +354,10 @@ describe("PropertyTypes:", function() {
     it("rejects string values not given in array", function() {
       var accepted = ["x", "y", "z"];
 
-      ["1", "foo", "bar"].forEach(function(value) {
-        expect(function() {
+      ["1", "foo", "bar"].forEach((value) => {
+        expect(() => {
           check(value, accepted);
-        }).toThrow(new Error("Accepting \"x\", \"y\", \"z\", given was: \"" + value + "\""));
+        }).toThrowError("Accepting \"x\", \"y\", \"z\", given was: \"" + value + "\"");
       });
     });
 
@@ -377,7 +377,7 @@ describe("PropertyTypes:", function() {
     });
 
     it("rejects alternate check", function() {
-      expect(function() {
+      expect(() => {
         check(NaN, "natural");
       }).toThrow();
     });
@@ -390,28 +390,28 @@ describe("PropertyTypes:", function() {
 
     it("fails for non-numbers", function() {
       var values = ["", "foo", "23", null, undefined, true, false, {}, []];
-      values.forEach(function(value) {
-        expect(function() {
+      values.forEach((value) => {
+        expect(() => {
           check(value);
-        }).toThrow(new Error(typeof value + " is not a number: " + value));
+        }).toThrowError(typeof value + " is not a number: " + value);
       });
     });
 
     it("fails for invalid numbers", function() {
       var values = [NaN, 1 / 0, -1 / 0];
-      values.forEach(function(value) {
-        expect(function() {
+      values.forEach((value) => {
+        expect(() => {
           check(value);
-        }).toThrow(new Error("Number is not a valid value: " + value));
+        }).toThrowError("Number is not a valid value: " + value);
       });
     });
 
     it("fails for out-of-bounds numbers", function() {
       var values = [-0.1, -1, 1.01, 2];
-      values.forEach(function(value) {
-        expect(function() {
+      values.forEach((value) => {
+        expect(() => {
           check(value);
-        }).toThrow(new Error("Number is out of bounds: " + value));
+        }).toThrowError("Number is out of bounds: " + value);
       });
     });
 
@@ -470,17 +470,17 @@ describe("PropertyTypes:", function() {
         {translationX: 1 / 0},
         {translationY: -1 / 0},
         {translationZ: 1 / 0}
-      ].forEach(function(value) {
-        expect(function() {
+      ].forEach((value) => {
+        expect(() => {
           check(value);
         }).toThrow();
       });
     });
 
     it("fails for unknown keys", function() {
-      expect(function() {
+      expect(() => {
         check({foo: 1});
-      }).toThrow(new Error("Not a valid transformation containing \"foo\""));
+      }).toThrowError("Not a valid transformation containing \"foo\"");
     });
 
   });
@@ -508,18 +508,18 @@ describe("PropertyTypes:", function() {
 
     it("fails for non-arrays", function() {
       var values = [0, 1, "", "foo", false, true, {}, {length: 0}];
-      values.forEach(function(value) {
-        expect(function() {
+      values.forEach((value) => {
+        expect(() => {
           check(value);
-        }).toThrow(new Error(typeof value + " is not an array: " + value));
+        }).toThrowError(typeof value + " is not an array: " + value);
       });
     });
 
     it("performs optional item checks", function() {
       expect(check(["foo", 1, true], "string")).toEqual(["foo", "1", "true"]);
-      expect(function() {
+      expect(() => {
         check(["foo"], "integer");
-      }).toThrow(new Error("string is not a number: foo"));
+      }).toThrowError("string is not a number: foo");
     });
 
   });

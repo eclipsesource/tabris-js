@@ -38,7 +38,7 @@ describe("WindowTimers", function() {
       callback = jasmine.createSpy("callback");
     });
 
-    ["setTimeout", "setInterval"].forEach(function(method) {
+    ["setTimeout", "setInterval"].forEach((method) => {
 
       var isInterval = method === "setInterval";
 
@@ -114,7 +114,7 @@ describe("WindowTimers", function() {
 
           });
 
-          ["clearTimeout", "clearInterval"].forEach(function(clearMethod) {
+          ["clearTimeout", "clearInterval"].forEach((clearMethod) => {
 
             describe("and " + clearMethod + " is called", function() {
 
@@ -133,7 +133,7 @@ describe("WindowTimers", function() {
               });
 
               it("tolerates unknown taskId", function() {
-                expect(function() {
+                expect(() => {
                   target.clearInterval(taskId + 1);
                 }).not.toThrow();
               });
@@ -160,7 +160,7 @@ describe("WindowTimers", function() {
         });
 
         it("passes 0 delay when argument is not a number", function() {
-          [1 / 0, NaN, "", {}, false].forEach(function(value) {
+          [1 / 0, NaN, "", {}, false].forEach((value) => {
             nativeBridge.resetCalls();
             target[method](callback, value);
 

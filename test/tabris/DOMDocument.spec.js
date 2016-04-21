@@ -18,7 +18,7 @@ describe("DOMDocument", function() {
   });
 
   it("can create mocked HTML elements", function() {
-    ["createElement", "createDocumentFragment"].forEach(function(method) {
+    ["createElement", "createDocumentFragment"].forEach((method) => {
       var element = target.document[method]();
 
       expect(element.setAttribute()).toBeUndefined();
@@ -29,7 +29,7 @@ describe("DOMDocument", function() {
   });
 
   it("has event handling", function() {
-    expect(function() {
+    expect(() => {
       target.document.addEventListener("foo", function() {});
       target.document.removeEventListener("bar", function() {});
     }).not.toThrow();

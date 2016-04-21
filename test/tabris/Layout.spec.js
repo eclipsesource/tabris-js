@@ -116,10 +116,10 @@ describe("Layout:", function() {
       expect(output.left).not.toBe(input.left);
     });
 
-    ["width", "height", "centerX", "centerY"].forEach(function(attr) {
+    ["width", "height", "centerX", "centerY"].forEach((attr) => {
 
       it("fails if '" + attr + "' is not a number", function() {
-        expect(function() {
+        expect(() => {
           var layoutData = {};
           layoutData[attr] = "23";
           encode(layoutData);
@@ -128,10 +128,10 @@ describe("Layout:", function() {
 
     });
 
-    ["left", "right", "top", "bottom"].forEach(function(attr) {
+    ["left", "right", "top", "bottom"].forEach((attr) => {
 
       it("fails if '" + attr + "' is an object", function() {
-        expect(function() {
+        expect(() => {
           var layoutData = {};
           layoutData[attr] = {};
           encode(layoutData);
@@ -139,7 +139,7 @@ describe("Layout:", function() {
       });
 
       it("fails if '" + attr + "' is an invalid array", function() {
-        expect(function() {
+        expect(() => {
           var layoutData = {};
           layoutData[attr] = [23];
           encode(layoutData);
@@ -149,19 +149,19 @@ describe("Layout:", function() {
     });
 
     it("fails if 'baseline' is a number", function() {
-      expect(function() {
+      expect(() => {
         encode({left: 0, baseline: 23});
       }).toThrowError("Invalid value for 'baseline': must be a widget reference");
     });
 
     it("fails if 'baseline' is a percentage", function() {
-      expect(function() {
+      expect(() => {
         encode({left: 0, baseline: "23%"});
       }).toThrowError("Invalid value for 'baseline': must be a widget reference");
     });
 
     it("fails for unknown attribute", function() {
-      expect(function() {
+      expect(() => {
         encode({left: 0, foo: "23"});
       }).toThrowError("Invalid key 'foo' in layoutData");
     });

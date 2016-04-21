@@ -86,9 +86,9 @@ describe("TabFolder", function() {
     describe("and appended to an illegal parent", function() {
 
       it("crashes", function() {
-        expect(function() {
+        expect(() => {
           tab.appendTo(new tabris.Composite());
-        }).toThrow(new Error("Tab must be a child of TabFolder"));
+        }).toThrowError("Tab must be a child of TabFolder");
       });
 
     });

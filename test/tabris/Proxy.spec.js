@@ -191,7 +191,7 @@ describe("Proxy", function() {
       it("fails on disposed object", function() {
         proxy.dispose();
 
-        expect(function() {
+        expect(() => {
           proxy.get("foo");
         }).toThrowError("Object is disposed");
       });
@@ -242,7 +242,7 @@ describe("Proxy", function() {
       it("fails on disposed object", function() {
         proxy.dispose();
 
-        expect(function() {
+        expect(() => {
           proxy.set("foo", 23);
         }).toThrowError("Object is disposed");
       });
@@ -340,7 +340,7 @@ describe("Proxy", function() {
       it("fails on disposed object", function() {
         proxy.dispose();
 
-        expect(function() {
+        expect(() => {
           proxy._nativeCall("foo", {});
         }).toThrowError("Object is disposed");
       });
@@ -446,7 +446,7 @@ describe("Proxy", function() {
       it("fails on disposed object", function() {
         proxy.dispose();
 
-        expect(function() {
+        expect(() => {
           proxy.on("foo", listener);
         }).toThrowError("Object is disposed");
       });
@@ -559,7 +559,7 @@ describe("Proxy", function() {
       it("fails on disposed object", function() {
         proxy.dispose();
 
-        expect(function() {
+        expect(() => {
           proxy.off("foo", listener);
         }).toThrowError("Object is disposed");
       });
@@ -606,7 +606,7 @@ describe("Proxy", function() {
           proxy.dispose();
         });
 
-        expect(function() {
+        expect(() => {
           proxy.dispose();
         }).not.toThrow();
       });
@@ -623,13 +623,13 @@ describe("Proxy", function() {
       });
 
       it("calling append fails", function() {
-        expect(function() {
+        expect(() => {
           proxy.append();
         }).toThrowError("Object is disposed");
       });
 
       it("calling appendTo fails", function() {
-        expect(function() {
+        expect(() => {
           proxy.append();
         }).toThrowError("Object is disposed");
       });
@@ -681,7 +681,7 @@ describe("Proxy", function() {
 
         beforeEach(function() {
           targets = [proxy, child1, child2, child1_1];
-          targets.forEach(function(target) {
+          targets.forEach((target) => {
             target.set = jasmine.createSpy();
           });
         });

@@ -1,4 +1,4 @@
-["Backbone", "tabris"].forEach(function(provider) {
+["Backbone", "tabris"].forEach((provider) => {
   /*globals _:false*/
 
   describe("Backbone-like Events (" + provider + ")", function() {
@@ -88,9 +88,7 @@
         });
         it("should remove only the versions of the callback with this contexts", function() {
           object.trigger("foo");
-          var callContexts = callback.calls.all().map(function(call) {
-            return call.object;
-          });
+          var callContexts = callback.calls.all().map(call => call.object);
           expect(callContexts).toEqual([object, context]);
         });
       });

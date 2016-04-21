@@ -34,10 +34,8 @@ describe("CanvasContext", function() {
   function decode(packet) {
     var values = {};
     var opcodes = packet[0];
-    values.ops = packet[1].map(function(opIndex) {
-      return opcodes[opIndex];
-    });
-    ["doubles", "booleans", "strings", "ints"].forEach(function(name, index) {
+    values.ops = packet[1].map(opIndex => opcodes[opIndex]);
+    ["doubles", "booleans", "strings", "ints"].forEach((name, index) => {
       var slot = packet[index + 2];
       if (slot.length) {
         values[name] = slot;
@@ -515,7 +513,7 @@ describe("CanvasContext", function() {
     });
 
     it("raises error if parameters missing", function() {
-      expect(function() {
+      expect(() => {
         ctx.scale(2);
       }).toThrowError("Not enough arguments to CanvasContext.scale");
     });
@@ -532,7 +530,7 @@ describe("CanvasContext", function() {
     });
 
     it("raises error if parameters missing", function() {
-      expect(function() {
+      expect(() => {
         ctx.rotate();
       }).toThrowError("Not enough arguments to CanvasContext.rotate");
     });
@@ -549,7 +547,7 @@ describe("CanvasContext", function() {
     });
 
     it("raises error if parameters missing", function() {
-      expect(function() {
+      expect(() => {
         ctx.translate(23);
       }).toThrowError("Not enough arguments to CanvasContext.translate");
     });
@@ -566,7 +564,7 @@ describe("CanvasContext", function() {
     });
 
     it("raises error if parameters missing", function() {
-      expect(function() {
+      expect(() => {
         ctx.transform();
       }).toThrowError("Not enough arguments to CanvasContext.transform");
     });
@@ -583,7 +581,7 @@ describe("CanvasContext", function() {
     });
 
     it("raises error if parameters missing", function() {
-      expect(function() {
+      expect(() => {
         ctx.setTransform();
       }).toThrowError("Not enough arguments to CanvasContext.setTransform");
     });
@@ -630,7 +628,7 @@ describe("CanvasContext", function() {
     });
 
     it("raises error if parameters missing", function() {
-      expect(function() {
+      expect(() => {
         ctx.lineTo(1);
       }).toThrowError("Not enough arguments to CanvasContext.lineTo");
     });
@@ -647,7 +645,7 @@ describe("CanvasContext", function() {
     });
 
     it("raises error if parameters missing", function() {
-      expect(function() {
+      expect(() => {
         ctx.moveTo(1);
       }).toThrowError("Not enough arguments to CanvasContext.moveTo");
     });
@@ -664,7 +662,7 @@ describe("CanvasContext", function() {
     });
 
     it("raises error if parameters missing", function() {
-      expect(function() {
+      expect(() => {
         ctx.bezierCurveTo(1, 2, 3, 4, 5);
       }).toThrowError("Not enough arguments to CanvasContext.bezierCurveTo");
     });
@@ -681,7 +679,7 @@ describe("CanvasContext", function() {
     });
 
     it("raises error if parameters missing", function() {
-      expect(function() {
+      expect(() => {
         ctx.quadraticCurveTo(1, 2, 3);
       }).toThrowError("Not enough arguments to CanvasContext.quadraticCurveTo");
     });
@@ -705,7 +703,7 @@ describe("CanvasContext", function() {
     });
 
     it("raises error if parameters missing", function() {
-      expect(function() {
+      expect(() => {
         ctx.arc(1, 2, 3, 4);
       }).toThrowError("Not enough arguments to CanvasContext.arc");
     });
@@ -722,7 +720,7 @@ describe("CanvasContext", function() {
     });
 
     it("raises error if parameters missing", function() {
-      expect(function() {
+      expect(() => {
         ctx.rect(1, 2, 3);
       }).toThrowError("Not enough arguments to CanvasContext.rect");
     });
@@ -761,7 +759,7 @@ describe("CanvasContext", function() {
     });
 
     it("raises error if parameters missing", function() {
-      expect(function() {
+      expect(() => {
         ctx.clearRect(1, 2, 3);
       }).toThrowError("Not enough arguments to CanvasContext.clearRect");
     });
@@ -781,7 +779,7 @@ describe("CanvasContext", function() {
     });
 
     it("raises error if parameters missing", function() {
-      expect(function() {
+      expect(() => {
         ctx.fillRect(1, 2, 3);
       }).toThrowError("Not enough arguments to CanvasContext.fillRect");
     });
@@ -801,7 +799,7 @@ describe("CanvasContext", function() {
     });
 
     it("raises error if parameters missing", function() {
-      expect(function() {
+      expect(() => {
         ctx.strokeRect(1, 2, 3);
       }).toThrowError("Not enough arguments to CanvasContext.strokeRect");
     });
@@ -823,7 +821,7 @@ describe("CanvasContext", function() {
     });
 
     it("raises error if parameters missing", function() {
-      expect(function() {
+      expect(() => {
         ctx.fillText("foo", 2);
       }).toThrowError("Not enough arguments to CanvasContext.fillText");
     });
@@ -845,7 +843,7 @@ describe("CanvasContext", function() {
     });
 
     it("raises error if parameters missing", function() {
-      expect(function() {
+      expect(() => {
         ctx.strokeText("foo", 2);
       }).toThrowError("Not enough arguments to CanvasContext.strokeText");
     });

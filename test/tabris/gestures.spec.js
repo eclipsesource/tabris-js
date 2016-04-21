@@ -184,7 +184,7 @@ describe("gestures:", function() {
     });
 
     it("ignores removing a gesture listener (see #368)", function() {
-      expect(function() {
+      expect(() => {
         widget.off("pan", function() {});
       }).not.toThrow();
     });

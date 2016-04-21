@@ -64,7 +64,7 @@ describe("UI", function() {
 
     });
 
-    ["light", "dark", "default"].forEach(function(value) {
+    ["light", "dark", "default"].forEach((value) => {
 
       it("sets win_toolbarTheme to valid value", function() {
         ui.set("win_toolbarTheme", value);
@@ -125,7 +125,7 @@ describe("UI", function() {
       });
 
       it("setting 'activePage' fails with widgets other than Page", function() {
-        expect(function() {
+        expect(() => {
           ui.set("activePage", new tabris.Button());
         }).toThrow();
         expect(nativeBridge.calls({op: "set", id: ui.cid}).length).toBe(0);
@@ -172,7 +172,7 @@ describe("UI", function() {
       });
 
       it("fails when a page is opened without a top-level page", function() {
-        expect(function() {
+        expect(() => {
           page1.open();
         }).toThrow();
       });
@@ -354,7 +354,7 @@ describe("UI", function() {
       it("fails when closing the last page", function() {
         topLevelPage1.open();
 
-        expect(function() {
+        expect(() => {
           topLevelPage1.close();
         }).toThrowError("Cannot close the last page");
       });
@@ -362,7 +362,7 @@ describe("UI", function() {
     });
 
     it("ShowPreviousPage does not fail without a page", function() {
-      expect(function() {
+      expect(() => {
         tabris._notify(ui.cid, "ShowPreviousPage", {});
       }).not.toThrow();
     });

@@ -39,13 +39,13 @@ describe("Color", function() {
     });
 
     it("rejects rgb function strings with wrong argument count", function() {
-      expect(function() {
+      expect(() => {
         _.colorStringToArray("rgb(23, 42)");
       }).toThrow();
     });
 
     it("rejects rgb function strings with illegal format in argument", function() {
-      expect(function() {
+      expect(() => {
         _.colorStringToArray("rgb(xxx, 23, 42)");
       }).toThrow();
     });
@@ -59,19 +59,19 @@ describe("Color", function() {
     });
 
     it("rejects rgba function strings with wrong argument count", function() {
-      expect(function() {
+      expect(() => {
         _.colorStringToArray("rgba(23, 42, 47)");
       }).toThrow();
     });
 
     it("rejects rgba function strings with illegal format in color value", function() {
-      expect(function() {
+      expect(() => {
         _.colorStringToArray("rgba(xxx, 23, 42)");
       }).toThrow();
     });
 
     it("rejects rgba function strings with illegal format in alpha value", function() {
-      expect(function() {
+      expect(() => {
         _.colorStringToArray("rgba(0, 23, 42, 2..0)");
       }).toThrow();
     });
@@ -85,7 +85,7 @@ describe("Color", function() {
     });
 
     it("rejects unknown strings", function() {
-      expect(function() {
+      expect(() => {
         _.colorStringToArray("unknown");
       }).toThrow();
     });
