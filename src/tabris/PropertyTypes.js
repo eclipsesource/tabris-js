@@ -17,26 +17,22 @@
     },
 
     number: {
-      encode: function(number) {
-        checkValidNumber(number);
-        return number;
+      encode: function(value) {
+        return encodeNumber(value);
       }
     },
 
     natural: {
-      encode: function(number) {
-        checkValidNumber(number);
-        if (number < 0) {
-          return 0;
-        }
-        return Math.round(number);
+      encode: function(value) {
+        value = encodeNumber(value);
+        return value < 0 ? 0 : Math.round(value);
       }
     },
 
     integer: {
-      encode: function(number) {
-        checkValidNumber(number);
-        return Math.round(number);
+      encode: function(value) {
+        value = encodeNumber(value);
+        return Math.round(value);
       }
     },
 
@@ -195,7 +191,7 @@
 
     opacity: {
       encode: function(value) {
-        checkValidNumber(value);
+        value = encodeNumber(value);
         if (value < 0 || value > 1) {
           throw new Error("Number is out of bounds: " + value);
         }
@@ -205,13 +201,14 @@
 
     transform: {
       encode: function(value) {
+        var result = _.extend({}, transformDefaults);
         for (var key in value) {
           if (!(key in transformDefaults)) {
             throw new Error("Not a valid transformation containing \"" + key + "\"");
           }
-          checkValidNumber(value[key]);
+          result[key] = encodeNumber(value[key]);
         }
-        return _.extend({}, transformDefaults, value);
+        return result;
       }
     },
 
@@ -243,13 +240,18 @@
     throw new Error(message.join(""));
   }
 
-  function checkValidNumber(number) {
-    if (typeof number !== "number") {
-      throw new Error(typeof number + " is not a number: " + number);
+  function encodeNumber(value) {
+    var regex = /^\-?([0-9]+|[0-9]*\.[0-9]+)$/;
+    if (typeof value === "string" && regex.test(value)) {
+      return parseFloat(value);
     }
-    if (isNaN(number) || number === Infinity || number === -Infinity) {
-      throw new Error("Number is not a valid value: " + number);
+    if (typeof value !== "number") {
+      throw new Error(typeof value + " is not a number: " + value);
     }
+    if (isNaN(value) || value === Infinity || value === -Infinity) {
+      throw new Error("Invalid number: " + value);
+    }
+    return value;
   }
 
   var transformDefaults = {

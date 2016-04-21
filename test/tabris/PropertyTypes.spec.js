@@ -73,12 +73,12 @@ describe("PropertyTypes:", function() {
 
   describe("image", function() {
 
-    var check = tabris.PropertyTypes.image.encode;
+    var encode = tabris.PropertyTypes.image.encode;
 
     it("succeeds for minimal image value", function() {
       spyOn(console, "warn");
 
-      var result = check({src: "foo.png"});
+      var result = encode({src: "foo.png"});
 
       expect(result).toEqual(["foo.png", null, null, null]);
       expect(console.warn).not.toHaveBeenCalled();
@@ -87,35 +87,35 @@ describe("PropertyTypes:", function() {
     it("succeeds for image with width and height", function() {
       spyOn(console, "warn");
 
-      var result = check({src: "foo.png", width: 10, height: 10});
+      var result = encode({src: "foo.png", width: 10, height: 10});
 
       expect(result).toEqual(["foo.png", 10, 10, null]);
       expect(console.warn).not.toHaveBeenCalled();
     });
 
     it("succeeds for string", function() {
-      expect(check("foo.jpg")).toEqual(["foo.jpg", null, null, null]);
+      expect(encode("foo.jpg")).toEqual(["foo.jpg", null, null, null]);
     });
 
     it("succeeds for null", function() {
-      expect(check(null)).toBeNull();
+      expect(encode(null)).toBeNull();
     });
 
     it("fails if image value is not an object", function() {
       expect(() => {
-        check(23);
+        encode(23);
       }).toThrowError("Not an image: 23");
     });
 
     it("fails if src is undefined", function() {
       expect(() => {
-        check({});
+        encode({});
       }).toThrowError("image.src is not a string");
     });
 
     it("fails if src is empty string", function() {
       expect(() => {
-        check({src: ""});
+        encode({src: ""});
       }).toThrowError("image.src is an empty string");
     });
 
@@ -126,7 +126,7 @@ describe("PropertyTypes:", function() {
       var checkWith = function(prop, value) {
         var image = {src: "foo"};
         image[prop] = value;
-        check(image);
+        encode(image);
       };
 
       props.forEach((prop) => {
@@ -143,7 +143,7 @@ describe("PropertyTypes:", function() {
     it("warns if scale and width are given", function() {
       spyOn(console, "warn");
 
-      check({src: "foo.png", width: 23, scale: 2});
+      encode({src: "foo.png", width: 23, scale: 2});
 
       var warning = "Image scale is ignored if width or height are given";
       expect(console.warn).toHaveBeenCalledWith(warning);
@@ -152,7 +152,7 @@ describe("PropertyTypes:", function() {
     it("warns if scale and height are given", function() {
       spyOn(console, "warn");
 
-      check({src: "foo.png", height: 23, scale: 2});
+      encode({src: "foo.png", height: 23, scale: 2});
 
       var warning = "Image scale is ignored if width or height are given";
       expect(console.warn).toHaveBeenCalledWith(warning);
@@ -162,58 +162,58 @@ describe("PropertyTypes:", function() {
 
   describe("boolean", function() {
 
-    var check = tabris.PropertyTypes.boolean.encode;
+    var encode = tabris.PropertyTypes.boolean.encode;
 
     it("passes through true", function() {
-      expect(check(true)).toBe(true);
+      expect(encode(true)).toBe(true);
     });
 
     it("passes through false", function() {
-      expect(check(false)).toBe(false);
+      expect(encode(false)).toBe(false);
     });
 
     it("translates falsy values", function() {
-      expect(check(null)).toBe(false);
-      expect(check("")).toBe(false);
-      expect(check(undefined)).toBe(false);
-      expect(check(0)).toBe(false);
+      expect(encode(null)).toBe(false);
+      expect(encode("")).toBe(false);
+      expect(encode(undefined)).toBe(false);
+      expect(encode(0)).toBe(false);
     });
 
     it("translates truthy values", function() {
-      expect(check(1)).toBe(true);
-      expect(check({})).toBe(true);
-      expect(check("true")).toBe(true);
-      expect(check("false")).toBe(true);
+      expect(encode(1)).toBe(true);
+      expect(encode({})).toBe(true);
+      expect(encode("true")).toBe(true);
+      expect(encode("false")).toBe(true);
     });
 
   });
 
   describe("string", function() {
 
-    var check = tabris.PropertyTypes.string.encode;
+    var encode = tabris.PropertyTypes.string.encode;
 
     it("translates any value to string", function() {
-      expect(check("str")).toBe("str");
-      expect(check(23)).toBe("23");
-      expect(check(false)).toBe("false");
-      expect(check(null)).toBe("null");
-      expect(check(undefined)).toBe("undefined");
-      expect(check({})).toBe("[object Object]");
-      expect(check([1, 2, 3])).toBe("1,2,3");
-      expect(check({toString: function() {return "foo";}})).toBe("foo");
+      expect(encode("str")).toBe("str");
+      expect(encode(23)).toBe("23");
+      expect(encode(false)).toBe("false");
+      expect(encode(null)).toBe("null");
+      expect(encode(undefined)).toBe("undefined");
+      expect(encode({})).toBe("[object Object]");
+      expect(encode([1, 2, 3])).toBe("1,2,3");
+      expect(encode({toString: function() {return "foo";}})).toBe("foo");
     });
 
   });
 
   describe("number", function() {
 
-    var check = tabris.PropertyTypes.number.encode;
+    var encode = tabris.PropertyTypes.number.encode;
 
     it("fails for non-numbers", function() {
-      var values = ["", "foo", "23", null, undefined, true, false, {}, []];
+      var values = ["", "foo", "23f", null, undefined, true, false, {}, []];
       values.forEach((value) => {
         expect(() => {
-          check(value);
+          encode(value);
         }).toThrowError(typeof value + " is not a number: " + value);
       });
     });
@@ -222,30 +222,39 @@ describe("PropertyTypes:", function() {
       var values = [NaN, 1 / 0, -1 / 0];
       values.forEach((value) => {
         expect(() => {
-          check(value);
-        }).toThrowError("Number is not a valid value: " + value);
+          encode(value);
+        }).toThrowError("Invalid number: " + value);
       });
     });
 
     it("accepts all valid kinds of numbers", function() {
-      expect(check(0)).toBe(0);
-      expect(check(1)).toBe(1);
-      expect(check(-1)).toBe(-1);
-      expect(check(10e10)).toBe(10e10);
-      expect(check(10e-10)).toBe(10e-10);
+      expect(encode(0)).toBe(0);
+      expect(encode(1)).toBe(1);
+      expect(encode(-1)).toBe(-1);
+      expect(encode(10e10)).toBe(10e10);
+      expect(encode(10e-10)).toBe(10e-10);
+    });
+
+    it("accepts strings", function() {
+      expect(encode("0")).toBe(0);
+      expect(encode("1")).toBe(1);
+      expect(encode("-1")).toBe(-1);
+      expect(encode("3.14")).toBe(3.14);
+      expect(encode("-3.14")).toBe(-3.14);
+      expect(encode(".01")).toBe(0.01);
     });
 
   });
 
   describe("natural", function() {
 
-    var check = tabris.PropertyTypes.natural.encode;
+    var encode = tabris.PropertyTypes.natural.encode;
 
     it("fails for non-numbers", function() {
-      var values = ["", "foo", "23", null, undefined, true, false, {}, []];
+      var values = ["", "foo", "23f", null, undefined, true, false, {}, []];
       values.forEach((value) => {
         expect(() => {
-          check(value);
+          encode(value);
         }).toThrowError(typeof value + " is not a number: " + value);
       });
     });
@@ -254,39 +263,46 @@ describe("PropertyTypes:", function() {
       var values = [NaN, 1 / 0, -1 / 0];
       values.forEach((value) => {
         expect(() => {
-          check(value);
-        }).toThrowError("Number is not a valid value: " + value);
+          encode(value);
+        }).toThrowError("Invalid number: " + value);
       });
     });
 
     it("accepts natural number including zero", function() {
-      expect(check(0)).toBe(0);
-      expect(check(1)).toBe(1);
-      expect(check(10e10)).toBe(10e10);
+      expect(encode(0)).toBe(0);
+      expect(encode(1)).toBe(1);
+      expect(encode(10e10)).toBe(10e10);
     });
 
     it("normalizes negative values", function() {
-      expect(check(-1)).toBe(0);
-      expect(check(-1.5)).toBe(0);
+      expect(encode(-1)).toBe(0);
+      expect(encode(-1.5)).toBe(0);
     });
 
     it("rounds given value", function() {
-      expect(check(0.4)).toBe(0);
-      expect(check(1.1)).toBe(1);
-      expect(check(1.9)).toBe(2);
+      expect(encode(0.4)).toBe(0);
+      expect(encode(1.1)).toBe(1);
+      expect(encode(1.9)).toBe(2);
+    });
+
+    it("accepts strings", function() {
+      expect(encode("0")).toBe(0);
+      expect(encode("1")).toBe(1);
+      expect(encode("-1")).toBe(0);
+      expect(encode("0.7")).toBe(1);
     });
 
   });
 
   describe("integer", function() {
 
-    var check = tabris.PropertyTypes.integer.encode;
+    var encode = tabris.PropertyTypes.integer.encode;
 
     it("fails for non-numbers", function() {
-      var values = ["", "foo", "23", null, undefined, true, false, {}, []];
+      var values = ["", "foo", "23f", null, undefined, true, false, {}, []];
       values.forEach((value) => {
         expect(() => {
-          check(value);
+          encode(value);
         }).toThrowError(typeof value + " is not a number: " + value);
       });
     });
@@ -295,44 +311,51 @@ describe("PropertyTypes:", function() {
       var values = [NaN, 1 / 0, -1 / 0];
       values.forEach((value) => {
         expect(() => {
-          check(value);
-        }).toThrowError("Number is not a valid value: " + value);
+          encode(value);
+        }).toThrowError("Invalid number: " + value);
       });
     });
 
     it("accepts positive and negative numbers including zero", function() {
-      expect(check(-(10e10))).toBe(-(10e10));
-      expect(check(-1)).toBe(-1);
-      expect(check(0)).toBe(0);
-      expect(check(1)).toBe(1);
-      expect(check(10e10)).toBe(10e10);
+      expect(encode(-(10e10))).toBe(-(10e10));
+      expect(encode(-1)).toBe(-1);
+      expect(encode(0)).toBe(0);
+      expect(encode(1)).toBe(1);
+      expect(encode(10e10)).toBe(10e10);
     });
 
     it("rounds given value", function() {
-      expect(check(-1.9)).toBe(-2);
-      expect(check(-1.1)).toBe(-1);
-      expect(check(-0.4)).toBe(0);
-      expect(check(0.4)).toBe(0);
-      expect(check(1.1)).toBe(1);
-      expect(check(1.9)).toBe(2);
+      expect(encode(-1.9)).toBe(-2);
+      expect(encode(-1.1)).toBe(-1);
+      expect(encode(-0.4)).toBe(0);
+      expect(encode(0.4)).toBe(0);
+      expect(encode(1.1)).toBe(1);
+      expect(encode(1.9)).toBe(2);
+    });
+
+    it("accepts strings", function() {
+      expect(encode("0")).toBe(0);
+      expect(encode("1")).toBe(1);
+      expect(encode("-1")).toBe(-1);
+      expect(encode("0.7")).toBe(1);
     });
 
   });
 
   describe("function", function() {
 
-    var check = tabris.PropertyTypes.function.encode;
+    var encode = tabris.PropertyTypes.function.encode;
 
     it("accepts functions", function() {
       var fn = function() {};
-      expect(check(fn)).toBe(fn);
+      expect(encode(fn)).toBe(fn);
     });
 
     it("fails for non-functions", function() {
       var values = ["", "foo", 23, null, undefined, true, false, {}, []];
       values.forEach((value) => {
         expect(() => {
-          check(value);
+          encode(value);
         }).toThrowError(typeof value + " is not a function: " + value);
       });
     });
@@ -341,14 +364,14 @@ describe("PropertyTypes:", function() {
 
   describe("choice", function() {
 
-    var check = tabris.PropertyTypes.choice.encode;
+    var encode = tabris.PropertyTypes.choice.encode;
 
     it("allows string values given in array", function() {
       var accepted = ["1", "foo", "bar"];
 
-      expect(check("1", accepted)).toBe("1");
-      expect(check("foo", accepted)).toBe("foo");
-      expect(check("bar", accepted)).toBe("bar");
+      expect(encode("1", accepted)).toBe("1");
+      expect(encode("foo", accepted)).toBe("foo");
+      expect(encode("bar", accepted)).toBe("bar");
     });
 
     it("rejects string values not given in array", function() {
@@ -356,7 +379,7 @@ describe("PropertyTypes:", function() {
 
       ["1", "foo", "bar"].forEach((value) => {
         expect(() => {
-          check(value, accepted);
+          encode(value, accepted);
         }).toThrowError("Accepting \"x\", \"y\", \"z\", given was: \"" + value + "\"");
       });
     });
@@ -365,20 +388,20 @@ describe("PropertyTypes:", function() {
 
   describe("nullable", function() {
 
-    var check = tabris.PropertyTypes.nullable.encode;
+    var encode = tabris.PropertyTypes.nullable.encode;
 
     it("allows null", function() {
-      expect(check(null)).toBeNull();
+      expect(encode(null)).toBeNull();
     });
 
     it("allows null or alternate check", function() {
-      expect(check(null, "natural")).toBeNull();
-      expect(check(1.1, "natural")).toBe(1);
+      expect(encode(null, "natural")).toBeNull();
+      expect(encode(1.1, "natural")).toBe(1);
     });
 
     it("rejects alternate check", function() {
       expect(() => {
-        check(NaN, "natural");
+        encode(NaN, "natural");
       }).toThrow();
     });
 
@@ -386,13 +409,13 @@ describe("PropertyTypes:", function() {
 
   describe("opacity", function() {
 
-    var check = tabris.PropertyTypes.opacity.encode;
+    var encode = tabris.PropertyTypes.opacity.encode;
 
     it("fails for non-numbers", function() {
-      var values = ["", "foo", "23", null, undefined, true, false, {}, []];
+      var values = ["", "foo", "23f", null, undefined, true, false, {}, []];
       values.forEach((value) => {
         expect(() => {
-          check(value);
+          encode(value);
         }).toThrowError(typeof value + " is not a number: " + value);
       });
     });
@@ -401,8 +424,8 @@ describe("PropertyTypes:", function() {
       var values = [NaN, 1 / 0, -1 / 0];
       values.forEach((value) => {
         expect(() => {
-          check(value);
-        }).toThrowError("Number is not a valid value: " + value);
+          encode(value);
+        }).toThrowError("Invalid number: " + value);
       });
     });
 
@@ -410,22 +433,28 @@ describe("PropertyTypes:", function() {
       var values = [-0.1, -1, 1.01, 2];
       values.forEach((value) => {
         expect(() => {
-          check(value);
+          encode(value);
         }).toThrowError("Number is out of bounds: " + value);
       });
     });
 
+    it("accepts strings", function() {
+      expect(encode("0")).toBe(0);
+      expect(encode("0.1")).toBe(0.1);
+      expect(encode("1")).toBe(1);
+    });
+
     it("accepts natural numbers between (including) zero and one", function() {
-      expect(check(0)).toBe(0);
-      expect(check(0.5)).toBe(0.5);
-      expect(check(1)).toBe(1);
+      expect(encode(0)).toBe(0);
+      expect(encode(0.5)).toBe(0.5);
+      expect(encode(1)).toBe(1);
     });
 
   });
 
   describe("transform", function() {
 
-    var check = tabris.PropertyTypes.transform.encode;
+    var encode = tabris.PropertyTypes.transform.encode;
     var defaultValue = {
       rotation: 0,
       scaleX: 1,
@@ -444,8 +473,8 @@ describe("PropertyTypes:", function() {
     };
 
     it("accepts complete, valid values", function() {
-      expect(check(defaultValue)).toEqual(defaultValue);
-      expect(check(customValue)).toEqual(customValue);
+      expect(encode(defaultValue)).toEqual(defaultValue);
+      expect(encode(customValue)).toEqual(customValue);
     });
 
     it("auto-completes values", function() {
@@ -458,8 +487,8 @@ describe("PropertyTypes:", function() {
         translationY: 0,
         translationZ: +20
       };
-      expect(check(value)).toEqual(expected);
-      expect(check({})).toEqual(defaultValue);
+      expect(encode(value)).toEqual(expected);
+      expect(encode({})).toEqual(defaultValue);
     });
 
     it("fails for invalid numbers", function() {
@@ -472,14 +501,14 @@ describe("PropertyTypes:", function() {
         {translationZ: 1 / 0}
       ].forEach((value) => {
         expect(() => {
-          check(value);
+          encode(value);
         }).toThrow();
       });
     });
 
     it("fails for unknown keys", function() {
       expect(() => {
-        check({foo: 1});
+        encode({foo: 1});
       }).toThrowError("Not a valid transformation containing \"foo\"");
     });
 
@@ -487,38 +516,38 @@ describe("PropertyTypes:", function() {
 
   describe("array", function() {
 
-    var check = tabris.PropertyTypes.array.encode;
+    var encode = tabris.PropertyTypes.array.encode;
 
     it("passes any array", function() {
-      expect(check([1, "a", true])).toEqual([1, "a", true]);
+      expect(encode([1, "a", true])).toEqual([1, "a", true]);
     });
 
     it("converts null to empty array", function() {
-      expect(check(null)).toEqual([]);
+      expect(encode(null)).toEqual([]);
     });
 
     it("converts undefined to empty array", function() {
-      expect(check(undefined)).toEqual([]);
+      expect(encode(undefined)).toEqual([]);
     });
 
     it("does not copy array", function() {
       var input = [1, 2, 3];
-      expect(check(input)).toBe(input);
+      expect(encode(input)).toBe(input);
     });
 
     it("fails for non-arrays", function() {
       var values = [0, 1, "", "foo", false, true, {}, {length: 0}];
       values.forEach((value) => {
         expect(() => {
-          check(value);
+          encode(value);
         }).toThrowError(typeof value + " is not an array: " + value);
       });
     });
 
     it("performs optional item checks", function() {
-      expect(check(["foo", 1, true], "string")).toEqual(["foo", "1", "true"]);
+      expect(encode(["foo", 1, true], "string")).toEqual(["foo", "1", "true"]);
       expect(() => {
-        check(["foo"], "integer");
+        encode(["foo"], "integer");
       }).toThrowError("string is not a number: foo");
     });
 
