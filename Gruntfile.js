@@ -8,34 +8,6 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     clean: ["build"],
-    jshint: {
-      options: {
-        jshintrc: true
-      },
-      all: [
-        "Gruntfile.js",
-        "src/**/*.js",
-        "test/**/*.js",
-        "examples/**/*.js",
-        "snippets/**/*.js",
-        "!**/lib/**/*.js",
-        "!**/node_modules/**/*.js"
-      ]
-    },
-    jscs: {
-      src: [
-        "Gruntfile.js",
-        "src/**/*.js",
-        "test/**/*.js",
-        "examples/**/*.js",
-        "snippets/**/*.js",
-        "!**/lib/**/*.js",
-        "!**/node_modules/**/*.js"
-      ],
-      options: {
-        config: true
-      }
-    },
     concat: {
       tabris: {
         options: {
@@ -206,6 +178,9 @@ module.exports = function(grunt) {
       },
       test_tabris: {
         cmd: "node test/tabris/run-tests.js"
+      },
+      lint: {
+        cmd: "node_modules/.bin/eslint --color '**/*.js'"
       }
     },
     examples: {
@@ -215,8 +190,6 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks("grunt-contrib-clean");
   grunt.loadNpmTasks("grunt-contrib-concat");
-  grunt.loadNpmTasks("grunt-contrib-jshint");
-  grunt.loadNpmTasks("grunt-jscs");
   grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.loadNpmTasks("grunt-contrib-copy");
   grunt.loadNpmTasks("grunt-contrib-compress");
@@ -225,9 +198,8 @@ module.exports = function(grunt) {
   grunt.loadTasks("./grunt");
 
   /* runs static code analysis tools */
-  grunt.registerTask("check", [
-    "jscs",
-    "jshint"
+  grunt.registerTask("lint", [
+    "exec:lint"
   ]);
 
   grunt.registerTask("package", "create package.json", function() {
@@ -276,7 +248,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask("default", [
     "clean",
-    "check",
+    "lint",
     "build",
     "test",
     "doc",

@@ -275,7 +275,7 @@ module.exports = function(grunt) {
                   + " * @param property\n"
                   + " */\n"
                   + "get(property: string): any;");
-      addGetters(result, def, name);
+      addGetters(result, def);
       result.append("");
       result.append("/**\n"
                   + " * Sets the given property. Supports chaining.\n"
@@ -289,12 +289,12 @@ module.exports = function(grunt) {
                   + " * @param properties\n"
                   + "*/\n"
                   + `set(properties: ${name}Properties): this;`);
-      addSetters(result, def, name);
+      addSetters(result, def);
     }
   }
 
-  function addGetters(result, def, name) {
-    Object.keys(def.properties || []).sort().forEach((name) => {
+  function addGetters(result,  def) {
+    Object.keys(def.properties  || []).sort().forEach((name) => {
       result.append("");
       result.append(createGetter(name, def.properties[name]));
     });
@@ -307,7 +307,7 @@ module.exports = function(grunt) {
     return result.join("\n");
   }
 
-  function addSetters(result, def, name) {
+  function addSetters(result, def) {
     result.append("");
     Object.keys(def.properties || []).sort().forEach((name) => {
       result.append("");

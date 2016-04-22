@@ -1,11 +1,9 @@
 describe("Proxy", function() {
 
   var nativeBridge;
-  var log;
 
   beforeEach(function() {
     nativeBridge = new NativeBridgeSpy();
-    log = [];
     tabris._reset();
     tabris._init(nativeBridge);
     tabris.registerWidget("TestType", {

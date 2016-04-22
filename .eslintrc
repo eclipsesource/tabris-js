@@ -1,0 +1,42 @@
+{
+  "extends": "eslint:recommended",
+  "parserOptions": {
+    "ecmaVersion": 5,
+    "sourceType": "module"
+  },
+  "env": {
+    "node": true
+  },
+  "globals": {
+    "tabris": false,
+    "window": false,
+    "document": false,
+    "navigator": false,
+    "screen": false,
+    "device": false,
+    "fetch": false,
+    "localStorage": false,
+    "cordova": false,
+    "_": false
+  },
+  "rules": {
+    "no-empty": 0,
+    "no-console": 0,
+    "semi": 2,
+    "eqeqeq": [2, "allow-null"],
+    "indent": [2, 2, {"SwitchCase": 1}],
+    "linebreak-style": [2, "unix"],
+    "no-trailing-spaces": 2,
+    "space-in-parens": [2, "never"],
+    "array-bracket-spacing": [2, "never"],
+    "object-curly-spacing": [2, "never"],
+    "space-before-blocks": 2,
+    "space-infix-ops": 2,
+    "space-unary-ops": 2,
+    "max-len": [2, 120, 2, {"ignoreUrls": true, "ignorePattern": "\\/\\^"}],
+    "quotes": [2, "double", "avoid-escape"],
+    "curly": [2, "all"],
+    "eol-last": 2,
+    "no-with": 2
+  }
+}

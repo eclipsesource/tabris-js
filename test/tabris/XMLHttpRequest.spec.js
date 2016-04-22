@@ -851,8 +851,7 @@ describe("XMLHttpRequest", function() {
       it("fails when responseText was not a string", function() {
         proxy.trigger("StateChange", {state: "finished", response: 2});
         expect(() => {
-          /*jshint unused: false */
-          var responseText = xhr.responseText;
+          xhr.responseText;
         }).toThrowError("IllegalStateError: responseText is not a string");
       });
 
@@ -876,8 +875,7 @@ describe("XMLHttpRequest", function() {
       it("fails with invalid reponseText type", function() {
         proxy.trigger("StateChange", {state: "finished", response: ["foo"]});
         expect(() => {
-          /*jshint unused: false */
-          var responseText = xhr.responseText;
+          xhr.responseText;
         }).toThrowError("IllegalStateError: responseText is not a string");
       });
 

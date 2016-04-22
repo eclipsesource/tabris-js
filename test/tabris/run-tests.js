@@ -1,8 +1,8 @@
-/*global window: true, global: false, tabris: true, Backbone: true */
+/*global window: true, global: false, tabris: true */
 var Jasmine = require("jasmine");
 
 window = global;
-Backbone = require("backbone");
+window.Backbone = require("backbone");
 
 require("../../src/tabris/util.js");
 require("../../src/tabris/util-fonts.js");
