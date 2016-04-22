@@ -2,7 +2,7 @@
   "type": "UI",
   "object": "ui",
   "description": "The object `tabris.ui` is the root element for all widgets. This is the parent for all top-level pages, *actions* and the *drawer*.",
-  "include": ["Events", "Properties"],
+  "include": ["Widget"],
   "properties": {
     "background": {
       "type": "Color",
