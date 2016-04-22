@@ -123,37 +123,37 @@
 
     layoutData: {
       encode: function(value) {
-        return tabris.Layout.encodeLayoutData(value);
+        return encodeLayoutData(value);
       },
       decode: function(value) {
-        return tabris.Layout.decodeLayoutData(value);
+        return decodeLayoutData(value);
       }
     },
 
     edge: {
       encode: function(value) {
-        return value == null ? null : tabris.Layout.encodeEdge(value);
+        return value == null ? null : encodeEdge(value);
       },
       decode: function(value) {
-        return tabris.Layout.decodeAttribute(value);
+        return decodeAttribute(value);
       }
     },
 
     dimension: {
       encode: function(value) {
-        return value == null ? null : tabris.Layout.encodeSize(value);
+        return value == null ? null : encodeSize(value);
       },
       decode: function(value) {
-        return tabris.Layout.decodeAttribute(value);
+        return decodeAttribute(value);
       }
     },
 
     sibling: {
       encode: function(value) {
-        return value == null ? null : tabris.Layout.encodeRef(value);
+        return value == null ? null : encodeRef(value);
       },
       decode: function(value) {
-        return tabris.Layout.decodeAttribute(value);
+        return decodeAttribute(value);
       }
     },
 
@@ -262,5 +262,139 @@
     translationY: 0,
     translationZ: 0
   };
+
+  var layoutEncoders = {
+    width: encodeSize,
+    height: encodeSize,
+    left: encodeEdge,
+    right: encodeEdge,
+    top: encodeEdge,
+    bottom: encodeEdge,
+    centerX: encodeSize,
+    centerY: encodeSize,
+    baseline: encodeRef
+  };
+
+  function encodeLayoutData(layoutData) {
+    var result = {};
+    for (var key in layoutData) {
+      if (layoutData[key] != null) {
+        if (!(key in layoutEncoders)) {
+          throw new Error("Invalid key '" + key + "' in layoutData");
+        }
+        try {
+          result[key] = layoutEncoders[key](layoutData[key]);
+        } catch (error) {
+          throw new Error("Invalid value for '" + key + "': " + error.message);
+        }
+      }
+    }
+    return result;
+  }
+
+  function encodeSize(value) {
+    if (!isNumber(value)) {
+      throw new Error("must be a number");
+    }
+    return value;
+  }
+
+  function encodeEdge(value) {
+    if (isStringList(value)) {
+      return encodeStringList(value);
+    }
+    if (Array.isArray(value)) {
+      return encodeArray(value);
+    }
+    if (isNumber(value)) {
+      return value;
+    }
+    if (isPercentage(value)) {
+      var percentage = parseInt(value);
+      return percentage === 0 ? 0 : [percentage, 0];
+    }
+    if (isWidgetRef(value)) {
+      return [value, 0];
+    }
+    throw new Error("invalid type");
+  }
+
+  function encodeStringList(value) {
+    var array = value.split(/\s+/);
+    array[1] = parseFloat(array[1]);
+    return encodeArray(array);
+  }
+
+  function encodeArray(array) {
+    if (array.length !== 2) {
+      throw new Error("list length must be 2");
+    }
+    var ref = array[0];
+    var offset = array[1];
+    if (isPercentage(ref)) {
+      ref = parseInt(ref);
+    } else if (!isNumber(ref) && !isWidgetRef(ref)) {
+      throw new Error("first element must be a percentage or a widget reference");
+    }
+    if (!isNumber(offset)) {
+      throw new Error("second element must be a number");
+    }
+    return ref === 0 ? offset : [ref, offset];
+  }
+
+  function encodeRef(value) {
+    if (!isWidgetRef(value)) {
+      throw new Error("must be a widget reference");
+    }
+    return value;
+  }
+
+  function decodeLayoutData(layoutData) {
+    if (!layoutData) {
+      return null;
+    }
+    var result = {};
+    for (var key in layoutData) {
+      result[key] = decodeAttribute(layoutData[key]);
+    }
+    return result;
+  }
+
+  function decodeAttribute(value) {
+    return Array.isArray(value) ? decodeArray(value) : value;
+  }
+
+  function decodeArray(array) {
+    if (array[0] === 0) {
+      return array[1];
+    }
+    if (array[1] === 0) {
+      return isNumber(array[0]) ? array[0] + "%" : array[0];
+    }
+    return [isNumber(array[0]) ? array[0] + "%" : array[0], array[1]];
+  }
+
+  function isStringList(value) {
+    return typeof value === "string" && value.indexOf(" ") !== -1;
+  }
+
+  function isPercentage(value) {
+    return typeof value === "string" && value[value.length - 1] === "%" && !isNaN(parseInt(value));
+  }
+
+  function isWidgetRef(value) {
+    var selectorRegex = /^(\*|([#.]?[A-Za-z0-9_-]+))$/;
+    if (value instanceof tabris.Proxy) {
+      return true;
+    }
+    if (typeof value === "string") {
+      return value === "prev()" || selectorRegex.test(value);
+    }
+    return false;
+  }
+
+  function isNumber(value) {
+    return typeof value === "number" && isFinite(value);
+  }
 
 }());
