@@ -52,22 +52,22 @@
   "events": {
     "select": {
       "parameters": [
-        {"name": "widget", "type": "CollectionView"},
+        {"name": "widget", "type": "this"},
         {"name": "item", "type": "any", "description": "The item that was selected."},
-        {"name": "options", "type": "Object", "description": "Contains the index of the selected item, e.g. `{index: number}`"}
+        {"name": "options", "type": "{index: number}", "description": "Contains the index of the selected item, e.g. `{index: number}`"}
       ],
       "description": "Fired when a collection item is selected."
     },
     "refresh": {
       "parameters": [
-        {"name": "widget", "type": "CollectionView"}
+        {"name": "widget", "type": "this"}
       ],
       "description": "Fired when the user requested a refresh. An event listener should reset the *refreshIndicator* property when refresh is finished."
     },
     "scroll": {
       "parameters": [
-        {"name": "widget", "type": "CollectionView"},
-        {"name": "event", "type": "Object", "description": "Contains the scroll delta of this scroll event `{deltaX: number, deltaY: number}`. The value of `deltaY` will be positive when scrolling up and negative when scrolling down."}
+        {"name": "widget", "type": "this"},
+        {"name": "event", "type": "{deltaX: number, deltaY: number}", "description": "Contains the scroll delta of this scroll event `{deltaX: number, deltaY: number}`. The value of `deltaY` will be positive when scrolling up and negative when scrolling down."}
       ],
       "description": "Fired while the collection view is scrolling."
     }

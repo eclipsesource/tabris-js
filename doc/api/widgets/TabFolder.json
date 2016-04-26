@@ -22,17 +22,17 @@
   "events": {
     "change:selection": {
       "parameters": [
-        {"name": "widget", "type": "TabFolder"},
+        {"name": "widget", "type": "this"},
         {"name": "selection", "type": "Tab", "description": "The new value of *selection*."},
-        {"name": "options", "type": "Object"}
+        {"name": "options", "type": "any"}
       ],
       "description": "Fired when the selection property changes."
     },
     "select": {
       "parameters": [
-        {"name": "widget", "type": "TabFolder"},
+        {"name": "widget", "type": "this"},
         {"name": "selection", "type": "Tab", "description": "The new value of *selection*."},
-        {"name": "options", "type": "Object"}
+        {"name": "options", "type": "any"}
       ],
       "description": "Fired when the selection property changes by user interaction."
     }

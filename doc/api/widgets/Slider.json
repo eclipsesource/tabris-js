@@ -22,9 +22,9 @@
   "events": {
     "change:selection": {
       "parameters": [
-        {"name": "widget", "type": "SearchAction"},
+        {"name": "widget", "type": "this"},
         {"name": "selection", "type": "number", "description": "The new value of *[selection](#selection)*."},
-        {"name": "options", "type": "Object"}
+        {"name": "options", "type": "any"}
       ],
       "description": "Fired when the selection property changes."
     },
@@ -32,7 +32,7 @@
       "parameters": [
         {"name": "widget", "type": "SearchAction"},
         {"name": "selection", "type": "number", "description": "The new value of *[selection](#selection)*."},
-        {"name": "options", "type": "Object"}
+        {"name": "options", "type": "any"}
       ],
       "description": "Fired when the selection property is changed by the user."
     }

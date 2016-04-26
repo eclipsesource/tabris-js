@@ -30,17 +30,17 @@
   "events": {
     "addchild": {
       "parameters": [
-        {"name": "widget", "type": "Composite"},
+        {"name": "widget", "type": "this"},
         {"name": "child", "type": "Widget", "description": "The widget that was added as a child."},
-        {"name": "options", "type": "Object"}
+        {"name": "options", "type": "any"}
       ],
       "description": "Fired when a child is added to this widget."
     },
     "removechild": {
       "parameters": [
-        {"name": "widget", "type": "Composite"},
+        {"name": "widget", "type": "this"},
         {"name": "child", "type": "Widget", "description": "The widget that was removed."},
-        {"name": "options", "type": "Object", "description": "Contains the index of the removed child widget, e.g. `{index: number}`"}
+        {"name": "options", "type": "{index: number}", "description": "Contains the index of the removed child widget, e.g. `{index: number}`"}
       ],
       "description": "Fired when a child is removed from this widget."
     }

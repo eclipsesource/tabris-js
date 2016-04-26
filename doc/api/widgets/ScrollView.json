@@ -22,8 +22,8 @@
   "events": {
     "scroll": {
       "parameters": [
-        {"name": "widget", "type": "ScrollView"},
-        {"name": "offset", "type": "Object", "description": "Indicates the current scrolling position, e.g. `{x: number, y: number}`"}
+        {"name": "widget", "type": "this"},
+        {"name": "offset", "type": "{x: number, y: number}", "description": "Indicates the current scrolling position, e.g. `{x: number, y: number}`"}
       ],
       "description": "Fired on scrolling."
     }

@@ -23,25 +23,25 @@
   "events": {
     "change:selectionIndex": {
       "parameters": [
-        {"name": "widget", "type": "Picker"},
+        {"name": "widget", "type": "this"},
         {"name": "selectionIndex", "type": "number", "description": "The new value of *[selectionIndex](#selectionindex)*."},
-        {"name": "options", "type": "Object"}
+        {"name": "options", "type": "any"}
       ],
       "description": "Fired when the selectionIndex property changes."
     },
     "change:selection": {
       "parameters": [
-        {"name": "widget", "type": "Picker"},
+        {"name": "widget", "type": "this"},
         {"name": "selection", "type": "string", "description": "The new value of *[selection](#selection)*."},
-        {"name": "options", "type": "Object"}
+        {"name": "options", "type": "any"}
       ],
       "description": "Fired when the selection property changes."
     },
     "select": {
       "parameters": [
-        {"name": "widget", "type": "Picker"},
+        {"name": "widget", "type": "this"},
         {"name": "selection", "type": "string", "description": "The new value of *[selection](#selection)*."},
-        {"name": "options", "type": "Object", "description": "Contains the index of the selected item, e.g. `{index: number}`"}
+        {"name": "options", "type": "{index: number}", "description": "Contains the index of the selected item, e.g. `{index: number}`"}
       ],
       "description": "Fired an item was selected by the user."
     }

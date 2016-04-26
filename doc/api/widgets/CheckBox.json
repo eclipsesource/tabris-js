@@ -16,17 +16,17 @@
   "events": {
     "change:selection": {
       "parameters": [
-        {"name": "widget", "type": "CheckBox"},
+        {"name": "widget", "type": "this"},
         {"name": "selection", "type": "boolean", "description": "The new value of *[selection](#selection)*."},
-        {"name": "options", "type": "Object"}
+        {"name": "options", "type": "any"}
       ],
       "description": "Fired when the check box is checked or unchecked."
     },
     "select": {
       "parameters": [
-        {"name": "widget", "type": "CheckBox"},
+        {"name": "widget", "type": "this"},
         {"name": "selection", "type": "boolean", "description": "The new value of *[selection](#selection)*."},
-        {"name": "options", "type": "Object"}
+        {"name": "options", "type": "any"}
       ],
       "description": "Fired when the check box is checked or unchecked by the user."
     }
