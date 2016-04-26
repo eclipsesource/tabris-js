@@ -84,5 +84,3 @@ tabris.registerWidget("ScrollView", {
   }
 
 });
-
-tabris.registerWidget("ScrollComposite", tabris.ScrollView);
