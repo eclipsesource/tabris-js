@@ -1,5 +1,232 @@
-describe("PropertyTypes:", function() {
-  /*globals _:false*/
+describe("PropertyTypes", function() {
+
+  var widget;
+
+  beforeEach(function() {
+    function WidgetMock() {}
+    WidgetMock.prototype = tabris.Proxy.prototype;
+    widget = new WidgetMock();
+  });
+
+  describe("sibling encode", function() {
+
+    var encode = tabris.PropertyTypes.sibling.encode;
+
+    it("accepts widgets", function() {
+      expect(encode(widget)).toBe(widget);
+    });
+
+    it("accepts selector strings", function() {
+      expect(encode("prev()")).toBe("prev()");
+      expect(encode("#foo")).toBe("#foo");
+    });
+
+    it("rejects other strings", function() {
+      expect(() => encode("23")).toThrowError("Not a widget reference: '23'");
+      expect(() => encode("23%")).toThrowError("Not a widget reference: '23%'");
+    });
+
+    it("passes null though", function() {
+      expect(encode(null)).toBe(null);
+      expect(encode()).toBe(null);
+    });
+
+    it("rejects other types", function() {
+      expect(() => encode(23)).toThrowError("Not a widget reference: 23");
+      expect(() => encode([])).toThrowError("Not a widget reference: []");
+      expect(() => encode({})).toThrowError("Not a widget reference: {}");
+    });
+
+  });
+
+  describe("sibling decode", function() {
+
+    var decode = tabris.PropertyTypes.sibling.decode;
+
+    it("passes values through", function() {
+      expect(decode("prev()")).toBe("prev()");
+      expect(decode("#foo")).toBe("#foo");
+      expect(decode(widget)).toBe(widget);
+    });
+
+  });
+
+  describe("dimension encode", function() {
+
+    var encode = tabris.PropertyTypes.dimension.encode;
+
+    it("accepts numeric strings", function() {
+      expect(encode("23")).toBe(23);
+      expect(encode("-23")).toBe(-23);
+      expect(encode("+23")).toBe(23);
+      expect(encode("3.5")).toBe(3.5);
+    });
+
+    it("rejects non-numeric strings", function() {
+      expect(() => encode("*")).toThrowError("Not a number: '*'");
+      expect(() => encode("prev()")).toThrowError("Not a number: 'prev()'");
+      expect(() => encode("23px")).toThrowError("Not a number: '23px'");
+      expect(() => encode("")).toThrowError("Not a number: ''");
+    });
+
+    it("accepts numbers", function() {
+      expect(encode(23)).toBe(23);
+      expect(encode(-23)).toBe(-23);
+      expect(encode(3.5)).toBe(3.5);
+    });
+
+    it("rejects infinte numbers", function() {
+      expect(() => encode(NaN)).toThrowError("Invalid number: NaN");
+      expect(() => encode(Infinity)).toThrowError("Invalid number: Infinity");
+      expect(() => encode(-Infinity)).toThrowError("Invalid number: -Infinity");
+    });
+
+    it("passes null though", function() {
+      expect(encode(null)).toBe(null);
+      expect(encode()).toBe(null);
+    });
+
+    it("rejects other types", function() {
+      expect(() => encode([])).toThrowError("Not a number: []");
+      expect(() => encode({})).toThrowError("Not a number: {}");
+    });
+
+  });
+
+  describe("dimension decode", function() {
+
+    var decode = tabris.PropertyTypes.dimension.decode;
+
+    it("passes values through", function() {
+      expect(decode(10)).toBe(10);
+      expect(decode(-0.5)).toBe(-0.5);
+    });
+
+  });
+
+  describe("edge encode", function() {
+
+    var encode = tabris.PropertyTypes.edge.encode;
+
+    it("accepts numeric strings", function() {
+      expect(encode("23")).toEqual([0, 23]);
+      expect(encode("-23")).toEqual([0, -23]);
+      expect(encode("+23")).toEqual([0, 23]);
+      expect(encode("3.5")).toEqual([0, 3.5]);
+    });
+
+    it("accepts selector strings", function() {
+      expect(encode("*")).toEqual(["*", 0]);
+      expect(encode("prev()")).toEqual(["prev()", 0]);
+      expect(encode(".foo")).toEqual([".foo", 0]);
+      expect(encode("#foo")).toEqual(["#foo", 0]);
+      expect(encode("Type")).toEqual(["Type", 0]);
+    });
+
+    it("accepts percentage strings", function() {
+      expect(encode("-30%")).toEqual([-30, 0]);
+      expect(encode("120%")).toEqual([120, 0]);
+      expect(encode("30% +10")).toEqual([30, 10]);
+      expect(encode("30% -10")).toEqual([30, -10]);
+    });
+
+    it("rejects other strings", function() {
+      expect(() => encode("23px")).toThrowError("Invalid dimension: '23px'");
+      expect(() => encode("")).toThrowError("Invalid dimension: ''");
+    });
+
+    it("accepts numbers", function() {
+      expect(encode(23)).toBe(23);
+      expect(encode(-23)).toBe(-23);
+      expect(encode(3.5)).toBe(3.5);
+    });
+
+    it("rejects infinte numbers", function() {
+      expect(() => encode(NaN)).toThrowError("Invalid number: NaN");
+      expect(() => encode(Infinity)).toThrowError("Invalid number: Infinity");
+      expect(() => encode(-Infinity)).toThrowError("Invalid number: -Infinity");
+    });
+
+    it("accepts arrays", function() {
+      expect(encode([30, 10])).toEqual([30, 10]);
+      expect(encode([30, "10"])).toEqual([30, 10]);
+      expect(encode(["30%", "10"])).toEqual([30, 10]);
+      expect(encode(["prev()", 10])).toEqual(["prev()", 10]);
+      expect(encode(["prev()", 10])).toEqual(["prev()", 10]);
+      expect(encode([widget, 10])).toEqual([widget, 10]);
+    });
+
+    it("rejects invalid arrays", function() {
+      expect(() => encode(["30", "10"]))
+        .toThrowError("Not a percentage or widget reference: '30'");
+      expect(() => encode(["10", "30%"]))
+        .toThrowError("Not a percentage or widget reference: '10'");
+      expect(() => encode([23]))
+        .toThrowError("Wrong number of elements (must be 2): [23]");
+      expect(() => encode([1, 2, 3]))
+        .toThrowError("Wrong number of elements (must be 2): [1, 2, 3]");
+    });
+
+    it("translates zero percentage to offset", function() {
+      expect(encode("0%")).toBe(0);
+      expect(encode("0% 23")).toBe(23);
+      expect(encode(["0%", 23])).toBe(23);
+    });
+
+    it("translates percentage strings to arrays", function() {
+      expect(encode("30%")).toEqual([30, 0]);
+    });
+
+    it("translates selector-offset strings to arrays", function() {
+      expect(encode("#foo 5")).toEqual(["#foo", 5]);
+      expect(encode("#foo -7")).toEqual(["#foo", -7]);
+      expect(encode("#foo +9")).toEqual(["#foo", 9]);
+      expect(encode("#foo -10.4")).toEqual(["#foo", -10.4]);
+    });
+
+    it("translates percentage-offset strings to arrays", function() {
+      expect(encode("30% 5")).toEqual([30, 5]);
+      expect(encode("1% -7")).toEqual([1, -7]);
+      expect(encode("-5% +9")).toEqual([-5, 9]);
+      expect(encode("100% -10.4")).toEqual([100, -10.4]);
+    });
+
+    it("translates selector to array", function() {
+      expect(encode("#other")).toEqual(["#other", 0]);
+    });
+
+    it("does not encode widget refs", function() {
+      expect(encode(["#other", 0])).toEqual(["#other", 0]);
+    });
+
+    it("passes null though", function() {
+      expect(encode(null)).toBe(null);
+      expect(encode()).toBe(null);
+    });
+
+  });
+
+  describe("edge decode", function() {
+
+    var decode = tabris.PropertyTypes.edge.decode;
+
+    it("passes scalar values through", function() {
+      expect(decode("prev()")).toBe("prev()");
+      expect(decode("30%")).toBe("30%");
+      expect(decode(10)).toBe(10);
+    });
+
+    it("translates percentage in arrays to string", function() {
+      expect(decode(["30%", 10])).toEqual(["30%", 10]);
+      expect(decode([30, 10])).toEqual(["30%", 10]);
+    });
+
+    it("removes zero offset from arrays", function() {
+      expect(decode([30, 0])).toBe("30%");
+      expect(decode(["30%", 0])).toBe("30%");
+    });
+
+  });
 
   describe("layoutData encode", function() {
 
@@ -44,96 +271,64 @@ describe("PropertyTypes:", function() {
 
     ["width", "height", "centerX", "centerY"].forEach((attr) => {
 
-      it("fails if '" + attr + "' is not a number", function() {
-        expect(() => {
-          var layoutData = {};
-          layoutData[attr] = "23";
-          encode(layoutData);
-        }).toThrowError("Invalid value for '" + attr + "': must be a number");
+      it("accepts a numeric string for '" + attr + "'", function() {
+        expect(encode({[attr]: "23"})).toEqual({[attr]: 23});
+      });
+
+      it("accepts a number for '" + attr + "'", function() {
+        expect(encode({[attr]: 23})).toEqual({[attr]: 23});
+      });
+
+      it("rejects non-numeric string for '" + attr + "'", function() {
+        expect(() => encode({[attr]: "23px"}))
+          .toThrowError("Invalid value for '" + attr + "': Not a number: '23px'");
       });
 
     });
 
     ["left", "right", "top", "bottom"].forEach((attr) => {
 
-      it("fails if '" + attr + "' is an object", function() {
-        expect(() => {
-          var layoutData = {};
-          layoutData[attr] = {};
-          encode(layoutData);
-        }).toThrowError("Invalid value for '" + attr + "': invalid type");
+      it("accepts a numeric string for '" + attr + "'", function() {
+        expect(encode({[attr]: "23"})).toEqual({[attr]: [0, 23]});
       });
 
-      it("fails if '" + attr + "' is an invalid array", function() {
-        expect(() => {
-          var layoutData = {};
-          layoutData[attr] = [23];
-          encode(layoutData);
-        }).toThrowError("Invalid value for '" + attr + "': list length must be 2");
+      it("accepts percentage+offset string for '" + attr + "'", function() {
+        expect(encode({[attr]: "30% +10"})).toEqual({[attr]: [30, 10]});
+      });
+
+      it("rejects object for '" + attr + "'", function() {
+        expect(() => encode({[attr]: {}}))
+          .toThrowError("Invalid value for '" + attr + "': Invalid dimension: {}");
+      });
+
+      it("rejects invalid array for '" + attr + "'", function() {
+        expect(() => encode({[attr]: [23]}))
+          .toThrowError("Invalid value for '" + attr + "': Wrong number of elements (must be 2): [23]");
       });
 
     });
 
-    it("fails if 'baseline' is a number", function() {
-      expect(() => {
-        encode({left: 0, baseline: 23});
-      }).toThrowError("Invalid value for 'baseline': must be a widget reference");
+    it("accepts widget for 'baseline'", function() {
+      expect(encode({left: 0, baseline: widget})).toEqual({left: 0, baseline: widget});
     });
 
-    it("fails if 'baseline' is a percentage", function() {
-      expect(() => {
-        encode({left: 0, baseline: "23%"});
-      }).toThrowError("Invalid value for 'baseline': must be a widget reference");
+    it("accepts selector for 'baseline'", function() {
+      expect(encode({left: 0, baseline: "prev()"})).toEqual({left: 0, baseline: "prev()"});
     });
 
-    it("fails for unknown attribute", function() {
-      expect(() => {
-        encode({left: 0, foo: "23"});
-      }).toThrowError("Invalid key 'foo' in layoutData");
+    it("rejects number for 'baseline'", function() {
+      expect(() => encode({left: 0, baseline: 23}))
+        .toThrowError("Invalid value for 'baseline': Not a widget reference: 23");
     });
 
-    it("translates percentage strings to arrays", function() {
-      expect(encode({left: "30%", top: "0%"})).toEqual({left: [30, 0], top: 0});
+    it("rejects percentage for 'baseline'", function() {
+      expect(() => encode({left: 0, baseline: "23%"}))
+        .toThrowError("Invalid value for 'baseline': Not a widget reference: '23%'");
     });
 
-    it("translates percentages in arrays to numbers", function() {
-      var input = {left: ["30%", 0]};
-      var output = encode(input);
-
-      expect(output.left).toEqual([30, 0]);
-    });
-
-    it("translates selector to array", function() {
-      var input = {left: "#other", top: "#other"};
-      var expected = {left: ["#other", 0], top: ["#other", 0]};
-
-      expect(encode(input)).toEqual(expected);
-    });
-
-    it("translates zero percentage to offset", function() {
-      expect(encode({left: "0%", top: ["0%", 23]}))
-        .toEqual({left: 0, top: 23});
-    });
-
-    it("translates `percentage offset` strings to arrays", function() {
-      var input = {left: "30%   5", top: "1% -7", bottom: "-5% +9", right: "100% -10.4"};
-      var expected = {left: [30, 5], top: [1, -7], bottom: [-5, 9], right: [100, -10.4]};
-
-      expect(encode(input)).toEqual(expected);
-    });
-
-    it("translates `selector offset` strings to arrays", function() {
-      var input = {left: "#foo   5", top: "#bar -7", bottom: "#boo +9", right: "#far -10.4"};
-      var expected = {left: ["#foo", 5], top: ["#bar", -7], bottom: ["#boo", 9], right: ["#far", -10.4]};
-
-      expect(encode(input)).toEqual(expected);
-    });
-
-    it("does not encode widget refs", function() {
-      var input = {left: ["#other", 0]};
-      var output = encode(input);
-
-      expect(output.left).toEqual(["#other", 0]);
+    it("rejects unknown attribute", function() {
+      expect(() => encode({left: 0, foo: "23"}))
+        .toThrowError("Invalid key 'foo' in layoutData");
     });
 
   });
@@ -366,12 +561,13 @@ describe("PropertyTypes:", function() {
     var encode = tabris.PropertyTypes.number.encode;
 
     it("fails for non-numbers", function() {
-      var values = ["", "foo", "23f", null, undefined, true, false, {}, []];
-      values.forEach((value) => {
-        expect(() => {
-          encode(value);
-        }).toThrowError(typeof value + " is not a number: " + value);
-      });
+      expect(() => encode()).toThrowError("Not a number: undefined");
+      expect(() => encode(null)).toThrowError("Not a number: null");
+      expect(() => encode(true)).toThrowError("Not a number: true");
+      expect(() => encode("")).toThrowError("Not a number: ''");
+      expect(() => encode("23x")).toThrowError("Not a number: '23x'");
+      expect(() => encode({})).toThrowError("Not a number: {}");
+      expect(() => encode([])).toThrowError("Not a number: []");
     });
 
     it("fails for invalid numbers", function() {
@@ -407,12 +603,13 @@ describe("PropertyTypes:", function() {
     var encode = tabris.PropertyTypes.natural.encode;
 
     it("fails for non-numbers", function() {
-      var values = ["", "foo", "23f", null, undefined, true, false, {}, []];
-      values.forEach((value) => {
-        expect(() => {
-          encode(value);
-        }).toThrowError(typeof value + " is not a number: " + value);
-      });
+      expect(() => encode()).toThrowError("Not a number: undefined");
+      expect(() => encode(null)).toThrowError("Not a number: null");
+      expect(() => encode(true)).toThrowError("Not a number: true");
+      expect(() => encode("")).toThrowError("Not a number: ''");
+      expect(() => encode("23x")).toThrowError("Not a number: '23x'");
+      expect(() => encode({})).toThrowError("Not a number: {}");
+      expect(() => encode([])).toThrowError("Not a number: []");
     });
 
     it("fails for invalid numbers", function() {
@@ -455,12 +652,13 @@ describe("PropertyTypes:", function() {
     var encode = tabris.PropertyTypes.integer.encode;
 
     it("fails for non-numbers", function() {
-      var values = ["", "foo", "23f", null, undefined, true, false, {}, []];
-      values.forEach((value) => {
-        expect(() => {
-          encode(value);
-        }).toThrowError(typeof value + " is not a number: " + value);
-      });
+      expect(() => encode()).toThrowError("Not a number: undefined");
+      expect(() => encode(null)).toThrowError("Not a number: null");
+      expect(() => encode(true)).toThrowError("Not a number: true");
+      expect(() => encode("")).toThrowError("Not a number: ''");
+      expect(() => encode("23x")).toThrowError("Not a number: '23x'");
+      expect(() => encode({})).toThrowError("Not a number: {}");
+      expect(() => encode([])).toThrowError("Not a number: []");
     });
 
     it("fails for invalid numbers", function() {
@@ -568,12 +766,13 @@ describe("PropertyTypes:", function() {
     var encode = tabris.PropertyTypes.opacity.encode;
 
     it("fails for non-numbers", function() {
-      var values = ["", "foo", "23f", null, undefined, true, false, {}, []];
-      values.forEach((value) => {
-        expect(() => {
-          encode(value);
-        }).toThrowError(typeof value + " is not a number: " + value);
-      });
+      expect(() => encode()).toThrowError("Not a number: undefined");
+      expect(() => encode(null)).toThrowError("Not a number: null");
+      expect(() => encode(true)).toThrowError("Not a number: true");
+      expect(() => encode("")).toThrowError("Not a number: ''");
+      expect(() => encode("23x")).toThrowError("Not a number: '23x'");
+      expect(() => encode({})).toThrowError("Not a number: {}");
+      expect(() => encode([])).toThrowError("Not a number: []");
     });
 
     it("fails for invalid numbers", function() {
@@ -702,9 +901,7 @@ describe("PropertyTypes:", function() {
 
     it("performs optional item checks", function() {
       expect(encode(["foo", 1, true], "string")).toEqual(["foo", "1", "true"]);
-      expect(() => {
-        encode(["foo"], "integer");
-      }).toThrowError("string is not a number: foo");
+      expect(() => encode(["foo"], "integer")).toThrowError("Not a number: 'foo'");
     });
 
   });
