@@ -21,6 +21,7 @@ tabris.registerWidget("WebView", {
   _properties: {
     url: {type: "string", nocache: true},
     html: {type: "string", nocache: true},
-    headers: {type: "any", default: {}}
+    headers: {type: "any", default: {}},
+    initScript: {type: "string"}
   }
 });
