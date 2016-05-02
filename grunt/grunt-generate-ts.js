@@ -108,7 +108,6 @@ type offset = number;
 type margin = any;
 `.trim();
 
-
 module.exports = function(grunt) {
 
   grunt.registerTask("generate-tsd", function() {
@@ -130,7 +129,7 @@ module.exports = function(grunt) {
   }
 
   function createTypeDefs(defs) {
-    applyIncludes(defs);
+    applyIncludes(defs, ["Events", "Properties"]);
     let result = new Text();
     result.append(header);
     result.append("");
@@ -141,19 +140,26 @@ module.exports = function(grunt) {
     return result.toString();
   }
 
-  function applyIncludes(defs) {
+  function applyIncludes(defs, parents) {
+    let newParents = [];
     Object.keys(defs).forEach((name) => {
       let def = defs[name];
       if (def.include) {
         // TODO adjust when json defs distiguish extends and includes
-        let includes = def.include.filter(name => name === "Events" || name === "Properties");
-        includes.forEach(function(name) {
-          let incl = defs[name];
-          def.methods = Object.assign({}, incl.methods || {}, def.methods);
+        let includes = def.include.filter(include => parents.indexOf(include) !== -1);
+        if (includes.length > 0) {
+          newParents.push(name);
+        }
+        includes.forEach(function(include) {
+          let incl = defs[include];
           def.events = Object.assign({}, incl.events || {}, def.events);
+          def.properties = Object.assign({}, incl.properties || {}, def.properties);
         });
       }
     });
+    if (newParents.length > 0) {
+      applyIncludes(defs, newParents);
+    }
   }
 
   function createTypeDef(result, def, name) {
@@ -258,43 +264,106 @@ module.exports = function(grunt) {
 
   function addEvents(result, def) {
     if (def.events) {
-      result.append("");
-      result.append("on(event: string, listener: Function, context?: this): this;");
-      Object.keys(def.events).sort().forEach((event) => {
-        result.append("");
-        result.append(createEvent(event, def.events[event]));
-      });
+      addOffMethods(result, def);
+      addOnMethods(result, def);
+      addOnceMethods(result, def);
+      addTriggerMethod(result);
     }
+  }
+
+  function addOffMethods(result, def) {
+    result.append("");
+    result.append(createComment([
+      "Removes all occurrences of *listener* that are bound to *event* and *context* from this widget.",
+      "If the context parameter is not present, all matching listeners will be removed.",
+      "If the listener parameter is not present, all listeners that are bound to *event* will be removed.",
+      "If the event parameter is not present, all listeners for all events will be removed from this widget.",
+      "Supports chaining.",
+      "@param event",
+      "@param listener",
+      "@param context"
+    ]));
+    result.append("off(event?: string, listener?: Function, context?: this): this;");
+    Object.keys(def.events).sort().forEach((event) => {
+      result.append(createOffMethod(event));
+    });
+  }
+
+  function createOffMethod(name) {
+    return `off(event: "${name}", listener?: Function, context?: this): this;`;
+  }
+
+  function addOnMethods(result, def) {
+    result.append("");
+    result.append(createComment([
+      "Adds a *listener* to the list of functions to be notified when *event* is fired. If the context",
+      "parameter is not present, the listener will be called in the context of this object. Supports",
+      "chaining.",
+      "@param event",
+      "@param listener",
+      "@param context? In the listener function, `this` will point to this object."
+    ]));
+    result.append("on(event: string, listener: Function, context?: this): this;");
+    Object.keys(def.events).sort().forEach((event) => {
+      result.append(createOnMethod(event, def.events[event]));
+    });
+  }
+
+  function createOnMethod(name, def) {
+    return `on(event: "${name}", listener: (${createParamList(def.parameters)}) => any): this;`;
+  }
+
+  function addOnceMethods(result, def) {
+    result.append("");
+    result.append(createComment([
+      "Same as `on`, but removes the listener after it has been invoked by an event. Supports chaining.",
+      "@param event",
+      "@param listener",
+      "@param context? In the listener function, `this` will point to this object."
+    ]));
+    result.append("once(event: string, listener: Function, context?: this): this;");
+    Object.keys(def.events).sort().forEach((event) => {
+      result.append(createOnceMethod(event, def.events[event]));
+    });
+  }
+
+  function createOnceMethod(name, def) {
+    return `once(event: "${name}", listener: (${createParamList(def.parameters)}, context?: this) => any): this;`;
+  }
+
+  function addTriggerMethod(result) {
+    result.append("");
+    result.append(createComment([
+      "Triggers an event of the given type. All registered listeners will be notified. Additional parameters",
+      "will be passed to the listeners.",
+      "@param event",
+      "@param ...params"
+    ]));
+    result.append("trigger(event: string, ...params: any[]): this;");
   }
 
   function addPropertyApi(result, def, name) {
     if (def.properties) {
       result.append("");
-      result.append("/**\n"
-                  + " * Gets the current value of the given *property*.\n"
-                  + " * @param property\n"
-                  + " */\n"
-                  + "get(property: string): any;");
+      result.append(createComment([
+        "Gets the current value of the given *property*.",
+        "@param property"
+      ]));
+      result.append("get(property: string): any;");
       addGetters(result, def);
       result.append("");
-      result.append("/**\n"
-                  + " * Sets the given property. Supports chaining.\n"
-                  + " * @param property\n"
-                  + " * @param value\n"
-                  + " */\n"
-                  + "set(property: string, value: any): this;");
-      result.append("");
-      result.append("/**\n"
-                  + " * Sets all key-value pairs in the properties object as widget properties. Supports chaining."
-                  + " * @param properties\n"
-                  + "*/\n"
-                  + `set(properties: ${name}Properties): this;`);
-      addSetters(result, def);
+      result.append(createComment([
+        "Sets the given property. Supports chaining.",
+        "@param property",
+        "@param value"
+      ]));
+      result.append("set(property: string, value: any): this;");
+      addSetters(result, def, name);
     }
   }
 
-  function addGetters(result,  def) {
-    Object.keys(def.properties  || []).sort().forEach((name) => {
+  function addGetters(result, def) {
+    Object.keys(def.properties || []).sort().forEach((name) => {
       result.append("");
       result.append(createGetter(name, def.properties[name]));
     });
@@ -307,8 +376,13 @@ module.exports = function(grunt) {
     return result.join("\n");
   }
 
-  function addSetters(result, def) {
+  function addSetters(result, def, name) {
     result.append("");
+    result.append(createComment([
+      "Sets all key-value pairs in the properties object as widget properties. Supports chaining.",
+      "@param properties"
+    ]));
+    result.append(`set(properties: ${name}Properties): this;`);
     Object.keys(def.properties || []).sort().forEach((name) => {
       result.append("");
       result.append(createSetter(name, def.properties[name]));
@@ -319,6 +393,9 @@ module.exports = function(grunt) {
     let result = [];
     result.push(createDoc(def));
     result.push(`set(property: "${name}", value: ${def.type}): this;`);
+    (def.values || []).sort().forEach((value) => {
+      result.push(`set(property: "${name}", value: "${value}"): this;`);
+    });
     return result.join("\n");
   }
 
@@ -336,12 +413,6 @@ module.exports = function(grunt) {
     return result.join("\n");
   }
 
-  function createEvent(name, def) {
-    let result = [];
-    result.push(createDoc(def));
-    result.push(`on(event: "${name}", listener: (${createParamList(def.parameters)}) => any): this;`);
-    return result.join("\n");
-  }
 
   function createMethod(name, def) {
     let result = [];
@@ -375,9 +446,12 @@ module.exports = function(grunt) {
     if (def.provisional) {
       result.push("@provisional");
     }
-    return ["/**"].concat(result.map(line => " * " + line), " */").join("\n");
+    return createComment(result);
   }
 
+  function createComment(comment) {
+    return ["/**"].concat(comment.map(line => " * " + line), " */").join("\n");
+  }
   function createParamAnnotations(params) {
     return params.map(param => `@param ${param.name} ${param.description || ""}`);
   }
