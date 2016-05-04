@@ -1185,22 +1185,35 @@ describe("tabris.registerWidget", function() {
     );
   });
 
-  it("adds default properties copy", function() {
+  it("adds custom properties", function() {
+    tabris.registerWidget("TestType", {_properties: {foo: {type: "number"}}});
+
+    expect(tabris.TestType._properties.foo).toBeDefined();
+    expect(tabris.TestType._properties.foo.type.encode("23")).toBe(23);
+  });
+
+  it("adds default properties", function() {
     tabris.registerWidget("TestType", {});
 
-    expect(tabris.TestType._properties).toEqual(tabris.registerWidget._defaultProperties);
-    expect(tabris.TestType._properties).not.toBe(tabris.registerWidget._defaultProperties);
+    expect(tabris.TestType._properties.enabled).toBeDefined();
+    expect(tabris.TestType._properties.visible).toBeDefined();
   });
 
   it("extends default properties", function() {
-    var custom = {foo: "any", enabled: {type: "color"}};
-    var normalized = tabris.registerType.normalizePropertiesMap(custom);
+    var custom = {foo: "any", enabled: {type: "number"}};
 
     tabris.registerWidget("TestType", {_properties: custom});
 
-    expect(tabris.TestType._properties).toEqual(
-      _.extend({}, tabris.registerWidget._defaultProperties, normalized)
-    );
+    expect(tabris.TestType._properties.foo).toBeDefined();
+    expect(tabris.TestType._properties.enabled.type.encode("23")).toBe(23);
+  });
+
+  it("creates a copy of default properties", function() {
+    tabris.registerWidget("TestType", {_properties: {enabled: {type: "number"}}});
+    delete tabris.TestType;
+    tabris.registerWidget("TestType", {});
+
+    expect(tabris.TestType._properties.enabled.type.encode("23")).toBe(true);
   });
 
   it("created widgets are instanceof Widget", function() {

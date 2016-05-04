@@ -92,45 +92,49 @@ describe("Properties", function() {
     expect(value).toBe("bar2");
   });
 
-  describe("access:", function() {
+  describe("get", function() {
 
-    it ("set calls custom setter", function() {
-      var setter = jasmine.createSpy();
-      TestType._properties.foo = {access: {set: setter}};
-      object.set("foo", "bar");
-
-      expect(setter).toHaveBeenCalledWith("foo", "bar", {});
-    });
-
-    it ("set stores nothing if custom setter exists", function() {
-      TestType._properties.foo = {access: {set: function() {}}};
-      object.set("foo", "bar");
-
-      expect(object.get("foo")).toBe(undefined);
-    });
-
-    it ("set calls custom setter with options", function() {
-      var setter = jasmine.createSpy().and.returnValue(true);
-      TestType._properties.foo = {access: {set: setter}};
-      object.set("foo", "bar", {foo2: "bar2"});
-
-      expect(setter).toHaveBeenCalledWith("foo", "bar", {foo2: "bar2"});
-    });
-
-    it ("get calls custom getter with property name", function() {
+    it ("calls custom getter with property name", function() {
       var getter = jasmine.createSpy();
       object.set("foo", "bar");
-      TestType._properties.foo = {access: {get: getter}};
+      TestType._properties.foo = {get: getter};
 
       object.get("foo");
 
       expect(getter).toHaveBeenCalledWith("foo");
     });
 
-    it ("get returns value from custom getter", function() {
-      TestType._properties.foo = {access: {get: jasmine.createSpy().and.returnValue("bar")}};
+    it ("returns value from custom getter", function() {
+      TestType._properties.foo = {get: jasmine.createSpy().and.returnValue("bar")};
 
       expect(object.get("foo")).toBe("bar");
+    });
+
+  });
+
+  describe("set", function() {
+
+    it ("calls custom setter", function() {
+      var setter = jasmine.createSpy();
+      TestType._properties.foo = {set: setter};
+      object.set("foo", "bar");
+
+      expect(setter).toHaveBeenCalledWith("foo", "bar", {});
+    });
+
+    it ("stores nothing if custom setter exists", function() {
+      TestType._properties.foo = {set: function() {}};
+      object.set("foo", "bar");
+
+      expect(object.get("foo")).toBe(undefined);
+    });
+
+    it ("calls custom setter with options", function() {
+      var setter = jasmine.createSpy().and.returnValue(true);
+      TestType._properties.foo = {set: setter};
+      object.set("foo", "bar", {foo2: "bar2"});
+
+      expect(setter).toHaveBeenCalledWith("foo", "bar", {foo2: "bar2"});
     });
 
   });

@@ -47,8 +47,8 @@
       for (var member in staticMembers) {
         tabris[type][member] = members[member] || getDefault(member);
       }
-      tabris[type]._events = normalizeEventsMap(tabris[type]._events);
-      tabris[type]._properties = normalizePropertiesMap(tabris[type]._properties);
+      tabris[type]._events = normalizeEvents(tabris[type]._events);
+      tabris[type]._properties = normalizeProperties(tabris[type]._properties);
       tabris[type]._trigger = buildTriggerMap(tabris[type]._events);
       var superProto = _.omit(members, Object.keys(staticMembers));
       superProto.type = type;
@@ -104,7 +104,7 @@
   // TODO: remove once source files are modules
   tabris.util = _;
 
-  var normalizeEventsMap = tabris.registerType.normalizeEventsMap = function(events) {
+  function normalizeEvents(events) {
     var result = {};
     for (var event in events) {
       var entry = events[event];
@@ -118,31 +118,34 @@
       }
     }
     return result;
-  };
+  }
 
-  var normalizePropertiesMap = tabris.registerType.normalizePropertiesMap = function(properties) {
+  function normalizeProperties(properties) {
     var result = {};
-    for (var property in properties) {
-      var entry = properties[property];
-      if (entry === true) {
-        // TODO: Remove this block once current tabris.js is considered incompatible with developer
-        //       apps older than tabris 1.2 (which have cordova.js files built in using this syntax)
-        console.warn("A custom component uses deprecated property type value 'true'");
-        entry = "any";
-      }
-      var shortHand = (typeof entry === "string" || Array.isArray(entry));
-      result[property] = {
-        type: resolveType((shortHand ? entry : entry.type) || "any"),
-        default: entry.default,
-        nocache: entry.nocache,
-        access: {
-          set: entry.access && entry.access.set || defaultSetter,
-          get: entry.access && entry.access.get || defaultGetter
-        }
-      };
+    for (var name in properties) {
+      result[name] = normalizeProperty(properties[name]);
     }
     return result;
-  };
+  }
+
+  function normalizeProperty(property) {
+    if (property === true) {
+      // TODO: Remove this block once current tabris.js is considered incompatible with developer
+      //       apps older than tabris 1.2 (which have cordova.js files built in using this syntax)
+      console.warn("A custom component uses deprecated property type value 'true'");
+      property = "any";
+    }
+    var shortHand = (typeof property === "string" || Array.isArray(property));
+    var setter = property.access && property.access.set || defaultSetter;
+    var getter = property.access && property.access.get || defaultGetter;
+    return {
+      type: resolveType((shortHand ? property : property.type) || "any"),
+      default: property.default,
+      nocache: property.nocache,
+      set: setter,
+      get: getter
+    };
+  }
 
   function resolveType(type) {
     var typeDef = type;

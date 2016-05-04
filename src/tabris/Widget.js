@@ -253,7 +253,7 @@
         }
       }
     },
-    _defaultProperties: tabris.registerType.normalizePropertiesMap({
+    _defaultProperties: {
       enabled: {
         type: "boolean",
         default: true
@@ -403,7 +403,7 @@
         type: ["choice", ["default", "light", "dark"]],
         default: "default"
       }
-    })
+    }
   });
 
   var defaultGestures = {
