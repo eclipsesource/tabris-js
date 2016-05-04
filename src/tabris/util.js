@@ -1,5 +1,5 @@
 /* global _: true */
-_ = {
+var _ = {
 
   extend: function(target) {
     for (var i = 1; i < arguments.length; i++) {

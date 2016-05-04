@@ -3,15 +3,12 @@ var Jasmine = require("jasmine");
 
 global.Backbone = require("backbone");
 
-require("../../src/tabris/util.js");
-require("../../src/tabris/util-fonts.js");
-require("../../src/tabris/util-images.js");
-require("../../src/tabris/util-colors.js");
-
 require("./NativeBridgeSpy.js");
 tabris = require("../../build/tabris/tabris.js");
 require("./tabris-init.js");
 require("./jasmineToString.js");
+
+_ = tabris.util;
 
 var runner = new Jasmine();
 runner.loadConfig({
