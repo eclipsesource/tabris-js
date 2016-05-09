@@ -125,10 +125,16 @@ module.exports = function(grunt) {
         src: "README.md",
         dest: "build/tabris/"
       },
+      typings: {
+        expand: true,
+        cwd: "typings/",
+        src: ["whatwg-fetch.d.ts", "promise.d.ts"],
+        dest: "build/tabris/"
+      },
       test_ts: {
         expand: true,
         cwd: "test/typescript/",
-        src: ["**/*.test.ts", "package.json"],
+        src: ["**/*.test.ts", "package.json", "tsconfig.json"],
         dest: "build/typescript/"
       }
     },
@@ -170,7 +176,7 @@ module.exports = function(grunt) {
     },
     exec: {
       test_typings: {
-        cmd: "npm install && node_modules/.bin/tsc --noImplicitAny tabris.*.ts",
+        cmd: "npm install && node_modules/.bin/tsc -p . --noImplicitAny",
         cwd: "build/typescript"
       },
       test_boot: {
@@ -221,6 +227,7 @@ module.exports = function(grunt) {
     "uglify:polyfill",
     "package",
     "copy:readme",
+    "copy:typings",
     "generate-tsd",
     "compress:tabris"
   ]);
