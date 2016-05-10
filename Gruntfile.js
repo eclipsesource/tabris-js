@@ -176,7 +176,7 @@ module.exports = function(grunt) {
     },
     exec: {
       test_typings: {
-        cmd: "npm install && node_modules/.bin/tsc -p . --noImplicitAny",
+        cmd: "npm install && node node_modules/typescript/bin/tsc -p . --noImplicitAny",
         cwd: "build/typescript"
       },
       test_boot: {
@@ -186,7 +186,7 @@ module.exports = function(grunt) {
         cmd: "node test/tabris/run-tests.js"
       },
       lint: {
-        cmd: "node_modules/.bin/eslint --color '**/*.js'"
+        cmd: "node node_modules/eslint/bin/eslint.js --color **/*.js"
       }
     },
     examples: {
