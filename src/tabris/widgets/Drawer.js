@@ -23,6 +23,10 @@ tabris.load(function() {
         win_buttonBackground: {
           type: "color",
           default: null
+        },
+        win_buttonTheme: {
+          type: ["choice", ["light", "dark", "default"]],
+          default: "default"
         }
       },
 
