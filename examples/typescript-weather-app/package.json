@@ -1,0 +1,12 @@
+{
+  "main": "./dist/app.js",
+  "scripts": {
+    "build": "tsc -p ."
+  },
+  "dependencies": {
+    "tabris": "^1.8.0"
+  },
+  "devDependencies": {
+    "typescript": "^1.8.10"
+  }
+}
