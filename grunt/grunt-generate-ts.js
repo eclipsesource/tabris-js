@@ -4,6 +4,254 @@
 let header = `
 // Type definitions for Tabris.js v1.8
 
+interface TextMetrics {
+
+  /**
+   * The calculated width of a segment of text.
+   * It takes into account the current font of the context.
+   */
+  width: number;
+}
+
+export class CanvasContext {
+
+  /**
+   * The thickness of lines in space units.
+   */
+  lineWidth: number;
+
+  /**
+   * Determines how the end points of every line are drawn.
+   */
+  lineCap: "butt" | "round" | "square";
+
+  /**
+   * Determines how two connecting segments in a shape are joined together.
+   */
+  lineJoin: "bevel" | "round" | "miter";
+
+  /**
+   * Specifies the color to use inside shapes.
+   */
+  fillStyle: string;
+
+  /**
+   * Specifies the current text style being used when drawing text.
+   */
+  font: string;
+
+  /**
+   * Specifies the color to use for the lines around shapes.
+   */
+  strokeStyle: string;
+
+  /**
+   * Specifies the current text alignment being used when drawing text.
+   */
+  textAlign: "left" | "right" | "center" | "start" | "end";
+
+  /**
+   * Specifies the current text baseline being used when drawing text.
+   */
+  textBaseline: "top" | "hanging" | "middle" | "alphabetic" | "ideographic" | "bottom";
+
+  /**
+   * Saves the entire state of the canvas by pushing the current state onto a stack.
+   */
+  save(): void;
+
+  /**
+   * Restores the most recently saved canvas state by popping the top entry in the drawing state stack.
+   */
+  restore(): void;
+
+  /**
+   * Starts a new path by emptying the list of sub-paths.
+   */
+  beginPath(): void;
+
+  /**
+   * Adds a straight line from the current point to the start of the current sub-path.
+   */
+  closePath(): void;
+
+  /**
+   * Connects the last point in the sub-path to the *(x, y)* coordinates with a straight line.
+   * @param x The x axis of the coordinate for the end of the line.
+   * @param y The y axis of the coordinate for the end of the line.
+   */
+  lineTo(x: number, y: number): void;
+
+  /**
+   * Moves the starting point of a new sub-path to the *(x, y)* coordinates.
+   * @param x The x axis of the point.
+   * @param y The y axis of the point.
+   */
+  moveTo(x: number, y: number): void;
+
+  /**
+   * Adds a cubic Bézier curve to the path. The starting point is the last point in the current path.
+   * @param cp1x The x axis of the coordinate for the first control point.
+   * @param cp1y The y axis of the coordinate for the first control point.
+   * @param cp2x The x axis of the coordinate for the second control point.
+   * @param cp2y The y axis of the coordinate for the second control point.
+   * @param x The x axis of the coordinate for the end point.
+   * @param y The y axis of the coordinate for the end point.
+   */
+  bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): void;
+
+  /**
+   * Adds a quadratic Bézier curve to the path. The starting point is the last point in the current path.
+   * @param cpx The x axis of the coordinate for the control point.
+   * @param cpy The y axis of the coordinate for the control point.
+   * @param x The x axis of the coordinate for the end point.
+   * @param y The y axis of the coordinate for the end point.
+   */
+  quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): void;
+
+  /**
+   * Creates a path for a rectangle with the top-left corner at *(x, y)*.
+   * @param x The x axis of the rectangle starting point.
+   * @param y The y axis of the rectangle starting point.
+   * @param width The rectangle's width.
+   * @param height The rectangles height.
+   */
+  rect(x: number, y: number, width: number, height: number): void;
+
+  /**
+   * Adds an arc to the path which is centered at *(x, y)* position with radius *r* starting at *startAngle*
+   * and ending at *endAngle* going in the given direction by *anticlockwise* (defaulting to clockwise).
+   * @param x The x coordinate of the arc's center.
+   * @param y The y coordinate of the arc's center.
+   * @param radius The arc's radius.
+   * @param startAngle The angle in radians at which the arc starts, measured clockwise from the positive x axis.
+   * @param startAngle The angle in radians at which the arc ends, measured clockwise from the positive x axis.
+   * @param anticlockwise? if true, causes the arc to be drawn counter-clockwise between the two angles.
+   */
+  arc(x: number, y: number, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): void;
+
+  /**
+   * Adds a scaling transformation to the canvas units by x horizontally and by y vertically.
+   * @param x Scaling factor in the horizontal direction.
+   * @param y Scaling factor in the vertical direction.
+   */
+  scale(x: number, y: number): void;
+
+  /**
+   * Adds a rotation to the transformation matrix.
+   * @param angle The angle to rotate clockwise in radians.
+   */
+  rotate(angle: number): void;
+
+  /**
+   * Adds a translation transformation by moving the canvas and its origin
+   * *x* horizontally and *y* vertically on the grid.
+   * @param x The distance to move in the horizontal direction.
+   * @param y The distance to move in the vertical direction.
+   */
+  translate(x: number, y: number): void;
+
+  /**
+   * Multiplies the current transformation with the matrix described by the arguments of this method.
+   * The matrix has the following format:
+   * [[a, c, e],
+   *  [b, d, f],
+   *  [0, 0, 1]]
+   * @param a Horizontal scaling.
+   * @param b Horizontal skewing.
+   * @param c Vertical skewing.
+   * @param d Vertical scaling.
+   * @param e Horizontal moving.
+   * @param f Vertical moving.
+   */
+  transform(a: number, b: number, c: number, d: number, e: number, f: number): void;
+
+  /**
+   * resets (overrides) the current transformation to the identity matrix and then
+   * invokes a transformation described by the arguments of this method.
+   * The matrix has the following format:
+   * [[a, c, e],
+   *  [b, d, f],
+   *  [0, 0, 1]]
+   * @param a Horizontal scaling.
+   * @param b Horizontal skewing.
+   * @param c Vertical skewing.
+   * @param d Vertical scaling.
+   * @param e Horizontal moving.
+   * @param f Vertical moving.
+   */
+  setTransform(a: number, b: number, c: number, d: number, e: number, f: number): void;
+
+  /**
+   * Sets all pixels in the rectangle defined by starting point *(x, y)*.
+   * and size *(width, height)* to transparent black, erasing any previously drawn content.
+   * @param x The x axis of the rectangle starting point.
+   * @param y The y axis of the rectangle starting point.
+   * @param width The rectangle's width.
+   * @param height The rectangles height.
+   */
+  clearRect(x: number, y: number, width: number, height: number): void;
+
+  /**
+   * draws a filled rectangle at *(x, y)* position whose size is determined by *width* and *height*.
+   * and whose color is determined by the fillStyle attribute.
+   * @param x The x axis of the rectangle starting point.
+   * @param y The y axis of the rectangle starting point.
+   * @param width The rectangle's width.
+   * @param height The rectangles height.
+   */
+  fillRect(x: number, y: number, width: number, height: number): void;
+
+  /**
+   * draws the outline of a rectangle at *(x, y)* position whose size is determined by *width* and *height*
+   * using the current stroke style.
+   * @param x The x axis of the rectangle starting point.
+   * @param y The y axis of the rectangle starting point.
+   * @param width The rectangle's width.
+   * @param height The rectangles height.
+   */
+  strokeRect(x: number, y: number, width: number, height: number): void;
+
+  /**
+   * Fills a given text at the given *(x, y)* position using the current *textAlign* and
+   * *textBaseline* values. If the optional fourth parameter for a maximum width is provided,
+   * the text will be scaled to fit that width.
+   * @param text The text to render.
+   * @param x The x axis of the coordinate for the text starting point.
+   * @param y The y axis of the coordinate for the text starting point.
+   * @param  maxWidth? The maximum width to draw.
+   */
+  fillText(text: string, x: number, y: number, maxWidth?: number): void;
+
+  /**
+   * Strokes a given text at the given *(x, y)* position using the current *textAlign* and
+   * *textBaseline* values. If the optional fourth parameter for a maximum width is provided,
+   * the text will be scaled to fit that width.
+   * @param text The text to render.
+   * @param x The x axis of the coordinate for the text starting point.
+   * @param y The y axis of the coordinate for the text starting point.
+   * @param  maxWidth? The maximum width to draw.
+   */
+  strokeText(text: string, x: number, y: number, maxWidth?: number): void;
+
+  /**
+   * Fills the current or path with the current fill style using the non-zero or even-odd winding rule.
+   * @param fillRule? The algorithm by which to determine if a point is inside a path or outside a path.
+   */
+  fill(fillRule?: "nonzero" | "evenodd"): void;
+
+  /**
+   * Strokes the current path with the current stroke style using the non-zero winding rule.
+   */
+  stroke(): void;
+
+  /**
+   * Returns a *TextMetrics* object that contains information about the measured text.
+   * @param text The text to measure.
+   */
+  text(text: string): TextMetrics;
+}
+
 // TODO A plain string can be used as a shorthand, e.g. \`"image.jpg"\` equals \`{src: "image.jpg"}\`.
 interface Image {
 
@@ -27,10 +275,6 @@ interface Image {
    * Ignored when width or height are set.
    */
   scale?: number;
-}
-
-interface CanvasContext {
-  // TODO
 }
 
 type Color = string;
