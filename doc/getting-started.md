@@ -1,136 +1,78 @@
 # Getting Started
-Welcome to Tabris.js, the framework for developing native apps in JavaScript. Before you get started, you should be logged in to http://tabrisjs.com. This site provides you with documentation and integrates with the Tabris.js Developer App.
 
-**If you want to start coding right away, there is also the [Quickstart](quickstart.md) guide for the inpatient expert.**
+Welcome to Tabris.js, the framework for developing native cross-platform apps in JavaScript. This guide will help you start developing Tabris.js apps in minutes.
 
-# The Tabris.js Developer App
-The Tabris.js developer apps are available for free on the Apple App Store and Google Play respectively. Simply follow the links below or search for "Tabris.js" in the store on your mobile device.
+## What you need:
 
-[![Tabris.js on Google play](https://tabrisjs.com/assets/img/playstore-badge.png)](https://play.google.com/store/apps/details?id=com.eclipsesource.tabris.js) [![Tabris.js on Apple App Store](https://tabrisjs.com/assets/img/appstore-badge.png)](https://itunes.apple.com/us/app/tabris.js/id939600018?mt=8)
+- An Android and/or iOS device, connected to the same network as your development machine
+- A [GitHub](https://github.com/) account to login on [tabrisjs.com](http://tabrisjs.com)
 
-After launching the app you should sign-in with your GitHub account (the same you use on tabrisjs.com) and switch to the **Examples** tab.
+## Setting up the development machine
 
-![Android Developer App](img/login.png)
+The following software needs to be installed:
 
-## Try the Examples
+- [node.js](https://nodejs.org/), [npm](https://docs.npmjs.com/getting-started/installing-node)
+- [http-server](https://www.npmjs.com/package/http-server) (type `npm install -g http-server`)
+- A text editor or JavaScript IDE of your choice
 
-The Tabris.js examples are a collection of small apps that demonstrate the power and flexibility of the framework. They are part of the Tabris.js [GitHub repository](https://github.com/eclipsesource/tabris-js/tree/master/examples) and are developed entirely in JavaScript.
+## Setting up the test device:
 
-![Android Examples Tab](img/examples.png)
+- Download the Tabris.js developer app from the [Google Play](https://play.google.com/store/apps/details?id=com.eclipsesource.tabris.js) / [Apple Appstore](https://itunes.apple.com/us/app/tabris.js/id939600018?mt=8).
+- Start the app and log in with your GitHub account. This enables the "URL" tab.
+- If you need it, there is also a separate [tutorial](developer-app.md) for the app itself.
 
-Just tap an example and it will run within the developer app. You can go back to the examples selection by using the back button in Android or [the Developer Console](#the-developer-console) on either platform.
+## Create your first app
 
-![Android Back](img/back-android.png)         ![iOS Back](img/back-ios.png)
+### Option 1: Setting up your project manually
 
-## The Developer Console
+Create a directory with two files:
 
-While running Tabris.js scripts in the developer app, you can open a developer console by sliding from the right edge of the screen to the left. On iOS you may have to start sliding from the edge itself to open the drawer.
-
-Here you will see messages and errors logged while running a script. You can filter the log or even share it (e.g. by email). The console also lets you go back to the developer app, or reload the script instantly.
-
-![Developer Console](img/console-android.png)
-
-## Play with the Scratchpad
-
-On tabrisjs.com, click **My Scratchpad** on the left. Here you will find a simple, editable Tabris.js script. You can run this script immediately (no need to save) in the Tabris.js Developer App by going to the *My Scripts* tab and selecting *My Scratchpad*. By default the scratchpad contains the "Hello World" example explained [below](#hellojs).
-
-## The Tabris.js Snippets
-
-On the [tabrisjs.com snippets page](https://tabrisjs.com/snippets/) you can find a code snippet for nearly every feature in Tabris.js. You can run a snippet immediately on your device by clicking the **link** button next to it...
-
-![Android Developer App](img/button-unlinked.png)
-
-... and then select it from the **My Scripts** list of the developer app. You may have to refresh the list by swiping down on Android or by switching tabs on iOS.
-
-If you like to play with the snippet, simply copy and paste it to the scratchpad and run it from there.
-
-# Create Your First App
-Tabris.js scripts can be developed using any text editor or IDE.
-
-Clone or [Download](https://github.com/eclipsesource/tabris-js-getting-started/archive/master.zip) the [Getting Started Project](https://github.com/eclipsesource/tabris-js-getting-started) to begin developing your first Tabris.js app.
-
-    git clone https://github.com/eclipsesource/tabris-js-getting-started.git
-
-It contains a minimal Tabris.js project, which consists of two files:
-
-### package.json
-The `package.json` file is used to describe the app, including the name, description, dependencies and the main script. Every Tabris.js app should include a package.json.
-
-```javascript
+#### package.json
+```js
 {
-  "name": "hello-world",
-  "description": "Tabris.js - Hello, World!",
-  "main": "hello.js",
+  "main": "myapp.js",
   "dependencies": {
     "tabris": "^1.8.0"
   }
 }
 ```
 
-### hello.js
-The Tabris.js "Hello, World!" example is contained in `hello.js`. It contains a *button* and a *text view*. When the button is selected, the text view is updated. For further documentation on widgets, visit the [Widgets](widget-basics.md) article and [Widgets API reference](api/Widget.md).
+#### myapp.js
 
 ```js
 var page = new tabris.Page({
-  title: "Hello, World!",
-  topLevel: true
+  topLevel: true,
+  title: "myapp"
 });
-
-var button = new tabris.Button({
-  text: "Native Widgets",
-  layoutData: {centerX: 0, top: 100}
+new tabris.TextView({
+  layoutData: {centerX: 0, centerY: 0},
+  text: "My First App"
 }).appendTo(page);
-
-var label = new tabris.TextView({
-  font: "24px",
-  layoutData: {centerX: 0, top: [button, 50]}
-}).appendTo(page);
-
-button.on("select", function() {
-  label.set("text", "Totally Rock!");
-});
-
 page.open();
 ```
 
-### Install the tabris module
+Run `npm install` in this directory to install the tabris module.
 
-The *tabris* module is available on [npm](https://www.npmjs.com/package/tabris). It can be installed using the `npm` command line interface that is available when you have [node.js](http://nodejs.org/) installed on your development machine.
+### Option 2: Setting up your project with Yeoman
 
-Change to a command line in your project directory and run:
+You can also use the Yeoman generator to create your project. It can not only create the basic files as described above, but also prepare your project for the build process and set up ES6 or TypeScript support.
 
-    npm install
+To install Yeoman and the generator, use npm:
 
-This will install the tabris module (the version specified in the `package.json`) in a folder named `node_modules` in your project. You need to do this once for every project.
+    npm install yo generator-tabris-js -g
 
-### Test your app
+Once installed, `cd` to an empty project directory and run `yo tabris-js`. The generator will ask you a number of questions including the project name and version. The generator will also ask you if you would like to create a _Basic JS App_, _ES6 App_ or a _TypeScript App_. This tutorial assumes you select a _Basic JS App_ to get started.
 
-You can test your app on an Android or iOS device (real or emulated) if the following preconditions are met:
 
-* you have the developer app installed on the device
-* you are logged in with your GitHub account
-* your device is connected to the same network as your development machine
+## Run the app
 
-In your Tabris.js project directory, type the following:
+- In the project directory, type `hs`. Let the server run as long as you are testing your app.
+- In the developer app, go to the URL tab and enter `http://<development-machine-ip-address>:8080/`
+- Tap *Connect*.
 
-    npm install http-server -g
-    http-server
+The developer app will now download the script and execute it on your device. Swipe from the right edge of the screen to open the developer console, which lets you restart the script or go back to the developer app.
 
-The first line installs a simple http-server on your system. You only need to do this once. The second line starts the http-server in the working directory. Keep it running as long as you test the application.
-
-In the URL tab of the developer app, enter:
-
-    http://<development-machine-ip-address>:8080/
-
-Now tap *Connect* to run the app:
-
-![Android Developer App](img/hello.png)
-
-Each time the your app is started, the sources are downloaded to the device. While this happens you will see a blank screen. Once you've [built](#publishing-your-app) the app, this delay will be gone, because the sources are then bundled with the app.
-
-If the URL of your developer machine is stable, you can also use the *My Scripts* page on [tabrisjs.com](http://tabrisjs.com) to add it permanently to the **My Scripts** tab.
-
-![Link A Script](img/link-app.png)
+Now you can start developing. You may want to have a look at the rest of the documentation and the Tabris.js snippets.
 
 ## Publishing your app
 
@@ -138,3 +80,4 @@ For submission to the App / Play Stores you will need to bundle, brand and build
 
 ## Feedback
 Help us improve Tabris.js! [Feedback](mailto:care@eclipsesource.com?subject=Tabris.js%20feedback) is always welcome. Feel free to invite your friends if you find Tabris.js interesting.
+
