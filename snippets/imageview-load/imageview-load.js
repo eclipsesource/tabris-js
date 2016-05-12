@@ -1,4 +1,4 @@
-var page = tabris.create("Page", {
+var page = new tabris.Page({
   title: "ImageView load event",
   topLevel: true
 });
