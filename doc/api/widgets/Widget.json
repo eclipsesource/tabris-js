@@ -77,7 +77,7 @@
     "insertBefore": [
       {
         "parameters": [
-          {"name": "widget", "type": "this"}
+          {"name": "widget", "type": "Widget"}
         ],
         "returns": "this",
         "description": "Inserts this widget directly before the given widget. If the widget already has a parent, it is removed from the old parent."
@@ -86,7 +86,7 @@
     "insertAfter": [
       {
         "parameters": [
-          {"name": "widget", "type": "this"}
+          {"name": "widget", "type": "Widget"}
         ],
         "returns": "this",
         "description": "Inserts this widget directly after the given widget. If the widget already has a parent, it is removed from the old parent."
@@ -171,7 +171,7 @@
       "description": "The vertical position of the widget's center relative to the parent's center."
     },
     "baseline": {
-      "type": "this",
+      "type": "Widget",
       "description": "The vertical position of the widget's baseline relative to a sibling widget."
     },
     "elevation": {
