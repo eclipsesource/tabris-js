@@ -2,7 +2,7 @@
 
 You can build Tabris.js apps on your local machine using the [Cordova command line interface](http://cordova.apache.org/docs/en/edge/guide_cli_index.md.html#The%20Command-Line%20Interface).
 
-> <img align="left" src="img/note.png"> <i>To build an app locally you need a [pro account](https://tabrisjs.com/pricing/). A guide covering the free online build service can be found [here](build.md).</i>
+> <img align="left" src="img/note.png"> <i>This guide is for building apps locally with the command line. A guide covering the online build service can be found [here](build.md).</i>
 
 ### Prerequisites
 
@@ -24,8 +24,6 @@ This directory structure can easily be created using the `cordova create` comman
 
 ### Adding Tabris.js platforms
 Tabris.js ships two custom Cordova platforms. This includes platforms for iOS and Android. Visit the [Tabris.js download page](https://tabrisjs.com/download) and download the platform of your choice.
-
-> <img align="left" src="img/note.png"> <i>Local builds are a [Pro feature](https://tabrisjs.com/pricing/). If you don't see the download you are probably not on a Pro plan.</i>
 
 Extract the content of the downloaded archive and add the platform to your project using the `cordova platform add` command. You need to append the path to the download platform. E.g.:
 
