@@ -1,5 +1,5 @@
 {
-  "title": "TextViews",
+  "title": "TextView line spacing",
   "category": "TextView",
   "description": "Creating text views with varying line spacing",
   "main": "textview-linespacing.js",
