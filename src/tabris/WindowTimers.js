@@ -37,11 +37,23 @@
     }
 
     target.setTimeout = function(fn, delay) {
+      if (arguments.length < 1) {
+        throw new TypeError("Not enough arguments to setTimeout");
+      }
+      if (typeof fn !== "function") {
+        throw new TypeError("Illegal argument to setTimeout: not a function");
+      }
       var args = Array.prototype.slice.call(arguments, 2);
       return createTimer(fn, adjustDelay(delay), false, args);
     };
 
     target.setInterval = function(fn, delay) {
+      if (arguments.length < 1) {
+        throw new TypeError("Not enough arguments to setInterval");
+      }
+      if (typeof fn !== "function") {
+        throw new TypeError("Illegal argument to setInterval: not a function");
+      }
       var args = Array.prototype.slice.call(arguments, 2);
       return createTimer(fn, adjustDelay(delay), true, args);
     };

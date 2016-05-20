@@ -101,6 +101,9 @@
 
   });
 
+  // TODO: remove once source files are modules
+  tabris.util = _;
+
   var normalizeEventsMap = tabris.registerType.normalizeEventsMap = function(events) {
     var result = {};
     for (var event in events) {

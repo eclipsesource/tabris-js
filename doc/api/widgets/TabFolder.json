@@ -1,19 +1,7 @@
 {
   "type": "TabFolder",
-  "description": "A widget that can switch between [tabs](Tab).",
-  "include": ["Widget"],
-  "methods": {
-    "append": [
-      {
-        "parameters": [
-          {"name": "child", "type": "Tab"},
-          {"name": "child*", "type": "Tab"}
-        ],
-        "returns": "TabFolder",
-        "description": "Adds the given tabs in the given order to the TabFolder"
-      }
-    ]
-  },
+  "description": "A widget that can switch between [tabs](Tab). Only children of type `Tab` are supported. Since the TabFolder does not compute its own size, the width and height must be defined by the respective layout properties (e.g. either `width` or `left` and `right` must be specified).",
+  "include": ["Composite"],
   "properties": {
     "tabBarLocation": {
       "type": "string",
@@ -34,17 +22,17 @@
   "events": {
     "change:selection": {
       "parameters": [
-        {"name": "widget", "type": "TabFolder"},
+        {"name": "widget", "type": "this"},
         {"name": "selection", "type": "Tab", "description": "The new value of *selection*."},
-        {"name": "options", "type": "Object"}
+        {"name": "options", "type": "any"}
       ],
       "description": "Fired when the selection property changes."
     },
     "select": {
       "parameters": [
-        {"name": "widget", "type": "TabFolder"},
+        {"name": "widget", "type": "this"},
         {"name": "selection", "type": "Tab", "description": "The new value of *selection*."},
-        {"name": "options", "type": "Object"}
+        {"name": "options", "type": "any"}
       ],
       "description": "Fired when the selection property changes by user interaction."
     }

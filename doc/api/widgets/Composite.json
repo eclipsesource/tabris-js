@@ -6,24 +6,23 @@
     "append": [
       {
         "parameters": [
-          {"name": "child", "type": "Widget"},
-          {"name": "child*", "type": "Widget"}
+          {"name": "...widgets", "type": "Widget[]"}
         ],
-        "returns": "Widget",
-        "description": "Adds the given widget(s) in the given order to the composite."
+        "returns": "this",
+        "description": "Adds the given widgets to the composite."
       },
       {
         "parameters": [
           {"name": "widgets", "type": "Widget[]"}
         ],
-        "returns": "Widget",
+        "returns": "this",
         "description": "Adds all widgets in the given array to the composite."
       },
       {
         "parameters": [
           {"name": "widgets", "type": "WidgetCollection"}
         ],
-        "returns": "Widget",
+        "returns": "this",
         "description": "Adds all widgets in the given collection to the composite."
       }
     ]
@@ -31,17 +30,17 @@
   "events": {
     "addchild": {
       "parameters": [
-        {"name": "widget", "type": "Composite"},
+        {"name": "widget", "type": "this"},
         {"name": "child", "type": "Widget", "description": "The widget that was added as a child."},
-        {"name": "options", "type": "Object"}
+        {"name": "options", "type": "any"}
       ],
       "description": "Fired when a child is added to this widget."
     },
     "removechild": {
       "parameters": [
-        {"name": "widget", "type": "Composite"},
+        {"name": "widget", "type": "this"},
         {"name": "child", "type": "Widget", "description": "The widget that was removed."},
-        {"name": "options", "type": "Object", "description": "Contains the index of the removed child widget, e.g. `{index: number}`"}
+        {"name": "options", "type": "{index: number}", "description": "Contains the index of the removed child widget, e.g. `{index: number}`"}
       ],
       "description": "Fired when a child is removed from this widget."
     }

@@ -4,7 +4,7 @@
   "include": ["Widget"],
   "properties": {
     "itemHeight": {
-      "type": "number|function",
+      "type": "number|Function",
       "description": "The height of a collection cell. If set to a function, this function will be called for every item, providing the item and the cell type as parameters, and must return the item height for the given item."
     },
     "items": {
@@ -12,12 +12,12 @@
       "description": "An array of data items to be displayed by the collection view. For dynamic content, use the methods `insert` and `remove` instead of setting this property directly."
     },
     "initializeCell": {
-      "type": "function",
+      "type": "Function",
       "static": true,
       "description": "A callback used to initialize a collection cell by attaching widget and *change:item* listener. Cells are created by the framework and recycled on scrolling. This callback receives the cell as the first and the cell type as second parameter."
     },
     "cellType": {
-      "type": "string|function",
+      "type": "string|Function",
       "description": "The name of the cell type to use for a given item. This name will be passed to the `initializeCell` and `itemHeight` functions. Cells will be reused only by items that require the same cell type. If set to a function, this function will be called for every item, providing the item as a parameter, and must return a name for the cell type to use for the given item."
     },
     "refreshEnabled": {
@@ -42,27 +42,32 @@
     "lastVisibleIndex": {
       "type": "number",
       "description": "The last item that is currently visible on screen. This property is read-only."
+    },
+    "columnCount": {
+      "type": "number",
+      "default": 1,
+      "description": "The number of columns to display in the collection view. If set to a value `n > 1`, each row will contain `n` items. The available space will be equally distributed between columns."
     }
   },
   "events": {
     "select": {
       "parameters": [
-        {"name": "widget", "type": "CollectionView"},
+        {"name": "widget", "type": "this"},
         {"name": "item", "type": "any", "description": "The item that was selected."},
-        {"name": "options", "type": "Object", "description": "Contains the index of the selected item, e.g. `{index: number}`"}
+        {"name": "options", "type": "{index: number}", "description": "Contains the index of the selected item, e.g. `{index: number}`"}
       ],
       "description": "Fired when a collection item is selected."
     },
     "refresh": {
       "parameters": [
-        {"name": "widget", "type": "CollectionView"}
+        {"name": "widget", "type": "this"}
       ],
       "description": "Fired when the user requested a refresh. An event listener should reset the *refreshIndicator* property when refresh is finished."
     },
     "scroll": {
       "parameters": [
-        {"name": "widget", "type": "CollectionView"},
-        {"name": "event", "type": "Object", "description": "Contains the scroll delta of this scroll event `{deltaX: number, deltaY: number}`. The value of `deltaY` will be positive when scrolling up and negative when scrolling down."}
+        {"name": "widget", "type": "this"},
+        {"name": "event", "type": "{deltaX: number, deltaY: number}", "description": "Contains the scroll delta of this scroll event `{deltaX: number, deltaY: number}`. The value of `deltaY` will be positive when scrolling up and negative when scrolling down."}
       ],
       "description": "Fired while the collection view is scrolling."
     }

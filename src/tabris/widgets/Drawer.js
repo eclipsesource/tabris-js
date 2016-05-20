@@ -1,6 +1,6 @@
 tabris.load(function() {
 
-  if (device.platform === "UWP") {
+  if (device.platform === "windows") {
 
     tabris.registerWidget("Drawer", {
 
@@ -13,6 +13,17 @@ tabris.load(function() {
         this._super("_create", arguments);
         this._setParent(tabris.ui);
         return this;
+      },
+
+      _properties: {
+        win_displayMode: {
+          type: ["choice", ["overlay", "compactOverlay"]],
+          default: "overlay"
+        },
+        win_buttonBackground: {
+          type: "color",
+          default: null
+        }
       },
 
       open: function() {

@@ -17,26 +17,22 @@
     },
 
     number: {
-      encode: function(number) {
-        checkValidNumber(number);
-        return number;
+      encode: function(value) {
+        return encodeNumber(value);
       }
     },
 
     natural: {
-      encode: function(number) {
-        checkValidNumber(number);
-        if (number < 0) {
-          return 0;
-        }
-        return Math.round(number);
+      encode: function(value) {
+        value = encodeNumber(value);
+        return value < 0 ? 0 : Math.round(value);
       }
     },
 
     integer: {
-      encode: function(number) {
-        checkValidNumber(number);
-        return Math.round(number);
+      encode: function(value) {
+        value = encodeNumber(value);
+        return Math.round(value);
       }
     },
 
@@ -51,16 +47,10 @@
 
     choice: {
       encode: function(value, acceptable) {
-        if (Array.isArray(acceptable)) {
-          if (acceptable.indexOf(value) === -1) {
-            throwNotAcceptedError(acceptable, value);
-          }
-          return value;
+        if (acceptable.indexOf(value) === -1) {
+          throwNotAcceptedError(acceptable, value);
         }
-        if (!(value in acceptable)) {
-          throwNotAcceptedError(Object.keys(acceptable), value);
-        }
-        return acceptable[value];
+        return value;
       }
     },
 
@@ -85,14 +75,14 @@
         if (value === "initial") {
           return undefined;
         }
-        return _.fontStringToArray(value);
+        return _.fontStringToObject(value);
       },
       decode: function(value) {
         if (!value) {
           // NOTE: workaround to allow triggering a change event when setting font to "initial"
           return "initial";
         }
-        return _.fontArrayToString(value);
+        return _.fontObjectToString(value);
       }
     },
 
@@ -133,38 +123,32 @@
 
     layoutData: {
       encode: function(value) {
-        return tabris.Layout.encodeLayoutData(value);
+        return encodeLayoutData(value);
       },
       decode: function(value) {
-        return tabris.Layout.decodeLayoutData(value);
+        return decodeLayoutData(value);
       }
     },
 
     edge: {
       encode: function(value) {
-        return value == null ? null : tabris.Layout.encodeEdge(value);
+        return value == null ? null : encodeEdge(value);
       },
-      decode: function(value) {
-        return tabris.Layout.decodeAttribute(value);
-      }
+      decode: decodeLayoutAttr
     },
 
     dimension: {
       encode: function(value) {
-        return value == null ? null : tabris.Layout.encodeSize(value);
+        return value == null ? null : encodeNumber(value);
       },
-      decode: function(value) {
-        return tabris.Layout.decodeAttribute(value);
-      }
+      decode: decodeLayoutAttr
     },
 
     sibling: {
       encode: function(value) {
-        return value == null ? null : tabris.Layout.encodeRef(value);
+        return value == null ? null : encodeWidgetRef(value);
       },
-      decode: function(value) {
-        return tabris.Layout.decodeAttribute(value);
-      }
+      decode: decodeLayoutAttr
     },
 
     bounds: {
@@ -201,7 +185,7 @@
 
     opacity: {
       encode: function(value) {
-        checkValidNumber(value);
+        value = encodeNumber(value);
         if (value < 0 || value > 1) {
           throw new Error("Number is out of bounds: " + value);
         }
@@ -211,13 +195,14 @@
 
     transform: {
       encode: function(value) {
+        var result = _.extend({}, transformDefaults);
         for (var key in value) {
           if (!(key in transformDefaults)) {
             throw new Error("Not a valid transformation containing \"" + key + "\"");
           }
-          checkValidNumber(value[key]);
+          result[key] = encodeNumber(value[key]);
         }
-        return _.extend({}, transformDefaults, value);
+        return result;
       }
     },
 
@@ -238,6 +223,9 @@
 
   };
 
+  var numberRegex = /^[+-]?([0-9]+|[0-9]*\.[0-9]+)$/;
+  var selectorRegex = /^(\*|prev\(\)|([#.]?[A-Za-z_][A-Za-z0-9_-]+))$/;
+
   function isDimension(value) {
     return typeof value === "number" && !isNaN(value) && value >= 0 && value !== Infinity;
   }
@@ -249,13 +237,17 @@
     throw new Error(message.join(""));
   }
 
-  function checkValidNumber(number) {
-    if (typeof number !== "number") {
-      throw new Error(typeof number + " is not a number: " + number);
+  function encodeNumber(value) {
+    if (typeof value === "string" && numberRegex.test(value)) {
+      return parseFloat(value);
     }
-    if (isNaN(number) || number === Infinity || number === -Infinity) {
-      throw new Error("Number is not a valid value: " + number);
+    if (typeof value !== "number") {
+      throw new Error("Not a number: " + toString(value));
     }
+    if (!isFinite(value)) {
+      throw new Error("Invalid number: " + toString(value));
+    }
+    return value;
   }
 
   var transformDefaults = {
@@ -266,5 +258,151 @@
     translationY: 0,
     translationZ: 0
   };
+
+  var layoutEncoders = {
+    width: encodeNumber,
+    height: encodeNumber,
+    left: encodeEdge,
+    right: encodeEdge,
+    top: encodeEdge,
+    bottom: encodeEdge,
+    centerX: encodeNumber,
+    centerY: encodeNumber,
+    baseline: encodeWidgetRef
+  };
+
+  function encodeLayoutData(layoutData) {
+    var result = {};
+    for (var key in layoutData) {
+      if (layoutData[key] != null) {
+        if (!(key in layoutEncoders)) {
+          throw new Error("Invalid key '" + key + "' in layoutData");
+        }
+        try {
+          result[key] = layoutEncoders[key](layoutData[key]);
+        } catch (error) {
+          throw new Error("Invalid value for '" + key + "': " + error.message);
+        }
+      }
+    }
+    return result;
+  }
+
+  function encodeEdge(value) {
+    if (typeof value === "string") {
+      if (value.indexOf(" ") !== -1) {
+        return encodeEdgeArray(value.split(/\s+/));
+      }
+      if (value[value.length - 1] === "%") {
+        var percentage = encodePercentage(value);
+        return percentage === 0 ? 0 : [percentage, 0];
+      }
+      if (numberRegex.test(value)) {
+        return [0, parseFloat(value)];
+      }
+      if (selectorRegex.test(value)) {
+        return [value, 0];
+      }
+      throw new Error("Invalid dimension: " + toString(value));
+    }
+    if (typeof value === "number") {
+      if (!isFinite(value)) {
+        throw new Error("Invalid number: " + toString(value));
+      }
+      return value;
+    }
+    if (Array.isArray(value)) {
+      return encodeEdgeArray(value);
+    }
+    if (value instanceof tabris.Proxy) {
+      return [value, 0];
+    }
+    throw new Error("Invalid dimension: " + toString(value));
+  }
+
+  function encodeEdgeArray(array) {
+    if (array.length !== 2) {
+      throw new Error("Wrong number of elements (must be 2): " + toString(array));
+    }
+    var ref = encodeEdgeRef(array[0]);
+    var offset = encodeNumber(array[1]);
+    return ref === 0 ? offset : [ref, offset];
+  }
+
+  function encodeEdgeRef(value) {
+    if (typeof value === "string") {
+      if (value[value.length - 1] === "%") {
+        return encodePercentage(value);
+      }
+      if (selectorRegex.test(value)) {
+        return value;
+      }
+    }
+    if (typeof value === "number") {
+      if (!isFinite(value)) {
+        throw new Error("Invalid number: " + toString(value));
+      }
+      return value;
+    }
+    if (value instanceof tabris.Proxy) {
+      return value;
+    }
+    throw new Error("Not a percentage or widget reference: " + toString(value));
+  }
+
+  function encodePercentage(value) {
+    var sub = value.substr(0, value.length - 1);
+    if (numberRegex.test(sub)) {
+      return parseFloat(sub);
+    }
+    throw new Error("Invalid percentage value: " + toString(value));
+  }
+
+  function encodeWidgetRef(value) {
+    if (value instanceof tabris.Proxy) {
+      return value;
+    }
+    if (typeof value === "string" && selectorRegex.test(value)) {
+      return value;
+    }
+    throw new Error("Not a widget reference: " + toString(value));
+  }
+
+  function decodeLayoutData(layoutData) {
+    if (!layoutData) {
+      return null;
+    }
+    var result = {};
+    for (var key in layoutData) {
+      result[key] = decodeLayoutAttr(layoutData[key]);
+    }
+    return result;
+  }
+
+  function decodeLayoutAttr(value) {
+    if (Array.isArray(value)) {
+      if (value[0] === 0) {
+        return value[1];
+      }
+      if (value[1] === 0) {
+        return typeof value[0] === "number" ? value[0] + "%" : value[0];
+      }
+      return [typeof value[0] === "number" ? value[0] + "%" : value[0], value[1]];
+    }
+    return value;
+  }
+
+  function toString(value) {
+    if (typeof value === "string") {
+      return "'" + value + "'";
+    }
+    if (Array.isArray(value)) {
+      return "[" + value.map(toString).join(", ") + "]";
+    }
+    if (typeof value === "object" && value != null) {
+      return "{" + Object.keys(value).join(", ") + "}";
+    }
+    return "" + value;
+  }
 
 }());

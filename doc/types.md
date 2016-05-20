@@ -71,14 +71,14 @@ See also [Layout](Layout.md).
 
 ## Font
 
-Fonts are specified as strings using the shorthand syntax known from CSS. The font family may be omitted, in this case the default system font will be used. The value `"initial"` resets the font to its (platform-dependent) default.
+Fonts are specified as strings using the shorthand syntax known from CSS, specifically `"[font-style] [font-weight] font-size [font-family[, font-family]*]"`. The font family may be omitted, in this case the default system font will be used. Generic font families supported across all platforms are `"serif"`, `"sans-serif"`, `"condensed"` and `"monospace"`. Supported font weights are `"light"`, `"thin"`, `"normal"`, `"medium"`, `"bold"` and `"black"`. The value `"initial"` represents the platform default.
 
 Examples:
 
 ```javascript
 "bold 24px"
 "12px sans-serif"
-"bold italic 12px sans-serif"
+"thin italic 12px sans-serif"
 "initial"
 ```
 

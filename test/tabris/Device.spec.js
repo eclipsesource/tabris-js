@@ -74,7 +74,7 @@ describe("Device", function() {
   });
 
   it("can not be disposed", function() {
-    expect(function() {
+    expect(() => {
       device.dispose();
     }).toThrow();
   });

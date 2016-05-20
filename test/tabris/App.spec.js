@@ -44,7 +44,7 @@ describe("App", function() {
   });
 
   it("can not be disposed", function() {
-    expect(function() {
+    expect(() => {
       app.dispose();
     }).toThrow();
   });
@@ -143,7 +143,7 @@ describe("App", function() {
     });
 
     it("throws on '..'", function() {
-      expect(function() {
+      expect(() => {
         app.getResourceLocation("../foo");
       }).toThrowError("Path must not contain '..'");
     });
@@ -160,7 +160,7 @@ describe("App", function() {
     });
 
     it("fails if parameter is not a string", function() {
-      expect(function() {
+      expect(() => {
         app.installPatch(23);
       }).toThrow();
     });

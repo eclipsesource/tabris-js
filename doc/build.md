@@ -13,7 +13,7 @@ Tabris.js utilizes [Apache Cordova](http://cordova.apache.org) to build and pack
 | Using own build hardware  |              |       ✓      |
 | Other SCMs than Git       |              |       ✓      |
 
-> <img align="left" src="img/note.png"> <i>The online build service is free for public GitHub repositories. To built from a private repository, you need a [developer account](https://tabrisjs.com/pricing/). To build an app locally you need a [pro account](https://tabrisjs.com/pricing/). To build locally you need to follow the [local build guide](local-build.md).</i>
+> <img align="left" src="img/note.png"> <i>The online build service is free for unlimited public GitHub repositories and 1 private repository. To build from unlimited private repositories, you need a [Pro account](https://tabrisjs.com/pricing/). Local build is free for everyone. To build locally you need to follow the [local build guide](local-build.md).</i>
 
 ## Project Layout
 
@@ -55,7 +55,7 @@ The build service packages the contents of your project into the app. You can ex
 
 ## Build Service
 
-[Tabrisjs.com](https://tabrisjs.com) offers a free online build service for Tabris.js apps. After signing in you can create an app in the "My Apps" section by clicking "Create App". Now you can select your GitHub repository in the list of repositories (if it’s not visible you may need to press the "synchronize" button). Users on the [Developer plan](https://tabrisjs.com/pricing/) can also use self hosted Git repositories.
+[Tabrisjs.com](https://tabrisjs.com) offers a free online build service for Tabris.js apps. After signing in you can create an app in the "My Apps" section by clicking "Create App". Now you can select your GitHub repository in the list of repositories (if it’s not visible you may need to press the "synchronize" button). Users on the [Pro plan](https://tabrisjs.com/pricing/) can also use self hosted Git repositories.
 ![Create an App](img/build-create-app.png)
 After you have selected your repository it’s going to be validated. The validation checks if the selected repository contains a valid Tabris.js [project layout](build.md#project-layout). If you have a valid project structure and `config.xml`, your app should become valid shortly. If it’s invalid, the site will tell you what went wrong. In this case please follow the instructions displayed.
 ![Valid App](img/build-valid-app.png)
@@ -66,7 +66,7 @@ After your app has become valid, you are ready to execute the first build. Just 
 ### Settings
 ![App Settings](img/build-app-settings.png)
 
-* **Repository URL:** This is the URL of your git repository. If you're using the free build, it should point to a public GitHub repository. Users who are on the [Developer plan](https://tabrisjs.com/pricing/) can also use private GitHub repositories and custom repository locations.
+* **Repository URL:** This is the URL of your git repository. If you're using the free build, it should point to a GitHub repository. Users who are on the [Pro plan](https://tabrisjs.com/pricing/) can also use custom repository locations.
 * **SSH Private Key:** A SSH private key to access your repository. Only relevant for git repositories which are not hosted on GitHub.
 * **Branch:** The git branch to build from. The default value is `master`. If you want to build from a feature branch, you may specify the branch here.
 * **App Directory:** The directory within your repository that contains your Tabris.js app. The value must be relative to the repository root.

@@ -8,7 +8,7 @@ describe("NativeBridge", function() {
     tabris.off();
     log = [];
     native = {};
-    ["create", "destroy", "listen", "set", "get", "call"].forEach(function(method) {
+    ["create", "destroy", "listen", "set", "get", "call"].forEach((method) => {
       native[method] = jasmine.createSpy(method).and.callFake(function() {
         log.push(method);
         return 23;

@@ -248,17 +248,17 @@ module.exports = function (grunt) {
       }).join(", ");
     }
     return "\n\n" + parameters.map(function (param) {
-        var result = ["- ", param.name, ": "];
-        if (param.type) {
-          result.push("*", renderTypeLink(param.type, data), "*");
-        } else if (param.value) {
-          result.push("`", param.value, "`");
-        }
-        if (param.description) {
-          result.push(", " + firstCharLower(param.description));
-        }
-        return result.join("");
-      }).join("\n");
+      var result = ["- ", param.name, ": "];
+      if (param.type) {
+        result.push("*", renderTypeLink(param.type, data), "*");
+      } else if (param.value) {
+        result.push("`", param.value, "`");
+      }
+      if (param.description) {
+        result.push(", " + firstCharLower(param.description));
+      }
+      return result.join("");
+    }).join("\n");
   }
 
   function renderLinks(json) {

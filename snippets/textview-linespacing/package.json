@@ -1,0 +1,9 @@
+{
+  "title": "TextViews",
+  "category": "TextView",
+  "description": "Creating text views with varying line spacing",
+  "main": "textview-linespacing.js",
+  "dependencies": {
+    "tabris": "^1.8.0"
+  }
+}

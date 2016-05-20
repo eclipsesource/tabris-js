@@ -42,69 +42,69 @@ describe("XMLHttpRequest", function() {
   describe("open", function() {
 
     it("fails without method", function() {
-      expect(function() {
+      expect(() => {
         xhr.open(undefined, "http://foo.com");
       }).toThrowError("Method argument should be specified to execute 'open'");
     });
 
     it("fails without url", function() {
-      expect(function() {
+      expect(() => {
         xhr.open("foo", undefined);
       }).toThrowError("URL argument should be specified to execute 'open'");
     });
 
     it("fails for synchronous requests", function() {
-      expect(function() {
+      expect(() => {
         xhr.open("GET", "http://foo.com", false);
       }).toThrowError("Only asynchronous request supported.");
     });
 
     it("sets async to true when argument omitted", function() {
-      expect(function() {
+      expect(() => {
         xhr.open("GET", "http://foo.com");
       }).not.toThrow();
     });
 
     it("fails with method name containing space", function() {
-      expect(function() {
+      expect(() => {
         xhr.open("ba r", "http://foo.com");
       }).toThrowError("Invalid HTTP method, failed to execute 'open'");
     });
 
     it("doesn't fail with method name containing '!'", function() {
-      expect(function() {
+      expect(() => {
         xhr.open("ba!r", "http://foo.com");
       }).not.toThrow();
     });
 
     it("fails with method name containing (del)", function() {
-      expect(function() {
+      expect(() => {
         xhr.open("ba" + String.fromCharCode(127) + "r", "http://foo.com");
       }).toThrowError("Invalid HTTP method, failed to execute 'open'");
     });
 
     it("doesn't fail with method name containing '~'", function() {
-      expect(function() {
+      expect(() => {
         xhr.open("ba~r", "http://foo.com");
       }).not.toThrow();
     });
 
     it("fails with forbidden method name", function() {
-      expect(function() {
+      expect(() => {
         xhr.open("CONNECT", "http://foo.com");
       }).toThrowError("SecurityError: " +
                       "'CONNECT' HTTP method is not secure, failed to execute 'open'");
     });
 
     it("fails with forbidden non-uppercase method name", function() {
-      expect(function() {
+      expect(() => {
         xhr.open("coNnEcT", "http://foo.com");
       }).toThrowError("SecurityError: " +
                       "'CONNECT' HTTP method is not secure, failed to execute 'open'");
     });
 
     it("fails with unsupported URL scheme", function() {
-      expect(function() {
+      expect(() => {
         xhr.open("GET", "foo:bar");
       }).toThrowError("Unsupported URL scheme, failed to execute 'open'");
     });
@@ -178,7 +178,7 @@ describe("XMLHttpRequest", function() {
     });
 
     it("fails when state not 'opened'", function() {
-      expect(function() {
+      expect(() => {
         xhr.send();
       }).toThrowError("InvalidStateError: " +
                       "Object's state must be 'OPENED', failed to execute 'send'");
@@ -187,7 +187,7 @@ describe("XMLHttpRequest", function() {
     it("fails if send invoked", function() {
       xhr.open("GET", "http://foo.com");
       xhr.send();
-      expect(function() {
+      expect(() => {
         xhr.send();
       }).toThrowError("InvalidStateError: 'send' invoked, failed to execute 'send'");
     });
@@ -346,7 +346,7 @@ describe("XMLHttpRequest", function() {
       });
 
       it("doesn't fail when onreadystatechange not implemented", function() {
-        expect(function() {
+        expect(() => {
           proxy.trigger("StateChange", {state: "finished", response: "foo"});
         }).not.toThrow();
       });
@@ -378,7 +378,7 @@ describe("XMLHttpRequest", function() {
       });
 
       it("calls upload progress events on proxy event state 'headers'", function() {
-        progressEvents.forEach(function(event) {
+        progressEvents.forEach((event) => {
           var handler = "on" + event;
           xhr.upload[handler] = jasmine.createSpy(handler);
           proxy.trigger("StateChange", {state: "headers"});
@@ -387,7 +387,7 @@ describe("XMLHttpRequest", function() {
       });
 
       it("calls progress events on proxy event state 'finished'", function() {
-        progressEvents.forEach(function(event) {
+        progressEvents.forEach((event) => {
           var handler = "on" + event;
           xhr[handler] = jasmine.createSpy(handler);
           proxy.trigger("StateChange", {state: "finished"});
@@ -397,7 +397,7 @@ describe("XMLHttpRequest", function() {
       });
 
       it("calls upload progress events on proxy event state 'finished'", function() {
-        progressEvents.forEach(function(event) {
+        progressEvents.forEach((event) => {
           var handler = "on" + event;
           xhr.upload[handler] = jasmine.createSpy(handler);
           proxy.trigger("StateChange", {state: "finished"});
@@ -455,7 +455,7 @@ describe("XMLHttpRequest", function() {
       });
 
       it("sets state to 'DONE' on request error", function() {
-        requestErrors.forEach(function(entry) {
+        requestErrors.forEach((entry) => {
           proxy.trigger("StateChange", {state: entry});
           expect(xhr.readyState).toBe(xhr.DONE);
           sendRequest(xhr);
@@ -463,7 +463,7 @@ describe("XMLHttpRequest", function() {
       });
 
       it("calls onreadystatechange on request error", function() {
-        requestErrors.forEach(function(entry) {
+        requestErrors.forEach((entry) => {
           xhr.onreadystatechange = jasmine.createSpy("onreadystatechange");
           proxy.trigger("StateChange", {state: entry});
           expect(xhr.onreadystatechange).toHaveBeenCalled();
@@ -472,7 +472,7 @@ describe("XMLHttpRequest", function() {
       });
 
       it("calls progress event handlers on request error", function() {
-        requestErrors.forEach(function(entry) {
+        requestErrors.forEach((entry) => {
           var handler = "on" + entry;
           xhr.onprogress = jasmine.createSpy("onprogress");
           xhr[handler] = jasmine.createSpy(handler);
@@ -486,7 +486,7 @@ describe("XMLHttpRequest", function() {
       });
 
       it("calls upload progress event handlers on request error", function() {
-        requestErrors.forEach(function(entry) {
+        requestErrors.forEach((entry) => {
           var handler = "on" + entry;
           xhr.upload.onprogress = jasmine.createSpy("onprogress");
           xhr.upload[handler] = jasmine.createSpy(handler);
@@ -501,7 +501,7 @@ describe("XMLHttpRequest", function() {
       });
 
       it("doesn't call upload event handler on request error when upload complete", function() {
-        requestErrors.forEach(function(entry) {
+        requestErrors.forEach((entry) => {
           var handler = "on" + entry;
           xhr.upload.onprogress = jasmine.createSpy("onprogress");
           xhr.upload[handler] = jasmine.createSpy(handler);
@@ -544,7 +544,7 @@ describe("XMLHttpRequest", function() {
       });
 
       it("disposes of proxy on error proxy event states and 'finished'", function() {
-        requestErrors.concat("finished").forEach(function(state) {
+        requestErrors.concat("finished").forEach((state) => {
           xhr.onreadystatechange = jasmine.createSpy("onreadystatechange");
           proxy.trigger("StateChange", {state: state});
           expect(proxy._isDisposed).toBe(true);
@@ -553,7 +553,7 @@ describe("XMLHttpRequest", function() {
       });
 
       it("doesn't dispose of proxy on proxy event states 'headers' and 'loading'", function() {
-        ["headers", "loading"].forEach(function(state) {
+        ["headers", "loading"].forEach((state) => {
           xhr.onreadystatechange = jasmine.createSpy("onreadystatechange");
           proxy.trigger("StateChange", {state: state});
           expect(!proxy._isDisposed).toBe(true);
@@ -570,7 +570,7 @@ describe("XMLHttpRequest", function() {
     var handlers = ["onprogress", "onloadend", "onabort"];
 
     it("doesn't fail without proxy", function() {
-      expect(function() {
+      expect(() => {
         xhr.abort();
       }).not.toThrow();
     });
@@ -611,7 +611,7 @@ describe("XMLHttpRequest", function() {
     });
 
     it("dispatches progress events when send interrupted", function() {
-      handlers.forEach(function(handler) {
+      handlers.forEach((handler) => {
         xhr.open("GET", "http://www.foo.com");
         xhr.send();
         xhr[handler] = jasmine.createSpy(handler);
@@ -621,7 +621,7 @@ describe("XMLHttpRequest", function() {
     });
 
     it("dispatches upload progress events when send interrupted", function() {
-      handlers.forEach(function(handler) {
+      handlers.forEach((handler) => {
         xhr.open("POST", "http://www.foo.com");
         xhr.send("foo");
         xhr.upload[handler] = jasmine.createSpy(handler);
@@ -631,7 +631,7 @@ describe("XMLHttpRequest", function() {
     });
 
     it("doesn't dispatch upload progress events when send interrupted and upload complete", function() {
-      handlers.forEach(function(handler) {
+      handlers.forEach((handler) => {
         xhr.open("GET", "http://www.foo.com");
         xhr.send();
         proxy.trigger("StateChange", {state: "headers"});
@@ -650,7 +650,7 @@ describe("XMLHttpRequest", function() {
   describe("setRequestHeader", function() {
 
     it("fails when state not 'opened'", function() {
-      expect(function() {
+      expect(() => {
         xhr.setRequestHeader();
       }).toThrowError(
         "InvalidStateError: Object's state must be 'OPENED', failed to execute 'setRequestHeader'"
@@ -659,7 +659,7 @@ describe("XMLHttpRequest", function() {
 
     it("fails with invalid HTTP header field name", function() {
       xhr.open("GET", "http://foo.com");
-      expect(function() {
+      expect(() => {
         xhr.setRequestHeader("foo bar", "bar");
       }).toThrowError(
         "Invalid HTTP header name, failed to execute 'open'"
@@ -668,7 +668,7 @@ describe("XMLHttpRequest", function() {
 
     it("fails with invalid HTTP header value name", function() {
       xhr.open("GET", "http://foo.com");
-      expect(function() {
+      expect(() => {
         xhr.setRequestHeader("Foo", "bar\n");
       }).toThrowError(
         "Invalid HTTP header value, failed to execute 'open'"
@@ -677,13 +677,13 @@ describe("XMLHttpRequest", function() {
 
     it("doesn't fail with HTTP header values containing numbers", function() {
       xhr.open("GET", "http://foo.com");
-      expect(function() {
+      expect(() => {
         xhr.setRequestHeader("Foo", "1234");
       }).not.toThrow();
     });
 
     it("doesn't fail with HTTP header values containing wildcards", function() {
-      expect(function() {
+      expect(() => {
         xhr.open("GET", "http://foo.com");
         xhr.setRequestHeader("Foo", "*/*");
       }).not.toThrow();
@@ -691,7 +691,7 @@ describe("XMLHttpRequest", function() {
 
     it("fails with case variant of forbidden header", function() {
       xhr.open("GET", "http://foo.com");
-      expect(function() {
+      expect(() => {
         xhr.setRequestHeader("acCept-charseT", "foo");
       }).toThrowError(
         "Cannot set forbidden header 'acCept-charseT'"
@@ -701,7 +701,7 @@ describe("XMLHttpRequest", function() {
     it("fails when send invoked", function() {
       xhr.open("GET", "http://foo.com");
       xhr.send();
-      expect(function() {
+      expect(() => {
         xhr.setRequestHeader("Foo", "Bar");
       }).toThrowError(
         "InvalidStateError: cannot set request header if 'send()' invoked and request not completed"
@@ -850,9 +850,8 @@ describe("XMLHttpRequest", function() {
 
       it("fails when responseText was not a string", function() {
         proxy.trigger("StateChange", {state: "finished", response: 2});
-        expect(function() {
-          /*jshint unused: false */
-          var responseText = xhr.responseText;
+        expect(() => {
+          xhr.responseText;
         }).toThrowError("IllegalStateError: responseText is not a string");
       });
 
@@ -875,9 +874,8 @@ describe("XMLHttpRequest", function() {
 
       it("fails with invalid reponseText type", function() {
         proxy.trigger("StateChange", {state: "finished", response: ["foo"]});
-        expect(function() {
-          /*jshint unused: false */
-          var responseText = xhr.responseText;
+        expect(() => {
+          xhr.responseText;
         }).toThrowError("IllegalStateError: responseText is not a string");
       });
 
@@ -935,7 +933,7 @@ describe("XMLHttpRequest", function() {
       it("fails with bad state", function() {
         sendRequest(xhr);
         proxy.trigger("StateChange", {state: "loading"});
-        expect(function() {
+        expect(() => {
           xhr.responseType = "foo";
         }).toThrowError(
           "InvalidStateError: state must not be 'LOADING' or 'DONE' when setting responseType"
@@ -953,7 +951,7 @@ describe("XMLHttpRequest", function() {
       });
 
       it("fails to set response type which is not 'text'", function() {
-        expect(function() {
+        expect(() => {
           xhr.responseType = "document";
         }).toThrowError("Only the 'text' response type is supported.");
       });
@@ -1084,7 +1082,7 @@ describe("XMLHttpRequest", function() {
 
       it("fails with state other than UNSENT or OPENED", function() {
         proxy.trigger("StateChange", {state: "headers", message: "OK"});
-        expect(function() {
+        expect(() => {
           xhr.withCredentials = true;
         }).toThrowError(
           "InvalidStateError: state must be 'UNSENT' or 'OPENED' when setting withCredentials"
@@ -1094,7 +1092,7 @@ describe("XMLHttpRequest", function() {
       it("fails when send invoked", function() {
         xhr.open("Foo", "http://www.foo.com");
         xhr.send();
-        expect(function() {
+        expect(() => {
           xhr.withCredentials = true;
         }).toThrowError("InvalidStateError: 'send' invoked, failed to set 'withCredentials'");
       });
@@ -1134,7 +1132,7 @@ describe("XMLHttpRequest", function() {
     describe(name, function() {
 
       it("are initialized with null", function() {
-        eventTypes.forEach(function(type) {
+        eventTypes.forEach((type) => {
           var handler = "on" + type;
           expect(getTarget(property)[handler]).toBe(null);
         });
@@ -1143,7 +1141,7 @@ describe("XMLHttpRequest", function() {
       describe("set", function() {
 
         it("doesn't set value when value not a function", function() {
-          eventTypes.forEach(function(type) {
+          eventTypes.forEach((type) => {
             var handler = "on" + type;
             getTarget(property)[handler] = "foo";
             expect(getTarget(property)[handler]).toBe(null);
@@ -1152,7 +1150,7 @@ describe("XMLHttpRequest", function() {
 
         it("sets value to function", function() {
           var foo = function() {};
-          eventTypes.forEach(function(type) {
+          eventTypes.forEach((type) => {
             var handler = "on" + type;
             getTarget(property)[handler] = foo;
             expect(getTarget(property)[handler]).toBe(foo);
@@ -1162,7 +1160,7 @@ describe("XMLHttpRequest", function() {
         it("replaces existing listener", function() {
           var handler1 = jasmine.createSpy("handler1");
           var handler2 = jasmine.createSpy("handler2");
-          eventTypes.forEach(function(type) {
+          eventTypes.forEach((type) => {
             var handler = "on" + type;
             getTarget(property)[handler] = handler1;
             getTarget(property)[handler] = handler2;

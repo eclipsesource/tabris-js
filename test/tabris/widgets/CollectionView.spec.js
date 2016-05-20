@@ -45,7 +45,7 @@ describe("CollectionView", function() {
       expect(view.get("refreshMessage")).toBe("");
     });
 
-    ["firstVisibleIndex", "lastVisibleIndex"].forEach(function(prop) {
+    ["firstVisibleIndex", "lastVisibleIndex"].forEach((prop) => {
 
       describe(prop, function() {
 
@@ -89,7 +89,7 @@ describe("CollectionView", function() {
           var listener = jasmine.createSpy();
           var index = 23;
           view.on(changeEvent, listener);
-          spyOn(nativeBridge, "get").and.callFake(function() { return index; });
+          spyOn(nativeBridge, "get").and.callFake(() => index);
 
           view._trigger("scroll", {});
           view._trigger("scroll", {});
@@ -664,13 +664,13 @@ describe("CollectionView", function() {
       });
 
       it("fails when index is not a number", function() {
-        expect(function() {
+        expect(() => {
           view.insert(["d"], NaN);
         }).toThrow();
       });
 
       it("fails when items is not an array", function() {
-        expect(function() {
+        expect(() => {
           view.insert({});
         }).toThrow();
       });
@@ -768,13 +768,13 @@ describe("CollectionView", function() {
       });
 
       it("fails when index is not a number", function() {
-        expect(function() {
+        expect(() => {
           view.remove(NaN);
         }).toThrow();
       });
 
       it("fails when count is not a number", function() {
-        expect(function() {
+        expect(() => {
           view.remove(0, NaN);
         }).toThrow();
       });
@@ -833,7 +833,7 @@ describe("CollectionView", function() {
       });
 
       it("fails with invalid parameter", function() {
-        expect(function() {
+        expect(() => {
           view.refresh(NaN);
         }).toThrow();
       });
@@ -868,7 +868,7 @@ describe("CollectionView", function() {
       });
 
       it("fails with invalid parameter", function() {
-        expect(function() {
+        expect(() => {
           view.refresh(NaN);
         }).toThrow();
       });

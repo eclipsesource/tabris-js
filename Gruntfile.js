@@ -8,67 +8,6 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     clean: ["build"],
-    jshint: {
-      options: {
-        jshintrc: true
-      },
-      all: [
-        "Gruntfile.js",
-        "src/**/*.js",
-        "test/**/*.js",
-        "examples/**/*.js",
-        "snippets/**/*.js",
-        "!**/lib/**/*.js",
-        "!**/node_modules/**/*.js"
-      ]
-    },
-    jscs: {
-      src: [
-        "Gruntfile.js",
-        "src/**/*.js",
-        "test/**/*.js",
-        "examples/**/*.js",
-        "snippets/**/*.js",
-        "!**/lib/**/*.js",
-        "!**/node_modules/**/*.js"
-      ],
-      options: {
-        config: true
-      }
-    },
-    jasmine: {
-      boot: {
-        options: {
-          specs: "test/boot/*.spec.js",
-          helpers: ["test/tabris/NativeBridgeSpy.js"],
-          version: "2.3.0",
-          display: "short",
-          summary: true
-        },
-        src: "build/boot.js"
-      },
-      tabris: {
-        options: {
-          specs: grunt.file.expand("test/tabris/*.spec.js").filter(function(path) {
-            return path.indexOf("/util") === -1;
-          }),
-          helpers: [
-            "test/tabris/NativeBridgeSpy.js",
-            "node_modules/underscore/underscore-min.js",
-            "node_modules/backbone/backbone-min.js",
-            "test/tabris/FakeTabrisModule.js"
-          ],
-          version: "2.3.0",
-          display: "short",
-          summary: true
-        },
-        src: [
-          "build/tabris/tabris.js",
-          "test/tabris/jasmineToString.js",
-          "test/tabris/tabris-init.js"
-        ]
-      }
-    },
     concat: {
       tabris: {
         options: {
@@ -102,6 +41,7 @@ module.exports = function(grunt) {
           "WindowTimers.js",
           "App.js",
           "UI.js",
+          "ImageData.js",
           "CanvasContext.js",
           "LegacyCanvasContext.js",
           "WebStorage.js",
@@ -185,6 +125,18 @@ module.exports = function(grunt) {
       readme: {
         src: "README.md",
         dest: "build/tabris/"
+      },
+      typings: {
+        expand: true,
+        cwd: "typings/",
+        src: ["whatwg-fetch.d.ts", "promise.d.ts"],
+        dest: "build/tabris/"
+      },
+      test_ts: {
+        expand: true,
+        cwd: "test/typescript/",
+        src: ["**/*.test.ts", "package.json", "tsconfig.json"],
+        dest: "build/typescript/"
       }
     },
     compress: {
@@ -223,6 +175,21 @@ module.exports = function(grunt) {
         }
       }
     },
+    exec: {
+      test_typings: {
+        cmd: "npm install && node node_modules/typescript/bin/tsc -p . --noImplicitAny",
+        cwd: "build/typescript"
+      },
+      test_boot: {
+        cmd: "node test/boot/run-tests.js"
+      },
+      test_tabris: {
+        cmd: "node test/tabris/run-tests.js"
+      },
+      lint: {
+        cmd: "node node_modules/eslint/bin/eslint.js --color **/*.js"
+      }
+    },
     examples: {
       src: ["snippets", "examples"]
     }
@@ -230,19 +197,16 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks("grunt-contrib-clean");
   grunt.loadNpmTasks("grunt-contrib-concat");
-  grunt.loadNpmTasks("grunt-contrib-jshint");
-  grunt.loadNpmTasks("grunt-jscs");
-  grunt.loadNpmTasks("grunt-contrib-jasmine");
   grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.loadNpmTasks("grunt-contrib-copy");
   grunt.loadNpmTasks("grunt-contrib-compress");
   grunt.loadNpmTasks("grunt-webpack");
+  grunt.loadNpmTasks("grunt-exec");
   grunt.loadTasks("./grunt");
 
   /* runs static code analysis tools */
-  grunt.registerTask("check", [
-    "jscs",
-    "jshint"
+  grunt.registerTask("lint", [
+    "exec:lint"
   ]);
 
   grunt.registerTask("package", "create package.json", function() {
@@ -250,6 +214,7 @@ module.exports = function(grunt) {
     var pack = grunt.file.readJSON("package.json");
     delete pack.devDependencies;
     pack.main = "tabris.min.js";
+    pack.typings = "tabris.d.ts";
     grunt.file.write("build/tabris/package.json", stringify.plain(pack));
   });
 
@@ -263,13 +228,17 @@ module.exports = function(grunt) {
     "uglify:polyfill",
     "package",
     "copy:readme",
+    "copy:typings",
+    "generate-tsd",
     "compress:tabris"
   ]);
 
-  /* runs jasmine tests against the build output */
+  /* runs tests against the build output */
   grunt.registerTask("test", [
-    "jasmine:boot",
-    "jasmine:tabris"
+    "exec:test_boot",
+    "exec:test_tabris",
+    "copy:test_ts",
+    "exec:test_typings"
   ]);
 
   /* generates reference documentation */
@@ -287,7 +256,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask("default", [
     "clean",
-    "check",
+    "lint",
     "build",
     "test",
     "doc",

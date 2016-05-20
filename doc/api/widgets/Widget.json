@@ -54,7 +54,7 @@
             "description": "An object in the format `{Selector: {property: value, property: value, ... }, Selector: ...}`"
           }
         ],
-        "returns": "Widget",
+        "returns": "this",
         "description": "Applies the given properties to all descendants that match the associated selector(s)."
       }
     ],
@@ -70,7 +70,7 @@
         "parameters": [
           {"name": "parent", "type": "Composite"}
         ],
-        "returns": "Widget",
+        "returns": "this",
         "description": "Appends this widget to the given parent. The parent widget must support children (extending *Composite*). If the widget already has a parent, it is removed from the old parent."
       }
     ],
@@ -79,7 +79,7 @@
         "parameters": [
           {"name": "widget", "type": "Widget"}
         ],
-        "returns": "Widget",
+        "returns": "this",
         "description": "Inserts this widget directly before the given widget. If the widget already has a parent, it is removed from the old parent."
       }
     ],
@@ -88,7 +88,7 @@
         "parameters": [
           {"name": "widget", "type": "Widget"}
         ],
-        "returns": "Widget",
+        "returns": "this",
         "description": "Inserts this widget directly after the given widget. If the widget already has a parent, it is removed from the old parent."
       }
     ],
@@ -119,6 +119,10 @@
     "id": {
       "type": "string",
       "description": "A string to identify the widget by using selectors. Id's are optional. It is strongly recommended that they are unique within a page."
+    },
+    "class": {
+      "type": "string",
+      "description": "A class name or a whitespace separated list of class names to identify the widget. Class names are arbitrary strings that describe a state or a category and help to select widgets using a selector expression. A class name may only contain alphanumeric characters, `_` and `-`. Class names can also be added or removed using the field `classList`."
     },
     "enabled": {
       "type": "boolean",
@@ -222,6 +226,10 @@
       "type": "string",
       "description": "An application-wide unique identifier automatically assigned to all widgets on creation. Do not change it."
     },
+    "classList": {
+      "type": "string[]",
+      "description": "Provides convenient access to the list of class names set to this widget. Class names can either be set using the `class` property or by modifying the `classList` directly."
+    },
     "type": {
       "type": "string",
       "description": "The widget type without the 'tabris' namespace."
@@ -230,7 +238,7 @@
   "events": {
     "change:{property}": {
       "parameters": [
-        {"name": "widget", "type": "Widget"},
+        {"name": "widget", "type": "this"},
         {"name": "value", "type": "any", "description": "The new value of this given property."},
         {"name": "options", "type": "Object", "description": "This is the options object given to the [`set`](#set) method."}
       ],
@@ -238,112 +246,112 @@
     },
     "tap": {
       "parameters": [
-        {"name": "widget", "type": "Widget"},
+        {"name": "widget", "type": "this"},
         {"name": "gesture", "type": "GestureObject"}
       ],
       "description": "Fired once when a finger briefly touched the widget."
     },
     "longpress": {
       "parameters": [
-        {"name": "widget", "type": "Widget"},
+        {"name": "widget", "type": "this"},
         {"name": "gesture", "type": "GestureObject"}
       ],
       "description": "Fired after pressing a widget for a specific amount of time (about a second), and again on lifting the finger."
     },
     "pan": {
       "parameters": [
-        {"name": "widget", "type": "Widget"},
+        {"name": "widget", "type": "this"},
         {"name": "gesture", "type": "GestureObject"}
       ],
       "description": "Fired continuously after a finger touching the widget moved for a certain distance."
     },
     "pan:up": {
       "parameters": [
-        {"name": "widget", "type": "Widget"},
+        {"name": "widget", "type": "this"},
         {"name": "gesture", "type": "GestureObject"}
       ],
       "description": "Fired when a finger starts moving up."
     },
     "pan:down": {
       "parameters": [
-        {"name": "widget", "type": "Widget"},
+        {"name": "widget", "type": "this"},
         {"name": "gesture", "type": "GestureObject"}
       ],
       "description": "Fired when a finger starts moving down."
     },
     "pan:left": {
       "parameters": [
-        {"name": "widget", "type": "Widget"},
+        {"name": "widget", "type": "this"},
         {"name": "gesture", "type": "GestureObject"}
       ],
       "description": "Fired when a finger starts moving left."
     },
     "pan:right": {
       "parameters": [
-        {"name": "widget", "type": "Widget"},
+        {"name": "widget", "type": "this"},
         {"name": "gesture", "type": "GestureObject"}
       ],
       "description": "Fired when a finger starts moving right."
     },
     "swipe:up": {
       "parameters": [
-        {"name": "widget", "type": "Widget"},
+        {"name": "widget", "type": "this"},
         {"name": "gesture", "type": "GestureObject"}
       ],
       "description": "Fired when a finger moves up quickly."
     },
     "swipe:down": {
       "parameters": [
-        {"name": "widget", "type": "Widget"},
+        {"name": "widget", "type": "this"},
         {"name": "gesture", "type": "GestureObject"}
       ],
       "description": "Fired when a finger moves down quickly."
     },
     "swipe:left": {
       "parameters": [
-        {"name": "widget", "type": "Widget"},
+        {"name": "widget", "type": "this"},
         {"name": "gesture", "type": "GestureObject"}
       ],
       "description": "Fired when a finger moves left quickly."
     },
     "swipe:right": {
       "parameters": [
-        {"name": "widget", "type": "Widget"},
+        {"name": "widget", "type": "this"},
         {"name": "gesture", "type": "GestureObject"}
       ],
       "description": "Fired when a finger moves right quickly."
     },
     "touchstart": {
       "parameters": [
-        {"name": "widget", "type": "Widget"},
+        {"name": "widget", "type": "this"},
         {"name": "gesture", "type": "TouchEvent"}
       ],
       "description": "Fired when a widget is touched. See [Touch Events](../touch.md)."
     },
     "touchmove": {
       "parameters": [
-        {"name": "widget", "type": "Widget"},
+        {"name": "widget", "type": "this"},
         {"name": "gesture", "type": "TouchEvent"}
       ],
       "description": "Fired repeatedly while swiping across the screen."
     },
     "touchend": {
       "parameters": [
-        {"name": "widget", "type": "Widget"},
+        {"name": "widget", "type": "this"},
         {"name": "gesture", "type": "TouchEvent"}
       ],
       "description": "Fired when a touch ends on the same widget than it started on."
     },
     "touchcancel": {
       "parameters": [
-        {"name": "widget", "type": "Widget"},
+        {"name": "widget", "type": "this"},
         {"name": "gesture", "type": "TouchEvent"}
       ],
       "description": "Fired instead of touchend when the touch ends on another widget than it started on."
     },
     "resize": {
       "parameters": [
-        {"name": "widget", "type": "Widget"},
+        {"name": "widget", "type": "this"},
         {"name": "bounds", "type": "Bounds", "description": "The new value of the [*bounds*](#bounds) property."},
         {"name": "options", "type": "Object"}
       ],
@@ -351,21 +359,21 @@
     },
     "animationstart": {
       "parameters": [
-        {"name": "widget", "type": "Widget"},
+        {"name": "widget", "type": "this"},
         {"name": "options", "type": "Object", "description": "The *options* object given [when `animate` was called](#animateproperties-options)."}
       ],
       "description": "Fired when an animation starts playing."
     },
     "animationend": {
       "parameters": [
-        {"name": "widget", "type": "Widget"},
+        {"name": "widget", "type": "this"},
         {"name": "options", "type": "Object", "description": "The *options* object given [when `animate` was called](#animateproperties-options)."}
       ],
       "description": "Fired when an animation has completed."
     },
     "dispose": {
       "parameters": [
-        {"name": "widget", "type": "Widget"}
+        {"name": "widget", "type": "this"}
       ],
       "description": "Fired when the widget is about to be disposed. At this point the widget and its children are still accessible."
     }

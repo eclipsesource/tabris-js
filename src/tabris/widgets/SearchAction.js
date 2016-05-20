@@ -5,13 +5,14 @@ tabris.registerWidget("SearchAction", {
   _properties: {
     image: {type: "image", default: null},
     placementPriority: {
-      type: ["choice", {low: "LOW", high: "HIGH", normal: "NORMAL"}],
+      type: ["choice", ["low", "high", "normal"]],
       access: {
-        get: function() {
-          var value = this._nativeGet("placementPriority");
-          return value ? value.toLowerCase() : value;
+        set: function(name, value, options) {
+          this._nativeSet(name, value.toUpperCase());
+          this._storeProperty(name, value, options);
         }
-      }
+      },
+      default: "normal"
     },
     title: {type: "string", default: ""},
     proposals: {default: function() {return [];}},

@@ -305,7 +305,8 @@
             this._nativeSet(name, value === undefined ? null : value);
             this._storeProperty(name, value, options);
           }
-        }
+        },
+        default: null
       },
       backgroundImage: "image",
       bounds: {
@@ -400,6 +401,10 @@
             return this._gestures;
           }
         }
+      },
+      win_theme: {
+        type: ["choice", ["default", "light", "dark"]],
+        default: "default"
       }
     })
   });

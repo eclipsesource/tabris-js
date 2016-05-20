@@ -1,7 +1,7 @@
 var RowLayout = function(options) {
-    this.margin = options.margin || 0;
-    this.spacing = options.spacing || 0;
-  };
+  this.margin = options.margin || 0;
+  this.spacing = options.spacing || 0;
+};
 
 RowLayout.prototype = {
 

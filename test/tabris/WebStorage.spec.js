@@ -23,7 +23,7 @@ describe("LocalStorage", function() {
   describe("setItem", function() {
 
     it("fails with missing argument", function() {
-      expect(function() {
+      expect(() => {
         localStorage.setItem("foo");
       }).toThrowError("Not enough arguments to 'setItem'");
     });
@@ -59,7 +59,7 @@ describe("LocalStorage", function() {
   describe("getItem", function() {
 
     it("fails with missing argument", function() {
-      expect(function() {
+      expect(() => {
         localStorage.getItem();
       }).toThrowError("Not enough arguments to 'getItem'");
     });
@@ -105,7 +105,7 @@ describe("LocalStorage", function() {
   describe("removeItem", function() {
 
     it("fails with missing argument", function() {
-      expect(function() {
+      expect(() => {
         localStorage.removeItem();
       }).toThrowError("Not enough arguments to 'removeItem'");
     });

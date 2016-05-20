@@ -86,9 +86,9 @@ describe("TabFolder", function() {
     describe("and appended to an illegal parent", function() {
 
       it("crashes", function() {
-        expect(function() {
+        expect(() => {
           tab.appendTo(new tabris.Composite());
-        }).toThrow(new Error("Tab must be a child of TabFolder"));
+        }).toThrowError("Tab must be a child of TabFolder");
       });
 
     });
@@ -225,18 +225,17 @@ describe("TabFolder", function() {
 
   describe("selection property:", function() {
 
-    var tab1, tab2;
+    var tab;
 
     beforeEach(function() {
-      tab1 = new tabris.Tab().appendTo(tabFolder);
-      tab2 = new tabris.Tab().appendTo(tabFolder);
+      tab = new tabris.Tab().appendTo(tabFolder);
     });
 
     it("Setting a Tab SETs tabItem id", function() {
-      tabFolder.set("selection", tab2);
+      tabFolder.set("selection", tab);
 
       var setCall = nativeBridge.calls({op: "set", id: tabFolder.cid})[0];
-      expect(setCall.properties.selection).toBe(tab2._tabItem.cid);
+      expect(setCall.properties.selection).toBe(tab._tabItem.cid);
     });
 
     it("Ignores setting null with warning", function() {
@@ -251,9 +250,9 @@ describe("TabFolder", function() {
 
     it("Ignores setting disposed tab with warning", function() {
       spyOn(console, "warn");
-      tab2.dispose();
+      tab.dispose();
 
-      tabFolder.set("selection", tab2);
+      tabFolder.set("selection", tab);
 
       var calls = nativeBridge.calls({op: "set", id: tabFolder.cid});
       expect(calls.length).toBe(0);
@@ -271,9 +270,9 @@ describe("TabFolder", function() {
     });
 
     it("Get returns Tab", function() {
-      spyOn(nativeBridge, "get").and.returnValue(tab2._tabItem.cid);
+      spyOn(nativeBridge, "get").and.returnValue(tab._tabItem.cid);
 
-      expect(tabFolder.get("selection")).toBe(tab2);
+      expect(tabFolder.get("selection")).toBe(tab);
     });
 
     it("Get returns null", function() {
@@ -284,11 +283,11 @@ describe("TabFolder", function() {
       var listener = jasmine.createSpy();
       tabFolder.on("change:selection", listener);
 
-      tabris._notify(tabFolder.cid, "Selection", {selection: tab2._tabItem.cid});
+      tabris._notify(tabFolder.cid, "Selection", {selection: tab._tabItem.cid});
 
       expect(listener.calls.count()).toBe(1);
       expect(listener.calls.argsFor(0)[0]).toBe(tabFolder);
-      expect(listener.calls.argsFor(0)[1]).toBe(tab2);
+      expect(listener.calls.argsFor(0)[1]).toBe(tab);
       expect(listener.calls.argsFor(0)[2]).toEqual({});
     });
 
@@ -296,11 +295,11 @@ describe("TabFolder", function() {
       var listener = jasmine.createSpy();
       tabFolder.on("select", listener);
 
-      tabris._notify(tabFolder.cid, "Selection", {selection: tab2._tabItem.cid});
+      tabris._notify(tabFolder.cid, "Selection", {selection: tab._tabItem.cid});
 
       expect(listener.calls.count()).toBe(1);
       expect(listener.calls.argsFor(0)[0]).toBe(tabFolder);
-      expect(listener.calls.argsFor(0)[1]).toBe(tab2);
+      expect(listener.calls.argsFor(0)[1]).toBe(tab);
       expect(listener.calls.argsFor(0)[2]).toEqual({});
     });
 

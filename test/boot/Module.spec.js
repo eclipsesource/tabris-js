@@ -6,7 +6,7 @@ describe("tabris.Module", function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._client = nativeBridge;
     spyOn(nativeBridge, "load");
-    spyOn(tabris.Module, "createLoader").and.returnValue(function(module) {
+    spyOn(tabris.Module, "createLoader").and.returnValue((module) => {
       module.exports = module;
     });
   });
@@ -68,7 +68,7 @@ describe("tabris.Module", function() {
     describe("require", function() {
 
       it("returns exports", function() {
-        tabris.Module.createLoader.and.returnValue(function(module, exports) {
+        tabris.Module.createLoader.and.returnValue((module, exports) => {
           exports.bar = 1;
         });
 
@@ -85,7 +85,7 @@ describe("tabris.Module", function() {
       });
 
       it("returns module that is currently loading", function() {
-        tabris.Module.createLoader.and.returnValue(function(module, exports) {
+        tabris.Module.createLoader.and.returnValue((module, exports) => {
           exports.foo = 1;
           module.require("./foo").bar = 2;
         });
@@ -100,7 +100,7 @@ describe("tabris.Module", function() {
       });
 
       it("returns same exports from different modules", function() {
-        tabris.Module.createLoader.and.returnValue(function(module, exports) {
+        tabris.Module.createLoader.and.returnValue((module, exports) => {
           exports.bar = 1;
         });
         var module1 = new tabris.Module("./module1", module);
@@ -266,9 +266,9 @@ describe("tabris.Module", function() {
         tabris.Module.createLoader.and.returnValue(undefined);
         spyOn(tabris.Module, "readJSON").and.returnValue(undefined);
 
-        expect(function() {
+        expect(() => {
           module.require("foo");
-        }).toThrow(new Error("Cannot find module 'foo'"));
+        }).toThrowError("Cannot find module 'foo'");
 
         expect(tabris.Module.createLoader).toHaveBeenCalledWith("./node_modules/foo");
         expect(tabris.Module.createLoader).toHaveBeenCalledWith("./node_modules/foo.js");
@@ -330,7 +330,7 @@ describe("tabris.Module", function() {
         tabris.Module.createLoader.and.returnValue(undefined);
         spyOn(tabris.Module, "readJSON").and.returnValue(undefined);
 
-        expect(function() {
+        expect(() => {
           module.require("foo");
         }).toThrow();
 
@@ -433,7 +433,7 @@ describe("tabris.Module", function() {
         });
 
         it("fails if requested id is outside of module root", function() {
-          expect(function() {
+          expect(() => {
             module.require("../bar");
           }).toThrow();
         });

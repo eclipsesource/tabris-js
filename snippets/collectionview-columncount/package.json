@@ -1,0 +1,9 @@
+{
+  "title": "Collection View Column Count",
+  "category": "Collection View",
+  "description": "Create a collection view with multiple columns",
+  "main": "collectionview-columncount.js",
+  "dependencies": {
+    "tabris": "^1.8.0"
+  }
+}

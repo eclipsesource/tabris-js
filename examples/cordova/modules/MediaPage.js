@@ -1,3 +1,5 @@
+/* global Media: false */
+
 var PluginPage = require("./PluginPage");
 
 var page = new PluginPage("Media", "cordova-media", function(parent) {

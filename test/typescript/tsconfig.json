@@ -1,0 +1,9 @@
+{
+  "files": [
+    "../tabris/promise.d.ts",
+    "../tabris/whatwg-fetch.d.ts",
+    "./tabris.test.ts",
+    "./promise.test.ts",
+    "./whatwg-fetch.test.ts"
+  ]
+}

@@ -69,6 +69,10 @@
             console.warn(this.type + ": Cannot set read-only property '" + name + "'.");
           }
         }
+      },
+      columnCount: {
+        type: "number",
+        default: 1
       }
     },
 

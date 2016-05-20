@@ -75,8 +75,8 @@ describe("SearchAction", function() {
       nativeBridge.resetCalls();
     });
 
-    it("translates placementPriority to lowercase", function() {
-      spyOn(nativeBridge, "get").and.returnValue("LOW");
+    it("returns cached placementPriority", function() {
+      action.set("placementPriority", "low");
 
       var result = action.get("placementPriority");
 
@@ -89,6 +89,7 @@ describe("SearchAction", function() {
       expect(action.get("title")).toBe("");
       expect(action.get("visible")).toBe(true);
       expect(action.get("proposals")).toEqual([]);
+      expect(action.get("placementPriority")).toBe("normal");
     });
 
   });

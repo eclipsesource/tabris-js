@@ -13,13 +13,15 @@ tabris.registerWidget("WebView", {
     },
     load: {
       name: "Progress",
-      trigger: function() {
-        this.trigger("load", this);
+      trigger: function(event) {
+        this.trigger("load", this, event);
       }
     }
   },
   _properties: {
     url: {type: "string", nocache: true},
-    html: {type: "string", nocache: true}
+    html: {type: "string", nocache: true},
+    headers: {type: "any", default: {}},
+    initScript: {type: "string"}
   }
 });

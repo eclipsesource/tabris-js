@@ -6,13 +6,15 @@
     "open": [
       {
         "parameters": [],
-        "description": "Opens the drawer."
+        "description": "Opens the drawer.",
+        "returns": "this"
       }
     ],
     "close": [
       {
         "parameters": [],
-        "description": "Closes the drawer."
+        "description": "Closes the drawer.",
+        "returns": "this"
       }
     ]
   },

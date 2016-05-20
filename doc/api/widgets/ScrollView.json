@@ -1,6 +1,6 @@
 {
   "type": "ScrollView",
-  "description": "A composite that allows its content to overflow either vertically (default) or horizontally. Children of a ScrollView may not be attached to its edge in scrolling direction (to the bottom for vertical scrolling, to the right for horizontal scrolling).",
+  "description": "A composite that allows its content to overflow either vertically (default) or horizontally. Since the ScrollView does not compute its own size, the width and height must be defined by the respective layout properties (e.g. either `width` or `left` and `right` must be specified).",
   "include": ["Composite"],
   "properties": {
     "direction": {
@@ -22,8 +22,8 @@
   "events": {
     "scroll": {
       "parameters": [
-        {"name": "widget", "type": "ScrollView"},
-        {"name": "offset", "type": "Object", "description": "Indicates the current scrolling position, e.g. `{x: number, y: number}`"}
+        {"name": "widget", "type": "this"},
+        {"name": "offset", "type": "{x: number, y: number}", "description": "Indicates the current scrolling position, e.g. `{x: number, y: number}`"}
       ],
       "description": "Fired on scrolling."
     }

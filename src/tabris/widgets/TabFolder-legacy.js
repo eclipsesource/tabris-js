@@ -1,6 +1,6 @@
 tabris.load(function() {
 
-  if (device.platform !== "UWP") {
+  if (device.platform !== "windows") {
 
     var itemProps = ["title", "badge", "image", "visible"];
 

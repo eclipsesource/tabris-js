@@ -1,0 +1,9 @@
+{
+  "title": "TextView font",
+  "category": "TextView",
+  "description": "Creating text views with different fonts",
+  "main": "textview-font.js",
+  "dependencies": {
+    "tabris": "^1.7.0"
+  }
+}

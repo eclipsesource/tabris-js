@@ -78,20 +78,11 @@ describe("Action", function() {
     it("returns initial default property values", function() {
       expect(action.get("image")).toBe(null);
       expect(action.get("visible")).toBe(true);
-      // TODO: Priority can not yet be cached because the custom getter is doing the decoding:
-      //expect(action.get("placementPriority")).toBe("normal");
+      expect(action.get("placementPriority")).toBe("normal");
     });
 
-    it("translates placementPriority to lowercase", function() {
-      spyOn(nativeBridge, "get").and.returnValue("LOW");
-
-      var result = action.get("placementPriority");
-
-      expect(result).toBe("low");
-    });
-
-    it("translates placementPriority to lowercase", function() {
-      spyOn(nativeBridge, "get").and.returnValue("LOW");
+    it("returns cached placementPriority", function() {
+      action.set("placementPriority", "low");
 
       var result = action.get("placementPriority");
 

@@ -19,7 +19,7 @@ describe("Widget", function() {
   describe("constructor", function() {
 
     it("prevents instantiation", function() {
-      expect(function() {
+      expect(() => {
         new tabris.Widget();
       }).toThrowError("Cannot instantiate abstract Widget");
     });
@@ -47,11 +47,25 @@ describe("Widget", function() {
       expect(call.properties.background).toEqual([1, 2, 3, 128]);
     });
 
-    it("translates font string to array", function() {
+    it("translates font string to object", function() {
       widget.set({font: "12px Arial"});
 
       var call = nativeBridge.calls({op: "set"})[0];
-      expect(call.properties.font).toEqual([["Arial"], 12, false, false]);
+      expect(call.properties.font)
+        .toEqual({family: ["Arial"], size: 12, style: "normal", weight: "normal"});
+    });
+
+    it("normalizes font string", function() {
+      widget.set({font: "bold italic   12px Arial"});
+
+      expect(widget.get("font")).toEqual("italic bold 12px Arial");
+    });
+
+    it("returns 'initial' when no value is cached", function() {
+      spyOn(nativeBridge, "get");
+
+      expect(widget.get("font")).toEqual("initial");
+      expect(nativeBridge.get).not.toHaveBeenCalled();
     });
 
     it("translates backgroundImage to array", function() {
@@ -83,6 +97,28 @@ describe("Widget", function() {
 
       var call = nativeBridge.calls({op: "set"})[0];
       expect(call.properties.cornerRadius).toBe(4);
+    });
+
+    ["light", "dark", "default"].forEach((value) => {
+
+      it("sets win_theme to valid value", function() {
+        widget.set("win_theme", value);
+
+        var call = nativeBridge.calls({op: "set"})[0];
+        expect(call.properties.win_theme).toBe(value);
+      });
+
+    });
+
+    it("ignores setting win_theme to invalid value", function() {
+      spyOn(console, "warn");
+      widget.set("win_theme", "foo");
+
+      expect(nativeBridge.calls({op: "set"}).length).toBe(0);
+    });
+
+    it("returns win_theme default value", function() {
+      expect(widget.get("win_theme")).toBe("default");
     });
 
     it("translates visible to visibility", function() {
@@ -365,7 +401,7 @@ describe("Widget", function() {
       describe("when called with non-widget", function() {
 
         it("throws an error", function() {
-          expect(function() {
+          expect(() => {
             widget.append({});
           }).toThrowError("Cannot append non-widget");
         });
@@ -378,7 +414,7 @@ describe("Widget", function() {
           tabris.TestType._supportsChildren = false;
           var child = new tabris.TextView();
 
-          expect(function() {
+          expect(() => {
             widget.append(child);
           }).toThrowError("TestType cannot contain children");
           expect(widget.children()).not.toContain(child);
@@ -392,7 +428,7 @@ describe("Widget", function() {
           tabris.TestType._supportsChildren = function() { return false; };
           var child = new tabris.TextView();
 
-          expect(function() {
+          expect(() => {
             widget.append(child);
           }).toThrowError("TestType cannot contain children of type TextView");
           expect(widget.children()).not.toContain(child);
@@ -479,7 +515,7 @@ describe("Widget", function() {
       describe("when called with non-widget", function() {
 
         it("throws an error", function() {
-          expect(function() {
+          expect(() => {
             widget.appendTo({});
           }).toThrowError("Cannot append to non-widget");
         });
@@ -498,19 +534,19 @@ describe("Widget", function() {
       });
 
       it("throws when disposed", function() {
-        expect(function() {
+        expect(() => {
           widget.insertBefore({});
         }).toThrowError("Cannot insert before non-widget");
       });
 
       it("throws when called with a non-widget", function() {
-        expect(function() {
+        expect(() => {
           widget.insertBefore({});
         }).toThrowError("Cannot insert before non-widget");
       });
 
       it("throws when called with an empty widget collection", function() {
-        expect(function() {
+        expect(() => {
           widget.insertBefore(parent1.find(".missing"));
         }).toThrowError("Cannot insert before non-widget");
       });
@@ -582,19 +618,19 @@ describe("Widget", function() {
       it("throws when disposed", function() {
         widget.dispose();
 
-        expect(function() {
+        expect(() => {
           widget.insertAfter({});
         }).toThrowError("Object is disposed");
       });
 
       it("throws when called with a non-widget", function() {
-        expect(function() {
+        expect(() => {
           widget.insertAfter({});
         }).toThrowError("Cannot insert after non-widget");
       });
 
       it("throws when called with an empty widget collection", function() {
-        expect(function() {
+        expect(() => {
           widget.insertAfter(parent1.find(".missing"));
         }).toThrowError("Cannot insert after non-widget");
       });
@@ -730,14 +766,6 @@ describe("Widget", function() {
       var result = widget.get("background");
 
       expect(result).toBe("rgba(0, 0, 0, 0)");
-    });
-
-    it("translates font to string", function() {
-      spyOn(nativeBridge, "get").and.returnValue([["Arial"], 12, true, true]);
-
-      var result = widget.get("font");
-
-      expect(result).toBe("italic bold 12px Arial");
     });
 
     it("translates bounds to object", function() {
@@ -904,7 +932,7 @@ describe("Widget", function() {
       nativeBridge.resetCalls();
     });
 
-    ["left", "right", "top", "bottom"].forEach(function(attr) {
+    ["left", "right", "top", "bottom"].forEach((attr) => {
 
       it("modifies layoutData", function() {
         widget.set(attr, ["#other", 10]);
@@ -967,7 +995,7 @@ describe("Widget", function() {
 
     });
 
-    ["width", "height", "centerX", "centerY"].forEach(function(attr) {
+    ["width", "height", "centerX", "centerY"].forEach((attr) => {
 
       it("modifies layoutData", function() {
         widget.set(attr, 23);
@@ -1040,7 +1068,7 @@ describe("Widget", function() {
     });
 
     it("does not fail when there are no children", function() {
-      expect(function() {
+      expect(() => {
         parent._flushLayout();
       }).not.toThrow();
     });

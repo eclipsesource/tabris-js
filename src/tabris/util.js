@@ -1,5 +1,4 @@
 /* global _: true */
-/* jshint unused: false */
 var _ = {
 
   extend: function(target) {

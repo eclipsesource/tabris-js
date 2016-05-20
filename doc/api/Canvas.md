@@ -43,5 +43,6 @@ The following `CanvasRenderingContext2D` properties are supported:
 * lineJoin
 * fillStyle
 * strokeStyle
+* font
 * textAlign
 * textBaseline

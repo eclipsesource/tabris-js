@@ -1,6 +1,6 @@
 {
   "type": "Device",
-  "object": "tabris.device",
+  "object": "device",
   "include": ["Events", "Properties"],
   "description": "The object `tabris.device` provides information about the device that executes the application. All properties are read-only.",
   "properties": {
@@ -42,7 +42,7 @@
       "parameters": [
         {
           "name": "device",
-          "type": "tabris.device"
+          "type": "Device"
         },
         {
           "name": "orientation",

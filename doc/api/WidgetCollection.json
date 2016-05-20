@@ -62,41 +62,63 @@
         "description": "Disposes all widgets in this collection."
       }
     ],
-    "first": {
-      "parameters": [],
-      "returns": "Widget",
-      "description": "Returns the first widget in the collection. Same as `collection[0]`."
-    },
-    "last": {
-      "parameters": [],
-      "returns": "Widget",
-      "description": "Returns the last widget in the collection. Same as `collection[collection.length - 1]`."
-    },
-    "toArray": {
-      "parameters": [],
-      "returns": "widget[]",
-      "description": "Return an Array containing all widgets in the collection."
-    },
-    "forEach": {
-      "parameters": [
-        {"name": "callback", "type": "Function", "description": "The function to call. The arguments are: *widget*, *index*, *WidgetCollection*"}
-      ],
-      "description": "Calls the given callback for each widget in the collection."
-    },
-    "filter": {
-      "parameters": [
-        {"name": "selector", "type": "Selector"}
-      ],
-      "returns": "WidgetCollection",
-      "description": "Returns a new *WidgetCollection* containing all widgets in this collection that match the given selector."
-    },
-    "indexOf": {
-      "parameters": [
-        {"name": "widget", "type": "Widget"}
-      ],
-      "returns": "number",
-      "description": "Returns the index of the given widget within the collection. If there is no match, the return value is `-1`."
-    }
+    "first": [
+      {
+        "parameters": [],
+        "returns": "Widget",
+        "description": "Returns the first widget in the collection. Same as `collection[0]`."
+      }
+    ],
+    "last": [
+      {
+        "parameters": [],
+        "returns": "Widget",
+        "description": "Returns the last widget in the collection. Same as `collection[collection.length - 1]`."
+      }
+    ],
+    "toArray": [
+      {
+        "parameters": [],
+        "returns": "Widget[]",
+        "description": "Return an Array containing all widgets in the collection."
+      }
+    ],
+    "forEach": [
+      {
+        "parameters": [
+          {
+            "name": "callback",
+            "type": "Function",
+            "description": "The function to call. The arguments are: *widget*, *index*, *WidgetCollection*"
+          }
+        ],
+        "description": "Calls the given callback for each widget in the collection."
+      }
+    ],
+    "filter": [
+      {
+        "parameters": [
+          {
+            "name": "selector",
+            "type": "Selector"
+          }
+        ],
+        "returns": "WidgetCollection",
+        "description": "Returns a new *WidgetCollection* containing all widgets in this collection that match the given selector."
+      }
+    ],
+    "indexOf": [
+      {
+        "parameters": [
+          {
+            "name": "widget",
+            "type": "Widget"
+          }
+        ],
+        "returns": "number",
+        "description": "Returns the index of the given widget within the collection. If there is no match, the return value is `-1`."
+      }
+    ]
   },
   "fields": {
     "length": {
