@@ -75,13 +75,13 @@ function handlePanFinished(event, container) {
 
 function animateDismiss(event, container) {
   var bounds = container.get("bounds");
-  container.once("animationend", function() {
-    collectionView.remove(container.parent().get("itemIndex"));
-  }).animate({
+  container.animate({
     transform: {translationX: sign(event.translation.x) * bounds.width}
   }, {
     duration: 200,
     easing: "ease-out"
+  }).then(function() {
+    collectionView.remove(container.parent().get("itemIndex"));
   });
 }
 

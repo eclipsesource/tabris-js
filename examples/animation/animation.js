@@ -11,9 +11,7 @@ new tabris.Button({
   layoutData: {left: MARGIN, right: MARGIN, top: MARGIN}
 }).on("select", function(button) {
   button.set("enabled", false);
-  page.children("#helloLabel").first().once("animationend", function() {
-    button.set("enabled", true);
-  }).animate({
+  page.children("#helloLabel").first().animate({
     opacity: 0.25,
     transform: {
       rotation: 0.75 * Math.PI,
@@ -28,6 +26,8 @@ new tabris.Button({
     repeat: 1,
     reverse: true,
     easing: "ease-out" // "linear", "ease-in", "ease-out", "ease-in-out"
+  }).then(function() {
+    button.set("enabled", true);
   });
 }).appendTo(page);
 

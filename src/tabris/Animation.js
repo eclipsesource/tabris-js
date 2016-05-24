@@ -19,8 +19,11 @@
       },
       Completion: {
         trigger: function() {
-          this._target._off("dispose", this.dispose, this);
+          this._target._off("dispose", this.abort, this);
           this._target.trigger("animationend", this._target, this._options);
+          if (this._resolve) {
+            this._resolve();
+          }
           this.dispose();
         }
       }
@@ -38,6 +41,13 @@
 
     start: function() {
       this._nativeCall("start");
+    },
+
+    abort: function() {
+      if (this._reject) {
+        this._reject();
+      }
+      this.dispose();
     }
 
   });
@@ -68,8 +78,12 @@
     }));
     animation._target = this;
     animation._options = options;
-    this._on("dispose", animation.dispose, animation);
+    this._on("dispose", animation.abort, animation);
     animation.start();
+    return new Promise(function(resolve, reject) {
+      animation._resolve = resolve;
+      animation._reject = reject;
+    });
   };
 
   var animatable = {

@@ -84,16 +84,12 @@ function animateInScaleUp(widget, delay) {
 }
 
 function animateOutLeftCreateCurrentPerson(person) {
-  detailView.once("animationend", function() {
-    detailView.dispose();
-    detailView = createPersonDetail(detailsParent, person, 0);
-  }).animate({
-    opacity: 0.0,
-    transform: {translationX: -64}
-  }, {
-    duration: 500,
-    easing: "ease-out"
-  });
+  detailView
+    .animate({opacity: 0.0, transform: {translationX: -64}}, {duration: 500, easing: "ease-out"})
+    .then(function() {
+      detailView.dispose();
+      detailView = createPersonDetail(detailsParent, person, 0);
+    });
 }
 
 function createPersonDetail(parent, person, delay) {

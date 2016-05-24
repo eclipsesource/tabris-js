@@ -98,7 +98,8 @@
           {"name": "properties", "type": "Object", "description": "The properties and target values to animate."},
           {"name": "options", "type": "Object", "description": "Configures the animation itself."}
         ],
-        "description": "Starts an animation that transforms the given properties from their current values to the given ones. Supported properties are *transform* and *opacity*. Supported options are:\n\n- *delay* - time until the animation starts in ms, defaults to `0`\n- *duration* - in ms,\n- *easing* - one of `linear`, `ease-in`, `ease-out`, `ease-in-out`\n- *repeat* - number of times to repeat the animation, defaults to `0`\n- *reverse* - `true` to alternate the direction of the animation on every repeat.\n- *name* - no effect, but will be given in animation events"
+        "returns": "Promise<any>",
+        "description": "Starts an animation that transforms the given properties from their current values to the given ones. Supported properties are *transform* and *opacity*. Supported options are:\n\n- *delay* - time until the animation starts in ms, defaults to `0`\n- *duration* - in ms,\n- *easing* - one of `linear`, `ease-in`, `ease-out`, `ease-in-out`\n- *repeat* - number of times to repeat the animation, defaults to `0`\n- *reverse* - `true` to alternate the direction of the animation on every repeat.\n- *name* - no effect, but will be given in animation events.\nReturns a promise that is resolved once the animation is completed and is rejected if the animation is aborted."
       }
     ],
     "dispose": [

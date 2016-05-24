@@ -86,7 +86,9 @@ The `options` object may contain additional information about the event. It may 
 
 ## Animations
 
-All widgets have the method [`animate(properties, options)`](api/Widget.md#animateproperties-options). It expects a map of properties to animate (akin to the `set` method), and a set of options for the animation itself. Currently, only the properties `transform` and `opacity` can be animated
+All widgets have the method [`animate(properties, options)`](api/Widget.md#animateproperties-options). It expects a map of properties to animate (akin to the `set` method), and a set of options for the animation itself.
+All animated properties are set to their target value as soon as the animation starts. Therefore, calling `get` will always return either the start or target value, never one in between.
+Only the properties `transform` and `opacity` can be animated.
 
 Each animate call will be followed by up to two events fired on the widget:
 
@@ -117,7 +119,22 @@ label.animate({
 });
 ```
 
-The animated properties are set to their target value as soon as the animation starts. Therefore, calling `get` will always return either the start or target value, never one in between.
+The `animate` method also returns a promise that is resolved once the animation is completed. If the animation is aborted, e.g. by disposing the widget, the promise is rejected. Often it's more readable to use the promise over the `animationend` event:
+
+```javascript
+label.animate({
+  opacity: 0,
+  transform: {
+    translationX: 200,
+    scaleX: 0.1
+  }
+}, {
+  duration: 1000,
+  easing: "ease-out"
+}).then(function() {
+  label.dispose();
+});
+```
 
 ## The Widget Tree
 

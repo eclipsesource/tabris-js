@@ -166,8 +166,41 @@ describe("Animation", function() {
       expect(nativeBridge.calls({op: "destroy", id: animationId()}).length).toBe(1);
     });
 
-    it("returns nothing", function() {
-      expect(widget.animate({}, {})).not.toBeDefined();
+    it("returns unresolved Promise", function(done) {
+      var thenCallback = jasmine.createSpy();
+
+      widget.animate({}, {}).then(thenCallback);
+
+      setTimeout(function() {
+        expect(thenCallback).not.toHaveBeenCalled();
+        done();
+      }, 100);
+    });
+
+    it("returns Promise that resolves on completion", function(done) {
+      var thenCallback = jasmine.createSpy();
+      widget.animate({}, {}).then(thenCallback);
+
+      tabris._notify(animationId(), "Completion", {});
+
+      setTimeout(function() {
+        expect(thenCallback).toHaveBeenCalled();
+        done();
+      }, 100);
+    });
+
+    it("returns Promise that rejects on widget dispose", function(done) {
+      var thenCallback = jasmine.createSpy();
+      var rejectCallback = jasmine.createSpy();
+      widget.animate({}, {}).then(thenCallback, rejectCallback);
+
+      widget.dispose();
+
+      setTimeout(function() {
+        expect(thenCallback).not.toHaveBeenCalled();
+        expect(rejectCallback).toHaveBeenCalled();
+        done();
+      }, 100);
     });
 
   });
