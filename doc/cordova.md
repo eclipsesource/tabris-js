@@ -6,18 +6,17 @@ The JavaScript API documentation of a Cordova plug-ins is also valid in Tabris.j
 ## Default Plug-Ins
 While using the [Tabris.js Developer App](getting-started.md), your application can directly access the following pre-packaged plug-ins:
 
-* [Badge](http://plugins.cordova.io/#/package/de.appplant.cordova.plugin.badge)
-* [Camera](http://plugins.cordova.io/#/package/org.apache.cordova.camera)
-* [Device Motion](http://plugins.cordova.io/#/package/org.apache.cordova.device-motion)
-* [Dialogs](http://plugins.cordova.io/#/package/org.apache.cordova.dialogs)
-* [Network Information](http://plugins.cordova.io/#/package/org.apache.cordova.network-information)
-* [Toast](http://plugins.cordova.io/#/package/nl.x-services.plugins.toast)
-* [Touch Id](http://plugins.cordova.io/#/package/io.monaca.touchid)
-* [BarcodeScanner](http://plugins.cordova.io/#/package/com.phonegap.plugins.barcodescanner)
-* [Google Analytics](http://plugins.cordova.io/#/package/com.cmackay.plugins.googleanalytics)
-* [Google Play Services](http://plugins.cordova.io/#/package/com.google.playservices)
+* [Badge](https://www.npmjs.com/package/de.appplant.cordova.plugin.badge)
+* [Camera](https://www.npmjs.com/package/cordova-plugin-camera)
+* [Device Motion](https://www.npmjs.com/package/cordova-plugin-device-motion)
+* [Dialogs](https://www.npmjs.com/package/cordova-plugin-dialogs)
+* [Network Information](https://www.npmjs.com/package/cordova-plugin-network-information)
+* [Toast](https://www.npmjs.com/package/cordova-plugin-x-toast)
+* [BarcodeScanner](https://www.npmjs.com/package/phonegap-plugin-barcodescanner)
+* [Google Analytics](https://www.npmjs.com/package/com.cmackay.plugins.googleanalytics)
+* [Google Play Services](https://www.npmjs.com/package/cordova-plugin-googleplayservices)
 
-These plug-ins have tested with Tabris.js and a [demo](https://github.com/eclipsesource/tabris-js/tree/master/examples/cordova) can be found among the Tabris.js examples.
+These plug-ins have been tested with Tabris.js and a [demo](https://github.com/eclipsesource/tabris-js/tree/master/examples/cordova) can be found among the Tabris.js examples.
 
 Please note, default plug-ins are only included in the debug version of an app. If you want to use them in the release version, you should add them via `<plugin>` tags in the Cordova `config.xml` file: [Adding Plug-Ins](build.md#adding-plugins).
 
