@@ -8,10 +8,11 @@ var tabFolder = new tabris.TabFolder({
   paging: true // enables swiping. To still be able to open the developer console in iOS, swipe from the bottom right.
 }).appendTo(page);
 
-var createTab = function(title, image) {
+var createTab = function(title, image, seletedImage) {
   var tab = new tabris.Tab({
     title: title, // converted to upper-case on Android
-    image: {src: image, scale: 2}
+    image: {src: image, scale: 2},
+    selectedImage: {src: seletedImage, scale: 2} // only used by iOS
   }).appendTo(tabFolder);
   new tabris.TextView({
     layoutData: {centerX: 0, centerY: 0},
@@ -19,9 +20,9 @@ var createTab = function(title, image) {
   }).appendTo(tab);
 };
 
-createTab("Cart", "images/cart.png");
-createTab("Pay", "images/card.png");
-createTab("Statistic", "images/chart.png");
+createTab("Cart", "images/cart.png", "images/cart-filled.png");
+createTab("Pay", "images/card.png", "images/card-filled.png");
+createTab("Statistic", "images/chart.png", "images/chart-filled.png");
 
 page.open();
 

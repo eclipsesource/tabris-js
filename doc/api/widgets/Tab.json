@@ -11,6 +11,10 @@
       "type": "Image",
       "description": "An image to be displayed on the tab."
     },
+    "selectedImage": {
+      "type": "Image",
+      "description": "An image to be displayed on the currently active tab. Only supported on iOS."
+    },
     "badge": {
       "type": "string",
       "description": "A badge to attach to the tab. Only supported on iOS."

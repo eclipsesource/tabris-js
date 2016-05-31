@@ -2,7 +2,7 @@ tabris.load(function() {
 
   if (device.platform !== "windows") {
 
-    var itemProps = ["title", "badge", "image", "visible"];
+    var itemProps = ["title", "badge", "image", "selectedImage", "visible"];
 
     tabris.registerWidget("_TabItem", {
       _type: "rwt.widgets.TabItem",
@@ -16,6 +16,7 @@ tabris.load(function() {
           }
         },
         image: {nocache: true},
+        selectedImage: {nocache: true},
         badge: {nocache: true},
         control: "any",
         index: "any"
@@ -123,6 +124,18 @@ tabris.load(function() {
             set: function(name, value, options) {
               if (this._tabItem) {
                 this._tabItem._setProperty("image", value);
+              }
+              this._storeProperty(name, value, options);
+            }
+          }
+        },
+        selectedImage: {
+          type: "image",
+          default: null,
+          access: {
+            set: function(name, value, options) {
+              if (this._tabItem) {
+                this._tabItem._setProperty("selectedImage", value);
               }
               this._storeProperty(name, value, options);
             }

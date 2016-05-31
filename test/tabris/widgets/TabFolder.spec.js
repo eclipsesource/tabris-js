@@ -48,6 +48,7 @@ describe("TabFolder", function() {
       tab = new tabris.Tab({
         title: "foo",
         image: {src: "bar"},
+        selectedImage: {src: "selectedBar"},
         badge: "1",
         background: "#010203",
         visible: false
@@ -71,6 +72,7 @@ describe("TabFolder", function() {
     it("getter returns item properties", function() {
       expect(tab.get("title")).toBe("foo");
       expect(tab.get("image")).toEqual({src: "bar"});
+      expect(tab.get("selectedImage")).toEqual({src: "selectedBar"});
       expect(tab.get("badge")).toBe("1");
       expect(tab.get("visible")).toBe(false);
     });
@@ -79,6 +81,7 @@ describe("TabFolder", function() {
       tab = new tabris.Tab();
       expect(tab.get("title")).toBe("");
       expect(tab.get("image")).toBe(null);
+      expect(tab.get("selectedImage")).toBe(null);
       expect(tab.get("badge")).toBe("");
       expect(tab.get("visible")).toBe(true);
     });
@@ -120,6 +123,7 @@ describe("TabFolder", function() {
       it("sets the item properties to the TabItem", function() {
         expect(itemCreate.properties.text).toBe("foo");
         expect(itemCreate.properties.image).toEqual(["bar", null, null, null]);
+        expect(itemCreate.properties.selectedImage).toEqual(["selectedBar", null, null, null]);
         expect(itemCreate.properties.badge).toBe("1");
         expect(itemCreate.properties.visibility).toBe(false);
       });
@@ -129,11 +133,12 @@ describe("TabFolder", function() {
       });
 
       it("getter gets item properties from cache", function() {
-        tab.set({title: "foo", "badge": "bar", image: "foobar.jpg"});
+        tab.set({title: "foo", "badge": "bar", image: "foobar.jpg", selectedImage: "selectedFoobar.jpg"});
 
         expect(tab.get("title")).toBe("foo");
         expect(tab.get("badge")).toBe("bar");
         expect(tab.get("image")).toEqual({src: "foobar.jpg"});
+        expect(tab.get("selectedImage")).toEqual({src: "selectedFoobar.jpg"});
       });
 
       it("children list contains only the tab", function() {
