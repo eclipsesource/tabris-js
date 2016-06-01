@@ -52,7 +52,7 @@
         }
       },
       refreshEnabled: {type: "boolean", default: false},
-      refreshIndicator: {type: "boolean", default: false},
+      refreshIndicator: {type: "boolean", nocache: true},
       refreshMessage: {type: "string", default: ""},
       firstVisibleIndex: {
         type: "number",

@@ -41,8 +41,17 @@ describe("CollectionView", function() {
       expect(view.get("initializeCell")).toBe(null);
       expect(view.get("cellType")).toBe(null);
       expect(view.get("refreshEnabled")).toBe(false);
-      expect(view.get("refreshIndicator")).toBe(false);
       expect(view.get("refreshMessage")).toBe("");
+    });
+
+    describe("refreshIndicator", function() {
+
+      it("calls native GET", function() {
+        spyOn(nativeBridge, "get").and.returnValue(false);
+
+        expect(view.get("refreshIndicator")).toBe(false);
+      });
+
     });
 
     ["firstVisibleIndex", "lastVisibleIndex"].forEach((prop) => {
