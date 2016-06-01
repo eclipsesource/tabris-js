@@ -4,7 +4,7 @@
 
 A Tabris.js widget consists of a [JavaScript API](custom-widgets.md) and a native client side implementation. This document describes how to create the native implementation for a custom widget on the iOS platform.
 
-To implement a custom widget you’ll need the Tabris.js SDK, which is available as part of the [Pro](https://tabrisjs.com/pricing/) plan.
+In order to implement a custom widget you will need to build locally. Follow the [Local Build guide](local-build.md).
 
 ### Building upon Cordova infrastructure
 
