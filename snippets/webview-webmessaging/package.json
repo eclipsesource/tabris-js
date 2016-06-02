@@ -1,0 +1,9 @@
+{
+  "title": "WebView communication with native app",
+  "category": "WebView",
+  "description": "Communicate between WebView and native app via web messages",
+  "main": "webview-webmessaging.js",
+  "dependencies": {
+    "tabris": "^1.9.0"
+  }
+}

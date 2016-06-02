@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+      window.addEventListener("message", function(event) {
+        document.getElementById("paragraph").innerHTML = "Message received: " + event.data;
+      });
+      function sendMessage() {
+        window.parent.postMessage("Hello from the WebView", "*");
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Web Messaging</h1>
+    <p id="paragraph">No message received from Tabris.js</p>
+    <button type="button" onclick="sendMessage()">Send Web Message</button>
+  </body>
+</html>
