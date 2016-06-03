@@ -12,7 +12,7 @@ var createTab = function(title, image, seletedImage) {
   var tab = new tabris.Tab({
     title: title, // converted to upper-case on Android
     image: {src: image, scale: 2},
-    selectedImage: {src: seletedImage, scale: 2} // only used by iOS
+    selectedImage: {src: seletedImage, scale: 2}
   }).appendTo(tabFolder);
   new tabris.TextView({
     layoutData: {centerX: 0, centerY: 0},

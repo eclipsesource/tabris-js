@@ -13,7 +13,7 @@
     },
     "selectedImage": {
       "type": "Image",
-      "description": "An image to be displayed on the currently active tab. Only supported on iOS."
+      "description": "An image to be displayed on the currently active tab."
     },
     "badge": {
       "type": "string",
