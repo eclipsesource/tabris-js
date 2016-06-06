@@ -10,7 +10,7 @@ If you're targeting iOS you will need MacOS, while Android apps can be build on 
 
 You also need a Cordova installation. Follow the [Cordova Installation Guide](http://cordova.apache.org/docs/en/edge/guide_cli_index.md.html#The%20Command-Line%20Interface_installing_the_cordova_cli) and install the latest Cordova version on your system.
 
-The Cordova CLI expects a [standard directory layout](https://cordova.apache.org/docs/en/4.0.0/guide_cli_index.md.html#The%20Command-Line%20Interface_create_the_app). That is, the `config.xml` is required at the root of the project and a `www` folder must exist which contains your actual Tabris.js app.
+The Cordova CLI expects a [standard directory layout](http://cordova.apache.org/docs/en/latest/reference/cordova-cli/index.html#directory-structure). That is, the `config.xml` is required at the root of the project and a `www` folder must exist which contains your actual Tabris.js app.
 ```
 /
 |- cordova/
