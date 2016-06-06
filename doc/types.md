@@ -19,7 +19,7 @@ Example:
 var buttonWidth = button.get("bounds").width;
 ```
 
-See also [Layout](Layout.md).
+See also [Layout](layout.md).
 
 ## Color
 
@@ -48,7 +48,7 @@ Examples:
 
 A positive float, or 0, representing device independent pixels.
 
-See also [Layout](Layout.md).
+See also [Layout](layout.md).
 
 ## Margin
 
@@ -67,7 +67,7 @@ Distance to a parent's or sibling's opposing edge in one of these formats:
 * `[selector, offset]`
 * `["prev()", offset]`
 
-See also [Layout](Layout.md).
+See also [Layout](layout.md).
 
 ## Font
 
@@ -117,13 +117,13 @@ Used to define how a widget should be arranged within its parent. See ["Layouts"
 
 A positive or negative float, or 0, representing device independent pixels.
 
-See also [Layout](Layout.md).
+See also [Layout](layout.md).
 
 ## Percentage
 
 A string starting with a number (int) followed directly by "%". May be negative.
 
-See also [Layout](Layout.md).
+See also [Layout](layout.md).
 
 ## TouchEvent
 
