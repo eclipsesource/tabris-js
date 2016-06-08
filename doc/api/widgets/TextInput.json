@@ -43,6 +43,10 @@
       "values": ["ascii", "decimal", "email", "number", "numbersAndPunctuation", "phone", "url", "default"],
       "default": "default",
       "description": "Selects the keyboard type to use for editing this widget."
+    },
+    "focused": {
+      "type": "boolean",
+      "description": "Reflects whether this widget has the keyboard focus. Setting this property to `true` will focus the widget and open the virtual keyboard, setting it to `false` will remove the focus and hide the virtual keyboard."
     }
   },
   "events": {

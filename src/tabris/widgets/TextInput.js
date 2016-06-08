@@ -36,6 +36,7 @@ tabris.registerWidget("TextInput", {
     keyboard: {
       type: ["choice", ["ascii", "decimal", "email", "number", "numbersAndPunctuation", "phone", "url", "default"]],
       default: "default"
-    }
+    },
+    focused: {type: "boolean", nocache: true}
   }
 });
