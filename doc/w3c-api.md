@@ -18,7 +18,7 @@ console.info("An info message");
 console.debug("A debug Message");
 ```
 
-Calling `console.error` will also cause a message to pop up (even if the developer console is closed), but it won't interrupt script execution.  
+Calling `console.error` will also cause a message to pop up (even if the developer console is closed), but it won't interrupt script execution.
 
 ## Timer
 
@@ -66,3 +66,8 @@ The `Canvas` widget provides an HTML5 canvas compatible "2D Context" object. See
 
 See [W3C](http://www.w3.org/TR/2dcontext/) / [MDN](https://developer.mozilla.org/en/docs/Web/API/CanvasRenderingContext2D)
 
+## Random Source (Crypto)
+
+The global object `crypto` provides an implementation of the [RandomSource](https://developer.mozilla.org/en/docs/Web/API/RandomSource) interface. It can be used to generate cryptographically secure random numbers.
+
+See [W3C](https://dvcs.w3.org/hg/webcrypto-api/raw-file/tip/spec/Overview.html#crypto-interface) / [MDN](https://developer.mozilla.org/en/docs/Web/API/RandomSource/getRandomValues)

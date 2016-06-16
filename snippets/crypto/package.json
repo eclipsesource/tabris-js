@@ -1,0 +1,9 @@
+{
+  "title": "Secure Random Number",
+  "category": "Crypto",
+  "description": "Create a secure random number",
+  "main": "crypto.js",
+  "dependencies": {
+    "tabris": "^1.9.0"
+  }
+}
