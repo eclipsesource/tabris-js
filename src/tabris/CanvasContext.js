@@ -189,13 +189,13 @@
     }
     this._flush();
     // TODO check validity of args
-    var array = this._gc._nativeCall("getImageData", {
+    var uint8ClampedArray = this._gc._nativeCall("getImageData", {
       x: x,
       y: y,
       width: width,
       height: height
     });
-    return new tabris.ImageData(new Uint8ClampedArray(array), width, height);
+    return new tabris.ImageData(uint8ClampedArray, width, height);
   };
 
   tabris.CanvasContext.prototype.putImageData = function(imageData, x, y) {
