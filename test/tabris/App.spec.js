@@ -9,36 +9,70 @@ describe("App", function() {
     app = new tabris._App();
   });
 
-  it("listens for Pause event", function() {
+  it("listens for pause event", function() {
     var listener = jasmine.createSpy();
 
     app.on("pause", listener);
 
-    var calls = nativeBridge.calls({id: app.cid, op: "listen", event: "Pause"});
+    var calls = nativeBridge.calls({id: app.cid, op: "listen", event: "pause"});
     expect(calls[0].listen).toBe(true);
   });
 
   it("triggers pause event", function() {
     var listener = jasmine.createSpy();
     app.on("pause", listener);
-    tabris._notify(app.cid, "Pause");
+    tabris._notify(app.cid, "pause");
 
     expect(listener).toHaveBeenCalled();
   });
 
-  it("listens for Resume event", function() {
+  it("listens for resume event", function() {
     var listener = jasmine.createSpy();
 
     app.on("resume", listener);
 
-    var calls = nativeBridge.calls({id: app.cid, op: "listen", event: "Resume"});
+    var calls = nativeBridge.calls({id: app.cid, op: "listen", event: "resume"});
     expect(calls[0].listen).toBe(true);
   });
 
   it("triggers resume event", function() {
     var listener = jasmine.createSpy();
     app.on("resume", listener);
-    tabris._notify(app.cid, "Resume");
+    tabris._notify(app.cid, "resume");
+
+    expect(listener).toHaveBeenCalled();
+  });
+
+  it("listens for foreground event", function() {
+    var listener = jasmine.createSpy();
+
+    app.on("foreground", listener);
+
+    var calls = nativeBridge.calls({id: app.cid, op: "listen", event: "foreground"});
+    expect(calls[0].listen).toBe(true);
+  });
+
+  it("triggers foreground event", function() {
+    var listener = jasmine.createSpy();
+    app.on("foreground", listener);
+    tabris._notify(app.cid, "foreground");
+
+    expect(listener).toHaveBeenCalled();
+  });
+
+  it("listens for background event", function() {
+    var listener = jasmine.createSpy();
+
+    app.on("background", listener);
+
+    var calls = nativeBridge.calls({id: app.cid, op: "listen", event: "background"});
+    expect(calls[0].listen).toBe(true);
+  });
+
+  it("triggers background event", function() {
+    var listener = jasmine.createSpy();
+    app.on("background", listener);
+    tabris._notify(app.cid, "background");
 
     expect(listener).toHaveBeenCalled();
   });
