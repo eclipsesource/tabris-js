@@ -408,9 +408,7 @@
       if (!isValidHttpHeaderValue(value)) { // (4)
         throw new TypeError("Invalid HTTP header value, failed to execute 'open'");
       }
-      if (isForbiddenHeader(header)) { // (5)
-        throw new Error("Cannot set forbidden header '" + header + "'");
-      }
+      // (5) (No headers are filtered out as this restriction does not apply to native apps)
       if (header in scope.authorRequestHeaders) { // (6):
         scope.authorRequestHeaders[header] = scope.authorRequestHeaders[header] + ", " + value; // (7)
       } else {
@@ -427,10 +425,7 @@
       if (scope.error) { // (2)
         return null;
       }
-      var forbiddenHeaders = ["set-cookie", "set-cookie2", "status"]; // (3)
-      if (forbiddenHeaders.indexOf(header.toLowerCase()) > -1) {
-        return null;
-      }
+      // (3) (No headers are filtered out as this restriction does not apply to native apps)
       for (var key in scope.responseHeaders) { // (4), (5)
         if (key.toLowerCase() === header.toLowerCase()) {
           return scope.responseHeaders[key];
@@ -454,11 +449,8 @@
 
   function stringifyResponseHeaders(headers) {
     var string = [];
-    var forbiddenHeaders = ["set-cookie", "set-cookie2", "status"];
     for (var key in headers) {
-      if (forbiddenHeaders.indexOf(key.toLowerCase()) < 0) {
-        string.push(key + ": " + headers[key]);
-      }
+      string.push(key + ": " + headers[key]);
     }
     return string.join("\n");
   }
@@ -565,10 +557,6 @@
     return /^[\x09\x0A\x0D\x20-\x7E\xA0-\xFF]*$/.test(value) && value.indexOf("\n") < 0 && value.indexOf("\r") < 0;
   }
 
-  function isForbiddenHeader(header) {
-    return forbiddenHeaders.indexOf(header.toLowerCase()) > -1;
-  }
-
   var supportedSchemes = ["http", "https", "file"];
 
   function validateUrl(url) {
@@ -583,29 +571,6 @@
     var match = /^(\S+?):/.exec(url);
     return match ? match[1] : null;
   }
-
-  var forbiddenHeaders = [
-    "accept-charset",
-    "accept-encoding",
-    "access-control-request-headers",
-    "access-control-request-method",
-    "connection",
-    "content-length",
-    "cookie",
-    "date",
-    "dnt",
-    "expect",
-    "host",
-    "keep-alive",
-    "origin",
-    "referer",
-    "te",
-    "trailer",
-    "transfer-encoding",
-    "upgrade",
-    "user-agent",
-    "via"
-  ];
 
   // -----------------------------------------------------------------
   // Event dispatcher

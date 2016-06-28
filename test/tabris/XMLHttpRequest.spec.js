@@ -689,15 +689,6 @@ describe("XMLHttpRequest", function() {
       }).not.toThrow();
     });
 
-    it("fails with case variant of forbidden header", function() {
-      xhr.open("GET", "http://foo.com");
-      expect(() => {
-        xhr.setRequestHeader("acCept-charseT", "foo");
-      }).toThrowError(
-        "Cannot set forbidden header 'acCept-charseT'"
-      );
-    });
-
     it("fails when send invoked", function() {
       xhr.open("GET", "http://foo.com");
       xhr.send();
@@ -738,7 +729,7 @@ describe("XMLHttpRequest", function() {
       expect(xhr.getAllResponseHeaders()).toBe("");
     });
 
-    it("returns response headers without forbidden headers", function() {
+    it("returns response headers", function() {
       proxy.trigger("StateChange", {
         state: "headers",
         code: 200,
@@ -750,7 +741,8 @@ describe("XMLHttpRequest", function() {
           "Header-Name2": "bar, baz"
         }
       });
-      expect(xhr.getAllResponseHeaders()).toBe("Header-Name1: foo\nHeader-Name2: bar, baz");
+      expect(xhr.getAllResponseHeaders()).toBe("Status: foo\nSet-Cookie: foo\nSet-Cookie2: foo\n"
+        + "Header-Name1: foo\nHeader-Name2: bar, baz");
     });
 
   });
@@ -785,22 +777,6 @@ describe("XMLHttpRequest", function() {
         headers: {"Header-Name1": "foo", "Header-Name2": "bar, baz"}
       });
       expect(xhr.getResponseHeader("Header-Name1")).toBe("foo");
-    });
-
-    it("doesn't return forbidden response headers", function() {
-      proxy.trigger("StateChange", {
-        state: "headers",
-        headers: {
-          Status: "foo",
-          "Set-Cookie": "foo",
-          "Set-Cookie2": "foo",
-          "Header-Name1": "foo",
-          "Header-Name2": "bar, baz"
-        }
-      });
-      expect(xhr.getResponseHeader("Status")).toBe(null);
-      expect(xhr.getResponseHeader("Set-Cookie")).toBe(null);
-      expect(xhr.getResponseHeader("Set-Cookie2")).toBe(null);
     });
 
     it("returns null when header not found", function() {
