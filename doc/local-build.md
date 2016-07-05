@@ -33,7 +33,6 @@ cordova platform add /Users/Me/Downloads/tabris-android
 ```
 or for Windows users:
 ```
-cordova platform add c:\MyDownloads\tabris-ios
 cordova platform add c:\MyDownloads\tabris-android
 ```
 
