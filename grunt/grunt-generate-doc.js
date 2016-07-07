@@ -49,7 +49,7 @@ module.exports = function (grunt) {
     grunt.log.verbose.writeln("Generating DOC for " + type);
     var json = data.widgets[type] || data.api[type];
     var result = [];
-    result.push("# " + title(json));
+    result.push("# " + title(json) + "\n");
     result.push(renderDescription(json));
     if (grunt.file.isFile(getTargetPath(json))) {
       result.push(grunt.file.read(getTargetPath(json)));
@@ -132,7 +132,7 @@ module.exports = function (grunt) {
       return "";
     }
     var result = [];
-    result.push("## Methods\n");
+    result.push("## Methods\n\n");
     Object.keys(json.methods).sort().forEach(function (name) {
       Array.prototype.forEach.call(json.methods[name], function (desc) {
         result.push(renderMethod(name, desc, data));
@@ -143,7 +143,7 @@ module.exports = function (grunt) {
 
   function renderMethod(name, desc, data) {
     var result = [];
-    result.push("### " + name + "(" + renderParamList(desc.parameters, data) + ")\n");
+    result.push("### " + name + "(" + renderParamList(desc.parameters, data) + ")\n\n");
     if (desc.parameters) {
       result.push("\n**Parameters:** " + renderParamList(desc.parameters, data, true) + "\n");
     }
@@ -156,7 +156,7 @@ module.exports = function (grunt) {
     if (desc.description) {
       result.push(desc.description);
     }
-    result.push("\n");
+    result.push("\n\n");
     return result.join("\n");
   }
 
@@ -165,10 +165,10 @@ module.exports = function (grunt) {
       return "";
     }
     var result = [];
-    result.push("## Properties\n");
+    result.push("## Properties\n\n");
     Object.keys(json.properties).sort().forEach(function (name) {
       var property = json.properties[name];
-      result.push("### ", name, "\n");
+      result.push("### ", name, "\n\n");
       result.push("Type: ", renderPropertyType(property, data), "\n");
       if (property.provisional) {
         result.push(provisionalNote);
@@ -180,7 +180,7 @@ module.exports = function (grunt) {
         result.push("<br/>This property can only be set on widget creation. " +
         "Once set, it cannot be changed anymore.");
       }
-      result.push("\n");
+      result.push("\n\n");
     });
     return result.join("");
   }
@@ -190,7 +190,7 @@ module.exports = function (grunt) {
       return "";
     }
     var result = [];
-    result.push("## Fields\n");
+    result.push("## Fields\n\n");
     Object.keys(json.fields).sort().forEach(function (name) {
       var field = json.fields[name];
       result.push("### ", name, "\n");
@@ -201,7 +201,7 @@ module.exports = function (grunt) {
       if (field.description) {
         result.push("\n" + field.description);
       }
-      result.push("\n");
+      result.push("\n\n");
     });
     return result.join("");
   }
@@ -223,7 +223,7 @@ module.exports = function (grunt) {
       return "";
     }
     var result = [];
-    result.push("## Events\n");
+    result.push("## Events\n\n");
     Object.keys(json.events).sort().forEach(function (name) {
       var event = json.events[name];
       result.push("### \"", name, "\" (" + renderParamList(event.parameters, data) + ")\n");
@@ -236,7 +236,7 @@ module.exports = function (grunt) {
       if (event.description) {
         result.push("\n" + event.description + "\n");
       }
-      result.push("\n");
+      result.push("\n\n");
     });
     return result.join("");
   }
@@ -266,7 +266,7 @@ module.exports = function (grunt) {
       return "";
     }
     var result = [];
-    result.push("## See also\n");
+    result.push("## See also\n\n");
     json.links.forEach(function (link) {
       result.push("- [", link.title, "](", link.path, ")\n");
     });
