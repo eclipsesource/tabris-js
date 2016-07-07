@@ -5,78 +5,81 @@ var page = new tabris.Page({
   topLevel: true
 });
 
+var scrollView = new tabris.ScrollView().appendTo(page);
+
 new tabris.TextView({
-  id: "firstNameLabel",
+  id: "nameLabel",
   alignment: "left",
-  text: "First Name:"
-}).appendTo(page);
+  text: "Name:"
+}).appendTo(scrollView);
 
 new tabris.TextInput({
-  id: "firstNameInput",
-  message: "First Name"
-}).appendTo(page);
+  id: "nameInput",
+  message: "Full Name"
+}).appendTo(scrollView);
 
 new tabris.TextView({
-  id: "lastNameLabel",
-  text: "Last Name:"
-}).appendTo(page);
+  id: "flyerNumberLabel",
+  text: "Flyer Number:"
+}).appendTo(scrollView);
 
 new tabris.TextInput({
-  id: "lastNameInput",
-  message: "Last Name"
-}).appendTo(page);
+  id: "flyerNumberInput",
+  keyboard: "number",
+  message: "Flyer Number"
+}).appendTo(scrollView);
 
 new tabris.TextView({
   id: "passphraseLabel",
   text: "Passphrase:"
-}).appendTo(page);
+}).appendTo(scrollView);
 
 new tabris.TextInput({
   id: "passphraseInput",
   type: "password",
   message: "Passphrase"
-}).appendTo(page);
+}).appendTo(scrollView);
 
 new tabris.TextView({
   id: "countryLabel",
   text: "Country:"
-}).appendTo(page);
+}).appendTo(scrollView);
 
 new tabris.Picker({
   id: "countryPicker",
   items: ["Germany", "Canada", "USA", "Bulgaria"]
-}).appendTo(page);
+}).appendTo(scrollView);
 
 new tabris.TextView({
   id: "classLabel",
   text: "Class:"
-}).appendTo(page);
+}).appendTo(scrollView);
 
 new tabris.Picker({
   id: "classPicker",
   items: ["Business", "Economy", "Economy Plus"]
-}).appendTo(page);
+}).appendTo(scrollView);
 
 new tabris.TextView({
   id: "seatLabel",
   text: "Seat:"
-}).appendTo(page);
+}).appendTo(scrollView);
 
 new tabris.RadioButton({
-  id: "window",
+  id: "windowSeat",
   text: "Window"
-}).appendTo(page);
+}).appendTo(scrollView);
 
 new tabris.RadioButton({
-  id: "aisle",
+  id: "aisleSeat",
   text: "Aisle"
-}).appendTo(page);
+}).appendTo(scrollView);
 
 new tabris.RadioButton({
-  id: "dontCareButton",
+  id: "anySeat",
   text: "Don't care",
   selection: true
-}).appendTo(page);
+}).appendTo(scrollView);
 
 new tabris.Composite({
   id: "luggagePanel"
@@ -94,14 +97,14 @@ new tabris.Composite({
   new tabris.Slider({
     id: "luggageSlider"
   }).on("change:selection", function(widget, selection) {
-    page.find("#luggageWeight").set("text", selection + " Kg");
+    scrollView.find("#luggageWeight").set("text", selection + " Kg");
   })
-).appendTo(page);
+).appendTo(scrollView);
 
 new tabris.CheckBox({
-  id: "veggie",
+  id: "veggieChoice",
   text: "Vegetarian"
-}).appendTo(page);
+}).appendTo(scrollView);
 
 new tabris.Composite({
   id: "milesPanel"
@@ -114,41 +117,41 @@ new tabris.Composite({
   new tabris.Switch({
     id: "milesSwitch"
   })
-).appendTo(page);
+).appendTo(scrollView);
 
 new tabris.Button({
-  id: "done",
+  id: "reservationButton",
   text: "Place Reservation",
   background: "#8b0000",
   textColor: "white"
 }).on("select", function() {
   populateMessage();
-}).appendTo(page);
+}).appendTo(scrollView);
 
-page.apply({
-  "#firstNameLabel": {layoutData: {left: 10, top: 18, width: 120}},
-  "#firstNameInput": {layoutData: {left: "#firstNameLabel 10", right: 10, baseline: "#firstNameLabel"}},
-  "#lastNameLabel": {layoutData: {left: 10, top: "#firstNameLabel 18", width: 120}},
-  "#lastNameInput": {layoutData: {left: "#lastNameLabel 10", right: 10, baseline: "#lastNameLabel"}},
-  "#passphraseLabel": {layoutData: {left: 10, top: "#lastNameLabel 18", width: 120}},
+scrollView.apply({
+  "#nameLabel": {layoutData: {left: 10, top: 18, width: 120}},
+  "#nameInput": {layoutData: {left: "#nameLabel 10", right: 10, baseline: "#nameLabel"}},
+  "#flyerNumberLabel": {layoutData: {left: 10, top: "#nameLabel 18", width: 120}},
+  "#flyerNumberInput": {layoutData: {left: "#flyerNumberLabel 10", right: 10, baseline: "#flyerNumberLabel"}},
+  "#passphraseLabel": {layoutData: {left: 10, top: "#flyerNumberLabel 18", width: 120}},
   "#passphraseInput": {layoutData: {left: "#passphraseLabel 10", right: 10, baseline: "#passphraseLabel"}},
   "#countryLabel": {layoutData: {left: 10, top: "#passphraseLabel 18", width: 120}},
   "#countryPicker": {layoutData: {left: "#countryLabel 10", right: 10, baseline: "#countryLabel"}},
   "#seatLabel": {layoutData: {left: 10, top: "#classLabel 18", width: 120}},
-  "#window": {layoutData: {left: "#seatLabel 10", right: 10, baseline: "#seatLabel"}},
-  "#aisle": {layoutData: {left: "#seatLabel 10", right: 10, top: "#seatLabel 10"}},
+  "#windowSeat": {layoutData: {left: "#seatLabel 10", right: 10, baseline: "#seatLabel"}},
+  "#aisleSeat": {layoutData: {left: "#seatLabel 10", right: 10, top: "#seatLabel 10"}},
   "#classLabel": {layoutData: {left: 10, top: "#countryLabel 18", width: 120}},
   "#classPicker": {layoutData: {left: "#classLabel 10", right: 10, baseline: "#classLabel"}},
-  "#dontCareButton": {layoutData: {left: "#seatLabel 10", right: 10, top: "#aisle 10"}},
-  "#luggagePanel": {layoutData: {left: 10, top: "#dontCareButton 18", right: 10}},
+  "#anySeat": {layoutData: {left: "#seatLabel 10", right: 10, top: "#aisleSeat 10"}},
+  "#luggagePanel": {layoutData: {left: 10, top: "#anySeat 18", right: 10}},
   "#luggageLabel": {layoutData: {left: 0, centerY: 0, width: 120}},
   "#luggageWeight": {layoutData: {right: 10, centerY: 0, width: 50}},
   "#luggageSlider": {layoutData: {left: "#luggageLabel 10", right: "#luggageWeight 10", centerY: 0}},
-  "#veggie": {layoutData: {left: "#seatLabel 10", right: 10, top: "#luggagePanel 10"}},
-  "#milesPanel": {layoutData: {left: 10, top: "#veggie 10", right: 10}},
+  "#veggieChoice": {layoutData: {left: "#seatLabel 10", right: 10, top: "#luggagePanel 10"}},
+  "#milesPanel": {layoutData: {left: 10, top: "#veggieChoice 10", right: 10}},
   "#milesLabel": {layoutData: {left: 0, centerY: 0, width: 120}},
   "#milesSwitch": {layoutData: {left: "#milesLabel 10", centerY: 0}},
-  "#done": {layoutData: {left: 10, right: 10, top: "#milesPanel 18"}}
+  "#reservationButton": {layoutData: {left: 10, right: 10, top: "#milesPanel 18"}}
 });
 
 function populateMessage() {
@@ -156,23 +159,43 @@ function populateMessage() {
     message.dispose();
   }
   message = new tabris.TextView({
-    layoutData: {left: 10, right: 10, top: "#done 10"},
-    text: "Flight booked for: " + createName() + "\nSeating: " + createSeating()
-  }).appendTo(page);
-}
-
-function createName() {
-  return [page.children("#firstNameInput").get("text"), page.children("#lastNameInput").get("text")].join(" ");
+    layoutData: {left: 10, right: 10, top: "#reservationButton 10", bottom: 10},
+    text: [
+      "Flight booked for: " + scrollView.children("#nameInput").get("text"),
+      "Destination: " + scrollView.children("#countryPicker").get("selection"),
+      "Seating: " + createSeating(),
+      "Luggage: " + createWeight(),
+      "Meal: " + createMeal(),
+      "Redeem miles: " + createFrequentFlyerInfo()
+    ].join("\n")
+  }).appendTo(scrollView);
 }
 
 function createSeating() {
   var seating = "Anywhere";
-  page.children("RadioButton").forEach(function(button) {
+  scrollView.children("RadioButton").forEach(function(button) {
     if (button.get("selection")) {
       seating = button.get("text");
     }
   });
+  seating += ", " + scrollView.children("#classPicker").get("selection");
   return seating;
+}
+
+function createWeight() {
+  var panel = scrollView.children("#luggagePanel");
+  return panel.children("#luggageSlider").get("selection") + " Kg";
+}
+
+function createMeal() {
+  return scrollView.children("#veggieChoice").get("selection") ? "Vegetarian" : "Standard";
+}
+
+function createFrequentFlyerInfo() {
+  var panel = scrollView.children("#milesPanel");
+  var info = panel.children("#milesSwitch").get("selection") ? "Yes" : "No";
+  info += ", acct: " + scrollView.children("#flyerNumberInput").get("text");
+  return info;
 }
 
 page.open();
