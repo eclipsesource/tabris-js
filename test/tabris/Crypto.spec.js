@@ -43,7 +43,7 @@ describe("Crypto", function() {
       returnValue = new Uint8Array([0, 1]);
 
       expect(() => crypto.getRandomValues(new Int8Array(3)))
-        .toThrowError("wrong number of random bytes");
+        .toThrowError("Not enough random bytes available");
     });
 
     it("fills a given Int8Array", function() {

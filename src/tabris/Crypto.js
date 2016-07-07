@@ -22,7 +22,7 @@
       var byteLength = typedArray.byteLength;
       var values = proxy._nativeCall("getRandomValues", {byteLength: byteLength});
       if (values.length !== byteLength) {
-        throw new Error("wrong number of random bytes");
+        throw new Error("Not enough random bytes available");
       }
       new Uint8Array(typedArray.buffer).set(values);
     }
