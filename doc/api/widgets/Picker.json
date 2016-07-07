@@ -43,7 +43,7 @@
         {"name": "selection", "type": "string", "description": "The new value of *[selection](#selection)*."},
         {"name": "options", "type": "{index: number}", "description": "Contains the index of the selected item, e.g. `{index: number}`"}
       ],
-      "description": "Fired an item was selected by the user."
+      "description": "Fired when an item was selected by the user."
     }
   },
   "links": [
