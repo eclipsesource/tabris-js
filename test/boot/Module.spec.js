@@ -210,6 +210,23 @@ describe("tabris.Module", function() {
         expect(tabris.Module.readJSON).toHaveBeenCalledWith("./foo/package.json");
       });
 
+      it("requests index.js if package.json has no main", function() {
+        spyOn(tabris.Module, "readJSON").and.callFake(function(url) {
+          if (url === "./foo/package.json") {
+            return {not_main: "./bar"};
+          }
+        });
+        tabris.Module.createLoader.and.callFake(function(path) {
+          if (path === "./foo/index.js") {
+            return function(module) {module.exports = module;};
+          }
+        });
+
+        var foo = module.require("./foo");
+
+        expect(foo.id).toBe("./foo/index.js");
+      });
+
       it("requests alternate file name /index.json", function() {
         tabris.Module.createLoader.and.returnValue(undefined);
         spyOn(tabris.Module, "readJSON").and.callFake(function(url) {
