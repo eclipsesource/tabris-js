@@ -183,18 +183,6 @@
       }
     },
 
-    classList: {
-      get length() {
-        return 0;
-      },
-      indexOf: function() {
-        return -1;
-      },
-      join: function() {
-        return "";
-      }
-    },
-
     animate: tabris._Animation.animate
 
   });
@@ -208,6 +196,15 @@
     }
     tabris.registerType(type, members, tabris.Widget);
   };
+
+  Object.defineProperty(tabris.Widget.prototype, "classList", {
+    get: function() {
+      if (!this._classList) {
+        this._classList = [];
+      }
+      return this._classList;
+    }
+  });
 
   var hasAndroidResizeBug;
   tabris.load(function() {
@@ -382,7 +379,7 @@
         type: "string",
         access: {
           set: function(name, value) {
-            this.classList = value.trim().split(/\s+/);
+            this._classList = value.trim().split(/\s+/);
           },
           get: function() {
             return this.classList.join(" ");

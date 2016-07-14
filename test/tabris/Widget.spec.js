@@ -168,6 +168,13 @@ describe("Widget", function() {
       expect(widget.classList.length).toBe(0);
     });
 
+    it("can modify class property value", function() {
+      widget.classList.push("foo");
+      widget.classList.push("bar");
+
+      expect(widget.get("class")).toBe("foo bar");
+    });
+
     it("returns default initial default values", function() {
       expect(widget.get("highlightOnTouch")).toBe(false);
       expect(widget.get("enabled")).toBe(true);
