@@ -9,7 +9,6 @@ tabris.Events = {
   },
 
   _on: function(type, callback, context, isPublic) {
-    this._checkDisposed();
     var store = isPublic ? "_callbacks" : "_privateCallbacks";
     var wasListening = this._isListening(type);
     if (!this[store]) {
@@ -28,7 +27,6 @@ tabris.Events = {
   },
 
   _off: function(type, callback, context, isPublic) {
-    this._checkDisposed();
     var store = isPublic ? "_callbacks" : "_privateCallbacks";
     if (this[store]) {
       if (!type) {
@@ -62,7 +60,6 @@ tabris.Events = {
   },
 
   once: function(type, callback, context) {
-    this._checkDisposed();
     var self = this;
     var wrappedCallback = function() {
       if (!self._isDisposed) {
@@ -99,7 +96,6 @@ tabris.Events = {
       (!!this._privateCallbacks && (!type || type in this._privateCallbacks));
   },
 
-  _checkDisposed: function() {},
   _listen: function() {}
 
 };

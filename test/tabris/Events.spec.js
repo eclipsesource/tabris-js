@@ -274,64 +274,6 @@
         });
       });
 
-      describe("_isDisposed", function() {
-
-        it("prevents callbacks from being triggered", function() {
-          object.on("foo", callback);
-          object._on("foo", callback);
-
-          object._isDisposed = true;
-          object.trigger("foo");
-
-          expect(callback).not.toHaveBeenCalled();
-        });
-
-      });
-
-      describe("_checkDisposed", function() {
-
-        beforeEach(function() {
-          spyOn(object, "_checkDisposed");
-        });
-
-        it("is called for 'on'", function() {
-          object.on("foo", function() {});
-          expect(object._checkDisposed).toHaveBeenCalled();
-        });
-
-        it("is called for 'off'", function() {
-          object.off("foo");
-          expect(object._checkDisposed).toHaveBeenCalled();
-        });
-
-        it("is called for 'once'", function() {
-          object.once("foo", function() {});
-          expect(object._checkDisposed).toHaveBeenCalled();
-        });
-
-        it("is not called for 'trigger'", function() {
-          object.trigger("foo");
-          expect(object._checkDisposed).not.toHaveBeenCalled();
-        });
-
-        it("is not called inside 'once' when disposed during event processing", function() {
-          // See #531
-          object._checkDisposed.and.callFake(function() {
-            expect(this._isDisposed).toBeFalsy();
-          });
-          callback.and.callFake(function() {
-            this._isDisposed = true;
-          });
-          object.once("foo", callback);
-          object.once("foo", callback);
-
-          object.trigger("foo", callback);
-
-          expect(callback.calls.count()).toBe(2);
-        });
-
-      });
-
       describe("_on", function() {
 
         it("registers listener that can not be removed with off", function() {
