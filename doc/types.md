@@ -38,8 +38,8 @@ Examples:
 ```javascript
 "#f00"
 "#ff0000"
-"#rgb(255, 0, 0)"
-"#rgba(255, 0, 0, 0.8)"
+"rgb(255, 0, 0)"
+"rgba(255, 0, 0, 0.8)"
 "red"
 "initial"
 ```
