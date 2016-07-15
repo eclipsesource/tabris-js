@@ -5,20 +5,28 @@
   });
 
   var encode = tabris.PropertyTypes.string.encode;
-  var proxy;
 
-  tabris.WebStorage = function() {
-    proxy = new tabris._ClientStore();
+  function createStorage() {
+    function Storage() {
+      var proxy = new tabris._ClientStore();
+      Object.defineProperty(this, "_proxy", {value: proxy});
+    }
+    Storage.prototype = tabris.Storage.prototype;
+    return new Storage();
+  }
+
+  tabris.Storage = function() {
+    throw new Error("Cannot instantiate Storage");
   };
 
-  tabris.WebStorage.prototype = {
+  tabris.Storage.prototype = {
     // Note: key and length methods currently not supported
 
     setItem: function(key, value) {
       if (arguments.length < 2) {
         throw new TypeError("Not enough arguments to 'setItem'");
       }
-      proxy._nativeCall("add", {
+      this._proxy._nativeCall("add", {
         key: encode(key),
         value: encode(value)
       });
@@ -28,7 +36,7 @@
       if (arguments.length < 1) {
         throw new TypeError("Not enough arguments to 'getItem'");
       }
-      var result = proxy._nativeCall("get", {key: encode(key)});
+      var result = this._proxy._nativeCall("get", {key: encode(key)});
       // Note: iOS can not return null, only undefined:
       return result === undefined ? null : result;
     },
@@ -37,11 +45,11 @@
       if (arguments.length < 1) {
         throw new TypeError("Not enough arguments to 'removeItem'");
       }
-      proxy._nativeCall("remove", {keys: [encode(key)]});
+      this._proxy._nativeCall("remove", {keys: [encode(key)]});
     },
 
     clear: function() {
-      proxy._nativeCall("clear");
+      this._proxy._nativeCall("clear");
     }
 
   };
@@ -60,9 +68,11 @@
     storageArea: null
   });
 
-  if (!window.Storage) {
-    window.Storage = tabris.WebStorage;
-    window.localStorage = new tabris.WebStorage();
-  }
+  tabris.load(function() {
+    if (!window.Storage) {
+      window.Storage = tabris.Storage;
+      window.localStorage = createStorage();
+    }
+  });
 
 }());

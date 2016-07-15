@@ -1,4 +1,4 @@
-describe("LocalStorage", function() {
+describe("WebStorage", function() {
 
   var nativeBridge;
   var localStorage;
@@ -9,7 +9,7 @@ describe("LocalStorage", function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._init(nativeBridge);
-    localStorage = new tabris.WebStorage();
+    localStorage = window.localStorage;
     spyOn(nativeBridge, "call").and.callFake(function() {
       return returnValue;
     });
@@ -20,143 +20,150 @@ describe("LocalStorage", function() {
     localStorage = null;
   });
 
-  describe("setItem", function() {
+  describe("localStorage", function() {
 
-    it("fails with missing argument", function() {
-      expect(() => {
-        localStorage.setItem("foo");
-      }).toThrowError("Not enough arguments to 'setItem'");
+    it("extends Storage", function() {
+      expect(localStorage).toEqual(jasmine.any(window.Storage));
     });
 
-    it("calls proxy add with key and value", function() {
-      localStorage.setItem("foo", "bar");
-
-      expect(nativeBridge.call).toHaveBeenCalledWith(cid, "add", {key: "foo", value: "bar"});
+    it("does not have any enumerable Object keys", function() {
+      expect(Object.keys(localStorage).length).toBe(0);
     });
 
-    it("call proxy add with stringified key", function() {
-      localStorage.setItem(2, "bar");
+    describe("setItem", function() {
 
-      expect(nativeBridge.call).toHaveBeenCalledWith(cid, "add", {key: "2", value: "bar"});
+      it("fails with missing argument", function() {
+        expect(() => {
+          localStorage.setItem("foo");
+        }).toThrowError("Not enough arguments to 'setItem'");
+      });
+
+      it("calls proxy add with key and value", function() {
+        localStorage.setItem("foo", "bar");
+
+        expect(nativeBridge.call).toHaveBeenCalledWith(cid, "add", {key: "foo", value: "bar"});
+      });
+
+      it("call proxy add with stringified key", function() {
+        localStorage.setItem(2, "bar");
+
+        expect(nativeBridge.call).toHaveBeenCalledWith(cid, "add", {key: "2", value: "bar"});
+      });
+
+      it("calls add with stringified value", function() {
+        localStorage.setItem("foo", 2);
+
+        expect(nativeBridge.call).toHaveBeenCalledWith(cid, "add", {key: "foo", value: "2"});
+      });
+
+      it("works with falsy keys and values", function() {
+        localStorage.setItem(false, false);
+        localStorage.setItem(undefined, undefined);
+
+        expect(nativeBridge.call).toHaveBeenCalledWith(cid, "add", {key: "false", value: "false"});
+        expect(nativeBridge.call).toHaveBeenCalledWith(cid, "add", {key: "undefined", value: "undefined"});
+      });
+
     });
 
-    it("calls add with stringified value", function() {
-      localStorage.setItem("foo", 2);
+    describe("getItem", function() {
 
-      expect(nativeBridge.call).toHaveBeenCalledWith(cid, "add", {key: "foo", value: "2"});
+      it("fails with missing argument", function() {
+        expect(() => {
+          localStorage.getItem();
+        }).toThrowError("Not enough arguments to 'getItem'");
+      });
+
+      it("calls proxy get with key", function() {
+        localStorage.getItem("foo");
+
+        expect(nativeBridge.call).toHaveBeenCalledWith(cid, "get", {key: "foo"});
+      });
+
+      it("calls get with stringified key", function() {
+        localStorage.getItem(5);
+
+        expect(nativeBridge.call).toHaveBeenCalledWith(cid, "get", {key: "5"});
+      });
+
+      it("works with falsy keys", function() {
+        localStorage.getItem(false);
+        localStorage.getItem(undefined);
+
+        expect(nativeBridge.call).toHaveBeenCalledWith(cid, "get", {key: "false"});
+        expect(nativeBridge.call).toHaveBeenCalledWith(cid, "get", {key: "undefined"});
+      });
+
+      it("returns saved item", function() {
+        returnValue = "bar";
+
+        var item = localStorage.getItem("foo");
+
+        expect(item).toBe("bar");
+      });
+
+      it("returns null for undefined", function() {
+        returnValue = undefined;
+
+        var item = localStorage.getItem("foo");
+
+        expect(item).toBe(null);
+      });
+
     });
 
-    it("works with falsy keys and values", function() {
-      localStorage.setItem(false, false);
-      localStorage.setItem(undefined, undefined);
+    describe("removeItem", function() {
 
-      expect(nativeBridge.call).toHaveBeenCalledWith(cid, "add", {key: "false", value: "false"});
-      expect(nativeBridge.call).toHaveBeenCalledWith(cid, "add", {key: "undefined", value: "undefined"});
+      it("fails with missing argument", function() {
+        expect(() => {
+          localStorage.removeItem();
+        }).toThrowError("Not enough arguments to 'removeItem'");
+      });
+
+      it("calls proxy remove with keys array", function() {
+        localStorage.removeItem("foo");
+
+        expect(nativeBridge.call).toHaveBeenCalledWith(cid, "remove", {keys: ["foo"]});
+      });
+
+      it("calls proxy remove with keys array with stringified key", function() {
+        localStorage.removeItem(3);
+
+        expect(nativeBridge.call).toHaveBeenCalledWith(cid, "remove", {keys: ["3"]});
+      });
+
+      it("works with falsy keys", function() {
+        localStorage.removeItem(false);
+        localStorage.removeItem(undefined);
+
+        expect(nativeBridge.call).toHaveBeenCalledWith(cid, "remove", {keys: ["false"]});
+        expect(nativeBridge.call).toHaveBeenCalledWith(cid, "remove", {keys: ["undefined"]});
+      });
+
+    });
+
+    describe("clear", function() {
+
+      it("calls proxy clear", function() {
+        localStorage.clear();
+
+        expect(nativeBridge.call).toHaveBeenCalledWith(cid, "clear", undefined);
+      });
+
     });
 
   });
 
-  describe("getItem", function() {
+  describe("Storage constructor", function() {
 
-    it("fails with missing argument", function() {
-      expect(() => {
-        localStorage.getItem();
-      }).toThrowError("Not enough arguments to 'getItem'");
+    it("is a function", function() {
+      expect(typeof tabris.Storage).toBe("function");
     });
 
-    it("calls proxy get with key", function() {
-      localStorage.getItem("foo");
-
-      expect(nativeBridge.call).toHaveBeenCalledWith(cid, "get", {key: "foo"});
+    it("does not declare formal paramters", function() {
+      expect(tabris.Storage.length).toBe(0);
     });
 
-    it("calls get with stringified key", function() {
-      localStorage.getItem(5);
-
-      expect(nativeBridge.call).toHaveBeenCalledWith(cid, "get", {key: "5"});
-    });
-
-    it("works with falsy keys", function() {
-      localStorage.getItem(false);
-      localStorage.getItem(undefined);
-
-      expect(nativeBridge.call).toHaveBeenCalledWith(cid, "get", {key: "false"});
-      expect(nativeBridge.call).toHaveBeenCalledWith(cid, "get", {key: "undefined"});
-    });
-
-    it("returns saved item", function() {
-      returnValue = "bar";
-
-      var item = localStorage.getItem("foo");
-
-      expect(item).toBe("bar");
-    });
-
-    it("returns null for undefined", function() {
-      returnValue = undefined;
-
-      var item = localStorage.getItem("foo");
-
-      expect(item).toBe(null);
-    });
-
-  });
-
-  describe("removeItem", function() {
-
-    it("fails with missing argument", function() {
-      expect(() => {
-        localStorage.removeItem();
-      }).toThrowError("Not enough arguments to 'removeItem'");
-    });
-
-    it("calls proxy remove with keys array", function() {
-      localStorage.removeItem("foo");
-
-      expect(nativeBridge.call).toHaveBeenCalledWith(cid, "remove", {keys: ["foo"]});
-    });
-
-    it("calls proxy remove with keys array with stringified key", function() {
-      localStorage.removeItem(3);
-
-      expect(nativeBridge.call).toHaveBeenCalledWith(cid, "remove", {keys: ["3"]});
-    });
-
-    it("works with falsy keys", function() {
-      localStorage.removeItem(false);
-      localStorage.removeItem(undefined);
-
-      expect(nativeBridge.call).toHaveBeenCalledWith(cid, "remove", {keys: ["false"]});
-      expect(nativeBridge.call).toHaveBeenCalledWith(cid, "remove", {keys: ["undefined"]});
-    });
-
-  });
-
-  describe("clear", function() {
-
-    it("calls proxy clear", function() {
-      localStorage.clear();
-
-      expect(nativeBridge.call).toHaveBeenCalledWith(cid, "clear", undefined);
-    });
-
-  });
-
-  describe("WebStorage", function() {
-
-    it("is a function", function() { // Note: Chromium: function, Firefox: object
-      expect(typeof tabris.WebStorage).toBe("function");
-    });
-
-    it("is initialized with length 0", function() {
-      expect(tabris.WebStorage.length).toBe(0);
-    });
-
-  });
-
-  it("extends WebStorage", function() {
-    tabris.WebStorage.prototype.foo = "bar";
-    expect(localStorage.foo).toBe("bar");
   });
 
   describe("StorageEvent", function() {
