@@ -46,15 +46,17 @@ As of Tabris.js 1.7, an implementation of this API is included.
 
 > <img align="left" src="img/note.png"> <i>To load static resources, working with URLs relative to the current [module](modules.md) may be more convenient. In the case of a JSON file, this can be done simply by using the `require` method instead of XHR. For other types of files, use the `__dirname` variable, e.g. `xhr.open("GET", __dirname + "/foo.txt");`.</i>
 
-## Storage
+## Persistent Storage
 
-Tabris supports the `localStorage` object, which allows storing simple key-value pairs.
+Tabris supports the global object `localStorage`, which allows storing key-value pairs in a persistent store. Both keys and values are stored as strings.
+
+On iOS, there is an additional object `secureStorage` available in the global scope. This is a drop-in replacement for `localStorage` that keeps data in the encrypted iOS Keychain.
 
 See [W3C](http://dev.w3.org/html5/webstorage/) / [MDN](https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Storage)
 
 *Tabris.js specifics:*
 
-* Currently the localStorage supports the methods `setItem`, `getItem`, `removeItem`, and `clear`.
+* Currently, `localStorage` and `secureStorage` support the methods `setItem`, `getItem`, `removeItem`, and `clear`.
 * The `sessionStorage` is not supported, as it would serve no purpose in a non-browser environment.
 * The storage event is currently not supported.
 

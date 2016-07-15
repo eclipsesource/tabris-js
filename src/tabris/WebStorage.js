@@ -4,11 +4,15 @@
     _cid: "tabris.ClientStore"
   });
 
+  tabris.registerType("_SecureStore", {
+    _cid: "tabris.SecureStore"
+  });
+
   var encode = tabris.PropertyTypes.string.encode;
 
-  function createStorage() {
+  function createStorage(secure) {
     function Storage() {
-      var proxy = new tabris._ClientStore();
+      var proxy = secure ? new tabris._SecureStore() : new tabris._ClientStore();
       Object.defineProperty(this, "_proxy", {value: proxy});
     }
     Storage.prototype = tabris.Storage.prototype;
@@ -72,6 +76,9 @@
     if (!window.Storage) {
       window.Storage = tabris.Storage;
       window.localStorage = createStorage();
+      if (device.platform === "iOS") {
+        window.secureStorage = createStorage(true);
+      }
     }
   });
 
