@@ -15,7 +15,7 @@
     },
     "tintColor": {
       "type": "Color",
-      "description": "A color to change the image appearance. All opaque parts of the image will be tinted with the given color. Set to `null` to remove the effect."
+      "description": "A color to change the image appearance. All opaque parts of the image will be tinted with the given color. Set to `null` to remove the effect. Available on iOS and Android 5.0+."
     }
   },
   "events": {
