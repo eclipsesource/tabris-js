@@ -2,6 +2,20 @@
   "type": "Drawer",
   "description": "A navigation drawer that can be swiped in from the left edge of the screen. Can contain any kind of widgets. It may be useful to include a `PageSelector` that displays all top-level pages.",
   "include": ["Composite"],
+  "events": {
+    "open": {
+      "parameters": [
+        {"name": "widget", "type": "this"}
+      ],
+      "description": "Fired when the drawer is opened and has reached its resting position."
+    },
+    "close": {
+      "parameters": [
+        {"name": "widget", "type": "this"}
+      ],
+      "description": "Fired when the drawer is closed and has reached its resting position."
+    }
+  },
   "methods": {
     "open": [
       {

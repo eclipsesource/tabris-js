@@ -30,6 +30,19 @@ tabris.load(function() {
         }
       },
 
+      _events: {
+        open: {
+          trigger: function() {
+            this.trigger("open", this);
+          }
+        },
+        close: {
+          trigger: function() {
+            this.trigger("close", this);
+          }
+        }
+      },
+
       open: function() {
         this._nativeCall("open", {});
         return this;
