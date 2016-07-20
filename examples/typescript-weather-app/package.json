@@ -1,7 +1,4 @@
 {
-  "title": "TypeScript Weather App",
-  "category": "Small Apps",
-  "description": "An example of a weather app written in TypeScript",
   "main": "./dist/app.js",
   "scripts": {
     "build": "tsc -p ."
