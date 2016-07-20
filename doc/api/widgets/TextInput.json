@@ -16,7 +16,7 @@
     },
     "message": {
       "type": "string",
-      "description": "A hint text that is displayed when the input field is empty."
+      "description": "A hint text that is displayed when the input field is empty. Does not apply on iOS when `type` is set to `multiline`."
     },
     "editable": {
       "type": "boolean",
@@ -42,7 +42,7 @@
       "type": "string",
       "values": ["ascii", "decimal", "email", "number", "numbersAndPunctuation", "phone", "url", "default"],
       "default": "default",
-      "description": "Selects the keyboard type to use for editing this widget."
+      "description": "Selects the keyboard type to use for editing this widget. Has no effect when `type` is set to `multiline`."
     },
     "focused": {
       "type": "boolean",
