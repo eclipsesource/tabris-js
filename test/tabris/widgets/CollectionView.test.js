@@ -54,7 +54,7 @@ describe('CollectionView', function() {
     it('returns default property values', function() {
       expect(view.itemCount).to.equal(0);
       expect(view.cellType).to.equal(null);
-      expect(view.cellHeight).to.equal(0);
+      expect(view.cellHeight).to.equal('auto');
       expect(view.createCell).to.be.a('function');
       expect(view.updateCell).to.be.a('function');
       expect(view.refreshEnabled).to.equal(false);
@@ -325,6 +325,11 @@ describe('CollectionView', function() {
       it('accepts and returns number', function() {
         view.cellHeight = 23;
         expect(view.cellHeight).to.equal(23);
+      });
+
+      it('accepts and returns "auto"', function() {
+        view.cellHeight = 'auto';
+        expect(view.cellHeight).to.equal('auto');
       });
 
       it('does not SET native property', function() {

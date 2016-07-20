@@ -91,8 +91,10 @@ export default class CollectionView extends Composite {
     if (name === 'requestinfo') {
       let type = resolveProperty(this, 'cellType', event.index);
       let height = resolveProperty(this, 'cellHeight', event.index, type);
-      let typeId = encodeCellType(this, type);
-      return {type: typeId, height};
+      return {
+        type: encodeCellType(this, type),
+        height: encodeCellHeight(height)
+      };
     } else if (name === 'createitem') {
       let item = this._createCell(event.type);
       return item.cid;
@@ -134,7 +136,7 @@ NativeObject.defineProperties(CollectionView.prototype, {
     }
   },
   cellType: {
-    type: 'any', // "string|function",
+    type: 'any', // string|function,
     default: null,
     set(name, value) {
       if (value !== this.cellType) {
@@ -144,8 +146,8 @@ NativeObject.defineProperties(CollectionView.prototype, {
     }
   },
   cellHeight: {
-    type: 'any', // "function|natural",
-    default: 0,
+    type: 'any', // natural|auto|function
+    default: 'auto',
     set(name, value) {
       if (value !== this.cellHeight) {
         this._storeProperty(name, value);
@@ -200,7 +202,7 @@ NativeObject.defineProperties(CollectionView.prototype, {
 });
 
 function resolveProperty(ctx, name) {
-  let value = ctx.get(name);
+  let value = ctx[name];
   if (typeof value === 'function') {
     return value.apply(null, Array.prototype.slice.call(arguments, 2));
   }
@@ -219,6 +221,16 @@ function encodeCellType(ctx, type) {
 function decodeCellType(ctx, type) {
   let cellTypes = ctx._cellTypes || [];
   return cellTypes[type] || null;
+}
+
+function encodeCellHeight(value) {
+  if (value === 'auto') {
+    return -1;
+  }
+  if (isNumber(value)) {
+    return Math.max(-1, value);
+  }
+  console.warn('Invalid cell height: ' + value);
 }
 
 let triggerChangeFirstVisibleIndex = createDelegate('firstVisibleIndex');

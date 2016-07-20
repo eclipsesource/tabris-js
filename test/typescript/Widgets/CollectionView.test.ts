@@ -6,7 +6,7 @@ let columnCount: number;
 let firstVisibleIndex: number;
 let createCell:  (cellType: string) => Widget;
 let updateCell:  (cell: Widget, index: number) => void;
-let cellHeight: number|((item: any, cellType: string) => number);
+let cellHeight: number|'auto'|((item: any, cellType: string) => number);
 let lastVisibleIndex: number;
 let refreshEnabled: boolean;
 let refreshIndicator: boolean;
