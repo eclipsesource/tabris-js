@@ -1,6 +1,5 @@
-var MARGIN = 12;
+var MARGIN = 16;
 var MARGIN_LARGE = 24;
-var LARGE_FONT = "20px";
 
 var cpsCount = 0;
 var startTime = new Date().getTime();
@@ -13,22 +12,21 @@ var page = new tabris.Page({
 
 var statusTextView = new tabris.TextView({
   text: "Last update: <none>",
-  layoutData: {left: MARGIN, top: MARGIN_LARGE, right: MARGIN},
-  font: LARGE_FONT
+  layoutData: {left: MARGIN, top: MARGIN_LARGE, right: MARGIN}
 }).appendTo(page);
 
 var cpsTextView = new tabris.TextView({
   text: "Calls per second: <none>",
-  layoutData: {left: MARGIN, top: [statusTextView, MARGIN], right: MARGIN},
-  font: LARGE_FONT
+  layoutData: {left: MARGIN, top: [statusTextView, MARGIN], right: MARGIN}
 }).appendTo(page);
 
 var delayTextView = new tabris.TextView({
-  text: "Delay (ms)",
-  layoutData: {left: MARGIN, top: [cpsTextView, MARGIN_LARGE]}
+  text: "Delay (ms):",
+  layoutData: {left: MARGIN, baseline: "#delayTextInput"}
 }).appendTo(page);
 
 var delayTextInput = new tabris.TextInput({
+  id: "delayTextInput",
   text: "1000",
   message: "Delay (ms)",
   layoutData: {left: [delayTextView, MARGIN], top: [cpsTextView, MARGIN_LARGE]}
@@ -36,7 +34,7 @@ var delayTextInput = new tabris.TextInput({
 
 var repeatCheckbox = new tabris.CheckBox({
   text: "Repeat",
-  layoutData: {left: MARGIN, top: [delayTextInput, MARGIN]}
+  layoutData: {left: MARGIN, top: delayTextInput}
 }).appendTo(page);
 
 var startButton = new tabris.Button({
