@@ -5,7 +5,7 @@ var page = new tabris.Page({
   topLevel: true
 });
 
-var scrollView = new tabris.ScrollView().appendTo(page);
+var scrollView = new tabris.ScrollView({left: 0, top: 0, right: 0, bottom: 0}).appendTo(page);
 
 new tabris.TextView({
   id: "nameLabel",
