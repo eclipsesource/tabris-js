@@ -161,8 +161,8 @@ function populateMessage() {
   message = new tabris.TextView({
     layoutData: {left: 10, right: 10, top: "#reservationButton 10", bottom: 10},
     text: [
-      "Flight booked for: " + scrollView.children("#nameInput").get("text"),
-      "Destination: " + scrollView.children("#countryPicker").get("selection"),
+      "Flight booked for: " + scrollView.children("#nameInput").first().text,
+      "Destination: " + scrollView.children("#countryPicker").first().selection,
       "Seating: " + createSeating(),
       "Luggage: " + createWeight(),
       "Meal: " + createMeal(),
@@ -174,27 +174,27 @@ function populateMessage() {
 function createSeating() {
   var seating = "Anywhere";
   scrollView.children("RadioButton").forEach(function(button) {
-    if (button.get("selection")) {
-      seating = button.get("text");
+    if (button.selection) {
+      seating = button.text;
     }
   });
-  seating += ", " + scrollView.children("#classPicker").get("selection");
+  seating += ", " + scrollView.children("#classPicker").first().selection;
   return seating;
 }
 
 function createWeight() {
   var panel = scrollView.children("#luggagePanel");
-  return panel.children("#luggageSlider").get("selection") + " Kg";
+  return panel.children("#luggageSlider").first().selection + " Kg";
 }
 
 function createMeal() {
-  return scrollView.children("#veggieChoice").get("selection") ? "Vegetarian" : "Standard";
+  return scrollView.children("#veggieChoice").selection ? "Vegetarian" : "Standard";
 }
 
 function createFrequentFlyerInfo() {
   var panel = scrollView.children("#milesPanel");
-  var info = panel.children("#milesSwitch").get("selection") ? "Yes" : "No";
-  info += ", acct: " + scrollView.children("#flyerNumberInput").get("text");
+  var info = panel.children("#milesSwitch").first().selection ? "Yes" : "No";
+  info += ", acct: " + scrollView.children("#flyerNumberInput").first().text;
   return info;
 }
 

@@ -20,16 +20,23 @@ Widgets have methods to modify their properties, be notified of events, and appe
 
 ## Widget Properties
 
-Every native widget supports a set of properties (e.g. a text or a color). These properties can be read and written using the [property API](api/Properties.md) methods `get` and `set`, respectively. *Widgets properties can not be written or read by directly accessing fields on the widget object. There is no "widget.text".*
+Every native widget supports a set of properties (e.g. a text or a color). These properties can be read and written using the [property API](api/Properties.md) methods `get` and `set`, respectively. Widgets properties can also be written or read by directly accessing fields on the widget object. For example, `var text = widget.text;` is the same as `var text = widget.get("text");` and `widget.text = "foo";` is the same as `widget.set("text", "foo");`. If the property is supported, but the given value is of the wrong type, the value will either be converted (if boolean or string are expected), or ignored with a printed warning.
 
-Example:
+Example with `get` and `set`:
 
 ```javascript
 widget.set("text", "Hello World");
 var text = widget.get("text");
 ```
 
-Like with `create`, it's also possible to give an object defining multiple property values:
+Example with field access:
+
+```javascript
+widget.text = "Hello World";
+var text = widget.text;
+```
+
+Like with the constructor, it's also possible to give an object defining multiple property values:
 
 ```javascript
 button.set({
@@ -38,7 +45,20 @@ button.set({
 });
 ```
 
-Even if a property is not explicitly supported by the widget it can still be set. This can be used to attach arbitrary data to a widget. If the property is supported, but the given value is of the wrong type, the value will either be converted (if boolean or string are expected), or ignored with a printed warning.
+Even if a property is not explicitly supported by the widget it can still be set and fire appropriate change events. This can be used to attach arbitrary data to a widget. *Note that this does only work using `set` and `get`.* Using direct field access with properties unkown to Tabris.js will not work correctly unless you also define a JavaScript property that redirects to `set` and `get` using [Object.defineProperty](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty). Example:
+
+```javascript
+Object.defineProperty(myCustomComponent, 'foo', {
+  set: function(value) {
+    this.set('foo', value);
+  },
+  get: function() {
+    return this.get('foo');
+  }
+});
+```
+
+Where `myCustomComponent` can be either an instance of a Tabris.js widget, or an ES6 class extending a Tabris.js widget.
 
 ## Events
 

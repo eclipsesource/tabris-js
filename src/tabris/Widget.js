@@ -367,11 +367,11 @@
       id: {
         type: "string",
         access: {
-          set: function(name, value) {
-            this.id = value;
+          set: function(name, value, options) {
+            this._storeProperty(name, value, options);
           },
-          get: function() {
-            return this.id;
+          get: function(name) {
+            return this._getStoredProperty(name);
           }
         }
       },

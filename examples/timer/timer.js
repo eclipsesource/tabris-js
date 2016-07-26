@@ -41,8 +41,8 @@ var startButton = new tabris.Button({
   text: "Start timer",
   layoutData: {left: ["50%", MARGIN / 4], top: [repeatCheckbox, MARGIN_LARGE], right: MARGIN}
 }).on("select", function() {
-  var delay = parseInt(delayTextInput.get("text"));
-  if (repeatCheckbox.get("selection")) {
+  var delay = parseInt(delayTextInput.text);
+  if (repeatCheckbox.selection) {
     taskId = setInterval(updateStatusTextViews, delay);
   } else {
     taskId = setTimeout(function() {

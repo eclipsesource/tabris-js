@@ -14,7 +14,7 @@ var webview = new tabris.WebView({
 }).appendTo(page);
 
 function loadUrl() {
-  webview.set("url", urlInput.get("text"));
+  webview.set("url", urlInput.text);
 }
 
 loadUrl();

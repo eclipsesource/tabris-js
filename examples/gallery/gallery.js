@@ -42,7 +42,7 @@ var thumbnailsAction = new tabris.Action({
 page.open();
 
 function toggleAction() {
-  if (scrollView.get("visible")) {
+  if (scrollView.visible) {
     scrollView.set("visible", false);
     thumbnailsAction.set("visible", true);
     fullscreenAction.set("visible", false);

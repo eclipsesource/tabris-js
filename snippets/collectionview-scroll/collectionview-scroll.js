@@ -34,7 +34,7 @@ new tabris.CollectionView({
   }
 }).on("scroll", function(collectionView, event) {
   scrollPosition += event.deltaY;
-  var firstVisibleItem = collectionView.get("firstVisibleIndex");
+  var firstVisibleItem = collectionView.firstVisibleIndex;
   floatingSection.set({
     text: getCurrentSection(firstVisibleItem).name,
     transform: {translationY: getSectionTranslationY(firstVisibleItem)}

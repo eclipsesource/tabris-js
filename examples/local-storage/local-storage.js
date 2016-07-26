@@ -27,12 +27,12 @@ new tabris.Button({
   layoutData: {left: 10, right: "66% 5", top: [valueTextView, 20]},
   text: "Set"
 }).on("select", function() {
-  if (!keyField.get("text")) {
+  if (!keyField.text) {
     console.error("The key cannot be empty.");
-  } else if (!valueField.get("text")) {
+  } else if (!valueField.text) {
     console.error("The value cannot be empty.");
   } else {
-    localStorage.setItem(keyField.get("text"), valueField.get("text"));
+    localStorage.setItem(keyField.text"), valueField.get("text);
     valueField.set("text", "");
   }
 }).appendTo(page);
@@ -41,11 +41,11 @@ new tabris.Button({
   layoutData: {left: "33% 5", right: "33% 5", top: [valueTextView, 20]},
   text: "Get"
 }).on("select", function() {
-  if (!keyField.get("text")) {
+  if (!keyField.text) {
     console.error("The key cannot be empty.");
   } else {
     valueField.set("text", "");
-    valueField.set("text", localStorage.getItem(keyField.get("text")));
+    valueField.set("text", localStorage.getItem(keyField.text));
   }
 }).appendTo(page);
 
@@ -53,7 +53,7 @@ new tabris.Button({
   layoutData: {left: "66% 5", right: 10, top: [valueTextView, 20]},
   text: "Remove"
 }).on("select", function() {
-  localStorage.removeItem(keyField.get("text"));
+  localStorage.removeItem(keyField.text);
   valueField.set("text", "");
 }).appendTo(page);
 

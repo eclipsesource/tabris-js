@@ -74,7 +74,7 @@ new tabris.TextView({
 scrollView.on("resize", function(widget, bounds) {
   var imageHeight = bounds.height / 2;
   imageView.set("height", imageHeight);
-  var titleCompHeight = titleComposite.get("height");
+  var titleCompHeight = titleComposite.height;
   // We need the offset of the title composite in each scroll event.
   // As it can only change on resize, we assign it here.
   titleCompY = Math.min(imageHeight - titleCompHeight, bounds.height / 2);

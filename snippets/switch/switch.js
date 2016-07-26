@@ -23,7 +23,7 @@ new tabris.Button({
   text: "Toggle Switch",
   layoutData: {left: MARGIN, top: ["#switch", MARGIN]}
 }).on("select", function() {
-  var checked = page.find("#switch").get("selection");
+  var checked = page.find("#switch").first().selection;
   page.find("#switch").set("selection", !checked);
 }).appendTo(page);
 

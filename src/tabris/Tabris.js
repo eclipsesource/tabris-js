@@ -54,6 +54,7 @@
       superProto.type = type;
       superProto.constructor = tabris[type]; // _.extendPrototype can not provide the original
       tabris[type].prototype = _.extendPrototype(superType || tabris.Proxy, superProto);
+      mapProperties(tabris[type].prototype, tabris[type]._properties);
     },
 
     version: "${VERSION}",
@@ -206,6 +207,23 @@
   function getDefault(member) {
     var value = staticMembers[member];
     return value instanceof Object ? _.clone(value) : value;
+  }
+
+  function mapProperties(target, definitions) {
+    for (var property in definitions) {
+      createProperty(target, property);
+    }
+  }
+
+  function createProperty(target, property) {
+    Object.defineProperty(target, property, {
+      set: function(value) {
+        this.set(property, value);
+      },
+      get: function() {
+        return this.get(property);
+      }
+    });
   }
 
   var staticMembers = {

@@ -9,7 +9,7 @@ var page = new tabris.Page({
     text: title
   }).on("change:selection", function(widget, selection) {
     if (selection) {
-      console.log(widget.get("text") + " selected");
+      console.log(widget.text + " selected");
     }
   }).appendTo(page);
 });

@@ -64,7 +64,7 @@ new tabris.TextView({
 }).appendTo(trayContent);
 
 trayContent.on("resize", function() {
-  var bounds = trayContent.get("bounds");
+  var bounds = trayContent.bounds;
   trayHeight = bounds.height;
   if (trayState === "dragging") {
     positionTrayInRestingState(2000);
@@ -76,7 +76,7 @@ trayContent.on("resize", function() {
 strap.on("pan:vertical", function(widget, event) {
   if (event.state === "start" && (trayState === "up" || trayState === "down")) {
     trayState = "dragging";
-    dragOffset = tray.get("transform").translationY - event.translation.y;
+    dragOffset = tray.transform.translationY - event.translation.y;
   }
   if (trayState === "dragging") {
     var offsetY = Math.min(Math.max(event.translation.y + dragOffset, 0), trayHeight);

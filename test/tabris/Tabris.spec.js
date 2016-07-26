@@ -377,6 +377,28 @@ describe("tabris", function() {
       expect(instance.type).toBe("CustomType");
     });
 
+    it("adds JS property setters", function() {
+      var type = {encode: function() {}, decode: function() {}};
+      tabris.registerType("CustomType", {_properties: {foo: {type: type}}});
+      var instance = new tabris.CustomType();
+      spyOn(instance, "set");
+
+      instance.foo = "bar";
+
+      expect(instance.set).toHaveBeenCalledWith("foo", "bar");
+    });
+
+    it("adds JS property getters", function() {
+      var type = {encode: function() {}, decode: function() {}};
+      tabris.registerType("CustomType", {_properties: {foo: {type: type}}});
+      var instance = new tabris.CustomType();
+      spyOn(instance, "get").and.returnValue("bar");
+
+      var result = instance.foo;
+
+      expect(result).toBe("bar");
+    });
+
     it("calls 'create' with type", function() {
       tabris.registerType("CustomType", {});
       new tabris.CustomType();

@@ -14,7 +14,7 @@ var logTextInput = new tabris.TextInput({
     layoutData: {left: 10, right: 10, top: "prev() 10"},
     text: method
   }).on("select", function() {
-    console[method](logTextInput.get("text"));
+    console[method](logTextInput.text);
   }).appendTo(page);
 });
 

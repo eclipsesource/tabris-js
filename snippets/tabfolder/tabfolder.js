@@ -27,5 +27,5 @@ createTab("Statistic", "images/chart.png", "images/chart-filled.png");
 page.open();
 
 tabFolder.on("change:selection", function(widget, tab) {
-  console.log(tab.get("title"));
+  console.log(tab.title);
 });

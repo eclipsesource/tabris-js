@@ -60,7 +60,7 @@ function handlePan(event, container) {
 }
 
 function handlePanFinished(event, container) {
-  var beyondCenter = Math.abs(event.translation.x) > container.get("bounds").width / 2;
+  var beyondCenter = Math.abs(event.translation.x) > container.bounds.width / 2;
   var fling = Math.abs(event.velocity.x) > 200;
   var sameDirection = sign(event.velocity.x) === sign(event.translation.x);
   // When swiped beyond the center, trigger dismiss if flinged in the same direction or let go.
@@ -74,14 +74,14 @@ function handlePanFinished(event, container) {
 }
 
 function animateDismiss(event, container) {
-  var bounds = container.get("bounds");
+  var bounds = container.bounds;
   container.animate({
     transform: {translationX: sign(event.translation.x) * bounds.width}
   }, {
     duration: 200,
     easing: "ease-out"
   }).then(function() {
-    collectionView.remove(container.parent().get("itemIndex"));
+    collectionView.remove(container.parent().itemIndex);
   });
 }
 
