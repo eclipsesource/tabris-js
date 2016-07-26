@@ -20,7 +20,7 @@
     "open": [
       {
         "parameters": [],
-        "description": "Opens the drawer.",
+        "description": "Opens the drawer. It may be useful to call this method on first startup, so that users notice the drawer and its contents.",
         "returns": "this"
       }
     ],
