@@ -26,7 +26,7 @@
       "parameters": [
         {"name": "app", "type": "App"}
       ],
-      "description": "Fired when the app becomes invisible. Either because the user has another app in the foreground or he returned to the home screen."
+      "description": "Fired when the app becomes invisible. Either because another app is in the foreground or the user has returned to the home screen."
     },
     "terminate": {
       "parameters": [
