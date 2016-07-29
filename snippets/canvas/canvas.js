@@ -1,7 +1,3 @@
-/*
- * Note: putImageData and getImageData is currently only supported on Android.
- */
-
 var page = new tabris.Page({
   title: "Canvas",
   topLevel: true
