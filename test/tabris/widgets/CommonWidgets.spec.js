@@ -46,8 +46,7 @@ describe("Common Widgets", function() {
   it("Button", function() {
     var button = new tabris.Button({enabled: false});
 
-    expect(getCreate().type).toEqual("rwt.widgets.Button");
-    expect(getCreate().properties).toEqual({style: ["PUSH"], enabled: false});
+    expect(getCreate().type).toEqual("tabris.Button");
     expect(button.get("image")).toBe(null);
     expect(button.get("alignment")).toBe("center");
     expect(button.get("text")).toBe("");
@@ -56,10 +55,10 @@ describe("Common Widgets", function() {
   it("Button select", function() {
     widget = new tabris.Button().on("select", listener);
 
-    tabris._notify(widget.cid, "Selection", {});
+    tabris._notify(widget.cid, "select", {});
 
     checkEvent();
-    checkListen("Selection");
+    checkListen("select");
   });
 
   it("Canvas", function() {

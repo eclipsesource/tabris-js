@@ -1,12 +1,7 @@
 tabris.registerWidget("Button", {
-  _type: "rwt.widgets.Button",
-  _initProperties: {style: ["PUSH"]},
+  _type: "tabris.Button",
   _events: {
     select: {
-      name: "Selection",
-      listen: function(state) {
-        this._nativeListen("Selection", state);
-      },
       trigger: function(event) {
         this.trigger("select", this, event);
       }

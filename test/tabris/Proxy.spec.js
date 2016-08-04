@@ -31,8 +31,7 @@ describe("Proxy", function() {
       new tabris.Button({text: "foo"});
 
       var create = nativeBridge.calls({op: "create"})[0];
-      expect(create.type).toEqual("rwt.widgets.Button");
-      expect(create.properties).toEqual({style: ["PUSH"], text: "foo"});
+      expect(create.type).toEqual("tabris.Button");
     });
 
     it("calls native create with properties", function() {
