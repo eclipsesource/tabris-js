@@ -11,8 +11,8 @@ describe("Picker", function() {
 
   describe("creation", function() {
 
-    it("creates combo", function() {
-      expect(nativeBridge.calls({op: "create"})[0].type).toEqual("rwt.widgets.Combo");
+    it("creates picker", function() {
+      expect(nativeBridge.calls({op: "create"})[0].type).toEqual("tabris.Picker");
     });
 
     it("initializes selectionIndex", function() {
@@ -49,20 +49,20 @@ describe("Picker", function() {
       picker.on("select", listener);
       picker.set("items", ["foo", "bar"]);
 
-      tabris._notify(picker.cid, "Selection", {selectionIndex: 1});
+      tabris._notify(picker.cid, "select", {selectionIndex: 1});
 
       checkEvent("bar", {index: 1});
-      checkListen("Selection");
+      checkListen("select");
     });
 
     it("change:selection on interactive change", function() {
       picker.on("change:selection", listener);
       picker.set("items", ["foo", "bar"]);
 
-      tabris._notify(picker.cid, "Selection", {selectionIndex: 1});
+      tabris._notify(picker.cid, "select", {selectionIndex: 1});
 
       checkEvent("bar", {index: 1});
-      checkListen("Selection");
+      checkListen("select");
     });
 
     it("change:selection on programmatic change", function() {
@@ -78,10 +78,10 @@ describe("Picker", function() {
     it("change:selectionIndex", function() {
       picker.on("change:selectionIndex", listener);
 
-      tabris._notify(picker.cid, "Selection", {selectionIndex: 23});
+      tabris._notify(picker.cid, "select", {selectionIndex: 23});
 
       checkEvent(23);
-      checkListen("Selection");
+      checkListen("select");
     });
 
   });

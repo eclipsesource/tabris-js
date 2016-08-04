@@ -2,13 +2,12 @@ import {omit, drop, extend} from "../util";
 
 tabris.registerWidget("Picker", {
 
-  _type: "rwt.widgets.Combo",
+  _type: "tabris.Picker",
 
   _initProperties: {selectionIndex: 0},
 
   _events: {
     select: {
-      name: "Selection",
       alias: "change:selectionIndex",
       trigger: function(event) {
         this._triggerChangeEvent("selectionIndex", event.selectionIndex);
