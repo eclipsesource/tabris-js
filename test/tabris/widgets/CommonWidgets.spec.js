@@ -91,7 +91,7 @@ describe("Common Widgets", function() {
   it("Composite", function() {
     new tabris.Composite();
 
-    expect(getCreate().type).toEqual("rwt.widgets.Composite");
+    expect(getCreate().type).toEqual("tabris.Composite");
   });
 
   it("ImageView", function() {

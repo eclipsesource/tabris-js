@@ -289,7 +289,7 @@ function createDelegate(prop) {
 
 tabris.registerWidget("Cell", {
 
-  _type: "rwt.widgets.Composite",
+  _type: "tabris.Composite",
 
   _supportsChildren: true,
 

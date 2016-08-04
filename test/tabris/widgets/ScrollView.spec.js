@@ -28,7 +28,7 @@ describe("ScrollView", function() {
     });
 
     it("creates a Composite", function() {
-      expect(createCalls[2].type).toBe("rwt.widgets.Composite");
+      expect(createCalls[2].type).toBe("tabris.Composite");
       expect(createCalls[2].properties.parent).toBe(createCalls[0].id);
     });
 

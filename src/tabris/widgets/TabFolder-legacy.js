@@ -104,7 +104,7 @@ tabris.load(function() {
 
     tabris.registerWidget("Tab", {
 
-      _type: "rwt.widgets.Composite",
+      _type: "tabris.Composite",
 
       _properties: {
         title: {

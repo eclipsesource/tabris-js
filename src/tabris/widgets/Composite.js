@@ -1,4 +1,4 @@
 tabris.registerWidget("Composite", {
-  _type: "rwt.widgets.Composite",
+  _type: "tabris.Composite",
   _supportsChildren: true
 });

@@ -57,7 +57,7 @@ describe("TabFolder", function() {
     });
 
     it("creates a Composite", function() {
-      expect(controlCreate.type).toBe("rwt.widgets.Composite");
+      expect(controlCreate.type).toBe("tabris.Composite");
       expect(controlCreate.id).toBe(tab.cid);
     });
 

@@ -42,7 +42,7 @@ var pageProperties = {
 
 tabris.registerWidget("Page", {
 
-  _type: "rwt.widgets.Composite",
+  _type: "tabris.Composite",
 
   _supportsChildren: true,
 

@@ -20,7 +20,7 @@ describe("Drawer", function() {
   describe("create", function() {
 
     it("creates a Composite and a Drawer", function() {
-      expect(nativeBridge.calls({op: "create", type: "rwt.widgets.Composite"}).length).toBe(1);
+      expect(nativeBridge.calls({op: "create", type: "tabris.Composite"}).length).toBe(1);
       expect(nativeBridge.calls({op: "create", type: "tabris.Drawer"}).length).toBe(1);
     });
 
@@ -44,7 +44,7 @@ describe("Drawer", function() {
       var properties;
 
       beforeEach(function() {
-        var createCall = nativeBridge.calls({op: "create", type: "rwt.widgets.Composite"})[0];
+        var createCall = nativeBridge.calls({op: "create", type: "tabris.Composite"})[0];
         properties = createCall.properties;
       });
 

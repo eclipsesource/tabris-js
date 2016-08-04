@@ -16,7 +16,7 @@ tabris.load(function() {
 
     tabris.registerWidget("Drawer", {
 
-      _type: "rwt.widgets.Composite",
+      _type: "tabris.Composite",
 
       _supportsChildren: true,
 

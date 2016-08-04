@@ -31,7 +31,7 @@ describe("Page", function() {
     it("creates a Composite and a Page", function() {
       var createCalls = nativeBridge.calls({op: "create"});
       expect(createCalls.length).toBe(2);
-      expect(createCalls[0].type).toBe("rwt.widgets.Composite");
+      expect(createCalls[0].type).toBe("tabris.Composite");
       expect(createCalls[1].type).toBe("tabris.Page");
     });
 
@@ -40,7 +40,7 @@ describe("Page", function() {
       var createProps;
 
       beforeEach(function() {
-        var createCall = nativeBridge.calls({op: "create", type: "rwt.widgets.Composite"})[0];
+        var createCall = nativeBridge.calls({op: "create", type: "tabris.Composite"})[0];
         createProps = createCall.properties;
       });
 
@@ -112,7 +112,7 @@ describe("Page", function() {
     beforeEach(function() {
       page = new tabris.Page();
       pageCreateCall = nativeBridge.calls({op: "create", type: "tabris.Page"})[0];
-      compositeCreateCall = nativeBridge.calls({op: "create", type: "rwt.widgets.Composite"})[0];
+      compositeCreateCall = nativeBridge.calls({op: "create", type: "tabris.Composite"})[0];
       nativeBridge.resetCalls();
     });
 
