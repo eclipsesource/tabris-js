@@ -1,19 +1,27 @@
-import {expect, spy, stub, restore} from "../../test";
+import {expect, restore, spy, stub} from "../../test";
 import ProxyStore from "../../../src/tabris/ProxyStore";
-import NativeBridge from "../../../src/tabris/NativeBridge";
 import ClientStub from "../ClientStub";
 import ScrollView from "../../../src/tabris/widgets/ScrollView";
 import Composite from "../../../src/tabris/widgets/Composite";
+import NativeBridge from "../../../src/tabris/NativeBridge";
 
 describe("ScrollView", function() {
 
-  let client;
+  let client, scrollView;
+
+  let checkListen = function(event) {
+    let listen = client.calls({op: "listen", id: scrollView.cid});
+    expect(listen.length).to.equal(1);
+    expect(listen[0].event).to.equal(event);
+    expect(listen[0].listen).to.equal(true);
+  };
 
   beforeEach(function() {
     client = new ClientStub();
     global.tabris = {
       on: () => {},
-      _proxies: new ProxyStore()
+      _proxies: new ProxyStore(),
+      _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
     };
     global.tabris._nativeBridge = new NativeBridge(client);
   });
@@ -21,35 +29,17 @@ describe("ScrollView", function() {
   afterEach(restore);
 
   describe("when a ScrollView is created", function() {
-    let scrollView, createCalls;
 
     beforeEach(function() {
       scrollView = new ScrollView();
-      createCalls = client.calls({op: "create"});
     });
 
-    it("creates a vertical ScrolledComposite", function() {
-      expect(createCalls[0].type).to.equal("rwt.widgets.ScrolledComposite");
-      expect(createCalls[0].properties.style).to.eql(["V_SCROLL"]);
-    });
-
-    it("creates a vertical ScrollBar", function() {
-      expect(createCalls[1].type).to.equal("rwt.widgets.ScrollBar");
-      expect(createCalls[1].properties.parent).to.equal(createCalls[0].id);
-      expect(createCalls[1].properties.style).to.eql(["VERTICAL"]);
-    });
-
-    it("creates a Composite", function() {
-      expect(createCalls[2].type).to.equal("tabris.Composite");
-      expect(createCalls[2].properties.parent).to.equal(createCalls[0].id);
-    });
-
-    it("sets the Composite as content", function() {
-      let setCall = client.calls({op: "set", id: createCalls[0].id})[0];
-      expect(setCall.properties).to.eql({content: createCalls[2].id});
+    it("defaults to vertical direction", function() {
+      expect(scrollView.direction).to.equal("vertical");
     });
 
     describe("when a child is appended", function() {
+
       let result, child;
 
       beforeEach(function() {
@@ -58,9 +48,9 @@ describe("ScrollView", function() {
         result = scrollView.append(child);
       });
 
-      it("sets child's parent to the inner composite", function() {
+      it("sets child's parent to scrollView", function() {
         let call = client.calls({op: "set", id: child.cid})[0];
-        expect(call.properties.parent).to.equal(scrollView._composite.cid);
+        expect(call.properties.parent).to.equal(scrollView.cid);
       });
 
       it("returns self to allow chaining", function() {
@@ -69,76 +59,11 @@ describe("ScrollView", function() {
 
     });
 
-    describe("when a Scroll listener is added", function() {
-      let listener;
-      let scrollBar;
-
-      beforeEach(function() {
-        listener = spy();
-        scrollBar = tabris._proxies.find(createCalls[1].id);
-        scrollView.on("scroll", listener);
-        stub(client, "get", function(id, property) {
-          if (id === scrollView.cid && property === "origin") {
-            return [23, 42];
-          }
-        });
-      });
-
-      it("is notified on ScrollBar change", function() {
-        scrollBar.trigger("Selection", {});
-        expect(listener).to.have.been.calledOnce;
-        expect(listener).to.have.been.calledWith(scrollView, {x: 23, y: 42});
-      });
-
-      describe("when another listener is added", function() {
-
-        beforeEach(function() {
-          scrollView.on("scroll", spy());
-        });
-
-        it("is notified on ScrollBar change once", function() {
-          scrollBar.trigger("Selection", {});
-          expect(listener).to.have.been.calledOnce;
-        });
-
-      });
-
-      describe("when the listener is removed", function() {
-
-        beforeEach(function() {
-          scrollView.off("scroll", listener);
-        });
-
-        it("is not notified on ScrollBar change anymore", function() {
-          scrollBar.trigger("Selection", {});
-          expect(listener).not.to.have.been.called;
-        });
-
-      });
-
-    });
-
-    describe("appending a widget", function() {
-      let child;
-
-      beforeEach(function() {
-        child = new Composite();
-        client.resetCalls();
-        scrollView.append(child);
-      });
-
-      it("uses inner composite in 'set'", function() {
-        let call = client.calls({op: "set", id: child.cid})[0];
-        expect(call.properties.parent).to.equal(scrollView._composite.cid);
-      });
-
-    });
-
   });
 
   describe("when created with direction 'vertical'", function() {
 
-    let scrollView, createCalls;
+    let createCalls;
 
     beforeEach(function() {
       scrollView = new ScrollView({direction: "vertical"});
@@ -146,45 +71,62 @@ describe("ScrollView", function() {
       client.resetCalls();
     });
 
-    it("creates a vertical ScrolledComposite", function() {
-      expect(createCalls[0].properties.style).to.eql(["V_SCROLL"]);
+    it("creates a vertical ScrolledView", function() {
+      expect(createCalls[0].properties.direction).to.equal("vertical");
+      expect(scrollView.get("direction")).to.equal("vertical");
     });
 
-    it("creates a vertical ScrollBar", function() {
-      expect(createCalls[1].properties.style).to.eql(["VERTICAL"]);
+    it("offsetY is taken from native", function() {
+      stub(client, "get").returns(42);
+      expect(scrollView.get("offsetY")).to.equal(42);
     });
 
-    it("direction is 'vertical'", function() {
-      expect(scrollView.get("direction")).to.eql("vertical");
-    });
-
-    it("scrollY is taken from native, scrollX is 0", function() {
-      stub(client, "get").returns([23, 42]);
-      expect(scrollView.get("scrollX")).to.equal(0);
-      expect(scrollView.get("scrollY")).to.equal(42);
-    });
-
-    it("scrollY can be set", function() {
-      scrollView.set("scrollY", 23);
+    it("offsetY can be set", function() {
+      scrollView.set("offsetY", 23);
 
       let setCalls = client.calls({id: scrollView.cid, op: "set"});
 
-      expect(setCalls[0].properties.origin).to.eql([0, 23]);
+      expect(setCalls[0].properties.offsetY).to.equal(23);
     });
 
-    it("ignores setting scrollX", function() {
-      scrollView.set("scrollX", 23);
+    it("fires scroll event", function() {
+      let listener = spy();
+      scrollView.on("scrollY", listener);
 
-      let setCalls = client.calls({id: scrollView.cid, op: "set"});
+      tabris._notify(scrollView.cid, "scrollY", 42);
 
-      expect(setCalls.length).to.equal(0);
+      checkListen("scrollY");
+      expect(listener).to.have.been.called;
+      expect(listener.firstCall.args[0]).to.equal(scrollView);
+      expect(listener.firstCall.args[1]).to.equal(42);
+    });
+
+    it("fires change:offsetY event", function() {
+      let listener = spy();
+      scrollView.on("change:offsetY", listener);
+
+      tabris._notify(scrollView.cid, "scrollY", 42);
+
+      checkListen("scrollY");
+      expect(listener).to.have.been.called;
+      expect(listener.firstCall.args[0]).to.equal(scrollView);
+      expect(listener.firstCall.args[1]).to.equal(42);
+    });
+
+    it("does not fire change:offsetX event", function() {
+      let listener = spy();
+      scrollView.on("change:offsetX", listener);
+
+      tabris._notify(scrollView.cid, "scrollY", 42);
+
+      expect(listener).not.to.have.been.called;
     });
 
   });
 
   describe("when created with direction 'horizontal'", function() {
 
-    let scrollView, createCalls;
+    let createCalls;
 
     beforeEach(function() {
       scrollView = new ScrollView({direction: "horizontal"});
@@ -192,61 +134,83 @@ describe("ScrollView", function() {
       client.resetCalls();
     });
 
-    it("creates a horizontal ScrolledComposite", function() {
-      expect(createCalls[0].properties.style).to.eql(["H_SCROLL"]);
-    });
-
-    it("creates a horizontal ScrollBar", function() {
-      expect(createCalls[1].properties.style).to.eql(["HORIZONTAL"]);
-    });
-
-    it("direction is 'horizontal'", function() {
+    it("creates a horizontal ScrollView", function() {
+      expect(createCalls[0].properties.direction).to.equal("horizontal");
       expect(scrollView.get("direction")).to.equal("horizontal");
     });
 
-    it("scrollX is taken from native, scrollY is 0", function() {
-      stub(client, "get").returns([23, 42]);
-      expect(scrollView.get("scrollX")).to.equal(23);
-      expect(scrollView.get("scrollY")).to.equal(0);
+    it("offsetX is taken from native", function() {
+      stub(client, "get").returns(23);
+      expect(scrollView.get("offsetX")).to.equal(23);
     });
 
-    it("scrollX can be set", function() {
-      scrollView.set("scrollX", 23);
+    it("offsetX can be set", function() {
+      scrollView.set("offsetX", 23);
 
       let setCalls = client.calls({id: scrollView.cid, op: "set"});
 
-      expect(setCalls[0].properties.origin).to.eql([23, 0]);
+      expect(setCalls[0].properties.offsetX).to.equal(23);
     });
 
-    it("ignores setting scrollY", function() {
-      scrollView.set("scrollY", 23);
+    it("fires scrollX event", function() {
+      let listener = spy();
+      scrollView.on("scrollX", listener);
 
-      let setCalls = client.calls({id: scrollView.cid, op: "set"});
+      tabris._notify(scrollView.cid, "scrollX", 42);
 
-      expect(setCalls.length).to.equal(0);
+      checkListen("scrollX");
+      expect(listener).to.have.been.called;
+      expect(listener.firstCall.args[0]).to.equal(scrollView);
+      expect(listener.firstCall.args[1]).to.equal(42);
+    });
+
+    it("fires change:offsetX event", function() {
+      let listener = spy();
+      scrollView.on("change:offsetX", listener);
+
+      tabris._notify(scrollView.cid, "scrollX", 42);
+
+      checkListen("scrollX");
+      expect(listener).to.have.been.called;
+      expect(listener.firstCall.args[0]).to.equal(scrollView);
+      expect(listener.firstCall.args[1]).to.equal(42);
+    });
+
+    it("does not fire change:offsetY event", function() {
+      let listener = spy();
+      scrollView.on("change:offsetY", listener);
+
+      tabris._notify(scrollView.cid, "scrollX", 43);
+
+      expect(listener).not.to.have.been.called;
     });
 
   });
 
-  describe("when created without direction", function() {
-
-    let scrollView, createCalls;
+  describe("when scrollToX is invoked", function() {
 
     beforeEach(function() {
       scrollView = new ScrollView();
-      createCalls = client.calls({op: "create"});
     });
 
-    it("creates a vertical ScrolledComposite", function() {
-      expect(createCalls[0].properties.style).to.eql(["V_SCROLL"]);
+    it("calls 'scrollToX' on client", function() {
+      scrollView.scrollToX(100);
+
+      expect(client.calls({op: "call", id: scrollView.cid})[0].parameters.offsetX).to.equal(100);
     });
 
-    it("creates a vertical ScrollBar", function() {
-      expect(createCalls[1].properties.style).to.eql(["VERTICAL"]);
+  });
+
+  describe("when scrollToY is invoked", function() {
+
+    beforeEach(function() {
+      scrollView = new ScrollView();
     });
 
-    it("direction is 'vertical'", function() {
-      expect(scrollView.get("direction")).to.eql("vertical");
+    it("calls 'scrollToY' on client", function() {
+      scrollView.scrollToY(200);
+
+      expect(client.calls({op: "call", id: scrollView.cid})[0].parameters.offsetY).to.equal(200);
     });
 
   });

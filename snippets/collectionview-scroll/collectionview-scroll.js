@@ -32,7 +32,7 @@ new tabris.CollectionView({
       textView.set("text", item.name);
     });
   }
-}).on("scroll", function(collectionView, event) {
+}).on("scrollY", function(collectionView, event) {
   scrollPosition += event.deltaY;
   var firstVisibleItem = collectionView.firstVisibleIndex;
   floatingSection.set({

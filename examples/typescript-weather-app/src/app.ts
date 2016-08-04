@@ -16,7 +16,7 @@ let background = new BackgroundLayer({
   left: 0,
   right: 0,
 }).appendTo(page);
-let scrollView = new ScrollView().on("scroll", (widget, offset) => {
+let scrollView = new ScrollView().on("scrollY", (widget, offset) => {
   background.scroll(-offset.y);
 }).appendTo(page);
 let citySelector = createCitySelector().appendTo(scrollView);
@@ -49,7 +49,7 @@ function createWeatherInformation(data: WeatherData) {
     forecastTabView.set("selection", forecastTabView.getTab(index));
     let scrollToGraph = container.get("bounds").top + currentWeatherView.get("bounds").height + overview.get("bounds").height;
     let maxScroll = container.get("bounds").top + container.get("bounds").height - page.get("bounds").height;
-    scrollView.set("scrollY", Math.min(scrollToGraph, maxScroll));
+    scrollView.set("offsetY", Math.min(scrollToGraph, maxScroll));
   }).appendTo(container);
   finishedLoading = true;
 }

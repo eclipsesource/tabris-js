@@ -10,22 +10,29 @@
       "static": true,
       "description": "Specifies the scrolling direction of the scroll composite."
     },
-    "scrollX": {
+    "offsetX": {
       "type": "number",
       "description": "The horizontal scrolling position."
     },
-    "scrollY": {
+    "offsetY": {
       "type": "number",
       "description": "The vertical scrolling position."
     }
   },
   "events": {
-    "scroll": {
+    "scrollX": {
       "parameters": [
         {"name": "widget", "type": "this"},
-        {"name": "offset", "type": "{x: number, y: number}", "description": "Indicates the current scrolling position, e.g. `{x: number, y: number}`"}
+        {"name": "offset", "type": "number", "description": "Indicates the current horizontal scrolling position."}
       ],
-      "description": "Fired on scrolling."
+      "description": "Fired on scrolling horizontally."
+    },
+    "scrollY": {
+      "parameters": [
+        {"name": "widget", "type": "this"},
+        {"name": "offset", "type": "number", "description": "Indicates the current vertical scrolling position."}
+      ],
+      "description": "Fired on scrolling vertically."
     }
   },
   "links": [

@@ -18,10 +18,10 @@ for (var i = 0; i <= 50; i++) {
 }
 
 new tabris.Button({
-  left: 10, bottom: 10,
+  left: 16, bottom: 16,
   text: "scroll"
 }).on("select", function() {
-  scrollView.set("scrollX", 310);
+  scrollView.scrollToX(310);
 }).appendTo(page);
 
 page.open();

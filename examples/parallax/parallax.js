@@ -81,7 +81,7 @@ scrollView.on("resize", function(widget, bounds) {
   titleComposite.set("top", titleCompY);
 });
 
-scrollView.on("scroll", function(widget, offset) {
+scrollView.on("scrollY", function(widget, offset) {
   imageView.set("transform", {translationY: Math.max(0, offset.y * 0.4)});
   titleComposite.set("transform", {translationY: Math.max(0, offset.y - titleCompY)});
   var opacity = calculateTitleCompositeOpacity(offset.y, titleCompY);

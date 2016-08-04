@@ -1,18 +1,10 @@
 import Widget from "../Widget";
-import Composite from "./Composite";
-
-var ScrollBar = Widget.extend({
-  _type: "rwt.widgets.ScrollBar",
-  _events: {Selection: true},
-  _properties: {
-    style: "any"
-  }
-});
 
 export default Widget.extend({
+
   _name: "ScrollView",
 
-  _type: "rwt.widgets.ScrolledComposite",
+  _type: "tabris.ScrollView",
 
   _supportsChildren: true,
 
@@ -21,70 +13,33 @@ export default Widget.extend({
       type: ["choice", ["horizontal", "vertical"]],
       default: "vertical"
     },
-    scrollX: {
-      type: "number",
-      access: {
-        set: function(name, value) {
-          if (this.get("direction") === "horizontal") {
-            this._nativeSet("origin", [value, 0]);
-          }
-        },
-        get: function() {
-          return this.get("direction") === "horizontal" ? this._nativeGet("origin")[0] : 0;
-        }
-      }
-    },
-    scrollY: {
-      type: "number",
-      access: {
-        set: function(name, value) {
-          if (this.get("direction") === "vertical") {
-            this._nativeSet("origin", [0, value]);
-          }
-        },
-        get: function() {
-          return this.get("direction") === "vertical" ? this._nativeGet("origin")[1] : 0;
-        }
-      }
-    }
+    offsetX: {type: "number", nocache: true},
+    offsetY: {type: "number", nocache: true}
   },
 
   _events: {
-    scroll: {
-      listen: function(listen) {
-        if (listen) {
-          this._scrollBar.on("Selection", this._scrollBarListener, this);
-        } else {
-          this._scrollBar.off("Selection", this._scrollBarListener, this);
-        }
-      },
-      trigger: function(position) {
-        this.trigger(this, position, {});
+    scrollX: {
+      alias: "change:offsetX",
+      trigger: function(offset) {
+        this._triggerChangeEvent("offsetX", offset);
+        this.trigger("scrollX", this, offset, {});
+      }
+    },
+    scrollY: {
+      alias: "change:offsetY",
+      trigger: function(offset) {
+        this._triggerChangeEvent("offsetY", offset);
+        this.trigger("scrollY", this, offset, {});
       }
     }
   },
 
-  _create: function(properties) {
-    this._super("_create", arguments);
-    var style = properties.direction === "horizontal" ? ["H_SCROLL"] : ["V_SCROLL"];
-    this._nativeSet("style", style);
-    this._scrollBar = new ScrollBar({
-      style: properties.direction === "horizontal" ? ["HORIZONTAL"] : ["VERTICAL"]
-    });
-    this._scrollBar._nativeSet("parent", this.cid);
-    this._composite = new Composite();
-    this._composite._nativeSet("parent", this.cid);
-    this._nativeSet("content", this._composite.cid);
-    return this;
+  scrollToY: function(offsetY) {
+    this._nativeCall("scrollToY", {offsetY: offsetY});
   },
 
-  _scrollBarListener: function() {
-    var origin = this._nativeGet("origin");
-    this.trigger("scroll", this, {x: origin[0], y: origin[1]});
-  },
-
-  _getContainer: function() {
-    return this._composite;
+  scrollToX: function(offsetX) {
+    this._nativeCall("scrollToX", {offsetX: offsetX});
   }
 
 });
