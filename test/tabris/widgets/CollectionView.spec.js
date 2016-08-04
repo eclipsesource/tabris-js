@@ -421,7 +421,7 @@ describe("CollectionView", function() {
 
         });
 
-        describe("when selection event is received", function() {
+        describe("when select event is received", function() {
 
           var listener;
 
@@ -433,7 +433,7 @@ describe("CollectionView", function() {
             spyOn(console, "warn");
             view.on("select", listener);
 
-            view._trigger("selection", {index: 0});
+            view._trigger("select", {index: 0});
 
             expect(listener.calls.count()).toBe(1);
             expect(listener.calls.argsFor(0)[0]).toBe(view);

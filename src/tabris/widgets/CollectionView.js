@@ -132,14 +132,12 @@ tabris.registerWidget("CollectionView", {
       }
     },
     select: {
-      name: "selection",
       listen: function(state) {
-        this._nativeListen("selection", state);
+        this._nativeListen("select", state);
       },
       trigger: function(event) {
         var item = this._getItem(this._items, event.index);
         this.trigger("select", this, item, {index: event.index});
-        this.trigger("selection", {index: event.index, item: item});
       }
     },
     scroll: {
