@@ -1,7 +1,7 @@
 describe("Drawer", function() {
 
   var nativeBridge;
-  var drawer, _drawer;
+  var drawer;
 
   beforeEach(function() {
     nativeBridge = new NativeBridgeSpy();
@@ -10,7 +10,6 @@ describe("Drawer", function() {
     tabris.ui = tabris.create("_UI");
     nativeBridge.resetCalls();
     drawer = new tabris.Drawer({background: "#ff0000"});
-    _drawer = tabris(nativeBridge.calls({op: "create", type: "tabris.Drawer"})[0].id);
   });
 
   afterEach(function() {
@@ -19,8 +18,7 @@ describe("Drawer", function() {
 
   describe("create", function() {
 
-    it("creates a Composite and a Drawer", function() {
-      expect(nativeBridge.calls({op: "create", type: "tabris.Composite"}).length).toBe(1);
+    it("creates Drawer", function() {
       expect(nativeBridge.calls({op: "create", type: "tabris.Drawer"}).length).toBe(1);
     });
 
@@ -37,48 +35,6 @@ describe("Drawer", function() {
     it("fails when a drawer already exists", function() {
       expect(() => { new tabris.Drawer(); }).toThrow();
       expect(nativeBridge.calls({op: "create", type: "tabris.Drawer"}).length).toBe(1);
-    });
-
-    describe("created Composite", function() {
-
-      var properties;
-
-      beforeEach(function() {
-        var createCall = nativeBridge.calls({op: "create", type: "tabris.Composite"})[0];
-        properties = createCall.properties;
-      });
-
-      it("parent is _drawer", function() {
-        expect(properties.parent).toEqual(_drawer.cid);
-      });
-
-      it("is full-size", function() {
-        expect(properties.layoutData).toEqual({left: 0, right: 0, top: 0, bottom: 0});
-      });
-
-      it("has non-drawer properties", function() {
-        expect(properties.background).toEqual([255, 0, 0, 255]);
-      });
-
-    });
-
-    describe("created Drawer", function() {
-
-      var properties;
-
-      beforeEach(function() {
-        var createCall = nativeBridge.calls({op: "create", type: "tabris.Drawer"})[0];
-        properties = createCall.properties;
-      });
-
-      it("does not have non-drawer properties set", function() {
-        expect(properties.background).not.toBeDefined();
-      });
-
-      it("does not have a parent", function() {
-        expect(properties.parent).not.toBeDefined();
-      });
-
     });
 
   });
@@ -98,7 +54,7 @@ describe("Drawer", function() {
         drawer.append(child);
       });
 
-      it("child's parent is set to the composite", function() {
+      it("child's parent is set to the drawer", function() {
         var call = nativeBridge.calls({op: "set", id: child.cid})[0];
         expect(call.properties.parent).toEqual(drawer.cid);
       });
@@ -109,7 +65,7 @@ describe("Drawer", function() {
 
       it("CALLs open", function() {
         drawer.open();
-        expect(nativeBridge.calls({op: "call", id: _drawer.cid})[0].method).toBe("open");
+        expect(nativeBridge.calls({op: "call", id: drawer.cid})[0].method).toBe("open");
       });
 
     });
@@ -118,7 +74,7 @@ describe("Drawer", function() {
 
       it("CALLs close", function() {
         drawer.close();
-        expect(nativeBridge.calls({op: "call", id: _drawer.cid})[0].method).toBe("close");
+        expect(nativeBridge.calls({op: "call", id: drawer.cid})[0].method).toBe("close");
       });
 
     });
@@ -131,7 +87,7 @@ describe("Drawer", function() {
 
       it("disposes drawer and composite", function() {
         expect(nativeBridge.calls({op: "destroy", id: drawer.cid}).length).toBe(1);
-        expect(nativeBridge.calls({op: "destroy", id: _drawer.cid}).length).toBe(1);
+        expect(nativeBridge.calls({op: "destroy", id: drawer.cid}).length).toBe(1);
       });
 
       it("clear tabris.ui.drawer", function() {

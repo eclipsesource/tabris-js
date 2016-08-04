@@ -28,7 +28,6 @@ import "./widgets/CheckBox.js";
 import "./widgets/CollectionView.js";
 import "./widgets/Composite.js";
 import "./widgets/Drawer.js";
-import "./widgets/Drawer-legacy.js";
 import "./widgets/ImageView.js";
 import "./widgets/Page.js";
 import "./widgets/PageSelector.js";

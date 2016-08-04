@@ -80,7 +80,6 @@ tabris.registerWidget("_UI", {
   _getContainer: function(child) {
     switch (child.type) {
       case "Drawer":
-        return child._drawer ? child._drawer : this; // child._drawer used for the legacy drawer
       case "Action":
       case "SearchAction":
         return this;
