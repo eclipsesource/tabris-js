@@ -1,18 +1,12 @@
 import Widget from "../Widget";
 
 export default Widget.extend({
+
   _name: "Drawer",
 
   _type: "tabris.Drawer",
 
   _supportsChildren: true,
-
-  _create: function() {
-    tabris.ui._setCurrentDrawer(this);
-    this._super("_create", arguments);
-    this._setParent(tabris.ui);
-    return this;
-  },
 
   _properties: {
     win_displayMode: {
@@ -50,11 +44,6 @@ export default Widget.extend({
   close: function() {
     this._nativeCall("close", {});
     return this;
-  },
-
-  dispose: function() {
-    tabris.ui._setCurrentDrawer(null);
-    this._super("dispose", arguments);
   }
 
 });

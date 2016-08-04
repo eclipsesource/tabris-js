@@ -3,7 +3,6 @@ import ProxyStore from "../../../src/tabris/ProxyStore";
 import NativeBridge from "../../../src/tabris/NativeBridge";
 import ClientStub from "../ClientStub";
 import Action from "../../../src/tabris/widgets/Action";
-import UI from "../../../src/tabris/UI";
 
 describe("Action", function() {
 
@@ -17,13 +16,9 @@ describe("Action", function() {
       _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
     };
     global.tabris._nativeBridge = new NativeBridge(client);
-    tabris.ui = new UI();
   });
 
-  afterEach(function() {
-    restore();
-    delete tabris.ui;
-  });
+  afterEach(restore);
 
   describe("create", function() {
 
@@ -36,14 +31,6 @@ describe("Action", function() {
 
     it("creates an action", function() {
       expect(actionCreateCalls.length).to.equal(1);
-    });
-
-    it("created action's parent is set to ui", function() {
-      expect(actionCreateCalls[0].properties.parent).to.eql(tabris.ui.cid);
-    });
-
-    it("ui.children has Action", function() {
-      expect(tabris.ui.children("Action").length).to.equal(1);
     });
 
     it("properties are passed to created action", function() {

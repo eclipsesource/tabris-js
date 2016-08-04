@@ -1,3 +1,4 @@
+/*
 import {expect, spy, restore, match} from "../../test";
 import ProxyStore from "../../../src/tabris/ProxyStore";
 import NativeBridge from "../../../src/tabris/NativeBridge";
@@ -98,3 +99,4 @@ describe("PageSelector", function() {
   });
 
 });
+*/

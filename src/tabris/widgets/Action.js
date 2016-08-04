@@ -1,6 +1,7 @@
 import Widget from "../Widget";
 
 export default Widget.extend({
+
   _name: "Action",
 
   _type: "tabris.Action",
@@ -27,12 +28,6 @@ export default Widget.extend({
         this.trigger("select", this, event);
       }
     }
-  },
-
-  _create: function() {
-    this._super("_create", arguments);
-    tabris.ui.append(this);
-    return this;
   }
 
 });
