@@ -1,3 +1,5 @@
+import {drop, extend} from "../util";
+
 tabris.load(function() {
 
   if (device.platform !== "windows") {
@@ -27,9 +29,9 @@ tabris.load(function() {
         this._drawer._on("close", function() {
           this.trigger("close", this);
         }, this);
-        this._super("_create", [_.extend(properties, {
+        this._super("_create", [extend(properties, {
           layoutData: {left: 0, right: 0, top: 0, bottom: 0}
-        })].concat(_.drop(arguments)));
+        })].concat(drop(arguments)));
         this._setParent(tabris.ui);
         return this;
       },

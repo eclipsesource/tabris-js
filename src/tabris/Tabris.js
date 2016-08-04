@@ -1,6 +1,8 @@
+import {extend, extendPrototype, omit, clone} from "./util";
+
 (function(module) {
 
-  window.tabris = module.exports = _.extend(function(cid) {
+  window.tabris = module.exports = extend(function(cid) {
     if (!tabris._proxies[cid]) {
       throw new Error("No native object with cid " + cid);
     }
@@ -50,10 +52,10 @@
       tabris[type]._events = normalizeEvents(tabris[type]._events);
       tabris[type]._properties = normalizeProperties(tabris[type]._properties);
       tabris[type]._trigger = buildTriggerMap(tabris[type]._events);
-      var superProto = _.omit(members, Object.keys(staticMembers));
+      var superProto = omit(members, Object.keys(staticMembers));
       superProto.type = type;
-      superProto.constructor = tabris[type]; // _.extendPrototype can not provide the original
-      tabris[type].prototype = _.extendPrototype(superType || tabris.Proxy, superProto);
+      superProto.constructor = tabris[type]; // extendPrototype can not provide the original
+      tabris[type].prototype = extendPrototype(superType || tabris.Proxy, superProto);
       mapProperties(tabris[type].prototype, tabris[type]._properties);
     },
 
@@ -101,9 +103,6 @@
     }
 
   });
-
-  // TODO: remove once source files are modules
-  tabris.util = _;
 
   function normalizeEvents(events) {
     var result = {};
@@ -159,7 +158,7 @@
       throw new Error("Can not find property type " + type);
     }
     if (Array.isArray(type)) {
-      typeDef = _.clone(typeDef);
+      typeDef = clone(typeDef);
       var args = type.slice(1);
       if (typeDef.encode) {
         typeDef.encode = wrapCoder(typeDef.encode, args);
@@ -206,7 +205,7 @@
 
   function getDefault(member) {
     var value = staticMembers[member];
-    return value instanceof Object ? _.clone(value) : value;
+    return value instanceof Object ? clone(value) : value;
   }
 
   function mapProperties(target, definitions) {

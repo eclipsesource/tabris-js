@@ -18,62 +18,7 @@ module.exports = function(grunt) {
             return src.replace(/\${VERSION}/g, pkg.version);
           }
         },
-        src: prefix("src/tabris/", [
-          "load-polyfill.js",
-          "util.js",
-          "util-colors.js",
-          "util-fonts.js",
-          "util-images.js",
-          "Tabris.js",
-          "NativeBridge.js",
-          "Events.js",
-          "Layout.js",
-          "Properties.js",
-          "Proxy.js",
-          "ProxyCollection.js",
-          "PropertyTypes.js",
-          "Animation.js",
-          "GestureRecognizer.js",
-          "Device.js",
-          "Widget.js",
-          "Crypto.js",
-          "DOMEvents.js",
-          "DOMDocument.js",
-          "WindowTimers.js",
-          "App.js",
-          "UI.js",
-          "ImageData.js",
-          "CanvasContext.js",
-          "LegacyCanvasContext.js",
-          "WebStorage.js",
-          "XMLHttpRequest.js",
-          "widgets/Action.js",
-          "widgets/ActivityIndicator.js",
-          "widgets/Button.js",
-          "widgets/Canvas.js",
-          "widgets/CheckBox.js",
-          "widgets/CollectionView.js",
-          "widgets/Composite.js",
-          "widgets/Drawer.js",
-          "widgets/Drawer-legacy.js",
-          "widgets/ImageView.js",
-          "widgets/Page.js",
-          "widgets/PageSelector.js",
-          "widgets/Picker.js",
-          "widgets/ProgressBar.js",
-          "widgets/RadioButton.js",
-          "widgets/ScrollView.js",
-          "widgets/SearchAction.js",
-          "widgets/Slider.js",
-          "widgets/Switch.js",
-          "widgets/TabFolder.js",
-          "widgets/TabFolder-legacy.js",
-          "widgets/TextInput.js",
-          "widgets/TextView.js",
-          "widgets/ToggleButton.js",
-          "widgets/Video.js",
-          "widgets/WebView.js"
-        ]),
+        src: ["build/bundle.js"],
         dest: "build/tabris/tabris.js"
       },
       boot: {
@@ -192,6 +137,9 @@ module.exports = function(grunt) {
       },
       lint: {
         cmd: "node node_modules/eslint/bin/eslint.js --color **/*.js"
+      },
+      bundle: {
+        cmd: "node node_modules/rollup/bin/rollup --format=cjs --output=build/bundle.js -- src/tabris/main.js"
       }
     },
     examples: {
@@ -224,6 +172,7 @@ module.exports = function(grunt) {
 
   /* concatenates and minifies code */
   grunt.registerTask("build", [
+    "exec:bundle",
     "concat:tabris",
     "concat:boot",
     "webpack:polyfill",

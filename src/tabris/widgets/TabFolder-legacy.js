@@ -1,3 +1,5 @@
+import {extend} from "../util";
+
 tabris.load(function() {
 
   if (device.platform !== "windows") {
@@ -174,7 +176,7 @@ tabris.load(function() {
           throw new Error("Tab must be a child of TabFolder");
         }
         tabris.Widget.prototype._setParent.call(this, parent);
-        this._tabItem = tabris.create("_TabItem", _.extend({
+        this._tabItem = tabris.create("_TabItem", extend({
           control: this.cid,
           index: parent._getItems().length
         }, this._getItemProps())).appendTo(parent);

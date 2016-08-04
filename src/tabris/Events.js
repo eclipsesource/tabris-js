@@ -1,3 +1,5 @@
+import {extend} from "./util";
+
 tabris.Events = {
 
   on: function(type, callback, context) {
@@ -100,4 +102,4 @@ tabris.Events = {
 
 };
 
-_.extend(tabris, tabris.Events);
+extend(tabris, tabris.Events);
