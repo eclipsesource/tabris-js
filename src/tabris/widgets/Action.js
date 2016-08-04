@@ -20,10 +20,6 @@ tabris.registerWidget("Action", {
 
   _events: {
     select: {
-      name: "Selection",
-      listen: function(state) {
-        this._nativeListen("Selection", state);
-      },
       trigger: function(event) {
         this.trigger("select", this, event);
       }
