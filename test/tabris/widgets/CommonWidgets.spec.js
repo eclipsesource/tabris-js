@@ -65,7 +65,7 @@ describe("Common Widgets", function() {
   it("Canvas", function() {
     new tabris.Canvas();
 
-    expect(getCreate().type).toEqual("rwt.widgets.Canvas");
+    expect(getCreate().type).toEqual("tabris.Canvas");
   });
 
   it("CheckBox", function() {
