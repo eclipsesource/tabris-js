@@ -1,5 +1,5 @@
 tabris.registerWidget("ProgressBar", {
-  _type: "rwt.widgets.ProgressBar",
+  _type: "tabris.ProgressBar",
   _properties: {
     minimum: {type: "integer", default: 0},
     maximum: {type: "integer", default: 100},

@@ -105,7 +105,7 @@ describe("Common Widgets", function() {
   it("ProgressBar", function() {
     var progressBar = new tabris.ProgressBar();
 
-    expect(getCreate().type).toEqual("rwt.widgets.ProgressBar");
+    expect(getCreate().type).toEqual("tabris.ProgressBar");
     expect(progressBar.get("minimum")).toBe(0);
     expect(progressBar.get("maximum")).toBe(100);
     expect(progressBar.get("selection")).toBe(0);
