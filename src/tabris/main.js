@@ -49,6 +49,10 @@ import "./widgets/ToggleButton.js";
 import "./widgets/Video.js";
 import "./widgets/WebView.js";
 
+if (typeof module !== "undefined") {
+  module.exports = window.tabris;
+}
+
 // TODO: Temporary code to keep tests alive
 import * as util from "./util";
 import * as colors from "./util-colors";
