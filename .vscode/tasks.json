@@ -1,33 +1,35 @@
-// A task runner that calls the Typescript compiler (tsc) and
-// compiles based on a tsconfig.json file that is present in
-// the root of the folder open in VSCode
-
 {
 
   "version": "0.1.0",
-
-  // The command is tsc. Assumes that tsc has been installed using npm install -g typescript
-  "command": "tsc",
-
-  // The command is a shell script
+  "command": "grunt",
+  "showOutput": "always",
   "isShellCommand": true,
-
-  // Show the output window only if unrecognized errors occur.
-  "showOutput": "silent",
-
-  // Tell the tsc compiler to use the tsconfig.json from the open folder.
-  "args": [
-    "-m", "commonjs",
-    "-t", "es5",
-    "--experimentalDecorators",
-    "--emitDecoratorMetadata",
-    "--noImplicitAny",
-    "-p",
-    "doc/api/typescript"
-  ],
-
-  // use the standard tsc problem matcher to find compile problems
-  // in the output.
-  "problemMatcher": "$tsc"
-
+  "tasks": [
+    {
+      "suppressTaskName": true,
+      "taskName": " test all",
+      "args": ["clean", "build", "test"]
+    },
+    {
+      "suppressTaskName": true,
+      "taskName": " test tabris.js",
+      "args": ["clean", "build", "exec:test_tabris"]
+    },
+    {
+      "suppressTaskName": true,
+      "taskName": " test boot.js",
+      "args": ["clean", "build", "exec:test_boot"]
+    },
+    {
+      "suppressTaskName": true,
+      "taskName": " test typings",
+      "args": ["clean", "build", "copy:test_ts", "exec:test_typings"]
+    },
+    {
+      "suppressTaskName": true,
+      "taskName": " test spec",
+      "args": ["clean", "build", "exec:test_spec", "--spec=${file}"],
+      "isTestCommand": true
+    }
+  ]
 }

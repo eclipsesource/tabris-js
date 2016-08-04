@@ -187,6 +187,9 @@ module.exports = function(grunt) {
       test_tabris: {
         cmd: "node test/tabris/run-tests.js"
       },
+      test_spec: {
+        cmd: "node test/tabris/run-tests.js " + grunt.option("spec")
+      },
       lint: {
         cmd: "node node_modules/eslint/bin/eslint.js --color **/*.js"
       }

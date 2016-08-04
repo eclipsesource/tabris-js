@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [{
+      "name": "Debug Tests",
+      "type": "node",
+      "program": "${workspaceRoot}/test/tabris/run-tests.js",
+      "stopOnEntry": false,
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": null,
+      "env": { "NODE_ENV": "production"},
+      "preLaunchTask": "build",
+      "externalConsole": true
+    }
+  ]
+}
