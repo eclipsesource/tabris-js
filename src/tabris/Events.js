@@ -1,6 +1,4 @@
-import {extend} from "./util";
-
-tabris.Events = {
+export default {
 
   on: function(type, callback, context) {
     return this._on(type, callback, context, true);
@@ -101,5 +99,3 @@ tabris.Events = {
   _listen: function() {}
 
 };
-
-extend(tabris, tabris.Events);

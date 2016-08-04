@@ -1,4 +1,5 @@
 import {extend, extendPrototype, omit, clone} from "./util";
+import Events from "./Events";
 
 window.tabris = extend(function(cid) {
   if (!tabris._proxies[cid]) {
@@ -100,7 +101,7 @@ window.tabris = extend(function(cid) {
     this._proxies = {};
   }
 
-});
+}, Events);
 
 function normalizeEvents(events) {
   var result = {};

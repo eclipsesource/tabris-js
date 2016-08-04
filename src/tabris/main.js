@@ -1,9 +1,7 @@
 import "./load-polyfill.js";
 import "./Tabris.js";
 import "./NativeBridge.js";
-import "./Events.js";
 import "./Layout.js";
-import "./Properties.js";
 import "./Proxy.js";
 import "./ProxyCollection.js";
 import "./PropertyTypes.js";
@@ -54,9 +52,14 @@ if (typeof module !== "undefined") {
 }
 
 // TODO: Temporary code to keep tests alive
+
 import * as util from "./util";
 import * as colors from "./util-colors";
 import * as fonts from "./util-fonts";
 import * as images from "./util-images";
+import Events from "./Events.js";
+import Properties from "./Properties.js";
 
 tabris.util = util.extend({}, util, colors, fonts, images);
+tabris.Properties = Properties;
+tabris.Events = Events;

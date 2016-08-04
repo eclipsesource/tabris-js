@@ -1,4 +1,6 @@
 import {extend} from "./util";
+import Properties from "./Properties";
+import Events from "./Events";
 
 tabris.Proxy = function(cid) {
   this.cid = cid || generateId();
@@ -8,7 +10,7 @@ tabris.Proxy = function(cid) {
   tabris._proxies[this.cid] = this;
 };
 
-extend(tabris.Proxy.prototype, tabris.Properties, tabris.Events, {
+extend(tabris.Proxy.prototype, Properties, Events, {
 
   _create: function(properties) {
     var type = this.constructor._type || this.type;

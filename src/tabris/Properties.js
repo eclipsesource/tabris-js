@@ -1,4 +1,4 @@
-tabris.Properties = {
+export default {
 
   set: function(arg1, arg2, arg3) {
     this._checkDisposed();
