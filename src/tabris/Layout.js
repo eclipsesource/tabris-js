@@ -1,6 +1,6 @@
 import {omit} from "./util";
 
-tabris.Layout = {
+export default {
 
   checkConsistency: function(layoutData) {
     var result = layoutData;

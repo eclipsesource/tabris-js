@@ -1,4 +1,5 @@
 import {extend, extendPrototype} from "./util";
+import Layout from "./Layout";
 
 tabris.Widget = function() {
   throw new Error("Cannot instantiate abstract Widget");
@@ -116,11 +117,11 @@ tabris.Widget.prototype = extendPrototype(tabris.Proxy, {
     this._nativeSet("parent", tabris.PropertyTypes.proxy.encode(parent._getContainer(this)));
     if (this._parent) {
       this._parent._removeChild(this);
-      tabris.Layout.addToQueue(this._parent);
+      Layout.addToQueue(this._parent);
     }
     this._parent = parent;
     this._parent._addChild(this, index);
-    tabris.Layout.addToQueue(this._parent);
+    Layout.addToQueue(this._parent);
   },
 
   _addChild: function(child, index) {
@@ -162,7 +163,7 @@ tabris.Widget.prototype = extendPrototype(tabris.Proxy, {
     }
     if (this._parent) {
       this._parent._removeChild(this);
-      tabris.Layout.addToQueue(this._parent);
+      Layout.addToQueue(this._parent);
       delete this._parent;
     }
   },
@@ -222,7 +223,7 @@ var layoutAccess = {
       this._layoutData[name] = value;
     }
     if (this._parent) {
-      tabris.Layout.addToQueue(this._parent);
+      Layout.addToQueue(this._parent);
     }
   },
   get: function(name) {
@@ -274,7 +275,7 @@ extend(tabris.registerWidget, {
         set: function(name, value) {
           this._layoutData = value;
           if (this._parent) {
-            tabris.Layout.addToQueue(this._parent);
+            Layout.addToQueue(this._parent);
           }
         },
         get: function() {
@@ -424,8 +425,8 @@ var defaultGestures = {
 
 function renderLayoutData() {
   if (this._layoutData) {
-    var checkedData = tabris.Layout.checkConsistency(this._layoutData);
-    this._nativeSet("layoutData", tabris.Layout.resolveReferences(checkedData, this));
+    var checkedData = Layout.checkConsistency(this._layoutData);
+    this._nativeSet("layoutData", Layout.resolveReferences(checkedData, this));
   }
 }
 

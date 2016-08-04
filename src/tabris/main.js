@@ -1,7 +1,6 @@
 import "./load-polyfill.js";
 import "./Tabris.js";
 import "./NativeBridge.js";
-import "./Layout.js";
 import "./Proxy.js";
 import "./ProxyCollection.js";
 import "./PropertyTypes.js";
@@ -58,7 +57,9 @@ import * as fonts from "./util-fonts";
 import * as images from "./util-images";
 import Events from "./Events.js";
 import Properties from "./Properties.js";
+import Layout from "./Layout.js";
 
 tabris.util = util.extend({}, util, colors, fonts, images);
 tabris.Properties = Properties;
 tabris.Events = Events;
+tabris.Layout = Layout;

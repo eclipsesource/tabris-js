@@ -1,3 +1,5 @@
+import Layout from "./Layout";
+
 tabris.NativeBridge = function(bridge) {
   this._bridge = bridge;
   this._operations = [];
@@ -45,7 +47,7 @@ tabris.NativeBridge.prototype = {
   },
 
   flush: function() {
-    tabris.Layout.flushQueue();
+    Layout.flushQueue();
     var operations = this._operations;
     this._operations = [];
     this._currentOperation = {id: null};
