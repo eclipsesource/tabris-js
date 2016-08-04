@@ -115,23 +115,22 @@ describe("Common Widgets", function() {
   it("RadioButton", function() {
     var radioButton = new tabris.RadioButton({enabled: false});
 
-    expect(getCreate().type).toEqual("rwt.widgets.Button");
-    expect(getCreate().properties).toEqual({style: ["RADIO"], enabled: false});
+    expect(getCreate().type).toEqual("tabris.RadioButton");
     expect(radioButton.get("text")).toBe("");
   });
 
   it("RadioButton select", function() {
     widget = new tabris.RadioButton().on("select", listener);
-    tabris._notify(widget.cid, "Selection", {selection: true});
+    tabris._notify(widget.cid, "select", {selection: true});
     checkEvent(true);
-    checkListen("Selection");
+    checkListen("select");
   });
 
   it("RadioButton change:selection", function() {
     widget = new tabris.RadioButton().on("change:selection", listener);
-    tabris._notify(widget.cid, "Selection", {selection: true});
+    tabris._notify(widget.cid, "select", {selection: true});
     checkEvent(true);
-    checkListen("Selection");
+    checkListen("select");
   });
 
   it("TextView", function() {
@@ -173,10 +172,10 @@ describe("Common Widgets", function() {
   });
 
   it("Slider change:selection", function() {
-    widget = new tabris.RadioButton().on("change:selection", listener);
-    tabris._notify(widget.cid, "Selection", {selection: 23});
+    widget = new tabris.Slider().on("change:selection", listener);
+    tabris._notify(widget.cid, "select", {selection: 23});
     checkEvent(23);
-    checkListen("Selection");
+    checkListen("select");
   });
 
   it("TextInput", function() {
