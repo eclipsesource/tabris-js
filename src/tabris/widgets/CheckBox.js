@@ -1,9 +1,7 @@
 tabris.registerWidget("CheckBox", {
-  _type: "rwt.widgets.Button",
-  _initProperties: {style: ["CHECK"]},
+  _type: "tabris.CheckBox",
   _events: {
     select: {
-      name: "Selection",
       alias: "change:selection",
       trigger: function(event) {
         this._triggerChangeEvent("selection", event.selection);

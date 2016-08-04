@@ -71,23 +71,22 @@ describe("Common Widgets", function() {
   it("CheckBox", function() {
     var checkBox = new tabris.CheckBox({enabled: false});
 
-    expect(getCreate().type).toEqual("rwt.widgets.Button");
-    expect(getCreate().properties).toEqual({style: ["CHECK"], enabled: false});
+    expect(getCreate().type).toEqual("tabris.CheckBox");
     expect(checkBox.get("text")).toBe("");
   });
 
   it("CheckBox select", function() {
     widget = new tabris.CheckBox().on("select", listener);
-    tabris._notify(widget.cid, "Selection", {selection: true});
+    tabris._notify(widget.cid, "select", {selection: true});
     checkEvent(true);
-    checkListen("Selection");
+    checkListen("select");
   });
 
   it("CheckBox change:selection", function() {
     widget = new tabris.CheckBox().on("change:selection", listener);
-    tabris._notify(widget.cid, "Selection", {selection: true});
+    tabris._notify(widget.cid, "select", {selection: true});
     checkEvent(true);
-    checkListen("Selection");
+    checkListen("select");
   });
 
   it("Composite", function() {
