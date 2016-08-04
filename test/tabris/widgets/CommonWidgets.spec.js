@@ -40,11 +40,7 @@ describe("Common Widgets", function() {
   it("ActivityIndicator", function() {
     new tabris.ActivityIndicator();
 
-    expect(getCreate().type).toEqual("rwt.widgets.ProgressBar");
-    expect(getCreate().properties).toEqual({
-      style: ["INDETERMINATE"],
-      data: {spinningIndicator: true}
-    });
+    expect(getCreate().type).toEqual("tabris.ActivityIndicator");
   });
 
   it("Button", function() {
