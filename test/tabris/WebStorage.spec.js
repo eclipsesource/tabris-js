@@ -9,7 +9,7 @@ describe("WebStorage", function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._init(nativeBridge);
-    localStorage = window.localStorage;
+    localStorage = tabris.localStorage;
     spyOn(nativeBridge, "call").and.callFake(function() {
       return returnValue;
     });
@@ -23,7 +23,7 @@ describe("WebStorage", function() {
   describe("localStorage", function() {
 
     it("extends Storage", function() {
-      expect(localStorage).toEqual(jasmine.any(window.Storage));
+      expect(localStorage).toEqual(jasmine.any(tabris.Storage));
     });
 
     it("does not have any enumerable Object keys", function() {

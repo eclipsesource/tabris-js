@@ -73,11 +73,15 @@
   });
 
   tabris.load(function() {
+    tabris.localStorage = createStorage();
+    if (device.platform === "iOS") {
+      tabris.secureStorage = createStorage(true);
+    }
     if (!window.Storage) {
       window.Storage = tabris.Storage;
-      window.localStorage = createStorage();
-      if (device.platform === "iOS") {
-        window.secureStorage = createStorage(true);
+      window.localStorage = tabris.localStorage;
+      if (tabris.secureStorage) {
+        window.secureStorage = tabris.secureStorage;
       }
     }
   });
