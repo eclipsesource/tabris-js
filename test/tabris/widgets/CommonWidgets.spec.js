@@ -223,16 +223,16 @@ describe("Common Widgets", function() {
     new tabris.Switch({selection: true});
 
     expect(getCreate().type).toEqual("tabris.Switch");
-    expect(getCreate().properties).toEqual({checked: true});
+    expect(getCreate().properties).toEqual({selection: true});
   });
 
   it("Switch change:selection", function() {
     widget = new tabris.Switch().on("change:selection", listener);
 
-    tabris._notify(widget.cid, "toggle", {checked: true});
+    tabris._notify(widget.cid, "select", {selection: true});
 
     checkEvent(true);
-    checkListen("toggle");
+    checkListen("select");
   });
 
   it("Switch change:selection on property change", function() {
@@ -246,10 +246,10 @@ describe("Common Widgets", function() {
   it("Switch select", function() {
     widget = new tabris.Switch().on("select", listener);
 
-    tabris._notify(widget.cid, "toggle", {checked: true});
+    tabris._notify(widget.cid, "select", {selection: true});
 
     checkEvent(true);
-    checkListen("toggle");
+    checkListen("select");
   });
 
   it("ToggleButton", function() {
