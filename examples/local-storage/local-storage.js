@@ -32,7 +32,7 @@ new tabris.Button({
   } else if (!valueField.text) {
     console.error("The value cannot be empty.");
   } else {
-    localStorage.setItem(keyField.text"), valueField.get("text);
+    localStorage.setItem(keyField.text, valueField.text);
     valueField.set("text", "");
   }
 }).appendTo(page);
