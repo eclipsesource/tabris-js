@@ -50,18 +50,11 @@ describe("SearchAction", function() {
       nativeBridge.resetCalls();
     });
 
-    it("translates visible to visibility", function() {
-      action.set("visible", true);
-
-      var call = nativeBridge.calls({op: "set"})[0];
-      expect(call.properties.visibility).toBe(true);
-    });
-
-    it("translates placement priority to uppercase", function() {
+    it("sets placement priority to uppercase", function() {
       action.set("placementPriority", "low");
 
       var call = nativeBridge.calls({op: "set"})[0];
-      expect(call.properties.placementPriority).toBe("LOW");
+      expect(call.properties.placementPriority).toBe("low");
     });
 
   });
@@ -122,17 +115,17 @@ describe("SearchAction", function() {
 
     it("select", function() {
       action.on("select", listener);
-      tabris._notify(action.cid, "Selection", {});
+      tabris._notify(action.cid, "select", {});
 
-      checkListen("Selection");
+      checkListen("select");
       checkEvent();
     });
 
     it("accept", function() {
       action.on("accept", listener);
-      tabris._notify(action.cid, "Search", {query: "foo"});
+      tabris._notify(action.cid, "accept", {text: "foo"});
 
-      checkListen("Search");
+      checkListen("accept");
       checkEvent("foo");
     });
 
