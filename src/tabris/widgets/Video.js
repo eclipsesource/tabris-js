@@ -1,5 +1,4 @@
 tabris.registerWidget("Video", {
-  _type: "tabris.widgets.Video",
-  _initProperties: {controls_visible: true, repeat: false},
+  _type: "tabris.Video",
   _properties: {url: "string"}
 });
