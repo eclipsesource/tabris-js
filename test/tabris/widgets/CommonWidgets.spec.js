@@ -159,7 +159,7 @@ describe("Common Widgets", function() {
   it("Slider", function() {
     var slider = new tabris.Slider({selection: 23});
 
-    expect(getCreate().type).toEqual("rwt.widgets.Scale");
+    expect(getCreate().type).toEqual("tabris.Slider");
     expect(getCreate().properties).toEqual({selection: 23});
     expect(slider.get("minimum")).toBe(0);
     expect(slider.get("maximum")).toBe(100);
@@ -167,9 +167,9 @@ describe("Common Widgets", function() {
 
   it("Slider select", function() {
     widget = new tabris.Slider().on("select", listener);
-    tabris._notify(widget.cid, "Selection", {selection: 23});
+    tabris._notify(widget.cid, "select", {selection: 23});
     checkEvent(23);
-    checkListen("Selection");
+    checkListen("select");
   });
 
   it("Slider change:selection", function() {

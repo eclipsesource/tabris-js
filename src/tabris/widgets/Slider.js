@@ -1,8 +1,7 @@
 tabris.registerWidget("Slider", {
-  _type: "rwt.widgets.Scale",
+  _type: "tabris.Slider",
   _events: {
     select: {
-      name: "Selection",
       alias: "change:selection",
       trigger: function(event) {
         this._triggerChangeEvent("selection", event.selection);
