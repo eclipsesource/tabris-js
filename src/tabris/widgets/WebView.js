@@ -1,6 +1,6 @@
 tabris.registerWidget("WebView", {
 
-  _type: "rwt.widgets.Browser",
+  _type: "tabris.WebView",
 
   _events: {
     navigate: {
@@ -14,7 +14,6 @@ tabris.registerWidget("WebView", {
       }
     },
     load: {
-      name: "Progress",
       trigger: function(event) {
         this.trigger("load", this, event);
       }

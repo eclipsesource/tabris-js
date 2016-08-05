@@ -215,7 +215,7 @@ describe("Common Widgets", function() {
   it("WebView", function() {
     new tabris.WebView({html: "foo"});
 
-    expect(getCreate().type).toEqual("rwt.widgets.Browser");
+    expect(getCreate().type).toEqual("tabris.WebView");
     expect(getCreate().properties).toEqual({html: "foo"});
   });
 
