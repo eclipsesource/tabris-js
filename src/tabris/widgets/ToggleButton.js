@@ -1,9 +1,7 @@
 tabris.registerWidget("ToggleButton", {
-  _type: "rwt.widgets.Button",
-  _initProperties: {style: ["TOGGLE"]},
+  _type: "tabris.ToggleButton",
   _events: {
     select: {
-      name: "Selection",
       alias: "change:selection",
       trigger: function(event) {
         this._triggerChangeEvent("selection", event.selection);

@@ -255,8 +255,7 @@ describe("Common Widgets", function() {
   it("ToggleButton", function() {
     var toggleButton = new tabris.ToggleButton({enabled: false});
 
-    expect(getCreate().type).toEqual("rwt.widgets.Button");
-    expect(getCreate().properties).toEqual({style: ["TOGGLE"], enabled: false});
+    expect(getCreate().type).toEqual("tabris.ToggleButton");
     expect(toggleButton.get("text")).toBe("");
     expect(toggleButton.get("image")).toBe(null);
     expect(toggleButton.get("alignment")).toBe("center");
@@ -264,16 +263,16 @@ describe("Common Widgets", function() {
 
   it("ToggleButton change:selection", function() {
     widget = new tabris.ToggleButton().on("change:selection", listener);
-    tabris._notify(widget.cid, "Selection", {selection: true});
+    tabris._notify(widget.cid, "select", {selection: true});
     checkEvent(true);
-    checkListen("Selection");
+    checkListen("select");
   });
 
   it("ToggleButton select", function() {
     widget = new tabris.ToggleButton().on("select", listener);
-    tabris._notify(widget.cid, "Selection", {selection: true});
+    tabris._notify(widget.cid, "select", {selection: true});
     checkEvent(true);
-    checkListen("Selection");
+    checkListen("select");
 
   });
 
