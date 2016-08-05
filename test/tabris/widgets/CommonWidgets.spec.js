@@ -193,9 +193,9 @@ describe("Common Widgets", function() {
 
   it("TextInput input", function() {
     widget = new tabris.TextInput().on("input", listener);
-    tabris._notify(widget.cid, "modify", {text: "foo"});
+    tabris._notify(widget.cid, "input", {text: "foo"});
     checkEvent("foo");
-    checkListen("modify");
+    checkListen("input");
   });
 
   it("TextInput accept", function() {
@@ -207,9 +207,9 @@ describe("Common Widgets", function() {
 
   it("TextInput change:text", function() {
     widget = new tabris.TextInput().on("change:text", listener);
-    tabris._notify(widget.cid, "modify", {text: "foo"});
+    tabris._notify(widget.cid, "input", {text: "foo"});
     checkEvent("foo");
-    checkListen("modify");
+    checkListen("input");
   });
 
   it("WebView", function() {

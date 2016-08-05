@@ -17,7 +17,6 @@ tabris.registerWidget("TextInput", {
       }
     },
     input: {
-      name: "modify",
       alias: "change:text",
       trigger: function(event) {
         this._triggerChangeEvent("text", event.text);
