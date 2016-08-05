@@ -28,7 +28,6 @@ import "./widgets/SearchAction.js";
 import "./widgets/Slider.js";
 import "./widgets/Switch.js";
 import "./widgets/TabFolder.js";
-import "./widgets/TabFolder-legacy.js";
 import "./widgets/TextInput.js";
 import "./widgets/TextView.js";
 import "./widgets/ToggleButton.js";
