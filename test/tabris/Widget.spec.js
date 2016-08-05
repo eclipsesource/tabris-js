@@ -121,13 +121,6 @@ describe("Widget", function() {
       expect(widget.get("win_theme")).toBe("default");
     });
 
-    it("translates visible to visibility", function() {
-      widget.set("visible", true);
-
-      var call = nativeBridge.calls({op: "set"})[0];
-      expect(call.properties.visibility).toBe(true);
-    });
-
     it("support 'initial' for textColor, background and font", function() {
       widget.set({textColor: "red", background: "green", font: "23px Arial"});
       nativeBridge.resetCalls();
@@ -1143,19 +1136,19 @@ describe("Widget", function() {
     it("change:bounds", function() {
       widget = new tabris.CheckBox().on("change:bounds", listener);
 
-      tabris._notify(widget.cid, "Resize", {bounds: [1, 2, 3, 4]});
+      tabris._notify(widget.cid, "resize", {bounds: [1, 2, 3, 4]});
 
       checkEvent({left: 1, top: 2, width: 3, height: 4});
-      checkListen("Resize");
+      checkListen("resize");
     });
 
     it("resize", function() {
       widget = new tabris.CheckBox().on("resize", listener);
 
-      tabris._notify(widget.cid, "Resize", {bounds: [1, 2, 3, 4]});
+      tabris._notify(widget.cid, "resize", {bounds: [1, 2, 3, 4]});
 
       checkEvent({left: 1, top: 2, width: 3, height: 4});
-      checkListen("Resize");
+      checkListen("resize");
     });
 
   });

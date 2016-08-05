@@ -125,7 +125,7 @@ describe("TabFolder", function() {
         expect(itemCreate.properties.image).toEqual(["bar", null, null, null]);
         expect(itemCreate.properties.selectedImage).toEqual(["selectedBar", null, null, null]);
         expect(itemCreate.properties.badge).toBe("1");
-        expect(itemCreate.properties.visibility).toBe(false);
+        expect(itemCreate.properties.visible).toBe(false);
       });
 
       it("sets the TabItem index", function() {
@@ -385,7 +385,7 @@ describe("Tab", function() {
       var properties = nativeBridge.calls({id: tab.cid, op: "create"})[0].properties;
 
       expect(properties.visibile).not.toBeDefined();
-      expect(properties.visibility).not.toBeDefined();
+      expect(properties.visible).not.toBeDefined();
     });
 
     it("is not rendered on Composite", function() {
@@ -393,15 +393,7 @@ describe("Tab", function() {
 
       var properties = nativeBridge.calls({id: tab.cid, op: "create"})[0].properties;
 
-      expect(properties.visibility).not.toBeDefined();
-    });
-
-    it("is rendered as 'visibility' on TabItem", function() {
-      var tab = new tabris.Tab({visible: false}).appendTo(tabFolder);
-
-      var properties = nativeBridge.calls({id: tab._tabItem.cid, op: "create"})[0].properties;
-
-      expect(properties.visibility).toBe(false);
+      expect(properties.visible).not.toBeDefined();
     });
 
   });

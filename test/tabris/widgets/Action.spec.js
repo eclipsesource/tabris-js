@@ -50,13 +50,6 @@ describe("Action", function() {
       nativeBridge.resetCalls();
     });
 
-    it("translates visible to visibility", function() {
-      action.set("visible", true);
-
-      var call = nativeBridge.calls({op: "set"})[0];
-      expect(call.properties.visibility).toBe(true);
-    });
-
     it("translates placement priority to uppercase", function() {
       action.set("placementPriority", "low");
 

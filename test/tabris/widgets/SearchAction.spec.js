@@ -50,7 +50,7 @@ describe("SearchAction", function() {
       nativeBridge.resetCalls();
     });
 
-    it("sets placement priority to uppercase", function() {
+    it("translates placement priority to uppercase", function() {
       action.set("placementPriority", "low");
 
       var call = nativeBridge.calls({op: "set"})[0];

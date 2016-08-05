@@ -241,7 +241,6 @@ extend(tabris.registerWidget, {
     touchend: {trigger: triggerWithTarget},
     touchcancel: {trigger: triggerWithTarget},
     "resize": {
-      name: "Resize",
       alias: "change:bounds",
       trigger: function(event) {
         if (hasAndroidResizeBug) {
@@ -264,13 +263,7 @@ extend(tabris.registerWidget, {
     },
     visible: {
       type: "boolean",
-      default: true,
-      access: {
-        set: function(name, value, options) {
-          this._nativeSet("visibility", value);
-          this._storeProperty(name, value, options);
-        }
-      }
+      default: true
     },
     layoutData: {
       type: "layoutData",
