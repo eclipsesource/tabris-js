@@ -136,7 +136,7 @@ module.exports = function(grunt) {
         cmd: "node test/tabris/run-tests.js " + grunt.option("spec")
       },
       lint: {
-        cmd: "node node_modules/eslint/bin/eslint.js --color **/*.js"
+        cmd: "node node_modules/eslint/bin/eslint.js --color ."
       },
       bundle: {
         cmd: "node node_modules/rollup/bin/rollup --format=cjs --output=build/bundle.js -- src/tabris/main.js"
