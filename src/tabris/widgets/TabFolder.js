@@ -8,7 +8,11 @@ tabris.load(function() {
 
       _properties: {
         paging: {type: "boolean", default: false},
-        selection: {type: "proxy", default: null}
+        selection: {type: "proxy", nocache: true},
+        tabBarLocation: {
+          type: ["choice", ["top", "bottom", "hidden", "auto"]],
+          default: "auto"
+        }
       },
 
       _supportsChildren: function(child) {
@@ -20,7 +24,7 @@ tabris.load(function() {
           alias: "change:selection",
           trigger: function(event) {
             var tab = tabris(event.selection);
-            this._triggerChangeEvent("selection", tab);
+            this.trigger("change:selection", this, tab, {});
             this.trigger("select", this, tab, {});
           }
         }
@@ -35,6 +39,7 @@ tabris.load(function() {
       _properties: {
         title: {type: "string", default: ""},
         image: {type: "image", default: null},
+        selectedImage: {type: "image", default: null},
         badge: {type: "string", default: ""}
       },
 
