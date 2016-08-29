@@ -7,6 +7,7 @@ module.exports = function(grunt) {
                             grunt.file.read("LICENSE"));
 
   grunt.initConfig({
+    version: pkg.version,
     clean: ["build"],
     concat: {
       tabris: {

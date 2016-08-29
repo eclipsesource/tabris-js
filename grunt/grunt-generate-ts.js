@@ -2,7 +2,7 @@
 "use strict";
 
 let header = `
-// Type definitions for Tabris.js v1.8
+// Type definitions for Tabris.js \${VERSION}
 
 interface TextMetrics {
 
@@ -356,7 +356,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask("generate-tsd", function() {
     let defs = readJsonDefs();
-    let tsd = createTypeDefs(defs);
+    let tsd = createTypeDefs(defs).replace(/\${VERSION}/g, grunt.config("version"));
     grunt.file.write("build/tabris/tabris.d.ts", tsd);
   });
 
