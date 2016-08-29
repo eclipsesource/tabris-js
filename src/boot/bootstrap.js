@@ -51,13 +51,17 @@
   };
 
   function checkVersion() {
-    var clientVersion = tabris._client.get("tabris.App", "tabrisJsVersion").split(".");
-    var tabrisVersion = tabris.version.split(".");
+    var clientVersion = tabris._client.get("tabris.App", "tabrisJsVersion").split(".").map(toInt);
+    var tabrisVersion = tabris.version.split(".").map(toInt);
     if (tabrisVersion[0] !== clientVersion[0]) {
       console.error(createVersionMessage(clientVersion, tabrisVersion, "incompatible with"));
     } else if (tabrisVersion[1] > clientVersion[1]) {
       console.warn(createVersionMessage(clientVersion, tabrisVersion, "newer than"));
     }
+  }
+
+  function toInt(string) {
+    return parseInt(string);
   }
 
   function createVersionMessage(clientVersion, tabrisVersion, versionComp) {

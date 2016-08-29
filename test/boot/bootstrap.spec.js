@@ -66,6 +66,16 @@ describe("bootstrap", function() {
       expect(console.error).not.toHaveBeenCalled();
     });
 
+    it("compares numerically, not lexicographically", function() {
+      client.version = "1.10.0";
+      tabris.version = "1.9.0";
+
+      tabris._start(client);
+
+      expect(console.warn).not.toHaveBeenCalled();
+      expect(console.error).not.toHaveBeenCalled();
+    });
+
     it("raises warning for greater tabris minor version", function() {
       client.version = "1.2.3";
       tabris.version = "1.3.0";
