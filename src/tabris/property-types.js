@@ -5,7 +5,7 @@ import {fontObjectToString, fontStringToObject} from "./util-fonts";
 import Proxy from "./Proxy";
 import ProxyCollection from "./ProxyCollection";
 
-tabris.PropertyTypes = {
+export var types = {
 
   any: {},
 
@@ -186,7 +186,7 @@ tabris.PropertyTypes = {
       if (value === null) {
         return value;
       }
-      return tabris.PropertyTypes[altCheck].encode(value);
+      return types[altCheck].encode(value);
     }
   },
 
@@ -222,7 +222,7 @@ tabris.PropertyTypes = {
         throw new Error(typeof value + " is not an array: " + value);
       }
       if (type) {
-        return value.map(tabris.PropertyTypes[type].encode);
+        return value.map(types[type].encode);
       }
       return value;
     }

@@ -1,4 +1,5 @@
 import {omit} from "./util";
+import {types} from "./property-types";
 
 export default {
 
@@ -80,15 +81,15 @@ function toProxyId(ref, widget) {
     var children = getParent(widget).children();
     var index = children.indexOf(widget);
     if (index > 0) {
-      return tabris.PropertyTypes.proxy.encode(children[index - 1]) || 0;
+      return types.proxy.encode(children[index - 1]) || 0;
     }
     return 0;
   }
   if (typeof ref === "string") {
     var proxy = getParent(widget).children(ref)[0];
-    return tabris.PropertyTypes.proxy.encode(proxy) || 0;
+    return types.proxy.encode(proxy) || 0;
   }
-  return tabris.PropertyTypes.proxy.encode(ref) || 0;
+  return types.proxy.encode(ref) || 0;
 }
 
 function isNumber(value) {

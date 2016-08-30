@@ -1,4 +1,5 @@
 import {extendPrototype} from "./util";
+import {types} from "./property-types";
 
 tabris.registerType("_ClientStore", {
   _cid: "tabris.ClientStore"
@@ -8,7 +9,7 @@ tabris.registerType("_SecureStore", {
   _cid: "tabris.SecureStore"
 });
 
-var encode = tabris.PropertyTypes.string.encode;
+var encode = types.string.encode;
 
 function createStorage(secure) {
   function Storage() {

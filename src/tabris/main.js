@@ -1,6 +1,5 @@
 import "./load-polyfill.js";
 import "./Tabris.js";
-import "./PropertyTypes.js";
 import "./Animation.js";
 import "./GestureRecognizer.js";
 import "./Device.js";
@@ -60,6 +59,7 @@ import LegacyCanvasContext from "./LegacyCanvasContext";
 import NativeBridge from "./NativeBridge";
 import Proxy from "./Proxy.js";
 import ProxyCollection from "./ProxyCollection.js";
+import {types} from "./property-types.js";
 
 tabris.util = util;
 tabris.Properties = Properties;
@@ -71,3 +71,4 @@ tabris.LegacyCanvasContext = LegacyCanvasContext;
 tabris.NativeBridge = NativeBridge;
 tabris.Proxy = Proxy;
 tabris.ProxyCollection = ProxyCollection;
+tabris.PropertyTypes = types;

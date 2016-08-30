@@ -3,6 +3,7 @@ import Events from "./Events";
 import NativeBridge from "./NativeBridge";
 import Proxy from "./Proxy";
 import ProxyStore from "./ProxyStore";
+import {types} from "./property-types";
 
 window.tabris = extend({}, Events, {
 
@@ -140,9 +141,9 @@ function normalizeProperty(property) {
 function resolveType(type) {
   var typeDef = type;
   if (typeof type === "string") {
-    typeDef = tabris.PropertyTypes[type];
+    typeDef = types[type];
   } else if (Array.isArray(type)) {
-    typeDef = tabris.PropertyTypes[type[0]];
+    typeDef = types[type[0]];
   }
   if (typeof typeDef !== "object") {
     throw new Error("Can not find property type " + type);

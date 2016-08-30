@@ -2,6 +2,7 @@ import {extend, extendPrototype} from "./util";
 import Layout from "./Layout";
 import Proxy from "./Proxy";
 import ProxyCollection from "./ProxyCollection";
+import {types} from "./property-types";
 
 tabris.Widget = function() {
   throw new Error("Cannot instantiate abstract Widget");
@@ -116,7 +117,7 @@ tabris.Widget.prototype = extendPrototype(Proxy, {
   },
 
   _setParent: function(parent, index) {
-    this._nativeSet("parent", tabris.PropertyTypes.proxy.encode(parent._getContainer(this)));
+    this._nativeSet("parent", types.proxy.encode(parent._getContainer(this)));
     if (this._parent) {
       this._parent._removeChild(this);
       Layout.addToQueue(this._parent);
@@ -247,11 +248,11 @@ extend(tabris.registerWidget, {
           var self = this;
           setTimeout(function() {
             self._triggerChangeEvent("bounds", event.bounds, {}, "resize");
-            self.trigger("resize", self, tabris.PropertyTypes.bounds.decode(event.bounds), {});
+            self.trigger("resize", self, types.bounds.decode(event.bounds), {});
           }, 0);
         } else {
           this._triggerChangeEvent("bounds", event.bounds, {}, "resize");
-          this.trigger("resize", this, tabris.PropertyTypes.bounds.decode(event.bounds), {});
+          this.trigger("resize", this, types.bounds.decode(event.bounds), {});
         }
       }
     }
