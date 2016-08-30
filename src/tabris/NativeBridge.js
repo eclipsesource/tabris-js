@@ -1,13 +1,13 @@
 import Layout from "./Layout";
 
-tabris.NativeBridge = function(bridge) {
+export default function NativeBridge(bridge) {
   this._bridge = bridge;
   this._operations = [];
   this._currentOperation = {id: null};
   tabris._on("flush", this.flush, this);
-};
+}
 
-tabris.NativeBridge.prototype = {
+NativeBridge.prototype = {
 
   create: function(id, type) {
     var properties = {};

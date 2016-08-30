@@ -1,5 +1,6 @@
 import {extend, extendPrototype, omit, clone} from "./util";
 import Events from "./Events";
+import NativeBridge from "./NativeBridge";
 
 window.tabris = extend(function(cid) {
   if (!tabris._proxies[cid]) {
@@ -64,7 +65,7 @@ window.tabris = extend(function(cid) {
     tabris.off();
     tabris._off();
     tabris._client = client;
-    tabris._nativeBridge = new tabris.NativeBridge(client);
+    tabris._nativeBridge = new NativeBridge(client);
     var i = 0;
     while (i < tabris._loadFunctions.length) {
       tabris._loadFunctions[i++].call();

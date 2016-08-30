@@ -1,6 +1,5 @@
 import "./load-polyfill.js";
 import "./Tabris.js";
-import "./NativeBridge.js";
 import "./Proxy.js";
 import "./ProxyCollection.js";
 import "./PropertyTypes.js";
@@ -63,6 +62,7 @@ import Properties from "./Properties.js";
 import Layout from "./Layout.js";
 import CanvasContext from "./CanvasContext";
 import LegacyCanvasContext from "./LegacyCanvasContext";
+import NativeBridge from "./NativeBridge";
 
 tabris.util = util.extend({}, util, colors, fonts, images);
 tabris.Properties = Properties;
@@ -71,3 +71,4 @@ tabris.Layout = Layout;
 tabris.ImageData = ImageData;
 tabris.CanvasContext = CanvasContext;
 tabris.LegacyCanvasContext = LegacyCanvasContext;
+tabris.NativeBridge = NativeBridge;
