@@ -15,24 +15,6 @@ describe("tabris", function() {
     delete tabris.TestType;
   });
 
-  describe("when used as a function", function() {
-
-    it("returns proxy instance for a given cid", function() {
-      var instance = new tabris.TestType();
-
-      var result = tabris(instance.cid);
-
-      expect(result).toBe(instance);
-    });
-
-    it("fails for unknown cids", function() {
-      expect(() => {
-        tabris("foo");
-      }).toThrow();
-    });
-
-  });
-
   describe("_init", function() {
 
     it("can be called without a context", function() {

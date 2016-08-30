@@ -63,7 +63,7 @@ describe("ScrollView", function() {
 
       beforeEach(function() {
         listener = jasmine.createSpy();
-        scrollBar = tabris(createCalls[1].id);
+        scrollBar = tabris._proxies.find(createCalls[1].id);
         scrollView.on("scroll", listener);
         spyOn(nativeBridge, "get").and.callFake(function(id, property) {
           if (id === scrollView.cid && property === "origin") {

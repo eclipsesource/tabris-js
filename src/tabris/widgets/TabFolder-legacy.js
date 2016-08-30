@@ -67,7 +67,7 @@ tabris.load(function() {
             },
             get: function() {
               var selection = this._nativeGet("selection");
-              return selection ? tabris(selection)._tab : null;
+              return selection ? tabris._proxies.find(selection)._tab : null;
             }
           }
         },
@@ -86,7 +86,7 @@ tabris.load(function() {
           name: "Selection",
           alias: "change:selection",
           trigger: function(event) {
-            var tab = tabris(event.selection)._tab;
+            var tab = tabris._proxies.find(event.selection)._tab;
             this._triggerChangeEvent("selection", tab);
             this.trigger("select", this, tab, {});
           }

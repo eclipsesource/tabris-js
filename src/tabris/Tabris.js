@@ -2,16 +2,12 @@ import {extend, extendPrototype, omit, clone} from "./util";
 import Events from "./Events";
 import NativeBridge from "./NativeBridge";
 import Proxy from "./Proxy";
+import ProxyStore from "./ProxyStore";
 
-window.tabris = extend(function(cid) {
-  if (!tabris._proxies[cid]) {
-    throw new Error("No native object with cid " + cid);
-  }
-  return tabris._proxies[cid];
-}, {
+window.tabris = extend({}, Events, {
 
   _loadFunctions: [],
-  _proxies: {},
+  _proxies: new ProxyStore(),
   _ready: false,
 
   load: function(fn) {
@@ -81,7 +77,7 @@ window.tabris = extend(function(cid) {
   _notify: function(cid, event, param) {
     var returnValue;
     try {
-      var proxy = tabris._proxies[cid];
+      var proxy = tabris._proxies.find(cid);
       if (proxy) {
         try {
           returnValue = proxy._trigger(event, param);
@@ -100,10 +96,10 @@ window.tabris = extend(function(cid) {
 
   _reset: function() {
     this._loadFunctions = [];
-    this._proxies = {};
+    this._proxies = new ProxyStore();
   }
 
-}, Events);
+});
 
 function normalizeEvents(events) {
   var result = {};

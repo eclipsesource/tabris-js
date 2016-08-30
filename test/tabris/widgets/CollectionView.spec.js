@@ -470,7 +470,7 @@ describe("CollectionView", function() {
           beforeEach(function() {
             view._trigger("createitem", {type: 0});
             cellCreateCall = nativeBridge.calls({op: "create", type: "tabris.Composite"})[0];
-            cell = tabris(cellCreateCall.id);
+            cell = tabris._proxies.find(cellCreateCall.id);
           });
 
           it("creates a Cell", function() {
@@ -594,7 +594,7 @@ describe("CollectionView", function() {
     function createCell(item) {
       view._trigger("createitem", {type: 0});
       var createCalls = nativeBridge.calls({op: "create", type: "tabris.Composite"});
-      var cell = tabris(createCalls[createCalls.length - 1].id);
+      var cell = tabris._proxies.find(createCalls[createCalls.length - 1].id);
       view._trigger("populateitem", {widget: cell.cid, index: view.get("items").indexOf(item)});
       return cell;
     }

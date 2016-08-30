@@ -121,7 +121,7 @@ tabris.registerWidget("CollectionView", {
     },
     populateitem: {
       trigger: function(event) {
-        var cell = tabris(event.widget);
+        var cell = tabris._proxies.find(event.widget);
         var item = this._getItem(this._items, event.index);
         cell.set("itemIndex", event.index);
         if (item !== cell.get("item")) {

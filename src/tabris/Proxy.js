@@ -3,11 +3,7 @@ import Properties from "./Properties";
 import Events from "./Events";
 
 export default function Proxy(cid) {
-  this.cid = cid || generateId();
-  if (cid in tabris._proxies) {
-    throw new Error("cid already in use: " + cid);
-  }
-  tabris._proxies[this.cid] = this;
+  this.cid = tabris._proxies.register(this, cid);
 }
 
 extend(Proxy.prototype, Properties, Events, {
@@ -36,7 +32,7 @@ extend(Proxy.prototype, Properties, Events, {
       if (!skipNative) {
         tabris._nativeBridge.destroy(this.cid);
       }
-      delete tabris._proxies[this.cid];
+      tabris._proxies.remove(this.cid);
       this._isDisposed = true;
     }
   },
@@ -111,9 +107,3 @@ extend(Proxy.prototype, Properties, Events, {
   }
 
 });
-
-var idSequence = 1;
-
-function generateId() {
-  return "o" + (idSequence++);
-}

@@ -19,7 +19,7 @@ tabris.load(function() {
         select: {
           alias: "change:selection",
           trigger: function(event) {
-            var tab = tabris(event.selection);
+            var tab = tabris._proxies.find(event.selection);
             this._triggerChangeEvent("selection", tab);
             this.trigger("select", this, tab, {});
           }

@@ -176,7 +176,9 @@ tabris.PropertyTypes = {
       // TODO: Should throw error instead
       return value;
     },
-    decode: tabris
+    decode: function(cid) {
+      return tabris._proxies.find(cid);
+    }
   },
 
   nullable: {

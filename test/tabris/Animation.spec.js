@@ -31,7 +31,7 @@ describe("Animation", function() {
 
     it("disposes Animation object on widget dispose", function() {
       widget.animate({}, {});
-      var animation = tabris(animationId());
+      var animation = tabris._proxies.find(animationId());
 
       widget.dispose();
 
@@ -40,7 +40,7 @@ describe("Animation", function() {
 
     it("does not keep references to Animation object after completion", function() {
       widget.animate({}, {});
-      var animation = tabris(animationId());
+      var animation = tabris._proxies.find(animationId());
       tabris._notify(animation.cid, "Completion", {});
       spyOn(animation, "dispose");
 
