@@ -1,6 +1,7 @@
 import {extend, extendPrototype, omit, clone} from "./util";
 import Events from "./Events";
 import NativeBridge from "./NativeBridge";
+import Proxy from "./Proxy";
 
 window.tabris = extend(function(cid) {
   if (!tabris._proxies[cid]) {
@@ -37,12 +38,12 @@ window.tabris = extend(function(cid) {
         throw new Error("Cannot call constructor as a function");
       }
       if (tabris[type]._cid) {
-        tabris.Proxy.call(this, tabris[type]._cid);
+        Proxy.call(this, tabris[type]._cid);
       } else {
         if (!tabris._nativeBridge) {
           throw new Error("tabris.js not started");
         }
-        tabris.Proxy.call(this);
+        Proxy.call(this);
         this._create(properties || {});
       }
     };
@@ -55,7 +56,7 @@ window.tabris = extend(function(cid) {
     var superProto = omit(members, Object.keys(staticMembers));
     superProto.type = type;
     superProto.constructor = tabris[type]; // extendPrototype can not provide the original
-    tabris[type].prototype = extendPrototype(superType || tabris.Proxy, superProto);
+    tabris[type].prototype = extendPrototype(superType || Proxy, superProto);
     mapProperties(tabris[type].prototype, tabris[type]._properties);
   },
 

@@ -2,6 +2,8 @@ import {extend} from "./util";
 import {imageToArray, imageFromArray} from "./util-images";
 import {colorArrayToString, colorStringToArray} from "./util-colors";
 import {fontObjectToString, fontStringToObject} from "./util-fonts";
+import Proxy from "./Proxy";
+import ProxyCollection from "./ProxyCollection";
 
 tabris.PropertyTypes = {
 
@@ -165,10 +167,10 @@ tabris.PropertyTypes = {
 
   proxy: {
     encode: function(value) {
-      if (value instanceof tabris.Proxy) {
+      if (value instanceof Proxy) {
         return value.cid;
       }
-      if (value instanceof tabris.ProxyCollection) {
+      if (value instanceof ProxyCollection) {
         return value[0] ? value[0].cid : null;
       }
       // TODO: Should throw error instead
@@ -317,7 +319,7 @@ function encodeEdge(value) {
   if (Array.isArray(value)) {
     return encodeEdgeArray(value);
   }
-  if (value instanceof tabris.Proxy) {
+  if (value instanceof Proxy) {
     return [value, 0];
   }
   throw new Error("Invalid dimension: " + toString(value));
@@ -347,7 +349,7 @@ function encodeEdgeRef(value) {
     }
     return value;
   }
-  if (value instanceof tabris.Proxy) {
+  if (value instanceof Proxy) {
     return value;
   }
   throw new Error("Not a percentage or widget reference: " + toString(value));
@@ -362,7 +364,7 @@ function encodePercentage(value) {
 }
 
 function encodeWidgetRef(value) {
-  if (value instanceof tabris.Proxy) {
+  if (value instanceof Proxy) {
     return value;
   }
   if (typeof value === "string" && selectorRegex.test(value)) {

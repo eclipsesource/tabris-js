@@ -1,4 +1,5 @@
 import {extend} from "../util";
+import ProxyCollection from "../ProxyCollection";
 
 tabris.load(function() {
 
@@ -93,7 +94,7 @@ tabris.load(function() {
       },
 
       _getItems: function() {
-        return this._children ? this._children.filter(isItem) : new tabris.ProxyCollection();
+        return this._children ? this._children.filter(isItem) : new ProxyCollection();
       },
 
       _getSelectableChildren: function() {

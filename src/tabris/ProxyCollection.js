@@ -1,12 +1,12 @@
-tabris.ProxyCollection = function(arr, selector, deep) {
+export default function ProxyCollection(arr, selector, deep) {
   this._array = select(arr, selector || "*", deep);
   for (var i = 0; i < this._array.length; i++) {
     this[i] = this._array[i];
   }
   this.length = this._array.length;
-};
+}
 
-var proto = tabris.ProxyCollection.prototype = {
+var proto = ProxyCollection.prototype = {
 
   first: function() {
     return this._array[0];
@@ -32,7 +32,7 @@ var proto = tabris.ProxyCollection.prototype = {
   },
 
   filter: function(selector) {
-    return new tabris.ProxyCollection(this._array, selector);
+    return new ProxyCollection(this._array, selector);
   },
 
   get: function(prop) {
@@ -50,7 +50,7 @@ var proto = tabris.ProxyCollection.prototype = {
       }
     }
     if (result.length) {
-      return new tabris.ProxyCollection(result);
+      return new ProxyCollection(result);
     }
   },
 
@@ -59,11 +59,11 @@ var proto = tabris.ProxyCollection.prototype = {
     for (var i = 0; i < this._array.length; i++) {
       result.push.apply(result, this._array[i]._getSelectableChildren() || []);
     }
-    return new tabris.ProxyCollection(result, selector);
+    return new ProxyCollection(result, selector);
   },
 
   find: function(selector) {
-    return new tabris.ProxyCollection(this.children()._array, selector, true);
+    return new ProxyCollection(this.children()._array, selector, true);
   },
 
   appendTo: function(parent) {

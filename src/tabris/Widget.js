@@ -1,23 +1,25 @@
 import {extend, extendPrototype} from "./util";
 import Layout from "./Layout";
+import Proxy from "./Proxy";
+import ProxyCollection from "./ProxyCollection";
 
 tabris.Widget = function() {
   throw new Error("Cannot instantiate abstract Widget");
 };
 
-var superProto = tabris.Proxy.prototype;
+var superProto = Proxy.prototype;
 
-tabris.Widget.prototype = extendPrototype(tabris.Proxy, {
+tabris.Widget.prototype = extendPrototype(Proxy, {
 
   append: function() {
     this._checkDisposed();
     var accept = function(proxy) {
-      if (!(proxy instanceof tabris.Proxy)) {
+      if (!(proxy instanceof Proxy)) {
         throw new Error("Cannot append non-widget");
       }
       proxy._setParent(this);
     }.bind(this);
-    if (arguments[0] instanceof tabris.ProxyCollection) {
+    if (arguments[0] instanceof ProxyCollection) {
       arguments[0].toArray().forEach(accept);
     } else if (Array.isArray(arguments[0])) {
       arguments[0].forEach(accept);
@@ -29,8 +31,8 @@ tabris.Widget.prototype = extendPrototype(tabris.Proxy, {
 
   appendTo: function(proxy) {
     this._checkDisposed();
-    proxy = proxy instanceof tabris.ProxyCollection ? proxy.first() : proxy;
-    if (!(proxy instanceof tabris.Proxy)) {
+    proxy = proxy instanceof ProxyCollection ? proxy.first() : proxy;
+    if (!(proxy instanceof Proxy)) {
       throw new Error("Cannot append to non-widget");
     }
     this._setParent(proxy);
@@ -39,8 +41,8 @@ tabris.Widget.prototype = extendPrototype(tabris.Proxy, {
 
   insertBefore: function(proxy) {
     this._checkDisposed();
-    proxy = proxy instanceof tabris.ProxyCollection ? proxy.first() : proxy;
-    if (!(proxy instanceof tabris.Proxy)) {
+    proxy = proxy instanceof ProxyCollection ? proxy.first() : proxy;
+    if (!(proxy instanceof Proxy)) {
       throw new Error("Cannot insert before non-widget");
     }
     var parent = proxy.parent();
@@ -51,8 +53,8 @@ tabris.Widget.prototype = extendPrototype(tabris.Proxy, {
 
   insertAfter: function(proxy) {
     this._checkDisposed();
-    proxy = proxy instanceof tabris.ProxyCollection ? proxy.first() : proxy;
-    if (!(proxy instanceof tabris.Proxy)) {
+    proxy = proxy instanceof ProxyCollection ? proxy.first() : proxy;
+    if (!(proxy instanceof Proxy)) {
       throw new Error("Cannot insert after non-widget");
     }
     var parent = proxy.parent();
@@ -66,7 +68,7 @@ tabris.Widget.prototype = extendPrototype(tabris.Proxy, {
   },
 
   children: function(selector) {
-    return new tabris.ProxyCollection(this._getSelectableChildren(), selector);
+    return new ProxyCollection(this._getSelectableChildren(), selector);
   },
 
   siblings: function(selector) {
@@ -74,15 +76,15 @@ tabris.Widget.prototype = extendPrototype(tabris.Proxy, {
     var filtered = siblings.filter(function(widget) {
       return widget !== this;
     }.bind(this));
-    return new tabris.ProxyCollection(filtered, selector);
+    return new ProxyCollection(filtered, selector);
   },
 
   find: function(selector) {
-    return new tabris.ProxyCollection(this._getSelectableChildren(), selector, true);
+    return new ProxyCollection(this._getSelectableChildren(), selector, true);
   },
 
   apply: function(sheet) {
-    var scope = new tabris.ProxyCollection(this._children.concat(this), "*", true);
+    var scope = new ProxyCollection(this._children.concat(this), "*", true);
     if (sheet["*"]) {
       scope.set(sheet["*"]);
     }
