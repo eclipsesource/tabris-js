@@ -1,7 +1,8 @@
 import {colorStringToArray, colorArrayToString} from "./util-colors";
 import {clone} from "./util";
+import ImageData from "./ImageData";
 
-tabris.LegacyCanvasContext = function(gc) {
+export default function LegacyCanvasContext(gc) {
   this._gc = gc;
   this._state = createState();
   this._savedStates = [];
@@ -18,9 +19,9 @@ tabris.LegacyCanvasContext = function(gc) {
   gc._on("dispose", function() {
     tabris._off("flush", this._flush, this);
   }, this);
-};
+}
 
-tabris.LegacyCanvasContext.prototype = {
+LegacyCanvasContext.prototype = {
 
   save: function() {
     this._operations.push(["save"]);
@@ -139,7 +140,7 @@ tabris.LegacyCanvasContext.prototype = {
       width: width,
       height: height
     });
-    return new tabris.ImageData(new Uint8ClampedArray(array), width, height);
+    return new ImageData(new Uint8ClampedArray(array), width, height);
   },
 
   putImageData: function(imageData, x, y) {
@@ -157,14 +158,14 @@ tabris.LegacyCanvasContext.prototype = {
   },
 
   createImageData: function(width, height) {
-    if (arguments[0] instanceof tabris.ImageData) {
+    if (arguments[0] instanceof ImageData) {
       var data = arguments[0];
       width = data.width;
       height = data.height;
     } else if (arguments.length < 2) {
       throw new Error("Not enough arguments to CanvasContext.createImageData");
     }
-    return new tabris.ImageData(width, height);
+    return new ImageData(width, height);
   },
 
   _init: function(width, height) {

@@ -1,4 +1,4 @@
-tabris.ImageData = function() {
+export default function() {
   var array, width, height;
   if (arguments.length < 2) {
     throw new TypeError("Not enough arguments to ImageData");
@@ -27,10 +27,6 @@ tabris.ImageData = function() {
     value: height,
     writable: false
   });
-};
-
-if (!("ImageData" in window)) {
-  window.ImageData = tabris.ImageData;
 }
 
 function checkArray(array) {

@@ -14,9 +14,6 @@ import "./DOMDocument.js";
 import "./WindowTimers.js";
 import "./App.js";
 import "./UI.js";
-import "./ImageData.js";
-import "./CanvasContext.js";
-import "./LegacyCanvasContext.js";
 import "./WebStorage.js";
 import "./XMLHttpRequest.js";
 import "./widgets/Action.js";
@@ -45,8 +42,14 @@ import "./widgets/ToggleButton.js";
 import "./widgets/Video.js";
 import "./widgets/WebView.js";
 
+import ImageData from "./ImageData";
+
 if (typeof module !== "undefined") {
   module.exports = window.tabris;
+}
+
+if (!("ImageData" in window)) {
+  window.ImageData = ImageData;
 }
 
 // TODO: Temporary code to keep tests alive
@@ -58,8 +61,13 @@ import * as images from "./util-images";
 import Events from "./Events.js";
 import Properties from "./Properties.js";
 import Layout from "./Layout.js";
+import CanvasContext from "./CanvasContext";
+import LegacyCanvasContext from "./LegacyCanvasContext";
 
 tabris.util = util.extend({}, util, colors, fonts, images);
 tabris.Properties = Properties;
 tabris.Events = Events;
 tabris.Layout = Layout;
+tabris.ImageData = ImageData;
+tabris.CanvasContext = CanvasContext;
+tabris.LegacyCanvasContext = LegacyCanvasContext;

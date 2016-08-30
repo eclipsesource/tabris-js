@@ -1,12 +1,14 @@
 import {colorStringToArray, colorArrayToString} from "./util-colors";
 import {clone} from "./util";
+import ImageData from "./ImageData";
+import LegacyCanvasContext from "./LegacyCanvasContext";
 
 tabris.registerType("_GC", {
   _type: "rwt.widgets.GC",
   _properties: {parent: "proxy"}
 });
 
-tabris.CanvasContext = function(gc) {
+export default function CanvasContext(gc) {
   this._gc = gc;
   this._state = createState();
   this._savedStates = [];
@@ -29,9 +31,9 @@ tabris.CanvasContext = function(gc) {
   gc._on("dispose", function() {
     tabris._off("flush", this._flush, this);
   }, this);
-};
+}
 
-tabris.CanvasContext.prototype = {
+CanvasContext.prototype = {
 
   fillRect: function(x, y, width, height) {
     // TODO: delegate to native function, once it is implemented (#493)
@@ -184,7 +186,7 @@ defineMethod("strokeText", 3, function(text, x, y /* , maxWidth */) {
 
 // ImageData operations
 
-tabris.CanvasContext.prototype.getImageData = function(x, y, width, height) {
+CanvasContext.prototype.getImageData = function(x, y, width, height) {
   if (arguments.length < 4) {
     throw new Error("Not enough arguments to CanvasContext.getImageData");
   }
@@ -196,10 +198,10 @@ tabris.CanvasContext.prototype.getImageData = function(x, y, width, height) {
     width: width,
     height: height
   });
-  return new tabris.ImageData(uint8ClampedArray, width, height);
+  return new ImageData(uint8ClampedArray, width, height);
 };
 
-tabris.CanvasContext.prototype.putImageData = function(imageData, x, y) {
+CanvasContext.prototype.putImageData = function(imageData, x, y) {
   if (arguments.length < 3) {
     throw new Error("Not enough arguments to CanvasContext.putImageData");
   }
@@ -213,28 +215,28 @@ tabris.CanvasContext.prototype.putImageData = function(imageData, x, y) {
   });
 };
 
-tabris.CanvasContext.prototype.createImageData = function(width, height) {
-  if (arguments[0] instanceof tabris.ImageData) {
+CanvasContext.prototype.createImageData = function(width, height) {
+  if (arguments[0] instanceof ImageData) {
     var data = arguments[0];
     width = data.width;
     height = data.height;
   } else if (arguments.length < 2) {
     throw new Error("Not enough arguments to CanvasContext.createImageData");
   }
-  return new tabris.ImageData(width, height);
+  return new ImageData(width, height);
 };
 
 defineMethod("fill");
 
 defineMethod("stroke");
 
-tabris.CanvasContext.getContext = function(canvas, width, height) {
+CanvasContext.getContext = function(canvas, width, height) {
   if (!canvas._gc) {
     canvas._gc = tabris.create("_GC", {parent: canvas});
   }
   if (!canvas._ctx) {
-    canvas._ctx = device.platform === "Android" ? new tabris.CanvasContext(canvas._gc)
-                                                : new tabris.LegacyCanvasContext(canvas._gc);
+    canvas._ctx = device.platform === "Android" ? new CanvasContext(canvas._gc)
+                                                : new LegacyCanvasContext(canvas._gc);
   }
   canvas._ctx._init(width, height);
   return canvas._ctx;
@@ -336,7 +338,7 @@ function createState() {
 }
 
 function defineMethod(name, reqArgCount, fn) {
-  tabris.CanvasContext.prototype[name] = function() {
+  CanvasContext.prototype[name] = function() {
     if (reqArgCount && arguments.length < reqArgCount) {
       throw new Error("Not enough arguments to CanvasContext." + name);
     }
