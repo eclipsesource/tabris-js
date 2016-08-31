@@ -1,24 +1,26 @@
+import {expect} from "chai";
+import ProxyStore from "../../src/tabris/ProxyStore";
+
 describe("ProxyStore", function() {
 
-  var store, proxy;
+  let store, proxy;
 
   beforeEach(function() {
-    tabris._reset();
-    store = tabris._proxies;
+    store = new ProxyStore();
     proxy = {};
   });
 
   describe("register without cid", function() {
 
     it("returns generated cid", function() {
-      var cid = store.register(proxy);
-      expect(cid).toBe("o1");
+      let cid = store.register(proxy);
+      expect(cid).to.equal("o1");
     });
 
     it("returns different generated cids", function() {
-      var cid1 = store.register(proxy);
-      var cid2 = store.register(proxy);
-      expect(cid1).not.toBe(cid2);
+      let cid1 = store.register(proxy);
+      let cid2 = store.register(proxy);
+      expect(cid1).not.to.equal(cid2);
     });
 
   });
@@ -26,13 +28,13 @@ describe("ProxyStore", function() {
   describe("register with fixed cid", function() {
 
     it("returns given cid", function() {
-      var cid = store.register(proxy, "fixed");
-      expect(cid).toBe("fixed");
+      let cid = store.register(proxy, "fixed");
+      expect(cid).to.equal("fixed");
     });
 
     it("throws when registered twice", function() {
       store.register(proxy, "fixed");
-      expect(() => store.register(proxy, "fixed")).toThrowError(/cid.*fixed/);
+      expect(() => store.register(proxy, "fixed")).to.throw(Error, /cid.*fixed/);
     });
 
   });
@@ -40,17 +42,17 @@ describe("ProxyStore", function() {
   describe("find", function() {
 
     it("returns proxy with generated cid", function() {
-      var cid = store.register(proxy);
-      expect(store.find(cid)).toBe(proxy);
+      let cid = store.register(proxy);
+      expect(store.find(cid)).to.equal(proxy);
     });
 
     it("returns proxy with fixed cid", function() {
       store.register(proxy, "fixed");
-      expect(store.find("fixed")).toBe(proxy);
+      expect(store.find("fixed")).to.equal(proxy);
     });
 
     it("returns null for unknown cid", function() {
-      expect(store.find("unknown")).toBeNull();
+      expect(store.find("unknown")).to.be.null;
     });
 
   });
@@ -58,9 +60,9 @@ describe("ProxyStore", function() {
   describe("remove", function() {
 
     it("removes registered proxy", function() {
-      var cid = store.register(proxy);
+      let cid = store.register(proxy);
       store.remove(cid);
-      expect(store.find(cid)).toBeNull();
+      expect(store.find(cid)).to.be.null;
     });
 
   });

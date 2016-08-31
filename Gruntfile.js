@@ -133,6 +133,9 @@ module.exports = function(grunt) {
       test_tabris: {
         cmd: "node test/tabris/run-tests.js"
       },
+      test_tabris_mocha: {
+        cmd: "node node_modules/mocha/bin/mocha --compilers js:babel-core/register 'test/**/*.test.js'"
+      },
       test_spec: {
         cmd: "node test/tabris/run-tests.js " + grunt.option("spec")
       },
@@ -191,6 +194,7 @@ module.exports = function(grunt) {
   grunt.registerTask("test", [
     "exec:test_boot",
     "exec:test_tabris",
+    "exec:test_tabris_mocha",
     "copy:test_ts",
     "exec:test_typings"
   ]);
