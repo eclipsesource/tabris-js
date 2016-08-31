@@ -438,7 +438,7 @@ function getGestureEventConfig(name) {
       var gestures = this.get("gestures");
       if (state) {
         var properties = extend({target: this}, gestures[name]);
-        var recognizer = tabris.create("_GestureRecognizer", properties)
+        var recognizer = new tabris._GestureRecognizer(properties)
           .on("gesture", gestureListener, {target: this, name: name});
         if (!this._recognizers) {
           this._recognizers = {};

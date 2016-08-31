@@ -7,7 +7,7 @@ describe("Page", function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._init(nativeBridge);
-    tabris.ui = tabris.create("_UI");
+    tabris.ui = new tabris._UI();
     spyOn(tabris.ui, "set");
     nativeBridge.resetCalls();
   });

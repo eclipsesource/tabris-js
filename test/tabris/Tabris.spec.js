@@ -307,23 +307,6 @@ describe("tabris", function() {
 
   });
 
-  describe("create", function() {
-
-    it("fails if type is unknown", function() {
-      expect(() => {
-        tabris.create("UnknownType", {});
-      }).toThrowError("Unknown type UnknownType");
-    });
-
-    it("delegates to constructor", function() {
-      var result = tabris.create("TestType", {foo: 23});
-
-      expect(result).toEqual(jasmine.any(tabris.TestType));
-      expect(result.get("foo")).toBe(23);
-    });
-
-  });
-
   describe("register types", function() {
 
     afterEach(function() {

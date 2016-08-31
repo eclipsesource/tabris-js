@@ -18,7 +18,7 @@ tabris._addWindowTimerMethods = function(target) {
     // If tabris is not ready, create the timer on load.
     // However, clearTimeout won't work until after load.
     tabris.load(function() {
-      var timer = tabris.create("_Timer", {
+      var timer = new tabris._Timer({
         delay: delay,
         repeat: repeat
       }).on("Run", function() {

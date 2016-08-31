@@ -21,8 +21,8 @@ tabris.registerWidget("_UI", {
   _supportsChildren: true,
 
   _create: function() {
-    tabris.create("_Display");
-    this._shell = tabris.create("_Shell", {
+    new tabris._Display();
+    this._shell = new tabris._Shell({
       style: ["NO_TRIM"],
       mode: "maximized",
       active: true,
@@ -195,5 +195,5 @@ tabris.registerWidget("_UI", {
 });
 
 tabris.load(function() {
-  tabris.ui = tabris.create("_UI");
+  tabris.ui = new tabris._UI();
 });

@@ -18,13 +18,6 @@ window.tabris = extend({}, Events, {
     }
   },
 
-  create: function(type, properties) {
-    if (!(type in tabris)) {
-      throw new Error("Unknown type " + type);
-    }
-    return new tabris[type](properties || {});
-  },
-
   registerType: function(type, members, superType) {
     if (type in tabris) {
       throw new Error("Type already registered: " + type);

@@ -6,7 +6,7 @@ describe("PageSelector", function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._init(nativeBridge);
-    tabris.ui = tabris.create("_UI");
+    tabris.ui = new tabris._UI();
     nativeBridge.resetCalls();
     // TODO: remove spy when properties are cached
     spyOn(nativeBridge, "get").and.callFake(function(target, prop) {

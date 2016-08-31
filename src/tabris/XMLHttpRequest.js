@@ -319,7 +319,7 @@ function createOpenMethod(xhr, scope) {
 
 function createSendMethod(xhr, scope) {
   return function(data) { // #the-send()-method
-    scope.proxy = tabris.create("_HttpRequest");
+    scope.proxy = new tabris._HttpRequest();
     scope.proxy.on("StateChange", function(e) {
       stateChangeHandler(e, xhr, scope);
     });

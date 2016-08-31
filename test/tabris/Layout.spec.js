@@ -130,7 +130,7 @@ describe("Layout:", function() {
 
     it("treats ambiguous string as selector", function() {
       tabris.registerWidget("Foo%", {});
-      var freak1 = tabris.create("Foo%").appendTo(parent);
+      var freak1 = new tabris["Foo%"]().appendTo(parent);
       var freak2 = new tabris.TestType({id: "23%"}).appendTo(parent);
 
       expect(resolve({left: ["Foo%", 23], top: ["#23%", 42]}, widget))

@@ -52,7 +52,7 @@ tabris.registerWidget("Page", {
     this._super("_create", [omit(properties, Object.keys(pageProperties))].concat(drop(arguments)));
     this._nativeSet("layoutData", {left: 0, right: 0, top: 0, bottom: 0});
     this._nativeSet("parent", tabris.ui._shell.cid);
-    this._page = tabris.create("_Page", extend(pick(properties, Object.keys(pageProperties)), {
+    this._page = new tabris._Page(extend(pick(properties, Object.keys(pageProperties)), {
       parent: tabris.ui,
       control: this
     }));

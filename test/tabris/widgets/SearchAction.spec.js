@@ -6,7 +6,7 @@ describe("SearchAction", function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._init(nativeBridge);
-    tabris.ui = new tabris.create("_UI");
+    tabris.ui = new tabris._UI();
   });
 
   afterEach(function() {

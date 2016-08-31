@@ -7,7 +7,7 @@ describe("Drawer", function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._init(nativeBridge);
-    tabris.ui = tabris.create("_UI");
+    tabris.ui = new tabris._UI();
     nativeBridge.resetCalls();
     drawer = new tabris.Drawer({background: "#ff0000"});
   });

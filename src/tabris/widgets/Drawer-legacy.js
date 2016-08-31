@@ -22,7 +22,7 @@ tabris.load(function() {
 
       _create: function(properties) {
         tabris.ui._setCurrentDrawer(this);
-        this._drawer = tabris.create("_Drawer", {});
+        this._drawer = new tabris._Drawer({});
         this._drawer._on("open", function() {
           this.trigger("open", this);
         }, this);

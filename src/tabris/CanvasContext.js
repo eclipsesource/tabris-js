@@ -232,7 +232,7 @@ defineMethod("stroke");
 
 CanvasContext.getContext = function(canvas, width, height) {
   if (!canvas._gc) {
-    canvas._gc = tabris.create("_GC", {parent: canvas});
+    canvas._gc = new tabris._GC({parent: canvas});
   }
   if (!canvas._ctx) {
     canvas._ctx = device.platform === "Android" ? new CanvasContext(canvas._gc)

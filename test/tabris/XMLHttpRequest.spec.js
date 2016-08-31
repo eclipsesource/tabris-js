@@ -8,11 +8,13 @@ describe("XMLHttpRequest", function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._init(nativeBridge);
-    var origCreate = tabris.create;
-    spyOn(tabris, "create").and.callFake(function() {
-      proxy = origCreate.apply(this, arguments);
-      spyOn(proxy, "_nativeCall");
-      return proxy;
+    var origCreate = tabris._nativeBridge.create;
+    spyOn(tabris._nativeBridge, "create").and.callFake(function(cid, type) {
+      if (type === "tabris.HttpRequest") {
+        proxy = tabris._proxies.find(cid);
+        spyOn(proxy, "_nativeCall");
+      }
+      return origCreate.apply(tabris._nativeBridge, arguments);
     });
     xhr = new tabris.XMLHttpRequest();
   });
@@ -174,7 +176,7 @@ describe("XMLHttpRequest", function() {
     it("creates proxy", function() {
       xhr.open("GET", "http://www.foo.com");
       xhr.send();
-      expect(tabris.create).toHaveBeenCalledWith("_HttpRequest");
+      expect(proxy).toEqual(jasmine.any(tabris._HttpRequest));
     });
 
     it("fails when state not 'opened'", function() {
