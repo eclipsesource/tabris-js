@@ -4,7 +4,7 @@ var path = require("path");
 
 global.Backbone = require("backbone");
 
-require("./NativeBridgeSpy.js");
+NativeBridgeSpy = require("./NativeBridgeSpy.js");
 tabris = require("../../build/tabris/tabris.js");
 require("./tabris-init.js");
 require("./jasmineToString.js");
