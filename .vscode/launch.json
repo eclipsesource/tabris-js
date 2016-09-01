@@ -3,6 +3,7 @@
   "configurations": [{
       "name": "Debug Tests",
       "type": "node",
+      "request": "launch",
       "program": "${workspaceRoot}/test/tabris/run-tests.js",
       "stopOnEntry": false,
       "cwd": "${workspaceRoot}",
@@ -10,6 +11,18 @@
       "env": { "NODE_ENV": "production"},
       "preLaunchTask": "build",
       "externalConsole": true
+    },
+    {
+      "name": "Attach",
+      "type": "node",
+      "request": "attach",
+      "port": 5858,
+      "address": "localhost",
+      "restart": false,
+      "sourceMaps": false,
+      "outDir": null,
+      "localRoot": "${workspaceRoot}",
+      "remoteRoot": null
     }
   ]
 }
