@@ -38,6 +38,7 @@
     "promise": "^7.1.1",
     "rollup": "^0.34.3",
     "sinon": "^1.17.5",
+    "sinon-chai": "^2.8.0",
     "underscore": "^1.8.0",
     "webpack": "^1.12.14",
     "webpack-dev-server": "^1.14.1",

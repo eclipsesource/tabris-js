@@ -1,4 +1,4 @@
-import {expect} from "chai";
+import {expect} from "../test";
 import ProxyStore from "../../src/tabris/ProxyStore";
 
 describe("ProxyStore", function() {

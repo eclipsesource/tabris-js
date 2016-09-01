@@ -52,9 +52,6 @@ if (!("ImageData" in window)) {
 // TODO: Temporary code to keep tests alive
 
 import * as util from "./util";
-import * as colors from "./util-colors";
-import * as fonts from "./util-fonts";
-import * as images from "./util-images";
 import Events from "./Events.js";
 import Properties from "./Properties.js";
 import Layout from "./Layout.js";
@@ -64,7 +61,7 @@ import NativeBridge from "./NativeBridge";
 import Proxy from "./Proxy.js";
 import ProxyCollection from "./ProxyCollection.js";
 
-tabris.util = util.extend({}, util, colors, fonts, images);
+tabris.util = util;
 tabris.Properties = Properties;
 tabris.Events = Events;
 tabris.Layout = Layout;
