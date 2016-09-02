@@ -577,6 +577,18 @@ describe("CollectionView", function() {
               expect(console.warn).not.toHaveBeenCalled();
             });
 
+            it("cell item is accessible through field", function() {
+              view._trigger("populateitem", {widget: cell.cid, index: 0});
+
+              expect(cell.item).toBe("a");
+            });
+
+            it("cell itemIndex is accessible through field", function() {
+              view._trigger("populateitem", {widget: cell.cid, index: 0});
+
+              expect(cell.itemIndex).toBe(0);
+            });
+
           });
 
         });

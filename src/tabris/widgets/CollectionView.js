@@ -123,9 +123,9 @@ tabris.registerWidget("CollectionView", {
       trigger: function(event) {
         var cell = tabris._proxies.find(event.widget);
         var item = this._getItem(this._items, event.index);
-        cell.set("itemIndex", event.index);
-        if (item !== cell.get("item")) {
-          cell.set("item", item);
+        cell._storeProperty("itemIndex", event.index);
+        if (item !== cell._getStoredProperty("item")) {
+          cell._storeProperty("item", item);
         } else {
           cell.trigger("change:item", cell, item, {});
         }
@@ -243,9 +243,9 @@ tabris.registerWidget("CollectionView", {
     var cells = this._children || [];
     for (var i = 0; i < cells.length; i++) {
       var cell = cells[i];
-      var itemIndex = cell.get("itemIndex");
+      var itemIndex = cell._getStoredProperty("itemIndex");
       if (itemIndex >= offset) {
-        cell.set("itemIndex", itemIndex + diff);
+        cell._storeProperty("itemIndex", itemIndex + diff);
       }
     }
   }
@@ -295,6 +295,29 @@ tabris.registerWidget("Cell", {
 
   dispose: function() {
     console.warn("CollectionView cells are container-managed, they cannot be disposed of");
+  },
+
+  _properties: {
+    item: {
+      access: {
+        set: function() {
+          // read only
+        },
+        get: function(name) {
+          return this._getStoredProperty(name);
+        }
+      }
+    },
+    itemIndex: {
+      access: {
+        set: function() {
+          // read only
+        },
+        get: function(name) {
+          return this._getStoredProperty(name);
+        }
+      }
+    }
   }
 
 });
