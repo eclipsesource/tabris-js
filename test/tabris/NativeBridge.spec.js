@@ -5,7 +5,6 @@ describe("NativeBridge", function() {
   var log;
 
   beforeEach(function() {
-    tabris.off();
     log = [];
     native = {};
     ["create", "destroy", "listen", "set", "get", "call"].forEach((method) => {

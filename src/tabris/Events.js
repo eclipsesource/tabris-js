@@ -30,8 +30,9 @@ export default {
     var store = isPublic ? "_callbacks" : "_privateCallbacks";
     if (this[store]) {
       if (!type) {
-        delete this[store];
-      } else if (type in this[store]) {
+        throw new Error("Not enough arguments");
+      }
+      if (type in this[store]) {
         if (!callback) {
           delete this[store][type];
         } else {

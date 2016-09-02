@@ -44,7 +44,6 @@ function test_events() {
   widget.off("foo", listener);
   widget.off("foo");
   widget.off(null, listener);
-  widget.off();
 }
 
 function test_Action() {

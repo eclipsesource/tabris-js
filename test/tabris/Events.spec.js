@@ -133,12 +133,9 @@ describe("Events", function() {
       beforeEach(function() {
         object.on("foo", callback);
         object.on("bar", callback);
-        object.off();
       });
-      it("should remove all callbacks for all event types", function() {
-        object.trigger("foo");
-        object.trigger("bar");
-        expect(callback).not.toHaveBeenCalled();
+      it("throws error", function() {
+        expect(() => object.off()).toThrow();
       });
     });
 
@@ -275,7 +272,6 @@ describe("Events", function() {
       object.off("foo", callback, context);
       object.off("foo", callback);
       object.off("foo");
-      object.off();
       object.trigger("foo", "argument");
 
       expect(object._isListening("foo")).toBe(true);

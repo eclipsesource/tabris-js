@@ -28,8 +28,6 @@ window.tabris = extend({}, Events, {
   version: "${VERSION}",
 
   _init: function(client) {
-    tabris.off();
-    tabris._off();
     tabris._client = client;
     tabris._nativeBridge = new NativeBridge(client);
     var i = 0;
