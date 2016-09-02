@@ -4,15 +4,15 @@
     _type: "tabris.Page",
 
     _properties: {
-      image: {
+      icon: {
         type: "image",
         access: {
-          set: function(name, image) {
-            this._image = image;
-            this._nativeSet("image", image);
+          set: function(name, icon) {
+            this._icon = icon;
+            this._nativeSet("image", icon);
           },
           get: function() {
-            return this._image;
+            return this._icon;
           }
         }
       },
@@ -34,7 +34,7 @@
 
   var pageProperties = {
     title: pageProperty,
-    image: pageProperty,
+    icon: pageProperty,
     style: pageProperty,
     topLevel: pageProperty,
     layoutData: {access: {set: function() {}, get: function() {}}}
