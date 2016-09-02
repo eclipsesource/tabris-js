@@ -134,7 +134,7 @@ module.exports = function(grunt) {
         cmd: "node test/tabris/run-tests.js"
       },
       test_tabris: {
-        cmd: "node node_modules/mocha/bin/mocha --colors --compilers js:babel-core/register 'test/**/*.test.js'"
+        cmd: "node node_modules/mocha/bin/mocha --colors --compilers js:babel-core/register \"test/**/*.test.js\""
       },
       test_spec: {
         cmd: "node test/tabris/run-tests.js " + grunt.option("spec")
