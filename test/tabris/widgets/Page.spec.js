@@ -21,7 +21,7 @@ describe("Page", function() {
     beforeEach(function() {
       page = new tabris.Page({
         title: "title",
-        image: {src: "image"},
+        icon: {src: "image"},
         style: "fullscreen",
         topLevel: true,
         background: "red"
@@ -54,7 +54,7 @@ describe("Page", function() {
 
       it("does not inherit page properties", function() {
         expect(createProps.title).not.toBeDefined();
-        expect(createProps.image).not.toBeDefined();
+        expect(createProps.icon).not.toBeDefined();
         expect(createProps.style).not.toBeDefined();
         expect(createProps.topLevel).not.toBeDefined();
       });
@@ -93,12 +93,12 @@ describe("Page", function() {
         expect(properties.background).not.toBeDefined();
       });
 
-      it("supports getting image property", function() {
-        expect(page.get("image")).toEqual({src: "image"});
+      it("supports getting icon property", function() {
+        expect(page.get("icon")).toEqual({src: "image"});
       });
 
-      it("image property is nullable", function() {
-        expect(page.set("image", null).get("image")).toBeNull();
+      it("icon property is nullable", function() {
+        expect(page.set("icon", null).get("icon")).toBeNull();
       });
 
     });
@@ -117,7 +117,7 @@ describe("Page", function() {
     });
 
     it("returns default property values", function() {
-      expect(page.get("image")).toBe(null);
+      expect(page.get("icon")).toBe(null);
       expect(page.get("title")).toBe("");
     });
 
