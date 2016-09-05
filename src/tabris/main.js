@@ -1,6 +1,5 @@
 import "./load-polyfill.js";
 import "./Tabris.js";
-import "./Animation.js";
 import "./GestureRecognizer.js";
 import "./Device.js";
 import "./Widget.js";

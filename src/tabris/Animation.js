@@ -1,6 +1,7 @@
 import {extend} from "./util";
+import {createType} from "./create-type";
 
-tabris.registerType("_Animation", {
+var Animation = createType("_Animation", {
 
   _type: "tabris.Animation",
 
@@ -52,7 +53,7 @@ tabris.registerType("_Animation", {
 
 });
 
-tabris._Animation.animate = function(properties, options) {
+export function animate(properties, options) {
   var animatedProps = {};
   for (var property in properties) {
     if (animatable[property]) {
@@ -68,11 +69,11 @@ tabris._Animation.animate = function(properties, options) {
     }
   }
   for (var option in options) {
-    if (!tabris._Animation._properties[option] && option !== "name") {
+    if (!Animation._properties[option] && option !== "name") {
       console.warn(this.type + ": Ignored invalid animation option \"" + option + "\"");
     }
   }
-  var animation = new tabris._Animation(extend({}, options, {
+  var animation = new Animation(extend({}, options, {
     target: this,
     properties: animatedProps
   }));
@@ -84,7 +85,7 @@ tabris._Animation.animate = function(properties, options) {
     animation._resolve = resolve;
     animation._reject = reject;
   });
-};
+}
 
 var animatable = {
   opacity: true,

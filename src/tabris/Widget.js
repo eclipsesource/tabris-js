@@ -3,6 +3,7 @@ import Layout from "./Layout";
 import Proxy from "./Proxy";
 import ProxyCollection from "./ProxyCollection";
 import {types} from "./property-types";
+import {animate} from "./Animation";
 
 tabris.Widget = function() {
   throw new Error("Cannot instantiate abstract Widget");
@@ -187,7 +188,7 @@ tabris.Widget.prototype = extendPrototype(Proxy, {
     }
   },
 
-  animate: tabris._Animation.animate
+  animate: animate
 
 });
 

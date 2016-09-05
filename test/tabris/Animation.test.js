@@ -1,9 +1,20 @@
+import {expect, spy, stub, restore} from "../test";
+import ProxyStore from "../../src/tabris/ProxyStore";
+import NativeBridge from "../../src/tabris/NativeBridge";
+import NativeBridgeSpy from "./NativeBridgeSpy";
+import {animate} from "../../src/tabris/Animation";
+import {createType} from "../../src/tabris/create-type";
+
 describe("Animation", function() {
 
-  var widget, nativeBridge;
+  let widget, nativeBridge;
 
   function animationId() {
     return nativeBridge.calls({op: "create", type: "tabris.Animation"}).pop().id;
+  }
+
+  function findProxy(cid) {
+    return tabris._proxies.find(cid);
   }
 
   function createOp() {
@@ -11,57 +22,80 @@ describe("Animation", function() {
   }
 
   beforeEach(function() {
+    stub(console, "warn");
     nativeBridge = new NativeBridgeSpy();
-    tabris._reset();
-    tabris._init(nativeBridge);
-    tabris.registerWidget("TestType", {_properties: {foo: "any"}});
-    widget = new tabris.TestType();
+    global.tabris = {
+      _on: () => {},
+      _proxies: new ProxyStore()
+    };
+    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    let TestWidget = createType("TestType", {
+      _properties: {
+        opacity: {
+          type: "opacity",
+          default: 1
+        },
+        transform: {
+          type: "transform",
+          default: function() {
+            return {
+              rotation: 0,
+              scaleX: 1,
+              scaleY: 1,
+              translationX: 0,
+              translationY: 0,
+              translationZ: 0
+            };
+          }
+        }
+      }
+    });
+    TestWidget.prototype.animate = animate;
+    widget = new TestWidget({});
   });
 
-  afterEach(function() {
-    delete tabris.TestType;
-  });
+  afterEach(restore);
 
-  describe("widget.animate", function() {
+  describe("animate", function() {
 
     it("creates native animation with target", function() {
       widget.animate({}, {});
-      expect(createOp().target).toBe(widget.cid);
+      expect(createOp().target).to.equal(widget.cid);
     });
 
     it("disposes Animation object on widget dispose", function() {
       widget.animate({}, {});
-      var animation = tabris._proxies.find(animationId());
+      let animation = findProxy(animationId());
 
       widget.dispose();
 
-      expect(animation.isDisposed()).toBe(true);
+      expect(animation.isDisposed()).to.equal(true);
     });
 
     it("does not keep references to Animation object after completion", function() {
       widget.animate({}, {});
-      var animation = tabris._proxies.find(animationId());
-      tabris._notify(animation.cid, "Completion", {});
-      spyOn(animation, "dispose");
+      let animation = findProxy(animationId());
+      animation._trigger("Completion", {});
+      spy(animation, "dispose");
 
       widget.dispose();
 
-      expect(animation.dispose).not.toHaveBeenCalled();
+      expect(animation.dispose).not.to.have.been.called;
     });
 
     it("sets animated properties on animation", function() {
       widget.animate({opacity: 0.4, transform: {rotation: 0.5}}, {});
-      var expected = {
+      let expected = {
         opacity: 0.4,
         transform: {rotation: 0.5, scaleX: 1, scaleY: 1, translationX: 0, translationY: 0, translationZ: 0}
       };
-      expect(createOp().properties).toEqual(expected);
+      expect(createOp().properties).to.eql(expected);
     });
 
     it("caches animated properties in widget", function() {
       widget.animate({opacity: 0.4, transform: {rotation: 0.5}}, {});
-      expect(widget.get("opacity")).toBe(0.4);
-      expect(widget.get("transform")).toEqual({
+      expect(widget.get("opacity")).to.equal(0.4);
+      expect(widget.get("transform")).to.eql({
         rotation: 0.5,
         scaleX: 1,
         scaleY: 1,
@@ -72,14 +106,13 @@ describe("Animation", function() {
     });
 
     it("caches only valid properties in widget", function() {
-      spyOn(console, "warn");
       widget.set("foo", 1);
 
       widget.animate({opacity: 0.4, transform: {foo: 0.5}, foo: 2}, {});
 
-      expect(widget.get("foo")).toBe(1);
-      expect(widget.get("opacity")).toBe(0.4);
-      expect(widget.get("transform")).toEqual({
+      expect(widget.get("foo")).to.equal(1);
+      expect(widget.get("opacity")).to.equal(0.4);
+      expect(widget.get("transform")).to.eql({
         rotation: 0,
         scaleX: 1,
         scaleY: 1,
@@ -90,13 +123,11 @@ describe("Animation", function() {
     });
 
     it("sets valid options only", function() {
-      spyOn(console, "warn");
-
       widget.animate({}, {
         delay: 10, duration: 100, repeat: 1, reverse: true, easing: "ease-out", foo: "bar"
       });
 
-      expect(createOp()).toEqual({
+      expect(createOp()).to.eql({
         delay: 10,
         duration: 100,
         repeat: 1,
@@ -108,29 +139,24 @@ describe("Animation", function() {
     });
 
     it("warns against invalid options", function() {
-      spyOn(console, "warn");
-
       widget.animate({}, {foo: "bar"});
 
-      expect(console.warn).toHaveBeenCalledWith("TestType: Ignored invalid animation option \"foo\"");
+      expect(console.warn).to.have.been.calledWith("TestType: Ignored invalid animation option \"foo\"");
     });
 
     it("warns against invalid properties", function() {
-      spyOn(console, "warn");
-
       widget.animate({background: "#00ff00", opacity: 0}, {});
 
-      expect(console.warn).toHaveBeenCalledWith("TestType: Ignored invalid animation property \"background\"");
-      expect(createOp().properties).toEqual({opacity: 0});
+      expect(console.warn).to.have.been.calledWith("TestType: Ignored invalid animation property \"background\"");
+      expect(createOp().properties).to.eql({opacity: 0});
     });
 
     it("warns against invalid property values", function() {
-      spyOn(console, "warn");
-
       widget.animate({opacity: 0, transform: {foo: "bar"}}, {});
 
-      expect(console.warn).toHaveBeenCalledWith("TestType: Ignored invalid animation property value for \"transform\"");
-      expect(createOp().properties).toEqual({opacity: 0});
+      expect(console.warn)
+        .to.have.been.calledWith("TestType: Ignored invalid animation property value for \"transform\"");
+      expect(createOp().properties).to.eql({opacity: 0});
     });
 
     it("issues listen call for Start", function() {
@@ -140,7 +166,7 @@ describe("Animation", function() {
         id: animationId(),
         event: "Start",
         listen: true
-      }).length).toBe(1);
+      }).length).to.equal(1);
     });
 
     it("issues listen call for Completion", function() {
@@ -150,55 +176,55 @@ describe("Animation", function() {
         id: animationId(),
         event: "Completion",
         listen: true
-      }).length).toBe(1);
+      }).length).to.equal(1);
     });
 
     it("starts animation", function() {
       widget.animate({}, {});
-      expect(nativeBridge.calls({op: "call", id: animationId(), method: "start"}).length).toBe(1);
+      expect(nativeBridge.calls({op: "call", id: animationId(), method: "start"}).length).to.equal(1);
     });
 
     it("disposes animation on completion", function() {
       widget.animate({}, {});
-      expect(nativeBridge.calls({op: "destroy", id: animationId()}).length).toBe(0);
+      expect(nativeBridge.calls({op: "destroy", id: animationId()}).length).to.equal(0);
 
-      tabris._notify(animationId(), "Completion", {});
-      expect(nativeBridge.calls({op: "destroy", id: animationId()}).length).toBe(1);
+      findProxy(animationId())._trigger("Completion", {});
+      expect(nativeBridge.calls({op: "destroy", id: animationId()}).length).to.equal(1);
     });
 
     it("returns unresolved Promise", function(done) {
-      var thenCallback = jasmine.createSpy();
+      let thenCallback = spy();
 
       widget.animate({}, {}).then(thenCallback);
 
       setTimeout(function() {
-        expect(thenCallback).not.toHaveBeenCalled();
+        expect(thenCallback).not.to.have.been.called;
         done();
       }, 100);
     });
 
     it("returns Promise that resolves on completion", function(done) {
-      var thenCallback = jasmine.createSpy();
+      let thenCallback = spy();
       widget.animate({}, {}).then(thenCallback);
 
-      tabris._notify(animationId(), "Completion", {});
+      findProxy(animationId())._trigger("Completion", {});
 
       setTimeout(function() {
-        expect(thenCallback).toHaveBeenCalled();
+        expect(thenCallback).to.have.been.called;
         done();
       }, 100);
     });
 
     it("returns Promise that rejects on widget dispose", function(done) {
-      var thenCallback = jasmine.createSpy();
-      var rejectCallback = jasmine.createSpy();
+      let thenCallback = spy();
+      let rejectCallback = spy();
       widget.animate({}, {}).then(thenCallback, rejectCallback);
 
       widget.dispose();
 
       setTimeout(function() {
-        expect(thenCallback).not.toHaveBeenCalled();
-        expect(rejectCallback).toHaveBeenCalled();
+        expect(thenCallback).not.to.have.been.called;
+        expect(rejectCallback).to.have.been.called;
         done();
       }, 100);
     });
@@ -212,25 +238,25 @@ describe("Animation", function() {
     });
 
     it("animationstart", function() {
-      var listener = jasmine.createSpy();
+      let listener = spy();
       widget.on("animationstart", listener);
 
-      tabris._notify(animationId(), "Start", {});
+      findProxy(animationId())._trigger("Start", {});
 
-      expect(listener).toHaveBeenCalled();
-      expect(listener.calls.argsFor(0)[0]).toBe(widget);
-      expect(listener.calls.argsFor(0)[1]).toEqual({duration: 123, name: "bar"});
+      expect(listener).to.have.been.called;
+      expect(listener.args[0][0]).to.equal(widget);
+      expect(listener.args[0][1]).to.eql({duration: 123, name: "bar"});
     });
 
     it("animationend", function() {
-      var listener = jasmine.createSpy();
+      let listener = spy();
       widget.on("animationend", listener);
 
-      tabris._notify(animationId(), "Completion", {});
+      findProxy(animationId())._trigger("Completion", {});
 
-      expect(listener).toHaveBeenCalled();
-      expect(listener.calls.argsFor(0)[0]).toBe(widget);
-      expect(listener.calls.argsFor(0)[1]).toEqual({duration: 123, name: "bar"});
+      expect(listener).to.have.been.called;
+      expect(listener.args[0][0]).to.equal(widget);
+      expect(listener.args[0][1]).to.eql({duration: 123, name: "bar"});
     });
 
   });
