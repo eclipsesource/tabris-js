@@ -11,15 +11,17 @@ export default {
   _on: function(type, callback, context, isPublic) {
     var store = isPublic ? "_callbacks" : "_privateCallbacks";
     var wasListening = this._isListening(type);
-    if (!this[store]) {
-      this[store] = [];
+    this[store] = this[store] || [];
+    this[store][type] = (this[store][type] || []).concat();
+    var alreadyAdded = this[store][type].some(function(entry) {
+      return (
+        (entry.fn === callback || "_callback" in callback && entry.fn._callback === callback._callback) &&
+        (entry.ctx === context)
+      );
+    });
+    if (!alreadyAdded) {
+      this[store][type].push({fn: callback, ctx: context});
     }
-    this[store][type] = (this[store][type] || []).concat([
-      {
-        fn: callback,
-        ctx: context
-      }
-    ]);
     if (!wasListening) {
       this._listen(type, true);
     }

@@ -27,13 +27,6 @@ describe("Events", function() {
       expect(callback).to.have.been.called;
     });
 
-    it("should not eliminate duplicate callbacks", function() {
-      object.on("foo", callback);
-      object.on("foo", callback);
-      object.trigger("foo");
-      expect(callback.callCount).to.equal(2);
-    });
-
     it("should return context", function() {
       var result = object.on("foo", callback);
       expect(result).to.equal(object);
@@ -160,13 +153,6 @@ describe("Events", function() {
       expect(callback.firstCall).to.have.been.calledOn(context);
     });
 
-    it("should not eliminate duplicate callbacks", function() {
-      object.once("foo", callback);
-      object.once("foo", callback);
-      object.trigger("foo");
-      expect(callback.callCount).to.equal(2);
-    });
-
     it("should return context", function() {
       var result = object.once("foo", callback);
       expect(result).to.equal(object);
@@ -281,5 +267,62 @@ describe("Events", function() {
     });
 
   });
+
+  describe("when attaching events", function() {
+
+    ["on", "once"].forEach(function(method) {
+
+      describe("with " + method + ",", function() {
+
+        describe("callback is triggered multiple times", function() {
+
+          it("when callbacks are not identical", function() {
+            object[method]("foo", callback);
+            object[method]("foo", callback2);
+            object.trigger("foo");
+            expect(callback).to.have.been.calledOnce;
+            expect(callback2).to.have.been.calledOnce;
+          });
+
+          it("when callbacks are identical, but contexts are not", function() {
+            object[method]("foo", callback, context);
+            object[method]("foo", callback, context2);
+            object.trigger("foo");
+            expect(callback).to.have.been.calledTwice;
+          });
+
+          it("when callbacks are identical, but one of the contexts is not given", function() {
+            object[method]("foo", callback, context);
+            object[method]("foo", callback);
+            object.trigger("foo");
+            expect(callback).to.have.been.calledTwice;
+          });
+
+        });
+
+        describe("callback is not triggered multiple times", function() {
+
+          it("when callbacks are identical", function() {
+            object[method]("foo", callback);
+            object[method]("foo", callback);
+            object.trigger("foo");
+            expect(callback).to.have.been.calledOnce;
+          });
+
+          it("when callbacks and contexts are identical", function() {
+            object[method]("foo", callback, context);
+            object[method]("foo", callback, context);
+            object.trigger("foo");
+            expect(callback).to.have.been.calledOnce;
+          });
+
+        });
+
+      });
+
+    });
+
+  });
+
 
 });
