@@ -2,16 +2,22 @@ import {extend, extendPrototype} from "./util";
 import Layout from "./Layout";
 import Proxy from "./Proxy";
 import ProxyCollection from "./ProxyCollection";
-import {types} from "./property-types";
 import {animate} from "./Animation";
+import {types} from "./property-types";
+import {createType} from "./create-type";
 
-tabris.Widget = function() {
+var tabris = global.tabris;
+if (tabris) {
+  tabris.Widget = Widget;
+}
+
+export default function Widget() {
   throw new Error("Cannot instantiate abstract Widget");
-};
+}
 
 var superProto = Proxy.prototype;
 
-tabris.Widget.prototype = extendPrototype(Proxy, {
+Widget.prototype = extendPrototype(Proxy, {
 
   append: function() {
     this._checkDisposed();
@@ -192,17 +198,26 @@ tabris.Widget.prototype = extendPrototype(Proxy, {
 
 });
 
-tabris.registerWidget = function(type, members) {
+Widget.extend = function(type, members) {
   members = extend({}, members);
-  members._events = extend({}, tabris.registerWidget._defaultEvents, members._events || {});
+  members._events = extend({}, _defaultEvents, members._events || {});
   if (members._properties !== true) {
-    var defaultProperties = tabris.registerWidget._defaultProperties;
+    var defaultProperties = _defaultProperties;
     members._properties = extend({}, defaultProperties, members._properties || {});
   }
-  tabris.registerType(type, members, tabris.Widget);
+  return createType(type, members, Widget);
 };
 
-Object.defineProperty(tabris.Widget.prototype, "classList", {
+if (tabris) {
+  tabris.registerWidget = function(type, members) {
+    if (type in tabris) {
+      throw new Error("Widget already registered: " + type);
+    }
+    tabris[type] = Widget.extend(type, members);
+  };
+}
+
+Object.defineProperty(Widget.prototype, "classList", {
   get: function() {
     if (!this._classList) {
       this._classList = [];
@@ -212,9 +227,11 @@ Object.defineProperty(tabris.Widget.prototype, "classList", {
 });
 
 var hasAndroidResizeBug;
-tabris.load(function() {
-  hasAndroidResizeBug = device.platform === "Android" && device.version <= 17;
-});
+if (tabris) {
+  tabris.load(function() {
+    hasAndroidResizeBug = device.platform === "Android" && device.version <= 17;
+  });
+}
 
 var layoutAccess = {
   set: function(name, value) {
@@ -235,174 +252,173 @@ var layoutAccess = {
   }
 };
 
-extend(tabris.registerWidget, {
-  _defaultEvents: {
-    touchstart: {trigger: triggerWithTarget},
-    touchmove: {trigger: triggerWithTarget},
-    touchend: {trigger: triggerWithTarget},
-    touchcancel: {trigger: triggerWithTarget},
-    "resize": {
-      alias: "change:bounds",
-      trigger: function(event) {
-        if (hasAndroidResizeBug) {
-          var self = this;
-          setTimeout(function() {
-            self._triggerChangeEvent("bounds", event.bounds, {}, "resize");
-            self.trigger("resize", self, types.bounds.decode(event.bounds), {});
-          }, 0);
-        } else {
-          this._triggerChangeEvent("bounds", event.bounds, {}, "resize");
-          this.trigger("resize", this, types.bounds.decode(event.bounds), {});
+var _defaultEvents = {
+  touchstart: {trigger: triggerWithTarget},
+  touchmove: {trigger: triggerWithTarget},
+  touchend: {trigger: triggerWithTarget},
+  touchcancel: {trigger: triggerWithTarget},
+  "resize": {
+    alias: "change:bounds",
+    trigger: function(event) {
+      if (hasAndroidResizeBug) {
+        var self = this;
+        setTimeout(function() {
+          self._triggerChangeEvent("bounds", event.bounds, {}, "resize");
+          self.trigger("resize", self, types.bounds.decode(event.bounds), {});
+        }, 0);
+      } else {
+        this._triggerChangeEvent("bounds", event.bounds, {}, "resize");
+        this.trigger("resize", this, types.bounds.decode(event.bounds), {});
+      }
+    }
+  }
+};
+
+var _defaultProperties = {
+  enabled: {
+    type: "boolean",
+    default: true
+  },
+  visible: {
+    type: "boolean",
+    default: true
+  },
+  layoutData: {
+    type: "layoutData",
+    access: {
+      set: function(name, value) {
+        this._layoutData = value;
+        if (this._parent) {
+          Layout.addToQueue(this._parent);
         }
+      },
+      get: function() {
+        return this._layoutData || null;
       }
     }
   },
-  _defaultProperties: {
-    enabled: {
-      type: "boolean",
-      default: true
-    },
-    visible: {
-      type: "boolean",
-      default: true
-    },
-    layoutData: {
-      type: "layoutData",
-      access: {
-        set: function(name, value) {
-          this._layoutData = value;
-          if (this._parent) {
-            Layout.addToQueue(this._parent);
-          }
-        },
-        get: function() {
-          return this._layoutData || null;
-        }
+  left: {type: "edge", access: layoutAccess},
+  right: {type: "edge", access: layoutAccess},
+  top: {type: "edge", access: layoutAccess},
+  bottom: {type: "edge", access: layoutAccess},
+  width: {type: "dimension", access: layoutAccess},
+  height: {type: "dimension", access: layoutAccess},
+  centerX: {type: "dimension", access: layoutAccess},
+  centerY: {type: "dimension", access: layoutAccess},
+  baseline: {type: "sibling", access: layoutAccess},
+  elevation: {
+    type: "number",
+    default: 0
+  },
+  font: {
+    type: "font",
+    access: {
+      set: function(name, value, options) {
+        this._nativeSet(name, value === undefined ? null : value);
+        this._storeProperty(name, value, options);
       }
     },
-    left: {type: "edge", access: layoutAccess},
-    right: {type: "edge", access: layoutAccess},
-    top: {type: "edge", access: layoutAccess},
-    bottom: {type: "edge", access: layoutAccess},
-    width: {type: "dimension", access: layoutAccess},
-    height: {type: "dimension", access: layoutAccess},
-    centerX: {type: "dimension", access: layoutAccess},
-    centerY: {type: "dimension", access: layoutAccess},
-    baseline: {type: "sibling", access: layoutAccess},
-    elevation: {
-      type: "number",
-      default: 0
-    },
-    font: {
-      type: "font",
-      access: {
-        set: function(name, value, options) {
-          this._nativeSet(name, value === undefined ? null : value);
-          this._storeProperty(name, value, options);
-        }
-      },
-      default: null
-    },
-    backgroundImage: "image",
-    bounds: {
-      type: "bounds",
-      access: {
-        set: function() {
-          console.warn(this.type + ": Can not set read-only property \"bounds\".");
-        }
+    default: null
+  },
+  backgroundImage: "image",
+  bounds: {
+    type: "bounds",
+    access: {
+      set: function() {
+        console.warn(this.type + ": Can not set read-only property \"bounds\".");
       }
-    },
-    background: {
-      type: "color",
-      access: {
-        set: function(name, value, options) {
-          this._nativeSet(name, value === undefined ? null : value);
-          this._storeProperty(name, value, options);
-        }
-      }
-    },
-    textColor: {
-      type: "color",
-      access: {
-        set: function(name, value, options) {
-          this._nativeSet("foreground", value === undefined ? null : value);
-          this._storeProperty(name, value, options);
-        },
-        get: function(name) {
-          var result = this._getStoredProperty(name);
-          if (result === undefined) {
-            result = this._nativeGet("foreground");
-          }
-          return result;
-        }
-      }
-    },
-    opacity: {
-      type: "opacity",
-      default: 1
-    },
-    transform: {
-      type: "transform",
-      default: function() {
-        return {
-          rotation: 0,
-          scaleX: 1,
-          scaleY: 1,
-          translationX: 0,
-          translationY: 0,
-          translationZ: 0
-        };
-      }
-    },
-    highlightOnTouch: {
-      type: "boolean",
-      default: false
-    },
-    cornerRadius: {
-      type: "number",
-      default: 0
-    },
-    id: {
-      type: "string",
-      access: {
-        set: function(name, value, options) {
-          this._storeProperty(name, value, options);
-        },
-        get: function(name) {
-          return this._getStoredProperty(name);
-        }
-      }
-    },
-    class: {
-      type: "string",
-      access: {
-        set: function(name, value) {
-          this._classList = value.trim().split(/\s+/);
-        },
-        get: function() {
-          return this.classList.join(" ");
-        }
-      }
-    },
-    gestures: {
-      access: {
-        set: function(name, gestures) {
-          this._gestures = extend({}, defaultGestures, gestures);
-        },
-        get: function() {
-          if (!this._gestures) {
-            this._gestures = extend({}, defaultGestures);
-          }
-          return this._gestures;
-        }
-      }
-    },
-    win_theme: {
-      type: ["choice", ["default", "light", "dark"]],
-      default: "default"
     }
+  },
+  background: {
+    type: "color",
+    access: {
+      set: function(name, value, options) {
+        this._nativeSet(name, value === undefined ? null : value);
+        this._storeProperty(name, value, options);
+      }
+    }
+  },
+  textColor: {
+    type: "color",
+    access: {
+      set: function(name, value, options) {
+        this._nativeSet("foreground", value === undefined ? null : value);
+        this._storeProperty(name, value, options);
+      },
+      get: function(name) {
+        var result = this._getStoredProperty(name);
+        if (result === undefined) {
+          result = this._nativeGet("foreground");
+        }
+        return result;
+      }
+    }
+  },
+  opacity: {
+    type: "opacity",
+    default: 1
+  },
+  transform: {
+    type: "transform",
+    default: function() {
+      return {
+        rotation: 0,
+        scaleX: 1,
+        scaleY: 1,
+        translationX: 0,
+        translationY: 0,
+        translationZ: 0
+      };
+    }
+  },
+  highlightOnTouch: {
+    type: "boolean",
+    default: false
+  },
+  cornerRadius: {
+    type: "number",
+    default: 0
+  },
+  id: {
+    type: "string",
+    access: {
+      set: function(name, value, options) {
+        this._storeProperty(name, value, options);
+      },
+      get: function(name) {
+        return this._getStoredProperty(name);
+      }
+    }
+  },
+  class: {
+    type: "string",
+    access: {
+      set: function(name, value) {
+        this._classList = value.trim().split(/\s+/);
+      },
+      get: function() {
+        return this.classList.join(" ");
+      }
+    }
+  },
+  gestures: {
+    access: {
+      set: function(name, gestures) {
+        this._gestures = extend({}, defaultGestures, gestures);
+      },
+      get: function() {
+        if (!this._gestures) {
+          this._gestures = extend({}, defaultGestures);
+        }
+        return this._gestures;
+      }
+    }
+  },
+  win_theme: {
+    type: ["choice", ["default", "light", "dark"]],
+    default: "default"
   }
-});
+};
 
 var defaultGestures = {
   tap: {type: "tap"},
