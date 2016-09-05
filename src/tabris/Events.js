@@ -27,30 +27,26 @@ export default {
   },
 
   _off: function(type, callback, context, isPublic) {
-    if (!type) {
+    if (!type || !callback) {
       throw new Error("Not enough arguments");
     }
     var store = isPublic ? "_callbacks" : "_privateCallbacks";
     if (this[store]) {
       if (type in this[store]) {
-        if (!callback) {
+        var callbacks = this[store][type].concat();
+        for (var i = callbacks.length - 1; i >= 0; i--) {
+          if ((callbacks[i].fn === callback || callbacks[i].fn._callback === callback) &&
+            (!context || callbacks[i].ctx === context)) {
+            callbacks.splice(i, 1);
+          }
+        }
+        if (callbacks.length === 0) {
           delete this[store][type];
+          if (Object.keys(this[store]).length === 0) {
+            delete this[store];
+          }
         } else {
-          var callbacks = this[store][type].concat();
-          for (var i = callbacks.length - 1; i >= 0; i--) {
-            if ((callbacks[i].fn === callback || callbacks[i].fn._callback === callback) &&
-              (!context || callbacks[i].ctx === context)) {
-              callbacks.splice(i, 1);
-            }
-          }
-          if (callbacks.length === 0) {
-            delete this[store][type];
-            if (Object.keys(this[store]).length === 0) {
-              delete this[store];
-            }
-          } else {
-            this[store][type] = callbacks;
-          }
+          this[store][type] = callbacks;
         }
       }
     }

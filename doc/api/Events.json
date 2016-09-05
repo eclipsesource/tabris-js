@@ -17,13 +17,6 @@
     "off": [
       {
         "parameters": [
-          {"name": "event", "type": "string"}
-        ],
-        "returns": "this",
-        "description": "Removes all listeners for *event* from this widget. Supports chaining."
-      },
-      {
-        "parameters": [
           {"name": "event", "type": "string"},
           {"name": "listener", "type": "Function"}
         ],

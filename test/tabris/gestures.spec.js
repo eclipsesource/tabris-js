@@ -63,8 +63,10 @@ describe("gestures:", function() {
 
     describe("and adding matching gesture listener", function() {
 
+      var listener = function() {};
+
       beforeEach(function() {
-        widget.on("foo", function() {});
+        widget.on("foo", listener);
       });
 
       it("CREATEs GestureRecognizer", function() {
@@ -134,7 +136,7 @@ describe("gestures:", function() {
       describe(", then removing all listener", function() {
 
         beforeEach(function() {
-          widget.off("foo");
+          widget.off("foo", listener);
         });
 
         it("disposes matching GestureRecognizer", function() {
@@ -148,6 +150,8 @@ describe("gestures:", function() {
   });
 
   describe("listening to multiple gestures", function() {
+
+    var barListener = function() {};
 
     beforeEach(function() {
       widget = new tabris.TestType({
@@ -168,7 +172,7 @@ describe("gestures:", function() {
     });
 
     it("disposing widget disposes all remaining GestureRecognizers", function() {
-      widget.off("bar");
+      widget.off("bar", barListener);
       widget.dispose();
 
       expect(nativeBridge.calls({op: "destroy", id: gestureCreate()[0].id}).length).toBe(1);

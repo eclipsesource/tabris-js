@@ -55,6 +55,10 @@ describe("Events", function() {
       expect(() => object.off()).to.throw();
     });
 
+    it("throws error if no event callback is specified", function() {
+      expect(() => object.off("foo")).to.throw();
+    });
+
     it("should remove callback", function() {
       object.on("foo", callback);
       object.off("foo", callback);
@@ -123,19 +127,6 @@ describe("Events", function() {
         object.trigger("foo");
         expect(callback).not.to.have.been.called;
         expect(callback2).to.have.been.called;
-      });
-    });
-
-    describe("if no callback is specified", function() {
-      beforeEach(function() {
-        object.on("foo", callback);
-        object.on("foo", callback2);
-        object.off("foo");
-      });
-      it("should remove all callbacks for the event type", function() {
-        object.trigger("foo");
-        expect(callback).not.to.have.been.called;
-        expect(callback2).not.to.have.been.called;
       });
     });
 
@@ -271,7 +262,6 @@ describe("Events", function() {
 
       object.off("foo", callback, context);
       object.off("foo", callback);
-      object.off("foo");
       object.trigger("foo", "argument");
 
       expect(object._isListening("foo")).to.equal(true);

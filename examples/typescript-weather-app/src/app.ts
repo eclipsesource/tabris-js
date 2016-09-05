@@ -114,10 +114,9 @@ function loadDataFromInput(widget: TextInput, text: string) {
 }
 
 function animateGraphChange(graph: Graph, min: number, max: number) {
-  graph.off("animationend");
-  graph.animate({ opacity: 0 }, { duration: 180, easing: "ease-in-out" });
-  graph.once("animationend", () => {
-    graph.setScale(min, max);
-    graph.animate({ opacity: 1 }, { duration: 180, easing: "ease-in-out" });
-  });
+  graph.animate({ opacity: 0 }, { duration: 180, easing: "ease-in-out" })
+    .then(() => {
+      graph.setScale(min, max);
+      graph.animate({ opacity: 1 }, { duration: 180, easing: "ease-in-out" });
+    });
 }

@@ -42,7 +42,6 @@ function test_events() {
   widget.on("foo", listener);
   widget.trigger("foo", "details");
   widget.off("foo", listener);
-  widget.off("foo");
   widget.off(null, listener);
 }
 
@@ -327,7 +326,7 @@ function test_tabris_device() {
   var height: number = device.get("screenHeight");
   var width: number = device.get("screenWidth");
   var version: string = device.get("version");
-  var same: Device = device.on("change:orientation", () => {}).off("change:orientation");
+  var same: Device = device.on("change:orientation", () => {}).off("change:orientation", () => {});
 }
 
 function test_tabris_ui() {
@@ -335,5 +334,5 @@ function test_tabris_ui() {
   var bg: string = ui.get("background");
   var tc: string = ui.get("textColor");
   var visible: boolean = ui.get("toolbarVisible");
-  var same: UI = ui.on("change:activePage", () => {}).off("change:activePage");
+  var same: UI = ui.on("change:activePage", () => {}).off("change:activePage", () => {});
 }
