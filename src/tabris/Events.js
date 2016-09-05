@@ -27,11 +27,11 @@ export default {
   },
 
   _off: function(type, callback, context, isPublic) {
+    if (!type) {
+      throw new Error("Not enough arguments");
+    }
     var store = isPublic ? "_callbacks" : "_privateCallbacks";
     if (this[store]) {
-      if (!type) {
-        throw new Error("Not enough arguments");
-      }
       if (type in this[store]) {
         if (!callback) {
           delete this[store][type];

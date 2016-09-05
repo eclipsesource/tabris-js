@@ -51,6 +51,10 @@ describe("Events", function() {
 
   describe("off", function() {
 
+    it("throws error if no event type is specified", function() {
+      expect(() => object.off()).to.throw();
+    });
+
     it("should remove callback", function() {
       object.on("foo", callback);
       object.off("foo", callback);
@@ -132,16 +136,6 @@ describe("Events", function() {
         object.trigger("foo");
         expect(callback).not.to.have.been.called;
         expect(callback2).not.to.have.been.called;
-      });
-    });
-
-    describe("if no event type is specified", function() {
-      beforeEach(function() {
-        object.on("foo", callback);
-        object.on("bar", callback);
-      });
-      it("throws error", function() {
-        expect(() => object.off()).to.throw();
       });
     });
 
