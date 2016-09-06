@@ -4,7 +4,6 @@ import Proxy from "./Proxy";
 import ProxyCollection from "./ProxyCollection";
 import {animate} from "./Animation";
 import {types} from "./property-types";
-import {createType} from "./create-type";
 
 var tabris = global.tabris;
 if (tabris) {
@@ -205,7 +204,7 @@ Widget.extend = function(type, members) {
     var defaultProperties = _defaultProperties;
     members._properties = extend({}, defaultProperties, members._properties || {});
   }
-  return createType(type, members, Widget);
+  return Proxy.extend(type, members, Widget);
 };
 
 if (tabris) {

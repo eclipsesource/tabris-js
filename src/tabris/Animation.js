@@ -1,7 +1,7 @@
 import {extend} from "./util";
-import {createType} from "./create-type";
+import Proxy from "./Proxy";
 
-var Animation = createType("_Animation", {
+var Animation = Proxy.extend("_Animation", {
 
   _type: "tabris.Animation",
 

@@ -2,7 +2,7 @@ import {extend} from "./util";
 import Events from "./Events";
 import NativeBridge from "./NativeBridge";
 import ProxyStore from "./ProxyStore";
-import {createType} from "./create-type";
+import Proxy from "./Proxy";
 
 window.tabris = extend({}, Events, {
 
@@ -22,7 +22,7 @@ window.tabris = extend({}, Events, {
     if (type in tabris) {
       throw new Error("Type already registered: " + type);
     }
-    tabris[type] = createType(type, members, superType);
+    tabris[type] = Proxy.extend(type, members, superType);
   },
 
   version: "${VERSION}",
