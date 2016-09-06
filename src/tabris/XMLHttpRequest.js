@@ -6,6 +6,7 @@
 // Steps are referenced to with a number inside parentheses, e.g. (2)
 
 import {extendPrototype} from "./util";
+import DOMEvent, {addDOMEventTargetMethods} from "./DOMEvent";
 
 tabris.registerType("_HttpRequest", {
   _type: "tabris.HttpRequest",
@@ -39,8 +40,8 @@ tabris.XMLHttpRequest = function() {
   this.setRequestHeader = createSetRequestHeaderMethod(this, scope);
   this.getResponseHeader = createGetResponseHeaderMethod(this, scope);
   this.getAllResponseHeaders = createGetAllResponseHeadersMethod(this, scope);
-  tabris._addDOMEventTargetMethods(this);
-  tabris._addDOMEventTargetMethods(scope.uploadEventTarget);
+  addDOMEventTargetMethods(this);
+  addDOMEventTargetMethods(scope.uploadEventTarget);
 };
 
 tabris.XMLHttpRequest.prototype = {
@@ -58,7 +59,7 @@ tabris.XMLHttpRequestProgressEvent = function(type) {
   this.type = type;
 };
 
-tabris.XMLHttpRequestProgressEvent.prototype = extendPrototype(tabris.DOMEvent, {
+tabris.XMLHttpRequestProgressEvent.prototype = extendPrototype(DOMEvent, {
   lengthComputable: false,
   loaded: 0,
   total: 0
@@ -618,7 +619,7 @@ function dispatchXHREvent(type, target) {
 }
 
 function initXhrEvent(type, target) {
-  var xhrEvent = new tabris.DOMEvent(type);
+  var xhrEvent = new DOMEvent(type);
   xhrEvent.currentTarget = xhrEvent.target = target;
   return xhrEvent;
 }

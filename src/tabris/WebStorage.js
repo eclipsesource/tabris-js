@@ -1,5 +1,6 @@
 import {extendPrototype} from "./util";
 import {types} from "./property-types";
+import DOMEvent from "./DOMEvent";
 
 tabris.registerType("_ClientStore", {
   _cid: "tabris.ClientStore"
@@ -63,7 +64,7 @@ tabris.StorageEvent = function(type) {
   this.type = type;
 };
 
-tabris.StorageEvent.prototype = extendPrototype(tabris.DOMEvent, {
+tabris.StorageEvent.prototype = extendPrototype(DOMEvent, {
   bubbles: false,
   cancelable: false,
   key: "",

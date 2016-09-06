@@ -4,8 +4,6 @@ import "./GestureRecognizer.js";
 import "./Device.js";
 import "./Widget.js";
 import "./Crypto.js";
-import "./DOMEvents.js";
-import "./DOMDocument.js";
 import "./WindowTimers.js";
 import "./App.js";
 import "./UI.js";
@@ -38,14 +36,11 @@ import "./widgets/Video.js";
 import "./widgets/WebView.js";
 
 import ImageData from "./ImageData";
+import {addDOMDocument} from "./DOMDocument";
 
-if (typeof module !== "undefined") {
-  module.exports = window.tabris;
-}
-
-if (!("ImageData" in window)) {
-  window.ImageData = ImageData;
-}
+module.exports = global.tabris;
+window.ImageData = ImageData;
+addDOMDocument(window);
 
 // TODO: Temporary code to keep tests alive
 

@@ -1,6 +1,6 @@
 var noop = function() {};
 
-tabris.DOMEvent = function(type, eventInitDict) {
+export default function DOMEvent(type, eventInitDict) {
   this.type = type;
   this.timeStamp = Date.now();
   if (typeof eventInitDict !== "undefined") {
@@ -11,9 +11,9 @@ tabris.DOMEvent = function(type, eventInitDict) {
       this.cancelable = eventInitDict.cancelable;
     }
   }
-};
+}
 
-tabris.DOMEvent.prototype = {
+DOMEvent.prototype = {
   NONE: 0,
   CAPTURING_PHASE: 1,
   AT_TARGET: 2,
@@ -36,7 +36,7 @@ tabris.DOMEvent.prototype = {
   }
 };
 
-tabris._addDOMEventTargetMethods = function(target) {
+export function addDOMEventTargetMethods(target) {
 
   if (typeof target.addEventListener === "function") {
     return;
@@ -79,11 +79,4 @@ tabris._addDOMEventTargetMethods = function(target) {
     }
   };
 
-};
-
-if (typeof window !== "undefined") {
-  tabris._addDOMEventTargetMethods(window);
-  if (!window.Event) {
-    window.Event = tabris.DOMEvent;
-  }
 }
