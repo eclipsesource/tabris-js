@@ -36,7 +36,7 @@ export default {
         var callbacks = this[store][type].concat();
         for (var i = callbacks.length - 1; i >= 0; i--) {
           if ((callbacks[i].fn === callback || callbacks[i].fn._callback === callback) &&
-            (!context || callbacks[i].ctx === context)) {
+            callbacks[i].ctx === context) {
             callbacks.splice(i, 1);
           }
         }

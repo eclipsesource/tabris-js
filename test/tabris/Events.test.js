@@ -111,9 +111,11 @@ describe("Events", function() {
         object.on("foo", callback, context2);
         object.off("foo", callback);
       });
-      it("should remove all versions of the callback with different contexts", function() {
+      it("should remove only the callback without context", function() {
         object.trigger("foo");
-        expect(callback).not.to.have.been.called;
+        expect(callback).to.have.been.called.twice;
+        expect(callback.firstCall).to.have.been.calledOn(context);
+        expect(callback.secondCall).to.have.been.calledOn(context2);
       });
     });
 
