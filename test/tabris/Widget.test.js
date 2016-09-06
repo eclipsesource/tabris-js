@@ -19,7 +19,8 @@ describe("Widget", function() {
       _proxies: new ProxyStore()
     };
     global.tabris._nativeBridge = new NativeBridge(nativeBridge);
-    TestWidget = Widget.extend("TestWidget", {
+    TestWidget = Widget.extend({
+      _name: "TestWidget",
       _supportsChildren: true
     });
   });
@@ -1262,7 +1263,7 @@ describe("Widget", function() {
 describe("Widget.extend", function() {
 
   it("adds default events copy", function() {
-    let TestWidget = Widget.extend("TestWidget", {});
+    let TestWidget = Widget.extend({});
 
     expect(TestWidget._events.resize).to.be.instanceof(Object);
     expect(TestWidget._events).not.to.equal(Widget.extend._defaultEvents);
@@ -1271,7 +1272,7 @@ describe("Widget.extend", function() {
   it("extends default events", function() {
     let custom = {foo: {name: "bar"}, touchstart: {name: "touchstart"}};
 
-    let TestWidget = Widget.extend("TestWidget", {_events: custom});
+    let TestWidget = Widget.extend({_events: custom});
 
     expect(TestWidget._events).to.eql(
       extend({}, TestWidget._events, custom)
@@ -1279,14 +1280,14 @@ describe("Widget.extend", function() {
   });
 
   it("adds custom properties", function() {
-    let TestWidget = Widget.extend("TestWidget", {_properties: {foo: {type: "number"}}});
+    let TestWidget = Widget.extend({_properties: {foo: {type: "number"}}});
 
     expect(TestWidget._properties.foo).to.be.defined;
     expect(TestWidget._properties.foo.type.encode("23")).to.equal(23);
   });
 
   it("adds default properties", function() {
-    let TestWidget = Widget.extend("TestWidget", {});
+    let TestWidget = Widget.extend({});
 
     expect(TestWidget._properties.enabled).to.be.defined;
     expect(TestWidget._properties.visible).to.be.defined;
@@ -1295,14 +1296,14 @@ describe("Widget.extend", function() {
   it("extends default properties", function() {
     let custom = {foo: "any", enabled: {type: "number"}};
 
-    let TestWidget = Widget.extend("TestWidget", {_properties: custom});
+    let TestWidget = Widget.extend({_properties: custom});
 
     expect(TestWidget._properties.foo).to.be.defined;
     expect(TestWidget._properties.enabled.type.encode("23")).to.equal(23);
   });
 
   it("created widgets are instanceof Widget", function() {
-    let TestWidget = Widget.extend("TestWidget", {});
+    let TestWidget = Widget.extend({});
 
     let instance = new TestWidget();
 

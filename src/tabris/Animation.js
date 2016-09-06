@@ -1,7 +1,9 @@
 import {extend} from "./util";
 import Proxy from "./Proxy";
 
-var Animation = Proxy.extend("_Animation", {
+var Animation = Proxy.extend({
+
+  _name: "_Animation",
 
   _type: "tabris.Animation",
 

@@ -22,7 +22,8 @@ window.tabris = extend({}, Events, {
     if (type in tabris) {
       throw new Error("Type already registered: " + type);
     }
-    tabris[type] = Proxy.extend(type, members, superType);
+    members._name = type;
+    tabris[type] = Proxy.extend(members, superType);
   },
 
   version: "${VERSION}",

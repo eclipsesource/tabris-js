@@ -197,14 +197,14 @@ Widget.prototype = extendPrototype(Proxy, {
 
 });
 
-Widget.extend = function(type, members) {
+Widget.extend = function(members) {
   members = extend({}, members);
   members._events = extend({}, _defaultEvents, members._events || {});
   if (members._properties !== true) {
     var defaultProperties = _defaultProperties;
     members._properties = extend({}, defaultProperties, members._properties || {});
   }
-  return Proxy.extend(type, members, Widget);
+  return Proxy.extend(members, Widget);
 };
 
 if (tabris) {
@@ -212,7 +212,8 @@ if (tabris) {
     if (type in tabris) {
       throw new Error("Widget already registered: " + type);
     }
-    tabris[type] = Widget.extend(type, members);
+    members._name = type;
+    tabris[type] = Widget.extend(members);
   };
 }
 

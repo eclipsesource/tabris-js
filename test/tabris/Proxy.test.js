@@ -17,7 +17,8 @@ describe("Proxy", function() {
       _proxies: new ProxyStore()
     };
     global.tabris._nativeBridge = new NativeBridge(nativeBridge);
-    TestType = Proxy.extend("TestType", {
+    TestType = Proxy.extend({
+      _name: "TestType",
       _properties: {foo: "any", uncachedProperty: {type: "any", nocache: true}},
       _events: {bar: true}
     });
@@ -53,7 +54,8 @@ describe("Proxy", function() {
     });
 
     it("sends native set for init properties", function() {
-      let CustomType = Proxy.extend("CustomType", {
+      let CustomType = Proxy.extend({
+        _name: "CustomType",
         _initProperties: {foo: 23},
         _properties: {bar: "any"}
       });
@@ -65,7 +67,7 @@ describe("Proxy", function() {
     });
 
     it("does not raise warning for init properties", function() {
-      let CustomType = Proxy.extend("CustomType", {_initProperties: {foo: 23}});
+      let CustomType = Proxy.extend({_initProperties: {foo: 23}});
       spy(console, "warn");
 
       new CustomType();
@@ -74,7 +76,7 @@ describe("Proxy", function() {
     });
 
     it("does not modify prototype properties", function() {
-      let CustomType = Proxy.extend("CustomType", {_initProperties: {}});
+      let CustomType = Proxy.extend({_initProperties: {}});
 
       new CustomType({foo: 23});
 
@@ -355,7 +357,7 @@ describe("Proxy", function() {
       });
 
       it("calls native listen with translated event name", function() {
-        let CustomType = Proxy.extend("CustomType", {_events: {foo: "bar"}});
+        let CustomType = Proxy.extend({_events: {foo: "bar"}});
         proxy = new CustomType();
         proxy.on("foo", listener);
 
@@ -364,7 +366,7 @@ describe("Proxy", function() {
       });
 
       it("calls native listen (true) for first alias listener", function() {
-        let CustomType = Proxy.extend("CustomType", {_events: {foo: {name: "bar", alias: "foo1"}}});
+        let CustomType = Proxy.extend({_events: {foo: {name: "bar", alias: "foo1"}}});
         proxy = new CustomType();
 
         proxy.on("foo1", listener);
@@ -382,7 +384,7 @@ describe("Proxy", function() {
       });
 
       it("calls custom listen with alias flag", function() {
-        let CustomType = Proxy.extend("CustomType", {
+        let CustomType = Proxy.extend({
           _events: {foo: {alias: "foo1", listen: spy()}}
         });
         proxy = new CustomType();
@@ -410,7 +412,7 @@ describe("Proxy", function() {
       });
 
       it("does not call native listen for subsequent listeners for alias event", function() {
-        let CustomType = Proxy.extend("CustomType", {_events: {foo: {alias: "bar"}}});
+        let CustomType = Proxy.extend({_events: {foo: {alias: "bar"}}});
         proxy = new CustomType();
         proxy.on("foo", listener);
         proxy.on("bar", listener);
@@ -419,7 +421,7 @@ describe("Proxy", function() {
       });
 
       it("does not call native listen for subsequent listeners for aliased event", function() {
-        let CustomType = Proxy.extend("CustomType", {_events: {foo: {alias: "bar"}}});
+        let CustomType = Proxy.extend({_events: {foo: {alias: "bar"}}});
         proxy = new CustomType();
         proxy.on("bar", listener);
         proxy.on("foo", listener);
@@ -462,7 +464,7 @@ describe("Proxy", function() {
       });
 
       it("calls native listen (false) for last alias listener removed", function() {
-        let CustomType = Proxy.extend("CustomType", {_events: {foo: {alias: "bar"}}});
+        let CustomType = Proxy.extend({_events: {foo: {alias: "bar"}}});
         proxy = new CustomType();
         proxy.on("bar", listener);
 
@@ -473,7 +475,7 @@ describe("Proxy", function() {
       });
 
       it("calls native listen with translated event name", function() {
-        let CustomType = Proxy.extend("CustomType", {_events: {foo: "bar"}});
+        let CustomType = Proxy.extend({_events: {foo: "bar"}});
         proxy = new CustomType();
         proxy.on("foo", listener);
         proxy.off("foo", listener);
@@ -490,7 +492,7 @@ describe("Proxy", function() {
       });
 
       it("does not call native listen when other listeners exist for alias event", function() {
-        let CustomType = Proxy.extend("CustomType", {_events: {foo: {alias: "bar"}}});
+        let CustomType = Proxy.extend({_events: {foo: {alias: "bar"}}});
         proxy = new CustomType();
         proxy.on("foo", listener);
         proxy.on("bar", listener);
@@ -502,7 +504,7 @@ describe("Proxy", function() {
       });
 
       it("does not call native listen when other listeners exist for aliased event", function() {
-        let CustomType = Proxy.extend("CustomType", {_events: {foo: {alias: "bar"}}});
+        let CustomType = Proxy.extend({_events: {foo: {alias: "bar"}}});
         proxy = new CustomType();
         proxy.on("foo", listener);
         proxy.on("bar", listener);
@@ -514,7 +516,7 @@ describe("Proxy", function() {
       });
 
       it("calls native listen when not other listeners exist for aliased or alias event", function() {
-        let CustomType = Proxy.extend("CustomType", {_events: {foo: {alias: "bar"}}});
+        let CustomType = Proxy.extend({_events: {foo: {alias: "bar"}}});
         proxy = new CustomType();
         proxy.on("foo", listener);
         proxy.on("bar", listener);
@@ -527,7 +529,7 @@ describe("Proxy", function() {
       });
 
       it("calls native listen when not other listeners exist for aliased or alias event (reversed off)", function() {
-        let CustomType = Proxy.extend("CustomType", {_events: {foo: {alias: "bar"}}});
+        let CustomType = Proxy.extend({_events: {foo: {alias: "bar"}}});
         proxy = new CustomType();
         proxy.on("foo", listener);
         proxy.on("bar", listener);
@@ -630,7 +632,7 @@ describe("Proxy.extend", function() {
   afterEach(restore);
 
   it("creates a constructor", function() {
-    let CustomType = Proxy.extend("CustomType", {});
+    let CustomType = Proxy.extend({});
 
     let instance = new CustomType({foo: 42});
 
@@ -639,7 +641,7 @@ describe("Proxy.extend", function() {
   });
 
   it("adds members to new type", function() {
-    let CustomType = Proxy.extend("CustomType", {foo: 23});
+    let CustomType = Proxy.extend({foo: 23});
 
     let instance = new CustomType();
 
@@ -648,7 +650,7 @@ describe("Proxy.extend", function() {
 
   it("adds JS property setters", function() {
     let type = {encode: function() {}, decode: function() {}};
-    let CustomType = Proxy.extend("CustomType", {_properties: {foo: {type: type}}});
+    let CustomType = Proxy.extend({_properties: {foo: {type: type}}});
     let instance = new CustomType();
     spy(instance, "set");
 
@@ -659,7 +661,7 @@ describe("Proxy.extend", function() {
 
   it("adds JS property getters", function() {
     let type = {encode: function() {}, decode: function() {}};
-    let CustomType = Proxy.extend("CustomType", {_properties: {foo: {type: type}}});
+    let CustomType = Proxy.extend({_properties: {foo: {type: type}}});
     let instance = new CustomType();
     stub(instance, "get").returns("bar");
 
@@ -669,14 +671,14 @@ describe("Proxy.extend", function() {
   });
 
   it("adds empty trigger map to constructor", function() {
-    let CustomType = Proxy.extend("CustomType", {});
+    let CustomType = Proxy.extend({});
     let instance = new CustomType();
 
     expect(instance.constructor._trigger).to.eql({});
   });
 
   it("adds _events to constructor", function() {
-    let CustomType = Proxy.extend("CustomType", {_events: {foo: "bar"}});
+    let CustomType = Proxy.extend({_events: {foo: "bar"}});
     let instance = new CustomType();
 
     expect(instance.constructor._events.foo).to.eql({name: "bar"});
@@ -684,7 +686,7 @@ describe("Proxy.extend", function() {
   });
 
   it("adds normalized _events to constructor", function() {
-    let CustomType = Proxy.extend("CustomType", {_events: {foo: "bar", foo2: {alias: "foo3"}}});
+    let CustomType = Proxy.extend({_events: {foo: "bar", foo2: {alias: "foo3"}}});
     let instance = new CustomType();
 
     expect(instance.constructor._events.foo).to.eql({name: "bar"});
@@ -694,7 +696,7 @@ describe("Proxy.extend", function() {
   });
 
   it("adds empty events map to constructor", function() {
-    let CustomType = Proxy.extend("CustomType", {});
+    let CustomType = Proxy.extend({});
     let instance = new CustomType();
 
     expect(instance.constructor._events).to.eql({});
@@ -702,14 +704,14 @@ describe("Proxy.extend", function() {
 
   it("adds _properties to constructor", function() {
     let type = {encode: function() {}, decode: function() {}};
-    let CustomType = Proxy.extend("CustomType", {_properties: {foo: {type: type}}});
+    let CustomType = Proxy.extend({_properties: {foo: {type: type}}});
     let instance = new CustomType();
 
     expect(instance.constructor._properties.foo.type).to.equal(type);
   });
 
   it("replaces type strings with type definition object", function() {
-    let CustomType = Proxy.extend("CustomType", {_properties: {foo: {type: "boolean"}}});
+    let CustomType = Proxy.extend({_properties: {foo: {type: "boolean"}}});
     let instance = new CustomType();
 
     expect(instance.constructor._properties.foo.type).to.equal(types.boolean);
@@ -718,7 +720,7 @@ describe("Proxy.extend", function() {
   it("wraps encode function if type is given as an array", function() {
     let type = ["choice", ["a", "b", "c"]];
     spy(types.choice, "encode");
-    let CustomType = Proxy.extend("CustomType", {_properties: {foo: type}});
+    let CustomType = Proxy.extend({_properties: {foo: type}});
     let instance = new CustomType();
 
     instance.set("foo", "bar");
@@ -732,7 +734,7 @@ describe("Proxy.extend", function() {
     let type = ["bounds", ["customarg"]];
     stub(types.bounds, "encode").returns("bar");
     spy(types.bounds, "decode");
-    let CustomType = Proxy.extend("CustomType", {_properties: {foo: type}});
+    let CustomType = Proxy.extend({_properties: {foo: type}});
     let instance = new CustomType();
     instance.set("foo", "bar");
 
@@ -745,26 +747,26 @@ describe("Proxy.extend", function() {
 
   it("throws if type string is not found in PropertyTypes object", function() {
     expect(() => {
-      Proxy.extend("CustomType", {_properties: {foo: {type: "nothing"}}});
+      Proxy.extend({_properties: {foo: {type: "nothing"}}});
     }).to.throw();
   });
 
   it("adds normalized _properties to constructor", function() {
-    let CustomType = Proxy.extend("CustomType", {_properties: {foo: "boolean"}});
+    let CustomType = Proxy.extend({_properties: {foo: "boolean"}});
     let instance = new CustomType();
 
     expect(instance.constructor._properties.foo.type).to.equal(types.boolean);
   });
 
   it("adds empty properties map to constructor", function() {
-    let CustomType = Proxy.extend("CustomType", {});
+    let CustomType = Proxy.extend({});
     let instance = new CustomType();
 
     expect(instance.constructor._properties).to.eql({});
   });
 
   it("adds _type to constructor", function() {
-    let CustomType = Proxy.extend("CustomType", {_type: "foo"});
+    let CustomType = Proxy.extend({_type: "foo"});
     let instance = new CustomType();
 
     expect(instance.constructor._type).to.equal("foo");
@@ -776,7 +778,7 @@ describe("Proxy.extend", function() {
     let TestType;
 
     beforeEach(function() {
-      TestType = Proxy.extend("TestType", {_properties: {foo: "any"}});
+      TestType = Proxy.extend({_name: "TestType", _properties: {foo: "any"}});
     });
 
     it("fails if tabris.js not yet started", function() {
@@ -817,7 +819,7 @@ describe("Proxy.extend", function() {
     });
 
     it("triggers a create operation with _type if present", function() {
-      let CustomType = Proxy.extend("CustomType", {_type: "foo.Type"});
+      let CustomType = Proxy.extend({_type: "foo.Type"});
       new CustomType();
 
       expect(nativeBridge.calls({op: "create"})[0].type).to.equal("foo.Type");
@@ -836,7 +838,7 @@ describe("Proxy.extend", function() {
     let ServiceType;
 
     beforeEach(function() {
-      ServiceType = Proxy.extend("ServiceType", {_cid: "foo"});
+      ServiceType = Proxy.extend({_cid: "foo"});
     });
 
     it("respects _cid", function() {

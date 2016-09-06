@@ -109,7 +109,7 @@ extend(Proxy.prototype, Properties, Events, {
 
 });
 
-Proxy.extend = function(type, members, superType) {
+Proxy.extend = function(members, superType) {
   var Type = function(properties) {
     if (!(this instanceof Type)) {
       throw new Error("Cannot call constructor as a function");
@@ -131,7 +131,7 @@ Proxy.extend = function(type, members, superType) {
   Type._properties = normalizeProperties(Type._properties);
   Type._trigger = buildTriggerMap(Type._events);
   var superProto = omit(members, Object.keys(staticMembers));
-  superProto.type = type;
+  superProto.type = members._name;
   superProto.constructor = Type; // extendPrototype can not provide the original
   Type.prototype = extendPrototype(superType || Proxy, superProto);
   mapProperties(Type.prototype, Type._properties);
