@@ -1,14 +1,13 @@
-/*global XMLHttpRequest: true */
-
 // Created based on the W3C XMLHttpRequest specifications: http://www.w3.org/TR/XMLHttpRequest/
 // References to sections listed on the same line as the the function definition.
 // Append the section tag to the URL above to get the link to the corresponding section.
 // Steps are referenced to with a number inside parentheses, e.g. (2)
 
-import {extendPrototype} from "./util";
+import Proxy from "./Proxy";
 import DOMEvent, {addDOMEventTargetMethods} from "./DOMEvent";
+import ProgressEvent from "./DOMProgressEvent";
 
-tabris.registerType("_HttpRequest", {
+var HttpRequest = Proxy.extend({
   _type: "tabris.HttpRequest",
   _events: {StateChange: true, DownloadProgress: true, UploadProgress: true}
 });
@@ -21,7 +20,7 @@ var uploadEventTypes = ["progress", "loadstart", "load", "loadend", "timeout", "
 // -----------------------------------------------------------------
 // Constructor
 
-tabris.XMLHttpRequest = function() {
+export default function XMLHttpRequest() {
   var scope = createScopeObject(this);
   definePropertyUpload(this, scope);
   definePropertyReadyState(this, scope);
@@ -42,28 +41,15 @@ tabris.XMLHttpRequest = function() {
   this.getAllResponseHeaders = createGetAllResponseHeadersMethod(this, scope);
   addDOMEventTargetMethods(this);
   addDOMEventTargetMethods(scope.uploadEventTarget);
-};
+}
 
-tabris.XMLHttpRequest.prototype = {
+XMLHttpRequest.prototype = {
   UNSENT: 0,
   OPENED: 1,
   HEADERS_RECEIVED: 2,
   LOADING: 3,
   DONE: 4
 };
-
-// -----------------------------------------------------------------
-// Events
-
-tabris.XMLHttpRequestProgressEvent = function(type) {
-  this.type = type;
-};
-
-tabris.XMLHttpRequestProgressEvent.prototype = extendPrototype(DOMEvent, {
-  lengthComputable: false,
-  loaded: 0,
-  total: 0
-});
 
 // -----------------------------------------------------------------
 // Properties
@@ -313,14 +299,14 @@ function createOpenMethod(xhr, scope) {
     scope.responseText = null;
     if (scope.readyState !== xhr.OPENED) { // (15)
       scope.readyState = xhr.OPENED;
-      dispatchXHREvent("readystatechange", xhr);
+      dispatchEvent("readystatechange", xhr);
     }
   };
 }
 
 function createSendMethod(xhr, scope) {
   return function(data) { // #the-send()-method
-    scope.proxy = new tabris._HttpRequest();
+    scope.proxy = new HttpRequest();
     scope.proxy.on("StateChange", function(e) {
       stateChangeHandler(e, xhr, scope);
     });
@@ -382,7 +368,7 @@ function createAbortMethod(xhr, scope) {
         scope.readyState === xhr.DONE)) { // send() interrupted
       // (2.1), (2.2): setting readyState DONE with sendInvoked true or false seems to be an
       // internal state which doesn't affect the behavior and thus cannot be tested
-      dispatchXHREvent("readystatechange", xhr); // (2.3)
+      dispatchEvent("readystatechange", xhr); // (2.3)
       if (!scope.uploadComplete) {
         scope.uploadComplete = true; // (2.4.1)
         dispatchAbortProgressEvents(xhr.upload); // (2.4.2), (2.4.3), (2.4.4)
@@ -467,19 +453,19 @@ function stateChangeHandler(e, xhr, scope) { // #infrastructure-for-the-send()-m
       scope.status = e.code;
       scope.statusText = e.message;
       scope.responseHeaders = e.headers;
-      dispatchXHREvent("readystatechange", xhr);
+      dispatchEvent("readystatechange", xhr);
       scope.uploadComplete = true; // #make-upload-progress-notifications
       dispatchFinishedProgressEvents(xhr.upload);
       break;
     case "loading":
       scope.readyState = xhr.LOADING;
-      dispatchXHREvent("readystatechange", xhr);
+      dispatchEvent("readystatechange", xhr);
       break;
     case "finished":
       // TODO create response based on responseType
       scope.responseText = e.response;
       scope.readyState = xhr.DONE;
-      dispatchXHREvent("readystatechange", xhr);
+      dispatchEvent("readystatechange", xhr);
       dispatchFinishedProgressEvents(xhr);
       dispatchFinishedProgressEvents(xhr.upload);
       scope.proxy.dispose();
@@ -501,7 +487,7 @@ function handleRequestError(event, xhr, scope) { // #request-error
   scope.error = true; // (1*) (#terminate-the-request)
   scope.readyState = xhr.DONE; // (1)
   // (2): superfluous as we don't support synchronous requests
-  dispatchXHREvent("readystatechange", xhr); // (3)
+  dispatchEvent("readystatechange", xhr); // (3)
   dispatchErrorProgressEvents(event, xhr);
   if (!scope.uploadComplete) {
     scope.uploadComplete = true;
@@ -577,7 +563,7 @@ function extractScheme(url) {
 // Event dispatcher
 
 function dispatchProgressEvent(type, target, lengthComputable, loaded, total) {
-  target.dispatchEvent(initXhrProgressEvent(type, target, lengthComputable, loaded, total));
+  target.dispatchEvent(initProgressEvent(type, target, lengthComputable, loaded, total));
 }
 
 function dispatchAbortProgressEvents(context) {
@@ -598,36 +584,28 @@ function dispatchFinishedProgressEvents(context) {
   dispatchProgressEvent("loadend", context);
 }
 
-function initXhrProgressEvent(type, target, lengthComputable, loaded, total) {
-  var xhrProgressEvent = new tabris.XMLHttpRequestProgressEvent(type);
-  xhrProgressEvent.currentTarget = xhrProgressEvent.target = target;
+function initProgressEvent(type, target, lengthComputable, loaded, total) {
+  var progressEvent = new ProgressEvent(type);
+  progressEvent.currentTarget = progressEvent.target = target;
   if (lengthComputable) {
-    xhrProgressEvent.lengthComputable = lengthComputable;
+    progressEvent.lengthComputable = lengthComputable;
   }
   if (loaded) {
-    xhrProgressEvent.loaded = loaded;
+    progressEvent.loaded = loaded;
   }
   if (total) {
-    xhrProgressEvent.total = total;
+    progressEvent.total = total;
   }
-  return xhrProgressEvent;
+  return progressEvent;
 }
 
-function dispatchXHREvent(type, target) {
-  var xhrEvent = initXhrEvent(type, target);
-  target.dispatchEvent(xhrEvent);
+function dispatchEvent(type, target) {
+  var event = initEvent(type, target);
+  target.dispatchEvent(event);
 }
 
-function initXhrEvent(type, target) {
-  var xhrEvent = new DOMEvent(type);
-  xhrEvent.currentTarget = xhrEvent.target = target;
-  return xhrEvent;
-}
-
-// -----------------------------------------------------------------
-// Export
-
-if (typeof XMLHttpRequest === "undefined") {
-  window.XMLHttpRequest = tabris.XMLHttpRequest;
-  window.XMLHttpRequestProgressEvent = tabris.XMLHttpRequestProgressEvent;
+function initEvent(type, target) {
+  var event = new DOMEvent(type);
+  event.currentTarget = event.target = target;
+  return event;
 }
