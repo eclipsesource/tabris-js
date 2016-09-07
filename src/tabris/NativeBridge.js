@@ -4,7 +4,7 @@ export default function NativeBridge(bridge) {
   this._bridge = bridge;
   this._operations = [];
   this._currentOperation = {id: null};
-  tabris._on("flush", this.flush, this);
+  tabris.on("flush", this.flush, this);
 }
 
 NativeBridge.prototype = {

@@ -455,7 +455,7 @@ function getGestureEventConfig(name) {
           this._recognizers = {};
         }
         this._recognizers[name] = recognizer;
-        this._on("dispose", recognizer.dispose, recognizer);
+        this.on("dispose", recognizer.dispose, recognizer);
       } else if (this._recognizers && name in this._recognizers) {
         this._recognizers[name].dispose();
         delete this._recognizers[name];

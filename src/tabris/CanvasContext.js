@@ -27,9 +27,9 @@ export default function CanvasContext(gc) {
   for (var name in properties) {
     defineProperty(this, name);
   }
-  tabris._on("flush", this._flush, this);
-  gc._on("dispose", function() {
-    tabris._off("flush", this._flush, this);
+  tabris.on("flush", this._flush, this);
+  gc.on("dispose", function() {
+    tabris.off("flush", this._flush, this);
   }, this);
 }
 

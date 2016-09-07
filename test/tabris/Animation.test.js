@@ -25,7 +25,7 @@ describe("Animation", function() {
     stub(console, "warn");
     nativeBridge = new NativeBridgeSpy();
     global.tabris = {
-      _on: () => {},
+      on: () => {},
       _proxies: new ProxyStore()
     };
     global.tabris._nativeBridge = new NativeBridge(nativeBridge);

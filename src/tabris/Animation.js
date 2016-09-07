@@ -22,7 +22,7 @@ var Animation = Proxy.extend({
     },
     Completion: {
       trigger: function() {
-        this._target._off("dispose", this.abort, this);
+        this._target.off("dispose", this.abort, this);
         this._target.trigger("animationend", this._target, this._options);
         if (this._resolve) {
           this._resolve();
@@ -81,7 +81,7 @@ export function animate(properties, options) {
   }));
   animation._target = this;
   animation._options = options;
-  this._on("dispose", animation.abort, animation);
+  this.on("dispose", animation.abort, animation);
   animation.start();
   return new Promise(function(resolve, reject) {
     animation._resolve = resolve;

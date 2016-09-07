@@ -17,9 +17,9 @@ tabris.registerWidget("Picker", {
     "change:selection": {
       listen: function(state) {
         if (state) {
-          this._on("change:selectionIndex", triggerSelectionChange);
+          this.on("change:selectionIndex", triggerSelectionChange);
         } else {
-          this._off("change:selectionIndex", triggerSelectionChange);
+          this.off("change:selectionIndex", triggerSelectionChange);
         }
       }
     }

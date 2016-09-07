@@ -15,7 +15,7 @@ describe("Widget", function() {
   beforeEach(function() {
     nativeBridge = new NativeBridgeSpy();
     global.tabris = {
-      _on: () => {},
+      on: () => {},
       _proxies: new ProxyStore()
     };
     global.tabris._nativeBridge = new NativeBridge(nativeBridge);

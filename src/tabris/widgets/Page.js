@@ -59,7 +59,7 @@ tabris.registerWidget("Page", {
     this._page.widget = this;
     this._parent = tabris.ui;
     tabris.ui._addChild(this);
-    this._on("dispose", function() {
+    this.on("dispose", function() {
       tabris.ui._pageClosed(this);
       this._page.dispose();
     });

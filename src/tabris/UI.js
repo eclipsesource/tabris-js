@@ -34,13 +34,13 @@ tabris.registerWidget("_UI", {
     this._nativeSet("shell", this._shell.cid);
     this._pages = [];
     this._drawer = null;
-    this._on("ShowPreviousPage", function() {
+    this.on("ShowPreviousPage", function() {
       var page = this.get("activePage");
       if (page) {
         page.close();
       }
     });
-    this._on("change:activePage", this._onChangeActivePage, this);
+    this.on("change:activePage", this._onChangeActivePage, this);
     this._removedPages = [];
     Object.defineProperty(this, "drawer", {
       get: function() { return this._drawer; }.bind(this),

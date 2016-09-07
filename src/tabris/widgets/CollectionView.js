@@ -148,18 +148,18 @@ tabris.registerWidget("CollectionView", {
     "change:firstVisibleIndex": {
       listen: function(state) {
         if (state) {
-          this._on("scroll", triggerChangeFirstVisibleIndex);
+          this.on("scroll", triggerChangeFirstVisibleIndex);
         } else {
-          this._off("scroll", triggerChangeFirstVisibleIndex);
+          this.off("scroll", triggerChangeFirstVisibleIndex);
         }
       }
     },
     "change:lastVisibleIndex": {
       listen: function(state) {
         if (state) {
-          this._on("scroll", triggerChangeLastVisibleIndex);
+          this.on("scroll", triggerChangeLastVisibleIndex);
         } else {
-          this._off("scroll", triggerChangeLastVisibleIndex);
+          this.off("scroll", triggerChangeLastVisibleIndex);
         }
       }
     }

@@ -1,26 +1,17 @@
 export default {
 
   on: function(type, callback, context) {
-    return this._on(type, callback, context, true);
-  },
-
-  off: function(type, callback, context) {
-    return this._off(type, callback, context, true);
-  },
-
-  _on: function(type, callback, context, isPublic) {
-    var store = isPublic ? "_callbacks" : "_privateCallbacks";
     var wasListening = this._isListening(type);
-    this[store] = this[store] || [];
-    this[store][type] = (this[store][type] || []).concat();
-    var alreadyAdded = this[store][type].some(function(entry) {
+    this._callbacks = this._callbacks || [];
+    this._callbacks[type] = (this._callbacks[type] || []).concat();
+    var alreadyAdded = this._callbacks[type].some(function(entry) {
       return (
         (entry.fn === callback || "_callback" in callback && entry.fn._callback === callback._callback) &&
         (entry.ctx === context)
       );
     });
     if (!alreadyAdded) {
-      this[store][type].push({fn: callback, ctx: context});
+      this._callbacks[type].push({fn: callback, ctx: context});
     }
     if (!wasListening) {
       this._listen(type, true);
@@ -28,14 +19,13 @@ export default {
     return this;
   },
 
-  _off: function(type, callback, context, isPublic) {
+  off: function(type, callback, context) {
     if (!type || !callback) {
       throw new Error("Not enough arguments");
     }
-    var store = isPublic ? "_callbacks" : "_privateCallbacks";
-    if (this[store]) {
-      if (type in this[store]) {
-        var callbacks = this[store][type].concat();
+    if (this._callbacks) {
+      if (type in this._callbacks) {
+        var callbacks = this._callbacks[type].concat();
         for (var i = callbacks.length - 1; i >= 0; i--) {
           if ((callbacks[i].fn === callback || callbacks[i].fn._callback === callback) &&
             callbacks[i].ctx === context) {
@@ -43,12 +33,12 @@ export default {
           }
         }
         if (callbacks.length === 0) {
-          delete this[store][type];
-          if (Object.keys(this[store]).length === 0) {
-            delete this[store];
+          delete this._callbacks[type];
+          if (Object.keys(this._callbacks).length === 0) {
+            delete this._callbacks;
           }
         } else {
-          this[store][type] = callbacks;
+          this._callbacks[type] = callbacks;
         }
       }
     }

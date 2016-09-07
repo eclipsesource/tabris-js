@@ -11,7 +11,7 @@ describe("DOMDocument", function() {
   beforeEach(function() {
     target = {};
     global.tabris = {
-      _on: () => {},
+      on: () => {},
       load: cb => loadCallback = cb
     };
     client = global.tabris._client = new NativeBridge(new NativeBridgeSpy());

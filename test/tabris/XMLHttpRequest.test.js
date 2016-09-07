@@ -10,7 +10,7 @@ describe("XMLHttpRequest", function() {
 
   beforeEach(function() {
     global.tabris = {
-      _on: () => {},
+      on: () => {},
       _proxies: new ProxyStore()
     };
     nativeBridge = new NativeBridgeSpy();

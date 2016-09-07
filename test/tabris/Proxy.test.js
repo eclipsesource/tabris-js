@@ -13,7 +13,7 @@ describe("Proxy", function() {
   beforeEach(function() {
     nativeBridge = new NativeBridgeSpy();
     global.tabris = {
-      _on: () => {},
+      on: () => {},
       _proxies: new ProxyStore()
     };
     global.tabris._nativeBridge = new NativeBridge(nativeBridge);
@@ -623,7 +623,7 @@ describe("Proxy.extend", function() {
   beforeEach(function() {
     nativeBridge = new NativeBridgeSpy();
     global.tabris = {
-      _on: () => {},
+      on: () => {},
       _proxies: new ProxyStore()
     };
     global.tabris._nativeBridge = new NativeBridge(nativeBridge);
