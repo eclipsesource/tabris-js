@@ -1,4 +1,7 @@
-tabris.registerWidget("TabFolder", {
+import Widget from "../Widget";
+
+tabris.TabFolder = Widget.extend({
+  _name: "TabFolder",
 
   _type: "tabris.TabFolder",
 
@@ -40,7 +43,9 @@ tabris.registerWidget("TabFolder", {
 
 });
 
-tabris.registerWidget("Tab", {
+tabris.Tab = Widget.extend({
+  _name: "Tab",
+
 
   _type: "tabris.Tab",
 

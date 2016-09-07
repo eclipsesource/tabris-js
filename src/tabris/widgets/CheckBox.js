@@ -1,4 +1,7 @@
-tabris.registerWidget("CheckBox", {
+import Widget from "../Widget";
+
+tabris.CheckBox = Widget.extend({
+  _name: "CheckBox",
   _type: "tabris.CheckBox",
   _events: {
     select: {

@@ -1,4 +1,7 @@
-tabris.registerWidget("RadioButton", {
+import Widget from "../Widget";
+
+tabris.RadioButton = Widget.extend({
+  _name: "RadioButton",
   _type: "tabris.RadioButton",
   _events: {
     select: {

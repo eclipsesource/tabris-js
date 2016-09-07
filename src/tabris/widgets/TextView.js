@@ -1,4 +1,7 @@
-tabris.registerWidget("TextView", {
+import Widget from "../Widget";
+
+tabris.TextView = Widget.extend({
+  _name: "TextView",
   _type: "tabris.TextView",
   _properties: {
     alignment: {type: ["choice", ["left", "right", "center"]], default: "left"},

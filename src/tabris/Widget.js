@@ -207,16 +207,6 @@ Widget.extend = function(members) {
   return Proxy.extend(members, Widget);
 };
 
-if (tabris) {
-  tabris.registerWidget = function(type, members) {
-    if (type in tabris) {
-      throw new Error("Widget already registered: " + type);
-    }
-    members._name = type;
-    tabris[type] = Widget.extend(members);
-  };
-}
-
 Object.defineProperty(Widget.prototype, "classList", {
   get: function() {
     if (!this._classList) {

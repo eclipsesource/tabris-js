@@ -1,6 +1,8 @@
 import {omit, drop, extend} from "../util";
+import Widget from "../Widget";
 
-tabris.registerWidget("Picker", {
+tabris.Picker = Widget.extend({
+  _name: "Picker",
 
   _type: "tabris.Picker",
 

@@ -1,4 +1,7 @@
-tabris.registerWidget("CollectionView", {
+import Widget from "../Widget";
+
+tabris.CollectionView = Widget.extend({
+  _name: "CollectionView",
 
   _type: "tabris.CollectionView",
 
@@ -287,7 +290,8 @@ function createDelegate(prop) {
   };
 }
 
-tabris.registerWidget("Cell", {
+tabris.Cell = Widget.extend({
+  _name: "Cell",
 
   _type: "tabris.Composite",
 

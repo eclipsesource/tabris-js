@@ -1,4 +1,7 @@
-tabris.registerWidget("ImageView", {
+import Widget from "../Widget";
+
+tabris.ImageView = Widget.extend({
+  _name: "ImageView",
   _type: "tabris.ImageView",
   _events: {
     load: {

@@ -1,6 +1,7 @@
 import {omit, drop, pick, extend} from "../util";
+import Widget from "../Widget";
 
-tabris.registerWidget("_Page", {
+tabris._Page = Widget.extend({
   _type: "tabris.Page",
 
   _properties: {
@@ -40,7 +41,8 @@ var pageProperties = {
   layoutData: {access: {set: function() {}, get: function() {}}}
 };
 
-tabris.registerWidget("Page", {
+tabris.Page = Widget.extend({
+  _name: "Page",
 
   _type: "tabris.Composite",
 

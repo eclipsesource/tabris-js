@@ -1,4 +1,7 @@
-tabris.registerWidget("Drawer", {
+import Widget from "../Widget";
+
+tabris.Drawer = Widget.extend({
+  _name: "Drawer",
 
   _type: "tabris.Drawer",
 

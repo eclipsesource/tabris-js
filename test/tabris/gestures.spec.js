@@ -6,7 +6,7 @@ describe("gestures:", function() {
     nativeBridge = new NativeBridgeSpy();
     tabris._reset();
     tabris._init(nativeBridge);
-    tabris.registerWidget("TestType", {});
+    tabris.TestType = tabris.Widget.extend({_name: "TestType"});
   });
 
   afterEach(function() {

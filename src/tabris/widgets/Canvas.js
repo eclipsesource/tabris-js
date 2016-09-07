@@ -1,6 +1,8 @@
 import CanvasContext from "../CanvasContext";
+import Widget from "../Widget";
 
-tabris.registerWidget("Canvas", {
+tabris.Canvas = Widget.extend({
+  _name: "Canvas",
   _type: "tabris.Canvas",
   _supportsChildren: true,
   getContext: function(type, width, height) {

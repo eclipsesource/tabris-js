@@ -1,4 +1,7 @@
-tabris.registerWidget("ProgressBar", {
+import Widget from "../Widget";
+
+tabris.ProgressBar = Widget.extend({
+  _name: "ProgressBar",
   _type: "tabris.ProgressBar",
   _properties: {
     minimum: {type: "integer", default: 0},

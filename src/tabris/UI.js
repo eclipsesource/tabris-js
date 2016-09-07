@@ -1,10 +1,11 @@
 import Proxy from "./Proxy";
+import Widget from "./Widget";
 
 var Display = Proxy.extend({
   _type: "rwt.widgets.Display"
 });
 
-tabris.registerWidget("_Shell", {
+tabris._Shell = Widget.extend({
   _type: "rwt.widgets.Shell",
   _events: {Close: true},
   _properties: {
@@ -14,7 +15,7 @@ tabris.registerWidget("_Shell", {
   }
 });
 
-tabris.registerWidget("_UI", {
+tabris._UI = Widget.extend({
 
   _type: "tabris.UI",
 

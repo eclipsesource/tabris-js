@@ -1,4 +1,7 @@
-tabris.registerWidget("WebView", {
+import Widget from "../Widget";
+
+tabris.WebView = Widget.extend({
+  _name: "WebView",
 
   _type: "tabris.WebView",
 

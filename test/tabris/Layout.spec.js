@@ -83,7 +83,7 @@ describe("Layout:", function() {
     beforeEach(function() {
       tabris._reset();
       tabris._init(new NativeBridgeSpy());
-      tabris.registerWidget("TestType", {});
+      tabris.TestType = tabris.Widget.extend("TestType", {});
       parent = new tabris.Composite();
       widget = new tabris.TestType().appendTo(parent);
       other = new tabris.TestType({id: "other"}).appendTo(parent);
@@ -129,7 +129,7 @@ describe("Layout:", function() {
     });
 
     it("treats ambiguous string as selector", function() {
-      tabris.registerWidget("Foo%", {});
+      tabris["Foo%"] = tabris.Widget.extend({_name: "Foo%"});
       var freak1 = new tabris["Foo%"]().appendTo(parent);
       var freak2 = new tabris.TestType({id: "23%"}).appendTo(parent);
 

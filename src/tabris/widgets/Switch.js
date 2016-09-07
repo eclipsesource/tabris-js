@@ -1,4 +1,7 @@
-tabris.registerWidget("Switch", {
+import Widget from "../Widget";
+
+tabris.Switch = Widget.extend({
+  _name: "Switch",
   _type: "tabris.Switch",
   _events: {
     select: {

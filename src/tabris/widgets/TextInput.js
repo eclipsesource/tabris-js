@@ -1,4 +1,7 @@
-tabris.registerWidget("TextInput", {
+import Widget from "../Widget";
+
+tabris.TextInput = Widget.extend({
+  _name: "TextInput",
   _type: "tabris.TextInput",
   _events: {
     focus: {

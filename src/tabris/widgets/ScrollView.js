@@ -1,4 +1,6 @@
-tabris.registerWidget("_ScrollBar", {
+import Widget from "../Widget";
+
+tabris._ScrollBar = Widget.extend({
   _type: "rwt.widgets.ScrollBar",
   _events: {Selection: true},
   _properties: {
@@ -6,7 +8,9 @@ tabris.registerWidget("_ScrollBar", {
   }
 });
 
-tabris.registerWidget("ScrollView", {
+tabris.ScrollView = Widget.extend({
+  _name: "ScrollView",
+
 
   _type: "rwt.widgets.ScrolledComposite",
 

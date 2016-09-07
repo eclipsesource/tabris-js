@@ -1,4 +1,7 @@
-tabris.registerWidget("ToggleButton", {
+import Widget from "../Widget";
+
+tabris.ToggleButton = Widget.extend({
+  _name: "ToggleButton",
   _type: "tabris.ToggleButton",
   _events: {
     select: {

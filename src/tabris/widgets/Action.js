@@ -1,4 +1,7 @@
-tabris.registerWidget("Action", {
+import Widget from "../Widget";
+
+tabris.Action = Widget.extend({
+  _name: "Action",
 
   _type: "tabris.Action",
 
