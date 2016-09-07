@@ -1,11 +1,77 @@
 {
   "type": "Video",
-  "description": "A widget that plays a video from a URL.",
+  "description": "A widget that plays a video from an URL.",
   "extends": "Widget",
   "properties": {
     "url": {
       "type": "string",
-      "description": "The URL of the video to play."
+      "description": "The URL of the video to play. Setting this property to any non-empty string changes the *[state](#state)* to `open` and the video starts loading. Seting this property to an empty string unloads the current video and the *[state](#state)* returns to `empty`."
+    },
+    "controlsVisible": {
+      "type": "boolean",
+      "default": "true",
+      "description": "If set to `true`, overlays the video with a native UI for controlling playback."
+    },
+    "autoPlay": {
+      "type": "boolean",
+      "default": "true",
+      "description": "If set to `true`, starts playing the video as soon as the state changes from `open` to `ready`."
+    },
+    "speed": {
+      "type": "number",
+      "description": "Returns the current playback speed. The value `1` represents the natural speed of the video. When the *[state](#state)* of the widget is not `play` this property always has the value `0`. This property is read-only."
+    },
+    "position": {
+      "type": "number",
+      "description": "Returns the current playback position in milliseconds. This property is read-only. This property does not trigger any change events."
+    },
+    "duration": {
+      "type": "number",
+      "description": "Returns the full length of the current video in milliseconds. This property is read-only."
+    },
+    "state": {
+      "type": "string",
+      "default": "empty",
+      "values": ["empty", "open", "ready", "play", "stale", "pause", "finish", "fail"],
+      "description": "The current state of the widget. This property is read-only."
+    }
+  },
+  "methods": {
+    "pause": [
+      {
+        "parameters": [],
+        "description": "Pauses the video. *[state](#state)* changes to `pause` and `speed` to `0`. Has no effect when *[state](#state)* is not `play`."
+      }
+    ],
+    "seek": [
+      {
+        "parameters": [
+          {"name": "position", "type": "number", "description": "Desired position in milliseconds."}
+        ],
+        "description": "Attempts to change the `position` to the given time index. Success depends on the currently loaded video. Has no effect if the current *[state](#state)* is `empty` or `fail`."
+      }
+    ],
+    "play": [
+      {
+        "parameters": [],
+        "description": "Starts playing the video, *[state](#state)* changes to `play`. Has no effect if the current state is not either `pause` or `ready`."
+      },
+      {
+        "parameters": [
+          {"name": "speed", "type": "number", "description": "Desired playback speed. If the given speed is not supported by the platform or video, the actual playback speed will be `1` - i.e. the natural speed of the video."}
+        ],
+        "description": "Starts playing the video, *[state](#state)* changes to `play`. Has no effect if the current state is not either `pause` or `ready`."
+      }
+    ]
+  },
+  "events": {
+    "change:state": {
+      "parameters": [
+        {"name": "widget", "type": "this"},
+        {"name": "state", "type": "string", "description": "The current value of *[state](#state)*."},
+        {"name": "options", "type": "Object"}
+      ],
+      "description": "Fired when the state property changes."
     }
   },
   "links": [
