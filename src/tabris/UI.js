@@ -1,4 +1,6 @@
-tabris.registerType("_Display", {
+import Proxy from "./Proxy";
+
+var Display = Proxy.extend({
   _type: "rwt.widgets.Display"
 });
 
@@ -21,7 +23,7 @@ tabris.registerWidget("_UI", {
   _supportsChildren: true,
 
   _create: function() {
-    new tabris._Display();
+    new Display();
     this._shell = new tabris._Shell({
       style: ["NO_TRIM"],
       mode: "maximized",

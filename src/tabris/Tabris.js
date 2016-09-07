@@ -2,7 +2,6 @@ import {extend} from "./util";
 import Events from "./Events";
 import NativeBridge from "./NativeBridge";
 import ProxyStore from "./ProxyStore";
-import Proxy from "./Proxy";
 
 window.tabris = extend({}, Events, {
 
@@ -16,14 +15,6 @@ window.tabris = extend({}, Events, {
     } else {
       tabris._loadFunctions.push(fn);
     }
-  },
-
-  registerType: function(type, members, superType) {
-    if (type in tabris) {
-      throw new Error("Type already registered: " + type);
-    }
-    members._name = type;
-    tabris[type] = Proxy.extend(members, superType);
   },
 
   version: "${VERSION}",

@@ -1,5 +1,6 @@
-tabris.registerType("_GestureRecognizer", {
+import Proxy from "./Proxy";
 
+tabris._GestureRecognizer = Proxy.extend({
   _type: "tabris.GestureRecognizer",
   _properties: {
     type: "string",

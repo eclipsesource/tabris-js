@@ -1,12 +1,13 @@
 import {extendPrototype} from "./util";
 import {types} from "./property-types";
 import DOMEvent from "./DOMEvent";
+import Proxy from "./Proxy";
 
-tabris.registerType("_ClientStore", {
+var ClientStore = Proxy.extend({
   _cid: "tabris.ClientStore"
 });
 
-tabris.registerType("_SecureStore", {
+var SecureStore = Proxy.extend({
   _cid: "tabris.SecureStore"
 });
 
@@ -14,7 +15,7 @@ var encode = types.string.encode;
 
 function createStorage(secure) {
   function Storage() {
-    var proxy = secure ? new tabris._SecureStore() : new tabris._ClientStore();
+    var proxy = secure ? new SecureStore() : new ClientStore();
     Object.defineProperty(this, "_proxy", {value: proxy});
   }
   Storage.prototype = tabris.Storage.prototype;

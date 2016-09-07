@@ -1,4 +1,6 @@
-tabris.registerType("_Timer", {
+import Proxy from "./Proxy";
+
+var Timer = Proxy.extend({
   _type: "tabris.Timer",
   _events: {Run: true},
   _properties: {delay: "any", repeat: "any"}
@@ -18,7 +20,7 @@ tabris._addWindowTimerMethods = function(target) {
     // If tabris is not ready, create the timer on load.
     // However, clearTimeout won't work until after load.
     tabris.load(function() {
-      var timer = new tabris._Timer({
+      var timer = new Timer({
         delay: delay,
         repeat: repeat
       }).on("Run", function() {

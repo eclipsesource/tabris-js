@@ -1,4 +1,6 @@
-tabris.registerType("_App", {
+import Proxy from "./Proxy";
+
+var App = tabris._App = Proxy.extend({
   _cid: "tabris.App",
   _events: {
     foreground: {trigger: triggerWithTarget},
@@ -49,7 +51,7 @@ tabris.registerType("_App", {
 });
 
 tabris.load(function() {
-  tabris.app = new tabris._App();
+  tabris.app = new App();
 });
 
 function triggerWithTarget(event, name) {

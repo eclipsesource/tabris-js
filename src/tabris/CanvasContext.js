@@ -1,9 +1,10 @@
 import {colorStringToArray, colorArrayToString} from "./util-colors";
 import {clone} from "./util";
 import ImageData from "./ImageData";
+import Proxy from "./Proxy";
 import LegacyCanvasContext from "./LegacyCanvasContext";
 
-tabris.registerType("_GC", {
+var GC = tabris._GC = Proxy.extend({
   _type: "rwt.widgets.GC",
   _properties: {parent: "proxy"}
 });
@@ -232,7 +233,7 @@ defineMethod("stroke");
 
 CanvasContext.getContext = function(canvas, width, height) {
   if (!canvas._gc) {
-    canvas._gc = new tabris._GC({parent: canvas});
+    canvas._gc = new GC({parent: canvas});
   }
   if (!canvas._ctx) {
     canvas._ctx = device.platform === "Android" ? new CanvasContext(canvas._gc)

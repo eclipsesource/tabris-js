@@ -1,4 +1,6 @@
-tabris.registerType("_Device", {
+import Proxy from "./Proxy";
+
+var Device = tabris._Device = Proxy.extend({
   _cid: "tabris.Device",
   _properties: {
     model: "any",
@@ -42,7 +44,7 @@ tabris._publishDeviceProperties = function(target) {
 };
 
 tabris.load(function() {
-  tabris.device = new tabris._Device();
+  tabris.device = new Device();
   if (typeof window !== "undefined") {
     tabris._publishDeviceProperties(window);
   }

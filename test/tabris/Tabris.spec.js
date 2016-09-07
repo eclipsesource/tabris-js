@@ -8,7 +8,7 @@ describe("tabris", function() {
     log = [];
     tabris._reset();
     tabris._init(nativeBridge);
-    tabris.registerType("TestType", {_properties: {foo: "any"}});
+    tabris.TestType = tabris.Proxy.extend({_name: "TestType", _properties: {foo: "any"}});
   });
 
   afterEach(function() {
@@ -58,7 +58,7 @@ describe("tabris", function() {
     });
 
     it("notifies widget proxy", function() {
-      tabris.registerType("CustomType", {_events: {bar: true}});
+      tabris.CustomType = tabris.Proxy.extend({_events: {bar: true}});
       proxy = new tabris.CustomType();
       spyOn(proxy, "trigger");
 
@@ -68,7 +68,7 @@ describe("tabris", function() {
     });
 
     it("notifies widget proxy with translated event name", function() {
-      tabris.registerType("CustomType", {_events: {bar: "foo"}});
+      tabris.CustomType = tabris.Proxy.extend({_events: {bar: "foo"}});
       proxy = new tabris.CustomType();
       spyOn(proxy, "trigger");
 
@@ -78,7 +78,8 @@ describe("tabris", function() {
     });
 
     it("calls custom trigger", function() {
-      tabris.registerType("CustomType", {
+      tabris.CustomType = tabris.Proxy.extend({
+
         _events: {
           bar: {
             trigger: jasmine.createSpy()
@@ -94,7 +95,8 @@ describe("tabris", function() {
     });
 
     it("returns return value from custom trigger", function() {
-      tabris.registerType("CustomType", {
+      tabris.CustomType = tabris.Proxy.extend({
+
         _events: {
           bar: {
             trigger: jasmine.createSpy().and.returnValue("foo")
@@ -110,7 +112,8 @@ describe("tabris", function() {
     });
 
     it("calls custom trigger of translated event", function() {
-      tabris.registerType("CustomType", {
+      tabris.CustomType = tabris.Proxy.extend({
+
         _events: {
           bar: {
             name: "foo",
@@ -127,7 +130,8 @@ describe("tabris", function() {
     });
 
     it("returns return value from custom trigger with translated event", function() {
-      tabris.registerType("CustomType", {
+      tabris.CustomType = tabris.Proxy.extend({
+
         _events: {
           bar: {
             name: "foo",
@@ -144,7 +148,7 @@ describe("tabris", function() {
     });
 
     it("skips events for already disposed widgets", function() {
-      tabris.registerType("CustomType", {_events: {bar: true}});
+      tabris.CustomType = tabris.Proxy.extend({_events: {bar: true}});
       proxy = new tabris.CustomType();
       proxy.dispose();
       spyOn(proxy, "trigger");
@@ -161,7 +165,7 @@ describe("tabris", function() {
     });
 
     it("can be called without a context", function() {
-      tabris.registerType("CustomType", {_events: {bar: true}});
+      tabris.CustomType = tabris.Proxy.extend({_events: {bar: true}});
       proxy = new tabris.CustomType();
       spyOn(proxy, "trigger");
 
@@ -222,30 +226,6 @@ describe("tabris", function() {
       tabris.load(fn);
 
       expect(fn).toHaveBeenCalled();
-    });
-
-  });
-
-  describe("registerType", function() {
-
-    afterEach(function() {
-      delete tabris.CustomType;
-    });
-
-    it("allows to register a new type", function() {
-      var members = {foo: 23};
-      tabris.registerType("CustomType", members);
-
-      var instance = new tabris.CustomType();
-
-      expect(instance).toEqual(jasmine.any(tabris.Proxy));
-      expect(instance).toEqual(jasmine.any(tabris.CustomType));
-    });
-
-    it("prevents to overwrite already registered types", function() {
-      expect(() => {
-        tabris.registerType("Button", {});
-      }).toThrowError("Type already registered: Button");
     });
 
   });

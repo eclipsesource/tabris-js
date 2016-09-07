@@ -1,4 +1,6 @@
-tabris.registerType("_Crypto", {
+import Proxy from "./Proxy";
+
+var Crypto = Proxy.extend({
   _type: "tabris.Crypto"
 });
 
@@ -42,3 +44,5 @@ function isIntArray(value) {
           (value instanceof Int32Array) ||
           (value instanceof Uint32Array);
 }
+
+tabris._Crypto = Crypto;
