@@ -1,6 +1,4 @@
-import {extendPrototype} from "./util";
 import {types} from "./property-types";
-import DOMEvent from "./DOMEvent";
 import Proxy from "./Proxy";
 
 var ClientStore = Proxy.extend({
@@ -13,20 +11,20 @@ var SecureStore = Proxy.extend({
 
 var encode = types.string.encode;
 
-function createStorage(secure) {
+export function create(secure) {
   function Storage() {
     var proxy = secure ? new SecureStore() : new ClientStore();
     Object.defineProperty(this, "_proxy", {value: proxy});
   }
-  Storage.prototype = tabris.Storage.prototype;
+  Storage.prototype = WebStorage.prototype;
   return new Storage();
 }
 
-tabris.Storage = function() {
-  throw new Error("Cannot instantiate Storage");
-};
+export default function WebStorage() {
+  throw new Error("Cannot instantiate WebStorage");
+}
 
-tabris.Storage.prototype = {
+WebStorage.prototype = {
   // Note: key and length methods currently not supported
 
   setItem: function(key, value) {
@@ -60,31 +58,3 @@ tabris.Storage.prototype = {
   }
 
 };
-
-tabris.StorageEvent = function(type) {
-  this.type = type;
-};
-
-tabris.StorageEvent.prototype = extendPrototype(DOMEvent, {
-  bubbles: false,
-  cancelable: false,
-  key: "",
-  oldValue: null,
-  newValue: null,
-  url: "",
-  storageArea: null
-});
-
-tabris.load(function() {
-  tabris.localStorage = createStorage();
-  if (device.platform === "iOS") {
-    tabris.secureStorage = createStorage(true);
-  }
-  if (!window.Storage) {
-    window.Storage = tabris.Storage;
-    window.localStorage = tabris.localStorage;
-    if (tabris.secureStorage) {
-      window.secureStorage = tabris.secureStorage;
-    }
-  }
-});

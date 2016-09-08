@@ -38,6 +38,7 @@ import ImageData from "./ImageData";
 import {addDOMDocument} from "./DOMDocument";
 import {addWindowTimerMethods} from "./WindowTimers";
 import ProgressEvent from "./DOMProgressEvent";
+import Storage, {create as createStorage} from "./WebStorage";
 import XMLHttpRequest from "./XMLHttpRequest";
 
 module.exports = global.tabris;
@@ -46,6 +47,17 @@ window.XMLHttpRequest = XMLHttpRequest;
 window.ProgressEvent = ProgressEvent;
 addDOMDocument(window);
 addWindowTimerMethods(window);
+tabris.load(function() {
+  tabris.Storage = Storage;
+  tabris.localStorage = createStorage();
+  if (device.platform === "iOS") {
+    tabris.secureStorage = createStorage(true);
+  }
+  window.localStorage = tabris.localStorage;
+  if (tabris.secureStorage) {
+    window.secureStorage = tabris.secureStorage;
+  }
+});
 
 // TODO: Temporary code to keep tests alive
 
