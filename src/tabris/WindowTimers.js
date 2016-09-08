@@ -6,7 +6,7 @@ var Timer = Proxy.extend({
   _properties: {delay: "any", repeat: "any"}
 });
 
-tabris._addWindowTimerMethods = function(target) {
+export function addWindowTimerMethods(target) {
 
   if (typeof target.setTimeout === "function") {
     return;
@@ -24,7 +24,7 @@ tabris._addWindowTimerMethods = function(target) {
         delay: delay,
         repeat: repeat
       }).on("Run", function() {
-        fn.apply(window, args);
+        fn.apply(target, args);
         if (!repeat) {
           timer.dispose();
           delete timers[taskId];
@@ -67,10 +67,6 @@ tabris._addWindowTimerMethods = function(target) {
     }
   };
 
-};
-
-if (typeof window !== "undefined") {
-  tabris._addWindowTimerMethods(window);
 }
 
 function adjustDelay(value) {

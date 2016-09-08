@@ -36,14 +36,16 @@ import "./widgets/WebView.js";
 
 import ImageData from "./ImageData";
 import {addDOMDocument} from "./DOMDocument";
+import {addWindowTimerMethods} from "./WindowTimers";
 import ProgressEvent from "./DOMProgressEvent";
 import XMLHttpRequest from "./XMLHttpRequest";
 
 module.exports = global.tabris;
 window.ImageData = ImageData;
-addDOMDocument(window);
 window.XMLHttpRequest = XMLHttpRequest;
 window.ProgressEvent = ProgressEvent;
+addDOMDocument(window);
+addWindowTimerMethods(window);
 
 // TODO: Temporary code to keep tests alive
 
