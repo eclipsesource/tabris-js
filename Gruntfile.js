@@ -130,6 +130,9 @@ module.exports = function(grunt) {
       test_boot: {
         cmd: 'node node_modules/mocha/bin/mocha --colors --compilers js:babel-core/register "test/boot/**/*.test.js"'
       },
+      verify_tabris: {
+        cmd: 'node node_modules/mocha/bin/mocha --colors "test/**/*.verify.js"'
+      },
       test_tabris: {
         cmd: 'node node_modules/mocha/bin/mocha --colors --compilers js:babel-core/register "test/tabris/**/*.test.js"'
       },
@@ -194,6 +197,7 @@ module.exports = function(grunt) {
 
   /* runs tests against the build output */
   grunt.registerTask("verify", [
+    "exec:verify_tabris",
     "copy:test_ts",
     "exec:verify_typings"
   ]);

@@ -1,7 +1,7 @@
 import "./load-polyfill.js";
 import "./Tabris.js";
-import "./Device.js";
 
+import Device from "./Device.js";
 import App from "./App";
 import UI, {create as createUI} from "./widgets/UI";
 import ContentView from "./widgets/ContentView";
@@ -39,30 +39,23 @@ import TextView from "./widgets/TextView.js";
 import ToggleButton from "./widgets/ToggleButton.js";
 import Video from "./widgets/Video.js";
 import WebView from "./widgets/WebView.js";
+import Widget from "./Widget.js";
+import WidgetCollection from "./WidgetCollection.js";
 
 module.exports = global.tabris;
+
+window.Crypto = Crypto;
 window.ImageData = ImageData;
-window.XMLHttpRequest = XMLHttpRequest;
 window.ProgressEvent = ProgressEvent;
+window.Storage = Storage;
+window.XMLHttpRequest = XMLHttpRequest;
+
 addDOMDocument(window);
 addWindowTimerMethods(window);
-tabris.load(function() {
-  tabris.app = new App();
-  tabris.ui = createUI();
-  tabris.Storage = Storage;
-  tabris.localStorage = createStorage();
-  if (device.platform === "iOS") {
-    tabris.secureStorage = createStorage(true);
-  }
-  window.localStorage = tabris.localStorage;
-  if (tabris.secureStorage) {
-    window.secureStorage = tabris.secureStorage;
-  }
-  window.crypto = new Crypto();
-});
 
 tabris.Action = Action;
 tabris.ActivityIndicator = ActivityIndicator;
+tabris.App = App;
 tabris.Button = Button;
 tabris.Canvas = Canvas;
 tabris.Cell = Cell;
@@ -70,17 +63,22 @@ tabris.CheckBox = CheckBox;
 tabris.CollectionView = CollectionView;
 tabris.Composite = Composite;
 tabris.ContentView = ContentView;
+tabris.Crypto = Crypto;
 tabris.Drawer = Drawer;
+tabris.Device = Device;
+tabris.ImageData = ImageData;
 tabris.ImageView = ImageView;
 tabris.Page = Page;
 tabris.PageSelector = PageSelector;
 tabris.Picker = Picker;
 tabris.ProgressBar = ProgressBar;
+tabris.ProgressEvent = ProgressEvent;
 tabris.NativeObject = NativeObject;
 tabris.RadioButton = RadioButton;
 tabris.ScrollView = ScrollView;
 tabris.SearchAction = SearchAction;
 tabris.Slider = Slider;
+tabris.Storage = Storage;
 tabris.Switch = Switch;
 tabris.Tab = Tab;
 tabris.TabFolder = TabFolder;
@@ -90,3 +88,16 @@ tabris.ToggleButton = ToggleButton;
 tabris.UI = UI;
 tabris.Video = Video;
 tabris.WebView = WebView;
+tabris.Widget = Widget;
+tabris.WidgetCollection = WidgetCollection;
+tabris.XMLHttpRequest = XMLHttpRequest;
+
+tabris.load(function() {
+  tabris.app = new App();
+  tabris.ui = createUI();
+  window.localStorage = tabris.localStorage = createStorage();
+  if (device.platform === "iOS") {
+    window.secureStorage = tabris.secureStorage = createStorage(true);
+  }
+  window.crypto = tabris.crypto = new Crypto();
+});
