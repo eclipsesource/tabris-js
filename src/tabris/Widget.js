@@ -2,6 +2,7 @@ import {extend, extendPrototype} from "./util";
 import Layout from "./Layout";
 import Proxy from "./Proxy";
 import ProxyCollection from "./ProxyCollection";
+import GestureRecognizer from "./GestureRecognizer";
 import {animate} from "./Animation";
 import {types} from "./property-types";
 
@@ -439,7 +440,7 @@ function getGestureEventConfig(name) {
       var gestures = this.get("gestures");
       if (state) {
         var properties = extend({target: this}, gestures[name]);
-        var recognizer = new tabris._GestureRecognizer(properties)
+        var recognizer = new GestureRecognizer(properties)
           .on("gesture", gestureListener, {target: this, name: name});
         if (!this._recognizers) {
           this._recognizers = {};

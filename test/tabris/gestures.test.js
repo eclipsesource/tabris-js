@@ -1,17 +1,26 @@
+import Widget from "../../src/tabris/Widget";
+import ProxyStore from "../../src/tabris/ProxyStore";
+import NativeBridge from "../../src/tabris/NativeBridge";
+import NativeBridgeSpy from "./NativeBridgeSpy";
+import {expect, spy, restore} from "../test";
+
 describe("gestures:", function() {
 
-  var nativeBridge, widget;
+  let nativeBridge, widget, TestType;
 
   beforeEach(function() {
     nativeBridge = new NativeBridgeSpy();
-    tabris._reset();
-    tabris._init(nativeBridge);
-    tabris.TestType = tabris.Widget.extend({_name: "TestType"});
+    TestType = Widget.extend({_name: "TestType"});
+    nativeBridge = new NativeBridgeSpy();
+    global.tabris = {
+      on: () => {},
+      _proxies: new ProxyStore(),
+      _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
+    };
+    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
   });
 
-  afterEach(function() {
-    delete tabris.TestType;
-  });
+  afterEach(restore);
 
   function gestureCreate() {
     return nativeBridge.calls({op: "create", type: "tabris.GestureRecognizer"});
@@ -22,78 +31,78 @@ describe("gestures:", function() {
   }
 
   it("get returns object with pre-configured gestures as initial value", function() {
-    var gestures = new tabris.TestType().get("gestures");
-    expect(gestures.tap).toEqual({type: "tap"});
-    expect(gestures.longpress).toEqual({type: "longpress"});
+    let gestures = new TestType().get("gestures");
+    expect(gestures.tap).to.eql({type: "tap"});
+    expect(gestures.longpress).to.eql({type: "longpress"});
   });
 
   describe("setting single gesture", function() {
 
     beforeEach(function() {
-      widget = new tabris.TestType({
+      widget = new TestType({
         gestures: {foo: {type: "tap", fingers: 2}}
       });
 
     });
 
     it("does not SET property", function() {
-      expect(widgetCreate()[0].properties.gestures).toBeUndefined();
+      expect(widgetCreate()[0].properties.gestures).to.be.undefined;
     });
 
     it("does not CREATE GestureRecognizer", function() {
-      expect(gestureCreate().length).toBe(0);
+      expect(gestureCreate().length).to.equal(0);
     });
 
     it("extends pre-configured gestures", function() {
-      var gestures = widget.get("gestures");
-      expect(gestures.foo).toEqual({type: "tap", fingers: 2});
-      expect(gestures.tap).toEqual({type: "tap"});
+      let gestures = widget.get("gestures");
+      expect(gestures.foo).to.eql({type: "tap", fingers: 2});
+      expect(gestures.tap).to.eql({type: "tap"});
     });
 
     it("prevent overwriting global default gestures", function() {
-      var defaultGestures = new tabris.TestType().get("gestures");
+      let defaultGestures = new TestType().get("gestures");
       defaultGestures.tap = false;
-      expect(new tabris.TestType().get("gestures").tap).toEqual({type: "tap"});
+      expect(new TestType().get("gestures").tap).to.eql({type: "tap"});
     });
 
     it("allows overwriting pre-configured gestures", function() {
       widget.set("gestures", {tap: {type: "tap", touches: 2}});
-      expect(widget.get("gestures").tap).toEqual({type: "tap", touches: 2});
+      expect(widget.get("gestures").tap).to.eql({type: "tap", touches: 2});
     });
 
     describe("and adding matching gesture listener", function() {
 
-      var listener = function() {};
+      let listener = function() {};
 
       beforeEach(function() {
         widget.on("foo", listener);
       });
 
       it("CREATEs GestureRecognizer", function() {
-        expect(gestureCreate().length).toBe(1);
+        expect(gestureCreate().length).to.equal(1);
       });
 
       it("CREATEs GestureRecognizer with type", function() {
-        expect(gestureCreate()[0].properties.type).toBe("tap");
+        expect(gestureCreate()[0].properties.type).to.equal("tap");
       });
 
       it("CREATEs GestureRecognizer with target", function() {
-        expect(gestureCreate()[0].properties.target).toBe(widget.cid);
+        expect(gestureCreate()[0].properties.target).to.equal(widget.cid);
       });
 
       it("CREATEs GestureRecognizer with configuration properties", function() {
-        expect(gestureCreate()[0].properties.fingers).toBe(2);
+        expect(gestureCreate()[0].properties.fingers).to.equal(2);
       });
 
       it("GestureRecognizer LISTENs to gesture events", function() {
-        var call = nativeBridge.calls({op: "listen", id: gestureCreate()[0].id, event: "gesture"})[0];
-        expect(call.listen).toBe(true);
+        let call = nativeBridge.calls({op: "listen", id: gestureCreate()[0].id, event: "gesture"})[0];
+        expect(call.listen).to.equal(true);
       });
 
       it("disposing widget disposes existing GestureRecognizer", function() {
         widget.dispose();
 
-        expect(nativeBridge.calls({op: "destroy", id: gestureCreate()[0].id}).length).toBe(1);
+        expect(nativeBridge.calls({op: "destroy", id: gestureCreate()[0].id}).length).to.equal(1);
       });
 
       describe("multiple times", function() {
@@ -104,7 +113,7 @@ describe("gestures:", function() {
         });
 
         it("CREATEs only one GestureRecognizer", function() {
-          expect(gestureCreate().length).toBe(1);
+          expect(gestureCreate().length).to.equal(1);
         });
 
       });
@@ -112,23 +121,22 @@ describe("gestures:", function() {
       describe(", then notifying the recognizer", function() {
 
         it("triggers matching widget event", function() {
-          var listener = jasmine.createSpy();
+          let listener = spy();
           widget.on("foo", listener);
 
           tabris._notify(gestureCreate()[0].id, "gesture", {});
 
-          expect(listener).toHaveBeenCalled();
+          expect(listener).to.have.been.called;
         });
 
         it("forwards event object", function() {
-          var listener = jasmine.createSpy();
+          let listener = spy();
           widget.on("foo", listener);
 
           tabris._notify(gestureCreate()[0].id, "gesture", {state: "recognized"});
 
-          expect(listener.calls.count()).toBe(1);
-          expect(listener.calls.argsFor(0)[0]).toBe(widget);
-          expect(listener.calls.argsFor(0)[1]).toEqual({state: "recognized"});
+          expect(listener).to.have.been.called.once;
+          expect(listener).to.have.been.calledWith(widget, {state: "recognized"});
         });
 
       });
@@ -140,7 +148,7 @@ describe("gestures:", function() {
         });
 
         it("disposes matching GestureRecognizer", function() {
-          expect(nativeBridge.calls({op: "destroy", id: gestureCreate()[0].id}).length).toBe(1);
+          expect(nativeBridge.calls({op: "destroy", id: gestureCreate()[0].id}).length).to.equal(1);
         });
 
       });
@@ -151,32 +159,32 @@ describe("gestures:", function() {
 
   describe("listening to multiple gestures", function() {
 
-    var barListener = function() {};
+    let barListener = function() {};
 
     beforeEach(function() {
-      widget = new tabris.TestType({
+      widget = new TestType({
         gestures: {foo: {type: "tap", fingers: 2}, bar: {type: "pan", fingers: 3}}
       });
       widget.on("foo", function() {}).on("bar", function() {});
     });
 
     it("CREATEs multiple GestureRecognizers", function() {
-      expect(gestureCreate().length).toBe(2);
+      expect(gestureCreate().length).to.equal(2);
     });
 
     it("disposing widget disposes all GestureRecognizers", function() {
       widget.dispose();
 
-      expect(nativeBridge.calls({op: "destroy", id: gestureCreate()[0].id}).length).toBe(1);
-      expect(nativeBridge.calls({op: "destroy", id: gestureCreate()[1].id}).length).toBe(1);
+      expect(nativeBridge.calls({op: "destroy", id: gestureCreate()[0].id}).length).to.equal(1);
+      expect(nativeBridge.calls({op: "destroy", id: gestureCreate()[1].id}).length).to.equal(1);
     });
 
     it("disposing widget disposes all remaining GestureRecognizers", function() {
       widget.off("bar", barListener);
       widget.dispose();
 
-      expect(nativeBridge.calls({op: "destroy", id: gestureCreate()[0].id}).length).toBe(1);
-      expect(nativeBridge.calls({op: "destroy", id: gestureCreate()[1].id}).length).toBe(1);
+      expect(nativeBridge.calls({op: "destroy", id: gestureCreate()[0].id}).length).to.equal(1);
+      expect(nativeBridge.calls({op: "destroy", id: gestureCreate()[1].id}).length).to.equal(1);
     });
 
   });
@@ -184,13 +192,13 @@ describe("gestures:", function() {
   describe("when no gestures are configured", function() {
 
     beforeEach(function() {
-      widget = new tabris.TestType();
+      widget = new TestType();
     });
 
     it("ignores removing a gesture listener (see #368)", function() {
       expect(() => {
         widget.off("pan", function() {});
-      }).not.toThrow();
+      }).to.not.throw();
     });
 
   });

@@ -1,6 +1,6 @@
 import Proxy from "./Proxy";
 
-tabris._GestureRecognizer = Proxy.extend({
+export default Proxy.extend({
   _type: "tabris.GestureRecognizer",
   _properties: {
     type: "string",
@@ -14,5 +14,4 @@ tabris._GestureRecognizer = Proxy.extend({
   _events: {
     gesture: true
   }
-
 });
