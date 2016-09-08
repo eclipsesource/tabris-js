@@ -1,118 +1,129 @@
+import {expect, spy, stub} from "../test";
+import ProxyStore from "../../src/tabris/ProxyStore";
+import NativeBridge from "../../src/tabris/NativeBridge";
+import NativeBridgeSpy from "./NativeBridgeSpy";
+import Device, {publishDeviceProperties} from "../../src/tabris/Device";
+
 describe("Device", function() {
 
-  var device, results, nativeBridge;
+  let device, results, nativeBridge;
 
   beforeEach(function() {
-    nativeBridge = new NativeBridgeSpy();
     results = {};
-    spyOn(nativeBridge, "get").and.callFake(function(id, name) {
+    nativeBridge = new NativeBridgeSpy();
+    global.tabris = {
+      on: () => {},
+      _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param),
+      _proxies: new ProxyStore()
+    };
+    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    stub(nativeBridge, "get", function(id, name) {
       if (id === "tabris.Device") {
         return results[name];
       }
     });
-    tabris._reset();
-    tabris._init(nativeBridge);
-    device = new tabris._Device();
+    device = new Device();
   });
 
   it("provides model", function() {
     results.model = "x1";
-    expect(device.get("model")).toBe("x1");
+    expect(device.get("model")).to.equal("x1");
   });
 
   it("provides platform", function() {
     results.platform = "foo";
-    expect(device.get("platform")).toBe("foo");
+    expect(device.get("platform")).to.equal("foo");
   });
 
   it("provides version", function() {
     results.version = "23";
-    expect(device.get("version")).toBe("23");
+    expect(device.get("version")).to.equal("23");
   });
 
   it("provides language", function() {
     results.language = "es";
-    expect(device.get("language")).toBe("es");
+    expect(device.get("language")).to.equal("es");
   });
 
   it("provides screenWidth", function() {
     results.screenWidth = 23;
-    expect(device.get("screenWidth")).toBe(23);
+    expect(device.get("screenWidth")).to.equal(23);
   });
 
   it("provides screenHeight", function() {
     results.screenHeight = 23;
-    expect(device.get("screenHeight")).toBe(23);
+    expect(device.get("screenHeight")).to.equal(23);
   });
 
   it("provides orientation", function() {
     results.orientation = "portrait";
-    expect(device.get("orientation")).toBe("portrait");
+    expect(device.get("orientation")).to.equal("portrait");
   });
 
   it("adds listener for orientationchange event", function() {
     device.on("change:orientation", function() {});
 
-    var calls = nativeBridge.calls({id: "tabris.Device", op: "listen", event: "orientationchange"});
-    expect(calls[0].listen).toBe(true);
+    let calls = nativeBridge.calls({id: "tabris.Device", op: "listen", event: "orientationchange"});
+    expect(calls[0].listen).to.equal(true);
   });
 
   it("triggers change:orientation event", function() {
-    var listener = jasmine.createSpy("listener");
+    let listener = spy();
     device.on("change:orientation", listener);
 
     tabris._notify("tabris.Device", "orientationchange", {orientation: "portrait"});
 
-    expect(listener.calls.argsFor(0)[0]).toBe(device);
-    expect(listener.calls.argsFor(0)[1]).toBe("portrait");
+    expect(listener).to.have.been.calledOnce;
+    expect(listener).to.have.been.calledWith(device, "portrait");
   });
 
   it("prevents overwriting properties", function() {
     results.language = "es";
     device.set("language", "fr");
-    expect(device.get("language")).toBe("es");
+    expect(device.get("language")).to.equal("es");
   });
 
   it("can not be disposed", function() {
     expect(() => {
       device.dispose();
-    }).toThrow();
-  });
-
-  it("is available as tabris.device", function() {
-    expect(tabris.device).toEqual(jasmine.any(tabris._Device));
+    }).to.throw();
   });
 
 });
 
 describe("publishDeviceProperties", function() {
 
-  var target, results, nativeBridge;
+  let target, results, nativeBridge;
 
   beforeEach(function() {
-    nativeBridge = new NativeBridgeSpy();
     results = {};
-    spyOn(nativeBridge, "get").and.callFake(function(id, name) {
+    nativeBridge = new NativeBridgeSpy();
+    global.tabris = {
+      on: () => {},
+      _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param),
+      _proxies: new ProxyStore()
+    };
+    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    global.tabris.device = new Device();
+    stub(nativeBridge, "get", function(id, name) {
       if (id === "tabris.Device") {
         return results[name];
       }
     });
-    tabris._reset();
-    tabris._init(nativeBridge);
   });
 
   describe("when device exists", function() {
 
-    var orig;
+    let orig;
 
     beforeEach(function() {
       orig = {};
       target = {device: orig};
-      tabris._publishDeviceProperties(target);
+      publishDeviceProperties(target);
     });
 
     it("does not modify device", function() {
-      expect(target.device).toBe(orig);
+      expect(target.device).to.equal(orig);
     });
 
   });
@@ -121,50 +132,50 @@ describe("publishDeviceProperties", function() {
 
     beforeEach(function() {
       target = {};
-      tabris._publishDeviceProperties(target);
+      publishDeviceProperties(target);
     });
 
     it("creates device", function() {
-      expect(target.device).toBeDefined();
+      expect(target.device).to.be.ok;
     });
 
     it("allows overwriting device", function() {
       // See #785
       target.device = 42;
-      expect(target.device).toBe(42);
+      expect(target.device).to.equal(42);
     });
 
     it("provides device.model", function() {
       results.model = "x1";
-      expect(target.device.model).toBe("x1");
+      expect(target.device.model).to.equal("x1");
     });
 
     it("prevents overwriting device.model", function() {
       results.model = "x1";
       target.device.model = "x2";
-      expect(target.device.model).toBe("x1");
+      expect(target.device.model).to.equal("x1");
     });
 
     it("provides device.platform", function() {
       results.platform = "foo";
-      expect(target.device.platform).toBe("foo");
+      expect(target.device.platform).to.equal("foo");
     });
 
     it("prevents overwriting device.platform", function() {
       results.platform = "foo";
       target.device.platform = "bar";
-      expect(target.device.platform).toBe("foo");
+      expect(target.device.platform).to.equal("foo");
     });
 
     it("provides device.version", function() {
       results.version = "23";
-      expect(target.device.version).toBe("23");
+      expect(target.device.version).to.equal("23");
     });
 
     it("prevents overwriting device.version", function() {
       results.version = "23";
       target.device.version = "42";
-      expect(target.device.version).toBe("23");
+      expect(target.device.version).to.equal("23");
     });
 
   });
@@ -175,11 +186,11 @@ describe("publishDeviceProperties", function() {
       target = {
         devicePixelRatio: 23
       };
-      tabris._publishDeviceProperties(target);
+      publishDeviceProperties(target);
     });
 
     it("does not change devicePixelRatio", function() {
-      expect(target.devicePixelRatio).toBe(23);
+      expect(target.devicePixelRatio).to.equal(23);
     });
 
   });
@@ -189,17 +200,17 @@ describe("publishDeviceProperties", function() {
     beforeEach(function() {
       target = {};
       results.scaleFactor = 23;
-      tabris._publishDeviceProperties(target);
+      publishDeviceProperties(target);
     });
 
     it("provides devicePixelRatio", function() {
-      expect(target.devicePixelRatio).toBe(23);
+      expect(target.devicePixelRatio).to.equal(23);
     });
 
     it("allows overwriting devicePixelRatio", function() {
       // Browsers also allow overwriting
       target.devicePixelRatio = 42;
-      expect(target.devicePixelRatio).toBe(42);
+      expect(target.devicePixelRatio).to.equal(42);
     });
 
   });
@@ -208,11 +219,11 @@ describe("publishDeviceProperties", function() {
 
     beforeEach(function() {
       target = {};
-      tabris._publishDeviceProperties(target);
+      publishDeviceProperties(target);
     });
 
     it("does not create navigator", function() {
-      expect(target.navigator).not.toBeDefined();
+      expect(target.navigator).to.be.undefined;
     });
 
   });
@@ -225,11 +236,11 @@ describe("publishDeviceProperties", function() {
           language: "es"
         }
       };
-      tabris._publishDeviceProperties(target);
+      publishDeviceProperties(target);
     });
 
     it("does not change navigator.language", function() {
-      expect(target.navigator.language).toBe("es");
+      expect(target.navigator.language).to.equal("es");
     });
 
   });
@@ -240,18 +251,18 @@ describe("publishDeviceProperties", function() {
       target = {
         navigator: {}
       };
-      tabris._publishDeviceProperties(target);
+      publishDeviceProperties(target);
     });
 
     it("provides navigator.language", function() {
       results.language = "es";
-      expect(target.navigator.language).toBe("es");
+      expect(target.navigator.language).to.equal("es");
     });
 
     it("prevents overwriting navigator.language", function() {
       results.language = "es";
       target.navigator.language = "fr";
-      expect(target.navigator.language).toBe("es");
+      expect(target.navigator.language).to.equal("es");
     });
 
   });
@@ -262,11 +273,11 @@ describe("publishDeviceProperties", function() {
       target = {
         screen: {}
       };
-      tabris._publishDeviceProperties(target);
+      publishDeviceProperties(target);
     });
 
     it("does not modify screen", function() {
-      expect(target.screen).toEqual({});
+      expect(target.screen).to.eql({});
     });
 
   });
@@ -275,17 +286,17 @@ describe("publishDeviceProperties", function() {
 
     beforeEach(function() {
       target = {};
-      tabris._publishDeviceProperties(target);
+      publishDeviceProperties(target);
     });
 
     it("creates screen", function() {
-      expect(target.screen).toBeDefined();
+      expect(target.screen).to.be.ok;
     });
 
     it("allows overwriting screen", function() {
       // Browsers also allow overwriting
       target.screen = 23;
-      expect(target.screen).toBe(23);
+      expect(target.screen).to.equal(23);
     });
 
   });

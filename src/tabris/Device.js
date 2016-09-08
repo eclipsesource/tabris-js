@@ -1,6 +1,6 @@
 import Proxy from "./Proxy";
 
-var Device = tabris._Device = Proxy.extend({
+var Device = Proxy.extend({
   _cid: "tabris.Device",
   _properties: {
     model: "any",
@@ -28,7 +28,9 @@ var Device = tabris._Device = Proxy.extend({
   }
 });
 
-tabris._publishDeviceProperties = function(target) {
+export default Device;
+
+export function publishDeviceProperties(target) {
   if (!("device" in target)) {
     target.device = createDeviceObject();
   }
@@ -41,14 +43,16 @@ tabris._publishDeviceProperties = function(target) {
   if (!("devicePixelRatio" in target)) {
     target.devicePixelRatio = tabris.device.get("scaleFactor");
   }
-};
+}
 
-tabris.load(function() {
-  tabris.device = new Device();
-  if (typeof window !== "undefined") {
-    tabris._publishDeviceProperties(window);
-  }
-});
+if (global.tabris) {
+  tabris.load(function() {
+    tabris.device = new Device();
+    if (typeof window !== "undefined") {
+      publishDeviceProperties(window);
+    }
+  });
+}
 
 function createDeviceObject() {
   var dev = {};
