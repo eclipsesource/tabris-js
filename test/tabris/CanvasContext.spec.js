@@ -5,6 +5,7 @@ describe("CanvasContext", function() {
   var gc;
 
   beforeEach(function() {
+    tabris._reset();
     nativeBridge = new NativeBridgeSpy();
     tabris._init(nativeBridge);
     gc = new tabris._GC();

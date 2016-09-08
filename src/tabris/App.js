@@ -1,6 +1,6 @@
 import Proxy from "./Proxy";
 
-var App = tabris._App = Proxy.extend({
+export default Proxy.extend({
   _cid: "tabris.App",
   _events: {
     foreground: {trigger: triggerWithTarget},
@@ -48,10 +48,6 @@ var App = tabris._App = Proxy.extend({
       callback(new Error("Another installPatch operation is already pending."));
     }
   }
-});
-
-tabris.load(function() {
-  tabris.app = new App();
 });
 
 function triggerWithTarget(event, name) {

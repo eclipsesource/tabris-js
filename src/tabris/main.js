@@ -5,7 +5,6 @@ import "./Device.js";
 import "./Widget.js";
 import "./Crypto.js";
 import "./WindowTimers.js";
-import "./App.js";
 import "./UI.js";
 import "./WebStorage.js";
 import "./XMLHttpRequest.js";
@@ -34,6 +33,7 @@ import "./widgets/ToggleButton.js";
 import "./widgets/Video.js";
 import "./widgets/WebView.js";
 
+import App from "./App";
 import ImageData from "./ImageData";
 import {addDOMDocument} from "./DOMDocument";
 import {addWindowTimerMethods} from "./WindowTimers";
@@ -48,6 +48,7 @@ window.ProgressEvent = ProgressEvent;
 addDOMDocument(window);
 addWindowTimerMethods(window);
 tabris.load(function() {
+  tabris.app = new App();
   tabris.Storage = Storage;
   tabris.localStorage = createStorage();
   if (device.platform === "iOS") {
