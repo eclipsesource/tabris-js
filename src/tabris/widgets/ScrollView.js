@@ -12,7 +12,6 @@ var ScrollBar = Widget.extend({
 export default Widget.extend({
   _name: "ScrollView",
 
-
   _type: "rwt.widgets.ScrolledComposite",
 
   _supportsChildren: true,
