@@ -1,19 +1,32 @@
+import {expect, spy, restore} from "../test";
+import ProxyStore from "../../src/tabris/ProxyStore";
+import NativeBridge from "../../src/tabris/NativeBridge";
+import NativeBridgeSpy from "./NativeBridgeSpy";
+import Events from "../../src/tabris/Events";
+import LegacyCanvasContext from "../../src/tabris/LegacyCanvasContext";
+import GC from "../../src/tabris/GC";
+
 describe("Legacy CanvasContext", function() {
 
-  var nativeBridge;
-  var ctx;
-  var gc;
+  let nativeBridge;
+  let ctx;
+  let gc;
 
   beforeEach(function() {
     nativeBridge = new NativeBridgeSpy();
-    tabris._init(nativeBridge);
-    gc = new tabris._GC();
-    nativeBridge.resetCalls();
-    ctx = new tabris.LegacyCanvasContext(gc);
-    tabris._reset();
+    global.tabris = Object.assign({
+      on: () => {},
+      off: () => {},
+      _proxies: new ProxyStore()
+    }, Events);
+    global.device = {platform: "Android"};
+    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    gc = new GC();
+    ctx = new LegacyCanvasContext(gc);
   });
 
   afterEach(function() {
+    restore();
     gc.dispose();
   });
 
@@ -22,40 +35,40 @@ describe("Legacy CanvasContext", function() {
   }
 
   function getDrawOperations() {
-    var call = nativeBridge.calls({id: gc.cid, op: "call", method: "draw"})[0];
+    let call = nativeBridge.calls({id: gc.cid, op: "call", method: "draw"})[0];
     return call ? call.parameters.operations : undefined;
   }
 
   describe("lineWidth", function() {
 
     it("defaults to 1", function() {
-      expect(ctx.lineWidth).toEqual(1);
+      expect(ctx.lineWidth).to.eql(1);
     });
 
     it("accepts changes", function() {
       ctx.lineWidth = 2;
 
-      expect(ctx.lineWidth).toEqual(2);
+      expect(ctx.lineWidth).to.eql(2);
     });
 
     it("renders changes", function() {
       ctx.lineWidth = 2;
       flush();
 
-      expect(getDrawOperations()).toEqual([
+      expect(getDrawOperations()).to.eql([
         ["lineWidth", 2]
       ]);
     });
 
     it("ignores zero and negative values, but prints a warning", function() {
-      spyOn(console, "warn");
+      spy(console, "warn");
       ctx.lineWidth = 3;
 
       ctx.lineWidth = 0;
       ctx.lineWidth = -1;
 
-      expect(ctx.lineWidth).toEqual(3);
-      expect(console.warn).toHaveBeenCalledWith("Unsupported value for lineWidth: -1");
+      expect(ctx.lineWidth).to.eql(3);
+      expect(console.warn).to.have.been.calledWith("Unsupported value for lineWidth: -1");
     });
 
   });
@@ -63,32 +76,32 @@ describe("Legacy CanvasContext", function() {
   describe("lineCap", function() {
 
     it("defaults to 'butt'", function() {
-      expect(ctx.lineCap).toEqual("butt");
+      expect(ctx.lineCap).to.eql("butt");
     });
 
     it("accepts changes", function() {
       ctx.lineCap = "round";
 
-      expect(ctx.lineCap).toEqual("round");
+      expect(ctx.lineCap).to.eql("round");
     });
 
     it("renders changes", function() {
       ctx.lineCap = "round";
       flush();
 
-      expect(getDrawOperations()).toEqual([
+      expect(getDrawOperations()).to.eql([
         ["lineCap", "round"]
       ]);
     });
 
     it("ignores unknown values, but prints a warning", function() {
-      spyOn(console, "warn");
+      spy(console, "warn");
       ctx.lineCap = "round";
 
       ctx.lineCap = "foo";
 
-      expect(ctx.lineCap).toEqual("round");
-      expect(console.warn).toHaveBeenCalledWith("Unsupported value for lineCap: foo");
+      expect(ctx.lineCap).to.eql("round");
+      expect(console.warn).to.have.been.calledWith("Unsupported value for lineCap: foo");
     });
 
   });
@@ -96,32 +109,32 @@ describe("Legacy CanvasContext", function() {
   describe("lineJoin", function() {
 
     it("defaults to 'miter'", function() {
-      expect(ctx.lineJoin).toEqual("miter");
+      expect(ctx.lineJoin).to.eql("miter");
     });
 
     it("accepts changes", function() {
       ctx.lineJoin = "round";
 
-      expect(ctx.lineJoin).toEqual("round");
+      expect(ctx.lineJoin).to.eql("round");
     });
 
     it("renders changes", function() {
       ctx.lineJoin = "round";
       flush();
 
-      expect(getDrawOperations()).toEqual([
+      expect(getDrawOperations()).to.eql([
         ["lineJoin", "round"]
       ]);
     });
 
     it("ignores unknown values, but prints a warning", function() {
-      spyOn(console, "warn");
+      spy(console, "warn");
       ctx.lineJoin = "round";
 
       ctx.lineJoin = "foo";
 
-      expect(ctx.lineJoin).toEqual("round");
-      expect(console.warn).toHaveBeenCalledWith("Unsupported value for lineJoin: foo");
+      expect(ctx.lineJoin).to.eql("round");
+      expect(console.warn).to.have.been.calledWith("Unsupported value for lineJoin: foo");
     });
 
   });
@@ -129,32 +142,32 @@ describe("Legacy CanvasContext", function() {
   describe("fillStyle", function() {
 
     it("defaults to black", function() {
-      expect(ctx.fillStyle).toEqual("rgba(0, 0, 0, 1)");
+      expect(ctx.fillStyle).to.eql("rgba(0, 0, 0, 1)");
     });
 
     it("accepts changes", function() {
       ctx.fillStyle = "red";
 
-      expect(ctx.fillStyle).toEqual("rgba(255, 0, 0, 1)");
+      expect(ctx.fillStyle).to.eql("rgba(255, 0, 0, 1)");
     });
 
     it("renders changes", function() {
       ctx.fillStyle = "red";
       flush();
 
-      expect(getDrawOperations()).toEqual([
+      expect(getDrawOperations()).to.eql([
         ["fillStyle", [255, 0, 0, 255]]
       ]);
     });
 
     it("ignores invalid color strings, but prints a warning", function() {
-      spyOn(console, "warn");
+      spy(console, "warn");
       ctx.fillStyle = "red";
 
       ctx.fillStyle = "no-such-color";
 
-      expect(ctx.fillStyle).toEqual("rgba(255, 0, 0, 1)");
-      expect(console.warn).toHaveBeenCalledWith("Unsupported value for fillStyle: no-such-color");
+      expect(ctx.fillStyle).to.eql("rgba(255, 0, 0, 1)");
+      expect(console.warn).to.have.been.calledWith("Unsupported value for fillStyle: no-such-color");
     });
 
   });
@@ -162,32 +175,32 @@ describe("Legacy CanvasContext", function() {
   describe("strokeStyle", function() {
 
     it("defaults to black", function() {
-      expect(ctx.strokeStyle).toEqual("rgba(0, 0, 0, 1)");
+      expect(ctx.strokeStyle).to.eql("rgba(0, 0, 0, 1)");
     });
 
     it("accepts changes", function() {
       ctx.strokeStyle = "red";
 
-      expect(ctx.strokeStyle).toEqual("rgba(255, 0, 0, 1)");
+      expect(ctx.strokeStyle).to.eql("rgba(255, 0, 0, 1)");
     });
 
     it("renders changes", function() {
       ctx.strokeStyle = "red";
       flush();
 
-      expect(getDrawOperations()).toEqual([
+      expect(getDrawOperations()).to.eql([
         ["strokeStyle", [255, 0, 0, 255]]
       ]);
     });
 
     it("ignores invalid color strings, but prints a warning", function() {
-      spyOn(console, "warn");
+      spy(console, "warn");
       ctx.strokeStyle = "red";
 
       ctx.strokeStyle = "no-such-color";
 
-      expect(ctx.strokeStyle).toEqual("rgba(255, 0, 0, 1)");
-      expect(console.warn).toHaveBeenCalledWith("Unsupported value for strokeStyle: no-such-color");
+      expect(ctx.strokeStyle).to.eql("rgba(255, 0, 0, 1)");
+      expect(console.warn).to.have.been.calledWith("Unsupported value for strokeStyle: no-such-color");
     });
 
   });
@@ -195,32 +208,32 @@ describe("Legacy CanvasContext", function() {
   describe("textAlign", function() {
 
     it("defaults to 'start'", function() {
-      expect(ctx.textAlign).toEqual("start");
+      expect(ctx.textAlign).to.eql("start");
     });
 
     it("accepts changes", function() {
       ctx.textAlign = "center";
 
-      expect(ctx.textAlign).toEqual("center");
+      expect(ctx.textAlign).to.eql("center");
     });
 
     it("renders changes", function() {
       ctx.textAlign = "center";
       flush();
 
-      expect(getDrawOperations()).toEqual([
+      expect(getDrawOperations()).to.eql([
         ["textAlign", "center"]
       ]);
     });
 
     it("ignores unknown values, but prints a warning", function() {
-      spyOn(console, "warn");
+      spy(console, "warn");
       ctx.textAlign = "center";
 
       ctx.textAlign = "foo";
 
-      expect(ctx.textAlign).toEqual("center");
-      expect(console.warn).toHaveBeenCalledWith("Unsupported value for textAlign: foo");
+      expect(ctx.textAlign).to.eql("center");
+      expect(console.warn).to.have.been.calledWith("Unsupported value for textAlign: foo");
     });
 
   });
@@ -228,32 +241,32 @@ describe("Legacy CanvasContext", function() {
   describe("textBaseline", function() {
 
     it("defaults to 'alphabetic'", function() {
-      expect(ctx.textBaseline).toEqual("alphabetic");
+      expect(ctx.textBaseline).to.eql("alphabetic");
     });
 
     it("accepts changes", function() {
       ctx.textBaseline = "middle";
 
-      expect(ctx.textBaseline).toEqual("middle");
+      expect(ctx.textBaseline).to.eql("middle");
     });
 
     it("renders changes", function() {
       ctx.textBaseline = "middle";
       flush();
 
-      expect(getDrawOperations()).toEqual([
+      expect(getDrawOperations()).to.eql([
         ["textBaseline", "middle"]
       ]);
     });
 
     it("ignores unknown values, but prints a warning", function() {
-      spyOn(console, "warn");
+      spy(console, "warn");
       ctx.textBaseline = "middle";
 
       ctx.textBaseline = "foo";
 
-      expect(ctx.textBaseline).toEqual("middle");
-      expect(console.warn).toHaveBeenCalledWith("Unsupported value for textBaseline: foo");
+      expect(ctx.textBaseline).to.eql("middle");
+      expect(console.warn).to.have.been.calledWith("Unsupported value for textBaseline: foo");
     });
 
   });
@@ -264,14 +277,14 @@ describe("Legacy CanvasContext", function() {
       ctx.strokeStyle = "red";
       ctx.save();
 
-      expect(ctx.strokeStyle).toEqual("rgba(255, 0, 0, 1)");
+      expect(ctx.strokeStyle).to.eql("rgba(255, 0, 0, 1)");
     });
 
     it("renders save operation", function() {
       ctx.save();
       flush();
 
-      expect(getDrawOperations()).toEqual([
+      expect(getDrawOperations()).to.eql([
         ["save"]
       ]);
     });
@@ -287,7 +300,7 @@ describe("Legacy CanvasContext", function() {
 
       ctx.restore();
 
-      expect(ctx.strokeStyle).toEqual("rgba(255, 0, 0, 1)");
+      expect(ctx.strokeStyle).to.eql("rgba(255, 0, 0, 1)");
     });
 
     it("restores multiple steps", function() {
@@ -299,7 +312,7 @@ describe("Legacy CanvasContext", function() {
       ctx.restore();
       ctx.restore();
 
-      expect(ctx.strokeStyle).toEqual("rgba(255, 0, 0, 1)");
+      expect(ctx.strokeStyle).to.eql("rgba(255, 0, 0, 1)");
     });
 
     it("does not change current state when stack is empty", function() {
@@ -307,14 +320,14 @@ describe("Legacy CanvasContext", function() {
 
       ctx.restore();
 
-      expect(ctx.strokeStyle).toEqual("rgba(255, 0, 0, 1)");
+      expect(ctx.strokeStyle).to.eql("rgba(255, 0, 0, 1)");
     });
 
     it("renders restore operation", function() {
       ctx.restore();
       flush();
 
-      expect(getDrawOperations()).toEqual([
+      expect(getDrawOperations()).to.eql([
         ["restore"]
       ]);
     });
@@ -333,7 +346,7 @@ describe("Legacy CanvasContext", function() {
       ctx.bezierCurveTo(50, 70, 60, 80, 70, 80);
       ctx.closePath();
 
-      expect(getDrawOperations()).not.toBeDefined();
+      expect(getDrawOperations()).to.be.undefined;
     });
 
     it("are rendered on flush", function() {
@@ -348,9 +361,9 @@ describe("Legacy CanvasContext", function() {
 
       flush();
 
-      expect(getDrawOperations().length).toEqual(8);
-      expect(getDrawOperations()[0]).toEqual(["beginPath"]);
-      expect(getDrawOperations()[7]).toEqual(["closePath"]);
+      expect(getDrawOperations().length).to.eql(8);
+      expect(getDrawOperations()[0]).to.eql(["beginPath"]);
+      expect(getDrawOperations()[7]).to.eql(["closePath"]);
     });
 
     it("are not rendered after gc disposal anymore", function() {
@@ -359,56 +372,56 @@ describe("Legacy CanvasContext", function() {
       gc.dispose();
       flush();
 
-      expect(getDrawOperations()).not.toBeDefined();
+      expect(getDrawOperations()).to.be.undefined;
     });
 
     it("moveTo", function() {
       ctx.moveTo(10, 20);
       flush();
 
-      expect(getDrawOperations()[0]).toEqual(["moveTo", 10, 20]);
+      expect(getDrawOperations()[0]).to.eql(["moveTo", 10, 20]);
     });
 
     it("lineTo", function() {
       ctx.lineTo(10, 20);
       flush();
 
-      expect(getDrawOperations()[0]).toEqual(["lineTo", 10, 20]);
+      expect(getDrawOperations()[0]).to.eql(["lineTo", 10, 20]);
     });
 
     it("rect", function() {
       ctx.rect(10, 20, 30, 40);
       flush();
 
-      expect(getDrawOperations()[0]).toEqual(["rect", 10, 20, 30, 40]);
+      expect(getDrawOperations()[0]).to.eql(["rect", 10, 20, 30, 40]);
     });
 
     it("arc", function() {
       ctx.arc(10, 20, 5, 1, 2);
       flush();
 
-      expect(getDrawOperations()[0]).toEqual(["arc", 10, 20, 5, 1, 2, false]);
+      expect(getDrawOperations()[0]).to.eql(["arc", 10, 20, 5, 1, 2, false]);
     });
 
     it("arc with anticlockwise", function() {
       ctx.arc(10, 20, 5, 1, 2, true);
       flush();
 
-      expect(getDrawOperations()[0]).toEqual(["arc", 10, 20, 5, 1, 2, true]);
+      expect(getDrawOperations()[0]).to.eql(["arc", 10, 20, 5, 1, 2, true]);
     });
 
     it("quadraticCurve", function() {
       ctx.quadraticCurveTo(10, 20, 30, 40);
       flush();
 
-      expect(getDrawOperations()[0]).toEqual(["quadraticCurveTo", 10, 20, 30, 40]);
+      expect(getDrawOperations()[0]).to.eql(["quadraticCurveTo", 10, 20, 30, 40]);
     });
 
     it("bezierCurve", function() {
       ctx.bezierCurveTo(10, 20, 30, 40, 50, 60);
       flush();
 
-      expect(getDrawOperations()[0]).toEqual(["bezierCurveTo", 10, 20, 30, 40, 50, 60]);
+      expect(getDrawOperations()[0]).to.eql(["bezierCurveTo", 10, 20, 30, 40, 50, 60]);
     });
 
   });
@@ -422,7 +435,7 @@ describe("Legacy CanvasContext", function() {
       ctx.rotate(3.14);
       ctx.scale(2, 3);
 
-      expect(getDrawOperations()).not.toBeDefined();
+      expect(getDrawOperations()).to.be.undefined;
     });
 
     it("are rendered on flush", function() {
@@ -434,44 +447,44 @@ describe("Legacy CanvasContext", function() {
 
       flush();
 
-      expect(getDrawOperations().length).toEqual(5);
-      expect(getDrawOperations()[0]).toEqual(["setTransform", 1, 2, 3, 4, 5, 6]);
-      expect(getDrawOperations()[4]).toEqual(["scale", 2, 3]);
+      expect(getDrawOperations().length).to.eql(5);
+      expect(getDrawOperations()[0]).to.eql(["setTransform", 1, 2, 3, 4, 5, 6]);
+      expect(getDrawOperations()[4]).to.eql(["scale", 2, 3]);
     });
 
     it("scale", function() {
       ctx.scale(2, 3);
       flush();
 
-      expect(getDrawOperations()[0]).toEqual(["scale", 2, 3]);
+      expect(getDrawOperations()[0]).to.eql(["scale", 2, 3]);
     });
 
     it("rotate", function() {
       ctx.rotate(3.14);
       flush();
 
-      expect(getDrawOperations()[0]).toEqual(["rotate", 3.14]);
+      expect(getDrawOperations()[0]).to.eql(["rotate", 3.14]);
     });
 
     it("translate", function() {
       ctx.translate(23, 42);
       flush();
 
-      expect(getDrawOperations()[0]).toEqual(["translate", 23, 42]);
+      expect(getDrawOperations()[0]).to.eql(["translate", 23, 42]);
     });
 
     it("transform", function() {
       ctx.transform(1, 2, 3, 4, 5, 6);
       flush();
 
-      expect(getDrawOperations()[0]).toEqual(["transform", 1, 2, 3, 4, 5, 6]);
+      expect(getDrawOperations()[0]).to.eql(["transform", 1, 2, 3, 4, 5, 6]);
     });
 
     it("setTransform", function() {
       ctx.setTransform(1, 2, 3, 4, 5, 6);
       flush();
 
-      expect(getDrawOperations()[0]).toEqual(["setTransform", 1, 2, 3, 4, 5, 6]);
+      expect(getDrawOperations()[0]).to.eql(["setTransform", 1, 2, 3, 4, 5, 6]);
     });
 
   });
@@ -482,7 +495,7 @@ describe("Legacy CanvasContext", function() {
       ctx.fill();
       flush();
 
-      expect(getDrawOperations()).toEqual([
+      expect(getDrawOperations()).to.eql([
         ["fill"]
       ]);
     });
@@ -495,7 +508,7 @@ describe("Legacy CanvasContext", function() {
       ctx.stroke();
       flush();
 
-      expect(getDrawOperations()).toEqual([
+      expect(getDrawOperations()).to.eql([
         ["stroke"]
       ]);
     });
@@ -508,7 +521,7 @@ describe("Legacy CanvasContext", function() {
       ctx.clearRect(10, 20, 30, 40);
       flush();
 
-      expect(getDrawOperations()).toEqual([
+      expect(getDrawOperations()).to.eql([
         ["clearRect", 10, 20, 30, 40]
       ]);
     });
@@ -521,7 +534,7 @@ describe("Legacy CanvasContext", function() {
       ctx.fillRect(10, 20, 30, 40);
       flush();
 
-      expect(getDrawOperations()).toEqual([
+      expect(getDrawOperations()).to.eql([
         ["beginPath"],
         ["rect", 10, 20, 30, 40],
         ["fill"]
@@ -536,7 +549,7 @@ describe("Legacy CanvasContext", function() {
       ctx.strokeRect(10, 20, 30, 40);
       flush();
 
-      expect(getDrawOperations()).toEqual([
+      expect(getDrawOperations()).to.eql([
         ["beginPath"],
         ["rect", 10, 20, 30, 40],
         ["stroke"]
@@ -551,7 +564,7 @@ describe("Legacy CanvasContext", function() {
       ctx.fillText("foo", 10, 20);
       flush();
 
-      expect(getDrawOperations()).toEqual([
+      expect(getDrawOperations()).to.eql([
         ["fillText", "foo", false, false, false, 10, 20]
       ]);
     });
@@ -564,7 +577,7 @@ describe("Legacy CanvasContext", function() {
       ctx.strokeText("foo", 10, 20);
       flush();
 
-      expect(getDrawOperations()).toEqual([
+      expect(getDrawOperations()).to.eql([
         ["strokeText", "foo", false, false, false, 10, 20]
       ]);
     });
@@ -574,7 +587,7 @@ describe("Legacy CanvasContext", function() {
   describe("measureText", function() {
 
     it("is rendered", function() {
-      expect(ctx.measureText("foo").width).toBeGreaterThan("foo".length);
+      expect(ctx.measureText("foo").width).to.be.above("foo".length);
     });
 
   });

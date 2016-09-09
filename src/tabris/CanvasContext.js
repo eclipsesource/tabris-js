@@ -1,13 +1,8 @@
 import {colorStringToArray, colorArrayToString} from "./util-colors";
 import {clone} from "./util";
 import ImageData from "./ImageData";
-import Proxy from "./Proxy";
+import GC from "./GC";
 import LegacyCanvasContext from "./LegacyCanvasContext";
-
-var GC = tabris._GC = Proxy.extend({
-  _type: "rwt.widgets.GC",
-  _properties: {parent: "proxy"}
-});
 
 export default function CanvasContext(gc) {
   this._gc = gc;

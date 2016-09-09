@@ -1,20 +1,34 @@
+import {expect, stub, spy, restore} from "../test";
+import ProxyStore from "../../src/tabris/ProxyStore";
+import NativeBridge from "../../src/tabris/NativeBridge";
+import GC from "../../src/tabris/GC";
+import NativeBridgeSpy from "./NativeBridgeSpy";
+import CanvasContext from "../../src/tabris/CanvasContext";
+import ImageData from "../../src/tabris/ImageData";
+import Canvas from "../../src/tabris/widgets/Canvas";
+import Events from "../../src/tabris/Events";
+
 describe("CanvasContext", function() {
 
-  var nativeBridge;
-  var ctx;
-  var gc;
+  let nativeBridge;
+  let ctx;
+  let gc;
 
   beforeEach(function() {
-    tabris._reset();
     nativeBridge = new NativeBridgeSpy();
-    tabris._init(nativeBridge);
-    gc = new tabris._GC();
-    nativeBridge.resetCalls();
-    ctx = new tabris.CanvasContext(gc);
-    tabris._reset();
+    global.tabris = Object.assign({
+      on: () => {},
+      off: () => {},
+      _proxies: new ProxyStore()
+    }, Events);
+    global.device = {platform: "Android"};
+    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    gc = new GC();
+    ctx = new CanvasContext(gc);
   });
 
   afterEach(function() {
+    restore();
     gc.dispose();
   });
 
@@ -23,21 +37,21 @@ describe("CanvasContext", function() {
   }
 
   function getLastPacket() {
-    var calls = nativeBridge.calls({id: gc.cid, op: "call", method: "draw"});
+    let calls = nativeBridge.calls({id: gc.cid, op: "call", method: "draw"});
     return calls.length ? calls[calls.length - 1].parameters.packedOperations : undefined;
   }
 
   function decodeLastPacket() {
-    var calls = nativeBridge.calls({id: gc.cid, op: "call", method: "draw"});
+    let calls = nativeBridge.calls({id: gc.cid, op: "call", method: "draw"});
     return calls.length ? decode(calls[calls.length - 1].parameters.packedOperations) : {};
   }
 
   function decode(packet) {
-    var values = {};
-    var opcodes = packet[0];
+    let values = {};
+    let opcodes = packet[0];
     values.ops = packet[1].map(opIndex => opcodes[opIndex]);
     ["doubles", "booleans", "strings", "ints"].forEach((name, index) => {
-      var slot = packet[index + 2];
+      let slot = packet[index + 2];
       if (slot.length) {
         values[name] = slot;
       }
@@ -47,45 +61,45 @@ describe("CanvasContext", function() {
 
   describe("getContext", function() {
 
-    var canvas;
+    let canvas;
 
     beforeEach(function() {
-      canvas = new tabris.Canvas();
+      canvas = new Canvas();
       nativeBridge.resetCalls();
     });
 
     it("returns null without \"2d\" parameter", function() {
-      expect(canvas.getContext("foo", 100, 200)).toBe(null);
+      expect(canvas.getContext("foo", 100, 200)).to.equal(null);
     });
 
     it("creates a native GC with parent", function() {
       canvas.getContext("2d", 100, 200);
 
-      var createCalls = nativeBridge.calls({op: "create", type: "rwt.widgets.GC"});
-      expect(createCalls.length).toBe(1);
-      expect(createCalls[0].properties.parent).toBe(canvas.cid);
+      let createCalls = nativeBridge.calls({op: "create", type: "rwt.widgets.GC"});
+      expect(createCalls.length).to.equal(1);
+      expect(createCalls[0].properties.parent).to.equal(canvas.cid);
     });
 
     it("creates and returns graphics context", function() {
-      var ctx = canvas.getContext("2d", 100, 200);
+      let ctx = canvas.getContext("2d", 100, 200);
 
-      expect(ctx).toEqual(jasmine.any(tabris.LegacyCanvasContext));
+      expect(ctx).to.be.an.instanceof(CanvasContext);
     });
 
     it("returns same instance everytime", function() {
-      var ctx1 = canvas.getContext("2d", 100, 200);
+      let ctx1 = canvas.getContext("2d", 100, 200);
 
-      var ctx2 = canvas.getContext("2d", 100, 200);
+      let ctx2 = canvas.getContext("2d", 100, 200);
 
-      expect(ctx2).toBe(ctx1);
+      expect(ctx2).to.equal(ctx1);
     });
 
     it("calls init", function() {
       canvas.getContext("2d", 100, 200);
 
-      var call = nativeBridge.calls({op: "call", method: "init"})[0];
-      expect(call.parameters.width).toEqual(100);
-      expect(call.parameters.height).toEqual(200);
+      let call = nativeBridge.calls({op: "call", method: "init"})[0];
+      expect(call.parameters.width).to.eql(100);
+      expect(call.parameters.height).to.eql(200);
     });
 
     it("calls init everytime", function() {
@@ -93,22 +107,22 @@ describe("CanvasContext", function() {
 
       canvas.getContext("2d", 200, 100);
 
-      var call = nativeBridge.calls({op: "call", method: "init"})[1];
-      expect(call.parameters.width).toEqual(200);
-      expect(call.parameters.height).toEqual(100);
+      let call = nativeBridge.calls({op: "call", method: "init"})[1];
+      expect(call.parameters.width).to.eql(200);
+      expect(call.parameters.height).to.eql(100);
     });
 
     it("updates width and height in canvas dummy", function() {
       ctx = canvas.getContext("2d", 100, 200);
 
-      expect(ctx.canvas.width).toEqual(100);
-      expect(ctx.canvas.height).toEqual(200);
+      expect(ctx.canvas.width).to.eql(100);
+      expect(ctx.canvas.height).to.eql(200);
     });
 
     it("allows to set canvas.style attributes", function() {
       // Used by third party libraries, ensure this doesn't crash
       ctx.canvas.style.width = 23;
-      expect(ctx.canvas.style.width).toBe(23);
+      expect(ctx.canvas.style.width).to.equal(23);
     });
 
   });
@@ -118,32 +132,32 @@ describe("CanvasContext", function() {
     describe("lineWidth", function() {
 
       it("defaults to 1", function() {
-        expect(ctx.lineWidth).toEqual(1);
+        expect(ctx.lineWidth).to.eql(1);
       });
 
       it("accepts changes", function() {
         ctx.lineWidth = 2;
 
-        expect(ctx.lineWidth).toEqual(2);
+        expect(ctx.lineWidth).to.eql(2);
       });
 
       it("renders changes", function() {
         ctx.lineWidth = 2;
         flush();
 
-        expect(decodeLastPacket()).toEqual({ops: ["lineWidth"], doubles: [2]});
+        expect(decodeLastPacket()).to.eql({ops: ["lineWidth"], doubles: [2]});
       });
 
       it("ignores zero and negative values, but prints a warning", function() {
-        spyOn(console, "warn");
+        spy(console, "warn");
         ctx.lineWidth = 3;
 
         ctx.lineWidth = 0;
         ctx.lineWidth = -1;
 
-        expect(ctx.lineWidth).toEqual(3);
-        expect(console.warn).toHaveBeenCalledWith("Unsupported value for lineWidth: 0");
-        expect(console.warn).toHaveBeenCalledWith("Unsupported value for lineWidth: -1");
+        expect(ctx.lineWidth).to.eql(3);
+        expect(console.warn).to.have.been.calledWith("Unsupported value for lineWidth: 0");
+        expect(console.warn).to.have.been.calledWith("Unsupported value for lineWidth: -1");
       });
 
     });
@@ -151,30 +165,30 @@ describe("CanvasContext", function() {
     describe("lineCap", function() {
 
       it("defaults to 'butt'", function() {
-        expect(ctx.lineCap).toEqual("butt");
+        expect(ctx.lineCap).to.eql("butt");
       });
 
       it("accepts changes", function() {
         ctx.lineCap = "round";
 
-        expect(ctx.lineCap).toEqual("round");
+        expect(ctx.lineCap).to.eql("round");
       });
 
       it("renders changes", function() {
         ctx.lineCap = "round";
         flush();
 
-        expect(decodeLastPacket()).toEqual({ops: ["lineCap"], strings: ["round"]});
+        expect(decodeLastPacket()).to.eql({ops: ["lineCap"], strings: ["round"]});
       });
 
       it("ignores unknown values, but prints a warning", function() {
-        spyOn(console, "warn");
+        spy(console, "warn");
         ctx.lineCap = "round";
 
         ctx.lineCap = "foo";
 
-        expect(ctx.lineCap).toEqual("round");
-        expect(console.warn).toHaveBeenCalledWith("Unsupported value for lineCap: foo");
+        expect(ctx.lineCap).to.eql("round");
+        expect(console.warn).to.have.been.calledWith("Unsupported value for lineCap: foo");
       });
 
     });
@@ -182,30 +196,30 @@ describe("CanvasContext", function() {
     describe("lineJoin", function() {
 
       it("defaults to 'miter'", function() {
-        expect(ctx.lineJoin).toEqual("miter");
+        expect(ctx.lineJoin).to.eql("miter");
       });
 
       it("accepts changes", function() {
         ctx.lineJoin = "round";
 
-        expect(ctx.lineJoin).toEqual("round");
+        expect(ctx.lineJoin).to.eql("round");
       });
 
       it("renders changes", function() {
         ctx.lineJoin = "round";
         flush();
 
-        expect(decodeLastPacket()).toEqual({ops: ["lineJoin"], strings: ["round"]});
+        expect(decodeLastPacket()).to.eql({ops: ["lineJoin"], strings: ["round"]});
       });
 
       it("ignores unknown values, but prints a warning", function() {
-        spyOn(console, "warn");
+        spy(console, "warn");
         ctx.lineJoin = "round";
 
         ctx.lineJoin = "foo";
 
-        expect(ctx.lineJoin).toEqual("round");
-        expect(console.warn).toHaveBeenCalledWith("Unsupported value for lineJoin: foo");
+        expect(ctx.lineJoin).to.eql("round");
+        expect(console.warn).to.have.been.calledWith("Unsupported value for lineJoin: foo");
       });
 
     });
@@ -213,30 +227,30 @@ describe("CanvasContext", function() {
     describe("fillStyle", function() {
 
       it("defaults to black", function() {
-        expect(ctx.fillStyle).toEqual("rgba(0, 0, 0, 1)");
+        expect(ctx.fillStyle).to.eql("rgba(0, 0, 0, 1)");
       });
 
       it("accepts changes", function() {
         ctx.fillStyle = "red";
 
-        expect(ctx.fillStyle).toEqual("rgba(255, 0, 0, 1)");
+        expect(ctx.fillStyle).to.eql("rgba(255, 0, 0, 1)");
       });
 
       it("renders changes", function() {
         ctx.fillStyle = "red";
         flush();
 
-        expect(decodeLastPacket()).toEqual({ops: ["fillStyle"], ints: [255, 0, 0, 255]});
+        expect(decodeLastPacket()).to.eql({ops: ["fillStyle"], ints: [255, 0, 0, 255]});
       });
 
       it("ignores invalid color strings, but prints a warning", function() {
-        spyOn(console, "warn");
+        spy(console, "warn");
         ctx.fillStyle = "red";
 
         ctx.fillStyle = "no-such-color";
 
-        expect(ctx.fillStyle).toEqual("rgba(255, 0, 0, 1)");
-        expect(console.warn).toHaveBeenCalledWith("Unsupported value for fillStyle: no-such-color");
+        expect(ctx.fillStyle).to.eql("rgba(255, 0, 0, 1)");
+        expect(console.warn).to.have.been.calledWith("Unsupported value for fillStyle: no-such-color");
       });
 
     });
@@ -244,30 +258,30 @@ describe("CanvasContext", function() {
     describe("strokeStyle", function() {
 
       it("defaults to black", function() {
-        expect(ctx.strokeStyle).toEqual("rgba(0, 0, 0, 1)");
+        expect(ctx.strokeStyle).to.eql("rgba(0, 0, 0, 1)");
       });
 
       it("accepts changes", function() {
         ctx.strokeStyle = "red";
 
-        expect(ctx.strokeStyle).toEqual("rgba(255, 0, 0, 1)");
+        expect(ctx.strokeStyle).to.eql("rgba(255, 0, 0, 1)");
       });
 
       it("renders changes", function() {
         ctx.strokeStyle = "red";
         flush();
 
-        expect(decodeLastPacket()).toEqual({ops: ["strokeStyle"], ints: [255, 0, 0, 255]});
+        expect(decodeLastPacket()).to.eql({ops: ["strokeStyle"], ints: [255, 0, 0, 255]});
       });
 
       it("ignores invalid color strings, but prints a warning", function() {
-        spyOn(console, "warn");
+        spy(console, "warn");
         ctx.strokeStyle = "red";
 
         ctx.strokeStyle = "no-such-color";
 
-        expect(ctx.strokeStyle).toEqual("rgba(255, 0, 0, 1)");
-        expect(console.warn).toHaveBeenCalledWith("Unsupported value for strokeStyle: no-such-color");
+        expect(ctx.strokeStyle).to.eql("rgba(255, 0, 0, 1)");
+        expect(console.warn).to.have.been.calledWith("Unsupported value for strokeStyle: no-such-color");
       });
 
     });
@@ -275,30 +289,30 @@ describe("CanvasContext", function() {
     describe("textAlign", function() {
 
       it("defaults to 'start'", function() {
-        expect(ctx.textAlign).toEqual("start");
+        expect(ctx.textAlign).to.eql("start");
       });
 
       it("accepts changes", function() {
         ctx.textAlign = "center";
 
-        expect(ctx.textAlign).toEqual("center");
+        expect(ctx.textAlign).to.eql("center");
       });
 
       it("renders changes", function() {
         ctx.textAlign = "center";
         flush();
 
-        expect(decodeLastPacket()).toEqual({ops: ["textAlign"], strings: ["center"]});
+        expect(decodeLastPacket()).to.eql({ops: ["textAlign"], strings: ["center"]});
       });
 
       it("ignores unknown values, but prints a warning", function() {
-        spyOn(console, "warn");
+        spy(console, "warn");
         ctx.textAlign = "center";
 
         ctx.textAlign = "foo";
 
-        expect(ctx.textAlign).toEqual("center");
-        expect(console.warn).toHaveBeenCalledWith("Unsupported value for textAlign: foo");
+        expect(ctx.textAlign).to.eql("center");
+        expect(console.warn).to.have.been.calledWith("Unsupported value for textAlign: foo");
       });
 
     });
@@ -306,30 +320,30 @@ describe("CanvasContext", function() {
     describe("textBaseline", function() {
 
       it("defaults to 'alphabetic'", function() {
-        expect(ctx.textBaseline).toEqual("alphabetic");
+        expect(ctx.textBaseline).to.eql("alphabetic");
       });
 
       it("accepts changes", function() {
         ctx.textBaseline = "middle";
 
-        expect(ctx.textBaseline).toEqual("middle");
+        expect(ctx.textBaseline).to.eql("middle");
       });
 
       it("renders changes", function() {
         ctx.textBaseline = "middle";
         flush();
 
-        expect(decodeLastPacket()).toEqual({ops: ["textBaseline"], strings: ["middle"]});
+        expect(decodeLastPacket()).to.eql({ops: ["textBaseline"], strings: ["middle"]});
       });
 
       it("ignores unknown values, but prints a warning", function() {
-        spyOn(console, "warn");
+        spy(console, "warn");
         ctx.textBaseline = "middle";
 
         ctx.textBaseline = "foo";
 
-        expect(ctx.textBaseline).toEqual("middle");
-        expect(console.warn).toHaveBeenCalledWith("Unsupported value for textBaseline: foo");
+        expect(ctx.textBaseline).to.eql("middle");
+        expect(console.warn).to.have.been.calledWith("Unsupported value for textBaseline: foo");
       });
 
     });
@@ -342,14 +356,14 @@ describe("CanvasContext", function() {
       ctx.strokeStyle = "red";
       ctx.save();
 
-      expect(ctx.strokeStyle).toEqual("rgba(255, 0, 0, 1)");
+      expect(ctx.strokeStyle).to.eql("rgba(255, 0, 0, 1)");
     });
 
     it("renders save operation", function() {
       ctx.save();
       flush();
 
-      expect(decodeLastPacket()).toEqual({ops: ["save"]});
+      expect(decodeLastPacket()).to.eql({ops: ["save"]});
     });
 
   });
@@ -363,7 +377,7 @@ describe("CanvasContext", function() {
 
       ctx.restore();
 
-      expect(ctx.strokeStyle).toEqual("rgba(255, 0, 0, 1)");
+      expect(ctx.strokeStyle).to.eql("rgba(255, 0, 0, 1)");
     });
 
     it("restores multiple steps", function() {
@@ -375,7 +389,7 @@ describe("CanvasContext", function() {
       ctx.restore();
       ctx.restore();
 
-      expect(ctx.strokeStyle).toEqual("rgba(255, 0, 0, 1)");
+      expect(ctx.strokeStyle).to.eql("rgba(255, 0, 0, 1)");
     });
 
     it("does not change current state when stack is empty", function() {
@@ -383,14 +397,14 @@ describe("CanvasContext", function() {
 
       ctx.restore();
 
-      expect(ctx.strokeStyle).toEqual("rgba(255, 0, 0, 1)");
+      expect(ctx.strokeStyle).to.eql("rgba(255, 0, 0, 1)");
     });
 
     it("renders restore operation", function() {
       ctx.restore();
       flush();
 
-      expect(decodeLastPacket()).toEqual({ops: ["restore"]});
+      expect(decodeLastPacket()).to.eql({ops: ["restore"]});
     });
 
   });
@@ -407,7 +421,7 @@ describe("CanvasContext", function() {
       ctx.bezierCurveTo(50, 70, 60, 80, 70, 80);
       ctx.closePath();
 
-      expect(getLastPacket()).not.toBeDefined();
+      expect(getLastPacket()).to.be.undefined;
     });
 
     it("are rendered on flush", function() {
@@ -422,7 +436,7 @@ describe("CanvasContext", function() {
 
       flush();
 
-      expect(decodeLastPacket().ops).toEqual(["beginPath", "moveTo", "lineTo", "rect", "arc",
+      expect(decodeLastPacket().ops).to.eql(["beginPath", "moveTo", "lineTo", "rect", "arc",
                                               "quadraticCurveTo", "bezierCurveTo", "closePath"]);
     });
 
@@ -432,7 +446,7 @@ describe("CanvasContext", function() {
       gc.dispose();
       flush();
 
-      expect(getLastPacket()).not.toBeDefined();
+      expect(getLastPacket()).to.be.undefined;
     });
 
   });
@@ -446,7 +460,7 @@ describe("CanvasContext", function() {
       ctx.rotate(3.14);
       ctx.scale(2, 3);
 
-      expect(getLastPacket()).not.toBeDefined();
+      expect(getLastPacket()).to.be.undefined;
     });
 
     it("are rendered on flush", function() {
@@ -458,7 +472,7 @@ describe("CanvasContext", function() {
 
       flush();
 
-      expect(decodeLastPacket().ops).toEqual(["setTransform", "transform", "translate",
+      expect(decodeLastPacket().ops).to.eql(["setTransform", "transform", "translate",
                                               "rotate", "scale"]);
     });
 
@@ -471,8 +485,8 @@ describe("CanvasContext", function() {
       ctx.moveTo(30, 40);
       flush();
 
-      expect(getLastPacket()[0]).toEqual(["lineTo", "moveTo"]);
-      expect(getLastPacket()[1]).toEqual([0, 1]);
+      expect(getLastPacket()[0]).to.eql(["lineTo", "moveTo"]);
+      expect(getLastPacket()[1]).to.eql([0, 1]);
     });
 
     it("are not rendered again", function() {
@@ -485,8 +499,8 @@ describe("CanvasContext", function() {
       ctx.moveTo(70, 80);
       flush();
 
-      expect(getLastPacket()[0]).toEqual([]);
-      expect(getLastPacket()[1]).toEqual([0, 1]);
+      expect(getLastPacket()[0]).to.eql([]);
+      expect(getLastPacket()[1]).to.eql([0, 1]);
     });
 
     it("are appended to existing operations", function() {
@@ -498,8 +512,8 @@ describe("CanvasContext", function() {
       ctx.rect(10, 20, 30, 40);
       flush();
 
-      expect(getLastPacket()[0]).toEqual(["rect"]);
-      expect(getLastPacket()[1]).toEqual([2]);
+      expect(getLastPacket()[0]).to.eql(["rect"]);
+      expect(getLastPacket()[1]).to.eql([2]);
     });
 
   });
@@ -510,13 +524,13 @@ describe("CanvasContext", function() {
       ctx.scale(2, 3);
       flush();
 
-      expect(decodeLastPacket()).toEqual({ops: ["scale"], doubles: [2, 3]});
+      expect(decodeLastPacket()).to.eql({ops: ["scale"], doubles: [2, 3]});
     });
 
     it("raises error if parameters missing", function() {
       expect(() => {
         ctx.scale(2);
-      }).toThrowError("Not enough arguments to CanvasContext.scale");
+      }).to.throw("Not enough arguments to CanvasContext.scale");
     });
 
   });
@@ -527,13 +541,13 @@ describe("CanvasContext", function() {
       ctx.rotate(3.14);
       flush();
 
-      expect(decodeLastPacket()).toEqual({ops: ["rotate"], doubles: [3.14]});
+      expect(decodeLastPacket()).to.eql({ops: ["rotate"], doubles: [3.14]});
     });
 
     it("raises error if parameters missing", function() {
       expect(() => {
         ctx.rotate();
-      }).toThrowError("Not enough arguments to CanvasContext.rotate");
+      }).to.throw("Not enough arguments to CanvasContext.rotate");
     });
 
   });
@@ -544,13 +558,13 @@ describe("CanvasContext", function() {
       ctx.translate(23, 42);
       flush();
 
-      expect(decodeLastPacket()).toEqual({ops: ["translate"], doubles: [23, 42]});
+      expect(decodeLastPacket()).to.eql({ops: ["translate"], doubles: [23, 42]});
     });
 
     it("raises error if parameters missing", function() {
       expect(() => {
         ctx.translate(23);
-      }).toThrowError("Not enough arguments to CanvasContext.translate");
+      }).to.throw("Not enough arguments to CanvasContext.translate");
     });
 
   });
@@ -561,13 +575,13 @@ describe("CanvasContext", function() {
       ctx.transform(1, 2, 3, 4, 5, 6);
       flush();
 
-      expect(decodeLastPacket()).toEqual({ops: ["transform"], doubles: [1, 2, 3, 4, 5, 6]});
+      expect(decodeLastPacket()).to.eql({ops: ["transform"], doubles: [1, 2, 3, 4, 5, 6]});
     });
 
     it("raises error if parameters missing", function() {
       expect(() => {
         ctx.transform();
-      }).toThrowError("Not enough arguments to CanvasContext.transform");
+      }).to.throw("Not enough arguments to CanvasContext.transform");
     });
 
   });
@@ -578,13 +592,13 @@ describe("CanvasContext", function() {
       ctx.setTransform(1, 2, 3, 4, 5, 6);
       flush();
 
-      expect(decodeLastPacket()).toEqual({ops: ["setTransform"], doubles: [1, 2, 3, 4, 5, 6]});
+      expect(decodeLastPacket()).to.eql({ops: ["setTransform"], doubles: [1, 2, 3, 4, 5, 6]});
     });
 
     it("raises error if parameters missing", function() {
       expect(() => {
         ctx.setTransform();
-      }).toThrowError("Not enough arguments to CanvasContext.setTransform");
+      }).to.throw("Not enough arguments to CanvasContext.setTransform");
     });
 
   });
@@ -592,7 +606,7 @@ describe("CanvasContext", function() {
   describe("measureText", function() {
 
     it("is rendered", function() {
-      expect(ctx.measureText("foo").width).toBeGreaterThan("foo".length);
+      expect(ctx.measureText("foo").width).to.be.above("foo".length);
     });
 
   });
@@ -603,7 +617,7 @@ describe("CanvasContext", function() {
       ctx.beginPath();
       flush();
 
-      expect(decodeLastPacket()).toEqual({ops: ["beginPath"]});
+      expect(decodeLastPacket()).to.eql({ops: ["beginPath"]});
     });
 
   });
@@ -614,7 +628,7 @@ describe("CanvasContext", function() {
       ctx.closePath();
       flush();
 
-      expect(decodeLastPacket()).toEqual({ops: ["closePath"]});
+      expect(decodeLastPacket()).to.eql({ops: ["closePath"]});
     });
 
   });
@@ -625,13 +639,13 @@ describe("CanvasContext", function() {
       ctx.lineTo(10, 20);
       flush();
 
-      expect(decodeLastPacket()).toEqual({ops: ["lineTo"], doubles: [10, 20]});
+      expect(decodeLastPacket()).to.eql({ops: ["lineTo"], doubles: [10, 20]});
     });
 
     it("raises error if parameters missing", function() {
       expect(() => {
         ctx.lineTo(1);
-      }).toThrowError("Not enough arguments to CanvasContext.lineTo");
+      }).to.throw("Not enough arguments to CanvasContext.lineTo");
     });
 
   });
@@ -642,13 +656,13 @@ describe("CanvasContext", function() {
       ctx.moveTo(10, 20);
       flush();
 
-      expect(decodeLastPacket()).toEqual({ops: ["moveTo"], doubles: [10, 20]});
+      expect(decodeLastPacket()).to.eql({ops: ["moveTo"], doubles: [10, 20]});
     });
 
     it("raises error if parameters missing", function() {
       expect(() => {
         ctx.moveTo(1);
-      }).toThrowError("Not enough arguments to CanvasContext.moveTo");
+      }).to.throw("Not enough arguments to CanvasContext.moveTo");
     });
 
   });
@@ -659,13 +673,13 @@ describe("CanvasContext", function() {
       ctx.bezierCurveTo(1, 2, 3, 4, 5, 6);
       flush();
 
-      expect(decodeLastPacket()).toEqual({ops: ["bezierCurveTo"], doubles: [1, 2, 3, 4, 5, 6]});
+      expect(decodeLastPacket()).to.eql({ops: ["bezierCurveTo"], doubles: [1, 2, 3, 4, 5, 6]});
     });
 
     it("raises error if parameters missing", function() {
       expect(() => {
         ctx.bezierCurveTo(1, 2, 3, 4, 5);
-      }).toThrowError("Not enough arguments to CanvasContext.bezierCurveTo");
+      }).to.throw("Not enough arguments to CanvasContext.bezierCurveTo");
     });
 
   });
@@ -676,13 +690,13 @@ describe("CanvasContext", function() {
       ctx.quadraticCurveTo(1, 2, 3, 4);
       flush();
 
-      expect(decodeLastPacket()).toEqual({ops: ["quadraticCurveTo"], doubles: [1, 2, 3, 4]});
+      expect(decodeLastPacket()).to.eql({ops: ["quadraticCurveTo"], doubles: [1, 2, 3, 4]});
     });
 
     it("raises error if parameters missing", function() {
       expect(() => {
         ctx.quadraticCurveTo(1, 2, 3);
-      }).toThrowError("Not enough arguments to CanvasContext.quadraticCurveTo");
+      }).to.throw("Not enough arguments to CanvasContext.quadraticCurveTo");
     });
 
   });
@@ -693,20 +707,20 @@ describe("CanvasContext", function() {
       ctx.arc(1, 2, 3, 4, 5);
       flush();
 
-      expect(decodeLastPacket()).toEqual({ops: ["arc"], doubles: [1, 2, 3, 4, 5], booleans: [false]});
+      expect(decodeLastPacket()).to.eql({ops: ["arc"], doubles: [1, 2, 3, 4, 5], booleans: [false]});
     });
 
     it("is rendered with counterclockwise parameter", function() {
       ctx.arc(1, 2, 3, 4, 5, true);
       flush();
 
-      expect(decodeLastPacket()).toEqual({ops: ["arc"], doubles: [1, 2, 3, 4, 5], booleans: [true]});
+      expect(decodeLastPacket()).to.eql({ops: ["arc"], doubles: [1, 2, 3, 4, 5], booleans: [true]});
     });
 
     it("raises error if parameters missing", function() {
       expect(() => {
         ctx.arc(1, 2, 3, 4);
-      }).toThrowError("Not enough arguments to CanvasContext.arc");
+      }).to.throw("Not enough arguments to CanvasContext.arc");
     });
 
   });
@@ -717,13 +731,13 @@ describe("CanvasContext", function() {
       ctx.rect(1, 2, 3, 4);
       flush();
 
-      expect(decodeLastPacket()).toEqual({ops: ["rect"], doubles: [1, 2, 3, 4]});
+      expect(decodeLastPacket()).to.eql({ops: ["rect"], doubles: [1, 2, 3, 4]});
     });
 
     it("raises error if parameters missing", function() {
       expect(() => {
         ctx.rect(1, 2, 3);
-      }).toThrowError("Not enough arguments to CanvasContext.rect");
+      }).to.throw("Not enough arguments to CanvasContext.rect");
     });
 
   });
@@ -734,7 +748,7 @@ describe("CanvasContext", function() {
       ctx.fill();
       flush();
 
-      expect(decodeLastPacket()).toEqual({ops: ["fill"]});
+      expect(decodeLastPacket()).to.eql({ops: ["fill"]});
     });
 
   });
@@ -745,7 +759,7 @@ describe("CanvasContext", function() {
       ctx.stroke();
       flush();
 
-      expect(decodeLastPacket()).toEqual({ops: ["stroke"]});
+      expect(decodeLastPacket()).to.eql({ops: ["stroke"]});
     });
 
   });
@@ -756,13 +770,13 @@ describe("CanvasContext", function() {
       ctx.clearRect(10, 20, 30, 40);
       flush();
 
-      expect(decodeLastPacket()).toEqual({ops: ["clearRect"], doubles: [10, 20, 30, 40]});
+      expect(decodeLastPacket()).to.eql({ops: ["clearRect"], doubles: [10, 20, 30, 40]});
     });
 
     it("raises error if parameters missing", function() {
       expect(() => {
         ctx.clearRect(1, 2, 3);
-      }).toThrowError("Not enough arguments to CanvasContext.clearRect");
+      }).to.throw("Not enough arguments to CanvasContext.clearRect");
     });
 
   });
@@ -773,7 +787,7 @@ describe("CanvasContext", function() {
       ctx.fillRect(10, 20, 30, 40);
       flush();
 
-      expect(decodeLastPacket()).toEqual({
+      expect(decodeLastPacket()).to.eql({
         ops: ["beginPath", "rect", "fill"],
         doubles: [10, 20, 30, 40]
       });
@@ -782,7 +796,7 @@ describe("CanvasContext", function() {
     it("raises error if parameters missing", function() {
       expect(() => {
         ctx.fillRect(1, 2, 3);
-      }).toThrowError("Not enough arguments to CanvasContext.fillRect");
+      }).to.throw("Not enough arguments to CanvasContext.fillRect");
     });
 
   });
@@ -793,7 +807,7 @@ describe("CanvasContext", function() {
       ctx.strokeRect(10, 20, 30, 40);
       flush();
 
-      expect(decodeLastPacket()).toEqual({
+      expect(decodeLastPacket()).to.eql({
         ops: ["beginPath", "rect", "stroke"],
         doubles: [10, 20, 30, 40]
       });
@@ -802,7 +816,7 @@ describe("CanvasContext", function() {
     it("raises error if parameters missing", function() {
       expect(() => {
         ctx.strokeRect(1, 2, 3);
-      }).toThrowError("Not enough arguments to CanvasContext.strokeRect");
+      }).to.throw("Not enough arguments to CanvasContext.strokeRect");
     });
 
   });
@@ -813,7 +827,7 @@ describe("CanvasContext", function() {
       ctx.fillText("foo", 10, 20);
       flush();
 
-      expect(decodeLastPacket()).toEqual({
+      expect(decodeLastPacket()).to.eql({
         ops: ["fillText"],
         doubles: [10, 20],
         booleans: [false, false, false],
@@ -824,7 +838,7 @@ describe("CanvasContext", function() {
     it("raises error if parameters missing", function() {
       expect(() => {
         ctx.fillText("foo", 2);
-      }).toThrowError("Not enough arguments to CanvasContext.fillText");
+      }).to.throw("Not enough arguments to CanvasContext.fillText");
     });
 
   });
@@ -835,7 +849,7 @@ describe("CanvasContext", function() {
       ctx.strokeText("foo", 10, 20);
       flush();
 
-      expect(decodeLastPacket()).toEqual({
+      expect(decodeLastPacket()).to.eql({
         ops: ["strokeText"],
         doubles: [10, 20],
         booleans: [false, false, false],
@@ -846,7 +860,7 @@ describe("CanvasContext", function() {
     it("raises error if parameters missing", function() {
       expect(() => {
         ctx.strokeText("foo", 2);
-      }).toThrowError("Not enough arguments to CanvasContext.strokeText");
+      }).to.throw("Not enough arguments to CanvasContext.strokeText");
     });
 
   });
@@ -854,46 +868,46 @@ describe("CanvasContext", function() {
   describe("createImageData", function() {
 
     it("creates ImageData from width and height", function() {
-      var result = ctx.createImageData(10, 20);
+      let result = ctx.createImageData(10, 20);
 
-      expect(result).toEqual(jasmine.any(tabris.ImageData));
-      expect(result.width).toBe(10);
-      expect(result.height).toBe(20);
+      expect(result).to.be.an.instanceof(ImageData);
+      expect(result.width).to.equal(10);
+      expect(result.height).to.equal(20);
     });
 
     it("creates ImageData from ImageData", function() {
-      var array = new Uint8ClampedArray(60).fill(128);
-      var input = new tabris.ImageData(array, 3, 5);
+      let array = new Uint8ClampedArray(60).fill(128);
+      let input = new ImageData(array, 3, 5);
 
-      var result = ctx.createImageData(input);
+      let result = ctx.createImageData(input);
 
-      expect(result).toEqual(jasmine.any(tabris.ImageData));
-      expect(result.width).toBe(3);
-      expect(result.height).toBe(5);
-      expect(result.data[0]).toBe(0);
+      expect(result).to.be.an.instanceof(ImageData);
+      expect(result.width).to.equal(3);
+      expect(result.height).to.equal(5);
+      expect(result.data[0]).to.equal(0);
     });
 
     it("raises error if parameters missing", function() {
       expect(function() {
         ctx.createImageData(10);
-      }).toThrowError("Not enough arguments to CanvasContext.createImageData");
+      }).to.throw("Not enough arguments to CanvasContext.createImageData");
     });
 
   });
 
   describe("getImageData", function() {
 
-    var array;
+    let array;
 
     beforeEach(function() {
       array = new Uint8ClampedArray(60);
-      spyOn(nativeBridge, "call").and.returnValue(array);
+      stub(nativeBridge, "call").returns(array);
     });
 
     it("is rendered", function() {
       ctx.getImageData(10, 20, 5, 3);
 
-      expect(nativeBridge.call).toHaveBeenCalledWith(gc.cid, "getImageData", {
+      expect(nativeBridge.call).to.have.been.calledWith(gc.cid, "getImageData", {
         x: 10,
         y: 20,
         width: 5,
@@ -902,32 +916,32 @@ describe("CanvasContext", function() {
     });
 
     it("returns value from native", function() {
-      var result = ctx.getImageData(10, 20, 5, 3);
+      let result = ctx.getImageData(10, 20, 5, 3);
 
-      expect(result.data).toEqual(array);
+      expect(result.data).to.eql(array);
     });
 
     it("raises error if parameters missing", function() {
       expect(function() {
         ctx.getImageData(10, 20, 100);
-      }).toThrowError("Not enough arguments to CanvasContext.getImageData");
+      }).to.throw("Not enough arguments to CanvasContext.getImageData");
     });
 
   });
 
   describe("putImageData", function() {
 
-    var imageData;
+    let imageData;
 
     beforeEach(function() {
-      imageData = new tabris.ImageData(3, 5);
-      spyOn(nativeBridge, "call");
+      imageData = new ImageData(3, 5);
+      spy(nativeBridge, "call");
     });
 
     it("is rendered", function() {
       ctx.putImageData(imageData, 10, 20);
 
-      expect(nativeBridge.call).toHaveBeenCalledWith(gc.cid, "putImageData", {
+      expect(nativeBridge.call).to.have.been.calledWith(gc.cid, "putImageData", {
         data: imageData.data,
         x: 10,
         y: 20,
@@ -939,7 +953,7 @@ describe("CanvasContext", function() {
     it("raises error if parameters missing", function() {
       expect(() => {
         ctx.putImageData(imageData, 10);
-      }).toThrowError("Not enough arguments to CanvasContext.putImageData");
+      }).to.throw("Not enough arguments to CanvasContext.putImageData");
     });
 
   });
