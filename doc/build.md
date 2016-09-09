@@ -87,8 +87,8 @@ To add a set of Apache Cordova Plugins you only need to add them to the `config.
     xmlns="http://www.w3.org/ns/widgets"
     xmlns:cdv="http://cordova.apache.org/ns/1.0">
     ...
-  <plugin name="cordova-plugin-camera" version="1.2.0" />
-  <plugin name="cordova-plugin-dialogs" version="1.1.1" />
+  <plugin name="cordova-plugin-camera" spec="1.2.0" />
+  <plugin name="cordova-plugin-dialogs" spec="1.1.1" />
 </widget>
 ```
 
