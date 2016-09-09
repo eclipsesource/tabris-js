@@ -1,11 +1,12 @@
 import Proxy from "./Proxy";
 import Widget from "./Widget";
+import Page from "./widgets/Page";
 
 var Display = Proxy.extend({
   _type: "rwt.widgets.Display"
 });
 
-tabris._Shell = Widget.extend({
+var Shell = Widget.extend({
   _type: "rwt.widgets.Shell",
   _events: {Close: true},
   _properties: {
@@ -15,7 +16,7 @@ tabris._Shell = Widget.extend({
   }
 });
 
-tabris._UI = Widget.extend({
+export default Widget.extend({
 
   _type: "tabris.UI",
 
@@ -25,7 +26,7 @@ tabris._UI = Widget.extend({
 
   _create: function() {
     new Display();
-    this._shell = new tabris._Shell({
+    this._shell = new Shell({
       style: ["NO_TRIM"],
       mode: "maximized",
       active: true,
@@ -66,7 +67,7 @@ tabris._UI = Widget.extend({
     activePage: {
       access: {
         set: function(name, page, options) {
-          if (!(page instanceof tabris.Page)) {
+          if (!(page instanceof Page)) {
             throw new Error("Value for activePage is not a page");
           }
           this._nativeSet("activePage", page._page.cid);
@@ -197,6 +198,3 @@ tabris._UI = Widget.extend({
 
 });
 
-tabris.load(function() {
-  tabris.ui = new tabris._UI();
-});

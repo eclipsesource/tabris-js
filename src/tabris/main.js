@@ -10,6 +10,7 @@ import "./WebStorage.js";
 import "./XMLHttpRequest.js";
 
 import App from "./App";
+import UI from "./UI";
 import ImageData from "./ImageData";
 import {addDOMDocument} from "./DOMDocument";
 import {addWindowTimerMethods} from "./WindowTimers";
@@ -51,6 +52,7 @@ addDOMDocument(window);
 addWindowTimerMethods(window);
 tabris.load(function() {
   tabris.app = new App();
+  tabris.ui = new UI();
   tabris.Storage = Storage;
   tabris.localStorage = createStorage();
   if (device.platform === "iOS") {
@@ -113,3 +115,4 @@ tabris.NativeBridge = NativeBridge;
 tabris.Proxy = Proxy;
 tabris.ProxyCollection = ProxyCollection;
 tabris.PropertyTypes = types;
+tabris._UI = UI;

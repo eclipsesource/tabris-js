@@ -1,40 +1,53 @@
+import {expect, spy, restore} from "../test";
+import Page from "../../src/tabris/widgets/Page";
+import ProxyStore from "../../src/tabris/ProxyStore";
+import NativeBridge from "../../src/tabris/NativeBridge";
+import NativeBridgeSpy from "./NativeBridgeSpy";
+import UI from "../../src/tabris/UI";
+
 describe("UI", function() {
 
-  var nativeBridge;
-  var ui;
-  var shellId;
+  let nativeBridge;
+  let ui;
+  let shellId;
 
   beforeEach(function() {
     nativeBridge = new NativeBridgeSpy();
-    tabris._reset();
-    tabris._init(nativeBridge);
-    ui = new tabris._UI();
+    global.tabris = {
+      on: () => {},
+      _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param),
+      _proxies: new ProxyStore()
+    };
+    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    ui = new UI();
   });
+
+  afterEach(restore);
 
   describe("creation", function() {
 
     it("creates Display, Shell, and tabris UI", function() {
-      var createCalls = nativeBridge.calls({op: "create"});
-      expect(createCalls[0].type).toBe("rwt.widgets.Display");
-      expect(createCalls[1].type).toBe("rwt.widgets.Shell");
-      expect(createCalls[2].type).toBe("tabris.UI");
+      let createCalls = nativeBridge.calls({op: "create"});
+      expect(createCalls[0].type).to.equal("rwt.widgets.Display");
+      expect(createCalls[1].type).to.equal("rwt.widgets.Shell");
+      expect(createCalls[2].type).to.equal("tabris.UI");
     });
 
     it("created Shell is active, visible, and maximized", function() {
-      var shellCreate = nativeBridge.calls({op: "create", type: "rwt.widgets.Shell"})[0];
-      expect(shellCreate.properties.active).toBe(true);
-      expect(shellCreate.properties.visible).toBe(true);
-      expect(shellCreate.properties.mode).toBe("maximized");
+      let shellCreate = nativeBridge.calls({op: "create", type: "rwt.widgets.Shell"})[0];
+      expect(shellCreate.properties.active).to.equal(true);
+      expect(shellCreate.properties.visible).to.equal(true);
+      expect(shellCreate.properties.mode).to.equal("maximized");
     });
 
     it("created tabris UI refers to Shell", function() {
-      var shellCreate = nativeBridge.calls({op: "create", type: "rwt.widgets.Shell"})[0];
-      var tabrisUiCreate = nativeBridge.calls({op: "create", type: "tabris.UI"})[0];
-      expect(tabrisUiCreate.properties.shell).toBe(shellCreate.id);
+      let shellCreate = nativeBridge.calls({op: "create", type: "rwt.widgets.Shell"})[0];
+      let tabrisUiCreate = nativeBridge.calls({op: "create", type: "tabris.UI"})[0];
+      expect(tabrisUiCreate.properties.shell).to.equal(shellCreate.id);
     });
 
     it("listens on tabris UI ShowPreviousPage event", function() {
-      expect(nativeBridge.calls({op: "listen", id: ui.cid, event: "ShowPreviousPage"}).length).toBe(1);
+      expect(nativeBridge.calls({op: "listen", id: ui.cid, event: "ShowPreviousPage"}).length).to.equal(1);
     });
 
   });
@@ -59,7 +72,7 @@ describe("UI", function() {
 
       it("sends a Shell destroy", function() {
         // See https://github.com/eclipsesource/tabris-js/issues/28
-        expect(nativeBridge.calls({id: shellId, op: "destroy"}).length).toBe(1);
+        expect(nativeBridge.calls({id: shellId, op: "destroy"}).length).to.equal(1);
       });
 
     });
@@ -69,92 +82,91 @@ describe("UI", function() {
       it("sets win_toolbarTheme to valid value", function() {
         ui.set("win_toolbarTheme", value);
 
-        var call = nativeBridge.calls({op: "set"})[0];
-        expect(call.properties.win_toolbarTheme).toBe(value);
+        let call = nativeBridge.calls({op: "set"})[0];
+        expect(call.properties.win_toolbarTheme).to.equal(value);
       });
 
     });
 
     it("ignores setting win_toolbarTheme to invalid value", function() {
-      spyOn(console, "warn");
+      spy(console, "warn");
       ui.set("win_toolbarTheme", "foo");
 
-      expect(nativeBridge.calls({op: "set"}).length).toBe(0);
+      expect(nativeBridge.calls({op: "set"}).length).to.equal(0);
     });
 
     it("returns win_toolbarTheme default value", function() {
-      expect(ui.get("win_toolbarTheme")).toBe("default");
+      expect(ui.get("win_toolbarTheme")).to.equal("default");
     });
 
     describe("with a page", function() {
 
-      var page;
+      let page;
 
       beforeEach(function() {
-        page = new tabris.Page({title: "Foo", topLevel: true});
+        page = new Page({title: "Foo", topLevel: true});
         ui.set("activePage", page);
-        spyOn(page, "close");
+        spy(page, "close");
         nativeBridge.resetCalls();
       });
 
-      it("ShowPreviousPage event closes page", function() {
-        tabris._notify(ui.cid, "ShowPreviousPage", {});
-        expect(page.close).toHaveBeenCalled();
+      it("fails when closing the single page", function() {
+        expect(() => tabris._notify(ui.cid, "ShowPreviousPage", {})).to.throw(/Cannot close the last page/);
       });
 
       it("has Page in children", function() {
-        expect(ui.children("Page")[0]).toBe(page);
+        expect(ui.children("Page")[0]).to.equal(page);
       });
 
       it("does not have _Page in children", function() {
-        expect(ui.children("_Page").length).toBe(0);
+        expect(ui.children("_Page").length).to.equal(0);
       });
 
     });
 
     describe("with multiple pages,", function() {
 
-      var topLevelPage1, topLevelPage2, page1, page2, page3;
+      let topLevelPage1, topLevelPage2, page1, page2, page3;
 
       beforeEach(function() {
-        topLevelPage1 = new tabris.Page({title: "Top-level Page 1", topLevel: true});
-        topLevelPage2 = new tabris.Page({title: "Top-level Page 2", topLevel: true});
-        page1 = new tabris.Page({title: "Page 1"});
-        page2 = new tabris.Page({title: "Page 2"});
-        page3 = new tabris.Page({title: "Page 3"});
+        topLevelPage1 = new Page({title: "Top-level Page 1", topLevel: true});
+        topLevelPage2 = new Page({title: "Top-level Page 2", topLevel: true});
+        page1 = new Page({title: "Page 1"});
+        page2 = new Page({title: "Page 2"});
+        page3 = new Page({title: "Page 3"});
       });
 
       it("setting 'activePage' fails with widgets other than Page", function() {
         expect(() => {
           ui.set("activePage", new tabris.Button());
-        }).toThrow();
-        expect(nativeBridge.calls({op: "set", id: ui.cid}).length).toBe(0);
+        }).to.throw();
+        expect(nativeBridge.calls({op: "set", id: ui.cid}).length).to.equal(0);
       });
 
       it("setting 'activePage' triggers 'appear' and 'disappear' events on pages", function() {
         ui.set("activePage", topLevelPage1);
-        spyOn(topLevelPage1, "trigger");
-        spyOn(topLevelPage2, "trigger");
+        spy(topLevelPage1, "trigger");
+        spy(topLevelPage2, "trigger");
 
         ui.set("activePage", topLevelPage2);
 
-        expect(topLevelPage1.trigger.calls.argsFor(0)[0]).toBe("disappear");
-        expect(topLevelPage1.trigger.calls.argsFor(0)[1]).toBe(topLevelPage1);
-        expect(topLevelPage2.trigger.calls.argsFor(0)[0]).toBe("appear");
-        expect(topLevelPage2.trigger.calls.argsFor(0)[1]).toBe(topLevelPage2);
+        expect(topLevelPage1.trigger).to.have.been.calledOnce;
+        expect(topLevelPage1.trigger).to.have.been.calledWith("disappear", topLevelPage1);
+        expect(topLevelPage2.trigger).to.have.been.calledOnce;
+        expect(topLevelPage2.trigger).to.have.been.calledWith("appear", topLevelPage2);
       });
 
       it("setting 'activePage' issues a set operation", function() {
         ui.set("activePage", topLevelPage1);
-        var setCall = nativeBridge.calls({op: "set", id: ui.cid}).pop();
-        expect(setCall.properties.activePage).toBe(topLevelPage1._page.cid);
+        let setCall = nativeBridge.calls({op: "set", id: ui.cid}).pop();
+        expect(setCall.properties.activePage).to.equal(topLevelPage1._page.cid);
       });
 
       it("getting 'activePage' returns last set active page", function() {
         ui.set("activePage", topLevelPage1);
         ui.set("activePage", topLevelPage2);
 
-        expect(ui.get("activePage")).toBe(topLevelPage2);
+        expect(ui.get("activePage")).to.equal(topLevelPage2);
       });
 
       // OPENING PAGES
@@ -167,14 +179,14 @@ describe("UI", function() {
 
         page1.open();
 
-        expect(page2.isDisposed()).toBe(true);
-        expect(page3.isDisposed()).toBe(true);
+        expect(page2.isDisposed()).to.equal(true);
+        expect(page3.isDisposed()).to.equal(true);
       });
 
       it("fails when a page is opened without a top-level page", function() {
         expect(() => {
           page1.open();
-        }).toThrow();
+        }).to.throw();
       });
 
       it("when a top-level page on stack is opened, closes all stacked pages", function() {
@@ -184,8 +196,8 @@ describe("UI", function() {
 
         topLevelPage1.open();
 
-        expect(page1.isDisposed()).toBe(true);
-        expect(page2.isDisposed()).toBe(true);
+        expect(page1.isDisposed()).to.equal(true);
+        expect(page2.isDisposed()).to.equal(true);
       });
 
       it("when lower top-level page on stack is opened, closes all stacked pages", function() {
@@ -196,9 +208,9 @@ describe("UI", function() {
 
         topLevelPage1.open();
 
-        expect(page1.isDisposed()).toBe(true);
-        expect(page2.isDisposed()).toBe(true);
-        expect(topLevelPage2.isDisposed()).toBe(false);
+        expect(page1.isDisposed()).to.equal(true);
+        expect(page2.isDisposed()).to.equal(true);
+        expect(topLevelPage2.isDisposed()).to.equal(false);
       });
 
       it("when a top-level page on stack is opened, other top-level pages remain on stack", function() {
@@ -208,7 +220,7 @@ describe("UI", function() {
         topLevelPage1.open();
         topLevelPage1.close();
 
-        expect(tabris.ui.get("activePage")).toBe(topLevelPage2);
+        expect(tabris.ui.get("activePage")).to.equal(topLevelPage2);
       });
 
       it("when an off-stack top-level page is opened, closes all stacked pages", function() {
@@ -218,9 +230,9 @@ describe("UI", function() {
 
         topLevelPage2.open();
 
-        expect(page1.isDisposed()).toBe(true);
-        expect(page2.isDisposed()).toBe(true);
-        expect(topLevelPage1.isDisposed()).toBe(false);
+        expect(page1.isDisposed()).to.equal(true);
+        expect(page2.isDisposed()).to.equal(true);
+        expect(topLevelPage1.isDisposed()).to.equal(false);
       });
 
       it("when an off-stack top-level page is opened, sets activePage *before* disposing pages", function() {
@@ -228,7 +240,7 @@ describe("UI", function() {
         topLevelPage1.open();
         page1.open();
         page1.on("dispose", function() {
-          expect(tabris.ui.get("activePage")).toBe(topLevelPage2);
+          expect(tabris.ui.get("activePage")).to.equal(topLevelPage2);
         });
 
         topLevelPage2.open();
@@ -241,8 +253,8 @@ describe("UI", function() {
 
         page3.open();
 
-        expect(page1.isDisposed()).toBe(false);
-        expect(page2.isDisposed()).toBe(false);
+        expect(page1.isDisposed()).to.equal(false);
+        expect(page2.isDisposed()).to.equal(false);
       });
 
       // CLOSING PAGES
@@ -254,13 +266,13 @@ describe("UI", function() {
 
         page3.close();
 
-        var lastSetCall = nativeBridge.calls({op: "set", id: ui.cid}).pop();
-        expect(lastSetCall.properties.activePage).toBe(page2._page.cid);
-        expect(ui.get("activePage")).toBe(page2);
+        let lastSetCall = nativeBridge.calls({op: "set", id: ui.cid}).pop();
+        expect(lastSetCall.properties.activePage).to.equal(page2._page.cid);
+        expect(ui.get("activePage")).to.equal(page2);
       });
 
       it("when the active page is closed, triggers 'appear' and 'disappear' events on pages", function() {
-        var log = [];
+        let log = [];
         topLevelPage1.open();
         page1.open();
         page2.open();
@@ -269,7 +281,7 @@ describe("UI", function() {
 
         page2.close();
 
-        expect(log).toEqual(["page2 disappear", "page1 appear"]);
+        expect(log).to.eql(["page2 disappear", "page1 appear"]);
       });
 
       it("when an off-stack page is closed, leave the stack unchanged", function() {
@@ -279,7 +291,7 @@ describe("UI", function() {
 
         page3.close();
 
-        expect(ui.get("activePage")).toBe(page2);
+        expect(ui.get("activePage")).to.equal(page2);
       });
 
       it("when an off-stack top-level page is closed, leave the stack unchanged", function() {
@@ -289,7 +301,7 @@ describe("UI", function() {
 
         topLevelPage2.close();
 
-        expect(ui.get("activePage")).toBe(page2);
+        expect(ui.get("activePage")).to.equal(page2);
       });
 
       it("when a page on stack is closed, closes pages stacked upon it", function() {
@@ -300,8 +312,8 @@ describe("UI", function() {
 
         page1.close();
 
-        expect(page2.isDisposed()).toBe(true);
-        expect(page3.isDisposed()).toBe(true);
+        expect(page2.isDisposed()).to.equal(true);
+        expect(page3.isDisposed()).to.equal(true);
       });
 
       it("when a top-level page on stack is closed, closes pages stacked upon it", function() {
@@ -312,9 +324,9 @@ describe("UI", function() {
 
         topLevelPage2.close();
 
-        expect(page1.isDisposed()).toBe(true);
-        expect(page2.isDisposed()).toBe(true);
-        expect(ui.get("activePage")).toBe(topLevelPage1);
+        expect(page1.isDisposed()).to.equal(true);
+        expect(page2.isDisposed()).to.equal(true);
+        expect(ui.get("activePage")).to.equal(topLevelPage1);
       });
 
       it("when a top-level page on stack is closed, other top-level pages remain on stack", function() {
@@ -323,7 +335,7 @@ describe("UI", function() {
 
         topLevelPage1.close();
 
-        expect(tabris.ui.get("activePage")).toBe(topLevelPage2);
+        expect(tabris.ui.get("activePage")).to.equal(topLevelPage2);
       });
 
       it("when a lower top-level page on stack is closed, does not close stacked pages", function() {
@@ -334,9 +346,9 @@ describe("UI", function() {
 
         topLevelPage1.close();
 
-        expect(page1.isDisposed()).toBe(false);
-        expect(page2.isDisposed()).toBe(false);
-        expect(ui.get("activePage")).toBe(page2);
+        expect(page1.isDisposed()).to.equal(false);
+        expect(page2.isDisposed()).to.equal(false);
+        expect(ui.get("activePage")).to.equal(page2);
       });
 
       it("when a page on stack is closed, sets activePage *before* disposing pages", function() {
@@ -345,7 +357,7 @@ describe("UI", function() {
         page1.open();
         page2.open();
         page2.on("dispose", function() {
-          expect(tabris.ui.get("activePage")).toBe(page1);
+          expect(tabris.ui.get("activePage")).to.equal(page1);
         });
 
         page2.close();
@@ -356,7 +368,7 @@ describe("UI", function() {
 
         expect(() => {
           topLevelPage1.close();
-        }).toThrowError("Cannot close the last page");
+        }).to.throw("Cannot close the last page");
       });
 
     });
@@ -364,7 +376,7 @@ describe("UI", function() {
     it("ShowPreviousPage does not fail without a page", function() {
       expect(() => {
         tabris._notify(ui.cid, "ShowPreviousPage", {});
-      }).not.toThrow();
+      }).to.not.throw();
     });
 
   });
