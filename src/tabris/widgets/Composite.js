@@ -1,6 +1,6 @@
 import Widget from "../Widget";
 
-tabris.Composite = Widget.extend({
+export default Widget.extend({
   _name: "Composite",
   _type: "tabris.Composite",
   _supportsChildren: true

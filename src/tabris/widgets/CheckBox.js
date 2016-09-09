@@ -1,6 +1,6 @@
 import Widget from "../Widget";
 
-tabris.CheckBox = Widget.extend({
+export default Widget.extend({
   _name: "CheckBox",
   _type: "tabris.CheckBox",
   _events: {

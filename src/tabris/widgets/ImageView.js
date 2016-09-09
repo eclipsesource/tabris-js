@@ -1,6 +1,6 @@
 import Widget from "../Widget";
 
-tabris.ImageView = Widget.extend({
+export default Widget.extend({
   _name: "ImageView",
   _type: "tabris.ImageView",
   _events: {

@@ -1,6 +1,6 @@
 import Widget from "../Widget";
 
-tabris.Slider = Widget.extend({
+export default Widget.extend({
   _name: "Slider",
   _type: "tabris.Slider",
   _events: {

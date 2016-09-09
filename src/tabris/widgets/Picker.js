@@ -1,7 +1,7 @@
 import {omit, drop, extend} from "../util";
 import Widget from "../Widget";
 
-tabris.Picker = Widget.extend({
+export default Widget.extend({
   _name: "Picker",
 
   _type: "tabris.Picker",

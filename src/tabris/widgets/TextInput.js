@@ -1,6 +1,6 @@
 import Widget from "../Widget";
 
-tabris.TextInput = Widget.extend({
+export default Widget.extend({
   _name: "TextInput",
   _type: "tabris.TextInput",
   _events: {

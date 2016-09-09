@@ -1,6 +1,6 @@
 import Widget from "../Widget";
 
-tabris.WebView = Widget.extend({
+export default Widget.extend({
   _name: "WebView",
 
   _type: "tabris.WebView",

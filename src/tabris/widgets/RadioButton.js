@@ -1,6 +1,6 @@
 import Widget from "../Widget";
 
-tabris.RadioButton = Widget.extend({
+export default Widget.extend({
   _name: "RadioButton",
   _type: "tabris.RadioButton",
   _events: {

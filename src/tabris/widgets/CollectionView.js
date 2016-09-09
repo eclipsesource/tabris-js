@@ -1,12 +1,13 @@
 import Widget from "../Widget";
+import Cell from "./Cell";
 
-tabris.CollectionView = Widget.extend({
+export default Widget.extend({
   _name: "CollectionView",
 
   _type: "tabris.CollectionView",
 
   _supportsChildren: function(child) {
-    return child instanceof tabris.Cell;
+    return child instanceof Cell;
   },
 
   _properties: {
@@ -110,7 +111,7 @@ tabris.CollectionView = Widget.extend({
     },
     createitem: {
       trigger: function(event) {
-        var cell = new tabris.Cell();
+        var cell = new Cell();
         cell._parent = this;
         this._addChild(cell);
         this._nativeCall("addItem", {widget: cell.cid});
@@ -289,39 +290,3 @@ function createDelegate(prop) {
     this["_prev:" + prop] = actual;
   };
 }
-
-tabris.Cell = Widget.extend({
-  _name: "Cell",
-
-  _type: "tabris.Composite",
-
-  _supportsChildren: true,
-
-  dispose: function() {
-    console.warn("CollectionView cells are container-managed, they cannot be disposed of");
-  },
-
-  _properties: {
-    item: {
-      access: {
-        set: function() {
-          // read only
-        },
-        get: function(name) {
-          return this._getStoredProperty(name);
-        }
-      }
-    },
-    itemIndex: {
-      access: {
-        set: function() {
-          // read only
-        },
-        get: function(name) {
-          return this._getStoredProperty(name);
-        }
-      }
-    }
-  }
-
-});

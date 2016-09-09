@@ -1,6 +1,6 @@
 import Widget from "../Widget";
 
-tabris.TabFolder = Widget.extend({
+export default Widget.extend({
   _name: "TabFolder",
 
   _type: "tabris.TabFolder",
@@ -39,30 +39,6 @@ tabris.TabFolder = Widget.extend({
 
   _supportsChildren: function(child) {
     return child.type === "Tab";
-  }
-
-});
-
-tabris.Tab = Widget.extend({
-  _name: "Tab",
-
-
-  _type: "tabris.Tab",
-
-  _properties: {
-    title: {type: "string", default: ""},
-    image: {type: "image", default: null},
-    selectedImage: {type: "image", default: null},
-    badge: {type: "string", default: ""}
-  },
-
-  _supportsChildren: true,
-
-  _setParent: function(parent) {
-    if (!(parent instanceof tabris.TabFolder)) {
-      throw new Error("Tab must be a child of TabFolder");
-    }
-    tabris.Widget.prototype._setParent.call(this, parent);
   }
 
 });

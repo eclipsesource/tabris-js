@@ -1,6 +1,6 @@
 import Widget from "../Widget";
 
-tabris.Button = Widget.extend({
+export default Widget.extend({
   _name: "Button",
   _type: "tabris.Button",
   _events: {

@@ -1,6 +1,6 @@
 import Widget from "../Widget";
 
-tabris.ProgressBar = Widget.extend({
+export default Widget.extend({
   _name: "ProgressBar",
   _type: "tabris.ProgressBar",
   _properties: {

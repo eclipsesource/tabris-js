@@ -1,6 +1,6 @@
 import Widget from "../Widget";
 
-tabris.ToggleButton = Widget.extend({
+export default Widget.extend({
   _name: "ToggleButton",
   _type: "tabris.ToggleButton",
   _events: {

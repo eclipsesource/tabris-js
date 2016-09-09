@@ -1,6 +1,6 @@
 import Widget from "../Widget";
 
-tabris.TextView = Widget.extend({
+export default Widget.extend({
   _name: "TextView",
   _type: "tabris.TextView",
   _properties: {

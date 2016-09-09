@@ -1,6 +1,6 @@
 import Widget from "../Widget";
 
-tabris.Switch = Widget.extend({
+export default Widget.extend({
   _name: "Switch",
   _type: "tabris.Switch",
   _events: {

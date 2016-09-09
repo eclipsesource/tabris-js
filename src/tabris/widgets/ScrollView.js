@@ -1,6 +1,7 @@
 import Widget from "../Widget";
+import Composite from "./Composite";
 
-tabris._ScrollBar = Widget.extend({
+var ScrollBar = Widget.extend({
   _type: "rwt.widgets.ScrollBar",
   _events: {Selection: true},
   _properties: {
@@ -8,7 +9,7 @@ tabris._ScrollBar = Widget.extend({
   }
 });
 
-tabris.ScrollView = Widget.extend({
+export default Widget.extend({
   _name: "ScrollView",
 
 
@@ -68,11 +69,11 @@ tabris.ScrollView = Widget.extend({
     this._super("_create", arguments);
     var style = properties.direction === "horizontal" ? ["H_SCROLL"] : ["V_SCROLL"];
     this._nativeSet("style", style);
-    this._scrollBar = new tabris._ScrollBar({
+    this._scrollBar = new ScrollBar({
       style: properties.direction === "horizontal" ? ["HORIZONTAL"] : ["VERTICAL"]
     });
     this._scrollBar._nativeSet("parent", this.cid);
-    this._composite = new tabris.Composite();
+    this._composite = new Composite();
     this._composite._nativeSet("parent", this.cid);
     this._nativeSet("content", this._composite.cid);
     return this;

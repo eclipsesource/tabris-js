@@ -1,6 +1,6 @@
 import Widget from "../Widget";
 
-tabris.Drawer = Widget.extend({
+export default Widget.extend({
   _name: "Drawer",
 
   _type: "tabris.Drawer",

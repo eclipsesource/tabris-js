@@ -1,6 +1,6 @@
 import Widget from "../Widget";
 
-tabris.Action = Widget.extend({
+export default Widget.extend({
   _name: "Action",
 
   _type: "tabris.Action",
