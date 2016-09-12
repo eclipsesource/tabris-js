@@ -1,16 +1,16 @@
 import Proxy from "./Proxy";
 
-var Crypto = Proxy.extend({
+var _Crypto = Proxy.extend({
   _type: "tabris.Crypto"
 });
 
 var proxy;
 
-tabris.Crypto = function() {
-  proxy = new tabris._Crypto();
-};
+export default function Crypto() {
+  proxy = new _Crypto();
+}
 
-tabris.Crypto.prototype = {
+Crypto.prototype = {
 
   getRandomValues: function(typedArray) {
     if (arguments.length === 0) {
@@ -29,12 +29,6 @@ tabris.Crypto.prototype = {
 
 };
 
-tabris.load(function () {
-  if (!window.crypto) {
-    window.crypto = new tabris.Crypto();
-  }
-});
-
 function isIntArray(value) {
   return (value instanceof Int8Array) ||
           (value instanceof Uint8Array) ||
@@ -44,5 +38,3 @@ function isIntArray(value) {
           (value instanceof Int32Array) ||
           (value instanceof Uint32Array);
 }
-
-tabris._Crypto = Crypto;

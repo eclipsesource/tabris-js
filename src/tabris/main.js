@@ -3,7 +3,6 @@ import "./Tabris.js";
 import "./GestureRecognizer.js";
 import "./Device.js";
 import "./Widget.js";
-import "./Crypto.js";
 import "./WindowTimers.js";
 import "./UI.js";
 import "./WebStorage.js";
@@ -25,6 +24,7 @@ import CheckBox from "./widgets/CheckBox.js";
 import Cell from "./widgets/Cell.js";
 import CollectionView from "./widgets/CollectionView.js";
 import Composite from "./widgets/Composite.js";
+import Crypto from "./Crypto.js";
 import Drawer from "./widgets/Drawer.js";
 import ImageView from "./widgets/ImageView.js";
 import Page from "./widgets/Page.js";
@@ -62,6 +62,7 @@ tabris.load(function() {
   if (tabris.secureStorage) {
     window.secureStorage = tabris.secureStorage;
   }
+  window.crypto = new Crypto();
 });
 
 tabris.Action = Action;
