@@ -1,20 +1,29 @@
+import {expect, stub, spy, restore} from "../test";
+import NativeBridge from "../../src/tabris/NativeBridge";
+import Layout from "../../src/tabris/Layout";
+
 describe("NativeBridge", function() {
 
-  var native;
-  var bridge;
-  var log;
+  let native;
+  let bridge;
+  let log;
 
   beforeEach(function() {
+    global.tabris = {
+      on: () => {}
+    };
     log = [];
     native = {};
-    ["create", "destroy", "listen", "set", "get", "call"].forEach((method) => {
-      native[method] = jasmine.createSpy(method).and.callFake(function() {
+    ["create", "destroy", "listen", "set", "get", "call"].forEach(method => {
+      native[method] = spy(() => {
         log.push(method);
         return 23;
       });
     });
-    bridge = new tabris.NativeBridge(native);
+    bridge = new NativeBridge(native);
   });
+
+  afterEach(restore);
 
   describe("create", function() {
     beforeEach(function() {
@@ -22,12 +31,12 @@ describe("NativeBridge", function() {
     });
 
     it("is not transferred immediately", function() {
-      expect(native.destroy).not.toHaveBeenCalled();
+      expect(native.destroy).to.have.not.been.called;
     });
 
     it("is transferred on flush", function() {
-      tabris.trigger("flush");
-      expect(native.create).toHaveBeenCalledWith("id", "type", {});
+      bridge.flush();
+      expect(native.create).to.have.been.calledWith("id", "type", {});
     });
   });
 
@@ -37,12 +46,12 @@ describe("NativeBridge", function() {
     });
 
     it("is not transferred immediately", function() {
-      expect(native.set).not.toHaveBeenCalled();
+      expect(native.set).to.have.not.been.called;
     });
 
     it("is transferred on flush", function() {
-      tabris.trigger("flush");
-      expect(native.set).toHaveBeenCalledWith("id", {foo: 23});
+      bridge.flush();
+      expect(native.set).to.have.been.calledWith("id", {foo: 23});
     });
   });
 
@@ -54,14 +63,14 @@ describe("NativeBridge", function() {
     });
 
     it("is not transferred immediately", function() {
-      expect(native.create).not.toHaveBeenCalled();
-      expect(native.set).not.toHaveBeenCalled();
+      expect(native.create).to.have.not.been.called;
+      expect(native.set).to.have.not.been.called;
     });
 
     it("is transferred on flush", function() {
-      tabris.trigger("flush");
-      expect(native.create).toHaveBeenCalledWith("id", "type", {foo: 23, bar: 42});
-      expect(native.set).not.toHaveBeenCalled();
+      bridge.flush();
+      expect(native.create).to.have.been.calledWith("id", "type", {foo: 23, bar: 42});
+      expect(native.set).to.have.not.been.called;
     });
   });
 
@@ -71,12 +80,12 @@ describe("NativeBridge", function() {
     });
 
     it("is not transferred immediately", function() {
-      expect(native.listen).not.toHaveBeenCalled();
+      expect(native.listen).to.have.not.been.called;
     });
 
     it("is transferred on flush", function() {
-      tabris.trigger("flush");
-      expect(native.listen).toHaveBeenCalledWith("id", "event", false);
+      bridge.flush();
+      expect(native.listen).to.have.been.calledWith("id", "event", false);
     });
   });
 
@@ -86,12 +95,12 @@ describe("NativeBridge", function() {
     });
 
     it("is not transferred immediately", function() {
-      expect(native.create).not.toHaveBeenCalled();
+      expect(native.create).to.have.not.been.called;
     });
 
     it("is transferred on flush", function() {
-      tabris.trigger("flush");
-      expect(native.destroy).toHaveBeenCalledWith("id");
+      bridge.flush();
+      expect(native.destroy).to.have.been.calledWith("id");
     });
   });
 
@@ -102,27 +111,27 @@ describe("NativeBridge", function() {
 
     it("is transferred immediately", function() {
       bridge.get("id", "foo");
-      expect(native.get).toHaveBeenCalledWith("id", "foo");
+      expect(native.get).to.have.been.calledWith("id", "foo");
     });
 
     it("returns a value", function() {
-      var result = bridge.get("id", "foo");
-      expect(result).toBe(23);
+      let result = bridge.get("id", "foo");
+      expect(result).to.equal(23);
     });
 
     it("flushes buffered operations first", function() {
       bridge.get("id", "foo");
-      expect(log).toEqual(["set", "get"]);
+      expect(log).to.eql(["set", "get"]);
     });
 
     it("flushes layout queue first", function() {
-      spyOn(tabris.Layout, "flushQueue").and.callFake(function() {
+      stub(Layout, "flushQueue", function() {
         bridge.set("id2", {bar: 23});
       });
 
       bridge.get("id", "foo");
 
-      expect(log).toEqual(["set", "set", "get"]);
+      expect(log).to.eql(["set", "set", "get"]);
     });
   });
 
@@ -133,27 +142,27 @@ describe("NativeBridge", function() {
 
     it("is transferred immediately", function() {
       bridge.call("id", "foo", {foo: 23});
-      expect(native.call).toHaveBeenCalledWith("id", "foo", {foo: 23});
+      expect(native.call).to.have.been.calledWith("id", "foo", {foo: 23});
     });
 
     it("returns a value", function() {
-      var result = bridge.call("id", "foo", {foo: 23});
-      expect(result).toBe(23);
+      let result = bridge.call("id", "foo", {foo: 23});
+      expect(result).to.equal(23);
     });
 
     it("flushes buffered operations first", function() {
       bridge.call("id", "foo", {foo: 23});
-      expect(log).toEqual(["set", "call"]);
+      expect(log).to.eql(["set", "call"]);
     });
 
     it("allows operation to be added in beforeFlush event", function() {
-      spyOn(tabris.Layout, "flushQueue").and.callFake(function() {
+      stub(Layout, "flushQueue", function() {
         bridge.set("id2", {bar: 23});
       });
 
       bridge.call("id", "foo", {foo: 23});
 
-      expect(log).toEqual(["set", "set", "call"]);
+      expect(log).to.eql(["set", "set", "call"]);
     });
   });
 
