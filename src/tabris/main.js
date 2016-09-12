@@ -24,6 +24,7 @@ import Composite from './widgets/Composite';
 import Crypto from './Crypto';
 import Drawer from './widgets/Drawer';
 import ImageView from './widgets/ImageView';
+import InactivityTimer from './InactivityTimer.js';
 import Page from './widgets/Page';
 import PageSelector from './widgets/PageSelector';
 import Picker from './widgets/Picker';
@@ -62,6 +63,7 @@ module.exports = global.tabris = extend(new Tabris(), {
   Drawer,
   Device,
   ImageData,
+  InactivityTimer,
   ImageView,
   Page,
   PageSelector,

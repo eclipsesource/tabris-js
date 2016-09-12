@@ -1,0 +1,33 @@
+{
+  "type": "InactivityTimer",
+  "description": "A timer that triggers when the app has not been interacted with for a configurable interval.",
+  "properties": {
+    "delay": {
+      "type": "number",
+      "default": "0",
+      "description": "The interval of user inactivity that will trigger the timer. Given in milliseconds. Changes to this property will not affect a running timer."
+    }
+  },
+  "methods": {
+    "start": [
+      {
+        "parameters": [],
+        "description": "Starts the timer with the currently configured delay. After the first `timeout` event, the timer will stop but it can be started again."
+      }
+    ],
+    "cancel": [
+      {
+        "parameters": [],
+        "description": "Stops and resets the timer."
+      }
+    ]
+  },
+  "events": {
+    "timeout": {
+      "parameters": [
+        {"name": "target", "type": "this"}
+      ],
+      "description": "Fired when the app has not been interacted with since the configured delay."
+    }
+  }
+}
