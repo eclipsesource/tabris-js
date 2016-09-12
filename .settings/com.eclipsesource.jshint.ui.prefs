@@ -1,4 +1,0 @@
-eclipse.preferences.version=1
-excluded=//*.min.js\:build//*\:lib//*\://node_modules//*
-included=//*.js
-projectSpecificOptions=true
