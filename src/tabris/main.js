@@ -1,12 +1,6 @@
 import "./load-polyfill.js";
 import "./Tabris.js";
-import "./GestureRecognizer.js";
 import "./Device.js";
-import "./Widget.js";
-import "./WindowTimers.js";
-import "./UI.js";
-import "./WebStorage.js";
-import "./XMLHttpRequest.js";
 
 import App from "./App";
 import UI from "./UI";
@@ -31,6 +25,7 @@ import Page from "./widgets/Page.js";
 import PageSelector from "./widgets/PageSelector.js";
 import Picker from "./widgets/Picker.js";
 import ProgressBar from "./widgets/ProgressBar.js";
+import Proxy from "./Proxy.js";
 import RadioButton from "./widgets/RadioButton.js";
 import ScrollView from "./widgets/ScrollView.js";
 import SearchAction from "./widgets/SearchAction.js";
@@ -79,6 +74,7 @@ tabris.Page = Page;
 tabris.PageSelector = PageSelector;
 tabris.Picker = Picker;
 tabris.ProgressBar = ProgressBar;
+tabris.Proxy = Proxy;
 tabris.RadioButton = RadioButton;
 tabris.ScrollView = ScrollView;
 tabris.SearchAction = SearchAction;
@@ -91,29 +87,3 @@ tabris.TextView = TextView;
 tabris.ToggleButton = ToggleButton;
 tabris.Video = Video;
 tabris.WebView = WebView;
-
-// TODO: Temporary code to keep tests alive
-
-import * as util from "./util";
-import Events from "./Events.js";
-import Properties from "./Properties.js";
-import Layout from "./Layout.js";
-import CanvasContext from "./CanvasContext";
-import LegacyCanvasContext from "./LegacyCanvasContext";
-import NativeBridge from "./NativeBridge";
-import Proxy from "./Proxy.js";
-import ProxyCollection from "./ProxyCollection.js";
-import {types} from "./property-types.js";
-
-tabris.util = util;
-tabris.Properties = Properties;
-tabris.Events = Events;
-tabris.Layout = Layout;
-tabris.ImageData = ImageData;
-tabris.CanvasContext = CanvasContext;
-tabris.LegacyCanvasContext = LegacyCanvasContext;
-tabris.NativeBridge = NativeBridge;
-tabris.Proxy = Proxy;
-tabris.ProxyCollection = ProxyCollection;
-tabris.PropertyTypes = types;
-tabris._UI = UI;
