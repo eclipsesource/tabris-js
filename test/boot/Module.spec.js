@@ -1,11 +1,6 @@
 describe("tabris.Module", function() {
 
-  var nativeBridge;
-
   beforeEach(function() {
-    nativeBridge = new NativeBridgeSpy();
-    tabris._client = nativeBridge;
-    spyOn(nativeBridge, "load");
     spyOn(tabris.Module, "createLoader").and.returnValue((module) => {
       module.exports = module;
     });

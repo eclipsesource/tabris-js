@@ -1,17 +1,17 @@
 describe("bootstrap", function() {
 
   function fakeClient() {
-    var client = new NativeBridgeSpy();
-    // used by module system, return empty modules
-    client.loadAndExecute = function() {
-      return {executeResult: {exports: {}}};
-    };
-    // allow to specify client version using the client.version field in tests
-    spyOn(client, "get").and.callFake(function(target, prop) {
-      if (target === "tabris.App" && prop === "tabrisJsVersion") {
-        return client.version;
+    var client = {
+      // used by module system, return empty modules
+      load: () => {},
+      loadAndExecute: () => ({executeResult: {exports: {}}}),
+      // allow to specify client version using the client.version field in tests
+      get: (target, prop) => {
+        if (target === "tabris.App" && prop === "tabrisJsVersion") {
+          return client.version;
+        }
       }
-    });
+    };
     return client;
   }
 
