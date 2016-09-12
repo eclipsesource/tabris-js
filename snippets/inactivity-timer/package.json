@@ -1,0 +1,9 @@
+{
+  "title": "InactivityTimer",
+  "category": "Timer",
+  "description": "Detect a period of user inactivity",
+  "main": "inactivity.js",
+  "dependencies": {
+    "tabris": "^1.10.0"
+  }
+}

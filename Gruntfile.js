@@ -40,6 +40,7 @@ module.exports = function(grunt) {
           "DOMEvents.js",
           "DOMDocument.js",
           "WindowTimers.js",
+          "InactivityTimer.js",
           "App.js",
           "UI.js",
           "ImageData.js",
