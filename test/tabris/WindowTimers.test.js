@@ -77,7 +77,7 @@ describe("WindowTimers", function() {
       });
 
       it("creates native Timer", function() {
-        expect(createCall()).to.be.defined;
+        expect(createCall()).not.to.be.undefined;
       });
 
       it("passes arguments to Timer creation", function() {
@@ -86,11 +86,11 @@ describe("WindowTimers", function() {
       });
 
       it("listens on Run event of native Timer", function() {
-        expect(listenCall()).to.be.defined;
+        expect(listenCall()).not.to.be.undefined;
       });
 
       it("starts the native Timer", function() {
-        expect(startCall()).to.be.defined;
+        expect(startCall()).not.to.be.undefined;
       });
 
       it("create, listen, start are called in this order", function() {
@@ -134,7 +134,7 @@ describe("WindowTimers", function() {
         } else {
           it("timer is disposed", function() {
             let destroyCall = nativeBridge.calls({id: createCall().id, op: "destroy"})[0];
-            expect(destroyCall).to.be.defined;
+            expect(destroyCall).not.to.be.undefined;
           });
         }
 
@@ -150,12 +150,12 @@ describe("WindowTimers", function() {
 
           it("calls native cancelTask", function() {
             let cancelCall = nativeBridge.calls({id: createCall().id, op: "call", method: "cancel"})[0];
-            expect(cancelCall).to.be.defined;
+            expect(cancelCall).not.to.be.undefined;
           });
 
           it("destroys native timer", function() {
             let destroyCall = nativeBridge.calls({id: createCall().id, op: "destroy"})[0];
-            expect(destroyCall).to.be.defined;
+            expect(destroyCall).not.to.be.undefined;
           });
 
           it("tolerates unknown taskId", function() {
@@ -173,7 +173,7 @@ describe("WindowTimers", function() {
     it("creates native Timer on load callback", function() {
       taskId = method(callback, delay);
 
-      expect(createCall()).to.be.defined;
+      expect(createCall()).not.to.be.undefined;
     });
 
     it("passes 0 delay when argument is left out", function() {

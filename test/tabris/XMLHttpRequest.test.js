@@ -182,7 +182,7 @@ describe("XMLHttpRequest", function() {
       xhr.open("GET", "http://www.foo.com");
       xhr.send();
 
-      expect(proxy).to.be.defined;
+      expect(proxy).not.to.be.undefined;
     });
 
     it("fails when state not 'opened'", function() {
@@ -520,7 +520,7 @@ describe("XMLHttpRequest", function() {
           proxy.trigger("StateChange", {state: entry});
           expect(xhr.upload.onprogress).to.have.not.been.called;
           expect(xhr.upload[handler]).to.have.not.been.called;
-          expect(xhr.upload.onloadend).to.have.been.called.once; // called on "headers" stateChange
+          expect(xhr.upload.onloadend).to.have.been.calledOnce; // called on "headers" stateChange
         });
       });
 

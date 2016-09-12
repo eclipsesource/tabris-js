@@ -125,7 +125,7 @@ describe("DOMEvent", function() {
         it("it is notified only once", function() {
           var event = {type: "foo"};
           target.dispatchEvent(event);
-          expect(listener).to.have.been.called.once;
+          expect(listener).to.have.been.calledOnce;
         });
 
         describe("and removed once", function() {

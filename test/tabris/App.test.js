@@ -171,7 +171,7 @@ describe("App", function() {
       app.getResourceLocation();
       app.getResourceLocation();
 
-      expect(nativeBridge.get).to.have.been.called.once;
+      expect(nativeBridge.get).to.have.been.calledOnce;
     });
 
     it("appends normalized parameter", function() {

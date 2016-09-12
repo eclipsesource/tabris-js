@@ -222,7 +222,7 @@ describe("Widget", function() {
       it("removes parent", function() {
         child.dispose();
 
-        expect(child.parent()).not.to.be.defined;
+        expect(child.parent()).to.be.undefined;
       });
 
       it("DESTROYs native widget", function() {
@@ -1282,15 +1282,15 @@ describe("Widget.extend", function() {
   it("adds custom properties", function() {
     let TestWidget = Widget.extend({_properties: {foo: {type: "number"}}});
 
-    expect(TestWidget._properties.foo).to.be.defined;
+    expect(TestWidget._properties.foo).not.to.be.undefined;
     expect(TestWidget._properties.foo.type.encode("23")).to.equal(23);
   });
 
   it("adds default properties", function() {
     let TestWidget = Widget.extend({});
 
-    expect(TestWidget._properties.enabled).to.be.defined;
-    expect(TestWidget._properties.visible).to.be.defined;
+    expect(TestWidget._properties.enabled).not.to.be.undefined;
+    expect(TestWidget._properties.visible).not.to.be.undefined;
   });
 
   it("extends default properties", function() {
@@ -1298,7 +1298,7 @@ describe("Widget.extend", function() {
 
     let TestWidget = Widget.extend({_properties: custom});
 
-    expect(TestWidget._properties.foo).to.be.defined;
+    expect(TestWidget._properties.foo).not.to.be.undefined;
     expect(TestWidget._properties.enabled.type.encode("23")).to.equal(23);
   });
 

@@ -106,7 +106,7 @@ describe("Events", function() {
       });
       it("should remove only the callback without context", function() {
         object.trigger("foo");
-        expect(callback).to.have.been.called.twice;
+        expect(callback).to.have.been.calledTwice;
         expect(callback.firstCall).to.have.been.calledOn(context);
         expect(callback.secondCall).to.have.been.calledOn(context2);
       });

@@ -95,7 +95,7 @@ describe("Proxy", function() {
     });
 
     // it("parent() returns nothing", function() {
-    //   expect(proxy.parent()).not.to.be.defined;
+    //   expect(proxy.parent()).to.be.undefined;
     // });
 
     // it("children() returns empty collection", function() {
@@ -563,7 +563,7 @@ describe("Proxy", function() {
         proxy.dispose();
 
         let destroyCall = nativeBridge.calls({op: "destroy", id: proxy.cid})[0];
-        expect(destroyCall).to.be.defined;
+        expect(destroyCall).not.to.be.undefined;
       });
 
       it("notifies dispose listeners", function() {
@@ -770,7 +770,7 @@ describe("Proxy.extend", function() {
     let instance = new CustomType();
 
     expect(instance.constructor._type).to.equal("foo");
-    expect(instance._type).not.to.be.defined;
+    expect(instance._type).to.be.undefined;
   });
 
   describe("constructor", function() {
