@@ -1,6 +1,4 @@
-module.exports = NativeBridgeSpy;
-
-function NativeBridgeSpy() {
+export default function NativeBridgeSpy() {
   this._calls = [];
 }
 

@@ -2,7 +2,6 @@
 var Jasmine = require("jasmine");
 var path = require("path");
 
-NativeBridgeSpy = require("./NativeBridgeSpy.js");
 tabris = require("../../build/tabris/tabris.js");
 require("./tabris-init.js");
 require("./jasmineToString.js");

@@ -11,7 +11,6 @@ document = {
   }
 };
 
-NativeBridgeSpy = require("../tabris/NativeBridgeSpy.js");
 require("../../build/boot.js");
 
 var runner = new Jasmine();
