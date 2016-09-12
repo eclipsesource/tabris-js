@@ -3,30 +3,34 @@ import Events from "./Events";
 import NativeBridge from "./NativeBridge";
 import ProxyStore from "./ProxyStore";
 
-window.tabris = extend({}, Events, {
+export default function Tabris() {
+  this._loadFunctions = [];
+  this._proxies = new ProxyStore();
+  this._ready = false;
+  this._init = this._init.bind(this);
+  this._notify = this._notify.bind(this);
+}
 
-  _loadFunctions: [],
-  _proxies: new ProxyStore(),
-  _ready: false,
+extend(Tabris.prototype, Events, {
 
   load: function(fn) {
-    if (tabris._ready) {
+    if (this._ready) {
       fn.call();
     } else {
-      tabris._loadFunctions.push(fn);
+      this._loadFunctions.push(fn);
     }
   },
 
   version: "${VERSION}",
 
   _init: function(client) {
-    tabris._client = client;
-    tabris._nativeBridge = new NativeBridge(client);
+    this._client = client;
+    this._nativeBridge = new NativeBridge(client);
     var i = 0;
-    while (i < tabris._loadFunctions.length) {
-      tabris._loadFunctions[i++].call();
+    while (i < this._loadFunctions.length) {
+      this._loadFunctions[i++].call();
     }
-    tabris._ready = true;
+    this._ready = true;
   },
 
   _setEntryPoint: function(entryPoint) {
@@ -36,7 +40,7 @@ window.tabris = extend({}, Events, {
   _notify: function(cid, event, param) {
     var returnValue;
     try {
-      var proxy = tabris._proxies.find(cid);
+      var proxy = this._proxies.find(cid);
       if (proxy) {
         try {
           returnValue = proxy._trigger(event, param);
@@ -45,17 +49,14 @@ window.tabris = extend({}, Events, {
           console.log(error.stack);
         }
       }
-      tabris.trigger("flush");
+      this.trigger("flush");
     } catch (ex) {
       console.error(ex);
       console.log(ex.stack);
     }
     return returnValue;
-  },
-
-  _reset: function() {
-    this._loadFunctions = [];
-    this._proxies = new ProxyStore();
   }
 
 });
+
+global.tabris = new Tabris();
