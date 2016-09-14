@@ -2,28 +2,28 @@ import {expect, stub} from "../test";
 import WebStorage, {create as createWebStorage} from "../../src/tabris/WebStorage";
 import ProxyStore from "../../src/tabris/ProxyStore";
 import NativeBridge from "../../src/tabris/NativeBridge";
-import NativeBridgeSpy from "./NativeBridgeSpy";
+import ClientStub from "./ClientStub";
 
 describe("WebStorage", function() {
 
-  let nativeBridge;
+  let client;
   let storage;
   let returnValue;
   let cid = "tabris.ClientStore";
 
   beforeEach(function() {
-    nativeBridge = new NativeBridgeSpy();
+    client = new ClientStub();
     global.tabris = {
       on: () => {},
       _proxies: new ProxyStore()
     };
-    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    global.tabris._nativeBridge = new NativeBridge(client);
     storage = createWebStorage();
-    stub(nativeBridge, "call", () => returnValue);
+    stub(client, "call", () => returnValue);
   });
 
   afterEach(function() {
-    nativeBridge = null;
+    client = null;
     storage = null;
   });
 
@@ -42,27 +42,27 @@ describe("WebStorage", function() {
     it("calls proxy add with key and value", function() {
       storage.setItem("foo", "bar");
 
-      expect(nativeBridge.call).to.have.been.calledWith(cid, "add", {key: "foo", value: "bar"});
+      expect(client.call).to.have.been.calledWith(cid, "add", {key: "foo", value: "bar"});
     });
 
     it("call proxy add with stringified key", function() {
       storage.setItem(2, "bar");
 
-      expect(nativeBridge.call).to.have.been.calledWith(cid, "add", {key: "2", value: "bar"});
+      expect(client.call).to.have.been.calledWith(cid, "add", {key: "2", value: "bar"});
     });
 
     it("calls add with stringified value", function() {
       storage.setItem("foo", 2);
 
-      expect(nativeBridge.call).to.have.been.calledWith(cid, "add", {key: "foo", value: "2"});
+      expect(client.call).to.have.been.calledWith(cid, "add", {key: "foo", value: "2"});
     });
 
     it("works with falsy keys and values", function() {
       storage.setItem(false, false);
       storage.setItem(undefined, undefined);
 
-      expect(nativeBridge.call).to.have.been.calledWith(cid, "add", {key: "false", value: "false"});
-      expect(nativeBridge.call).to.have.been.calledWith(cid, "add", {key: "undefined", value: "undefined"});
+      expect(client.call).to.have.been.calledWith(cid, "add", {key: "false", value: "false"});
+      expect(client.call).to.have.been.calledWith(cid, "add", {key: "undefined", value: "undefined"});
     });
 
   });
@@ -78,21 +78,21 @@ describe("WebStorage", function() {
     it("calls proxy get with key", function() {
       storage.getItem("foo");
 
-      expect(nativeBridge.call).to.have.been.calledWith(cid, "get", {key: "foo"});
+      expect(client.call).to.have.been.calledWith(cid, "get", {key: "foo"});
     });
 
     it("calls get with stringified key", function() {
       storage.getItem(5);
 
-      expect(nativeBridge.call).to.have.been.calledWith(cid, "get", {key: "5"});
+      expect(client.call).to.have.been.calledWith(cid, "get", {key: "5"});
     });
 
     it("works with falsy keys", function() {
       storage.getItem(false);
       storage.getItem(undefined);
 
-      expect(nativeBridge.call).to.have.been.calledWith(cid, "get", {key: "false"});
-      expect(nativeBridge.call).to.have.been.calledWith(cid, "get", {key: "undefined"});
+      expect(client.call).to.have.been.calledWith(cid, "get", {key: "false"});
+      expect(client.call).to.have.been.calledWith(cid, "get", {key: "undefined"});
     });
 
     it("returns saved item", function() {
@@ -124,21 +124,21 @@ describe("WebStorage", function() {
     it("calls proxy remove with keys array", function() {
       storage.removeItem("foo");
 
-      expect(nativeBridge.call).to.have.been.calledWith(cid, "remove", {keys: ["foo"]});
+      expect(client.call).to.have.been.calledWith(cid, "remove", {keys: ["foo"]});
     });
 
     it("calls proxy remove with keys array with stringified key", function() {
       storage.removeItem(3);
 
-      expect(nativeBridge.call).to.have.been.calledWith(cid, "remove", {keys: ["3"]});
+      expect(client.call).to.have.been.calledWith(cid, "remove", {keys: ["3"]});
     });
 
     it("works with falsy keys", function() {
       storage.removeItem(false);
       storage.removeItem(undefined);
 
-      expect(nativeBridge.call).to.have.been.calledWith(cid, "remove", {keys: ["false"]});
-      expect(nativeBridge.call).to.have.been.calledWith(cid, "remove", {keys: ["undefined"]});
+      expect(client.call).to.have.been.calledWith(cid, "remove", {keys: ["false"]});
+      expect(client.call).to.have.been.calledWith(cid, "remove", {keys: ["undefined"]});
     });
 
   });
@@ -148,7 +148,7 @@ describe("WebStorage", function() {
     it("calls proxy clear", function() {
       storage.clear();
 
-      expect(nativeBridge.call).to.have.been.calledWith(cid, "clear", undefined);
+      expect(client.call).to.have.been.calledWith(cid, "clear", undefined);
     });
 
   });

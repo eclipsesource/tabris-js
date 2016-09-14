@@ -1,21 +1,21 @@
 import {expect, spy, stub, restore} from "../../test";
 import ProxyStore from "../../../src/tabris/ProxyStore";
 import NativeBridge from "../../../src/tabris/NativeBridge";
-import NativeBridgeSpy from "../NativeBridgeSpy";
+import ClientStub from "../ClientStub";
 import ScrollView from "../../../src/tabris/widgets/ScrollView";
 import Composite from "../../../src/tabris/widgets/Composite";
 
 describe("ScrollView", function() {
 
-  let nativeBridge;
+  let client;
 
   beforeEach(function() {
-    nativeBridge = new NativeBridgeSpy();
+    client = new ClientStub();
     global.tabris = {
       on: () => {},
       _proxies: new ProxyStore()
     };
-    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    global.tabris._nativeBridge = new NativeBridge(client);
   });
 
   afterEach(restore);
@@ -25,7 +25,7 @@ describe("ScrollView", function() {
 
     beforeEach(function() {
       scrollView = new ScrollView();
-      createCalls = nativeBridge.calls({op: "create"});
+      createCalls = client.calls({op: "create"});
     });
 
     it("creates a vertical ScrolledComposite", function() {
@@ -45,7 +45,7 @@ describe("ScrollView", function() {
     });
 
     it("sets the Composite as content", function() {
-      let setCall = nativeBridge.calls({op: "set", id: createCalls[0].id})[0];
+      let setCall = client.calls({op: "set", id: createCalls[0].id})[0];
       expect(setCall.properties).to.eql({content: createCalls[2].id});
     });
 
@@ -54,12 +54,12 @@ describe("ScrollView", function() {
 
       beforeEach(function() {
         child = new Composite();
-        nativeBridge.resetCalls();
+        client.resetCalls();
         result = scrollView.append(child);
       });
 
       it("sets child's parent to the inner composite", function() {
-        let call = nativeBridge.calls({op: "set", id: child.cid})[0];
+        let call = client.calls({op: "set", id: child.cid})[0];
         expect(call.properties.parent).to.equal(scrollView._composite.cid);
       });
 
@@ -77,7 +77,7 @@ describe("ScrollView", function() {
         listener = spy();
         scrollBar = tabris._proxies.find(createCalls[1].id);
         scrollView.on("scroll", listener);
-        stub(nativeBridge, "get", function(id, property) {
+        stub(client, "get", function(id, property) {
           if (id === scrollView.cid && property === "origin") {
             return [23, 42];
           }
@@ -123,12 +123,12 @@ describe("ScrollView", function() {
 
       beforeEach(function() {
         child = new Composite();
-        nativeBridge.resetCalls();
+        client.resetCalls();
         scrollView.append(child);
       });
 
       it("uses inner composite in 'set'", function() {
-        let call = nativeBridge.calls({op: "set", id: child.cid})[0];
+        let call = client.calls({op: "set", id: child.cid})[0];
         expect(call.properties.parent).to.equal(scrollView._composite.cid);
       });
 
@@ -142,8 +142,8 @@ describe("ScrollView", function() {
 
     beforeEach(function() {
       scrollView = new ScrollView({direction: "vertical"});
-      createCalls = nativeBridge.calls({op: "create"});
-      nativeBridge.resetCalls();
+      createCalls = client.calls({op: "create"});
+      client.resetCalls();
     });
 
     it("creates a vertical ScrolledComposite", function() {
@@ -159,7 +159,7 @@ describe("ScrollView", function() {
     });
 
     it("scrollY is taken from native, scrollX is 0", function() {
-      stub(nativeBridge, "get").returns([23, 42]);
+      stub(client, "get").returns([23, 42]);
       expect(scrollView.get("scrollX")).to.equal(0);
       expect(scrollView.get("scrollY")).to.equal(42);
     });
@@ -167,7 +167,7 @@ describe("ScrollView", function() {
     it("scrollY can be set", function() {
       scrollView.set("scrollY", 23);
 
-      let setCalls = nativeBridge.calls({id: scrollView.cid, op: "set"});
+      let setCalls = client.calls({id: scrollView.cid, op: "set"});
 
       expect(setCalls[0].properties.origin).to.eql([0, 23]);
     });
@@ -175,7 +175,7 @@ describe("ScrollView", function() {
     it("ignores setting scrollX", function() {
       scrollView.set("scrollX", 23);
 
-      let setCalls = nativeBridge.calls({id: scrollView.cid, op: "set"});
+      let setCalls = client.calls({id: scrollView.cid, op: "set"});
 
       expect(setCalls.length).to.equal(0);
     });
@@ -188,8 +188,8 @@ describe("ScrollView", function() {
 
     beforeEach(function() {
       scrollView = new ScrollView({direction: "horizontal"});
-      createCalls = nativeBridge.calls({op: "create"});
-      nativeBridge.resetCalls();
+      createCalls = client.calls({op: "create"});
+      client.resetCalls();
     });
 
     it("creates a horizontal ScrolledComposite", function() {
@@ -205,7 +205,7 @@ describe("ScrollView", function() {
     });
 
     it("scrollX is taken from native, scrollY is 0", function() {
-      stub(nativeBridge, "get").returns([23, 42]);
+      stub(client, "get").returns([23, 42]);
       expect(scrollView.get("scrollX")).to.equal(23);
       expect(scrollView.get("scrollY")).to.equal(0);
     });
@@ -213,7 +213,7 @@ describe("ScrollView", function() {
     it("scrollX can be set", function() {
       scrollView.set("scrollX", 23);
 
-      let setCalls = nativeBridge.calls({id: scrollView.cid, op: "set"});
+      let setCalls = client.calls({id: scrollView.cid, op: "set"});
 
       expect(setCalls[0].properties.origin).to.eql([23, 0]);
     });
@@ -221,7 +221,7 @@ describe("ScrollView", function() {
     it("ignores setting scrollY", function() {
       scrollView.set("scrollY", 23);
 
-      let setCalls = nativeBridge.calls({id: scrollView.cid, op: "set"});
+      let setCalls = client.calls({id: scrollView.cid, op: "set"});
 
       expect(setCalls.length).to.equal(0);
     });
@@ -234,7 +234,7 @@ describe("ScrollView", function() {
 
     beforeEach(function() {
       scrollView = new ScrollView();
-      createCalls = nativeBridge.calls({op: "create"});
+      createCalls = client.calls({op: "create"});
     });
 
     it("creates a vertical ScrolledComposite", function() {

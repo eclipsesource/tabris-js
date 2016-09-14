@@ -3,20 +3,20 @@ import Proxy from "../../src/tabris/Proxy";
 import ProxyStore from "../../src/tabris/ProxyStore";
 import {types} from "../../src/tabris/property-types";
 import NativeBridge from "../../src/tabris/NativeBridge";
-import NativeBridgeSpy from "./NativeBridgeSpy";
+import ClientStub from "./ClientStub";
 
 describe("Proxy", function() {
 
-  let nativeBridge;
+  let client;
   let TestType;
 
   beforeEach(function() {
-    nativeBridge = new NativeBridgeSpy();
+    client = new ClientStub();
     global.tabris = {
       on: () => {},
       _proxies: new ProxyStore()
     };
-    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    global.tabris._nativeBridge = new NativeBridge(client);
     TestType = Proxy.extend({
       _name: "TestType",
       _properties: {foo: "any", uncachedProperty: {type: "any", nocache: true}},
@@ -32,13 +32,13 @@ describe("Proxy", function() {
 
     beforeEach(function() {
       proxy = new TestType();
-      nativeBridge.resetCalls();
+      client.resetCalls();
     });
 
     it("calls native create with properties", function() {
       proxy._create({foo: 23});
 
-      let calls = nativeBridge.calls({op: "create", type: "TestType"});
+      let calls = client.calls({op: "create", type: "TestType"});
       expect(calls.length).to.equal(1);
       expect(calls[0].properties).to.eql({foo: 23});
     });
@@ -49,7 +49,7 @@ describe("Proxy", function() {
 
       proxy._create({foo: other});
 
-      let properties = nativeBridge.calls({op: "create", type: "TestType"})[0].properties;
+      let properties = client.calls({op: "create", type: "TestType"})[0].properties;
       expect(properties.foo).to.equal("other-id");
     });
 
@@ -62,7 +62,7 @@ describe("Proxy", function() {
 
       new CustomType({bar: 42});
 
-      let properties = nativeBridge.calls({op: "create", type: "CustomType"})[0].properties;
+      let properties = client.calls({op: "create", type: "CustomType"})[0].properties;
       expect(properties).to.eql({foo: 23, bar: 42});
     });
 
@@ -91,7 +91,7 @@ describe("Proxy", function() {
 
     beforeEach(function() {
       proxy = new TestType();
-      nativeBridge.resetCalls();
+      client.resetCalls();
     });
 
     // it("parent() returns nothing", function() {
@@ -112,17 +112,17 @@ describe("Proxy", function() {
       it("does not call native get for unknown properties", function() {
         proxy.get("bar");
 
-        expect(nativeBridge.calls({op: "get"}).length).to.equal(0);
+        expect(client.calls({op: "get"}).length).to.equal(0);
       });
 
       it("calls native get", function() {
         proxy.get("foo");
 
-        expect(nativeBridge.calls({op: "get", property: "foo"}).length).to.equal(1);
+        expect(client.calls({op: "get", property: "foo"}).length).to.equal(1);
       });
 
       it("returns uncached value from native", function() {
-        stub(nativeBridge, "get").returns(23);
+        stub(client, "get").returns(23);
         proxy.set("uncachedProperty", 12);
 
         let result = proxy.get("uncachedProperty");
@@ -148,11 +148,11 @@ describe("Proxy", function() {
 
       it("returns cached value", function() {
         proxy.set("foo", "bar");
-        spy(nativeBridge, "get");
+        spy(client, "get");
 
         let result = proxy.get("foo");
 
-        expect(nativeBridge.get).not.to.have.been.called;
+        expect(client.get).not.to.have.been.called;
         expect(result).to.equal("bar");
       });
 
@@ -177,7 +177,7 @@ describe("Proxy", function() {
         TestType._properties.foo.type = {
           decode: stub().returns("bar")
         };
-        stub(nativeBridge, "get").returns(23);
+        stub(client, "get").returns(23);
         spy(console, "warn");
 
         let result = proxy.get("foo");
@@ -219,7 +219,7 @@ describe("Proxy", function() {
       it("stores unknown property loacally", function() {
         proxy.set("unknownProperty", "foo");
 
-        expect(nativeBridge.calls({op: "set", id: proxy.cid}).length).to.equal(0);
+        expect(client.calls({op: "set", id: proxy.cid}).length).to.equal(0);
         expect(proxy.get("unknownProperty")).to.equal("foo");
       });
 
@@ -229,7 +229,7 @@ describe("Proxy", function() {
 
         proxy.set("knownProperty", "foo");
 
-        expect(nativeBridge.calls({op: "set"}).length).to.equal(0);
+        expect(client.calls({op: "set"}).length).to.equal(0);
       });
 
       it("returns self to allow chaining", function() {
@@ -316,14 +316,14 @@ describe("Proxy", function() {
       it("calls native call", function() {
         proxy._nativeCall("method", {foo: 23});
 
-        let call = nativeBridge.calls()[0];
+        let call = client.calls()[0];
         expect(call.op).to.eql("call");
         expect(call.method).to.eql("method");
         expect(call.parameters).to.eql({foo: 23});
       });
 
       it("returns value from native", function() {
-        stub(nativeBridge, "call").returns(23);
+        stub(client, "call").returns(23);
 
         let result = proxy._nativeCall("method", {});
 
@@ -346,13 +346,13 @@ describe("Proxy", function() {
 
       beforeEach(function() {
         listener = spy();
-        nativeBridge.resetCalls();
+        client.resetCalls();
       });
 
       it("calls native listen (true) for first listener", function() {
         proxy.on("bar", listener);
 
-        let call = nativeBridge.calls({op: "listen", event: "bar"})[0];
+        let call = client.calls({op: "listen", event: "bar"})[0];
         expect(call.listen).to.eql(true);
       });
 
@@ -361,7 +361,7 @@ describe("Proxy", function() {
         proxy = new CustomType();
         proxy.on("foo", listener);
 
-        let call = nativeBridge.calls({op: "listen"})[0];
+        let call = client.calls({op: "listen"})[0];
         expect(call.event).to.equal("bar");
       });
 
@@ -371,7 +371,7 @@ describe("Proxy", function() {
 
         proxy.on("foo1", listener);
 
-        let call = nativeBridge.calls({op: "listen", event: "bar"})[0];
+        let call = client.calls({op: "listen", event: "bar"})[0];
         expect(call.listen).to.eql(true);
       });
 
@@ -400,7 +400,7 @@ describe("Proxy", function() {
         proxy.on("foo", listener);
         proxy.on("bar", listener);
 
-        let call = nativeBridge.calls({op: "listen", event: "bar"})[0];
+        let call = client.calls({op: "listen", event: "bar"})[0];
         expect(call.listen).to.eql(true);
       });
 
@@ -408,7 +408,7 @@ describe("Proxy", function() {
         proxy.on("bar", listener);
         proxy.on("bar", listener);
 
-        expect(nativeBridge.calls({op: "listen"}).length).to.equal(1);
+        expect(client.calls({op: "listen"}).length).to.equal(1);
       });
 
       it("does not call native listen for subsequent listeners for alias event", function() {
@@ -417,7 +417,7 @@ describe("Proxy", function() {
         proxy.on("foo", listener);
         proxy.on("bar", listener);
 
-        expect(nativeBridge.calls({op: "listen"}).length).to.equal(1);
+        expect(client.calls({op: "listen"}).length).to.equal(1);
       });
 
       it("does not call native listen for subsequent listeners for aliased event", function() {
@@ -426,7 +426,7 @@ describe("Proxy", function() {
         proxy.on("bar", listener);
         proxy.on("foo", listener);
 
-        expect(nativeBridge.calls({op: "listen"}).length).to.equal(1);
+        expect(client.calls({op: "listen"}).length).to.equal(1);
       });
 
       it("returns self to allow chaining", function() {
@@ -453,13 +453,13 @@ describe("Proxy", function() {
         listener = spy();
         listener2 = spy();
         proxy.on("bar", listener);
-        nativeBridge.resetCalls();
+        client.resetCalls();
       });
 
       it("calls native listen (false) for last listener removed", function() {
         proxy.off("bar", listener);
 
-        let call = nativeBridge.calls({op: "listen", event: "bar"})[0];
+        let call = client.calls({op: "listen", event: "bar"})[0];
         expect(call.listen).to.equal(false);
       });
 
@@ -470,7 +470,7 @@ describe("Proxy", function() {
 
         proxy.off("bar", listener);
 
-        let call = nativeBridge.calls({op: "listen", event: "foo"})[1];
+        let call = client.calls({op: "listen", event: "foo"})[1];
         expect(call.listen).to.equal(false);
       });
 
@@ -480,7 +480,7 @@ describe("Proxy", function() {
         proxy.on("foo", listener);
         proxy.off("foo", listener);
 
-        let call = nativeBridge.calls({op: "listen"})[1];
+        let call = client.calls({op: "listen"})[1];
         expect(call.event).to.equal("bar");
       });
 
@@ -488,7 +488,7 @@ describe("Proxy", function() {
         proxy.on("bar", listener2);
         proxy.off("bar", listener);
 
-        expect(nativeBridge.calls().length).to.equal(0);
+        expect(client.calls().length).to.equal(0);
       });
 
       it("does not call native listen when other listeners exist for alias event", function() {
@@ -496,11 +496,11 @@ describe("Proxy", function() {
         proxy = new CustomType();
         proxy.on("foo", listener);
         proxy.on("bar", listener);
-        nativeBridge.resetCalls();
+        client.resetCalls();
 
         proxy.off("foo", listener);
 
-        expect(nativeBridge.calls().length).to.equal(0);
+        expect(client.calls().length).to.equal(0);
       });
 
       it("does not call native listen when other listeners exist for aliased event", function() {
@@ -508,11 +508,11 @@ describe("Proxy", function() {
         proxy = new CustomType();
         proxy.on("foo", listener);
         proxy.on("bar", listener);
-        nativeBridge.resetCalls();
+        client.resetCalls();
 
         proxy.off("bar", listener);
 
-        expect(nativeBridge.calls().length).to.equal(0);
+        expect(client.calls().length).to.equal(0);
       });
 
       it("calls native listen when not other listeners exist for aliased or alias event", function() {
@@ -520,12 +520,12 @@ describe("Proxy", function() {
         proxy = new CustomType();
         proxy.on("foo", listener);
         proxy.on("bar", listener);
-        nativeBridge.resetCalls();
+        client.resetCalls();
 
         proxy.off("bar", listener);
         proxy.off("foo", listener);
 
-        expect(nativeBridge.calls().length).to.equal(1);
+        expect(client.calls().length).to.equal(1);
       });
 
       it("calls native listen when not other listeners exist for aliased or alias event (reversed off)", function() {
@@ -533,12 +533,12 @@ describe("Proxy", function() {
         proxy = new CustomType();
         proxy.on("foo", listener);
         proxy.on("bar", listener);
-        nativeBridge.resetCalls();
+        client.resetCalls();
 
         proxy.off("foo", listener);
         proxy.off("bar", listener);
 
-        expect(nativeBridge.calls().length).to.equal(1);
+        expect(client.calls().length).to.equal(1);
       });
 
       it("returns self to allow chaining", function() {
@@ -562,7 +562,7 @@ describe("Proxy", function() {
       it("calls native destroy", function() {
         proxy.dispose();
 
-        let destroyCall = nativeBridge.calls({op: "destroy", id: proxy.cid})[0];
+        let destroyCall = client.calls({op: "destroy", id: proxy.cid})[0];
         expect(destroyCall).not.to.be.undefined;
       });
 
@@ -577,7 +577,7 @@ describe("Proxy", function() {
 
       it("notifies dispose listeners before native destroy", function() {
         proxy.on("dispose", () => {
-          expect(nativeBridge.calls({op: "destroy"}).length).to.eql(0);
+          expect(client.calls({op: "destroy"}).length).to.eql(0);
         });
 
         proxy.dispose();
@@ -587,7 +587,7 @@ describe("Proxy", function() {
         proxy.dispose();
         proxy.dispose();
 
-        expect(nativeBridge.calls({op: "destroy"}).length).to.equal(1);
+        expect(client.calls({op: "destroy"}).length).to.equal(1);
       });
 
       it("can be called from within a dispose listener", function() {
@@ -621,7 +621,7 @@ describe("Proxy.extend", function() {
   let nativeBridge;
 
   beforeEach(function() {
-    nativeBridge = new NativeBridgeSpy();
+    nativeBridge = new ClientStub();
     global.tabris = {
       on: () => {},
       _proxies: new ProxyStore()

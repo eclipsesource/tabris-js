@@ -1,8 +1,8 @@
-export default function NativeBridgeSpy() {
+export default function ClientStub() {
   this._calls = [];
 }
 
-NativeBridgeSpy.prototype = {
+ClientStub.prototype = {
 
   create: function() {
     this._calls.push({

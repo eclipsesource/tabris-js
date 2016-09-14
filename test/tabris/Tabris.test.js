@@ -1,17 +1,17 @@
 import {expect, spy, restore} from "../test";
 import Proxy from "../../src/tabris/Proxy";
 import ClientInterface from "../../src/tabris/Tabris";
-import NativeBridgeSpy from "./NativeBridgeSpy";
+import ClientStub from "./ClientStub";
 import "../../src/tabris/Tabris";
 
 describe("ClientInterface", function() {
 
   let tabris;
-  let nativeBridge;
+  let client;
 
   beforeEach(function() {
     tabris = global.tabris = new ClientInterface();
-    nativeBridge = new NativeBridgeSpy();
+    client = new ClientStub();
   });
 
   afterEach(restore);
@@ -20,7 +20,7 @@ describe("ClientInterface", function() {
 
     it("can be called without a context", function() {
       expect(() => {
-        tabris._init.call(null, nativeBridge);
+        tabris._init.call(null, client);
       }).to.not.throw();
     });
 
@@ -30,7 +30,7 @@ describe("ClientInterface", function() {
       tabris.load(f1);
       tabris.load(f2);
 
-      tabris._init.call(null, nativeBridge);
+      tabris._init.call(null, client);
 
       expect(f1).to.have.been.called;
       expect(f2).to.have.been.called;
@@ -41,9 +41,9 @@ describe("ClientInterface", function() {
       let TestType = Proxy.extend({_type: "test.Type"});
       tabris.load(() => new TestType());
 
-      tabris._init.call(null, nativeBridge);
+      tabris._init.call(null, client);
 
-      expect(nativeBridge.calls({op: "create", type: "test.Type"}).length).to.equal(1);
+      expect(client.calls({op: "create", type: "test.Type"}).length).to.equal(1);
     });
 
   });
@@ -54,7 +54,7 @@ describe("ClientInterface", function() {
     let proxy;
 
     beforeEach(function() {
-      tabris._init(nativeBridge);
+      tabris._init(client);
     });
 
     it("notifies widget proxy", function() {
@@ -194,7 +194,7 @@ describe("ClientInterface", function() {
       let fn = spy();
 
       tabris.load(fn);
-      tabris._init(nativeBridge);
+      tabris._init(client);
 
       expect(fn).to.have.been.called;
     });
@@ -214,7 +214,7 @@ describe("ClientInterface", function() {
       tabris.load(function() {
         log.push("2");
       });
-      tabris._init(nativeBridge);
+      tabris._init(client);
 
       expect(log).to.eql(["1", "2", "1a", "1b"]);
     });
@@ -222,7 +222,7 @@ describe("ClientInterface", function() {
     it("runs immediately if already started", function() {
       let fn = spy();
 
-      tabris._init(nativeBridge);
+      tabris._init(client);
       tabris.load(fn);
 
       expect(fn).to.have.been.called;

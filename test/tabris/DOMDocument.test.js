@@ -2,7 +2,7 @@ import {expect, spy, stub, restore} from "../test";
 import {addDOMDocument} from "../../src/tabris/DOMDocument";
 import DOMEvent from "../../src/tabris/DOMEvent";
 import NativeBridge from "../../src/tabris/NativeBridge";
-import NativeBridgeSpy from "./NativeBridgeSpy";
+import ClientStub from "./ClientStub";
 
 describe("DOMDocument", function() {
 
@@ -14,7 +14,7 @@ describe("DOMDocument", function() {
       on: () => {},
       load: cb => loadCallback = cb
     };
-    client = global.tabris._client = new NativeBridge(new NativeBridgeSpy());
+    client = global.tabris._client = new NativeBridge(new ClientStub());
     client.loadAndExecute = stub().returns({});
     addDOMDocument(target);
   });

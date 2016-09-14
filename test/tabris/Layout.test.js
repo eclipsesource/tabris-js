@@ -1,6 +1,6 @@
 import ProxyStore from "../../src/tabris/ProxyStore";
 import NativeBridge from "../../src/tabris/NativeBridge";
-import NativeBridgeSpy from "./NativeBridgeSpy";
+import ClientStub from "./ClientStub";
 import {expect, stub, spy, restore} from "../test";
 import Layout from "../../src/tabris/Layout";
 import Composite from "../../src/tabris/widgets/Composite";
@@ -95,7 +95,7 @@ describe("Layout", function() {
         on: () => {},
         _proxies: new ProxyStore()
       };
-      global.tabris._nativeBridge = new NativeBridge(new NativeBridgeSpy());
+      global.tabris._nativeBridge = new NativeBridge(new ClientStub());
       TestType = Widget.extend("TestType", {});
       parent = new Composite();
       widget = new TestType().appendTo(parent);

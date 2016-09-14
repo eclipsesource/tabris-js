@@ -2,23 +2,23 @@ import {expect, spy, restore} from "../test";
 import Page from "../../src/tabris/widgets/Page";
 import ProxyStore from "../../src/tabris/ProxyStore";
 import NativeBridge from "../../src/tabris/NativeBridge";
-import NativeBridgeSpy from "./NativeBridgeSpy";
+import ClientStub from "./ClientStub";
 import UI from "../../src/tabris/UI";
 
 describe("UI", function() {
 
-  let nativeBridge;
+  let client;
   let ui;
   let shellId;
 
   beforeEach(function() {
-    nativeBridge = new NativeBridgeSpy();
+    client = new ClientStub();
     global.tabris = {
       on: () => {},
       _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param),
       _proxies: new ProxyStore()
     };
-    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    global.tabris._nativeBridge = new NativeBridge(client);
     ui = new UI();
   });
 
@@ -27,27 +27,27 @@ describe("UI", function() {
   describe("creation", function() {
 
     it("creates Display, Shell, and tabris UI", function() {
-      let createCalls = nativeBridge.calls({op: "create"});
+      let createCalls = client.calls({op: "create"});
       expect(createCalls[0].type).to.equal("rwt.widgets.Display");
       expect(createCalls[1].type).to.equal("rwt.widgets.Shell");
       expect(createCalls[2].type).to.equal("tabris.UI");
     });
 
     it("created Shell is active, visible, and maximized", function() {
-      let shellCreate = nativeBridge.calls({op: "create", type: "rwt.widgets.Shell"})[0];
+      let shellCreate = client.calls({op: "create", type: "rwt.widgets.Shell"})[0];
       expect(shellCreate.properties.active).to.equal(true);
       expect(shellCreate.properties.visible).to.equal(true);
       expect(shellCreate.properties.mode).to.equal("maximized");
     });
 
     it("created tabris UI refers to Shell", function() {
-      let shellCreate = nativeBridge.calls({op: "create", type: "rwt.widgets.Shell"})[0];
-      let tabrisUiCreate = nativeBridge.calls({op: "create", type: "tabris.UI"})[0];
+      let shellCreate = client.calls({op: "create", type: "rwt.widgets.Shell"})[0];
+      let tabrisUiCreate = client.calls({op: "create", type: "tabris.UI"})[0];
       expect(tabrisUiCreate.properties.shell).to.equal(shellCreate.id);
     });
 
     it("listens on tabris UI ShowPreviousPage event", function() {
-      expect(nativeBridge.calls({op: "listen", id: ui.cid, event: "ShowPreviousPage"}).length).to.equal(1);
+      expect(client.calls({op: "listen", id: ui.cid, event: "ShowPreviousPage"}).length).to.equal(1);
     });
 
   });
@@ -56,8 +56,8 @@ describe("UI", function() {
 
     beforeEach(function() {
       tabris.ui = ui;
-      shellId = nativeBridge.calls({op: "create", type: "rwt.widgets.Shell"})[0].id;
-      nativeBridge.resetCalls();
+      shellId = client.calls({op: "create", type: "rwt.widgets.Shell"})[0].id;
+      client.resetCalls();
     });
 
     afterEach(function() {
@@ -72,7 +72,7 @@ describe("UI", function() {
 
       it("sends a Shell destroy", function() {
         // See https://github.com/eclipsesource/tabris-js/issues/28
-        expect(nativeBridge.calls({id: shellId, op: "destroy"}).length).to.equal(1);
+        expect(client.calls({id: shellId, op: "destroy"}).length).to.equal(1);
       });
 
     });
@@ -82,7 +82,7 @@ describe("UI", function() {
       it("sets win_toolbarTheme to valid value", function() {
         ui.set("win_toolbarTheme", value);
 
-        let call = nativeBridge.calls({op: "set"})[0];
+        let call = client.calls({op: "set"})[0];
         expect(call.properties.win_toolbarTheme).to.equal(value);
       });
 
@@ -92,7 +92,7 @@ describe("UI", function() {
       spy(console, "warn");
       ui.set("win_toolbarTheme", "foo");
 
-      expect(nativeBridge.calls({op: "set"}).length).to.equal(0);
+      expect(client.calls({op: "set"}).length).to.equal(0);
     });
 
     it("returns win_toolbarTheme default value", function() {
@@ -107,7 +107,7 @@ describe("UI", function() {
         page = new Page({title: "Foo", topLevel: true});
         ui.set("activePage", page);
         spy(page, "close");
-        nativeBridge.resetCalls();
+        client.resetCalls();
       });
 
       it("fails when closing the single page", function() {
@@ -140,7 +140,7 @@ describe("UI", function() {
         expect(() => {
           ui.set("activePage", new tabris.Button());
         }).to.throw();
-        expect(nativeBridge.calls({op: "set", id: ui.cid}).length).to.equal(0);
+        expect(client.calls({op: "set", id: ui.cid}).length).to.equal(0);
       });
 
       it("setting 'activePage' triggers 'appear' and 'disappear' events on pages", function() {
@@ -158,7 +158,7 @@ describe("UI", function() {
 
       it("setting 'activePage' issues a set operation", function() {
         ui.set("activePage", topLevelPage1);
-        let setCall = nativeBridge.calls({op: "set", id: ui.cid}).pop();
+        let setCall = client.calls({op: "set", id: ui.cid}).pop();
         expect(setCall.properties.activePage).to.equal(topLevelPage1._page.cid);
       });
 
@@ -266,7 +266,7 @@ describe("UI", function() {
 
         page3.close();
 
-        let lastSetCall = nativeBridge.calls({op: "set", id: ui.cid}).pop();
+        let lastSetCall = client.calls({op: "set", id: ui.cid}).pop();
         expect(lastSetCall.properties.activePage).to.equal(page2._page.cid);
         expect(ui.get("activePage")).to.equal(page2);
       });

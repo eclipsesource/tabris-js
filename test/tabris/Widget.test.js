@@ -3,22 +3,22 @@ import ProxyCollection from "../../src/tabris/ProxyCollection";
 import ProxyStore from "../../src/tabris/ProxyStore";
 import Layout from "../../src/tabris/Layout";
 import NativeBridge from "../../src/tabris/NativeBridge";
-import NativeBridgeSpy from "./NativeBridgeSpy";
+import ClientStub from "./ClientStub";
 import Widget from "../../src/tabris/Widget";
 import {extend, omit} from "../../src/tabris/util";
 
 describe("Widget", function() {
 
-  let nativeBridge;
+  let client;
   let TestWidget;
 
   beforeEach(function() {
-    nativeBridge = new NativeBridgeSpy();
+    client = new ClientStub();
     global.tabris = {
       on: () => {},
       _proxies: new ProxyStore()
     };
-    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    global.tabris._nativeBridge = new NativeBridge(client);
     TestWidget = Widget.extend({
       _name: "TestWidget",
       _supportsChildren: true
@@ -43,7 +43,7 @@ describe("Widget", function() {
 
     beforeEach(function() {
       widget = new TestWidget();
-      nativeBridge.resetCalls();
+      client.resetCalls();
     });
 
     it("is a Widget instance", function() {
@@ -53,7 +53,7 @@ describe("Widget", function() {
     it("translates textColor and background colors to arrays", function() {
       widget.set({textColor: "red", background: "rgba(1, 2, 3, 0.5)"});
 
-      let call = nativeBridge.calls({op: "set"})[0];
+      let call = client.calls({op: "set"})[0];
       expect(call.properties.foreground).to.eql([255, 0, 0, 255]);
       expect(call.properties.background).to.eql([1, 2, 3, 128]);
     });
@@ -61,7 +61,7 @@ describe("Widget", function() {
     it("translates font string to object", function() {
       widget.set({font: "12px Arial"});
 
-      let call = nativeBridge.calls({op: "set"})[0];
+      let call = client.calls({op: "set"})[0];
       expect(call.properties.font)
         .to.eql({family: ["Arial"], size: 12, style: "normal", weight: "normal"});
     });
@@ -73,16 +73,16 @@ describe("Widget", function() {
     });
 
     it("returns 'initial' when no value is cached", function() {
-      spy(nativeBridge, "get");
+      spy(client, "get");
 
       expect(widget.get("font")).to.eql("initial");
-      expect(nativeBridge.get).not.to.have.been.called;
+      expect(client.get).not.to.have.been.called;
     });
 
     it("translates backgroundImage to array", function() {
       widget.set({backgroundImage: {src: "bar", width: 23, height: 42}});
 
-      let call = nativeBridge.calls({op: "set"})[0];
+      let call = client.calls({op: "set"})[0];
       expect(call.properties.backgroundImage).to.eql(["bar", 23, 42, null]);
     });
 
@@ -90,7 +90,7 @@ describe("Widget", function() {
       spy(console, "warn");
       widget.set("bounds", {left: 1, top: 2, width: 3, height: 4});
 
-      expect(nativeBridge.calls({op: "set"}).length).to.equal(0);
+      expect(client.calls({op: "set"}).length).to.equal(0);
       expect(console.warn).to.have.been.calledWith(
         "TestWidget: Can not set read-only property \"bounds\"."
       );
@@ -99,14 +99,14 @@ describe("Widget", function() {
     it("sets elevation to value", function() {
       widget.set("elevation", 8);
 
-      let call = nativeBridge.calls({op: "set"})[0];
+      let call = client.calls({op: "set"})[0];
       expect(call.properties.elevation).to.equal(8);
     });
 
     it("sets cornerRadius to value", function() {
       widget.set("cornerRadius", 4);
 
-      let call = nativeBridge.calls({op: "set"})[0];
+      let call = client.calls({op: "set"})[0];
       expect(call.properties.cornerRadius).to.equal(4);
     });
 
@@ -115,7 +115,7 @@ describe("Widget", function() {
       it("sets win_theme to valid value", function() {
         widget.set("win_theme", value);
 
-        let call = nativeBridge.calls({op: "set"})[0];
+        let call = client.calls({op: "set"})[0];
         expect(call.properties.win_theme).to.equal(value);
       });
 
@@ -125,7 +125,7 @@ describe("Widget", function() {
       spy(console, "warn");
       widget.set("win_theme", "foo");
 
-      expect(nativeBridge.calls({op: "set"}).length).to.equal(0);
+      expect(client.calls({op: "set"}).length).to.equal(0);
     });
 
     it("returns win_theme default value", function() {
@@ -134,10 +134,10 @@ describe("Widget", function() {
 
     it("support 'initial' for textColor, background and font", function() {
       widget.set({textColor: "red", background: "green", font: "23px Arial"});
-      nativeBridge.resetCalls();
+      client.resetCalls();
       widget.set({textColor: "initial", background: "initial", font: "initial"});
 
-      let call = nativeBridge.calls({op: "set"})[0];
+      let call = client.calls({op: "set"})[0];
       expect(call.properties.foreground).to.be.null;
       expect(call.properties.background).to.be.null;
       expect(call.properties.font).to.be.null;
@@ -204,7 +204,7 @@ describe("Widget", function() {
       beforeEach(function() {
         parent = new TestWidget();
         child = new TestWidget().appendTo(parent);
-        nativeBridge.resetCalls();
+        client.resetCalls();
       });
 
       it("disposes children", function() {
@@ -228,13 +228,13 @@ describe("Widget", function() {
       it("DESTROYs native widget", function() {
         parent.dispose();
 
-        expect(nativeBridge.calls({op: "destroy", id: parent.cid}).length).to.equal(1);
+        expect(client.calls({op: "destroy", id: parent.cid}).length).to.equal(1);
       });
 
       it("does not DESTROY native children", function() {
         parent.dispose();
 
-        expect(nativeBridge.calls({op: "destroy", id: child.cid}).length).to.equal(0);
+        expect(client.calls({op: "destroy", id: child.cid}).length).to.equal(0);
       });
 
       it("notifies parent's remove listeners", function() {
@@ -304,7 +304,7 @@ describe("Widget", function() {
         widget = new TestWidget();
         child1 = new TestWidget({id: "child1"});
         child2 = new TestWidget({id: "child2"});
-        nativeBridge.resetCalls();
+        client.resetCalls();
         listener = spy();
       });
 
@@ -316,7 +316,7 @@ describe("Widget", function() {
         });
 
         it("sets the child's parent", function() {
-          let calls = nativeBridge.calls();
+          let calls = client.calls();
           expect(calls.length).to.equal(1);
           expect(calls[0]).to.eql({op: "set", id: child1.cid, properties: {parent: widget.cid}});
         });
@@ -350,7 +350,7 @@ describe("Widget", function() {
         });
 
         it("sets the children's parent", function() {
-          let calls = nativeBridge.calls();
+          let calls = client.calls();
           expect(calls.length).to.equal(2);
           expect(calls[1]).to.eql({op: "set", id: child2.cid, properties: {parent: widget.cid}});
         });
@@ -378,7 +378,7 @@ describe("Widget", function() {
         });
 
         it("sets the widgets' parent", function() {
-          let calls = nativeBridge.calls();
+          let calls = client.calls();
           expect(calls.length).to.equal(2);
           expect(calls[0]).to.eql({op: "set", id: child1.cid, properties: {parent: widget.cid}});
           expect(calls[1]).to.eql({op: "set", id: child2.cid, properties: {parent: widget.cid}});
@@ -401,7 +401,7 @@ describe("Widget", function() {
         });
 
         it("sets the widgets' parent", function() {
-          let calls = nativeBridge.calls();
+          let calls = client.calls();
           expect(calls.length).to.equal(2);
           expect(calls[0]).to.eql({op: "set", id: child1.cid, properties: {parent: widget.cid}});
           expect(calls[1]).to.eql({op: "set", id: child2.cid, properties: {parent: widget.cid}});
@@ -463,7 +463,7 @@ describe("Widget", function() {
 
       beforeEach(function() {
         parent1 = new TestWidget();
-        nativeBridge.resetCalls();
+        client.resetCalls();
         result = widget.appendTo(parent1);
       });
 
@@ -474,7 +474,7 @@ describe("Widget", function() {
         });
 
         it("sets the widget's parent", function() {
-          let setCall = nativeBridge.calls({op: "set", id: widget.cid})[0];
+          let setCall = client.calls({op: "set", id: widget.cid})[0];
           expect(setCall.properties.parent).to.eql(parent1.cid);
         });
 
@@ -513,7 +513,7 @@ describe("Widget", function() {
         beforeEach(function() {
           parent1 = new TestWidget();
           parent2 = new TestWidget();
-          nativeBridge.resetCalls();
+          client.resetCalls();
           result = widget.appendTo(new ProxyCollection([parent1, parent2]));
         });
 
@@ -846,11 +846,11 @@ describe("Widget", function() {
 
     beforeEach(function() {
       widget = new TestWidget();
-      nativeBridge.resetCalls();
+      client.resetCalls();
     });
 
     it("translates textColor to string", function() {
-      stub(nativeBridge, "get").returns([170, 255, 0, 128]);
+      stub(client, "get").returns([170, 255, 0, 128]);
 
       let result = widget.get("textColor");
 
@@ -858,7 +858,7 @@ describe("Widget", function() {
     });
 
     it("translates background to string", function() {
-      stub(nativeBridge, "get").returns([170, 255, 0, 128]);
+      stub(client, "get").returns([170, 255, 0, 128]);
 
       let result = widget.get("background");
 
@@ -866,7 +866,7 @@ describe("Widget", function() {
     });
 
     it("translates background null to string", function() {
-      stub(nativeBridge, "get").returns(null);
+      stub(client, "get").returns(null);
 
       let result = widget.get("background");
 
@@ -874,7 +874,7 @@ describe("Widget", function() {
     });
 
     it("translates bounds to object", function() {
-      stub(nativeBridge, "get").returns([1, 2, 3, 4]);
+      stub(client, "get").returns([1, 2, 3, 4]);
 
       let result = widget.get("bounds");
 
@@ -882,7 +882,7 @@ describe("Widget", function() {
     });
 
     it("translates bounds to object", function() {
-      stub(nativeBridge, "get").returns([1, 2, 3, 4]);
+      stub(client, "get").returns([1, 2, 3, 4]);
 
       let result = widget.get("bounds");
 
@@ -890,7 +890,7 @@ describe("Widget", function() {
     });
 
     it("translates backgroundImage to object", function() {
-      stub(nativeBridge, "get").returns(["foo", 23, 42]);
+      stub(client, "get").returns(["foo", 23, 42]);
 
       let result = widget.get("backgroundImage");
 
@@ -907,7 +907,7 @@ describe("Widget", function() {
       parent = new TestWidget();
       widget = new TestWidget().appendTo(parent);
       other = new TestWidget({id: "other"}).appendTo(parent);
-      nativeBridge.resetCalls();
+      client.resetCalls();
     });
 
     it("return null for undefined layoutData", function() {
@@ -961,7 +961,7 @@ describe("Widget", function() {
       widget.set("layoutData", {left: 23, baseline: "#other", right: ["#other", 42]});
       other = new TestWidget({id: "other"}).appendTo(parent);
 
-      let call = nativeBridge.calls({op: "set", id: widget.cid})[0];
+      let call = client.calls({op: "set", id: widget.cid})[0];
       let expected = {left: 23, baseline: other.cid, right: [other.cid, 42]};
       expect(call.properties.layoutData).to.eql(expected);
     });
@@ -972,7 +972,7 @@ describe("Widget", function() {
       widget.set("layoutData", {left: 23, baseline: "#other", right: ["#other", 42]});
       widget.appendTo(parent);
 
-      let call = nativeBridge.calls({op: "create"})[0];
+      let call = client.calls({op: "create"})[0];
       let expected = {left: 23, baseline: other.cid, right: [other.cid, 42]};
       expect(call.properties.layoutData).to.eql(expected);
     });
@@ -980,7 +980,7 @@ describe("Widget", function() {
     it("SET preliminary layoutData if selector does not resolve in flush", function() {
       widget.set("layoutData", {left: 23, baseline: "#mother", right: ["other", 42]});
 
-      let call = nativeBridge.calls({op: "set"})[0];
+      let call = client.calls({op: "set"})[0];
       let expected = {left: 23, baseline: 0, right: [0, 42]};
       expect(call.properties.layoutData).to.eql(expected);
     });
@@ -989,11 +989,11 @@ describe("Widget", function() {
       other.dispose();
 
       widget.set("layoutData", {right: "#other"});
-      let withoutSibling = nativeBridge.calls({op: "set"});
-      let retry = nativeBridge.calls({op: "set"});
+      let withoutSibling = client.calls({op: "set"});
+      let retry = client.calls({op: "set"});
       other = new TestWidget({id: "other"}).appendTo(parent);
-      let withSibling = nativeBridge.calls({op: "set"});
-      let noRetry = nativeBridge.calls({op: "set"});
+      let withSibling = client.calls({op: "set"});
+      let noRetry = client.calls({op: "set"});
 
       expect(withoutSibling.length).to.equal(1);
       expect(retry.length).to.equal(1);
@@ -1007,14 +1007,14 @@ describe("Widget", function() {
       widget = new TestWidget();
       let oldParent = new TestWidget();
       widget.appendTo(oldParent);
-      nativeBridge.resetCalls();
+      client.resetCalls();
 
       widget.set("layoutData", {right: "#other"});
-      let withoutParent = nativeBridge.calls({op: "set"});
-      let retry = nativeBridge.calls({op: "set"});
+      let withoutParent = client.calls({op: "set"});
+      let retry = client.calls({op: "set"});
       widget.appendTo(parent);
-      let withParent = nativeBridge.calls({op: "set"});
-      let noRetry = nativeBridge.calls({op: "set"});
+      let withParent = client.calls({op: "set"});
+      let noRetry = client.calls({op: "set"});
 
       expect(withoutParent.length).to.equal(1);
       expect(retry.length).to.equal(1);
@@ -1034,7 +1034,7 @@ describe("Widget", function() {
       parent = new TestWidget();
       other = new TestWidget({id: "other"}).appendTo(parent);
       widget = new TestWidget().appendTo(parent);
-      nativeBridge.resetCalls();
+      client.resetCalls();
     });
 
     ["left", "right", "top", "bottom"].forEach((attr) => {
@@ -1092,7 +1092,7 @@ describe("Widget", function() {
       it("SETs layoutData", function() {
         widget.set(attr, 23);
 
-        let call = nativeBridge.calls({op: "set"})[0];
+        let call = client.calls({op: "set"})[0];
         let expected = {};
         expected[attr] = 23;
         expect(call.properties.layoutData).to.eql(expected);
@@ -1119,7 +1119,7 @@ describe("Widget", function() {
       it("SETs layoutData", function() {
         widget.set(attr, 23);
 
-        let call = nativeBridge.calls({op: "set"})[0];
+        let call = client.calls({op: "set"})[0];
         let expected = {};
         expected[attr] = 23;
         expect(call.properties.layoutData).to.eql(expected);
@@ -1132,7 +1132,7 @@ describe("Widget", function() {
 
       widget.set("left", 10).set("width", 10).set("right", 10).set("left", null);
 
-      let call = nativeBridge.calls({op: "set"})[0];
+      let call = client.calls({op: "set"})[0];
       let expected = {right: 10, width: 10};
       expect(call.properties.layoutData).to.eql(expected);
       expect(console.warn).not.to.have.been.called;
@@ -1143,7 +1143,7 @@ describe("Widget", function() {
 
       widget.set("left", 10).set("width", 10).set("right", 10);
 
-      let call = nativeBridge.calls({op: "set"})[0];
+      let call = client.calls({op: "set"})[0];
       let expected = {right: 10, left: 10};
       expect(call.properties.layoutData).to.eql(expected);
       expect(console.warn).to.have.been.called;
@@ -1164,11 +1164,11 @@ describe("Widget", function() {
       child = new TestWidget({
         layoutData: {left: 23, top: 42}
       }).appendTo(parent);
-      nativeBridge.resetCalls();
+      client.resetCalls();
 
       parent._flushLayout();
 
-      let call = nativeBridge.calls({op: "set", id: child.cid})[0];
+      let call = client.calls({op: "set", id: child.cid})[0];
       expect(call.properties.layoutData).to.eql({left: 23, top: 42});
     });
 
@@ -1228,7 +1228,7 @@ describe("Widget", function() {
     }
 
     function checkListen(event) {
-      let listen = nativeBridge.calls({op: "listen", id: widget.cid});
+      let listen = client.calls({op: "listen", id: widget.cid});
       expect(listen.length).to.equal(1);
       expect(listen[0].event).to.equal(event);
       expect(listen[0].listen).to.be.true;

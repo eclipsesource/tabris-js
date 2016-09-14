@@ -1,5 +1,5 @@
 import {expect} from "../../test";
-import NativeBridgeSpy from "../NativeBridgeSpy";
+import ClientStub from "../ClientStub";
 import Tab from "../../../src/tabris/widgets/Tab";
 import Composite from "../../../src/tabris/widgets/Composite";
 import ProxyStore from "../../../src/tabris/ProxyStore";
@@ -7,17 +7,17 @@ import NativeBridge from "../../../src/tabris/NativeBridge";
 
 describe("Tab", function() {
 
-  let nativeBridge;
+  let client;
 
   beforeEach(function() {
-    nativeBridge = new NativeBridgeSpy();
+    client = new ClientStub();
     global.tabris = {
       on: () => {},
       _proxies: new ProxyStore(),
       _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
     };
-    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
-    nativeBridge.resetCalls();
+    global.tabris._nativeBridge = new NativeBridge(client);
+    client.resetCalls();
   });
 
   describe("when created", function() {
@@ -33,7 +33,7 @@ describe("Tab", function() {
         background: "#010203",
         visible: false
       });
-      create = nativeBridge.calls({op: "create"})[0];
+      create = client.calls({op: "create"})[0];
     });
 
     it("creates a Tab", function() {

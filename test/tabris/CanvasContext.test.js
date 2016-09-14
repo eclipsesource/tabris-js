@@ -2,7 +2,7 @@ import {expect, stub, spy, restore} from "../test";
 import ProxyStore from "../../src/tabris/ProxyStore";
 import NativeBridge from "../../src/tabris/NativeBridge";
 import GC from "../../src/tabris/GC";
-import NativeBridgeSpy from "./NativeBridgeSpy";
+import ClientStub from "./ClientStub";
 import CanvasContext from "../../src/tabris/CanvasContext";
 import ImageData from "../../src/tabris/ImageData";
 import Canvas from "../../src/tabris/widgets/Canvas";
@@ -10,19 +10,19 @@ import Events from "../../src/tabris/Events";
 
 describe("CanvasContext", function() {
 
-  let nativeBridge;
+  let client;
   let ctx;
   let gc;
 
   beforeEach(function() {
-    nativeBridge = new NativeBridgeSpy();
+    client = new ClientStub();
     global.tabris = Object.assign({
       on: () => {},
       off: () => {},
       _proxies: new ProxyStore()
     }, Events);
     global.device = {platform: "Android"};
-    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    global.tabris._nativeBridge = new NativeBridge(client);
     gc = new GC();
     ctx = new CanvasContext(gc);
   });
@@ -37,12 +37,12 @@ describe("CanvasContext", function() {
   }
 
   function getLastPacket() {
-    let calls = nativeBridge.calls({id: gc.cid, op: "call", method: "draw"});
+    let calls = client.calls({id: gc.cid, op: "call", method: "draw"});
     return calls.length ? calls[calls.length - 1].parameters.packedOperations : undefined;
   }
 
   function decodeLastPacket() {
-    let calls = nativeBridge.calls({id: gc.cid, op: "call", method: "draw"});
+    let calls = client.calls({id: gc.cid, op: "call", method: "draw"});
     return calls.length ? decode(calls[calls.length - 1].parameters.packedOperations) : {};
   }
 
@@ -65,7 +65,7 @@ describe("CanvasContext", function() {
 
     beforeEach(function() {
       canvas = new Canvas();
-      nativeBridge.resetCalls();
+      client.resetCalls();
     });
 
     it("returns null without \"2d\" parameter", function() {
@@ -75,7 +75,7 @@ describe("CanvasContext", function() {
     it("creates a native GC with parent", function() {
       canvas.getContext("2d", 100, 200);
 
-      let createCalls = nativeBridge.calls({op: "create", type: "rwt.widgets.GC"});
+      let createCalls = client.calls({op: "create", type: "rwt.widgets.GC"});
       expect(createCalls.length).to.equal(1);
       expect(createCalls[0].properties.parent).to.equal(canvas.cid);
     });
@@ -97,7 +97,7 @@ describe("CanvasContext", function() {
     it("calls init", function() {
       canvas.getContext("2d", 100, 200);
 
-      let call = nativeBridge.calls({op: "call", method: "init"})[0];
+      let call = client.calls({op: "call", method: "init"})[0];
       expect(call.parameters.width).to.eql(100);
       expect(call.parameters.height).to.eql(200);
     });
@@ -107,7 +107,7 @@ describe("CanvasContext", function() {
 
       canvas.getContext("2d", 200, 100);
 
-      let call = nativeBridge.calls({op: "call", method: "init"})[1];
+      let call = client.calls({op: "call", method: "init"})[1];
       expect(call.parameters.width).to.eql(200);
       expect(call.parameters.height).to.eql(100);
     });
@@ -493,7 +493,7 @@ describe("CanvasContext", function() {
       ctx.lineTo(10, 20);
       ctx.moveTo(30, 40);
       flush();
-      nativeBridge.resetCalls();
+      client.resetCalls();
 
       ctx.lineTo(50, 60);
       ctx.moveTo(70, 80);
@@ -507,7 +507,7 @@ describe("CanvasContext", function() {
       ctx.lineTo(10, 20);
       ctx.moveTo(30, 40);
       flush();
-      nativeBridge.resetCalls();
+      client.resetCalls();
 
       ctx.rect(10, 20, 30, 40);
       flush();
@@ -901,13 +901,13 @@ describe("CanvasContext", function() {
 
     beforeEach(function() {
       array = new Uint8ClampedArray(60);
-      stub(nativeBridge, "call").returns(array);
+      stub(client, "call").returns(array);
     });
 
     it("is rendered", function() {
       ctx.getImageData(10, 20, 5, 3);
 
-      expect(nativeBridge.call).to.have.been.calledWith(gc.cid, "getImageData", {
+      expect(client.call).to.have.been.calledWith(gc.cid, "getImageData", {
         x: 10,
         y: 20,
         width: 5,
@@ -935,13 +935,13 @@ describe("CanvasContext", function() {
 
     beforeEach(function() {
       imageData = new ImageData(3, 5);
-      spy(nativeBridge, "call");
+      spy(client, "call");
     });
 
     it("is rendered", function() {
       ctx.putImageData(imageData, 10, 20);
 
-      expect(nativeBridge.call).to.have.been.calledWith(gc.cid, "putImageData", {
+      expect(client.call).to.have.been.calledWith(gc.cid, "putImageData", {
         data: imageData.data,
         x: 10,
         y: 20,

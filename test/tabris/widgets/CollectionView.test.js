@@ -1,26 +1,26 @@
 import {expect, spy, stub, restore, match} from "../../test";
 import ProxyStore from "../../../src/tabris/ProxyStore";
 import NativeBridge from "../../../src/tabris/NativeBridge";
-import NativeBridgeSpy from "../NativeBridgeSpy";
+import ClientStub from "../ClientStub";
 import CollectionView from "../../../src/tabris/widgets/CollectionView";
 import Composite from "../../../src/tabris/widgets/Composite";
 import Cell from "../../../src/tabris/widgets/Cell";
 
 describe("CollectionView", function() {
 
-  let nativeBridge;
+  let client;
   let parent;
 
   beforeEach(function() {
-    nativeBridge = new NativeBridgeSpy();
+    client = new ClientStub();
     global.tabris = {
       on: () => {},
       _proxies: new ProxyStore(),
       _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
     };
-    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    global.tabris._nativeBridge = new NativeBridge(client);
     parent = new Composite();
-    nativeBridge.resetCalls();
+    client.resetCalls();
   });
 
   afterEach(restore);
@@ -33,20 +33,20 @@ describe("CollectionView", function() {
     });
 
     it("creates a native view", function() {
-      let createCalls = nativeBridge.calls({op: "create"});
+      let createCalls = client.calls({op: "create"});
       expect(createCalls.length).to.equal(1);
       expect(createCalls[0].type).to.equal("tabris.CollectionView");
     });
 
     it("includes standard properties in native create", function() {
-      let createCalls = nativeBridge.calls({op: "create"});
+      let createCalls = client.calls({op: "create"});
       expect(createCalls[0].properties.background).to.eql([255, 255, 0, 255]);
     });
 
     it("listens on native events `requestinfo`, `createitem`, and `populateitem`", function() {
-      expect(nativeBridge.calls({op: "listen", event: "requestinfo"})[0].listen).to.equal(true);
-      expect(nativeBridge.calls({op: "listen", event: "createitem"})[0].listen).to.equal(true);
-      expect(nativeBridge.calls({op: "listen", event: "populateitem"})[0].listen).to.equal(true);
+      expect(client.calls({op: "listen", event: "requestinfo"})[0].listen).to.equal(true);
+      expect(client.calls({op: "listen", event: "createitem"})[0].listen).to.equal(true);
+      expect(client.calls({op: "listen", event: "populateitem"})[0].listen).to.equal(true);
     });
 
     it("returns default property values", function() {
@@ -61,7 +61,7 @@ describe("CollectionView", function() {
     describe("refreshIndicator", function() {
 
       it("calls native GET", function() {
-        stub(nativeBridge, "get").returns(false);
+        stub(client, "get").returns(false);
 
         expect(view.get("refreshIndicator")).to.equal(false);
       });
@@ -73,21 +73,21 @@ describe("CollectionView", function() {
       describe(prop, function() {
 
         it("GETs property from client", function() {
-          stub(nativeBridge, "get").returns(23);
+          stub(client, "get").returns(23);
 
           let result = view.get(prop);
 
           expect(result).to.equal(23);
-          expect(nativeBridge.get).to.have.been.called;
+          expect(client.get).to.have.been.called;
         });
 
         it("prevents setting the property", function() {
           spy(console, "warn");
-          spy(nativeBridge, "set");
+          spy(client, "set");
 
           view.set(prop, 23);
 
-          expect(nativeBridge.set).to.have.not.been.called;
+          expect(client.set).to.have.not.been.called;
           expect(console.warn).to.have.been.called;
           expect(console.warn).to.have.been.calledWith(match("Cannot set read-only property '" + prop + "'"));
         });
@@ -104,14 +104,14 @@ describe("CollectionView", function() {
           view.on(changeEvent, listener);
           view.on(changeEvent, listener);
 
-          expect(nativeBridge.calls({op: "listen", id: view.cid, event: "scroll"}).length).to.equal(1);
+          expect(client.calls({op: "listen", id: view.cid, event: "scroll"}).length).to.equal(1);
         });
 
         it("listener is notified once for every new index", function() {
           let listener = spy();
           let index = 23;
           view.on(changeEvent, listener);
-          stub(nativeBridge, "get", () => index);
+          stub(client, "get", () => index);
 
           view._trigger("scroll", {});
           view._trigger("scroll", {});
@@ -129,7 +129,7 @@ describe("CollectionView", function() {
           let listener = spy();
           view.on(changeEvent, listener);
           view.on(changeEvent, function() {});
-          stub(nativeBridge, "get").returns(23);
+          stub(client, "get").returns(23);
 
           view._trigger("scroll", {});
 
@@ -141,7 +141,7 @@ describe("CollectionView", function() {
           view.on(changeEvent, listener);
           view.off(changeEvent, listener);
           view.on(changeEvent, listener);
-          stub(nativeBridge, "get").returns(23);
+          stub(client, "get").returns(23);
 
           view._trigger("scroll", {});
 
@@ -157,8 +157,8 @@ describe("CollectionView", function() {
       let cellTypeFn = spy();
 
       beforeEach(function() {
-        nativeBridge.resetCalls();
-        spy(nativeBridge, "set");
+        client.resetCalls();
+        spy(client, "set");
         view.set("cellType", cellTypeFn);
         tabris._nativeBridge.flush();
       });
@@ -168,7 +168,7 @@ describe("CollectionView", function() {
       });
 
       it("does not SET native property", function() {
-        expect(nativeBridge.set).to.have.not.been.called;
+        expect(client.set).to.have.not.been.called;
       });
 
     });
@@ -176,8 +176,8 @@ describe("CollectionView", function() {
     describe("when cellType is set to a string", function() {
 
       beforeEach(function() {
-        nativeBridge.resetCalls();
-        spy(nativeBridge, "set");
+        client.resetCalls();
+        spy(client, "set");
         view.set("cellType", "foo");
         tabris._nativeBridge.flush();
       });
@@ -187,7 +187,7 @@ describe("CollectionView", function() {
       });
 
       it("does not SET native property", function() {
-        expect(nativeBridge.set).to.have.not.been.called;
+        expect(client.set).to.have.not.been.called;
       });
 
     });
@@ -197,8 +197,8 @@ describe("CollectionView", function() {
       let itemHeightFn = spy();
 
       beforeEach(function() {
-        nativeBridge.resetCalls();
-        spy(nativeBridge, "set");
+        client.resetCalls();
+        spy(client, "set");
         view.set("itemHeight", itemHeightFn);
         tabris._nativeBridge.flush();
       });
@@ -208,7 +208,7 @@ describe("CollectionView", function() {
       });
 
       it("does not SET native property", function() {
-        expect(nativeBridge.set).to.have.not.been.called;
+        expect(client.set).to.have.not.been.called;
       });
 
     });
@@ -216,7 +216,7 @@ describe("CollectionView", function() {
     describe("when itemHeight is set to a number", function() {
 
       beforeEach(function() {
-        nativeBridge.resetCalls();
+        client.resetCalls();
         view.set("itemHeight", 23);
         tabris._nativeBridge.flush();
       });
@@ -226,7 +226,7 @@ describe("CollectionView", function() {
       });
 
       it("SETs native property", function() {
-        let calls = nativeBridge.calls({op: "set"});
+        let calls = client.calls({op: "set"});
         expect(calls[0].properties.itemHeight).to.equal(23);
       });
 
@@ -238,7 +238,7 @@ describe("CollectionView", function() {
 
       beforeEach(function() {
         initializeCell = spy();
-        nativeBridge.resetCalls();
+        client.resetCalls();
         view.set("initializeCell", initializeCell);
       });
 
@@ -247,7 +247,7 @@ describe("CollectionView", function() {
       });
 
       it("does not SET property on client", function() {
-        expect(nativeBridge.calls({op: "set", id: view.cid}).length).to.equal(0);
+        expect(client.calls({op: "set", id: view.cid}).length).to.equal(0);
       });
 
       describe("when items is set", function() {
@@ -256,12 +256,12 @@ describe("CollectionView", function() {
 
         beforeEach(function() {
           items = ["a", "b", "c"];
-          nativeBridge.resetCalls();
+          client.resetCalls();
           view.set("items", items);
         });
 
         it("calls native reload with item count", function() {
-          let calls = nativeBridge.calls({op: "call", id: view.cid, method: "reload"});
+          let calls = client.calls({op: "call", id: view.cid, method: "reload"});
           expect(calls[0].parameters).to.eql({items: 3});
         });
 
@@ -291,7 +291,7 @@ describe("CollectionView", function() {
               view._trigger("requestinfo", {index: 0});
               view._trigger("requestinfo", {index: 1});
               view._trigger("requestinfo", {index: 2});
-              describeCalls = nativeBridge.calls({op: "call", method: "describeItem"});
+              describeCalls = client.calls({op: "call", method: "describeItem"});
             });
 
             it("executes `cellType` function", function() {
@@ -326,7 +326,7 @@ describe("CollectionView", function() {
               view.set("cellType", "foo");
               tabris._nativeBridge.flush();
               view._trigger("requestinfo", {index: 0});
-              describeCalls = nativeBridge.calls({op: "call", method: "describeItem"});
+              describeCalls = client.calls({op: "call", method: "describeItem"});
             });
 
             it("CALLs `describeItem` with type set to zero", function() {
@@ -343,7 +343,7 @@ describe("CollectionView", function() {
               view._trigger("requestinfo", {index: 0});
               view._trigger("requestinfo", {index: 1});
               view._trigger("requestinfo", {index: 2});
-              describeCalls = nativeBridge.calls({op: "call", method: "describeItem"});
+              describeCalls = client.calls({op: "call", method: "describeItem"});
             });
 
             it("executes `itemHeight` function", function() {
@@ -369,7 +369,7 @@ describe("CollectionView", function() {
               view._trigger("requestinfo", {index: 0});
               view._trigger("requestinfo", {index: 1});
               view._trigger("requestinfo", {index: 2});
-              describeCalls = nativeBridge.calls({op: "call", method: "describeItem"});
+              describeCalls = client.calls({op: "call", method: "describeItem"});
             });
 
             it("executes `itemHeight` function", function() {
@@ -392,7 +392,7 @@ describe("CollectionView", function() {
               view.set("itemHeight", 23);
               tabris._nativeBridge.flush();
               view._trigger("requestinfo", {index: 0});
-              describeCalls = nativeBridge.calls({op: "call", method: "describeItem"});
+              describeCalls = client.calls({op: "call", method: "describeItem"});
             });
 
             it("doesn't CALL `describeItem`", function() {
@@ -406,12 +406,12 @@ describe("CollectionView", function() {
         describe("when items is set again", function() {
 
           beforeEach(function() {
-            nativeBridge.resetCalls();
+            client.resetCalls();
             view.set("items", ["e", "f"]);
           });
 
           it("calls native reload with item count", function() {
-            let calls = nativeBridge.calls({op: "call", id: view.cid, method: "reload"});
+            let calls = client.calls({op: "call", id: view.cid, method: "reload"});
             expect(calls[0].parameters).to.eql({items: 2});
           });
 
@@ -420,12 +420,12 @@ describe("CollectionView", function() {
         describe("when items is set to null", function() {
 
           beforeEach(function() {
-            nativeBridge.resetCalls();
+            client.resetCalls();
             view.set("items", null);
           });
 
           it("calls native reload with 0", function() {
-            let calls = nativeBridge.calls({op: "call", id: view.cid, method: "reload"});
+            let calls = client.calls({op: "call", id: view.cid, method: "reload"});
             expect(calls[0].parameters).to.eql({items: 0});
           });
 
@@ -481,7 +481,7 @@ describe("CollectionView", function() {
 
           beforeEach(function() {
             view._trigger("createitem", {type: 0});
-            cellCreateCall = nativeBridge.calls({op: "create", type: "tabris.Composite"})[0];
+            cellCreateCall = client.calls({op: "create", type: "tabris.Composite"})[0];
             cell = tabris._proxies.find(cellCreateCall.id);
           });
 
@@ -491,7 +491,7 @@ describe("CollectionView", function() {
           });
 
           it("calls native addItem with created cell", function() {
-            let addItemCall = nativeBridge.calls({op: "call", id: view.cid, method: "addItem"})[0];
+            let addItemCall = client.calls({op: "call", id: view.cid, method: "addItem"})[0];
             expect(addItemCall.parameters).to.eql({widget: cell.cid});
           });
 
@@ -617,7 +617,7 @@ describe("CollectionView", function() {
 
     function createCell(item) {
       view._trigger("createitem", {type: 0});
-      let createCalls = nativeBridge.calls({op: "create", type: "tabris.Composite"});
+      let createCalls = client.calls({op: "create", type: "tabris.Composite"});
       let cell = tabris._proxies.find(createCalls[createCalls.length - 1].id);
       view._trigger("populateitem", {widget: cell.cid, index: view.get("items").indexOf(item)});
       return cell;
@@ -631,10 +631,10 @@ describe("CollectionView", function() {
     });
 
     it("calls reload after create and listen calls", function() {
-      let allCalls = nativeBridge.calls({id: view.cid});
-      let listen1Call = nativeBridge.calls({op: "listen", event: "createitem", id: view.cid})[0];
-      let listen2Call = nativeBridge.calls({op: "listen", event: "populateitem", id: view.cid})[0];
-      let reloadCall = nativeBridge.calls({op: "call", method: "reload", id: view.cid})[0];
+      let allCalls = client.calls({id: view.cid});
+      let listen1Call = client.calls({op: "listen", event: "createitem", id: view.cid})[0];
+      let listen2Call = client.calls({op: "listen", event: "populateitem", id: view.cid})[0];
+      let reloadCall = client.calls({op: "call", method: "reload", id: view.cid})[0];
 
       expect(allCalls.indexOf(reloadCall)).to.be.above(allCalls.indexOf(listen1Call));
       expect(allCalls.indexOf(reloadCall)).to.be.above(allCalls.indexOf(listen2Call));
@@ -642,7 +642,7 @@ describe("CollectionView", function() {
 
     describe("insert", function() {
       beforeEach(function() {
-        nativeBridge.resetCalls();
+        client.resetCalls();
       });
 
       it("can prepend to items array", function() {
@@ -660,14 +660,14 @@ describe("CollectionView", function() {
       it("calls native update", function() {
         view.insert(["d", "e"], 1);
 
-        let updateCall = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
+        let updateCall = client.calls({op: "call", method: "update", id: view.cid})[0];
         expect(updateCall.parameters).to.eql({insert: [1, 2]});
       });
 
       it("handles single parameter", function() {
         view.insert(["d", "e"]);
 
-        let updateCall = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
+        let updateCall = client.calls({op: "call", method: "update", id: view.cid})[0];
         expect(updateCall.parameters).to.eql({insert: [3, 2]});
         expect(view.get("items")).to.eql(["A", "B", "C", "d", "e"]);
       });
@@ -675,7 +675,7 @@ describe("CollectionView", function() {
       it("handles negative index", function() {
         view.insert(["d", "e"], -1);
 
-        let updateCall = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
+        let updateCall = client.calls({op: "call", method: "update", id: view.cid})[0];
         expect(updateCall.parameters).to.eql({insert: [2, 2]});
         expect(view.get("items")).to.eql(["A", "B", "d", "e", "C"]);
       });
@@ -683,7 +683,7 @@ describe("CollectionView", function() {
       it("adjusts index to bounds", function() {
         view.insert(["x"], 5);
 
-        let call = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
+        let call = client.calls({op: "call", method: "update", id: view.cid})[0];
         expect(call.parameters).to.eql({insert: [3, 1]});
         expect(view.get("items")).to.eql(["A", "B", "C", "x"]);
       });
@@ -691,7 +691,7 @@ describe("CollectionView", function() {
       it("adjusts negative index to bounds", function() {
         view.insert(["x"], -5);
 
-        let call = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
+        let call = client.calls({op: "call", method: "update", id: view.cid})[0];
         expect(call.parameters).to.eql({insert: [0, 1]});
         expect(view.get("items")).to.eql(["x", "A", "B", "C"]);
       });
@@ -730,7 +730,7 @@ describe("CollectionView", function() {
     describe("remove", function() {
 
       beforeEach(function() {
-        nativeBridge.resetCalls();
+        client.resetCalls();
       });
 
       it("can remove beginning of items array", function() {
@@ -748,14 +748,14 @@ describe("CollectionView", function() {
       it("calls native update", function() {
         view.remove(1, 2);
 
-        let updateCall = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
+        let updateCall = client.calls({op: "call", method: "update", id: view.cid})[0];
         expect(updateCall.parameters).to.eql({remove: [1, 2]});
       });
 
       it("handles single parameter", function() {
         view.remove(1);
 
-        let updateCall = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
+        let updateCall = client.calls({op: "call", method: "update", id: view.cid})[0];
         expect(updateCall.parameters).to.eql({remove: [1, 1]});
         expect(view.get("items")).to.eql(["A", "C"]);
       });
@@ -763,7 +763,7 @@ describe("CollectionView", function() {
       it("handles negative index", function() {
         view.remove(-1, 1);
 
-        let updateCall = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
+        let updateCall = client.calls({op: "call", method: "update", id: view.cid})[0];
         expect(updateCall.parameters).to.eql({remove: [2, 1]});
         expect(view.get("items")).to.eql(["A", "B"]);
       });
@@ -771,7 +771,7 @@ describe("CollectionView", function() {
       it("ignores index out of bounds", function() {
         view.remove(5, 2);
 
-        let updateCalls = nativeBridge.calls({op: "call", method: "update", id: view.cid});
+        let updateCalls = client.calls({op: "call", method: "update", id: view.cid});
         expect(updateCalls).to.eql([]);
         expect(view.get("items")).to.eql(["A", "B", "C"]);
       });
@@ -779,7 +779,7 @@ describe("CollectionView", function() {
       it("ignores negative index out of bounds", function() {
         view.remove(-5, 2);
 
-        let updateCalls = nativeBridge.calls({op: "call", method: "update", id: view.cid});
+        let updateCalls = client.calls({op: "call", method: "update", id: view.cid});
         expect(updateCalls).to.eql([]);
         expect(view.get("items")).to.eql(["A", "B", "C"]);
       });
@@ -787,7 +787,7 @@ describe("CollectionView", function() {
       it("repairs count if exceeding", function() {
         view.remove(2, 5);
 
-        let updateCall = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
+        let updateCall = client.calls({op: "call", method: "update", id: view.cid})[0];
         expect(updateCall.parameters).to.eql({remove: [2, 1]});
         expect(view.get("items")).to.eql(["A", "B"]);
       });
@@ -795,7 +795,7 @@ describe("CollectionView", function() {
       it("ignores zero count", function() {
         view.remove(2, 0);
 
-        let updateCalls = nativeBridge.calls({op: "call", method: "update", id: view.cid});
+        let updateCalls = client.calls({op: "call", method: "update", id: view.cid});
         expect(updateCalls).to.eql([]);
         expect(view.get("items")).to.eql(["A", "B", "C"]);
       });
@@ -834,34 +834,34 @@ describe("CollectionView", function() {
     describe("refresh", function() {
 
       beforeEach(function() {
-        nativeBridge.resetCalls();
+        client.resetCalls();
       });
 
       it("without parameters calls native update", function() {
         view.refresh();
 
-        let updateCall = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
+        let updateCall = client.calls({op: "call", method: "update", id: view.cid})[0];
         expect(updateCall.parameters.reload).to.eql([0, 3]);
       });
 
       it("calls native update", function() {
         view.refresh(1);
 
-        let updateCall = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
+        let updateCall = client.calls({op: "call", method: "update", id: view.cid})[0];
         expect(updateCall.parameters.reload).to.eql([1, 1]);
       });
 
       it("accepts negative index", function() {
         view.refresh(-1);
 
-        let updateCall = nativeBridge.calls({op: "call", method: "update", id: view.cid})[0];
+        let updateCall = client.calls({op: "call", method: "update", id: view.cid})[0];
         expect(updateCall.parameters.reload).to.eql([2, 1]);
       });
 
       it("ignores out-of-bounds index", function() {
         view.refresh(5);
 
-        let calls = nativeBridge.calls({op: "call", method: "update", id: view.cid});
+        let calls = client.calls({op: "call", method: "update", id: view.cid});
         expect(calls).to.eql([]);
       });
 
@@ -876,27 +876,27 @@ describe("CollectionView", function() {
     describe("reveal", function() {
 
       beforeEach(function() {
-        nativeBridge.resetCalls();
+        client.resetCalls();
       });
 
       it("calls native reveal with index", function() {
         view.reveal(1);
 
-        let call = nativeBridge.calls({op: "call", method: "reveal", id: view.cid})[0];
+        let call = client.calls({op: "call", method: "reveal", id: view.cid})[0];
         expect(call.parameters).to.eql({index: 1});
       });
 
       it("accepts negative index", function() {
         view.reveal(-1);
 
-        let call = nativeBridge.calls({op: "call", method: "reveal", id: view.cid})[0];
+        let call = client.calls({op: "call", method: "reveal", id: view.cid})[0];
         expect(call.parameters).to.eql({index: 2});
       });
 
       it("ignores out-of-bounds index", function() {
         view.reveal(5);
 
-        let calls = nativeBridge.calls({op: "call", method: "reveal", id: view.cid});
+        let calls = client.calls({op: "call", method: "reveal", id: view.cid});
         expect(calls).to.eql([]);
       });
 

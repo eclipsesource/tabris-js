@@ -1,23 +1,23 @@
 import ProxyStore from "../../src/tabris/ProxyStore";
 import {expect, spy, restore} from "../test";
 import NativeBridge from "../../src/tabris/NativeBridge";
-import NativeBridgeSpy from "./NativeBridgeSpy";
+import ClientStub from "./ClientStub";
 import {addWindowTimerMethods} from "../../src/tabris/WindowTimers";
 
 describe("WindowTimers", function() {
 
-  let nativeBridge;
+  let client;
   let target;
 
   beforeEach(function() {
-    nativeBridge = new NativeBridgeSpy();
+    client = new ClientStub();
     global.tabris = {
       on: () => {},
       _proxies: new ProxyStore(),
       _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param),
       load: fn => fn.call()
     };
-    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    global.tabris._nativeBridge = new NativeBridge(client);
     target = {};
   });
 
@@ -43,9 +43,9 @@ describe("WindowTimers", function() {
     let taskId;
     let callback;
     let method;
-    let createCall = function() { return nativeBridge.calls({op: "create", type: "tabris.Timer"})[0]; };
-    let listenCall = function() { return nativeBridge.calls({id: createCall().id, op: "listen", event: "Run"})[0]; };
-    let startCall = function() { return nativeBridge.calls({id: createCall().id, op: "call", method: "start"})[0]; };
+    let createCall = function() { return client.calls({op: "create", type: "tabris.Timer"})[0]; };
+    let listenCall = function() { return client.calls({id: createCall().id, op: "listen", event: "Run"})[0]; };
+    let startCall = function() { return client.calls({id: createCall().id, op: "call", method: "start"})[0]; };
     let isInterval = name === "setInterval";
 
     beforeEach(function() {
@@ -94,9 +94,9 @@ describe("WindowTimers", function() {
       });
 
       it("create, listen, start are called in this order", function() {
-        let createPosition = nativeBridge.calls().indexOf(createCall());
-        let listenPosition = nativeBridge.calls().indexOf(listenCall());
-        let startPosition = nativeBridge.calls().indexOf(startCall());
+        let createPosition = client.calls().indexOf(createCall());
+        let listenPosition = client.calls().indexOf(listenCall());
+        let startPosition = client.calls().indexOf(startCall());
         expect(listenPosition).to.be.above(createPosition);
         expect(startPosition).to.be.above(listenPosition);
       });
@@ -128,12 +128,12 @@ describe("WindowTimers", function() {
 
         if (isInterval) {
           it("timer is not disposed", function() {
-            let destroyCall = nativeBridge.calls({id: createCall().id, op: "destroy"})[0];
+            let destroyCall = client.calls({id: createCall().id, op: "destroy"})[0];
             expect(destroyCall).to.be.undefined;
           });
         } else {
           it("timer is disposed", function() {
-            let destroyCall = nativeBridge.calls({id: createCall().id, op: "destroy"})[0];
+            let destroyCall = client.calls({id: createCall().id, op: "destroy"})[0];
             expect(destroyCall).not.to.be.undefined;
           });
         }
@@ -149,12 +149,12 @@ describe("WindowTimers", function() {
           });
 
           it("calls native cancelTask", function() {
-            let cancelCall = nativeBridge.calls({id: createCall().id, op: "call", method: "cancel"})[0];
+            let cancelCall = client.calls({id: createCall().id, op: "call", method: "cancel"})[0];
             expect(cancelCall).not.to.be.undefined;
           });
 
           it("destroys native timer", function() {
-            let destroyCall = nativeBridge.calls({id: createCall().id, op: "destroy"})[0];
+            let destroyCall = client.calls({id: createCall().id, op: "destroy"})[0];
             expect(destroyCall).not.to.be.undefined;
           });
 
@@ -184,7 +184,7 @@ describe("WindowTimers", function() {
 
     it("passes 0 delay when argument is not a number", function() {
       [1 / 0, NaN, "", {}, false].forEach((value) => {
-        nativeBridge.resetCalls();
+        client.resetCalls();
         method(callback, value);
 
         expect(createCall().properties.delay).to.equal(0);

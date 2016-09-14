@@ -1,24 +1,24 @@
 import {expect} from "../../test";
 import ProxyStore from "../../../src/tabris/ProxyStore";
 import NativeBridge from "../../../src/tabris/NativeBridge";
-import NativeBridgeSpy from "../NativeBridgeSpy";
+import ClientStub from "../ClientStub";
 import Drawer from "../../../src/tabris/widgets/Drawer";
 import TextView from "../../../src/tabris/widgets/TextView";
 import UI from "../../../src/tabris/UI";
 
 describe("Drawer", function() {
 
-  let nativeBridge;
+  let client;
   let drawer;
 
   beforeEach(function() {
-    nativeBridge = new NativeBridgeSpy();
+    client = new ClientStub();
     global.tabris = {
       on: () => {},
       _proxies: new ProxyStore(),
       _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
     };
-    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    global.tabris._nativeBridge = new NativeBridge(client);
     tabris.ui = new UI();
     drawer = new Drawer({background: "#ff0000"});
   });
@@ -30,7 +30,7 @@ describe("Drawer", function() {
   describe("create", function() {
 
     it("creates Drawer", function() {
-      expect(nativeBridge.calls({op: "create", type: "tabris.Drawer"}).length).to.equal(1);
+      expect(client.calls({op: "create", type: "tabris.Drawer"}).length).to.equal(1);
     });
 
     it("sets drawer on ui as read-only", function() {
@@ -45,7 +45,7 @@ describe("Drawer", function() {
 
     it("fails when a drawer already exists", function() {
       expect(() => { new Drawer(); }).to.throw();
-      expect(nativeBridge.calls({op: "create", type: "tabris.Drawer"}).length).to.equal(1);
+      expect(client.calls({op: "create", type: "tabris.Drawer"}).length).to.equal(1);
     });
 
   });
@@ -53,7 +53,7 @@ describe("Drawer", function() {
   describe("instance: ", function() {
 
     beforeEach(function() {
-      nativeBridge.resetCalls();
+      client.resetCalls();
     });
 
     describe("when a child is appended", function() {
@@ -61,12 +61,12 @@ describe("Drawer", function() {
 
       beforeEach(function() {
         child = new TextView();
-        nativeBridge.resetCalls();
+        client.resetCalls();
         drawer.append(child);
       });
 
       it("child's parent is set to the drawer", function() {
-        let call = nativeBridge.calls({op: "set", id: child.cid})[0];
+        let call = client.calls({op: "set", id: child.cid})[0];
         expect(call.properties.parent).to.eql(drawer.cid);
       });
 
@@ -76,7 +76,7 @@ describe("Drawer", function() {
 
       it("CALLs open", function() {
         drawer.open();
-        expect(nativeBridge.calls({op: "call", id: drawer.cid})[0].method).to.equal("open");
+        expect(client.calls({op: "call", id: drawer.cid})[0].method).to.equal("open");
       });
 
     });
@@ -85,7 +85,7 @@ describe("Drawer", function() {
 
       it("CALLs close", function() {
         drawer.close();
-        expect(nativeBridge.calls({op: "call", id: drawer.cid})[0].method).to.equal("close");
+        expect(client.calls({op: "call", id: drawer.cid})[0].method).to.equal("close");
       });
 
     });
@@ -97,8 +97,8 @@ describe("Drawer", function() {
       });
 
       it("disposes drawer and composite", function() {
-        expect(nativeBridge.calls({op: "destroy", id: drawer.cid}).length).to.equal(1);
-        expect(nativeBridge.calls({op: "destroy", id: drawer.cid}).length).to.equal(1);
+        expect(client.calls({op: "destroy", id: drawer.cid}).length).to.equal(1);
+        expect(client.calls({op: "destroy", id: drawer.cid}).length).to.equal(1);
       });
 
       it("clear tabris.ui.drawer", function() {
@@ -107,7 +107,7 @@ describe("Drawer", function() {
 
       it("allows new drawer to be created", function() {
         expect(() => { new Drawer(); }).to.not.throw();
-        expect(nativeBridge.calls({op: "create", type: "tabris.Drawer"}).length).to.equal(1);
+        expect(client.calls({op: "create", type: "tabris.Drawer"}).length).to.equal(1);
       });
 
     });

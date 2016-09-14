@@ -1,21 +1,21 @@
 import {expect, spy, stub, restore, match} from "../test";
 import ProxyStore from "../../src/tabris/ProxyStore";
 import NativeBridge from "../../src/tabris/NativeBridge";
-import NativeBridgeSpy from "./NativeBridgeSpy";
+import ClientStub from "./ClientStub";
 import App from "../../src/tabris/App";
 
 describe("App", function() {
 
-  let app, nativeBridge;
+  let app, client;
 
   beforeEach(function() {
-    nativeBridge = new NativeBridgeSpy();
+    client = new ClientStub();
     global.tabris = {
       on: () => {},
       _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param),
       _proxies: new ProxyStore()
     };
-    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    global.tabris._nativeBridge = new NativeBridge(client);
     app = new App();
   });
 
@@ -26,7 +26,7 @@ describe("App", function() {
 
     app.on("pause", listener);
 
-    let calls = nativeBridge.calls({id: app.cid, op: "listen", event: "pause"});
+    let calls = client.calls({id: app.cid, op: "listen", event: "pause"});
     expect(calls[0].listen).to.equal(true);
   });
 
@@ -43,7 +43,7 @@ describe("App", function() {
 
     app.on("resume", listener);
 
-    let calls = nativeBridge.calls({id: app.cid, op: "listen", event: "resume"});
+    let calls = client.calls({id: app.cid, op: "listen", event: "resume"});
     expect(calls[0].listen).to.equal(true);
   });
 
@@ -60,7 +60,7 @@ describe("App", function() {
 
     app.on("foreground", listener);
 
-    let calls = nativeBridge.calls({id: app.cid, op: "listen", event: "foreground"});
+    let calls = client.calls({id: app.cid, op: "listen", event: "foreground"});
     expect(calls[0].listen).to.equal(true);
   });
 
@@ -77,7 +77,7 @@ describe("App", function() {
 
     app.on("background", listener);
 
-    let calls = nativeBridge.calls({id: app.cid, op: "listen", event: "background"});
+    let calls = client.calls({id: app.cid, op: "listen", event: "background"});
     expect(calls[0].listen).to.equal(true);
   });
 
@@ -98,7 +98,7 @@ describe("App", function() {
   it("listens for backnavigation event", function() {
     app.on("backnavigation", spy());
 
-    let calls = nativeBridge.calls({id: app.cid, op: "listen", event: "backnavigation"});
+    let calls = client.calls({id: app.cid, op: "listen", event: "backnavigation"});
     expect(calls[0].listen).to.equal(true);
   });
 
@@ -142,11 +142,11 @@ describe("App", function() {
   describe("reload", function() {
 
     it("CALLs `reload`", function() {
-      spy(nativeBridge, "call");
+      spy(client, "call");
 
       app.reload();
 
-      expect(nativeBridge.call).to.have.been.calledWith(app.cid, "reload", {});
+      expect(client.call).to.have.been.calledWith(app.cid, "reload", {});
     });
 
   });
@@ -154,9 +154,9 @@ describe("App", function() {
   describe("getResourceLocation", function() {
 
     beforeEach(function() {
-      let origGet = nativeBridge.get;
-      stub(nativeBridge, "get", function() {
-        origGet.apply(nativeBridge, arguments);
+      let origGet = client.get;
+      stub(client, "get", function() {
+        origGet.apply(client, arguments);
         return "/root";
       });
     });
@@ -164,14 +164,14 @@ describe("App", function() {
     it("GETs 'resourceBaseUrl'", function() {
       app.getResourceLocation();
 
-      expect(nativeBridge.get).to.have.been.calledWith(app.cid, "resourceBaseUrl");
+      expect(client.get).to.have.been.calledWith(app.cid, "resourceBaseUrl");
     });
 
     it("GETs 'resourceBaseUrl' only once", function() {
       app.getResourceLocation();
       app.getResourceLocation();
 
-      expect(nativeBridge.get).to.have.been.calledOnce;
+      expect(client.get).to.have.been.calledOnce;
     });
 
     it("appends normalized parameter", function() {
@@ -216,22 +216,22 @@ describe("App", function() {
     });
 
     it("CALLs `installPatch` with URL", function() {
-      spy(nativeBridge, "call");
+      spy(client, "call");
 
       app.installPatch("http://example.com/patch");
 
-      expect(nativeBridge.call).to.have.been.calledWith(app.cid, "installPatch", {
+      expect(client.call).to.have.been.calledWith(app.cid, "installPatch", {
         url: "http://example.com/patch"
       });
     });
 
     it("does not CALL `installPatch` when already pending", function() {
       app.installPatch("http://example.com/patch1");
-      spy(nativeBridge, "call");
+      spy(client, "call");
 
       app.installPatch("http://example.com/patch2");
 
-      expect(nativeBridge.call).to.have.not.been.called;
+      expect(client.call).to.have.not.been.called;
     });
 
     it("errors if install already pending", function() {
@@ -244,11 +244,11 @@ describe("App", function() {
     });
 
     it("starts LISTEN on `patchInstall` event", function() {
-      spy(nativeBridge, "listen");
+      spy(client, "listen");
 
       app.installPatch("http://example.com/patch");
 
-      expect(nativeBridge.listen).to.have.been.calledWith(app.cid, "patchInstall", true);
+      expect(client.listen).to.have.been.calledWith(app.cid, "patchInstall", true);
     });
 
     describe("on success event with illegal JSON", function() {

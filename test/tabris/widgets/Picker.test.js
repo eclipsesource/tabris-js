@@ -1,21 +1,21 @@
 import {expect, stub, spy, restore} from "../../test";
 import ProxyStore from "../../../src/tabris/ProxyStore";
 import NativeBridge from "../../../src/tabris/NativeBridge";
-import NativeBridgeSpy from "../NativeBridgeSpy";
+import ClientStub from "../ClientStub";
 import Picker from "../../../src/tabris/widgets/Picker";
 
 describe("Picker", function() {
 
-  let nativeBridge, picker;
+  let client, picker;
 
   beforeEach(function() {
-    nativeBridge = new NativeBridgeSpy();
+    client = new ClientStub();
     global.tabris = {
       on: () => {},
       _proxies: new ProxyStore(),
       _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
     };
-    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    global.tabris._nativeBridge = new NativeBridge(client);
     picker = new Picker();
   });
 
@@ -24,11 +24,11 @@ describe("Picker", function() {
   describe("creation", function() {
 
     it("creates picker", function() {
-      expect(nativeBridge.calls({op: "create"})[0].type).to.eql("tabris.Picker");
+      expect(client.calls({op: "create"})[0].type).to.eql("tabris.Picker");
     });
 
     it("initializes selectionIndex", function() {
-      expect(nativeBridge.calls({op: "create"})[0].properties).to.eql({selectionIndex: 0});
+      expect(client.calls({op: "create"})[0].properties).to.eql({selectionIndex: 0});
     });
 
   });
@@ -46,7 +46,7 @@ describe("Picker", function() {
       }
     };
     let checkListen = function(event) {
-      let listen = nativeBridge.calls({op: "listen", id: picker.cid});
+      let listen = client.calls({op: "listen", id: picker.cid});
       expect(listen.length).to.equal(1);
       expect(listen[0].event).to.equal(event);
       expect(listen[0].listen).to.equal(true);
@@ -100,7 +100,7 @@ describe("Picker", function() {
   describe("properties:", function() {
 
     beforeEach(function() {
-      nativeBridge.resetCalls();
+      client.resetCalls();
     });
 
     describe("items", function() {
@@ -122,14 +122,14 @@ describe("Picker", function() {
       it("set SETs items property", function() {
         picker.set("items", ["a", "b", "c"]);
 
-        let call = nativeBridge.calls({op: "set", id: picker.cid})[0];
+        let call = client.calls({op: "set", id: picker.cid})[0];
         expect(call.properties).to.eql({items: ["a", "b", "c"]});
       });
 
       it("get does not GET from client", function() {
         picker.get("items");
 
-        expect(nativeBridge.calls({op: "get", id: picker.cid}).length).to.equal(0);
+        expect(client.calls({op: "get", id: picker.cid}).length).to.equal(0);
       });
 
     });
@@ -152,7 +152,7 @@ describe("Picker", function() {
       it("does not SET property on client", function() {
         picker.set("itemText", function(item) { return item.name; });
 
-        expect(nativeBridge.calls({op: "set", id: picker.cid}).length).to.equal(0);
+        expect(client.calls({op: "set", id: picker.cid}).length).to.equal(0);
       });
 
     });
@@ -162,23 +162,23 @@ describe("Picker", function() {
       it("set SETs selectionIndex", function() {
         picker.set("selectionIndex", 23);
 
-        expect(nativeBridge.calls({op: "set", id: picker.cid})[0].properties).to.eql({selectionIndex: 23});
+        expect(client.calls({op: "set", id: picker.cid})[0].properties).to.eql({selectionIndex: 23});
       });
 
     });
 
     it("get GETs selectionIndex", function() {
-      stub(nativeBridge, "get").returns(23);
+      stub(client, "get").returns(23);
 
       expect(picker.get("selectionIndex")).to.equal(23);
-      expect(nativeBridge.get).to.have.been.calledWith(picker.cid, "selectionIndex");
+      expect(client.get).to.have.been.calledWith(picker.cid, "selectionIndex");
     });
 
     describe("selection", function() {
 
       it("get returns items entry", function() {
         picker.set("items", ["foo", "bar"]);
-        stub(nativeBridge, "get").returns(1);
+        stub(client, "get").returns(1);
 
         expect(picker.get("selection")).to.equal("bar");
       });
@@ -188,14 +188,14 @@ describe("Picker", function() {
 
         picker.set("selection", "bar");
 
-        expect(nativeBridge.calls({op: "set", id: picker.cid})[0].properties.selectionIndex).to.equal(1);
+        expect(client.calls({op: "set", id: picker.cid})[0].properties.selectionIndex).to.equal(1);
       });
 
     });
 
     it("set together with items SETs selectionIndex", function() {
       picker.set({selection: "bar", items: ["foo", "bar"]});
-      expect(nativeBridge.calls({op: "set", id: picker.cid})[0].properties).to.eql({
+      expect(client.calls({op: "set", id: picker.cid})[0].properties).to.eql({
         selectionIndex: 1,
         items: ["foo", "bar"]
       });
@@ -205,7 +205,7 @@ describe("Picker", function() {
       spy(console, "warn");
       picker.set({selection: "bar2"});
 
-      expect(nativeBridge.calls({op: "set", id: picker.cid}).length).to.equal(0);
+      expect(client.calls({op: "set", id: picker.cid}).length).to.equal(0);
       expect(console.warn).to.have.been.calledWith("Could not set picker selection bar2: item not found");
     });
 

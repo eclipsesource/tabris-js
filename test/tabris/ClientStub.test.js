@@ -1,19 +1,19 @@
 import {expect, spy, restore} from "../test";
-import NativeBridgeSpy from "./NativeBridgeSpy";
+import ClientStub from "./ClientStub";
 import NativeBridge from "../../src/tabris/NativeBridge";
 import ProxyStore from "../../src/tabris/ProxyStore";
 
-describe("NativeBridgeSpy", function() {
+describe("ClientStub", function() {
 
-  let nativeBridge;
+  let client;
 
   beforeEach(function() {
-    nativeBridge = new NativeBridgeSpy();
+    client = new ClientStub();
     global.tabris = {
       on: () => {},
       _proxies: new ProxyStore()
     };
-    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    global.tabris._nativeBridge = new NativeBridge(client);
     tabris._nativeBridge = {flush: spy()};
   });
 
@@ -23,9 +23,9 @@ describe("NativeBridgeSpy", function() {
 
     it("create", function() {
       let props = {};
-      nativeBridge.create("id", "type", props);
+      client.create("id", "type", props);
 
-      let call = nativeBridge.calls()[0];
+      let call = client.calls()[0];
       expect(call.op).to.equal("create");
       expect(call.id).to.equal("id");
       expect(call.type).to.equal("type");
@@ -33,9 +33,9 @@ describe("NativeBridgeSpy", function() {
     });
 
     it("get", function() {
-      nativeBridge.get("id", "prop");
+      client.get("id", "prop");
 
-      let call = nativeBridge.calls()[0];
+      let call = client.calls()[0];
       expect(call.op).to.equal("get");
       expect(call.id).to.equal("id");
       expect(call.property).to.equal("prop");
@@ -43,9 +43,9 @@ describe("NativeBridgeSpy", function() {
 
     it("set", function() {
       let props = {};
-      nativeBridge.set("id", props);
+      client.set("id", props);
 
-      let call = nativeBridge.calls()[0];
+      let call = client.calls()[0];
       expect(call.op).to.equal("set");
       expect(call.id).to.equal("id");
       expect(call.properties).to.equal(props);
@@ -53,9 +53,9 @@ describe("NativeBridgeSpy", function() {
 
     it("call", function() {
       let params = {};
-      nativeBridge.call("id", "method", params);
+      client.call("id", "method", params);
 
-      let call = nativeBridge.calls()[0];
+      let call = client.calls()[0];
       expect(call.op).to.equal("call");
       expect(call.id).to.equal("id");
       expect(call.method).to.equal("method");
@@ -63,9 +63,9 @@ describe("NativeBridgeSpy", function() {
     });
 
     it("listen", function() {
-      nativeBridge.listen("id", "event", true);
+      client.listen("id", "event", true);
 
-      let call = nativeBridge.calls()[0];
+      let call = client.calls()[0];
       expect(call.op).to.equal("listen");
       expect(call.id).to.equal("id");
       expect(call.event).to.equal("event");
@@ -73,9 +73,9 @@ describe("NativeBridgeSpy", function() {
     });
 
     it("destroy", function() {
-      nativeBridge.destroy("id");
+      client.destroy("id");
 
-      let call = nativeBridge.calls()[0];
+      let call = client.calls()[0];
       expect(call.op).to.equal("destroy");
       expect(call.id).to.equal("id");
     });
@@ -85,7 +85,7 @@ describe("NativeBridgeSpy", function() {
   describe("without any calls", function() {
 
     it("result list is empty", function() {
-      expect(nativeBridge.calls().length).to.equal(0);
+      expect(client.calls().length).to.equal(0);
     });
 
   });
@@ -93,18 +93,18 @@ describe("NativeBridgeSpy", function() {
   describe("when calls have been made", function() {
 
     beforeEach(function() {
-      nativeBridge.create("id1", "type1", {foo: 1});
-      nativeBridge.create("id2", "type2", {foo: 2});
-      nativeBridge.set("id1", {bar: 1});
-      nativeBridge.set("id2", {bar: 2});
+      client.create("id1", "type1", {foo: 1});
+      client.create("id2", "type2", {foo: 2});
+      client.set("id1", {bar: 1});
+      client.set("id2", {bar: 2});
     });
 
     it("result list has contains all calls", function() {
-      expect(nativeBridge.calls().length).to.equal(4);
+      expect(client.calls().length).to.equal(4);
     });
 
     it("result list can be filtered", function() {
-      expect(nativeBridge.calls({id: "id1"}).length).to.equal(2);
+      expect(client.calls({id: "id1"}).length).to.equal(2);
     });
 
   });

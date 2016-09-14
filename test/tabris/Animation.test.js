@@ -1,16 +1,16 @@
 import {expect, spy, stub, restore} from "../test";
 import ProxyStore from "../../src/tabris/ProxyStore";
 import NativeBridge from "../../src/tabris/NativeBridge";
-import NativeBridgeSpy from "./NativeBridgeSpy";
+import ClientStub from "./ClientStub";
 import {animate} from "../../src/tabris/Animation";
 import Proxy from "../../src/tabris/Proxy";
 
 describe("Animation", function() {
 
-  let widget, nativeBridge;
+  let widget, client;
 
   function animationId() {
-    return nativeBridge.calls({op: "create", type: "tabris.Animation"}).pop().id;
+    return client.calls({op: "create", type: "tabris.Animation"}).pop().id;
   }
 
   function findProxy(cid) {
@@ -18,17 +18,17 @@ describe("Animation", function() {
   }
 
   function createOp() {
-    return nativeBridge.calls({op: "create", type: "tabris.Animation"}).pop().properties;
+    return client.calls({op: "create", type: "tabris.Animation"}).pop().properties;
   }
 
   beforeEach(function() {
     stub(console, "warn");
-    nativeBridge = new NativeBridgeSpy();
+    client = new ClientStub();
     global.tabris = {
       on: () => {},
       _proxies: new ProxyStore()
     };
-    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    global.tabris._nativeBridge = new NativeBridge(client);
     let TestWidget = Proxy.extend({
       _name: "TestWidget",
       _properties: {
@@ -162,7 +162,7 @@ describe("Animation", function() {
 
     it("issues listen call for Start", function() {
       widget.animate({}, {});
-      expect(nativeBridge.calls({
+      expect(client.calls({
         op: "listen",
         id: animationId(),
         event: "Start",
@@ -172,7 +172,7 @@ describe("Animation", function() {
 
     it("issues listen call for Completion", function() {
       widget.animate({}, {});
-      expect(nativeBridge.calls({
+      expect(client.calls({
         op: "listen",
         id: animationId(),
         event: "Completion",
@@ -182,15 +182,15 @@ describe("Animation", function() {
 
     it("starts animation", function() {
       widget.animate({}, {});
-      expect(nativeBridge.calls({op: "call", id: animationId(), method: "start"}).length).to.equal(1);
+      expect(client.calls({op: "call", id: animationId(), method: "start"}).length).to.equal(1);
     });
 
     it("disposes animation on completion", function() {
       widget.animate({}, {});
-      expect(nativeBridge.calls({op: "destroy", id: animationId()}).length).to.equal(0);
+      expect(client.calls({op: "destroy", id: animationId()}).length).to.equal(0);
 
       findProxy(animationId())._trigger("Completion", {});
-      expect(nativeBridge.calls({op: "destroy", id: animationId()}).length).to.equal(1);
+      expect(client.calls({op: "destroy", id: animationId()}).length).to.equal(1);
     });
 
     it("returns unresolved Promise", function(done) {

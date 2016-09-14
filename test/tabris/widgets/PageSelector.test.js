@@ -1,7 +1,7 @@
 import {expect, spy, restore, match} from "../../test";
 import ProxyStore from "../../../src/tabris/ProxyStore";
 import NativeBridge from "../../../src/tabris/NativeBridge";
-import NativeBridgeSpy from "../NativeBridgeSpy";
+import ClientStub from "../ClientStub";
 import UI from "../../../src/tabris/UI";
 import PageSelector from "../../../src/tabris/widgets/PageSelector";
 import Page from "../../../src/tabris/widgets/Page";
@@ -10,16 +10,16 @@ import CollectionView from "../../../src/tabris/widgets/CollectionView";
 
 describe("PageSelector", function() {
 
-  let nativeBridge;
+  let client;
 
   beforeEach(function() {
-    nativeBridge = new NativeBridgeSpy();
+    client = new ClientStub();
     global.tabris = {
       on: () => {},
       _proxies: new ProxyStore()
     };
     global.device = {platform: "test"};
-    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    global.tabris._nativeBridge = new NativeBridge(client);
     tabris.ui = new UI();
   });
 

@@ -1,20 +1,20 @@
 import {expect, spy, stub, match, restore} from "../test";
-import NativeBridgeSpy from "./NativeBridgeSpy";
+import ClientStub from "./ClientStub";
 import XMLHttpRequest from "../../src/tabris/XMLHttpRequest";
 import NativeBridge from "../../src/tabris/NativeBridge";
 import ProxyStore from "../../src/tabris/ProxyStore";
 
 describe("XMLHttpRequest", function() {
 
-  let proxy, nativeBridge, xhr;
+  let proxy, client, xhr;
 
   beforeEach(function() {
     global.tabris = {
       on: () => {},
       _proxies: new ProxyStore()
     };
-    nativeBridge = new NativeBridgeSpy();
-    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    client = new ClientStub();
+    global.tabris._nativeBridge = new NativeBridge(client);
     let origCreate = tabris._nativeBridge.create;
     stub(tabris._nativeBridge, "create", (cid, type) => {
       if (type === "tabris.HttpRequest") {

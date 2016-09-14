@@ -1,23 +1,23 @@
 import {expect, spy, stub} from "../test";
 import ProxyStore from "../../src/tabris/ProxyStore";
 import NativeBridge from "../../src/tabris/NativeBridge";
-import NativeBridgeSpy from "./NativeBridgeSpy";
+import ClientStub from "./ClientStub";
 import Device, {publishDeviceProperties} from "../../src/tabris/Device";
 
 describe("Device", function() {
 
-  let device, results, nativeBridge;
+  let device, results, client;
 
   beforeEach(function() {
     results = {};
-    nativeBridge = new NativeBridgeSpy();
+    client = new ClientStub();
     global.tabris = {
       on: () => {},
       _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param),
       _proxies: new ProxyStore()
     };
-    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
-    stub(nativeBridge, "get", function(id, name) {
+    global.tabris._nativeBridge = new NativeBridge(client);
+    stub(client, "get", function(id, name) {
       if (id === "tabris.Device") {
         return results[name];
       }
@@ -63,7 +63,7 @@ describe("Device", function() {
   it("adds listener for orientationchange event", function() {
     device.on("change:orientation", function() {});
 
-    let calls = nativeBridge.calls({id: "tabris.Device", op: "listen", event: "orientationchange"});
+    let calls = client.calls({id: "tabris.Device", op: "listen", event: "orientationchange"});
     expect(calls[0].listen).to.equal(true);
   });
 
@@ -97,7 +97,7 @@ describe("publishDeviceProperties", function() {
 
   beforeEach(function() {
     results = {};
-    nativeBridge = new NativeBridgeSpy();
+    nativeBridge = new ClientStub();
     global.tabris = {
       on: () => {},
       _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param),

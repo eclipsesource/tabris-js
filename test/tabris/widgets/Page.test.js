@@ -1,27 +1,27 @@
 import {expect, spy, restore} from "../../test";
 import ProxyStore from "../../../src/tabris/ProxyStore";
 import NativeBridge from "../../../src/tabris/NativeBridge";
-import NativeBridgeSpy from "../NativeBridgeSpy";
+import ClientStub from "../ClientStub";
 import Page from "../../../src/tabris/widgets/Page";
 import Composite from "../../../src/tabris/widgets/Composite";
 import UI from "../../../src/tabris/UI";
 
 describe("Page", function() {
 
-  let nativeBridge;
+  let client;
   let page;
 
   beforeEach(function() {
-    nativeBridge = new NativeBridgeSpy();
+    client = new ClientStub();
     global.tabris = {
       on: () => {},
       _proxies: new ProxyStore(),
       _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
     };
-    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    global.tabris._nativeBridge = new NativeBridge(client);
     tabris.ui = new UI();
     spy(tabris.ui, "set");
-    nativeBridge.resetCalls();
+    client.resetCalls();
   });
 
   afterEach(function() {
@@ -42,7 +42,7 @@ describe("Page", function() {
     });
 
     it("creates a Composite and a Page", function() {
-      let createCalls = nativeBridge.calls({op: "create"});
+      let createCalls = client.calls({op: "create"});
       expect(createCalls.length).to.equal(2);
       expect(createCalls[0].type).to.equal("tabris.Composite");
       expect(createCalls[1].type).to.equal("tabris.Page");
@@ -53,7 +53,7 @@ describe("Page", function() {
       let createProps;
 
       beforeEach(function() {
-        let createCall = nativeBridge.calls({op: "create", type: "tabris.Composite"})[0];
+        let createCall = client.calls({op: "create", type: "tabris.Composite"})[0];
         createProps = createCall.properties;
       });
 
@@ -83,7 +83,7 @@ describe("Page", function() {
       let properties;
 
       beforeEach(function() {
-        let createCall = nativeBridge.calls({op: "create", type: "tabris.Page"})[0];
+        let createCall = client.calls({op: "create", type: "tabris.Page"})[0];
         properties = createCall.properties;
       });
 
@@ -124,11 +124,11 @@ describe("Page", function() {
 
     beforeEach(function() {
       new Page({topLevel: true}).open(); // prevent error for opening a page without a top-level page
-      nativeBridge.resetCalls();
+      client.resetCalls();
       page = new Page();
-      pageCreateCall = nativeBridge.calls({op: "create", type: "tabris.Page"})[0];
-      compositeCreateCall = nativeBridge.calls({op: "create", type: "tabris.Composite"})[0];
-      nativeBridge.resetCalls();
+      pageCreateCall = client.calls({op: "create", type: "tabris.Page"})[0];
+      compositeCreateCall = client.calls({op: "create", type: "tabris.Composite"})[0];
+      client.resetCalls();
     });
 
     it("returns default property values", function() {
@@ -141,12 +141,12 @@ describe("Page", function() {
 
       beforeEach(function() {
         child = new Composite();
-        nativeBridge.resetCalls();
+        client.resetCalls();
         page.append(child);
       });
 
       it("sets child's parent to the composite", function() {
-        let call = nativeBridge.calls({op: "set", id: child.cid})[0];
+        let call = client.calls({op: "set", id: child.cid})[0];
         expect(call.properties.parent).to.eql(compositeCreateCall.id);
       });
 
@@ -157,7 +157,7 @@ describe("Page", function() {
       it("modifies the page", function() {
         page.set("title", "foo");
 
-        let setCalls = nativeBridge.calls({op: "set", id: pageCreateCall.id});
+        let setCalls = client.calls({op: "set", id: pageCreateCall.id});
         expect(setCalls.length).to.equal(1);
         expect(setCalls[0].properties.title).to.eql("foo");
       });
@@ -165,7 +165,7 @@ describe("Page", function() {
       it("modifies the composite", function() {
         page.set("background", "red");
 
-        let setCalls = nativeBridge.calls({op: "set", id: compositeCreateCall.id});
+        let setCalls = client.calls({op: "set", id: compositeCreateCall.id});
         expect(setCalls.length).to.equal(1);
         expect(setCalls[0].properties.background).to.eql([255, 0, 0, 255]);
       });
@@ -195,7 +195,7 @@ describe("Page", function() {
 
         page.close();
 
-        let destroyCalls = nativeBridge.calls({op: "destroy"});
+        let destroyCalls = client.calls({op: "destroy"});
         // page must be destroyed before composite, see issue 253
         expect(destroyCalls[0].id).to.equal(pageCreateCall.id);
         expect(destroyCalls[1].id).to.equal(compositeCreateCall.id);
@@ -208,12 +208,12 @@ describe("Page", function() {
 
       beforeEach(function() {
         child = new Composite();
-        nativeBridge.resetCalls();
+        client.resetCalls();
         page.append(child);
       });
 
       it("uses page's composite in 'set'", function() {
-        let call = nativeBridge.calls({op: "set", id: child.cid})[0];
+        let call = client.calls({op: "set", id: child.cid})[0];
         expect(call.properties.parent).to.equal(page.cid);
       });
 

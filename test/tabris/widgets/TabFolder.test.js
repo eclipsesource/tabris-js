@@ -1,5 +1,5 @@
 import {expect, stub, spy, restore} from "../../test";
-import NativeBridgeSpy from "../NativeBridgeSpy";
+import ClientStub from "../ClientStub";
 import Tab from "../../../src/tabris/widgets/Tab";
 import TabFolder from "../../../src/tabris/widgets/TabFolder";
 import Composite from "../../../src/tabris/widgets/Composite";
@@ -8,18 +8,18 @@ import NativeBridge from "../../../src/tabris/NativeBridge";
 
 describe("TabFolder", function() {
 
-  let nativeBridge, tabFolder, parent;
+  let client, tabFolder, parent;
 
   beforeEach(function() {
-    nativeBridge = new NativeBridgeSpy();
+    client = new ClientStub();
     global.tabris = {
       on: () => {},
       _proxies: new ProxyStore(),
       _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
     };
-    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    global.tabris._nativeBridge = new NativeBridge(client);
     parent = new Composite();
-    nativeBridge.resetCalls();
+    client.resetCalls();
     tabFolder = new TabFolder().appendTo(parent);
   });
 
@@ -42,7 +42,7 @@ describe("TabFolder", function() {
     var tab, create;
 
     beforeEach(function() {
-      nativeBridge.resetCalls();
+      client.resetCalls();
       tab = new Tab({
         title: "foo",
         image: {src: "bar"},
@@ -51,12 +51,12 @@ describe("TabFolder", function() {
         background: "#010203",
         visible: false
       });
-      create = nativeBridge.calls({op: "create"})[0];
+      create = client.calls({op: "create"})[0];
       tab.appendTo(tabFolder);
     });
 
     it("sets the tabs's parent", function() {
-      let call = nativeBridge.calls({op: "set", id: create.id})[0];
+      let call = client.calls({op: "set", id: create.id})[0];
       expect(call.properties.parent).to.equal(tabFolder.cid);
     });
 
@@ -98,12 +98,12 @@ describe("TabFolder", function() {
     describe("and the Tab is disposed", function() {
 
       beforeEach(function() {
-        nativeBridge.resetCalls();
+        client.resetCalls();
         tab.dispose();
       });
 
       it("then destroys the tab", function() {
-        expect(nativeBridge.calls({op: "destroy", id: tab.cid})[0]).to.be.ok;
+        expect(client.calls({op: "destroy", id: tab.cid})[0]).to.be.ok;
       });
 
     });
@@ -129,7 +129,7 @@ describe("TabFolder", function() {
     });
 
     it("sets the 'paging' property", function() {
-      let setOp = nativeBridge.calls({id: tabFolder.cid, op: "create"})[0];
+      let setOp = client.calls({id: tabFolder.cid, op: "create"})[0];
       expect(setOp.properties.paging).to.eql(true);
     });
 
@@ -150,7 +150,7 @@ describe("TabFolder", function() {
     it("Setting a Tab SETs tab id", function() {
       tabFolder.set("selection", tab);
 
-      let setCall = nativeBridge.calls({op: "set", id: tabFolder.cid})[0];
+      let setCall = client.calls({op: "set", id: tabFolder.cid})[0];
       expect(setCall.properties.selection).to.equal(tab.cid);
     });
 
@@ -159,7 +159,7 @@ describe("TabFolder", function() {
 
       tabFolder.set("selection", null);
 
-      let calls = nativeBridge.calls({op: "set", id: tabFolder.cid});
+      let calls = client.calls({op: "set", id: tabFolder.cid});
       expect(calls.length).to.equal(0);
       expect(console.warn).to.have.been.calledWith("Can not set TabFolder selection to null");
     });
@@ -170,7 +170,7 @@ describe("TabFolder", function() {
 
       tabFolder.set("selection", tab);
 
-      let calls = nativeBridge.calls({op: "set", id: tabFolder.cid});
+      let calls = client.calls({op: "set", id: tabFolder.cid});
       expect(calls.length).to.equal(0);
       expect(console.warn).to.have.been.calledWith("Can not set TabFolder selection to Tab");
     });
@@ -180,13 +180,13 @@ describe("TabFolder", function() {
 
       tabFolder.set("selection", "foo");
 
-      let calls = nativeBridge.calls({op: "set", id: tabFolder.cid});
+      let calls = client.calls({op: "set", id: tabFolder.cid});
       expect(calls.length).to.equal(0);
       expect(console.warn).to.have.been.calledWith("Can not set TabFolder selection to foo");
     });
 
     it("Get returns Tab", function() {
-      stub(nativeBridge, "get").returns(tab.cid);
+      stub(client, "get").returns(tab.cid);
 
       expect(tabFolder.get("selection")).to.equal(tab);
     });
@@ -220,51 +220,51 @@ describe("TabFolder", function() {
   describe("tabBarLocation property", function() {
 
     beforeEach(function() {
-      nativeBridge.resetCalls();
+      client.resetCalls();
     });
 
     it("passes property to client", function() {
       tabFolder = new TabFolder({tabBarLocation: "top"});
 
-      let properties = nativeBridge.calls({id: tabFolder.cid, op: "create"})[0].properties;
+      let properties = client.calls({id: tabFolder.cid, op: "create"})[0].properties;
       expect(properties.tabBarLocation).to.equal("top");
     });
 
     it("property is cached", function() {
-      spy(nativeBridge, "get");
+      spy(client, "get");
       tabFolder = new TabFolder({tabBarLocation: "top"});
 
       let result = tabFolder.get("tabBarLocation");
 
-      expect(nativeBridge.get).to.have.not.been.called;
+      expect(client.get).to.have.not.been.called;
       expect(result).to.equal("top");
     });
 
     it("sets value tabBarLocation 'top'", function() {
       tabFolder = new TabFolder({tabBarLocation: "top"});
 
-      let properties = nativeBridge.calls({id: tabFolder.cid, op: "create"})[0].properties;
+      let properties = client.calls({id: tabFolder.cid, op: "create"})[0].properties;
       expect(properties.tabBarLocation).to.eql("top");
     });
 
     it("sets tabBarLocation 'bottom'", function() {
       tabFolder = new TabFolder({tabBarLocation: "bottom"});
 
-      let properties = nativeBridge.calls({id: tabFolder.cid, op: "create"})[0].properties;
+      let properties = client.calls({id: tabFolder.cid, op: "create"})[0].properties;
       expect(properties.tabBarLocation).to.eql("bottom");
     });
 
     it("sets tabBarLocation 'hidden'", function() {
       tabFolder = new TabFolder({tabBarLocation: "hidden"});
 
-      let properties = nativeBridge.calls({id: tabFolder.cid, op: "create"})[0].properties;
+      let properties = client.calls({id: tabFolder.cid, op: "create"})[0].properties;
       expect(properties.tabBarLocation).to.eql("hidden");
     });
 
     it("sets tabBarLocation 'auto'", function() {
       tabFolder = new TabFolder({tabBarLocation: "auto"});
 
-      let properties = nativeBridge.calls({id: tabFolder.cid, op: "create"})[0].properties;
+      let properties = client.calls({id: tabFolder.cid, op: "create"})[0].properties;
       expect(properties.tabBarLocation).to.eql("auto");
     });
 

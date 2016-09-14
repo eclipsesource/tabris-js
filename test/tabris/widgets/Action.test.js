@@ -1,22 +1,22 @@
 import {expect, spy, restore} from "../../test";
 import ProxyStore from "../../../src/tabris/ProxyStore";
 import NativeBridge from "../../../src/tabris/NativeBridge";
-import NativeBridgeSpy from "../NativeBridgeSpy";
+import ClientStub from "../ClientStub";
 import Action from "../../../src/tabris/widgets/Action";
 import UI from "../../../src/tabris/UI";
 
 describe("Action", function() {
 
-  let nativeBridge;
+  let client;
 
   beforeEach(function() {
-    nativeBridge = new NativeBridgeSpy();
+    client = new ClientStub();
     global.tabris = {
       on: () => {},
       _proxies: new ProxyStore(),
       _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
     };
-    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    global.tabris._nativeBridge = new NativeBridge(client);
     tabris.ui = new UI();
   });
 
@@ -31,7 +31,7 @@ describe("Action", function() {
 
     beforeEach(function() {
       new Action({title: "Foo", enabled: true});
-      actionCreateCalls = nativeBridge.calls({op: "create", type: "tabris.Action"});
+      actionCreateCalls = client.calls({op: "create", type: "tabris.Action"});
     });
 
     it("creates an action", function() {
@@ -59,13 +59,13 @@ describe("Action", function() {
 
     beforeEach(function() {
       action = new Action();
-      nativeBridge.resetCalls();
+      client.resetCalls();
     });
 
     it("translates placement priority to uppercase", function() {
       action.set("placementPriority", "low");
 
-      let call = nativeBridge.calls({op: "set"})[0];
+      let call = client.calls({op: "set"})[0];
       expect(call.properties.placementPriority).to.equal("LOW");
     });
 
@@ -77,7 +77,7 @@ describe("Action", function() {
 
     beforeEach(function() {
       action = new Action();
-      nativeBridge.resetCalls();
+      client.resetCalls();
     });
 
     it("returns initial default property values", function() {
@@ -108,7 +108,7 @@ describe("Action", function() {
     it("sends listen for select", function() {
       action.on("select", listener);
 
-      let listen = nativeBridge.calls({op: "listen", id: action.cid});
+      let listen = client.calls({op: "listen", id: action.cid});
       expect(listen.length).to.equal(1);
       expect(listen[0].event).to.equal("select");
       expect(listen[0].listen).to.equal(true);

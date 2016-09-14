@@ -1,26 +1,26 @@
 import {expect, spy, restore} from "../test";
 import ProxyStore from "../../src/tabris/ProxyStore";
 import NativeBridge from "../../src/tabris/NativeBridge";
-import NativeBridgeSpy from "./NativeBridgeSpy";
+import ClientStub from "./ClientStub";
 import Events from "../../src/tabris/Events";
 import LegacyCanvasContext from "../../src/tabris/LegacyCanvasContext";
 import GC from "../../src/tabris/GC";
 
 describe("Legacy CanvasContext", function() {
 
-  let nativeBridge;
+  let client;
   let ctx;
   let gc;
 
   beforeEach(function() {
-    nativeBridge = new NativeBridgeSpy();
+    client = new ClientStub();
     global.tabris = Object.assign({
       on: () => {},
       off: () => {},
       _proxies: new ProxyStore()
     }, Events);
     global.device = {platform: "Android"};
-    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    global.tabris._nativeBridge = new NativeBridge(client);
     gc = new GC();
     ctx = new LegacyCanvasContext(gc);
   });
@@ -35,7 +35,7 @@ describe("Legacy CanvasContext", function() {
   }
 
   function getDrawOperations() {
-    let call = nativeBridge.calls({id: gc.cid, op: "call", method: "draw"})[0];
+    let call = client.calls({id: gc.cid, op: "call", method: "draw"})[0];
     return call ? call.parameters.operations : undefined;
   }
 

@@ -1,5 +1,5 @@
 import {expect, spy, restore} from "../../test";
-import NativeBridgeSpy from "../NativeBridgeSpy";
+import ClientStub from "../ClientStub";
 import ProxyStore from "../../../src/tabris/ProxyStore";
 import NativeBridge from "../../../src/tabris/NativeBridge";
 import Composite from "../../../src/tabris/widgets/Composite";
@@ -19,18 +19,18 @@ import ActivityIndicator from "../../../src/tabris/widgets/ActivityIndicator";
 
 describe("Common Widgets", function() {
 
-  let nativeBridge;
+  let client;
   let widget;
   let listener;
 
   beforeEach(function() {
-    nativeBridge = new NativeBridgeSpy();
+    client = new ClientStub();
     global.tabris = {
       on: () => {},
       _proxies: new ProxyStore(),
       _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
     };
-    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    global.tabris._nativeBridge = new NativeBridge(client);
     listener = spy();
   });
 
@@ -40,7 +40,7 @@ describe("Common Widgets", function() {
   });
 
   function getCreate() {
-    return nativeBridge.calls({op: "create"})[0];
+    return client.calls({op: "create"})[0];
   }
 
   function checkEvent(value) {
@@ -53,7 +53,7 @@ describe("Common Widgets", function() {
   }
 
   function checkListen(event) {
-    let listen = nativeBridge.calls({op: "listen", id: widget.cid});
+    let listen = client.calls({op: "listen", id: widget.cid});
     expect(listen.length).to.equal(1);
     expect(listen[0].event).to.equal(event);
     expect(listen[0].listen).to.equal(true);

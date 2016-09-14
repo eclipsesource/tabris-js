@@ -1,28 +1,28 @@
 import {expect, stub} from "../test";
 import ProxyStore from "../../src/tabris/ProxyStore";
 import NativeBridge from "../../src/tabris/NativeBridge";
-import NativeBridgeSpy from "./NativeBridgeSpy";
+import ClientStub from "./ClientStub";
 import Crypto from "../../src/tabris/Crypto";
 
 describe("Crypto", function() {
 
-  let nativeBridge;
+  let client;
   let crypto;
   let returnValue;
 
   beforeEach(function() {
-    nativeBridge = new NativeBridgeSpy();
+    client = new ClientStub();
     global.tabris = {
       on: () => {},
       _proxies: new ProxyStore()
     };
-    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    global.tabris._nativeBridge = new NativeBridge(client);
     crypto = new Crypto();
-    stub(nativeBridge, "call", (id, method) => method === "getRandomValues" ? returnValue : null);
+    stub(client, "call", (id, method) => method === "getRandomValues" ? returnValue : null);
   });
 
   afterEach(function() {
-    nativeBridge = null;
+    client = null;
     crypto = null;
   });
 
