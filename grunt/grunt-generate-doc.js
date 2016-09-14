@@ -32,12 +32,12 @@ module.exports = function (grunt) {
     let widgetIndex = [];
     widgets.forEach(type => {
       let json = data.widgets[type];
-      widgetIndex.push("- [" + title(json) + "](api/" + baseFileName(json.file) + ".md)");
+      widgetIndex.push("- [" + title(json) + "](api/" + path.parse(json.file).name + ".md)");
     });
     let apiIndex = [];
     Object.keys(data.api).forEach(type => {
       let json = data.api[type];
-      apiIndex.push("- [" + title(json) + "](api/" + baseFileName(json.file) + ".md)");
+      apiIndex.push("- [" + title(json) + "](api/" + path.parse(json.file).name + ".md)");
     });
     let templData = {data: {widgets: widgetIndex.join("\n"), api: apiIndex.join("\n")}};
     grunt.file.write(getIndexPath(), grunt.template.process(grunt.file.read(getIndexPath()), templData));
@@ -46,18 +46,31 @@ module.exports = function (grunt) {
   function renderDocument(data, type) {
     grunt.log.verbose.writeln("Generating DOC for " + type);
     let json = data.widgets[type] || data.api[type];
-    let result = [];
-    result.push("# " + title(json) + "\n");
-    result.push(renderDescription(json));
+    return [
+      "# " + title(json) + "\n",
+      renderDescription(json),
+      renderImages(json),
+      renderExample(json),
+      renderIncludes(json),
+      renderMembers(json, data),
+      renderLinks(json)
+    ].filter(notEmpty).join("\n");
+  }
+
+  function renderMembers(json, data) {
+    return [
+      renderMethods(json, data),
+      renderFields(json, data),
+      renderProperties(json, data),
+      renderEvents(json, data)
+    ].filter(notEmpty).join("\n");
+  }
+
+  function renderExample(json) {
     if (grunt.file.isFile(getTargetPath(json))) {
-      result.push(grunt.file.read(getTargetPath(json)));
+      return grunt.file.read(getTargetPath(json));
     }
-    result.push(renderMethods(json, data));
-    result.push(renderFields(json, data));
-    result.push(renderProperties(json, data));
-    result.push(renderEvents(json, data));
-    result.push(renderLinks(json));
-    return result.filter(notEmpty).join("\n");
+    return "";
   }
 
   function resolveIncludes(data) {
@@ -103,18 +116,40 @@ module.exports = function (grunt) {
   }
 
   function getTargetPath(json) {
-    return grunt.config("doc").target + baseFileName(json.file) + ".md";
+    return grunt.config("doc").target + path.parse(json.file).name + ".md";
   }
 
   function getIndexPath() {
     return grunt.config("doc").index;
   }
 
-  function renderDescription(json) {
-    let result = [];
-    if (json.description) {
-      result.push(json.description + "\n");
+  function renderImages(json) {
+    if (hasAndroidImage(json) && hasiOSImage(json)) {
+      return [
+        "Android | iOS",
+        "--- | ---",
+        "![" + json.type + " on Android](img/android/" + path.parse(json.file).name + ".png) | " +
+          "![" + json.type + " on iOS](img/ios/" + path.parse(json.file).name + ".png)"
+      ].join("\n") + "\n";
     }
+    if (hasAndroidImage(json)) {
+      return "![" + json.type + " on Android](img/android/" + path.parse(json.file).name + ".png)\n";
+    }
+    if (hasiOSImage(json)) {
+      return "![" + json.type + " on iOS](img/ios/" + path.parse(json.file).name + ".png)\n";
+    }
+    return "";
+  }
+
+  function renderDescription(json) {
+    if (json.description) {
+      return json.description + "\n";
+    }
+    return "";
+  }
+
+  function renderIncludes(json) {
+    let result = [];
     if (json.include) {
       result.push("Includes ");
       result.push(json.include.map(widget => {
@@ -303,8 +338,22 @@ module.exports = function (grunt) {
     return json.object || json.type;
   }
 
-  function baseFileName(file) {
-    return file.slice(file.lastIndexOf("/") + 1, file.lastIndexOf("."));
+  function hasAndroidImage(json) {
+    return grunt.file.isFile(fileImagePath(json.file, "android"));
+  }
+
+  function hasiOSImage(json) {
+    return grunt.file.isFile(fileImagePath(json.file, "ios"));
+  }
+
+  function fileImagePath(file, platform) {
+    let filePath = file.split(path.sep);
+    return path.join(
+      ...filePath.slice(0, filePath.length - 2),
+      "img",
+      platform,
+      path.parse(file).name + ".png"
+    );
   }
 
   let provisionalNote = "\n**Note:** this API is provisional and may change in a future release.\n";

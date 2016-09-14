@@ -66,7 +66,7 @@ module.exports = function(grunt) {
       doc: {
         expand: true,
         cwd: "doc/",
-        src: ["*.md", "api/*.md", "img/*.*"],
+        src: ["*.md", "api/*.md", "api/img/**/*.*", "img/*.*"],
         dest: "build/doc/"
       },
       readme: {
