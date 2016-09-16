@@ -7,10 +7,8 @@ var MARGIN_LARGE = 24;
 var ANIMATION_START_DELAY = 500;
 
 var people = [
-  ['Holger', 'Staudacher', 'holger.jpg'],
   ['Ian', 'Bull', 'ian.jpg'],
   ['Jochen', 'Krause', 'jochen.jpg'],
-  ['Jordi ', 'Böhme López', 'jordi.jpg'],
   ['Markus ', 'Knauer', 'markus.jpg'],
   ['Moritz', 'Post', 'moritz.jpg'],
   ['Tim', 'Buschtöns', 'tim.jpg']
