@@ -1,17 +1,35 @@
 var pageCount = 0;
+var navigationView = new tabris.NavigationView({
+  left: 0, top: 0, right: 0, bottom: 0,
+  drawerActionVisible: true
+}).appendTo(tabris.ui.contentView);
 
-createPage('Initial Page', true);
+var page = createPage();
 
-function createPage(title, topLevel) {
+navigationView.stack.push(page);
+
+function createPage(title) {
   var page = new tabris.Page({
-    title: title,
-    topLevel: topLevel
-  }).open();
-
+    title: title || 'Initial Page'
+  });
   new tabris.Button({
-    layoutData: {left: 10, top: 10, right: 10},
+    left: 16, top: 16, right: 16,
     text: 'Create another page'
   }).on('select', function() {
-    createPage('Page ' + (++pageCount), false);
+    navigationView.stack.push(createPage('Page ' + (++pageCount)));
   }).appendTo(page);
+  new tabris.Button({
+    left: 16, top: 'prev() 16', right: 16,
+    text: 'Go back'
+  }).on('select', function() {
+    navigationView.stack.pop().dispose();
+  }).appendTo(page);
+  new tabris.Button({
+    left: 16, top: 'prev() 16', right: 16,
+    text: 'Go to initial page'
+  }).on('select', function() {
+    navigationView.stack.clear().dispose();
+    navigationView.stack.push(createPage());
+  }).appendTo(page);
+  return page;
 }

@@ -124,14 +124,16 @@ Widget.prototype = extendPrototype(NativeObject, {
   },
 
   _setParent: function(parent, index) {
-    this._nativeSet('parent', types.proxy.encode(parent._getContainer(this)));
+    this._nativeSet('parent', parent ? types.proxy.encode(parent._getContainer(this)) : null);
     if (this._parent) {
       this._parent._removeChild(this);
       Layout.addToQueue(this._parent);
     }
     this._parent = parent;
-    this._parent._addChild(this, index);
-    Layout.addToQueue(this._parent);
+    if (this._parent) {
+      this._parent._addChild(this, index);
+      Layout.addToQueue(this._parent);
+    }
   },
 
   _addChild: function(child, index) {
