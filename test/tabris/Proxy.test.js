@@ -253,17 +253,7 @@ describe("Proxy", function() {
 
         proxy.set("foo", "bar");
 
-        expect(listener).to.have.been.calledWith(proxy, "bar", {});
-      });
-
-      it("triggers change event for known properties with options object", function() {
-        TestType._properties.foo = {type: "any", default: ""};
-        let listener = spy();
-        proxy.on("change:foo", listener);
-
-        proxy.set("foo", "bar", {foo2: "bar2"});
-
-        expect(listener).to.have.been.calledWith(proxy, "bar", {foo2: "bar2"});
+        expect(listener).to.have.been.calledWith(proxy, "bar");
       });
 
       it("triggers change event with decoded property value", function() {

@@ -1,9 +1,9 @@
 export default {
 
-  set: function(arg1, arg2, arg3) {
+  set: function(arg1, arg2) {
     this._checkDisposed();
     if (typeof arg1 === "string") {
-      this._setProperty(arg1, arg2, arg3 || {});
+      this._setProperty(arg1, arg2);
     } else {
       this._setProperties(arg1, arg2 || {});
     }
@@ -17,13 +17,13 @@ export default {
     return this._decodeProperty(this._getTypeDef(name), value);
   },
 
-  _setProperties: function(properties, options) {
+  _setProperties: function(properties) {
     for (var name in properties) {
-      this._setProperty(name, properties[name], options);
+      this._setProperty(name, properties[name]);
     }
   },
 
-  _setProperty: function(name, value, options) {
+  _setProperty: function(name, value) {
     var typeDef = this._getTypeDef(name);
     var encodedValue;
     try {
@@ -33,10 +33,10 @@ export default {
       return;
     }
     var setter = this._getPropertySetter(name) || this._storeProperty;
-    setter.call(this, name, encodedValue, options);
+    setter.call(this, name, encodedValue);
   },
 
-  _storeProperty: function(name, encodedValue, options) {
+  _storeProperty: function(name, encodedValue) {
     var oldEncodedValue = this._getStoredProperty(name);
     if (encodedValue === oldEncodedValue) {
       return;
@@ -49,7 +49,7 @@ export default {
       }
       this._props[name] = encodedValue;
     }
-    this._triggerChangeEvent(name, encodedValue, options);
+    this._triggerChangeEvent(name, encodedValue);
   },
 
   _getStoredProperty: function(name) {
@@ -88,10 +88,10 @@ export default {
     return prop ? prop.set : undefined;
   },
 
-  _triggerChangeEvent: function(propertyName, newEncodedValue, options) {
+  _triggerChangeEvent: function(propertyName, newEncodedValue) {
     var typeDef = this._getTypeDef(propertyName);
     var decodedValue = this._decodeProperty(typeDef, newEncodedValue);
-    this.trigger("change:" + propertyName, this, decodedValue, options || {});
+    this.trigger("change:" + propertyName, this, decodedValue);
   },
 
   _checkDisposed: function() {},

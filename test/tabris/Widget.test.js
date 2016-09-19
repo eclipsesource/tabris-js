@@ -1216,17 +1216,6 @@ describe("Widget", function() {
 
     let listener, widget;
 
-    function checkEvent(value) {
-      expect(listener.callCount).to.equal(1);
-      expect(listener.args[0][0]).to.equal(widget);
-      if (arguments.length > 0) {
-        expect(listener.args[0][1]).to.eql(value);
-        expect(listener.args[0][2]).to.eql(arguments[1] || {});
-      } else {
-        expect(listener.args[0][1]).to.eql({});
-      }
-    }
-
     function checkListen(event) {
       let listen = client.calls({op: "listen", id: widget.cid});
       expect(listen.length).to.equal(1);
@@ -1243,7 +1232,8 @@ describe("Widget", function() {
 
       widget._trigger("resize", {bounds: [1, 2, 3, 4]});
 
-      checkEvent({left: 1, top: 2, width: 3, height: 4});
+      expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWith(widget, {left: 1, top: 2, width: 3, height: 4});
       checkListen("resize");
     });
 
@@ -1252,7 +1242,8 @@ describe("Widget", function() {
 
       widget._trigger("resize", {bounds: [1, 2, 3, 4]});
 
-      checkEvent({left: 1, top: 2, width: 3, height: 4});
+      expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWith(widget, {left: 1, top: 2, width: 3, height: 4});
       checkListen("resize");
     });
 

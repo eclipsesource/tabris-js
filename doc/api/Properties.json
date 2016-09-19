@@ -14,24 +14,7 @@
       },
       {
         "parameters": [
-          {"name": "property", "type": "string"},
-          {"name": "value", "type": "any"},
-          {"name": "options", "type": "Object", "description": "This object is given in the change event resulting from this method call."}
-        ],
-        "description": "Sets the given property. Supports chaining.",
-        "returns": "this"
-      },
-      {
-        "parameters": [
           {"name": "properties", "type": "Object"}
-        ],
-        "description": "Sets all key-value pairs in the properties object as widget properties. Supports chaining.",
-        "returns": "this"
-      },
-      {
-        "parameters": [
-          {"name": "properties", "type": "Object"},
-          {"name": "options", "type": "Object", "description": "This object is given in the change event(s) resulting from this method call."}
         ],
         "description": "Sets all key-value pairs in the properties object as widget properties. Supports chaining.",
         "returns": "this"
@@ -59,11 +42,6 @@
           "name": "value",
           "type": "any",
           "description": "The new value of the given property."
-        },
-        {
-          "name": "options",
-          "type": "Object",
-          "description": "This is the options object given to the [`set`](#set) method."
         }
       ],
       "description": "Fired when the given property has changed. Change events for specific properties will only be documented separately if they may be triggered without calling `set`. "

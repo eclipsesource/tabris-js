@@ -121,8 +121,8 @@ describe("CollectionView", function() {
           view._trigger("scroll", {});
 
           expect(listener).to.have.been.calledTwice;
-          expect(listener.firstCall).to.have.been.calledWith(view, 23, {});
-          expect(listener.secondCall).to.have.been.calledWith(view, 24, {});
+          expect(listener.firstCall).to.have.been.calledWith(view, 23);
+          expect(listener.secondCall).to.have.been.calledWith(view, 24);
         });
 
         it("listener is notified once even if other listeners are attached", function() {
@@ -561,7 +561,7 @@ describe("CollectionView", function() {
 
               view._trigger("populateitem", {widget: cell.cid, index: 0});
 
-              expect(listener).to.have.been.calledWith(cell, "a", {});
+              expect(listener).to.have.been.calledWith(cell, "a");
               expect(cell.get("item")).to.equal("a");
               expect(console.warn).to.have.not.been.called;
             });
@@ -584,7 +584,7 @@ describe("CollectionView", function() {
 
               view._trigger("populateitem", {widget: cell.cid, index: 0});
 
-              expect(listener).to.have.been.calledWith(cell, 0, {});
+              expect(listener).to.have.been.calledWith(cell, 0);
               expect(cell.get("itemIndex")).to.equal(0);
               expect(console.warn).to.have.not.been.called;
             });

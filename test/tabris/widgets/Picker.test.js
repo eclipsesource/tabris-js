@@ -39,10 +39,9 @@ describe("Picker", function() {
     let checkEvent = function(value) {
       expect(listener).to.have.been.calledOnce;
       if (arguments.length > 0) {
-        expect(listener).to.have.been.calledWith(picker, value, arguments[1] || {});
+        expect(listener).to.have.been.calledWith(picker, value);
       } else {
-        expect(listener).to.have.been.calledWith(picker, {});
-        expect(listener.calls.argsFor(0)[1]).to.eql({});
+        expect(listener).to.have.been.calledWith(picker);
       }
     };
     let checkListen = function(event) {
@@ -80,9 +79,9 @@ describe("Picker", function() {
       picker.on("change:selection", listener);
       picker.set("items", ["foo", "bar"]);
 
-      picker.set("selection", "foo", {custom: 23});
+      picker.set("selection", "foo");
 
-      expect(listener).to.have.been.calledWith(picker, "foo", {custom: 23, index: 0});
+      expect(listener).to.have.been.calledWith(picker, "foo");
       expect(listener).to.have.been.calledOnce;
     });
 

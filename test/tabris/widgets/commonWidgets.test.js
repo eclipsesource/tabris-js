@@ -46,9 +46,9 @@ describe("Common Widgets", function() {
   function checkEvent(value) {
     expect(listener).to.have.been.calledOnce;
     if (arguments.length > 0) {
-      expect(listener).to.have.been.calledWith(widget, value, arguments[1] || {});
+      expect(listener).to.have.been.calledWith(widget, value);
     } else {
-      expect(listener).to.have.been.calledWith(widget, {});
+      expect(listener).to.have.been.calledWith(widget);
     }
   }
 

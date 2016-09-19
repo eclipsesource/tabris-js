@@ -124,7 +124,7 @@ describe("Properties", function() {
       TestType._properties.foo = {set: setter};
       object.set("foo", "bar");
 
-      expect(setter).to.have.been.calledWith("foo", "bar", {});
+      expect(setter).to.have.been.calledWith("foo", "bar");
     });
 
     it ("stores nothing if custom setter exists", function() {
@@ -132,14 +132,6 @@ describe("Properties", function() {
       object.set("foo", "bar");
 
       expect(object.get("foo")).to.equal(undefined);
-    });
-
-    it ("calls custom setter with options", function() {
-      let setter = stub().returns(true);
-      TestType._properties.foo = {set: setter};
-      object.set("foo", "bar", {foo2: "bar2"});
-
-      expect(setter).to.have.been.calledWith("foo", "bar", {foo2: "bar2"});
     });
 
   });
@@ -159,7 +151,7 @@ describe("Properties", function() {
       object.set("foo", "bar");
 
       expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWith(object, "bar", {});
+      expect(listener).to.have.been.calledWith(object, "bar");
     });
 
     it ("set triggers change event with decoded value", function() {
@@ -169,25 +161,16 @@ describe("Properties", function() {
       object.set("foo", "bar");
 
       expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWith(object, true, {});
+      expect(listener).to.have.been.calledWith(object, true);
     });
 
-    it ("set (two parameters) triggers change event with options", function() {
+    it ("set (single parameter) triggers change event", function() {
       object.on("change:foo", listener);
 
-      object.set({foo: "bar"}, {foo2: "bar2"});
+      object.set({foo: "bar"});
 
       expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWith(object, "bar", {foo2: "bar2"});
-    });
-
-    it ("set (three parameters) triggers change event with options", function() {
-      object.on("change:foo", listener);
-
-      object.set("foo", "bar", {foo2: "bar2"});
-
-      expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWith(object, "bar", {foo2: "bar2"});
+      expect(listener).to.have.been.calledWith(object, "bar");
     });
 
     it ("set triggers no change event if value is unchanged", function() {
