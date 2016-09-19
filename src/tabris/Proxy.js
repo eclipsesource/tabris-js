@@ -163,12 +163,6 @@ function normalizeProperties(properties) {
 }
 
 function normalizeProperty(property) {
-  if (property === true) {
-    // TODO: Remove this block once current tabris.js is considered incompatible with developer
-    //       apps older than tabris 1.2 (which have cordova.js files built in using this syntax)
-    console.warn("A custom component uses deprecated property type value 'true'");
-    property = "any";
-  }
   var shortHand = (typeof property === "string" || Array.isArray(property));
   var setter = property.access && property.access.set || defaultSetter;
   var getter = property.access && property.access.get || defaultGetter;
