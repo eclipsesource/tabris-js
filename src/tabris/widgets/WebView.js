@@ -19,6 +19,11 @@ tabris.registerWidget("WebView", {
         this.trigger("load", this, event);
       }
     },
+    download: {
+      trigger: function(event) {
+        this.trigger("download", this, event);
+      }
+    },
     message: {
       trigger: function(event) {
         this.trigger("message", this, event);
