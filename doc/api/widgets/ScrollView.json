@@ -12,12 +12,48 @@
     },
     "offsetX": {
       "type": "number",
-      "description": "The horizontal scrolling position."
+      "description": "The horizontal scrolling position. This property is read-only."
     },
     "offsetY": {
       "type": "number",
-      "description": "The vertical scrolling position."
+      "description": "The vertical scrolling position. This property is read-only."
     }
+  },
+  "methods": {
+    "scrollToX": [
+      {
+        "parameters": [
+          {"name": "offsetX", "type": "number"}
+        ],
+        "returns": "this",
+        "description": "Scrolls to the given horizontal offset using an animation. Has no effect on a vertical `ScrollView`"
+      },
+      {
+        "parameters": [
+          {"name": "offsetX", "type": "number"},
+          {"name": "options", "type": "Object"}
+        ],
+        "returns": "this",
+        "description": "Scrolls to the given horizontal offset. Give `{animated: false}` as the second parameter to suppress the animation."
+      }
+    ],
+    "scrollToY": [
+      {
+        "parameters": [
+          {"name": "offsetY", "type": "number"}
+        ],
+        "returns": "this",
+        "description": "Scrolls to the given vertical offset using an animation. Has no effect on a horizontal `ScrollView`"
+      },
+      {
+        "parameters": [
+          {"name": "offsetY", "type": "number"},
+          {"name": "options", "type": "Object"}
+        ],
+        "returns": "this",
+        "description": "Scrolls to the given vertical offset. Give `{animated: false}` as the second parameter to suppress the animation."
+      }
+    ]
   },
   "events": {
     "scrollX": {

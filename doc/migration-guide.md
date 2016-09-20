@@ -4,6 +4,6 @@
 * Calling `Events.off()` without arguments is not supported anymore.
 * Calling `Events.off(event)` is not supported anymore.
 * ScrollView
-  * Property `scrollX` is now `offsetX`.
-  * Property `scrollY` is now `offsetY`.
+  * Property `scrollX` is now `offsetX`. It is now read-only, use scrollToX method to scroll.
+  * Property `scrollY` is now `offsetY`. It is now read-only, use scrollToY method to scroll.
   * Event `scroll` has been replaced by `scrollX` and `scrollY`

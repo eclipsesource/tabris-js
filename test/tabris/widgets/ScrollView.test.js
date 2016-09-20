@@ -81,12 +81,12 @@ describe("ScrollView", function() {
       expect(scrollView.get("offsetY")).to.equal(42);
     });
 
-    it("offsetY can be set", function() {
+    it("offsetY can not be set", function() {
       scrollView.set("offsetY", 23);
 
       let setCalls = client.calls({id: scrollView.cid, op: "set"});
 
-      expect(setCalls[0].properties.offsetY).to.equal(23);
+      expect(setCalls.length).to.equal(0);
     });
 
     it("fires scroll event", function() {
@@ -144,12 +144,12 @@ describe("ScrollView", function() {
       expect(scrollView.get("offsetX")).to.equal(23);
     });
 
-    it("offsetX can be set", function() {
+    it("offsetX can not be set", function() {
       scrollView.set("offsetX", 23);
 
       let setCalls = client.calls({id: scrollView.cid, op: "set"});
 
-      expect(setCalls[0].properties.offsetX).to.equal(23);
+      expect(setCalls.length).to.equal(0);
     });
 
     it("fires scrollX event", function() {
@@ -193,10 +193,83 @@ describe("ScrollView", function() {
       scrollView = new ScrollView();
     });
 
-    it("calls 'scrollToX' on client", function() {
+    it("returns ScrollView", function() {
+      expect(scrollView.scrollToX(100)).to.equal(scrollView);
+    });
+
+    it("CALLs 'scrollToX' with default options", function() {
       scrollView.scrollToX(100);
 
-      expect(client.calls({op: "call", id: scrollView.cid})[0].parameters.offsetX).to.equal(100);
+      let calls = client.calls({op: "call", id: scrollView.cid});
+      expect(calls).to.deep.equal([{
+        op: "call",
+        id: scrollView.cid,
+        method: "scrollToX",
+        parameters: {
+          offsetX: 100,
+          animated: true
+        }
+      }]);
+    });
+
+    it("CALLs 'scrollToX' with options", function() {
+      scrollView.scrollToX(101, {animated: false});
+
+      let calls = client.calls({op: "call", id: scrollView.cid});
+      expect(calls).to.deep.equal([{
+        op: "call",
+        id: scrollView.cid,
+        method: "scrollToX",
+        parameters: {
+          offsetX: 101,
+          animated: false
+        }
+      }]);
+    });
+
+    it("CALLs 'scrollToX' with normalized options", function() {
+      scrollView.scrollToX(101, {animated: 1});
+
+      let calls = client.calls({op: "call", id: scrollView.cid});
+      expect(calls).to.deep.equal([{
+        op: "call",
+        id: scrollView.cid,
+        method: "scrollToX",
+        parameters: {
+          offsetX: 101,
+          animated: true
+        }
+      }]);
+    });
+
+    it("CALLs 'scrollToX' with filtered options", function() {
+      scrollView.scrollToX(101, {foo: "bar", animated: true});
+
+      let calls = client.calls({op: "call", id: scrollView.cid});
+      expect(calls).to.deep.equal([{
+        op: "call",
+        id: scrollView.cid,
+        method: "scrollToX",
+        parameters: {
+          offsetX: 101,
+          animated: true
+        }
+      }]);
+    });
+
+    it("CALLs 'scrollToX' with autocompleted options", function() {
+      scrollView.scrollToX(101, {});
+
+      let calls = client.calls({op: "call", id: scrollView.cid});
+      expect(calls).to.deep.equal([{
+        op: "call",
+        id: scrollView.cid,
+        method: "scrollToX",
+        parameters: {
+          offsetX: 101,
+          animated: true
+        }
+      }]);
     });
 
   });
@@ -207,10 +280,83 @@ describe("ScrollView", function() {
       scrollView = new ScrollView();
     });
 
-    it("calls 'scrollToY' on client", function() {
-      scrollView.scrollToY(200);
+    it("returns ScrollView", function() {
+      expect(scrollView.scrollToY(100)).to.equal(scrollView);
+    });
 
-      expect(client.calls({op: "call", id: scrollView.cid})[0].parameters.offsetY).to.equal(200);
+    it("CALLs 'scrollToY' with default options", function() {
+      scrollView.scrollToY(100);
+
+      let calls = client.calls({op: "call", id: scrollView.cid});
+      expect(calls).to.deep.equal([{
+        op: "call",
+        id: scrollView.cid,
+        method: "scrollToY",
+        parameters: {
+          offsetY: 100,
+          animated: true
+        }
+      }]);
+    });
+
+    it("CALLs 'scrollToY' with options", function() {
+      scrollView.scrollToY(101, {animated: false});
+
+      let calls = client.calls({op: "call", id: scrollView.cid});
+      expect(calls).to.deep.equal([{
+        op: "call",
+        id: scrollView.cid,
+        method: "scrollToY",
+        parameters: {
+          offsetY: 101,
+          animated: false
+        }
+      }]);
+    });
+
+    it("CALLs 'scrollToY' with normalized options", function() {
+      scrollView.scrollToY(101, {animated: 1});
+
+      let calls = client.calls({op: "call", id: scrollView.cid});
+      expect(calls).to.deep.equal([{
+        op: "call",
+        id: scrollView.cid,
+        method: "scrollToY",
+        parameters: {
+          offsetY: 101,
+          animated: true
+        }
+      }]);
+    });
+
+    it("CALLs 'scrollToY' with filtered options", function() {
+      scrollView.scrollToY(101, {foo: "bar", animated: true});
+
+      let calls = client.calls({op: "call", id: scrollView.cid});
+      expect(calls).to.deep.equal([{
+        op: "call",
+        id: scrollView.cid,
+        method: "scrollToY",
+        parameters: {
+          offsetY: 101,
+          animated: true
+        }
+      }]);
+    });
+
+    it("CALLs 'scrollToY' with autocompleted options", function() {
+      scrollView.scrollToY(101, {});
+
+      let calls = client.calls({op: "call", id: scrollView.cid});
+      expect(calls).to.deep.equal([{
+        op: "call",
+        id: scrollView.cid,
+        method: "scrollToY",
+        parameters: {
+          offsetY: 101,
+          animated: true
+        }
+      }]);
     });
 
   });
