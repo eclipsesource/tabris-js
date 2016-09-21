@@ -3,7 +3,7 @@ import ProxyStore from "../../src/tabris/ProxyStore";
 import NativeBridge from "../../src/tabris/NativeBridge";
 import ClientStub from "./ClientStub";
 import {animate} from "../../src/tabris/Animation";
-import Proxy from "../../src/tabris/Proxy";
+import NativeObject from "../../src/tabris/NativeObject";
 
 describe("Animation", function() {
 
@@ -29,7 +29,7 @@ describe("Animation", function() {
       _proxies: new ProxyStore()
     };
     global.tabris._nativeBridge = new NativeBridge(client);
-    let TestWidget = Proxy.extend({
+    let TestWidget = NativeObject.extend({
       _name: "TestWidget",
       _properties: {
         opacity: {

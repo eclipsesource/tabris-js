@@ -1,5 +1,5 @@
 import {expect, spy, restore} from "../test";
-import Proxy from "../../src/tabris/Proxy";
+import NativeObject from "../../src/tabris/NativeObject";
 import ProxyStore from "../../src/tabris/ProxyStore";
 import ProxyCollection from "../../src/tabris/ProxyCollection";
 import {types} from "../../src/tabris/property-types";
@@ -14,7 +14,7 @@ describe("property-types", function() {
       _proxies: new ProxyStore()
     };
     function WidgetMock() {}
-    WidgetMock.prototype = Proxy.prototype;
+    WidgetMock.prototype = NativeObject.prototype;
     widget = new WidgetMock();
   });
 
@@ -409,13 +409,13 @@ describe("property-types", function() {
     var decode = types.proxy.decode;
 
     it("translates widgets to ids in properties", function() {
-      var value = new Proxy("other-id");
+      var value = new NativeObject("other-id");
 
       expect(encode(value)).to.equal("other-id");
     });
 
     it("translates widget collection to first ids in properties", function() {
-      var value = new ProxyCollection([new Proxy("cid-23")]);
+      var value = new ProxyCollection([new NativeObject("cid-23")]);
 
       expect(encode(value)).to.equal("cid-23");
     });
@@ -427,7 +427,7 @@ describe("property-types", function() {
     });
 
     it("translates ids to widgets", function() {
-      var value = new Proxy("cid-42");
+      var value = new NativeObject("cid-42");
 
       expect(decode("cid-42")).to.equal(value);
     });

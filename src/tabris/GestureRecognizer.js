@@ -1,6 +1,6 @@
-import Proxy from "./Proxy";
+import NativeObject from "./NativeObject";
 
-export default Proxy.extend({
+export default NativeObject.extend({
   _type: "tabris.GestureRecognizer",
   _properties: {
     type: "string",

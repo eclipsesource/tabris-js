@@ -3,11 +3,11 @@ import {types} from "./property-types";
 import Properties from "./Properties";
 import Events from "./Events";
 
-export default function Proxy(cid) {
+export default function NativeObject(cid) {
   this.cid = tabris._proxies.register(this, cid);
 }
 
-extend(Proxy.prototype, Properties, Events, {
+extend(NativeObject.prototype, Properties, Events, {
 
   _create: function(properties) {
     var type = this.constructor._type || this.type;
@@ -109,18 +109,18 @@ extend(Proxy.prototype, Properties, Events, {
 
 });
 
-Proxy.extend = function(members, superType) {
+NativeObject.extend = function(members, superType) {
   var Type = function(properties) {
     if (!(this instanceof Type)) {
       throw new Error("Cannot call constructor as a function");
     }
     if (Type._cid) {
-      Proxy.call(this, Type._cid);
+      NativeObject.call(this, Type._cid);
     } else {
       if (!global.tabris._nativeBridge) {
         throw new Error("tabris.js not started");
       }
-      Proxy.call(this);
+      NativeObject.call(this);
       this._create(properties || {});
     }
   };
@@ -133,7 +133,7 @@ Proxy.extend = function(members, superType) {
   var superProto = omit(members, Object.keys(staticMembers));
   superProto.type = members._name;
   superProto.constructor = Type; // extendPrototype can not provide the original
-  Type.prototype = extendPrototype(superType || Proxy, superProto);
+  Type.prototype = extendPrototype(superType || NativeObject, superProto);
   mapProperties(Type.prototype, Type._properties);
   return Type;
 };

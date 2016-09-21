@@ -1,7 +1,7 @@
 import {extend} from "./util";
-import Proxy from "./Proxy";
+import NativeObject from "./NativeObject";
 
-var Animation = Proxy.extend({
+var Animation = NativeObject.extend({
 
   _name: "_Animation",
 

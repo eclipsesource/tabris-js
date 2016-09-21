@@ -1,5 +1,5 @@
 import {expect, spy, restore} from "../test";
-import Proxy from "../../src/tabris/Proxy";
+import NativeObject from "../../src/tabris/NativeObject";
 import ClientInterface from "../../src/tabris/Tabris";
 import ClientStub from "./ClientStub";
 import "../../src/tabris/Tabris";
@@ -38,7 +38,7 @@ describe("ClientInterface", function() {
     });
 
     it("load functions can access tabris functions", function() {
-      let TestType = Proxy.extend({_type: "test.Type"});
+      let TestType = NativeObject.extend({_type: "test.Type"});
       tabris.load(() => new TestType());
 
       tabris._init.call(null, client);
@@ -58,7 +58,7 @@ describe("ClientInterface", function() {
     });
 
     it("notifies widget proxy", function() {
-      CustomType = Proxy.extend({_events: {bar: true}});
+      CustomType = NativeObject.extend({_events: {bar: true}});
       proxy = new CustomType();
       spy(proxy, "trigger");
 
@@ -68,7 +68,7 @@ describe("ClientInterface", function() {
     });
 
     it("notifies widget proxy with translated event name", function() {
-      CustomType = Proxy.extend({_events: {bar: "foo"}});
+      CustomType = NativeObject.extend({_events: {bar: "foo"}});
       proxy = new CustomType();
       spy(proxy, "trigger");
 
@@ -78,7 +78,7 @@ describe("ClientInterface", function() {
     });
 
     it("calls custom trigger", function() {
-      CustomType = Proxy.extend({
+      CustomType = NativeObject.extend({
 
         _events: {
           bar: {
@@ -95,7 +95,7 @@ describe("ClientInterface", function() {
     });
 
     it("returns return value from custom trigger", function() {
-      CustomType = Proxy.extend({
+      CustomType = NativeObject.extend({
 
         _events: {
           bar: {
@@ -112,7 +112,7 @@ describe("ClientInterface", function() {
     });
 
     it("calls custom trigger of translated event", function() {
-      CustomType = Proxy.extend({
+      CustomType = NativeObject.extend({
 
         _events: {
           bar: {
@@ -130,7 +130,7 @@ describe("ClientInterface", function() {
     });
 
     it("returns return value from custom trigger with translated event", function() {
-      CustomType = Proxy.extend({
+      CustomType = NativeObject.extend({
 
         _events: {
           bar: {
@@ -148,7 +148,7 @@ describe("ClientInterface", function() {
     });
 
     it("skips events for already disposed widgets", function() {
-      CustomType = Proxy.extend({_events: {bar: true}});
+      CustomType = NativeObject.extend({_events: {bar: true}});
       proxy = new CustomType();
       proxy.dispose();
       spy(proxy, "trigger");
@@ -165,7 +165,7 @@ describe("ClientInterface", function() {
     });
 
     it("can be called without a context", function() {
-      CustomType = Proxy.extend({_events: {bar: true}});
+      CustomType = NativeObject.extend({_events: {bar: true}});
       proxy = new CustomType();
       spy(proxy, "trigger");
 

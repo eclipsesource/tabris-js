@@ -1,6 +1,6 @@
-import Proxy from "./Proxy";
+import NativeObject from "./NativeObject";
 
-var Timer = Proxy.extend({
+var Timer = NativeObject.extend({
   _type: "tabris.Timer",
   _events: {Run: true},
   _properties: {delay: "any", repeat: "any"}

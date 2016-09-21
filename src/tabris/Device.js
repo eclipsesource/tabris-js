@@ -1,6 +1,6 @@
-import Proxy from "./Proxy";
+import NativeObject from "./NativeObject";
 
-var Device = Proxy.extend({
+var Device = NativeObject.extend({
   _cid: "tabris.Device",
   _properties: {
     model: "any",

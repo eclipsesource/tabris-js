@@ -1,11 +1,11 @@
 import {types} from "./property-types";
-import Proxy from "./Proxy";
+import NativeObject from "./NativeObject";
 
-var ClientStore = Proxy.extend({
+var ClientStore = NativeObject.extend({
   _cid: "tabris.ClientStore"
 });
 
-var SecureStore = Proxy.extend({
+var SecureStore = NativeObject.extend({
   _cid: "tabris.SecureStore"
 });
 

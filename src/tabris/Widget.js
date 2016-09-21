@@ -1,6 +1,6 @@
 import {extend, extendPrototype} from "./util";
 import Layout from "./Layout";
-import Proxy from "./Proxy";
+import NativeObject from "./NativeObject";
 import ProxyCollection from "./ProxyCollection";
 import GestureRecognizer from "./GestureRecognizer";
 import {animate} from "./Animation";
@@ -15,14 +15,14 @@ export default function Widget() {
   throw new Error("Cannot instantiate abstract Widget");
 }
 
-var superProto = Proxy.prototype;
+var superProto = NativeObject.prototype;
 
-Widget.prototype = extendPrototype(Proxy, {
+Widget.prototype = extendPrototype(NativeObject, {
 
   append: function() {
     this._checkDisposed();
     var accept = function(proxy) {
-      if (!(proxy instanceof Proxy)) {
+      if (!(proxy instanceof NativeObject)) {
         throw new Error("Cannot append non-widget");
       }
       proxy._setParent(this);
@@ -40,7 +40,7 @@ Widget.prototype = extendPrototype(Proxy, {
   appendTo: function(proxy) {
     this._checkDisposed();
     proxy = proxy instanceof ProxyCollection ? proxy.first() : proxy;
-    if (!(proxy instanceof Proxy)) {
+    if (!(proxy instanceof NativeObject)) {
       throw new Error("Cannot append to non-widget");
     }
     this._setParent(proxy);
@@ -50,7 +50,7 @@ Widget.prototype = extendPrototype(Proxy, {
   insertBefore: function(proxy) {
     this._checkDisposed();
     proxy = proxy instanceof ProxyCollection ? proxy.first() : proxy;
-    if (!(proxy instanceof Proxy)) {
+    if (!(proxy instanceof NativeObject)) {
       throw new Error("Cannot insert before non-widget");
     }
     var parent = proxy.parent();
@@ -62,7 +62,7 @@ Widget.prototype = extendPrototype(Proxy, {
   insertAfter: function(proxy) {
     this._checkDisposed();
     proxy = proxy instanceof ProxyCollection ? proxy.first() : proxy;
-    if (!(proxy instanceof Proxy)) {
+    if (!(proxy instanceof NativeObject)) {
       throw new Error("Cannot insert after non-widget");
     }
     var parent = proxy.parent();
@@ -205,7 +205,7 @@ Widget.extend = function(members) {
     var defaultProperties = _defaultProperties;
     members._properties = extend({}, defaultProperties, members._properties || {});
   }
-  return Proxy.extend(members, Widget);
+  return NativeObject.extend(members, Widget);
 };
 
 Object.defineProperty(Widget.prototype, "classList", {

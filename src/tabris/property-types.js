@@ -2,7 +2,7 @@ import {extend} from "./util";
 import {imageToArray, imageFromArray} from "./util-images";
 import {colorArrayToString, colorStringToArray} from "./util-colors";
 import {fontObjectToString, fontStringToObject} from "./util-fonts";
-import Proxy from "./Proxy";
+import NativeObject from "./NativeObject";
 import ProxyCollection from "./ProxyCollection";
 
 export var types = {
@@ -167,7 +167,7 @@ export var types = {
 
   proxy: {
     encode: function(value) {
-      if (value instanceof Proxy) {
+      if (value instanceof NativeObject) {
         return value.cid;
       }
       if (value instanceof ProxyCollection) {
@@ -321,7 +321,7 @@ function encodeEdge(value) {
   if (Array.isArray(value)) {
     return encodeEdgeArray(value);
   }
-  if (value instanceof Proxy) {
+  if (value instanceof NativeObject) {
     return [value, 0];
   }
   throw new Error("Invalid dimension: " + toString(value));
@@ -351,7 +351,7 @@ function encodeEdgeRef(value) {
     }
     return value;
   }
-  if (value instanceof Proxy) {
+  if (value instanceof NativeObject) {
     return value;
   }
   throw new Error("Not a percentage or widget reference: " + toString(value));
@@ -366,7 +366,7 @@ function encodePercentage(value) {
 }
 
 function encodeWidgetRef(value) {
-  if (value instanceof Proxy) {
+  if (value instanceof NativeObject) {
     return value;
   }
   if (typeof value === "string" && selectorRegex.test(value)) {

@@ -3,11 +3,11 @@
 // Append the section tag to the URL above to get the link to the corresponding section.
 // Steps are referenced to with a number inside parentheses, e.g. (2)
 
-import Proxy from "./Proxy";
+import NativeObject from "./NativeObject";
 import DOMEvent, {addDOMEventTargetMethods} from "./DOMEvent";
 import ProgressEvent from "./DOMProgressEvent";
 
-var HttpRequest = Proxy.extend({
+var HttpRequest = NativeObject.extend({
   _type: "tabris.HttpRequest",
   _events: {StateChange: true, DownloadProgress: true, UploadProgress: true}
 });

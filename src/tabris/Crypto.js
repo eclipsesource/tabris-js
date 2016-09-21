@@ -1,6 +1,6 @@
-import Proxy from "./Proxy";
+import NativeObject from "./NativeObject";
 
-var _Crypto = Proxy.extend({
+var _Crypto = NativeObject.extend({
   _type: "tabris.Crypto"
 });
 
