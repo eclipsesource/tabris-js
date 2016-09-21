@@ -1,7 +1,7 @@
 import {extend, extendPrototype} from "./util";
 import Layout from "./Layout";
 import NativeObject from "./NativeObject";
-import ProxyCollection from "./ProxyCollection";
+import WidgetCollection from "./WidgetCollection";
 import GestureRecognizer from "./GestureRecognizer";
 import {animate} from "./Animation";
 import {types} from "./property-types";
@@ -27,7 +27,7 @@ Widget.prototype = extendPrototype(NativeObject, {
       }
       proxy._setParent(this);
     }.bind(this);
-    if (arguments[0] instanceof ProxyCollection) {
+    if (arguments[0] instanceof WidgetCollection) {
       arguments[0].toArray().forEach(accept);
     } else if (Array.isArray(arguments[0])) {
       arguments[0].forEach(accept);
@@ -39,7 +39,7 @@ Widget.prototype = extendPrototype(NativeObject, {
 
   appendTo: function(proxy) {
     this._checkDisposed();
-    proxy = proxy instanceof ProxyCollection ? proxy.first() : proxy;
+    proxy = proxy instanceof WidgetCollection ? proxy.first() : proxy;
     if (!(proxy instanceof NativeObject)) {
       throw new Error("Cannot append to non-widget");
     }
@@ -49,7 +49,7 @@ Widget.prototype = extendPrototype(NativeObject, {
 
   insertBefore: function(proxy) {
     this._checkDisposed();
-    proxy = proxy instanceof ProxyCollection ? proxy.first() : proxy;
+    proxy = proxy instanceof WidgetCollection ? proxy.first() : proxy;
     if (!(proxy instanceof NativeObject)) {
       throw new Error("Cannot insert before non-widget");
     }
@@ -61,7 +61,7 @@ Widget.prototype = extendPrototype(NativeObject, {
 
   insertAfter: function(proxy) {
     this._checkDisposed();
-    proxy = proxy instanceof ProxyCollection ? proxy.first() : proxy;
+    proxy = proxy instanceof WidgetCollection ? proxy.first() : proxy;
     if (!(proxy instanceof NativeObject)) {
       throw new Error("Cannot insert after non-widget");
     }
@@ -76,7 +76,7 @@ Widget.prototype = extendPrototype(NativeObject, {
   },
 
   children: function(selector) {
-    return new ProxyCollection(this._getSelectableChildren(), selector);
+    return new WidgetCollection(this._getSelectableChildren(), selector);
   },
 
   siblings: function(selector) {
@@ -84,15 +84,15 @@ Widget.prototype = extendPrototype(NativeObject, {
     var filtered = siblings.filter(function(widget) {
       return widget !== this;
     }.bind(this));
-    return new ProxyCollection(filtered, selector);
+    return new WidgetCollection(filtered, selector);
   },
 
   find: function(selector) {
-    return new ProxyCollection(this._getSelectableChildren(), selector, true);
+    return new WidgetCollection(this._getSelectableChildren(), selector, true);
   },
 
   apply: function(sheet) {
-    var scope = new ProxyCollection(this._children.concat(this), "*", true);
+    var scope = new WidgetCollection(this._children.concat(this), "*", true);
     if (sheet["*"]) {
       scope.set(sheet["*"]);
     }

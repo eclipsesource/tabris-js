@@ -1,7 +1,7 @@
 import {expect, spy, restore} from "../test";
 import NativeObject from "../../src/tabris/NativeObject";
 import ProxyStore from "../../src/tabris/ProxyStore";
-import ProxyCollection from "../../src/tabris/ProxyCollection";
+import WidgetCollection from "../../src/tabris/WidgetCollection";
 import {types} from "../../src/tabris/property-types";
 import {omit} from "../../src/tabris/util";
 
@@ -415,7 +415,7 @@ describe("property-types", function() {
     });
 
     it("translates widget collection to first ids in properties", function() {
-      var value = new ProxyCollection([new NativeObject("cid-23")]);
+      var value = new WidgetCollection([new NativeObject("cid-23")]);
 
       expect(encode(value)).to.equal("cid-23");
     });

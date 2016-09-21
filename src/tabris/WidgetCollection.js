@@ -1,4 +1,4 @@
-export default function ProxyCollection(arr, selector, deep) {
+export default function WidgetCollection(arr, selector, deep) {
   this._array = select(arr, selector || "*", deep);
   for (var i = 0; i < this._array.length; i++) {
     this[i] = this._array[i];
@@ -6,7 +6,7 @@ export default function ProxyCollection(arr, selector, deep) {
   this.length = this._array.length;
 }
 
-var proto = ProxyCollection.prototype = {
+var proto = WidgetCollection.prototype = {
 
   first: function() {
     return this._array[0];
@@ -32,7 +32,7 @@ var proto = ProxyCollection.prototype = {
   },
 
   filter: function(selector) {
-    return new ProxyCollection(this._array, selector);
+    return new WidgetCollection(this._array, selector);
   },
 
   get: function(prop) {
@@ -50,7 +50,7 @@ var proto = ProxyCollection.prototype = {
       }
     }
     if (result.length) {
-      return new ProxyCollection(result);
+      return new WidgetCollection(result);
     }
   },
 
@@ -59,11 +59,11 @@ var proto = ProxyCollection.prototype = {
     for (var i = 0; i < this._array.length; i++) {
       result.push.apply(result, this._array[i]._getSelectableChildren() || []);
     }
-    return new ProxyCollection(result, selector);
+    return new WidgetCollection(result, selector);
   },
 
   find: function(selector) {
-    return new ProxyCollection(this.children()._array, selector, true);
+    return new WidgetCollection(this.children()._array, selector, true);
   },
 
   appendTo: function(parent) {

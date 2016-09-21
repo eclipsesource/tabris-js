@@ -1,7 +1,7 @@
 import {expect, spy, stub, restore} from "../test";
-import ProxyCollection from "../../src/tabris/ProxyCollection";
+import WidgetCollection from "../../src/tabris/WidgetCollection";
 
-describe("ProxyCollection", function() {
+describe("WidgetCollection", function() {
 
   let counter = 0;
   let mockProxy = function() {
@@ -20,7 +20,7 @@ describe("ProxyCollection", function() {
 
   beforeEach(function() {
     mocks = [mockProxy(), mockProxy(), mockProxy()];
-    collection = new ProxyCollection(mocks);
+    collection = new WidgetCollection(mocks);
   });
 
   afterEach(restore);
@@ -189,7 +189,7 @@ describe("ProxyCollection", function() {
     });
 
     it("get() returns undefined for empty collection", function() {
-      expect((new ProxyCollection([])).get("foo")).to.be.undefined;
+      expect((new WidgetCollection([])).get("foo")).to.be.undefined;
     });
 
     it("parent() returns all parents", function() {
@@ -210,7 +210,7 @@ describe("ProxyCollection", function() {
     });
 
     it("parent() returns undefined for empty collection", function() {
-      expect((new ProxyCollection([])).parent()).to.be.undefined;
+      expect((new WidgetCollection([])).parent()).to.be.undefined;
     });
 
     it("appendTo(parent) calls parent.append", function() {

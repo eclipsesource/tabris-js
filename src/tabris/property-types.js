@@ -3,7 +3,7 @@ import {imageToArray, imageFromArray} from "./util-images";
 import {colorArrayToString, colorStringToArray} from "./util-colors";
 import {fontObjectToString, fontStringToObject} from "./util-fonts";
 import NativeObject from "./NativeObject";
-import ProxyCollection from "./ProxyCollection";
+import WidgetCollection from "./WidgetCollection";
 
 export var types = {
 
@@ -170,7 +170,7 @@ export var types = {
       if (value instanceof NativeObject) {
         return value.cid;
       }
-      if (value instanceof ProxyCollection) {
+      if (value instanceof WidgetCollection) {
         return value[0] ? value[0].cid : null;
       }
       // TODO: Should throw error instead

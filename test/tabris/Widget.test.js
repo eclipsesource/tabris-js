@@ -1,5 +1,5 @@
 import {expect, spy, stub, restore} from "../test";
-import ProxyCollection from "../../src/tabris/ProxyCollection";
+import WidgetCollection from "../../src/tabris/WidgetCollection";
 import ProxyStore from "../../src/tabris/ProxyStore";
 import Layout from "../../src/tabris/Layout";
 import NativeBridge from "../../src/tabris/NativeBridge";
@@ -397,7 +397,7 @@ describe("Widget", function() {
       describe("when called with a widget collection", function() {
 
         beforeEach(function() {
-          result = widget.append(new ProxyCollection([child1, child2]));
+          result = widget.append(new WidgetCollection([child1, child2]));
         });
 
         it("sets the widgets' parent", function() {
@@ -514,7 +514,7 @@ describe("Widget", function() {
           parent1 = new TestWidget();
           parent2 = new TestWidget();
           client.resetCalls();
-          result = widget.appendTo(new ProxyCollection([parent1, parent2]));
+          result = widget.appendTo(new WidgetCollection([parent1, parent2]));
         });
 
         it("returns self to allow chaining", function() {
