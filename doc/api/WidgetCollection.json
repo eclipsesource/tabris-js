@@ -1,8 +1,57 @@
 {
   "type": "WidgetCollection",
-  "include": ["Events", "Properties"],
   "description": "A `WidgetCollection` is an array-like object representing a set of widgets, as returned by the widget methods `children` and `find`.",
   "methods": {
+    "on": [
+      {
+        "parameters": [
+          {"name": "event", "type": "string"},
+          {"name": "listener", "type": "Function"},
+          {"name": "context?", "type": "this", "description": "In the listener function, `this` will point to this object."}
+        ],
+        "returns": "this",
+        "description": "Adds the given listener to all widgets in this collection. See also `Widget.on()`."
+      }
+    ],
+    "once": [
+      {
+        "parameters": [
+          {"name": "event", "type": "string"},
+          {"name": "listener", "type": "Function"},
+          {"name": "context?", "type": "this", "description": "In the listener function, `this` will point to this object."}
+        ],
+        "returns": "this",
+        "description": "Adds the given listener for single execution on all widgets in this collection. See also `Widget.once()`."
+      }
+    ],
+    "off": [
+      {
+        "parameters": [
+          {"name": "event", "type": "string"},
+          {"name": "listener", "type": "Function"},
+          {"name": "context?", "type": "this"}
+        ],
+        "returns": "this",
+        "description": "Removes the given listener from all widgets in this collection. See also `Widget.off()`."
+      }
+    ],
+    "set": [
+      {
+        "parameters": [
+          {"name": "property", "type": "string"},
+          {"name": "value", "type": "any"}
+        ],
+        "description": "Sets the given property on all widgets in this collection. See also `Widget.set()`.",
+        "returns": "this"
+      },
+      {
+        "parameters": [
+          {"name": "properties", "type": "Object"}
+        ],
+        "description": "Sets all key-value pairs in the properties object on all widgets in this collection. See also `Widget.set()`.",
+        "returns": "this"
+      }
+    ],
     "children": [
       {
         "parameters": [],
@@ -43,7 +92,7 @@
         "parameters": [
           {"name": "parent", "type": "Composite"}
         ],
-        "returns": "WidgetCollection",
+        "returns": "this",
         "description": "Append all widgets in this collection to the given widget."
       }
     ],

@@ -1,7 +1,7 @@
 {
   "type": "Device",
   "object": "device",
-  "include": ["Events", "Properties"],
+  "include": ["NativeObject"],
   "description": "The object `tabris.device` provides information about the device that executes the application. All properties are read-only.",
   "properties": {
     "platform": {

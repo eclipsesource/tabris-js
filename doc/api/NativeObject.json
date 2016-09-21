@@ -1,0 +1,92 @@
+{
+  "type": "NativeObject",
+  "description": "Base class for all objects with a native implementation.",
+  "methods": {
+    "on": [
+      {
+        "parameters": [
+          {"name": "event", "type": "string"},
+          {"name": "listener", "type": "Function"},
+          {"name": "context?", "type": "this", "description": "In the listener function, `this` will point to this object."}
+        ],
+        "returns": "this",
+        "description": "Adds a *listener* to the list of functions to be notified when *event* is fired. If the context parameter is not present, the listener will be called in the context of this object."
+      }
+    ],
+    "once": [
+      {
+        "parameters": [
+          {"name": "event", "type": "string"},
+          {"name": "listener", "type": "Function"},
+          {"name": "context?", "type": "this", "description": "In the listener function, `this` will point to this object."}
+        ],
+        "returns": "this",
+        "description": "Same as `on`, but removes the listener after it has been invoked by an event."
+      }
+    ],
+    "off": [
+      {
+        "parameters": [
+          {"name": "event", "type": "string"},
+          {"name": "listener", "type": "Function"},
+          {"name": "context?", "type": "this"}
+        ],
+        "returns": "this",
+        "description": "Removes all occurrences of *listener* that are bound to *event* and *context* from this widget."
+      }
+    ],
+    "trigger": [
+      {
+        "parameters": [
+          {"name": "event", "type": "string"},
+          {"name": "...params", "type": "any[]"}
+        ],
+        "returns": "this",
+        "description": "Triggers an event of the given type. All registered listeners will be notified. Additional parameters will be passed to the listeners."
+      }
+    ],
+    "set": [
+      {
+        "parameters": [
+          {"name": "property", "type": "string"},
+          {"name": "value", "type": "any"}
+        ],
+        "description": "Sets the given property.",
+        "returns": "this"
+      },
+      {
+        "parameters": [
+          {"name": "properties", "type": "Object"}
+        ],
+        "description": "Sets all key-value pairs in the properties object as widget properties.",
+        "returns": "this"
+      }
+    ],
+    "get": [
+      {
+        "parameters": [
+          {"name": "property", "type": "string"}
+        ],
+        "returns": "any",
+        "description": "Gets the current value of the given *property*."
+      }
+    ]
+  },
+  "events": {
+    "change:{property}": {
+      "parameters": [
+        {
+          "name": "target",
+          "type": "this",
+          "description": "The object that fired the change event."
+        },
+        {
+          "name": "value",
+          "type": "any",
+          "description": "The new value of the given property."
+        }
+      ],
+      "description": "Fired when the given property has changed. Change events for specific properties will only be documented separately if they may be triggered without calling `set`. "
+    }
+  }
+}

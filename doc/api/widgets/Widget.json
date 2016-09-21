@@ -1,7 +1,7 @@
 {
   "type": "Widget",
   "description": "Base class for all widgets",
-  "include": ["Events", "Properties"],
+  "include": ["NativeObject"],
   "methods": {
     "children": [
       {
