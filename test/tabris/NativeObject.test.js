@@ -94,15 +94,6 @@ describe("NativeObject", function() {
       client.resetCalls();
     });
 
-    // it("parent() returns nothing", function() {
-    //   expect(proxy.parent()).to.be.undefined;
-    // });
-
-    // it("children() returns empty collection", function() {
-    //   expect(proxy.children()).to.be.instanceof(ProxyCollection);
-    //   expect(proxy.children().length).to.equal(0);
-    // });
-
     it("isDisposed() returns false", function() {
       expect(proxy.isDisposed()).to.equal(false);
     });
@@ -175,15 +166,14 @@ describe("NativeObject", function() {
 
       it("decodes value if there is a decoder", function() {
         TestType._properties.foo.type = {
-          decode: stub().returns("bar")
+          decode: x => x + "-decoded"
         };
         stub(client, "get").returns(23);
         spy(console, "warn");
 
         let result = proxy.get("foo");
 
-        expect(result).to.equal("bar");
-        expect(TestType._properties.foo.type.decode).to.have.been.calledWith(23);
+        expect(result).to.equal("23-decoded");
         expect(console.warn).not.to.have.been.called;
       });
 
@@ -195,9 +185,60 @@ describe("NativeObject", function() {
         }).to.throw(Error, "Object is disposed");
       });
 
+      it ("returns undefined for unset property", function() {
+        expect(proxy.get("foo")).to.be.undefined;
+      });
+
+      it ("returns default value if property was never set", function() {
+        TestType._properties.foo = {default: "bar"};
+
+        expect(proxy.get("foo")).to.equal("bar");
+      });
+
+      it ("does not return default value if property was set", function() {
+        TestType._properties.foo = {default: "bar"};
+
+        proxy.set("foo", "something else");
+
+        expect(proxy.get("foo")).to.equal("something else");
+      });
+
+      it ("calls custom getter with property name", function() {
+        let getter = spy();
+        proxy.set("foo", "bar");
+        TestType._properties.foo = {get: getter};
+
+        proxy.get("foo");
+
+        expect(getter).to.have.been.calledWith("foo");
+      });
+
+      it ("returns value from custom getter", function() {
+        TestType._properties.foo = {get: stub().returns("bar")};
+
+        expect(proxy.get("foo")).to.equal("bar");
+      });
+
     });
 
     describe("set", function() {
+
+      let listener;
+
+      beforeEach(function() {
+        listener = spy();
+      });
+
+      it ("stores single property", function() {
+        proxy.set("foo", "bar");
+        expect(proxy.get("foo")).to.equal("bar");
+      });
+
+      it ("stores multiple properties", function() {
+        proxy.set({foo: "bar", foo2: "bar2"});
+        expect(proxy.get("foo")).to.equal("bar");
+        expect(proxy.get("foo2")).to.equal("bar2");
+      });
 
       it("translation does not modify properties", function() {
         let other = new NativeObject("other-id");
@@ -248,7 +289,6 @@ describe("NativeObject", function() {
 
       it("triggers change event for known properties", function() {
         TestType._properties.foo = {type: "any", default: ""};
-        let listener = spy();
         proxy.on("change:foo", listener);
 
         proxy.set("foo", "bar");
@@ -258,7 +298,6 @@ describe("NativeObject", function() {
 
       it("triggers change event with decoded property value", function() {
         TestType._properties.foo = {type: types.color};
-        let listener = spy();
         proxy.on("change:foo", listener);
 
         proxy.set("foo", "#ff00ff");
@@ -268,7 +307,6 @@ describe("NativeObject", function() {
 
       it("triggers no change event if value is unchanged from default", function() {
         TestType._properties.foo = {type: "any", default: ""};
-        let listener = spy();
         proxy.on("change:foo", listener);
 
         proxy.set("foo", "");
@@ -279,7 +317,6 @@ describe("NativeObject", function() {
 
       it("triggers no change event if value is unchanged from previous value", function() {
         TestType._properties.foo = {type: "any", default: ""};
-        let listener = spy();
         proxy.set("foo", "bar");
         proxy.on("change:foo", listener);
 
@@ -290,13 +327,98 @@ describe("NativeObject", function() {
 
       it("always triggers initial change event for cached properties without default", function() {
         TestType._properties.foo = {type: "any"};
-        let listener = spy();
         proxy.on("change:foo", listener);
 
         proxy.set("foo", "bar");
         proxy.set("foo", "bar");
 
         expect(listener).to.have.been.calledOnce;
+      });
+
+      it ("triggers change event", function() {
+        proxy.on("change:foo", listener);
+
+        proxy.set("foo", "bar");
+
+        expect(listener).to.have.been.calledOnce;
+        expect(listener).to.have.been.calledWith(proxy, "bar");
+      });
+
+      it ("triggers change event with decoded value", function() {
+        TestType._properties.foo = {type: types.boolean};
+        proxy.on("change:foo", listener);
+
+        proxy.set("foo", "bar");
+
+        expect(listener).to.have.been.calledOnce;
+        expect(listener).to.have.been.calledWith(proxy, true);
+      });
+
+      it ("(single parameter) triggers change event", function() {
+        proxy.on("change:foo", listener);
+
+        proxy.set({foo: "bar"});
+
+        expect(listener).to.have.been.calledOnce;
+        expect(listener).to.have.been.calledWith(proxy, "bar");
+      });
+
+      it ("triggers no change event if value is unchanged", function() {
+        proxy.set("foo", "bar");
+        proxy.on("change:foo", listener);
+
+        proxy.set("foo", "bar");
+
+        expect(listener).to.have.not.been.called;
+      });
+
+      it ("triggers no change event if encoded value is unchanged", function() {
+        TestType._properties.foo = {type: types.boolean};
+        proxy.set("foo", true);
+        proxy.on("change:foo", listener);
+
+        proxy.set("foo", "bar");
+
+        expect(listener).to.have.not.been.called;
+      });
+
+      it ("calls custom setter", function() {
+        let setter = stub();
+        TestType._properties.foo = {set: setter};
+        proxy.set("foo", "bar");
+
+        expect(setter).to.have.been.calledWith("foo", "bar");
+      });
+
+      it ("stores nothing if custom setter exists", function() {
+        TestType._properties.foo = {set: () => {}};
+        proxy.set("foo", "bar");
+
+        expect(proxy.get("foo")).to.equal(undefined);
+      });
+
+      it("calls encoding function if present", function() {
+        TestType._properties.knownProperty = {type: {
+          encode: stub().returns(true)
+        }};
+        stub(console, "warn");
+
+        proxy.set("knownProperty", true);
+
+        expect(TestType._properties.knownProperty.type.encode).to.have.been.called;
+        expect(console.warn).to.have.not.been.called;
+      });
+
+      it("raises a warning if encoding function throws", function() {
+        TestType._properties.knownProperty = {type: {
+          encode: stub().throws(new Error("My Error"))
+        }};
+        stub(console, "warn");
+
+        proxy.set("knownProperty", true);
+
+        let message = "TestType: Ignored unsupported value for property \"knownProperty\": My Error";
+        expect(console.warn).to.have.been.calledWith(message);
       });
 
     });
