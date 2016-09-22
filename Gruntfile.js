@@ -127,17 +127,14 @@ module.exports = function(grunt) {
         cmd: "npm install && node node_modules/typescript/bin/tsc -p . --noImplicitAny",
         cwd: "build/typescript"
       },
-      verify_boot: {
-        cmd: "node test/boot/run-tests.js"
-      },
-      verify_tabris: {
-        cmd: "node test/tabris/run-tests.js"
+      test_boot: {
+        cmd: 'node node_modules/mocha/bin/mocha --colors --compilers js:babel-core/register "test/boot/**/*.test.js"'
       },
       test_tabris: {
-        cmd: "node node_modules/mocha/bin/mocha --colors --compilers js:babel-core/register \"test/**/*.test.js\""
+        cmd: 'node node_modules/mocha/bin/mocha --colors --compilers js:babel-core/register "test/tabris/**/*.test.js"'
       },
       test_spec: {
-        cmd: "node test/tabris/run-tests.js " + grunt.option("spec")
+        cmd: `node node_modules/mocha/bin/mocha --colors --compilers js:babel-core/register "${grunt.option("spec")}"`
       },
       lint: {
         cmd: "node node_modules/eslint/bin/eslint.js --color ."
@@ -191,13 +188,12 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask("test", [
+    "exec:test_boot",
     "exec:test_tabris"
   ]);
 
   /* runs tests against the build output */
   grunt.registerTask("verify", [
-    "exec:verify_boot",
-    "exec:verify_tabris",
     "copy:test_ts",
     "exec:verify_typings"
   ]);

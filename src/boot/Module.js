@@ -1,6 +1,7 @@
 (function() {
 
-  window.tabris = {}; // create preliminary tabris object
+  // TODO: clients still expose the global object as "window"
+  (global || window).tabris = {}; // create preliminary tabris object
 
   var Module = tabris.Module = function(id, parent, content) {
     this.id = id || null;

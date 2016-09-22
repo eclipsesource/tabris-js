@@ -1,7 +1,11 @@
+import {expect, stub, restore} from "../test";
+import "../../src/boot/Module";
+import "../../src/boot/bootstrap";
+
 describe("bootstrap", function() {
 
   function fakeClient() {
-    var client = {
+    let client = {
       // used by module system, return empty modules
       load: () => {},
       loadAndExecute: () => ({executeResult: {exports: {}}}),
@@ -15,14 +19,22 @@ describe("bootstrap", function() {
     return client;
   }
 
-  var client;
+  let client;
 
   beforeEach(function() {
     client = fakeClient();
-    tabris.trigger = function() {};
-    spyOn(console, "error");
-    spyOn(console, "warn");
+    global.tabris.trigger = function() {};
+    global.document = {
+      createElement: () => ({}),
+      head: {
+        appendChild: function() {}
+      }
+    };
+    stub(console, "error");
+    stub(console, "warn");
   });
+
+  afterEach(restore);
 
   describe("version check", function() {
 
@@ -32,8 +44,8 @@ describe("bootstrap", function() {
 
       tabris._start(client);
 
-      expect(console.warn).not.toHaveBeenCalled();
-      expect(console.error).not.toHaveBeenCalled();
+      expect(console.warn).not.to.have.been.called;
+      expect(console.error).not.to.have.been.called;
     });
 
     it("ignores smaller tabris patch version", function() {
@@ -42,8 +54,8 @@ describe("bootstrap", function() {
 
       tabris._start(client);
 
-      expect(console.warn).not.toHaveBeenCalled();
-      expect(console.error).not.toHaveBeenCalled();
+      expect(console.warn).not.to.have.been.called;
+      expect(console.error).not.to.have.been.called;
     });
 
     it("ignores greater tabris patch version", function() {
@@ -52,8 +64,8 @@ describe("bootstrap", function() {
 
       tabris._start(client);
 
-      expect(console.warn).not.toHaveBeenCalled();
-      expect(console.error).not.toHaveBeenCalled();
+      expect(console.warn).not.to.have.been.called;
+      expect(console.error).not.to.have.been.called;
     });
 
     it("ignores smaller tabris minor version", function() {
@@ -62,8 +74,8 @@ describe("bootstrap", function() {
 
       tabris._start(client);
 
-      expect(console.warn).not.toHaveBeenCalled();
-      expect(console.error).not.toHaveBeenCalled();
+      expect(console.warn).not.to.have.been.called;
+      expect(console.error).not.to.have.been.called;
     });
 
     it("compares numerically, not lexicographically", function() {
@@ -72,8 +84,8 @@ describe("bootstrap", function() {
 
       tabris._start(client);
 
-      expect(console.warn).not.toHaveBeenCalled();
-      expect(console.error).not.toHaveBeenCalled();
+      expect(console.warn).not.to.have.been.called;
+      expect(console.error).not.to.have.been.called;
     });
 
     it("raises warning for greater tabris minor version", function() {
@@ -82,10 +94,10 @@ describe("bootstrap", function() {
 
       tabris._start(client);
 
-      expect(console.warn).toHaveBeenCalledWith('Version mismatch: JavaScript module "tabris" ' +
+      expect(console.warn).to.have.been.calledWith('Version mismatch: JavaScript module "tabris" ' +
         "(version 1.3.0) is newer than the native tabris platform. " +
         "Supported module versions: 1.0 to 1.2.");
-      expect(console.error).not.toHaveBeenCalled();
+      expect(console.error).not.to.have.been.called;
     });
 
     it("raises error for smaller tabris major version", function() {
@@ -94,8 +106,8 @@ describe("bootstrap", function() {
 
       tabris._start(client);
 
-      expect(console.warn).not.toHaveBeenCalled();
-      expect(console.error).toHaveBeenCalledWith('Version mismatch: JavaScript module "tabris" ' +
+      expect(console.warn).not.to.have.been.called;
+      expect(console.error).to.have.been.calledWith('Version mismatch: JavaScript module "tabris" ' +
         "(version 1.2.3) is incompatible with the native tabris platform. " +
         "Supported module versions: 2.0 to 2.2.");
     });
@@ -106,8 +118,8 @@ describe("bootstrap", function() {
 
       tabris._start(client);
 
-      expect(console.warn).not.toHaveBeenCalled();
-      expect(console.error).toHaveBeenCalledWith('Version mismatch: JavaScript module "tabris" ' +
+      expect(console.warn).not.to.have.been.called;
+      expect(console.error).to.have.been.calledWith('Version mismatch: JavaScript module "tabris" ' +
         "(version 2.1.0) is incompatible with the native tabris platform. " +
         "Supported module versions: 1.0 to 1.2.");
     });

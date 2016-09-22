@@ -1,7 +1,11 @@
 (function() {
   tabris._start = function(client) {
     try {
-      window.global = window.self = window;
+      // TODO: clients still expose the global object as "window"
+      if (typeof global === "undefined") {
+        window.global = window;
+      }
+      global.window = global.self = global;
       tabris._client = client;
       var Module = tabris.Module;
       var rootModule = new Module();
