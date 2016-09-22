@@ -1,13 +1,8 @@
-var page = new tabris.Page({
-  title: "Scroll Composite - Horizontal",
-  topLevel: true
-});
-
 var scrollView = new tabris.ScrollView({
   left: 0, right: 0, top: "40%", bottom: "40%",
   direction: "horizontal",
   background: "#234"
-}).appendTo(page);
+}).appendTo(tabris.ui.contentView);
 
 for (var i = 0; i <= 50; i++) {
   new tabris.TextView({
@@ -22,6 +17,4 @@ new tabris.Button({
   text: "scroll"
 }).on("select", function() {
   scrollView.scrollToX(310);
-}).appendTo(page);
-
-page.open();
+}).appendTo(tabris.ui.contentView);

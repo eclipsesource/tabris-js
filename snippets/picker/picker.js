@@ -1,8 +1,3 @@
-var page = new tabris.Page({
-  title: "Picker",
-  topLevel: true
-});
-
 var airports = [
   {
     id: "SFO",
@@ -27,6 +22,4 @@ new tabris.Picker({
   selection: airports[1]
 }).on("change:selection", function(picker, item) {
   console.log("Selected " + item.id);
-}).appendTo(page);
-
-page.open();
+}).appendTo(tabris.ui.contentView);

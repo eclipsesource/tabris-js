@@ -1,8 +1,3 @@
-var page = new tabris.Page({
-  title: "App Info",
-  topLevel: true
-});
-
 var paused = 0;
 
 var label = new tabris.TextView({
@@ -10,14 +5,14 @@ var label = new tabris.TextView({
   font: "32px sans-serif",
   alignment: "center",
   text: "Pause and resume this app!"
-}).appendTo(page);
+}).appendTo(tabris.ui.contentView);
 
 new tabris.Button({
   layoutData: {centerX: 0, bottom: 32},
   text: "Reload"
 }).on("select", function() {
   tabris.app.reload();
-}).appendTo(page);
+}).appendTo(tabris.ui.contentView);
 
 tabris.app.on("pause", function() {
   paused = Date.now();
@@ -30,5 +25,3 @@ tabris.app.on("backnavigation", function(app, options) {
   options.preventDefault = true;
   label.set("text", "Back navigation prevented.");
 });
-
-page.open();

@@ -1,8 +1,3 @@
-var page = new tabris.Page({
-  title: "Push Buttons",
-  topLevel: true
-});
-
 var count = 0;
 
 new tabris.Button({
@@ -10,6 +5,4 @@ new tabris.Button({
   text: "Button"
 }).on("select", function() {
   this.set("text", "Pressed " + (++count) + " times");
-}).appendTo(page);
-
-page.open();
+}).appendTo(tabris.ui.contentView);

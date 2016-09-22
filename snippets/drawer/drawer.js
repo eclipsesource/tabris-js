@@ -1,8 +1,3 @@
-var page = new tabris.Page({
-  title: "Drawer",
-  topLevel: true
-});
-
 var drawer = new tabris.Drawer()
   .on("open", function() {
     console.log("drawer opened");
@@ -14,13 +9,11 @@ var drawer = new tabris.Drawer()
 var arrow = String.fromCharCode(8592);
 createLabel(arrow + " Swipe from left or tap here").on("tap", function() {
   drawer.open();
-}).appendTo(page);
+}).appendTo(tabris.ui.contentView);
 
 createLabel("Thank you!").on("tap", function() {
   drawer.close();
 }).appendTo(drawer);
-
-page.open();
 
 function createLabel(text) {
   return new tabris.TextView({

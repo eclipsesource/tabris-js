@@ -1,8 +1,3 @@
-var page = new tabris.Page({
-  title: "Using an image view as a button",
-  topLevel: true
-});
-
 var touched = 0;
 new tabris.ImageView({
   layoutData: {centerX: 0, centerY: 0},
@@ -10,7 +5,8 @@ new tabris.ImageView({
   highlightOnTouch: true
 }).on("tap", function() {
   touched++;
-  page.set("title", "touched " + touched + " times");
-}).appendTo(page);
-
-page.open();
+  touchedLabel.set("text", "touched " + touched + " times");
+}).appendTo(tabris.ui.contentView);
+var touchedLabel = new tabris.TextView({
+  top: "prev() 10", centerX: 0
+}).appendTo(tabris.ui.contentView);

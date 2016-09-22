@@ -1,8 +1,3 @@
-var page = new tabris.Page({
-  title: "Text Input / Focus Listener",
-  topLevel: true
-});
-
 new tabris.TextInput({
   layoutData: {top: 20, left: "20%", right: "20%"},
   message: "Colorful typing...",
@@ -11,11 +6,9 @@ new tabris.TextInput({
   this.set("background", "yellow");
 }).on("blur", function() {
   this.set("background", "red");
-}).appendTo(page);
+}).appendTo(tabris.ui.contentView);
 
 new tabris.TextInput({
   layoutData: {top: "prev() 20", left: "20%", right: "20%"},
   message: "Another field to focus..."
-}).appendTo(page);
-
-page.open();
+}).appendTo(tabris.ui.contentView);

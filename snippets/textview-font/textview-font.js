@@ -2,14 +2,9 @@ var families = ["sans-serif", "serif", "condensed", "monospace"];
 var styles = ["normal", "italic"];
 var weights =  ["thin", "light", "normal", "medium", "bold", "black"];
 
-var page = new tabris.Page({
-  title: "TextView font",
-  topLevel: true
-});
-
 var scrollView = new tabris.ScrollView({
   left: 0, top: 0, right: 0, bottom: 0
-}).appendTo(page);
+}).appendTo(tabris.ui.contentView);
 
 for (var style of styles) {
   for (var family of families) {
@@ -27,5 +22,3 @@ for (var style of styles) {
     }
   }
 }
-
-page.open();

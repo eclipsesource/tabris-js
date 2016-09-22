@@ -13,11 +13,6 @@ var people = [
   return {firstName: element[0], lastName: element[1], image: IMAGE_PATH + element[2]};
 });
 
-var page = new tabris.Page({
-  title: "Collection View",
-  topLevel: true
-});
-
 new tabris.CollectionView({
   layoutData: {left: 0, top: 0, right: 0, bottom: 0},
   items: people,
@@ -37,6 +32,4 @@ new tabris.CollectionView({
   }
 }).on("select", function(target, value) {
   console.log("selected", value.firstName);
-}).appendTo(page);
-
-page.open();
+}).appendTo(tabris.ui.contentView);

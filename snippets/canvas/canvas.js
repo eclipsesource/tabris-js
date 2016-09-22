@@ -1,8 +1,3 @@
-var page = new tabris.Page({
-  title: "Canvas",
-  topLevel: true
-});
-
 new tabris.Canvas({
   layoutData: {left: 10, top: 10, right: 10, bottom: 10}
 }).on("resize", function(canvas, bounds) {
@@ -20,9 +15,7 @@ new tabris.Canvas({
   var data = ctx.getImageData(0, 0, 100, 100);
   ctx.putImageData(data, 180, 100);
 
-}).appendTo(page);
-
-page.open();
+}).appendTo(tabris.ui.contentView);
 
 function createImageData(width, height) {
   var array = [];

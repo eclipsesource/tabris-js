@@ -4,20 +4,10 @@ var ITEM_HEIGHT = 32;
 var scrollPosition = 0;
 var items = createItems();
 
-tabris.ui.set({
-  background: "#009688",
-  textColor: "white"
-});
-
-var page = new tabris.Page({
-  title: "CollectionView Scrolling",
-  topLevel: true
-});
-
 var floatingSection = createSectionView("section").set("text", "Section 1");
 
 new tabris.CollectionView({
-  layoutData: {left: 0, top: 0, right: 0, bottom: 0},
+  left: 0, top: 0, right: 0, bottom: 0,
   items: items,
   cellType: function(item) {
     return item.type;
@@ -39,11 +29,9 @@ new tabris.CollectionView({
     text: getCurrentSection(firstVisibleItem).name,
     transform: {translationY: getSectionTranslationY(firstVisibleItem)}
   });
-}).appendTo(page);
+}).appendTo(tabris.ui.contentView);
 
-floatingSection.appendTo(page);
-
-page.open();
+floatingSection.appendTo(tabris.ui.contentView);
 
 function getSectionTranslationY(firstVisibleItem) {
   if (scrollPosition < 0) {

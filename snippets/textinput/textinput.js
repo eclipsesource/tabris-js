@@ -1,8 +1,3 @@
-var page = new tabris.Page({
-  title: "Text Input",
-  topLevel: true
-});
-
 new tabris.TextInput({
   layoutData: {top: 20, left: "20%", right: "20%"},
   message: "Type here, then confirm"
@@ -10,7 +5,5 @@ new tabris.TextInput({
   new tabris.TextView({
     layoutData: {top: "prev() 20", left: "20%"},
     text: text
-  }).appendTo(page);
-}).appendTo(page);
-
-page.open();
+  }).appendTo(tabris.ui.contentView);
+}).appendTo(tabris.ui.contentView);

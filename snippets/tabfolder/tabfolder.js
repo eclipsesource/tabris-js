@@ -1,12 +1,7 @@
-var page = new tabris.Page({
-  title: "TabFolder",
-  topLevel: true
-});
-
 var tabFolder = new tabris.TabFolder({
   layoutData: {left: 0, top: 0, right: 0, bottom: 0},
   paging: true // enables swiping. To still be able to open the developer console in iOS, swipe from the bottom right.
-}).appendTo(page);
+}).appendTo(tabris.ui.contentView);
 
 var createTab = function(title, image, seletedImage) {
   var tab = new tabris.Tab({
@@ -23,8 +18,6 @@ var createTab = function(title, image, seletedImage) {
 createTab("Cart", "images/cart.png", "images/cart-filled.png");
 createTab("Pay", "images/card.png", "images/card-filled.png");
 createTab("Statistic", "images/chart.png", "images/chart-filled.png");
-
-page.open();
 
 tabFolder.on("change:selection", function(widget, tab) {
   console.log(tab.title);

@@ -1,12 +1,7 @@
-var page = new tabris.Page({
-  title: "Collection View Column Count",
-  topLevel: true
-});
-
 var columnCountTextView = new tabris.TextView({
   bottom: 16, right: 16, width: 32,
   font: "bold 14px"
-}).appendTo(page);
+}).appendTo(tabris.ui.contentView);
 
 var slider = new tabris.Slider({
   left: 16, bottom: 0, right: [columnCountTextView, 16], height: 48,
@@ -15,7 +10,7 @@ var slider = new tabris.Slider({
 }).on("change:selection", function(slider, selection) {
   collectionView.set("columnCount", selection);
   columnCountTextView.set("text", selection);
-}).appendTo(page);
+}).appendTo(tabris.ui.contentView);
 
 var collectionView = new tabris.CollectionView({
   left: 0, top: 0, right: 0, bottom: slider,
@@ -36,11 +31,9 @@ var collectionView = new tabris.CollectionView({
       });
     });
   }
-}).appendTo(page);
+}).appendTo(tabris.ui.contentView);
 
 slider.set("selection", 3);
-
-page.open();
 
 function createItems() {
   var items = [];

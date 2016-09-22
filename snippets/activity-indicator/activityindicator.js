@@ -1,13 +1,8 @@
-var page = new tabris.Page({
-  title: "ActivityIndicator",
-  topLevel: true
-});
-
 // Create the activity indicator centered in the page
 var activityIndicator = new tabris.ActivityIndicator({
   centerX: 0,
   centerY: 0
-}).appendTo(page);
+}).appendTo(tabris.ui.contentView);
 
 // Create reload button
 var reloadButton = new tabris.Button({
@@ -15,7 +10,7 @@ var reloadButton = new tabris.Button({
   text: "Run Task"
 }).on("select", function() {
   executeLongRunningTask();
-}).appendTo(page);
+}).appendTo(tabris.ui.contentView);
 
 function executeLongRunningTask() {
   // Toggle visibiliy of elements
@@ -30,6 +25,3 @@ function executeLongRunningTask() {
 }
 
 executeLongRunningTask();
-
-page.open();
-

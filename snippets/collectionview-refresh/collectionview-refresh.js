@@ -1,8 +1,3 @@
-var page = new tabris.Page({
-  title: "Collection View",
-  topLevel: true
-});
-
 var view = new tabris.CollectionView({
   layoutData: {left: 0, top: 0, right: 0, bottom: 0},
   itemHeight: 25,
@@ -17,11 +12,9 @@ var view = new tabris.CollectionView({
   }
 }).on("refresh", function() {
   loadItems();
-}).appendTo(page);
+}).appendTo(tabris.ui.contentView);
 
 loadItems();
-
-page.open();
 
 function loadItems() {
   view.set({

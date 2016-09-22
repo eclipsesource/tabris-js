@@ -1,8 +1,3 @@
-var page = new tabris.Page({
-  title: "Collection View",
-  topLevel: true
-});
-
 new tabris.CollectionView({
   layoutData: {left: 0, top: 0, right: 0, bottom: 0},
   items: createItems(),
@@ -25,9 +20,7 @@ new tabris.CollectionView({
       textView.set("text", item.name);
     });
   }
-}).appendTo(page);
-
-page.open();
+}).appendTo(tabris.ui.contentView);
 
 function createItems() {
   var count = 1;

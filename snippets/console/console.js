@@ -1,13 +1,8 @@
-var page = new tabris.Page({
-  title: "Developer Console",
-  topLevel: true
-});
-
 var logTextInput = new tabris.TextInput({
   layoutData: {left: 10, top: 20, right: 10},
   text: "Message",
   message: "Log message"
-}).appendTo(page);
+}).appendTo(tabris.ui.contentView);
 
 ["debug", "log", "info", "warn", "error"].forEach(function(method) {
   new tabris.Button({
@@ -15,7 +10,5 @@ var logTextInput = new tabris.TextInput({
     text: method
   }).on("select", function() {
     console[method](logTextInput.text);
-  }).appendTo(page);
+  }).appendTo(tabris.ui.contentView);
 });
-
-page.open();
