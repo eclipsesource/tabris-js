@@ -68,7 +68,7 @@ describe("CanvasContext", function() {
     it("creates and returns graphics context", function() {
       var ctx = canvas.getContext("2d", 100, 200);
 
-      expect(ctx).toEqual(jasmine.any(tabris.LegacyCanvasContext));
+      expect(ctx).toEqual(jasmine.any(tabris.CanvasContext));
     });
 
     it("returns same instance everytime", function() {

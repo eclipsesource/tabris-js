@@ -232,8 +232,8 @@
       canvas._gc = tabris.create("_GC", {parent: canvas});
     }
     if (!canvas._ctx) {
-      canvas._ctx = device.platform === "Android" ? new tabris.CanvasContext(canvas._gc)
-                                                  : new tabris.LegacyCanvasContext(canvas._gc);
+      canvas._ctx = device.platform === "iOS" ? new tabris.LegacyCanvasContext(canvas._gc)
+                                              : new tabris.CanvasContext(canvas._gc);
     }
     canvas._ctx._init(width, height);
     return canvas._ctx;
