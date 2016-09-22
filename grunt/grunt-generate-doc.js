@@ -1,11 +1,9 @@
-/* global _: true */
-var _ = require("underscore");
-var path = require("path");
+let path = require("path");
 
 module.exports = function (grunt) {
 
-  grunt.registerTask("generate-doc", function () {
-    var data = {
+  grunt.registerTask("generate-doc", () => {
+    let data = {
       api: readAPI(),
       widgets: readWidgets(),
       types: readTypes()
@@ -17,38 +15,38 @@ module.exports = function (grunt) {
   });
 
   function renderWidgets(data) {
-    Object.keys(data.widgets).forEach(function (type) {
+    Object.keys(data.widgets).forEach(type => {
       grunt.file.write(getTargetPath(data.widgets[type]), renderDocument(data, type));
     });
   }
 
   function renderAPI(data) {
-    Object.keys(data.api).forEach(function (type) {
+    Object.keys(data.api).forEach(type => {
       grunt.file.write(getTargetPath(data.api[type]), renderDocument(data, type));
     });
   }
 
   function renderIndex(data) {
     grunt.log.verbose.writeln("Generating index");
-    var widgets = ["Widget"].concat(_.chain(data.widgets).keys().without("Widget").value());
-    var widgetIndex = [];
-    widgets.forEach(function (type) {
-      var json = data.widgets[type];
+    let widgets = ["Widget"].concat(Object.keys(data.widgets).filter(name => name !== "Widget"));
+    let widgetIndex = [];
+    widgets.forEach(type => {
+      let json = data.widgets[type];
       widgetIndex.push("- [" + title(json) + "](api/" + baseFileName(json.file) + ".md)");
     });
-    var apiIndex = [];
-    Object.keys(data.api).forEach(function (type) {
-      var json = data.api[type];
+    let apiIndex = [];
+    Object.keys(data.api).forEach(type => {
+      let json = data.api[type];
       apiIndex.push("- [" + title(json) + "](api/" + baseFileName(json.file) + ".md)");
     });
-    var templData = {data: {widgets: widgetIndex.join("\n"), api: apiIndex.join("\n")}};
+    let templData = {data: {widgets: widgetIndex.join("\n"), api: apiIndex.join("\n")}};
     grunt.file.write(getIndexPath(), grunt.template.process(grunt.file.read(getIndexPath()), templData));
   }
 
   function renderDocument(data, type) {
     grunt.log.verbose.writeln("Generating DOC for " + type);
-    var json = data.widgets[type] || data.api[type];
-    var result = [];
+    let json = data.widgets[type] || data.api[type];
+    let result = [];
     result.push("# " + title(json) + "\n");
     result.push(renderDescription(json));
     if (grunt.file.isFile(getTargetPath(json))) {
@@ -63,11 +61,11 @@ module.exports = function (grunt) {
   }
 
   function resolveIncludes(data) {
-    Object.keys(data.widgets).concat(Object.keys(data.api)).forEach(function (type) {
-      var json = data.widgets[type] || data.api[type];
+    Object.keys(data.widgets).concat(Object.keys(data.api)).forEach(type => {
+      let json = data.widgets[type] || data.api[type];
       if (json.include) {
-        json.include = json.include.map(function (type) {
-          var include = data.widgets[type] || data.api[type];
+        json.include = json.include.map(type => {
+          let include = data.widgets[type] || data.api[type];
           if (!include) {
             throw new Error("Could not find included type " + type);
           }
@@ -78,9 +76,9 @@ module.exports = function (grunt) {
   }
 
   function readWidgets() {
-    var widgets = {};
-    grunt.file.expand(grunt.config("doc").widgets).forEach(function (file) {
-      var json = grunt.file.readJSON(file);
+    let widgets = {};
+    grunt.file.expand(grunt.config("doc").widgets).forEach(file => {
+      let json = grunt.file.readJSON(file);
       json.file = file;
       widgets[json.type] = json;
     });
@@ -88,9 +86,9 @@ module.exports = function (grunt) {
   }
 
   function readAPI() {
-    var api = {};
-    grunt.file.expand(grunt.config("doc").api).forEach(function (file) {
-      var json = grunt.file.readJSON(file);
+    let api = {};
+    grunt.file.expand(grunt.config("doc").api).forEach(file => {
+      let json = grunt.file.readJSON(file);
       json.file = file;
       api[json.type] = json;
     });
@@ -98,8 +96,8 @@ module.exports = function (grunt) {
   }
 
   function readTypes() {
-    var md = grunt.file.read(grunt.config("doc").types);
-    return md.match(/^##\ *(.*)$/gm).map(function (heading) {
+    let md = grunt.file.read(grunt.config("doc").types);
+    return md.match(/^##\ *(.*)$/gm).map(heading => {
       return heading.slice(3).toLowerCase();
     });
   }
@@ -113,13 +111,13 @@ module.exports = function (grunt) {
   }
 
   function renderDescription(json) {
-    var result = [];
+    let result = [];
     if (json.description) {
       result.push(json.description + "\n");
     }
     if (json.include) {
       result.push("Includes ");
-      result.push(json.include.map(function (widget) {
+      result.push(json.include.map(widget => {
         return "[" + title(widget) + "](" + widget.type + ".md)";
       }).join(", "));
       result.push("\n");
@@ -131,10 +129,10 @@ module.exports = function (grunt) {
     if (!json.methods) {
       return "";
     }
-    var result = [];
+    let result = [];
     result.push("## Methods\n\n");
-    Object.keys(json.methods).sort().forEach(function (name) {
-      Array.prototype.forEach.call(json.methods[name], function (desc) {
+    Object.keys(json.methods).sort().forEach(name => {
+      Array.prototype.forEach.call(json.methods[name], desc => {
         result.push(renderMethod(name, desc, data));
       });
     });
@@ -142,7 +140,7 @@ module.exports = function (grunt) {
   }
 
   function renderMethod(name, desc, data) {
-    var result = [];
+    let result = [];
     result.push("### " + name + "(" + renderParamList(desc.parameters, data) + ")\n\n");
     if (desc.parameters) {
       result.push("\n**Parameters:** " + renderParamList(desc.parameters, data, true) + "\n");
@@ -164,10 +162,10 @@ module.exports = function (grunt) {
     if (!json.properties) {
       return "";
     }
-    var result = [];
+    let result = [];
     result.push("## Properties\n\n");
-    Object.keys(json.properties).sort().forEach(function (name) {
-      var property = json.properties[name];
+    Object.keys(json.properties).sort().forEach(name => {
+      let property = json.properties[name];
       result.push("### ", name, "\n\n");
       result.push("Type: ", renderPropertyType(property, data), "\n");
       if (property.provisional) {
@@ -189,10 +187,10 @@ module.exports = function (grunt) {
     if (!json.fields) {
       return "";
     }
-    var result = [];
+    let result = [];
     result.push("## Fields\n\n");
-    Object.keys(json.fields).sort().forEach(function (name) {
-      var field = json.fields[name];
+    Object.keys(json.fields).sort().forEach(name => {
+      let field = json.fields[name];
       result.push("### ", name, "\n");
       result.push("Type: ", renderPropertyType(field, data), "\n");
       if (field.provisional) {
@@ -207,8 +205,8 @@ module.exports = function (grunt) {
   }
 
   function renderPropertyType(property, data) {
-    var name = property.type;
-    var result = ["*", renderTypeLink(name, data), "*"];
+    let name = property.type;
+    let result = ["*", renderTypeLink(name, data), "*"];
     if (property.values) {
       result.push(", supported values: `" + property.values.join("`, `") + "`");
     }
@@ -222,10 +220,10 @@ module.exports = function (grunt) {
     if (!json.events) {
       return "";
     }
-    var result = [];
+    let result = [];
     result.push("## Events\n\n");
-    Object.keys(json.events).sort().forEach(function (name) {
-      var event = json.events[name];
+    Object.keys(json.events).sort().forEach(name => {
+      let event = json.events[name];
       result.push("### \"", name, "\" (" + renderParamList(event.parameters, data) + ")\n");
       if (event.parameters) {
         result.push("\n**Parameters:** " + renderParamList(event.parameters, data, true) + "\n");
@@ -243,12 +241,10 @@ module.exports = function (grunt) {
 
   function renderParamList(parameters, data, detailed) {
     if (!detailed) {
-      return parameters.map(function (param) {
-        return typeof param === "object" ? param.name : param;
-      }).join(", ");
+      return parameters.map(param => typeof param === "object" ? param.name : param).join(", ");
     }
-    return "\n\n" + parameters.map(function (param) {
-      var result = ["- ", param.name, ": "];
+    return "\n\n" + parameters.map(param => {
+      let result = ["- ", param.name, ": "];
       if (param.type) {
         result.push("*", renderTypeLink(param.type, data), "*");
       } else if (param.value) {
@@ -265,9 +261,9 @@ module.exports = function (grunt) {
     if (!json.links) {
       return "";
     }
-    var result = [];
+    let result = [];
     result.push("## See also\n\n");
-    json.links.forEach(function (link) {
+    json.links.forEach(link => {
       result.push("- [", link.title, "](", link.path, ")\n");
     });
     return result.join("");
@@ -290,8 +286,8 @@ module.exports = function (grunt) {
   }
 
   function getTypeDocPath() {
-    var types = grunt.config("doc").types;
-    var target = grunt.config("doc").target;
+    let types = grunt.config("doc").types;
+    let target = grunt.config("doc").target;
     return path.relative(target, types).replace(path.sep, "/");
   }
 
@@ -304,13 +300,13 @@ module.exports = function (grunt) {
   }
 
   function title(json) {
-    return json.title || json.object || json.type;
+    return json.object || json.type;
   }
 
   function baseFileName(file) {
     return file.slice(file.lastIndexOf("/") + 1, file.lastIndexOf("."));
   }
 
-  var provisionalNote = "\n**Note:** this API is provisional and may change in a future release.\n";
+  let provisionalNote = "\n**Note:** this API is provisional and may change in a future release.\n";
 
 };
