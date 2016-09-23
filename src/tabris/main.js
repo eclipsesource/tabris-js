@@ -3,7 +3,8 @@ import "./Tabris.js";
 import "./Device.js";
 
 import App from "./App";
-import UI from "./UI";
+import UI, {create as createUI} from "./widgets/UI";
+import ContentView from "./widgets/ContentView";
 import ImageData from "./ImageData";
 import {addDOMDocument} from "./DOMDocument";
 import {addWindowTimerMethods} from "./WindowTimers";
@@ -47,7 +48,7 @@ addDOMDocument(window);
 addWindowTimerMethods(window);
 tabris.load(function() {
   tabris.app = new App();
-  tabris.ui = new UI();
+  tabris.ui = createUI();
   tabris.Storage = Storage;
   tabris.localStorage = createStorage();
   if (device.platform === "iOS") {
@@ -68,6 +69,7 @@ tabris.Cell = Cell;
 tabris.CheckBox = CheckBox;
 tabris.CollectionView = CollectionView;
 tabris.Composite = Composite;
+tabris.ContentView = ContentView;
 tabris.Drawer = Drawer;
 tabris.ImageView = ImageView;
 tabris.Page = Page;
@@ -85,5 +87,6 @@ tabris.TabFolder = TabFolder;
 tabris.TextInput = TextInput;
 tabris.TextView = TextView;
 tabris.ToggleButton = ToggleButton;
+tabris.UI = UI;
 tabris.Video = Video;
 tabris.WebView = WebView;

@@ -139,7 +139,7 @@ Widget.prototype = extendPrototype(NativeObject, {
     if (check === false) {
       throw new Error(this.type + " cannot contain children");
     }
-    if (typeof check === "function" && !check(child)) {
+    if (typeof check === "function" && !check.call(this, child)) {
       throw new Error(this.type + " cannot contain children of type " + child.type);
     }
     if (!this._children) {
