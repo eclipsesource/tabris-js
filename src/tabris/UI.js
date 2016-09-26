@@ -74,6 +74,22 @@ tabris.registerWidget("_UI", {
     win_toolbarTheme: {
       type: ["choice", ["default", "light", "dark"]],
       default: "default"
+    },
+    win_accentColors : {
+      access: {
+        set: function(mame, value) {
+          if (!value) {
+            this._nativeSet("win_accentColors", null);
+          } else {
+            this._nativeSet("win_accentColors", {
+              light: _.colorStringToArray(value.light),
+              dark: _.colorStringToArray(value.dark),
+              highContrast: _.colorStringToArray(value.highContrast)
+            });
+          }
+        }
+      },
+      default: null
     }
   },
 
