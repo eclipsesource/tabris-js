@@ -1,4 +1,6 @@
 # Tabris.js 1.x
+
+[![Build Status](https://travis-ci.org/eclipsesource/tabris-js.svg?branch=1.x)](https://travis-ci.org/eclipsesource/tabris-js)
 [![Slack Status](https://tabrisjs.herokuapp.com/badge.svg)](https://tabrisjs.herokuapp.com)
 
 Tabris.js is a framework for developing mobile apps with native UIs in JavaScript.
