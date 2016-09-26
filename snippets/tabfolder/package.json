@@ -1,9 +1,0 @@
-{
-  "title": "Tab Folder",
-  "category": "TabFolder",
-  "description": "A swipe enabled Tab Folder with 3 tabs",
-  "main": "tabfolder.js",
-  "dependencies": {
-    "tabris": "^1.9.0"
-  }
-}

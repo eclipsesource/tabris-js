@@ -1,9 +1,0 @@
-{
-  "title": "Fullscreen and toolbar visibility",
-  "category": "UI",
-  "description": "Demonstrates fullscreen options",
-  "main": "ui-fullscreen.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

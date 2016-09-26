@@ -1,9 +1,0 @@
-{
-  "title": "Radio Buttons",
-  "category": "RadioButton",
-  "description": "Create radio buttons with handlers",
-  "main": "radiobutton.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

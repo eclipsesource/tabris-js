@@ -1,9 +1,0 @@
-{
-  "title": "Using different image view scale modes",
-  "category": "ImageView",
-  "description": "Demonstrates image view scale modes",
-  "main": "imageview-scalemodes.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

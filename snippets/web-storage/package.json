@@ -1,9 +1,0 @@
-{
-  "title": "Web Storage",
-  "category": "WebStorage",
-  "description": "Count how many times the application was started.",
-  "main": "web-storage.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

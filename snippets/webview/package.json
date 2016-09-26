@@ -1,9 +1,0 @@
-{
-  "title": "Web View",
-  "category": "WebView",
-  "description": "Create a web view to load a web page",
-  "main": "webview.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

@@ -1,9 +1,0 @@
-{
-  "title": "Actions",
-  "category": "Action",
-  "description": "Create an action with an image and a handler",
-  "main": "action.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

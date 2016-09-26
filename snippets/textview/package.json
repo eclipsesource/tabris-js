@@ -1,9 +1,0 @@
-{
-  "title": "TextViews",
-  "category": "TextView",
-  "description": "Creating text views with different alignments",
-  "main": "textview.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

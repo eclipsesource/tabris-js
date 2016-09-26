@@ -1,9 +1,0 @@
-{
-  "title": "Horizontal Scrolling",
-  "category": "ScrollView",
-  "description": "Create a horizontal scroll view and fill it with labels",
-  "main": "scrollview.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

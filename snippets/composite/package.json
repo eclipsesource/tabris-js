@@ -1,9 +1,0 @@
-{
-  "title": "Composite",
-  "category": "Composite",
-  "description": "Create composites and append children to them",
-  "main": "composite.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

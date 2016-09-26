@@ -1,9 +1,0 @@
-{
-  "title": "Check Boxes",
-  "category": "CheckBox",
-  "description": "Create a check box with a handler",
-  "main": "checkbox.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

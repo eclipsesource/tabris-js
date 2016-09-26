@@ -1,9 +1,0 @@
-{
-  "title": "Absolute Layout",
-  "category": "Layout",
-  "description": "Layout a widget with a fixed size and position",
-  "main": "layout.js",
-  "dependencies": {
-    "tabris": "^2.0.0"
-  }
-}

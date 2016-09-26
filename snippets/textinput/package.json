@@ -1,9 +1,0 @@
-{
-  "title": "Text Input",
-  "category": "TextInput",
-  "description": "with listener",
-  "main": "textinput.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

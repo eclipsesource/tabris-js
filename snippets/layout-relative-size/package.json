@@ -1,9 +1,0 @@
-{
-  "title": "Size by Percentage",
-  "category": "Layout",
-  "description": "Specify a widget's bounds as percentage of the parent",
-  "main": "layout-relative-size.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

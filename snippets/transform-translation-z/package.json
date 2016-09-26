@@ -1,9 +1,0 @@
-{
-  "title": "Composite",
-  "category": "Composite",
-  "description": "Use the translationZ transform to raise a widget on the z-axis",
-  "main": "translation-z.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

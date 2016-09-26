@@ -1,9 +1,0 @@
-{
-  "title": "Toggle Buttons",
-  "category": "ToggleButton",
-  "description": "Create a toggle button with a selection handler",
-  "main": "togglebutton.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

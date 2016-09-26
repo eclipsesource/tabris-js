@@ -1,9 +1,0 @@
-{
-  "title": "Baseline Alignment",
-  "category": "Layout",
-  "description": "Align widgets on their baseline",
-  "main": "layout-baseline.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

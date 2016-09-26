@@ -1,9 +1,0 @@
-{
-  "title": "Picker",
-  "category": "Picker",
-  "description": "Create a picker widget to select a string from a list",
-  "main": "picker.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

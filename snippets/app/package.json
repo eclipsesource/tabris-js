@@ -1,9 +1,0 @@
-{
-  "title": "App Object",
-  "category": "Device",
-  "description": "React to application hibernation and resume",
-  "main": "app.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

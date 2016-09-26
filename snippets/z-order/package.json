@@ -1,9 +1,0 @@
-{
-  "title": "Z-Order",
-  "category": "Layout",
-  "description": "Overlapping widgets",
-  "main": "z-order.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

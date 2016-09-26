@@ -1,9 +1,0 @@
-{
-  "title": "Tab Folder - Swipe",
-  "category": "TabFolder",
-  "description": "A TabFolder without tab bar, used as a swipe control",
-  "main": "tabfolder-swipe.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

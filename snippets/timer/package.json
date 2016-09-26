@@ -1,9 +1,0 @@
-{
-  "title": "Timer",
-  "category": "Timer",
-  "description": "Use a timer to delay an action",
-  "main": "timer.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

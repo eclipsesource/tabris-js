@@ -1,9 +1,0 @@
-{
-  "title": "Image View - Scale mode 'auto'",
-  "category": "ImageView",
-  "description": "Scale an image to fit the ImageView until it's at it original size, but not more",
-  "main": "imageview-scalemode-auto.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

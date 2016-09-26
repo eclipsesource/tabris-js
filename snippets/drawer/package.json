@@ -1,9 +1,0 @@
-{
-  "title": "Drawer",
-  "category": "Drawer",
-  "description": "Create a drawer and add a widget",
-  "main": "drawer.js",
-  "dependencies": {
-    "tabris": "^1.9.0"
-  }
-}

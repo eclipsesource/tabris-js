@@ -1,9 +1,0 @@
-{
-  "title": "Text Input and Focus Listener",
-  "category": "TextInput",
-  "description": "Listen to focus events",
-  "main": "textinput-focus.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

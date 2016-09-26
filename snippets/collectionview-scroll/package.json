@@ -1,9 +1,0 @@
-{
-  "title": "Collection View Fixed Section Header",
-  "category": "Collection View",
-  "description": "Create a collection view with fixed section headers",
-  "main": "collectionview-scroll.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

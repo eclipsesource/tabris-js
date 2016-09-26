@@ -1,9 +1,0 @@
-{
-  "title": "Slider",
-  "category": "Slider",
-  "description": "A slider",
-  "main": "slider.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

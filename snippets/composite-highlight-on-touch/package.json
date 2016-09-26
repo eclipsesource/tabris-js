@@ -1,9 +1,0 @@
-{
-  "title": "Composite",
-  "category": "Composite",
-  "description": "Create a composite which gets highlighted on touch",
-  "main": "composite-highlight-on-touch.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

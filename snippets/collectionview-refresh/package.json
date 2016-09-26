@@ -1,9 +1,0 @@
-{
-  "title": "Collection View with Pull-to-Refresh",
-  "category": "Collection View",
-  "description": "Create a collection view and enable pull-to-refresh",
-  "main": "collectionview-refresh.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

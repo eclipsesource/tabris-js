@@ -1,9 +1,0 @@
-{
-  "title": "Device Info",
-  "category": "Device",
-  "description": "Display available device information",
-  "main": "device.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

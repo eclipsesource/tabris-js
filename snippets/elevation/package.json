@@ -1,9 +1,0 @@
-{
-  "title": "Composite",
-  "category": "Composite",
-  "description": "Use elevation to raise a widget on the z-axis",
-  "main": "elevation.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

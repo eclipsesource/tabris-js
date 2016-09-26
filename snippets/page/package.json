@@ -1,9 +1,0 @@
-{
-  "title": "Creating multiple top level pages",
-  "category": "Page",
-  "description": "Demonstrates creating multiple top level pages",
-  "main": "page.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

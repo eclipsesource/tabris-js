@@ -1,9 +1,0 @@
-{
-  "title": "Developer Console",
-  "category": "Console",
-  "description": "Print messages to the developer console using different log levels",
-  "main": "console.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

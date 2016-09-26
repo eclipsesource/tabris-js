@@ -1,9 +1,0 @@
-{
-  "title": "Image View",
-  "category": "ImageView",
-  "description": "Display images with different scale modes",
-  "main": "imageview.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

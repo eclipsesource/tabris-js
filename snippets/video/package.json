@@ -1,9 +1,0 @@
-{
-  "title": "Video",
-  "category": "Video",
-  "description": "Play video",
-  "main": "video.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

@@ -1,9 +1,0 @@
-{
-  "title": "Dynamic Layout",
-  "category": "Layout",
-  "description": "Arrange widgets depending on orientation",
-  "main": "layout-dynamic.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

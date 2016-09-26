@@ -1,9 +1,0 @@
-{
-  "title": "Image View Load Event",
-  "category": "ImageView",
-  "description": "Use the 'load' event to determine if the ImageView could load an image",
-  "main": "imageview-load.js",
-  "dependencies": {
-    "tabris": "^1.8.0"
-  }
-}

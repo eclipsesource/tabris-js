@@ -1,9 +1,0 @@
-{
-  "title": "TextView with markup",
-  "category": "TextView",
-  "description": "Creating text views with and without markup enabled",
-  "main": "textview-markup.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

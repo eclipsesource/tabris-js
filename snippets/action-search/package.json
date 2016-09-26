@@ -1,9 +1,0 @@
-{
-  "title": "Search Actions",
-  "category": "Action",
-  "description": "Create an action to perform a search with dynamic proposals",
-  "main": "search-action.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

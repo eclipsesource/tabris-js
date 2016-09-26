@@ -1,9 +1,0 @@
-{
-  "title": "Using an image view as a button",
-  "category": "ImageView",
-  "description": "Demonstrates using an image view as a button",
-  "main": "imageview-as-a-button.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}
