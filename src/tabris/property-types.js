@@ -1,9 +1,9 @@
-import {extend} from "./util";
-import {imageToArray, imageFromArray} from "./util-images";
-import {colorArrayToString, colorStringToArray} from "./util-colors";
-import {fontObjectToString, fontStringToObject} from "./util-fonts";
-import NativeObject from "./NativeObject";
-import WidgetCollection from "./WidgetCollection";
+import {extend} from './util';
+import {imageToArray, imageFromArray} from './util-images';
+import {colorArrayToString, colorStringToArray} from './util-colors';
+import {fontObjectToString, fontStringToObject} from './util-fonts';
+import NativeObject from './NativeObject';
+import WidgetCollection from './WidgetCollection';
 
 export var types = {
 
@@ -17,7 +17,7 @@ export var types = {
 
   string: {
     encode: function(str) {
-      return "" + str;
+      return '' + str;
     }
   },
 
@@ -43,8 +43,8 @@ export var types = {
 
   function: {
     encode: function(value) {
-      if ("function" !== typeof value) {
-        throw new Error(typeof value + " is not a function: " + value);
+      if ('function' !== typeof value) {
+        throw new Error(typeof value + ' is not a function: ' + value);
       }
       return value;
     }
@@ -61,7 +61,7 @@ export var types = {
 
   color: {
     encode: function(value) {
-      if (value === "initial") {
+      if (value === 'initial') {
         return undefined;
       }
       return colorStringToArray(value);
@@ -69,7 +69,7 @@ export var types = {
     decode: function(value) {
       if (!value) {
         // NOTE: null is only returned for "background" where it means "no background"
-        return "rgba(0, 0, 0, 0)";
+        return 'rgba(0, 0, 0, 0)';
       }
       return colorArrayToString(value);
     }
@@ -77,7 +77,7 @@ export var types = {
 
   font: {
     encode: function(value) {
-      if (value === "initial") {
+      if (value === 'initial') {
         return undefined;
       }
       return fontStringToObject(value);
@@ -85,7 +85,7 @@ export var types = {
     decode: function(value) {
       if (!value) {
         // NOTE: workaround to allow triggering a change event when setting font to "initial"
-        return "initial";
+        return 'initial';
       }
       return fontObjectToString(value);
     }
@@ -96,25 +96,25 @@ export var types = {
       if (!value) {
         return null;
       }
-      if (typeof value === "string") {
+      if (typeof value === 'string') {
         value = {src: value};
       }
-      if (typeof value !== "object") {
-        throw new Error("Not an image: " + value);
+      if (typeof value !== 'object') {
+        throw new Error('Not an image: ' + value);
       }
-      if (typeof value.src !== "string") {
-        throw new Error("image.src is not a string");
+      if (typeof value.src !== 'string') {
+        throw new Error('image.src is not a string');
       }
-      if (value.src === "") {
-        throw new Error("image.src is an empty string");
+      if (value.src === '') {
+        throw new Error('image.src is an empty string');
       }
-      ["scale", "width", "height"].forEach(function(prop) {
+      ['scale', 'width', 'height'].forEach(function(prop) {
         if (prop in value && !isDimension(value[prop])) {
-          throw new Error("image." + prop + " is not a dimension: " + value[prop]);
+          throw new Error('image.' + prop + ' is not a dimension: ' + value[prop]);
         }
       });
-      if ("scale" in value && ("width" in value || "height" in value)) {
-        console.warn("Image scale is ignored if width or height are given");
+      if ('scale' in value && ('width' in value || 'height' in value)) {
+        console.warn('Image scale is ignored if width or height are given');
       }
       return imageToArray(value);
     },
@@ -194,7 +194,7 @@ export var types = {
     encode: function(value) {
       value = encodeNumber(value);
       if (value < 0 || value > 1) {
-        throw new Error("Number is out of bounds: " + value);
+        throw new Error('Number is out of bounds: ' + value);
       }
       return value;
     }
@@ -205,7 +205,7 @@ export var types = {
       var result = extend({}, transformDefaults);
       for (var key in value) {
         if (!(key in transformDefaults)) {
-          throw new Error("Not a valid transformation containing \"" + key + "\"");
+          throw new Error('Not a valid transformation containing "' + key + '"');
         }
         result[key] = encodeNumber(value[key]);
       }
@@ -219,7 +219,7 @@ export var types = {
         return [];
       }
       if (!(value instanceof Array)) {
-        throw new Error(typeof value + " is not an array: " + value);
+        throw new Error(typeof value + ' is not an array: ' + value);
       }
       if (type) {
         return value.map(types[type].encode);
@@ -234,25 +234,25 @@ var numberRegex = /^[+-]?([0-9]+|[0-9]*\.[0-9]+)$/;
 var selectorRegex = /^(\*|prev\(\)|([#.]?[A-Za-z_][A-Za-z0-9_-]+))$/;
 
 function isDimension(value) {
-  return typeof value === "number" && !isNaN(value) && value >= 0 && value !== Infinity;
+  return typeof value === 'number' && !isNaN(value) && value >= 0 && value !== Infinity;
 }
 
 function throwNotAcceptedError(acceptable, given) {
-  var message = ["Accepting \""];
-  message.push(acceptable.join("\", \""));
-  message.push("\", given was: \"", given + "\"");
-  throw new Error(message.join(""));
+  var message = ['Accepting "'];
+  message.push(acceptable.join('", "'));
+  message.push('", given was: "', given + '"');
+  throw new Error(message.join(''));
 }
 
 function encodeNumber(value) {
-  if (typeof value === "string" && numberRegex.test(value)) {
+  if (typeof value === 'string' && numberRegex.test(value)) {
     return parseFloat(value);
   }
-  if (typeof value !== "number") {
-    throw new Error("Not a number: " + toString(value));
+  if (typeof value !== 'number') {
+    throw new Error('Not a number: ' + toString(value));
   }
   if (!isFinite(value)) {
-    throw new Error("Invalid number: " + toString(value));
+    throw new Error('Invalid number: ' + toString(value));
   }
   return value;
 }
@@ -296,11 +296,11 @@ function encodeLayoutData(layoutData) {
 }
 
 function encodeEdge(value) {
-  if (typeof value === "string") {
-    if (value.indexOf(" ") !== -1) {
+  if (typeof value === 'string') {
+    if (value.indexOf(' ') !== -1) {
       return encodeEdgeArray(value.split(/\s+/));
     }
-    if (value[value.length - 1] === "%") {
+    if (value[value.length - 1] === '%') {
       var percentage = encodePercentage(value);
       return percentage === 0 ? 0 : [percentage, 0];
     }
@@ -310,11 +310,11 @@ function encodeEdge(value) {
     if (selectorRegex.test(value)) {
       return [value, 0];
     }
-    throw new Error("Invalid dimension: " + toString(value));
+    throw new Error('Invalid dimension: ' + toString(value));
   }
-  if (typeof value === "number") {
+  if (typeof value === 'number') {
     if (!isFinite(value)) {
-      throw new Error("Invalid number: " + toString(value));
+      throw new Error('Invalid number: ' + toString(value));
     }
     return value;
   }
@@ -324,12 +324,12 @@ function encodeEdge(value) {
   if (value instanceof NativeObject) {
     return [value, 0];
   }
-  throw new Error("Invalid dimension: " + toString(value));
+  throw new Error('Invalid dimension: ' + toString(value));
 }
 
 function encodeEdgeArray(array) {
   if (array.length !== 2) {
-    throw new Error("Wrong number of elements (must be 2): " + toString(array));
+    throw new Error('Wrong number of elements (must be 2): ' + toString(array));
   }
   var ref = encodeEdgeRef(array[0]);
   var offset = encodeNumber(array[1]);
@@ -337,24 +337,24 @@ function encodeEdgeArray(array) {
 }
 
 function encodeEdgeRef(value) {
-  if (typeof value === "string") {
-    if (value[value.length - 1] === "%") {
+  if (typeof value === 'string') {
+    if (value[value.length - 1] === '%') {
       return encodePercentage(value);
     }
     if (selectorRegex.test(value)) {
       return value;
     }
   }
-  if (typeof value === "number") {
+  if (typeof value === 'number') {
     if (!isFinite(value)) {
-      throw new Error("Invalid number: " + toString(value));
+      throw new Error('Invalid number: ' + toString(value));
     }
     return value;
   }
   if (value instanceof NativeObject) {
     return value;
   }
-  throw new Error("Not a percentage or widget reference: " + toString(value));
+  throw new Error('Not a percentage or widget reference: ' + toString(value));
 }
 
 function encodePercentage(value) {
@@ -362,17 +362,17 @@ function encodePercentage(value) {
   if (numberRegex.test(sub)) {
     return parseFloat(sub);
   }
-  throw new Error("Invalid percentage value: " + toString(value));
+  throw new Error('Invalid percentage value: ' + toString(value));
 }
 
 function encodeWidgetRef(value) {
   if (value instanceof NativeObject) {
     return value;
   }
-  if (typeof value === "string" && selectorRegex.test(value)) {
+  if (typeof value === 'string' && selectorRegex.test(value)) {
     return value;
   }
-  throw new Error("Not a widget reference: " + toString(value));
+  throw new Error('Not a widget reference: ' + toString(value));
 }
 
 function decodeLayoutData(layoutData) {
@@ -392,22 +392,22 @@ function decodeLayoutAttr(value) {
       return value[1];
     }
     if (value[1] === 0) {
-      return typeof value[0] === "number" ? value[0] + "%" : value[0];
+      return typeof value[0] === 'number' ? value[0] + '%' : value[0];
     }
-    return [typeof value[0] === "number" ? value[0] + "%" : value[0], value[1]];
+    return [typeof value[0] === 'number' ? value[0] + '%' : value[0], value[1]];
   }
   return value;
 }
 
 function toString(value) {
-  if (typeof value === "string") {
+  if (typeof value === 'string') {
     return "'" + value + "'";
   }
   if (Array.isArray(value)) {
-    return "[" + value.map(toString).join(", ") + "]";
+    return '[' + value.map(toString).join(', ') + ']';
   }
-  if (typeof value === "object" && value != null) {
-    return "{" + Object.keys(value).join(", ") + "}";
+  if (typeof value === 'object' && value != null) {
+    return '{' + Object.keys(value).join(', ') + '}';
   }
-  return "" + value;
+  return '' + value;
 }

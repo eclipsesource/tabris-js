@@ -7,8 +7,8 @@ RowLayout.prototype = {
 
   attachTo: function(parent) {
     this.parent = parent;
-    this.parent.on("addchild", onAddChild, this);
-    this.parent.on("removechild", onRemoveChild, this);
+    this.parent.on('addchild', onAddChild, this);
+    this.parent.on('removechild', onRemoveChild, this);
     return this;
   },
 
@@ -19,7 +19,7 @@ RowLayout.prototype = {
 
   layoutChild: function(child, index, children) {
     var prev = children[index - 1];
-    child.set("layoutData", {
+    child.set('layoutData', {
       left: this.margin,
       right: this.margin,
       top: prev ? [prev, this.spacing] : this.margin

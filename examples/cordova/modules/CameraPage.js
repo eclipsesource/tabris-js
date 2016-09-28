@@ -1,10 +1,10 @@
-var PluginPage = require("./PluginPage");
+var PluginPage = require('./PluginPage');
 
-var page = new PluginPage("Camera", "cordova-plugin-camera", function(parent) {
+var page = new PluginPage('Camera', 'cordova-plugin-camera', function(parent) {
   var button = new tabris.Button({
     layoutData: {left: 10, top: 10, right: 10},
-    text: "Take a picture"
-  }).appendTo(parent).on("select", function() {
+    text: 'Take a picture'
+  }).appendTo(parent).on('select', function() {
     navigator.camera.getPicture(onSuccess, onFail, {
       quality: 50,
       targetWidth: 1024,
@@ -12,10 +12,10 @@ var page = new PluginPage("Camera", "cordova-plugin-camera", function(parent) {
       destinationType: window.Camera.DestinationType.FILE_URI
     });
     function onSuccess(imageUrl) {
-      imageView.set("image", {src: imageUrl});
+      imageView.set('image', {src: imageUrl});
     }
     function onFail(message) {
-      console.log("Camera failed because: " + message);
+      console.log('Camera failed because: ' + message);
     }
   });
 

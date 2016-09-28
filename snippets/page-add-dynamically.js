@@ -1,14 +1,14 @@
 var page = new tabris.Page({
-  title: "Creating a new page dynamically",
+  title: 'Creating a new page dynamically',
   topLevel: true
 });
 
 new tabris.Button({
   layoutData: {left: 10, top: 10, right: 10},
-  text: "Create and open a new page"
-}).on("select", function() {
+  text: 'Create and open a new page'
+}).on('select', function() {
   new tabris.Page({
-    title: "Dynamically created page"
+    title: 'Dynamically created page'
   }).open();
 }).appendTo(page);
 

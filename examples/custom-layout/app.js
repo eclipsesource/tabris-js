@@ -1,7 +1,7 @@
-var RowLayout = require("./RowLayout");
+var RowLayout = require('./RowLayout');
 
 var page = new tabris.Page({
-  title: "Column Layout",
+  title: 'Column Layout',
   topLevel: true
 });
 
@@ -11,11 +11,11 @@ var composite = new tabris.Composite({
 
 var count = 1;
 new tabris.Button({
-  text: "Add Button"
-}).on("select", function() {
+  text: 'Add Button'
+}).on('select', function() {
   return new tabris.Button({
-    text: "Button " + count++ + " (remove)"
-  }).on("select", function() {
+    text: 'Button ' + count++ + ' (remove)'
+  }).on('select', function() {
     this.dispose();
   }).appendTo(composite);
 }).appendTo(composite);

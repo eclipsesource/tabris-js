@@ -6,5 +6,5 @@ var progressBar = new tabris.ProgressBar({
 
 setInterval(function() {
   var selection = progressBar.selection + 1;
-  progressBar.set("selection", selection > 300 ? 0 : selection);
+  progressBar.set('selection', selection > 300 ? 0 : selection);
 }, 20);

@@ -1,5 +1,5 @@
 export default function WidgetCollection(arr, selector, deep) {
-  this._array = select(arr, selector || "*", deep);
+  this._array = select(arr, selector || '*', deep);
   for (var i = 0; i < this._array.length; i++) {
     this[i] = this._array[i];
   }
@@ -78,12 +78,12 @@ var proto = WidgetCollection.prototype = {
 
 };
 
-["set", "animate", "on", "off", "once"].forEach(function(key) {
+['set', 'animate', 'on', 'off', 'once'].forEach(function(key) {
   proto[key] = function() {
     for (var i = 0; i < this._array.length; i++) {
       this._array[i][key].apply(this._array[i], arguments);
     }
-    if (key !== "animate") {
+    if (key !== 'animate') {
       return this;
     }
   };
@@ -93,7 +93,7 @@ function select(array, selector, deep) {
   if (!array || array.length === 0) {
     return [];
   }
-  if (selector === "*" && !deep) {
+  if (selector === '*' && !deep) {
     return array.concat();
   }
   var filter = getFilter(selector);
@@ -131,19 +131,19 @@ function getFilter(selector) {
 }
 
 function createMatcher(selector) {
-  if (selector.charAt(0) === "#") {
+  if (selector.charAt(0) === '#') {
     var expectedId = selector.slice(1);
     return function(proxy) {
       return expectedId === proxy.id;
     };
   }
-  if (selector.charAt(0) === ".") {
+  if (selector.charAt(0) === '.') {
     var expectedClass = selector.slice(1);
     return function(proxy) {
       return proxy.classList.indexOf(expectedClass) !== -1;
     };
   }
-  if (selector === "*") {
+  if (selector === '*') {
     return function() {return true;};
   }
   return function(proxy) {

@@ -1,15 +1,15 @@
 var airports = [
   {
-    id: "SFO",
-    name: "San Francisco"
+    id: 'SFO',
+    name: 'San Francisco'
   },
   {
-    id: "TXL",
-    name: "Berlin Tegel"
+    id: 'TXL',
+    name: 'Berlin Tegel'
   },
   {
-    id: "FRA",
-    name: "Frankfurt"
+    id: 'FRA',
+    name: 'Frankfurt'
   }
 ];
 
@@ -20,6 +20,6 @@ new tabris.Picker({
     return airport.name;
   },
   selection: airports[1]
-}).on("change:selection", function(picker, item) {
-  console.log("Selected " + item.id);
+}).on('change:selection', function(picker, item) {
+  console.log('Selected ' + item.id);
 }).appendTo(tabris.ui.contentView);

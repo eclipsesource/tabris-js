@@ -1,14 +1,14 @@
-import Widget from "../Widget";
+import Widget from '../Widget';
 
 export default Widget.extend({
-  _name: "Cell",
+  _name: 'Cell',
 
-  _type: "tabris.Composite",
+  _type: 'tabris.Composite',
 
   _supportsChildren: true,
 
   dispose: function() {
-    console.warn("CollectionView cells are container-managed, they cannot be disposed of");
+    console.warn('CollectionView cells are container-managed, they cannot be disposed of');
   },
 
   _properties: {

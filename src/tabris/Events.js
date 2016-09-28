@@ -6,7 +6,7 @@ export default {
     this._callbacks[type] = (this._callbacks[type] || []).concat();
     var alreadyAdded = this._callbacks[type].some(function(entry) {
       return (
-        (entry.fn === callback || "_callback" in callback && entry.fn._callback === callback._callback) &&
+        (entry.fn === callback || '_callback' in callback && entry.fn._callback === callback._callback) &&
         (entry.ctx === context)
       );
     });
@@ -21,7 +21,7 @@ export default {
 
   off: function(type, callback, context) {
     if (!type || !callback) {
-      throw new Error("Not enough arguments");
+      throw new Error('Not enough arguments');
     }
     if (this._callbacks) {
       if (type in this._callbacks) {
@@ -70,7 +70,7 @@ export default {
   },
 
   _callAll: function(type, args, isPublic) {
-    var store = isPublic ? "_callbacks" : "_privateCallbacks";
+    var store = isPublic ? '_callbacks' : '_privateCallbacks';
     if (this[store] && type in this[store]) {
       var callbacks = this[store][type];
       for (var i = 0; i < callbacks.length; i++) {

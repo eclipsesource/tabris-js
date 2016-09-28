@@ -1,27 +1,27 @@
 var example = new Example();
 
 var page = module.exports = new tabris.Page({
-  title: "Animation",
+  title: 'Animation',
   topLevel: true
-}).on("disappear", function() {
-  page.children("#toggleRun").set("selection", false);
+}).on('disappear', function() {
+  page.children('#toggleRun').set('selection', false);
 });
 
 new tabris.Canvas({
-  layoutData: {left: 10, top: 10, right: 10, bottom: "#toggleRun 10"}
-}).on("resize", function(canvas, bounds) {
+  layoutData: {left: 10, top: 10, right: 10, bottom: '#toggleRun 10'}
+}).on('resize', function(canvas, bounds) {
   var height = Math.min(bounds.height, Math.floor(bounds.width / 2));
-  var ctx = canvas.getContext("2d", bounds.width, height);
+  var ctx = canvas.getContext('2d', bounds.width, height);
   example.init(ctx);
 }).appendTo(page);
 
 new tabris.ToggleButton({
-  text: "Start",
+  text: 'Start',
   layoutData: {left: 10, bottom: 10},
-  id: "toggleRun"
-}).on("change:selection", function(button, selection) {
+  id: 'toggleRun'
+}).on('change:selection', function(button, selection) {
   example.setRunning(selection);
-  button.set("text", selection ? "Stop" : "Start");
+  button.set('text', selection ? 'Stop' : 'Start');
 }).appendTo(page);
 
 function Example() {
@@ -34,8 +34,8 @@ function Example() {
     ctx = newCtx;
     width = ctx.canvas.width;
     height = ctx.canvas.height;
-    ctx.font = "18px sans-serif";
-    ctx.lineJoin = "round";
+    ctx.font = '18px sans-serif';
+    ctx.lineJoin = 'round';
     cx = Math.floor(width / 3);
     cy = Math.floor(height / 2);
     unit = width / 12;
@@ -84,7 +84,7 @@ function Example() {
   }
 
   function drawAxes() {
-    ctx.strokeStyle = "#aaa";
+    ctx.strokeStyle = '#aaa';
     ctx.lineWidth = 1;
     ctx.beginPath();
     // x and y axes
@@ -103,16 +103,16 @@ function Example() {
     ctx.moveTo(cx - 5, cy - unit);
     ctx.lineTo(cx + 5, cy - unit);
     ctx.stroke();
-    ctx.fillStyle = "#aaa";
-    ctx.font = "12px sans-serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "top";
-    ctx.fillText("π", cx + Math.PI * unit, cy + 8);
-    ctx.fillText("2π", cx + 2 * Math.PI * unit, cy + 8);
-    ctx.textAlign = "left";
-    ctx.textBaseline = "middle";
-    ctx.fillText("1", cx + 8, cy - unit);
-    ctx.fillText("-1", cx + 8, cy + unit);
+    ctx.fillStyle = '#aaa';
+    ctx.font = '12px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    ctx.fillText('π', cx + Math.PI * unit, cy + 8);
+    ctx.fillText('2π', cx + 2 * Math.PI * unit, cy + 8);
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('1', cx + 8, cy - unit);
+    ctx.fillText('-1', cx + 8, cy + unit);
   }
 
   function drawSine(t) {
@@ -125,14 +125,14 @@ function Example() {
       y = Math.sin(t + x);
       ctx.lineTo(cx + x * unit, cy + y * unit);
     }
-    ctx.strokeStyle = "#fa0";
+    ctx.strokeStyle = '#fa0';
     ctx.lineWidth = 2;
     ctx.stroke();
   }
 
   function drawCircle() {
     var ccx = cx - 1.5 * unit;
-    ctx.strokeStyle = "#0af";
+    ctx.strokeStyle = '#0af';
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.arc(ccx, cy, unit, 0, 2 * Math.PI);
@@ -143,8 +143,8 @@ function Example() {
     var ccx = cx - 1.5 * unit;
     var x = ccx + Math.cos(t) * unit;
     var y = cy + Math.sin(t) * unit;
-    ctx.strokeStyle = "#0af";
-    ctx.fillStyle = "#fff";
+    ctx.strokeStyle = '#0af';
+    ctx.fillStyle = '#fff';
     ctx.lineWidth = 2;
     ctx.beginPath();
     // lines
@@ -165,12 +165,12 @@ function Example() {
   }
 
   function drawFpsLabel() {
-    ctx.textAlign = "left";
-    ctx.textBaseline = "top";
-    ctx.fillStyle = "#000";
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    ctx.fillStyle = '#000';
     ctx.lineWidth = 1;
     // TODO concat only needed on Rhino
-    ctx.fillText("FPS: ".concat(speedometer.fps.toFixed(1)), 10, 10);
+    ctx.fillText('FPS: '.concat(speedometer.fps.toFixed(1)), 10, 10);
   }
 
   var speedometer = {

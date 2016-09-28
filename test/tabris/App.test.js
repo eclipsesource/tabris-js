@@ -1,10 +1,10 @@
-import {expect, spy, stub, restore, match} from "../test";
-import ProxyStore from "../../src/tabris/ProxyStore";
-import NativeBridge from "../../src/tabris/NativeBridge";
-import ClientStub from "./ClientStub";
-import App from "../../src/tabris/App";
+import {expect, spy, stub, restore, match} from '../test';
+import ProxyStore from '../../src/tabris/ProxyStore';
+import NativeBridge from '../../src/tabris/NativeBridge';
+import ClientStub from './ClientStub';
+import App from '../../src/tabris/App';
 
-describe("App", function() {
+describe('App', function() {
 
   let app, client;
 
@@ -21,150 +21,150 @@ describe("App", function() {
 
   afterEach(restore);
 
-  it("listens for pause event", function() {
+  it('listens for pause event', function() {
     let listener = spy();
 
-    app.on("pause", listener);
+    app.on('pause', listener);
 
-    let calls = client.calls({id: app.cid, op: "listen", event: "pause"});
+    let calls = client.calls({id: app.cid, op: 'listen', event: 'pause'});
     expect(calls[0].listen).to.equal(true);
   });
 
-  it("triggers pause event", function() {
+  it('triggers pause event', function() {
     let listener = spy();
-    app.on("pause", listener);
-    tabris._notify(app.cid, "pause");
+    app.on('pause', listener);
+    tabris._notify(app.cid, 'pause');
 
     expect(listener).to.have.been.called;
   });
 
-  it("listens for resume event", function() {
+  it('listens for resume event', function() {
     let listener = spy();
 
-    app.on("resume", listener);
+    app.on('resume', listener);
 
-    let calls = client.calls({id: app.cid, op: "listen", event: "resume"});
+    let calls = client.calls({id: app.cid, op: 'listen', event: 'resume'});
     expect(calls[0].listen).to.equal(true);
   });
 
-  it("triggers resume event", function() {
+  it('triggers resume event', function() {
     let listener = spy();
-    app.on("resume", listener);
-    tabris._notify(app.cid, "resume");
+    app.on('resume', listener);
+    tabris._notify(app.cid, 'resume');
 
     expect(listener).to.have.been.called;
   });
 
-  it("listens for foreground event", function() {
+  it('listens for foreground event', function() {
     let listener = spy();
 
-    app.on("foreground", listener);
+    app.on('foreground', listener);
 
-    let calls = client.calls({id: app.cid, op: "listen", event: "foreground"});
+    let calls = client.calls({id: app.cid, op: 'listen', event: 'foreground'});
     expect(calls[0].listen).to.equal(true);
   });
 
-  it("triggers foreground event", function() {
+  it('triggers foreground event', function() {
     let listener = spy();
-    app.on("foreground", listener);
-    tabris._notify(app.cid, "foreground");
+    app.on('foreground', listener);
+    tabris._notify(app.cid, 'foreground');
 
     expect(listener).to.have.been.called;
   });
 
-  it("listens for background event", function() {
+  it('listens for background event', function() {
     let listener = spy();
 
-    app.on("background", listener);
+    app.on('background', listener);
 
-    let calls = client.calls({id: app.cid, op: "listen", event: "background"});
+    let calls = client.calls({id: app.cid, op: 'listen', event: 'background'});
     expect(calls[0].listen).to.equal(true);
   });
 
-  it("triggers background event", function() {
+  it('triggers background event', function() {
     let listener = spy();
-    app.on("background", listener);
-    tabris._notify(app.cid, "background");
+    app.on('background', listener);
+    tabris._notify(app.cid, 'background');
 
     expect(listener).to.have.been.called;
   });
 
-  it("can not be disposed", function() {
+  it('can not be disposed', function() {
     expect(() => {
       app.dispose();
     }).to.throw();
   });
 
-  it("listens for backnavigation event", function() {
-    app.on("backnavigation", spy());
+  it('listens for backnavigation event', function() {
+    app.on('backnavigation', spy());
 
-    let calls = client.calls({id: app.cid, op: "listen", event: "backnavigation"});
+    let calls = client.calls({id: app.cid, op: 'listen', event: 'backnavigation'});
     expect(calls[0].listen).to.equal(true);
   });
 
-  it("triggers backnavigation event", function() {
+  it('triggers backnavigation event', function() {
     let listener = spy();
-    app.on("backnavigation", listener);
+    app.on('backnavigation', listener);
 
-    tabris._notify(app.cid, "backnavigation");
+    tabris._notify(app.cid, 'backnavigation');
 
     expect(listener).to.have.been.calledWith(app, match.object);
   });
 
-  it("backnavigation event returns false by default", function() {
-    app.on("backnavigation", spy());
+  it('backnavigation event returns false by default', function() {
+    app.on('backnavigation', spy());
 
-    let returnValue = tabris._notify(app.cid, "backnavigation");
+    let returnValue = tabris._notify(app.cid, 'backnavigation');
 
     expect(returnValue).to.equal(false);
   });
 
-  it("backnavigation event returns true if preventDefault is called", function() {
-    app.on("backnavigation", function(app, event) {
+  it('backnavigation event returns true if preventDefault is called', function() {
+    app.on('backnavigation', function(app, event) {
       event.preventDefault = true;
     });
 
-    let returnValue = tabris._notify(app.cid, "backnavigation");
+    let returnValue = tabris._notify(app.cid, 'backnavigation');
 
     expect(returnValue).to.equal(true);
   });
 
-  it("backnavigation event returns true if preventDefault is set to true", function() {
-    app.on("backnavigation", function(app, event) {
+  it('backnavigation event returns true if preventDefault is set to true', function() {
+    app.on('backnavigation', function(app, event) {
       event.preventDefault();
     });
 
-    let returnValue = tabris._notify(app.cid, "backnavigation");
+    let returnValue = tabris._notify(app.cid, 'backnavigation');
 
     expect(returnValue).to.equal(true);
   });
 
-  describe("reload", function() {
+  describe('reload', function() {
 
-    it("CALLs `reload`", function() {
-      spy(client, "call");
+    it('CALLs `reload`', function() {
+      spy(client, 'call');
 
       app.reload();
 
-      expect(client.call).to.have.been.calledWith(app.cid, "reload", {});
+      expect(client.call).to.have.been.calledWith(app.cid, 'reload', {});
     });
 
   });
 
-  describe("getResourceLocation", function() {
+  describe('getResourceLocation', function() {
 
     beforeEach(function() {
       let origGet = client.get;
-      stub(client, "get", function() {
+      stub(client, 'get', function() {
         origGet.apply(client, arguments);
-        return "/root";
+        return '/root';
       });
     });
 
     it("GETs 'resourceBaseUrl'", function() {
       app.getResourceLocation();
 
-      expect(client.get).to.have.been.calledWith(app.cid, "resourceBaseUrl");
+      expect(client.get).to.have.been.calledWith(app.cid, 'resourceBaseUrl');
     });
 
     it("GETs 'resourceBaseUrl' only once", function() {
@@ -174,33 +174,33 @@ describe("App", function() {
       expect(client.get).to.have.been.calledOnce;
     });
 
-    it("appends normalized parameter", function() {
-      let result = app.getResourceLocation("foo//bar");
+    it('appends normalized parameter', function() {
+      let result = app.getResourceLocation('foo//bar');
 
-      expect(result).to.equal("/root/foo/bar");
+      expect(result).to.equal('/root/foo/bar');
     });
 
-    it("strips leading and trailing slash", function() {
-      let result = app.getResourceLocation("/foo/bar/");
+    it('strips leading and trailing slash', function() {
+      let result = app.getResourceLocation('/foo/bar/');
 
-      expect(result).to.equal("/root/foo/bar");
+      expect(result).to.equal('/root/foo/bar');
     });
 
     it("ignores '.' segments", function() {
-      let result = app.getResourceLocation("./foo/bar");
+      let result = app.getResourceLocation('./foo/bar');
 
-      expect(result).to.equal("/root/foo/bar");
+      expect(result).to.equal('/root/foo/bar');
     });
 
     it("throws on '..'", function() {
       expect(() => {
-        app.getResourceLocation("../foo");
+        app.getResourceLocation('../foo');
       }).to.throw("Path must not contain '..'");
     });
 
   });
 
-  describe("installPatch", function() {
+  describe('installPatch', function() {
 
     let callback, error;
 
@@ -209,121 +209,121 @@ describe("App", function() {
       error = {};
     });
 
-    it("fails if parameter is not a string", function() {
+    it('fails if parameter is not a string', function() {
       expect(() => {
         app.installPatch(23);
       }).to.throw();
     });
 
-    it("CALLs `installPatch` with URL", function() {
-      spy(client, "call");
+    it('CALLs `installPatch` with URL', function() {
+      spy(client, 'call');
 
-      app.installPatch("http://example.com/patch");
+      app.installPatch('http://example.com/patch');
 
-      expect(client.call).to.have.been.calledWith(app.cid, "installPatch", {
-        url: "http://example.com/patch"
+      expect(client.call).to.have.been.calledWith(app.cid, 'installPatch', {
+        url: 'http://example.com/patch'
       });
     });
 
-    it("does not CALL `installPatch` when already pending", function() {
-      app.installPatch("http://example.com/patch1");
-      spy(client, "call");
+    it('does not CALL `installPatch` when already pending', function() {
+      app.installPatch('http://example.com/patch1');
+      spy(client, 'call');
 
-      app.installPatch("http://example.com/patch2");
+      app.installPatch('http://example.com/patch2');
 
       expect(client.call).to.have.not.been.called;
     });
 
-    it("errors if install already pending", function() {
-      app.installPatch("http://example.com/patch");
+    it('errors if install already pending', function() {
+      app.installPatch('http://example.com/patch');
 
-      app.installPatch("http://example.com/patch", callback);
+      app.installPatch('http://example.com/patch', callback);
 
       expect(callback).to.have.been.calledWith(match(Error));
       expect(callback).to.have.been.calledWith(match({message: match(/already pending/)}));
     });
 
-    it("starts LISTEN on `patchInstall` event", function() {
-      spy(client, "listen");
+    it('starts LISTEN on `patchInstall` event', function() {
+      spy(client, 'listen');
 
-      app.installPatch("http://example.com/patch");
+      app.installPatch('http://example.com/patch');
 
-      expect(client.listen).to.have.been.calledWith(app.cid, "patchInstall", true);
+      expect(client.listen).to.have.been.calledWith(app.cid, 'patchInstall', true);
     });
 
-    describe("on success event with illegal JSON", function() {
+    describe('on success event with illegal JSON', function() {
 
       beforeEach(function() {
-        app.installPatch("http://example.com/patch", callback);
-        spy(tabris._nativeBridge, "listen");
-        spy(tabris._nativeBridge, "call");
+        app.installPatch('http://example.com/patch', callback);
+        spy(tabris._nativeBridge, 'listen');
+        spy(tabris._nativeBridge, 'call');
 
-        tabris._notify(app.cid, "patchInstall", {success: "{not json}"});
+        tabris._notify(app.cid, 'patchInstall', {success: '{not json}'});
       });
 
-      it("notifies callback with error", function() {
+      it('notifies callback with error', function() {
         expect(callback).to.have.been.calledWith(match(Error));
         expect(callback).to.have.been.calledWith(match({message: match(/parse/)}));
       });
 
-      it("stops LISTEN on `patchInstall` event", function() {
-        expect(tabris._nativeBridge.listen).to.have.been.calledWith(app.cid, "patchInstall", false);
+      it('stops LISTEN on `patchInstall` event', function() {
+        expect(tabris._nativeBridge.listen).to.have.been.calledWith(app.cid, 'patchInstall', false);
       });
 
-      it("allows for subsequent calls", function() {
-        app.installPatch("http://example.com/patch");
+      it('allows for subsequent calls', function() {
+        app.installPatch('http://example.com/patch');
 
         expect(tabris._nativeBridge.call).to.have.been.called;
       });
 
     });
 
-    describe("on success event", function() {
+    describe('on success event', function() {
 
       beforeEach(function() {
-        app.installPatch("http://example.com/patch", callback);
-        spy(tabris._nativeBridge, "listen");
-        spy(tabris._nativeBridge, "call");
+        app.installPatch('http://example.com/patch', callback);
+        spy(tabris._nativeBridge, 'listen');
+        spy(tabris._nativeBridge, 'call');
 
-        tabris._notify(app.cid, "patchInstall", {success: '{"version": 23}'});
+        tabris._notify(app.cid, 'patchInstall', {success: '{"version": 23}'});
       });
 
-      it("notifies callback", function() {
+      it('notifies callback', function() {
         expect(callback).to.have.been.calledWith(null, {version: 23});
       });
 
-      it("stops LISTEN on `patchInstall` event", function() {
-        expect(tabris._nativeBridge.listen).to.have.been.calledWith(app.cid, "patchInstall", false);
+      it('stops LISTEN on `patchInstall` event', function() {
+        expect(tabris._nativeBridge.listen).to.have.been.calledWith(app.cid, 'patchInstall', false);
       });
 
-      it("allows for subsequent calls", function() {
-        app.installPatch("http://example.com/patch");
+      it('allows for subsequent calls', function() {
+        app.installPatch('http://example.com/patch');
 
         expect(tabris._nativeBridge.call).to.have.been.called;
       });
 
     });
 
-    describe("on error event", function() {
+    describe('on error event', function() {
 
       beforeEach(function() {
-        app.installPatch("http://example.com/patch", callback);
-        spy(tabris._nativeBridge, "listen");
-        spy(tabris._nativeBridge, "call");
+        app.installPatch('http://example.com/patch', callback);
+        spy(tabris._nativeBridge, 'listen');
+        spy(tabris._nativeBridge, 'call');
 
-        tabris._notify(app.cid, "patchInstall", {error: error});
+        tabris._notify(app.cid, 'patchInstall', {error: error});
       });
 
-      it("notifies callback", function() {
+      it('notifies callback', function() {
         expect(callback).to.have.been.calledWith(new Error(error));
       });
 
-      it("stops LISTEN on `patchInstall` event", function() {
-        expect(tabris._nativeBridge.listen).to.have.been.calledWith(app.cid, "patchInstall", false);
+      it('stops LISTEN on `patchInstall` event', function() {
+        expect(tabris._nativeBridge.listen).to.have.been.calledWith(app.cid, 'patchInstall', false);
       });
 
-      it("allows for subsequent calls", function() {
-        app.installPatch("http://example.com/patch");
+      it('allows for subsequent calls', function() {
+        app.installPatch('http://example.com/patch');
 
         expect(tabris._nativeBridge.call).to.have.been.called;
       });

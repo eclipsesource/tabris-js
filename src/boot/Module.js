@@ -13,14 +13,14 @@
     if (id) {
       this._cache[id] = this;
     }
-    Object.defineProperty(this, "exports", {
+    Object.defineProperty(this, 'exports', {
       set: function(value) {
         exports = value;
       },
       get: function() {
         if (!resolved) {
           resolved = true;
-          if (typeof content === "function") {
+          if (typeof content === 'function') {
             content(this, exports, require, id.slice(1), dirname(id).slice(1));
           } else if (content instanceof Object) {
             exports = content;
@@ -34,7 +34,7 @@
   Module.prototype = {
 
     require: function(request) {
-      if (request.slice(0, 1) !== ".") {
+      if (request.slice(0, 1) !== '.') {
         if (this._cache[request]) {
           return this._cache[request].exports;
         }
@@ -50,7 +50,7 @@
     try {
       result = tabris._client.loadAndExecute(url, modulePrefix, modulePostfix);
     } catch (ex) {
-      throw new Error("Could not parse " + url + ":" + ex);
+      throw new Error('Could not parse ' + url + ':' + ex);
     }
     if (result.loadError) {
       return null;
@@ -64,13 +64,13 @@
       try {
         return JSON.parse(src);
       } catch (ex) {
-        throw new Error("Could not parse " + url);
+        throw new Error('Could not parse ' + url);
       }
     }
   };
 
   function findFileModule(request) {
-    var path = normalizePath(dirname(this.id) + "/" + request);
+    var path = normalizePath(dirname(this.id) + '/' + request);
     var result = findModule.call(this, path, getPostfixes(request));
     if (!result) {
       throw new Error("Cannot find module '" + request + "'");
@@ -81,14 +81,14 @@
   function findNodeModule(request) {
     var currentDir = dirname(this.id);
     var postfixes = getPostfixes(request);
-    var modulesPath = "/node_modules";
-    var filePath = modulesPath + "/" + request;
+    var modulesPath = '/node_modules';
+    var filePath = modulesPath + '/' + request;
     var result;
     do {
       result = findModule.call(this, normalizePath(currentDir + filePath), postfixes);
-      currentDir = normalizePath(currentDir + "/..");
+      currentDir = normalizePath(currentDir + '/..');
       if (currentDir && currentDir.slice(-1 * modulesPath.length) === modulesPath) {
-        currentDir = normalizePath(currentDir + "/..");
+        currentDir = normalizePath(currentDir + '/..');
       }
     } while (!result && currentDir);
     if (!result) {
@@ -101,9 +101,9 @@
     if (path) {
       for (var i = 0; i < postfixes.length; i++) {
         var module = getModule.call(this, path + postfixes[i]);
-        if (postfixes[i] === "/package.json") {
+        if (postfixes[i] === '/package.json') {
           if (getMain(module)) {
-            var normalizedPath = normalizePath(path + "/" + getMain(module));
+            var normalizedPath = normalizePath(path + '/' + getMain(module));
             module = findModule.call(this, normalizedPath, filePostfixes);
           } else {
             module = null;
@@ -124,7 +124,7 @@
     if (url in this._cache) {
       return this._cache[url];
     }
-    if (url.slice(-5) === ".json") {
+    if (url.slice(-5) === '.json') {
       var data = Module.readJSON(url);
       if (data) {
         return new Module(url, this, data);
@@ -139,37 +139,37 @@
   }
 
   function getPostfixes(request) {
-    return request.slice(-1) === "/" ? folderPostfixes : filePostfixes;
+    return request.slice(-1) === '/' ? folderPostfixes : filePostfixes;
   }
 
-  var modulePrefix = "(function (module, exports, require, __filename, __dirname) { ";
-  var modulePostfix = "\n});";
+  var modulePrefix = '(function (module, exports, require, __filename, __dirname) { ';
+  var modulePostfix = '\n});';
 
   function dirname(id) {
-    if (!id || id.slice(0, 1) !== ".") {
-      return "./";
+    if (!id || id.slice(0, 1) !== '.') {
+      return './';
     }
-    return id.slice(0, id.lastIndexOf("/"));
+    return id.slice(0, id.lastIndexOf('/'));
   }
 
   function normalizePath(path) {
     var segments = [];
-    var pathSegments = path.split("/");
+    var pathSegments = path.split('/');
     for (var i = 0; i < pathSegments.length; i++) {
       var segment = pathSegments[i];
-      if (segment === "..") {
+      if (segment === '..') {
         var removed = segments.pop();
-        if (!removed || removed === ".") {
+        if (!removed || removed === '.') {
           return null;
         }
-      } else if (segment === "." ? segments.length === 0 : segment !== "") {
+      } else if (segment === '.' ? segments.length === 0 : segment !== '') {
         segments.push(segment);
       }
     }
-    return segments.join("/");
+    return segments.join('/');
   }
 
-  var filePostfixes = ["", ".js", ".json", "/package.json", "/index.js", "/index.json"];
-  var folderPostfixes = ["/package.json", "/index.js", "/index.json"];
+  var filePostfixes = ['', '.js', '.json', '/package.json', '/index.js', '/index.json'];
+  var folderPostfixes = ['/package.json', '/index.js', '/index.json'];
 
 }());

@@ -1,10 +1,10 @@
-import {extend, extendPrototype} from "./util";
-import Layout from "./Layout";
-import NativeObject from "./NativeObject";
-import WidgetCollection from "./WidgetCollection";
-import GestureRecognizer from "./GestureRecognizer";
-import {animate} from "./Animation";
-import {types} from "./property-types";
+import {extend, extendPrototype} from './util';
+import Layout from './Layout';
+import NativeObject from './NativeObject';
+import WidgetCollection from './WidgetCollection';
+import GestureRecognizer from './GestureRecognizer';
+import {animate} from './Animation';
+import {types} from './property-types';
 
 var tabris = global.tabris;
 if (tabris) {
@@ -12,7 +12,7 @@ if (tabris) {
 }
 
 export default function Widget() {
-  throw new Error("Cannot instantiate abstract Widget");
+  throw new Error('Cannot instantiate abstract Widget');
 }
 
 var superProto = NativeObject.prototype;
@@ -23,7 +23,7 @@ Widget.prototype = extendPrototype(NativeObject, {
     this._checkDisposed();
     var accept = function(proxy) {
       if (!(proxy instanceof NativeObject)) {
-        throw new Error("Cannot append non-widget");
+        throw new Error('Cannot append non-widget');
       }
       proxy._setParent(this);
     }.bind(this);
@@ -41,7 +41,7 @@ Widget.prototype = extendPrototype(NativeObject, {
     this._checkDisposed();
     proxy = proxy instanceof WidgetCollection ? proxy.first() : proxy;
     if (!(proxy instanceof NativeObject)) {
-      throw new Error("Cannot append to non-widget");
+      throw new Error('Cannot append to non-widget');
     }
     this._setParent(proxy);
     return this;
@@ -51,7 +51,7 @@ Widget.prototype = extendPrototype(NativeObject, {
     this._checkDisposed();
     proxy = proxy instanceof WidgetCollection ? proxy.first() : proxy;
     if (!(proxy instanceof NativeObject)) {
-      throw new Error("Cannot insert before non-widget");
+      throw new Error('Cannot insert before non-widget');
     }
     var parent = proxy.parent();
     var index = parent._children.indexOf(proxy);
@@ -63,7 +63,7 @@ Widget.prototype = extendPrototype(NativeObject, {
     this._checkDisposed();
     proxy = proxy instanceof WidgetCollection ? proxy.first() : proxy;
     if (!(proxy instanceof NativeObject)) {
-      throw new Error("Cannot insert after non-widget");
+      throw new Error('Cannot insert after non-widget');
     }
     var parent = proxy.parent();
     var index = parent._children.indexOf(proxy);
@@ -92,23 +92,23 @@ Widget.prototype = extendPrototype(NativeObject, {
   },
 
   apply: function(sheet) {
-    var scope = new WidgetCollection(this._children.concat(this), "*", true);
-    if (sheet["*"]) {
-      scope.set(sheet["*"]);
+    var scope = new WidgetCollection(this._children.concat(this), '*', true);
+    if (sheet['*']) {
+      scope.set(sheet['*']);
     }
     var selector;
     for (selector in sheet) {
-      if (selector !== "*" && selector[0] !== "#" && selector[0] !== ".") {
+      if (selector !== '*' && selector[0] !== '#' && selector[0] !== '.') {
         scope.filter(selector).set(sheet[selector]);
       }
     }
     for (selector in sheet) {
-      if (selector[0] === ".") {
+      if (selector[0] === '.') {
         scope.filter(selector).set(sheet[selector]);
       }
     }
     for (selector in sheet) {
-      if (selector[0] === "#") {
+      if (selector[0] === '#') {
         scope.filter(selector).set(sheet[selector]);
       }
     }
@@ -124,7 +124,7 @@ Widget.prototype = extendPrototype(NativeObject, {
   },
 
   _setParent: function(parent, index) {
-    this._nativeSet("parent", types.proxy.encode(parent._getContainer(this)));
+    this._nativeSet('parent', types.proxy.encode(parent._getContainer(this)));
     if (this._parent) {
       this._parent._removeChild(this);
       Layout.addToQueue(this._parent);
@@ -137,20 +137,20 @@ Widget.prototype = extendPrototype(NativeObject, {
   _addChild: function(child, index) {
     var check = this.constructor._supportsChildren;
     if (check === false) {
-      throw new Error(this.type + " cannot contain children");
+      throw new Error(this.type + ' cannot contain children');
     }
-    if (typeof check === "function" && !check.call(this, child)) {
-      throw new Error(this.type + " cannot contain children of type " + child.type);
+    if (typeof check === 'function' && !check.call(this, child)) {
+      throw new Error(this.type + ' cannot contain children of type ' + child.type);
     }
     if (!this._children) {
       this._children = [];
     }
-    if (typeof index === "number") {
+    if (typeof index === 'number') {
       this._children.splice(index, 0, child);
     } else {
       this._children.push(child);
     }
-    this.trigger("addchild", this, child, {});
+    this.trigger('addchild', this, child, {});
   },
 
   _removeChild: function(child) {
@@ -159,7 +159,7 @@ Widget.prototype = extendPrototype(NativeObject, {
       if (index !== -1) {
         this._children.splice(index, 1);
       }
-      this.trigger("removechild", this, child, {index: index});
+      this.trigger('removechild', this, child, {index: index});
     }
   },
 
@@ -180,7 +180,7 @@ Widget.prototype = extendPrototype(NativeObject, {
 
   _getEventConfig: function(type) {
     var result = superProto._getEventConfig.apply(this, arguments);
-    if (!result && this.get("gestures")[type]) {
+    if (!result && this.get('gestures')[type]) {
       return getGestureEventConfig(type);
     }
     return result;
@@ -208,7 +208,7 @@ Widget.extend = function(members) {
   return NativeObject.extend(members, Widget);
 };
 
-Object.defineProperty(Widget.prototype, "classList", {
+Object.defineProperty(Widget.prototype, 'classList', {
   get: function() {
     if (!this._classList) {
       this._classList = [];
@@ -220,7 +220,7 @@ Object.defineProperty(Widget.prototype, "classList", {
 var hasAndroidResizeBug;
 if (tabris) {
   tabris.load(function() {
-    hasAndroidResizeBug = device.platform === "Android" && device.version <= 17;
+    hasAndroidResizeBug = device.platform === 'Android' && device.version <= 17;
   });
 }
 
@@ -248,18 +248,18 @@ var _defaultEvents = {
   touchmove: {trigger: triggerWithTarget},
   touchend: {trigger: triggerWithTarget},
   touchcancel: {trigger: triggerWithTarget},
-  "resize": {
-    alias: "change:bounds",
+  'resize': {
+    alias: 'change:bounds',
     trigger: function(event) {
       if (hasAndroidResizeBug) {
         var self = this;
         setTimeout(function() {
-          self._triggerChangeEvent("bounds", event.bounds, {}, "resize");
-          self.trigger("resize", self, types.bounds.decode(event.bounds), {});
+          self._triggerChangeEvent('bounds', event.bounds, {}, 'resize');
+          self.trigger('resize', self, types.bounds.decode(event.bounds), {});
         }, 0);
       } else {
-        this._triggerChangeEvent("bounds", event.bounds, {}, "resize");
-        this.trigger("resize", this, types.bounds.decode(event.bounds), {});
+        this._triggerChangeEvent('bounds', event.bounds, {}, 'resize');
+        this.trigger('resize', this, types.bounds.decode(event.bounds), {});
       }
     }
   }
@@ -267,15 +267,15 @@ var _defaultEvents = {
 
 var _defaultProperties = {
   enabled: {
-    type: "boolean",
+    type: 'boolean',
     default: true
   },
   visible: {
-    type: "boolean",
+    type: 'boolean',
     default: true
   },
   layoutData: {
-    type: "layoutData",
+    type: 'layoutData',
     access: {
       set: function(name, value) {
         this._layoutData = value;
@@ -288,21 +288,21 @@ var _defaultProperties = {
       }
     }
   },
-  left: {type: "edge", access: layoutAccess},
-  right: {type: "edge", access: layoutAccess},
-  top: {type: "edge", access: layoutAccess},
-  bottom: {type: "edge", access: layoutAccess},
-  width: {type: "dimension", access: layoutAccess},
-  height: {type: "dimension", access: layoutAccess},
-  centerX: {type: "dimension", access: layoutAccess},
-  centerY: {type: "dimension", access: layoutAccess},
-  baseline: {type: "sibling", access: layoutAccess},
+  left: {type: 'edge', access: layoutAccess},
+  right: {type: 'edge', access: layoutAccess},
+  top: {type: 'edge', access: layoutAccess},
+  bottom: {type: 'edge', access: layoutAccess},
+  width: {type: 'dimension', access: layoutAccess},
+  height: {type: 'dimension', access: layoutAccess},
+  centerX: {type: 'dimension', access: layoutAccess},
+  centerY: {type: 'dimension', access: layoutAccess},
+  baseline: {type: 'sibling', access: layoutAccess},
   elevation: {
-    type: "number",
+    type: 'number',
     default: 0
   },
   font: {
-    type: "font",
+    type: 'font',
     access: {
       set: function(name, value, options) {
         this._nativeSet(name, value === undefined ? null : value);
@@ -311,17 +311,17 @@ var _defaultProperties = {
     },
     default: null
   },
-  backgroundImage: "image",
+  backgroundImage: 'image',
   bounds: {
-    type: "bounds",
+    type: 'bounds',
     access: {
       set: function() {
-        console.warn(this.type + ": Can not set read-only property \"bounds\".");
+        console.warn(this.type + ': Can not set read-only property "bounds".');
       }
     }
   },
   background: {
-    type: "color",
+    type: 'color',
     access: {
       set: function(name, value, options) {
         this._nativeSet(name, value === undefined ? null : value);
@@ -330,27 +330,27 @@ var _defaultProperties = {
     }
   },
   textColor: {
-    type: "color",
+    type: 'color',
     access: {
       set: function(name, value, options) {
-        this._nativeSet("foreground", value === undefined ? null : value);
+        this._nativeSet('foreground', value === undefined ? null : value);
         this._storeProperty(name, value, options);
       },
       get: function(name) {
         var result = this._getStoredProperty(name);
         if (result === undefined) {
-          result = this._nativeGet("foreground");
+          result = this._nativeGet('foreground');
         }
         return result;
       }
     }
   },
   opacity: {
-    type: "opacity",
+    type: 'opacity',
     default: 1
   },
   transform: {
-    type: "transform",
+    type: 'transform',
     default: function() {
       return {
         rotation: 0,
@@ -363,15 +363,15 @@ var _defaultProperties = {
     }
   },
   highlightOnTouch: {
-    type: "boolean",
+    type: 'boolean',
     default: false
   },
   cornerRadius: {
-    type: "number",
+    type: 'number',
     default: 0
   },
   id: {
-    type: "string",
+    type: 'string',
     access: {
       set: function(name, value, options) {
         this._storeProperty(name, value, options);
@@ -382,13 +382,13 @@ var _defaultProperties = {
     }
   },
   class: {
-    type: "string",
+    type: 'string',
     access: {
       set: function(name, value) {
         this._classList = value.trim().split(/\s+/);
       },
       get: function() {
-        return this.classList.join(" ");
+        return this.classList.join(' ');
       }
     }
   },
@@ -406,47 +406,47 @@ var _defaultProperties = {
     }
   },
   win_theme: {
-    type: ["choice", ["default", "light", "dark"]],
-    default: "default"
+    type: ['choice', ['default', 'light', 'dark']],
+    default: 'default'
   }
 };
 
 var defaultGestures = {
-  tap: {type: "tap"},
-  longpress: {type: "longpress"},
-  pan: {type: "pan"},
-  "pan:left": {type: "pan", direction: "left"},
-  "pan:right": {type: "pan", direction: "right"},
-  "pan:up": {type: "pan", direction: "up"},
-  "pan:down": {type: "pan", direction: "down"},
-  "pan:horizontal": {type: "pan", direction: "horizontal"},
-  "pan:vertical": {type: "pan", direction: "vertical"},
-  "swipe:left": {type: "swipe", direction: "left"},
-  "swipe:right": {type: "swipe", direction: "right"},
-  "swipe:up": {type: "swipe", direction: "up"},
-  "swipe:down": {type: "swipe", direction: "down"}
+  tap: {type: 'tap'},
+  longpress: {type: 'longpress'},
+  pan: {type: 'pan'},
+  'pan:left': {type: 'pan', direction: 'left'},
+  'pan:right': {type: 'pan', direction: 'right'},
+  'pan:up': {type: 'pan', direction: 'up'},
+  'pan:down': {type: 'pan', direction: 'down'},
+  'pan:horizontal': {type: 'pan', direction: 'horizontal'},
+  'pan:vertical': {type: 'pan', direction: 'vertical'},
+  'swipe:left': {type: 'swipe', direction: 'left'},
+  'swipe:right': {type: 'swipe', direction: 'right'},
+  'swipe:up': {type: 'swipe', direction: 'up'},
+  'swipe:down': {type: 'swipe', direction: 'down'}
 };
 
 function renderLayoutData() {
   if (this._layoutData) {
     var checkedData = Layout.checkConsistency(this._layoutData);
-    this._nativeSet("layoutData", Layout.resolveReferences(checkedData, this));
+    this._nativeSet('layoutData', Layout.resolveReferences(checkedData, this));
   }
 }
 
 function getGestureEventConfig(name) {
   return {
     listen: function(state) {
-      var gestures = this.get("gestures");
+      var gestures = this.get('gestures');
       if (state) {
         var properties = extend({target: this}, gestures[name]);
         var recognizer = new GestureRecognizer(properties)
-          .on("gesture", gestureListener, {target: this, name: name});
+          .on('gesture', gestureListener, {target: this, name: name});
         if (!this._recognizers) {
           this._recognizers = {};
         }
         this._recognizers[name] = recognizer;
-        this.on("dispose", recognizer.dispose, recognizer);
+        this.on('dispose', recognizer.dispose, recognizer);
       } else if (this._recognizers && name in this._recognizers) {
         this._recognizers[name].dispose();
         delete this._recognizers[name];

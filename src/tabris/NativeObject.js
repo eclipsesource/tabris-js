@@ -1,6 +1,6 @@
-import {extend, extendPrototype, omit, clone} from "./util";
-import {types} from "./property-types";
-import Events from "./Events";
+import {extend, extendPrototype, omit, clone} from './util';
+import {types} from './property-types';
+import Events from './Events';
 
 export default function NativeObject(cid) {
   this.cid = tabris._proxies.register(this, cid);
@@ -10,9 +10,9 @@ extend(NativeObject.prototype, Events, {
 
   set: function(arg1, arg2) {
     if (this._isDisposed) {
-      console.warn("Cannot set property on disposed object");
+      console.warn('Cannot set property on disposed object');
     } else {
-      if (typeof arg1 === "string") {
+      if (typeof arg1 === 'string') {
         this._setProperty(arg1, arg2);
       } else {
         this._setProperties(arg1, arg2 || {});
@@ -23,7 +23,7 @@ extend(NativeObject.prototype, Events, {
 
   get: function(name) {
     if (this._isDisposed) {
-      console.warn("Cannot get property on disposed object");
+      console.warn('Cannot get property on disposed object');
     } else {
       var getter = this._getPropertyGetter(name) || this._getStoredProperty;
       var value = getter.call(this, name);
@@ -43,7 +43,7 @@ extend(NativeObject.prototype, Events, {
     try {
       encodedValue = this._encodeProperty(typeDef, value);
     } catch (ex) {
-      console.warn(this.toString() + ": Ignored unsupported value for property \"" + name + "\": " + ex.message);
+      console.warn(this.toString() + ': Ignored unsupported value for property "' + name + '": ' + ex.message);
       return;
     }
     var setter = this._getPropertySetter(name) || this._storeProperty;
@@ -105,7 +105,7 @@ extend(NativeObject.prototype, Events, {
   _triggerChangeEvent: function(propertyName, newEncodedValue) {
     var typeDef = this._getTypeDef(propertyName);
     var decodedValue = this._decodeProperty(typeDef, newEncodedValue);
-    this.trigger("change:" + propertyName, this, decodedValue);
+    this.trigger('change:' + propertyName, this, decodedValue);
   },
 
   _create: function(properties) {
@@ -127,7 +127,7 @@ extend(NativeObject.prototype, Events, {
   _dispose: function(skipNative) {
     if (!this._isDisposed && !this._inDispose) {
       this._inDispose = true;
-      this.trigger("dispose", this, {});
+      this.trigger('dispose', this, {});
       this._release();
       if (!skipNative) {
         tabris._nativeBridge.destroy(this.cid);
@@ -184,7 +184,7 @@ extend(NativeObject.prototype, Events, {
 
   _checkDisposed: function() {
     if (this._isDisposed) {
-      throw new Error("Object is disposed");
+      throw new Error('Object is disposed');
     }
   },
 
@@ -216,13 +216,13 @@ extend(NativeObject.prototype, Events, {
 NativeObject.extend = function(members, superType) {
   var Type = function(properties) {
     if (!(this instanceof Type)) {
-      throw new Error("Cannot call constructor as a function");
+      throw new Error('Cannot call constructor as a function');
     }
     if (Type._cid) {
       NativeObject.call(this, Type._cid);
     } else {
       if (!global.tabris._nativeBridge) {
-        throw new Error("tabris.js not started");
+        throw new Error('tabris.js not started');
       }
       NativeObject.call(this);
       this._create(properties || {});
@@ -246,9 +246,9 @@ function normalizeEvents(events) {
   var result = {};
   for (var event in events) {
     var entry = events[event];
-    result[event] = typeof entry === "object" ? entry : {};
+    result[event] = typeof entry === 'object' ? entry : {};
     if (!result[event].name) {
-      result[event].name = typeof entry === "string" ? entry : event;
+      result[event].name = typeof entry === 'string' ? entry : event;
     }
     if (result[event].alias) {
       result[event].originalName = event;
@@ -267,11 +267,11 @@ function normalizeProperties(properties) {
 }
 
 function normalizeProperty(property) {
-  var shortHand = (typeof property === "string" || Array.isArray(property));
+  var shortHand = (typeof property === 'string' || Array.isArray(property));
   var setter = property.access && property.access.set || defaultSetter;
   var getter = property.access && property.access.get || defaultGetter;
   return {
-    type: resolveType((shortHand ? property : property.type) || "any"),
+    type: resolveType((shortHand ? property : property.type) || 'any'),
     default: property.default,
     nocache: property.nocache,
     set: setter,
@@ -281,13 +281,13 @@ function normalizeProperty(property) {
 
 function resolveType(type) {
   var typeDef = type;
-  if (typeof type === "string") {
+  if (typeof type === 'string') {
     typeDef = types[type];
   } else if (Array.isArray(type)) {
     typeDef = types[type[0]];
   }
-  if (typeof typeDef !== "object") {
-    throw new Error("Can not find property type " + type);
+  if (typeof typeDef !== 'object') {
+    throw new Error('Can not find property type ' + type);
   }
   if (Array.isArray(type)) {
     typeDef = clone(typeDef);
@@ -362,10 +362,10 @@ function valueOf(value) {
 }
 
 var staticMembers = {
-  "_events": {},
-  "_initProperties": {},
-  "_type": null,
-  "_cid": null,
-  "_properties": {},
-  "_supportsChildren": false
+  '_events': {},
+  '_initProperties': {},
+  '_type': null,
+  '_cid': null,
+  '_properties': {},
+  '_supportsChildren': false
 };

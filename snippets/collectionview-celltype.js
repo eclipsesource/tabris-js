@@ -5,19 +5,19 @@ new tabris.CollectionView({
     return item.type;
   },
   itemHeight: function(item, type) {
-    return type === "section" ? 48 : 24;
+    return type === 'section' ? 48 : 24;
   },
   initializeCell: function(cell, type) {
     var textView = new tabris.TextView({
       layoutData: {top: 2, bottom: 2, left: 5, right: 5},
-      font: type === "section" ? "bold 28px" : "14px",
-      alignment: type === "section" ? "center" : "left"
+      font: type === 'section' ? 'bold 28px' : '14px',
+      alignment: type === 'section' ? 'center' : 'left'
     }).appendTo(cell);
-    if (type === "section") {
-      cell.set("background", "#cecece");
+    if (type === 'section') {
+      cell.set('background', '#cecece');
     }
-    cell.on("change:item", function(widget, item) {
-      textView.set("text", item.name);
+    cell.on('change:item', function(widget, item) {
+      textView.set('text', item.name);
     });
   }
 }).appendTo(tabris.ui.contentView);
@@ -25,10 +25,10 @@ new tabris.CollectionView({
 function createItems() {
   var count = 1;
   var items = [];
-  ["Section 1", "Section 2", "Section 3"].forEach(function(name) {
-    items.push({name: name, type: "section"});
+  ['Section 1', 'Section 2', 'Section 3'].forEach(function(name) {
+    items.push({name: name, type: 'section'});
     for (var i = 0; i < 25; i++) {
-      items.push({name: "Item " + count++, type: "item"});
+      items.push({name: 'Item ' + count++, type: 'item'});
     }
   });
   return items;

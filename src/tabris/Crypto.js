@@ -1,7 +1,7 @@
-import NativeObject from "./NativeObject";
+import NativeObject from './NativeObject';
 
 var _Crypto = NativeObject.extend({
-  _type: "tabris.Crypto"
+  _type: 'tabris.Crypto'
 });
 
 var proxy;
@@ -14,15 +14,15 @@ Crypto.prototype = {
 
   getRandomValues: function(typedArray) {
     if (arguments.length === 0) {
-      throw new Error("Not enough arguments to Crypto.getRandomValues");
+      throw new Error('Not enough arguments to Crypto.getRandomValues');
     }
     if (!isIntArray(typedArray)) {
-      throw new Error("Unsupported type in Crypto.getRandomValues");
+      throw new Error('Unsupported type in Crypto.getRandomValues');
     }
     var byteLength = typedArray.byteLength;
-    var values = proxy._nativeCall("getRandomValues", {byteLength: byteLength});
+    var values = proxy._nativeCall('getRandomValues', {byteLength: byteLength});
     if (values.length !== byteLength) {
-      throw new Error("Not enough random bytes available");
+      throw new Error('Not enough random bytes available');
     }
     new Uint8Array(typedArray.buffer).set(values);
   }

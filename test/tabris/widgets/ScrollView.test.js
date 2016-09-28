@@ -1,16 +1,16 @@
-import {expect, restore, spy, stub} from "../../test";
-import ProxyStore from "../../../src/tabris/ProxyStore";
-import ClientStub from "../ClientStub";
-import ScrollView from "../../../src/tabris/widgets/ScrollView";
-import Composite from "../../../src/tabris/widgets/Composite";
-import NativeBridge from "../../../src/tabris/NativeBridge";
+import {expect, restore, spy, stub} from '../../test';
+import ProxyStore from '../../../src/tabris/ProxyStore';
+import ClientStub from '../ClientStub';
+import ScrollView from '../../../src/tabris/widgets/ScrollView';
+import Composite from '../../../src/tabris/widgets/Composite';
+import NativeBridge from '../../../src/tabris/NativeBridge';
 
-describe("ScrollView", function() {
+describe('ScrollView', function() {
 
   let client, scrollView;
 
   let checkListen = function(event) {
-    let listen = client.calls({op: "listen", id: scrollView.cid});
+    let listen = client.calls({op: 'listen', id: scrollView.cid});
     expect(listen.length).to.equal(1);
     expect(listen[0].event).to.equal(event);
     expect(listen[0].listen).to.equal(true);
@@ -28,17 +28,17 @@ describe("ScrollView", function() {
 
   afterEach(restore);
 
-  describe("when a ScrollView is created", function() {
+  describe('when a ScrollView is created', function() {
 
     beforeEach(function() {
       scrollView = new ScrollView();
     });
 
-    it("defaults to vertical direction", function() {
-      expect(scrollView.direction).to.equal("vertical");
+    it('defaults to vertical direction', function() {
+      expect(scrollView.direction).to.equal('vertical');
     });
 
-    describe("when a child is appended", function() {
+    describe('when a child is appended', function() {
 
       let result, child;
 
@@ -49,11 +49,11 @@ describe("ScrollView", function() {
       });
 
       it("sets child's parent to scrollView", function() {
-        let call = client.calls({op: "set", id: child.cid})[0];
+        let call = client.calls({op: 'set', id: child.cid})[0];
         expect(call.properties.parent).to.equal(scrollView.cid);
       });
 
-      it("returns self to allow chaining", function() {
+      it('returns self to allow chaining', function() {
         expect(result).to.equal(scrollView);
       });
 
@@ -66,58 +66,58 @@ describe("ScrollView", function() {
     let createCalls;
 
     beforeEach(function() {
-      scrollView = new ScrollView({direction: "vertical"});
-      createCalls = client.calls({op: "create"});
+      scrollView = new ScrollView({direction: 'vertical'});
+      createCalls = client.calls({op: 'create'});
       client.resetCalls();
     });
 
-    it("creates a vertical ScrolledView", function() {
-      expect(createCalls[0].properties.direction).to.equal("vertical");
-      expect(scrollView.get("direction")).to.equal("vertical");
+    it('creates a vertical ScrolledView', function() {
+      expect(createCalls[0].properties.direction).to.equal('vertical');
+      expect(scrollView.get('direction')).to.equal('vertical');
     });
 
-    it("offsetY is taken from native", function() {
-      stub(client, "get").returns(42);
-      expect(scrollView.get("offsetY")).to.equal(42);
+    it('offsetY is taken from native', function() {
+      stub(client, 'get').returns(42);
+      expect(scrollView.get('offsetY')).to.equal(42);
     });
 
-    it("offsetY can not be set", function() {
-      scrollView.set("offsetY", 23);
+    it('offsetY can not be set', function() {
+      scrollView.set('offsetY', 23);
 
-      let setCalls = client.calls({id: scrollView.cid, op: "set"});
+      let setCalls = client.calls({id: scrollView.cid, op: 'set'});
 
       expect(setCalls.length).to.equal(0);
     });
 
-    it("fires scroll event", function() {
+    it('fires scroll event', function() {
       let listener = spy();
-      scrollView.on("scrollY", listener);
+      scrollView.on('scrollY', listener);
 
-      tabris._notify(scrollView.cid, "scrollY", 42);
+      tabris._notify(scrollView.cid, 'scrollY', 42);
 
-      checkListen("scrollY");
+      checkListen('scrollY');
       expect(listener).to.have.been.called;
       expect(listener.firstCall.args[0]).to.equal(scrollView);
       expect(listener.firstCall.args[1]).to.equal(42);
     });
 
-    it("fires change:offsetY event", function() {
+    it('fires change:offsetY event', function() {
       let listener = spy();
-      scrollView.on("change:offsetY", listener);
+      scrollView.on('change:offsetY', listener);
 
-      tabris._notify(scrollView.cid, "scrollY", 42);
+      tabris._notify(scrollView.cid, 'scrollY', 42);
 
-      checkListen("scrollY");
+      checkListen('scrollY');
       expect(listener).to.have.been.called;
       expect(listener.firstCall.args[0]).to.equal(scrollView);
       expect(listener.firstCall.args[1]).to.equal(42);
     });
 
-    it("does not fire change:offsetX event", function() {
+    it('does not fire change:offsetX event', function() {
       let listener = spy();
-      scrollView.on("change:offsetX", listener);
+      scrollView.on('change:offsetX', listener);
 
-      tabris._notify(scrollView.cid, "scrollY", 42);
+      tabris._notify(scrollView.cid, 'scrollY', 42);
 
       expect(listener).not.to.have.been.called;
     });
@@ -129,82 +129,82 @@ describe("ScrollView", function() {
     let createCalls;
 
     beforeEach(function() {
-      scrollView = new ScrollView({direction: "horizontal"});
-      createCalls = client.calls({op: "create"});
+      scrollView = new ScrollView({direction: 'horizontal'});
+      createCalls = client.calls({op: 'create'});
       client.resetCalls();
     });
 
-    it("creates a horizontal ScrollView", function() {
-      expect(createCalls[0].properties.direction).to.equal("horizontal");
-      expect(scrollView.get("direction")).to.equal("horizontal");
+    it('creates a horizontal ScrollView', function() {
+      expect(createCalls[0].properties.direction).to.equal('horizontal');
+      expect(scrollView.get('direction')).to.equal('horizontal');
     });
 
-    it("offsetX is taken from native", function() {
-      stub(client, "get").returns(23);
-      expect(scrollView.get("offsetX")).to.equal(23);
+    it('offsetX is taken from native', function() {
+      stub(client, 'get').returns(23);
+      expect(scrollView.get('offsetX')).to.equal(23);
     });
 
-    it("offsetX can not be set", function() {
-      scrollView.set("offsetX", 23);
+    it('offsetX can not be set', function() {
+      scrollView.set('offsetX', 23);
 
-      let setCalls = client.calls({id: scrollView.cid, op: "set"});
+      let setCalls = client.calls({id: scrollView.cid, op: 'set'});
 
       expect(setCalls.length).to.equal(0);
     });
 
-    it("fires scrollX event", function() {
+    it('fires scrollX event', function() {
       let listener = spy();
-      scrollView.on("scrollX", listener);
+      scrollView.on('scrollX', listener);
 
-      tabris._notify(scrollView.cid, "scrollX", 42);
+      tabris._notify(scrollView.cid, 'scrollX', 42);
 
-      checkListen("scrollX");
+      checkListen('scrollX');
       expect(listener).to.have.been.called;
       expect(listener.firstCall.args[0]).to.equal(scrollView);
       expect(listener.firstCall.args[1]).to.equal(42);
     });
 
-    it("fires change:offsetX event", function() {
+    it('fires change:offsetX event', function() {
       let listener = spy();
-      scrollView.on("change:offsetX", listener);
+      scrollView.on('change:offsetX', listener);
 
-      tabris._notify(scrollView.cid, "scrollX", 42);
+      tabris._notify(scrollView.cid, 'scrollX', 42);
 
-      checkListen("scrollX");
+      checkListen('scrollX');
       expect(listener).to.have.been.called;
       expect(listener.firstCall.args[0]).to.equal(scrollView);
       expect(listener.firstCall.args[1]).to.equal(42);
     });
 
-    it("does not fire change:offsetY event", function() {
+    it('does not fire change:offsetY event', function() {
       let listener = spy();
-      scrollView.on("change:offsetY", listener);
+      scrollView.on('change:offsetY', listener);
 
-      tabris._notify(scrollView.cid, "scrollX", 43);
+      tabris._notify(scrollView.cid, 'scrollX', 43);
 
       expect(listener).not.to.have.been.called;
     });
 
   });
 
-  describe("when scrollToX is invoked", function() {
+  describe('when scrollToX is invoked', function() {
 
     beforeEach(function() {
       scrollView = new ScrollView();
     });
 
-    it("returns ScrollView", function() {
+    it('returns ScrollView', function() {
       expect(scrollView.scrollToX(100)).to.equal(scrollView);
     });
 
     it("CALLs 'scrollToX' with default options", function() {
       scrollView.scrollToX(100);
 
-      let calls = client.calls({op: "call", id: scrollView.cid});
+      let calls = client.calls({op: 'call', id: scrollView.cid});
       expect(calls).to.deep.equal([{
-        op: "call",
+        op: 'call',
         id: scrollView.cid,
-        method: "scrollToX",
+        method: 'scrollToX',
         parameters: {
           offsetX: 100,
           animate: true
@@ -215,11 +215,11 @@ describe("ScrollView", function() {
     it("CALLs 'scrollToX' with options", function() {
       scrollView.scrollToX(101, {animate: false});
 
-      let calls = client.calls({op: "call", id: scrollView.cid});
+      let calls = client.calls({op: 'call', id: scrollView.cid});
       expect(calls).to.deep.equal([{
-        op: "call",
+        op: 'call',
         id: scrollView.cid,
-        method: "scrollToX",
+        method: 'scrollToX',
         parameters: {
           offsetX: 101,
           animate: false
@@ -230,11 +230,11 @@ describe("ScrollView", function() {
     it("CALLs 'scrollToX' with normalized options", function() {
       scrollView.scrollToX(101, {animate: 1});
 
-      let calls = client.calls({op: "call", id: scrollView.cid});
+      let calls = client.calls({op: 'call', id: scrollView.cid});
       expect(calls).to.deep.equal([{
-        op: "call",
+        op: 'call',
         id: scrollView.cid,
-        method: "scrollToX",
+        method: 'scrollToX',
         parameters: {
           offsetX: 101,
           animate: true
@@ -243,13 +243,13 @@ describe("ScrollView", function() {
     });
 
     it("CALLs 'scrollToX' with filtered options", function() {
-      scrollView.scrollToX(101, {foo: "bar", animate: true});
+      scrollView.scrollToX(101, {foo: 'bar', animate: true});
 
-      let calls = client.calls({op: "call", id: scrollView.cid});
+      let calls = client.calls({op: 'call', id: scrollView.cid});
       expect(calls).to.deep.equal([{
-        op: "call",
+        op: 'call',
         id: scrollView.cid,
-        method: "scrollToX",
+        method: 'scrollToX',
         parameters: {
           offsetX: 101,
           animate: true
@@ -260,11 +260,11 @@ describe("ScrollView", function() {
     it("CALLs 'scrollToX' with autocompleted options", function() {
       scrollView.scrollToX(101, {});
 
-      let calls = client.calls({op: "call", id: scrollView.cid});
+      let calls = client.calls({op: 'call', id: scrollView.cid});
       expect(calls).to.deep.equal([{
-        op: "call",
+        op: 'call',
         id: scrollView.cid,
-        method: "scrollToX",
+        method: 'scrollToX',
         parameters: {
           offsetX: 101,
           animate: true
@@ -274,24 +274,24 @@ describe("ScrollView", function() {
 
   });
 
-  describe("when scrollToY is invoked", function() {
+  describe('when scrollToY is invoked', function() {
 
     beforeEach(function() {
       scrollView = new ScrollView();
     });
 
-    it("returns ScrollView", function() {
+    it('returns ScrollView', function() {
       expect(scrollView.scrollToY(100)).to.equal(scrollView);
     });
 
     it("CALLs 'scrollToY' with default options", function() {
       scrollView.scrollToY(100);
 
-      let calls = client.calls({op: "call", id: scrollView.cid});
+      let calls = client.calls({op: 'call', id: scrollView.cid});
       expect(calls).to.deep.equal([{
-        op: "call",
+        op: 'call',
         id: scrollView.cid,
-        method: "scrollToY",
+        method: 'scrollToY',
         parameters: {
           offsetY: 100,
           animate: true
@@ -302,11 +302,11 @@ describe("ScrollView", function() {
     it("CALLs 'scrollToY' with options", function() {
       scrollView.scrollToY(101, {animate: false});
 
-      let calls = client.calls({op: "call", id: scrollView.cid});
+      let calls = client.calls({op: 'call', id: scrollView.cid});
       expect(calls).to.deep.equal([{
-        op: "call",
+        op: 'call',
         id: scrollView.cid,
-        method: "scrollToY",
+        method: 'scrollToY',
         parameters: {
           offsetY: 101,
           animate: false
@@ -317,11 +317,11 @@ describe("ScrollView", function() {
     it("CALLs 'scrollToY' with normalized options", function() {
       scrollView.scrollToY(101, {animate: 1});
 
-      let calls = client.calls({op: "call", id: scrollView.cid});
+      let calls = client.calls({op: 'call', id: scrollView.cid});
       expect(calls).to.deep.equal([{
-        op: "call",
+        op: 'call',
         id: scrollView.cid,
-        method: "scrollToY",
+        method: 'scrollToY',
         parameters: {
           offsetY: 101,
           animate: true
@@ -330,13 +330,13 @@ describe("ScrollView", function() {
     });
 
     it("CALLs 'scrollToY' with filtered options", function() {
-      scrollView.scrollToY(101, {foo: "bar", animate: true});
+      scrollView.scrollToY(101, {foo: 'bar', animate: true});
 
-      let calls = client.calls({op: "call", id: scrollView.cid});
+      let calls = client.calls({op: 'call', id: scrollView.cid});
       expect(calls).to.deep.equal([{
-        op: "call",
+        op: 'call',
         id: scrollView.cid,
-        method: "scrollToY",
+        method: 'scrollToY',
         parameters: {
           offsetY: 101,
           animate: true
@@ -347,11 +347,11 @@ describe("ScrollView", function() {
     it("CALLs 'scrollToY' with autocompleted options", function() {
       scrollView.scrollToY(101, {});
 
-      let calls = client.calls({op: "call", id: scrollView.cid});
+      let calls = client.calls({op: 'call', id: scrollView.cid});
       expect(calls).to.deep.equal([{
-        op: "call",
+        op: 'call',
         id: scrollView.cid,
-        method: "scrollToY",
+        method: 'scrollToY',
         parameters: {
           offsetY: 101,
           animate: true

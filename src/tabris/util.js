@@ -60,7 +60,7 @@ export function extendPrototype(fn, target) {
   var Helper = function() {};
   Helper.prototype = fn.prototype;
   return extend(new Helper(), target, {
-    "_super": function(method, params) {
+    '_super': function(method, params) {
       return fn.prototype[method].apply(this, params);
     }
   });

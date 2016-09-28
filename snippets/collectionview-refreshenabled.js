@@ -6,11 +6,11 @@ var view = new tabris.CollectionView({
     var textView = new tabris.TextView({
       layoutData: {top: 2, bottom: 2, left: 5, right: 5}
     }).appendTo(cell);
-    cell.on("change:item", function(widget, item) {
-      textView.set("text", item);
+    cell.on('change:item', function(widget, item) {
+      textView.set('text', item);
     });
   }
-}).on("refresh", function() {
+}).on('refresh', function() {
   loadItems();
 }).appendTo(tabris.ui.contentView);
 
@@ -19,13 +19,13 @@ loadItems();
 function loadItems() {
   view.set({
     refreshIndicator: true,
-    refreshMessage: "loading..."
+    refreshMessage: 'loading...'
   });
   setTimeout(function() {
     view.set({
       items: createNewItems(),
       refreshIndicator: false,
-      refreshMessage: ""
+      refreshMessage: ''
     });
   }, 1000);
 }
@@ -34,7 +34,7 @@ var count = 1;
 function createNewItems() {
   var items = [];
   for (var i = 0; i < 25; i++) {
-    items.push("Item " + count++);
+    items.push('Item ' + count++);
   }
   return items;
 }

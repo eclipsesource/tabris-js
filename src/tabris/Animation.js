@@ -1,29 +1,29 @@
-import {extend} from "./util";
-import NativeObject from "./NativeObject";
+import {extend} from './util';
+import NativeObject from './NativeObject';
 
 var Animation = NativeObject.extend({
 
-  _name: "_Animation",
+  _name: '_Animation',
 
-  _type: "tabris.Animation",
+  _type: 'tabris.Animation',
 
   _create: function() {
-    this._super("_create", arguments);
-    this._nativeListen("Start", true);
-    this._nativeListen("Completion", true);
+    this._super('_create', arguments);
+    this._nativeListen('Start', true);
+    this._nativeListen('Completion', true);
     return this;
   },
 
   _events: {
     Start: {
       trigger: function() {
-        this._target.trigger("animationstart", this._target, this._options);
+        this._target.trigger('animationstart', this._target, this._options);
       }
     },
     Completion: {
       trigger: function() {
-        this._target.off("dispose", this.abort, this);
-        this._target.trigger("animationend", this._target, this._options);
+        this._target.off('dispose', this.abort, this);
+        this._target.trigger('animationend', this._target, this._options);
         if (this._resolve) {
           this._resolve();
         }
@@ -33,17 +33,17 @@ var Animation = NativeObject.extend({
   },
 
   _properties: {
-    properties: "any",
-    delay: "natural",
-    duration: "natural",
-    repeat: "natural",
-    reverse: "boolean",
-    easing: ["choice", ["linear", "ease-in", "ease-out", "ease-in-out"]],
-    target: "proxy"
+    properties: 'any',
+    delay: 'natural',
+    duration: 'natural',
+    repeat: 'natural',
+    reverse: 'boolean',
+    easing: ['choice', ['linear', 'ease-in', 'ease-out', 'ease-in-out']],
+    target: 'proxy'
   },
 
   start: function() {
-    this._nativeCall("start");
+    this._nativeCall('start');
   },
 
   abort: function() {
@@ -64,15 +64,15 @@ export function animate(properties, options) {
           this._encodeProperty(this._getTypeDef(property), properties[property]);
         this._storeProperty(property, animatedProps[property], options);
       } catch (ex) {
-        console.warn(this.type + ": Ignored invalid animation property value for \"" + property + "\"");
+        console.warn(this.type + ': Ignored invalid animation property value for "' + property + '"');
       }
     } else {
-      console.warn(this.type + ": Ignored invalid animation property \"" + property + "\"");
+      console.warn(this.type + ': Ignored invalid animation property "' + property + '"');
     }
   }
   for (var option in options) {
-    if (!Animation._properties[option] && option !== "name") {
-      console.warn(this.type + ": Ignored invalid animation option \"" + option + "\"");
+    if (!Animation._properties[option] && option !== 'name') {
+      console.warn(this.type + ': Ignored invalid animation option "' + option + '"');
     }
   }
   var animation = new Animation(extend({}, options, {
@@ -81,7 +81,7 @@ export function animate(properties, options) {
   }));
   animation._target = this;
   animation._options = options;
-  this.on("dispose", animation.abort, animation);
+  this.on('dispose', animation.abort, animation);
   animation.start();
   return new Promise(function(resolve, reject) {
     animation._resolve = resolve;

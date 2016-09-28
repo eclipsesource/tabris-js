@@ -1,51 +1,51 @@
-import Widget from "../Widget";
+import Widget from '../Widget';
 
 export default Widget.extend({
 
-  _name: "ScrollView",
+  _name: 'ScrollView',
 
-  _type: "tabris.ScrollView",
+  _type: 'tabris.ScrollView',
 
   _supportsChildren: true,
 
   _properties: {
     direction: {
-      type: ["choice", ["horizontal", "vertical"]],
-      default: "vertical"
+      type: ['choice', ['horizontal', 'vertical']],
+      default: 'vertical'
     },
-    offsetX: {type: "number", nocache: true, access: {set: function() {}}},
-    offsetY: {type: "number", nocache: true, access: {set: function() {}}}
+    offsetX: {type: 'number', nocache: true, access: {set: function() {}}},
+    offsetY: {type: 'number', nocache: true, access: {set: function() {}}}
   },
 
   _events: {
     scrollX: {
-      alias: "change:offsetX",
+      alias: 'change:offsetX',
       trigger: function(offset) {
-        this._triggerChangeEvent("offsetX", offset);
-        this.trigger("scrollX", this, offset, {});
+        this._triggerChangeEvent('offsetX', offset);
+        this.trigger('scrollX', this, offset, {});
       }
     },
     scrollY: {
-      alias: "change:offsetY",
+      alias: 'change:offsetY',
       trigger: function(offset) {
-        this._triggerChangeEvent("offsetY", offset);
-        this.trigger("scrollY", this, offset, {});
+        this._triggerChangeEvent('offsetY', offset);
+        this.trigger('scrollY', this, offset, {});
       }
     }
   },
 
   scrollToY: function(offsetY, options) {
-    this._nativeCall("scrollToY", {
+    this._nativeCall('scrollToY', {
       offsetY: offsetY,
-      animate: options && "animate" in options ? !!options.animate : true
+      animate: options && 'animate' in options ? !!options.animate : true
     });
     return this;
   },
 
   scrollToX: function(offsetX, options) {
-    this._nativeCall("scrollToX", {
+    this._nativeCall('scrollToX', {
       offsetX: offsetX,
-      animate: options && "animate" in options ? !!options.animate : true
+      animate: options && 'animate' in options ? !!options.animate : true
     });
     return this;
   }

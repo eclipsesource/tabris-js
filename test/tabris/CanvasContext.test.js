@@ -1,14 +1,14 @@
-import {expect, stub, spy, restore} from "../test";
-import ProxyStore from "../../src/tabris/ProxyStore";
-import NativeBridge from "../../src/tabris/NativeBridge";
-import GC from "../../src/tabris/GC";
-import ClientStub from "./ClientStub";
-import CanvasContext from "../../src/tabris/CanvasContext";
-import ImageData from "../../src/tabris/ImageData";
-import Canvas from "../../src/tabris/widgets/Canvas";
-import Events from "../../src/tabris/Events";
+import {expect, stub, spy, restore} from '../test';
+import ProxyStore from '../../src/tabris/ProxyStore';
+import NativeBridge from '../../src/tabris/NativeBridge';
+import GC from '../../src/tabris/GC';
+import ClientStub from './ClientStub';
+import CanvasContext from '../../src/tabris/CanvasContext';
+import ImageData from '../../src/tabris/ImageData';
+import Canvas from '../../src/tabris/widgets/Canvas';
+import Events from '../../src/tabris/Events';
 
-describe("CanvasContext", function() {
+describe('CanvasContext', function() {
 
   let client;
   let ctx;
@@ -21,7 +21,7 @@ describe("CanvasContext", function() {
       off: () => {},
       _proxies: new ProxyStore()
     }, Events);
-    global.device = {platform: "Android"};
+    global.device = {platform: 'Android'};
     global.tabris._nativeBridge = new NativeBridge(client);
     gc = new GC();
     ctx = new CanvasContext(gc);
@@ -33,16 +33,16 @@ describe("CanvasContext", function() {
   });
 
   function flush() {
-    tabris.trigger("flush");
+    tabris.trigger('flush');
   }
 
   function getLastPacket() {
-    let calls = client.calls({id: gc.cid, op: "call", method: "draw"});
+    let calls = client.calls({id: gc.cid, op: 'call', method: 'draw'});
     return calls.length ? calls[calls.length - 1].parameters.packedOperations : undefined;
   }
 
   function decodeLastPacket() {
-    let calls = client.calls({id: gc.cid, op: "call", method: "draw"});
+    let calls = client.calls({id: gc.cid, op: 'call', method: 'draw'});
     return calls.length ? decode(calls[calls.length - 1].parameters.packedOperations) : {};
   }
 
@@ -50,7 +50,7 @@ describe("CanvasContext", function() {
     let values = {};
     let opcodes = packet[0];
     values.ops = packet[1].map(opIndex => opcodes[opIndex]);
-    ["doubles", "booleans", "strings", "ints"].forEach((name, index) => {
+    ['doubles', 'booleans', 'strings', 'ints'].forEach((name, index) => {
       let slot = packet[index + 2];
       if (slot.length) {
         values[name] = slot;
@@ -59,7 +59,7 @@ describe("CanvasContext", function() {
     return values;
   }
 
-  describe("getContext", function() {
+  describe('getContext', function() {
 
     let canvas;
 
@@ -68,58 +68,58 @@ describe("CanvasContext", function() {
       client.resetCalls();
     });
 
-    it("returns null without \"2d\" parameter", function() {
-      expect(canvas.getContext("foo", 100, 200)).to.equal(null);
+    it('returns null without "2d" parameter', function() {
+      expect(canvas.getContext('foo', 100, 200)).to.equal(null);
     });
 
-    it("creates a native GC with parent", function() {
-      canvas.getContext("2d", 100, 200);
+    it('creates a native GC with parent', function() {
+      canvas.getContext('2d', 100, 200);
 
-      let createCalls = client.calls({op: "create", type: "rwt.widgets.GC"});
+      let createCalls = client.calls({op: 'create', type: 'rwt.widgets.GC'});
       expect(createCalls.length).to.equal(1);
       expect(createCalls[0].properties.parent).to.equal(canvas.cid);
     });
 
-    it("creates and returns graphics context", function() {
-      let ctx = canvas.getContext("2d", 100, 200);
+    it('creates and returns graphics context', function() {
+      let ctx = canvas.getContext('2d', 100, 200);
 
       expect(ctx).to.be.an.instanceof(CanvasContext);
     });
 
-    it("returns same instance everytime", function() {
-      let ctx1 = canvas.getContext("2d", 100, 200);
+    it('returns same instance everytime', function() {
+      let ctx1 = canvas.getContext('2d', 100, 200);
 
-      let ctx2 = canvas.getContext("2d", 100, 200);
+      let ctx2 = canvas.getContext('2d', 100, 200);
 
       expect(ctx2).to.equal(ctx1);
     });
 
-    it("calls init", function() {
-      canvas.getContext("2d", 100, 200);
+    it('calls init', function() {
+      canvas.getContext('2d', 100, 200);
 
-      let call = client.calls({op: "call", method: "init"})[0];
+      let call = client.calls({op: 'call', method: 'init'})[0];
       expect(call.parameters.width).to.eql(100);
       expect(call.parameters.height).to.eql(200);
     });
 
-    it("calls init everytime", function() {
-      canvas.getContext("2d", 100, 200);
+    it('calls init everytime', function() {
+      canvas.getContext('2d', 100, 200);
 
-      canvas.getContext("2d", 200, 100);
+      canvas.getContext('2d', 200, 100);
 
-      let call = client.calls({op: "call", method: "init"})[1];
+      let call = client.calls({op: 'call', method: 'init'})[1];
       expect(call.parameters.width).to.eql(200);
       expect(call.parameters.height).to.eql(100);
     });
 
-    it("updates width and height in canvas dummy", function() {
-      ctx = canvas.getContext("2d", 100, 200);
+    it('updates width and height in canvas dummy', function() {
+      ctx = canvas.getContext('2d', 100, 200);
 
       expect(ctx.canvas.width).to.eql(100);
       expect(ctx.canvas.height).to.eql(200);
     });
 
-    it("allows to set canvas.style attributes", function() {
+    it('allows to set canvas.style attributes', function() {
       // Used by third party libraries, ensure this doesn't crash
       ctx.canvas.style.width = 23;
       expect(ctx.canvas.style.width).to.equal(23);
@@ -127,289 +127,289 @@ describe("CanvasContext", function() {
 
   });
 
-  describe("property", function() {
+  describe('property', function() {
 
-    describe("lineWidth", function() {
+    describe('lineWidth', function() {
 
-      it("defaults to 1", function() {
+      it('defaults to 1', function() {
         expect(ctx.lineWidth).to.eql(1);
       });
 
-      it("accepts changes", function() {
+      it('accepts changes', function() {
         ctx.lineWidth = 2;
 
         expect(ctx.lineWidth).to.eql(2);
       });
 
-      it("renders changes", function() {
+      it('renders changes', function() {
         ctx.lineWidth = 2;
         flush();
 
-        expect(decodeLastPacket()).to.eql({ops: ["lineWidth"], doubles: [2]});
+        expect(decodeLastPacket()).to.eql({ops: ['lineWidth'], doubles: [2]});
       });
 
-      it("ignores zero and negative values, but prints a warning", function() {
-        spy(console, "warn");
+      it('ignores zero and negative values, but prints a warning', function() {
+        spy(console, 'warn');
         ctx.lineWidth = 3;
 
         ctx.lineWidth = 0;
         ctx.lineWidth = -1;
 
         expect(ctx.lineWidth).to.eql(3);
-        expect(console.warn).to.have.been.calledWith("Unsupported value for lineWidth: 0");
-        expect(console.warn).to.have.been.calledWith("Unsupported value for lineWidth: -1");
+        expect(console.warn).to.have.been.calledWith('Unsupported value for lineWidth: 0');
+        expect(console.warn).to.have.been.calledWith('Unsupported value for lineWidth: -1');
       });
 
     });
 
-    describe("lineCap", function() {
+    describe('lineCap', function() {
 
       it("defaults to 'butt'", function() {
-        expect(ctx.lineCap).to.eql("butt");
+        expect(ctx.lineCap).to.eql('butt');
       });
 
-      it("accepts changes", function() {
-        ctx.lineCap = "round";
+      it('accepts changes', function() {
+        ctx.lineCap = 'round';
 
-        expect(ctx.lineCap).to.eql("round");
+        expect(ctx.lineCap).to.eql('round');
       });
 
-      it("renders changes", function() {
-        ctx.lineCap = "round";
+      it('renders changes', function() {
+        ctx.lineCap = 'round';
         flush();
 
-        expect(decodeLastPacket()).to.eql({ops: ["lineCap"], strings: ["round"]});
+        expect(decodeLastPacket()).to.eql({ops: ['lineCap'], strings: ['round']});
       });
 
-      it("ignores unknown values, but prints a warning", function() {
-        spy(console, "warn");
-        ctx.lineCap = "round";
+      it('ignores unknown values, but prints a warning', function() {
+        spy(console, 'warn');
+        ctx.lineCap = 'round';
 
-        ctx.lineCap = "foo";
+        ctx.lineCap = 'foo';
 
-        expect(ctx.lineCap).to.eql("round");
-        expect(console.warn).to.have.been.calledWith("Unsupported value for lineCap: foo");
+        expect(ctx.lineCap).to.eql('round');
+        expect(console.warn).to.have.been.calledWith('Unsupported value for lineCap: foo');
       });
 
     });
 
-    describe("lineJoin", function() {
+    describe('lineJoin', function() {
 
       it("defaults to 'miter'", function() {
-        expect(ctx.lineJoin).to.eql("miter");
+        expect(ctx.lineJoin).to.eql('miter');
       });
 
-      it("accepts changes", function() {
-        ctx.lineJoin = "round";
+      it('accepts changes', function() {
+        ctx.lineJoin = 'round';
 
-        expect(ctx.lineJoin).to.eql("round");
+        expect(ctx.lineJoin).to.eql('round');
       });
 
-      it("renders changes", function() {
-        ctx.lineJoin = "round";
+      it('renders changes', function() {
+        ctx.lineJoin = 'round';
         flush();
 
-        expect(decodeLastPacket()).to.eql({ops: ["lineJoin"], strings: ["round"]});
+        expect(decodeLastPacket()).to.eql({ops: ['lineJoin'], strings: ['round']});
       });
 
-      it("ignores unknown values, but prints a warning", function() {
-        spy(console, "warn");
-        ctx.lineJoin = "round";
+      it('ignores unknown values, but prints a warning', function() {
+        spy(console, 'warn');
+        ctx.lineJoin = 'round';
 
-        ctx.lineJoin = "foo";
+        ctx.lineJoin = 'foo';
 
-        expect(ctx.lineJoin).to.eql("round");
-        expect(console.warn).to.have.been.calledWith("Unsupported value for lineJoin: foo");
+        expect(ctx.lineJoin).to.eql('round');
+        expect(console.warn).to.have.been.calledWith('Unsupported value for lineJoin: foo');
       });
 
     });
 
-    describe("fillStyle", function() {
+    describe('fillStyle', function() {
 
-      it("defaults to black", function() {
-        expect(ctx.fillStyle).to.eql("rgba(0, 0, 0, 1)");
+      it('defaults to black', function() {
+        expect(ctx.fillStyle).to.eql('rgba(0, 0, 0, 1)');
       });
 
-      it("accepts changes", function() {
-        ctx.fillStyle = "red";
+      it('accepts changes', function() {
+        ctx.fillStyle = 'red';
 
-        expect(ctx.fillStyle).to.eql("rgba(255, 0, 0, 1)");
+        expect(ctx.fillStyle).to.eql('rgba(255, 0, 0, 1)');
       });
 
-      it("renders changes", function() {
-        ctx.fillStyle = "red";
+      it('renders changes', function() {
+        ctx.fillStyle = 'red';
         flush();
 
-        expect(decodeLastPacket()).to.eql({ops: ["fillStyle"], ints: [255, 0, 0, 255]});
+        expect(decodeLastPacket()).to.eql({ops: ['fillStyle'], ints: [255, 0, 0, 255]});
       });
 
-      it("ignores invalid color strings, but prints a warning", function() {
-        spy(console, "warn");
-        ctx.fillStyle = "red";
+      it('ignores invalid color strings, but prints a warning', function() {
+        spy(console, 'warn');
+        ctx.fillStyle = 'red';
 
-        ctx.fillStyle = "no-such-color";
+        ctx.fillStyle = 'no-such-color';
 
-        expect(ctx.fillStyle).to.eql("rgba(255, 0, 0, 1)");
-        expect(console.warn).to.have.been.calledWith("Unsupported value for fillStyle: no-such-color");
+        expect(ctx.fillStyle).to.eql('rgba(255, 0, 0, 1)');
+        expect(console.warn).to.have.been.calledWith('Unsupported value for fillStyle: no-such-color');
       });
 
     });
 
-    describe("strokeStyle", function() {
+    describe('strokeStyle', function() {
 
-      it("defaults to black", function() {
-        expect(ctx.strokeStyle).to.eql("rgba(0, 0, 0, 1)");
+      it('defaults to black', function() {
+        expect(ctx.strokeStyle).to.eql('rgba(0, 0, 0, 1)');
       });
 
-      it("accepts changes", function() {
-        ctx.strokeStyle = "red";
+      it('accepts changes', function() {
+        ctx.strokeStyle = 'red';
 
-        expect(ctx.strokeStyle).to.eql("rgba(255, 0, 0, 1)");
+        expect(ctx.strokeStyle).to.eql('rgba(255, 0, 0, 1)');
       });
 
-      it("renders changes", function() {
-        ctx.strokeStyle = "red";
+      it('renders changes', function() {
+        ctx.strokeStyle = 'red';
         flush();
 
-        expect(decodeLastPacket()).to.eql({ops: ["strokeStyle"], ints: [255, 0, 0, 255]});
+        expect(decodeLastPacket()).to.eql({ops: ['strokeStyle'], ints: [255, 0, 0, 255]});
       });
 
-      it("ignores invalid color strings, but prints a warning", function() {
-        spy(console, "warn");
-        ctx.strokeStyle = "red";
+      it('ignores invalid color strings, but prints a warning', function() {
+        spy(console, 'warn');
+        ctx.strokeStyle = 'red';
 
-        ctx.strokeStyle = "no-such-color";
+        ctx.strokeStyle = 'no-such-color';
 
-        expect(ctx.strokeStyle).to.eql("rgba(255, 0, 0, 1)");
-        expect(console.warn).to.have.been.calledWith("Unsupported value for strokeStyle: no-such-color");
+        expect(ctx.strokeStyle).to.eql('rgba(255, 0, 0, 1)');
+        expect(console.warn).to.have.been.calledWith('Unsupported value for strokeStyle: no-such-color');
       });
 
     });
 
-    describe("textAlign", function() {
+    describe('textAlign', function() {
 
       it("defaults to 'start'", function() {
-        expect(ctx.textAlign).to.eql("start");
+        expect(ctx.textAlign).to.eql('start');
       });
 
-      it("accepts changes", function() {
-        ctx.textAlign = "center";
+      it('accepts changes', function() {
+        ctx.textAlign = 'center';
 
-        expect(ctx.textAlign).to.eql("center");
+        expect(ctx.textAlign).to.eql('center');
       });
 
-      it("renders changes", function() {
-        ctx.textAlign = "center";
+      it('renders changes', function() {
+        ctx.textAlign = 'center';
         flush();
 
-        expect(decodeLastPacket()).to.eql({ops: ["textAlign"], strings: ["center"]});
+        expect(decodeLastPacket()).to.eql({ops: ['textAlign'], strings: ['center']});
       });
 
-      it("ignores unknown values, but prints a warning", function() {
-        spy(console, "warn");
-        ctx.textAlign = "center";
+      it('ignores unknown values, but prints a warning', function() {
+        spy(console, 'warn');
+        ctx.textAlign = 'center';
 
-        ctx.textAlign = "foo";
+        ctx.textAlign = 'foo';
 
-        expect(ctx.textAlign).to.eql("center");
-        expect(console.warn).to.have.been.calledWith("Unsupported value for textAlign: foo");
+        expect(ctx.textAlign).to.eql('center');
+        expect(console.warn).to.have.been.calledWith('Unsupported value for textAlign: foo');
       });
 
     });
 
-    describe("textBaseline", function() {
+    describe('textBaseline', function() {
 
       it("defaults to 'alphabetic'", function() {
-        expect(ctx.textBaseline).to.eql("alphabetic");
+        expect(ctx.textBaseline).to.eql('alphabetic');
       });
 
-      it("accepts changes", function() {
-        ctx.textBaseline = "middle";
+      it('accepts changes', function() {
+        ctx.textBaseline = 'middle';
 
-        expect(ctx.textBaseline).to.eql("middle");
+        expect(ctx.textBaseline).to.eql('middle');
       });
 
-      it("renders changes", function() {
-        ctx.textBaseline = "middle";
+      it('renders changes', function() {
+        ctx.textBaseline = 'middle';
         flush();
 
-        expect(decodeLastPacket()).to.eql({ops: ["textBaseline"], strings: ["middle"]});
+        expect(decodeLastPacket()).to.eql({ops: ['textBaseline'], strings: ['middle']});
       });
 
-      it("ignores unknown values, but prints a warning", function() {
-        spy(console, "warn");
-        ctx.textBaseline = "middle";
+      it('ignores unknown values, but prints a warning', function() {
+        spy(console, 'warn');
+        ctx.textBaseline = 'middle';
 
-        ctx.textBaseline = "foo";
+        ctx.textBaseline = 'foo';
 
-        expect(ctx.textBaseline).to.eql("middle");
-        expect(console.warn).to.have.been.calledWith("Unsupported value for textBaseline: foo");
+        expect(ctx.textBaseline).to.eql('middle');
+        expect(console.warn).to.have.been.calledWith('Unsupported value for textBaseline: foo');
       });
 
     });
 
   });
 
-  describe("save", function() {
+  describe('save', function() {
 
-    it("does not change current state", function() {
-      ctx.strokeStyle = "red";
+    it('does not change current state', function() {
+      ctx.strokeStyle = 'red';
       ctx.save();
 
-      expect(ctx.strokeStyle).to.eql("rgba(255, 0, 0, 1)");
+      expect(ctx.strokeStyle).to.eql('rgba(255, 0, 0, 1)');
     });
 
-    it("renders save operation", function() {
+    it('renders save operation', function() {
       ctx.save();
       flush();
 
-      expect(decodeLastPacket()).to.eql({ops: ["save"]});
+      expect(decodeLastPacket()).to.eql({ops: ['save']});
     });
 
   });
 
-  describe("restore", function() {
+  describe('restore', function() {
 
-    it("restores previous state", function() {
-      ctx.strokeStyle = "red";
+    it('restores previous state', function() {
+      ctx.strokeStyle = 'red';
       ctx.save();
-      ctx.strokeStyle = "blue";
+      ctx.strokeStyle = 'blue';
 
       ctx.restore();
 
-      expect(ctx.strokeStyle).to.eql("rgba(255, 0, 0, 1)");
+      expect(ctx.strokeStyle).to.eql('rgba(255, 0, 0, 1)');
     });
 
-    it("restores multiple steps", function() {
-      ctx.strokeStyle = "red";
+    it('restores multiple steps', function() {
+      ctx.strokeStyle = 'red';
       ctx.save();
-      ctx.strokeStyle = "blue";
+      ctx.strokeStyle = 'blue';
       ctx.save();
 
       ctx.restore();
       ctx.restore();
 
-      expect(ctx.strokeStyle).to.eql("rgba(255, 0, 0, 1)");
+      expect(ctx.strokeStyle).to.eql('rgba(255, 0, 0, 1)');
     });
 
-    it("does not change current state when stack is empty", function() {
-      ctx.strokeStyle = "red";
+    it('does not change current state when stack is empty', function() {
+      ctx.strokeStyle = 'red';
 
       ctx.restore();
 
-      expect(ctx.strokeStyle).to.eql("rgba(255, 0, 0, 1)");
+      expect(ctx.strokeStyle).to.eql('rgba(255, 0, 0, 1)');
     });
 
-    it("renders restore operation", function() {
+    it('renders restore operation', function() {
       ctx.restore();
       flush();
 
-      expect(decodeLastPacket()).to.eql({ops: ["restore"]});
+      expect(decodeLastPacket()).to.eql({ops: ['restore']});
     });
 
   });
 
-  describe("path operations", function() {
+  describe('path operations', function() {
 
     it("aren't rendered before flush", function() {
       ctx.beginPath();
@@ -424,7 +424,7 @@ describe("CanvasContext", function() {
       expect(getLastPacket()).to.be.undefined;
     });
 
-    it("are rendered on flush", function() {
+    it('are rendered on flush', function() {
       ctx.beginPath();
       ctx.moveTo(10, 20);
       ctx.lineTo(30, 40);
@@ -436,11 +436,11 @@ describe("CanvasContext", function() {
 
       flush();
 
-      expect(decodeLastPacket().ops).to.eql(["beginPath", "moveTo", "lineTo", "rect", "arc",
-                                              "quadraticCurveTo", "bezierCurveTo", "closePath"]);
+      expect(decodeLastPacket().ops).to.eql(['beginPath', 'moveTo', 'lineTo', 'rect', 'arc',
+                                              'quadraticCurveTo', 'bezierCurveTo', 'closePath']);
     });
 
-    it("are not rendered after gc disposal anymore", function() {
+    it('are not rendered after gc disposal anymore', function() {
       ctx.rect(10, 20, 30, 40);
 
       gc.dispose();
@@ -451,7 +451,7 @@ describe("CanvasContext", function() {
 
   });
 
-  describe("transformations", function() {
+  describe('transformations', function() {
 
     it("aren't rendered before flush", function() {
       ctx.setTransform(1, 2, 3, 4, 5, 6);
@@ -463,7 +463,7 @@ describe("CanvasContext", function() {
       expect(getLastPacket()).to.be.undefined;
     });
 
-    it("are rendered on flush", function() {
+    it('are rendered on flush', function() {
       ctx.setTransform(1, 2, 3, 4, 5, 6);
       ctx.transform(1, 2, 3, 4, 5, 6);
       ctx.translate(23, 42);
@@ -472,24 +472,24 @@ describe("CanvasContext", function() {
 
       flush();
 
-      expect(decodeLastPacket().ops).to.eql(["setTransform", "transform", "translate",
-                                              "rotate", "scale"]);
+      expect(decodeLastPacket().ops).to.eql(['setTransform', 'transform', 'translate',
+                                              'rotate', 'scale']);
     });
 
   });
 
-  describe("operation names", function() {
+  describe('operation names', function() {
 
-    it("are rendered once", function() {
+    it('are rendered once', function() {
       ctx.lineTo(10, 20);
       ctx.moveTo(30, 40);
       flush();
 
-      expect(getLastPacket()[0]).to.eql(["lineTo", "moveTo"]);
+      expect(getLastPacket()[0]).to.eql(['lineTo', 'moveTo']);
       expect(getLastPacket()[1]).to.eql([0, 1]);
     });
 
-    it("are not rendered again", function() {
+    it('are not rendered again', function() {
       ctx.lineTo(10, 20);
       ctx.moveTo(30, 40);
       flush();
@@ -503,7 +503,7 @@ describe("CanvasContext", function() {
       expect(getLastPacket()[1]).to.eql([0, 1]);
     });
 
-    it("are appended to existing operations", function() {
+    it('are appended to existing operations', function() {
       ctx.lineTo(10, 20);
       ctx.moveTo(30, 40);
       flush();
@@ -512,362 +512,362 @@ describe("CanvasContext", function() {
       ctx.rect(10, 20, 30, 40);
       flush();
 
-      expect(getLastPacket()[0]).to.eql(["rect"]);
+      expect(getLastPacket()[0]).to.eql(['rect']);
       expect(getLastPacket()[1]).to.eql([2]);
     });
 
   });
 
-  describe("scale", function() {
+  describe('scale', function() {
 
-    it("is rendered", function() {
+    it('is rendered', function() {
       ctx.scale(2, 3);
       flush();
 
-      expect(decodeLastPacket()).to.eql({ops: ["scale"], doubles: [2, 3]});
+      expect(decodeLastPacket()).to.eql({ops: ['scale'], doubles: [2, 3]});
     });
 
-    it("raises error if parameters missing", function() {
+    it('raises error if parameters missing', function() {
       expect(() => {
         ctx.scale(2);
-      }).to.throw("Not enough arguments to CanvasContext.scale");
+      }).to.throw('Not enough arguments to CanvasContext.scale');
     });
 
   });
 
-  describe("rotate", function() {
+  describe('rotate', function() {
 
-    it("is rendered", function() {
+    it('is rendered', function() {
       ctx.rotate(3.14);
       flush();
 
-      expect(decodeLastPacket()).to.eql({ops: ["rotate"], doubles: [3.14]});
+      expect(decodeLastPacket()).to.eql({ops: ['rotate'], doubles: [3.14]});
     });
 
-    it("raises error if parameters missing", function() {
+    it('raises error if parameters missing', function() {
       expect(() => {
         ctx.rotate();
-      }).to.throw("Not enough arguments to CanvasContext.rotate");
+      }).to.throw('Not enough arguments to CanvasContext.rotate');
     });
 
   });
 
-  describe("translate", function() {
+  describe('translate', function() {
 
-    it("is rendered", function() {
+    it('is rendered', function() {
       ctx.translate(23, 42);
       flush();
 
-      expect(decodeLastPacket()).to.eql({ops: ["translate"], doubles: [23, 42]});
+      expect(decodeLastPacket()).to.eql({ops: ['translate'], doubles: [23, 42]});
     });
 
-    it("raises error if parameters missing", function() {
+    it('raises error if parameters missing', function() {
       expect(() => {
         ctx.translate(23);
-      }).to.throw("Not enough arguments to CanvasContext.translate");
+      }).to.throw('Not enough arguments to CanvasContext.translate');
     });
 
   });
 
-  describe("transform", function() {
+  describe('transform', function() {
 
-    it("is rendered", function() {
+    it('is rendered', function() {
       ctx.transform(1, 2, 3, 4, 5, 6);
       flush();
 
-      expect(decodeLastPacket()).to.eql({ops: ["transform"], doubles: [1, 2, 3, 4, 5, 6]});
+      expect(decodeLastPacket()).to.eql({ops: ['transform'], doubles: [1, 2, 3, 4, 5, 6]});
     });
 
-    it("raises error if parameters missing", function() {
+    it('raises error if parameters missing', function() {
       expect(() => {
         ctx.transform();
-      }).to.throw("Not enough arguments to CanvasContext.transform");
+      }).to.throw('Not enough arguments to CanvasContext.transform');
     });
 
   });
 
-  describe("setTransform", function() {
+  describe('setTransform', function() {
 
-    it("is rendered", function() {
+    it('is rendered', function() {
       ctx.setTransform(1, 2, 3, 4, 5, 6);
       flush();
 
-      expect(decodeLastPacket()).to.eql({ops: ["setTransform"], doubles: [1, 2, 3, 4, 5, 6]});
+      expect(decodeLastPacket()).to.eql({ops: ['setTransform'], doubles: [1, 2, 3, 4, 5, 6]});
     });
 
-    it("raises error if parameters missing", function() {
+    it('raises error if parameters missing', function() {
       expect(() => {
         ctx.setTransform();
-      }).to.throw("Not enough arguments to CanvasContext.setTransform");
+      }).to.throw('Not enough arguments to CanvasContext.setTransform');
     });
 
   });
 
-  describe("measureText", function() {
+  describe('measureText', function() {
 
-    it("is rendered", function() {
-      expect(ctx.measureText("foo").width).to.be.above("foo".length);
+    it('is rendered', function() {
+      expect(ctx.measureText('foo').width).to.be.above('foo'.length);
     });
 
   });
 
-  describe("beginPath", function() {
+  describe('beginPath', function() {
 
-    it("is rendered", function() {
+    it('is rendered', function() {
       ctx.beginPath();
       flush();
 
-      expect(decodeLastPacket()).to.eql({ops: ["beginPath"]});
+      expect(decodeLastPacket()).to.eql({ops: ['beginPath']});
     });
 
   });
 
-  describe("closePath", function() {
+  describe('closePath', function() {
 
-    it("is rendered", function() {
+    it('is rendered', function() {
       ctx.closePath();
       flush();
 
-      expect(decodeLastPacket()).to.eql({ops: ["closePath"]});
+      expect(decodeLastPacket()).to.eql({ops: ['closePath']});
     });
 
   });
 
-  describe("lineTo", function() {
+  describe('lineTo', function() {
 
-    it("is rendered", function() {
+    it('is rendered', function() {
       ctx.lineTo(10, 20);
       flush();
 
-      expect(decodeLastPacket()).to.eql({ops: ["lineTo"], doubles: [10, 20]});
+      expect(decodeLastPacket()).to.eql({ops: ['lineTo'], doubles: [10, 20]});
     });
 
-    it("raises error if parameters missing", function() {
+    it('raises error if parameters missing', function() {
       expect(() => {
         ctx.lineTo(1);
-      }).to.throw("Not enough arguments to CanvasContext.lineTo");
+      }).to.throw('Not enough arguments to CanvasContext.lineTo');
     });
 
   });
 
-  describe("moveTo", function() {
+  describe('moveTo', function() {
 
-    it("is rendered", function() {
+    it('is rendered', function() {
       ctx.moveTo(10, 20);
       flush();
 
-      expect(decodeLastPacket()).to.eql({ops: ["moveTo"], doubles: [10, 20]});
+      expect(decodeLastPacket()).to.eql({ops: ['moveTo'], doubles: [10, 20]});
     });
 
-    it("raises error if parameters missing", function() {
+    it('raises error if parameters missing', function() {
       expect(() => {
         ctx.moveTo(1);
-      }).to.throw("Not enough arguments to CanvasContext.moveTo");
+      }).to.throw('Not enough arguments to CanvasContext.moveTo');
     });
 
   });
 
-  describe("bezierCurveTo", function() {
+  describe('bezierCurveTo', function() {
 
-    it("is rendered", function() {
+    it('is rendered', function() {
       ctx.bezierCurveTo(1, 2, 3, 4, 5, 6);
       flush();
 
-      expect(decodeLastPacket()).to.eql({ops: ["bezierCurveTo"], doubles: [1, 2, 3, 4, 5, 6]});
+      expect(decodeLastPacket()).to.eql({ops: ['bezierCurveTo'], doubles: [1, 2, 3, 4, 5, 6]});
     });
 
-    it("raises error if parameters missing", function() {
+    it('raises error if parameters missing', function() {
       expect(() => {
         ctx.bezierCurveTo(1, 2, 3, 4, 5);
-      }).to.throw("Not enough arguments to CanvasContext.bezierCurveTo");
+      }).to.throw('Not enough arguments to CanvasContext.bezierCurveTo');
     });
 
   });
 
-  describe("quadraticCurveTo", function() {
+  describe('quadraticCurveTo', function() {
 
-    it("is rendered", function() {
+    it('is rendered', function() {
       ctx.quadraticCurveTo(1, 2, 3, 4);
       flush();
 
-      expect(decodeLastPacket()).to.eql({ops: ["quadraticCurveTo"], doubles: [1, 2, 3, 4]});
+      expect(decodeLastPacket()).to.eql({ops: ['quadraticCurveTo'], doubles: [1, 2, 3, 4]});
     });
 
-    it("raises error if parameters missing", function() {
+    it('raises error if parameters missing', function() {
       expect(() => {
         ctx.quadraticCurveTo(1, 2, 3);
-      }).to.throw("Not enough arguments to CanvasContext.quadraticCurveTo");
+      }).to.throw('Not enough arguments to CanvasContext.quadraticCurveTo');
     });
 
   });
 
-  describe("arc", function() {
+  describe('arc', function() {
 
-    it("is rendered with counterclockwise default", function() {
+    it('is rendered with counterclockwise default', function() {
       ctx.arc(1, 2, 3, 4, 5);
       flush();
 
-      expect(decodeLastPacket()).to.eql({ops: ["arc"], doubles: [1, 2, 3, 4, 5], booleans: [false]});
+      expect(decodeLastPacket()).to.eql({ops: ['arc'], doubles: [1, 2, 3, 4, 5], booleans: [false]});
     });
 
-    it("is rendered with counterclockwise parameter", function() {
+    it('is rendered with counterclockwise parameter', function() {
       ctx.arc(1, 2, 3, 4, 5, true);
       flush();
 
-      expect(decodeLastPacket()).to.eql({ops: ["arc"], doubles: [1, 2, 3, 4, 5], booleans: [true]});
+      expect(decodeLastPacket()).to.eql({ops: ['arc'], doubles: [1, 2, 3, 4, 5], booleans: [true]});
     });
 
-    it("raises error if parameters missing", function() {
+    it('raises error if parameters missing', function() {
       expect(() => {
         ctx.arc(1, 2, 3, 4);
-      }).to.throw("Not enough arguments to CanvasContext.arc");
+      }).to.throw('Not enough arguments to CanvasContext.arc');
     });
 
   });
 
-  describe("rect", function() {
+  describe('rect', function() {
 
-    it("is rendered", function() {
+    it('is rendered', function() {
       ctx.rect(1, 2, 3, 4);
       flush();
 
-      expect(decodeLastPacket()).to.eql({ops: ["rect"], doubles: [1, 2, 3, 4]});
+      expect(decodeLastPacket()).to.eql({ops: ['rect'], doubles: [1, 2, 3, 4]});
     });
 
-    it("raises error if parameters missing", function() {
+    it('raises error if parameters missing', function() {
       expect(() => {
         ctx.rect(1, 2, 3);
-      }).to.throw("Not enough arguments to CanvasContext.rect");
+      }).to.throw('Not enough arguments to CanvasContext.rect');
     });
 
   });
 
-  describe("fill", function() {
+  describe('fill', function() {
 
-    it("is rendered", function() {
+    it('is rendered', function() {
       ctx.fill();
       flush();
 
-      expect(decodeLastPacket()).to.eql({ops: ["fill"]});
+      expect(decodeLastPacket()).to.eql({ops: ['fill']});
     });
 
   });
 
-  describe("stroke", function() {
+  describe('stroke', function() {
 
-    it("is rendered", function() {
+    it('is rendered', function() {
       ctx.stroke();
       flush();
 
-      expect(decodeLastPacket()).to.eql({ops: ["stroke"]});
+      expect(decodeLastPacket()).to.eql({ops: ['stroke']});
     });
 
   });
 
-  describe("clearRect", function() {
+  describe('clearRect', function() {
 
-    it("is rendered", function() {
+    it('is rendered', function() {
       ctx.clearRect(10, 20, 30, 40);
       flush();
 
-      expect(decodeLastPacket()).to.eql({ops: ["clearRect"], doubles: [10, 20, 30, 40]});
+      expect(decodeLastPacket()).to.eql({ops: ['clearRect'], doubles: [10, 20, 30, 40]});
     });
 
-    it("raises error if parameters missing", function() {
+    it('raises error if parameters missing', function() {
       expect(() => {
         ctx.clearRect(1, 2, 3);
-      }).to.throw("Not enough arguments to CanvasContext.clearRect");
+      }).to.throw('Not enough arguments to CanvasContext.clearRect');
     });
 
   });
 
-  describe("fillRect", function() {
+  describe('fillRect', function() {
 
-    it("is rendered", function() {
+    it('is rendered', function() {
       ctx.fillRect(10, 20, 30, 40);
       flush();
 
       expect(decodeLastPacket()).to.eql({
-        ops: ["beginPath", "rect", "fill"],
+        ops: ['beginPath', 'rect', 'fill'],
         doubles: [10, 20, 30, 40]
       });
     });
 
-    it("raises error if parameters missing", function() {
+    it('raises error if parameters missing', function() {
       expect(() => {
         ctx.fillRect(1, 2, 3);
-      }).to.throw("Not enough arguments to CanvasContext.fillRect");
+      }).to.throw('Not enough arguments to CanvasContext.fillRect');
     });
 
   });
 
-  describe("strokeRect", function() {
+  describe('strokeRect', function() {
 
-    it("is rendered", function() {
+    it('is rendered', function() {
       ctx.strokeRect(10, 20, 30, 40);
       flush();
 
       expect(decodeLastPacket()).to.eql({
-        ops: ["beginPath", "rect", "stroke"],
+        ops: ['beginPath', 'rect', 'stroke'],
         doubles: [10, 20, 30, 40]
       });
     });
 
-    it("raises error if parameters missing", function() {
+    it('raises error if parameters missing', function() {
       expect(() => {
         ctx.strokeRect(1, 2, 3);
-      }).to.throw("Not enough arguments to CanvasContext.strokeRect");
+      }).to.throw('Not enough arguments to CanvasContext.strokeRect');
     });
 
   });
 
-  describe("fillText", function() {
+  describe('fillText', function() {
 
-    it("is rendered", function() {
-      ctx.fillText("foo", 10, 20);
+    it('is rendered', function() {
+      ctx.fillText('foo', 10, 20);
       flush();
 
       expect(decodeLastPacket()).to.eql({
-        ops: ["fillText"],
+        ops: ['fillText'],
         doubles: [10, 20],
         booleans: [false, false, false],
-        strings: ["foo"]
+        strings: ['foo']
       });
     });
 
-    it("raises error if parameters missing", function() {
+    it('raises error if parameters missing', function() {
       expect(() => {
-        ctx.fillText("foo", 2);
-      }).to.throw("Not enough arguments to CanvasContext.fillText");
+        ctx.fillText('foo', 2);
+      }).to.throw('Not enough arguments to CanvasContext.fillText');
     });
 
   });
 
-  describe("strokeText", function() {
+  describe('strokeText', function() {
 
-    it("is rendered", function() {
-      ctx.strokeText("foo", 10, 20);
+    it('is rendered', function() {
+      ctx.strokeText('foo', 10, 20);
       flush();
 
       expect(decodeLastPacket()).to.eql({
-        ops: ["strokeText"],
+        ops: ['strokeText'],
         doubles: [10, 20],
         booleans: [false, false, false],
-        strings: ["foo"]
+        strings: ['foo']
       });
     });
 
-    it("raises error if parameters missing", function() {
+    it('raises error if parameters missing', function() {
       expect(() => {
-        ctx.strokeText("foo", 2);
-      }).to.throw("Not enough arguments to CanvasContext.strokeText");
+        ctx.strokeText('foo', 2);
+      }).to.throw('Not enough arguments to CanvasContext.strokeText');
     });
 
   });
 
-  describe("createImageData", function() {
+  describe('createImageData', function() {
 
-    it("creates ImageData from width and height", function() {
+    it('creates ImageData from width and height', function() {
       let result = ctx.createImageData(10, 20);
 
       expect(result).to.be.an.instanceof(ImageData);
@@ -875,7 +875,7 @@ describe("CanvasContext", function() {
       expect(result.height).to.equal(20);
     });
 
-    it("creates ImageData from ImageData", function() {
+    it('creates ImageData from ImageData', function() {
       let array = new Uint8ClampedArray(60).fill(128);
       let input = new ImageData(array, 3, 5);
 
@@ -887,27 +887,27 @@ describe("CanvasContext", function() {
       expect(result.data[0]).to.equal(0);
     });
 
-    it("raises error if parameters missing", function() {
+    it('raises error if parameters missing', function() {
       expect(function() {
         ctx.createImageData(10);
-      }).to.throw("Not enough arguments to CanvasContext.createImageData");
+      }).to.throw('Not enough arguments to CanvasContext.createImageData');
     });
 
   });
 
-  describe("getImageData", function() {
+  describe('getImageData', function() {
 
     let array;
 
     beforeEach(function() {
       array = new Uint8ClampedArray(60);
-      stub(client, "call").returns(array);
+      stub(client, 'call').returns(array);
     });
 
-    it("is rendered", function() {
+    it('is rendered', function() {
       ctx.getImageData(10, 20, 5, 3);
 
-      expect(client.call).to.have.been.calledWith(gc.cid, "getImageData", {
+      expect(client.call).to.have.been.calledWith(gc.cid, 'getImageData', {
         x: 10,
         y: 20,
         width: 5,
@@ -915,33 +915,33 @@ describe("CanvasContext", function() {
       });
     });
 
-    it("returns value from native", function() {
+    it('returns value from native', function() {
       let result = ctx.getImageData(10, 20, 5, 3);
 
       expect(result.data).to.eql(array);
     });
 
-    it("raises error if parameters missing", function() {
+    it('raises error if parameters missing', function() {
       expect(function() {
         ctx.getImageData(10, 20, 100);
-      }).to.throw("Not enough arguments to CanvasContext.getImageData");
+      }).to.throw('Not enough arguments to CanvasContext.getImageData');
     });
 
   });
 
-  describe("putImageData", function() {
+  describe('putImageData', function() {
 
     let imageData;
 
     beforeEach(function() {
       imageData = new ImageData(3, 5);
-      spy(client, "call");
+      spy(client, 'call');
     });
 
-    it("is rendered", function() {
+    it('is rendered', function() {
       ctx.putImageData(imageData, 10, 20);
 
-      expect(client.call).to.have.been.calledWith(gc.cid, "putImageData", {
+      expect(client.call).to.have.been.calledWith(gc.cid, 'putImageData', {
         data: imageData.data,
         x: 10,
         y: 20,
@@ -950,10 +950,10 @@ describe("CanvasContext", function() {
       });
     });
 
-    it("raises error if parameters missing", function() {
+    it('raises error if parameters missing', function() {
       expect(() => {
         ctx.putImageData(imageData, 10);
-      }).to.throw("Not enough arguments to CanvasContext.putImageData");
+      }).to.throw('Not enough arguments to CanvasContext.putImageData');
     });
 
   });

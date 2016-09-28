@@ -1,22 +1,22 @@
-var PluginPage = require("./PluginPage");
+var PluginPage = require('./PluginPage');
 
-var page = new PluginPage("Motion", "cordova-plugin-device-motion", function(parent) {
+var page = new PluginPage('Motion', 'cordova-plugin-device-motion', function(parent) {
 
-  var watchID = "";
+  var watchID = '';
 
   var buttonWatch = new tabris.Button({
     layoutData: {left: 10, top: 10, right: 10},
-    text: "Start Watch Acceleration"
-  }).appendTo(parent).on("select", function() {
+    text: 'Start Watch Acceleration'
+  }).appendTo(parent).on('select', function() {
     var onSuccess = function(acceleration) {
-      textView.set("text", "Acceleration X: " + acceleration.x + "\n" +
-                        "Acceleration Y: " + acceleration.y + "\n" +
-                        "Acceleration Z: " + acceleration.z + "\n" +
-                        "Timestamp: "      + acceleration.timestamp + "\n");
+      textView.set('text', 'Acceleration X: ' + acceleration.x + '\n' +
+                        'Acceleration Y: ' + acceleration.y + '\n' +
+                        'Acceleration Z: ' + acceleration.z + '\n' +
+                        'Timestamp: '      + acceleration.timestamp + '\n');
     };
 
     var onError = function() {
-      console.log("onError!");
+      console.log('onError!');
     };
 
     var options = {frequency: 700};  // Update every 700ms
@@ -26,8 +26,8 @@ var page = new PluginPage("Motion", "cordova-plugin-device-motion", function(par
 
   var buttonStopWatch = new tabris.Button({
     layoutData: {left: 10, top: [buttonWatch, 10], right: 10},
-    text: "Stop Watch Acceleration"
-  }).appendTo(parent).on("select", function() {
+    text: 'Stop Watch Acceleration'
+  }).appendTo(parent).on('select', function() {
     navigator.accelerometer.clearWatch(watchID);
   });
 

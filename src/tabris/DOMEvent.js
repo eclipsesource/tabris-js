@@ -3,11 +3,11 @@ var noop = function() {};
 export default function DOMEvent(type, eventInitDict) {
   this.type = type;
   this.timeStamp = Date.now();
-  if (typeof eventInitDict !== "undefined") {
-    if ("bubbles" in eventInitDict) {
+  if (typeof eventInitDict !== 'undefined') {
+    if ('bubbles' in eventInitDict) {
       this.bubbles = eventInitDict.bubbles;
     }
-    if ("cancelable" in eventInitDict) {
+    if ('cancelable' in eventInitDict) {
       this.cancelable = eventInitDict.cancelable;
     }
   }
@@ -21,7 +21,7 @@ DOMEvent.prototype = {
   target: null,
   currentTarget: null,
   eventPhase: 0,
-  type: "",
+  type: '',
   bubbles: false,
   cancelable: false,
   defaultPrevented: false,
@@ -38,7 +38,7 @@ DOMEvent.prototype = {
 
 export function addDOMEventTargetMethods(target) {
 
-  if (typeof target.addEventListener === "function") {
+  if (typeof target.addEventListener === 'function') {
     return;
   }
 

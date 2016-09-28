@@ -2,7 +2,7 @@ var CANVAS_SIZE = 300;
 var ARC_RADIUS = 20;
 
 var page = module.exports = new tabris.Page({
-  title: "Arcs",
+  title: 'Arcs',
   topLevel: true
 });
 
@@ -11,16 +11,16 @@ var canvas = new tabris.Canvas({
 }).appendTo(page);
 
 new tabris.CheckBox({
-  text: "Counterclockwise",
+  text: 'Counterclockwise',
   layoutData: {left: 10, right: 10, top: [canvas, 8]}
-}).on("change:selection", function(checkBox, selection) {
+}).on('change:selection', function(checkBox, selection) {
   clearCanvas();
   drawArcs(selection);
 }).appendTo(page);
 
-var context = canvas.getContext("2d", CANVAS_SIZE, CANVAS_SIZE);
-context.textAlign = "center";
-context.textBaseline = "top";
+var context = canvas.getContext('2d', CANVAS_SIZE, CANVAS_SIZE);
+context.textAlign = 'center';
+context.textBaseline = 'top';
 
 clearCanvas();
 drawArcs(false);
@@ -51,8 +51,8 @@ function drawArc(x, y, startAngle, endAngle, counterClockwise) {
   context.beginPath();
   context.moveTo(x + ARC_RADIUS, y + ARC_RADIUS);
   context.arc(x + ARC_RADIUS, y + ARC_RADIUS, ARC_RADIUS, startAngle * Math.PI, endAngle * Math.PI, counterClockwise);
-  context.fillStyle = "rgba(255, 100, 100, 0.5)";
+  context.fillStyle = 'rgba(255, 100, 100, 0.5)';
   context.fill();
-  context.fillStyle = "black";
-  context.fillText(startAngle.toString().concat(", ").concat(endAngle), x + ARC_RADIUS, y + ARC_RADIUS * 2);
+  context.fillStyle = 'black';
+  context.fillText(startAngle.toString().concat(', ').concat(endAngle), x + ARC_RADIUS, y + ARC_RADIUS * 2);
 }

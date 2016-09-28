@@ -1,12 +1,12 @@
-import {types} from "./property-types";
-import NativeObject from "./NativeObject";
+import {types} from './property-types';
+import NativeObject from './NativeObject';
 
 var ClientStore = NativeObject.extend({
-  _cid: "tabris.ClientStore"
+  _cid: 'tabris.ClientStore'
 });
 
 var SecureStore = NativeObject.extend({
-  _cid: "tabris.SecureStore"
+  _cid: 'tabris.SecureStore'
 });
 
 var encode = types.string.encode;
@@ -14,14 +14,14 @@ var encode = types.string.encode;
 export function create(secure) {
   function Storage() {
     var proxy = secure ? new SecureStore() : new ClientStore();
-    Object.defineProperty(this, "_proxy", {value: proxy});
+    Object.defineProperty(this, '_proxy', {value: proxy});
   }
   Storage.prototype = WebStorage.prototype;
   return new Storage();
 }
 
 export default function WebStorage() {
-  throw new Error("Cannot instantiate WebStorage");
+  throw new Error('Cannot instantiate WebStorage');
 }
 
 WebStorage.prototype = {
@@ -31,7 +31,7 @@ WebStorage.prototype = {
     if (arguments.length < 2) {
       throw new TypeError("Not enough arguments to 'setItem'");
     }
-    this._proxy._nativeCall("add", {
+    this._proxy._nativeCall('add', {
       key: encode(key),
       value: encode(value)
     });
@@ -41,7 +41,7 @@ WebStorage.prototype = {
     if (arguments.length < 1) {
       throw new TypeError("Not enough arguments to 'getItem'");
     }
-    var result = this._proxy._nativeCall("get", {key: encode(key)});
+    var result = this._proxy._nativeCall('get', {key: encode(key)});
     // Note: iOS can not return null, only undefined:
     return result === undefined ? null : result;
   },
@@ -50,11 +50,11 @@ WebStorage.prototype = {
     if (arguments.length < 1) {
       throw new TypeError("Not enough arguments to 'removeItem'");
     }
-    this._proxy._nativeCall("remove", {keys: [encode(key)]});
+    this._proxy._nativeCall('remove', {keys: [encode(key)]});
   },
 
   clear: function() {
-    this._proxy._nativeCall("clear");
+    this._proxy._nativeCall('clear');
   }
 
 };

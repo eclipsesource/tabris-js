@@ -2,7 +2,7 @@ var MARGIN = 12;
 var loading;
 
 var page = new tabris.Page({
-  title: "Reddit - Pets",
+  title: 'Reddit - Pets',
   topLevel: true
 });
 
@@ -11,25 +11,25 @@ var collectionView = new tabris.CollectionView({
   itemHeight: 82,
   refreshEnabled: true,
   cellType: function(item) {
-    return item.loading ? "loading" : "normal";
+    return item.loading ? 'loading' : 'normal';
   },
   initializeCell: function(cell, type) {
-    if (type === "loading") {
+    if (type === 'loading') {
       initializeLoadingCell(cell);
     } else {
       initializeStandardCell(cell);
     }
   }
-}).on("refresh", function() {
+}).on('refresh', function() {
   loadNewItems();
-}).on("scroll", function(view, scroll) {
+}).on('scroll', function(view, scroll) {
   if (scroll.deltaY > 0) {
-    var remaining = view.get("items").length - view.get("lastVisibleIndex");
+    var remaining = view.get('items').length - view.get('lastVisibleIndex');
     if (remaining < 20) {
       loadMoreItems();
     }
   }
-}).on("select", function(target, value) {
+}).on('select', function(target, value) {
   if (!value.loading) {
     createDetailsPage(value.data);
   }
@@ -41,7 +41,7 @@ loadInitialItems();
 function initializeStandardCell(cell) {
   var imageView = new tabris.ImageView({
     left: MARGIN, top: 6, width: 70, height: 70,
-    scaleMode: "fill"
+    scaleMode: 'fill'
   }).appendTo(cell);
   var nameView = new tabris.TextView({
     top: 6, left: 104, right: MARGIN,
@@ -49,34 +49,34 @@ function initializeStandardCell(cell) {
   }).appendTo(cell);
   var commentsView = new tabris.TextView({
     top: 54, right: MARGIN,
-    alignment: "right",
-    textColor: "green"
+    alignment: 'right',
+    textColor: 'green'
   }).appendTo(cell);
   var authorView = new tabris.TextView({
     top: 54, left: 104, height: 20, right: [commentsView, MARGIN],
-    textColor: "#234"
+    textColor: '#234'
   }).appendTo(cell);
-  cell.on("change:item", function(widget, item) {
-    imageView.set("image", {src: item.data.thumbnail, width: 70, height: 70});
-    nameView.set("text", item.data.title);
-    authorView.set("text", item.data.author);
-    commentsView.set("text", item.data.num_comments + " comments");
+  cell.on('change:item', function(widget, item) {
+    imageView.set('image', {src: item.data.thumbnail, width: 70, height: 70});
+    nameView.set('text', item.data.title);
+    authorView.set('text', item.data.author);
+    commentsView.set('text', item.data.num_comments + ' comments');
   });
 }
 
 function initializeLoadingCell(cell) {
   new tabris.TextView({
     left: 12, right: 12, centerY: 0,
-    alignment: "center",
-    text: "loading ..."
+    alignment: 'center',
+    text: 'loading ...'
   }).appendTo(cell);
 }
 
 function loadInitialItems() {
-  collectionView.set("refreshIndicator", true);
+  collectionView.set('refreshIndicator', true);
   getJSON(createUrl({limit: 25})).then(function(json) {
-    collectionView.set("items", json.data.children);
-    collectionView.set("refreshIndicator", false);
+    collectionView.set('items', json.data.children);
+    collectionView.set('refreshIndicator', false);
   });
 }
 
@@ -86,7 +86,7 @@ function loadNewItems() {
     getJSON(createUrl({limit: 25, before: getFirstId()})).then(function(json) {
       collectionView.insert(json.data.children, 0);
       collectionView.reveal(0);
-      collectionView.set("refreshIndicator", false);
+      collectionView.set('refreshIndicator', false);
       loading = false;
     });
   }
@@ -108,35 +108,35 @@ function loadMoreItems() {
 }
 
 function createUrl(params) {
-  return "http://www.reddit.com/r/petpictures.json?" + Object.keys(params).map(function(key) {
-    return key + "=" + params[key];
-  }).join("&");
+  return 'http://www.reddit.com/r/petpictures.json?' + Object.keys(params).map(function(key) {
+    return key + '=' + params[key];
+  }).join('&');
 }
 
 function getFirstId() {
-  return getRedditId(collectionView.get("items")[0]) || null;
+  return getRedditId(collectionView.get('items')[0]) || null;
 }
 
 function getLastId() {
-  var items = collectionView.get("items");
+  var items = collectionView.get('items');
   return getRedditId(items[items.length - 2]) || null;
 }
 
 function getRedditId(item) {
-  return item ? item.kind + "_" + item.data.id : null;
+  return item ? item.kind + '_' + item.data.id : null;
 }
 
 function createDetailsPage(data) {
   var detailPage = new tabris.Page({
-    background: "black",
+    background: 'black',
     title: data.title,
     topLevel: false
   });
-  if (data.url.substr(-4, 4) === ".jpg") {
+  if (data.url.substr(-4, 4) === '.jpg') {
     new tabris.ImageView({
       left: 0, top: 0, right: 0, bottom: 0,
       image: data.url,
-      scaleMode: "fit"
+      scaleMode: 'fit'
     }).appendTo(detailPage);
   } else {
     new tabris.WebView({

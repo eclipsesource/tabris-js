@@ -1,10 +1,10 @@
-import {expect, spy, restore} from "../test";
-import NativeObject from "../../src/tabris/NativeObject";
-import ClientInterface from "../../src/tabris/Tabris";
-import ClientStub from "./ClientStub";
-import "../../src/tabris/Tabris";
+import {expect, spy, restore} from '../test';
+import NativeObject from '../../src/tabris/NativeObject';
+import ClientInterface from '../../src/tabris/Tabris';
+import ClientStub from './ClientStub';
+import '../../src/tabris/Tabris';
 
-describe("ClientInterface", function() {
+describe('ClientInterface', function() {
 
   let tabris;
   let client;
@@ -16,15 +16,15 @@ describe("ClientInterface", function() {
 
   afterEach(restore);
 
-  describe("_init", function() {
+  describe('_init', function() {
 
-    it("can be called without a context", function() {
+    it('can be called without a context', function() {
       expect(() => {
         tabris._init.call(null, client);
       }).to.not.throw();
     });
 
-    it("executes all load functions", function() {
+    it('executes all load functions', function() {
       let f1 = spy();
       let f2 = spy();
       tabris.load(f1);
@@ -37,18 +37,18 @@ describe("ClientInterface", function() {
       expect(f1).to.have.been.calledBefore(f2);
     });
 
-    it("load functions can access tabris functions", function() {
-      let TestType = NativeObject.extend({_type: "test.Type"});
+    it('load functions can access tabris functions', function() {
+      let TestType = NativeObject.extend({_type: 'test.Type'});
       tabris.load(() => new TestType());
 
       tabris._init.call(null, client);
 
-      expect(client.calls({op: "create", type: "test.Type"}).length).to.equal(1);
+      expect(client.calls({op: 'create', type: 'test.Type'}).length).to.equal(1);
     });
 
   });
 
-  describe("_notify", function() {
+  describe('_notify', function() {
 
     let CustomType;
     let proxy;
@@ -57,27 +57,27 @@ describe("ClientInterface", function() {
       tabris._init(client);
     });
 
-    it("notifies widget proxy", function() {
+    it('notifies widget proxy', function() {
       CustomType = NativeObject.extend({_events: {bar: true}});
       proxy = new CustomType();
-      spy(proxy, "trigger");
+      spy(proxy, 'trigger');
 
-      tabris._notify(proxy.cid, "bar", {bar: 23});
+      tabris._notify(proxy.cid, 'bar', {bar: 23});
 
-      expect(proxy.trigger).to.have.been.calledWith("bar", {bar: 23});
+      expect(proxy.trigger).to.have.been.calledWith('bar', {bar: 23});
     });
 
-    it("notifies widget proxy with translated event name", function() {
-      CustomType = NativeObject.extend({_events: {bar: "foo"}});
+    it('notifies widget proxy with translated event name', function() {
+      CustomType = NativeObject.extend({_events: {bar: 'foo'}});
       proxy = new CustomType();
-      spy(proxy, "trigger");
+      spy(proxy, 'trigger');
 
-      tabris._notify(proxy.cid, "foo", {});
+      tabris._notify(proxy.cid, 'foo', {});
 
-      expect(proxy.trigger).to.have.been.calledWith("bar", {});
+      expect(proxy.trigger).to.have.been.calledWith('bar', {});
     });
 
-    it("calls custom trigger", function() {
+    it('calls custom trigger', function() {
       CustomType = NativeObject.extend({
 
         _events: {
@@ -87,110 +87,110 @@ describe("ClientInterface", function() {
         }
       });
       proxy = new CustomType();
-      spy(proxy, "trigger");
+      spy(proxy, 'trigger');
 
-      tabris._notify(proxy.cid, "bar", {bar: 23});
+      tabris._notify(proxy.cid, 'bar', {bar: 23});
 
-      expect(CustomType._events.bar.trigger).to.have.been.calledWith({bar: 23}, "bar");
+      expect(CustomType._events.bar.trigger).to.have.been.calledWith({bar: 23}, 'bar');
     });
 
-    it("returns return value from custom trigger", function() {
+    it('returns return value from custom trigger', function() {
       CustomType = NativeObject.extend({
 
         _events: {
           bar: {
-            trigger: spy(() => "foo")
+            trigger: spy(() => 'foo')
           }
         }
       });
       proxy = new CustomType();
-      spy(proxy, "trigger");
+      spy(proxy, 'trigger');
 
-      let returnValue = tabris._notify(proxy.cid, "bar");
+      let returnValue = tabris._notify(proxy.cid, 'bar');
 
-      expect(returnValue).to.equal("foo");
+      expect(returnValue).to.equal('foo');
     });
 
-    it("calls custom trigger of translated event", function() {
+    it('calls custom trigger of translated event', function() {
       CustomType = NativeObject.extend({
 
         _events: {
           bar: {
-            name: "foo",
+            name: 'foo',
             trigger: spy()
           }
         }
       });
       proxy = new CustomType();
-      spy(proxy, "trigger");
+      spy(proxy, 'trigger');
 
-      tabris._notify(proxy.cid, "foo", {bar: 23});
+      tabris._notify(proxy.cid, 'foo', {bar: 23});
 
-      expect(CustomType._events.bar.trigger).to.have.been.calledWith({bar: 23}, "bar");
+      expect(CustomType._events.bar.trigger).to.have.been.calledWith({bar: 23}, 'bar');
     });
 
-    it("returns return value from custom trigger with translated event", function() {
+    it('returns return value from custom trigger with translated event', function() {
       CustomType = NativeObject.extend({
 
         _events: {
           bar: {
-            name: "foo",
-            trigger: spy(() => "foobar")
+            name: 'foo',
+            trigger: spy(() => 'foobar')
           }
         }
       });
       proxy = new CustomType();
-      spy(proxy, "trigger");
+      spy(proxy, 'trigger');
 
-      let returnValue = tabris._notify(proxy.cid, "foo");
+      let returnValue = tabris._notify(proxy.cid, 'foo');
 
-      expect(returnValue).to.equal("foobar");
+      expect(returnValue).to.equal('foobar');
     });
 
-    it("skips events for already disposed widgets", function() {
+    it('skips events for already disposed widgets', function() {
       CustomType = NativeObject.extend({_events: {bar: true}});
       proxy = new CustomType();
       proxy.dispose();
-      spy(proxy, "trigger");
+      spy(proxy, 'trigger');
 
-      tabris._notify(proxy.cid, "bar", {bar: 23});
+      tabris._notify(proxy.cid, 'bar', {bar: 23});
 
       expect(proxy.trigger).to.have.not.been.called;
     });
 
-    it("silently ignores events for non-existing ids (does not crash)", function() {
+    it('silently ignores events for non-existing ids (does not crash)', function() {
       expect(() => {
-        tabris._notify("no-id", "foo", [23, 42]);
+        tabris._notify('no-id', 'foo', [23, 42]);
       }).to.not.throw();
     });
 
-    it("can be called without a context", function() {
+    it('can be called without a context', function() {
       CustomType = NativeObject.extend({_events: {bar: true}});
       proxy = new CustomType();
-      spy(proxy, "trigger");
+      spy(proxy, 'trigger');
 
-      tabris._notify.call(null, proxy.cid, "bar", [23, 42]);
+      tabris._notify.call(null, proxy.cid, 'bar', [23, 42]);
 
-      expect(proxy.trigger).to.have.been.calledWith("bar", [23, 42]);
+      expect(proxy.trigger).to.have.been.calledWith('bar', [23, 42]);
     });
 
   });
 
-  describe("load", function() {
+  describe('load', function() {
 
     beforeEach(function() {
       delete tabris._nativeBridge;
       tabris._ready = false;
     });
 
-    it("function is not executed before start time", function() {
+    it('function is not executed before start time', function() {
       let fn = spy();
       tabris.load(fn);
 
       expect(fn).to.have.not.been.called;
     });
 
-    it("function is executed at start time", function() {
+    it('function is executed at start time', function() {
       let fn = spy();
 
       tabris.load(fn);
@@ -199,27 +199,27 @@ describe("ClientInterface", function() {
       expect(fn).to.have.been.called;
     });
 
-    it("nested load functions are executed at the end", function() {
+    it('nested load functions are executed at the end', function() {
       let log = [];
 
       tabris.load(function() {
-        log.push("1");
+        log.push('1');
         tabris.load(function() {
-          log.push("1a");
+          log.push('1a');
         });
         tabris.load(function() {
-          log.push("1b");
+          log.push('1b');
         });
       });
       tabris.load(function() {
-        log.push("2");
+        log.push('2');
       });
       tabris._init(client);
 
-      expect(log).to.eql(["1", "2", "1a", "1b"]);
+      expect(log).to.eql(['1', '2', '1a', '1b']);
     });
 
-    it("runs immediately if already started", function() {
+    it('runs immediately if already started', function() {
       let fn = spy();
 
       tabris._init(client);

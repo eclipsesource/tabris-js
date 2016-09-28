@@ -4,11 +4,11 @@ export function colorArrayToString(array) {
   var g = array[1];
   var b = array[2];
   var a = array.length === 3 ? 1 : Math.round(array[3] * 100 / 255) / 100;
-  return "rgba(" + r + ", " + g + ", " + b + ", " + a + ")";
+  return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
 }
 
 export function colorStringToArray(str) {
-  if (str === "transparent") {
+  if (str === 'transparent') {
     return [0, 0, 0, 0];
   }
   // #xxxxxx
@@ -52,7 +52,7 @@ export function colorStringToArray(str) {
     var rgb = NAMES[str];
     return [rgb[0], rgb[1], rgb[2], 255];
   }
-  throw new Error("invalid color: " + str);
+  throw new Error('invalid color: ' + str);
 }
 
 /*

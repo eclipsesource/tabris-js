@@ -1,16 +1,16 @@
-import Widget from "../Widget";
-import {create as createContentView} from "./ContentView";
+import Widget from '../Widget';
+import {create as createContentView} from './ContentView';
 
 export default function UI() {
-  throw new Error("UI can not be created");
+  throw new Error('UI can not be created');
 }
 
 var _UI = Widget.extend({
 
-  _name: "UI",
+  _name: 'UI',
 
   _create: function() {
-    Object.defineProperty(this, "contentView", {
+    Object.defineProperty(this, 'contentView', {
       value: createContentView(),
       writable: false,
       configurable: false
@@ -19,7 +19,7 @@ var _UI = Widget.extend({
   },
 
   _setParent: function() {
-    throw new Error("Parent of ContentView can not be changed");
+    throw new Error('Parent of ContentView can not be changed');
   },
 
   _nativeSet: function() {},
@@ -38,7 +38,7 @@ var _UI = Widget.extend({
   },
 
   _dispose: function() {
-    throw new Error("UI can not be disposed");
+    throw new Error('UI can not be disposed');
   }
 
 });

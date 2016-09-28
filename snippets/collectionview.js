@@ -1,14 +1,14 @@
-var IMAGE_PATH = "images/";
+var IMAGE_PATH = 'images/';
 
 var people = [
-  ["Holger", "Staudacher", "holger.jpg"],
-  ["Ian", "Bull", "ian.jpg"],
-  ["Jochen", "Krause", "jochen.jpg"],
-  ["Jordi", "Böhme López", "jordi.jpg"],
-  ["Markus", "Knauer", "markus.jpg"],
-  ["Moritz", "Post", "moritz.jpg"],
-  ["Ralf", "Sternberg", "ralf.jpg"],
-  ["Tim", "Buschtöns", "tim.jpg"]
+  ['Holger', 'Staudacher', 'holger.jpg'],
+  ['Ian', 'Bull', 'ian.jpg'],
+  ['Jochen', 'Krause', 'jochen.jpg'],
+  ['Jordi', 'Böhme López', 'jordi.jpg'],
+  ['Markus', 'Knauer', 'markus.jpg'],
+  ['Moritz', 'Post', 'moritz.jpg'],
+  ['Ralf', 'Sternberg', 'ralf.jpg'],
+  ['Tim', 'Buschtöns', 'tim.jpg']
 ].map(function(element) {
   return {firstName: element[0], lastName: element[1], image: IMAGE_PATH + element[2]};
 });
@@ -23,13 +23,13 @@ new tabris.CollectionView({
     }).appendTo(cell);
     var nameTextView = new tabris.TextView({
       layoutData: {left: 30, top: [imageView, 16], right: 30},
-      alignment: "center"
+      alignment: 'center'
     }).appendTo(cell);
-    cell.on("change:item", function(widget, person) {
-      imageView.set("image", {src: person.image});
-      nameTextView.set("text", person.firstName);
+    cell.on('change:item', function(widget, person) {
+      imageView.set('image', {src: person.image});
+      nameTextView.set('text', person.firstName);
     });
   }
-}).on("select", function(target, value) {
-  console.log("selected", value.firstName);
+}).on('select', function(target, value) {
+  console.log('selected', value.firstName);
 }).appendTo(tabris.ui.contentView);

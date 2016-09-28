@@ -1,10 +1,10 @@
-import Widget from "../Widget";
-import Cell from "./Cell";
+import Widget from '../Widget';
+import Cell from './Cell';
 
 export default Widget.extend({
-  _name: "CollectionView",
+  _name: 'CollectionView',
 
-  _type: "tabris.CollectionView",
+  _type: 'tabris.CollectionView',
 
   _supportsChildren: function(child) {
     return child instanceof Cell;
@@ -12,20 +12,20 @@ export default Widget.extend({
 
   _properties: {
     itemHeight: {
-      type: "any", // "function|natural",
+      type: 'any', // "function|natural",
       default: 0,
       access: {
         set: function(name, value, options) {
-          if (typeof value !== "function") {
+          if (typeof value !== 'function') {
             // Required for 1.0 compatibility
-            this._nativeSet("itemHeight", value);
+            this._nativeSet('itemHeight', value);
           }
           this._storeProperty(name, value, options);
         }
       }
     },
     items: {
-      type: "array",
+      type: 'array',
       access: {
         set: function(name, value, options) {
           this._setItems(value, options);
@@ -36,7 +36,7 @@ export default Widget.extend({
       }
     },
     initializeCell: {
-      type: "function",
+      type: 'function',
       default: null,
       access: {
         set: function(name, value) {
@@ -45,7 +45,7 @@ export default Widget.extend({
       }
     },
     cellType: {
-      type: "any", // "string|function",
+      type: 'any', // "string|function",
       default: null,
       access: {
         set: function(name, value, options) {
@@ -53,11 +53,11 @@ export default Widget.extend({
         }
       }
     },
-    refreshEnabled: {type: "boolean", default: false},
-    refreshIndicator: {type: "boolean", nocache: true},
-    refreshMessage: {type: "string", default: ""},
+    refreshEnabled: {type: 'boolean', default: false},
+    refreshIndicator: {type: 'boolean', nocache: true},
+    refreshMessage: {type: 'string', default: ''},
     firstVisibleIndex: {
-      type: "number",
+      type: 'number',
       access: {
         set: function(name) {
           console.warn(this.type + ": Cannot set read-only property '" + name + "'.");
@@ -65,7 +65,7 @@ export default Widget.extend({
       }
     },
     lastVisibleIndex: {
-      type: "number",
+      type: 'number',
       access: {
         set: function(name) {
           console.warn(this.type + ": Cannot set read-only property '" + name + "'.");
@@ -73,24 +73,24 @@ export default Widget.extend({
       }
     },
     columnCount: {
-      type: "number",
+      type: 'number',
       default: 1
     }
   },
 
   _create: function() {
     this._items = [];
-    var result = this._super("_create", arguments);
-    this._nativeListen("requestinfo", true);
-    this._nativeListen("createitem", true);
-    this._nativeListen("populateitem", true);
+    var result = this._super('_create', arguments);
+    this._nativeListen('requestinfo', true);
+    this._nativeListen('createitem', true);
+    this._nativeListen('populateitem', true);
     // TODO call _reload on flush
     this._reload();
     return result;
   },
 
   set: function() {
-    var result = this._super("set", arguments);
+    var result = this._super('set', arguments);
     // TODO call _reload on flush, remove override
     this._reload();
     return result;
@@ -98,15 +98,15 @@ export default Widget.extend({
 
   _events: {
     refresh: {
-      trigger: function(event) {this.trigger("refresh", this, event);}
+      trigger: function(event) {this.trigger('refresh', this, event);}
     },
     requestinfo: {
       trigger: function(event) {
         var item = this._getItem(this._items, event.index);
-        var type = resolveProperty(this, "cellType", item);
-        var height = resolveProperty(this, "itemHeight", item, type);
+        var type = resolveProperty(this, 'cellType', item);
+        var height = resolveProperty(this, 'itemHeight', item, type);
         var typeId = encodeCellType(this, type);
-        this._nativeCall("describeItem", {index: event.index, type: typeId, height: height});
+        this._nativeCall('describeItem', {index: event.index, type: typeId, height: height});
       }
     },
     createitem: {
@@ -114,10 +114,10 @@ export default Widget.extend({
         var cell = new Cell();
         cell._parent = this;
         this._addChild(cell);
-        this._nativeCall("addItem", {widget: cell.cid});
-        var initializeCell = this.get("initializeCell");
-        if (typeof initializeCell !== "function") {
-          console.warn("initializeCell callback missing");
+        this._nativeCall('addItem', {widget: cell.cid});
+        var initializeCell = this.get('initializeCell');
+        if (typeof initializeCell !== 'function') {
+          console.warn('initializeCell callback missing');
         } else {
           initializeCell(cell, decodeCellType(this, event.type));
         }
@@ -127,43 +127,43 @@ export default Widget.extend({
       trigger: function(event) {
         var cell = tabris._proxies.find(event.widget);
         var item = this._getItem(this._items, event.index);
-        cell._storeProperty("itemIndex", event.index);
-        if (item !== cell._getStoredProperty("item")) {
-          cell._storeProperty("item", item);
+        cell._storeProperty('itemIndex', event.index);
+        if (item !== cell._getStoredProperty('item')) {
+          cell._storeProperty('item', item);
         } else {
-          cell.trigger("change:item", cell, item, {});
+          cell.trigger('change:item', cell, item, {});
         }
       }
     },
     select: {
       listen: function(state) {
-        this._nativeListen("select", state);
+        this._nativeListen('select', state);
       },
       trigger: function(event) {
         var item = this._getItem(this._items, event.index);
-        this.trigger("select", this, item, {index: event.index});
+        this.trigger('select', this, item, {index: event.index});
       }
     },
     scroll: {
       trigger: function(event) {
-        this.trigger("scroll", this, event);
+        this.trigger('scroll', this, event);
       }
     },
-    "change:firstVisibleIndex": {
+    'change:firstVisibleIndex': {
       listen: function(state) {
         if (state) {
-          this.on("scroll", triggerChangeFirstVisibleIndex);
+          this.on('scroll', triggerChangeFirstVisibleIndex);
         } else {
-          this.off("scroll", triggerChangeFirstVisibleIndex);
+          this.off('scroll', triggerChangeFirstVisibleIndex);
         }
       }
     },
-    "change:lastVisibleIndex": {
+    'change:lastVisibleIndex': {
       listen: function(state) {
         if (state) {
-          this.on("scroll", triggerChangeLastVisibleIndex);
+          this.on('scroll', triggerChangeLastVisibleIndex);
         } else {
-          this.off("scroll", triggerChangeLastVisibleIndex);
+          this.off('scroll', triggerChangeLastVisibleIndex);
         }
       }
     }
@@ -171,7 +171,7 @@ export default Widget.extend({
 
   _setItems: function(items, options) {
     this._items = items || [];
-    this._triggerChangeEvent("items", this._items, options);
+    this._triggerChangeEvent('items', this._items, options);
     this._needsReload = true;
   },
 
@@ -182,24 +182,24 @@ export default Widget.extend({
   reveal: function(index) {
     index = this._checkIndex(index);
     if (index >= 0 && index < this._items.length) {
-      this._nativeCall("reveal", {index: index});
+      this._nativeCall('reveal', {index: index});
     }
   },
 
   refresh: function(index) {
     if (arguments.length === 0) {
-      this._nativeCall("update", {reload: [0, this._items.length]});
+      this._nativeCall('update', {reload: [0, this._items.length]});
       return;
     }
     index = this._checkIndex(index);
     if (index >= 0 && index < this._items.length) {
-      this._nativeCall("update", {reload: [index, 1]});
+      this._nativeCall('update', {reload: [index, 1]});
     }
   },
 
   insert: function(items, index) {
     if (!Array.isArray(items)) {
-      throw new Error("items is not an array");
+      throw new Error('items is not an array');
     }
     if (arguments.length === 1) {
       index = this._items.length;
@@ -208,22 +208,22 @@ export default Widget.extend({
     }
     Array.prototype.splice.apply(this._items, [index, 0].concat(items));
     this._adjustIndicies(index, items.length);
-    this._nativeCall("update", {insert: [index, items.length]});
+    this._nativeCall('update', {insert: [index, items.length]});
   },
 
   remove: function(index, count) {
     index = this._checkIndex(index);
     if (arguments.length === 1) {
       count = 1;
-    } else if (typeof count === "number" && isFinite(count) && count >= 0) {
+    } else if (typeof count === 'number' && isFinite(count) && count >= 0) {
       count = Math.min(count, this._items.length - index);
     } else {
-      throw new Error("illegal remove count");
+      throw new Error('illegal remove count');
     }
     if (index >= 0 && index < this._items.length && count > 0) {
       this._items.splice(index, count);
       this._adjustIndicies(index + count, -count);
-      this._nativeCall("update", {remove: [index, count]});
+      this._nativeCall('update', {remove: [index, count]});
     }
   },
 
@@ -231,14 +231,14 @@ export default Widget.extend({
     // We defer the reload call until the end of create/set in order to ensure that
     // we don't receive events before the listeners are attached
     if (this._needsReload) {
-      this._nativeCall("reload", {"items": this._items.length});
+      this._nativeCall('reload', {'items': this._items.length});
       delete this._needsReload;
     }
   },
 
   _checkIndex: function(index) {
-    if (typeof index !== "number" || !isFinite(index)) {
-      throw new Error("illegal index");
+    if (typeof index !== 'number' || !isFinite(index)) {
+      throw new Error('illegal index');
     }
     return index < 0 ? index + this._items.length : index;
   },
@@ -247,9 +247,9 @@ export default Widget.extend({
     var cells = this._children || [];
     for (var i = 0; i < cells.length; i++) {
       var cell = cells[i];
-      var itemIndex = cell._getStoredProperty("itemIndex");
+      var itemIndex = cell._getStoredProperty('itemIndex');
       if (itemIndex >= offset) {
-        cell._storeProperty("itemIndex", itemIndex + diff);
+        cell._storeProperty('itemIndex', itemIndex + diff);
       }
     }
   }
@@ -258,7 +258,7 @@ export default Widget.extend({
 
 function resolveProperty(ctx, name) {
   var value = ctx.get(name);
-  if (typeof value === "function") {
+  if (typeof value === 'function') {
     return value.apply(null, Array.prototype.slice.call(arguments, 2));
   }
   return value;
@@ -278,15 +278,15 @@ function decodeCellType(ctx, type) {
   return cellTypes[type];
 }
 
-var triggerChangeFirstVisibleIndex = createDelegate("firstVisibleIndex");
-var triggerChangeLastVisibleIndex = createDelegate("lastVisibleIndex");
+var triggerChangeFirstVisibleIndex = createDelegate('firstVisibleIndex');
+var triggerChangeLastVisibleIndex = createDelegate('lastVisibleIndex');
 
 function createDelegate(prop) {
   return function() {
     var actual = this.get(prop);
-    if (actual !== this["_prev:" + prop]) {
+    if (actual !== this['_prev:' + prop]) {
       this._triggerChangeEvent(prop, actual);
     }
-    this["_prev:" + prop] = actual;
+    this['_prev:' + prop] = actual;
   };
 }

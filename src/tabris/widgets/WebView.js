@@ -1,9 +1,9 @@
-import Widget from "../Widget";
+import Widget from '../Widget';
 
 export default Widget.extend({
-  _name: "WebView",
+  _name: 'WebView',
 
-  _type: "tabris.WebView",
+  _type: 'tabris.WebView',
 
   _events: {
     navigate: {
@@ -18,30 +18,30 @@ export default Widget.extend({
     },
     load: {
       trigger: function(event) {
-        this.trigger("load", this, event);
+        this.trigger('load', this, event);
       }
     },
     download: {
       trigger: function(event) {
-        this.trigger("download", this, event);
+        this.trigger('download', this, event);
       }
     },
     message: {
       trigger: function(event) {
-        this.trigger("message", this, event);
+        this.trigger('message', this, event);
       }
     }
   },
 
   _properties: {
-    url: {type: "string", nocache: true},
-    html: {type: "string", nocache: true},
-    headers: {type: "any", default: {}},
-    initScript: {type: "string"}
+    url: {type: 'string', nocache: true},
+    html: {type: 'string', nocache: true},
+    headers: {type: 'any', default: {}},
+    initScript: {type: 'string'}
   },
 
   postMessage: function(data, targetOrigin) {
-    this._nativeCall("postMessage", {
+    this._nativeCall('postMessage', {
       data: data,
       origin: targetOrigin
     });

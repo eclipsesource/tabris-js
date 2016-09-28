@@ -1,10 +1,10 @@
-import {expect, spy, restore} from "../../test";
-import ProxyStore from "../../../src/tabris/ProxyStore";
-import NativeBridge from "../../../src/tabris/NativeBridge";
-import ClientStub from "../ClientStub";
-import Action from "../../../src/tabris/widgets/Action";
+import {expect, spy, restore} from '../../test';
+import ProxyStore from '../../../src/tabris/ProxyStore';
+import NativeBridge from '../../../src/tabris/NativeBridge';
+import ClientStub from '../ClientStub';
+import Action from '../../../src/tabris/widgets/Action';
 
-describe("Action", function() {
+describe('Action', function() {
 
   let client;
 
@@ -20,27 +20,27 @@ describe("Action", function() {
 
   afterEach(restore);
 
-  describe("create", function() {
+  describe('create', function() {
 
     let actionCreateCalls;
 
     beforeEach(function() {
-      new Action({title: "Foo", enabled: true});
-      actionCreateCalls = client.calls({op: "create", type: "tabris.Action"});
+      new Action({title: 'Foo', enabled: true});
+      actionCreateCalls = client.calls({op: 'create', type: 'tabris.Action'});
     });
 
-    it("creates an action", function() {
+    it('creates an action', function() {
       expect(actionCreateCalls.length).to.equal(1);
     });
 
-    it("properties are passed to created action", function() {
-      expect(actionCreateCalls[0].properties.title).to.eql("Foo");
+    it('properties are passed to created action', function() {
+      expect(actionCreateCalls[0].properties.title).to.eql('Foo');
       expect(actionCreateCalls[0].properties.enabled).to.equal(true);
     });
 
   });
 
-  describe("set", function() {
+  describe('set', function() {
 
     let action;
 
@@ -49,16 +49,16 @@ describe("Action", function() {
       client.resetCalls();
     });
 
-    it("translates placement priority to uppercase", function() {
-      action.set("placementPriority", "low");
+    it('translates placement priority to uppercase', function() {
+      action.set('placementPriority', 'low');
 
-      let call = client.calls({op: "set"})[0];
-      expect(call.properties.placementPriority).to.equal("LOW");
+      let call = client.calls({op: 'set'})[0];
+      expect(call.properties.placementPriority).to.equal('LOW');
     });
 
   });
 
-  describe("get", function() {
+  describe('get', function() {
 
     let action;
 
@@ -67,23 +67,23 @@ describe("Action", function() {
       client.resetCalls();
     });
 
-    it("returns initial default property values", function() {
-      expect(action.get("image")).to.equal(null);
-      expect(action.get("visible")).to.equal(true);
-      expect(action.get("placementPriority")).to.equal("normal");
+    it('returns initial default property values', function() {
+      expect(action.get('image')).to.equal(null);
+      expect(action.get('visible')).to.equal(true);
+      expect(action.get('placementPriority')).to.equal('normal');
     });
 
-    it("returns cached placementPriority", function() {
-      action.set("placementPriority", "low");
+    it('returns cached placementPriority', function() {
+      action.set('placementPriority', 'low');
 
-      let result = action.get("placementPriority");
+      let result = action.get('placementPriority');
 
-      expect(result).to.equal("low");
+      expect(result).to.equal('low');
     });
 
   });
 
-  describe("select event", function() {
+  describe('select event', function() {
 
     let action, listener;
 
@@ -92,19 +92,19 @@ describe("Action", function() {
       listener = spy();
     });
 
-    it("sends listen for select", function() {
-      action.on("select", listener);
+    it('sends listen for select', function() {
+      action.on('select', listener);
 
-      let listen = client.calls({op: "listen", id: action.cid});
+      let listen = client.calls({op: 'listen', id: action.cid});
       expect(listen.length).to.equal(1);
-      expect(listen[0].event).to.equal("select");
+      expect(listen[0].event).to.equal('select');
       expect(listen[0].listen).to.equal(true);
     });
 
-    it("is fired with parameters", function() {
-      action.on("select", listener);
+    it('is fired with parameters', function() {
+      action.on('select', listener);
 
-      tabris._notify(action.cid, "select", {});
+      tabris._notify(action.cid, 'select', {});
 
       expect(listener).to.have.been.calledOnce;
       expect(listener).to.have.been.calledWith(action, {});

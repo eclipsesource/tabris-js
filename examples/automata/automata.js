@@ -22,9 +22,9 @@ var ySize = height / CELL_SIZE;
 //  exitOnClose: true
 // });
 var page = new tabris.Page({
-  title: "Automata",
+  title: 'Automata',
   topLevel: true,
-  background: "#000"
+  background: '#000'
 });
 
 function getNextState(x, y, alive) {
@@ -74,7 +74,7 @@ for (var x = 0; x < xSize; x++) {
     var alive = Math.random() >= 0.5;
     var composite = new tabris.Composite({
       layoutData: {left: x * CELL_SIZE, top: y * CELL_SIZE, width: CELL_SIZE, height: CELL_SIZE},
-      background: "#fff",
+      background: '#fff',
       visible: alive
     }).appendTo(page);
     cells[x][y] = {
@@ -97,9 +97,9 @@ for (var x = 0; x < xSize; x++) {
 
 var textView = new tabris.TextView({
   layoutData: {left: 0, top: 0, width: 80, height: 40},
-  background: "rgba(255, 0, 0, 0.8)",
-  textColor: "#fff",
-  text: "FPS"
+  background: 'rgba(255, 0, 0, 0.8)',
+  textColor: '#fff',
+  text: 'FPS'
 }).appendTo(page);
 
 // add FPS label
@@ -137,7 +137,7 @@ var run = function() {
         // minimze number of times we need to modify the proxy object
         if (cell.alive !== cell.lastAlive) {
           // cell.proxy.visible = cell.alive;
-          cell.proxy.set("visible", cell.alive);
+          cell.proxy.set('visible', cell.alive);
         }
 
         // save the state
@@ -158,7 +158,7 @@ var run = function() {
       var curTime = new Date().getTime();
       var diff = curTime - start;
       if (diff >= 1000) {
-        textView.set("text", "FPS: " + count);
+        textView.set('text', 'FPS: ' + count);
         count = 0;
         start = curTime;
       }
@@ -169,6 +169,6 @@ var run = function() {
 };
 
 var offset = new Date().getTime() - time;
-textView.set("text", "Load: " + offset);
+textView.set('text', 'Load: ' + offset);
 
-textView.on("tap", run);
+textView.on('tap', run);

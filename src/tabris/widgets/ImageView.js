@@ -1,20 +1,20 @@
-import Widget from "../Widget";
+import Widget from '../Widget';
 
 export default Widget.extend({
-  _name: "ImageView",
-  _type: "tabris.ImageView",
+  _name: 'ImageView',
+  _type: 'tabris.ImageView',
   _events: {
     load: {
       trigger: function(event) {
-        this.trigger("load", this, event);
+        this.trigger('load', this, event);
       }
     }
   },
   _properties: {
-    image: {type: "image", default: null},
-    scaleMode: {type: ["choice", ["auto", "fit", "fill", "stretch", "none"]], default: "auto"},
+    image: {type: 'image', default: null},
+    scaleMode: {type: ['choice', ['auto', 'fit', 'fill', 'stretch', 'none']], default: 'auto'},
     tintColor: {
-      type: "color",
+      type: 'color',
       access: {
         set: function(name, value, options) {
           this._nativeSet(name, value === undefined ? null : value);

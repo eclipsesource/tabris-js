@@ -1,8 +1,8 @@
-import {colorStringToArray, colorArrayToString} from "./util-colors";
-import {clone} from "./util";
-import ImageData from "./ImageData";
-import GC from "./GC";
-import LegacyCanvasContext from "./LegacyCanvasContext";
+import {colorStringToArray, colorArrayToString} from './util-colors';
+import {clone} from './util';
+import ImageData from './ImageData';
+import GC from './GC';
+import LegacyCanvasContext from './LegacyCanvasContext';
 
 export default function CanvasContext(gc) {
   this._gc = gc;
@@ -23,9 +23,9 @@ export default function CanvasContext(gc) {
   for (var name in properties) {
     defineProperty(this, name);
   }
-  tabris.on("flush", this._flush, this);
-  gc.on("dispose", function() {
-    tabris.off("flush", this._flush, this);
+  tabris.on('flush', this._flush, this);
+  gc.on('dispose', function() {
+    tabris.off('flush', this._flush, this);
   }, this);
 }
 
@@ -34,10 +34,10 @@ CanvasContext.prototype = {
   fillRect: function(x, y, width, height) {
     // TODO: delegate to native function, once it is implemented (#493)
     if (arguments.length < 4) {
-      throw new Error("Not enough arguments to CanvasContext.fillRect");
+      throw new Error('Not enough arguments to CanvasContext.fillRect');
     }
-    this._pushOperation("beginPath");
-    this._pushOperation("rect");
+    this._pushOperation('beginPath');
+    this._pushOperation('rect');
     this._doubles.push(x, y, width, height);
     this.fill();
   },
@@ -45,10 +45,10 @@ CanvasContext.prototype = {
   strokeRect: function(x, y, width, height) {
     // TODO: delegate to native function, once it is implemented (#493)
     if (arguments.length < 4) {
-      throw new Error("Not enough arguments to CanvasContext.strokeRect");
+      throw new Error('Not enough arguments to CanvasContext.strokeRect');
     }
-    this._pushOperation("beginPath");
-    this._pushOperation("rect");
+    this._pushOperation('beginPath');
+    this._pushOperation('rect');
     this._doubles.push(x, y, width, height);
     this.stroke();
   },
@@ -61,10 +61,10 @@ CanvasContext.prototype = {
   _init: function(width, height) {
     this.canvas.width = width;
     this.canvas.height = height;
-    this._gc._nativeCall("init", {
+    this._gc._nativeCall('init', {
       width: width,
       height: height,
-      font: [["sans-serif"], 12, false, false],
+      font: [['sans-serif'], 12, false, false],
       fillStyle: [0, 0, 0, 255],
       strokeStyle: [0, 0, 0, 255]
     });
@@ -72,7 +72,7 @@ CanvasContext.prototype = {
 
   _flush: function() {
     if (this._operations.length > 0) {
-      this._gc._nativeCall("draw", {packedOperations: [
+      this._gc._nativeCall('draw', {packedOperations: [
         this._newOpCodes,
         this._operations,
         this._doubles,
@@ -101,80 +101,80 @@ CanvasContext.prototype = {
 
 // State operations
 
-defineMethod("save", 0, function() {
+defineMethod('save', 0, function() {
   this._savedStates.push(clone(this._state));
 });
 
-defineMethod("restore", 0, function() {
+defineMethod('restore', 0, function() {
   this._state = this._savedStates.pop() || this._state;
 });
 
 // Path operations
 
-defineMethod("beginPath");
+defineMethod('beginPath');
 
-defineMethod("closePath");
+defineMethod('closePath');
 
-defineMethod("lineTo", 2, function(x, y) {
+defineMethod('lineTo', 2, function(x, y) {
   this._doubles.push(x, y);
 });
 
-defineMethod("moveTo", 2, function(x, y) {
+defineMethod('moveTo', 2, function(x, y) {
   this._doubles.push(x, y);
 });
 
-defineMethod("bezierCurveTo", 6, function(cp1x, cp1y, cp2x, cp2y, x, y) {
+defineMethod('bezierCurveTo', 6, function(cp1x, cp1y, cp2x, cp2y, x, y) {
   this._doubles.push(cp1x, cp1y, cp2x, cp2y, x, y);
 });
 
-defineMethod("quadraticCurveTo", 4, function(cpx, cpy, x, y) {
+defineMethod('quadraticCurveTo', 4, function(cpx, cpy, x, y) {
   this._doubles.push(cpx, cpy, x, y);
 });
 
-defineMethod("rect", 4, function(x, y, width, height) {
+defineMethod('rect', 4, function(x, y, width, height) {
   this._doubles.push(x, y, width, height);
 });
 
-defineMethod("arc", 5, function(x, y, radius, startAngle, endAngle, anticlockwise) {
+defineMethod('arc', 5, function(x, y, radius, startAngle, endAngle, anticlockwise) {
   this._doubles.push(x, y, radius, startAngle, endAngle);
   this._booleans.push(!!anticlockwise);
 });
 
 // Transformations
 
-defineMethod("scale", 2, function(x, y) {
+defineMethod('scale', 2, function(x, y) {
   this._doubles.push(x, y);
 });
 
-defineMethod("rotate", 1, function(angle) {
+defineMethod('rotate', 1, function(angle) {
   this._doubles.push(angle);
 });
 
-defineMethod("translate", 2, function(x, y) {
+defineMethod('translate', 2, function(x, y) {
   this._doubles.push(x, y);
 });
 
-defineMethod("transform", 6, function(a, b, c, d, e, f) {
+defineMethod('transform', 6, function(a, b, c, d, e, f) {
   this._doubles.push(a, b, c, d, e, f);
 });
 
-defineMethod("setTransform", 6, function(a, b, c, d, e, f) {
+defineMethod('setTransform', 6, function(a, b, c, d, e, f) {
   this._doubles.push(a, b, c, d, e, f);
 });
 
 // Drawing operations
 
-defineMethod("clearRect", 4, function(x, y, width, height) {
+defineMethod('clearRect', 4, function(x, y, width, height) {
   this._doubles.push(x, y, width, height);
 });
 
-defineMethod("fillText", 3, function(text, x, y /* , maxWidth */) {
+defineMethod('fillText', 3, function(text, x, y /* , maxWidth */) {
   this._strings.push(text);
   this._booleans.push(false, false, false);
   this._doubles.push(x, y);
 });
 
-defineMethod("strokeText", 3, function(text, x, y /* , maxWidth */) {
+defineMethod('strokeText', 3, function(text, x, y /* , maxWidth */) {
   this._strings.push(text);
   this._booleans.push(false, false, false);
   this._doubles.push(x, y);
@@ -184,11 +184,11 @@ defineMethod("strokeText", 3, function(text, x, y /* , maxWidth */) {
 
 CanvasContext.prototype.getImageData = function(x, y, width, height) {
   if (arguments.length < 4) {
-    throw new Error("Not enough arguments to CanvasContext.getImageData");
+    throw new Error('Not enough arguments to CanvasContext.getImageData');
   }
   this._flush();
   // TODO check validity of args
-  var uint8ClampedArray = this._gc._nativeCall("getImageData", {
+  var uint8ClampedArray = this._gc._nativeCall('getImageData', {
     x: x,
     y: y,
     width: width,
@@ -199,10 +199,10 @@ CanvasContext.prototype.getImageData = function(x, y, width, height) {
 
 CanvasContext.prototype.putImageData = function(imageData, x, y) {
   if (arguments.length < 3) {
-    throw new Error("Not enough arguments to CanvasContext.putImageData");
+    throw new Error('Not enough arguments to CanvasContext.putImageData');
   }
   this._flush();
-  this._gc._nativeCall("putImageData", {
+  this._gc._nativeCall('putImageData', {
     data: imageData.data,
     width: imageData.width,
     height: imageData.height,
@@ -217,21 +217,21 @@ CanvasContext.prototype.createImageData = function(width, height) {
     width = data.width;
     height = data.height;
   } else if (arguments.length < 2) {
-    throw new Error("Not enough arguments to CanvasContext.createImageData");
+    throw new Error('Not enough arguments to CanvasContext.createImageData');
   }
   return new ImageData(width, height);
 };
 
-defineMethod("fill");
+defineMethod('fill');
 
-defineMethod("stroke");
+defineMethod('stroke');
 
 CanvasContext.getContext = function(canvas, width, height) {
   if (!canvas._gc) {
     canvas._gc = new GC({parent: canvas});
   }
   if (!canvas._ctx) {
-    canvas._ctx = device.platform === "iOS" ? new LegacyCanvasContext(canvas._gc)
+    canvas._ctx = device.platform === 'iOS' ? new LegacyCanvasContext(canvas._gc)
                                             : new CanvasContext(canvas._gc);
   }
   canvas._ctx._init(width, height);
@@ -253,8 +253,8 @@ var properties = {
     }
   },
   lineCap: {
-    init: "butt",
-    values: toObject(["butt", "round", "square"]),
+    init: 'butt',
+    values: toObject(['butt', 'round', 'square']),
     encode: checkValue,
     decode: passThrough,
     addOperations: function(context, value) {
@@ -262,8 +262,8 @@ var properties = {
     }
   },
   lineJoin: {
-    init: "miter",
-    values: toObject(["bevel", "miter", "round"]),
+    init: 'miter',
+    values: toObject(['bevel', 'miter', 'round']),
     encode: checkValue,
     decode: passThrough,
     addOperations: function(context, value) {
@@ -287,8 +287,8 @@ var properties = {
     }
   },
   textAlign: {
-    init: "start",
-    values: toObject(["start", "end", "left", "right", "center"]),
+    init: 'start',
+    values: toObject(['start', 'end', 'left', 'right', 'center']),
     encode: checkValue,
     decode: passThrough,
     addOperations: function(context, value) {
@@ -296,8 +296,8 @@ var properties = {
     }
   },
   textBaseline: {
-    init: "alphabetic",
-    values: toObject(["top", "hanging", "middle", "alphabetic", "ideographic", "bottom"]),
+    init: 'alphabetic',
+    values: toObject(['top', 'hanging', 'middle', 'alphabetic', 'ideographic', 'bottom']),
     encode: checkValue,
     decode: passThrough,
     addOperations: function(context, value) {
@@ -336,7 +336,7 @@ function createState() {
 function defineMethod(name, reqArgCount, fn) {
   CanvasContext.prototype[name] = function() {
     if (reqArgCount && arguments.length < reqArgCount) {
-      throw new Error("Not enough arguments to CanvasContext." + name);
+      throw new Error('Not enough arguments to CanvasContext.' + name);
     }
     this._pushOperation(name);
     if (fn) {
@@ -357,7 +357,7 @@ function defineProperty(context, name) {
         context._pushOperation(name);
         prop.addOperations(context, context._state[name]);
       } catch (error) {
-        console.warn("Unsupported value for " + name + ": " + value);
+        console.warn('Unsupported value for ' + name + ': ' + value);
       }
     }
   });

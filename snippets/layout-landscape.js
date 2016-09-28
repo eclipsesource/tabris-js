@@ -1,33 +1,33 @@
 var SPACE = Math.max(screen.width, screen.height) > 900 ? 15 : 5;
 
 module.exports = {
-  "#red": {
+  '#red': {
     left: SPACE,
     top: SPACE,
-    right: ["#blue", SPACE],
+    right: ['#blue', SPACE],
     height: 80
   },
-  "#green": {
+  '#green': {
     left: SPACE,
-    top: ["#red", SPACE],
-    right: ["#purple", SPACE],
+    top: ['#red', SPACE],
+    right: ['#purple', SPACE],
     bottom: SPACE
   },
-  "#yellow": {
-    top: ["#red", SPACE],
+  '#yellow': {
+    top: ['#red', SPACE],
     bottom: SPACE,
-    right: ["#blue", SPACE],
+    right: ['#blue', SPACE],
     width: 80
   },
-  "#purple": {
-    top: ["#red", SPACE],
+  '#purple': {
+    top: ['#red', SPACE],
     left: null,
-    right: ["#yellow", SPACE],
+    right: ['#yellow', SPACE],
     bottom: SPACE,
     width: 80,
     height: null
   },
-  "#blue": {
+  '#blue': {
     visible: true,
     top: SPACE,
     right: SPACE,

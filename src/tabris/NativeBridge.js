@@ -1,17 +1,17 @@
-import Layout from "./Layout";
+import Layout from './Layout';
 
 export default function NativeBridge(bridge) {
   this._bridge = bridge;
   this._operations = [];
   this._currentOperation = {id: null};
-  tabris.on("flush", this.flush, this);
+  tabris.on('flush', this.flush, this);
 }
 
 NativeBridge.prototype = {
 
   create: function(id, type) {
     var properties = {};
-    this._operations.push(["create", id, type, properties]);
+    this._operations.push(['create', id, type, properties]);
     this._currentOperation = {id: id, properties: properties};
   },
 
@@ -21,18 +21,18 @@ NativeBridge.prototype = {
     } else {
       var properties = {};
       properties[name] = value;
-      this._operations.push(["set", id, properties]);
+      this._operations.push(['set', id, properties]);
       this._currentOperation = {id: id, properties: properties};
     }
   },
 
   listen: function(id, event, listen) {
-    this._operations.push(["listen", id, event, listen]);
+    this._operations.push(['listen', id, event, listen]);
     this._currentOperation = {id: null};
   },
 
   destroy: function(id) {
-    this._operations.push(["destroy", id]);
+    this._operations.push(['destroy', id]);
     this._currentOperation = {id: null};
   },
 
@@ -57,16 +57,16 @@ NativeBridge.prototype = {
     for (var i = 0; i < length; i++) {
       var op = operations[i];
       switch (op[0]) {
-        case "create":
+        case 'create':
           this._bridge.create(op[1], op[2], op[3]);
           break;
-        case "set":
+        case 'set':
           this._bridge.set(op[1], op[2]);
           break;
-        case "listen":
+        case 'listen':
           this._bridge.listen(op[1], op[2], op[3]);
           break;
-        case "destroy":
+        case 'destroy':
           this._bridge.destroy(op[1]);
       }
     }

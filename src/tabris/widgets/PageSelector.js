@@ -1,18 +1,18 @@
-import {extend} from "../util";
-import Composite from "./Composite";
-import Page from "./Page";
-import ImageView from "./ImageView";
-import TextView from "./TextView";
-import CollectionView from "./CollectionView";
+import {extend} from '../util';
+import Composite from './Composite';
+import Page from './Page';
+import ImageView from './ImageView';
+import TextView from './TextView';
+import CollectionView from './CollectionView';
 
 var PageSelector = function(properties) {
   var instance = new CollectionView(extend({
     items: getPages(),
     initializeCell: initializeCell,
-    itemHeight: device.platform === "iOS" ? 40 : 48,
+    itemHeight: device.platform === 'iOS' ? 40 : 48,
     layoutData: {left: 0, top: 0, right: 0, bottom: 0}
   }, properties));
-  instance.on("select", function(target, value) {
+  instance.on('select', function(target, value) {
     if (value instanceof Page) {
       if (tabris.ui.drawer) {
         tabris.ui.drawer.close();
@@ -20,52 +20,52 @@ var PageSelector = function(properties) {
       value.open();
     }
   });
-  tabris.ui.on("addchild", insertPage, instance).on("removechild", removePage, instance);
-  instance.on("dispose", function() {
-    tabris.ui.off("addchild", insertPage);
-    tabris.ui.off("removechild", removePage);
+  tabris.ui.on('addchild', insertPage, instance).on('removechild', removePage, instance);
+  instance.on('dispose', function() {
+    tabris.ui.off('addchild', insertPage);
+    tabris.ui.off('removechild', removePage);
   });
   return instance;
 };
 
 export default PageSelector;
 
-PageSelector.prototype.type = "PageSelector";
+PageSelector.prototype.type = 'PageSelector';
 
 function insertPage(ui, child) {
-  if (child instanceof Page && child.get("topLevel")) {
+  if (child instanceof Page && child.get('topLevel')) {
     this.insert([child]);
   }
 }
 
 function removePage(ui, child) {
-  var index = this.get("items").indexOf(child);
+  var index = this.get('items').indexOf(child);
   if (index !== -1) {
     this.remove(index);
   }
 }
 
 function getPages() {
-  return tabris.ui.children("Page").toArray().filter(function(page) {
-    return page.get("topLevel");
+  return tabris.ui.children('Page').toArray().filter(function(page) {
+    return page.get('topLevel');
   });
 }
 
 function initializeCell(cell) {
   new Composite({
     layoutData: {left: 0, right: 0, bottom: 0, height: 1},
-    background: "#bbb"
+    background: '#bbb'
   }).appendTo(cell);
   var imageView = new ImageView({
     layoutData: {left: 10, top: 10, bottom: 10}
   }).appendTo(cell);
   var textView = new TextView({
     layoutData: {left: 72, centerY: 0},
-    font: device.platform === "iOS" ? "17px .HelveticaNeueInterface-Regular" : "14px Roboto Medium",
-    textColor: device.platform === "iOS" ? "rgb(22, 126, 251)" : "#212121"
+    font: device.platform === 'iOS' ? '17px .HelveticaNeueInterface-Regular' : '14px Roboto Medium',
+    textColor: device.platform === 'iOS' ? 'rgb(22, 126, 251)' : '#212121'
   }).appendTo(cell);
-  cell.on("change:item", function(widget, page) {
-    imageView.set("image", page.get("image"));
-    textView.set("text", page.get("title"));
+  cell.on('change:item', function(widget, page) {
+    imageView.set('image', page.get('image'));
+    textView.set('text', page.get('title'));
   });
 }

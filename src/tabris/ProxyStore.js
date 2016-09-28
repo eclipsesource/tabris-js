@@ -8,7 +8,7 @@ ProxyStore.prototype = {
   register: function(proxy, withcid) {
     var cid = withcid || this._generateId();
     if (cid in this._proxies) {
-      throw new Error("cid already in use: " + cid);
+      throw new Error('cid already in use: ' + cid);
     }
     this._proxies[cid] = proxy;
     return cid;
@@ -23,7 +23,7 @@ ProxyStore.prototype = {
   },
 
   _generateId: function() {
-    return "o" + (this._idSequence++);
+    return 'o' + (this._idSequence++);
   }
 
 };

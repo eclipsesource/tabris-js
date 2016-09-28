@@ -1,54 +1,54 @@
-import NativeObject from "./NativeObject";
+import NativeObject from './NativeObject';
 
 var Device = NativeObject.extend({
-  _cid: "tabris.Device",
+  _cid: 'tabris.Device',
   _properties: {
-    model: "any",
-    platform: "any",
-    version: "any",
-    language: "any",
-    orientation: "any",
-    screenWidth: "any",
-    screenHeight: "any",
-    scaleFactor: "any",
-    win_keyboardPresent: "any",
-    win_primaryInput: "any"
+    model: 'any',
+    platform: 'any',
+    version: 'any',
+    language: 'any',
+    orientation: 'any',
+    screenWidth: 'any',
+    screenHeight: 'any',
+    scaleFactor: 'any',
+    win_keyboardPresent: 'any',
+    win_primaryInput: 'any'
   },
   _setProperty: function() {},
   _events: {
-    "change:orientation": {
-      name: "orientationchange",
+    'change:orientation': {
+      name: 'orientationchange',
       trigger: function(event) {
-        this._triggerChangeEvent("orientation", event.orientation);
+        this._triggerChangeEvent('orientation', event.orientation);
       }
     }
   },
   dispose: function() {
-    throw new Error("cannot dispose device object");
+    throw new Error('cannot dispose device object');
   }
 });
 
 export default Device;
 
 export function publishDeviceProperties(target) {
-  if (!("device" in target)) {
+  if (!('device' in target)) {
     target.device = createDeviceObject();
   }
-  if (!("screen" in target)) {
+  if (!('screen' in target)) {
     target.screen = createScreenObject();
   }
-  if (("navigator" in target) && !("language" in target.navigator)) {
-    defineReadOnlyProperty(target.navigator, "language", getDevicePropertyFn("language"));
+  if (('navigator' in target) && !('language' in target.navigator)) {
+    defineReadOnlyProperty(target.navigator, 'language', getDevicePropertyFn('language'));
   }
-  if (!("devicePixelRatio" in target)) {
-    target.devicePixelRatio = tabris.device.get("scaleFactor");
+  if (!('devicePixelRatio' in target)) {
+    target.devicePixelRatio = tabris.device.get('scaleFactor');
   }
 }
 
 if (global.tabris) {
   tabris.load(function() {
     tabris.device = new Device();
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       publishDeviceProperties(window);
     }
   });
@@ -56,7 +56,7 @@ if (global.tabris) {
 
 function createDeviceObject() {
   var dev = {};
-  ["model", "platform", "version"].forEach(function(name) {
+  ['model', 'platform', 'version'].forEach(function(name) {
     defineReadOnlyProperty(dev, name, getDevicePropertyFn(name));
   });
   return dev;
@@ -64,8 +64,8 @@ function createDeviceObject() {
 
 function createScreenObject() {
   var screen = {};
-  defineReadOnlyProperty(screen, "width", getDevicePropertyFn("screenWidth"));
-  defineReadOnlyProperty(screen, "height", getDevicePropertyFn("screenHeight"));
+  defineReadOnlyProperty(screen, 'width', getDevicePropertyFn('screenWidth'));
+  defineReadOnlyProperty(screen, 'height', getDevicePropertyFn('screenHeight'));
   return screen;
 }
 

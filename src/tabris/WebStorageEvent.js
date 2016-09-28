@@ -1,5 +1,5 @@
-import {extendPrototype} from "./util";
-import DOMEvent from "./DOMEvent";
+import {extendPrototype} from './util';
+import DOMEvent from './DOMEvent';
 
 export default function WebStorageEvent(type) {
   this.type = type;
@@ -8,9 +8,9 @@ export default function WebStorageEvent(type) {
 WebStorageEvent.prototype = extendPrototype(DOMEvent, {
   bubbles: false,
   cancelable: false,
-  key: "",
+  key: '',
   oldValue: null,
   newValue: null,
-  url: "",
+  url: '',
   storageArea: null
 });

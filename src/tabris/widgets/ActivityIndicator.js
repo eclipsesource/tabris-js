@@ -1,6 +1,6 @@
-import Widget from "../Widget";
+import Widget from '../Widget';
 
 export default Widget.extend({
-  _name: "ActivityIndicator",
-  _type: "tabris.ActivityIndicator"
+  _name: 'ActivityIndicator',
+  _type: 'tabris.ActivityIndicator'
 });

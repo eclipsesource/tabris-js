@@ -1,6 +1,6 @@
-import chai, {expect} from "chai";
-import * as sinon from "sinon";
-import sinonChai from "sinon-chai";
+import chai, {expect} from 'chai';
+import * as sinon from 'sinon';
+import sinonChai from 'sinon-chai';
 
 chai.use(sinonChai);
 

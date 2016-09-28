@@ -1,12 +1,12 @@
-import {expect, restore} from "../../test";
-import ProxyStore from "../../../src/tabris/ProxyStore";
-import NativeBridge from "../../../src/tabris/NativeBridge";
-import ClientStub from "../ClientStub";
-import {create as createUI} from "../../../src/tabris/widgets/UI";
-import ContentView from "../../../src/tabris/widgets/ContentView";
-import Composite from "../../../src/tabris/widgets/Composite";
+import {expect, restore} from '../../test';
+import ProxyStore from '../../../src/tabris/ProxyStore';
+import NativeBridge from '../../../src/tabris/NativeBridge';
+import ClientStub from '../ClientStub';
+import {create as createUI} from '../../../src/tabris/widgets/UI';
+import ContentView from '../../../src/tabris/widgets/ContentView';
+import Composite from '../../../src/tabris/widgets/Composite';
 
-describe("ContentView", function() {
+describe('ContentView', function() {
 
   let ui, contentView, client;
 
@@ -24,38 +24,38 @@ describe("ContentView", function() {
 
   afterEach(restore);
 
-  it("can not be created standalone", function() {
+  it('can not be created standalone', function() {
     expect(() => {
       new ContentView({});
     }).to.throw(Error);
   });
 
-  it("is a ContentView", function() {
+  it('is a ContentView', function() {
     expect(contentView).to.be.an.instanceOf(ContentView);
   });
 
-  it("CREATEs Composite", function() {
-    let createCall = client.calls({op: "create", id: contentView.cid})[0];
-    expect(createCall.type).to.equal("tabris.Composite");
+  it('CREATEs Composite', function() {
+    let createCall = client.calls({op: 'create', id: contentView.cid})[0];
+    expect(createCall.type).to.equal('tabris.Composite');
     expect(createCall.properties).to.contain.all.keys({root: true});
   });
 
-  it("does not SET parent", function() {
-    let createCall = client.calls({op: "create", id: contentView.cid})[0];
-    expect(createCall.properties).not.to.contain.any.keys("parent");
+  it('does not SET parent', function() {
+    let createCall = client.calls({op: 'create', id: contentView.cid})[0];
+    expect(createCall.properties).not.to.contain.any.keys('parent');
   });
 
-  it("is child of ui", function() {
+  it('is child of ui', function() {
     expect(contentView.parent()).to.equal(ui);
   });
 
-  it("can not be disposed", function() {
+  it('can not be disposed', function() {
     expect(() => {
       contentView.dispose();
     }).to.throw(Error);
   });
 
-  it("can not be reparented", function() {
+  it('can not be reparented', function() {
     expect(() => {
       new Composite().append(contentView);
     }).to.throw(Error);

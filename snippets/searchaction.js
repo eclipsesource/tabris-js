@@ -1,9 +1,9 @@
 var page = new tabris.Page({
-  title: "Actions",
+  title: 'Actions',
   topLevel: true
 });
 
-var proposals = ["baseball", "batman", "battleship", "bangkok", "bangladesh", "banana"];
+var proposals = ['baseball', 'batman', 'battleship', 'bangkok', 'bangladesh', 'banana'];
 
 var searchBox = new tabris.Composite({
   layoutData: {centerX: 0, centerY: 0}
@@ -12,30 +12,30 @@ var searchBox = new tabris.Composite({
 var textView = new tabris.TextView().appendTo(searchBox);
 
 var action = new tabris.SearchAction({
-  title: "Search",
-  image: "images/search.png"
-}).on("select", function() {
-  this.set("text", "");
-}).on("input", function(widget, query) {
+  title: 'Search',
+  image: 'images/search.png'
+}).on('select', function() {
+  this.set('text', '');
+}).on('input', function(widget, query) {
   updateProposals(query);
-}).on("accept", function(widget, query) {
-  textView.set("text", "Selected '" + query + "'");
+}).on('accept', function(widget, query) {
+  textView.set('text', "Selected '" + query + "'");
 });
 
-updateProposals("");
+updateProposals('');
 
 new tabris.Button({
-  text: "Open Search",
+  text: 'Open Search',
   centerX: 0,
-  top: "prev() 10"
-}).on("select", function() {
+  top: 'prev() 10'
+}).on('select', function() {
   action.open();
 }).appendTo(searchBox);
 
 page.open();
 
 function updateProposals(query) {
-  action.set("proposals", proposals.filter(function(proposal) {
+  action.set('proposals', proposals.filter(function(proposal) {
     return proposal.indexOf(query.toLowerCase()) !== -1;
   }));
 }

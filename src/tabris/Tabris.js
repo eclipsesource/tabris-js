@@ -1,7 +1,7 @@
-import {extend} from "./util";
-import Events from "./Events";
-import NativeBridge from "./NativeBridge";
-import ProxyStore from "./ProxyStore";
+import {extend} from './util';
+import Events from './Events';
+import NativeBridge from './NativeBridge';
+import ProxyStore from './ProxyStore';
 
 export default function Tabris() {
   this._loadFunctions = [];
@@ -21,7 +21,7 @@ extend(Tabris.prototype, Events, {
     }
   },
 
-  version: "${VERSION}",
+  version: '${VERSION}',
 
   _init: function(client) {
     this._client = client;
@@ -49,7 +49,7 @@ extend(Tabris.prototype, Events, {
           console.log(error.stack);
         }
       }
-      this.trigger("flush");
+      this.trigger('flush');
     } catch (ex) {
       console.error(ex);
       console.log(ex.stack);

@@ -6,7 +6,7 @@ ClientStub.prototype = {
 
   create: function() {
     this._calls.push({
-      op: "create",
+      op: 'create',
       id: arguments[0],
       type: arguments[1],
       properties: arguments[2]
@@ -15,7 +15,7 @@ ClientStub.prototype = {
 
   get: function() {
     this._calls.push({
-      op: "get",
+      op: 'get',
       id: arguments[0],
       property: arguments[1]
     });
@@ -23,7 +23,7 @@ ClientStub.prototype = {
 
   set: function() {
     this._calls.push({
-      op: "set",
+      op: 'set',
       id: arguments[0],
       properties: arguments[1]
     });
@@ -31,7 +31,7 @@ ClientStub.prototype = {
 
   call: function() {
     this._calls.push({
-      op: "call",
+      op: 'call',
       id: arguments[0],
       method: arguments[1],
       parameters: arguments[2]
@@ -40,7 +40,7 @@ ClientStub.prototype = {
 
   listen: function() {
     this._calls.push({
-      op: "listen",
+      op: 'listen',
       id: arguments[0],
       event: arguments[1],
       listen: arguments[2]
@@ -49,13 +49,13 @@ ClientStub.prototype = {
 
   destroy: function() {
     this._calls.push({
-      op: "destroy",
+      op: 'destroy',
       id: arguments[0]
     });
   },
 
   load: function(url) {
-    return url.slice(-5) === ".json" ? "{}" : "exports = 23;";
+    return url.slice(-5) === '.json' ? '{}' : 'exports = 23;';
   },
 
   calls: function(filterProperties) {

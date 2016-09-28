@@ -1,6 +1,6 @@
 var pageCount = 0;
 
-createPage("Initial Page", true);
+createPage('Initial Page', true);
 
 function createPage(title, topLevel) {
   var page = new tabris.Page({
@@ -10,8 +10,8 @@ function createPage(title, topLevel) {
 
   new tabris.Button({
     layoutData: {left: 10, top: 10, right: 10},
-    text: "Create another page"
-  }).on("select", function() {
-    createPage("Page " + (++pageCount), false);
+    text: 'Create another page'
+  }).on('select', function() {
+    createPage('Page ' + (++pageCount), false);
   }).appendTo(page);
 }
