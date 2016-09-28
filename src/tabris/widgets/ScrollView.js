@@ -37,7 +37,7 @@ export default Widget.extend({
   scrollToY: function(offsetY, options) {
     this._nativeCall("scrollToY", {
       offsetY: offsetY,
-      animated: options && "animated" in options ? !!options.animated : true
+      animate: options && "animate" in options ? !!options.animate : true
     });
     return this;
   },
@@ -45,7 +45,7 @@ export default Widget.extend({
   scrollToX: function(offsetX, options) {
     this._nativeCall("scrollToX", {
       offsetX: offsetX,
-      animated: options && "animated" in options ? !!options.animated : true
+      animate: options && "animate" in options ? !!options.animate : true
     });
     return this;
   }

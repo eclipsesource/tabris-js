@@ -207,13 +207,13 @@ describe("ScrollView", function() {
         method: "scrollToX",
         parameters: {
           offsetX: 100,
-          animated: true
+          animate: true
         }
       }]);
     });
 
     it("CALLs 'scrollToX' with options", function() {
-      scrollView.scrollToX(101, {animated: false});
+      scrollView.scrollToX(101, {animate: false});
 
       let calls = client.calls({op: "call", id: scrollView.cid});
       expect(calls).to.deep.equal([{
@@ -222,13 +222,13 @@ describe("ScrollView", function() {
         method: "scrollToX",
         parameters: {
           offsetX: 101,
-          animated: false
+          animate: false
         }
       }]);
     });
 
     it("CALLs 'scrollToX' with normalized options", function() {
-      scrollView.scrollToX(101, {animated: 1});
+      scrollView.scrollToX(101, {animate: 1});
 
       let calls = client.calls({op: "call", id: scrollView.cid});
       expect(calls).to.deep.equal([{
@@ -237,13 +237,13 @@ describe("ScrollView", function() {
         method: "scrollToX",
         parameters: {
           offsetX: 101,
-          animated: true
+          animate: true
         }
       }]);
     });
 
     it("CALLs 'scrollToX' with filtered options", function() {
-      scrollView.scrollToX(101, {foo: "bar", animated: true});
+      scrollView.scrollToX(101, {foo: "bar", animate: true});
 
       let calls = client.calls({op: "call", id: scrollView.cid});
       expect(calls).to.deep.equal([{
@@ -252,7 +252,7 @@ describe("ScrollView", function() {
         method: "scrollToX",
         parameters: {
           offsetX: 101,
-          animated: true
+          animate: true
         }
       }]);
     });
@@ -267,7 +267,7 @@ describe("ScrollView", function() {
         method: "scrollToX",
         parameters: {
           offsetX: 101,
-          animated: true
+          animate: true
         }
       }]);
     });
@@ -294,13 +294,13 @@ describe("ScrollView", function() {
         method: "scrollToY",
         parameters: {
           offsetY: 100,
-          animated: true
+          animate: true
         }
       }]);
     });
 
     it("CALLs 'scrollToY' with options", function() {
-      scrollView.scrollToY(101, {animated: false});
+      scrollView.scrollToY(101, {animate: false});
 
       let calls = client.calls({op: "call", id: scrollView.cid});
       expect(calls).to.deep.equal([{
@@ -309,13 +309,13 @@ describe("ScrollView", function() {
         method: "scrollToY",
         parameters: {
           offsetY: 101,
-          animated: false
+          animate: false
         }
       }]);
     });
 
     it("CALLs 'scrollToY' with normalized options", function() {
-      scrollView.scrollToY(101, {animated: 1});
+      scrollView.scrollToY(101, {animate: 1});
 
       let calls = client.calls({op: "call", id: scrollView.cid});
       expect(calls).to.deep.equal([{
@@ -324,13 +324,13 @@ describe("ScrollView", function() {
         method: "scrollToY",
         parameters: {
           offsetY: 101,
-          animated: true
+          animate: true
         }
       }]);
     });
 
     it("CALLs 'scrollToY' with filtered options", function() {
-      scrollView.scrollToY(101, {foo: "bar", animated: true});
+      scrollView.scrollToY(101, {foo: "bar", animate: true});
 
       let calls = client.calls({op: "call", id: scrollView.cid});
       expect(calls).to.deep.equal([{
@@ -339,7 +339,7 @@ describe("ScrollView", function() {
         method: "scrollToY",
         parameters: {
           offsetY: 101,
-          animated: true
+          animate: true
         }
       }]);
     });
@@ -354,7 +354,7 @@ describe("ScrollView", function() {
         method: "scrollToY",
         parameters: {
           offsetY: 101,
-          animated: true
+          animate: true
         }
       }]);
     });
