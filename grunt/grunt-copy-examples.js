@@ -4,21 +4,16 @@ var async = require('async');
 
 module.exports = function(grunt) {
 
-  grunt.registerTask('copy-examples', 'Copy examples and snippets to build/', function() {
-    var src = grunt.config('examples').src;
+  grunt.registerTask('copy-examples', 'Copy examples to build/', function() {
     var done = this.async();
-    async.eachSeries(src, processExamples, function(err) {
-      if (err) {
-        grunt.log.error(err);
-      }
-      done(!err);
-    });
+    processExamples(grunt.config('examples').src, done);
   });
 
   function processExamples(dir, callback) {
     async.map(grunt.file.expand(dir + '/*'), processExample, function(err, results) {
       if (err) {
-        return callback(err);
+        grunt.log.error(err);
+        return callback(!err);
       }
       var index = results.filter(exists);
       grunt.file.write(path.join('build', dir, 'index.json'), JSON.stringify(index, null, 2));

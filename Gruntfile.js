@@ -147,7 +147,7 @@ module.exports = function(grunt) {
       }
     },
     examples: {
-      src: ['snippets', 'examples']
+      src: 'examples'
     }
   });
 
