@@ -9,20 +9,26 @@ export default function NativeObject(cid) {
 extend(NativeObject.prototype, Events, {
 
   set: function(arg1, arg2) {
-    this._checkDisposed();
-    if (typeof arg1 === "string") {
-      this._setProperty(arg1, arg2);
+    if (this._isDisposed) {
+      console.warn("Cannot set property on disposed object");
     } else {
-      this._setProperties(arg1, arg2 || {});
+      if (typeof arg1 === "string") {
+        this._setProperty(arg1, arg2);
+      } else {
+        this._setProperties(arg1, arg2 || {});
+      }
     }
     return this;
   },
 
   get: function(name) {
-    this._checkDisposed();
-    var getter = this._getPropertyGetter(name) || this._getStoredProperty;
-    var value = getter.call(this, name);
-    return this._decodeProperty(this._getTypeDef(name), value);
+    if (this._isDisposed) {
+      console.warn("Cannot get property on disposed object");
+    } else {
+      var getter = this._getPropertyGetter(name) || this._getStoredProperty;
+      var value = getter.call(this, name);
+      return this._decodeProperty(this._getTypeDef(name), value);
+    }
   },
 
   _setProperties: function(properties) {
@@ -127,6 +133,7 @@ extend(NativeObject.prototype, Events, {
         tabris._nativeBridge.destroy(this.cid);
       }
       tabris._proxies.remove(this.cid);
+      delete this._props;
       this._isDisposed = true;
     }
   },
@@ -159,6 +166,7 @@ extend(NativeObject.prototype, Events, {
   },
 
   _nativeListen: function(event, state) {
+    this._checkDisposed();
     tabris._nativeBridge.listen(this.cid, event, state);
   },
 
@@ -179,15 +187,18 @@ extend(NativeObject.prototype, Events, {
       throw new Error("Object is disposed");
     }
   },
+
   _getEventConfig: function(type) {
     return this.constructor._events[type];
   },
 
   _nativeSet: function(name, value) {
+    this._checkDisposed();
     tabris._nativeBridge.set(this.cid, name, value);
   },
 
   _nativeGet: function(name) {
+    this._checkDisposed();
     return tabris._nativeBridge.get(this.cid, name);
   },
 

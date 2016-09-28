@@ -92,6 +92,7 @@ describe("NativeObject", function() {
     beforeEach(function() {
       proxy = new TestType();
       client.resetCalls();
+      stub(console, "warn");
     });
 
     it("isDisposed() returns false", function() {
@@ -100,16 +101,32 @@ describe("NativeObject", function() {
 
     describe("get", function() {
 
-      it("does not call native get for unknown properties", function() {
-        proxy.get("bar");
-
-        expect(client.calls({op: "get"}).length).to.equal(0);
-      });
-
-      it("calls native get", function() {
+      it("calls native GET", function() {
         proxy.get("foo");
 
-        expect(client.calls({op: "get", property: "foo"}).length).to.equal(1);
+        expect(client.calls({op: "get", id: proxy.cid})).not.to.be.empty;
+      });
+
+      it("does not call native GET for unknown properties", function() {
+        proxy.get("bar");
+
+        expect(client.calls({op: "get", id: proxy.cid})).to.be.empty;
+      });
+
+      it("does not call native GET when disposed", function() {
+        proxy.dispose();
+
+        proxy.get("foo");
+
+        expect(client.calls({op: "get", id: proxy.cid})).to.be.empty;
+      });
+
+      it("prints warning when disposed", function() {
+        proxy.dispose();
+
+        proxy.get("foo");
+
+        expect(console.warn).to.have.been.calledWithMatch(/disposed/);
       });
 
       it("returns uncached value from native", function() {
@@ -157,8 +174,6 @@ describe("NativeObject", function() {
       });
 
       it("raises no warning for unknown property", function() {
-        spy(console, "warn");
-
         proxy.get("unknownProperty", true);
 
         expect(console.warn).not.to.have.been.called;
@@ -169,7 +184,6 @@ describe("NativeObject", function() {
           decode: x => x + "-decoded"
         };
         stub(client, "get").returns(23);
-        spy(console, "warn");
 
         let result = proxy.get("foo");
 
@@ -177,12 +191,11 @@ describe("NativeObject", function() {
         expect(console.warn).not.to.have.been.called;
       });
 
-      it("fails on disposed object", function() {
+      it("returns undefined on disposed object", function() {
+        proxy.set("foo", 23);
         proxy.dispose();
 
-        expect(() => {
-          proxy.get("foo");
-        }).to.throw(Error, "Object is disposed");
+        expect(proxy.get("foo")).to.be.undefined;
       });
 
       it ("returns undefined for unset property", function() {
@@ -229,6 +242,28 @@ describe("NativeObject", function() {
         listener = spy();
       });
 
+      it("calls native SET", function() {
+        proxy.set("foo", 23);
+
+        expect(client.calls({op: "set", id: proxy.cid}).length).to.equal(1);
+      });
+
+      it("does not call native SET if disposed", function() {
+        proxy.dispose();
+
+        proxy.set("foo", 23);
+
+        expect(client.calls({op: "set", id: proxy.cid})).to.be.empty;
+      });
+
+      it("prints warning if disposed", function() {
+        proxy.dispose();
+
+        proxy.set("foo", 23);
+
+        expect(console.warn).to.have.been.calledWithMatch(/disposed/);
+      });
+
       it ("stores single property", function() {
         proxy.set("foo", "bar");
         expect(proxy.get("foo")).to.equal("bar");
@@ -250,8 +285,6 @@ describe("NativeObject", function() {
       });
 
       it("raises no warning for unknown property", function() {
-        spy(console, "warn");
-
         proxy.set("unknownProperty", true);
 
         expect(console.warn).not.to.have.been.called;
@@ -260,31 +293,23 @@ describe("NativeObject", function() {
       it("stores unknown property loacally", function() {
         proxy.set("unknownProperty", "foo");
 
-        expect(client.calls({op: "set", id: proxy.cid}).length).to.equal(0);
+        expect(client.calls({op: "set", id: proxy.cid})).to.be.empty;
         expect(proxy.get("unknownProperty")).to.equal("foo");
       });
 
-      it("do not SET the value if _properties entry references a function that throws", function() {
+      it("does not call native SET if _properties entry references a function that throws", function() {
         TestType._properties.knownProperty = {type: "boolean"};
         stub(types.boolean, "encode").throws(new Error("My Error"));
 
         proxy.set("knownProperty", "foo");
 
-        expect(client.calls({op: "set"}).length).to.equal(0);
+        expect(client.calls({op: "set"})).to.be.empty;
       });
 
       it("returns self to allow chaining", function() {
         let result = proxy.set("foo", 23);
 
         expect(result).to.equal(proxy);
-      });
-
-      it("fails on disposed object", function() {
-        proxy.dispose();
-
-        expect(() => {
-          proxy.set("foo", 23);
-        }).to.throw(Error, "Object is disposed");
       });
 
       it("triggers change event for known properties", function() {
@@ -401,7 +426,6 @@ describe("NativeObject", function() {
         TestType._properties.knownProperty = {type: {
           encode: stub().returns(true)
         }};
-        stub(console, "warn");
 
         proxy.set("knownProperty", true);
 
@@ -413,7 +437,6 @@ describe("NativeObject", function() {
         TestType._properties.knownProperty = {type: {
           encode: stub().throws(new Error("My Error"))
         }};
-        stub(console, "warn");
 
         proxy.set("knownProperty", true);
 
@@ -423,14 +446,65 @@ describe("NativeObject", function() {
 
     });
 
+    describe("_nativeSet", function() {
+
+      it("calls native SET", function() {
+        proxy._nativeSet("foo", 23);
+
+        let call = client.calls()[0];
+        expect(call.id).to.equal(proxy.cid);
+        expect(call.op).to.equal("set");
+        expect(call.properties).to.eql({foo: 23});
+      });
+
+      it("fails on disposed object", function() {
+        proxy.dispose();
+
+        expect(() => {
+          proxy._nativeSet("foo", 23);
+        }).to.throw(Error, "Object is disposed");
+      });
+
+    });
+
+    describe("_nativeGet", function() {
+
+      it("calls native GET", function() {
+        proxy._nativeGet("foo");
+
+        let call = client.calls()[0];
+        expect(call.id).to.equal(proxy.cid);
+        expect(call.op).to.equal("get");
+        expect(call.property).to.equal("foo");
+      });
+
+      it("returns value from native", function() {
+        stub(client, "get").returns(23);
+
+        let result = proxy._nativeGet("foo");
+
+        expect(result).to.equal(23);
+      });
+
+      it("fails on disposed object", function() {
+        proxy.dispose();
+
+        expect(() => {
+          proxy._nativeGet("foo");
+        }).to.throw(Error, "Object is disposed");
+      });
+
+    });
+
     describe("_nativeCall", function() {
 
-      it("calls native call", function() {
+      it("calls native CALL", function() {
         proxy._nativeCall("method", {foo: 23});
 
         let call = client.calls()[0];
-        expect(call.op).to.eql("call");
-        expect(call.method).to.eql("method");
+        expect(call.id).to.equal(proxy.cid);
+        expect(call.op).to.equal("call");
+        expect(call.method).to.equal("method");
         expect(call.parameters).to.eql({foo: 23});
       });
 
@@ -447,6 +521,28 @@ describe("NativeObject", function() {
 
         expect(() => {
           proxy._nativeCall("foo", {});
+        }).to.throw(Error, "Object is disposed");
+      });
+
+    });
+
+    describe("_nativeListen", function() {
+
+      it("calls native LISTEN", function() {
+        proxy._nativeListen("foo", true);
+
+        let call = client.calls()[0];
+        expect(call.id).to.equal(proxy.cid);
+        expect(call.op).to.equal("listen");
+        expect(call.event).to.equal("foo");
+        expect(call.listen).to.be.true;
+      });
+
+      it("fails on disposed object", function() {
+        proxy.dispose();
+
+        expect(() => {
+          proxy._nativeListen("foo", true);
         }).to.throw(Error, "Object is disposed");
       });
 
@@ -600,7 +696,7 @@ describe("NativeObject", function() {
         proxy.on("bar", listener2);
         proxy.off("bar", listener);
 
-        expect(client.calls().length).to.equal(0);
+        expect(client.calls()).to.be.empty;
       });
 
       it("does not call native listen when other listeners exist for alias event", function() {
@@ -612,7 +708,7 @@ describe("NativeObject", function() {
 
         proxy.off("foo", listener);
 
-        expect(client.calls().length).to.equal(0);
+        expect(client.calls()).to.be.empty;
       });
 
       it("does not call native listen when other listeners exist for aliased event", function() {
@@ -624,7 +720,7 @@ describe("NativeObject", function() {
 
         proxy.off("bar", listener);
 
-        expect(client.calls().length).to.equal(0);
+        expect(client.calls()).to.be.empty;
       });
 
       it("calls native listen when not other listeners exist for aliased or alias event", function() {
@@ -739,6 +835,7 @@ describe("NativeObject.extend", function() {
       _proxies: new ProxyStore()
     };
     global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    stub(console, "warn");
   });
 
   afterEach(restore);
@@ -963,7 +1060,7 @@ describe("NativeObject.extend", function() {
     it("does not call create for service objects", function() {
       new ServiceType();
 
-      expect(nativeBridge.calls({op: "create"}).length).to.equal(0);
+      expect(nativeBridge.calls({op: "create"})).to.be.empty;
     });
 
     it("prevents multiple instances", function() {
