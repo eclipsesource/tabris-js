@@ -6,6 +6,7 @@
   "properties": {
     "platform": {
       "type": "string",
+      "values": ["Android", "iOS"],
       "description": "The name of the platform. Currently either `\"Android\"` or `\"iOS\"`. This property is also available globally as `device.platform`."
     },
     "version": {
@@ -34,6 +35,7 @@
     },
     "orientation": {
       "type": "string",
+      "values": ["portrait-primary", "portrait-secondary", "landscape-primary", "landscape-secondary"],
       "description": "The device orientation. One of `portrait-primary`, `portrait-secondary`, `landscape-primary`, and `landscape-secondary`."
     }
   },
