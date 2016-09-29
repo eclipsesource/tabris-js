@@ -145,9 +145,6 @@ module.exports = function(grunt) {
       bundle: {
         cmd: 'node node_modules/rollup/bin/rollup --format=cjs --output=build/bundle.js -- src/tabris/main.js'
       }
-    },
-    examples: {
-      src: 'examples'
     }
   });
 

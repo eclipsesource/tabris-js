@@ -1,3 +1,5 @@
+// React to application hibernation, resume and back navigation
+
 var paused = 0;
 
 var label = new tabris.TextView({

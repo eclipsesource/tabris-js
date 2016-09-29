@@ -1,3 +1,5 @@
+// Create a slider with a selection handler
+
 var textView = new tabris.TextView({
   layoutData: {left: 10, right: 10, top: '30%'},
   alignment: 'center',

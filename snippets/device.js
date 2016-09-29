@@ -1,3 +1,5 @@
+// Display available device information
+
 ['platform', 'version', 'model', 'language', 'orientation'].forEach(function(property) {
   new tabris.TextView({
     id: property,

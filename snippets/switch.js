@@ -1,3 +1,5 @@
+// Create a switch with a selection handler
+
 var MARGIN = 16;
 
 new tabris.Switch({

@@ -1,3 +1,5 @@
+// Create an action with an image and a selection handler
+
 var page = new tabris.Page({
   title: 'Actions',
   topLevel: true

@@ -1,3 +1,5 @@
+// Create radio buttons with selection handlers
+
 ['One', 'Two', 'Three'].forEach(function(title) {
   new tabris.RadioButton({
     layoutData: {left: 10, top: 'prev() 10'},

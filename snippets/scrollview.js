@@ -1,3 +1,5 @@
+// Create a horizontal scroll view and populate it with text views
+
 var scrollView = new tabris.ScrollView({
   left: 0, right: 0, top: '40%', bottom: '40%',
   direction: 'horizontal',

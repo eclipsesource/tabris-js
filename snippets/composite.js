@@ -1,3 +1,5 @@
+// Create composites and append children to them
+
 var composite1 = new tabris.Composite({
   layoutData: {left: 0, top: 0, bottom: 0, right: '50%'},
   background: '#f3f3f3'

@@ -1,3 +1,5 @@
+// Create a collection view, initialize its cells and fill it with items
+
 var IMAGE_PATH = 'images/';
 
 var people = [

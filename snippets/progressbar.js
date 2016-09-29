@@ -1,3 +1,5 @@
+// A progress bar that is animated using a timer
+
 var progressBar = new tabris.ProgressBar({
   layoutData: {left: 15, right: 15, centerY: 0},
   maximum: 300,

@@ -1,3 +1,5 @@
+// Create an action to perform a search with dynamic proposals
+
 var page = new tabris.Page({
   title: 'Actions',
   topLevel: true

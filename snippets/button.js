@@ -1,3 +1,5 @@
+// Create a push button that counts up on selection
+
 var count = 0;
 
 new tabris.Button({

@@ -1,3 +1,5 @@
+// Create a toggle button with a selection handler
+
 new tabris.ToggleButton({
   layoutData: {left: 10, top: 10},
   text: 'selected',

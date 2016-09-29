@@ -1,5 +1,7 @@
 let path = require('path');
 
+const SNIPPETS_LOCATION = 'snippets';
+
 module.exports = function (grunt) {
 
   grunt.registerTask('generate-doc', () => {
@@ -53,6 +55,7 @@ module.exports = function (grunt) {
       renderExample(json),
       renderIncludes(json),
       renderMembers(json, data),
+      renderSnippet(json),
       renderLinks(json)
     ].filter(notEmpty).join('\n');
   }
@@ -70,7 +73,17 @@ module.exports = function (grunt) {
     if (grunt.file.isFile(getTargetPath(json))) {
       return grunt.file.read(getTargetPath(json));
     }
-    return '';
+  }
+
+  function renderSnippet(json) {
+    if (grunt.file.isFile(getSnippetPath(json))) {
+      return [
+        '## Example',
+        '```javascript',
+        grunt.file.read(getSnippetPath(json)),
+        '```'
+      ].join('\n');
+    }
   }
 
   function resolveIncludes(data) {
@@ -113,6 +126,10 @@ module.exports = function (grunt) {
     return md.match(/^##\ *(.*)$/gm).map(heading => {
       return heading.slice(3).toLowerCase();
     });
+  }
+
+  function getSnippetPath(json) {
+    return path.join(SNIPPETS_LOCATION, `${json.type.toLowerCase()}.js`);
   }
 
   function getTargetPath(json) {

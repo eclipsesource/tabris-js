@@ -1,3 +1,5 @@
+// Create a picker widget to select a string from a list
+
 var airports = [
   {
     id: 'SFO',

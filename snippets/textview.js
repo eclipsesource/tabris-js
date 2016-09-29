@@ -1,3 +1,5 @@
+// Create text views with different alignments
+
 new tabris.TextView({
   layoutData: {left: 10, top: 10, right: 10},
   text: 'Left',

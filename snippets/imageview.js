@@ -1,3 +1,5 @@
+// Display images with different scale modes
+
 var createImageView = function(scaleMode) {
   new tabris.ImageView({
     layoutData: {left: 10, top: 'prev() 10', width: 250, height: 100},

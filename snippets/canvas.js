@@ -1,3 +1,5 @@
+// Draw shapes on a canvas using HTML5 Canvas API
+
 new tabris.Canvas({
   layoutData: {left: 10, top: 10, right: 10, bottom: 10}
 }).on('resize', function(canvas, bounds) {

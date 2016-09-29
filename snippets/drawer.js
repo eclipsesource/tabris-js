@@ -1,3 +1,5 @@
+// Create a drawer and append a widget to it
+
 var drawer = new tabris.Drawer()
   .on('open', function() {
     console.log('drawer opened');

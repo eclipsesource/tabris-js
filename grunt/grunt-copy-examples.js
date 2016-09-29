@@ -2,11 +2,13 @@ var npm = require('npm');
 var path = require('path');
 var async = require('async');
 
+const EXAMPLES_LOCATION = 'examples';
+
 module.exports = function(grunt) {
 
   grunt.registerTask('copy-examples', 'Copy examples to build/', function() {
     var done = this.async();
-    processExamples(grunt.config('examples').src, done);
+    processExamples(EXAMPLES_LOCATION, done);
   });
 
   function processExamples(dir, callback) {

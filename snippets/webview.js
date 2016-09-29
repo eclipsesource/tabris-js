@@ -1,3 +1,5 @@
+// Create a web view to show a web page
+
 var urlInput = new tabris.TextInput({
   layoutData: {left: 8, right: 8, top: 8},
   message: 'Enter URL...',

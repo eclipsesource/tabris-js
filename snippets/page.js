@@ -1,3 +1,5 @@
+// Creating multiple top level pages
+
 new tabris.Drawer().append(new tabris.PageSelector());
 
 new tabris.Page({
