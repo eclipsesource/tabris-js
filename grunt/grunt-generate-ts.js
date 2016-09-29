@@ -373,7 +373,7 @@ module.exports = function(grunt) {
   }
 
   function createTypeDefs(defs) {
-    applyIncludes(defs, ['Events', 'Properties']);
+    applyIncludes(defs, ['NativeObject']);
     let result = new Text();
     result.append(header);
     result.append('');
@@ -397,7 +397,6 @@ module.exports = function(grunt) {
         includes.forEach(function(include) {
           let incl = defs[include];
           def.events = Object.assign({}, incl.events || {}, def.events);
-          def.properties = Object.assign({}, incl.properties || {}, def.properties);
         });
       }
     });
@@ -432,6 +431,7 @@ module.exports = function(grunt) {
     addMethods(result, def);
     addEvents(result, def);
     addPropertyApi(result, def, name);
+    addProperties(result, def);
     result.indent--;
     result.append('}');
   }
@@ -453,7 +453,7 @@ module.exports = function(grunt) {
   function getSuperClass(name, def) {
     if (def.include) {
       // TODO adjust when json defs distiguish extends and includes
-      let includes = def.include.filter(sup => sup !== 'Events' && sup !== 'Properties');
+      let includes = def.include.filter(sup => sup !== 'NativeObject');
       if (includes.length > 1) {
         throw new Error('multiple inheritance: ' + name);
       }
@@ -469,7 +469,7 @@ module.exports = function(grunt) {
     result.indent++;
     Object.keys(def.properties || []).sort().forEach((name) => {
       result.append('');
-      result.append(createProperty(name, def.properties[name]));
+      result.append(createInterfaceProperty(name, def.properties[name]));
     });
     result.indent--;
     result.append('}');
@@ -594,7 +594,6 @@ module.exports = function(grunt) {
         '@param property'
       ]));
       result.append('get(property: string): any;');
-      addGetters(result, def);
       result.append('');
       result.append(createComment([
         'Sets the given property. Supports chaining.',
@@ -602,44 +601,31 @@ module.exports = function(grunt) {
         '@param value'
       ]));
       result.append('set(property: string, value: any): this;');
-      addSetters(result, def, name);
+      result.append('');
+      result.append(createComment([
+        'Sets all key-value pairs in the properties object as widget properties. Supports chaining.',
+        '@param properties'
+      ]));
+      result.append(`set(properties: ${name}Properties): this;`);
     }
   }
 
-  function addGetters(result, def) {
+  function addProperties(result, def) {
     Object.keys(def.properties || []).sort().forEach((name) => {
       result.append('');
-      result.append(createGetter(name, def.properties[name]));
+      result.append(createProperty(name, def.properties[name]));
     });
   }
 
-  function createGetter(name, def) {
+  function createProperty(name, def) {
     let result = [];
     result.push(createDoc(def));
-    result.push(`get(property: "${name}"): ${def.type};`);
-    return result.join('\n');
-  }
-
-  function addSetters(result, def, name) {
-    result.append('');
-    result.append(createComment([
-      'Sets all key-value pairs in the properties object as widget properties. Supports chaining.',
-      '@param properties'
-    ]));
-    result.append(`set(properties: ${name}Properties): this;`);
-    Object.keys(def.properties || []).sort().forEach((name) => {
-      result.append('');
-      result.append(createSetter(name, def.properties[name]));
-    });
-  }
-
-  function createSetter(name, def) {
-    let result = [];
-    result.push(createDoc(def));
-    result.push(`set(property: "${name}", value: ${def.type}): this;`);
+    let values = [];
     (def.values || []).sort().forEach((value) => {
-      result.push(`set(property: "${name}", value: "${value}"): this;`);
+      values.push(`"${value}"`);
     });
+    let valuesType = (values || []).join(' | ');
+    result.push(`${name}: ${valuesType || def.type};`);
     return result.join('\n');
   }
 
@@ -650,13 +636,17 @@ module.exports = function(grunt) {
     return result.join('\n');
   }
 
-  function createProperty(name, def) {
+  function createInterfaceProperty(name, def) {
     let result = [];
     result.push(createDoc(def));
-    result.push(`${name}?: ${def.type};`);
+    let values = [];
+    (def.values || []).sort().forEach((value) => {
+      values.push(`"${value}"`);
+    });
+    let valuesType = (values || []).join(' | ');
+    result.push(`${name}?: ${valuesType || def.type};`);
     return result.join('\n');
   }
-
 
   function createMethod(name, def) {
     let result = [];
@@ -753,3 +743,4 @@ module.exports = function(grunt) {
   }
 
 };
+

@@ -219,10 +219,6 @@
     }
   },
   "fields": {
-    "id": {
-      "type": "string",
-      "description": "Direct access to the value of the property of the same name. May be used instead of `widget.get(\"id\");` Do not use this field to change the value, instead use `widget.set(\"id\", id);`."
-    },
     "cid": {
       "type": "string",
       "description": "An application-wide unique identifier automatically assigned to all widgets on creation. Do not change it."
