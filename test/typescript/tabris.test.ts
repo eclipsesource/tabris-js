@@ -32,6 +32,7 @@ import {
   Device,
   ui,
   UI,
+  Image
 } from "tabris";
 
 var page: Page = new Page();
@@ -66,6 +67,11 @@ function test_Button() {
     image: {src: "http://example.org"},
     text: "foo"
   });
+  let width: number = widget.width;
+  let height: number = widget.height;
+  let alignment: "center" | "left" | "right" = widget.alignment;
+  let image: Image = widget.image;
+  let text: string = widget.text;
 }
 
 function test_CheckBox() {
@@ -75,6 +81,7 @@ function test_CheckBox() {
     selection: true,
     text: "foo"
   });
+  let selection: boolean = widget.selection;
 }
 
 function test_Canvas() {
@@ -104,6 +111,13 @@ function test_CollectionView() {
     refreshIndicator: true,
     refreshMessage: "foo"
   });
+  let cellType: string|Function = widget.cellType;
+  let initializeCell: Function = widget.initializeCell;
+  let itemHeight: number|Function = widget.itemHeight;
+  let items: any[] = widget.items;
+  let refreshEnabled: boolean = widget.refreshEnabled;
+  let refreshIndicator: boolean = widget.refreshIndicator;
+  let refreshMessage: string = widget.refreshMessage;
   widget.insert(["item1", "item2"]);
   widget.insert(["item1", "item2"], 3);
   widget.refresh();
@@ -136,6 +150,7 @@ function test_ImageView() {
     image: {src: "http://example.com"},
     scaleMode: "auto"
   });
+  let scaleMode: "auto" | "fill" | "fit" | "none" | "stretch" = widget.scaleMode;
 }
 
 function test_Page() {
@@ -146,6 +161,8 @@ function test_Page() {
     title: "foo",
     topLevel: true
   });
+  let title: string = page.title;
+  let topLevel: boolean = page.topLevel;
   page.open().close();
 }
 
@@ -164,6 +181,9 @@ function test_Picker() {
     selectionIndex: 23,
     items: ["foo", "bar", "baz"]
   });
+  let selection: any = widget.selection;
+  let selectionIndex: number = widget.selectionIndex;
+  let items: any[] = widget.items;
 }
 
 function test_ProgressBar() {
@@ -175,6 +195,10 @@ function test_ProgressBar() {
     selection: 23,
     state: "normal"
   });
+  let minimum: number = widget.minimum;
+  let maximum: number = widget.maximum;
+  let selction: number = widget.selection;
+  let state: "error" | "normal" | "paused" = widget.state;
 }
 
 function test_RadioButton() {
@@ -192,6 +216,7 @@ function test_ScrollView() {
   widget.set({
     direction: "horizontal"
   });
+  let direction: "horizontal" | "vertical" = widget.direction;
 }
 
 function test_SearchAction() {
@@ -202,6 +227,9 @@ function test_SearchAction() {
     proposals: ["foo", "bar", "baz"],
     text: "foo"
   });
+  let message: string = widget.message;
+  let proposals: string[] = widget.proposals;
+  let text: string = widget.text;
 }
 
 function test_Slider() {
@@ -212,6 +240,9 @@ function test_Slider() {
     maximum: 100,
     selection: 23
   });
+  let minimum: number = widget.minimum;
+  let maximum: number = widget.maximum;
+  let selction: number = widget.selection;
 }
 
 function test_Switch() {
@@ -235,6 +266,14 @@ function test_TextInput() {
     type: "search",
     keyboard: "ascii"
   });
+  let alignment: "center" | "left" | "right" = widget.alignment;
+  let autoCapitalize: boolean = widget.autoCapitalize;
+  let autoCorrect: boolean = widget.autoCorrect;
+  let editable: boolean = widget.editable;
+  let text: string = widget.text;
+  let message: string = widget.message;
+  let type: "default" | "multiline" | "password" | "search" = widget.type;
+  let keyboard: "ascii" | "decimal" | "default" | "email" | "number" | "numbersAndPunctuation" | "phone" | "url" = widget.keyboard;
 }
 
 function test_Tab() {
@@ -245,6 +284,7 @@ function test_Tab() {
     title: "bar",
     image: {src: "http://example.org"}
   });
+  let badge: string = tab.badge;
   var folder = new TabFolder();
   tab.appendTo(folder);
 }
@@ -257,6 +297,9 @@ function test_TabFolder() {
     tabBarLocation: "auto",
     selection: tab1
   });
+  let paging: boolean = widget.paging;
+  let tabBarLocation: "auto" | "bottom" | "hidden" | "top" = widget.tabBarLocation;
+  let selection: Tab = widget.selection;
   var tab1: Tab, tab2: Tab;
   var same: TabFolder = widget.append(tab1, tab2);
 }
@@ -270,6 +313,9 @@ function test_TextView() {
     maxLines: 23,
     text: "foo"
   });
+  let alignment: "center" | "left" | "right" = widget.alignment;
+  let markupEnabled: boolean = widget.markupEnabled;
+  let maxLines: number|Function = widget.maxLines;
   widget.set("maxLines", 23);
   widget.set("maxLines", () => 42);
 }
@@ -291,6 +337,7 @@ function test_Video() {
   widget.set({
     url: "http://example.org"
   });
+  let url: string = widget.url;
 }
 
 function test_WebView() {
@@ -300,6 +347,8 @@ function test_WebView() {
     html: "<html>",
     url: "http://example.org"
   });
+  let url: string = widget.url;
+  let html: string = widget.html;
 }
 
 function test_WidgetCollection() {
