@@ -46,7 +46,7 @@
   "links": [
     {
       "title": "Search action snippet",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/action-search/search-action.js"
+      "path": "${GITHUB_BRANCH}/snippets/action-search/search-action.js"
     }
   ]
 }

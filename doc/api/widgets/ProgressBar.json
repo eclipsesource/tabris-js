@@ -28,7 +28,7 @@
   "links": [
     {
       "title" : "Simple ProgressBar snippet",
-      "path" : "https://github.com/eclipsesource/tabris-js/blob/master/snippets/progressbar/progressbar.js"
+      "path" : "${GITHUB_BRANCH}/snippets/progressbar/progressbar.js"
     }
   ]
 }

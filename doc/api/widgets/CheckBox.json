@@ -34,7 +34,7 @@
   "links": [
     {
       "title" : "Simple Checkbox snippet",
-      "path" : "https://github.com/eclipsesource/tabris-js/blob/master/snippets/checkbox/checkbox.js"
+      "path" : "${GITHUB_BRANCH}/snippets/checkbox/checkbox.js"
     }
   ]
 }

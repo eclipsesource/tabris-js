@@ -35,7 +35,7 @@
   "links": [
     {
       "title": "Snippet for creating a Drawer",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/drawer/drawer.js"
+      "path": "${GITHUB_BRANCH}/snippets/drawer/drawer.js"
     }
   ]
 }

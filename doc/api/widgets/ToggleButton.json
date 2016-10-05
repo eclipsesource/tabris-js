@@ -44,7 +44,7 @@
   "links": [
     {
       "title": "Simple ToggleButton snippet",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/togglebutton/togglebutton.js"
+      "path": "${GITHUB_BRANCH}/snippets/togglebutton/togglebutton.js"
     }
   ]
 }

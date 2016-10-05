@@ -56,11 +56,11 @@
   "links": [
     {
       "title": "Simple WebView snippet",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/webview/webview.js"
+      "path": "${GITHUB_BRANCH}/snippets/webview/webview.js"
     },
     {
       "title": "WebView snippet demonstrating web messaging",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/webview-webmessage/webview-webmessage.js"
+      "path": "${GITHUB_BRANCH}/snippets/webview-webmessage/webview-webmessage.js"
     },
     {
       "title": "Web Messaging",

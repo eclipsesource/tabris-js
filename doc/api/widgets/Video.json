@@ -11,7 +11,7 @@
   "links": [
     {
       "title": "Snippet for creating a video wigdet",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/video/video.js"
+      "path": "${GITHUB_BRANCH}/snippets/video/video.js"
     }
   ]
 }

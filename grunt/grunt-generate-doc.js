@@ -290,7 +290,9 @@ module.exports = function (grunt) {
     let result = [];
     result.push('## See also\n\n');
     json.links.forEach(link => {
-      result.push('- [', link.title, '](', link.path, ')\n');
+      let path = link.path.replace('${GITHUB_BRANCH}',
+        'https://github.com/eclipsesource/tabris-js/tree/v' + grunt.config('version'));
+      result.push(`- [${link.title}](${path})\n`);
     });
     return result.join('');
   }

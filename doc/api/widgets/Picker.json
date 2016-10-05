@@ -49,7 +49,7 @@
   "links": [
     {
       "title": "Simple Picker snippet",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/picker/picker.js"
+      "path": "${GITHUB_BRANCH}/snippets/picker/picker.js"
     }
   ]
 }

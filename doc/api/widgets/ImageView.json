@@ -30,7 +30,7 @@
   "links": [
     {
       "title": "Image example",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/examples/image/image.js"
+      "path": "${GITHUB_BRANCH}/examples/image/image.js"
     }
   ]
 }

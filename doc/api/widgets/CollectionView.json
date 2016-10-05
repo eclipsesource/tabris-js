@@ -127,7 +127,7 @@
   "links": [
     {
       "title": "CollectionView example",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/collectionview/collectionview.js"
+      "path": "${GITHUB_BRANCH}/snippets/collectionview/collectionview.js"
     }
   ]
 }

@@ -40,7 +40,7 @@
   "links": [
     {
       "title" : "Simple Slider snippet",
-      "path" : "https://github.com/eclipsesource/tabris-js/blob/master/snippets/slider/slider.js"
+      "path" : "${GITHUB_BRANCH}/snippets/slider/slider.js"
     }
   ]
 }

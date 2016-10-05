@@ -29,11 +29,11 @@
   "links": [
     {
       "title": "Snippet for creating actions",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/action/action.js"
+      "path": "${GITHUB_BRANCH}/snippets/action/action.js"
     },
      {
       "title": "Actions - placement priorities",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/action-placement-priority/action-placement-priority.js"
+      "path": "${GITHUB_BRANCH}/snippets/action-placement-priority/action-placement-priority.js"
     }
   ]
 }

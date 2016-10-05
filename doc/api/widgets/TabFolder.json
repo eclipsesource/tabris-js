@@ -40,7 +40,7 @@
   "links": [
     {
       "title": "Snippet with a TabFolder and Tabs",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/tabfolder/tabfolder.js"
+      "path": "${GITHUB_BRANCH}/snippets/tabfolder/tabfolder.js"
     }
   ]
 }

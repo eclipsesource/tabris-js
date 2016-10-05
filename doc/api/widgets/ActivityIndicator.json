@@ -5,7 +5,7 @@
   "links": [
     {
       "title" : "Simple ActivityIndicator snippet",
-      "path" : "https://github.com/eclipsesource/tabris-js/blob/master/snippets/activity-indicator/activityindicator.js"
+      "path" : "${GITHUB_BRANCH}/snippets/activity-indicator/activityindicator.js"
     }
   ]
 }
