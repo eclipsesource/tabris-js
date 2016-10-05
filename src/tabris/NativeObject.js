@@ -9,35 +9,35 @@ export default function NativeObject(cid) {
 extend(NativeObject.prototype, Events, {
 
   set: function(arg1, arg2) {
-    if (this._isDisposed) {
-      console.warn('Cannot set property on disposed object');
+    if (typeof arg1 === 'string') {
+      setExistingProperty.call(this, arg1, arg2);
     } else {
-      if (typeof arg1 === 'string') {
-        this._setProperty(arg1, arg2);
-      } else {
-        this._setProperties(arg1, arg2 || {});
-      }
+      this._reorderProperties(Object.keys(arg1)).forEach(function(name) {
+        setExistingProperty.call(this, name, arg1[name]);
+      }, this);
     }
     return this;
   },
 
   get: function(name) {
-    if (this._isDisposed) {
-      console.warn('Cannot get property on disposed object');
-    } else {
-      var getter = this._getPropertyGetter(name) || this._getStoredProperty;
-      var value = getter.call(this, name);
-      return this._decodeProperty(this._getTypeDef(name), value);
-    }
+    return this[name];
   },
 
-  _setProperties: function(properties) {
-    for (var name in properties) {
-      this._setProperty(name, properties[name]);
+  _getProperty: function(name) {
+    if (this._isDisposed) {
+      console.warn('Cannot get property "' + name + '" on disposed object');
+      return;
     }
+    var getter = this._getPropertyGetter(name) || this._getStoredProperty;
+    var value = getter.call(this, name);
+    return this._decodeProperty(this._getTypeDef(name), value);
   },
 
   _setProperty: function(name, value) {
+    if (this._isDisposed) {
+      console.warn('Cannot set property "' + name + '" on disposed object');
+      return;
+    }
     var typeDef = this._getTypeDef(name);
     var encodedValue;
     try {
@@ -116,8 +116,14 @@ extend(NativeObject.prototype, Events, {
         this._nativeSet(name, this.constructor._initProperties[name]);
       }
     }
-    this._setProperties(properties || {});
+    this._reorderProperties(Object.keys(properties)).forEach(function(name) {
+      setExistingProperty.call(this, name, properties[name]);
+    }, this);
     return this;
+  },
+
+  _reorderProperties: function(properties) {
+    return properties;
   },
 
   dispose: function() {
@@ -213,6 +219,14 @@ extend(NativeObject.prototype, Events, {
 
 });
 
+function setExistingProperty(name, value) {
+  if (name in this) {
+    this[name] = value;
+  } else {
+    console.warn('Unknown property "' + name + '"');
+  }
+}
+
 NativeObject.extend = function(members, superType) {
   var Type = function(properties) {
     if (!(this instanceof Type)) {
@@ -238,7 +252,7 @@ NativeObject.extend = function(members, superType) {
   superProto.type = members._name;
   superProto.constructor = Type; // extendPrototype can not provide the original
   Type.prototype = extendPrototype(superType || NativeObject, superProto);
-  mapProperties(Type.prototype, Type._properties);
+  createProperties(Type.prototype, Type._properties);
   return Type;
 };
 
@@ -340,7 +354,7 @@ function getDefault(member) {
   return value instanceof Object ? clone(value) : value;
 }
 
-function mapProperties(target, definitions) {
+function createProperties(target, definitions) {
   for (var property in definitions) {
     createProperty(target, property);
   }
@@ -349,10 +363,10 @@ function mapProperties(target, definitions) {
 function createProperty(target, property) {
   Object.defineProperty(target, property, {
     set: function(value) {
-      this.set(property, value);
+      this._setProperty(property, value);
     },
     get: function() {
-      return this.get(property);
+      return this._getProperty(property);
     }
   });
 }

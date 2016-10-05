@@ -32,6 +32,7 @@ describe('Animation', function() {
     let TestWidget = NativeObject.extend({
       _name: 'TestWidget',
       _properties: {
+        foo: 'any',
         opacity: {
           type: 'opacity',
           default: 1

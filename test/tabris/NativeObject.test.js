@@ -8,7 +8,6 @@ import ClientStub from './ClientStub';
 describe('NativeObject', function() {
 
   let client;
-  let TestType;
 
   beforeEach(function() {
     client = new ClientStub();
@@ -17,26 +16,26 @@ describe('NativeObject', function() {
       _proxies: new ProxyStore()
     };
     global.tabris._nativeBridge = new NativeBridge(client);
-    TestType = NativeObject.extend({
-      _name: 'TestType',
-      _properties: {foo: 'any', uncachedProperty: {type: 'any', nocache: true}},
-      _events: {bar: true}
-    });
   });
 
   afterEach(restore);
 
   describe('create', function() {
 
-    let proxy;
+    let TestType, object;
 
     beforeEach(function() {
-      proxy = new TestType();
+      TestType = NativeObject.extend({
+        _name: 'TestType',
+        _properties: {foo: 'any', bar: 'any'},
+        _events: {bar: true}
+      });
+      object = new TestType();
       client.resetCalls();
     });
 
     it('calls native create with properties', function() {
-      proxy._create({foo: 23});
+      object._create({foo: 23});
 
       let calls = client.calls({op: 'create', type: 'TestType'});
       expect(calls.length).to.equal(1);
@@ -47,7 +46,7 @@ describe('NativeObject', function() {
       let other = new NativeObject('other-id');
       TestType._properties.foo.type = types.proxy;
 
-      proxy._create({foo: other});
+      object._create({foo: other});
 
       let properties = client.calls({op: 'create', type: 'TestType'})[0].properties;
       expect(properties.foo).to.equal('other-id');
@@ -87,361 +86,97 @@ describe('NativeObject', function() {
 
   describe('instance', function() {
 
-    let proxy;
+    let TestType, object;
 
     beforeEach(function() {
-      proxy = new TestType();
+      TestType = NativeObject.extend({
+        _name: 'TestType',
+        _events: {bar: true}
+      });
+      object = new TestType();
       client.resetCalls();
       stub(console, 'warn');
     });
 
     it('isDisposed() returns false', function() {
-      expect(proxy.isDisposed()).to.equal(false);
+      expect(object.isDisposed()).to.equal(false);
     });
 
     describe('get', function() {
 
-      it('calls native GET', function() {
-        proxy.get('foo');
+      it('calls property getter', function() {
+        Object.defineProperty(TestType.prototype, 'foo', {get: () => 23});
 
-        expect(client.calls({op: 'get', id: proxy.cid})).not.to.be.empty;
-      });
-
-      it('does not call native GET for unknown properties', function() {
-        proxy.get('bar');
-
-        expect(client.calls({op: 'get', id: proxy.cid})).to.be.empty;
-      });
-
-      it('does not call native GET when disposed', function() {
-        proxy.dispose();
-
-        proxy.get('foo');
-
-        expect(client.calls({op: 'get', id: proxy.cid})).to.be.empty;
-      });
-
-      it('prints warning when disposed', function() {
-        proxy.dispose();
-
-        proxy.get('foo');
-
-        expect(console.warn).to.have.been.calledWithMatch(/disposed/);
-      });
-
-      it('returns uncached value from native', function() {
-        stub(client, 'get').returns(23);
-        proxy.set('uncachedProperty', 12);
-
-        let result = proxy.get('uncachedProperty');
+        let result = object.get('foo');
 
         expect(result).to.equal(23);
       });
 
-      it('returns uncached value from default config', function() {
-        TestType._properties.foo.default = 23;
+      it('calls property getter on super class', function() {
+        Object.defineProperty(TestType.prototype, 'foo', {get: () => 23});
+        class SubType extends TestType {}
+        object = new SubType();
 
-        let result = proxy.get('foo');
+        let result = object.get('foo');
 
         expect(result).to.equal(23);
       });
 
-      it('returns cloned value from default function', function() {
-        TestType._properties.foo.default = () => [];
+      it('returns undefined for non-existing property', function() {
+        let result = object.get('unknown');
 
-        proxy.get('foo').push(1);
-
-        expect(proxy.get('foo')).to.eql([]);
-      });
-
-      it('returns cached value', function() {
-        proxy.set('foo', 'bar');
-        spy(client, 'get');
-
-        let result = proxy.get('foo');
-
-        expect(client.get).not.to.have.been.called;
-        expect(result).to.equal('bar');
-      });
-
-      it('returns cached value decoded', function() {
-        TestType._properties.foo.type = types.color;
-        proxy.set('foo', '#ff00ff');
-
-        let result = proxy.get('foo');
-
-        expect(result).to.equal('rgba(255, 0, 255, 1)');
-      });
-
-      it('raises no warning for unknown property', function() {
-        proxy.get('unknownProperty', true);
-
-        expect(console.warn).not.to.have.been.called;
-      });
-
-      it('decodes value if there is a decoder', function() {
-        TestType._properties.foo.type = {
-          decode: x => x + '-decoded'
-        };
-        stub(client, 'get').returns(23);
-
-        let result = proxy.get('foo');
-
-        expect(result).to.equal('23-decoded');
-        expect(console.warn).not.to.have.been.called;
-      });
-
-      it('returns undefined on disposed object', function() {
-        proxy.set('foo', 23);
-        proxy.dispose();
-
-        expect(proxy.get('foo')).to.be.undefined;
-      });
-
-      it ('returns undefined for unset property', function() {
-        expect(proxy.get('foo')).to.be.undefined;
-      });
-
-      it ('returns default value if property was never set', function() {
-        TestType._properties.foo = {default: 'bar'};
-
-        expect(proxy.get('foo')).to.equal('bar');
-      });
-
-      it ('does not return default value if property was set', function() {
-        TestType._properties.foo = {default: 'bar'};
-
-        proxy.set('foo', 'something else');
-
-        expect(proxy.get('foo')).to.equal('something else');
-      });
-
-      it ('calls custom getter with property name', function() {
-        let getter = spy();
-        proxy.set('foo', 'bar');
-        TestType._properties.foo = {get: getter};
-
-        proxy.get('foo');
-
-        expect(getter).to.have.been.calledWith('foo');
-      });
-
-      it ('returns value from custom getter', function() {
-        TestType._properties.foo = {get: stub().returns('bar')};
-
-        expect(proxy.get('foo')).to.equal('bar');
+        expect(result).to.be.undefined;
       });
 
     });
 
     describe('set', function() {
 
-      let listener;
+      it('calls property setter', function() {
+        let setter = spy();
+        Object.defineProperty(TestType.prototype, 'foo', {set: setter});
 
-      beforeEach(function() {
-        listener = spy();
+        object.set('foo', 23);
+
+        expect(setter).to.have.been.calledWith(23);
       });
 
-      it('calls native SET', function() {
-        proxy.set('foo', 23);
+      it('supports property objects', function() {
+        Object.assign(TestType.prototype, {foo: 0, bar: 0});
 
-        expect(client.calls({op: 'set', id: proxy.cid}).length).to.equal(1);
+        object.set({foo: 23, bar: 42});
+
+        expect(object.foo).to.equal(23);
+        expect(object.bar).to.equal(42);
       });
 
-      it('does not call native SET if disposed', function() {
-        proxy.dispose();
+      it('calls property setter on super class', function() {
+        let setter = spy();
+        Object.defineProperty(TestType.prototype, 'foo', {set: setter});
+        class SubClass extends TestType {}
+        object = new SubClass();
 
-        proxy.set('foo', 23);
+        object.set('foo', 23);
 
-        expect(client.calls({op: 'set', id: proxy.cid})).to.be.empty;
+        expect(setter).to.have.been.calledWith(23);
       });
 
-      it('prints warning if disposed', function() {
-        proxy.dispose();
+      it('does not set non-existing property', function() {
+        object.set('unknown', 23);
 
-        proxy.set('foo', 23);
-
-        expect(console.warn).to.have.been.calledWithMatch(/disposed/);
+        expect(object.unknown).to.be.undefined;
       });
 
-      it ('stores single property', function() {
-        proxy.set('foo', 'bar');
-        expect(proxy.get('foo')).to.equal('bar');
-      });
+      it('prints warnings for non-existing property', function() {
+        object.set('unknown', 23);
 
-      it ('stores multiple properties', function() {
-        proxy.set({foo: 'bar', foo2: 'bar2'});
-        expect(proxy.get('foo')).to.equal('bar');
-        expect(proxy.get('foo2')).to.equal('bar2');
-      });
-
-      it('translation does not modify properties', function() {
-        let other = new NativeObject('other-id');
-        let properties = {foo: other};
-
-        proxy.set(properties);
-
-        expect(properties.foo).to.equal(other);
-      });
-
-      it('raises no warning for unknown property', function() {
-        proxy.set('unknownProperty', true);
-
-        expect(console.warn).not.to.have.been.called;
-      });
-
-      it('stores unknown property loacally', function() {
-        proxy.set('unknownProperty', 'foo');
-
-        expect(client.calls({op: 'set', id: proxy.cid})).to.be.empty;
-        expect(proxy.get('unknownProperty')).to.equal('foo');
-      });
-
-      it('does not call native SET if _properties entry references a function that throws', function() {
-        TestType._properties.knownProperty = {type: 'boolean'};
-        stub(types.boolean, 'encode').throws(new Error('My Error'));
-
-        proxy.set('knownProperty', 'foo');
-
-        expect(client.calls({op: 'set'})).to.be.empty;
+        expect(console.warn).to.have.been.calledWith('Unknown property "unknown"');
       });
 
       it('returns self to allow chaining', function() {
-        let result = proxy.set('foo', 23);
+        let result = object.set('foo', 23);
 
-        expect(result).to.equal(proxy);
-      });
-
-      it('triggers change event for known properties', function() {
-        TestType._properties.foo = {type: 'any', default: ''};
-        proxy.on('change:foo', listener);
-
-        proxy.set('foo', 'bar');
-
-        expect(listener).to.have.been.calledWith(proxy, 'bar');
-      });
-
-      it('triggers change event with decoded property value', function() {
-        TestType._properties.foo = {type: types.color};
-        proxy.on('change:foo', listener);
-
-        proxy.set('foo', '#ff00ff');
-
-        expect(listener.args[0][1]).to.equal('rgba(255, 0, 255, 1)');
-      });
-
-      it('triggers no change event if value is unchanged from default', function() {
-        TestType._properties.foo = {type: 'any', default: ''};
-        proxy.on('change:foo', listener);
-
-        proxy.set('foo', '');
-
-        expect(listener).not.to.have.been.called;
-
-      });
-
-      it('triggers no change event if value is unchanged from previous value', function() {
-        TestType._properties.foo = {type: 'any', default: ''};
-        proxy.set('foo', 'bar');
-        proxy.on('change:foo', listener);
-
-        proxy.set('foo', 'bar');
-
-        expect(listener).not.to.have.been.called;
-      });
-
-      it('always triggers initial change event for cached properties without default', function() {
-        TestType._properties.foo = {type: 'any'};
-        proxy.on('change:foo', listener);
-
-        proxy.set('foo', 'bar');
-        proxy.set('foo', 'bar');
-
-        expect(listener).to.have.been.calledOnce;
-      });
-
-      it ('triggers change event', function() {
-        proxy.on('change:foo', listener);
-
-        proxy.set('foo', 'bar');
-
-        expect(listener).to.have.been.calledOnce;
-        expect(listener).to.have.been.calledWith(proxy, 'bar');
-      });
-
-      it ('triggers change event with decoded value', function() {
-        TestType._properties.foo = {type: types.boolean};
-        proxy.on('change:foo', listener);
-
-        proxy.set('foo', 'bar');
-
-        expect(listener).to.have.been.calledOnce;
-        expect(listener).to.have.been.calledWith(proxy, true);
-      });
-
-      it ('(single parameter) triggers change event', function() {
-        proxy.on('change:foo', listener);
-
-        proxy.set({foo: 'bar'});
-
-        expect(listener).to.have.been.calledOnce;
-        expect(listener).to.have.been.calledWith(proxy, 'bar');
-      });
-
-      it ('triggers no change event if value is unchanged', function() {
-        proxy.set('foo', 'bar');
-        proxy.on('change:foo', listener);
-
-        proxy.set('foo', 'bar');
-
-        expect(listener).to.have.not.been.called;
-      });
-
-      it ('triggers no change event if encoded value is unchanged', function() {
-        TestType._properties.foo = {type: types.boolean};
-        proxy.set('foo', true);
-        proxy.on('change:foo', listener);
-
-        proxy.set('foo', 'bar');
-
-        expect(listener).to.have.not.been.called;
-      });
-
-      it ('calls custom setter', function() {
-        let setter = stub();
-        TestType._properties.foo = {set: setter};
-        proxy.set('foo', 'bar');
-
-        expect(setter).to.have.been.calledWith('foo', 'bar');
-      });
-
-      it ('stores nothing if custom setter exists', function() {
-        TestType._properties.foo = {set: () => {}};
-        proxy.set('foo', 'bar');
-
-        expect(proxy.get('foo')).to.equal(undefined);
-      });
-
-      it('calls encoding function if present', function() {
-        TestType._properties.knownProperty = {type: {
-          encode: stub().returns(true)
-        }};
-
-        proxy.set('knownProperty', true);
-
-        expect(TestType._properties.knownProperty.type.encode).to.have.been.called;
-        expect(console.warn).to.have.not.been.called;
-      });
-
-      it('raises a warning if encoding function throws', function() {
-        TestType._properties.knownProperty = {type: {
-          encode: stub().throws(new Error('My Error'))
-        }};
-
-        proxy.set('knownProperty', true);
-
-        let message = 'TestType: Ignored unsupported value for property "knownProperty": My Error';
-        expect(console.warn).to.have.been.calledWith(message);
+        expect(result).to.equal(object);
       });
 
     });
@@ -449,19 +184,19 @@ describe('NativeObject', function() {
     describe('_nativeSet', function() {
 
       it('calls native SET', function() {
-        proxy._nativeSet('foo', 23);
+        object._nativeSet('foo', 23);
 
         let call = client.calls()[0];
-        expect(call.id).to.equal(proxy.cid);
+        expect(call.id).to.equal(object.cid);
         expect(call.op).to.equal('set');
         expect(call.properties).to.eql({foo: 23});
       });
 
       it('fails on disposed object', function() {
-        proxy.dispose();
+        object.dispose();
 
         expect(() => {
-          proxy._nativeSet('foo', 23);
+          object._nativeSet('foo', 23);
         }).to.throw(Error, 'Object is disposed');
       });
 
@@ -470,10 +205,10 @@ describe('NativeObject', function() {
     describe('_nativeGet', function() {
 
       it('calls native GET', function() {
-        proxy._nativeGet('foo');
+        object._nativeGet('foo');
 
         let call = client.calls()[0];
-        expect(call.id).to.equal(proxy.cid);
+        expect(call.id).to.equal(object.cid);
         expect(call.op).to.equal('get');
         expect(call.property).to.equal('foo');
       });
@@ -481,16 +216,16 @@ describe('NativeObject', function() {
       it('returns value from native', function() {
         stub(client, 'get').returns(23);
 
-        let result = proxy._nativeGet('foo');
+        let result = object._nativeGet('foo');
 
         expect(result).to.equal(23);
       });
 
       it('fails on disposed object', function() {
-        proxy.dispose();
+        object.dispose();
 
         expect(() => {
-          proxy._nativeGet('foo');
+          object._nativeGet('foo');
         }).to.throw(Error, 'Object is disposed');
       });
 
@@ -499,10 +234,10 @@ describe('NativeObject', function() {
     describe('_nativeCall', function() {
 
       it('calls native CALL', function() {
-        proxy._nativeCall('method', {foo: 23});
+        object._nativeCall('method', {foo: 23});
 
         let call = client.calls()[0];
-        expect(call.id).to.equal(proxy.cid);
+        expect(call.id).to.equal(object.cid);
         expect(call.op).to.equal('call');
         expect(call.method).to.equal('method');
         expect(call.parameters).to.eql({foo: 23});
@@ -511,16 +246,16 @@ describe('NativeObject', function() {
       it('returns value from native', function() {
         stub(client, 'call').returns(23);
 
-        let result = proxy._nativeCall('method', {});
+        let result = object._nativeCall('method', {});
 
         expect(result).to.equal(23);
       });
 
       it('fails on disposed object', function() {
-        proxy.dispose();
+        object.dispose();
 
         expect(() => {
-          proxy._nativeCall('foo', {});
+          object._nativeCall('foo', {});
         }).to.throw(Error, 'Object is disposed');
       });
 
@@ -529,20 +264,20 @@ describe('NativeObject', function() {
     describe('_nativeListen', function() {
 
       it('calls native LISTEN', function() {
-        proxy._nativeListen('foo', true);
+        object._nativeListen('foo', true);
 
         let call = client.calls()[0];
-        expect(call.id).to.equal(proxy.cid);
+        expect(call.id).to.equal(object.cid);
         expect(call.op).to.equal('listen');
         expect(call.event).to.equal('foo');
         expect(call.listen).to.be.true;
       });
 
       it('fails on disposed object', function() {
-        proxy.dispose();
+        object.dispose();
 
         expect(() => {
-          proxy._nativeListen('foo', true);
+          object._nativeListen('foo', true);
         }).to.throw(Error, 'Object is disposed');
       });
 
@@ -558,7 +293,7 @@ describe('NativeObject', function() {
       });
 
       it('calls native listen (true) for first listener', function() {
-        proxy.on('bar', listener);
+        object.on('bar', listener);
 
         let call = client.calls({op: 'listen', event: 'bar'})[0];
         expect(call.listen).to.eql(true);
@@ -566,8 +301,8 @@ describe('NativeObject', function() {
 
       it('calls native listen with translated event name', function() {
         let CustomType = NativeObject.extend({_events: {foo: 'bar'}});
-        proxy = new CustomType();
-        proxy.on('foo', listener);
+        object = new CustomType();
+        object.on('foo', listener);
 
         let call = client.calls({op: 'listen'})[0];
         expect(call.event).to.equal('bar');
@@ -575,9 +310,9 @@ describe('NativeObject', function() {
 
       it('calls native listen (true) for first alias listener', function() {
         let CustomType = NativeObject.extend({_events: {foo: {name: 'bar', alias: 'foo1'}}});
-        proxy = new CustomType();
+        object = new CustomType();
 
-        proxy.on('foo1', listener);
+        object.on('foo1', listener);
 
         let call = client.calls({op: 'listen', event: 'bar'})[0];
         expect(call.listen).to.eql(true);
@@ -586,7 +321,7 @@ describe('NativeObject', function() {
       it('calls custom listen', function() {
         TestType._events.bar.listen = spy();
 
-        proxy.on('bar', listener);
+        object.on('bar', listener);
 
         expect(TestType._events.bar.listen).to.have.been.calledWith(true, false);
       });
@@ -595,9 +330,9 @@ describe('NativeObject', function() {
         let CustomType = NativeObject.extend({
           _events: {foo: {alias: 'foo1', listen: spy()}}
         });
-        proxy = new CustomType();
+        object = new CustomType();
 
-        proxy.on('foo1', listener);
+        object.on('foo1', listener);
 
         expect(CustomType._events.foo.listen).to.have.been.calledWith(true, true);
       });
@@ -605,49 +340,49 @@ describe('NativeObject', function() {
       it('calls native listen for another listener for another event', function() {
         TestType._events.bar = {name: 'bar'};
 
-        proxy.on('foo', listener);
-        proxy.on('bar', listener);
+        object.on('foo', listener);
+        object.on('bar', listener);
 
         let call = client.calls({op: 'listen', event: 'bar'})[0];
         expect(call.listen).to.eql(true);
       });
 
       it('does not call native listen for subsequent listeners for the same event', function() {
-        proxy.on('bar', listener);
-        proxy.on('bar', listener);
+        object.on('bar', listener);
+        object.on('bar', listener);
 
         expect(client.calls({op: 'listen'}).length).to.equal(1);
       });
 
       it('does not call native listen for subsequent listeners for alias event', function() {
         let CustomType = NativeObject.extend({_events: {foo: {alias: 'bar'}}});
-        proxy = new CustomType();
-        proxy.on('foo', listener);
-        proxy.on('bar', listener);
+        object = new CustomType();
+        object.on('foo', listener);
+        object.on('bar', listener);
 
         expect(client.calls({op: 'listen'}).length).to.equal(1);
       });
 
       it('does not call native listen for subsequent listeners for aliased event', function() {
         let CustomType = NativeObject.extend({_events: {foo: {alias: 'bar'}}});
-        proxy = new CustomType();
-        proxy.on('bar', listener);
-        proxy.on('foo', listener);
+        object = new CustomType();
+        object.on('bar', listener);
+        object.on('foo', listener);
 
         expect(client.calls({op: 'listen'}).length).to.equal(1);
       });
 
       it('returns self to allow chaining', function() {
-        let result = proxy.on('foo', listener);
+        let result = object.on('foo', listener);
 
-        expect(result).to.equal(proxy);
+        expect(result).to.equal(object);
       });
 
       it('does not fail on disposed object', function() {
-        proxy.dispose();
+        object.dispose();
 
         expect(() => {
-          proxy.on('foo', listener);
+          object.on('foo', listener);
         }).not.to.throw();
       });
 
@@ -660,12 +395,12 @@ describe('NativeObject', function() {
       beforeEach(function() {
         listener = spy();
         listener2 = spy();
-        proxy.on('bar', listener);
+        object.on('bar', listener);
         client.resetCalls();
       });
 
       it('calls native listen (false) for last listener removed', function() {
-        proxy.off('bar', listener);
+        object.off('bar', listener);
 
         let call = client.calls({op: 'listen', event: 'bar'})[0];
         expect(call.listen).to.equal(false);
@@ -673,10 +408,10 @@ describe('NativeObject', function() {
 
       it('calls native listen (false) for last alias listener removed', function() {
         let CustomType = NativeObject.extend({_events: {foo: {alias: 'bar'}}});
-        proxy = new CustomType();
-        proxy.on('bar', listener);
+        object = new CustomType();
+        object.on('bar', listener);
 
-        proxy.off('bar', listener);
+        object.off('bar', listener);
 
         let call = client.calls({op: 'listen', event: 'foo'})[1];
         expect(call.listen).to.equal(false);
@@ -684,82 +419,82 @@ describe('NativeObject', function() {
 
       it('calls native listen with translated event name', function() {
         let CustomType = NativeObject.extend({_events: {foo: 'bar'}});
-        proxy = new CustomType();
-        proxy.on('foo', listener);
-        proxy.off('foo', listener);
+        object = new CustomType();
+        object.on('foo', listener);
+        object.off('foo', listener);
 
         let call = client.calls({op: 'listen'})[1];
         expect(call.event).to.equal('bar');
       });
 
       it('does not call native listen when other listeners exist for same event', function() {
-        proxy.on('bar', listener2);
-        proxy.off('bar', listener);
+        object.on('bar', listener2);
+        object.off('bar', listener);
 
         expect(client.calls()).to.be.empty;
       });
 
       it('does not call native listen when other listeners exist for alias event', function() {
         let CustomType = NativeObject.extend({_events: {foo: {alias: 'bar'}}});
-        proxy = new CustomType();
-        proxy.on('foo', listener);
-        proxy.on('bar', listener);
+        object = new CustomType();
+        object.on('foo', listener);
+        object.on('bar', listener);
         client.resetCalls();
 
-        proxy.off('foo', listener);
+        object.off('foo', listener);
 
         expect(client.calls()).to.be.empty;
       });
 
       it('does not call native listen when other listeners exist for aliased event', function() {
         let CustomType = NativeObject.extend({_events: {foo: {alias: 'bar'}}});
-        proxy = new CustomType();
-        proxy.on('foo', listener);
-        proxy.on('bar', listener);
+        object = new CustomType();
+        object.on('foo', listener);
+        object.on('bar', listener);
         client.resetCalls();
 
-        proxy.off('bar', listener);
+        object.off('bar', listener);
 
         expect(client.calls()).to.be.empty;
       });
 
       it('calls native listen when not other listeners exist for aliased or alias event', function() {
         let CustomType = NativeObject.extend({_events: {foo: {alias: 'bar'}}});
-        proxy = new CustomType();
-        proxy.on('foo', listener);
-        proxy.on('bar', listener);
+        object = new CustomType();
+        object.on('foo', listener);
+        object.on('bar', listener);
         client.resetCalls();
 
-        proxy.off('bar', listener);
-        proxy.off('foo', listener);
+        object.off('bar', listener);
+        object.off('foo', listener);
 
         expect(client.calls().length).to.equal(1);
       });
 
       it('calls native listen when not other listeners exist for aliased or alias event (reversed off)', function() {
         let CustomType = NativeObject.extend({_events: {foo: {alias: 'bar'}}});
-        proxy = new CustomType();
-        proxy.on('foo', listener);
-        proxy.on('bar', listener);
+        object = new CustomType();
+        object.on('foo', listener);
+        object.on('bar', listener);
         client.resetCalls();
 
-        proxy.off('foo', listener);
-        proxy.off('bar', listener);
+        object.off('foo', listener);
+        object.off('bar', listener);
 
         expect(client.calls().length).to.equal(1);
       });
 
       it('returns self to allow chaining', function() {
-        let result = proxy.off('foo', listener);
+        let result = object.off('foo', listener);
 
-        expect(result).to.equal(proxy);
+        expect(result).to.equal(object);
       });
 
       it('does not fail on disposed object', function() {
-        proxy.dispose();
+        object.dispose();
 
         expect(() => {
-          proxy.off('foo', listener);
+          object.off('foo', listener);
         }).not.to.throw();
       });
 
@@ -768,41 +503,41 @@ describe('NativeObject', function() {
     describe('dispose', function() {
 
       it('calls native destroy', function() {
-        proxy.dispose();
+        object.dispose();
 
-        let destroyCall = client.calls({op: 'destroy', id: proxy.cid})[0];
+        let destroyCall = client.calls({op: 'destroy', id: object.cid})[0];
         expect(destroyCall).not.to.be.undefined;
       });
 
       it('notifies dispose listeners', function() {
         let listener = spy();
-        proxy.on('dispose', listener);
+        object.on('dispose', listener);
 
-        proxy.dispose();
+        object.dispose();
 
-        expect(listener).to.have.been.calledWith(proxy, {});
+        expect(listener).to.have.been.calledWith(object, {});
       });
 
       it('notifies dispose listeners before native destroy', function() {
-        proxy.on('dispose', () => {
+        object.on('dispose', () => {
           expect(client.calls({op: 'destroy'}).length).to.eql(0);
         });
 
-        proxy.dispose();
+        object.dispose();
       });
 
       it('does not call native destroy twice when called twice', function() {
-        proxy.dispose();
-        proxy.dispose();
+        object.dispose();
+        object.dispose();
 
         expect(client.calls({op: 'destroy'}).length).to.equal(1);
       });
 
       it('can be called from within a dispose listener', function() {
-        proxy.on('dispose', () => proxy.dispose());
+        object.on('dispose', () => object.dispose());
 
         expect(() => {
-          proxy.dispose();
+          object.dispose();
         }).not.to.throw();
       });
 
@@ -811,11 +546,11 @@ describe('NativeObject', function() {
     describe('when disposed', function() {
 
       beforeEach(function() {
-        proxy.dispose();
+        object.dispose();
       });
 
       it('isDisposed returns true', function() {
-        expect(proxy.isDisposed()).to.equal(true);
+        expect(object.isDisposed()).to.equal(true);
       });
 
     });
@@ -826,15 +561,15 @@ describe('NativeObject', function() {
 
 describe('NativeObject.extend', function() {
 
-  let nativeBridge;
+  let client;
 
   beforeEach(function() {
-    nativeBridge = new ClientStub();
+    client = new ClientStub();
     global.tabris = {
       on: () => {},
       _proxies: new ProxyStore()
     };
-    global.tabris._nativeBridge = new NativeBridge(nativeBridge);
+    global.tabris._nativeBridge = new NativeBridge(client);
     stub(console, 'warn');
   });
 
@@ -857,26 +592,23 @@ describe('NativeObject.extend', function() {
     expect(instance.foo).to.equal(23);
   });
 
-  it('adds JS property setters', function() {
-    let type = {encode: function() {}, decode: function() {}};
+  it('adds property setters', function() {
+    let type = {encode: spy(), decode: spy()};
     let CustomType = NativeObject.extend({_properties: {foo: {type: type}}});
     let instance = new CustomType();
-    spy(instance, 'set');
 
-    instance.foo = 'bar';
+    instance.foo = 23;
 
-    expect(instance.set).to.have.been.calledWith('foo', 'bar');
+    expect(type.encode).to.have.been.calledWith(23);
   });
 
-  it('adds JS property getters', function() {
-    let type = {encode: function() {}, decode: function() {}};
-    let CustomType = NativeObject.extend({_properties: {foo: {type: type}}});
+  it('adds property getters', function() {
+    let CustomType = NativeObject.extend({_properties: {foo: {type: 'number', default: 23}}});
     let instance = new CustomType();
-    stub(instance, 'get').returns('bar');
 
     let result = instance.foo;
 
-    expect(result).to.equal('bar');
+    expect(result).to.equal(23);
   });
 
   it('adds empty trigger map to constructor', function() {
@@ -1021,7 +753,7 @@ describe('NativeObject.extend', function() {
 
     it('triggers a create operation with type and properties', function() {
       let proxy = new TestType({foo: 23});
-      let createCall = nativeBridge.calls({op: 'create', id: proxy.cid})[0];
+      let createCall = client.calls({op: 'create', id: proxy.cid})[0];
 
       expect(createCall.type).to.equal('TestType');
       expect(createCall.properties.foo).to.equal(23);
@@ -1031,7 +763,7 @@ describe('NativeObject.extend', function() {
       let CustomType = NativeObject.extend({_type: 'foo.Type'});
       new CustomType();
 
-      expect(nativeBridge.calls({op: 'create'})[0].type).to.equal('foo.Type');
+      expect(client.calls({op: 'create'})[0].type).to.equal('foo.Type');
     });
 
     it('cannot be called as a function', function() {
@@ -1060,7 +792,7 @@ describe('NativeObject.extend', function() {
     it('does not call create for service objects', function() {
       new ServiceType();
 
-      expect(nativeBridge.calls({op: 'create'})).to.be.empty;
+      expect(client.calls({op: 'create'})).to.be.empty;
     });
 
     it('prevents multiple instances', function() {
@@ -1069,6 +801,262 @@ describe('NativeObject.extend', function() {
       expect(() => {
         new ServiceType();
       }).to.throw(Error, /cid.*foo/);
+    });
+
+  });
+
+  describe('property getter', function() {
+
+    let TestType, object;
+
+    beforeEach(function() {
+      TestType = NativeObject.extend({
+        _name: 'TestType',
+        _properties: {foo: 'any', uncached: {type: 'any', nocache: true}}
+      });
+      object = new TestType();
+    });
+
+    it('calls native GET', function() {
+      object.foo;
+
+      expect(client.calls({op: 'get', id: object.cid})).not.to.be.empty;
+    });
+
+    it('does not call native GET when disposed', function() {
+      object.dispose();
+
+      object.foo;
+
+      expect(client.calls({op: 'get', id: object.cid})).to.be.empty;
+    });
+
+    it('prints warning when disposed', function() {
+      object.dispose();
+
+      object.foo;
+
+      expect(console.warn).to.have.been.calledWithMatch('Cannot get property "foo" on disposed object');
+    });
+
+    it('returns uncached value from native', function() {
+      stub(client, 'get').returns(23);
+      object.uncached = 12;
+
+      expect(object.uncached).to.equal(23);
+    });
+
+    it('returns uncached value from default config', function() {
+      TestType._properties.foo.default = 23;
+
+      expect(object.foo).to.equal(23);
+    });
+
+    it('returns cloned value from default function', function() {
+      TestType._properties.foo.default = () => [];
+
+      object.foo.push(1);
+
+      expect(object.foo).to.eql([]);
+    });
+
+    it('returns cached value', function() {
+      object.foo = 'bar';
+      spy(client, 'get');
+
+      let result = object.foo;
+
+      expect(client.get).not.to.have.been.called;
+      expect(result).to.equal('bar');
+    });
+
+    it('returns cached value decoded', function() {
+      TestType._properties.foo.type = types.color;
+      object.foo = '#ff00ff';
+
+      expect(object.foo).to.equal('rgba(255, 0, 255, 1)');
+    });
+
+    it('decodes value if there is a decoder', function() {
+      TestType._properties.foo.type = {
+        decode: x => x + '-decoded'
+      };
+      stub(client, 'get').returns(23);
+
+      let result = object.foo;
+
+      expect(result).to.equal('23-decoded');
+      expect(console.warn).not.to.have.been.called;
+    });
+
+    it('returns undefined on disposed object', function() {
+      object.foo = 23;
+      object.dispose();
+
+      expect(object.foo).to.be.undefined;
+    });
+
+    it('returns undefined for unset property', function() {
+      expect(object.foo).to.be.undefined;
+    });
+
+    it('returns default value if property was never set', function() {
+      TestType._properties.foo = {default: 'bar'};
+
+      expect(object.foo).to.equal('bar');
+    });
+
+    it('does not return default value if property was set', function() {
+      TestType._properties.foo = {default: 'bar'};
+
+      object.foo = 'something else';
+
+      expect(object.foo).to.equal('something else');
+    });
+
+    it('calls custom getter with property name', function() {
+      let getter = spy();
+      TestType._properties.foo = {get: getter};
+
+      object.foo;
+
+      expect(getter).to.have.been.calledWith('foo');
+    });
+
+    it('returns value from custom getter', function() {
+      TestType._properties.foo = {get: stub().returns('bar')};
+
+      expect(object.foo).to.equal('bar');
+    });
+
+  });
+
+  describe('property setter', function() {
+
+    let TestType, object, listener;
+
+    beforeEach(function() {
+      TestType = NativeObject.extend({
+        _name: 'TestType',
+        _properties: {foo: 'any', uncached: {type: 'any', nocache: true}}
+      });
+      object = new TestType();
+      listener = spy();
+      client.resetCalls();
+    });
+
+    it('calls native SET', function() {
+      object.foo = 23;
+
+      expect(client.calls({op: 'set', id: object.cid})).not.to.be.empty;
+    });
+
+    it('does not call native SET if disposed', function() {
+      object.dispose();
+
+      object.foo = 23;
+
+      expect(client.calls({op: 'set', id: object.cid})).to.be.empty;
+    });
+
+    it('prints warning if disposed', function() {
+      object.dispose();
+
+      object.foo = 23;
+
+      expect(console.warn).to.have.been.calledWith('Cannot set property "foo" on disposed object');
+    });
+
+    it('does not call native SET if encoder function throws', function() {
+      TestType._properties.knownProperty = {type: 'boolean'};
+      stub(types.boolean, 'encode').throws(new Error('My Error'));
+
+      object.knownProperty = 'foo';
+
+      expect(client.calls({op: 'set'})).to.be.empty;
+    });
+
+    it('triggers change event', function() {
+      object.on('change:foo', listener);
+
+      object.foo = 23;
+
+      expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWith(object, 23);
+    });
+
+    it('triggers change event with decoded value', function() {
+      TestType._properties.foo = {type: types.boolean};
+      object.on('change:foo', listener);
+
+      object.foo = 23;
+
+      expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWith(object, true);
+    });
+
+    it('triggers no change event if value is unchanged', function() {
+      object.foo = 23;
+      object.on('change:foo', listener);
+
+      object.foo = 23;
+
+      expect(listener).to.have.not.been.called;
+    });
+
+    it('triggers no change event if value is unchanged from default', function() {
+      TestType._properties.foo = {type: 'any', default: 0};
+      object.on('change:foo', listener);
+
+      object.foo = 0;
+
+      expect(listener).not.to.have.been.called;
+    });
+
+    it('triggers no change event if encoded value is unchanged', function() {
+      TestType._properties.foo = {type: types.boolean};
+      object.set('foo', true);
+      object.on('change:foo', listener);
+
+      object.foo = 23;
+
+      expect(listener).to.have.not.been.called;
+    });
+
+    it('calls custom setter', function() {
+      let setter = spy();
+      TestType._properties.foo = {set: setter};
+
+      object.foo = 23;
+
+      expect(setter).to.have.been.calledWith('foo', 23);
+    });
+
+    it('stores nothing if custom setter exists', function() {
+      TestType._properties.foo = {set: () => {}};
+
+      object.foo = 23;
+
+      expect(object.foo).to.be.undefined;
+    });
+
+    it('calls encoding function if present', function() {
+      let encode = spy();
+      TestType._properties.foo = {type: {encode}};
+
+      object.foo = true;
+
+      expect(encode).to.have.been.called;
+    });
+
+    it('raises a warning if encoding function throws', function() {
+      let encode = stub().throws(new Error('My Error'));
+      TestType._properties.foo = {type: {encode}};
+
+      object.foo = true;
+
+      let message = 'TestType: Ignored unsupported value for property "foo": My Error';
+      expect(console.warn).to.have.been.calledWith(message);
     });
 
   });

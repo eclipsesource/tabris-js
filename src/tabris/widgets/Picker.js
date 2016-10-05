@@ -1,4 +1,4 @@
-import {omit, drop, extend} from '../util';
+import {extend} from '../util';
 import Widget from '../Widget';
 
 export default Widget.extend({
@@ -80,15 +80,14 @@ export default Widget.extend({
     }
   },
 
-  _setProperties: function(properties, options) {
+  _reorderProperties: function(properties) {
     // items property depends on itemText, selection/selectionIndex depend on items
     var deferred = ['items', 'selection', 'selectionIndex'];
-    this._super('_setProperties', [omit(properties, deferred)].concat(drop(arguments)));
-    deferred.forEach(function(name) {
-      if (name in properties) {
-        this._setProperty(name, properties[name], options);
-      }
-    }, this);
+    return properties.filter(function(name) {
+      return deferred.indexOf(name) === -1;
+    }).concat(deferred.filter(function(name) {
+      return properties.indexOf(name) !== -1;
+    }));
   },
 
   _getItem: function(index) {

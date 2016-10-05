@@ -210,4 +210,9 @@ describe('Picker', function() {
 
   });
 
+  it('reorders properties', function() {
+    let result = picker._reorderProperties(['foo', 'selection', 'items', 'bar']);
+    expect(result).to.eql(['foo', 'bar', 'items', 'selection']);
+  });
+
 });
