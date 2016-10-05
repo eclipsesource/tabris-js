@@ -90,11 +90,11 @@
   "links": [
     {
       "title": "Simple TextInput snippet",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/textinput/textinput.js"
+      "path": "${GITHUB_BRANCH}/snippets/textinput/textinput.js"
     },
     {
       "title": "Example with Text and other input controls",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/examples/input/input.js"
+      "path": "${GITHUB_BRANCH}/examples/input/input.js"
     }
   ]
 }

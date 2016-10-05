@@ -29,7 +29,7 @@
   "links": [
     {
       "title": "Simple Button snippet",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/button/button.js"
+      "path": "${GITHUB_BRANCH}/snippets/button/button.js"
     }
   ]
 }

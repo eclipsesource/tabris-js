@@ -31,11 +31,11 @@
   "links": [
     {
       "title": "Simple ScrollView snippet",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/scrollview/scrollview.js"
+      "path": "${GITHUB_BRANCH}/snippets/scrollview/scrollview.js"
     },
     {
       "title": "Example using a ScrollView",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/examples/parallax/parallax.js"
+      "path": "${GITHUB_BRANCH}/examples/parallax/parallax.js"
     }
   ]
 }

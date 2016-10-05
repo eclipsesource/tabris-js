@@ -268,7 +268,9 @@ module.exports = function (grunt) {
     var result = [];
     result.push("## See also\n\n");
     json.links.forEach(function (link) {
-      result.push("- [", link.title, "](", link.path, ")\n");
+      var path = link.path.replace("${GITHUB_BRANCH}",
+        "https://github.com/eclipsesource/tabris-js/tree/v" + grunt.config("version"));
+      result.push("- [", link.title, "](", path, ")\n");
     });
     return result.join("");
   }

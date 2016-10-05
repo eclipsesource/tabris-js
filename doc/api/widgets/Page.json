@@ -53,15 +53,15 @@
   "links": [
     {
       "title": "Simple Page snippet with multiple top-level pages including a PageSelector (aka Burger Menu)",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/page/page.js"
+      "path": "${GITHUB_BRANCH}/snippets/page/page.js"
     },
     {
       "title": "Snippet for creating a full screen Page",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/page-fullscreen/page-fullscreen.js"
+      "path": "${GITHUB_BRANCH}/snippets/page-fullscreen/page-fullscreen.js"
     },
     {
       "title": "Snippet for dynamically creating Pages",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/master/snippets/page-add-dynamically/page-add-dynamically.js"
+      "path": "${GITHUB_BRANCH}/snippets/page-add-dynamically/page-add-dynamically.js"
     }
   ]
 }
