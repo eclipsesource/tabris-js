@@ -58,6 +58,7 @@ module.exports = function(grunt) {
     doc: {
       widgets: 'doc/api/widgets/*.json',
       api: 'doc/api/*.json',
+      typings: 'typings/propertyTypes.d.ts',
       target: 'build/doc/api/',
       index: 'build/doc/index.md',
       types: 'build/doc/types.md'

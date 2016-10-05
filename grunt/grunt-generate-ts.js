@@ -3,105 +3,6 @@
 
 let header = `
 // Type definitions for Tabris.js \${VERSION}
-
-// TODO A plain string can be used as a shorthand, e.g. \`"image.jpg"\` equals \`{src: "image.jpg"}\`.
-interface Image {
-
-  /**
-   * Image path or URL.
-   */
-  src?: string;
-
-  /**
-   * Image width, extracted from the image file when missing.
-   */
-  width?: number;
-
-  /**
-   * Image height, extracted from the image file when missing.
-   */
-  height?: number;
-
-  /**
-   * Image scale factor - the image will be scaled down by this factor.
-   * Ignored when width or height are set.
-   */
-  scale?: number;
-}
-
-type Color = string;
-
-type Font = string;
-
-type LayoutData = any;
-
-type GestureObject = any;
-
-interface Bounds {
-
-  /**
-   * the horizontal offset from the parent's left edge in dip
-   */
-  left?: number;
-
-  /**
-   * the vertical offset from the parent's top edge in dip
-   */
-  top?: number;
-
-  /**
-   * the width of the widget in dip
-   */
-  width?: number;
-
-  /**
-   * the height of the widget in dip
-   */
-  height?: number;
-
-}
-
-interface Transformation {
-
-  /**
-   * Clock-wise rotation in radians. Defaults to \`0\`.
-   */
-   rotation?: number;
-
-  /**
-   * Horizontal scale factor. Defaults to \`1\`.
-   */
-  scaleX?: number;
-
-  /**
-   * Vertical scale factor. Defaults to \`1\`.
-   */
-  scaleY?: number;
-
-  /**
-   * Horizontal translation (shift) in dip. Defaults to \`0\`.
-   */
-  translationX?: number;
-
-  /**
-   * Vertical translation (shift) in dip. Defaults to \`0\`.
-   */
-  translationY?: number;
-
-  /**
-   * Z-axis translation (shift) in dip. Defaults to \`0\`. Android 5.0+ only.
-   */
-  translationZ?: number;
-
-}
-
-type Selector = string;
-
-type dimension = number;
-
-type offset = number;
-
-type margin = any;
 `.trim();
 
 module.exports = function(grunt) {
@@ -128,6 +29,8 @@ module.exports = function(grunt) {
     applyIncludes(defs, ['NativeObject']);
     let result = new Text();
     result.append(header);
+    result.append('');
+    result.append(grunt.file.read(grunt.config('doc').typings));
     result.append('');
     Object.keys(defs).forEach((name) => {
       createTypeDef(result, defs[name], name);
