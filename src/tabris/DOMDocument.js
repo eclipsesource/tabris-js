@@ -45,9 +45,6 @@ export function addDOMDocument(target) {
     event.initEvent('DOMContentLoaded', false, false);
     target.document.dispatchEvent(event);
   });
-  target.navigator = {
-    userAgent: 'tabris-js' // TODO: identify OS/device?
-  };
 }
 
 function handleElementInserted(parent, child, target) {

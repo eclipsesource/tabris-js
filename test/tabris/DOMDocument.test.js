@@ -63,14 +63,6 @@ describe('DOMDocument', function() {
     expect(event).to.be.an.instanceof(DOMEvent);
   });
 
-  describe('navigator', function() {
-
-    it('has userAgent', function() {
-      expect(target.navigator.userAgent).to.equal('tabris-js');
-    });
-
-  });
-
   describe('script element', function() {
 
     var script1, script2, nonScript;

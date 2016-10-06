@@ -35,12 +35,6 @@ describe('window', function() {
     expect(window.XMLHttpRequest).to.be.a('function');
   });
 
-  it('contains DOM API singletons', function() {
-    expect(window.document).to.be.ok;
-    expect(window.location).to.be.ok;
-    expect(window.navigator).to.be.ok;
-  });
-
 });
 
 describe('tabris', function() {
@@ -126,6 +120,12 @@ describe('tabris', function() {
       expect(tabris.ui).to.be.instanceOf(tabris.UI);
       expect(tabris.app).to.be.instanceOf(tabris.App);
       expect(tabris.device).to.be.instanceOf(tabris.Device);
+    });
+
+    it('creates DOM API singletons', function() {
+      expect(window.document).to.be.ok;
+      expect(window.location).to.be.ok;
+      expect(window.navigator).to.be.ok;
     });
 
   });

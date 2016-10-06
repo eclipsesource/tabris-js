@@ -1,7 +1,7 @@
 import './load-polyfill.js';
 import './Tabris.js';
 
-import Device from './Device.js';
+import Device, {create as createDevice, publishDeviceProperties} from './Device.js';
 import App from './App';
 import UI, {create as createUI} from './widgets/UI';
 import ContentView from './widgets/ContentView';
@@ -97,9 +97,12 @@ tabris.Widget = Widget;
 tabris.WidgetCollection = WidgetCollection;
 tabris.XMLHttpRequest = XMLHttpRequest;
 
-tabris.load(function() {
+// TODO: ensure tabris is set up before load functions, remove when merged with tabris module
+tabris._loadFunctions.unshift(function() {
   tabris.app = new App();
   tabris.ui = createUI();
+  tabris.device = createDevice();
+  publishDeviceProperties(tabris.device, window);
   window.localStorage = tabris.localStorage = createStorage();
   if (device.platform === 'iOS') {
     window.secureStorage = tabris.secureStorage = createStorage(true);

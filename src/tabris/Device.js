@@ -1,6 +1,6 @@
 import NativeObject from './NativeObject';
 
-var Device = NativeObject.extend({
+var _Device = NativeObject.extend({
   _cid: 'tabris.Device',
   _properties: {
     model: 'any',
@@ -24,49 +24,47 @@ var Device = NativeObject.extend({
     }
   },
   dispose: function() {
-    throw new Error('cannot dispose device object');
+    throw new Error('Cannot dispose device object');
   }
 });
 
-export default Device;
-
-export function publishDeviceProperties(target) {
-  if (!('device' in target)) {
-    target.device = createDeviceObject();
-  }
-  if (!('screen' in target)) {
-    target.screen = createScreenObject();
-  }
-  if (('navigator' in target) && !('language' in target.navigator)) {
-    defineReadOnlyProperty(target.navigator, 'language', getDevicePropertyFn('language'));
-  }
-  if (!('devicePixelRatio' in target)) {
-    target.devicePixelRatio = tabris.device.get('scaleFactor');
-  }
+export default function Device() {
+  throw new Error('Device can not be created');
 }
 
-if (global.tabris) {
-  tabris.load(function() {
-    tabris.device = new Device();
-    if (typeof window !== 'undefined') {
-      publishDeviceProperties(window);
-    }
-  });
+Device.prototype = _Device.prototype;
+
+export function create() {
+  return new _Device();
 }
 
-function createDeviceObject() {
+export function publishDeviceProperties(device, target) {
+  target.devicePixelRatio = device.scaleFactor;
+  target.device = createDevice(device);
+  target.screen = createScreen(device);
+  target.navigator = createNavigator(device);
+}
+
+function createDevice(device) {
   var dev = {};
   ['model', 'platform', 'version'].forEach(function(name) {
-    defineReadOnlyProperty(dev, name, getDevicePropertyFn(name));
+    defineReadOnlyProperty(dev, name, function() {return device[name];});
   });
   return dev;
 }
 
-function createScreenObject() {
+function createScreen(device) {
   var screen = {};
-  defineReadOnlyProperty(screen, 'width', getDevicePropertyFn('screenWidth'));
-  defineReadOnlyProperty(screen, 'height', getDevicePropertyFn('screenHeight'));
+  defineReadOnlyProperty(screen, 'width', function() {return device.screenWidth;});
+  defineReadOnlyProperty(screen, 'height', function() {return device.screenHeight;});
   return screen;
+}
+
+function createNavigator(device) {
+  var navigator = {};
+  defineReadOnlyProperty(navigator, 'userAgent', function() {return 'tabris-js';});
+  defineReadOnlyProperty(navigator, 'language', function() {return device.language;});
+  return navigator;
 }
 
 function defineReadOnlyProperty(target, name, getter) {
@@ -74,10 +72,4 @@ function defineReadOnlyProperty(target, name, getter) {
     get: getter,
     set: function() {}
   });
-}
-
-function getDevicePropertyFn(name) {
-  return function() {
-    return tabris.device.get(name);
-  };
 }
