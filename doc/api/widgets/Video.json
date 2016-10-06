@@ -33,7 +33,7 @@
       "type": "string",
       "default": "empty",
       "values": ["empty", "open", "ready", "play", "stale", "pause", "finish", "fail"],
-      "description": "The current state of the widget. This property is read-only."
+      "description": "The current state of the widget. This property is read-only.\n * `empty` - No URL is set.\n * `open` - URL is set to a valid value, but the video is not yet ready to play.\n * `fail` - No supported video file was found at the given URL.\n * `ready` - The video is ready to play. If `autoPlay` is `true` the state will automatically change from `ready` to `play`.\n * `play` - The video is currently playing.\n * `stale` - The playback was paused for buffering, but will continue once enough data has been buffered.\n * `pause` - The playback was explicitly paused due to user interaction or `pause()` call.\n * `finish` - Playback stopped at the end of the timeline."
     }
   },
   "methods": {
