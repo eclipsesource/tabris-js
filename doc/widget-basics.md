@@ -24,21 +24,21 @@ Every native widget supports a set of properties (e.g. a text or a color). These
 
 Example with `get` and `set`:
 
-```javascript
+```js
 widget.set("text", "Hello World");
 var text = widget.get("text");
 ```
 
 Example with field access:
 
-```javascript
+```js
 widget.text = "Hello World";
 var text = widget.text;
 ```
 
 Like with the constructor, it's also possible to give an object defining multiple property values:
 
-```javascript
+```js
 button.set({
   text: "OK",
   background: "blue"
@@ -47,7 +47,7 @@ button.set({
 
 Even if a property is not explicitly supported by the widget it can still be set and fire appropriate change events. This can be used to attach arbitrary data to a widget. *Note that this does only work using `set` and `get`.* Using direct field access with properties unkown to Tabris.js will not work correctly unless you also define a JavaScript property that redirects to `set` and `get` using [Object.defineProperty](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty). Example:
 
-```javascript
+```js
 Object.defineProperty(myCustomComponent, 'foo', {
   set: function(value) {
     this.set('foo', value);
@@ -66,7 +66,7 @@ Widgets can fire a number of events, e.g. on touch or on modification. Event lis
 
 Example:
 
-```javascript
+```js
 var selectionHandler = function(button) {
   console.log("Button " + button.get("text") + " selected!");
 };
@@ -79,7 +79,7 @@ Depending on the event type the listener function is called with a list of param
 
 An "context" object may be given as the third `on` parameter. This object will then be available as `this` inside the listener function.
 
-```javascript
+```js
 var selectionHandler = function() {
   console.log(this.foo);
 };
@@ -96,7 +96,7 @@ All widgets support property change events. Change events are fired for all prop
 
 Example:
 
-```javascript
+```js
 new tabris.TextInput().on("change:text", function(textInput, text, options) {
   console.log("The text has changed to: " + text);
 });
@@ -119,7 +119,7 @@ The animation event listeners are called with the widget as the first parameter,
 
 Example:
 
-```javascript
+```js
 label.once("animationend", function(label, options) {
   if (options.name === "my-remove-animation") {
     label.dispose();
@@ -141,7 +141,7 @@ label.animate({
 
 The `animate` method also returns a promise that is resolved once the animation is completed. If the animation is aborted, e.g. by disposing the widget, the promise is rejected. Often it's more readable to use the promise over the `animationend` event:
 
-```javascript
+```js
 label.animate({
   opacity: 0,
   transform: {
@@ -164,7 +164,7 @@ To be visible, a widget needs a parent. The top-level parent of every UI is a `P
 
 Example:
 
-```javascript
+```js
 var button = new tabris.Button({
   text: "OK",
   ...
@@ -175,7 +175,7 @@ If the widget already has a parent, it is de-registered from the actual parent a
 
 It's also possible to add any number of widgets to the same parent using `append`:
 
-```javascript
+```js
 page.append(okButton, cancelButton);
 ```
 
@@ -186,7 +186,7 @@ The current parent of a widget is returned by the [`parent`](api/Widget.md#paren
 
 Example:
 
-```javascript
+```js
 var parent = widget.parent();
 var firstChild = parent.children()[0];
 var lastChild = parent.children().last();
@@ -200,7 +200,7 @@ The `dispose` method disposes of the widget and all of its children. Triggers a 
 
 Example:
 
-```javascript
+```js
 button.on("dispose", function() {
   console.log("Button disposed!");
 });

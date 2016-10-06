@@ -8,8 +8,8 @@ Custom widgets are written in JavaScript the language available for the native p
 
 Custom widgets must be registered in JavaScript in order to make their constructor available on the `tabris` object and to set up the communication with the native implementation. This is done using the method `registerWidget`:
 
-```javascript
-    tabris.registerWidget(type, definition);
+```js
+tabris.registerWidget(type, definition);
 ```
 
 The parameter `type` is the name of the widget constructor. Type names should begin with an upper-case character, internal types are prefixed with an underscore, e.g. "_MyInternalWidget".
@@ -35,7 +35,7 @@ The type identifier determines how the property value is checked/encoded/convert
 
 #### Example
 
-```javascript
+```js
 properties: {
   text: "string",
   selection: {
@@ -78,7 +78,7 @@ Valid values for the `_events` map are:
 
 #### Example
 
-```javascript
+```js
 _events: {
   select: {
     trigger: function(event) {

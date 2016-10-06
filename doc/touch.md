@@ -22,7 +22,7 @@ In Tabris.js there are 13 gesture events based on 4 basic gesture types:
 
 Example:
 
-```javascript
+```js
 widget.on("swipe:left", function(widget, event) {
   moveWidgetLeft();
 });
@@ -75,7 +75,7 @@ Every touch object has the following properties:
 - **pageY**: *number* - the vertical offset relative to the current page
 
 Example:
-```javascript
+```js
 widget.on("touchstart", function(widget, event) {
   var x = event.touches[0].pageX;
   var y = event.touches[0].pageY;

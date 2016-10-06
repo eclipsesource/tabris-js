@@ -41,13 +41,13 @@ The apply method uses selectors to apply different sets of properties to differe
 
 For example, to make all widgets within a page green you could call:
 
-```javascript
+```js
 page.apply({"*": {background: "green"}});
 ```
 
 You can also set different properties on different widgets:
 
-```javascript
+```js
 page.apply({
   "#okbutton": {text: "OK!", background: "yellow"},
   "#cancelbutton": {text: "Cancel!", textColor: "red"}
@@ -60,7 +60,7 @@ The order in which these properties are applied depends on the selector used. Th
 
 For example:
 
-```javascript
+```js
 page.apply({
   "#mybutton": {background: "red"},
   "Button": {background: "green"},
@@ -70,7 +70,7 @@ page.apply({
 
 This will make all widgets within the page blue, except for the buttons, which are green, except for "#mybutton", which will be red.
 
-> <img align="left" src="img/note.png"> <i>The on-screen order of the properties in the object literal is meaningless. According to the EcmaScript standard the members of a JavaScript object do not have a defined order.</i> 
+> <img align="left" src="img/note.png"> <i>The on-screen order of the properties in the object literal is meaningless. According to the EcmaScript standard the members of a JavaScript object do not have a defined order.</i>
 
 ### How to use it
 
@@ -78,7 +78,7 @@ While we used object literals in the above examples, the apply method can be ver
 
 Imagine, for example, that you want to apply different texts to your widgets depending on your locale. You could do it like this:
 
-```javascript
+```js
 var lang = tabris.device.get("language");
 try {
   page.apply(module.require("./texts-" + lang));
@@ -99,14 +99,14 @@ Since JSON files can be used as modules, your language file (e.g. "texts-en.json
 
 An alternative pattern would be to always use the same module...
 
-```javascript
+```js
   page.apply(module.require("./texts));
 }
 ```
 
 But use scripting within the module to calculate the actual values:
 
-```javascript
+```js
 var texts = {
   en: {
     "#okbutton": {text: "OK!"}
@@ -119,7 +119,7 @@ module.exports = texts[tabris.device.get("language")] || texts.en;
 
 The same pattern could be applied for e.g. colors based on the OS, font-sizes based on screen width, or layout data depending on device orientation:
 
-```javascript
+```js
 page.on("resize", function() {
   var bounds = page.get("bounds");
   page.apply(require("./layout-" + (bounds.width > bounds.height) ? "landscape" : "portrait"));

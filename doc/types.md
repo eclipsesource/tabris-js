@@ -15,7 +15,7 @@ The width of the widget in dip
 The height of the widget in dip
 
 Example:
-```javascript
+```js
 var buttonWidth = button.get("bounds").width;
 ```
 
@@ -35,7 +35,7 @@ Colors are specified as strings using one of the following formats:
 
 Examples:
 
-```javascript
+```js
 "#f00"
 "#ff0000"
 "rgb(255, 0, 0)"
@@ -75,7 +75,7 @@ Fonts are specified as strings using the shorthand syntax known from CSS, specif
 
 Examples:
 
-```javascript
+```js
 "bold 24px"
 "12px sans-serif"
 "thin italic 12px sans-serif"
@@ -103,7 +103,7 @@ A plain string can be used as a shorthand, e.g. `"image.jpg"` equals `{src: "ima
 
 Examples:
 
-```javascript
+```js
 "images/catseye.jpg"
 {src: "images/catseye.jpg", width: 300, height: 200}
 {src: "http://example.com/catseye.jpg", scale: 2}
@@ -121,7 +121,7 @@ See also [Layout](layout.md).
 
 ## Percentage
 
-A string starting with a number (int) followed directly by "%". May be negative.
+A string starting with a number (int) followed directly by `%`. May be negative.
 
 See also [Layout](layout.md).
 
@@ -148,7 +148,7 @@ Transformations are specified as an object with the following properties:
 
 Example:
 
-```javascript
+```js
 {scaleX: 2, scaleY: 2, rotation: Math.PI * 0.75}
 ```
 This transformation will make the widget twice as big and rotate it by 135&deg;.

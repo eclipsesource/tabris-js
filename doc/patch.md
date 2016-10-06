@@ -40,7 +40,7 @@ You are free to implement the patch detection however you wish. For example, you
 
 ## Installing a Patch
 
-To install a patch, call the method `tabris.app.installPatch` with the URL of the patch file and a callback function with two parameters, *error* and *patch*. The patch file will be downloaded and installed in the background, but it won't have an effect before the app is reloaded. 
+To install a patch, call the method `tabris.app.installPatch` with the URL of the patch file and a callback function with two parameters, *error* and *patch*. The patch file will be downloaded and installed in the background, but it won't have an effect before the app is reloaded.
 
 > <img align="left" src="img/note.png"> <i>Tabris.js supports cache-control headers. If new updates are not being found by Tabris.js, check the cache invalidation settings of your HTTP server.</i>
 
@@ -50,7 +50,7 @@ The format and content of the *patch.json* descriptor file is not enforced by Ta
 
 On the next start of the app, files present in the patch will overlay the app files. You can use the callback to confirm and reload the app. Here's a simple example:
 
-```javascript
+```js
 tabris.app.installPatch(patchUrl, function(error, patch) {
   if (error) {
     // show error dialog
