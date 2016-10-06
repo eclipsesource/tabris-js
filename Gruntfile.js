@@ -19,7 +19,7 @@ module.exports = function(grunt) {
             return src.replace(/\${VERSION}/g, pkg.version);
           }
         },
-        src: ['build/bundle.js'],
+        src: ['build/transpiled.js'],
         dest: 'build/tabris/tabris.js'
       },
       boot: {
@@ -145,6 +145,10 @@ module.exports = function(grunt) {
       },
       bundle: {
         cmd: 'node node_modules/rollup/bin/rollup --format=cjs --output=build/bundle.js -- src/tabris/main.js'
+      },
+      transpile: {
+        cmd: 'BABEL_ENV=build node node_modules/babel-cli/bin/babel.js --compact false ' +
+          '--out-file build/transpiled.js build/bundle.js'
       }
     }
   });
@@ -175,6 +179,7 @@ module.exports = function(grunt) {
   /* concatenates and minifies code */
   grunt.registerTask('build', [
     'exec:bundle',
+    'exec:transpile',
     'concat:tabris',
     'concat:boot',
     'webpack:polyfill',
