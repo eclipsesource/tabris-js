@@ -42,22 +42,18 @@
   "methods": {
     "save": [{
       "parameters": [],
-      "returns": "void",
       "description": "Saves the entire state of the canvas by pushing the current state onto a stack."
     }],
     "restore": [{
       "parameters": [],
-      "returns": "void",
       "description": "Restores the most recently saved canvas state by popping the top entry in the drawing state stack."
     }],
     "beginPath": [{
       "parameters": [],
-      "returns": "void",
       "description": "Starts a new path by emptying the list of sub-paths."
     }],
     "closePath": [{
       "parameters": [],
-      "returns": "void",
       "description": "Adds a straight line from the current point to the start of the current sub-path."
     }],
     "lineTo": [{
@@ -65,7 +61,6 @@
         {"name": "x", "type": "number", "description": "The x axis of the coordinate for the end of the line."},
         {"name": "y", "type": "number", "description": "The y axis of the coordinate for the end of the line." }
         ],
-      "returns": "void",
       "description": "Connects the last point in the sub-path to the *(x, y)* coordinates with a straight line."
     }],
     "moveTo": [{
@@ -73,7 +68,6 @@
         {"name": "x", "type": "number", "description": "The x axis of the point."},
         {"name": "y", "type": "number", "description": "The y axis of the point."}
         ],
-      "returns": "void",
       "description": "Moves the starting point of a new sub-path to the *(x, y)* coordinates."
     }],
     "bezierCurveTo": [{
@@ -85,7 +79,6 @@
         {"name": "x", "type": "number", "description": "The x axis of the coordinate for the end point."},
         {"name": "y", "type": "number", "description": "The y axis of the coordinate for the end point."}
       ],
-      "returns": "void",
       "description": "Adds a cubic Bézier curve to the path. The starting point is the last point in the current path."
     }],
     "quadraticCurveTo": [{
@@ -95,7 +88,6 @@
         {"name": "x", "type": "number", "description": "The x axis of the coordinate for the end point."},
         {"name": "y", "type": "number", "description": "The y axis of the coordinate for the end point."}
       ],
-      "returns": "void",
       "description": "Adds a quadratic Bézier curve to the path. The starting point is the last point in the current path."
     }],
     "rect": [{
@@ -105,7 +97,6 @@
         {"name": "width", "type": "number", "description": "The rectangle's width."},
         {"name": "height", "type": "number", "description": "The rectangles height."}
       ],
-      "returns": "void",
       "description": "Creates a path for a rectangle with the top-left corner at *(x, y)*"
     }],
     "arc": [{
@@ -117,7 +108,6 @@
         {"name": "endAngle", "type": "number", "description": "The angle in radians at which the arc ends, measured clockwise from the positive x axis."},
         {"name": "anticlockwise?", "type": "boolean", "description": "if true, causes the arc to be drawn counter-clockwise between the two angles."}
       ],
-      "returns": "void",
       "description": "Adds an arc to the path which is centered at *(x, y)* position with radius *r* starting at *startAngle* and ending at *endAngle* going in the given direction by *anticlockwise* (defaulting to clockwise)."
     }],
     "scale": [{
@@ -125,14 +115,12 @@
         {"name": "x", "type": "number", "description": "Scaling factor in the horizontal direction."},
         {"name": "y", "type": "number", "description": "Scaling factor in the vertical direction."}
       ],
-      "returns": "void",
       "description": "Adds a scaling transformation to the canvas units by x horizontally and by y vertically."
     }],
     "rotate": [{
       "parameters": [
         {"name": "angle", "type": "number", "description": " The angle to rotate clockwise in radians."}
       ],
-      "returns": "void",
       "description": "Adds a rotation to the transformation matrix."
     }],
     "translate": [{
@@ -140,7 +128,6 @@
         {"name": "x", "type": "number", "description": "The distance to move in the horizontal direction."},
         {"name": "y", "type": "number", "description": "The distance to move in the vertical direction."}
       ],
-      "returns": "void",
       "description": "Adds a translation transformation by moving the canvas and its origin *x* horizontally and *y* vertically on the grid."
     }],
     "transform": [{
@@ -152,7 +139,6 @@
         {"name": "e", "type": "number", "description": "Horizontal moving."},
         {"name": "f", "type": "number", "description": "Vertical moving."}
       ],
-      "returns": "void",
       "description": "Multiplies the current transformation with the matrix described by the arguments of this method. The matrix has the following format:\n[[a, c, e],\n [b, d, f],\n [0, 0, 1]]"
     }],
     "setTransform": [{
@@ -164,7 +150,6 @@
         {"name": "e", "type": "number", "description": "Horizontal moving."},
         {"name": "f", "type": "number", "description": "Vertical moving."}
       ],
-      "returns": "void",
       "description": "resets (overrides) the current transformation to the identity matrix and then invokes a transformation described by the arguments of this method. The matrix has the following format:\n[[a, c, e],\n [b, d, f],\n [0, 0, 1]]"
     }],
     "clearRect": [{
@@ -174,7 +159,6 @@
         {"name": "width", "type": "number", "description": "The rectangle's width."},
         {"name": "height", "type": "number", "description": "The rectangles height."}
       ],
-      "returns": "void",
       "description": "Sets all pixels in the rectangle defined by starting point *(x, y)* and size *(width, height)* to transparent, erasing any previously drawn content."
     }],
     "fillRect": [{
@@ -184,7 +168,6 @@
         {"name": "width", "type": "number", "description": "The rectangle's width."},
         {"name": "height", "type": "number", "description": "The rectangles height."}
       ],
-      "returns": "void",
       "description": "draws a filled rectangle at *(x, y)* position whose size is determined by *width* and *height*. and whose color is determined by the fillStyle attribute."
     }],
     "strokeRect": [{
@@ -194,7 +177,6 @@
         {"name": "width", "type": "number", "description": "The rectangle's width."},
         {"name": "height", "type": "number", "description": "The rectangles height."}
       ],
-      "returns": "void",
       "description": "draws the outline of a rectangle at *(x, y)* position whose size is determined by *width* and *height* using the current stroke style."
     }],
     "fillText": [{
@@ -203,7 +185,6 @@
         {"name": "x", "type": "number", "description": "The x axis of the coordinate for the text starting point."},
         {"name": "y", "type": "number", "description": "The y axis of the coordinate for the text starting point."}
       ],
-      "returns": "void",
       "description": "Fills a given text at the given *(x, y)* position using the current *textAlign* and *textBaseline* values."
     }],
     "strokeText": [{
@@ -212,17 +193,14 @@
         {"name": "x", "type": "number", "description": "The x axis of the coordinate for the text starting point."},
         {"name": "y", "type": "number", "description": "The y axis of the coordinate for the text starting point."}
       ],
-      "returns": "void",
       "description": "Strokes a given text at the given *(x, y)* position using the current *textAlign* and *textBaseline* values."
     }],
     "fill": [{
       "parameters": [],
-      "returns": "void",
       "description": "Fills the current or path with the current fill style."
     }],
     "stroke": [{
       "parameters": [],
-      "returns": "void",
       "description": "Strokes the current path with the current stroke style."
     }]
   }
