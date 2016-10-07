@@ -15,7 +15,6 @@
     "url": "https://github.com/eclipsesource/tabris-js.git"
   },
   "devDependencies": {
-    "async": "0.9.0",
     "babel-cli": "^6.14.0",
     "babel-core": "^6.14.0",
     "babel-plugin-transform-es2015-arrow-functions": "^6.8.0",
@@ -38,7 +37,6 @@
     "grunt-exec": "^1.0.1",
     "grunt-webpack": "^1.0.11",
     "mocha": "^3.0.2",
-    "npm": "^3.5.0",
     "promise": "^7.1.1",
     "rollup": "^0.34.3",
     "sinon": "^1.17.5",

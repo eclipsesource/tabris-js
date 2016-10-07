@@ -1,83 +1,59 @@
-let npm = require('npm');
 let path = require('path');
-let async = require('async');
+let exec = require('child_process').execSync;
 
-const EXAMPLES_LOCATION = 'examples';
+const SRC_DIR = 'examples';
+const OUT_DIR = 'build/examples';
 
 module.exports = function(grunt) {
 
-  grunt.registerTask('copy-examples', 'Copy examples to build/', function() {
-    let done = this.async();
-    processExamples(EXAMPLES_LOCATION, done);
+  grunt.registerTask('copy-examples', 'Copy examples to build/', () => {
+    let subdirs = grunt.file.expand(SRC_DIR + '/*').map(dir => path.basename(dir))
+      .filter(dir => grunt.file.exists(dir, 'package.json'));
+    let index = subdirs.map(processExample).filter(value => !!value);
+    grunt.file.write(path.join(OUT_DIR, 'index.json'), JSON.stringify(index, null, 2));
+    if (grunt.file.exists(SRC_DIR, 'README.md')) {
+      grunt.file.copy(path.join(SRC_DIR, 'README.md'), path.join(OUT_DIR, 'README.md'));
+    }
+    grunt.log.writeln(`copied ${index.length} examples from ${SRC_DIR} to ${OUT_DIR}`);
   });
 
-  function processExamples(dir, callback) {
-    async.map(grunt.file.expand(dir + '/*'), processExample, (err, results) => {
-      if (err) {
-        grunt.log.error(err);
-        return callback(!err);
-      }
-      let index = results.filter(exists);
-      grunt.file.write(path.join('build', dir, 'index.json'), JSON.stringify(index, null, 2));
-      if (grunt.file.exists(dir, 'README.md')) {
-        grunt.file.copy(path.join(dir, 'README.md'), path.join('build', dir, 'README.md'));
-      }
-      grunt.log.writeln('copied ' + index.length + ' ' + dir + ' to build/');
-      callback();
-    });
-  }
-
-  function processExample(dir, callback) {
-    if (grunt.file.exists(dir, 'package.json')) {
-      let manifest = grunt.file.readJSON(path.join(dir, 'package.json'));
-      if ('title' in manifest) {
-        return installDependencies(dir, manifest, (err) => {
-          if (err) {
-            return callback(err);
-          }
-          return copyExample(dir, manifest, callback);
-        });
-      }
+  function processExample(dir) {
+    let srcDir = path.join(SRC_DIR, dir);
+    let targetDir = path.join(OUT_DIR, dir);
+    let manifest = grunt.file.readJSON(path.join(srcDir, 'package.json'));
+    if ('title' in manifest) {
+      copyExample(srcDir, targetDir);
+      copyTabris(targetDir);
+      installDependencies(targetDir, manifest);
+      return {
+        category: manifest.category || '',
+        title: manifest.title,
+        description: manifest.description || '',
+        path: path.basename(srcDir)
+      };
     }
-    callback();
   }
 
-  function copyExample(dir, manifest, callback) {
-    grunt.file.recurse(dir, (abspath) => {
-      grunt.file.copy(abspath, path.join('build', abspath));
-    });
-    return callback(null, {
-      category: manifest.category || '',
-      title: manifest.title,
-      description: manifest.description || '',
-      path: path.basename(dir)
-    });
-  }
-
-  function installDependencies(dir, manifest, callback) {
-    preInstallTabris(dir, manifest);
-    if (Object.keys(manifest.dependencies).length === 0) {
-      return callback();
-    }
-    npm.load({}, (err) => {
-      if (err) {
-        return callback(err);
+  function copyExample(srcDir, targetDir) {
+    grunt.file.recurse(srcDir, (abspath, root, subdir, file) => {
+      if (!subdir || !subdir.startsWith('node_modules')) {
+        grunt.file.copy(abspath, path.join(targetDir, subdir || '', file));
       }
-      grunt.log.writeln('installing dependencies in ' + dir);
-      let modules = Object.keys(manifest.dependencies).map((key) => key + '@' + manifest.dependencies[key]);
-      npm.commands.install(dir, modules, callback);
     });
   }
 
-  function exists(value) {
-    return !!value;
+  function copyTabris(targetDir) {
+    grunt.file.recurse('build/tabris', (abspath, root, subdir, file) => {
+      grunt.file.copy(abspath, path.join(targetDir, 'node_modules/tabris', subdir || '', file));
+    });
   }
 
-  function preInstallTabris(dir, manifest) {
-    delete manifest.dependencies.tabris;
-    grunt.file.copy('build/tabris/package.json', dir + '/node_modules/tabris/package.json');
-    grunt.file.copy('build/tabris/tabris.min.js', dir + '/node_modules/tabris/tabris.min.js');
-    grunt.file.copy('build/tabris/polyfill.min.js', dir + '/node_modules/tabris/polyfill.min.js');
+  function installDependencies(targetDir, manifest) {
+    if (Object.keys(manifest.dependencies).length) {
+      Object.keys(manifest.dependencies).filter(name => name !== 'tabris').forEach(name => {
+        exec('npm install ' + name, {cwd: targetDir});
+      });
+    }
   }
 
 };
