@@ -4,7 +4,7 @@ import {types} from './property-types';
 export default {
 
   checkConsistency: function(layoutData) {
-    var result = layoutData;
+    let result = layoutData;
     if ('centerX' in result) {
       if (('left' in result) || ('right' in result)) {
         console.warn('Inconsistent layoutData: centerX overrides left and right');
@@ -37,8 +37,8 @@ export default {
     if (!targetWidget) {
       return layoutData;
     }
-    var result = {};
-    for (var key in layoutData) {
+    let result = {};
+    for (let key in layoutData) {
       result[key] = resolveAttribute(layoutData[key], targetWidget);
     }
     return result;
@@ -49,7 +49,7 @@ export default {
   },
 
   flushQueue: function() {
-    for (var cid in layoutQueue) {
+    for (let cid in layoutQueue) {
       layoutQueue[cid]._flushLayout();
     }
     layoutQueue = {};
@@ -57,7 +57,7 @@ export default {
 
 };
 
-var layoutQueue = {};
+let layoutQueue = {};
 
 function resolveAttribute(value, widget) {
   if (Array.isArray(value)) {
@@ -78,15 +78,15 @@ function resolveArray(array, widget) {
 
 function toProxyId(ref, widget) {
   if (ref === 'prev()') {
-    var children = getParent(widget).children();
-    var index = children.indexOf(widget);
+    let children = getParent(widget).children();
+    let index = children.indexOf(widget);
     if (index > 0) {
       return types.proxy.encode(children[index - 1]) || 0;
     }
     return 0;
   }
   if (typeof ref === 'string') {
-    var proxy = getParent(widget).children(ref)[0];
+    let proxy = getParent(widget).children(ref)[0];
     return types.proxy.encode(proxy) || 0;
   }
   return types.proxy.encode(ref) || 0;
@@ -100,7 +100,7 @@ function getParent(widget) {
   return widget.parent() || emptyParent;
 }
 
-var emptyParent = {
+let emptyParent = {
   children: function() {
     return [];
   }

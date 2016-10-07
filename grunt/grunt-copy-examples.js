@@ -1,13 +1,13 @@
-var npm = require('npm');
-var path = require('path');
-var async = require('async');
+let npm = require('npm');
+let path = require('path');
+let async = require('async');
 
 const EXAMPLES_LOCATION = 'examples';
 
 module.exports = function(grunt) {
 
   grunt.registerTask('copy-examples', 'Copy examples to build/', function() {
-    var done = this.async();
+    let done = this.async();
     processExamples(EXAMPLES_LOCATION, done);
   });
 
@@ -17,7 +17,7 @@ module.exports = function(grunt) {
         grunt.log.error(err);
         return callback(!err);
       }
-      var index = results.filter(exists);
+      let index = results.filter(exists);
       grunt.file.write(path.join('build', dir, 'index.json'), JSON.stringify(index, null, 2));
       if (grunt.file.exists(dir, 'README.md')) {
         grunt.file.copy(path.join(dir, 'README.md'), path.join('build', dir, 'README.md'));
@@ -29,7 +29,7 @@ module.exports = function(grunt) {
 
   function processExample(dir, callback) {
     if (grunt.file.exists(dir, 'package.json')) {
-      var manifest = grunt.file.readJSON(path.join(dir, 'package.json'));
+      let manifest = grunt.file.readJSON(path.join(dir, 'package.json'));
       if ('title' in manifest) {
         return installDependencies(dir, manifest, function(err) {
           if (err) {
@@ -64,7 +64,7 @@ module.exports = function(grunt) {
         return callback(err);
       }
       grunt.log.writeln('installing dependencies in ' + dir);
-      var modules = Object.keys(manifest.dependencies).map(function(key) {
+      let modules = Object.keys(manifest.dependencies).map(function(key) {
         return key + '@' + manifest.dependencies[key];
       });
       npm.commands.install(dir, modules, callback);

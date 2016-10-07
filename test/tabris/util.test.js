@@ -8,7 +8,7 @@ describe('util', function() {
   describe('extend', function() {
 
     it('copies properties of all source objects into target object', function() {
-      var target = {a: 1, b: 1};
+      let target = {a: 1, b: 1};
 
       extend(target, {b: 2, c: 2}, {c: 3});
 
@@ -16,9 +16,9 @@ describe('util', function() {
     });
 
     it('returns target object', function() {
-      var object = {};
+      let object = {};
 
-      var result = extend(object, {a: 1});
+      let result = extend(object, {a: 1});
 
       expect(result).to.equal(object);
     });
@@ -28,15 +28,15 @@ describe('util', function() {
   describe('pick', function() {
 
     it('returns a copy', function() {
-      var original = {a: 1};
+      let original = {a: 1};
 
-      var result = pick(original, ['a']);
+      let result = pick(original, ['a']);
 
       expect(result).not.to.equal(original);
     });
 
     it('copies all properties that are in the list', function() {
-      var result = pick({a: 1, b: 2, c: 3}, ['a', 'c', 'x']);
+      let result = pick({a: 1, b: 2, c: 3}, ['a', 'c', 'x']);
 
       expect(result).to.eql({a: 1, c: 3});
     });
@@ -46,15 +46,15 @@ describe('util', function() {
   describe('omit', function() {
 
     it('returns a copy', function() {
-      var original = {a: 1};
+      let original = {a: 1};
 
-      var result = omit(original, ['b']);
+      let result = omit(original, ['b']);
 
       expect(result).not.to.equal(original);
     });
 
     it('copies all properties that are not in the list', function() {
-      var result = omit({a: 1, b: 2, c: 3}, ['a', 'c', 'x']);
+      let result = omit({a: 1, b: 2, c: 3}, ['a', 'c', 'x']);
 
       expect(result).to.eql({b: 2});
     });
@@ -64,34 +64,34 @@ describe('util', function() {
   describe('drop', function() {
 
     it('returns copy, does not modify original', function() {
-      var original = [0, 1, 2, 3, 4];
+      let original = [0, 1, 2, 3, 4];
 
-      var result = drop(original);
+      let result = drop(original);
 
       expect(result).not.to.equal(original);
       expect(original).to.eql([0, 1, 2, 3, 4]);
     });
 
     it('skips the first element without parameter', function() {
-      var result = drop([0, 1, 2, 3, 4]);
+      let result = drop([0, 1, 2, 3, 4]);
 
       expect(result).to.eql([1, 2, 3, 4]);
     });
 
     it('returns copy with parameter 0', function() {
-      var result = drop([0, 1, 2, 3, 4], 0);
+      let result = drop([0, 1, 2, 3, 4], 0);
 
       expect(result).to.eql([0, 1, 2, 3, 4]);
     });
 
     it('skips n elements with parameter n', function() {
-      var result = drop([0, 1, 2, 3, 4], 2);
+      let result = drop([0, 1, 2, 3, 4], 2);
 
       expect(result).to.eql([2, 3, 4]);
     });
 
     it('supports negative parameter', function() {
-      var result = drop([0, 1, 2, 3, 4], -2);
+      let result = drop([0, 1, 2, 3, 4], -2);
 
       expect(result).to.eql([3, 4]);
     });
@@ -101,15 +101,15 @@ describe('util', function() {
   describe('clone', function() {
 
     it('returns a copy of object', function() {
-      var original = {a: 1};
+      let original = {a: 1};
 
-      var result = clone(original);
+      let result = clone(original);
 
       expect(result).not.to.equal(original);
     });
 
     it('copies all properties', function() {
-      var result = clone({a: 1, b: 2});
+      let result = clone({a: 1, b: 2});
 
       expect(result).to.eql({a: 1, b: 2});
     });
@@ -119,7 +119,7 @@ describe('util', function() {
   describe('invert', function() {
 
     it('inverts object with string values', function() {
-      var result = invert({Moe: 'Moses', Larry: 'Louis', Curly: 'Jerome'});
+      let result = invert({Moe: 'Moses', Larry: 'Louis', Curly: 'Jerome'});
       expect(result).to.eql({Moses: 'Moe', Louis: 'Larry', Jerome: 'Curly'});
     });
 
@@ -128,13 +128,13 @@ describe('util', function() {
   describe('rename', function() {
 
     it('renames keys on resulting object', function() {
-      var original = {foo1: 'bar1', foo2: 'bar2', foo3: 'bar3'};
-      var result = rename(original, {foo1: 'foo4', foo2: 'foo5', foox: 'fooy'});
+      let original = {foo1: 'bar1', foo2: 'bar2', foo3: 'bar3'};
+      let result = rename(original, {foo1: 'foo4', foo2: 'foo5', foox: 'fooy'});
       expect(result).to.eql({foo4: 'bar1', foo5: 'bar2', foo3: 'bar3'});
     });
 
     it('does not modify existing object', function() {
-      var original = {foo1: 'bar1', foo2: 'bar2', foo3: 'bar3'};
+      let original = {foo1: 'bar1', foo2: 'bar2', foo3: 'bar3'};
       rename(original, {foo1: 'foo4', foo2: 'foo5', foox: 'fooy'});
       expect(original).to.eql({foo1: 'bar1', foo2: 'bar2', foo3: 'bar3'});
     });
@@ -143,7 +143,7 @@ describe('util', function() {
 
   describe('extendPrototype', function() {
 
-    var Class1, Class2;
+    let Class1, Class2;
 
     beforeEach(function() {
       Class1 = function() {};
@@ -152,14 +152,14 @@ describe('util', function() {
 
     it('returns object with source function prototype as prototype', function() {
       Class1.prototype = {a: 1};
-      var object = extendPrototype(Class1, {});
+      let object = extendPrototype(Class1, {});
 
       expect(object.a).to.equal(1);
       expect(object.hasOwnProperty('a')).to.be.not.ok;
     });
 
     it('returns object with target object properties', function() {
-      var object = extendPrototype(function() {}, {a: 1});
+      let object = extendPrototype(function() {}, {a: 1});
 
       expect(object.a).to.equal(1);
       expect(object.hasOwnProperty('a')).to.be.ok;
@@ -168,7 +168,7 @@ describe('util', function() {
     it('works with instanceof', function() {
 
       Class2.prototype = extendPrototype(Class1, {});
-      var object = new Class2();
+      let object = new Class2();
 
       expect(object instanceof Class2).to.be.ok;
       expect(object instanceof Class1).to.be.ok;
@@ -210,7 +210,7 @@ describe('util', function() {
             this._super('myFunction');
           }
         });
-        var instance = new Class2();
+        let instance = new Class2();
         instance.myFunction();
 
         expect(Class1.prototype.myFunction).to.have.been.calledOn(instance);
@@ -226,8 +226,8 @@ describe('util', function() {
             return this._super('myFunction') + 1;
           }
         });
-        var instance = new Class2();
-        var result = instance.myFunction();
+        let instance = new Class2();
+        let result = instance.myFunction();
         expect(result).to.equal(24);
       });
 

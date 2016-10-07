@@ -39,7 +39,7 @@ describe('TabFolder', function() {
 
   describe('when a Tab is appended', function() {
 
-    var tab, create;
+    let tab, create;
 
     beforeEach(function() {
       client.resetCalls();

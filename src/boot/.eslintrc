@@ -1,0 +1,13 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 5
+  },
+  "globals": {
+    "tabris": false,
+    "window": false,
+    "document": false
+  },
+  "rules": {
+    "no-var": "off"
+  }
+}

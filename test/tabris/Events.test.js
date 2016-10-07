@@ -4,9 +4,9 @@ import Events from '../../src/tabris/Events';
 
 describe('Events', function() {
 
-  var object;
-  var context, context2;
-  var callback, callback2;
+  let object;
+  let context, context2;
+  let callback, callback2;
 
   beforeEach(function() {
     object = {};
@@ -28,7 +28,7 @@ describe('Events', function() {
     });
 
     it('should return context', function() {
-      var result = object.on('foo', callback);
+      let result = object.on('foo', callback);
       expect(result).to.equal(object);
     });
 
@@ -126,7 +126,7 @@ describe('Events', function() {
     });
 
     it('should return context', function() {
-      var result = object.off('foo', callback);
+      let result = object.off('foo', callback);
       expect(result).to.equal(object);
     });
 
@@ -147,14 +147,14 @@ describe('Events', function() {
     });
 
     it('should use given context', function() {
-      var context = {};
+      let context = {};
       object.once('foo', callback, context);
       object.trigger('foo');
       expect(callback.firstCall).to.have.been.calledOn(context);
     });
 
     it('should return context', function() {
-      var result = object.once('foo', callback);
+      let result = object.once('foo', callback);
       expect(result).to.equal(object);
     });
 
@@ -197,7 +197,7 @@ describe('Events', function() {
     });
 
     it('should return context', function() {
-      var result = object.trigger('foo');
+      let result = object.trigger('foo');
       expect(result).to.equal(object);
     });
 

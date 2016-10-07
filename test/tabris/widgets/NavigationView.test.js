@@ -85,7 +85,7 @@ describe('NavigationView', () => {
       });
 
       it('clear() returns empty WidgetCollection', () => {
-        var collection = stack.clear();
+        let collection = stack.clear();
 
         expect(collection instanceof WidgetCollection).to.be.true;
         expect(collection.length).to.equal(0);

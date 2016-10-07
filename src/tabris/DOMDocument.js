@@ -1,10 +1,10 @@
 import DOMEvent, {addDOMEventTargetMethods} from './DOMEvent';
 
-var noop = function() {};
+let noop = function() {};
 
 export function addDOMDocument(target) {
 
-  var HTMLElement = function(tagName) {
+  let HTMLElement = function(tagName) {
     this.tagName = (tagName || '').toUpperCase();
     this.children = [];
   };
@@ -41,7 +41,7 @@ export function addDOMDocument(target) {
   }
   tabris.load(function() {
     target.document.readyState = 'complete';
-    var event = target.document.createEvent('Events');
+    let event = target.document.createEvent('Events');
     event.initEvent('DOMContentLoaded', false, false);
     target.document.dispatchEvent(event);
   });
@@ -49,7 +49,7 @@ export function addDOMDocument(target) {
 
 function handleElementInserted(parent, child, target) {
   if (parent.tagName === 'HEAD' && child.tagName === 'SCRIPT' && child.src) {
-    var result;
+    let result;
     try {
       result = tabris._client.loadAndExecute(child.src, '', '');
     } catch (ex) {

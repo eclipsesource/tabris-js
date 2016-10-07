@@ -7,21 +7,21 @@ import NativeObject from './NativeObject';
 import DOMEvent, {addDOMEventTargetMethods} from './DOMEvent';
 import ProgressEvent from './DOMProgressEvent';
 
-var HttpRequest = NativeObject.extend({
+let HttpRequest = NativeObject.extend({
   _type: 'tabris.HttpRequest',
   _events: {StateChange: true, DownloadProgress: true, UploadProgress: true}
 });
 
-var eventTypes = [
+let eventTypes = [
   'loadstart', 'readystatechange', 'load', 'loadend', 'progress', 'timeout', 'abort', 'error'
 ];
-var uploadEventTypes = ['progress', 'loadstart', 'load', 'loadend', 'timeout', 'abort', 'error'];
+let uploadEventTypes = ['progress', 'loadstart', 'load', 'loadend', 'timeout', 'abort', 'error'];
 
 // -----------------------------------------------------------------
 // Constructor
 
 export default function XMLHttpRequest() {
-  var scope = createScopeObject(this);
+  let scope = createScopeObject(this);
   definePropertyUpload(this, scope);
   definePropertyReadyState(this, scope);
   definePropertyTimeout(this, scope);
@@ -55,7 +55,7 @@ XMLHttpRequest.prototype = {
 // Properties
 
 function createScopeObject(xhr) {
-  var scope = {};
+  let scope = {};
   scope.proxy = null;
   scope.authorRequestHeaders = {};
   scope.uploadListeners = {};
@@ -192,7 +192,7 @@ function defineEventHandlers(xhr, scope) {
 }
 
 function defineEventHandler(eventType, target, listeners) {
-  var handler = 'on' + eventType;
+  let handler = 'on' + eventType;
   Object.defineProperty(target, handler, {
     get: function() {
       return listeners[handler];
@@ -266,12 +266,12 @@ function definePropertyWithCredentials(xhr, scope) {
 
 function createOpenMethod(xhr, scope) {
   return function(method, url, async, username, password) { // #dom-xmlhttprequest-open
-    var parsedUrl = {};
+    let parsedUrl = {};
     // (2), (3), (4): we don't implement the 'settings' object
     validateRequiredOpenArgs(method, url);
     parsedUrl.source = url; // (8), (9): experimental non-standard parsing implementation:
     // regex taken from http://stackoverflow.com/a/8206299:
-    var urlWithoutProtocol = url.replace(/.*?:\/\//g, '');
+    let urlWithoutProtocol = url.replace(/.*?:\/\//g, '');
     // regex taken from http://stackoverflow.com/a/19709846:
     parsedUrl.isRelative = !new RegExp('^(?:[a-z]+:)?//', 'i').test(url);
     parsedUrl.userdata = urlWithoutProtocol.substring(0, urlWithoutProtocol.indexOf('@'));
@@ -413,7 +413,7 @@ function createGetResponseHeaderMethod(xhr, scope) {
       return null;
     }
     // (3) (No headers are filtered out as this restriction does not apply to native apps)
-    for (var key in scope.responseHeaders) { // (4), (5)
+    for (let key in scope.responseHeaders) { // (4), (5)
       if (key.toLowerCase() === header.toLowerCase()) {
         return scope.responseHeaders[key];
       }
@@ -435,8 +435,8 @@ function createGetAllResponseHeadersMethod(xhr, scope) {
 }
 
 function stringifyResponseHeaders(headers) {
-  var string = [];
-  for (var key in headers) {
+  let string = [];
+  for (let key in headers) {
     string.push(key + ': ' + headers[key]);
   }
   return string.join('\n');
@@ -516,12 +516,12 @@ function validateMethod(method) {
     throw new TypeError("Invalid HTTP method, failed to execute 'open'");
   }
   // (6):
-  var tokens = ['CONNECT', 'DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'TRACE', 'TRACK'];
-  var uppercaseMethod = method.toUpperCase();
+  let tokens = ['CONNECT', 'DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'TRACE', 'TRACK'];
+  let uppercaseMethod = method.toUpperCase();
   if (tokens.indexOf(uppercaseMethod) >= 0) {
     method = uppercaseMethod;
   }
-  var forbiddenTokens = ['CONNECT', 'TRACE', 'TRACK']; // (7)
+  let forbiddenTokens = ['CONNECT', 'TRACE', 'TRACK']; // (7)
   if (forbiddenTokens.indexOf(method) >= 0) {
     throw new Error(
             "SecurityError: '" + method + "' HTTP method is not secure, failed to execute 'open'"
@@ -532,7 +532,7 @@ function validateMethod(method) {
 function validHttpToken(httpToken) {
   // RFC-compliant validation for HTTP tokens ported from Chromium:
   // https://chromium.googlesource.com/chromium/blink.git/+/master/Source/platform/network/HTTPParsers.cpp
-  var forbiddenCharacters = ['(', ')', '<', '>', '@', ',', ';', ':', '\\', '"', '\/', '[', ']',
+  let forbiddenCharacters = ['(', ')', '<', '>', '@', ',', ';', ':', '\\', '"', '\/', '[', ']',
       '?', '=', '{', '}'];
   return !(/[^\x21-\x7E]/.test(httpToken) || forbiddenCharacters.indexOf(httpToken) >= 0);
 }
@@ -544,18 +544,18 @@ function isValidHttpHeaderValue(value) {
   return /^[\x09\x0A\x0D\x20-\x7E\xA0-\xFF]*$/.test(value) && value.indexOf('\n') < 0 && value.indexOf('\r') < 0;
 }
 
-var supportedSchemes = ['http', 'https', 'file'];
+let supportedSchemes = ['http', 'https', 'file'];
 
 function validateUrl(url) {
   // TODO: rewrite (8),(9)
-  var scheme = extractScheme(url);
+  let scheme = extractScheme(url);
   if (scheme && (supportedSchemes.indexOf(scheme) === -1)) {
     throw new SyntaxError("Unsupported URL scheme, failed to execute 'open'");
   }
 }
 
 function extractScheme(url) {
-  var match = /^(\S+?):/.exec(url);
+  let match = /^(\S+?):/.exec(url);
   return match ? match[1] : null;
 }
 
@@ -585,7 +585,7 @@ function dispatchFinishedProgressEvents(context) {
 }
 
 function initProgressEvent(type, target, lengthComputable, loaded, total) {
-  var progressEvent = new ProgressEvent(type);
+  let progressEvent = new ProgressEvent(type);
   progressEvent.currentTarget = progressEvent.target = target;
   if (lengthComputable) {
     progressEvent.lengthComputable = lengthComputable;
@@ -600,12 +600,12 @@ function initProgressEvent(type, target, lengthComputable, loaded, total) {
 }
 
 function dispatchEvent(type, target) {
-  var event = initEvent(type, target);
+  let event = initEvent(type, target);
   target.dispatchEvent(event);
 }
 
 function initEvent(type, target) {
-  var event = new DOMEvent(type);
+  let event = new DOMEvent(type);
   event.currentTarget = event.target = target;
   return event;
 }

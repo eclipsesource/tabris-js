@@ -1,11 +1,11 @@
 import NativeObject from './NativeObject';
 
-var CONNECTING = 0;
-var OPEN = 1;
-var CLOSING = 2;
-var CLOSED = 3;
+let CONNECTING = 0;
+let OPEN = 1;
+let CLOSING = 2;
+let CLOSED = 3;
 
-var _WebSocket = NativeObject.extend({
+let _WebSocket = NativeObject.extend({
   _type: 'tabris.WebSocket',
   _events: {
     open: true,
@@ -26,14 +26,14 @@ export default function WebSocket(url, protocol) {
   if (typeof url !== 'string') {
     throw new Error('The WebSocket url has to be of type string');
   }
-  var scheme = extractScheme(url);
+  let scheme = extractScheme(url);
   if (!(scheme === 'ws' || scheme === 'wss')) {
     throw new Error("The WebSocket url has to have a scheme of 'ws' or 'wss' but is '" + scheme + "'");
   }
 
   this.url = url;
 
-  var protocolArray = [];
+  let protocolArray = [];
   if (typeof protocol === 'string') {
     protocolArray = [protocol];
   } else if (Array.isArray(protocol)) {
@@ -123,7 +123,7 @@ WebSocket.prototype = {
     }
     if (this.readyState !== CLOSING || this.readyState !== CLOSED) {
       this.readyState = CLOSING;
-      var properties = {};
+      let properties = {};
       if (code) {
         properties.code = code;
       }
@@ -141,9 +141,9 @@ if (typeof WebSocket === 'undefined') {
 }
 
 function getStringByteSize(input) {
-  var len = 0;
-  for (var i = 0; i < input.length; i++) {
-    var code = input.charCodeAt(i);
+  let len = 0;
+  for (let i = 0; i < input.length; i++) {
+    let code = input.charCodeAt(i);
     if (code <= 0x7f) {
       len += 1;
     } else if (code <= 0x7ff) {
@@ -163,6 +163,6 @@ function getStringByteSize(input) {
 }
 
 function extractScheme(url) {
-  var match = /^(\S+?):/.exec(url);
+  let match = /^(\S+?):/.exec(url);
   return match ? match[1] : null;
 }

@@ -1,4 +1,4 @@
-var client = {
+let client = {
   get: () => {},
   create: () => {},
   listen: () => {}

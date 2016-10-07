@@ -5,7 +5,7 @@ export default function UI() {
   throw new Error('UI can not be created');
 }
 
-var _UI = Widget.extend({
+let _UI = Widget.extend({
 
   _name: 'UI',
 

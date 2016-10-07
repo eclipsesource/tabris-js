@@ -6,7 +6,7 @@ import GestureRecognizer from './GestureRecognizer';
 import {animate} from './Animation';
 import {types} from './property-types';
 
-var tabris = global.tabris;
+let tabris = global.tabris;
 if (tabris) {
   tabris.Widget = Widget;
 }
@@ -15,13 +15,13 @@ export default function Widget() {
   throw new Error('Cannot instantiate abstract Widget');
 }
 
-var superProto = NativeObject.prototype;
+let superProto = NativeObject.prototype;
 
 Widget.prototype = extendPrototype(NativeObject, {
 
   append: function() {
     this._checkDisposed();
-    var accept = function(proxy) {
+    let accept = function(proxy) {
       if (!(proxy instanceof NativeObject)) {
         throw new Error('Cannot append non-widget');
       }
@@ -53,8 +53,8 @@ Widget.prototype = extendPrototype(NativeObject, {
     if (!(proxy instanceof NativeObject)) {
       throw new Error('Cannot insert before non-widget');
     }
-    var parent = proxy.parent();
-    var index = parent._children.indexOf(proxy);
+    let parent = proxy.parent();
+    let index = parent._children.indexOf(proxy);
     this._setParent(parent, index);
     return this;
   },
@@ -65,8 +65,8 @@ Widget.prototype = extendPrototype(NativeObject, {
     if (!(proxy instanceof NativeObject)) {
       throw new Error('Cannot insert after non-widget');
     }
-    var parent = proxy.parent();
-    var index = parent._children.indexOf(proxy);
+    let parent = proxy.parent();
+    let index = parent._children.indexOf(proxy);
     this._setParent(parent, index + 1);
     return this;
   },
@@ -80,8 +80,8 @@ Widget.prototype = extendPrototype(NativeObject, {
   },
 
   siblings: function(selector) {
-    var siblings = (this._parent ? this._parent._getSelectableChildren() : []);
-    var filtered = siblings.filter(function(widget) {
+    let siblings = (this._parent ? this._parent._getSelectableChildren() : []);
+    let filtered = siblings.filter(function(widget) {
       return widget !== this;
     }.bind(this));
     return new WidgetCollection(filtered, selector);
@@ -92,11 +92,11 @@ Widget.prototype = extendPrototype(NativeObject, {
   },
 
   apply: function(sheet) {
-    var scope = new WidgetCollection(this._children.concat(this), '*', true);
+    let scope = new WidgetCollection(this._children.concat(this), '*', true);
     if (sheet['*']) {
       scope.set(sheet['*']);
     }
-    var selector;
+    let selector;
     for (selector in sheet) {
       if (selector !== '*' && selector[0] !== '#' && selector[0] !== '.') {
         scope.filter(selector).set(sheet[selector]);
@@ -137,7 +137,7 @@ Widget.prototype = extendPrototype(NativeObject, {
   },
 
   _addChild: function(child, index) {
-    var check = this.constructor._supportsChildren;
+    let check = this.constructor._supportsChildren;
     if (check === false) {
       throw new Error(this.type + ' cannot contain children');
     }
@@ -157,7 +157,7 @@ Widget.prototype = extendPrototype(NativeObject, {
 
   _removeChild: function(child) {
     if (this._children) {
-      var index = this._children.indexOf(child);
+      let index = this._children.indexOf(child);
       if (index !== -1) {
         this._children.splice(index, 1);
       }
@@ -167,8 +167,8 @@ Widget.prototype = extendPrototype(NativeObject, {
 
   _release: function() {
     if (this._children) {
-      var children = this._children.concat();
-      for (var i = 0; i < children.length; i++) {
+      let children = this._children.concat();
+      for (let i = 0; i < children.length; i++) {
         children[i]._dispose(true);
       }
       delete this._children;
@@ -181,7 +181,7 @@ Widget.prototype = extendPrototype(NativeObject, {
   },
 
   _getEventConfig: function(type) {
-    var result = superProto._getEventConfig.apply(this, arguments);
+    let result = superProto._getEventConfig.apply(this, arguments);
     if (!result && this.get('gestures')[type]) {
       return getGestureEventConfig(type);
     }
@@ -204,7 +204,7 @@ Widget.extend = function(members) {
   members = extend({}, members);
   members._events = extend({}, _defaultEvents, members._events || {});
   if (members._properties !== true) {
-    var defaultProperties = _defaultProperties;
+    let defaultProperties = _defaultProperties;
     members._properties = extend({}, defaultProperties, members._properties || {});
   }
   return NativeObject.extend(members, Widget);
@@ -219,14 +219,14 @@ Object.defineProperty(Widget.prototype, 'classList', {
   }
 });
 
-var hasAndroidResizeBug;
+let hasAndroidResizeBug;
 if (tabris) {
   tabris.load(function() {
     hasAndroidResizeBug = device.platform === 'Android' && device.version <= 17;
   });
 }
 
-var layoutAccess = {
+let layoutAccess = {
   set: function(name, value) {
     if (!this._layoutData) {
       this._layoutData = {};
@@ -245,7 +245,7 @@ var layoutAccess = {
   }
 };
 
-var _defaultEvents = {
+let _defaultEvents = {
   touchstart: {trigger: triggerWithTarget},
   touchmove: {trigger: triggerWithTarget},
   touchend: {trigger: triggerWithTarget},
@@ -254,7 +254,7 @@ var _defaultEvents = {
     alias: 'change:bounds',
     trigger: function(event) {
       if (hasAndroidResizeBug) {
-        var self = this;
+        let self = this;
         setTimeout(function() {
           self._triggerChangeEvent('bounds', event.bounds, {}, 'resize');
           self.trigger('resize', self, types.bounds.decode(event.bounds), {});
@@ -267,7 +267,7 @@ var _defaultEvents = {
   }
 };
 
-var _defaultProperties = {
+let _defaultProperties = {
   enabled: {
     type: 'boolean',
     default: true
@@ -339,7 +339,7 @@ var _defaultProperties = {
         this._storeProperty(name, value, options);
       },
       get: function(name) {
-        var result = this._getStoredProperty(name);
+        let result = this._getStoredProperty(name);
         if (result === undefined) {
           result = this._nativeGet('foreground');
         }
@@ -413,7 +413,7 @@ var _defaultProperties = {
   }
 };
 
-var defaultGestures = {
+let defaultGestures = {
   tap: {type: 'tap'},
   longpress: {type: 'longpress'},
   pan: {type: 'pan'},
@@ -431,7 +431,7 @@ var defaultGestures = {
 
 function renderLayoutData() {
   if (this._layoutData) {
-    var checkedData = Layout.checkConsistency(this._layoutData);
+    let checkedData = Layout.checkConsistency(this._layoutData);
     this._nativeSet('layoutData', Layout.resolveReferences(checkedData, this));
   }
 }
@@ -439,10 +439,10 @@ function renderLayoutData() {
 function getGestureEventConfig(name) {
   return {
     listen: function(state) {
-      var gestures = this.get('gestures');
+      let gestures = this.get('gestures');
       if (state) {
-        var properties = extend({target: this}, gestures[name]);
-        var recognizer = new GestureRecognizer(properties)
+        let properties = extend({target: this}, gestures[name]);
+        let recognizer = new GestureRecognizer(properties)
           .on('gesture', gestureListener, {target: this, name: name});
         if (!this._recognizers) {
           this._recognizers = {};

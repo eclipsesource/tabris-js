@@ -10,7 +10,7 @@ export default Widget.extend({
   _type: 'tabris.NavigationView',
 
   _create: function() {
-    var result = Widget.prototype._create.apply(this, arguments);
+    let result = Widget.prototype._create.apply(this, arguments);
     Object.defineProperty(this, 'stack', {value: new StackView(this)});
     this._nativeListen('backnavigation', true);
     return result;
@@ -36,7 +36,7 @@ export default Widget.extend({
 
 function StackView(navigationView) {
 
-  var stack = [];
+  let stack = [];
 
   Object.defineProperty(this, 'length', {get: function() {return stack.length;}});
 
@@ -55,7 +55,7 @@ function StackView(navigationView) {
     },
 
     pop: function() {
-      var result = stack.pop();
+      let result = stack.pop();
       if (result) {
         navigationView._nativeCall('stack_pop', {});
         result._setParent(null);
@@ -64,7 +64,7 @@ function StackView(navigationView) {
     },
 
     clear: function() {
-      var result = new WidgetCollection(stack);
+      let result = new WidgetCollection(stack);
       navigationView._nativeCall('stack_clear', {});
       stack = [];
       result.forEach(function(page) {page._setParent(null);});

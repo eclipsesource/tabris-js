@@ -28,8 +28,8 @@ extend(NativeObject.prototype, Events, {
       console.warn('Cannot get property "' + name + '" on disposed object');
       return;
     }
-    var getter = this._getPropertyGetter(name) || this._getStoredProperty;
-    var value = getter.call(this, name);
+    let getter = this._getPropertyGetter(name) || this._getStoredProperty;
+    let value = getter.call(this, name);
     return this._decodeProperty(this._getTypeDef(name), value);
   },
 
@@ -38,20 +38,20 @@ extend(NativeObject.prototype, Events, {
       console.warn('Cannot set property "' + name + '" on disposed object');
       return;
     }
-    var typeDef = this._getTypeDef(name);
-    var encodedValue;
+    let typeDef = this._getTypeDef(name);
+    let encodedValue;
     try {
       encodedValue = this._encodeProperty(typeDef, value);
     } catch (ex) {
       console.warn(this.toString() + ': Ignored unsupported value for property "' + name + '": ' + ex.message);
       return;
     }
-    var setter = this._getPropertySetter(name) || this._storeProperty;
+    let setter = this._getPropertySetter(name) || this._storeProperty;
     setter.call(this, name, encodedValue);
   },
 
   _storeProperty: function(name, encodedValue) {
-    var oldEncodedValue = this._getStoredProperty(name);
+    let oldEncodedValue = this._getStoredProperty(name);
     if (encodedValue === oldEncodedValue) {
       return;
     }
@@ -67,7 +67,7 @@ extend(NativeObject.prototype, Events, {
   },
 
   _getStoredProperty: function(name) {
-    var result = this._props ? this._props[name] : undefined;
+    let result = this._props ? this._props[name] : undefined;
     if (result === undefined) {
       result = this._getDefaultPropertyValue(name);
     }
@@ -75,12 +75,12 @@ extend(NativeObject.prototype, Events, {
   },
 
   _getTypeDef: function(name) {
-    var prop = this.constructor._properties[name];
+    let prop = this.constructor._properties[name];
     return prop ? prop.type : null;
   },
 
   _getDefaultPropertyValue: function(name) {
-    var prop = this.constructor._properties[name];
+    let prop = this.constructor._properties[name];
     return prop ? valueOf(prop.default) : undefined;
   },
 
@@ -93,26 +93,26 @@ extend(NativeObject.prototype, Events, {
   },
 
   _getPropertyGetter: function(name) {
-    var prop = this.constructor._properties[name];
+    let prop = this.constructor._properties[name];
     return prop ? prop.get : undefined;
   },
 
   _getPropertySetter: function(name) {
-    var prop = this.constructor._properties[name];
+    let prop = this.constructor._properties[name];
     return prop ? prop.set : undefined;
   },
 
   _triggerChangeEvent: function(propertyName, newEncodedValue) {
-    var typeDef = this._getTypeDef(propertyName);
-    var decodedValue = this._decodeProperty(typeDef, newEncodedValue);
+    let typeDef = this._getTypeDef(propertyName);
+    let decodedValue = this._decodeProperty(typeDef, newEncodedValue);
     this.trigger('change:' + propertyName, this, decodedValue);
   },
 
   _create: function(properties) {
-    var type = this.constructor._type || this.type;
+    let type = this.constructor._type || this.type;
     tabris._nativeBridge.create(this.cid, type);
     if (this.constructor._initProperties) {
-      for (var name in this.constructor._initProperties) {
+      for (let name in this.constructor._initProperties) {
         this._nativeSet(name, this.constructor._initProperties[name]);
       }
     }
@@ -152,7 +152,7 @@ extend(NativeObject.prototype, Events, {
   },
 
   _listen: function(event, state) {
-    var config = this._getEventConfig(event);
+    let config = this._getEventConfig(event);
     if (!config || this._isListeningToAlias(event, config)) {
       return;
     }
@@ -167,7 +167,7 @@ extend(NativeObject.prototype, Events, {
     if (!config.alias) {
       return false;
     }
-    var other = event === config.originalName ?  config.alias : config.originalName;
+    let other = event === config.originalName ?  config.alias : config.originalName;
     return this._isListening(other);
   },
 
@@ -177,8 +177,8 @@ extend(NativeObject.prototype, Events, {
   },
 
   _trigger: function(event, params) {
-    var name = this.constructor._trigger[event];
-    var trigger = name && this.constructor._events[name].trigger;
+    let name = this.constructor._trigger[event];
+    let trigger = name && this.constructor._events[name].trigger;
     if (trigger instanceof Function) {
       return trigger.call(this, params, name);
     } else if (name) {
@@ -228,7 +228,7 @@ function setExistingProperty(name, value) {
 }
 
 NativeObject.extend = function(members, superType) {
-  var Type = function(properties) {
+  let Type = function(properties) {
     if (!(this instanceof Type)) {
       throw new Error('Cannot call constructor as a function');
     }
@@ -242,13 +242,13 @@ NativeObject.extend = function(members, superType) {
       this._create(properties || {});
     }
   };
-  for (var member in staticMembers) {
+  for (let member in staticMembers) {
     Type[member] = members[member] || getDefault(member);
   }
   Type._events = normalizeEvents(Type._events);
   Type._properties = normalizeProperties(Type._properties);
   Type._trigger = buildTriggerMap(Type._events);
-  var superProto = omit(members, Object.keys(staticMembers));
+  let superProto = omit(members, Object.keys(staticMembers));
   superProto.type = members._name;
   superProto.constructor = Type; // extendPrototype can not provide the original
   Type.prototype = extendPrototype(superType || NativeObject, superProto);
@@ -257,9 +257,9 @@ NativeObject.extend = function(members, superType) {
 };
 
 function normalizeEvents(events) {
-  var result = {};
-  for (var event in events) {
-    var entry = events[event];
+  let result = {};
+  for (let event in events) {
+    let entry = events[event];
     result[event] = typeof entry === 'object' ? entry : {};
     if (!result[event].name) {
       result[event].name = typeof entry === 'string' ? entry : event;
@@ -273,17 +273,17 @@ function normalizeEvents(events) {
 }
 
 function normalizeProperties(properties) {
-  var result = {};
-  for (var name in properties) {
+  let result = {};
+  for (let name in properties) {
     result[name] = normalizeProperty(properties[name]);
   }
   return result;
 }
 
 function normalizeProperty(property) {
-  var shortHand = (typeof property === 'string' || Array.isArray(property));
-  var setter = property.access && property.access.set || defaultSetter;
-  var getter = property.access && property.access.get || defaultGetter;
+  let shortHand = (typeof property === 'string' || Array.isArray(property));
+  let setter = property.access && property.access.set || defaultSetter;
+  let getter = property.access && property.access.get || defaultGetter;
   return {
     type: resolveType((shortHand ? property : property.type) || 'any'),
     default: property.default,
@@ -294,7 +294,7 @@ function normalizeProperty(property) {
 }
 
 function resolveType(type) {
-  var typeDef = type;
+  let typeDef = type;
   if (typeof type === 'string') {
     typeDef = types[type];
   } else if (Array.isArray(type)) {
@@ -305,7 +305,7 @@ function resolveType(type) {
   }
   if (Array.isArray(type)) {
     typeDef = clone(typeDef);
-    var args = type.slice(1);
+    let args = type.slice(1);
     if (typeDef.encode) {
       typeDef.encode = wrapCoder(typeDef.encode, args);
     }
@@ -332,7 +332,7 @@ function defaultSetter(name, value, options) {
 }
 
 function defaultGetter(name) {
-  var result = this._getStoredProperty(name);
+  let result = this._getStoredProperty(name);
   if (result === undefined) {
     // TODO: cache read property, but not for device properties
     result = this._nativeGet(name);
@@ -341,21 +341,21 @@ function defaultGetter(name) {
 }
 
 function buildTriggerMap(events) {
-  var result = {};
-  for (var event in events) {
-    var name = events[event].name;
+  let result = {};
+  for (let event in events) {
+    let name = events[event].name;
     result[name] = event;
   }
   return result;
 }
 
 function getDefault(member) {
-  var value = staticMembers[member];
+  let value = staticMembers[member];
   return value instanceof Object ? clone(value) : value;
 }
 
 function createProperties(target, definitions) {
-  for (var property in definitions) {
+  for (let property in definitions) {
     createProperty(target, property);
   }
 }
@@ -375,7 +375,7 @@ function valueOf(value) {
   return value instanceof Function ? value() : value;
 }
 
-var staticMembers = {
+let staticMembers = {
   '_events': {},
   '_initProperties': {},
   '_type': null,

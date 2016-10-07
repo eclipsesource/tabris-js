@@ -1,4 +1,4 @@
-var noop = function() {};
+let noop = function() {};
 
 export default function DOMEvent(type, eventInitDict) {
   this.type = type;
@@ -42,7 +42,7 @@ export function addDOMEventTargetMethods(target) {
     return;
   }
 
-  var listeners;
+  let listeners;
 
   target.addEventListener = function(type, listener /*, useCapture*/) {
     if (!listeners) {
@@ -51,7 +51,7 @@ export function addDOMEventTargetMethods(target) {
     if (!(type in listeners)) {
       listeners[type] = [];
     }
-    var index = listeners[type].indexOf(listener);
+    let index = listeners[type].indexOf(listener);
     if (index === -1) {
       listeners[type].push(listener);
     }
@@ -60,7 +60,7 @@ export function addDOMEventTargetMethods(target) {
 
   target.removeEventListener = function(type, listener /*, useCapture*/) {
     if (listeners && type in listeners) {
-      var index = listeners[type].indexOf(listener);
+      let index = listeners[type].indexOf(listener);
       if (index !== -1) {
         listeners[type].splice(index, 1);
         return listeners[type].length === 0;
@@ -71,9 +71,9 @@ export function addDOMEventTargetMethods(target) {
 
   target.dispatchEvent = function(event) {
     if (listeners && event.type in listeners) {
-      var eventListeners = listeners[event.type];
+      let eventListeners = listeners[event.type];
       event.target = target;
-      for (var i = 0; i < eventListeners.length; i++) {
+      for (let i = 0; i < eventListeners.length; i++) {
         eventListeners[i].call(this, event);
       }
     }

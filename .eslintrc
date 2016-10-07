@@ -11,7 +11,6 @@
   "globals": {
     "tabris": false,
     "window": false,
-    "document": false,
     "device": false
   },
   "rules": {
@@ -33,6 +32,7 @@
     "quotes": ["error", "single", "avoid-escape"],
     "curly": ["error", "all"],
     "eol-last": "error",
-    "no-with": "error"
+    "no-with": "error",
+    "no-var": "error"
   }
 }

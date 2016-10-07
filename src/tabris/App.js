@@ -12,8 +12,8 @@ export default NativeObject.extend({
     patchInstall: {trigger: notifyPatchCallback},
     backnavigation: {
       trigger: function() {
-        var intercepted = false;
-        var event = {};
+        let intercepted = false;
+        let event = {};
         event.preventDefault = function() {
           intercepted = true;
         };
@@ -27,7 +27,7 @@ export default NativeObject.extend({
     if (!this._resourceBaseUrl) {
       this._resourceBaseUrl = this._nativeGet('resourceBaseUrl');
     }
-    var subPath = path != null ? '/' + normalizePath('' + path) : '';
+    let subPath = path != null ? '/' + normalizePath('' + path) : '';
     return this._resourceBaseUrl + subPath;
   },
   dispose: function() {
@@ -56,14 +56,14 @@ function triggerWithTarget(event, name) {
 
 function notifyPatchCallback(event) {
   this._listen('patchInstall', false);
-  var callback = this._pendingPatchCallback;
+  let callback = this._pendingPatchCallback;
   delete this._pendingPatchCallback;
   if (typeof callback === 'function') {
     if (event.error) {
       callback(new Error(event.error));
     } else {
       try {
-        var patch = event.success ? JSON.parse(event.success) : null;
+        let patch = event.success ? JSON.parse(event.success) : null;
         callback(null, patch);
       } catch (error) {
         callback(new Error('Failed to parse patch.json'));

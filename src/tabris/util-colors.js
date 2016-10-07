@@ -1,9 +1,9 @@
 
 export function colorArrayToString(array) {
-  var r = array[0];
-  var g = array[1];
-  var b = array[2];
-  var a = array.length === 3 ? 1 : Math.round(array[3] * 100 / 255) / 100;
+  let r = array[0];
+  let g = array[1];
+  let b = array[2];
+  let a = array.length === 3 ? 1 : Math.round(array[3] * 100 / 255) / 100;
   return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
 }
 
@@ -49,7 +49,7 @@ export function colorStringToArray(str) {
   }
   // named colors
   if (str in NAMES) {
-    var rgb = NAMES[str];
+    let rgb = NAMES[str];
     return [rgb[0], rgb[1], rgb[2], 255];
   }
   throw new Error('invalid color: ' + str);
@@ -59,7 +59,7 @@ export function colorStringToArray(str) {
  * Basic color keywords as defined in CSS 3
  * See http://www.w3.org/TR/css3-color/#html4
  */
-var NAMES = {
+let NAMES = {
   black: [0, 0, 0],
   silver: [192, 192, 192],
   gray: [128, 128, 128],

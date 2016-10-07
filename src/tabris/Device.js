@@ -1,6 +1,6 @@
 import NativeObject from './NativeObject';
 
-var _Device = NativeObject.extend({
+let _Device = NativeObject.extend({
   _cid: 'tabris.Device',
   _properties: {
     model: 'any',
@@ -46,7 +46,7 @@ export function publishDeviceProperties(device, target) {
 }
 
 function createDevice(device) {
-  var dev = {};
+  let dev = {};
   ['model', 'platform', 'version'].forEach(function(name) {
     defineReadOnlyProperty(dev, name, function() {return device[name];});
   });
@@ -54,14 +54,14 @@ function createDevice(device) {
 }
 
 function createScreen(device) {
-  var screen = {};
+  let screen = {};
   defineReadOnlyProperty(screen, 'width', function() {return device.screenWidth;});
   defineReadOnlyProperty(screen, 'height', function() {return device.screenHeight;});
   return screen;
 }
 
 function createNavigator(device) {
-  var navigator = {};
+  let navigator = {};
   defineReadOnlyProperty(navigator, 'userAgent', function() {return 'tabris-js';});
   defineReadOnlyProperty(navigator, 'language', function() {return device.language;});
   return navigator;

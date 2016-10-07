@@ -5,7 +5,7 @@ import {fontObjectToString, fontStringToObject} from './util-fonts';
 import NativeObject from './NativeObject';
 import WidgetCollection from './WidgetCollection';
 
-export var types = {
+export let types = {
 
   any: {},
 
@@ -202,8 +202,8 @@ export var types = {
 
   transform: {
     encode: function(value) {
-      var result = extend({}, transformDefaults);
-      for (var key in value) {
+      let result = extend({}, transformDefaults);
+      for (let key in value) {
         if (!(key in transformDefaults)) {
           throw new Error('Not a valid transformation containing "' + key + '"');
         }
@@ -230,15 +230,15 @@ export var types = {
 
 };
 
-var numberRegex = /^[+-]?([0-9]+|[0-9]*\.[0-9]+)$/;
-var selectorRegex = /^(\*|prev\(\)|([#.]?[A-Za-z_][A-Za-z0-9_-]+))$/;
+let numberRegex = /^[+-]?([0-9]+|[0-9]*\.[0-9]+)$/;
+let selectorRegex = /^(\*|prev\(\)|([#.]?[A-Za-z_][A-Za-z0-9_-]+))$/;
 
 function isDimension(value) {
   return typeof value === 'number' && !isNaN(value) && value >= 0 && value !== Infinity;
 }
 
 function throwNotAcceptedError(acceptable, given) {
-  var message = ['Accepting "'];
+  let message = ['Accepting "'];
   message.push(acceptable.join('", "'));
   message.push('", given was: "', given + '"');
   throw new Error(message.join(''));
@@ -257,7 +257,7 @@ function encodeNumber(value) {
   return value;
 }
 
-var transformDefaults = {
+let transformDefaults = {
   rotation: 0,
   scaleX: 1,
   scaleY: 1,
@@ -266,7 +266,7 @@ var transformDefaults = {
   translationZ: 0
 };
 
-var layoutEncoders = {
+let layoutEncoders = {
   width: encodeNumber,
   height: encodeNumber,
   left: encodeEdge,
@@ -279,8 +279,8 @@ var layoutEncoders = {
 };
 
 function encodeLayoutData(layoutData) {
-  var result = {};
-  for (var key in layoutData) {
+  let result = {};
+  for (let key in layoutData) {
     if (layoutData[key] != null) {
       if (!(key in layoutEncoders)) {
         throw new Error("Invalid key '" + key + "' in layoutData");
@@ -301,7 +301,7 @@ function encodeEdge(value) {
       return encodeEdgeArray(value.split(/\s+/));
     }
     if (value[value.length - 1] === '%') {
-      var percentage = encodePercentage(value);
+      let percentage = encodePercentage(value);
       return percentage === 0 ? 0 : [percentage, 0];
     }
     if (numberRegex.test(value)) {
@@ -331,8 +331,8 @@ function encodeEdgeArray(array) {
   if (array.length !== 2) {
     throw new Error('Wrong number of elements (must be 2): ' + toString(array));
   }
-  var ref = encodeEdgeRef(array[0]);
-  var offset = encodeNumber(array[1]);
+  let ref = encodeEdgeRef(array[0]);
+  let offset = encodeNumber(array[1]);
   return ref === 0 ? offset : [ref, offset];
 }
 
@@ -358,7 +358,7 @@ function encodeEdgeRef(value) {
 }
 
 function encodePercentage(value) {
-  var sub = value.substr(0, value.length - 1);
+  let sub = value.substr(0, value.length - 1);
   if (numberRegex.test(sub)) {
     return parseFloat(sub);
   }
@@ -379,8 +379,8 @@ function decodeLayoutData(layoutData) {
   if (!layoutData) {
     return null;
   }
-  var result = {};
-  for (var key in layoutData) {
+  let result = {};
+  for (let key in layoutData) {
     result[key] = decodeLayoutAttr(layoutData[key]);
   }
   return result;

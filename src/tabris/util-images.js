@@ -3,7 +3,7 @@ export function imageToArray(value) {
 }
 
 export function imageFromArray(value) {
-  var result = {src: value[0]};
+  let result = {src: value[0]};
   if (value[1]) {
     result.width = value[1];
   }

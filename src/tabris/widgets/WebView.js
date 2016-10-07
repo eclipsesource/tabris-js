@@ -8,7 +8,7 @@ export default Widget.extend({
   _events: {
     navigate: {
       trigger: function(event, name) {
-        var intercepted = false;
+        let intercepted = false;
         event.preventDefault = function() {
           intercepted = true;
         };

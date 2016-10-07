@@ -20,7 +20,7 @@ export default function CanvasContext(gc) {
     height: 0,
     style: {}
   };
-  for (var name in properties) {
+  for (let name in properties) {
     defineProperty(this, name);
   }
   tabris.on('flush', this._flush, this);
@@ -188,7 +188,7 @@ CanvasContext.prototype.getImageData = function(x, y, width, height) {
   }
   this._flush();
   // TODO check validity of args
-  var uint8ClampedArray = this._gc._nativeCall('getImageData', {
+  let uint8ClampedArray = this._gc._nativeCall('getImageData', {
     x: x,
     y: y,
     width: width,
@@ -213,7 +213,7 @@ CanvasContext.prototype.putImageData = function(imageData, x, y) {
 
 CanvasContext.prototype.createImageData = function(width, height) {
   if (arguments[0] instanceof ImageData) {
-    var data = arguments[0];
+    let data = arguments[0];
     width = data.width;
     height = data.height;
   } else if (arguments.length < 2) {
@@ -238,7 +238,7 @@ CanvasContext.getContext = function(canvas, width, height) {
   return canvas._ctx;
 };
 
-var properties = {
+let properties = {
   lineWidth: {
     init: 1,
     encode: function(value) {
@@ -318,7 +318,7 @@ function checkValue(value) {
 }
 
 function toObject(array) {
-  var obj = {};
+  let obj = {};
   array.forEach(function(name) {
     obj[name] = true;
   });
@@ -326,8 +326,8 @@ function toObject(array) {
 }
 
 function createState() {
-  var state = {};
-  for (var name in properties) {
+  let state = {};
+  for (let name in properties) {
     state[name] = properties[name].init;
   }
   return state;
@@ -346,7 +346,7 @@ function defineMethod(name, reqArgCount, fn) {
 }
 
 function defineProperty(context, name) {
-  var prop = properties[name];
+  let prop = properties[name];
   Object.defineProperty(context, name, {
     get: function() {
       return prop.decode(context._state[name]);

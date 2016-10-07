@@ -6,7 +6,7 @@ import ClientStub from './ClientStub';
 
 describe('DOMDocument', function() {
 
-  var target, client, loadCallback;
+  let target, client, loadCallback;
 
   beforeEach(function() {
     target = {};
@@ -31,7 +31,7 @@ describe('DOMDocument', function() {
 
   it('can create mocked HTML elements', function() {
     ['createElement', 'createDocumentFragment'].forEach((method) => {
-      var element = target.document[method]();
+      let element = target.document[method]();
 
       expect(element.setAttribute()).to.be.undefined;
       expect(element.appendChild(23)).to.equal(23);
@@ -49,7 +49,7 @@ describe('DOMDocument', function() {
 
   it('fires DOMContentLoaded on tabris.load', function() {
     expect(target.document.readyState).to.equal('loading');
-    var listener = spy();
+    let listener = spy();
     target.document.addEventListener('DOMContentLoaded', listener);
 
     loadCallback();
@@ -59,13 +59,13 @@ describe('DOMDocument', function() {
   });
 
   it('can create HTML Element events', function() {
-    var event = target.document.createEvent();
+    let event = target.document.createEvent();
     expect(event).to.be.an.instanceof(DOMEvent);
   });
 
   describe('script element', function() {
 
-    var script1, script2, nonScript;
+    let script1, script2, nonScript;
 
     beforeEach(function() {
       script1 = target.document.createElement('script');
@@ -78,7 +78,7 @@ describe('DOMDocument', function() {
       target.document.head.appendChild(script2);
       target.document.head.appendChild(nonScript);
 
-      var result = target.document.getElementsByTagName('script');
+      let result = target.document.getElementsByTagName('script');
       expect(result).to.contain(script1);
       expect(result).to.contain(script2);
       expect(result).not.to.contain(nonScript);
@@ -126,7 +126,7 @@ describe('DOMDocument', function() {
     });
 
     it('calls onerror when script throws error', function() {
-      var error = new Error('bang');
+      let error = new Error('bang');
       client.loadAndExecute = stub().throws(error);
       script1.src = 'foo.js';
       script1.onload = spy();

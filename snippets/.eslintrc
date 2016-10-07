@@ -26,5 +26,8 @@
     "Float64Array": false,
     "Promise": false,
     "WebSocket": false
+  },
+  "rules": {
+    "no-var": "off"
   }
 }

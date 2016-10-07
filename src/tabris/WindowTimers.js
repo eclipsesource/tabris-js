@@ -1,6 +1,6 @@
 import NativeObject from './NativeObject';
 
-var Timer = NativeObject.extend({
+let Timer = NativeObject.extend({
   _type: 'tabris.Timer',
   _events: {Run: true},
   _properties: {delay: 'any', repeat: 'any'}
@@ -12,15 +12,15 @@ export function addWindowTimerMethods(target) {
     return;
   }
 
-  var taskSequence = 0;
-  var timers = {};
+  let taskSequence = 0;
+  let timers = {};
 
   function createTimer(fn, delay, repeat, args) {
-    var taskId = taskSequence++;
+    let taskId = taskSequence++;
     // If tabris is not ready, create the timer on load.
     // However, clearTimeout won't work until after load.
     tabris.load(function() {
-      var timer = new Timer({
+      let timer = new Timer({
         delay: delay,
         repeat: repeat
       }).on('Run', function() {
@@ -43,7 +43,7 @@ export function addWindowTimerMethods(target) {
     if (typeof fn !== 'function') {
       throw new TypeError('Illegal argument to setTimeout: not a function');
     }
-    var args = Array.prototype.slice.call(arguments, 2);
+    let args = Array.prototype.slice.call(arguments, 2);
     return createTimer(fn, adjustDelay(delay), false, args);
   };
 
@@ -54,12 +54,12 @@ export function addWindowTimerMethods(target) {
     if (typeof fn !== 'function') {
       throw new TypeError('Illegal argument to setInterval: not a function');
     }
-    var args = Array.prototype.slice.call(arguments, 2);
+    let args = Array.prototype.slice.call(arguments, 2);
     return createTimer(fn, adjustDelay(delay), true, args);
   };
 
   target.clearTimeout = target.clearInterval = function(taskId) {
-    var timer = timers[taskId];
+    let timer = timers[taskId];
     if (timer) {
       timer._nativeCall('cancel', {});
       timer.dispose();

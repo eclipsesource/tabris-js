@@ -80,7 +80,7 @@ export default Widget.extend({
 
   _create: function() {
     this._items = [];
-    var result = this._super('_create', arguments);
+    let result = this._super('_create', arguments);
     this._nativeListen('requestinfo', true);
     this._nativeListen('createitem', true);
     this._nativeListen('populateitem', true);
@@ -90,7 +90,7 @@ export default Widget.extend({
   },
 
   set: function() {
-    var result = this._super('set', arguments);
+    let result = this._super('set', arguments);
     // TODO call _reload on flush, remove override
     this._reload();
     return result;
@@ -102,20 +102,20 @@ export default Widget.extend({
     },
     requestinfo: {
       trigger: function(event) {
-        var item = this._getItem(this._items, event.index);
-        var type = resolveProperty(this, 'cellType', item);
-        var height = resolveProperty(this, 'itemHeight', item, type);
-        var typeId = encodeCellType(this, type);
+        let item = this._getItem(this._items, event.index);
+        let type = resolveProperty(this, 'cellType', item);
+        let height = resolveProperty(this, 'itemHeight', item, type);
+        let typeId = encodeCellType(this, type);
         this._nativeCall('describeItem', {index: event.index, type: typeId, height: height});
       }
     },
     createitem: {
       trigger: function(event) {
-        var cell = new Cell();
+        let cell = new Cell();
         cell._parent = this;
         this._addChild(cell);
         this._nativeCall('addItem', {widget: cell.cid});
-        var initializeCell = this.get('initializeCell');
+        let initializeCell = this.get('initializeCell');
         if (typeof initializeCell !== 'function') {
           console.warn('initializeCell callback missing');
         } else {
@@ -125,8 +125,8 @@ export default Widget.extend({
     },
     populateitem: {
       trigger: function(event) {
-        var cell = tabris._proxies.find(event.widget);
-        var item = this._getItem(this._items, event.index);
+        let cell = tabris._proxies.find(event.widget);
+        let item = this._getItem(this._items, event.index);
         cell._storeProperty('itemIndex', event.index);
         if (item !== cell._getStoredProperty('item')) {
           cell._storeProperty('item', item);
@@ -140,7 +140,7 @@ export default Widget.extend({
         this._nativeListen('select', state);
       },
       trigger: function(event) {
-        var item = this._getItem(this._items, event.index);
+        let item = this._getItem(this._items, event.index);
         this.trigger('select', this, item, {index: event.index});
       }
     },
@@ -244,10 +244,10 @@ export default Widget.extend({
   },
 
   _adjustIndicies: function(offset, diff) {
-    var cells = this._children || [];
-    for (var i = 0; i < cells.length; i++) {
-      var cell = cells[i];
-      var itemIndex = cell._getStoredProperty('itemIndex');
+    let cells = this._children || [];
+    for (let i = 0; i < cells.length; i++) {
+      let cell = cells[i];
+      let itemIndex = cell._getStoredProperty('itemIndex');
       if (itemIndex >= offset) {
         cell._storeProperty('itemIndex', itemIndex + diff);
       }
@@ -257,7 +257,7 @@ export default Widget.extend({
 });
 
 function resolveProperty(ctx, name) {
-  var value = ctx.get(name);
+  let value = ctx.get(name);
   if (typeof value === 'function') {
     return value.apply(null, Array.prototype.slice.call(arguments, 2));
   }
@@ -265,8 +265,8 @@ function resolveProperty(ctx, name) {
 }
 
 function encodeCellType(ctx, type) {
-  var cellTypes = ctx._cellTypes || (ctx._cellTypes = []);
-  var index = cellTypes.indexOf(type);
+  let cellTypes = ctx._cellTypes || (ctx._cellTypes = []);
+  let index = cellTypes.indexOf(type);
   if (index === -1) {
     index += cellTypes.push(type);
   }
@@ -274,16 +274,16 @@ function encodeCellType(ctx, type) {
 }
 
 function decodeCellType(ctx, type) {
-  var cellTypes = ctx._cellTypes || [];
+  let cellTypes = ctx._cellTypes || [];
   return cellTypes[type];
 }
 
-var triggerChangeFirstVisibleIndex = createDelegate('firstVisibleIndex');
-var triggerChangeLastVisibleIndex = createDelegate('lastVisibleIndex');
+let triggerChangeFirstVisibleIndex = createDelegate('firstVisibleIndex');
+let triggerChangeLastVisibleIndex = createDelegate('lastVisibleIndex');
 
 function createDelegate(prop) {
   return function() {
-    var actual = this.get(prop);
+    let actual = this.get(prop);
     if (actual !== this['_prev:' + prop]) {
       this._triggerChangeEvent(prop, actual);
     }

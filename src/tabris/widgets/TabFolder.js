@@ -18,7 +18,7 @@ export default Widget.extend({
           this.trigger('change:selection', this, tab, options);
         },
         get: function() {
-          var selection = this._nativeGet('selection');
+          let selection = this._nativeGet('selection');
           return selection ? tabris._proxies.find(selection) : null;
         }
       }
@@ -30,7 +30,7 @@ export default Widget.extend({
     select: {
       alias: 'change:selection',
       trigger: function(event) {
-        var tab = tabris._proxies.find(event.selection);
+        let tab = tabris._proxies.find(event.selection);
         this.trigger('change:selection', this, tab, {});
         this.trigger('select', this, tab, {});
       }

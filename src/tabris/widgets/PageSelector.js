@@ -5,8 +5,8 @@ import ImageView from './ImageView';
 import TextView from './TextView';
 import CollectionView from './CollectionView';
 
-var PageSelector = function(properties) {
-  var instance = new CollectionView(extend({
+let PageSelector = function(properties) {
+  let instance = new CollectionView(extend({
     items: getPages(),
     initializeCell: initializeCell,
     itemHeight: device.platform === 'iOS' ? 40 : 48,
@@ -39,7 +39,7 @@ function insertPage(ui, child) {
 }
 
 function removePage(ui, child) {
-  var index = this.get('items').indexOf(child);
+  let index = this.get('items').indexOf(child);
   if (index !== -1) {
     this.remove(index);
   }
@@ -56,10 +56,10 @@ function initializeCell(cell) {
     layoutData: {left: 0, right: 0, bottom: 0, height: 1},
     background: '#bbb'
   }).appendTo(cell);
-  var imageView = new ImageView({
+  let imageView = new ImageView({
     layoutData: {left: 10, top: 10, bottom: 10}
   }).appendTo(cell);
-  var textView = new TextView({
+  let textView = new TextView({
     layoutData: {left: 72, centerY: 0},
     font: device.platform === 'iOS' ? '17px .HelveticaNeueInterface-Regular' : '14px Roboto Medium',
     textColor: device.platform === 'iOS' ? 'rgb(22, 126, 251)' : '#212121'

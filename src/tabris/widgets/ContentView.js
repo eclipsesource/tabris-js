@@ -3,7 +3,7 @@ import Widget from '../Widget';
 export default function ContentView() {
   throw new Error('ContentView can not be created');
 }
-var _ContentView = Widget.extend({
+let _ContentView = Widget.extend({
 
   _name: 'ContentView',
 

@@ -3,8 +3,8 @@ import DOMEvent, {addDOMEventTargetMethods} from '../../src/tabris/DOMEvent';
 
 describe('DOMEvent', function() {
 
-  var target;
-  var listener;
+  let target;
+  let listener;
 
   beforeEach(function() {
     target = {};
@@ -15,7 +15,7 @@ describe('DOMEvent', function() {
   describe('Event constructor', function() {
 
     it('sets default values', function() {
-      var event = new DOMEvent('type');
+      let event = new DOMEvent('type');
       expect(event.NONE).to.equal(0);
       expect(event.CAPTURING_PHASE).to.equal(1);
       expect(event.AT_TARGET).to.equal(2);
@@ -33,12 +33,12 @@ describe('DOMEvent', function() {
     });
 
     it('sets type from parameter', function() {
-      var event = new DOMEvent('type');
+      let event = new DOMEvent('type');
       expect(event.type).to.equal('type');
     });
 
     it('sets values from eventInitDict parameter', function() {
-      var event = new DOMEvent('type', {bubbles: true, cancelable: true});
+      let event = new DOMEvent('type', {bubbles: true, cancelable: true});
       expect(event.bubbles).to.equal(true);
       expect(event.cancelable).to.equal(true);
     });
@@ -46,7 +46,7 @@ describe('DOMEvent', function() {
   });
 
   describe('Event.prototype.initEvent', function() {
-    var event = new DOMEvent();
+    let event = new DOMEvent();
 
     it('sets the type, bubbles, cancelable', function() {
       event.initEvent('foo', true, true);
@@ -67,9 +67,9 @@ describe('DOMEvent', function() {
     });
 
     it('does not overwrite existing window methods', function() {
-      var addEventListener = target.addEventListener;
-      var removeEventListener = target.removeEventListener;
-      var dispatchEvent = target.dispatchEvent;
+      let addEventListener = target.addEventListener;
+      let removeEventListener = target.removeEventListener;
+      let dispatchEvent = target.dispatchEvent;
 
       addDOMEventTargetMethods(target);
 
@@ -85,19 +85,19 @@ describe('DOMEvent', function() {
       });
 
       it('it is notified for Events with same type', function() {
-        var event = {type: 'foo'};
+        let event = {type: 'foo'};
         target.dispatchEvent(event);
         expect(listener).to.have.been.calledWith(event);
       });
 
       it('it is not notified for Events with different type', function() {
-        var event = {type: 'bar'};
+        let event = {type: 'bar'};
         target.dispatchEvent(event);
         expect(listener).to.have.not.been.called;
       });
 
       it('it is notified with Events with listener target', function() {
-        var event = {type: 'foo'};
+        let event = {type: 'foo'};
         target.dispatchEvent(event);
         expect(listener).to.have.been.calledWith({type: 'foo', target: target});
         expect(event.target).to.equal(target);
@@ -110,7 +110,7 @@ describe('DOMEvent', function() {
         });
 
         it('it is not notified anymore', function() {
-          var event = {type: 'foo'};
+          let event = {type: 'foo'};
           target.dispatchEvent(event);
           expect(listener).to.have.not.been.called;
         });
@@ -123,7 +123,7 @@ describe('DOMEvent', function() {
         });
 
         it('it is notified only once', function() {
-          var event = {type: 'foo'};
+          let event = {type: 'foo'};
           target.dispatchEvent(event);
           expect(listener).to.have.been.calledOnce;
         });
@@ -135,7 +135,7 @@ describe('DOMEvent', function() {
           });
 
           it('it is not notified anymore', function() {
-            var event = {type: 'foo'};
+            let event = {type: 'foo'};
             target.dispatchEvent(event);
             expect(listener).to.have.not.been.called;
           });

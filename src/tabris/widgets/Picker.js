@@ -36,7 +36,7 @@ export default Widget.extend({
       access: {
         set: function(name, value, options) {
           this._storeProperty(name, value, options);
-          var getText = this.get('itemText');
+          let getText = this.get('itemText');
           this._nativeSet('items', value.map(getText));
         }
       }
@@ -66,7 +66,7 @@ export default Widget.extend({
     selection: {
       access: {
         set: function(name, item, options) {
-          var index = this._getItemIndex(item);
+          let index = this._getItemIndex(item);
           if (index !== -1) {
             this.set('selectionIndex', index, options);
           } else {
@@ -82,7 +82,7 @@ export default Widget.extend({
 
   _reorderProperties: function(properties) {
     // items property depends on itemText, selection/selectionIndex depend on items
-    var deferred = ['items', 'selection', 'selectionIndex'];
+    let deferred = ['items', 'selection', 'selectionIndex'];
     return properties.filter(function(name) {
       return deferred.indexOf(name) === -1;
     }).concat(deferred.filter(function(name) {

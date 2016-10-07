@@ -6,7 +6,7 @@ export default function ProxyStore() {
 ProxyStore.prototype = {
 
   register: function(proxy, withcid) {
-    var cid = withcid || this._generateId();
+    let cid = withcid || this._generateId();
     if (cid in this._proxies) {
       throw new Error('cid already in use: ' + cid);
     }

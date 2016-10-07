@@ -1,19 +1,19 @@
 import {types} from './property-types';
 import NativeObject from './NativeObject';
 
-var ClientStore = NativeObject.extend({
+let ClientStore = NativeObject.extend({
   _cid: 'tabris.ClientStore'
 });
 
-var SecureStore = NativeObject.extend({
+let SecureStore = NativeObject.extend({
   _cid: 'tabris.SecureStore'
 });
 
-var encode = types.string.encode;
+let encode = types.string.encode;
 
 export function create(secure) {
   function Storage() {
-    var proxy = secure ? new SecureStore() : new ClientStore();
+    let proxy = secure ? new SecureStore() : new ClientStore();
     Object.defineProperty(this, '_proxy', {value: proxy});
   }
   Storage.prototype = WebStorage.prototype;
@@ -41,7 +41,7 @@ WebStorage.prototype = {
     if (arguments.length < 1) {
       throw new TypeError("Not enough arguments to 'getItem'");
     }
-    var result = this._proxy._nativeCall('get', {key: encode(key)});
+    let result = this._proxy._nativeCall('get', {key: encode(key)});
     // Note: iOS can not return null, only undefined:
     return result === undefined ? null : result;
   },

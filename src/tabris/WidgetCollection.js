@@ -1,12 +1,12 @@
 export default function WidgetCollection(arr, selector, deep) {
   this._array = select(arr, selector || '*', deep);
-  for (var i = 0; i < this._array.length; i++) {
+  for (let i = 0; i < this._array.length; i++) {
     this[i] = this._array[i];
   }
   this.length = this._array.length;
 }
 
-var proto = WidgetCollection.prototype = {
+let proto = WidgetCollection.prototype = {
 
   first: function() {
     return this._array[0];
@@ -21,7 +21,7 @@ var proto = WidgetCollection.prototype = {
   },
 
   forEach: function(callback) {
-    var that = this;
+    let that = this;
     this._array.forEach(function(value, index) {
       callback(value, index, that);
     });
@@ -42,9 +42,9 @@ var proto = WidgetCollection.prototype = {
   },
 
   parent: function() {
-    var result = [];
-    for (var i = 0; i < this._array.length; i++) {
-      var parent = this._array[i].parent();
+    let result = [];
+    for (let i = 0; i < this._array.length; i++) {
+      let parent = this._array[i].parent();
       if (parent && result.indexOf(parent) === -1) {
         result.push(parent);
       }
@@ -55,8 +55,8 @@ var proto = WidgetCollection.prototype = {
   },
 
   children: function(selector) {
-    var result = [];
-    for (var i = 0; i < this._array.length; i++) {
+    let result = [];
+    for (let i = 0; i < this._array.length; i++) {
       result.push.apply(result, this._array[i]._getSelectableChildren() || []);
     }
     return new WidgetCollection(result, selector);
@@ -71,7 +71,7 @@ var proto = WidgetCollection.prototype = {
   },
 
   dispose: function() {
-    for (var i = 0; i < this._array.length; i++) {
+    for (let i = 0; i < this._array.length; i++) {
       this._array[i].dispose();
     }
   }
@@ -80,7 +80,7 @@ var proto = WidgetCollection.prototype = {
 
 ['set', 'animate', 'on', 'off', 'once'].forEach(function(key) {
   proto[key] = function() {
-    for (var i = 0; i < this._array.length; i++) {
+    for (let i = 0; i < this._array.length; i++) {
       this._array[i][key].apply(this._array[i], arguments);
     }
     if (key !== 'animate') {
@@ -96,7 +96,7 @@ function select(array, selector, deep) {
   if (selector === '*' && !deep) {
     return array.concat();
   }
-  var filter = getFilter(selector);
+  let filter = getFilter(selector);
   if (deep) {
     return deepSelect([], array, filter);
   }
@@ -104,7 +104,7 @@ function select(array, selector, deep) {
 }
 
 function deepSelect(result, array, filter) {
-  for (var i = 0; i < array.length; i++) {
+  for (let i = 0; i < array.length; i++) {
     if (filter(array[i])) {
       result.push(array[i]);
     }
@@ -116,8 +116,8 @@ function deepSelect(result, array, filter) {
 }
 
 function getFilter(selector) {
-  var matches = {};
-  var filter = selector instanceof Function ? selector : createMatcher(selector);
+  let matches = {};
+  let filter = selector instanceof Function ? selector : createMatcher(selector);
   return function(widget) {
     if (matches[widget.cid]) {
       return false;
@@ -132,13 +132,13 @@ function getFilter(selector) {
 
 function createMatcher(selector) {
   if (selector.charAt(0) === '#') {
-    var expectedId = selector.slice(1);
+    let expectedId = selector.slice(1);
     return function(proxy) {
       return expectedId === proxy.id;
     };
   }
   if (selector.charAt(0) === '.') {
-    var expectedClass = selector.slice(1);
+    let expectedClass = selector.slice(1);
     return function(proxy) {
       return proxy.classList.indexOf(expectedClass) !== -1;
     };

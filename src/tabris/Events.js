@@ -1,10 +1,10 @@
 export default {
 
   on: function(type, callback, context) {
-    var wasListening = this._isListening(type);
+    let wasListening = this._isListening(type);
     this._callbacks = this._callbacks || [];
     this._callbacks[type] = (this._callbacks[type] || []).concat();
-    var alreadyAdded = this._callbacks[type].some(function(entry) {
+    let alreadyAdded = this._callbacks[type].some(function(entry) {
       return (
         (entry.fn === callback || '_callback' in callback && entry.fn._callback === callback._callback) &&
         (entry.ctx === context)
@@ -25,8 +25,8 @@ export default {
     }
     if (this._callbacks) {
       if (type in this._callbacks) {
-        var callbacks = this._callbacks[type].concat();
-        for (var i = callbacks.length - 1; i >= 0; i--) {
+        let callbacks = this._callbacks[type].concat();
+        for (let i = callbacks.length - 1; i >= 0; i--) {
           if ((callbacks[i].fn === callback || callbacks[i].fn._callback === callback) &&
             callbacks[i].ctx === context) {
             callbacks.splice(i, 1);
@@ -49,8 +49,8 @@ export default {
   },
 
   once: function(type, callback, context) {
-    var self = this;
-    var wrappedCallback = function() {
+    let self = this;
+    let wrappedCallback = function() {
       if (!self._isDisposed) {
         self.off(type, wrappedCallback, context);
       }
@@ -62,7 +62,7 @@ export default {
 
   trigger: function(type /*, args* */) {
     if (!this._isDisposed) {
-      var args = Array.prototype.slice.call(arguments, 1);
+      let args = Array.prototype.slice.call(arguments, 1);
       this._callAll(type, args, false);
       this._callAll(type, args, true);
     }
@@ -70,11 +70,11 @@ export default {
   },
 
   _callAll: function(type, args, isPublic) {
-    var store = isPublic ? '_callbacks' : '_privateCallbacks';
+    let store = isPublic ? '_callbacks' : '_privateCallbacks';
     if (this[store] && type in this[store]) {
-      var callbacks = this[store][type];
-      for (var i = 0; i < callbacks.length; i++) {
-        var callback = callbacks[i];
+      let callbacks = this[store][type];
+      for (let i = 0; i < callbacks.length; i++) {
+        let callback = callbacks[i];
         callback.fn.apply(callback.ctx || this, args);
       }
     }

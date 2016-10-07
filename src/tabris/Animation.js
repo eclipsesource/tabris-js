@@ -1,7 +1,7 @@
 import {extend} from './util';
 import NativeObject from './NativeObject';
 
-var Animation = NativeObject.extend({
+let Animation = NativeObject.extend({
 
   _name: '_Animation',
 
@@ -56,8 +56,8 @@ var Animation = NativeObject.extend({
 });
 
 export function animate(properties, options) {
-  var animatedProps = {};
-  for (var property in properties) {
+  let animatedProps = {};
+  for (let property in properties) {
     if (animatable[property]) {
       try {
         animatedProps[property] =
@@ -70,12 +70,12 @@ export function animate(properties, options) {
       console.warn(this.type + ': Ignored invalid animation property "' + property + '"');
     }
   }
-  for (var option in options) {
+  for (let option in options) {
     if (!Animation._properties[option] && option !== 'name') {
       console.warn(this.type + ': Ignored invalid animation option "' + option + '"');
     }
   }
-  var animation = new Animation(extend({}, options, {
+  let animation = new Animation(extend({}, options, {
     target: this,
     properties: animatedProps
   }));
@@ -89,7 +89,7 @@ export function animate(properties, options) {
   });
 }
 
-var animatable = {
+let animatable = {
   opacity: true,
   transform: true
 };

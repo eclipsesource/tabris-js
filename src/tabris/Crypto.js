@@ -1,10 +1,10 @@
 import NativeObject from './NativeObject';
 
-var _Crypto = NativeObject.extend({
+let _Crypto = NativeObject.extend({
   _type: 'tabris.Crypto'
 });
 
-var proxy;
+let proxy;
 
 export default function Crypto() {
   proxy = new _Crypto();
@@ -19,8 +19,8 @@ Crypto.prototype = {
     if (!isIntArray(typedArray)) {
       throw new Error('Unsupported type in Crypto.getRandomValues');
     }
-    var byteLength = typedArray.byteLength;
-    var values = proxy._nativeCall('getRandomValues', {byteLength: byteLength});
+    let byteLength = typedArray.byteLength;
+    let values = proxy._nativeCall('getRandomValues', {byteLength: byteLength});
     if (values.length !== byteLength) {
       throw new Error('Not enough random bytes available');
     }

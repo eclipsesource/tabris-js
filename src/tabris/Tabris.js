@@ -26,7 +26,7 @@ extend(Tabris.prototype, Events, {
   _init: function(client) {
     this._client = client;
     this._nativeBridge = new NativeBridge(client);
-    var i = 0;
+    let i = 0;
     while (i < this._loadFunctions.length) {
       this._loadFunctions[i++].call();
     }
@@ -38,9 +38,9 @@ extend(Tabris.prototype, Events, {
   },
 
   _notify: function(cid, event, param) {
-    var returnValue;
+    let returnValue;
     try {
-      var proxy = this._proxies.find(cid);
+      let proxy = this._proxies.find(cid);
       if (proxy) {
         try {
           returnValue = proxy._trigger(event, param);

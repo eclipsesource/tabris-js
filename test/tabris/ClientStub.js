@@ -72,7 +72,7 @@ ClientStub.prototype = {
 
 function select(filterProperties) {
   return this.filter((call) => {
-    for (var key in filterProperties) {
+    for (let key in filterProperties) {
       if (filterProperties[key] !== call[key]) {
         return false;
       }

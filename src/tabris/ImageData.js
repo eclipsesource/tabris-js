@@ -1,5 +1,5 @@
 export default function() {
-  var array, width, height;
+  let array, width, height;
   if (arguments.length < 2) {
     throw new TypeError('Not enough arguments to ImageData');
   }
@@ -37,7 +37,7 @@ function checkArray(array) {
 }
 
 function checkSize(input) {
-  var size = Math.floor(input);
+  let size = Math.floor(input);
   if (size <= 0 || !isFinite(size)) {
     throw new Error('Illegal size for ImageData');
   }

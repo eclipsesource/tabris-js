@@ -1,8 +1,8 @@
 module.exports = function(grunt) {
 
-  var pkg = grunt.file.readJSON('package.json');
+  let pkg = grunt.file.readJSON('package.json');
 
-  var banner = blockComment('Tabris.js ' + pkg.version +
+  let banner = blockComment('Tabris.js ' + pkg.version +
                             " (<%= grunt.template.today('yyyy-mm-dd HH:MM') %>)\n\n" +
                             grunt.file.read('LICENSE'));
 
@@ -168,8 +168,8 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('package', 'create package.json', function() {
-    var stringify = require('format-json');
-    var pack = grunt.file.readJSON('package.json');
+    let stringify = require('format-json');
+    let pack = grunt.file.readJSON('package.json');
     delete pack.devDependencies;
     pack.main = 'tabris.min.js';
     pack.typings = 'tabris.d.ts';
@@ -233,7 +233,7 @@ module.exports = function(grunt) {
   }
 
   function blockComment(text) {
-    var commented = text.trim().split('\n').map(function(line) {
+    let commented = text.trim().split('\n').map(function(line) {
       return ' * ' + line;
     }).join('\n');
     return '/*!\n' + commented + '\n */\n';
