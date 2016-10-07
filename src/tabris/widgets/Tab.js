@@ -15,7 +15,7 @@ export default Widget.extend({
 
   _supportsChildren: true,
 
-  _setParent: function(parent) {
+  _setParent(parent) {
     if (!(parent instanceof TabFolder)) {
       throw new Error('Tab must be a child of TabFolder');
     }

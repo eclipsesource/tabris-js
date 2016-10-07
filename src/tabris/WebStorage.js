@@ -27,7 +27,7 @@ export default function WebStorage() {
 WebStorage.prototype = {
   // Note: key and length methods currently not supported
 
-  setItem: function(key, value) {
+  setItem(key, value) {
     if (arguments.length < 2) {
       throw new TypeError("Not enough arguments to 'setItem'");
     }
@@ -37,7 +37,7 @@ WebStorage.prototype = {
     });
   },
 
-  getItem: function(key) {
+  getItem(key) {
     if (arguments.length < 1) {
       throw new TypeError("Not enough arguments to 'getItem'");
     }
@@ -46,14 +46,14 @@ WebStorage.prototype = {
     return result === undefined ? null : result;
   },
 
-  removeItem: function(key) {
+  removeItem(key) {
     if (arguments.length < 1) {
       throw new TypeError("Not enough arguments to 'removeItem'");
     }
     this._proxy._nativeCall('remove', {keys: [encode(key)]});
   },
 
-  clear: function() {
+  clear() {
     this._proxy._nativeCall('clear');
   }
 

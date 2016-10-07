@@ -594,7 +594,7 @@ describe('NativeObject.extend', function() {
 
   it('adds property setters', function() {
     let type = {encode: spy(), decode: spy()};
-    let CustomType = NativeObject.extend({_properties: {foo: {type: type}}});
+    let CustomType = NativeObject.extend({_properties: {foo: {type}}});
     let instance = new CustomType();
 
     instance.foo = 23;
@@ -644,8 +644,8 @@ describe('NativeObject.extend', function() {
   });
 
   it('adds _properties to constructor', function() {
-    let type = {encode: function() {}, decode: function() {}};
-    let CustomType = NativeObject.extend({_properties: {foo: {type: type}}});
+    let type = {encode() {}, decode() {}};
+    let CustomType = NativeObject.extend({_properties: {foo: {type}}});
     let instance = new CustomType();
 
     expect(instance.constructor._properties.foo.type).to.equal(type);

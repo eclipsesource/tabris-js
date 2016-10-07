@@ -11,12 +11,12 @@ let _ContentView = Widget.extend({
 
   _supportsChildren: true,
 
-  _create: function() {
+  _create() {
     Widget.prototype._create.call(this, {});
     this._nativeSet('root', true);
   },
 
-  _setParent: function(parent, index) {
+  _setParent(parent, index) {
     if (this._parent) {
       throw new Error('Parent of ContentView can not be changed');
     }
@@ -24,7 +24,7 @@ let _ContentView = Widget.extend({
     this._parent._addChild(this, index);
   },
 
-  _dispose: function() {
+  _dispose() {
     throw new Error('ContentView can not be disposed');
   }
 

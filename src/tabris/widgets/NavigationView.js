@@ -9,7 +9,7 @@ export default Widget.extend({
 
   _type: 'tabris.NavigationView',
 
-  _create: function() {
+  _create() {
     let result = Widget.prototype._create.apply(this, arguments);
     Object.defineProperty(this, 'stack', {value: new StackView(this)});
     this._nativeListen('backnavigation', true);
@@ -22,13 +22,13 @@ export default Widget.extend({
 
   _events: {
     backnavigation: {
-      trigger: function() {
+      trigger() {
         this.stack.pop();
       }
     }
   },
 
-  _supportsChildren: function(child) {
+  _supportsChildren(child) {
     return this.stack.indexOf(child) !== -1;
   }
 
@@ -38,11 +38,11 @@ function StackView(navigationView) {
 
   let stack = [];
 
-  Object.defineProperty(this, 'length', {get: function() {return stack.length;}});
+  Object.defineProperty(this, 'length', {get() {return stack.length;}});
 
   extend(this, {
 
-    push: function(page) {
+    push(page) {
       if (!(page instanceof Page)) {
         throw new Error('Only instances of Page can be pushed.');
       }
@@ -54,7 +54,7 @@ function StackView(navigationView) {
       navigationView._nativeCall('stack_push', {page: page.cid});
     },
 
-    pop: function() {
+    pop() {
       let result = stack.pop();
       if (result) {
         navigationView._nativeCall('stack_pop', {});
@@ -63,7 +63,7 @@ function StackView(navigationView) {
       return result;
     },
 
-    clear: function() {
+    clear() {
       let result = new WidgetCollection(stack);
       navigationView._nativeCall('stack_clear', {});
       stack = [];
@@ -71,15 +71,15 @@ function StackView(navigationView) {
       return result;
     },
 
-    first: function() {
+    first() {
       return stack[0];
     },
 
-    last: function() {
+    last() {
       return stack[stack.length - 1];
     },
 
-    indexOf: function(page) {
+    indexOf(page) {
       return stack.indexOf(page);
     }
 

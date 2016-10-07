@@ -8,40 +8,40 @@ export default function WidgetCollection(arr, selector, deep) {
 
 let proto = WidgetCollection.prototype = {
 
-  first: function() {
+  first() {
     return this._array[0];
   },
 
-  last: function() {
+  last() {
     return this._array[this._array.length - 1];
   },
 
-  toArray: function() {
+  toArray() {
     return this._array.concat();
   },
 
-  forEach: function(callback) {
+  forEach(callback) {
     let that = this;
     this._array.forEach((value, index) => {
       callback(value, index, that);
     });
   },
 
-  indexOf: function(needle) {
+  indexOf(needle) {
     return this._array.indexOf(needle);
   },
 
-  filter: function(selector) {
+  filter(selector) {
     return new WidgetCollection(this._array, selector);
   },
 
-  get: function(prop) {
+  get(prop) {
     if (this._array[0]) {
       return this._array[0].get(prop);
     }
   },
 
-  parent: function() {
+  parent() {
     let result = [];
     for (let i = 0; i < this._array.length; i++) {
       let parent = this._array[i].parent();
@@ -54,7 +54,7 @@ let proto = WidgetCollection.prototype = {
     }
   },
 
-  children: function(selector) {
+  children(selector) {
     let result = [];
     for (let i = 0; i < this._array.length; i++) {
       result.push.apply(result, this._array[i]._getSelectableChildren() || []);
@@ -62,15 +62,15 @@ let proto = WidgetCollection.prototype = {
     return new WidgetCollection(result, selector);
   },
 
-  find: function(selector) {
+  find(selector) {
     return new WidgetCollection(this.children()._array, selector, true);
   },
 
-  appendTo: function(parent) {
+  appendTo(parent) {
     parent.append(this);
   },
 
-  dispose: function() {
+  dispose() {
     for (let i = 0; i < this._array.length; i++) {
       this._array[i].dispose();
     }

@@ -7,27 +7,27 @@ export default Widget.extend({
 
   _supportsChildren: true,
 
-  dispose: function() {
+  dispose() {
     console.warn('CollectionView cells are container-managed, they cannot be disposed of');
   },
 
   _properties: {
     item: {
       access: {
-        set: function() {
+        set() {
           // read only
         },
-        get: function(name) {
+        get(name) {
           return this._getStoredProperty(name);
         }
       }
     },
     itemIndex: {
       access: {
-        set: function() {
+        set() {
           // read only
         },
-        get: function(name) {
+        get(name) {
           return this._getStoredProperty(name);
         }
       }

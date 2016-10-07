@@ -7,7 +7,7 @@ let Animation = NativeObject.extend({
 
   _type: 'tabris.Animation',
 
-  _create: function() {
+  _create() {
     this._super('_create', arguments);
     this._nativeListen('Start', true);
     this._nativeListen('Completion', true);
@@ -16,12 +16,12 @@ let Animation = NativeObject.extend({
 
   _events: {
     Start: {
-      trigger: function() {
+      trigger() {
         this._target.trigger('animationstart', this._target, this._options);
       }
     },
     Completion: {
-      trigger: function() {
+      trigger() {
         this._target.off('dispose', this.abort, this);
         this._target.trigger('animationend', this._target, this._options);
         if (this._resolve) {
@@ -42,11 +42,11 @@ let Animation = NativeObject.extend({
     target: 'proxy'
   },
 
-  start: function() {
+  start() {
     this._nativeCall('start');
   },
 
-  abort: function() {
+  abort() {
     if (this._reject) {
       this._reject();
     }

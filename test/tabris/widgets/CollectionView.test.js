@@ -626,7 +626,7 @@ describe('CollectionView', function() {
     beforeEach(function() {
       view = new CollectionView({
         items: ['A', 'B', 'C'],
-        initializeCell: function() {}
+        initializeCell() {}
       }).appendTo(parent);
     });
 

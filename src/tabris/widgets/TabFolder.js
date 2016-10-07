@@ -9,7 +9,7 @@ export default Widget.extend({
     paging: {type: 'boolean', default: false},
     selection: {
       access: {
-        set: function(name, tab, options) {
+        set(name, tab, options) {
           if (this._children.indexOf(tab) < 0) {
             console.warn('Can not set TabFolder selection to ' + tab);
             return;
@@ -17,7 +17,7 @@ export default Widget.extend({
           this._nativeSet('selection', tab.cid);
           this.trigger('change:selection', this, tab, options);
         },
-        get: function() {
+        get() {
           let selection = this._nativeGet('selection');
           return selection ? tabris._proxies.find(selection) : null;
         }
@@ -29,7 +29,7 @@ export default Widget.extend({
   _events: {
     select: {
       alias: 'change:selection',
-      trigger: function(event) {
+      trigger(event) {
         let tab = tabris._proxies.find(event.selection);
         this.trigger('change:selection', this, tab, {});
         this.trigger('select', this, tab, {});
@@ -37,7 +37,7 @@ export default Widget.extend({
     }
   },
 
-  _supportsChildren: function(child) {
+  _supportsChildren(child) {
     return child.type === 'Tab';
   }
 

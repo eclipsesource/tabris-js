@@ -6,7 +6,7 @@ export default Widget.extend({
   _events: {
     select: {
       alias: 'change:selection',
-      trigger: function(event) {
+      trigger(event) {
         this.trigger('change:selection', this, event.selection, {});
         this.trigger('select', this, event.selection, {});
       }

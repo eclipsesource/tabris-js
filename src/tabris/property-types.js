@@ -10,39 +10,39 @@ export let types = {
   any: {},
 
   boolean: {
-    encode: function(bool) {
+    encode(bool) {
       return !!bool;
     }
   },
 
   string: {
-    encode: function(str) {
+    encode(str) {
       return '' + str;
     }
   },
 
   number: {
-    encode: function(value) {
+    encode(value) {
       return encodeNumber(value);
     }
   },
 
   natural: {
-    encode: function(value) {
+    encode(value) {
       value = encodeNumber(value);
       return value < 0 ? 0 : Math.round(value);
     }
   },
 
   integer: {
-    encode: function(value) {
+    encode(value) {
       value = encodeNumber(value);
       return Math.round(value);
     }
   },
 
   function: {
-    encode: function(value) {
+    encode(value) {
       if ('function' !== typeof value) {
         throw new Error(typeof value + ' is not a function: ' + value);
       }
@@ -51,7 +51,7 @@ export let types = {
   },
 
   choice: {
-    encode: function(value, acceptable) {
+    encode(value, acceptable) {
       if (acceptable.indexOf(value) === -1) {
         throwNotAcceptedError(acceptable, value);
       }
@@ -60,13 +60,13 @@ export let types = {
   },
 
   color: {
-    encode: function(value) {
+    encode(value) {
       if (value === 'initial') {
         return undefined;
       }
       return colorStringToArray(value);
     },
-    decode: function(value) {
+    decode(value) {
       if (!value) {
         // NOTE: null is only returned for "background" where it means "no background"
         return 'rgba(0, 0, 0, 0)';
@@ -76,13 +76,13 @@ export let types = {
   },
 
   font: {
-    encode: function(value) {
+    encode(value) {
       if (value === 'initial') {
         return undefined;
       }
       return fontStringToObject(value);
     },
-    decode: function(value) {
+    decode(value) {
       if (!value) {
         // NOTE: workaround to allow triggering a change event when setting font to "initial"
         return 'initial';
@@ -92,7 +92,7 @@ export let types = {
   },
 
   image: {
-    encode: function(value) {
+    encode(value) {
       if (!value) {
         return null;
       }
@@ -118,7 +118,7 @@ export let types = {
       }
       return imageToArray(value);
     },
-    decode: function(value) {
+    decode(value) {
       if (!value) {
         return null;
       }
@@ -127,46 +127,46 @@ export let types = {
   },
 
   layoutData: {
-    encode: function(value) {
+    encode(value) {
       return encodeLayoutData(value);
     },
-    decode: function(value) {
+    decode(value) {
       return decodeLayoutData(value);
     }
   },
 
   edge: {
-    encode: function(value) {
+    encode(value) {
       return value == null ? null : encodeEdge(value);
     },
     decode: decodeLayoutAttr
   },
 
   dimension: {
-    encode: function(value) {
+    encode(value) {
       return value == null ? null : encodeNumber(value);
     },
     decode: decodeLayoutAttr
   },
 
   sibling: {
-    encode: function(value) {
+    encode(value) {
       return value == null ? null : encodeWidgetRef(value);
     },
     decode: decodeLayoutAttr
   },
 
   bounds: {
-    encode: function(value) {
+    encode(value) {
       return [value.left, value.top, value.width, value.height];
     },
-    decode: function(value) {
+    decode(value) {
       return {left: value[0], top: value[1], width: value[2], height: value[3]};
     }
   },
 
   proxy: {
-    encode: function(value) {
+    encode(value) {
       if (value instanceof NativeObject) {
         return value.cid;
       }
@@ -176,13 +176,13 @@ export let types = {
       // TODO: Should throw error instead
       return value;
     },
-    decode: function(cid) {
+    decode(cid) {
       return tabris._proxies.find(cid);
     }
   },
 
   nullable: {
-    encode: function(value, altCheck) {
+    encode(value, altCheck) {
       if (value === null) {
         return value;
       }
@@ -191,7 +191,7 @@ export let types = {
   },
 
   opacity: {
-    encode: function(value) {
+    encode(value) {
       value = encodeNumber(value);
       if (value < 0 || value > 1) {
         throw new Error('Number is out of bounds: ' + value);
@@ -201,7 +201,7 @@ export let types = {
   },
 
   transform: {
-    encode: function(value) {
+    encode(value) {
       let result = extend({}, transformDefaults);
       for (let key in value) {
         if (!(key in transformDefaults)) {
@@ -214,7 +214,7 @@ export let types = {
   },
 
   array: {
-    encode: function(value, type) {
+    encode(value, type) {
       if (value == null) {
         return [];
       }

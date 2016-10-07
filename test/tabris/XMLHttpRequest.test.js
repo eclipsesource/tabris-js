@@ -554,7 +554,7 @@ describe('XMLHttpRequest', function() {
       it("disposes of proxy on error proxy event states and 'finished'", function() {
         requestErrors.concat('finished').forEach((state) => {
           xhr.onreadystatechange = spy();
-          proxy.trigger('StateChange', {state: state});
+          proxy.trigger('StateChange', {state});
           expect(proxy._isDisposed).to.equal(true);
           sendRequest(xhr);
         });
@@ -563,7 +563,7 @@ describe('XMLHttpRequest', function() {
       it("doesn't dispose of proxy on proxy event states 'headers' and 'loading'", function() {
         ['headers', 'loading'].forEach((state) => {
           xhr.onreadystatechange = spy();
-          proxy.trigger('StateChange', {state: state});
+          proxy.trigger('StateChange', {state});
           expect(!proxy._isDisposed).to.equal(true);
           sendRequest(xhr);
         });
@@ -1149,7 +1149,7 @@ describe('XMLHttpRequest', function() {
             getTarget(property)[handler] = handler1;
             getTarget(property)[handler] = handler2;
             getTarget(property).dispatchEvent({
-              type: type
+              type
             });
             expect(handler1).to.have.not.been.called;
             expect(handler2).to.have.been.called;

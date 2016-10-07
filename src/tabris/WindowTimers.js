@@ -21,8 +21,8 @@ export function addWindowTimerMethods(target) {
     // However, clearTimeout won't work until after load.
     tabris.load(() => {
       let timer = new Timer({
-        delay: delay,
-        repeat: repeat
+        delay,
+        repeat
       }).on('Run', () => {
         fn.apply(target, args);
         if (!repeat) {

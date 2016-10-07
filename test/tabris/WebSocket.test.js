@@ -238,7 +238,7 @@ describe('WebSocket', function() {
 
       webSocket.send(data);
 
-      expect(client.call).to.have.been.calledWith(webSocket._proxy.cid, 'send', {data: data});
+      expect(client.call).to.have.been.calledWith(webSocket._proxy.cid, 'send', {data});
     });
 
     it('increases bufferedAmount by the number of bytes in int8 array', function() {

@@ -8,7 +8,7 @@ export default function NativeObject(cid) {
 
 extend(NativeObject.prototype, Events, {
 
-  set: function(arg1, arg2) {
+  set(arg1, arg2) {
     if (typeof arg1 === 'string') {
       setExistingProperty.call(this, arg1, arg2);
     } else {
@@ -19,11 +19,11 @@ extend(NativeObject.prototype, Events, {
     return this;
   },
 
-  get: function(name) {
+  get(name) {
     return this[name];
   },
 
-  _getProperty: function(name) {
+  _getProperty(name) {
     if (this._isDisposed) {
       console.warn('Cannot get property "' + name + '" on disposed object');
       return;
@@ -33,7 +33,7 @@ extend(NativeObject.prototype, Events, {
     return this._decodeProperty(this._getTypeDef(name), value);
   },
 
-  _setProperty: function(name, value) {
+  _setProperty(name, value) {
     if (this._isDisposed) {
       console.warn('Cannot set property "' + name + '" on disposed object');
       return;
@@ -50,7 +50,7 @@ extend(NativeObject.prototype, Events, {
     setter.call(this, name, encodedValue);
   },
 
-  _storeProperty: function(name, encodedValue) {
+  _storeProperty(name, encodedValue) {
     let oldEncodedValue = this._getStoredProperty(name);
     if (encodedValue === oldEncodedValue) {
       return;
@@ -66,7 +66,7 @@ extend(NativeObject.prototype, Events, {
     this._triggerChangeEvent(name, encodedValue);
   },
 
-  _getStoredProperty: function(name) {
+  _getStoredProperty(name) {
     let result = this._props ? this._props[name] : undefined;
     if (result === undefined) {
       result = this._getDefaultPropertyValue(name);
@@ -74,41 +74,41 @@ extend(NativeObject.prototype, Events, {
     return result;
   },
 
-  _getTypeDef: function(name) {
+  _getTypeDef(name) {
     let prop = this.constructor._properties[name];
     return prop ? prop.type : null;
   },
 
-  _getDefaultPropertyValue: function(name) {
+  _getDefaultPropertyValue(name) {
     let prop = this.constructor._properties[name];
     return prop ? valueOf(prop.default) : undefined;
   },
 
-  _encodeProperty: function(typeDef, value) {
+  _encodeProperty(typeDef, value) {
     return (typeDef && typeDef.encode) ? typeDef.encode(value) : value;
   },
 
-  _decodeProperty: function(typeDef, value) {
+  _decodeProperty(typeDef, value) {
     return (typeDef && typeDef.decode) ? typeDef.decode(value) : value;
   },
 
-  _getPropertyGetter: function(name) {
+  _getPropertyGetter(name) {
     let prop = this.constructor._properties[name];
     return prop ? prop.get : undefined;
   },
 
-  _getPropertySetter: function(name) {
+  _getPropertySetter(name) {
     let prop = this.constructor._properties[name];
     return prop ? prop.set : undefined;
   },
 
-  _triggerChangeEvent: function(propertyName, newEncodedValue) {
+  _triggerChangeEvent(propertyName, newEncodedValue) {
     let typeDef = this._getTypeDef(propertyName);
     let decodedValue = this._decodeProperty(typeDef, newEncodedValue);
     this.trigger('change:' + propertyName, this, decodedValue);
   },
 
-  _create: function(properties) {
+  _create(properties) {
     let type = this.constructor._type || this.type;
     tabris._nativeBridge.create(this.cid, type);
     if (this.constructor._initProperties) {
@@ -122,15 +122,15 @@ extend(NativeObject.prototype, Events, {
     return this;
   },
 
-  _reorderProperties: function(properties) {
+  _reorderProperties(properties) {
     return properties;
   },
 
-  dispose: function() {
+  dispose() {
     this._dispose();
   },
 
-  _dispose: function(skipNative) {
+  _dispose(skipNative) {
     if (!this._isDisposed && !this._inDispose) {
       this._inDispose = true;
       this.trigger('dispose', this, {});
@@ -144,14 +144,14 @@ extend(NativeObject.prototype, Events, {
     }
   },
 
-  _release: function() {
+  _release() {
   },
 
-  isDisposed: function() {
+  isDisposed() {
     return !!this._isDisposed;
   },
 
-  _listen: function(event, state) {
+  _listen(event, state) {
     let config = this._getEventConfig(event);
     if (!config || this._isListeningToAlias(event, config)) {
       return;
@@ -163,7 +163,7 @@ extend(NativeObject.prototype, Events, {
     }
   },
 
-  _isListeningToAlias: function(event, config) {
+  _isListeningToAlias(event, config) {
     if (!config.alias) {
       return false;
     }
@@ -171,12 +171,12 @@ extend(NativeObject.prototype, Events, {
     return this._isListening(other);
   },
 
-  _nativeListen: function(event, state) {
+  _nativeListen(event, state) {
     this._checkDisposed();
     tabris._nativeBridge.listen(this.cid, event, state);
   },
 
-  _trigger: function(event, params) {
+  _trigger(event, params) {
     let name = this.constructor._trigger[event];
     let trigger = name && this.constructor._events[name].trigger;
     if (trigger instanceof Function) {
@@ -188,32 +188,32 @@ extend(NativeObject.prototype, Events, {
     }
   },
 
-  _checkDisposed: function() {
+  _checkDisposed() {
     if (this._isDisposed) {
       throw new Error('Object is disposed');
     }
   },
 
-  _getEventConfig: function(type) {
+  _getEventConfig(type) {
     return this.constructor._events[type];
   },
 
-  _nativeSet: function(name, value) {
+  _nativeSet(name, value) {
     this._checkDisposed();
     tabris._nativeBridge.set(this.cid, name, value);
   },
 
-  _nativeGet: function(name) {
+  _nativeGet(name) {
     this._checkDisposed();
     return tabris._nativeBridge.get(this.cid, name);
   },
 
-  _nativeCall: function(method, parameters) {
+  _nativeCall(method, parameters) {
     this._checkDisposed();
     return tabris._nativeBridge.call(this.cid, method, parameters);
   },
 
-  toString: function() {
+  toString() {
     return this.type;
   }
 
@@ -362,10 +362,10 @@ function createProperties(target, definitions) {
 
 function createProperty(target, property) {
   Object.defineProperty(target, property, {
-    set: function(value) {
+    set(value) {
       this._setProperty(property, value);
     },
-    get: function() {
+    get() {
       return this._getProperty(property);
     }
   });

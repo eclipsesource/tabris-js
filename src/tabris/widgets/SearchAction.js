@@ -10,30 +10,30 @@ export default Widget.extend({
     image: {type: 'image', default: null},
     placementPriority: {type: ['choice', ['low', 'high', 'normal']], default: 'normal'},
     title: {type: 'string', default: ''},
-    proposals: {default: function() {return [];}},
+    proposals: {default() {return [];}},
     text: {type: 'string', nocache: true},
     message: {type: 'string', default: ''}
   },
 
   _events: {
     input: {
-      trigger: function(event) {
+      trigger(event) {
         this.trigger('input', this, event.text, {});
       }
     },
     accept: {
-      trigger: function(event) {
+      trigger(event) {
         this.trigger('accept', this, event.text, {});
       }
     },
     select: {
-      trigger: function(event) {
+      trigger(event) {
         this.trigger('select', this, event);
       }
     }
   },
 
-  open: function() {
+  open() {
     this._nativeCall('open', {});
     return this;
   }

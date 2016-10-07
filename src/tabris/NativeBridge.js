@@ -9,44 +9,44 @@ export default function NativeBridge(bridge) {
 
 NativeBridge.prototype = {
 
-  create: function(id, type) {
+  create(id, type) {
     let properties = {};
     this._operations.push(['create', id, type, properties]);
-    this._currentOperation = {id: id, properties: properties};
+    this._currentOperation = {id, properties};
   },
 
-  set: function(id, name, value) {
+  set(id, name, value) {
     if (this._currentOperation.id === id) {
       this._currentOperation.properties[name] = value;
     } else {
       let properties = {};
       properties[name] = value;
       this._operations.push(['set', id, properties]);
-      this._currentOperation = {id: id, properties: properties};
+      this._currentOperation = {id, properties};
     }
   },
 
-  listen: function(id, event, listen) {
+  listen(id, event, listen) {
     this._operations.push(['listen', id, event, listen]);
     this._currentOperation = {id: null};
   },
 
-  destroy: function(id) {
+  destroy(id) {
     this._operations.push(['destroy', id]);
     this._currentOperation = {id: null};
   },
 
-  get: function(id, name) {
+  get(id, name) {
     this.flush();
     return this._bridge.get(id, name);
   },
 
-  call: function(id, method, parameters) {
+  call(id, method, parameters) {
     this.flush();
     return this._bridge.call(id, method, parameters);
   },
 
-  flush: function() {
+  flush() {
     Layout.flushQueue();
     let operations = this._operations;
     this._operations = [];

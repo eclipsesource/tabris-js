@@ -25,23 +25,23 @@ export default Widget.extend({
 
   _events: {
     open: {
-      trigger: function() {
+      trigger() {
         this.trigger('open', this);
       }
     },
     close: {
-      trigger: function() {
+      trigger() {
         this.trigger('close', this);
       }
     }
   },
 
-  open: function() {
+  open() {
     this._nativeCall('open', {});
     return this;
   },
 
-  close: function() {
+  close() {
     this._nativeCall('close', {});
     return this;
   }

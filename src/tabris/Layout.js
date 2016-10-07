@@ -3,7 +3,7 @@ import {types} from './property-types';
 
 export default {
 
-  checkConsistency: function(layoutData) {
+  checkConsistency(layoutData) {
     let result = layoutData;
     if ('centerX' in result) {
       if (('left' in result) || ('right' in result)) {
@@ -33,7 +33,7 @@ export default {
     return result;
   },
 
-  resolveReferences: function(layoutData, targetWidget) {
+  resolveReferences(layoutData, targetWidget) {
     if (!targetWidget) {
       return layoutData;
     }
@@ -44,11 +44,11 @@ export default {
     return result;
   },
 
-  addToQueue: function(parent) {
+  addToQueue(parent) {
     layoutQueue[parent.cid] = parent;
   },
 
-  flushQueue: function() {
+  flushQueue() {
     for (let cid in layoutQueue) {
       layoutQueue[cid]._flushLayout();
     }
@@ -101,7 +101,7 @@ function getParent(widget) {
 }
 
 let emptyParent = {
-  children: function() {
+  children() {
     return [];
   }
 };

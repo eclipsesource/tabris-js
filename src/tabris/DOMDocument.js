@@ -10,26 +10,26 @@ export function addDOMDocument(target) {
   };
   HTMLElement.prototype = {
     setAttribute: noop,
-    appendChild: function(el) {
+    appendChild(el) {
       this.children.push(el);
       handleElementInserted(this, el, target);
       return el;
     },
-    cloneNode: function() {return new HTMLElement();},
-    lastChild: function() {return new HTMLElement();}
+    cloneNode() {return new HTMLElement();},
+    lastChild() {return new HTMLElement();}
   };
 
   target.document = {
     documentElement: {},
-    createDocumentFragment: function() {return new HTMLElement();},
-    createElement: function(tagName) {return new HTMLElement(tagName);},
+    createDocumentFragment() {return new HTMLElement();},
+    createElement(tagName) {return new HTMLElement(tagName);},
     location: {href: ''},
     readyState: 'loading',
     head: new HTMLElement('head'),
-    getElementsByTagName: function(tagName) {
+    getElementsByTagName(tagName) {
       return this.head.children.filter(node => node.tagName === tagName.toUpperCase());
     },
-    createEvent: function() {
+    createEvent() {
       return new DOMEvent();
     }
   };

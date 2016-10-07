@@ -5,7 +5,7 @@ export default Widget.extend({
   _type: 'tabris.ImageView',
   _events: {
     load: {
-      trigger: function(event) {
+      trigger(event) {
         this.trigger('load', this, event);
       }
     }
@@ -16,7 +16,7 @@ export default Widget.extend({
     tintColor: {
       type: 'color',
       access: {
-        set: function(name, value, options) {
+        set(name, value, options) {
           this._nativeSet(name, value === undefined ? null : value);
           this._storeProperty(name, value, options);
         }

@@ -311,7 +311,7 @@ describe('App', function() {
         spy(tabris._nativeBridge, 'listen');
         spy(tabris._nativeBridge, 'call');
 
-        tabris._notify(app.cid, 'patchInstall', {error: error});
+        tabris._notify(app.cid, 'patchInstall', {error});
       });
 
       it('notifies callback', function() {

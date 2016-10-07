@@ -39,7 +39,7 @@ describe('Animation', function() {
         },
         transform: {
           type: 'transform',
-          default: function() {
+          default() {
             return {
               rotation: 0,
               scaleX: 1,

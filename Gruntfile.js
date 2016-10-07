@@ -15,7 +15,7 @@ module.exports = function(grunt) {
           banner: banner + '(function(){\n',
           footer: '\n}());',
           stripBanners: true,
-          process: function(src) {
+          process(src) {
             return src.replace(/\${VERSION}/g, pkg.version);
           }
         },
@@ -27,7 +27,7 @@ module.exports = function(grunt) {
           banner: banner + '(function(){\n',
           footer: '\n}());',
           stripBanners: true,
-          process: function(src) {
+          process(src) {
             return src.replace(/\${VERSION}/g, pkg.version);
           }
         },
@@ -41,7 +41,7 @@ module.exports = function(grunt) {
     uglify: {
       tabris: {
         options: {
-          banner: banner
+          banner
         },
         src: 'build/tabris/tabris.js',
         dest: 'build/tabris/tabris.min.js'

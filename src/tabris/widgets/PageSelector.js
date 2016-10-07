@@ -8,7 +8,7 @@ import CollectionView from './CollectionView';
 let PageSelector = function(properties) {
   let instance = new CollectionView(extend({
     items: getPages(),
-    initializeCell: initializeCell,
+    initializeCell,
     itemHeight: device.platform === 'iOS' ? 40 : 48,
     layoutData: {left: 0, top: 0, right: 0, bottom: 0}
   }, properties));

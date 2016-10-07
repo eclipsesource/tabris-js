@@ -7,7 +7,7 @@ export default Widget.extend({
 
   _events: {
     navigate: {
-      trigger: function(event, name) {
+      trigger(event, name) {
         let intercepted = false;
         event.preventDefault = function() {
           intercepted = true;
@@ -17,17 +17,17 @@ export default Widget.extend({
       }
     },
     load: {
-      trigger: function(event) {
+      trigger(event) {
         this.trigger('load', this, event);
       }
     },
     download: {
-      trigger: function(event) {
+      trigger(event) {
         this.trigger('download', this, event);
       }
     },
     message: {
-      trigger: function(event) {
+      trigger(event) {
         this.trigger('message', this, event);
       }
     }
@@ -40,9 +40,9 @@ export default Widget.extend({
     initScript: {type: 'string'}
   },
 
-  postMessage: function(data, targetOrigin) {
+  postMessage(data, targetOrigin) {
     this._nativeCall('postMessage', {
-      data: data,
+      data,
       origin: targetOrigin
     });
     return this;

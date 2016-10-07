@@ -13,38 +13,38 @@ export default Widget.extend({
       type: ['choice', ['horizontal', 'vertical']],
       default: 'vertical'
     },
-    offsetX: {type: 'number', nocache: true, access: {set: function() {}}},
-    offsetY: {type: 'number', nocache: true, access: {set: function() {}}}
+    offsetX: {type: 'number', nocache: true, access: {set() {}}},
+    offsetY: {type: 'number', nocache: true, access: {set() {}}}
   },
 
   _events: {
     scrollX: {
       alias: 'change:offsetX',
-      trigger: function(offset) {
+      trigger(offset) {
         this._triggerChangeEvent('offsetX', offset);
         this.trigger('scrollX', this, offset, {});
       }
     },
     scrollY: {
       alias: 'change:offsetY',
-      trigger: function(offset) {
+      trigger(offset) {
         this._triggerChangeEvent('offsetY', offset);
         this.trigger('scrollY', this, offset, {});
       }
     }
   },
 
-  scrollToY: function(offsetY, options) {
+  scrollToY(offsetY, options) {
     this._nativeCall('scrollToY', {
-      offsetY: offsetY,
+      offsetY,
       animate: options && 'animate' in options ? !!options.animate : true
     });
     return this;
   },
 
-  scrollToX: function(offsetX, options) {
+  scrollToX(offsetX, options) {
     this._nativeCall('scrollToX', {
-      offsetX: offsetX,
+      offsetX,
       animate: options && 'animate' in options ? !!options.animate : true
     });
     return this;

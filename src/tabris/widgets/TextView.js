@@ -11,7 +11,7 @@ export default Widget.extend({
       type: ['nullable', 'natural'],
       default: null,
       access: {
-        set: function(name, value, options) {
+        set(name, value, options) {
           this._nativeSet(name, value <= 0 ? null : value);
           this._storeProperty(name, value, options);
         }

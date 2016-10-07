@@ -29,7 +29,7 @@ DOMEvent.prototype = {
   stopPropagation: noop,
   stopImmediatePropagation: noop,
   preventDefault: noop,
-  initEvent: function(type, bubbles, cancelable) {
+  initEvent(type, bubbles, cancelable) {
     this.type = type;
     this.bubbles = bubbles;
     this.cancelable = cancelable;

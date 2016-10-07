@@ -5,23 +5,23 @@ export default Widget.extend({
   _type: 'tabris.TextInput',
   _events: {
     focus: {
-      trigger: function() {
+      trigger() {
         this.trigger('focus', this);
       }
     },
     blur:  {
-      trigger: function() {
+      trigger() {
         this.trigger('blur', this);
       }
     },
     accept: {
-      trigger: function(event) {
+      trigger(event) {
         this.trigger('accept', this, event.text, {});
       }
     },
     input: {
       alias: 'change:text',
-      trigger: function(event) {
+      trigger(event) {
         this._triggerChangeEvent('text', event.text);
         this.trigger('input', this, event.text, {});
       }

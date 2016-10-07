@@ -19,7 +19,7 @@ let superProto = NativeObject.prototype;
 
 Widget.prototype = extendPrototype(NativeObject, {
 
-  append: function() {
+  append() {
     this._checkDisposed();
     let accept = function(proxy) {
       if (!(proxy instanceof NativeObject)) {
@@ -37,7 +37,7 @@ Widget.prototype = extendPrototype(NativeObject, {
     return this;
   },
 
-  appendTo: function(proxy) {
+  appendTo(proxy) {
     this._checkDisposed();
     proxy = proxy instanceof WidgetCollection ? proxy.first() : proxy;
     if (!(proxy instanceof NativeObject)) {
@@ -47,7 +47,7 @@ Widget.prototype = extendPrototype(NativeObject, {
     return this;
   },
 
-  insertBefore: function(proxy) {
+  insertBefore(proxy) {
     this._checkDisposed();
     proxy = proxy instanceof WidgetCollection ? proxy.first() : proxy;
     if (!(proxy instanceof NativeObject)) {
@@ -59,7 +59,7 @@ Widget.prototype = extendPrototype(NativeObject, {
     return this;
   },
 
-  insertAfter: function(proxy) {
+  insertAfter(proxy) {
     this._checkDisposed();
     proxy = proxy instanceof WidgetCollection ? proxy.first() : proxy;
     if (!(proxy instanceof NativeObject)) {
@@ -71,25 +71,25 @@ Widget.prototype = extendPrototype(NativeObject, {
     return this;
   },
 
-  parent: function() {
+  parent() {
     return this._parent;
   },
 
-  children: function(selector) {
+  children(selector) {
     return new WidgetCollection(this._getSelectableChildren(), selector);
   },
 
-  siblings: function(selector) {
+  siblings(selector) {
     let siblings = (this._parent ? this._parent._getSelectableChildren() : []);
     let filtered = siblings.filter(widget => widget !== this);
     return new WidgetCollection(filtered, selector);
   },
 
-  find: function(selector) {
+  find(selector) {
     return new WidgetCollection(this._getSelectableChildren(), selector, true);
   },
 
-  apply: function(sheet) {
+  apply(sheet) {
     let scope = new WidgetCollection(this._children.concat(this), '*', true);
     if (sheet['*']) {
       scope.set(sheet['*']);
@@ -113,15 +113,15 @@ Widget.prototype = extendPrototype(NativeObject, {
     return this;
   },
 
-  _getContainer: function() {
+  _getContainer() {
     return this;
   },
 
-  _getSelectableChildren: function() {
+  _getSelectableChildren() {
     return this._children;
   },
 
-  _setParent: function(parent, index) {
+  _setParent(parent, index) {
     this._nativeSet('parent', parent ? types.proxy.encode(parent._getContainer(this)) : null);
     if (this._parent) {
       this._parent._removeChild(this);
@@ -134,7 +134,7 @@ Widget.prototype = extendPrototype(NativeObject, {
     }
   },
 
-  _addChild: function(child, index) {
+  _addChild(child, index) {
     let check = this.constructor._supportsChildren;
     if (check === false) {
       throw new Error(this.type + ' cannot contain children');
@@ -153,17 +153,17 @@ Widget.prototype = extendPrototype(NativeObject, {
     this.trigger('addchild', this, child, {});
   },
 
-  _removeChild: function(child) {
+  _removeChild(child) {
     if (this._children) {
       let index = this._children.indexOf(child);
       if (index !== -1) {
         this._children.splice(index, 1);
       }
-      this.trigger('removechild', this, child, {index: index});
+      this.trigger('removechild', this, child, {index});
     }
   },
 
-  _release: function() {
+  _release() {
     if (this._children) {
       let children = this._children.concat();
       for (let i = 0; i < children.length; i++) {
@@ -178,7 +178,7 @@ Widget.prototype = extendPrototype(NativeObject, {
     }
   },
 
-  _getEventConfig: function(type) {
+  _getEventConfig(type) {
     let result = superProto._getEventConfig.apply(this, arguments);
     if (!result && this.get('gestures')[type]) {
       return getGestureEventConfig(type);
@@ -186,7 +186,7 @@ Widget.prototype = extendPrototype(NativeObject, {
     return result;
   },
 
-  _flushLayout: function() {
+  _flushLayout() {
     if (this._children) {
       this._children.forEach((child) => {
         renderLayoutData.call(child);
@@ -194,7 +194,7 @@ Widget.prototype = extendPrototype(NativeObject, {
     }
   },
 
-  animate: animate
+  animate
 
 });
 
@@ -209,7 +209,7 @@ Widget.extend = function(members) {
 };
 
 Object.defineProperty(Widget.prototype, 'classList', {
-  get: function() {
+  get() {
     if (!this._classList) {
       this._classList = [];
     }
@@ -225,7 +225,7 @@ if (tabris) {
 }
 
 let layoutAccess = {
-  set: function(name, value) {
+  set(name, value) {
     if (!this._layoutData) {
       this._layoutData = {};
     }
@@ -238,7 +238,7 @@ let layoutAccess = {
       Layout.addToQueue(this._parent);
     }
   },
-  get: function(name) {
+  get(name) {
     return this._layoutData && this._layoutData[name] != null ? this._layoutData[name] : null;
   }
 };
@@ -250,7 +250,7 @@ let _defaultEvents = {
   touchcancel: {trigger: triggerWithTarget},
   'resize': {
     alias: 'change:bounds',
-    trigger: function(event) {
+    trigger(event) {
       if (hasAndroidResizeBug) {
         let self = this;
         setTimeout(() => {
@@ -277,13 +277,13 @@ let _defaultProperties = {
   layoutData: {
     type: 'layoutData',
     access: {
-      set: function(name, value) {
+      set(name, value) {
         this._layoutData = value;
         if (this._parent) {
           Layout.addToQueue(this._parent);
         }
       },
-      get: function() {
+      get() {
         return this._layoutData || null;
       }
     }
@@ -304,7 +304,7 @@ let _defaultProperties = {
   font: {
     type: 'font',
     access: {
-      set: function(name, value, options) {
+      set(name, value, options) {
         this._nativeSet(name, value === undefined ? null : value);
         this._storeProperty(name, value, options);
       }
@@ -315,7 +315,7 @@ let _defaultProperties = {
   bounds: {
     type: 'bounds',
     access: {
-      set: function() {
+      set() {
         console.warn(this.type + ': Can not set read-only property "bounds".');
       }
     }
@@ -323,7 +323,7 @@ let _defaultProperties = {
   background: {
     type: 'color',
     access: {
-      set: function(name, value, options) {
+      set(name, value, options) {
         this._nativeSet(name, value === undefined ? null : value);
         this._storeProperty(name, value, options);
       }
@@ -332,11 +332,11 @@ let _defaultProperties = {
   textColor: {
     type: 'color',
     access: {
-      set: function(name, value, options) {
+      set(name, value, options) {
         this._nativeSet('foreground', value === undefined ? null : value);
         this._storeProperty(name, value, options);
       },
-      get: function(name) {
+      get(name) {
         let result = this._getStoredProperty(name);
         if (result === undefined) {
           result = this._nativeGet('foreground');
@@ -351,7 +351,7 @@ let _defaultProperties = {
   },
   transform: {
     type: 'transform',
-    default: function() {
+    default() {
       return {
         rotation: 0,
         scaleX: 1,
@@ -373,10 +373,10 @@ let _defaultProperties = {
   id: {
     type: 'string',
     access: {
-      set: function(name, value, options) {
+      set(name, value, options) {
         this._storeProperty(name, value, options);
       },
-      get: function(name) {
+      get(name) {
         return this._getStoredProperty(name);
       }
     }
@@ -384,20 +384,20 @@ let _defaultProperties = {
   class: {
     type: 'string',
     access: {
-      set: function(name, value) {
+      set(name, value) {
         this._classList = value.trim().split(/\s+/);
       },
-      get: function() {
+      get() {
         return this.classList.join(' ');
       }
     }
   },
   gestures: {
     access: {
-      set: function(name, gestures) {
+      set(name, gestures) {
         this._gestures = extend({}, defaultGestures, gestures);
       },
-      get: function() {
+      get() {
         if (!this._gestures) {
           this._gestures = extend({}, defaultGestures);
         }
@@ -436,12 +436,12 @@ function renderLayoutData() {
 
 function getGestureEventConfig(name) {
   return {
-    listen: function(state) {
+    listen(state) {
       let gestures = this.get('gestures');
       if (state) {
         let properties = extend({target: this}, gestures[name]);
         let recognizer = new GestureRecognizer(properties)
-          .on('gesture', gestureListener, {target: this, name: name});
+          .on('gesture', gestureListener, {target: this, name});
         if (!this._recognizers) {
           this._recognizers = {};
         }

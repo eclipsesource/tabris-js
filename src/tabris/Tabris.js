@@ -13,7 +13,7 @@ export default function Tabris() {
 
 extend(Tabris.prototype, Events, {
 
-  load: function(fn) {
+  load(fn) {
     if (this._ready) {
       fn.call();
     } else {
@@ -23,7 +23,7 @@ extend(Tabris.prototype, Events, {
 
   version: '${VERSION}',
 
-  _init: function(client) {
+  _init(client) {
     this._client = client;
     this._nativeBridge = new NativeBridge(client);
     let i = 0;
@@ -33,11 +33,11 @@ extend(Tabris.prototype, Events, {
     this._ready = true;
   },
 
-  _setEntryPoint: function(entryPoint) {
+  _setEntryPoint(entryPoint) {
     this._entryPoint = entryPoint;
   },
 
-  _notify: function(cid, event, param) {
+  _notify(cid, event, param) {
     let returnValue;
     try {
       let proxy = this._proxies.find(cid);

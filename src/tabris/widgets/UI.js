@@ -9,7 +9,7 @@ let _UI = Widget.extend({
 
   _name: 'UI',
 
-  _create: function() {
+  _create() {
     Object.defineProperty(this, 'contentView', {
       value: createContentView(),
       writable: false,
@@ -18,26 +18,26 @@ let _UI = Widget.extend({
     this.append(this.contentView);
   },
 
-  _setParent: function() {
+  _setParent() {
     throw new Error('Parent of ContentView can not be changed');
   },
 
-  _nativeSet: function() {},
+  _nativeSet() {},
 
-  _nativeGet: function() {},
+  _nativeGet() {},
 
-  _nativeCall: function() {},
+  _nativeCall() {},
 
-  _nativeListen: function() {},
+  _nativeListen() {},
 
-  _supportsChildren: function(child) {
+  _supportsChildren(child) {
     if (child === this.contentView) {
       return true;
     }
     return false;
   },
 
-  _dispose: function() {
+  _dispose() {
     throw new Error('UI can not be disposed');
   }
 

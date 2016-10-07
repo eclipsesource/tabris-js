@@ -99,7 +99,7 @@ describe('DOMEvent', function() {
       it('it is notified with Events with listener target', function() {
         let event = {type: 'foo'};
         target.dispatchEvent(event);
-        expect(listener).to.have.been.calledWith({type: 'foo', target: target});
+        expect(listener).to.have.been.calledWith({type: 'foo', target});
         expect(event.target).to.equal(target);
       });
 

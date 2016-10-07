@@ -180,7 +180,7 @@ describe('util', function() {
         Class1.prototype.myFunction = spy();
 
         Class2.prototype = extendPrototype(Class1, {
-          myFunction: function() {
+          myFunction() {
             this._super('myFunction');
           }
         });
@@ -193,7 +193,7 @@ describe('util', function() {
         Class1.prototype.myFunction = spy();
 
         Class2.prototype = extendPrototype(Class1, {
-          myFunction: function() {
+          myFunction() {
             this._super('myFunction', [1, 2, 3]);
           }
         });
@@ -206,7 +206,7 @@ describe('util', function() {
         Class1.prototype.myFunction = spy();
 
         Class2.prototype = extendPrototype(Class1, {
-          myFunction: function() {
+          myFunction() {
             this._super('myFunction');
           }
         });
@@ -222,7 +222,7 @@ describe('util', function() {
         };
 
         Class2.prototype = extendPrototype(Class1, {
-          myFunction: function() {
+          myFunction() {
             return this._super('myFunction') + 1;
           }
         });

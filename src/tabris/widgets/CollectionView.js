@@ -6,7 +6,7 @@ export default Widget.extend({
 
   _type: 'tabris.CollectionView',
 
-  _supportsChildren: function(child) {
+  _supportsChildren(child) {
     return child instanceof Cell;
   },
 
@@ -15,7 +15,7 @@ export default Widget.extend({
       type: 'any', // "function|natural",
       default: 0,
       access: {
-        set: function(name, value, options) {
+        set(name, value, options) {
           if (typeof value !== 'function') {
             // Required for 1.0 compatibility
             this._nativeSet('itemHeight', value);
@@ -27,10 +27,10 @@ export default Widget.extend({
     items: {
       type: 'array',
       access: {
-        set: function(name, value, options) {
+        set(name, value, options) {
           this._setItems(value, options);
         },
-        get: function() {
+        get() {
           return this._items;
         }
       }
@@ -39,7 +39,7 @@ export default Widget.extend({
       type: 'function',
       default: null,
       access: {
-        set: function(name, value) {
+        set(name, value) {
           this._storeProperty(name, value);
         }
       }
@@ -48,7 +48,7 @@ export default Widget.extend({
       type: 'any', // "string|function",
       default: null,
       access: {
-        set: function(name, value, options) {
+        set(name, value, options) {
           this._storeProperty(name, value, options);
         }
       }
@@ -59,7 +59,7 @@ export default Widget.extend({
     firstVisibleIndex: {
       type: 'number',
       access: {
-        set: function(name) {
+        set(name) {
           console.warn(this.type + ": Cannot set read-only property '" + name + "'.");
         }
       }
@@ -67,7 +67,7 @@ export default Widget.extend({
     lastVisibleIndex: {
       type: 'number',
       access: {
-        set: function(name) {
+        set(name) {
           console.warn(this.type + ": Cannot set read-only property '" + name + "'.");
         }
       }
@@ -78,7 +78,7 @@ export default Widget.extend({
     }
   },
 
-  _create: function() {
+  _create() {
     this._items = [];
     let result = this._super('_create', arguments);
     this._nativeListen('requestinfo', true);
@@ -89,7 +89,7 @@ export default Widget.extend({
     return result;
   },
 
-  set: function() {
+  set() {
     let result = this._super('set', arguments);
     // TODO call _reload on flush, remove override
     this._reload();
@@ -98,19 +98,19 @@ export default Widget.extend({
 
   _events: {
     refresh: {
-      trigger: function(event) {this.trigger('refresh', this, event);}
+      trigger(event) {this.trigger('refresh', this, event);}
     },
     requestinfo: {
-      trigger: function(event) {
+      trigger(event) {
         let item = this._getItem(this._items, event.index);
         let type = resolveProperty(this, 'cellType', item);
         let height = resolveProperty(this, 'itemHeight', item, type);
         let typeId = encodeCellType(this, type);
-        this._nativeCall('describeItem', {index: event.index, type: typeId, height: height});
+        this._nativeCall('describeItem', {index: event.index, type: typeId, height});
       }
     },
     createitem: {
-      trigger: function(event) {
+      trigger(event) {
         let cell = new Cell();
         cell._parent = this;
         this._addChild(cell);
@@ -124,7 +124,7 @@ export default Widget.extend({
       }
     },
     populateitem: {
-      trigger: function(event) {
+      trigger(event) {
         let cell = tabris._proxies.find(event.widget);
         let item = this._getItem(this._items, event.index);
         cell._storeProperty('itemIndex', event.index);
@@ -136,21 +136,21 @@ export default Widget.extend({
       }
     },
     select: {
-      listen: function(state) {
+      listen(state) {
         this._nativeListen('select', state);
       },
-      trigger: function(event) {
+      trigger(event) {
         let item = this._getItem(this._items, event.index);
         this.trigger('select', this, item, {index: event.index});
       }
     },
     scroll: {
-      trigger: function(event) {
+      trigger(event) {
         this.trigger('scroll', this, event);
       }
     },
     'change:firstVisibleIndex': {
-      listen: function(state) {
+      listen(state) {
         if (state) {
           this.on('scroll', triggerChangeFirstVisibleIndex);
         } else {
@@ -159,7 +159,7 @@ export default Widget.extend({
       }
     },
     'change:lastVisibleIndex': {
-      listen: function(state) {
+      listen(state) {
         if (state) {
           this.on('scroll', triggerChangeLastVisibleIndex);
         } else {
@@ -169,24 +169,24 @@ export default Widget.extend({
     }
   },
 
-  _setItems: function(items, options) {
+  _setItems(items, options) {
     this._items = items || [];
     this._triggerChangeEvent('items', this._items, options);
     this._needsReload = true;
   },
 
-  _getItem: function(items, index) {
+  _getItem(items, index) {
     return items[index];
   },
 
-  reveal: function(index) {
+  reveal(index) {
     index = this._checkIndex(index);
     if (index >= 0 && index < this._items.length) {
-      this._nativeCall('reveal', {index: index});
+      this._nativeCall('reveal', {index});
     }
   },
 
-  refresh: function(index) {
+  refresh(index) {
     if (arguments.length === 0) {
       this._nativeCall('update', {reload: [0, this._items.length]});
       return;
@@ -197,7 +197,7 @@ export default Widget.extend({
     }
   },
 
-  insert: function(items, index) {
+  insert(items, index) {
     if (!Array.isArray(items)) {
       throw new Error('items is not an array');
     }
@@ -211,7 +211,7 @@ export default Widget.extend({
     this._nativeCall('update', {insert: [index, items.length]});
   },
 
-  remove: function(index, count) {
+  remove(index, count) {
     index = this._checkIndex(index);
     if (arguments.length === 1) {
       count = 1;
@@ -227,7 +227,7 @@ export default Widget.extend({
     }
   },
 
-  _reload: function() {
+  _reload() {
     // We defer the reload call until the end of create/set in order to ensure that
     // we don't receive events before the listeners are attached
     if (this._needsReload) {
@@ -236,14 +236,14 @@ export default Widget.extend({
     }
   },
 
-  _checkIndex: function(index) {
+  _checkIndex(index) {
     if (typeof index !== 'number' || !isFinite(index)) {
       throw new Error('illegal index');
     }
     return index < 0 ? index + this._items.length : index;
   },
 
-  _adjustIndicies: function(offset, diff) {
+  _adjustIndicies(offset, diff) {
     let cells = this._children || [];
     for (let i = 0; i < cells.length; i++) {
       let cell = cells[i];

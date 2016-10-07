@@ -44,7 +44,7 @@ export default function WebSocket(url, protocol) {
   }
 
   this._proxy = new _WebSocket({
-    url: url,
+    url,
     protocol: protocolArray
   });
 
@@ -80,10 +80,10 @@ export default function WebSocket(url, protocol) {
 
 WebSocket.prototype = {
 
-  CONNECTING: CONNECTING,
-  OPEN: OPEN,
-  CLOSING: CLOSING,
-  CLOSED: CLOSED,
+  CONNECTING,
+  OPEN,
+  CLOSING,
+  CLOSED,
 
   url: '',
   readyState: CONNECTING,
@@ -98,22 +98,22 @@ WebSocket.prototype = {
     return this._proxy.get('binaryType');
   },
 
-  send: function(data) {
+  send(data) {
     if (this.readyState === CONNECTING) {
       throw new Error("Can not 'send' WebSocket message when WebSocket state is CONNECTING");
     }
     if (typeof data === 'string') {
       this.bufferedAmount += getStringByteSize(data);
-      this._proxy._nativeCall('send', {data: data});
+      this._proxy._nativeCall('send', {data});
     } else if (data instanceof ArrayBuffer || ArrayBuffer.isView(data)) {
       this.bufferedAmount += data.byteLength;
-      this._proxy._nativeCall('send', {data: data});
+      this._proxy._nativeCall('send', {data});
     } else {
       throw new Error('Data of type ' + typeof data + " is not supported in WebSocket 'send' operation");
     }
   },
 
-  close: function(code, reason) {
+  close(code, reason) {
     if (code &&
       (typeof code !== 'number' || !(typeof code === 'number' && (code === 1000 || code >= 3000 && code <= 4999)))) {
       throw new Error('A given close code has to be either 1000 or in the range 3000 - 4999 inclusive');

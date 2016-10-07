@@ -5,7 +5,7 @@ export default function ProxyStore() {
 
 ProxyStore.prototype = {
 
-  register: function(proxy, withcid) {
+  register(proxy, withcid) {
     let cid = withcid || this._generateId();
     if (cid in this._proxies) {
       throw new Error('cid already in use: ' + cid);
@@ -14,15 +14,15 @@ ProxyStore.prototype = {
     return cid;
   },
 
-  remove: function(cid) {
+  remove(cid) {
     delete this._proxies[cid];
   },
 
-  find: function(cid) {
+  find(cid) {
     return this._proxies[cid] || null;
   },
 
-  _generateId: function() {
+  _generateId() {
     return 'o' + (this._idSequence++);
   }
 

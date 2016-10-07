@@ -5,7 +5,7 @@ export default Widget.extend({
   _type: 'tabris.Button',
   _events: {
     select: {
-      trigger: function(event) {
+      trigger(event) {
         this.trigger('select', this, event);
       }
     }

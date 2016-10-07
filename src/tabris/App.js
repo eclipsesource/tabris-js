@@ -11,7 +11,7 @@ export default NativeObject.extend({
     open: {name: 'Open', trigger: triggerWithTarget},
     patchInstall: {trigger: notifyPatchCallback},
     backnavigation: {
-      trigger: function() {
+      trigger() {
         let intercepted = false;
         let event = {};
         event.preventDefault = function() {
@@ -23,27 +23,27 @@ export default NativeObject.extend({
       }
     }
   },
-  getResourceLocation: function(path) {
+  getResourceLocation(path) {
     if (!this._resourceBaseUrl) {
       this._resourceBaseUrl = this._nativeGet('resourceBaseUrl');
     }
     let subPath = path != null ? '/' + normalizePath('' + path) : '';
     return this._resourceBaseUrl + subPath;
   },
-  dispose: function() {
+  dispose() {
     throw new Error('tabris.app can not be disposed');
   },
-  reload: function() {
+  reload() {
     this._nativeCall('reload', {});
   },
-  installPatch: function(url, callback) {
+  installPatch(url, callback) {
     if (typeof url !== 'string') {
       throw new Error('parameter url is not a string');
     }
     if (!this._pendingPatchCallback) {
       this._pendingPatchCallback = callback || true;
       this._listen('patchInstall', true);
-      this._nativeCall('installPatch', {url: url});
+      this._nativeCall('installPatch', {url});
     } else if (typeof callback === 'function') {
       callback(new Error('Another installPatch operation is already pending.'));
     }

@@ -4,7 +4,7 @@ export default function ClientStub() {
 
 ClientStub.prototype = {
 
-  create: function() {
+  create() {
     this._calls.push({
       op: 'create',
       id: arguments[0],
@@ -13,7 +13,7 @@ ClientStub.prototype = {
     });
   },
 
-  get: function() {
+  get() {
     this._calls.push({
       op: 'get',
       id: arguments[0],
@@ -21,7 +21,7 @@ ClientStub.prototype = {
     });
   },
 
-  set: function() {
+  set() {
     this._calls.push({
       op: 'set',
       id: arguments[0],
@@ -29,7 +29,7 @@ ClientStub.prototype = {
     });
   },
 
-  call: function() {
+  call() {
     this._calls.push({
       op: 'call',
       id: arguments[0],
@@ -38,7 +38,7 @@ ClientStub.prototype = {
     });
   },
 
-  listen: function() {
+  listen() {
     this._calls.push({
       op: 'listen',
       id: arguments[0],
@@ -47,23 +47,23 @@ ClientStub.prototype = {
     });
   },
 
-  destroy: function() {
+  destroy() {
     this._calls.push({
       op: 'destroy',
       id: arguments[0]
     });
   },
 
-  load: function(url) {
+  load(url) {
     return url.slice(-5) === '.json' ? '{}' : 'exports = 23;';
   },
 
-  calls: function(filterProperties) {
+  calls(filterProperties) {
     tabris._nativeBridge.flush();
     return select.call(this._calls, filterProperties);
   },
 
-  resetCalls: function() {
+  resetCalls() {
     tabris._nativeBridge.flush();
     this._calls = [];
   }

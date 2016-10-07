@@ -27,7 +27,7 @@ describe('bootstrap', function() {
     global.document = {
       createElement: () => ({}),
       head: {
-        appendChild: function() {}
+        appendChild() {}
       }
     };
     stub(console, 'error');

@@ -14,16 +14,16 @@ let _Device = NativeObject.extend({
     win_keyboardPresent: 'any',
     win_primaryInput: 'any'
   },
-  _setProperty: function() {},
+  _setProperty() {},
   _events: {
     'change:orientation': {
       name: 'orientationchange',
-      trigger: function(event) {
+      trigger(event) {
         this._triggerChangeEvent('orientation', event.orientation);
       }
     }
   },
-  dispose: function() {
+  dispose() {
     throw new Error('Cannot dispose device object');
   }
 });
@@ -70,6 +70,6 @@ function createNavigator(device) {
 function defineReadOnlyProperty(target, name, getter) {
   Object.defineProperty(target, name, {
     get: getter,
-    set: function() {}
+    set() {}
   });
 }

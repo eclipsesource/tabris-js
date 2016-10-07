@@ -86,28 +86,28 @@ function initializeEventHandlers(scope) {
 
 function definePropertyUpload(xhr, scope) {
   Object.defineProperty(xhr, 'upload', {
-    get: function() {
+    get() {
       return scope.uploadEventTarget;
     },
-    set: function() {}
+    set() {}
   });
 }
 
 function definePropertyReadyState(xhr, scope) {
   Object.defineProperty(xhr, 'readyState', {
-    get: function() {
+    get() {
       return scope.readyState;
     },
-    set: function() {}
+    set() {}
   });
 }
 
 function definePropertyTimeout(xhr, scope) {
   Object.defineProperty(xhr, 'timeout', { // #the-timeout-attribute
-    get: function() {
+    get() {
       return scope.timeout;
     },
-    set: function(value) {
+    set(value) {
       // (1): superfluous, as we don't support synchronous requests
       if (!isNaN(value)) { // (2)
         scope.timeout = Math.round(value);
@@ -118,7 +118,7 @@ function definePropertyTimeout(xhr, scope) {
 
 function definePropertyResponseText(xhr, scope) {
   Object.defineProperty(xhr, 'responseText', { // #dom-xmlhttprequest-responsetext
-    get: function() {
+    get() {
       // Steps merged with #text-response-entity-body, entity body steps marked with '*'
       // Note: HttpRequest's response is already stringified
       if (scope.responseText === null) { // (1*)
@@ -135,13 +135,13 @@ function definePropertyResponseText(xhr, scope) {
       }
       return scope.responseText;
     },
-    set: function() {}
+    set() {}
   });
 }
 
 function definePropertyResponse(xhr, scope) {
   Object.defineProperty(xhr, 'response', { // #dom-xmlhttprequest-responsetext
-    get: function() {
+    get() {
       // Note: only the if-statement implemented, as response types different than 'text' are
       // currently not supported
       if (scope.readyState !== xhr.LOADING && scope.readyState !== xhr.DONE) { // (1)
@@ -152,16 +152,16 @@ function definePropertyResponse(xhr, scope) {
       }
       return scope.responseText; // (3)
     },
-    set: function() {}
+    set() {}
   });
 }
 
 function definePropertyResponseType(xhr, scope) {
   Object.defineProperty(xhr, 'responseType', { // #dom-xmlhttprequest-responsetype
-    get: function() {
+    get() {
       return scope.responseType;
     },
-    set: function(value) {
+    set(value) {
       if ((scope.readyState === xhr.LOADING || scope.readyState === xhr.DONE)) { // (1)
         throw new Error(
             "InvalidStateError: state must not be 'LOADING' or 'DONE' when setting responseType"
@@ -194,10 +194,10 @@ function defineEventHandlers(xhr, scope) {
 function defineEventHandler(eventType, target, listeners) {
   let handler = 'on' + eventType;
   Object.defineProperty(target, handler, {
-    get: function() {
+    get() {
       return listeners[handler];
     },
-    set: function(value) {
+    set(value) {
       // mimicks the behavior of Firefox and Chromium
       if (typeof value === 'function') {
         target.removeEventListener(eventType, target[handler]);
@@ -210,7 +210,7 @@ function defineEventHandler(eventType, target, listeners) {
 
 function definePropertyStatus(xhr, scope) {
   Object.defineProperty(xhr, 'status', { // #the-status-attribute
-    get: function() {
+    get() {
       if ([xhr.OPENED, xhr.UNSENT].indexOf(scope.readyState) > -1) { // (1)
         return 0;
       }
@@ -219,13 +219,13 @@ function definePropertyStatus(xhr, scope) {
       }
       return scope.status; // (3)
     },
-    set: function() {}
+    set() {}
   });
 }
 
 function definePropertyStatusText(xhr, scope) {
   Object.defineProperty(xhr, 'statusText', {
-    get: function() { // #the-statustext-attribute
+    get() { // #the-statustext-attribute
       if ([xhr.OPENED, xhr.UNSENT].indexOf(scope.readyState) > -1) { // (1)
         return '';
       }
@@ -234,13 +234,13 @@ function definePropertyStatusText(xhr, scope) {
       }
       return scope.statusText; // (3)
     },
-    set: function() {}
+    set() {}
   });
 }
 
 function definePropertyWithCredentials(xhr, scope) {
   Object.defineProperty(xhr, 'withCredentials', { // #the-withcredentials-attribute
-    set: function(value) {
+    set(value) {
       if (scope.readyState !== xhr.UNSENT && scope.readyState !== xhr.OPENED) { // (1)
         throw new Error(
             "InvalidStateError: state must be 'UNSENT' or 'OPENED' when setting withCredentials"
@@ -255,7 +255,7 @@ function definePropertyWithCredentials(xhr, scope) {
         scope.withCredentials = value; // (4)
       }
     },
-    get: function() {
+    get() {
       return scope.withCredentials;
     }
   });

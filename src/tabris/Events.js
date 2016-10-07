@@ -1,6 +1,6 @@
 export default {
 
-  on: function(type, callback, context) {
+  on(type, callback, context) {
     let wasListening = this._isListening(type);
     this._callbacks = this._callbacks || [];
     this._callbacks[type] = (this._callbacks[type] || []).concat();
@@ -17,7 +17,7 @@ export default {
     return this;
   },
 
-  off: function(type, callback, context) {
+  off(type, callback, context) {
     if (!type || !callback) {
       throw new Error('Not enough arguments');
     }
@@ -46,7 +46,7 @@ export default {
     return this;
   },
 
-  once: function(type, callback, context) {
+  once(type, callback, context) {
     let self = this;
     let wrappedCallback = function() {
       if (!self._isDisposed) {
@@ -58,7 +58,7 @@ export default {
     return this.on(type, wrappedCallback, context);
   },
 
-  trigger: function(type /*, args* */) {
+  trigger(type /*, args* */) {
     if (!this._isDisposed) {
       let args = Array.prototype.slice.call(arguments, 1);
       this._callAll(type, args, false);
@@ -67,7 +67,7 @@ export default {
     return this;
   },
 
-  _callAll: function(type, args, isPublic) {
+  _callAll(type, args, isPublic) {
     let store = isPublic ? '_callbacks' : '_privateCallbacks';
     if (this[store] && type in this[store]) {
       let callbacks = this[store][type];
@@ -78,11 +78,11 @@ export default {
     }
   },
 
-  _isListening: function(type) {
+  _isListening(type) {
     return (!!this._callbacks && (!type || type in this._callbacks)) ||
       (!!this._privateCallbacks && (!type || type in this._privateCallbacks));
   },
 
-  _listen: function() {}
+  _listen() {}
 
 };

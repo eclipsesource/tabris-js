@@ -31,7 +31,7 @@ export default function CanvasContext(gc) {
 
 CanvasContext.prototype = {
 
-  fillRect: function(x, y, width, height) {
+  fillRect(x, y, width, height) {
     // TODO: delegate to native function, once it is implemented (#493)
     if (arguments.length < 4) {
       throw new Error('Not enough arguments to CanvasContext.fillRect');
@@ -42,7 +42,7 @@ CanvasContext.prototype = {
     this.fill();
   },
 
-  strokeRect: function(x, y, width, height) {
+  strokeRect(x, y, width, height) {
     // TODO: delegate to native function, once it is implemented (#493)
     if (arguments.length < 4) {
       throw new Error('Not enough arguments to CanvasContext.strokeRect');
@@ -53,24 +53,24 @@ CanvasContext.prototype = {
     this.stroke();
   },
 
-  measureText: function(text) {
+  measureText(text) {
     // TODO: delegate to native function, once it is implemented (#56)
     return {width: text.length * 5 + 5};
   },
 
-  _init: function(width, height) {
+  _init(width, height) {
     this.canvas.width = width;
     this.canvas.height = height;
     this._gc._nativeCall('init', {
-      width: width,
-      height: height,
+      width,
+      height,
       font: [['sans-serif'], 12, false, false],
       fillStyle: [0, 0, 0, 255],
       strokeStyle: [0, 0, 0, 255]
     });
   },
 
-  _flush: function() {
+  _flush() {
     if (this._operations.length > 0) {
       this._gc._nativeCall('draw', {packedOperations: [
         this._newOpCodes,
@@ -89,7 +89,7 @@ CanvasContext.prototype = {
     }
   },
 
-  _pushOperation: function(operation) {
+  _pushOperation(operation) {
     if (this._opCodes.indexOf(operation) < 0) {
       this._newOpCodes.push(operation);
       this._opCodes.push(operation);
@@ -189,10 +189,10 @@ CanvasContext.prototype.getImageData = function(x, y, width, height) {
   this._flush();
   // TODO check validity of args
   let uint8ClampedArray = this._gc._nativeCall('getImageData', {
-    x: x,
-    y: y,
-    width: width,
-    height: height
+    x,
+    y,
+    width,
+    height
   });
   return new ImageData(uint8ClampedArray, width, height);
 };
@@ -206,8 +206,8 @@ CanvasContext.prototype.putImageData = function(imageData, x, y) {
     data: imageData.data,
     width: imageData.width,
     height: imageData.height,
-    x: x,
-    y: y
+    x,
+    y
   });
 };
 
@@ -241,14 +241,14 @@ CanvasContext.getContext = function(canvas, width, height) {
 let properties = {
   lineWidth: {
     init: 1,
-    encode: function(value) {
+    encode(value) {
       if (value > 0) {
         return value;
       }
       throw new Error(value);
     },
     decode: passThrough,
-    addOperations: function(context, value) {
+    addOperations(context, value) {
       context._doubles.push(value);
     }
   },
@@ -257,7 +257,7 @@ let properties = {
     values: toObject(['butt', 'round', 'square']),
     encode: checkValue,
     decode: passThrough,
-    addOperations: function(context, value) {
+    addOperations(context, value) {
       context._strings.push(value);
     }
   },
@@ -266,7 +266,7 @@ let properties = {
     values: toObject(['bevel', 'miter', 'round']),
     encode: checkValue,
     decode: passThrough,
-    addOperations: function(context, value) {
+    addOperations(context, value) {
       context._strings.push(value);
     }
   },
@@ -274,7 +274,7 @@ let properties = {
     init: [0, 0, 0, 255],
     encode: colorStringToArray,
     decode: colorArrayToString,
-    addOperations: function(context, value) {
+    addOperations(context, value) {
       context._ints.push(value[0], value[1], value[2], value[3]);
     }
   },
@@ -282,7 +282,7 @@ let properties = {
     init: [0, 0, 0, 255],
     encode: colorStringToArray,
     decode: colorArrayToString,
-    addOperations: function(context, value) {
+    addOperations(context, value) {
       context._ints.push(value[0], value[1], value[2], value[3]);
     }
   },
@@ -291,7 +291,7 @@ let properties = {
     values: toObject(['start', 'end', 'left', 'right', 'center']),
     encode: checkValue,
     decode: passThrough,
-    addOperations: function(context, value) {
+    addOperations(context, value) {
       context._strings.push(value);
     }
   },
@@ -300,7 +300,7 @@ let properties = {
     values: toObject(['top', 'hanging', 'middle', 'alphabetic', 'ideographic', 'bottom']),
     encode: checkValue,
     decode: passThrough,
-    addOperations: function(context, value) {
+    addOperations(context, value) {
       context._strings.push(value);
     }
   }
@@ -348,10 +348,10 @@ function defineMethod(name, reqArgCount, fn) {
 function defineProperty(context, name) {
   let prop = properties[name];
   Object.defineProperty(context, name, {
-    get: function() {
+    get() {
       return prop.decode(context._state[name]);
     },
-    set: function(value) {
+    set(value) {
       try {
         context._state[name] = prop.encode(value);
         context._pushOperation(name);

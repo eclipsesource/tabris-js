@@ -12,7 +12,7 @@ export default function Crypto() {
 
 Crypto.prototype = {
 
-  getRandomValues: function(typedArray) {
+  getRandomValues(typedArray) {
     if (arguments.length === 0) {
       throw new Error('Not enough arguments to Crypto.getRandomValues');
     }
@@ -20,7 +20,7 @@ Crypto.prototype = {
       throw new Error('Unsupported type in Crypto.getRandomValues');
     }
     let byteLength = typedArray.byteLength;
-    let values = proxy._nativeCall('getRandomValues', {byteLength: byteLength});
+    let values = proxy._nativeCall('getRandomValues', {byteLength});
     if (values.length !== byteLength) {
       throw new Error('Not enough random bytes available');
     }

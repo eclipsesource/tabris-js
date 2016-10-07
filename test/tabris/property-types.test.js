@@ -562,7 +562,7 @@ describe('property-types', function() {
       expect(encode(undefined)).to.equal('undefined');
       expect(encode({})).to.equal('[object Object]');
       expect(encode([1, 2, 3])).to.equal('1,2,3');
-      expect(encode({toString: function() {return 'foo';}})).to.equal('foo');
+      expect(encode({toString() {return 'foo';}})).to.equal('foo');
     });
 
   });

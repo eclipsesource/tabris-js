@@ -11,7 +11,7 @@ export default Widget.extend({
     placementPriority: {
       type: ['choice', ['low', 'high', 'normal']],
       access: {
-        set: function(name, value, options) {
+        set(name, value, options) {
           this._nativeSet(name, value.toUpperCase());
           this._storeProperty(name, value, options);
         }
@@ -24,7 +24,7 @@ export default Widget.extend({
 
   _events: {
     select: {
-      trigger: function(event) {
+      trigger(event) {
         this.trigger('select', this, event);
       }
     }

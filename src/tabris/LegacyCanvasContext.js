@@ -23,127 +23,127 @@ export default function LegacyCanvasContext(gc) {
 
 LegacyCanvasContext.prototype = {
 
-  save: function() {
+  save() {
     this._operations.push(['save']);
     this._savedStates.push(clone(this._state));
   },
 
-  restore: function() {
+  restore() {
     this._operations.push(['restore']);
     this._state = this._savedStates.pop() || this._state;
   },
 
   // Path operations
 
-  beginPath: function() {
+  beginPath() {
     this._operations.push(['beginPath']);
   },
 
-  closePath: function() {
+  closePath() {
     this._operations.push(['closePath']);
   },
 
-  lineTo: function(x, y) {
+  lineTo(x, y) {
     this._operations.push(['lineTo', x, y]);
   },
 
-  moveTo: function(x, y) {
+  moveTo(x, y) {
     this._operations.push(['moveTo', x, y]);
   },
 
-  bezierCurveTo: function(cp1x, cp1y, cp2x, cp2y, x, y) {
+  bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y) {
     this._operations.push(['bezierCurveTo', cp1x, cp1y, cp2x, cp2y, x, y]);
   },
 
-  quadraticCurveTo: function(cpx, cpy, x, y) {
+  quadraticCurveTo(cpx, cpy, x, y) {
     this._operations.push(['quadraticCurveTo', cpx, cpy, x, y]);
   },
 
-  rect: function(x, y, width, height) {
+  rect(x, y, width, height) {
     this._operations.push(['rect', x, y, width, height]);
   },
 
-  arc: function(x, y, radius, startAngle, endAngle, anticlockwise) {
+  arc(x, y, radius, startAngle, endAngle, anticlockwise) {
     this._operations.push(['arc', x, y, radius, startAngle, endAngle, !!anticlockwise]);
   },
 
   // Transformations
 
-  scale: function(x, y) {
+  scale(x, y) {
     this._operations.push(['scale', x, y]);
   },
 
-  rotate: function(angle) {
+  rotate(angle) {
     this._operations.push(['rotate', angle]);
   },
 
-  translate: function(x, y) {
+  translate(x, y) {
     this._operations.push(['translate', x, y]);
   },
 
-  transform: function(a, b, c, d, e, f) {
+  transform(a, b, c, d, e, f) {
     this._operations.push(['transform', a, b, c, d, e, f]);
   },
 
-  setTransform: function(a, b, c, d, e, f) {
+  setTransform(a, b, c, d, e, f) {
     this._operations.push(['setTransform', a, b, c, d, e, f]);
   },
 
   // Drawing operations
 
-  clearRect: function(x, y, width, height) {
+  clearRect(x, y, width, height) {
     this._operations.push(['clearRect', x, y, width, height]);
   },
 
-  fillRect: function(x, y, width, height) {
+  fillRect(x, y, width, height) {
     this._operations.push(['beginPath'], ['rect', x, y, width, height]);
     this.fill();
   },
 
-  strokeRect: function(x, y, width, height) {
+  strokeRect(x, y, width, height) {
     this._operations.push(['beginPath'], ['rect', x, y, width, height]);
     this.stroke();
   },
 
-  fillText: function(text, x, y /*, maxWidth*/) {
+  fillText(text, x, y /*, maxWidth*/) {
     this._operations.push(['fillText', text, false, false, false, x, y]);
   },
 
-  strokeText: function(text, x, y /*, maxWidth*/) {
+  strokeText(text, x, y /*, maxWidth*/) {
     this._operations.push(['strokeText', text, false, false, false, x, y]);
   },
 
-  fill: function() {
+  fill() {
     this._operations.push(['fill']);
   },
 
-  stroke: function() {
+  stroke() {
     this._operations.push(['stroke']);
   },
 
-  measureText: function(text) {
+  measureText(text) {
     // TODO wire to native function
     return {width: text.length * 5 + 5};
   },
 
   // ImageData operations
 
-  getImageData: function(x, y, width, height) {
+  getImageData(x, y, width, height) {
     if (arguments.length < 4) {
       throw new Error('Not enough arguments to CanvasContext.getImageData');
     }
     this._flush();
     // TODO check validity of args
     let array = this._gc._nativeCall('getImageData', {
-      x: x,
-      y: y,
-      width: width,
-      height: height
+      x,
+      y,
+      width,
+      height
     });
     return new ImageData(new Uint8ClampedArray(array), width, height);
   },
 
-  putImageData: function(imageData, x, y) {
+  putImageData(imageData, x, y) {
     if (arguments.length < 3) {
       throw new Error('Not enough arguments to CanvasContext.putImageData');
     }
@@ -152,12 +152,12 @@ LegacyCanvasContext.prototype = {
       data: imageData.data,
       width: imageData.width,
       height: imageData.height,
-      x: x,
-      y: y
+      x,
+      y
     });
   },
 
-  createImageData: function(width, height) {
+  createImageData(width, height) {
     if (arguments[0] instanceof ImageData) {
       let data = arguments[0];
       width = data.width;
@@ -168,19 +168,19 @@ LegacyCanvasContext.prototype = {
     return new ImageData(width, height);
   },
 
-  _init: function(width, height) {
+  _init(width, height) {
     this.canvas.width = width;
     this.canvas.height = height;
     this._gc._nativeCall('init', {
-      width: width,
-      height: height,
+      width,
+      height,
       font: [['sans-serif'], 12, false, false],
       fillStyle: [0, 0, 0, 255],
       strokeStyle: [0, 0, 0, 255]
     });
   },
 
-  _flush: function() {
+  _flush() {
     if (this._operations.length > 0) {
       this._gc._nativeCall('draw', {operations: this._operations});
       this._operations = [];
@@ -192,7 +192,7 @@ LegacyCanvasContext.prototype = {
 let properties = {
   lineWidth: {
     init: 1,
-    encode: function(value) {
+    encode(value) {
       if (value > 0) {
         return value;
       }
@@ -266,10 +266,10 @@ function createState() {
 function defineProperty(context, name) {
   let prop = properties[name];
   Object.defineProperty(context, name, {
-    get: function() {
+    get() {
       return prop.decode(context._state[name]);
     },
-    set: function(value) {
+    set(value) {
       try {
         context._state[name] = prop.encode(value);
         context._operations.push([name, this._state[name]]);
