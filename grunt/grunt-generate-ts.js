@@ -7,7 +7,7 @@ let header = `
 
 module.exports = function(grunt) {
 
-  grunt.registerTask('generate-tsd', function() {
+  grunt.registerTask('generate-tsd', () => {
     let defs = readJsonDefs();
     let tsd = createTypeDefs(defs).replace(/\${VERSION}/g, grunt.config('version'));
     grunt.file.write('build/tabris/tabris.d.ts', tsd);
@@ -49,7 +49,7 @@ module.exports = function(grunt) {
         if (includes.length > 0) {
           newParents.push(name);
         }
-        includes.forEach(function(include) {
+        includes.forEach((include) => {
           let incl = defs[include];
           def.events = Object.assign({}, incl.events || {}, def.events);
         });

@@ -83,7 +83,7 @@ export function animate(properties, options) {
   animation._options = options;
   this.on('dispose', animation.abort, animation);
   animation.start();
-  return new Promise(function(resolve, reject) {
+  return new Promise((resolve, reject) => {
     animation._resolve = resolve;
     animation._reject = reject;
   });

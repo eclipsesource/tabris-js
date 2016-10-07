@@ -33,6 +33,8 @@
     "curly": ["error", "all"],
     "eol-last": "error",
     "no-with": "error",
-    "no-var": "error"
+    "no-var": "error",
+    "prefer-arrow-callback": "error",
+    "arrow-body-style": ["error", "as-needed"]
   }
 }

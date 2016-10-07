@@ -12,7 +12,7 @@ let PageSelector = function(properties) {
     itemHeight: device.platform === 'iOS' ? 40 : 48,
     layoutData: {left: 0, top: 0, right: 0, bottom: 0}
   }, properties));
-  instance.on('select', function(target, value) {
+  instance.on('select', (target, value) => {
     if (value instanceof Page) {
       if (tabris.ui.drawer) {
         tabris.ui.drawer.close();
@@ -21,7 +21,7 @@ let PageSelector = function(properties) {
     }
   });
   tabris.ui.on('addchild', insertPage, instance).on('removechild', removePage, instance);
-  instance.on('dispose', function() {
+  instance.on('dispose', () => {
     tabris.ui.off('addchild', insertPage);
     tabris.ui.off('removechild', removePage);
   });
@@ -46,9 +46,7 @@ function removePage(ui, child) {
 }
 
 function getPages() {
-  return tabris.ui.children('Page').toArray().filter(function(page) {
-    return page.get('topLevel');
-  });
+  return tabris.ui.children('Page').toArray().filter(page => page.get('topLevel'));
 }
 
 function initializeCell(cell) {
@@ -64,7 +62,7 @@ function initializeCell(cell) {
     font: device.platform === 'iOS' ? '17px .HelveticaNeueInterface-Regular' : '14px Roboto Medium',
     textColor: device.platform === 'iOS' ? 'rgb(22, 126, 251)' : '#212121'
   }).appendTo(cell);
-  cell.on('change:item', function(widget, page) {
+  cell.on('change:item', (widget, page) => {
     imageView.set('image', page.get('image'));
     textView.set('text', page.get('title'));
   });

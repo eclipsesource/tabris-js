@@ -47,23 +47,23 @@ export function publishDeviceProperties(device, target) {
 
 function createDevice(device) {
   let dev = {};
-  ['model', 'platform', 'version'].forEach(function(name) {
-    defineReadOnlyProperty(dev, name, function() {return device[name];});
+  ['model', 'platform', 'version'].forEach((name) => {
+    defineReadOnlyProperty(dev, name, () => device[name]);
   });
   return dev;
 }
 
 function createScreen(device) {
   let screen = {};
-  defineReadOnlyProperty(screen, 'width', function() {return device.screenWidth;});
-  defineReadOnlyProperty(screen, 'height', function() {return device.screenHeight;});
+  defineReadOnlyProperty(screen, 'width', () => device.screenWidth);
+  defineReadOnlyProperty(screen, 'height', () => device.screenHeight);
   return screen;
 }
 
 function createNavigator(device) {
   let navigator = {};
-  defineReadOnlyProperty(navigator, 'userAgent', function() {return 'tabris-js';});
-  defineReadOnlyProperty(navigator, 'language', function() {return device.language;});
+  defineReadOnlyProperty(navigator, 'userAgent', () => 'tabris-js');
+  defineReadOnlyProperty(navigator, 'language', () => device.language);
   return navigator;
 }
 

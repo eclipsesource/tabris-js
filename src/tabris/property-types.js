@@ -108,7 +108,7 @@ export let types = {
       if (value.src === '') {
         throw new Error('image.src is an empty string');
       }
-      ['scale', 'width', 'height'].forEach(function(prop) {
+      ['scale', 'width', 'height'].forEach((prop) => {
         if (prop in value && !isDimension(value[prop])) {
           throw new Error('image.' + prop + ' is not a dimension: ' + value[prop]);
         }

@@ -72,9 +72,7 @@ describe('WidgetCollection', function() {
   describe('filter()', function() {
 
     it('with callback', function() {
-      expect(collection.filter((proxy) => {
-        return proxy !== mocks[1];
-      }).toArray()).to.eql([mocks[0], mocks[2]]);
+      expect(collection.filter(proxy => proxy !== mocks[1]).toArray()).to.eql([mocks[0], mocks[2]]);
     });
 
     it('with type selector', function() {

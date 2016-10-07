@@ -76,10 +76,10 @@ function createScopeObject(xhr) {
 }
 
 function initializeEventHandlers(scope) {
-  eventTypes.forEach(function(eventType) {
+  eventTypes.forEach((eventType) => {
     scope['on' + eventType] = null;
   });
-  uploadEventTypes.forEach(function(eventType) {
+  uploadEventTypes.forEach((eventType) => {
     scope.uploadListeners['on' + eventType] = null;
   });
 }
@@ -183,10 +183,10 @@ function definePropertyResponseType(xhr, scope) {
 }
 
 function defineEventHandlers(xhr, scope) {
-  eventTypes.forEach(function(eventType) {
+  eventTypes.forEach((eventType) => {
     defineEventHandler(eventType, xhr, scope);
   });
-  uploadEventTypes.forEach(function(eventType) {
+  uploadEventTypes.forEach((eventType) => {
     defineEventHandler(eventType, scope.uploadEventTarget, scope.uploadListeners);
   });
 }
@@ -307,13 +307,13 @@ function createOpenMethod(xhr, scope) {
 function createSendMethod(xhr, scope) {
   return function(data) { // #the-send()-method
     scope.proxy = new HttpRequest();
-    scope.proxy.on('StateChange', function(e) {
+    scope.proxy.on('StateChange', (e) => {
       stateChangeHandler(e, xhr, scope);
     });
-    scope.proxy.on('DownloadProgress', function(e) {
+    scope.proxy.on('DownloadProgress', (e) => {
       dispatchProgressEvent('progress', xhr, e.lengthComputable, e.loaded, e.total);
     });
-    scope.proxy.on('UploadProgress', function(e) {
+    scope.proxy.on('UploadProgress', (e) => {
       dispatchProgressEvent('progress', xhr.upload, e.lengthComputable, e.loaded, e.total);
     });
     if (scope.readyState !== xhr.OPENED) { // (1)

@@ -15,7 +15,7 @@ export function fontObjectToString(font) {
 function parseStyles(fontArr, styles) {
   let styleArr = styles.trim().split(/\s+/);
   checkTruthy(styleArr.length <= 2, 'Too many font styles');
-  styleArr.forEach(function(property) {
+  styleArr.forEach((property) => {
     switch (property.trim()) {
       case 'italic':
         checkTruthy(fontArr.style === 'normal', 'Invalid font variant');
@@ -41,7 +41,7 @@ function parseStyles(fontArr, styles) {
 function parseFamily(fontArr, family) {
   // NOTE: Currently family is optional to allow for default fonts, but this is
   //       not CSS font syntax. See https://github.com/eclipsesource/tabris-js/issues/24
-  (family ? family.split(',') : []).forEach(function(name) {
+  (family ? family.split(',') : []).forEach((name) => {
     let valid = /(?:^\s*[^\"\']+\s*$)|(?:^\s*\"[^\"\']+\"\s*$)|(?:^\s*\'[^\"\']+\'\s*$)/.exec(name);
     checkTruthy(valid, 'Invalid font family: ' + name);
     fontArr.family.push(/^\s*[\"\']?([^\"\']*)/.exec(name)[1].trim());

@@ -22,7 +22,7 @@ let proto = WidgetCollection.prototype = {
 
   forEach: function(callback) {
     let that = this;
-    this._array.forEach(function(value, index) {
+    this._array.forEach((value, index) => {
       callback(value, index, that);
     });
   },
@@ -78,7 +78,7 @@ let proto = WidgetCollection.prototype = {
 
 };
 
-['set', 'animate', 'on', 'off', 'once'].forEach(function(key) {
+['set', 'animate', 'on', 'off', 'once'].forEach((key) => {
   proto[key] = function() {
     for (let i = 0; i < this._array.length; i++) {
       this._array[i][key].apply(this._array[i], arguments);

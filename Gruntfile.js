@@ -167,7 +167,7 @@ module.exports = function(grunt) {
     'exec:lint'
   ]);
 
-  grunt.registerTask('package', 'create package.json', function() {
+  grunt.registerTask('package', 'create package.json', () => {
     let stringify = require('format-json');
     let pack = grunt.file.readJSON('package.json');
     delete pack.devDependencies;
@@ -229,13 +229,11 @@ module.exports = function(grunt) {
   ]);
 
   function prefix(prefix, strings) {
-    return strings.map(function(string) {return prefix + string;});
+    return strings.map(string => prefix + string);
   }
 
   function blockComment(text) {
-    let commented = text.trim().split('\n').map(function(line) {
-      return ' * ' + line;
-    }).join('\n');
+    let commented = text.trim().split('\n').map(line => ' * ' + line).join('\n');
     return '/*!\n' + commented + '\n */\n';
   }
 

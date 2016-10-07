@@ -27,9 +27,7 @@ export function addDOMDocument(target) {
     readyState: 'loading',
     head: new HTMLElement('head'),
     getElementsByTagName: function(tagName) {
-      return this.head.children.filter(function(node) {
-        return node.tagName === tagName.toUpperCase();
-      });
+      return this.head.children.filter(node => node.tagName === tagName.toUpperCase());
     },
     createEvent: function() {
       return new DOMEvent();
@@ -39,7 +37,7 @@ export function addDOMDocument(target) {
   if (typeof target.location === 'undefined') {
     target.location = target.document.location;
   }
-  tabris.load(function() {
+  tabris.load(() => {
     target.document.readyState = 'complete';
     let event = target.document.createEvent('Events');
     event.initEvent('DOMContentLoaded', false, false);

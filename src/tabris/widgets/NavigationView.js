@@ -67,7 +67,7 @@ function StackView(navigationView) {
       let result = new WidgetCollection(stack);
       navigationView._nativeCall('stack_clear', {});
       stack = [];
-      result.forEach(function(page) {page._setParent(null);});
+      result.forEach((page) => {page._setParent(null);});
       return result;
     },
 

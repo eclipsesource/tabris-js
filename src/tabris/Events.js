@@ -4,12 +4,10 @@ export default {
     let wasListening = this._isListening(type);
     this._callbacks = this._callbacks || [];
     this._callbacks[type] = (this._callbacks[type] || []).concat();
-    let alreadyAdded = this._callbacks[type].some(function(entry) {
-      return (
-        (entry.fn === callback || '_callback' in callback && entry.fn._callback === callback._callback) &&
-        (entry.ctx === context)
-      );
-    });
+    let alreadyAdded = this._callbacks[type].some(entry => (
+      (entry.fn === callback || '_callback' in callback && entry.fn._callback === callback._callback) &&
+      (entry.ctx === context)
+    ));
     if (!alreadyAdded) {
       this._callbacks[type].push({fn: callback, ctx: context});
     }

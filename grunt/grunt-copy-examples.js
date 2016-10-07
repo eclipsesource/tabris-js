@@ -12,7 +12,7 @@ module.exports = function(grunt) {
   });
 
   function processExamples(dir, callback) {
-    async.map(grunt.file.expand(dir + '/*'), processExample, function(err, results) {
+    async.map(grunt.file.expand(dir + '/*'), processExample, (err, results) => {
       if (err) {
         grunt.log.error(err);
         return callback(!err);
@@ -31,7 +31,7 @@ module.exports = function(grunt) {
     if (grunt.file.exists(dir, 'package.json')) {
       let manifest = grunt.file.readJSON(path.join(dir, 'package.json'));
       if ('title' in manifest) {
-        return installDependencies(dir, manifest, function(err) {
+        return installDependencies(dir, manifest, (err) => {
           if (err) {
             return callback(err);
           }
@@ -43,7 +43,7 @@ module.exports = function(grunt) {
   }
 
   function copyExample(dir, manifest, callback) {
-    grunt.file.recurse(dir, function(abspath) {
+    grunt.file.recurse(dir, (abspath) => {
       grunt.file.copy(abspath, path.join('build', abspath));
     });
     return callback(null, {
@@ -59,14 +59,12 @@ module.exports = function(grunt) {
     if (Object.keys(manifest.dependencies).length === 0) {
       return callback();
     }
-    npm.load({}, function(err) {
+    npm.load({}, (err) => {
       if (err) {
         return callback(err);
       }
       grunt.log.writeln('installing dependencies in ' + dir);
-      let modules = Object.keys(manifest.dependencies).map(function(key) {
-        return key + '@' + manifest.dependencies[key];
-      });
+      let modules = Object.keys(manifest.dependencies).map((key) => key + '@' + manifest.dependencies[key]);
       npm.commands.install(dir, modules, callback);
     });
   }

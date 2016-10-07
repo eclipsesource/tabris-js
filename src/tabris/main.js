@@ -98,7 +98,7 @@ tabris.WidgetCollection = WidgetCollection;
 tabris.XMLHttpRequest = XMLHttpRequest;
 
 // TODO: ensure tabris is set up before load functions, remove when merged with tabris module
-tabris._loadFunctions.unshift(function() {
+tabris._loadFunctions.unshift(() => {
   tabris.app = new App();
   tabris.ui = createUI();
   tabris.device = createDevice();

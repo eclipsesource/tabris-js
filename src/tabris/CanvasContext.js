@@ -319,7 +319,7 @@ function checkValue(value) {
 
 function toObject(array) {
   let obj = {};
-  array.forEach(function(name) {
+  array.forEach((name) => {
     obj[name] = true;
   });
   return obj;

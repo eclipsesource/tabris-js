@@ -73,7 +73,7 @@ function notifyPatchCallback(event) {
 }
 
 function normalizePath(path) {
-  return path.split(/\/+/).map(function(segment) {
+  return path.split(/\/+/).map((segment) => {
     if (segment === '..') {
       throw new Error("Path must not contain '..'");
     }
@@ -81,7 +81,5 @@ function normalizePath(path) {
       return '';
     }
     return segment;
-  }).filter(function(string) {
-    return !!string;
-  }).join('/');
+  }).filter(string => !!string).join('/');
 }

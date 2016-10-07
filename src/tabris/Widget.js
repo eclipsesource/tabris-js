@@ -81,9 +81,7 @@ Widget.prototype = extendPrototype(NativeObject, {
 
   siblings: function(selector) {
     let siblings = (this._parent ? this._parent._getSelectableChildren() : []);
-    let filtered = siblings.filter(function(widget) {
-      return widget !== this;
-    }.bind(this));
+    let filtered = siblings.filter(widget => widget !== this);
     return new WidgetCollection(filtered, selector);
   },
 
@@ -190,7 +188,7 @@ Widget.prototype = extendPrototype(NativeObject, {
 
   _flushLayout: function() {
     if (this._children) {
-      this._children.forEach(function(child) {
+      this._children.forEach((child) => {
         renderLayoutData.call(child);
       });
     }
@@ -221,7 +219,7 @@ Object.defineProperty(Widget.prototype, 'classList', {
 
 let hasAndroidResizeBug;
 if (tabris) {
-  tabris.load(function() {
+  tabris.load(() => {
     hasAndroidResizeBug = device.platform === 'Android' && device.version <= 17;
   });
 }
@@ -255,7 +253,7 @@ let _defaultEvents = {
     trigger: function(event) {
       if (hasAndroidResizeBug) {
         let self = this;
-        setTimeout(function() {
+        setTimeout(() => {
           self._triggerChangeEvent('bounds', event.bounds, {}, 'resize');
           self.trigger('resize', self, types.bounds.decode(event.bounds), {});
         }, 0);

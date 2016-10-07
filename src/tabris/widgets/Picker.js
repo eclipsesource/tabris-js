@@ -83,11 +83,8 @@ export default Widget.extend({
   _reorderProperties: function(properties) {
     // items property depends on itemText, selection/selectionIndex depend on items
     let deferred = ['items', 'selection', 'selectionIndex'];
-    return properties.filter(function(name) {
-      return deferred.indexOf(name) === -1;
-    }).concat(deferred.filter(function(name) {
-      return properties.indexOf(name) !== -1;
-    }));
+    return properties.filter(name => deferred.indexOf(name) === -1)
+      .concat(deferred.filter(name => properties.indexOf(name) !== -1));
   },
 
   _getItem: function(index) {

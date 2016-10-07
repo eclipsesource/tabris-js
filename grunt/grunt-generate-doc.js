@@ -123,9 +123,7 @@ module.exports = function (grunt) {
 
   function readTypes() {
     let md = grunt.file.read(grunt.config('doc').types);
-    return md.match(/^##\ *(.*)$/gm).map(heading => {
-      return heading.slice(3).toLowerCase();
-    });
+    return md.match(/^##\ *(.*)$/gm).map(heading => heading.slice(3).toLowerCase());
   }
 
   function getSnippetPath(json) {
@@ -169,9 +167,7 @@ module.exports = function (grunt) {
     let result = [];
     if (json.include) {
       result.push('Includes ');
-      result.push(json.include.map(widget => {
-        return '[' + title(widget) + '](' + widget.type + '.md)';
-      }).join(', '));
+      result.push(json.include.map(widget => '[' + title(widget) + '](' + widget.type + '.md)').join(', '));
       result.push('\n');
     }
     return result.join('');
