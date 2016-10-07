@@ -6,11 +6,6 @@ import GestureRecognizer from './GestureRecognizer';
 import {animate} from './Animation';
 import {types} from './property-types';
 
-let tabris = global.tabris;
-if (tabris) {
-  tabris.Widget = Widget;
-}
-
 export default function Widget() {
   throw new Error('Cannot instantiate abstract Widget');
 }
@@ -218,9 +213,9 @@ Object.defineProperty(Widget.prototype, 'classList', {
 });
 
 let hasAndroidResizeBug;
-if (tabris) {
+if (global.tabris) {
   tabris.load(() => {
-    hasAndroidResizeBug = device.platform === 'Android' && device.version <= 17;
+    hasAndroidResizeBug = tabris.device.platform === 'Android' && tabris.device.version <= 17;
   });
 }
 

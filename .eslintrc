@@ -9,9 +9,7 @@
     "es6": true
   },
   "globals": {
-    "tabris": false,
-    "window": false,
-    "device": false
+    "tabris": false
   },
   "rules": {
     "no-empty": "off",

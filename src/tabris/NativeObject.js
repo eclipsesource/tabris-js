@@ -235,7 +235,7 @@ NativeObject.extend = function(members, superType) {
     if (Type._cid) {
       NativeObject.call(this, Type._cid);
     } else {
-      if (!global.tabris._nativeBridge) {
+      if (!tabris._nativeBridge) {
         throw new Error('tabris.js not started');
       }
       NativeObject.call(this);

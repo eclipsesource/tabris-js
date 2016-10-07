@@ -9,7 +9,7 @@ let PageSelector = function(properties) {
   let instance = new CollectionView(extend({
     items: getPages(),
     initializeCell,
-    itemHeight: device.platform === 'iOS' ? 40 : 48,
+    itemHeight: tabris.device.platform === 'iOS' ? 40 : 48,
     layoutData: {left: 0, top: 0, right: 0, bottom: 0}
   }, properties));
   instance.on('select', (target, value) => {
@@ -59,8 +59,8 @@ function initializeCell(cell) {
   }).appendTo(cell);
   let textView = new TextView({
     layoutData: {left: 72, centerY: 0},
-    font: device.platform === 'iOS' ? '17px .HelveticaNeueInterface-Regular' : '14px Roboto Medium',
-    textColor: device.platform === 'iOS' ? 'rgb(22, 126, 251)' : '#212121'
+    font: tabris.device.platform === 'iOS' ? '17px .HelveticaNeueInterface-Regular' : '14px Roboto Medium',
+    textColor: tabris.device.platform === 'iOS' ? 'rgb(22, 126, 251)' : '#212121'
   }).appendTo(cell);
   cell.on('change:item', (widget, page) => {
     imageView.set('image', page.get('image'));

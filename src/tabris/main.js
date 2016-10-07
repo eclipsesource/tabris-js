@@ -1,7 +1,8 @@
-import './load-polyfill.js';
-import './Tabris.js';
+import './load-polyfill';
 
-import Device, {create as createDevice, publishDeviceProperties} from './Device.js';
+import {extend} from './util';
+import Tabris from './Tabris';
+import Device, {create as createDevice, publishDeviceProperties} from './Device';
 import App from './App';
 import UI, {create as createUI} from './widgets/UI';
 import ContentView from './widgets/ContentView';
@@ -13,89 +14,93 @@ import Storage, {create as createStorage} from './WebStorage';
 import WebSocket from './WebSocket';
 import XMLHttpRequest from './XMLHttpRequest';
 import Action from './widgets/Action';
-import ActivityIndicator from './widgets/ActivityIndicator.js';
-import Button from './widgets/Button.js';
-import Canvas from './widgets/Canvas.js';
-import CheckBox from './widgets/CheckBox.js';
-import Cell from './widgets/Cell.js';
-import CollectionView from './widgets/CollectionView.js';
-import Composite from './widgets/Composite.js';
-import Crypto from './Crypto.js';
-import Drawer from './widgets/Drawer.js';
-import ImageView from './widgets/ImageView.js';
-import Page from './widgets/Page.js';
-import PageSelector from './widgets/PageSelector.js';
-import Picker from './widgets/Picker.js';
-import ProgressBar from './widgets/ProgressBar.js';
-import NativeObject from './NativeObject.js';
+import ActivityIndicator from './widgets/ActivityIndicator';
+import Button from './widgets/Button';
+import Canvas from './widgets/Canvas';
+import CheckBox from './widgets/CheckBox';
+import Cell from './widgets/Cell';
+import CollectionView from './widgets/CollectionView';
+import Composite from './widgets/Composite';
+import Crypto from './Crypto';
+import Drawer from './widgets/Drawer';
+import ImageView from './widgets/ImageView';
+import Page from './widgets/Page';
+import PageSelector from './widgets/PageSelector';
+import Picker from './widgets/Picker';
+import ProgressBar from './widgets/ProgressBar';
+import NativeObject from './NativeObject';
 import NavigationView from './widgets/NavigationView';
-import RadioButton from './widgets/RadioButton.js';
-import ScrollView from './widgets/ScrollView.js';
-import SearchAction from './widgets/SearchAction.js';
-import Slider from './widgets/Slider.js';
-import Switch from './widgets/Switch.js';
-import Tab from './widgets/Tab.js';
-import TabFolder from './widgets/TabFolder.js';
-import TextInput from './widgets/TextInput.js';
-import TextView from './widgets/TextView.js';
-import ToggleButton from './widgets/ToggleButton.js';
-import Video from './widgets/Video.js';
-import WebView from './widgets/WebView.js';
-import Widget from './Widget.js';
-import WidgetCollection from './WidgetCollection.js';
+import RadioButton from './widgets/RadioButton';
+import ScrollView from './widgets/ScrollView';
+import SearchAction from './widgets/SearchAction';
+import Slider from './widgets/Slider';
+import Switch from './widgets/Switch';
+import Tab from './widgets/Tab';
+import TabFolder from './widgets/TabFolder';
+import TextInput from './widgets/TextInput';
+import TextView from './widgets/TextView';
+import ToggleButton from './widgets/ToggleButton';
+import Video from './widgets/Video';
+import WebView from './widgets/WebView';
+import Widget from './Widget';
+import WidgetCollection from './WidgetCollection';
 
-module.exports = global.tabris;
+const window = global.window;
 
-window.Crypto = Crypto;
-window.ImageData = ImageData;
-window.ProgressEvent = ProgressEvent;
-window.Storage = Storage;
-window.WebSocket = WebSocket;
-window.XMLHttpRequest = XMLHttpRequest;
+module.exports = global.tabris = extend(new Tabris(), {
+  Action,
+  ActivityIndicator,
+  App,
+  Button,
+  Canvas,
+  Cell,
+  CheckBox,
+  CollectionView,
+  Composite,
+  ContentView,
+  Crypto,
+  Drawer,
+  Device,
+  ImageData,
+  ImageView,
+  Page,
+  PageSelector,
+  Picker,
+  ProgressBar,
+  ProgressEvent,
+  NativeObject,
+  NavigationView,
+  RadioButton,
+  ScrollView,
+  SearchAction,
+  Slider,
+  Storage,
+  Switch,
+  Tab,
+  TabFolder,
+  TextInput,
+  TextView,
+  ToggleButton,
+  UI,
+  Video,
+  WebView,
+  WebSocket,
+  Widget,
+  WidgetCollection,
+  XMLHttpRequest
+});
+
+extend(window, {
+  Crypto,
+  ImageData,
+  ProgressEvent,
+  Storage,
+  WebSocket,
+  XMLHttpRequest
+});
 
 addDOMDocument(window);
 addWindowTimerMethods(window);
-
-tabris.Action = Action;
-tabris.ActivityIndicator = ActivityIndicator;
-tabris.App = App;
-tabris.Button = Button;
-tabris.Canvas = Canvas;
-tabris.Cell = Cell;
-tabris.CheckBox = CheckBox;
-tabris.CollectionView = CollectionView;
-tabris.Composite = Composite;
-tabris.ContentView = ContentView;
-tabris.Crypto = Crypto;
-tabris.Drawer = Drawer;
-tabris.Device = Device;
-tabris.ImageData = ImageData;
-tabris.ImageView = ImageView;
-tabris.Page = Page;
-tabris.PageSelector = PageSelector;
-tabris.Picker = Picker;
-tabris.ProgressBar = ProgressBar;
-tabris.ProgressEvent = ProgressEvent;
-tabris.NativeObject = NativeObject;
-tabris.NavigationView = NavigationView;
-tabris.RadioButton = RadioButton;
-tabris.ScrollView = ScrollView;
-tabris.SearchAction = SearchAction;
-tabris.Slider = Slider;
-tabris.Storage = Storage;
-tabris.Switch = Switch;
-tabris.Tab = Tab;
-tabris.TabFolder = TabFolder;
-tabris.TextInput = TextInput;
-tabris.TextView = TextView;
-tabris.ToggleButton = ToggleButton;
-tabris.UI = UI;
-tabris.Video = Video;
-tabris.WebView = WebView;
-tabris.WebSocket = WebSocket;
-tabris.Widget = Widget;
-tabris.WidgetCollection = WidgetCollection;
-tabris.XMLHttpRequest = XMLHttpRequest;
 
 // TODO: ensure tabris is set up before load functions, remove when merged with tabris module
 tabris._loadFunctions.unshift(() => {
@@ -104,7 +109,7 @@ tabris._loadFunctions.unshift(() => {
   tabris.device = createDevice();
   publishDeviceProperties(tabris.device, window);
   window.localStorage = tabris.localStorage = createStorage();
-  if (device.platform === 'iOS') {
+  if (tabris.device.platform === 'iOS') {
     window.secureStorage = tabris.secureStorage = createStorage(true);
   }
   window.crypto = tabris.crypto = new Crypto();

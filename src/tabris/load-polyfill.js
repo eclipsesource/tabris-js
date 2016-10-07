@@ -1,5 +1,5 @@
 if (typeof window === 'undefined') {
   global.window = global;
 }
-delete window.Promise;
+delete global.Promise;
 require('./polyfill.min.js');

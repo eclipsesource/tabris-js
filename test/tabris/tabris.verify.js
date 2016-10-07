@@ -2,6 +2,8 @@ global.self = global;
 let tabris = require('../../build/tabris/');
 let expect = require('chai').expect;
 
+let window = global.window;
+
 describe('global object', function() {
 
   it('contains Promise', function() {

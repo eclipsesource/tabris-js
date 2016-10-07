@@ -58,5 +58,3 @@ extend(Tabris.prototype, Events, {
   }
 
 });
-
-global.tabris = new Tabris();

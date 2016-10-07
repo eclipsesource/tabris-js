@@ -19,9 +19,9 @@ describe('CanvasContext', function() {
     global.tabris = Object.assign({
       on: () => {},
       off: () => {},
-      _proxies: new ProxyStore()
+      _proxies: new ProxyStore(),
+      device: {platform: 'Android'}
     }, Events);
-    global.device = {platform: 'Android'};
     global.tabris._nativeBridge = new NativeBridge(client);
     gc = new GC();
     ctx = new CanvasContext(gc);

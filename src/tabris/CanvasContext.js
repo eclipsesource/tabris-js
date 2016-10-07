@@ -231,8 +231,8 @@ CanvasContext.getContext = function(canvas, width, height) {
     canvas._gc = new GC({parent: canvas});
   }
   if (!canvas._ctx) {
-    canvas._ctx = device.platform === 'iOS' ? new LegacyCanvasContext(canvas._gc)
-                                            : new CanvasContext(canvas._gc);
+    canvas._ctx = tabris.device.platform === 'iOS' ? new LegacyCanvasContext(canvas._gc)
+                                                   : new CanvasContext(canvas._gc);
   }
   canvas._ctx._init(width, height);
   return canvas._ctx;

@@ -136,10 +136,6 @@ WebSocket.prototype = {
 
 };
 
-if (typeof WebSocket === 'undefined') {
-  window.WebSocket = tabris.WebSocket;
-}
-
 function getStringByteSize(input) {
   let len = 0;
   for (let i = 0; i < input.length; i++) {
