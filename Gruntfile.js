@@ -12,12 +12,8 @@ module.exports = function(grunt) {
     concat: {
       tabris: {
         options: {
-          banner: banner + '(function(){\n',
-          footer: '\n}());',
-          stripBanners: true,
-          process(src) {
-            return src.replace(/\${VERSION}/g, pkg.version);
-          }
+          banner,
+          process: src => src.replace(/\${VERSION}/g, pkg.version)
         },
         src: ['build/transpiled.js'],
         dest: 'build/tabris/tabris.js'
@@ -27,9 +23,7 @@ module.exports = function(grunt) {
           banner: banner + '(function(){\n',
           footer: '\n}());',
           stripBanners: true,
-          process(src) {
-            return src.replace(/\${VERSION}/g, pkg.version);
-          }
+          process: src => src.replace(/\${VERSION}/g, pkg.version)
         },
         src: prefix('src/boot/', [
           'Module.js',
