@@ -1,37 +1,18 @@
 {
   "extends": "eslint:recommended",
   "parserOptions": {
-    "ecmaVersion": 5,
+    "ecmaVersion": 6,
     "sourceType": "module"
   },
   "env": {
-    "node": true
+    "node": true,
+    "es6": true
   },
   "globals": {
     "tabris": false,
     "window": false,
     "document": false,
-    "navigator": false,
-    "screen": false,
-    "device": false,
-    "fetch": false,
-    "localStorage": false,
-    "crypto": false,
-    "cordova": false,
-    "_": false,
-    "ArrayBuffer": false,
-    "ImageData": false,
-    "Int8Array": false,
-    "Uint8Array": false,
-    "Uint8ClampedArray": false,
-    "Int16Array": false,
-    "Uint16Array": false,
-    "Uint32Array": false,
-    "Int32Array": false,
-    "Float32Array": false,
-    "Float64Array": false,
-    "Promise": false,
-    "WebSocket": false
+    "device": false
   },
   "rules": {
     "no-empty": "off",
