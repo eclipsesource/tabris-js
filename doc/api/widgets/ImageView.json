@@ -1,7 +1,7 @@
 {
   "type": "ImageView",
   "description": "A widget to display an image.",
-  "include": ["Widget"],
+  "extends": "Widget",
   "properties": {
     "image": {
       "type": "Image",

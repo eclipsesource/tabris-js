@@ -1,7 +1,7 @@
 {
   "type": "TabFolder",
   "description": "A widget that can switch between [tabs](Tab). Only children of type `Tab` are supported. Since the TabFolder does not compute its own size, the width and height must be defined by the respective layout properties (e.g. either `width` or `left` and `right` must be specified).",
-  "include": ["Composite"],
+  "extends": "Composite",
   "properties": {
     "tabBarLocation": {
       "type": "string",

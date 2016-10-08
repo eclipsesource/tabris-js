@@ -1,7 +1,7 @@
 {
   "type": "Composite",
   "description": "An empty widget that can contain other widgets.",
-  "include": ["Widget"],
+  "extends": "Widget",
   "methods": {
     "append": [
       {

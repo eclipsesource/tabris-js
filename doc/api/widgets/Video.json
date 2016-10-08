@@ -1,7 +1,7 @@
 {
   "type": "Video",
   "description": "A widget that plays a video from a URL.",
-  "include": ["Widget"],
+  "extends": "Widget",
   "properties": {
     "url": {
       "type": "string",

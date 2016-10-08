@@ -1,7 +1,7 @@
 {
   "type": "WebView",
   "description": "A widget that can display a web page. Since this widget requires a lot of recourses it's recommended to have no more than one instance at a time.",
-  "include": ["Widget"],
+  "extends": "Widget",
   "properties": {
     "url": {
       "type": "string",

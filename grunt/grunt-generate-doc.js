@@ -2,7 +2,7 @@ let path = require('path');
 
 const SNIPPETS_LOCATION = 'snippets';
 
-module.exports = function (grunt) {
+module.exports = function(grunt) {
 
   grunt.registerTask('generate-doc', () => {
     let data = {
@@ -10,7 +10,6 @@ module.exports = function (grunt) {
       widgets: readWidgets(),
       types: readTypes()
     };
-    resolveIncludes(data);
     renderWidgets(data);
     renderAPI(data);
     renderIndex(data);
@@ -53,7 +52,7 @@ module.exports = function (grunt) {
       renderDescription(json),
       renderImages(json),
       renderExample(json),
-      renderIncludes(json),
+      renderExtends(json, data),
       renderMembers(json, data),
       renderSnippet(json),
       renderLinks(json)
@@ -83,21 +82,6 @@ module.exports = function (grunt) {
         '```'
       ].join('\n');
     }
-  }
-
-  function resolveIncludes(data) {
-    Object.keys(data.widgets).concat(Object.keys(data.api)).forEach(type => {
-      let json = data.widgets[type] || data.api[type];
-      if (json.include) {
-        json.include = json.include.map(type => {
-          let include = data.widgets[type] || data.api[type];
-          if (!include) {
-            throw new Error('Could not find included type ' + type);
-          }
-          return include;
-        });
-      }
-    });
   }
 
   function readWidgets() {
@@ -162,14 +146,15 @@ module.exports = function (grunt) {
     return '';
   }
 
-  function renderIncludes(json) {
-    let result = [];
-    if (json.include) {
-      result.push('Includes ');
-      result.push(json.include.map(widget => '[' + title(widget) + '](' + widget.type + '.md)').join(', '));
-      result.push('\n');
+  function renderExtends(json, data) {
+    if (json.extends) {
+      let sup = data.api[json.extends] || data.widgets[json.extends];
+      if (!sup) {
+        throw new Error('Could not find super type for ' + json.type);
+      }
+      return `Extends [${title(sup)}](${sup.type}.md)\n`;
     }
-    return result.join('');
+    return '';
   }
 
   function renderMethods(json, data) {

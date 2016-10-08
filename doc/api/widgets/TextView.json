@@ -1,7 +1,7 @@
 {
   "type": "TextView",
   "description": "A widget to display a text. For images, use ImageView.",
-  "include": ["Widget"],
+  "extends": "Widget",
   "properties": {
     "alignment": {
       "type": "string",

@@ -1,7 +1,7 @@
 {
   "type": "CheckBox",
   "description": "A check box widget.",
-  "include": ["Widget"],
+  "extends": "Widget",
   "properties": {
     "selection": {
       "type": "boolean",

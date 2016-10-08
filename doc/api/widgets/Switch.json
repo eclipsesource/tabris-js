@@ -1,7 +1,7 @@
 {
   "type": "Switch",
   "description": "A switch widget that can be toggled.",
-  "include": ["Widget"],
+  "extends": "Widget",
   "properties": {
     "selection": {
       "type": "boolean",

@@ -1,7 +1,7 @@
 {
   "type": "Picker",
   "description": "A widget with a drop-down list of items to choose from.",
-  "include": ["Widget"],
+  "extends": "Widget",
   "properties": {
     "items": {
       "type": "any[]",

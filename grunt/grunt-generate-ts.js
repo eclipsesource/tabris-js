@@ -26,37 +26,27 @@ module.exports = function(grunt) {
   }
 
   function createTypeDefs(defs) {
-    applyIncludes(defs, ['NativeObject']);
     let result = new Text();
     result.append(header);
     result.append('');
     result.append(grunt.file.read(grunt.config('doc').typings));
     result.append('');
     Object.keys(defs).forEach((name) => {
+      addInheritedEvents(defs, name);
       createTypeDef(result, defs[name], name);
     });
     result.append('');
     return result.toString();
   }
 
-  function applyIncludes(defs, parents) {
-    let newParents = [];
-    Object.keys(defs).forEach((name) => {
-      let def = defs[name];
-      if (def.include) {
-        // TODO adjust when json defs distiguish extends and includes
-        let includes = def.include.filter(include => parents.indexOf(include) !== -1);
-        if (includes.length > 0) {
-          newParents.push(name);
-        }
-        includes.forEach((include) => {
-          let incl = defs[include];
-          def.events = Object.assign({}, incl.events || {}, def.events);
-        });
+  function addInheritedEvents(defs, name) {
+    let def = defs[name];
+    if (def.extends) {
+      if (!(def.extends in defs)) {
+        throw new Error('Super type not found for ' + def.type);
       }
-    });
-    if (newParents.length > 0) {
-      applyIncludes(defs, newParents);
+      addInheritedEvents(defs, def.extends);
+      def.events = Object.assign({}, defs[def.extends].events || {}, def.events);
     }
   }
 
@@ -97,25 +87,10 @@ module.exports = function(grunt) {
 
   function createClassDef(name, def) {
     let str = 'export class ' + name;
-    let superClass = getSuperClass(name, def);
-    if (superClass) {
-      str += ' extends ' + superClass;
+    if (def.extends && def.extends !== 'NativeObject') {
+      str += ' extends ' + def.extends;
     }
     return str + ' {';
-  }
-
-  function getSuperClass(name, def) {
-    if (def.include) {
-      // TODO adjust when json defs distiguish extends and includes
-      let includes = def.include.filter(sup => sup !== 'NativeObject');
-      if (includes.length > 1) {
-        throw new Error('multiple inheritance: ' + name);
-      }
-      if (includes.length === 1) {
-        return includes[0];
-      }
-    }
-    return null;
   }
 
   function addPropertyInterface(result, def, name) {
@@ -131,8 +106,8 @@ module.exports = function(grunt) {
 
   function createPropertyInterfaceDef(name, def) {
     let str = 'interface ' + name + 'Properties';
-    if (def.include) {
-      str += ' extends ' + def.include.map(sup => sup + 'Properties').join(', ');
+    if (def.extends) {
+      str += ' extends ' + def.extends + 'Properties';
     }
     return str + ' {';
   }

@@ -1,7 +1,7 @@
 {
   "type": "Action",
   "description": "An executable item that is integrated in the application's navigation menu. Add a listener on *select* to implement the action.",
-  "include": ["Widget"],
+  "extends": "Widget",
   "properties": {
     "image": {
       "type": "Image",

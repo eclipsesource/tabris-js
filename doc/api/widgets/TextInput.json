@@ -1,7 +1,7 @@
 {
   "type": "TextInput",
   "description": "A widget that allows to enter text.",
-  "include": ["Widget"],
+  "extends": "Widget",
   "properties": {
     "type": {
       "type": "string",
