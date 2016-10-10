@@ -131,8 +131,8 @@ describe('DOMDocument', function() {
       script1.src = 'foo.js';
       script1.onload = spy();
       script1.onerror = spy();
-      spy(console, 'error');
-      spy(console, 'log');
+      stub(console, 'error');
+      stub(console, 'log');
 
       target.document.head.appendChild(script1);
 

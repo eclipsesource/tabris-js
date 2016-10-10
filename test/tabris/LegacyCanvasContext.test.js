@@ -1,4 +1,4 @@
-import {expect, spy, restore} from '../test';
+import {expect, stub, restore} from '../test';
 import ProxyStore from '../../src/tabris/ProxyStore';
 import NativeBridge from '../../src/tabris/NativeBridge';
 import ClientStub from './ClientStub';
@@ -61,7 +61,7 @@ describe('Legacy CanvasContext', function() {
     });
 
     it('ignores zero and negative values, but prints a warning', function() {
-      spy(console, 'warn');
+      stub(console, 'warn');
       ctx.lineWidth = 3;
 
       ctx.lineWidth = 0;
@@ -95,7 +95,7 @@ describe('Legacy CanvasContext', function() {
     });
 
     it('ignores unknown values, but prints a warning', function() {
-      spy(console, 'warn');
+      stub(console, 'warn');
       ctx.lineCap = 'round';
 
       ctx.lineCap = 'foo';
@@ -128,7 +128,7 @@ describe('Legacy CanvasContext', function() {
     });
 
     it('ignores unknown values, but prints a warning', function() {
-      spy(console, 'warn');
+      stub(console, 'warn');
       ctx.lineJoin = 'round';
 
       ctx.lineJoin = 'foo';
@@ -161,7 +161,7 @@ describe('Legacy CanvasContext', function() {
     });
 
     it('ignores invalid color strings, but prints a warning', function() {
-      spy(console, 'warn');
+      stub(console, 'warn');
       ctx.fillStyle = 'red';
 
       ctx.fillStyle = 'no-such-color';
@@ -194,7 +194,7 @@ describe('Legacy CanvasContext', function() {
     });
 
     it('ignores invalid color strings, but prints a warning', function() {
-      spy(console, 'warn');
+      stub(console, 'warn');
       ctx.strokeStyle = 'red';
 
       ctx.strokeStyle = 'no-such-color';
@@ -227,7 +227,7 @@ describe('Legacy CanvasContext', function() {
     });
 
     it('ignores unknown values, but prints a warning', function() {
-      spy(console, 'warn');
+      stub(console, 'warn');
       ctx.textAlign = 'center';
 
       ctx.textAlign = 'foo';
@@ -260,7 +260,7 @@ describe('Legacy CanvasContext', function() {
     });
 
     it('ignores unknown values, but prints a warning', function() {
-      spy(console, 'warn');
+      stub(console, 'warn');
       ctx.textBaseline = 'middle';
 
       ctx.textBaseline = 'foo';

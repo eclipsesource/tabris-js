@@ -155,7 +155,7 @@ describe('TabFolder', function() {
     });
 
     it('Ignores setting null with warning', function() {
-      spy(console, 'warn');
+      stub(console, 'warn');
 
       tabFolder.set('selection', null);
 
@@ -165,7 +165,7 @@ describe('TabFolder', function() {
     });
 
     it('Ignores setting disposed tab with warning', function() {
-      spy(console, 'warn');
+      stub(console, 'warn');
       tab.dispose();
 
       tabFolder.set('selection', tab);
@@ -176,7 +176,7 @@ describe('TabFolder', function() {
     });
 
     it('Ignores setting non tab', function() {
-      spy(console, 'warn');
+      stub(console, 'warn');
 
       tabFolder.set('selection', 'foo');
 

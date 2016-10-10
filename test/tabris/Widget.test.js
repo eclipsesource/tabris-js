@@ -88,7 +88,8 @@ describe('Widget', function() {
     });
 
     it('prints warning when attempting to set bounds', function() {
-      spy(console, 'warn');
+      stub(console, 'warn');
+
       widget.set('bounds', {left: 1, top: 2, width: 3, height: 4});
 
       expect(client.calls({op: 'set'}).length).to.equal(0);
@@ -123,7 +124,8 @@ describe('Widget', function() {
     });
 
     it('ignores setting win_theme to invalid value', function() {
-      spy(console, 'warn');
+      stub(console, 'warn');
+
       widget.set('win_theme', 'foo');
 
       expect(client.calls({op: 'set'}).length).to.equal(0);
@@ -1129,7 +1131,7 @@ describe('Widget', function() {
     });
 
     it('contradicting attributes can be set temporarily without warning', function() {
-      spy(console, 'warn');
+      stub(console, 'warn');
 
       widget.set('left', 10).set('width', 10).set('right', 10).set('left', null);
 
@@ -1140,7 +1142,7 @@ describe('Widget', function() {
     });
 
     it('contradicting attributes will be warned against on flush', function() {
-      spy(console, 'warn');
+      stub(console, 'warn');
 
       widget.set('left', 10).set('width', 10).set('right', 10);
 

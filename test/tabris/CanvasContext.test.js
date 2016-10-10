@@ -149,7 +149,7 @@ describe('CanvasContext', function() {
       });
 
       it('ignores zero and negative values, but prints a warning', function() {
-        spy(console, 'warn');
+        stub(console, 'warn');
         ctx.lineWidth = 3;
 
         ctx.lineWidth = 0;
@@ -182,7 +182,7 @@ describe('CanvasContext', function() {
       });
 
       it('ignores unknown values, but prints a warning', function() {
-        spy(console, 'warn');
+        stub(console, 'warn');
         ctx.lineCap = 'round';
 
         ctx.lineCap = 'foo';
@@ -213,7 +213,7 @@ describe('CanvasContext', function() {
       });
 
       it('ignores unknown values, but prints a warning', function() {
-        spy(console, 'warn');
+        stub(console, 'warn');
         ctx.lineJoin = 'round';
 
         ctx.lineJoin = 'foo';
@@ -244,7 +244,7 @@ describe('CanvasContext', function() {
       });
 
       it('ignores invalid color strings, but prints a warning', function() {
-        spy(console, 'warn');
+        stub(console, 'warn');
         ctx.fillStyle = 'red';
 
         ctx.fillStyle = 'no-such-color';
@@ -275,7 +275,7 @@ describe('CanvasContext', function() {
       });
 
       it('ignores invalid color strings, but prints a warning', function() {
-        spy(console, 'warn');
+        stub(console, 'warn');
         ctx.strokeStyle = 'red';
 
         ctx.strokeStyle = 'no-such-color';
@@ -306,7 +306,7 @@ describe('CanvasContext', function() {
       });
 
       it('ignores unknown values, but prints a warning', function() {
-        spy(console, 'warn');
+        stub(console, 'warn');
         ctx.textAlign = 'center';
 
         ctx.textAlign = 'foo';
@@ -337,7 +337,7 @@ describe('CanvasContext', function() {
       });
 
       it('ignores unknown values, but prints a warning', function() {
-        spy(console, 'warn');
+        stub(console, 'warn');
         ctx.textBaseline = 'middle';
 
         ctx.textBaseline = 'foo';

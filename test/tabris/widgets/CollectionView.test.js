@@ -82,7 +82,7 @@ describe('CollectionView', function() {
         });
 
         it('prevents setting the property', function() {
-          spy(console, 'warn');
+          stub(console, 'warn');
           spy(client, 'set');
 
           view.set(prop, 23);
@@ -444,7 +444,7 @@ describe('CollectionView', function() {
           });
 
           it('triggers select on the collection view', function() {
-            spy(console, 'warn');
+            stub(console, 'warn');
             view.on('select', listener);
 
             view._trigger('select', {index: 0});
@@ -520,7 +520,7 @@ describe('CollectionView', function() {
           describe('when calling cell.dispose()', function() {
 
             beforeEach(function() {
-              spy(console, 'warn');
+              stub(console, 'warn');
               cell.dispose();
             });
 
@@ -556,7 +556,7 @@ describe('CollectionView', function() {
             });
 
             it('triggers change:item event on the cell', function() {
-              spy(console, 'warn');
+              stub(console, 'warn');
               cell.on('change:item', listener);
 
               view._trigger('populateitem', {widget: cell.cid, index: 0});
@@ -567,7 +567,7 @@ describe('CollectionView', function() {
             });
 
             it('triggers change:item event on the cell even if item is already set', function() {
-              spy(console, 'warn');
+              stub(console, 'warn');
               view._trigger('populateitem', {widget: cell.cid, index: 0});
               cell.on('change:item', listener);
 
@@ -579,7 +579,7 @@ describe('CollectionView', function() {
             });
 
             it('triggers change:itemIndex event on the cell', function() {
-              spy(console, 'warn');
+              stub(console, 'warn');
               cell.on('change:itemIndex', listener);
 
               view._trigger('populateitem', {widget: cell.cid, index: 0});

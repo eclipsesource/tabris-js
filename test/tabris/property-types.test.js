@@ -1,4 +1,4 @@
-import {expect, spy, restore} from '../test';
+import {expect, stub, restore} from '../test';
 import NativeObject from '../../src/tabris/NativeObject';
 import ProxyStore from '../../src/tabris/ProxyStore';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
@@ -439,7 +439,7 @@ describe('property-types', function() {
     let encode = types.image.encode;
 
     it('succeeds for minimal image value', function() {
-      spy(console, 'warn');
+      stub(console, 'warn');
 
       let result = encode({src: 'foo.png'});
 
@@ -448,7 +448,7 @@ describe('property-types', function() {
     });
 
     it('succeeds for image with width and height', function() {
-      spy(console, 'warn');
+      stub(console, 'warn');
 
       let result = encode({src: 'foo.png', width: 10, height: 10});
 
@@ -503,7 +503,7 @@ describe('property-types', function() {
     });
 
     it('warns if scale and width are given', function() {
-      spy(console, 'warn');
+      stub(console, 'warn');
 
       encode({src: 'foo.png', width: 23, scale: 2});
 
@@ -512,7 +512,7 @@ describe('property-types', function() {
     });
 
     it('warns if scale and height are given', function() {
-      spy(console, 'warn');
+      stub(console, 'warn');
 
       encode({src: 'foo.png', height: 23, scale: 2});
 

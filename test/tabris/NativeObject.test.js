@@ -67,7 +67,7 @@ describe('NativeObject', function() {
 
     it('does not raise warning for init properties', function() {
       let CustomType = NativeObject.extend({_initProperties: {foo: 23}});
-      spy(console, 'warn');
+      stub(console, 'warn');
 
       new CustomType();
 
@@ -76,6 +76,7 @@ describe('NativeObject', function() {
 
     it('does not modify prototype properties', function() {
       let CustomType = NativeObject.extend({_initProperties: {}});
+      stub(console, 'warn');
 
       new CustomType({foo: 23});
 

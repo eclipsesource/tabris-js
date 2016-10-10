@@ -201,7 +201,8 @@ describe('Picker', function() {
     });
 
     it('set with unknown value prints warning', function() {
-      spy(console, 'warn');
+      stub(console, 'warn');
+
       picker.set({selection: 'bar2'});
 
       expect(client.calls({op: 'set', id: picker.cid}).length).to.equal(0);
