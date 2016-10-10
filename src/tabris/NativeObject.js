@@ -3,7 +3,8 @@ import {types} from './property-types';
 import Events from './Events';
 
 export default function NativeObject(cid) {
-  this.cid = tabris._proxies.register(this, cid);
+  cid = tabris._proxies.register(this, cid);
+  Object.defineProperty(this, 'cid', {value: cid});
 }
 
 extend(NativeObject.prototype, Events, {

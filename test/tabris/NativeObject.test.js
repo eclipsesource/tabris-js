@@ -738,6 +738,15 @@ describe('NativeObject.extend', function() {
       expect(proxy.cid.length).to.be.above(0);
     });
 
+    it('assigns cid as read-only property', function() {
+      let proxy = new TestType();
+      let cid = proxy.cid;
+
+      proxy.cid = 4711;
+
+      expect(proxy.cid).to.equal(cid);
+    });
+
     it('creates different cids for subsequent calls', function() {
       let proxy1 = new TestType();
       let proxy2 = new TestType();
