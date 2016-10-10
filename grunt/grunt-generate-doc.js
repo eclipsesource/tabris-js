@@ -63,7 +63,6 @@ module.exports = function (grunt) {
   function renderMembers(json, data) {
     return [
       renderMethods(json, data),
-      renderFields(json, data),
       renderProperties(json, data),
       renderEvents(json, data)
     ].filter(notEmpty).join('\n');
@@ -225,27 +224,6 @@ module.exports = function (grunt) {
       if (property.static) {
         result.push('<br/>This property can only be set on widget creation. ' +
         'Once set, it cannot be changed anymore.');
-      }
-      result.push('\n\n');
-    });
-    return result.join('');
-  }
-
-  function renderFields(json, data) {
-    if (!json.fields) {
-      return '';
-    }
-    let result = [];
-    result.push('## Fields\n\n');
-    Object.keys(json.fields).sort().forEach(name => {
-      let field = json.fields[name];
-      result.push('### ', name, '\n');
-      result.push('Type: ', renderPropertyType(field, data), '\n');
-      if (field.provisional) {
-        result.push(provisionalNote);
-      }
-      if (field.description) {
-        result.push('\n' + field.description);
       }
       result.push('\n\n');
     });

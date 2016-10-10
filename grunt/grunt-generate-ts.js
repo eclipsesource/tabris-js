@@ -82,7 +82,6 @@ module.exports = function(grunt) {
     result.append(createClassDef(name, def));
     result.indent++;
     addConstructor(result, name);
-    addFields(result, def);
     addMethods(result, def);
     addEvents(result, def);
     addPropertyApi(result, def, name);
@@ -136,15 +135,6 @@ module.exports = function(grunt) {
       str += ' extends ' + def.include.map(sup => sup + 'Properties').join(', ');
     }
     return str + ' {';
-  }
-
-  function addFields(result, def) {
-    if (def.fields) {
-      Object.keys(def.fields).sort().forEach((name) => {
-        result.append('');
-        result.append(createField(name, def.fields[name]));
-      });
-    }
   }
 
   function addMethods(result, def) {
@@ -281,13 +271,6 @@ module.exports = function(grunt) {
     });
     let valuesType = (values || []).join(' | ');
     result.push(`${name}: ${valuesType || def.type};`);
-    return result.join('\n');
-  }
-
-  function createField(name, def) {
-    let result = [];
-    result.push(createDoc(def));
-    result.push(`${name}: ${def.type};`);
     return result.join('\n');
   }
 

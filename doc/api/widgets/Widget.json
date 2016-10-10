@@ -125,6 +125,14 @@
       "type": "string",
       "description": "A class name or a whitespace separated list of class names to identify the widget. Class names are arbitrary strings that describe a state or a category and help to select widgets using a selector expression. A class name may only contain alphanumeric characters, `_` and `-`. Class names can also be added or removed using the field `classList`."
     },
+    "classList": {
+      "type": "string[]",
+      "description": "Provides convenient access to the list of class names set to this widget. Class names can either be set using the `class` property or by modifying the `classList` directly."
+    },
+    "type": {
+      "type": "string",
+      "description": "The widget type without the 'tabris' namespace."
+    },
     "enabled": {
       "type": "boolean",
       "default": "true",
@@ -216,20 +224,6 @@
       "type": "boolean",
       "default": "false",
       "description": "Whether the entire widget should be highlighted while touched."
-    }
-  },
-  "fields": {
-    "cid": {
-      "type": "string",
-      "description": "An application-wide unique identifier automatically assigned to all widgets on creation. Do not change it."
-    },
-    "classList": {
-      "type": "string[]",
-      "description": "Provides convenient access to the list of class names set to this widget. Class names can either be set using the `class` property or by modifying the `classList` directly."
-    },
-    "type": {
-      "type": "string",
-      "description": "The widget type without the 'tabris' namespace."
     }
   },
   "events": {

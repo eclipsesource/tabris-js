@@ -169,10 +169,10 @@
       }
     ]
   },
-  "fields": {
+  "properties": {
     "length": {
       "type": "number",
-      "description": "A read-only field containing the number of widgets in the collection."
+      "description": "A read-only property containing the number of widgets in the collection."
     }
   }
 }

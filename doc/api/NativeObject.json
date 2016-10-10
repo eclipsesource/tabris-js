@@ -1,6 +1,12 @@
 {
   "type": "NativeObject",
   "description": "Base class for all objects with a native implementation.",
+  "properties": {
+      "cid": {
+      "type": "string",
+      "description": "An application-wide unique identifier automatically assigned to all native objects on creation. This property is read-only."
+    }
+  },
   "methods": {
     "on": [
       {
