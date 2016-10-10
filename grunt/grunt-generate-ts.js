@@ -16,7 +16,7 @@ module.exports = function(grunt) {
   function readJsonDefs() {
     let defs = {};
     let doc = grunt.config('doc');
-    let files = grunt.file.expand(doc.widgets).concat(grunt.file.expand(doc.api));
+    let files = grunt.file.expand(doc.api);
     files.forEach((file) => {
       let json = grunt.file.readJSON(file);
       json.file = file;

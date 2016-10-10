@@ -2,307 +2,265 @@ let path = require('path');
 
 const SNIPPETS_LOCATION = 'snippets';
 
+const MSG_PROVISIONAL = '**Note:** this API is provisional and may change in a future release.';
+const MSG_STATIC_PROP = 'This property can only be set on widget creation. Once set, it cannot be changed anymore.';
+
 module.exports = function(grunt) {
 
   grunt.registerTask('generate-doc', () => {
-    let data = {
-      api: readAPI(),
-      widgets: readWidgets(),
-      types: readTypes()
-    };
-    renderWidgets(data);
-    renderAPI(data);
-    renderIndex(data);
-  });
+    let indexPath = grunt.config('doc').index;
+    let targetPath = grunt.config('doc').target;
+    let api = readAPI();
+    let types = readTypes();
 
-  function renderWidgets(data) {
-    Object.keys(data.widgets).forEach(type => {
-      grunt.file.write(getTargetPath(data.widgets[type]), renderDocument(data, type));
-    });
-  }
+    renderAPI();
+    renderIndex();
 
-  function renderAPI(data) {
-    Object.keys(data.api).forEach(type => {
-      grunt.file.write(getTargetPath(data.api[type]), renderDocument(data, type));
-    });
-  }
-
-  function renderIndex(data) {
-    grunt.log.verbose.writeln('Generating index');
-    let widgets = ['Widget'].concat(Object.keys(data.widgets).filter(name => name !== 'Widget'));
-    let widgetIndex = [];
-    widgets.forEach(type => {
-      let json = data.widgets[type];
-      widgetIndex.push('- [' + title(json) + '](api/' + path.parse(json.file).name + '.md)');
-    });
-    let apiIndex = [];
-    Object.keys(data.api).forEach(type => {
-      let json = data.api[type];
-      apiIndex.push('- [' + title(json) + '](api/' + path.parse(json.file).name + '.md)');
-    });
-    let templData = {data: {widgets: widgetIndex.join('\n'), api: apiIndex.join('\n')}};
-    grunt.file.write(getIndexPath(), grunt.template.process(grunt.file.read(getIndexPath()), templData));
-  }
-
-  function renderDocument(data, type) {
-    grunt.log.verbose.writeln('Generating DOC for ' + type);
-    let json = data.widgets[type] || data.api[type];
-    return [
-      '# ' + title(json) + '\n',
-      renderDescription(json),
-      renderImages(json),
-      renderExample(json),
-      renderExtends(json, data),
-      renderMembers(json, data),
-      renderSnippet(json),
-      renderLinks(json)
-    ].filter(notEmpty).join('\n');
-  }
-
-  function renderMembers(json, data) {
-    return [
-      renderMethods(json, data),
-      renderProperties(json, data),
-      renderEvents(json, data)
-    ].filter(notEmpty).join('\n');
-  }
-
-  function renderExample(json) {
-    if (grunt.file.isFile(getTargetPath(json))) {
-      return grunt.file.read(getTargetPath(json));
-    }
-  }
-
-  function renderSnippet(json) {
-    if (grunt.file.isFile(getSnippetPath(json))) {
-      return [
-        '## Example',
-        '```javascript',
-        grunt.file.read(getSnippetPath(json)),
-        '```'
-      ].join('\n');
-    }
-  }
-
-  function readWidgets() {
-    let widgets = {};
-    grunt.file.expand(grunt.config('doc').widgets).forEach(file => {
-      let json = grunt.file.readJSON(file);
-      json.file = file;
-      widgets[json.type] = json;
-    });
-    return widgets;
-  }
-
-  function readAPI() {
-    let api = {};
-    grunt.file.expand(grunt.config('doc').api).forEach(file => {
-      let json = grunt.file.readJSON(file);
-      json.file = file;
-      api[json.type] = json;
-    });
-    return api;
-  }
-
-  function readTypes() {
-    let md = grunt.file.read(grunt.config('doc').types);
-    return md.match(/^##\ *(.*)$/gm).map(heading => heading.slice(3).toLowerCase());
-  }
-
-  function getSnippetPath(json) {
-    return path.join(SNIPPETS_LOCATION, `${json.type.toLowerCase()}.js`);
-  }
-
-  function getTargetPath(json) {
-    return grunt.config('doc').target + path.parse(json.file).name + '.md';
-  }
-
-  function getIndexPath() {
-    return grunt.config('doc').index;
-  }
-
-  function renderImages(json) {
-    if (hasAndroidImage(json) && hasiOSImage(json)) {
-      return [
-        'Android | iOS',
-        '--- | ---',
-        '![' + json.type + ' on Android](img/android/' + path.parse(json.file).name + '.png) | ' +
-          '![' + json.type + ' on iOS](img/ios/' + path.parse(json.file).name + '.png)'
-      ].join('\n') + '\n';
-    }
-    if (hasAndroidImage(json)) {
-      return '![' + json.type + ' on Android](img/android/' + path.parse(json.file).name + '.png)\n';
-    }
-    if (hasiOSImage(json)) {
-      return '![' + json.type + ' on iOS](img/ios/' + path.parse(json.file).name + '.png)\n';
-    }
-    return '';
-  }
-
-  function renderDescription(json) {
-    if (json.description) {
-      return json.description + '\n';
-    }
-    return '';
-  }
-
-  function renderExtends(json, data) {
-    if (json.extends) {
-      let sup = data.api[json.extends] || data.widgets[json.extends];
-      if (!sup) {
-        throw new Error('Could not find super type for ' + json.type);
-      }
-      return `Extends [${title(sup)}](${sup.type}.md)\n`;
-    }
-    return '';
-  }
-
-  function renderMethods(json, data) {
-    if (!json.methods) {
-      return '';
-    }
-    let result = [];
-    result.push('## Methods\n\n');
-    Object.keys(json.methods).sort().forEach(name => {
-      Array.prototype.forEach.call(json.methods[name], desc => {
-        result.push(renderMethod(name, desc, data));
+    function readAPI() {
+      let api = {};
+      grunt.file.expand(grunt.config('doc').api).forEach(file => {
+        let isWidget = file.indexOf('/widgets/') !== -1;
+        let def = Object.assign(grunt.file.readJSON(file), {file, isWidget});
+        api[def.type] = def;
       });
-    });
-    return result.join('');
-  }
+      return api;
+    }
 
-  function renderMethod(name, desc, data) {
-    let result = [];
-    result.push('### ' + name + '(' + renderParamList(desc.parameters, data) + ')\n\n');
-    if (desc.parameters) {
-      result.push('\n**Parameters:** ' + renderParamList(desc.parameters, data, true) + '\n');
+    function readTypes() {
+      let types = grunt.config('doc').types;
+      return {
+        list: grunt.file.read(types).match(/^##\ *(.*)$/gm).map(heading => heading.slice(3).toLowerCase()),
+        path: path.relative(targetPath, types).replace(path.sep, '/')
+      };
     }
-    if (desc.returns) {
-      result.push('**Returns:** *' + renderTypeLink(desc.returns, data) + '*\n');
-    }
-    if (desc.provisional) {
-      result.push(provisionalNote);
-    }
-    if (desc.description) {
-      result.push(desc.description);
-    }
-    result.push('\n\n');
-    return result.join('\n');
-  }
 
-  function renderProperties(json, data) {
-    if (!json.properties) {
+    function renderAPI() {
+      Object.keys(api).forEach(type => {
+        let targetFile = path.join(targetPath, path.parse(api[type].file).name + '.md');
+        grunt.file.write(targetFile, renderDocument(type));
+      });
+    }
+
+    function renderIndex() {
+      grunt.log.verbose.writeln('Generating index');
+      let types = Object.keys(api).sort().map(type => api[type]);
+      let render = def => `- [${title(def)}](api/${path.parse(def.file).name}.md)`;
+      let data = {
+        api: types.filter(type => !type.isWidget).map(render).join('\n'),
+        widgets: types.filter(type => type.isWidget).map(render).join('\n')
+      };
+      grunt.file.write(indexPath, grunt.template.process(grunt.file.read(indexPath), {data}));
+    }
+
+    function renderDocument(type) {
+      grunt.log.verbose.writeln('Generating DOC for ' + type);
+      let def = api[type];
+      return [
+        '# ' + title(def) + '\n',
+        renderDescription(def),
+        renderImages(def),
+        renderExample(def),
+        renderExtends(def),
+        renderMembers(def),
+        renderSnippet(def),
+        renderLinks(def)
+      ].filter(value => !!value).join('\n');
+    }
+
+    function renderMembers(def) {
+      return [
+        renderMethods(def),
+        renderProperties(def),
+        renderEvents(def)
+      ].filter(value => !!value).join('\n');
+    }
+
+    function renderExample(def) {
+      let exampleFile = path.join(targetPath, path.parse(def.file).name + '.md');
+      if (grunt.file.isFile(exampleFile)) {
+        return grunt.file.read(exampleFile);
+      }
+    }
+
+    function renderSnippet(def) {
+      let snippetPath = path.join(SNIPPETS_LOCATION, `${def.type.toLowerCase()}.js`);
+      if (grunt.file.isFile(snippetPath)) {
+        return [
+          '## Example',
+          '```js',
+          grunt.file.read(snippetPath).trim(),
+          '```'
+        ].join('\n');
+      }
+    }
+
+    function renderImages(def) {
+      let androidImage = path.join('img/android', path.parse(def.file).name + '.png');
+      let iosImage = path.join('img/ios', path.parse(def.file).name + '.png');
+      let exists = image => grunt.file.isFile(path.join('doc/api', image));
+      if (exists(androidImage) && exists(iosImage)) {
+        return [
+          'Android | iOS',
+          '--- | ---',
+          `![${def.type} on Android](${androidImage}) | ![${def.type} on iOS](${iosImage})`,
+        ].join('\n') + '\n';
+      }
+      if (exists(androidImage)) {
+        return `![${def.type} on Android](${androidImage})\n`;
+      }
+      if (exists(iosImage)) {
+        return `![${def.type} on iOS](${iosImage})\n`;
+      }
       return '';
     }
-    let result = [];
-    result.push('## Properties\n\n');
-    Object.keys(json.properties).sort().forEach(name => {
-      let property = json.properties[name];
-      result.push('### ', name, '\n\n');
-      result.push('Type: ', renderPropertyType(property, data), '\n');
-      if (property.provisional) {
-        result.push(provisionalNote);
-      }
-      if (property.description) {
-        result.push('\n' + property.description);
-      }
-      if (property.static) {
-        result.push('<br/>This property can only be set on widget creation. ' +
-        'Once set, it cannot be changed anymore.');
-      }
-      result.push('\n\n');
-    });
-    return result.join('');
-  }
 
-  function renderPropertyType(property, data) {
-    let name = property.type;
-    let result = ['*', renderTypeLink(name, data), '*'];
-    if (property.values) {
-      result.push(', supported values: `' + property.values.join('`, `') + '`');
-    }
-    if (property.default) {
-      result.push(', default: `' + property.default + '`');
-    }
-    return result.join('');
-  }
-
-  function renderEvents(json, data) {
-    if (!json.events) {
+    function renderDescription(def) {
+      if (def.description) {
+        return def.description + '\n';
+      }
       return '';
     }
-    let result = [];
-    result.push('## Events\n\n');
-    Object.keys(json.events).sort().forEach(name => {
-      let event = json.events[name];
-      result.push('### "', name, '" (' + renderParamList(event.parameters, data) + ')\n');
-      if (event.parameters) {
-        result.push('\n**Parameters:** ' + renderParamList(event.parameters, data, true) + '\n');
-      }
-      if (event.provisional) {
-        result.push(provisionalNote);
-      }
-      if (event.description) {
-        result.push('\n' + event.description + '\n');
-      }
-      result.push('\n\n');
-    });
-    return result.join('');
-  }
 
-  function renderParamList(parameters, data, detailed) {
-    if (!detailed) {
-      return parameters.map(param => typeof param === 'object' ? param.name : param).join(', ');
-    }
-    return '\n\n' + parameters.map(param => {
-      let result = ['- ', param.name, ': '];
-      if (param.type) {
-        result.push('*', renderTypeLink(param.type, data), '*');
-      } else if (param.value) {
-        result.push('`', param.value, '`');
+    function renderExtends(def) {
+      if (def.extends) {
+        if (!(def.extends in api)) {
+          throw new Error('Could not find super type for ' + def.type);
+        }
+        let sup = api[def.extends];
+        return `Extends [${sup.type}](${sup.type}.md)\n`;
       }
-      if (param.description) {
-        result.push(', ' + firstCharLower(param.description));
+      return '';
+    }
+
+    function renderMethods(def) {
+      if (!def.methods || !Object.keys(def.methods).length) {
+        return '';
+      }
+      let result = ['## Methods\n\n'];
+      Object.keys(def.methods).sort().forEach(name => {
+        def.methods[name].forEach(desc => {
+          result.push(renderMethod(name, desc));
+        });
+      });
+      return result.join('');
+    }
+
+    function renderMethod(name, desc) {
+      let result = [];
+      result.push('### ' + name + renderSignature(desc.parameters) + '\n');
+      if (desc.parameters && desc.parameters.length) {
+        result.push('**Parameters:** ' + renderParamList(desc.parameters) + '\n');
+      }
+      if (desc.returns) {
+        result.push('**Returns:** *' + renderTypeLink(desc.returns) + '*\n');
+      }
+      if (desc.provisional) {
+        result.push(MSG_PROVISIONAL + '\n');
+      }
+      if (desc.description) {
+        result.push(desc.description + '\n');
+      }
+      return result.join('\n') + '\n';
+    }
+
+    function renderProperties(def) {
+      if (!def.properties || !Object.keys(def.properties).length) {
+        return '';
+      }
+      let result = ['## Properties\n\n'];
+      Object.keys(def.properties).sort().forEach(name => {
+        let property = def.properties[name];
+        result.push('### ', name, '\n\n');
+        result.push('Type: ', renderPropertyType(property), '\n');
+        if (property.provisional) {
+          result.push('\n' + MSG_PROVISIONAL);
+        }
+        if (property.description) {
+          result.push('\n' + property.description);
+        }
+        if (property.static) {
+          result.push('<br/>' + MSG_STATIC_PROP);
+        }
+        result.push('\n\n');
+      });
+      return result.join('');
+    }
+
+    function renderPropertyType(property) {
+      let name = property.type;
+      let result = ['*', renderTypeLink(name), '*'];
+      if (property.values) {
+        result.push(', supported values: `' + property.values.join('`, `') + '`');
+      }
+      if (property.default) {
+        result.push(', default: `' + property.default + '`');
       }
       return result.join('');
-    }).join('\n');
-  }
-
-  function renderLinks(json) {
-    if (!json.links) {
-      return '';
     }
-    let result = [];
-    result.push('## See also\n\n');
-    json.links.forEach(link => {
-      let path = link.path.replace('${GITHUB_BRANCH}',
-        'https://github.com/eclipsesource/tabris-js/tree/v' + grunt.config('version'));
-      result.push(`- [${link.title}](${path})\n`);
-    });
-    return result.join('');
-  }
 
-  function renderTypeLink(name, data) {
-    if (data.types.indexOf(name.toLowerCase()) !== -1) {
-      return '[' + name + '](' + getTypeDocPath() + '#' + name.toLowerCase() + ')';
-    } else if (data.widgets[firstCharUp(name)]) {
-      return '[' + name + '](' + name + '.md)';
-    } else if (data.api[firstCharUp(name)]) {
-      return '[' + name + '](' + name + '.md)';
-    } else {
+    function renderEvents(def) {
+      if (!def.events || !Object.keys(def.events).length) {
+        return '';
+      }
+      let result = ['## Events\n\n'];
+      Object.keys(def.events).sort().forEach(name => {
+        let event = def.events[name];
+        result.push('### "', name, '" ' + renderSignature(event.parameters) + '\n');
+        if (event.parameters) {
+          result.push('\n**Parameters:** ' + renderParamList(event.parameters) + '\n');
+        }
+        if (event.provisional) {
+          result.push(MSG_PROVISIONAL);
+        }
+        if (event.description) {
+          result.push('\n' + event.description + '\n');
+        }
+        result.push('\n\n');
+      });
+      return result.join('');
+    }
+
+    function renderSignature(parameters) {
+      return '(' + parameters.map(param => typeof param === 'object' ? param.name : param).join(', ') + ')';
+    }
+
+    function renderParamList(parameters) {
+      return '\n\n' + parameters.map(param => {
+        let result = ['- ', param.name, ': '];
+        if (param.type) {
+          result.push('*', renderTypeLink(param.type), '*');
+        } else if (param.value) {
+          result.push('`', param.value, '`');
+        }
+        if (param.description) {
+          result.push(', ' + firstCharLower(param.description));
+        }
+        return result.join('');
+      }).join('\n');
+    }
+
+    function renderLinks(def) {
+      if (!def.links || !def.links.length) {
+        return '';
+      }
+      return ['## See also\n'].concat(def.links.map(link => {
+        let path = link.path.replace('${GITHUB_BRANCH}',
+          'https://github.com/eclipsesource/tabris-js/tree/v' + grunt.config('version'));
+        return `- [${link.title}](${path})`;
+      })).join('\n') + '\n';
+    }
+
+    function renderTypeLink(name) {
+      if (types.list.indexOf(name.toLowerCase()) !== -1) {
+        return `[${name}](${types.path}#${name.toLowerCase()})`;
+      }
+      if (api[firstCharUp(name)]) {
+        return `[${name}](${name}.md)`;
+      }
       return name;
     }
-  }
 
-  function notEmpty(value) {
-    return !!value;
-  }
-
-  function getTypeDocPath() {
-    let types = grunt.config('doc').types;
-    let target = grunt.config('doc').target;
-    return path.relative(target, types).replace(path.sep, '/');
-  }
+  });
 
   function firstCharUp(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -312,28 +270,8 @@ module.exports = function(grunt) {
     return str.charAt(0).toLowerCase() + str.slice(1);
   }
 
-  function title(json) {
-    return json.object || json.type;
+  function title(def) {
+    return def.object || def.type;
   }
-
-  function hasAndroidImage(json) {
-    return grunt.file.isFile(fileImagePath(json.file, 'android'));
-  }
-
-  function hasiOSImage(json) {
-    return grunt.file.isFile(fileImagePath(json.file, 'ios'));
-  }
-
-  function fileImagePath(file, platform) {
-    let filePath = file.split(path.sep);
-    return path.join(
-      ...filePath.slice(0, filePath.length - 2),
-      'img',
-      platform,
-      path.parse(file).name + '.png'
-    );
-  }
-
-  let provisionalNote = '\n**Note:** this API is provisional and may change in a future release.\n';
 
 };
