@@ -66,7 +66,7 @@ describe('Animation', function() {
     });
 
     it('disposes Animation object on widget dispose', function() {
-      widget.animate({}, {});
+      widget.animate({}, {}).catch(() => {});
       let animation = findProxy(animationId());
 
       widget.dispose();
