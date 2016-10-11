@@ -157,3 +157,11 @@ This transformation will make the widget twice as big and rotate it by 135&deg;.
 
 Selectors are used to filter a given list of widgets. It can be function returning a boolean for a given widget.
 However, more commonly a selector is a string that may either reference a widgets type (e.g. `"Button"`, `"TextView"`), or its id (`"#myButton"`, `"#myTextView"`).
+
+## ImageData
+
+Represents the underlying pixel data of an area of a canvas element. It is created using the creator methods on the [CanvasContext](api/CanvasContext.md): createImageData() and getImageData(). It can also be used to set a part of the canvas by using putImageData().
+An ImageData object has the following read-only properties:
+* **data**: *Uint8ClampedArray* one-dimensional array containing the data in the RGBA order, with integer values between `0` and `255`
+* **width**: *number* width in pixels of the ImageData
+* **height**: *number* height in pixels of the ImageData

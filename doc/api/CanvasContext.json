@@ -92,8 +92,8 @@
     }],
     "rect": [{
       "parameters": [
-        {"name": "x", "type": "number", "description": "The x axis of the rectangle starting point."},
-        {"name": "y", "type": "number", "description": "The y axis of the rectangle starting point."},
+        {"name": "x", "type": "number", "description": "The x axis of the rectangle's upper-left corner."},
+        {"name": "y", "type": "number", "description": "The y axis of the rectangle's upper-left corner."},
         {"name": "width", "type": "number", "description": "The rectangle's width."},
         {"name": "height", "type": "number", "description": "The rectangles height."}
       ],
@@ -154,8 +154,8 @@
     }],
     "clearRect": [{
       "parameters": [
-        {"name": "x", "type": "number", "description": "The x axis of the rectangle starting point."},
-        {"name": "y", "type": "number", "description": "The y axis of the rectangle starting point."},
+        {"name": "x", "type": "number", "description": "The x axis of the rectangle's upper-left corner."},
+        {"name": "y", "type": "number", "description": "The y axis of the rectangle's upper-left corner."},
         {"name": "width", "type": "number", "description": "The rectangle's width."},
         {"name": "height", "type": "number", "description": "The rectangles height."}
       ],
@@ -163,8 +163,8 @@
     }],
     "fillRect": [{
       "parameters": [
-        {"name": "x", "type": "number", "description": "The x axis of the rectangle starting point."},
-        {"name": "y", "type": "number", "description": "The y axis of the rectangle starting point."},
+        {"name": "x", "type": "number", "description": "The x axis of the rectangle's upper-left corner."},
+        {"name": "y", "type": "number", "description": "The y axis of the rectangle's upper-left corner."},
         {"name": "width", "type": "number", "description": "The rectangle's width."},
         {"name": "height", "type": "number", "description": "The rectangles height."}
       ],
@@ -172,8 +172,8 @@
     }],
     "strokeRect": [{
       "parameters": [
-        {"name": "x", "type": "number", "description": "The x axis of the rectangle starting point."},
-        {"name": "y", "type": "number", "description": "The y axis of the rectangle starting point."},
+        {"name": "x", "type": "number", "description": "The x axis of the rectangle's upper-left corner."},
+        {"name": "y", "type": "number", "description": "The y axis of the rectangle's upper-left corner."},
         {"name": "width", "type": "number", "description": "The rectangle's width."},
         {"name": "height", "type": "number", "description": "The rectangles height."}
       ],
@@ -202,6 +202,39 @@
     "stroke": [{
       "parameters": [],
       "description": "Strokes the current path with the current stroke style."
-    }]
+    }],
+    "getImageData": [{
+      "parameters": [
+        {"name": "x", "type": "number", "description": "The x axis of the rectangle's upper-left corner."},
+        {"name": "y", "type": "number", "description": "The y axis of the rectangle's upper-left corner."},
+        {"name": "width", "type": "number", "description": "The rectangle's width."},
+        {"name": "height", "type": "number", "description": "The rectangle's height."}
+      ],
+      "returns": "ImageData",
+      "description": "Returns an ImageData object representing the underlying pixel data for the area of the canvas denoted by the given rectangle."
+    }],
+    "putImageData": [{
+      "parameters": [
+        {"name": "imageData", "type": "ImageData", "description": "An ImageData object containing the array of pixel values."},
+        {"name": "x", "type": "number", "description": "x-coordinate of the upper-left corner of the image data rectangle"},
+        {"name": "y", "type": "number", "description": "y-coordinate of the upper-left corner of the image data rectangle"}
+      ],
+      "description": "Paints data from the given ImageData object onto the bitmap at coordinates (x, y)."
+    }],
+    "createImageData": [{
+      "parameters":  [
+        {"name": "width", "type": "number", "description": "The width of the new ImageData object."},
+        {"name": "height", "type": "number", "description": "The height of the new ImageData object."}
+      ],
+      "returns": "ImageData",
+      "description": "creates a new, blank ImageData object with the specified dimensions. All of the pixels in the new object are transparent black."
+    }, {
+      "parameters":  [
+        {"name": "imageData", "type": "ImageData", "description": "An existing ImageData object from which to copy the width and height."}
+      ],
+      "returns": "ImageData",
+      "description": "creates a new, blank ImageData object with the same dimensions as the specified existing ImageData object. All of the pixels in the new object are transparent black."
+    }
+    ]
   }
 }
