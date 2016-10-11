@@ -9,7 +9,7 @@
     },
     "image": {
       "type": "Image",
-      "description": "An image to be displayed on the tab."
+      "description": "An image to be displayed on the tab.  Will not be shown on iOS if the `TabFolder`'s `tabBarLocation` is set to `top`"
     },
     "selectedImage": {
       "type": "Image",
