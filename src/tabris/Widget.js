@@ -212,13 +212,6 @@ Object.defineProperty(Widget.prototype, 'classList', {
   }
 });
 
-let hasAndroidResizeBug;
-if (global.tabris) {
-  tabris.load(() => {
-    hasAndroidResizeBug = tabris.device.platform === 'Android' && tabris.device.version <= 17;
-  });
-}
-
 let layoutAccess = {
   set(name, value) {
     if (!this._layoutData) {
@@ -238,6 +231,13 @@ let layoutAccess = {
   }
 };
 
+function hasAndroidResizeBug() {
+  if (!('cache' in hasAndroidResizeBug)) {
+    hasAndroidResizeBug.cache = tabris.device.platform === 'Android' && tabris.device.version <= 17;
+  }
+  return hasAndroidResizeBug.cache;
+}
+
 let _defaultEvents = {
   touchstart: {trigger: triggerWithTarget},
   touchmove: {trigger: triggerWithTarget},
@@ -246,7 +246,7 @@ let _defaultEvents = {
   'resize': {
     alias: 'change:bounds',
     trigger(event) {
-      if (hasAndroidResizeBug) {
+      if (hasAndroidResizeBug()) {
         let self = this;
         setTimeout(() => {
           self._triggerChangeEvent('bounds', event.bounds, {}, 'resize');

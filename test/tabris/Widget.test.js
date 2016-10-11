@@ -16,7 +16,8 @@ describe('Widget', function() {
     client = new ClientStub();
     global.tabris = {
       on: () => {},
-      _proxies: new ProxyStore()
+      _proxies: new ProxyStore(),
+      device: {platform: 'Android', version: 18}
     };
     global.tabris._nativeBridge = new NativeBridge(client);
     TestWidget = Widget.extend({

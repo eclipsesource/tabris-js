@@ -45,6 +45,10 @@ describe('tabris', function() {
     expect(tabris.version).to.match(/\d+\.\d+\.\d+/);
   });
 
+  it('contains load function', function() {
+    expect(tabris.load).to.be.a('function');
+  });
+
   it('contains DOM API constructors', function() {
     expect(tabris.Crypto).to.be.a('function');
     expect(tabris.ImageData).to.be.a('function');
