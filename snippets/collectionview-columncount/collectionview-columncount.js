@@ -4,7 +4,7 @@ var page = new tabris.Page({
 });
 
 var collectionView = new tabris.CollectionView({
-  left: 0, top: 0, right: 0, bottom: slider,
+  left: 0, top: 0, right: 0, bottom: "#slider",
   items: createItems(),
   itemHeight: 128,
   initializeCell: function(cell) {
@@ -35,6 +35,7 @@ var columnCountTextView = new tabris.TextView({
 }).appendTo(sliderBox);
 
 var slider = new tabris.Slider({
+  id: "slider",
   left: 16, right: [columnCountTextView, 16], centerY: 0,
   minimum: 1,
   maximum: 8
