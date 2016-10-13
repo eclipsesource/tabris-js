@@ -7,8 +7,9 @@ const OUT_DIR = 'build/examples';
 module.exports = function(grunt) {
 
   grunt.registerTask('copy-examples', 'Copy examples to build/', () => {
-    let subdirs = grunt.file.expand(SRC_DIR + '/*').map(dir => path.basename(dir))
-      .filter(dir => grunt.file.exists(dir, 'package.json'));
+    let subdirs = grunt.file.expand(SRC_DIR + '/*')
+      .filter(dir => grunt.file.exists(dir, 'package.json'))
+      .map(dir => path.basename(dir));
     let index = subdirs.map(processExample).filter(value => !!value);
     grunt.file.write(path.join(OUT_DIR, 'index.json'), JSON.stringify(index, null, 2));
     if (grunt.file.exists(SRC_DIR, 'README.md')) {
