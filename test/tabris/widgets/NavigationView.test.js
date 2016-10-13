@@ -1,6 +1,7 @@
 import {expect, restore} from '../../test';
 import ClientStub from '../ClientStub';
 import Page from '../../../src/tabris/widgets/Page';
+import Action from '../../../src/tabris/widgets/Action';
 import Composite from '../../../src/tabris/widgets/Composite';
 import NavigationView from '../../../src/tabris/widgets/NavigationView';
 import NativeBridge from '../../../src/tabris/NativeBridge';
@@ -14,7 +15,8 @@ describe('NavigationView', () => {
   beforeEach(() => {
     client = new ClientStub();
     global.tabris = {
-      on: () => {},
+      on: () => {
+      },
       _proxies: new ProxyStore(),
       _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
     };
@@ -39,6 +41,14 @@ describe('NavigationView', () => {
     expect(() => {
       navigationView.append(new Page());
     }).to.throw();
+  });
+
+  it('can append an Action', () => {
+    let action = new Action();
+
+    navigationView.append(action);
+
+    expect(navigationView.children()[0]).to.equal(action);
   });
 
   describe('stack', () => {
@@ -123,7 +133,8 @@ describe('NavigationView', () => {
         expect(client.calls()[0]).to.deep.equal({
           id: page.cid,
           op: 'set',
-          properties: {parent: navigationView.cid}});
+          properties: {parent: navigationView.cid}
+        });
         expect(page.parent()).to.equal(navigationView);
       });
 
