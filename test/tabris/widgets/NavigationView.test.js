@@ -51,6 +51,30 @@ describe('NavigationView', () => {
     expect(navigationView.children()[0]).to.equal(action);
   });
 
+  it('supports property "toolbarColor"', () => {
+    navigationView.toolbarColor = 'red';
+
+    expect(navigationView.toolbarColor).to.eq('rgba(255, 0, 0, 1)');
+  });
+
+  it('supports property "titleTextColor"', () => {
+    navigationView.titleTextColor = '#00ff00';
+
+    expect(navigationView.titleTextColor).to.eq('rgba(0, 255, 0, 1)');
+  });
+
+  it('supports property "actionImageColor"', () => {
+    navigationView.actionImageColor = 'red';
+
+    expect(navigationView.actionImageColor).to.eq('rgba(255, 0, 0, 1)');
+  });
+
+  it('supports property "actionTextColor"', () => {
+    navigationView.actionTextColor = 'blue';
+
+    expect(navigationView.actionTextColor).to.eq('rgba(0, 0, 255, 1)');
+  });
+
   describe('stack', () => {
 
     let stack;
