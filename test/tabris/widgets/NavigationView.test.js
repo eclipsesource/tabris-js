@@ -1,4 +1,4 @@
-import {expect, restore} from '../../test';
+import {expect, restore, spy} from '../../test';
 import ClientStub from '../ClientStub';
 import Page from '../../../src/tabris/widgets/Page';
 import Action from '../../../src/tabris/widgets/Action';
@@ -239,11 +239,12 @@ describe('NavigationView', () => {
 
     describe('pushing five pages', () => {
 
-      let pages;
+      let pages, eventLog;
 
       beforeEach(() => {
         pages = [new Page(), new Page(), new Page(), new Page(), new Page()];
         pages.forEach((page) => stack.push(page));
+        eventLog = spy();
       });
 
       it('increases length', () => {
@@ -261,6 +262,23 @@ describe('NavigationView', () => {
 
       it('is returned by last()', () => {
         expect(stack.last()).to.equal(pages[4]);
+      });
+
+      it('triggers page appear event', () => {
+        let anotherPage = new Page();
+        anotherPage.on('appear', eventLog);
+
+        stack.push(anotherPage);
+
+        expect(eventLog).to.have.been.calledWith(anotherPage);
+      });
+
+      it('triggers page disappear event', () => {
+        pages[4].on('disappear', eventLog);
+
+        stack.push(new Page());
+
+        expect(eventLog).to.have.been.calledWith(pages[4]);
       });
 
       describe('calling pop()', () => {
@@ -284,6 +302,22 @@ describe('NavigationView', () => {
           expect(stack.length).to.equal(4);
         });
 
+        it('triggers page appear event', () => {
+          pages[2].on('appear', eventLog);
+
+          stack.pop();
+
+          expect(eventLog).to.have.been.calledWith(pages[2]);
+        });
+
+        it('triggers page disappear event', () => {
+          pages[3].on('disappear', eventLog);
+
+          stack.pop();
+
+          expect(eventLog).to.have.been.calledWith(pages[3]);
+        });
+
       });
 
       describe('calling clear()', () => {
@@ -292,6 +326,9 @@ describe('NavigationView', () => {
 
         beforeEach(() => {
           client.resetCalls();
+          pages.forEach((page) => {
+            page.on('disappear', eventLog);
+          });
           result = stack.clear();
         });
 
@@ -320,6 +357,11 @@ describe('NavigationView', () => {
             method: 'stack_clear',
             parameters: {}
           });
+        });
+
+        it('triggers last page disappear event', () => {
+          expect(eventLog.callCount).to.be.equal(1);
+          expect(eventLog).to.have.been.calledWith(pages[4]);
         });
 
       });

@@ -50,22 +50,36 @@ function StackView(navigationView) {
       if (this.indexOf(page) !== -1) {
         throw new Error('Can not push a page that is already on the stack.');
       }
+      let lastPage = this.last();
+      if (lastPage) {
+        lastPage.trigger('disappear', lastPage);
+      }
       stack.push(page);
       navigationView.append(page);
       navigationView._nativeCall('stack_push', {page: page.cid});
+      page.trigger('appear', page);
     },
 
     pop() {
       let result = stack.pop();
       if (result) {
+        result.trigger('disappear', result);
         navigationView._nativeCall('stack_pop', {});
         result._setParent(null);
+      }
+      let lastPage = this.last();
+      if (lastPage) {
+        lastPage.trigger('appear', lastPage);
       }
       return result;
     },
 
     clear() {
       let result = new WidgetCollection(stack);
+      let lastPage = this.last();
+      if (lastPage) {
+        lastPage.trigger('disappear', lastPage);
+      }
       navigationView._nativeCall('stack_clear', {});
       stack = [];
       result.forEach((page) => {page._setParent(null);});
