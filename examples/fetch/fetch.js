@@ -1,15 +1,10 @@
-var page = new tabris.Page({
-  title: 'XMLHttpRequest via fetch()',
-  topLevel: true
-});
-
 function createTextView(text) {
   new tabris.TextView({
     text: text,
     markupEnabled: true,
     layoutData: {left: 16, right: 16, top: 'prev() 12'},
     class: 'locationData'
-  }).appendTo(page);
+  }).appendTo(tabris.ui.contentView);
 }
 
 function createReloadButton() {
@@ -17,16 +12,18 @@ function createReloadButton() {
     layoutData: {left: 16, right: 16, top: 'prev() 12'},
     text: 'Reload Geo-Data',
     id: 'reloadButton'
-  }).on('select', loadData).appendTo(page);
+  }).on('select', loadData).appendTo(tabris.ui.contentView);
 }
 
 function loadData() {
   // Dispose existing elements via the class selector
-  page.children('.locationData').dispose();
-  page.children('#reloadButton').dispose();
+  tabris.ui.contentView.children('.locationData').dispose();
+  tabris.ui.contentView.children('#reloadButton').dispose();
 
   // Create loading indicator
-  var activityIndicator = new tabris.ActivityIndicator({centerX: 0, centerY: 0}).appendTo(page);
+  var activityIndicator = new tabris.ActivityIndicator({
+    centerX: 0, centerY: 0
+  }).appendTo(tabris.ui.contentView);
 
   // Run async remote request with fetch
   fetch('https://freegeoip.net/json/').then(function(response) {
@@ -54,5 +51,3 @@ function loadData() {
 }
 
 loadData();
-
-page.open();
