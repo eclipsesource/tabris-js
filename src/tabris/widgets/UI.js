@@ -1,5 +1,6 @@
 import Widget from '../Widget';
 import {create as createContentView} from './ContentView';
+import {create as createStatusBar} from './StatusBar';
 
 export default function UI() {
   throw new Error('UI can not be created');
@@ -16,6 +17,12 @@ let _UI = Widget.extend({
       configurable: false
     });
     this.append(this.contentView);
+    Object.defineProperty(this, 'statusBar', {
+      value: createStatusBar(),
+      writable: false,
+      configurable: false
+    });
+    this.append(this.statusBar);
   },
 
   _setParent() {
@@ -31,7 +38,7 @@ let _UI = Widget.extend({
   _nativeListen() {},
 
   _supportsChildren(child) {
-    if (child === this.contentView) {
+    if (child === this.contentView || child === this.statusBar) {
       return true;
     }
     return false;

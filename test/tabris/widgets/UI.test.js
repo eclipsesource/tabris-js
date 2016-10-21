@@ -40,13 +40,14 @@ describe('UI', function() {
 
   it('CREATEs children only', function() {
     let createCalls = client.calls({op: 'create'});
-    expect(createCalls.length).to.equal(1);
+    expect(createCalls.length).to.equal(2);
     expect(createCalls[0].id).to.equal(ui.contentView.cid);
   });
 
   it('contains children', function() {
-    expect(ui.children().length).to.equal(1);
+    expect(ui.children().length).to.equal(2);
     expect(ui.children().indexOf(ui.contentView)).not.to.equal(-1);
+    expect(ui.children().indexOf(ui.statusBar)).not.to.equal(-1);
   });
 
   it('does not accept any children', function() {
