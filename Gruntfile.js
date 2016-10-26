@@ -140,8 +140,9 @@ module.exports = function(grunt) {
         cmd: 'node node_modules/rollup/bin/rollup --format=cjs --output=build/bundle.js -- src/tabris/main.js'
       },
       transpile: {
-        cmd: 'BABEL_ENV=build node node_modules/babel-cli/bin/babel.js --compact false ' +
-          '--out-file build/transpiled.js build/bundle.js'
+        cmd: 'node node_modules/cross-env/bin/cross-env.js BABEL_ENV=build ' +
+          'node node_modules/babel-cli/bin/babel.js' +
+          ' --compact false --out-file build/transpiled.js build/bundle.js'
       }
     }
   });
