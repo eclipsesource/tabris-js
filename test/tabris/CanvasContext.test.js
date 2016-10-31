@@ -436,8 +436,9 @@ describe('CanvasContext', function() {
 
       flush();
 
-      expect(decodeLastPacket().ops).to.eql(['beginPath', 'moveTo', 'lineTo', 'rect', 'arc',
-                                              'quadraticCurveTo', 'bezierCurveTo', 'closePath']);
+      expect(decodeLastPacket().ops).to.eql([
+        'beginPath', 'moveTo', 'lineTo', 'rect', 'arc', 'quadraticCurveTo', 'bezierCurveTo', 'closePath'
+      ]);
     });
 
     it('are not rendered after gc disposal anymore', function() {
@@ -472,8 +473,7 @@ describe('CanvasContext', function() {
 
       flush();
 
-      expect(decodeLastPacket().ops).to.eql(['setTransform', 'transform', 'translate',
-                                              'rotate', 'scale']);
+      expect(decodeLastPacket().ops).to.eql(['setTransform', 'transform', 'translate', 'rotate', 'scale']);
     });
 
   });

@@ -89,16 +89,20 @@ var page = new PluginPage('Sharing', 'cordova-plugin-x-socialsharing', function(
   var tabs = [
     {
       title: 'ShareSheet',
-      description: ['Use the platform native sharing capabilities. There are various',
-                    ' options for sharing a Message, Subject, Image(s) and a Link'].join(''),
+      description: [
+        'Use the platform native sharing capabilities. There are various',
+        ' options for sharing a Message, Subject, Image(s) and a Link'
+      ].join(''),
       options: shareSheetOptions
     },
     {
       title: 'ShareVia',
-      description: ['You can also specify the target app for sharing.',
-                    ' Before you offer users to share via twitter, whatsapp, facebook, sms, email,',
-                    ' you may want to check that the option is available with',
-                    " socialsharing.canShareVia('whatsapp' ... )"].join(''),
+      description: [
+        'You can also specify the target app for sharing.',
+        ' Before you offer users to share via twitter, whatsapp, facebook, sms, email,',
+        ' you may want to check that the option is available with',
+        " socialsharing.canShareVia('whatsapp' ... )"
+      ].join(''),
       options: shareViaOptions
     }
   ];

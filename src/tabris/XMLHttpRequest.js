@@ -532,8 +532,9 @@ function validateMethod(method) {
 function validHttpToken(httpToken) {
   // RFC-compliant validation for HTTP tokens ported from Chromium:
   // https://chromium.googlesource.com/chromium/blink.git/+/master/Source/platform/network/HTTPParsers.cpp
-  let forbiddenCharacters = ['(', ')', '<', '>', '@', ',', ';', ':', '\\', '"', '\/', '[', ']',
-      '?', '=', '{', '}'];
+  let forbiddenCharacters = [
+    '(', ')', '<', '>', '@', ',', ';', ':', '\\', '"', '\/', '[', ']', '?', '=', '{', '}'
+  ];
   return !(/[^\x21-\x7E]/.test(httpToken) || forbiddenCharacters.indexOf(httpToken) >= 0);
 }
 
