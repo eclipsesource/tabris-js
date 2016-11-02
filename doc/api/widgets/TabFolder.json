@@ -35,6 +35,13 @@
         {"name": "options", "type": "any"}
       ],
       "description": "Fired when the selection property changes by user interaction."
+    },
+    "scroll": {
+      "parameters": [
+        {"name": "widget", "type": "this"},
+        {"name": "event", "type": "{selection: Tab, offset: number}", "description": "The `event` object contains the properties `selection` (same as `selection` property on `TabFolder`) and `offset` (number of pixels the current tab has scrolled horizontally)"}
+      ],
+      "description": "Fired when `paging` is enabled and a tab is scrolled. The `event` parameter contains position information relative to the currently selected `Tab`. Eg.: scrolling a 500px wide tab 10% to the left sets `offset` to `50`. Scrolling 10% to the right sets `offset` to `-50`."
     }
   },
   "links": [

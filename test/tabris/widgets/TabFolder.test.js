@@ -13,7 +13,8 @@ describe('TabFolder', function() {
   beforeEach(function() {
     client = new ClientStub();
     global.tabris = {
-      on: () => {},
+      on: () => {
+      },
       _proxies: new ProxyStore(),
       _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
     };
@@ -139,7 +140,7 @@ describe('TabFolder', function() {
 
   });
 
-  describe('selection property:', function() {
+  describe('selection property', function() {
 
     let tab;
 
@@ -269,5 +270,46 @@ describe('TabFolder', function() {
     });
 
   });
+
+  describe('scroll event', function() {
+
+    let tab;
+
+    beforeEach(function() {
+      tab = new Tab().appendTo(tabFolder);
+    });
+
+    it('fires scroll event with tab instance', function() {
+      let listener = spy();
+      tabFolder.on('scroll', listener);
+
+      tabris._notify(tabFolder.cid, 'scroll', {selection: tab.cid, offset: 48});
+
+      checkListen('scroll');
+      expect(listener).to.have.been.called;
+      expect(listener.firstCall.args[0]).to.equal(tabFolder);
+      expect(listener.firstCall.args[1]).to.eql({selection: tab, offset: 48});
+    });
+
+    it('fires scroll event with null selection if tab not found', function() {
+      let listener = spy();
+      tabFolder.on('scroll', listener);
+
+      tabris._notify(tabFolder.cid, 'scroll', {selection: 'not tab', offset: 48});
+
+      checkListen('scroll');
+      expect(listener).to.have.been.called;
+      expect(listener.firstCall.args[0]).to.equal(tabFolder);
+      expect(listener.firstCall.args[1]).to.eql({selection: null, offset: 48});
+    });
+
+  });
+
+  let checkListen = function(event) {
+    let listen = client.calls({op: 'listen', id: tabFolder.cid});
+    expect(listen.length).to.equal(1);
+    expect(listen[0].event).to.equal(event);
+    expect(listen[0].listen).to.equal(true);
+  };
 
 });
