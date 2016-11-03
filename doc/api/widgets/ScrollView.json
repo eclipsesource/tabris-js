@@ -36,7 +36,7 @@
           "name": "options",
           "type": "{animate?: boolean}",
           "optional": true,
-          "description": "An additional object to control the animation. Set `{animate: false}` to scroll without an animation."
+          "description": "An additional object to control the animation. Set to `{animate: false}` to scroll without an animation."
         }
       ],
       "returns": "this",
@@ -45,7 +45,7 @@
     "scrollToY": {
       "parameters": [
         {
-          "name": "offsetY",
+          "name": "offset",
           "type": "number",
           "description": "The offset to scroll to in dip."
         },
@@ -53,7 +53,7 @@
           "name": "options",
           "type": "{animate?: boolean}",
           "optional": true,
-          "description": "An additional object to control the animation. Set `{animate: false}` to scroll without an animation."
+          "description": "An additional object to control the animation. Set to `{animate: false}` to scroll without an animation."
         }
       ],
       "returns": "this",
