@@ -5,6 +5,7 @@ import ClientStub from '../ClientStub';
 import CollectionView from '../../../src/tabris/widgets/CollectionView';
 import Composite from '../../../src/tabris/widgets/Composite';
 import Cell from '../../../src/tabris/widgets/Cell';
+import Events from '../../../src/tabris/Events';
 
 describe('CollectionView', function() {
 
@@ -13,11 +14,10 @@ describe('CollectionView', function() {
 
   beforeEach(function() {
     client = new ClientStub();
-    global.tabris = {
-      on: () => {},
+    global.tabris = Object.assign({
       _proxies: new ProxyStore(),
       _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
-    };
+    }, Events);
     global.tabris._nativeBridge = new NativeBridge(client);
     parent = new Composite();
     client.resetCalls();
@@ -258,6 +258,7 @@ describe('CollectionView', function() {
           items = ['a', 'b', 'c'];
           client.resetCalls();
           view.set('items', items);
+          tabris.trigger('flush');
         });
 
         it('calls native reload with item count', function() {
@@ -408,6 +409,7 @@ describe('CollectionView', function() {
           beforeEach(function() {
             client.resetCalls();
             view.set('items', ['e', 'f']);
+            tabris.trigger('flush');
           });
 
           it('calls native reload with item count', function() {
@@ -422,6 +424,7 @@ describe('CollectionView', function() {
           beforeEach(function() {
             client.resetCalls();
             view.set('items', null);
+            tabris.trigger('flush');
           });
 
           it('calls native reload with 0', function() {
@@ -628,6 +631,7 @@ describe('CollectionView', function() {
         items: ['A', 'B', 'C'],
         initializeCell() {}
       }).appendTo(parent);
+      tabris.trigger('flush');
     });
 
     it('calls reload after create and listen calls', function() {

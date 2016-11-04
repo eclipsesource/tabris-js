@@ -84,15 +84,7 @@ export default Widget.extend({
     this._nativeListen('requestinfo', true);
     this._nativeListen('createitem', true);
     this._nativeListen('populateitem', true);
-    // TODO call _reload on flush
-    this._reload();
-    return result;
-  },
-
-  set() {
-    let result = this._super('set', arguments);
-    // TODO call _reload on flush, remove override
-    this._reload();
+    tabris.on('flush', () => this._reload());
     return result;
   },
 

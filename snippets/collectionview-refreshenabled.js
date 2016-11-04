@@ -17,16 +17,12 @@ var view = new tabris.CollectionView({
 loadItems();
 
 function loadItems() {
-  view.set({
-    refreshIndicator: true,
-    refreshMessage: 'loading...'
-  });
+  view.refreshIndicator = true;
+  view.refreshMessage = 'loading...';
   setTimeout(function() {
-    view.set({
-      items: createNewItems(),
-      refreshIndicator: false,
-      refreshMessage: ''
-    });
+    view.items = createNewItems();
+    view.refreshIndicator = false;
+    view.refreshMessage = '';
   }, 1000);
 }
 
