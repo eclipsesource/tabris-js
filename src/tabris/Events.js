@@ -61,26 +61,19 @@ export default {
   trigger(type /*, args* */) {
     if (!this._isDisposed) {
       let args = Array.prototype.slice.call(arguments, 1);
-      this._callAll(type, args, false);
-      this._callAll(type, args, true);
+      if (this._callbacks && type in this._callbacks) {
+        let callbacks = this._callbacks[type];
+        for (let i = 0; i < callbacks.length; i++) {
+          let callback = callbacks[i];
+          callback.fn.apply(callback.ctx || this, args);
+        }
+      }
     }
     return this;
   },
 
-  _callAll(type, args, isPublic) {
-    let store = isPublic ? '_callbacks' : '_privateCallbacks';
-    if (this[store] && type in this[store]) {
-      let callbacks = this[store][type];
-      for (let i = 0; i < callbacks.length; i++) {
-        let callback = callbacks[i];
-        callback.fn.apply(callback.ctx || this, args);
-      }
-    }
-  },
-
   _isListening(type) {
-    return (!!this._callbacks && (!type || type in this._callbacks)) ||
-      (!!this._privateCallbacks && (!type || type in this._privateCallbacks));
+    return !!this._callbacks && (!type || type in this._callbacks);
   },
 
   _listen() {}
