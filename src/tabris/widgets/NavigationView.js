@@ -19,6 +19,7 @@ export default Widget.extend({
 
   _properties: {
     drawerActionVisible: {type: 'boolean', default: false},
+    toolbarVisible: {type: 'boolean', default: true},
     toolbarColor: {type: 'color'},
     titleTextColor: {type: 'color'},
     actionImageColor: {type: 'color'},

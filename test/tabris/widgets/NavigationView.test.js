@@ -51,6 +51,16 @@ describe('NavigationView', () => {
     expect(navigationView.children()[0]).to.equal(action);
   });
 
+  it('has visible "toolbarVisible" by default', () => {
+    expect(navigationView.toolbarVisible).to.be.true;
+  });
+
+  it('supports property "toolbarVisible"', () => {
+    navigationView.toolbarVisible = false;
+
+    expect(navigationView.toolbarVisible).to.be.false;
+  });
+
   it('supports property "toolbarColor"', () => {
     navigationView.toolbarColor = 'red';
 
