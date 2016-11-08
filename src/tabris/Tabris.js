@@ -5,7 +5,6 @@ import ProxyStore from './ProxyStore';
 
 export default function Tabris() {
   this._loadFunctions = [];
-  this._proxies = new ProxyStore();
   this._ready = false;
   this._init = this._init.bind(this);
   this._notify = this._notify.bind(this);
@@ -25,6 +24,7 @@ extend(Tabris.prototype, Events, {
 
   _init(client) {
     this._client = client;
+    this._proxies = new ProxyStore();
     this._nativeBridge = new NativeBridge(client);
     let i = 0;
     while (i < this._loadFunctions.length) {
