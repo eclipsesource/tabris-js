@@ -2,6 +2,7 @@ import {expect, restore, spy} from '../../test';
 import ClientStub from '../ClientStub';
 import Page from '../../../src/tabris/widgets/Page';
 import Action from '../../../src/tabris/widgets/Action';
+import SearchAction from '../../../src/tabris/widgets/SearchAction';
 import Composite from '../../../src/tabris/widgets/Composite';
 import NavigationView from '../../../src/tabris/widgets/NavigationView';
 import NativeBridge from '../../../src/tabris/NativeBridge';
@@ -45,6 +46,14 @@ describe('NavigationView', () => {
 
   it('can append an Action', () => {
     let action = new Action();
+
+    navigationView.append(action);
+
+    expect(navigationView.children()[0]).to.equal(action);
+  });
+
+  it('can append a SearchAction', () => {
+    let action = new SearchAction();
 
     navigationView.append(action);
 

@@ -2,6 +2,7 @@ import Widget from '../Widget';
 import WidgetCollection from '../WidgetCollection';
 import Page from './Page';
 import Action from './Action';
+import SearchAction from './SearchAction';
 import {extend} from '../util';
 
 export default Widget.extend({
@@ -35,7 +36,7 @@ export default Widget.extend({
   },
 
   _supportsChildren(child) {
-    return this.stack.indexOf(child) !== -1 || child instanceof Action;
+    return this.stack.indexOf(child) !== -1 || child instanceof Action || child instanceof SearchAction;
   }
 
 });
