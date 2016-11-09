@@ -4,7 +4,7 @@
   "dependencies": {
     "colors": "^1.1.2",
     "ecstatic": "^2.1.0",
-    "tabris": "^1.9.0",
+    "tabris": "https://tabrisjs.com/downloads/nightly-2.x/tabris.tgz",
     "union": "^0.4.4"
   },
   "scripts": {
