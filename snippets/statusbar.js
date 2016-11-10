@@ -18,7 +18,7 @@ createTextView('Background');
 
 new tabris.Picker({
   left: '#displayMode 16', baseline: 'prev()', right: 16,
-  items: [tabris.ui.statusBar.background, 'red', 'green', 'blue']
+  items: [tabris.ui.statusBar.background, 'rgba(0, 0, 0, 0.25)', 'red', 'green', 'blue']
 }).on('change:selection', (picker, background) => tabris.ui.statusBar.background = background)
   .appendTo(tabris.ui.contentView);
 
