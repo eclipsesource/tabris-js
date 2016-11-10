@@ -1,6 +1,7 @@
 import Widget from '../Widget';
 import {create as createContentView} from './ContentView';
 import {create as createStatusBar} from './StatusBar';
+import {create as createNavigationBar} from './NavigationBar';
 
 export default function UI() {
   throw new Error('UI can not be created');
@@ -23,6 +24,12 @@ let _UI = Widget.extend({
       configurable: false
     });
     this.append(this.statusBar);
+    Object.defineProperty(this, 'navigationBar', {
+      value: createNavigationBar(),
+      writable: false,
+      configurable: false
+    });
+    this.append(this.navigationBar);
   },
 
   _setParent() {
@@ -38,10 +45,7 @@ let _UI = Widget.extend({
   _nativeListen() {},
 
   _supportsChildren(child) {
-    if (child === this.contentView || child === this.statusBar) {
-      return true;
-    }
-    return false;
+    return child === this.contentView || child === this.statusBar || child === this.navigationBar;
   },
 
   _dispose() {
