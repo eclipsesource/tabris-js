@@ -271,6 +271,44 @@ describe('TabFolder', function() {
 
   });
 
+  describe('tabMode property', function() {
+
+    beforeEach(function() {
+      client.resetCalls();
+    });
+
+    it('passes property to client', function() {
+      tabFolder = new TabFolder({tabMode: 'fixed'});
+
+      let properties = client.calls({id: tabFolder.cid, op: 'create'})[0].properties;
+      expect(properties.tabMode).to.equal('fixed');
+    });
+
+    it('property is cached', function() {
+      spy(client, 'get');
+      tabFolder = new TabFolder({tabMode: 'fixed'});
+
+      let result = tabFolder.get('tabMode');
+
+      expect(client.get).to.have.not.been.called;
+      expect(result).to.equal('fixed');
+    });
+
+    it("sets value tabMode 'fixed'", function() {
+      tabFolder = new TabFolder({tabMode: 'fixed'});
+
+      let properties = client.calls({id: tabFolder.cid, op: 'create'})[0].properties;
+      expect(properties.tabMode).to.eql('fixed');
+    });
+
+    it("sets tabMode 'scrollable'", function() {
+      tabFolder = new TabFolder({tabMode: 'scrollable'});
+
+      let properties = client.calls({id: tabFolder.cid, op: 'create'})[0].properties;
+      expect(properties.tabMode).to.eql('scrollable');
+    });
+
+  });
   describe('scroll event', function() {
 
     let tab;

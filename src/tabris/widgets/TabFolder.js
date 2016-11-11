@@ -7,6 +7,8 @@ export default Widget.extend({
 
   _properties: {
     paging: {type: 'boolean', default: false},
+    tabBarLocation: {type: ['choice', ['top', 'bottom', 'hidden', 'auto']], default: 'auto'},
+    tabMode: {type: ['choice', ['fixed', 'scrollable']], default: 'fixed'},
     selection: {
       access: {
         set(name, tab, options) {
@@ -22,8 +24,7 @@ export default Widget.extend({
           return selection ? tabris._proxies.find(selection) : null;
         }
       }
-    },
-    tabBarLocation: {type: ['choice', ['top', 'bottom', 'hidden', 'auto']], default: 'auto'}
+    }
   },
 
   _events: {
