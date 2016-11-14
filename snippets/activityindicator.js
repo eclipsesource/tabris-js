@@ -13,7 +13,7 @@ var reloadButton = new tabris.Button({
 }).appendTo(tabris.ui.contentView);
 
 function executeLongRunningTask() {
-  // Toggle visibiliy of elements
+  // Toggle visibility of elements
   activityIndicator.set('visible', true);
   reloadButton.set('visible', false);
 
