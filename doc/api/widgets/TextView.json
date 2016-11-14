@@ -9,6 +9,10 @@
       "default": "left",
       "description": "The horizontal alignment of the text."
     },
+    "selectable": {
+      "type": "boolean",
+      "description": "Whether the text can be selected or not. Currently only support on Android."
+    },
     "markupEnabled": {
       "type": "boolean",
       "static": true,

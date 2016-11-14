@@ -7,6 +7,7 @@ export default Widget.extend({
     alignment: {type: ['choice', ['left', 'right', 'center']], default: 'left'},
     markupEnabled: {type: 'boolean', default: false}, // TODO: readonly
     lineSpacing: {type: 'number', default: 1},
+    selectable: {type: 'boolean', default: false},
     maxLines: {
       type: ['nullable', 'natural'],
       default: null,
