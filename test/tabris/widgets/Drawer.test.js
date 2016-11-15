@@ -1,31 +1,60 @@
-import {expect} from '../../test';
+import {expect, restore} from '../../test';
 import ProxyStore from '../../../src/tabris/ProxyStore';
 import NativeBridge from '../../../src/tabris/NativeBridge';
 import ClientStub from '../ClientStub';
+import {create as createUI} from '../../../src/tabris/widgets/UI';
 import Drawer from '../../../src/tabris/widgets/Drawer';
+import Composite from '../../../src/tabris/widgets/Composite';
 import TextView from '../../../src/tabris/widgets/TextView';
 
 describe('Drawer', function() {
 
-  let client, drawer;
+  let ui, drawer, client;
 
   beforeEach(function() {
     client = new ClientStub();
     global.tabris = {
-      on: () => {},
-      _proxies: new ProxyStore(),
-      _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
+      on: () => {
+      },
+      _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param),
+      _proxies: new ProxyStore()
     };
     global.tabris._nativeBridge = new NativeBridge(client);
-    drawer = new Drawer({background: '#ff0000'});
+    ui = createUI();
+    drawer = ui.drawer;
   });
 
-  describe('create', function() {
+  afterEach(restore);
 
-    it('creates Drawer', function() {
-      expect(client.calls({op: 'create', type: 'tabris.Drawer'}).length).to.equal(1);
-    });
+  it('can not be created standalone', function() {
+    expect(() => {
+      new Drawer({});
+    }).to.throw(Error);
+  });
 
+  it('is a Drawer', function() {
+    expect(drawer).to.be.an.instanceOf(Drawer);
+  });
+
+  it('does not SET parent', function() {
+    let createCall = client.calls({op: 'create', id: drawer.cid})[0];
+    expect(createCall.properties).not.to.contain.any.keys('parent');
+  });
+
+  it('is child of ui', function() {
+    expect(drawer.parent()).to.equal(ui);
+  });
+
+  it('can not be disposed', function() {
+    expect(() => {
+      drawer.dispose();
+    }).to.throw(Error);
+  });
+
+  it('can not be reparented', function() {
+    expect(() => {
+      new Composite().append(drawer);
+    }).to.throw(Error);
   });
 
   describe('instance: ', function() {
@@ -65,18 +94,6 @@ describe('Drawer', function() {
       it('CALLs close', function() {
         drawer.close();
         expect(client.calls({op: 'call', id: drawer.cid})[0].method).to.equal('close');
-      });
-
-    });
-
-    describe('dispose', function() {
-
-      beforeEach(function() {
-        drawer.dispose();
-      });
-
-      it('disposes drawer', function() {
-        expect(client.calls({op: 'destroy', id: drawer.cid}).length).to.equal(1);
       });
 
     });

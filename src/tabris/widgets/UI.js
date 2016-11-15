@@ -2,6 +2,7 @@ import Widget from '../Widget';
 import {create as createContentView} from './ContentView';
 import {create as createStatusBar} from './StatusBar';
 import {create as createNavigationBar} from './NavigationBar';
+import {create as createDrawer} from './Drawer';
 
 export default function UI() {
   throw new Error('UI can not be created');
@@ -30,6 +31,12 @@ let _UI = Widget.extend({
       configurable: false
     });
     this.append(this.navigationBar);
+    Object.defineProperty(this, 'drawer', {
+      value: createDrawer(),
+      writable: false,
+      configurable: false
+    });
+    this.append(this.drawer);
   },
 
   _setParent() {
@@ -45,7 +52,10 @@ let _UI = Widget.extend({
   _nativeListen() {},
 
   _supportsChildren(child) {
-    return child === this.contentView || child === this.statusBar || child === this.navigationBar;
+    return child === this.contentView
+      || child === this.statusBar
+      || child === this.navigationBar
+      || child === this.drawer;
   },
 
   _dispose() {

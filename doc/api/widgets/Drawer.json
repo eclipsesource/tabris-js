@@ -16,6 +16,13 @@
       "description": "Fired when the drawer is closed and has reached its resting position."
     }
   },
+  "properties": {
+    "locked": {
+      "type": "boolean",
+      "default": "true",
+      "description": "Controls whether the drawer can be opened and closed. While `true`, the drawer cannot be opened and calls to `drawer.open()` will be ignored."
+    }
+  },
   "methods": {
     "open": [
       {

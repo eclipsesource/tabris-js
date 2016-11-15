@@ -1,12 +1,14 @@
-// Create a drawer and append a widget to it
+// Enable the drawer and append a widget to it
 
-var drawer = new tabris.Drawer()
-  .on('open', function() {
-    console.log('drawer opened');
-  })
-  .on('close', function() {
-    console.log('drawer closed');
-  });
+var drawer = tabris.ui.drawer;
+
+drawer.locked = false;
+
+drawer.on('open', function() {
+  console.log('drawer opened');
+}).on('close', function() {
+  console.log('drawer closed');
+});
 
 var arrow = String.fromCharCode(8592);
 createLabel(arrow + ' Swipe from left or tap here').on('tap', function() {

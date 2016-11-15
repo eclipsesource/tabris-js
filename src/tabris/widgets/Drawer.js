@@ -1,12 +1,30 @@
 import Widget from '../Widget';
 
-export default Widget.extend({
+export default function Drawer() {
+  throw new Error('Drawer can not be created');
+}
+
+let _Drawer = Widget.extend({
 
   _name: 'Drawer',
 
   _type: 'tabris.Drawer',
 
   _supportsChildren: true,
+
+  _create() {
+    const drawer = this._super('_create', arguments);
+    this._nativeSet('locked', true);
+    return drawer;
+  },
+
+  _setParent(parent, index) {
+    if (this._parent) {
+      throw new Error('Parent of Drawer can not be changed');
+    }
+    this._parent = parent;
+    this._parent._addChild(this, index);
+  },
 
   _properties: {
     win_displayMode: {
@@ -20,7 +38,7 @@ export default Widget.extend({
     win_buttonTheme: {
       type: ['choice', ['light', 'dark', 'default']],
       default: 'default'
-    }
+    },
   },
 
   _events: {
@@ -36,6 +54,10 @@ export default Widget.extend({
     }
   },
 
+  _dispose() {
+    throw new Error('Drawer can not be disposed');
+  },
+
   open() {
     this._nativeCall('open', {});
     return this;
@@ -47,3 +69,9 @@ export default Widget.extend({
   }
 
 });
+
+Drawer.prototype = _Drawer.prototype;
+
+export function create() {
+  return new _Drawer();
+}
