@@ -5,9 +5,10 @@
     "colors": "^1.1.2",
     "ecstatic": "^2.1.0",
     "tabris": "2.0.0-beta1",
+    "tabris-cli": "^0.1.0",
     "union": "^0.4.4"
   },
   "scripts": {
-    "start": "node bin/server.js"
+    "start": "tabris serve"
   }
 }
