@@ -41,6 +41,7 @@ describe('UI', function() {
   it('is CREATEed', function() {
     let createCalls = client.calls({op: 'create'});
     expect(createCalls[0].id).to.equal(ui.cid);
+    expect(createCalls[0].type).to.equal('tabris.UI');
   });
 
   it('contains children', function() {

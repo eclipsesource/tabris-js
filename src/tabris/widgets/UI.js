@@ -11,6 +11,7 @@ export default function UI() {
 let _UI = Widget.extend({
 
   _name: 'UI',
+  _type: 'tabris.UI',
 
   _create() {
     let result = this._super('_create', arguments);
