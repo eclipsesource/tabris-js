@@ -35,9 +35,9 @@ describe('NavigationBar', function() {
     expect(navigationBar).to.be.an.instanceOf(NavigationBar);
   });
 
-  it('does not SET parent', function() {
+  it('SETs parent', function() {
     let createCall = client.calls({op: 'create', id: navigationBar.cid})[0];
-    expect(createCall.properties).not.to.contain.any.keys('parent');
+    expect(createCall.properties).to.contain.all.keys({parent: ui.cid});
   });
 
   it('is child of ui', function() {
