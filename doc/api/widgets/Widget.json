@@ -256,6 +256,12 @@
       "type": "boolean",
       "default": "false",
       "description": "Whether the entire widget should be highlighted while touched."
+    },
+    "win_theme": {
+      "type": "string",
+      "values": ["light", "dark", "default"],
+      "default": "default",
+      "description": "Controls the color scheme used for this widget. When set to `\"default\"` the theme is inherited from either the parent (if present) or the OS settings. Available only on windows."
     }
   },
   "events": {

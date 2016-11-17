@@ -20,6 +20,11 @@
     "title": {
       "type": "string",
       "description": "The text to be displayed for the action."
+    },
+    "win_symbol": {
+      "type": "string",
+      "default": "",
+      "description": "Allows to override the image of the Action with an MDL2 (\"Metro Design Language 2\") symbol. When the string does not exactly match [the name of an MDL2 symbol](https://msdn.microsoft.com/en-us/library/windows/apps/windows.ui.xaml.controls.symbol.aspx) the `image` property is used instead. Platforms other than windows ignore this property and always show the image."
     }
   },
   "events": {
