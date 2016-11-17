@@ -12,12 +12,6 @@ let _Drawer = Widget.extend({
 
   _supportsChildren: true,
 
-  _create() {
-    const drawer = this._super('_create', arguments);
-    this._nativeSet('locked', true);
-    return drawer;
-  },
-
   _setParent(parent, index) {
     if (this._parent) {
       throw new Error('Parent of Drawer can not be changed');
@@ -39,6 +33,10 @@ let _Drawer = Widget.extend({
       type: ['choice', ['light', 'dark', 'default']],
       default: 'default'
     },
+    enabled: {
+      type: 'boolean',
+      default: false
+    }
   },
 
   _events: {

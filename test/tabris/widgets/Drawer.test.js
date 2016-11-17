@@ -80,6 +80,10 @@ describe('Drawer', function() {
 
     });
 
+    it('has "enabled" set to "false" by default', function() {
+      expect(drawer.enabled).to.be.false;
+    });
+
     describe('open', function() {
 
       it('CALLs open', function() {
