@@ -8,6 +8,7 @@ import Ui, {create as createUi} from './widgets/Ui';
 import ContentView from './widgets/ContentView';
 import ImageData from './ImageData';
 import {addDOMDocument} from './DOMDocument';
+import {addDOMEventTargetMethods} from './DOMEvent';
 import {addWindowTimerMethods} from './WindowTimers';
 import ProgressEvent from './DOMProgressEvent';
 import Storage, {create as createStorage} from './WebStorage';
@@ -102,6 +103,7 @@ extend(window, {
 });
 
 addDOMDocument(window);
+addDOMEventTargetMethods(window);
 addWindowTimerMethods(window);
 
 // TODO: ensure tabris is set up before load functions, remove when merged with tabris module

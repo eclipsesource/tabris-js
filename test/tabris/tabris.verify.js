@@ -29,6 +29,12 @@ describe('window', function() {
     expect(window.setTimeout).to.be.a('function');
   });
 
+  it('contains DOM EventTarget API', function() {
+    expect(window.addEventListener).to.be.a('function');
+    expect(window.removeEventListener).to.be.a('function');
+    expect(window.dispatchEvent).to.be.a('function');
+  });
+
   it('contains DOM API constructors', function() {
     expect(window.Crypto).to.be.a('function');
     expect(window.ImageData).to.be.a('function');
