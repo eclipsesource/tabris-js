@@ -16,6 +16,7 @@ import WebSocket from './WebSocket';
 import XMLHttpRequest from './XMLHttpRequest';
 import Action from './widgets/Action';
 import ActivityIndicator from './widgets/ActivityIndicator';
+import AlertDialog from './AlertDialog';
 import Button from './widgets/Button';
 import Canvas from './widgets/Canvas';
 import CheckBox from './widgets/CheckBox';
@@ -53,6 +54,7 @@ const window = global.window;
 module.exports = global.tabris = extend(new Tabris(), {
   Action,
   ActivityIndicator,
+  AlertDialog,
   App,
   Button,
   Canvas,

@@ -1,5 +1,6 @@
 import {
   Action,
+  AlertDialog,
   Button,
   Canvas,
   CanvasContext,
@@ -384,4 +385,18 @@ function test_tabris_ui() {
   var tc: string = ui.get("textColor");
   var visible: boolean = ui.get("toolbarVisible");
   var same: UI = ui.on("change:activePage", () => {}).off("change:activePage", () => {});
+}
+
+function test_AlertDialog() {
+  let widget: AlertDialog = new AlertDialog();
+  widget.set('foo', 23);
+  widget.buttons = {ok: 'Ok', cancel: 'Cancel', neutral: 'Close'};
+  widget.buttons = {ok: 'Ok'};
+  widget.buttons = {cancel: 'Cancel'};
+  widget.title = 'foo';
+  widget.message = 'bar';
+  let self1: AlertDialog = widget.on('close', (widget: AlertDialog, button: string) => {});
+  let self2: AlertDialog = widget.on('close:ok', (widget: AlertDialog) => {});
+  let self3: AlertDialog = widget.on('close:cancel', (widget: AlertDialog) => {});
+  let self4: AlertDialog = widget.on('close:neutral', (widget: AlertDialog) => {});
 }
