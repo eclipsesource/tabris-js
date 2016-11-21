@@ -36,9 +36,9 @@ describe('Drawer', function() {
     expect(drawer).to.be.an.instanceOf(Drawer);
   });
 
-  it('SETs parent', function() {
+  it('does not SET parent', function() {
     let createCall = client.calls({op: 'create', id: drawer.cid})[0];
-    expect(createCall.properties).to.contain.all.keys({parent: ui.cid});
+    expect(createCall.properties).not.to.contain.any.keys('parent');
   });
 
   it('is child of ui', function() {
