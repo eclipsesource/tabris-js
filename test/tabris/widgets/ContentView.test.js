@@ -40,9 +40,9 @@ describe('ContentView', function() {
     expect(createCall.properties).to.contain.all.keys({root: true});
   });
 
-  it('SETs parent', function() {
+  it('does not SET parent', function() {
     let createCall = client.calls({op: 'create', id: contentView.cid})[0];
-    expect(createCall.properties).to.contain.all.keys({parent: ui.cid});
+    expect(createCall.properties).not.to.contain.any.keys('parent');
   });
 
   it('is child of ui', function() {

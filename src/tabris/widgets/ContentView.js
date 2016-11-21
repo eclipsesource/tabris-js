@@ -16,11 +16,12 @@ let _ContentView = Widget.extend({
     this._nativeSet('root', true);
   },
 
-  _setParent() {
+  _setParent(parent, index) {
     if (this._parent) {
       throw new Error('Parent of ContentView can not be changed');
     }
-    this._super('_setParent', arguments);
+    this._parent = parent;
+    this._parent._addChild(this, index);
   },
 
   _dispose() {

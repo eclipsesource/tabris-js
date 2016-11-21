@@ -38,9 +38,10 @@ describe('UI', function() {
     expect(ui).to.be.an.instanceOf(UI);
   });
 
-  it('is CREATEed', function() {
+  it('CREATEs children only', function() {
     let createCalls = client.calls({op: 'create'});
-    expect(createCalls[0].id).to.equal(ui.cid);
+    expect(createCalls.length).to.equal(4);
+    expect(createCalls[0].id).to.equal(ui.contentView.cid);
   });
 
   it('contains children', function() {

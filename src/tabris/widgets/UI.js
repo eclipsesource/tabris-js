@@ -13,22 +13,43 @@ let _UI = Widget.extend({
   _name: 'UI',
 
   _create() {
-    let result = this._super('_create', arguments);
-    this._appendNamedChild('contentView', createContentView());
-    this._appendNamedChild('statusBar', createStatusBar());
-    this._appendNamedChild('navigationBar', createNavigationBar());
-    this._appendNamedChild('drawer', createDrawer());
-    return result;
-  },
-
-  _appendNamedChild(name, child) {
-    Object.defineProperty(this, name, {value: child});
-    this.append(child);
+    Object.defineProperty(this, 'contentView', {
+      value: createContentView(),
+      writable: false,
+      configurable: false
+    });
+    this.append(this.contentView);
+    Object.defineProperty(this, 'statusBar', {
+      value: createStatusBar(),
+      writable: false,
+      configurable: false
+    });
+    this.append(this.statusBar);
+    Object.defineProperty(this, 'navigationBar', {
+      value: createNavigationBar(),
+      writable: false,
+      configurable: false
+    });
+    this.append(this.navigationBar);
+    Object.defineProperty(this, 'drawer', {
+      value: createDrawer(),
+      writable: false,
+      configurable: false
+    });
+    this.append(this.drawer);
   },
 
   _setParent() {
-    throw new Error('Parent of tabris.ui can not be changed');
+    throw new Error('Parent of ContentView can not be changed');
   },
+
+  _nativeSet() {},
+
+  _nativeGet() {},
+
+  _nativeCall() {},
+
+  _nativeListen() {},
 
   _supportsChildren(child) {
     return child === this.contentView
