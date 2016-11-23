@@ -111,4 +111,4 @@ Tabris.js accepts the following custom preferences:
 
 | Name                    | Value |
 |-------------------------|-------|
-| Theme                   | <ul><li>`com.eclipsesource.tabris.android.R.style.Theme_Tabris`</li><li>`com.eclipsesource.tabris.android.R.style.Theme_Tabris_Light`</li><li>`com.eclipsesource.tabris.android.R.style.Theme_Tabris_Light_DarkActionBar` (Default)</ul> In addition to these three bundled themes, a reference to any other Android theme can be specified (must be a fully qualified name). |
+| Theme                   | <ul><li>`com.eclipsesource.tabris.android.R.style.Theme_Tabris`</li><li>`com.eclipsesource.tabris.android.R.style.Theme_Tabris_Light`</li><li>`com.eclipsesource.tabris.android.R.style.Theme_Tabris_Light_DarkAppBar` (Default)</ul> In addition to these three bundled themes, a reference to any other Android theme can be specified (must be a fully qualified name). |
