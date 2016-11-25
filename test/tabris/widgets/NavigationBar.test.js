@@ -2,7 +2,7 @@ import {expect, restore} from '../../test';
 import ProxyStore from '../../../src/tabris/ProxyStore';
 import NativeBridge from '../../../src/tabris/NativeBridge';
 import ClientStub from '../ClientStub';
-import {create as createUI} from '../../../src/tabris/widgets/UI';
+import {create as createUi} from '../../../src/tabris/widgets/Ui';
 import NavigationBar from '../../../src/tabris/widgets/NavigationBar';
 import Composite from '../../../src/tabris/widgets/Composite';
 
@@ -19,7 +19,7 @@ describe('NavigationBar', function() {
       _proxies: new ProxyStore()
     };
     global.tabris._nativeBridge = new NativeBridge(client);
-    ui = createUI();
+    ui = createUi();
     navigationBar = ui.navigationBar;
   });
 
@@ -35,9 +35,9 @@ describe('NavigationBar', function() {
     expect(navigationBar).to.be.an.instanceOf(NavigationBar);
   });
 
-  it('does not SET parent', function() {
+  it('SETs parent', function() {
     let createCall = client.calls({op: 'create', id: navigationBar.cid})[0];
-    expect(createCall.properties).not.to.contain.any.keys('parent');
+    expect(createCall.properties).to.contain.all.keys({parent: ui.cid});
   });
 
   it('is child of ui', function() {

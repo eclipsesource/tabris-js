@@ -2,12 +2,12 @@ import {expect, restore} from '../../test';
 import ProxyStore from '../../../src/tabris/ProxyStore';
 import NativeBridge from '../../../src/tabris/NativeBridge';
 import ClientStub from '../ClientStub';
-import UI, {create} from '../../../src/tabris/widgets/UI';
+import Ui, {create} from '../../../src/tabris/widgets/Ui';
 import ContentView from '../../../src/tabris/widgets/ContentView';
 import Widget from '../../../src/tabris/Widget';
 import Composite from '../../../src/tabris/widgets/Composite';
 
-describe('UI', function() {
+describe('Ui', function() {
 
   let client, ui;
 
@@ -26,7 +26,7 @@ describe('UI', function() {
 
   it('can not be created standalone', function() {
     expect(() => {
-      new UI({});
+      new Ui({});
     }).to.throw(Error);
   });
 
@@ -34,14 +34,14 @@ describe('UI', function() {
     expect(ui).to.be.an.instanceOf(Widget);
   });
 
-  it('is instanceof UI', function() {
-    expect(ui).to.be.an.instanceOf(UI);
+  it('is instanceof Ui', function() {
+    expect(ui).to.be.an.instanceOf(Ui);
   });
 
-  it('CREATEs children only', function() {
+  it('is CREATEed', function() {
     let createCalls = client.calls({op: 'create'});
-    expect(createCalls.length).to.equal(4);
-    expect(createCalls[0].id).to.equal(ui.contentView.cid);
+    expect(createCalls[0].id).to.equal(ui.cid);
+    expect(createCalls[0].type).to.equal('tabris.Ui');
   });
 
   it('contains children', function() {

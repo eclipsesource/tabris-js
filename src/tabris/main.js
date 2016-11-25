@@ -4,7 +4,7 @@ import {extend} from './util';
 import Tabris from './Tabris';
 import Device, {create as createDevice, publishDeviceProperties} from './Device';
 import App from './App';
-import UI, {create as createUI} from './widgets/UI';
+import Ui, {create as createUi} from './widgets/Ui';
 import ContentView from './widgets/ContentView';
 import ImageData from './ImageData';
 import {addDOMDocument} from './DOMDocument';
@@ -83,7 +83,7 @@ module.exports = global.tabris = extend(new Tabris(), {
   TextInput,
   TextView,
   ToggleButton,
-  UI,
+  Ui,
   Video,
   WebView,
   WebSocket,
@@ -107,7 +107,7 @@ addWindowTimerMethods(window);
 // TODO: ensure tabris is set up before load functions, remove when merged with tabris module
 tabris._loadFunctions.unshift(() => {
   tabris.app = new App();
-  tabris.ui = createUI();
+  tabris.ui = createUi();
   tabris.device = createDevice();
   publishDeviceProperties(tabris.device, window);
   window.localStorage = tabris.localStorage = createStorage();

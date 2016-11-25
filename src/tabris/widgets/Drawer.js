@@ -12,12 +12,11 @@ let _Drawer = Widget.extend({
 
   _supportsChildren: true,
 
-  _setParent(parent, index) {
+  _setParent() {
     if (this._parent) {
       throw new Error('Parent of Drawer can not be changed');
     }
-    this._parent = parent;
-    this._parent._addChild(this, index);
+    this._super('_setParent', arguments);
   },
 
   _properties: {
