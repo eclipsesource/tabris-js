@@ -23,7 +23,7 @@ export default Widget.extend({
     toolbarVisible: {type: 'boolean', default: true},
     toolbarColor: {type: 'color'},
     titleTextColor: {type: 'color'},
-    actionImageColor: {type: 'color'},
+    actionColor: {type: 'color'},
     actionTextColor: {type: 'color'}
   },
 

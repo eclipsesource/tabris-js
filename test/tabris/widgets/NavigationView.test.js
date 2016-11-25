@@ -82,10 +82,10 @@ describe('NavigationView', () => {
     expect(navigationView.titleTextColor).to.eq('rgba(0, 255, 0, 1)');
   });
 
-  it('supports property "actionImageColor"', () => {
-    navigationView.actionImageColor = 'red';
+  it('supports property "actionColor"', () => {
+    navigationView.actionColor = 'red';
 
-    expect(navigationView.actionImageColor).to.eq('rgba(255, 0, 0, 1)');
+    expect(navigationView.actionColor).to.eq('rgba(255, 0, 0, 1)');
   });
 
   it('supports property "actionTextColor"', () => {
