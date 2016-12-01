@@ -1,6 +1,10 @@
 import NativeObject from './NativeObject';
 
-export default NativeObject.extend({
+export default function App() {
+  throw new Error('App can not be created');
+}
+
+let _App = NativeObject.extend({
   _cid: 'tabris.App',
   _events: {
     foreground: {trigger: triggerWithTarget},
@@ -49,6 +53,16 @@ export default NativeObject.extend({
     }
   }
 });
+
+App.prototype = _App.prototype;
+
+export function create() {
+  let app = new _App();
+  Object.defineProperty(app, 'id', {get: () => app._nativeGet('appId')});
+  Object.defineProperty(app, 'version', {get: () => app._nativeGet('version')});
+  Object.defineProperty(app, 'versionCode', {get: () => app._nativeGet('versionId')});
+  return app;
+}
 
 function triggerWithTarget(event, name) {
   this.trigger(name, this, event);

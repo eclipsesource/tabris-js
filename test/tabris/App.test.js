@@ -1,8 +1,9 @@
 import {expect, spy, stub, restore, match} from '../test';
 import ProxyStore from '../../src/tabris/ProxyStore';
 import NativeBridge from '../../src/tabris/NativeBridge';
+import NativeObject from '../../src/tabris/NativeObject';
 import ClientStub from './ClientStub';
-import App from '../../src/tabris/App';
+import App, {create} from '../../src/tabris/App';
 
 describe('App', function() {
 
@@ -16,10 +17,24 @@ describe('App', function() {
       _proxies: new ProxyStore()
     };
     global.tabris._nativeBridge = new NativeBridge(client);
-    app = new App();
+    app = create();
   });
 
   afterEach(restore);
+
+  it('can not be created standalone', function() {
+    expect(() => {
+      new App({});
+    }).to.throw(Error);
+  });
+
+  it('is instanceof NativeObject', function() {
+    expect(app).to.be.an.instanceOf(NativeObject);
+  });
+
+  it('is instanceof App', function() {
+    expect(app).to.be.an.instanceOf(App);
+  });
 
   it('listens for pause event', function() {
     let listener = spy();
@@ -328,6 +343,57 @@ describe('App', function() {
         expect(tabris._nativeBridge.call).to.have.been.called;
       });
 
+    });
+
+  });
+
+  describe('properties', function() {
+
+    describe('id', function() {
+
+      it('should GET "appId" from native', function() {
+        app.id;
+
+        expect(client.calls({op: 'get', id: app.cid, property: 'appId'}).length).to.equal(1);
+      });
+
+      it('should not SET native property', function() {
+        app.id = 'newId';
+
+        expect(client.calls({op: 'set', id: app.cid}).length).to.equal(0);
+      });
+
+    });
+
+    describe('version', function() {
+
+      it('should GET "version" from native', function() {
+        app.version;
+
+        expect(client.calls({op: 'get', id: app.cid, property: 'version'}).length).to.equal(1);
+      });
+
+      it('should not SET native property', function() {
+        app.version = '1.2.3';
+
+        expect(client.calls({op: 'set', id: app.cid}).length).to.equal(0);
+      });
+
+    });
+
+    describe('versionCode', function() {
+
+      it('should get "versionId" from native', function() {
+        app.versionCode;
+
+        expect(client.calls({op: 'get', id: app.cid, property: 'versionId'}).length).to.equal(1);
+      });
+
+      it('should not SET native property', function() {
+        app.versionCode = 123;
+
+        expect(client.calls({op: 'set', id: app.cid}).length).to.equal(0);
+      });
     });
 
   });

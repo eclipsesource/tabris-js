@@ -3,6 +3,20 @@
   "object": "app",
   "extends": "NativeObject",
   "description": "The object `tabris.app` provides information about the application.",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Uniquely identifies the app."
+    },
+    "version": {
+      "type": "string",
+      "description": "The user facing version number, e.g. '2.1-beta3'."
+    },
+    "versionCode": {
+      "type": "number",
+      "description": "An alternative version number used in app stores to identify different versions of an app. Usually incremented with each release. This property reflects the `versionCode` on Android and `CFBundleVersion` on iOS."
+    }
+  },
   "events": {
     "foreground": {
       "parameters": [
