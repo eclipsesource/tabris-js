@@ -573,6 +573,12 @@ describe('Widget', function() {
         }).to.throw(Error, 'Cannot insert before non-widget');
       });
 
+      it('throws when called with an orphan widget', function() {
+        expect(() => {
+          widget.insertBefore(new TestWidget());
+        }).to.throw(Error, 'Cannot insert before orphan');
+      });
+
       describe('when called with a widget', function() {
 
         beforeEach(function() {
@@ -655,6 +661,12 @@ describe('Widget', function() {
         expect(() => {
           widget.insertAfter(parent1.find('.missing'));
         }).to.throw(Error, 'Cannot insert after non-widget');
+      });
+
+      it('throws when called with an orphan widget', function() {
+        expect(() => {
+          widget.insertAfter(new TestWidget());
+        }).to.throw(Error, 'Cannot insert after orphan');
       });
 
       describe('when called with a widget', function() {

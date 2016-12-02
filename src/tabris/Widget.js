@@ -49,6 +49,9 @@ Widget.prototype = extendPrototype(NativeObject, {
       throw new Error('Cannot insert before non-widget');
     }
     let parent = proxy.parent();
+    if (!parent) {
+      throw new Error('Cannot insert before orphan');
+    }
     let index = parent._children.indexOf(proxy);
     this._setParent(parent, index);
     return this;
@@ -61,6 +64,9 @@ Widget.prototype = extendPrototype(NativeObject, {
       throw new Error('Cannot insert after non-widget');
     }
     let parent = proxy.parent();
+    if (!parent) {
+      throw new Error('Cannot insert after orphan');
+    }
     let index = parent._children.indexOf(proxy);
     this._setParent(parent, index + 1);
     return this;
