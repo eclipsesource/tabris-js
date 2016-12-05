@@ -35,6 +35,16 @@
         "description": "Removes the given listener from all widgets in this collection. See also `Widget.off()`."
       }
     ],
+    "trigger": [
+      {
+        "parameters": [
+          {"name": "event", "type": "string"},
+          {"name": "...params", "type": "any[]"}
+        ],
+        "returns": "this",
+        "description": "Triggers an event of the given type on all widgets in this collection. See also `Widget.trigger()`"
+      }
+    ],
     "set": [
       {
         "parameters": [

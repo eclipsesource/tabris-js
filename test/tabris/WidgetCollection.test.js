@@ -166,6 +166,19 @@ describe('WidgetCollection', function() {
       expect(collection.off('foo', function() {})).to.equal(collection);
     });
 
+    it('trigger() is delegated', function() {
+      let event = {};
+      collection.trigger('foo', event);
+
+      expect(mocks[0].trigger).to.have.been.calledWith('foo', event);
+      expect(mocks[1].trigger).to.have.been.calledWith('foo', event);
+      expect(mocks[2].trigger).to.have.been.calledWith('foo', event);
+    });
+
+    it('trigger() returns collection', function() {
+      expect(collection.trigger('foo', {})).to.equal(collection);
+    });
+
     it('dispose() is delegated', function() {
       collection.dispose();
 
@@ -270,9 +283,10 @@ describe('WidgetCollection', function() {
 
   function mockProxy() {
     let mock = {};
-    ['set', 'get', 'append', 'appendTo', 'on', 'off', 'once', 'parent', 'children', 'animate', 'dispose'].forEach(
-      method => mock[method] = stub()
-    );
+    let methods = [
+      'set', 'get', 'append', 'appendTo', 'on', 'off', 'once', 'trigger', 'parent', 'children', 'animate', 'dispose'
+    ];
+    methods.forEach(method => mock[method] = stub());
     mock.cid = 'o' + counter++;
     mock._getSelectableChildren = function() {
       return this._children;

@@ -90,6 +90,11 @@ export default class WidgetCollection {
     return this;
   }
 
+  trigger() {
+    this._array.forEach(widget => widget.trigger.apply(widget, arguments));
+    return this;
+  }
+
   animate() {
     this._array.forEach(widget => widget.animate.apply(widget, arguments));
   }
