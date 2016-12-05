@@ -31,16 +31,16 @@
     "addchild": {
       "parameters": [
         {"name": "widget", "type": "this"},
-        {"name": "child", "type": "Widget", "description": "The widget that was added as a child."},
-        {"name": "options", "type": "any"}
+        {"name": "child", "type": "Widget", "description": "The widget that is added as a child."},
+        {"name": "options", "type": "{index: number}", "description": "The property `index` denotes the position in the children list at which the child widget is added."}
       ],
       "description": "Fired when a child is added to this widget."
     },
     "removechild": {
       "parameters": [
         {"name": "widget", "type": "this"},
-        {"name": "child", "type": "Widget", "description": "The widget that was removed."},
-        {"name": "options", "type": "{index: number}", "description": "Contains the index of the removed child widget, e.g. `{index: number}`"}
+        {"name": "child", "type": "Widget", "description": "The widget that is removed."},
+        {"name": "options", "type": "{index: number}", "description": "The property `index` denotes the removed child widget's position in the children list.`"}
       ],
       "description": "Fired when a child is removed from this widget."
     }

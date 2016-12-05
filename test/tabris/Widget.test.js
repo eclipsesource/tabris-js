@@ -240,16 +240,24 @@ describe('Widget', function() {
         expect(client.calls({op: 'destroy', id: child.cid}).length).to.equal(0);
       });
 
-      it("notifies parent's remove listeners", function() {
+      it("notifies parent's `removechild` listener", function() {
         let listener = spy();
         parent.on('removechild', listener);
 
         child.dispose();
 
-        let args = listener.args[0];
-        expect(args[0]).to.equal(parent);
-        expect(args[1]).to.equal(child);
-        expect(args[2]).to.eql({index: 0});
+        expect(listener).to.have.been.calledOnce;
+        expect(listener).to.have.been.calledWith(parent, child, {index: 0});
+      });
+
+      it("notifies parent's `removechild` listener with correct index", function() {
+        new TestWidget().insertBefore(child);
+        let listener = spy();
+        parent.on('removechild', listener);
+
+        child.dispose();
+
+        expect(listener).to.have.been.calledWith(parent, child, {index: 1});
       });
 
       it("notifies all children's dispose listeners", function() {
@@ -328,11 +336,9 @@ describe('Widget', function() {
           expect(result).to.equal(widget);
         });
 
-        it('notifies add listeners with arguments parent, child, event', function() {
-          let args = listener.args[0];
-          expect(args[0]).to.equal(widget);
-          expect(args[1]).to.equal(child1);
-          expect(args[2]).to.eql({});
+        it('notifies `addchild` listener with arguments parent, child, event', function() {
+          expect(listener).to.have.been.calledOnce;
+          expect(listener).to.have.been.calledWith(widget, child1, {index: 0});
         });
 
         it('children() contains appended child', function() {
@@ -346,7 +352,7 @@ describe('Widget', function() {
 
       });
 
-      describe('when called with multiple proxies', function() {
+      describe('when called with multiple widgets', function() {
 
         beforeEach(function() {
           result = widget.append(child1, child2);
@@ -548,11 +554,12 @@ describe('Widget', function() {
 
     describe('insertBefore', function() {
 
-      let parent1, parent2, other;
+      let parent1, parent2, other, listener;
 
       beforeEach(function() {
         parent1 = new TestWidget();
         parent2 = new TestWidget();
+        listener = spy();
       });
 
       it('throws when disposed', function() {
@@ -584,20 +591,38 @@ describe('Widget', function() {
         beforeEach(function() {
           widget.appendTo(parent1);
           other = new TestWidget().appendTo(parent2);
-          widget.insertBefore(other);
         });
 
         it("removes widget from its old parent's children list", function() {
+          widget.insertBefore(other);
           expect(parent1.children().toArray()).not.to.contain(widget);
         });
 
         it("adds widget to new parent's children list", function() {
+          widget.insertBefore(other);
           expect(parent2.children().toArray()).to.contain(widget);
         });
 
         it('adds widget directly before the given widget', function() {
+          widget.insertBefore(other);
           let children = parent2.children();
           expect(children.indexOf(widget)).to.equal(children.indexOf(other) - 1);
+        });
+
+        it('triggers remove event with index', function() {
+          parent1.on('removechild', listener);
+
+          widget.insertBefore(other);
+
+          expect(listener).to.have.been.calledWith(parent1, widget, {index: 0});
+        });
+
+        it('triggers add event with index', function() {
+          parent2.on('addchild', listener);
+
+          widget.insertBefore(other);
+
+          expect(listener).to.have.been.calledWith(parent2, widget, {index: 0});
         });
 
       });
@@ -636,11 +661,12 @@ describe('Widget', function() {
 
     describe('insertAfter', function() {
 
-      let parent1, parent2, other;
+      let parent1, parent2, other, listener;
 
       beforeEach(function() {
         parent1 = new TestWidget();
         parent2 = new TestWidget();
+        listener = spy();
       });
 
       it('throws when disposed', function() {
@@ -674,20 +700,38 @@ describe('Widget', function() {
         beforeEach(function() {
           widget.appendTo(parent1);
           other = new TestWidget().appendTo(parent2);
-          widget.insertAfter(other);
         });
 
         it("removes widget from its old parent's children list", function() {
+          widget.insertAfter(other);
           expect(parent1.children().toArray()).not.to.contain(widget);
         });
 
         it("adds widget to new parent's children list", function() {
+          widget.insertAfter(other);
           expect(parent2.children().toArray()).to.contain(widget);
         });
 
         it('adds widget directly after the given widget', function() {
+          widget.insertAfter(other);
           let children = parent2.children();
           expect(children.indexOf(widget)).to.equal(children.indexOf(other) + 1);
+        });
+
+        it('triggers `removechild` event with index', function() {
+          parent1.on('removechild', listener);
+
+          widget.insertAfter(other);
+
+          expect(listener).to.have.been.calledWith(parent1, widget, {index: 0});
+        });
+
+        it('triggers `addchild` event with index', function() {
+          parent2.on('addchild', listener);
+
+          widget.insertAfter(other);
+
+          expect(listener).to.have.been.calledWith(parent2, widget, {index: 1});
         });
 
       });

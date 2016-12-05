@@ -16,12 +16,12 @@ Widget.prototype = extendPrototype(NativeObject, {
 
   append() {
     this._checkDisposed();
-    let accept = function(proxy) {
-      if (!(proxy instanceof NativeObject)) {
+    let accept = (widget) => {
+      if (!(widget instanceof NativeObject)) {
         throw new Error('Cannot append non-widget');
       }
-      proxy._setParent(this);
-    }.bind(this);
+      widget._setParent(this);
+    };
     if (arguments[0] instanceof WidgetCollection) {
       arguments[0].toArray().forEach(accept);
     } else if (Array.isArray(arguments[0])) {
@@ -32,42 +32,42 @@ Widget.prototype = extendPrototype(NativeObject, {
     return this;
   },
 
-  appendTo(proxy) {
+  appendTo(widget) {
     this._checkDisposed();
-    proxy = proxy instanceof WidgetCollection ? proxy.first() : proxy;
-    if (!(proxy instanceof NativeObject)) {
+    widget = widget instanceof WidgetCollection ? widget.first() : widget;
+    if (!(widget instanceof NativeObject)) {
       throw new Error('Cannot append to non-widget');
     }
-    this._setParent(proxy);
+    this._setParent(widget);
     return this;
   },
 
-  insertBefore(proxy) {
+  insertBefore(widget) {
     this._checkDisposed();
-    proxy = proxy instanceof WidgetCollection ? proxy.first() : proxy;
-    if (!(proxy instanceof NativeObject)) {
+    widget = widget instanceof WidgetCollection ? widget.first() : widget;
+    if (!(widget instanceof NativeObject)) {
       throw new Error('Cannot insert before non-widget');
     }
-    let parent = proxy.parent();
+    let parent = widget.parent();
     if (!parent) {
       throw new Error('Cannot insert before orphan');
     }
-    let index = parent._children.indexOf(proxy);
+    let index = parent._children.indexOf(widget);
     this._setParent(parent, index);
     return this;
   },
 
-  insertAfter(proxy) {
+  insertAfter(widget) {
     this._checkDisposed();
-    proxy = proxy instanceof WidgetCollection ? proxy.first() : proxy;
-    if (!(proxy instanceof NativeObject)) {
+    widget = widget instanceof WidgetCollection ? widget.first() : widget;
+    if (!(widget instanceof NativeObject)) {
       throw new Error('Cannot insert after non-widget');
     }
-    let parent = proxy.parent();
+    let parent = widget.parent();
     if (!parent) {
       throw new Error('Cannot insert after orphan');
     }
-    let index = parent._children.indexOf(proxy);
+    let index = parent._children.indexOf(widget);
     this._setParent(parent, index + 1);
     return this;
   },
@@ -95,18 +95,17 @@ Widget.prototype = extendPrototype(NativeObject, {
     if (sheet['*']) {
       scope.set(sheet['*']);
     }
-    let selector;
-    for (selector in sheet) {
+    for (let selector in sheet) {
       if (selector !== '*' && selector[0] !== '#' && selector[0] !== '.') {
         scope.filter(selector).set(sheet[selector]);
       }
     }
-    for (selector in sheet) {
+    for (let selector in sheet) {
       if (selector[0] === '.') {
         scope.filter(selector).set(sheet[selector]);
       }
     }
-    for (selector in sheet) {
+    for (let selector in sheet) {
       if (selector[0] === '#') {
         scope.filter(selector).set(sheet[selector]);
       }
@@ -148,10 +147,11 @@ Widget.prototype = extendPrototype(NativeObject, {
     }
     if (typeof index === 'number') {
       this._children.splice(index, 0, child);
+      this.trigger('addchild', this, child, {index});
     } else {
       this._children.push(child);
+      this.trigger('addchild', this, child, {index: this._children.length - 1});
     }
-    this.trigger('addchild', this, child, {});
   },
 
   _removeChild(child) {
@@ -159,8 +159,8 @@ Widget.prototype = extendPrototype(NativeObject, {
       let index = this._children.indexOf(child);
       if (index !== -1) {
         this._children.splice(index, 1);
+        this.trigger('removechild', this, child, {index});
       }
-      this.trigger('removechild', this, child, {index});
     }
   },
 
@@ -201,9 +201,8 @@ Widget.prototype = extendPrototype(NativeObject, {
 
 Widget.extend = function(members) {
   members = extend({}, members);
-  members._events = extend({}, _defaultEvents, members._events || {});
+  members._events = extend({}, defaultEvents, members._events || {});
   if (members._properties !== true) {
-    let defaultProperties = _defaultProperties;
     members._properties = extend({}, defaultProperties, members._properties || {});
   }
   return NativeObject.extend(members, Widget);
@@ -244,7 +243,7 @@ function hasAndroidResizeBug() {
   return hasAndroidResizeBug.cache;
 }
 
-let _defaultEvents = {
+let defaultEvents = {
   touchstart: {trigger: triggerWithTarget},
   touchmove: {trigger: triggerWithTarget},
   touchend: {trigger: triggerWithTarget},
@@ -266,7 +265,7 @@ let _defaultEvents = {
   }
 };
 
-let _defaultProperties = {
+let defaultProperties = {
   enabled: {
     type: 'boolean',
     default: true
