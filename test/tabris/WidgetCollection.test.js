@@ -4,18 +4,6 @@ import WidgetCollection from '../../src/tabris/WidgetCollection';
 describe('WidgetCollection', function() {
 
   let counter = 0;
-  let mockProxy = function() {
-    let mock = {};
-    ['set', 'get', 'append', 'appendTo', 'on', 'off', 'once', 'parent', 'children', 'animate', 'dispose'].forEach(
-      method => mock[method] = stub()
-    );
-    mock.cid = 'o' + counter++;
-    mock._getSelectableChildren = function() {
-      return this._children;
-    };
-    return mock;
-  };
-
   let mocks, collection;
 
   beforeEach(function() {
@@ -29,10 +17,6 @@ describe('WidgetCollection', function() {
     expect(collection[0]).to.equal(mocks[0]);
     expect(collection[1]).to.equal(mocks[1]);
     expect(collection[2]).to.equal(mocks[2]);
-  });
-
-  it('sets length value', function() {
-    expect(collection.length).to.equal(3);
   });
 
   it('first()', function() {
@@ -67,6 +51,20 @@ describe('WidgetCollection', function() {
     expect(collection.indexOf(mocks[1])).to.equal(1);
     expect(collection.indexOf(mocks[2])).to.equal(2);
     expect(collection.indexOf(null)).to.equal(-1);
+  });
+
+  describe('length', function() {
+
+    it('reflects actual length', function() {
+      expect(collection.length).to.equal(3);
+    });
+
+    it('cannot be changed', function() {
+      collection.length = 1;
+
+      expect(collection.length).to.equal(3);
+    });
+
   });
 
   describe('filter()', function() {
@@ -269,5 +267,17 @@ describe('WidgetCollection', function() {
     });
 
   });
+
+  function mockProxy() {
+    let mock = {};
+    ['set', 'get', 'append', 'appendTo', 'on', 'off', 'once', 'parent', 'children', 'animate', 'dispose'].forEach(
+      method => mock[method] = stub()
+    );
+    mock.cid = 'o' + counter++;
+    mock._getSelectableChildren = function() {
+      return this._children;
+    };
+    return mock;
+  }
 
 });

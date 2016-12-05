@@ -1,50 +1,50 @@
-export default function WidgetCollection(arr, selector, deep) {
-  this._array = select(arr, selector || '*', deep);
-  for (let i = 0; i < this._array.length; i++) {
-    this[i] = this._array[i];
-  }
-  this.length = this._array.length;
-}
+export default class WidgetCollection {
 
-let proto = WidgetCollection.prototype = {
+  constructor(arr, selector, deep) {
+    this._array = select(arr, selector || '*', deep);
+    for (let i = 0; i < this._array.length; i++) {
+      this[i] = this._array[i];
+    }
+  }
+
+  get length() {
+    return this._array.length;
+  }
 
   first() {
     return this._array[0];
-  },
+  }
 
   last() {
     return this._array[this._array.length - 1];
-  },
+  }
 
   toArray() {
     return this._array.concat();
-  },
+  }
 
   forEach(callback) {
-    let that = this;
-    this._array.forEach((value, index) => {
-      callback(value, index, that);
-    });
-  },
+    this._array.forEach((value, index) => callback(value, index, this));
+  }
 
   indexOf(needle) {
     return this._array.indexOf(needle);
-  },
+  }
 
   filter(selector) {
     return new WidgetCollection(this._array, selector);
-  },
+  }
 
   get(prop) {
     if (this._array[0]) {
       return this._array[0].get(prop);
     }
-  },
+  }
 
   parent() {
     let result = [];
-    for (let i = 0; i < this._array.length; i++) {
-      let parent = this._array[i].parent();
+    for (let widget of this._array) {
+      let parent = widget.parent();
       if (parent && result.indexOf(parent) === -1) {
         result.push(parent);
       }
@@ -52,42 +52,53 @@ let proto = WidgetCollection.prototype = {
     if (result.length) {
       return new WidgetCollection(result);
     }
-  },
+  }
 
   children(selector) {
     let result = [];
-    for (let i = 0; i < this._array.length; i++) {
-      result.push.apply(result, this._array[i]._getSelectableChildren() || []);
+    for (let widget of this._array) {
+      result.push.apply(result, widget._getSelectableChildren() || []);
     }
     return new WidgetCollection(result, selector);
-  },
+  }
 
   find(selector) {
     return new WidgetCollection(this.children()._array, selector, true);
-  },
+  }
 
   appendTo(parent) {
     parent.append(this);
-  },
-
-  dispose() {
-    for (let i = 0; i < this._array.length; i++) {
-      this._array[i].dispose();
-    }
   }
 
-};
+  set() {
+    this._array.forEach(widget => widget.set.apply(widget, arguments));
+    return this;
+  }
 
-['set', 'animate', 'on', 'off', 'once'].forEach((key) => {
-  proto[key] = function() {
-    for (let i = 0; i < this._array.length; i++) {
-      this._array[i][key].apply(this._array[i], arguments);
-    }
-    if (key !== 'animate') {
-      return this;
-    }
-  };
-});
+  on() {
+    this._array.forEach(widget => widget.on.apply(widget, arguments));
+    return this;
+  }
+
+  off() {
+    this._array.forEach(widget => widget.off.apply(widget, arguments));
+    return this;
+  }
+
+  once() {
+    this._array.forEach(widget => widget.once.apply(widget, arguments));
+    return this;
+  }
+
+  animate() {
+    this._array.forEach(widget => widget.animate.apply(widget, arguments));
+  }
+
+  dispose() {
+    this._array.forEach(widget => widget.dispose.apply(widget, arguments));
+  }
+
+}
 
 function select(array, selector, deep) {
   if (!array || array.length === 0) {
@@ -104,12 +115,12 @@ function select(array, selector, deep) {
 }
 
 function deepSelect(result, array, filter) {
-  for (let i = 0; i < array.length; i++) {
-    if (filter(array[i])) {
-      result.push(array[i]);
+  for (let widget of array) {
+    if (filter(widget)) {
+      result.push(widget);
     }
-    if (array[i]._children) {
-      deepSelect(result, array[i]._getSelectableChildren(), filter);
+    if (widget._children) {
+      deepSelect(result, widget._getSelectableChildren(), filter);
     }
   }
   return result;
