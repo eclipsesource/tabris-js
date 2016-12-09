@@ -32,6 +32,7 @@ export default Widget.extend({
     text: {type: 'string', nocache: true},
     message: {type: 'string', default: ''},
     editable: {type: 'boolean', default: true},
+    keepFocus: {type: 'boolean'},
     alignment: {type: ['choice', ['left', 'center', 'right']], default: 'left'},
     autoCorrect: {type: 'boolean', default: false},
     autoCapitalize: {type: 'boolean', default: false},

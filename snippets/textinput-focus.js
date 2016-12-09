@@ -10,5 +10,6 @@ new tabris.TextInput({
 
 new tabris.TextInput({
   layoutData: {top: 'prev() 20', left: '20%', right: '20%'},
-  message: 'Another field to focus...'
+  message: 'This text field keeps its focus forever',
+  keepFocus: true
 }).appendTo(tabris.ui.contentView);

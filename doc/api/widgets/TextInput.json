@@ -20,6 +20,7 @@
     },
     "editable": {
       "type": "boolean",
+      "default": "true",
       "description": "Whether the text can be edited or not."
     },
     "alignment": {
@@ -46,7 +47,13 @@
     },
     "focused": {
       "type": "boolean",
+      "default": "false",
       "description": "Reflects whether this widget has the keyboard focus. Setting this property to `true` will focus the widget and open the virtual keyboard, setting it to `false` will remove the focus and hide the virtual keyboard."
+    },
+    "keepFocus": {
+      "type": "boolean",
+      "default": "false",
+      "description": "When `true` the `TextInput` will keep its focus, even when tapped outside of the widget bounds."
     }
   },
   "events": {
