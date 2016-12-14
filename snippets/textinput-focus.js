@@ -3,9 +3,10 @@ new tabris.TextInput({
   message: 'Colorful typing...',
   font: '22px sans-serif'
 }).on('focus', function() {
-  this.set('background', 'yellow');
+  this.set('fillColor', 'yellow');
+  this.set('borderColor', 'yellow');
 }).on('blur', function() {
-  this.set('background', 'red');
+  this.set('borderColor', 'red');
 }).appendTo(tabris.ui.contentView);
 
 new tabris.TextInput({

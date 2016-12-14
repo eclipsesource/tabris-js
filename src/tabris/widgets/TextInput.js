@@ -40,6 +40,8 @@ export default Widget.extend({
       type: ['choice', ['ascii', 'decimal', 'email', 'number', 'numbersAndPunctuation', 'phone', 'url', 'default']],
       default: 'default'
     },
-    focused: {type: 'boolean', nocache: true}
+    focused: {type: 'boolean', nocache: true},
+    fillColor: {type: 'color'},
+    borderColor: {type: 'color'}
   }
 });
