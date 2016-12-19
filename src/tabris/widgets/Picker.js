@@ -77,7 +77,9 @@ export default Widget.extend({
           return this._getItem(this.get('selectionIndex'));
         }
       }
-    }
+    },
+    fillColor: {type: 'color'},
+    borderColor: {type: 'color'}
   },
 
   _reorderProperties(properties) {

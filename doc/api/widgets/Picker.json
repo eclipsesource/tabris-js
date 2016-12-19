@@ -18,6 +18,14 @@
     "selection": {
       "type": "any",
       "description": "The currently selected data item."
+    },
+    "fillColor": {
+      "type": "Color",
+      "description": "The color of the background of the Picker - applies only to iOS."
+    },
+    "borderColor": {
+      "type": "Color",
+      "description": "The color of the border of the Picker. On iOS this is a rectangular border around the Picker, on Android it is a single line below the Picker."
     }
   },
   "events": {
