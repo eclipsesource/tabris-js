@@ -15,6 +15,7 @@ export default Widget.extend({
     let result = Widget.prototype._create.apply(this, arguments);
     Object.defineProperty(this, 'stack', {value: new StackView(this)});
     this._nativeListen('backnavigation', true);
+    this._nativeListen('back', true);
     return result;
   },
 
@@ -46,6 +47,17 @@ function StackView(navigationView) {
   let stack = [];
 
   Object.defineProperty(this, 'length', {get() {return stack.length;}});
+
+  navigationView.on('back', () => {
+    let result = stack.pop();
+    result.trigger('disappear', result);
+    result._setParent(null);
+    let lastPage = this.last();
+    if (lastPage) {
+      lastPage.trigger('appear', lastPage);
+    }
+    return result;
+  });
 
   extend(this, {
 

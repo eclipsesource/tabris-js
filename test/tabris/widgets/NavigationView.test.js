@@ -237,6 +237,44 @@ describe('NavigationView', () => {
 
       });
 
+      describe('triggering back', function() {
+
+        let disappearListener;
+
+        beforeEach(() => {
+          client.resetCalls();
+          disappearListener = spy();
+          page.on('disappear', disappearListener);
+          navigationView._trigger('back');
+        });
+
+        it('removes page from stack', () => {
+          expect(stack.indexOf(page)).to.equal(-1);
+        });
+
+        it('sets length back to zero', () => {
+          expect(stack.length).to.equal(0);
+        });
+
+        it('detaches page from navigationView', () => {
+          expect(client.calls()[0]).to.deep.equal({
+            id: page.cid,
+            op: 'set',
+            properties: {parent: null}
+          });
+          expect(page.parent()).to.be.null;
+        });
+
+        it('does NOT CALL stack_pop', () => {
+          expect(client.calls().length).to.equal(1);
+        });
+
+        it('triggers page disappear event', () => {
+          expect(disappearListener).to.have.been.calledOnce;
+        });
+
+      });
+
       describe('calling clear()', () => {
 
         let result;
@@ -322,6 +360,39 @@ describe('NavigationView', () => {
         stack.push(new Page());
 
         expect(eventLog).to.have.been.calledWith(pages[4]);
+      });
+
+      describe('triggering back', () => {
+
+        beforeEach(() => {
+          client.resetCalls();
+          navigationView._trigger('back');
+        });
+
+        it('removes page from stack', () => {
+          expect(stack.indexOf(pages[4])).to.equal(-1);
+        });
+
+        it('decreases length', () => {
+          expect(stack.length).to.equal(4);
+        });
+
+        it('triggers page appear event', () => {
+          pages[2].on('appear', eventLog);
+
+          stack.pop();
+
+          expect(eventLog).to.have.been.calledWith(pages[2]);
+        });
+
+        it('triggers page disappear event', () => {
+          pages[3].on('disappear', eventLog);
+
+          stack.pop();
+
+          expect(eventLog).to.have.been.calledWith(pages[3]);
+        });
+
       });
 
       describe('calling pop()', () => {
