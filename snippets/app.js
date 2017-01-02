@@ -29,8 +29,10 @@ new tabris.Button({
 tabris.app.on('pause', function() {
   paused = Date.now();
 }).on('resume', function() {
-  var diff = Date.now() - paused;
-  label.text = ' Welcome back!\n You were gone for ' + (diff / 1000).toFixed(1) + ' seconds.';
+  if (paused > 0) {
+    var diff = Date.now() - paused;
+    label.text = ' Welcome back!\n You were gone for ' + (diff / 1000).toFixed(1) + ' seconds.';
+  }
 });
 
 tabris.app.on('backnavigation', function(app, options) {
