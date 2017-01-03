@@ -15,6 +15,10 @@
     "versionCode": {
       "type": "number",
       "description": "An alternative version number used in app stores to identify different versions of an app. Usually incremented with each release. This property reflects the `versionCode` on Android and `CFBundleVersion` on iOS."
+    },
+    "pinnedCertificates": {
+      "type": "any[]",
+      "description": "Allows to validate an SSL certificates when performing HTTP requests. While pinning a certificate the following components match the certificate: XHR/fetch, WebSockets, image loading and app patching.<br/><br/>The list of pinned certificates has to be in the form of `[{domain: <string>, hash: <string>, algorithm: <RSA2048|RSA4096|ECDSA256>}, ..]`. The `domain` denotes the domain and subdomain ([wildcards allowed](https://en.wikipedia.org/wiki/Wildcard_DNS_record)). The `hash` is a base64 encoded sha256 fingerprint of the _subjectPublicKeyInfo_. The `algorithm` denotes the public key algorithm of the SSL certificate and can have the values `RSA2048`, `RSA4096` or `ECDSA256`. It is required on iOS.<br /><br/>Example: `[{domain: 'freegeoip.net', hash: 'sha256/eTPz+5X4FcoK5fW+I0Wt/9y2vOkU3UMmVnDs7yGUJf8', algorithm: 'RSA4096'}];`<br /><br />For further details see https://www.owasp.org/index.php/Certificate_and_Public_Key_Pinning.<br /><br/>Secure Transport's TLS session cache has a timeout of 10 minutes (Resumed TLS handshake)."
     }
   },
   "events": {

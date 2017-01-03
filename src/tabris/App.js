@@ -6,6 +6,31 @@ export default function App() {
 
 let _App = NativeObject.extend({
   _cid: 'tabris.App',
+  _properties: {
+    pinnedCertificates: {
+      type: 'array',
+      default() {
+        return [];
+      },
+      access: {
+        set(name, value, options) {
+          for (let cert of value) {
+            if (typeof cert.domain !== 'string') {
+              throw new Error('Pinned certificate requires "domain" property but is ' + JSON.stringify(cert));
+            }
+            if (typeof cert.hash !== 'string') {
+              throw new Error('Pinned certificate requires "hash" property but is ' + JSON.stringify(cert));
+            }
+            if (tabris.device.platform === 'iOS' && typeof cert.algorithm !== 'string') {
+              throw new Error('Pinned certificate requires "algorithm" property on iOS but is ' + JSON.stringify(cert));
+            }
+          }
+          this._storeProperty(name, value, options);
+          this._nativeSet(name, value);
+        }
+      }
+    }
+  },
   _events: {
     foreground: {trigger: triggerWithTarget},
     resume: {trigger: triggerWithTarget},

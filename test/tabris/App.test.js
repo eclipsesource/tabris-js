@@ -12,7 +12,8 @@ describe('App', function() {
   beforeEach(function() {
     client = new ClientStub();
     global.tabris = {
-      on: () => {},
+      on: () => {
+      },
       _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param),
       _proxies: new ProxyStore()
     };
@@ -34,6 +35,54 @@ describe('App', function() {
 
   it('is instanceof App', function() {
     expect(app).to.be.an.instanceOf(App);
+  });
+
+  describe('properties', function() {
+
+    describe('pinnedCertificates', function() {
+
+      beforeEach(function() {
+        tabris.device = {platform: 'Android'};
+      });
+
+      it('throws exception when set without "domain" property', function() {
+        expect(() => {
+          app.pinnedCertificates = [{hash: 'sha256/abc'}];
+        }).to.throw();
+      });
+
+      it('throws exception when set without "hash" property', function() {
+        expect(() => {
+          app.pinnedCertificates = [{domain: 'example.com'}];
+        }).to.throw();
+      });
+
+      it('throws exception when set without "algorithm" property on iOS', function() {
+        tabris.device.platform = 'iOS';
+        expect(() => {
+          app.pinnedCertificates = [{domain: 'example.com', hash: 'sha256/abc'}];
+        }).to.throw();
+      });
+
+
+      it('sets pinned certificates on native side', function() {
+        app.pinnedCertificates = [{domain: 'example.com', hash: 'sha256/abc'}];
+
+        let pinnedCertificates = [{domain: 'example.com', hash: 'sha256/abc'}];
+
+        expect(client.calls({op: 'set', id: app.cid})[0].properties).to.eql({pinnedCertificates});
+      });
+
+      it('sets pinned certificates, containing "algorithm" property, on iOS', function() {
+        tabris.device.platform = 'iOS';
+
+        app.pinnedCertificates = [{domain: 'example.com', hash: 'sha256/abc', algorithm: 'alg1'}];
+
+        let pinnedCertificates = [{domain: 'example.com', hash: 'sha256/abc', algorithm: 'alg1'}];
+        expect(client.calls({op: 'set', id: app.cid})[0].properties).to.eql({pinnedCertificates});
+      });
+
+    });
   });
 
   it('listens for pause event', function() {
