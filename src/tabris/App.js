@@ -4,8 +4,40 @@ export default function App() {
   throw new Error('App can not be created');
 }
 
+const CERTIFICATE_ALGORITHMS = ['RSA2048', 'RSA4096', 'ECDSA256'];
+
 let _App = NativeObject.extend({
   _cid: 'tabris.App',
+  _properties: {
+    pinnedCertificates: {
+      type: 'array',
+      default() {
+        return [];
+      },
+      access: {
+        set(name, value) {
+          for (let cert of value) {
+            if (typeof cert.host !== 'string') {
+              throw new Error('Invalid host for pinned certificate: ' + cert.host);
+            }
+            if (typeof cert.hash !== 'string' || !cert.hash.startsWith('sha256/')) {
+              throw new Error('Invalid hash for pinned certificate: ' + cert.hash);
+            }
+            if (tabris.device.platform === 'iOS') {
+              if (!('algorithm' in cert)) {
+                throw new Error('Missing algorithm for pinned certificate: ' + cert.host);
+              }
+              if (typeof cert.algorithm !== 'string' || CERTIFICATE_ALGORITHMS.indexOf(cert.algorithm) === -1) {
+                throw new Error('Invalid algorithm for pinned certificate: ' + cert.algorithm);
+              }
+            }
+          }
+          this._storeProperty(name, value);
+          this._nativeSet(name, value);
+        }
+      }
+    }
+  },
   _events: {
     foreground: {trigger: triggerWithTarget},
     resume: {trigger: triggerWithTarget},

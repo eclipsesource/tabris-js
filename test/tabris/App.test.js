@@ -36,6 +36,69 @@ describe('App', function() {
     expect(app).to.be.an.instanceOf(App);
   });
 
+  describe('properties', function() {
+
+    describe('pinnedCertificates', function() {
+
+      beforeEach(function() {
+        tabris.device = {platform: 'Android'};
+      });
+
+      it('throws exception when set without "host" property', function() {
+        expect(() => {
+          app.pinnedCertificates = [{hash: 'sha256/abc'}];
+        }).to.throw(Error, /Invalid host/);
+      });
+
+      it('throws exception when set without "hash" property', function() {
+        expect(() => {
+          app.pinnedCertificates = [{host: 'example.com'}];
+        }).to.throw(Error, /Invalid hash/);
+      });
+
+      it('throws exception when set with invalid "hash" property', function() {
+        expect(() => {
+          app.pinnedCertificates = [{host: 'example.com', hash: 'foo/bar'}];
+        }).to.throw(Error, /Invalid hash/);
+      });
+
+      it('throws exception when set without "algorithm" property on iOS', function() {
+        tabris.device.platform = 'iOS';
+        expect(() => {
+          app.pinnedCertificates = [{host: 'example.com', hash: 'sha256/abc'}];
+        }).to.throw(Error, /Missing algorithm/);
+      });
+
+      it('throws exception when set with invalid "algorithm" property on iOS', function() {
+        tabris.device.platform = 'iOS';
+        expect(() => {
+          app.pinnedCertificates = [{host: 'example.com', hash: 'sha256/abc', algorithm: 'Foo'}];
+        }).to.throw(Error, /Invalid algorithm/);
+      });
+
+      it('sets pinned certificates on native side', function() {
+        app.pinnedCertificates = [{host: 'example.com', hash: 'sha256/abc'}];
+
+        let setCall = client.calls({op: 'set', id: app.cid})[0];
+        expect(setCall.properties).to.deep.equal({
+          pinnedCertificates: [{host: 'example.com', hash: 'sha256/abc'}]
+        });
+      });
+
+      it('sets pinned certificates, containing "algorithm" property, on iOS', function() {
+        tabris.device.platform = 'iOS';
+        app.pinnedCertificates = [{host: 'example.com', hash: 'sha256/abc', algorithm: 'RSA4096'}];
+
+        let setCall = client.calls({op: 'set', id: app.cid})[0];
+        expect(setCall.properties).to.deep.equal({
+          pinnedCertificates: [{host: 'example.com', hash: 'sha256/abc', algorithm: 'RSA4096'}]
+        });
+      });
+
+    });
+
+  });
+
   it('listens for pause event', function() {
     let listener = spy();
 
