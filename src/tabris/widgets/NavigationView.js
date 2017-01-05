@@ -51,7 +51,11 @@ function StackView(navigationView) {
   navigationView.on('back', () => {
     let result = stack.pop();
     result.trigger('disappear', result);
-    result._setParent(null);
+    if(result.autoDispose === true) {
+      result.dispose();
+    } else {
+      result._setParent(null);
+    }
     let lastPage = this.last();
     if (lastPage) {
       lastPage.trigger('appear', lastPage);

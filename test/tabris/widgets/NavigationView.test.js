@@ -258,10 +258,9 @@ describe('NavigationView', () => {
         it('detaches page from navigationView', () => {
           expect(client.calls()[0]).to.deep.equal({
             id: page.cid,
-            op: 'set',
-            properties: {parent: null}
+            op: 'destroy'
           });
-          expect(page.parent()).to.be.null;
+          expect(page.parent()).to.be.undefined;
         });
 
         it('does NOT CALL stack_pop', () => {
