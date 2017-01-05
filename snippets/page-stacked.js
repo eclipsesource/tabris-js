@@ -22,13 +22,13 @@ function createPage(title) {
     left: 16, top: 'prev() 16', right: 16,
     text: 'Go back'
   }).on('select', function() {
-    navigationView.stack.pop().dispose();
+    navigationView.stack.pop();
   }).appendTo(page);
   new tabris.Button({
     left: 16, top: 'prev() 16', right: 16,
     text: 'Go to initial page'
   }).on('select', function() {
-    navigationView.stack.clear().dispose();
+    navigationView.stack.clear();
     navigationView.stack.push(createPage());
   }).appendTo(page);
   return page;
