@@ -30,6 +30,11 @@
       "type": "boolean",
       "default": "false",
       "description": "Defines whether this is a top level page."
+    },
+    "autoDispose": {
+      "type": "boolean",
+      "default": "true",
+      "description": "Defines whether this page will be automatically disposed when popped from the NavigationView, e,g. using native back navigation."
     }
   },
   "events": {

@@ -83,7 +83,11 @@ function StackView(navigationView) {
       if (result) {
         result.trigger('disappear', result);
         navigationView._nativeCall('stack_pop', {});
-        result._setParent(null);
+        if(result.autoDispose === true) {
+          result.dispose();
+        } else {
+          result._setParent(null);
+        }
       }
       let lastPage = this.last();
       if (lastPage) {
@@ -100,7 +104,13 @@ function StackView(navigationView) {
       }
       navigationView._nativeCall('stack_clear', {});
       stack = [];
-      result.forEach((page) => {page._setParent(null);});
+      result.forEach((page) => {
+        if(page.autoDispose === true) {
+          page.dispose();
+        } else {
+          page._setParent(null);
+        }
+      });
       return result;
     },
 

@@ -11,7 +11,8 @@ export default Widget.extend({
   _properties: {
     image: {type: 'image', default: null},
     title: {type: 'string', default: ''},
-    topLevel: {type: 'boolean', default: false}
+    topLevel: {type: 'boolean', default: false},
+    autoDispose: {type: 'boolean', default: true}
   }
 
 });

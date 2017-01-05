@@ -217,6 +217,137 @@ describe('NavigationView', () => {
           expect(stack.length).to.equal(0);
         });
 
+        it('disposes page', () => {
+          expect(client.calls()[1]).to.deep.equal({
+            id: page.cid,
+            op: 'destroy'
+          });
+          expect(page.parent()).to.be.undefined;
+        });
+
+        it('CALLs stack_pop', () => {
+          expect(client.calls()[0]).to.deep.equal({
+            id: navigationView.cid,
+            op: 'call',
+            method: 'stack_pop',
+            parameters: {}
+          });
+        });
+
+      });
+
+      describe('triggering back', function() {
+
+        let disappearListener;
+
+        beforeEach(() => {
+          client.resetCalls();
+          disappearListener = spy();
+          page.on('disappear', disappearListener);
+          navigationView._trigger('back');
+        });
+
+        it('removes page from stack', () => {
+          expect(stack.indexOf(page)).to.equal(-1);
+        });
+
+        it('sets length back to zero', () => {
+          expect(stack.length).to.equal(0);
+        });
+
+        it('detaches page from navigationView', () => {
+          expect(client.calls()[0]).to.deep.equal({
+            id: page.cid,
+            op: 'set',
+            properties: {parent: null}
+          });
+          expect(page.parent()).to.be.null;
+        });
+
+        it('does NOT CALL stack_pop', () => {
+          expect(client.calls().length).to.equal(1);
+        });
+
+        it('triggers page disappear event', () => {
+          expect(disappearListener).to.have.been.calledOnce;
+        });
+
+      });
+
+      describe('calling clear()', () => {
+
+        let result;
+
+        beforeEach(() => {
+          client.resetCalls();
+          result = stack.clear();
+        });
+
+        it('returns WidgetCollection with page', () => {
+          expect(result.toArray()).to.deep.equal([page]);
+        });
+
+        it('removes page from stack', () => {
+          expect(stack.indexOf(page)).to.equal(-1);
+        });
+
+        it('sets length back to zero', () => {
+          expect(stack.length).to.equal(0);
+        });
+
+        it('detaches page from navigationView', () => {
+          expect(client.calls()[1]).to.deep.equal({
+            id: page.cid,
+            op: 'destroy'
+          });
+          expect(page.parent()).to.be.undefined;
+        });
+
+        it('CALLs stack_clear', () => {
+          expect(client.calls()[0]).to.deep.equal({
+            id: navigationView.cid,
+            op: 'call',
+            method: 'stack_clear',
+            parameters: {}
+          });
+        });
+
+      });
+
+    });
+
+    describe('pushing a single page with autoDispose false', () => {
+
+      let page;
+
+      beforeEach(() => {
+        page = new Page();
+        page.autoDispose = false;
+        client.resetCalls();
+        stack.push(page);
+      });
+
+      describe('pop() a page with autoDispose false', () => {
+
+        let result;
+
+        beforeEach(() => {
+          client.resetCalls();
+          result = stack.pop();
+        });
+
+        it('returns page', () => {
+          expect(result).to.equal(page);
+        });
+
+        it('removes page from stack', () => {
+          expect(stack.indexOf(page)).to.equal(-1);
+        });
+
+        it('sets length back to zero', () => {
+          expect(stack.length).to.equal(0);
+        });
+
         it('detaches page from navigationView', () => {
           expect(client.calls()[1]).to.deep.equal({
             id: page.cid,
@@ -454,12 +585,11 @@ describe('NavigationView', () => {
           expect(stack.length).to.equal(0);
         });
 
-        it('detaches pages from navigationView', () => {
-          expect(client.calls({op: 'set'}).length).to.equal(5);
+        it('disposes pages', () => {
+          expect(client.calls({op: 'destroy'}).length).to.equal(5);
           expect(client.calls()[1]).to.deep.equal({
             id: pages[0].cid,
-            op: 'set',
-            properties: {parent: null}
+            op: 'destroy'
           });
           expect(navigationView.children().length).to.equal(0);
         });
