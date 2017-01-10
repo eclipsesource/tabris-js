@@ -123,6 +123,11 @@ describe('tabris', function() {
       expect(window.crypto).to.equal(tabris.crypto);
     });
 
+    it('creates a pkcs5 object on tabris', function() {
+      expect(tabris.pkcs5).to.be.an('object');
+      expect(tabris.pkcs5.pbkdf2).to.be.a('function');
+    });
+
     it('creates a localStorage object on window and tabris', function() {
       expect(tabris.localStorage).to.be.instanceOf(tabris.Storage);
       expect(window.localStorage).to.equal(tabris.localStorage);

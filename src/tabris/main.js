@@ -29,6 +29,7 @@ import InactivityTimer from './InactivityTimer.js';
 import Page from './widgets/Page';
 import PageSelector from './widgets/PageSelector';
 import Picker from './widgets/Picker';
+import Pkcs5 from './Pkcs5';
 import ProgressBar from './widgets/ProgressBar';
 import NativeObject from './NativeObject';
 import NavigationView from './widgets/NavigationView';
@@ -117,4 +118,5 @@ tabris._loadFunctions.unshift(() => {
     window.secureStorage = tabris.secureStorage = createStorage(true);
   }
   window.crypto = tabris.crypto = new Crypto();
+  tabris.pkcs5 = new Pkcs5();
 });
