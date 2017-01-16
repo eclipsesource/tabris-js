@@ -8,6 +8,11 @@ describe('XMLHttpRequest', function() {
 
   let proxy, client, xhr;
 
+  function sendRequest(xhr) {
+    xhr.open('GET', 'http://foo.com');
+    xhr.send();
+  }
+
   beforeEach(function() {
     global.tabris = {
       on: () => {},
@@ -31,11 +36,6 @@ describe('XMLHttpRequest', function() {
     restore();
   });
 
-  let sendRequest = function(xhr) {
-    xhr.open('GET', 'http://foo.com');
-    xhr.send();
-  };
-
   it('is an EventTarget', function() {
     let handler1 = spy();
     let handler2 = spy();
@@ -53,19 +53,19 @@ describe('XMLHttpRequest', function() {
     it('fails without method', function() {
       expect(() => {
         xhr.open(undefined, 'http://foo.com');
-      }).to.throw("Method argument should be specified to execute 'open'");
+      }).to.throw(Error, "Method argument should be specified to execute 'open'");
     });
 
     it('fails without url', function() {
       expect(() => {
         xhr.open('foo', undefined);
-      }).to.throw("URL argument should be specified to execute 'open'");
+      }).to.throw(Error, "URL argument should be specified to execute 'open'");
     });
 
     it('fails for synchronous requests', function() {
       expect(() => {
         xhr.open('GET', 'http://foo.com', false);
-      }).to.throw('Only asynchronous request supported.');
+      }).to.throw(Error, 'Only asynchronous request supported.');
     });
 
     it('sets async to true when argument omitted', function() {
@@ -77,7 +77,7 @@ describe('XMLHttpRequest', function() {
     it('fails with method name containing space', function() {
       expect(() => {
         xhr.open('ba r', 'http://foo.com');
-      }).to.throw("Invalid HTTP method, failed to execute 'open'");
+      }).to.throw(Error, "Invalid HTTP method, failed to execute 'open'");
     });
 
     it("doesn't fail with method name containing '!'", function() {
@@ -89,7 +89,7 @@ describe('XMLHttpRequest', function() {
     it('fails with method name containing (del)', function() {
       expect(() => {
         xhr.open('ba' + String.fromCharCode(127) + 'r', 'http://foo.com');
-      }).to.throw("Invalid HTTP method, failed to execute 'open'");
+      }).to.throw(Error, "Invalid HTTP method, failed to execute 'open'");
     });
 
     it("doesn't fail with method name containing '~'", function() {
@@ -101,21 +101,21 @@ describe('XMLHttpRequest', function() {
     it('fails with forbidden method name', function() {
       expect(() => {
         xhr.open('CONNECT', 'http://foo.com');
-      }).to.throw('SecurityError: ' +
+      }).to.throw(Error, 'SecurityError: ' +
                       "'CONNECT' HTTP method is not secure, failed to execute 'open'");
     });
 
     it('fails with forbidden non-uppercase method name', function() {
       expect(() => {
         xhr.open('coNnEcT', 'http://foo.com');
-      }).to.throw('SecurityError: ' +
+      }).to.throw(Error, 'SecurityError: ' +
                       "'CONNECT' HTTP method is not secure, failed to execute 'open'");
     });
 
     it('fails with unsupported URL scheme', function() {
       expect(() => {
         xhr.open('GET', 'foo:bar');
-      }).to.throw("Unsupported URL scheme, failed to execute 'open'");
+      }).to.throw(Error, "Unsupported URL scheme, failed to execute 'open'");
     });
 
     it("sets object state to 'OPENED'", function() {
@@ -188,7 +188,7 @@ describe('XMLHttpRequest', function() {
     it("fails when state not 'opened'", function() {
       expect(() => {
         xhr.send();
-      }).to.throw('InvalidStateError: ' +
+      }).to.throw(Error, 'InvalidStateError: ' +
                       "Object's state must be 'OPENED', failed to execute 'send'");
     });
 
@@ -197,7 +197,7 @@ describe('XMLHttpRequest', function() {
       xhr.send();
       expect(() => {
         xhr.send();
-      }).to.throw("InvalidStateError: 'send' invoked, failed to execute 'send'");
+      }).to.throw(Error, "InvalidStateError: 'send' invoked, failed to execute 'send'");
     });
 
     it('calls proxy send with request URL specified as open argument', function() {
@@ -660,7 +660,7 @@ describe('XMLHttpRequest', function() {
     it("fails when state not 'opened'", function() {
       expect(() => {
         xhr.setRequestHeader();
-      }).to.throw(
+      }).to.throw(Error,
         "InvalidStateError: Object's state must be 'OPENED', failed to execute 'setRequestHeader'"
       );
     });
@@ -669,7 +669,7 @@ describe('XMLHttpRequest', function() {
       xhr.open('GET', 'http://foo.com');
       expect(() => {
         xhr.setRequestHeader('foo bar', 'bar');
-      }).to.throw(
+      }).to.throw(Error,
         "Invalid HTTP header name, failed to execute 'open'"
       );
     });
@@ -678,7 +678,7 @@ describe('XMLHttpRequest', function() {
       xhr.open('GET', 'http://foo.com');
       expect(() => {
         xhr.setRequestHeader('Foo', 'bar\n');
-      }).to.throw(
+      }).to.throw(Error,
         "Invalid HTTP header value, failed to execute 'open'"
       );
     });
@@ -702,7 +702,7 @@ describe('XMLHttpRequest', function() {
       xhr.send();
       expect(() => {
         xhr.setRequestHeader('Foo', 'Bar');
-      }).to.throw(
+      }).to.throw(Error,
         "InvalidStateError: cannot set request header if 'send()' invoked and request not completed"
       );
     });
@@ -832,11 +832,12 @@ describe('XMLHttpRequest', function() {
         sendRequest(xhr);
       });
 
-      it('fails when responseText was not a string', function() {
+      it('throws when responseType is not text', function() {
+        xhr.responseType = 'arraybuffer';
         proxy.trigger('StateChange', {state: 'finished', response: 2});
         expect(() => {
           xhr.responseText;
-        }).to.throw('IllegalStateError: responseText is not a string');
+        }).to.throw(Error, 'XHR responseText not accessible for non-text responseType');
       });
 
       it('returns responseText', function() {
@@ -856,13 +857,6 @@ describe('XMLHttpRequest', function() {
         expect(xhr.responseText).to.equal('');
       });
 
-      it('fails with invalid reponseText type', function() {
-        proxy.trigger('StateChange', {state: 'finished', response: ['foo']});
-        expect(() => {
-          xhr.responseText;
-        }).to.throw('IllegalStateError: responseText is not a string');
-      });
-
     });
 
   });
@@ -876,30 +870,37 @@ describe('XMLHttpRequest', function() {
 
     describe('get', function() {
 
-      beforeEach(function() {
-        sendRequest(xhr);
-      });
-
       it('returns empty string when state not allowed', function() {
+        sendRequest(xhr);
         proxy.trigger('StateChange', {state: 'headers', response: 'hello'});
         expect(xhr.response).to.equal('');
       });
 
       it('returns empty string on error', function() {
-        proxy.trigger('StateChange', {state: 'finished', response: 'foo'});
         sendRequest(xhr);
         proxy.trigger('StateChange', {state: 'error'});
         expect(xhr.response).to.equal('');
       });
 
-      it("returns responseText when responseType empty string or 'text'", function() {
-        proxy.trigger('StateChange', {state: 'finished', response: 'foo'});
-        expect(xhr.response).to.equal('foo');
+      it('returns response text when responseType is empty', function() {
         sendRequest(xhr);
-        xhr.open('GET', 'http://foo.com');
-        xhr.responseType = 'text';
         proxy.trigger('StateChange', {state: 'finished', response: 'foo'});
         expect(xhr.response).to.equal('foo');
+      });
+
+      it("returns response text when responseType is 'text'", function() {
+        xhr.responseType = 'text';
+        sendRequest(xhr);
+        proxy.trigger('StateChange', {state: 'finished', response: 'foo'});
+        expect(xhr.response).to.equal('foo');
+      });
+
+      it("returns response data when responseType is 'arraybuffer'", function() {
+        let buffer = new ArrayBuffer(8);
+        xhr.responseType = 'arraybuffer';
+        sendRequest(xhr);
+        proxy.trigger('StateChange', {state: 'finished', response: buffer});
+        expect(xhr.response).to.equal(buffer);
       });
 
     });
@@ -919,30 +920,33 @@ describe('XMLHttpRequest', function() {
         proxy.trigger('StateChange', {state: 'loading'});
         expect(() => {
           xhr.responseType = 'foo';
-        }).to.throw(
-          "InvalidStateError: state must not be 'LOADING' or 'DONE' when setting responseType"
-        );
+        }).to.throw(Error, 'The response type cannot be set when state is LOADING or DONE.');
       });
 
-      it('fails to set bad responseType', function() {
+      it('ignores unknown responseType', function() {
         xhr.responseType = 'foo';
         expect(xhr.responseType).to.equal('');
       });
 
-      it('fails to set case variant of accepted responseType', function() {
-        xhr.responseType = 'tExt';
+      it('ignores non-lowercase variant of accepted responseType', function() {
+        xhr.responseType = 'Text';
         expect(xhr.responseType).to.equal('');
       });
 
-      it("fails to set response type which is not 'text'", function() {
+      it('throws when setting unsupported response type', function() {
         expect(() => {
           xhr.responseType = 'document';
-        }).to.throw("Only the 'text' response type is supported.");
+        }).to.throw(Error, "Unsupported responseType, only 'text' and 'arraybuffer' are supported");
       });
 
-      it('sets responseType', function() {
+      it('accepts responseType `text`', function() {
         xhr.responseType = 'text';
         expect(xhr.responseType).to.equal('text');
+      });
+
+      it('accepts responseType `arraybuffer`', function() {
+        xhr.responseType = 'arraybuffer';
+        expect(xhr.responseType).to.equal('arraybuffer');
       });
 
     });
@@ -1068,9 +1072,7 @@ describe('XMLHttpRequest', function() {
         proxy.trigger('StateChange', {state: 'headers', message: 'OK'});
         expect(() => {
           xhr.withCredentials = true;
-        }).to.throw(
-          "InvalidStateError: state must be 'UNSENT' or 'OPENED' when setting withCredentials"
-        );
+        }).to.throw(Error, "InvalidStateError: state must be 'UNSENT' or 'OPENED' when setting withCredentials");
       });
 
       it('fails when send invoked', function() {
@@ -1078,7 +1080,7 @@ describe('XMLHttpRequest', function() {
         xhr.send();
         expect(() => {
           xhr.withCredentials = true;
-        }).to.throw("InvalidStateError: 'send' invoked, failed to set 'withCredentials'");
+        }).to.throw(Error, "InvalidStateError: 'send' invoked, failed to set 'withCredentials'");
       });
 
       it('sets withCredentials', function() {

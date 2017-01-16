@@ -55,24 +55,24 @@ XMLHttpRequest.prototype = {
 // Properties
 
 function createScopeObject(xhr) {
-  let scope = {};
-  scope.proxy = null;
-  scope.authorRequestHeaders = {};
-  scope.uploadListeners = {};
-  scope.uploadEventTarget = {};
-  scope.timeout = 0;
-  scope.status = 0;
-  scope.statusText = '';
-  scope.responseHeaders = '';
-  scope.readyState = xhr.UNSENT;
-  scope.responseText = '';
-  scope.withCredentials = false;
-  scope.responseType = '';
-  scope.sendInvoked = false;
-  scope.isSynchronous = false;
-  scope.error = false;
-  scope.uploadComplete = false;
-  return scope;
+  return {
+    proxy: null,
+    authorRequestHeaders: {},
+    uploadListeners: {},
+    uploadEventTarget: {},
+    timeout: 0,
+    status: 0,
+    statusText: '',
+    responseHeaders: '',
+    readyState: xhr.UNSENT,
+    responseData: '',
+    withCredentials: false,
+    responseType: '',
+    sendInvoked: false,
+    isSynchronous: false,
+    error: false,
+    uploadComplete: false
+  };
 }
 
 function initializeEventHandlers(scope) {
@@ -117,65 +117,71 @@ function definePropertyTimeout(xhr, scope) {
 }
 
 function definePropertyResponseText(xhr, scope) {
+  // https://xhr.spec.whatwg.org/#the-responsetext-attribute
   Object.defineProperty(xhr, 'responseText', { // #dom-xmlhttprequest-responsetext
     get() {
-      // Steps merged with #text-response-entity-body, entity body steps marked with '*'
-      // Note: HttpRequest's response is already stringified
-      if (scope.responseText === null) { // (1*)
+      // 1. If responseType is not the empty string or "text", throw an InvalidStateError exception.
+      if (scope.responseType !== '' && scope.responseType !== 'text') {
+        throw new Error('XHR responseText not accessible for non-text responseType');
+      }
+      // 2. If state is not loading or done, return the empty string.
+      if ((scope.readyState !== xhr.LOADING && scope.readyState !== xhr.DONE)) {
         return '';
       }
-      if (typeof scope.responseText !== 'string') { // (1*)
-        throw new Error('IllegalStateError: responseText is not a string');
-      }
-      if ((scope.readyState !== xhr.LOADING && scope.readyState !== xhr.DONE)) { // (2)
-        return '';
-      }
-      if (scope.error) { // (3)
-        return '';
-      }
-      return scope.responseText;
+      // 3. Return the text response.
+      return scope.responseData || '';
     },
     set() {}
   });
 }
 
 function definePropertyResponse(xhr, scope) {
-  Object.defineProperty(xhr, 'response', { // #dom-xmlhttprequest-responsetext
+  // https://xhr.spec.whatwg.org/#the-response-attribute
+  Object.defineProperty(xhr, 'response', {
     get() {
-      // Note: only the if-statement implemented, as response types different than 'text' are
-      // currently not supported
-      if (scope.readyState !== xhr.LOADING && scope.readyState !== xhr.DONE) { // (1)
-        return '';
+      // If responseType is the empty string or "text"
+      if (scope.responseType === '' || scope.responseType === 'string') {
+        // 1. If state is not loading or done, return the empty string.
+        if (scope.readyState !== xhr.LOADING && scope.readyState !== xhr.DONE) {
+          return '';
+        }
+        // 2. Return the text response.
+        return scope.responseData || '';
       }
-      if (scope.error) { // (2)
-        return '';
+      // Otherwise
+      // 1. If state is not done, return null.
+      if (scope.readyState !== xhr.DONE) {
+        return null;
       }
-      return scope.responseText; // (3)
+      // 2. If responseType is "arraybuffer"
+      // Return the arraybuffer response.
+      return scope.responseData;
     },
     set() {}
   });
 }
 
 function definePropertyResponseType(xhr, scope) {
-  Object.defineProperty(xhr, 'responseType', { // #dom-xmlhttprequest-responsetype
+  // https://xhr.spec.whatwg.org/#the-responsetext-attribute
+  Object.defineProperty(xhr, 'responseType', {
     get() {
       return scope.responseType;
     },
     set(value) {
-      if ((scope.readyState === xhr.LOADING || scope.readyState === xhr.DONE)) { // (1)
-        throw new Error(
-            "InvalidStateError: state must not be 'LOADING' or 'DONE' when setting responseType"
-        );
+      // 1. (concurrency related, skip)
+      // 2. If state is loading or done, throw an InvalidStateError exception.
+      if ((scope.readyState === xhr.LOADING || scope.readyState === xhr.DONE)) {
+        throw new Error('The response type cannot be set when state is LOADING or DONE.');
       }
-      // (2): superfluous as we don't support synchronous requests
-      // (3): we don't handle the concurrency in this layer, so no worker environments
+      // 3. (concurrency related, skip)
+      // 4. Set the responseType attribute's value to the given value.
       // mimicking Chromium and Firefox behaviour when setting a not allowed responseType:
       if (['arraybuffer', 'blob', 'document', 'json', 'text'].indexOf(value) < 0) {
         return;
       }
-      // currently only the 'text' response type is supported
-      if (['arraybuffer', 'blob', 'document', 'json'].indexOf(value) > -1) {
-        throw new Error("Only the 'text' response type is supported.");
+      // currently only the response types 'text' and 'arraybuffer' are supported
+      if (['blob', 'document', 'json'].indexOf(value) > -1) {
+        throw new Error("Unsupported responseType, only 'text' and 'arraybuffer' are supported");
       }
       scope.responseType = value;
     }
@@ -296,7 +302,7 @@ function createOpenMethod(xhr, scope) {
     scope.isSynchronous = !async;
     scope.authorRequestHeaders = {};
     scope.sendInvoked = false;
-    scope.responseText = null;
+    scope.responseData = null;
     if (scope.readyState !== xhr.OPENED) { // (15)
       scope.readyState = xhr.OPENED;
       dispatchEvent('readystatechange', xhr);
@@ -354,7 +360,8 @@ function createSendMethod(xhr, scope) {
       method: scope.requestMethod,
       timeout: xhr.timeout,
       headers: scope.authorRequestHeaders,
-      data: scope.requestBody
+      data: scope.requestBody,
+      responseType: scope.responseType
     });
   };
 }
@@ -463,7 +470,7 @@ function stateChangeHandler(e, xhr, scope) { // #infrastructure-for-the-send()-m
       break;
     case 'finished':
       // TODO create response based on responseType
-      scope.responseText = e.response;
+      scope.responseData = e.response;
       scope.readyState = xhr.DONE;
       dispatchEvent('readystatechange', xhr);
       dispatchFinishedProgressEvents(xhr);
