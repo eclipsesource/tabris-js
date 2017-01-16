@@ -77,7 +77,7 @@
   "links": [
     {
       "title": "Snippet for creating a video wigdet",
-      "path": "${GITHUB_BRANCH}/snippets/video/video.js"
+      "path": "${GITHUB_BRANCH}/snippets/video.js"
     }
   ]
 }

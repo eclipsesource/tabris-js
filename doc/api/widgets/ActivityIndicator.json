@@ -5,7 +5,7 @@
   "links": [
     {
       "title" : "Simple ActivityIndicator snippet",
-      "path" : "${GITHUB_BRANCH}/snippets/activity-indicator/activityindicator.js"
+      "path" : "${GITHUB_BRANCH}/snippets/activityindicator.js"
     }
   ]
 }

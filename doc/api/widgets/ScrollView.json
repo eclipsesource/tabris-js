@@ -74,7 +74,7 @@
   "links": [
     {
       "title": "Simple ScrollView snippet",
-      "path": "${GITHUB_BRANCH}/snippets/scrollview/scrollview.js"
+      "path": "${GITHUB_BRANCH}/snippets/scrollview.js"
     },
     {
       "title": "Example using a ScrollView",

@@ -54,15 +54,15 @@
   "links": [
     {
       "title": "Simple Page snippet with multiple top-level pages including a PageSelector (aka Burger Menu)",
-      "path": "${GITHUB_BRANCH}/snippets/page/page.js"
+      "path": "${GITHUB_BRANCH}/snippets/page.js"
     },
     {
       "title": "Snippet for creating a full screen Page",
-      "path": "${GITHUB_BRANCH}/snippets/page-fullscreen/page-fullscreen.js"
+      "path": "${GITHUB_BRANCH}/snippets/page-fullscreen.js"
     },
     {
       "title": "Snippet for dynamically creating Pages",
-      "path": "${GITHUB_BRANCH}/snippets/page-add-dynamically/page-add-dynamically.js"
+      "path": "${GITHUB_BRANCH}/snippets/page-add-dynamically.js"
     }
   ]
 }

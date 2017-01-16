@@ -33,7 +33,7 @@
   "links": [
     {
       "title": "CollectionView example",
-      "path": "${GITHUB_BRANCH}/snippets/collectionview/collectionview.js"
+      "path": "${GITHUB_BRANCH}/snippets/collectionview.js"
     }
   ]
 }

@@ -57,7 +57,7 @@
   "links": [
     {
       "title": "Simple Picker snippet",
-      "path": "${GITHUB_BRANCH}/snippets/picker/picker.js"
+      "path": "${GITHUB_BRANCH}/snippets/picker.js"
     }
   ]
 }

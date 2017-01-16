@@ -36,11 +36,11 @@
   "links": [
     {
       "title": "Simple TextView snippet",
-      "path": "${GITHUB_BRANCH}/snippets/textview/textview.js"
+      "path": "${GITHUB_BRANCH}/snippets/textview.js"
     },
     {
       "title": "Snippet for TextView with markup",
-      "path": "${GITHUB_BRANCH}/snippets/textview-markup/textview-markup.js"
+      "path": "${GITHUB_BRANCH}/snippets/textview-markup.js"
     }
   ]
 }

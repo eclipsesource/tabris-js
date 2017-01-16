@@ -42,7 +42,7 @@
   "links": [
     {
       "title": "Snippet for creating a Drawer",
-      "path": "${GITHUB_BRANCH}/snippets/drawer/drawer.js"
+      "path": "${GITHUB_BRANCH}/snippets/drawer.js"
     }
   ]
 }

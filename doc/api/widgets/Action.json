@@ -29,11 +29,11 @@
   "links": [
     {
       "title": "Snippet for creating actions",
-      "path": "${GITHUB_BRANCH}/snippets/action/action.js"
+      "path": "${GITHUB_BRANCH}/snippets/action.js"
     },
-     {
+    {
       "title": "Actions - placement priorities",
-      "path": "${GITHUB_BRANCH}/snippets/action-placement-priority/action-placement-priority.js"
+      "path": "${GITHUB_BRANCH}/snippets/action-placement-priority.js"
     }
   ]
 }

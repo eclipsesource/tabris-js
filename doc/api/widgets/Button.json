@@ -29,7 +29,7 @@
   "links": [
     {
       "title": "Simple Button snippet",
-      "path": "${GITHUB_BRANCH}/snippets/button/button.js"
+      "path": "${GITHUB_BRANCH}/snippets/button.js"
     }
   ]
 }

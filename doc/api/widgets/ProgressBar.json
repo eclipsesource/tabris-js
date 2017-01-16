@@ -28,7 +28,7 @@
   "links": [
     {
       "title" : "Simple ProgressBar snippet",
-      "path" : "${GITHUB_BRANCH}/snippets/progressbar/progressbar.js"
+      "path" : "${GITHUB_BRANCH}/snippets/progressbar.js"
     }
   ]
 }

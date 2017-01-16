@@ -34,7 +34,7 @@
   "links": [
     {
       "title" : "Simple RadioButton snippet",
-      "path" : "${GITHUB_BRANCH}/snippets/radiobutton/radiobutton.js"
+      "path" : "${GITHUB_BRANCH}/snippets/radiobutton.js"
     }
   ]
 }

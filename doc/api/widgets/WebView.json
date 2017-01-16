@@ -56,11 +56,11 @@
   "links": [
     {
       "title": "Simple WebView snippet",
-      "path": "${GITHUB_BRANCH}/snippets/webview/webview.js"
+      "path": "${GITHUB_BRANCH}/snippets/webview.js"
     },
     {
       "title": "WebView snippet demonstrating web messaging",
-      "path": "${GITHUB_BRANCH}/snippets/webview-webmessage/webview-webmessage.js"
+      "path": "${GITHUB_BRANCH}/snippets/webview-webmessage.js"
     },
     {
       "title": "Web Messaging",
