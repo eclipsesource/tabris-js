@@ -11,7 +11,7 @@ export function extend(target) {
 export function pick(object, keys) {
   let result = {};
   for (let key in object) {
-    if (keys.indexOf(key) !== -1) {
+    if (keys.includes(key)) {
       result[key] = object[key];
     }
   }
@@ -21,7 +21,7 @@ export function pick(object, keys) {
 export function omit(object, keys) {
   let result = {};
   for (let key in object) {
-    if (keys.indexOf(key) === -1) {
+    if (!keys.includes(key)) {
       result[key] = object[key];
     }
   }
