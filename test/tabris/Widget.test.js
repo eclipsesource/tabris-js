@@ -225,7 +225,7 @@ describe('Widget', function() {
       it('removes parent', function() {
         child.dispose();
 
-        expect(child.parent()).to.be.undefined;
+        expect(child.parent()).to.be.null;
       });
 
       it('DESTROYs native widget', function() {
@@ -489,10 +489,6 @@ describe('Widget', function() {
 
         it("is added to parent's children list", function() {
           expect(parent1.children().toArray()).to.contain(widget);
-        });
-
-        it('parent() returns new parent', function() {
-          expect(result.parent()).to.equal(parent1);
         });
 
       });
@@ -764,6 +760,20 @@ describe('Widget', function() {
           expect(parent2.children().toArray()).not.to.contain(widget);
         });
 
+      });
+
+    });
+
+    describe('parent', function() {
+
+      it('returns null by default', function() {
+        expect(widget.parent()).to.be.null;
+      });
+
+      it('returns the parent when appended', function() {
+        let parent = new TestWidget();
+        widget.appendTo(parent);
+        expect(widget.parent()).to.equal(parent);
       });
 
     });

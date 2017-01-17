@@ -73,7 +73,7 @@ Widget.prototype = extendPrototype(NativeObject, {
   },
 
   parent() {
-    return this._parent;
+    return this._parent || null;
   },
 
   children(selector) {

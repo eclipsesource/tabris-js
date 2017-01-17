@@ -62,7 +62,7 @@
       {
         "parameters": [],
         "returns": "Widget",
-        "description": "Returns the parent of this widget."
+        "description": "Returns the parent of this widget or `null` if this widget is not appended to a parent."
       }
     ],
     "appendTo": [

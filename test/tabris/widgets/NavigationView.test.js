@@ -222,7 +222,7 @@ describe('NavigationView', () => {
             id: page.cid,
             op: 'destroy'
           });
-          expect(page.parent()).to.be.undefined;
+          expect(page.parent()).to.be.null;
         });
 
         it('CALLs stack_pop', () => {
@@ -260,7 +260,7 @@ describe('NavigationView', () => {
             id: page.cid,
             op: 'destroy'
           });
-          expect(page.parent()).to.be.undefined;
+          expect(page.parent()).to.be.null;
         });
 
         it('does NOT CALL stack_pop', () => {
@@ -299,7 +299,7 @@ describe('NavigationView', () => {
             id: page.cid,
             op: 'destroy'
           });
-          expect(page.parent()).to.be.undefined;
+          expect(page.parent()).to.be.null;
         });
 
         it('CALLs stack_clear', () => {

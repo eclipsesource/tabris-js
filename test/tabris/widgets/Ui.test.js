@@ -71,7 +71,7 @@ describe('Ui', function() {
   });
 
   it('has no parent', function() {
-    expect(ui.parent()).to.be.undefined;
+    expect(ui.parent()).to.be.null;
   });
 
   describe('contentView', function() {
