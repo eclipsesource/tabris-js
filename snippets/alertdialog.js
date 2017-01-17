@@ -25,7 +25,7 @@ new tabris.Button({
   }).on('close:ok', () => console.log('Replace'))
     .on('close:neutral', () => console.log('Keep editing'))
     .on('close:cancel', () => console.log('Discard'))
-    .on('close', (event) => console.log('Dialog closed: ' + event.button))
+    .on('close', (dialog, button) => console.log('Dialog closed: ' + button))
     .open()
 ).appendTo(tabris.ui.contentView);
 
