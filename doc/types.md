@@ -91,7 +91,7 @@ Object containing information about the currently performed gesture. See ["Touch
 Images are specified as objects with the following properties:
 
 * **src**: *string*
-    Image path or URL. Relative paths are resolved relative to 'package.json'.
+    Image path, URL or [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme). Relative paths are resolved relative to 'package.json'.
 * **width**: *number (optional)*
     Image width in dip, extracted from the image file when missing.
 * **height**: *number (optional)*
