@@ -1,0 +1,48 @@
+{
+  "type": "NavigationView",
+  "description": "A widget that displays a stack of [pages](Page) with a toolbar that allows to navigate back. The toolbar also displays the current page's title and the highest priority [actions](Action) that are added to the NavigationView. Only children of type `Page`, `Action` and `SearchAction` are supported. Since the NavigationView does not compute its own size, the width and height must be defined by the respective layout properties (e.g. either `width` or `left` and `right` must be specified).",
+  "extends": "Composite",
+  "properties": {
+    "drawerActionVisible": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to display the so-called \"Burger menu\" to open the drawer."
+    },
+    "toolbarVisible": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether the toolbar is visible."
+    },
+    "toolbarColor": {
+      "type": "Color",
+      "description": "The background color of the toolbar."
+    },
+    "titleTextColor": {
+      "type": "Color",
+      "description": "The text color used for page titles."
+    },
+    "actionColor": {
+      "type": "Color",
+      "description": "The color used for action icons."
+    },
+    "actionTextColor": {
+      "type": "Color",
+      "description": "The color used for action texts."
+    }
+  },
+  "methods": {
+    "pages": [
+      {
+        "parameters": [],
+        "description": "Returns the ordered list of pages on the page stack, with the bottommost page as the first and the topmost page as the last element. This method is similar to children(), but it does not contain children of other types than `Page`.",
+        "returns": "WidgetCollection"
+      }
+    ]
+  },
+  "links": [
+    {
+      "title": "Snippet with a NavigationView and Pages",
+      "path": "${GITHUB_BRANCH}/snippets/page-stacked.js"
+    }
+  ]
+}

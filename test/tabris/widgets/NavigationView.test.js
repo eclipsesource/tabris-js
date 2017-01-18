@@ -9,11 +9,11 @@ import NativeBridge from '../../../src/tabris/NativeBridge';
 import ProxyStore from '../../../src/tabris/ProxyStore';
 import WidgetCollection from '../../../src/tabris/WidgetCollection';
 
-describe('NavigationView', () => {
+describe('NavigationView', function() {
 
   let client, navigationView;
 
-  beforeEach(() => {
+  beforeEach(function() {
     client = new ClientStub();
     global.tabris = {
       on: () => {
@@ -22,29 +22,31 @@ describe('NavigationView', () => {
       _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
     };
     global.tabris._nativeBridge = new NativeBridge(client);
-    client.resetCalls();
     navigationView = new NavigationView();
+    client.resetCalls();
   });
 
   afterEach(restore);
 
-  it('children list is empty', () => {
+  it('children list is empty', function() {
     expect(navigationView.children().toArray()).to.eql([]);
   });
 
-  it('can not append a Composite', () => {
+  it('can not append a Composite', function() {
     expect(() => {
-      navigationView.append(new Page());
+      navigationView.append(new Composite());
     }).to.throw();
   });
 
-  it('can not append a Page', () => {
-    expect(() => {
-      navigationView.append(new Page());
-    }).to.throw();
+  it('can append a Page', function() {
+    let page = new Page();
+
+    navigationView.append(page);
+
+    expect(navigationView.children()[0]).to.equal(page);
   });
 
-  it('can append an Action', () => {
+  it('can append an Action', function() {
     let action = new Action();
 
     navigationView.append(action);
@@ -52,7 +54,7 @@ describe('NavigationView', () => {
     expect(navigationView.children()[0]).to.equal(action);
   });
 
-  it('can append a SearchAction', () => {
+  it('can append a SearchAction', function() {
     let action = new SearchAction();
 
     navigationView.append(action);
@@ -60,84 +62,218 @@ describe('NavigationView', () => {
     expect(navigationView.children()[0]).to.equal(action);
   });
 
-  it('has visible "toolbarVisible" by default', () => {
-    expect(navigationView.toolbarVisible).to.be.true;
+  describe('toolbarVisible', function() {
+
+    it('is true by default', function() {
+      expect(navigationView.toolbarVisible).to.be.true;
+    });
+
+    it('is rendered', function() {
+      navigationView.toolbarVisible = false;
+
+      expect(client.calls({id: navigationView.cid})[0].properties).to.deep.equal({toolbarVisible: false});
+    });
+
   });
 
-  it('supports property "toolbarVisible"', () => {
-    navigationView.toolbarVisible = false;
+  describe('toolbarColor', function() {
 
-    expect(navigationView.toolbarVisible).to.be.false;
+    it('supports colors', function() {
+      navigationView.toolbarColor = 'red';
+
+      expect(navigationView.toolbarColor).to.equal('rgba(255, 0, 0, 1)');
+    });
+
   });
 
-  it('supports property "toolbarColor"', () => {
-    navigationView.toolbarColor = 'red';
+  describe('titleTextColor', function() {
 
-    expect(navigationView.toolbarColor).to.eq('rgba(255, 0, 0, 1)');
+    it('supports colors', function() {
+      navigationView.titleTextColor = '#00ff00';
+
+      expect(navigationView.titleTextColor).to.equal('rgba(0, 255, 0, 1)');
+    });
+
   });
 
-  it('supports property "titleTextColor"', () => {
-    navigationView.titleTextColor = '#00ff00';
+  describe('actionColor', function() {
 
-    expect(navigationView.titleTextColor).to.eq('rgba(0, 255, 0, 1)');
+    it('supports colors', function() {
+      navigationView.actionColor = 'red';
+
+      expect(navigationView.actionColor).to.equal('rgba(255, 0, 0, 1)');
+    });
+
   });
 
-  it('supports property "actionColor"', () => {
-    navigationView.actionColor = 'red';
+  describe('actionTextColor', function() {
 
-    expect(navigationView.actionColor).to.eq('rgba(255, 0, 0, 1)');
+    it('supports colors', function() {
+      navigationView.actionTextColor = 'blue';
+
+      expect(navigationView.actionTextColor).to.equal('rgba(0, 0, 255, 1)');
+    });
+
   });
 
-  it('supports property "actionTextColor"', () => {
-    navigationView.actionTextColor = 'blue';
+  describe('pages', function() {
 
-    expect(navigationView.actionTextColor).to.eq('rgba(0, 0, 255, 1)');
+    it('returns empty WidgetCollection by default', function() {
+      expect(navigationView.pages()).to.be.instanceof(WidgetCollection);
+      expect(navigationView.pages().length).to.equal(0);
+      expect([]).to.be.empty;
+    });
+
+    describe('when pages are added', function() {
+
+      let pages;
+
+      beforeEach(function() {
+        pages = [new Page(), new Page(), new Page()];
+        navigationView.append(pages);
+      });
+
+      it('contains added pages', function() {
+        expect(navigationView.pages().toArray()).to.deep.equal(pages);
+      });
+
+      it('does not contain other children', function() {
+        navigationView.append(new Action(), new SearchAction());
+        expect(navigationView.pages().toArray()).to.deep.equal(pages);
+      });
+
+    });
+
   });
 
-  describe('stack', () => {
+  describe('appear event', function() {
+
+    let page1, page2, listener;
+
+    beforeEach(function() {
+      page1 = new Page();
+      page2 = new Page();
+      listener = spy();
+    });
+
+    it('is triggered when a page is appended', function() {
+      page1.on('appear', listener);
+      navigationView.append(page1);
+      expect(listener).to.have.been.calledOnce;
+    });
+
+    it('is triggered when a covering page is removed', function() {
+      navigationView.append(page1, page2);
+      page1.on('appear', listener);
+      page2.detach();
+      expect(listener).to.have.been.calledOnce;
+    });
+
+  });
+
+  describe('disappear event', function() {
+
+    let page1, page2, listener;
+
+    beforeEach(function() {
+      page1 = new Page();
+      page2 = new Page();
+      listener = spy();
+    });
+
+    it('is triggered when a page is covered by another page', function() {
+      navigationView.append(page1);
+      page1.on('disappear', listener);
+      navigationView.append(page2);
+      expect(listener).to.have.been.calledOnce;
+    });
+
+    it('is triggered when page is detached', function() {
+      navigationView.append(page1);
+      page1.on('disappear', listener);
+      page1.detach();
+      expect(listener).to.have.been.calledOnce;
+    });
+
+    it('is only triggered on the topmost page when multiple pages are detached', function() {
+      navigationView.append(page1, page2);
+      page1.on('disappear', listener);
+      page2.on('disappear', listener);
+      page1.detach();
+      expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWith(page2);
+    });
+
+  });
+
+  describe('detach', function() {
+
+    let page1, page2, page3;
+
+    beforeEach(function() {
+      page1 = new Page();
+      page2 = new Page();
+      page3 = new Page();
+    });
+
+    it('detaches all pages on top', function() {
+      navigationView.append(page1, page2, page3);
+      page1.detach();
+      expect(navigationView.pages().toArray()).to.deep.equal([]);
+    });
+
+    it('does not affect pages below', function() {
+      navigationView.append(page1, page2, page3);
+      page2.detach();
+      expect(navigationView.pages().toArray()).to.deep.equal([page1]);
+    });
+
+  });
+
+  describe('stack', function() {
 
     let stack;
 
-    beforeEach(() => {
+    beforeEach(function() {
       stack = navigationView.stack;
     });
 
-    it('length can not be set', () => {
+    it('length can not be set', function() {
       stack.length = 23;
       expect(stack.length).to.equal(0);
     });
 
-    it('throws when pushing a non-page', () => {
+    it('throws when pushing a non-page', function() {
       expect(() => {
         stack.push(new Composite());
-      }).to.throw(Error, 'Only instances of Page can be pushed.');
+      }).to.throw(Error, 'NavigationView cannot contain children of type Composite');
     });
 
-    describe('with no pages', () => {
+    describe('with no pages', function() {
 
-      it('length is 0', () => {
+      it('length is 0', function() {
         expect(stack.length).to.equal(0);
       });
 
-      it('returns -1 for indexOf', () => {
+      it('returns -1 for indexOf', function() {
         expect(stack.indexOf(new Page())).to.equal(-1);
       });
 
-      it('returns undefined for first()', () => {
+      it('returns undefined for first()', function() {
         expect(stack.first()).to.be.undefined;
       });
 
-      it('returns undefined for last()', () => {
+      it('returns undefined for last()', function() {
         expect(stack.last()).to.be.undefined;
       });
 
-      it('pop() returns undefined', () => {
+      it('pop() returns undefined', function() {
         expect(() => {
           stack.push(new Composite());
-        }).to.throw('Only instances of Page can be pushed.');
+        }).to.throw('NavigationView cannot contain children of type Composite');
       });
 
-      it('clear() returns empty WidgetCollection', () => {
+      it('clear() returns empty WidgetCollection', function() {
         let collection = stack.clear();
 
         expect(collection instanceof WidgetCollection).to.be.true;
@@ -146,33 +282,33 @@ describe('NavigationView', () => {
 
     });
 
-    describe('pushing a single page', () => {
+    describe('pushing a single page', function() {
 
       let page;
 
-      beforeEach(() => {
+      beforeEach(function() {
         page = new Page();
         client.resetCalls();
         stack.push(page);
       });
 
-      it('increases length', () => {
+      it('increases length', function() {
         expect(stack.length).to.equal(1);
       });
 
-      it('finds it with indexOf', () => {
+      it('finds it with indexOf', function() {
         expect(stack.indexOf(page)).to.equal(0);
       });
 
-      it('is returned by first()', () => {
+      it('is returned by first()', function() {
         expect(stack.first()).to.equal(page);
       });
 
-      it('is returned by last()', () => {
+      it('is returned by last()', function() {
         expect(stack.last()).to.equal(page);
       });
 
-      it('makes page a child of navigationView', () => {
+      it('makes page a child of navigationView', function() {
         expect(client.calls()[0]).to.deep.equal({
           id: page.cid,
           op: 'set',
@@ -181,7 +317,7 @@ describe('NavigationView', () => {
         expect(page.parent()).to.equal(navigationView);
       });
 
-      it('CALLs stack_push', () => {
+      it('CALLs stack_push', function() {
         expect(client.calls()[1]).to.deep.equal({
           id: navigationView.cid,
           op: 'call',
@@ -190,34 +326,28 @@ describe('NavigationView', () => {
         });
       });
 
-      it('throws if page is pushed again', () => {
-        expect(() => {
-          stack.push(page);
-        }).to.throw('Can not push a page that is already on the stack.');
-      });
-
-      describe('calling pop()', () => {
+      describe('calling pop()', function() {
 
         let result;
 
-        beforeEach(() => {
+        beforeEach(function() {
           client.resetCalls();
           result = stack.pop();
         });
 
-        it('returns page', () => {
+        it('returns page', function() {
           expect(result).to.equal(page);
         });
 
-        it('removes page from stack', () => {
+        it('removes page from stack', function() {
           expect(stack.indexOf(page)).to.equal(-1);
         });
 
-        it('sets length back to zero', () => {
+        it('sets length back to zero', function() {
           expect(stack.length).to.equal(0);
         });
 
-        it('disposes page', () => {
+        it('disposes page', function() {
           expect(client.calls()[1]).to.deep.equal({
             id: page.cid,
             op: 'destroy'
@@ -225,7 +355,7 @@ describe('NavigationView', () => {
           expect(page.parent()).to.be.null;
         });
 
-        it('CALLs stack_pop', () => {
+        it('CALLs stack_pop', function() {
           expect(client.calls()[0]).to.deep.equal({
             id: navigationView.cid,
             op: 'call',
@@ -240,22 +370,22 @@ describe('NavigationView', () => {
 
         let disappearListener;
 
-        beforeEach(() => {
+        beforeEach(function() {
           client.resetCalls();
           disappearListener = spy();
           page.on('disappear', disappearListener);
           navigationView._trigger('back');
         });
 
-        it('removes page from stack', () => {
+        it('removes page from stack', function() {
           expect(stack.indexOf(page)).to.equal(-1);
         });
 
-        it('sets length back to zero', () => {
+        it('sets length back to zero', function() {
           expect(stack.length).to.equal(0);
         });
 
-        it('detaches page from navigationView', () => {
+        it('detaches page from navigationView', function() {
           expect(client.calls()[0]).to.deep.equal({
             id: page.cid,
             op: 'destroy'
@@ -263,50 +393,50 @@ describe('NavigationView', () => {
           expect(page.parent()).to.be.null;
         });
 
-        it('does NOT CALL stack_pop', () => {
+        it('does NOT CALL stack_pop', function() {
           expect(client.calls().length).to.equal(1);
         });
 
-        it('triggers page disappear event', () => {
+        it('triggers page disappear event', function() {
           expect(disappearListener).to.have.been.calledOnce;
         });
 
       });
 
-      describe('calling clear()', () => {
+      describe('calling clear()', function() {
 
         let result;
 
-        beforeEach(() => {
+        beforeEach(function() {
           client.resetCalls();
           result = stack.clear();
         });
 
-        it('returns WidgetCollection with page', () => {
+        it('returns WidgetCollection with page', function() {
           expect(result.toArray()).to.deep.equal([page]);
         });
 
-        it('removes page from stack', () => {
+        it('removes page from stack', function() {
           expect(stack.indexOf(page)).to.equal(-1);
         });
 
-        it('sets length back to zero', () => {
+        it('sets length back to zero', function() {
           expect(stack.length).to.equal(0);
         });
 
-        it('detaches page from navigationView', () => {
-          expect(client.calls()[1]).to.deep.equal({
+        it('detaches page from navigationView', function() {
+          expect(client.calls({id: page.cid})[0]).to.deep.equal({
             id: page.cid,
             op: 'destroy'
           });
           expect(page.parent()).to.be.null;
         });
 
-        it('CALLs stack_clear', () => {
-          expect(client.calls()[0]).to.deep.equal({
+        it('CALLs stack_pop', function() {
+          expect(client.calls({id: navigationView.cid})[0]).to.deep.equal({
             id: navigationView.cid,
             op: 'call',
-            method: 'stack_clear',
+            method: 'stack_pop',
             parameters: {}
           });
         });
@@ -315,40 +445,40 @@ describe('NavigationView', () => {
 
     });
 
-    describe('pushing a single page with autoDispose false', () => {
+    describe('pushing a single page with autoDispose false', function() {
 
       let page;
 
-      beforeEach(() => {
+      beforeEach(function() {
         page = new Page();
         page.autoDispose = false;
         client.resetCalls();
         stack.push(page);
       });
 
-      describe('pop() a page with autoDispose false', () => {
+      describe('pop() a page with autoDispose false', function() {
 
         let result;
 
-        beforeEach(() => {
+        beforeEach(function() {
           client.resetCalls();
           result = stack.pop();
         });
 
-        it('returns page', () => {
+        it('returns page', function() {
           expect(result).to.equal(page);
         });
 
-        it('removes page from stack', () => {
+        it('removes page from stack', function() {
           expect(stack.indexOf(page)).to.equal(-1);
         });
 
-        it('sets length back to zero', () => {
+        it('sets length back to zero', function() {
           expect(stack.length).to.equal(0);
         });
 
-        it('detaches page from navigationView', () => {
-          expect(client.calls()[1]).to.deep.equal({
+        it('detaches page from navigationView', function() {
+          expect(client.calls({id: page.cid})[0]).to.deep.equal({
             id: page.cid,
             op: 'set',
             properties: {parent: null}
@@ -356,8 +486,8 @@ describe('NavigationView', () => {
           expect(page.parent()).to.be.null;
         });
 
-        it('CALLs stack_pop', () => {
-          expect(client.calls()[0]).to.deep.equal({
+        it('CALLs stack_pop', function() {
+          expect(client.calls({id: navigationView.cid})[0]).to.deep.equal({
             id: navigationView.cid,
             op: 'call',
             method: 'stack_pop',
@@ -371,22 +501,22 @@ describe('NavigationView', () => {
 
         let disappearListener;
 
-        beforeEach(() => {
+        beforeEach(function() {
           client.resetCalls();
           disappearListener = spy();
           page.on('disappear', disappearListener);
           navigationView._trigger('back');
         });
 
-        it('removes page from stack', () => {
+        it('removes page from stack', function() {
           expect(stack.indexOf(page)).to.equal(-1);
         });
 
-        it('sets length back to zero', () => {
+        it('sets length back to zero', function() {
           expect(stack.length).to.equal(0);
         });
 
-        it('detaches page from navigationView', () => {
+        it('detaches page from navigationView', function() {
           expect(client.calls()[0]).to.deep.equal({
             id: page.cid,
             op: 'set',
@@ -395,39 +525,39 @@ describe('NavigationView', () => {
           expect(page.parent()).to.be.null;
         });
 
-        it('does NOT CALL stack_pop', () => {
+        it('does NOT CALL stack_pop', function() {
           expect(client.calls().length).to.equal(1);
         });
 
-        it('triggers page disappear event', () => {
+        it('triggers page disappear event', function() {
           expect(disappearListener).to.have.been.calledOnce;
         });
 
       });
 
-      describe('calling clear()', () => {
+      describe('calling clear()', function() {
 
         let result;
 
-        beforeEach(() => {
+        beforeEach(function() {
           client.resetCalls();
           result = stack.clear();
         });
 
-        it('returns WidgetCollection with page', () => {
+        it('returns WidgetCollection with page', function() {
           expect(result.toArray()).to.deep.equal([page]);
         });
 
-        it('removes page from stack', () => {
+        it('removes page from stack', function() {
           expect(stack.indexOf(page)).to.equal(-1);
         });
 
-        it('sets length back to zero', () => {
+        it('sets length back to zero', function() {
           expect(stack.length).to.equal(0);
         });
 
-        it('detaches page from navigationView', () => {
-          expect(client.calls()[1]).to.deep.equal({
+        it('detaches page from navigationView', function() {
+          expect(client.calls({id: page.cid})[0]).to.deep.equal({
             id: page.cid,
             op: 'set',
             properties: {parent: null}
@@ -435,11 +565,11 @@ describe('NavigationView', () => {
           expect(page.parent()).to.be.null;
         });
 
-        it('CALLs stack_clear', () => {
-          expect(client.calls()[0]).to.deep.equal({
+        it('CALLs stack_pop', function() {
+          expect(client.calls({id: navigationView.cid})[0]).to.deep.equal({
             id: navigationView.cid,
             op: 'call',
-            method: 'stack_clear',
+            method: 'stack_pop',
             parameters: {}
           });
         });
@@ -448,152 +578,153 @@ describe('NavigationView', () => {
 
     });
 
-    describe('pushing five pages', () => {
+    describe('pushing five pages', function() {
 
-      let pages, eventLog;
+      let pages, listener;
 
-      beforeEach(() => {
+      beforeEach(function() {
         pages = [new Page(), new Page(), new Page(), new Page(), new Page()];
-        pages.forEach((page) => stack.push(page));
-        eventLog = spy();
+        pages.forEach(page => stack.push(page));
+        listener = spy();
       });
 
-      it('increases length', () => {
+      it('increases length', function() {
         expect(stack.length).to.equal(5);
       });
 
-      it('finds entry it with indexOf', () => {
+      it('finds entry it with indexOf', function() {
         expect(stack.indexOf(pages[0])).to.equal(0);
         expect(stack.indexOf(pages[4])).to.equal(4);
       });
 
-      it('is returned by first()', () => {
+      it('is returned by first()', function() {
         expect(stack.first()).to.equal(pages[0]);
       });
 
-      it('is returned by last()', () => {
+      it('is returned by last()', function() {
         expect(stack.last()).to.equal(pages[4]);
       });
 
-      it('triggers page appear event', () => {
+      it('triggers page appear event', function() {
         let anotherPage = new Page();
-        anotherPage.on('appear', eventLog);
+        anotherPage.on('appear', listener);
 
         stack.push(anotherPage);
 
-        expect(eventLog).to.have.been.calledWith(anotherPage);
+        expect(listener).to.have.been.calledWith(anotherPage);
       });
 
-      it('triggers page disappear event', () => {
-        pages[4].on('disappear', eventLog);
+      it('triggers page disappear event', function() {
+        pages[4].on('disappear', listener);
 
         stack.push(new Page());
 
-        expect(eventLog).to.have.been.calledWith(pages[4]);
+        expect(listener).to.have.been.calledWith(pages[4]);
       });
 
-      describe('triggering back', () => {
+      describe('triggering back', function() {
 
-        beforeEach(() => {
+        beforeEach(function() {
           client.resetCalls();
           navigationView._trigger('back');
         });
 
-        it('removes page from stack', () => {
+        it('removes page from stack', function() {
           expect(stack.indexOf(pages[4])).to.equal(-1);
         });
 
-        it('decreases length', () => {
+        it('decreases length', function() {
           expect(stack.length).to.equal(4);
         });
 
-        it('triggers page appear event', () => {
-          pages[2].on('appear', eventLog);
+        it('triggers page appear event', function() {
+          pages[2].on('appear', listener);
 
           stack.pop();
 
-          expect(eventLog).to.have.been.calledWith(pages[2]);
+          expect(listener).to.have.been.calledWith(pages[2]);
         });
 
-        it('triggers page disappear event', () => {
-          pages[3].on('disappear', eventLog);
+        it('triggers page disappear event', function() {
+          pages[3].on('disappear', listener);
 
           stack.pop();
 
-          expect(eventLog).to.have.been.calledWith(pages[3]);
+          expect(listener).to.have.been.calledWith(pages[3]);
         });
 
       });
 
-      describe('calling pop()', () => {
+      describe('calling pop()', function() {
 
         let result;
 
-        beforeEach(() => {
+        beforeEach(function() {
           client.resetCalls();
           result = stack.pop();
         });
 
-        it('returns page', () => {
+        it('returns page', function() {
           expect(result).to.equal(pages[4]);
         });
 
-        it('removes page from stack', () => {
+        it('removes page from stack', function() {
           expect(stack.indexOf(pages[4])).to.equal(-1);
         });
 
-        it('decreases length', () => {
+        it('decreases length', function() {
           expect(stack.length).to.equal(4);
         });
 
-        it('triggers page appear event', () => {
-          pages[2].on('appear', eventLog);
+        it('triggers page appear event', function() {
+          pages[2].on('appear', listener);
 
           stack.pop();
 
-          expect(eventLog).to.have.been.calledWith(pages[2]);
+          expect(listener).to.have.been.calledWith(pages[2]);
         });
 
-        it('triggers page disappear event', () => {
-          pages[3].on('disappear', eventLog);
+        it('triggers page disappear event', function() {
+          pages[3].on('disappear', listener);
 
           stack.pop();
 
-          expect(eventLog).to.have.been.calledWith(pages[3]);
+          expect(listener).to.have.been.calledWith(pages[3]);
         });
 
       });
 
-      describe('calling clear()', () => {
+      describe('calling clear()', function() {
 
         let result;
 
-        beforeEach(() => {
+        beforeEach(function() {
           client.resetCalls();
-          pages.forEach((page) => {
-            page.on('disappear', eventLog);
-          });
+          pages.forEach(page => page.on('disappear', listener));
           result = stack.clear();
         });
 
-        it('returns WidgetCollection with pages', () => {
+        it('returns WidgetCollection with pages', function() {
           expect(result.toArray()).to.deep.equal(pages);
         });
 
-        it('sets length back to zero', () => {
+        it('sets length back to zero', function() {
           expect(stack.length).to.equal(0);
         });
 
-        it('disposes pages', () => {
+        it('disposes pages', function() {
           expect(client.calls({op: 'destroy'}).length).to.equal(5);
-          expect(client.calls()[1]).to.deep.equal({
-            id: pages[0].cid,
-            op: 'destroy'
-          });
+          expect(client.calls({op: 'destroy'}).map(call => call.id)).to.deep.equal([
+            pages[4].cid,
+            pages[3].cid,
+            pages[2].cid,
+            pages[1].cid,
+            pages[0].cid,
+          ]);
           expect(navigationView.children().length).to.equal(0);
         });
 
-        it('CALLs stack_clear', () => {
+        it('CALLs stack_clear', function() {
           expect(client.calls()[0]).to.deep.equal({
             id: navigationView.cid,
             op: 'call',
@@ -602,9 +733,9 @@ describe('NavigationView', () => {
           });
         });
 
-        it('triggers last page disappear event', () => {
-          expect(eventLog.callCount).to.be.equal(1);
-          expect(eventLog).to.have.been.calledWith(pages[4]);
+        it('triggers last page disappear event', function() {
+          expect(listener).to.have.been.calledOnce;
+          expect(listener).to.have.been.calledWith(pages[4]);
         });
 
       });

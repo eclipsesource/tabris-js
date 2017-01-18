@@ -1,9 +1,7 @@
 import Widget from '../Widget';
-import WidgetCollection from '../WidgetCollection';
 import Page from './Page';
 import Action from './Action';
 import SearchAction from './SearchAction';
-import {extend} from '../util';
 
 export default Widget.extend({
 
@@ -29,107 +27,155 @@ export default Widget.extend({
   },
 
   _events: {
+    back: {
+      trigger() {
+        this._handleBackNavigation(true);
+      }
+    },
     backnavigation: {
       trigger() {
-        this.stack.pop();
+        this._handleBackNavigation();
       }
     }
   },
 
   _supportsChildren(child) {
-    return this.stack.indexOf(child) !== -1 || child instanceof Action || child instanceof SearchAction;
+    return child instanceof Page || child instanceof Action || child instanceof SearchAction;
+  },
+
+  _addChild(child, index) {
+    if (child instanceof Page) {
+      if (typeof index === 'number' && index !== this.pages().length) {
+        throw new Error('Cannot append a page at the given position');
+      }
+      // TODO remove iOS only stack_ calls
+      this._nativeCall('stack_push', {page: child.cid});
+      this._triggerDisappear();
+    }
+    Widget.prototype._addChild.apply(this, arguments);
+    if (child instanceof Page) {
+      this._triggerAppear();
+    }
+  },
+
+  _removeChild(child) {
+    if (child instanceof Page) {
+      if (!this.pages().includes(child)) {
+        return;
+      }
+      // TODO remove iOS only stack_ calls
+      if (this.pages().length > 1 && child === this.pages().first()) {
+        this._nativeCall('stack_clear', {});
+        this._skipPopCalls = true;
+      } else if (!this._skipPopCalls) {
+        this._nativeCall('stack_pop', {});
+      }
+      this._triggerDisappear();
+      this._popPagesAbove(child);
+      if (!this._inPopAbove) {
+        delete this._skipPopCalls;
+      }
+    }
+    Widget.prototype._removeChild.apply(this, arguments);
+    if (child instanceof Page) {
+      this._triggerAppear();
+    }
+  },
+
+  _handleBackNavigation(skipPopCalls) {
+    this._skipPopCalls = skipPopCalls;
+    this._pop(this.pages().last());
+    delete this._skipPopCalls;
+  },
+
+  _popPagesAbove(page) {
+    if (this._inPopAbove) {
+      return;
+    }
+    this._inPopAbove = true;
+    let pages = this.pages();
+    let index = pages.indexOf(page);
+    if (index !== -1) {
+      for (let i = pages.length - 1; i > index; i--) {
+        this._pop(pages[i]);
+      }
+    }
+    delete this._inPopAbove;
+  },
+
+  _pop(page) {
+    if (page && page.autoDispose) {
+      page.dispose();
+    } else if (page) {
+      page._setParent(null);
+    }
+  },
+
+  _triggerAppear() {
+    if (this._inPopAbove) {
+      return;
+    }
+    let topPage = this.pages().last();
+    if (topPage) {
+      topPage.trigger('appear', topPage);
+    }
+  },
+
+  _triggerDisappear() {
+    if (this._inPopAbove) {
+      return;
+    }
+    let topPage = this.pages().last();
+    if (topPage) {
+      topPage.trigger('disappear', topPage);
+    }
+  },
+
+  pages() {
+    return this.children().filter(child => child instanceof Page);
   }
 
 });
 
-function StackView(navigationView) {
+/**
+ * TODO Temporary stub for backwards compatibility, remove
+ */
+class StackView {
 
-  let stack = [];
+  constructor(parent) {
+    this._parent = parent;
+  }
 
-  Object.defineProperty(this, 'length', {get() {return stack.length;}});
+  get length() {
+    return this._parent.pages().length;
+  }
 
-  navigationView.on('back', () => {
-    let result = stack.pop();
-    result.trigger('disappear', result);
-    if(result.autoDispose === true) {
-      result.dispose();
-    } else {
-      result._setParent(null);
-    }
-    let lastPage = this.last();
-    if (lastPage) {
-      lastPage.trigger('appear', lastPage);
-    }
-    return result;
-  });
+  indexOf(page) {
+    return this._parent.pages().indexOf(page);
+  }
 
-  extend(this, {
+  first() {
+    return this._parent.pages().first();
+  }
 
-    push(page) {
-      if (!(page instanceof Page)) {
-        throw new Error('Only instances of Page can be pushed.');
-      }
-      if (this.indexOf(page) !== -1) {
-        throw new Error('Can not push a page that is already on the stack.');
-      }
-      let lastPage = this.last();
-      if (lastPage) {
-        lastPage.trigger('disappear', lastPage);
-      }
-      stack.push(page);
-      navigationView.append(page);
-      navigationView._nativeCall('stack_push', {page: page.cid});
-      page.trigger('appear', page);
-    },
+  last() {
+    return this._parent.pages().last();
+  }
 
-    pop() {
-      let result = stack.pop();
-      if (result) {
-        result.trigger('disappear', result);
-        navigationView._nativeCall('stack_pop', {});
-        if(result.autoDispose === true) {
-          result.dispose();
-        } else {
-          result._setParent(null);
-        }
-      }
-      let lastPage = this.last();
-      if (lastPage) {
-        lastPage.trigger('appear', lastPage);
-      }
-      return result;
-    },
+  push(page) {
+    this._parent.append(page);
+  }
 
-    clear() {
-      let result = new WidgetCollection(stack);
-      let lastPage = this.last();
-      if (lastPage) {
-        lastPage.trigger('disappear', lastPage);
-      }
-      navigationView._nativeCall('stack_clear', {});
-      stack = [];
-      result.forEach((page) => {
-        if(page.autoDispose === true) {
-          page.dispose();
-        } else {
-          page._setParent(null);
-        }
-      });
-      return result;
-    },
+  pop() {
+    let page = this._parent.pages().last();
+    this._parent._pop(page);
+    return page;
+  }
 
-    first() {
-      return stack[0];
-    },
-
-    last() {
-      return stack[stack.length - 1];
-    },
-
-    indexOf(page) {
-      return stack.indexOf(page);
-    }
-
-  });
+  clear() {
+    let pages = this._parent.pages();
+    this._parent._pop(pages.first());
+    return pages;
+  }
 
 }

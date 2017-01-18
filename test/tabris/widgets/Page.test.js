@@ -2,12 +2,14 @@ import {expect, restore} from '../../test';
 import ProxyStore from '../../../src/tabris/ProxyStore';
 import NativeBridge from '../../../src/tabris/NativeBridge';
 import ClientStub from '../ClientStub';
+import NavigationView from '../../../src/tabris/widgets/NavigationView';
 import Page from '../../../src/tabris/widgets/Page';
 import Composite from '../../../src/tabris/widgets/Composite';
 
 describe('Page', function() {
 
   let client;
+  let parent;
   let page;
 
   beforeEach(function() {
@@ -18,6 +20,7 @@ describe('Page', function() {
       _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
     };
     global.tabris._nativeBridge = new NativeBridge(client);
+    parent = new NavigationView();
     client.resetCalls();
     page = new Page();
   });
@@ -61,6 +64,26 @@ describe('Page', function() {
 
     let call = client.calls({op: 'set', id: child.cid})[0];
     expect(call.properties.parent).to.equal(page.cid);
+  });
+
+  it('prevents insertBefore', function() {
+    page.appendTo(parent);
+    expect(() => {
+      new Page().insertBefore(page);
+    }).to.throw(Error, 'insertBefore not supported on Page');
+  });
+
+  it('prevents insertAfter', function() {
+    page.appendTo(parent);
+    expect(() => {
+      new Page().insertAfter(page);
+    }).to.throw(Error, 'insertAfter not supported on Page');
+  });
+
+  it('cannot append to Composite', function() {
+    expect(() => {
+      page.appendTo(new Composite());
+    }).to.throw(Error, 'Page cannot be appended to parent of type Composite');
   });
 
 });
