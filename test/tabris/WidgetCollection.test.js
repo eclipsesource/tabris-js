@@ -53,6 +53,14 @@ describe('WidgetCollection', function() {
     expect(collection.indexOf(null)).to.equal(-1);
   });
 
+  it('includes()', function() {
+    expect(collection.includes(mocks[0])).to.be.true;
+    expect(collection.includes(mocks[1])).to.be.true;
+    expect(collection.includes(mocks[2])).to.be.true;
+    expect(collection.includes(mockProxy())).to.be.false;
+    expect(collection.includes(null)).to.be.false;
+  });
+
   describe('length', function() {
 
     it('reflects actual length', function() {

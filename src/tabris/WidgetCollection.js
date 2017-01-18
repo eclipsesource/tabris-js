@@ -31,6 +31,10 @@ export default class WidgetCollection {
     return this._array.indexOf(needle);
   }
 
+  includes(needle) {
+    return this._array.indexOf(needle) !== -1;
+  }
+
   filter(selector) {
     return new WidgetCollection(this._array, selector);
   }

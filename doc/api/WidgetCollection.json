@@ -177,6 +177,18 @@
         "returns": "number",
         "description": "Returns the index of the given widget within the collection. If there is no match, the return value is `-1`."
       }
+    ],
+    "includes": [
+      {
+        "parameters": [
+          {
+            "name": "widget",
+            "type": "Widget"
+          }
+        ],
+        "returns": "boolean",
+        "description": "Returns `true` if the given widget is included in the collection, `false` otherwise."
+      }
     ]
   },
   "properties": {
