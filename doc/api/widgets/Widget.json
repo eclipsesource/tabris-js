@@ -92,6 +92,13 @@
         "description": "Inserts this widget directly after the given widget. If the widget already has a parent, it is removed from the old parent."
       }
     ],
+    "detach": [
+      {
+        "parameters": [],
+        "returns": "this",
+        "description": "Removes this widget from its parent."
+      }
+    ],
     "animate": [
       {
         "parameters": [

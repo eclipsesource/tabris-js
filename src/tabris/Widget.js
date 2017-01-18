@@ -72,6 +72,12 @@ Widget.prototype = extendPrototype(NativeObject, {
     return this;
   },
 
+  detach() {
+    this._checkDisposed();
+    this._setParent(null);
+    return this;
+  },
+
   parent() {
     return this._parent || null;
   },

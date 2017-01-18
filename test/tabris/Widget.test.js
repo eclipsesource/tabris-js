@@ -764,6 +764,28 @@ describe('Widget', function() {
 
     });
 
+    describe('detach', function() {
+
+      it('throws when disposed', function() {
+        widget.dispose();
+
+        expect(() => {
+          widget.detach();
+        }).to.throw(Error, 'Object is disposed');
+      });
+
+      it('removes the widget from its parent', function() {
+        let parent = new TestWidget();
+        widget.appendTo(parent);
+
+        widget.detach();
+
+        expect(parent.children().toArray()).to.eql([]);
+        expect(widget.parent()).to.be.null;
+      });
+
+    });
+
     describe('parent', function() {
 
       it('returns null by default', function() {
