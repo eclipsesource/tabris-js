@@ -46,6 +46,10 @@ export default Widget.extend({
       origin: targetOrigin
     });
     return this;
+  },
+
+  _loadData(data, mimeType) {
+    this._nativeCall('loadData', {data, mimeType});
   }
 
 });
