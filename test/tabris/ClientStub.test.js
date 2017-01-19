@@ -19,92 +19,152 @@ describe('ClientStub', function() {
 
   afterEach(restore);
 
-  describe('calls are recorded', function() {
+  describe('calls', function() {
 
-    it('create', function() {
-      let props = {};
-      client.create('id', 'type', props);
-
-      let call = client.calls()[0];
-      expect(call.op).to.equal('create');
-      expect(call.id).to.equal('id');
-      expect(call.type).to.equal('type');
-      expect(call.properties).to.equal(props);
-    });
-
-    it('get', function() {
-      client.get('id', 'prop');
-
-      let call = client.calls()[0];
-      expect(call.op).to.equal('get');
-      expect(call.id).to.equal('id');
-      expect(call.property).to.equal('prop');
-    });
-
-    it('set', function() {
-      let props = {};
-      client.set('id', props);
-
-      let call = client.calls()[0];
-      expect(call.op).to.equal('set');
-      expect(call.id).to.equal('id');
-      expect(call.properties).to.equal(props);
-    });
-
-    it('call', function() {
-      let params = {};
-      client.call('id', 'method', params);
-
-      let call = client.calls()[0];
-      expect(call.op).to.equal('call');
-      expect(call.id).to.equal('id');
-      expect(call.method).to.equal('method');
-      expect(call.parameters).to.equal(params);
-    });
-
-    it('listen', function() {
-      client.listen('id', 'event', true);
-
-      let call = client.calls()[0];
-      expect(call.op).to.equal('listen');
-      expect(call.id).to.equal('id');
-      expect(call.event).to.equal('event');
-      expect(call.listen).to.equal(true);
-    });
-
-    it('destroy', function() {
-      client.destroy('id');
-
-      let call = client.calls()[0];
-      expect(call.op).to.equal('destroy');
-      expect(call.id).to.equal('id');
-    });
-
-  });
-
-  describe('without any calls', function() {
-
-    it('result list is empty', function() {
+    it('returns empty list by default', function() {
       expect(client.calls().length).to.equal(0);
     });
 
+    describe('returns recorded calls', function() {
+
+      it('create', function() {
+        let props = {};
+        client.create('id', 'type', props);
+
+        let call = client.calls()[0];
+        expect(call).to.deep.equal({
+          op: 'create',
+          id: 'id',
+          type: 'type',
+          properties: props
+        });
+      });
+
+      it('get', function() {
+        client.get('id', 'prop');
+
+        let call = client.calls()[0];
+        expect(call).to.deep.equal({
+          op: 'get',
+          id: 'id',
+          property: 'prop'
+        });
+      });
+
+      it('set', function() {
+        let props = {};
+        client.set('id', props);
+
+        let call = client.calls()[0];
+        expect(call).to.deep.equal({
+          op: 'set',
+          id: 'id',
+          properties: props
+        });
+      });
+
+      it('call', function() {
+        let params = {};
+        client.call('id', 'method', params);
+
+        let call = client.calls()[0];
+        expect(call).to.deep.equal({
+          op: 'call',
+          id: 'id',
+          method: 'method',
+          parameters: params
+        });
+      });
+
+      it('listen', function() {
+        client.listen('id', 'event', true);
+
+        let call = client.calls()[0];
+        expect(call).to.deep.equal({
+          op: 'listen',
+          id: 'id',
+          event: 'event',
+          listen: true
+        });
+      });
+
+      it('destroy', function() {
+        client.destroy('id');
+
+        let call = client.calls()[0];
+        expect(call).to.deep.equal({
+          op: 'destroy',
+          id: 'id'
+        });
+      });
+
+      describe('after multiple calls', function() {
+
+        beforeEach(function() {
+          client.create('id1', 'type1', {foo: 1});
+          client.create('id2', 'type2', {foo: 2});
+          client.set('id1', {bar: 1});
+          client.set('id2', {bar: 2});
+        });
+
+        it('returns all calls', function() {
+          expect(client.calls().length).to.equal(4);
+        });
+
+        it('result list can be filtered', function() {
+          expect(client.calls({id: 'id1'}).length).to.equal(2);
+        });
+
+      });
+
+    });
+
   });
 
-  describe('when calls have been made', function() {
+  describe('properties', function() {
+
+    it('throws with unknown object id', function() {
+      expect(() => client.properties('foo')).to.throw(Error, 'No object with id foo');
+    });
+
+    it('returns properties after create', function() {
+      client.create('w1', 'widget', {foo: 23});
+      expect(client.properties('w1')).to.deep.equal({foo: 23});
+    });
+
+    it('returns properties after set', function() {
+      client.set('w1', {foo: 23});
+      expect(client.properties('w1')).to.deep.equal({foo: 23});
+    });
+
+    it('aggregates properties after multiple calls', function() {
+      client.create('w1', 'widget', {foo: 23, bar: 42});
+      client.set('w1', {bar: 47, baz: 11});
+      expect(client.properties('w1')).to.deep.equal({foo: 23, bar: 47, baz: 11});
+    });
+
+    it('removes properties after destroy', function() {
+      client.create('w1', 'widget', {foo: 23, bar: 42});
+      client.destroy('w1');
+      expect(() => client.properties('w1')).to.throw(Error, 'No object with id w1');
+    });
+
+  });
+
+  describe('resetCalls', function() {
 
     beforeEach(function() {
       client.create('id1', 'type1', {foo: 1});
-      client.create('id2', 'type2', {foo: 2});
-      client.set('id1', {bar: 1});
-      client.set('id2', {bar: 2});
+      client.set('id1', {bar: 2});
+      client.resetCalls();
     });
 
-    it('result list has contains all calls', function() {
-      expect(client.calls().length).to.equal(4);
+    it('clears calls', function() {
+      expect(client.calls().length).to.equal(0);
     });
 
-    it('result list can be filtered', function() {
-      expect(client.calls({id: 'id1'}).length).to.equal(2);
+    it('retains properties', function() {
+      expect(client.properties('id1')).to.deep.equal({foo: 1, bar: 2});
     });
 
   });

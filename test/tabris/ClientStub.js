@@ -1,57 +1,44 @@
 export default function ClientStub() {
   this._calls = [];
+  this._objects = {};
 }
 
 ClientStub.prototype = {
 
   create() {
-    this._calls.push({
-      op: 'create',
-      id: arguments[0],
-      type: arguments[1],
-      properties: arguments[2]
-    });
+    let [id, type, properties] = arguments;
+    this._calls.push({op: 'create', id, type, properties});
+    this._objects[id] = {type, properties};
   },
 
   get() {
-    this._calls.push({
-      op: 'get',
-      id: arguments[0],
-      property: arguments[1]
-    });
+    let [id, property] = arguments;
+    this._calls.push({op: 'get', id, property});
   },
 
   set() {
-    this._calls.push({
-      op: 'set',
-      id: arguments[0],
-      properties: arguments[1]
-    });
+    let [id, properties] = arguments;
+    this._calls.push({op: 'set', id, properties});
+    if (!(id in this._objects)) {
+      this._objects[id] = {properties: {}};
+    }
+    Object.assign(this._objects[id].properties, properties);
   },
 
   call() {
-    this._calls.push({
-      op: 'call',
-      id: arguments[0],
-      method: arguments[1],
-      parameters: arguments[2]
-    });
+    let [id, method, parameters] = arguments;
+    this._calls.push({op: 'call', id, method, parameters});
   },
 
   listen() {
-    this._calls.push({
-      op: 'listen',
-      id: arguments[0],
-      event: arguments[1],
-      listen: arguments[2]
-    });
+    let [id, event, listen] = arguments;
+    this._calls.push({op: 'listen', id, event, listen});
   },
 
   destroy() {
-    this._calls.push({
-      op: 'destroy',
-      id: arguments[0]
-    });
+    let [id] = arguments;
+    this._calls.push({op: 'destroy', id});
+    delete this._objects[id];
   },
 
   load(url) {
@@ -66,6 +53,13 @@ ClientStub.prototype = {
   resetCalls() {
     tabris._nativeBridge.flush();
     this._calls = [];
+  },
+
+  properties(id) {
+    if (!(id in this._objects)) {
+      throw new Error('No object with id ' + id);
+    }
+    return this._objects[id].properties;
   }
 
 };
