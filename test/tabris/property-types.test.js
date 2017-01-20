@@ -1,5 +1,7 @@
 import {expect, stub, restore} from '../test';
+import ClientStub from './ClientStub';
 import NativeObject from '../../src/tabris/NativeObject';
+import NativeBridge from '../../src/tabris/NativeBridge';
 import ProxyStore from '../../src/tabris/ProxyStore';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
 import {types} from '../../src/tabris/property-types';
@@ -7,15 +9,23 @@ import {omit} from '../../src/tabris/util';
 
 describe('property-types', function() {
 
+  // Allow creating instances of NativeObject
+  class CustomNativeObject extends NativeObject {
+    constructor(cid) {
+      super(cid);
+    }
+  }
+
   let widget;
 
   beforeEach(function() {
+    let client = new ClientStub();
     global.tabris = {
+      on: () => {},
       _proxies: new ProxyStore()
     };
-    function WidgetMock() {}
-    WidgetMock.prototype = NativeObject.prototype;
-    widget = new WidgetMock();
+    global.tabris._nativeBridge = new NativeBridge(client);
+    widget = new CustomNativeObject();
   });
 
   afterEach(restore);
@@ -409,13 +419,13 @@ describe('property-types', function() {
     let decode = types.proxy.decode;
 
     it('translates widgets to ids in properties', function() {
-      let value = new NativeObject('other-id');
+      let value = new CustomNativeObject('other-id');
 
       expect(encode(value)).to.equal('other-id');
     });
 
     it('translates widget collection to first ids in properties', function() {
-      let value = new WidgetCollection([new NativeObject('cid-23')]);
+      let value = new WidgetCollection([new CustomNativeObject('cid-23')]);
 
       expect(encode(value)).to.equal('cid-23');
     });
@@ -427,7 +437,7 @@ describe('property-types', function() {
     });
 
     it('translates ids to widgets', function() {
-      let value = new NativeObject('cid-42');
+      let value = new CustomNativeObject('cid-42');
 
       expect(decode('cid-42')).to.equal(value);
     });

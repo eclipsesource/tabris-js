@@ -20,6 +20,16 @@ describe('NativeObject', function() {
 
   afterEach(restore);
 
+  describe('constructor', function() {
+
+    it('prevents instantiation', function() {
+      expect(() => {
+        new NativeObject();
+      }).to.throw(Error, 'Cannot instantiate abstract NativeObject');
+    });
+
+  });
+
   describe('create', function() {
 
     let TestType, object;
@@ -43,13 +53,12 @@ describe('NativeObject', function() {
     });
 
     it('translates properties', function() {
-      let other = new NativeObject('other-id');
+      let other = new TestType();
       TestType._properties.foo.type = types.proxy;
 
       object._create({foo: other});
-
-      let properties = client.calls({op: 'create', type: 'TestType'})[0].properties;
-      expect(properties.foo).to.equal('other-id');
+      let properties = client.calls({op: 'create', id: object.cid})[0].properties;
+      expect(properties.foo).to.equal(other.cid);
     });
 
     it('sends native set for init properties', function() {
@@ -873,7 +882,7 @@ describe('NativeObject.extend', function() {
     it('cannot be called as a function', function() {
       expect(() => {
         TestType({foo: 42});
-      }).to.throw(Error, 'Cannot call constructor as a function');
+      }).to.throw(Error, 'Class constructor Type cannot be invoked without \'new\'');
     });
 
   });

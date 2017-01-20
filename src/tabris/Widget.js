@@ -1,4 +1,4 @@
-import {extend, extendPrototype} from './util';
+import {extend} from './util';
 import Layout from './Layout';
 import NativeObject from './NativeObject';
 import WidgetCollection from './WidgetCollection';
@@ -6,13 +6,23 @@ import GestureRecognizer from './GestureRecognizer';
 import {animate} from './Animation';
 import {types} from './property-types';
 
-export default function Widget() {
-  throw new Error('Cannot instantiate abstract Widget');
-}
+export default class Widget extends NativeObject {
 
-let superProto = NativeObject.prototype;
+  static extend(members) {
+    members = extend({}, members);
+    members._events = extend({}, defaultEvents, members._events || {});
+    if (members._properties !== true) {
+      members._properties = extend({}, defaultProperties, members._properties || {});
+    }
+    return NativeObject.extend(members, Widget);
+  }
 
-Widget.prototype = extendPrototype(NativeObject, {
+  constructor() {
+    super();
+    if (this.constructor === Widget) {
+      throw new Error('Cannot instantiate abstract Widget');
+    }
+  }
 
   append() {
     this._checkDisposed();
@@ -30,7 +40,7 @@ Widget.prototype = extendPrototype(NativeObject, {
       Array.prototype.forEach.call(arguments, accept);
     }
     return this;
-  },
+  }
 
   appendTo(widget) {
     this._checkDisposed();
@@ -40,7 +50,7 @@ Widget.prototype = extendPrototype(NativeObject, {
     }
     this._setParent(widget);
     return this;
-  },
+  }
 
   insertBefore(widget) {
     this._checkDisposed();
@@ -55,7 +65,7 @@ Widget.prototype = extendPrototype(NativeObject, {
     let index = parent._children.indexOf(widget);
     this._setParent(parent, index);
     return this;
-  },
+  }
 
   insertAfter(widget) {
     this._checkDisposed();
@@ -70,31 +80,31 @@ Widget.prototype = extendPrototype(NativeObject, {
     let index = parent._children.indexOf(widget);
     this._setParent(parent, index + 1);
     return this;
-  },
+  }
 
   detach() {
     this._checkDisposed();
     this._setParent(null);
     return this;
-  },
+  }
 
   parent() {
     return this._parent || null;
-  },
+  }
 
   children(selector) {
     return new WidgetCollection(this._getSelectableChildren(), selector);
-  },
+  }
 
   siblings(selector) {
     let siblings = (this._parent ? this._parent._getSelectableChildren() : []);
     let filtered = siblings.filter(widget => widget !== this);
     return new WidgetCollection(filtered, selector);
-  },
+  }
 
   find(selector) {
     return new WidgetCollection(this._getSelectableChildren(), selector, true);
-  },
+  }
 
   apply(sheet) {
     let scope = new WidgetCollection(this._children.concat(this), '*', true);
@@ -117,15 +127,15 @@ Widget.prototype = extendPrototype(NativeObject, {
       }
     }
     return this;
-  },
+  }
 
   _getContainer() {
     return this;
-  },
+  }
 
   _getSelectableChildren() {
     return this._children;
-  },
+  }
 
   _setParent(parent, index) {
     this._nativeSet('parent', parent ? types.proxy.encode(parent._getContainer(this)) : null);
@@ -138,7 +148,7 @@ Widget.prototype = extendPrototype(NativeObject, {
       this._parent._addChild(this, index);
       Layout.addToQueue(this._parent);
     }
-  },
+  }
 
   _addChild(child, index) {
     let check = this.constructor._supportsChildren;
@@ -158,7 +168,7 @@ Widget.prototype = extendPrototype(NativeObject, {
       this._children.push(child);
       this.trigger('addchild', this, child, {index: this._children.length - 1});
     }
-  },
+  }
 
   _removeChild(child) {
     if (this._children) {
@@ -168,7 +178,7 @@ Widget.prototype = extendPrototype(NativeObject, {
         this.trigger('removechild', this, child, {index});
       }
     }
-  },
+  }
 
   _release() {
     if (this._children) {
@@ -183,15 +193,15 @@ Widget.prototype = extendPrototype(NativeObject, {
       Layout.addToQueue(this._parent);
       delete this._parent;
     }
-  },
+  }
 
   _getEventConfig(type) {
-    let result = superProto._getEventConfig.apply(this, arguments);
+    let result = super._getEventConfig(type);
     if (!result && this.get('gestures')[type]) {
       return getGestureEventConfig(type);
     }
     return result;
-  },
+  }
 
   _flushLayout() {
     if (this._children) {
@@ -199,29 +209,18 @@ Widget.prototype = extendPrototype(NativeObject, {
         renderLayoutData.call(child);
       });
     }
-  },
-
-  animate
-
-});
-
-Widget.extend = function(members) {
-  members = extend({}, members);
-  members._events = extend({}, defaultEvents, members._events || {});
-  if (members._properties !== true) {
-    members._properties = extend({}, defaultProperties, members._properties || {});
   }
-  return NativeObject.extend(members, Widget);
-};
 
-Object.defineProperty(Widget.prototype, 'classList', {
-  get() {
+  get classList() {
     if (!this._classList) {
       this._classList = [];
     }
     return this._classList;
   }
-});
+
+}
+
+Widget.prototype.animate = animate;
 
 let layoutAccess = {
   set(name, value) {
