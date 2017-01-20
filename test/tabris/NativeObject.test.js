@@ -284,6 +284,100 @@ describe('NativeObject', function() {
 
     });
 
+    describe('_trigger', function() {
+
+      let listener;
+
+      beforeEach(function() {
+        listener = spy();
+      });
+
+      it('notifies listeners', function() {
+        object.on('bar', listener);
+
+        object._trigger('bar', {bar: 23});
+
+        expect(listener).to.have.been.calledWith({bar: 23});
+      });
+
+      it('notifies listeners with translated event name', function() {
+        let CustomType = NativeObject.extend({_events: {bar: 'foo'}});
+        let object = new CustomType();
+        object.on('bar', listener);
+
+        object._trigger('foo', {});
+
+        expect(listener).to.have.been.calledWith({});
+      });
+
+      it('calls custom trigger', function() {
+        let CustomType = NativeObject.extend({
+          _events: {
+            bar: {
+              trigger: spy()
+            }
+          }
+        });
+        let object = new CustomType();
+        object.on('bar', listener);
+
+        object._trigger('bar', {bar: 23});
+
+        expect(CustomType._events.bar.trigger).to.have.been.calledWith({bar: 23}, 'bar');
+      });
+
+      it('returns result from custom trigger', function() {
+        let CustomType = NativeObject.extend({
+          _events: {
+            bar: {
+              trigger: spy(() => 'result')
+            }
+          }
+        });
+        let object = new CustomType();
+        object.on('bar', listener);
+
+        let result = object._trigger('bar');
+
+        expect(result).to.equal('result');
+      });
+
+      it('calls custom trigger of translated event', function() {
+        let CustomType = NativeObject.extend({
+          _events: {
+            bar: {
+              name: 'foo',
+              trigger: spy()
+            }
+          }
+        });
+        let object = new CustomType();
+        object.on('bar', listener);
+
+        object._trigger('foo', {bar: 23});
+
+        expect(CustomType._events.bar.trigger).to.have.been.calledWith({bar: 23}, 'bar');
+      });
+
+      it('returns return value from custom trigger with translated event', function() {
+        let CustomType = NativeObject.extend({
+          _events: {
+            bar: {
+              name: 'foo',
+              trigger: spy(() => 'result')
+            }
+          }
+        });
+        let object = new CustomType();
+        spy(object, 'trigger');
+
+        let result = object._trigger('foo');
+
+        expect(result).to.equal('result');
+      });
+
+    });
+
     describe('on', function() {
 
       let listener;

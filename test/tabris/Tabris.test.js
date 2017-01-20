@@ -1,4 +1,4 @@
-import {expect, spy, restore} from '../test';
+import {expect, spy, stub, restore} from '../test';
 import NativeObject from '../../src/tabris/NativeObject';
 import ClientInterface from '../../src/tabris/Tabris';
 import ClientStub from './ClientStub';
@@ -50,128 +50,52 @@ describe('ClientInterface', function() {
 
   describe('_notify', function() {
 
-    let CustomType;
-    let proxy;
+    let TestType;
+    let widget;
 
     beforeEach(function() {
       tabris._init(client);
+      TestType = NativeObject.extend({});
+      widget = new TestType();
     });
 
-    it('notifies widget proxy', function() {
-      CustomType = NativeObject.extend({_events: {bar: true}});
-      proxy = new CustomType();
-      spy(proxy, 'trigger');
+    it('notifies widget', function() {
+      spy(widget, '_trigger');
 
-      tabris._notify(proxy.cid, 'bar', {bar: 23});
+      tabris._notify(widget.cid, 'foo', {bar: 23});
 
-      expect(proxy.trigger).to.have.been.calledWith('bar', {bar: 23});
+      expect(widget._trigger).to.have.been.calledWith('foo', {bar: 23});
     });
 
-    it('notifies widget proxy with translated event name', function() {
-      CustomType = NativeObject.extend({_events: {bar: 'foo'}});
-      proxy = new CustomType();
-      spy(proxy, 'trigger');
+    it('returns return value from widget', function() {
+      stub(widget, '_trigger', () => 'result');
 
-      tabris._notify(proxy.cid, 'foo', {});
+      let result = tabris._notify(widget.cid, 'foo');
 
-      expect(proxy.trigger).to.have.been.calledWith('bar', {});
-    });
-
-    it('calls custom trigger', function() {
-      CustomType = NativeObject.extend({
-
-        _events: {
-          bar: {
-            trigger: spy()
-          }
-        }
-      });
-      proxy = new CustomType();
-      spy(proxy, 'trigger');
-
-      tabris._notify(proxy.cid, 'bar', {bar: 23});
-
-      expect(CustomType._events.bar.trigger).to.have.been.calledWith({bar: 23}, 'bar');
-    });
-
-    it('returns return value from custom trigger', function() {
-      CustomType = NativeObject.extend({
-
-        _events: {
-          bar: {
-            trigger: spy(() => 'foo')
-          }
-        }
-      });
-      proxy = new CustomType();
-      spy(proxy, 'trigger');
-
-      let returnValue = tabris._notify(proxy.cid, 'bar');
-
-      expect(returnValue).to.equal('foo');
-    });
-
-    it('calls custom trigger of translated event', function() {
-      CustomType = NativeObject.extend({
-
-        _events: {
-          bar: {
-            name: 'foo',
-            trigger: spy()
-          }
-        }
-      });
-      proxy = new CustomType();
-      spy(proxy, 'trigger');
-
-      tabris._notify(proxy.cid, 'foo', {bar: 23});
-
-      expect(CustomType._events.bar.trigger).to.have.been.calledWith({bar: 23}, 'bar');
-    });
-
-    it('returns return value from custom trigger with translated event', function() {
-      CustomType = NativeObject.extend({
-
-        _events: {
-          bar: {
-            name: 'foo',
-            trigger: spy(() => 'foobar')
-          }
-        }
-      });
-      proxy = new CustomType();
-      spy(proxy, 'trigger');
-
-      let returnValue = tabris._notify(proxy.cid, 'foo');
-
-      expect(returnValue).to.equal('foobar');
+      expect(result).to.equal('result');
     });
 
     it('skips events for already disposed widgets', function() {
-      CustomType = NativeObject.extend({_events: {bar: true}});
-      proxy = new CustomType();
-      proxy.dispose();
-      spy(proxy, 'trigger');
+      widget.dispose();
+      spy(widget, '_trigger');
 
-      tabris._notify(proxy.cid, 'bar', {bar: 23});
+      tabris._notify(widget.cid, 'foo', {bar: 23});
 
-      expect(proxy.trigger).to.have.not.been.called;
+      expect(widget._trigger).to.have.not.been.called;
     });
 
     it('silently ignores events for non-existing ids (does not crash)', function() {
       expect(() => {
-        tabris._notify('no-id', 'foo', [23, 42]);
+        tabris._notify('no-id', 'foo', {bar: 23});
       }).to.not.throw();
     });
 
     it('can be called without a context', function() {
-      CustomType = NativeObject.extend({_events: {bar: true}});
-      proxy = new CustomType();
-      spy(proxy, 'trigger');
+      spy(widget, '_trigger');
 
-      tabris._notify.call(null, proxy.cid, 'bar', [23, 42]);
+      tabris._notify.call(null, widget.cid, 'foo', [23, 42]);
 
-      expect(proxy.trigger).to.have.been.calledWith('bar', [23, 42]);
+      expect(widget._trigger).to.have.been.calledWith('foo', [23, 42]);
     });
 
   });
