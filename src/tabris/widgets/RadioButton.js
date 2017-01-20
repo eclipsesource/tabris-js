@@ -1,6 +1,6 @@
 import Widget from '../Widget';
 
-export default Widget.extend({
+const CONFIG = {
   _name: 'RadioButton',
   _type: 'tabris.RadioButton',
   _events: {
@@ -16,4 +16,6 @@ export default Widget.extend({
     text: {type: 'string', default: ''},
     selection: {type: 'boolean', nocache: true}
   }
-});
+};
+
+export default class RadioButton extends Widget.extend(CONFIG) {}

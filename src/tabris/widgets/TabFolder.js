@@ -1,6 +1,6 @@
 import Widget from '../Widget';
 
-export default Widget.extend({
+const CONFIG = {
   _name: 'TabFolder',
 
   _type: 'tabris.TabFolder',
@@ -48,4 +48,6 @@ export default Widget.extend({
     return child.type === 'Tab';
   }
 
-});
+};
+
+export default class TabFolder extends Widget.extend(CONFIG) {}

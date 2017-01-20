@@ -1,6 +1,6 @@
 import Widget from '../Widget';
 
-export default Widget.extend({
+const CONFIG = {
   _name: 'ToggleButton',
   _type: 'tabris.ToggleButton',
   _events: {
@@ -18,4 +18,6 @@ export default Widget.extend({
     selection: {type: 'boolean', nocache: true},
     alignment: {type: ['choice', ['left', 'right', 'center']], default: 'center'}
   }
-});
+};
+
+export default class ToggleButton extends Widget.extend(CONFIG) {}

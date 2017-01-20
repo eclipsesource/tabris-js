@@ -1,6 +1,6 @@
 import Widget from '../Widget';
 
-export default Widget.extend({
+const CONFIG = {
 
   _name: 'SearchAction',
 
@@ -31,11 +31,15 @@ export default Widget.extend({
         this.trigger('select', this, event);
       }
     }
-  },
+  }
+
+};
+
+export default class SearchAction extends Widget.extend(CONFIG) {
 
   open() {
     this._nativeCall('open', {});
     return this;
   }
 
-});
+}

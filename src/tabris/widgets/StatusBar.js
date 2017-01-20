@@ -1,23 +1,12 @@
 import Widget from '../Widget';
 
-export default function StatusBar() {
-  throw new Error('StatusBar can not be created');
-}
-
-let _StatusBar = Widget.extend({
+const CONFIG = {
 
   _name: 'StatusBar',
 
   _type: 'tabris.StatusBar',
 
   _supportsChildren: false,
-
-  _setParent() {
-    if (this._parent) {
-      throw new Error('Parent of StatusBar can not be changed');
-    }
-    this._super('_setParent', arguments);
-  },
 
   _properties: {
     theme: {type: ['choice', ['default', 'light', 'dark']], default: 'default'},
@@ -32,16 +21,32 @@ let _StatusBar = Widget.extend({
       }
     },
     background: {type: 'color', nocache: true}
-  },
+  }
+
+};
+
+export default class StatusBar extends Widget.extend(CONFIG) {
+
+  constructor() {
+    super();
+    if (arguments[0] !== true) {
+      throw new Error('StatusBar can not be created');
+    }
+  }
+
+  _setParent(parent, index) {
+    if (this._parent) {
+      throw new Error('Parent of StatusBar can not be changed');
+    }
+    super._setParent(parent, index);
+  }
 
   _dispose() {
     throw new Error('StatusBar can not be disposed');
   }
 
-});
-
-StatusBar.prototype = _StatusBar.prototype;
+}
 
 export function create() {
-  return new _StatusBar();
+  return new StatusBar(true);
 }

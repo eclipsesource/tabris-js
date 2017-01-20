@@ -1,23 +1,12 @@
 import Widget from '../Widget';
 
-export default function NavigationBar() {
-  throw new Error('NavigationBar can not be created');
-}
-
-let _NavigationBar = Widget.extend({
+const CONFIG = {
 
   _name: 'NavigationBar',
 
   _type: 'tabris.NavigationBar',
 
   _supportsChildren: false,
-
-  _setParent() {
-    if (this._parent) {
-      throw new Error('Parent of NavigationBar can not be changed');
-    }
-    this._super('_setParent', arguments);
-  },
 
   _properties: {
     displayMode: {type: ['choice', ['default', 'float', 'hide']], default: 'default'},
@@ -31,16 +20,32 @@ let _NavigationBar = Widget.extend({
       }
     },
     background: {type: 'color', nocache: true}
-  },
+  }
+
+};
+
+export default class NavigationBar extends Widget.extend(CONFIG) {
+
+  constructor() {
+    super();
+    if (arguments[0] !== true) {
+      throw new Error('NavigationBar can not be created');
+    }
+  }
+
+  _setParent(parent, index) {
+    if (this._parent) {
+      throw new Error('Parent of NavigationBar can not be changed');
+    }
+    super._setParent(parent, index);
+  }
 
   _dispose() {
     throw new Error('NavigationBar can not be disposed');
   }
 
-});
-
-NavigationBar.prototype = _NavigationBar.prototype;
+}
 
 export function create() {
-  return new _NavigationBar();
+  return new NavigationBar(true);
 }

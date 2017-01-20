@@ -1,6 +1,6 @@
 import Widget from '../Widget';
 
-export default Widget.extend({
+const CONFIG = {
   _name: 'ProgressBar',
   _type: 'tabris.ProgressBar',
   _properties: {
@@ -9,4 +9,6 @@ export default Widget.extend({
     selection: {type: 'integer', default: 0},
     state: {type: ['choice', ['normal', 'paused', 'error']], default: 'normal'}
   }
-});
+};
+
+export default class ProgressBar extends Widget.extend(CONFIG) {}

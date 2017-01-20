@@ -1,6 +1,6 @@
 import Widget from '../Widget';
 
-export default Widget.extend({
+const CONFIG = {
   _name: 'Slider',
   _type: 'tabris.Slider',
   _events: {
@@ -17,4 +17,6 @@ export default Widget.extend({
     maximum: {type: 'integer', default: 100},
     selection: {type: 'integer', nocache: true}
   }
-});
+};
+
+export default class Slider extends Widget.extend(CONFIG) {}

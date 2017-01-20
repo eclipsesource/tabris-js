@@ -1,6 +1,7 @@
 import Widget from '../Widget';
 
-export default Widget.extend({
+const CONFIG = {
+
   _name: 'WebView',
 
   _type: 'tabris.WebView',
@@ -38,7 +39,11 @@ export default Widget.extend({
     html: {type: 'string', nocache: true},
     headers: {type: 'any', default: {}},
     initScript: {type: 'string'}
-  },
+  }
+
+};
+
+export default class WebView extends Widget.extend(CONFIG) {
 
   postMessage(data, targetOrigin) {
     this._nativeCall('postMessage', {
@@ -46,10 +51,10 @@ export default Widget.extend({
       origin: targetOrigin
     });
     return this;
-  },
+  }
 
   _loadData(data, mimeType) {
     this._nativeCall('loadData', {data, mimeType});
   }
 
-});
+}

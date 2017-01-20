@@ -1,23 +1,12 @@
 import Widget from '../Widget';
 
-export default function Drawer() {
-  throw new Error('Drawer can not be created');
-}
-
-let _Drawer = Widget.extend({
+const CONFIG = {
 
   _name: 'Drawer',
 
   _type: 'tabris.Drawer',
 
   _supportsChildren: true,
-
-  _setParent() {
-    if (this._parent) {
-      throw new Error('Parent of Drawer can not be changed');
-    }
-    this._super('_setParent', arguments);
-  },
 
   _properties: {
     win_displayMode: {
@@ -51,24 +40,40 @@ let _Drawer = Widget.extend({
     }
   },
 
+};
+
+export default class Drawer extends Widget.extend(CONFIG) {
+
+  constructor() {
+    super();
+    if (arguments[0] !== true) {
+      throw new Error('Drawer can not be created');
+    }
+  }
+
+  _setParent(parent, index) {
+    if (this._parent) {
+      throw new Error('Parent of Drawer can not be changed');
+    }
+    super._setParent(parent, index);
+  }
+
   _dispose() {
     throw new Error('Drawer can not be disposed');
-  },
+  }
 
   open() {
     this._nativeCall('open', {});
     return this;
-  },
+  }
 
   close() {
     this._nativeCall('close', {});
     return this;
   }
 
-});
-
-Drawer.prototype = _Drawer.prototype;
+}
 
 export function create() {
-  return new _Drawer();
+  return new Drawer(true);
 }

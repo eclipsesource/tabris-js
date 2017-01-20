@@ -1,6 +1,6 @@
 import Widget from '../Widget';
 
-export default Widget.extend({
+const CONFIG = {
   _name: 'TextView',
   _type: 'tabris.TextView',
   _properties: {
@@ -20,4 +20,6 @@ export default Widget.extend({
     },
     text: {type: 'string', default: ''}
   }
-});
+};
+
+export default class TextView extends Widget.extend(CONFIG) {}

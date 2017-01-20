@@ -1,7 +1,9 @@
 import Widget from '../Widget';
 
-export default Widget.extend({
+const CONFIG = {
   _name: 'Composite',
   _type: 'tabris.Composite',
   _supportsChildren: true
-});
+};
+
+export default class Composite extends Widget.extend(CONFIG) {}

@@ -1,7 +1,7 @@
 import Widget from '../Widget';
 import TabFolder from './TabFolder';
 
-export default Widget.extend({
+const CONFIG = {
   _name: 'Tab',
 
   _type: 'tabris.Tab',
@@ -13,7 +13,10 @@ export default Widget.extend({
     badge: {type: 'string', default: ''}
   },
 
-  _supportsChildren: true,
+  _supportsChildren: true
+};
+
+export default class Tab extends Widget.extend(CONFIG) {
 
   _setParent(parent) {
     if (!(parent instanceof TabFolder)) {
@@ -21,4 +24,5 @@ export default Widget.extend({
     }
     Widget.prototype._setParent.call(this, parent);
   }
-});
+
+}

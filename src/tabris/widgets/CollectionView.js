@@ -1,7 +1,8 @@
 import Widget from '../Widget';
 import Cell from './Cell';
 
-export default Widget.extend({
+const CONFIG = {
+
   _name: 'CollectionView',
 
   _type: 'tabris.CollectionView',
@@ -78,16 +79,6 @@ export default Widget.extend({
     }
   },
 
-  _create() {
-    this._items = [];
-    let result = this._super('_create', arguments);
-    this._nativeListen('requestinfo', true);
-    this._nativeListen('createitem', true);
-    this._nativeListen('populateitem', true);
-    tabris.on('flush', () => this._reload());
-    return result;
-  },
-
   _events: {
     refresh: {
       trigger(event) {this.trigger('refresh', this, event);}
@@ -159,24 +150,38 @@ export default Widget.extend({
         }
       }
     }
-  },
+  }
+
+};
+
+export default class CollectionView extends Widget.extend(CONFIG) {
+
+  _create(properties) {
+    this._items = [];
+    let result = super._create(properties);
+    this._nativeListen('requestinfo', true);
+    this._nativeListen('createitem', true);
+    this._nativeListen('populateitem', true);
+    tabris.on('flush', () => this._reload());
+    return result;
+  }
 
   _setItems(items, options) {
     this._items = items || [];
     this._triggerChangeEvent('items', this._items, options);
     this._needsReload = true;
-  },
+  }
 
   _getItem(items, index) {
     return items[index];
-  },
+  }
 
   reveal(index) {
     index = this._checkIndex(index);
     if (index >= 0 && index < this._items.length) {
       this._nativeCall('reveal', {index});
     }
-  },
+  }
 
   refresh(index) {
     if (arguments.length === 0) {
@@ -187,7 +192,7 @@ export default Widget.extend({
     if (index >= 0 && index < this._items.length) {
       this._nativeCall('update', {reload: [index, 1]});
     }
-  },
+  }
 
   insert(items, index) {
     if (!Array.isArray(items)) {
@@ -201,7 +206,7 @@ export default Widget.extend({
     Array.prototype.splice.apply(this._items, [index, 0].concat(items));
     this._adjustIndicies(index, items.length);
     this._nativeCall('update', {insert: [index, items.length]});
-  },
+  }
 
   remove(index, count) {
     index = this._checkIndex(index);
@@ -217,7 +222,7 @@ export default Widget.extend({
       this._adjustIndicies(index + count, -count);
       this._nativeCall('update', {remove: [index, count]});
     }
-  },
+  }
 
   _reload() {
     // We defer the reload call until the end of create/set in order to ensure that
@@ -226,14 +231,14 @@ export default Widget.extend({
       this._nativeCall('reload', {'items': this._items.length});
       delete this._needsReload;
     }
-  },
+  }
 
   _checkIndex(index) {
     if (typeof index !== 'number' || !isFinite(index)) {
       throw new Error('illegal index');
     }
     return index < 0 ? index + this._items.length : index;
-  },
+  }
 
   _adjustIndicies(offset, diff) {
     let cells = this._children || [];
@@ -246,7 +251,7 @@ export default Widget.extend({
     }
   }
 
-});
+}
 
 function resolveProperty(ctx, name) {
   let value = ctx.get(name);

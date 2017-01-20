@@ -1,6 +1,6 @@
 import Widget from '../Widget';
 
-export default Widget.extend({
+const CONFIG = {
   _name: 'Button',
   _type: 'tabris.Button',
   _events: {
@@ -15,4 +15,6 @@ export default Widget.extend({
     image: {type: 'image', default: null},
     text: {type: 'string', default: ''}
   }
-});
+};
+
+export default class Button extends Widget.extend(CONFIG) {}

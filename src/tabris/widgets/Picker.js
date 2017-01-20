@@ -1,6 +1,7 @@
 import Widget from '../Widget';
 
-export default Widget.extend({
+const CONFIG = {
+
   _name: 'Picker',
 
   _type: 'tabris.Picker',
@@ -81,22 +82,26 @@ export default Widget.extend({
     borderColor: {type: 'color'}
   },
 
+};
+
+export default class Picker extends Widget.extend(CONFIG) {
+
   _reorderProperties(properties) {
     // items property depends on itemText, selection/selectionIndex depend on items
     let deferred = ['items', 'selection', 'selectionIndex'];
     return properties.filter(name => deferred.indexOf(name) === -1)
       .concat(deferred.filter(name => properties.indexOf(name) !== -1));
-  },
+  }
 
   _getItem(index) {
     return this.get('items')[index];
-  },
+  }
 
   _getItemIndex(item) {
     return this.get('items').indexOf(item);
   }
 
-});
+}
 
 function triggerSelectionChange(widget, index, options) {
   widget._triggerChangeEvent('selection', widget._getItem(index), Object.assign({index}, options));

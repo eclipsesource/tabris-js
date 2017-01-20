@@ -1,6 +1,6 @@
 import Widget from '../Widget';
 
-export default Widget.extend({
+const CONFIG = {
   _name: 'ImageView',
   _type: 'tabris.ImageView',
   _events: {
@@ -23,4 +23,6 @@ export default Widget.extend({
       }
     }
   }
-});
+};
+
+export default class ImageView extends Widget.extend(CONFIG) {}

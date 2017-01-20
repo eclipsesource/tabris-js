@@ -1,6 +1,6 @@
 import Widget from '../Widget';
 
-export default Widget.extend({
+const CONFIG = {
   _name: 'TextInput',
   _type: 'tabris.TextInput',
   _events: {
@@ -44,4 +44,6 @@ export default Widget.extend({
     fillColor: {type: 'color'},
     borderColor: {type: 'color'}
   }
-});
+};
+
+export default class TextInput extends Widget.extend(CONFIG) {}

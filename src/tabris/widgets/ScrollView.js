@@ -1,6 +1,6 @@
 import Widget from '../Widget';
 
-export default Widget.extend({
+const CONFIG = {
 
   _name: 'ScrollView',
 
@@ -32,7 +32,11 @@ export default Widget.extend({
         this.trigger('scrollY', this, offset, {});
       }
     }
-  },
+  }
+
+};
+
+export default class ScrollView extends Widget.extend(CONFIG) {
 
   scrollToY(offsetY, options) {
     this._nativeCall('scrollToY', {
@@ -40,7 +44,7 @@ export default Widget.extend({
       animate: options && 'animate' in options ? !!options.animate : true
     });
     return this;
-  },
+  }
 
   scrollToX(offsetX, options) {
     this._nativeCall('scrollToX', {
@@ -50,4 +54,4 @@ export default Widget.extend({
     return this;
   }
 
-});
+}

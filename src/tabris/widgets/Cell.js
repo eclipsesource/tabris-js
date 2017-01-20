@@ -1,15 +1,12 @@
 import Widget from '../Widget';
 
-export default Widget.extend({
+const CONFIG = {
+
   _name: 'Cell',
 
   _type: 'tabris.Composite',
 
   _supportsChildren: true,
-
-  dispose() {
-    console.warn('CollectionView cells are container-managed, they cannot be disposed of');
-  },
 
   _properties: {
     item: {
@@ -34,4 +31,12 @@ export default Widget.extend({
     }
   }
 
-});
+};
+
+export default class Cell extends Widget.extend(CONFIG) {
+
+  dispose() {
+    console.warn('CollectionView cells are container-managed, they cannot be disposed of');
+  }
+
+}

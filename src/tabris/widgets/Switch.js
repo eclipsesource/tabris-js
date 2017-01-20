@@ -1,6 +1,6 @@
 import Widget from '../Widget';
 
-export default Widget.extend({
+const CONFIG = {
   _name: 'Switch',
   _type: 'tabris.Switch',
   _events: {
@@ -19,4 +19,6 @@ export default Widget.extend({
     trackOnColor: {type: 'color'},
     trackOffColor: {type: 'color'}
   }
-});
+};
+
+export default class Switch extends Widget.extend(CONFIG) {}

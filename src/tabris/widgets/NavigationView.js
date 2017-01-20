@@ -3,19 +3,11 @@ import Page from './Page';
 import Action from './Action';
 import SearchAction from './SearchAction';
 
-export default Widget.extend({
+const CONFIG = {
 
   _name: 'NavigationView',
 
   _type: 'tabris.NavigationView',
-
-  _create() {
-    let result = Widget.prototype._create.apply(this, arguments);
-    Object.defineProperty(this, 'stack', {value: new StackView(this)});
-    this._nativeListen('backnavigation', true);
-    this._nativeListen('back', true);
-    return result;
-  },
 
   _properties: {
     drawerActionVisible: {type: 'boolean', default: false},
@@ -41,7 +33,19 @@ export default Widget.extend({
 
   _supportsChildren(child) {
     return child instanceof Page || child instanceof Action || child instanceof SearchAction;
-  },
+  }
+
+};
+
+export default class NavigationView extends Widget.extend(CONFIG) {
+
+  _create() {
+    let result = Widget.prototype._create.apply(this, arguments);
+    Object.defineProperty(this, 'stack', {value: new StackView(this)});
+    this._nativeListen('backnavigation', true);
+    this._nativeListen('back', true);
+    return result;
+  }
 
   _addChild(child, index) {
     if (child instanceof Page) {
@@ -56,7 +60,7 @@ export default Widget.extend({
     if (child instanceof Page) {
       this._triggerAppear();
     }
-  },
+  }
 
   _removeChild(child) {
     if (child instanceof Page) {
@@ -80,13 +84,13 @@ export default Widget.extend({
     if (child instanceof Page) {
       this._triggerAppear();
     }
-  },
+  }
 
   _handleBackNavigation(skipPopCalls) {
     this._skipPopCalls = skipPopCalls;
     this._pop(this.pages().last());
     delete this._skipPopCalls;
-  },
+  }
 
   _popPagesAbove(page) {
     if (this._inPopAbove) {
@@ -101,7 +105,7 @@ export default Widget.extend({
       }
     }
     delete this._inPopAbove;
-  },
+  }
 
   _pop(page) {
     if (page && page.autoDispose) {
@@ -109,7 +113,7 @@ export default Widget.extend({
     } else if (page) {
       page._setParent(null);
     }
-  },
+  }
 
   _triggerAppear() {
     if (this._inPopAbove) {
@@ -119,7 +123,7 @@ export default Widget.extend({
     if (topPage) {
       topPage.trigger('appear', topPage);
     }
-  },
+  }
 
   _triggerDisappear() {
     if (this._inPopAbove) {
@@ -129,13 +133,13 @@ export default Widget.extend({
     if (topPage) {
       topPage.trigger('disappear', topPage);
     }
-  },
+  }
 
   pages() {
     return this.children().filter(child => child instanceof Page);
   }
 
-});
+}
 
 /**
  * TODO Temporary stub for backwards compatibility, remove
