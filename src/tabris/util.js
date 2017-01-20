@@ -28,10 +28,6 @@ export function omit(object, keys) {
   return result;
 }
 
-export function drop(array, index) {
-  return Array.prototype.slice.call(array, arguments.length > 1 ? index : 1);
-}
-
 export function clone(object) {
   let result = {};
   for (let key in object) {
@@ -40,28 +36,8 @@ export function clone(object) {
   return result;
 }
 
-export function rename(object, mapping) {
-  let result = {};
-  for (let key in object) {
-    result[mapping[key] || key] = object[key];
-  }
-  return result;
-}
-
-export function invert(object) {
-  let result = {};
-  for (let key in object) {
-    result[object[key]] = key;
-  }
-  return result;
-}
-
 export function extendPrototype(fn, target) {
   let Helper = function() {};
   Helper.prototype = fn.prototype;
-  return extend(new Helper(), target, {
-    '_super'(method, params) {
-      return fn.prototype[method].apply(this, params);
-    }
-  });
+  return extend(new Helper(), target);
 }
