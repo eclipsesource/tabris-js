@@ -1,4 +1,4 @@
-import {expect, spy, restore} from '../../test';
+import {expect, spy, stub, restore} from '../../test';
 import ClientStub from '../ClientStub';
 import ProxyStore from '../../../src/tabris/ProxyStore';
 import NativeBridge from '../../../src/tabris/NativeBridge';
@@ -200,37 +200,53 @@ describe('Common Widgets', function() {
     checkListen('select');
   });
 
-  it('TextInput', function() {
-    let textInput = new TextInput({text: 'foo'});
+  describe('TextInput', function() {
 
-    expect(getCreate().type).to.eql('tabris.TextInput');
-    expect(getCreate().properties).to.eql({text: 'foo'});
-    expect(textInput.get('message')).to.equal('');
-    expect(textInput.get('alignment')).to.equal('left');
-    expect(textInput.get('keyboard')).to.equal('default');
-    expect(textInput.get('autoCorrect')).to.equal(false);
-    expect(textInput.get('autoCapitalize')).to.equal(false);
-  });
+    it('create', function() {
+      new TextInput({text: 'foo'});
 
-  it('TextInput input', function() {
-    widget = new TextInput().on('input', listener);
-    tabris._notify(widget.cid, 'input', {text: 'foo'});
-    checkEvent('foo');
-    checkListen('input');
-  });
+      expect(getCreate().type).to.eql('tabris.TextInput');
+      expect(getCreate().properties).to.eql({text: 'foo'});
+    });
 
-  it('TextInput accept', function() {
-    widget = new TextInput().on('accept', listener);
-    tabris._notify(widget.cid, 'accept', {text: 'foo'});
-    checkEvent('foo');
-    checkListen('accept');
-  });
+    it('properties', function() {
+      let textInput = new TextInput({text: 'foo'});
 
-  it('TextInput change:text', function() {
-    widget = new TextInput().on('change:text', listener);
-    tabris._notify(widget.cid, 'input', {text: 'foo'});
-    checkEvent('foo');
-    checkListen('input');
+      expect(textInput.get('message')).to.equal('');
+      expect(textInput.get('alignment')).to.equal('left');
+      expect(textInput.get('keyboard')).to.equal('default');
+      expect(textInput.get('autoCorrect')).to.equal(false);
+    });
+
+    it('autoCapitalize property', function() {
+      let textInput = new TextInput({text: 'foo'});
+      stub(client, 'get', () => false);
+
+      expect(textInput.get('autoCapitalize')).to.equal(false);
+      expect(client.get).to.have.been.called;
+    });
+
+    it('input event', function() {
+      widget = new TextInput().on('input', listener);
+      tabris._notify(widget.cid, 'input', {text: 'foo'});
+      checkEvent('foo');
+      checkListen('input');
+    });
+
+    it('accept event', function() {
+      widget = new TextInput().on('accept', listener);
+      tabris._notify(widget.cid, 'accept', {text: 'foo'});
+      checkEvent('foo');
+      checkListen('accept');
+    });
+
+    it('change:text event', function() {
+      widget = new TextInput().on('change:text', listener);
+      tabris._notify(widget.cid, 'input', {text: 'foo'});
+      checkEvent('foo');
+      checkListen('input');
+    });
+
   });
 
   it('WebView', function() {

@@ -35,7 +35,7 @@ export default Widget.extend({
     keepFocus: {type: 'boolean'},
     alignment: {type: ['choice', ['left', 'center', 'right']], default: 'left'},
     autoCorrect: {type: 'boolean', default: false},
-    autoCapitalize: {type: 'boolean', default: false},
+    autoCapitalize: {type: 'boolean', nocache: true},
     keyboard: {
       type: ['choice', ['ascii', 'decimal', 'email', 'number', 'numbersAndPunctuation', 'phone', 'url', 'default']],
       default: 'default'
