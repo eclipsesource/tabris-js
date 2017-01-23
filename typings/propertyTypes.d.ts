@@ -170,7 +170,12 @@ interface Transformation {
 
 }
 
-type Selector = string;
+/**
+ * An expression or a predicate function to select a set of widgets.
+ */
+type Selector = string | SelectorFunction;
+type SelectorFunction = (widget: Widget) => boolean;
+
 /**
  * A positive float, or 0, representing device independent pixels.
  */

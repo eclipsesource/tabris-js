@@ -26,6 +26,7 @@ import {
   ProgressBar,
   Video,
   WebView,
+  Widget,
   WidgetCollection,
   app,
   App,
@@ -352,13 +353,79 @@ function test_WebView() {
   let html: string = widget.html;
 }
 
+function test_Widget() {
+  let widget: Widget = new Composite();
+  let other: Widget = new Button();
+
+  // find
+  let found: WidgetCollection = widget.find('.foo');
+  let visibleFound: WidgetCollection = widget.find((widget: Widget) => widget.visible);
+
+  // parent
+  let parent: Widget = widget.parent();
+
+  // children
+  let children: WidgetCollection = widget.children();
+  let filteredChildren: WidgetCollection = widget.children('.foo');
+  let visbleChildren: WidgetCollection = widget.children((widget: Widget) => widget.visible);
+
+  // siblings
+  let siblings: WidgetCollection = widget.siblings();
+  let filteredSiblings: WidgetCollection = widget.siblings('.foo');
+  let visbleSiblings: WidgetCollection = widget.siblings((widget: Widget) => widget.visible);
+
+  // appendTo, insertBefore, insertAfter
+  widget.appendTo(page);
+  widget.insertBefore(other);
+  widget.insertAfter(other);
+
+  // detach, dispose, isDisposed
+  widget.detach();
+  widget.dispose();
+  let disposed = widget.isDisposed();
+}
+
 function test_WidgetCollection() {
-  var collection: WidgetCollection = page.find();
-  var length: number = collection.length;
-  var grandParents: WidgetCollection = collection.parent().parent();
-  var grandChildren: WidgetCollection = collection.children().children();
-  var found: WidgetCollection = collection.find().find(".class");
+  let collection: WidgetCollection = page.find();
+  let widget: Widget = new Button();
+
+  // length
+  let length: number = collection.length;
+
+  // first, last
+  let first: Widget = collection.first();
+  let last: Widget = collection.last();
+
+  // toArray
+  let array: Widget[] = collection.toArray();
+
+  // forEach
+  collection.forEach((widget: Widget, index: number) => index !== 0 && widget.visible);
+
+  // indexOf, includes
+  let index = collection.indexOf(widget);
+  let included = collection.includes(widget);
+
+  // filter
+  let filteredMembers: WidgetCollection = collection.filter('.foo');
+  let visibleMembers: WidgetCollection = collection.filter((widget: Widget) => widget.visible);
+
+  // find
+  let found: WidgetCollection = collection.find('.foo');
+  let visibleFound: WidgetCollection = collection.find((widget: Widget) => widget.visible);
+
+  // parent
+  let parents: WidgetCollection = collection.parent();
+
+  // children
+  let children: WidgetCollection = collection.children();
+  let filteredChildren: WidgetCollection = collection.children('.foo');
+  let visbleChildren: WidgetCollection = collection.children((widget: Widget) => widget.visible);
+
+  // appendTo
   collection.appendTo(page);
+
+  // dispose
   collection.dispose();
 }
 

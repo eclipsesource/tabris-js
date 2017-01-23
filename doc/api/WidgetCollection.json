@@ -5,9 +5,19 @@
     "on": [
       {
         "parameters": [
-          {"name": "event", "type": "string"},
-          {"name": "listener", "type": "Function"},
-          {"name": "context?", "type": "this", "description": "In the listener function, `this` will point to this object."}
+          {
+            "name": "event",
+            "type": "string"
+          },
+          {
+            "name": "listener",
+            "type": "Function"
+          },
+          {
+            "name": "context?",
+            "type": "this",
+            "description": "In the listener function, `this` will point to this object."
+          }
         ],
         "returns": "this",
         "description": "Adds the given listener to all widgets in this collection. See also `Widget.on()`."
@@ -16,9 +26,19 @@
     "once": [
       {
         "parameters": [
-          {"name": "event", "type": "string"},
-          {"name": "listener", "type": "Function"},
-          {"name": "context?", "type": "this", "description": "In the listener function, `this` will point to this object."}
+          {
+            "name": "event",
+            "type": "string"
+          },
+          {
+            "name": "listener",
+            "type": "Function"
+          },
+          {
+            "name": "context?",
+            "type": "this",
+            "description": "In the listener function, `this` will point to this object."
+          }
         ],
         "returns": "this",
         "description": "Adds the given listener for single execution on all widgets in this collection. See also `Widget.once()`."
@@ -27,9 +47,18 @@
     "off": [
       {
         "parameters": [
-          {"name": "event", "type": "string"},
-          {"name": "listener", "type": "Function"},
-          {"name": "context?", "type": "this"}
+          {
+            "name": "event",
+            "type": "string"
+          },
+          {
+            "name": "listener",
+            "type": "Function"
+          },
+          {
+            "name": "context?",
+            "type": "this"
+          }
         ],
         "returns": "this",
         "description": "Removes the given listener from all widgets in this collection. See also `Widget.off()`."
@@ -38,8 +67,14 @@
     "trigger": [
       {
         "parameters": [
-          {"name": "event", "type": "string"},
-          {"name": "...params", "type": "any[]"}
+          {
+            "name": "event",
+            "type": "string"
+          },
+          {
+            "name": "...params",
+            "type": "any[]"
+          }
         ],
         "returns": "this",
         "description": "Triggers an event of the given type on all widgets in this collection. See also `Widget.trigger()`"
@@ -48,15 +83,24 @@
     "set": [
       {
         "parameters": [
-          {"name": "property", "type": "string"},
-          {"name": "value", "type": "any"}
+          {
+            "name": "property",
+            "type": "string"
+          },
+          {
+            "name": "value",
+            "type": "any"
+          }
         ],
         "description": "Sets the given property on all widgets in this collection. See also `Widget.set()`.",
         "returns": "this"
       },
       {
         "parameters": [
-          {"name": "properties", "type": "Object"}
+          {
+            "name": "properties",
+            "type": "Object"
+          }
         ],
         "description": "Sets all key-value pairs in the properties object on all widgets in this collection. See also `Widget.set()`.",
         "returns": "this"
@@ -70,7 +114,11 @@
       },
       {
         "parameters": [
-          {"name": "selector", "type": "Selector"}
+          {
+            "name": "selector",
+            "type": "Selector",
+            "description": "A selector expression or a predicate function to filter the results."
+          }
         ],
         "returns": "WidgetCollection",
         "description": "Same as `collection.children().filter(selector)`."
@@ -84,7 +132,11 @@
       },
       {
         "parameters": [
-          {"name": "selector", "type": "Selector"}
+          {
+            "name": "selector",
+            "type": "Selector",
+            "description": "A selector expression or a predicate function to filter the results."
+          }
         ],
         "returns": "WidgetCollection",
         "description": "Returns a collection containing all descendants of all widgets in this collection that match the given selector."
@@ -94,23 +146,35 @@
       {
         "parameters": [],
         "returns": "WidgetCollection",
-        "description": "Returns a collection containing all direct parents of all widgets in this collection."
+        "description": "Returns a collection containing all direct parents of the widgets in this collection."
       }
     ],
     "appendTo": [
       {
         "parameters": [
-          {"name": "parent", "type": "Composite"}
+          {
+            "name": "parent",
+            "type": "Composite",
+            "description": "The parent widget to append to."
+          }
         ],
         "returns": "this",
-        "description": "Append all widgets in this collection to the given widget."
+        "description": "Appends all widgets in this collection to the given parent widget."
       }
     ],
     "animate": [
       {
         "parameters": [
-          {"name": "properties", "type": "Object", "description": "The properties and target values to animate."},
-          {"name": "options", "type": "Object", "description": "Configures the animation itself."}
+          {
+            "name": "properties",
+            "type": "Object",
+            "description": "The properties and target values to animate."
+          },
+          {
+            "name": "options",
+            "type": "Object",
+            "description": "Configures the animation itself."
+          }
         ],
         "description": "Animates all widgets in this collection."
       }
@@ -147,11 +211,11 @@
         "parameters": [
           {
             "name": "callback",
-            "type": "Function",
-            "description": "The function to call. The arguments are: *widget*, *index*, *WidgetCollection*"
+            "type": "(widget: Widget, index: number, collection: WidgetCollection) => void",
+            "description": "The function to call for each widget. The arguments are: *widget*, *index*, *collection*"
           }
         ],
-        "description": "Calls the given callback for each widget in the collection."
+        "description": "Calls the given callback function once for each widget in the collection."
       }
     ],
     "filter": [
@@ -159,7 +223,8 @@
         "parameters": [
           {
             "name": "selector",
-            "type": "Selector"
+            "type": "Selector",
+            "description": "A selector expression or a predicate function to filter the results."
           }
         ],
         "returns": "WidgetCollection",
@@ -171,11 +236,12 @@
         "parameters": [
           {
             "name": "widget",
-            "type": "Widget"
+            "type": "Widget",
+            "description": "The widget to locate in the collection."
           }
         ],
         "returns": "number",
-        "description": "Returns the index of the given widget within the collection. If there is no match, the return value is `-1`."
+        "description": "Returns the index of the given widget within the collection, or `-1` if the widget is not present."
       }
     ],
     "includes": [
@@ -183,7 +249,8 @@
         "parameters": [
           {
             "name": "widget",
-            "type": "Widget"
+            "type": "Widget",
+            "description": "The widget to search in the collection."
           }
         ],
         "returns": "boolean",
