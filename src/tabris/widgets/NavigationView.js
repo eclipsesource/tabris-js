@@ -21,7 +21,7 @@ const CONFIG = {
   _events: {
     back: {
       trigger() {
-        this._handleBackNavigation(true);
+        this._handleBackNavigation();
       }
     },
     backnavigation: {
@@ -52,8 +52,6 @@ export default class NavigationView extends Widget.extend(CONFIG) {
       if (typeof index === 'number' && index !== this.pages().length) {
         throw new Error('Cannot append a page at the given position');
       }
-      // TODO remove iOS only stack_ calls
-      this._nativeCall('stack_push', {page: child.cid});
       this._triggerDisappear();
     }
     Widget.prototype._addChild.apply(this, arguments);
@@ -70,14 +68,10 @@ export default class NavigationView extends Widget.extend(CONFIG) {
       // TODO remove iOS only stack_ calls
       if (this.pages().length > 1 && child === this.pages().first()) {
         this._nativeCall('stack_clear', {});
-        this._skipPopCalls = true;
-      } else if (!this._skipPopCalls) {
-        this._nativeCall('stack_pop', {});
       }
       this._triggerDisappear();
       this._popPagesAbove(child);
       if (!this._inPopAbove) {
-        delete this._skipPopCalls;
       }
     }
     Widget.prototype._removeChild.apply(this, arguments);
@@ -86,10 +80,8 @@ export default class NavigationView extends Widget.extend(CONFIG) {
     }
   }
 
-  _handleBackNavigation(skipPopCalls) {
-    this._skipPopCalls = skipPopCalls;
+  _handleBackNavigation() {
     this._pop(this.pages().last());
-    delete this._skipPopCalls;
   }
 
   _popPagesAbove(page) {

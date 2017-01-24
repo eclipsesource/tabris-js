@@ -317,15 +317,6 @@ describe('NavigationView', function() {
         expect(page.parent()).to.equal(navigationView);
       });
 
-      it('CALLs stack_push', function() {
-        expect(client.calls()[1]).to.deep.equal({
-          id: navigationView.cid,
-          op: 'call',
-          method: 'stack_push',
-          parameters: {page: page.cid}
-        });
-      });
-
       describe('calling pop()', function() {
 
         let result;
@@ -348,20 +339,11 @@ describe('NavigationView', function() {
         });
 
         it('disposes page', function() {
-          expect(client.calls()[1]).to.deep.equal({
+          expect(client.calls()[0]).to.deep.equal({
             id: page.cid,
             op: 'destroy'
           });
           expect(page.parent()).to.be.null;
-        });
-
-        it('CALLs stack_pop', function() {
-          expect(client.calls()[0]).to.deep.equal({
-            id: navigationView.cid,
-            op: 'call',
-            method: 'stack_pop',
-            parameters: {}
-          });
         });
 
       });
@@ -391,10 +373,6 @@ describe('NavigationView', function() {
             op: 'destroy'
           });
           expect(page.parent()).to.be.null;
-        });
-
-        it('does NOT CALL stack_pop', function() {
-          expect(client.calls().length).to.equal(1);
         });
 
         it('triggers page disappear event', function() {
@@ -430,15 +408,6 @@ describe('NavigationView', function() {
             op: 'destroy'
           });
           expect(page.parent()).to.be.null;
-        });
-
-        it('CALLs stack_pop', function() {
-          expect(client.calls({id: navigationView.cid})[0]).to.deep.equal({
-            id: navigationView.cid,
-            op: 'call',
-            method: 'stack_pop',
-            parameters: {}
-          });
         });
 
       });
@@ -486,15 +455,6 @@ describe('NavigationView', function() {
           expect(page.parent()).to.be.null;
         });
 
-        it('CALLs stack_pop', function() {
-          expect(client.calls({id: navigationView.cid})[0]).to.deep.equal({
-            id: navigationView.cid,
-            op: 'call',
-            method: 'stack_pop',
-            parameters: {}
-          });
-        });
-
       });
 
       describe('triggering back', function() {
@@ -523,10 +483,6 @@ describe('NavigationView', function() {
             properties: {parent: null}
           });
           expect(page.parent()).to.be.null;
-        });
-
-        it('does NOT CALL stack_pop', function() {
-          expect(client.calls().length).to.equal(1);
         });
 
         it('triggers page disappear event', function() {
@@ -563,15 +519,6 @@ describe('NavigationView', function() {
             properties: {parent: null}
           });
           expect(page.parent()).to.be.null;
-        });
-
-        it('CALLs stack_pop', function() {
-          expect(client.calls({id: navigationView.cid})[0]).to.deep.equal({
-            id: navigationView.cid,
-            op: 'call',
-            method: 'stack_pop',
-            parameters: {}
-          });
         });
 
       });
