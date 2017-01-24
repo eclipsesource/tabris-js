@@ -1,5 +1,4 @@
 import {colorStringToArray, colorArrayToString} from './util-colors';
-import {clone} from './util';
 import ImageData from './ImageData';
 
 export default function LegacyCanvasContext(gc) {
@@ -25,7 +24,7 @@ LegacyCanvasContext.prototype = {
 
   save() {
     this._operations.push(['save']);
-    this._savedStates.push(clone(this._state));
+    this._savedStates.push(Object.assign({}, this._state));
   },
 
   restore() {

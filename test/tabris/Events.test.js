@@ -1,5 +1,4 @@
 import {expect, spy, restore} from '../test';
-import {extend} from '../../src/tabris/util';
 import Events from '../../src/tabris/Events';
 
 describe('Events', function() {
@@ -9,8 +8,7 @@ describe('Events', function() {
   let callback, callback2;
 
   beforeEach(function() {
-    object = {};
-    extend(object, Events);
+    object = Object.assign({}, Events);
     callback = spy();
     callback2 = spy();
     context = {};

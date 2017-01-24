@@ -1,27 +1,7 @@
 import {expect} from '../test';
-import {extend, pick, omit, clone, extendPrototype} from '../../src/tabris/util';
+import {pick, omit, extendPrototype} from '../../src/tabris/util';
 
 describe('util', function() {
-
-  describe('extend', function() {
-
-    it('copies properties of all source objects into target object', function() {
-      let target = {a: 1, b: 1};
-
-      extend(target, {b: 2, c: 2}, {c: 3});
-
-      expect(target).to.eql({a: 1, b: 2, c: 3});
-    });
-
-    it('returns target object', function() {
-      let object = {};
-
-      let result = extend(object, {a: 1});
-
-      expect(result).to.equal(object);
-    });
-
-  });
 
   describe('pick', function() {
 
@@ -55,24 +35,6 @@ describe('util', function() {
       let result = omit({a: 1, b: 2, c: 3}, ['a', 'c', 'x']);
 
       expect(result).to.eql({b: 2});
-    });
-
-  });
-
-  describe('clone', function() {
-
-    it('returns a copy of object', function() {
-      let original = {a: 1};
-
-      let result = clone(original);
-
-      expect(result).not.to.equal(original);
-    });
-
-    it('copies all properties', function() {
-      let result = clone({a: 1, b: 2});
-
-      expect(result).to.eql({a: 1, b: 2});
     });
 
   });

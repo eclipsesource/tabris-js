@@ -5,7 +5,7 @@ import Layout from '../../src/tabris/Layout';
 import NativeBridge from '../../src/tabris/NativeBridge';
 import ClientStub from './ClientStub';
 import Widget from '../../src/tabris/Widget';
-import {extend, omit} from '../../src/tabris/util';
+import {omit} from '../../src/tabris/util';
 
 describe('Widget', function() {
 
@@ -1357,7 +1357,7 @@ describe('Widget.extend', function() {
     let TestWidget = Widget.extend({_events: custom});
 
     expect(TestWidget._events).to.eql(
-      extend({}, TestWidget._events, custom)
+      Object.assign({}, TestWidget._events, custom)
     );
   });
 

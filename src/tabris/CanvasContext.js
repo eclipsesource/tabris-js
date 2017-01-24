@@ -1,5 +1,4 @@
 import {colorStringToArray, colorArrayToString} from './util-colors';
-import {clone} from './util';
 import ImageData from './ImageData';
 import GC from './GC';
 import LegacyCanvasContext from './LegacyCanvasContext';
@@ -102,7 +101,7 @@ CanvasContext.prototype = {
 // State operations
 
 defineMethod('save', 0, function() {
-  this._savedStates.push(clone(this._state));
+  this._savedStates.push(Object.assign({}, this._state));
 });
 
 defineMethod('restore', 0, function() {

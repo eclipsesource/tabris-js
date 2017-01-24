@@ -1,4 +1,3 @@
-import {extend} from './util';
 import Layout from './Layout';
 import NativeObject from './NativeObject';
 import WidgetCollection from './WidgetCollection';
@@ -9,10 +8,10 @@ import {types} from './property-types';
 export default class Widget extends NativeObject {
 
   static extend(members) {
-    members = extend({}, members);
-    members._events = extend({}, defaultEvents, members._events || {});
+    members = Object.assign({}, members);
+    members._events = Object.assign({}, defaultEvents, members._events || {});
     if (members._properties !== true) {
-      members._properties = extend({}, defaultProperties, members._properties || {});
+      members._properties = Object.assign({}, defaultProperties, members._properties || {});
     }
     return NativeObject.extend(members, Widget);
   }
@@ -400,11 +399,11 @@ let defaultProperties = {
   gestures: {
     access: {
       set(name, gestures) {
-        this._gestures = extend({}, defaultGestures, gestures);
+        this._gestures = Object.assign({}, defaultGestures, gestures);
       },
       get() {
         if (!this._gestures) {
-          this._gestures = extend({}, defaultGestures);
+          this._gestures = Object.assign({}, defaultGestures);
         }
         return this._gestures;
       }
@@ -444,7 +443,7 @@ function getGestureEventConfig(name) {
     listen(state) {
       let gestures = this.get('gestures');
       if (state) {
-        let properties = extend({target: this}, gestures[name]);
+        let properties = Object.assign({target: this}, gestures[name]);
         let recognizer = new GestureRecognizer(properties)
           .on('gesture', gestureListener, {target: this, name});
         if (!this._recognizers) {

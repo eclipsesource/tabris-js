@@ -1,6 +1,5 @@
 import './load-polyfill';
 
-import {extend} from './util';
 import Tabris from './Tabris';
 import Device, {create as createDevice, publishDeviceProperties} from './Device';
 import App, {create as createApp} from './App';
@@ -51,7 +50,7 @@ import WidgetCollection from './WidgetCollection';
 
 const window = global.window;
 
-module.exports = global.tabris = extend(new Tabris(), {
+module.exports = global.tabris = Object.assign(new Tabris(), {
   Action,
   ActivityIndicator,
   AlertDialog,
@@ -96,7 +95,7 @@ module.exports = global.tabris = extend(new Tabris(), {
   XMLHttpRequest
 });
 
-extend(window, {
+Object.assign(window, {
   Crypto,
   ImageData,
   ProgressEvent,

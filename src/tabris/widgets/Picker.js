@@ -1,4 +1,3 @@
-import {extend} from '../util';
 import Widget from '../Widget';
 
 export default Widget.extend({
@@ -100,5 +99,5 @@ export default Widget.extend({
 });
 
 function triggerSelectionChange(widget, index, options) {
-  widget._triggerChangeEvent('selection', widget._getItem(index), extend({index}, options));
+  widget._triggerChangeEvent('selection', widget._getItem(index), Object.assign({index}, options));
 }

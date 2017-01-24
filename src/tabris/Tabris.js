@@ -1,4 +1,3 @@
-import {extend} from './util';
 import Events from './Events';
 import NativeBridge from './NativeBridge';
 import ProxyStore from './ProxyStore';
@@ -10,7 +9,7 @@ export default function Tabris() {
   this._notify = this._notify.bind(this);
 }
 
-extend(Tabris.prototype, Events, {
+Object.assign(Tabris.prototype, Events, {
 
   load(fn) {
     if (this._ready) {

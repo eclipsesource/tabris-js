@@ -1,4 +1,4 @@
-import {omit, clone} from './util';
+import {omit} from './util';
 import {types} from './property-types';
 import Events from './Events';
 
@@ -312,7 +312,7 @@ function resolveType(type) {
     throw new Error('Can not find property type ' + type);
   }
   if (Array.isArray(type)) {
-    typeDef = clone(typeDef);
+    typeDef = Object.assign({}, typeDef);
     let args = type.slice(1);
     if (typeDef.encode) {
       typeDef.encode = wrapCoder(typeDef.encode, args);
@@ -359,7 +359,7 @@ function buildTriggerMap(events) {
 
 function getDefault(member) {
   let value = staticMembers[member];
-  return value instanceof Object ? clone(value) : value;
+  return value instanceof Object ? Object.assign({}, value) : value;
 }
 
 function createProperties(target, definitions) {

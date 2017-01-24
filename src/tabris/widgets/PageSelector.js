@@ -1,4 +1,3 @@
-import {extend} from '../util';
 import Composite from './Composite';
 import Page from './Page';
 import ImageView from './ImageView';
@@ -6,7 +5,7 @@ import TextView from './TextView';
 import CollectionView from './CollectionView';
 
 let PageSelector = function(properties) {
-  let instance = new CollectionView(extend({
+  let instance = new CollectionView(Object.assign({
     items: getPages(),
     initializeCell,
     itemHeight: tabris.device.platform === 'iOS' ? 40 : 48,

@@ -1,4 +1,3 @@
-import {extend} from './util';
 import {imageToArray, imageFromArray} from './util-images';
 import {colorArrayToString, colorStringToArray} from './util-colors';
 import {fontObjectToString, fontStringToObject} from './util-fonts';
@@ -202,7 +201,7 @@ export let types = {
 
   transform: {
     encode(value) {
-      let result = extend({}, transformDefaults);
+      let result = Object.assign({}, transformDefaults);
       for (let key in value) {
         if (!(key in transformDefaults)) {
           throw new Error('Not a valid transformation containing "' + key + '"');

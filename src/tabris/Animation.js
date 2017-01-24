@@ -1,4 +1,3 @@
-import {extend} from './util';
 import NativeObject from './NativeObject';
 
 let Animation = NativeObject.extend({
@@ -75,7 +74,7 @@ export function animate(properties, options) {
       console.warn(this.type + ': Ignored invalid animation option "' + option + '"');
     }
   }
-  let animation = new Animation(extend({}, options, {
+  let animation = new Animation(Object.assign({}, options, {
     target: this,
     properties: animatedProps
   }));
