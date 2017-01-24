@@ -1,6 +1,8 @@
 {
+  "compilerOptions": {
+    "lib": ["dom", "es5", "scripthost", "es2015.promise" ]
+  },
   "files": [
-    "../tabris/promise.d.ts",
     "../tabris/whatwg-fetch.d.ts",
     "./tabris.test.ts",
     "./promise.test.ts",

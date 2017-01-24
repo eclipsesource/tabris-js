@@ -3,6 +3,6 @@
   "private": true,
   "dependencies": {
     "tabris": "../tabris",
-    "typescript": "^1.8.0"
+    "typescript": "^2.1.5"
   }
 }

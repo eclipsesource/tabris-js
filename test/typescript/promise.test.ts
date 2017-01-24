@@ -12,10 +12,6 @@ promise1.then((result) => {
   return "nextResult";
 }).catch((reason) => {
   // handle error
-}).finally(() => {
-  // do something
-}).done((result) => {
-  // doSomething();
 });
 
 let promise2 = new Promise<any>((resolve, reject) => {

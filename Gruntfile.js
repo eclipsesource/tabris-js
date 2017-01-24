@@ -70,7 +70,7 @@ module.exports = function(grunt) {
       typings: {
         expand: true,
         cwd: 'typings/',
-        src: ['whatwg-fetch.d.ts', 'promise.d.ts'],
+        src: ['whatwg-fetch.d.ts'],
         dest: 'build/tabris/'
       },
       test_ts: {
