@@ -75,7 +75,6 @@ describe('tabris', function() {
     expect(tabris.Drawer).to.be.a('function');
     expect(tabris.ImageView).to.be.a('function');
     expect(tabris.Page).to.be.a('function');
-    expect(tabris.PageSelector).to.be.a('function');
     expect(tabris.Picker).to.be.a('function');
     expect(tabris.ProgressBar).to.be.a('function');
     expect(tabris.RadioButton).to.be.a('function');

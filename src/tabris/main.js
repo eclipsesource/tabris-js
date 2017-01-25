@@ -27,7 +27,6 @@ import Drawer from './widgets/Drawer';
 import ImageView from './widgets/ImageView';
 import InactivityTimer from './InactivityTimer.js';
 import Page from './widgets/Page';
-import PageSelector from './widgets/PageSelector';
 import Picker from './widgets/Picker';
 import Pkcs5 from './Pkcs5';
 import ProgressBar from './widgets/ProgressBar';
@@ -69,7 +68,6 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   InactivityTimer,
   ImageView,
   Page,
-  PageSelector,
   Picker,
   ProgressBar,
   ProgressEvent,

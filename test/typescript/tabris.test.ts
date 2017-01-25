@@ -12,7 +12,6 @@ import {
   Page,
   Drawer,
   ImageView,
-  PageSelector,
   Picker,
   RadioButton,
   ScrollView,
@@ -175,13 +174,6 @@ function test_Page() {
   let title: string = page.title;
   let topLevel: boolean = page.topLevel;
   page.open().close();
-}
-
-function test_PageSelector() {
-  var widget: PageSelector = new PageSelector();
-  widget.set("foo", 23);
-  widget.set({
-  });
 }
 
 function test_Picker() {
