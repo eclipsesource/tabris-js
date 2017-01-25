@@ -1,17 +1,10 @@
 import NativeObject from './NativeObject';
 
-let Animation = NativeObject.extend({
+const CONFIG = {
 
   _name: '_Animation',
 
   _type: 'tabris.Animation',
-
-  _create() {
-    this._super('_create', arguments);
-    this._nativeListen('Start', true);
-    this._nativeListen('Completion', true);
-    return this;
-  },
 
   _events: {
     Start: {
@@ -39,11 +32,22 @@ let Animation = NativeObject.extend({
     reverse: 'boolean',
     easing: ['choice', ['linear', 'ease-in', 'ease-out', 'ease-in-out']],
     target: 'proxy'
-  },
+  }
+
+};
+
+class Animation extends NativeObject.extend(CONFIG) {
+
+  _create(properties) {
+    super._create(properties);
+    this._nativeListen('Start', true);
+    this._nativeListen('Completion', true);
+    return this;
+  }
 
   start() {
     this._nativeCall('start');
-  },
+  }
 
   abort() {
     if (this._reject) {
@@ -52,7 +56,7 @@ let Animation = NativeObject.extend({
     this.dispose();
   }
 
-});
+}
 
 export function animate(properties, options) {
   let animatedProps = {};

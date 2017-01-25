@@ -1,6 +1,6 @@
 import NativeObject from './NativeObject';
 
-export default NativeObject.extend({
+const CONFIG = {
 
   _type: 'tabris.AlertDialog',
 
@@ -42,13 +42,17 @@ export default NativeObject.extend({
         this.dispose();
       }
     }
-  },
+  }
 
-  _create() {
-    this._super('_create', arguments);
+};
+
+export default class AlertDialog extends NativeObject.extend(CONFIG) {
+
+  _create(properties) {
+    super._create(properties);
     this._nativeListen('close', true);
     return this;
-  },
+  }
 
   open() {
     if (this.isDisposed()) {
@@ -56,11 +60,11 @@ export default NativeObject.extend({
     }
     this._nativeCall('open');
     return this;
-  },
+  }
 
   close() {
     this.dispose();
     return this;
   }
 
-});
+}

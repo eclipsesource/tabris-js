@@ -1,6 +1,6 @@
 import NativeObject from './NativeObject';
 
-export default NativeObject.extend({
+const CONFIG = {
   _type: 'tabris.GestureRecognizer',
   _properties: {
     type: 'string',
@@ -14,4 +14,6 @@ export default NativeObject.extend({
   _events: {
     gesture: true
   }
-});
+};
+
+export default class GestureRecognizer extends NativeObject.extend(CONFIG) {}

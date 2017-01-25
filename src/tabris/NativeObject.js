@@ -1,4 +1,3 @@
-import {omit} from './util';
 import {types} from './property-types';
 import Events from './Events';
 
@@ -17,17 +16,19 @@ export default class NativeObject extends EventsClass {
           this._create(properties || {});
         }
       }
-      _super(method, params) {
-        return superType.prototype[method].apply(this, params);
-      }
     };
+    for (let key in members) {
+      if (!(key in staticMembers)) {
+        throw new Error('Illegal config option: ' + key);
+      }
+    }
     for (let member in staticMembers) {
       Type[member] = members[member] || getDefault(member);
     }
     Type._events = normalizeEvents(Type._events);
     Type._properties = normalizeProperties(Type._properties);
     Type._trigger = buildTriggerMap(Type._events);
-    Object.assign(Type.prototype, omit(members, Object.keys(staticMembers)), {type: members._name});
+    Object.assign(Type.prototype, {type: members._name});
     createProperties(Type.prototype, Type._properties);
     return Type;
   }
@@ -386,6 +387,7 @@ function valueOf(value) {
 let staticMembers = {
   '_events': {},
   '_initProperties': {},
+  '_name': null,
   '_type': null,
   '_cid': null,
   '_properties': {},

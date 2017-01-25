@@ -96,7 +96,7 @@ describe('Layout', function() {
         _proxies: new ProxyStore()
       };
       global.tabris._nativeBridge = new NativeBridge(new ClientStub());
-      TestType = Widget.extend('TestType', {});
+      TestType = Widget.extend({_name: 'TestType'});
       parent = new Composite();
       widget = new TestType().appendTo(parent);
       other = new TestType({id: 'other'}).appendTo(parent);

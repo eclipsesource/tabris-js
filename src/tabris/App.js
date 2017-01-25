@@ -1,12 +1,8 @@
 import NativeObject from './NativeObject';
 
-export default function App() {
-  throw new Error('App can not be created');
-}
-
 const CERTIFICATE_ALGORITHMS = ['RSA2048', 'RSA4096', 'ECDSA256'];
 
-let _App = NativeObject.extend({
+const CONFIG = {
   _cid: 'tabris.App',
   _properties: {
     pinnedCertificates: {
@@ -59,19 +55,33 @@ let _App = NativeObject.extend({
       }
     }
   },
+};
+
+export default class App extends NativeObject.extend(CONFIG) {
+
+  constructor() {
+    super();
+    if (arguments[0] !== true) {
+      throw new Error('App can not be created');
+    }
+  }
+
   getResourceLocation(path) {
     if (!this._resourceBaseUrl) {
       this._resourceBaseUrl = this._nativeGet('resourceBaseUrl');
     }
     let subPath = path != null ? '/' + normalizePath('' + path) : '';
     return this._resourceBaseUrl + subPath;
-  },
+  }
+
   dispose() {
     throw new Error('tabris.app can not be disposed');
-  },
+  }
+
   reload() {
     this._nativeCall('reload', {});
-  },
+  }
+
   installPatch(url, callback) {
     if (typeof url !== 'string') {
       throw new Error('parameter url is not a string');
@@ -84,12 +94,11 @@ let _App = NativeObject.extend({
       callback(new Error('Another installPatch operation is already pending.'));
     }
   }
-});
 
-App.prototype = _App.prototype;
+}
 
 export function create() {
-  let app = new _App();
+  let app = new App(true);
   Object.defineProperty(app, 'id', {get: () => app._nativeGet('appId')});
   Object.defineProperty(app, 'version', {get: () => app._nativeGet('version')});
   Object.defineProperty(app, 'versionCode', {get: () => app._nativeGet('versionId')});

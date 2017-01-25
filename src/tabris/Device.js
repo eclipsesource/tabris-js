@@ -1,6 +1,6 @@
 import NativeObject from './NativeObject';
 
-let _Device = NativeObject.extend({
+const CONFIG = {
   _cid: 'tabris.Device',
   _properties: {
     model: 'any',
@@ -14,7 +14,6 @@ let _Device = NativeObject.extend({
     win_keyboardPresent: 'any',
     win_primaryInput: 'any'
   },
-  _setProperty() {},
   _events: {
     'change:orientation': {
       name: 'orientationchange',
@@ -22,20 +21,30 @@ let _Device = NativeObject.extend({
         this._triggerChangeEvent('orientation', event.orientation);
       }
     }
-  },
+  }
+};
+
+export default class Device extends NativeObject.extend(CONFIG) {
+
+  constructor() {
+    super();
+    if (arguments[0] !== true) {
+      throw new Error('Device can not be created');
+    }
+  }
+
+  _setProperty() {
+
+  }
+
   dispose() {
     throw new Error('Cannot dispose device object');
   }
-});
 
-export default function Device() {
-  throw new Error('Device can not be created');
 }
 
-Device.prototype = _Device.prototype;
-
 export function create() {
-  return new _Device();
+  return new Device(true);
 }
 
 export function publishDeviceProperties(device, target) {

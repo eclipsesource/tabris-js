@@ -7,13 +7,11 @@ import {types} from './property-types';
 
 export default class Widget extends NativeObject {
 
-  static extend(members) {
-    members = Object.assign({}, members);
-    members._events = Object.assign({}, defaultEvents, members._events || {});
-    if (members._properties !== true) {
-      members._properties = Object.assign({}, defaultProperties, members._properties || {});
-    }
-    return NativeObject.extend(members, Widget);
+  static extend(config) {
+    let widgetConfig = Object.assign({}, config);
+    widgetConfig._events = Object.assign({}, defaultEvents, config._events || {});
+    widgetConfig._properties = Object.assign({}, defaultProperties, config._properties || {});
+    return NativeObject.extend(widgetConfig, Widget);
   }
 
   constructor() {

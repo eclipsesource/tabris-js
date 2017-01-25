@@ -688,12 +688,8 @@ describe('NativeObject.extend', function() {
     expect(instance).to.be.instanceof(NativeObject);
   });
 
-  it('adds members to new type', function() {
-    let CustomType = NativeObject.extend({foo: 23});
-
-    let instance = new CustomType();
-
-    expect(instance.foo).to.equal(23);
+  it('throws for unsupported config options', function() {
+    expect(() => NativeObject.extend({foo: 23})).to.throw();
   });
 
   it('adds property setters', function() {

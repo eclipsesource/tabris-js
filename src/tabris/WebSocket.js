@@ -5,7 +5,7 @@ let OPEN = 1;
 let CLOSING = 2;
 let CLOSED = 3;
 
-let _WebSocket = NativeObject.extend({
+const CONFIG = {
   _type: 'tabris.WebSocket',
   _events: {
     open: true,
@@ -19,7 +19,9 @@ let _WebSocket = NativeObject.extend({
     protocol: {type: 'any', default: ''},
     binaryType: {type: 'string', default: 'blob'}
   }
-});
+};
+
+class _WebSocket extends NativeObject.extend(CONFIG) {}
 
 export default function WebSocket(url, protocol) {
 

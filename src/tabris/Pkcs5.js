@@ -1,12 +1,17 @@
 import NativeObject from './NativeObject';
 
-let Pbkdf2 = NativeObject.extend({
+const CONFIG = {
   _type: 'tabris.pkcs5.Pbkdf2',
   _events: {done: true},
+};
+
+class Pbkdf2 extends NativeObject.extend(CONFIG) {
+
   start(parameters) {
     this._nativeCall('start', parameters);
   }
-});
+
+}
 
 export default class Pkcs5 {
 

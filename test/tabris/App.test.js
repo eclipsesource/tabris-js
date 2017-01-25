@@ -33,6 +33,7 @@ describe('App', function() {
   });
 
   it('is instanceof App', function() {
+    expect(app.constructor.name).to.equal('App');
     expect(app).to.be.an.instanceOf(App);
   });
 

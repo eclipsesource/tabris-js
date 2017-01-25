@@ -1,6 +1,6 @@
 import NativeObject from './NativeObject';
 
-export default NativeObject.extend({
+const CONFIG = {
 
   _type: 'tabris.InactivityTimer',
 
@@ -17,14 +17,18 @@ export default NativeObject.extend({
         this.trigger('timeout', this, {});
       }
     }
-  },
+  }
+
+};
+
+export default class InactivityTimer extends NativeObject.extend(CONFIG) {
 
   start() {
     this._nativeCall('start');
-  },
+  }
 
   cancel() {
     this._nativeCall('cancel');
   }
 
-});
+}

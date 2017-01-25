@@ -1,6 +1,8 @@
 import NativeObject from './NativeObject';
 
-export default NativeObject.extend({
+const CONFIG = {
   _type: 'rwt.widgets.GC',
   _properties: {parent: 'proxy'}
-});
+};
+
+export default class GC extends NativeObject.extend(CONFIG) {}

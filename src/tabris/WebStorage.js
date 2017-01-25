@@ -1,30 +1,26 @@
 import {types} from './property-types';
 import NativeObject from './NativeObject';
 
-let ClientStore = NativeObject.extend({
+class ClientStore extends NativeObject.extend({
   _cid: 'tabris.ClientStore'
-});
+}) {}
 
-let SecureStore = NativeObject.extend({
+class SecureStore extends NativeObject.extend({
   _cid: 'tabris.SecureStore'
-});
+}) {}
 
 let encode = types.string.encode;
 
-export function create(secure) {
-  function Storage() {
-    let proxy = secure ? new SecureStore() : new ClientStore();
+export default class WebStorage {
+
+  constructor() {
+    let proxy = arguments[0];
+    if (!(proxy instanceof NativeObject)) {
+      throw new Error('Cannot instantiate WebStorage');
+    }
     Object.defineProperty(this, '_proxy', {value: proxy});
   }
-  Storage.prototype = WebStorage.prototype;
-  return new Storage();
-}
 
-export default function WebStorage() {
-  throw new Error('Cannot instantiate WebStorage');
-}
-
-WebStorage.prototype = {
   // Note: key and length methods currently not supported
 
   setItem(key, value) {
@@ -35,7 +31,7 @@ WebStorage.prototype = {
       key: encode(key),
       value: encode(value)
     });
-  },
+  }
 
   getItem(key) {
     if (arguments.length < 1) {
@@ -44,17 +40,22 @@ WebStorage.prototype = {
     let result = this._proxy._nativeCall('get', {key: encode(key)});
     // Note: iOS can not return null, only undefined:
     return result === undefined ? null : result;
-  },
+  }
 
   removeItem(key) {
     if (arguments.length < 1) {
       throw new TypeError("Not enough arguments to 'removeItem'");
     }
     this._proxy._nativeCall('remove', {keys: [encode(key)]});
-  },
+  }
 
   clear() {
     this._proxy._nativeCall('clear');
   }
 
-};
+}
+
+export function create(secure) {
+  let proxy = secure ? new SecureStore() : new ClientStore();
+  return new WebStorage(proxy);
+}
