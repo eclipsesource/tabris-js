@@ -1,0 +1,30 @@
+{
+  "type": "NavigationBar",
+  "description": "The navigation bar is the onscreen area where *Back*, *Home* and similar buttons are displayed. The singleton instance can be accessed via `tabris.ui.navigationBar` and is only available on Android.",
+  "properties": {
+    "displayMode": {
+      "type": "string",
+      "values": [
+        "default",
+        "hide",
+        "float"
+      ],
+      "default": "default",
+      "description": "Controls how the navigation bar is positioned relative to the `tabris.ui.contentView`. The value `default` places the content above the navigation bar. The `hide` option lets the navigation bar disappear, making room for the content. The `float` option lets the content flow underneath the navigation bar."
+    },
+    "height": {
+      "type": "number",
+      "description": "The height of the navigation bar in device independent pixel. Can be used in conjunction with the `displayMode` `float` to offset the content as to not have it covered by the navigation bar. This property is read-only."
+    },
+    "background": {
+      "type": "Color",
+      "description": "Background color of the navigation bar."
+    }
+  },
+  "links": [
+    {
+      "title": "Snippet demonstrating various properties of the `NavigationBar`",
+      "path": "${GITHUB_BRANCH}/snippets/navigationbar.js"
+    }
+  ]
+}

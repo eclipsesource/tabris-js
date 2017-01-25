@@ -8,6 +8,7 @@ import {
   CheckBox,
   Cell,
   CollectionView,
+  NavigationBar,
   Page,
   Drawer,
   ImageView,
@@ -154,6 +155,13 @@ function test_ImageView() {
     scaleMode: "auto"
   });
   let scaleMode: "auto" | "fill" | "fit" | "none" | "stretch" = widget.scaleMode;
+}
+
+function test_NavigationBar() {
+  let navigationBar: NavigationBar = new NavigationBar();
+  let displayMode: 'default'|'hide'|'float' = navigationBar.displayMode;
+  let height: number = navigationBar.height;
+  let background: string = navigationBar.background;
 }
 
 function test_Page() {
