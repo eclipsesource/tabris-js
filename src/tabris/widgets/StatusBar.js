@@ -12,7 +12,7 @@ const CONFIG = {
     theme: {type: ['choice', ['default', 'light', 'dark']], default: 'default'},
     displayMode: {type: ['choice', ['default', 'float', 'hide']], default: 'default'},
     height: {
-      type: 'integer',
+      type: 'number',
       nocache: true,
       access: {
         set() {
