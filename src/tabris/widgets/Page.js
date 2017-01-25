@@ -2,20 +2,14 @@ import Widget from '../Widget';
 import NavigationView from '../widgets/NavigationView';
 
 const CONFIG = {
-
   _name: 'Page',
-
   _type: 'tabris.Page',
-
   _supportsChildren: true,
-
   _properties: {
     image: {type: 'image', default: null},
     title: {type: 'string', default: ''},
-    topLevel: {type: 'boolean', default: false},
     autoDispose: {type: 'boolean', default: true}
   }
-
 };
 
 export default class Page extends Widget.extend(CONFIG) {

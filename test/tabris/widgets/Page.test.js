@@ -38,21 +38,18 @@ describe('Page', function() {
     page.set({
       title: 'title',
       image: {src: 'image'},
-      topLevel: true,
       background: 'red'
     });
 
     let setCalls = client.calls({op: 'set'});
     expect(setCalls.length).to.equal(1);
     expect(setCalls[0].properties.title).to.equal('title');
-    expect(setCalls[0].properties.topLevel).to.be.true;
     expect(setCalls[0].properties.image).to.deep.equal(['image', null, null, null]);
     expect(setCalls[0].properties.background).to.deep.equal([255, 0, 0, 255]);
   });
 
   it('get returns default values', function() {
     expect(page.title).to.equal('');
-    expect(page.topLevel).to.be.false;
     expect(page.image).to.be.null;
     expect(page.background).to.equal('rgba(0, 0, 0, 0)');
   });

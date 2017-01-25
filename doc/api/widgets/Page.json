@@ -1,22 +1,7 @@
 {
   "type": "Page",
-  "description": "Pages contain an application's UI. Top-level pages can have a stack of non-top-level pages on top. See [Widget Tree](../ui)",
+  "description": "A container representing a single page of a NavigationView widget.",
   "extends": "Composite",
-  "methods": {
-    "open": [
-      {
-        "parameters": [],
-        "description": "Opens the page, i.e. makes it the active page.",
-        "returns": "this"
-      }
-    ],
-    "close": [
-      {
-        "parameters": [],
-        "description": "Closes and disposes of the page."
-      }
-    ]
-  },
   "properties": {
     "image": {
       "type": "Image",
@@ -26,27 +11,28 @@
       "type": "string",
       "description": "The page title to be displayed in the navigation bar."
     },
-    "topLevel": {
-      "type": "boolean",
-      "default": "false",
-      "description": "Defines whether this is a top level page."
-    },
     "autoDispose": {
       "type": "boolean",
       "default": "true",
-      "description": "Defines whether this page will be automatically disposed when popped from the NavigationView, e,g. using native back navigation."
+      "description": "Defines whether this page will be automatically disposed when popped from the NavigationView, e.g. using native back navigation."
     }
   },
   "events": {
     "appear": {
       "parameters": [
-        {"name": "widget", "type": "this"}
+        {
+          "name": "widget",
+          "type": "this"
+        }
       ],
       "description": "Fired when the page is about to become visible, i.e. it has become the active page."
     },
     "disappear": {
       "parameters": [
-        {"name": "widget", "type": "this"}
+        {
+          "name": "widget",
+          "type": "this"
+        }
       ],
       "description": "Fired when the page is no longer visible, i.e. another page has become the active page."
     }

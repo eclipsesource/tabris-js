@@ -165,15 +165,13 @@ function test_NavigationBar() {
 
 function test_Page() {
   var page: Page = new Page();
+  let image: Image = page.image;
+  let title: string = page.title;
   page.set("foo", 23);
   page.set({
     image: {src: "http://example.com"},
     title: "foo",
-    topLevel: true
   });
-  let title: string = page.title;
-  let topLevel: boolean = page.topLevel;
-  page.open().close();
 }
 
 function test_Picker() {

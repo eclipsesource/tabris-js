@@ -1,6 +1,6 @@
 {
   "type": "Tab",
-  "description": "A container representing a single tab of the TabFolder widget.",
+  "description": "A container representing a single tab of a TabFolder widget.",
   "extends": "Composite",
   "properties": {
     "title": {
