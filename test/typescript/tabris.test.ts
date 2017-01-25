@@ -17,6 +17,7 @@ import {
   ScrollView,
   SearchAction,
   Slider,
+  StatusBar,
   Switch,
   TabFolder,
   Tab,
@@ -245,6 +246,14 @@ function test_Slider() {
   let minimum: number = widget.minimum;
   let maximum: number = widget.maximum;
   let selction: number = widget.selection;
+}
+
+function test_StatusBar() {
+  let statusBar: StatusBar = new StatusBar();
+  let theme: 'default'|'light'|'dark' = statusBar.theme;
+  let displayMode: 'default'|'hide'|'float' = statusBar.displayMode;
+  let height: number = statusBar.height;
+  let background: string = statusBar.background;
 }
 
 function test_Switch() {

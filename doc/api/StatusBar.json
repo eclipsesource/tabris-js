@@ -1,0 +1,40 @@
+{
+  "type": "StatusBar",
+  "description": "The status bar is the area where notifications, status icons and device time are displayed. The singleton instance can be accessed via `tabris.ui.statusBar`.",
+  "properties": {
+    "theme": {
+      "type": "string",
+      "values": [
+        "default",
+        "light",
+        "dark"
+      ],
+      "default": "default",
+      "description": "Defines the shade used on the status bar. A `dark` theme sets the foreground icons to be of a light color, whereas `light` sets the icons to a dark color. The theme should be set in conjunction with the `background` property for contrast. The value `default` selects the default theme that depends on the device and on the app. Available on iOS and Android 6+."
+    },
+    "displayMode": {
+      "type": "string",
+      "values": [
+        "default",
+        "hide",
+        "float"
+      ],
+      "default": "default",
+      "description": "Controls how the status bar is positioned relative to the `tabris.ui.contentView`. The value `default` places the content below the status bar. The `hide` option lets the status bar disappear, making more room for the content. The `float` option lets the content flow underneath the status bar."
+    },
+    "height": {
+      "type": "number",
+      "description": "The height of the status bar in device independent pixel. Can be used in conjunction with the `displayMode` `'float'` to offset the content as to not have it covered by the status bar. This property is read-only."
+    },
+    "background": {
+      "type": "Color",
+      "description": "Background color of the status bar. Should be used in conjunction with the `theme` property to keep the status bar icons legible."
+    }
+  },
+  "links": [
+    {
+      "title": "Snippet demonstrating various properties on the `StatusBar`",
+      "path": "${GITHUB_BRANCH}/snippets/statusbar.js"
+    }
+  ]
+}
