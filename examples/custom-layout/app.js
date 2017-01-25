@@ -15,5 +15,7 @@ new tabris.Button({
   }).appendTo(composite);
 }).appendTo(composite);
 
-new RowLayout({margin: 20, spacing: 10}).attachTo(composite).layout();
-
+new RowLayout({
+  margin: 20, spacing: 10
+}).attachTo(composite)
+  .layout();

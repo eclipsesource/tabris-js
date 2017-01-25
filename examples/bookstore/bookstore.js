@@ -78,7 +78,6 @@ createBookListPage(bookListPageDescriptors[0]).appendTo(navigationView);
 function createBookListPage(descriptor) {
   return new tabris.Page({
     title: descriptor.title,
-    image: {src: descriptor.image, scale: 3},
     autoDispose: false
   }).append(createBooksList(books.filter(descriptor.filter)));
 }

@@ -3,7 +3,7 @@ var imageNames = require('./images/index.json');
 tabris.ui.contentView.background = 'black';
 
 var navigationView = new tabris.NavigationView({
-  left: 0, top: 0, right: 0, bottom: 0
+  left: 0, top: 0, right: 0, bottom: 0,
 }).appendTo(tabris.ui.contentView);
 
 var fullImage = new tabris.ImageView({
@@ -31,13 +31,15 @@ imageNames.forEach(function(image, index) {
 var fullscreenAction = new tabris.Action({
   title: 'Fullscreen',
   placementPriority: 'high'
-}).appendTo(navigationView).on('select', toggleAction);
+}).on('select', toggleAction)
+  .appendTo(navigationView);
 
 var thumbnailsAction = new tabris.Action({
   title: 'Thumbnails',
   placementPriority: 'high',
   visible: false
-}).appendTo(navigationView).on('select', toggleAction);
+}).on('select', toggleAction)
+  .appendTo(navigationView);
 
 function toggleAction() {
   var wasFullscreen = !scrollView.visible;

@@ -1,3 +1,6 @@
+
+// === DOES NOT WORK WITH TABRIS.JS 2.x ===
+
 // Original source: https://github.com/tonylukasavage/Automata
 // This example was initially developed to showcase Titanium performance characteristics
 // The author himself explains that Titanium is not well suited for this kind of application

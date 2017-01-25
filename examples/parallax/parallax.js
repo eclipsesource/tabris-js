@@ -74,9 +74,9 @@ scrollView.on('resize', function(widget, bounds) {
 });
 
 scrollView.on('scrollY', function(widget, offset) {
-  imageView.transform = {translationY: Math.max(0, offset.offsetY * 0.4)};
-  titleComposite.transform = {translationY: Math.max(0, offset.offsetY - titleCompY)};
-  var opacity = calculateTitleCompositeOpacity(offset.offsetY, titleCompY);
+  imageView.transform = {translationY: Math.max(0, offset * 0.4)};
+  titleComposite.transform = {translationY: Math.max(0, offset - titleCompY)};
+  var opacity = calculateTitleCompositeOpacity(offset, titleCompY);
   titleComposite.background = rgba(255, 152, 0, opacity);
 });
 

@@ -20,10 +20,6 @@ function createTextView(timezone, name) {
 }
 
 function update() {
-  tabris.ui.contentView.children().forEach(function(widget) {
-    console.error('update on ' + widget);
-    widget.trigger('update');
-  });
-  var delay = 60000 - Date.now() % 60000;
-  setTimeout(update, delay);
+  tabris.ui.contentView.children().trigger('update');
+  setTimeout(update, 60000 - Date.now() % 60000);
 }

@@ -1,6 +1,0 @@
-{
-  "main": "dynamic-ui.js",
-  "dependencies": {
-    "tabris": "^1.7.0"
-  }
-}

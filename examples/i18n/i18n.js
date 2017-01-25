@@ -18,8 +18,8 @@ new tabris.Picker({id: 'langPicker', left: 10, top: 10, right: 10})
   }).appendTo(tabris.ui.contentView);
 
 new tabris.CollectionView({
-  left: 0, top: '#langPicker 10', right: 0, bottom: 0,
   id: 'menuItemsCV',
+  left: 0, top: '#langPicker 10', right: 0, bottom: 0,
   itemHeight: 100,
   initializeCell: function(cell) {
     var price = new tabris.TextView({
