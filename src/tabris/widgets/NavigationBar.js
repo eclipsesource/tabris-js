@@ -11,7 +11,7 @@ const CONFIG = {
   _properties: {
     displayMode: {type: ['choice', ['default', 'float', 'hide']], default: 'default'},
     height: {
-      type: 'integer',
+      type: 'number',
       nocache: true,
       access: {
         set() {
