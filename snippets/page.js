@@ -1,15 +1,10 @@
-// Creating multiple top level pages
+// Create and open a page
 
-new tabris.Drawer().append(new tabris.PageSelector());
+let navigationView = new tabris.NavigationView({
+  left: 0, top: 0, right: 0, bottom: 0
+}).appendTo(tabris.ui.contentView);
 
 new tabris.Page({
-  title: 'Creating multiple top level pages',
+  title: 'Page',
   topLevel: true
-}).open();
-
-// Top level pages can always be accessed in the page selector
-// even if they are not openend
-new tabris.Page({
-  title: 'Top level page two',
-  topLevel: true
-});
+}).appendTo(navigationView);
