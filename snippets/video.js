@@ -3,7 +3,7 @@ let video = new tabris.Video({
   url: 'http://peach.themazzone.com/durian/movies/sintel-1280-stereo.mp4',
   controlsVisible: false
 }).on('change:state', function(widget, state) {
-  button.set('text', state !== 'pause' ? '❚❚' : '▶');
+  button.text = state !== 'pause' ? '❚❚' : '▶';
 }).appendTo(tabris.ui.contentView);
 
 let button = new tabris.Button({
@@ -11,5 +11,5 @@ let button = new tabris.Button({
   centerX: 0, bottom: 16,
   text: '❚❚'
 }).on('select', function() {
-  video.get('state') === 'play' ? video.pause() : video.play();
+  video.state === 'play' ? video.pause() : video.play();
 }).appendTo(tabris.ui.contentView);
