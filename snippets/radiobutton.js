@@ -2,7 +2,7 @@
 
 ['One', 'Two', 'Three'].forEach(function(title) {
   new tabris.RadioButton({
-    layoutData: {left: 10, top: 'prev() 10'},
+    left: 10, top: 'prev() 10',
     text: title
   }).on('change:selection', function(widget, selection) {
     if (selection) {
