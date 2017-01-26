@@ -57,38 +57,68 @@ describe('tabris', function() {
 
   it('contains DOM API constructors', function() {
     expect(tabris.Crypto).to.be.a('function');
+    expect(tabris.Crypto.name).to.equal('Crypto');
     expect(tabris.ImageData).to.be.a('function');
+    expect(tabris.ImageData.name).to.equal('ImageData');
     expect(tabris.ProgressEvent).to.be.a('function');
+    expect(tabris.ProgressEvent.name).to.equal('ProgressEvent');
     expect(tabris.Storage).to.be.a('function');
+    expect(tabris.Storage.name).to.equal('Storage');
     expect(tabris.XMLHttpRequest).to.be.a('function');
+    expect(tabris.XMLHttpRequest.name).to.equal('XMLHttpRequest');
   });
 
   it('contains widget constructors', function() {
     expect(tabris.Action).to.be.a('function');
+    expect(tabris.Action.name).to.equal('Action');
     expect(tabris.ActivityIndicator).to.be.a('function');
+    expect(tabris.ActivityIndicator.name).to.equal('ActivityIndicator');
     expect(tabris.Button).to.be.a('function');
+    expect(tabris.Button.name).to.equal('Button');
     expect(tabris.Cell).to.be.a('function');
+    expect(tabris.Cell.name).to.equal('Cell');
     expect(tabris.CheckBox).to.be.a('function');
+    expect(tabris.CheckBox.name).to.equal('CheckBox');
     expect(tabris.Canvas).to.be.a('function');
+    expect(tabris.Canvas.name).to.equal('Canvas');
     expect(tabris.CollectionView).to.be.a('function');
+    expect(tabris.CollectionView.name).to.equal('CollectionView');
     expect(tabris.Composite).to.be.a('function');
+    expect(tabris.Composite.name).to.equal('Composite');
     expect(tabris.Drawer).to.be.a('function');
+    expect(tabris.Drawer.name).to.equal('Drawer');
     expect(tabris.ImageView).to.be.a('function');
+    expect(tabris.ImageView.name).to.equal('ImageView');
     expect(tabris.Page).to.be.a('function');
+    expect(tabris.Page.name).to.equal('Page');
     expect(tabris.Picker).to.be.a('function');
+    expect(tabris.Picker.name).to.equal('Picker');
     expect(tabris.ProgressBar).to.be.a('function');
+    expect(tabris.ProgressBar.name).to.equal('ProgressBar');
     expect(tabris.RadioButton).to.be.a('function');
+    expect(tabris.RadioButton.name).to.equal('RadioButton');
     expect(tabris.ScrollView).to.be.a('function');
+    expect(tabris.ScrollView.name).to.equal('ScrollView');
     expect(tabris.SearchAction).to.be.a('function');
+    expect(tabris.SearchAction.name).to.equal('SearchAction');
     expect(tabris.Slider).to.be.a('function');
+    expect(tabris.Slider.name).to.equal('Slider');
     expect(tabris.Switch).to.be.a('function');
+    expect(tabris.Switch.name).to.equal('Switch');
     expect(tabris.Tab).to.be.a('function');
+    expect(tabris.Tab.name).to.equal('Tab');
     expect(tabris.TabFolder).to.be.a('function');
+    expect(tabris.TabFolder.name).to.equal('TabFolder');
     expect(tabris.TextInput).to.be.a('function');
+    expect(tabris.TextInput.name).to.equal('TextInput');
     expect(tabris.TextView).to.be.a('function');
+    expect(tabris.TextView.name).to.equal('TextView');
     expect(tabris.ToggleButton).to.be.a('function');
+    expect(tabris.ToggleButton.name).to.equal('ToggleButton');
     expect(tabris.Video).to.be.a('function');
+    expect(tabris.Video.name).to.equal('Video');
     expect(tabris.WebView).to.be.a('function');
+    expect(tabris.WebView.name).to.equal('WebView');
   });
 
   it('contains other constructors', function() {

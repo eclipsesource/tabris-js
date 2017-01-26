@@ -33,13 +33,6 @@ module.exports = function(grunt) {
       }
     },
     uglify: {
-      tabris: {
-        options: {
-          banner
-        },
-        src: 'build/tabris/tabris.js',
-        dest: 'build/tabris/tabris.min.js'
-      },
       boot: {
         src: 'build/boot.js',
         dest: 'build/boot.min.js'
@@ -165,7 +158,7 @@ module.exports = function(grunt) {
     let stringify = require('format-json');
     let pack = grunt.file.readJSON('package.json');
     delete pack.devDependencies;
-    pack.main = 'tabris.min.js';
+    pack.main = 'tabris.js';
     pack.typings = 'tabris.d.ts';
     grunt.file.write('build/tabris/package.json', stringify.plain(pack));
   });
@@ -177,7 +170,6 @@ module.exports = function(grunt) {
     'concat:tabris',
     'concat:boot',
     'webpack:polyfill',
-    'uglify:tabris',
     'uglify:boot',
     'uglify:polyfill',
     'package',
