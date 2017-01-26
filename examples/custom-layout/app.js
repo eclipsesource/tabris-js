@@ -1,13 +1,8 @@
 var RowLayout = require('./RowLayout');
 
-var page = new tabris.Page({
-  title: 'Column Layout',
-  topLevel: true
-});
-
 var composite = new tabris.Composite({
   layoutData: {left: 0, top: 0, right: 0, bottom: 0}
-}).appendTo(page);
+}).appendTo(tabris.ui.contentView);
 
 var count = 1;
 new tabris.Button({
@@ -22,4 +17,3 @@ new tabris.Button({
 
 new RowLayout({margin: 20, spacing: 10}).attachTo(composite).layout();
 
-page.open();

@@ -14,11 +14,11 @@ var page = new PluginPage('BarcodeScanner', 'phonegap-plugin-barcodescanner', fu
 
   function scanBarcode() {
     cordova.plugins.barcodeScanner.scan(function(result) {
-      resultView.set('text', result.cancelled ?
-                             '<b>Scan cancelled</b>' :
-                             '<b>Scan result:</b> ' + result.text + ' (' + result.format + ')');
+      resultView.text = result.cancelled ?
+                        '<b>Scan cancelled</b>' :
+                        '<b>Scan result:</b> ' + result.text + ' (' + result.format + ')';
     }, function(error) {
-      resultView.set('text', '<b>Error:</b> ' + error);
+      resultView.text = '<b>Error:</b> ' + error;
     });
   }
 });

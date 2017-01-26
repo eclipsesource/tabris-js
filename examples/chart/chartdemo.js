@@ -1,6 +1,15 @@
 var Chart = require('chart.js/Chart.min.js');
 
+var MARGIN_SMALL = 8;
 var MARGIN = 16;
+
+var navigationView = new tabris.NavigationView({
+  left: 0, top: 0, right: 0, bottom: 0
+}).appendTo(tabris.ui.contentView);
+
+var mainPage = new tabris.Page({
+  title: 'Chart Example'
+}).appendTo(navigationView);
 
 var data = {
   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -61,19 +70,21 @@ var pieData = [
   }
 ];
 
-createPage('Bar', data).open();
-createPage('Line', data);
-createPage('Radar', data);
-createPage('PolarArea', pieData);
-createPage('Pie', pieData);
-createPage('Doughnut', pieData);
+[
+  {type: 'Bar', data: data},
+  {type: 'Line', data: data},
+  {type: 'Radar', data: data},
+  {type: 'PolarArea', data: pieData},
+  {type: 'Pie', data: pieData},
+  {type: 'Doughnut', data: pieData}
+].forEach(function(chart) {
+  addPageSelector(createPage(chart));
+});
 
-new tabris.Drawer().append(new tabris.PageSelector());
-
-function createPage(chartType, chartData) {
+function createPage(chart) {
   var page = new tabris.Page({
-    title: chartType + ' Chart',
-    topLevel: true
+    title: chart.type + ' Chart',
+    autoDispose: false
   });
   var button = new tabris.Button({
     text: 'Draw graph',
@@ -87,7 +98,7 @@ function createPage(chartType, chartData) {
     layoutData: {left: MARGIN, top: [button, MARGIN], right: MARGIN, bottom: MARGIN}
   }).appendTo(page);
   var createCanvasContext = function() {
-    var bounds = canvas.get('bounds');
+    var bounds = canvas.bounds;
     var width = bounds.width;
     var height = Math.min(bounds.height, width);
     return canvas.getContext('2d', width, height);
@@ -96,12 +107,19 @@ function createPage(chartType, chartData) {
     var ctx = createCanvasContext();
     // workaround for scaling to native pixels by chart.js
     ctx.scale(1 / window.devicePixelRatio, 1 / window.devicePixelRatio);
-    new Chart(ctx)[chartType](chartData, {
-      animation: checkboxAnimate.get('selection'),
+    new Chart(ctx)[chart.type](chart.data, {
+      animation: checkboxAnimate.selection,
       showScale: true,
       showTooltips: false,
       scaleShowLabels: true
     });
   });
   return page;
+}
+
+function addPageSelector(page) {
+  new tabris.Button({
+    left: MARGIN_SMALL, top: ['prev()', MARGIN_SMALL],
+    text: page.title
+  }).on('select', function() {page.appendTo(navigationView);}).appendTo(mainPage);
 }

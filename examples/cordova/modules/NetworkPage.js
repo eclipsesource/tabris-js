@@ -17,7 +17,7 @@ var page = new PluginPage('Network', 'cordova-plugin-network-information', funct
     text: 'Get Network State'
   }).appendTo(parent).on('select', function() {
     var networkState = navigator.connection.type;
-    textView.set('text', states[networkState]);
+    textView.text = states[networkState];
   });
 
   var textView = new tabris.TextView({

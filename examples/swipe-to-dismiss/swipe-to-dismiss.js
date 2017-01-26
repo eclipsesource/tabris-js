@@ -1,11 +1,6 @@
 var HORIZONTAL_MARGIN = 16;
 var VERTICAL_MARGIN = 8;
 
-var page = new tabris.Page({
-  title: 'Swipe to dismiss',
-  topLevel: true
-});
-
 var items = [
   {title: 'Up for lunch?', sender: 'John Smith', time: '11:35'},
   {title: 'JavaScript for mobile applications', sender: 'JavaScript Newsletter', time: '08:03'},
@@ -21,7 +16,7 @@ var collectionView = new tabris.CollectionView({
   itemHeight: 64,
   items: items,
   initializeCell: function(cell) {
-    cell.set('background', '#d0d0d0');
+    cell.background = '#d0d0d0';
     var container = new tabris.Composite({
       background: 'white',
       layoutData: {left: 0, top: 0, bottom: 0, right: 0}
@@ -43,17 +38,16 @@ var collectionView = new tabris.CollectionView({
       background: '#b8b8b8',
       layoutData: {left: 0, bottom: 0, right: 0, height: 1}
     }).appendTo(cell);
-    cell.on('change:item', function(widget, message) {
-      container.set({transform: {}, message: message});
-      senderView.set('text', message.sender);
-      titleView.set('text', message.title);
-      timeView.set('text', message.time);
+    cell.on('change:item', function(widget, item) {
+      senderView.text = item.sender;
+      titleView.text = item.title;
+      timeView.text = item.time;
     });
   }
-}).appendTo(page);
+}).appendTo(tabris.ui.contentView);
 
 function handlePan(event, container) {
-  container.set('transform', {translationX: event.translation.x});
+  container.transform = {translationX: event.translation.x};
   if (event.state === 'end') {
     handlePanFinished(event, container);
   }
@@ -92,5 +86,3 @@ function animateCancel(event, container) {
 function sign(number) {
   return number ? number < 0 ? -1 : 1 : 0;
 }
-
-page.open();

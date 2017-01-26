@@ -1,8 +1,7 @@
 var example = new Example();
 
 var page = module.exports = new tabris.Page({
-  title: 'Animation',
-  topLevel: true
+  title: 'Animation'
 }).on('disappear', function() {
   page.children('#toggleRun').set('selection', false);
 });
@@ -19,9 +18,9 @@ new tabris.ToggleButton({
   text: 'Start',
   layoutData: {left: 10, bottom: 10},
   id: 'toggleRun'
-}).on('change:selection', function(button, selection) {
-  example.setRunning(selection);
-  button.set('text', selection ? 'Stop' : 'Start');
+}).on('change:selection', function(button) {
+  example.setRunning(button.selection);
+  button.text = button.selection ? 'Stop' : 'Start';
 }).appendTo(page);
 
 function Example() {

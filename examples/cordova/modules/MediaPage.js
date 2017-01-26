@@ -7,7 +7,7 @@ var page = new PluginPage('Media', 'cordova-media', function(parent) {
   var path = tabris.app.getResourceLocation('audio/media.wav');
   // According to Media plugin documentation the media path must be
   // relative to the "www" folder under iOS
-  if (tabris.device.get('platform') === 'iOS') {
+  if (tabris.device.platform === 'iOS') {
     path = path.substr(path.indexOf('/www/') + 5);
   }
 

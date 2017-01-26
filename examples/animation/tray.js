@@ -18,7 +18,7 @@ var loremIpsum = 'Etiam nisl nisi, egestas quis lacus ut, tristique suscipit met
 
 var page = new tabris.Page({
   title: 'Tray',
-  topLevel: true
+  autoDispose: false
 });
 
 new tabris.TextView({
@@ -69,7 +69,7 @@ trayContent.on('resize', function() {
   if (trayState === 'dragging') {
     positionTrayInRestingState(2000);
   } else {
-    tray.set('transform', {translationY: trayHeight});
+    tray.transform = {translationY: trayHeight};
   }
 });
 
@@ -80,9 +80,9 @@ strap.on('pan:vertical', function(widget, event) {
   }
   if (trayState === 'dragging') {
     var offsetY = Math.min(Math.max(event.translation.y + dragOffset, 0), trayHeight);
-    tray.set('transform', {translationY: offsetY});
-    shade.set('opacity', getShadeOpacity(offsetY));
-    strapIcon.set('transform', getStrapIconTransform(offsetY));
+    tray.transform = {translationY: offsetY};
+    shade.opacity = getShadeOpacity(offsetY);
+    strapIcon.transform = getStrapIconTransform(offsetY);
   }
   if (event.state === 'end' && trayState === 'dragging') {
     positionTrayInRestingState(event.velocity.y);

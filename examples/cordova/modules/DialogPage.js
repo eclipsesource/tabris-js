@@ -9,7 +9,7 @@ var page = new PluginPage('Dialog', 'cordova-plugin-dialogs', function(parent) {
     navigator.notification.alert(
       'You are the winner!', // message
       function() {
-        textView.set('text', 'Alert closed');
+        textView.text = 'Alert closed';
       }, // callback
       'Game Over', // title
       'Done' // buttonName
@@ -23,7 +23,7 @@ var page = new PluginPage('Dialog', 'cordova-plugin-dialogs', function(parent) {
     navigator.notification.confirm(
         'You are the winner!', // message
          function(buttonIndex) {
-           textView.set('text', 'Confirm closed with code: ' + buttonIndex);
+           textView.text = 'Confirm closed with code: ' + buttonIndex;
          }, // callback to invoke with index of button pressed
         'Game Over', // title
         ['Restart', 'Exit'] // buttonTextViews
@@ -37,7 +37,7 @@ var page = new PluginPage('Dialog', 'cordova-plugin-dialogs', function(parent) {
     navigator.notification.prompt(
         'Please enter your name', // message
         function(results) {
-          textView.set('text', 'You selected button number ' + results.buttonIndex + ' and entered ' + results.input1);
+          textView.text = 'You selected button number ' + results.buttonIndex + ' and entered ' + results.input1;
         }, // callback to invoke
         'Registration', // title
         ['Ok', 'Exit'], // buttonTextViews

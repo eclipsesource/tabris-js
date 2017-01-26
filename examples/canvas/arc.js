@@ -3,7 +3,7 @@ var ARC_RADIUS = 20;
 
 var page = module.exports = new tabris.Page({
   title: 'Arcs',
-  topLevel: true
+  autoDispose: false
 });
 
 var canvas = new tabris.Canvas({
@@ -13,9 +13,9 @@ var canvas = new tabris.Canvas({
 new tabris.CheckBox({
   text: 'Counterclockwise',
   layoutData: {left: 10, right: 10, top: [canvas, 8]}
-}).on('change:selection', function(checkBox, selection) {
+}).on('change:selection', function(checkBox) {
   clearCanvas();
-  drawArcs(selection);
+  drawArcs(checkBox.selection);
 }).appendTo(page);
 
 var context = canvas.getContext('2d', CANVAS_SIZE, CANVAS_SIZE);

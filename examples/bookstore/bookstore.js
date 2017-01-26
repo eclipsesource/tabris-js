@@ -1,7 +1,58 @@
 var PAGE_MARGIN = 16;
 var books = require('./books.json');
 
-new tabris.Drawer().append(new tabris.PageSelector());
+var navigationView = new tabris.NavigationView({
+  left: 0, top: 0, right: 0, bottom: 0,
+  drawerActionVisible: true
+}).appendTo(tabris.ui.contentView);
+
+tabris.ui.drawer.enabled = true;
+
+var bookListPageDescriptors = [{
+  title: 'Book Store',
+  image: 'images/page_all_books.png',
+  filter: function() {return true;}
+},{
+  title: 'Popular',
+  image: 'images/page_popular_books.png',
+  filter: function(book) {return book.popular;}
+},{
+  title: 'Favorite',
+  image: 'images/page_favorite_books.png',
+  filter: function(book) {return book.favorite;}
+}];
+
+var pageSelector = new tabris.CollectionView({
+  items: bookListPageDescriptors,
+  initializeCell: initializeCell,
+  itemHeight: tabris.device.platform === 'iOS' ? 40 : 48,
+  layoutData: {left: 0, top: 0, right: 0, bottom: 0}
+}).appendTo(tabris.ui.drawer);
+
+pageSelector.on('select', function(target, descriptor) {
+  tabris.ui.drawer.close();
+  navigationView.pages().dispose();
+  createBookListPage(descriptor).appendTo(navigationView);
+});
+
+function initializeCell(cell) {
+  new tabris.Composite({
+    layoutData: {left: 0, right: 0, bottom: 0, height: 1},
+    background: '#bbb'
+  }).appendTo(cell);
+  var imageView = new tabris.ImageView({
+    layoutData: {left: 10, top: 10, bottom: 10}
+  }).appendTo(cell);
+  var textView = new tabris.TextView({
+    layoutData: {left: 72, centerY: 0},
+    font: tabris.device.platform === 'iOS' ? '17px .HelveticaNeueInterface-Regular' : '14px Roboto Medium',
+    textColor: tabris.device.platform === 'iOS' ? 'rgb(22, 126, 251)' : '#212121'
+  }).appendTo(cell);
+  cell.on('change:item', function(widget, page) {
+    imageView.set('image', page.image);
+    textView.set('text', page.title);
+  });
+}
 
 var loremIpsum = 'Etiam nisl nisi, egestas quis lacus ut, tristique suscipit metus. In ' +
                  'vehicula lectus metus, at accumsan elit fringilla blandit. Integer et quam ' +
@@ -13,44 +64,32 @@ var loremIpsum = 'Etiam nisl nisi, egestas quis lacus ut, tristique suscipit met
                  'diam aliquam lectus, sed euismod leo elit eu justo. Integer vel ante ' +
                  'sapien.';
 
-var bookStorePage = createBookListPage('Book Store', 'images/page_all_books.png', function() {
-  return true;
-});
-
-createBookListPage('Popular', 'images/page_popular_books.png', function(book) {
-  return book.popular;
-});
-
-createBookListPage('Favorite', 'images/page_favorite_books.png', function(book) {
-  return book.favorite;
-});
-
 new tabris.Action({
   id: 'licenseToggler',
   title: 'Settings',
   placementPriority: 'high',
   image: {src: 'images/action_settings.png', scale: 3}
 }).on('select', function() {
-  createSettingsPage().open();
-});
+  createSettingsPage().appendTo(navigationView);
+}).appendTo(navigationView);
 
-bookStorePage.open();
+createBookListPage(bookListPageDescriptors[0]).appendTo(navigationView);
 
-function createBookListPage(title, image, filter) {
+function createBookListPage(descriptor) {
   return new tabris.Page({
-    title: title,
-    topLevel: true,
-    image: {src: image, scale: 3}
-  }).append(createBooksList(books.filter(filter)));
+    title: descriptor.title,
+    image: {src: descriptor.image, scale: 3},
+    autoDispose: false
+  }).append(createBooksList(books.filter(descriptor.filter)));
 }
 
 function createBookPage(book) {
   var page = new tabris.Page({
     title: book.title
   });
-  var detailsComposite = createDetailsView(book)
-    .set('layoutData', {top: 0, height: 192, left: 0, right: 0})
-    .appendTo(page);
+  var detailsComposite = createDetailsView(book).appendTo(page);
+  detailsComposite.layoutData = {top: 0, height: 192, left: 0, right: 0};
+
   createTabFolder().set({
     layoutData: {top: [detailsComposite, 0], left: 0, right: 0, bottom: 0}
   }).appendTo(page);
@@ -69,7 +108,7 @@ function createDetailsView(book) {
   new tabris.Composite({
     layoutData: {left: 0, right: 0, top: 0, height: 160 + 2 * PAGE_MARGIN}
   }).on('tap', function() {
-    createReadBookPage(book).open();
+    createReadBookPage(book).appendTo(navigationView);
   }).appendTo(composite);
   var coverView = new tabris.ImageView({
     layoutData: {height: 160, width: 106, left: PAGE_MARGIN, top: PAGE_MARGIN},
@@ -124,13 +163,13 @@ function createBooksList(books) {
         textColor: '#7b7b7b'
       }).appendTo(cell);
       cell.on('change:item', function(widget, book) {
-        imageView.set('image', book.image);
-        titleTextView.set('text', book.title);
-        authorTextView.set('text', book.author);
+        imageView.image = book.image;
+        titleTextView.text = book.title;
+        authorTextView.text = book.author;
       });
     }
   }).on('select', function(target, value) {
-    createBookPage(value).open();
+    createBookPage(value).appendTo(navigationView);
   });
 }
 
@@ -168,7 +207,7 @@ function createSettingsPage() {
     textColor: 'rgba(71, 161, 238, 0.75)',
     layoutData: {left: PAGE_MARGIN, right: PAGE_MARGIN, top: [settingsTextView, 10]}
   }).on('tap', function() {
-    createLicenseWebviewPage().open();
+    createLicenseWebviewPage().appendTo(navigationView);
   }).appendTo(page);
   new tabris.TextView({
     text: '<i>Authors of book covers:</i><br/>' +

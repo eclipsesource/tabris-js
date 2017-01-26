@@ -1,11 +1,6 @@
 var message;
 
-var page = new tabris.Page({
-  title: 'Oceanic Flight 815 Booking',
-  topLevel: true
-});
-
-var scrollView = new tabris.ScrollView({left: 0, top: 0, right: 0, bottom: 0}).appendTo(page);
+var scrollView = new tabris.ScrollView({left: 0, top: 0, right: 0, bottom: 0}).appendTo(tabris.ui.contentView);
 
 new tabris.TextView({
   id: 'nameLabel',
@@ -197,5 +192,3 @@ function createFrequentFlyerInfo() {
   info += ', acct: ' + scrollView.children('#flyerNumberInput').first().text;
   return info;
 }
-
-page.open();

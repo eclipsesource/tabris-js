@@ -9,19 +9,13 @@ var texts = (function() {
 
 var MARGIN = 10;
 
-var page = new tabris.Page({
-  id: 'menuPage',
-  background: 'white',
-  topLevel: true
-});
-
 new tabris.Picker({id: 'langPicker', layoutData: {left: 10, top: 10, right: 10}})
-  .on('change:selection', function(widget, selection, options) {
+  .on('select', function(widget, selection, options) {
     if (options.index > 0) {
-      this.set('selectionIndex', 0);
-      page.apply(require('./' + selection + '.json'));
+      this.selectionIndex = 0;
+      tabris.ui.contentView.apply(require('./' + selection + '.json'));
     }
-  }).appendTo(page);
+  }).appendTo(tabris.ui.contentView);
 
 new tabris.CollectionView({
   id: 'menuItemsCV',
@@ -46,11 +40,11 @@ new tabris.CollectionView({
       background: '#e3e3e3'
     }).appendTo(cell);
     cell.on('change:item', function(widget, item) {
-      name.set('text', item.name);
-      description.set('text', item.description);
-      price.set('text', item.price);
+      name.text = item.name;
+      description.text = item.description;
+      price.text = item.price;
     });
   }
-}).appendTo(page);
+}).appendTo(tabris.ui.contentView);
 
-page.apply(texts).open();
+tabris.ui.contentView.apply(texts);

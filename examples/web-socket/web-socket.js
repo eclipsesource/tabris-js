@@ -48,8 +48,8 @@ new tabris.Button({
   top: 16, bottom: 16, right: 16,
   text: 'Send'
 }).on('select', function() {
-  socket.send('<b>' + tabris.device.get('model') + '</b>: ' + chatInput.get('text'));
-  chatInput.set('text', '');
+  socket.send('<b>' + tabris.device.model + '</b>: ' + chatInput.text);
+  chatInput.text = '';
   logWebSocketState();
 }).appendTo(inputContainer);
 
@@ -66,7 +66,7 @@ var chatTextView = new tabris.TextView({
 }).appendTo(scrollView);
 
 function appendToChat(text) {
-  chatTextView.set('text', chatTextView.get('text') + '<br/>' + text);
+  chatTextView.set('text', chatTextView.text + '<br/>' + text);
 }
 
 function logWebSocketState() {

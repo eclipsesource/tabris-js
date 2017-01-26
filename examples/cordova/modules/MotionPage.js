@@ -9,10 +9,10 @@ var page = new PluginPage('Motion', 'cordova-plugin-device-motion', function(par
     text: 'Start Watch Acceleration'
   }).appendTo(parent).on('select', function() {
     var onSuccess = function(acceleration) {
-      textView.set('text', 'Acceleration X: ' + acceleration.x + '\n' +
-                        'Acceleration Y: ' + acceleration.y + '\n' +
-                        'Acceleration Z: ' + acceleration.z + '\n' +
-                        'Timestamp: '      + acceleration.timestamp + '\n');
+      textView.text = 'Acceleration X: ' + acceleration.x + '\n' +
+                      'Acceleration Y: ' + acceleration.y + '\n' +
+                      'Acceleration Z: ' + acceleration.z + '\n' +
+                      'Timestamp: '      + acceleration.timestamp + '\n';
     };
 
     var onError = function() {

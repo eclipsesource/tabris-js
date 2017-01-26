@@ -8,7 +8,7 @@ PluginPage.prototype.create = function() {
 
   this.page = new tabris.Page({
     title: this.pageName,
-    topLevel: true
+    autoDispose: false
   });
 
   new tabris.TextView({

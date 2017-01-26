@@ -11,7 +11,7 @@ var page = new PluginPage('Toast', 'cordova-plugin-x-toast', function(parent) {
     layoutData: {left: 10, top: [input, 10], right: 10},
     text: 'Show short top'
   }).appendTo(parent).on('select', function() {
-    var text = input.get('text');
+    var text = input.text;
     window.plugins.toast.showShortTop(text);
   });
 
@@ -19,7 +19,7 @@ var page = new PluginPage('Toast', 'cordova-plugin-x-toast', function(parent) {
     layoutData: {left: 10, top: [buttonShortTop, 10], right: 10},
     text: 'Show short center'
   }).appendTo(parent).on('select', function() {
-    var text = input.get('text');
+    var text = input.text;
     window.plugins.toast.showShortCenter(text);
   });
 
@@ -27,7 +27,7 @@ var page = new PluginPage('Toast', 'cordova-plugin-x-toast', function(parent) {
     layoutData: {left: 10, top: [buttonShortCenter, 10], right: 10},
     text: 'Show short bottom'
   }).appendTo(parent).on('select', function() {
-    var text = input.get('text');
+    var text = input.text;
     window.plugins.toast.showShortBottom(text);
   });
 
@@ -35,7 +35,7 @@ var page = new PluginPage('Toast', 'cordova-plugin-x-toast', function(parent) {
     layoutData: {left: 10, top: [buttonShortBottom, 10], right: 10},
     text: 'Show long top'
   }).appendTo(parent).on('select', function() {
-    var text = input.get('text');
+    var text = input.text;
     window.plugins.toast.showLongTop(text);
   });
 
@@ -43,7 +43,7 @@ var page = new PluginPage('Toast', 'cordova-plugin-x-toast', function(parent) {
     layoutData: {left: 10, top: [buttonLongTop, 10], right: 10},
     text: 'Show long center'
   }).appendTo(parent).on('select', function() {
-    var text = input.get('text');
+    var text = input.text;
     window.plugins.toast.showLongCenter(text);
   });
 
@@ -51,7 +51,7 @@ var page = new PluginPage('Toast', 'cordova-plugin-x-toast', function(parent) {
     layoutData: {left: 10, top: [buttonLongCenter, 10], right: 10},
     text: 'Show long bottom'
   }).appendTo(parent).on('select', function() {
-    var text = input.get('text');
+    var text = input.text;
     window.plugins.toast.showLongBottom(text);
   });
 

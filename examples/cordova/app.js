@@ -1,3 +1,13 @@
+var MARGIN = 8;
+
+var navigationView = new tabris.NavigationView({
+  left: 0, top: 0, right: 0, bottom: 0
+}).appendTo(tabris.ui.contentView);
+
+var mainPage = new tabris.Page({
+  title: 'Cordova Examples'
+}).appendTo(navigationView);
+
 [
   './modules/SharingPage',
   './modules/ToastPage',
@@ -9,8 +19,12 @@
   './modules/MediaPage',
   './modules/ActionSheetPage'
 ].forEach(function(page) {
-  require(page).create();
+  addPageSelector(require(page).create().page);
 });
 
-new tabris.Drawer().append(new tabris.PageSelector());
-tabris.ui.children('Page')[0].open();
+function addPageSelector(page) {
+  new tabris.Button({
+    left: MARGIN, top: ['prev()', MARGIN],
+    text: page.title
+  }).on('select', function() {page.appendTo(navigationView);}).appendTo(mainPage);
+}

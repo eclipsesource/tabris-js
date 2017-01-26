@@ -1,6 +1,6 @@
 var page = module.exports = new tabris.Page({
   title: 'Basic Shapes',
-  topLevel: true
+  autoDispose: false
 });
 
 var canvas = new tabris.Canvas({

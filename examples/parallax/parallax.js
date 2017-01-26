@@ -5,18 +5,11 @@ var INITIAL_TITLE_COMPOSITE_OPACITY = 0.85;
 
 var titleCompY = 0;
 
-tabris.ui.set('background', rgba(255, 152, 0, 1));
-
-var page = new tabris.Page({
-  topLevel: true,
-  title: "Aud'cuisine"
-}).once('resize', function() { // TODO: used "resize" event as workaround for tabris-js#597
-  tabris.ui.set('toolbarVisible', false);
-});
+tabris.ui.background = rgba(255, 152, 0, 1);
 
 var scrollView = new tabris.ScrollView({
   left: 0, right: 0, top: 0, bottom: 0
-}).appendTo(page);
+}).appendTo(tabris.ui.contentView);
 
 var imageView = new tabris.ImageView({
   left: 0, top: 0, right: 0,
@@ -72,20 +65,19 @@ new tabris.TextView({
 }).appendTo(titleComposite);
 
 scrollView.on('resize', function(widget, bounds) {
-  var imageHeight = bounds.height / 2;
-  imageView.set('height', imageHeight);
+  imageView.height  = bounds.height / 2;
   var titleCompHeight = titleComposite.height;
   // We need the offset of the title composite in each scroll event.
   // As it can only change on resize, we assign it here.
-  titleCompY = Math.min(imageHeight - titleCompHeight, bounds.height / 2);
-  titleComposite.set('top', titleCompY);
+  titleCompY = Math.min(imageView.height - titleCompHeight, bounds.height / 2);
+  titleComposite.top = titleCompY;
 });
 
 scrollView.on('scrollY', function(widget, offset) {
-  imageView.set('transform', {translationY: Math.max(0, offset.y * 0.4)});
-  titleComposite.set('transform', {translationY: Math.max(0, offset.y - titleCompY)});
-  var opacity = calculateTitleCompositeOpacity(offset.y, titleCompY);
-  titleComposite.set('background', rgba(255, 152, 0, opacity));
+  imageView.transform = {translationY: Math.max(0, offset.offsetY * 0.4)};
+  titleComposite.transform = {translationY: Math.max(0, offset.offsetY - titleCompY)};
+  var opacity = calculateTitleCompositeOpacity(offset.offsetY, titleCompY);
+  titleComposite.background = rgba(255, 152, 0, opacity);
 });
 
 function calculateTitleCompositeOpacity(scrollViewOffsetY, titleCompY) {
@@ -97,5 +89,3 @@ function calculateTitleCompositeOpacity(scrollViewOffsetY, titleCompY) {
 function rgba(r, g, b, a) {
   return 'rgba(' + r + ',' + g + ',' + b + ',' +  a + ')';
 }
-
-page.open();

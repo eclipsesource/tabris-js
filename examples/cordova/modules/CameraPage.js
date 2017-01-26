@@ -12,7 +12,7 @@ var page = new PluginPage('Camera', 'cordova-plugin-camera', function(parent) {
       destinationType: window.Camera.DestinationType.FILE_URI
     });
     function onSuccess(imageUrl) {
-      imageView.set('image', {src: imageUrl});
+      imageView.image = {src: imageUrl};
     }
     function onFail(message) {
       console.log('Camera failed because: ' + message);

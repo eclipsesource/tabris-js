@@ -20,7 +20,7 @@ var people = [
 
 var page = new tabris.Page({
   title: 'People',
-  topLevel: true
+  autoDispose: false
 });
 
 var detailsParent = new tabris.Composite({
@@ -72,7 +72,7 @@ function animateInFromRight(widget, delay) {
 }
 
 function animateInScaleUp(widget, delay) {
-  widget.set('opacity', 0.0);
+  widget.opacity = 0.0;
   widget.animate({
     opacity: 1.0,
     transform: {scaleX: 1.0, scaleY: 1.0}
@@ -101,10 +101,10 @@ function createPersonDetail(parent, person, delay) {
     image: {src: person.image, width: IMAGE_SIZE, height: IMAGE_SIZE},
     opacity: 0.0
   }).on('resize', function listener() {
-    this.set('transform', {
+    this.transform = {
       scaleX: 0.75,
       scaleY: 0.75
-    });
+    };
     animateInScaleUp(this, delay);
   }).appendTo(composite);
   var nameTextView = new tabris.TextView({

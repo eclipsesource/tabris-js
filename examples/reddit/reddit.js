@@ -1,10 +1,13 @@
 var MARGIN = 12;
 var loading;
 
+var navigationView = new tabris.NavigationView({
+  left: 0, top: 0, right: 0, bottom: 0,
+}).appendTo(tabris.ui.contentView);
+
 var page = new tabris.Page({
   title: 'Reddit - Pets',
-  topLevel: true
-});
+}).appendTo(navigationView);
 
 var collectionView = new tabris.CollectionView({
   left: 0, top: 0, right: 0, bottom: 0,
@@ -35,7 +38,6 @@ var collectionView = new tabris.CollectionView({
   }
 }).appendTo(page);
 
-page.open();
 loadInitialItems();
 
 function initializeStandardCell(cell) {
@@ -57,10 +59,10 @@ function initializeStandardCell(cell) {
     textColor: '#234'
   }).appendTo(cell);
   cell.on('change:item', function(widget, item) {
-    imageView.set('image', {src: item.data.thumbnail, width: 70, height: 70});
-    nameView.set('text', item.data.title);
-    authorView.set('text', item.data.author);
-    commentsView.set('text', item.data.num_comments + ' comments');
+    imageView.image = {src: item.data.thumbnail, width: 70, height: 70};
+    nameView.text = item.data.title;
+    authorView.text = item.data.author;
+    commentsView.text = item.data.num_comments + ' comments';
   });
 }
 
@@ -73,10 +75,10 @@ function initializeLoadingCell(cell) {
 }
 
 function loadInitialItems() {
-  collectionView.set('refreshIndicator', true);
+  collectionView.refreshIndicator = true;
   getJSON(createUrl({limit: 25})).then(function(json) {
-    collectionView.set('items', json.data.children);
-    collectionView.set('refreshIndicator', false);
+    collectionView.items = json.data.children;
+    collectionView.refreshIndicator = false;
   });
 }
 
@@ -86,7 +88,7 @@ function loadNewItems() {
     getJSON(createUrl({limit: 25, before: getFirstId()})).then(function(json) {
       collectionView.insert(json.data.children, 0);
       collectionView.reveal(0);
-      collectionView.set('refreshIndicator', false);
+      collectionView.refreshIndicator = false;
       loading = false;
     });
   }
@@ -130,8 +132,7 @@ function createDetailsPage(data) {
   var detailPage = new tabris.Page({
     background: 'black',
     title: data.title,
-    topLevel: false
-  });
+  }).appendTo(navigationView);
   if (data.url.substr(-4, 4) === '.jpg') {
     new tabris.ImageView({
       left: 0, top: 0, right: 0, bottom: 0,
@@ -144,7 +145,6 @@ function createDetailsPage(data) {
       url: data.url
     }).appendTo(detailPage);
   }
-  detailPage.open();
 }
 
 function getJSON(url) {

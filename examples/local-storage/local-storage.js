@@ -1,27 +1,23 @@
-var page = new tabris.Page({
-  title: 'Storing data on the device',
-  topLevel: true
-});
 
 var keyTextView = new tabris.TextView({
   layoutData: {left: 10, top: 20},
   text: 'Key:'
-}).appendTo(page);
+}).appendTo(tabris.ui.contentView);
 
 var keyField = new tabris.TextInput({
   layoutData: {left: 60, baseline: keyTextView, right: 10},
   text: 'foo'
-}).appendTo(page);
+}).appendTo(tabris.ui.contentView);
 
 var valueTextView = new tabris.TextView({
   layoutData: {left: 10, top: [keyField, 20]},
   text: 'Value:'
-}).appendTo(page);
+}).appendTo(tabris.ui.contentView);
 
 var valueField = new tabris.TextInput({
   layoutData: {left: 60, baseline: valueTextView, right: 10},
   text: localStorage.getItem('foo') || 'bar'
-}).appendTo(page);
+}).appendTo(tabris.ui.contentView);
 
 new tabris.Button({
   layoutData: {left: 10, right: '66% 5', top: [valueTextView, 20]},
@@ -33,9 +29,9 @@ new tabris.Button({
     console.error('The value cannot be empty.');
   } else {
     localStorage.setItem(keyField.text, valueField.text);
-    valueField.set('text', '');
+    valueField.text = '';
   }
-}).appendTo(page);
+}).appendTo(tabris.ui.contentView);
 
 new tabris.Button({
   layoutData: {left: '33% 5', right: '33% 5', top: [valueTextView, 20]},
@@ -44,17 +40,15 @@ new tabris.Button({
   if (!keyField.text) {
     console.error('The key cannot be empty.');
   } else {
-    valueField.set('text', '');
-    valueField.set('text', localStorage.getItem(keyField.text));
+    valueField.text = '';
+    valueField.text = localStorage.getItem(keyField.text);
   }
-}).appendTo(page);
+}).appendTo(tabris.ui.contentView);
 
 new tabris.Button({
   layoutData: {left: '66% 5', right: 10, top: [valueTextView, 20]},
   text: 'Remove'
 }).on('select', function() {
   localStorage.removeItem(keyField.text);
-  valueField.set('text', '');
-}).appendTo(page);
-
-page.open();
+  valueField.text = '';
+}).appendTo(tabris.ui.contentView);

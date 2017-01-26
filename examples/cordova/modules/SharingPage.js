@@ -140,7 +140,7 @@ var page = new PluginPage('Sharing', 'cordova-plugin-x-socialsharing', function(
         layoutData: layoutNext,
         text: sharingOption.name
       }).appendTo(target).on('select', function() {
-        var message = input.get('text');
+        var message = input.text;
         sharingOption.handler(message);
       });
     });

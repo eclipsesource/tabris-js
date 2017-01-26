@@ -2,7 +2,7 @@ var MARGIN = 12;
 
 var page = new tabris.Page({
   title: 'Simple Animation',
-  topLevel: true
+  autoDispose: false
 });
 
 new tabris.Button({
@@ -10,7 +10,7 @@ new tabris.Button({
   text: 'Animate',
   layoutData: {left: MARGIN, right: MARGIN, top: MARGIN}
 }).on('select', function(button) {
-  button.set('enabled', false);
+  button.enabled = false;
   page.children('#helloLabel').first().animate({
     opacity: 0.25,
     transform: {
@@ -27,7 +27,7 @@ new tabris.Button({
     reverse: true,
     easing: 'ease-out' // "linear", "ease-in", "ease-out", "ease-in-out"
   }).then(function() {
-    button.set('enabled', true);
+    button.enabled = true;
   });
 }).appendTo(page);
 
