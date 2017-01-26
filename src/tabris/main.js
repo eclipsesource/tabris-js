@@ -10,7 +10,7 @@ import {addDOMDocument} from './DOMDocument';
 import {addDOMEventTargetMethods} from './DOMEvent';
 import {addWindowTimerMethods} from './WindowTimers';
 import ProgressEvent from './DOMProgressEvent';
-import Storage, {create as createStorage} from './WebStorage';
+import Storage, {create as createStorage} from './Storage';
 import WebSocket from './WebSocket';
 import XMLHttpRequest from './XMLHttpRequest';
 import Action from './widgets/Action';

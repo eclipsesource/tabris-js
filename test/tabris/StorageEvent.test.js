@@ -1,9 +1,10 @@
 import {expect} from '../test';
-import WebStorageEvent from '../../src/tabris/WebStorageEvent';
+import StorageEvent from '../../src/tabris/StorageEvent';
 
-describe('WebStorageEvent', function() {
+describe('StorageEvent', function() {
+
   it('sets default values', function() {
-    let event = new WebStorageEvent();
+    let event = new StorageEvent();
     expect(event.bubbles).to.equal(false);
     expect(event.cancelable).to.equal(false);
     expect(event.key).to.equal('');
@@ -14,7 +15,8 @@ describe('WebStorageEvent', function() {
   });
 
   it('sets type from parameter', function() {
-    let event = new WebStorageEvent('type');
+    let event = new StorageEvent('type');
     expect(event.type).to.equal('type');
   });
+
 });

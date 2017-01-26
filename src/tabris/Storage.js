@@ -11,12 +11,12 @@ class SecureStore extends NativeObject.extend({
 
 let encode = types.string.encode;
 
-export default class WebStorage {
+export default class Storage {
 
   constructor() {
     let proxy = arguments[0];
     if (!(proxy instanceof NativeObject)) {
-      throw new Error('Cannot instantiate WebStorage');
+      throw new Error('Cannot instantiate Storage');
     }
     Object.defineProperty(this, '_proxy', {value: proxy});
   }
@@ -57,5 +57,5 @@ export default class WebStorage {
 
 export function create(secure) {
   let proxy = secure ? new SecureStore() : new ClientStore();
-  return new WebStorage(proxy);
+  return new Storage(proxy);
 }

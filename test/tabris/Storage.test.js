@@ -1,10 +1,10 @@
 import {expect, stub} from '../test';
-import WebStorage, {create as createWebStorage} from '../../src/tabris/WebStorage';
+import Storage, {create as createStorage} from '../../src/tabris/Storage';
 import ProxyStore from '../../src/tabris/ProxyStore';
 import NativeBridge from '../../src/tabris/NativeBridge';
 import ClientStub from './ClientStub';
 
-describe('WebStorage', function() {
+describe('Storage', function() {
 
   let client;
   let storage;
@@ -18,7 +18,7 @@ describe('WebStorage', function() {
       _proxies: new ProxyStore()
     };
     global.tabris._nativeBridge = new NativeBridge(client);
-    storage = createWebStorage();
+    storage = createStorage();
     stub(client, 'call', () => returnValue);
   });
 
@@ -156,11 +156,11 @@ describe('WebStorage', function() {
   describe('Storage constructor', function() {
 
     it('is a function', function() {
-      expect(WebStorage).to.be.a('function');
+      expect(Storage).to.be.a('function');
     });
 
     it('does not declare formal paramters', function() {
-      expect(WebStorage.length).to.equal(0);
+      expect(Storage.length).to.equal(0);
     });
 
   });
