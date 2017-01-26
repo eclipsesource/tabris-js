@@ -16,7 +16,7 @@ var airports = [
 ];
 
 new tabris.Picker({
-  layoutData: {left: 20, top: 20, right: 20},
+  left: 20, top: 20, right: 20,
   items: airports,
   itemText: function(airport) {
     return airport.name;
