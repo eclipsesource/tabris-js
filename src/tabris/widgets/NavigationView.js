@@ -41,7 +41,6 @@ export default class NavigationView extends Widget.extend(CONFIG) {
 
   _create() {
     let result = Widget.prototype._create.apply(this, arguments);
-    Object.defineProperty(this, 'stack', {value: new StackView(this)});
     this._nativeListen('backnavigation', true);
     this._nativeListen('back', true);
     return result;
@@ -129,49 +128,6 @@ export default class NavigationView extends Widget.extend(CONFIG) {
 
   pages() {
     return this.children().filter(child => child instanceof Page);
-  }
-
-}
-
-/**
- * TODO Temporary stub for backwards compatibility, remove
- */
-class StackView {
-
-  constructor(parent) {
-    this._parent = parent;
-  }
-
-  get length() {
-    return this._parent.pages().length;
-  }
-
-  indexOf(page) {
-    return this._parent.pages().indexOf(page);
-  }
-
-  first() {
-    return this._parent.pages().first();
-  }
-
-  last() {
-    return this._parent.pages().last();
-  }
-
-  push(page) {
-    this._parent.append(page);
-  }
-
-  pop() {
-    let page = this._parent.pages().last();
-    this._parent._pop(page);
-    return page;
-  }
-
-  clear() {
-    let pages = this._parent.pages();
-    this._parent._pop(pages.first());
-    return pages;
   }
 
 }
