@@ -23,9 +23,9 @@ var webView = new tabris.WebView({
 fetch('./html/website.html').then(function(result) {
   return result.text();
 }).then(function(text) {
-  webView.set('html', text);
+  webView.html = text;
 });
 
 webView.on('message', function(widget, event) {
-  statusTextView.set('text', 'Message received: ' + event.data);
+  statusTextView.text = 'Message received: ' + event.data;
 });
