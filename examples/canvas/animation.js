@@ -7,7 +7,7 @@ var page = module.exports = new tabris.Page({
 });
 
 new tabris.Canvas({
-  layoutData: {left: 10, top: 10, right: 10, bottom: '#toggleRun 10'}
+  left: 10, top: 10, right: 10, bottom: '#toggleRun 10'
 }).on('resize', function(canvas, bounds) {
   var height = Math.min(bounds.height, Math.floor(bounds.width / 2));
   var ctx = canvas.getContext('2d', bounds.width, height);
@@ -15,8 +15,8 @@ new tabris.Canvas({
 }).appendTo(page);
 
 new tabris.ToggleButton({
+  left: 10, bottom: 10,
   text: 'Start',
-  layoutData: {left: 10, bottom: 10},
   id: 'toggleRun'
 }).on('change:selection', function(button) {
   example.setRunning(button.selection);

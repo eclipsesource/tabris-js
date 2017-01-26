@@ -124,29 +124,29 @@ new tabris.Button({
 }).appendTo(scrollView);
 
 scrollView.apply({
-  '#nameLabel': {layoutData: {left: 10, top: 18, width: 120}},
-  '#nameInput': {layoutData: {left: '#nameLabel 10', right: 10, baseline: '#nameLabel'}},
-  '#flyerNumberLabel': {layoutData: {left: 10, top: '#nameLabel 18', width: 120}},
-  '#flyerNumberInput': {layoutData: {left: '#flyerNumberLabel 10', right: 10, baseline: '#flyerNumberLabel'}},
-  '#passphraseLabel': {layoutData: {left: 10, top: '#flyerNumberLabel 18', width: 120}},
-  '#passphraseInput': {layoutData: {left: '#passphraseLabel 10', right: 10, baseline: '#passphraseLabel'}},
-  '#countryLabel': {layoutData: {left: 10, top: '#passphraseLabel 18', width: 120}},
-  '#countryPicker': {layoutData: {left: '#countryLabel 10', right: 10, baseline: '#countryLabel'}},
-  '#seatLabel': {layoutData: {left: 10, top: '#classLabel 18', width: 120}},
-  '#windowSeat': {layoutData: {left: '#seatLabel 10', right: 10, baseline: '#seatLabel'}},
-  '#aisleSeat': {layoutData: {left: '#seatLabel 10', right: 10, top: '#seatLabel 10'}},
-  '#classLabel': {layoutData: {left: 10, top: '#countryLabel 18', width: 120}},
-  '#classPicker': {layoutData: {left: '#classLabel 10', right: 10, baseline: '#classLabel'}},
-  '#anySeat': {layoutData: {left: '#seatLabel 10', right: 10, top: '#aisleSeat 10'}},
-  '#luggagePanel': {layoutData: {left: 10, top: '#anySeat 18', right: 10}},
-  '#luggageLabel': {layoutData: {left: 0, centerY: 0, width: 120}},
-  '#luggageWeight': {layoutData: {right: 10, centerY: 0, width: 50}},
-  '#luggageSlider': {layoutData: {left: '#luggageLabel 10', right: '#luggageWeight 10', centerY: 0}},
-  '#veggieChoice': {layoutData: {left: '#seatLabel 10', right: 10, top: '#luggagePanel 10'}},
-  '#milesPanel': {layoutData: {left: 10, top: '#veggieChoice 10', right: 10}},
-  '#milesLabel': {layoutData: {left: 0, centerY: 0, width: 120}},
-  '#milesSwitch': {layoutData: {left: '#milesLabel 10', centerY: 0}},
-  '#reservationButton': {layoutData: {left: 10, right: 10, top: '#milesPanel 18'}}
+  '#nameLabel': {left: 10, top: 18, width: 120},
+  '#nameInput': {left: '#nameLabel 10', right: 10, baseline: '#nameLabel'},
+  '#flyerNumberLabel': {left: 10, top: '#nameLabel 18', width: 120},
+  '#flyerNumberInput': {left: '#flyerNumberLabel 10', right: 10, baseline: '#flyerNumberLabel'},
+  '#passphraseLabel': {left: 10, top: '#flyerNumberLabel 18', width: 120},
+  '#passphraseInput': {left: '#passphraseLabel 10', right: 10, baseline: '#passphraseLabel'},
+  '#countryLabel': {left: 10, top: '#passphraseLabel 18', width: 120},
+  '#countryPicker': {left: '#countryLabel 10', right: 10, baseline: '#countryLabel'},
+  '#seatLabel': {left: 10, top: '#classLabel 18', width: 120},
+  '#windowSeat': {left: '#seatLabel 10', right: 10, baseline: '#seatLabel'},
+  '#aisleSeat': {left: '#seatLabel 10', right: 10, top: '#seatLabel 10'},
+  '#classLabel': {left: 10, top: '#countryLabel 18', width: 120},
+  '#classPicker': {left: '#classLabel 10', right: 10, baseline: '#classLabel'},
+  '#anySeat': {left: '#seatLabel 10', right: 10, top: '#aisleSeat 10'},
+  '#luggagePanel': {left: 10, top: '#anySeat 18', right: 10},
+  '#luggageLabel': {left: 0, centerY: 0, width: 120},
+  '#luggageWeight': {right: 10, centerY: 0, width: 50},
+  '#luggageSlider': {left: '#luggageLabel 10', right: '#luggageWeight 10', centerY: 0},
+  '#veggieChoice': {left: '#seatLabel 10', right: 10, top: '#luggagePanel 10'},
+  '#milesPanel': {left: 10, top: '#veggieChoice 10', right: 10},
+  '#milesLabel': {left: 0, centerY: 0, width: 120},
+  '#milesSwitch': {left: '#milesLabel 10', centerY: 0},
+  '#reservationButton': {left: 10, right: 10, top: '#milesPanel 18'}
 });
 
 function populateMessage() {
@@ -154,7 +154,7 @@ function populateMessage() {
     message.dispose();
   }
   message = new tabris.TextView({
-    layoutData: {left: 10, right: 10, top: '#reservationButton 10', bottom: 10},
+    left: 10, right: 10, top: '#reservationButton 10', bottom: 10,
     text: [
       'Flight booked for: ' + scrollView.children('#nameInput').first().text,
       'Destination: ' + scrollView.children('#countryPicker').first().selection,

@@ -1,15 +1,15 @@
 function createTextView(text) {
   new tabris.TextView({
+    left: 16, right: 16, top: 'prev() 12',
     text: text,
     markupEnabled: true,
-    layoutData: {left: 16, right: 16, top: 'prev() 12'},
     class: 'locationData'
   }).appendTo(tabris.ui.contentView);
 }
 
 function createReloadButton() {
   new tabris.Button({
-    layoutData: {left: 16, right: 16, top: 'prev() 12'},
+    left: 16, right: 16, top: 'prev() 12',
     text: 'Reload Geo-Data',
     id: 'reloadButton'
   }).on('select', loadData).appendTo(tabris.ui.contentView);

@@ -87,15 +87,15 @@ function createPage(chart) {
     autoDispose: false
   });
   var button = new tabris.Button({
-    text: 'Draw graph',
-    layoutData: {left: MARGIN, top: MARGIN}
+    left: MARGIN, top: MARGIN,
+    text: 'Draw graph'
   }).appendTo(page);
   var checkboxAnimate = new tabris.CheckBox({
     text: 'Animate',
-    layoutData: {right: MARGIN, left: [button, MARGIN], baseline: button}
+    right: MARGIN, left: [button, MARGIN], baseline: button
   }).appendTo(page);
   var canvas = new tabris.Canvas({
-    layoutData: {left: MARGIN, top: [button, MARGIN], right: MARGIN, bottom: MARGIN}
+    left: MARGIN, top: [button, MARGIN], right: MARGIN, bottom: MARGIN
   }).appendTo(page);
   var createCanvasContext = function() {
     var bounds = canvas.bounds;

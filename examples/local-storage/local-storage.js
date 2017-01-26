@@ -1,26 +1,26 @@
 
 var keyTextView = new tabris.TextView({
-  layoutData: {left: 10, top: 20},
+  left: 10, top: 20,
   text: 'Key:'
 }).appendTo(tabris.ui.contentView);
 
 var keyField = new tabris.TextInput({
-  layoutData: {left: 60, baseline: keyTextView, right: 10},
+  left: 60, baseline: keyTextView, right: 10,
   text: 'foo'
 }).appendTo(tabris.ui.contentView);
 
 var valueTextView = new tabris.TextView({
-  layoutData: {left: 10, top: [keyField, 20]},
+  left: 10, top: [keyField, 20],
   text: 'Value:'
 }).appendTo(tabris.ui.contentView);
 
 var valueField = new tabris.TextInput({
-  layoutData: {left: 60, baseline: valueTextView, right: 10},
+  left: 60, baseline: valueTextView, right: 10,
   text: localStorage.getItem('foo') || 'bar'
 }).appendTo(tabris.ui.contentView);
 
 new tabris.Button({
-  layoutData: {left: 10, right: '66% 5', top: [valueTextView, 20]},
+  left: 10, right: '66% 5', top: [valueTextView, 20],
   text: 'Set'
 }).on('select', function() {
   if (!keyField.text) {
@@ -34,7 +34,7 @@ new tabris.Button({
 }).appendTo(tabris.ui.contentView);
 
 new tabris.Button({
-  layoutData: {left: '33% 5', right: '33% 5', top: [valueTextView, 20]},
+  left: '33% 5', right: '33% 5', top: [valueTextView, 20],
   text: 'Get'
 }).on('select', function() {
   if (!keyField.text) {
@@ -46,7 +46,7 @@ new tabris.Button({
 }).appendTo(tabris.ui.contentView);
 
 new tabris.Button({
-  layoutData: {left: '66% 5', right: 10, top: [valueTextView, 20]},
+  left: '66% 5', right: 10, top: [valueTextView, 20],
   text: 'Remove'
 }).on('select', function() {
   localStorage.removeItem(keyField.text);

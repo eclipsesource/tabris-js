@@ -6,9 +6,9 @@ var page = new tabris.Page({
 });
 
 new tabris.Button({
+  left: MARGIN, right: MARGIN, top: MARGIN,
   id: 'animateButton',
-  text: 'Animate',
-  layoutData: {left: MARGIN, right: MARGIN, top: MARGIN}
+  text: 'Animate'
 }).on('select', function(button) {
   button.enabled = false;
   page.children('#helloLabel').first().animate({
@@ -32,8 +32,8 @@ new tabris.Button({
 }).appendTo(page);
 
 new tabris.TextView({
+  left: MARGIN, top: ['#animateButton', MARGIN],
   id: 'helloLabel',
-  layoutData: {left: MARGIN, top: ['#animateButton', MARGIN]},
   background: '#6aa',
   textColor: 'white',
   font: '20px',

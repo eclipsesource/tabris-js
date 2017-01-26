@@ -7,12 +7,12 @@ var page = module.exports = new tabris.Page({
 });
 
 var canvas = new tabris.Canvas({
-  layoutData: {left: 10, top: 10, width: CANVAS_SIZE, height: CANVAS_SIZE}
+  left: 10, top: 10, width: CANVAS_SIZE, height: CANVAS_SIZE
 }).appendTo(page);
 
 new tabris.CheckBox({
-  text: 'Counterclockwise',
-  layoutData: {left: 10, right: 10, top: [canvas, 8]}
+  left: 10, right: 10, top: [canvas, 8],
+  text: 'Counterclockwise'
 }).on('change:selection', function(checkBox) {
   clearCanvas();
   drawArcs(checkBox.selection);

@@ -2,11 +2,11 @@ var MARGIN = 12;
 var loading;
 
 var navigationView = new tabris.NavigationView({
-  left: 0, top: 0, right: 0, bottom: 0,
+  left: 0, top: 0, right: 0, bottom: 0
 }).appendTo(tabris.ui.contentView);
 
 var page = new tabris.Page({
-  title: 'Reddit - Pets',
+  title: 'Reddit - Pets'
 }).appendTo(navigationView);
 
 var collectionView = new tabris.CollectionView({
@@ -131,7 +131,7 @@ function getRedditId(item) {
 function createDetailsPage(data) {
   var detailPage = new tabris.Page({
     background: 'black',
-    title: data.title,
+    title: data.title
   }).appendTo(navigationView);
   if (data.url.substr(-4, 4) === '.jpg') {
     new tabris.ImageView({

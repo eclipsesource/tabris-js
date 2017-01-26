@@ -1,5 +1,4 @@
 var PluginPage = require('./PluginPage');
-var layoutNext = {left: 10, top: ['prev()', 10], right: 10};
 
 var page = new PluginPage('Sharing', 'cordova-plugin-x-socialsharing', function(parent) {
 
@@ -108,16 +107,18 @@ var page = new PluginPage('Sharing', 'cordova-plugin-x-socialsharing', function(
   ];
 
   new tabris.TextView({
+    left: 10, top: ['prev()', 10], right: 10,
     text: 'Text to share:',
-    font: '20px', layoutData: layoutNext
+    font: '20px'
   }).appendTo(parent);
 
   var input = new tabris.TextInput({
-    text: 'Tabris.js - Native mobile apps in JavaScript', layoutData: layoutNext
+    left: 10, top: ['prev()', 10], right: 10,
+    text: 'Tabris.js - Native mobile apps in JavaScript'
   }).appendTo(parent);
 
   var scrollContainer = new tabris.ScrollView({
-    layoutData: {left: 0, top: ['prev()',16] , right: 0, bottom: 0}
+    left: 0, top: ['prev()',16] , right: 0, bottom: 0
   }).appendTo(parent);
 
   tabs.forEach(function(tabConfig) {
@@ -126,18 +127,18 @@ var page = new PluginPage('Sharing', 'cordova-plugin-x-socialsharing', function(
 
   function createSharingSection(tabConfig, target) {
     new tabris.TextView({
-      text: tabConfig.title + ' options', font: '20px',
-      layoutData: {left: 10, top: ['prev()',6], right: 10}
+      left: 10, top: ['prev()',6], right: 10,
+      text: tabConfig.title + ' options', font: '20px'
     }).appendTo(target);
 
     new tabris.TextView({
-      text: tabConfig.description, font: '14px',
-      layoutData: {left: 10, top: ['prev()', 2], right: 10}
+      left: 10, top: ['prev()', 2], right: 10,
+      text: tabConfig.description, font: '14px'
     }).appendTo(target);
 
     tabConfig.options.forEach(function(sharingOption) {
       new tabris.Button({
-        layoutData: layoutNext,
+        left: 10, top: ['prev()', 10], right: 10,
         text: sharingOption.name
       }).appendTo(target).on('select', function() {
         var message = input.text;
@@ -145,7 +146,7 @@ var page = new PluginPage('Sharing', 'cordova-plugin-x-socialsharing', function(
       });
     });
 
-    new tabris.Composite({layoutData: {left: 0, top: ['prev()',30] , right: 0}}).appendTo(target);
+    new tabris.Composite({left: 0, top: ['prev()',30] , right: 0}).appendTo(target);
   }
 });
 

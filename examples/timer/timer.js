@@ -6,35 +6,35 @@ var startTime = new Date().getTime();
 var taskId;
 
 var statusTextView = new tabris.TextView({
-  text: 'Last update: <none>',
-  layoutData: {left: MARGIN, top: MARGIN_LARGE, right: MARGIN}
+  left: MARGIN, top: MARGIN_LARGE, right: MARGIN,
+  text: 'Last update: <none>'
 }).appendTo(tabris.ui.contentView);
 
 var cpsTextView = new tabris.TextView({
-  text: 'Calls per second: <none>',
-  layoutData: {left: MARGIN, top: [statusTextView, MARGIN], right: MARGIN}
+  left: MARGIN, top: [statusTextView, MARGIN], right: MARGIN,
+  text: 'Calls per second: <none>'
 }).appendTo(tabris.ui.contentView);
 
 var delayTextView = new tabris.TextView({
-  text: 'Delay (ms):',
-  layoutData: {left: MARGIN, baseline: '#delayTextInput'}
+  left: MARGIN, baseline: '#delayTextInput',
+  text: 'Delay (ms):'
 }).appendTo(tabris.ui.contentView);
 
 var delayTextInput = new tabris.TextInput({
+  left: [delayTextView, MARGIN], top: [cpsTextView, MARGIN_LARGE],
   id: 'delayTextInput',
   text: '1000',
-  message: 'Delay (ms)',
-  layoutData: {left: [delayTextView, MARGIN], top: [cpsTextView, MARGIN_LARGE]}
+  message: 'Delay (ms)'
 }).appendTo(tabris.ui.contentView);
 
 var repeatCheckbox = new tabris.CheckBox({
-  text: 'Repeat',
-  layoutData: {left: MARGIN, top: delayTextInput}
+  left: MARGIN, top: delayTextInput,
+  text: 'Repeat'
 }).appendTo(tabris.ui.contentView);
 
 var startButton = new tabris.Button({
-  text: 'Start timer',
-  layoutData: {left: ['50%', MARGIN / 4], top: [repeatCheckbox, MARGIN_LARGE], right: MARGIN}
+  left: ['50%', MARGIN / 4], top: [repeatCheckbox, MARGIN_LARGE], right: MARGIN,
+  text: 'Start timer'
 }).on('select', function() {
   var delay = parseInt(delayTextInput.text);
   if (repeatCheckbox.selection) {
@@ -49,9 +49,9 @@ var startButton = new tabris.Button({
 }).appendTo(tabris.ui.contentView);
 
 var cancelButton = new tabris.Button({
+  left: MARGIN, top: [repeatCheckbox, MARGIN_LARGE], right: ['50%', MARGIN / 4],
   text: 'Cancel timer',
-  enabled: false,
-  layoutData: {left: MARGIN, top: [repeatCheckbox, MARGIN_LARGE], right: ['50%', MARGIN / 4]}
+  enabled: false
 }).on('select', function() {
   clearTimeout(taskId);
   enableTimerStart(true);

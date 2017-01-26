@@ -1,5 +1,4 @@
 var PluginPage = require('./PluginPage');
-var layoutNext = {left: 10, top: ['prev()', 10], right: 10};
 
 /********************
  * More info at:
@@ -25,7 +24,7 @@ var page = new PluginPage('ActionSheet', 'cordova-plugin-actionsheet', function(
 
   buttons.forEach(function(option) {
     new tabris.Button({
-      layoutData: layoutNext,
+      left: 10, top: ['prev()', 10], right: 10,
       text: option.title
     }).appendTo(parent).on('select', option.handler);
   });

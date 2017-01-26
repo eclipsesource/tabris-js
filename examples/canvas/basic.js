@@ -4,7 +4,7 @@ var page = module.exports = new tabris.Page({
 });
 
 var canvas = new tabris.Canvas({
-  layoutData: {left: 10, top: 10, right: 10, bottom: 10}
+  left: 10, top: 10, right: 10, bottom: 10
 }).appendTo(page);
 
 var ctx = canvas.getContext('2d', 400, 400);

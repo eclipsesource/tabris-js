@@ -12,31 +12,31 @@ var items = [
 ];
 
 var collectionView = new tabris.CollectionView({
-  layoutData: {left: 0, right: 0, top: 0, bottom: 0},
+  left: 0, right: 0, top: 0, bottom: 0,
   itemHeight: 64,
   items: items,
   initializeCell: function(cell) {
     cell.background = '#d0d0d0';
     var container = new tabris.Composite({
-      background: 'white',
-      layoutData: {left: 0, top: 0, bottom: 0, right: 0}
+      left: 0, top: 0, bottom: 0, right: 0,
+      background: 'white'
     }).on('pan:horizontal', function(widget, event) {
       handlePan(event, container);
     }).appendTo(cell);
     var senderView = new tabris.TextView({
-      font: 'bold 18px',
-      layoutData: {top: VERTICAL_MARGIN, left: HORIZONTAL_MARGIN}
+      top: VERTICAL_MARGIN, left: HORIZONTAL_MARGIN,
+      font: 'bold 18px'
     }).appendTo(container);
     var titleView = new tabris.TextView({
-      layoutData: {bottom: VERTICAL_MARGIN, left: HORIZONTAL_MARGIN}
+      bottom: VERTICAL_MARGIN, left: HORIZONTAL_MARGIN
     }).appendTo(container);
     var timeView = new tabris.TextView({
       textColor: '#b8b8b8',
-      layoutData: {top: VERTICAL_MARGIN, right: HORIZONTAL_MARGIN}
+      top: VERTICAL_MARGIN, right: HORIZONTAL_MARGIN
     }).appendTo(container);
     new tabris.Composite({
-      background: '#b8b8b8',
-      layoutData: {left: 0, bottom: 0, right: 0, height: 1}
+      left: 0, bottom: 0, right: 0, height: 1,
+      background: '#b8b8b8'
     }).appendTo(cell);
     cell.on('change:item', function(widget, item) {
       senderView.text = item.sender;

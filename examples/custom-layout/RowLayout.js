@@ -19,11 +19,9 @@ RowLayout.prototype = {
 
   layoutChild: function(child, index, children) {
     var prev = children[index - 1];
-    child.set('layoutData', {
-      left: this.margin,
-      right: this.margin,
-      top: prev ? [prev, this.spacing] : this.margin
-    });
+    child.left = this.margin;
+    child.right = this.margin;
+    child.top =  prev ? [prev, this.spacing] : this.margin;
   }
 
 };

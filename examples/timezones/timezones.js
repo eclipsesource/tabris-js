@@ -7,11 +7,11 @@ update();
 
 function createTextView(timezone, name) {
   var locationTextView = new tabris.TextView({
-    layoutData: {top: 'prev() 30', centerX: 0},
+    top: 'prev() 30', centerX: 0,
     text: name
   }).appendTo(tabris.ui.contentView);
   new tabris.TextView({
-    layoutData: {top: [locationTextView, 10], centerX: 0},
+    top: [locationTextView, 10], centerX: 0,
     font: 'bold 50px sans-serif',
     text: 'foo'
   }).on('update', function() {

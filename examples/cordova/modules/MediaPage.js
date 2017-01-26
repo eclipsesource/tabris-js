@@ -18,7 +18,7 @@ var page = new PluginPage('Media', 'cordova-media', function(parent) {
   });
 
   new tabris.Button({
-    layoutData: {left: 10, top: 10, right: 10},
+    left: 10, top: 10, right: 10,
     text: 'Play'
   }).appendTo(parent).on('select', function() {
     media.play();

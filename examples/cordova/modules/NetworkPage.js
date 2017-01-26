@@ -13,7 +13,7 @@ var page = new PluginPage('Network', 'cordova-plugin-network-information', funct
   states[window.Connection.NONE]     = 'No network connection';
 
   var button = new tabris.Button({
-    layoutData: {left: 10, top: 10, right: 10},
+    left: 10, top: 10, right: 10,
     text: 'Get Network State'
   }).appendTo(parent).on('select', function() {
     var networkState = navigator.connection.type;
@@ -21,7 +21,7 @@ var page = new PluginPage('Network', 'cordova-plugin-network-information', funct
   });
 
   var textView = new tabris.TextView({
-    layoutData: {top: [button, 20], left: 20, right: 20}
+    top: [button, 20], left: 20, right: 20
   }).appendTo(parent);
 });
 

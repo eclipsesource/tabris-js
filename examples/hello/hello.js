@@ -1,11 +1,11 @@
 var button = new tabris.Button({
-  text: 'Native Widgets',
-  layoutData: {centerX: 0, top: 100}
+  centerX: 0, top: 100,
+  text: 'Native Widgets'
 }).appendTo(tabris.ui.contentView);
 
 var textView = new tabris.TextView({
-  font: '24px',
-  layoutData: {centerX: 0, top: [button, 50]}
+  centerX: 0, top: [button, 50],
+  font: '24px'
 }).appendTo(tabris.ui.contentView);
 
 button.on('select', function() {

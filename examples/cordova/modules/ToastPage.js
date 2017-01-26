@@ -4,11 +4,11 @@ var page = new PluginPage('Toast', 'cordova-plugin-x-toast', function(parent) {
 
   var input = new tabris.TextInput({
     text: 'your message',
-    layoutData: {left: 10, top: 10, right: 10}
+    left: 10, top: 10, right: 10
   }).appendTo(parent);
 
   var buttonShortTop = new tabris.Button({
-    layoutData: {left: 10, top: [input, 10], right: 10},
+    left: 10, top: [input, 10], right: 10,
     text: 'Show short top'
   }).appendTo(parent).on('select', function() {
     var text = input.text;
@@ -16,7 +16,7 @@ var page = new PluginPage('Toast', 'cordova-plugin-x-toast', function(parent) {
   });
 
   var buttonShortCenter = new tabris.Button({
-    layoutData: {left: 10, top: [buttonShortTop, 10], right: 10},
+    left: 10, top: [buttonShortTop, 10], right: 10,
     text: 'Show short center'
   }).appendTo(parent).on('select', function() {
     var text = input.text;
@@ -24,7 +24,7 @@ var page = new PluginPage('Toast', 'cordova-plugin-x-toast', function(parent) {
   });
 
   var buttonShortBottom = new tabris.Button({
-    layoutData: {left: 10, top: [buttonShortCenter, 10], right: 10},
+    left: 10, top: [buttonShortCenter, 10], right: 10,
     text: 'Show short bottom'
   }).appendTo(parent).on('select', function() {
     var text = input.text;
@@ -32,7 +32,7 @@ var page = new PluginPage('Toast', 'cordova-plugin-x-toast', function(parent) {
   });
 
   var buttonLongTop = new tabris.Button({
-    layoutData: {left: 10, top: [buttonShortBottom, 10], right: 10},
+    left: 10, top: [buttonShortBottom, 10], right: 10,
     text: 'Show long top'
   }).appendTo(parent).on('select', function() {
     var text = input.text;
@@ -40,7 +40,7 @@ var page = new PluginPage('Toast', 'cordova-plugin-x-toast', function(parent) {
   });
 
   var buttonLongCenter = new tabris.Button({
-    layoutData: {left: 10, top: [buttonLongTop, 10], right: 10},
+    left: 10, top: [buttonLongTop, 10], right: 10,
     text: 'Show long center'
   }).appendTo(parent).on('select', function() {
     var text = input.text;
@@ -48,7 +48,7 @@ var page = new PluginPage('Toast', 'cordova-plugin-x-toast', function(parent) {
   });
 
   new tabris.Button({
-    layoutData: {left: 10, top: [buttonLongCenter, 10], right: 10},
+    left: 10, top: [buttonLongCenter, 10], right: 10,
     text: 'Show long bottom'
   }).appendTo(parent).on('select', function() {
     var text = input.text;
