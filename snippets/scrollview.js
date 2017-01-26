@@ -8,7 +8,7 @@ var scrollView = new tabris.ScrollView({
 
 for (var i = 0; i <= 50; i++) {
   new tabris.TextView({
-    layoutData: {left: i * 30 + 20, centerY: 0, width: 30},
+    left: i * 30 + 20, centerY: 0, width: 30,
     textColor: 'white',
     text: i + '°'
   }).appendTo(scrollView);
