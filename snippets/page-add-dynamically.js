@@ -4,7 +4,7 @@ var page = new tabris.Page({
 });
 
 new tabris.Button({
-  layoutData: {left: 10, top: 10, right: 10},
+  left: 10, top: 10, right: 10,
   text: 'Create and open a new page'
 }).on('select', function() {
   new tabris.Page({
