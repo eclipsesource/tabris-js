@@ -48,6 +48,10 @@
     {
       "title": "Snippet with a NavigationView and Pages",
       "path": "${GITHUB_BRANCH}/snippets/navigationview-page-stacked.js"
+    },
+    {
+      "title": "Snippet with a NavigationView and its various properties",
+      "path": "${GITHUB_BRANCH}/snippets/navigationview-properties.js"
     }
   ]
 }
