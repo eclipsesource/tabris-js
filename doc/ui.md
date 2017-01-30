@@ -1,100 +1,91 @@
 # The Widget Tree
 
-The UI of a Tabris.js app consists of native [Widgets](widget-basics.md). Every widget must have a parent to become visible on the screen. The top-level parent for all widgets is called *UI* and it is represented by the object `tabris.ui`.
+The UI of a Tabris.js app consists of native [Widgets](widget-basics.md). These widgets are implemented in native code, and represented by JavaScript objects. Every widget must have a parent to become visible on the screen. You can add a widget to a parent widget using its `appendTo` method.
 
-![The Widget Tree](img/widget-tree.png)
+## The UI Root
 
-## The Page Stack
+The top-level parent for all widgets is represented by the object `tabris.ui`. This object contains a number of fixed children, that represent different parts of the app's user interface:
 
-Most widgets are contained in a [*Page*](api/Page.md). An app can contain one or more pages. Only a single page is visible at a time, this is called the *active page*. A page can be activated by calling its `open()` method. Opening a page will put it on a *page stack*, covering the current active page.
+- `tabris.ui.statusBar` - shows the time and some system status icons
+- `tabris.ui.navigationBar` - contains the *Back*, *Home*, etc. buttons on Android
+- `tabris.ui.contentView` - contains the app's main UI
+- `tabris.ui.drawer` - can be swiped in from the left
 
-![Opening a page](img/page-open.png)
+Widgets can be added to the content view, and optionally to the drawer.
 
-When a page is opened that is already on the page stack, all pages on top of it will be closed and removed from the stack.
+## The Status Bar
 
-![Opening a page on the stack](img/page-open-stacked.png)
-
-A page can also be removed from the stack by calling its `close()` method. When a page is closed, all pages on top of it are also closed and removed from the stack. Closing a page also disposes of it, that is, a closed page cannot be re-used.
-
-![Closing a page on the stack](img/page-close.png)
-
-There must always be one active page remaining in an application. Because of that, closing the last page on the stack will lead to an error.
-
-All pages are automatically children of `tabris.ui`, so they don't have to be added to a parent.
-
-```js
-new tabris.Page({
-  title: "My Page",
-  image: "images/my-page.png"
-});
-```
-
-## Top-level Pages
-
-There's a special kind of pages used for the main navigation, called *top-level* pages. For those pages, different rules apply:
-
-* When a top-level page is opened, it will replace all pages on the stack. Hence top-level pages cannot be stacked on top of other pages, they always remain at the root of the stack.
-
-* When a top-level page is removed from the stack by opening another top-level page, it will not be closed, so it can be re-used.
-
-To create a top-level page, set the property `topLevel` to `true` when creating the page:
-
-```js
-new tabris.Page({
-  title: "My Page",
-  image: "images/my-page.png",
-  topLevel: true
-});
-```
-
-The [bookstore demo](https://github.com/eclipsesource/tabris-js/tree/master/examples/bookstore) is a good example for the use of top-level pages and stacked pages.
-
-## Accessing Pages
-
-Since all pages are children of `tabris.ui`, you can always access all pages using a type selector:
-
-```js
-var pages = tabris.ui.children("Page");
-```
-
-You can also attach an id attribute to a page and access it by:
-
-```js
-var mypage = tabris.ui.children("#my-id");
-```
+The status bar is the small area on the top of the screen that displays notifications, status icons and the time. The object [tabris.ui.statusBar](../api/StatusBar.md) can be used to control different aspects of its look and feel, such as background color and visibility.
 
 ## The Navigation Bar
 
-The current active page is visible in the app's navigation bar. A page can have a title and an image that will be displayed in this bar (the image is not visible on all platforms). When there is more than one page on the stack, the navigation bar will display a back button to allow the user to navigate back to the previous page. This will close the current page and remove it from the stack. On Android, the system back button can also be used to navigate back.
+The navigation bar is the area that contains the *Back*, *Home*, etc. buttons on Android. The object [tabris.ui.navigationBar](../api/NavigationBar.md) can be used to control its background color and visibility.
 
-## The Navigation Drawer
+## The Content View
 
-The "Drawer" is a common component of mobile applications. It's a container that can be slid in from the left edge of the screen, often used for top-level navigation. In Tabris.js, such a drawer can be created by instantiating the type `Drawer`:
-
-```js
-new tabris.Drawer();
-```
-
-Similar to pages, the drawer does not need to be appended to a parent, it is always a child of `tabris.ui` and can be accessed using `tabris.ui.children("Drawer")`.
-
-A drawer can be opened by a swipe from the left edge of the screen or by tapping the menu item on the left side of the navigation bar. To open and close the drawer programmatically, you can use its `open()` and `close()` methods, respectively.
-
-A drawer may contain any kind of widgets. To display a list of top-level pages, Tabris.js provides the type `PageSelector` for convenience. The page selector is a collection view that displays all top-level pages and allows to open one of them. It is pre-configured to be easily appendable to the drawer without setting any properties:
+The content view is the container for the widgets that constitute the app's main UI. It covers the entire app area. Widgets can be appended directly to the content view.
 
 ```js
-new tabris.Drawer().append(new tabris.PageSelector());
+new tabris.Button({
+  left: 16, top: 16
+}).appendTo(tabris.ui.contentView);
 ```
 
-Since PageSelector extends CollectionView, it supports the same properties. For example, you can freely position the PageSelector on the drawer by overwriting the `layoutData` property.
+## The Drawer
+
+The "drawer" is a common component of mobile applications. It's a container that can be slid in from the left edge of the screen, often used for top-level navigation. In Tabris.js, this drawer is disabled by default. To use it in an application, you have to enable it:
+
+```js
+tabris.ui.drawer.enabled = true;
+```
+
+The drawer can be opened by a swipe from the left edge of the screen or by tapping the action on the left side of a NavigationView (so called "burger menu"). To open and close the drawer programmatically, you can use its `open()` and `close()` methods, respectively.
+
+A drawer may contain any kind of widgets:
 
 ```js
 new tabris.ImageView({
-  image: "images/my-logo.png",
-  scaleMode: "fill",
-  layoutData: {left: 0, right: 0, top: 0, height: 200}
-}).appendTo(drawer);
+  left: 16, top: 16, right: 16,
+  image {src: 'buddy-icon.png'}
+}).appendTo(tabris.ui.drawer);
+```
 
-new tabris.PageSelector({
-  layoutData: {left: 0, top: 200, right: 0, bottom: 0}
-}).appendTo(drawer);
+## Navigation Patters
+
+Common navigation patterns for apps are based on pages or on tabs. Both approaches can also be combined.
+
+### Using Pages
+
+To implement a page navigation pattern, you can use a fullscreen [NavigationView](api/NavigationView.md). A navigation view contains [Pages](api/Page.md) that are arranged on a stack, so that only the topmost page is visible. A header displays the current page's title and a button to navigate back to the previous page.
+
+```js
+var navigationView = new tabris.NavigationView({
+  left: 0, top: 0, right: 0, bottom: 0
+}).appendTo(tabris.ui.contentView);
+```
+
+When a new page is appended to the NavigationView, it is put on top and becomes visible:
+
+```js
+new tabris.Page({
+  title: "My Page"
+}).appendTo(navigationView);
+```
+
+On back navigation, the topmost page will be disposed. Likewise, you can call `dispose()` on a page to remove it from the stack. When a page is removed that is not the topmost page, all pages on top will be disposed and removed as well.
+
+On Android, the system back button can also be used to navigate back.
+
+### Using Tabs
+
+The main UI of an app can also be organized in tabs. To do so, use a fullscreen [TabFolder](api/TabFolder.md) as top-level container. A tab folder contains [Tabs](api/Tab.md) that are displayed at the bottom on iOS and at the top on Android.
+
+```js
+var tabFolder = new tabris.TabFolder({
+  left: 0, top: 0, right: 0, bottom: 0
+}).appendTo(tabris.ui.contentView);
+new tabris.Tab({
+  title: 'Cart',
+  image: {src: 'cart.png'}
+}).appendTo(tabFolder);
 ```
