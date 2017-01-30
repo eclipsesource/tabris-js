@@ -9,7 +9,6 @@ While using the [Tabris.js Developer App](getting-started.md), your application 
 * [Badge](https://www.npmjs.com/package/de.appplant.cordova.plugin.badge)
 * [Camera](https://www.npmjs.com/package/cordova-plugin-camera)
 * [Device Motion](https://www.npmjs.com/package/cordova-plugin-device-motion)
-* [Dialogs](https://www.npmjs.com/package/cordova-plugin-dialogs)
 * [Network Information](https://www.npmjs.com/package/cordova-plugin-network-information)
 * [Toast](https://www.npmjs.com/package/cordova-plugin-x-toast)
 * [BarcodeScanner](https://www.npmjs.com/package/phonegap-plugin-barcodescanner)
@@ -23,6 +22,6 @@ Please note, default plug-ins are only included in the debug version of an app. 
 ## Other Cordova plug-ins
 To use Cordova plug-ins not part of the Tabris.js Developer App you need to add them during the [build](build.md) process. You can either create a release-ready version of your own app, or a enhanced version of the Developer App that contains the additional plug-ins (set *debug* mode to `ON`).
 
-Most of the olug-ins will work out of the box but not all. This is because Tabris.js uses a **native UI** and **no HTML5**. As a result all plug-ins that manipulate the DOM will not work.
+Since Tabris.js uses a **native UI** and **no HTML5**, most of the plug-ins will work out of the box but not all. Plug-ins that manipulate the DOM will not work.
 
 Plug-ins that have been tested with Tabris.js are tracked as [GitHub issues](https://github.com/eclipsesource/tabris-js/issues?utf8=%E2%9C%93&q=label%3A%22compatibility+cordova%22). If the plug-in is confirmed to work the issue is closed. Please feel free to add issues for plug-ins that you tested.
