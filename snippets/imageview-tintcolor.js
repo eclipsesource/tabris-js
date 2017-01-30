@@ -9,5 +9,5 @@ new tabris.Picker({
   top: [imageView, 16], centerX: 0,
   items: colors
 }).on('change:selection', function(picker, color) {
-  imageView.set('tintColor', color);
+  imageView.tintColor = color;
 }).appendTo(tabris.ui.contentView);

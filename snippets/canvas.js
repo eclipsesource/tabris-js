@@ -1,7 +1,7 @@
 // Draw shapes on a canvas using HTML5 Canvas API
 
 new tabris.Canvas({
-  layoutData: {left: 10, top: 10, right: 10, bottom: 10}
+  left: 10, top: 10, right: 10, bottom: 10
 }).on('resize', function(canvas, bounds) {
   var ctx = canvas.getContext('2d', bounds.width, bounds.height);
   ctx.strokeStyle = 'rgb(78, 154, 217)';

@@ -1,5 +1,5 @@
 var composite = new tabris.Composite({
-  layoutData: {top: 64, width: 200, height: 200, centerX: 0},
+  top: 64, width: 200, height: 200, centerX: 0,
   transform: {translationZ: 4},
   background: 'white'
 }).on('touchstart', function(widget) {
@@ -9,7 +9,7 @@ var composite = new tabris.Composite({
 }).appendTo(tabris.ui.contentView);
 
 new tabris.TextView({
+  centerX: 0, centerY: 0,
   text: 'Tap to elevate',
-  font: 'bold 16px',
-  layoutData: {centerX: 0, centerY: 0}
+  font: 'bold 16px'
 }).appendTo(composite);

@@ -3,16 +3,18 @@ createTextView('Display mode', 'displayMode');
 new tabris.Picker({
   left: '#displayMode 16', baseline: 'prev()', right: 16,
   items: ['default', 'float', 'hide']
-}).on('change:selection', (picker, displayMode) => tabris.ui.navigationBar.displayMode = displayMode)
-  .appendTo(tabris.ui.contentView);
+}).on('change:selection', function(picker, displayMode) {
+  tabris.ui.navigationBar.displayMode = displayMode;
+}).appendTo(tabris.ui.contentView);
 
 createTextView('Background');
 
 new tabris.Picker({
   left: '#displayMode 16', baseline: 'prev()', right: 16,
   items: [tabris.ui.navigationBar.background, 'rgba(0, 0, 0, 0.25)', 'red', 'green', 'blue']
-}).on('change:selection', (picker, background) => tabris.ui.navigationBar.background = background)
-  .appendTo(tabris.ui.contentView);
+}).on('change:selection', function(picker, background) {
+  tabris.ui.navigationBar.background = background;
+}).appendTo(tabris.ui.contentView);
 
 createTextView('Height');
 

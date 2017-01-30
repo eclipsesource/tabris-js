@@ -8,8 +8,8 @@ var slider = new tabris.Slider({
   minimum: 1,
   maximum: 8
 }).on('change:selection', function(slider, selection) {
-  collectionView.set('columnCount', selection);
-  columnCountTextView.set('text', selection);
+  collectionView.columnCount = selection;
+  columnCountTextView.text = selection;
 }).appendTo(tabris.ui.contentView);
 
 var collectionView = new tabris.CollectionView({
@@ -33,7 +33,7 @@ var collectionView = new tabris.CollectionView({
   }
 }).appendTo(tabris.ui.contentView);
 
-slider.set('selection', 3);
+slider.selection = 3;
 
 function createItems() {
   var items = [];

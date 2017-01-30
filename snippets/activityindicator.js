@@ -6,7 +6,7 @@ var activityIndicator = new tabris.ActivityIndicator({
 
 // Create reload button
 var reloadButton = new tabris.Button({
-  layoutData: {centerX: 0, centerY: 0},
+  centerX: 0, centerY: 0,
   text: 'Run Task'
 }).on('select', function() {
   executeLongRunningTask();
@@ -14,13 +14,13 @@ var reloadButton = new tabris.Button({
 
 function executeLongRunningTask() {
   // Toggle visibility of elements
-  activityIndicator.set('visible', true);
-  reloadButton.set('visible', false);
+  activityIndicator.visible = true;
+  reloadButton.visible = false;
 
   setTimeout(function() {
     // Async action is done
-    activityIndicator.set('visible', false);
-    reloadButton.set('visible', true);
+    activityIndicator.visible = false;
+    reloadButton.visible = true;
   }, 2500);
 }
 

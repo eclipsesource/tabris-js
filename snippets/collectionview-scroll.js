@@ -4,7 +4,8 @@ var ITEM_HEIGHT = 32;
 var scrollPosition = 0;
 var items = createItems();
 
-var floatingSection = createSectionView('section').set('text', 'Section 1');
+var floatingSection = createSectionView('section');
+floatingSection.text = 'Section 1';
 
 new tabris.CollectionView({
   left: 0, top: 0, right: 0, bottom: 0,
@@ -19,10 +20,10 @@ new tabris.CollectionView({
     var textView = type === 'section' ? createSectionView() : createItemView();
     textView.appendTo(cell);
     cell.on('change:item', function(widget, item) {
-      textView.set('text', item.name);
+      textView.text = item.name;
     });
   }
-}).on('scrollY', function(collectionView, event) {
+}).on('scroll', function(collectionView, event) {
   scrollPosition += event.deltaY;
   var firstVisibleItem = collectionView.firstVisibleIndex;
   floatingSection.set({
@@ -66,7 +67,7 @@ function getCurrentSection(firstVisibleItem) {
 
 function createSectionView() {
   return new tabris.TextView({
-    layoutData: {top: 0, height: SECTION_HEIGHT, left: 0, right: 0},
+    top: 0, height: SECTION_HEIGHT, left: 0, right: 0,
     background: '#aaaaaa',
     textColor: 'white',
     font: 'bold 24px',
@@ -76,7 +77,7 @@ function createSectionView() {
 
 function createItemView() {
   return new tabris.TextView({
-    layoutData: {top: 2, bottom: 2, left: 5, right: 5},
+    top: 2, bottom: 2, left: 5, right: 5,
     font: '14px',
     alignment: 'left'
   });

@@ -1,5 +1,5 @@
 var buffer = new Uint8Array(24);
-new crypto.getRandomValues(buffer);
+tabris.crypto.getRandomValues(buffer);
 
 new tabris.TextView({
   left: 16, right: 16, top: 16,

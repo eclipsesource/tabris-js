@@ -2,7 +2,7 @@
 
 var drawer = tabris.ui.drawer;
 
-drawer.locked = false;
+drawer.enabled = true;
 
 drawer.on('open', function() {
   console.log('drawer opened');
@@ -21,7 +21,7 @@ createLabel('Thank you!').on('tap', function() {
 
 function createLabel(text) {
   return new tabris.TextView({
-    layoutData: {left: 10, centerY: 0},
+    left: 10, centerY: 0,
     text: text,
     font: '22px Arial'
   });

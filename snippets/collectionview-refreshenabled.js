@@ -1,13 +1,13 @@
 var view = new tabris.CollectionView({
-  layoutData: {left: 0, top: 0, right: 0, bottom: 0},
+  left: 0, top: 0, right: 0, bottom: 0,
   itemHeight: 25,
   refreshEnabled: true,
   initializeCell: function(cell) {
     var textView = new tabris.TextView({
-      layoutData: {top: 2, bottom: 2, left: 5, right: 5}
+      top: 2, bottom: 2, left: 5, right: 5
     }).appendTo(cell);
     cell.on('change:item', function(widget, item) {
-      textView.set('text', item);
+      textView.text = item;
     });
   }
 }).on('refresh', function() {
