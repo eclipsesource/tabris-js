@@ -84,7 +84,7 @@ Examples:
 
 ## GestureObject
 
-Object containing information about the currently performed gesture. See ["Touch API"](touch.md#gesture_object).
+Object containing information about the currently performed gesture. See [Touch API](touch.md#gesture_object).
 
 ## Image
 

@@ -32,7 +32,7 @@ Accepted values:
 
 All **percentages** are provided as strings with a percent suffix, e.g. `"50%"`.
 
-**References to other widgets** can be given as a variable, a [selector string](selector.md) (filtering all siblings of the widget), or the symbolic reference `"prev()" (used to refer to the preceding sibling). Widget references are resolved dynamically, that is, if a referenced widget is added or removed later, the layout will adjust. When a widget reference does not match any of the current siblings, it will be treated like an offset of zero.
+**References to other widgets** can be given as a variable, a [selector string](selector.md) (filtering all siblings of the widget), or the symbolic reference `"prev()"` (used to refer to the preceding sibling). Widget references are resolved dynamically, that is, if a referenced widget is added or removed later, the layout will adjust. When a widget reference does not match any of the current siblings, it will be treated like an offset of zero.
 
 ### centerX
 Defines the horizontal position of the widget relative to the parent's center.

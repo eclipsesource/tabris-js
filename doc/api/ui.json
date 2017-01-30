@@ -6,11 +6,11 @@
   "properties": {
     "background": {
       "type": "Color",
-      "description": "Background color for the navigation elements"
+      "description": "Background color for the navigation elements."
     },
     "textColor": {
       "type": "Color",
-      "description": "Text color for the navigation elements"
+      "description": "Text color for the navigation elements."
     },
     "toolbarVisible": {
       "type": "boolean",

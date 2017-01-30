@@ -6,7 +6,7 @@
     "open": [
       {
         "parameters": [],
-        "description": "Invokes the search action, i.e. displays the ui to perform a search."
+        "description": "Invokes the search action, i.e. displays the UI to perform a search."
       }
     ]
   },

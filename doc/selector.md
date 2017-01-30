@@ -1,6 +1,6 @@
 # Selector API
 
-Modifying a widget usually requires direct access to the object. However, assigning all mutable widgets to variables can quickly clutter your UI code. For this reason, the Tabris.js API offers methods to find widgets by certain attributes, and even to manipulate multiple widgets at once. Widgets can be selected by their *type*, their *id*, or their *class* attributes, using a format established by CSS.
+Modifying a widget usually requires direct access to the object. However, assigning all mutable widgets to variables can quickly clutter your UI code. For this reason, the Tabris.js API offers methods to find widgets by certain attributes, and even to manipulate multiple widgets at once. Widgets can be selected by their *type*, their *ID*, or their *class* attributes, using a format established by CSS.
 
 ## Selecting widgets by type
 
@@ -10,21 +10,21 @@ The simplest method to select widgets is to refer to their type. For example, th
 page.find('CheckBox').set('selection', false);
 ```
 
-## Selecting widgets by id
+## Selecting widgets by ID
 
-The `id` of a widget is a property like any other. It is initially undefined, so you have to assign an id yourself to refer to the widget. Usually you would do this when you create the widget:
+The `id` of a widget is a property like any other. It is initially undefined, so you have to assign an ID yourself to refer to the widget. Usually you would do this when you create the widget:
 
 ```js
 new tabris.Button({id: 'submit'});
 ```
 
-To select a widget by its id, you can use the selector expression `'#id'` where `id` is the id of the widget:
+To select a widget by its ID, you can use the selector expression `'#id'` where `id` is the ID of the widget:
 
 ```js
 page.find('#submit').set('enabled', false);
 ```
 
-Ids should be unique. Although this is not enforced by the framework, it's a good practice not to use the same id twice within a component to avoid confusion.
+IDs should be unique. Although this is not enforced by the framework, it's a good practice not to use the same ID twice within a component to avoid confusion.
 
 ## Selecting widgets by class attribute
 
@@ -53,7 +53,7 @@ The following types of selector expressions are supported:
 - `'*'` matches all widgets.
 - `'Type'` matches all widgets of the given type, e.g. `'Button'` matches all Button widgets.
 - `'.class'` matches all widgets that have the given class in their class list, e.g. `'.foo'` matches a widget with `class` set to `'foo'`, but also `'foo bar`'.
-- `'#id'` matches all widgets with the given id, e.g. `'#foo'` matches all widgets with the id `'foo'`.
+- `'#id'` matches all widgets with the given ID, e.g. `'#foo'` matches all widgets with the ID `'foo'`.
 
 ## Selector Functions
 
@@ -125,7 +125,7 @@ page.apply({
 
 ### How to use it
 
-While we used object literals in the examples above, the apply method can be very effectively used with [modules](module), allowing most or all property values (except ids) to be extracted from your code.
+While we used object literals in the examples above, the apply method can be very effectively used with [modules](module), allowing most or all property values (except IDs) to be extracted from your code.
 
 Imagine, for example, that you want to apply different texts to your widgets depending on your locale. You could do it like this:
 

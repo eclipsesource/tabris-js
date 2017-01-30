@@ -8,7 +8,7 @@ In Tabris.js there are 13 gesture events based on 4 basic gesture types:
 
 - `tap` - Fired once when a finger briefly touched the widget.
 - `longpress` - Fired when a finger touched the widget for a longer period of time (about a second, may depend on the platform), and again when lifting the finger.
-- `pan` - Starts firing continuously as soon as a finger moved in any direction for a certain distance (about 5px, may depend on the platform). The event is always fired on the widget where that the finger first touched, even if the finger is moved outside the widget.
+- `pan` - Starts firing continuously as soon as a finger moved in any direction for a certain distance (about 5px, may depend on the platform). The event is always fired on the widget where the finger first touched, even if the finger is moved outside the widget.
 - `pan:left` - Starts firing continuously as soon as a finger moved to the left for a certain distance.
 - `pan:right` - Starts firing continuously as soon as a finger moved to the right for a certain distance.
 - `pan:up` - Starts firing continuously as soon as a finger moved upwards for a certain distance.

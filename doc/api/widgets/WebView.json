@@ -1,6 +1,6 @@
 {
   "type": "WebView",
-  "description": "A widget that can display a web page. Since this widget requires a lot of recourses it's recommended to have no more than one instance at a time.",
+  "description": "A widget that can display a web page. Since this widget requires a lot of resources it's recommended to have no more than one instance at a time.",
   "extends": "Widget",
   "properties": {
     "url": {
@@ -38,7 +38,7 @@
         {"name": "widget", "type": "this"},
         {"name": "event", "type": "{data: string}"}
       ],
-      "description": "Fired when a web message has been send via `window.parent.postMessage(message, targetOrigin)` from inside the `WebView`. The events `data` property contains the message send, which currently has to be a string."
+      "description": "Fired when a web message has been sent via `window.parent.postMessage(message, targetOrigin)` from inside the `WebView`. The event's `data` property contains the message sent, which currently has to be a string."
     }
   },
   "methods": {

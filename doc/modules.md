@@ -50,7 +50,7 @@ The Developer App usually loads modules from an HTTP server. For some larger mod
 
 ### Script Modules
 
-Any JavaScript file may be loaded as a module. However, loading a module should never have any side-effects. Implement each module as if there is no shared global scope, even though this is not the case for compatibility reasons. It is also recommended not to change the state of the application on load time (except in the main module). Remember that each each module is loaded only once, no matter how often it is imported.
+Any JavaScript file may be loaded as a module. However, loading a module should never have any side-effects. Implement each module as if there is no shared global scope, even though this is not the case for compatibility reasons. It is also recommended not to change the state of the application on load time (except in the main module). Remember that each module is loaded only once, no matter how often it is imported.
 
 Instead, modules should export data (which may include functions) to be used by other modules. By default the export of any module is a plain, empty object. This object is present in the module script as a local variable called `exports`. It may be modified in any way by the script, for example:
 
@@ -96,7 +96,7 @@ A folder module may consist of multiple internal file modules, but only the firs
 
 ## npm Support
 
-Tabris.js supports loading [npm](https://www.npm.org) modules, though he compatibility of the module depends on the API it expects.
+Tabris.js supports loading [npm](https://www.npm.org) modules, though the compatibility of the module depends on the API it expects.
 
 Use the [npm command line interface](https://www.npmjs.org/doc/) to install any Tabris.js compatible module into your project folder.
 

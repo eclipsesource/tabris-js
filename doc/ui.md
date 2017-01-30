@@ -37,7 +37,7 @@ There's a special kind of pages used for the main navigation, called *top-level*
 
 * When a top-level page is removed from the stack by opening another top-level page, it will not be closed, so it can be re-used.
 
-To create a top-level page, set the property `topLevel` to `true` when creation the page:
+To create a top-level page, set the property `topLevel` to `true` when creating the page:
 
 ```js
 new tabris.Page({
@@ -69,7 +69,7 @@ The current active page is visible in the app's navigation bar. A page can have 
 
 ## The Navigation Drawer
 
-The "Drawer" is a common component of mobile applications. It's a container that can be slid in form the left edge of the screen, often used for top-level navigation. In Tabris.js, such a drawer can be created by instantiating the type `Drawer`:
+The "Drawer" is a common component of mobile applications. It's a container that can be slid in from the left edge of the screen, often used for top-level navigation. In Tabris.js, such a drawer can be created by instantiating the type `Drawer`:
 
 ```js
 new tabris.Drawer();

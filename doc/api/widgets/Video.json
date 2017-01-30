@@ -5,7 +5,7 @@
   "properties": {
     "url": {
       "type": "string",
-      "description": "The URL of the video to play. Setting this property to any non-empty string changes the *[state](#state)* to `open` and the video starts loading. Seting this property to an empty string unloads the current video and the *[state](#state)* returns to `empty`."
+      "description": "The URL of the video to play. Setting this property to any non-empty string changes the *[state](#state)* to `open` and the video starts loading. Setting this property to an empty string unloads the current video and the *[state](#state)* returns to `empty`."
     },
     "controlsVisible": {
       "type": "boolean",

@@ -203,7 +203,7 @@
       {
         "parameters": [],
         "returns": "Widget[]",
-        "description": "Return an Array containing all widgets in the collection."
+        "description": "Returns an Array containing all widgets in the collection."
       }
     ],
     "forEach": [

@@ -32,13 +32,13 @@ public class CalendarOperator implements TabrisOperator {
 }
 ```
 
-The snippet above shows two important aspects of a `TabrisOperator`: The class _has to have_ a two argument constructor `CalendarOperator(<Activity>, <TabrisContext>)` and the method `getType()` has to return the name of the custom widget as registered on the [JavaScript side](custom-widgets.js).
+The snippet above shows two important aspects of a `TabrisOperator`: The class _has to have_ a two argument constructor `CalendarOperator(<Activity>, <TabrisContext>)` and the method `getType()` has to return the name of the custom widget as registered on the [JavaScript side](custom-widgets.md).
 
 ## Registering an operator
 
 To make an operator available to the Tabris.js Android runtime we have to register it. The simplest way is to declare our operator in a `meta-data` entry of the `AndroidManifest.xml`.
 
-Since our custom widget is wrapped in a cordova plugin we can use the plugin's `plugin.xml` file to add a new `meta-data` entry into the `AndroidManifest.xml` via the Cordova [`config-file`](https://cordova.apache.org/docs/en/5.0.0/plugin_ref_spec.md.html) directive. The following snippet shows how to declare our operator in the `plugin.xml` so that it is part of the final `AndroidManifest.xml`:
+Since our custom widget is wrapped in a Cordova plug-in we can use the plug-in's `plugin.xml` file to add a new `meta-data` entry into the `AndroidManifest.xml` via the Cordova [`config-file`](https://cordova.apache.org/docs/en/5.0.0/plugin_ref_spec.md.html) directive. The following snippet shows how to declare our operator in the `plugin.xml` so that it is part of the final `AndroidManifest.xml`:
 
 ```xml
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
@@ -57,7 +57,7 @@ Since our custom widget is wrapped in a cordova plugin we can use the plugin's `
 </plugin>
 ```
 
-The snippet above inserts the `meta-data` element with its two attributes `name` and `value` into the `AndroidManifest.xml`. The `name` attribute has to be an application wide unique id with a prefix of `com.eclipsesource.tabris.android.OPERATOR`. In order to make the name unique we append the widget specific id `.com.eclipsesource.tabris.calendar` to the prefix. The `value` attribute of the `meta-data` element has to contain the fully qualified class name of our `TabrisOperator` implementation, eg.: `com.eclipsesource.tabris.calendar.CalendarOperator`.
+The snippet above inserts the `meta-data` element with its two attributes `name` and `value` into the `AndroidManifest.xml`. The `name` attribute has to be an application wide unique ID with a prefix of `com.eclipsesource.tabris.android.OPERATOR`. In order to make the name unique we append the widget specific ID `.com.eclipsesource.tabris.calendar` to the prefix. The `value` attribute of the `meta-data` element has to contain the fully qualified class name of our `TabrisOperator` implementation, eg.: `com.eclipsesource.tabris.calendar.CalendarOperator`.
 
 ## Instantiating a widget
 
@@ -145,7 +145,7 @@ private class OnDateChangeListener implements CalendarView.OnDateChangeListener 
 
 ## Destroying a widget
 
-When a widget is no longer being used we also need to take care of destroying it. In case of our custom Android `View` we receive a destroy operation and are responsible for cleaning up any resource that are not required anymore and to remove the `View` from the view hierarchy:
+When a widget is no longer being used we also need to take care of destroying it. In case of our custom Android `View` we receive a destroy operation and are responsible for cleaning up any resources that are not required anymore and to remove the `View` from the view hierarchy:
 
 ```java
 @Override

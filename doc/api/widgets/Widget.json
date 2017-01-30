@@ -155,7 +155,7 @@
   "properties": {
     "id": {
       "type": "string",
-      "description": "A string to identify the widget by using selectors. Id's are optional. It is strongly recommended that they are unique within a page."
+      "description": "A string to identify the widget by using selectors. IDs are optional. It is strongly recommended that they are unique within a page."
     },
     "class": {
       "type": "string",

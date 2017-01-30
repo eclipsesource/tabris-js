@@ -1,7 +1,7 @@
-# Cordova Plug-Ins Support
+# Cordova Plug-ins Support
 The Tabris.js API is primarily a UI/widget library, with some [additional browser-inspired APIs](w3c-api.md). To provide features not covered by either of these, Tabris.js can be extended with [Apache Cordova](http://cordova.apache.org/) plug-ins.
 
-The JavaScript API documentation of a Cordova plug-ins is also valid in Tabris.js, with one minor exception: It is **not** necessary to listen to the `deviceready` event before accessing plug-in API. All plug-ins will be ready when the applications main module is loaded.
+The JavaScript API documentation of Cordova plug-ins is also valid in Tabris.js, with one minor exception: It is **not** necessary to listen to the `deviceready` event before accessing plug-in API. All plug-ins will be ready when the applications main module is loaded.
 
 ## Default Plug-Ins
 While using the [Tabris.js Developer App](getting-started.md), your application can directly access the following pre-packaged plug-ins:
@@ -20,9 +20,9 @@ These plug-ins have been tested with Tabris.js and a [demo](https://github.com/e
 
 Please note, default plug-ins are only included in the debug version of an app. If you want to use them in the release version, you should add them via `<plugin>` tags in the Cordova `config.xml` file: [Adding Plug-Ins](build.md#adding-plugins).
 
-## Other Cordova Plug-Ins
-To use Cordova Plug-Ins not part of the Tabris.js developer app you need to add them during the [build](build.md) process. You can either create a release-ready version of your own app, or a enhanced version of the developer app that contains the additional Plug-Ins (set *debug* mode to `ON`).
+## Other Cordova plug-ins
+To use Cordova plug-ins not part of the Tabris.js Developer App you need to add them during the [build](build.md) process. You can either create a release-ready version of your own app, or a enhanced version of the Developer App that contains the additional plug-ins (set *debug* mode to `ON`).
 
-Most of the Plug-Ins will work out of the box but not all. This is because Tabris.js uses a **native UI** and **no HTML5**. As a result all Plug-Ins that manipulate the DOM will not work.
+Most of the olug-ins will work out of the box but not all. This is because Tabris.js uses a **native UI** and **no HTML5**. As a result all plug-ins that manipulate the DOM will not work.
 
-Plug-Ins that have been tested with Tabris.js are tracked as [GitHub issues](https://github.com/eclipsesource/tabris-js/issues?utf8=%E2%9C%93&q=label%3A%22compatibility+cordova%22). If the Plug-In is confirmed to work the issue is closed. Please feel free to add issues for Plug-Ins that you tested.
+Plug-ins that have been tested with Tabris.js are tracked as [GitHub issues](https://github.com/eclipsesource/tabris-js/issues?utf8=%E2%9C%93&q=label%3A%22compatibility+cordova%22). If the plug-in is confirmed to work the issue is closed. Please feel free to add issues for plug-ins that you tested.

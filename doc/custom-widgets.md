@@ -2,7 +2,7 @@
 
 > <img align="left" src="img/note.png"> <i>The custom widget API is not final yet. It may change without prior notice!</i>
 
-Custom widgets are written in JavaScript the language available for the native platforms, using the interfaces of the native Tabris.js clients, and wrapped in a Cordova plug-in. This article covers the JavaScript part of the implementation
+Custom widgets are written in JavaScript, the language available for the native platforms, using the interfaces of the native Tabris.js clients, and wrapped in a Cordova plug-in. This article covers the JavaScript part of the implementation.
 
 ## Registering a Custom Widget in JavaScript
 

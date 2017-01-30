@@ -20,7 +20,7 @@ Widgets have methods to modify their properties, be notified of events, and appe
 
 ## Widget Properties
 
-Every native widget supports a set of properties (e.g. a text or a color). These properties can be read and written using the [property API](api/Properties.md) methods `get` and `set`, respectively. Widgets properties can also be written or read by directly accessing fields on the widget object. For example, `var text = widget.text;` is the same as `var text = widget.get("text");` and `widget.text = "foo";` is the same as `widget.set("text", "foo");`. If the property is supported, but the given value is of the wrong type, the value will either be converted (if boolean or string are expected), or ignored with a printed warning.
+Every native widget supports a set of properties (e.g. a text or a color). These properties can be read and written using the [property API](api/Properties.md) methods `get` and `set`, respectively. Widget's properties can also be written or read by directly accessing fields on the widget object. For example, `var text = widget.text;` is the same as `var text = widget.get("text");` and `widget.text = "foo";` is the same as `widget.set("text", "foo");`. If the property is supported, but the given value is of the wrong type, the value will either be converted (if boolean or string are expected), or ignored with a printed warning.
 
 Example with `get` and `set`:
 
@@ -73,7 +73,7 @@ var selectionHandler = function(button) {
 button.on("select", selectionHandler);
 ```
 
-Depending on the event type the listener function is called with a list of parameter, where the first parameter is usually the widget itself.
+Depending on the event type the listener function is called with a list of parameters, where the first parameter is usually the widget itself.
 
 > <img align="left" src="img/note.png"> <i>Event types are case sensitive. All Tabris.js event types are lowercase.</i>
 
@@ -88,11 +88,11 @@ button.on("select", selectionHandler, {foo: "Hello World"});
 
 The `once` method does the same as `on`, but removes the listener after it has been invoked by an event.
 
-To remove a listener, use the method `off`
+To remove a listener, use the method `off`.
 
 ### Change Events
 
-All widgets support property change events. Change events are fired for all property changes, not matter how or why the changed occurred, or if the property is supported by the widget. All change events are named `change:[propertyName]` and have the same parameters: `target`, `value`, `options`.
+All widgets support property change events. Change events are fired for all property changes, no matter how or why the change occurred, or if the property is supported by the widget. All change events are named `change:[propertyName]` and have the same parameters: `target`, `value`, `options`.
 
 Example:
 
@@ -194,7 +194,7 @@ var lastChild = parent.children().last();
 
 The result list of children is an array-like object of the type [`WidgetCollection`](api/WidgetCollection.md).
 
-## Disposing Of a Widget
+## Disposing of a Widget
 
 The `dispose` method disposes of the widget and all of its children. Triggers a *removechild* event on the parent and a *dispose* event on itself.
 
@@ -207,4 +207,4 @@ button.on("dispose", function() {
 button.dispose();
 ```
 
-After a widget is disposed none of it's methods will work except `isDisposed`, which returns `true` if the widget has been disposed, otherwise `false`.
+After a widget is disposed none of its methods will work except `isDisposed`, which returns `true` if the widget has been disposed, otherwise `false`.
