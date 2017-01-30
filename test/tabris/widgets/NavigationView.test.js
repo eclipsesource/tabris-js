@@ -116,6 +116,20 @@ describe('NavigationView', function() {
 
   });
 
+  describe('animated', function() {
+
+    it('is true by default', function() {
+      expect(navigationView.animated).to.be.true;
+    });
+
+    it('is rendered', function() {
+      navigationView.animated = false;
+
+      expect(client.calls({id: navigationView.cid})[0].properties).to.deep.equal({animated: false});
+    });
+
+  });
+
   describe('pages', function() {
 
     it('returns empty WidgetCollection by default', function() {

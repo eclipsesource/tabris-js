@@ -28,6 +28,11 @@
     "actionTextColor": {
       "type": "Color",
       "description": "The color used for action texts."
+    },
+    "animated": {
+      "type": "boolean",
+      "default": true,
+      "description": "Controls whether page transitions are animated."
     }
   },
   "methods": {

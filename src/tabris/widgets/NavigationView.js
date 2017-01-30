@@ -15,7 +15,8 @@ const CONFIG = {
     toolbarColor: {type: 'color'},
     titleTextColor: {type: 'color'},
     actionColor: {type: 'color'},
-    actionTextColor: {type: 'color'}
+    actionTextColor: {type: 'color'},
+    animated: {type: 'boolean', default: true}
   },
 
   _events: {
