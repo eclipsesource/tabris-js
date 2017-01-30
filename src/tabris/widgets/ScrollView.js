@@ -20,14 +20,14 @@ const CONFIG = {
   _events: {
     scrollX: {
       alias: 'change:offsetX',
-      trigger(offset) {
+      trigger({offset}) {
         this._triggerChangeEvent('offsetX', offset);
         this.trigger('scrollX', this, offset, {});
       }
     },
     scrollY: {
       alias: 'change:offsetY',
-      trigger(offset) {
+      trigger({offset}) {
         this._triggerChangeEvent('offsetY', offset);
         this.trigger('scrollY', this, offset, {});
       }
@@ -38,17 +38,17 @@ const CONFIG = {
 
 export default class ScrollView extends Widget.extend(CONFIG) {
 
-  scrollToY(offsetY, options) {
+  scrollToY(offset, options) {
     this._nativeCall('scrollToY', {
-      offsetY,
+      offset,
       animate: options && 'animate' in options ? !!options.animate : true
     });
     return this;
   }
 
-  scrollToX(offsetX, options) {
+  scrollToX(offset, options) {
     this._nativeCall('scrollToX', {
-      offsetX,
+      offset,
       animate: options && 'animate' in options ? !!options.animate : true
     });
     return this;

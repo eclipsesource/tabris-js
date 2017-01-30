@@ -93,7 +93,7 @@ describe('ScrollView', function() {
       let listener = spy();
       scrollView.on('scrollY', listener);
 
-      tabris._notify(scrollView.cid, 'scrollY', 42);
+      tabris._notify(scrollView.cid, 'scrollY', {offset: 42});
 
       checkListen('scrollY');
       expect(listener).to.have.been.called;
@@ -105,7 +105,7 @@ describe('ScrollView', function() {
       let listener = spy();
       scrollView.on('change:offsetY', listener);
 
-      tabris._notify(scrollView.cid, 'scrollY', 42);
+      tabris._notify(scrollView.cid, 'scrollY', {offset: 42});
 
       checkListen('scrollY');
       expect(listener).to.have.been.called;
@@ -117,7 +117,7 @@ describe('ScrollView', function() {
       let listener = spy();
       scrollView.on('change:offsetX', listener);
 
-      tabris._notify(scrollView.cid, 'scrollY', 42);
+      tabris._notify(scrollView.cid, 'scrollY', {offset: 42});
 
       expect(listener).not.to.have.been.called;
     });
@@ -156,7 +156,7 @@ describe('ScrollView', function() {
       let listener = spy();
       scrollView.on('scrollX', listener);
 
-      tabris._notify(scrollView.cid, 'scrollX', 42);
+      tabris._notify(scrollView.cid, 'scrollX', {offset: 42});
 
       checkListen('scrollX');
       expect(listener).to.have.been.called;
@@ -168,7 +168,7 @@ describe('ScrollView', function() {
       let listener = spy();
       scrollView.on('change:offsetX', listener);
 
-      tabris._notify(scrollView.cid, 'scrollX', 42);
+      tabris._notify(scrollView.cid, 'scrollX', {offset: 42});
 
       checkListen('scrollX');
       expect(listener).to.have.been.called;
@@ -180,7 +180,7 @@ describe('ScrollView', function() {
       let listener = spy();
       scrollView.on('change:offsetY', listener);
 
-      tabris._notify(scrollView.cid, 'scrollX', 43);
+      tabris._notify(scrollView.cid, 'scrollX', {offset: 42});
 
       expect(listener).not.to.have.been.called;
     });
@@ -206,7 +206,7 @@ describe('ScrollView', function() {
         id: scrollView.cid,
         method: 'scrollToX',
         parameters: {
-          offsetX: 100,
+          offset: 100,
           animate: true
         }
       }]);
@@ -221,7 +221,7 @@ describe('ScrollView', function() {
         id: scrollView.cid,
         method: 'scrollToX',
         parameters: {
-          offsetX: 101,
+          offset: 101,
           animate: false
         }
       }]);
@@ -236,7 +236,7 @@ describe('ScrollView', function() {
         id: scrollView.cid,
         method: 'scrollToX',
         parameters: {
-          offsetX: 101,
+          offset: 101,
           animate: true
         }
       }]);
@@ -251,7 +251,7 @@ describe('ScrollView', function() {
         id: scrollView.cid,
         method: 'scrollToX',
         parameters: {
-          offsetX: 101,
+          offset: 101,
           animate: true
         }
       }]);
@@ -266,7 +266,7 @@ describe('ScrollView', function() {
         id: scrollView.cid,
         method: 'scrollToX',
         parameters: {
-          offsetX: 101,
+          offset: 101,
           animate: true
         }
       }]);
@@ -293,7 +293,7 @@ describe('ScrollView', function() {
         id: scrollView.cid,
         method: 'scrollToY',
         parameters: {
-          offsetY: 100,
+          offset: 100,
           animate: true
         }
       }]);
@@ -308,7 +308,7 @@ describe('ScrollView', function() {
         id: scrollView.cid,
         method: 'scrollToY',
         parameters: {
-          offsetY: 101,
+          offset: 101,
           animate: false
         }
       }]);
@@ -323,7 +323,7 @@ describe('ScrollView', function() {
         id: scrollView.cid,
         method: 'scrollToY',
         parameters: {
-          offsetY: 101,
+          offset: 101,
           animate: true
         }
       }]);
@@ -338,7 +338,7 @@ describe('ScrollView', function() {
         id: scrollView.cid,
         method: 'scrollToY',
         parameters: {
-          offsetY: 101,
+          offset: 101,
           animate: true
         }
       }]);
@@ -353,7 +353,7 @@ describe('ScrollView', function() {
         id: scrollView.cid,
         method: 'scrollToY',
         parameters: {
-          offsetY: 101,
+          offset: 101,
           animate: true
         }
       }]);

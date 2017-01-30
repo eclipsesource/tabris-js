@@ -23,14 +23,14 @@
     "scrollToX": [
       {
         "parameters": [
-          {"name": "offsetX", "type": "number"}
+          {"name": "offset", "type": "number"}
         ],
         "returns": "this",
         "description": "Scrolls to the given horizontal offset using an animation. Has no effect on a vertical `ScrollView`"
       },
       {
         "parameters": [
-          {"name": "offsetX", "type": "number"},
+          {"name": "offset", "type": "number"},
           {"name": "options", "type": "Object"}
         ],
         "returns": "this",
