@@ -5,6 +5,5 @@ let navigationView = new tabris.NavigationView({
 }).appendTo(tabris.ui.contentView);
 
 new tabris.Page({
-  title: 'Page',
-  topLevel: true
+  title: 'Page'
 }).appendTo(navigationView);

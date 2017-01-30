@@ -47,7 +47,7 @@
   "links": [
     {
       "title": "Snippet with a NavigationView and Pages",
-      "path": "${GITHUB_BRANCH}/snippets/page-stacked.js"
+      "path": "${GITHUB_BRANCH}/snippets/navigationview-page-stacked.js"
     }
   ]
 }

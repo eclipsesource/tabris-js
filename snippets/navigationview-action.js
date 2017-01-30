@@ -6,8 +6,7 @@ var navigationView = new tabris.NavigationView({
 
 new tabris.Action({
   title: 'Action',
-  image: 'images/share.png',
-  placementPriority: 'high'
+  image: 'images/share.png'
 }).on('select', function() {
   console.log('Action selected.');
 }).appendTo(navigationView);

@@ -8,7 +8,7 @@ const union = require('union');
 const PORT = 8080;
 
 if (!process.argv[2]) {
-  fail('You need to specify a snippet. E.g.: \n  npm start action.js');
+  fail('You need to specify a snippet. E.g.: \n  npm start button.js');
 }
 
 let fileName = `${path.parse(process.argv[2]).name}.js`;
