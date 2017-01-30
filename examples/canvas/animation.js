@@ -1,7 +1,8 @@
 var example = new Example();
 
 var page = module.exports = new tabris.Page({
-  title: 'Animation'
+  title: 'Animation',
+  autoDispose: false
 }).on('disappear', function() {
   page.children('#toggleRun').set('selection', false);
 });
