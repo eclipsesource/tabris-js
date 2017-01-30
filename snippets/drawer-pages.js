@@ -4,7 +4,8 @@ drawer.enabled = true;
 
 var navigationView = new tabris.NavigationView({
   left: 0, top: 0, right: 0, bottom: 0,
-  drawerActionVisible: true
+  drawerActionVisible: true,
+  animated: false
 }).appendTo(tabris.ui.contentView);
 
 new tabris.ImageView({
@@ -15,7 +16,7 @@ new tabris.ImageView({
 
 var pageSelector = new tabris.CollectionView({
   left: 0, top: 'prev()', right: 0, bottom: 0,
-  items: [{title: 'Page 1', image: 'images/page.png'}, {title: 'Page 2', image: 'images/page.png'}],
+  items: [{title: 'Page 1', icon: 'images/page.png'}, {title: 'Page 2', icon: 'images/page.png'}],
   initializeCell: initializeCell,
   itemHeight: tabris.device.platform === 'iOS' ? 40 : 48
 }).appendTo(drawer);
@@ -26,7 +27,7 @@ pageSelector.on('select', function(target, pageDescriptor) {
   createPage(pageDescriptor).appendTo(navigationView);
 });
 
-createPage({title: 'Initial Page', image: 'images/page.png'}).appendTo(navigationView);
+createPage({title: 'Initial Page', icon: 'images/page.png'}).appendTo(navigationView);
 
 function initializeCell(cell) {
   new tabris.Composite({
@@ -42,18 +43,19 @@ function initializeCell(cell) {
     textColor: tabris.device.platform === 'iOS' ? 'rgb(22, 126, 251)' : '#212121'
   }).appendTo(cell);
   cell.on('change:item', function(widget, page) {
-    imageView.image = page.image;
+    imageView.image = page.icon;
     textView.text = page.title;
   });
 }
 
 function createPage(pageDescriptor) {
-  var page = new tabris.Page(pageDescriptor);
+  var page = new tabris.Page({title: pageDescriptor.title});
+  page.icon = pageDescriptor.icon;
   new tabris.Button({
     left: 20, right: 20, top: 20,
-    text: 'Create another page'
+    text: 'Create page in drawer'
   }).on('select', function() {
-    pageSelector.insert([{title: 'Another Page', image: 'images/page.png'}]);
+    pageSelector.insert([{title: 'Another Page', icon: 'images/page.png'}]);
   }).appendTo(page);
   return page;
 }
