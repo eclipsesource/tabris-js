@@ -60,7 +60,7 @@
     },
     {
       "title": "WebView snippet demonstrating web messaging",
-      "path": "${GITHUB_BRANCH}/snippets/webview-webmessage.js"
+      "path": "${GITHUB_BRANCH}/snippets/webview-webmessaging.js"
     },
     {
       "title": "Web Messaging",
