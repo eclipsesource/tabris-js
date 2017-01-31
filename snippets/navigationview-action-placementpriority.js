@@ -13,4 +13,4 @@ var createAction = function(title, imageName, placementPriority) {
 
 createAction('Search', 'search.png', 'high');
 createAction('Share', 'share.png', 'low');
-createAction('Settings', 'settings.png', 'low');
+createAction('Settings', 'settings.png', 'normal');
