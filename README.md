@@ -8,7 +8,7 @@ iOS and Android apps can be built entirely from one code base, which frees you f
 
 ## Getting Started
 
-To start developing Tabris.js applications, log in to [tabrisjs.com](http://tabrisjs.com) and select "Getting Started". Be sure to also check out code snippets, as well as examples in the Tabris.js Developer App ([Play Store](https://play.google.com/store/apps/details?id=com.eclipsesource.tabris.js) / [App Store](https://itunes.apple.com/us/app/tabris.js/id939600018?ls=1&mt=8)).
+To start developing Tabris.js applications, log in to [tabrisjs.com](http://tabrisjs.com) and select "Getting Started". Be sure to also check out code snippets, as well as examples in the Tabris.js Developer App ([Play Store](https://play.google.com/store/apps/details?id=com.eclipsesource.tabrisjs2) / [App Store](https://itunes.apple.com/us/app/tabris.js-2/id1166468326?mt=8)).
 
 ## Native performance
 
