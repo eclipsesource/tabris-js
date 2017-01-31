@@ -17,10 +17,10 @@
     }
   },
   "properties": {
-    "locked": {
+    "enabled": {
       "type": "boolean",
-      "default": "true",
-      "description": "Controls whether the drawer can be opened and closed. While `true`, the drawer cannot be opened and calls to `drawer.open()` will be ignored."
+      "default": "false",
+      "description": "Controls whether the drawer can be opened and closed. When set to `false`, the drawer cannot be opened and calls to `drawer.open()` will be ignored."
     }
   },
   "methods": {
