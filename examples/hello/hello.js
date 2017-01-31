@@ -1,6 +1,6 @@
 var button = new tabris.Button({
   centerX: 0, top: 100,
-  text: 'Show Message'
+  text: 'Show message'
 }).appendTo(tabris.ui.contentView);
 
 var textView = new tabris.TextView({
