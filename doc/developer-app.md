@@ -63,6 +63,8 @@ In the URL tab of the Developer App, enter:
 
     http://<development-machine-ip-address>:8080/
 
+![App URL](img/app-url.png)
+
 Now tap *Connect* to run the app:
 
 ![Android Developer App](img/hello.png)
