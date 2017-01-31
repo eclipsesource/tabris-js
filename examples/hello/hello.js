@@ -1,6 +1,6 @@
 var button = new tabris.Button({
   centerX: 0, top: 100,
-  text: 'Native Widgets'
+  text: 'Show Message'
 }).appendTo(tabris.ui.contentView);
 
 var textView = new tabris.TextView({
@@ -9,5 +9,5 @@ var textView = new tabris.TextView({
 }).appendTo(tabris.ui.contentView);
 
 button.on('select', function() {
-  textView.text = 'Totally Rock!';
+  textView.text = 'Tabris.js rocks!';
 });
