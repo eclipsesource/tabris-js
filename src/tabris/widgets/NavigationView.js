@@ -67,7 +67,9 @@ export default class NavigationView extends Widget.extend(CONFIG) {
         return;
       }
       let prev = pages[pages.indexOf(child) - 1];
-      this._nativeCall('popTo', {page: prev ? prev.cid : null});
+      if (!this._inPopAbove) {
+        this._nativeCall('popTo', {page: prev ? prev.cid : null});
+      }
       this._triggerDisappear();
       this._popPagesAbove(child);
     }

@@ -273,6 +273,14 @@ describe('NavigationView', function() {
       expect(popToCall.parameters).to.deep.equal({page: null});
     });
 
+    it('CALLs popTo only once', function() {
+      navigationView.append(page1, page2, page3);
+      page1.detach();
+
+      let popToCalls = client.calls({id: navigationView.cid, op: 'call', method: 'popTo'});
+      expect(popToCalls.length).to.equal(1);
+    });
+
   });
 
 });
