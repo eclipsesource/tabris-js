@@ -243,10 +243,34 @@ describe('NavigationView', function() {
       expect(navigationView.pages().toArray()).to.deep.equal([]);
     });
 
-    it('does not affect pages below', function() {
+    it('detaches all pages on top', function() {
+      navigationView.append(page1, page2, page3);
+      page1.detach();
+      expect(navigationView.pages().toArray()).to.deep.equal([]);
+    });
+
+    it('CALLs popTo for topmost page', function() {
+      navigationView.append(page1, page2, page3);
+      page3.detach();
+
+      let popToCall = client.calls({id: navigationView.cid, op: 'call', method: 'popTo'})[0];
+      expect(popToCall.parameters).to.deep.equal({page: page2.cid});
+    });
+
+    it('CALLs popTo for page below', function() {
       navigationView.append(page1, page2, page3);
       page2.detach();
-      expect(navigationView.pages().toArray()).to.deep.equal([page1]);
+
+      let popToCall = client.calls({id: navigationView.cid, op: 'call', method: 'popTo'})[0];
+      expect(popToCall.parameters).to.deep.equal({page: page1.cid});
+    });
+
+    it('CALLs popTo last page', function() {
+      navigationView.append(page1, page2, page3);
+      page1.detach();
+
+      let popToCall = client.calls({id: navigationView.cid, op: 'call', method: 'popTo'})[0];
+      expect(popToCall.parameters).to.deep.equal({page: null});
     });
 
   });

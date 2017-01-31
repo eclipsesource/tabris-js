@@ -62,17 +62,14 @@ export default class NavigationView extends Widget.extend(CONFIG) {
 
   _removeChild(child) {
     if (child instanceof Page) {
-      if (!this.pages().includes(child)) {
+      let pages = this.pages();
+      if (!pages.includes(child)) {
         return;
       }
-      // TODO remove iOS only stack_ calls
-      if (this.pages().length > 1 && child === this.pages().first()) {
-        this._nativeCall('stack_clear', {});
-      }
+      let prev = pages[pages.indexOf(child) - 1];
+      this._nativeCall('popTo', {page: prev ? prev.cid : null});
       this._triggerDisappear();
       this._popPagesAbove(child);
-      if (!this._inPopAbove) {
-      }
     }
     Widget.prototype._removeChild.apply(this, arguments);
     if (child instanceof Page) {
