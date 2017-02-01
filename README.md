@@ -4,44 +4,52 @@
 [![Slack Status](https://tabrisjs.herokuapp.com/badge.svg)](https://tabrisjs.herokuapp.com)
 
 Tabris.js is a framework for developing mobile apps with native UIs in JavaScript.
-iOS and Android apps can be built entirely from one code base, which frees you from the task of managing code for the two platforms individually.
+iOS and Android apps can be built entirely from one code base, which frees you from the task of managing code for multiple platforms.
 
-## Getting Started
+![Tabris.js hello world](doc/img/hello-example.png)
 
-To start developing Tabris.js applications, log in to [tabrisjs.com](http://tabrisjs.com) and select "Getting Started". Be sure to also check out code snippets, as well as examples in the Tabris.js Developer App ([Play Store](https://play.google.com/store/apps/details?id=com.eclipsesource.tabrisjs2) / [App Store](https://itunes.apple.com/us/app/tabris.js-2/id1166468326?mt=8)).
-
-## Native performance
+## Native widgets
 
 The code of the application is loaded dynamically - nothing is precompiled. JavaScript is executed Just-in-Time and passed via a native bridge to the device. Tabris.js accesses native controls and does not depend on webviews to render the app's UI. As a result, the performance of the apps cannot be distinguished from apps developed directly in native code of the platforms.
 
-![Native UI demo](https://tabrisjs.com/assets/public-content/img/examples/bookstore.gif)
+## Getting started
+
+To start developing Tabris.js applications, visit [tabrisjs.com](http://tabrisjs.com) and check out the "[Getting Started](https://tabrisjs.com/documentation/latest/getting-started)" guide in the documentation. Be sure to also consult the code [snippets](https://github.com/eclipsesource/tabris-js/tree/master/snippets) and [examples](https://github.com/eclipsesource/tabris-js/tree/master/examples) in the Tabris.js Developer App (download from the app store for [Android](https://play.google.com/store/apps/details?id=com.eclipsesource.tabrisjs2) and [iOS](https://itunes.apple.com/us/app/tabris.js-2/id1166468326?mt=8)).
+
+## Extensible
+
+Tabris.js can be extended with [Cordova plugins](https://cordova.apache.org/plugins/) to add support for additional native features. A cordova plugin is also able to directly interface with the native widgets (as can be seen e.g. in the [tabris-plugin-maps](https://github.com/eclipsesource/tabris-plugin-maps)).
+ 
+ Additionally [npm modules](https://www.npmjs.com/) can be used to further enrich the available JS APIs.
+
+Tabris.js also adds support for many key web technologies including:
+- _Canvas_
+- _XMLHttpRequest / fetch()_
+- _WebSockets_
+- _localStorage_
+
 
 ## Online build
 
-Tabris.js features an online build service, which means there is no need to download huge SDKs or use specific hardware for development (e.g. a Mac machine to build for iOS). A local build is also available as an option.
+To package your source into a installable app, Tabris.js features an online [build service](https://tabrisjs.com/documentation/latest/build). There is no need to download a huge SDK or use specific hardware for development (e.g. a Mac machine to build for iOS). A [local build](https://tabrisjs.com/documentation/latest/local-build) is also available as an option if more customization is needed.
 
-## Web APIs
 
-Tabris.js provides many web APIs, including:
-
-* Canvas 2d context
-* XMLHttpRequest
-* localStorage
-
-Tabris.js also makes use of Cordova plugins, Cordova build, npm and the CommonJS module system. The programming model is inspired, among others, by Backbone and jQuery.
-
-## Build tabris module
+## Build tabris npm module
 
 Follow these steps if you want to build the tabris module yourself.
 
-Install [Grunt](http://gruntjs.com) using [npm](http://www.npmjs.com):
+Install the [Grunt](http://gruntjs.com) build tool using [npm](http://www.npmjs.com):
 
-    npm install -g grunt-cli
+```bash
+npm install -g grunt-cli
+```
 
-Fetch dependencies and build:
+In the [tabris-js](https://github.com/eclipsesource/tabris-js) root directory fetch the dependencies and build:
 
-    npm install
-    grunt [-v]
+```bash
+npm install
+grunt
+```
 
 ## License
 
