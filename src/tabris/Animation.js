@@ -38,8 +38,8 @@ const CONFIG = {
 
 class Animation extends NativeObject.extend(CONFIG) {
 
-  _create(properties) {
-    super._create(properties);
+  _create(type, properties) {
+    super._create(type, properties);
     this._nativeListen('Start', true);
     this._nativeListen('Completion', true);
     return this;

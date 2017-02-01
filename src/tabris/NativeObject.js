@@ -7,26 +7,25 @@ Object.assign(EventsClass.prototype, Events);
 export default class NativeObject extends EventsClass {
 
   static extend(members, superType = NativeObject) {
+    let cid = members._cid;
+    let type = members._type;
     let Type = class extends superType {
       constructor(properties) {
-        if (Type._cid) {
-          super(Type._cid);
+        if (cid) {
+          super(cid);
         } else {
           super();
-          this._create(properties || {});
+          this._create(type, properties || {});
         }
       }
     };
     for (let key in members) {
-      if (!(key in staticMembers)) {
+      if (!['_cid', '_name', '_type', '_events', '_properties'].includes(key)) {
         throw new Error('Illegal config option: ' + key);
       }
     }
-    for (let member in staticMembers) {
-      Type[member] = members[member] || getDefault(member);
-    }
-    Type._events = normalizeEvents(Type._events);
-    Type._properties = normalizeProperties(Type._properties);
+    Type._events = normalizeEvents(members._events || {});
+    Type._properties = normalizeProperties(members._properties || {});
     Type._trigger = buildTriggerMap(Type._events);
     Object.assign(Type.prototype, {type: members._name});
     createProperties(Type.prototype, Type._properties);
@@ -145,8 +144,7 @@ export default class NativeObject extends EventsClass {
     this.trigger('change:' + propertyName, this, decodedValue);
   }
 
-  _create(properties) {
-    let type = this.constructor._type || this.type;
+  _create(type, properties) {
     tabris._nativeBridge.create(this.cid, type);
     this._reorderProperties(Object.keys(properties)).forEach(function(name) {
       setExistingProperty.call(this, name, properties[name]);
@@ -353,11 +351,6 @@ function buildTriggerMap(events) {
   return result;
 }
 
-function getDefault(member) {
-  let value = staticMembers[member];
-  return value instanceof Object ? Object.assign({}, value) : value;
-}
-
 function createProperties(target, definitions) {
   for (let property in definitions) {
     createProperty(target, property);
@@ -378,11 +371,3 @@ function createProperty(target, property) {
 function valueOf(value) {
   return value instanceof Function ? value() : value;
 }
-
-let staticMembers = {
-  '_events': {},
-  '_name': null,
-  '_type': null,
-  '_cid': null,
-  '_properties': {}
-};

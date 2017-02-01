@@ -36,16 +36,14 @@ describe('NativeObject', function() {
 
     beforeEach(function() {
       TestType = NativeObject.extend({
-        _name: 'TestType',
-        _properties: {foo: 'any', bar: 'any'},
-        _events: {bar: true}
+        _properties: {foo: 'any'}
       });
       object = new TestType();
       client.resetCalls();
     });
 
     it('calls native create with properties', function() {
-      object._create({foo: 23});
+      object._create('TestType', {foo: 23});
 
       let calls = client.calls({op: 'create', type: 'TestType'});
       expect(calls.length).to.equal(1);
@@ -56,7 +54,7 @@ describe('NativeObject', function() {
       let other = new TestType();
       TestType._properties.foo.type = types.proxy;
 
-      object._create({foo: other});
+      object._create('TestType', {foo: other});
       let properties = client.calls({op: 'create', id: object.cid})[0].properties;
       expect(properties.foo).to.equal(other.cid);
     });
@@ -775,20 +773,12 @@ describe('NativeObject.extend', function() {
     expect(instance.constructor._properties).to.eql({});
   });
 
-  it('adds _type to constructor', function() {
-    let CustomType = NativeObject.extend({_type: 'foo'});
-    let instance = new CustomType();
-
-    expect(instance.constructor._type).to.equal('foo');
-    expect(instance._type).to.be.undefined;
-  });
-
   describe('constructor', function() {
 
     let TestType;
 
     beforeEach(function() {
-      TestType = NativeObject.extend({_name: 'TestType', _properties: {foo: 'any'}});
+      TestType = NativeObject.extend({_type: 'TestType', _properties: {foo: 'any'}});
     });
 
     it('fails if tabris.js not yet started', function() {

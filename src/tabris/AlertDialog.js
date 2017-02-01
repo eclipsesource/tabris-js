@@ -48,8 +48,8 @@ const CONFIG = {
 
 export default class AlertDialog extends NativeObject.extend(CONFIG) {
 
-  _create(properties) {
-    super._create(properties);
+  _create(type, properties) {
+    super._create(type, properties);
     this._nativeListen('close', true);
     return this;
   }

@@ -10,7 +10,7 @@ describe('gestures:', function() {
 
   beforeEach(function() {
     client = new ClientStub();
-    TestType = Widget.extend({_name: 'TestType'});
+    TestType = Widget.extend({_type: 'TestType'});
     global.tabris = {
       on: () => {},
       _proxies: new ProxyStore(),

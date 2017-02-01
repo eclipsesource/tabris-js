@@ -84,9 +84,9 @@ const CONFIG = {
 
 export default class Picker extends Widget.extend(CONFIG) {
 
-  _create(properties) {
+  _create(type, properties) {
     let initProperties = ('selection' in properties) ? {} : {selectionIndex: 0};
-    super._create(Object.assign(initProperties, properties));
+    super._create(type, Object.assign(initProperties, properties));
     return this;
   }
 

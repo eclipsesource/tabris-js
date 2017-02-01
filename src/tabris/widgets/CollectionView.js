@@ -152,9 +152,9 @@ const CONFIG = {
 
 export default class CollectionView extends Widget.extend(CONFIG) {
 
-  _create(properties) {
+  _create(type, properties) {
     this._items = [];
-    let result = super._create(properties);
+    let result = super._create(type, properties);
     this._nativeListen('requestinfo', true);
     this._nativeListen('createitem', true);
     this._nativeListen('populateitem', true);

@@ -18,8 +18,8 @@ export default class Ui extends Widget.extend(CONFIG) {
     }
   }
 
-  _create(properties) {
-    super._create(properties);
+  _create(type, properties) {
+    super._create(type, properties);
     this._appendNamedChild('contentView', createContentView());
     this._appendNamedChild('statusBar', createStatusBar());
     this._appendNamedChild('navigationBar', createNavigationBar());
