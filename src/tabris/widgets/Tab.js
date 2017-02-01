@@ -11,12 +11,15 @@ const CONFIG = {
     image: {type: 'image', default: null},
     selectedImage: {type: 'image', default: null},
     badge: {type: 'string', default: ''}
-  },
+  }
 
-  _supportsChildren: true
 };
 
 export default class Tab extends Widget.extend(CONFIG) {
+
+  _acceptChild() {
+    return true;
+  }
 
   _setParent(parent) {
     if (!(parent instanceof TabFolder)) {

@@ -4,7 +4,6 @@ import NavigationView from '../widgets/NavigationView';
 const CONFIG = {
   _name: 'Page',
   _type: 'tabris.Page',
-  _supportsChildren: true,
   _properties: {
     image: {type: 'image', default: null},
     title: {type: 'string', default: ''},
@@ -20,6 +19,10 @@ export default class Page extends Widget.extend(CONFIG) {
 
   insertAfter() {
     throw new Error('insertAfter not supported on Page');
+  }
+
+  _acceptChild() {
+    return true;
   }
 
   _setParent(parent) {

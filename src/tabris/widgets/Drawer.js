@@ -6,8 +6,6 @@ const CONFIG = {
 
   _type: 'tabris.Drawer',
 
-  _supportsChildren: true,
-
   _properties: {
     win_displayMode: {
       type: ['choice', ['overlay', 'compactOverlay']],
@@ -49,6 +47,10 @@ export default class Drawer extends Widget.extend(CONFIG) {
     if (arguments[0] !== true) {
       throw new Error('Drawer can not be created');
     }
+  }
+
+  _acceptChild() {
+    return true;
   }
 
   _setParent(parent, index) {

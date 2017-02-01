@@ -7,10 +7,6 @@ const CONFIG = {
 
   _type: 'tabris.CollectionView',
 
-  _supportsChildren(child) {
-    return child instanceof Cell;
-  },
-
   _properties: {
     itemHeight: {
       type: 'any', // "function|natural",
@@ -164,6 +160,10 @@ export default class CollectionView extends Widget.extend(CONFIG) {
     this._nativeListen('populateitem', true);
     tabris.on('flush', () => this._reload());
     return result;
+  }
+
+  _acceptChild(child) {
+    return child instanceof Cell;
   }
 
   _setItems(items, options) {

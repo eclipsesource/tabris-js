@@ -6,8 +6,6 @@ const CONFIG = {
 
   _type: 'tabris.NavigationBar',
 
-  _supportsChildren: false,
-
   _properties: {
     displayMode: {type: ['choice', ['default', 'float', 'hide']], default: 'default'},
     height: {

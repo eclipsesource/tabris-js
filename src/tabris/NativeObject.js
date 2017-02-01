@@ -390,6 +390,5 @@ let staticMembers = {
   '_name': null,
   '_type': null,
   '_cid': null,
-  '_properties': {},
-  '_supportsChildren': false
+  '_properties': {}
 };

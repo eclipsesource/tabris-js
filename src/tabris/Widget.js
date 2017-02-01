@@ -147,13 +147,13 @@ export default class Widget extends NativeObject {
     }
   }
 
+  _acceptChild() {
+    return false;
+  }
+
   _addChild(child, index) {
-    let check = this.constructor._supportsChildren;
-    if (check === false) {
-      throw new Error(this.type + ' cannot contain children');
-    }
-    if (typeof check === 'function' && !check.call(this, child)) {
-      throw new Error(this.type + ' cannot contain children of type ' + child.type);
+    if (!this._acceptChild(child)) {
+      throw new Error(child.constructor.name + ' could not be appended to ' + this.constructor.name);
     }
     if (!this._children) {
       this._children = [];

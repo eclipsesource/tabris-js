@@ -6,13 +6,7 @@ import {create as createDrawer} from './Drawer';
 
 const CONFIG = {
   _name: 'Ui',
-  _type: 'tabris.Ui',
-  _supportsChildren(child) {
-    return child === this.contentView
-      || child === this.statusBar
-      || child === this.navigationBar
-      || child === this.drawer;
-  }
+  _type: 'tabris.Ui'
 };
 
 export default class Ui extends Widget.extend(CONFIG) {
@@ -31,6 +25,13 @@ export default class Ui extends Widget.extend(CONFIG) {
     this._appendNamedChild('navigationBar', createNavigationBar());
     this._appendNamedChild('drawer', createDrawer());
     return this;
+  }
+
+  _acceptChild(child) {
+    return child === this.contentView
+        || child === this.statusBar
+        || child === this.navigationBar
+        || child === this.drawer;
   }
 
   _appendNamedChild(name, child) {

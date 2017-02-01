@@ -6,8 +6,6 @@ const CONFIG = {
 
   _type: 'tabris.StatusBar',
 
-  _supportsChildren: false,
-
   _properties: {
     theme: {type: ['choice', ['default', 'light', 'dark']], default: 'default'},
     displayMode: {type: ['choice', ['default', 'float', 'hide']], default: 'default'},

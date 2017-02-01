@@ -42,12 +42,14 @@ const CONFIG = {
         this.trigger('scroll', this, event);
       }
     }
-  },
-
-  _supportsChildren(child) {
-    return child.type === 'Tab';
   }
 
 };
 
-export default class TabFolder extends Widget.extend(CONFIG) {}
+export default class TabFolder extends Widget.extend(CONFIG) {
+
+  _acceptChild(child) {
+    return child.type === 'Tab';
+  }
+
+}

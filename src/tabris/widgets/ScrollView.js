@@ -6,8 +6,6 @@ const CONFIG = {
 
   _type: 'tabris.ScrollView',
 
-  _supportsChildren: true,
-
   _properties: {
     direction: {
       type: ['choice', ['horizontal', 'vertical']],
@@ -37,6 +35,10 @@ const CONFIG = {
 };
 
 export default class ScrollView extends Widget.extend(CONFIG) {
+
+  _acceptChild() {
+    return true;
+  }
 
   scrollToY(offset, options) {
     this._nativeCall('scrollToY', {

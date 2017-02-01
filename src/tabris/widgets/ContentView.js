@@ -4,9 +4,7 @@ const CONFIG = {
 
   _name: 'ContentView',
 
-  _type: 'tabris.Composite',
-
-  _supportsChildren: true
+  _type: 'tabris.Composite'
 
 };
 
@@ -22,6 +20,10 @@ export default class ContentView extends Widget.extend(CONFIG) {
   _create() {
     Widget.prototype._create.call(this, {});
     this._nativeSet('root', true);
+  }
+
+  _acceptChild() {
+    return true;
   }
 
   _setParent(parent, index) {

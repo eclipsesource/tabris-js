@@ -10,7 +10,11 @@ import {omit} from '../../src/tabris/util';
 describe('Widget', function() {
 
   let client;
-  let TestWidget;
+  class TestWidget extends Widget.extend({_name: 'TestWidget'}) {
+    _acceptChild() {
+      return true;
+    }
+  }
 
   beforeEach(function() {
     client = new ClientStub();
@@ -20,10 +24,6 @@ describe('Widget', function() {
       device: {platform: 'Android', version: 18}
     };
     global.tabris._nativeBridge = new NativeBridge(client);
-    TestWidget = Widget.extend({
-      _name: 'TestWidget',
-      _supportsChildren: true
-    });
   });
 
   afterEach(restore);
@@ -436,29 +436,15 @@ describe('Widget', function() {
 
       });
 
-      describe('when children are not supported', function() {
+      describe('when child is not accepted', function() {
 
         it('throws an error', function() {
-          TestWidget._supportsChildren = false;
           let child = new TestWidget();
+          stub(widget, '_acceptChild', () => false);
 
           expect(() => {
             widget.append(child);
-          }).to.throw(Error, 'TestWidget cannot contain children');
-          expect(widget.children().toArray()).not.to.contain(child);
-        });
-
-      });
-
-      describe('when called with children of unsupported type', function() {
-
-        it('logs an error', function() {
-          TestWidget._supportsChildren = () => false;
-          let child = new TestWidget();
-
-          expect(() => {
-            widget.append(child);
-          }).to.throw(Error, 'TestWidget cannot contain children of type TestWidget');
+          }).to.throw(Error, 'TestWidget could not be appended to TestWidget');
           expect(widget.children().toArray()).not.to.contain(child);
         });
 

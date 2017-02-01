@@ -3,8 +3,7 @@ import Widget from '../Widget';
 
 const CONFIG = {
   _name: 'Canvas',
-  _type: 'tabris.Canvas',
-  _supportsChildren: true,
+  _type: 'tabris.Canvas'
 };
 
 export default class Canvas extends Widget.extend(CONFIG) {
@@ -14,6 +13,10 @@ export default class Canvas extends Widget.extend(CONFIG) {
       return CanvasContext.getContext(this, width, height);
     }
     return null;
+  }
+
+  _acceptChild() {
+    return true;
   }
 
 }

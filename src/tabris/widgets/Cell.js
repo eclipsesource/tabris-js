@@ -6,8 +6,6 @@ const CONFIG = {
 
   _type: 'tabris.Composite',
 
-  _supportsChildren: true,
-
   _properties: {
     item: {
       access: {
@@ -37,6 +35,10 @@ export default class Cell extends Widget.extend(CONFIG) {
 
   dispose() {
     console.warn('CollectionView cells are container-managed, they cannot be disposed of');
+  }
+
+  _acceptChild() {
+    return true;
   }
 
 }

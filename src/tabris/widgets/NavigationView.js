@@ -30,10 +30,6 @@ const CONFIG = {
         this._handleBackNavigation();
       }
     }
-  },
-
-  _supportsChildren(child) {
-    return child instanceof Page || child instanceof Action || child instanceof SearchAction;
   }
 
 };
@@ -45,6 +41,10 @@ export default class NavigationView extends Widget.extend(CONFIG) {
     this._nativeListen('backnavigation', true);
     this._nativeListen('back', true);
     return result;
+  }
+
+  _acceptChild(child) {
+    return child instanceof Page || child instanceof Action || child instanceof SearchAction;
   }
 
   _addChild(child, index) {
