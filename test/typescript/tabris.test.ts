@@ -471,11 +471,10 @@ function test_tabris_device() {
 }
 
 function test_tabris_ui() {
-  var page: Page = ui.get("activePage");
-  var bg: string = ui.get("background");
-  var tc: string = ui.get("textColor");
-  var visible: boolean = ui.get("toolbarVisible");
-  var same: UI = ui.on("change:activePage", () => {}).off("change:activePage", () => {});
+  var statusBar: StatusBar = ui.statusBar;
+  var navigationBar: NavigationBar = ui.navigationBar;
+  var drawer: Drawer = ui.drawer;
+  var contentView: Composite = ui.contentView;
 }
 
 function test_AlertDialog() {

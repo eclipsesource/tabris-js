@@ -1,57 +1,24 @@
 {
   "type": "UI",
   "object": "ui",
-  "description": "The object `tabris.ui` is the root element for all widgets. This is the parent for all top-level pages, *actions* and the *drawer*.",
+  "description": "The object `tabris.ui` represents the top-level parent for all widgets. It provides access to the status bar, the navigation bar, the drawer and the content view.",
   "extends": "Widget",
   "properties": {
-    "background": {
-      "type": "Color",
-      "description": "Background color for the navigation elements."
+    "statusBar":{
+      "type": "StatusBar",
+      "description": "Represents the system status bar. This is the area where notifications, status icons and device time are displayed."
     },
-    "textColor": {
-      "type": "Color",
-      "description": "Text color for the navigation elements."
+    "navigationBar":{
+      "type": "NavigationBar",
+      "description": "Represents the system navigation bar is the onscreen area where *Back*, *Home* and similar buttons are displayed. It is only available on Android."
     },
-    "toolbarVisible": {
-      "type": "boolean",
-      "default": "true",
-      "description": "Whether the toolbars above and below pages are visible."
+    "contentView":{
+      "type": "Composite",
+      "description": "The content view is the container for the widgets that constitute the app's main UI. It covers the entire app area. Widgets can be appended directly to the content view."
     },
-    "activePage": {
-      "type": "Page",
-      "description": "The currently visible page."
-    },
-    "displayMode": {
-      "type": "string",
-      "values": ["normal", "fullscreen"],
-      "default": "normal",
-      "description": "Allows to switch the UI to full screen."
-    },
-    "statusBarTheme": {
-      "type": "string",
-      "values": ["light", "dark", "default"],
-      "default": "default",
-      "description": "The theme to use for the system status bar. The value \"default\" selects the platform default. This property will only control the foreground text and icons. The 'light' theme will result in *dark* foreground. Only supported on iOS and Android 6+."
-    }
-  },
-  "events": {
-    "change:activePage": {
-      "parameters": [
-        {
-          "name": "ui",
-          "type": "UI"
-        },
-        {
-          "name": "page",
-          "type": "Page",
-          "description": "The page that is now active (visible)."
-        },
-        {
-          "name": "options",
-          "type": "Object"
-        }
-      ],
-      "description": "Fired when the active page changes."
+    "drawer":{
+      "type": "Drawer",
+      "description": "A drawer that can be swiped in from the left edge of the screen. The drawer is locked by default. To use it in an application, set the property `locked` to `false`. The drawer can contain any kind of widgets."
     }
   }
 }
