@@ -55,7 +55,7 @@
     "backnavigation": {
       "parameters": [
         {"name": "app", "type": "App"},
-        {"name": "event", "type": "Object"}
+        {"name": "event", "type": "{preventDefault: Function}"}
       ],
       "description": "Fired when the back button is pressed on Android. To suppress the default back navigation behavior, call `event.preventDefault()`."
     }
@@ -88,8 +88,8 @@
           },
           {
             "name": "callback",
-            "type": "Function",
-            "description": "A callback function to be called when the installation has finished or failed. In case of a failure, the callback will receive a parameter `error` that contains an Error object. If the installation succeeds, this parameter will be `undefined` and a second parameter will contain the parsed content of the file `patch.json` from the installed patch."
+            "type": "(error: Error|null, patch: any|null) => void",
+            "description": "A callback function to be called when the installation has finished or failed. In case of a failure, the callback will receive a parameter `error` that contains an Error object. If the installation succeeds, this parameter will be `null` and a second parameter will contain the parsed content of the file `patch.json` from the installed patch."
           }
         ],
         "description": "Installs a patch from the given URL. When the patch is successfully installed, it will remain inactive until the application is reloaded.",

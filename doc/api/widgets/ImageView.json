@@ -22,7 +22,7 @@
     "load": {
       "parameters": [
         {"name": "widget", "type": "this", "description": "The widget on which the event was triggered"},
-        {"name": "event", "type": "Object", "description": "Contains the final status of the loading process `{error: boolean}`"}
+        {"name": "event", "type": "{error: boolean}", "description": "Contains the final status of the loading process"}
       ],
       "description": "Fired when the image loading has finished. The event parameter contains information about the loading process."
     }

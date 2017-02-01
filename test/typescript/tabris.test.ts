@@ -116,9 +116,9 @@ function test_CollectionView() {
     refreshIndicator: true,
     refreshMessage: "foo"
   });
-  let cellType: string|Function = widget.cellType;
-  let initializeCell: Function = widget.initializeCell;
-  let itemHeight: number|Function = widget.itemHeight;
+  let cellType: string|((item: any) => string) = widget.cellType;
+  let initializeCell: ((cell: Cell, cellType: string) => void) = widget.initializeCell;
+  let itemHeight: number|((item: any, cellType: string) => number) = widget.itemHeight;
   let items: any[] = widget.items;
   let refreshEnabled: boolean = widget.refreshEnabled;
   let refreshIndicator: boolean = widget.refreshIndicator;
@@ -156,6 +156,9 @@ function test_ImageView() {
     scaleMode: "auto"
   });
   let scaleMode: "auto" | "fill" | "fit" | "none" | "stretch" = widget.scaleMode;
+  widget.on('load', (widget, event) => {
+    let foo: boolean = event.error;
+  });
 }
 
 function test_NavigationBar() {
@@ -377,6 +380,13 @@ function test_WebView() {
   });
   let url: string = widget.url;
   let html: string = widget.html;
+  widget.on('navigate', (widget, event) => event.preventDefault());
+  widget.on('download', (widget, event) => {
+   let url: string = event.url;
+   let mimeType: string = event.mimeType;
+   let contentLength: number = event.contentLength;
+   let contentDisposition: string = event.contentDisposition;
+  });
 }
 
 function test_Widget() {
@@ -490,8 +500,9 @@ function test_WidgetCollection() {
 }
 
 function test_tabris_app() {
-  app.installPatch("url", (error: Error, patch: Object) => {});
+  app.installPatch("url", (error: Error, patch: any) => {});
   app.reload();
+  app.on('backnavigation', (app,event) => event.preventDefault());
 }
 
 function test_tabris_device() {

@@ -4,7 +4,7 @@
   "extends": "Widget",
   "properties": {
     "itemHeight": {
-      "type": "number|Function",
+      "type": "number|((item: any, cellType: string) => number)",
       "description": "The height of a collection cell. If set to a function, this function will be called for every item, providing the item and the cell type as parameters, and must return the item height for the given item."
     },
     "items": {
@@ -12,12 +12,12 @@
       "description": "An array of data items to be displayed by the collection view. For dynamic content, use the methods `insert` and `remove` instead of setting this property directly."
     },
     "initializeCell": {
-      "type": "Function",
+      "type": "(cell: Cell, cellType: string) => void",
       "static": true,
       "description": "A callback used to initialize a collection cell by attaching widget and *change:item* listener. Cells are created by the framework and recycled on scrolling. This callback receives the cell as the first and the cell type as second parameter."
     },
     "cellType": {
-      "type": "string|Function",
+      "type": "string|((item: any) => string)",
       "description": "The name of the cell type to use for a given item. This name will be passed to the `initializeCell` and `itemHeight` functions. Cells will be reused only by items that require the same cell type. If set to a function, this function will be called for every item, providing the item as a parameter, and must return a name for the cell type to use for the given item."
     },
     "refreshEnabled": {

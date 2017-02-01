@@ -16,7 +16,7 @@
     "navigate": {
       "parameters": [
         {"name": "widget", "type": "this"},
-        {"name": "event", "type": "Object"}
+        {"name": "event", "type": "{preventDefault: () => void}"}
       ],
       "description": "Fired when the WebView is about to navigate to a new URL. Listeners can intercept the navigation by calling `event.preventDefault()`."
     },
@@ -29,7 +29,7 @@
     "download": {
       "parameters": [
         {"name": "widget", "type": "this"},
-        {"name": "event", "type": "Object"}
+        {"name": "event", "type": "{url: string, mimeType: string, contentLength: number, contentDisposition: string}"}
       ],
       "description": "Fired when the WebView requests a download. The download event provides the properties `url`, `mimeType`, `contentLength` and `contentDisposition`. Supported only on Android."
     },
