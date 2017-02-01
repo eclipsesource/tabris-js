@@ -21,11 +21,11 @@ export default class Tab extends Widget.extend(CONFIG) {
     return true;
   }
 
-  _setParent(parent) {
+  _setParent(parent, index) {
     if (!(parent instanceof TabFolder)) {
       throw new Error('Tab must be a child of TabFolder');
     }
-    Widget.prototype._setParent.call(this, parent);
+    super._setParent(parent, index);
   }
 
 }

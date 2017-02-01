@@ -36,11 +36,11 @@ const CONFIG = {
 
 export default class NavigationView extends Widget.extend(CONFIG) {
 
-  _create() {
-    let result = Widget.prototype._create.apply(this, arguments);
+  _create(properties) {
+    super._create(properties);
     this._nativeListen('backnavigation', true);
     this._nativeListen('back', true);
-    return result;
+    return this;
   }
 
   _acceptChild(child) {
@@ -54,7 +54,7 @@ export default class NavigationView extends Widget.extend(CONFIG) {
       }
       this._triggerDisappear();
     }
-    Widget.prototype._addChild.apply(this, arguments);
+    super._addChild(child, index);
     if (child instanceof Page) {
       this._triggerAppear();
     }
@@ -73,7 +73,7 @@ export default class NavigationView extends Widget.extend(CONFIG) {
       this._triggerDisappear();
       this._popPagesAbove(child);
     }
-    Widget.prototype._removeChild.apply(this, arguments);
+    super._removeChild(child);
     if (child instanceof Page) {
       this._triggerAppear();
     }

@@ -17,8 +17,8 @@ export default class ContentView extends Widget.extend(CONFIG) {
     }
   }
 
-  _create() {
-    Widget.prototype._create.call(this, {});
+  _create(properties) {
+    super._create(properties);
     this._nativeSet('root', true);
   }
 

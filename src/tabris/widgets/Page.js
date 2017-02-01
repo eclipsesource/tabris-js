@@ -25,11 +25,11 @@ export default class Page extends Widget.extend(CONFIG) {
     return true;
   }
 
-  _setParent(parent) {
+  _setParent(parent, index) {
     if (parent && !(parent instanceof NavigationView)) {
       throw new Error('Page cannot be appended to parent of type ' + parent.type);
     }
-    Widget.prototype._setParent.apply(this, arguments);
+    super._setParent(parent, index);
   }
 
 }
