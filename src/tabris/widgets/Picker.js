@@ -6,8 +6,6 @@ const CONFIG = {
 
   _type: 'tabris.Picker',
 
-  _initProperties: {selectionIndex: 0},
-
   _events: {
     select: {
       alias: 'change:selectionIndex',
@@ -85,6 +83,12 @@ const CONFIG = {
 };
 
 export default class Picker extends Widget.extend(CONFIG) {
+
+  _create(properties) {
+    let initProperties = ('selection' in properties) ? {} : {selectionIndex: 0};
+    super._create(Object.assign(initProperties, properties));
+    return this;
+  }
 
   _reorderProperties(properties) {
     // items property depends on itemText, selection/selectionIndex depend on items

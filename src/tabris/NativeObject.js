@@ -148,11 +148,6 @@ export default class NativeObject extends EventsClass {
   _create(properties) {
     let type = this.constructor._type || this.type;
     tabris._nativeBridge.create(this.cid, type);
-    if (this.constructor._initProperties) {
-      for (let name in this.constructor._initProperties) {
-        this._nativeSet(name, this.constructor._initProperties[name]);
-      }
-    }
     this._reorderProperties(Object.keys(properties)).forEach(function(name) {
       setExistingProperty.call(this, name, properties[name]);
     }, this);
@@ -386,7 +381,6 @@ function valueOf(value) {
 
 let staticMembers = {
   '_events': {},
-  '_initProperties': {},
   '_name': null,
   '_type': null,
   '_cid': null,

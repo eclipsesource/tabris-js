@@ -61,37 +61,6 @@ describe('NativeObject', function() {
       expect(properties.foo).to.equal(other.cid);
     });
 
-    it('sends native set for init properties', function() {
-      let CustomType = NativeObject.extend({
-        _name: 'CustomType',
-        _initProperties: {foo: 23},
-        _properties: {bar: 'any'}
-      });
-
-      new CustomType({bar: 42});
-
-      let properties = client.calls({op: 'create', type: 'CustomType'})[0].properties;
-      expect(properties).to.eql({foo: 23, bar: 42});
-    });
-
-    it('does not raise warning for init properties', function() {
-      let CustomType = NativeObject.extend({_initProperties: {foo: 23}});
-      stub(console, 'warn');
-
-      new CustomType();
-
-      expect(console.warn).not.to.have.been.called;
-    });
-
-    it('does not modify prototype properties', function() {
-      let CustomType = NativeObject.extend({_initProperties: {}});
-      stub(console, 'warn');
-
-      new CustomType({foo: 23});
-
-      expect(CustomType._initProperties).to.eql({});
-    });
-
   });
 
   describe('instance', function() {
