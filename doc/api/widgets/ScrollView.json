@@ -5,33 +5,48 @@
   "properties": {
     "direction": {
       "type": "string",
-      "values": ["vertical", "horizontal"],
+      "values": [
+        "vertical",
+        "horizontal"
+      ],
       "default": "vertical",
       "static": true,
       "description": "Specifies the scrolling direction of the scroll composite."
     },
     "offsetX": {
       "type": "number",
-      "description": "The horizontal scrolling position. This property is read-only."
+      "description": "The horizontal scrolling position in dip. This property is read-only."
     },
     "offsetY": {
       "type": "number",
-      "description": "The vertical scrolling position. This property is read-only."
+      "description": "The vertical scrolling position in dip. This property is read-only."
     }
   },
   "methods": {
     "scrollToX": [
       {
         "parameters": [
-          {"name": "offset", "type": "number"}
+          {
+            "name": "offset",
+            "type": "number",
+            "description": "The offset to scroll to in dip."
+          }
         ],
         "returns": "this",
         "description": "Scrolls to the given horizontal offset using an animation. Has no effect on a vertical `ScrollView`"
       },
       {
         "parameters": [
-          {"name": "offset", "type": "number"},
-          {"name": "options", "type": "Object"}
+          {
+            "name": "offset",
+            "type": "number",
+            "description": "The offset to scroll to in dip."
+          },
+          {
+            "name": "options",
+            "type": "{animate?: boolean}",
+            "description": "An additional object to control the animation. Set `{animate: false}` to scroll without an animation."
+          }
         ],
         "returns": "this",
         "description": "Scrolls to the given horizontal offset. Give `{animate: false}` as the second parameter to suppress the animation."
@@ -40,15 +55,27 @@
     "scrollToY": [
       {
         "parameters": [
-          {"name": "offsetY", "type": "number"}
+          {
+            "name": "offsetY",
+            "type": "number",
+            "description": "The offset to scroll to in dip."
+          }
         ],
         "returns": "this",
         "description": "Scrolls to the given vertical offset using an animation. Has no effect on a horizontal `ScrollView`"
       },
       {
         "parameters": [
-          {"name": "offsetY", "type": "number"},
-          {"name": "options", "type": "Object"}
+          {
+            "name": "offsetY",
+            "type": "number",
+            "description": "The offset to scroll to in dip."
+          },
+          {
+            "name": "options",
+            "type": "{animate?: boolean}",
+            "description": "An additional object to control the animation. Set `{animate: false}` to scroll without an animation."
+          }
         ],
         "returns": "this",
         "description": "Scrolls to the given vertical offset. Give `{animate: false}` as the second parameter to suppress the animation."
@@ -58,15 +85,29 @@
   "events": {
     "scrollX": {
       "parameters": [
-        {"name": "widget", "type": "this"},
-        {"name": "offset", "type": "number", "description": "Indicates the current horizontal scrolling position."}
+        {
+          "name": "widget",
+          "type": "this"
+        },
+        {
+          "name": "offset",
+          "type": "number",
+          "description": "Indicates the current horizontal scrolling position."
+        }
       ],
       "description": "Fired on scrolling horizontally."
     },
     "scrollY": {
       "parameters": [
-        {"name": "widget", "type": "this"},
-        {"name": "offset", "type": "number", "description": "Indicates the current vertical scrolling position."}
+        {
+          "name": "widget",
+          "type": "this"
+        },
+        {
+          "name": "offset",
+          "type": "number",
+          "description": "Indicates the current vertical scrolling position."
+        }
       ],
       "description": "Fired on scrolling vertically."
     }

@@ -212,12 +212,29 @@ function test_RadioButton() {
 }
 
 function test_ScrollView() {
-  var widget: ScrollView = new ScrollView();
-  widget.set("foo", 23);
-  widget.set({
-    direction: "horizontal"
+  let scrollView: ScrollView = new ScrollView();
+
+  scrollView.set('foo', 23);
+  scrollView.set({
+    direction: 'horizontal'
   });
-  let direction: "horizontal" | "vertical" = widget.direction;
+
+  let direction: 'horizontal' | 'vertical' = scrollView.direction;
+  scrollView.direction = 'horizontal';
+
+  let offsetX: number = scrollView.offsetX;
+  scrollView.offsetX = 23;
+
+  let offsetY: number = scrollView.offsetY;
+  scrollView.offsetY = 42;
+
+  scrollView.scrollToX(23);
+  scrollView.scrollToX(23, {});
+  scrollView.scrollToX(23, {animate: false});
+
+  scrollView.scrollToY(42);
+  scrollView.scrollToY(42, {});
+  scrollView.scrollToY(42, {animate: false});
 }
 
 function test_SearchAction() {
