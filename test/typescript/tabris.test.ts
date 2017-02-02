@@ -35,7 +35,9 @@ import {
   Device,
   ui,
   UI,
-  Image
+  Image,
+  Transformation,
+  AnimationOptions
 } from "tabris";
 
 var page: Page = new Page();
@@ -407,6 +409,23 @@ function test_Widget() {
   widget.detach();
   widget.dispose();
   let disposed = widget.isDisposed();
+
+  //animate
+  let transform: Transformation;
+  let opacity: number;
+  let options: AnimationOptions = {};
+  options = {
+    delay: 10,
+    duration: 10,
+    easing: "linear",
+    repeat: 10,
+    reverse: false,
+    name: "name",
+  }
+  widget.animate({}, {});
+  widget.animate({transform}, {});
+  widget.animate({opacity}, {});
+  widget.animate({},options);
 }
 
 function test_WidgetCollection() {
@@ -451,6 +470,23 @@ function test_WidgetCollection() {
 
   // dispose
   collection.dispose();
+
+    //animate
+  let transform: Transformation;
+  let opacity: number;
+  let options: AnimationOptions = {};
+  options = {
+    delay: 10,
+    duration: 10,
+    easing: "linear",
+    repeat: 10,
+    reverse: false,
+    name: "name",
+  }
+  collection.animate({}, {});
+  collection.animate({transform}, {});
+  collection.animate({opacity}, {});
+  collection.animate({},options);
 }
 
 function test_tabris_app() {

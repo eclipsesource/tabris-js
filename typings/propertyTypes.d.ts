@@ -202,3 +202,36 @@ type offset = number;
  * - **["prev()", offset]**
  */
 type margin = any;
+
+interface AnimationOptions {
+
+  /**
+   * Time until the animation starts in ms, defaults to 0.
+   */
+  delay?: number;
+
+  /**
+   * Duration of the animation in ms.
+   */
+  duration?: number;
+
+  /**
+   *  Easing function applied to the animation.
+   */
+  easing?: "linear"|"ease-in"|"ease-out"|"ease-in-out";
+
+  /**
+   *  Number of times to repeat the animation, defaults to 0.
+   */
+  repeat?: number;
+
+  /**
+   *  If true, alternates the direction of the animation on every repeat.
+   */
+  reverse?: boolean;
+
+  /**
+   * no effect, but will be given in animation events.
+   */
+  name?: string;
+}

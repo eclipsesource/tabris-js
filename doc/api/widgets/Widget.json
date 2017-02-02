@@ -125,12 +125,12 @@
         "parameters": [
           {
             "name": "properties",
-            "type": "Object",
+            "type": "{transform?: Transformation, opacity?: number}",
             "description": "The properties and target values to animate."
           },
           {
             "name": "options",
-            "type": "Object",
+            "type": "AnimationOptions",
             "description": "Configures the animation itself."
           }
         ],
