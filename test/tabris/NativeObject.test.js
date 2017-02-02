@@ -52,7 +52,7 @@ describe('NativeObject', function() {
 
     it('translates properties', function() {
       let other = new TestType();
-      TestType._properties.foo.type = types.proxy;
+      other.$properties.foo.type = types.proxy;
 
       object._create('TestType', {foo: other});
       let properties = client.calls({op: 'create', id: object.cid})[0].properties;
@@ -286,11 +286,12 @@ describe('NativeObject', function() {
         expect(listener).to.have.been.calledWith({});
       });
 
-      it('calls custom trigger', function() {
+      it('calls custom trigger function', function() {
+        let triggerFn = spy();
         let CustomType = NativeObject.extend({
           _events: {
             bar: {
-              trigger: spy()
+              trigger: triggerFn
             }
           }
         });
@@ -299,7 +300,7 @@ describe('NativeObject', function() {
 
         object._trigger('bar', {bar: 23});
 
-        expect(CustomType._events.bar.trigger).to.have.been.calledWith({bar: 23}, 'bar');
+        expect(triggerFn).to.have.been.calledWith({bar: 23}, 'bar');
       });
 
       it('returns result from custom trigger', function() {
@@ -318,12 +319,13 @@ describe('NativeObject', function() {
         expect(result).to.equal('result');
       });
 
-      it('calls custom trigger of translated event', function() {
+      it('calls custom trigger function of translated event', function() {
+        let triggerFn = spy();
         let CustomType = NativeObject.extend({
           _events: {
             bar: {
               name: 'foo',
-              trigger: spy()
+              trigger: triggerFn
             }
           }
         });
@@ -332,7 +334,7 @@ describe('NativeObject', function() {
 
         object._trigger('foo', {bar: 23});
 
-        expect(CustomType._events.bar.trigger).to.have.been.calledWith({bar: 23}, 'bar');
+        expect(triggerFn).to.have.been.calledWith({bar: 23}, 'bar');
       });
 
       it('returns return value from custom trigger with translated event', function() {
@@ -389,27 +391,35 @@ describe('NativeObject', function() {
         expect(call.listen).to.eql(true);
       });
 
-      it('calls custom listen', function() {
-        TestType._events.bar.listen = spy();
+      it('calls custom listen function', function() {
+        let listenFn = spy();
+        let CustomType = NativeObject.extend({
+          _events: {foo: {listen: listenFn}}
+        });
+        object = new CustomType();
 
-        object.on('bar', listener);
+        object.on('foo', listener);
 
-        expect(TestType._events.bar.listen).to.have.been.calledWith(true, false);
+        expect(listenFn).to.have.been.calledWith(true, false);
       });
 
-      it('calls custom listen with alias flag', function() {
+      it('calls custom listen function with alias flag', function() {
+        let listenFn = spy();
         let CustomType = NativeObject.extend({
-          _events: {foo: {alias: 'foo1', listen: spy()}}
+          _events: {foo: {alias: 'foo1', listen: listenFn}}
         });
         object = new CustomType();
 
         object.on('foo1', listener);
 
-        expect(CustomType._events.foo.listen).to.have.been.calledWith(true, true);
+        expect(listenFn).to.have.been.calledWith(true, true);
       });
 
-      it('calls native listen for another listener for another event', function() {
-        TestType._events.bar = {name: 'bar'};
+      it('calls native listen function for another listener for another event', function() {
+        let CustomType = NativeObject.extend({
+          _events: {bar: {name: 'bar'}}
+        });
+        object = new CustomType();
 
         object.on('foo', listener);
         object.on('bar', listener);
@@ -678,51 +688,50 @@ describe('NativeObject.extend', function() {
     expect(result).to.equal(23);
   });
 
-  it('adds empty trigger map to constructor', function() {
+  it('adds empty trigger map to prototype', function() {
     let CustomType = NativeObject.extend({});
     let instance = new CustomType();
 
-    expect(instance.constructor._trigger).to.eql({});
+    expect(instance.$trigger).to.eql({});
   });
 
-  it('adds _events to constructor', function() {
+  it('adds events map to prototype', function() {
     let CustomType = NativeObject.extend({_events: {foo: 'bar'}});
     let instance = new CustomType();
 
-    expect(instance.constructor._events.foo).to.eql({name: 'bar'});
+    expect(instance.$events.foo).to.eql({name: 'bar'});
     expect(instance._events).to.equal(NativeObject.prototype._events);
   });
 
-  it('adds normalized _events to constructor', function() {
+  it('adds normalized events map to prototype', function() {
     let CustomType = NativeObject.extend({_events: {foo: 'bar', foo2: {alias: 'foo3'}}});
     let instance = new CustomType();
 
-    expect(instance.constructor._events.foo).to.eql({name: 'bar'});
-    expect(instance.constructor._events.foo2).to.eql({name: 'foo2', alias: 'foo3', originalName: 'foo2'});
-    expect(instance.constructor._events.foo3).to.equal(instance.constructor._events.foo2);
-    expect(instance._events).not.to.equal(instance.constructor._events);
+    expect(instance.$events.foo).to.eql({name: 'bar'});
+    expect(instance.$events.foo2).to.eql({name: 'foo2', alias: 'foo3', originalName: 'foo2'});
+    expect(instance.$events.foo3).to.equal(instance.$events.foo2);
   });
 
-  it('adds empty events map to constructor', function() {
+  it('adds empty events map to prototype', function() {
     let CustomType = NativeObject.extend({});
     let instance = new CustomType();
 
-    expect(instance.constructor._events).to.eql({});
+    expect(instance.$events).to.eql({});
   });
 
-  it('adds _properties to constructor', function() {
+  it('adds properties map to prototype', function() {
     let type = {encode() {}, decode() {}};
     let CustomType = NativeObject.extend({_properties: {foo: {type}}});
     let instance = new CustomType();
 
-    expect(instance.constructor._properties.foo.type).to.equal(type);
+    expect(instance.$properties.foo.type).to.equal(type);
   });
 
   it('replaces type strings with type definition object', function() {
     let CustomType = NativeObject.extend({_properties: {foo: {type: 'boolean'}}});
     let instance = new CustomType();
 
-    expect(instance.constructor._properties.foo.type).to.equal(types.boolean);
+    expect(instance.$properties.foo.type).to.equal(types.boolean);
   });
 
   it('wraps encode function if type is given as an array', function() {
@@ -734,7 +743,7 @@ describe('NativeObject.extend', function() {
     instance.set('foo', 'bar');
 
     expect(types.choice.encode).to.have.been.calledWith('bar', ['a', 'b', 'c']);
-    expect(instance.constructor._properties.foo.type.encode)
+    expect(instance.$properties.foo.type.encode)
       .not.to.equal(types.choice.encode);
   });
 
@@ -749,7 +758,7 @@ describe('NativeObject.extend', function() {
     instance.get('foo');
 
     expect(types.bounds.decode).to.have.been.calledWith('bar', ['customarg']);
-    expect(instance.constructor._properties.foo.type.decode)
+    expect(instance.$properties.foo.type.decode)
       .not.to.equal(types.bounds.decode);
   });
 
@@ -759,18 +768,18 @@ describe('NativeObject.extend', function() {
     }).to.throw();
   });
 
-  it('adds normalized _properties to constructor', function() {
+  it('adds normalized properties map to prototype', function() {
     let CustomType = NativeObject.extend({_properties: {foo: 'boolean'}});
     let instance = new CustomType();
 
-    expect(instance.constructor._properties.foo.type).to.equal(types.boolean);
+    expect(instance.$properties.foo.type).to.equal(types.boolean);
   });
 
-  it('adds empty properties map to constructor', function() {
+  it('adds empty properties map to prototype', function() {
     let CustomType = NativeObject.extend({});
     let instance = new CustomType();
 
-    expect(instance.constructor._properties).to.eql({});
+    expect(instance.$properties).to.eql({});
   });
 
   describe('constructor', function() {
@@ -915,13 +924,13 @@ describe('NativeObject.extend', function() {
     });
 
     it('returns uncached value from default config', function() {
-      TestType._properties.foo.default = 23;
+      object.$properties.foo.default = 23;
 
       expect(object.foo).to.equal(23);
     });
 
     it('returns cloned value from default function', function() {
-      TestType._properties.foo.default = () => [];
+      object.$properties.foo.default = () => [];
 
       object.foo.push(1);
 
@@ -939,14 +948,14 @@ describe('NativeObject.extend', function() {
     });
 
     it('returns cached value decoded', function() {
-      TestType._properties.foo.type = types.color;
+      object.$properties.foo.type = types.color;
       object.foo = '#ff00ff';
 
       expect(object.foo).to.equal('rgba(255, 0, 255, 1)');
     });
 
     it('decodes value if there is a decoder', function() {
-      TestType._properties.foo.type = {
+      object.$properties.foo.type = {
         decode: x => x + '-decoded'
       };
       stub(client, 'get').returns(23);
@@ -969,13 +978,13 @@ describe('NativeObject.extend', function() {
     });
 
     it('returns default value if property was never set', function() {
-      TestType._properties.foo = {default: 'bar'};
+      object.$properties.foo = {default: 'bar'};
 
       expect(object.foo).to.equal('bar');
     });
 
     it('does not return default value if property was set', function() {
-      TestType._properties.foo = {default: 'bar'};
+      object.$properties.foo = {default: 'bar'};
 
       object.foo = 'something else';
 
@@ -984,7 +993,7 @@ describe('NativeObject.extend', function() {
 
     it('calls custom getter with property name', function() {
       let getter = spy();
-      TestType._properties.foo = {get: getter};
+      object.$properties.foo = {get: getter};
 
       object.foo;
 
@@ -992,7 +1001,7 @@ describe('NativeObject.extend', function() {
     });
 
     it('returns value from custom getter', function() {
-      TestType._properties.foo = {get: stub().returns('bar')};
+      object.$properties.foo = {get: stub().returns('bar')};
 
       expect(object.foo).to.equal('bar');
     });
@@ -1036,7 +1045,7 @@ describe('NativeObject.extend', function() {
     });
 
     it('does not call native SET if encoder function throws', function() {
-      TestType._properties.knownProperty = {type: 'boolean'};
+      object.$properties.knownProperty = {type: 'boolean'};
       stub(types.boolean, 'encode').throws(new Error('My Error'));
 
       object.knownProperty = 'foo';
@@ -1054,7 +1063,7 @@ describe('NativeObject.extend', function() {
     });
 
     it('triggers change event with decoded value', function() {
-      TestType._properties.foo = {type: types.boolean};
+      object.$properties.foo = {type: types.boolean};
       object.on('change:foo', listener);
 
       object.foo = 23;
@@ -1073,7 +1082,7 @@ describe('NativeObject.extend', function() {
     });
 
     it('triggers no change event if value is unchanged from default', function() {
-      TestType._properties.foo = {type: 'any', default: 0};
+      object.$properties.foo = {type: 'any', default: 0};
       object.on('change:foo', listener);
 
       object.foo = 0;
@@ -1082,7 +1091,7 @@ describe('NativeObject.extend', function() {
     });
 
     it('triggers no change event if encoded value is unchanged', function() {
-      TestType._properties.foo = {type: types.boolean};
+      object.$properties.foo = {type: types.boolean};
       object.set('foo', true);
       object.on('change:foo', listener);
 
@@ -1093,7 +1102,7 @@ describe('NativeObject.extend', function() {
 
     it('calls custom setter', function() {
       let setter = spy();
-      TestType._properties.foo = {set: setter};
+      object.$properties.foo = {set: setter};
 
       object.foo = 23;
 
@@ -1101,7 +1110,7 @@ describe('NativeObject.extend', function() {
     });
 
     it('stores nothing if custom setter exists', function() {
-      TestType._properties.foo = {set: () => {}};
+      object.$properties.foo = {set: () => {}};
 
       object.foo = 23;
 
@@ -1110,7 +1119,7 @@ describe('NativeObject.extend', function() {
 
     it('calls encoding function if present', function() {
       let encode = spy();
-      TestType._properties.foo = {type: {encode}};
+      object.$properties.foo = {type: {encode}};
 
       object.foo = true;
 
@@ -1119,7 +1128,7 @@ describe('NativeObject.extend', function() {
 
     it('raises a warning if encoding function throws', function() {
       let encode = stub().throws(new Error('My Error'));
-      TestType._properties.foo = {type: {encode}};
+      object.$properties.foo = {type: {encode}};
 
       object.foo = true;
 

@@ -1333,8 +1333,8 @@ describe('Widget.extend', function() {
   it('adds default events copy', function() {
     let TestWidget = Widget.extend({});
 
-    expect(TestWidget._events.resize).to.be.instanceof(Object);
-    expect(TestWidget._events).not.to.equal(Widget.extend._defaultEvents);
+    expect(TestWidget.prototype.$events.resize).to.be.instanceof(Object);
+    expect(TestWidget.prototype.$events).not.to.equal(Widget.extend._defaultEvents);
   });
 
   it('extends default events', function() {
@@ -1342,23 +1342,23 @@ describe('Widget.extend', function() {
 
     let TestWidget = Widget.extend({_events: custom});
 
-    expect(TestWidget._events).to.eql(
-      Object.assign({}, TestWidget._events, custom)
+    expect(TestWidget.prototype.$events).to.eql(
+      Object.assign({}, TestWidget.prototype.$events, custom)
     );
   });
 
   it('adds custom properties', function() {
     let TestWidget = Widget.extend({_properties: {foo: {type: 'number'}}});
 
-    expect(TestWidget._properties.foo).not.to.be.undefined;
-    expect(TestWidget._properties.foo.type.encode('23')).to.equal(23);
+    expect(TestWidget.prototype.$properties.foo).not.to.be.undefined;
+    expect(TestWidget.prototype.$properties.foo.type.encode('23')).to.equal(23);
   });
 
   it('adds default properties', function() {
     let TestWidget = Widget.extend({});
 
-    expect(TestWidget._properties.enabled).not.to.be.undefined;
-    expect(TestWidget._properties.visible).not.to.be.undefined;
+    expect(TestWidget.prototype.$properties.enabled).not.to.be.undefined;
+    expect(TestWidget.prototype.$properties.visible).not.to.be.undefined;
   });
 
   it('extends default properties', function() {
@@ -1366,8 +1366,8 @@ describe('Widget.extend', function() {
 
     let TestWidget = Widget.extend({_properties: custom});
 
-    expect(TestWidget._properties.foo).not.to.be.undefined;
-    expect(TestWidget._properties.enabled.type.encode('23')).to.equal(23);
+    expect(TestWidget.prototype.$properties.foo).not.to.be.undefined;
+    expect(TestWidget.prototype.$properties.enabled.type.encode('23')).to.equal(23);
   });
 
   it('created widgets are instanceof Widget', function() {

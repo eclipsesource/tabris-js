@@ -146,6 +146,12 @@ describe('Animation', function() {
       expect(console.warn).to.have.been.calledWith('TestWidget: Ignored invalid animation option "foo"');
     });
 
+    it('does not warn for valid options', function() {
+      widget.animate({}, {delay: 23});
+
+      expect(console.warn).to.not.have.been.called;
+    });
+
     it('warns against invalid properties', function() {
       widget.animate({background: '#00ff00', opacity: 0}, {});
 

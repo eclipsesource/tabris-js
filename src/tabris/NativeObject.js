@@ -24,11 +24,16 @@ export default class NativeObject extends EventsClass {
         throw new Error('Illegal config option: ' + key);
       }
     }
-    Type._events = normalizeEvents(members._events || {});
-    Type._properties = normalizeProperties(members._properties || {});
-    Type._trigger = buildTriggerMap(Type._events);
-    Object.assign(Type.prototype, {type: members._name});
-    createProperties(Type.prototype, Type._properties);
+    let events = normalizeEvents(members._events || {});
+    let trigger = buildTriggerMap(events);
+    let properties = normalizeProperties(members._properties || {});
+    Object.assign(Type.prototype, {
+      type: members._name,
+      $events: events,
+      $trigger: trigger,
+      $properties: properties
+    });
+    createProperties(Type.prototype, properties);
     return Type;
   }
 
@@ -111,12 +116,12 @@ export default class NativeObject extends EventsClass {
   }
 
   _getTypeDef(name) {
-    let prop = this.constructor._properties[name];
+    let prop = this.$properties[name];
     return prop ? prop.type : null;
   }
 
   _getDefaultPropertyValue(name) {
-    let prop = this.constructor._properties[name];
+    let prop = this.$properties[name];
     return prop ? valueOf(prop.default) : undefined;
   }
 
@@ -129,12 +134,12 @@ export default class NativeObject extends EventsClass {
   }
 
   _getPropertyGetter(name) {
-    let prop = this.constructor._properties[name];
+    let prop = this.$properties[name];
     return prop ? prop.get : undefined;
   }
 
   _getPropertySetter(name) {
-    let prop = this.constructor._properties[name];
+    let prop = this.$properties[name];
     return prop ? prop.set : undefined;
   }
 
@@ -207,8 +212,8 @@ export default class NativeObject extends EventsClass {
   }
 
   _trigger(event, params) {
-    let name = this.constructor._trigger[event];
-    let trigger = name && this.constructor._events[name].trigger;
+    let name = this.$trigger[event];
+    let trigger = name && this.$events[name].trigger;
     if (trigger instanceof Function) {
       return trigger.call(this, params, name);
     } else if (name) {
@@ -225,7 +230,7 @@ export default class NativeObject extends EventsClass {
   }
 
   _getEventConfig(type) {
-    return this.constructor._events[type];
+    return this.$events[type];
   }
 
   _nativeSet(name, value) {
@@ -326,7 +331,7 @@ function wrapCoder(fn, args) {
 
 function defaultSetter(name, value, options) {
   this._nativeSet(name, value);
-  if (this.constructor._properties[name].nocache) {
+  if (this.$properties[name].nocache) {
     this._triggerChangeEvent(name, value, options);
   } else {
     this._storeProperty(name, value, options);

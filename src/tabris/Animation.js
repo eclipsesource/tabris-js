@@ -74,7 +74,7 @@ export function animate(properties, options) {
     }
   }
   for (let option in options) {
-    if (!Animation._properties[option] && option !== 'name') {
+    if (!Animation.prototype.$properties[option] && option !== 'name') {
       console.warn(this.type + ': Ignored invalid animation option "' + option + '"');
     }
   }
