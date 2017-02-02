@@ -1,14 +1,25 @@
-new tabris.Composite({id: 'red', background: 'red'}).appendTo(tabris.ui.contentView);
-new tabris.Composite({id: 'green', background: 'green'}).appendTo(tabris.ui.contentView);
-new tabris.Composite({id: 'blue', background: 'blue'}).appendTo(tabris.ui.contentView);
-new tabris.Composite({id: 'yellow', background: 'yellow'}).appendTo(tabris.ui.contentView);
-new tabris.Composite({id: 'purple', background: 'purple'}).appendTo(tabris.ui.contentView);
+var MARGIN = 16;
 
-applyLayout(tabris.ui.contentView.bounds);
+var PORTRAIT = {
+  '#red': {layoutData: {left: MARGIN, top: MARGIN, right: MARGIN, height: '192'}},
+  '#green': {layoutData: {left: MARGIN, top: ['#red', MARGIN], right: MARGIN, bottom: MARGIN}}
+};
+
+var LANDSCAPE = {
+  '#red': {layoutData: {left: MARGIN, top: MARGIN, bottom: MARGIN, width: '192'}},
+  '#green': {layoutData: {left: ['#red', MARGIN], top: MARGIN, right: MARGIN, bottom: MARGIN}}
+};
+
+new tabris.Composite({
+  id: 'red',
+  background: 'red'
+}).appendTo(tabris.ui.contentView);
+
+new tabris.Composite({
+  id: 'green',
+  background: 'green'
+}).appendTo(tabris.ui.contentView);
+
 tabris.ui.contentView.on('resize', function(contentView, bounds) {
-  applyLayout(bounds);
+  tabris.ui.contentView.apply(bounds.height > bounds.width ? PORTRAIT : LANDSCAPE);
 });
-
-function applyLayout(bounds) {
-  tabris.ui.contentView.apply(require('./layout-' + (bounds.width > bounds.height ? 'landscape' : 'portrait')));
-}
