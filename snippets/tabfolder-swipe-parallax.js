@@ -39,7 +39,8 @@ var tabFolder = new tabris.TabFolder({
   }
 }).appendTo(tabris.ui.contentView);
 
-PEOPLE.forEach(function(person) {
+for (var i = 0; i < PEOPLE.length; i++) {
+  var person = PEOPLE[i];
   new tabris.Tab().appendTo(tabFolder)
     .append(
       new tabris.TextView({
@@ -53,7 +54,7 @@ PEOPLE.forEach(function(person) {
   new tabris.ImageView({
     left: 0, top: 0, right: 0, bottom: 0,
     scaleMode: 'fill',
-    opacity: 0,
+    opacity: i === 0 ? 1 : 0,
     image: person.image
   }).appendTo(imageContainer);
-});
+}
