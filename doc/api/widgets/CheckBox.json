@@ -16,25 +16,45 @@
   "events": {
     "change:selection": {
       "parameters": [
-        {"name": "widget", "type": "this"},
-        {"name": "selection", "type": "boolean", "description": "The new value of *[selection](#selection)*."},
-        {"name": "options", "type": "any"}
+        {
+          "name": "widget",
+          "type": "this"
+        },
+        {
+          "name": "selection",
+          "type": "boolean",
+          "description": "The new value of *[selection](#selection)*."
+        },
+        {
+          "name": "options",
+          "type": "any"
+        }
       ],
       "description": "Fired when the check box is checked or unchecked."
     },
     "select": {
       "parameters": [
-        {"name": "widget", "type": "this"},
-        {"name": "selection", "type": "boolean", "description": "The new value of *[selection](#selection)*."},
-        {"name": "options", "type": "any"}
+        {
+          "name": "widget",
+          "type": "this"
+        },
+        {
+          "name": "selection",
+          "type": "boolean",
+          "description": "The new value of *[selection](#selection)*."
+        },
+        {
+          "name": "options",
+          "type": "any"
+        }
       ],
       "description": "Fired when the check box is checked or unchecked by the user."
     }
   },
   "links": [
     {
-      "title" : "Simple Checkbox snippet",
-      "path" : "${GITHUB_BRANCH}/snippets/checkbox.js"
+      "title": "Simple Checkbox snippet",
+      "path": "${GITHUB_BRANCH}/snippets/checkbox.js"
     }
   ]
 }

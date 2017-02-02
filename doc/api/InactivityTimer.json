@@ -25,7 +25,10 @@
   "events": {
     "timeout": {
       "parameters": [
-        {"name": "target", "type": "this"}
+        {
+          "name": "target",
+          "type": "this"
+        }
       ],
       "description": "Fired when the app has not been interacted with since the configured delay."
     }

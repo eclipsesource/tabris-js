@@ -5,7 +5,11 @@
   "properties": {
     "alignment": {
       "type": "string",
-      "values": ["left", "right", "center"],
+      "values": [
+        "left",
+        "right",
+        "center"
+      ],
       "default": "center",
       "description": "The horizontal alignment of the button text."
     },
@@ -26,17 +30,37 @@
   "events": {
     "change:selection": {
       "parameters": [
-        {"name": "widget", "type": "this"},
-        {"name": "selection", "type": "boolean", "description": "The current value of *[selection](#selection)*."},
-        {"name": "options", "type": "any"}
+        {
+          "name": "widget",
+          "type": "this"
+        },
+        {
+          "name": "selection",
+          "type": "boolean",
+          "description": "The current value of *[selection](#selection)*."
+        },
+        {
+          "name": "options",
+          "type": "any"
+        }
       ],
       "description": "Fired when the selection property changes."
     },
     "select": {
       "parameters": [
-        {"name": "widget", "type": "this"},
-        {"name": "selection", "type": "boolean", "description": "The current value of *[selection](#selection)*."},
-        {"name": "options", "type": "any"}
+        {
+          "name": "widget",
+          "type": "this"
+        },
+        {
+          "name": "selection",
+          "type": "boolean",
+          "description": "The current value of *[selection](#selection)*."
+        },
+        {
+          "name": "options",
+          "type": "any"
+        }
       ],
       "description": "Fired when the toggle button is selected or deselected by the user."
     }

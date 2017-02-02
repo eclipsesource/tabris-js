@@ -28,17 +28,37 @@
   "events": {
     "change:selection": {
       "parameters": [
-        {"name": "widget", "type": "this"},
-        {"name": "selection", "type": "boolean", "description": "The current value of *[selection](#selection)*."},
-        {"name": "options", "type": "any"}
+        {
+          "name": "widget",
+          "type": "this"
+        },
+        {
+          "name": "selection",
+          "type": "boolean",
+          "description": "The current value of *[selection](#selection)*."
+        },
+        {
+          "name": "options",
+          "type": "any"
+        }
       ],
       "description": "Fired when the selection property changes."
     },
     "select": {
       "parameters": [
-        {"name": "widget", "type": "this"},
-        {"name": "selection", "type": "boolean", "description": "The current value of *[selection](#selection)*."},
-        {"name": "options", "type": "any"}
+        {
+          "name": "widget",
+          "type": "this"
+        },
+        {
+          "name": "selection",
+          "type": "boolean",
+          "description": "The current value of *[selection](#selection)*."
+        },
+        {
+          "name": "options",
+          "type": "any"
+        }
       ],
       "description": "Fired when the switch is toggled by the user."
     }

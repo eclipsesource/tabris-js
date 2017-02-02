@@ -5,7 +5,12 @@
   "properties": {
     "type": {
       "type": "string",
-      "values": ["default", "password", "search", "multiline"],
+      "values": [
+        "default",
+        "password",
+        "search",
+        "multiline"
+      ],
       "default": "default",
       "static": true,
       "description": "The type of the text widget."
@@ -25,7 +30,11 @@
     },
     "alignment": {
       "type": "string",
-      "values": ["left", "right", "center"],
+      "values": [
+        "left",
+        "right",
+        "center"
+      ],
       "default": "left",
       "description": "The horizontal alignment of the text."
     },
@@ -41,7 +50,16 @@
     },
     "keyboard": {
       "type": "string",
-      "values": ["ascii", "decimal", "email", "number", "numbersAndPunctuation", "phone", "url", "default"],
+      "values": [
+        "ascii",
+        "decimal",
+        "email",
+        "number",
+        "numbersAndPunctuation",
+        "phone",
+        "url",
+        "default"
+      ],
       "default": "default",
       "description": "Selects the keyboard type to use for editing this widget. Has no effect when `type` is set to `multiline`."
     },
@@ -67,37 +85,73 @@
   "events": {
     "accept": {
       "parameters": [
-        {"name": "widget", "type": "this"},
-        {"name": "text", "type": "string", "description": "The current value of *[text](#text)*."},
-        {"name": "options", "type": "any"}
+        {
+          "name": "widget",
+          "type": "this"
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "description": "The current value of *[text](#text)*."
+        },
+        {
+          "name": "options",
+          "type": "any"
+        }
       ],
       "description": "Fired when a text input has been finished by pressing the keyboard's Enter key. The label of this key may vary depending on the platform and locale."
     },
     "blur": {
       "parameters": [
-        {"name": "widget", "type": "this"}
+        {
+          "name": "widget",
+          "type": "this"
+        }
       ],
       "description": "Fired when the widget lost focus."
     },
     "focus": {
       "parameters": [
-        {"name": "widget", "type": "this"}
+        {
+          "name": "widget",
+          "type": "this"
+        }
       ],
       "description": "Fired when the widget gains focus."
     },
     "change:text": {
       "parameters": [
-        {"name": "widget", "type": "this"},
-        {"name": "text", "type": "string", "description": "The new value of *[text](#text)*."},
-        {"name": "options", "type": "any"}
+        {
+          "name": "widget",
+          "type": "this"
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "description": "The new value of *[text](#text)*."
+        },
+        {
+          "name": "options",
+          "type": "any"
+        }
       ],
       "description": "Fired when the text property changes."
     },
     "input": {
       "parameters": [
-        {"name": "widget", "type": "this"},
-        {"name": "text", "type": "string", "description": "The new value of *[text](#text)*."},
-        {"name": "options", "type": "any"}
+        {
+          "name": "widget",
+          "type": "this"
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "description": "The new value of *[text](#text)*."
+        },
+        {
+          "name": "options",
+          "type": "any"
+        }
       ],
       "description": "Fired when the text was changed by the user."
     }

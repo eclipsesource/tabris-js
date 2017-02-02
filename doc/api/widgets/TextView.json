@@ -5,7 +5,11 @@
   "properties": {
     "alignment": {
       "type": "string",
-      "values": ["left", "right", "center"],
+      "values": [
+        "left",
+        "right",
+        "center"
+      ],
       "default": "left",
       "description": "The horizontal alignment of the text."
     },

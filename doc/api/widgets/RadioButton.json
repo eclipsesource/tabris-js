@@ -16,25 +16,45 @@
   "events": {
     "change:selection": {
       "parameters": [
-        {"name": "widget", "type": "this"},
-        {"name": "selection", "type": "boolean", "description": "The new value of *[selection](#selection)*."},
-        {"name": "options", "type": "any"}
+        {
+          "name": "widget",
+          "type": "this"
+        },
+        {
+          "name": "selection",
+          "type": "boolean",
+          "description": "The new value of *[selection](#selection)*."
+        },
+        {
+          "name": "options",
+          "type": "any"
+        }
       ],
       "description": "Fired when the selection property changes."
     },
     "select": {
       "parameters": [
-        {"name": "widget", "type": "this"},
-        {"name": "selection", "type": "boolean", "description": "The new value of *[selection](#selection)*."},
-        {"name": "options", "type": "any"}
+        {
+          "name": "widget",
+          "type": "this"
+        },
+        {
+          "name": "selection",
+          "type": "boolean",
+          "description": "The new value of *[selection](#selection)*."
+        },
+        {
+          "name": "options",
+          "type": "any"
+        }
       ],
       "description": "Fired when the radio button is selected or deselected by the user."
     }
   },
   "links": [
     {
-      "title" : "Simple RadioButton snippet",
-      "path" : "${GITHUB_BRANCH}/snippets/radiobutton.js"
+      "title": "Simple RadioButton snippet",
+      "path": "${GITHUB_BRANCH}/snippets/radiobutton.js"
     }
   ]
 }

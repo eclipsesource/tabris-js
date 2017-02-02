@@ -32,7 +32,16 @@
     "state": {
       "type": "string",
       "default": "empty",
-      "values": ["empty", "open", "ready", "play", "stale", "pause", "finish", "fail"],
+      "values": [
+        "empty",
+        "open",
+        "ready",
+        "play",
+        "stale",
+        "pause",
+        "finish",
+        "fail"
+      ],
       "description": "The current state of the widget. This property is read-only."
     }
   },
@@ -46,7 +55,11 @@
     "seek": [
       {
         "parameters": [
-          {"name": "position", "type": "number", "description": "Desired position in milliseconds."}
+          {
+            "name": "position",
+            "type": "number",
+            "description": "Desired position in milliseconds."
+          }
         ],
         "description": "Attempts to change the `position` to the given time index. Success depends on the currently loaded video. Has no effect if the current *[state](#state)* is `empty` or `fail`."
       }
@@ -58,7 +71,11 @@
       },
       {
         "parameters": [
-          {"name": "speed", "type": "number", "description": "Desired playback speed. If the given speed is not supported by the platform or video, the actual playback speed will be `1` - i.e. the natural speed of the video."}
+          {
+            "name": "speed",
+            "type": "number",
+            "description": "Desired playback speed. If the given speed is not supported by the platform or video, the actual playback speed will be `1` - i.e. the natural speed of the video."
+          }
         ],
         "description": "Starts playing the video, *[state](#state)* changes to `play`. Has no effect if the current state is not either `pause` or `ready`."
       }
@@ -67,9 +84,19 @@
   "events": {
     "change:state": {
       "parameters": [
-        {"name": "widget", "type": "this"},
-        {"name": "state", "type": "string", "description": "The current value of *[state](#state)*."},
-        {"name": "options", "type": "Object"}
+        {
+          "name": "widget",
+          "type": "this"
+        },
+        {
+          "name": "state",
+          "type": "string",
+          "description": "The current value of *[state](#state)*."
+        },
+        {
+          "name": "options",
+          "type": "Object"
+        }
       ],
       "description": "Fired when the state property changes."
     }

@@ -15,28 +15,49 @@
   "events": {
     "navigate": {
       "parameters": [
-        {"name": "widget", "type": "this"},
-        {"name": "event", "type": "{preventDefault: () => void}"}
+        {
+          "name": "widget",
+          "type": "this"
+        },
+        {
+          "name": "event",
+          "type": "{preventDefault: () => void}"
+        }
       ],
       "description": "Fired when the WebView is about to navigate to a new URL. Listeners can intercept the navigation by calling `event.preventDefault()`."
     },
     "load": {
       "parameters": [
-        {"name": "widget", "type": "this"}
+        {
+          "name": "widget",
+          "type": "this"
+        }
       ],
       "description": "Fired when the url has been loaded."
     },
     "download": {
       "parameters": [
-        {"name": "widget", "type": "this"},
-        {"name": "event", "type": "{url: string, mimeType: string, contentLength: number, contentDisposition: string}"}
+        {
+          "name": "widget",
+          "type": "this"
+        },
+        {
+          "name": "event",
+          "type": "{url: string, mimeType: string, contentLength: number, contentDisposition: string}"
+        }
       ],
       "description": "Fired when the WebView requests a download. The download event provides the properties `url`, `mimeType`, `contentLength` and `contentDisposition`. Supported only on Android."
     },
     "message": {
       "parameters": [
-        {"name": "widget", "type": "this"},
-        {"name": "event", "type": "{data: string}"}
+        {
+          "name": "widget",
+          "type": "this"
+        },
+        {
+          "name": "event",
+          "type": "{data: string}"
+        }
       ],
       "description": "Fired when a web message has been sent via `window.parent.postMessage(message, targetOrigin)` from inside the `WebView`. The event's `data` property contains the message sent, which currently has to be a string."
     }
@@ -45,8 +66,16 @@
     "postMessage": [
       {
         "parameters": [
-          {"name": "message", "type": "string", "description": "The message to send. Currently supports only strings."},
-          {"name": "targetOrigin", "type": "string", "description": "The URL of the page that recieves the message. The message is only sent if the current document URL has the same scheme, domain and path. Use `*` to send to any URL."}
+          {
+            "name": "message",
+            "type": "string",
+            "description": "The message to send. Currently supports only strings."
+          },
+          {
+            "name": "targetOrigin",
+            "type": "string",
+            "description": "The URL of the page that recieves the message. The message is only sent if the current document URL has the same scheme, domain and path. Use `*` to send to any URL."
+          }
         ],
         "description": "Posts a web message to the underlying `window` object of the WebView. The website in the `WebView` can register for the message in the following fashion: `window.addEventListener('message', callbackFunction)`. For more information see [`Window.postMessage()`](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) API.",
         "returns": "this"

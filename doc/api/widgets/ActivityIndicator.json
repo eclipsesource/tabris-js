@@ -4,8 +4,8 @@
   "extends": "Widget",
   "links": [
     {
-      "title" : "Simple ActivityIndicator snippet",
-      "path" : "${GITHUB_BRANCH}/snippets/activityindicator.js"
+      "title": "Simple ActivityIndicator snippet",
+      "path": "${GITHUB_BRANCH}/snippets/activityindicator.js"
     }
   ]
 }

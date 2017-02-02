@@ -52,22 +52,43 @@
   "events": {
     "select": {
       "parameters": [
-        {"name": "widget", "type": "this"},
-        {"name": "item", "type": "any", "description": "The item that was selected."},
-        {"name": "options", "type": "{index: number}", "description": "Contains the index of the selected item, e.g. `{index: number}`"}
+        {
+          "name": "widget",
+          "type": "this"
+        },
+        {
+          "name": "item",
+          "type": "any",
+          "description": "The item that was selected."
+        },
+        {
+          "name": "options",
+          "type": "{index: number}",
+          "description": "Contains the index of the selected item, e.g. `{index: number}`"
+        }
       ],
       "description": "Fired when a collection item is selected."
     },
     "refresh": {
       "parameters": [
-        {"name": "widget", "type": "this"}
+        {
+          "name": "widget",
+          "type": "this"
+        }
       ],
       "description": "Fired when the user requested a refresh. An event listener should reset the *refreshIndicator* property when refresh is finished."
     },
     "scroll": {
       "parameters": [
-        {"name": "widget", "type": "this"},
-        {"name": "event", "type": "{deltaX: number, deltaY: number}", "description": "Contains the scroll delta of this scroll event `{deltaX: number, deltaY: number}`. The value of `deltaY` will be positive when scrolling up and negative when scrolling down."}
+        {
+          "name": "widget",
+          "type": "this"
+        },
+        {
+          "name": "event",
+          "type": "{deltaX: number, deltaY: number}",
+          "description": "Contains the scroll delta of this scroll event `{deltaX: number, deltaY: number}`. The value of `deltaY` will be positive when scrolling up and negative when scrolling down."
+        }
       ],
       "description": "Fired while the collection view is scrolling."
     }
@@ -76,14 +97,24 @@
     "insert": [
       {
         "parameters": [
-          {"name": "items", "type": "any[]"}
+          {
+            "name": "items",
+            "type": "any[]"
+          }
         ],
         "description": "Inserts the given items into this view. Items are added at the end. This operation will modify the *items* property."
       },
       {
         "parameters": [
-          {"name": "items", "type": "any[]"},
-          {"name": "index", "type": "number", "description": "The position to insert the items at. If a negative index is given, it is interpreted as relative to the end. If the given index is greater than the item count, new items will be appended at the end. "}
+          {
+            "name": "items",
+            "type": "any[]"
+          },
+          {
+            "name": "index",
+            "type": "number",
+            "description": "The position to insert the items at. If a negative index is given, it is interpreted as relative to the end. If the given index is greater than the item count, new items will be appended at the end. "
+          }
         ],
         "description": "Inserts the given items into this view at the given index. This operation will modify the *items* property."
       }
@@ -91,14 +122,26 @@
     "remove": [
       {
         "parameters": [
-          {"name": "index", "type": "number", "description": "The index of the item to remove. If this is negative, it is interpreted as relative to the end."}
+          {
+            "name": "index",
+            "type": "number",
+            "description": "The index of the item to remove. If this is negative, it is interpreted as relative to the end."
+          }
         ],
         "description": "Removes the item at the given index from this view. This operation will modify the *items* property."
       },
       {
         "parameters": [
-          {"name": "index", "type": "number", "description": "The index of the first item to remove. If this is negative, it is interpreted as relative to the end."},
-          {"name": "count", "type": "number", "description": "The number of items to remove."}
+          {
+            "name": "index",
+            "type": "number",
+            "description": "The index of the first item to remove. If this is negative, it is interpreted as relative to the end."
+          },
+          {
+            "name": "count",
+            "type": "number",
+            "description": "The number of items to remove."
+          }
         ],
         "description": "Removes *count* items beginning with the given index from this view. This operation will modify the *items* property."
       }
@@ -110,7 +153,11 @@
       },
       {
         "parameters": [
-          {"name": "index", "type": "number", "description": "The index of the item that was changed."}
+          {
+            "name": "index",
+            "type": "number",
+            "description": "The index of the item that was changed."
+          }
         ],
         "description": "Triggers a refresh of the item with the given index. If the item is scrolled into view, an *change:item* event will be issued on the corresponding cell."
       }
@@ -118,7 +165,11 @@
     "reveal": [
       {
         "parameters": [
-          {"name": "index", "type": "number", "description": "The index of the item to reveal. If this is negative, it is interpreted as relative to the end"}
+          {
+            "name": "index",
+            "type": "number",
+            "description": "The index of the item to reveal. If this is negative, it is interpreted as relative to the end"
+          }
         ],
         "description": "Scrolls the item with the given index into view."
       }

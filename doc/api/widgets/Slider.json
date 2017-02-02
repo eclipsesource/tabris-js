@@ -22,25 +22,45 @@
   "events": {
     "change:selection": {
       "parameters": [
-        {"name": "widget", "type": "this"},
-        {"name": "selection", "type": "number", "description": "The new value of *[selection](#selection)*."},
-        {"name": "options", "type": "any"}
+        {
+          "name": "widget",
+          "type": "this"
+        },
+        {
+          "name": "selection",
+          "type": "number",
+          "description": "The new value of *[selection](#selection)*."
+        },
+        {
+          "name": "options",
+          "type": "any"
+        }
       ],
       "description": "Fired when the selection property changes."
     },
     "select": {
       "parameters": [
-        {"name": "widget", "type": "SearchAction"},
-        {"name": "selection", "type": "number", "description": "The new value of *[selection](#selection)*."},
-        {"name": "options", "type": "any"}
+        {
+          "name": "widget",
+          "type": "SearchAction"
+        },
+        {
+          "name": "selection",
+          "type": "number",
+          "description": "The new value of *[selection](#selection)*."
+        },
+        {
+          "name": "options",
+          "type": "any"
+        }
       ],
       "description": "Fired when the selection property is changed by the user."
     }
   },
   "links": [
     {
-      "title" : "Simple Slider snippet",
-      "path" : "${GITHUB_BRANCH}/snippets/slider.js"
+      "title": "Simple Slider snippet",
+      "path": "${GITHUB_BRANCH}/snippets/slider.js"
     }
   ]
 }

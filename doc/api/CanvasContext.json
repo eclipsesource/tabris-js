@@ -8,12 +8,20 @@
     },
     "lineCap": {
       "type": "string",
-      "values": ["butt", "round", "square"],
+      "values": [
+        "butt",
+        "round",
+        "square"
+      ],
       "description": "Determines how the end points of every line are drawn."
     },
     "lineJoin": {
       "type": "string",
-      "values": ["bevel", "round", "miter"],
+      "values": [
+        "bevel",
+        "round",
+        "miter"
+      ],
       "description": "Determines how two connecting segments in a shape are joined together."
     },
     "fillStyle": {
@@ -30,211 +38,550 @@
     },
     "textAlign": {
       "type": "string",
-      "values": ["left", "right", "center", "start", "end"],
+      "values": [
+        "left",
+        "right",
+        "center",
+        "start",
+        "end"
+      ],
       "description": "Specifies the current text alignment being used when drawing text."
     },
     "textBaseline": {
       "type": "string",
-      "values": ["top", "hanging", "middle", "alphabetic", "ideographic", "bottom"],
+      "values": [
+        "top",
+        "hanging",
+        "middle",
+        "alphabetic",
+        "ideographic",
+        "bottom"
+      ],
       "description": "Specifies the current text baseline being used when drawing text."
     }
   },
   "methods": {
-    "save": [{
-      "parameters": [],
-      "description": "Saves the entire state of the canvas by pushing the current state onto a stack."
-    }],
-    "restore": [{
-      "parameters": [],
-      "description": "Restores the most recently saved canvas state by popping the top entry in the drawing state stack."
-    }],
-    "beginPath": [{
-      "parameters": [],
-      "description": "Starts a new path by emptying the list of sub-paths."
-    }],
-    "closePath": [{
-      "parameters": [],
-      "description": "Adds a straight line from the current point to the start of the current sub-path."
-    }],
-    "lineTo": [{
-      "parameters": [
-        {"name": "x", "type": "number", "description": "The x axis of the coordinate for the end of the line."},
-        {"name": "y", "type": "number", "description": "The y axis of the coordinate for the end of the line." }
+    "save": [
+      {
+        "parameters": [],
+        "description": "Saves the entire state of the canvas by pushing the current state onto a stack."
+      }
+    ],
+    "restore": [
+      {
+        "parameters": [],
+        "description": "Restores the most recently saved canvas state by popping the top entry in the drawing state stack."
+      }
+    ],
+    "beginPath": [
+      {
+        "parameters": [],
+        "description": "Starts a new path by emptying the list of sub-paths."
+      }
+    ],
+    "closePath": [
+      {
+        "parameters": [],
+        "description": "Adds a straight line from the current point to the start of the current sub-path."
+      }
+    ],
+    "lineTo": [
+      {
+        "parameters": [
+          {
+            "name": "x",
+            "type": "number",
+            "description": "The x axis of the coordinate for the end of the line."
+          },
+          {
+            "name": "y",
+            "type": "number",
+            "description": "The y axis of the coordinate for the end of the line."
+          }
         ],
-      "description": "Connects the last point in the sub-path to the *(x, y)* coordinates with a straight line."
-    }],
-    "moveTo": [{
-      "parameters": [
-        {"name": "x", "type": "number", "description": "The x axis of the point."},
-        {"name": "y", "type": "number", "description": "The y axis of the point."}
+        "description": "Connects the last point in the sub-path to the *(x, y)* coordinates with a straight line."
+      }
+    ],
+    "moveTo": [
+      {
+        "parameters": [
+          {
+            "name": "x",
+            "type": "number",
+            "description": "The x axis of the point."
+          },
+          {
+            "name": "y",
+            "type": "number",
+            "description": "The y axis of the point."
+          }
         ],
-      "description": "Moves the starting point of a new sub-path to the *(x, y)* coordinates."
-    }],
-    "bezierCurveTo": [{
-      "parameters": [
-        {"name": "cp1x", "type": "number", "description": "The x axis of the coordinate for the first control point."},
-        {"name": "cp1y", "type": "number", "description": "The y axis of the coordinate for the first control point."},
-        {"name": "cp2x", "type": "number", "description": "The x axis of the coordinate for the second control point."},
-        {"name": "cp2y", "type": "number", "description": "The y axis of the coordinate for the second control point."},
-        {"name": "x", "type": "number", "description": "The x axis of the coordinate for the end point."},
-        {"name": "y", "type": "number", "description": "The y axis of the coordinate for the end point."}
-      ],
-      "description": "Adds a cubic Bézier curve to the path. The starting point is the last point in the current path."
-    }],
-    "quadraticCurveTo": [{
-      "parameters": [
-        {"name": "cpx", "type": "number", "description": "The x axis of the coordinate for the control point."},
-        {"name": "cpy", "type": "number", "description": "The y axis of the coordinate for the control point."},
-        {"name": "x", "type": "number", "description": "The x axis of the coordinate for the end point."},
-        {"name": "y", "type": "number", "description": "The y axis of the coordinate for the end point."}
-      ],
-      "description": "Adds a quadratic Bézier curve to the path. The starting point is the last point in the current path."
-    }],
-    "rect": [{
-      "parameters": [
-        {"name": "x", "type": "number", "description": "The x axis of the rectangle's upper-left corner."},
-        {"name": "y", "type": "number", "description": "The y axis of the rectangle's upper-left corner."},
-        {"name": "width", "type": "number", "description": "The rectangle's width."},
-        {"name": "height", "type": "number", "description": "The rectangles height."}
-      ],
-      "description": "Creates a path for a rectangle with the top-left corner at *(x, y)*"
-    }],
-    "arc": [{
-      "parameters": [
-        {"name": "x", "type": "number", "description": "The x coordinate of the arc's center."},
-        {"name": "y", "type": "number", "description": "The y coordinate of the arc's center."},
-        {"name": "radius", "type": "number", "description": "The arc's radius."},
-        {"name": "startAngle", "type": "number", "description": "The angle in radians at which the arc starts, measured clockwise from the positive x axis."},
-        {"name": "endAngle", "type": "number", "description": "The angle in radians at which the arc ends, measured clockwise from the positive x axis."},
-        {"name": "anticlockwise?", "type": "boolean", "description": "if true, causes the arc to be drawn counter-clockwise between the two angles."}
-      ],
-      "description": "Adds an arc to the path which is centered at *(x, y)* position with radius *r* starting at *startAngle* and ending at *endAngle* going in the given direction by *anticlockwise* (defaulting to clockwise)."
-    }],
-    "scale": [{
-      "parameters": [
-        {"name": "x", "type": "number", "description": "Scaling factor in the horizontal direction."},
-        {"name": "y", "type": "number", "description": "Scaling factor in the vertical direction."}
-      ],
-      "description": "Adds a scaling transformation to the canvas units by x horizontally and by y vertically."
-    }],
-    "rotate": [{
-      "parameters": [
-        {"name": "angle", "type": "number", "description": " The angle to rotate clockwise in radians."}
-      ],
-      "description": "Adds a rotation to the transformation matrix."
-    }],
-    "translate": [{
-      "parameters": [
-        {"name": "x", "type": "number", "description": "The distance to move in the horizontal direction."},
-        {"name": "y", "type": "number", "description": "The distance to move in the vertical direction."}
-      ],
-      "description": "Adds a translation transformation by moving the canvas and its origin *x* horizontally and *y* vertically on the grid."
-    }],
-    "transform": [{
-      "parameters": [
-        {"name": "a", "type": "number", "description": "Horizontal scaling."},
-        {"name": "b", "type": "number", "description": "Horizontal skewing."},
-        {"name": "c", "type": "number", "description": "Vertical skewing."},
-        {"name": "d", "type": "number", "description": "Vertical scaling."},
-        {"name": "e", "type": "number", "description": "Horizontal moving."},
-        {"name": "f", "type": "number", "description": "Vertical moving."}
-      ],
-      "description": "Multiplies the current transformation with the matrix described by the arguments of this method. The matrix has the following format:\n[[a, c, e],\n [b, d, f],\n [0, 0, 1]]"
-    }],
-    "setTransform": [{
-      "parameters": [
-        {"name": "a", "type": "number", "description": "Horizontal scaling."},
-        {"name": "b", "type": "number", "description": "Horizontal skewing."},
-        {"name": "c", "type": "number", "description": "Vertical skewing."},
-        {"name": "d", "type": "number", "description": "Vertical scaling."},
-        {"name": "e", "type": "number", "description": "Horizontal moving."},
-        {"name": "f", "type": "number", "description": "Vertical moving."}
-      ],
-      "description": "resets (overrides) the current transformation to the identity matrix and then invokes a transformation described by the arguments of this method. The matrix has the following format:\n[[a, c, e],\n [b, d, f],\n [0, 0, 1]]"
-    }],
-    "clearRect": [{
-      "parameters": [
-        {"name": "x", "type": "number", "description": "The x axis of the rectangle's upper-left corner."},
-        {"name": "y", "type": "number", "description": "The y axis of the rectangle's upper-left corner."},
-        {"name": "width", "type": "number", "description": "The rectangle's width."},
-        {"name": "height", "type": "number", "description": "The rectangles height."}
-      ],
-      "description": "Sets all pixels in the rectangle defined by starting point *(x, y)* and size *(width, height)* to transparent, erasing any previously drawn content."
-    }],
-    "fillRect": [{
-      "parameters": [
-        {"name": "x", "type": "number", "description": "The x axis of the rectangle's upper-left corner."},
-        {"name": "y", "type": "number", "description": "The y axis of the rectangle's upper-left corner."},
-        {"name": "width", "type": "number", "description": "The rectangle's width."},
-        {"name": "height", "type": "number", "description": "The rectangles height."}
-      ],
-      "description": "draws a filled rectangle at *(x, y)* position whose size is determined by *width* and *height*. and whose color is determined by the fillStyle attribute."
-    }],
-    "strokeRect": [{
-      "parameters": [
-        {"name": "x", "type": "number", "description": "The x axis of the rectangle's upper-left corner."},
-        {"name": "y", "type": "number", "description": "The y axis of the rectangle's upper-left corner."},
-        {"name": "width", "type": "number", "description": "The rectangle's width."},
-        {"name": "height", "type": "number", "description": "The rectangles height."}
-      ],
-      "description": "draws the outline of a rectangle at *(x, y)* position whose size is determined by *width* and *height* using the current stroke style."
-    }],
-    "fillText": [{
-      "parameters": [
-        {"name": "text", "type": "string", "description": "The text to render."},
-        {"name": "x", "type": "number", "description": "The x axis of the coordinate for the text starting point."},
-        {"name": "y", "type": "number", "description": "The y axis of the coordinate for the text starting point."}
-      ],
-      "description": "Fills a given text at the given *(x, y)* position using the current *textAlign* and *textBaseline* values."
-    }],
-    "strokeText": [{
-      "parameters": [
-        {"name": "text", "type": "string", "description": "The text to render."},
-        {"name": "x", "type": "number", "description": "The x axis of the coordinate for the text starting point."},
-        {"name": "y", "type": "number", "description": "The y axis of the coordinate for the text starting point."}
-      ],
-      "description": "Strokes a given text at the given *(x, y)* position using the current *textAlign* and *textBaseline* values."
-    }],
-    "fill": [{
-      "parameters": [],
-      "description": "Fills the current or path with the current fill style."
-    }],
-    "stroke": [{
-      "parameters": [],
-      "description": "Strokes the current path with the current stroke style."
-    }],
-    "getImageData": [{
-      "parameters": [
-        {"name": "x", "type": "number", "description": "The x axis of the rectangle's upper-left corner."},
-        {"name": "y", "type": "number", "description": "The y axis of the rectangle's upper-left corner."},
-        {"name": "width", "type": "number", "description": "The rectangle's width."},
-        {"name": "height", "type": "number", "description": "The rectangle's height."}
-      ],
-      "returns": "ImageData",
-      "description": "Returns an ImageData object representing the underlying pixel data for the area of the canvas denoted by the given rectangle."
-    }],
-    "putImageData": [{
-      "parameters": [
-        {"name": "imageData", "type": "ImageData", "description": "An ImageData object containing the array of pixel values."},
-        {"name": "x", "type": "number", "description": "x-coordinate of the upper-left corner of the image data rectangle"},
-        {"name": "y", "type": "number", "description": "y-coordinate of the upper-left corner of the image data rectangle"}
-      ],
-      "description": "Paints data from the given ImageData object onto the bitmap at coordinates (x, y)."
-    }],
-    "createImageData": [{
-      "parameters":  [
-        {"name": "width", "type": "number", "description": "The width of the new ImageData object."},
-        {"name": "height", "type": "number", "description": "The height of the new ImageData object."}
-      ],
-      "returns": "ImageData",
-      "description": "creates a new, blank ImageData object with the specified dimensions. All of the pixels in the new object are transparent black."
-    }, {
-      "parameters":  [
-        {"name": "imageData", "type": "ImageData", "description": "An existing ImageData object from which to copy the width and height."}
-      ],
-      "returns": "ImageData",
-      "description": "creates a new, blank ImageData object with the same dimensions as the specified existing ImageData object. All of the pixels in the new object are transparent black."
-    }
+        "description": "Moves the starting point of a new sub-path to the *(x, y)* coordinates."
+      }
+    ],
+    "bezierCurveTo": [
+      {
+        "parameters": [
+          {
+            "name": "cp1x",
+            "type": "number",
+            "description": "The x axis of the coordinate for the first control point."
+          },
+          {
+            "name": "cp1y",
+            "type": "number",
+            "description": "The y axis of the coordinate for the first control point."
+          },
+          {
+            "name": "cp2x",
+            "type": "number",
+            "description": "The x axis of the coordinate for the second control point."
+          },
+          {
+            "name": "cp2y",
+            "type": "number",
+            "description": "The y axis of the coordinate for the second control point."
+          },
+          {
+            "name": "x",
+            "type": "number",
+            "description": "The x axis of the coordinate for the end point."
+          },
+          {
+            "name": "y",
+            "type": "number",
+            "description": "The y axis of the coordinate for the end point."
+          }
+        ],
+        "description": "Adds a cubic Bézier curve to the path. The starting point is the last point in the current path."
+      }
+    ],
+    "quadraticCurveTo": [
+      {
+        "parameters": [
+          {
+            "name": "cpx",
+            "type": "number",
+            "description": "The x axis of the coordinate for the control point."
+          },
+          {
+            "name": "cpy",
+            "type": "number",
+            "description": "The y axis of the coordinate for the control point."
+          },
+          {
+            "name": "x",
+            "type": "number",
+            "description": "The x axis of the coordinate for the end point."
+          },
+          {
+            "name": "y",
+            "type": "number",
+            "description": "The y axis of the coordinate for the end point."
+          }
+        ],
+        "description": "Adds a quadratic Bézier curve to the path. The starting point is the last point in the current path."
+      }
+    ],
+    "rect": [
+      {
+        "parameters": [
+          {
+            "name": "x",
+            "type": "number",
+            "description": "The x axis of the rectangle's upper-left corner."
+          },
+          {
+            "name": "y",
+            "type": "number",
+            "description": "The y axis of the rectangle's upper-left corner."
+          },
+          {
+            "name": "width",
+            "type": "number",
+            "description": "The rectangle's width."
+          },
+          {
+            "name": "height",
+            "type": "number",
+            "description": "The rectangles height."
+          }
+        ],
+        "description": "Creates a path for a rectangle with the top-left corner at *(x, y)*"
+      }
+    ],
+    "arc": [
+      {
+        "parameters": [
+          {
+            "name": "x",
+            "type": "number",
+            "description": "The x coordinate of the arc's center."
+          },
+          {
+            "name": "y",
+            "type": "number",
+            "description": "The y coordinate of the arc's center."
+          },
+          {
+            "name": "radius",
+            "type": "number",
+            "description": "The arc's radius."
+          },
+          {
+            "name": "startAngle",
+            "type": "number",
+            "description": "The angle in radians at which the arc starts, measured clockwise from the positive x axis."
+          },
+          {
+            "name": "endAngle",
+            "type": "number",
+            "description": "The angle in radians at which the arc ends, measured clockwise from the positive x axis."
+          },
+          {
+            "name": "anticlockwise?",
+            "type": "boolean",
+            "description": "if true, causes the arc to be drawn counter-clockwise between the two angles."
+          }
+        ],
+        "description": "Adds an arc to the path which is centered at *(x, y)* position with radius *r* starting at *startAngle* and ending at *endAngle* going in the given direction by *anticlockwise* (defaulting to clockwise)."
+      }
+    ],
+    "scale": [
+      {
+        "parameters": [
+          {
+            "name": "x",
+            "type": "number",
+            "description": "Scaling factor in the horizontal direction."
+          },
+          {
+            "name": "y",
+            "type": "number",
+            "description": "Scaling factor in the vertical direction."
+          }
+        ],
+        "description": "Adds a scaling transformation to the canvas units by x horizontally and by y vertically."
+      }
+    ],
+    "rotate": [
+      {
+        "parameters": [
+          {
+            "name": "angle",
+            "type": "number",
+            "description": " The angle to rotate clockwise in radians."
+          }
+        ],
+        "description": "Adds a rotation to the transformation matrix."
+      }
+    ],
+    "translate": [
+      {
+        "parameters": [
+          {
+            "name": "x",
+            "type": "number",
+            "description": "The distance to move in the horizontal direction."
+          },
+          {
+            "name": "y",
+            "type": "number",
+            "description": "The distance to move in the vertical direction."
+          }
+        ],
+        "description": "Adds a translation transformation by moving the canvas and its origin *x* horizontally and *y* vertically on the grid."
+      }
+    ],
+    "transform": [
+      {
+        "parameters": [
+          {
+            "name": "a",
+            "type": "number",
+            "description": "Horizontal scaling."
+          },
+          {
+            "name": "b",
+            "type": "number",
+            "description": "Horizontal skewing."
+          },
+          {
+            "name": "c",
+            "type": "number",
+            "description": "Vertical skewing."
+          },
+          {
+            "name": "d",
+            "type": "number",
+            "description": "Vertical scaling."
+          },
+          {
+            "name": "e",
+            "type": "number",
+            "description": "Horizontal moving."
+          },
+          {
+            "name": "f",
+            "type": "number",
+            "description": "Vertical moving."
+          }
+        ],
+        "description": "Multiplies the current transformation with the matrix described by the arguments of this method. The matrix has the following format:\n[[a, c, e],\n [b, d, f],\n [0, 0, 1]]"
+      }
+    ],
+    "setTransform": [
+      {
+        "parameters": [
+          {
+            "name": "a",
+            "type": "number",
+            "description": "Horizontal scaling."
+          },
+          {
+            "name": "b",
+            "type": "number",
+            "description": "Horizontal skewing."
+          },
+          {
+            "name": "c",
+            "type": "number",
+            "description": "Vertical skewing."
+          },
+          {
+            "name": "d",
+            "type": "number",
+            "description": "Vertical scaling."
+          },
+          {
+            "name": "e",
+            "type": "number",
+            "description": "Horizontal moving."
+          },
+          {
+            "name": "f",
+            "type": "number",
+            "description": "Vertical moving."
+          }
+        ],
+        "description": "resets (overrides) the current transformation to the identity matrix and then invokes a transformation described by the arguments of this method. The matrix has the following format:\n[[a, c, e],\n [b, d, f],\n [0, 0, 1]]"
+      }
+    ],
+    "clearRect": [
+      {
+        "parameters": [
+          {
+            "name": "x",
+            "type": "number",
+            "description": "The x axis of the rectangle's upper-left corner."
+          },
+          {
+            "name": "y",
+            "type": "number",
+            "description": "The y axis of the rectangle's upper-left corner."
+          },
+          {
+            "name": "width",
+            "type": "number",
+            "description": "The rectangle's width."
+          },
+          {
+            "name": "height",
+            "type": "number",
+            "description": "The rectangles height."
+          }
+        ],
+        "description": "Sets all pixels in the rectangle defined by starting point *(x, y)* and size *(width, height)* to transparent, erasing any previously drawn content."
+      }
+    ],
+    "fillRect": [
+      {
+        "parameters": [
+          {
+            "name": "x",
+            "type": "number",
+            "description": "The x axis of the rectangle's upper-left corner."
+          },
+          {
+            "name": "y",
+            "type": "number",
+            "description": "The y axis of the rectangle's upper-left corner."
+          },
+          {
+            "name": "width",
+            "type": "number",
+            "description": "The rectangle's width."
+          },
+          {
+            "name": "height",
+            "type": "number",
+            "description": "The rectangles height."
+          }
+        ],
+        "description": "draws a filled rectangle at *(x, y)* position whose size is determined by *width* and *height*. and whose color is determined by the fillStyle attribute."
+      }
+    ],
+    "strokeRect": [
+      {
+        "parameters": [
+          {
+            "name": "x",
+            "type": "number",
+            "description": "The x axis of the rectangle's upper-left corner."
+          },
+          {
+            "name": "y",
+            "type": "number",
+            "description": "The y axis of the rectangle's upper-left corner."
+          },
+          {
+            "name": "width",
+            "type": "number",
+            "description": "The rectangle's width."
+          },
+          {
+            "name": "height",
+            "type": "number",
+            "description": "The rectangles height."
+          }
+        ],
+        "description": "draws the outline of a rectangle at *(x, y)* position whose size is determined by *width* and *height* using the current stroke style."
+      }
+    ],
+    "fillText": [
+      {
+        "parameters": [
+          {
+            "name": "text",
+            "type": "string",
+            "description": "The text to render."
+          },
+          {
+            "name": "x",
+            "type": "number",
+            "description": "The x axis of the coordinate for the text starting point."
+          },
+          {
+            "name": "y",
+            "type": "number",
+            "description": "The y axis of the coordinate for the text starting point."
+          }
+        ],
+        "description": "Fills a given text at the given *(x, y)* position using the current *textAlign* and *textBaseline* values."
+      }
+    ],
+    "strokeText": [
+      {
+        "parameters": [
+          {
+            "name": "text",
+            "type": "string",
+            "description": "The text to render."
+          },
+          {
+            "name": "x",
+            "type": "number",
+            "description": "The x axis of the coordinate for the text starting point."
+          },
+          {
+            "name": "y",
+            "type": "number",
+            "description": "The y axis of the coordinate for the text starting point."
+          }
+        ],
+        "description": "Strokes a given text at the given *(x, y)* position using the current *textAlign* and *textBaseline* values."
+      }
+    ],
+    "fill": [
+      {
+        "parameters": [],
+        "description": "Fills the current or path with the current fill style."
+      }
+    ],
+    "stroke": [
+      {
+        "parameters": [],
+        "description": "Strokes the current path with the current stroke style."
+      }
+    ],
+    "getImageData": [
+      {
+        "parameters": [
+          {
+            "name": "x",
+            "type": "number",
+            "description": "The x axis of the rectangle's upper-left corner."
+          },
+          {
+            "name": "y",
+            "type": "number",
+            "description": "The y axis of the rectangle's upper-left corner."
+          },
+          {
+            "name": "width",
+            "type": "number",
+            "description": "The rectangle's width."
+          },
+          {
+            "name": "height",
+            "type": "number",
+            "description": "The rectangle's height."
+          }
+        ],
+        "returns": "ImageData",
+        "description": "Returns an ImageData object representing the underlying pixel data for the area of the canvas denoted by the given rectangle."
+      }
+    ],
+    "putImageData": [
+      {
+        "parameters": [
+          {
+            "name": "imageData",
+            "type": "ImageData",
+            "description": "An ImageData object containing the array of pixel values."
+          },
+          {
+            "name": "x",
+            "type": "number",
+            "description": "x-coordinate of the upper-left corner of the image data rectangle"
+          },
+          {
+            "name": "y",
+            "type": "number",
+            "description": "y-coordinate of the upper-left corner of the image data rectangle"
+          }
+        ],
+        "description": "Paints data from the given ImageData object onto the bitmap at coordinates (x, y)."
+      }
+    ],
+    "createImageData": [
+      {
+        "parameters": [
+          {
+            "name": "width",
+            "type": "number",
+            "description": "The width of the new ImageData object."
+          },
+          {
+            "name": "height",
+            "type": "number",
+            "description": "The height of the new ImageData object."
+          }
+        ],
+        "returns": "ImageData",
+        "description": "creates a new, blank ImageData object with the specified dimensions. All of the pixels in the new object are transparent black."
+      },
+      {
+        "parameters": [
+          {
+            "name": "imageData",
+            "type": "ImageData",
+            "description": "An existing ImageData object from which to copy the width and height."
+          }
+        ],
+        "returns": "ImageData",
+        "description": "creates a new, blank ImageData object with the same dimensions as the specified existing ImageData object. All of the pixels in the new object are transparent black."
+      }
     ]
   }
 }

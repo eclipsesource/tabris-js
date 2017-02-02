@@ -5,14 +5,22 @@
   "properties": {
     "tabBarLocation": {
       "type": "string",
-      "values": ["top", "bottom", "hidden", "auto"],
+      "values": [
+        "top",
+        "bottom",
+        "hidden",
+        "auto"
+      ],
       "default": "auto",
       "static": true,
       "description": "The placement of the tab titles. When set to `\"hidden\"`, the tab bar will not be visible. When set to `\"auto\"`, the position is platform dependent."
     },
     "tabMode": {
       "type": "string",
-      "values": ["fixed", "scrollable"],
+      "values": [
+        "fixed",
+        "scrollable"
+      ],
       "default": "fixed",
       "static": true,
       "description": "Controls how the tabs make use of the available horizontal space. Setting the `tabMode` to `\"fixed\"` makes the tabs span the entire available space. In case of a very wide `TabFolder` the `\"fixed\"` mode centers the tabs. The mode `\"scrollable\"` left aligns the tabs and allows to scroll the tabs if there are more tabs than would fit in the available space. Available on Android only."
@@ -29,24 +37,51 @@
   "events": {
     "change:selection": {
       "parameters": [
-        {"name": "widget", "type": "this"},
-        {"name": "selection", "type": "Tab", "description": "The new value of *selection*."},
-        {"name": "options", "type": "any"}
+        {
+          "name": "widget",
+          "type": "this"
+        },
+        {
+          "name": "selection",
+          "type": "Tab",
+          "description": "The new value of *selection*."
+        },
+        {
+          "name": "options",
+          "type": "any"
+        }
       ],
       "description": "Fired when the selection property changes."
     },
     "select": {
       "parameters": [
-        {"name": "widget", "type": "this"},
-        {"name": "selection", "type": "Tab", "description": "The new value of *selection*."},
-        {"name": "options", "type": "any"}
+        {
+          "name": "widget",
+          "type": "this"
+        },
+        {
+          "name": "selection",
+          "type": "Tab",
+          "description": "The new value of *selection*."
+        },
+        {
+          "name": "options",
+          "type": "any"
+        }
       ],
       "description": "Fired when the selection property changes by user interaction."
     },
     "scroll": {
       "parameters": [
-        {"name": "widget", "type": "this"},
-        {"name": "event", "type": "{selection: Tab, offset: number}", "description": "The `event` object contains the properties `selection` (same as `selection` property on `TabFolder`) and `offset` (number of pixels the current tab has scrolled horizontally)"}
+        {
+          "name": "widget",
+          "type": "this"
+        },
+        {
+          "name": "event",
+          "type": "{selection: Tab, offset: number}",
+          "description": "The `event` object contains the properties `selection` (same as `selection` property on `TabFolder`) and `offset` (number of pixels the current tab has scrolled horizontally)"
+        }
       ],
       "description": "Fired when `paging` is enabled and a tab is scrolled. The `event` parameter contains position information relative to the currently selected `Tab`. Eg.: scrolling a 500px wide tab 10% to the left sets `offset` to `50`. Scrolling 10% to the right sets `offset` to `-50`."
     }

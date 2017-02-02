@@ -24,38 +24,59 @@
   "events": {
     "foreground": {
       "parameters": [
-        {"name": "app", "type": "App"}
+        {
+          "name": "app",
+          "type": "App"
+        }
       ],
       "description": "Fired when the app becomes visible. The event is only fired after the app has been brought to the background. Not during app startup."
     },
     "resume": {
       "parameters": [
-        {"name": "app", "type": "App"}
+        {
+          "name": "app",
+          "type": "App"
+        }
       ],
       "description": "Fired when the app is visible and ready to interact with the user. The event is preceded by either `foreground` (the app becomes visible again) or `pause` (the app regains ability to interact with user)."
     },
     "pause": {
       "parameters": [
-        {"name": "app", "type": "App"}
+        {
+          "name": "app",
+          "type": "App"
+        }
       ],
       "description": "Fired when the app is not the interaction target of the user anymore. Usually preceded by `resume`."
     },
     "background": {
       "parameters": [
-        {"name": "app", "type": "App"}
+        {
+          "name": "app",
+          "type": "App"
+        }
       ],
       "description": "Fired when the app becomes invisible. Either because another app is in the foreground or the user has returned to the home screen."
     },
     "terminate": {
       "parameters": [
-        {"name": "app", "type": "App"}
+        {
+          "name": "app",
+          "type": "App"
+        }
       ],
       "description": "Fired when the app is being destroyed. After this callback no more interaction with the app is possible."
     },
     "backnavigation": {
       "parameters": [
-        {"name": "app", "type": "App"},
-        {"name": "event", "type": "{preventDefault: Function}"}
+        {
+          "name": "app",
+          "type": "App"
+        },
+        {
+          "name": "event",
+          "type": "{preventDefault: Function}"
+        }
       ],
       "description": "Fired when the back button is pressed on Android. To suppress the default back navigation behavior, call `event.preventDefault()`."
     }
@@ -69,11 +90,13 @@
     ],
     "getResourceLocation": [
       {
-        "parameters": [{
-          "name": "path",
-          "type": "string",
-          "description": "The path of a resource relative to the application root."
-        }],
+        "parameters": [
+          {
+            "name": "path",
+            "type": "string",
+            "description": "The path of a resource relative to the application root."
+          }
+        ],
         "returns": "string",
         "description": "Returns the URL for a given resource that is bundled with the app. Can be used to access app resources like images, videos, etc. Note that these resources can only be accessed in read-only mode."
       }

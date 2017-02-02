@@ -20,15 +20,19 @@
     },
     "state": {
       "type": "string",
-      "values": ["normal", "paused", "error"],
+      "values": [
+        "normal",
+        "paused",
+        "error"
+      ],
       "default": "normal",
       "description": "This property affects the color of the progress indicator. Not supported on iOS."
     }
   },
   "links": [
     {
-      "title" : "Simple ProgressBar snippet",
-      "path" : "${GITHUB_BRANCH}/snippets/progressbar.js"
+      "title": "Simple ProgressBar snippet",
+      "path": "${GITHUB_BRANCH}/snippets/progressbar.js"
     }
   ]
 }

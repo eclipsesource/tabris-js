@@ -9,7 +9,11 @@
     },
     "placementPriority": {
       "type": "string",
-      "values": ["low", "high", "normal"],
+      "values": [
+        "low",
+        "high",
+        "normal"
+      ],
       "default": "normal",
       "description": "Actions with higher placement priority will be placed at a more significant position in the UI, e.g. low priority actions could go into a menu instead of being included in a toolbar."
     },
@@ -21,7 +25,10 @@
   "events": {
     "select": {
       "parameters": [
-        {"name": "widget", "type": "this"}
+        {
+          "name": "widget",
+          "type": "this"
+        }
       ],
       "description": "Fired when the action is invoked."
     }

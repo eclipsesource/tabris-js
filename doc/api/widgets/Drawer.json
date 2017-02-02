@@ -5,13 +5,19 @@
   "events": {
     "open": {
       "parameters": [
-        {"name": "widget", "type": "this"}
+        {
+          "name": "widget",
+          "type": "this"
+        }
       ],
       "description": "Fired when the drawer is opened and has reached its resting position."
     },
     "close": {
       "parameters": [
-        {"name": "widget", "type": "this"}
+        {
+          "name": "widget",
+          "type": "this"
+        }
       ],
       "description": "Fired when the drawer is closed and has reached its resting position."
     }
