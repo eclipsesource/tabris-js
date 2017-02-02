@@ -10,15 +10,15 @@ var navigationView = new tabris.NavigationView({
 
 new tabris.ImageView({
   left: 0, right: 0, top: 0, height: 200,
-  image: 'images/cover.jpg',
+  image: 'images/landscape.jpg',
   scaleMode: 'fill'
 }).appendTo(drawer);
 
 var pageSelector = new tabris.CollectionView({
   left: 0, top: 'prev()', right: 0, bottom: 0,
-  items: [{title: 'Page 1', icon: 'images/page.png'}, {title: 'Page 2', icon: 'images/page.png'}],
+  items: [{title: 'Basket', icon: 'images/page.png'}, {title: 'Checkout', icon: 'images/page.png'}],
   initializeCell: initializeCell,
-  itemHeight: tabris.device.platform === 'iOS' ? 40 : 48
+  itemHeight: 48
 }).appendTo(drawer);
 
 pageSelector.on('select', function(target, pageDescriptor) {
@@ -31,19 +31,19 @@ createPage({title: 'Initial Page', icon: 'images/page.png'}).appendTo(navigation
 
 function initializeCell(cell) {
   new tabris.Composite({
-    left: 0, right: 0, bottom: 0, height: 1,
-    background: '#bbb'
+    left: tabris.device.platform === 'iOS' ? 60 : 72, right: 0, bottom: 0, height: 1,
+    background: '#e7e7e7'
   }).appendTo(cell);
   var imageView = new tabris.ImageView({
-    left: 10, top: 10, bottom: 10
+    left: 14, top: 10, bottom: 10
   }).appendTo(cell);
   var textView = new tabris.TextView({
-    left: 72, centerY: 0,
+    left: tabris.device.platform === 'iOS' ? 60 : 72, centerY: 0,
     font: tabris.device.platform === 'iOS' ? '17px .HelveticaNeueInterface-Regular' : '14px Roboto Medium',
-    textColor: tabris.device.platform === 'iOS' ? 'rgb(22, 126, 251)' : '#212121'
+    textColor: '#212121'
   }).appendTo(cell);
   cell.on('change:item', function(widget, page) {
-    imageView.image = page.icon;
+    imageView.image = {src: page.icon, scale: 3};
     textView.text = page.title;
   });
 }
