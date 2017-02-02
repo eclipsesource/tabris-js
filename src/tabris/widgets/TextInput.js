@@ -15,13 +15,13 @@ const CONFIG = {
       }
     },
     accept: {
-      trigger(event) {
+      trigger(name, event) {
         this.trigger('accept', this, event.text, {});
       }
     },
     input: {
       alias: 'change:text',
-      trigger(event) {
+      trigger(name, event) {
         this._triggerChangeEvent('text', event.text);
         this.trigger('input', this, event.text, {});
       }

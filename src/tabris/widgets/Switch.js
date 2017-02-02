@@ -6,7 +6,7 @@ const CONFIG = {
   _events: {
     select: {
       alias: 'change:selection',
-      trigger(event) {
+      trigger(name, event) {
         this.trigger('change:selection', this, event.selection, {});
         this.trigger('select', this, event.selection, {});
       }

@@ -17,7 +17,7 @@ const CONFIG = {
   _events: {
     'change:orientation': {
       name: 'orientationchange',
-      trigger(event) {
+      trigger(name, event) {
         this._triggerChangeEvent('orientation', event.orientation);
       }
     }

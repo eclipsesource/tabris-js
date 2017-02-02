@@ -210,15 +210,13 @@ export default class NativeObject extends EventsClass {
     tabris._nativeBridge.listen(this.cid, event, state);
   }
 
-  _trigger(event, params) {
+  _trigger(event, param = {}) {
     let name = this.$trigger[event];
     let trigger = name && this.$events[name].trigger;
     if (trigger instanceof Function) {
-      return trigger.call(this, params, name);
-    } else if (name) {
-      this.trigger(name, params);
+      return trigger.call(this, name, param);
     } else {
-      this.trigger(event, params);
+      this.trigger(name, param);
     }
   }
 

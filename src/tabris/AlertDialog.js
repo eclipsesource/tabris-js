@@ -34,7 +34,7 @@ const CONFIG = {
 
   _events: {
     'close': {
-      trigger(event) {
+      trigger(name, event) {
         if (event.button) {
           this.trigger('close:' + event.button, this);
         }

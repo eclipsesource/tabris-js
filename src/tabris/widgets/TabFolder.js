@@ -27,18 +27,17 @@ const CONFIG = {
       }
     }
   },
-
   _events: {
     select: {
       alias: 'change:selection',
-      trigger(event) {
+      trigger(name, event) {
         let tab = tabris._proxies.find(event.selection);
         this.trigger('change:selection', this, tab, {});
         this.trigger('select', this, tab, {});
       }
     },
     scroll: {
-      trigger(event) {
+      trigger(name, event) {
         event.selection = event.selection ? tabris._proxies.find(event.selection) : null;
         this.trigger('scroll', this, event);
       }

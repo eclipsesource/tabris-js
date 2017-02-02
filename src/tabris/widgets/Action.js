@@ -24,7 +24,7 @@ const CONFIG = {
 
   _events: {
     select: {
-      trigger(event) {
+      trigger(name, event) {
         this.trigger('select', this, event);
       }
     }

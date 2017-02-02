@@ -5,7 +5,7 @@ const CONFIG = {
   _type: 'tabris.ImageView',
   _events: {
     load: {
-      trigger(event) {
+      trigger(name, event) {
         this.trigger('load', this, event);
       }
     }

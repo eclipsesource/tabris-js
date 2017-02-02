@@ -22,7 +22,7 @@ const CONFIG = {
   _events: {
     'change:state': {
       name: 'statechange',
-      trigger(event) {
+      trigger(name, event) {
         this._triggerChangeEvent('state', event.state);
       }
     }

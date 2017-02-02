@@ -252,7 +252,7 @@ let defaultEvents = {
   touchcancel: {trigger: triggerWithTarget},
   'resize': {
     alias: 'change:bounds',
-    trigger(event) {
+    trigger(name, event) {
       if (hasAndroidResizeBug()) {
         let self = this;
         setTimeout(() => {
@@ -461,6 +461,6 @@ function gestureListener(event) {
   this.target.trigger(this.name, this.target, event);
 }
 
-function triggerWithTarget(event, name) {
-  this.trigger(name, this, event || {});
+function triggerWithTarget(name, event) {
+  this.trigger(name, this, event);
 }

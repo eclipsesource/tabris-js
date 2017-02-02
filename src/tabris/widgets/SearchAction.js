@@ -17,17 +17,17 @@ const CONFIG = {
 
   _events: {
     input: {
-      trigger(event) {
+      trigger(name, event) {
         this.trigger('input', this, event.text, {});
       }
     },
     accept: {
-      trigger(event) {
+      trigger(name, event) {
         this.trigger('accept', this, event.text, {});
       }
     },
     select: {
-      trigger(event) {
+      trigger(name, event) {
         this.trigger('select', this, event);
       }
     }

@@ -18,14 +18,14 @@ const CONFIG = {
   _events: {
     scrollX: {
       alias: 'change:offsetX',
-      trigger({offset}) {
+      trigger(name, {offset}) {
         this._triggerChangeEvent('offsetX', offset);
         this.trigger('scrollX', this, offset, {});
       }
     },
     scrollY: {
       alias: 'change:offsetY',
-      trigger({offset}) {
+      trigger(name, {offset}) {
         this._triggerChangeEvent('offsetY', offset);
         this.trigger('scrollY', this, offset, {});
       }

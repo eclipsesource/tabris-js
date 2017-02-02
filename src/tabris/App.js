@@ -105,11 +105,11 @@ export function create() {
   return app;
 }
 
-function triggerWithTarget(event, name) {
+function triggerWithTarget(name, event) {
   this.trigger(name, this, event);
 }
 
-function notifyPatchCallback(event) {
+function notifyPatchCallback(name, event) {
   this._listen('patchInstall', false);
   let callback = this._pendingPatchCallback;
   delete this._pendingPatchCallback;

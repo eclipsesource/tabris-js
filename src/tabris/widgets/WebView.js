@@ -8,7 +8,7 @@ const CONFIG = {
 
   _events: {
     navigate: {
-      trigger(event, name) {
+      trigger(name, event) {
         let intercepted = false;
         event.preventDefault = function() {
           intercepted = true;
@@ -18,17 +18,17 @@ const CONFIG = {
       }
     },
     load: {
-      trigger(event) {
+      trigger(name, event) {
         this.trigger('load', this, event);
       }
     },
     download: {
-      trigger(event) {
+      trigger(name, event) {
         this.trigger('download', this, event);
       }
     },
     message: {
-      trigger(event) {
+      trigger(name, event) {
         this.trigger('message', this, event);
       }
     }

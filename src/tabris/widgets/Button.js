@@ -5,7 +5,7 @@ const CONFIG = {
   _type: 'tabris.Button',
   _events: {
     select: {
-      trigger(event) {
+      trigger(name, event) {
         this.trigger('select', this, event);
       }
     }

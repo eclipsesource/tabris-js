@@ -77,10 +77,12 @@ const CONFIG = {
 
   _events: {
     refresh: {
-      trigger(event) {this.trigger('refresh', this, event);}
+      trigger(name, event) {
+        this.trigger('refresh', this, event);
+      }
     },
     requestinfo: {
-      trigger(event) {
+      trigger(name, event) {
         let item = this._getItem(this._items, event.index);
         let type = resolveProperty(this, 'cellType', item);
         let height = resolveProperty(this, 'itemHeight', item, type);
@@ -89,7 +91,7 @@ const CONFIG = {
       }
     },
     createitem: {
-      trigger(event) {
+      trigger(name, event) {
         let cell = new Cell();
         cell._parent = this;
         this._addChild(cell);
@@ -103,7 +105,7 @@ const CONFIG = {
       }
     },
     populateitem: {
-      trigger(event) {
+      trigger(name, event) {
         let cell = tabris._proxies.find(event.widget);
         let item = this._getItem(this._items, event.index);
         cell._storeProperty('itemIndex', event.index);
@@ -118,13 +120,13 @@ const CONFIG = {
       listen(state) {
         this._nativeListen('select', state);
       },
-      trigger(event) {
+      trigger(name, event) {
         let item = this._getItem(this._items, event.index);
         this.trigger('select', this, item, {index: event.index});
       }
     },
     scroll: {
-      trigger(event) {
+      trigger(name, event) {
         this.trigger('scroll', this, event);
       }
     },

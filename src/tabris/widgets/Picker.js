@@ -9,7 +9,7 @@ const CONFIG = {
   _events: {
     select: {
       alias: 'change:selectionIndex',
-      trigger(event) {
+      trigger(name, event) {
         this._triggerChangeEvent('selectionIndex', event.selectionIndex);
         this.trigger('select', this, this._getItem(event.selectionIndex), {index: event.selectionIndex});
       }
