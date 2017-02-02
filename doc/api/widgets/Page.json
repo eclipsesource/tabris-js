@@ -39,11 +39,11 @@
   },
   "links": [
     {
-      "title": "Simple Page snippet with multiple top-level pages including a PageSelector (aka Burger Menu)",
+      "title": "Simple snippet for displaying a single page",
       "path": "${GITHUB_BRANCH}/snippets/navigationview-page.js"
     },
     {
-      "title": "Snippet for creating a full screen Page",
+      "title": "Snippet for creating a stack of pages",
       "path": "${GITHUB_BRANCH}/snippets/navigationview-page-stacked.js"
     }
   ]
