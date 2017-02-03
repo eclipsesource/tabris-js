@@ -45,6 +45,8 @@
     "rollup": "^0.34.3",
     "sinon": "^1.17.5",
     "sinon-chai": "^2.8.0",
+    "tslint": "^4.4.2",
+    "typescript": "^2.1.5",
     "webpack": "^1.12.14",
     "webpack-dev-server": "^1.14.1",
     "whatwg-fetch": "^1.0.0"

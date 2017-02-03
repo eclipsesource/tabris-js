@@ -1,11 +1,11 @@
-import {CanvasProperties, Canvas, CanvasContext, Composite, CompositeProperties} from "tabris";
-import {WeatherData, WeatherDatum} from "./weatherService";
+import {CanvasProperties, Canvas, CanvasContext, Composite, CompositeProperties} from 'tabris';
+import {WeatherData, WeatherDatum} from './weatherService';
 
-const daysNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const uiFont = "16px sans-serif";
-const uiLineColor = "rgba(255,255,255,0.3)";
-const uiTextColor = "rgba(0,0,0,0.4)";
-const graphLineColor = "rgba(255,255,255,0.55)";
+const daysNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const uiFont = '16px sans-serif';
+const uiLineColor = 'rgba(255,255,255,0.3)';
+const uiTextColor = 'rgba(0,0,0,0.4)';
+const graphLineColor = 'rgba(255,255,255,0.55)';
 const uiLineWidth = 1.5;
 const graphLineWidth = 1;
 const minHorizontalDistance = 33;
@@ -14,8 +14,8 @@ const hourLength = 60 * 60 * 1000;
 const dayLength = 24 * 60 * 60 * 1000;
 const margins = { top: 20, left: 30, bottom: 13, right: 10 };
 const maxZoom = 5;
-const nightColor = "rgba(103,113,145,0.392)";
-const dayColor = "rgba(131,156,188,0.286)";
+const nightColor = 'rgba(103,113,145,0.392)';
+const dayColor = 'rgba(131,156,188,0.286)';
 
 interface WeatherGraphProperties extends CompositeProperties {
   data: WeatherData;
@@ -43,7 +43,7 @@ export default class WeatherGraph extends Canvas {
     this.initDataPoints();
     this.initScale();
     this.canvas = new Canvas({ top: 0, left: 0, right: 0, bottom: 0 });
-    this.on("resize", (widget, bounds, options) => {
+    this.on('resize', (widget, bounds, options) => {
       this.height = bounds.height;
       this.width = bounds.width;
       this.draw();
@@ -58,7 +58,7 @@ export default class WeatherGraph extends Canvas {
   }
 
   public draw() {
-    let ctx = this.getContext("2d", this.width, this.height);
+    let ctx = this.getContext('2d', this.width, this.height);
     this.drawBackground(ctx);
     this.drawTemperatureScale(ctx);
     this.drawTimeScale(ctx);
@@ -111,7 +111,7 @@ export default class WeatherGraph extends Canvas {
 
   private drawArea(ctx: CanvasContext, startTime: number, endTime: number, color: string) {
     ctx.fillStyle = color;
-    let graphHeight = this.get("height") - margins.top - margins.bottom;
+    let graphHeight = this.get('height') - margins.top - margins.bottom;
     ctx.fillRect(this.getX(startTime),
       this.getY(this.scale.maxY),
       this.getX(endTime) - this.getX(startTime),
@@ -134,9 +134,9 @@ export default class WeatherGraph extends Canvas {
       // text label
       ctx.fillStyle = uiTextColor;
       ctx.font = uiFont;
-      ctx.textAlign = "right";
-      ctx.textBaseline = "middle";
-      ctx.fillText(height + "°C", this.getX(this.scale.minX) - 2, this.getY(height));
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(height + '°C', this.getX(this.scale.minX) - 2, this.getY(height));
     }
   }
 
@@ -172,17 +172,17 @@ export default class WeatherGraph extends Canvas {
   }
 
   private drawDayLabel(ctx: CanvasContext, day: number) {
-    ctx.textAlign = "left";
-    ctx.textBaseline = "bottom";
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'bottom';
     let dayName = daysNames[new Date(day).getDay()];
     ctx.fillText(dayName, this.getX(day) + 3, this.getY(this.scale.maxY) + 1);
   }
 
   private drawHourLabel(ctx: CanvasContext, hour: number) {
-    ctx.textAlign = "center";
-    ctx.textBaseline = "top";
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
     let hourNumber = new Date(hour).getHours();
-    let hourString = (hourNumber < 10) ? "0" + hourNumber + ":00" : hourNumber + ":00";
+    let hourString = (hourNumber < 10) ? '0' + hourNumber + ':00' : hourNumber + ':00';
     ctx.fillText(hourString, this.getX(hour), this.getY(this.scale.minY) + 1);
   }
 

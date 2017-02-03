@@ -126,8 +126,11 @@ module.exports = function(grunt) {
       test_spec: {
         cmd: `node node_modules/mocha/bin/mocha --colors --compilers js:babel-core/register "${grunt.option('spec')}"`
       },
-      lint: {
+      eslint: {
         cmd: 'node node_modules/eslint/bin/eslint.js --color .'
+      },
+      tslint: {
+        cmd: 'node node_modules/tslint/bin/tslint --exclude "**/*.d.ts" "examples/**/*.ts" "test/**/*.ts"'
       },
       bundle: {
         cmd: 'node node_modules/rollup/bin/rollup --format=cjs --output=build/bundle.js -- src/tabris/main.js'
@@ -151,7 +154,8 @@ module.exports = function(grunt) {
 
   /* runs static code analysis tools */
   grunt.registerTask('lint', [
-    'exec:lint'
+    'exec:eslint',
+    'exec:tslint'
   ]);
 
   grunt.registerTask('package', 'create package.json', () => {

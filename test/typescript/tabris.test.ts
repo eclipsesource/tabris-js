@@ -38,83 +38,83 @@ import {
   Image,
   Transformation,
   AnimationOptions
-} from "tabris";
+} from 'tabris';
 
-var page: Page = new Page();
+let page: Page = new Page();
 
 function test_events() {
-  var listener = () => console.log("triggered");
-  var widget = new Composite();
-  widget.on("foo", listener);
-  widget.trigger("foo", "details");
-  widget.off("foo", listener);
+  let listener = () => console.log('triggered');
+  let widget = new Composite();
+  widget.on('foo', listener);
+  widget.trigger('foo', 'details');
+  widget.off('foo', listener);
   widget.off(null, listener);
 }
 
 function test_Action() {
-  var widget: Action = new Action();
-  widget.set("foo", 23);
+  let widget: Action = new Action();
+  widget.set('foo', 23);
   widget.set({
-    image: {src: "http://example.org"},
-    title: "foo",
-    placementPriority: "high"
+    image: {src: 'http://example.org'},
+    title: 'foo',
+    placementPriority: 'high'
   });
-  var self: Action = widget.on("event", function(widget: Action) {});
+  let self: Action = widget.on('event', function(widget: Action) {});
 }
 
 function test_Button() {
-  var widget: Button = new Button();
-  widget.set("foo", 23);
+  let widget: Button = new Button();
+  widget.set('foo', 23);
   widget.set({
     width: 200,
     height: 400,
-    alignment: "center",
-    image: {src: "http://example.org"},
-    text: "foo"
+    alignment: 'center',
+    image: {src: 'http://example.org'},
+    text: 'foo'
   });
   let width: number = widget.width;
   let height: number = widget.height;
-  let alignment: "center" | "left" | "right" = widget.alignment;
+  let alignment: 'center' | 'left' | 'right' = widget.alignment;
   let image: Image = widget.image;
   let text: string = widget.text;
 }
 
 function test_CheckBox() {
-  var widget: CheckBox = new CheckBox();
-  widget.set("foo", 23);
+  let widget: CheckBox = new CheckBox();
+  widget.set('foo', 23);
   widget.set({
     selection: true,
-    text: "foo"
+    text: 'foo'
   });
   let selection: boolean = widget.selection;
 }
 
 function test_Canvas() {
-  var widget: Canvas = new Canvas();
-  widget.set("foo", 23);
+  let widget: Canvas = new Canvas();
+  widget.set('foo', 23);
   widget.set({
   });
-  var ctx: CanvasContext = widget.getContext("2d", 200, 300);
+  let ctx: CanvasContext = widget.getContext('2d', 200, 300);
 }
 
 function test_Cell() {
-  var widget: Cell = new Cell();
-  widget.set("foo", 23);
+  let widget: Cell = new Cell();
+  widget.set('foo', 23);
   widget.set({
   });
 }
 
 function test_CollectionView() {
-  var widget: CollectionView = new CollectionView();
-  widget.set("foo", 23);
+  let widget: CollectionView = new CollectionView();
+  widget.set('foo', 23);
   widget.set({
-    cellType: (item: any) => "foo",
+    cellType: (item: any) => 'foo',
     initializeCell: (cell: Cell, type: string) => {},
     itemHeight: (item: any, type: string) => 23,
-    items: ["foo", "bar", "baz"],
+    items: ['foo', 'bar', 'baz'],
     refreshEnabled: true,
     refreshIndicator: true,
-    refreshMessage: "foo"
+    refreshMessage: 'foo'
   });
   let cellType: string|((item: any) => string) = widget.cellType;
   let initializeCell: ((cell: Cell, cellType: string) => void) = widget.initializeCell;
@@ -123,8 +123,8 @@ function test_CollectionView() {
   let refreshEnabled: boolean = widget.refreshEnabled;
   let refreshIndicator: boolean = widget.refreshIndicator;
   let refreshMessage: string = widget.refreshMessage;
-  widget.insert(["item1", "item2"]);
-  widget.insert(["item1", "item2"], 3);
+  widget.insert(['item1', 'item2']);
+  widget.insert(['item1', 'item2'], 3);
   widget.refresh();
   widget.refresh(3);
   widget.remove(3);
@@ -133,29 +133,29 @@ function test_CollectionView() {
 }
 
 function test_Composite() {
-  var widget: Composite = new Composite();
-  widget.set("foo", 23);
+  let widget: Composite = new Composite();
+  widget.set('foo', 23);
   widget.set({
   });
 }
 
 function test_Drawer() {
-  var widget: Drawer = new Drawer();
-  widget.set("foo", 23);
+  let widget: Drawer = new Drawer();
+  widget.set('foo', 23);
   widget.set({
   });
-  var same: Drawer = widget.open();
-  var same: Drawer = widget.close();
+  let same1: Drawer = widget.open();
+  let same2: Drawer = widget.close();
 }
 
 function test_ImageView() {
-  var widget: ImageView = new ImageView();
-  widget.set("foo", 23);
+  let widget: ImageView = new ImageView();
+  widget.set('foo', 23);
   widget.set({
-    image: {src: "http://example.com"},
-    scaleMode: "auto"
+    image: {src: 'http://example.com'},
+    scaleMode: 'auto'
   });
-  let scaleMode: "auto" | "fill" | "fit" | "none" | "stretch" = widget.scaleMode;
+  let scaleMode: 'auto' | 'fill' | 'fit' | 'none' | 'stretch' = widget.scaleMode;
   widget.on('load', (widget, event) => {
     let foo: boolean = event.error;
   });
@@ -169,23 +169,23 @@ function test_NavigationBar() {
 }
 
 function test_Page() {
-  var page: Page = new Page();
+  let page: Page = new Page();
   let image: Image = page.image;
   let title: string = page.title;
-  page.set("foo", 23);
+  page.set('foo', 23);
   page.set({
-    image: {src: "http://example.com"},
-    title: "foo",
+    image: {src: 'http://example.com'},
+    title: 'foo',
   });
 }
 
 function test_Picker() {
-  var widget: Picker = new Picker();
-  widget.set("foo", 23);
+  let widget: Picker = new Picker();
+  widget.set('foo', 23);
   widget.set({
-    selection: "foo",
+    selection: 'foo',
     selectionIndex: 23,
-    items: ["foo", "bar", "baz"]
+    items: ['foo', 'bar', 'baz']
   });
   let selection: any = widget.selection;
   let selectionIndex: number = widget.selectionIndex;
@@ -193,26 +193,26 @@ function test_Picker() {
 }
 
 function test_ProgressBar() {
-  var widget: ProgressBar = new ProgressBar();
-  widget.set("foo", 23);
+  let widget: ProgressBar = new ProgressBar();
+  widget.set('foo', 23);
   widget.set({
     minimum: 0,
     maximum: 100,
     selection: 23,
-    state: "normal"
+    state: 'normal'
   });
   let minimum: number = widget.minimum;
   let maximum: number = widget.maximum;
   let selction: number = widget.selection;
-  let state: "error" | "normal" | "paused" = widget.state;
+  let state: 'error' | 'normal' | 'paused' = widget.state;
 }
 
 function test_RadioButton() {
-  var widget: RadioButton = new RadioButton();
-  widget.set("foo", 23);
+  let widget: RadioButton = new RadioButton();
+  widget.set('foo', 23);
   widget.set({
     selection: true,
-    text: "foo"
+    text: 'foo'
   });
 }
 
@@ -243,12 +243,12 @@ function test_ScrollView() {
 }
 
 function test_SearchAction() {
-  var widget: SearchAction = new SearchAction();
-  widget.set("foo", 23);
+  let widget: SearchAction = new SearchAction();
+  widget.set('foo', 23);
   widget.set({
-    message: "foo",
-    proposals: ["foo", "bar", "baz"],
-    text: "foo"
+    message: 'foo',
+    proposals: ['foo', 'bar', 'baz'],
+    text: 'foo'
   });
   let message: string = widget.message;
   let proposals: string[] = widget.proposals;
@@ -256,8 +256,8 @@ function test_SearchAction() {
 }
 
 function test_Slider() {
-  var widget: Slider = new Slider();
-  widget.set("foo", 23);
+  let widget: Slider = new Slider();
+  widget.set('foo', 23);
   widget.set({
     minimum: 0,
     maximum: 100,
@@ -277,106 +277,106 @@ function test_StatusBar() {
 }
 
 function test_Switch() {
-  var widget: Switch = new Switch();
-  widget.set("foo", 23);
+  let widget: Switch = new Switch();
+  widget.set('foo', 23);
   widget.set({
     selection: true
   });
 }
 
 function test_TextInput() {
-  var widget: TextInput = new TextInput();
-  widget.set("foo", 23);
+  let widget: TextInput = new TextInput();
+  widget.set('foo', 23);
   widget.set({
-    alignment: "center",
+    alignment: 'center',
     autoCapitalize: true,
     autoCorrect: false,
     editable: true,
-    text: "foo",
-    message: "bar",
-    type: "search",
-    keyboard: "ascii"
+    text: 'foo',
+    message: 'bar',
+    type: 'search',
+    keyboard: 'ascii'
   });
-  let alignment: "center" | "left" | "right" = widget.alignment;
+  let alignment: 'center' | 'left' | 'right' = widget.alignment;
   let autoCapitalize: boolean = widget.autoCapitalize;
   let autoCorrect: boolean = widget.autoCorrect;
   let editable: boolean = widget.editable;
   let text: string = widget.text;
   let message: string = widget.message;
-  let type: "default" | "multiline" | "password" | "search" = widget.type;
-  let keyboard: "ascii" | "decimal" | "default" | "email" | "number" | "numbersAndPunctuation" | "phone" | "url" = widget.keyboard;
+  let type: 'default' | 'multiline' | 'password' | 'search' = widget.type;
+  let keyboard: 'ascii' | 'decimal' | 'default' | 'email' | 'number' | 'numbersAndPunctuation' | 'phone' | 'url' = widget.keyboard;
 }
 
 function test_Tab() {
-  var tab: Tab = new Tab();
-  tab.set("foo", 23);
+  let tab: Tab = new Tab();
+  tab.set('foo', 23);
   tab.set({
-    badge: "foo",
-    title: "bar",
-    image: {src: "http://example.org"}
+    badge: 'foo',
+    title: 'bar',
+    image: {src: 'http://example.org'}
   });
   let badge: string = tab.badge;
-  var folder = new TabFolder();
+  let folder = new TabFolder();
   tab.appendTo(folder);
 }
 
 function test_TabFolder() {
-  var widget: TabFolder = new TabFolder();
-  widget.set("foo", 23);
+  let widget: TabFolder = new TabFolder();
+  let tab1: Tab, tab2: Tab;
+  widget.set('foo', 23);
   widget.set({
     paging: true,
-    tabBarLocation: "auto",
+    tabBarLocation: 'auto',
     selection: tab1
   });
   let paging: boolean = widget.paging;
-  let tabBarLocation: "auto" | "bottom" | "hidden" | "top" = widget.tabBarLocation;
+  let tabBarLocation: 'auto' | 'bottom' | 'hidden' | 'top' = widget.tabBarLocation;
   let selection: Tab = widget.selection;
-  var tab1: Tab, tab2: Tab;
-  var same: TabFolder = widget.append(tab1, tab2);
+  let same: TabFolder = widget.append(tab1, tab2);
 }
 
 function test_TextView() {
-  var widget: TextView = new TextView();
-  widget.set("foo", 23);
+  let widget: TextView = new TextView();
+  widget.set('foo', 23);
   widget.set({
-    alignment: "center",
+    alignment: 'center',
     markupEnabled: true,
     maxLines: 23,
-    text: "foo"
+    text: 'foo'
   });
-  let alignment: "center" | "left" | "right" = widget.alignment;
+  let alignment: 'center' | 'left' | 'right' = widget.alignment;
   let markupEnabled: boolean = widget.markupEnabled;
   let maxLines: number|Function = widget.maxLines;
-  widget.set("maxLines", 23);
-  widget.set("maxLines", () => 42);
+  widget.set('maxLines', 23);
+  widget.set('maxLines', () => 42);
 }
 
 function test_ToggleButton() {
-  var widget: ToggleButton = new ToggleButton();
-  widget.set("foo", 23);
+  let widget: ToggleButton = new ToggleButton();
+  widget.set('foo', 23);
   widget.set({
-    alignment: "center",
-    image: {src: "http://example.org/"},
+    alignment: 'center',
+    image: {src: 'http://example.org/'},
     selection: true,
-    text: "foo"
+    text: 'foo'
   });
 }
 
 function test_Video() {
-  var widget: Video = new Video();
-  widget.set("foo", 23);
+  let widget: Video = new Video();
+  widget.set('foo', 23);
   widget.set({
-    url: "http://example.org"
+    url: 'http://example.org'
   });
   let url: string = widget.url;
 }
 
 function test_WebView() {
-  var widget: WebView = new WebView();
-  widget.set("foo", 23);
+  let widget: WebView = new WebView();
+  widget.set('foo', 23);
   widget.set({
-    html: "<html>",
-    url: "http://example.org"
+    html: '<html>',
+    url: 'http://example.org'
   });
   let url: string = widget.url;
   let html: string = widget.html;
@@ -420,22 +420,22 @@ function test_Widget() {
   widget.dispose();
   let disposed = widget.isDisposed();
 
-  //animate
+  // animate
   let transform: Transformation;
   let opacity: number;
   let options: AnimationOptions = {};
   options = {
     delay: 10,
     duration: 10,
-    easing: "linear",
+    easing: 'linear',
     repeat: 10,
     reverse: false,
-    name: "name",
-  }
+    name: 'name',
+  };
   widget.animate({}, {});
   widget.animate({transform}, {});
   widget.animate({opacity}, {});
-  widget.animate({},options);
+  widget.animate({}, options);
 }
 
 function test_WidgetCollection() {
@@ -481,47 +481,47 @@ function test_WidgetCollection() {
   // dispose
   collection.dispose();
 
-    //animate
+    // animate
   let transform: Transformation;
   let opacity: number;
   let options: AnimationOptions = {};
   options = {
     delay: 10,
     duration: 10,
-    easing: "linear",
+    easing: 'linear',
     repeat: 10,
     reverse: false,
-    name: "name",
-  }
+    name: 'name',
+  };
   collection.animate({}, {});
   collection.animate({transform}, {});
   collection.animate({opacity}, {});
-  collection.animate({},options);
+  collection.animate({}, options);
 }
 
 function test_tabris_app() {
-  app.installPatch("url", (error: Error, patch: any) => {});
+  app.installPatch('url', (error: Error, patch: any) => {});
   app.reload();
-  app.on('backnavigation', (app,event) => event.preventDefault());
+  app.on('backnavigation', (app, event) => event.preventDefault());
 }
 
 function test_tabris_device() {
-  var lang: string = device.get("language");
-  var model: string = device.get("model");
-  var orient: string = device.get("orientation");
-  var platform: string = device.get("platform");
-  var factor: number = device.get("scaleFactor");
-  var height: number = device.get("screenHeight");
-  var width: number = device.get("screenWidth");
-  var version: string = device.get("version");
-  var same: Device = device.on("change:orientation", () => {}).off("change:orientation", () => {});
+  let lang: string = device.get('language');
+  let model: string = device.get('model');
+  let orient: string = device.get('orientation');
+  let platform: string = device.get('platform');
+  let factor: number = device.get('scaleFactor');
+  let height: number = device.get('screenHeight');
+  let width: number = device.get('screenWidth');
+  let version: string = device.get('version');
+  let same: Device = device.on('change:orientation', () => {}).off('change:orientation', () => {});
 }
 
 function test_tabris_ui() {
-  var statusBar: StatusBar = ui.statusBar;
-  var navigationBar: NavigationBar = ui.navigationBar;
-  var drawer: Drawer = ui.drawer;
-  var contentView: Composite = ui.contentView;
+  let statusBar: StatusBar = ui.statusBar;
+  let navigationBar: NavigationBar = ui.navigationBar;
+  let drawer: Drawer = ui.drawer;
+  let contentView: Composite = ui.contentView;
 }
 
 function test_AlertDialog() {

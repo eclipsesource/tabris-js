@@ -1,5 +1,5 @@
-import {ImageView, Composite, CompositeProperties, Transformation} from "tabris";
-import {WeatherData} from "./weatherService";
+import {ImageView, Composite, CompositeProperties, Transformation} from 'tabris';
+import {WeatherData} from './weatherService';
 
 export default class BackgroundLayer extends Composite {
   private clouds: ImageView[];
@@ -9,14 +9,14 @@ export default class BackgroundLayer extends Composite {
     super(properties);
     this.clouds = [];
     this.distance = [];
-    this.on("resize", () => this.generateNewClouds());
+    this.on('resize', () => this.generateNewClouds());
   }
 
   private generateNewClouds() {
     for (let cloud of this.clouds) {
       cloud.dispose();
     }
-    if (this.get("bounds").width === 0 || this.get("bounds").height === 0) {
+    if (this.get('bounds').width === 0 || this.get('bounds').height === 0) {
       return;
     }
     this.clouds = [];
@@ -30,8 +30,8 @@ export default class BackgroundLayer extends Composite {
 
   public scroll(offset: number) {
     for (let i = 0; i < this.clouds.length; i++) {
-      let previousTransform = this.clouds[i].get("transform");
-      this.clouds[i].set("transform", {
+      let previousTransform = this.clouds[i].get('transform');
+      this.clouds[i].set('transform', {
         translationX: previousTransform.translationX,
         scaleX: previousTransform.scaleX,
         scaleY: previousTransform.scaleY,
@@ -43,7 +43,7 @@ export default class BackgroundLayer extends Composite {
   private generateDistribution(n: number): number[] {
     let result = [];
     let initialOffset = 140;
-    let height = this.get("bounds").height - initialOffset;
+    let height = this.get('bounds').height - initialOffset;
     let extraOffset = (height * 0.2) / n;
     for (let i = 0; i < n; i++) {
       result.push(initialOffset + (i * 0.8 * (height / n) + i * extraOffset));
@@ -54,12 +54,12 @@ export default class BackgroundLayer extends Composite {
 
   private generateCloud(position: number, distance: number) {
     let cloudImage = Math.ceil(Math.random() * 6);
-    let horizontalOffset = Math.ceil((0.5 - Math.random()) * this.get("bounds").width);
+    let horizontalOffset = Math.ceil((0.5 - Math.random()) * this.get('bounds').width);
     let scale = ((10 - distance) / 10) * 1.6 + 0.4;
     return new ImageView({
-      image: "/images/cloud" + cloudImage + ".png",
-      width: this.get("bounds").width,
-      scaleMode: "fill",
+      image: '/images/cloud' + cloudImage + '.png',
+      width: this.get('bounds').width,
+      scaleMode: 'fill',
       top: position,
       centerX: 0,
       opacity: 0.7,

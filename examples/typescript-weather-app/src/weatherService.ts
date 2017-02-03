@@ -1,17 +1,17 @@
 // Replace with your API key for OpenWeatherMap, see http://openweathermap.org/appid
-const API_KEY = "";
+const API_KEY = '';
 
 export function pollWeatherData(cityName: String): Promise<WeatherData> {
   if (!API_KEY) {
     return getExampleWeatherData(cityName);
   }
   cityName = cityName.trim();
-  let forecastUrl = "http://api.openweathermap.org/data/2.5/forecast?q="
+  let forecastUrl = 'http://api.openweathermap.org/data/2.5/forecast?q='
     + cityName
-    + "&type=like&units=metric&APPID=" + API_KEY;
-  let currentUrl = "http://api.openweathermap.org/data/2.5/weather?q="
+    + '&type=like&units=metric&APPID=' + API_KEY;
+  let currentUrl = 'http://api.openweathermap.org/data/2.5/weather?q='
     + cityName
-    + "&type=like&units=metric&APPID=" + API_KEY;
+    + '&type=like&units=metric&APPID=' + API_KEY;
 
   let currentPromise = fetchWithBackoff(currentUrl).then(validateResponse);
   let forecastPromise = fetchWithBackoff(forecastUrl, 50).then(validateResponse);
@@ -22,7 +22,7 @@ export function pollWeatherData(cityName: String): Promise<WeatherData> {
 function fetchWithBackoff(url: string, waitTime?: number): Promise<Response> {
   return new Promise((resolve, reject) => {
     if (waitTime > 2000) {
-      reject("Timeout fetching data");
+      reject('Timeout fetching data');
     }
     setTimeout(() => {
       fetch(url)
@@ -41,14 +41,14 @@ function fetchWithBackoff(url: string, waitTime?: number): Promise<Response> {
 
 function validateResponse(response: any) {
   if (!response.ok) {
-    console.log("weatherAPI status code : " + response.status);
-    throw new Error("Error fetching weather data");
+    console.log('weatherAPI status code : ' + response.status);
+    throw new Error('Error fetching weather data');
   }
   return response.json().then(validateJson);
 }
 
 function validateJson(json: any) {
-  if (json.cod !== 200 && json.cod !== "200") {
+  if (json.cod !== 200 && json.cod !== '200') {
     throw new Error(json.message);
   }
   return json;
@@ -62,21 +62,21 @@ function getExampleWeatherData(cityName: String) {
     let rawWeatherData = exampleData[pollCount++ % exampleData.length];
     let result = new WeatherData(rawWeatherData[0], rawWeatherData[1]);
     result.cityName = cityName.charAt(0).toUpperCase() + cityName.slice(1);
-    result.countryName = "Example Data";
+    result.countryName = 'Example Data';
     return result;
   });
 }
 
 function getExampleData() {
   if (exampleData == null) {
-    return fetch("./src/exampleData.json")
+    return fetch('./src/exampleData.json')
       .then(response => response.json())
       .then(json => {
         exampleData = json;
-        return exampleData
+        return exampleData;
       });
   }
-  return Promise.resolve(exampleData)
+  return Promise.resolve(exampleData);
 }
 
 export class WeatherData {
@@ -103,25 +103,25 @@ export class WeatherData {
   }
 
   static getAverageWeatherDescription(day: WeatherDatum[]): string {
-    let cloudForecasts = day.filter((forecast) => (forecast.weather === "Clouds")).length;
-    let rainForecasts = day.filter((forecast) => (forecast.weather === "Rain")).length;
-    let snowForecasts = day.filter((forecast) => (forecast.weather === "Snow")).length;
+    let cloudForecasts = day.filter((forecast) => (forecast.weather === 'Clouds')).length;
+    let rainForecasts = day.filter((forecast) => (forecast.weather === 'Rain')).length;
+    let snowForecasts = day.filter((forecast) => (forecast.weather === 'Snow')).length;
     if (rainForecasts > 3) {
-      return "rain";
+      return 'rain';
     }
     if (snowForecasts > 3) {
-      return "snow";
+      return 'snow';
     }
     if (cloudForecasts > 2 && rainForecasts > 0) {
-      return "cloudy, some rain";
+      return 'cloudy, some rain';
     }
     if (cloudForecasts > 2 && snowForecasts > 0) {
-      return "cloudy, some snow";
+      return 'cloudy, some snow';
     }
     if (cloudForecasts > 3) {
-      return "cloudy";
+      return 'cloudy';
     }
-    return "clear";
+    return 'clear';
   }
 
   public getWeatherAtDate(date: Date): WeatherDatum {
@@ -167,8 +167,8 @@ export class WeatherData {
       cloudCoverage: datum.clouds.all,
       windSpeed: datum.wind.speed,
       windDirection: datum.wind.deg,
-      rain: datum.rain ? datum.rain.hasOwnProperty("3h") ? datum.rain["3h"] : 0 : 0,
-      snow: datum.snow ? datum.snow.hasOwnProperty("3h") ? datum.snow["3h"] : 0 : 0
+      rain: datum.rain ? datum.rain.hasOwnProperty('3h') ? datum.rain['3h'] : 0 : 0,
+      snow: datum.snow ? datum.snow.hasOwnProperty('3h') ? datum.snow['3h'] : 0 : 0
     };
   }
 }

@@ -1,16 +1,16 @@
-import {CompositeProperties, Composite, ImageView, TextView} from "tabris";
-import {WeatherData, WeatherDatum} from "./weatherService";
+import {CompositeProperties, Composite, ImageView, TextView} from 'tabris';
+import {WeatherData, WeatherDatum} from './weatherService';
 
-const textColor = "rgb(255, 255, 255)";
-const minTempColor = "rgb(245, 245, 255)";
-const infoBoxColor = "rgba(0, 0, 0, 0.2)";
+const textColor = 'rgb(255, 255, 255)';
+const minTempColor = 'rgb(245, 245, 255)';
+const infoBoxColor = 'rgba(0, 0, 0, 0.2)';
 
 const margin = 5;
 const innerMargin = 6;
-const daysAbbreviations = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const smallFont = "thin 19px sans-serif";
-const bigFont = "thin 28px sans-serif";
-const smallFontItalic = "italic thin 22px sans-serif";
+const daysAbbreviations = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const smallFont = 'thin 19px sans-serif';
+const bigFont = 'thin 28px sans-serif';
+const smallFontItalic = 'italic thin 22px sans-serif';
 
 interface ForecastOverviewProperties extends CompositeProperties {
   data: WeatherData;
@@ -30,7 +30,7 @@ export default class ForecastOverview extends Composite {
   private createDayInformationBox(dayIndex: number) {
     let dayForecasts = this.days[dayIndex];
     let container = new Composite({
-      top: this.children().length === 0 ? 0 : "prev()",
+      top: this.children().length === 0 ? 0 : 'prev()',
       left: margin,
       right: margin,
     });
@@ -40,7 +40,7 @@ export default class ForecastOverview extends Composite {
       right: margin,
       background: infoBoxColor,
       highlightOnTouch: true
-    }).on("tap", () => this.trigger("daySelect", dayIndex)).appendTo(container);
+    }).on('tap', () => this.trigger('daySelect', dayIndex)).appendTo(container);
     let minTemp = Math.min(...dayForecasts.map((forecast) => forecast.temperature));
     let maxTemp = Math.max(...dayForecasts.map((forecast) => forecast.temperature));
     this.createDayText(dayForecasts[0]).appendTo(infoBox);
@@ -66,13 +66,13 @@ export default class ForecastOverview extends Composite {
       centerY: 0
     });
     let maxTempText = new TextView({
-      text: Math.round(maxTemp) + "°C /",
+      text: Math.round(maxTemp) + '°C /',
       textColor: textColor,
       font: bigFont
     }).appendTo(container);
     new TextView({
-      left: "prev()",
-      text: Math.round(minTemp) + "°C",
+      left: 'prev()',
+      text: Math.round(minTemp) + '°C',
       textColor: minTempColor,
       baseline: maxTempText,
       font: smallFont
@@ -82,7 +82,7 @@ export default class ForecastOverview extends Composite {
 
   private createWeatherText(text: string) {
     return new TextView({
-      left: "prev() 8",
+      left: 'prev() 8',
       centerY: 0,
       text: text,
       textColor: textColor,
