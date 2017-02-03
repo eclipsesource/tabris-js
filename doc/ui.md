@@ -15,15 +15,21 @@ Widgets can be added to the content view, and optionally to the drawer.
 
 ## The Status Bar
 
-The status bar is the small area on the top of the screen that displays notifications, status icons and the time. The object [tabris.ui.statusBar](../api/StatusBar.md) can be used to control different aspects of its look and feel, such as background color and visibility.
+The status bar is the small area on the top of the screen that displays notifications, status icons and the time. The object [tabris.ui.statusBar](../api/StatusBar.md) can be used to control different aspects of its look 
+
+![StatusBar](img/statusbar.png)
 
 ## The Navigation Bar
 
 The navigation bar is the area that contains the *Back*, *Home*, etc. buttons on Android. The object [tabris.ui.navigationBar](../api/NavigationBar.md) can be used to control its background color and visibility.
 
+![NavigationBar](img/navigationbar.png)
+
 ## The Content View
 
 The content view is the container for the widgets that constitute the app's main UI. It covers the entire app area. Widgets can be appended directly to the content view.
+
+![ContentView](img/contentview.png)
 
 ```js
 new tabris.Button({
@@ -34,6 +40,8 @@ new tabris.Button({
 ## The Drawer
 
 The "drawer" is a common component of mobile applications. It's a container that can be slid in from the left edge of the screen, often used for top-level navigation. In Tabris.js, this drawer is disabled by default. To use it in an application, you have to enable it:
+
+![Drawer](img/drawer.png)
 
 ```js
 tabris.ui.drawer.enabled = true;
