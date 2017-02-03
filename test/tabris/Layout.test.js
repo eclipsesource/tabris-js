@@ -138,12 +138,11 @@ describe('Layout', function() {
     });
 
     it('treats ambiguous string as selector', function() {
-      let Foo = Widget.extend({_name: 'Foo%'});
-      let freak1 = new Foo().appendTo(parent);
+      let freak1 = new TestType({class: 'foo%'}).appendTo(parent);
       let freak2 = new TestType({id: '23%'}).appendTo(parent);
 
-      expect(resolve({left: ['Foo%', 23], top: ['#23%', 42]}, widget))
-        .to.eql({left: [freak1.cid, 23], top: [freak2.cid, 42]});
+      expect(resolve({left: ['.foo%', 23], top: ['#23%', 42], right: ['Foo%', 47]}, widget))
+        .to.eql({left: [freak1.cid, 23], top: [freak2.cid, 42], right: [0, 47]});
     });
 
     it('replaces unresolved selector (due to missing sibling) with 0', function() {

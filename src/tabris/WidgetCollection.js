@@ -138,7 +138,7 @@ function deepSelect(result, array, filter) {
 function getFilter(selector) {
   let matches = {};
   let filter = selector instanceof Function ? selector : createMatcher(selector);
-  return function(widget) {
+  return (widget) => {
     if (matches[widget.cid]) {
       return false;
     }
@@ -153,20 +153,14 @@ function getFilter(selector) {
 function createMatcher(selector) {
   if (selector.charAt(0) === '#') {
     let expectedId = selector.slice(1);
-    return function(proxy) {
-      return expectedId === proxy.id;
-    };
+    return widget => expectedId === widget.id;
   }
   if (selector.charAt(0) === '.') {
     let expectedClass = selector.slice(1);
-    return function(proxy) {
-      return proxy.classList.indexOf(expectedClass) !== -1;
-    };
+    return widget => widget.classList.indexOf(expectedClass) !== -1;
   }
   if (selector === '*') {
-    return function() {return true;};
+    return () => true;
   }
-  return function(proxy) {
-    return selector === proxy.type;
-  };
+  return widget => selector === widget.constructor.name;
 }

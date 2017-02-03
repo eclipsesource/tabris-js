@@ -1,38 +1,55 @@
 import {expect, spy, stub, restore} from '../test';
+import ClientStub from './ClientStub';
+import NativeBridge from '../../src/tabris/NativeBridge';
+import ProxyStore from '../../src/tabris/ProxyStore';
+import Widget from '../../src/tabris/Widget';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
+
+class Foo extends Widget.extend({_properties: {foo: {}}}) {
+  _acceptChild() {
+    return true;
+  }
+}
+
+class Bar extends Foo {}
 
 describe('WidgetCollection', function() {
 
-  let counter = 0;
-  let mocks, collection;
+  let widgets, collection;
 
   beforeEach(function() {
-    mocks = [mockProxy(), mockProxy(), mockProxy()];
-    collection = new WidgetCollection(mocks);
+    let client = new ClientStub();
+    global.tabris = {
+      on: () => {},
+      _proxies: new ProxyStore()
+    };
+    global.tabris._nativeBridge = new NativeBridge(client);
+    widgets = [new Foo(), new Bar(), new Foo()];
+    collection = new WidgetCollection(widgets);
   });
 
   afterEach(restore);
 
-  it('maps proxies to numeric fields', function() {
-    expect(collection[0]).to.equal(mocks[0]);
-    expect(collection[1]).to.equal(mocks[1]);
-    expect(collection[2]).to.equal(mocks[2]);
+  it('maps widgets to numeric fields', function() {
+    expect(collection[0]).to.equal(widgets[0]);
+    expect(collection[1]).to.equal(widgets[1]);
+    expect(collection[2]).to.equal(widgets[2]);
   });
 
   it('first()', function() {
-    expect(collection.first()).to.equal(mocks[0]);
+    expect(collection.first()).to.equal(widgets[0]);
   });
 
   it('last()', function() {
-    expect(collection.last()).to.equal(mocks[2]);
+    expect(collection.last()).to.equal(widgets[2]);
   });
 
   it('toArray()', function() {
     let arr1 = collection.toArray();
     let arr2 = collection.toArray();
 
-    expect(arr1).to.eql(mocks);
-    expect(arr2).to.eql(mocks);
+    expect(arr1).to.deep.equal(widgets);
+    expect(arr2).to.deep.equal(widgets);
     expect(arr1).not.to.equal(arr2);
   });
 
@@ -41,23 +58,23 @@ describe('WidgetCollection', function() {
 
     collection.forEach(callback);
 
-    expect(callback).to.have.been.calledWith(mocks[0], 0, collection);
-    expect(callback).to.have.been.calledWith(mocks[1], 1, collection);
-    expect(callback).to.have.been.calledWith(mocks[2], 2, collection);
+    expect(callback).to.have.been.calledWith(widgets[0], 0, collection);
+    expect(callback).to.have.been.calledWith(widgets[1], 1, collection);
+    expect(callback).to.have.been.calledWith(widgets[2], 2, collection);
   });
 
   it('indexOf()', function() {
-    expect(collection.indexOf(mocks[0])).to.equal(0);
-    expect(collection.indexOf(mocks[1])).to.equal(1);
-    expect(collection.indexOf(mocks[2])).to.equal(2);
+    expect(collection.indexOf(widgets[0])).to.equal(0);
+    expect(collection.indexOf(widgets[1])).to.equal(1);
+    expect(collection.indexOf(widgets[2])).to.equal(2);
     expect(collection.indexOf(null)).to.equal(-1);
   });
 
   it('includes()', function() {
-    expect(collection.includes(mocks[0])).to.be.true;
-    expect(collection.includes(mocks[1])).to.be.true;
-    expect(collection.includes(mocks[2])).to.be.true;
-    expect(collection.includes(mockProxy())).to.be.false;
+    expect(collection.includes(widgets[0])).to.be.true;
+    expect(collection.includes(widgets[1])).to.be.true;
+    expect(collection.includes(widgets[2])).to.be.true;
+    expect(collection.includes(new Foo())).to.be.false;
     expect(collection.includes(null)).to.be.false;
   });
 
@@ -78,31 +95,31 @@ describe('WidgetCollection', function() {
   describe('filter()', function() {
 
     it('with callback', function() {
-      expect(collection.filter(proxy => proxy !== mocks[1]).toArray()).to.eql([mocks[0], mocks[2]]);
+      expect(collection.filter(widget => widget !== widgets[1]).toArray()).to.deep.equal([widgets[0], widgets[2]]);
     });
 
     it('with type selector', function() {
-      mocks[0].type = 'Foo';
-      mocks[1].type = 'Bar';
-      mocks[2].type = 'Foo';
-
-      expect(collection.filter('Foo').toArray()).to.eql([mocks[0], mocks[2]]);
+      expect(collection.filter('Foo').toArray()).to.deep.equal([widgets[0], widgets[2]]);
     });
 
     it('with * selector', function() {
-      mocks[0].type = 'Foo';
-      mocks[1].type = 'Bar';
-      mocks[2].type = 'Foo';
+      expect(collection.filter('*').toArray()).to.deep.equal(widgets);
+    });
 
-      expect(collection.filter('*').toArray()).to.eql(mocks);
+    it('with .class selectors', function() {
+      widgets[0].class = 'foo';
+      widgets[1].class = 'bar';
+      widgets[2].class = 'foo bar';
+
+      expect(collection.filter('.foo').toArray()).to.deep.equal([widgets[0], widgets[2]]);
     });
 
     it('with # selectors', function() {
-      mocks[0].id = 'foo';
-      mocks[1].id = 'bar';
-      mocks[2].id = 'bar';
+      widgets[0].id = 'foo';
+      widgets[1].id = 'bar';
+      widgets[2].id = 'foo';
 
-      expect(collection.filter('#bar').toArray()).to.eql([mocks[1], mocks[2]]);
+      expect(collection.filter('#foo').toArray()).to.deep.equal([widgets[0], widgets[2]]);
     });
 
   });
@@ -110,11 +127,14 @@ describe('WidgetCollection', function() {
   describe('delegation:', function() {
 
     it('set() is delegated', function() {
+      spy(widgets[0], 'set');
+      spy(widgets[1], 'set');
+      spy(widgets[2], 'set');
       collection.set('foo', 'bar');
 
-      expect(mocks[0].set).to.have.been.calledWith('foo', 'bar');
-      expect(mocks[1].set).to.have.been.calledWith('foo', 'bar');
-      expect(mocks[2].set).to.have.been.calledWith('foo', 'bar');
+      expect(widgets[0].set).to.have.been.calledWith('foo', 'bar');
+      expect(widgets[1].set).to.have.been.calledWith('foo', 'bar');
+      expect(widgets[2].set).to.have.been.calledWith('foo', 'bar');
     });
 
     it('set() returns collection', function() {
@@ -124,11 +144,14 @@ describe('WidgetCollection', function() {
     it('animate() is delegated', function() {
       let props = {foo: 'bar'};
       let options = {delay: 3000};
+      spy(widgets[0], 'animate');
+      spy(widgets[1], 'animate');
+      spy(widgets[2], 'animate');
       collection.animate(props, options);
 
-      expect(mocks[0].animate).to.have.been.calledWith(props, options);
-      expect(mocks[1].animate).to.have.been.calledWith(props, options);
-      expect(mocks[2].animate).to.have.been.calledWith(props, options);
+      expect(widgets[0].animate).to.have.been.calledWith(props, options);
+      expect(widgets[1].animate).to.have.been.calledWith(props, options);
+      expect(widgets[2].animate).to.have.been.calledWith(props, options);
     });
 
     it('animate() returns nothing', function() {
@@ -137,11 +160,14 @@ describe('WidgetCollection', function() {
 
     it('on() is delegated', function() {
       let listener = function() {};
+      spy(widgets[0], 'on');
+      spy(widgets[1], 'on');
+      spy(widgets[2], 'on');
       collection.on('foo', listener);
 
-      expect(mocks[0].on).to.have.been.calledWith('foo', listener);
-      expect(mocks[1].on).to.have.been.calledWith('foo', listener);
-      expect(mocks[2].on).to.have.been.calledWith('foo', listener);
+      expect(widgets[0].on).to.have.been.calledWith('foo', listener);
+      expect(widgets[1].on).to.have.been.calledWith('foo', listener);
+      expect(widgets[2].on).to.have.been.calledWith('foo', listener);
     });
 
     it('on() returns collection', function() {
@@ -150,11 +176,14 @@ describe('WidgetCollection', function() {
 
     it('once() is delegated', function() {
       let listener = function() {};
+      spy(widgets[0], 'once');
+      spy(widgets[1], 'once');
+      spy(widgets[2], 'once');
       collection.once('foo', listener);
 
-      expect(mocks[0].once).to.have.been.calledWith('foo', listener);
-      expect(mocks[1].once).to.have.been.calledWith('foo', listener);
-      expect(mocks[2].once).to.have.been.calledWith('foo', listener);
+      expect(widgets[0].once).to.have.been.calledWith('foo', listener);
+      expect(widgets[1].once).to.have.been.calledWith('foo', listener);
+      expect(widgets[2].once).to.have.been.calledWith('foo', listener);
     });
 
     it('once() returns collection', function() {
@@ -163,11 +192,14 @@ describe('WidgetCollection', function() {
 
     it('off() is delegated', function() {
       let listener = function() {};
+      spy(widgets[0], 'off');
+      spy(widgets[1], 'off');
+      spy(widgets[2], 'off');
       collection.off('foo', listener);
 
-      expect(mocks[0].off).to.have.been.calledWith('foo', listener);
-      expect(mocks[1].off).to.have.been.calledWith('foo', listener);
-      expect(mocks[2].off).to.have.been.calledWith('foo', listener);
+      expect(widgets[0].off).to.have.been.calledWith('foo', listener);
+      expect(widgets[1].off).to.have.been.calledWith('foo', listener);
+      expect(widgets[2].off).to.have.been.calledWith('foo', listener);
     });
 
     it('off() returns collection', function() {
@@ -176,11 +208,14 @@ describe('WidgetCollection', function() {
 
     it('trigger() is delegated', function() {
       let event = {};
+      spy(widgets[0], 'trigger');
+      spy(widgets[1], 'trigger');
+      spy(widgets[2], 'trigger');
       collection.trigger('foo', event);
 
-      expect(mocks[0].trigger).to.have.been.calledWith('foo', event);
-      expect(mocks[1].trigger).to.have.been.calledWith('foo', event);
-      expect(mocks[2].trigger).to.have.been.calledWith('foo', event);
+      expect(widgets[0].trigger).to.have.been.calledWith('foo', event);
+      expect(widgets[1].trigger).to.have.been.calledWith('foo', event);
+      expect(widgets[2].trigger).to.have.been.calledWith('foo', event);
     });
 
     it('trigger() returns collection', function() {
@@ -188,11 +223,14 @@ describe('WidgetCollection', function() {
     });
 
     it('dispose() is delegated', function() {
+      spy(widgets[0], 'dispose');
+      spy(widgets[1], 'dispose');
+      spy(widgets[2], 'dispose');
       collection.dispose();
 
-      expect(mocks[0].dispose).to.have.been.called;
-      expect(mocks[1].dispose).to.have.been.called;
-      expect(mocks[2].dispose).to.have.been.called;
+      expect(widgets[0].dispose).to.have.been.called;
+      expect(widgets[1].dispose).to.have.been.called;
+      expect(widgets[2].dispose).to.have.been.called;
     });
 
     it('dispose() returns undefined', function() {
@@ -200,9 +238,9 @@ describe('WidgetCollection', function() {
     });
 
     it('get() is delegated to first', function() {
-      mocks[0].get.returns('foo');
+      stub(widgets[0], 'get', () => 'foo');
       expect(collection.get('bar')).to.equal('foo');
-      expect(mocks[0].get).to.have.been.calledWith('bar');
+      expect(widgets[0].get).to.have.been.calledWith('bar');
     });
 
     it('get() returns undefined for empty collection', function() {
@@ -210,20 +248,21 @@ describe('WidgetCollection', function() {
     });
 
     it('parent() returns all parents', function() {
-      let parents = [mockProxy(), mockProxy()];
-      mocks[0].parent.returns(parents[0]);
-      mocks[2].parent.returns(parents[1]);
+      let parents = [new Foo(), new Bar()];
 
-      expect(collection.parent().toArray()).to.eql(parents);
+      widgets[0].appendTo(parents[0]);
+      widgets[2].appendTo(parents[1]);
+
+      expect(collection.parent().toArray()).to.deep.equal(parents);
     });
 
     it('parent() returns only unique parents', function() {
-      let parents = [mockProxy(), mockProxy()];
-      mocks[0].parent.returns(parents[0]);
-      mocks[1].parent.returns(parents[0]);
-      mocks[2].parent.returns(parents[1]);
+      let parents = [new Foo(), new Bar()];
+      widgets[0].appendTo(parents[0]);
+      widgets[1].appendTo(parents[0]);
+      widgets[2].appendTo(parents[1]);
 
-      expect(collection.parent().toArray()).to.eql(parents);
+      expect(collection.parent().toArray()).to.deep.equal(parents);
     });
 
     it('parent() returns undefined for empty collection', function() {
@@ -231,54 +270,55 @@ describe('WidgetCollection', function() {
     });
 
     it('appendTo(parent) calls parent.append', function() {
-      let parent = mockProxy();
+      let parent = new Foo();
+      spy(parent, 'append');
       collection.appendTo(parent);
+
       expect(parent.append).to.have.been.calledWith(collection);
     });
 
     it('children() returns children from all in collection', function() {
-      let children = [mockProxy(), mockProxy(), mockProxy(), mockProxy()];
-      mocks[0]._children = children.slice(0, 2);
-      mocks[2]._children = children.slice(2, 4);
+      let children = [new Foo(), new Bar(), new Foo(), new Bar()];
+      widgets[0].append(children.slice(0, 2));
+      widgets[2].append(children.slice(2, 4));
 
-      expect(collection.children().toArray()).to.eql(children);
+      expect(collection.children().toArray()).to.deep.equal(children);
     });
 
     it('children() with matcher returns children from all in collection', function() {
-      let children = [mockProxy(), mockProxy(), mockProxy(), mockProxy()];
-      children[0].type = children[2].type = 'Foo';
-      mocks[0]._children = children.slice(0, 2);
-      mocks[2]._children = children.slice(2, 4);
+      let children = [new Foo(), new Bar(), new Foo(), new Bar()];
+      widgets[0].append(children.slice(0, 2));
+      widgets[2].append(children.slice(2, 4));
 
-      expect(collection.children('Foo').toArray()).to.eql([children[0], children[2]]);
+      expect(collection.children('Foo').toArray()).to.deep.equal([children[0], children[2]]);
     });
 
-    it('find("*") returns descendants from all proxies in collection', function() {
-      let children = [mockProxy(), mockProxy(), mockProxy(), mockProxy()];
-      mocks[0]._children = [children[0]];
-      mocks[2]._children = [children[1]];
-      children[1]._children = children.slice(2, 4);
+    it('find("*") returns descendants from all widgets in collection', function() {
+      let children = [new Foo(), new Bar(), new Foo(), new Bar()];
+      widgets[0].append(children[0]);
+      widgets[2].append(children[1]);
+      children[1].append(children.slice(2, 4));
 
-      expect(collection.find('*').toArray().length).to.eql(children.length);
-      expect(collection.find('*').toArray()).to.eql(children);
+      expect(collection.find('*').toArray().length).to.deep.equal(children.length);
+      expect(collection.find('*').toArray()).to.deep.equal(children);
     });
 
-    it('find() returns descendants from all proxies in collection', function() {
-      let children = [mockProxy(), mockProxy(), mockProxy(), mockProxy()];
-      mocks[0]._children = [children[0]];
-      mocks[2]._children = [children[1]];
-      children[1]._children = children.slice(2, 4);
+    it('find() returns descendants from all widgets in collection', function() {
+      let children = [new Foo(), new Foo(), new Foo(), new Foo()];
+      widgets[0].append(children[0]);
+      widgets[2].append(children[1]);
+      children[1].append(children.slice(2, 4));
 
-      expect(collection.find().toArray().length).to.eql(children.length);
-      expect(collection.find().toArray()).to.eql(children);
+      expect(collection.find().toArray().length).to.deep.equal(children.length);
+      expect(collection.find().toArray()).to.deep.equal(children);
     });
 
     it('find() returns no duplicates', function() {
-      let children = [mockProxy(), mockProxy(), mockProxy(), mockProxy()];
-      mocks[0]._children = [children[0]];
-      children[0]._children = [children[1]];
-      children[1]._children = [children[2]];
-      children[2]._children = [children[3]];
+      let children = [new Foo(), new Foo(), new Foo(), new Foo()];
+      widgets[0].append(children[0]);
+      children[0].append(children[1]);
+      children[1].append(children[2]);
+      children[2].append(children[3]);
 
       let result = collection.find('*').find('*');
       expect(result.length).to.equal(3);
@@ -288,18 +328,5 @@ describe('WidgetCollection', function() {
     });
 
   });
-
-  function mockProxy() {
-    let mock = {};
-    let methods = [
-      'set', 'get', 'append', 'appendTo', 'on', 'off', 'once', 'trigger', 'parent', 'children', 'animate', 'dispose'
-    ];
-    methods.forEach(method => mock[method] = stub());
-    mock.cid = 'o' + counter++;
-    mock._getSelectableChildren = function() {
-      return this._children;
-    };
-    return mock;
-  }
 
 });
