@@ -1,28 +1,30 @@
 {
   "version": "0.2.0",
-  "configurations": [{
-      "name": "Debug Tests",
-      "type": "node",
+  "configurations": [
+    {
+      "name": "Debug Test",
+      "type": "node2",
       "request": "launch",
-      "program": "${workspaceRoot}/test/tabris/run-tests.js",
-      "stopOnEntry": false,
       "cwd": "${workspaceRoot}",
-      "runtimeExecutable": null,
-      "env": { "NODE_ENV": "production"},
-      "preLaunchTask": "build",
-      "externalConsole": true
+      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/mocha",
+      "windows": {
+        "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/mocha.cmd"
+      },
+      "runtimeArgs": [
+        "--colors",
+        "--compilers",
+        "js:babel-core/register",
+        "${file}"
+      ],
+      "internalConsoleOptions": "openOnSessionStart"
     },
     {
-      "name": "Attach",
-      "type": "node",
+      "name": "Attach to Port",
+      "type": "node2",
       "request": "attach",
-      "port": 5858,
+      "port": 9229,
       "address": "localhost",
-      "restart": false,
-      "sourceMaps": false,
-      "outDir": null,
-      "localRoot": "${workspaceRoot}",
-      "remoteRoot": null
+      "localRoot": "${workspaceRoot}"
     }
   ]
 }
