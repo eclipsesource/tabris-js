@@ -1,5 +1,6 @@
 .DS_Store
 .idea/
+.history/
 build/
 node_modules/
 platforms/
