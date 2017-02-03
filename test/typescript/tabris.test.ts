@@ -398,20 +398,20 @@ function test_Widget() {
   let visibleFound: WidgetCollection = widget.find((widget: Widget) => widget.visible);
 
   // parent
-  let parent: Widget = widget.parent();
+  let parent: Composite = widget.parent();
 
   // children
   let children: WidgetCollection = widget.children();
   let filteredChildren: WidgetCollection = widget.children('.foo');
-  let visbleChildren: WidgetCollection = widget.children((widget: Widget) => widget.visible);
+  let visibleChildren: WidgetCollection = widget.children((widget: Widget) => widget.visible);
 
   // siblings
   let siblings: WidgetCollection = widget.siblings();
   let filteredSiblings: WidgetCollection = widget.siblings('.foo');
-  let visbleSiblings: WidgetCollection = widget.siblings((widget: Widget) => widget.visible);
+  let visibleSiblings: WidgetCollection = widget.siblings((widget: Widget) => widget.visible);
 
   // appendTo, insertBefore, insertAfter
-  widget.appendTo(page);
+  widget.appendTo(parent);
   widget.insertBefore(other);
   widget.insertAfter(other);
 

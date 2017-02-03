@@ -73,7 +73,7 @@
     "parent": [
       {
         "parameters": [],
-        "returns": "Widget",
+        "returns": "Composite",
         "description": "Returns the parent of this widget or `null` if this widget is not appended to a parent."
       }
     ],
