@@ -6,7 +6,13 @@ import {create as createDrawer} from './Drawer';
 
 const CONFIG = {
   _name: 'Ui',
-  _type: 'tabris.Ui'
+  _type: 'tabris.Ui',
+  _properties: {
+    win_theme: {
+      type: ['choice', ['default', 'light', 'dark']],
+      default: 'light'
+    }
+  }
 };
 
 export default class Ui extends Widget.extend(CONFIG) {

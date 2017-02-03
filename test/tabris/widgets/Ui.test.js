@@ -74,6 +74,10 @@ describe('Ui', function() {
     expect(ui.parent()).to.be.null;
   });
 
+  it('overrides initial value for win_theme', function() {
+    expect(ui.win_theme).to.equal('light');
+  });
+
   describe('contentView', function() {
 
     it('is instance of ContentView', function() {
