@@ -21,7 +21,13 @@ new tabris.TextView({
 }).appendTo(page);
 
 new tabris.Action({title: 'Search'}).appendTo(navigationView);
-new tabris.Action({title: 'Share', image: 'images/share.png'}).appendTo(navigationView);
+new tabris.Action({
+  title: 'Share',
+  image: {
+    src: tabris.device.platform === 'iOS' ? 'images/share-black-24dp@3x.png' : 'images/share-white-24dp@3x.png',
+    scale: 3
+  }
+}).appendTo(navigationView);
 
 var controls = new tabris.ScrollView({
   left: 0, right: 0, top: 'prev()', bottom: 0,

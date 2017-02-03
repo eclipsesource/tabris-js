@@ -18,7 +18,10 @@ var textView = new tabris.TextView().appendTo(searchBox);
 
 var action = new tabris.SearchAction({
   title: 'Search',
-  image: 'images/search.png'
+  image: {
+    src: tabris.device.platform === 'iOS' ? 'images/search-black-24dp@3x.png' : 'images/search-white-24dp@3x.png',
+    scale: 3
+  }
 }).on('select', function() {
   this.text = '';
 }).on('input', function(widget, query) {
