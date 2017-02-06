@@ -1,68 +1,68 @@
-export default function ClientStub() {
-  this._calls = [];
-  this._objects = {};
-}
+export default class ClientStub {
 
-ClientStub.prototype = {
+  constructor() {
+    this.$calls = [];
+    this.$objects = {};
+  }
 
   create() {
     let [id, type, properties] = arguments;
-    this._calls.push({op: 'create', id, type, properties});
-    this._objects[id] = {type, properties};
-  },
+    this.$calls.push({op: 'create', id, type, properties});
+    this.$objects[id] = {type, properties};
+  }
 
   get() {
     let [id, property] = arguments;
-    this._calls.push({op: 'get', id, property});
-  },
+    this.$calls.push({op: 'get', id, property});
+  }
 
   set() {
     let [id, properties] = arguments;
-    this._calls.push({op: 'set', id, properties});
-    if (!(id in this._objects)) {
-      this._objects[id] = {properties: {}};
+    this.$calls.push({op: 'set', id, properties});
+    if (!(id in this.$objects)) {
+      this.$objects[id] = {properties: {}};
     }
-    Object.assign(this._objects[id].properties, properties);
-  },
+    Object.assign(this.$objects[id].properties, properties);
+  }
 
   call() {
     let [id, method, parameters] = arguments;
-    this._calls.push({op: 'call', id, method, parameters});
-  },
+    this.$calls.push({op: 'call', id, method, parameters});
+  }
 
   listen() {
     let [id, event, listen] = arguments;
-    this._calls.push({op: 'listen', id, event, listen});
-  },
+    this.$calls.push({op: 'listen', id, event, listen});
+  }
 
   destroy() {
     let [id] = arguments;
-    this._calls.push({op: 'destroy', id});
-    delete this._objects[id];
-  },
+    this.$calls.push({op: 'destroy', id});
+    delete this.$objects[id];
+  }
 
   load(url) {
     return url.slice(-5) === '.json' ? '{}' : 'exports = 23;';
-  },
+  }
 
   calls(filterProperties) {
     tabris._nativeBridge.flush();
-    return select.call(this._calls, filterProperties);
-  },
+    return select.call(this.$calls, filterProperties);
+  }
 
   resetCalls() {
     tabris._nativeBridge.flush();
-    this._calls = [];
-  },
-
-  properties(id) {
-    if (!(id in this._objects)) {
-      throw new Error('No object with id ' + id);
-    }
-    return this._objects[id].properties;
+    this.$calls = [];
   }
 
-};
+  properties(id) {
+    if (!(id in this.$objects)) {
+      throw new Error('No object with id ' + id);
+    }
+    return this.$objects[id].properties;
+  }
+
+}
 
 function select(filterProperties) {
   return this.filter((call) => {

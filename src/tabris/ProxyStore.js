@@ -1,31 +1,29 @@
-export default function ProxyStore() {
-  this._idSequence = 1;
-  this._proxies = {};
-}
+export default class ProxyStore {
 
-ProxyStore.prototype = {
-
-  register(proxy, withcid) {
-    let cid = withcid || this._generateId();
-    if (cid in this._proxies) {
-      throw new Error('cid already in use: ' + cid);
-    }
-    this._proxies[cid] = proxy;
-    return cid;
-  },
-
-  remove(cid) {
-    delete this._proxies[cid];
-  },
-
-  find(cid) {
-    return this._proxies[cid] || null;
-  },
-
-  _generateId() {
-    return 'o' + (this._idSequence++);
+  constructor() {
+    this.$idSequence = 1;
+    this.$proxies = {};
   }
 
-};
+  register(proxy, withcid) {
+    let cid = withcid || this.$generateId();
+    if (cid in this.$proxies) {
+      throw new Error('cid already in use: ' + cid);
+    }
+    this.$proxies[cid] = proxy;
+    return cid;
+  }
 
+  remove(cid) {
+    delete this.$proxies[cid];
+  }
 
+  find(cid) {
+    return this.$proxies[cid] || null;
+  }
+
+  $generateId() {
+    return 'o' + (this.$idSequence++);
+  }
+
+}

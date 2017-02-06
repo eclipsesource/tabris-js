@@ -1,56 +1,56 @@
 import Layout from './Layout';
 
-export default function NativeBridge(bridge) {
-  this._bridge = bridge;
-  this._operations = [];
-  this._currentOperation = {id: null};
-  tabris.on('flush', this.flush, this);
-}
+export default class NativeBridge {
 
-NativeBridge.prototype = {
+  constructor(bridge) {
+    this.$bridge = bridge;
+    this.$operations = [];
+    this.$currentOperation = {id: null};
+    tabris.on('flush', this.flush, this);
+  }
 
   create(id, type) {
     let properties = {};
-    this._operations.push(['create', id, type, properties]);
-    this._currentOperation = {id, properties};
-  },
+    this.$operations.push(['create', id, type, properties]);
+    this.$currentOperation = {id, properties};
+  }
 
   set(id, name, value) {
-    if (this._currentOperation.id === id) {
-      this._currentOperation.properties[name] = value;
+    if (this.$currentOperation.id === id) {
+      this.$currentOperation.properties[name] = value;
     } else {
       let properties = {};
       properties[name] = value;
-      this._operations.push(['set', id, properties]);
-      this._currentOperation = {id, properties};
+      this.$operations.push(['set', id, properties]);
+      this.$currentOperation = {id, properties};
     }
-  },
+  }
 
   listen(id, event, listen) {
-    this._operations.push(['listen', id, event, listen]);
-    this._currentOperation = {id: null};
-  },
+    this.$operations.push(['listen', id, event, listen]);
+    this.$currentOperation = {id: null};
+  }
 
   destroy(id) {
-    this._operations.push(['destroy', id]);
-    this._currentOperation = {id: null};
-  },
+    this.$operations.push(['destroy', id]);
+    this.$currentOperation = {id: null};
+  }
 
   get(id, name) {
     this.flush();
-    return this._bridge.get(id, name);
-  },
+    return this.$bridge.get(id, name);
+  }
 
   call(id, method, parameters) {
     this.flush();
-    return this._bridge.call(id, method, parameters);
-  },
+    return this.$bridge.call(id, method, parameters);
+  }
 
   flush() {
     Layout.flushQueue();
-    let operations = this._operations;
-    this._operations = [];
-    this._currentOperation = {id: null};
+    let operations = this.$operations;
+    this.$operations = [];
+    this.$currentOperation = {id: null};
     let length = operations.length;
     // Using apply() on the native bridge does not work with Rhino. It seems that the parameter
     // count must be known in order to find the associated native method.
@@ -58,17 +58,17 @@ NativeBridge.prototype = {
       let op = operations[i];
       switch (op[0]) {
         case 'create':
-          this._bridge.create(op[1], op[2], op[3]);
+          this.$bridge.create(op[1], op[2], op[3]);
           break;
         case 'set':
-          this._bridge.set(op[1], op[2]);
+          this.$bridge.set(op[1], op[2]);
           break;
         case 'listen':
-          this._bridge.listen(op[1], op[2], op[3]);
+          this.$bridge.listen(op[1], op[2], op[3]);
           break;
         case 'destroy':
-          this._bridge.destroy(op[1]);
+          this.$bridge.destroy(op[1]);
       }
     }
   }
-};
+}
