@@ -315,15 +315,9 @@ function createOpenMethod(xhr, scope) {
 function createSendMethod(xhr, scope) {
   return function(data) { // #the-send()-method
     scope.proxy = new HttpRequest();
-    scope.proxy.on('StateChange', (e) => {
-      stateChangeHandler(e, xhr, scope);
-    });
-    scope.proxy.on('DownloadProgress', (e) => {
-      dispatchProgressEvent('progress', xhr, e.lengthComputable, e.loaded, e.total);
-    });
-    scope.proxy.on('UploadProgress', (e) => {
-      dispatchProgressEvent('progress', xhr.upload, e.lengthComputable, e.loaded, e.total);
-    });
+    scope.proxy.on('StateChange', event => stateChangeHandler(event, xhr, scope));
+    scope.proxy.on('DownloadProgress', event => dispatchProgressEvent('progress', xhr, event));
+    scope.proxy.on('UploadProgress', event => dispatchProgressEvent('progress', xhr.upload, event));
     if (scope.readyState !== xhr.OPENED) { // (1)
       throw new Error(
           "InvalidStateError: Object's state must be 'OPENED', failed to execute 'send'"
@@ -572,50 +566,28 @@ function extractScheme(url) {
 // -----------------------------------------------------------------
 // Event dispatcher
 
-function dispatchProgressEvent(type, target, lengthComputable, loaded, total) {
-  target.dispatchEvent(initProgressEvent(type, target, lengthComputable, loaded, total));
-}
-
-function dispatchAbortProgressEvents(context) {
-  dispatchProgressEvent('progress', context);
-  dispatchProgressEvent('abort', context);
-  dispatchProgressEvent('loadend', context);
-}
-
-function dispatchErrorProgressEvents(event, context) {
-  dispatchProgressEvent('progress', context);
-  dispatchProgressEvent(event, context);
-  dispatchProgressEvent('loadend', context);
-}
-
-function dispatchFinishedProgressEvents(context) {
-  // Note: progress event is dispatched separately by the DownloadProgress/UploadProgress callbacks
-  dispatchProgressEvent('load', context);
-  dispatchProgressEvent('loadend', context);
-}
-
-function initProgressEvent(type, target, lengthComputable, loaded, total) {
-  let progressEvent = new ProgressEvent(type);
-  progressEvent.currentTarget = progressEvent.target = target;
-  if (lengthComputable) {
-    progressEvent.lengthComputable = lengthComputable;
-  }
-  if (loaded) {
-    progressEvent.loaded = loaded;
-  }
-  if (total) {
-    progressEvent.total = total;
-  }
-  return progressEvent;
-}
-
 function dispatchEvent(type, target) {
-  let event = initEvent(type, target);
-  target.dispatchEvent(event);
+  target.dispatchEvent(new Event(type));
 }
 
-function initEvent(type, target) {
-  let event = new Event(type);
-  event.currentTarget = event.target = target;
-  return event;
+function dispatchProgressEvent(type, target, config) {
+  target.dispatchEvent(new ProgressEvent(type, config));
+}
+
+function dispatchAbortProgressEvents(target) {
+  dispatchProgressEvent('progress', target);
+  dispatchProgressEvent('abort', target);
+  dispatchProgressEvent('loadend', target);
+}
+
+function dispatchErrorProgressEvents(type, target) {
+  dispatchProgressEvent('progress', target);
+  dispatchProgressEvent(type, target);
+  dispatchProgressEvent('loadend', target);
+}
+
+function dispatchFinishedProgressEvents(target) {
+  // Note: progress event is dispatched separately by the DownloadProgress/UploadProgress callbacks
+  dispatchProgressEvent('load', target);
+  dispatchProgressEvent('loadend', target);
 }

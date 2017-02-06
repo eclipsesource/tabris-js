@@ -1,12 +1,27 @@
-import {extendPrototype} from './util';
 import Event from './Event';
 
-export default function ProgressEvent(type) {
-  this.type = type;
-}
+export default class ProgressEvent extends Event {
 
-ProgressEvent.prototype = extendPrototype(Event, {
-  lengthComputable: false,
-  loaded: 0,
-  total: 0
-});
+  constructor(type, config) {
+    if (arguments.length < 1) {
+      throw new Error('Not enough arguments to ProgressEvent');
+    }
+    super(type, config);
+    this.$lengthComputable = config && config.lengthComputable || false;
+    this.$loaded = config && config.loaded || 0;
+    this.$total = config && config.total || 0;
+  }
+
+  get lengthComputable() {
+    return this.$lengthComputable;
+  }
+
+  get loaded() {
+    return this.$loaded;
+  }
+
+  get total() {
+    return this.$total;
+  }
+
+}

@@ -59,8 +59,10 @@ describe('Document', function() {
   });
 
   it('can create HTML Element events', function() {
-    let event = target.document.createEvent();
+    let event = target.document.createEvent('foo');
+
     expect(event).to.be.an.instanceof(Event);
+    expect(event.type).to.equal('foo');
   });
 
   describe('script element', function() {

@@ -1,40 +1,85 @@
-let noop = function() {};
+const PHASE_CONSTANTS = {
+  NONE: {value: 0},
+  CAPTURING_PHASE: {value: 1},
+  AT_TARGET: {value: 2},
+  BUBBLING_PHASE: {value: 3},
+};
 
-export default function Event(type, eventInitDict) {
-  this.type = type;
-  this.timeStamp = Date.now();
-  if (typeof eventInitDict !== 'undefined') {
-    if ('bubbles' in eventInitDict) {
-      this.bubbles = eventInitDict.bubbles;
+export default class Event {
+
+  constructor(type, config) {
+    if (arguments.length < 1) {
+      throw new Error('Not enough arguments to Event');
     }
-    if ('cancelable' in eventInitDict) {
-      this.cancelable = eventInitDict.cancelable;
+    this.$timeStamp = Date.now();
+    this.$type = type || '';
+    this.$bubbles = config && !!config.bubbles || false;
+    this.$cancelable = config && !!config.cancelable || false;
+    this.$target = null;
+    this.$defaultPrevented = false;
+  }
+
+  initEvent(type, bubbles, cancelable) {
+    if (arguments.length < 3) {
+      throw new Error('Not enough arguments to initEvent');
+    }
+    this.$type = type + '';
+    this.$bubbles = !!bubbles;
+    this.$cancelable = !!cancelable;
+  }
+
+  get type() {
+    return this.$type;
+  }
+
+  get timeStamp() {
+    return this.$timeStamp;
+  }
+
+  get bubbles() {
+    return this.$bubbles;
+  }
+
+  get cancelable() {
+    return this.$cancelable;
+  }
+
+  get target() {
+    return this.$target;
+  }
+
+  get currentTarget() {
+    return this.$target;
+  }
+
+  get defaultPrevented() {
+    return this.$defaultPrevented;
+  }
+
+  get eventPhase() {
+    return 0;
+  }
+
+  get isTrusted() {
+    return false;
+  }
+
+  stopPropagation() {
+  }
+
+  stopImmediatePropagation() {
+  }
+
+  preventDefault() {
+    if (this.$cancelable) {
+      this.$defaultPrevented = true;
     }
   }
+
 }
 
-Event.prototype = {
-  NONE: 0,
-  CAPTURING_PHASE: 1,
-  AT_TARGET: 2,
-  BUBBLING_PHASE: 3,
-  target: null,
-  currentTarget: null,
-  eventPhase: 0,
-  type: '',
-  bubbles: false,
-  cancelable: false,
-  defaultPrevented: false,
-  isTrusted: false,
-  stopPropagation: noop,
-  stopImmediatePropagation: noop,
-  preventDefault: noop,
-  initEvent(type, bubbles, cancelable) {
-    this.type = type;
-    this.bubbles = bubbles;
-    this.cancelable = cancelable;
-  }
-};
+Object.defineProperties(Event, PHASE_CONSTANTS);
+Object.defineProperties(Event.prototype, PHASE_CONSTANTS);
 
 export function addDOMEventTargetMethods(target) {
 
@@ -45,38 +90,46 @@ export function addDOMEventTargetMethods(target) {
   let listeners;
 
   target.addEventListener = function(type, listener /*, useCapture*/) {
+    if (arguments.length < 2) {
+      throw new Error('Not enough arguments to addEventListener');
+    }
     if (!listeners) {
       listeners = [];
     }
     if (!(type in listeners)) {
       listeners[type] = [];
     }
-    let index = listeners[type].indexOf(listener);
-    if (index === -1) {
+    if (!listeners[type].includes(listener)) {
       listeners[type].push(listener);
     }
-    return listeners[type].length === 1;
   };
 
   target.removeEventListener = function(type, listener /*, useCapture*/) {
+    if (arguments.length < 2) {
+      throw new Error('Not enough arguments to removeEventListener');
+    }
     if (listeners && type in listeners) {
       let index = listeners[type].indexOf(listener);
       if (index !== -1) {
         listeners[type].splice(index, 1);
-        return listeners[type].length === 0;
       }
     }
-    return false;
   };
 
   target.dispatchEvent = function(event) {
+    if (arguments.length < 1) {
+      throw new Error('Not enough arguments to dispatchEvent');
+    }
+    if (!(event instanceof Event)) {
+      throw new Error('Invalid event given to dispatchEvent');
+    }
+    event.$target = target;
     if (listeners && event.type in listeners) {
-      let eventListeners = listeners[event.type];
-      event.target = target;
-      for (let i = 0; i < eventListeners.length; i++) {
-        eventListeners[i].call(this, event);
+      for (let listener of listeners[event.type]) {
+        listener.call(this, event);
       }
     }
+    return !event.defaultPrevented;
   };
 
 }

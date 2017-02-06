@@ -1,5 +1,6 @@
 import {expect, spy, stub, match, restore} from '../test';
 import ClientStub from './ClientStub';
+import Event from '../../src/tabris/Event';
 import XMLHttpRequest from '../../src/tabris/XMLHttpRequest';
 import NativeBridge from '../../src/tabris/NativeBridge';
 import ProxyStore from '../../src/tabris/ProxyStore';
@@ -42,8 +43,8 @@ describe('XMLHttpRequest', function() {
     xhr.addEventListener('foo', handler1);
     xhr.addEventListener('bar', handler2);
     xhr.removeEventListener('foo', handler1);
-    xhr.dispatchEvent({type: 'foo'});
-    xhr.dispatchEvent({type: 'bar'});
+    xhr.dispatchEvent(new Event('foo'));
+    xhr.dispatchEvent(new Event('bar'));
     expect(handler2).to.have.been.called;
     expect(handler1).to.have.not.been.called;
   });
@@ -801,8 +802,8 @@ describe('XMLHttpRequest', function() {
       xhr.upload.addEventListener('foo', handler1);
       xhr.upload.addEventListener('bar', handler2);
       xhr.upload.removeEventListener('foo', handler1);
-      xhr.upload.dispatchEvent({type: 'foo'});
-      xhr.upload.dispatchEvent({type: 'bar'});
+      xhr.upload.dispatchEvent(new Event('foo'));
+      xhr.upload.dispatchEvent(new Event('bar'));
       expect(handler2).to.have.been.called;
       expect(handler1).to.have.not.been.called;
     });
@@ -1150,9 +1151,7 @@ describe('XMLHttpRequest', function() {
             let handler = 'on' + type;
             getTarget(property)[handler] = handler1;
             getTarget(property)[handler] = handler2;
-            getTarget(property).dispatchEvent({
-              type
-            });
+            getTarget(property).dispatchEvent(new Event(type));
             expect(handler1).to.have.not.been.called;
             expect(handler2).to.have.been.called;
           });

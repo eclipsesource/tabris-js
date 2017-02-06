@@ -29,8 +29,8 @@ export function addDOMDocument(target) {
     getElementsByTagName(tagName) {
       return this.head.children.filter(node => node.tagName === tagName.toUpperCase());
     },
-    createEvent() {
-      return new Event();
+    createEvent(type) {
+      return new Event(type);
     }
   };
   addDOMEventTargetMethods(target.document);
@@ -39,8 +39,7 @@ export function addDOMDocument(target) {
   }
   tabris.load(() => {
     target.document.readyState = 'complete';
-    let event = target.document.createEvent('Events');
-    event.initEvent('DOMContentLoaded', false, false);
+    let event = new Event('DOMContentLoaded', false, false);
     target.document.dispatchEvent(event);
   });
 }
