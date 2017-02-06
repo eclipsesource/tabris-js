@@ -17,9 +17,3 @@ export function omit(object, keys) {
   }
   return result;
 }
-
-export function extendPrototype(fn, target) {
-  let Helper = function() {};
-  Helper.prototype = fn.prototype;
-  return Object.assign(new Helper(), target);
-}
