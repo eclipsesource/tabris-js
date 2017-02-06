@@ -1,10 +1,10 @@
 import {expect, spy, stub, restore} from '../test';
-import {addDOMDocument} from '../../src/tabris/DOMDocument';
-import DOMEvent from '../../src/tabris/DOMEvent';
+import {addDOMDocument} from '../../src/tabris/Document';
+import Event from '../../src/tabris/Event';
 import NativeBridge from '../../src/tabris/NativeBridge';
 import ClientStub from './ClientStub';
 
-describe('DOMDocument', function() {
+describe('Document', function() {
 
   let target, client, loadCallback;
 
@@ -60,7 +60,7 @@ describe('DOMDocument', function() {
 
   it('can create HTML Element events', function() {
     let event = target.document.createEvent();
-    expect(event).to.be.an.instanceof(DOMEvent);
+    expect(event).to.be.an.instanceof(Event);
   });
 
   describe('script element', function() {

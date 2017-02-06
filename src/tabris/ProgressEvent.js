@@ -1,5 +1,5 @@
 import {extendPrototype} from './util';
-import Event from './DOMEvent';
+import Event from './Event';
 
 export default function ProgressEvent(type) {
   this.type = type;

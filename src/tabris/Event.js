@@ -1,6 +1,6 @@
 let noop = function() {};
 
-export default function DOMEvent(type, eventInitDict) {
+export default function Event(type, eventInitDict) {
   this.type = type;
   this.timeStamp = Date.now();
   if (typeof eventInitDict !== 'undefined') {
@@ -13,7 +13,7 @@ export default function DOMEvent(type, eventInitDict) {
   }
 }
 
-DOMEvent.prototype = {
+Event.prototype = {
   NONE: 0,
   CAPTURING_PHASE: 1,
   AT_TARGET: 2,

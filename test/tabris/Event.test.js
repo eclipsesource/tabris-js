@@ -1,7 +1,7 @@
 import {expect, spy} from '../test';
-import DOMEvent, {addDOMEventTargetMethods} from '../../src/tabris/DOMEvent';
+import Event, {addDOMEventTargetMethods} from '../../src/tabris/Event';
 
-describe('DOMEvent', function() {
+describe('Event', function() {
 
   let target;
   let listener;
@@ -15,7 +15,7 @@ describe('DOMEvent', function() {
   describe('Event constructor', function() {
 
     it('sets default values', function() {
-      let event = new DOMEvent('type');
+      let event = new Event('type');
       expect(event.NONE).to.equal(0);
       expect(event.CAPTURING_PHASE).to.equal(1);
       expect(event.AT_TARGET).to.equal(2);
@@ -33,12 +33,12 @@ describe('DOMEvent', function() {
     });
 
     it('sets type from parameter', function() {
-      let event = new DOMEvent('type');
+      let event = new Event('type');
       expect(event.type).to.equal('type');
     });
 
     it('sets values from eventInitDict parameter', function() {
-      let event = new DOMEvent('type', {bubbles: true, cancelable: true});
+      let event = new Event('type', {bubbles: true, cancelable: true});
       expect(event.bubbles).to.equal(true);
       expect(event.cancelable).to.equal(true);
     });
@@ -46,7 +46,7 @@ describe('DOMEvent', function() {
   });
 
   describe('Event.prototype.initEvent', function() {
-    let event = new DOMEvent();
+    let event = new Event();
 
     it('sets the type, bubbles, cancelable', function() {
       event.initEvent('foo', true, true);

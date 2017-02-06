@@ -4,8 +4,8 @@
 // Steps are referenced to with a number inside parentheses, e.g. (2)
 
 import NativeObject from './NativeObject';
-import DOMEvent, {addDOMEventTargetMethods} from './DOMEvent';
-import ProgressEvent from './DOMProgressEvent';
+import Event, {addDOMEventTargetMethods} from './Event';
+import ProgressEvent from './ProgressEvent';
 
 const CONFIG = {
   _type: 'tabris.HttpRequest',
@@ -615,7 +615,7 @@ function dispatchEvent(type, target) {
 }
 
 function initEvent(type, target) {
-  let event = new DOMEvent(type);
+  let event = new Event(type);
   event.currentTarget = event.target = target;
   return event;
 }

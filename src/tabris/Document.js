@@ -1,4 +1,4 @@
-import DOMEvent, {addDOMEventTargetMethods} from './DOMEvent';
+import Event, {addDOMEventTargetMethods} from './Event';
 
 let noop = function() {};
 
@@ -30,7 +30,7 @@ export function addDOMDocument(target) {
       return this.head.children.filter(node => node.tagName === tagName.toUpperCase());
     },
     createEvent() {
-      return new DOMEvent();
+      return new Event();
     }
   };
   addDOMEventTargetMethods(target.document);
