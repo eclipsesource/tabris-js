@@ -15,7 +15,7 @@ Widgets can be added to the content view, and optionally to the drawer.
 
 ## The Status Bar
 
-The status bar is the small area on the top of the screen that displays notifications, status icons and the time. The object [tabris.ui.statusBar](../api/StatusBar.md) can be used to control different aspects of its look 
+The status bar is the small area on the top of the screen that displays notifications, status icons and the time. The object [tabris.ui.statusBar](../api/StatusBar.md) can be used to control different aspects of its look and feel, such as background color and visibility.
 
 ![StatusBar](img/statusbar.png)
 
