@@ -1,4 +1,4 @@
-import {expect, restore, spy} from '../../test';
+import {expect, restore, spy, stub} from '../../test';
 import ClientStub from '../ClientStub';
 import Page from '../../../src/tabris/widgets/Page';
 import Action from '../../../src/tabris/widgets/Action';
@@ -129,6 +129,34 @@ describe('NavigationView', function() {
     });
 
   });
+
+  ['win_theme', 'win_toolbarTheme'].forEach(prop => describe(prop, function() {
+
+    ['light', 'dark', 'default'].forEach(value => {
+
+      it(`set ${prop} to ${value} value`, function() {
+        navigationView[prop] = value;
+
+        let call = client.calls({op: 'set'})[0];
+        expect(call.properties[prop]).to.equal(value);
+      });
+
+    });
+
+    it(`ignores setting ${prop} to invalid value`, function() {
+      stub(console, 'warn');
+
+      navigationView.set(prop, 'foo');
+
+      expect(client.calls({op: 'set'}).length).to.equal(0);
+    });
+
+
+    it(`return ${prop} default value`, function() {
+      expect(navigationView.get(prop)).to.equal('default');
+    });
+
+  }));
 
   describe('pages', function() {
 
