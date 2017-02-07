@@ -4,15 +4,10 @@ import Tabris from './Tabris';
 import Device, {create as createDevice, publishDeviceProperties} from './Device';
 import App, {create as createApp} from './App';
 import Ui, {create as createUi} from './widgets/Ui';
-import ContentView from './widgets/ContentView';
-import ImageData from './ImageData';
 import {addDOMDocument} from './Document';
 import {addDOMEventTargetMethods} from './Event';
 import {addWindowTimerMethods} from './WindowTimers';
-import ProgressEvent from './ProgressEvent';
 import Storage, {create as createStorage} from './Storage';
-import WebSocket from './WebSocket';
-import XMLHttpRequest from './XMLHttpRequest';
 import Action from './widgets/Action';
 import ActivityIndicator from './widgets/ActivityIndicator';
 import AlertDialog from './AlertDialog';
@@ -22,20 +17,26 @@ import CheckBox from './widgets/CheckBox';
 import Cell from './widgets/Cell';
 import CollectionView from './widgets/CollectionView';
 import Composite from './widgets/Composite';
+import ContentView from './widgets/ContentView';
 import Crypto from './Crypto';
 import Drawer from './widgets/Drawer';
+import Event from './Event';
+import ImageData from './ImageData';
 import ImageView from './widgets/ImageView';
 import InactivityTimer from './InactivityTimer.js';
 import Page from './widgets/Page';
 import Picker from './widgets/Picker';
 import Pkcs5 from './Pkcs5';
+import ProgressEvent from './ProgressEvent';
 import ProgressBar from './widgets/ProgressBar';
 import NativeObject from './NativeObject';
 import NavigationView from './widgets/NavigationView';
+import NavigationBar from './widgets/NavigationBar';
 import RadioButton from './widgets/RadioButton';
 import ScrollView from './widgets/ScrollView';
 import SearchAction from './widgets/SearchAction';
 import Slider from './widgets/Slider';
+import StatusBar from './widgets/StatusBar';
 import Switch from './widgets/Switch';
 import Tab from './widgets/Tab';
 import TabFolder from './widgets/TabFolder';
@@ -44,8 +45,10 @@ import TextView from './widgets/TextView';
 import ToggleButton from './widgets/ToggleButton';
 import Video from './widgets/Video';
 import WebView from './widgets/WebView';
+import WebSocket from './WebSocket';
 import Widget from './Widget';
 import WidgetCollection from './WidgetCollection';
+import XMLHttpRequest from './XMLHttpRequest';
 
 const window = global.window;
 
@@ -62,22 +65,25 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   Composite,
   ContentView,
   Crypto,
-  Drawer,
   Device,
+  Drawer,
+  Event,
   ImageData,
-  InactivityTimer,
   ImageView,
+  InactivityTimer,
+  NativeObject,
+  NavigationView,
+  NavigationBar,
   Page,
   Picker,
   ProgressBar,
   ProgressEvent,
-  NativeObject,
-  NavigationView,
   RadioButton,
   ScrollView,
   SearchAction,
   Slider,
   Storage,
+  StatusBar,
   Switch,
   Tab,
   TabFolder,
@@ -86,8 +92,8 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   ToggleButton,
   Ui,
   Video,
-  WebView,
   WebSocket,
+  WebView,
   Widget,
   WidgetCollection,
   XMLHttpRequest
