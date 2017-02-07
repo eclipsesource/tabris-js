@@ -27,7 +27,7 @@
     },
     "actionTextColor": {
       "type": "Color",
-      "description": "The color used for action texts."
+      "description": "The color used for action texts. Only applied on Android. IOS uses the `actionColor` to colorize the action text."
     },
     "animated": {
       "type": "boolean",
