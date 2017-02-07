@@ -27,7 +27,7 @@ export default class Page extends Widget.extend(CONFIG) {
 
   _setParent(parent, index) {
     if (parent && !(parent instanceof NavigationView)) {
-      throw new Error('Page cannot be appended to parent of type ' + parent.type);
+      throw new Error('Page could not be appended to ' + parent);
     }
     super._setParent(parent, index);
   }

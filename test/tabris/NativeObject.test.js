@@ -1010,13 +1010,13 @@ describe('NativeObject.extend', function() {
 
   describe('property setter', function() {
 
-    let TestType, object, listener;
+    class TestType extends NativeObject.extend({
+      _name: 'TestType',
+      _properties: {foo: 'any', uncached: {type: 'any', nocache: true}}
+    }) {}
+    let object, listener;
 
     beforeEach(function() {
-      TestType = NativeObject.extend({
-        _name: 'TestType',
-        _properties: {foo: 'any', uncached: {type: 'any', nocache: true}}
-      });
       object = new TestType();
       listener = spy();
       client.resetCalls();

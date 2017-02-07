@@ -50,10 +50,10 @@ describe('Tab', function() {
       expect(tab.get('visible')).to.equal(true);
     });
 
-    it('crashes when appended to an illegal parent', function() {
+    it('throws when appended to an illegal parent', function() {
       expect(() => {
         tab.appendTo(new Composite());
-      }).to.throw('Tab must be a child of TabFolder');
+      }).to.throw('Tab could not be appended to Composite');
     });
 
   });

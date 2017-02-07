@@ -67,15 +67,15 @@ export function animate(properties, options) {
           this._encodeProperty(this._getTypeDef(property), properties[property]);
         this._storeProperty(property, animatedProps[property], options);
       } catch (ex) {
-        console.warn(this.type + ': Ignored invalid animation property value for "' + property + '"');
+        console.warn(this + ': Ignored invalid animation property value for "' + property + '"');
       }
     } else {
-      console.warn(this.type + ': Ignored invalid animation property "' + property + '"');
+      console.warn(this + ': Ignored invalid animation property "' + property + '"');
     }
   }
   for (let option in options) {
     if (!Animation.prototype.$properties[option] && option !== 'name') {
-      console.warn(this.type + ': Ignored invalid animation option "' + option + '"');
+      console.warn(this + ': Ignored invalid animation option "' + option + '"');
     }
   }
   let animation = new Animation(Object.assign({}, options, {

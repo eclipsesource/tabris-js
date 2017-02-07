@@ -1,4 +1,5 @@
 import Widget from '../Widget';
+import Tab from './Tab';
 
 const CONFIG = {
   _name: 'TabFolder',
@@ -49,7 +50,7 @@ const CONFIG = {
 export default class TabFolder extends Widget.extend(CONFIG) {
 
   _acceptChild(child) {
-    return child.type === 'Tab';
+    return child instanceof Tab;
   }
 
 }

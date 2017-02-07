@@ -57,7 +57,7 @@ const CONFIG = {
       type: 'number',
       access: {
         set(name) {
-          console.warn(this.type + ": Cannot set read-only property '" + name + "'.");
+          console.warn(this + ": Cannot set read-only property '" + name + "'.");
         }
       }
     },
@@ -65,7 +65,7 @@ const CONFIG = {
       type: 'number',
       access: {
         set(name) {
-          console.warn(this.type + ": Cannot set read-only property '" + name + "'.");
+          console.warn(this + ": Cannot set read-only property '" + name + "'.");
         }
       }
     },

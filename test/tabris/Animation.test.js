@@ -21,6 +21,30 @@ describe('Animation', function() {
     return client.calls({op: 'create', type: 'tabris.Animation'}).pop().properties;
   }
 
+  class TestWidget extends NativeObject.extend({
+    _name: 'TestWidget',
+    _properties: {
+      foo: 'any',
+      opacity: {
+        type: 'opacity',
+        default: 1
+      },
+      transform: {
+        type: 'transform',
+        default() {
+          return {
+            rotation: 0,
+            scaleX: 1,
+            scaleY: 1,
+            translationX: 0,
+            translationY: 0,
+            translationZ: 0
+          };
+        }
+      }
+    }
+  }) {}
+
   beforeEach(function() {
     stub(console, 'warn');
     client = new ClientStub();
@@ -29,29 +53,6 @@ describe('Animation', function() {
       _proxies: new ProxyStore()
     };
     global.tabris._nativeBridge = new NativeBridge(client);
-    let TestWidget = NativeObject.extend({
-      _name: 'TestWidget',
-      _properties: {
-        foo: 'any',
-        opacity: {
-          type: 'opacity',
-          default: 1
-        },
-        transform: {
-          type: 'transform',
-          default() {
-            return {
-              rotation: 0,
-              scaleX: 1,
-              scaleY: 1,
-              translationX: 0,
-              translationY: 0,
-              translationZ: 0
-            };
-          }
-        }
-      }
-    });
     TestWidget.prototype.animate = animate;
     widget = new TestWidget({});
   });

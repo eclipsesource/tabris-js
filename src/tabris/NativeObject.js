@@ -28,7 +28,6 @@ export default class NativeObject extends EventsClass {
     let trigger = buildTriggerMap(events);
     let properties = normalizeProperties(members._properties || {});
     Object.assign(Type.prototype, {
-      type: members._name,
       $events: events,
       $trigger: trigger,
       $properties: properties
@@ -84,7 +83,7 @@ export default class NativeObject extends EventsClass {
     try {
       encodedValue = this._encodeProperty(typeDef, value);
     } catch (ex) {
-      console.warn(this.toString() + ': Ignored unsupported value for property "' + name + '": ' + ex.message);
+      console.warn(this + ': Ignored unsupported value for property "' + name + '": ' + ex.message);
       return;
     }
     let setter = this._getPropertySetter(name) || this._storeProperty;
@@ -249,7 +248,7 @@ export default class NativeObject extends EventsClass {
   }
 
   toString() {
-    return this.type;
+    return this.constructor.name;
   }
 
 }

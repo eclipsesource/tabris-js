@@ -153,7 +153,7 @@ export default class Widget extends NativeObject {
 
   _addChild(child, index) {
     if (!this._acceptChild(child)) {
-      throw new Error(child.constructor.name + ' could not be appended to ' + this.constructor.name);
+      throw new Error(child + ' could not be appended to ' + this);
     }
     if (!this._children) {
       this._children = [];
@@ -318,7 +318,7 @@ let defaultProperties = {
     type: 'bounds',
     access: {
       set() {
-        console.warn(this.type + ': Can not set read-only property "bounds".');
+        console.warn(this + ': Can not set read-only property "bounds".');
       }
     }
   },

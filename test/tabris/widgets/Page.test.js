@@ -77,10 +77,10 @@ describe('Page', function() {
     }).to.throw(Error, 'insertAfter not supported on Page');
   });
 
-  it('cannot append to Composite', function() {
+  it('throws when appended to an illegal parent', function() {
     expect(() => {
       page.appendTo(new Composite());
-    }).to.throw(Error, 'Page cannot be appended to parent of type Composite');
+    }).to.throw(Error, 'Page could not be appended to Composite');
   });
 
 });

@@ -22,8 +22,8 @@ export default class Tab extends Widget.extend(CONFIG) {
   }
 
   _setParent(parent, index) {
-    if (!(parent instanceof TabFolder)) {
-      throw new Error('Tab must be a child of TabFolder');
+    if (parent && !(parent instanceof TabFolder)) {
+      throw new Error('Tab could not be appended to ' + parent);
     }
     super._setParent(parent, index);
   }
