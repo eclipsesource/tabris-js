@@ -21,7 +21,7 @@
         },
         {
           "name": "event",
-          "type": "{preventDefault: () => void}"
+          "type": "{preventDefault: () => void, url: string}"
         }
       ],
       "description": "Fired when the WebView is about to navigate to a new URL. Listeners can intercept the navigation by calling `event.preventDefault()`."
