@@ -38,8 +38,8 @@ module.exports = function(grunt) {
         dest: 'build/boot.min.js'
       },
       polyfill: {
-        src: 'build/tabris/polyfill.js',
-        dest: 'build/tabris/polyfill.min.js'
+        src: 'build/polyfill.js',
+        dest: 'build/tabris/polyfill.js'
       }
     },
     doc: {
@@ -103,7 +103,7 @@ module.exports = function(grunt) {
       polyfill: {
         entry: './src/polyfill.js',
         output: {
-          filename: 'build/tabris/polyfill.js',
+          filename: 'build/polyfill.js',
           library: 'polyfill',
           libraryTarget: 'commonjs2'
         }
