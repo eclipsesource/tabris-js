@@ -4,9 +4,9 @@
     "build": "tsc -p ."
   },
   "dependencies": {
-    "tabris": "^1.8.0"
+    "tabris": "2.0.0-beta2"
   },
   "devDependencies": {
-    "typescript": "^1.8.10"
+    "typescript": "^2.1.5"
   }
 }

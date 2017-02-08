@@ -1,21 +1,21 @@
-import {TabFolderProperties, TabFolder, Tab, ScrollView, Composite, ImageView, TextView} from 'tabris';
+import {Composite, ImageView, Tab, TabFolder, TabFolderProperties, TextView} from 'tabris';
+import {omit} from './util';
 import {WeatherData, WeatherDatum} from './weatherService';
 
-const textColor = 'rgb(255, 255, 255)';
-const headerTextColor = 'rgb(255, 255, 255)';
-const infoBoxColor = 'rgba(0, 0, 0, 0.2)';
-const headerBoxColor = 'rgba(0,0,0,0.4)';
-const margin = 5;
-const innerMargin = 6;
-const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-const smallFont = 'thin 19px sans-serif';
-const smallFontItalic = 'italic thin 19px sans-serif';
-const bigFont = 'thin 28px sans-serif';
+const TEXT_COLOR = 'rgb(255, 255, 255)';
+const HEADER_TEXT_COLOR = 'rgb(255, 255, 255)';
+const INFO_BOX_COLOR = 'rgba(0, 0, 0, 0.2)';
+const HEADER_BOX_COLOR = 'rgba(0,0,0,0.4)';
+const MARGIN = 5;
+const INNER_MARGIN = 6;
+const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const SMALL_FONT = 'thin 19px sans-serif';
+const SMALL_FONT_ITALIC = 'italic thin 19px sans-serif';
+const BIG_FONT = 'thin 28px sans-serif';
 
-const headerHeight = 50;
-const forecastBoxHeight = 45;
-const weatherIconSize = 35;
-const navigationIconSize = 50;
+const HEADER_HEIGHT = 50;
+const FORECAST_BOX_HEIGHT = 45;
+const WEATHER_ICON_SIZE = 35;
 
 interface ForecastTabViewProperties extends TabFolderProperties {
   data: WeatherData;
@@ -24,17 +24,16 @@ interface ForecastTabViewProperties extends TabFolderProperties {
 export default class ForecastTabView extends TabFolder {
   private data: WeatherData;
   private tabs: Tab[];
-  private scrollView: ScrollView;
 
   constructor(properties: ForecastTabViewProperties) {
     properties.tabBarLocation = 'hidden';
     properties.paging = true;
-    super(properties);
+    super(omit(properties, 'data'));
     this.data = properties.data;
     this.tabs = [this.createTab(0, 'today')];
     this.append(this.tabs[0]);
     for (let index = 1; index < this.data.days.length; index++) {
-      let headerName = dayNames[this.data.days[index][0].date.getDay()];
+      let headerName = DAY_NAMES[this.data.days[index][0].date.getDay()];
       this.tabs.push(this.createTab(index, headerName));
       this.append(this.tabs[index]);
     }
@@ -58,11 +57,17 @@ export default class ForecastTabView extends TabFolder {
   }
 
   private createHeader(text: string, tabIndex: number) {
-    let container = new Composite({ top: 0, left: 0, right: 0, height: headerHeight, });
-    let background = new Composite({ top: 0, left: margin, right: margin, background: headerBoxColor })
-      .appendTo(container);
-    new TextView({ text: text, centerY: 0, centerX: 0, font: bigFont, textColor: headerTextColor })
-      .appendTo(background);
+    let container = new Composite({top: 0, left: 0, right: 0, height: HEADER_HEIGHT});
+    let background = new Composite({
+      top: 0, left: MARGIN, right: MARGIN,
+      background: HEADER_BOX_COLOR
+     }).appendTo(container);
+    new TextView({
+      centerY: 0, centerX: 0,
+      text,
+      textColor: HEADER_TEXT_COLOR,
+      font: BIG_FONT
+    }).appendTo(background);
     if (tabIndex !== 0) {
       this.createArrowImage('left').appendTo(background);
     }
@@ -72,31 +77,24 @@ export default class ForecastTabView extends TabFolder {
     return container;
   }
 
-  private createArrowImage(direction: string) {
+  private createArrowImage(direction: 'left' | 'right') {
     return new ImageView({
-      image: './icons/arrow' + direction + '.png',
-      centerY: 0,
-      height: 50,
+      centerY: 0, height: 50,
       opacity: 0.6,
-      highlightOnTouch: true
-    }).set(direction, 0).on('tap', () => {
-      let nextTab = this.tabs[this.getTabIndex(this.get('selection')) + ((direction === 'right') ? 1 : -1)];
-      this.set('selection', nextTab);
+      image: './icons/arrow' + direction + '.png',
+      highlightOnTouch: true,
+      [direction]: 0
+    }).on('tap', () => {
+      let nextTab = this.tabs[this.getTabIndex(this.selection) + ((direction === 'right') ? 1 : -1)];
+      this.selection = nextTab;
     });
   }
 
   private createForecastBox(forecast: WeatherDatum) {
-    let container = new Composite({
-      top: 'prev()',
-      left: 0,
-      right: 0,
-      height: forecastBoxHeight
-    });
+    let container = new Composite({ top: 'prev()', left: 0, right: 0, height: FORECAST_BOX_HEIGHT});
     let forecastBox = new Composite({
-      top: margin,
-      left: margin,
-      right: margin,
-      background: infoBoxColor
+      top: MARGIN, left: MARGIN, right: MARGIN,
+      background: INFO_BOX_COLOR
     }).appendTo(container);
     this.createTimeText(forecast.date).appendTo(forecastBox);
     this.createWeatherText(forecast.weatherDetailed).appendTo(forecastBox);
@@ -111,41 +109,34 @@ export default class ForecastTabView extends TabFolder {
     let hoursString = (hours < 10) ? '0' + hours : hours;
     let minutesString = (minutes < 10) ? '0' + minutes : minutes;
     return new TextView({
-      top: innerMargin,
-      bottom: innerMargin,
-      left: innerMargin,
+      top: INNER_MARGIN, bottom: INNER_MARGIN, left: INNER_MARGIN,
       text: hoursString + ':' + minutesString,
-      textColor: textColor,
-      font: smallFont
+      textColor: TEXT_COLOR,
+      font: SMALL_FONT
     });
   }
 
   private createWeatherText(text: string) {
     return new TextView({
-      centerY: 0,
-      left: 'prev() 10',
-      text: text,
-      textColor: textColor,
-      font: smallFontItalic
+      centerY: 0, left: 'prev() 10',
+      text,
+      textColor: TEXT_COLOR,
+      font: SMALL_FONT_ITALIC
     });
   }
 
   private createTemperatureText(temperature: number) {
     return new TextView({
-      right: margin,
-      centerY: 0,
+      right: MARGIN, centerY: 0,
       text: Math.round(temperature) + '°C',
-      textColor: textColor,
-      font: bigFont
+      textColor: TEXT_COLOR,
+      font: BIG_FONT
     });
   }
 
   private createWeatherIcon(icon: string) {
     return new ImageView({
-      right: 80,
-      width: weatherIconSize,
-      height: weatherIconSize,
-      centerY: 0,
+      right: 80, width: WEATHER_ICON_SIZE, height: WEATHER_ICON_SIZE, centerY: 0,
       image: '/icons/' + icon + '.png'
     });
   }

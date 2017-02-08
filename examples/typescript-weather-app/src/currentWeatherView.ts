@@ -1,14 +1,11 @@
-import {CompositeProperties, Composite, ImageView, TextView} from 'tabris';
+import {Composite, CompositeProperties, ImageView, TextView} from 'tabris';
+import {omit} from './util';
 import {WeatherData} from './weatherService';
 
-const textColor = 'rgb(255, 255, 255)';
-const margin = 8;
-const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const smallFont = 'thin 19px sans-serif';
-const smallFontItalic = 'italic thin 19px sans-serif';
-const bigFont = 'thin 28px sans-serif';
-const font = 'thin 100px sans-serif';
-const iconSize = 100;
+const TEXT_COLOR = 'rgb(255, 255, 255)';
+const BIG_FONT = 'thin 28px sans-serif';
+const FONT = 'thin 100px sans-serif';
+const ICON_SIZE = 100;
 
 interface CurrentWeatherViewProperties extends CompositeProperties {
   data: WeatherData;
@@ -17,7 +14,7 @@ interface CurrentWeatherViewProperties extends CompositeProperties {
 export default class CurrentWeatherView extends Composite {
 
   constructor(properties: CurrentWeatherViewProperties) {
-    super(properties);
+    super(omit(properties, 'data'));
     let data = properties.data;
     let centerBox = new Composite({ top: 0, centerX: 0 }).appendTo(this);
     this.createWeatherIcon(data.list[0].weatherIcon).appendTo(centerBox);
@@ -27,9 +24,7 @@ export default class CurrentWeatherView extends Composite {
 
   private createWeatherIcon(icon: string) {
     return new ImageView({
-      centerY: 0,
-      width: iconSize,
-      height: iconSize,
+      centerY: 0, width: ICON_SIZE, height: ICON_SIZE,
       scaleMode: 'stretch',
       image: '/icons/' + icon + '.png'
     });
@@ -37,21 +32,19 @@ export default class CurrentWeatherView extends Composite {
 
   private createTemperatureText(temperature: number) {
     return new TextView({
-      centerY: 0,
-      left: 'prev()',
+      centerY: 0, left: 'prev()',
       text: Math.round(temperature) + '°C',
-      textColor: textColor,
-      font: font
+      textColor: TEXT_COLOR,
+      font: FONT
     });
   }
 
   private createWeatherText(text: string) {
     return new TextView({
-      top: 'prev()',
-      centerX: 0,
-      text: text,
-      textColor: textColor,
-      font: bigFont
+      top: 'prev()', centerX: 0,
+      text,
+      textColor: TEXT_COLOR,
+      font: BIG_FONT
     });
   }
 
