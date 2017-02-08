@@ -3,6 +3,9 @@
 
 let header = `
 // Type definitions for Tabris.js \${VERSION}
+
+export as namespace tabris;
+
 `.trim();
 
 module.exports = function(grunt) {

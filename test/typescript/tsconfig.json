@@ -6,6 +6,7 @@
     "../tabris/whatwg-fetch.d.ts",
     "./tabris.test.ts",
     "./promise.test.ts",
-    "./whatwg-fetch.test.ts"
+    "./whatwg-fetch.test.ts",
+    "./globalTabrisObject.test.ts"
   ]
 }
