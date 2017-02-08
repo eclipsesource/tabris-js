@@ -10,11 +10,28 @@
         "transform-es2015-computed-properties",
         "transform-es2015-template-literals",
         "transform-es2015-parameters"
+      ],
+      "presets": [
+        [
+          "babili",
+          {
+            "mangle": {
+              "keepFnName": true
+            },
+            "simplify": false,
+            "unsafe": false
+          }
+        ]
       ]
     },
     "development": {
       "plugins": [
-        ["transform-es2015-modules-commonjs", {"strict": false}]
+        [
+          "transform-es2015-modules-commonjs",
+          {
+            "strict": false
+          }
+        ]
       ],
       "sourceMaps": "both"
     }
