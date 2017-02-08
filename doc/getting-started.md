@@ -33,7 +33,7 @@ Create a directory with two files:
 {
   "main": "app.js",
   "dependencies": {
-    "tabris": "^2.0.0-beta1"
+    "tabris": "^2.0.0-beta2"
   }
 }
 ```

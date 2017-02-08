@@ -1,10 +1,10 @@
 {
   "name": "tabris-js-snippets",
-  "version": "2.0.0-beta1",
+  "version": "2.0.0-beta2",
   "dependencies": {
     "colors": "^1.1.2",
     "ecstatic": "^2.1.0",
-    "tabris": "2.0.0-beta1",
+    "tabris": "2.0.0-beta2",
     "tabris-cli": "^0.1.0",
     "union": "^0.4.4"
   },

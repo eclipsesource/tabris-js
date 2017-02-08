@@ -4,6 +4,6 @@
   "category": "Web APIs",
   "main": "fetch.js",
   "dependencies": {
-    "tabris": "2.0.0-beta1"
+    "tabris": "2.0.0-beta2"
   }
 }
