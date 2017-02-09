@@ -13,15 +13,6 @@ const CONFIG = {
         this._triggerChangeEvent('selectionIndex', event.selectionIndex);
         this.trigger('select', this, this._getItem(event.selectionIndex), {index: event.selectionIndex});
       }
-    },
-    'change:selection': {
-      listen(state) {
-        if (state) {
-          this.on('change:selectionIndex', triggerSelectionChange);
-        } else {
-          this.off('change:selectionIndex', triggerSelectionChange);
-        }
-      }
     }
   },
 
@@ -103,6 +94,18 @@ export default class Picker extends Widget.extend(CONFIG) {
 
   _getItemIndex(item) {
     return this.get('items').indexOf(item);
+  }
+
+  _listen(name, listening) {
+    if (name === 'change:selection') {
+      if (listening) {
+        this.on('change:selectionIndex', triggerSelectionChange);
+      } else {
+        this.off('change:selectionIndex', triggerSelectionChange);
+      }
+    } else {
+      super._listen(name, listening);
+    }
   }
 
 }

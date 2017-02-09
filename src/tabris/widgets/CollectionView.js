@@ -117,9 +117,6 @@ const CONFIG = {
       }
     },
     select: {
-      listen(state) {
-        this._nativeListen('select', state);
-      },
       trigger(name, event) {
         let item = this._getItem(this._items, event.index);
         this.trigger('select', this, item, {index: event.index});
@@ -128,24 +125,6 @@ const CONFIG = {
     scroll: {
       trigger(name, event) {
         this.trigger('scroll', this, event);
-      }
-    },
-    'change:firstVisibleIndex': {
-      listen(state) {
-        if (state) {
-          this.on('scroll', triggerChangeFirstVisibleIndex);
-        } else {
-          this.off('scroll', triggerChangeFirstVisibleIndex);
-        }
-      }
-    },
-    'change:lastVisibleIndex': {
-      listen(state) {
-        if (state) {
-          this.on('scroll', triggerChangeLastVisibleIndex);
-        } else {
-          this.off('scroll', triggerChangeLastVisibleIndex);
-        }
       }
     }
   }
@@ -250,6 +229,24 @@ export default class CollectionView extends Widget.extend(CONFIG) {
       if (itemIndex >= offset) {
         cell._storeProperty('itemIndex', itemIndex + diff);
       }
+    }
+  }
+
+  _listen(name, listening) {
+    if (name === 'change:firstVisibleIndex') {
+      if (listening) {
+        this.on('scroll', triggerChangeFirstVisibleIndex);
+      } else {
+        this.off('scroll', triggerChangeFirstVisibleIndex);
+      }
+    } else if (name === 'change:lastVisibleIndex') {
+      if (listening) {
+        this.on('scroll', triggerChangeLastVisibleIndex);
+      } else {
+        this.off('scroll', triggerChangeLastVisibleIndex);
+      }
+    } else {
+      super._listen(name, listening);
     }
   }
 

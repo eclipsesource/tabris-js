@@ -382,30 +382,6 @@ describe('NativeObject', function() {
         expect(call.listen).to.eql(true);
       });
 
-      it('calls custom listen function', function() {
-        let listenFn = spy();
-        let CustomType = NativeObject.extend({
-          _events: {foo: {listen: listenFn}}
-        });
-        object = new CustomType();
-
-        object.on('foo', listener);
-
-        expect(listenFn).to.have.been.calledWith(true, false);
-      });
-
-      it('calls custom listen function with alias flag', function() {
-        let listenFn = spy();
-        let CustomType = NativeObject.extend({
-          _events: {foo: {alias: 'foo1', listen: listenFn}}
-        });
-        object = new CustomType();
-
-        object.on('foo1', listener);
-
-        expect(listenFn).to.have.been.calledWith(true, true);
-      });
-
       it('calls native listen function for another listener for another event', function() {
         let CustomType = NativeObject.extend({
           _events: {bar: {name: 'bar'}}

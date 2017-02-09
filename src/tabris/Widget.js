@@ -192,12 +192,24 @@ export default class Widget extends NativeObject {
     }
   }
 
-  _getEventConfig(type) {
-    let result = super._getEventConfig(type);
-    if (!result && this.get('gestures')[type]) {
-      return getGestureEventConfig(type);
+  _listen(name, listening) {
+    if (this.gestures[name]) {
+      if (listening) {
+        let properties = Object.assign({target: this}, this.gestures[name]);
+        let recognizer = new GestureRecognizer(properties)
+          .on('gesture', gestureListener, {target: this, name});
+        if (!this._recognizers) {
+          this._recognizers = {};
+        }
+        this._recognizers[name] = recognizer;
+        this.on('dispose', recognizer.dispose, recognizer);
+      } else if (this._recognizers && name in this._recognizers) {
+        this._recognizers[name].dispose();
+        delete this._recognizers[name];
+      }
+    } else {
+      super._listen(name, listening);
     }
-    return result;
   }
 
   _flushLayout() {
@@ -434,27 +446,6 @@ function renderLayoutData() {
     let checkedData = Layout.checkConsistency(this._layoutData);
     this._nativeSet('layoutData', Layout.resolveReferences(checkedData, this));
   }
-}
-
-function getGestureEventConfig(name) {
-  return {
-    listen(state) {
-      let gestures = this.get('gestures');
-      if (state) {
-        let properties = Object.assign({target: this}, gestures[name]);
-        let recognizer = new GestureRecognizer(properties)
-          .on('gesture', gestureListener, {target: this, name});
-        if (!this._recognizers) {
-          this._recognizers = {};
-        }
-        this._recognizers[name] = recognizer;
-        this.on('dispose', recognizer.dispose, recognizer);
-      } else if (this._recognizers && name in this._recognizers) {
-        this._recognizers[name].dispose();
-        delete this._recognizers[name];
-      }
-    }
-  };
 }
 
 function gestureListener(event) {

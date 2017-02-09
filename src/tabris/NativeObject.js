@@ -185,23 +185,19 @@ export default class NativeObject extends EventsClass {
     return !!this._isDisposed;
   }
 
-  _listen(event, state) {
-    let config = this._getEventConfig(event);
-    if (!config || this._isListeningToAlias(event, config)) {
+  _listen(name, listening) {
+    let config = this.$events[name];
+    if (!config || this.$isListeningToAlias(name, config)) {
       return;
     }
-    if (config.listen) {
-      config.listen.call(this, state, config.alias === event);
-    } else {
-      this._nativeListen(config.name, state);
-    }
+    this._nativeListen(config.name, listening);
   }
 
-  _isListeningToAlias(event, config) {
+  $isListeningToAlias(name, config) {
     if (!config.alias) {
       return false;
     }
-    let other = event === config.originalName ? config.alias : config.originalName;
+    let other = name === config.originalName ? config.alias : config.originalName;
     return this._isListening(other);
   }
 
@@ -224,10 +220,6 @@ export default class NativeObject extends EventsClass {
     if (this._isDisposed) {
       throw new Error('Object is disposed');
     }
-  }
-
-  _getEventConfig(type) {
-    return this.$events[type];
   }
 
   _nativeSet(name, value) {
@@ -259,18 +251,17 @@ function setExistingProperty(name, value) {
   }
 }
 
-
 function normalizeEvents(events) {
   let result = {};
-  for (let event in events) {
-    let entry = events[event];
-    result[event] = typeof entry === 'object' ? entry : {};
-    if (!result[event].name) {
-      result[event].name = typeof entry === 'string' ? entry : event;
+  for (let name in events) {
+    let config = events[name];
+    result[name] = typeof config === 'object' ? config : {};
+    if (!result[name].name) {
+      result[name].name = typeof config === 'string' ? config : name;
     }
-    if (result[event].alias) {
-      result[event].originalName = event;
-      result[result[event].alias] = result[event];
+    if (result[name].alias) {
+      result[name].originalName = name;
+      result[result[name].alias] = result[name];
     }
   }
   return result;
