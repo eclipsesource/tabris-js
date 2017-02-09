@@ -16,8 +16,6 @@ var button = new tabris.Button({
 
 Widgets have methods to modify their properties, be notified of events, and append widgets to a parent widget. Most of these methods return the widget itself to allow method chaining.
 
-**Note:** prior to Tabris.js 1.7, you had to use the method `tabris.create` to instantiate widgets. This method is still supported but we recommend using constructors instead.
-
 ## Widget Properties
 
 Every native widget supports a set of properties (e.g. a text or a color). These properties can be read and written using the [property API](api/Properties.md) methods `get` and `set`, respectively. Widget's properties can also be written or read by directly accessing fields on the widget object. For example, `var text = widget.text;` is the same as `var text = widget.get("text");` and `widget.text = "foo";` is the same as `widget.set("text", "foo");`. If the property is supported, but the given value is of the wrong type, the value will either be converted (if boolean or string are expected), or ignored with a printed warning.
