@@ -207,9 +207,15 @@ export default class Widget extends NativeObject {
         this._recognizers[name].dispose();
         delete this._recognizers[name];
       }
+    } else if (name === 'change:bounds') {
+      this._onoff('resize', listening, this.$triggerChangeBounds);
     } else {
       super._listen(name, listening);
     }
+  }
+
+  $triggerChangeBounds(widget, bounds) {
+    this.trigger('change:bounds', this, bounds);
   }
 
   _flushLayout() {
@@ -263,16 +269,13 @@ let defaultEvents = {
   touchend: {trigger: triggerWithTarget},
   touchcancel: {trigger: triggerWithTarget},
   'resize': {
-    alias: 'change:bounds',
     trigger(name, event) {
       if (hasAndroidResizeBug()) {
         let self = this;
         setTimeout(() => {
-          self._triggerChangeEvent('bounds', event.bounds, {}, 'resize');
           self.trigger('resize', self, types.bounds.decode(event.bounds), {});
         }, 0);
       } else {
-        this._triggerChangeEvent('bounds', event.bounds, {}, 'resize');
         this.trigger('resize', this, types.bounds.decode(event.bounds), {});
       }
     }

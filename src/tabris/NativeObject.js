@@ -187,18 +187,9 @@ export default class NativeObject extends EventsClass {
 
   _listen(name, listening) {
     let config = this.$events[name];
-    if (!config || this.$isListeningToAlias(name, config)) {
-      return;
+    if (config) {
+      this._nativeListen(config.name, listening);
     }
-    this._nativeListen(config.name, listening);
-  }
-
-  $isListeningToAlias(name, config) {
-    if (!config.alias) {
-      return false;
-    }
-    let other = name === config.originalName ? config.alias : config.originalName;
-    return this._isListening(other);
   }
 
   _nativeListen(event, state) {
@@ -214,6 +205,10 @@ export default class NativeObject extends EventsClass {
     } else {
       this.trigger(name, param);
     }
+  }
+
+  _onoff(name, listening, listener) {
+    listening ? this.on(name, listener) : this.off(name, listener);
   }
 
   _checkDisposed() {
@@ -258,10 +253,6 @@ function normalizeEvents(events) {
     result[name] = typeof config === 'object' ? config : {};
     if (!result[name].name) {
       result[name].name = typeof config === 'string' ? config : name;
-    }
-    if (result[name].alias) {
-      result[name].originalName = name;
-      result[result[name].alias] = result[name];
     }
   }
   return result;

@@ -372,16 +372,6 @@ describe('NativeObject', function() {
         expect(call.event).to.equal('bar');
       });
 
-      it('calls native listen (true) for first alias listener', function() {
-        let CustomType = NativeObject.extend({_events: {foo: {name: 'bar', alias: 'foo1'}}});
-        object = new CustomType();
-
-        object.on('foo1', listener);
-
-        let call = client.calls({op: 'listen', event: 'bar'})[0];
-        expect(call.listen).to.eql(true);
-      });
-
       it('calls native listen function for another listener for another event', function() {
         let CustomType = NativeObject.extend({
           _events: {bar: {name: 'bar'}}
@@ -398,24 +388,6 @@ describe('NativeObject', function() {
       it('does not call native listen for subsequent listeners for the same event', function() {
         object.on('bar', listener);
         object.on('bar', listener);
-
-        expect(client.calls({op: 'listen'}).length).to.equal(1);
-      });
-
-      it('does not call native listen for subsequent listeners for alias event', function() {
-        let CustomType = NativeObject.extend({_events: {foo: {alias: 'bar'}}});
-        object = new CustomType();
-        object.on('foo', listener);
-        object.on('bar', listener);
-
-        expect(client.calls({op: 'listen'}).length).to.equal(1);
-      });
-
-      it('does not call native listen for subsequent listeners for aliased event', function() {
-        let CustomType = NativeObject.extend({_events: {foo: {alias: 'bar'}}});
-        object = new CustomType();
-        object.on('bar', listener);
-        object.on('foo', listener);
 
         expect(client.calls({op: 'listen'}).length).to.equal(1);
       });
@@ -454,17 +426,6 @@ describe('NativeObject', function() {
         expect(call.listen).to.equal(false);
       });
 
-      it('calls native listen (false) for last alias listener removed', function() {
-        let CustomType = NativeObject.extend({_events: {foo: {alias: 'bar'}}});
-        object = new CustomType();
-        object.on('bar', listener);
-
-        object.off('bar', listener);
-
-        let call = client.calls({op: 'listen', event: 'foo'})[1];
-        expect(call.listen).to.equal(false);
-      });
-
       it('calls native listen with translated event name', function() {
         let CustomType = NativeObject.extend({_events: {foo: 'bar'}});
         object = new CustomType();
@@ -480,56 +441,6 @@ describe('NativeObject', function() {
         object.off('bar', listener);
 
         expect(client.calls()).to.be.empty;
-      });
-
-      it('does not call native listen when other listeners exist for alias event', function() {
-        let CustomType = NativeObject.extend({_events: {foo: {alias: 'bar'}}});
-        object = new CustomType();
-        object.on('foo', listener);
-        object.on('bar', listener);
-        client.resetCalls();
-
-        object.off('foo', listener);
-
-        expect(client.calls()).to.be.empty;
-      });
-
-      it('does not call native listen when other listeners exist for aliased event', function() {
-        let CustomType = NativeObject.extend({_events: {foo: {alias: 'bar'}}});
-        object = new CustomType();
-        object.on('foo', listener);
-        object.on('bar', listener);
-        client.resetCalls();
-
-        object.off('bar', listener);
-
-        expect(client.calls()).to.be.empty;
-      });
-
-      it('calls native listen when not other listeners exist for aliased or alias event', function() {
-        let CustomType = NativeObject.extend({_events: {foo: {alias: 'bar'}}});
-        object = new CustomType();
-        object.on('foo', listener);
-        object.on('bar', listener);
-        client.resetCalls();
-
-        object.off('bar', listener);
-        object.off('foo', listener);
-
-        expect(client.calls().length).to.equal(1);
-      });
-
-      it('calls native listen when not other listeners exist for aliased or alias event (reversed off)', function() {
-        let CustomType = NativeObject.extend({_events: {foo: {alias: 'bar'}}});
-        object = new CustomType();
-        object.on('foo', listener);
-        object.on('bar', listener);
-        client.resetCalls();
-
-        object.off('foo', listener);
-        object.off('bar', listener);
-
-        expect(client.calls().length).to.equal(1);
       });
 
       it('returns self to allow chaining', function() {
@@ -671,12 +582,10 @@ describe('NativeObject.extend', function() {
   });
 
   it('adds normalized events map to prototype', function() {
-    let CustomType = NativeObject.extend({_events: {foo: 'bar', foo2: {alias: 'foo3'}}});
+    let CustomType = NativeObject.extend({_events: {foo: 'bar'}});
     let instance = new CustomType();
 
     expect(instance.$events.foo).to.eql({name: 'bar'});
-    expect(instance.$events.foo2).to.eql({name: 'foo2', alias: 'foo3', originalName: 'foo2'});
-    expect(instance.$events.foo3).to.equal(instance.$events.foo2);
   });
 
   it('adds empty events map to prototype', function() {

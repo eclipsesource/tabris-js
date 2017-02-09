@@ -20,9 +20,7 @@ const CONFIG = {
       }
     },
     input: {
-      alias: 'change:text',
       trigger(name, event) {
-        this._triggerChangeEvent('text', event.text);
         this.trigger('input', this, event.text, {});
       }
     }
@@ -46,4 +44,18 @@ const CONFIG = {
   }
 };
 
-export default class TextInput extends Widget.extend(CONFIG) {}
+export default class TextInput extends Widget.extend(CONFIG) {
+
+  _listen(name, listening) {
+    if (name === 'change:text') {
+      this._onoff('input', listening, this.$triggerChangeSelection);
+    } else {
+      super._listen(name, listening);
+    }
+  }
+
+  $triggerChangeSelection(widget, text) {
+    this._triggerChangeEvent('text', text);
+  }
+
+}

@@ -8,9 +8,7 @@ const CONFIG = {
 
   _events: {
     select: {
-      alias: 'change:selectionIndex',
       trigger(name, event) {
-        this._triggerChangeEvent('selectionIndex', event.selectionIndex);
         this.trigger('select', this, this._getItem(event.selectionIndex), {index: event.selectionIndex});
       }
     }
@@ -58,6 +56,7 @@ const CONFIG = {
           let index = this._getItemIndex(item);
           if (index !== -1) {
             this.set('selectionIndex', index, options);
+            this._triggerChangeEvent(name, item);
           } else {
             console.warn('Could not set picker selection ' + item + ': item not found');
           }
@@ -98,18 +97,20 @@ export default class Picker extends Widget.extend(CONFIG) {
 
   _listen(name, listening) {
     if (name === 'change:selection') {
-      if (listening) {
-        this.on('change:selectionIndex', triggerSelectionChange);
-      } else {
-        this.off('change:selectionIndex', triggerSelectionChange);
-      }
+      this._onoff('select', listening, this.$triggerChangeSelection);
+    } else if (name === 'change:selectionIndex') {
+      this._onoff('select', listening, this.$triggerChangeSelectionIndex);
     } else {
       super._listen(name, listening);
     }
   }
 
-}
+  $triggerChangeSelection(widget, item) {
+    this._triggerChangeEvent('selection', item);
+  }
 
-function triggerSelectionChange(widget, index, options) {
-  widget._triggerChangeEvent('selection', widget._getItem(index), Object.assign({index}, options));
+  $triggerChangeSelectionIndex(widget, item, options) {
+    this._triggerChangeEvent('selectionIndex', options.index);
+  }
+
 }

@@ -234,17 +234,9 @@ export default class CollectionView extends Widget.extend(CONFIG) {
 
   _listen(name, listening) {
     if (name === 'change:firstVisibleIndex') {
-      if (listening) {
-        this.on('scroll', triggerChangeFirstVisibleIndex);
-      } else {
-        this.off('scroll', triggerChangeFirstVisibleIndex);
-      }
+      this._onoff('scroll', listening, triggerChangeFirstVisibleIndex);
     } else if (name === 'change:lastVisibleIndex') {
-      if (listening) {
-        this.on('scroll', triggerChangeLastVisibleIndex);
-      } else {
-        this.off('scroll', triggerChangeLastVisibleIndex);
-      }
+      this._onoff('scroll', listening, triggerChangeLastVisibleIndex);
     } else {
       super._listen(name, listening);
     }

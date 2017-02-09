@@ -5,9 +5,7 @@ const CONFIG = {
   _type: 'tabris.Slider',
   _events: {
     select: {
-      alias: 'change:selection',
       trigger(name, event) {
-        this._triggerChangeEvent('selection', event.selection);
         this.trigger('select', this, event.selection, {});
       }
     }
@@ -19,4 +17,18 @@ const CONFIG = {
   }
 };
 
-export default class Slider extends Widget.extend(CONFIG) {}
+export default class Slider extends Widget.extend(CONFIG) {
+
+  _listen(name, listening) {
+    if (name === 'change:selection') {
+      this._onoff('select', listening, this.$triggerChangeSelection);
+    } else {
+      super._listen(name, listening);
+    }
+  }
+
+  $triggerChangeSelection(widget, selection) {
+    this._triggerChangeEvent('selection', selection);
+  }
+
+}

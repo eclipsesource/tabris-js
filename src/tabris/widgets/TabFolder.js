@@ -29,10 +29,8 @@ const CONFIG = {
   },
   _events: {
     select: {
-      alias: 'change:selection',
       trigger(name, event) {
         let tab = tabris._proxies.find(event.selection);
-        this.trigger('change:selection', this, tab, {});
         this.trigger('select', this, tab, {});
       }
     },
@@ -50,6 +48,18 @@ export default class TabFolder extends Widget.extend(CONFIG) {
 
   _acceptChild(child) {
     return child instanceof Tab;
+  }
+
+  _listen(name, listening) {
+    if (name === 'change:selection') {
+      this._onoff('select', listening, this.$triggerChangeSelection);
+    } else {
+      super._listen(name, listening);
+    }
+  }
+
+  $triggerChangeSelection(widget, tab) {
+    this.trigger('change:selection', this, tab, {});
   }
 
 }

@@ -17,16 +17,12 @@ const CONFIG = {
 
   _events: {
     scrollX: {
-      alias: 'change:offsetX',
       trigger(name, {offset}) {
-        this._triggerChangeEvent('offsetX', offset);
         this.trigger('scrollX', this, offset, {});
       }
     },
     scrollY: {
-      alias: 'change:offsetY',
       trigger(name, {offset}) {
-        this._triggerChangeEvent('offsetY', offset);
         this.trigger('scrollY', this, offset, {});
       }
     }
@@ -35,6 +31,24 @@ const CONFIG = {
 };
 
 export default class ScrollView extends Widget.extend(CONFIG) {
+
+  _listen(name, listening) {
+    if (name === 'change:offsetX') {
+      this._onoff('scrollX', listening, this.$triggerChangeOffsetX);
+    } else if (name === 'change:offsetY') {
+      this._onoff('scrollY', listening, this.$triggerChangeOffsetY);
+    } else {
+      super._listen(name, listening);
+    }
+  }
+
+  $triggerChangeOffsetX(widget, offset) {
+    this._triggerChangeEvent('offsetX', offset);
+  }
+
+  $triggerChangeOffsetY(widget, offset) {
+    this._triggerChangeEvent('offsetY', offset);
+  }
 
   _acceptChild() {
     return true;
