@@ -40,7 +40,6 @@ let right: margin;
 let textColor: Color;
 let top: margin;
 let transform: Transformation;
-let type: string;
 let visible: boolean;
 let width: dimension;
 
@@ -67,7 +66,6 @@ widget.right = right;
 widget.textColor = textColor;
 widget.top = top;
 widget.transform = transform;
-widget.type = type;
 widget.visible = visible;
 widget.width = width;
 
@@ -94,7 +92,6 @@ right = widget.right;
 textColor = widget.textColor;
 top = widget.top;
 transform = widget.transform;
-type = widget.type;
 visible = widget.visible;
 width = widget.width;
 

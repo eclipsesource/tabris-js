@@ -165,10 +165,6 @@
       "type": "string[]",
       "description": "Provides convenient access to the list of class names set to this widget. Class names can either be set using the `class` property or by modifying the `classList` directly."
     },
-    "type": {
-      "type": "string",
-      "description": "The widget type without the 'tabris' namespace."
-    },
     "enabled": {
       "type": "boolean",
       "default": "true",
