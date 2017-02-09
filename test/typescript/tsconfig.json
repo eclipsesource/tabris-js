@@ -2,11 +2,8 @@
   "compilerOptions": {
     "lib": ["dom", "es5", "scripthost", "es2015.promise" ]
   },
-  "files": [
+  "include": [
     "../tabris/whatwg-fetch.d.ts",
-    "./tabris.test.ts",
-    "./promise.test.ts",
-    "./whatwg-fetch.test.ts",
-    "./globalTabrisObject.test.ts"
+    "**/*.test.ts"
   ]
 }
