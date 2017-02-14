@@ -2,7 +2,8 @@
 
 var tabFolder = new tabris.TabFolder({
   left: 0, top: 0, right: 0, bottom: 0,
-  paging: true
+  tabBarLocation: 'bottom',
+  background: 'white'
 }).appendTo(tabris.ui.contentView);
 
 function createTab(title, image) {
@@ -12,14 +13,13 @@ function createTab(title, image) {
   }).appendTo(tabFolder);
   var navigationView = new tabris.NavigationView({
     id: 'navigationView',
-    left: 0, top: 0, right: 0, bottom: 0,
-    toolbarVisible: tabris.device.platform !== 'Android' // hide toolbar on Android for more native appearance
+    left: 0, top: 0, right: 0, bottom: 0
   }).appendTo(tab);
-  createPage(navigationView);
+  createPage(navigationView, title);
 }
 
-function createPage(navigationView) {
-  var text = 'Page ' + (navigationView.pages().length + 1);
+function createPage(navigationView, title) {
+  var text = title || 'Page ' + (navigationView.pages().length + 1);
   var page = new tabris.Page({
     title: text,
     background: '#eeeeee'
