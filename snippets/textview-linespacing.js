@@ -17,8 +17,8 @@ var slider = new tabris.Slider({
   left: 16, bottom: 16, right: [spacingView, 16],
   minimum: 2,
   maximum: 50
-}).on('change:selection', function(slider, selection) {
-  var lineSpacing = selection / 10;
+}).on('change:selection', function({value}) {
+  var lineSpacing = value / 10;
   textView.lineSpacing = lineSpacing;
   spacingView.text = lineSpacing;
 }).appendTo(tabris.ui.contentView);

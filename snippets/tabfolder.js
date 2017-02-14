@@ -21,6 +21,6 @@ createTab('Cart', 'images/cart.png', 'images/cart-filled.png');
 createTab('Pay', 'images/card.png', 'images/card-filled.png');
 createTab('Statistic', 'images/chart.png', 'images/chart-filled.png');
 
-tabFolder.on('change:selection', function(widget, tab) {
+tabFolder.on('change:selection', function({value: tab}) {
   console.log(tab.title);
 });

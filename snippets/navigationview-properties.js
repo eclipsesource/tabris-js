@@ -35,28 +35,28 @@ var controls = new tabris.ScrollView({
   elevation: tabris.device.platform === 'Android' ? 12 : 4
 }).appendTo(tabris.ui.contentView);
 
-createCheckBox('Show toolbar', function(checkBox, checked) {
+createCheckBox('Show toolbar', function({value: checked}) {
   navigationView.toolbarVisible = checked;
 });
 
-createCheckBox('Show drawer action', function(checkBox, checked) {
+createCheckBox('Show drawer action', function({value: checked}) {
   navigationView.drawerActionVisible = checked;
 });
 
-createColorPicker('Toolbar color', navigationView.toolbarColor, function(picker, color) {
+createColorPicker('Toolbar color', navigationView.toolbarColor, function({value: color}) {
   navigationView.toolbarColor = color;
 });
 
-createColorPicker('Title text color', navigationView.titleTextColor, function(picker, color) {
+createColorPicker('Title text color', navigationView.titleTextColor, function({value: color}) {
   navigationView.titleTextColor = color;
 });
 
-createColorPicker('Action color', navigationView.actionColor, function(picker, color) {
+createColorPicker('Action color', navigationView.actionColor, function({value: color}) {
   navigationView.actionColor = color;
 });
 
 if (tabris.device.platform === 'Android') {
-  createColorPicker('Action text color', navigationView.actionTextColor, function(picker, color) {
+  createColorPicker('Action text color', navigationView.actionTextColor, function({value: color}) {
     navigationView.actionTextColor = color;
   });
 }

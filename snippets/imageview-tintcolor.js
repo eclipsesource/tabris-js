@@ -8,6 +8,6 @@ var imageView = new tabris.ImageView({
 new tabris.Picker({
   top: [imageView, 16], centerX: 0,
   items: colors
-}).on('change:selection', function(picker, color) {
+}).on('change:selection', function({value: color}) {
   imageView.tintColor = color;
 }).appendTo(tabris.ui.contentView);

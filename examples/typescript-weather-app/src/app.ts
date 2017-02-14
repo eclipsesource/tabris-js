@@ -58,8 +58,8 @@ function createWeatherInformation(data: WeatherData) {
     new CurrentWeatherView({data, class: 'weatherInfo', id: 'current'}),
     new WeatherGraph({data, class: 'weatherInfo', id: 'graph'}),
     new ForecastTabView({data, class: 'weatherInfo', id: 'forecast'})
-      .on('change:selection', (widget, selection) => {
-        changeGraphFocus(widget as ForecastTabView, selection, data);
+      .on('change:selection', ({target, value}) => {
+        changeGraphFocus(target as ForecastTabView, value, data);
       }),
     new ForecastOverview({data, class: 'weatherInfo', id: 'overview'}).on('daySelect', index => {
       let forecastTabView = ui.find('#forecast').first() as ForecastTabView;

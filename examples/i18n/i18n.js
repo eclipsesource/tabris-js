@@ -39,7 +39,7 @@ new tabris.CollectionView({
       left: 0, bottom: 0, right: 0, height: 1,
       background: '#e3e3e3'
     }).appendTo(cell);
-    cell.on('change:item', function(widget, item) {
+    cell.on('change:item', function({value: item}) {
       name.text = item.name;
       description.text = item.description;
       price.text = item.price;

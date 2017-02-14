@@ -48,7 +48,7 @@ function initializeCell(cell) {
     font: tabris.device.platform === 'iOS' ? '17px .HelveticaNeueInterface-Regular' : '14px Roboto Medium',
     textColor: tabris.device.platform === 'iOS' ? 'rgb(22, 126, 251)' : '#212121'
   }).appendTo(cell);
-  cell.on('change:item', function(widget, page) {
+  cell.on('change:item', function({value: page}) {
     imageView.set('image', page.image);
     textView.set('text', page.title);
   });
@@ -161,7 +161,7 @@ function createBooksList(books) {
         left: 64, right: PAGE_MARGIN, top: [titleTextView, 4],
         textColor: '#7b7b7b'
       }).appendTo(cell);
-      cell.on('change:item', function(widget, book) {
+      cell.on('change:item', function({value: book}) {
         imageView.image = book.image;
         titleTextView.text = book.title;
         authorTextView.text = book.author;

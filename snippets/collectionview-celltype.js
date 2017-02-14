@@ -16,7 +16,7 @@ new tabris.CollectionView({
     if (type === 'section') {
       cell.background = '#cecece';
     }
-    cell.on('change:item', function(widget, item) {
+    cell.on('change:item', function({value: item}) {
       textView.text = item.name;
     });
   }

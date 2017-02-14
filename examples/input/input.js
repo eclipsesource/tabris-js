@@ -91,8 +91,8 @@ new tabris.Composite({
 ).append(
   new tabris.Slider({
     id: 'luggageSlider'
-  }).on('change:selection', function(widget, selection) {
-    scrollView.find('#luggageWeight').set('text', selection + ' Kg');
+  }).on('change:selection', function({value}) {
+    scrollView.find('#luggageWeight').set('text', value + ' Kg');
   })
 ).appendTo(scrollView);
 

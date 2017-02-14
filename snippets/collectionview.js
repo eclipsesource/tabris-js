@@ -27,7 +27,7 @@ new tabris.CollectionView({
       left: 30, top: [imageView, 16], right: 30,
       alignment: 'center'
     }).appendTo(cell);
-    cell.on('change:item', function(widget, person) {
+    cell.on('change:item', function({value: person}) {
       imageView.image = person.image;
       nameTextView.text = person.firstName;
     });

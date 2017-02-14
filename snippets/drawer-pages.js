@@ -42,7 +42,7 @@ function initializeCell(cell) {
     font: tabris.device.platform === 'iOS' ? '17px .HelveticaNeueInterface-Regular' : '14px Roboto Medium',
     textColor: '#212121'
   }).appendTo(cell);
-  cell.on('change:item', function(widget, page) {
+  cell.on('change:item', function({value: page}) {
     imageView.image = {src: page.icon, scale: 3};
     textView.text = page.title;
   });
