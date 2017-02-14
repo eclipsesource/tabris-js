@@ -32,17 +32,9 @@
     "change:selectionIndex": {
       "parameters": [
         {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "selectionIndex",
-          "type": "number",
-          "description": "The new value of *[selectionIndex](#selectionindex)*."
-        },
-        {
-          "name": "options",
-          "type": "any"
+          "name": "event",
+          "type": "ChangeEvent<Picker, number>",
+          "description": "The change event for the selectionIndex property."
         }
       ],
       "description": "Fired when the selectionIndex property changes."
@@ -50,17 +42,9 @@
     "change:selection": {
       "parameters": [
         {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "selection",
-          "type": "any",
-          "description": "The new value of *[selection](#selection)*."
-        },
-        {
-          "name": "options",
-          "type": "any"
+          "name": "event",
+          "type": "ChangeEvent<Picker, any>",
+          "description": "The change event for the selection property."
         }
       ],
       "description": "Fired when the selection property changes."

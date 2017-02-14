@@ -71,7 +71,8 @@ describe('Picker', function() {
 
       tabris._notify(picker.cid, 'select', {selectionIndex: 1});
 
-      checkEvent('bar', {index: 1});
+      expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWithMatch({target: picker, value: 'bar'});
       checkListen('select');
     });
 
@@ -81,8 +82,8 @@ describe('Picker', function() {
 
       picker.set('selection', 'foo');
 
-      expect(listener).to.have.been.calledWith(picker, 'foo');
       expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWithMatch({target: picker, value: 'foo'});
     });
 
     it('change:selectionIndex', function() {
@@ -90,7 +91,8 @@ describe('Picker', function() {
 
       tabris._notify(picker.cid, 'select', {selectionIndex: 23});
 
-      checkEvent(23);
+      expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWithMatch({target: picker, value: 23});
       checkListen('select');
     });
 

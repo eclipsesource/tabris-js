@@ -16,17 +16,9 @@
     "change:item": {
       "parameters": [
         {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "item",
-          "type": "any",
-          "description": "The new value of *[item](#item)*."
-        },
-        {
-          "name": "options",
-          "type": "any"
+          "name": "event",
+          "type": "ChangeEvent<Cell, any>",
+          "description": "The change event for the item property."
         }
       ],
       "description": "Fired when a collection item is assigned to this cell. Use this event to configure the widgets in this cell to represent the assigned item."
@@ -34,17 +26,9 @@
     "change:itemIndex": {
       "parameters": [
         {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "itemIndex",
-          "type": "number",
-          "description": "The new value of *[itemIndex](#indexindex)*."
-        },
-        {
-          "name": "options",
-          "type": "any"
+          "name": "event",
+          "type": "ChangeEvent<Cell, number>",
+          "description": "The change event for the itemIndex property."
         }
       ],
       "description": "Fired when the index of the assigned item changes, either by assigning a new item or by inserting/removing items above the current item."

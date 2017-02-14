@@ -155,6 +155,16 @@ describe('TabFolder', function() {
       expect(setCall.properties.selection).to.equal(tab.cid);
     });
 
+    it('Setting a Tab triggers change event', function() {
+      let listener = spy();
+      tabFolder.on('change:selection', listener);
+
+      tabFolder.set('selection', tab);
+
+      expect(listener).to.have.been.calledOnce;
+      expect(listener.firstCall).to.have.been.calledWithMatch({target: tabFolder, value: tab});
+    });
+
     it('Ignores setting null with warning', function() {
       stub(console, 'warn');
 
@@ -203,7 +213,7 @@ describe('TabFolder', function() {
       tabris._notify(tabFolder.cid, 'select', {selection: tab.cid});
 
       expect(listener).to.have.been.calledOnce;
-      expect(listener.firstCall).to.have.been.calledWith(tabFolder, tab, {});
+      expect(listener.firstCall).to.have.been.calledWithMatch({target: tabFolder, value: tab});
     });
 
     it('supports native event select', function() {

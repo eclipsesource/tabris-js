@@ -85,17 +85,9 @@
     "change:state": {
       "parameters": [
         {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "state",
-          "type": "string",
-          "description": "The current value of *[state](#state)*."
-        },
-        {
-          "name": "options",
-          "type": "Object"
+          "name": "event",
+          "type": "ChangeEvent<Video, string>",
+          "description": "The change event for the state property."
         }
       ],
       "description": "Fired when the state property changes."

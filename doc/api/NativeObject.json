@@ -129,14 +129,9 @@
     "change:{property}": {
       "parameters": [
         {
-          "name": "target",
-          "type": "this",
-          "description": "The object that fired the change event."
-        },
-        {
-          "name": "value",
-          "type": "any",
-          "description": "The new value of the given property."
+          "name": "event",
+          "type": "ChangeEvent<NativeObject, any>",
+          "description": "The change event for the changed property."
         }
       ],
       "description": "Fired when the given property has changed. Change events for specific properties will only be documented separately if they may be triggered without calling `set`. "

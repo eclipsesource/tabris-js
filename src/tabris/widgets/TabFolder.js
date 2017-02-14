@@ -12,13 +12,13 @@ const CONFIG = {
     tabMode: {type: ['choice', ['fixed', 'scrollable']], default: 'fixed'},
     selection: {
       access: {
-        set(name, tab, options) {
+        set(name, tab) {
           if (this._children.indexOf(tab) < 0) {
             console.warn('Can not set TabFolder selection to ' + tab);
             return;
           }
           this._nativeSet('selection', tab.cid);
-          this.trigger('change:selection', this, tab, options);
+          this._triggerChangeEvent('selection', tab);
         },
         get() {
           let selection = this._nativeGet('selection');
@@ -59,7 +59,7 @@ export default class TabFolder extends Widget.extend(CONFIG) {
   }
 
   $triggerChangeSelection(widget, tab) {
-    this.trigger('change:selection', this, tab, {});
+    this._triggerChangeEvent('selection', tab);
   }
 
 }

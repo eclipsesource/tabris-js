@@ -215,7 +215,7 @@ export default class Widget extends NativeObject {
   }
 
   $triggerChangeBounds(widget, bounds) {
-    this.trigger('change:bounds', this, bounds);
+    this.trigger('change:bounds', {target: this, value: bounds});
   }
 
   _flushLayout() {

@@ -122,17 +122,9 @@
     "change:text": {
       "parameters": [
         {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "text",
-          "type": "string",
-          "description": "The new value of *[text](#text)*."
-        },
-        {
-          "name": "options",
-          "type": "any"
+          "name": "event",
+          "type": "ChangeEvent<TextInput, string>",
+          "description": "The change event for the text property."
         }
       ],
       "description": "Fired when the text property changes."

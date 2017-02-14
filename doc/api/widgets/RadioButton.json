@@ -17,17 +17,9 @@
     "change:selection": {
       "parameters": [
         {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "selection",
-          "type": "boolean",
-          "description": "The new value of *[selection](#selection)*."
-        },
-        {
-          "name": "options",
-          "type": "any"
+          "name": "event",
+          "type": "ChangeEvent<RadioButton, boolean>",
+          "description": "The change event for the selection property."
         }
       ],
       "description": "Fired when the selection property changes."

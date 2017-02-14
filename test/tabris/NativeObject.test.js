@@ -935,7 +935,7 @@ describe('NativeObject.extend', function() {
       object.foo = 23;
 
       expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWith(object, 23);
+      expect(listener).to.have.been.calledWith({target: object, value: 23});
     });
 
     it('triggers change event with decoded value', function() {
@@ -945,7 +945,7 @@ describe('NativeObject.extend', function() {
       object.foo = 23;
 
       expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWith(object, true);
+      expect(listener).to.have.been.calledWith({target: object, value: true});
     });
 
     it('triggers no change event if value is unchanged', function() {

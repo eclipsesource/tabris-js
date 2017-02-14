@@ -60,16 +60,9 @@
     "change:orientation": {
       "parameters": [
         {
-          "name": "device",
-          "type": "Device"
-        },
-        {
-          "name": "orientation",
-          "type": "string"
-        },
-        {
-          "name": "options",
-          "type": "Object"
+          "name": "event",
+          "type": "ChangeEvent<Device, string>",
+          "description": "The change event for the orientation property."
         }
       ],
       "description": "Fired when the `orientation` property has changed and the rotation animation has finished."

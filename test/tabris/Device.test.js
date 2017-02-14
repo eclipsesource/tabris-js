@@ -88,7 +88,7 @@ describe('Device', function() {
       tabris._notify('tabris.Device', 'orientationchange', {orientation: 'portrait'});
 
       expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWith(device, 'portrait');
+      expect(listener).to.have.been.calledWithMatch({target: device, value: 'portrait'});
     });
 
     it('can not be disposed', function() {

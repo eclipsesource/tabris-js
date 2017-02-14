@@ -27,6 +27,7 @@ describe('Video', function() {
   });
 
   it('does not SET read-only properties', function() {
+    stub(console, 'warn');
     video.set({
       speed: 2,
       position: 3,
@@ -77,7 +78,7 @@ describe('Video', function() {
       tabris._notify(video.cid, 'statechange', {state: 'play'});
 
       expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWith(video, 'play');
+      expect(listener).to.have.been.calledWithMatch({target: video, value: 'play'});
     });
 
   });

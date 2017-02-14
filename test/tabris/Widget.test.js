@@ -1310,7 +1310,7 @@ describe('Widget', function() {
       widget._trigger('resize', {bounds: [1, 2, 3, 4]});
 
       expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWith(widget, {left: 1, top: 2, width: 3, height: 4});
+      expect(listener).to.have.been.calledWith({target: widget, value: {left: 1, top: 2, width: 3, height: 4}});
       checkListen('resize');
     });
 

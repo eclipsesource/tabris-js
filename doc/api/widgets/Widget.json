@@ -268,18 +268,9 @@
     "change:{property}": {
       "parameters": [
         {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "value",
-          "type": "any",
-          "description": "The new value of this given property."
-        },
-        {
-          "name": "options",
-          "type": "Object",
-          "description": "This is the options object given to the [`set`](#set) method."
+          "name": "event",
+          "type": "ChangeEvent<Widget, any>",
+          "description": "The change event for the changed property."
         }
       ],
       "description": "Fired when the given property has changed. Change events for specific properties will only be documented separately if they may be triggered without calling `set`. "

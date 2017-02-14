@@ -144,6 +144,7 @@ describe('WidgetCollection', function() {
     it('animate() is delegated', function() {
       let props = {foo: 'bar'};
       let options = {delay: 3000};
+      stub(console, 'warn');
       spy(widgets[0], 'animate');
       spy(widgets[1], 'animate');
       spy(widgets[2], 'animate');

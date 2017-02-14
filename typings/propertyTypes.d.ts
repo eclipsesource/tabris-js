@@ -235,3 +235,20 @@ interface AnimationOptions {
    */
   name?: string;
 }
+
+/**
+ * An event that is triggered when a property changes.
+ */
+interface ChangeEvent<T, P> {
+
+  /**
+   * The object that the event was triggered on.
+   */
+  target: T,
+
+  /**
+   * The new value of the changed property.
+   */
+  value: P
+
+}

@@ -14,7 +14,7 @@
     "initializeCell": {
       "type": "(cell: Cell, cellType: string) => void",
       "static": true,
-      "description": "A callback used to initialize a collection cell by attaching widget and *change:item* listener. Cells are created by the framework and recycled on scrolling. This callback receives the cell as the first and the cell type as second parameter."
+      "description": "A callback used to initialize a collection cell by attaching widget and *change:item* listener. Cells are created by the framework and recycled on scrolling."
     },
     "cellType": {
       "type": "string|((item: any) => string)",

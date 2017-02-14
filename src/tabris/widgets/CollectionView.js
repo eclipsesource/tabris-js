@@ -112,7 +112,7 @@ const CONFIG = {
         if (item !== cell._getStoredProperty('item')) {
           cell._storeProperty('item', item);
         } else {
-          cell.trigger('change:item', cell, item, {});
+          cell._triggerChangeEvent('item', item);
         }
       }
     },
