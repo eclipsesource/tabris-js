@@ -177,7 +177,7 @@ module.exports = function(grunt) {
   }
 
   function createOnMethod(name, def) {
-    return `on(event: "${name}", listener: (${createParamList(def.parameters)}) => any): this;`;
+    return `on(event: "${name}", listener: (${createParamList(def.parameters)}) => void): this;`;
   }
 
   function addOnceMethods(result, def) {
