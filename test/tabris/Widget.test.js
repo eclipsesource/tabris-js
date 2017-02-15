@@ -1320,9 +1320,22 @@ describe('Widget', function() {
       widget._trigger('resize', {bounds: [1, 2, 3, 4]});
 
       expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWith(widget, {left: 1, top: 2, width: 3, height: 4});
+      expect(listener).to.have.been.calledWithMatch({target: widget, left: 1, top: 2, width: 3, height: 4});
       checkListen('resize');
     });
+
+    ['touchstart', 'touchmove', 'touchend', 'touchcancel'].forEach(name => {
+      it(name, function() {
+        widget = new TestWidget().on(name, listener);
+
+        widget._trigger(name, {time: 23});
+
+        expect(listener).to.have.been.calledOnce;
+        expect(listener).to.have.been.calledWithMatch({target: widget, time: 23});
+        checkListen(name);
+      });
+    });
+
 
   });
 

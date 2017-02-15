@@ -135,7 +135,7 @@ describe('gestures:', function() {
           tabris._notify(gestureCreate()[0].id, 'gesture', {state: 'recognized'});
 
           expect(listener).to.have.been.calledOnce;
-          expect(listener).to.have.been.calledWith(widget, {state: 'recognized'});
+          expect(listener).to.have.been.calledWithMatch({target: widget, state: 'recognized'});
         });
 
       });

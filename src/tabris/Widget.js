@@ -196,8 +196,9 @@ export default class Widget extends NativeObject {
     if (this.gestures[name]) {
       if (listening) {
         let properties = Object.assign({target: this}, this.gestures[name]);
-        let recognizer = new GestureRecognizer(properties)
-          .on('gesture', gestureListener, {target: this, name});
+        let recognizer = new GestureRecognizer(properties).on('gesture', event => {
+          this.trigger(name, Object.assign({}, event, {target: this}));
+        });
         if (!this._recognizers) {
           this._recognizers = {};
         }
@@ -214,8 +215,24 @@ export default class Widget extends NativeObject {
     }
   }
 
-  $triggerChangeBounds(widget, bounds) {
-    this.trigger('change:bounds', {target: this, value: bounds});
+  _trigger(name, event) {
+    if (['touchstart', 'touchmove', 'touchend', 'touchcancel'].includes(name)) {
+      this.trigger(name, Object.assign({target: this}, event));
+    } else if (name === 'resize') {
+      if (hasAndroidResizeBug()) {
+        setTimeout(() => {
+          this.trigger(name, Object.assign({target: this}, types.bounds.decode(event.bounds)));
+        }, 0);
+      } else {
+        this.trigger(name, Object.assign({target: this}, types.bounds.decode(event.bounds)));
+      }
+    } else {
+      super._trigger(name, event);
+    }
+  }
+
+  $triggerChangeBounds({left, top, width, height}) {
+    this.trigger('change:bounds', {target: this, value: {left, top, width, height}});
   }
 
   _flushLayout() {
@@ -264,22 +281,11 @@ function hasAndroidResizeBug() {
 }
 
 let defaultEvents = {
-  touchstart: {trigger: triggerWithTarget},
-  touchmove: {trigger: triggerWithTarget},
-  touchend: {trigger: triggerWithTarget},
-  touchcancel: {trigger: triggerWithTarget},
-  'resize': {
-    trigger(name, event) {
-      if (hasAndroidResizeBug()) {
-        let self = this;
-        setTimeout(() => {
-          self.trigger('resize', self, types.bounds.decode(event.bounds), {});
-        }, 0);
-      } else {
-        this.trigger('resize', this, types.bounds.decode(event.bounds), {});
-      }
-    }
-  }
+  touchstart: true,
+  touchmove: true,
+  touchend: true,
+  touchcancel: true,
+  resize: true
 };
 
 let defaultProperties = {
@@ -449,12 +455,4 @@ function renderLayoutData() {
     let checkedData = Layout.checkConsistency(this._layoutData);
     this._nativeSet('layoutData', Layout.resolveReferences(checkedData, this));
   }
-}
-
-function gestureListener(event) {
-  this.target.trigger(this.name, this.target, event);
-}
-
-function triggerWithTarget(name, event) {
-  this.trigger(name, this, event);
 }

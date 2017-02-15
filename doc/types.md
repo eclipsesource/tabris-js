@@ -1,6 +1,31 @@
 Property Types
 ==============
 
+## AnimationEvent
+
+An animation event containing following properties:
+
+- **target**: *Widget*
+The widget the event was fired on.
+- the properties of the [`AnimationOptions`](#animationoptions) object given when [`animate()`](api/Widget.md#animateproperties-options) was called.
+
+## AnimationOptions
+
+Options of the [`animate()`](api/Widget.md#animateproperties-options) method. They have following properties:
+
+- **delay**: *number*, default: `0`
+Time until the animation starts in ms.
+- **duration**: *number*
+Animation duration in ms.
+- **easing**: *string*
+One of `linear`, `ease-in`, `ease-out`, `ease-in-out`.
+- **repeat**: *number*, default: `0`
+Number of times to repeat the animation.
+- **reverse**: *boolean*
+`true` to alternate the direction of the animation on every repeat.
+- **name**: *string*
+No effect, but will be given in animation events.
+
 ## Bounds
 
 Widget bounds are represented as an object with the following properties:
@@ -20,6 +45,15 @@ var buttonWidth = button.get("bounds").width;
 ```
 
 See also [Layout](layout.md).
+
+## ChangeEvent
+
+An event fired when an object property changes. It has following properties:
+
+- **target**: *Widget*
+The widget the event was fired on.
+- **value**: *any*
+The new value of the changed property.
 
 ## Color
 
@@ -82,9 +116,9 @@ Examples:
 "initial"
 ```
 
-## GestureObject
+## GestureEvent
 
-Object containing information about the currently performed gesture. See [Touch API](touch.md#gesture_object).
+Object containing information about the currently performed gesture. See [Gesture Events](touch.md).
 
 ## Image
 
@@ -127,7 +161,7 @@ See also [Layout](layout.md).
 
 ## TouchEvent
 
-Object containing information about the currently performed gesture. See ["Touch API"](touch.md#touch_event_object).
+Object containing information about the currently performed gesture. See [Touch Events](touch.md).
 
 ## Transformation
 
@@ -152,6 +186,21 @@ Example:
 {scaleX: 2, scaleY: 2, rotation: Math.PI * 0.75}
 ```
 This transformation will make the widget twice as big and rotate it by 135&deg;.
+
+## ResizeEvent
+
+Object containing information about the new widget size. It has the following properties:
+
+* **target**: *Widget*
+The widget the event was fired on.
+* **left**: *number*
+The horizontal offset from the parent's left edge in dip
+* **top**: *number*
+The vertical offset from the parent's top edge in dip
+* **width**: *number*
+The width of the widget in dip
+* **height**: *number*
+The height of the widget in dip
 
 ## Selector
 

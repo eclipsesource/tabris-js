@@ -9,13 +9,13 @@ const CONFIG = {
   _events: {
     Start: {
       trigger() {
-        this._target.trigger('animationstart', this._target, this._options);
+        this._target.trigger('animationstart', Object.assign({target: this._target}, this._options));
       }
     },
     Completion: {
       trigger() {
         this._target.off('dispose', this.abort, this);
-        this._target.trigger('animationend', this._target, this._options);
+        this._target.trigger('animationend', Object.assign({target: this._target}, this._options));
         if (this._resolve) {
           this._resolve();
         }

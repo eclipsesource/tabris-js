@@ -123,3 +123,83 @@ bool = widget.isDisposed();
 composite = widget.parent();
 widgetCollection = widget.siblings();
 widgetCollection = widget.siblings(selector);
+
+// Events
+
+widget.on('dispose', (event) => {
+  let target: Widget = event.target;
+});
+
+widget.on('resize', (event) => {
+  let target: Widget = event.target;
+  let left: number = event.left;
+  let top: number = event.top;
+  let width: number = event.width;
+  let height: number = event.height;
+});
+
+widget.on('tap', (event) => {
+  let target: Widget = event.target;
+  let state: string = event.state;
+  let touch: {x: number, y: number} = event.touches[0];
+});
+
+widget.on('longpress', (event) => {
+  let target: Widget = event.target;
+  let state: string = event.state;
+  let touch: {x: number, y: number} = event.touches[0];
+});
+
+widget.on('swipe:left', (event) => {
+  let target: Widget = event.target;
+  let state: string = event.state;
+  let touch: {x: number, y: number} = event.touches[0];
+});
+
+widget.on('pan', (event) => {
+  let target: Widget = event.target;
+  let state: string = event.state;
+  let touch: {x: number, y: number} = event.touches[0];
+});
+
+widget.on('touchstart', (event) => {
+  let target: Widget = event.target;
+  let time: number = event.time;
+  let touch: {x: number, y: number} = event.touches[0];
+});
+
+widget.on('touchmove', (event) => {
+  let target: Widget = event.target;
+  let time: number = event.time;
+  let touch: {x: number, y: number} = event.touches[0];
+});
+
+widget.on('touchend', (event) => {
+  let target: Widget = event.target;
+  let time: number = event.time;
+  let touch: {x: number, y: number} = event.touches[0];
+});
+
+widget.on('touchcancel', (event) => {
+  let target: Widget = event.target;
+  let time: number = event.time;
+  let touch: {x: number, y: number} = event.touches[0];
+});
+
+widget.on('animationstart', (event) => {
+  let target: Widget = event.target;
+  let delay: number = event.delay;
+  let duration: number = event.duration;
+  let easing: 'linear'|'ease-in'|'ease-out'|'ease-in-out' = event.easing;
+  let repeat: number = event.repeat;
+  let reverse: boolean = event.reverse;
+});
+
+widget.on('animationend', (event) => {
+  let target: Widget = event.target;
+  let delay: number = event.delay;
+  let duration: number = event.duration;
+  let easing: 'linear'|'ease-in'|'ease-out'|'ease-in-out' = event.easing;
+  let repeat: number = event.repeat;
+  let reverse: boolean = event.reverse;
+});

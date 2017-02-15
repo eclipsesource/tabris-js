@@ -56,57 +56,124 @@ interface LayoutData {
     height?: dimension;
 }
 
-interface TapGesture {
-  state: "recognized";
+interface EventObject<T> {
+
   /**
-   * Array of touch coordinates relative to the origin coordinates of the widget.
+   * The object that received the event.
    */
-  touches:  [{x: number, y: number}];
+  target: T;
+
 }
 
-interface LongpressGesture {
-  state: "start" | "end" | "cancel";
+/**
+ * An event that is triggered when a property changes.
+ */
+interface ChangeEvent<T, P> extends EventObject<T> {
+
   /**
-   * Array of touch coordinates relative to the origin coordinates of the widget.
+   * The new value of the changed property.
    */
-  touches:  [{x: number, y: number}];
-}
-interface PanGesture {
-  state: "start" | "end" | "change" | "cancel";
-  /**
-   * current touch coordinates relative to the coordinates of the first touch
-   */
-  translation:  [{x: number, y: number}];
-  /**
-   *  current touch velocity in pixels per second
-   */
-  velocity:  [{x: number, y: number}];
-  /**
-   * Array of touch coordinates relative to the origin coordinates of the widget.
-   */
-  touches:  [{x: number, y: number}];
+  value: P;
+
 }
 
-interface SwipeGesture {
-  state: "recognized";
+/**
+ * An event that is triggered when a widget has been resized.
+ */
+interface ResizeEvent<T> extends EventObject<T> {
+
   /**
-   * Array of touch coordinates relative to the origin coordinates of the widget.
+   * The horizontal offset from the parent's left edge in dip.
    */
-  touches:  [{x: number, y: number}];
+  left: number;
+
+  /**
+   * The vertical offset from the parent's top edge in dip.
+   */
+  top: number;
+
+  /**
+   * The width of the widget in dip.
+   */
+  width: number;
+
+  /**
+   * the height of the widget in dip.
+   */
+  height: number;
+
 }
 
-type GestureObject = TapGesture | LongpressGesture | SwipeGesture | PanGesture;
+/**
+ * An event that is triggered by a gesture.
+ */
+interface GestureEvent<T> extends EventObject<T> {
 
-interface TouchEvent {
+  /**
+   * The gesture state, depends on the type of the gesture.
+   */
+  state: string,
+
+  /**
+   * An array of touch coordinates relative to the origin coordinates of the widget.
+   */
+  touches: {x: number, y: number}[],
+
+  /**
+   * Current touch coordinates relative to the coordinates of the first touch.
+   * Only for pan gestures.
+   */
+  translation?: {x: number, y: number},
+
+  /**
+   * Current touch velocity in pixels per second.
+   * Only for pan gestures.
+   */
+  velocity?: {x: number, y: number}
+
+}
+
+interface TouchEvent<T> extends EventObject<T> {
 
   /**
    * number of milliseconds since the start of the app
    */
   time: number;
+
   /**
    * An array of touch objects for all current touches. Since multiple touches are currently not supported, this array has always one element.
    */
-  // touches: [TouchObject];
+  touches: {x: number, y: number}[];
+
+}
+
+interface AnimationEvent<T> extends EventObject<T> {
+
+  /**
+   * The time until the animation starts in ms.
+   */
+  delay: number;
+
+  /**
+   * The animation duration in ms.
+   */
+  duration: number;
+
+  /**
+   * One of `linear`, `ease-in`, `ease-out`, `ease-in-out`.
+   */
+  easing: 'linear'|'ease-in'|'ease-out'|'ease-in-out';
+
+  /**
+   * The number of times to repeat the animation.
+   */
+  repeat: number;
+
+  /**
+   * Whether to alternate the direction of the animation on every repeat.
+   */
+  reverse: boolean;
+
 }
 
 /**
@@ -234,21 +301,4 @@ interface AnimationOptions {
    * no effect, but will be given in animation events.
    */
   name?: string;
-}
-
-/**
- * An event that is triggered when a property changes.
- */
-interface ChangeEvent<T, P> {
-
-  /**
-   * The object that the event was triggered on.
-   */
-  target: T,
-
-  /**
-   * The new value of the changed property.
-   */
-  value: P
-
 }

@@ -252,9 +252,8 @@ describe('Animation', function() {
 
       findProxy(animationId())._trigger('Start', {});
 
-      expect(listener).to.have.been.called;
-      expect(listener.args[0][0]).to.equal(widget);
-      expect(listener.args[0][1]).to.eql({duration: 123, name: 'bar'});
+      expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWithMatch({target: widget, duration: 123, name: 'bar'});
     });
 
     it('animationend', function() {
@@ -263,9 +262,8 @@ describe('Animation', function() {
 
       findProxy(animationId())._trigger('Completion', {});
 
-      expect(listener).to.have.been.called;
-      expect(listener.args[0][0]).to.equal(widget);
-      expect(listener.args[0][1]).to.eql({duration: 123, name: 'bar'});
+      expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWithMatch({target: widget, duration: 123, name: 'bar'});
     });
 
   });

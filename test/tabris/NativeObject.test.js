@@ -474,7 +474,7 @@ describe('NativeObject', function() {
 
         object.dispose();
 
-        expect(listener).to.have.been.calledWith(object, {});
+        expect(listener).to.have.been.calledWith({target: object});
       });
 
       it('notifies dispose listeners before native destroy', function() {

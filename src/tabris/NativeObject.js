@@ -167,7 +167,7 @@ export default class NativeObject extends EventsClass {
   _dispose(skipNative) {
     if (!this._isDisposed && !this._inDispose) {
       this._inDispose = true;
-      this.trigger('dispose', this, {});
+      this.trigger('dispose', {target: this});
       this._release();
       if (!skipNative) {
         tabris._nativeBridge.destroy(this.cid);

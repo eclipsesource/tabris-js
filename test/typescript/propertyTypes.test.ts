@@ -4,12 +4,6 @@ import {
  Font,
  LayoutData,
  Widget,
- TapGesture,
- LongpressGesture,
- PanGesture,
- SwipeGesture,
- GestureObject,
- TouchEvent,
  Bounds,
  Transformation,
  Selector,
@@ -79,62 +73,6 @@ offsetType = layoutData.centerY;
 widgetType = layoutData.baseline;
 dimensionType = layoutData.width;
 dimensionType = layoutData.height;
-
-// TapGesture
-let tapStateType: 'recognized';
-let touchesType: [{x: number, y: number}];
-
-let tapGesture: TapGesture = {
-  state: tapStateType,
-  touches: touchesType
-};
-tapStateType = tapGesture.state;
-touchesType = tapGesture.touches;
-
-// LongpressGesture
-let longpressStateType: 'start' | 'end' | 'cancel';
-
-let longpressGesture: LongpressGesture = {
-  state: longpressStateType,
-  touches:  touchesType
-};
-longpressStateType = longpressGesture.state;
-touchesType = longpressGesture.touches;
-
-// PanGesture
-let panStateType: 'start' | 'end' | 'change' | 'cancel';
-
-let panGesture: PanGesture = {
-  state: panStateType,
-  translation:  touchesType,
-  velocity:  touchesType,
-  touches:  touchesType,
-};
-panStateType = panGesture.state;
-touchesType = panGesture.translation;
-touchesType = panGesture.velocity;
-touchesType = panGesture.touches;
-
-// SwipeGesture
-let swipeStateType: 'recognized';
-
-let swipeGesture: SwipeGesture = {
-  state: swipeStateType,
-  touches:  touchesType
-};
-swipeStateType = swipeGesture.state;
-touchesType = swipeGesture.touches;
-
-// GestureObject
-let gestureObjectType: TapGesture | LongpressGesture | SwipeGesture | PanGesture;
-let gestureObject: GestureObject = gestureObjectType;
-gestureObjectType = gestureObject;
-
-// TouchEvent
-let touchEvent: TouchEvent = {
-  time: numberType
-};
-numberType = touchEvent.time;
 
 // Bounds
 let bounds: Bounds = {

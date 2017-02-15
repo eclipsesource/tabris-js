@@ -135,7 +135,7 @@
           }
         ],
         "returns": "Promise<any>",
-        "description": "Starts an animation that transforms the given properties from their current values to the given ones. Supported properties are *transform* and *opacity*. Supported options are:\n\n- *delay* - time until the animation starts in ms, defaults to `0`\n- *duration* - in ms,\n- *easing* - one of `linear`, `ease-in`, `ease-out`, `ease-in-out`\n- *repeat* - number of times to repeat the animation, defaults to `0`\n- *reverse* - `true` to alternate the direction of the animation on every repeat.\n- *name* - no effect, but will be given in animation events.\nReturns a promise that is resolved once the animation is completed and is rejected if the animation is aborted."
+        "description": "Starts an animation that transforms the given properties from their current values to the given ones. Supported properties are *transform* and *opacity*. Returns a promise that is resolved once the animation is completed and is rejected if the animation is aborted."
       }
     ],
     "dispose": [
@@ -268,12 +268,9 @@
     "tap": {
       "parameters": [
         {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "gesture",
-          "type": "GestureObject"
+          "name": "event",
+          "type": "GestureEvent<this>",
+          "description": "The event object that describes the gesture."
         }
       ],
       "description": "Fired once when a finger briefly touched the widget."
@@ -281,12 +278,9 @@
     "longpress": {
       "parameters": [
         {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "gesture",
-          "type": "GestureObject"
+          "name": "event",
+          "type": "GestureEvent<this>",
+          "description": "The event object that describes the gesture."
         }
       ],
       "description": "Fired after pressing a widget for a specific amount of time (about a second), and again on lifting the finger."
@@ -294,12 +288,9 @@
     "pan": {
       "parameters": [
         {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "gesture",
-          "type": "GestureObject"
+          "name": "event",
+          "type": "GestureEvent<this>",
+          "description": "The event object that describes the gesture."
         }
       ],
       "description": "Fired continuously after a finger touching the widget moved for a certain distance."
@@ -307,12 +298,9 @@
     "pan:up": {
       "parameters": [
         {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "gesture",
-          "type": "GestureObject"
+          "name": "event",
+          "type": "GestureEvent<this>",
+          "description": "The event object that describes the gesture."
         }
       ],
       "description": "Fired when a finger starts moving up."
@@ -320,12 +308,9 @@
     "pan:down": {
       "parameters": [
         {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "gesture",
-          "type": "GestureObject"
+          "name": "event",
+          "type": "GestureEvent<this>",
+          "description": "The event object that describes the gesture."
         }
       ],
       "description": "Fired when a finger starts moving down."
@@ -333,12 +318,9 @@
     "pan:left": {
       "parameters": [
         {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "gesture",
-          "type": "GestureObject"
+          "name": "event",
+          "type": "GestureEvent<this>",
+          "description": "The event object that describes the gesture."
         }
       ],
       "description": "Fired when a finger starts moving left."
@@ -346,12 +328,9 @@
     "pan:right": {
       "parameters": [
         {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "gesture",
-          "type": "GestureObject"
+          "name": "event",
+          "type": "GestureEvent<this>",
+          "description": "The event object that describes the gesture."
         }
       ],
       "description": "Fired when a finger starts moving right."
@@ -359,12 +338,9 @@
     "swipe:up": {
       "parameters": [
         {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "gesture",
-          "type": "GestureObject"
+          "name": "event",
+          "type": "GestureEvent<this>",
+          "description": "The event object that describes the gesture."
         }
       ],
       "description": "Fired when a finger moves up quickly."
@@ -372,12 +348,9 @@
     "swipe:down": {
       "parameters": [
         {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "gesture",
-          "type": "GestureObject"
+          "name": "event",
+          "type": "GestureEvent<this>",
+          "description": "The event object that describes the gesture."
         }
       ],
       "description": "Fired when a finger moves down quickly."
@@ -385,12 +358,9 @@
     "swipe:left": {
       "parameters": [
         {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "gesture",
-          "type": "GestureObject"
+          "name": "event",
+          "type": "GestureEvent<this>",
+          "description": "The event object that describes the gesture."
         }
       ],
       "description": "Fired when a finger moves left quickly."
@@ -398,12 +368,9 @@
     "swipe:right": {
       "parameters": [
         {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "gesture",
-          "type": "GestureObject"
+          "name": "event",
+          "type": "GestureEvent<this>",
+          "description": "The event object that describes the gesture."
         }
       ],
       "description": "Fired when a finger moves right quickly."
@@ -411,12 +378,9 @@
     "touchstart": {
       "parameters": [
         {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "gesture",
-          "type": "TouchEvent"
+          "name": "event",
+          "type": "TouchEvent<this>",
+          "description": "The event object that describes the touch gesture."
         }
       ],
       "description": "Fired when a widget is touched. See [Touch Events](../touch.md)."
@@ -424,12 +388,9 @@
     "touchmove": {
       "parameters": [
         {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "gesture",
-          "type": "TouchEvent"
+          "name": "event",
+          "type": "TouchEvent<this>",
+          "description": "The event object that describes the touch gesture."
         }
       ],
       "description": "Fired repeatedly while swiping across the screen."
@@ -437,12 +398,9 @@
     "touchend": {
       "parameters": [
         {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "gesture",
-          "type": "TouchEvent"
+          "name": "event",
+          "type": "TouchEvent<this>",
+          "description": "The event object that describes the touch gesture."
         }
       ],
       "description": "Fired when a touch ends on the same widget than it started on."
@@ -450,12 +408,9 @@
     "touchcancel": {
       "parameters": [
         {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "gesture",
-          "type": "TouchEvent"
+          "name": "event",
+          "type": "TouchEvent<this>",
+          "description": "The event object that describes the touch gesture."
         }
       ],
       "description": "Fired instead of touchend when the touch ends on another widget than it started on."
@@ -463,17 +418,9 @@
     "resize": {
       "parameters": [
         {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "bounds",
-          "type": "Bounds",
-          "description": "The new value of the [*bounds*](#bounds) property."
-        },
-        {
-          "name": "options",
-          "type": "Object"
+          "name": "event",
+          "type": "ResizeEvent<this>",
+          "description": "The event object that contains the new bounds."
         }
       ],
       "description": "Fired when the widget's size has changed. You can use this event to apply new [*layoutData*](#layoutdata)."
@@ -481,13 +428,9 @@
     "animationstart": {
       "parameters": [
         {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "options",
-          "type": "Object",
-          "description": "The *options* object given [when `animate` was called](#animateproperties-options)."
+          "name": "event",
+          "type": "AnimationEvent<this>",
+          "description": "The event object that contains the animation options."
         }
       ],
       "description": "Fired when an animation starts playing."
@@ -495,13 +438,9 @@
     "animationend": {
       "parameters": [
         {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "options",
-          "type": "Object",
-          "description": "The *options* object given [when `animate` was called](#animateproperties-options)."
+          "name": "event",
+          "type": "AnimationEvent<this>",
+          "description": "The event object that contains the animation options."
         }
       ],
       "description": "Fired when an animation has completed."
@@ -509,8 +448,8 @@
     "dispose": {
       "parameters": [
         {
-          "name": "widget",
-          "type": "this"
+          "name": "event",
+          "type": "EventObject<this>"
         }
       ],
       "description": "Fired when the widget is about to be disposed. At this point the widget and its children are still accessible."
