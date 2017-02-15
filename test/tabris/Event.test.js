@@ -1,5 +1,5 @@
 import {expect, spy, restore} from '../test';
-import Event, {addDOMEventTargetMethods} from '../../src/tabris/Event';
+import Event, {addDOMEventTargetMethods, defineEventHandlerProperties} from '../../src/tabris/Event';
 
 describe('Event', function() {
 
@@ -324,6 +324,70 @@ describe('Event', function() {
 
       });
 
+    });
+
+  });
+
+  describe('defineEventHandlerProperties', function() {
+
+    let target;
+
+    beforeEach(function() {
+      target = {};
+      addDOMEventTargetMethods(target);
+      defineEventHandlerProperties(target, ['foo', 'bar']);
+    });
+
+    it('adds on-event properties, default to null', function() {
+      expect(target.onfoo).to.be.null;
+      expect(target.onbar).to.be.null;
+    });
+
+    it('on-event property returns listener', function() {
+      let listener = spy();
+
+      target.onfoo = listener;
+
+      expect(target.onfoo).to.equal(listener);
+    });
+
+    it('on-event property ignores types other than function', function() {
+      target.onfoo = 2;
+
+      expect(target.onfoo).to.be.null;
+    });
+
+    it('on-event property registers function as listener', function() {
+      target.onfoo = spy();
+
+      let event = new Event('foo');
+      target.dispatchEvent(event);
+
+      expect(target.onfoo).to.have.been.calledOnce;
+      expect(target.onfoo).to.have.been.calledWith(event);
+    });
+
+    it('on-event property removes previous event handler', function() {
+      let listener1 = spy();
+      let listener2 = spy();
+      target.onfoo = listener1;
+
+      target.onfoo = listener2;
+      target.dispatchEvent(new Event('foo'));
+
+      expect(listener2).to.have.been.called;
+      expect(listener1).to.not.have.been.called;
+    });
+
+    it('on-event property does not interact with event handlers for other types', function() {
+      target.onfoo = spy();
+      target.onbar = spy();
+
+      let event = new Event('foo');
+      target.dispatchEvent(event);
+
+      expect(target.onfoo).to.have.been.called;
+      expect(target.onbar).to.not.have.been.called;
     });
 
   });

@@ -1,9 +1,18 @@
 import NativeObject from './NativeObject';
+import Event, {addDOMEventTargetMethods, defineEventHandlerProperties} from './Event';
+import {omit} from './util';
 
-let CONNECTING = 0;
-let OPEN = 1;
-let CLOSING = 2;
-let CLOSED = 3;
+const CONNECTING = 0;
+const OPEN = 1;
+const CLOSING = 2;
+const CLOSED = 3;
+const CONSTANTS = {
+  CONNECTING: {value: CONNECTING},
+  OPEN: {value: OPEN},
+  CLOSING: {value: CLOSING},
+  CLOSED: {value: CLOSED}
+};
+const EVENT_TYPES = ['open', 'message', 'close', 'error'];
 
 const CONFIG = {
   _type: 'tabris.WebSocket',
@@ -23,82 +32,61 @@ const CONFIG = {
 
 class _WebSocket extends NativeObject.extend(CONFIG) {}
 
-export default function WebSocket(url, protocol) {
+export default class WebSocket {
 
-  if (typeof url !== 'string') {
-    throw new Error('The WebSocket url has to be of type string');
+  constructor(url, protocol) {
+    if (typeof url !== 'string') {
+      throw new Error('The WebSocket url has to be of type string');
+    }
+    let scheme = extractScheme(url);
+    if (!(scheme === 'ws' || scheme === 'wss')) {
+      throw new Error("The WebSocket url has to have a scheme of 'ws' or 'wss' but is '" + scheme + "'");
+    }
+    if (typeof protocol !== 'string' && !Array.isArray(protocol)) {
+      throw new Error('The WebSocket protocol has too be a string or an array of strings');
+    }
+    let protocols = Array.isArray(protocol) ? protocol : [protocol];
+    this.url = url;
+    this.readyState = CONNECTING;
+    this.protocol = '';
+    this.extensions = '';
+    this.bufferedAmount = 0;
+    addDOMEventTargetMethods(this);
+    defineEventHandlerProperties(this, EVENT_TYPES);
+    this._proxy = this.$createProxy(url, protocols);
   }
-  let scheme = extractScheme(url);
-  if (!(scheme === 'ws' || scheme === 'wss')) {
-    throw new Error("The WebSocket url has to have a scheme of 'ws' or 'wss' but is '" + scheme + "'");
+
+  $createProxy(url, protocols) {
+    return new _WebSocket({
+      url,
+      protocol: protocols
+    }).on('open', event => {
+      this.readyState = OPEN;
+      this.protocol = event.protocol;
+      this.extensions = event.extensions;
+      this.dispatchEvent(Object.assign(new Event('open'), omit(event, 'target')));
+    }).on('message', event => {
+      if (this.readyState === OPEN) {
+        this.dispatchEvent(Object.assign(new Event('message'), omit(event, 'target')));
+      }
+    }).on('close', event => {
+      this.readyState = CLOSED;
+      this.dispatchEvent(Object.assign(new Event('close'), omit(event, 'target')));
+    }).on('error', event => {
+      this.readyState = CLOSED;
+      this.dispatchEvent(Object.assign(new Event('error'), omit(event, 'target')));
+    }).on('bufferProcess', event => {
+      this.bufferedAmount -= event.byteLength;
+    });
   }
-
-  this.url = url;
-
-  let protocolArray = [];
-  if (typeof protocol === 'string') {
-    protocolArray = [protocol];
-  } else if (Array.isArray(protocol)) {
-    // validate that all protocols are strings and no entry appears multiple times
-    protocolArray = protocol;
-  } else {
-    throw new Error('The WebSocket protocol has too be a string or an array of strings');
-  }
-
-  this._proxy = new _WebSocket({
-    url,
-    protocol: protocolArray
-  });
-
-  this._proxy.on('open', function(event) {
-    this.readyState = OPEN;
-    this.protocol = event.protocol;
-    this.extensions = event.extensions;
-    if (typeof this.onopen === 'function') {
-      this.onopen(event);
-    }
-  }, this);
-  this._proxy.on('message', function(event) {
-    if (this.readyState === OPEN && typeof this.onmessage === 'function') {
-      this.onmessage(event);
-    }
-  }, this);
-  this._proxy.on('close', function(event) {
-    this.readyState = CLOSED;
-    if (typeof this.onclose === 'function') {
-      this.onclose(event);
-    }
-  }, this);
-  this._proxy.on('error', function(event) {
-    this.readyState = CLOSED;
-    if (typeof this.onerror === 'function') {
-      this.onerror(event);
-    }
-  }, this);
-  this._proxy.on('bufferProcess', function(event) {
-    this.bufferedAmount -= event.byteLength;
-  }, this);
-}
-
-WebSocket.prototype = {
-
-  CONNECTING,
-  OPEN,
-  CLOSING,
-  CLOSED,
-
-  url: '',
-  readyState: CONNECTING,
-  protocol: '',
-  extensions: '',
-  bufferedAmount: 0,
 
   set binaryType(binaryType) {
     this._proxy.set('binaryType', binaryType);
-  },
+  }
+
   get binaryType() {
     return this._proxy.get('binaryType');
-  },
+  }
 
   send(data) {
     if (this.readyState === CONNECTING) {
@@ -113,7 +101,7 @@ WebSocket.prototype = {
     } else {
       throw new Error('Data of type ' + typeof data + " is not supported in WebSocket 'send' operation");
     }
-  },
+  }
 
   close(code, reason) {
     if (code &&
@@ -136,7 +124,10 @@ WebSocket.prototype = {
     }
   }
 
-};
+}
+
+Object.defineProperties(WebSocket, CONSTANTS);
+Object.defineProperties(WebSocket.prototype, CONSTANTS);
 
 function getStringByteSize(input) {
   let len = 0;

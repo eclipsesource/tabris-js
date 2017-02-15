@@ -3,6 +3,7 @@ import ClientStub from './ClientStub';
 import ProxyStore from '../../src/tabris/ProxyStore';
 import NativeBridge from '../../src/tabris/NativeBridge';
 import WebSocket from '../../src/tabris/WebSocket';
+import Event from '../../src/tabris/Event';
 
 describe('WebSocket', function() {
 
@@ -22,14 +23,6 @@ describe('WebSocket', function() {
   });
 
   afterEach(restore);
-
-  describe('WebSocket', function() {
-
-    it('is available on window', function() {
-      expect(WebSocket).not.to.equal(undefined);
-    });
-
-  });
 
   describe('WebSocket constructor', function() {
 
@@ -82,6 +75,12 @@ describe('WebSocket', function() {
 
   });
 
+  it('contains event methods', function() {
+    expect(webSocket.addEventListener).to.be.a('function');
+    expect(webSocket.removeEventListener).to.be.a('function');
+    expect(webSocket.dispatchEvent).to.be.a('function');
+  });
+
   describe('open event', function() {
 
     it('sets readyState to OPEN', function() {
@@ -104,12 +103,16 @@ describe('WebSocket', function() {
 
     it('notifies onopen listener', function() {
       let listener = spy();
-      let parameter = {protocol: 'chat-protocol', extensions: 'compress'};
       webSocket.onopen = listener;
 
-      tabris._notify(webSocket._proxy.cid, 'open', parameter);
+      tabris._notify(webSocket._proxy.cid, 'open', {protocol: 'chat-protocol', extensions: 'compress'});
 
-      expect(listener).to.have.been.calledWith(parameter);
+      expect(listener).to.have.been.calledWithMatch({
+        target: webSocket,
+        protocol: 'chat-protocol',
+        extensions: 'compress'
+      });
+      expect(listener.firstCall.args[0]).to.be.instanceOf(Event);
     });
 
   });
@@ -118,13 +121,13 @@ describe('WebSocket', function() {
 
     it('notifies onmessage listener', function() {
       let listener = spy();
-      let parameter = {data: 'message'};
       webSocket.onmessage = listener;
-      tabris._notify(webSocket._proxy.cid, 'open', parameter);
+      tabris._notify(webSocket._proxy.cid, 'open', {data: 'message'});
 
-      tabris._notify(webSocket._proxy.cid, 'message', parameter);
+      tabris._notify(webSocket._proxy.cid, 'message', {data: 'message'});
 
-      expect(listener).to.have.been.calledWith(parameter);
+      expect(listener).to.have.been.calledWithMatch({target: webSocket, data: 'message'});
+      expect(listener.firstCall.args[0]).to.be.instanceOf(Event);
     });
 
   });
@@ -143,7 +146,8 @@ describe('WebSocket', function() {
 
       tabris._notify(webSocket._proxy.cid, 'close', {});
 
-      expect(listener).to.have.been.calledWith({});
+      expect(listener).to.have.been.calledWithMatch({target: webSocket});
+      expect(listener.firstCall.args[0]).to.be.instanceOf(Event);
     });
 
   });
@@ -162,7 +166,8 @@ describe('WebSocket', function() {
 
       tabris._notify(webSocket._proxy.cid, 'error', {});
 
-      expect(listener).to.have.been.calledWith({});
+      expect(listener).to.have.been.calledWithMatch({target: webSocket});
+      expect(listener.firstCall.args[0]).to.be.instanceOf(Event);
     });
 
   });

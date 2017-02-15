@@ -4,7 +4,7 @@
 // Steps are referenced to with a number inside parentheses, e.g. (2)
 
 import NativeObject from './NativeObject';
-import Event, {addDOMEventTargetMethods} from './Event';
+import Event, {addDOMEventTargetMethods, defineEventHandlerProperties} from './Event';
 import ProgressEvent from './ProgressEvent';
 
 const CONFIG = {
@@ -14,10 +14,10 @@ const CONFIG = {
 
 class HttpRequest extends NativeObject.extend(CONFIG) {}
 
-let eventTypes = [
+const EVENT_TYPES = [
   'loadstart', 'readystatechange', 'load', 'loadend', 'progress', 'timeout', 'abort', 'error'
 ];
-let uploadEventTypes = ['progress', 'loadstart', 'load', 'loadend', 'timeout', 'abort', 'error'];
+const UPLOAD_EVENT_TYPES = ['progress', 'loadstart', 'load', 'loadend', 'timeout', 'abort', 'error'];
 
 // -----------------------------------------------------------------
 // Constructor
@@ -33,7 +33,8 @@ export default function XMLHttpRequest() {
   definePropertyStatus(this, scope);
   definePropertyStatusText(this, scope);
   definePropertyWithCredentials(this, scope);
-  defineEventHandlers(this, scope);
+  defineEventHandlerProperties(this, EVENT_TYPES);
+  defineEventHandlerProperties(scope.uploadEventTarget, UPLOAD_EVENT_TYPES);
   initializeEventHandlers(scope);
   this.open = createOpenMethod(this, scope);
   this.send = createSendMethod(this, scope);
@@ -78,10 +79,10 @@ function createScopeObject(xhr) {
 }
 
 function initializeEventHandlers(scope) {
-  eventTypes.forEach((eventType) => {
+  EVENT_TYPES.forEach((eventType) => {
     scope['on' + eventType] = null;
   });
-  uploadEventTypes.forEach((eventType) => {
+  UPLOAD_EVENT_TYPES.forEach((eventType) => {
     scope.uploadListeners['on' + eventType] = null;
   });
 }
@@ -186,32 +187,6 @@ function definePropertyResponseType(xhr, scope) {
         throw new Error("Unsupported responseType, only 'text' and 'arraybuffer' are supported");
       }
       scope.responseType = value;
-    }
-  });
-}
-
-function defineEventHandlers(xhr, scope) {
-  eventTypes.forEach((eventType) => {
-    defineEventHandler(eventType, xhr, scope);
-  });
-  uploadEventTypes.forEach((eventType) => {
-    defineEventHandler(eventType, scope.uploadEventTarget, scope.uploadListeners);
-  });
-}
-
-function defineEventHandler(eventType, target, listeners) {
-  let handler = 'on' + eventType;
-  Object.defineProperty(target, handler, {
-    get() {
-      return listeners[handler];
-    },
-    set(value) {
-      // mimicks the behavior of Firefox and Chromium
-      if (typeof value === 'function') {
-        target.removeEventListener(eventType, target[handler]);
-        listeners[handler] = value;
-        target.addEventListener(eventType, target[handler]);
-      }
     }
   });
 }

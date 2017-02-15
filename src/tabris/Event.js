@@ -133,3 +133,28 @@ export function addDOMEventTargetMethods(target) {
   };
 
 }
+
+export function defineEventHandlerProperties(target, types) {
+  types.forEach(type => defineEventHandlerProperty(target, type));
+}
+
+function defineEventHandlerProperty(target, type) {
+  let handler = 'on' + type;
+  let listener = null;
+  Object.defineProperty(target, handler, {
+    get() {
+      return listener;
+    },
+    set(value) {
+      // ignore other types, mimicks the behavior of Firefox and Chromium
+      if (typeof value === 'function') {
+        if (listener) {
+          target.removeEventListener(type, listener);
+        }
+        listener = value;
+        target.addEventListener(type, listener);
+      }
+    }
+  });
+}
+
