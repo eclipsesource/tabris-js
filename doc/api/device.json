@@ -61,7 +61,7 @@
       "parameters": [
         {
           "name": "event",
-          "type": "ChangeEvent<Device, string>",
+          "type": "ChangeEvent<this, string>",
           "description": "The change event for the orientation property."
         }
       ],

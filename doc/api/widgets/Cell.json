@@ -17,7 +17,7 @@
       "parameters": [
         {
           "name": "event",
-          "type": "ChangeEvent<Cell, any>",
+          "type": "ChangeEvent<this, any>",
           "description": "The change event for the item property."
         }
       ],
@@ -27,7 +27,7 @@
       "parameters": [
         {
           "name": "event",
-          "type": "ChangeEvent<Cell, number>",
+          "type": "ChangeEvent<this, number>",
           "description": "The change event for the itemIndex property."
         }
       ],

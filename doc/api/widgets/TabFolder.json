@@ -39,7 +39,7 @@
       "parameters": [
         {
           "name": "event",
-          "type": "ChangeEvent<TabFolder, Tab>",
+          "type": "ChangeEvent<this, Tab>",
           "description": "The change event for the selection property."
         }
       ],

@@ -33,7 +33,7 @@
       "parameters": [
         {
           "name": "event",
-          "type": "ChangeEvent<Picker, number>",
+          "type": "ChangeEvent<this, number>",
           "description": "The change event for the selectionIndex property."
         }
       ],
@@ -43,7 +43,7 @@
       "parameters": [
         {
           "name": "event",
-          "type": "ChangeEvent<Picker, any>",
+          "type": "ChangeEvent<this, any>",
           "description": "The change event for the selection property."
         }
       ],

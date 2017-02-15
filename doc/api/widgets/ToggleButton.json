@@ -32,7 +32,7 @@
       "parameters": [
         {
           "name": "event",
-          "type": "ChangeEvent<ToggleButton, boolean>",
+          "type": "ChangeEvent<this, boolean>",
           "description": "The change event for the selection property."
         }
       ],

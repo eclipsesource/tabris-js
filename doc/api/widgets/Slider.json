@@ -24,7 +24,7 @@
       "parameters": [
         {
           "name": "event",
-          "type": "ChangeEvent<Slider, number>",
+          "type": "ChangeEvent<this, number>",
           "description": "The change event for the selection property."
         }
       ],

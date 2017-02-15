@@ -265,16 +265,6 @@
     }
   },
   "events": {
-    "change:{property}": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "ChangeEvent<Widget, any>",
-          "description": "The change event for the changed property."
-        }
-      ],
-      "description": "Fired when the given property has changed. Change events for specific properties will only be documented separately if they may be triggered without calling `set`. "
-    },
     "tap": {
       "parameters": [
         {

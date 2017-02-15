@@ -86,7 +86,7 @@
       "parameters": [
         {
           "name": "event",
-          "type": "ChangeEvent<Video, string>",
+          "type": "ChangeEvent<this, string>",
           "description": "The change event for the state property."
         }
       ],
