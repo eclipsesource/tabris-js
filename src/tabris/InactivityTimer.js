@@ -12,11 +12,7 @@ const CONFIG = {
   },
 
   _events: {
-    timeout: {
-      trigger() {
-        this.trigger('timeout', this, {});
-      }
-    }
+    timeout: true
   }
 
 };

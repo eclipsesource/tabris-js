@@ -96,9 +96,8 @@ describe('ScrollView', function() {
       tabris._notify(scrollView.cid, 'scrollY', {offset: 42});
 
       checkListen('scrollY');
-      expect(listener).to.have.been.called;
-      expect(listener.firstCall.args[0]).to.equal(scrollView);
-      expect(listener.firstCall.args[1]).to.equal(42);
+      expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWithMatch({target: scrollView, offset: 42});
     });
 
     it('fires change:offsetY event', function() {
@@ -158,9 +157,8 @@ describe('ScrollView', function() {
       tabris._notify(scrollView.cid, 'scrollX', {offset: 42});
 
       checkListen('scrollX');
-      expect(listener).to.have.been.called;
-      expect(listener.firstCall.args[0]).to.equal(scrollView);
-      expect(listener.firstCall.args[1]).to.equal(42);
+      expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWithMatch({target: scrollView, offset: 42});
     });
 
     it('fires change:offsetX event', function() {

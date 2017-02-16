@@ -95,27 +95,20 @@ describe('SearchAction', function() {
       listener = spy();
     });
 
-    let checkEvent = function(value) {
-      expect(listener).to.have.been.calledOnce;
-      if (arguments.length === 1) {
-        expect(listener).to.have.been.calledWith(action, value, {});
-      } else {
-        expect(listener).to.have.been.calledWith(action, {});
-      }
-    };
-    let checkListen = function(event) {
+    function checkListen(event) {
       let listen = client.calls({op: 'listen', id: action.cid});
       expect(listen.length).to.equal(1);
       expect(listen[0].event).to.equal(event);
       expect(listen[0].listen).to.equal(true);
-    };
+    }
 
     it('select', function() {
       action.on('select', listener);
       tabris._notify(action.cid, 'select', {});
 
       checkListen('select');
-      checkEvent();
+      expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWith({target: action});
     });
 
     it('accept', function() {
@@ -123,7 +116,8 @@ describe('SearchAction', function() {
       tabris._notify(action.cid, 'accept', {text: 'foo'});
 
       checkListen('accept');
-      checkEvent('foo');
+      expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWith({target: action, text: 'foo'});
     });
 
   });

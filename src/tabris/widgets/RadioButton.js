@@ -4,11 +4,7 @@ const CONFIG = {
   _name: 'RadioButton',
   _type: 'tabris.RadioButton',
   _events: {
-    select: {
-      trigger(name, event) {
-        this.trigger('select', this, event.selection, {});
-      }
-    }
+    select: true
   },
   _properties: {
     text: {type: 'string', default: ''},
@@ -26,7 +22,7 @@ export default class RadioButton extends Widget.extend(CONFIG) {
     }
   }
 
-  $triggerChangeSelection(widget, selection) {
+  $triggerChangeSelection({selection}) {
     this._triggerChangeEvent('selection', selection);
   }
 

@@ -112,9 +112,11 @@ describe('App', function() {
   it('triggers pause event', function() {
     let listener = spy();
     app.on('pause', listener);
+
     tabris._notify(app.cid, 'pause');
 
-    expect(listener).to.have.been.called;
+    expect(listener).to.have.been.calledOnce;
+    expect(listener).to.have.been.calledWithMatch({target: app});
   });
 
   it('listens for resume event', function() {
@@ -129,9 +131,11 @@ describe('App', function() {
   it('triggers resume event', function() {
     let listener = spy();
     app.on('resume', listener);
+
     tabris._notify(app.cid, 'resume');
 
-    expect(listener).to.have.been.called;
+    expect(listener).to.have.been.calledOnce;
+    expect(listener).to.have.been.calledWithMatch({target: app});
   });
 
   it('listens for foreground event', function() {
@@ -146,9 +150,11 @@ describe('App', function() {
   it('triggers foreground event', function() {
     let listener = spy();
     app.on('foreground', listener);
+
     tabris._notify(app.cid, 'foreground');
 
-    expect(listener).to.have.been.called;
+    expect(listener).to.have.been.calledOnce;
+    expect(listener).to.have.been.calledWithMatch({target: app});
   });
 
   it('listens for background event', function() {
@@ -163,9 +169,11 @@ describe('App', function() {
   it('triggers background event', function() {
     let listener = spy();
     app.on('background', listener);
+
     tabris._notify(app.cid, 'background');
 
-    expect(listener).to.have.been.called;
+    expect(listener).to.have.been.calledOnce;
+    expect(listener).to.have.been.calledWithMatch({target: app});
   });
 
   it('can not be disposed', function() {
@@ -187,7 +195,8 @@ describe('App', function() {
 
     tabris._notify(app.cid, 'backnavigation');
 
-    expect(listener).to.have.been.calledWith(app, match.object);
+    expect(listener).to.have.been.calledOnce;
+    expect(listener).to.have.been.calledWithMatch({target: app});
   });
 
   it('backnavigation event returns false by default', function() {
@@ -199,17 +208,7 @@ describe('App', function() {
   });
 
   it('backnavigation event returns true if preventDefault is called', function() {
-    app.on('backnavigation', function(app, event) {
-      event.preventDefault = true;
-    });
-
-    let returnValue = tabris._notify(app.cid, 'backnavigation');
-
-    expect(returnValue).to.equal(true);
-  });
-
-  it('backnavigation event returns true if preventDefault is set to true', function() {
-    app.on('backnavigation', function(app, event) {
+    app.on('backnavigation', function(event) {
       event.preventDefault();
     });
 

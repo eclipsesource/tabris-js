@@ -33,15 +33,7 @@ const CONFIG = {
   },
 
   _events: {
-    'close': {
-      trigger(name, event) {
-        if (event.button) {
-          this.trigger('close:' + event.button, this);
-        }
-        this.trigger('close', this, event.button || '');
-        this.dispose();
-      }
-    }
+    'close': true
   }
 
 };
@@ -52,6 +44,18 @@ export default class AlertDialog extends NativeObject.extend(CONFIG) {
     super._create(type, properties);
     this._nativeListen('close', true);
     return this;
+  }
+
+  _trigger(name, event) {
+    if (name === 'close') {
+      if (event.button) {
+        this.trigger('close:' + event.button, {target: this});
+      }
+      this.trigger('close', {target: this, button: event.button || ''});
+      this.dispose();
+    } else {
+      super._trigger(name, event);
+    }
   }
 
   open() {

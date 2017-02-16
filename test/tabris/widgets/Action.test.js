@@ -107,7 +107,7 @@ describe('Action', function() {
       tabris._notify(action.cid, 'select', {});
 
       expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWith(action, {});
+      expect(listener).to.have.been.calledWithMatch({target: action});
     });
 
   });

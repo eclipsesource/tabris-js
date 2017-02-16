@@ -4,11 +4,7 @@ const CONFIG = {
   _name: 'Slider',
   _type: 'tabris.Slider',
   _events: {
-    select: {
-      trigger(name, event) {
-        this.trigger('select', this, event.selection, {});
-      }
-    }
+    select: true
   },
   _properties: {
     minimum: {type: 'integer', default: 0},
@@ -27,7 +23,7 @@ export default class Slider extends Widget.extend(CONFIG) {
     }
   }
 
-  $triggerChangeSelection(widget, selection) {
+  $triggerChangeSelection({selection}) {
     this._triggerChangeEvent('selection', selection);
   }
 

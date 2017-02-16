@@ -76,57 +76,12 @@ const CONFIG = {
   },
 
   _events: {
-    refresh: {
-      trigger(name, event) {
-        this.trigger('refresh', this, event);
-      }
-    },
-    requestinfo: {
-      trigger(name, event) {
-        let item = this._getItem(this._items, event.index);
-        let type = resolveProperty(this, 'cellType', item);
-        let height = resolveProperty(this, 'itemHeight', item, type);
-        let typeId = encodeCellType(this, type);
-        this._nativeCall('describeItem', {index: event.index, type: typeId, height});
-      }
-    },
-    createitem: {
-      trigger(name, event) {
-        let cell = new Cell();
-        cell._parent = this;
-        this._addChild(cell);
-        this._nativeCall('addItem', {widget: cell.cid});
-        let initializeCell = this.get('initializeCell');
-        if (typeof initializeCell !== 'function') {
-          console.warn('initializeCell callback missing');
-        } else {
-          initializeCell(cell, decodeCellType(this, event.type));
-        }
-      }
-    },
-    populateitem: {
-      trigger(name, event) {
-        let cell = tabris._proxies.find(event.widget);
-        let item = this._getItem(this._items, event.index);
-        cell._storeProperty('itemIndex', event.index);
-        if (item !== cell._getStoredProperty('item')) {
-          cell._storeProperty('item', item);
-        } else {
-          cell._triggerChangeEvent('item', item);
-        }
-      }
-    },
-    select: {
-      trigger(name, event) {
-        let item = this._getItem(this._items, event.index);
-        this.trigger('select', this, item, {index: event.index});
-      }
-    },
-    scroll: {
-      trigger(name, event) {
-        this.trigger('scroll', this, event);
-      }
-    }
+    refresh: true,
+    requestinfo: true,
+    createitem: true,
+    populateitem: true,
+    select: true,
+    scroll: true
   }
 
 };
@@ -239,6 +194,41 @@ export default class CollectionView extends Widget.extend(CONFIG) {
       this._onoff('scroll', listening, triggerChangeLastVisibleIndex);
     } else {
       super._listen(name, listening);
+    }
+  }
+
+  _trigger(name, event) {
+    if (name === 'requestinfo') {
+      let item = this._getItem(this._items, event.index);
+      let type = resolveProperty(this, 'cellType', item);
+      let height = resolveProperty(this, 'itemHeight', item, type);
+      let typeId = encodeCellType(this, type);
+      this._nativeCall('describeItem', {index: event.index, type: typeId, height});
+    } else if (name === 'createitem') {
+      let cell = new Cell();
+      cell._parent = this;
+      this._addChild(cell);
+      this._nativeCall('addItem', {widget: cell.cid});
+      let initializeCell = this.get('initializeCell');
+      if (typeof initializeCell !== 'function') {
+        console.warn('initializeCell callback missing');
+      } else {
+        initializeCell(cell, decodeCellType(this, event.type));
+      }
+    } else if (name === 'populateitem') {
+      let cell = tabris._proxies.find(event.widget);
+      let item = this._getItem(this._items, event.index);
+      cell._storeProperty('itemIndex', event.index);
+      if (item !== cell._getStoredProperty('item')) {
+        cell._storeProperty('item', item);
+      } else {
+        cell._triggerChangeEvent('item', item);
+      }
+    } else if (name === 'select') {
+      let item = this._getItem(this._items, event.index);
+      this.trigger('select', {target: this, item, index: event.index});
+    } else {
+      super._trigger(name, event);
     }
   }
 

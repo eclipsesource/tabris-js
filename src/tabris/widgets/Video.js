@@ -20,17 +20,19 @@ const CONFIG = {
     state: {access: readOnly}
   },
   _events: {
-    'change:state': {
-      name: 'statechange',
-      trigger(name, event) {
-        this._triggerChangeEvent('state', event.state);
-      }
-    }
-  },
-
+    'change:state': 'statechange'
+  }
 };
 
 export default class Video extends Widget.extend(CONFIG) {
+
+  _trigger(name, event) {
+    if (name === 'statechange') {
+      this._triggerChangeEvent('state', event.state);
+    } else {
+      super._trigger(name, event);
+    }
+  }
 
   pause() {
     this._nativeCall('pause');

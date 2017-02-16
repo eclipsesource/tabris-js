@@ -43,15 +43,6 @@ describe('Common Widgets', function() {
     return client.calls({op: 'create'})[0];
   }
 
-  function checkEvent(value) {
-    expect(listener).to.have.been.calledOnce;
-    if (arguments.length > 0) {
-      expect(listener).to.have.been.calledWith(widget, value);
-    } else {
-      expect(listener).to.have.been.calledWith(widget);
-    }
-  }
-
   function checkListen(event) {
     let listen = client.calls({op: 'listen', id: widget.cid});
     expect(listen.length).to.equal(1);
@@ -81,7 +72,8 @@ describe('Common Widgets', function() {
 
     tabris._notify(widget.cid, 'select', {});
 
-    checkEvent();
+    expect(listener).to.have.been.calledOnce;
+    expect(listener).to.have.been.calledWithMatch({target: widget});
     checkListen('select');
   });
 
@@ -102,8 +94,11 @@ describe('Common Widgets', function() {
 
   it('CheckBox select', function() {
     widget = new CheckBox().on('select', listener);
+
     tabris._notify(widget.cid, 'select', {selection: true});
-    checkEvent(true);
+
+    expect(listener).to.have.been.calledOnce;
+    expect(listener).to.have.been.calledWithMatch({target: widget, selection: true});
     checkListen('select');
   });
 
@@ -152,8 +147,11 @@ describe('Common Widgets', function() {
 
   it('RadioButton select', function() {
     widget = new RadioButton().on('select', listener);
+
     tabris._notify(widget.cid, 'select', {selection: true});
-    checkEvent(true);
+
+    expect(listener).to.have.been.calledOnce;
+    expect(listener).to.have.been.calledWithMatch({target: widget, selection: true});
     checkListen('select');
   });
 
@@ -201,8 +199,11 @@ describe('Common Widgets', function() {
 
   it('Slider select', function() {
     widget = new Slider().on('select', listener);
+
     tabris._notify(widget.cid, 'select', {selection: 23});
-    checkEvent(23);
+
+    expect(listener).to.have.been.calledOnce;
+    expect(listener).to.have.been.calledWithMatch({target: widget, selection: 23});
     checkListen('select');
   });
 
@@ -249,21 +250,29 @@ describe('Common Widgets', function() {
 
     it('input event', function() {
       widget = new TextInput().on('input', listener);
+
       tabris._notify(widget.cid, 'input', {text: 'foo'});
-      checkEvent('foo');
+
+      expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWithMatch({target: widget, text: 'foo'});
       checkListen('input');
     });
 
     it('accept event', function() {
       widget = new TextInput().on('accept', listener);
+
       tabris._notify(widget.cid, 'accept', {text: 'foo'});
-      checkEvent('foo');
+
+      expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWithMatch({target: widget, text: 'foo'});
       checkListen('accept');
     });
 
     it('change:text event', function() {
       widget = new TextInput().on('change:text', listener);
+
       tabris._notify(widget.cid, 'input', {text: 'foo'});
+
       expect(listener).to.have.been.calledOnce;
       expect(listener).to.have.been.calledWithMatch({target: widget, value: 'foo'});
       checkListen('input');
@@ -311,7 +320,8 @@ describe('Common Widgets', function() {
 
     tabris._notify(widget.cid, 'select', {selection: true});
 
-    checkEvent(true);
+    expect(listener).to.have.been.calledOnce;
+    expect(listener).to.have.been.calledWithMatch({target: widget, selection: true});
     checkListen('select');
   });
 
@@ -327,6 +337,7 @@ describe('Common Widgets', function() {
 
   it('ToggleButton change:selection', function() {
     widget = new ToggleButton().on('change:selection', listener);
+
     tabris._notify(widget.cid, 'select', {selection: true});
 
     expect(listener).to.have.been.calledOnce;
@@ -336,8 +347,11 @@ describe('Common Widgets', function() {
 
   it('ToggleButton select', function() {
     widget = new ToggleButton().on('select', listener);
+
     tabris._notify(widget.cid, 'select', {selection: true});
-    checkEvent(true);
+
+    expect(listener).to.have.been.calledOnce;
+    expect(listener).to.have.been.calledWithMatch({target: widget, selection: true});
     checkListen('select');
   });
 

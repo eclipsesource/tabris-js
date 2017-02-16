@@ -223,7 +223,7 @@ describe('TabFolder', function() {
       tabris._notify(tabFolder.cid, 'select', {selection: tab.cid});
 
       expect(listener).to.have.been.calledOnce;
-      expect(listener.firstCall).to.have.been.calledWith(tabFolder, tab, {});
+      expect(listener.firstCall).to.have.been.calledWithMatch({target: tabFolder, tab});
     });
 
   });
@@ -334,9 +334,8 @@ describe('TabFolder', function() {
       tabris._notify(tabFolder.cid, 'scroll', {selection: tab.cid, offset: 48});
 
       checkListen('scroll');
-      expect(listener).to.have.been.called;
-      expect(listener.firstCall.args[0]).to.equal(tabFolder);
-      expect(listener.firstCall.args[1]).to.eql({selection: tab, offset: 48});
+      expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWithMatch({target: tabFolder, selection: tab, offset: 48});
     });
 
     it('fires scroll event with null selection if tab not found', function() {
@@ -346,9 +345,8 @@ describe('TabFolder', function() {
       tabris._notify(tabFolder.cid, 'scroll', {selection: 'not tab', offset: 48});
 
       checkListen('scroll');
-      expect(listener).to.have.been.called;
-      expect(listener.firstCall.args[0]).to.equal(tabFolder);
-      expect(listener.firstCall.args[1]).to.eql({selection: null, offset: 48});
+      expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWithMatch({target: tabFolder, selection: null, offset: 48});
     });
 
   });

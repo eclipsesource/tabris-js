@@ -28,16 +28,8 @@ const CONFIG = {
   },
 
   _events: {
-    back: {
-      trigger() {
-        this._handleBackNavigation();
-      }
-    },
-    backnavigation: {
-      trigger() {
-        this._handleBackNavigation();
-      }
-    }
+    back: true,
+    backnavigation: true
   }
 
 };
@@ -114,13 +106,21 @@ export default class NavigationView extends Widget.extend(CONFIG) {
     }
   }
 
+  _trigger(name, event) {
+    if (name === 'back' || name === 'backnavigation') {
+      this._handleBackNavigation();
+    } else {
+      super._trigger(name, event);
+    }
+  }
+
   _triggerAppear() {
     if (this._inPopAbove) {
       return;
     }
     let topPage = this.pages().last();
     if (topPage) {
-      topPage.trigger('appear', topPage);
+      topPage.trigger('appear', {target: topPage});
     }
   }
 
@@ -130,7 +130,7 @@ export default class NavigationView extends Widget.extend(CONFIG) {
     }
     let topPage = this.pages().last();
     if (topPage) {
-      topPage.trigger('disappear', topPage);
+      topPage.trigger('disappear', {target: topPage});
     }
   }
 

@@ -273,7 +273,8 @@ describe('NativeObject', function() {
 
         object._trigger('bar', {bar: 23});
 
-        expect(listener).to.have.been.calledWith({bar: 23});
+        expect(listener).to.have.been.calledOnce;
+        expect(listener).to.have.been.calledWith({target: object, bar: 23});
       });
 
       it('notifies listeners with translated event name', function() {
@@ -283,7 +284,8 @@ describe('NativeObject', function() {
 
         object._trigger('foo', {});
 
-        expect(listener).to.have.been.calledWith({});
+        expect(listener).to.have.been.calledOnce;
+        expect(listener).to.have.been.calledWith({target: object});
       });
 
       it('calls custom trigger function', function() {

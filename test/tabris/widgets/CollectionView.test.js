@@ -453,7 +453,7 @@ describe('CollectionView', function() {
             view._trigger('select', {index: 0});
 
             expect(listener).to.have.been.calledOnce;
-            expect(listener).to.have.been.calledWith(view, 'a', {index: 0});
+            expect(listener).to.have.been.calledWithMatch({target: view, item: 'a', index: 0});
             expect(console.warn).to.have.not.been.called;
           });
 
@@ -473,7 +473,7 @@ describe('CollectionView', function() {
             view._trigger('scroll', {deltaX: 23, deltaY: 42});
 
             expect(listener).to.have.been.calledOnce;
-            expect(listener).to.have.been.calledWith(view, {deltaX: 23, deltaY: 42});
+            expect(listener).to.have.been.calledWithMatch({target: view, deltaX: 23, deltaY: 42});
           });
 
         });

@@ -4,11 +4,7 @@ const CONFIG = {
   _name: 'ToggleButton',
   _type: 'tabris.ToggleButton',
   _events: {
-    select: {
-      trigger(name, event) {
-        this.trigger('select', this, event.selection, {});
-      }
-    }
+    select: true
   },
   _properties: {
     text: {type: 'string', default: ''},
@@ -28,7 +24,7 @@ export default class ToggleButton extends Widget.extend(CONFIG) {
     }
   }
 
-  $triggerChangeSelection(widget, selection) {
+  $triggerChangeSelection({selection}) {
     this._triggerChangeEvent('selection', selection);
   }
 

@@ -3,9 +3,7 @@ import Tab from './Tab';
 
 const CONFIG = {
   _name: 'TabFolder',
-
   _type: 'tabris.TabFolder',
-
   _properties: {
     paging: {type: 'boolean', default: false},
     tabBarLocation: {type: ['choice', ['top', 'bottom', 'hidden', 'auto']], default: 'auto'},
@@ -28,20 +26,9 @@ const CONFIG = {
     }
   },
   _events: {
-    select: {
-      trigger(name, event) {
-        let tab = tabris._proxies.find(event.selection);
-        this.trigger('select', this, tab, {});
-      }
-    },
-    scroll: {
-      trigger(name, event) {
-        event.selection = event.selection ? tabris._proxies.find(event.selection) : null;
-        this.trigger('scroll', this, event);
-      }
-    }
+    select: true,
+    scroll: true
   }
-
 };
 
 export default class TabFolder extends Widget.extend(CONFIG) {
@@ -58,7 +45,19 @@ export default class TabFolder extends Widget.extend(CONFIG) {
     }
   }
 
-  $triggerChangeSelection(widget, tab) {
+  _trigger(name, event) {
+    if (name === 'select') {
+      let tab = tabris._proxies.find(event.selection);
+      this.trigger('select', {target: this, tab});
+    } else if (name === 'scroll') {
+      let selection = event.selection ? tabris._proxies.find(event.selection) : null;
+      this.trigger('scroll', {target: this, selection, offset: event.offset});
+    } else {
+      super._trigger(name, event);
+    }
+  }
+
+  $triggerChangeSelection({tab}) {
     this._triggerChangeEvent('selection', tab);
   }
 

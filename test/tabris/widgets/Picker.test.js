@@ -36,20 +36,12 @@ describe('Picker', function() {
   describe('events:', function() {
 
     let listener;
-    let checkEvent = function(value) {
-      expect(listener).to.have.been.calledOnce;
-      if (arguments.length > 0) {
-        expect(listener).to.have.been.calledWith(picker, value);
-      } else {
-        expect(listener).to.have.been.calledWith(picker);
-      }
-    };
-    let checkListen = function(event) {
+    function checkListen(event) {
       let listen = client.calls({op: 'listen', id: picker.cid});
       expect(listen.length).to.equal(1);
       expect(listen[0].event).to.equal(event);
       expect(listen[0].listen).to.equal(true);
-    };
+    }
 
     beforeEach(function() {
       listener = spy();
@@ -61,8 +53,9 @@ describe('Picker', function() {
 
       tabris._notify(picker.cid, 'select', {selectionIndex: 1});
 
-      checkEvent('bar', {index: 1});
       checkListen('select');
+      expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWithMatch({target: picker, item: 'bar', index: 1});
     });
 
     it('change:selection on interactive change', function() {
@@ -71,9 +64,9 @@ describe('Picker', function() {
 
       tabris._notify(picker.cid, 'select', {selectionIndex: 1});
 
+      checkListen('select');
       expect(listener).to.have.been.calledOnce;
       expect(listener).to.have.been.calledWithMatch({target: picker, value: 'bar'});
-      checkListen('select');
     });
 
     it('change:selection on programmatic change', function() {

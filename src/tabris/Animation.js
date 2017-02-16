@@ -7,21 +7,8 @@ const CONFIG = {
   _type: 'tabris.Animation',
 
   _events: {
-    Start: {
-      trigger() {
-        this._target.trigger('animationstart', Object.assign({target: this._target}, this._options));
-      }
-    },
-    Completion: {
-      trigger() {
-        this._target.off('dispose', this.abort, this);
-        this._target.trigger('animationend', Object.assign({target: this._target}, this._options));
-        if (this._resolve) {
-          this._resolve();
-        }
-        this.dispose();
-      }
-    }
+    Start: true,
+    Completion: true
   },
 
   _properties: {
@@ -43,6 +30,21 @@ class Animation extends NativeObject.extend(CONFIG) {
     this._nativeListen('Start', true);
     this._nativeListen('Completion', true);
     return this;
+  }
+
+  _trigger(name, event) {
+    if (name === 'Start') {
+      this._target.trigger('animationstart', Object.assign({target: this._target}, this._options));
+    } else if (name === 'Completion') {
+      this._target.off('dispose', this.abort, this);
+      this._target.trigger('animationend', Object.assign({target: this._target}, this._options));
+      if (this._resolve) {
+        this._resolve();
+      }
+      this.dispose();
+    } else {
+      super._trigger(name, event);
+    }
   }
 
   start() {

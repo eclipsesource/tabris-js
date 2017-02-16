@@ -23,11 +23,7 @@ const CONFIG = {
   },
 
   _events: {
-    select: {
-      trigger(name, event) {
-        this.trigger('select', this, event);
-      }
-    }
+    select: true
   }
 
 };

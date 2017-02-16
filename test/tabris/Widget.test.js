@@ -247,7 +247,7 @@ describe('Widget', function() {
         child.dispose();
 
         expect(listener).to.have.been.calledOnce;
-        expect(listener).to.have.been.calledWith(parent, child, {index: 0});
+        expect(listener).to.have.been.calledWith({target: parent, child, index: 0});
       });
 
       it("notifies parent's `removechild` listener with correct index", function() {
@@ -257,7 +257,7 @@ describe('Widget', function() {
 
         child.dispose();
 
-        expect(listener).to.have.been.calledWith(parent, child, {index: 1});
+        expect(listener).to.have.been.calledWith({target: parent, child, index: 1});
       });
 
       it("notifies all children's dispose listeners", function() {
@@ -338,7 +338,7 @@ describe('Widget', function() {
 
         it('notifies `addchild` listener with arguments parent, child, event', function() {
           expect(listener).to.have.been.calledOnce;
-          expect(listener).to.have.been.calledWith(widget, child1, {index: 0});
+          expect(listener).to.have.been.calledWithMatch({target: widget, child: child1, index: 0});
         });
 
         it('children() contains appended child', function() {
@@ -596,7 +596,7 @@ describe('Widget', function() {
 
           widget.insertBefore(other);
 
-          expect(listener).to.have.been.calledWith(parent1, widget, {index: 0});
+          expect(listener).to.have.been.calledWith({target: parent1, child: widget, index: 0});
         });
 
         it('triggers add event with index', function() {
@@ -604,7 +604,7 @@ describe('Widget', function() {
 
           widget.insertBefore(other);
 
-          expect(listener).to.have.been.calledWith(parent2, widget, {index: 0});
+          expect(listener).to.have.been.calledWithMatch({target: parent2, child: widget, index: 0});
         });
 
       });
@@ -705,7 +705,7 @@ describe('Widget', function() {
 
           widget.insertAfter(other);
 
-          expect(listener).to.have.been.calledWith(parent1, widget, {index: 0});
+          expect(listener).to.have.been.calledWithMatch({target: parent1, child: widget, index: 0});
         });
 
         it('triggers `addchild` event with index', function() {
@@ -713,7 +713,7 @@ describe('Widget', function() {
 
           widget.insertAfter(other);
 
-          expect(listener).to.have.been.calledWith(parent2, widget, {index: 1});
+          expect(listener).to.have.been.calledWithMatch({target: parent2, child: widget, index: 1});
         });
 
       });

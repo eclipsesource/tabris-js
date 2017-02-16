@@ -4,11 +4,7 @@ const CONFIG = {
   _name: 'Switch',
   _type: 'tabris.Switch',
   _events: {
-    select: {
-      trigger(name, event) {
-        this.trigger('select', this, event.selection, {});
-      }
-    }
+    select: true
   },
   _properties: {
     selection: {type: 'boolean', nocache: true},
@@ -29,7 +25,7 @@ export default class Switch extends Widget.extend(CONFIG) {
     }
   }
 
-  $triggerChangeSelection(widget, selection) {
+  $triggerChangeSelection({selection}) {
     this._triggerChangeEvent('selection', selection);
   }
 

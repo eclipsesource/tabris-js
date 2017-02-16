@@ -16,16 +16,8 @@ const CONFIG = {
   },
 
   _events: {
-    scrollX: {
-      trigger(name, {offset}) {
-        this.trigger('scrollX', this, offset, {});
-      }
-    },
-    scrollY: {
-      trigger(name, {offset}) {
-        this.trigger('scrollY', this, offset, {});
-      }
-    }
+    scrollX: true,
+    scrollY: true
   }
 
 };
@@ -42,11 +34,11 @@ export default class ScrollView extends Widget.extend(CONFIG) {
     }
   }
 
-  $triggerChangeOffsetX(widget, offset) {
+  $triggerChangeOffsetX({offset}) {
     this._triggerChangeEvent('offsetX', offset);
   }
 
-  $triggerChangeOffsetY(widget, offset) {
+  $triggerChangeOffsetY({offset}) {
     this._triggerChangeEvent('offsetY', offset);
   }
 

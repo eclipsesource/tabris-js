@@ -7,31 +7,10 @@ const CONFIG = {
   _type: 'tabris.WebView',
 
   _events: {
-    navigate: {
-      trigger(name, event) {
-        let intercepted = false;
-        event.preventDefault = function() {
-          intercepted = true;
-        };
-        this.trigger(name, this, event);
-        return intercepted;
-      }
-    },
-    load: {
-      trigger(name, event) {
-        this.trigger('load', this, event);
-      }
-    },
-    download: {
-      trigger(name, event) {
-        this.trigger('download', this, event);
-      }
-    },
-    message: {
-      trigger(name, event) {
-        this.trigger('message', this, event);
-      }
-    }
+    navigate: true,
+    load: true,
+    download: true,
+    message: true
   },
 
   _properties: {
@@ -55,6 +34,22 @@ export default class WebView extends Widget.extend(CONFIG) {
 
   _loadData(data, mimeType) {
     this._nativeCall('loadData', {data, mimeType});
+  }
+
+  _trigger(name, event) {
+    if (name === 'navigate') {
+      let intercepted = false;
+      Object.assign(event, {
+        target: this,
+        preventDefault() {
+          intercepted = true;
+        }
+      });
+      this.trigger(name, event);
+      return intercepted;
+    } else {
+      super._trigger(name, event);
+    }
   }
 
 }

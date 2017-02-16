@@ -4,11 +4,7 @@ const CONFIG = {
   _name: 'Button',
   _type: 'tabris.Button',
   _events: {
-    select: {
-      trigger(name, event) {
-        this.trigger('select', this, event);
-      }
-    }
+    select: true
   },
   _properties: {
     alignment: {type: ['choice', ['left', 'right', 'center']], default: 'center'},

@@ -15,12 +15,7 @@ const CONFIG = {
     win_primaryInput: 'any'
   },
   _events: {
-    'change:orientation': {
-      name: 'orientationchange',
-      trigger(name, event) {
-        this._triggerChangeEvent('orientation', event.orientation);
-      }
-    }
+    'change:orientation': 'orientationchange'
   }
 };
 
@@ -34,7 +29,15 @@ export default class Device extends NativeObject.extend(CONFIG) {
   }
 
   _setProperty() {
+    // prevent overwriting properties
+  }
 
+  _trigger(name, event) {
+    if (name === 'orientationchange') {
+      this._triggerChangeEvent('orientation', event.orientation);
+    } else {
+      super._trigger(name, event);
+    }
   }
 
   dispose() {

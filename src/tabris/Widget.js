@@ -160,10 +160,10 @@ export default class Widget extends NativeObject {
     }
     if (typeof index === 'number') {
       this._children.splice(index, 0, child);
-      this.trigger('addchild', this, child, {index});
+      this.trigger('addchild', {target: this, child, index});
     } else {
       this._children.push(child);
-      this.trigger('addchild', this, child, {index: this._children.length - 1});
+      this.trigger('addchild', {target: this, child, index: this._children.length - 1});
     }
   }
 
@@ -172,7 +172,7 @@ export default class Widget extends NativeObject {
       let index = this._children.indexOf(child);
       if (index !== -1) {
         this._children.splice(index, 1);
-        this.trigger('removechild', this, child, {index});
+        this.trigger('removechild', {target: this, child, index});
       }
     }
   }

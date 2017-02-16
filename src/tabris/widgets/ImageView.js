@@ -4,11 +4,7 @@ const CONFIG = {
   _name: 'ImageView',
   _type: 'tabris.ImageView',
   _events: {
-    load: {
-      trigger(name, event) {
-        this.trigger('load', this, event);
-      }
-    }
+    load: true
   },
   _properties: {
     image: {type: 'image', default: null},

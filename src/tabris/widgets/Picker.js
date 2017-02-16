@@ -7,11 +7,7 @@ const CONFIG = {
   _type: 'tabris.Picker',
 
   _events: {
-    select: {
-      trigger(name, event) {
-        this.trigger('select', this, this._getItem(event.selectionIndex), {index: event.selectionIndex});
-      }
-    }
+    select: true
   },
 
   _properties: {
@@ -105,12 +101,20 @@ export default class Picker extends Widget.extend(CONFIG) {
     }
   }
 
-  $triggerChangeSelection(widget, item) {
+  _trigger(name, event) {
+    if (name === 'select') {
+      this.trigger('select', {target: this, item: this._getItem(event.selectionIndex), index: event.selectionIndex});
+    } else {
+      super._trigger(name, event);
+    }
+  }
+
+  $triggerChangeSelection({item}) {
     this._triggerChangeEvent('selection', item);
   }
 
-  $triggerChangeSelectionIndex(widget, item, options) {
-    this._triggerChangeEvent('selectionIndex', options.index);
+  $triggerChangeSelectionIndex({index}) {
+    this._triggerChangeEvent('selectionIndex', index);
   }
 
 }

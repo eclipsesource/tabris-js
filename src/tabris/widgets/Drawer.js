@@ -26,16 +26,8 @@ const CONFIG = {
   },
 
   _events: {
-    open: {
-      trigger() {
-        this.trigger('open', this);
-      }
-    },
-    close: {
-      trigger() {
-        this.trigger('close', this);
-      }
-    }
+    open: true,
+    close: true
   },
 
 };

@@ -4,26 +4,10 @@ const CONFIG = {
   _name: 'TextInput',
   _type: 'tabris.TextInput',
   _events: {
-    focus: {
-      trigger() {
-        this.trigger('focus', this);
-      }
-    },
-    blur:  {
-      trigger() {
-        this.trigger('blur', this);
-      }
-    },
-    accept: {
-      trigger(name, event) {
-        this.trigger('accept', this, event.text, {});
-      }
-    },
-    input: {
-      trigger(name, event) {
-        this.trigger('input', this, event.text, {});
-      }
-    }
+    focus: true,
+    blur:  true,
+    accept: true,
+    input: true
   },
   _properties: {
     type: ['choice', ['default', 'password', 'search', 'multiline']],
@@ -54,7 +38,7 @@ export default class TextInput extends Widget.extend(CONFIG) {
     }
   }
 
-  $triggerChangeSelection(widget, text) {
+  $triggerChangeSelection({text}) {
     this._triggerChangeEvent('text', text);
   }
 

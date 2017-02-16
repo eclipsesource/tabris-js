@@ -143,8 +143,10 @@ describe('AlertDialog', function() {
 
       tabris._notify(dialog.cid, 'close', {button: 'ok'});
 
-      expect(closeOk).to.have.been.calledWith(dialog);
-      expect(close).to.have.been.calledWith(dialog, 'ok');
+      expect(closeOk).to.have.been.calledOnce;
+      expect(closeOk).to.have.been.calledWithMatch({target: dialog});
+      expect(close).to.have.been.calledOnce;
+      expect(close).to.have.been.calledWithMatch({target: dialog, button: 'ok'});
     });
 
     it('without button fires close only', function() {
@@ -156,7 +158,8 @@ describe('AlertDialog', function() {
       tabris._notify(dialog.cid, 'close', {});
 
       expect(closeOk).not.to.have.been.called;
-      expect(close).to.have.been.calledWith(dialog, '');
+      expect(close).to.have.been.calledOnce;
+      expect(close).to.have.been.calledWithMatch({target: dialog, button: ''});
     });
 
   });

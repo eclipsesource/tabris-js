@@ -35,25 +35,14 @@ const CONFIG = {
     }
   },
   _events: {
-    foreground: {trigger: triggerWithTarget},
-    resume: {trigger: triggerWithTarget},
-    pause: {trigger: triggerWithTarget},
-    background: {trigger: triggerWithTarget},
-    terminate: {trigger: triggerWithTarget},
-    open: {name: 'Open', trigger: triggerWithTarget},
-    patchInstall: {trigger: notifyPatchCallback},
-    backnavigation: {
-      trigger() {
-        let intercepted = false;
-        let event = {};
-        event.preventDefault = function() {
-          intercepted = true;
-        };
-        this.trigger('backnavigation', this, event);
-        // TODO [2.0]: Remove compat support for setting preventDefault to false
-        return intercepted || (event.preventDefault === true);
-      }
-    }
+    foreground: true,
+    resume: true,
+    pause: true,
+    background: true,
+    terminate: true,
+    open: 'Open',
+    patchInstall: true,
+    backnavigation: true
   },
 };
 
@@ -95,6 +84,37 @@ export default class App extends NativeObject.extend(CONFIG) {
     }
   }
 
+  _trigger(name, event) {
+    if (name === 'backnavigation') {
+      let cancelled = false;
+      this.trigger('backnavigation', {
+        target: this,
+        preventDefault() {
+          cancelled = true;
+        }
+      });
+      return cancelled;
+    } else if (name === 'patchInstall') {
+      this._listen('patchInstall', false);
+      let callback = this._pendingPatchCallback;
+      delete this._pendingPatchCallback;
+      if (typeof callback === 'function') {
+        if (event.error) {
+          callback(new Error(event.error));
+        } else {
+          try {
+            let patch = event.success ? JSON.parse(event.success) : null;
+            callback(null, patch);
+          } catch (error) {
+            callback(new Error('Failed to parse patch.json'));
+          }
+        }
+      }
+    } else {
+      super._trigger(name, event);
+    }
+  }
+
 }
 
 export function create() {
@@ -103,28 +123,6 @@ export function create() {
   Object.defineProperty(app, 'version', {get: () => app._nativeGet('version')});
   Object.defineProperty(app, 'versionCode', {get: () => app._nativeGet('versionId')});
   return app;
-}
-
-function triggerWithTarget(name, event) {
-  this.trigger(name, this, event);
-}
-
-function notifyPatchCallback(name, event) {
-  this._listen('patchInstall', false);
-  let callback = this._pendingPatchCallback;
-  delete this._pendingPatchCallback;
-  if (typeof callback === 'function') {
-    if (event.error) {
-      callback(new Error(event.error));
-    } else {
-      try {
-        let patch = event.success ? JSON.parse(event.success) : null;
-        callback(null, patch);
-      } catch (error) {
-        callback(new Error('Failed to parse patch.json'));
-      }
-    }
-  }
 }
 
 function normalizePath(path) {

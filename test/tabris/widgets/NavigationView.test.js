@@ -200,15 +200,21 @@ describe('NavigationView', function() {
 
     it('is triggered when a page is appended', function() {
       page1.on('appear', listener);
+
       navigationView.append(page1);
+
       expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWithMatch({target: page1});
     });
 
     it('is triggered when a covering page is removed', function() {
       navigationView.append(page1, page2);
       page1.on('appear', listener);
+
       page2.detach();
+
       expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWithMatch({target: page1});
     });
 
   });
@@ -226,31 +232,43 @@ describe('NavigationView', function() {
     it('is triggered when a page is covered by another page', function() {
       navigationView.append(page1);
       page1.on('disappear', listener);
+
       navigationView.append(page2);
+
       expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWithMatch({target: page1});
     });
 
     it('is triggered when page is detached', function() {
       navigationView.append(page1);
       page1.on('disappear', listener);
+
       page1.detach();
+
       expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWithMatch({target: page1});
     });
 
     it('is triggered when page is disposed', function() {
       navigationView.append(page1);
       page1.on('disappear', listener);
+
       page1.dispose();
+
       expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWithMatch({target: page1});
     });
 
     it('is only triggered on the topmost page when multiple pages are detached', function() {
       navigationView.append(page1, page2);
       page1.on('disappear', listener);
       page2.on('disappear', listener);
+
       page1.detach();
+
       expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWith(page2);
+      expect(listener).to.have.been.calledOn(page2);
+      expect(listener).to.have.been.calledWith({target: page2});
     });
 
   });
