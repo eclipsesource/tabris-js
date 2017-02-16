@@ -38,42 +38,30 @@
   },
   "events": {
     "addchild": {
-      "parameters": [
-        {
-          "name": "widget",
-          "type": "this"
+      "description": "Fired when a child is added to this widget.",
+      "parameters": {
+        "child": {
+          "description": "The widget that is added as a child.",
+          "type": "Widget"
         },
-        {
-          "name": "child",
-          "type": "Widget",
-          "description": "The widget that is added as a child."
-        },
-        {
-          "name": "options",
-          "type": "{index: number}",
-          "description": "The property `index` denotes the position in the children list at which the child widget is added."
+        "index": {
+          "description": "Denotes the position in the children list at which the child widget is added.",
+          "type": "number"
         }
-      ],
-      "description": "Fired when a child is added to this widget."
+      }
     },
     "removechild": {
-      "parameters": [
-        {
-          "name": "widget",
-          "type": "this"
+      "description": "Fired when a child is removed from this widget.",
+      "parameters": {
+        "child": {
+          "description": "The widget that is removed.",
+          "type": "Widget"
         },
-        {
-          "name": "child",
-          "type": "Widget",
-          "description": "The widget that is removed."
-        },
-        {
-          "name": "options",
-          "type": "{index: number}",
-          "description": "The property `index` denotes the removed child widget's position in the children list.`"
+        "index": {
+          "description": "The property `index` denotes the removed child widget's position in the children list.`",
+          "type": "number"
         }
-      ],
-      "description": "Fired when a child is removed from this widget."
+      }
     }
   }
 }

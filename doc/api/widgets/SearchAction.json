@@ -27,40 +27,22 @@
   },
   "events": {
     "input": {
-      "parameters": [
-        {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "text",
-          "type": "string",
-          "description": "The new value of *[text](#text)*."
-        },
-        {
-          "name": "options",
-          "type": "any"
+      "description": "Fired when the user inputs text.",
+      "parameters": {
+        "text": {
+          "description": "The new value of *[text](#text)*.",
+          "type": "string"
         }
-      ],
-      "description": "Fired the user inputs text."
+      }
     },
     "accept": {
-      "parameters": [
-        {
-          "name": "widget",
-          "type": "SearchAction"
-        },
-        {
-          "name": "text",
-          "type": "string",
-          "description": "The current value of *[text](#text)*."
-        },
-        {
-          "name": "options",
-          "type": "any"
+      "description": "Fired when a text input has been submitted by pressing the keyboard's search key.",
+      "parameters": {
+        "text": {
+          "description": "The current value of *[text](#text)*.",
+          "type": "string"
         }
-      ],
-      "description": "Fired when a text input has been submitted by pressing the keyboard's search key."
+      }
     }
   },
   "links": [

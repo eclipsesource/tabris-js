@@ -21,32 +21,22 @@
   },
   "events": {
     "change:selection": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "ChangeEvent<this, number>",
-          "description": "The change event for the selection property."
+      "description": "Fired when the selection property changes.",
+      "parameters": {
+        "value": {
+          "description": "The new value of the `selection` property.",
+          "type": "number"
         }
-      ],
-      "description": "Fired when the selection property changes."
+      }
     },
     "select": {
-      "parameters": [
-        {
-          "name": "widget",
-          "type": "SearchAction"
-        },
-        {
-          "name": "selection",
-          "type": "number",
-          "description": "The new value of *[selection](#selection)*."
-        },
-        {
-          "name": "options",
-          "type": "any"
+      "description": "Fired when the selection property is changed by the user.",
+      "parameters": {
+        "selection": {
+          "description": "The new value of *[selection](#selection)*.",
+          "type": "number"
         }
-      ],
-      "description": "Fired when the selection property is changed by the user."
+      }
     }
   },
   "links": [

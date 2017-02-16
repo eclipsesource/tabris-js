@@ -23,62 +23,28 @@
   },
   "events": {
     "foreground": {
-      "parameters": [
-        {
-          "name": "app",
-          "type": "App"
-        }
-      ],
       "description": "Fired when the app becomes visible. The event is only fired after the app has been brought to the background. Not during app startup."
     },
     "resume": {
-      "parameters": [
-        {
-          "name": "app",
-          "type": "App"
-        }
-      ],
       "description": "Fired when the app is visible and ready to interact with the user. The event is preceded by either `foreground` (the app becomes visible again) or `pause` (the app regains ability to interact with user)."
     },
     "pause": {
-      "parameters": [
-        {
-          "name": "app",
-          "type": "App"
-        }
-      ],
       "description": "Fired when the app is not the interaction target of the user anymore. Usually preceded by `resume`."
     },
     "background": {
-      "parameters": [
-        {
-          "name": "app",
-          "type": "App"
-        }
-      ],
       "description": "Fired when the app becomes invisible. Either because another app is in the foreground or the user has returned to the home screen."
     },
     "terminate": {
-      "parameters": [
-        {
-          "name": "app",
-          "type": "App"
-        }
-      ],
       "description": "Fired when the app is being destroyed. After this callback no more interaction with the app is possible."
     },
     "backnavigation": {
-      "parameters": [
-        {
-          "name": "app",
-          "type": "App"
-        },
-        {
-          "name": "event",
-          "type": "{preventDefault: Function}"
+      "description": "Fired when the back button is pressed on Android.",
+      "parameters": {
+        "preventDefault": {
+          "description": "Call to suppress the default back navigation behavior.",
+          "type": "() => void"
         }
-      ],
-      "description": "Fired when the back button is pressed on Android. To suppress the default back navigation behavior, call `event.preventDefault()`."
+      }
     }
   },
   "methods": {

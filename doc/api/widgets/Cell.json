@@ -14,24 +14,22 @@
   },
   "events": {
     "change:item": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "ChangeEvent<this, any>",
-          "description": "The change event for the item property."
+      "description": "Fired when a collection item is assigned to this cell. Use this event to configure the widgets in this cell to represent the assigned item.",
+      "parameters": {
+        "value": {
+          "description": "The new item.",
+          "type": "any"
         }
-      ],
-      "description": "Fired when a collection item is assigned to this cell. Use this event to configure the widgets in this cell to represent the assigned item."
+      }
     },
     "change:itemIndex": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "ChangeEvent<this, number>",
-          "description": "The change event for the itemIndex property."
+      "description": "Fired when the index of the assigned item changes, either by assigning a new item or by inserting/removing items above the current item.",
+      "parameters": {
+        "value": {
+          "description": "The new index of the item.",
+          "type": "number"
         }
-      ],
-      "description": "Fired when the index of the assigned item changes, either by assigning a new item or by inserting/removing items above the current item."
+      }
     }
   },
   "links": [

@@ -83,14 +83,13 @@
   },
   "events": {
     "change:state": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "ChangeEvent<this, string>",
-          "description": "The change event for the state property."
+      "description": "Fired when the state property changes.",
+      "parameters": {
+        "value": {
+          "description": "The new value of the `state` property.",
+          "type": "string"
         }
-      ],
-      "description": "Fired when the state property changes."
+      }
     }
   },
   "links": [

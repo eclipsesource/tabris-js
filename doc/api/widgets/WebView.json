@@ -14,52 +14,50 @@
   },
   "events": {
     "navigate": {
-      "parameters": [
-        {
-          "name": "widget",
-          "type": "this"
+      "description": "Fired when the WebView is about to navigate to a new URL.",
+      "parameters": {
+        "preventDefault": {
+          "description": "Call to intercept the navigation.",
+          "type": "() => void"
         },
-        {
-          "name": "event",
-          "type": "{preventDefault: () => void, url: string}"
+        "url": {
+          "description": "The new URL the WebView is about to navigate to.",
+          "type": "string"
         }
-      ],
-      "description": "Fired when the WebView is about to navigate to a new URL. Listeners can intercept the navigation by calling `event.preventDefault()`."
+      }
     },
     "load": {
-      "parameters": [
-        {
-          "name": "widget",
-          "type": "this"
-        }
-      ],
       "description": "Fired when the url has been loaded."
     },
     "download": {
-      "parameters": [
-        {
-          "name": "widget",
-          "type": "this"
+      "description": "Fired when the WebView requests a download. The download event provides the properties `url`, `mimeType`, `contentLength` and `contentDisposition`. Supported only on Android.",
+      "parameters": {
+        "url": {
+          "description": "The URL of the resource to be downloaded.",
+          "type": "string"
         },
-        {
-          "name": "event",
-          "type": "{url: string, mimeType: string, contentLength: number, contentDisposition: string}"
+        "mimeType": {
+          "description": "The mime type of the resource to be downloaded.",
+          "type": "string"
+        },
+        "contentLength": {
+          "description": "The size of the downloaded entity body.",
+          "type": "number"
+        },
+        "contentDisposition": {
+          "description": "Indicates whether the download is expected to be displayed inline or to be downloaded as an attachment.",
+          "type": "string"
         }
-      ],
-      "description": "Fired when the WebView requests a download. The download event provides the properties `url`, `mimeType`, `contentLength` and `contentDisposition`. Supported only on Android."
+      }
     },
     "message": {
-      "parameters": [
-        {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "event",
-          "type": "{data: string}"
+      "description": "Fired when a web message has been sent via `window.parent.postMessage(message, targetOrigin)` from inside the `WebView`.",
+      "parameters": {
+        "data": {
+          "description": "The sent message.",
+          "type": "string"
         }
-      ],
-      "description": "Fired when a web message has been sent via `window.parent.postMessage(message, targetOrigin)` from inside the `WebView`. The event's `data` property contains the message sent, which currently has to be a string."
+      }
     }
   },
   "methods": {

@@ -15,32 +15,22 @@
   },
   "events": {
     "change:selection": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "ChangeEvent<this, boolean>",
-          "description": "The change event for the selection property."
+      "description": "Fired when the check box is checked or unchecked.",
+      "parameters": {
+        "value": {
+          "description": "The new value of the `selection` property.",
+          "type": "boolean"
         }
-      ],
-      "description": "Fired when the check box is checked or unchecked."
+      }
     },
     "select": {
-      "parameters": [
-        {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "selection",
-          "type": "boolean",
-          "description": "The new value of *[selection](#selection)*."
-        },
-        {
-          "name": "options",
-          "type": "any"
+      "description": "Fired when the check box is checked or unchecked by the user.",
+      "parameters": {
+        "selection": {
+          "description": "The new value of *[selection](#selection)*.",
+          "type": "boolean"
         }
-      ],
-      "description": "Fired when the check box is checked or unchecked by the user."
+      }
     }
   },
   "links": [

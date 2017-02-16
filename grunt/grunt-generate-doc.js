@@ -149,7 +149,7 @@ module.exports = function(grunt) {
       let result = [];
       result.push('### ' + name + renderSignature(desc.parameters) + '\n');
       if (desc.parameters && desc.parameters.length) {
-        result.push('**Parameters:** ' + renderParamList(desc.parameters) + '\n');
+        result.push('**Parameters:** ' + renderMethodParamList(desc.parameters) + '\n');
       }
       if (desc.returns) {
         result.push('**Returns:** *' + renderTypeLink(desc.returns) + '*\n');
@@ -205,15 +205,15 @@ module.exports = function(grunt) {
       let result = ['## Events\n\n'];
       Object.keys(def.events).sort().forEach(name => {
         let event = def.events[name];
-        result.push('### "', name, '" ' + renderSignature(event.parameters) + '\n');
-        if (event.parameters) {
-          result.push('\n**Parameters:** ' + renderParamList(event.parameters) + '\n');
+        result.push('### ', name, '\n');
+        if (event.description) {
+          result.push(event.description + '\n');
         }
         if (event.provisional) {
           result.push(MSG_PROVISIONAL);
         }
-        if (event.description) {
-          result.push('\n' + event.description + '\n');
+        if (event.parameters) {
+          result.push('\n#### Event Parameters ' + renderEventParamList(event.parameters) + '\n');
         }
         result.push('\n\n');
       });
@@ -224,7 +224,16 @@ module.exports = function(grunt) {
       return '(' + parameters.map(param => typeof param === 'object' ? param.name : param).join(', ') + ')';
     }
 
-    function renderParamList(parameters) {
+    function renderEventParamList(parameters) {
+      let result = '\n';
+      result += renderEventParameter({name: 'target', type: 'this', description: 'The widget the event was fired on.'});
+      Object.keys(parameters).sort().forEach((name) => {
+        result += renderEventParameter(Object.assign({name}, parameters[name]));
+      });
+      return result;
+    }
+
+    function renderMethodParamList(parameters) {
       return '\n\n' + parameters.map(param => {
         let result = ['- ', param.name, ': '];
         if (param.type) {
@@ -237,6 +246,10 @@ module.exports = function(grunt) {
         }
         return result.join('');
       }).join('\n');
+    }
+
+    function renderEventParameter({name, type, description}) {
+      return `- **${name}**: *${renderTypeLink(type)}*\n    ${description}\n\n`;
     }
 
     function renderLinks(def) {

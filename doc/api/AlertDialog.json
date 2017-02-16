@@ -34,48 +34,21 @@
   },
   "events": {
     "close": {
-      "parameters": [
-        {
-          "name": "target",
-          "type": "this",
-          "description": "The dialog that fired the event."
-        },
-        {
-          "name": "button",
-          "type": "string",
-          "description": "The type of button (`'ok'`/`'cancel'`/`'neutral'`) that was used to close the dialog. Can also be an empty string, e.g. when the global back button was pressed."
+      "description": "Fired when the dialog was closed for any reason.",
+      "parameters": {
+        "button": {
+          "description": "The type of button that was used to close the dialog. Can also be an empty string, e.g. when the global back button was pressed.",
+          "type": "'ok'|'cancel'|'neutral'|''"
         }
-      ],
-      "description": "Fired when the dialog was closed for any reason."
+      }
     },
     "close:ok": {
-      "parameters": [
-        {
-          "name": "target",
-          "type": "this",
-          "description": "The dialog that fired the event."
-        }
-      ],
       "description": "Fired when the dialog was closed by pressing the 'ok' button."
     },
     "close:cancel": {
-      "parameters": [
-        {
-          "name": "target",
-          "type": "this",
-          "description": "The dialog that fired the event."
-        }
-      ],
       "description": "Fired when the dialog was closed by pressing the 'cancel' button."
     },
     "close:neutral": {
-      "parameters": [
-        {
-          "name": "target",
-          "type": "this",
-          "description": "The dialog that fired the event."
-        }
-      ],
       "description": "Fired when the dialog was closed by pressing the 'neutral' button."
     }
   },

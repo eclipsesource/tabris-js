@@ -27,32 +27,22 @@
   },
   "events": {
     "change:selection": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "ChangeEvent<this, boolean>",
-          "description": "The change event for the selection property."
+      "description": "Fired when the selection property changes.",
+      "parameters": {
+        "value": {
+          "description": "The new value of the `selection` property.",
+          "type": "boolean"
         }
-      ],
-      "description": "Fired when the selection property changes."
+      }
     },
     "select": {
-      "parameters": [
-        {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "selection",
-          "type": "boolean",
-          "description": "The current value of *[selection](#selection)*."
-        },
-        {
-          "name": "options",
-          "type": "any"
+      "description": "Fired when the switch is toggled by the user.",
+      "parameters": {
+        "selection": {
+          "description": "The current value of *[selection](#selection)*.",
+          "type": "boolean"
         }
-      ],
-      "description": "Fired when the switch is toggled by the user."
+      }
     }
   }
 }

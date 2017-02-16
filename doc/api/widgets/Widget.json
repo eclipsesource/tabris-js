@@ -266,192 +266,300 @@
   },
   "events": {
     "tap": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "GestureEvent<this>",
-          "description": "The event object that describes the gesture."
+      "description": "Fired once when a finger briefly touched the widget.",
+      "parameters": {
+        "touches": {
+          "description": "Touch coordinates relative to the origin coordinates of the widget.",
+          "type": "{x: number, y: number}[]"
         }
-      ],
-      "description": "Fired once when a finger briefly touched the widget."
+      }
     },
     "longpress": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "GestureEvent<this>",
-          "description": "The event object that describes the gesture."
+      "description": "Fired after pressing a widget for a specific amount of time (about a second), and again on lifting the finger.",
+      "parameters": {
+        "state": {
+          "description": "'start' when the widget has been hold down long enough, 'end' when the finger has been lifted and 'cancel' when the gesture has been interrupted.",
+          "type": "'start'|'end'|'cancel'"
+        },
+        "touches": {
+          "description": "Touch coordinates relative to the origin coordinates of the widget.",
+          "type": "{x: number, y: number}[]"
         }
-      ],
-      "description": "Fired after pressing a widget for a specific amount of time (about a second), and again on lifting the finger."
+      }
     },
     "pan": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "GestureEvent<this>",
-          "description": "The event object that describes the gesture."
+      "description": "Fired continuously after a finger touching the widget moved for a certain distance.",
+      "parameters": {
+        "state": {
+          "description": "'start' when the finger starts moving, 'change' while the finger is moving, 'end' when the finger has been lifted and 'cancel' when the gesture has been interrupted.",
+          "type": "'start'|'change'|'end'|'cancel'"
+        },
+        "touches": {
+          "description": "Touch coordinates relative to the origin coordinates of the widget.",
+          "type": "{x: number, y: number}[]"
+        },
+        "translation": {
+          "description": "Current touch coordinates relative to the coordinates of the first touch.",
+          "type": "{x: number, y: number}"
+        },
+        "velocity": {
+          "description": "Current touch velocity in pixels per second.",
+          "type": "{x: number, y: number}"
         }
-      ],
-      "description": "Fired continuously after a finger touching the widget moved for a certain distance."
+      }
     },
     "pan:up": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "GestureEvent<this>",
-          "description": "The event object that describes the gesture."
+      "description": "Fired when a finger starts moving up.",
+      "parameters": {
+        "state": {
+          "description": "'start' when the finger starts moving, 'change' while the finger is moving, 'end' when the finger has been lifted and 'cancel' when the gesture has been interrupted.",
+          "type": "'start'|'change'|'end'|'cancel'"
+        },
+        "touches": {
+          "description": "Touch coordinates relative to the origin coordinates of the widget.",
+          "type": "{x: number, y: number}[]"
+        },
+        "translation": {
+          "description": "Current touch coordinates relative to the coordinates of the first touch.",
+          "type": "{x: number, y: number}"
+        },
+        "velocity": {
+          "description": "Current touch velocity in pixels per second.",
+          "type": "{x: number, y: number}"
         }
-      ],
-      "description": "Fired when a finger starts moving up."
+      }
     },
     "pan:down": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "GestureEvent<this>",
-          "description": "The event object that describes the gesture."
+      "description": "Fired when a finger starts moving down.",
+      "parameters": {
+        "state": {
+          "description": "'start' when the finger starts moving, 'change' while the finger is moving, 'end' when the finger has been lifted and 'cancel' when the gesture has been interrupted.",
+          "type": "'start'|'change'|'end'|'cancel'"
+        },
+        "touches": {
+          "description": "Touch coordinates relative to the origin coordinates of the widget.",
+          "type": "{x: number, y: number}[]"
+        },
+        "translation": {
+          "description": "Current touch coordinates relative to the coordinates of the first touch.",
+          "type": "{x: number, y: number}"
+        },
+        "velocity": {
+          "description": "Current touch velocity in pixels per second.",
+          "type": "{x: number, y: number}"
         }
-      ],
-      "description": "Fired when a finger starts moving down."
+      }
     },
     "pan:left": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "GestureEvent<this>",
-          "description": "The event object that describes the gesture."
+      "description": "Fired when a finger starts moving left.",
+      "parameters": {
+        "state": {
+          "description": "'start' when the finger starts moving, 'change' while the finger is moving, 'end' when the finger has been lifted and 'cancel' when the gesture has been interrupted.",
+          "type": "'start'|'change'|'end'|'cancel'"
+        },
+        "touches": {
+          "description": "Touch coordinates relative to the origin coordinates of the widget.",
+          "type": "{x: number, y: number}[]"
+        },
+        "translation": {
+          "description": "Current touch coordinates relative to the coordinates of the first touch.",
+          "type": "{x: number, y: number}"
+        },
+        "velocity": {
+          "description": "Current touch velocity in pixels per second.",
+          "type": "{x: number, y: number}"
         }
-      ],
-      "description": "Fired when a finger starts moving left."
+      }
     },
     "pan:right": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "GestureEvent<this>",
-          "description": "The event object that describes the gesture."
+      "description": "Fired when a finger starts moving right.",
+      "parameters": {
+        "state": {
+          "description": "'start' when the finger starts moving, 'change' while the finger is moving, 'end' when the finger has been lifted and 'cancel' when the gesture has been interrupted.",
+          "type": "'start'|'change'|'end'|'cancel'"
+        },
+        "touches": {
+          "description": "Touch coordinates relative to the origin coordinates of the widget.",
+          "type": "{x: number, y: number}[]"
+        },
+        "translation": {
+          "description": "Current touch coordinates relative to the coordinates of the first touch.",
+          "type": "{x: number, y: number}"
+        },
+        "velocity": {
+          "description": "Current touch velocity in pixels per second.",
+          "type": "{x: number, y: number}"
         }
-      ],
-      "description": "Fired when a finger starts moving right."
+      }
     },
     "swipe:up": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "GestureEvent<this>",
-          "description": "The event object that describes the gesture."
+      "description": "Fired when a finger moves up quickly.",
+      "parameters": {
+        "touches": {
+          "description": "Touch coordinates relative to the origin coordinates of the widget.",
+          "type": "{x: number, y: number}[]"
         }
-      ],
-      "description": "Fired when a finger moves up quickly."
+      }
     },
     "swipe:down": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "GestureEvent<this>",
-          "description": "The event object that describes the gesture."
+      "description": "Fired when a finger moves down quickly.",
+      "parameters": {
+        "touches": {
+          "description": "Touch coordinates relative to the origin coordinates of the widget.",
+          "type": "{x: number, y: number}[]"
         }
-      ],
-      "description": "Fired when a finger moves down quickly."
+      }
     },
     "swipe:left": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "GestureEvent<this>",
-          "description": "The event object that describes the gesture."
+      "description": "Fired when a finger moves left quickly.",
+      "parameters": {
+        "touches": {
+          "description": "Touch coordinates relative to the origin coordinates of the widget.",
+          "type": "{x: number, y: number}[]"
         }
-      ],
-      "description": "Fired when a finger moves left quickly."
+      }
     },
     "swipe:right": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "GestureEvent<this>",
-          "description": "The event object that describes the gesture."
+      "description": "Fired when a finger moves right quickly.",
+      "parameters": {
+        "touches": {
+          "description": "Touch coordinates relative to the origin coordinates of the widget.",
+          "type": "{x: number, y: number}[]"
         }
-      ],
-      "description": "Fired when a finger moves right quickly."
+      }
     },
     "touchstart": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "TouchEvent<this>",
-          "description": "The event object that describes the touch gesture."
+      "description": "Fired when a widget is touched. See [Touch Events](../touch.md).",
+      "parameters": {
+        "time": {
+          "description": "Number of milliseconds since the start of the app.",
+          "type": "number"
+        },
+        "touches": {
+          "description": "Touch coordinates relative to the origin coordinates of the widget.",
+          "type": "{x: number, y: number}[]"
         }
-      ],
-      "description": "Fired when a widget is touched. See [Touch Events](../touch.md)."
+      }
     },
     "touchmove": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "TouchEvent<this>",
-          "description": "The event object that describes the touch gesture."
+      "description": "Fired repeatedly while swiping across the screen.",
+      "parameters": {
+        "time": {
+          "description": "Number of milliseconds since the start of the app.",
+          "type": "number"
+        },
+        "touches": {
+          "description": "Touch coordinates relative to the origin coordinates of the widget.",
+          "type": "{x: number, y: number}[]"
         }
-      ],
-      "description": "Fired repeatedly while swiping across the screen."
+      }
     },
     "touchend": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "TouchEvent<this>",
-          "description": "The event object that describes the touch gesture."
+      "description": "Fired when a touch ends on the same widget than it started on.",
+      "parameters": {
+        "time": {
+          "description": "Number of milliseconds since the start of the app.",
+          "type": "number"
+        },
+        "touches": {
+          "description": "Touch coordinates relative to the origin coordinates of the widget.",
+          "type": "{x: number, y: number}[]"
         }
-      ],
-      "description": "Fired when a touch ends on the same widget than it started on."
+      }
     },
     "touchcancel": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "TouchEvent<this>",
-          "description": "The event object that describes the touch gesture."
+      "description": "Fired instead of touchend when the touch ends on another widget than it started on.",
+      "parameters": {
+        "time": {
+          "description": "Number of milliseconds since the start of the app.",
+          "type": "number"
+        },
+        "touches": {
+          "description": "Touch coordinates relative to the origin coordinates of the widget.",
+          "type": "{x: number, y: number}[]"
         }
-      ],
-      "description": "Fired instead of touchend when the touch ends on another widget than it started on."
+      }
     },
     "resize": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "ResizeEvent<this>",
-          "description": "The event object that contains the new bounds."
+      "description": "Fired when the widget's size has changed. You can use this event to apply new [*layoutData*](#layoutdata).",
+      "parameters": {
+        "left": {
+          "description": "The horizontal offset from the parent's left edge in dip.",
+          "type": "number"
+        },
+        "top": {
+          "description": "The vertical offset from the parent's top edge in dip.",
+          "type": "number"
+        },
+        "width": {
+          "description": "The width of the widget in dip.",
+          "type": "number"
+        },
+        "height": {
+          "description": "The height of the widget in dip.",
+          "type": "number"
         }
-      ],
-      "description": "Fired when the widget's size has changed. You can use this event to apply new [*layoutData*](#layoutdata)."
+      }
     },
     "animationstart": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "AnimationEvent<this>",
-          "description": "The event object that contains the animation options."
+      "description": "Fired when an animation starts playing.",
+      "parameters": {
+        "name?": {
+          "description": "The name provided as an `animate()` option.",
+          "type": "string"
+        },
+        "delay?": {
+          "description": "The time until the animation starts in ms.",
+          "type": "number"
+        },
+        "duration?": {
+          "description": "The animation duration in ms.",
+          "type": "number"
+        },
+        "easing?": {
+          "description": "The type of easing used for the animation.",
+          "type": "'linear'|'ease-in'|'ease-out'|'ease-in-out'"
+        },
+        "repeat?": {
+          "description": "The number of times to repeat the animation.",
+          "type": "number"
+        },
+        "reverse?": {
+          "description": "Whether to alternate the direction of the animation on every repeat.",
+          "type": "boolean"
         }
-      ],
-      "description": "Fired when an animation starts playing."
+      }
     },
     "animationend": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "AnimationEvent<this>",
-          "description": "The event object that contains the animation options."
+      "description": "Fired when an animation has completed.",
+      "parameters": {
+        "name?": {
+          "description": "The name provided as an `animate()` option.",
+          "type": "string"
+        },
+        "delay?": {
+          "description": "The time until the animation starts in ms.",
+          "type": "number"
+        },
+        "duration?": {
+          "description": "The animation duration in ms.",
+          "type": "number"
+        },
+        "easing?": {
+          "description": "The type of easing used for the animation.",
+          "type": "'linear'|'ease-in'|'ease-out'|'ease-in-out'"
+        },
+        "repeat?": {
+          "description": "The number of times to repeat the animation.",
+          "type": "number"
+        },
+        "reverse?": {
+          "description": "Whether to alternate the direction of the animation on every repeat.",
+          "type": "boolean"
         }
-      ],
-      "description": "Fired when an animation has completed."
+      }
     },
     "dispose": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "EventObject<this>"
-        }
-      ],
       "description": "Fired when the widget is about to be disposed. At this point the widget and its children are still accessible."
     }
   },

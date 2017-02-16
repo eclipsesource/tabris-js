@@ -51,46 +51,33 @@
   },
   "events": {
     "select": {
-      "parameters": [
-        {
-          "name": "widget",
-          "type": "this"
+      "description": "Fired when a collection item is selected.",
+      "parameters": {
+        "item": {
+          "description": "The item that was selected.",
+          "type": "any"
         },
-        {
-          "name": "item",
-          "type": "any",
-          "description": "The item that was selected."
-        },
-        {
-          "name": "options",
-          "type": "{index: number}",
-          "description": "Contains the index of the selected item, e.g. `{index: number}`"
+        "index": {
+          "description": "The index of the selected item.",
+          "type": "number"
         }
-      ],
-      "description": "Fired when a collection item is selected."
+      }
     },
     "refresh": {
-      "parameters": [
-        {
-          "name": "widget",
-          "type": "this"
-        }
-      ],
       "description": "Fired when the user requested a refresh. An event listener should reset the *refreshIndicator* property when refresh is finished."
     },
     "scroll": {
-      "parameters": [
-        {
-          "name": "widget",
-          "type": "this"
+      "description": "Fired while the collection view is scrolling.",
+      "parameters": {
+        "deltaX": {
+          "description": "Currently always 0.",
+          "type": "number"
         },
-        {
-          "name": "event",
-          "type": "{deltaX: number, deltaY: number}",
-          "description": "Contains the scroll delta of this scroll event `{deltaX: number, deltaY: number}`. The value of `deltaY` will be positive when scrolling up and negative when scrolling down."
+        "deltaY": {
+          "description": "The delta of the scroll position. Positive when scrolling up and negative when scrolling down.",
+          "type": "number"
         }
-      ],
-      "description": "Fired while the collection view is scrolling."
+      }
     }
   },
   "methods": {

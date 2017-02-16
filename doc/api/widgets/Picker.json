@@ -30,43 +30,35 @@
   },
   "events": {
     "change:selectionIndex": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "ChangeEvent<this, number>",
-          "description": "The change event for the selectionIndex property."
+      "description": "Fired when the selectionIndex property changes.",
+      "parameters": {
+        "value": {
+          "description": "The new value of the `selectionIndex` property.",
+          "type": "number"
         }
-      ],
-      "description": "Fired when the selectionIndex property changes."
+      }
     },
     "change:selection": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "ChangeEvent<this, any>",
-          "description": "The change event for the selection property."
+      "description": "Fired when the selection property changes.",
+      "parameters": {
+        "value": {
+          "description": "The new value of the `selection` property.",
+          "type": "any"
         }
-      ],
-      "description": "Fired when the selection property changes."
+      }
     },
     "select": {
-      "parameters": [
-        {
-          "name": "widget",
-          "type": "this"
+      "description": "Fired when an item was selected by the user.",
+      "parameters": {
+        "selection": {
+          "description": "The new value of *[selection](#selection)*.",
+          "type": "any"
         },
-        {
-          "name": "selection",
-          "type": "any",
-          "description": "The new value of *[selection](#selection)*."
-        },
-        {
-          "name": "options",
-          "type": "{index: number}",
-          "description": "Contains the index of the selected item, e.g. `{index: number}`"
+        "index": {
+          "description": "Contains the index of the selected item.",
+          "type": "number"
         }
-      ],
-      "description": "Fired when an item was selected by the user."
+      }
     }
   },
   "links": [

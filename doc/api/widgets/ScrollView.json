@@ -84,32 +84,22 @@
   },
   "events": {
     "scrollX": {
-      "parameters": [
-        {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "offset",
-          "type": "number",
-          "description": "Indicates the current horizontal scrolling position."
+      "description": "Fired while scrolling horizontally.",
+      "parameters": {
+        "offset": {
+          "description": "Indicates the current horizontal scrolling position.",
+          "type": "number"
         }
-      ],
-      "description": "Fired on scrolling horizontally."
+      }
     },
     "scrollY": {
-      "parameters": [
-        {
-          "name": "widget",
-          "type": "this"
-        },
-        {
-          "name": "offset",
-          "type": "number",
-          "description": "Indicates the current vertical scrolling position."
+      "description": "Fired while scrolling vertically.",
+      "parameters": {
+        "offset": {
+          "description": "Indicates the current vertical scrolling position.",
+          "type": "number"
         }
-      ],
-      "description": "Fired on scrolling vertically."
+      }
     }
   },
   "links": [

@@ -58,14 +58,13 @@
   },
   "events": {
     "change:orientation": {
-      "parameters": [
-        {
-          "name": "event",
-          "type": "ChangeEvent<this, string>",
-          "description": "The change event for the orientation property."
+      "description": "Fired when the `orientation` property has changed and the rotation animation has finished.",
+      "parameters": {
+        "value": {
+          "description": "The new value of the `orientation` property.",
+          "type": "string"
         }
-      ],
-      "description": "Fired when the `orientation` property has changed and the rotation animation has finished."
+      }
     }
   }
 }
