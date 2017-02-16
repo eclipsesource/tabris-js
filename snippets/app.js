@@ -35,8 +35,8 @@ tabris.app.on('pause', function() {
   }
 });
 
-tabris.app.on('backnavigation', function(app, options) {
-  options.preventDefault = true;
+tabris.app.on('backnavigation', function(event) {
+  event.preventDefault();
   label.text = 'Back navigation prevented.';
 });
 

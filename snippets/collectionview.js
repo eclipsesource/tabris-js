@@ -32,6 +32,6 @@ new tabris.CollectionView({
       nameTextView.text = person.firstName;
     });
   }
-}).on('select', function(target, value) {
-  console.log('selected', value.firstName);
+}).on('select', function({item}) {
+  console.log('selected', item.firstName);
 }).appendTo(tabris.ui.contentView);

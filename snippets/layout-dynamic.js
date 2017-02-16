@@ -20,6 +20,6 @@ new tabris.Composite({
   background: 'green'
 }).appendTo(tabris.ui.contentView);
 
-tabris.ui.contentView.on('resize', function(contentView, bounds) {
-  tabris.ui.contentView.apply(bounds.height > bounds.width ? PORTRAIT : LANDSCAPE);
+tabris.ui.contentView.on('resize', function({width, height}) {
+  tabris.ui.contentView.apply(height > width ? PORTRAIT : LANDSCAPE);
 });

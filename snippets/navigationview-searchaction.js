@@ -24,10 +24,10 @@ var action = new tabris.SearchAction({
   }
 }).on('select', function() {
   this.text = '';
-}).on('input', function(widget, query) {
-  updateProposals(query);
-}).on('accept', function(widget, query) {
-  textView.text = 'Selected "' + query + '"';
+}).on('input', function({text}) {
+  updateProposals(text);
+}).on('accept', function({text}) {
+  textView.text = 'Selected "' + text + '"';
 }).appendTo(navigationView);
 
 updateProposals('');

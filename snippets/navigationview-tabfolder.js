@@ -49,7 +49,7 @@ createTab('Cart', 'images/cart.png');
 createTab('Pay', 'images/card.png');
 createTab('Statistic', 'images/chart.png');
 
-tabris.app.on('backnavigation', function(app, event) {
+tabris.app.on('backnavigation', function(event) {
   // handle the "physical" back button on Android
   var navigationView = tabFolder.selection.find('#navigationView').first();
   var page = navigationView.pages().last();

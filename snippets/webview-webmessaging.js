@@ -26,6 +26,6 @@ fetch('./html/website.html').then(function(result) {
   webView.html = text;
 });
 
-webView.on('message', function(widget, event) {
-  statusTextView.text = 'Message received: ' + event.data;
+webView.on('message', function({data}) {
+  statusTextView.text = 'Message received: ' + data;
 });

@@ -21,10 +21,10 @@ var pageSelector = new tabris.CollectionView({
   itemHeight: 48
 }).appendTo(drawer);
 
-pageSelector.on('select', function(target, pageDescriptor) {
+pageSelector.on('select', function({item: pageConfiguration}) {
   tabris.ui.drawer.close();
   navigationView.pages().dispose();
-  createPage(pageDescriptor).appendTo(navigationView);
+  createPage(pageConfiguration).appendTo(navigationView);
 });
 
 createPage({title: 'Initial Page', icon: 'images/page.png'}).appendTo(navigationView);
@@ -48,9 +48,9 @@ function initializeCell(cell) {
   });
 }
 
-function createPage(pageDescriptor) {
-  var page = new tabris.Page({title: pageDescriptor.title});
-  page.icon = pageDescriptor.icon;
+function createPage(pageConfiguration) {
+  var page = new tabris.Page({title: pageConfiguration.title});
+  page.icon = pageConfiguration.icon;
   new tabris.Button({
     left: 20, right: 20, top: 20,
     text: 'Create page in drawer'

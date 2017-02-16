@@ -16,14 +16,14 @@ var tabFolder = new tabris.TabFolder({
   left: 0, top: 0, right: 0, bottom: 0,
   paging: true,
   tabBarLocation: 'hidden'
-}).on('scroll', function(tabFolder, event) {
+}).on('scroll', function({selection, offset}) {
   var imageViews = imageContainer.children();
-  var tabIndex = tabFolder.children().indexOf(event.selection);
+  var tabIndex = tabFolder.children().indexOf(selection);
   var tabFolderWidth = tabFolder.bounds.width;
-  var offsetPercent = event.offset / tabFolderWidth;
+  var offsetPercent = offset / tabFolderWidth;
   imageViews[tabIndex].set({
     opacity: 1 - Math.abs(offsetPercent),
-    transform: {translationX: -event.offset * PARALLAX}
+    transform: {translationX: -offset * PARALLAX}
   });
   if (offsetPercent < 0 && tabIndex - 1 >= 0) {
     imageViews[tabIndex - 1].set({
