@@ -9,9 +9,9 @@ var page = module.exports = new tabris.Page({
 
 new tabris.Canvas({
   left: 10, top: 10, right: 10, bottom: '#toggleRun 10'
-}).on('resize', function(canvas, bounds) {
-  var height = Math.min(bounds.height, Math.floor(bounds.width / 2));
-  var ctx = canvas.getContext('2d', bounds.width, height);
+}).on('resize', function({target, width, height}) {
+  var contextHeight = Math.min(height, Math.floor(width / 2));
+  var ctx = target.getContext('2d', width, contextHeight);
   example.init(ctx);
 }).appendTo(page);
 

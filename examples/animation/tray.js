@@ -73,19 +73,19 @@ trayContent.on('resize', function() {
   }
 });
 
-strap.on('pan:vertical', function(widget, event) {
-  if (event.state === 'start' && (trayState === 'up' || trayState === 'down')) {
+strap.on('pan:vertical', function({state, translation, velocity}) {
+  if (state === 'start' && (trayState === 'up' || trayState === 'down')) {
     trayState = 'dragging';
-    dragOffset = tray.transform.translationY - event.translation.y;
+    dragOffset = tray.transform.translationY - translation.y;
   }
   if (trayState === 'dragging') {
-    var offsetY = Math.min(Math.max(event.translation.y + dragOffset, 0), trayHeight);
+    var offsetY = Math.min(Math.max(translation.y + dragOffset, 0), trayHeight);
     tray.transform = {translationY: offsetY};
     shade.opacity = getShadeOpacity(offsetY);
     strapIcon.transform = getStrapIconTransform(offsetY);
   }
-  if (event.state === 'end' && trayState === 'dragging') {
-    positionTrayInRestingState(event.velocity.y);
+  if (state === 'end' && trayState === 'dragging') {
+    positionTrayInRestingState(velocity.y);
   }
 });
 

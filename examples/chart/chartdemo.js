@@ -121,5 +121,7 @@ function addPageSelector(page) {
   new tabris.Button({
     left: MARGIN_SMALL, top: ['prev()', MARGIN_SMALL],
     text: page.title
-  }).on('select', function() {page.appendTo(navigationView);}).appendTo(mainPage);
+  }).on('select', function() {
+    page.appendTo(navigationView);
+  }).appendTo(mainPage);
 }

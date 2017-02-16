@@ -31,11 +31,12 @@ var detailView = createPersonDetail(detailsParent, people[2], ANIMATION_START_DE
 
 new tabris.Composite({
   left: 0, top: [detailsParent, MARGIN], right: 0, height: 96
-}).on('resize', function(widget, bounds) {
+}).on('resize', function({target: container, width}) {
   this.children().dispose();
-  var thumbsize = Math.min(64, bounds.width / people.length - MARGIN);
+  var thumbsize = Math.min(64, width / people.length - MARGIN);
   people.forEach(function(person, index) {
-    animateInFromBottom(createPersonThumb(widget, person, thumbsize), index);
+    var personThumb = createPersonThumb(person, thumbsize).appendTo(container);
+    animateInFromBottom(personThumb, index);
   });
 }).appendTo(page);
 
@@ -100,7 +101,7 @@ function createPersonDetail(parent, person, delay) {
     left: 0, top: 0, width: IMAGE_SIZE, height: IMAGE_SIZE,
     image: {src: person.image, width: IMAGE_SIZE, height: IMAGE_SIZE},
     opacity: 0.0
-  }).on('resize', function listener() {
+  }).on('resize', function() {
     this.transform = {
       scaleX: 0.75,
       scaleY: 0.75
@@ -132,11 +133,11 @@ function createPersonDetail(parent, person, delay) {
   return composite;
 }
 
-function createPersonThumb(parent, person, thumbsize) {
+function createPersonThumb(person, thumbsize) {
   var font = (thumbsize < 48) ? '9px' : '12px';
   var composite = new tabris.Composite({
     left: ['prev()', MARGIN], top: 0
-  }).appendTo(parent);
+  });
   var personView = new tabris.ImageView({
     left: 0, top: 0, width: thumbsize, height: thumbsize,
     image: {src: person.image, width: thumbsize, height: thumbsize},

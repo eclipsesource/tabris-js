@@ -18,6 +18,8 @@ var mainPage = new tabris.Page({
   new tabris.Button({
     left: MARGIN, top: ['prev()', MARGIN],
     text: page.title
-  }).on('select', function() {page.appendTo(navigationView);}).appendTo(mainPage);
+  }).on('select', function() {
+    page.appendTo(navigationView);
+  }).appendTo(mainPage);
 });
 

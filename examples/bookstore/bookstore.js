@@ -8,7 +8,7 @@ var navigationView = new tabris.NavigationView({
 
 tabris.ui.drawer.enabled = true;
 
-var bookListPageDescriptors = [{
+var pageConfigurations = [{
   title: 'Book Store',
   image: 'images/page_all_books.png',
   filter: function() {return true;}
@@ -22,18 +22,16 @@ var bookListPageDescriptors = [{
   filter: function(book) {return book.favorite;}
 }];
 
-var pageSelector = new tabris.CollectionView({
+new tabris.CollectionView({
   left: 0, top: 0, right: 0, bottom: 0,
-  items: bookListPageDescriptors,
+  items: pageConfigurations,
   initializeCell: initializeCell,
   itemHeight: tabris.device.platform === 'iOS' ? 40 : 48
-}).appendTo(tabris.ui.drawer);
-
-pageSelector.on('select', function(target, descriptor) {
+}).on('select', function({item: pageConfiguration}) {
   tabris.ui.drawer.close();
   navigationView.pages().dispose();
-  createBookListPage(descriptor).appendTo(navigationView);
-});
+  createBookListPage(pageConfiguration).appendTo(navigationView);
+}).appendTo(tabris.ui.drawer);
 
 function initializeCell(cell) {
   new tabris.Composite({
@@ -73,13 +71,13 @@ new tabris.Action({
   createSettingsPage().appendTo(navigationView);
 }).appendTo(navigationView);
 
-createBookListPage(bookListPageDescriptors[0]).appendTo(navigationView);
+createBookListPage(pageConfigurations[0]).appendTo(navigationView);
 
-function createBookListPage(descriptor) {
+function createBookListPage({title, filter}) {
   return new tabris.Page({
-    title: descriptor.title,
+    title: title,
     autoDispose: false
-  }).append(createBooksList(books.filter(descriptor.filter)));
+  }).append(createBooksList(books.filter(filter)));
 }
 
 function createBookPage(book) {
@@ -167,8 +165,8 @@ function createBooksList(books) {
         authorTextView.text = book.author;
       });
     }
-  }).on('select', function(target, value) {
-    createBookPage(value).appendTo(navigationView);
+  }).on('select', function({item: book}) {
+    createBookPage(book).appendTo(navigationView);
   });
 }
 
@@ -194,9 +192,11 @@ function createReadBookPage(book) {
 function createSettingsPage() {
   var page = new tabris.Page({
     title: 'License'
-  })
-  .on('appear', function() { actionVisbility(false); })
-  .on('disappear', function() { actionVisbility(true); });
+  }).on('appear', function() {
+    actionVisbility(false);
+  }).on('disappear', function() {
+    actionVisbility(true);
+  });
   var settingsTextView = new tabris.TextView({
     left: PAGE_MARGIN, right: PAGE_MARGIN, top: PAGE_MARGIN,
     text: 'Book covers under CC BY 2.0'
@@ -226,8 +226,9 @@ function createSettingsPage() {
 function createLicenseWebviewPage() {
   var page = new tabris.Page({
     title: 'Book covers license'
-  })
-  .on('appear', function() { actionVisbility(false); });
+  }).on('appear', function() {
+    actionVisbility(false);
+  });
   new tabris.WebView({
     left: 0, right: 0, top: 0, bottom: 0,
     url: 'https://www.flickr.com/photos/ajourneyroundmyskull/sets/72157626894978086/'

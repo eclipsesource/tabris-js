@@ -10,10 +10,10 @@ var texts = (function() {
 var MARGIN = 10;
 
 new tabris.Picker({id: 'langPicker', left: 10, top: 10, right: 10})
-  .on('select', function(widget, selection, options) {
-    if (options.index > 0) {
+  .on('select', function({item: lang, index}) {
+    if (index > 0) {
       this.selectionIndex = 0;
-      tabris.ui.contentView.apply(require('./' + selection + '.json'));
+      tabris.ui.contentView.apply(require('./' + lang + '.json'));
     }
   }).appendTo(tabris.ui.contentView);
 

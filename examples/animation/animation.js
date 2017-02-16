@@ -9,7 +9,7 @@ new tabris.Button({
   left: MARGIN, right: MARGIN, top: MARGIN,
   id: 'animateButton',
   text: 'Animate'
-}).on('select', function(button) {
+}).on('select', function({target: button}) {
   button.enabled = false;
   page.children('#helloLabel').first().animate({
     opacity: 0.25,

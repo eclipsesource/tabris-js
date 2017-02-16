@@ -20,8 +20,8 @@ var collectionView = new tabris.CollectionView({
     var container = new tabris.Composite({
       left: 0, top: 0, bottom: 0, right: 0,
       background: 'white'
-    }).on('pan:horizontal', function(widget, event) {
-      handlePan(event, container);
+    }).on('pan:horizontal', function(event) {
+      handlePan(event);
     }).appendTo(cell);
     var senderView = new tabris.TextView({
       top: VERTICAL_MARGIN, left: HORIZONTAL_MARGIN,
@@ -46,41 +46,43 @@ var collectionView = new tabris.CollectionView({
   }
 }).appendTo(tabris.ui.contentView);
 
-function handlePan(event, container) {
-  container.transform = {translationX: event.translation.x};
-  if (event.state === 'end') {
-    handlePanFinished(event, container);
+function handlePan(event) {
+  let {target, state, translation} = event;
+  target.transform = {translationX: translation.x};
+  if (state === 'end') {
+    handlePanFinished(event);
   }
 }
 
-function handlePanFinished(event, container) {
-  var beyondCenter = Math.abs(event.translation.x) > container.bounds.width / 2;
-  var fling = Math.abs(event.velocity.x) > 200;
-  var sameDirection = sign(event.velocity.x) === sign(event.translation.x);
+function handlePanFinished(event) {
+  let {target, velocity, translation} = event;
+  var beyondCenter = Math.abs(translation.x) > target.bounds.width / 2;
+  var fling = Math.abs(velocity.x) > 200;
+  var sameDirection = sign(velocity.x) === sign(translation.x);
   // When swiped beyond the center, trigger dismiss if flinged in the same direction or let go.
   // Otherwise, detect a dismiss only if flinged in the same direction.
   var dismiss = beyondCenter ? sameDirection || !fling : sameDirection && fling;
   if (dismiss) {
-    animateDismiss(event, container);
+    animateDismiss(event);
   } else {
-    animateCancel(event, container);
+    animateCancel(event);
   }
 }
 
-function animateDismiss(event, container) {
-  var bounds = container.bounds;
-  container.animate({
-    transform: {translationX: sign(event.translation.x) * bounds.width}
+function animateDismiss({target, translation}) {
+  var bounds = target.bounds;
+  target.animate({
+    transform: {translationX: sign(translation.x) * bounds.width}
   }, {
     duration: 200,
     easing: 'ease-out'
   }).then(function() {
-    collectionView.remove(container.parent().itemIndex);
+    collectionView.remove(target.parent().itemIndex);
   });
 }
 
-function animateCancel(event, container) {
-  container.animate({transform: {translationX: 0}}, {duration: 200, easing: 'ease-out'});
+function animateCancel({target}) {
+  target.animate({transform: {translationX: 0}}, {duration: 200, easing: 'ease-out'});
 }
 
 function sign(number) {

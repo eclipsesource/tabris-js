@@ -25,16 +25,16 @@ var collectionView = new tabris.CollectionView({
   }
 }).on('refresh', function() {
   loadNewItems();
-}).on('scroll', function(view, scroll) {
-  if (scroll.deltaY > 0) {
-    var remaining = view.get('items').length - view.get('lastVisibleIndex');
+}).on('scroll', function({target, deltaY}) {
+  if (deltaY > 0) {
+    var remaining = target.items.length - target.lastVisibleIndex;
     if (remaining < 20) {
       loadMoreItems();
     }
   }
-}).on('select', function(target, value) {
-  if (!value.loading) {
-    createDetailsPage(value.data);
+}).on('select', function({item}) {
+  if (!item.loading) {
+    createDetailsPage(item.data);
   }
 }).appendTo(page);
 
@@ -116,11 +116,11 @@ function createUrl(params) {
 }
 
 function getFirstId() {
-  return getRedditId(collectionView.get('items')[0]) || null;
+  return getRedditId(collectionView.items[0]) || null;
 }
 
 function getLastId() {
-  var items = collectionView.get('items');
+  var items = collectionView.items;
   return getRedditId(items[items.length - 2]) || null;
 }
 

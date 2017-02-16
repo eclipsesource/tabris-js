@@ -64,16 +64,16 @@ new tabris.TextView({
   textColor: 'white'
 }).appendTo(titleComposite);
 
-scrollView.on('resize', function(widget, bounds) {
-  imageView.height  = bounds.height / 2;
+scrollView.on('resize', function({height}) {
+  imageView.height  = height / 2;
   var titleCompHeight = titleComposite.height;
   // We need the offset of the title composite in each scroll event.
   // As it can only change on resize, we assign it here.
-  titleCompY = Math.min(imageView.height - titleCompHeight, bounds.height / 2);
+  titleCompY = Math.min(imageView.height - titleCompHeight, height / 2);
   titleComposite.top = titleCompY;
 });
 
-scrollView.on('scrollY', function(widget, offset) {
+scrollView.on('scrollY', function({offset}) {
   imageView.transform = {translationY: Math.max(0, offset * 0.4)};
   titleComposite.transform = {translationY: Math.max(0, offset - titleCompY)};
   var opacity = calculateTitleCompositeOpacity(offset, titleCompY);

@@ -13,36 +13,36 @@ let background = new BackgroundLayer({
   left: 0, right: 0, top: 0, height: ui.contentView.height
 }).appendTo(ui.contentView);
 
-let scrollView = new ScrollView({left: 0, right: 0, top: 0, bottom: 0}).on('scrollY', (_, offset) => {
+let scrollView = new ScrollView({left: 0, right: 0, top: 0, bottom: 0}).on('scrollY', ({offset}) => {
   background.scroll(-offset);
 }).appendTo(ui.contentView);
 
-new TextInput({
+let input = new TextInput({
     top: 30, centerX: 0,
     id: 'citySelector',
     message: 'enter city',
     textColor: '#FFFFFF',
     background: 'rgba(255, 255, 255, 0)',
     font: 'normal thin 32px sans-serif'
-  }).on('focus', widget => widget.text = '')
-    .on('blur', widget => widget.text = localStorage.getItem('city') || '')
-    .on('accept', loadDataFromInput)
+  }).on('focus', () => input.text = '')
+    .on('blur', () => input.text = localStorage.getItem('city') || '')
+    .on('accept', () => loadCity(input.text))
     .appendTo(scrollView);
 
 if (localStorage.getItem('city')) {
-  loadDataFromInput(ui.find('#citySelector').first() as TextInput, localStorage.getItem('city'));
+  loadCity(localStorage.getItem('city'));
 }
 
-function loadDataFromInput(widget: TextInput, text: string) {
+function loadCity(cityName: string) {
   let activityIndicator = new ActivityIndicator({centerX: 0, centerY: 0}).appendTo(ui.contentView);
-  pollWeatherData(text)
+  pollWeatherData(cityName)
     .then(data => {
-      widget.text = data.cityName + ', ' + data.countryName;
+      input.text = data.cityName + ', ' + data.countryName;
       localStorage.setItem('city', data.cityName);
       presentWeather(data);
     }).catch(error => {
       console.error(error);
-      widget.text = '';
+      input.text = '';
       localStorage.setItem('city', '');
     }).then(() => activityIndicator.dispose());
 }
@@ -61,11 +61,11 @@ function createWeatherInformation(data: WeatherData) {
       .on('change:selection', ({target, value}) => {
         changeGraphFocus(target as ForecastTabView, value, data);
       }),
-    new ForecastOverview({data, class: 'weatherInfo', id: 'overview'}).on('daySelect', index => {
+    new ForecastOverview({data, class: 'weatherInfo', id: 'overview'}).on('daySelect', (index) => {
       let forecastTabView = ui.find('#forecast').first() as ForecastTabView;
       forecastTabView.selection = forecastTabView.getTab(index);
     })
-  ).on('resize', (_, bounds) => background.height = bounds.height + bounds.top)
+  ).on('resize', ({top, height}) => background.height = height + top)
    .appendTo(scrollView);
 }
 
