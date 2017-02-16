@@ -56,9 +56,9 @@ module.exports = function(grunt) {
   function createTypeDef(result, def, name) {
     result.append('// ' + name);
     result.append('');
-    addClass(result, def, name);
-    result.append('');
     addPropertyInterface(result, def, name);
+    result.append('');
+    addClass(result, def, name);
     addInstance(result, def, name);
     result.append('');
   }
@@ -72,13 +72,12 @@ module.exports = function(grunt) {
 
   function addClass(result, def, name) {
     result.append(createDoc(def));
-    result.append(createClassDef(name, def));
+    addClassDef(result,name, def);
     result.indent++;
     addConstructor(result, name);
     addMethods(result, def);
     addEvents(result, def);
     addPropertyApi(result, def, name);
-    addProperties(result, def);
     result.indent--;
     result.append('}');
   }
@@ -88,12 +87,13 @@ module.exports = function(grunt) {
     result.append(`constructor(properties?: ${name}Properties);`);
   }
 
-  function createClassDef(name, def) {
+  function addClassDef(result, name, def) {
+    result.append(`interface ${name} extends ${name}Properties {}`);
     let str = 'export class ' + name;
     if (def.extends && def.extends !== 'NativeObject') {
       str += ' extends ' + def.extends;
     }
-    return str + ' {';
+    result.append(str + ' {');
   }
 
   function addPropertyInterface(result, def, name) {
@@ -231,25 +231,6 @@ module.exports = function(grunt) {
       ]));
       result.append(`set(properties: ${name}Properties): this;`);
     }
-  }
-
-  function addProperties(result, def) {
-    Object.keys(def.properties || []).sort().forEach((name) => {
-      result.append('');
-      result.append(createProperty(name, def.properties[name]));
-    });
-  }
-
-  function createProperty(name, def) {
-    let result = [];
-    result.push(createDoc(def));
-    let values = [];
-    (def.values || []).sort().forEach((value) => {
-      values.push(`"${value}"`);
-    });
-    let valuesType = (values || []).join(' | ');
-    result.push(`${name}: ${valuesType || def.type};`);
-    return result.join('\n');
   }
 
   function createInterfaceProperty(name, def) {
