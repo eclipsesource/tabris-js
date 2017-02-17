@@ -1346,12 +1346,12 @@ describe('Widget.extend', function() {
   it('adds default events copy', function() {
     let TestWidget = Widget.extend({});
 
-    expect(TestWidget.prototype.$events.resize).to.be.instanceof(Object);
+    expect(TestWidget.prototype.$events.resize).to.equal('resize');
     expect(TestWidget.prototype.$events).not.to.equal(Widget.extend._defaultEvents);
   });
 
   it('extends default events', function() {
-    let custom = {foo: {name: 'bar'}, touchstart: {name: 'touchstart'}};
+    let custom = {foo: 'bar', touchstart: 'touchstart'};
 
     let TestWidget = Widget.extend({_events: custom});
 

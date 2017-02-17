@@ -288,65 +288,6 @@ describe('NativeObject', function() {
         expect(listener).to.have.been.calledWith({target: object});
       });
 
-      it('calls custom trigger function', function() {
-        let triggerFn = spy();
-        let CustomType = NativeObject.extend({
-          _events: {bar: {trigger: triggerFn}}
-        });
-        let object = new CustomType();
-
-        object._trigger('bar', {bar: 23});
-
-        expect(triggerFn).to.have.been.calledWith('bar', {bar: 23});
-      });
-
-      it('calls custom trigger function with empty events object', function() {
-        let triggerFn = spy();
-        let CustomType = NativeObject.extend({
-          _events: {bar: {trigger: triggerFn}}
-        });
-        let object = new CustomType();
-
-        object._trigger('bar');
-
-        expect(triggerFn).to.have.been.calledWith('bar', {});
-      });
-
-      it('returns result from custom trigger', function() {
-        let CustomType = NativeObject.extend({
-          _events: {bar: {trigger: spy(() => 'result')}}
-        });
-        let object = new CustomType();
-
-        let result = object._trigger('bar');
-
-        expect(result).to.equal('result');
-      });
-
-      it('calls custom trigger function of translated event', function() {
-        let triggerFn = spy();
-        let CustomType = NativeObject.extend({
-          _events: {bar: {name: 'foo', trigger: triggerFn}}
-        });
-        let object = new CustomType();
-
-        object._trigger('foo', {bar: 23});
-
-        expect(triggerFn).to.have.been.calledWith('bar', {bar: 23});
-      });
-
-      it('returns return value from custom trigger with translated event', function() {
-        let CustomType = NativeObject.extend({
-          _events: {bar: {name: 'foo', trigger: spy(() => 'result')}}
-        });
-        let object = new CustomType();
-        spy(object, 'trigger');
-
-        let result = object._trigger('foo');
-
-        expect(result).to.equal('result');
-      });
-
     });
 
     describe('on', function() {
@@ -579,7 +520,7 @@ describe('NativeObject.extend', function() {
     let CustomType = NativeObject.extend({_events: {foo: 'bar'}});
     let instance = new CustomType();
 
-    expect(instance.$events.foo).to.eql({name: 'bar'});
+    expect(instance.$events.foo).to.eql('bar');
     expect(instance._events).to.equal(NativeObject.prototype._events);
   });
 
@@ -587,7 +528,7 @@ describe('NativeObject.extend', function() {
     let CustomType = NativeObject.extend({_events: {foo: 'bar'}});
     let instance = new CustomType();
 
-    expect(instance.$events.foo).to.eql({name: 'bar'});
+    expect(instance.$events.foo).to.eql('bar');
   });
 
   it('adds empty events map to prototype', function() {

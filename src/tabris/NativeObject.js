@@ -186,9 +186,8 @@ export default class NativeObject extends EventsClass {
   }
 
   _listen(name, listening) {
-    let config = this.$events[name];
-    if (config) {
-      this._nativeListen(config.name, listening);
+    if (this.$events[name]) {
+      this._nativeListen(this.$events[name], listening);
     }
   }
 
@@ -199,12 +198,7 @@ export default class NativeObject extends EventsClass {
 
   _trigger(nativeName, event = {}) {
     let name = this.$trigger[nativeName];
-    let trigger = name && this.$events[name].trigger;
-    if (trigger instanceof Function) {
-      return trigger.call(this, name, event);
-    } else {
-      this.trigger(name, Object.assign({target: this}, event));
-    }
+    this.trigger(name, Object.assign({target: this}, event));
   }
 
   _onoff(name, listening, listener) {
@@ -249,10 +243,8 @@ function setExistingProperty(name, value) {
 function normalizeEvents(events) {
   let result = {};
   for (let name in events) {
-    let config = events[name];
-    result[name] = typeof config === 'object' ? config : {};
-    if (!result[name].name) {
-      result[name].name = typeof config === 'string' ? config : name;
+    if (events[name]) {
+      result[name] = typeof events[name] === 'string' ? events[name] : name;
     }
   }
   return result;
@@ -328,9 +320,8 @@ function defaultGetter(name) {
 
 function buildTriggerMap(events) {
   let result = {};
-  for (let event in events) {
-    let name = events[event].name;
-    result[name] = event;
+  for (let name in events) {
+    result[events[name]] = name;
   }
   return result;
 }
