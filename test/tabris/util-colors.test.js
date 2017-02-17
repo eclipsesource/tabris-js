@@ -83,6 +83,10 @@ describe('util-colors', function() {
       expect(colorStringToArray('navy')).to.eql([0, 0, 128, 255]);
     });
 
+    it('accepts color names in mixed case', function() {
+      expect(colorStringToArray('Blue')).to.eql([0, 0, 255, 255]);
+    });
+
     it("accepts 'transparent'", function() {
       expect(colorStringToArray('transparent')).to.eql([0, 0, 0, 0]);
     });

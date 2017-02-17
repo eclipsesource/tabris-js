@@ -48,8 +48,8 @@ export function colorStringToArray(str) {
     ];
   }
   // named colors
-  if (str in NAMES) {
-    let rgb = NAMES[str];
+  if (str.toLowerCase() in NAMES) {
+    let rgb = NAMES[str.toLowerCase()];
     return [rgb[0], rgb[1], rgb[2], 255];
   }
   throw new Error('invalid color: ' + str);
