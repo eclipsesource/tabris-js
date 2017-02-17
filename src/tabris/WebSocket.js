@@ -131,6 +131,10 @@ Object.defineProperties(WebSocket.prototype, CONSTANTS);
 
 function getStringByteSize(input) {
   let len = 0;
+  // TODO: workaround for https://github.com/babel/babili/issues/430
+  if (!input.length) {
+    return 0;
+  }
   for (let i = 0; i < input.length; i++) {
     let code = input.charCodeAt(i);
     if (code <= 0x7f) {
