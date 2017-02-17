@@ -80,6 +80,18 @@
         "description": "Triggers an event of the given type on all widgets in this collection. See also `Widget.trigger()`"
       }
     ],
+    "get": [
+      {
+        "parameters": [
+          {
+            "name": "property",
+            "type": "string"
+          }
+        ],
+        "description": "Returns the value of the given property of the first widget in this collection.",
+        "returns": "any"
+      }
+    ],
     "set": [
       {
         "parameters": [
