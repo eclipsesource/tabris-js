@@ -58,14 +58,13 @@ export default {
     return this.on(type, wrappedCallback, context);
   },
 
-  trigger(type /*, args* */) {
+  trigger(type, event = {}) {
     if (!this._isDisposed) {
-      let args = Array.prototype.slice.call(arguments, 1);
       if (this._callbacks && type in this._callbacks) {
         let callbacks = this._callbacks[type];
         for (let i = 0; i < callbacks.length; i++) {
           let callback = callbacks[i];
-          callback.fn.apply(callback.ctx || this, args);
+          callback.fn.call(callback.ctx || this, event);
         }
       }
     }

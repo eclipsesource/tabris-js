@@ -5,12 +5,12 @@ describe('Events', function() {
 
   let object;
   let context, context2;
-  let callback, callback2;
+  let listener, listener2;
 
   beforeEach(function() {
     object = Object.assign({}, Events);
-    callback = spy();
-    callback2 = spy();
+    listener = spy();
+    listener2 = spy();
     context = {};
     context2 = {};
   });
@@ -19,23 +19,28 @@ describe('Events', function() {
 
   describe('on', function() {
 
-    it('should attach callback', function() {
-      object.on('foo', callback);
+    it('registers listener', function() {
+      object.on('foo', listener);
+
       object.trigger('foo');
-      expect(callback).to.have.been.called;
+
+      expect(listener).to.have.been.called;
     });
 
-    it('should return context', function() {
-      let result = object.on('foo', callback);
+    it('returns context', function() {
+      let result = object.on('foo', listener);
+
       expect(result).to.equal(object);
     });
 
-    it('should not affect currently processed event', function() {
+    it('does not affect currently processed event', function() {
       object.on('foo', function() {
-        object.on('foo', callback);
+        object.on('foo', listener);
       });
+
       object.trigger('foo');
-      expect(callback).not.to.have.been.called;
+
+      expect(listener).not.to.have.been.called;
     });
 
   });
@@ -46,85 +51,106 @@ describe('Events', function() {
       expect(() => object.off()).to.throw();
     });
 
-    it('throws error if no event callback is specified', function() {
+    it('throws error if no listener is specified', function() {
       expect(() => object.off('foo')).to.throw();
     });
 
-    it('should remove callback', function() {
-      object.on('foo', callback);
-      object.off('foo', callback);
+    it('removes listener', function() {
+      object.on('foo', listener);
+      object.off('foo', listener);
+
       object.trigger('foo');
-      expect(callback).not.to.have.been.called;
+
+      expect(listener).not.to.have.been.called;
     });
 
-    it('should remove callback registered with once', function() {
-      object.once('foo', callback);
-      object.off('foo', callback);
+    it('removes listener registered with once', function() {
+      object.once('foo', listener);
+      object.off('foo', listener);
+
       object.trigger('foo');
-      expect(callback).not.to.have.been.called;
+
+      expect(listener).not.to.have.been.called;
     });
 
-    it('should remove duplicate callbacks', function() {
-      object.on('foo', callback);
-      object.on('foo', callback);
-      object.off('foo', callback);
+    it('removes duplicate listeners', function() {
+      object.on('foo', listener);
+      object.on('foo', listener);
+      object.off('foo', listener);
+
       object.trigger('foo');
-      expect(callback).not.to.have.been.called;
+
+      expect(listener).not.to.have.been.called;
     });
 
-    it('should not affect currently processed event', function() {
+    it('does not affect currently processed event', function() {
       object.on('foo', function() {
-        object.off('foo', callback);
+        object.off('foo', listener);
       });
-      object.on('foo', callback);
+      object.on('foo', listener);
+
       object.trigger('foo');
-      expect(callback).to.have.been.called;
+
+      expect(listener).to.have.been.calledOnce;
     });
 
     describe('if context is specified', function() {
+
       beforeEach(function() {
-        object.on('foo', callback);
-        object.on('foo', callback, context);
-        object.on('foo', callback, context2);
-        object.off('foo', callback, context);
+        object.on('foo', listener);
+        object.on('foo', listener, context);
+        object.on('foo', listener, context2);
+        object.off('foo', listener, context);
       });
-      it('should remove only the versions of the callback with this contexts', function() {
+
+      it('removes only the versions of the listener with this contexts', function() {
         object.trigger('foo');
-        expect(callback.firstCall).to.have.been.calledOn(object);
-        expect(callback.secondCall).to.have.been.calledOn(context2);
+
+        expect(listener.firstCall).to.have.been.calledOn(object);
+        expect(listener.secondCall).to.have.been.calledOn(context2);
       });
+
     });
 
     describe('if no context is specified', function() {
+
       beforeEach(function() {
-        object.on('foo', callback);
-        object.on('foo', callback, context);
-        object.on('foo', callback, context2);
-        object.off('foo', callback);
+        object.on('foo', listener);
+        object.on('foo', listener, context);
+        object.on('foo', listener, context2);
+        object.off('foo', listener);
       });
-      it('should remove only the callback without context', function() {
+
+      it('removes only the listener without context', function() {
         object.trigger('foo');
-        expect(callback).to.have.been.calledTwice;
-        expect(callback.firstCall).to.have.been.calledOn(context);
-        expect(callback.secondCall).to.have.been.calledOn(context2);
+
+        expect(listener).to.have.been.calledTwice;
+        expect(listener.firstCall).to.have.been.calledOn(context);
+        expect(listener.secondCall).to.have.been.calledOn(context2);
       });
+
     });
 
-    describe('if callback is specified', function() {
+    describe('if listener is specified', function() {
+
       beforeEach(function() {
-        object.on('foo', callback);
-        object.on('foo', callback2);
-        object.off('foo', callback);
+        object.on('foo', listener);
+        object.on('foo', listener2);
+        object.off('foo', listener);
       });
-      it('should remove only callbacks for the given event type', function() {
+
+      it('removes only listeners for the given event type', function() {
         object.trigger('foo');
-        expect(callback).not.to.have.been.called;
-        expect(callback2).to.have.been.called;
+
+        expect(listener).not.to.have.been.called;
+        expect(listener2).to.have.been.called;
       });
+
     });
 
-    it('should return context', function() {
-      let result = object.off('foo', callback);
+    it('returns context', function() {
+      let result = object.off('foo', listener);
+
       expect(result).to.equal(object);
     });
 
@@ -132,70 +158,96 @@ describe('Events', function() {
 
   describe('once', function() {
 
-    it('should attach callback', function() {
-      object.once('foo', callback);
+    it('triggers listener once', function() {
+      object.once('foo', listener);
+
       object.trigger('foo');
-      expect(callback).to.have.been.called;
+
+      expect(listener).to.have.been.called;
     });
 
-    it('should forward trigger arguments to wrapped callback', function() {
-      object.once('foo', callback);
-      object.trigger('foo', 1, 2, 3);
-      expect(callback).to.have.been.calledWith(1, 2, 3);
+    it('forwards event object to wrapped listener', function() {
+      object.once('foo', listener);
+      let event = {};
+
+      object.trigger('foo', event);
+
+      expect(listener).to.have.been.calledWith(event);
     });
 
-    it('should use given context', function() {
+    it('uses given context', function() {
       let context = {};
-      object.once('foo', callback, context);
+      object.once('foo', listener, context);
+
       object.trigger('foo');
-      expect(callback.firstCall).to.have.been.calledOn(context);
+
+      expect(listener.firstCall).to.have.been.calledOn(context);
     });
 
-    it('should return context', function() {
-      let result = object.once('foo', callback);
+    it('returns context', function() {
+      let result = object.once('foo', listener);
+
       expect(result).to.equal(object);
     });
 
-    it('should remove callback after trigger', function() {
-      object.once('foo', callback);
+    it('removes listener after trigger', function() {
+      object.once('foo', listener);
       object.trigger('foo');
-      callback.reset();
+      listener.reset();
 
       object.trigger('foo');
 
-      expect(callback).not.to.have.been.called;
+      expect(listener).not.to.have.been.called;
     });
 
   });
 
   describe('trigger', function() {
 
-    it('should trigger callback', function() {
-      object.on('foo', callback);
+    it('triggers listener once', function() {
+      object.on('foo', listener);
+
       object.trigger('foo');
-      expect(callback).to.have.been.called;
+
+      expect(listener).to.have.been.calledOnce;
     });
 
-    it('should trigger callback with parameters', function() {
-      object.on('foo', callback);
-      object.trigger('foo', 23, 42);
-      expect(callback).to.have.been.calledWith(23, 42);
-    });
+    it('triggers listener with default empty object', function() {
+      object.on('foo', listener);
 
-    it('should trigger callback with default context', function() {
-      object.on('foo', callback);
       object.trigger('foo');
-      expect(callback.firstCall).to.have.been.calledOn(object);
+
+      expect(listener).to.have.been.calledWith({});
     });
 
-    it('should trigger callback with parameters and given context', function() {
-      object.on('foo', callback, context);
+    it('triggers listener with event object', function() {
+      object.on('foo', listener);
+      let event = {};
+
+      object.trigger('foo', event);
+
+      expect(listener).to.have.been.calledWith(event);
+    });
+
+    it('triggers listener with default context', function() {
+      object.on('foo', listener);
+
       object.trigger('foo');
-      expect(callback.firstCall).to.have.been.calledOn(context);
+
+      expect(listener.firstCall).to.have.been.calledOn(object);
     });
 
-    it('should return context', function() {
+    it('triggers listener with parameters and given context', function() {
+      object.on('foo', listener, context);
+
+      object.trigger('foo');
+
+      expect(listener.firstCall).to.have.been.calledOn(context);
+    });
+
+    it('returns context', function() {
       let result = object.trigger('foo');
+
       expect(result).to.equal(object);
     });
 
@@ -203,42 +255,55 @@ describe('Events', function() {
 
   describe('_isListening', function() {
 
-    describe('when no callbacks are attached', function() {
-      it('should return false without event type', function() {
+    describe('when no listeners are attached', function() {
+
+      it('returns false without event type', function() {
         expect(object._isListening()).to.equal(false);
       });
-      it('should return false for all event types', function() {
+
+      it('returns false for all event types', function() {
         expect(object._isListening('foo')).to.equal(false);
       });
+
     });
 
-    describe('when a callback is attached', function() {
+    describe('when a listener is attached', function() {
+
       beforeEach(function() {
-        object.on('foo', callback);
+        object.on('foo', listener);
       });
-      it('should return true without event type', function() {
+
+      it('returns true without event type', function() {
         expect(object._isListening()).to.equal(true);
       });
-      it('should return true for the particular event type', function() {
+
+      it('returns true for the particular event type', function() {
         expect(object._isListening('foo')).to.equal(true);
       });
-      it('should return false for other event types', function() {
+
+      it('returns false for other event types', function() {
         expect(object._isListening('bar')).to.equal(false);
       });
+
     });
 
-    describe('when a callback is attached and removed', function() {
+    describe('when a listener is attached and removed', function() {
+
       beforeEach(function() {
-        object.on('foo', callback);
-        object.off('foo', callback);
+        object.on('foo', listener);
+        object.off('foo', listener);
       });
-      it('should return false without event type', function() {
+
+      it('returns false without event type', function() {
         expect(object._isListening()).to.equal(false);
       });
-      it('should return false for this event type', function() {
+
+      it('returns false for this event type', function() {
         expect(object._isListening('foo')).to.equal(false);
       });
+
     });
+
   });
 
   describe('when attaching events', function() {
@@ -247,46 +312,56 @@ describe('Events', function() {
 
       describe('with ' + method + ',', function() {
 
-        describe('callback is triggered multiple times', function() {
+        describe('listener is triggered multiple times', function() {
 
-          it('when callbacks are not identical', function() {
-            object[method]('foo', callback);
-            object[method]('foo', callback2);
+          it('when listeners are not identical', function() {
+            object[method]('foo', listener);
+            object[method]('foo', listener2);
+
             object.trigger('foo');
-            expect(callback).to.have.been.calledOnce;
-            expect(callback2).to.have.been.calledOnce;
+
+            expect(listener).to.have.been.calledOnce;
+            expect(listener2).to.have.been.calledOnce;
           });
 
-          it('when callbacks are identical, but contexts are not', function() {
-            object[method]('foo', callback, context);
-            object[method]('foo', callback, context2);
+          it('when listeners are identical, but contexts are not', function() {
+            object[method]('foo', listener, context);
+            object[method]('foo', listener, context2);
+
             object.trigger('foo');
-            expect(callback).to.have.been.calledTwice;
+
+            expect(listener).to.have.been.calledTwice;
           });
 
-          it('when callbacks are identical, but one of the contexts is not given', function() {
-            object[method]('foo', callback, context);
-            object[method]('foo', callback);
+          it('when listeners are identical, but one of the contexts is not given', function() {
+            object[method]('foo', listener, context);
+            object[method]('foo', listener);
+
             object.trigger('foo');
-            expect(callback).to.have.been.calledTwice;
+
+            expect(listener).to.have.been.calledTwice;
           });
 
         });
 
-        describe('callback is not triggered multiple times', function() {
+        describe('listener is not triggered multiple times', function() {
 
-          it('when callbacks are identical', function() {
-            object[method]('foo', callback);
-            object[method]('foo', callback);
+          it('when listeners are identical', function() {
+            object[method]('foo', listener);
+            object[method]('foo', listener);
+
             object.trigger('foo');
-            expect(callback).to.have.been.calledOnce;
+
+            expect(listener).to.have.been.calledOnce;
           });
 
-          it('when callbacks and contexts are identical', function() {
-            object[method]('foo', callback, context);
-            object[method]('foo', callback, context);
+          it('when listeners and contexts are identical', function() {
+            object[method]('foo', listener, context);
+            object[method]('foo', listener, context);
+
             object.trigger('foo');
-            expect(callback).to.have.been.calledOnce;
+
+            expect(listener).to.have.been.calledOnce;
           });
 
         });
