@@ -28,6 +28,8 @@ interface Image {
  *
  * - **"#xxxxxx"**
  * - **"#xxx"**
+ * - **"#xxxxxxxx"**
+ * - **"#xxxx"**
  * - **"rgb(r, g, b)"** with **r**, **g** and **b** being numbers in the range 0..255.
  * - **"rgba(r, g, b, a)"** with **a** being a number in the range 0..1.
  * - a color name from the CSS3 specification.

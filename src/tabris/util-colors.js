@@ -29,6 +29,24 @@ export function colorStringToArray(str) {
       255
     ];
   }
+  // #xxxxxxxx
+  if (/^#([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/.test(str)) {
+    return [
+      parseInt(RegExp.$1, 16),
+      parseInt(RegExp.$2, 16),
+      parseInt(RegExp.$3, 16),
+      parseInt(RegExp.$4, 16),
+    ];
+  }
+  // #xxxx
+  if (/^#([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])$/.test(str)) {
+    return [
+      parseInt(RegExp.$1, 16) * 17,
+      parseInt(RegExp.$2, 16) * 17,
+      parseInt(RegExp.$3, 16) * 17,
+      parseInt(RegExp.$4, 16) * 17
+    ];
+  }
   // #rgb(r, g, b)
   if (/^rgb\s*\(\s*([+\-]?[0-9]+)\s*,\s*([+\-]?[0-9]+)\s*,\s*([+\-]?[0-9]+)\s*\)$/.test(str)) {
     return [
