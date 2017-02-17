@@ -11,22 +11,22 @@ export function colorStringToArray(str) {
   if (str === 'transparent') {
     return [0, 0, 0, 0];
   }
-  // #xxxxxx
-  if (/^#([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/.test(str)) {
+  // #xxxxxx and #xxxxxxxx
+  if (/^#([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})?$/.test(str)) {
     return [
       parseInt(RegExp.$1, 16),
       parseInt(RegExp.$2, 16),
       parseInt(RegExp.$3, 16),
-      255
+      RegExp.$4 === '' ? 255 : parseInt(RegExp.$4, 16)
     ];
   }
-  // #xxx
-  if (/^#([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])$/.test(str)) {
+  // #xxx and #xxxx
+  if (/^#([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])?$/.test(str)) {
     return [
       parseInt(RegExp.$1, 16) * 17,
       parseInt(RegExp.$2, 16) * 17,
       parseInt(RegExp.$3, 16) * 17,
-      255
+      RegExp.$4 === '' ? 255 : parseInt(RegExp.$4, 16) * 17
     ];
   }
   // #rgb(r, g, b)
