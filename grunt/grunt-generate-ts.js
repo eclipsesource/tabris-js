@@ -76,7 +76,6 @@ module.exports = function(grunt) {
     result.indent++;
     addConstructor(result, name);
     addMethods(result, def);
-    addEvents(result, def);
     addPropertyApi(result, def, name);
     result.indent--;
     result.append('}');
@@ -90,7 +89,7 @@ module.exports = function(grunt) {
   function addClassDef(result, name, def) {
     result.append(`interface ${name} extends ${name}Properties {}`);
     let str = 'export class ' + name;
-    if (def.extends && def.extends !== 'NativeObject') {
+    if (def.extends) {
       str += ' extends ' + def.extends;
     }
     result.append(str + ' {');
@@ -127,86 +126,6 @@ module.exports = function(grunt) {
         });
       });
     }
-  }
-
-  function addEvents(result, def) {
-    if (def.events) {
-      addOffMethods(result, def);
-      addOnMethods(result, def);
-      addOnceMethods(result, def);
-      addTriggerMethod(result);
-    }
-  }
-
-  function addOffMethods(result, def) {
-    result.append('');
-    result.append(createComment([
-      'Removes all occurrences of *listener* that are bound to *event* and *context* from this widget.',
-      'If the context parameter is not present, all matching listeners will be removed.',
-      'If the listener parameter is not present, all listeners that are bound to *event* will be removed.',
-      'If the event parameter is not present, all listeners for all events will be removed from this widget.',
-      'Supports chaining.',
-      '@param event',
-      '@param listener',
-      '@param context'
-    ]));
-    result.append('off(event?: string, listener?: Function, context?: this): this;');
-    Object.keys(def.events).sort().forEach((event) => {
-      result.append(createOffMethod(event));
-    });
-  }
-
-  function createOffMethod(name) {
-    return `off(event: "${name}", listener?: Function, context?: this): this;`;
-  }
-
-  function addOnMethods(result, def) {
-    result.append('');
-    result.append(createComment([
-      'Adds a *listener* to the list of functions to be notified when *event* is fired. If the context',
-      'parameter is not present, the listener will be called in the context of this object. Supports',
-      'chaining.',
-      '@param event',
-      '@param listener',
-      '@param context? In the listener function, `this` will point to this object.'
-    ]));
-    result.append('on(event: string, listener: Function, context?: this): this;');
-    Object.keys(def.events).sort().forEach((event) => {
-      result.append(createOnMethod(event, def.events[event]));
-    });
-  }
-
-  function createOnMethod(name, def) {
-    return `on(event: "${name}", listener: (${createParamList(def.parameters)}) => void): this;`;
-  }
-
-  function addOnceMethods(result, def) {
-    result.append('');
-    result.append(createComment([
-      'Same as `on`, but removes the listener after it has been invoked by an event. Supports chaining.',
-      '@param event',
-      '@param listener',
-      '@param context? In the listener function, `this` will point to this object.'
-    ]));
-    result.append('once(event: string, listener: Function, context?: this): this;');
-    Object.keys(def.events).sort().forEach((event) => {
-      result.append(createOnceMethod(event, def.events[event]));
-    });
-  }
-
-  function createOnceMethod(name, def) {
-    return `once(event: "${name}", listener: (${createParamList(def.parameters)}, context?: this) => any): this;`;
-  }
-
-  function addTriggerMethod(result) {
-    result.append('');
-    result.append(createComment([
-      'Triggers an event of the given type. All registered listeners will be notified. Additional parameters',
-      'will be passed to the listeners.',
-      '@param event',
-      '@param ...params'
-    ]));
-    result.append('trigger(event: string, ...params: any[]): this;');
   }
 
   function addPropertyApi(result, def, name) {

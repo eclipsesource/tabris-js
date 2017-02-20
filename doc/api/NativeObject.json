@@ -18,7 +18,7 @@
           },
           {
             "name": "listener",
-            "type": "(event: Object) => void",
+            "type": "(event: any) => void",
             "description": "The listener function to register. This function will be called with an event object."
           },
           {
@@ -41,7 +41,7 @@
           },
           {
             "name": "listener",
-            "type": "(event: Object) => void",
+            "type": "(event: any) => void",
             "description": "The listener function to register. This function will be called with an event object."
           },
           {
@@ -64,7 +64,7 @@
           },
           {
             "name": "listener",
-            "type": "(event: Object) => void",
+            "type": "(event: any) => void",
             "description": "The listener function to remove."
           },
           {
