@@ -23,7 +23,7 @@ module.exports = function(grunt) {
     files.forEach((file) => {
       let json = grunt.file.readJSON(file);
       json.file = file;
-      defs[json.type || json.object] = json;
+      defs[json.type] = json;
     });
     return defs;
   }
@@ -35,15 +35,14 @@ module.exports = function(grunt) {
     result.append(grunt.file.read(grunt.config('doc').typings));
     result.append('');
     Object.keys(defs).forEach((name) => {
-      addInheritedEvents(defs, name);
-      createTypeDef(result, defs[name], name);
+      addInheritedEvents(defs, defs[name]);
+      createTypeDef(result, defs[name]);
     });
     result.append('');
     return result.toString();
   }
 
-  function addInheritedEvents(defs, name) {
-    let def = defs[name];
+  function addInheritedEvents(defs, def) {
     if (def.extends) {
       if (!(def.extends in defs)) {
         throw new Error('Super type not found for ' + def.type);
@@ -53,50 +52,50 @@ module.exports = function(grunt) {
     }
   }
 
-  function createTypeDef(result, def, name) {
-    result.append('// ' + name);
+  function createTypeDef(result, def) {
+    result.append('// ' + def.type);
     result.append('');
-    addPropertyInterface(result, def, name);
+    addPropertyInterface(result, def);
     result.append('');
-    addClass(result, def, name);
-    addInstance(result, def, name);
+    addClass(result, def);
+    addInstance(result, def);
     result.append('');
   }
 
-  function addInstance(result, def, name) {
+  function addInstance(result, def) {
     if (def.object) {
       result.append('');
-      result.append(`declare let ${def.object}: ${name};`);
+      result.append(`declare let ${def.object}: ${def.type};`);
     }
   }
 
-  function addClass(result, def, name) {
+  function addClass(result, def) {
     result.append(createDoc(def));
-    addClassDef(result,name, def);
+    addClassDef(result, def);
     result.indent++;
-    addConstructor(result, name);
+    addConstructor(result, def);
     addMethods(result, def);
-    addPropertyApi(result, def, name);
+    addPropertyApi(result, def);
     result.indent--;
     result.append('}');
   }
 
-  function addConstructor(result, name) {
+  function addConstructor(result, def) {
     result.append('');
-    result.append(`constructor(properties?: ${name}Properties);`);
+    result.append(`constructor(properties?: ${def.type}Properties);`);
   }
 
-  function addClassDef(result, name, def) {
-    result.append(`interface ${name} extends ${name}Properties {}`);
-    let str = 'export class ' + name;
+  function addClassDef(result, def) {
+    result.append(`interface ${def.type} extends ${def.type}Properties {}`);
+    let str = 'export class ' + def.type;
     if (def.extends) {
       str += ' extends ' + def.extends;
     }
     result.append(str + ' {');
   }
 
-  function addPropertyInterface(result, def, name) {
-    result.append(createPropertyInterfaceDef(name, def));
+  function addPropertyInterface(result, def) {
+    result.append(createPropertyInterfaceDef(def));
     result.indent++;
     Object.keys(def.properties || []).sort().forEach((name) => {
       result.append('');
@@ -106,8 +105,8 @@ module.exports = function(grunt) {
     result.append('}');
   }
 
-  function createPropertyInterfaceDef(name, def) {
-    let str = 'interface ' + name + 'Properties';
+  function createPropertyInterfaceDef(def) {
+    let str = 'interface ' + def.type + 'Properties';
     if (def.extends) {
       str += ' extends ' + def.extends + 'Properties';
     }
@@ -128,7 +127,7 @@ module.exports = function(grunt) {
     }
   }
 
-  function addPropertyApi(result, def, name) {
+  function addPropertyApi(result, def) {
     if (def.properties) {
       result.append('');
       result.append(createComment([
@@ -148,7 +147,7 @@ module.exports = function(grunt) {
         'Sets all key-value pairs in the properties object as widget properties. Supports chaining.',
         '@param properties'
       ]));
-      result.append(`set(properties: ${name}Properties): this;`);
+      result.append(`set(properties: ${def.type}Properties): this;`);
     }
   }
 
