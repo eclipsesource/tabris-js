@@ -1363,15 +1363,15 @@ describe('Widget.extend', function() {
   it('adds custom properties', function() {
     let TestWidget = Widget.extend({_properties: {foo: {type: 'number'}}});
 
-    expect(TestWidget.prototype.$properties.foo).not.to.be.undefined;
-    expect(TestWidget.prototype.$properties.foo.type.encode('23')).to.equal(23);
+    expect(TestWidget.prototype.$prop_foo).not.to.be.undefined;
+    expect(TestWidget.prototype.$prop_foo.type.encode('23')).to.equal(23);
   });
 
   it('adds default properties', function() {
     let TestWidget = Widget.extend({});
 
-    expect(TestWidget.prototype.$properties.enabled).not.to.be.undefined;
-    expect(TestWidget.prototype.$properties.visible).not.to.be.undefined;
+    expect(TestWidget.prototype.$prop_enabled).not.to.be.undefined;
+    expect(TestWidget.prototype.$prop_visible).not.to.be.undefined;
   });
 
   it('extends default properties', function() {
@@ -1379,8 +1379,8 @@ describe('Widget.extend', function() {
 
     let TestWidget = Widget.extend({_properties: custom});
 
-    expect(TestWidget.prototype.$properties.foo).not.to.be.undefined;
-    expect(TestWidget.prototype.$properties.enabled.type.encode('23')).to.equal(23);
+    expect(TestWidget.prototype.$prop_foo).not.to.be.undefined;
+    expect(TestWidget.prototype.$prop_enabled.type.encode('23')).to.equal(23);
   });
 
   it('created widgets are instanceof Widget', function() {

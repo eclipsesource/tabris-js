@@ -1,35 +1,22 @@
 import NativeObject from './NativeObject';
 
-const CONFIG = {
-
-  _name: '_Animation',
-
-  _type: 'tabris.Animation',
-
-  _events: {
-    Start: true,
-    Completion: true
-  },
-
-  _properties: {
-    properties: 'any',
-    delay: 'natural',
-    duration: 'natural',
-    repeat: 'natural',
-    reverse: 'boolean',
-    easing: ['choice', ['linear', 'ease-in', 'ease-out', 'ease-in-out']],
-    target: 'proxy'
-  }
-
+const PROPERTIES = {
+  properties: 'any',
+  delay: 'natural',
+  duration: 'natural',
+  repeat: 'natural',
+  reverse: 'boolean',
+  easing: ['choice', ['linear', 'ease-in', 'ease-out', 'ease-in-out']],
+  target: 'proxy'
 };
 
-class Animation extends NativeObject.extend(CONFIG) {
+class Animation extends NativeObject {
 
-  _create(type, properties) {
-    super._create(type, properties);
+  constructor(properties) {
+    super();
+    this._create('tabris.Animation', properties);
     this._nativeListen('Start', true);
     this._nativeListen('Completion', true);
-    return this;
   }
 
   _trigger(name, event) {
@@ -60,6 +47,8 @@ class Animation extends NativeObject.extend(CONFIG) {
 
 }
 
+NativeObject.defineProperties(Animation.prototype, PROPERTIES);
+
 export function animate(properties, options) {
   let animatedProps = {};
   for (let property in properties) {
@@ -76,7 +65,7 @@ export function animate(properties, options) {
     }
   }
   for (let option in options) {
-    if (!Animation.prototype.$properties[option] && option !== 'name') {
+    if (!(option in PROPERTIES) && option !== 'name') {
       console.warn(this + ': Ignored invalid animation option "' + option + '"');
     }
   }

@@ -6,6 +6,24 @@ Object.assign(EventsClass.prototype, Events);
 
 export default class NativeObject extends EventsClass {
 
+  static defineProperties(target, definitions) {
+    for (let name in definitions) {
+      NativeObject.defineProperty(target, name, definitions[name]);
+    }
+  }
+
+  static defineProperty(target, name, definition) {
+    target['$prop_' + name] = normalizeProperty(definition);
+    Object.defineProperty(target, name, {
+      set(value) {
+        this._setProperty(name, value);
+      },
+      get() {
+        return this._getProperty(name);
+      }
+    });
+  }
+
   static extend(members, superType = NativeObject) {
     let cid = members._cid;
     let type = members._type;
@@ -26,13 +44,11 @@ export default class NativeObject extends EventsClass {
     }
     let events = normalizeEvents(members._events || {});
     let trigger = buildTriggerMap(events);
-    let properties = normalizeProperties(members._properties || {});
     Object.assign(Type.prototype, {
       $events: events,
-      $trigger: trigger,
-      $properties: properties
+      $trigger: trigger
     });
-    createProperties(Type.prototype, properties);
+    NativeObject.defineProperties(Type.prototype, members._properties || {});
     return Type;
   }
 
@@ -115,12 +131,12 @@ export default class NativeObject extends EventsClass {
   }
 
   _getTypeDef(name) {
-    let prop = this.$properties[name];
+    let prop = this['$prop_' + name];
     return prop ? prop.type : null;
   }
 
   _getDefaultPropertyValue(name) {
-    let prop = this.$properties[name];
+    let prop = this['$prop_' + name];
     return prop ? valueOf(prop.default) : undefined;
   }
 
@@ -133,12 +149,12 @@ export default class NativeObject extends EventsClass {
   }
 
   _getPropertyGetter(name) {
-    let prop = this.$properties[name];
+    let prop = this['$prop_' + name];
     return prop ? prop.get : undefined;
   }
 
   _getPropertySetter(name) {
-    let prop = this.$properties[name];
+    let prop = this['$prop_' + name];
     return prop ? prop.set : undefined;
   }
 
@@ -186,7 +202,7 @@ export default class NativeObject extends EventsClass {
   }
 
   _listen(name, listening) {
-    if (this.$events[name]) {
+    if (this.$events && this.$events[name]) {
       this._nativeListen(this.$events[name], listening);
     }
   }
@@ -197,7 +213,7 @@ export default class NativeObject extends EventsClass {
   }
 
   _trigger(nativeName, event = {}) {
-    let name = this.$trigger[nativeName];
+    let name = this.$trigger && this.$trigger[nativeName] || nativeName;
     this.trigger(name, Object.assign({target: this}, event));
   }
 
@@ -250,14 +266,6 @@ function normalizeEvents(events) {
   return result;
 }
 
-function normalizeProperties(properties) {
-  let result = {};
-  for (let name in properties) {
-    result[name] = normalizeProperty(properties[name]);
-  }
-  return result;
-}
-
 function normalizeProperty(property) {
   let shortHand = (typeof property === 'string' || Array.isArray(property));
   let setter = property.access && property.access.set || defaultSetter;
@@ -302,7 +310,7 @@ function wrapCoder(fn, args) {
 
 function defaultSetter(name, value, options) {
   this._nativeSet(name, value);
-  if (this.$properties[name].nocache) {
+  if (this['$prop_' + name].nocache) {
     this._triggerChangeEvent(name, value, options);
   } else {
     this._storeProperty(name, value, options);
@@ -324,23 +332,6 @@ function buildTriggerMap(events) {
     result[events[name]] = name;
   }
   return result;
-}
-
-function createProperties(target, definitions) {
-  for (let property in definitions) {
-    createProperty(target, property);
-  }
-}
-
-function createProperty(target, property) {
-  Object.defineProperty(target, property, {
-    set(value) {
-      this._setProperty(property, value);
-    },
-    get() {
-      return this._getProperty(property);
-    }
-  });
 }
 
 function valueOf(value) {

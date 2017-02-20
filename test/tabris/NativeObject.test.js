@@ -30,19 +30,19 @@ describe('NativeObject', function() {
 
   });
 
-  describe('create', function() {
+  describe('_create', function() {
 
     let TestType, object;
 
     beforeEach(function() {
-      TestType = NativeObject.extend({
-        _properties: {foo: 'any'}
-      });
+      TestType = class TestType extends NativeObject {};
       object = new TestType();
       client.resetCalls();
     });
 
     it('calls native create with properties', function() {
+      NativeObject.defineProperties(TestType.prototype, {foo: 'any'});
+
       object._create('TestType', {foo: 23});
 
       let calls = client.calls({op: 'create', type: 'TestType'});
@@ -51,12 +51,13 @@ describe('NativeObject', function() {
     });
 
     it('translates properties', function() {
+      NativeObject.defineProperties(TestType.prototype, {bar: {type: 'proxy'}});
       let other = new TestType();
-      other.$properties.foo.type = types.proxy;
 
-      object._create('TestType', {foo: other});
+      object._create('TestType', {bar: other});
+
       let properties = client.calls({op: 'create', id: object.cid})[0].properties;
-      expect(properties.foo).to.equal(other.cid);
+      expect(properties.bar).to.equal(other.cid);
     });
 
   });
@@ -538,19 +539,19 @@ describe('NativeObject.extend', function() {
     expect(instance.$events).to.eql({});
   });
 
-  it('adds properties map to prototype', function() {
+  it('adds property definition to prototype', function() {
     let type = {encode() {}, decode() {}};
     let CustomType = NativeObject.extend({_properties: {foo: {type}}});
     let instance = new CustomType();
 
-    expect(instance.$properties.foo.type).to.equal(type);
+    expect(instance.$prop_foo.type).to.equal(type);
   });
 
   it('replaces type strings with type definition object', function() {
     let CustomType = NativeObject.extend({_properties: {foo: {type: 'boolean'}}});
     let instance = new CustomType();
 
-    expect(instance.$properties.foo.type).to.equal(types.boolean);
+    expect(instance.$prop_foo.type).to.equal(types.boolean);
   });
 
   it('wraps encode function if type is given as an array', function() {
@@ -562,7 +563,7 @@ describe('NativeObject.extend', function() {
     instance.set('foo', 'bar');
 
     expect(types.choice.encode).to.have.been.calledWith('bar', ['a', 'b', 'c']);
-    expect(instance.$properties.foo.type.encode)
+    expect(instance.$prop_foo.type.encode)
       .not.to.equal(types.choice.encode);
   });
 
@@ -577,7 +578,7 @@ describe('NativeObject.extend', function() {
     instance.get('foo');
 
     expect(types.bounds.decode).to.have.been.calledWith('bar', ['customarg']);
-    expect(instance.$properties.foo.type.decode)
+    expect(instance.$prop_foo.type.decode)
       .not.to.equal(types.bounds.decode);
   });
 
@@ -587,18 +588,11 @@ describe('NativeObject.extend', function() {
     }).to.throw();
   });
 
-  it('adds normalized properties map to prototype', function() {
+  it('adds normalized property definition to prototype', function() {
     let CustomType = NativeObject.extend({_properties: {foo: 'boolean'}});
     let instance = new CustomType();
 
-    expect(instance.$properties.foo.type).to.equal(types.boolean);
-  });
-
-  it('adds empty properties map to prototype', function() {
-    let CustomType = NativeObject.extend({});
-    let instance = new CustomType();
-
-    expect(instance.$properties).to.eql({});
+    expect(instance.$prop_foo.type).to.equal(types.boolean);
   });
 
   describe('constructor', function() {
@@ -706,9 +700,10 @@ describe('NativeObject.extend', function() {
     let TestType, object;
 
     beforeEach(function() {
-      TestType = NativeObject.extend({
-        _name: 'TestType',
-        _properties: {foo: 'any', uncached: {type: 'any', nocache: true}}
+      TestType = class TestType extends NativeObject {};
+      NativeObject.defineProperties(TestType.prototype, {
+        foo: 'any',
+        uncached: {type: 'any', nocache: true}
       });
       object = new TestType();
     });
@@ -743,13 +738,13 @@ describe('NativeObject.extend', function() {
     });
 
     it('returns uncached value from default config', function() {
-      object.$properties.foo.default = 23;
+      object.$prop_foo.default = 23;
 
       expect(object.foo).to.equal(23);
     });
 
     it('returns cloned value from default function', function() {
-      object.$properties.foo.default = () => [];
+      object.$prop_foo.default = () => [];
 
       object.foo.push(1);
 
@@ -767,14 +762,14 @@ describe('NativeObject.extend', function() {
     });
 
     it('returns cached value decoded', function() {
-      object.$properties.foo.type = types.color;
+      object.$prop_foo.type = types.color;
       object.foo = '#ff00ff';
 
       expect(object.foo).to.equal('rgba(255, 0, 255, 1)');
     });
 
     it('decodes value if there is a decoder', function() {
-      object.$properties.foo.type = {
+      object.$prop_foo.type = {
         decode: x => x + '-decoded'
       };
       stub(client, 'get').returns(23);
@@ -797,13 +792,13 @@ describe('NativeObject.extend', function() {
     });
 
     it('returns default value if property was never set', function() {
-      object.$properties.foo = {default: 'bar'};
+      object.$prop_foo = {default: 'bar'};
 
       expect(object.foo).to.equal('bar');
     });
 
     it('does not return default value if property was set', function() {
-      object.$properties.foo = {default: 'bar'};
+      object.$prop_foo = {default: 'bar'};
 
       object.foo = 'something else';
 
@@ -812,7 +807,7 @@ describe('NativeObject.extend', function() {
 
     it('calls custom getter with property name', function() {
       let getter = spy();
-      object.$properties.foo = {get: getter};
+      object.$prop_foo = {get: getter};
 
       object.foo;
 
@@ -820,7 +815,7 @@ describe('NativeObject.extend', function() {
     });
 
     it('returns value from custom getter', function() {
-      object.$properties.foo = {get: stub().returns('bar')};
+      object.$prop_foo = {get: stub().returns('bar')};
 
       expect(object.foo).to.equal('bar');
     });
@@ -829,13 +824,14 @@ describe('NativeObject.extend', function() {
 
   describe('property setter', function() {
 
-    class TestType extends NativeObject.extend({
-      _name: 'TestType',
-      _properties: {foo: 'any', uncached: {type: 'any', nocache: true}}
-    }) {}
-    let object, listener;
+    let TestType, object, listener;
 
     beforeEach(function() {
+      TestType = class TestType extends NativeObject {};
+      NativeObject.defineProperties(TestType.prototype, {
+        foo: 'any',
+        uncached: {type: 'any', nocache: true}
+      });
       object = new TestType();
       listener = spy();
       client.resetCalls();
@@ -864,7 +860,7 @@ describe('NativeObject.extend', function() {
     });
 
     it('does not call native SET if encoder function throws', function() {
-      object.$properties.knownProperty = {type: 'boolean'};
+      object.$prop_knownProperty = {type: 'boolean'};
       stub(types.boolean, 'encode').throws(new Error('My Error'));
 
       object.knownProperty = 'foo';
@@ -882,7 +878,7 @@ describe('NativeObject.extend', function() {
     });
 
     it('triggers change event with decoded value', function() {
-      object.$properties.foo = {type: types.boolean};
+      object.$prop_foo = {type: types.boolean};
       object.on('change:foo', listener);
 
       object.foo = 23;
@@ -901,7 +897,7 @@ describe('NativeObject.extend', function() {
     });
 
     it('triggers no change event if value is unchanged from default', function() {
-      object.$properties.foo = {type: 'any', default: 0};
+      object.$prop_foo = {type: 'any', default: 0};
       object.on('change:foo', listener);
 
       object.foo = 0;
@@ -910,7 +906,7 @@ describe('NativeObject.extend', function() {
     });
 
     it('triggers no change event if encoded value is unchanged', function() {
-      object.$properties.foo = {type: types.boolean};
+      object.$prop_foo = {type: types.boolean};
       object.set('foo', true);
       object.on('change:foo', listener);
 
@@ -921,7 +917,7 @@ describe('NativeObject.extend', function() {
 
     it('calls custom setter', function() {
       let setter = spy();
-      object.$properties.foo = {set: setter};
+      object.$prop_foo = {set: setter};
 
       object.foo = 23;
 
@@ -929,7 +925,7 @@ describe('NativeObject.extend', function() {
     });
 
     it('stores nothing if custom setter exists', function() {
-      object.$properties.foo = {set: () => {}};
+      object.$prop_foo = {set: () => {}};
 
       object.foo = 23;
 
@@ -938,7 +934,7 @@ describe('NativeObject.extend', function() {
 
     it('calls encoding function if present', function() {
       let encode = spy();
-      object.$properties.foo = {type: {encode}};
+      object.$prop_foo = {type: {encode}};
 
       object.foo = true;
 
@@ -947,7 +943,7 @@ describe('NativeObject.extend', function() {
 
     it('raises a warning if encoding function throws', function() {
       let encode = stub().throws(new Error('My Error'));
-      object.$properties.foo = {type: {encode}};
+      object.$prop_foo = {type: {encode}};
 
       object.foo = true;
 
