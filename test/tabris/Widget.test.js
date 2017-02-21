@@ -1343,44 +1343,11 @@ describe('Widget', function() {
 
 describe('Widget.extend', function() {
 
-  it('adds default events copy', function() {
-    let TestWidget = Widget.extend({});
-
-    expect(TestWidget.prototype.$events.resize).to.equal('resize');
-    expect(TestWidget.prototype.$events).not.to.equal(Widget.extend._defaultEvents);
-  });
-
-  it('extends default events', function() {
-    let custom = {foo: 'bar', touchstart: 'touchstart'};
-
-    let TestWidget = Widget.extend({_events: custom});
-
-    expect(TestWidget.prototype.$events).to.eql(
-      Object.assign({}, TestWidget.prototype.$events, custom)
-    );
-  });
-
-  it('adds custom properties', function() {
+  it('delegates to NativeObject', function() {
     let TestWidget = Widget.extend({_properties: {foo: {type: 'number'}}});
 
     expect(TestWidget.prototype.$prop_foo).not.to.be.undefined;
     expect(TestWidget.prototype.$prop_foo.type.encode('23')).to.equal(23);
-  });
-
-  it('adds default properties', function() {
-    let TestWidget = Widget.extend({});
-
-    expect(TestWidget.prototype.$prop_enabled).not.to.be.undefined;
-    expect(TestWidget.prototype.$prop_visible).not.to.be.undefined;
-  });
-
-  it('extends default properties', function() {
-    let custom = {foo: 'any', enabled: {type: 'number'}};
-
-    let TestWidget = Widget.extend({_properties: custom});
-
-    expect(TestWidget.prototype.$prop_foo).not.to.be.undefined;
-    expect(TestWidget.prototype.$prop_enabled.type.encode('23')).to.equal(23);
   });
 
   it('created widgets are instanceof Widget', function() {

@@ -5,13 +5,12 @@ import GestureRecognizer from './GestureRecognizer';
 import {animate} from './Animation';
 import {types} from './property-types';
 
+const EVENT_TYPES = ['touchstart', 'touchmove', 'touchend', 'touchcancel', 'resize'];
+
 export default class Widget extends NativeObject {
 
   static extend(config) {
-    let widgetConfig = Object.assign({}, config);
-    widgetConfig._events = Object.assign({}, defaultEvents, config._events || {});
-    widgetConfig._properties = Object.assign({}, defaultProperties, config._properties || {});
-    return NativeObject.extend(widgetConfig, Widget);
+    return NativeObject.extend(config, Widget);
   }
 
   constructor() {
@@ -210,21 +209,21 @@ export default class Widget extends NativeObject {
       }
     } else if (name === 'change:bounds') {
       this._onoff('resize', listening, this.$triggerChangeBounds);
+    } else if (EVENT_TYPES.includes(name)) {
+      this._nativeListen(name, listening);
     } else {
       super._listen(name, listening);
     }
   }
 
   _trigger(name, event) {
-    if (['touchstart', 'touchmove', 'touchend', 'touchcancel'].includes(name)) {
-      this.trigger(name, Object.assign({target: this}, event));
-    } else if (name === 'resize') {
+    if (name === 'resize') {
       if (hasAndroidResizeBug()) {
         setTimeout(() => {
-          this.trigger(name, Object.assign({target: this}, types.bounds.decode(event.bounds)));
+          super._trigger(name, types.bounds.decode(event.bounds));
         }, 0);
       } else {
-        this.trigger(name, Object.assign({target: this}, types.bounds.decode(event.bounds)));
+        super._trigger(name, types.bounds.decode(event.bounds));
       }
     } else {
       super._trigger(name, event);
@@ -252,8 +251,6 @@ export default class Widget extends NativeObject {
 
 }
 
-Widget.prototype.animate = animate;
-
 let layoutAccess = {
   set(name, value) {
     if (!this._layoutData) {
@@ -273,22 +270,7 @@ let layoutAccess = {
   }
 };
 
-function hasAndroidResizeBug() {
-  if (!('cache' in hasAndroidResizeBug)) {
-    hasAndroidResizeBug.cache = tabris.device.platform === 'Android' && tabris.device.version <= 17;
-  }
-  return hasAndroidResizeBug.cache;
-}
-
-let defaultEvents = {
-  touchstart: true,
-  touchmove: true,
-  touchend: true,
-  touchcancel: true,
-  resize: true
-};
-
-let defaultProperties = {
+NativeObject.defineProperties(Widget.prototype, {
   enabled: {
     type: 'boolean',
     default: true
@@ -432,7 +414,16 @@ let defaultProperties = {
     type: ['choice', ['default', 'light', 'dark']],
     default: 'default'
   }
-};
+});
+
+Widget.prototype.animate = animate;
+
+function hasAndroidResizeBug() {
+  if (!('cache' in hasAndroidResizeBug)) {
+    hasAndroidResizeBug.cache = tabris.device.platform === 'Android' && tabris.device.version <= 17;
+  }
+  return hasAndroidResizeBug.cache;
+}
 
 let defaultGestures = {
   tap: {type: 'tap'},
