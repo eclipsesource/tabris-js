@@ -1,23 +1,12 @@
 import NativeObject from './NativeObject';
 
-const CONFIG = {
+export default class InactivityTimer extends NativeObject {
 
-  _type: 'tabris.InactivityTimer',
-
-  _properties: {
-    delay: {
-      type: 'natural',
-      default: 0
-    }
-  },
-
-  _events: {
-    timeout: true
+  constructor(properties) {
+    super();
+    this._create('tabris.InactivityTimer', properties);
+    this._nativeListen('timeout', true);
   }
-
-};
-
-export default class InactivityTimer extends NativeObject.extend(CONFIG) {
 
   start() {
     this._nativeCall('start');
@@ -28,3 +17,10 @@ export default class InactivityTimer extends NativeObject.extend(CONFIG) {
   }
 
 }
+
+NativeObject.defineProperties(InactivityTimer.prototype, {
+  delay: {
+    type: 'natural',
+    default: 0
+  }
+});

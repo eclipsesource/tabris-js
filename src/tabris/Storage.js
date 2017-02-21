@@ -1,13 +1,17 @@
 import {types} from './property-types';
 import NativeObject from './NativeObject';
 
-class ClientStore extends NativeObject.extend({
-  _cid: 'tabris.ClientStore'
-}) {}
+class ClientStore extends NativeObject {
+  constructor() {
+    super('tabris.ClientStore');
+  }
+}
 
-class SecureStore extends NativeObject.extend({
-  _cid: 'tabris.SecureStore'
-}) {}
+class SecureStore extends NativeObject {
+  constructor() {
+    super('tabris.SecureStore');
+  }
+}
 
 let encode = types.string.encode;
 

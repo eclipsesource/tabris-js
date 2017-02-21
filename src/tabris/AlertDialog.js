@@ -1,49 +1,11 @@
 import NativeObject from './NativeObject';
 
-const CONFIG = {
+export default class AlertDialog extends NativeObject {
 
-  _type: 'tabris.AlertDialog',
-
-  _name: 'AlertDialog',
-
-  _properties: {
-    title: {type: 'string', default: ''},
-    message: {type: 'string', default: ''},
-    buttons: {
-      type: {
-        encode(value) {
-          if (typeof value !== 'object') {
-            throw new Error('value is not an object');
-          }
-          let encoded = {};
-          if ('ok' in value) {
-            encoded.ok = value.ok + '';
-          }
-          if ('cancel' in value) {
-            encoded.cancel = value.cancel + '';
-          }
-          if ('neutral' in value) {
-            encoded.neutral = value.neutral + '';
-          }
-          return encoded;
-        }
-      },
-      default: () => ({})
-    }
-  },
-
-  _events: {
-    'close': true
-  }
-
-};
-
-export default class AlertDialog extends NativeObject.extend(CONFIG) {
-
-  _create(type, properties) {
-    super._create(type, properties);
+  constructor(properties) {
+    super();
+    this._create('tabris.AlertDialog', properties);
     this._nativeListen('close', true);
-    return this;
   }
 
   _trigger(name, event) {
@@ -72,3 +34,29 @@ export default class AlertDialog extends NativeObject.extend(CONFIG) {
   }
 
 }
+
+NativeObject.defineProperties(AlertDialog.prototype, {
+  title: {type: 'string', default: ''},
+  message: {type: 'string', default: ''},
+  buttons: {
+    type: {
+      encode(value) {
+        if (typeof value !== 'object') {
+          throw new Error('value is not an object');
+        }
+        let encoded = {};
+        if ('ok' in value) {
+          encoded.ok = value.ok + '';
+        }
+        if ('cancel' in value) {
+          encoded.cancel = value.cancel + '';
+        }
+        if ('neutral' in value) {
+          encoded.neutral = value.neutral + '';
+        }
+        return encoded;
+      }
+    },
+    default: () => ({})
+  }
+});

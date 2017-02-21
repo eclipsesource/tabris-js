@@ -1,12 +1,16 @@
 import NativeObject from './NativeObject';
 
-const CONFIG = {
-  _type: 'tabris.Timer',
-  _events: {Run: true},
-  _properties: {delay: 'any', repeat: 'any'}
-};
+class Timer extends NativeObject {
 
-class Timer extends NativeObject.extend(CONFIG) {}
+  constructor(properties) {
+    super();
+    this._create('tabris.Timer', properties);
+    this._nativeListen('Run', true);
+  }
+
+}
+
+NativeObject.defineProperties(Timer.prototype, {delay: 'any', repeat: 'any'});
 
 export function addWindowTimerMethods(target) {
 

@@ -1,19 +1,27 @@
 import NativeObject from './NativeObject';
 
-const CONFIG = {
-  _type: 'tabris.GestureRecognizer',
-  _properties: {
-    type: 'string',
-    target: 'proxy',
-    fingers: 'natural',
-    touches: 'natural',
-    duration: 'natural',
-    direction: 'string'
-  },
+export default class GestureRecognizer extends NativeObject {
 
-  _events: {
-    gesture: true
+  constructor(properties) {
+    super();
+    this._create('tabris.GestureRecognizer', properties);
   }
-};
 
-export default class GestureRecognizer extends NativeObject.extend(CONFIG) {}
+  _listen(name, listening) {
+    if (name === 'gesture') {
+      this._nativeListen(name, listening);
+    } else {
+      super._listen(name, listening);
+    }
+  }
+
+}
+
+NativeObject.defineProperties(GestureRecognizer.prototype, {
+  type: 'string',
+  target: 'proxy',
+  fingers: 'natural',
+  touches: 'natural',
+  duration: 'natural',
+  direction: 'string'
+});

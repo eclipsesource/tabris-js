@@ -86,7 +86,7 @@ describe('WindowTimers', function() {
       });
 
       it('listens on Run event of native Timer', function() {
-        expect(listenCall()).not.to.be.undefined;
+        expect(listenCall().listen).to.be.true;
       });
 
       it('starts the native Timer', function() {

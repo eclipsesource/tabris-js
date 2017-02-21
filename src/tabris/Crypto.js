@@ -1,10 +1,11 @@
 import NativeObject from './NativeObject';
 
-const CONFIG = {
-  _type: 'tabris.Crypto'
-};
+export default class Crypto extends NativeObject {
 
-export default class Crypto extends NativeObject.extend(CONFIG) {
+  constructor() {
+    super();
+    this._create('tabris.Crypto');
+  }
 
   getRandomValues(typedArray) {
     if (arguments.length === 0) {

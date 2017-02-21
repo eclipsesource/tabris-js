@@ -1,28 +1,9 @@
 import NativeObject from './NativeObject';
 
-const CONFIG = {
-  _cid: 'tabris.Device',
-  _properties: {
-    model: 'any',
-    platform: 'any',
-    version: 'any',
-    language: 'any',
-    orientation: 'any',
-    screenWidth: 'any',
-    screenHeight: 'any',
-    scaleFactor: 'any',
-    win_keyboardPresent: 'any',
-    win_primaryInput: 'any'
-  },
-  _events: {
-    'change:orientation': 'orientationchange'
-  }
-};
-
-export default class Device extends NativeObject.extend(CONFIG) {
+export default class Device extends NativeObject {
 
   constructor() {
-    super();
+    super('tabris.Device');
     if (arguments[0] !== true) {
       throw new Error('Device can not be created');
     }
@@ -30,6 +11,14 @@ export default class Device extends NativeObject.extend(CONFIG) {
 
   _setProperty() {
     // prevent overwriting properties
+  }
+
+  _listen(name, listening) {
+    if (name === 'change:orientation') {
+      this._nativeListen('orientationchange', listening);
+    } else {
+      super._listen(name, listening);
+    }
   }
 
   _trigger(name, event) {
@@ -45,6 +34,19 @@ export default class Device extends NativeObject.extend(CONFIG) {
   }
 
 }
+
+NativeObject.defineProperties(Device.prototype, {
+  model: 'any',
+  platform: 'any',
+  version: 'any',
+  language: 'any',
+  orientation: 'any',
+  screenWidth: 'any',
+  screenHeight: 'any',
+  scaleFactor: 'any',
+  win_keyboardPresent: 'any',
+  win_primaryInput: 'any'
+});
 
 export function create() {
   return new Device(true);

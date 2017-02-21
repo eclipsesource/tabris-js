@@ -1,55 +1,12 @@
 import NativeObject from './NativeObject';
 
 const CERTIFICATE_ALGORITHMS = ['RSA2048', 'RSA4096', 'ECDSA256'];
+const EVENT_TYPES = ['foreground', 'background', 'pause', 'resume', 'terminate', 'backnavigation'];
 
-const CONFIG = {
-  _cid: 'tabris.App',
-  _properties: {
-    pinnedCertificates: {
-      type: 'array',
-      default() {
-        return [];
-      },
-      access: {
-        set(name, value) {
-          for (let cert of value) {
-            if (typeof cert.host !== 'string') {
-              throw new Error('Invalid host for pinned certificate: ' + cert.host);
-            }
-            if (typeof cert.hash !== 'string' || !cert.hash.startsWith('sha256/')) {
-              throw new Error('Invalid hash for pinned certificate: ' + cert.hash);
-            }
-            if (tabris.device.platform === 'iOS') {
-              if (!('algorithm' in cert)) {
-                throw new Error('Missing algorithm for pinned certificate: ' + cert.host);
-              }
-              if (typeof cert.algorithm !== 'string' || CERTIFICATE_ALGORITHMS.indexOf(cert.algorithm) === -1) {
-                throw new Error('Invalid algorithm for pinned certificate: ' + cert.algorithm);
-              }
-            }
-          }
-          this._storeProperty(name, value);
-          this._nativeSet(name, value);
-        }
-      }
-    }
-  },
-  _events: {
-    foreground: true,
-    resume: true,
-    pause: true,
-    background: true,
-    terminate: true,
-    open: 'Open',
-    patchInstall: true,
-    backnavigation: true
-  },
-};
-
-export default class App extends NativeObject.extend(CONFIG) {
+export default class App extends NativeObject {
 
   constructor() {
-    super();
+    super('tabris.App');
     if (arguments[0] !== true) {
       throw new Error('App can not be created');
     }
@@ -77,10 +34,18 @@ export default class App extends NativeObject.extend(CONFIG) {
     }
     if (!this._pendingPatchCallback) {
       this._pendingPatchCallback = callback || true;
-      this._listen('patchInstall', true);
+      this._nativeListen('patchInstall', true);
       this._nativeCall('installPatch', {url});
     } else if (typeof callback === 'function') {
       callback(new Error('Another installPatch operation is already pending.'));
+    }
+  }
+
+  _listen(name, listening) {
+    if (EVENT_TYPES.includes(name)) {
+      this._nativeListen(name, listening);
+    } else {
+      super._listen(name, listening);
     }
   }
 
@@ -95,7 +60,7 @@ export default class App extends NativeObject.extend(CONFIG) {
       });
       return cancelled;
     } else if (name === 'patchInstall') {
-      this._listen('patchInstall', false);
+      this._nativeListen('patchInstall', false);
       let callback = this._pendingPatchCallback;
       delete this._pendingPatchCallback;
       if (typeof callback === 'function') {
@@ -116,6 +81,37 @@ export default class App extends NativeObject.extend(CONFIG) {
   }
 
 }
+
+NativeObject.defineProperties(App.prototype, {
+  pinnedCertificates: {
+    type: 'array',
+    default() {
+      return [];
+    },
+    access: {
+      set(name, value) {
+        for (let cert of value) {
+          if (typeof cert.host !== 'string') {
+            throw new Error('Invalid host for pinned certificate: ' + cert.host);
+          }
+          if (typeof cert.hash !== 'string' || !cert.hash.startsWith('sha256/')) {
+            throw new Error('Invalid hash for pinned certificate: ' + cert.hash);
+          }
+          if (tabris.device.platform === 'iOS') {
+            if (!('algorithm' in cert)) {
+              throw new Error('Missing algorithm for pinned certificate: ' + cert.host);
+            }
+            if (typeof cert.algorithm !== 'string' || CERTIFICATE_ALGORITHMS.indexOf(cert.algorithm) === -1) {
+              throw new Error('Invalid algorithm for pinned certificate: ' + cert.algorithm);
+            }
+          }
+        }
+        this._storeProperty(name, value);
+        this._nativeSet(name, value);
+      }
+    }
+  }
+});
 
 export function create() {
   let app = new App(true);

@@ -14,23 +14,22 @@ const CONSTANTS = {
 };
 const EVENT_TYPES = ['open', 'message', 'close', 'error'];
 
-const CONFIG = {
-  _type: 'tabris.WebSocket',
-  _events: {
-    open: true,
-    message: true,
-    error: true,
-    close: true,
-    bufferProcess: true
-  },
-  _properties: {
-    url: {type: 'string', default: ''},
-    protocol: {type: 'any', default: ''},
-    binaryType: {type: 'string', default: 'blob'}
-  }
-};
+class _WebSocket extends NativeObject {
 
-class _WebSocket extends NativeObject.extend(CONFIG) {}
+  constructor(properties) {
+    super();
+    this._create('tabris.WebSocket', properties);
+    EVENT_TYPES.forEach(type => this._nativeListen(type, true));
+    this._nativeListen('bufferProcess', true);
+  }
+
+}
+
+NativeObject.defineProperties(_WebSocket.prototype, {
+  url: {type: 'string', default: ''},
+  protocol: {type: 'any', default: ''},
+  binaryType: {type: 'string', default: 'blob'}
+});
 
 export default class WebSocket {
 

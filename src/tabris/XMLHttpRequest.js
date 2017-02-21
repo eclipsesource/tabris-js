@@ -7,12 +7,17 @@ import NativeObject from './NativeObject';
 import Event, {addDOMEventTargetMethods, defineEventHandlerProperties} from './Event';
 import ProgressEvent from './ProgressEvent';
 
-const CONFIG = {
-  _type: 'tabris.HttpRequest',
-  _events: {StateChange: true, DownloadProgress: true, UploadProgress: true}
-};
+class HttpRequest extends NativeObject {
 
-class HttpRequest extends NativeObject.extend(CONFIG) {}
+  constructor() {
+    super();
+    this._create('tabris.HttpRequest');
+    this._nativeListen('StateChange', true);
+    this._nativeListen('DownloadProgress', true);
+    this._nativeListen('UploadProgress', true);
+  }
+
+}
 
 const EVENT_TYPES = [
   'loadstart', 'readystatechange', 'load', 'loadend', 'progress', 'timeout', 'abort', 'error'

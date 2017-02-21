@@ -164,7 +164,7 @@ export default class NativeObject extends EventsClass {
     this.trigger('change:' + propertyName, {target: this, value: decodedValue});
   }
 
-  _create(type, properties) {
+  _create(type, properties = {}) {
     tabris._nativeBridge.create(this.cid, type);
     this._reorderProperties(Object.keys(properties)).forEach(function(name) {
       setExistingProperty.call(this, name, properties[name]);
