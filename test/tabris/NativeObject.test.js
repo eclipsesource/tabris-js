@@ -67,10 +67,7 @@ describe('NativeObject', function() {
     let TestType, object;
 
     beforeEach(function() {
-      TestType = NativeObject.extend({
-        _name: 'TestType',
-        _events: {bar: true}
-      });
+      TestType = class TestType extends NativeObject {};
       object = new TestType();
       client.resetCalls();
       stub(console, 'warn');
@@ -241,14 +238,18 @@ describe('NativeObject', function() {
 
     describe('_nativeListen', function() {
 
-      it('calls native LISTEN', function() {
+      it('calls native LISTEN with true', function() {
         object._nativeListen('foo', true);
 
         let call = client.calls()[0];
-        expect(call.id).to.equal(object.cid);
-        expect(call.op).to.equal('listen');
-        expect(call.event).to.equal('foo');
-        expect(call.listen).to.be.true;
+        expect(call).to.deep.equal({op: 'listen', id: object.cid, event: 'foo', listen: true});
+      });
+
+      it('calls native LISTEN with false', function() {
+        object._nativeListen('foo', false);
+
+        let call = client.calls()[0];
+        expect(call).to.deep.equal({op: 'listen', id: object.cid, event: 'foo', listen: false});
       });
 
       it('fails on disposed object', function() {
@@ -257,6 +258,19 @@ describe('NativeObject', function() {
         expect(() => {
           object._nativeListen('foo', true);
         }).to.throw(Error, 'Object is disposed');
+      });
+
+    });
+
+    describe('_listen', function() {
+
+      it('calls native listen with translated event name', function() {
+        let CustomType = NativeObject.extend({_events: {foo: 'bar'}});
+        object = new CustomType();
+        object._listen('foo', true);
+
+        let call = client.calls({op: 'listen'})[0];
+        expect(call.event).to.equal('bar');
       });
 
     });
@@ -297,43 +311,20 @@ describe('NativeObject', function() {
 
       beforeEach(function() {
         listener = spy();
-        client.resetCalls();
+        spy(object, '_listen');
       });
 
-      it('calls native listen (true) for first listener', function() {
-        object.on('bar', listener);
-
-        let call = client.calls({op: 'listen', event: 'bar'})[0];
-        expect(call.listen).to.eql(true);
-      });
-
-      it('calls native listen with translated event name', function() {
-        let CustomType = NativeObject.extend({_events: {foo: 'bar'}});
-        object = new CustomType();
+      it('calls _listen with true for first listener', function() {
         object.on('foo', listener);
 
-        let call = client.calls({op: 'listen'})[0];
-        expect(call.event).to.equal('bar');
+        expect(object._listen).to.have.been.calledWith('foo', true);
       });
 
-      it('calls native listen function for another listener for another event', function() {
-        let CustomType = NativeObject.extend({
-          _events: {bar: {name: 'bar'}}
-        });
-        object = new CustomType();
-
-        object.on('foo', listener);
-        object.on('bar', listener);
-
-        let call = client.calls({op: 'listen', event: 'bar'})[0];
-        expect(call.listen).to.eql(true);
-      });
-
-      it('does not call native listen for subsequent listeners for the same event', function() {
+      it('does not call _listen for subsequent listeners for the same event', function() {
         object.on('bar', listener);
         object.on('bar', listener);
 
-        expect(client.calls({op: 'listen'}).length).to.equal(1);
+        expect(object._listen).to.have.been.calledOnce;
       });
 
       it('returns self to allow chaining', function() {
@@ -354,37 +345,26 @@ describe('NativeObject', function() {
 
     describe('off', function() {
 
-      let listener, listener2;
+      let listener;
 
       beforeEach(function() {
         listener = spy();
-        listener2 = spy();
-        object.on('bar', listener);
-        client.resetCalls();
-      });
-
-      it('calls native listen (false) for last listener removed', function() {
-        object.off('bar', listener);
-
-        let call = client.calls({op: 'listen', event: 'bar'})[0];
-        expect(call.listen).to.equal(false);
-      });
-
-      it('calls native listen with translated event name', function() {
-        let CustomType = NativeObject.extend({_events: {foo: 'bar'}});
-        object = new CustomType();
         object.on('foo', listener);
+        spy(object, '_listen');
+      });
+
+      it('calls _listen with false for last listener removed', function() {
         object.off('foo', listener);
 
-        let call = client.calls({op: 'listen'})[1];
-        expect(call.event).to.equal('bar');
+        expect(object._listen).to.have.been.calledOnce;
+        expect(object._listen).to.have.been.calledWith('foo', false);
       });
 
-      it('does not call native listen when other listeners exist for same event', function() {
-        object.on('bar', listener2);
-        object.off('bar', listener);
+      it('does not call _listen when other listeners exist for same event', function() {
+        object.on('foo', spy());
+        object.off('foo', listener);
 
-        expect(client.calls()).to.be.empty;
+        expect(object._listen).to.not.have.been.calledWith('foo', false);
       });
 
       it('returns self to allow chaining', function() {

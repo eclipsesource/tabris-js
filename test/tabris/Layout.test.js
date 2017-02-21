@@ -87,8 +87,15 @@ describe('Layout', function() {
 
   describe('resolveReferences', function() {
 
+    class TestType extends Widget {
+      constructor(properties) {
+        super();
+        this._create('TestType', properties);
+      }
+    }
+
     let resolve = Layout.resolveReferences;
-    let parent, widget, other, TestType;
+    let parent, widget, other;
 
     beforeEach(function() {
       global.tabris = {
@@ -96,7 +103,6 @@ describe('Layout', function() {
         _proxies: new ProxyStore()
       };
       global.tabris._nativeBridge = new NativeBridge(new ClientStub());
-      TestType = Widget.extend({_name: 'TestType'});
       parent = new Composite();
       widget = new TestType().appendTo(parent);
       other = new TestType({id: 'other'}).appendTo(parent);

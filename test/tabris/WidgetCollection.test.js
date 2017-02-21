@@ -5,7 +5,7 @@ import ProxyStore from '../../src/tabris/ProxyStore';
 import Widget from '../../src/tabris/Widget';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
 
-class Foo extends Widget.extend({_properties: {foo: {}}}) {
+class Foo extends Widget {
   _acceptChild() {
     return true;
   }

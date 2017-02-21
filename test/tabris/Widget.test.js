@@ -9,12 +9,17 @@ import {omit} from '../../src/tabris/util';
 
 describe('Widget', function() {
 
-  let client;
-  class TestWidget extends Widget.extend({_name: 'TestWidget'}) {
+  class TestWidget extends Widget {
+    constructor(properties) {
+      super();
+      this._create('TestWidget', properties);
+    }
     _acceptChild() {
       return true;
     }
   }
+
+  let client;
 
   beforeEach(function() {
     client = new ClientStub();

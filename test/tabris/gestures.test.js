@@ -6,11 +6,17 @@ import {expect, spy, restore} from '../test';
 
 describe('gestures:', function() {
 
-  let client, widget, TestType;
+  class TestType extends Widget {
+    constructor(properties) {
+      super();
+      this._create('TestType', properties);
+    }
+  }
+
+  let client, widget;
 
   beforeEach(function() {
     client = new ClientStub();
-    TestType = Widget.extend({_type: 'TestType'});
     global.tabris = {
       on: () => {},
       _proxies: new ProxyStore(),

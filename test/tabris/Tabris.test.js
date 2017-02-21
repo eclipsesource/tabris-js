@@ -38,8 +38,8 @@ describe('ClientInterface', function() {
     });
 
     it('load functions can access tabris functions', function() {
-      let TestType = NativeObject.extend({_type: 'test.Type'});
-      tabris.load(() => new TestType());
+      class TestType extends NativeObject {}
+      tabris.load(() => new TestType()._create('test.Type'));
 
       tabris._init.call(null, client);
 
@@ -50,12 +50,11 @@ describe('ClientInterface', function() {
 
   describe('_notify', function() {
 
-    let TestType;
+    class TestType extends NativeObject {}
     let widget;
 
     beforeEach(function() {
       tabris._init(client);
-      TestType = NativeObject.extend({});
       widget = new TestType();
     });
 
