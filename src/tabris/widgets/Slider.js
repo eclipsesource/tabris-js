@@ -1,22 +1,17 @@
+import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 
-const CONFIG = {
-  _name: 'Slider',
-  _type: 'tabris.Slider',
-  _events: {
-    select: true
-  },
-  _properties: {
-    minimum: {type: 'integer', default: 0},
-    maximum: {type: 'integer', default: 100},
-    selection: {type: 'integer', nocache: true}
-  }
-};
+export default class Slider extends Widget {
 
-export default class Slider extends Widget.extend(CONFIG) {
+  constructor(properties) {
+    super();
+    this._create('tabris.Slider', properties);
+  }
 
   _listen(name, listening) {
-    if (name === 'change:selection') {
+    if (name === 'select') {
+      this._nativeListen(name, listening);
+    } else if (name === 'change:selection') {
       this._onoff('select', listening, this.$triggerChangeSelection);
     } else {
       super._listen(name, listening);
@@ -28,3 +23,9 @@ export default class Slider extends Widget.extend(CONFIG) {
   }
 
 }
+
+NativeObject.defineProperties(Slider.prototype, {
+  minimum: {type: 'integer', default: 0},
+  maximum: {type: 'integer', default: 100},
+  selection: {type: 'integer', nocache: true}
+});

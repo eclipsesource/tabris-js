@@ -1,17 +1,13 @@
+import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 import NavigationView from '../widgets/NavigationView';
 
-const CONFIG = {
-  _name: 'Page',
-  _type: 'tabris.Page',
-  _properties: {
-    image: {type: 'image', default: null},
-    title: {type: 'string', default: ''},
-    autoDispose: {type: 'boolean', default: true}
-  }
-};
+export default class Page extends Widget {
 
-export default class Page extends Widget.extend(CONFIG) {
+  constructor(properties) {
+    super();
+    this._create('tabris.Page', properties);
+  }
 
   insertBefore() {
     throw new Error('insertBefore not supported on Page');
@@ -33,3 +29,9 @@ export default class Page extends Widget.extend(CONFIG) {
   }
 
 }
+
+NativeObject.defineProperties(Page.prototype, {
+  image: {type: 'image', default: null},
+  title: {type: 'string', default: ''},
+  autoDispose: {type: 'boolean', default: true}
+});

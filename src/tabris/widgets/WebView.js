@@ -1,28 +1,22 @@
 import Widget from '../Widget';
+import NativeObject from '../NativeObject';
 
-const CONFIG = {
+const EVENT_TYPES = ['navigate', 'load', 'download', 'message'];
 
-  _name: 'WebView',
+export default class WebView extends Widget {
 
-  _type: 'tabris.WebView',
-
-  _events: {
-    navigate: true,
-    load: true,
-    download: true,
-    message: true
-  },
-
-  _properties: {
-    url: {type: 'string', nocache: true},
-    html: {type: 'string', nocache: true},
-    headers: {type: 'any', default: {}},
-    initScript: {type: 'string'}
+  constructor(properties) {
+    super();
+    this._create('tabris.WebView', properties);
   }
 
-};
-
-export default class WebView extends Widget.extend(CONFIG) {
+  _listen(name, listening) {
+    if (EVENT_TYPES.includes(name)) {
+      this._nativeListen(name, listening);
+    } else {
+      super._listen(name, listening);
+    }
+  }
 
   postMessage(data, targetOrigin) {
     this._nativeCall('postMessage', {
@@ -53,3 +47,10 @@ export default class WebView extends Widget.extend(CONFIG) {
   }
 
 }
+
+NativeObject.defineProperties(WebView.prototype, {
+  url: {type: 'string', nocache: true},
+  html: {type: 'string', nocache: true},
+  headers: {type: 'any', default: {}},
+  initScript: {type: 'string'}
+});

@@ -1,21 +1,17 @@
+import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 
-const CONFIG = {
-  _name: 'RadioButton',
-  _type: 'tabris.RadioButton',
-  _events: {
-    select: true
-  },
-  _properties: {
-    text: {type: 'string', default: ''},
-    selection: {type: 'boolean', nocache: true}
-  }
-};
+export default class RadioButton extends Widget {
 
-export default class RadioButton extends Widget.extend(CONFIG) {
+  constructor(properties) {
+    super();
+    this._create('tabris.RadioButton', properties);
+  }
 
   _listen(name, listening) {
-    if (name === 'change:selection') {
+    if (name === 'select') {
+      this._nativeListen(name, listening);
+    } else if (name === 'change:selection') {
       this._onoff('select', listening, this.$triggerChangeSelection);
     } else {
       super._listen(name, listening);
@@ -27,3 +23,8 @@ export default class RadioButton extends Widget.extend(CONFIG) {
   }
 
 }
+
+NativeObject.defineProperties(RadioButton.prototype, {
+  text: {type: 'string', default: ''},
+  selection: {type: 'boolean', nocache: true}
+});

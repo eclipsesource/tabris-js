@@ -1,35 +1,14 @@
+import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 
-const CONFIG = {
+export default class StatusBar extends Widget {
 
-  _name: 'StatusBar',
-
-  _type: 'tabris.StatusBar',
-
-  _properties: {
-    theme: {type: ['choice', ['default', 'light', 'dark']], default: 'default'},
-    displayMode: {type: ['choice', ['default', 'float', 'hide']], default: 'default'},
-    height: {
-      type: 'number',
-      nocache: true,
-      access: {
-        set() {
-          throw new Error('StatusBar "height" is read only');
-        }
-      }
-    },
-    background: {type: 'color', nocache: true}
-  }
-
-};
-
-export default class StatusBar extends Widget.extend(CONFIG) {
-
-  constructor() {
+  constructor(properties) {
     super();
     if (arguments[0] !== true) {
       throw new Error('StatusBar can not be created');
     }
+    this._create('tabris.StatusBar', properties);
   }
 
   _setParent(parent, index) {
@@ -44,6 +23,21 @@ export default class StatusBar extends Widget.extend(CONFIG) {
   }
 
 }
+
+NativeObject.defineProperties(StatusBar.prototype, {
+  theme: {type: ['choice', ['default', 'light', 'dark']], default: 'default'},
+  displayMode: {type: ['choice', ['default', 'float', 'hide']], default: 'default'},
+  height: {
+    type: 'number',
+    nocache: true,
+    access: {
+      set() {
+        throw new Error('StatusBar "height" is read only');
+      }
+    }
+  },
+  background: {type: 'color', nocache: true}
+});
 
 export function create() {
   return new StatusBar(true);

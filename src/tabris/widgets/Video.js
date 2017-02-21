@@ -1,30 +1,21 @@
+import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 import {types} from '../property-types';
 
-const readOnly = {
-  set(name) {
-    console.warn('Can not set read-only property "' + name + '"');
-  }
-};
+export default class Video extends Widget {
 
-const CONFIG = {
-  _name: 'Video',
-  _type: 'tabris.Video',
-  _properties: {
-    url: {type: 'string', default: ''},
-    controlsVisible: {type: 'boolean', default: true},
-    autoPlay: {type: 'boolean', default: true},
-    speed: {access: readOnly},
-    position: {access: readOnly},
-    duration: {access: readOnly},
-    state: {access: readOnly}
-  },
-  _events: {
-    'change:state': 'statechange'
+  constructor(properties) {
+    super();
+    this._create('tabris.Video', properties);
   }
-};
 
-export default class Video extends Widget.extend(CONFIG) {
+  _listen(name, listening) {
+    if (name === 'change:state') {
+      this._nativeListen('statechange', listening) ;
+    } else {
+      super._listen(name, listening);
+    }
+  }
 
   _trigger(name, event) {
     if (name === 'statechange') {
@@ -49,3 +40,19 @@ export default class Video extends Widget.extend(CONFIG) {
   }
 
 }
+
+const readOnly = {
+  set(name) {
+    console.warn('Can not set read-only property "' + name + '"');
+  }
+};
+
+NativeObject.defineProperties(Video.prototype, {
+  url: {type: 'string', default: ''},
+  controlsVisible: {type: 'boolean', default: true},
+  autoPlay: {type: 'boolean', default: true},
+  speed: {access: readOnly},
+  position: {access: readOnly},
+  duration: {access: readOnly},
+  state: {access: readOnly}
+});

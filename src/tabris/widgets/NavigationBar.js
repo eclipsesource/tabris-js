@@ -1,34 +1,14 @@
+import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 
-const CONFIG = {
+export default class NavigationBar extends Widget {
 
-  _name: 'NavigationBar',
-
-  _type: 'tabris.NavigationBar',
-
-  _properties: {
-    displayMode: {type: ['choice', ['default', 'float', 'hide']], default: 'default'},
-    height: {
-      type: 'number',
-      nocache: true,
-      access: {
-        set() {
-          throw new Error('NavigationBar "height" is read only');
-        }
-      }
-    },
-    background: {type: 'color', nocache: true}
-  }
-
-};
-
-export default class NavigationBar extends Widget.extend(CONFIG) {
-
-  constructor() {
+  constructor(properties) {
     super();
     if (arguments[0] !== true) {
       throw new Error('NavigationBar can not be created');
     }
+    this._create('tabris.NavigationBar', properties);
   }
 
   _setParent(parent, index) {
@@ -43,6 +23,20 @@ export default class NavigationBar extends Widget.extend(CONFIG) {
   }
 
 }
+
+NativeObject.defineProperties(NavigationBar.prototype, {
+  displayMode: {type: ['choice', ['default', 'float', 'hide']], default: 'default'},
+  height: {
+    type: 'number',
+    nocache: true,
+    access: {
+      set() {
+        throw new Error('NavigationBar "height" is read only');
+      }
+    }
+  },
+  background: {type: 'color', nocache: true}
+});
 
 export function create() {
   return new NavigationBar(true);

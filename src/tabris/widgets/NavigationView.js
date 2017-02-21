@@ -1,46 +1,16 @@
+import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 import Page from './Page';
 import Action from './Action';
 import SearchAction from './SearchAction';
 
-const CONFIG = {
+export default class NavigationView extends Widget {
 
-  _name: 'NavigationView',
-
-  _type: 'tabris.NavigationView',
-
-  _properties: {
-    drawerActionVisible: {type: 'boolean', default: false},
-    toolbarVisible: {type: 'boolean', default: true},
-    toolbarColor: {type: 'color'},
-    titleTextColor: {type: 'color'},
-    actionColor: {type: 'color'},
-    actionTextColor: {type: 'color'},
-    animated: {type: 'boolean', default: true},
-    win_toolbarTheme: {
-      type: ['choice', ['default', 'light', 'dark']],
-      default: 'default'
-    },
-    win_toolbarOverflowTheme: {
-      type: ['choice', ['default', 'light', 'dark']],
-      default: 'default'
-    }
-  },
-
-  _events: {
-    back: true,
-    backnavigation: true
-  }
-
-};
-
-export default class NavigationView extends Widget.extend(CONFIG) {
-
-  _create(type, properties) {
-    super._create(type, properties);
+  constructor(properties) {
+    super();
+    this._create('tabris.NavigationView', properties);
     this._nativeListen('backnavigation', true);
     this._nativeListen('back', true);
-    return this;
   }
 
   _acceptChild(child) {
@@ -139,3 +109,21 @@ export default class NavigationView extends Widget.extend(CONFIG) {
   }
 
 }
+
+NativeObject.defineProperties(NavigationView.prototype, {
+  drawerActionVisible: {type: 'boolean', default: false},
+  toolbarVisible: {type: 'boolean', default: true},
+  toolbarColor: {type: 'color'},
+  titleTextColor: {type: 'color'},
+  actionColor: {type: 'color'},
+  actionTextColor: {type: 'color'},
+  animated: {type: 'boolean', default: true},
+  win_toolbarTheme: {
+    type: ['choice', ['default', 'light', 'dark']],
+    default: 'default'
+  },
+  win_toolbarOverflowTheme: {
+    type: ['choice', ['default', 'light', 'dark']],
+    default: 'default'
+  }
+});

@@ -1,24 +1,22 @@
+import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 
-const CONFIG = {
-  _name: 'SearchAction',
-  _type: 'tabris.SearchAction',
-  _properties: {
-    image: {type: 'image', default: null},
-    placementPriority: {type: ['choice', ['low', 'high', 'normal']], default: 'normal'},
-    title: {type: 'string', default: ''},
-    proposals: {default() {return [];}},
-    text: {type: 'string', nocache: true},
-    message: {type: 'string', default: ''}
-  },
-  _events: {
-    input: true,
-    accept: true,
-    select: true
-  }
-};
+const EVENT_TYPES = ['input', 'accept', 'select'];
 
-export default class SearchAction extends Widget.extend(CONFIG) {
+export default class SearchAction extends Widget {
+
+  constructor(properties) {
+    super();
+    this._create('tabris.SearchAction', properties);
+  }
+
+  _listen(name, listening) {
+    if (EVENT_TYPES.includes(name)) {
+      this._nativeListen(name, listening);
+    } else {
+      super._listen(name, listening);
+    }
+  }
 
   open() {
     this._nativeCall('open', {});
@@ -26,3 +24,12 @@ export default class SearchAction extends Widget.extend(CONFIG) {
   }
 
 }
+
+NativeObject.defineProperties(SearchAction.prototype, {
+  image: {type: 'image', default: null},
+  placementPriority: {type: ['choice', ['low', 'high', 'normal']], default: 'normal'},
+  title: {type: 'string', default: ''},
+  proposals: {default() {return [];}},
+  text: {type: 'string', nocache: true},
+  message: {type: 'string', default: ''}
+});

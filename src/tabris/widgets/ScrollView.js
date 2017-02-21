@@ -1,31 +1,19 @@
+import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 
-const CONFIG = {
+const EVENT_TYPES = ['scrollX', 'scrollY'];
 
-  _name: 'ScrollView',
+export default class ScrollView extends Widget {
 
-  _type: 'tabris.ScrollView',
-
-  _properties: {
-    direction: {
-      type: ['choice', ['horizontal', 'vertical']],
-      default: 'vertical'
-    },
-    offsetX: {type: 'number', nocache: true, access: {set() {}}},
-    offsetY: {type: 'number', nocache: true, access: {set() {}}}
-  },
-
-  _events: {
-    scrollX: true,
-    scrollY: true
+  constructor(properties) {
+    super();
+    this._create('tabris.ScrollView', properties);
   }
 
-};
-
-export default class ScrollView extends Widget.extend(CONFIG) {
-
   _listen(name, listening) {
-    if (name === 'change:offsetX') {
+    if (EVENT_TYPES.includes(name)) {
+      this._nativeListen(name, listening);
+    } else if (name === 'change:offsetX') {
       this._onoff('scrollX', listening, this.$triggerChangeOffsetX);
     } else if (name === 'change:offsetY') {
       this._onoff('scrollY', listening, this.$triggerChangeOffsetY);
@@ -63,3 +51,12 @@ export default class ScrollView extends Widget.extend(CONFIG) {
   }
 
 }
+
+NativeObject.defineProperties(ScrollView.prototype, {
+  direction: {
+    type: ['choice', ['horizontal', 'vertical']],
+    default: 'vertical'
+  },
+  offsetX: {type: 'number', nocache: true, access: {set() {}}},
+  offsetY: {type: 'number', nocache: true, access: {set() {}}}
+});

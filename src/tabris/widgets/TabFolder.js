@@ -1,44 +1,24 @@
+import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 import Tab from './Tab';
 
-const CONFIG = {
-  _name: 'TabFolder',
-  _type: 'tabris.TabFolder',
-  _properties: {
-    paging: {type: 'boolean', default: false},
-    tabBarLocation: {type: ['choice', ['top', 'bottom', 'hidden', 'auto']], default: 'auto'},
-    tabMode: {type: ['choice', ['fixed', 'scrollable']], default: 'fixed'},
-    selection: {
-      access: {
-        set(name, tab) {
-          if (this._children.indexOf(tab) < 0) {
-            console.warn('Can not set TabFolder selection to ' + tab);
-            return;
-          }
-          this._nativeSet('selection', tab.cid);
-          this._triggerChangeEvent('selection', tab);
-        },
-        get() {
-          let selection = this._nativeGet('selection');
-          return selection ? tabris._proxies.find(selection) : null;
-        }
-      }
-    }
-  },
-  _events: {
-    select: true,
-    scroll: true
-  }
-};
+const EVENT_TYPES = ['select', 'scroll'];
 
-export default class TabFolder extends Widget.extend(CONFIG) {
+export default class TabFolder extends Widget {
+
+  constructor(properties) {
+    super();
+    this._create('tabris.TabFolder', properties);
+  }
 
   _acceptChild(child) {
     return child instanceof Tab;
   }
 
   _listen(name, listening) {
-    if (name === 'change:selection') {
+    if (EVENT_TYPES.includes(name)) {
+      this._nativeListen(name, listening);
+    } else if (name === 'change:selection') {
       this._onoff('select', listening, this.$triggerChangeSelection);
     } else {
       super._listen(name, listening);
@@ -62,3 +42,25 @@ export default class TabFolder extends Widget.extend(CONFIG) {
   }
 
 }
+
+NativeObject.defineProperties(TabFolder.prototype, {
+  paging: {type: 'boolean', default: false},
+  tabBarLocation: {type: ['choice', ['top', 'bottom', 'hidden', 'auto']], default: 'auto'},
+  tabMode: {type: ['choice', ['fixed', 'scrollable']], default: 'fixed'},
+  selection: {
+    access: {
+      set(name, tab) {
+        if (this._children.indexOf(tab) < 0) {
+          console.warn('Can not set TabFolder selection to ' + tab);
+          return;
+        }
+        this._nativeSet('selection', tab.cid);
+        this._triggerChangeEvent('selection', tab);
+      },
+      get() {
+        let selection = this._nativeGet('selection');
+        return selection ? tabris._proxies.find(selection) : null;
+      }
+    }
+  }
+});

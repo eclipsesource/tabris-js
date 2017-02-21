@@ -1,21 +1,13 @@
+import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 import TabFolder from './TabFolder';
 
-const CONFIG = {
-  _name: 'Tab',
+export default class Tab extends Widget {
 
-  _type: 'tabris.Tab',
-
-  _properties: {
-    title: {type: 'string', default: ''},
-    image: {type: 'image', default: null},
-    selectedImage: {type: 'image', default: null},
-    badge: {type: 'string', default: ''}
+  constructor(properties) {
+    super();
+    this._create('tabris.Tab', properties);
   }
-
-};
-
-export default class Tab extends Widget.extend(CONFIG) {
 
   _acceptChild() {
     return true;
@@ -29,3 +21,10 @@ export default class Tab extends Widget.extend(CONFIG) {
   }
 
 }
+
+NativeObject.defineProperties(Tab.prototype, {
+  title: {type: 'string', default: ''},
+  image: {type: 'image', default: null},
+  selectedImage: {type: 'image', default: null},
+  badge: {type: 'string', default: ''}
+});
