@@ -1,11 +1,11 @@
 import Widget from '../Widget';
 
-const CONFIG = {
-  _name: 'Composite',
-  _type: 'tabris.Composite'
-};
+export default class Composite extends Widget {
 
-export default class Composite extends Widget.extend(CONFIG) {
+  constructor(properties) {
+    super();
+    this._create('tabris.Composite', properties);
+  }
 
   _acceptChild() {
     return true;

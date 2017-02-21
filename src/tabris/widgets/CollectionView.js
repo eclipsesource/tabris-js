@@ -1,101 +1,19 @@
+import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 import Cell from './Cell';
 
-const CONFIG = {
+const EVENT_TYPES = ['refresh', 'select', 'scroll'];
 
-  _name: 'CollectionView',
+export default class CollectionView extends Widget {
 
-  _type: 'tabris.CollectionView',
-
-  _properties: {
-    itemHeight: {
-      type: 'any', // "function|natural",
-      default: 0,
-      access: {
-        set(name, value, options) {
-          if (typeof value !== 'function') {
-            // Required for 1.0 compatibility
-            this._nativeSet('itemHeight', value);
-          }
-          this._storeProperty(name, value, options);
-        }
-      }
-    },
-    items: {
-      type: 'array',
-      access: {
-        set(name, value, options) {
-          this._setItems(value, options);
-        },
-        get() {
-          return this._items;
-        }
-      }
-    },
-    initializeCell: {
-      type: 'function',
-      default: null,
-      access: {
-        set(name, value) {
-          this._storeProperty(name, value);
-        }
-      }
-    },
-    cellType: {
-      type: 'any', // "string|function",
-      default: null,
-      access: {
-        set(name, value, options) {
-          this._storeProperty(name, value, options);
-        }
-      }
-    },
-    refreshEnabled: {type: 'boolean', default: false},
-    refreshIndicator: {type: 'boolean', nocache: true},
-    refreshMessage: {type: 'string', default: ''},
-    firstVisibleIndex: {
-      type: 'number',
-      access: {
-        set(name) {
-          console.warn(this + ": Cannot set read-only property '" + name + "'.");
-        }
-      }
-    },
-    lastVisibleIndex: {
-      type: 'number',
-      access: {
-        set(name) {
-          console.warn(this + ": Cannot set read-only property '" + name + "'.");
-        }
-      }
-    },
-    columnCount: {
-      type: 'number',
-      default: 1
-    }
-  },
-
-  _events: {
-    refresh: true,
-    requestinfo: true,
-    createitem: true,
-    populateitem: true,
-    select: true,
-    scroll: true
-  }
-
-};
-
-export default class CollectionView extends Widget.extend(CONFIG) {
-
-  _create(type, properties) {
+  constructor(properties) {
+    super();
     this._items = [];
-    let result = super._create(type, properties);
+    this._create('tabris.CollectionView', properties);
     this._nativeListen('requestinfo', true);
     this._nativeListen('createitem', true);
     this._nativeListen('populateitem', true);
     tabris.on('flush', () => this._reload());
-    return result;
   }
 
   _acceptChild(child) {
@@ -192,6 +110,8 @@ export default class CollectionView extends Widget.extend(CONFIG) {
       this._onoff('scroll', listening, triggerChangeFirstVisibleIndex);
     } else if (name === 'change:lastVisibleIndex') {
       this._onoff('scroll', listening, triggerChangeLastVisibleIndex);
+    } else if (EVENT_TYPES.includes(name)) {
+      this._nativeListen(name, listening);
     } else {
       super._listen(name, listening);
     }
@@ -233,6 +153,74 @@ export default class CollectionView extends Widget.extend(CONFIG) {
   }
 
 }
+
+NativeObject.defineProperties(CollectionView.prototype, {
+  itemHeight: {
+    type: 'any', // "function|natural",
+    default: 0,
+    access: {
+      set(name, value, options) {
+        if (typeof value !== 'function') {
+          // Required for 1.0 compatibility
+          this._nativeSet('itemHeight', value);
+        }
+        this._storeProperty(name, value, options);
+      }
+    }
+  },
+  items: {
+    type: 'array',
+    access: {
+      set(name, value, options) {
+        this._setItems(value, options);
+      },
+      get() {
+        return this._items;
+      }
+    }
+  },
+  initializeCell: {
+    type: 'function',
+    default: null,
+    access: {
+      set(name, value) {
+        this._storeProperty(name, value);
+      }
+    }
+  },
+  cellType: {
+    type: 'any', // "string|function",
+    default: null,
+    access: {
+      set(name, value, options) {
+        this._storeProperty(name, value, options);
+      }
+    }
+  },
+  refreshEnabled: {type: 'boolean', default: false},
+  refreshIndicator: {type: 'boolean', nocache: true},
+  refreshMessage: {type: 'string', default: ''},
+  firstVisibleIndex: {
+    type: 'number',
+    access: {
+      set(name) {
+        console.warn(this + ": Cannot set read-only property '" + name + "'.");
+      }
+    }
+  },
+  lastVisibleIndex: {
+    type: 'number',
+    access: {
+      set(name) {
+        console.warn(this + ": Cannot set read-only property '" + name + "'.");
+      }
+    }
+  },
+  columnCount: {
+    type: 'number',
+    default: 1
+  }
+});
 
 function resolveProperty(ctx, name) {
   let value = ctx.get(name);

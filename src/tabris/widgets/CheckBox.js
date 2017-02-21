@@ -1,22 +1,18 @@
+import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 
-const CONFIG = {
-  _name: 'CheckBox',
-  _type: 'tabris.CheckBox',
-  _events: {
-    select: true
-  },
-  _properties: {
-    text: {type: 'string', default: ''},
-    selection: {type: 'boolean', nocache: true}
-  }
-};
+export default class CheckBox extends Widget {
 
-export default class CheckBox extends Widget.extend(CONFIG) {
+  constructor(properties) {
+    super();
+    this._create('tabris.CheckBox', properties);
+  }
 
   _listen(name, listening) {
     if (name === 'change:selection') {
       this._onoff('select', listening, this.$triggerChangeSelection);
+    } else if (name === 'select') {
+      this._nativeListen(name, listening);
     } else {
       super._listen(name, listening);
     }
@@ -27,3 +23,8 @@ export default class CheckBox extends Widget.extend(CONFIG) {
   }
 
 }
+
+NativeObject.defineProperties(CheckBox.prototype, {
+  text: {type: 'string', default: ''},
+  selection: {type: 'boolean', nocache: true}
+});

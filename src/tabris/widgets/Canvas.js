@@ -1,12 +1,12 @@
 import CanvasContext from '../CanvasContext';
 import Widget from '../Widget';
 
-const CONFIG = {
-  _name: 'Canvas',
-  _type: 'tabris.Canvas'
-};
+export default class Canvas extends Widget {
 
-export default class Canvas extends Widget.extend(CONFIG) {
+  constructor(properties) {
+    super();
+    this._create('tabris.Canvas', properties);
+  }
 
   getContext(type, width, height) {
     if (type === '2d') {

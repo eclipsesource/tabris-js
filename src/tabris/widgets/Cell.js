@@ -1,37 +1,12 @@
+import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 
-const CONFIG = {
+export default class Cell extends Widget {
 
-  _name: 'Cell',
-
-  _type: 'tabris.Composite',
-
-  _properties: {
-    item: {
-      access: {
-        set() {
-          // read only
-        },
-        get(name) {
-          return this._getStoredProperty(name);
-        }
-      }
-    },
-    itemIndex: {
-      access: {
-        set() {
-          // read only
-        },
-        get(name) {
-          return this._getStoredProperty(name);
-        }
-      }
-    }
+  constructor(properties) {
+    super();
+    this._create('tabris.Composite', properties);
   }
-
-};
-
-export default class Cell extends Widget.extend(CONFIG) {
 
   dispose() {
     console.warn('CollectionView cells are container-managed, they cannot be disposed of');
@@ -42,3 +17,26 @@ export default class Cell extends Widget.extend(CONFIG) {
   }
 
 }
+
+NativeObject.defineProperties(Cell.prototype, {
+  item: {
+    access: {
+      set() {
+        // read only
+      },
+      get(name) {
+        return this._getStoredProperty(name);
+      }
+    }
+  },
+  itemIndex: {
+    access: {
+      set() {
+        // read only
+      },
+      get(name) {
+        return this._getStoredProperty(name);
+      }
+    }
+  }
+});

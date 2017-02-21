@@ -1,44 +1,14 @@
+import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 
-const CONFIG = {
+export default class Drawer extends Widget {
 
-  _name: 'Drawer',
-
-  _type: 'tabris.Drawer',
-
-  _properties: {
-    win_displayMode: {
-      type: ['choice', ['overlay', 'compactOverlay']],
-      default: 'overlay'
-    },
-    win_buttonBackground: {
-      type: 'color',
-      default: null
-    },
-    win_buttonTheme: {
-      type: ['choice', ['light', 'dark', 'default']],
-      default: 'default'
-    },
-    enabled: {
-      type: 'boolean',
-      default: false
-    }
-  },
-
-  _events: {
-    open: true,
-    close: true
-  },
-
-};
-
-export default class Drawer extends Widget.extend(CONFIG) {
-
-  constructor() {
+  constructor(properties) {
     super();
     if (arguments[0] !== true) {
       throw new Error('Drawer can not be created');
     }
+    this._create('tabris.Drawer', properties);
   }
 
   _acceptChild() {
@@ -50,6 +20,14 @@ export default class Drawer extends Widget.extend(CONFIG) {
       throw new Error('Parent of Drawer can not be changed');
     }
     super._setParent(parent, index);
+  }
+
+  _listen(name, listening) {
+    if (name === 'open' || name === 'close') {
+      this._nativeListen(name, listening);
+    } else {
+      super._listen(name, listening);
+    }
   }
 
   _dispose() {
@@ -67,6 +45,25 @@ export default class Drawer extends Widget.extend(CONFIG) {
   }
 
 }
+
+NativeObject.defineProperties(Drawer.prototype, {
+  win_displayMode: {
+    type: ['choice', ['overlay', 'compactOverlay']],
+    default: 'overlay'
+  },
+  win_buttonBackground: {
+    type: 'color',
+    default: null
+  },
+  win_buttonTheme: {
+    type: ['choice', ['light', 'dark', 'default']],
+    default: 'default'
+  },
+  enabled: {
+    type: 'boolean',
+    default: false
+  }
+});
 
 export function create() {
   return new Drawer(true);

@@ -1,20 +1,13 @@
 import Widget from '../Widget';
 
-const CONFIG = {
+export default class ContentView extends Widget {
 
-  _name: 'ContentView',
-
-  _type: 'tabris.Composite'
-
-};
-
-export default class ContentView extends Widget.extend(CONFIG) {
-
-  constructor() {
+  constructor(properties) {
     super();
     if (arguments[0] !== true) {
       throw new Error('ContentView can not be created');
     }
+    this._create('tabris.Composite', properties);
   }
 
   _create(type, properties) {
