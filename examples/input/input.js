@@ -169,7 +169,7 @@ function populateMessage() {
 function createSeating() {
   var seating = 'Anywhere';
   scrollView.children('RadioButton').forEach(function(button) {
-    if (button.selection) {
+    if (button.checked) {
       seating = button.text;
     }
   });
@@ -183,12 +183,12 @@ function createWeight() {
 }
 
 function createMeal() {
-  return scrollView.children('#veggieChoice').selection ? 'Vegetarian' : 'Standard';
+  return scrollView.children('#veggieChoice').checked ? 'Vegetarian' : 'Standard';
 }
 
 function createFrequentFlyerInfo() {
   var panel = scrollView.children('#milesPanel');
-  var info = panel.children('#milesSwitch').first().selection ? 'Yes' : 'No';
+  var info = panel.children('#milesSwitch').first().checked ? 'Yes' : 'No';
   info += ', acct: ' + scrollView.children('#flyerNumberInput').first().text;
   return info;
 }

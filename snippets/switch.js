@@ -1,13 +1,13 @@
-// Create a switch with a selection handler
+// Create a switch with a checked handler
 
 var MARGIN = 16;
 
 new tabris.Switch({
   left: MARGIN, top: MARGIN,
   id: 'switch',
-  selection: true
-}).on('change:selection', function({value: selection}) {
-  tabris.ui.contentView.find('#stateView').first().text = selection ? 'State: checked' : 'State: unchecked';
+  checked: true
+}).on('change:checked', function({value: checked}) {
+  tabris.ui.contentView.find('#stateView').first().text = checked ? 'State: checked' : 'State: unchecked';
 }).appendTo(tabris.ui.contentView);
 
 new tabris.TextView({
@@ -20,6 +20,6 @@ new tabris.Button({
   left: MARGIN, top: ['#switch', MARGIN],
   text: 'Toggle Switch'
 }).on('select', function() {
-  var checked = tabris.ui.contentView.find('#switch').first().selection;
-  tabris.ui.contentView.find('#switch').first().selection = !checked;
+  var switcher = tabris.ui.contentView.find('#switch').first();
+  switcher.checked = !switcher.checked;
 }).appendTo(tabris.ui.contentView);

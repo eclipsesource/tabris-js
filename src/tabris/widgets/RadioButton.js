@@ -11,20 +11,20 @@ export default class RadioButton extends Widget {
   _listen(name, listening) {
     if (name === 'select') {
       this._nativeListen(name, listening);
-    } else if (name === 'change:selection') {
-      this._onoff('select', listening, this.$triggerChangeSelection);
+    } else if (name === 'change:checked') {
+      this._onoff('select', listening, this.$triggerChangeChecked);
     } else {
       super._listen(name, listening);
     }
   }
 
-  $triggerChangeSelection({selection}) {
-    this._triggerChangeEvent('selection', selection);
+  $triggerChangeChecked({checked}) {
+    this._triggerChangeEvent('checked', checked);
   }
 
 }
 
 NativeObject.defineProperties(RadioButton.prototype, {
   text: {type: 'string', default: ''},
-  selection: {type: 'boolean', nocache: true}
+  checked: {type: 'boolean', nocache: true}
 });

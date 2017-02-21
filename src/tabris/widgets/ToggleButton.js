@@ -11,15 +11,15 @@ export default class ToggleButton extends Widget {
   _listen(name, listening) {
     if (name === 'select') {
       this._nativeListen(name, listening);
-    } else if (name === 'change:selection') {
-      this._onoff('select', listening, this.$triggerChangeSelection);
+    } else if (name === 'change:checked') {
+      this._onoff('select', listening, this.$triggerChangeChecked);
     } else {
       super._listen(name, listening);
     }
   }
 
-  $triggerChangeSelection({selection}) {
-    this._triggerChangeEvent('selection', selection);
+  $triggerChangeChecked({checked}) {
+    this._triggerChangeEvent('checked', checked);
   }
 
 }
@@ -27,6 +27,6 @@ export default class ToggleButton extends Widget {
 NativeObject.defineProperties(ToggleButton.prototype, {
   text: {type: 'string', default: ''},
   image: {type: 'image', default: null},
-  selection: {type: 'boolean', nocache: true},
+  checked: {type: 'boolean', nocache: true},
   alignment: {type: ['choice', ['left', 'right', 'center']], default: 'center'}
 });

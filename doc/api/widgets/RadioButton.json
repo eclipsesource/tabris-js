@@ -3,7 +3,7 @@
   "description": "A radio button. Selecting a radio button de-selects all its siblings (i.e. all radio buttons within the same parent).",
   "extends": "Widget",
   "properties": {
-    "selection": {
+    "checked": {
       "type": "boolean",
       "default": "false",
       "description": "The checked state of the radio button."
@@ -14,11 +14,11 @@
     }
   },
   "events": {
-    "change:selection": {
-      "description": "Fired when the selection property changes.",
+    "change:checked": {
+      "description": "Fired when the checked property changes.",
       "parameters": {
         "value": {
-          "description": "The new value of the `selection` property.",
+          "description": "The new value of the `checked` property.",
           "type": "boolean"
         }
       }
@@ -26,8 +26,8 @@
     "select": {
       "description": "Fired when the radio button is selected or deselected by the user.",
       "parameters": {
-        "selection": {
-          "description": "The new value of *[selection](#selection)*.",
+        "checked": {
+          "description": "The new value of *[checked](#checked)*.",
           "type": "boolean"
         }
       }

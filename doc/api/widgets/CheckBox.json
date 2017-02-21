@@ -3,7 +3,7 @@
   "description": "A check box widget.",
   "extends": "Widget",
   "properties": {
-    "selection": {
+    "checked": {
       "type": "boolean",
       "default": "false",
       "description": "The checked state of the check box."
@@ -14,11 +14,11 @@
     }
   },
   "events": {
-    "change:selection": {
+    "change:checked": {
       "description": "Fired when the check box is checked or unchecked.",
       "parameters": {
         "value": {
-          "description": "The new value of the `selection` property.",
+          "description": "The new value of the `checked` property.",
           "type": "boolean"
         }
       }
@@ -26,8 +26,8 @@
     "select": {
       "description": "Fired when the check box is checked or unchecked by the user.",
       "parameters": {
-        "selection": {
-          "description": "The new value of *[selection](#selection)*.",
+        "checked": {
+          "description": "The new value of *[checked](#checked)*.",
           "type": "boolean"
         }
       }

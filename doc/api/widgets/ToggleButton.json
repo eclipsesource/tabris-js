@@ -17,10 +17,10 @@
       "type": "Image",
       "description": "An image to be displayed on the button."
     },
-    "selection": {
+    "checked": {
       "type": "boolean",
       "default": "false",
-      "description": "The selection state of the toggle button."
+      "description": "The checked state of the toggle button."
     },
     "text": {
       "type": "string",
@@ -28,11 +28,11 @@
     }
   },
   "events": {
-    "change:selection": {
-      "description": "Fired when the selection property changes.",
+    "change:checked": {
+      "description": "Fired when the checked property changes.",
       "parameters": {
         "value": {
-          "description": "The new value of the `selection` property.",
+          "description": "The new value of the `checked` property.",
           "type": "boolean"
         }
       }
@@ -40,8 +40,8 @@
     "select": {
       "description": "Fired when the toggle button is selected or deselected by the user.",
       "parameters": {
-        "selection": {
-          "description": "The current value of *[selection](#selection)*.",
+        "checked": {
+          "description": "The current value of *[checked](#checked)*.",
           "type": "boolean"
         }
       }

@@ -3,11 +3,11 @@ import {RadioButton} from 'tabris';
 let widget: RadioButton;
 
 // Properties
-let selection: boolean;
+let checked: boolean;
 let text: string;
 
-widget.selection = selection;
+widget.checked = checked;
 widget.text = text;
 
-selection = widget.selection;
+checked = widget.checked;
 text = widget.text;

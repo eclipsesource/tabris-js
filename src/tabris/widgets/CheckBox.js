@@ -9,8 +9,8 @@ export default class CheckBox extends Widget {
   }
 
   _listen(name, listening) {
-    if (name === 'change:selection') {
-      this._onoff('select', listening, this.$triggerChangeSelection);
+    if (name === 'change:checked') {
+      this._onoff('select', listening, this.$triggerChangeChecked);
     } else if (name === 'select') {
       this._nativeListen(name, listening);
     } else {
@@ -18,13 +18,13 @@ export default class CheckBox extends Widget {
     }
   }
 
-  $triggerChangeSelection({selection}) {
-    this._triggerChangeEvent('selection', selection);
+  $triggerChangeChecked({checked}) {
+    this._triggerChangeEvent('checked', checked);
   }
 
 }
 
 NativeObject.defineProperties(CheckBox.prototype, {
   text: {type: 'string', default: ''},
-  selection: {type: 'boolean', nocache: true}
+  checked: {type: 'boolean', nocache: true}
 });

@@ -108,7 +108,7 @@ function createPage(chart) {
     // workaround for scaling to native pixels by chart.js
     ctx.scale(1 / window.devicePixelRatio, 1 / window.devicePixelRatio);
     new Chart(ctx)[chart.type](chart.data, {
-      animation: checkboxAnimate.selection,
+      animation: checkboxAnimate.checked,
       showScale: true,
       showTooltips: false,
       scaleShowLabels: true

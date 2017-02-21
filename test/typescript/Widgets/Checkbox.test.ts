@@ -3,18 +3,18 @@ import {CheckBox} from 'tabris';
 let widget: CheckBox;
 
 // Properties
-let selection: boolean;
+let checked: boolean;
 let text: string;
 
-widget.selection = selection;
+widget.checked = checked;
 widget.text = text;
 
-selection = widget.selection;
+checked = widget.checked;
 text = widget.text;
 
 // Events
 
-widget.on('change:selection', (event) => {
+widget.on('change:checked', (event) => {
   let self: CheckBox = event.target;
-  let selection: boolean = event.value;
+  let checked: boolean = event.value;
 });

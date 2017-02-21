@@ -1,9 +1,9 @@
-// Create a check box with a selection handler
+// Create a check box with a checked handler
 
 new tabris.CheckBox({
   left: 10, top: 10,
-  selection: true,
-  text: 'selected'
-}).on('change:selection', function(event) {
-  this.text = event.value ? 'selected' : 'deselected';
+  checked: true,
+  text: 'checked'
+}).on('change:checked', function(event) {
+  event.target.text = event.value ? 'checked' : 'unchecked';
 }).appendTo(tabris.ui.contentView);
