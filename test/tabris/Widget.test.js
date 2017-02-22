@@ -1345,22 +1345,3 @@ describe('Widget', function() {
   });
 
 });
-
-describe('Widget.extend', function() {
-
-  it('delegates to NativeObject', function() {
-    let TestWidget = Widget.extend({_properties: {foo: {type: 'number'}}});
-
-    expect(TestWidget.prototype.$prop_foo).not.to.be.undefined;
-    expect(TestWidget.prototype.$prop_foo.type.encode('23')).to.equal(23);
-  });
-
-  it('created widgets are instanceof Widget', function() {
-    let TestWidget = Widget.extend({});
-
-    let instance = new TestWidget();
-
-    expect(instance).to.be.instanceof(Widget);
-  });
-
-});

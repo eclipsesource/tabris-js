@@ -9,10 +9,6 @@ const EVENT_TYPES = ['touchstart', 'touchmove', 'touchend', 'touchcancel', 'resi
 
 export default class Widget extends NativeObject {
 
-  static extend(config) {
-    return NativeObject.extend(config, Widget);
-  }
-
   constructor() {
     super();
     if (this.constructor === Widget) {
