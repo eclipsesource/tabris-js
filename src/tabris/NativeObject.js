@@ -24,32 +24,13 @@ export default class NativeObject extends EventsClass {
     });
   }
 
-  static extend(members, superType = NativeObject) {
-    let cid = members._cid;
-    let type = members._type;
-    let Type = class extends superType {
+  static extend(nativeType, superType = NativeObject) {
+    return class extends superType {
       constructor(properties) {
-        if (cid) {
-          super(cid);
-        } else {
-          super();
-          this._create(type, properties || {});
-        }
+        super();
+        this._create(nativeType, properties || {});
       }
     };
-    for (let key in members) {
-      if (!['_cid', '_name', '_type', '_events', '_properties'].includes(key)) {
-        throw new Error('Illegal config option: ' + key);
-      }
-    }
-    let events = normalizeEvents(members._events || {});
-    let trigger = buildTriggerMap(events);
-    Object.assign(Type.prototype, {
-      $events: events,
-      $trigger: trigger
-    });
-    NativeObject.defineProperties(Type.prototype, members._properties || {});
-    return Type;
   }
 
   constructor(cid) {
@@ -201,10 +182,7 @@ export default class NativeObject extends EventsClass {
     return !!this._isDisposed;
   }
 
-  _listen(name, listening) {
-    if (this.$events && this.$events[name]) {
-      this._nativeListen(this.$events[name], listening);
-    }
+  _listen(/* name, listening */) {
   }
 
   _nativeListen(event, state) {
@@ -212,8 +190,7 @@ export default class NativeObject extends EventsClass {
     tabris._nativeBridge.listen(this.cid, event, state);
   }
 
-  _trigger(nativeName, event = {}) {
-    let name = this.$trigger && this.$trigger[nativeName] || nativeName;
+  _trigger(name, event = {}) {
     this.trigger(name, Object.assign({target: this}, event));
   }
 
@@ -254,16 +231,6 @@ function setExistingProperty(name, value) {
   } else {
     console.warn('Unknown property "' + name + '"');
   }
-}
-
-function normalizeEvents(events) {
-  let result = {};
-  for (let name in events) {
-    if (events[name]) {
-      result[name] = typeof events[name] === 'string' ? events[name] : name;
-    }
-  }
-  return result;
 }
 
 function normalizeProperty(property) {
@@ -322,14 +289,6 @@ function defaultGetter(name) {
   if (result === undefined) {
     // TODO: cache read property, but not for device properties
     result = this._nativeGet(name);
-  }
-  return result;
-}
-
-function buildTriggerMap(events) {
-  let result = {};
-  for (let name in events) {
-    result[events[name]] = name;
   }
   return result;
 }
