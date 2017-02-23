@@ -1,18 +1,10 @@
 import NativeObject from '../NativeObject';
-import Widget from '../Widget';
+import Composite from './Composite';
 
-export default class Cell extends Widget {
-
-  get _nativeType() {
-    return 'tabris.Composite';
-  }
+export default class Cell extends Composite {
 
   dispose() {
     console.warn('CollectionView cells are container-managed, they cannot be disposed of');
-  }
-
-  _acceptChild() {
-    return true;
   }
 
 }

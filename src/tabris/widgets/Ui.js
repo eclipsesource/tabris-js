@@ -1,11 +1,11 @@
-import Widget from '../Widget';
+import Composite from './Composite';
 import NativeObject from '../NativeObject';
 import {create as createContentView} from './ContentView';
 import {create as createStatusBar} from './StatusBar';
 import {create as createNavigationBar} from './NavigationBar';
 import {create as createDrawer} from './Drawer';
 
-export default class Ui extends Widget {
+export default class Ui extends Composite {
 
   constructor(properties) {
     if (arguments[0] !== true) {

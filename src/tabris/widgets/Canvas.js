@@ -1,7 +1,7 @@
 import CanvasContext from '../CanvasContext';
-import Widget from '../Widget';
+import Composite from './Composite';
 
-export default class Canvas extends Widget {
+export default class Canvas extends Composite {
 
   get _nativeType() {
     return 'tabris.Canvas';
@@ -12,10 +12,6 @@ export default class Canvas extends Widget {
       return CanvasContext.getContext(this, width, height);
     }
     return null;
-  }
-
-  _acceptChild() {
-    return true;
   }
 
 }

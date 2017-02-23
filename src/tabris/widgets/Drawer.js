@@ -1,7 +1,7 @@
 import NativeObject from '../NativeObject';
-import Widget from '../Widget';
+import Composite from './Composite';
 
-export default class Drawer extends Widget {
+export default class Drawer extends Composite {
 
   constructor(properties) {
     if (arguments[0] !== true) {
@@ -12,10 +12,6 @@ export default class Drawer extends Widget {
 
   get _nativeType() {
     return 'tabris.Drawer';
-  }
-
-  _acceptChild() {
-    return true;
   }
 
   _setParent(parent, index) {

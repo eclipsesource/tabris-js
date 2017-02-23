@@ -2,13 +2,10 @@ import {expect, spy, stub, restore} from '../test';
 import ClientStub from './ClientStub';
 import NativeBridge from '../../src/tabris/NativeBridge';
 import ProxyStore from '../../src/tabris/ProxyStore';
-import Widget from '../../src/tabris/Widget';
+import Composite from '../../src/tabris/widgets/Composite';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
 
-class Foo extends Widget {
-  _acceptChild() {
-    return true;
-  }
+class Foo extends Composite {
   get foo() {
     return this._foo;
   }

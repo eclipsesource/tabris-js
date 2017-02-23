@@ -4,7 +4,6 @@ import NativeBridge from '../../../src/tabris/NativeBridge';
 import ClientStub from '../ClientStub';
 import Ui, {create} from '../../../src/tabris/widgets/Ui';
 import ContentView from '../../../src/tabris/widgets/ContentView';
-import Widget from '../../../src/tabris/Widget';
 import Composite from '../../../src/tabris/widgets/Composite';
 
 describe('Ui', function() {
@@ -30,8 +29,8 @@ describe('Ui', function() {
     }).to.throw(Error);
   });
 
-  it('is instanceof Widget', function() {
-    expect(ui).to.be.an.instanceOf(Widget);
+  it('is instanceof Composite', function() {
+    expect(ui).to.be.an.instanceOf(Composite);
   });
 
   it('is instanceof Ui', function() {

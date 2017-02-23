@@ -1,9 +1,9 @@
 import NativeObject from '../NativeObject';
-import Widget from '../Widget';
+import Composite from './Composite';
 
 const EVENT_TYPES = ['scrollX', 'scrollY'];
 
-export default class ScrollView extends Widget {
+export default class ScrollView extends Composite {
 
   get _nativeType() {
     return 'tabris.ScrollView';
@@ -27,10 +27,6 @@ export default class ScrollView extends Widget {
 
   $triggerChangeOffsetY({offset}) {
     this._triggerChangeEvent('offsetY', offset);
-  }
-
-  _acceptChild() {
-    return true;
   }
 
   scrollToY(offset, options) {

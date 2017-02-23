@@ -1,10 +1,10 @@
 import NativeObject from '../NativeObject';
-import Widget from '../Widget';
+import Composite from './Composite';
 import Page from './Page';
 import Action from './Action';
 import SearchAction from './SearchAction';
 
-export default class NavigationView extends Widget {
+export default class NavigationView extends Composite {
 
   constructor(properties) {
     super(properties);

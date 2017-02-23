@@ -1,15 +1,11 @@
 import NativeObject from '../NativeObject';
-import Widget from '../Widget';
+import Composite from './Composite';
 import TabFolder from './TabFolder';
 
-export default class Tab extends Widget {
+export default class Tab extends Composite {
 
   get _nativeType() {
     return 'tabris.Tab';
-  }
-
-  _acceptChild() {
-    return true;
   }
 
   _setParent(parent, index) {

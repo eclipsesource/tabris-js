@@ -1,6 +1,6 @@
-import Widget from '../Widget';
+import Composite from './Composite';
 
-export default class ContentView extends Widget {
+export default class ContentView extends Composite {
 
   constructor(properties) {
     if (arguments[0] !== true) {
@@ -9,17 +9,9 @@ export default class ContentView extends Widget {
     super(properties);
   }
 
-  get _nativeType() {
-    return 'tabris.Composite';
-  }
-
   _create(type, properties) {
     super._create(type, properties);
     this._nativeSet('root', true);
-  }
-
-  _acceptChild() {
-    return true;
   }
 
   _setParent(parent, index) {

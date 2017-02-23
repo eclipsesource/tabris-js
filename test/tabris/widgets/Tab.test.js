@@ -33,12 +33,13 @@ describe('Tab', function() {
         background: '#010203',
         visible: false
       });
-      create = client.calls({op: 'create'})[0];
+      create = client.calls({op: 'create', id: tab.cid})[0];
     });
 
     it('creates a Tab', function() {
       expect(create.type).to.equal('tabris.Tab');
       expect(create.id).to.equal(tab.cid);
+      expect(create.properties.title).to.equal('foo');
     });
 
     it('getter returns initial properties', function() {

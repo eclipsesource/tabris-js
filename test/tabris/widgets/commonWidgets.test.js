@@ -78,16 +78,17 @@ describe('Common Widgets', function() {
   });
 
   it('Canvas', function() {
-    let canvas = new Canvas();
+    let canvas = new Canvas({visible: false});
 
-    expect(getCreate().type).to.eql('tabris.Canvas');
+    expect(getCreate().type).to.equal('tabris.Canvas');
+    expect(getCreate().properties.visible).to.be.false;
     expect(canvas.constructor.name).to.equal('Canvas');
   });
 
   it('CheckBox', function() {
     let checkBox = new CheckBox({enabled: false});
 
-    expect(getCreate().type).to.eql('tabris.CheckBox');
+    expect(getCreate().type).to.equal('tabris.CheckBox');
     expect(checkBox.constructor.name).to.equal('CheckBox');
     expect(checkBox.get('text')).to.equal('');
   });
@@ -113,14 +114,14 @@ describe('Common Widgets', function() {
   it('Composite', function() {
     let composite = new Composite();
 
-    expect(getCreate().type).to.eql('tabris.Composite');
+    expect(getCreate().type).to.equal('tabris.Composite');
     expect(composite.constructor.name).to.equal('Composite');
   });
 
   it('ImageView', function() {
     let imageView = new ImageView();
 
-    expect(getCreate().type).to.eql('tabris.ImageView');
+    expect(getCreate().type).to.equal('tabris.ImageView');
     expect(imageView.constructor.name).to.equal('ImageView');
     expect(imageView.get('image')).to.equal(null);
     expect(imageView.get('scaleMode')).to.equal('auto');
@@ -129,7 +130,7 @@ describe('Common Widgets', function() {
   it('ProgressBar', function() {
     let progressBar = new ProgressBar();
 
-    expect(getCreate().type).to.eql('tabris.ProgressBar');
+    expect(getCreate().type).to.equal('tabris.ProgressBar');
     expect(progressBar.constructor.name).to.equal('ProgressBar');
     expect(progressBar.get('minimum')).to.equal(0);
     expect(progressBar.get('maximum')).to.equal(100);
@@ -140,7 +141,7 @@ describe('Common Widgets', function() {
   it('RadioButton', function() {
     let radioButton = new RadioButton({enabled: false});
 
-    expect(getCreate().type).to.eql('tabris.RadioButton');
+    expect(getCreate().type).to.equal('tabris.RadioButton');
     expect(radioButton.constructor.name).to.equal('RadioButton');
     expect(radioButton.get('text')).to.equal('');
   });
@@ -167,8 +168,8 @@ describe('Common Widgets', function() {
   it('TextView', function() {
     let textView = new TextView({text: 'foo'});
 
-    expect(getCreate().type).to.eql('tabris.TextView');
-    expect(getCreate().properties).to.eql({text: 'foo'});
+    expect(getCreate().type).to.equal('tabris.TextView');
+    expect(getCreate().properties).to.deep.equal({text: 'foo'});
     expect(textView.constructor.name).to.equal('TextView');
     expect(textView.get('alignment')).to.equal('left');
     expect(textView.get('markupEnabled')).to.equal(false);
@@ -190,8 +191,8 @@ describe('Common Widgets', function() {
   it('Slider', function() {
     let slider = new Slider({selection: 23});
 
-    expect(getCreate().type).to.eql('tabris.Slider');
-    expect(getCreate().properties).to.eql({selection: 23});
+    expect(getCreate().type).to.equal('tabris.Slider');
+    expect(getCreate().properties).to.deep.equal({selection: 23});
     expect(slider.constructor.name).to.equal('Slider');
     expect(slider.get('minimum')).to.equal(0);
     expect(slider.get('maximum')).to.equal(100);
@@ -221,8 +222,8 @@ describe('Common Widgets', function() {
     it('create', function() {
       new TextInput({text: 'foo'});
 
-      expect(getCreate().type).to.eql('tabris.TextInput');
-      expect(getCreate().properties).to.eql({text: 'foo'});
+      expect(getCreate().type).to.equal('tabris.TextInput');
+      expect(getCreate().properties).to.deep.equal({text: 'foo'});
     });
 
     it('constructor name', function() {
@@ -283,16 +284,16 @@ describe('Common Widgets', function() {
   it('WebView', function() {
     let webView = new WebView({html: 'foo'});
 
-    expect(getCreate().type).to.eql('tabris.WebView');
-    expect(getCreate().properties).to.eql({html: 'foo'});
+    expect(getCreate().type).to.equal('tabris.WebView');
+    expect(getCreate().properties).to.deep.equal({html: 'foo'});
     expect(webView.constructor.name).to.equal('WebView');
   });
 
   it('Switch', function() {
     let swtch = new Switch({checked: true});
 
-    expect(getCreate().type).to.eql('tabris.Switch');
-    expect(getCreate().properties).to.eql({checked: true});
+    expect(getCreate().type).to.equal('tabris.Switch');
+    expect(getCreate().properties).to.deep.equal({checked: true});
     expect(swtch.constructor.name).to.equal('Switch');
   });
 
@@ -328,7 +329,7 @@ describe('Common Widgets', function() {
   it('ToggleButton', function() {
     let toggleButton = new ToggleButton({enabled: false});
 
-    expect(getCreate().type).to.eql('tabris.ToggleButton');
+    expect(getCreate().type).to.equal('tabris.ToggleButton');
     expect(toggleButton.constructor.name).to.equal('ToggleButton');
     expect(toggleButton.get('text')).to.equal('');
     expect(toggleButton.get('image')).to.equal(null);

@@ -1,10 +1,10 @@
 import NativeObject from '../NativeObject';
-import Widget from '../Widget';
+import Composite from './Composite';
 import Tab from './Tab';
 
 const EVENT_TYPES = ['select', 'scroll'];
 
-export default class TabFolder extends Widget {
+export default class TabFolder extends Composite {
 
   get _nativeType() {
     return 'tabris.TabFolder';

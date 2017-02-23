@@ -5,16 +5,14 @@ import Layout from '../../src/tabris/Layout';
 import NativeBridge from '../../src/tabris/NativeBridge';
 import ClientStub from './ClientStub';
 import Widget from '../../src/tabris/Widget';
+import Composite from '../../src/tabris/widgets/Composite';
 import {omit} from '../../src/tabris/util';
 
 describe('Widget', function() {
 
-  class TestWidget extends Widget {
+  class TestWidget extends Composite {
     get _nativeType() {
       return 'TestWidget';
-    }
-    _acceptChild() {
-      return true;
     }
   }
 

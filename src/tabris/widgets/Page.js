@@ -1,8 +1,8 @@
 import NativeObject from '../NativeObject';
-import Widget from '../Widget';
+import Composite from './Composite';
 import NavigationView from '../widgets/NavigationView';
 
-export default class Page extends Widget {
+export default class Page extends Composite {
 
   get _nativeType() {
     return 'tabris.Page';
@@ -14,10 +14,6 @@ export default class Page extends Widget {
 
   insertAfter() {
     throw new Error('insertAfter not supported on Page');
-  }
-
-  _acceptChild() {
-    return true;
   }
 
   _setParent(parent, index) {
