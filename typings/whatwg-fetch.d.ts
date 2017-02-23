@@ -51,8 +51,9 @@ declare class Headers {
 declare class Body {
   bodyUsed: boolean;
   arrayBuffer(): Promise<ArrayBuffer>;
-  blob(): Promise<Blob>;
-  formData(): Promise<FormData>;
+  // TODO: enable when Blob support is added
+  // blob(): Promise<Blob>;
+  // formData(): Promise<FormData>;
   json(): Promise<any>;
   json<T>(): Promise<T>;
   text(): Promise<string>;
@@ -79,7 +80,9 @@ interface ResponseInit {
 }
 
 declare type HeaderInit = Headers | Array<string>;
-declare type BodyInit = Blob | FormData | string;
+// TODO: enable when Blob support is added
+// declare type BodyInit = Blob | FormData | string;
+declare type BodyInit = string;
 declare type RequestInfo = Request | string;
 
 declare function fetch(url: string | Request, init?: RequestInit): Promise<Response>;

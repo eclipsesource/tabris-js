@@ -1,5 +1,5 @@
 let id: any;
-let callback: Function;
+let callback: () => void;
 let delay: number;
 let voidReturnValue: void;
 let timerID: number;

@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "es5", "scripthost", "es2015.promise" ]
+    "lib": ["es5", "es2015.promise" ]
   },
   "include": [
     "../tabris/whatwg-fetch.d.ts",
+    "../tabris/timer.d.ts",
     "**/*.test.ts"
   ]
 }

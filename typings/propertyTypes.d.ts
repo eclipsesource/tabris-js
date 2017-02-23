@@ -1,3 +1,26 @@
+
+/**
+ * Represents pixel data of a `Canvas` widget.
+ */
+interface ImageData {
+
+  /**
+   * A one-dimensional array containing the data in the RGBA order, with integer values between 0 and 255 (included).
+   */
+  readonly data: Uint8ClampedArray;
+
+  /**
+   * The actual height of the ImageData, in pixels.
+   */
+  readonly width: number;
+
+  /**
+   * The actual height of the ImageData, in pixels.
+   */
+  readonly height: number;
+
+}
+
 // TODO A plain string can be used as a shorthand, e.g. \`"image.jpg"\` equals \`{src: "image.jpg"}\`.
 interface Image {
 

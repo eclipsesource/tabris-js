@@ -1,4 +1,4 @@
-import {CanvasContext, Color, Font} from 'tabris';
+import {CanvasContext, ImageData, Color, Font} from 'tabris';
 
 let ctx: CanvasContext;
 
