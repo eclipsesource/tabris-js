@@ -172,13 +172,28 @@ describe('WebSocket', function() {
 
   });
 
-  describe('bufferProcess event', function() {
+  describe('bufferedAmount', function() {
 
-    it('reduces amount of buffered data', function() {
-      webSocket.bufferedAmount = 1000;
-      tabris._notify(webSocket._proxy.cid, 'bufferProcess', {byteLength: 100});
+    it('set does not call set on client', function() {
+      stub(console, 'warn');
 
-      expect(webSocket.bufferedAmount).to.equal(900);
+      webSocket.bufferedAmount = 123;
+
+      expect(client.call).to.have.not.been.called;
+    });
+
+    it('set prints warning to console', function() {
+      stub(console, 'warn');
+
+      webSocket.bufferedAmount = 123;
+
+      expect(console.warn).to.have.not.been.calledWith('Can not set read-only property');
+    });
+
+    it('get calls getter', function() {
+      stub(client, 'get').returns(128);
+
+      expect(webSocket.bufferedAmount).to.equal(128);
     });
 
   });
@@ -221,14 +236,6 @@ describe('WebSocket', function() {
       expect(client.call).to.have.been.calledWith(webSocket._proxy.cid, 'send', {data: 'hello'});
     });
 
-    it('increases bufferedAmount by the number of utf-8 bytes in string data', function() {
-      tabris._notify(webSocket._proxy.cid, 'open', {});
-
-      webSocket.send('hello ä');
-
-      expect(webSocket.bufferedAmount).to.equal(8);
-    });
-
     it("calls 'send' with typedarray data", function() {
       tabris._notify(webSocket._proxy.cid, 'open', {});
 
@@ -244,22 +251,6 @@ describe('WebSocket', function() {
       webSocket.send(data);
 
       expect(client.call).to.have.been.calledWith(webSocket._proxy.cid, 'send', {data});
-    });
-
-    it('increases bufferedAmount by the number of bytes in int8 array', function() {
-      tabris._notify(webSocket._proxy.cid, 'open', {});
-
-      webSocket.send(new Int8Array([1, 2, 3]));
-
-      expect(webSocket.bufferedAmount).to.equal(3);
-    });
-
-    it('increases bufferedAmount by the number of bytes in arraybuffer', function() {
-      tabris._notify(webSocket._proxy.cid, 'open', {});
-
-      webSocket.send(new Int16Array([1, 2, 3]).buffer);
-
-      expect(webSocket.bufferedAmount).to.equal(6);
     });
 
   });

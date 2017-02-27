@@ -20,7 +20,6 @@ class _WebSocket extends NativeObject {
     super();
     this._create('tabris.WebSocket', properties);
     EVENT_TYPES.forEach(type => this._nativeListen(type, true));
-    this._nativeListen('bufferProcess', true);
   }
 
 }
@@ -28,7 +27,8 @@ class _WebSocket extends NativeObject {
 NativeObject.defineProperties(_WebSocket.prototype, {
   url: {type: 'string', default: ''},
   protocol: {type: 'any', default: ''},
-  binaryType: {type: 'string', default: 'blob'}
+  binaryType: {type: 'string', default: 'blob'},
+  bufferedAmount: {type: 'number', nocache: true}
 });
 
 export default class WebSocket {
@@ -49,7 +49,6 @@ export default class WebSocket {
     this.readyState = CONNECTING;
     this.protocol = '';
     this.extensions = '';
-    this.bufferedAmount = 0;
     addDOMEventTargetMethods(this);
     defineEventHandlerProperties(this, EVENT_TYPES);
     this._proxy = this.$createProxy(url, protocols);
@@ -74,17 +73,23 @@ export default class WebSocket {
     }).on('error', event => {
       this.readyState = CLOSED;
       this.dispatchEvent(Object.assign(new Event('error'), omit(event, 'target')));
-    }).on('bufferProcess', event => {
-      this.bufferedAmount -= event.byteLength;
     });
   }
 
   set binaryType(binaryType) {
-    this._proxy.set('binaryType', binaryType);
+    this._proxy.binaryType = binaryType;
   }
 
   get binaryType() {
-    return this._proxy.get('binaryType');
+    return this._proxy.binaryType;
+  }
+
+  set bufferedAmount(bufferedAmount) {
+    console.warn('Can not set read-only property "bufferedAmount"');
+  }
+
+  get bufferedAmount() {
+    return this._proxy.bufferedAmount;
   }
 
   send(data) {
@@ -92,10 +97,8 @@ export default class WebSocket {
       throw new Error("Can not 'send' WebSocket message when WebSocket state is CONNECTING");
     }
     if (typeof data === 'string') {
-      this.bufferedAmount += getStringByteSize(data);
       this._proxy._nativeCall('send', {data});
     } else if (data instanceof ArrayBuffer || ArrayBuffer.isView(data)) {
-      this.bufferedAmount += data.byteLength;
       this._proxy._nativeCall('send', {data});
     } else {
       throw new Error('Data of type ' + typeof data + " is not supported in WebSocket 'send' operation");
