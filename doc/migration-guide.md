@@ -1,7 +1,5 @@
 # 1.x -> 2.x
 
-=== Beta 1 ===
-
 ## Widgets
 * `tabris.create()` has been removed. Widget constructors are now available under the `tabris` namespace. [Create widgets](https://tabrisjs.com/documentation/2.0/widget-basics#creating-native-widgets) using `new` instead, e.g. use:
 
@@ -40,9 +38,6 @@
 ### SearchAction
 * `tabris.SearchAction` must now be appended to a [`NavigationView`](https://tabrisjs.com/documentation/2.0/api/NavigationView#navigationview).
 
-### Custom widgets
-* `tabris.registerWidget()` has been removed. Use [`tabris.Widget.extend(...)`](https://tabrisjs.com/documentation/2.0/custom-widgets#custom-widgets) instead.
-
 ## UI
 * `tabris.ui.statusBarTheme` has been removed. Use [`tabris.StatusBar.theme`](https://tabrisjs.com/documentation/2.0/api/StatusBar#theme) instead.
 * `tabris.ui.displayMode` has been removed. Use [`tabris.StatusBar.displayMode`](https://tabrisjs.com/documentation/2.0/api/StatusBar#displaymode) instead.
@@ -53,55 +48,31 @@
 ## Properties
 * Calling `get()` on a disposed object now returns `undefined`.
 * `set()` of a disposed object is a [NOOP](https://en.wikipedia.org/wiki/NOP).
+* The property `selection` of `CheckBox`, `RadioButton`, `Switch` and `ToggleButton` has been renamed to `checked`.
+
 
 ## Events
 * `off()` without arguments is not supported anymore.
 * `off(event)` is not supported anymore.
 * Calling [`on(event, listener, context?)`](https://tabrisjs.com/documentation/2.0/api/NativeObject#onevent-listener-context) or [`once(event, listener, context?)`](https://tabrisjs.com/documentation/2.0/api/NativeObject#onceevent-listener-context) multiple times with identical parameters will result into the callback being registered only once.
 
-=== Beta 2 ===
+* Event listeners are now called with a single event parameter. All event objects have a `target` field - the object the event was fired on. Other properties of the event object are event-specific. Refer to the [documentation](https://tabrisjs.com/documentation/2.0/) for information about changed events.
 
-## Events
+E.g. use:
 
-* Some event listeners are now called with a single event parameter. All changed event objects have a `target` field - the object the event was fired on. Other properties of the event object are event-specific.
+```js
+checkBox.on('select', ({target, selection: checked}) => {
+    target.text = checked ? 'checked' : 'not checked';
+});
+```
 
-    E.g. use:
+... instead of ...
 
-    ```js
-    checkBox.on('select', ({target, selection: checked}) => {
-      target.text = checked ? 'checked' : 'not checked';
-    });
-    ```
+```js
+checkBox.on('select', (target, selection) => {
+    target.text = selection ? 'checked' : 'not checked';
+});
+```
 
-    ... instead of ...
-
-    ```js
-    checkBox.on('select', (target, selection) => {
-      target.text = selection ? 'checked' : 'not checked';
-    });
-    ```
-    Changed listener API:
-
-    * `dispose`
-        - old listener signature: `function(target)`
-        - new listener signature: `function({target})`
-
-    * `resize`
-        - old listener signature: `function(target, bounds)`
-        - new listener signature: `function(event)`, where `event` is a [`ResizeEvent`](types.md#resizeevent)
-
-    * `change:...` events have a property named `value` containing the new value of the changed property.
-        - old listener signature: `function(target, newValue)`
-        - new listener signature: `function(event)`, where `event` is a [`ChangeEvent`](types.md#changeevent).
-
-    * `pan`, `tap`, `longpress` and `swipe`
-        - old listener signature: `function(target, gesture)`
-        - new listener signature: `function(event)`, where `event` is a [`GestureEvent`](types.md#gestureevent).
-
-    * `touchstart`, `touchmove`, `touchend`, `touchcancel`
-        - old listener signature: `function(target, touchObject)`
-        - new listener signature: `function(event)`, where `event` is a [`TouchEvent`](types.md#touchevent).
-
-    * `animationstart` and `animationend`
-        - old listener signature: `function(target, options)`
-        - new listener signature: `function(event)`, where `event` is an [`AnimationEvent`](types.md#animationevent).
+## Custom widgets
+Custom widget API has changed. Refer to the [custom widget documentation](https://tabrisjs.com/documentation/2.0/custom-widgets) for more information.
