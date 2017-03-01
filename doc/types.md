@@ -1,14 +1,6 @@
 Property Types
 ==============
 
-## AnimationEvent
-
-An animation event containing following properties:
-
-- **target**: *Widget*
-The widget the event was fired on.
-- the properties of the [`AnimationOptions`](#animationoptions) object given when [`animate()`](api/Widget.md#animateproperties-options) was called.
-
 ## AnimationOptions
 
 Options of the [`animate()`](api/Widget.md#animateproperties-options) method. They have following properties:
@@ -116,10 +108,6 @@ Examples:
 "initial"
 ```
 
-## GestureEvent
-
-Object containing information about the currently performed gesture. See [Gesture Events](touch.md).
-
 ## Image
 
 Images are specified as objects with the following properties:
@@ -159,10 +147,6 @@ A string starting with a number (int) followed directly by `%`. May be negative.
 
 See also [Layout](layout.md).
 
-## TouchEvent
-
-Object containing information about the currently performed gesture. See [Touch Events](touch.md).
-
 ## Transformation
 
 Transformations are specified as an object with the following properties:
@@ -186,21 +170,6 @@ Example:
 {scaleX: 2, scaleY: 2, rotation: Math.PI * 0.75}
 ```
 This transformation will make the widget twice as big and rotate it by 135&deg;.
-
-## ResizeEvent
-
-Object containing information about the new widget size. It has the following properties:
-
-* **target**: *Widget*
-The widget the event was fired on.
-* **left**: *number*
-The horizontal offset from the parent's left edge in dip
-* **top**: *number*
-The vertical offset from the parent's top edge in dip
-* **width**: *number*
-The width of the widget in dip
-* **height**: *number*
-The height of the widget in dip
 
 ## Selector
 
