@@ -422,7 +422,7 @@ function stringifyResponseHeaders(headers) {
   for (let key in headers) {
     string.push(key + ': ' + headers[key]);
   }
-  return string.join('\n');
+  return string.join('\r\n');
 }
 
 // -----------------------------------------------------------------

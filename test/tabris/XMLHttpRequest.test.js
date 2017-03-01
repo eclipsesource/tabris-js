@@ -445,7 +445,7 @@ describe('XMLHttpRequest', function() {
           code: 200,
           headers: {'Header-Name1': 'foo', 'Header-Name2': 'bar, baz'}
         });
-        expect(xhr.getAllResponseHeaders()).to.equal('Header-Name1: foo\nHeader-Name2: bar, baz');
+        expect(xhr.getAllResponseHeaders()).to.equal('Header-Name1: foo\r\nHeader-Name2: bar, baz');
       });
 
       it("sets state to 'LOADING' when proxy event state 'loading'", function() {
@@ -738,20 +738,17 @@ describe('XMLHttpRequest', function() {
       expect(xhr.getAllResponseHeaders()).to.equal('');
     });
 
-    it('returns response headers', function() {
+    it('returns response headers, separated by CRLF', function() {
       proxy.trigger('StateChange', {
         state: 'headers',
         code: 200,
         headers: {
           Status: 'foo',
           'Set-Cookie': 'foo',
-          'Set-Cookie2': 'foo',
-          'Header-Name1': 'foo',
-          'Header-Name2': 'bar, baz'
+          'X-Custom-Header': 'bar, baz'
         }
       });
-      expect(xhr.getAllResponseHeaders()).to.equal('Status: foo\nSet-Cookie: foo\nSet-Cookie2: foo\n'
-        + 'Header-Name1: foo\nHeader-Name2: bar, baz');
+      expect(xhr.getAllResponseHeaders()).to.equal('Status: foo\r\nSet-Cookie: foo\r\nX-Custom-Header: bar, baz');
     });
 
   });
