@@ -1,25 +1,31 @@
-var drawer = tabris.ui.drawer;
-
-drawer.enabled = true;
-
 var navigationView = new tabris.NavigationView({
   left: 0, top: 0, right: 0, bottom: 0,
   drawerActionVisible: true,
-  animated: false
+  animated: false,
+  win_drawerActionBackground: '#009688',
+  win_drawerActionTheme: 'dark'
 }).appendTo(tabris.ui.contentView);
 
-new tabris.ImageView({
-  left: 0, right: 0, top: 0, height: 200,
-  image: 'images/landscape.jpg',
-  scaleMode: 'fill'
-}).appendTo(drawer);
+tabris.ui.drawer.set({
+  enabled: true,
+  win_targetView: navigationView,
+  win_displayMode: 'compactOverlay'
+});
+
+if (tabris.device.platform !== 'windows') {
+  new tabris.ImageView({
+    left: 0, right: 0, top: 0, height: 200,
+    image: 'images/landscape.jpg',
+    scaleMode: 'fill'
+  }).appendTo(tabris.ui.drawer);
+}
 
 var pageSelector = new tabris.CollectionView({
   left: 0, top: 'prev()', right: 0, bottom: 0,
   items: [{title: 'Basket', icon: 'images/page.png'}, {title: 'Checkout', icon: 'images/page.png'}],
   initializeCell: initializeCell,
   itemHeight: 48
-}).appendTo(drawer);
+}).appendTo(tabris.ui.drawer);
 
 pageSelector.on('select', function({item: pageConfiguration}) {
   tabris.ui.drawer.close();
@@ -30,16 +36,18 @@ pageSelector.on('select', function({item: pageConfiguration}) {
 createPage({title: 'Initial Page', icon: 'images/page.png'}).appendTo(navigationView);
 
 function initializeCell(cell) {
-  new tabris.Composite({
-    left: tabris.device.platform === 'iOS' ? 60 : 72, right: 0, bottom: 0, height: 1,
-    background: '#e7e7e7'
-  }).appendTo(cell);
+  if (tabris.device.platform !== 'windows') {
+    new tabris.Composite({
+      left: tabris.device.platform === 'iOS' ? 60 : 72, right: 0, bottom: 0, height: 1,
+      background: '#e7e7e7'
+    }).appendTo(cell);
+  }
   var imageView = new tabris.ImageView({
-    left: 14, top: 10, bottom: 10
+    left: select({iOS: 14, Android: 14, windows: 8}), top: 10, bottom: 10
   }).appendTo(cell);
   var textView = new tabris.TextView({
-    left: tabris.device.platform === 'iOS' ? 60 : 72, centerY: 0,
-    font: tabris.device.platform === 'iOS' ? '17px .HelveticaNeueInterface-Regular' : '14px Roboto Medium',
+    left: select({iOS: 60, Android: 72, windows: 56}), centerY: 0,
+    font: select({iOS: '17px .HelveticaNeueInterface-Regular', Android: '14px Roboto Medium', windows: '18px default'}),
     textColor: '#212121'
   }).appendTo(cell);
   cell.on('change:item', function({value: page}) {
@@ -58,4 +66,8 @@ function createPage(pageConfiguration) {
     pageSelector.insert([{title: 'Another Page', icon: 'images/page.png'}]);
   }).appendTo(page);
   return page;
+}
+
+function select(options) {
+  return options[tabris.device.platform];
 }

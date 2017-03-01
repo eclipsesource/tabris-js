@@ -15,6 +15,17 @@
       "type": "boolean",
       "default": "false",
       "description": "Controls whether the drawer can be opened and closed. When set to `false`, the drawer cannot be opened and calls to `drawer.open()` will be ignored."
+    },
+    "win_targetView": {
+      "type": "Widget",
+      "default": "`tabris.ui`",
+      "description": "This property may be set to an instance of NavigationView to make its drawer-action open/close the drawer. It also integrates the drawer into the NavigationView layout. When not set to NavigationView instance the property defaults to `tabris.ui`. Other widgets are not supported. Available only on Windows."
+    },
+    "win_displayMode": {
+      "type": "string",
+      "values": ["overlay", "compactOverlay", "inline", "compactInline"],
+      "default": "overlay",
+      "description": "Controls how the drawer integrates in to its targetView. \n\n- `overlay` completely hides the drawer when closed and overlays other content when opend.\n- `compactOverlay` makes the drawer partially visible when closed so a 48px wide bar remains side-by-side with the targetViews other content. If a drawer-action controls the drawer it is placed inside this bar. When the drawer is opend its remaining width overlays the targetViews other content.\n- `inline` completely hides the drawer when closed, but shows it side-by-side with the targetView when opend. The drawer does not close automatically in this mode.\n- `compactInline` makes the drawer partially visible when closed (like `compactOverlay`), but shows it side-by-side with the targetView when opend (like `inline`).\n\nAvailable only on windows."
     }
   },
   "methods": {
@@ -37,6 +48,10 @@
     {
       "title": "Snippet for creating a Drawer",
       "path": "${GITHUB_BRANCH}/snippets/drawer.js"
+    },
+    {
+      "title": "Example for Drawer-based navigation",
+      "path": "${GITHUB_BRANCH}/snippets/drawer-pages.js"
     }
   ]
 }

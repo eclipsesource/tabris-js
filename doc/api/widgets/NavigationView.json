@@ -33,6 +33,28 @@
       "type": "boolean",
       "default": true,
       "description": "Controls whether page transitions are animated."
+    },
+    "win_toolbarTheme": {
+      "type": "string",
+      "values": ["light", "dark", "default"],
+      "default": "default",
+      "description": "Controls the color scheme used for the toolbar. When set to `\"default\"` the theme is inherited from the NavigationView. Available only on Windows."
+    },
+    "win_toolbarOverflowTheme": {
+      "type": "string",
+      "values": ["light", "dark", "default"],
+      "default": "default",
+      "description": "Controls the color scheme used for the toolbars overflow menu. When set to `\"default\"` the theme is inherited from the toolbar. Available only on Windows."
+    },
+    "win_drawerActionTheme": {
+      "type": "string",
+      "values": ["light", "dark", "default"],
+      "default": "default",
+      "description": "Controls the color scheme used for the drawer action. When set to `\"default\"` the theme is inherited from the NavigationView. Available only on Windows."
+    },
+    "win_drawerActionBackground": {
+      "type": "Color",
+      "description": "The background color used for the drawer action. It is common to the make this the same color as the splash screen. Available only on Windows."
     }
   },
   "methods": {

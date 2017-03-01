@@ -121,12 +121,8 @@ NativeObject.defineProperties(NavigationView.prototype, {
   actionColor: {type: 'color'},
   actionTextColor: {type: 'color'},
   animated: {type: 'boolean', default: true},
-  win_toolbarTheme: {
-    type: ['choice', ['default', 'light', 'dark']],
-    default: 'default'
-  },
-  win_toolbarOverflowTheme: {
-    type: ['choice', ['default', 'light', 'dark']],
-    default: 'default'
-  }
+  win_toolbarTheme: {type: ['choice', ['default', 'light', 'dark']], default: 'default'},
+  win_toolbarOverflowTheme: {type: ['choice', ['default', 'light', 'dark']], default: 'default'},
+  win_drawerActionTheme: {type: ['choice', ['default', 'light', 'dark']], default: 'default'},
+  win_drawerActionBackground: {type: 'color'}
 });

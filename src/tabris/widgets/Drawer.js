@@ -46,21 +46,16 @@ export default class Drawer extends Composite {
 }
 
 NativeObject.defineProperties(Drawer.prototype, {
-  win_displayMode: {
-    type: ['choice', ['overlay', 'compactOverlay']],
-    default: 'overlay'
-  },
-  win_buttonBackground: {
-    type: 'color',
-    default: null
-  },
-  win_buttonTheme: {
-    type: ['choice', ['light', 'dark', 'default']],
-    default: 'default'
-  },
   enabled: {
     type: 'boolean',
     default: false
+  },
+  win_targetView: {
+    type: 'proxy'
+  },
+  win_displayMode: {
+    type: ['choice', ['overlay', 'compactOverlay', 'inline', 'compactInline']],
+    default: 'overlay'
   }
 });
 
