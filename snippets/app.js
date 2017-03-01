@@ -43,5 +43,5 @@ tabris.app.on('backnavigation', function(event) {
 function createTextView(key, value) {
   var composite = new tabris.Composite({left: 16, top: 'prev() 8', right: 16}).appendTo(tabris.ui.contentView);
   new tabris.TextView({text: key}).appendTo(composite);
-  new tabris.TextView({text: value, left: '128'}).appendTo(composite);
+  new tabris.TextView({text: value, left: 128}).appendTo(composite);
 }
