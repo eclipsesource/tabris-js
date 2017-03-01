@@ -9,6 +9,12 @@ class Foo extends Widget {
   _acceptChild() {
     return true;
   }
+  get foo() {
+    return this._foo;
+  }
+  set foo(value) {
+    this._foo = value;
+  }
 }
 
 class Bar extends Foo {}
@@ -127,14 +133,11 @@ describe('WidgetCollection', function() {
   describe('delegation:', function() {
 
     it('set() is delegated', function() {
-      spy(widgets[0], 'set');
-      spy(widgets[1], 'set');
-      spy(widgets[2], 'set');
       collection.set('foo', 'bar');
 
-      expect(widgets[0].set).to.have.been.calledWith('foo', 'bar');
-      expect(widgets[1].set).to.have.been.calledWith('foo', 'bar');
-      expect(widgets[2].set).to.have.been.calledWith('foo', 'bar');
+      expect(widgets[0].foo).to.equal('bar');
+      expect(widgets[1].foo).to.equal('bar');
+      expect(widgets[2].foo).to.equal('bar');
     });
 
     it('set() returns collection', function() {
