@@ -1,11 +1,12 @@
 # Building a Tabris.js App
 
-Tabris.js utilizes [Apache Cordova](http://cordova.apache.org) to build and package apps. Apps can be built without any local setup using the free online build service on tabrisjs.com. To [build an app on your local machine](local-build.md), you need to setup developer tools like Xcode or the Android SDK. The following features are supported by the two different build types.
+Tabris.js utilizes [Apache Cordova](http://cordova.apache.org) to build and package apps. Apps can be built without any local setup using the free online build service on tabrisjs.com. To [build an app on your local machine](local-build.md), you need to setup developer tools like Xcode, Visual Studio or the Android SDK. The following features are supported by the two different build types.
 
 |                           | Build Service | Local Build |
 | :------------------------ |:---------------:| :---------------: |
 | Building iOS Apps         |       ✓         |       ✓      |
 | Building Android Apps     |       ✓         |       ✓      |
+| Building Windows Apps     |       ✓         |       ✓      |
 | [Integrate Cordova Plugins](cordova.md)     |       ✓      |       ✓      |
 | [Cordova Build Hooks](http://cordova.apache.org/docs/en/edge/guide_appdev_hooks_index.md.html#Hooks%20Guide)       |       ✓      |       ✓      |
 | Custom Project Structure  |       ✓      |       ✓      |
@@ -63,6 +64,8 @@ After your app has become valid, you are ready to execute the first build. Just 
 
 > <img align="left" src="img/note.png"> <i>The build service installs the dependencies specified in your package.json from npm (except devDependencies). As a result, you don't have to put the `node_modules` folder under version control.</i>
 
+> <img align="left" src="img/note.png"> <i>When building Windows apps, please also read the [Windows Support Documentation](windows-support.md)</i>
+
 ### Settings
 ![App Settings](img/build-app-settings.png)
 
@@ -113,3 +116,15 @@ Tabris.js accepts the following custom preferences:
 |-------------------------|-------|
 | Theme                   | <ul><li>`@style/Theme.Tabris`</li><li>`@style/Theme.Tabris.Light`</li><li>`@style/Theme.Tabris.Light.DarkAppBar` (Default)</ul>In addition to the bundled Tabris themes, a resource reference to a custom Android theme can be specified. Custom themes have to inherit from one of the Tabris base themes.<br/><br/>Example: `<preference name="Theme" value="@style/Theme.MyAppTheme" />` |
 | ThemeSplash             | <ul><li>`@style/Theme.Tabris.SplashScreen`</li><li>`@style/Theme.Tabris.Light.SplashScreen` (Default)</ul>The splash screen is shown to the user while the app is starting up. By default this screen has a white background. The `ThemeSplash` preference allows to set one of the bundled themes or to provide a custom theme.<br/><br/>Example: `<preference name="ThemeSplash" value="@style/Theme.Tabris.SplashScreen" />`<br/><br/>Note that the `config.xml` element `<splash .. />` can be used to set an image on the splash screen. For styling guides see the material design guidelines on [launch screens](https://material.google.com/patterns/launch-screens.html). |
+
+### Windows specific preferences
+Windows apps always have a splash screen. If you do not configure one, the default Tabris.js splash screen is used. To configure your own splash creen, you have to give a logo in three different resolutions and the background color, like this:
+
+```xml
+<platform name="windows">
+    <splash src="resources/windows/splash/SplashScreen.scale-100.png" width="620" height="300"/>
+    <splash src="resources/windows/splash/SplashScreen.scale-150.png" width="930" height="450"/>
+    <splash src="resources/windows/splash/SplashScreen.scale-200.png" width="1240" height="600"/>
+    <preference name="SplashScreenBackgroundColor" value="#009688"/>
+</platform>
+```

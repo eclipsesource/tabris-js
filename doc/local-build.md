@@ -6,7 +6,8 @@ You can build Tabris.js apps on your local machine using the [Cordova command li
 
 ### Prerequisites
 
-If you're targeting iOS you will need MacOS, while Android apps can be build on any OS that is supported by the Android SDK.
+If you're targeting iOS you will need MacOS, while Windows apps need a Windows PC with Visual Studio 2015.
+Android apps can be build on any OS that is supported by the Android SDK.
 
 You also need a Cordova installation. Follow the [Cordova Installation Guide](http://cordova.apache.org/docs/en/edge/guide_cli_index.md.html#The%20Command-Line%20Interface_installing_the_cordova_cli) and install the latest Cordova version on your system.
 
@@ -34,6 +35,7 @@ cordova platform add /Users/Me/Downloads/tabris-android
 or for Windows users:
 ```
 cordova platform add c:\MyDownloads\tabris-android
+cordova platform add c:\MyDownloads\tabris-windows
 ```
 
 ### Integrate Cordova Plugins
@@ -54,3 +56,5 @@ To run an app, use the `cordova run` command as described in the [Cordova Emulat
 
 Building an app is just as simple. Use the `cordova build` command as described in the [Cordova Build Guide](http://cordova.apache.org/docs/en/edge/guide_cli_index.md.html#The%20Command-Line%20Interface_build_the_app).
 
+To build a Windows app signed with your own key, run
+`cordova build windows --release -- --packageCertificateKeyFile="<absolute-path-to-pfx>" --bundle`

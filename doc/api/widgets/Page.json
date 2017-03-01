@@ -5,7 +5,7 @@
   "properties": {
     "image": {
       "type": "Image",
-      "description": "An image to be displayed in the navigation bar. Not supported anymore, don't use it."
+      "description": "An image to be displayed in the navigation bar. Not supported on Windows."
     },
     "title": {
       "type": "string",
