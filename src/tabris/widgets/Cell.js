@@ -3,9 +3,8 @@ import Widget from '../Widget';
 
 export default class Cell extends Widget {
 
-  constructor(properties) {
-    super();
-    this._create('tabris.Composite', properties);
+  get _nativeType() {
+    return 'tabris.Composite';
   }
 
   dispose() {

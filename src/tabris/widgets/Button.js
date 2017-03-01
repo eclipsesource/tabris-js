@@ -3,9 +3,8 @@ import Widget from '../Widget';
 
 export default class Button extends Widget {
 
-  constructor(properties) {
-    super();
-    this._create('tabris.Button', properties);
+  get _nativeType() {
+    return 'tabris.Button';
   }
 
   _listen(name, listening) {

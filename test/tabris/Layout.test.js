@@ -88,9 +88,8 @@ describe('Layout', function() {
   describe('resolveReferences', function() {
 
     class TestType extends Widget {
-      constructor(properties) {
-        super();
-        this._create('TestType', properties);
+      get _nativeType() {
+        return 'TestType';
       }
     }
 

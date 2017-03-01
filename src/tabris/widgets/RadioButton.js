@@ -3,9 +3,8 @@ import Widget from '../Widget';
 
 export default class RadioButton extends Widget {
 
-  constructor(properties) {
-    super();
-    this._create('tabris.RadioButton', properties);
+  get _nativeType() {
+    return 'tabris.RadioButton';
   }
 
   _listen(name, listening) {

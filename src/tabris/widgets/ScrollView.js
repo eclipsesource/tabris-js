@@ -5,9 +5,8 @@ const EVENT_TYPES = ['scrollX', 'scrollY'];
 
 export default class ScrollView extends Widget {
 
-  constructor(properties) {
-    super();
-    this._create('tabris.ScrollView', properties);
+  get _nativeType() {
+    return 'tabris.ScrollView';
   }
 
   _listen(name, listening) {

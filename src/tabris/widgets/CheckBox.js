@@ -3,9 +3,8 @@ import Widget from '../Widget';
 
 export default class CheckBox extends Widget {
 
-  constructor(properties) {
-    super();
-    this._create('tabris.CheckBox', properties);
+  get _nativeType() {
+    return 'tabris.CheckBox';
   }
 
   _listen(name, listening) {

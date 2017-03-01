@@ -4,11 +4,14 @@ import Widget from '../Widget';
 export default class NavigationBar extends Widget {
 
   constructor(properties) {
-    super();
     if (arguments[0] !== true) {
       throw new Error('NavigationBar can not be created');
     }
-    this._create('tabris.NavigationBar', properties);
+    super(properties);
+  }
+
+  get _nativeType() {
+    return 'tabris.NavigationBar';
   }
 
   _setParent(parent, index) {

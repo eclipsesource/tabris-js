@@ -3,9 +3,8 @@ import Widget from '../Widget';
 
 export default class Action extends Widget {
 
-  constructor(properties) {
-    super();
-    this._create('tabris.Action', properties);
+  get _nativeType() {
+    return 'tabris.Action';
   }
 
   _listen(name, listening) {

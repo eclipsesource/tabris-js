@@ -3,9 +3,8 @@ import Widget from '../Widget';
 
 export default class Slider extends Widget {
 
-  constructor(properties) {
-    super();
-    this._create('tabris.Slider', properties);
+  get _nativeType() {
+    return 'tabris.Slider';
   }
 
   _listen(name, listening) {

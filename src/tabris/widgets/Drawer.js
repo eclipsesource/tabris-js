@@ -4,11 +4,14 @@ import Widget from '../Widget';
 export default class Drawer extends Widget {
 
   constructor(properties) {
-    super();
     if (arguments[0] !== true) {
       throw new Error('Drawer can not be created');
     }
-    this._create('tabris.Drawer', properties);
+    super(properties);
+  }
+
+  get _nativeType() {
+    return 'tabris.Drawer';
   }
 
   _acceptChild() {

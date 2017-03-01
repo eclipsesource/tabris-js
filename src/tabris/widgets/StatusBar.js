@@ -4,11 +4,14 @@ import Widget from '../Widget';
 export default class StatusBar extends Widget {
 
   constructor(properties) {
-    super();
     if (arguments[0] !== true) {
       throw new Error('StatusBar can not be created');
     }
-    this._create('tabris.StatusBar', properties);
+    super(properties);
+  }
+
+  get _nativeType() {
+    return 'tabris.StatusBar';
   }
 
   _setParent(parent, index) {

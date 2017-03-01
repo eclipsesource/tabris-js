@@ -3,9 +3,8 @@ import Widget from '../Widget';
 
 export default class ToggleButton extends Widget {
 
-  constructor(properties) {
-    super();
-    this._create('tabris.ToggleButton', properties);
+  get _nativeType() {
+    return 'tabris.ToggleButton';
   }
 
   _listen(name, listening) {

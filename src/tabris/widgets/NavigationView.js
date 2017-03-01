@@ -7,10 +7,13 @@ import SearchAction from './SearchAction';
 export default class NavigationView extends Widget {
 
   constructor(properties) {
-    super();
-    this._create('tabris.NavigationView', properties);
+    super(properties);
     this._nativeListen('backnavigation', true);
     this._nativeListen('back', true);
+  }
+
+  get _nativeType() {
+    return 'tabris.NavigationView';
   }
 
   _acceptChild(child) {

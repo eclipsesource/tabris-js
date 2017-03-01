@@ -2,9 +2,8 @@ import Widget from '../Widget';
 
 export default class Composite extends Widget {
 
-  constructor(properties) {
-    super();
-    this._create('tabris.Composite', properties);
+  get _nativeType() {
+    return 'tabris.Composite';
   }
 
   _acceptChild() {

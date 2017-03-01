@@ -5,9 +5,8 @@ const EVENT_TYPES = ['input', 'accept', 'select'];
 
 export default class SearchAction extends Widget {
 
-  constructor(properties) {
-    super();
-    this._create('tabris.SearchAction', properties);
+  get _nativeType() {
+    return 'tabris.SearchAction';
   }
 
   _listen(name, listening) {

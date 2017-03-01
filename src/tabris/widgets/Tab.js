@@ -4,9 +4,8 @@ import TabFolder from './TabFolder';
 
 export default class Tab extends Widget {
 
-  constructor(properties) {
-    super();
-    this._create('tabris.Tab', properties);
+  get _nativeType() {
+    return 'tabris.Tab';
   }
 
   _acceptChild() {

@@ -7,13 +7,15 @@ const EVENT_TYPES = ['refresh', 'select', 'scroll'];
 export default class CollectionView extends Widget {
 
   constructor(properties) {
-    super();
-    this._items = [];
-    this._create('tabris.CollectionView', properties);
+    super(Object.assign({items: []}, properties));
     this._nativeListen('requestinfo', true);
     this._nativeListen('createitem', true);
     this._nativeListen('populateitem', true);
     tabris.on('flush', () => this._reload());
+  }
+
+  get _nativeType() {
+    return 'tabris.CollectionView';
   }
 
   _acceptChild(child) {

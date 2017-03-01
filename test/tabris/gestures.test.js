@@ -7,9 +7,8 @@ import {expect, spy, restore} from '../test';
 describe('gestures:', function() {
 
   class TestType extends Widget {
-    constructor(properties) {
-      super();
-      this._create('TestType', properties);
+    get _nativeType() {
+      return 'TestType';
     }
   }
 

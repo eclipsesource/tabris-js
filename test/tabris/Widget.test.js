@@ -10,9 +10,8 @@ import {omit} from '../../src/tabris/util';
 describe('Widget', function() {
 
   class TestWidget extends Widget {
-    constructor(properties) {
-      super();
-      this._create('TestWidget', properties);
+    get _nativeType() {
+      return 'TestWidget';
     }
     _acceptChild() {
       return true;

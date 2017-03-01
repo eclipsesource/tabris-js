@@ -5,9 +5,8 @@ const EVENT_TYPES = ['navigate', 'load', 'download', 'message'];
 
 export default class WebView extends Widget {
 
-  constructor(properties) {
-    super();
-    this._create('tabris.WebView', properties);
+  get _nativeType() {
+    return 'tabris.WebView';
   }
 
   _listen(name, listening) {

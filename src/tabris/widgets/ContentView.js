@@ -3,11 +3,14 @@ import Widget from '../Widget';
 export default class ContentView extends Widget {
 
   constructor(properties) {
-    super();
     if (arguments[0] !== true) {
       throw new Error('ContentView can not be created');
     }
-    this._create('tabris.Composite', properties);
+    super(properties);
+  }
+
+  get _nativeType() {
+    return 'tabris.Composite';
   }
 
   _create(type, properties) {

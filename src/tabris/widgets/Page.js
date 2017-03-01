@@ -4,9 +4,8 @@ import NavigationView from '../widgets/NavigationView';
 
 export default class Page extends Widget {
 
-  constructor(properties) {
-    super();
-    this._create('tabris.Page', properties);
+  get _nativeType() {
+    return 'tabris.Page';
   }
 
   insertBefore() {

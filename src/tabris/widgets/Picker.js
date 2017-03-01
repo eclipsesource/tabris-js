@@ -3,9 +3,8 @@ import Widget from '../Widget';
 
 export default class Picker extends Widget {
 
-  constructor(properties) {
-    super();
-    this._create('tabris.Picker', properties);
+  get _nativeType() {
+    return 'tabris.Picker';
   }
 
   _create(type, properties = {}) {

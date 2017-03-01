@@ -3,9 +3,8 @@ import Widget from '../Widget';
 
 export default class TextView extends Widget {
 
-  constructor(properties) {
-    super();
-    this._create('tabris.TextView', properties);
+  get _nativeType() {
+    return 'tabris.TextView';
   }
 
 }

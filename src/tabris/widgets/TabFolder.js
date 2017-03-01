@@ -6,9 +6,8 @@ const EVENT_TYPES = ['select', 'scroll'];
 
 export default class TabFolder extends Widget {
 
-  constructor(properties) {
-    super();
-    this._create('tabris.TabFolder', properties);
+  get _nativeType() {
+    return 'tabris.TabFolder';
   }
 
   _acceptChild(child) {

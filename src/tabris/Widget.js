@@ -9,10 +9,13 @@ const EVENT_TYPES = ['touchstart', 'touchmove', 'touchend', 'touchcancel', 'resi
 
 export default class Widget extends NativeObject {
 
-  constructor() {
+  constructor(properties) {
     super();
     if (this.constructor === Widget) {
       throw new Error('Cannot instantiate abstract Widget');
+    }
+    if (this._nativeType) {
+      this._create(this._nativeType, properties);
     }
   }
 

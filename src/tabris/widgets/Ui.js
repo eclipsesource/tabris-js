@@ -8,15 +8,18 @@ import {create as createDrawer} from './Drawer';
 export default class Ui extends Widget {
 
   constructor(properties) {
-    super();
     if (arguments[0] !== true) {
       throw new Error('Ui can not be created');
     }
-    this._create('tabris.Ui', properties);
+    super(properties);
     this._appendNamedChild('contentView', createContentView());
     this._appendNamedChild('statusBar', createStatusBar());
     this._appendNamedChild('navigationBar', createNavigationBar());
     this._appendNamedChild('drawer', createDrawer());
+  }
+
+  get _nativeType() {
+    return 'tabris.Ui';
   }
 
   _acceptChild(child) {

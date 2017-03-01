@@ -3,9 +3,8 @@ import Widget from '../Widget';
 
 export default class Switch extends Widget {
 
-  constructor(properties) {
-    super();
-    this._create('tabris.Switch', properties);
+  get _nativeType() {
+    return 'tabris.Switch';
   }
 
   _listen(name, listening) {

@@ -4,9 +4,8 @@ import {types} from '../property-types';
 
 export default class Video extends Widget {
 
-  constructor(properties) {
-    super();
-    this._create('tabris.Video', properties);
+  get _nativeType() {
+    return 'tabris.Video';
   }
 
   _listen(name, listening) {

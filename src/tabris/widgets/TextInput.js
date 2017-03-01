@@ -5,9 +5,8 @@ const EVENT_TYPES = ['focus', 'blur', 'accept', 'input'];
 
 export default class TextInput extends Widget {
 
-  constructor(properties) {
-    super();
-    this._create('tabris.TextInput', properties);
+  get _nativeType() {
+    return 'tabris.TextInput';
   }
 
   _listen(name, listening) {

@@ -3,9 +3,8 @@ import Widget from '../Widget';
 
 export default class Canvas extends Widget {
 
-  constructor(properties) {
-    super();
-    this._create('tabris.Canvas', properties);
+  get _nativeType() {
+    return 'tabris.Canvas';
   }
 
   getContext(type, width, height) {

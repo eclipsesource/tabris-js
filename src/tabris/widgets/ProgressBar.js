@@ -3,9 +3,8 @@ import Widget from '../Widget';
 
 export default class ProgressBar extends Widget {
 
-  constructor(properties) {
-    super();
-    this._create('tabris.ProgressBar', properties);
+  get _nativeType() {
+    return 'tabris.ProgressBar';
   }
 
 }

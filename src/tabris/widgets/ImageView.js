@@ -3,9 +3,8 @@ import Widget from '../Widget';
 
 export default class ImageView extends Widget {
 
-  constructor(properties) {
-    super();
-    this._create('tabris.ImageView', properties);
+  get _nativeType() {
+    return 'tabris.ImageView';
   }
 
   _listen(name, listening) {
