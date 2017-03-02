@@ -1,89 +1,67 @@
 # Custom Widgets
 
-> <img align="left" src="img/note.png"> <i>The custom widget API is not final yet. It may change without prior notice!</i>
+Custom widgets are written in JavaScript and the language available for the native platforms. They use the interfaces of the native Tabris.js clients and are wrapped in a Cordova plug-in. This article covers the JavaScript part of the implementation.
 
-Custom widgets are written in JavaScript, the language available for the native platforms, using the interfaces of the native Tabris.js clients, and wrapped in a Cordova plug-in. This article covers the JavaScript part of the implementation.
+## Defining a Custom Widget in JavaScript
 
-## Registering a Custom Widget in JavaScript
+Custom widgets must extend `tabris.Widget`. It enables communication with the native part of the custom widget.
 
-Custom widgets must be registered in JavaScript in order to make their constructor available on the `tabris` object and to set up the communication with the native implementation. This is done using the method `registerWidget`:
+Custom widget classes must overwrite the `_nativeType` property getter to return a type matching the native implementation:
 
 ```js
-tabris.registerWidget(type, definition);
+class MyCustomWidget extends tabris.Widget {
+
+  get _nativeType() {
+    return 'myLibrary.MyCustomWidget';
+  }
+
+}
 ```
-
-The parameter `type` is the name of the widget constructor. Type names should begin with an upper-case character, internal types are prefixed with an underscore, e.g. "_MyInternalWidget".
-
-The second parameter `definition` is an object with the following members:
-
-* `_type`: The native type to be used in the native bridge `create` operation, if it differs from the type used in JavaScript. Defaults to the type that was specified in the first parameter.
-* `_properties`: An object that defines the properties that should be forwarded to the native widget (see below).
-* `_events`: An object that defines the events that are supported by the native widget (see list below).
-* `_supportsChildren`: If set to `true`, the custom widget will support children. Otherwise, an error will be thrown when attempting to append a child.
 
 ### Properties
 
-The `_properties` object maps property names to their definitions. Properties described in the Tabris.js documentation for `Widget` are automatically defined. A property can be defined using one of these syntaxes:
-
-* A property type identifier (see below).
-* A *map* with any of these entries:
-    * `type`: One of the property type identifiers listed below. Same effect as giving the type directly. If omitted, any value is accepted.
-    * `default`: A default value to return when the property has not yet been set.
-    * `nocache`: If set to true the property value will never be cached in JavaScript. Use this for all properties that can change on the native side, e.g. selection.
-
-The type identifier determines how the property value is checked/encoded/converted before passing it to the native side.
-
-#### Example
+Call `_nativeSet(name, value)` and `_nativeGet(name)` to exchange properties with the native client.
 
 ```js
-properties: {
-  text: "string",
-  selection: {
-    type: "number",
-    default: 0
-  },
+class MyCustomWidget extends tabris.Widget {
+
   ...
+
+  set myProperty(value) {
+    this._nativeSet('myProperty', value);
+  }
+
+  get myProperty() {
+    return this._nativeGet('myProperty');
+  }
+
+  ...
+
 }
 ```
-
-#### Available property types
-
-* `"any"`: Accepts any value. The value is neither checked nor converted.
-* `"boolean"`: Accepts `true` or `false`. Other values are converted to boolean as determined by the JavaScript language ("truthy"/"falsy" values).
-* `"string"`:  Accepts any string. Other values are converted to strings as determined by the JavaScript language (e.g. `23.0` becomes `"23"`).
-* `"number"`: Accepts any finite number. Other values (including `NaN`) are rejected.
-* `"natural"`: Accepts any finite number equal or greater than zero. Floating-point numbers will be rounded. Other values (including `NaN`) are rejected.
-* `"integer"`: Accepts any finite number. Floating-point numbers will be rounded. Other values (including `NaN`) are rejected.
-* `"color"`: Accepts any value describing a color as outlined in the Tabris.js documentation. Other values are rejected. Will be passed as an [r, g, b, a] array to the native side.
-* `"font"`: Accepts any value describing a font as outlined in the Tabris.js documentation. Other values are rejected. Will be passed as an [[family*], size, bold, italic] array to the native side.
-* `"image"`: Accepts any value describing an image as outlined in the Tabris.js documentation. Other values are rejected. Will be passed to the native side as an object as described in the Tabris.js documentation.
-* `["choice", ["op1", "op2", ...]]` allows `"op1"`, `"op2"`, etc. Other values are rejected.
-* `["choice", ["op1": "encodedOp1", ...}]` allows `"op1"` and encodes it as `"encodedOp1"`. Other values are rejected.
-* `"array"`: Accepts any array.
-* `"array:<type>"`: Accepts array whose entries are all of the type `<type>`, or can be converted to `<type>` as described above.
-* `"nullable:<type>"`: Accepts null or `<type>` or any value that can be converted to `<type>` as described above.
-
-Rejected values will not be passed on in a `set` operation and cause a console warning to be logged.
 
 ### Events
 
-Widgets can send events to the JavaScipt code by issuing `notify` operations on the native bridge. To enable events on your custom widget, you have to declare the events in the `_events` map in `registerWidget`.  Events described in the Tabris.js documentation for `Widget` are automatically defined.
-
-Valid values for the `_events` map are:
-
-
-* `true`: passes the name of the event to the `listen` operation without any changes.
-* A *map* with any of these entries:
-    * `trigger`: A function that will be called instead of proxy.trigger for this event type.
-
-#### Example
+Overwrite the `_listen` method and call `_nativeListen` to get notified when an event gets fired by the native widget part.
 
 ```js
-_events: {
-  select: {
-    trigger: function(event) {
-      this.trigger("select", this, event);
+class MyCustomWidget extends tabris.Widget {
+
+  ...
+
+  _listen(name, listening) {
+    if (name === 'myEvent') {
+      this._nativeListen(name, listening);
+    } else {
+      super._listen(name, listening);
     }
   }
+
+  ...
+
 }
 ```
+
+### Compatibility with iOS 8 and 9
+
+For compatibility with the JavaScriptCore environment version used in iOS 8 and 9, ES6 language features must be transpiled. See http://kangax.github.io/compat-table/es6/
