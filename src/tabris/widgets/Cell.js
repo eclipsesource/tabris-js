@@ -11,23 +11,19 @@ export default class Cell extends Composite {
 
 NativeObject.defineProperties(Cell.prototype, {
   item: {
-    access: {
-      set() {
-        // read only
-      },
-      get(name) {
-        return this._getStoredProperty(name);
-      }
+    set() {
+      // read only
+    },
+    get(name) {
+      return this._getStoredProperty(name);
     }
   },
   itemIndex: {
-    access: {
-      set() {
-        // read only
-      },
-      get(name) {
-        return this._getStoredProperty(name);
-      }
+    set() {
+      // read only
+    },
+    get(name) {
+      return this._getStoredProperty(name);
     }
   }
 });

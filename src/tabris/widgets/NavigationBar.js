@@ -32,10 +32,8 @@ NativeObject.defineProperties(NavigationBar.prototype, {
   height: {
     type: 'number',
     nocache: true,
-    access: {
-      set() {
-        throw new Error('NavigationBar "height" is read only');
-      }
+    set() {
+      throw new Error('NavigationBar "height" is read only');
     }
   },
   background: {type: 'color', nocache: true}

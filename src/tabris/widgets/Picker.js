@@ -64,12 +64,10 @@ NativeObject.defineProperties(Picker.prototype, {
     default() {
       return [];
     },
-    access: {
-      set(name, value, options) {
-        this._storeProperty(name, value, options);
-        let getText = this.get('itemText');
-        this._nativeSet('items', value.map(getText));
-      }
+    set(name, value) {
+      this._storeProperty(name, value);
+      let getText = this.get('itemText');
+      this._nativeSet('items', value.map(getText));
     }
   },
   itemText: {
@@ -79,35 +77,29 @@ NativeObject.defineProperties(Picker.prototype, {
         return item == null ? '' : item.toString();
       };
     },
-    access: {
-      set(name, value, options) {
-        this._storeProperty(name, value, options);
-      }
+    set(name, value) {
+      this._storeProperty(name, value);
     }
   },
   selectionIndex: {
     type: 'natural',
-    access: {
-      set(name, value, options) {
-        this._nativeSet(name, value);
-        this._triggerChangeEvent(name, value, options);
-      }
+    set(name, value) {
+      this._nativeSet(name, value);
+      this._triggerChangeEvent(name, value);
     }
   },
   selection: {
-    access: {
-      set(name, item, options) {
-        let index = this._getItemIndex(item);
-        if (index !== -1) {
-          this.set('selectionIndex', index, options);
-          this._triggerChangeEvent(name, item);
-        } else {
-          console.warn('Could not set picker selection ' + item + ': item not found');
-        }
-      },
-      get() {
-        return this._getItem(this.get('selectionIndex'));
+    set(name, item) {
+      let index = this._getItemIndex(item);
+      if (index !== -1) {
+        this.set('selectionIndex', index);
+        this._triggerChangeEvent(name, item);
+      } else {
+        console.warn('Could not set picker selection ' + item + ': item not found');
       }
+    },
+    get() {
+      return this._getItem(this.get('selectionIndex'));
     }
   },
   fillColor: {type: 'color'},

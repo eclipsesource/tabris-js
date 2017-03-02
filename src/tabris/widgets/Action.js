@@ -21,11 +21,9 @@ NativeObject.defineProperties(Action.prototype, {
   image: {type: 'image', default: null},
   placementPriority: {
     type: ['choice', ['low', 'high', 'normal']],
-    access: {
-      set(name, value, options) {
-        this._nativeSet(name, value.toUpperCase());
-        this._storeProperty(name, value, options);
-      }
+    set(name, value) {
+      this._nativeSet(name, value.toUpperCase());
+      this._storeProperty(name, value);
     },
     default: 'normal'
   },

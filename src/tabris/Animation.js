@@ -3,13 +3,13 @@ import NativeObject from './NativeObject';
 const ANIMATABLE_PROPERTIES = ['opacity', 'transform'];
 
 const PROPERTIES = {
-  properties: 'any',
-  delay: 'natural',
-  duration: 'natural',
-  repeat: 'natural',
-  reverse: 'boolean',
-  easing: ['choice', ['linear', 'ease-in', 'ease-out', 'ease-in-out']],
-  target: 'proxy'
+  properties: {type: 'any'},
+  delay: {type: 'natural'},
+  duration: {type: 'natural'},
+  repeat: {type: 'natural'},
+  reverse: {type: 'boolean'},
+  easing: {type: ['choice', ['linear', 'ease-in', 'ease-out', 'ease-in-out']]},
+  target: {type: 'proxy'}
 };
 
 class Animation extends NativeObject {

@@ -26,7 +26,7 @@ export default class TextInput extends Widget {
 }
 
 NativeObject.defineProperties(TextInput.prototype, {
-  type: ['choice', ['default', 'password', 'search', 'multiline']],
+  type: {type: ['choice', ['default', 'password', 'search', 'multiline']]},
   text: {type: 'string', nocache: true},
   message: {type: 'string', default: ''},
   editable: {type: 'boolean', default: true},

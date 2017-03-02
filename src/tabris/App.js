@@ -88,27 +88,25 @@ NativeObject.defineProperties(App.prototype, {
     default() {
       return [];
     },
-    access: {
-      set(name, value) {
-        for (let cert of value) {
-          if (typeof cert.host !== 'string') {
-            throw new Error('Invalid host for pinned certificate: ' + cert.host);
+    set(name, value) {
+      for (let cert of value) {
+        if (typeof cert.host !== 'string') {
+          throw new Error('Invalid host for pinned certificate: ' + cert.host);
+        }
+        if (typeof cert.hash !== 'string' || !cert.hash.startsWith('sha256/')) {
+          throw new Error('Invalid hash for pinned certificate: ' + cert.hash);
+        }
+        if (tabris.device.platform === 'iOS') {
+          if (!('algorithm' in cert)) {
+            throw new Error('Missing algorithm for pinned certificate: ' + cert.host);
           }
-          if (typeof cert.hash !== 'string' || !cert.hash.startsWith('sha256/')) {
-            throw new Error('Invalid hash for pinned certificate: ' + cert.hash);
-          }
-          if (tabris.device.platform === 'iOS') {
-            if (!('algorithm' in cert)) {
-              throw new Error('Missing algorithm for pinned certificate: ' + cert.host);
-            }
-            if (typeof cert.algorithm !== 'string' || CERTIFICATE_ALGORITHMS.indexOf(cert.algorithm) === -1) {
-              throw new Error('Invalid algorithm for pinned certificate: ' + cert.algorithm);
-            }
+          if (typeof cert.algorithm !== 'string' || CERTIFICATE_ALGORITHMS.indexOf(cert.algorithm) === -1) {
+            throw new Error('Invalid algorithm for pinned certificate: ' + cert.algorithm);
           }
         }
-        this._storeProperty(name, value);
-        this._nativeSet(name, value);
       }
+      this._storeProperty(name, value);
+      this._nativeSet(name, value);
     }
   }
 });

@@ -17,11 +17,9 @@ NativeObject.defineProperties(TextView.prototype, {
   maxLines: {
     type: ['nullable', 'natural'],
     default: null,
-    access: {
-      set(name, value, options) {
-        this._nativeSet(name, value <= 0 ? null : value);
-        this._storeProperty(name, value, options);
-      }
+    set(name, value) {
+      this._nativeSet(name, value <= 0 ? null : value);
+      this._storeProperty(name, value);
     }
   },
   text: {type: 'string', default: ''}

@@ -40,18 +40,16 @@ export default class Video extends Widget {
 
 }
 
-const readOnly = {
-  set(name) {
-    console.warn('Can not set read-only property "' + name + '"');
-  }
-};
+function readOnlySet(name) {
+  console.warn('Can not set read-only property "' + name + '"');
+}
 
 NativeObject.defineProperties(Video.prototype, {
   url: {type: 'string', default: ''},
   controlsVisible: {type: 'boolean', default: true},
   autoPlay: {type: 'boolean', default: true},
-  speed: {access: readOnly},
-  position: {access: readOnly},
-  duration: {access: readOnly},
-  state: {access: readOnly}
+  speed: {set: readOnlySet},
+  position: {set: readOnlySet},
+  duration: {set: readOnlySet},
+  state: {set: readOnlySet}
 });

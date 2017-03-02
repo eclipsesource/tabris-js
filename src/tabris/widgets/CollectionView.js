@@ -22,9 +22,9 @@ export default class CollectionView extends Widget {
     return child instanceof Cell;
   }
 
-  _setItems(items, options) {
+  _setItems(items) {
     this._items = items || [];
-    this._triggerChangeEvent('items', this._items, options);
+    this._triggerChangeEvent('items', this._items);
     this._needsReload = true;
   }
 
@@ -160,43 +160,35 @@ NativeObject.defineProperties(CollectionView.prototype, {
   itemHeight: {
     type: 'any', // "function|natural",
     default: 0,
-    access: {
-      set(name, value, options) {
-        if (typeof value !== 'function') {
-          // Required for 1.0 compatibility
-          this._nativeSet('itemHeight', value);
-        }
-        this._storeProperty(name, value, options);
+    set(name, value) {
+      if (typeof value !== 'function') {
+        // Required for 1.0 compatibility
+        this._nativeSet('itemHeight', value);
       }
+      this._storeProperty(name, value);
     }
   },
   items: {
     type: 'array',
-    access: {
-      set(name, value, options) {
-        this._setItems(value, options);
-      },
-      get() {
-        return this._items;
-      }
+    set(name, value) {
+      this._setItems(value);
+    },
+    get() {
+      return this._items;
     }
   },
   initializeCell: {
     type: 'function',
     default: null,
-    access: {
-      set(name, value) {
-        this._storeProperty(name, value);
-      }
+    set(name, value) {
+      this._storeProperty(name, value);
     }
   },
   cellType: {
     type: 'any', // "string|function",
     default: null,
-    access: {
-      set(name, value, options) {
-        this._storeProperty(name, value, options);
-      }
+    set(name, value) {
+      this._storeProperty(name, value);
     }
   },
   refreshEnabled: {type: 'boolean', default: false},
@@ -204,18 +196,14 @@ NativeObject.defineProperties(CollectionView.prototype, {
   refreshMessage: {type: 'string', default: ''},
   firstVisibleIndex: {
     type: 'number',
-    access: {
-      set(name) {
-        console.warn(this + ": Cannot set read-only property '" + name + "'.");
-      }
+    set(name) {
+      console.warn(this + ": Cannot set read-only property '" + name + "'.");
     }
   },
   lastVisibleIndex: {
     type: 'number',
-    access: {
-      set(name) {
-        console.warn(this + ": Cannot set read-only property '" + name + "'.");
-      }
+    set(name) {
+      console.warn(this + ": Cannot set read-only property '" + name + "'.");
     }
   },
   columnCount: {

@@ -52,6 +52,6 @@ NativeObject.defineProperties(ScrollView.prototype, {
     type: ['choice', ['horizontal', 'vertical']],
     default: 'vertical'
   },
-  offsetX: {type: 'number', nocache: true, access: {set() {}}},
-  offsetY: {type: 'number', nocache: true, access: {set() {}}}
+  offsetX: {type: 'number', nocache: true, set() {}},
+  offsetY: {type: 'number', nocache: true, set() {}}
 });

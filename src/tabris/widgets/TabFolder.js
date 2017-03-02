@@ -47,19 +47,17 @@ NativeObject.defineProperties(TabFolder.prototype, {
   tabBarLocation: {type: ['choice', ['top', 'bottom', 'hidden', 'auto']], default: 'auto'},
   tabMode: {type: ['choice', ['fixed', 'scrollable']], default: 'fixed'},
   selection: {
-    access: {
-      set(name, tab) {
-        if (this._children.indexOf(tab) < 0) {
-          console.warn('Can not set TabFolder selection to ' + tab);
-          return;
-        }
-        this._nativeSet('selection', tab.cid);
-        this._triggerChangeEvent('selection', tab);
-      },
-      get() {
-        let selection = this._nativeGet('selection');
-        return selection ? tabris._proxies.find(selection) : null;
+    set(name, tab) {
+      if (this._children.indexOf(tab) < 0) {
+        console.warn('Can not set TabFolder selection to ' + tab);
+        return;
       }
+      this._nativeSet('selection', tab.cid);
+      this._triggerChangeEvent('selection', tab);
+    },
+    get() {
+      let selection = this._nativeGet('selection');
+      return selection ? tabris._proxies.find(selection) : null;
     }
   }
 });

@@ -250,25 +250,6 @@ export default class Widget extends NativeObject {
 
 }
 
-let layoutAccess = {
-  set(name, value) {
-    if (!this._layoutData) {
-      this._layoutData = {};
-    }
-    if (value == null) {
-      delete this._layoutData[name];
-    } else {
-      this._layoutData[name] = value;
-    }
-    if (this._parent) {
-      Layout.addToQueue(this._parent);
-    }
-  },
-  get(name) {
-    return this._layoutData && this._layoutData[name] != null ? this._layoutData[name] : null;
-  }
-};
-
 NativeObject.defineProperties(Widget.prototype, {
   enabled: {
     type: 'boolean',
@@ -280,73 +261,65 @@ NativeObject.defineProperties(Widget.prototype, {
   },
   layoutData: {
     type: 'layoutData',
-    access: {
-      set(name, value) {
-        this._layoutData = value;
-        if (this._parent) {
-          Layout.addToQueue(this._parent);
-        }
-      },
-      get() {
-        return this._layoutData || null;
+    set(name, value) {
+      this._layoutData = value;
+      if (this._parent) {
+        Layout.addToQueue(this._parent);
       }
+    },
+    get() {
+      return this._layoutData || null;
     }
   },
-  left: {type: 'edge', access: layoutAccess},
-  right: {type: 'edge', access: layoutAccess},
-  top: {type: 'edge', access: layoutAccess},
-  bottom: {type: 'edge', access: layoutAccess},
-  width: {type: 'dimension', access: layoutAccess},
-  height: {type: 'dimension', access: layoutAccess},
-  centerX: {type: 'dimension', access: layoutAccess},
-  centerY: {type: 'dimension', access: layoutAccess},
-  baseline: {type: 'sibling', access: layoutAccess},
+  left: {type: 'edge', get: getLayoutProperty, set: setLayoutProperty},
+  right: {type: 'edge', get: getLayoutProperty, set: setLayoutProperty},
+  top: {type: 'edge', get: getLayoutProperty, set: setLayoutProperty},
+  bottom: {type: 'edge', get: getLayoutProperty, set: setLayoutProperty},
+  width: {type: 'dimension', get: getLayoutProperty, set: setLayoutProperty},
+  height: {type: 'dimension', get: getLayoutProperty, set: setLayoutProperty},
+  centerX: {type: 'dimension', get: getLayoutProperty, set: setLayoutProperty},
+  centerY: {type: 'dimension', get: getLayoutProperty, set: setLayoutProperty},
+  baseline: {type: 'sibling', get: getLayoutProperty, set: setLayoutProperty},
   elevation: {
     type: 'number',
     default: 0
   },
   font: {
     type: 'font',
-    access: {
-      set(name, value, options) {
-        this._nativeSet(name, value === undefined ? null : value);
-        this._storeProperty(name, value, options);
-      }
+    set(name, value) {
+      this._nativeSet(name, value === undefined ? null : value);
+      this._storeProperty(name, value);
     },
     default: null
   },
-  backgroundImage: 'image',
+  backgroundImage: {
+    type: 'image'
+  },
   bounds: {
     type: 'bounds',
-    access: {
-      set() {
-        console.warn(this + ': Can not set read-only property "bounds".');
-      }
+    set() {
+      console.warn(this + ': Can not set read-only property "bounds".');
     }
   },
   background: {
     type: 'color',
-    access: {
-      set(name, value, options) {
-        this._nativeSet(name, value === undefined ? null : value);
-        this._storeProperty(name, value, options);
-      }
+    set(name, value) {
+      this._nativeSet(name, value === undefined ? null : value);
+      this._storeProperty(name, value);
     }
   },
   textColor: {
     type: 'color',
-    access: {
-      set(name, value, options) {
-        this._nativeSet('foreground', value === undefined ? null : value);
-        this._storeProperty(name, value, options);
-      },
-      get(name) {
-        let result = this._getStoredProperty(name);
-        if (result === undefined) {
-          result = this._nativeGet('foreground');
-        }
-        return result;
+    set(name, value) {
+      this._nativeSet('foreground', value === undefined ? null : value);
+      this._storeProperty(name, value);
+    },
+    get(name) {
+      let result = this._getStoredProperty(name);
+      if (result === undefined) {
+        result = this._nativeGet('foreground');
       }
+      return result;
     }
   },
   opacity: {
@@ -376,37 +349,31 @@ NativeObject.defineProperties(Widget.prototype, {
   },
   id: {
     type: 'string',
-    access: {
-      set(name, value, options) {
-        this._storeProperty(name, value, options);
-      },
-      get(name) {
-        return this._getStoredProperty(name);
-      }
+    set(name, value) {
+      this._storeProperty(name, value);
+    },
+    get(name) {
+      return this._getStoredProperty(name);
     }
   },
   class: {
     type: 'string',
-    access: {
-      set(name, value) {
-        this._classList = value.trim().split(/\s+/);
-      },
-      get() {
-        return this.classList.join(' ');
-      }
+    set(name, value) {
+      this._classList = value.trim().split(/\s+/);
+    },
+    get() {
+      return this.classList.join(' ');
     }
   },
   gestures: {
-    access: {
-      set(name, gestures) {
-        this._gestures = Object.assign({}, defaultGestures, gestures);
-      },
-      get() {
-        if (!this._gestures) {
-          this._gestures = Object.assign({}, defaultGestures);
-        }
-        return this._gestures;
+    set(name, gestures) {
+      this._gestures = Object.assign({}, defaultGestures, gestures);
+    },
+    get() {
+      if (!this._gestures) {
+        this._gestures = Object.assign({}, defaultGestures);
       }
+      return this._gestures;
     }
   },
   win_theme: {
@@ -445,4 +412,22 @@ function renderLayoutData() {
     let checkedData = Layout.checkConsistency(this._layoutData);
     this._nativeSet('layoutData', Layout.resolveReferences(checkedData, this));
   }
+}
+
+function setLayoutProperty(name, value) {
+  if (!this._layoutData) {
+    this._layoutData = {};
+  }
+  if (value == null) {
+    delete this._layoutData[name];
+  } else {
+    this._layoutData[name] = value;
+  }
+  if (this._parent) {
+    Layout.addToQueue(this._parent);
+  }
+}
+
+function getLayoutProperty(name) {
+  return this._layoutData && this._layoutData[name] != null ? this._layoutData[name] : null;
 }

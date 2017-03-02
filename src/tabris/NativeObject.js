@@ -234,15 +234,13 @@ function setExistingProperty(name, value) {
 }
 
 function normalizeProperty(property) {
-  let shortHand = (typeof property === 'string' || Array.isArray(property));
-  let setter = property.access && property.access.set || defaultSetter;
-  let getter = property.access && property.access.get || defaultGetter;
+  let config = typeof property === 'string' ? {type: property} : property;
   return {
-    type: resolveType((shortHand ? property : property.type) || 'any'),
-    default: property.default,
-    nocache: property.nocache,
-    set: setter,
-    get: getter
+    type: resolveType(config.type || 'any'),
+    default: config.default,
+    nocache: config.nocache,
+    set: config.set || defaultSetter,
+    get: config.get || defaultGetter
   };
 }
 
@@ -275,12 +273,12 @@ function wrapCoder(fn, args) {
   };
 }
 
-function defaultSetter(name, value, options) {
+function defaultSetter(name, value) {
   this._nativeSet(name, value);
   if (this['$prop_' + name].nocache) {
-    this._triggerChangeEvent(name, value, options);
+    this._triggerChangeEvent(name, value);
   } else {
-    this._storeProperty(name, value, options);
+    this._storeProperty(name, value);
   }
 }
 

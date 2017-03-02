@@ -22,11 +22,9 @@ NativeObject.defineProperties(ImageView.prototype, {
   scaleMode: {type: ['choice', ['auto', 'fit', 'fill', 'stretch', 'none']], default: 'auto'},
   tintColor: {
     type: 'color',
-    access: {
-      set(name, value, options) {
-        this._nativeSet(name, value === undefined ? null : value);
-        this._storeProperty(name, value, options);
-      }
+    set(name, value) {
+      this._nativeSet(name, value === undefined ? null : value);
+      this._storeProperty(name, value);
     }
   }
 });
