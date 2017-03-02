@@ -23,7 +23,7 @@
   },
   "events": {
     "foreground": {
-      "description": "Fired when the app becomes visible. The event is only fired after the app has been brought to the background. Not during app startup."
+      "description": "The event is fired when the app starts or when it returns from the background."
     },
     "resume": {
       "description": "Fired when the app is visible and ready to interact with the user. The event is preceded by either `foreground` (the app becomes visible again) or `pause` (the app regains ability to interact with user)."
