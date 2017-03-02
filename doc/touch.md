@@ -63,4 +63,13 @@ The event object includes the following properties:
 
 - **target**: *Widget* - the widget that received the event
 - **time**: *number* - number of milliseconds since the start of the app
-- **touches**: *{x: number, y: number}[]* - an array of touch coordinates for all current touches, relative to the origin of the widget. Since multiple touches are currently not supported, this array has always one element.
+- **touches**: *{x: number, y: number, absoluteX: number, absoluteY: number}[]* - an array of touch coordinates for all current touches. The x/y coordinates are relative to the parent of the widget whereas the absoluteX/absoluteY coordinates are relative to the `tabris.ui.contentView`. Since multiple touches are currently not supported, the array always has one element.
+
+Example:
+```js
+widget.on("touchstart", function(widget, event) {
+  var x = event.touches[0].absoluteX;
+  var y = event.touches[0].absoluteY;
+  ...
+});
+```

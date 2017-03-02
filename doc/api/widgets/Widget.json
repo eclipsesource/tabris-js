@@ -437,7 +437,7 @@
         },
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
-          "type": "{x: number, y: number}[]"
+          "type": "{x: number, y: number, absoluteX: number, absoluteY: number}[]"
         }
       }
     },
@@ -450,7 +450,7 @@
         },
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
-          "type": "{x: number, y: number}[]"
+          "type": "{x: number, y: number, absoluteX: number, absoluteY: number}[]"
         }
       }
     },
@@ -463,7 +463,7 @@
         },
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
-          "type": "{x: number, y: number}[]"
+          "type": "{x: number, y: number, absoluteX: number, absoluteY: number}[]"
         }
       }
     },
@@ -476,7 +476,7 @@
         },
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
-          "type": "{x: number, y: number}[]"
+          "type": "{x: number, y: number, absoluteX: number, absoluteY: number}[]"
         }
       }
     },
