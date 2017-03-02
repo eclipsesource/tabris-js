@@ -196,15 +196,11 @@ NativeObject.defineProperties(CollectionView.prototype, {
   refreshMessage: {type: 'string', default: ''},
   firstVisibleIndex: {
     type: 'number',
-    set(name) {
-      console.warn(this + ": Cannot set read-only property '" + name + "'.");
-    }
+    readonly: true
   },
   lastVisibleIndex: {
     type: 'number',
-    set(name) {
-      console.warn(this + ": Cannot set read-only property '" + name + "'.");
-    }
+    readonly: true
   },
   columnCount: {
     type: 'number',

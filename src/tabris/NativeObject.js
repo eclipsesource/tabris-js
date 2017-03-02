@@ -239,7 +239,7 @@ function normalizeProperty(property) {
     type: resolveType(config.type || 'any'),
     default: config.default,
     nocache: config.nocache,
-    set: config.set || defaultSetter,
+    set: config.readonly && readOnlySetter || config.set || defaultSetter,
     get: config.get || defaultGetter
   };
 }
@@ -271,6 +271,10 @@ function wrapCoder(fn, args) {
   return function(value) {
     return fn.apply(global, [value].concat(args));
   };
+}
+
+function readOnlySetter(name) {
+  console.warn(`Can not set read-only property "${name}"`);
 }
 
 function defaultSetter(name, value) {

@@ -297,9 +297,7 @@ NativeObject.defineProperties(Widget.prototype, {
   },
   bounds: {
     type: 'bounds',
-    set() {
-      console.warn(this + ': Can not set read-only property "bounds".');
-    }
+    readonly: true
   },
   background: {
     type: 'color',

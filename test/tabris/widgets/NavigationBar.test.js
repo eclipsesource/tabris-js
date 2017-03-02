@@ -1,4 +1,4 @@
-import {expect, restore, mockTabris} from '../../test';
+import {expect, mockTabris, restore, stub} from '../../test';
 import ClientStub from '../ClientStub';
 import {create as createUi} from '../../../src/tabris/widgets/Ui';
 import NavigationBar from '../../../src/tabris/widgets/NavigationBar';
@@ -60,10 +60,12 @@ describe('NavigationBar', function() {
     expect(client.calls({op: 'get', id: navigationBar.cid, property: 'height'}).length).to.equal(1);
   });
 
-  it('throws exception when setting read only property "height"', () => {
-    expect(() => {
-      navigationBar.height = 64;
-    }).to.throw('NavigationBar "height" is read only');
-  });
+  it('does not set read-only property "height"', () => {
+    stub(console, 'warn');
 
+    navigationBar.height = 64;
+
+    expect(client.calls({op: 'set', id: navigationBar.cid}).length).to.equal(0);
+    expect(console.warn).to.have.been.calledWith('Can not set read-only property "height"');
+  });
 });

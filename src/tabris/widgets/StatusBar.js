@@ -33,9 +33,7 @@ NativeObject.defineProperties(StatusBar.prototype, {
   height: {
     type: 'number',
     nocache: true,
-    set() {
-      throw new Error('StatusBar "height" is read only');
-    }
+    readonly: true
   },
   background: {type: 'color', nocache: true}
 });

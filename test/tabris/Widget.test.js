@@ -88,9 +88,7 @@ describe('Widget', function() {
       widget.set('bounds', {left: 1, top: 2, width: 3, height: 4});
 
       expect(client.calls({op: 'set'}).length).to.equal(0);
-      expect(console.warn).to.have.been.calledWith(
-        'TestWidget: Can not set read-only property "bounds".'
-      );
+      expect(console.warn).to.have.been.calledWith('Can not set read-only property "bounds"');
     });
 
     it('sets elevation to value', function() {

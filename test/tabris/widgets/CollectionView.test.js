@@ -82,7 +82,7 @@ describe('CollectionView', function() {
 
           expect(client.set).to.have.not.been.called;
           expect(console.warn).to.have.been.called;
-          expect(console.warn).to.have.been.calledWith(match("Cannot set read-only property '" + prop + "'"));
+          expect(console.warn).to.have.been.calledWith(match(`Can not set read-only property "${prop}"`));
         });
 
       });
