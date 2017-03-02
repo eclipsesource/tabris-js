@@ -3,7 +3,7 @@
   "configurations": [
     {
       "name": "Debug Test",
-      "type": "node2",
+      "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/mocha",
@@ -20,7 +20,7 @@
     },
     {
       "name": "Attach to Port",
-      "type": "node2",
+      "type": "node",
       "request": "attach",
       "port": 9229,
       "address": "localhost",
