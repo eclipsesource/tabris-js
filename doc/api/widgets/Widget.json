@@ -501,64 +501,6 @@
         }
       }
     },
-    "animationstart": {
-      "description": "Fired when an animation starts playing.",
-      "parameters": {
-        "name?": {
-          "description": "The name provided as an `animate()` option.",
-          "type": "string"
-        },
-        "delay?": {
-          "description": "The time until the animation starts in ms.",
-          "type": "number"
-        },
-        "duration?": {
-          "description": "The animation duration in ms.",
-          "type": "number"
-        },
-        "easing?": {
-          "description": "The type of easing used for the animation.",
-          "type": "'linear'|'ease-in'|'ease-out'|'ease-in-out'"
-        },
-        "repeat?": {
-          "description": "The number of times to repeat the animation.",
-          "type": "number"
-        },
-        "reverse?": {
-          "description": "Whether to alternate the direction of the animation on every repeat.",
-          "type": "boolean"
-        }
-      }
-    },
-    "animationend": {
-      "description": "Fired when an animation has completed.",
-      "parameters": {
-        "name?": {
-          "description": "The name provided as an `animate()` option.",
-          "type": "string"
-        },
-        "delay?": {
-          "description": "The time until the animation starts in ms.",
-          "type": "number"
-        },
-        "duration?": {
-          "description": "The animation duration in ms.",
-          "type": "number"
-        },
-        "easing?": {
-          "description": "The type of easing used for the animation.",
-          "type": "'linear'|'ease-in'|'ease-out'|'ease-in-out'"
-        },
-        "repeat?": {
-          "description": "The number of times to repeat the animation.",
-          "type": "number"
-        },
-        "reverse?": {
-          "description": "Whether to alternate the direction of the animation on every repeat.",
-          "type": "boolean"
-        }
-      }
-    },
     "dispose": {
       "description": "Fired when the widget is about to be disposed. At this point the widget and its children are still accessible."
     }

@@ -185,21 +185,3 @@ widget.on('touchcancel', (event) => {
   let time: number = event.time;
   let touch: {x: number, y: number} = event.touches[0];
 });
-
-widget.on('animationstart', (event) => {
-  let target: Widget = event.target;
-  let delay: number = event.delay;
-  let duration: number = event.duration;
-  let easing: 'linear'|'ease-in'|'ease-out'|'ease-in-out' = event.easing;
-  let repeat: number = event.repeat;
-  let reverse: boolean = event.reverse;
-});
-
-widget.on('animationend', (event) => {
-  let target: Widget = event.target;
-  let delay: number = event.delay;
-  let duration: number = event.duration;
-  let easing: 'linear'|'ease-in'|'ease-out'|'ease-in-out' = event.easing;
-  let repeat: number = event.repeat;
-  let reverse: boolean = event.reverse;
-});

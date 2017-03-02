@@ -1,5 +1,7 @@
 import NativeObject from './NativeObject';
 
+const ANIMATABLE_PROPERTIES = ['opacity', 'transform'];
+
 const PROPERTIES = {
   properties: 'any',
   delay: 'natural',
@@ -15,16 +17,12 @@ class Animation extends NativeObject {
   constructor(properties) {
     super();
     this._create('tabris.Animation', properties);
-    this._nativeListen('Start', true);
     this._nativeListen('Completion', true);
   }
 
   _trigger(name, event) {
-    if (name === 'Start') {
-      this._target.trigger('animationstart', Object.assign({target: this._target}, this._options));
-    } else if (name === 'Completion') {
-      this._target.off('dispose', this.abort, this);
-      this._target.trigger('animationend', Object.assign({target: this._target}, this._options));
+    if (name === 'Completion') {
+      this.target.off('dispose', this.abort, this);
       if (this._resolve) {
         this._resolve();
       }
@@ -34,7 +32,10 @@ class Animation extends NativeObject {
     }
   }
 
-  start() {
+  start(resolve, reject) {
+    this.target.on('dispose', this.abort, this);
+    this._resolve = resolve;
+    this._reject = reject;
     this._nativeCall('start');
   }
 
@@ -52,7 +53,7 @@ NativeObject.defineProperties(Animation.prototype, PROPERTIES);
 export function animate(properties, options) {
   let animatedProps = {};
   for (let property in properties) {
-    if (animatable[property]) {
+    if (ANIMATABLE_PROPERTIES.includes(property)) {
       try {
         animatedProps[property] =
           this._encodeProperty(this._getTypeDef(property), properties[property]);
@@ -69,21 +70,10 @@ export function animate(properties, options) {
       console.warn(this + ': Ignored invalid animation option "' + option + '"');
     }
   }
-  let animation = new Animation(Object.assign({}, options, {
-    target: this,
-    properties: animatedProps
-  }));
-  animation._target = this;
-  animation._options = options;
-  this.on('dispose', animation.abort, animation);
-  animation.start();
   return new Promise((resolve, reject) => {
-    animation._resolve = resolve;
-    animation._reject = reject;
+    new Animation(Object.assign({}, options, {
+      target: this,
+      properties: animatedProps
+    })).start(resolve, reject);
   });
 }
-
-let animatable = {
-  opacity: true,
-  transform: true
-};

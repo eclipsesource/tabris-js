@@ -166,16 +166,6 @@ describe('Animation', function() {
       expect(createOp().properties).to.eql({opacity: 0});
     });
 
-    it('issues listen call for Start', function() {
-      widget.animate({}, {});
-      expect(client.calls({
-        op: 'listen',
-        id: animationId(),
-        event: 'Start',
-        listen: true
-      }).length).to.equal(1);
-    });
-
     it('issues listen call for Completion', function() {
       widget.animate({}, {});
       expect(client.calls({
@@ -234,34 +224,6 @@ describe('Animation', function() {
         expect(rejectCallback).to.have.been.called;
         done();
       }, 100);
-    });
-
-  });
-
-  describe('events', function() {
-
-    beforeEach(function() {
-      widget.animate({}, {duration: 123, name: 'bar'});
-    });
-
-    it('animationstart', function() {
-      let listener = spy();
-      widget.on('animationstart', listener);
-
-      findProxy(animationId())._trigger('Start', {});
-
-      expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWithMatch({target: widget, duration: 123, name: 'bar'});
-    });
-
-    it('animationend', function() {
-      let listener = spy();
-      widget.on('animationend', listener);
-
-      findProxy(animationId())._trigger('Completion', {});
-
-      expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWithMatch({target: widget, duration: 123, name: 'bar'});
     });
 
   });

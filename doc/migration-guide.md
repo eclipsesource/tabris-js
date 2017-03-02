@@ -74,5 +74,9 @@ checkBox.on('select', (target, selection) => {
 });
 ```
 
+### Specific events
+* `animationstart` and `animationend`
+  - removed, use the Promise returned by `animate()`
+
 ## Custom widgets
 Custom widget API has changed. Refer to the [custom widget documentation](https://tabrisjs.com/documentation/2.0/custom-widgets) for more information.
