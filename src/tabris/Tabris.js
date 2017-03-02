@@ -2,14 +2,14 @@ import Events from './Events';
 import NativeBridge from './NativeBridge';
 import ProxyStore from './ProxyStore';
 
-export default function Tabris() {
-  this._loadFunctions = [];
-  this._ready = false;
-  this._init = this._init.bind(this);
-  this._notify = this._notify.bind(this);
-}
+export default class Tabris {
 
-Object.assign(Tabris.prototype, Events, {
+  constructor() {
+    this._loadFunctions = [];
+    this._ready = false;
+    this._init = this._init.bind(this);
+    this._notify = this._notify.bind(this);
+  }
 
   load(fn) {
     if (this._ready) {
@@ -17,9 +17,11 @@ Object.assign(Tabris.prototype, Events, {
     } else {
       this._loadFunctions.push(fn);
     }
-  },
+  }
 
-  version: '${VERSION}',
+  get version() {
+    return '${VERSION}';
+  }
 
   _init(client) {
     this._client = client;
@@ -30,11 +32,11 @@ Object.assign(Tabris.prototype, Events, {
       this._loadFunctions[i++].call();
     }
     this._ready = true;
-  },
+  }
 
   _setEntryPoint(entryPoint) {
     this._entryPoint = entryPoint;
-  },
+  }
 
   _notify(cid, event, param) {
     let returnValue;
@@ -56,4 +58,6 @@ Object.assign(Tabris.prototype, Events, {
     return returnValue;
   }
 
-});
+}
+
+Object.assign(Tabris.prototype, Events);

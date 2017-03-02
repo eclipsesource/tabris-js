@@ -3,32 +3,32 @@ import ImageData from './ImageData';
 import GC from './GC';
 import LegacyCanvasContext from './LegacyCanvasContext';
 
-export default function CanvasContext(gc) {
-  this._gc = gc;
-  this._state = createState();
-  this._savedStates = [];
-  this._opCodes = [];
-  this._newOpCodes = [];
-  this._operations = [];
-  this._doubles = [];
-  this._booleans = [];
-  this._strings = [];
-  this._ints = [];
-  this.canvas = {
-    width: 0,
-    height: 0,
-    style: {}
-  };
-  for (let name in properties) {
-    defineProperty(this, name);
-  }
-  tabris.on('flush', this._flush, this);
-  gc.on('dispose', function() {
-    tabris.off('flush', this._flush, this);
-  }, this);
-}
+export default class CanvasContext {
 
-CanvasContext.prototype = {
+  constructor(gc) {
+    this._gc = gc;
+    this._state = createState();
+    this._savedStates = [];
+    this._opCodes = [];
+    this._newOpCodes = [];
+    this._operations = [];
+    this._doubles = [];
+    this._booleans = [];
+    this._strings = [];
+    this._ints = [];
+    this.canvas = {
+      width: 0,
+      height: 0,
+      style: {}
+    };
+    for (let name in properties) {
+      defineProperty(this, name);
+    }
+    tabris.on('flush', this._flush, this);
+    gc.on('dispose', function() {
+      tabris.off('flush', this._flush, this);
+    }, this);
+  }
 
   fillRect(x, y, width, height) {
     // TODO: delegate to native function, once it is implemented (#493)
@@ -39,7 +39,7 @@ CanvasContext.prototype = {
     this._pushOperation('rect');
     this._doubles.push(x, y, width, height);
     this.fill();
-  },
+  }
 
   strokeRect(x, y, width, height) {
     // TODO: delegate to native function, once it is implemented (#493)
@@ -50,12 +50,54 @@ CanvasContext.prototype = {
     this._pushOperation('rect');
     this._doubles.push(x, y, width, height);
     this.stroke();
-  },
+  }
 
   measureText(text) {
     // TODO: delegate to native function, once it is implemented (#56)
     return {width: text.length * 5 + 5};
-  },
+  }
+
+  // ImageData operations
+
+  getImageData(x, y, width, height) {
+    if (arguments.length < 4) {
+      throw new Error('Not enough arguments to CanvasContext.getImageData');
+    }
+    this._flush();
+    // TODO check validity of args
+    let uint8ClampedArray = this._gc._nativeCall('getImageData', {
+      x,
+      y,
+      width,
+      height
+    });
+    return new ImageData(uint8ClampedArray, width, height);
+  }
+
+  putImageData(imageData, x, y) {
+    if (arguments.length < 3) {
+      throw new Error('Not enough arguments to CanvasContext.putImageData');
+    }
+    this._flush();
+    this._gc._nativeCall('putImageData', {
+      data: imageData.data,
+      width: imageData.width,
+      height: imageData.height,
+      x,
+      y
+    });
+  }
+
+  createImageData(width, height) {
+    if (arguments[0] instanceof ImageData) {
+      let data = arguments[0];
+      width = data.width;
+      height = data.height;
+    } else if (arguments.length < 2) {
+      throw new Error('Not enough arguments to CanvasContext.createImageData');
+    }
+    return new ImageData(width, height);
+  }
 
   _init(width, height) {
     this.canvas.width = width;
@@ -67,7 +109,7 @@ CanvasContext.prototype = {
       fillStyle: [0, 0, 0, 255],
       strokeStyle: [0, 0, 0, 255]
     });
-  },
+  }
 
   _flush() {
     if (this._operations.length > 0) {
@@ -86,7 +128,7 @@ CanvasContext.prototype = {
       this._strings = [];
       this._ints = [];
     }
-  },
+  }
 
   _pushOperation(operation) {
     if (this._opCodes.indexOf(operation) < 0) {
@@ -96,7 +138,7 @@ CanvasContext.prototype = {
     this._operations.push(this._opCodes.indexOf(operation));
   }
 
-};
+}
 
 // State operations
 
@@ -178,48 +220,6 @@ defineMethod('strokeText', 3, function(text, x, y /* , maxWidth */) {
   this._booleans.push(false, false, false);
   this._doubles.push(x, y);
 });
-
-// ImageData operations
-
-CanvasContext.prototype.getImageData = function(x, y, width, height) {
-  if (arguments.length < 4) {
-    throw new Error('Not enough arguments to CanvasContext.getImageData');
-  }
-  this._flush();
-  // TODO check validity of args
-  let uint8ClampedArray = this._gc._nativeCall('getImageData', {
-    x,
-    y,
-    width,
-    height
-  });
-  return new ImageData(uint8ClampedArray, width, height);
-};
-
-CanvasContext.prototype.putImageData = function(imageData, x, y) {
-  if (arguments.length < 3) {
-    throw new Error('Not enough arguments to CanvasContext.putImageData');
-  }
-  this._flush();
-  this._gc._nativeCall('putImageData', {
-    data: imageData.data,
-    width: imageData.width,
-    height: imageData.height,
-    x,
-    y
-  });
-};
-
-CanvasContext.prototype.createImageData = function(width, height) {
-  if (arguments[0] instanceof ImageData) {
-    let data = arguments[0];
-    width = data.width;
-    height = data.height;
-  } else if (arguments.length < 2) {
-    throw new Error('Not enough arguments to CanvasContext.createImageData');
-  }
-  return new ImageData(width, height);
-};
 
 defineMethod('fill');
 

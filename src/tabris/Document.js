@@ -1,23 +1,32 @@
 import Event, {addDOMEventTargetMethods} from './Event';
 
-let noop = function() {};
-
 export function addDOMDocument(target) {
 
-  let HTMLElement = function(tagName) {
-    this.tagName = (tagName || '').toUpperCase();
-    this.children = [];
-  };
-  HTMLElement.prototype = {
-    setAttribute: noop,
+  class HTMLElement {
+
+    constructor(tagName) {
+      this.tagName = (tagName || '').toUpperCase();
+      this.children = [];
+    }
+
+    setAttribute() {
+    }
+
     appendChild(el) {
       this.children.push(el);
       handleElementInserted(this, el, target);
       return el;
-    },
-    cloneNode() {return new HTMLElement();},
-    lastChild() {return new HTMLElement();}
-  };
+    }
+
+    cloneNode() {
+      return new HTMLElement();
+    }
+
+    lastChild() {
+      return new HTMLElement();
+    }
+
+  }
 
   target.document = {
     documentElement: {},
