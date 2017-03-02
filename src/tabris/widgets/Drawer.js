@@ -3,11 +3,11 @@ import Composite from './Composite';
 
 export default class Drawer extends Composite {
 
-  constructor(properties) {
+  constructor() {
     if (arguments[0] !== true) {
       throw new Error('Drawer can not be created');
     }
-    super(properties);
+    super();
   }
 
   get _nativeType() {

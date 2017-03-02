@@ -7,11 +7,11 @@ import {create as createDrawer} from './Drawer';
 
 export default class Ui extends Composite {
 
-  constructor(properties) {
+  constructor() {
     if (arguments[0] !== true) {
       throw new Error('Ui can not be created');
     }
-    super(properties);
+    super();
     this._appendNamedChild('contentView', createContentView());
     this._appendNamedChild('statusBar', createStatusBar());
     this._appendNamedChild('navigationBar', createNavigationBar());

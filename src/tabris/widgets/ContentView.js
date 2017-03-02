@@ -2,11 +2,11 @@ import Composite from './Composite';
 
 export default class ContentView extends Composite {
 
-  constructor(properties) {
+  constructor() {
     if (arguments[0] !== true) {
       throw new Error('ContentView can not be created');
     }
-    super(properties);
+    super();
   }
 
   _create(type, properties) {

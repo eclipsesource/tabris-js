@@ -3,11 +3,11 @@ import Widget from '../Widget';
 
 export default class StatusBar extends Widget {
 
-  constructor(properties) {
+  constructor() {
     if (arguments[0] !== true) {
       throw new Error('StatusBar can not be created');
     }
-    super(properties);
+    super();
   }
 
   get _nativeType() {

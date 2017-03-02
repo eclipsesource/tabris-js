@@ -3,11 +3,11 @@ import Widget from '../Widget';
 
 export default class NavigationBar extends Widget {
 
-  constructor(properties) {
+  constructor() {
     if (arguments[0] !== true) {
       throw new Error('NavigationBar can not be created');
     }
-    super(properties);
+    super();
   }
 
   get _nativeType() {
