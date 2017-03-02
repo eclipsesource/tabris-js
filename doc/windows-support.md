@@ -69,7 +69,7 @@ The other option is to install the app from a Windows PC. This requires the Wind
 Open a Windows commandline (`cmd.exe`) and enter the following commands *exactly*, but replace
 
  - <publisher-id> with your publisher ID including `CN=` (!),
- - <date> with an expiration date (`dd\mm\yyyy`) of your choice,
+ - <date> with an expiration date (`mm/dd/yyyy`) of your choice,
  - <key-name> with the desired name of the `.pfx` file.
 
 ```
