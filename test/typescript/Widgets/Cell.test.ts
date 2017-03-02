@@ -6,8 +6,5 @@ let widget: Cell;
 let item: any;
 let itemIndex: number;
 
-widget.item = item;
-widget.itemIndex = itemIndex;
-
 item = widget.item;
 itemIndex = widget.itemIndex;

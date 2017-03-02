@@ -15,10 +15,8 @@ let widget: CollectionView;
 
 widget.cellType = cellType;
 widget.columnCount = columnCount;
-widget.firstVisibleIndex = firstVisibleIndex;
 widget.initializeCell = initializeCell;
 widget.itemHeight = itemHeight;
-widget.lastVisibleIndex = lastVisibleIndex;
 widget.refreshEnabled = refreshEnabled;
 widget.refreshIndicator = refreshIndicator;
 widget.refreshMessage = refreshMessage;

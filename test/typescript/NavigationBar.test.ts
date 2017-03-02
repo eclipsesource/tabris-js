@@ -9,7 +9,6 @@ let height: number;
 
 navigationBar.background = background;
 navigationBar.displayMode = displayMode;
-navigationBar.height = height;
 
 background = navigationBar.background;
 displayMode = navigationBar.displayMode;

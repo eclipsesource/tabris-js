@@ -2,7 +2,7 @@
   "type": "Device",
   "object": "device",
   "extends": "NativeObject",
-  "description": "The object `tabris.device` provides information about the device that executes the application. All properties are read-only.",
+  "description": "The object `tabris.device` provides information about the device that executes the application.",
   "properties": {
     "platform": {
       "type": "string",
@@ -15,30 +15,37 @@
     },
     "version": {
       "type": "string",
+      "readonly": true,
       "description": "The platform version. On iOS it lools like this: `\"8.1.1\"`. On Android, the [version code](https://developer.android.com/reference/android/os/Build.VERSION_CODES.html) is returned. This property is also available globally as `device.version`."
     },
     "model": {
       "type": "string",
+      "readonly": true,
       "description": "The name of the device model. For example `\"iPad4,1\"` or `\"Nexus 7\"`. This property is also available globally as `device.model`."
     },
     "language": {
       "type": "string",
+      "readonly": true,
       "description": "The user language configured on the device as an [RFC 4646](http://tools.ietf.org/html/rfc4646) compliant string. For example `\"de\"`, `\"es-ES\"`, etc. This property is also available globally as `navigator.language`."
     },
     "screenWidth": {
       "type": "number",
+      "readonly": true,
       "description": "The entire width of the device's screen in device independent pixel. Depends on the current device orientation. This property is also available as globally as [screen.width](https://developer.mozilla.org/en-US/docs/Web/API/Screen.width)."
     },
     "screenHeight": {
       "type": "number",
+      "readonly": true,
       "description": "The entire height of the device's screen in device independent pixel. Depends on the current device orientation. This property is also available globally as [screen.height](https://developer.mozilla.org/en-US/docs/Web/API/Screen.height)."
     },
     "scaleFactor": {
       "type": "number",
+      "readonly": true,
       "description": "The ratio between physical pixels and device independent pixels. This property is also available globally as [`window.devicePixelRatio`](https://developer.mozilla.org/en-US/docs/Web/API/Window.devicePixelRatio)."
     },
     "orientation": {
       "type": "string",
+      "readonly": true,
       "values": [
         "portrait-primary",
         "portrait-secondary",
@@ -49,10 +56,12 @@
     },
     "win_keyboardPresent": {
       "type": "boolean",
+      "readonly": true,
       "description": "Returns `true` if a hardware keyboard is present. The developer may choose to handle some user input differently in that case. Available only on windows."
     },
     "win_primaryInput": {
       "type": "boolean",
+      "readonly": true,
       "values": ["touch", "mouse"],
       "description": "On a PC this returns `\"touch\"` when in tablet mode, otherwise `\"mouse\"`. On phones this this returns `\"mouse\"` when displayed on an external display (\"Continuum\"), otherwise `\"touch\"`. Available only on windows"
     }

@@ -13,10 +13,6 @@ let url: string;
 
 widget.autoPlay = autoPlay;
 widget.controlsVisible = controlsVisible;
-widget.duration = duration;
-widget.position = position;
-widget.speed = speed;
-widget.state = state;
 widget.url = url;
 
 autoPlay = widget.autoPlay;

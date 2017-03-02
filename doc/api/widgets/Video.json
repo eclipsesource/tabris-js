@@ -19,18 +19,22 @@
     },
     "speed": {
       "type": "number",
-      "description": "Returns the current playback speed. The value `1` represents the natural speed of the video. When the *[state](#state)* of the widget is not `play` this property always has the value `0`. This property is read-only."
+      "readonly": true,
+      "description": "Returns the current playback speed. The value `1` represents the natural speed of the video. When the *[state](#state)* of the widget is not `play` this property always has the value `0`."
     },
     "position": {
       "type": "number",
-      "description": "Returns the current playback position in milliseconds. This property is read-only. This property does not trigger any change events."
+      "readonly": true,
+      "description": "Returns the current playback position in milliseconds. This property does not trigger any change events."
     },
     "duration": {
       "type": "number",
-      "description": "Returns the full length of the current video in milliseconds. This property is read-only."
+      "readonly": true,
+      "description": "Returns the full length of the current video in milliseconds."
     },
     "state": {
       "type": "string",
+      "readonly": true,
       "default": "empty",
       "values": [
         "empty",
@@ -42,7 +46,7 @@
         "finish",
         "fail"
       ],
-      "description": "The current state of the widget. This property is read-only."
+      "description": "The current state of the widget."
     }
   },
   "methods": {

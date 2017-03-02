@@ -4,7 +4,8 @@
   "properties": {
     "cid": {
       "type": "string",
-      "description": "An application-wide unique identifier automatically assigned to all native objects on creation. This property is read-only."
+      "readonly": true,
+      "description": "An application-wide unique identifier automatically assigned to all native objects on creation."
     }
   },
   "methods": {

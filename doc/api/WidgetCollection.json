@@ -273,7 +273,8 @@
   "properties": {
     "length": {
       "type": "number",
-      "description": "A read-only property containing the number of widgets in the collection."
+      "readonly": true,
+      "description": "Contains the number of widgets in the collection."
     }
   }
 }

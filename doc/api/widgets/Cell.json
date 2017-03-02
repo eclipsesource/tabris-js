@@ -5,11 +5,13 @@
   "properties": {
     "item": {
       "type": "any",
-      "description": "The item that is currently represented by this cell. This property is not set by the application but by the *CollectionView* widget."
+      "readonly": true,
+      "description": "The item that is currently represented by this cell."
     },
     "itemIndex": {
       "type": "number",
-      "description": "The index of the item that is currently represented by this cell. This property is not set by the application but by the *CollectionView* widget."
+      "readonly": true,
+      "description": "The index of the item that is currently represented by this cell."
     }
   },
   "events": {

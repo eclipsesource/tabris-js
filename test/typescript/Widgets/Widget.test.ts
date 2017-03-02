@@ -47,7 +47,6 @@ widget.background = background;
 widget.backgroundImage = backgroundImage;
 widget.baseline = baseline;
 widget.bottom = bottom;
-widget.bounds = bounds;
 widget.centerX = centerX;
 widget.centerY = centerY;
 widget.class = _class;

@@ -171,6 +171,9 @@ module.exports = function(grunt) {
       Object.keys(def.properties).sort().forEach(name => {
         let property = def.properties[name];
         result.push('### ', name, '\n\n');
+        if (property.readonly) {
+          result.push('**read-only**<br/>\n');
+        }
         result.push('Type: ', renderPropertyType(property), '\n');
         if (property.provisional) {
           result.push('\n' + MSG_PROVISIONAL);

@@ -5,8 +5,6 @@ let widgetCollection: WidgetCollection;
 // Properties
 let length: number;
 
-widgetCollection.length = length;
-
 length = widgetCollection.length;
 
 // Methods

@@ -37,11 +37,13 @@
     },
     "firstVisibleIndex": {
       "type": "number",
-      "description": "The first item that is currently visible on screen. This property is read-only."
+      "readonly": true,
+      "description": "The first item that is currently visible on screen."
     },
     "lastVisibleIndex": {
       "type": "number",
-      "description": "The last item that is currently visible on screen. This property is read-only."
+      "readonly": true,
+      "description": "The last item that is currently visible on screen."
     },
     "columnCount": {
       "type": "number",

@@ -8,8 +8,6 @@ let offsetX: number;
 let offsetY: number;
 
 widget.direction = direction;
-widget.offsetX = offsetX;
-widget.offsetY = offsetY;
 
 direction = widget.direction;
 offsetX = widget.offsetX;

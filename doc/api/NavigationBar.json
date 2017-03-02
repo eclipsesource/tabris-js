@@ -14,7 +14,8 @@
     },
     "height": {
       "type": "number",
-      "description": "The height of the navigation bar in device independent pixel. Can be used in conjunction with the `displayMode` `float` to offset the content as to not have it covered by the navigation bar. This property is read-only."
+      "readonly": true,
+      "description": "The height of the navigation bar in device independent pixel. Can be used in conjunction with the `displayMode` `float` to offset the content as to not have it covered by the navigation bar."
     },
     "background": {
       "type": "Color",

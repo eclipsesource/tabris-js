@@ -15,11 +15,13 @@
     },
     "offsetX": {
       "type": "number",
-      "description": "The horizontal scrolling position in dip. This property is read-only."
+      "readonly": true,
+      "description": "The horizontal scrolling position in dip."
     },
     "offsetY": {
       "type": "number",
-      "description": "The vertical scrolling position in dip. This property is read-only."
+      "readonly": true,
+      "description": "The vertical scrolling position in dip."
     }
   },
   "methods": {

@@ -5,8 +5,6 @@ let nativeObject: NativeObject;
 // Properties
 let cid: string;
 
-nativeObject.cid = cid;
-
 cid = nativeObject.cid;
 
 // Methods

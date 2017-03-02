@@ -10,7 +10,6 @@ let theme: 'dark' | 'default' | 'light';
 
 statusBar.background = background;
 statusBar.displayMode = displayMode;
-statusBar.height = height;
 statusBar.theme = theme;
 
 background = statusBar.background;
