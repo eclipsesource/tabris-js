@@ -3,7 +3,10 @@
   "description": "Tabris.js - Hello, World!",
   "category": "Small Apps",
   "main": "hello.js",
+  "scripts": {
+    "start": "http-server -c-1 -d false"
+  },
   "dependencies": {
-    "tabris": "2.0.0-beta2"
+    "tabris": "^2.0.0-beta1"
   }
 }
