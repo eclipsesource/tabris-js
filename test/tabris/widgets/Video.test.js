@@ -1,6 +1,4 @@
-import {expect, stub, restore} from '../../test';
-import ProxyStore from '../../../src/tabris/ProxyStore';
-import NativeBridge from '../../../src/tabris/NativeBridge';
+import {expect, mockTabris, restore, stub} from '../../test';
 import ClientStub from '../ClientStub';
 import Video from '../../../src/tabris/widgets/Video';
 
@@ -10,12 +8,7 @@ describe('Video', function() {
 
   beforeEach(function() {
     client = new ClientStub();
-    global.tabris = {
-      on: () => {},
-      _proxies: new ProxyStore(),
-      _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
-    };
-    global.tabris._nativeBridge = new NativeBridge(client);
+    mockTabris(client);
     video = new Video();
   });
 

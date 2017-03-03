@@ -1,7 +1,5 @@
-import {expect, stub} from '../test';
+import {expect, mockTabris, stub} from '../test';
 import Storage, {create as createStorage} from '../../src/tabris/Storage';
-import ProxyStore from '../../src/tabris/ProxyStore';
-import NativeBridge from '../../src/tabris/NativeBridge';
 import ClientStub from './ClientStub';
 
 describe('Storage', function() {
@@ -13,11 +11,7 @@ describe('Storage', function() {
 
   beforeEach(function() {
     client = new ClientStub();
-    global.tabris = {
-      on: () => {},
-      _proxies: new ProxyStore()
-    };
-    global.tabris._nativeBridge = new NativeBridge(client);
+    mockTabris(client);
     storage = createStorage();
     stub(client, 'call', () => returnValue);
   });

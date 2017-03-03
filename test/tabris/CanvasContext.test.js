@@ -1,12 +1,9 @@
-import {expect, stub, spy, restore} from '../test';
-import ProxyStore from '../../src/tabris/ProxyStore';
-import NativeBridge from '../../src/tabris/NativeBridge';
+import {expect, mockTabris, restore, spy, stub} from '../test';
 import GC from '../../src/tabris/GC';
 import ClientStub from './ClientStub';
 import CanvasContext from '../../src/tabris/CanvasContext';
 import ImageData from '../../src/tabris/ImageData';
 import Canvas from '../../src/tabris/widgets/Canvas';
-import Events from '../../src/tabris/Events';
 
 describe('CanvasContext', function() {
 
@@ -16,13 +13,7 @@ describe('CanvasContext', function() {
 
   beforeEach(function() {
     client = new ClientStub();
-    global.tabris = Object.assign({
-      on: () => {},
-      off: () => {},
-      _proxies: new ProxyStore(),
-      device: {platform: 'Android'}
-    }, Events);
-    global.tabris._nativeBridge = new NativeBridge(client);
+    mockTabris(client);
     gc = new GC();
     ctx = new CanvasContext(gc);
   });

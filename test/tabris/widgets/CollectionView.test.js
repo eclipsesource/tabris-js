@@ -1,11 +1,8 @@
-import {expect, spy, stub, restore, match} from '../../test';
-import ProxyStore from '../../../src/tabris/ProxyStore';
-import NativeBridge from '../../../src/tabris/NativeBridge';
+import {expect, spy, stub, restore, match, mockTabris} from '../../test';
 import ClientStub from '../ClientStub';
 import CollectionView from '../../../src/tabris/widgets/CollectionView';
 import Composite from '../../../src/tabris/widgets/Composite';
 import Cell from '../../../src/tabris/widgets/Cell';
-import Events from '../../../src/tabris/Events';
 
 describe('CollectionView', function() {
 
@@ -14,11 +11,7 @@ describe('CollectionView', function() {
 
   beforeEach(function() {
     client = new ClientStub();
-    global.tabris = Object.assign({
-      _proxies: new ProxyStore(),
-      _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
-    }, Events);
-    global.tabris._nativeBridge = new NativeBridge(client);
+    mockTabris(client);
     parent = new Composite();
     client.resetCalls();
   });

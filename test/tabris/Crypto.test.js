@@ -1,6 +1,4 @@
-import {expect, stub} from '../test';
-import ProxyStore from '../../src/tabris/ProxyStore';
-import NativeBridge from '../../src/tabris/NativeBridge';
+import {expect, mockTabris, stub} from '../test';
 import ClientStub from './ClientStub';
 import Crypto from '../../src/tabris/Crypto';
 
@@ -12,11 +10,7 @@ describe('Crypto', function() {
 
   beforeEach(function() {
     client = new ClientStub();
-    global.tabris = {
-      on: () => {},
-      _proxies: new ProxyStore()
-    };
-    global.tabris._nativeBridge = new NativeBridge(client);
+    mockTabris(client);
     crypto = new Crypto();
     stub(client, 'call', (id, method) => method === 'getRandomValues' ? returnValue : null);
   });

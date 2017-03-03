@@ -1,8 +1,6 @@
-import {expect, stub, restore} from '../test';
+import {expect, mockTabris, stub, restore} from '../test';
 import ClientStub from './ClientStub';
 import NativeObject from '../../src/tabris/NativeObject';
-import NativeBridge from '../../src/tabris/NativeBridge';
-import ProxyStore from '../../src/tabris/ProxyStore';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
 import {types} from '../../src/tabris/property-types';
 import {omit} from '../../src/tabris/util';
@@ -20,11 +18,7 @@ describe('property-types', function() {
 
   beforeEach(function() {
     let client = new ClientStub();
-    global.tabris = {
-      on: () => {},
-      _proxies: new ProxyStore()
-    };
-    global.tabris._nativeBridge = new NativeBridge(client);
+    mockTabris(client);
     widget = new CustomNativeObject();
   });
 

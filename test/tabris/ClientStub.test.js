@@ -1,7 +1,5 @@
-import {expect, spy, restore} from '../test';
+import {expect, mockTabris, restore} from '../test';
 import ClientStub from './ClientStub';
-import NativeBridge from '../../src/tabris/NativeBridge';
-import ProxyStore from '../../src/tabris/ProxyStore';
 
 describe('ClientStub', function() {
 
@@ -9,12 +7,7 @@ describe('ClientStub', function() {
 
   beforeEach(function() {
     client = new ClientStub();
-    global.tabris = {
-      on: () => {},
-      _proxies: new ProxyStore()
-    };
-    global.tabris._nativeBridge = new NativeBridge(client);
-    tabris._nativeBridge = {flush: spy()};
+    mockTabris(client);
   });
 
   afterEach(restore);

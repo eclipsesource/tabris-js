@@ -1,7 +1,5 @@
-import ProxyStore from '../../src/tabris/ProxyStore';
-import NativeBridge from '../../src/tabris/NativeBridge';
 import ClientStub from './ClientStub';
-import {expect, stub, spy, restore} from '../test';
+import {expect, mockTabris, stub, spy, restore} from '../test';
 import Layout from '../../src/tabris/Layout';
 import Composite from '../../src/tabris/widgets/Composite';
 import Widget from '../../src/tabris/Widget';
@@ -97,11 +95,7 @@ describe('Layout', function() {
     let parent, widget, other;
 
     beforeEach(function() {
-      global.tabris = {
-        on: () => {},
-        _proxies: new ProxyStore()
-      };
-      global.tabris._nativeBridge = new NativeBridge(new ClientStub());
+      mockTabris(new ClientStub());
       parent = new Composite();
       widget = new TestType().appendTo(parent);
       other = new TestType({id: 'other'}).appendTo(parent);

@@ -1,12 +1,10 @@
-import {expect, restore, spy, stub} from '../../test';
+import {expect, spy, stub, restore, mockTabris} from '../../test';
 import ClientStub from '../ClientStub';
 import Page from '../../../src/tabris/widgets/Page';
 import Action from '../../../src/tabris/widgets/Action';
 import SearchAction from '../../../src/tabris/widgets/SearchAction';
 import Composite from '../../../src/tabris/widgets/Composite';
 import NavigationView from '../../../src/tabris/widgets/NavigationView';
-import NativeBridge from '../../../src/tabris/NativeBridge';
-import ProxyStore from '../../../src/tabris/ProxyStore';
 import WidgetCollection from '../../../src/tabris/WidgetCollection';
 
 describe('NavigationView', function() {
@@ -15,13 +13,7 @@ describe('NavigationView', function() {
 
   beforeEach(function() {
     client = new ClientStub();
-    global.tabris = {
-      on: () => {
-      },
-      _proxies: new ProxyStore(),
-      _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
-    };
-    global.tabris._nativeBridge = new NativeBridge(client);
+    mockTabris(client);
     navigationView = new NavigationView();
     client.resetCalls();
   });

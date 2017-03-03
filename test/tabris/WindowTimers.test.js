@@ -1,6 +1,4 @@
-import ProxyStore from '../../src/tabris/ProxyStore';
-import {expect, spy, restore} from '../test';
-import NativeBridge from '../../src/tabris/NativeBridge';
+import {expect, mockTabris, spy, restore} from '../test';
 import ClientStub from './ClientStub';
 import {addWindowTimerMethods} from '../../src/tabris/WindowTimers';
 
@@ -11,13 +9,7 @@ describe('WindowTimers', function() {
 
   beforeEach(function() {
     client = new ClientStub();
-    global.tabris = {
-      on: () => {},
-      _proxies: new ProxyStore(),
-      _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param),
-      load: fn => fn.call()
-    };
-    global.tabris._nativeBridge = new NativeBridge(client);
+    mockTabris(client);
     target = {};
   });
 

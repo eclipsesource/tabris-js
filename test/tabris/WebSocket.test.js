@@ -1,7 +1,5 @@
-import {expect, spy, stub, restore} from '../test';
+import {expect, mockTabris, spy, stub, restore} from '../test';
 import ClientStub from './ClientStub';
-import ProxyStore from '../../src/tabris/ProxyStore';
-import NativeBridge from '../../src/tabris/NativeBridge';
 import WebSocket from '../../src/tabris/WebSocket';
 import Event from '../../src/tabris/Event';
 
@@ -12,12 +10,7 @@ describe('WebSocket', function() {
 
   beforeEach(function() {
     client = new ClientStub();
-    global.tabris = {
-      on: () => {},
-      _proxies: new ProxyStore(),
-      _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
-    };
-    global.tabris._nativeBridge = new NativeBridge(client);
+    mockTabris(client);
     spy(client, 'call');
     webSocket = new WebSocket('ws://url.com', 'chat-protocol');
   });

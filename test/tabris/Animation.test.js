@@ -1,6 +1,4 @@
-import {expect, spy, stub, restore} from '../test';
-import ProxyStore from '../../src/tabris/ProxyStore';
-import NativeBridge from '../../src/tabris/NativeBridge';
+import {expect, mockTabris, restore, spy, stub} from '../test';
 import ClientStub from './ClientStub';
 import {animate} from '../../src/tabris/Animation';
 import NativeObject from '../../src/tabris/NativeObject';
@@ -46,11 +44,7 @@ describe('Animation', function() {
   beforeEach(function() {
     stub(console, 'warn');
     client = new ClientStub();
-    global.tabris = {
-      on: () => {},
-      _proxies: new ProxyStore()
-    };
-    global.tabris._nativeBridge = new NativeBridge(client);
+    mockTabris(client);
     TestWidget.prototype.animate = animate;
     widget = new TestWidget({});
   });

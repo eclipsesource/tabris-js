@@ -1,6 +1,4 @@
-import {expect, stub, spy, restore} from '../../test';
-import ProxyStore from '../../../src/tabris/ProxyStore';
-import NativeBridge from '../../../src/tabris/NativeBridge';
+import {expect, stub, spy, restore, mockTabris} from '../../test';
 import ClientStub from '../ClientStub';
 import Picker from '../../../src/tabris/widgets/Picker';
 
@@ -10,12 +8,7 @@ describe('Picker', function() {
 
   beforeEach(function() {
     client = new ClientStub();
-    global.tabris = {
-      on: () => {},
-      _proxies: new ProxyStore(),
-      _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
-    };
-    global.tabris._nativeBridge = new NativeBridge(client);
+    mockTabris(client);
     picker = new Picker();
   });
 

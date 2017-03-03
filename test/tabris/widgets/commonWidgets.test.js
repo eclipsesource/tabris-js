@@ -1,7 +1,5 @@
-import {expect, spy, stub, restore} from '../../test';
+import {expect, spy, stub, restore, mockTabris} from '../../test';
 import ClientStub from '../ClientStub';
-import ProxyStore from '../../../src/tabris/ProxyStore';
-import NativeBridge from '../../../src/tabris/NativeBridge';
 import Composite from '../../../src/tabris/widgets/Composite';
 import Canvas from '../../../src/tabris/widgets/Canvas';
 import Button from '../../../src/tabris/widgets/Button';
@@ -25,12 +23,7 @@ describe('Common Widgets', function() {
 
   beforeEach(function() {
     client = new ClientStub();
-    global.tabris = {
-      on: () => {},
-      _proxies: new ProxyStore(),
-      _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
-    };
-    global.tabris._nativeBridge = new NativeBridge(client);
+    mockTabris(client);
     listener = spy();
   });
 

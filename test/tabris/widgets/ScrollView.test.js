@@ -1,9 +1,7 @@
-import {expect, restore, spy, stub} from '../../test';
-import ProxyStore from '../../../src/tabris/ProxyStore';
+import {expect, mockTabris, restore, spy, stub} from '../../test';
 import ClientStub from '../ClientStub';
 import ScrollView from '../../../src/tabris/widgets/ScrollView';
 import Composite from '../../../src/tabris/widgets/Composite';
-import NativeBridge from '../../../src/tabris/NativeBridge';
 
 describe('ScrollView', function() {
 
@@ -18,12 +16,7 @@ describe('ScrollView', function() {
 
   beforeEach(function() {
     client = new ClientStub();
-    global.tabris = {
-      on: () => {},
-      _proxies: new ProxyStore(),
-      _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
-    };
-    global.tabris._nativeBridge = new NativeBridge(client);
+    mockTabris(client);
   });
 
   afterEach(restore);

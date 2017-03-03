@@ -1,6 +1,4 @@
-import {expect, restore} from '../../test';
-import ProxyStore from '../../../src/tabris/ProxyStore';
-import NativeBridge from '../../../src/tabris/NativeBridge';
+import {expect, restore, mockTabris} from '../../test';
 import ClientStub from '../ClientStub';
 import NavigationView from '../../../src/tabris/widgets/NavigationView';
 import Page from '../../../src/tabris/widgets/Page';
@@ -14,12 +12,7 @@ describe('Page', function() {
 
   beforeEach(function() {
     client = new ClientStub();
-    global.tabris = {
-      on: () => {},
-      _proxies: new ProxyStore(),
-      _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
-    };
-    global.tabris._nativeBridge = new NativeBridge(client);
+    mockTabris(client);
     parent = new NavigationView();
     client.resetCalls();
     page = new Page();

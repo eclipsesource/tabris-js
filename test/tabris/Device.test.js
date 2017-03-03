@@ -1,6 +1,4 @@
-import {expect, spy, stub} from '../test';
-import ProxyStore from '../../src/tabris/ProxyStore';
-import NativeBridge from '../../src/tabris/NativeBridge';
+import {expect, mockTabris, spy, stub} from '../test';
 import ClientStub from './ClientStub';
 import Device, {create as createDevice, publishDeviceProperties} from '../../src/tabris/Device';
 
@@ -10,12 +8,7 @@ describe('Device', function() {
 
   beforeEach(function() {
     client = new ClientStub();
-    global.tabris = {
-      on: () => {},
-      _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param),
-      _proxies: new ProxyStore()
-    };
-    global.tabris._nativeBridge = new NativeBridge(client);
+    mockTabris(client);
   });
 
   it('cannot be instantiated', function() {
@@ -116,7 +109,7 @@ describe('Device', function() {
         scaleFactor: 23
       };
       target = {};
-      global.tabris._nativeBridge = new NativeBridge(client);
+      mockTabris(client);
       stub(client, 'get', function(id, name) {
         if (id === 'tabris.Device') {
           return device[name];

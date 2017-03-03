@@ -1,9 +1,7 @@
-import {expect} from '../../test';
+import {expect, mockTabris} from '../../test';
 import ClientStub from '../ClientStub';
 import Tab from '../../../src/tabris/widgets/Tab';
 import Composite from '../../../src/tabris/widgets/Composite';
-import ProxyStore from '../../../src/tabris/ProxyStore';
-import NativeBridge from '../../../src/tabris/NativeBridge';
 
 describe('Tab', function() {
 
@@ -11,12 +9,7 @@ describe('Tab', function() {
 
   beforeEach(function() {
     client = new ClientStub();
-    global.tabris = {
-      on: () => {},
-      _proxies: new ProxyStore(),
-      _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
-    };
-    global.tabris._nativeBridge = new NativeBridge(client);
+    mockTabris(client);
     client.resetCalls();
   });
 

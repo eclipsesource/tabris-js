@@ -1,6 +1,4 @@
-import {expect, stub, restore} from '../test';
-import ProxyStore from '../../src/tabris/ProxyStore';
-import NativeBridge from '../../src/tabris/NativeBridge';
+import {expect, mockTabris, stub, restore} from '../test';
 import ClientStub from './ClientStub';
 import Pkcs5 from '../../src/tabris/Pkcs5';
 
@@ -13,12 +11,7 @@ describe('Pkcs5', function() {
 
   beforeEach(function() {
     client = new ClientStub();
-    global.tabris = {
-      on: () => {},
-      _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param),
-      _proxies: new ProxyStore()
-    };
-    global.tabris._nativeBridge = new NativeBridge(client);
+    mockTabris(client);
     pkcs5 = new Pkcs5();
     stub(client, 'call', (id, method) => {
       if (method === 'start') {

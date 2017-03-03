@@ -1,9 +1,7 @@
-import {expect, spy, stub, match, restore} from '../test';
+import {expect, mockTabris, spy, stub, match, restore} from '../test';
 import ClientStub from './ClientStub';
 import Event from '../../src/tabris/Event';
 import XMLHttpRequest from '../../src/tabris/XMLHttpRequest';
-import NativeBridge from '../../src/tabris/NativeBridge';
-import ProxyStore from '../../src/tabris/ProxyStore';
 
 describe('XMLHttpRequest', function() {
 
@@ -15,12 +13,8 @@ describe('XMLHttpRequest', function() {
   }
 
   beforeEach(function() {
-    global.tabris = {
-      on: () => {},
-      _proxies: new ProxyStore()
-    };
     client = new ClientStub();
-    global.tabris._nativeBridge = new NativeBridge(client);
+    mockTabris(client);
     let origCreate = tabris._nativeBridge.create;
     stub(tabris._nativeBridge, 'create', (cid, type) => {
       if (type === 'tabris.HttpRequest') {

@@ -1,8 +1,6 @@
-import {expect, spy, stub, restore} from '../test';
+import {expect, mockTabris, spy, stub, restore} from '../test';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
-import ProxyStore from '../../src/tabris/ProxyStore';
 import Layout from '../../src/tabris/Layout';
-import NativeBridge from '../../src/tabris/NativeBridge';
 import ClientStub from './ClientStub';
 import Widget from '../../src/tabris/Widget';
 import Composite from '../../src/tabris/widgets/Composite';
@@ -20,12 +18,7 @@ describe('Widget', function() {
 
   beforeEach(function() {
     client = new ClientStub();
-    global.tabris = {
-      on: () => {},
-      _proxies: new ProxyStore(),
-      device: {platform: 'Android', version: 18}
-    };
-    global.tabris._nativeBridge = new NativeBridge(client);
+    mockTabris(client);
   });
 
   afterEach(restore);

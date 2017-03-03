@@ -1,7 +1,5 @@
-import {expect, spy, restore} from '../test';
+import {expect, mockTabris, spy, restore} from '../test';
 import ClientStub from './ClientStub';
-import NativeBridge from '../../src/tabris/NativeBridge';
-import ProxyStore from '../../src/tabris/ProxyStore';
 import Composite from '../../src/tabris/widgets/Composite';
 import EventSubscription from '../../src/tabris/EventSubscription';
 
@@ -11,13 +9,7 @@ describe('EventSubscription', function() {
 
   beforeEach(function() {
     client = new ClientStub();
-    global.tabris = {
-      on: () => {
-      },
-      _proxies: new ProxyStore(),
-      _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
-    };
-    global.tabris._nativeBridge = new NativeBridge(client);
+    mockTabris(client);
     client.resetCalls();
     widget = new Composite();
     onSpy = spy(widget, 'on');

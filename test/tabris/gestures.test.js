@@ -1,8 +1,6 @@
 import Widget from '../../src/tabris/Widget';
-import ProxyStore from '../../src/tabris/ProxyStore';
-import NativeBridge from '../../src/tabris/NativeBridge';
 import ClientStub from './ClientStub';
-import {expect, spy, restore} from '../test';
+import {expect, mockTabris, spy, restore} from '../test';
 
 describe('gestures:', function() {
 
@@ -16,12 +14,7 @@ describe('gestures:', function() {
 
   beforeEach(function() {
     client = new ClientStub();
-    global.tabris = {
-      on: () => {},
-      _proxies: new ProxyStore(),
-      _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
-    };
-    global.tabris._nativeBridge = new NativeBridge(client);
+    mockTabris(client);
   });
 
   afterEach(restore);

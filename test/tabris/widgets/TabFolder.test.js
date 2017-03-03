@@ -1,10 +1,8 @@
-import {expect, stub, spy, restore} from '../../test';
+import {expect, mockTabris, restore, spy, stub} from '../../test';
 import ClientStub from '../ClientStub';
 import Tab from '../../../src/tabris/widgets/Tab';
 import TabFolder from '../../../src/tabris/widgets/TabFolder';
 import Composite from '../../../src/tabris/widgets/Composite';
-import ProxyStore from '../../../src/tabris/ProxyStore';
-import NativeBridge from '../../../src/tabris/NativeBridge';
 
 describe('TabFolder', function() {
 
@@ -12,13 +10,7 @@ describe('TabFolder', function() {
 
   beforeEach(function() {
     client = new ClientStub();
-    global.tabris = {
-      on: () => {
-      },
-      _proxies: new ProxyStore(),
-      _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param)
-    };
-    global.tabris._nativeBridge = new NativeBridge(client);
+    mockTabris(client);
     parent = new Composite();
     client.resetCalls();
     tabFolder = new TabFolder().appendTo(parent);
