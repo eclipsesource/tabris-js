@@ -1,9 +1,9 @@
 import {expect, mockTabris, stub, restore} from '../test';
 import ClientStub from './ClientStub';
-import LegacyCanvasContext from '../../src/tabris/LegacyCanvasContext';
+import CanvasContext from '../../src/tabris/CanvasContext';
 import GC from '../../src/tabris/GC';
 
-describe('Legacy CanvasContext', function() {
+describe('CanvasContext in legacy mode', function() {
 
   let client;
   let ctx;
@@ -12,8 +12,9 @@ describe('Legacy CanvasContext', function() {
   beforeEach(function() {
     client = new ClientStub();
     mockTabris(client);
+    tabris.device.platform = 'iOS';
     gc = new GC();
-    ctx = new LegacyCanvasContext(gc);
+    ctx = new CanvasContext(gc);
   });
 
   afterEach(function() {
