@@ -1,4 +1,4 @@
-# Tabris.js - 2.0 Beta 1
+# Tabris.js - 2.0 Beta 2
 
 ## Introduction
 
