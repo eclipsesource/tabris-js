@@ -4,6 +4,7 @@
     {
       "name": "Debug Test",
       "type": "node",
+      "protocol": "inspector",
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/mocha",
@@ -21,6 +22,7 @@
     {
       "name": "Attach to Port",
       "type": "node",
+      "protocol": "inspector",
       "request": "attach",
       "port": 9229,
       "address": "localhost",
