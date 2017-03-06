@@ -32,7 +32,7 @@ Tabris.js is a mobile framework that lets you develop native iOS and Android app
 
 ## Articles
 - [Apache Cordova vs. Tabris.js](http://eclipsesource.com/blogs/2015/03/02/apache-cordova-vs-tabris-js/) - How to use Cordova's build tooling to create Tabris.js apps.
-- [Debugging Tabris.js](http://eclipsesource.com/blogs/2015/04/17/debugging-tabris-js/) - How to debug a Tabris.js app running on Android using Eclipse.
+- [Debugging Tabris.js](debug.md) - How to debug a Tabris.js app
 - [Layouting in Tabris.js](http://eclipsesource.com/blogs/2015/02/19/layouting-in-tabris-js/) - Layouting explained.
 - [CollectionView: Display Data Sets in Tabris.js](http://eclipsesource.com/blogs/2015/02/16/collectionview-display-data-sets-in-tabris-js/) - The power of the CollectionView in detail.
 
