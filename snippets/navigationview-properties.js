@@ -65,8 +65,8 @@ function createCheckBox(text, listener) {
   return new tabris.CheckBox({
     left: MARGIN, top: ['prev()', MARGIN_SMALL], right: MARGIN,
     text: text,
-    selection: true
-  }).on('change:selection', listener)
+    checked: true
+  }).on('change:checked', listener)
     .appendTo(controls);
 }
 

@@ -19,9 +19,9 @@ new tabris.ToggleButton({
   left: 10, bottom: 10,
   text: 'Start',
   id: 'toggleRun'
-}).on('change:selection', function({target: button, value: selection}) {
-  example.setRunning(selection);
-  button.text = selection ? 'Stop' : 'Start';
+}).on('change:checked', function({target: button, value: checked}) {
+  example.setRunning(checked);
+  button.text = checked ? 'Stop' : 'Start';
 }).appendTo(page);
 
 function Example() {

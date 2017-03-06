@@ -73,7 +73,7 @@ new tabris.RadioButton({
 new tabris.RadioButton({
   id: 'anySeat',
   text: "Don't care",
-  selection: true
+  checked: true
 }).appendTo(scrollView);
 
 new tabris.Composite({
