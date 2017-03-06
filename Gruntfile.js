@@ -137,9 +137,7 @@ module.exports = function(grunt) {
       },
       transpile: {
         options: {
-          env: {
-            BABEL_ENV: 'build'
-          }
+          env: Object.assign({}, process.env, {BABEL_ENV: 'build'})
         },
         cmd: 'node node_modules/babel-cli/bin/babel.js --compact false --out-file build/transpiled.js build/bundle.js'
       }
