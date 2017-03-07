@@ -123,6 +123,10 @@ defineMethod('arc', 5, function(x, y, radius, startAngle, endAngle, anticlockwis
   this._gc.addBoolean(!!anticlockwise);
 });
 
+defineMethod('arcTo', 5, function(x1, y1, x2, y2, radius) {
+  this._gc.addDouble(x1, y1, x2, y2, radius);
+});
+
 // Transformations
 
 defineMethod('scale', 2, function(x, y) {

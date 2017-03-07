@@ -716,6 +716,23 @@ describe('CanvasContext', function() {
 
   });
 
+  describe('arcTo', function() {
+
+    it('is rendered', function() {
+      ctx.arcTo(1, 2, 3, 4, 5);
+      flush();
+
+      expect(decodeLastPacket()).to.eql({ops: ['arcTo'], doubles: [1, 2, 3, 4, 5]});
+    });
+
+    it('raises error if parameters missing', function() {
+      expect(() => {
+        ctx.arcTo(1, 2, 3, 4);
+      }).to.throw('Not enough arguments to CanvasContext.arcTo');
+    });
+
+  });
+
   describe('rect', function() {
 
     it('is rendered', function() {
