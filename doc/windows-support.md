@@ -7,6 +7,7 @@ Windows 10 (UWP/Store Apps) support was added in Tabris.js 2.0 and is still catc
 The following classes and objects are not yet supported on Windows:
  - `crypto`
  - `app`
+ - `AlertDialog`
  - `WebSocket`
  - `SearchAction`
  - `ui.statusBar`
@@ -18,7 +19,7 @@ The following classes and objects are not yet supported on Windows:
   - `CollectionView`: Methods `insert`, `refresh`, `remove` and `reveal`, as well as the properties `refreshEnabled` and `columnCount` are ignored.
   - `ImageView`: Property `tintColor` is ignored.
   - `NavigationView`: Properties `toolbarVisible` and `animated` are ignored. Both behave as if `true`.
-  - `ScrollView`: Methods `scrollToX` and `scrollToY` have no effect.
+  - `ScrollView`: Methods `scrollToX` and `scrollToY` have no effect. Event `scrollX` does not fire.
   - `Tab`: Properties `badge`, `image` and `selectedImage` are ignored. Only the title is displayed.
   - `TabFolder`: Property `paging` is ignored, behaves as if always `true`.
   - `TextInput`: Properties `alignment`, `autoCapitalize`, `editable`, `fillColor`, `borderColor`, `keepFocus` are ignored. Setting `type` to `search` has no effect, but `password` and `multiline` work. `focused` is unsupported and will not reflect whether or not the field is actually focused. However, **all events are supported**, including `focus` and `blur`.
