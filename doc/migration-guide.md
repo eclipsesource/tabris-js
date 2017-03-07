@@ -1,82 +1,141 @@
-# 1.x -> 2.x
+# Migration Guide 1.x to 2.0
 
-## Widgets
-* `tabris.create()` has been removed. Widget constructors are now available under the `tabris` namespace. [Create widgets](https://tabrisjs.com/documentation/2.0/widget-basics#creating-native-widgets) using `new` instead, e.g. use:
+Tabris.js 2.0 introduces a number of API changes that require adjustments in your app code.
+This guide explains how to migrate your app from Tabris.js 1.x to 2.0.
 
-    ```js
-    new tabris.Button({centerX: 0, centerY: 0})
-    ```
+We recommend using ES6 or Typescript for Tabris.js apps and importing Tabris types instead of accessing the global `tabris` object. You can import types using the ES6 object destructor syntax:
 
-    ... instead of ...
+```js
+const {Button, NavigationView, ui} from 'tabris';
+```
 
-    ```js
-    tabris.create("Button", {centerX: 0, centerY: 0})
-    ```
+However, the global `tabris` object is still available. If your app refers to Tabris API using the `tabris` object, e.g. `tabris.Button`, this code will continue to work.
 
-* `tabris.Widget.type` has been removed. `toString()` now returns the widget constructor name.
+## Navigation and pages
 
-### Action
-* `tabris.Action` must now be appended to a [`NavigationView`](https://tabrisjs.com/documentation/2.0/api/NavigationView#navigationview).
+Tabris 2.x has a new navigation concept that does not require pages as top-level containers anymore. Widgets can now be appended to the top-level `ui.contentView`. If you use pages, they need to be appended to a `NavigationView`. See [Navigation Patterns](https://tabrisjs.com/documentation/2.0/ui) for more information.
+
+For a simple migration, you could include this snippet:
+
+```js
+let navigationView = new NavigationView({
+  left: 0, top: 0, right: 0, bottom: 0
+}).appendTo(ui.contentView);
+Page.prototype.open = function() {
+  this.appendTo(navigationView);
+}
+Page.prototype.close = function() {
+  this.dispose();
+}
+```
+
+The changes in detail:
+
+#### Page and PageSelector
+
+* `Page.open()` has been removed. Append the page to a `NavigationView` instead.
+* `Page.close()` has been removed. Use `dispose()` or `detach()` to close a page.
+* `Page.topLevel` property has been removed.
+* `PageSelector` has been removed. For a sample page selector implementation, see the [drawer pages snippet](https://github.com/eclipsesource/tabris-js/blob/master/snippets/drawer-pages.js).
+
+### Actions
+
+* Instances of `Action` and `SearchAction` must now be appended to a `NavigationView`.
 
 ### Drawer
-* `tabris.Drawer` constructor has been removed. A singleton drawer instance is now available as [`tabris.ui.drawer`](https://tabrisjs.com/documentation/2.0/api/ui#drawer). Its property
-    [`enabled`](https://tabrisjs.com/documentation/2.0/api/Drawer#enabled) must be set to `true` before the drawer can be used.
 
-### ScrollView
-* Property `scrollX` is now [`offsetX`](https://tabrisjs.com/documentation/2.0/api/ScrollView#offsetx). It is now read-only, use [`scrollToX()`](https://tabrisjs.com/documentation/2.0/api/ScrollView#scrolltoxoffset) method to scroll.
-* Property `scrollY` is now [`offsetY`](https://tabrisjs.com/documentation/2.0/api/ScrollView#offsety). It is now read-only, use [`scrollToY()`](https://tabrisjs.com/documentation/2.0/api/ScrollView#scrolltoyoffsety) method to scroll.
-* Event `scroll` has been replaced by [`scrollX`](https://tabrisjs.com/documentation/2.0/api/ScrollView#scrollx-widget-offset) and [`scrollY`](https://tabrisjs.com/documentation/2.0/api/ScrollView#scrolly-widget-offset).
+* The type `Drawer` can not be instantiated anymore. A singleton instance is now available as `ui.drawer`.
+* The drawer is disabled by default. The property `enabled` must be set to `true` before the drawer can be used.
 
-### Page
-* Tabris 2.x has a new navigation concept. See [Navigation Patterns](https://tabrisjs.com/documentation/2.0/ui#navigation-patters) for more information.
-* `tabris.Page.open()` has been removed. Append the page to a [`NavigationView`](https://tabrisjs.com/documentation/2.0/api/NavigationView#navigationview) instead.
-* `tabris.Page.close()` has been removed. Use [`dispose()`](https://tabrisjs.com/documentation/2.0/api/Widget#dispose) or [`detach()`](https://tabrisjs.com/documentation/2.0/api/Widget#detach) to close a page.
-* `tabris.Page.topLevel` has been removed.
-* `tabris.ui.activePage` has been removed. Get the most top page of a [`NavigationView`](https://tabrisjs.com/documentation/2.0/api/NavigationView#navigationview) by calling [`navigationView.pages().last()`](https://tabrisjs.com/documentation/2.0/api/NavigationView#pages).
-* `tabris.PageSelector` has been removed. For a sample page selector implementation, see the [drawer pages snippet](https://github.com/eclipsesource/tabris-js/blob/master/snippets/drawer-pages.js).
+### UI
 
-### SearchAction
-* `tabris.SearchAction` must now be appended to a [`NavigationView`](https://tabrisjs.com/documentation/2.0/api/NavigationView#navigationview).
-
-## UI
-* `tabris.ui.statusBarTheme` has been removed. Use [`tabris.StatusBar.theme`](https://tabrisjs.com/documentation/2.0/api/StatusBar#theme) instead.
-* `tabris.ui.displayMode` has been removed. Use [`tabris.StatusBar.displayMode`](https://tabrisjs.com/documentation/2.0/api/StatusBar#displaymode) instead.
-* `tabris.ui.background` has been removed. Use [`tabris.NavigationView.toolbarColor`](https://tabrisjs.com/documentation/2.0/api/NavigationView#toolbarcolor) instead.
-* `tabris.ui.textColor` has been removed. Use [`tabris.NavigationView.titleTextColor`](https://tabrisjs.com/documentation/2.0/api/NavigationView#titletextcolor), [`tabris.NavigationView.actionColor`](https://tabrisjs.com/documentation/2.0/api/NavigationView#actioncolor) and [`tabris.NavigationView.actionTextColor`](https://tabrisjs.com/documentation/2.0/api/NavigationView#actiontextcolor) instead.
-* `tabris.ui.toolbarVisible` has been removed. Use [`tabris.NavigationView.toolbarVisible`](https://tabrisjs.com/documentation/2.0/api/NavigationView#toolbarvisible) instead.
-
-## Properties
-* Calling `get()` on a disposed object now returns `undefined`.
-* `set()` of a disposed object is a [NOOP](https://en.wikipedia.org/wiki/NOP).
-* The property `selection` of `CheckBox`, `RadioButton`, `Switch` and `ToggleButton` has been renamed to `checked`.
-
+* `ui.statusBarTheme` has been removed. Use `ui.statusBar.theme` instead.
+* `ui.displayMode` has been removed. Use `ui.statusBar.displayMode` instead.
+* `ui.activePage` has been removed. Get the top most page of a `NavigationView` by calling `navigationView.pages().last()`.
+* `ui.background` has been removed. Use the `NavigationView` property `toolbarColor` instead.
+* `ui.textColor` has been removed. Use the `NavigationView` properties `titleTextColor`, `actionColor` and `actionTextColor` instead.
+* `ui.toolbarVisible` has been removed. Use the `NavigationView` property `toolbarVisible` instead.
 
 ## Events
-* `off()` without arguments is not supported anymore.
-* `off(event)` is not supported anymore.
-* Calling [`on(event, listener, context?)`](https://tabrisjs.com/documentation/2.0/api/NativeObject#onevent-listener-context) or [`once(event, listener, context?)`](https://tabrisjs.com/documentation/2.0/api/NativeObject#onceevent-listener-context) multiple times with identical parameters will result into the callback being registered only once.
 
-* Event listeners are now called with a single event parameter. All event objects have a `target` field - the object the event was fired on. Other properties of the event object are event-specific. Refer to the [documentation](https://tabrisjs.com/documentation/2.0/) for information about changed events.
+The API for event listeners has changed. Most notably, event listeners are now called with a single event parameter. All event objects have a `target` field that contains the object that received the event. Other properties of the event object are event-specific. Refer to the [documentation](https://tabrisjs.com/documentation/2.0/) for the properties available on the respective events.
 
-E.g. use:
+For example, the following snippet:
 
 ```js
-checkBox.on('select', ({target, selection: checked}) => {
-    target.text = checked ? 'checked' : 'not checked';
-});
-```
-
-... instead of ...
-
-```js
+// Tabris 1.x
 checkBox.on('select', (target, selection) => {
-    target.text = selection ? 'checked' : 'not checked';
+  target.text = selection ? 'checked' : 'not checked';
 });
 ```
 
-### Specific events
-* `animationstart` and `animationend`
-  - removed, use the Promise returned by `animate()`
+would have to be rewritten to:
+
+```js
+// Tabris 2.0
+checkBox.on('select', (event) => {
+  event.target.text = event.checked ? 'checked' : 'not checked';
+});
+```
+
+or, a bit more concise, using ES6 object destructors:
+
+```js
+// Tabris 2.0
+checkBox.on('select', ({target, checked}) => {
+  target.text = checked ? 'checked' : 'not checked';
+});
+```
+
+More changes to events:
+
+* Calling `off()` without arguments or with a single argument is not supported anymore.
+* Calling `on(event, listener)` or `once(event, listener)` multiple times with identical parameters will register the listener only once.
+* The events `animationstart` and `animationend` have been removed, use the Promise returned by `animate()`.
+* The properties `pageX` and `pageY` that was available on touch events have been renamed to `absoluteX` and `absoluteY`.
+
+## Widgets
+
+* The `tabris.create()` method has been removed. Widget constructors are now available under the `tabris` namespace. [Create widgets](https://tabrisjs.com/documentation/2.0/widget-basics#creating-native-widgets) using `new` instead, e.g. use:
+
+```js
+new Button({centerX: 0, centerY: 0})
+```
+
+* The property `Widget.type` has been removed. This property used to contain the widget type, e.g. `'Button'`. Use `widget.constructor.name` instead. The `toString()` method now also returns the widget constructor name.
+
+### Stateful buttons
+
+* On `CheckBox`, `RadioButton`, `Switch` and `ToggleButton`, the property `selection` has been renamed to `checked`.
+
+### ScrollView
+
+* The properties `scrollX` and `scrollY` have been renamed to `offsetX` and `offsetY`, respectively. They are now read-only, use the method `scrollToX()` or `scrollToY()` to scroll.
+* The event `scroll` has been replaced by `scrollX` and `scrollY`.
+
+## Access to properties
+
+Widget properties can now be accessed directly, without `get()` and `set()`. For example:
+
+```
+// Tabris 1.x
+textView.set('text', 'foo');
+let text = textView.get('text');
+```
+
+can now be written as:
+
+```
+// Tabris 2.0
+textView.text = 'foo';
+let text = textView.text;
+```
+
+However, the `get()` and `set()` methods continue to work with a small adjustment:
+
+* Calling `get()` on a disposed object now returns `undefined`.
+* Calling `set()` on a disposed object is a [NOOP](https://en.wikipedia.org/wiki/NOP).
 
 ## Custom widgets
+
 Custom widget API has changed. Refer to the [custom widget documentation](https://tabrisjs.com/documentation/2.0/custom-widgets) for more information.
