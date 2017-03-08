@@ -5,7 +5,7 @@ var INITIAL_TITLE_COMPOSITE_OPACITY = 0.85;
 
 var titleCompY = 0;
 
-tabris.ui.background = rgba(255, 152, 0, 1);
+tabris.ui.statusBar.background = rgba(255, 152, 0, 1);
 
 var scrollView = new tabris.ScrollView({
   left: 0, right: 0, top: 0, bottom: 0
