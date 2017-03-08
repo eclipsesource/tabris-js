@@ -33,19 +33,19 @@ socket.onclose = function(event) {
 };
 
 var inputContainer = new tabris.Composite({
-  left: 0, right: 0, bottom: 0,
+  left: 0, right: 0, bottom: 0, height: 64,
   background: '#f5f5f5'
 }).appendTo(tabris.ui.contentView);
 
 var chatInput = new tabris.TextInput({
-  bottom: 16, left: 16, right: ['#sendButton', 16],
+  left: 16, right: ['#sendButton', 16], centerY: 0,
   message: 'Enter chat message...',
   text: 'Hello Chat!'
 }).appendTo(inputContainer);
 
 new tabris.Button({
   id: 'sendButton',
-  top: 16, bottom: 16, right: 16,
+  right: 16, width: 76, centerY: 0,
   text: 'Send'
 }).on('select', function() {
   socket.send('<b>' + tabris.device.model + '</b>: ' + chatInput.text);
