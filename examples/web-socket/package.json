@@ -1,5 +1,4 @@
 {
-  "title": "WebSocket",
   "category": "WebSocket",
   "description": "Create websocket connection",
   "main": "web-socket.js",
