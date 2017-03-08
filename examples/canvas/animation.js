@@ -4,24 +4,23 @@ var page = module.exports = new tabris.Page({
   title: 'Animation',
   autoDispose: false
 }).on('disappear', function() {
-  page.children('#toggleRun').set('checked', false);
+  page.children('#animateCheckBox').set('checked', false);
 });
 
 new tabris.Canvas({
-  left: 10, top: 10, right: 10, bottom: '#toggleRun 10'
+  left: 10, top: 10, right: 10, bottom: '#animateCheckBox 10'
 }).on('resize', function({target, width, height}) {
   var contextHeight = Math.min(height, Math.floor(width / 2));
   var ctx = target.getContext('2d', width, contextHeight);
   example.init(ctx);
 }).appendTo(page);
 
-new tabris.ToggleButton({
-  left: 10, bottom: 10,
-  text: 'Start',
-  id: 'toggleRun'
-}).on('change:checked', function({target: button, value: checked}) {
+new tabris.CheckBox({
+  centerX: 0, bottom: 10,
+  text: 'Animate',
+  id: 'animateCheckBox'
+}).on('change:checked', function({value: checked}) {
   example.setRunning(checked);
-  button.text = checked ? 'Stop' : 'Start';
 }).appendTo(page);
 
 function Example() {
