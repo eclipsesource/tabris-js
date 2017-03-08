@@ -1,5 +1,3 @@
-var message;
-
 var scrollView = new tabris.ScrollView({left: 0, top: 0, right: 0, bottom: 0}).appendTo(tabris.ui.contentView);
 
 new tabris.TextView({
@@ -120,7 +118,11 @@ new tabris.Button({
   background: '#8b0000',
   textColor: 'white'
 }).on('select', function() {
-  populateMessage();
+  updateMessage();
+}).appendTo(scrollView);
+
+let message = new tabris.TextView({
+  left: 10, right: 10, top: '#reservationButton 10'
 }).appendTo(scrollView);
 
 scrollView.apply({
@@ -149,21 +151,15 @@ scrollView.apply({
   '#reservationButton': {left: 10, right: 10, top: '#milesPanel 18'}
 });
 
-function populateMessage() {
-  if (message) {
-    message.dispose();
-  }
-  message = new tabris.TextView({
-    left: 10, right: 10, top: '#reservationButton 10', bottom: 10,
-    text: [
-      'Flight booked for: ' + scrollView.children('#nameInput').first().text,
-      'Destination: ' + scrollView.children('#countryPicker').first().selection,
-      'Seating: ' + createSeating(),
-      'Luggage: ' + createWeight(),
-      'Meal: ' + createMeal(),
-      'Redeem miles: ' + createFrequentFlyerInfo()
-    ].join('\n')
-  }).appendTo(scrollView);
+function updateMessage() {
+  message.text = [
+    'Flight booked for: ' + scrollView.children('#nameInput').first().text,
+    'Destination: ' + scrollView.children('#countryPicker').first().selection,
+    'Seating: ' + createSeating(),
+    'Luggage: ' + createWeight(),
+    'Meal: ' + createMeal(),
+    'Redeem miles: ' + createFrequentFlyerInfo()
+  ].join('\n') + '\n';
 }
 
 function createSeating() {
