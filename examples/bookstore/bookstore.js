@@ -66,7 +66,10 @@ new tabris.Action({
   id: 'licenseToggler',
   title: 'Settings',
   placementPriority: 'high',
-  image: {src: 'images/action_settings.png', scale: 3}
+  image: {
+    src: tabris.device.platform === 'iOS' ? 'images/settings-black-24dp@3x.png' : 'images/settings-white-24dp@3x.png',
+    scale: 3
+  }
 }).on('select', function() {
   createSettingsPage().appendTo(navigationView);
 }).appendTo(navigationView);
