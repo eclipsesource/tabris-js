@@ -24,22 +24,14 @@ var contentComposite = new tabris.Composite({
 
 new tabris.TextView({
   left: MARGIN, right: MARGIN, top: MARGIN,
-  text: 'Etiam nisl nisi, egestas quis lacus ut, tristique suscipit metus. In vehicula lectus ' +
-        'metus, at accumsan elit fringilla blandit. Integer et quam sed dolor pharetra ' +
-        'molestie id eget dui. Donec ac libero eu lectus dapibus placerat eu a tellus. Fusce ' +
-        'vulputate ac sem sit amet bibendum. Pellentesque euismod varius purus pharetra. Sed ' +
-        'vitae ipsum sit amet risus vehicula euismod in at nunc. Sed in viverra arcu, id ' +
-        'blandit. Praesent sagittis quis nisl id molestie. Donec dignissim, nisl id volutpat ' +
-        'consectetur, massa diam aliquam lectus, sed euismod leo elit eu justo. Integer vel ' +
-        'ante sapien.\n\nNunc sit amet blandit tellus, sed neque. Proin vel elementum augue. ' +
-        'Quisque gravida nulla nisl, at fermentum turpis euismod in. Maecenas tortor at ante ' +
-        'vulputate iaculis at vitae sem. Nulla dui erat, viverra eget mauris in, sodales ' +
-        'mollis. Integer rhoncus suscipit mi in pulvinar. Nam metus augue, dictum a egestas ' +
-        'ut, gravida eget ipsum. Nunc nisl, mollis et mauris in, venenatis blandit magna. ' +
-        'Nullam scelerisque tellus lacus, in lobortis purus consectetur sed. Etiam pulvinar ' +
-        'sapien vel nibh vehicula, in lacinia odio pharetra. Duis tincidunt metus a semper ' +
-        'auctor. Sed nec consequat augue, id vulputate orci. Nunc metus nulla, luctus id ' +
-        'porttitor nec, sed lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus.'
+  text: 'Make a dressing of the yolks of 3 hard-boiled eggs pounded fine, equal ' +
+    'quantities of mustard and paprika, a pinch of powdered sugar, 4 ' +
+    'tablespoonfuls of oil, 2 tablespoonfuls of vinegar. Simmer over the fire, ' +
+    'but do not allow to boil. Take the white meat of two chickens, and separate ' +
+    'into flakes; pile it in the middle of a dish, and pour the dressing over ' +
+    'it. Cut up two heads of lettuce, and arrange around the chicken. On top of ' +
+    'the lettuce place the whites of the eggs, cut into rings, and lay so as to ' +
+    'form a chain.'
 }).appendTo(contentComposite);
 
 var titleComposite = new tabris.Composite({

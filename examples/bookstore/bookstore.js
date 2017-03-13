@@ -52,15 +52,14 @@ function initializeCell(cell) {
   });
 }
 
-var loremIpsum = 'Etiam nisl nisi, egestas quis lacus ut, tristique suscipit metus. In ' +
-                 'vehicula lectus metus, at accumsan elit fringilla blandit. Integer et quam ' +
-                 'sed dolor pharetra molestie id eget dui. Donec ac libero eu lectus dapibus ' +
-                 'placerat eu a tellus. Fusce vulputate ac sem sit amet bibendum. Pellentesque ' +
-                 'euismod varius purus nec pharetra. Sed vitae ipsum sit amet risus vehicula ' +
-                 'euismod in at nunc. Sed in viverra arcu, id blandit risus. Praesent sagittis ' +
-                 'quis nisl id molestie. Donec dignissim, nisl id volutpat consectetur, massa ' +
-                 'diam aliquam lectus, sed euismod leo elit eu justo. Integer vel ante ' +
-                 'sapien.';
+var excerpt = '"And thus the first man of the Pequod that mounted the mast to look out for ' +
+  'the White Whale, on the White Whale\'s own peculiar ground; that man was ' +
+  'swallowed up in the deep. But few, perhaps, thought of that at the time. ' +
+  'Indeed, in some sort, they were not grieved at this event, at least as a ' +
+  'portent; for they regarded it, not as a foreshadowing of evil in the ' +
+  'future, but as the fulfilment of an evil already presaged. They declared ' +
+  'that now they knew the reason of those wild shrieks they had heard the ' +
+  'night before. But again the old Manxman said nay."';
 
 new tabris.Action({
   id: 'licenseToggler',
@@ -187,7 +186,7 @@ function createReadBookPage(book) {
   }).appendTo(scrollView);
   new tabris.TextView({
     left: PAGE_MARGIN, right: PAGE_MARGIN, top: [titleTextView, PAGE_MARGIN], bottom: PAGE_MARGIN,
-    text: [loremIpsum, loremIpsum, loremIpsum].join('\n\n')
+    text: excerpt
   }).appendTo(scrollView);
   return page;
 }

@@ -1,12 +1,13 @@
 var textView = new tabris.TextView({
   left: 16, top: 16, right: 16,
-  text: 'Lorem ipsum etiam maecenas lorem nunc tristique suscipit ligula mattis'  +
-    'amet, metus fringilla dapibus cubilia eros curae egestas tincidunt pellentesque, ' +
-    'consectetur inceptos scelerisque interdum quisque ligula cubilia ipsum eros' +
-    'pulvinar magna curabitur ligula vehicula primis arcu dolor ut volutpat fusce' +
-    'sit porta malesuada.\n\nLectus neque arcu imperdiet pulvinar varius lobortis' +
-    'aenean cursus lacus rutrum viverra morbi, ligula cubilia proin malesuada ' +
-    'tristique etiam blandit platea primis malesuada leo.'
+  text: 'And thus the first man of the Pequod that mounted the mast to look out for ' +
+  'the White Whale, on the White Whale\'s own peculiar ground; that man was ' +
+  'swallowed up in the deep. But few, perhaps, thought of that at the time. ' +
+  'Indeed, in some sort, they were not grieved at this event, at least as a ' +
+  'portent; for they regarded it, not as a foreshadowing of evil in the ' +
+  'future, but as the fulfilment of an evil already presaged. They declared ' +
+  'that now they knew the reason of those wild shrieks they had heard the ' +
+  'night before. But again the old Manxman said nay.'
 }).appendTo(tabris.ui.contentView);
 
 var spacingView = new tabris.TextView({

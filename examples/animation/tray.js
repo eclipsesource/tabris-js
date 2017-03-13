@@ -4,17 +4,17 @@ var trayHeight;
 var trayState = 'down';
 var dragOffset;
 
-var loremIpsum = 'Etiam nisl nisi, egestas quis lacus ut, tristique suscipit metus. In ' +
-                 'vehicula lectus metus, at accumsan elit fringilla blandit. Integer et quam ' +
-                 'sed dolor pharetra molestie id eget dui. Donec ac libero eu lectus dapibus ' +
-                 'placerat eu a tellus. Fusce vulputate ac sem sit amet bibendum.\n\n' +
-                 'Pellentesque euismod varius purus nec pharetra. Sed vitae ipsum sit amet ' +
-                 'risus vehicula euismod in at nunc. Sed in viverra arcu, id blandit risus. ' +
-                 'Praesent sagittis quis nisl id molestie. Donec dignissim, nisl id volutpat ' +
-                 'consectetur, massa diam aliquam lectus, sed euismod leo elit eu justo. ' +
-                 'Integer vel ante sapien.\n\nNunc sit amet blandit tellus, sed consequat ' +
-                 'neque. Proin vel elementum augue. Quisque gravida nulla nisl, at fermentum ' +
-                 'turpis euismod in. ';
+var text = 'There was nothing so very remarkable in that; nor did Alice ' +
+  'think it so very much out of the way to hear the Rabbit say to itself, ‘Oh ' +
+  'dear! Oh dear! I shall be late!’ (when she thought it over afterwards, it ' +
+  'occurred to her that she ought to have wondered at this, but at the time ' +
+  'it all seemed quite natural); but when the Rabbit actually took a watch ' +
+  'out of its waistcoat-pocket, and looked at it, and then hurried on, Alice ' +
+  'started to her feet, for it flashed across her mind that she had never ' +
+  'before seen a rabbit with either a waistcoat-pocket, or a watch to take ' +
+  'out of it, and burning with curiosity, she ran across the field after it, ' +
+  'and fortunately was just in time to see it pop down a large rabbit-hole ' +
+  'under the hedge.';
 
 var page = new tabris.Page({
   title: 'Tray',
@@ -23,7 +23,7 @@ var page = new tabris.Page({
 
 new tabris.TextView({
   left: MARGIN, right: MARGIN, top: MARGIN,
-  text: loremIpsum,
+  text: text,
   textColor: '#777'
 }).appendTo(page);
 
