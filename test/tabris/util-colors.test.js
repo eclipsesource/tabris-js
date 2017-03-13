@@ -33,6 +33,22 @@ describe('util-colors', function() {
       expect(colorStringToArray('#aF0')).to.eql([170, 255, 0, 255]);
     });
 
+    it('accepts color string of form #xxxxxxxx', function() {
+      expect(colorStringToArray('#aaff00cc')).to.eql([170, 255, 0, 204]);
+    });
+
+    it('accepts color string of form #xxxxxxxx with mixed upper/lower case', function() {
+      expect(colorStringToArray('#aaFF00CC')).to.eql([170, 255, 0, 204]);
+    });
+
+    it('accepts color string of form #xxxx', function() {
+      expect(colorStringToArray('#ff06')).to.eql([255, 255, 0, 102]);
+    });
+
+    it('accepts color string of form #xxxx with mixed upper/lower case', function() {
+      expect(colorStringToArray('#aBcD')).to.eql([170, 187, 204, 221]);
+    });
+
     it('accepts rgb function strings', function() {
       expect(colorStringToArray('rgb(12, 34, 56)')).to.eql([12, 34, 56, 255]);
     });
