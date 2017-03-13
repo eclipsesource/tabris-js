@@ -3,12 +3,15 @@
     "module": "commonjs",
     "target": "es5",
     "outDir": "./dist/",
-    "lib": ["dom", "es5", "scripthost", "es2015.promise" ],
+    "lib": ["es5", "es2015.promise" ],
     "noUnusedParameters" : true,
     "noUnusedLocals" : true
   },
   "files": [
-    "./node_modules/tabris/whatwg-fetch.d.ts"
+    "./node_modules/tabris/whatwg-fetch.d.ts",
+    "./node_modules/tabris/timer.d.ts",
+    "./node_modules/tabris/console.d.ts",
+    "./node_modules/tabris/localStorage.d.ts"
   ],
   "include": [
     "./src/**/*.ts"

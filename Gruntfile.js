@@ -63,7 +63,7 @@ module.exports = function(grunt) {
       typings: {
         expand: true,
         cwd: 'typings/',
-        src: ['whatwg-fetch.d.ts', 'timer.d.ts'],
+        src: ['whatwg-fetch.d.ts', 'timer.d.ts', 'console.d.ts', 'localStorage.d.ts'],
         dest: 'build/tabris/'
       },
       test_ts: {

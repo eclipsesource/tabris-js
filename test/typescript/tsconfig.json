@@ -5,6 +5,8 @@
   "include": [
     "../tabris/whatwg-fetch.d.ts",
     "../tabris/timer.d.ts",
+    "../tabris/localStorage.d.ts",
+    "../tabris/console.d.ts",
     "**/*.test.ts"
   ]
 }
