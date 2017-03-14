@@ -68,6 +68,78 @@ describe('NavigationView', function() {
 
   });
 
+  describe('topToolbarHeight', function() {
+
+    it('supports get', function() {
+      stub(client, 'get').returns(23);
+
+      let height = navigationView.topToolbarHeight;
+
+      expect(height).to.equal(23);
+      expect(client.get).to.have.been.calledWith(navigationView.cid, 'topToolbarHeight');
+    });
+
+    it('ignores set', function() {
+      stub(client, 'get').returns(23);
+      spy(client, 'set');
+      navigationView.topToolbarHeight = 12;
+
+      let height = navigationView.topToolbarHeight;
+
+      expect(height).to.equal(23);
+      expect(client.set).not.to.have.been.calledWith(navigationView.cid, 'topToolbarHeight');
+    });
+
+    it('support change event', function() {
+      let listener = spy();
+      navigationView.on('change:topToolbarHeight', listener);
+
+      tabris._notify(navigationView.cid, 'change_topToolbarHeight', {value: 23});
+
+      expect(client.calls({op: 'listen', id: navigationView.cid, event: 'change_topToolbarHeight'})[0].listen)
+        .to.be.true;
+      expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWithMatch({target: navigationView, value: 23});
+    });
+
+  });
+
+  describe('bottomToolbarHeight', function() {
+
+    it('supports get', function() {
+      stub(client, 'get').returns(23);
+
+      let height = navigationView.bottomToolbarHeight;
+
+      expect(height).to.equal(23);
+      expect(client.get).to.have.been.calledWith(navigationView.cid, 'bottomToolbarHeight');
+    });
+
+    it('ignores set', function() {
+      stub(client, 'get').returns(23);
+      spy(client, 'set');
+      navigationView.bottomToolbarHeight = 12;
+
+      let height = navigationView.bottomToolbarHeight;
+
+      expect(height).to.equal(23);
+      expect(client.set).not.to.have.been.calledWith(navigationView.cid, 'bottomToolbarHeight');
+    });
+
+    it('support change event', function() {
+      let listener = spy();
+      navigationView.on('change:bottomToolbarHeight', listener);
+
+      tabris._notify(navigationView.cid, 'change_bottomToolbarHeight', {value: 23});
+
+      expect(client.calls({op: 'listen', id: navigationView.cid, event: 'change_bottomToolbarHeight'})[0].listen)
+        .to.be.true;
+      expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWithMatch({target: navigationView, value: 23});
+    });
+
+  });
+
   describe('toolbarColor', function() {
 
     it('supports colors', function() {

@@ -17,6 +17,14 @@
       "type": "Color",
       "description": "The background color of the toolbar."
     },
+    "topToolbarHeight": {
+      "type": "number",
+      "description": "The height of the top toolbar. Is 0 if not visible."
+    },
+    "bottomToolbarHeight": {
+      "type": "number",
+      "description": "The height of the bottom toolbar. Is 0 if not visible or unsupported by the platform."
+    },
     "titleTextColor": {
       "type": "Color",
       "description": "The text color used for page titles."
@@ -55,6 +63,26 @@
     "win_drawerActionBackground": {
       "type": "Color",
       "description": "The background color used for the drawer action. It is common to the make this the same color as the splash screen. Available only on Windows."
+    }
+  },
+  "events": {
+    "change:topToolbarHeight": {
+      "description": "Fired when the height of the top toolbar changes, e.g. if it changes visibility.",
+      "parameters": {
+        "value": {
+          "description": "The new height",
+          "type": "number"
+        }
+      }
+    },
+    "change:bottomToolbarHeight": {
+      "description": "Fired when the height of the bottom toolbar changes, e.g. if it changes visibility.",
+      "parameters": {
+        "value": {
+          "description": "The new height",
+          "type": "number"
+        }
+      }
     }
   },
   "methods": {
