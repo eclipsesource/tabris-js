@@ -9,7 +9,6 @@ export default class NavigationView extends Composite {
   constructor(properties) {
     super(properties);
     this._nativeListen('backnavigation', true);
-    this._nativeListen('back', true);
   }
 
   get _nativeType() {
@@ -80,7 +79,7 @@ export default class NavigationView extends Composite {
   }
 
   _trigger(name, event) {
-    if (name === 'back' || name === 'backnavigation') {
+    if (name === 'backnavigation') {
       this._handleBackNavigation();
     } else {
       super._trigger(name, event);
