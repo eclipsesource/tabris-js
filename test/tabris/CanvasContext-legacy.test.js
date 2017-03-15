@@ -527,9 +527,7 @@ describe('CanvasContext in legacy mode', function() {
       flush();
 
       expect(getDrawOperations()).to.eql([
-        ['beginPath'],
-        ['rect', 10, 20, 30, 40],
-        ['fill']
+        ['fillRect', 10, 20, 30, 40]
       ]);
     });
 
@@ -542,9 +540,7 @@ describe('CanvasContext in legacy mode', function() {
       flush();
 
       expect(getDrawOperations()).to.eql([
-        ['beginPath'],
-        ['rect', 10, 20, 30, 40],
-        ['stroke']
+        ['strokeRect', 10, 20, 30, 40]
       ]);
     });
 

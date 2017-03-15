@@ -796,7 +796,7 @@ describe('CanvasContext', function() {
       flush();
 
       expect(decodeLastPacket()).to.eql({
-        ops: ['beginPath', 'rect', 'fill'],
+        ops: ['fillRect'],
         doubles: [10, 20, 30, 40]
       });
     });
@@ -816,7 +816,7 @@ describe('CanvasContext', function() {
       flush();
 
       expect(decodeLastPacket()).to.eql({
-        ops: ['beginPath', 'rect', 'stroke'],
+        ops: ['strokeRect'],
         doubles: [10, 20, 30, 40]
       });
     });

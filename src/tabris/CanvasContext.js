@@ -18,24 +18,6 @@ export default class CanvasContext {
     }
   }
 
-  fillRect(x, y, width, height) {
-    // TODO: delegate to native function, once it is implemented (#493)
-    checkRequiredArgs(arguments, 4, 'CanvasContext.fillRect');
-    this._gc.addOperation('beginPath');
-    this._gc.addOperation('rect');
-    this._gc.addDouble(x, y, width, height);
-    this.fill();
-  }
-
-  strokeRect(x, y, width, height) {
-    // TODO: delegate to native function, once it is implemented (#493)
-    checkRequiredArgs(arguments, 4, 'CanvasContext.strokeRect');
-    this._gc.addOperation('beginPath');
-    this._gc.addOperation('rect');
-    this._gc.addDouble(x, y, width, height);
-    this.stroke();
-  }
-
   measureText(text) {
     // TODO: delegate to native function, once it is implemented (#56)
     return {width: text.length * 5 + 5};
@@ -152,6 +134,14 @@ defineMethod('setTransform', 6, function(a, b, c, d, e, f) {
 // Drawing operations
 
 defineMethod('clearRect', 4, function(x, y, width, height) {
+  this._gc.addDouble(x, y, width, height);
+});
+
+defineMethod('fillRect', 4, function(x, y, width, height) {
+  this._gc.addDouble(x, y, width, height);
+});
+
+defineMethod('strokeRect', 4, function(x, y, width, height) {
   this._gc.addDouble(x, y, width, height);
 });
 
