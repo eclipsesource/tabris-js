@@ -202,11 +202,22 @@ describe('NavigationView', function() {
     it('is triggered when a covering page is removed', function() {
       navigationView.append(page1, page2);
       page1.on('appear', listener);
+      page2.on('appear', listener);
 
       page2.detach();
 
       expect(listener).to.have.been.calledOnce;
       expect(listener).to.have.been.calledWithMatch({target: page1});
+    });
+
+    it('is not triggered when hidden page is removed', function() {
+      navigationView.append(page1, page2);
+      page1.on('appear', listener);
+      page2.on('appear', listener);
+
+      page1.detach();
+
+      expect(listener).to.not.have.been.called;
     });
 
   });
@@ -219,16 +230,6 @@ describe('NavigationView', function() {
       page1 = new Page();
       page2 = new Page();
       listener = spy();
-    });
-
-    it('is triggered when a page is covered by another page', function() {
-      navigationView.append(page1);
-      page1.on('disappear', listener);
-
-      navigationView.append(page2);
-
-      expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWithMatch({target: page1});
     });
 
     it('is triggered when page is detached', function() {
@@ -251,16 +252,25 @@ describe('NavigationView', function() {
       expect(listener).to.have.been.calledWithMatch({target: page1});
     });
 
-    it('is only triggered on the topmost page when multiple pages are detached', function() {
+    it('is triggered when a page is covered by another page', function() {
+      navigationView.append(page1);
+      page1.on('disappear', listener);
+      page2.on('disappear', listener);
+
+      navigationView.append(page2);
+
+      expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWithMatch({target: page1});
+    });
+
+    it('is not triggered when a page in the middle is removed', function() {
       navigationView.append(page1, page2);
       page1.on('disappear', listener);
       page2.on('disappear', listener);
 
       page1.detach();
 
-      expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledOn(page2);
-      expect(listener).to.have.been.calledWith({target: page2});
+      expect(listener).to.not.have.been.called;
     });
 
   });
@@ -275,48 +285,10 @@ describe('NavigationView', function() {
       page3 = new Page();
     });
 
-    it('detaches all pages on top', function() {
-      navigationView.append(page1, page2, page3);
-      page1.detach();
-      expect(navigationView.pages().toArray()).to.deep.equal([]);
-    });
-
-    it('detaches all pages on top', function() {
-      navigationView.append(page1, page2, page3);
-      page1.detach();
-      expect(navigationView.pages().toArray()).to.deep.equal([]);
-    });
-
-    it('CALLs popTo for topmost page', function() {
-      navigationView.append(page1, page2, page3);
-      page3.detach();
-
-      let popToCall = client.calls({id: navigationView.cid, op: 'call', method: 'popTo'})[0];
-      expect(popToCall.parameters).to.deep.equal({page: page2.cid});
-    });
-
-    it('CALLs popTo for page below', function() {
+    it('detaches a page in the middle', function() {
       navigationView.append(page1, page2, page3);
       page2.detach();
-
-      let popToCall = client.calls({id: navigationView.cid, op: 'call', method: 'popTo'})[0];
-      expect(popToCall.parameters).to.deep.equal({page: page1.cid});
-    });
-
-    it('CALLs popTo last page', function() {
-      navigationView.append(page1, page2, page3);
-      page1.detach();
-
-      let popToCall = client.calls({id: navigationView.cid, op: 'call', method: 'popTo'})[0];
-      expect(popToCall.parameters).to.deep.equal({page: null});
-    });
-
-    it('CALLs popTo only once', function() {
-      navigationView.append(page1, page2, page3);
-      page1.detach();
-
-      let popToCalls = client.calls({id: navigationView.cid, op: 'call', method: 'popTo'});
-      expect(popToCalls.length).to.equal(1);
+      expect(navigationView.pages().toArray()).to.deep.equal([page1, page3]);
     });
 
   });

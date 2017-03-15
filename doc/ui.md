@@ -64,7 +64,7 @@ Common navigation patterns for apps are based on pages or on tabs. Both approach
 
 ### Using Pages
 
-To implement a page navigation pattern, you can use a fullscreen [NavigationView](api/NavigationView.md). A navigation view contains [Pages](api/Page.md) that are arranged on a stack, so that only the topmost page is visible. A header displays the current page's title and a button to navigate back to the previous page.
+To implement a page navigation pattern, you can use a full-screen [NavigationView](api/NavigationView.md). A navigation view contains [Pages](api/Page.md) that are arranged on a stack, so that only the topmost page is visible. A header displays the topmost page's title and a button to navigate back to the previous page. On Android, the system back button can also be used to navigate back.
 
 ```js
 var navigationView = new tabris.NavigationView({
@@ -80,9 +80,7 @@ new tabris.Page({
 }).appendTo(navigationView);
 ```
 
-On back navigation, the topmost page will be disposed. Likewise, you can call `dispose()` on a page to remove it from the stack. When a page is removed that is not the topmost page, all pages on top will be disposed and removed as well.
-
-On Android, the system back button can also be used to navigate back.
+On back navigation, the topmost page will be removed from the stack and disposed. To prevent pages from being automatically disposed on back navigation you can set its `autoDispose` property to `false`. This allows you to re-use the page later on. If you do so, please ensure that pages are disposed when they are no longer needed to avoid memory leaks.
 
 ### Using Tabs
 

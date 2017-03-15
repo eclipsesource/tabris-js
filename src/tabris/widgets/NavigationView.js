@@ -20,54 +20,29 @@ export default class NavigationView extends Composite {
   }
 
   _addChild(child, index) {
-    if (child instanceof Page) {
-      if (typeof index === 'number' && index !== this.pages().length) {
-        throw new Error('Cannot append a page at the given position');
-      }
+    let isTopPage = (child instanceof Page && typeof index !== 'number' || index === this.pages().length);
+    if (isTopPage) {
       this._triggerDisappear();
     }
     super._addChild(child, index);
-    if (child instanceof Page) {
+    if (isTopPage) {
       this._triggerAppear();
     }
   }
 
   _removeChild(child) {
-    if (child instanceof Page) {
-      let pages = this.pages();
-      if (!pages.includes(child)) {
-        return;
-      }
-      let prev = pages[pages.indexOf(child) - 1];
-      if (!this._inPopAbove) {
-        this._nativeCall('popTo', {page: prev ? prev.cid : null});
-      }
+    let isTopPage = (child instanceof Page && child === this.pages().last());
+    if (isTopPage) {
       this._triggerDisappear();
-      this._popPagesAbove(child);
     }
     super._removeChild(child);
-    if (child instanceof Page) {
+    if (isTopPage) {
       this._triggerAppear();
     }
   }
 
   _handleBackNavigation() {
     this._pop(this.pages().last());
-  }
-
-  _popPagesAbove(page) {
-    if (this._inPopAbove) {
-      return;
-    }
-    this._inPopAbove = true;
-    let pages = this.pages();
-    let index = pages.indexOf(page);
-    if (index !== -1) {
-      for (let i = pages.length - 1; i > index; i--) {
-        this._pop(pages[i]);
-      }
-    }
-    delete this._inPopAbove;
   }
 
   _pop(page) {
@@ -87,9 +62,6 @@ export default class NavigationView extends Composite {
   }
 
   _triggerAppear() {
-    if (this._inPopAbove) {
-      return;
-    }
     let topPage = this.pages().last();
     if (topPage) {
       topPage.trigger('appear', {target: topPage});
@@ -97,9 +69,6 @@ export default class NavigationView extends Composite {
   }
 
   _triggerDisappear() {
-    if (this._inPopAbove) {
-      return;
-    }
     let topPage = this.pages().last();
     if (topPage) {
       topPage.trigger('disappear', {target: topPage});
