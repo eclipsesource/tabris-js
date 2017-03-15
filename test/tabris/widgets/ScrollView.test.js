@@ -75,6 +75,7 @@ describe('ScrollView', function() {
     });
 
     it('offsetY can not be set', function() {
+      stub(console, 'warn');
       scrollView.set('offsetY', 23);
 
       let setCalls = client.calls({id: scrollView.cid, op: 'set'});
@@ -136,6 +137,7 @@ describe('ScrollView', function() {
     });
 
     it('offsetX can not be set', function() {
+      stub(console, 'warn');
       scrollView.set('offsetX', 23);
 
       let setCalls = client.calls({id: scrollView.cid, op: 'set'});
