@@ -15,28 +15,19 @@ module.exports = function(grunt) {
           banner,
           process: src => src.replace(/\${VERSION}/g, pkg.version)
         },
-        src: ['build/transpiled.js'],
+        src: ['build/tabris-transpiled.js'],
         dest: 'build/tabris/tabris.js'
       },
       boot: {
         options: {
-          banner: banner + '(function(){\n',
-          footer: '\n}());',
-          stripBanners: true,
+          banner,
           process: src => src.replace(/\${VERSION}/g, pkg.version)
         },
-        src: prefix('src/boot/', [
-          'Module.js',
-          'bootstrap.js'
-        ]),
+        src: ['build/boot-transpiled.js'],
         dest: 'build/boot.js'
       }
     },
     uglify: {
-      boot: {
-        src: 'build/boot.js',
-        dest: 'build/boot.min.js'
-      },
       polyfill: {
         src: 'build/polyfill.js',
         dest: 'build/tabris/polyfill.js'
@@ -132,14 +123,21 @@ module.exports = function(grunt) {
       tslint: {
         cmd: 'node node_modules/tslint/bin/tslint --exclude "**/*.d.ts" "examples/**/*.ts" "test/**/*.ts"'
       },
-      bundle: {
-        cmd: 'node node_modules/rollup/bin/rollup --format=cjs --output=build/bundle.js -- src/tabris/main.js'
+      bundle_tabris: {
+        cmd: 'node node_modules/rollup/bin/rollup --format=cjs --output=build/tabris-bundle.js -- src/tabris/main.js'
       },
-      transpile: {
-        options: {
-          env: Object.assign({}, process.env, {BABEL_ENV: 'build'})
-        },
-        cmd: 'node node_modules/babel-cli/bin/babel.js --compact false --out-file build/transpiled.js build/bundle.js'
+      bundle_boot: {
+        cmd: 'node node_modules/rollup/bin/rollup --format=cjs --output=build/boot-bundle.js -- src/boot/main.js'
+      },
+      transpile_tabris: {
+        options: {env: Object.assign({}, process.env, {BABEL_ENV: 'build'})},
+        cmd: 'node node_modules/babel-cli/bin/babel.js --compact false ' +
+          '--out-file build/tabris-transpiled.js build/tabris-bundle.js'
+      },
+      transpile_boot: {
+        options: {env: Object.assign({}, process.env, {BABEL_ENV: 'build'})},
+        cmd: 'node node_modules/babel-cli/bin/babel.js --compact false ' +
+          '--out-file build/boot-transpiled.js build/boot-bundle.js'
       }
     }
   });
@@ -170,12 +168,13 @@ module.exports = function(grunt) {
 
   /* concatenates and minifies code */
   grunt.registerTask('build', [
-    'exec:bundle',
-    'exec:transpile',
+    'exec:bundle_tabris',
+    'exec:transpile_tabris',
     'concat:tabris',
+    'exec:bundle_boot',
+    'exec:transpile_boot',
     'concat:boot',
     'webpack:polyfill',
-    'uglify:boot',
     'uglify:polyfill',
     'package',
     'copy:readme',
@@ -218,10 +217,6 @@ module.exports = function(grunt) {
     'doc',
     'examples'
   ]);
-
-  function prefix(prefix, strings) {
-    return strings.map(string => prefix + string);
-  }
 
   function blockComment(text) {
     let commented = text.trim().split('\n').map(line => ' * ' + line).join('\n');
