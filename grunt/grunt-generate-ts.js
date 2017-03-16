@@ -3,6 +3,10 @@
 
 let header = `
 // Type definitions for Tabris.js \${VERSION}
+/// <reference path="console.d.ts" />
+/// <reference path="localStorage.d.ts" />
+/// <reference path="timer.d.ts" />
+/// <reference path="whatwg-fetch.d.ts" />
 
 export as namespace tabris;
 
