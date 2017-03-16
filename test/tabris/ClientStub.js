@@ -45,6 +45,12 @@ export default class ClientStub {
     return url.slice(-5) === '.json' ? '{}' : 'exports = 23;';
   }
 
+  loadAndExecute() {
+    return {
+      executeResult: {}
+    };
+  }
+
   calls(filterProperties) {
     tabris._nativeBridge.flush();
     return select.call(this.$calls, filterProperties);

@@ -58,8 +58,8 @@ describe('tabris', function() {
     expect(tabris.version).to.match(/\d+\.\d+\.\d+/);
   });
 
-  it('contains load function', function() {
-    expect(tabris.load).to.be.a('function');
+  it('is started', function() {
+    expect(tabris.started).to.be.true;
   });
 
   it('contains DOM API constructors', function() {

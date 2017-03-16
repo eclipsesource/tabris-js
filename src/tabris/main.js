@@ -108,12 +108,7 @@ Object.assign(window, {
   XMLHttpRequest
 });
 
-addDOMDocument(window);
-addDOMEventTargetMethods(window);
-addWindowTimerMethods(window);
-
-// TODO: ensure tabris is set up before load functions, remove when merged with tabris module
-tabris._loadFunctions.unshift(() => {
+tabris.on('start', () => {
   tabris.app = createApp();
   tabris.ui = createUi();
   tabris.device = createDevice();
@@ -125,3 +120,7 @@ tabris._loadFunctions.unshift(() => {
   window.crypto = tabris.crypto = new Crypto();
   tabris.pkcs5 = new Pkcs5();
 });
+
+addDOMDocument(window);
+addDOMEventTargetMethods(window);
+addWindowTimerMethods(window);

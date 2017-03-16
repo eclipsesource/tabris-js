@@ -25,7 +25,7 @@ export function addWindowTimerMethods(target) {
     let taskId = taskSequence++;
     // If tabris is not ready, create the timer on load.
     // However, clearTimeout won't work until after load.
-    tabris.load(() => {
+    let create = () => {
       let timer = new Timer({
         delay,
         repeat
@@ -38,7 +38,12 @@ export function addWindowTimerMethods(target) {
       });
       timer._nativeCall('start');
       timers[taskId] = timer;
-    });
+    };
+    if (tabris.started) {
+      create();
+    } else {
+      tabris.on('start', create);
+    }
     return taskId;
   }
 

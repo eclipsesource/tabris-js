@@ -7,9 +7,10 @@ export function mockTabris(client) {
     throw new Error('Cannot mock without a client');
   }
   global.tabris = Object.assign({
+    _client: client,
     _proxies: new ProxyStore(),
     _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param),
-    load: fn => fn.call(),
+    started: true,
     device: {platform: 'test'}
   }, Events);
   global.tabris._nativeBridge = new NativeBridge(client);

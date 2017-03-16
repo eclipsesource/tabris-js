@@ -1,21 +1,17 @@
-import {expect, spy, stub, restore} from '../test';
+import {expect, mockTabris, spy, stub, restore} from '../test';
 import {addDOMDocument} from '../../src/tabris/Document';
 import Event from '../../src/tabris/Event';
-import NativeBridge from '../../src/tabris/NativeBridge';
 import ClientStub from './ClientStub';
 
 describe('Document', function() {
 
-  let target, client, loadCallback;
+  let target, client;
 
   beforeEach(function() {
     target = {};
-    global.tabris = {
-      on: () => {},
-      load: cb => loadCallback = cb
-    };
-    client = global.tabris._client = new NativeBridge(new ClientStub());
-    client.loadAndExecute = stub().returns({});
+    client = new ClientStub();
+    mockTabris(client);
+    stub(client, 'loadAndExecute').returns({});
     addDOMDocument(target);
   });
 
@@ -52,7 +48,7 @@ describe('Document', function() {
     let listener = spy();
     target.document.addEventListener('DOMContentLoaded', listener);
 
-    loadCallback();
+    tabris.trigger('start');
 
     expect(listener).to.have.been.called;
     expect(target.document.readyState).to.equal('complete'); // we skip "interactive"

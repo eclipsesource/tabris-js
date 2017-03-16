@@ -42,15 +42,18 @@ export function addDOMDocument(target) {
       return new Event(type);
     }
   };
+
   addDOMEventTargetMethods(target.document);
   if (typeof target.location === 'undefined') {
     target.location = target.document.location;
   }
-  tabris.load(() => {
+
+  tabris.on('start', () => {
     target.document.readyState = 'complete';
     let event = new Event('DOMContentLoaded', false, false);
     target.document.dispatchEvent(event);
   });
+
 }
 
 function handleElementInserted(parent, child, target) {

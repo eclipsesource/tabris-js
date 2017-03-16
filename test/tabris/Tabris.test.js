@@ -24,22 +24,18 @@ describe('ClientInterface', function() {
       }).to.not.throw();
     });
 
-    it('executes all load functions', function() {
-      let f1 = spy();
-      let f2 = spy();
-      tabris.load(f1);
-      tabris.load(f2);
+    it('triggers start event', function() {
+      let listener = spy();
+      tabris.on('start', listener);
 
       tabris._init.call(null, client);
 
-      expect(f1).to.have.been.called;
-      expect(f2).to.have.been.called;
-      expect(f1).to.have.been.calledBefore(f2);
+      expect(listener).to.have.been.calledOnce;
     });
 
-    it('load functions can access tabris functions', function() {
+    it('triggers start event when tabris is set up', function() {
       class TestType extends NativeObject {}
-      tabris.load(() => new TestType()._create('test.Type'));
+      tabris.on('start', () => new TestType()._create('test.Type'));
 
       tabris._init.call(null, client);
 
@@ -95,60 +91,6 @@ describe('ClientInterface', function() {
       tabris._notify.call(null, widget.cid, 'foo', [23, 42]);
 
       expect(widget._trigger).to.have.been.calledWith('foo', [23, 42]);
-    });
-
-  });
-
-  describe('load', function() {
-
-    beforeEach(function() {
-      delete tabris._nativeBridge;
-      tabris._ready = false;
-    });
-
-    it('function is not executed before start time', function() {
-      let fn = spy();
-      tabris.load(fn);
-
-      expect(fn).to.have.not.been.called;
-    });
-
-    it('function is executed at start time', function() {
-      let fn = spy();
-
-      tabris.load(fn);
-      tabris._init(client);
-
-      expect(fn).to.have.been.called;
-    });
-
-    it('nested load functions are executed at the end', function() {
-      let log = [];
-
-      tabris.load(function() {
-        log.push('1');
-        tabris.load(function() {
-          log.push('1a');
-        });
-        tabris.load(function() {
-          log.push('1b');
-        });
-      });
-      tabris.load(function() {
-        log.push('2');
-      });
-      tabris._init(client);
-
-      expect(log).to.eql(['1', '2', '1a', '1b']);
-    });
-
-    it('runs immediately if already started', function() {
-      let fn = spy();
-
-      tabris._init(client);
-      tabris.load(fn);
-
-      expect(fn).to.have.been.called;
     });
 
   });
