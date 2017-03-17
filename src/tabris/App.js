@@ -1,7 +1,8 @@
 import NativeObject from './NativeObject';
 
 const CERTIFICATE_ALGORITHMS = ['RSA2048', 'RSA4096', 'ECDSA256'];
-const EVENT_TYPES = ['foreground', 'background', 'pause', 'resume', 'terminate', 'backnavigation'];
+const EVENT_TYPES = ['foreground', 'background', 'pause', 'resume', 'terminate', 'backnavigation',
+  'certificatesReceived'];
 
 export default class App extends NativeObject {
 
@@ -49,15 +50,14 @@ export default class App extends NativeObject {
     }
   }
 
-  _trigger(name, event) {
-    if (name === 'backnavigation') {
+  _trigger(name, event = {}) {
+    if (name === 'backnavigation' || name === 'certificatesReceived') {
       let cancelled = false;
-      this.trigger('backnavigation', {
-        target: this,
+      super._trigger(name, Object.assign(event, {
         preventDefault() {
           cancelled = true;
         }
-      });
+      }));
       return cancelled;
     } else if (name === 'patchInstall') {
       this._nativeListen('patchInstall', false);
@@ -80,6 +80,13 @@ export default class App extends NativeObject {
     }
   }
 
+  _validateCertificate(event) {
+    let hashes = this.$pinnedCerts[event.host];
+    if (hashes && !hashes.some(hash => event.hashes.includes(hash))) {
+      event.preventDefault();
+    }
+  }
+
 }
 
 NativeObject.defineProperties(App.prototype, {
@@ -89,27 +96,36 @@ NativeObject.defineProperties(App.prototype, {
       return [];
     },
     set(name, value) {
-      for (let cert of value) {
-        if (typeof cert.host !== 'string') {
-          throw new Error('Invalid host for pinned certificate: ' + cert.host);
-        }
-        if (typeof cert.hash !== 'string' || !cert.hash.startsWith('sha256/')) {
-          throw new Error('Invalid hash for pinned certificate: ' + cert.hash);
-        }
-        if (tabris.device.platform === 'iOS') {
-          if (!('algorithm' in cert)) {
-            throw new Error('Missing algorithm for pinned certificate: ' + cert.host);
-          }
-          if (typeof cert.algorithm !== 'string' || CERTIFICATE_ALGORITHMS.indexOf(cert.algorithm) === -1) {
-            throw new Error('Invalid algorithm for pinned certificate: ' + cert.algorithm);
-          }
-        }
-      }
+      this.$pinnedCerts = checkCertificates(value);
+      this.on('certificatesReceived', this._validateCertificate, this);
       this._storeProperty(name, value);
       this._nativeSet(name, value);
     }
   }
 });
+
+function checkCertificates(certificates) {
+  let hashes = {};
+  for (let cert of certificates) {
+    if (typeof cert.host !== 'string') {
+      throw new Error('Invalid host for pinned certificate: ' + cert.host);
+    }
+    if (typeof cert.hash !== 'string' || !cert.hash.startsWith('sha256/')) {
+      throw new Error('Invalid hash for pinned certificate: ' + cert.hash);
+    }
+    if (tabris.device.platform === 'iOS') {
+      if (!('algorithm' in cert)) {
+        throw new Error('Missing algorithm for pinned certificate: ' + cert.host);
+      }
+      if (typeof cert.algorithm !== 'string' || CERTIFICATE_ALGORITHMS.indexOf(cert.algorithm) === -1) {
+        throw new Error('Invalid algorithm for pinned certificate: ' + cert.algorithm);
+      }
+    }
+    hashes[cert.host] = hashes[cert.host] || [];
+    hashes[cert.host].push(cert.hash);
+  }
+  return hashes;
+}
 
 export function create() {
   let app = new App(true);

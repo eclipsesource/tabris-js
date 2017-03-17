@@ -89,6 +89,50 @@ describe('App', function() {
         });
       });
 
+      it('returns pinnedCertificates', function() {
+        app.pinnedCertificates = [{host: 'example.com', hash: 'sha256/abc', algorithm: 'RSA4096'}];
+
+        expect(app.pinnedCertificates).to.deep.equal([{host: 'example.com', hash: 'sha256/abc', algorithm: 'RSA4096'}]);
+      });
+
+      it('adds native listener on certificatesReceived', function() {
+        app.pinnedCertificates = [{host: 'example.com', hash: 'sha256/abc', algorithm: 'RSA4096'}];
+
+        let listenCall = client.calls({op: 'listen', id: app.cid})[0];
+        expect(listenCall.event).to.equal('certificatesReceived');
+        expect(listenCall.listen).to.be.true;
+      });
+
+      it('cancels certificateReceived event with invalid certificate', function() {
+        app.pinnedCertificates = [{host: 'example.com', hash: 'sha256/abc', algorithm: 'RSA4096'}];
+
+        let cancelled = app._trigger('certificatesReceived', {
+          host: 'example.com',
+          hashes: ['sha256/uvw', 'sha256/xyz']
+        });
+
+        expect(cancelled).to.be.true;
+      });
+
+      it('does not cancel certificateReceived event with valid certificate', function() {
+        app.pinnedCertificates = [{host: 'example.com', hash: 'sha256/abc', algorithm: 'RSA4096'}];
+
+        let cancelled = app._trigger('certificatesReceived', {
+          host: 'example.com',
+          hashes: ['sha256/xyz', 'sha256/abc']
+        });
+
+        expect(cancelled).to.be.false;
+      });
+
+      it('does not cancel certificateReceived event with unpinned host', function() {
+        app.pinnedCertificates = [{host: 'example.com', hash: 'sha256/abc', algorithm: 'RSA4096'}];
+
+        let cancelled = app._trigger('certificatesReceived', {host: 'somewhere-else.com', hashes: ['sha256/xyz']});
+
+        expect(cancelled).to.be.false;
+      });
+
     });
 
   });
