@@ -1,11 +1,6 @@
-/*global window: true, document: true */
+/*global document: true */
 import {checkVersion} from './version';
 import Module from './Module';
-
-// TODO: clients still expose the global object as "window"
-if (typeof global === 'undefined') {
-  window.global = window;
-}
 
 global.window = global.self = global;
 global.tabris = {};
