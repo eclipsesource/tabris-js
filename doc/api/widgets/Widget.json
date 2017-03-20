@@ -393,6 +393,48 @@
         }
       }
     },
+    "pan:horizontal": {
+      "description": "Fired when a finger starts moving left or right.",
+      "parameters": {
+        "state": {
+          "description": "'start' when the finger starts moving, 'change' while the finger is moving, 'end' when the finger has been lifted and 'cancel' when the gesture has been interrupted.",
+          "type": "'start'|'change'|'end'|'cancel'"
+        },
+        "touches": {
+          "description": "Touch coordinates relative to the origin coordinates of the widget.",
+          "type": "{x: number, y: number}[]"
+        },
+        "translation": {
+          "description": "Current touch coordinates relative to the coordinates of the first touch.",
+          "type": "{x: number, y: number}"
+        },
+        "velocity": {
+          "description": "Current touch velocity in pixels per second.",
+          "type": "{x: number, y: number}"
+        }
+      }
+    },
+    "pan:vertical": {
+      "description": "Fired when a finger starts moving up or down.",
+      "parameters": {
+        "state": {
+          "description": "'start' when the finger starts moving, 'change' while the finger is moving, 'end' when the finger has been lifted and 'cancel' when the gesture has been interrupted.",
+          "type": "'start'|'change'|'end'|'cancel'"
+        },
+        "touches": {
+          "description": "Touch coordinates relative to the origin coordinates of the widget.",
+          "type": "{x: number, y: number}[]"
+        },
+        "translation": {
+          "description": "Current touch coordinates relative to the coordinates of the first touch.",
+          "type": "{x: number, y: number}"
+        },
+        "velocity": {
+          "description": "Current touch velocity in pixels per second.",
+          "type": "{x: number, y: number}"
+        }
+      }
+    },
     "swipe:up": {
       "description": "Fired when a finger moves up quickly.",
       "parameters": {
