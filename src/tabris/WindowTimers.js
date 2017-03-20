@@ -42,7 +42,7 @@ export function addWindowTimerMethods(target) {
     if (tabris.started) {
       create();
     } else {
-      tabris.on('start', create);
+      tabris.once('start', create);
     }
     return taskId;
   }

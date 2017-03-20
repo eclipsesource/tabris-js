@@ -108,7 +108,7 @@ Object.assign(window, {
   XMLHttpRequest
 });
 
-tabris.on('start', () => {
+tabris.once('start', () => {
   tabris.app = createApp();
   tabris.ui = createUi();
   tabris.device = createDevice();
