@@ -137,6 +137,7 @@ export default class CollectionView extends Widget {
       } else {
         initializeCell(cell, decodeCellType(this, event.type));
       }
+      return cell.cid;
     } else if (name === 'populateitem') {
       let cell = tabris._proxies.find(event.widget);
       let item = this._getItem(this._items, event.index);

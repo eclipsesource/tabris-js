@@ -473,10 +473,10 @@ describe('CollectionView', function() {
 
         describe('when createitem event is received', function() {
 
-          let cellCreateCall, cell;
+          let cellCreateCall, cell, result;
 
           beforeEach(function() {
-            view._trigger('createitem', {type: 0});
+            result = view._trigger('createitem', {type: 0});
             cellCreateCall = client.calls({op: 'create', type: 'tabris.Composite'})[0];
             cell = tabris._proxies.find(cellCreateCall.id);
           });
@@ -484,6 +484,10 @@ describe('CollectionView', function() {
           it('creates a Cell', function() {
             expect(cellCreateCall).to.be.ok;
             expect(cell).to.be.an.instanceof(Cell);
+          });
+
+          it('returns the created cell`s id', function() {
+            expect(result).to.equal(cell.cid);
           });
 
           it('calls native addItem with created cell', function() {
