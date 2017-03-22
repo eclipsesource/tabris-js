@@ -1,6 +1,6 @@
 {
   "name": "tabris",
-  "version": "2.0.0-beta2",
+  "version": "2.0.0-rc1",
   "description": "Mobile apps with native UIs in JavaScript",
   "keywords": [
     "native",

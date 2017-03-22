@@ -4,6 +4,6 @@
   "description": "Demonstrates using the Tabris.js timer with the window.timer API",
   "main": "timer.js",
   "dependencies": {
-    "tabris": "2.0.0-beta2"
+    "tabris": "2.0.0-rc1"
   }
 }

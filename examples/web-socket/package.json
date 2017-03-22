@@ -3,6 +3,6 @@
   "description": "Create websocket connection",
   "main": "web-socket.js",
   "dependencies": {
-    "tabris": "^2.0.0-beta2"
+    "tabris": "^2.0.0-rc1"
   }
 }
