@@ -18,10 +18,9 @@ export default class Video extends Widget {
 
   _trigger(name, event) {
     if (name === 'statechange') {
-      this._triggerChangeEvent('state', event.state);
-    } else {
-      super._trigger(name, event);
+      return this._triggerChangeEvent('state', event.state);
     }
+    return super._trigger(name, event);
   }
 
   pause() {

@@ -158,10 +158,10 @@ export default class Widget extends NativeObject {
     }
     if (typeof index === 'number') {
       this._children.splice(index, 0, child);
-      this.trigger('addchild', {target: this, child, index});
+      super._trigger('addchild', {child, index});
     } else {
       this._children.push(child);
-      this.trigger('addchild', {target: this, child, index: this._children.length - 1});
+      super._trigger('addchild', {child, index: this._children.length - 1});
     }
   }
 
@@ -170,7 +170,7 @@ export default class Widget extends NativeObject {
       let index = this._children.indexOf(child);
       if (index !== -1) {
         this._children.splice(index, 1);
-        this.trigger('removechild', {target: this, child, index});
+        super._trigger('removechild', {child, index});
       }
     }
   }
@@ -195,7 +195,7 @@ export default class Widget extends NativeObject {
       if (listening) {
         let properties = Object.assign({target: this}, this.gestures[name]);
         let recognizer = new GestureRecognizer(properties).on('gesture', event => {
-          this.trigger(name, Object.assign({}, event, {target: this}));
+          super._trigger(name, event);
         });
         if (!this._recognizers) {
           this._recognizers = {};
@@ -218,19 +218,17 @@ export default class Widget extends NativeObject {
   _trigger(name, event) {
     if (name === 'resize') {
       if (hasAndroidResizeBug()) {
-        setTimeout(() => {
-          super._trigger(name, types.bounds.decode(event.bounds));
-        }, 0);
+        setTimeout(() => super._trigger(name, types.bounds.decode(event.bounds)), 0);
       } else {
         super._trigger(name, types.bounds.decode(event.bounds));
       }
     } else {
-      super._trigger(name, event);
+      return super._trigger(name, event);
     }
   }
 
   $triggerChangeBounds({left, top, width, height}) {
-    this.trigger('change:bounds', {target: this, value: {left, top, width, height}});
+    super._trigger('change:bounds', {value: {left, top, width, height}});
   }
 
   _flushLayout() {

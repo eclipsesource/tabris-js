@@ -71,7 +71,7 @@ export default class NavigationView extends Composite {
     } else if (name === 'change_bottomToolbarHeight') {
       this._triggerChangeEvent('bottomToolbarHeight', event.value);
     } else {
-      super._trigger(name, event);
+      return super._trigger(name, event);
     }
   }
 

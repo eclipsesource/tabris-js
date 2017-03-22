@@ -1,4 +1,5 @@
 import {types} from './property-types';
+import EventObject from './EventObject';
 import Events from './Events';
 
 function EventsClass() {}
@@ -142,7 +143,7 @@ export default class NativeObject extends EventsClass {
   _triggerChangeEvent(propertyName, newEncodedValue) {
     let typeDef = this._getTypeDef(propertyName);
     let decodedValue = this._decodeProperty(typeDef, newEncodedValue);
-    this.trigger('change:' + propertyName, {target: this, value: decodedValue});
+    this._trigger('change:' + propertyName, {value: decodedValue});
   }
 
   _create(type, properties = {}) {
@@ -164,7 +165,7 @@ export default class NativeObject extends EventsClass {
   _dispose(skipNative) {
     if (!this._isDisposed && !this._inDispose) {
       this._inDispose = true;
-      this.trigger('dispose', {target: this});
+      this._trigger('dispose');
       this._release();
       if (!skipNative) {
         tabris._nativeBridge.destroy(this.cid);
@@ -190,8 +191,10 @@ export default class NativeObject extends EventsClass {
     tabris._nativeBridge.listen(this.cid, event, state);
   }
 
-  _trigger(name, event = {}) {
-    this.trigger(name, Object.assign({target: this}, event));
+  _trigger(name, eventData = {}) {
+    let event = Object.assign(new EventObject(name, this), eventData);
+    this.trigger(name, event);
+    return !!event.defaultPrevented;
   }
 
   _onoff(name, listening, listener) {

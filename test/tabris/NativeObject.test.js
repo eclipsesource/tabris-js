@@ -271,7 +271,7 @@ describe('NativeObject', function() {
         object._trigger('bar', {bar: 23});
 
         expect(listener).to.have.been.calledOnce;
-        expect(listener).to.have.been.calledWith({target: object, bar: 23});
+        expect(listener).to.have.been.calledWithMatch({target: object, bar: 23});
       });
 
     });
@@ -369,7 +369,7 @@ describe('NativeObject', function() {
 
         object.dispose();
 
-        expect(listener).to.have.been.calledWith({target: object});
+        expect(listener).to.have.been.calledWithMatch({target: object});
       });
 
       it('notifies dispose listeners before native destroy', function() {

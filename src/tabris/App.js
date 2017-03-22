@@ -51,15 +51,7 @@ export default class App extends NativeObject {
   }
 
   _trigger(name, event = {}) {
-    if (name === 'backnavigation' || name === 'certificatesReceived') {
-      let cancelled = false;
-      super._trigger(name, Object.assign(event, {
-        preventDefault() {
-          cancelled = true;
-        }
-      }));
-      return cancelled;
-    } else if (name === 'patchInstall') {
+    if (name === 'patchInstall') {
       this._nativeListen('patchInstall', false);
       let callback = this._pendingPatchCallback;
       delete this._pendingPatchCallback;
@@ -76,7 +68,7 @@ export default class App extends NativeObject {
         }
       }
     } else {
-      super._trigger(name, event);
+      return super._trigger(name, event);
     }
   }
 

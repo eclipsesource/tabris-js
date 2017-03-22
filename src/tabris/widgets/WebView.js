@@ -29,22 +29,6 @@ export default class WebView extends Widget {
     this._nativeCall('loadData', {data, mimeType});
   }
 
-  _trigger(name, event) {
-    if (name === 'navigate') {
-      let intercepted = false;
-      Object.assign(event, {
-        target: this,
-        preventDefault() {
-          intercepted = true;
-        }
-      });
-      this.trigger(name, event);
-      return intercepted;
-    } else {
-      super._trigger(name, event);
-    }
-  }
-
 }
 
 NativeObject.defineProperties(WebView.prototype, {

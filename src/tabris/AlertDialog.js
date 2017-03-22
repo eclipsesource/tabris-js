@@ -10,13 +10,14 @@ export default class AlertDialog extends NativeObject {
 
   _trigger(name, event) {
     if (name === 'close') {
+      event.button = event.button || '';
       if (event.button) {
-        this.trigger('close:' + event.button, {target: this});
+        super._trigger('close:' + event.button, event);
       }
-      this.trigger('close', {target: this, button: event.button || ''});
+      super._trigger('close', event);
       this.dispose();
     } else {
-      super._trigger(name, event);
+      return super._trigger(name, event);
     }
   }
 

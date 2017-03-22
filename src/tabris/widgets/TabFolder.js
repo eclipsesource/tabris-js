@@ -27,13 +27,13 @@ export default class TabFolder extends Composite {
   _trigger(name, event) {
     if (name === 'select') {
       let tab = tabris._proxies.find(event.selection);
-      this.trigger('select', {target: this, tab});
-    } else if (name === 'scroll') {
-      let selection = event.selection ? tabris._proxies.find(event.selection) : null;
-      this.trigger('scroll', {target: this, selection, offset: event.offset});
-    } else {
-      super._trigger(name, event);
+      return super._trigger('select', {tab});
     }
+    if (name === 'scroll') {
+      let selection = event.selection ? tabris._proxies.find(event.selection) : null;
+      return super._trigger('scroll', {selection, offset: event.offset});
+    }
+    return super._trigger(name, event);
   }
 
   $triggerChangeSelection({tab}) {

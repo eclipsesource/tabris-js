@@ -149,9 +149,9 @@ export default class CollectionView extends Widget {
       }
     } else if (name === 'select') {
       let item = this._getItem(this._items, event.index);
-      this.trigger('select', {target: this, item, index: event.index});
+      return super._trigger('select', {item, index: event.index});
     } else {
-      super._trigger(name, event);
+      return super._trigger(name, event);
     }
   }
 

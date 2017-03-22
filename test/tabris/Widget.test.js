@@ -240,7 +240,7 @@ describe('Widget', function() {
         child.dispose();
 
         expect(listener).to.have.been.calledOnce;
-        expect(listener).to.have.been.calledWith({target: parent, child, index: 0});
+        expect(listener).to.have.been.calledWithMatch({target: parent, child, index: 0});
       });
 
       it("notifies parent's `removechild` listener with correct index", function() {
@@ -250,7 +250,7 @@ describe('Widget', function() {
 
         child.dispose();
 
-        expect(listener).to.have.been.calledWith({target: parent, child, index: 1});
+        expect(listener).to.have.been.calledWithMatch({target: parent, child, index: 1});
       });
 
       it("notifies all children's dispose listeners", function() {
@@ -589,7 +589,7 @@ describe('Widget', function() {
 
           widget.insertBefore(other);
 
-          expect(listener).to.have.been.calledWith({target: parent1, child: widget, index: 0});
+          expect(listener).to.have.been.calledWithMatch({target: parent1, child: widget, index: 0});
         });
 
         it('triggers add event with index', function() {
@@ -1303,7 +1303,7 @@ describe('Widget', function() {
       widget._trigger('resize', {bounds: [1, 2, 3, 4]});
 
       expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWith({target: widget, value: {left: 1, top: 2, width: 3, height: 4}});
+      expect(listener).to.have.been.calledWithMatch({target: widget, value: {left: 1, top: 2, width: 3, height: 4}});
       checkListen('resize');
     });
 

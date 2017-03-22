@@ -42,10 +42,9 @@ export default class Picker extends Widget {
 
   _trigger(name, event) {
     if (name === 'select') {
-      this.trigger('select', {target: this, item: this._getItem(event.selectionIndex), index: event.selectionIndex});
-    } else {
-      super._trigger(name, event);
+      return super._trigger('select', {item: this._getItem(event.selectionIndex), index: event.selectionIndex});
     }
+    return super._trigger(name, event);
   }
 
   $triggerChangeSelection({item}) {

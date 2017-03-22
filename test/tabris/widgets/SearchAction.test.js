@@ -101,7 +101,7 @@ describe('SearchAction', function() {
 
       checkListen('select');
       expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWith({target: action});
+      expect(listener).to.have.been.calledWithMatch({target: action});
     });
 
     it('accept', function() {
@@ -110,7 +110,7 @@ describe('SearchAction', function() {
 
       checkListen('accept');
       expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWith({target: action, text: 'foo'});
+      expect(listener).to.have.been.calledWithMatch({target: action, text: 'foo'});
     });
 
   });
