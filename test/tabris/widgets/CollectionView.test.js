@@ -395,6 +395,12 @@ describe('CollectionView', function() {
 
           });
 
+          it('returns the created item description', function() {
+            view.itemHeight = 23;
+            let result = view._trigger('requestinfo', {index: 0});
+            expect(result).to.deep.equal({height: 23, index: 0, type: 0});
+          });
+
         });
 
         describe('when items is set again', function() {

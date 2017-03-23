@@ -125,7 +125,9 @@ export default class CollectionView extends Widget {
       let type = resolveProperty(this, 'cellType', item);
       let height = resolveProperty(this, 'itemHeight', item, type);
       let typeId = encodeCellType(this, type);
-      this._nativeCall('describeItem', {index: event.index, type: typeId, height});
+      let description = {index: event.index, type: typeId, height};
+      this._nativeCall('describeItem', description);
+      return description;
     } else if (name === 'createitem') {
       let cell = new Cell();
       cell._parent = this;
