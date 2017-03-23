@@ -128,16 +128,8 @@ export default class CollectionView extends Widget {
       this._nativeCall('describeItem', {index: event.index, type: typeId, height});
       return {type: typeId, height};
     } else if (name === 'createitem') {
-      let cell = new Cell();
-      cell._parent = this;
-      this._addChild(cell);
+      let cell = this._createCell(event.type);
       this._nativeCall('addItem', {widget: cell.cid});
-      let initializeCell = this.initializeCell;
-      if (typeof initializeCell !== 'function') {
-        console.warn('initializeCell callback missing');
-      } else {
-        initializeCell(cell, decodeCellType(this, event.type));
-      }
       return cell.cid;
     } else if (name === 'populateitem') {
       let cell = tabris._proxies.find(event.widget);
@@ -154,6 +146,20 @@ export default class CollectionView extends Widget {
     } else {
       return super._trigger(name, event);
     }
+  }
+
+  _createCell(type) {
+    let cell = this.createCell(decodeCellType(this, type));
+    if (!(cell instanceof Cell)) {
+      throw new Error('createCell returned invalid type');
+    }
+    if (cell._parent) {
+      throw new Error('createCell returned used cell');
+    }
+    this.initializeCell(cell, decodeCellType(this, type));
+    cell._parent = this;
+    this._addChild(cell);
+    return cell;
   }
 
 }
@@ -179,9 +185,16 @@ NativeObject.defineProperties(CollectionView.prototype, {
       return this._items;
     }
   },
+  createCell: {
+    type: 'function',
+    default: () => () => new Cell(),
+    set(name, value) {
+      this._storeProperty(name, value);
+    }
+  },
   initializeCell: {
     type: 'function',
-    default: null,
+    default: () => () => {},
     set(name, value) {
       this._storeProperty(name, value);
     }

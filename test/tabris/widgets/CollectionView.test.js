@@ -45,7 +45,8 @@ describe('CollectionView', function() {
     it('returns default property values', function() {
       expect(view.itemHeight).to.equal(0);
       expect(view.items).to.eql([]);
-      expect(view.initializeCell).to.equal(null);
+      expect(view.createCell).to.be.a('function');
+      expect(view.initializeCell).to.be.a('function');
       expect(view.cellType).to.equal(null);
       expect(view.refreshEnabled).to.equal(false);
       expect(view.refreshMessage).to.equal('');
@@ -57,6 +58,84 @@ describe('CollectionView', function() {
         stub(client, 'get').returns(false);
 
         expect(view.refreshIndicator).to.equal(false);
+      });
+
+    });
+
+    describe('createCell', function() {
+
+      it('defaults to function that creates a cell', function() {
+        expect(view.createCell).to.be.a('function');
+        expect(view.createCell()).to.be.instanceOf(Cell);
+      });
+
+      it('accepts function', function() {
+        let fn = spy();
+        view.createCell = fn;
+        expect(view.createCell).to.equal(fn);
+      });
+
+      it('does not SET property on client', function() {
+        client.resetCalls();
+        view.createCell = spy();
+        expect(client.calls({op: 'set', id: view.cid}).length).to.equal(0);
+      });
+
+    });
+
+    describe('initializeCell', function() {
+
+      it('defaults to function', function() {
+        expect(view.initializeCell).to.be.a('function');
+      });
+
+      it('accepts function', function() {
+        let fn = spy();
+        view.initializeCell = fn;
+        expect(view.initializeCell).to.equal(fn);
+      });
+
+      it('does not SET property on client', function() {
+        client.resetCalls();
+        view.initializeCell = spy();
+        expect(client.calls({op: 'set', id: view.cid}).length).to.equal(0);
+      });
+
+    });
+
+    describe('creating cells on demand', function() {
+
+      it('calls createCell', function() {
+        view.createCell = spy(() => new Cell());
+        view._trigger('createitem', {type: 0});
+        expect(view.createCell).to.have.been.calledOnce;
+      });
+
+      it('throws when createCell returns wrong type', function() {
+        view.createCell = spy(() => new Composite());
+        expect(() => view._trigger('createitem', {type: 0})).to.throw(Error, 'createCell returned invalid type');
+      });
+
+      it('throws when createCell returns used cell', function() {
+        let cell = new Cell();
+        view.createCell = spy(() => cell);
+        view._trigger('createitem', {type: 0});
+        expect(() => view._trigger('createitem', {type: 0})).to.throw(Error, 'createCell returned used cell');
+      });
+
+      it('calls initializeCell', function() {
+        view.initializeCell = spy(() => {});
+        view._trigger('createitem', {type: 0});
+        expect(view.initializeCell).to.have.been.calledOnce;
+        expect(view.initializeCell.firstCall.args[0]).to.be.instanceOf(Cell);
+      });
+
+      it('calls both createCell and initializeCell', function() {
+        let cell = new Cell();
+        view.createCell = spy(() => cell);
+        view.initializeCell = spy(() => {});
+        view._trigger('createitem', {type: 0});
+        expect(view.initializeCell).to.have.been.calledWith(cell);
       });
 
     });
@@ -235,14 +314,6 @@ describe('CollectionView', function() {
         view.initializeCell = initializeCell;
       });
 
-      it('returns same function in get', function() {
-        expect(view.initializeCell).to.equal(initializeCell);
-      });
-
-      it('does not SET property on client', function() {
-        expect(client.calls({op: 'set', id: view.cid}).length).to.equal(0);
-      });
-
       describe('when items is set', function() {
 
         let items;
@@ -268,12 +339,8 @@ describe('CollectionView', function() {
           let cellTypeFn, itemHeightFn, describeCalls;
 
           beforeEach(function() {
-            cellTypeFn = spy(function(item) {
-              return item.charCodeAt(0) % 2 === 0 ? 'bar' : 'foo';
-            });
-            itemHeightFn = spy(function(item) {
-              return item.charCodeAt(0) % 2 === 0 ? 80 : 50;
-            });
+            cellTypeFn = spy(item => item.charCodeAt(0) % 2 === 0 ? 'bar' : 'foo');
+            itemHeightFn = spy(item => item.charCodeAt(0) % 2 === 0 ? 80 : 50);
           });
 
           describe('when cellType is set to a function', function() {
