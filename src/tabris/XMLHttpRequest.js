@@ -1,6 +1,6 @@
 // XHR Spec: https://xhr.spec.whatwg.org/
 
-import NativeObject from './NativeObject';
+import HttpRequest from './HttpRequest';
 import Event, {addDOMEventTargetMethods, defineEventHandlerProperties} from './Event';
 import ProgressEvent from './ProgressEvent';
 
@@ -16,18 +16,6 @@ const EVENT_TYPES = [
 const UPLOAD_EVENT_TYPES = ['progress', 'loadstart', 'load', 'loadend', 'timeout', 'abort', 'error'];
 
 const SUPPORTED_SCHEMES = ['http', 'https', 'file'];
-
-class HttpRequest extends NativeObject {
-
-  constructor() {
-    super();
-    this._create('tabris.HttpRequest');
-    this._nativeListen('StateChange', true);
-    this._nativeListen('DownloadProgress', true);
-    this._nativeListen('UploadProgress', true);
-  }
-
-}
 
 export default class XMLHttpRequest {
 
@@ -239,7 +227,7 @@ export default class XMLHttpRequest {
       dispatchProgressEvent('loadstart', this.upload); // (9.3)
     }
     // (10): only handling the same origin case
-    this.$proxy._nativeCall('send', { // request URL fetch
+    this.$proxy.send({ // request URL fetch
       url: this.$requestUrl.source,
       method: this.$requestMethod,
       timeout: this.timeout,
@@ -251,7 +239,7 @@ export default class XMLHttpRequest {
 
   abort() {
     if (this.$proxy) {
-      this.$proxy._nativeCall('abort'); // (1)
+      this.$proxy.abort(); // (1)
     }
     if (!([UNSENT, OPENED].indexOf(this.$readyState) > -1 && !this.$sendInvoked ||
         this.$readyState === DONE)) { // send() interrupted

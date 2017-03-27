@@ -19,7 +19,8 @@ describe('XMLHttpRequest', function() {
     stub(tabris._nativeBridge, 'create', (cid, type) => {
       if (type === 'tabris.HttpRequest') {
         proxy = tabris._proxies.find(cid);
-        spy(proxy, '_nativeCall');
+        spy(proxy, 'send');
+        spy(proxy, 'abort');
       }
       return origCreate.apply(tabris._nativeBridge, arguments);
     });
@@ -130,7 +131,7 @@ describe('XMLHttpRequest', function() {
       xhr.setRequestHeader('Foo', 'Bar');
       xhr.open('GET', 'http://foo.com');
       xhr.send();
-      expect(proxy._nativeCall).to.have.been.calledWith('send', match({headers: {}}));
+      expect(proxy.send).to.have.been.calledWithMatch({headers: {}});
     });
 
     it('resets responseText', function() {
@@ -154,9 +155,9 @@ describe('XMLHttpRequest', function() {
       xhr.withCredentials = true;
       xhr.open('GET', 'index.json', true, 'user', 'password');
       xhr.send();
-      expect(proxy._nativeCall).to.have.been.calledWith('send', match({
+      expect(proxy.send).to.have.been.calledWithMatch({
         headers: {Authorization: 'Basic user:password'}
-      }));
+      });
     });
 
     it("doesn't set url username and password if url relative and username or password null",
@@ -164,9 +165,9 @@ describe('XMLHttpRequest', function() {
       xhr.withCredentials = true;
       xhr.open('GET', 'index.json', true, 'user', null);
       xhr.send();
-      expect(proxy._nativeCall).not.to.have.been.calledWith('send', match({
+      expect(proxy.send).not.to.have.been.calledWithMatch({
         headers: {Authorization: 'Basic user:password'}
-      }));
+      });
     });
 
   });
@@ -199,18 +200,18 @@ describe('XMLHttpRequest', function() {
       sendRequest(xhr);
       xhr.open('GET', 'http://foo.com');
       xhr.send();
-      expect(proxy._nativeCall).to.have.been.calledWith('send', match({
+      expect(proxy.send).to.have.been.calledWithMatch({
         url: 'http://foo.com'
-      }));
+      });
     });
 
     it('calls proxy send with method specified as open argument', function() {
       sendRequest(xhr);
       xhr.open('GET', 'http://foo.com');
       xhr.send();
-      expect(proxy._nativeCall).to.have.been.calledWith('send', match({
+      expect(proxy.send).to.have.been.calledWithMatch({
         method: 'GET'
-      }));
+      });
     });
 
     it('calls proxy send with timeout property', function() {
@@ -218,9 +219,9 @@ describe('XMLHttpRequest', function() {
       xhr.open('GET', 'http://foo.com');
       xhr.timeout = 2000;
       xhr.send();
-      expect(proxy._nativeCall).to.have.been.calledWith('send', match({
+      expect(proxy.send).to.have.been.calledWithMatch({
         timeout: 2000
-      }));
+      });
     });
 
     it('calls proxy send with headers property', function() {
@@ -228,32 +229,32 @@ describe('XMLHttpRequest', function() {
       xhr.open('GET', 'http://foo.com');
       xhr.setRequestHeader('Foo', 'Bar');
       xhr.send();
-      expect(proxy._nativeCall).to.have.been.calledWith('send', match({
+      expect(proxy.send).to.have.been.calledWithMatch({
         headers: {Foo: 'Bar'}
-      }));
+      });
     });
 
     it('calls proxy send with data property', function() {
       sendRequest(xhr);
       xhr.open('POST', 'http://foo.com');
       xhr.send('foo');
-      expect(proxy._nativeCall).to.have.been.calledWith('send', match({
+      expect(proxy.send).to.have.been.calledWithMatch({
         data: 'foo'
-      }));
+      });
     });
 
     it('calls proxy send with null data if request method is HEAD or GET', function() {
       sendRequest(xhr);
       xhr.open('GET', 'http://foo.com');
       xhr.send('foo');
-      expect(proxy._nativeCall).to.have.been.calledWith('send', match({
+      expect(proxy.send).to.have.been.calledWithMatch({
         data: null
-      }));
+      });
       xhr.open('HEAD', 'http://foo.com');
       xhr.send('foo');
-      expect(proxy._nativeCall).to.have.been.calledWith('send', match({
+      expect(proxy.send).to.have.been.calledWithMatch({
         data: null
-      }));
+      });
     });
 
     it('calls proxy send with headers property and appended header', function() {
@@ -262,9 +263,9 @@ describe('XMLHttpRequest', function() {
       xhr.setRequestHeader('Foo', 'Bar');
       xhr.setRequestHeader('Foo', 'Baz');
       xhr.send();
-      expect(proxy._nativeCall).to.have.been.calledWith('send', match({
+      expect(proxy.send).to.have.been.calledWithMatch({
         headers: {Foo: 'Bar, Baz'}
-      }));
+      });
     });
 
     it('resets error', function() {
@@ -317,26 +318,26 @@ describe('XMLHttpRequest', function() {
       xhr.withCredentials = true;
       xhr.open('GET', 'http://user:password@foobar.com');
       xhr.send();
-      expect(proxy._nativeCall).to.have.been.calledWith('send', match({
+      expect(proxy.send).to.have.been.calledWithMatch({
         headers: {Authorization: 'Basic user:password'}
-      }));
+      });
     });
 
     it("doesn't send basic access authentication header when withCredentials false", function() {
       xhr.open('GET', 'http://user:password@foobar.com');
       xhr.send();
-      expect(proxy._nativeCall).not.to.have.been.calledWith('send', match({
+      expect(proxy.send).not.to.have.been.calledWithMatch({
         headers: {Authorization: 'Basic user:password'}
-      }));
+      });
     });
 
     it("doesn't send basic access authentication header when userdata null", function() {
       xhr.withCredentials = true;
       xhr.open('GET', 'http://foobar.com');
       xhr.send();
-      expect(proxy._nativeCall).not.to.have.been.calledWith('send', match({
+      expect(proxy.send).not.to.have.been.calledWithMatch({
         headers: {Authorization: 'Basic user:password'}
-      }));
+      });
     });
 
     describe('proxy StateChange callback', function() {
@@ -581,7 +582,7 @@ describe('XMLHttpRequest', function() {
     it('calls proxy abort', function() {
       sendRequest(xhr);
       xhr.abort();
-      expect(proxy._nativeCall).to.have.been.calledWith('abort');
+      expect(proxy.abort).to.have.been.called;
     });
 
     it("changes state to 'UNSENT' with states 'UNSENT' and 'OPENED' if send() not invoked", function() {
