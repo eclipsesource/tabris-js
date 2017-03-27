@@ -50,6 +50,11 @@ import Widget from './Widget';
 import WidgetCollection from './WidgetCollection';
 import XMLHttpRequest from './XMLHttpRequest';
 
+import {fetch} from './fetch/fetch';
+import Headers from './fetch/Headers';
+import Request from './fetch/Request';
+import Response from './fetch/Response';
+
 const window = global.window;
 
 module.exports = global.tabris = Object.assign(new Tabris(), {
@@ -96,7 +101,11 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   WebView,
   Widget,
   WidgetCollection,
-  XMLHttpRequest
+  XMLHttpRequest,
+  fetch,
+  Headers,
+  Request,
+  Response
 });
 
 Object.assign(window, {
@@ -105,7 +114,11 @@ Object.assign(window, {
   ProgressEvent,
   Storage,
   WebSocket,
-  XMLHttpRequest
+  XMLHttpRequest,
+  fetch,
+  Headers,
+  Request,
+  Response
 });
 
 tabris.on('start', () => {

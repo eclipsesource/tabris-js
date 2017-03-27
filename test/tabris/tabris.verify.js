@@ -46,6 +46,13 @@ describe('window', function() {
     expect(window.Storage.name).to.equal('Storage');
     expect(window.WebSocket).to.be.a('function');
     expect(window.WebSocket.name).to.equal('WebSocket');
+    // http
+    expect(window.Headers).to.be.a('function');
+    expect(window.Headers.name).to.equal('Headers');
+    expect(window.Request).to.be.a('function');
+    expect(window.Request.name).to.equal('Request');
+    expect(window.Response).to.be.a('function');
+    expect(window.Response.name).to.equal('Response');
     expect(window.XMLHttpRequest).to.be.a('function');
     expect(window.XMLHttpRequest.name).to.equal('XMLHttpRequest');
   });
@@ -75,6 +82,13 @@ describe('tabris', function() {
     expect(tabris.Storage.name).to.equal('Storage');
     expect(window.WebSocket).to.be.a('function');
     expect(tabris.WebSocket.name).to.equal('WebSocket');
+    // http
+    expect(tabris.Headers).to.be.a('function');
+    expect(tabris.Headers.name).to.equal('Headers');
+    expect(tabris.Request).to.be.a('function');
+    expect(tabris.Request.name).to.equal('Request');
+    expect(tabris.Response).to.be.a('function');
+    expect(tabris.Response.name).to.equal('Response');
     expect(tabris.XMLHttpRequest).to.be.a('function');
     expect(tabris.XMLHttpRequest.name).to.equal('XMLHttpRequest');
   });
