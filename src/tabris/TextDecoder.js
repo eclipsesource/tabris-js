@@ -20,7 +20,7 @@ class TextDecoder extends NativeObject {
     if (!SUPPORTED_ENCODINGS.includes(encoding)) {
       throw new Error(`Unsupported encoding: '${encoding}'`);
     }
-    this._nativeCall('decode', {buffer, encoding});
+    this._nativeCall('decode', {data: buffer, encoding});
   }
 
 }

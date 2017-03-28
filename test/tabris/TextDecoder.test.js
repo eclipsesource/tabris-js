@@ -53,7 +53,7 @@ describe('TextDecoder', function() {
     it('passes parameters to native call', function() {
       decode(buffer, 'ascii');
       let call = client.calls({op: 'call', method: 'decode'})[0];
-      expect(call.parameters).to.deep.equal({buffer, encoding: 'ascii'});
+      expect(call.parameters).to.deep.equal({data: buffer, encoding: 'ascii'});
     });
 
     it('defaults to utf-8', function() {
@@ -66,7 +66,7 @@ describe('TextDecoder', function() {
       let bufferView = new Uint8Array();
       decode(bufferView);
       let call = client.calls({op: 'call', method: 'decode'})[0];
-      expect(call.parameters.buffer).to.equal(bufferView.buffer);
+      expect(call.parameters.data).to.equal(bufferView.buffer);
     });
 
     it('resolves with result string', function() {
