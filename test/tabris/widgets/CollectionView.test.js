@@ -541,6 +541,25 @@ describe('CollectionView', function() {
 
           });
 
+          describe('when calling cell.appendTo()', function() {
+
+            beforeEach(function() {
+              cell = new Cell();
+              stub(console, 'warn');
+              cell.appendTo(view);
+            });
+
+            it('cell is not appended', function() {
+              expect(view.children().toArray()).to.not.include(cell);
+            });
+
+            it('a warning is logged', function() {
+              let warning = 'CollectionView cells are container-managed, they cannot be appended';
+              expect(console.warn).to.have.been.calledWith(warning);
+            });
+
+          });
+
           describe('when view is disposed', function() {
 
             beforeEach(function() {

@@ -3,6 +3,10 @@ import Composite from './Composite';
 
 export default class Cell extends Composite {
 
+  _setParent() {
+    console.warn('CollectionView cells are container-managed, they cannot be appended');
+  }
+
   dispose() {
     console.warn('CollectionView cells are container-managed, they cannot be disposed of');
   }
