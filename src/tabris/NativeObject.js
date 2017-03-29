@@ -17,10 +17,10 @@ export default class NativeObject extends EventsClass {
     target['$prop_' + name] = normalizeProperty(definition);
     Object.defineProperty(target, name, {
       set(value) {
-        this._setProperty(name, value);
+        this.$setProperty(name, value);
       },
       get() {
-        return this._getProperty(name);
+        return this.$getProperty(name);
       }
     });
   }
@@ -61,17 +61,17 @@ export default class NativeObject extends EventsClass {
     return this[name];
   }
 
-  _getProperty(name) {
+  $getProperty(name) {
     if (this._isDisposed) {
       console.warn('Cannot get property "' + name + '" on disposed object');
       return;
     }
-    let getter = this._getPropertyGetter(name) || this._getStoredProperty;
+    let getter = this.$getPropertyGetter(name) || this._getStoredProperty;
     let value = getter.call(this, name);
     return this._decodeProperty(this._getTypeDef(name), value);
   }
 
-  _setProperty(name, value) {
+  $setProperty(name, value) {
     if (this._isDisposed) {
       console.warn('Cannot set property "' + name + '" on disposed object');
       return;
@@ -84,7 +84,7 @@ export default class NativeObject extends EventsClass {
       console.warn(this + ': Ignored unsupported value for property "' + name + '": ' + ex.message);
       return;
     }
-    let setter = this._getPropertySetter(name) || this._storeProperty;
+    let setter = this.$getPropertySetter(name) || this._storeProperty;
     setter.call(this, name, encodedValue);
   }
 
@@ -130,12 +130,12 @@ export default class NativeObject extends EventsClass {
     return (typeDef && typeDef.decode) ? typeDef.decode(value) : value;
   }
 
-  _getPropertyGetter(name) {
+  $getPropertyGetter(name) {
     let prop = this['$prop_' + name];
     return prop ? prop.get : undefined;
   }
 
-  _getPropertySetter(name) {
+  $getPropertySetter(name) {
     let prop = this['$prop_' + name];
     return prop ? prop.set : undefined;
   }

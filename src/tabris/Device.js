@@ -9,10 +9,6 @@ export default class Device extends NativeObject {
     }
   }
 
-  _setProperty() {
-    // prevent overwriting properties
-  }
-
   _listen(name, listening) {
     if (name === 'change:orientation') {
       this._nativeListen('orientationchange', listening);
@@ -36,16 +32,16 @@ export default class Device extends NativeObject {
 }
 
 NativeObject.defineProperties(Device.prototype, {
-  model: 'any',
-  platform: 'any',
-  version: 'any',
-  language: 'any',
-  orientation: 'any',
-  screenWidth: 'any',
-  screenHeight: 'any',
-  scaleFactor: 'any',
-  win_keyboardPresent: 'any',
-  win_primaryInput: 'any'
+  model: {type: 'any', readonly: true},
+  platform: {type: 'any', readonly: true},
+  version: {type: 'any', readonly: true},
+  language: {type: 'any', readonly: true},
+  orientation: {type: 'any', readonly: true},
+  screenWidth: {type: 'any', readonly: true},
+  screenHeight: {type: 'any', readonly: true},
+  scaleFactor: {type: 'any', readonly: true},
+  win_keyboardPresent: {type: 'any', readonly: true},
+  win_primaryInput: {type: 'any', readonly: true}
 });
 
 export function create() {
