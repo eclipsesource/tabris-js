@@ -1,3 +1,5 @@
+import 'tabris';
+
 let id: any;
 let callback: () => void;
 let delay: number;

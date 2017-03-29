@@ -7,6 +7,8 @@ let header = `
 /// <reference path="localStorage.d.ts" />
 /// <reference path="timer.d.ts" />
 /// <reference path="whatwg-fetch.d.ts" />
+/// <reference path="Event.d.ts" />
+/// <reference path="XMLHttpRequest.d.ts" />
 
 export as namespace tabris;
 

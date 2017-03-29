@@ -1,3 +1,5 @@
+import 'tabris';
+
 let promise1 = new Promise<any>((resolve, reject) => {
   if (1 === 1) {
     resolve('result');

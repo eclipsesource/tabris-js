@@ -1,3 +1,5 @@
+import 'tabris';
+
 declare type T = Object;
 
 let result: Promise<Response> = fetch('URL');
