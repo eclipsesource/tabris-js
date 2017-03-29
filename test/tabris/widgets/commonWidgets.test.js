@@ -55,9 +55,9 @@ describe('Common Widgets', function() {
 
     expect(getCreate().type).to.equal('tabris.Button');
     expect(button.constructor.name).to.equal('Button');
-    expect(button.get('image')).to.equal(null);
-    expect(button.get('alignment')).to.equal('center');
-    expect(button.get('text')).to.equal('');
+    expect(button.image).to.equal(null);
+    expect(button.alignment).to.equal('center');
+    expect(button.text).to.equal('');
   });
 
   it('Button select', function() {
@@ -83,7 +83,7 @@ describe('Common Widgets', function() {
 
     expect(getCreate().type).to.equal('tabris.CheckBox');
     expect(checkBox.constructor.name).to.equal('CheckBox');
-    expect(checkBox.get('text')).to.equal('');
+    expect(checkBox.text).to.equal('');
   });
 
   it('CheckBox select', function() {
@@ -116,8 +116,8 @@ describe('Common Widgets', function() {
 
     expect(getCreate().type).to.equal('tabris.ImageView');
     expect(imageView.constructor.name).to.equal('ImageView');
-    expect(imageView.get('image')).to.equal(null);
-    expect(imageView.get('scaleMode')).to.equal('auto');
+    expect(imageView.image).to.equal(null);
+    expect(imageView.scaleMode).to.equal('auto');
   });
 
   it('ProgressBar', function() {
@@ -125,10 +125,10 @@ describe('Common Widgets', function() {
 
     expect(getCreate().type).to.equal('tabris.ProgressBar');
     expect(progressBar.constructor.name).to.equal('ProgressBar');
-    expect(progressBar.get('minimum')).to.equal(0);
-    expect(progressBar.get('maximum')).to.equal(100);
-    expect(progressBar.get('selection')).to.equal(0);
-    expect(progressBar.get('state')).to.equal('normal');
+    expect(progressBar.minimum).to.equal(0);
+    expect(progressBar.maximum).to.equal(100);
+    expect(progressBar.selection).to.equal(0);
+    expect(progressBar.state).to.equal('normal');
   });
 
   it('RadioButton', function() {
@@ -136,7 +136,7 @@ describe('Common Widgets', function() {
 
     expect(getCreate().type).to.equal('tabris.RadioButton');
     expect(radioButton.constructor.name).to.equal('RadioButton');
-    expect(radioButton.get('text')).to.equal('');
+    expect(radioButton.text).to.equal('');
   });
 
   it('RadioButton select', function() {
@@ -164,9 +164,9 @@ describe('Common Widgets', function() {
     expect(getCreate().type).to.equal('tabris.TextView');
     expect(getCreate().properties).to.deep.equal({text: 'foo'});
     expect(textView.constructor.name).to.equal('TextView');
-    expect(textView.get('alignment')).to.equal('left');
-    expect(textView.get('markupEnabled')).to.equal(false);
-    expect(textView.get('maxLines')).to.equal(null);
+    expect(textView.alignment).to.equal('left');
+    expect(textView.markupEnabled).to.equal(false);
+    expect(textView.maxLines).to.equal(null);
   });
 
   it('TextView, maxLines: 0 is mapped to null', function() {
@@ -187,8 +187,8 @@ describe('Common Widgets', function() {
     expect(getCreate().type).to.equal('tabris.Slider');
     expect(getCreate().properties).to.deep.equal({selection: 23});
     expect(slider.constructor.name).to.equal('Slider');
-    expect(slider.get('minimum')).to.equal(0);
-    expect(slider.get('maximum')).to.equal(100);
+    expect(slider.minimum).to.equal(0);
+    expect(slider.maximum).to.equal(100);
   });
 
   it('Slider select', function() {
@@ -228,17 +228,17 @@ describe('Common Widgets', function() {
     it('properties', function() {
       let textInput = new TextInput({text: 'foo'});
 
-      expect(textInput.get('message')).to.equal('');
-      expect(textInput.get('alignment')).to.equal('left');
-      expect(textInput.get('keyboard')).to.equal('default');
-      expect(textInput.get('autoCorrect')).to.equal(false);
+      expect(textInput.message).to.equal('');
+      expect(textInput.alignment).to.equal('left');
+      expect(textInput.keyboard).to.equal('default');
+      expect(textInput.autoCorrect).to.equal(false);
     });
 
     it('autoCapitalize property', function() {
       let textInput = new TextInput({text: 'foo'});
       stub(client, 'get', () => false);
 
-      expect(textInput.get('autoCapitalize')).to.equal(false);
+      expect(textInput.autoCapitalize).to.equal(false);
       expect(client.get).to.have.been.called;
     });
 
@@ -303,7 +303,7 @@ describe('Common Widgets', function() {
   it('Switch change:checked on property change', function() {
     widget = new Switch().on('change:checked', listener);
 
-    widget.set('checked', true);
+    widget.checked = true;
 
     expect(listener).to.have.been.calledOnce;
     expect(listener).to.have.been.calledWithMatch({target: widget, value: true});
@@ -324,9 +324,9 @@ describe('Common Widgets', function() {
 
     expect(getCreate().type).to.equal('tabris.ToggleButton');
     expect(toggleButton.constructor.name).to.equal('ToggleButton');
-    expect(toggleButton.get('text')).to.equal('');
-    expect(toggleButton.get('image')).to.equal(null);
-    expect(toggleButton.get('alignment')).to.equal('center');
+    expect(toggleButton.text).to.equal('');
+    expect(toggleButton.image).to.equal(null);
+    expect(toggleButton.alignment).to.equal('center');
   });
 
   it('ToggleButton change:checked', function() {

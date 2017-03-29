@@ -65,13 +65,13 @@ describe('Widget', function() {
     it('normalizes font string', function() {
       widget.set({font: 'bold italic   12px Arial'});
 
-      expect(widget.get('font')).to.eql('italic bold 12px Arial');
+      expect(widget.font).to.eql('italic bold 12px Arial');
     });
 
     it("returns 'initial' when no value is cached", function() {
       spy(client, 'get');
 
-      expect(widget.get('font')).to.eql('initial');
+      expect(widget.font).to.eql('initial');
       expect(client.get).not.to.have.been.called;
     });
 
@@ -85,21 +85,21 @@ describe('Widget', function() {
     it('prints warning when attempting to set bounds', function() {
       stub(console, 'warn');
 
-      widget.set('bounds', {left: 1, top: 2, width: 3, height: 4});
+      widget.bounds = {left: 1, top: 2, width: 3, height: 4};
 
       expect(client.calls({op: 'set'}).length).to.equal(0);
       expect(console.warn).to.have.been.calledWith('Can not set read-only property "bounds"');
     });
 
     it('sets elevation to value', function() {
-      widget.set('elevation', 8);
+      widget.elevation = 8;
 
       let call = client.calls({op: 'set'})[0];
       expect(call.properties.elevation).to.equal(8);
     });
 
     it('sets cornerRadius to value', function() {
-      widget.set('cornerRadius', 4);
+      widget.cornerRadius = 4;
 
       let call = client.calls({op: 'set'})[0];
       expect(call.properties.cornerRadius).to.equal(4);
@@ -108,7 +108,7 @@ describe('Widget', function() {
     ['light', 'dark', 'default'].forEach((value) => {
 
       it('sets win_theme to valid value', function() {
-        widget.set('win_theme', value);
+        widget.win_theme = value;
 
         let call = client.calls({op: 'set'})[0];
         expect(call.properties.win_theme).to.equal(value);
@@ -119,13 +119,13 @@ describe('Widget', function() {
     it('ignores setting win_theme to invalid value', function() {
       stub(console, 'warn');
 
-      widget.set('win_theme', 'foo');
+      widget.win_theme = 'foo';
 
       expect(client.calls({op: 'set'}).length).to.equal(0);
     });
 
     it('returns win_theme default value', function() {
-      expect(widget.get('win_theme')).to.equal('default');
+      expect(widget.win_theme).to.equal('default');
     });
 
     it("support 'initial' for textColor, background and font", function() {
@@ -140,31 +140,31 @@ describe('Widget', function() {
     });
 
     it('stores id property in widget.id', function() {
-      widget.set('id', 'foo');
+      widget.id = 'foo';
 
       expect(widget.id).to.equal('foo');
     });
 
     it('gets id property from widget.id', function() {
-      widget.set('id', 'foo');
+      widget.id = 'foo';
 
-      expect(widget.get('id')).to.equal('foo');
+      expect(widget.id).to.equal('foo');
     });
 
     it('stores class property in widget.classList', function() {
-      widget.set('class', 'foo bar');
+      widget.class = 'foo bar';
 
       expect(widget.classList).to.eql(['foo', 'bar']);
     });
 
     it('normalizes class property', function() {
-      widget.set('class', ' foo bar   foobar  ');
+      widget.class = ' foo bar   foobar  ';
 
-      expect(widget.get('class')).to.equal('foo bar foobar');
+      expect(widget.class).to.equal('foo bar foobar');
     });
 
     it('has default class property value', function() {
-      expect(widget.get('class')).to.equal('');
+      expect(widget.class).to.equal('');
       expect(widget.classList.length).to.equal(0);
     });
 
@@ -172,18 +172,18 @@ describe('Widget', function() {
       widget.classList.push('foo');
       widget.classList.push('bar');
 
-      expect(widget.get('class')).to.equal('foo bar');
+      expect(widget.class).to.equal('foo bar');
     });
 
     it('returns default initial default values', function() {
-      expect(widget.get('highlightOnTouch')).to.be.false;
-      expect(widget.get('enabled')).to.be.true;
-      expect(widget.get('visible')).to.be.true;
-      expect(widget.get('layoutData')).to.be.null;
-      expect(widget.get('elevation')).to.equal(0);
-      expect(widget.get('cornerRadius')).to.equal(0);
-      expect(widget.get('opacity')).to.equal(1);
-      expect(widget.get('transform')).to.eql({
+      expect(widget.highlightOnTouch).to.be.false;
+      expect(widget.enabled).to.be.true;
+      expect(widget.visible).to.be.true;
+      expect(widget.layoutData).to.be.null;
+      expect(widget.elevation).to.equal(0);
+      expect(widget.cornerRadius).to.equal(0);
+      expect(widget.opacity).to.equal(1);
+      expect(widget.transform).to.eql({
         rotation: 0,
         scaleX: 1,
         scaleY: 1,
@@ -922,7 +922,7 @@ describe('Widget', function() {
     it('translates textColor to string', function() {
       stub(client, 'get').returns([170, 255, 0, 128]);
 
-      let result = widget.get('textColor');
+      let result = widget.textColor;
 
       expect(result).to.equal('rgba(170, 255, 0, 0.5)');
     });
@@ -930,7 +930,7 @@ describe('Widget', function() {
     it('translates background to string', function() {
       stub(client, 'get').returns([170, 255, 0, 128]);
 
-      let result = widget.get('background');
+      let result = widget.background;
 
       expect(result).to.equal('rgba(170, 255, 0, 0.5)');
     });
@@ -938,7 +938,7 @@ describe('Widget', function() {
     it('translates background null to string', function() {
       stub(client, 'get').returns(null);
 
-      let result = widget.get('background');
+      let result = widget.background;
 
       expect(result).to.equal('rgba(0, 0, 0, 0)');
     });
@@ -946,7 +946,7 @@ describe('Widget', function() {
     it('translates bounds to object', function() {
       stub(client, 'get').returns([1, 2, 3, 4]);
 
-      let result = widget.get('bounds');
+      let result = widget.bounds;
 
       expect(result).to.eql({left: 1, top: 2, width: 3, height: 4});
     });
@@ -954,7 +954,7 @@ describe('Widget', function() {
     it('translates bounds to object', function() {
       stub(client, 'get').returns([1, 2, 3, 4]);
 
-      let result = widget.get('bounds');
+      let result = widget.bounds;
 
       expect(result).to.eql({left: 1, top: 2, width: 3, height: 4});
     });
@@ -962,7 +962,7 @@ describe('Widget', function() {
     it('translates backgroundImage to object', function() {
       stub(client, 'get').returns(['foo', 23, 42]);
 
-      let result = widget.get('backgroundImage');
+      let result = widget.backgroundImage;
 
       expect(result).to.eql({src: 'foo', width: 23, height: 42});
     });
@@ -981,54 +981,54 @@ describe('Widget', function() {
     });
 
     it('return null for undefined layoutData', function() {
-      expect(widget.get('layoutData')).to.be.null;
+      expect(widget.layoutData).to.be.null;
     });
 
     it('store layoutData property locally', function() {
-      widget.set('layoutData', {top: 10, left: ['#other', 10]});
+      widget.layoutData = {top: 10, left: ['#other', 10]};
 
-      expect(widget.get('layoutData')).to.eql({top: 10, left: ['#other', 10]});
+      expect(widget.layoutData).to.eql({top: 10, left: ['#other', 10]});
     });
 
     it('getter does not translate selectors', function() {
-      widget.set('layoutData', {top: '#other', left: ['#other', 42]});
+      widget.layoutData = {top: '#other', left: ['#other', 42]};
 
-      expect(widget.get('layoutData')).to.eql({top: '#other', left: ['#other', 42]});
+      expect(widget.layoutData).to.eql({top: '#other', left: ['#other', 42]});
     });
 
     it('getter does not translate widgets', function() {
-      widget.set('layoutData', {top: other, left: [other, 42]});
+      widget.layoutData = {top: other, left: [other, 42]};
 
-      expect(widget.get('layoutData')).to.eql({top: other, left: [other, 42]});
+      expect(widget.layoutData).to.eql({top: other, left: [other, 42]});
     });
 
     it('getter returns normalized percentages in arrays', function() {
-      widget.set('layoutData', {left: '32%', top: [23, 42]});
+      widget.layoutData = {left: '32%', top: [23, 42]};
 
-      expect(widget.get('layoutData')).to.eql({left: '32%', top: ['23%', 42]});
+      expect(widget.layoutData).to.eql({left: '32%', top: ['23%', 42]});
     });
 
     it('getter returns arrays with zero percentage as plain offset', function() {
-      widget.set('layoutData', {left: '32%', top: [0, 42]});
+      widget.layoutData = {left: '32%', top: [0, 42]};
 
-      expect(widget.get('layoutData')).to.eql({left: '32%', top: 42});
+      expect(widget.layoutData).to.eql({left: '32%', top: 42});
     });
 
     it('getter normalizes arrays with zero offset', function() {
-      widget.set('layoutData', {left: ['#other', 0], top: [33, 0]});
+      widget.layoutData = {left: ['#other', 0], top: [33, 0]};
 
-      expect(widget.get('layoutData')).to.eql({left: '#other', top: '33%'});
+      expect(widget.layoutData).to.eql({left: '#other', top: '33%'});
     });
 
     it('getter replaces zero percentage', function() {
-      widget.set('layoutData', {left: '0%', top: ['0%', 23]});
+      widget.layoutData = {left: '0%', top: ['0%', 23]};
 
-      expect(widget.get('layoutData')).to.eql({left: 0, top: 23});
+      expect(widget.layoutData).to.eql({left: 0, top: 23});
     });
 
     it('SET layoutData after widget referenced by selector is added to parent', function() {
       other.dispose();
-      widget.set('layoutData', {left: 23, baseline: '#other', right: ['#other', 42]});
+      widget.layoutData = {left: 23, baseline: '#other', right: ['#other', 42]};
       other = new TestWidget({id: 'other'}).appendTo(parent);
 
       let call = client.calls({op: 'set', id: widget.cid})[0];
@@ -1039,7 +1039,7 @@ describe('Widget', function() {
     it('SET layoutData after self is added to parent', function() {
       widget = new TestWidget();
 
-      widget.set('layoutData', {left: 23, baseline: '#other', right: ['#other', 42]});
+      widget.layoutData = {left: 23, baseline: '#other', right: ['#other', 42]};
       widget.appendTo(parent);
 
       let call = client.calls({op: 'create'})[0];
@@ -1048,7 +1048,7 @@ describe('Widget', function() {
     });
 
     it('SET preliminary layoutData if selector does not resolve in flush', function() {
-      widget.set('layoutData', {left: 23, baseline: '#mother', right: ['other', 42]});
+      widget.layoutData = {left: 23, baseline: '#mother', right: ['other', 42]};
 
       let call = client.calls({op: 'set'})[0];
       let expected = {left: 23, baseline: 0, right: [0, 42]};
@@ -1058,7 +1058,7 @@ describe('Widget', function() {
     it('SET layoutData again until selector resolves by adding sibling', function() {
       other.dispose();
 
-      widget.set('layoutData', {right: '#other'});
+      widget.layoutData = {right: '#other'};
       let withoutSibling = client.calls({op: 'set'});
       let retry = client.calls({op: 'set'});
       other = new TestWidget({id: 'other'}).appendTo(parent);
@@ -1079,7 +1079,7 @@ describe('Widget', function() {
       widget.appendTo(oldParent);
       client.resetCalls();
 
-      widget.set('layoutData', {right: '#other'});
+      widget.layoutData = {right: '#other'};
       let withoutParent = client.calls({op: 'set'});
       let retry = client.calls({op: 'set'});
       widget.appendTo(parent);
@@ -1112,15 +1112,15 @@ describe('Widget', function() {
       it('modifies layoutData', function() {
         widget.set(attr, ['#other', 10]);
 
-        expect(widget.get('layoutData')[attr]).to.eql(['#other', 10]);
+        expect(widget.layoutData[attr]).to.eql(['#other', 10]);
       });
 
       it('resets layoutData properties', function() {
         let layoutData = {left: 1, right: 2, top: 3, bottom: 4};
-        widget.set('layoutData', layoutData);
+        widget.layoutData = layoutData;
         widget.set(attr, null);
 
-        expect(widget.get('layoutData')).to.eql(omit(layoutData, attr));
+        expect(widget.layoutData).to.eql(omit(layoutData, attr));
       });
 
       it('getter does not translate selectors', function() {
@@ -1175,15 +1175,15 @@ describe('Widget', function() {
       it('modifies layoutData', function() {
         widget.set(attr, 23);
 
-        expect(widget.get('layoutData')[attr]).to.equal(23);
+        expect(widget.layoutData[attr]).to.equal(23);
       });
 
       it('resets layoutData properties', function() {
         let layoutData = {centerX: 0, centerY: 0, width: 100, height: 200};
-        widget.set('layoutData', layoutData);
+        widget.layoutData = layoutData;
         widget.set(attr, null);
 
-        expect(widget.get('layoutData')).to.eql(omit(layoutData, attr));
+        expect(widget.layoutData).to.eql(omit(layoutData, attr));
       });
 
       it('SETs layoutData', function() {
@@ -1200,7 +1200,10 @@ describe('Widget', function() {
     it('contradicting attributes can be set temporarily without warning', function() {
       stub(console, 'warn');
 
-      widget.set('left', 10).set('width', 10).set('right', 10).set('left', null);
+      widget.left = 10;
+      widget.width = 10;
+      widget.right = 10;
+      widget.left = null;
 
       let call = client.calls({op: 'set'})[0];
       let expected = {right: 10, width: 10};
@@ -1211,7 +1214,9 @@ describe('Widget', function() {
     it('contradicting attributes will be warned against on flush', function() {
       stub(console, 'warn');
 
-      widget.set('left', 10).set('width', 10).set('right', 10);
+      widget.left = 10;
+      widget.width = 10;
+      widget.right = 10;
 
       let call = client.calls({op: 'set'})[0];
       let expected = {right: 10, left: 10};

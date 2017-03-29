@@ -37,11 +37,11 @@ describe('Tab', function() {
 
     it('getter returns initial properties', function() {
       tab = new Tab();
-      expect(tab.get('title')).to.equal('');
-      expect(tab.get('image')).to.equal(null);
-      expect(tab.get('selectedImage')).to.equal(null);
-      expect(tab.get('badge')).to.equal('');
-      expect(tab.get('visible')).to.equal(true);
+      expect(tab.title).to.equal('');
+      expect(tab.image).to.equal(null);
+      expect(tab.selectedImage).to.equal(null);
+      expect(tab.badge).to.equal('');
+      expect(tab.visible).to.equal(true);
     });
 
     it('throws when appended to an illegal parent', function() {

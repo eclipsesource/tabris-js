@@ -42,7 +42,7 @@ describe('Picker', function() {
 
     it('select', function() {
       picker.on('select', listener);
-      picker.set('items', ['foo', 'bar']);
+      picker.items = ['foo', 'bar'];
 
       tabris._notify(picker.cid, 'select', {selectionIndex: 1});
 
@@ -53,7 +53,7 @@ describe('Picker', function() {
 
     it('change:selection on interactive change', function() {
       picker.on('change:selection', listener);
-      picker.set('items', ['foo', 'bar']);
+      picker.items = ['foo', 'bar'];
 
       tabris._notify(picker.cid, 'select', {selectionIndex: 1});
 
@@ -64,9 +64,9 @@ describe('Picker', function() {
 
     it('change:selection on programmatic change', function() {
       picker.on('change:selection', listener);
-      picker.set('items', ['foo', 'bar']);
+      picker.items = ['foo', 'bar'];
 
-      picker.set('selection', 'foo');
+      picker.selection = 'foo';
 
       expect(listener).to.have.been.calledOnce;
       expect(listener).to.have.been.calledWithMatch({target: picker, value: 'foo'});
@@ -93,28 +93,30 @@ describe('Picker', function() {
     describe('items', function() {
 
       it('initial value is empty array', function() {
-        expect(picker.get('items')).to.eql([]);
+        expect(picker.items).to.eql([]);
       });
 
       it('initial value is a safe copy', function() {
-        picker.get('items').push(23);
+        picker.items.push(23);
 
-        expect(picker.get('items')).to.eql([]);
+        expect(picker.items).to.eql([]);
       });
 
       it('converts null to empty array', function() {
-        expect(picker.set('items', null).get('items')).to.eql([]);
+        picker.items = null;
+
+        expect(picker.items).to.eql([]);
       });
 
       it('set SETs items property', function() {
-        picker.set('items', ['a', 'b', 'c']);
+        picker.items = ['a', 'b', 'c'];
 
         let call = client.calls({op: 'set', id: picker.cid})[0];
         expect(call.properties).to.eql({items: ['a', 'b', 'c']});
       });
 
       it('get does not GET from client', function() {
-        picker.get('items');
+        picker.items;
 
         expect(client.calls({op: 'get', id: picker.cid}).length).to.equal(0);
       });
@@ -124,11 +126,11 @@ describe('Picker', function() {
     describe('itemText', function() {
 
       it('initial value is function', function() {
-        expect(picker.get('itemText')).to.be.a('function');
+        expect(picker.itemText).to.be.a('function');
       });
 
       it('initial function translates to string', function() {
-        let fn = picker.get('itemText');
+        let fn = picker.itemText;
 
         expect(fn('foo')).to.equal('foo');
         expect(fn(23)).to.equal('23');
@@ -137,7 +139,7 @@ describe('Picker', function() {
       });
 
       it('does not SET property on client', function() {
-        picker.set('itemText', function(item) { return item.name; });
+        picker.itemText = function(item) { return item.name; };
 
         expect(client.calls({op: 'set', id: picker.cid}).length).to.equal(0);
       });
@@ -147,7 +149,7 @@ describe('Picker', function() {
     describe('selectionIndex', function() {
 
       it('set SETs selectionIndex', function() {
-        picker.set('selectionIndex', 23);
+        picker.selectionIndex = 23;
 
         expect(client.calls({op: 'set', id: picker.cid})[0].properties).to.eql({selectionIndex: 23});
       });
@@ -157,23 +159,23 @@ describe('Picker', function() {
     it('get GETs selectionIndex', function() {
       stub(client, 'get').returns(23);
 
-      expect(picker.get('selectionIndex')).to.equal(23);
+      expect(picker.selectionIndex).to.equal(23);
       expect(client.get).to.have.been.calledWith(picker.cid, 'selectionIndex');
     });
 
     describe('selection', function() {
 
       it('get returns items entry', function() {
-        picker.set('items', ['foo', 'bar']);
+        picker.items = ['foo', 'bar'];
         stub(client, 'get').returns(1);
 
-        expect(picker.get('selection')).to.equal('bar');
+        expect(picker.selection).to.equal('bar');
       });
 
       it('set SETs selectionIndex', function() {
-        picker.set('items', ['foo', 'bar']);
+        picker.items = ['foo', 'bar'];
 
-        picker.set('selection', 'bar');
+        picker.selection = 'bar';
 
         expect(client.calls({op: 'set', id: picker.cid})[0].properties.selectionIndex).to.equal(1);
       });

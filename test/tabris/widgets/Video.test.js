@@ -35,18 +35,18 @@ describe('Video', function() {
   describe('get', function() {
 
     it('returns initial default property values', function() {
-      expect(video.get('url')).to.equal('');
-      expect(video.get('controlsVisible')).to.equal(true);
-      expect(video.get('autoPlay')).to.equal(true);
+      expect(video.url).to.equal('');
+      expect(video.controlsVisible).to.equal(true);
+      expect(video.autoPlay).to.equal(true);
     });
 
     it('GETs read-only properties', function() {
       stub(client, 'get').returns('native value');
 
-      expect(video.get('speed')).to.equal('native value');
-      expect(video.get('position')).to.equal('native value');
-      expect(video.get('duration')).to.equal('native value');
-      expect(video.get('state')).to.equal('native value');
+      expect(video.speed).to.equal('native value');
+      expect(video.position).to.equal('native value');
+      expect(video.duration).to.equal('native value');
+      expect(video.state).to.equal('native value');
     });
 
   });

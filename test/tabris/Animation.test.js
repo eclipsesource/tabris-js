@@ -89,8 +89,8 @@ describe('Animation', function() {
 
     it('caches animated properties in widget', function() {
       widget.animate({opacity: 0.4, transform: {rotation: 0.5}}, {});
-      expect(widget.get('opacity')).to.equal(0.4);
-      expect(widget.get('transform')).to.eql({
+      expect(widget.opacity).to.equal(0.4);
+      expect(widget.transform).to.eql({
         rotation: 0.5,
         scaleX: 1,
         scaleY: 1,
@@ -101,13 +101,13 @@ describe('Animation', function() {
     });
 
     it('caches only valid properties in widget', function() {
-      widget.set('foo', 1);
+      widget.foo = 1;
 
       widget.animate({opacity: 0.4, transform: {foo: 0.5}, foo: 2}, {});
 
-      expect(widget.get('foo')).to.equal(1);
-      expect(widget.get('opacity')).to.equal(0.4);
-      expect(widget.get('transform')).to.eql({
+      expect(widget.foo).to.equal(1);
+      expect(widget.opacity).to.equal(0.4);
+      expect(widget.transform).to.eql({
         rotation: 0,
         scaleX: 1,
         scaleY: 1,

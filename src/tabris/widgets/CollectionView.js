@@ -133,7 +133,7 @@ export default class CollectionView extends Widget {
       cell._parent = this;
       this._addChild(cell);
       this._nativeCall('addItem', {widget: cell.cid});
-      let initializeCell = this.get('initializeCell');
+      let initializeCell = this.initializeCell;
       if (typeof initializeCell !== 'function') {
         console.warn('initializeCell callback missing');
       } else {

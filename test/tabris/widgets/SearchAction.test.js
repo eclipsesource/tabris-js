@@ -43,7 +43,7 @@ describe('SearchAction', function() {
     });
 
     it('translates placement priority to uppercase', function() {
-      action.set('placementPriority', 'low');
+      action.placementPriority = 'low';
 
       let call = client.calls({op: 'set'})[0];
       expect(call.properties.placementPriority).to.equal('low');
@@ -61,20 +61,20 @@ describe('SearchAction', function() {
     });
 
     it('returns cached placementPriority', function() {
-      action.set('placementPriority', 'low');
+      action.placementPriority = 'low';
 
-      let result = action.get('placementPriority');
+      let result = action.placementPriority;
 
       expect(result).to.equal('low');
     });
 
     it('returns initial values', function() {
-      expect(action.get('enabled')).to.equal(true);
-      expect(action.get('image')).to.equal(null);
-      expect(action.get('title')).to.equal('');
-      expect(action.get('visible')).to.equal(true);
-      expect(action.get('proposals')).to.eql([]);
-      expect(action.get('placementPriority')).to.equal('normal');
+      expect(action.enabled).to.equal(true);
+      expect(action.image).to.equal(null);
+      expect(action.title).to.equal('');
+      expect(action.visible).to.equal(true);
+      expect(action.proposals).to.eql([]);
+      expect(action.placementPriority).to.equal('normal');
     });
 
   });

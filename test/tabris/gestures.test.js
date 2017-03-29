@@ -27,8 +27,8 @@ describe('gestures:', function() {
     return client.calls({op: 'create', type: 'TestType'});
   }
 
-  it('get returns object with pre-configured gestures as initial value', function() {
-    let gestures = new TestType().get('gestures');
+  it('getter returns object with pre-configured gestures as initial value', function() {
+    let gestures = new TestType().gestures;
     expect(gestures.tap).to.eql({type: 'tap'});
     expect(gestures.longpress).to.eql({type: 'longpress'});
   });
@@ -51,20 +51,19 @@ describe('gestures:', function() {
     });
 
     it('extends pre-configured gestures', function() {
-      let gestures = widget.get('gestures');
-      expect(gestures.foo).to.eql({type: 'tap', fingers: 2});
-      expect(gestures.tap).to.eql({type: 'tap'});
+      expect(widget.gestures.foo).to.eql({type: 'tap', fingers: 2});
+      expect(widget.gestures.tap).to.eql({type: 'tap'});
     });
 
-    it('prevent overwriting global default gestures', function() {
-      let defaultGestures = new TestType().get('gestures');
+    it('prevents overwriting global default gestures', function() {
+      let defaultGestures = new TestType().gestures;
       defaultGestures.tap = false;
-      expect(new TestType().get('gestures').tap).to.eql({type: 'tap'});
+      expect(new TestType().gestures.tap).to.eql({type: 'tap'});
     });
 
     it('allows overwriting pre-configured gestures', function() {
-      widget.set('gestures', {tap: {type: 'tap', touches: 2}});
-      expect(widget.get('gestures').tap).to.eql({type: 'tap', touches: 2});
+      widget.gestures = {tap: {type: 'tap', touches: 2}};
+      expect(widget.gestures.tap).to.eql({type: 'tap', touches: 2});
     });
 
     describe('and adding matching gesture listener', function() {

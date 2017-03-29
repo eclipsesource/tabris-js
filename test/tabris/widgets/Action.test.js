@@ -43,7 +43,7 @@ describe('Action', function() {
     });
 
     it('translates placement priority to uppercase', function() {
-      action.set('placementPriority', 'low');
+      action.placementPriority = 'low';
 
       let call = client.calls({op: 'set'})[0];
       expect(call.properties.placementPriority).to.equal('LOW');
@@ -61,15 +61,15 @@ describe('Action', function() {
     });
 
     it('returns initial default property values', function() {
-      expect(action.get('image')).to.equal(null);
-      expect(action.get('visible')).to.equal(true);
-      expect(action.get('placementPriority')).to.equal('normal');
+      expect(action.image).to.equal(null);
+      expect(action.visible).to.equal(true);
+      expect(action.placementPriority).to.equal('normal');
     });
 
     it('returns cached placementPriority', function() {
-      action.set('placementPriority', 'low');
+      action.placementPriority = 'low';
 
-      let result = action.get('placementPriority');
+      let result = action.placementPriority;
 
       expect(result).to.equal('low');
     });

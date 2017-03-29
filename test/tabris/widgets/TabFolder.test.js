@@ -23,11 +23,11 @@ describe('TabFolder', function() {
   });
 
   it('paging is false', function() {
-    expect(tabFolder.get('paging')).to.equal(false);
+    expect(tabFolder.paging).to.equal(false);
   });
 
   it('returns initial property values', function() {
-    expect(tabFolder.get('paging')).to.equal(false);
+    expect(tabFolder.paging).to.equal(false);
   });
 
   describe('when a Tab is appended', function() {
@@ -56,10 +56,10 @@ describe('TabFolder', function() {
     it('getter gets tab properties from cache', function() {
       tab.set({title: 'foo', 'badge': 'bar', image: 'foobar.jpg', selectedImage: 'selectedFoobar.jpg'});
 
-      expect(tab.get('title')).to.equal('foo');
-      expect(tab.get('badge')).to.equal('bar');
-      expect(tab.get('image')).to.eql({src: 'foobar.jpg'});
-      expect(tab.get('selectedImage')).to.eql({src: 'selectedFoobar.jpg'});
+      expect(tab.title).to.equal('foo');
+      expect(tab.badge).to.equal('bar');
+      expect(tab.image).to.eql({src: 'foobar.jpg'});
+      expect(tab.selectedImage).to.eql({src: 'selectedFoobar.jpg'});
     });
 
     it('children list contains only the tab', function() {
@@ -118,7 +118,7 @@ describe('TabFolder', function() {
   describe('when paging is set', function() {
 
     beforeEach(function() {
-      tabFolder.set('paging', true);
+      tabFolder.paging = true;
     });
 
     it("sets the 'paging' property", function() {
@@ -127,7 +127,7 @@ describe('TabFolder', function() {
     });
 
     it('getter reflects change', function() {
-      expect(tabFolder.get('paging')).to.equal(true);
+      expect(tabFolder.paging).to.equal(true);
     });
 
   });
@@ -141,7 +141,7 @@ describe('TabFolder', function() {
     });
 
     it('Setting a Tab SETs tab id', function() {
-      tabFolder.set('selection', tab);
+      tabFolder.selection = tab;
 
       let setCall = client.calls({op: 'set', id: tabFolder.cid})[0];
       expect(setCall.properties.selection).to.equal(tab.cid);
@@ -151,7 +151,7 @@ describe('TabFolder', function() {
       let listener = spy();
       tabFolder.on('change:selection', listener);
 
-      tabFolder.set('selection', tab);
+      tabFolder.selection = tab;
 
       expect(listener).to.have.been.calledOnce;
       expect(listener.firstCall).to.have.been.calledWithMatch({target: tabFolder, value: tab});
@@ -160,7 +160,7 @@ describe('TabFolder', function() {
     it('Ignores setting null with warning', function() {
       stub(console, 'warn');
 
-      tabFolder.set('selection', null);
+      tabFolder.selection = null;
 
       let calls = client.calls({op: 'set', id: tabFolder.cid});
       expect(calls.length).to.equal(0);
@@ -171,7 +171,7 @@ describe('TabFolder', function() {
       stub(console, 'warn');
       tab.dispose();
 
-      tabFolder.set('selection', tab);
+      tabFolder.selection = tab;
 
       let calls = client.calls({op: 'set', id: tabFolder.cid});
       expect(calls.length).to.equal(0);
@@ -181,7 +181,7 @@ describe('TabFolder', function() {
     it('Ignores setting non tab', function() {
       stub(console, 'warn');
 
-      tabFolder.set('selection', 'foo');
+      tabFolder.selection = 'foo';
 
       let calls = client.calls({op: 'set', id: tabFolder.cid});
       expect(calls.length).to.equal(0);
@@ -191,11 +191,11 @@ describe('TabFolder', function() {
     it('Get returns Tab', function() {
       stub(client, 'get').returns(tab.cid);
 
-      expect(tabFolder.get('selection')).to.equal(tab);
+      expect(tabFolder.selection).to.equal(tab);
     });
 
     it('Get returns null', function() {
-      expect(tabFolder.get('selection')).to.be.null;
+      expect(tabFolder.selection).to.be.null;
     });
 
     it('supports native event change:selection', function() {
@@ -237,7 +237,7 @@ describe('TabFolder', function() {
       spy(client, 'get');
       tabFolder = new TabFolder({tabBarLocation: 'top'});
 
-      let result = tabFolder.get('tabBarLocation');
+      let result = tabFolder.tabBarLocation;
 
       expect(client.get).to.have.not.been.called;
       expect(result).to.equal('top');
@@ -290,7 +290,7 @@ describe('TabFolder', function() {
       spy(client, 'get');
       tabFolder = new TabFolder({tabMode: 'fixed'});
 
-      let result = tabFolder.get('tabMode');
+      let result = tabFolder.tabMode;
 
       expect(client.get).to.have.not.been.called;
       expect(result).to.equal('fixed');

@@ -43,12 +43,12 @@ describe('CollectionView', function() {
     });
 
     it('returns default property values', function() {
-      expect(view.get('itemHeight')).to.equal(0);
-      expect(view.get('items', [])).to.eql([]);
-      expect(view.get('initializeCell')).to.equal(null);
-      expect(view.get('cellType')).to.equal(null);
-      expect(view.get('refreshEnabled')).to.equal(false);
-      expect(view.get('refreshMessage')).to.equal('');
+      expect(view.itemHeight).to.equal(0);
+      expect(view.items).to.eql([]);
+      expect(view.initializeCell).to.equal(null);
+      expect(view.cellType).to.equal(null);
+      expect(view.refreshEnabled).to.equal(false);
+      expect(view.refreshMessage).to.equal('');
     });
 
     describe('refreshIndicator', function() {
@@ -56,7 +56,7 @@ describe('CollectionView', function() {
       it('calls native GET', function() {
         stub(client, 'get').returns(false);
 
-        expect(view.get('refreshIndicator')).to.equal(false);
+        expect(view.refreshIndicator).to.equal(false);
       });
 
     });
@@ -152,12 +152,12 @@ describe('CollectionView', function() {
       beforeEach(function() {
         client.resetCalls();
         spy(client, 'set');
-        view.set('cellType', cellTypeFn);
+        view.cellType = cellTypeFn;
         tabris._nativeBridge.flush();
       });
 
       it('returns the given function', function() {
-        expect(view.get('cellType')).to.equal(cellTypeFn);
+        expect(view.cellType).to.equal(cellTypeFn);
       });
 
       it('does not SET native property', function() {
@@ -171,12 +171,12 @@ describe('CollectionView', function() {
       beforeEach(function() {
         client.resetCalls();
         spy(client, 'set');
-        view.set('cellType', 'foo');
+        view.cellType = 'foo';
         tabris._nativeBridge.flush();
       });
 
       it('returns the given string', function() {
-        expect(view.get('cellType')).to.equal('foo');
+        expect(view.cellType).to.equal('foo');
       });
 
       it('does not SET native property', function() {
@@ -192,12 +192,12 @@ describe('CollectionView', function() {
       beforeEach(function() {
         client.resetCalls();
         spy(client, 'set');
-        view.set('itemHeight', itemHeightFn);
+        view.itemHeight = itemHeightFn;
         tabris._nativeBridge.flush();
       });
 
       it('returns the given function', function() {
-        expect(view.get('itemHeight')).to.equal(itemHeightFn);
+        expect(view.itemHeight).to.equal(itemHeightFn);
       });
 
       it('does not SET native property', function() {
@@ -210,12 +210,12 @@ describe('CollectionView', function() {
 
       beforeEach(function() {
         client.resetCalls();
-        view.set('itemHeight', 23);
+        view.itemHeight = 23;
         tabris._nativeBridge.flush();
       });
 
       it('returns the given number', function() {
-        expect(view.get('itemHeight')).to.equal(23);
+        expect(view.itemHeight).to.equal(23);
       });
 
       it('SETs native property', function() {
@@ -232,11 +232,11 @@ describe('CollectionView', function() {
       beforeEach(function() {
         initializeCell = spy();
         client.resetCalls();
-        view.set('initializeCell', initializeCell);
+        view.initializeCell = initializeCell;
       });
 
       it('returns same function in get', function() {
-        expect(view.get('initializeCell')).to.equal(initializeCell);
+        expect(view.initializeCell).to.equal(initializeCell);
       });
 
       it('does not SET property on client', function() {
@@ -250,7 +250,7 @@ describe('CollectionView', function() {
         beforeEach(function() {
           items = ['a', 'b', 'c'];
           client.resetCalls();
-          view.set('items', items);
+          view.items = items;
           tabris.trigger('flush');
         });
 
@@ -260,7 +260,7 @@ describe('CollectionView', function() {
         });
 
         it('items are kept by reference (no defensive copy)', function() {
-          expect(view.get('items')).to.equal(items);
+          expect(view.items).to.equal(items);
         });
 
         describe('when requestinfo event is received', function() {
@@ -279,8 +279,8 @@ describe('CollectionView', function() {
           describe('when cellType is set to a function', function() {
 
             beforeEach(function() {
-              view.set('cellType', cellTypeFn);
-              view.set('itemHeight', 50);
+              view.cellType = cellTypeFn;
+              view.itemHeight = 50;
               tabris._nativeBridge.flush();
               view._trigger('requestinfo', {index: 0});
               view._trigger('requestinfo', {index: 1});
@@ -317,7 +317,7 @@ describe('CollectionView', function() {
           describe('when cellType is set to a string', function() {
 
             beforeEach(function() {
-              view.set('cellType', 'foo');
+              view.cellType = 'foo';
               tabris._nativeBridge.flush();
               view._trigger('requestinfo', {index: 0});
               describeCalls = client.calls({op: 'call', method: 'describeItem'});
@@ -332,7 +332,7 @@ describe('CollectionView', function() {
           describe('when itemHeight is set to a function', function() {
 
             beforeEach(function() {
-              view.set('itemHeight', itemHeightFn);
+              view.itemHeight = itemHeightFn;
               tabris._nativeBridge.flush();
               view._trigger('requestinfo', {index: 0});
               view._trigger('requestinfo', {index: 1});
@@ -357,8 +357,8 @@ describe('CollectionView', function() {
           describe('when both cellType and itemHeight is set to a function', function() {
 
             beforeEach(function() {
-              view.set('cellType', cellTypeFn);
-              view.set('itemHeight', itemHeightFn);
+              view.cellType = cellTypeFn;
+              view.itemHeight = itemHeightFn;
               tabris._nativeBridge.flush();
               view._trigger('requestinfo', {index: 0});
               view._trigger('requestinfo', {index: 1});
@@ -383,7 +383,7 @@ describe('CollectionView', function() {
           describe('when itemHeight is set to a number', function() {
 
             beforeEach(function() {
-              view.set('itemHeight', 23);
+              view.itemHeight = 23;
               tabris._nativeBridge.flush();
               view._trigger('requestinfo', {index: 0});
               describeCalls = client.calls({op: 'call', method: 'describeItem'});
@@ -407,7 +407,7 @@ describe('CollectionView', function() {
 
           beforeEach(function() {
             client.resetCalls();
-            view.set('items', ['e', 'f']);
+            view.items = ['e', 'f'];
             tabris.trigger('flush');
           });
 
@@ -422,7 +422,7 @@ describe('CollectionView', function() {
 
           beforeEach(function() {
             client.resetCalls();
-            view.set('items', null);
+            view.items = null;
             tabris.trigger('flush');
           });
 
@@ -432,7 +432,7 @@ describe('CollectionView', function() {
           });
 
           it('sets items to empty array', function() {
-            expect(view.get('items')).to.eql([]);
+            expect(view.items).to.eql([]);
           });
 
         });
@@ -569,7 +569,7 @@ describe('CollectionView', function() {
 
               expect(listener).to.have.been.calledOnce;
               expect(listener).to.have.been.calledWithMatch({target: cell, value: 'a'});
-              expect(cell.get('item')).to.equal('a');
+              expect(cell.item).to.equal('a');
               expect(console.warn).to.have.not.been.called;
             });
 
@@ -581,7 +581,7 @@ describe('CollectionView', function() {
               view._trigger('populateitem', {widget: cell.cid, index: 0});
 
               expect(listener).to.have.been.calledWithMatch({target: cell, value: 'a'});
-              expect(cell.get('item')).to.equal('a');
+              expect(cell.item).to.equal('a');
               expect(console.warn).to.have.not.been.called;
             });
 
@@ -593,7 +593,7 @@ describe('CollectionView', function() {
 
               expect(listener).to.have.been.calledOnce;
               expect(listener).to.have.been.calledWithMatch({target: cell, value: 0});
-              expect(cell.get('itemIndex')).to.equal(0);
+              expect(cell.itemIndex).to.equal(0);
               expect(console.warn).to.have.not.been.called;
             });
 
@@ -627,7 +627,7 @@ describe('CollectionView', function() {
       view._trigger('createitem', {type: 0});
       let createCalls = client.calls({op: 'create', type: 'tabris.Composite'});
       let cell = tabris._proxies.find(createCalls[createCalls.length - 1].id);
-      view._trigger('populateitem', {widget: cell.cid, index: view.get('items').indexOf(item)});
+      view._trigger('populateitem', {widget: cell.cid, index: view.items.indexOf(item)});
       return cell;
     }
 
@@ -657,13 +657,13 @@ describe('CollectionView', function() {
       it('can prepend to items array', function() {
         view.insert(['d', 'e'], 0);
 
-        expect(view.get('items')).to.eql(['d', 'e', 'A', 'B', 'C']);
+        expect(view.items).to.eql(['d', 'e', 'A', 'B', 'C']);
       });
 
       it('can append to items array', function() {
         view.insert(['d', 'e'], 3);
 
-        expect(view.get('items')).to.eql(['A', 'B', 'C', 'd', 'e']);
+        expect(view.items).to.eql(['A', 'B', 'C', 'd', 'e']);
       });
 
       it('calls native update', function() {
@@ -678,7 +678,7 @@ describe('CollectionView', function() {
 
         let updateCall = client.calls({op: 'call', method: 'update', id: view.cid})[0];
         expect(updateCall.parameters).to.eql({insert: [3, 2]});
-        expect(view.get('items')).to.eql(['A', 'B', 'C', 'd', 'e']);
+        expect(view.items).to.eql(['A', 'B', 'C', 'd', 'e']);
       });
 
       it('handles negative index', function() {
@@ -686,7 +686,7 @@ describe('CollectionView', function() {
 
         let updateCall = client.calls({op: 'call', method: 'update', id: view.cid})[0];
         expect(updateCall.parameters).to.eql({insert: [2, 2]});
-        expect(view.get('items')).to.eql(['A', 'B', 'd', 'e', 'C']);
+        expect(view.items).to.eql(['A', 'B', 'd', 'e', 'C']);
       });
 
       it('adjusts index to bounds', function() {
@@ -694,7 +694,7 @@ describe('CollectionView', function() {
 
         let call = client.calls({op: 'call', method: 'update', id: view.cid})[0];
         expect(call.parameters).to.eql({insert: [3, 1]});
-        expect(view.get('items')).to.eql(['A', 'B', 'C', 'x']);
+        expect(view.items).to.eql(['A', 'B', 'C', 'x']);
       });
 
       it('adjusts negative index to bounds', function() {
@@ -702,7 +702,7 @@ describe('CollectionView', function() {
 
         let call = client.calls({op: 'call', method: 'update', id: view.cid})[0];
         expect(call.parameters).to.eql({insert: [0, 1]});
-        expect(view.get('items')).to.eql(['x', 'A', 'B', 'C']);
+        expect(view.items).to.eql(['x', 'A', 'B', 'C']);
       });
 
       it('fails when index is not a number', function() {
@@ -718,7 +718,7 @@ describe('CollectionView', function() {
       });
 
       it('adjusts cells itemIndex properties', function() {
-        view.set('items', ['A', 'B', 'C', 'D', 'E']);
+        view.items = ['A', 'B', 'C', 'D', 'E'];
         let a = createCell('A');
         let b = createCell('B');
         let c = createCell('C');
@@ -727,11 +727,11 @@ describe('CollectionView', function() {
 
         view.insert(['X', 'Y'], 2);
 
-        expect(a.get('itemIndex')).to.equal(0);
-        expect(b.get('itemIndex')).to.equal(1);
-        expect(c.get('itemIndex')).to.equal(4);
-        expect(d.get('itemIndex')).to.equal(5);
-        expect(e.get('itemIndex')).to.equal(6);
+        expect(a.itemIndex).to.equal(0);
+        expect(b.itemIndex).to.equal(1);
+        expect(c.itemIndex).to.equal(4);
+        expect(d.itemIndex).to.equal(5);
+        expect(e.itemIndex).to.equal(6);
       });
 
     });
@@ -745,13 +745,13 @@ describe('CollectionView', function() {
       it('can remove beginning of items array', function() {
         view.remove(0, 2);
 
-        expect(view.get('items')).to.eql(['C']);
+        expect(view.items).to.eql(['C']);
       });
 
       it('can remove end of items array', function() {
         view.remove(1, 2);
 
-        expect(view.get('items')).to.eql(['A']);
+        expect(view.items).to.eql(['A']);
       });
 
       it('calls native update', function() {
@@ -766,7 +766,7 @@ describe('CollectionView', function() {
 
         let updateCall = client.calls({op: 'call', method: 'update', id: view.cid})[0];
         expect(updateCall.parameters).to.eql({remove: [1, 1]});
-        expect(view.get('items')).to.eql(['A', 'C']);
+        expect(view.items).to.eql(['A', 'C']);
       });
 
       it('handles negative index', function() {
@@ -774,7 +774,7 @@ describe('CollectionView', function() {
 
         let updateCall = client.calls({op: 'call', method: 'update', id: view.cid})[0];
         expect(updateCall.parameters).to.eql({remove: [2, 1]});
-        expect(view.get('items')).to.eql(['A', 'B']);
+        expect(view.items).to.eql(['A', 'B']);
       });
 
       it('ignores index out of bounds', function() {
@@ -782,7 +782,7 @@ describe('CollectionView', function() {
 
         let updateCalls = client.calls({op: 'call', method: 'update', id: view.cid});
         expect(updateCalls).to.eql([]);
-        expect(view.get('items')).to.eql(['A', 'B', 'C']);
+        expect(view.items).to.eql(['A', 'B', 'C']);
       });
 
       it('ignores negative index out of bounds', function() {
@@ -790,7 +790,7 @@ describe('CollectionView', function() {
 
         let updateCalls = client.calls({op: 'call', method: 'update', id: view.cid});
         expect(updateCalls).to.eql([]);
-        expect(view.get('items')).to.eql(['A', 'B', 'C']);
+        expect(view.items).to.eql(['A', 'B', 'C']);
       });
 
       it('repairs count if exceeding', function() {
@@ -798,7 +798,7 @@ describe('CollectionView', function() {
 
         let updateCall = client.calls({op: 'call', method: 'update', id: view.cid})[0];
         expect(updateCall.parameters).to.eql({remove: [2, 1]});
-        expect(view.get('items')).to.eql(['A', 'B']);
+        expect(view.items).to.eql(['A', 'B']);
       });
 
       it('ignores zero count', function() {
@@ -806,7 +806,7 @@ describe('CollectionView', function() {
 
         let updateCalls = client.calls({op: 'call', method: 'update', id: view.cid});
         expect(updateCalls).to.eql([]);
-        expect(view.get('items')).to.eql(['A', 'B', 'C']);
+        expect(view.items).to.eql(['A', 'B', 'C']);
       });
 
       it('fails when index is not a number', function() {
@@ -822,7 +822,7 @@ describe('CollectionView', function() {
       });
 
       it('adjusts cells itemIndex properties', function() {
-        view.set('items', ['A', 'B', 'C', 'D', 'E']);
+        view.items = ['A', 'B', 'C', 'D', 'E'];
         let a = createCell('A');
         let b = createCell('B');
         let c = createCell('C');
@@ -831,11 +831,11 @@ describe('CollectionView', function() {
 
         view.remove(1, 2);
 
-        expect(a.get('itemIndex')).to.equal(0);
-        expect(b.get('itemIndex')).to.equal(1);
-        expect(c.get('itemIndex')).to.equal(2);
-        expect(d.get('itemIndex')).to.equal(1);
-        expect(e.get('itemIndex')).to.equal(2);
+        expect(a.itemIndex).to.equal(0);
+        expect(b.itemIndex).to.equal(1);
+        expect(c.itemIndex).to.equal(2);
+        expect(d.itemIndex).to.equal(1);
+        expect(e.itemIndex).to.equal(2);
       });
 
     });

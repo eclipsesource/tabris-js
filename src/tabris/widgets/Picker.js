@@ -21,11 +21,11 @@ export default class Picker extends Widget {
   }
 
   _getItem(index) {
-    return this.get('items')[index];
+    return this.items[index];
   }
 
   _getItemIndex(item) {
-    return this.get('items').indexOf(item);
+    return this.items.indexOf(item);
   }
 
   _listen(name, listening) {
@@ -65,8 +65,7 @@ NativeObject.defineProperties(Picker.prototype, {
     },
     set(name, value) {
       this._storeProperty(name, value);
-      let getText = this.get('itemText');
-      this._nativeSet('items', value.map(getText));
+      this._nativeSet('items', value.map(this.itemText));
     }
   },
   itemText: {
@@ -91,14 +90,14 @@ NativeObject.defineProperties(Picker.prototype, {
     set(name, item) {
       let index = this._getItemIndex(item);
       if (index !== -1) {
-        this.set('selectionIndex', index);
+        this.selectionIndex = index;
         this._triggerChangeEvent(name, item);
       } else {
         console.warn('Could not set picker selection ' + item + ': item not found');
       }
     },
     get() {
-      return this._getItem(this.get('selectionIndex'));
+      return this._getItem(this.selectionIndex);
     }
   },
   fillColor: {type: 'color'},

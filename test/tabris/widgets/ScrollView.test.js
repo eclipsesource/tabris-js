@@ -66,17 +66,17 @@ describe('ScrollView', function() {
 
     it('creates a vertical ScrolledView', function() {
       expect(createCalls[0].properties.direction).to.equal('vertical');
-      expect(scrollView.get('direction')).to.equal('vertical');
+      expect(scrollView.direction).to.equal('vertical');
     });
 
     it('offsetY is taken from native', function() {
       stub(client, 'get').returns(42);
-      expect(scrollView.get('offsetY')).to.equal(42);
+      expect(scrollView.offsetY).to.equal(42);
     });
 
     it('offsetY can not be set', function() {
       stub(console, 'warn');
-      scrollView.set('offsetY', 23);
+      scrollView.offsetY = 23;
 
       let setCalls = client.calls({id: scrollView.cid, op: 'set'});
 
@@ -128,17 +128,17 @@ describe('ScrollView', function() {
 
     it('creates a horizontal ScrollView', function() {
       expect(createCalls[0].properties.direction).to.equal('horizontal');
-      expect(scrollView.get('direction')).to.equal('horizontal');
+      expect(scrollView.direction).to.equal('horizontal');
     });
 
     it('offsetX is taken from native', function() {
       stub(client, 'get').returns(23);
-      expect(scrollView.get('offsetX')).to.equal(23);
+      expect(scrollView.offsetX).to.equal(23);
     });
 
     it('offsetX can not be set', function() {
       stub(console, 'warn');
-      scrollView.set('offsetX', 23);
+      scrollView.offsetX = 23;
 
       let setCalls = client.calls({id: scrollView.cid, op: 'set'});
 
