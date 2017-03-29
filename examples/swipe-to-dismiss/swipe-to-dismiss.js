@@ -47,18 +47,18 @@ var collectionView = new tabris.CollectionView({
 }).appendTo(tabris.ui.contentView);
 
 function handlePan(event) {
-  let {target, state, translation} = event;
-  target.transform = {translationX: translation.x};
+  let {target, state, translationX} = event;
+  target.transform = {translationX};
   if (state === 'end') {
     handlePanFinished(event);
   }
 }
 
 function handlePanFinished(event) {
-  let {target, velocity, translation} = event;
-  var beyondCenter = Math.abs(translation.x) > target.bounds.width / 2;
-  var fling = Math.abs(velocity.x) > 200;
-  var sameDirection = sign(velocity.x) === sign(translation.x);
+  let {target, velocityX, translationX} = event;
+  var beyondCenter = Math.abs(translationX) > target.bounds.width / 2;
+  var fling = Math.abs(velocityX) > 200;
+  var sameDirection = sign(velocityX) === sign(translationX);
   // When swiped beyond the center, trigger dismiss if flinged in the same direction or let go.
   // Otherwise, detect a dismiss only if flinged in the same direction.
   var dismiss = beyondCenter ? sameDirection || !fling : sameDirection && fling;
@@ -69,10 +69,10 @@ function handlePanFinished(event) {
   }
 }
 
-function animateDismiss({target, translation}) {
+function animateDismiss({target, translationX}) {
   var bounds = target.bounds;
   target.animate({
-    transform: {translationX: sign(translation.x) * bounds.width}
+    transform: {translationX: sign(translationX) * bounds.width}
   }, {
     duration: 200,
     easing: 'ease-out'

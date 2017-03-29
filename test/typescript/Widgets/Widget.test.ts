@@ -159,6 +159,10 @@ widget.on('pan', (event) => {
   let target: Widget = event.target;
   let state: string = event.state;
   let touch: {x: number, y: number} = event.touches[0];
+  let translationX: number = event.translationX;
+  let translationY: number = event.translationY;
+  let velocityX: number = event.velocityX;
+  let velocityY: number = event.velocityY;
 });
 
 widget.on('touchstart', (event) => {

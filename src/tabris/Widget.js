@@ -195,6 +195,14 @@ export default class Widget extends NativeObject {
       if (listening) {
         let properties = Object.assign({target: this}, this.gestures[name]);
         let recognizer = new GestureRecognizer(properties).on('gesture', event => {
+          if (event.translation) {
+            event.translationX = event.translation.x;
+            event.translationY = event.translation.y;
+          }
+          if (event.velocity) {
+            event.velocityX = event.velocity.x;
+            event.velocityY = event.velocity.y;
+          }
           super._trigger(name, event);
         });
         if (!this._recognizers) {

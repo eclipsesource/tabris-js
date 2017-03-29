@@ -299,13 +299,21 @@
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
           "type": "{x: number, y: number}[]"
         },
-        "translation": {
-          "description": "Current touch coordinates relative to the coordinates of the first touch.",
-          "type": "{x: number, y: number}"
+        "translationX": {
+          "description": "Current horizontal touch offset relative to the first touch.",
+          "type": "number"
         },
-        "velocity": {
-          "description": "Current touch velocity in pixels per second.",
-          "type": "{x: number, y: number}"
+        "translationY": {
+          "description": "Current vertical touch offset relative to the first touch.",
+          "type": "number"
+        },
+        "velocityX": {
+          "description": "Current horizontal velocity in pixels per second.",
+          "type": "number"
+        },
+        "velocityY": {
+          "description": "Current vertical velocity in pixels per second.",
+          "type": "number"
         }
       }
     },
@@ -320,13 +328,21 @@
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
           "type": "{x: number, y: number}[]"
         },
-        "translation": {
-          "description": "Current touch coordinates relative to the coordinates of the first touch.",
-          "type": "{x: number, y: number}"
+        "translationX": {
+          "description": "Current horizontal touch offset relative to the first touch.",
+          "type": "number"
         },
-        "velocity": {
-          "description": "Current touch velocity in pixels per second.",
-          "type": "{x: number, y: number}"
+        "translationY": {
+          "description": "Current vertical touch offset relative to the first touch.",
+          "type": "number"
+        },
+        "velocityX": {
+          "description": "Current horizontal velocity in pixels per second.",
+          "type": "number"
+        },
+        "velocityY": {
+          "description": "Current vertical velocity in pixels per second.",
+          "type": "number"
         }
       }
     },
@@ -341,13 +357,21 @@
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
           "type": "{x: number, y: number}[]"
         },
-        "translation": {
-          "description": "Current touch coordinates relative to the coordinates of the first touch.",
-          "type": "{x: number, y: number}"
+        "translationX": {
+          "description": "Current horizontal touch offset relative to the first touch.",
+          "type": "number"
         },
-        "velocity": {
-          "description": "Current touch velocity in pixels per second.",
-          "type": "{x: number, y: number}"
+        "translationY": {
+          "description": "Current vertical touch offset relative to the first touch.",
+          "type": "number"
+        },
+        "velocityX": {
+          "description": "Current horizontal velocity in pixels per second.",
+          "type": "number"
+        },
+        "velocityY": {
+          "description": "Current vertical velocity in pixels per second.",
+          "type": "number"
         }
       }
     },
@@ -362,13 +386,21 @@
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
           "type": "{x: number, y: number}[]"
         },
-        "translation": {
-          "description": "Current touch coordinates relative to the coordinates of the first touch.",
-          "type": "{x: number, y: number}"
+        "translationX": {
+          "description": "Current horizontal touch offset relative to the first touch.",
+          "type": "number"
         },
-        "velocity": {
-          "description": "Current touch velocity in pixels per second.",
-          "type": "{x: number, y: number}"
+        "translationY": {
+          "description": "Current vertical touch offset relative to the first touch.",
+          "type": "number"
+        },
+        "velocityX": {
+          "description": "Current horizontal velocity in pixels per second.",
+          "type": "number"
+        },
+        "velocityY": {
+          "description": "Current vertical velocity in pixels per second.",
+          "type": "number"
         }
       }
     },
@@ -383,13 +415,21 @@
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
           "type": "{x: number, y: number}[]"
         },
-        "translation": {
-          "description": "Current touch coordinates relative to the coordinates of the first touch.",
-          "type": "{x: number, y: number}"
+        "translationX": {
+          "description": "Current horizontal touch offset relative to the first touch.",
+          "type": "number"
         },
-        "velocity": {
-          "description": "Current touch velocity in pixels per second.",
-          "type": "{x: number, y: number}"
+        "translationY": {
+          "description": "Current vertical touch offset relative to the first touch.",
+          "type": "number"
+        },
+        "velocityX": {
+          "description": "Current horizontal velocity in pixels per second.",
+          "type": "number"
+        },
+        "velocityY": {
+          "description": "Current vertical velocity in pixels per second.",
+          "type": "number"
         }
       }
     },
@@ -404,13 +444,21 @@
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
           "type": "{x: number, y: number}[]"
         },
-        "translation": {
-          "description": "Current touch coordinates relative to the coordinates of the first touch.",
-          "type": "{x: number, y: number}"
+        "translationX": {
+          "description": "Current horizontal touch offset relative to the first touch.",
+          "type": "number"
         },
-        "velocity": {
-          "description": "Current touch velocity in pixels per second.",
-          "type": "{x: number, y: number}"
+        "translationY": {
+          "description": "Current vertical touch offset relative to the first touch.",
+          "type": "number"
+        },
+        "velocityX": {
+          "description": "Current horizontal velocity in pixels per second.",
+          "type": "number"
+        },
+        "velocityY": {
+          "description": "Current vertical velocity in pixels per second.",
+          "type": "number"
         }
       }
     },
@@ -425,13 +473,21 @@
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
           "type": "{x: number, y: number}[]"
         },
-        "translation": {
-          "description": "Current touch coordinates relative to the coordinates of the first touch.",
-          "type": "{x: number, y: number}"
+        "translationX": {
+          "description": "Current horizontal touch offset relative to the first touch.",
+          "type": "number"
         },
-        "velocity": {
-          "description": "Current touch velocity in pixels per second.",
-          "type": "{x: number, y: number}"
+        "translationY": {
+          "description": "Current vertical touch offset relative to the first touch.",
+          "type": "number"
+        },
+        "velocityX": {
+          "description": "Current horizontal velocity in pixels per second.",
+          "type": "number"
+        },
+        "velocityY": {
+          "description": "Current vertical velocity in pixels per second.",
+          "type": "number"
         }
       }
     },

@@ -35,8 +35,10 @@ All gesture events have the following common properties:
 
 Pan gesture events also contain these additional properties:
 
-- **translation**: *{x: number, y: number}* - current touch coordinates relative to the coordinates of the first touch
-- **velocity**: *{x: number, y: number}* - current touch velocity in pixels per second
+- **translationX**: *number* - current touch coordinates relative to the coordinates of the first touch
+- **translationY**: *number* - current touch coordinates relative to the coordinates of the first touch
+- **velocityX**: *number* - current touch velocity in pixels per second
+- **velocityY**: *number* - current touch velocity in pixels per second
 
 Event states:
 
