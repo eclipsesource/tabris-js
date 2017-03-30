@@ -195,6 +195,10 @@ module.exports = function(grunt) {
         result.push(line);
       });
     }
+    if (def.deprecated) {
+      let message = typeof def.deprecated === 'string' ? `'${def.deprecated}'` : '';
+      result.push(`@deprecated(${message})`);
+    }
     if (def.static) {
       result.push('@static');
     }

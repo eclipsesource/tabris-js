@@ -2,6 +2,7 @@ let path = require('path');
 
 const SNIPPETS_LOCATION = 'snippets';
 
+const MSG_DEPRECATED = '**Deprecated**';
 const MSG_PROVISIONAL = '**Note:** this API is provisional and may change in a future release.';
 const MSG_STATIC_PROP = 'This property can only be set on widget creation. Once set, it cannot be changed anymore.';
 
@@ -175,8 +176,12 @@ module.exports = function(grunt) {
           result.push('**read-only**<br/>\n');
         }
         result.push('Type: ', renderPropertyType(property), '\n');
+        if (property.deprecated) {
+          let message = typeof property.deprecated === 'string' ? property.deprecated : '';
+          result.push('\n' + MSG_DEPRECATED + (message ? ': ' + message : '') + '\n');
+        }
         if (property.provisional) {
-          result.push('\n' + MSG_PROVISIONAL);
+          result.push('\n' + MSG_PROVISIONAL + '\n');
         }
         if (property.description) {
           result.push('\n' + property.description);
