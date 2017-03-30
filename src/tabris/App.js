@@ -13,6 +13,18 @@ export default class App extends NativeObject {
     }
   }
 
+  get id() {
+    return this._nativeGet('appId');
+  }
+
+  get version() {
+    return this._nativeGet('version');
+  }
+
+  get versionCode() {
+    this._nativeGet('versionId');
+  }
+
   getResourceLocation(path) {
     if (!this._resourceBaseUrl) {
       this._resourceBaseUrl = this._nativeGet('resourceBaseUrl');
@@ -120,11 +132,7 @@ function checkCertificates(certificates) {
 }
 
 export function create() {
-  let app = new App(true);
-  Object.defineProperty(app, 'id', {get: () => app._nativeGet('appId')});
-  Object.defineProperty(app, 'version', {get: () => app._nativeGet('version')});
-  Object.defineProperty(app, 'versionCode', {get: () => app._nativeGet('versionId')});
-  return app;
+  return new App(true);
 }
 
 function normalizePath(path) {
