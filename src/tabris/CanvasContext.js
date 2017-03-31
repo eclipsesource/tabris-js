@@ -209,11 +209,7 @@ let properties = {
     encode: colorStringToArray,
     decode: colorArrayToString,
     addOperations(value) {
-      if (isIOS()) {
-        this._gc.addInt(value);
-      } else {
-        this._gc.addInt(value[0], value[1], value[2], value[3]);
-      }
+      this._gc.addInt(value[0], value[1], value[2], value[3]);
     }
   },
   strokeStyle: {
@@ -221,11 +217,7 @@ let properties = {
     encode: colorStringToArray,
     decode: colorArrayToString,
     addOperations(value) {
-      if (isIOS()) {
-        this._gc.addInt(value);
-      } else {
-        this._gc.addInt(value[0], value[1], value[2], value[3]);
-      }
+      this._gc.addInt(value[0], value[1], value[2], value[3]);
     }
   },
   textAlign: {
@@ -307,8 +299,4 @@ function checkRequiredArgs(args, nr, name) {
   if (args.length < nr) {
     throw new Error('Not enough arguments to ' + name);
   }
-}
-
-function isIOS() {
-  return tabris.device.platform === 'iOS';
 }

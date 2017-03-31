@@ -148,7 +148,7 @@ describe('CanvasContext in legacy mode', function() {
       flush();
 
       expect(getDrawOperations()).to.eql([
-        ['fillStyle', [255, 0, 0, 255]]
+        ['fillStyle', 255, 0, 0, 255]
       ]);
     });
 
@@ -181,7 +181,7 @@ describe('CanvasContext in legacy mode', function() {
       flush();
 
       expect(getDrawOperations()).to.eql([
-        ['strokeStyle', [255, 0, 0, 255]]
+        ['strokeStyle', 255, 0, 0, 255]
       ]);
     });
 
