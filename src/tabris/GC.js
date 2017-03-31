@@ -12,6 +12,7 @@ export default class GC extends NativeObject {
     this._booleans = [];
     this._strings = [];
     this._ints = [];
+    this._isIOS = tabris.device.platform === 'iOS';
     let listener = () => this.flush();
     tabris.on('flush', listener);
     this.on('dispose', () => tabris.off('flush', listener));
@@ -38,7 +39,7 @@ export default class GC extends NativeObject {
   }
 
   addOperation(operation) {
-    if (isIOS()) {
+    if (this._isIOS) {
       this._operations.push([operation]);
     } else {
       if (this._opCodes.indexOf(operation) < 0) {
@@ -50,28 +51,28 @@ export default class GC extends NativeObject {
   }
 
   addBoolean() {
-    let array = isIOS() ? this._operations[this._operations.length - 1] : this._booleans;
+    let array = this._isIOS ? this._operations[this._operations.length - 1] : this._booleans;
     Array.prototype.push.apply(array, arguments);
   }
 
   addDouble() {
-    let array = isIOS() ? this._operations[this._operations.length - 1] : this._doubles;
+    let array = this._isIOS ? this._operations[this._operations.length - 1] : this._doubles;
     Array.prototype.push.apply(array, arguments);
   }
 
   addInt() {
-    let array = isIOS() ? this._operations[this._operations.length - 1] : this._ints;
+    let array = this._isIOS ? this._operations[this._operations.length - 1] : this._ints;
     Array.prototype.push.apply(array, arguments);
   }
 
   addString() {
-    let array = isIOS() ? this._operations[this._operations.length - 1] : this._strings;
+    let array = this._isIOS ? this._operations[this._operations.length - 1] : this._strings;
     Array.prototype.push.apply(array, arguments);
   }
 
   flush() {
     if (this._operations.length > 0) {
-      if (isIOS()) {
+      if (this._isIOS) {
         this._nativeCall('draw', {operations: this._operations});
       } else {
         this._nativeCall('draw', {packedOperations: [
@@ -95,7 +96,3 @@ export default class GC extends NativeObject {
 }
 
 NativeObject.defineProperties(GC.prototype, {parent: 'proxy'});
-
-function isIOS() {
-  return tabris.device.platform === 'iOS';
-}
