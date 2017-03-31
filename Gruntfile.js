@@ -1,19 +1,23 @@
 module.exports = function(grunt) {
 
   let pkg = grunt.file.readJSON('package.json');
+  let version = pkg.version;
+  let release = grunt.option('release');
+  if (!release) {
+    version += '-dev.' + grunt.template.today('yyyymmdd+HHMM');
+  }
+  let banner = blockComment('Tabris.js ' + version + '\n\n' + grunt.file.read('LICENSE'));
 
-  let banner = blockComment('Tabris.js ' + pkg.version +
-                            " (<%= grunt.template.today('yyyy-mm-dd HH:MM') %>)\n\n" +
-                            grunt.file.read('LICENSE'));
+  grunt.log.writeln('Building version ' + version);
 
   grunt.initConfig({
-    version: pkg.version,
+    version,
     clean: ['build'],
     concat: {
       tabris: {
         options: {
           banner,
-          process: src => src.replace(/\${VERSION}/g, pkg.version)
+          process: src => src.replace(/\${VERSION}/g, version)
         },
         src: ['build/tabris-transpiled.js'],
         dest: 'build/tabris/tabris.js'
@@ -21,7 +25,7 @@ module.exports = function(grunt) {
       boot: {
         options: {
           banner,
-          process: src => src.replace(/\${VERSION}/g, pkg.version)
+          process: src => src.replace(/\${VERSION}/g, version)
         },
         src: ['build/boot-transpiled.js'],
         dest: 'build/boot.js'
@@ -170,6 +174,7 @@ module.exports = function(grunt) {
     delete pack.devDependencies;
     pack.main = 'tabris.js';
     pack.typings = 'tabris.d.ts';
+    pack.version = version;
     grunt.file.write('build/tabris/package.json', stringify.plain(pack));
   });
 
