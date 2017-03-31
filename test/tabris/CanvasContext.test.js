@@ -66,7 +66,7 @@ describe('CanvasContext', function() {
     it('creates a native GC with parent', function() {
       canvas.getContext('2d', 100, 200);
 
-      let createCalls = client.calls({op: 'create', type: 'rwt.widgets.GC'});
+      let createCalls = client.calls({op: 'create', type: 'tabris.GC'});
       expect(createCalls.length).to.equal(1);
       expect(createCalls[0].properties.parent).to.equal(canvas.cid);
     });

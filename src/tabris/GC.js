@@ -4,7 +4,7 @@ export default class GC extends NativeObject {
 
   constructor(properties) {
     super();
-    this._create('rwt.widgets.GC', properties);
+    this._create('tabris.GC', properties);
     this._operations = [];
     this._opCodes = [];
     this._newOpCodes = [];
