@@ -5,9 +5,9 @@ export default class EventObject {
       throw new Error('Not enough arguments to Event');
     }
     Object.defineProperties(this, {
-      type: {value: type},
-      target: {value: target},
-      timeStamp: {value: Date.now()}
+      type: {enumerable: true, value: type},
+      target: {enumerable: true, value: target},
+      timeStamp: {enumerable: true, value: Date.now()}
     });
   }
 

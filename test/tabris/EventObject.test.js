@@ -50,6 +50,10 @@ describe('EventObject', function() {
         expect(event.type).to.equal('foo');
       });
 
+      it('is enumerable', function() {
+        expect(Object.keys(event)).to.include('type');
+      });
+
     });
 
     describe('target', function() {
@@ -59,6 +63,10 @@ describe('EventObject', function() {
         expect(event.target).to.equal(target);
       });
 
+      it('is enumerable', function() {
+        expect(Object.keys(event)).to.include('target');
+      });
+
     });
 
     describe('timeStamp', function() {
@@ -66,6 +74,10 @@ describe('EventObject', function() {
       it('is read-only', function() {
         event.timeStamp = 23;
         expect(event.timeStamp).to.be.closeTo(Date.now(), 100);
+      });
+
+      it('is enumerable', function() {
+        expect(Object.keys(event)).to.include('timeStamp');
       });
 
     });

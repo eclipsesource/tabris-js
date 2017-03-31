@@ -62,17 +62,17 @@ export default class WebSocket {
       this.readyState = OPEN;
       this.protocol = event.protocol;
       this.extensions = event.extensions;
-      this.dispatchEvent(Object.assign(new Event('open'), omit(event, 'target')));
+      this.dispatchEvent(Object.assign(new Event('open'), omit(event, ['target', 'type', 'timeStamp'])));
     }).on('message', event => {
       if (this.readyState === OPEN) {
-        this.dispatchEvent(Object.assign(new Event('message'), omit(event, 'target')));
+        this.dispatchEvent(Object.assign(new Event('message'), omit(event, ['target', 'type', 'timeStamp'])));
       }
     }).on('close', event => {
       this.readyState = CLOSED;
-      this.dispatchEvent(Object.assign(new Event('close'), omit(event, 'target')));
+      this.dispatchEvent(Object.assign(new Event('close'), omit(event, ['target', 'type', 'timeStamp'])));
     }).on('error', event => {
       this.readyState = CLOSED;
-      this.dispatchEvent(Object.assign(new Event('error'), omit(event, 'target')));
+      this.dispatchEvent(Object.assign(new Event('error'), omit(event, ['target', 'type', 'timeStamp'])));
     });
   }
 

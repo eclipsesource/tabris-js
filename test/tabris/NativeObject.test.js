@@ -276,6 +276,25 @@ describe('NativeObject', function() {
 
     });
 
+    describe('_triggerChangeEvent', function() {
+
+      let listener;
+
+      beforeEach(function() {
+        listener = spy();
+      });
+
+      it('notifies listeners', function() {
+        object.on('change:foo', listener);
+
+        object._triggerChangeEvent('foo', 23);
+
+        expect(listener).to.have.been.calledOnce;
+        expect(listener).to.have.been.calledWithMatch({target: object, value: 23});
+      });
+
+    });
+
     describe('on', function() {
 
       let listener;
