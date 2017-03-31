@@ -530,10 +530,6 @@
     "touchstart": {
       "description": "Fired when a widget is touched. See [Touch Events](../touch.md).",
       "parameters": {
-        "time": {
-          "description": "Number of milliseconds since the start of the app.",
-          "type": "number"
-        },
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
           "type": "{x: number, y: number, absoluteX: number, absoluteY: number}[]"
@@ -543,10 +539,6 @@
     "touchmove": {
       "description": "Fired repeatedly while swiping across the screen.",
       "parameters": {
-        "time": {
-          "description": "Number of milliseconds since the start of the app.",
-          "type": "number"
-        },
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
           "type": "{x: number, y: number, absoluteX: number, absoluteY: number}[]"
@@ -556,10 +548,6 @@
     "touchend": {
       "description": "Fired when a touch ends on the same widget than it started on.",
       "parameters": {
-        "time": {
-          "description": "Number of milliseconds since the start of the app.",
-          "type": "number"
-        },
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
           "type": "{x: number, y: number, absoluteX: number, absoluteY: number}[]"
@@ -569,10 +557,6 @@
     "touchcancel": {
       "description": "Fired instead of touchend when the touch ends on another widget than it started on.",
       "parameters": {
-        "time": {
-          "description": "Number of milliseconds since the start of the app.",
-          "type": "number"
-        },
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
           "type": "{x: number, y: number, absoluteX: number, absoluteY: number}[]"

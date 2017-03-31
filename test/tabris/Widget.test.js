@@ -1326,10 +1326,10 @@ describe('Widget', function() {
       it(name, function() {
         widget = new TestWidget().on(name, listener);
 
-        widget._trigger(name, {time: 23});
+        widget._trigger(name, {});
 
         expect(listener).to.have.been.calledOnce;
-        expect(listener).to.have.been.calledWithMatch({target: widget, time: 23});
+        expect(listener).to.have.been.calledWithMatch({target: widget});
         checkListen(name);
       });
     });
