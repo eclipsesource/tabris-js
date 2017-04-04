@@ -1,6 +1,6 @@
 import {TextInput, Color} from 'tabris';
 
-let widget: TextInput;
+let widget: TextInput = new TextInput();
 
 // Properties
 let alignment: 'center' | 'left' | 'right';
@@ -16,19 +16,6 @@ let message: string;
 let text: string;
 let type: 'default' | 'multiline' | 'password' | 'search';
 
-widget.alignment = alignment;
-widget.autoCapitalize = autoCapitalize;
-widget.autoCorrect = autoCorrect;
-widget.borderColor = borderColor;
-widget.editable = editable;
-widget.fillColor = fillColor;
-widget.focused = focused;
-widget.keepFocus = keepFocus;
-widget.keyboard = keyboard;
-widget.message = message;
-widget.text = text;
-widget.type = type;
-
 alignment = widget.alignment;
 autoCapitalize = widget.autoCapitalize;
 autoCorrect = widget.autoCorrect;
@@ -41,3 +28,16 @@ keyboard = widget.keyboard;
 message = widget.message;
 text = widget.text;
 type = widget.type;
+
+widget.alignment = alignment;
+widget.autoCapitalize = autoCapitalize;
+widget.autoCorrect = autoCorrect;
+widget.borderColor = borderColor;
+widget.editable = editable;
+widget.fillColor = fillColor;
+widget.focused = focused;
+widget.keepFocus = keepFocus;
+widget.keyboard = keyboard;
+widget.message = message;
+widget.text = text;
+widget.type = type;

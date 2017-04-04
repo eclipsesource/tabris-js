@@ -6,20 +6,20 @@ let pinnedCertificates: any[];
 let version: string;
 let versionCode: number;
 
-app.id = id;
-app.pinnedCertificates = pinnedCertificates;
-app.version = version;
-app.versionCode = versionCode;
-
 id = app.id;
 pinnedCertificates = app.pinnedCertificates;
 version = app.version;
 versionCode = app.versionCode;
 
+app.id = id;
+app.pinnedCertificates = pinnedCertificates;
+app.version = version;
+app.versionCode = versionCode;
+
 // Methods
-let path: string;
-let url: string;
-let callback: (error: Error|null, patch: any|null) => void;
+let path: string = '';
+let url: string = '';
+let callback: (error: Error|null, patch: any|null) => void = () => {};
 let voidReturnValue: void;
 let stringReturnValue: string;
 

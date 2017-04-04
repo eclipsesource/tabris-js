@@ -1,21 +1,21 @@
 import {ScrollView} from 'tabris';
 
-let widget: ScrollView;
+let widget: ScrollView = new ScrollView();
 
 // Properties
 let direction: 'horizontal' | 'vertical';
 let offsetX: number;
 let offsetY: number;
 
-widget.direction = direction;
-
 direction = widget.direction;
 offsetX = widget.offsetX;
 offsetY = widget.offsetY;
 
+widget.direction = direction;
+
 // Methods
-let offset: number;
-let options: {animate?: boolean};
+let offset: number = 42;
+let options: {animate?: boolean} = {};
 let thisReturnValue: ScrollView;
 
 thisReturnValue = widget.scrollToX(offset);

@@ -12,15 +12,7 @@ let refreshEnabled: boolean;
 let refreshIndicator: boolean;
 let refreshMessage: string;
 
-let widget: CollectionView;
-
-widget.cellType = cellType;
-widget.columnCount = columnCount;
-widget.initializeCell = initializeCell;
-widget.itemHeight = itemHeight;
-widget.refreshEnabled = refreshEnabled;
-widget.refreshIndicator = refreshIndicator;
-widget.refreshMessage = refreshMessage;
+let widget: CollectionView = new CollectionView();
 
 cellType = widget.cellType;
 columnCount = widget.columnCount;
@@ -33,10 +25,18 @@ refreshEnabled = widget.refreshEnabled;
 refreshIndicator = widget.refreshIndicator;
 refreshMessage = widget.refreshMessage;
 
+widget.cellType = cellType;
+widget.columnCount = columnCount;
+widget.initializeCell = initializeCell;
+widget.itemHeight = itemHeight;
+widget.refreshEnabled = refreshEnabled;
+widget.refreshIndicator = refreshIndicator;
+widget.refreshMessage = refreshMessage;
+
 // Methods
-let items: any[];
-let index: number;
-let count: number;
+let items: any[] = [];
+let index: number = 42;
+let count: number = 42;
 let noReturnValue: void;
 
 noReturnValue = widget.insert(items);

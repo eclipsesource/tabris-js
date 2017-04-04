@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "lib": ["es5", "es2015.promise" ]
+    "lib": ["es5", "es2015.promise" ],
+    "strictNullChecks": true
   },
   "include": [
     "**/*.test.ts"

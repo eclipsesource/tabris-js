@@ -40,17 +40,17 @@ isNumber = xhr.timeout;
 isBoolean = xhr.withCredentials;
 xhr.withCredentials = isBoolean;
 
-let header: string;
-let method: string;
-let url: string;
-let async: boolean;
-let user: string;
-let password: string;
+let header: string = '';
+let method: string = '';
+let url: string = '';
+let async: boolean = true;
+let user: string = '';
+let password: string = '';
 let data: any;
-let value: string;
-let type: string;
-let listener: EventListener;
-let useCapture: boolean;
+let value: string = '';
+let type: string = '';
+let listener: EventListener = () => {};
+let useCapture: boolean = true;
 
 isVoid = xhr.abort();
 isString = xhr.getAllResponseHeaders();

@@ -1,6 +1,6 @@
 import {Video} from 'tabris';
 
-let widget: Video;
+let widget: Video = new Video();
 
 // Properties
 let autoPlay: boolean;
@@ -11,10 +11,6 @@ let speed: number;
 let state: 'empty' | 'fail' | 'finish' | 'open' | 'pause' | 'play' | 'ready' | 'stale';
 let url: string;
 
-widget.autoPlay = autoPlay;
-widget.controlsVisible = controlsVisible;
-widget.url = url;
-
 autoPlay = widget.autoPlay;
 controlsVisible = widget.controlsVisible;
 duration = widget.duration;
@@ -22,6 +18,10 @@ position = widget.position;
 speed = widget.speed;
 state = widget.state;
 url = widget.url;
+
+widget.autoPlay = autoPlay;
+widget.controlsVisible = controlsVisible;
+widget.url = url;
 
 // Methods
 let voidReturnValue: void;

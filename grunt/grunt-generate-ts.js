@@ -1,7 +1,4 @@
-/*jshint -W097 */
-'use strict';
-
-let header = `
+const header = `
 // Type definitions for Tabris.js \${VERSION}
 /// <reference path="console.d.ts" />
 /// <reference path="localStorage.d.ts" />
@@ -10,6 +7,10 @@ let header = `
 /// <reference path="Event.d.ts" />
 /// <reference path="XMLHttpRequest.d.ts" />
 /// <reference path="ObjectAssign.d.ts" />
+
+type Partial<T> = {
+  [P in keyof T]?: T[P];
+};
 
 export as namespace tabris;
 
@@ -93,7 +94,7 @@ module.exports = function(grunt) {
   }
 
   function addClassDef(result, def) {
-    result.append(`interface ${def.type} extends ${def.type}Properties {}`);
+    result.append(`interface ${def.type} extends _${def.type}Properties {}`);
     let str = 'export class ' + def.type;
     if (def.extends) {
       str += ' extends ' + def.extends;
@@ -110,12 +111,13 @@ module.exports = function(grunt) {
     });
     result.indent--;
     result.append('}');
+    result.append(`type ${def.type}Properties = Partial<_${def.type}Properties>`);
   }
 
   function createPropertyInterfaceDef(def) {
-    let str = 'interface ' + def.type + 'Properties';
+    let str = 'interface _' + def.type + 'Properties';
     if (def.extends) {
-      str += ' extends ' + def.extends + 'Properties';
+      str += ' extends _' + def.extends + 'Properties';
     }
     return str + ' {';
   }
@@ -166,7 +168,7 @@ module.exports = function(grunt) {
       values.push(`"${value}"`);
     });
     let valuesType = (values || []).join(' | ');
-    result.push(`${def.readonly ? 'readonly ' : ''}${name}?: ${valuesType || def.type};`);
+    result.push(`${def.readonly ? 'readonly ' : ''}${name}: ${valuesType || def.type};`);
     return result.join('\n');
   }
 

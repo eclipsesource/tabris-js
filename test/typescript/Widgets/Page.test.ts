@@ -1,16 +1,16 @@
 import {Page, Image} from 'tabris';
 
-let widget: Page;
+let widget: Page = new Page();
 
 // Properties
 let autoDispose: boolean;
 let image: Image;
 let title: string;
 
-widget.autoDispose = autoDispose;
-widget.image = image;
-widget.title = title;
-
 autoDispose = widget.autoDispose;
 image = widget.image;
 title = widget.title;
+
+widget.autoDispose = autoDispose;
+widget.image = image;
+widget.title = title;

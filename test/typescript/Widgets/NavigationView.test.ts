@@ -1,6 +1,6 @@
 import {NavigationView, Color, WidgetCollection} from 'tabris';
 
-let widget: NavigationView;
+let widget: NavigationView = new NavigationView;
 
 // Properties
 let actionColor: Color;
@@ -11,14 +11,6 @@ let titleTextColor: Color;
 let toolbarColor: Color;
 let toolbarVisible: boolean;
 
-widget.actionColor = actionColor;
-widget.actionTextColor = actionTextColor;
-widget.animated = animated;
-widget.drawerActionVisible = drawerActionVisible;
-widget.titleTextColor = titleTextColor;
-widget.toolbarColor = toolbarColor;
-widget.toolbarVisible = toolbarVisible;
-
 actionColor = widget.actionColor;
 actionTextColor = widget.actionTextColor;
 animated = widget.animated;
@@ -26,6 +18,14 @@ drawerActionVisible = widget.drawerActionVisible;
 titleTextColor = widget.titleTextColor;
 toolbarColor = widget.toolbarColor;
 toolbarVisible = widget.toolbarVisible;
+
+widget.actionColor = actionColor;
+widget.actionTextColor = actionTextColor;
+widget.animated = animated;
+widget.drawerActionVisible = drawerActionVisible;
+widget.titleTextColor = titleTextColor;
+widget.toolbarColor = toolbarColor;
+widget.toolbarVisible = toolbarVisible;
 
 // Methods
 let widgetCollection: WidgetCollection;

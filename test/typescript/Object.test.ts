@@ -20,11 +20,11 @@ interface E {
   anyProp: any;
 }
 
-let a: A;
-let b: B;
-let c: C;
-let d: D;
-let e: E;
+let a: A = { stringProp: '' };
+let b: B = { numberProp: 42 };
+let c: C = { objectProp: {} };
+let d: D = { functionProp: () => { } };
+let e: E = { anyProp: 42 };
 
 let aAndB: A & B = Object.assign(a, b);
 let aAndBAndC: A & B & C = Object.assign(a, b, c);

@@ -1,8 +1,8 @@
 import 'tabris';
 
 let id: any;
-let callback: () => void;
-let delay: number;
+let callback: () => void = () => {};
+let delay: number = 42;
 let voidReturnValue: void;
 let timerID: number;
 let paramA: any;
@@ -17,8 +17,8 @@ setTimeout(callback, delay);
 setTimeout(callback, delay, paramA, paramB);
 
 let item: string | null;
-let key: string;
-let data: string;
+let key: string = '';
+let data: string = '';
 
 voidReturnValue = localStorage.clear();
 voidReturnValue = localStorage.removeItem(key);

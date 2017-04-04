@@ -14,7 +14,7 @@ import {Widget,
  Composite
 } from 'tabris';
 
-let widget: Widget;
+let widget: Widget = new Widget();
 
 // Properties
 let background: Color;
@@ -43,31 +43,6 @@ let transform: Transformation;
 let visible: boolean;
 let width: dimension;
 
-widget.background = background;
-widget.backgroundImage = backgroundImage;
-widget.baseline = baseline;
-widget.bottom = bottom;
-widget.centerX = centerX;
-widget.centerY = centerY;
-widget.class = _class;
-widget.classList = classList;
-widget.cornerRadius = cornerRadius;
-widget.elevation = elevation;
-widget.enabled = enabled;
-widget.font = font;
-widget.height = height;
-widget.highlightOnTouch = highlightOnTouch;
-widget.id = id;
-widget.layoutData = layoutData;
-widget.left = left;
-widget.opacity = opacity;
-widget.right = right;
-widget.textColor = textColor;
-widget.top = top;
-widget.transform = transform;
-widget.visible = visible;
-widget.width = width;
-
 background = widget.background;
 backgroundImage = widget.backgroundImage;
 baseline = widget.baseline;
@@ -94,12 +69,37 @@ transform = widget.transform;
 visible = widget.visible;
 width = widget.width;
 
+widget.background = background;
+widget.backgroundImage = backgroundImage;
+widget.baseline = baseline;
+widget.bottom = bottom;
+widget.centerX = centerX;
+widget.centerY = centerY;
+widget.class = _class;
+widget.classList = classList;
+widget.cornerRadius = cornerRadius;
+widget.elevation = elevation;
+widget.enabled = enabled;
+widget.font = font;
+widget.height = height;
+widget.highlightOnTouch = highlightOnTouch;
+widget.id = id;
+widget.layoutData = layoutData;
+widget.left = left;
+widget.opacity = opacity;
+widget.right = right;
+widget.textColor = textColor;
+widget.top = top;
+widget.transform = transform;
+widget.visible = visible;
+widget.width = width;
+
 // Methods
-let properties: {transform?: Transformation, opacity?: number};
-let parent: Composite;
-let options: AnimationOptions;
-let selector: Selector;
-let otherWidget: Widget;
+let properties: {transform?: Transformation, opacity?: number} = {};
+let parent: Composite = new Composite();
+let options: AnimationOptions = {};
+let selector: Selector = '';
+let otherWidget: Widget = new Widget();
 let promise: Promise<any>;
 let thisReturnValue: Widget;
 let voidReturnValue: void;

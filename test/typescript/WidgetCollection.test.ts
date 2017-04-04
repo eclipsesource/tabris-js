@@ -1,6 +1,6 @@
 import {WidgetCollection, Transformation, AnimationOptions, Composite, Selector, Widget} from 'tabris';
 
-let widgetCollection: WidgetCollection;
+let widgetCollection: WidgetCollection = new WidgetCollection();
 
 // Properties
 let length: number;
@@ -8,18 +8,18 @@ let length: number;
 length = widgetCollection.length;
 
 // Methods
-let properties: {transform?: Transformation, opacity?: number};
-let options: AnimationOptions;
-let parent: Composite;
-let selector: Selector;
-let callback: (widget: Widget, index: number, collection: WidgetCollection) => void;
+let properties: {transform?: Transformation, opacity?: number} = {};
+let options: AnimationOptions = {};
+let parent: Composite = new Composite();
+let selector: Selector = '';
+let callback: (widget: Widget, index: number, collection: WidgetCollection) => void = () => {};
 let widget: Widget;
 let widgetArray: Widget[];
-let listener: Function;
+let listener: Function = () => {};
 let context: WidgetCollection;
-let property: string;
+let property: string = '';
 let Properties: Object;
-let event: string;
+let event: string = '';
 let thisReturnValue: WidgetCollection;
 let voidReturnValue: void;
 let anyReturnValue: any;

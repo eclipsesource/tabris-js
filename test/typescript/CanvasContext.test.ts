@@ -1,6 +1,6 @@
 import {CanvasContext, ImageData, Color, Font} from 'tabris';
 
-let ctx: CanvasContext;
+let ctx: CanvasContext = new CanvasContext();
 
 // Properties
 let fillStyle: Color;
@@ -12,15 +12,6 @@ let strokeStyle: Color;
 let textAlign: 'center' | 'end' | 'left' | 'right' | 'start';
 let textBaseline: 'alphabetic' | 'bottom' | 'hanging' | 'ideographic' | 'middle' | 'top';
 
-ctx.fillStyle = fillStyle;
-ctx.font = font;
-ctx.lineCap = lineCap;
-ctx.lineJoin = lineJoin;
-ctx.lineWidth = lineWidth;
-ctx.strokeStyle = strokeStyle;
-ctx.textAlign = textAlign;
-ctx.textBaseline = textBaseline;
-
 fillStyle = ctx.fillStyle;
 font = ctx.font;
 lineCap = ctx.lineCap;
@@ -30,12 +21,21 @@ strokeStyle = ctx.strokeStyle;
 textAlign = ctx.textAlign;
 textBaseline = ctx.textBaseline;
 
+ctx.fillStyle = fillStyle;
+ctx.font = font;
+ctx.lineCap = lineCap;
+ctx.lineJoin = lineJoin;
+ctx.lineWidth = lineWidth;
+ctx.strokeStyle = strokeStyle;
+ctx.textAlign = textAlign;
+ctx.textBaseline = textBaseline;
+
 // Methods
-let num: number;
-let bool: boolean;
+let num: number = 42;
+let bool: boolean = false;
 let voidReturnValue: void;
 let imageData: ImageData;
-let text: string;
+let text: string = '';
 
 voidReturnValue = ctx.arc(num, num, num, num, num, bool);
 voidReturnValue = ctx.beginPath();

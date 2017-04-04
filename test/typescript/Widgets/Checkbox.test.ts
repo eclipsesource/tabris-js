@@ -1,16 +1,16 @@
 import {CheckBox} from 'tabris';
 
-let widget: CheckBox;
+let widget: CheckBox = new CheckBox();
 
 // Properties
 let checked: boolean;
 let text: string;
 
-widget.checked = checked;
-widget.text = text;
-
 checked = widget.checked;
 text = widget.text;
+
+widget.checked = checked;
+widget.text = text;
 
 // Events
 

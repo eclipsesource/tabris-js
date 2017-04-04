@@ -27,7 +27,7 @@ interface Image {
   /**
    * Image path or URL.
    */
-  src?: string;
+  src: string;
 
   /**
    * Image width, extracted from the image file when missing.
@@ -89,22 +89,22 @@ interface Bounds {
   /**
    * the horizontal offset from the parent's left edge in dip
    */
-  left?: number;
+  left: number;
 
   /**
    * the vertical offset from the parent's top edge in dip
    */
-  top?: number;
+  top: number;
 
   /**
    * the width of the widget in dip
    */
-  width?: number;
+  width: number;
 
   /**
    * the height of the widget in dip
    */
-  height?: number;
+  height: number;
 
 }
 

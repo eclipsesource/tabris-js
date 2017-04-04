@@ -1,6 +1,6 @@
 import {Cell} from 'tabris';
 
-let widget: Cell;
+let widget: Cell = new Cell();
 
 // Properties
 let item: any;

@@ -1,13 +1,13 @@
 import {Drawer} from 'tabris';
 
-let widget: Drawer;
+let widget: Drawer = new Drawer();
 
 // Propeties
 let enabled: boolean;
 
-widget.enabled = enabled;
-
 enabled = widget.enabled;
+
+widget.enabled = enabled;
 
 // Methods
 let thisReturnValue: Drawer;

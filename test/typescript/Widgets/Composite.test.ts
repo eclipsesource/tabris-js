@@ -1,12 +1,12 @@
 import {Composite, Widget, WidgetCollection} from 'tabris';
 
-let widget: Composite;
+let widget: Composite = new Composite();
 
 // Methods
-let widgets: Widget[];
-let widgetA: Widget;
-let widgetB: Widget;
-let widgetCollection: WidgetCollection;
+let widgets: Widget[] = [];
+let widgetA: Widget = new Widget();
+let widgetB: Widget = new Widget();
+let widgetCollection: WidgetCollection = new WidgetCollection();
 let thisReturnValue: Composite;
 
 thisReturnValue = widget.append(widgetA, widgetB);

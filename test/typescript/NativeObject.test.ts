@@ -1,6 +1,6 @@
 import {NativeObject} from 'tabris';
 
-let nativeObject: NativeObject;
+let nativeObject: NativeObject = new NativeObject();
 
 // Properties
 let cid: string;
@@ -8,11 +8,11 @@ let cid: string;
 cid = nativeObject.cid;
 
 // Methods
-let type: string;
-let listener: (event: Object) => void;
-let context: NativeObject;
-let property: string;
-let properties: Object;
+let type: string = '';
+let listener: (event: Object) => void = () => {};
+let context: NativeObject = nativeObject;
+let property: string = '';
+let properties: Object = {};
 let thisReturnValue: NativeObject;
 let value: any;
 

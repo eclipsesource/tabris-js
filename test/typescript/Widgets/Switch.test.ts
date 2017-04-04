@@ -1,6 +1,6 @@
 import {Switch, Color} from 'tabris';
 
-let widget: Switch;
+let widget: Switch = new Switch();
 
 // Properties
 let checked: boolean;
@@ -9,14 +9,14 @@ let thumbOnColor: Color;
 let trackOffColor: Color;
 let trackOnColor: Color;
 
-widget.checked = checked;
-widget.thumbOffColor = thumbOffColor;
-widget.thumbOnColor = thumbOnColor;
-widget.trackOffColor = trackOffColor;
-widget.trackOnColor = trackOnColor;
-
 checked = widget.checked;
 thumbOffColor = widget.thumbOffColor;
 thumbOnColor = widget.thumbOnColor;
 trackOffColor = widget.trackOffColor;
 trackOnColor = widget.trackOnColor;
+
+widget.checked = checked;
+widget.thumbOffColor = thumbOffColor;
+widget.thumbOnColor = thumbOnColor;
+widget.trackOffColor = trackOffColor;
+widget.trackOnColor = trackOnColor;

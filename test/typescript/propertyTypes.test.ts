@@ -14,13 +14,19 @@ import {
  AnimationOptions,
 } from 'tabris';
 
-let stringType: string;
-let numberType: number;
-let booleanType: boolean;
+let stringType: string = '';
+let stringOrUndefined: string | undefined;
+let numberType: number = 42;
+let numberOrUndefined: number | undefined;
+let booleanType: boolean = false;
+let booleanOrUndefined: boolean | undefined;
 let marginType: margin;
-let offsetType: offset;
-let dimensionType: dimension;
-let widgetType: Widget;
+let offsetType: offset = 42;
+let offsetOrUndefined: offset | undefined;
+let dimensionType: dimension = 42;
+let dimensionOrUndefined: dimension | undefined;
+let widgetType: Widget = new Widget();
+let widgetOrUndefined: Widget | undefined;
 
 // dimension
 let _dimension: dimension = numberType;
@@ -37,11 +43,11 @@ let image: Image = {
   height: numberType,
   scale: numberType
 };
-image = {};
+image = {src: ''};
 stringType = image.src;
-numberType = image.width;
-numberType = image.height;
-numberType = image.scale;
+numberOrUndefined = image.width;
+numberOrUndefined = image.height;
+numberOrUndefined = image.scale;
 
 // Color
 let color: Color = stringType;
@@ -68,11 +74,11 @@ marginType = layoutData.left;
 marginType = layoutData.right;
 marginType = layoutData.top;
 marginType = layoutData.bottom;
-offsetType = layoutData.centerX;
-offsetType = layoutData.centerY;
-widgetType = layoutData.baseline;
-dimensionType = layoutData.width;
-dimensionType = layoutData.height;
+offsetOrUndefined = layoutData.centerX;
+offsetOrUndefined = layoutData.centerY;
+widgetOrUndefined = layoutData.baseline;
+dimensionOrUndefined = layoutData.width;
+dimensionOrUndefined = layoutData.height;
 
 // Bounds
 let bounds: Bounds = {
@@ -81,7 +87,7 @@ let bounds: Bounds = {
   width: numberType,
   height: numberType
 };
-bounds = {};
+
 numberType = bounds.left;
 numberType = bounds.top;
 numberType = bounds.width;
@@ -97,25 +103,27 @@ let transformation: Transformation = {
   translationZ: numberType
 };
 transformation = {};
-numberType = transformation.rotation;
-numberType = transformation.scaleX;
-numberType = transformation.scaleY;
-numberType = transformation.translationX;
-numberType = transformation.translationY;
-numberType = transformation.translationZ;
+numberOrUndefined = transformation.rotation;
+numberOrUndefined = transformation.scaleX;
+numberOrUndefined = transformation.scaleY;
+numberOrUndefined = transformation.translationX;
+numberOrUndefined = transformation.translationY;
+numberOrUndefined = transformation.translationZ;
 
 // SelectorFunction
-let selectorFunctionType: (widget: Widget) => boolean;
+let selectorFunctionType: (widget: Widget) => boolean = () => true;
 let selectorFunction: SelectorFunction = selectorFunctionType;
 selectorFunctionType = selectorFunction;
 
 // Selector
-let selectorType: string | SelectorFunction;
+let selectorType: string | SelectorFunction = '';
 let selector: Selector = selectorType;
 selectorType = selector;
 
 // AnimationOptions
 let easingType: 'linear'|'ease-in'|'ease-out'|'ease-in-out';
+let easingOrUndefined: typeof easingType | undefined;
+easingType = 'linear';
 
 let animationOptions: AnimationOptions = {
   delay: numberType,
@@ -126,9 +134,9 @@ let animationOptions: AnimationOptions = {
   name: stringType
 };
 animationOptions = {};
-numberType = animationOptions.delay;
-numberType = animationOptions.duration;
-easingType = animationOptions.easing;
-numberType = animationOptions.repeat;
-booleanType = animationOptions.reverse;
-stringType = animationOptions.name;
+numberOrUndefined = animationOptions.delay;
+numberOrUndefined = animationOptions.duration;
+easingOrUndefined = animationOptions.easing;
+numberOrUndefined = animationOptions.repeat;
+booleanOrUndefined = animationOptions.reverse;
+stringOrUndefined = animationOptions.name;
