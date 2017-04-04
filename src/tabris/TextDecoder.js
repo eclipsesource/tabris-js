@@ -8,28 +8,36 @@ class TextDecoder extends NativeObject {
     super();
     this._create('tabris.TextDecoder');
     this._nativeListen('result', true);
+    this._nativeListen('error', true);
   }
 
-  decode(buffer, encoding = 'utf-8') {
-    if (ArrayBuffer.isView(buffer)) {
-      buffer = buffer.buffer;
-    }
-    if (!(buffer instanceof ArrayBuffer)) {
-      throw new Error('Invalid buffer type');
-    }
-    if (!SUPPORTED_ENCODINGS.includes(encoding)) {
-      throw new Error(`Unsupported encoding: '${encoding}'`);
-    }
+  decode(buffer, encoding) {
     this._nativeCall('decode', {data: buffer, encoding});
   }
 
 }
 
 export function decode(buffer, encoding) {
-  return new Promise((resolve) => {
-    new TextDecoder().on('result', ({target, string}) => {
-      resolve(string);
-      target.dispose();
-    }).decode(buffer, encoding);
+  return new Promise((resolve, reject) => {
+    if (ArrayBuffer.isView(buffer)) {
+      buffer = buffer.buffer;
+    }
+    if (!(buffer instanceof ArrayBuffer)) {
+      throw new Error('Invalid buffer type');
+    }
+    encoding = encoding || 'utf-8';
+    if (!SUPPORTED_ENCODINGS.includes(encoding)) {
+      throw new Error(`Unsupported encoding: '${encoding}'`);
+    }
+    new TextDecoder()
+      .on('result', ({target, string}) => {
+        resolve(string);
+        target.dispose();
+      })
+      .on('error', ({target}) => {
+        reject(new Error('Could not decode ' + encoding));
+        target.dispose();
+      })
+      .decode(buffer, encoding);
   });
 }

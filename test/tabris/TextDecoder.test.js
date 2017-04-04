@@ -27,12 +27,13 @@ describe('TextDecoder', function() {
       expect(createCalls[0].properties).to.deep.equal({});
     });
 
-    it('adds native listener on `result`', function() {
+    it('adds native listeners on `result`', function() {
       decode(buffer);
       expect(client.calls({op: 'listen', id: created().id, event: 'result', listen: true}).length).to.equal(1);
+      expect(client.calls({op: 'listen', id: created().id, event: 'error', listen: true}).length).to.equal(1);
     });
 
-    it('throws with missing buffer argument', function() {
+    it('rejects with missing buffer argument', function() {
       return decode().then(expectFail, err => {
         expect(err.message).to.equal('Invalid buffer type');
       });
@@ -50,6 +51,12 @@ describe('TextDecoder', function() {
       });
     });
 
+    it('does not create native object when rejecting parameters', function() {
+      return decode().then(expectFail, () => {
+        expect(client.calls()).to.be.empty;
+      });
+    });
+
     it('passes parameters to native call', function() {
       decode(buffer, 'ascii');
       let call = client.calls({op: 'call', method: 'decode'})[0];
@@ -58,6 +65,12 @@ describe('TextDecoder', function() {
 
     it('defaults to utf-8', function() {
       decode(buffer);
+      let call = client.calls({op: 'call', method: 'decode'})[0];
+      expect(call.parameters.encoding).to.equal('utf-8');
+    });
+
+    it('replaces null with utf-8 ', function() {
+      decode(buffer, null);
       let call = client.calls({op: 'call', method: 'decode'})[0];
       expect(call.parameters.encoding).to.equal('utf-8');
     });
@@ -81,6 +94,22 @@ describe('TextDecoder', function() {
       let promise = decode(buffer);
       tabris._notify(created().id, 'result', {string: 'foo'});
       return promise.then(() => {
+        expect(client.calls({op: 'destroy', id: created().id})).not.to.be.empty;
+      });
+    });
+
+    it('rejects when error received', function() {
+      let promise = decode(buffer);
+      tabris._notify(created().id, 'error', {});
+      return promise.then(expectFail, err => {
+        expect(err.message).to.equal('Could not decode utf-8');
+      });
+    });
+
+    it('destroys remote object when error received', function() {
+      let promise = decode(buffer);
+      tabris._notify(created().id, 'error', {});
+      return promise.then(expectFail, () => {
         expect(client.calls({op: 'destroy', id: created().id})).not.to.be.empty;
       });
     });
