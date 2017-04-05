@@ -108,12 +108,30 @@ describe('Request', function() {
     describe('referrer', function() {
 
       it('defaults to empty string', function() {
-        expect(request.credentials).to.equal('omit');
+        expect(request.referrer).to.equal('');
       });
 
       it('is read-only', function() {
         request.referrer = 'http://example.com/';
         expect(request.referrer).to.equal('');
+      });
+
+    });
+
+    describe('timeout', function() {
+
+      it('defaults to 0', function() {
+        expect(request.timeout).to.equal(0);
+      });
+
+      it('is accepted in config', function() {
+        request = new Request('http://example.com', {timeout: 23});
+        expect(request.timeout).to.equal(23);
+      });
+
+      it('is read-only', function() {
+        request.timeout = 23;
+        expect(request.timeout).to.equal(0);
       });
 
     });

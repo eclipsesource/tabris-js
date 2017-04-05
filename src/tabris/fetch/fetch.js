@@ -44,7 +44,7 @@ export function fetch(input, init) {
       responseType: 'arraybuffer',
       data: typeof request._bodyInit === 'undefined' ? null : request._bodyInit,
       headers: encodeHeaders(request.headers),
-      timeout: 0
+      timeout: request.timeout
     });
   });
 }

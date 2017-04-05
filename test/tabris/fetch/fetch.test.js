@@ -41,7 +41,8 @@ describe('fetch', function() {
     fetch('http://example.org', {
       method: 'post',
       headers: {foo: 23, bar: 42},
-      body: 'content'
+      body: 'content',
+      timeout: 4711
     });
     expect(proxy.send).to.have.been.calledWithMatch({
       url: 'http://example.org',
@@ -49,7 +50,7 @@ describe('fetch', function() {
       headers: {foo: '23', bar: '42'},
       data: 'content',
       responseType: 'arraybuffer',
-      timeout: 0
+      timeout: 4711
     });
   });
 

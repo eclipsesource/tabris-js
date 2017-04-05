@@ -32,7 +32,8 @@ export default class Request extends Body {
       headers: {value: new Headers(options.headers || input.headers || {})},
       credentials: {value: options.credentials || input.credentials || 'omit'},
       mode: {value: options.mode || input.mode || null},
-      referrer: {value: ''}
+      referrer: {value: ''},
+      timeout: {value: options.timeout || 0}
     });
     if ((this.method === 'GET' || this.method === 'HEAD') && body) {
       throw new TypeError('Body not allowed for GET or HEAD requests');
