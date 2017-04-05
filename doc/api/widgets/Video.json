@@ -84,7 +84,7 @@
           "description": "Desired playback speed. If the given speed is not supported by the platform or video, the actual playback speed will be `1` - i.e. the natural speed of the video."
         }
       ],
-      "description": "Starts playing the video, *[state](#state)* changes to `play`. Has no effect if the current state is not either `pause` or `ready`."
+      "description": "Starts playing the video, *[state](#state)* changes to `play`. Has no effect unless the current state is either `pause` or `ready`."
     }
   },
   "events": {
@@ -101,7 +101,7 @@
   },
   "links": [
     {
-      "title": "Snippet for creating a video wigdet",
+      "title": "Snippet for creating a video widget",
       "path": "${GITHUB_BRANCH}/snippets/video.js"
     }
   ]

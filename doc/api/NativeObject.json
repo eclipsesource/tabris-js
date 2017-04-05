@@ -130,7 +130,7 @@
         {
           "name": "type",
           "type": "string",
-          "decscription": "The type of event to trigger"
+          "description": "The type of event to trigger"
         },
         {
           "name": "event",

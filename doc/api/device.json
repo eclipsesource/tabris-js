@@ -20,7 +20,7 @@
     "version": {
       "type": "string",
       "readonly": true,
-      "description": "The platform version. On iOS it lools like this: `\"8.1.1\"`. On Android, the [version code](https://developer.android.com/reference/android/os/Build.VERSION_CODES.html) is returned. This property is also available globally as `device.version`."
+      "description": "The platform version. On iOS it looks like this: `\"8.1.1\"`. On Android, the [version code](https://developer.android.com/reference/android/os/Build.VERSION_CODES.html) is returned. This property is also available globally as `device.version`."
     },
     "model": {
       "type": "string",

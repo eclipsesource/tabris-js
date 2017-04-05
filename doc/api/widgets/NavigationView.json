@@ -53,7 +53,7 @@
       "type": "string",
       "values": ["light", "dark", "default"],
       "default": "default",
-      "description": "Controls the color scheme used for the toolbars overflow menu. When set to `\"default\"` the theme is inherited from the toolbar. Available only on Windows."
+      "description": "Controls the color scheme used for the toolbar's overflow menu. When set to `\"default\"` the theme is inherited from the toolbar. Available only on Windows."
     },
     "win_drawerActionTheme": {
       "type": "string",
