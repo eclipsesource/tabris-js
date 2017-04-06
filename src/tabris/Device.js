@@ -7,6 +7,7 @@ export default class Device extends NativeObject {
     if (arguments[0] !== true) {
       throw new Error('Device can not be created');
     }
+    this._create('tabris.Device');
   }
 
   _listen(name, listening) {

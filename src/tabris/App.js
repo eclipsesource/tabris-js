@@ -11,6 +11,7 @@ export default class App extends NativeObject {
     if (arguments[0] !== true) {
       throw new Error('App can not be created');
     }
+    this._create('tabris.App');
   }
 
   get id() {

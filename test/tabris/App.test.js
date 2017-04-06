@@ -30,6 +30,14 @@ describe('App', function() {
     expect(app).to.be.an.instanceOf(App);
   });
 
+  describe('create', function() {
+
+    it('creates a native object', function() {
+      expect(client.calls({op: 'create', type: 'tabris.App'})).to.not.be.empty;
+    });
+
+  });
+
   describe('properties', function() {
 
     describe('pinnedCertificates', function() {

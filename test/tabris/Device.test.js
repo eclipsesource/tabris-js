@@ -15,6 +15,15 @@ describe('Device', function() {
     expect(() => new Device()).to.throw(Error, 'Device can not be created');
   });
 
+  describe('create', function() {
+
+    it('creates a native object', function() {
+      createDevice();
+      expect(client.calls({op: 'create', type: 'tabris.Device'})).to.not.be.empty;
+    });
+
+  });
+
   describe('instance', function() {
 
     let results;
