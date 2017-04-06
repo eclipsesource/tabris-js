@@ -187,7 +187,7 @@ function createReadBookPage(book) {
     text: '<b>' + book.title + '</b>'
   }).appendTo(scrollView);
   new tabris.TextView({
-    left: PAGE_MARGIN, right: PAGE_MARGIN, top: [titleTextView, PAGE_MARGIN], bottom: PAGE_MARGIN,
+    left: PAGE_MARGIN, right: PAGE_MARGIN, top: [titleTextView, PAGE_MARGIN],
     text: excerpt
   }).appendTo(scrollView);
   return page;
