@@ -80,6 +80,7 @@ describe('NavigationView', function() {
     });
 
     it('ignores set', function() {
+      stub(console, 'warn');
       stub(client, 'get').returns(23);
       spy(client, 'set');
       navigationView.topToolbarHeight = 12;
@@ -116,6 +117,7 @@ describe('NavigationView', function() {
     });
 
     it('ignores set', function() {
+      stub(console, 'warn');
       stub(client, 'get').returns(23);
       spy(client, 'set');
       navigationView.bottomToolbarHeight = 12;

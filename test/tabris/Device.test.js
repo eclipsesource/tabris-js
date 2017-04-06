@@ -58,6 +58,7 @@ describe('Device', function() {
     });
 
     it('setting properties does not call native SET', function() {
+      stub(console, 'warn');
       device.model = 'x1';
       device.platform = 'foo';
       device.version = '23';
