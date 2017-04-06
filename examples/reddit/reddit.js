@@ -17,6 +17,7 @@ var collectionView = new tabris.CollectionView({
     return item.loading ? 'loading' : 'normal';
   },
   initializeCell: function(cell, type) {
+    cell.highlightOnTouch = true;
     if (type === 'loading') {
       initializeLoadingCell(cell);
     } else {

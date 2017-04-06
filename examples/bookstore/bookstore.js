@@ -34,6 +34,7 @@ new tabris.CollectionView({
 }).appendTo(tabris.ui.drawer);
 
 function initializeCell(cell) {
+  cell.highlightOnTouch = true;
   new tabris.Composite({
     left: 0, right: 0, bottom: 0, height: 1,
     background: '#bbb'
@@ -148,6 +149,7 @@ function createBooksList(books) {
     itemHeight: 72,
     items: books,
     initializeCell: function(cell) {
+      cell.highlightOnTouch = true;
       var imageView = new tabris.ImageView({
         left: PAGE_MARGIN, centerY: 0, width: 32, height: 48,
         scaleMode: 'fit'
