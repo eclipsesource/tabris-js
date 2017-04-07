@@ -111,6 +111,35 @@ new Button({centerX: 0, centerY: 0})
 
 * The property `Widget.type` has been removed. This property used to contain the widget type, e.g. `'Button'`. Use `widget.constructor.name` instead. The `toString()` method now also returns the widget constructor name.
 
+### New CollectionView API
+
+The CollectionView has a new API based on item *indexes* instead of the items itself.
+This gives the developer more control over binding different types of models to a CollectionView.
+
+To begin with, the `items` property has been replaced by a new property `itemCount` that controls the number of items to be displayed.
+To add or remove items at runtime, the methods `insert()` and `remove()` can be used, however, `insert()` now expects and item count instead of an array.
+
+The cells of a CollectionView must now be created by the application in the callback `createCell`, which replaces the `initializeCell` callback.
+Any type of widget can be used as a cell. The type Cell has become obsolete and was removed. Example:
+
+```js
+function createCell(type) {
+  return new TextView({
+    font: type === 'header' ? 'bold 18px' : '14px'
+  });
+}
+```
+
+Instead of the `change:item` event, the cells are now populated in a dedicated `updateCell` callback that receives the cell view and the item index to show:
+
+```js
+function updateCell(cell, index) {
+  cell.text = items[index].name;
+}
+```
+
+The property `itemHeight` has been renamed to `cellHeight` for consistency.
+
 ### Stateful buttons
 
 * On `CheckBox`, `RadioButton`, `Switch` and `ToggleButton`, the property `selection` has been renamed to `checked`.

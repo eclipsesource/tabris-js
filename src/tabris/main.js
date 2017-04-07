@@ -15,7 +15,6 @@ import AlertDialog from './AlertDialog';
 import Button from './widgets/Button';
 import Canvas from './widgets/Canvas';
 import CheckBox from './widgets/CheckBox';
-import Cell from './widgets/Cell';
 import CollectionView from './widgets/CollectionView';
 import Composite from './widgets/Composite';
 import ContentView from './widgets/ContentView';
@@ -65,7 +64,6 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   App,
   Button,
   Canvas,
-  Cell,
   CheckBox,
   CollectionView,
   Composite,

@@ -5,8 +5,7 @@
   "#langPicker": {
     "items": ["Sprache wechseln", "de", "en"]
   },
-  "#menuItemsCV": {
-    "items": [{
+  "items": [{
       "name": "Pizza Hawaii",
       "description": "Pizza aus Grundteig mit Tomatensauce, Schinken, Ananas und Käse.",
       "price": "€6,00"
@@ -30,6 +29,5 @@
       "name": "Pizza Spinaci",
       "description": "Pizza mit Spinat, Knoblauch und Tomaten.",
       "price": "€6,50"
-    }]
-  }
+  }]
 }

@@ -100,8 +100,6 @@ describe('tabris', function() {
     expect(tabris.ActivityIndicator.name).to.equal('ActivityIndicator');
     expect(tabris.Button).to.be.a('function');
     expect(tabris.Button.name).to.equal('Button');
-    expect(tabris.Cell).to.be.a('function');
-    expect(tabris.Cell.name).to.equal('Cell');
     expect(tabris.CheckBox).to.be.a('function');
     expect(tabris.CheckBox.name).to.equal('CheckBox');
     expect(tabris.Canvas).to.be.a('function');

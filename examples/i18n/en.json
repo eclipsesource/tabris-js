@@ -5,8 +5,7 @@
   "#langPicker": {
     "items": ["Change language", "de", "en"]
   },
-  "#menuItemsCV": {
-    "items": [{
+  "items": [{
       "name": "Pizza Hawaii",
       "description": "Pizza with tomato base, cheese, pieces of ham and pineapple.",
       "price": "$5.30"
@@ -30,6 +29,6 @@
       "name": "Pizza Spinaci",
       "description": "Pizza with spinach, garlic and tomatoes.",
       "price": "$7.50"
-    }]
-  }
+    }
+  ]
 }

@@ -1,7 +1,7 @@
-var HORIZONTAL_MARGIN = 16;
-var VERTICAL_MARGIN = 8;
+const HORIZONTAL_MARGIN = 16;
+const VERTICAL_MARGIN = 8;
 
-var items = [
+const items = [
   {title: 'Up for lunch?', sender: 'John Smith', time: '11:35'},
   {title: 'JavaScript for mobile applications', sender: 'JavaScript Newsletter', time: '08:03'},
   {title: 'This is just a spam message', sender: 'Spammer', time: '04:32'},
@@ -11,26 +11,29 @@ var items = [
   {title: 'Fraud mail', sender: 'Unsuspicious Jack', time: 'yesterday'}
 ];
 
-var collectionView = new tabris.CollectionView({
+let collectionView = new tabris.CollectionView({
   left: 0, right: 0, top: 0, bottom: 0,
-  itemHeight: 64,
-  items: items,
-  initializeCell: function(cell) {
-    cell.background = '#d0d0d0';
-    var container = new tabris.Composite({
+  itemCount: items.length,
+  cellHeight: 64,
+  createCell: () => {
+    let cell = new tabris.Composite({'background': '#d0d0d0'});
+    let container = new tabris.Composite({
+      id: 'container',
       left: 0, top: 0, bottom: 0, right: 0,
       background: 'white'
-    }).on('panHorizontal', function(event) {
-      handlePan(event);
-    }).appendTo(cell);
-    var senderView = new tabris.TextView({
+    }).on('panHorizontal', event => handlePan(event))
+      .appendTo(cell);
+    new tabris.TextView({
+      id: 'senderText',
       top: VERTICAL_MARGIN, left: HORIZONTAL_MARGIN,
       font: 'bold 18px'
     }).appendTo(container);
-    var titleView = new tabris.TextView({
+    new tabris.TextView({
+      id: 'titleText',
       bottom: VERTICAL_MARGIN, left: HORIZONTAL_MARGIN
     }).appendTo(container);
-    var timeView = new tabris.TextView({
+    new tabris.TextView({
+      id: 'timeText',
       textColor: '#b8b8b8',
       top: VERTICAL_MARGIN, right: HORIZONTAL_MARGIN
     }).appendTo(container);
@@ -38,11 +41,14 @@ var collectionView = new tabris.CollectionView({
       left: 0, bottom: 0, right: 0, height: 1,
       background: '#b8b8b8'
     }).appendTo(cell);
-    cell.on('itemChanged', function({value: item}) {
-      senderView.text = item.sender;
-      titleView.text = item.title;
-      timeView.text = item.time;
-    });
+    return cell;
+  },
+  updateCell: (view, index) => {
+    let item = items[index];
+    view.find('#container').first().item = item;
+    view.find('#senderText').set('text', item.sender);
+    view.find('#titleText').set('text', item.title);
+    view.find('#timeText').set('text', item.time);
   }
 }).appendTo(tabris.ui.contentView);
 
@@ -56,12 +62,12 @@ function handlePan(event) {
 
 function handlePanFinished(event) {
   let {target, velocityX, translationX} = event;
-  var beyondCenter = Math.abs(translationX) > target.bounds.width / 2;
-  var fling = Math.abs(velocityX) > 200;
-  var sameDirection = sign(velocityX) === sign(translationX);
+  let beyondCenter = Math.abs(translationX) > target.bounds.width / 2;
+  let fling = Math.abs(velocityX) > 200;
+  let sameDirection = sign(velocityX) === sign(translationX);
   // When swiped beyond the center, trigger dismiss if flinged in the same direction or let go.
   // Otherwise, detect a dismiss only if flinged in the same direction.
-  var dismiss = beyondCenter ? sameDirection || !fling : sameDirection && fling;
+  let dismiss = beyondCenter ? sameDirection || !fling : sameDirection && fling;
   if (dismiss) {
     animateDismiss(event);
   } else {
@@ -70,14 +76,16 @@ function handlePanFinished(event) {
 }
 
 function animateDismiss({target, translationX}) {
-  var bounds = target.bounds;
+  let bounds = target.bounds;
   target.animate({
     transform: {translationX: sign(translationX) * bounds.width}
   }, {
     duration: 200,
     easing: 'ease-out'
-  }).then(function() {
-    collectionView.remove(target.parent().itemIndex);
+  }).then(() => {
+    let index = items.indexOf(target.item);
+    items.splice(index, 1);
+    collectionView.remove(index);
   });
 }
 

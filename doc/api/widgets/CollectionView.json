@@ -3,24 +3,23 @@
   "description": "A scrollable list that displays data items in cells, one per row. Cells are created on demand by the *createCell* callback and reused on scrolling.",
   "extends": "Widget",
   "properties": {
-    "itemHeight": {
+    "cellHeight": {
       "type": "number|((item: any, cellType: string) => number)",
       "description": "The height of a collection cell. If set to a function, this function will be called for every item, providing the item and the cell type as parameters, and must return the item height for the given item."
     },
-    "items": {
-      "type": "any[]",
-      "description": "An array of data items to be displayed by the collection view. For dynamic content, use the methods `insert` and `remove` instead of setting this property directly."
+    "itemCount": {
+      "type": "number",
+      "description": "The number of items to display. Setting this property will reload all items. To add or remove items, use the methods `insert` and `remove` instead of setting the `itemCount`."
     },
     "createCell": {
-      "type": "(cellType: string) => Cell",
+      "type": "(cellType: string) => Widget",
       "static": true,
-      "description": "A callback used to create a new collection cell for a given type. This callback will be called by the framework and the created cell will be reused for different items. The cell should be populated in a *itemChanged* listener."
+      "description": "A callback used to create a new reusable cell widget for a given type. This callback will be called by the framework and the created cell will be reused for different items. The created widget should be populated in the `updateCell` function."
     },
-    "initializeCell": {
-      "type": "(cell: Cell, cellType: string) => void",
+    "updateCell": {
+      "type": "(cell: Widget, index: number) => void",
       "static": true,
-      "deprecated": "Use `createCell` instead.",
-      "description": "A callback used to initialize a collection cell by attaching widgets and a *itemChanged* listener."
+      "description": "A callback used to update a given cell widget to display the item with the given index. This callback will be called by the framework."
     },
     "cellType": {
       "type": "string|((item: any) => string)",
@@ -61,10 +60,6 @@
     "select": {
       "description": "Fired when a collection item is selected.",
       "parameters": {
-        "item": {
-          "description": "The item that was selected.",
-          "type": "any"
-        },
         "index": {
           "description": "The index of the selected item.",
           "type": "number"
@@ -92,24 +87,24 @@
     "insert": {
       "parameters": [
         {
-          "name": "items",
-          "type": "any[]"
+          "name": "index",
+          "type": "number"
         },
         {
-          "name": "index",
+          "name": "count",
           "type": "number",
           "optional": true,
-          "description": "The position to insert the items at. If a negative index is given, it is interpreted as relative to the end. If the given index is greater than the item count, new items will be appended at the end. "
+          "description": "The position to insert the items at. A negative index is interpreted as relative to the end. If the given index is greater than the item count, new items will be appended at the end. "
         }
       ],
-      "description": "Inserts the given items into this view at the given index or at the end if none is specified. This operation will modify the *items* property."
+      "description": "Inserts one or more items at the given index. When no *count* is specified, a single item will be added at the given *index*. New cells may be created if needed. The `updateCell` callback will only be called for those new items that become immediately visible. Note that inserting new items changes the index of all subsequent items. This operation will update the `itemCount` property."
     },
     "remove": {
       "parameters": [
         {
           "name": "index",
           "type": "number",
-          "description": "The index of the first item to remove. If this is negative, it is interpreted as relative to the end."
+          "description": "The index of the first item to remove. A negative value is interpreted as relative to the end."
         },
         {
           "name": "count",
@@ -118,24 +113,19 @@
           "description": "The number of items to remove."
         }
       ],
-      "description": "Removes one or, if specified, *count* items beginning with the given index from this view. This operation will modify the *items* property."
+      "description": "Removes one or more items beginning with the given index. When no *count* is given, only the item at *index* will be removed. Note that this changes the index of all subsequent items, however. This operation will update the `itemCount` property."
     },
-    "refresh": [
-      {
-        "parameters": [],
-        "description": "Triggers a refresh of all visible items. This will issue *itemChanged* events on the corresponding cells."
-      },
-      {
-        "parameters": [
-          {
-            "name": "index",
-            "type": "number",
-            "description": "The index of the item that was changed."
-          }
-        ],
-        "description": "Triggers a refresh of the item with the given index. If the item is scrolled into view, a *itemChanged* event will be issued on the corresponding cell."
-      }
-    ],
+    "refresh": {
+      "parameters": [
+        {
+          "name": "index",
+          "type": "number",
+          "optional": true,
+          "description": "The index of the item that was changed."
+        }
+      ],
+      "description": "Triggers an update of the item at the given *index* by calling the `updateCell` callback of the corresponding. If no *index* is given, all visible items will be updated."
+    },
     "reveal": {
       "parameters": [
         {

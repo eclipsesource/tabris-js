@@ -1,31 +1,22 @@
-var SECTION_HEIGHT = 48;
-var ITEM_HEIGHT = 32;
+let SECTION_HEIGHT = 48;
+let ITEM_HEIGHT = 32;
 
-var scrollPosition = 0;
-var items = createItems();
+let scrollPosition = 0;
+let items = createItems();
 
-var floatingSection = createSectionView('section');
+let floatingSection = createSectionView('section');
 floatingSection.text = 'Section 1';
 
 new tabris.CollectionView({
   left: 0, top: 0, right: 0, bottom: 0,
-  items: items,
-  cellType: function(item) {
-    return item.type;
-  },
-  itemHeight: function(item, type) {
-    return type === 'section' ? SECTION_HEIGHT : ITEM_HEIGHT;
-  },
-  initializeCell: function(cell, type) {
-    var textView = type === 'section' ? createSectionView() : createItemView();
-    textView.appendTo(cell);
-    cell.on('itemChanged', function({value: item}) {
-      textView.text = item.name;
-    });
-  }
-}).on('scroll', function({target, deltaY}) {
+  itemCount: items.length,
+  cellType: index => items[index].type,
+  cellHeight: (index, type) => type === 'section' ? SECTION_HEIGHT : ITEM_HEIGHT,
+  createCell: (type) => type === 'section' ? createSectionView() : createItemView(),
+  updateCell: (cell, index) => cell.text = items[index].name
+}).on('scroll', ({target, deltaY}) => {
   scrollPosition += deltaY;
-  var firstVisibleItem = target.firstVisibleIndex;
+  let firstVisibleItem = target.firstVisibleIndex;
   floatingSection.set({
     text: getCurrentSection(firstVisibleItem).name,
     transform: {translationY: getSectionTranslationY(firstVisibleItem)}
@@ -38,7 +29,7 @@ function getSectionTranslationY(firstVisibleItem) {
   if (scrollPosition < 0) {
     return -scrollPosition;
   }
-  var nextSectionOffset = scrollPosition + SECTION_HEIGHT - getNextSection(firstVisibleItem).top;
+  let nextSectionOffset = scrollPosition + SECTION_HEIGHT - getNextSection(firstVisibleItem).top;
   if (nextSectionOffset > 0) {
     return -nextSectionOffset;
   }
@@ -46,8 +37,8 @@ function getSectionTranslationY(firstVisibleItem) {
 }
 
 function getNextSection(firstVisibleItem) {
-  for (var i = firstVisibleItem + 1; i < items.length; i++) {
-    var item = items[i];
+  for (let i = firstVisibleItem + 1; i < items.length; i++) {
+    let item = items[i];
     if (item.type === 'section') {
       return item;
     }
@@ -56,8 +47,8 @@ function getNextSection(firstVisibleItem) {
 }
 
 function getCurrentSection(firstVisibleItem) {
-  for (var i = firstVisibleItem; i >= 0; i--) {
-    var item = items[i];
+  for (let i = firstVisibleItem; i >= 0; i--) {
+    let item = items[i];
     if (item.type === 'section') {
       return item;
     }
@@ -84,13 +75,13 @@ function createItemView() {
 }
 
 function createItems() {
-  var count = 1;
-  var items = [];
-  var top = 0;
-  for (var j = 1; j <= 10; j++) {
+  let count = 1;
+  let items = [];
+  let top = 0;
+  for (let j = 1; j <= 10; j++) {
     items.push({name: 'Section ' + j, type: 'section', top: top});
     top += SECTION_HEIGHT;
-    for (var i = 0; i < 5; i++) {
+    for (let i = 0; i < 5; i++) {
       items.push({name: 'Item ' + count++, type: 'item', top: top});
       top += ITEM_HEIGHT;
     }

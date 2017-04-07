@@ -1,50 +1,67 @@
-var texts = (function() {
-  var lang = tabris.device.get('language').replace(/-.*/, '');
-  try {
-    return require('./' + lang + '.json');
-  } catch (ex) {
-    return require('./en.json');
+const MARGIN = 16;
+const MARGIN_SMALL = 8;
+
+let texts = loadInitialLanguage();
+
+new tabris.Picker({
+  id: 'langPicker',
+  left: MARGIN, top: MARGIN_SMALL, right: MARGIN
+}).on('select', ({item: lang, index}) => {
+  if (index > 0) {
+    this.selectionIndex = 0;
+    texts = require(`./${lang}.json`);
+    tabris.ui.contentView.apply(texts);
+    collectionView.itemCount = texts.items.length;
+    collectionView.refresh();
   }
-}());
+}).appendTo(tabris.ui.contentView);
 
-var MARGIN = 10;
-
-new tabris.Picker({id: 'langPicker', left: 10, top: 10, right: 10})
-  .on('select', function({item: lang, index}) {
-    if (index > 0) {
-      this.selectionIndex = 0;
-      tabris.ui.contentView.apply(require('./' + lang + '.json'));
-    }
-  }).appendTo(tabris.ui.contentView);
-
-new tabris.CollectionView({
-  id: 'menuItemsCV',
-  left: 0, top: '#langPicker 10', right: 0, bottom: 0,
-  itemHeight: 100,
-  initializeCell: function(cell) {
-    var price = new tabris.TextView({
-      centerY: 0, right: MARGIN, width: 100,
+let collectionView = new tabris.CollectionView({
+  left: 0, top: ['#langPicker', MARGIN_SMALL], right: 0, bottom: 0,
+  itemCount: texts.items.length,
+  cellHeight: 54,
+  createCell: () => {
+    let cell = new tabris.Composite();
+    new tabris.TextView({
+      id: 'priceText',
+      top: MARGIN_SMALL, right: MARGIN,
       alignment: 'right',
-      font: '18px',
-      textColor: '#a4c639'
+      font: '14px',
+      textColor: '#7CB342'
     }).appendTo(cell);
-    var name = new tabris.TextView({
-      left: MARGIN, top: MARGIN, right: [price, 0],
-      font: 'bold 18px'
+    new tabris.TextView({
+      id: 'nameText',
+      left: MARGIN, top: MARGIN_SMALL, right: ['#priceText', 0],
+      textColor: '#202020',
+      font: 'bold 14px'
     }).appendTo(cell);
-    var description = new tabris.TextView({
-      left: MARGIN, top: [name, MARGIN / 2], right: [price, 0]
+    new tabris.TextView({
+      id: 'descriptionText',
+      textColor: '#767676',
+      maxLines: 1,
+      left: MARGIN, top: ['#nameText', 0], right: ['#priceText', MARGIN]
     }).appendTo(cell);
     new tabris.Composite({
       left: 0, bottom: 0, right: 0, height: 1,
       background: '#e3e3e3'
     }).appendTo(cell);
-    cell.on('itemChanged', function({value: item}) {
-      name.text = item.name;
-      description.text = item.description;
-      price.text = item.price;
-    });
+    return cell;
+  },
+  updateCell: (view, index) => {
+    let item = texts.items[index];
+    view.find('#priceText').set('text', item.price);
+    view.find('#nameText').set('text', item.name);
+    view.find('#descriptionText').set('text', item.description);
   }
 }).appendTo(tabris.ui.contentView);
 
 tabris.ui.contentView.apply(texts);
+
+function loadInitialLanguage() {
+  let lang = tabris.device.get('language').replace(/-.*/, '');
+  try {
+    return require('./' + lang + '.json');
+  } catch (ex) {
+    return require('./en.json');
+  }
+}

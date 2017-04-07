@@ -1,12 +1,12 @@
-import {CollectionView, Cell} from 'tabris';
+import {CollectionView, Widget} from 'tabris';
 
 // Properties
 let cellType: string|((item: any) => string);
 let columnCount: number;
 let firstVisibleIndex: number;
-let initializeCell:  (cell: Cell, cellType: string) => void;
-let createCell:  (cellType: string) => Cell;
-let itemHeight: number|((item: any, cellType: string) => number);
+let createCell:  (cellType: string) => Widget;
+let updateCell:  (cell: Widget, index: number) => void;
+let cellHeight: number|((item: any, cellType: string) => number);
 let lastVisibleIndex: number;
 let refreshEnabled: boolean;
 let refreshIndicator: boolean;
@@ -18,8 +18,8 @@ cellType = widget.cellType;
 columnCount = widget.columnCount;
 firstVisibleIndex = widget.firstVisibleIndex;
 createCell = widget.createCell;
-initializeCell = widget.initializeCell;
-itemHeight = widget.itemHeight;
+updateCell = widget.updateCell;
+cellHeight = widget.cellHeight;
 lastVisibleIndex = widget.lastVisibleIndex;
 refreshEnabled = widget.refreshEnabled;
 refreshIndicator = widget.refreshIndicator;
@@ -27,20 +27,20 @@ refreshMessage = widget.refreshMessage;
 
 widget.cellType = cellType;
 widget.columnCount = columnCount;
-widget.initializeCell = initializeCell;
-widget.itemHeight = itemHeight;
+widget.createCell = createCell;
+widget.updateCell = updateCell;
+widget.cellHeight = cellHeight;
 widget.refreshEnabled = refreshEnabled;
 widget.refreshIndicator = refreshIndicator;
 widget.refreshMessage = refreshMessage;
 
 // Methods
-let items: any[] = [];
 let index: number = 42;
 let count: number = 42;
 let noReturnValue: void;
 
-noReturnValue = widget.insert(items);
-noReturnValue = widget.insert(items, index);
+noReturnValue = widget.insert(index);
+noReturnValue = widget.insert(index, count);
 noReturnValue = widget.refresh();
 noReturnValue = widget.refresh(index);
 noReturnValue = widget.remove(index);
