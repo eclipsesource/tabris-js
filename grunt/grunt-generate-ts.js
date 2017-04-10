@@ -83,6 +83,7 @@ module.exports = function(grunt) {
     result.indent++;
     addConstructor(result, def);
     addMethods(result, def);
+    addReadonlyProperties(result, def);
     addPropertyApi(result, def);
     result.indent--;
     result.append('}');
@@ -105,9 +106,9 @@ module.exports = function(grunt) {
   function addPropertyInterface(result, def) {
     result.append(createPropertyInterfaceDef(def));
     result.indent++;
-    Object.keys(def.properties || []).sort().forEach((name) => {
+    Object.keys(def.properties || {}).filter(name => !def.properties[name].readonly).sort().forEach((name) => {
       result.append('');
-      result.append(createInterfaceProperty(name, def.properties[name]));
+      result.append(createProperty(name, def.properties[name]));
     });
     result.indent--;
     result.append('}');
@@ -136,6 +137,15 @@ module.exports = function(grunt) {
     }
   }
 
+  function addReadonlyProperties(result, def) {
+    if (def.properties) {
+      Object.keys(def.properties || {}).filter(name => def.properties[name].readonly).sort().forEach((name) => {
+        result.append('');
+        result.append(createProperty(name, def.properties[name]));
+      });
+    }
+  }
+
   function addPropertyApi(result, def) {
     if (def.properties) {
       result.append('');
@@ -160,7 +170,7 @@ module.exports = function(grunt) {
     }
   }
 
-  function createInterfaceProperty(name, def) {
+  function createProperty(name, def) {
     let result = [];
     result.push(createDoc(def));
     let values = [];
