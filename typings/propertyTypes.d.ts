@@ -76,7 +76,7 @@ interface LayoutData {
     bottom?: margin;
     centerX?: offset;
     centerY?: offset;
-    baseline?: Widget;
+    baseline?: Widget | Selector;
     width?: dimension;
     height?: dimension;
 }

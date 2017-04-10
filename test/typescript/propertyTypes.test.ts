@@ -25,8 +25,8 @@ let offsetType: offset = 42;
 let offsetOrUndefined: offset | undefined;
 let dimensionType: dimension = 42;
 let dimensionOrUndefined: dimension | undefined;
-let widgetType: Widget = new Widget();
-let widgetOrUndefined: Widget | undefined;
+let widgetOrSelector: Widget | Selector = new Widget();
+let widgetOrSelectorOrUndefined: Widget | Selector | undefined;
 
 // dimension
 let _dimension: dimension = numberType;
@@ -65,7 +65,7 @@ let layoutData: LayoutData = {
     bottom: marginType,
     centerX: offsetType,
     centerY: offsetType,
-    baseline: widgetType,
+    baseline: widgetOrSelector,
     width: dimensionType,
     height: dimensionType
 };
@@ -76,7 +76,7 @@ marginType = layoutData.top;
 marginType = layoutData.bottom;
 offsetOrUndefined = layoutData.centerX;
 offsetOrUndefined = layoutData.centerY;
-widgetOrUndefined = layoutData.baseline;
+widgetOrSelectorOrUndefined = layoutData.baseline;
 dimensionOrUndefined = layoutData.width;
 dimensionOrUndefined = layoutData.height;
 
