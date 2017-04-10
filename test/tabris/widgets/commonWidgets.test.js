@@ -231,6 +231,7 @@ describe('Common Widgets', function() {
       expect(textInput.message).to.equal('');
       expect(textInput.alignment).to.equal('left');
       expect(textInput.keyboard).to.equal('default');
+      expect(textInput.enterKeyType).to.equal('default');
       expect(textInput.autoCorrect).to.equal(false);
     });
 

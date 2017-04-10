@@ -63,6 +63,19 @@
       "default": "default",
       "description": "Selects the keyboard type to use for editing this widget. Has no effect when `type` is set to `multiline`."
     },
+    "enterKeyType": {
+      "type": "string",
+      "values": [
+        "default",
+        "done",
+        "next",
+        "send",
+        "search",
+        "go"
+      ],
+      "default": "default",
+      "description": "Label or icon to display on the keyboard 'confirmation' key. The key press can be captured via the `accept` event. Setting an `enterKeyType` other than `default` will change the key behavior to not close the keyboard automatically. The developer is able close the keyboard by removing the focus from the `TextInput`."
+    },
     "focused": {
       "type": "boolean",
       "default": "false",

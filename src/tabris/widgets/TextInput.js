@@ -38,6 +38,10 @@ NativeObject.defineProperties(TextInput.prototype, {
     type: ['choice', ['ascii', 'decimal', 'email', 'number', 'numbersAndPunctuation', 'phone', 'url', 'default']],
     default: 'default'
   },
+  enterKeyType: {
+    type: ['choice', ['default', 'done', 'next', 'send', 'search', 'go']],
+    default: 'default'
+  },
   focused: {type: 'boolean', nocache: true},
   fillColor: {type: 'color'},
   borderColor: {type: 'color'}
