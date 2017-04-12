@@ -43,27 +43,23 @@ module.exports = function(grunt) {
     result.append(grunt.file.read(grunt.config('doc').typings));
     result.append('');
     Object.keys(defs).forEach((name) => {
-      addInheritedEvents(defs, defs[name]);
+      defs[name].isNativeObject = isNativeObject(defs, defs[name]);
       createTypeDef(result, defs[name]);
     });
     result.append('');
     return result.toString();
   }
 
-  function addInheritedEvents(defs, def) {
-    if (def.extends) {
-      if (!(def.extends in defs)) {
-        throw new Error('Super type not found for ' + def.type);
-      }
-      addInheritedEvents(defs, def.extends);
-      def.events = Object.assign({}, defs[def.extends].events || {}, def.events);
-    }
+  function isNativeObject(defs, def) {
+    return def && (def.type === 'NativeObject' || isNativeObject(defs, defs[def.extends]));
   }
 
   function createTypeDef(result, def) {
     result.append('// ' + def.type);
-    result.append('');
-    addPropertyInterface(result, def);
+    if (def.isNativeObject) {
+      result.append('');
+      addPropertyInterface(result, def);
+    }
     result.append('');
     addClass(result, def);
     addInstance(result, def);
@@ -83,19 +79,25 @@ module.exports = function(grunt) {
     result.indent++;
     addConstructor(result, def);
     addMethods(result, def);
-    addReadonlyProperties(result, def);
-    addPropertyApi(result, def);
+    let propertiesFilter = def.isNativeObject ? prop => prop.readonly : () => true;
+    addProperties(result, def, propertiesFilter);
+    if (def.isNativeObject) {
+      addPropertyApi(result, def);
+    }
     result.indent--;
     result.append('}');
   }
 
   function addConstructor(result, def) {
     result.append('');
-    result.append(`constructor(properties?: ${def.type}Properties);`);
+    let str = def.isNativeObject ? `properties?: ${def.type}Properties` : '';
+    result.append('constructor(' + str + ');');
   }
 
   function addClassDef(result, def) {
-    result.append(`interface ${def.type} extends _${def.type}Properties {}`);
+    if (def.isNativeObject) {
+      result.append(`interface ${def.type} extends _${def.type}Properties {}`);
+    }
     let str = 'export class ' + def.type;
     if (def.extends) {
       str += ' extends ' + def.extends;
@@ -106,10 +108,7 @@ module.exports = function(grunt) {
   function addPropertyInterface(result, def) {
     result.append(createPropertyInterfaceDef(def));
     result.indent++;
-    Object.keys(def.properties || {}).filter(name => !def.properties[name].readonly).sort().forEach((name) => {
-      result.append('');
-      result.append(createProperty(name, def.properties[name]));
-    });
+    addProperties(result, def, prop => !prop.readonly);
     result.indent--;
     result.append('}');
     result.append(`type ${def.type}Properties = Partial<_${def.type}Properties>`);
@@ -137,9 +136,10 @@ module.exports = function(grunt) {
     }
   }
 
-  function addReadonlyProperties(result, def) {
+  function addProperties(result, def, filter) {
     if (def.properties) {
-      Object.keys(def.properties || {}).filter(name => def.properties[name].readonly).sort().forEach((name) => {
+      let propertiesFilter = filter ? name => filter(def.properties[name]) : () => true;
+      Object.keys(def.properties || {}).filter(propertiesFilter).sort().forEach((name) => {
         result.append('');
         result.append(createProperty(name, def.properties[name]));
       });
