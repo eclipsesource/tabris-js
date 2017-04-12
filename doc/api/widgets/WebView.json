@@ -10,6 +10,16 @@
     "html": {
       "type": "string",
       "description": "A complete HTML document to display. Always returns the last set value."
+    },
+    "canGoForward": {
+      "type": "boolean",
+      "readonly": true,
+      "description": "Whether there is a next page to navigate to via `goForward()`."
+    },
+    "canGoBack": {
+      "type": "boolean",
+      "readonly": true,
+      "description": "Whether there is a previous to navigated to via `goBack()`."
     }
   },
   "events": {
@@ -77,6 +87,18 @@
         ],
         "description": "Posts a web message to the underlying `window` object of the WebView. The website in the `WebView` can register for the message in the following fashion: `window.addEventListener('message', callbackFunction)`. For more information see [`Window.postMessage()`](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) API.",
         "returns": "this"
+      }
+    ],
+    "goBack": [
+      {
+        "parameters": [],
+        "description": "Navigate the `WebView` to the previous page if possible."
+      }
+    ],
+    "goForward": [
+      {
+        "parameters": [],
+        "description": "Navigate the `WebView` to the next page if possible."
       }
     ]
   },
