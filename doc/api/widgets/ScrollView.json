@@ -47,6 +47,7 @@
           {
             "name": "options",
             "type": "{animate?: boolean}",
+            "optional": true,
             "description": "An additional object to control the animation. Set `{animate: false}` to scroll without an animation."
           }
         ],
@@ -76,6 +77,7 @@
           {
             "name": "options",
             "type": "{animate?: boolean}",
+            "optional": true,
             "description": "An additional object to control the animation. Set `{animate: false}` to scroll without an animation."
           }
         ],

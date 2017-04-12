@@ -14,8 +14,9 @@
             "type": "Function"
           },
           {
-            "name": "context?",
+            "name": "context",
             "type": "this",
+            "optional": true,
             "description": "In the listener function, `this` will point to this object."
           }
         ],
@@ -35,8 +36,9 @@
             "type": "Function"
           },
           {
-            "name": "context?",
+            "name": "context",
             "type": "this",
+            "optional": true,
             "description": "In the listener function, `this` will point to this object."
           }
         ],
@@ -56,7 +58,8 @@
             "type": "Function"
           },
           {
-            "name": "context?",
+            "name": "context",
+            "optional": true,
             "type": "this"
           }
         ],

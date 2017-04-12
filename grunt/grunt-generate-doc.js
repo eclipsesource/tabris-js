@@ -243,7 +243,7 @@ module.exports = function(grunt) {
 
     function renderMethodParamList(parameters) {
       return '\n\n' + parameters.map(param => {
-        let result = ['- ', param.name, ': '];
+        let result = ['- ', param.name, param.optional ? '?: ' : ': '];
         if (param.type) {
           result.push('*', renderTypeLink(param.type), '*');
         } else if (param.value) {

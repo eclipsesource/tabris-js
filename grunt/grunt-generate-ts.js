@@ -190,7 +190,7 @@ module.exports = function(grunt) {
   }
 
   function createParamList(parameters) {
-    return parameters.map(param => `${param.name}: ${param.type}`).join(', ');
+    return parameters.map(param => `${param.name}${param.optional ? '?' : ''}: ${param.type}`).join(', ');
   }
 
   function createDoc(def) {
