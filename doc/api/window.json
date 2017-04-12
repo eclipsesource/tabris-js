@@ -10,37 +10,11 @@
             "name": "callback",
             "type": "Function",
             "description": "The function to call."
-          }
-        ],
-        "description": "Calls the given function as soon as the current javascript thread is no longer busy. Same as `setTimeout(callback, 0)`.",
-        "returns": "any"
-      },
-      {
-        "parameters": [
-          {
-            "name": "callback",
-            "type": "Function",
-            "description": "The function to call."
           },
           {
             "name": "delay",
             "type": "number",
-            "description": "The delay in milliseconds."
-          }
-        ],
-        "description": "Calls the given function after the specified delay. The actual delay may be slightly longer than the given one.",
-        "returns": "any"
-      },
-      {
-        "parameters": [
-          {
-            "name": "callback",
-            "type": "Function",
-            "description": "The function to call."
-          },
-          {
-            "name": "delay",
-            "type": "number",
+            "optional": true,
             "description": "The delay in milliseconds."
           },
           {
@@ -64,22 +38,7 @@
           {
             "name": "delay",
             "type": "number",
-            "description": "The delay in milliseconds."
-          }
-        ],
-        "description": "Calls the given function repeatedly, each times waiting the given delay. The actual delay may be slightly longer than the given one.",
-        "returns": "any"
-      },
-      {
-        "parameters": [
-          {
-            "name": "callback",
-            "type": "Function",
-            "description": "The function to call."
-          },
-          {
-            "name": "delay",
-            "type": "number",
+            "optional": true,
             "description": "The delay in milliseconds."
           },
           {

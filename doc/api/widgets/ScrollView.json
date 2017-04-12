@@ -32,17 +32,6 @@
             "name": "offset",
             "type": "number",
             "description": "The offset to scroll to in dip."
-          }
-        ],
-        "returns": "this",
-        "description": "Scrolls to the given horizontal offset using an animation. Has no effect on a vertical `ScrollView`"
-      },
-      {
-        "parameters": [
-          {
-            "name": "offset",
-            "type": "number",
-            "description": "The offset to scroll to in dip."
           },
           {
             "name": "options",
@@ -56,17 +45,6 @@
       }
     ],
     "scrollToY": [
-      {
-        "parameters": [
-          {
-            "name": "offsetY",
-            "type": "number",
-            "description": "The offset to scroll to in dip."
-          }
-        ],
-        "returns": "this",
-        "description": "Scrolls to the given vertical offset using an animation. Has no effect on a horizontal `ScrollView`"
-      },
       {
         "parameters": [
           {

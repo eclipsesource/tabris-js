@@ -123,33 +123,25 @@
     ],
     "children": [
       {
-        "parameters": [],
-        "returns": "WidgetCollection",
-        "description": "Returns a collection containing all children of all widgets in this collection."
-      },
-      {
         "parameters": [
           {
             "name": "selector",
             "type": "Selector",
+            "optional": true,
             "description": "A selector expression or a predicate function to filter the results."
           }
         ],
         "returns": "WidgetCollection",
-        "description": "Same as `collection.children().filter(selector)`."
+        "description": "Returns a collection containing all children of all widgets in this collection that match the given selector."
       }
     ],
     "find": [
-      {
-        "parameters": [],
-        "returns": "WidgetCollection",
-        "description": "Returns a collection containing all descendants of all widgets in this collection."
-      },
       {
         "parameters": [
           {
             "name": "selector",
             "type": "Selector",
+            "optional": true,
             "description": "A selector expression or a predicate function to filter the results."
           }
         ],

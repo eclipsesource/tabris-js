@@ -70,14 +70,11 @@
     ],
     "play": [
       {
-        "parameters": [],
-        "description": "Starts playing the video, *[state](#state)* changes to `play`. Has no effect if the current state is not either `pause` or `ready`."
-      },
-      {
         "parameters": [
           {
             "name": "speed",
             "type": "number",
+            "optional": true,
             "description": "Desired playback speed. If the given speed is not supported by the platform or video, the actual playback speed will be `1` - i.e. the natural speed of the video."
           }
         ],

@@ -5,15 +5,11 @@
   "methods": {
     "children": [
       {
-        "parameters": [],
-        "returns": "WidgetCollection",
-        "description": "Returns a (possibly empty) collection of all children of this widget."
-      },
-      {
         "parameters": [
           {
             "name": "selector",
             "type": "Selector",
+            "optional": true,
             "description": "A selector expression or a predicate function to filter the results."
           }
         ],
@@ -23,15 +19,11 @@
     ],
     "siblings": [
       {
-        "parameters": [],
-        "returns": "WidgetCollection",
-        "description": "Returns a (possibly empty) collection of all siblings of this widget."
-      },
-      {
         "parameters": [
           {
             "name": "selector",
             "type": "Selector",
+            "optional": true,
             "description": "A selector expression or a predicate function to filter the results."
           }
         ],
@@ -41,15 +33,11 @@
     ],
     "find": [
       {
-        "parameters": [],
-        "returns": "WidgetCollection",
-        "description": "Returns a (possibly empty) collection of all descendants of this widget."
-      },
-      {
         "parameters": [
           {
             "name": "selector",
             "type": "Selector",
+            "optional": true,
             "description": "A selector expression or a predicate function to filter the results."
           }
         ],

@@ -95,36 +95,18 @@
           {
             "name": "items",
             "type": "any[]"
-          }
-        ],
-        "description": "Inserts the given items into this view. Items are added at the end. This operation will modify the *items* property."
-      },
-      {
-        "parameters": [
-          {
-            "name": "items",
-            "type": "any[]"
           },
           {
             "name": "index",
             "type": "number",
+            "optional": true,
             "description": "The position to insert the items at. If a negative index is given, it is interpreted as relative to the end. If the given index is greater than the item count, new items will be appended at the end. "
           }
         ],
-        "description": "Inserts the given items into this view at the given index. This operation will modify the *items* property."
+        "description": "Inserts the given items into this view at the given index or at the end if none is specified. This operation will modify the *items* property."
       }
     ],
     "remove": [
-      {
-        "parameters": [
-          {
-            "name": "index",
-            "type": "number",
-            "description": "The index of the item to remove. If this is negative, it is interpreted as relative to the end."
-          }
-        ],
-        "description": "Removes the item at the given index from this view. This operation will modify the *items* property."
-      },
       {
         "parameters": [
           {
@@ -135,10 +117,11 @@
           {
             "name": "count",
             "type": "number",
+            "optional": true,
             "description": "The number of items to remove."
           }
         ],
-        "description": "Removes *count* items beginning with the given index from this view. This operation will modify the *items* property."
+        "description": "Removes one or, if specified, *count* items beginning with the given index from this view. This operation will modify the *items* property."
       }
     ],
     "refresh": [
@@ -154,7 +137,7 @@
             "description": "The index of the item that was changed."
           }
         ],
-        "description": "Triggers a refresh of the item with the given index. If the item is scrolled into view, an *change:item* event will be issued on the corresponding cell."
+        "description": "Triggers a refresh of the item with the given index. If the item is scrolled into view, a *change:item* event will be issued on the corresponding cell."
       }
     ],
     "reveal": [
