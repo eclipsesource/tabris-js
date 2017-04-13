@@ -12,7 +12,7 @@ tabris._start = function(client) {
     try {
       rootModule.require('tabris');
       tabris._client = client; // required by head.append
-      checkVersion(tabris.version, client.get('tabris.App', 'tabrisJsVersion'));
+      checkVersion(tabris.version, tabris.app._nativeGet('tabrisJsVersion'));
     } catch (error) {
       console.error('Could not load tabris module: ' + error);
       console.log(error.stack);
