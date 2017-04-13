@@ -1,5 +1,4 @@
 /*global document: true */
-import {checkVersion} from './version';
 import Module from './Module';
 
 global.window = global.self = global;
@@ -12,7 +11,6 @@ tabris._start = function(client) {
     try {
       rootModule.require('tabris');
       tabris._client = client; // required by head.append
-      checkVersion(tabris.version, tabris.app._nativeGet('tabrisJsVersion'));
     } catch (error) {
       console.error('Could not load tabris module: ' + error);
       console.log(error.stack);

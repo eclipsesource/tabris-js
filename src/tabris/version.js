@@ -1,5 +1,8 @@
 
 export function checkVersion(tabrisVersionString, clientVersionString) {
+  if (!clientVersionString) {
+    return;
+  }
   let tabrisVersion = tabrisVersionString.split('.').map(toInt);
   let clientVersion = clientVersionString.split('.').map(toInt);
   if (tabrisVersion[0] !== clientVersion[0]) {

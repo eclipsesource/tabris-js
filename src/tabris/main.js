@@ -1,5 +1,6 @@
 import './load-polyfill';
 
+import {checkVersion} from './version';
 import Tabris from './Tabris';
 import Device, {create as createDevice, publishDeviceProperties} from './Device';
 import App, {create as createApp} from './App';
@@ -123,6 +124,7 @@ Object.assign(window, {
 
 tabris.on('start', () => {
   tabris.app = createApp();
+  checkVersion(tabris.version, tabris.app._nativeGet('tabrisJsVersion'));
   tabris.ui = createUi();
   tabris.device = createDevice();
   publishDeviceProperties(tabris.device, window);

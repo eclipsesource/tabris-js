@@ -1,5 +1,5 @@
 import {expect, stub, restore} from '../test';
-import {checkVersion} from '../../src/boot/version';
+import {checkVersion} from '../../src/tabris/version';
 
 describe('version check', function() {
 
