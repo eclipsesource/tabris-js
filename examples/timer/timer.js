@@ -16,12 +16,12 @@ var cpsTextView = new tabris.TextView({
 }).appendTo(tabris.ui.contentView);
 
 var delayTextView = new tabris.TextView({
-  left: MARGIN, baseline: '#delayTextInput',
+  left: MARGIN, top: [cpsTextView, MARGIN_LARGE],
   text: 'Delay (ms):'
 }).appendTo(tabris.ui.contentView);
 
 var delayTextInput = new tabris.TextInput({
-  left: [delayTextView, MARGIN], top: [cpsTextView, MARGIN_LARGE],
+  left: [delayTextView, MARGIN], baseline: delayTextView,
   id: 'delayTextInput',
   text: '1000',
   message: 'Delay (ms)'
