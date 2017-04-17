@@ -1,5 +1,6 @@
 {
   "type": "InactivityTimer",
+  "extends": "NativeObject",
   "description": "A timer that triggers when the app has not been interacted with for a configurable interval.",
   "properties": {
     "delay": {
