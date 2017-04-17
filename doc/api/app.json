@@ -48,42 +48,36 @@
     }
   },
   "methods": {
-    "reload": [
-      {
-        "parameters": [],
-        "description": "Forces the running application to reload the main module and start over."
-      }
-    ],
-    "getResourceLocation": [
-      {
-        "parameters": [
-          {
-            "name": "path",
-            "type": "string",
-            "description": "The path of a resource relative to the application root."
-          }
-        ],
-        "returns": "string",
-        "description": "Returns the URL for a given resource that is bundled with the app. Can be used to access app resources like images, videos, etc. Note that these resources can only be accessed in read-only mode."
-      }
-    ],
-    "installPatch": [
-      {
-        "parameters": [
-          {
-            "name": "url",
-            "type": "string",
-            "description": "The URL to fetch a patch from."
-          },
-          {
-            "name": "callback",
-            "type": "(error: Error|null, patch: any|null) => void",
-            "description": "A callback function to be called when the installation has finished or failed. In case of a failure, the callback will receive a parameter `error` that contains an Error object. If the installation succeeds, this parameter will be `null` and a second parameter will contain the parsed content of the file `patch.json` from the installed patch."
-          }
-        ],
-        "description": "Installs a patch from the given URL. When the patch is successfully installed, it will remain inactive until the application is reloaded. Not supported on Windows.",
-        "provisional": true
-      }
-    ]
+    "reload": {
+      "parameters": [],
+      "description": "Forces the running application to reload the main module and start over."
+    },
+    "getResourceLocation": {
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "description": "The path of a resource relative to the application root."
+        }
+      ],
+      "returns": "string",
+      "description": "Returns the URL for a given resource that is bundled with the app. Can be used to access app resources like images, videos, etc. Note that these resources can only be accessed in read-only mode."
+    },
+    "installPatch": {
+      "parameters": [
+        {
+          "name": "url",
+          "type": "string",
+          "description": "The URL to fetch a patch from."
+        },
+        {
+          "name": "callback",
+          "type": "(error: Error|null, patch: any|null) => void",
+          "description": "A callback function to be called when the installation has finished or failed. In case of a failure, the callback will receive a parameter `error` that contains an Error object. If the installation succeeds, this parameter will be `null` and a second parameter will contain the parsed content of the file `patch.json` from the installed patch."
+        }
+      ],
+      "description": "Installs a patch from the given URL. When the patch is successfully installed, it will remain inactive until the application is reloaded. Not supported on Windows.",
+      "provisional": true
+    }
   }
 }

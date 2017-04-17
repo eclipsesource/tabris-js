@@ -25,44 +25,40 @@
     }
   },
   "methods": {
-    "scrollToX": [
-      {
-        "parameters": [
-          {
-            "name": "offset",
-            "type": "number",
-            "description": "The offset to scroll to in dip."
-          },
-          {
-            "name": "options",
-            "type": "{animate?: boolean}",
-            "optional": true,
-            "description": "An additional object to control the animation. Set `{animate: false}` to scroll without an animation."
-          }
-        ],
-        "returns": "this",
-        "description": "Scrolls to the given horizontal offset. Give `{animate: false}` as the second parameter to suppress the animation."
-      }
-    ],
-    "scrollToY": [
-      {
-        "parameters": [
-          {
-            "name": "offsetY",
-            "type": "number",
-            "description": "The offset to scroll to in dip."
-          },
-          {
-            "name": "options",
-            "type": "{animate?: boolean}",
-            "optional": true,
-            "description": "An additional object to control the animation. Set `{animate: false}` to scroll without an animation."
-          }
-        ],
-        "returns": "this",
-        "description": "Scrolls to the given vertical offset. Give `{animate: false}` as the second parameter to suppress the animation."
-      }
-    ]
+    "scrollToX": {
+      "parameters": [
+        {
+          "name": "offset",
+          "type": "number",
+          "description": "The offset to scroll to in dip."
+        },
+        {
+          "name": "options",
+          "type": "{animate?: boolean}",
+          "optional": true,
+          "description": "An additional object to control the animation. Set `{animate: false}` to scroll without an animation."
+        }
+      ],
+      "returns": "this",
+      "description": "Scrolls to the given horizontal offset. Give `{animate: false}` as the second parameter to suppress the animation."
+    },
+    "scrollToY": {
+      "parameters": [
+        {
+          "name": "offsetY",
+          "type": "number",
+          "description": "The offset to scroll to in dip."
+        },
+        {
+          "name": "options",
+          "type": "{animate?: boolean}",
+          "optional": true,
+          "description": "An additional object to control the animation. Set `{animate: false}` to scroll without an animation."
+        }
+      ],
+      "returns": "this",
+      "description": "Scrolls to the given vertical offset. Give `{animate: false}` as the second parameter to suppress the animation."
+    }
   },
   "events": {
     "scrollX": {

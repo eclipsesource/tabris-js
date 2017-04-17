@@ -10,18 +10,14 @@
     }
   },
   "methods": {
-    "start": [
-      {
-        "parameters": [],
-        "description": "Starts the timer with the currently configured delay. After the first `timeout` event, the timer will stop but it can be started again."
-      }
-    ],
-    "cancel": [
-      {
-        "parameters": [],
-        "description": "Stops and resets the timer."
-      }
-    ]
+    "start": {
+      "parameters": [],
+      "description": "Starts the timer with the currently configured delay. After the first `timeout` event, the timer will stop but it can be started again."
+    },
+    "cancel": {
+      "parameters": [],
+      "description": "Stops and resets the timer."
+    }
   },
   "events": {
     "timeout": {

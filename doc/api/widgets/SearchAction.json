@@ -3,12 +3,10 @@
   "description": "An action that displays a search text field with dynamic proposals when selected. Add a listener on *select* to implement the action. On *input*, you may set a list of *proposals*.",
   "extends": "Action",
   "methods": {
-    "open": [
-      {
-        "parameters": [],
-        "description": "Invokes the search action, i.e. displays the UI to perform a search."
-      }
-    ]
+    "open": {
+      "parameters": [],
+      "description": "Invokes the search action, i.e. displays the UI to perform a search."
+    }
   },
   "properties": {
     "proposals": {

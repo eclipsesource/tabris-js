@@ -86,13 +86,11 @@
     }
   },
   "methods": {
-    "pages": [
-      {
-        "parameters": [],
-        "description": "Returns the ordered list of pages on the page stack, with the bottommost page as the first and the topmost page as the last element. This method is similar to children(), but it does not contain children of other types than `Page`.",
-        "returns": "WidgetCollection"
-      }
-    ]
+    "pages": {
+      "parameters": [],
+      "description": "Returns the ordered list of pages on the page stack, with the bottommost page as the first and the topmost page as the last element. This method is similar to children(), but it does not contain children of other types than `Page`.",
+      "returns": "WidgetCollection"
+    }
   },
   "links": [
     {

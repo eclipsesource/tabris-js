@@ -2,99 +2,89 @@
   "type": "WidgetCollection",
   "description": "A `WidgetCollection` is an array-like object representing a set of widgets, as returned by the widget methods `children` and `find`.",
   "methods": {
-    "on": [
-      {
-        "parameters": [
-          {
-            "name": "event",
-            "type": "string"
-          },
-          {
-            "name": "listener",
-            "type": "Function"
-          },
-          {
-            "name": "context",
-            "type": "this",
-            "optional": true,
-            "description": "In the listener function, `this` will point to this object."
-          }
-        ],
-        "returns": "this",
-        "description": "Adds the given listener to all widgets in this collection. See also `Widget.on()`."
-      }
-    ],
-    "once": [
-      {
-        "parameters": [
-          {
-            "name": "event",
-            "type": "string"
-          },
-          {
-            "name": "listener",
-            "type": "Function"
-          },
-          {
-            "name": "context",
-            "type": "this",
-            "optional": true,
-            "description": "In the listener function, `this` will point to this object."
-          }
-        ],
-        "returns": "this",
-        "description": "Adds the given listener for single execution on all widgets in this collection. See also `Widget.once()`."
-      }
-    ],
-    "off": [
-      {
-        "parameters": [
-          {
-            "name": "event",
-            "type": "string"
-          },
-          {
-            "name": "listener",
-            "type": "Function"
-          },
-          {
-            "name": "context",
-            "optional": true,
-            "type": "this"
-          }
-        ],
-        "returns": "this",
-        "description": "Removes the given listener from all widgets in this collection. See also `Widget.off()`."
-      }
-    ],
-    "trigger": [
-      {
-        "parameters": [
-          {
-            "name": "event",
-            "type": "string"
-          },
-          {
-            "name": "...params",
-            "type": "any[]"
-          }
-        ],
-        "returns": "this",
-        "description": "Triggers an event of the given type on all widgets in this collection. See also `Widget.trigger()`"
-      }
-    ],
-    "get": [
-      {
-        "parameters": [
-          {
-            "name": "property",
-            "type": "string"
-          }
-        ],
-        "description": "Returns the value of the given property of the first widget in this collection.",
-        "returns": "any"
-      }
-    ],
+    "on": {
+      "parameters": [
+        {
+          "name": "event",
+          "type": "string"
+        },
+        {
+          "name": "listener",
+          "type": "Function"
+        },
+        {
+          "name": "context",
+          "type": "this",
+          "optional": true,
+          "description": "In the listener function, `this` will point to this object."
+        }
+      ],
+      "returns": "this",
+      "description": "Adds the given listener to all widgets in this collection. See also `Widget.on()`."
+    },
+    "once": {
+      "parameters": [
+        {
+          "name": "event",
+          "type": "string"
+        },
+        {
+          "name": "listener",
+          "type": "Function"
+        },
+        {
+          "name": "context",
+          "type": "this",
+          "optional": true,
+          "description": "In the listener function, `this` will point to this object."
+        }
+      ],
+      "returns": "this",
+      "description": "Adds the given listener for single execution on all widgets in this collection. See also `Widget.once()`."
+    },
+    "off": {
+      "parameters": [
+        {
+          "name": "event",
+          "type": "string"
+        },
+        {
+          "name": "listener",
+          "type": "Function"
+        },
+        {
+          "name": "context",
+          "optional": true,
+          "type": "this"
+        }
+      ],
+      "returns": "this",
+      "description": "Removes the given listener from all widgets in this collection. See also `Widget.off()`."
+    },
+    "trigger": {
+      "parameters": [
+        {
+          "name": "event",
+          "type": "string"
+        },
+        {
+          "name": "...params",
+          "type": "any[]"
+        }
+      ],
+      "returns": "this",
+      "description": "Triggers an event of the given type on all widgets in this collection. See also `Widget.trigger()`"
+    },
+    "get": {
+      "parameters": [
+        {
+          "name": "property",
+          "type": "string"
+        }
+      ],
+      "description": "Returns the value of the given property of the first widget in this collection.",
+      "returns": "any"
+    },
     "set": [
       {
         "parameters": [
@@ -121,149 +111,123 @@
         "returns": "this"
       }
     ],
-    "children": [
-      {
-        "parameters": [
-          {
-            "name": "selector",
-            "type": "Selector",
-            "optional": true,
-            "description": "A selector expression or a predicate function to filter the results."
-          }
-        ],
-        "returns": "WidgetCollection",
-        "description": "Returns a collection containing all children of all widgets in this collection that match the given selector."
-      }
-    ],
-    "find": [
-      {
-        "parameters": [
-          {
-            "name": "selector",
-            "type": "Selector",
-            "optional": true,
-            "description": "A selector expression or a predicate function to filter the results."
-          }
-        ],
-        "returns": "WidgetCollection",
-        "description": "Returns a collection containing all descendants of all widgets in this collection that match the given selector."
-      }
-    ],
-    "parent": [
-      {
-        "parameters": [],
-        "returns": "WidgetCollection",
-        "description": "Returns a collection containing all direct parents of the widgets in this collection."
-      }
-    ],
-    "appendTo": [
-      {
-        "parameters": [
-          {
-            "name": "parent",
-            "type": "Composite",
-            "description": "The parent widget to append to."
-          }
-        ],
-        "returns": "this",
-        "description": "Appends all widgets in this collection to the given parent widget."
-      }
-    ],
-    "animate": [
-      {
-        "parameters": [
-          {
-            "name": "properties",
-            "type": "{transform?: Transformation, opacity?: number}",
-            "description": "The properties and target values to animate."
-          },
-          {
-            "name": "options",
-            "type": "AnimationOptions",
-            "description": "Configures the animation itself."
-          }
-        ],
-        "description": "Animates all widgets in this collection."
-      }
-    ],
-    "dispose": [
-      {
-        "parameters": [],
-        "description": "Disposes all widgets in this collection."
-      }
-    ],
-    "first": [
-      {
-        "parameters": [],
-        "returns": "Widget",
-        "description": "Returns the first widget in the collection. Same as `collection[0]`."
-      }
-    ],
-    "last": [
-      {
-        "parameters": [],
-        "returns": "Widget",
-        "description": "Returns the last widget in the collection. Same as `collection[collection.length - 1]`."
-      }
-    ],
-    "toArray": [
-      {
-        "parameters": [],
-        "returns": "Widget[]",
-        "description": "Returns an Array containing all widgets in the collection."
-      }
-    ],
-    "forEach": [
-      {
-        "parameters": [
-          {
-            "name": "callback",
-            "type": "(widget: Widget, index: number, collection: WidgetCollection) => void",
-            "description": "The function to call for each widget. The arguments are: *widget*, *index*, *collection*"
-          }
-        ],
-        "description": "Calls the given callback function once for each widget in the collection."
-      }
-    ],
-    "filter": [
-      {
-        "parameters": [
-          {
-            "name": "selector",
-            "type": "Selector",
-            "description": "A selector expression or a predicate function to filter the results."
-          }
-        ],
-        "returns": "WidgetCollection",
-        "description": "Returns a new *WidgetCollection* containing all widgets in this collection that match the given selector."
-      }
-    ],
-    "indexOf": [
-      {
-        "parameters": [
-          {
-            "name": "widget",
-            "type": "Widget",
-            "description": "The widget to locate in the collection."
-          }
-        ],
-        "returns": "number",
-        "description": "Returns the index of the given widget within the collection, or `-1` if the widget is not present."
-      }
-    ],
-    "includes": [
-      {
-        "parameters": [
-          {
-            "name": "widget",
-            "type": "Widget",
-            "description": "The widget to search in the collection."
-          }
-        ],
-        "returns": "boolean",
-        "description": "Returns `true` if the given widget is included in the collection, `false` otherwise."
-      }
-    ]
+    "children": {
+      "parameters": [
+        {
+          "name": "selector",
+          "type": "Selector",
+          "optional": true,
+          "description": "A selector expression or a predicate function to filter the results."
+        }
+      ],
+      "returns": "WidgetCollection",
+      "description": "Returns a collection containing all children of all widgets in this collection that match the given selector."
+    },
+    "find": {
+      "parameters": [
+        {
+          "name": "selector",
+          "type": "Selector",
+          "optional": true,
+          "description": "A selector expression or a predicate function to filter the results."
+        }
+      ],
+      "returns": "WidgetCollection",
+      "description": "Returns a collection containing all descendants of all widgets in this collection that match the given selector."
+    },
+    "parent": {
+      "parameters": [],
+      "returns": "WidgetCollection",
+      "description": "Returns a collection containing all direct parents of the widgets in this collection."
+    },
+    "appendTo": {
+      "parameters": [
+        {
+          "name": "parent",
+          "type": "Composite",
+          "description": "The parent widget to append to."
+        }
+      ],
+      "returns": "this",
+      "description": "Appends all widgets in this collection to the given parent widget."
+    },
+    "animate": {
+      "parameters": [
+        {
+          "name": "properties",
+          "type": "{transform?: Transformation, opacity?: number}",
+          "description": "The properties and target values to animate."
+        },
+        {
+          "name": "options",
+          "type": "AnimationOptions",
+          "description": "Configures the animation itself."
+        }
+      ],
+      "description": "Animates all widgets in this collection."
+    },
+    "dispose": {
+      "parameters": [],
+      "description": "Disposes all widgets in this collection."
+    },
+    "first": {
+      "parameters": [],
+      "returns": "Widget",
+      "description": "Returns the first widget in the collection. Same as `collection[0]`."
+    },
+    "last": {
+      "parameters": [],
+      "returns": "Widget",
+      "description": "Returns the last widget in the collection. Same as `collection[collection.length - 1]`."
+    },
+    "toArray": {
+      "parameters": [],
+      "returns": "Widget[]",
+      "description": "Returns an Array containing all widgets in the collection."
+    },
+    "forEach": {
+      "parameters": [
+        {
+          "name": "callback",
+          "type": "(widget: Widget, index: number, collection: WidgetCollection) => void",
+          "description": "The function to call for each widget. The arguments are: *widget*, *index*, *collection*"
+        }
+      ],
+      "description": "Calls the given callback function once for each widget in the collection."
+    },
+    "filter": {
+      "parameters": [
+        {
+          "name": "selector",
+          "type": "Selector",
+          "description": "A selector expression or a predicate function to filter the results."
+        }
+      ],
+      "returns": "WidgetCollection",
+      "description": "Returns a new *WidgetCollection* containing all widgets in this collection that match the given selector."
+    },
+    "indexOf": {
+      "parameters": [
+        {
+          "name": "widget",
+          "type": "Widget",
+          "description": "The widget to locate in the collection."
+        }
+      ],
+      "returns": "number",
+      "description": "Returns the index of the given widget within the collection, or `-1` if the widget is not present."
+    },
+    "includes": {
+      "parameters": [
+        {
+          "name": "widget",
+          "type": "Widget",
+          "description": "The widget to search in the collection."
+        }
+      ],
+      "returns": "boolean",
+      "description": "Returns `true` if the given widget is included in the collection, `false` otherwise."
+    }
   },
   "properties": {
     "length": {

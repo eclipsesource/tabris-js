@@ -3,77 +3,69 @@
   "object": "window",
   "description": "The object `window` is the global object. All fields of windows are also global variables and vice versa. For compatibility it is also known as `global` and `self`.",
   "methods": {
-    "setTimeout": [
-      {
-        "parameters": [
-          {
-            "name": "callback",
-            "type": "Function",
-            "description": "The function to call."
-          },
-          {
-            "name": "delay",
-            "type": "number",
-            "optional": true,
-            "description": "The delay in milliseconds."
-          },
-          {
-            "name": "...params",
-            "type": "any[]",
-            "description": "One or more values passed on to the callback."
-          }
-        ],
-        "description": "Calls the given function with `param` (and all following parameters) after the specified delay. The actual delay may be slightly longer than the given one.",
-        "returns": "any"
-      }
-    ],
-    "setInterval": [
-      {
-        "parameters": [
-          {
-            "name": "callback",
-            "type": "Function",
-            "description": "The function to call."
-          },
-          {
-            "name": "delay",
-            "type": "number",
-            "optional": true,
-            "description": "The delay in milliseconds."
-          },
-          {
-            "name": "...params",
-            "type": "any[]",
-            "description": "One or more values passed on to the callback."
-          }
-        ],
-        "description": "Calls the given function repeatedly, each times waiting the given delay. The actual delay may be slightly longer than the given one.",
-        "returns": "any"
-      }
-    ],
-    "clearTimeout": [
-      {
-        "parameters": [
-          {
-            "name": "id",
-            "type": "any",
-            "description": "The ID that was returned by `setTimeout`."
-          }
-        ],
-        "description": "Cancels the running timeout associated with the given ID. When given an invalid ID, nothing happens."
-      }
-    ],
-    "clearInterval": [
-      {
-        "parameters": [
-          {
-            "name": "id",
-            "type": "any",
-            "description": "The ID that was returned by `setInterval`."
-          }
-        ],
-        "description": "Cancels the running interval associated with the given ID. When given an invalid ID, nothing happens."
-      }
-    ]
+    "setTimeout": {
+      "parameters": [
+        {
+          "name": "callback",
+          "type": "Function",
+          "description": "The function to call."
+        },
+        {
+          "name": "delay",
+          "type": "number",
+          "optional": true,
+          "description": "The delay in milliseconds."
+        },
+        {
+          "name": "...params",
+          "type": "any[]",
+          "description": "One or more values passed on to the callback."
+        }
+      ],
+      "description": "Calls the given function with `param` (and all following parameters) after the specified delay. The actual delay may be slightly longer than the given one.",
+      "returns": "any"
+    },
+    "setInterval": {
+      "parameters": [
+        {
+          "name": "callback",
+          "type": "Function",
+          "description": "The function to call."
+        },
+        {
+          "name": "delay",
+          "type": "number",
+          "optional": true,
+          "description": "The delay in milliseconds."
+        },
+        {
+          "name": "...params",
+          "type": "any[]",
+          "description": "One or more values passed on to the callback."
+        }
+      ],
+      "description": "Calls the given function repeatedly, each times waiting the given delay. The actual delay may be slightly longer than the given one.",
+      "returns": "any"
+    },
+    "clearTimeout": {
+      "parameters": [
+        {
+          "name": "id",
+          "type": "any",
+          "description": "The ID that was returned by `setTimeout`."
+        }
+      ],
+      "description": "Cancels the running timeout associated with the given ID. When given an invalid ID, nothing happens."
+    },
+    "clearInterval": {
+      "parameters": [
+        {
+          "name": "id",
+          "type": "any",
+          "description": "The ID that was returned by `setInterval`."
+        }
+      ],
+      "description": "Cancels the running interval associated with the given ID. When given an invalid ID, nothing happens."
+    }
   }
 }

@@ -50,37 +50,31 @@
     }
   },
   "methods": {
-    "pause": [
-      {
-        "parameters": [],
-        "description": "Pauses the video. *[state](#state)* changes to `pause` and `speed` to `0`. Has no effect when *[state](#state)* is not `play`."
-      }
-    ],
-    "seek": [
-      {
-        "parameters": [
-          {
-            "name": "position",
-            "type": "number",
-            "description": "Desired position in milliseconds."
-          }
-        ],
-        "description": "Attempts to change the `position` to the given time index. Success depends on the currently loaded video. Has no effect if the current *[state](#state)* is `empty` or `fail`."
-      }
-    ],
-    "play": [
-      {
-        "parameters": [
-          {
-            "name": "speed",
-            "type": "number",
-            "optional": true,
-            "description": "Desired playback speed. If the given speed is not supported by the platform or video, the actual playback speed will be `1` - i.e. the natural speed of the video."
-          }
-        ],
-        "description": "Starts playing the video, *[state](#state)* changes to `play`. Has no effect if the current state is not either `pause` or `ready`."
-      }
-    ]
+    "pause": {
+      "parameters": [],
+      "description": "Pauses the video. *[state](#state)* changes to `pause` and `speed` to `0`. Has no effect when *[state](#state)* is not `play`."
+    },
+    "seek": {
+      "parameters": [
+        {
+          "name": "position",
+          "type": "number",
+          "description": "Desired position in milliseconds."
+        }
+      ],
+      "description": "Attempts to change the `position` to the given time index. Success depends on the currently loaded video. Has no effect if the current *[state](#state)* is `empty` or `fail`."
+    },
+    "play": {
+      "parameters": [
+        {
+          "name": "speed",
+          "type": "number",
+          "optional": true,
+          "description": "Desired playback speed. If the given speed is not supported by the platform or video, the actual playback speed will be `1` - i.e. the natural speed of the video."
+        }
+      ],
+      "description": "Starts playing the video, *[state](#state)* changes to `play`. Has no effect if the current state is not either `pause` or `ready`."
+    }
   },
   "events": {
     "change:state": {

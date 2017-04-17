@@ -125,13 +125,15 @@ module.exports = function(grunt) {
   function addMethods(result, def) {
     if (def.methods) {
       Object.keys(def.methods).sort().forEach((name) => {
-        if (!Array.isArray(def.methods[name])) {
-          throw new Error('method definition not an array', def.type, name);
-        }
-        def.methods[name].forEach((method) => {
+        if (Array.isArray(def.methods[name])) {
+          def.methods[name].forEach((method) => {
+            result.append('');
+            result.append(createMethod(name, method));
+          });
+        } else {
           result.append('');
-          result.append(createMethod(name, method));
-        });
+          result.append(createMethod(name, def.methods[name]));
+        }
       });
     }
   }
