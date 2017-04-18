@@ -1,7 +1,6 @@
 import {types} from './property-types';
 import EventObject from './EventObject';
 import Events from './Events';
-import {omit} from './util';
 
 function EventsClass() {}
 Object.assign(EventsClass.prototype, Events);
@@ -193,7 +192,7 @@ export default class NativeObject extends EventsClass {
   }
 
   _trigger(name, eventData = {}) {
-    let event = Object.assign(new EventObject(name, this), omit(eventData, ['target', 'type', 'timeStamp']));
+    let event = new EventObject(name, this, eventData);
     this.trigger(name, event);
     return !!event.defaultPrevented;
   }

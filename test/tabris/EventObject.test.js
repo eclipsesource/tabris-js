@@ -33,6 +33,21 @@ describe('EventObject', function() {
       expect(event.timeStamp).to.be.closeTo(Date.now(), 100);
     });
 
+    it('copies data into instance', function() {
+      let event = new EventObject('type', target, {foo: 23});
+
+      expect(event.foo).to.equal(23);
+    });
+
+    it('does not copy target, type, or timeStamp from data', function() {
+      let event = new EventObject('bar', target, {foo: 23, type: 'foo', target: {}, timeStamp: 42});
+
+      expect(event.foo).to.equal(23);
+      expect(event.type).to.equal('bar');
+      expect(event.target).to.equal(target);
+      expect(event.timeStamp).to.not.equal(42);
+    });
+
   });
 
   describe('instance', function() {
