@@ -15,7 +15,7 @@
     }
   },
   "events": {
-    "change:item": {
+    "itemChanged": {
       "description": "Fired when a collection item is assigned to this cell. Use this event to configure the widgets in this cell to represent the assigned item.",
       "parameters": {
         "value": {
@@ -24,7 +24,7 @@
         }
       }
     },
-    "change:itemIndex": {
+    "itemIndexChanged": {
       "description": "Fired when the index of the assigned item changes, either by assigning a new item or by inserting/removing items above the current item.",
       "parameters": {
         "value": {

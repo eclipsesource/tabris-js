@@ -17,7 +17,7 @@ export default class TabFolder extends Composite {
   _listen(name, listening) {
     if (EVENT_TYPES.includes(name)) {
       this._nativeListen(name, listening);
-    } else if (name === 'change:selection') {
+    } else if (name === 'selectionChanged') {
       this._onoff('select', listening, this.$triggerChangeSelection);
     } else {
       super._listen(name, listening);

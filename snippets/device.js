@@ -8,6 +8,6 @@
   }).appendTo(tabris.ui.contentView);
 });
 
-tabris.device.on('change:orientation', function({value: orientation}) {
+tabris.device.on('orientationChanged', function({value: orientation}) {
   tabris.ui.contentView.find('#orientation').set('text', 'orientation: ' + orientation);
 });

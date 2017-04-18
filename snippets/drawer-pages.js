@@ -50,7 +50,7 @@ function initializeCell(cell) {
     font: select({iOS: '17px .HelveticaNeueInterface-Regular', Android: '14px Roboto Medium', windows: '18px default'}),
     textColor: '#212121'
   }).appendTo(cell);
-  cell.on('change:item', function({value: page}) {
+  cell.on('itemChanged', function({value: page}) {
     imageView.image = {src: page.icon, scale: 3};
     textView.text = page.title;
   });

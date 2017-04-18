@@ -111,7 +111,7 @@
     "focus": {
       "description": "Fired when the widget gains focus."
     },
-    "change:text": {
+    "textChanged": {
       "description": "Fired when the text property changes.",
       "parameters": {
         "value": {

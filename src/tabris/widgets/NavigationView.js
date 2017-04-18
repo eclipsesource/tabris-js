@@ -54,9 +54,9 @@ export default class NavigationView extends Composite {
   }
 
   _listen(name, listening) {
-    if (name === 'change:topToolbarHeight') {
+    if (name === 'topToolbarHeightChanged') {
       this._nativeListen('change_topToolbarHeight', listening);
-    } else if (name === 'change:bottomToolbarHeight') {
+    } else if (name === 'bottomToolbarHeightChanged') {
       this._nativeListen('change_bottomToolbarHeight', listening);
     } else {
       super._listen(name, listening);

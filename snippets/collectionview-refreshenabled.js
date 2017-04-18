@@ -6,7 +6,7 @@ var view = new tabris.CollectionView({
     var textView = new tabris.TextView({
       top: 2, bottom: 2, left: 5, right: 5
     }).appendTo(cell);
-    cell.on('change:item', function({value: item}) {
+    cell.on('itemChanged', function({value: item}) {
       textView.text = item;
     });
   }

@@ -12,6 +12,6 @@ new tabris.Slider({
   minimum: -50,
   selection: 50,
   maximum: 150
-}).on('change:selection', function({value}) {
+}).on('selectionChanged', function({value}) {
   textView.text = value;
 }).appendTo(tabris.ui.contentView);

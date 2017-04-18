@@ -93,7 +93,7 @@ describe('NavigationView', function() {
 
     it('support change event', function() {
       let listener = spy();
-      navigationView.on('change:topToolbarHeight', listener);
+      navigationView.on('topToolbarHeightChanged', listener);
 
       tabris._notify(navigationView.cid, 'change_topToolbarHeight', {value: 23});
 
@@ -130,7 +130,7 @@ describe('NavigationView', function() {
 
     it('support change event', function() {
       let listener = spy();
-      navigationView.on('change:bottomToolbarHeight', listener);
+      navigationView.on('bottomToolbarHeightChanged', listener);
 
       tabris._notify(navigationView.cid, 'change_bottomToolbarHeight', {value: 23});
 

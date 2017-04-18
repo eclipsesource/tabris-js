@@ -137,7 +137,7 @@ private class OnDateChangeListener implements CalendarView.OnDateChangeListener 
   public void onSelectedDayChange( CalendarView view, int year, int month, int dayOfMonth ) {
     String date = String.valueOf( new GregorianCalendar( year, month, dayOfMonth + 1 ).getTimeInMillis() );
     RemoteObject remoteObject = tabrisContext.getObjectRegistry().getRemoteObjectForObject( view );
-    remoteObject.notify( "change:date", "date", date );
+    remoteObject.notify( "dateChanged", "date", date );
   }
 
 }

@@ -10,7 +10,7 @@ class TextCell extends Cell {
       font: type === 'section' ? 'bold 28px' : '14px',
       alignment: type === 'section' ? 'center' : 'left'
     }).appendTo(this);
-    this.on('change:item', ({value: item}) => {
+    this.on('itemChanged', ({value: item}) => {
       textView.text = item.name;
     });
   }

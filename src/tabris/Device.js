@@ -11,7 +11,7 @@ export default class Device extends NativeObject {
   }
 
   _listen(name, listening) {
-    if (name === 'change:orientation') {
+    if (name === 'orientationChanged') {
       this._nativeListen('orientationchange', listening);
     } else {
       super._listen(name, listening);

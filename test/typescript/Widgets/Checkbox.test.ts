@@ -14,7 +14,7 @@ widget.text = text;
 
 // Events
 
-widget.on('change:checked', (event) => {
+widget.on('checkedChanged', (event) => {
   let self: CheckBox = event.target;
   let checked: boolean = event.value;
 });

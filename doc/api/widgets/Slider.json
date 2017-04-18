@@ -20,7 +20,7 @@
     }
   },
   "events": {
-    "change:selection": {
+    "selectionChanged": {
       "description": "Fired when the selection property changes.",
       "parameters": {
         "value": {

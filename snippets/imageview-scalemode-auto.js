@@ -10,6 +10,6 @@ new tabris.Slider({
   minimum: 50,
   selection: 100,
   maximum: 300
-}).on('change:selection', function({value: selection}) {
+}).on('selectionChanged', function({value: selection}) {
   imageView.set({left: 20, top: 20, width: selection, height: 250});
 }).appendTo(tabris.ui.contentView);

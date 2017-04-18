@@ -166,7 +166,7 @@ describe('CollectionView', function() {
 
       });
 
-      let changeEvent = 'change:' + prop;
+      let changeEvent = prop + 'Changed';
 
       describe(changeEvent, function() {
 
@@ -647,9 +647,9 @@ describe('CollectionView', function() {
               listener = spy();
             });
 
-            it('triggers change:item event on the cell', function() {
+            it('triggers itemChanged event on the cell', function() {
               stub(console, 'warn');
-              cell.on('change:item', listener);
+              cell.on('itemChanged', listener);
 
               view._trigger('populateitem', {widget: cell.cid, index: 0});
 
@@ -659,10 +659,10 @@ describe('CollectionView', function() {
               expect(console.warn).to.have.not.been.called;
             });
 
-            it('triggers change:item event on the cell even if item is already set', function() {
+            it('triggers itemChanged event on the cell even if item is already set', function() {
               stub(console, 'warn');
               view._trigger('populateitem', {widget: cell.cid, index: 0});
-              cell.on('change:item', listener);
+              cell.on('itemChanged', listener);
 
               view._trigger('populateitem', {widget: cell.cid, index: 0});
 
@@ -671,9 +671,9 @@ describe('CollectionView', function() {
               expect(console.warn).to.have.not.been.called;
             });
 
-            it('triggers change:itemIndex event on the cell', function() {
+            it('triggers itemIndexChanged event on the cell', function() {
               stub(console, 'warn');
-              cell.on('change:itemIndex', listener);
+              cell.on('itemIndexChanged', listener);
 
               view._trigger('populateitem', {widget: cell.cid, index: 0});
 

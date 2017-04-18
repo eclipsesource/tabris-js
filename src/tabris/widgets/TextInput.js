@@ -12,7 +12,7 @@ export default class TextInput extends Widget {
   _listen(name, listening) {
     if (EVENT_TYPES.includes(name)) {
       this._nativeListen(name, listening);
-    } else if (name === 'change:text') {
+    } else if (name === 'textChanged') {
       this._onoff('input', listening, this.$triggerChangeSelection);
     } else {
       super._listen(name, listening);

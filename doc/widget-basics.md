@@ -90,7 +90,7 @@ To remove a listener, use the method `off`.
 
 ### Change Events
 
-All widgets support property change events. Change events are fired for all property changes, no matter how or why the change occurred, or if the property is supported by the widget. All change events are named `change:[propertyName]` and provide a `ChangeEvent`.
+All widgets support property change events. Change events are fired for all property changes, no matter how or why the change occurred, or if the property is supported by the widget. All change events are named `[propertyName]Changed` and provide a `ChangeEvent`.
 
 Change events have the following properties:
 
@@ -100,7 +100,7 @@ Change events have the following properties:
 Example:
 
 ```js
-new tabris.TextInput().on("change:text", function(event) {
+new tabris.TextInput().on("textChanged", function(event) {
   console.log("The text has changed to: " + event.value);
 });
 ```
@@ -108,7 +108,7 @@ new tabris.TextInput().on("change:text", function(event) {
 It's often convenient to use the [ES6 destructuring syntax](http://exploringjs.com/es6/ch_destructuring.html) for the event parameter, which allows to extract event properties as named variables:
 
 ```js
-checkBox.on("change:selection", function({target, value: checked}) {
+checkBox.on("selectionChanged", function({target, value: checked}) {
   target.text = checked ? "checked" : "unchecked";
 });
 ```

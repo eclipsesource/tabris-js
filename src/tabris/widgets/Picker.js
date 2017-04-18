@@ -31,9 +31,9 @@ export default class Picker extends Widget {
   _listen(name, listening) {
     if (name === 'select') {
       this._nativeListen(name, listening);
-    } else if (name === 'change:selection') {
+    } else if (name === 'selectionChanged') {
       this._onoff('select', listening, this.$triggerChangeSelection);
-    } else if (name === 'change:selectionIndex') {
+    } else if (name === 'selectionIndexChanged') {
       this._onoff('select', listening, this.$triggerChangeSelectionIndex);
     } else {
       super._listen(name, listening);

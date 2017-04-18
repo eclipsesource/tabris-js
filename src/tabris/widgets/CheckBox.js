@@ -8,7 +8,7 @@ export default class CheckBox extends Widget {
   }
 
   _listen(name, listening) {
-    if (name === 'change:checked') {
+    if (name === 'checkedChanged') {
       this._onoff('select', listening, this.$triggerChangeChecked);
     } else if (name === 'select') {
       this._nativeListen(name, listening);

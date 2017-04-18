@@ -77,7 +77,7 @@
     }
   },
   "events": {
-    "change:state": {
+    "stateChanged": {
       "description": "Fired when the state property changes.",
       "parameters": {
         "value": {

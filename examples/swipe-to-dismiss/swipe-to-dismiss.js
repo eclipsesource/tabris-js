@@ -38,7 +38,7 @@ var collectionView = new tabris.CollectionView({
       left: 0, bottom: 0, right: 0, height: 1,
       background: '#b8b8b8'
     }).appendTo(cell);
-    cell.on('change:item', function({value: item}) {
+    cell.on('itemChanged', function({value: item}) {
       senderView.text = item.sender;
       titleView.text = item.title;
       timeView.text = item.time;

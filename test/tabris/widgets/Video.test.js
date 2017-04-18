@@ -51,13 +51,13 @@ describe('Video', function() {
 
   });
 
-  describe('change:state', function() {
+  describe('stateChanged', function() {
 
     let listener;
 
     beforeEach(function() {
       listener = stub();
-      video.on('change:state', listener);
+      video.on('stateChanged', listener);
     });
 
     it('sends listen for statechange', function() {

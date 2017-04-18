@@ -51,8 +51,8 @@ describe('Picker', function() {
       expect(listener).to.have.been.calledWithMatch({target: picker, item: 'bar', index: 1});
     });
 
-    it('change:selection on interactive change', function() {
-      picker.on('change:selection', listener);
+    it('selectionChanged on interactive change', function() {
+      picker.on('selectionChanged', listener);
       picker.items = ['foo', 'bar'];
 
       tabris._notify(picker.cid, 'select', {selectionIndex: 1});
@@ -62,8 +62,8 @@ describe('Picker', function() {
       expect(listener).to.have.been.calledWithMatch({target: picker, value: 'bar'});
     });
 
-    it('change:selection on programmatic change', function() {
-      picker.on('change:selection', listener);
+    it('selectionChanged on programmatic change', function() {
+      picker.on('selectionChanged', listener);
       picker.items = ['foo', 'bar'];
 
       picker.selection = 'foo';
@@ -72,8 +72,8 @@ describe('Picker', function() {
       expect(listener).to.have.been.calledWithMatch({target: picker, value: 'foo'});
     });
 
-    it('change:selectionIndex', function() {
-      picker.on('change:selectionIndex', listener);
+    it('selectionIndexChanged', function() {
+      picker.on('selectionIndexChanged', listener);
 
       tabris._notify(picker.cid, 'select', {selectionIndex: 23});
 

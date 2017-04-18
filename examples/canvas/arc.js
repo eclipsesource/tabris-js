@@ -15,7 +15,7 @@ var canvas = new tabris.Canvas({
 new tabris.CheckBox({
   centerX: 0, top: [canvas, 16],
   text: 'Counterclockwise'
-}).on('change:checked', function({value}) {
+}).on('checkedChanged', function({value}) {
   clearCanvas();
   drawArcs(value);
 }).appendTo(page);

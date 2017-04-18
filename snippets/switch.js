@@ -6,7 +6,7 @@ new tabris.Switch({
   left: MARGIN, top: MARGIN,
   id: 'switch',
   checked: true
-}).on('change:checked', function({value: checked}) {
+}).on('checkedChanged', function({value: checked}) {
   tabris.ui.contentView.find('#stateView').first().text = checked ? 'State: checked' : 'State: unchecked';
 }).appendTo(tabris.ui.contentView);
 

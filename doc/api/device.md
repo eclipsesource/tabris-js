@@ -3,7 +3,7 @@ Example:
 ```js
 var lang = tabris.device.get("language");
 
-tabris.device.on("change:orientation", function(event) {
+tabris.device.on("orientationChanged", function(event) {
   console.log("new orientation:", event.value);
 });
 ```

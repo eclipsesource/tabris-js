@@ -214,7 +214,7 @@ export default class Widget extends NativeObject {
         this._recognizers[name].dispose();
         delete this._recognizers[name];
       }
-    } else if (name === 'change:bounds') {
+    } else if (name === 'boundsChanged') {
       this._onoff('resize', listening, this.$triggerChangeBounds);
     } else if (EVENT_TYPES.includes(name)) {
       this._nativeListen(name, listening);
@@ -236,7 +236,7 @@ export default class Widget extends NativeObject {
   }
 
   $triggerChangeBounds({left, top, width, height}) {
-    super._trigger('change:bounds', {value: {left, top, width, height}});
+    super._trigger('boundsChanged', {value: {left, top, width, height}});
   }
 
   _flushLayout() {

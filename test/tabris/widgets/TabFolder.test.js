@@ -149,7 +149,7 @@ describe('TabFolder', function() {
 
     it('Setting a Tab triggers change event', function() {
       let listener = spy();
-      tabFolder.on('change:selection', listener);
+      tabFolder.on('selectionChanged', listener);
 
       tabFolder.selection = tab;
 
@@ -198,9 +198,9 @@ describe('TabFolder', function() {
       expect(tabFolder.selection).to.be.null;
     });
 
-    it('supports native event change:selection', function() {
+    it('supports native event selectionChanged', function() {
       let listener = spy();
-      tabFolder.on('change:selection', listener);
+      tabFolder.on('selectionChanged', listener);
 
       tabris._notify(tabFolder.cid, 'select', {selection: tab.cid});
 

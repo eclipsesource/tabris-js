@@ -19,7 +19,7 @@ new tabris.CollectionView({
   initializeCell: function(cell, type) {
     var textView = type === 'section' ? createSectionView() : createItemView();
     textView.appendTo(cell);
-    cell.on('change:item', function({value: item}) {
+    cell.on('itemChanged', function({value: item}) {
       textView.text = item.name;
     });
   }

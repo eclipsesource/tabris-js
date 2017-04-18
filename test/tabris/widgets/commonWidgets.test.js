@@ -96,8 +96,8 @@ describe('Common Widgets', function() {
     checkListen('select');
   });
 
-  it('CheckBox change:checked', function() {
-    widget = new CheckBox().on('change:checked', listener);
+  it('CheckBox checkedChanged', function() {
+    widget = new CheckBox().on('checkedChanged', listener);
     tabris._notify(widget.cid, 'select', {checked: true});
     expect(listener).to.have.been.calledOnce;
     expect(listener).to.have.been.calledWithMatch({target: widget, 'value': true});
@@ -149,8 +149,8 @@ describe('Common Widgets', function() {
     checkListen('select');
   });
 
-  it('RadioButton change:checked', function() {
-    widget = new RadioButton().on('change:checked', listener);
+  it('RadioButton checkedChanged', function() {
+    widget = new RadioButton().on('checkedChanged', listener);
     tabris._notify(widget.cid, 'select', {checked: true});
 
     expect(listener).to.have.been.calledOnce;
@@ -201,8 +201,8 @@ describe('Common Widgets', function() {
     checkListen('select');
   });
 
-  it('Slider change:selection', function() {
-    widget = new Slider().on('change:selection', listener);
+  it('Slider selectionChanged', function() {
+    widget = new Slider().on('selectionChanged', listener);
     tabris._notify(widget.cid, 'select', {selection: 23});
 
     expect(listener).to.have.been.calledOnce;
@@ -263,8 +263,8 @@ describe('Common Widgets', function() {
       checkListen('accept');
     });
 
-    it('change:text event', function() {
-      widget = new TextInput().on('change:text', listener);
+    it('textChanged event', function() {
+      widget = new TextInput().on('textChanged', listener);
 
       tabris._notify(widget.cid, 'input', {text: 'foo'});
 
@@ -291,8 +291,8 @@ describe('Common Widgets', function() {
     expect(swtch.constructor.name).to.equal('Switch');
   });
 
-  it('Switch change:checked', function() {
-    widget = new Switch().on('change:checked', listener);
+  it('Switch checkedChanged', function() {
+    widget = new Switch().on('checkedChanged', listener);
 
     tabris._notify(widget.cid, 'select', {checked: true});
 
@@ -301,8 +301,8 @@ describe('Common Widgets', function() {
     checkListen('select');
   });
 
-  it('Switch change:checked on property change', function() {
-    widget = new Switch().on('change:checked', listener);
+  it('Switch checkedChanged on property change', function() {
+    widget = new Switch().on('checkedChanged', listener);
 
     widget.checked = true;
 
@@ -330,8 +330,8 @@ describe('Common Widgets', function() {
     expect(toggleButton.alignment).to.equal('center');
   });
 
-  it('ToggleButton change:checked', function() {
-    widget = new ToggleButton().on('change:checked', listener);
+  it('ToggleButton checkedChanged', function() {
+    widget = new ToggleButton().on('checkedChanged', listener);
 
     tabris._notify(widget.cid, 'select', {checked: true});
 

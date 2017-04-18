@@ -10,7 +10,7 @@ export default class ToggleButton extends Widget {
   _listen(name, listening) {
     if (name === 'select') {
       this._nativeListen(name, listening);
-    } else if (name === 'change:checked') {
+    } else if (name === 'checkedChanged') {
       this._onoff('select', listening, this.$triggerChangeChecked);
     } else {
       super._listen(name, listening);

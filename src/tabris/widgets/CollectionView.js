@@ -108,9 +108,9 @@ export default class CollectionView extends Widget {
   }
 
   _listen(name, listening) {
-    if (name === 'change:firstVisibleIndex') {
+    if (name === 'firstVisibleIndexChanged') {
       this._onoff('scroll', listening, triggerChangeFirstVisibleIndex);
-    } else if (name === 'change:lastVisibleIndex') {
+    } else if (name === 'lastVisibleIndexChanged') {
       this._onoff('scroll', listening, triggerChangeLastVisibleIndex);
     } else if (EVENT_TYPES.includes(name)) {
       this._nativeListen(name, listening);

@@ -18,7 +18,7 @@ new tabris.TextView({
 new tabris.Picker({
   right: MARGIN, left: '#imageSizeLabel', baseline: '#imageSizeLabel',
   items: ['Large', 'Small']
-}).on('change:selectionIndex', function({value: index}) {
+}).on('selectionIndexChanged', function({value: index}) {
   imageView.image = getImage(index);
 }).appendTo(tabris.ui.contentView);
 
@@ -31,7 +31,7 @@ new tabris.TextView({
 new tabris.Picker({
   right: MARGIN, left: '#scaleModeLabel', baseline: '#scaleModeLabel',
   items: scaleModes
-}).on('change:selectionIndex', function({value: index}) {
+}).on('selectionIndexChanged', function({value: index}) {
   imageView.scaleMode = scaleModes[index];
 }).appendTo(tabris.ui.contentView);
 

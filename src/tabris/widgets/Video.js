@@ -9,7 +9,7 @@ export default class Video extends Widget {
   }
 
   _listen(name, listening) {
-    if (name === 'change:state') {
+    if (name === 'stateChanged') {
       this._nativeListen('statechange', listening) ;
     } else {
       super._listen(name, listening);

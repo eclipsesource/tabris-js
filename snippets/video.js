@@ -2,7 +2,7 @@ var video = new tabris.Video({
   left: 0, top: 0, right: 0, bottom: '#button 16',
   url: 'http://peach.themazzone.com/durian/movies/sintel-1280-stereo.mp4',
   controlsVisible: false
-}).on('change:state', function(event) {
+}).on('stateChanged', function(event) {
   button.text = event.value !== 'pause' ? '❚❚' : '▶';
 }).appendTo(tabris.ui.contentView);
 

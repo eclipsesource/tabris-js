@@ -19,7 +19,7 @@ new tabris.CheckBox({
   centerX: 0, bottom: 10,
   text: 'Animate',
   id: 'animateCheckBox'
-}).on('change:checked', function({value: checked}) {
+}).on('checkedChanged', function({value: checked}) {
   example.setRunning(checked);
 }).appendTo(page);
 

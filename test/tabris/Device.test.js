@@ -78,15 +78,15 @@ describe('Device', function() {
     });
 
     it('adds listener for orientationchange event', function() {
-      device.on('change:orientation', function() {});
+      device.on('orientationChanged', function() {});
 
       let calls = client.calls({id: 'tabris.Device', op: 'listen', event: 'orientationchange'});
       expect(calls[0].listen).to.equal(true);
     });
 
-    it('triggers change:orientation event', function() {
+    it('triggers orientationChanged event', function() {
       let listener = spy();
-      device.on('change:orientation', listener);
+      device.on('orientationChanged', listener);
 
       tabris._notify('tabris.Device', 'orientationchange', {orientation: 'portrait'});
 

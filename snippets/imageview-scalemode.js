@@ -29,11 +29,11 @@ var scaleModePicker = new tabris.Picker({
   items: scaleModes
 }).appendTo(tabris.ui.contentView);
 
-imageSizePicker.on('change:selectionIndex', function({value: index}) {
+imageSizePicker.on('selectionIndexChanged', function({value: index}) {
   imageView.image = getImage(index);
 });
 
-scaleModePicker.on('change:selectionIndex', function({value: index}) {
+scaleModePicker.on('selectionIndexChanged', function({value: index}) {
   imageView.scaleMode = scaleModes[index];
 });
 

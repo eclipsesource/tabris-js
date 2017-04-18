@@ -59,7 +59,7 @@ function initializeStandardCell(cell) {
     top: 54, left: 104, height: 20, right: [commentsView, MARGIN],
     textColor: '#234'
   }).appendTo(cell);
-  cell.on('change:item', function({value: item}) {
+  cell.on('itemChanged', function({value: item}) {
     imageView.image = {src: item.data.thumbnail, width: 70, height: 70};
     nameView.text = item.data.title;
     authorView.text = item.data.author;

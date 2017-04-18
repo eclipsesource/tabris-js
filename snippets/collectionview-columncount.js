@@ -7,7 +7,7 @@ var slider = new tabris.Slider({
   left: 16, bottom: 0, right: [columnCountTextView, 16], height: 48,
   minimum: 1,
   maximum: 8
-}).on('change:selection', function({value: selection}) {
+}).on('selectionChanged', function({value: selection}) {
   collectionView.columnCount = selection;
   columnCountTextView.text = selection;
 }).appendTo(tabris.ui.contentView);
@@ -24,7 +24,7 @@ var collectionView = new tabris.CollectionView({
       alignment: 'center',
       maxLines: 1
     }).appendTo(cell);
-    cell.on('change:item', function({value: item}) {
+    cell.on('itemChanged', function({value: item}) {
       textView.set({
         text: item,
         background: item % 2 === 0 ? '#CFD8DC' : '#ffffff'

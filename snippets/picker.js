@@ -22,6 +22,6 @@ new tabris.Picker({
     return airport.name;
   },
   selection: airports[1]
-}).on('change:selection', function({value: airport}) {
+}).on('selectionChanged', function({value: airport}) {
   console.log('Selected ' + airport.id);
 }).appendTo(tabris.ui.contentView);

@@ -93,6 +93,7 @@ More changes to events:
 * Calling `on(event, listener)` or `once(event, listener)` multiple times with identical parameters will register the listener only once.
 * The events `animationstart` and `animationend` have been removed, use the Promise returned by `animate()`.
 * The properties `pageX` and `pageY` that was available on touch events have been renamed to `absoluteX` and `absoluteY`.
+* Change events are now named after the pattern `<property>Changed`.
 
 ## Widgets
 

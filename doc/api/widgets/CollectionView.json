@@ -14,13 +14,13 @@
     "createCell": {
       "type": "(cellType: string) => Cell",
       "static": true,
-      "description": "A callback used to create a new collection cell for a given type. This callback will be called by the framework and the created cell will be reused for different items. The cell should be populated in a *change:item* listener."
+      "description": "A callback used to create a new collection cell for a given type. This callback will be called by the framework and the created cell will be reused for different items. The cell should be populated in a *itemChanged* listener."
     },
     "initializeCell": {
       "type": "(cell: Cell, cellType: string) => void",
       "static": true,
       "deprecated": "Use `createCell` instead.",
-      "description": "A callback used to initialize a collection cell by attaching widgets and a *change:item* listener."
+      "description": "A callback used to initialize a collection cell by attaching widgets and a *itemChanged* listener."
     },
     "cellType": {
       "type": "string|((item: any) => string)",
@@ -123,7 +123,7 @@
     "refresh": [
       {
         "parameters": [],
-        "description": "Triggers a refresh of all visible items. This will issue *change:item* events on the corresponding cells."
+        "description": "Triggers a refresh of all visible items. This will issue *itemChanged* events on the corresponding cells."
       },
       {
         "parameters": [
@@ -133,7 +133,7 @@
             "description": "The index of the item that was changed."
           }
         ],
-        "description": "Triggers a refresh of the item with the given index. If the item is scrolled into view, a *change:item* event will be issued on the corresponding cell."
+        "description": "Triggers a refresh of the item with the given index. If the item is scrolled into view, a *itemChanged* event will be issued on the corresponding cell."
       }
     ],
     "reveal": {

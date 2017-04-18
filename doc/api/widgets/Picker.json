@@ -29,7 +29,7 @@
     }
   },
   "events": {
-    "change:selectionIndex": {
+    "selectionIndexChanged": {
       "description": "Fired when the selectionIndex property changes.",
       "parameters": {
         "value": {
@@ -38,7 +38,7 @@
         }
       }
     },
-    "change:selection": {
+    "selectionChanged": {
       "description": "Fired when the selection property changes.",
       "parameters": {
         "value": {

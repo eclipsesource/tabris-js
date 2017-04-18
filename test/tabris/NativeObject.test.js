@@ -285,7 +285,7 @@ describe('NativeObject', function() {
       });
 
       it('notifies listeners', function() {
-        object.on('change:foo', listener);
+        object.on('fooChanged', listener);
 
         object._triggerChangeEvent('foo', 23);
 

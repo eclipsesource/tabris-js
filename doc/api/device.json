@@ -67,7 +67,7 @@
     }
   },
   "events": {
-    "change:orientation": {
+    "orientationChanged": {
       "description": "Fired when the `orientation` property has changed and the rotation animation has finished.",
       "parameters": {
         "value": {

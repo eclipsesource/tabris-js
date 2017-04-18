@@ -28,7 +28,7 @@
     }
   },
   "events": {
-    "change:checked": {
+    "checkedChanged": {
       "description": "Fired when the checked property changes.",
       "parameters": {
         "value": {

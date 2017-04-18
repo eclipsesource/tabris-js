@@ -1302,8 +1302,8 @@ describe('Widget', function() {
       listener = spy();
     });
 
-    it('change:bounds', function() {
-      widget = new TestWidget().on('change:bounds', listener);
+    it('boundsChanged', function() {
+      widget = new TestWidget().on('boundsChanged', listener);
 
       widget._trigger('resize', {bounds: [1, 2, 3, 4]});
 

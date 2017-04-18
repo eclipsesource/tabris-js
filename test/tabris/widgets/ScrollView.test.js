@@ -94,9 +94,9 @@ describe('ScrollView', function() {
       expect(listener).to.have.been.calledWithMatch({target: scrollView, offset: 42});
     });
 
-    it('fires change:offsetY event', function() {
+    it('fires offsetYChanged event', function() {
       let listener = spy();
-      scrollView.on('change:offsetY', listener);
+      scrollView.on('offsetYChanged', listener);
 
       tabris._notify(scrollView.cid, 'scrollY', {offset: 42});
 
@@ -105,9 +105,9 @@ describe('ScrollView', function() {
       expect(listener).to.have.been.calledWithMatch({target: scrollView, value: 42});
     });
 
-    it('does not fire change:offsetX event', function() {
+    it('does not fire offsetXChanged event', function() {
       let listener = spy();
-      scrollView.on('change:offsetX', listener);
+      scrollView.on('offsetXChanged', listener);
 
       tabris._notify(scrollView.cid, 'scrollY', {offset: 42});
 
@@ -156,9 +156,9 @@ describe('ScrollView', function() {
       expect(listener).to.have.been.calledWithMatch({target: scrollView, offset: 42});
     });
 
-    it('fires change:offsetX event', function() {
+    it('fires offsetXChanged event', function() {
       let listener = spy();
-      scrollView.on('change:offsetX', listener);
+      scrollView.on('offsetXChanged', listener);
 
       tabris._notify(scrollView.cid, 'scrollX', {offset: 42});
 
@@ -167,9 +167,9 @@ describe('ScrollView', function() {
       expect(listener).to.have.been.calledWithMatch({target: scrollView, value: 42});
     });
 
-    it('does not fire change:offsetY event', function() {
+    it('does not fire offsetYChanged event', function() {
       let listener = spy();
-      scrollView.on('change:offsetY', listener);
+      scrollView.on('offsetYChanged', listener);
 
       tabris._notify(scrollView.cid, 'scrollX', {offset: 42});
 

@@ -9,9 +9,9 @@ tabris.ui.drawer.enabled = true;
 var navigationView = new tabris.NavigationView({
   left: 0, top: 0, right: 0, height: 144,
   drawerActionVisible: true
-}).on('change:topToolbarHeight', function({value: topToolbarHeight}) {
+}).on('topToolbarHeightChanged', function({value: topToolbarHeight}) {
   topToolbarHeightTextView.text = topToolbarHeight;
-}).on('change:bottomToolbarHeight', function({value: bottomToolbarHeight}) {
+}).on('bottomToolbarHeightChanged', function({value: bottomToolbarHeight}) {
   bottomToolbarHeightTextView.text = bottomToolbarHeight;
 }).appendTo(tabris.ui.contentView);
 
@@ -76,7 +76,7 @@ function createCheckBox(text, listener) {
     left: MARGIN, top: ['prev()', MARGIN_SMALL], right: MARGIN,
     text: text,
     checked: true
-  }).on('change:checked', listener)
+  }).on('checkedChanged', listener)
     .appendTo(controls);
 }
 
@@ -88,7 +88,7 @@ function createColorPicker(text, initialColor, listener) {
   new tabris.Picker({
     left: ['prev()', MARGIN], baseline: 'prev()', right: MARGIN,
     items: [initialColor, 'red', 'green', 'blue', 'rgba(0, 0, 0, 0.25)']
-  }).on('change:selection', listener)
+  }).on('selectionChanged', listener)
     .appendTo(controls);
 }
 
