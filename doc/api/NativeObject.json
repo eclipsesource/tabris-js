@@ -149,7 +149,7 @@
         "parameters": [
           {
             "name": "properties",
-            "type": "Object"
+            "type": "PropertiesObject"
           }
         ],
         "description": "Sets all key-value pairs in the properties object as widget properties.",

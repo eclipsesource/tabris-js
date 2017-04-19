@@ -16,6 +16,9 @@ export as namespace tabris;
 
 `.trim();
 
+const PROPERTIES_OBJECT = 'PropertiesObject';
+const CLASS_DEPENDENT_TYPES = [PROPERTIES_OBJECT];
+
 module.exports = function(grunt) {
 
   grunt.registerTask('generate-tsd', () => {
@@ -42,12 +45,21 @@ module.exports = function(grunt) {
     result.append('');
     result.append(grunt.file.read(grunt.config('doc').typings));
     result.append('');
+    prepareTypeDefs(defs);
     Object.keys(defs).forEach((name) => {
-      defs[name].isNativeObject = isNativeObject(defs, defs[name]);
       createTypeDef(result, defs[name]);
     });
     result.append('');
     return result.toString();
+  }
+
+  function prepareTypeDefs(defs) {
+    Object.keys(defs).forEach((name) => {
+      defs[name].isNativeObject = isNativeObject(defs, defs[name]);
+      if (defs[name].extends) {
+        defs[name].parent = defs[defs[name].extends];
+      }
+    });
   }
 
   function isNativeObject(defs, def) {
@@ -81,9 +93,6 @@ module.exports = function(grunt) {
     addMethods(result, def);
     let propertiesFilter = def.isNativeObject ? prop => prop.readonly : () => true;
     addProperties(result, def, propertiesFilter);
-    if (def.isNativeObject) {
-      addPropertyApi(result, def);
-    }
     result.indent--;
     result.append('}');
   }
@@ -123,19 +132,36 @@ module.exports = function(grunt) {
   }
 
   function addMethods(result, def) {
-    if (def.methods) {
-      Object.keys(def.methods).sort().forEach((name) => {
-        if (Array.isArray(def.methods[name])) {
-          def.methods[name].forEach((method) => {
-            result.append('');
-            result.append(createMethod(name, method));
-          });
-        } else {
+    let methods = Object.assign({}, def.methods, inheritClassDependentMethods(def.parent));
+    Object.keys(methods).sort().forEach((name) => {
+      if (Array.isArray(methods[name])) {
+        methods[name].forEach((method) => {
           result.append('');
-          result.append(createMethod(name, def.methods[name]));
-        }
-      });
+          result.append(createMethod(name, method, def.type));
+        });
+      } else {
+        result.append('');
+        result.append(createMethod(name, methods[name], def.type));
+      }
+    });
+  }
+
+  function inheritClassDependentMethods(def) {
+    let result = {};
+    if (def) {
+      Object.keys(def.methods || {})
+        .filter(methodName => isClassDependent(def.methods[methodName]))
+        .forEach(methodName => result[methodName] = def.methods[methodName]);
+      Object.assign(result, inheritClassDependentMethods(def.parent));
     }
+    return result;
+  }
+
+  function isClassDependent(def) {
+    let variants = Array.isArray(def) ? def : [def];
+    return variants.some(variant =>
+      (variant.parameters || []).some(param => CLASS_DEPENDENT_TYPES.includes(param.type))
+    );
   }
 
   function addProperties(result, def, filter) {
@@ -145,30 +171,6 @@ module.exports = function(grunt) {
         result.append('');
         result.append(createProperty(name, def.properties[name]));
       });
-    }
-  }
-
-  function addPropertyApi(result, def) {
-    if (def.properties) {
-      result.append('');
-      result.append(createComment([
-        'Gets the current value of the given *property*.',
-        '@param property'
-      ]));
-      result.append('get(property: string): any;');
-      result.append('');
-      result.append(createComment([
-        'Sets the given property. Supports chaining.',
-        '@param property',
-        '@param value'
-      ]));
-      result.append('set(property: string, value: any): this;');
-      result.append('');
-      result.append(createComment([
-        'Sets all key-value pairs in the properties object as widget properties. Supports chaining.',
-        '@param properties'
-      ]));
-      result.append(`set(properties: ${def.type}Properties): this;`);
     }
   }
 
@@ -184,15 +186,24 @@ module.exports = function(grunt) {
     return result.join('\n');
   }
 
-  function createMethod(name, def) {
+  function createMethod(name, def, className) {
     let result = [];
     result.push(createDoc(def));
-    result.push(`${name}(${createParamList(def.parameters)}): ${def.returns || 'void'};`);
+    result.push(`${name}(${createParamList(def.parameters, className)}): ${def.returns || 'void'};`);
     return result.join('\n');
   }
 
-  function createParamList(parameters) {
-    return parameters.map(param => `${param.name}${param.optional ? '?' : ''}: ${param.type}`).join(', ');
+  function createParamList(parameters, className) {
+    return parameters.map(param =>
+      `${param.name}${param.optional ? '?' : ''}: ${decodeType(param.type, className)}`
+    ).join(', ');
+  }
+
+  function decodeType(type, className) {
+    if (type === PROPERTIES_OBJECT) {
+      return className + 'Properties';
+    }
+    return type;
   }
 
   function createDoc(def) {
