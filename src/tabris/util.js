@@ -17,3 +17,7 @@ export function omit(object, keys) {
   }
   return result;
 }
+
+export function isObject(value) {
+  return value !== null && typeof value === 'object';
+}

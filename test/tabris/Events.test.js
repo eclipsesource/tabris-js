@@ -43,6 +43,18 @@ describe('Events', function() {
       expect(listener).not.to.have.been.called;
     });
 
+    it('accepts objects', function() {
+      object.on({foo: listener, bar: listener});
+
+      object.trigger('foo', {type: 'foo'});
+      object.trigger('bar', {type: 'bar'});
+      object.trigger('baz', {type: 'baz'});
+
+      expect(listener).to.have.been.calledTwice;
+      expect(listener).to.have.been.calledWithMatch({type: 'foo'});
+      expect(listener).to.have.been.calledWithMatch({type: 'bar'});
+    });
+
   });
 
   describe('off', function() {
@@ -60,6 +72,16 @@ describe('Events', function() {
       object.off('foo', listener);
 
       object.trigger('foo');
+
+      expect(listener).not.to.have.been.called;
+    });
+
+    it('accepts object', function() {
+      object.on({foo: listener, bar: listener});
+      object.off({foo: listener, bar: listener});
+
+      object.trigger('foo');
+      object.trigger('bar');
 
       expect(listener).not.to.have.been.called;
     });
@@ -198,6 +220,19 @@ describe('Events', function() {
       object.trigger('foo');
 
       expect(listener).not.to.have.been.called;
+    });
+
+    it('accepts objects', function() {
+      object.once({foo: listener, bar: listener});
+
+      object.trigger('foo', {type: 'foo'});
+      object.trigger('bar', {type: 'bar'});
+      object.trigger('foo', {type: 'foo'});
+      object.trigger('bar', {type: 'bar'});
+
+      expect(listener).to.have.been.calledTwice;
+      expect(listener).to.have.been.calledWithMatch({type: 'foo'});
+      expect(listener).to.have.been.calledWithMatch({type: 'bar'});
     });
 
   });

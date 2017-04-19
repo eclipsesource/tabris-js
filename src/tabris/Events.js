@@ -1,6 +1,14 @@
+import {isObject} from './util';
+
 export default {
 
   on(type, callback, context) {
+    if (isObject(type)) {
+      for (let key in type) {
+        this.on(key, type[key]);
+      }
+      return this;
+    }
     let wasListening = this._isListening(type);
     this._callbacks = this._callbacks || [];
     this._callbacks[type] = (this._callbacks[type] || []).concat();
@@ -18,6 +26,12 @@ export default {
   },
 
   off(type, callback, context) {
+    if (isObject(type)) {
+      for (let key in type) {
+        this.off(key, type[key]);
+      }
+      return this;
+    }
     if (!type || !callback) {
       throw new Error('Not enough arguments');
     }
@@ -47,6 +61,12 @@ export default {
   },
 
   once(type, callback, context) {
+    if (isObject(type)) {
+      for (let key in type) {
+        this.once(key, type[key]);
+      }
+      return this;
+    }
     let self = this;
     let wrappedCallback = function() {
       if (!self._isDisposed) {
