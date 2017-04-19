@@ -5,7 +5,7 @@ import GestureRecognizer from './GestureRecognizer';
 import {animate} from './Animation';
 import {types} from './property-types';
 
-const EVENT_TYPES = ['touchstart', 'touchmove', 'touchend', 'touchcancel', 'resize'];
+const EVENT_TYPES = ['touchStart', 'touchMove', 'touchEnd', 'touchCancel', 'resize'];
 
 export default class Widget extends NativeObject {
 

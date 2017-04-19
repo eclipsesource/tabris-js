@@ -3,16 +3,16 @@ var textView = new tabris.TextView({
   text: 'Touch anywhere...'
 }).appendTo(tabris.ui.contentView);
 
-tabris.ui.contentView.on('touchstart', function({touches}) {
-  printXY('touchstart', touches);
+tabris.ui.contentView.on('touchStart', function({touches}) {
+  printXY('touchStart', touches);
   tabris.ui.contentView.background = 'yellow';
-}).on('touchmove', function({touches}) {
-  printXY('touchmove', touches);
-}).on('touchend', function({touches}) {
-  printXY('touchend', touches);
+}).on('touchMove', function({touches}) {
+  printXY('touchMove', touches);
+}).on('touchEnd', function({touches}) {
+  printXY('touchEnd', touches);
   tabris.ui.contentView.background = 'green';
-}).on('touchcancel', function({touches}) {
-  printXY('touchcancel', touches);
+}).on('touchCancel', function({touches}) {
+  printXY('touchCancel', touches);
   tabris.ui.contentView.background = 'red';
 }).on('longpress', function({touches}) {
   tabris.ui.contentView.background = 'blue';

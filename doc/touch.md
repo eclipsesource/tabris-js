@@ -57,10 +57,10 @@ In a scrollable widget, like `ScrollView` or `CollectionView`, a recognized **pa
 
 Touch events are a low-level alternative to gesture events. They should only be used in case an interaction can not be accurately represented by a gesture. The target of all touch events is the widget that was touched first. Available touch event types are:
 
-- `touchstart` - Fired when a finger touches the widget.
-- `touchmove` - Fired repeatedly while swiping across the screen after initiating a `touchstart` event.
-- `touchend` - Fired when the touch interaction ends (i.e. the finger is lifted up) on the same widget that received the `touchstart` event.
-- `touchcancel` - Fired instead of `touchend` when the touch interaction ends on another widget than it started.
+- `touchStart` - Fired when a finger touches the widget.
+- `touchMove` - Fired repeatedly while swiping across the screen after initiating a `touchStart` event.
+- `touchEnd` - Fired when the touch interaction ends (i.e. the finger is lifted up) on the same widget that received the `touchStart` event.
+- `touchCancel` - Fired instead of `touchEnd` when the touch interaction ends on another widget than it started.
 
 The event object includes the following properties:
 
@@ -70,7 +70,7 @@ The event object includes the following properties:
 
 Example:
 ```js
-widget.on("touchstart", function(widget, event) {
+widget.on("touchStart", function(widget, event) {
   var x = event.touches[0].absoluteX;
   var y = event.touches[0].absoluteY;
   ...

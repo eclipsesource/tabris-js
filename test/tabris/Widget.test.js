@@ -1322,7 +1322,7 @@ describe('Widget', function() {
       checkListen('resize');
     });
 
-    ['touchstart', 'touchmove', 'touchend', 'touchcancel'].forEach(name => {
+    ['touchStart', 'touchMove', 'touchEnd', 'touchCancel'].forEach(name => {
       it(name, function() {
         widget = new TestWidget().on(name, listener);
 

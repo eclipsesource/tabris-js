@@ -165,25 +165,25 @@ widget.on('pan', (event) => {
   let velocityY: number = event.velocityY;
 });
 
-widget.on('touchstart', (event) => {
+widget.on('touchStart', (event) => {
   let target: Widget = event.target;
   let time: number = event.time;
   let touch: {x: number, y: number} = event.touches[0];
 });
 
-widget.on('touchmove', (event) => {
+widget.on('touchMove', (event) => {
   let target: Widget = event.target;
   let time: number = event.time;
   let touch: {x: number, y: number} = event.touches[0];
 });
 
-widget.on('touchend', (event) => {
+widget.on('touchEnd', (event) => {
   let target: Widget = event.target;
   let time: number = event.time;
   let touch: {x: number, y: number} = event.touches[0];
 });
 
-widget.on('touchcancel', (event) => {
+widget.on('touchCancel', (event) => {
   let target: Widget = event.target;
   let time: number = event.time;
   let touch: {x: number, y: number} = event.touches[0];

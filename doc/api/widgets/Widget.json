@@ -491,7 +491,7 @@
         }
       }
     },
-    "touchstart": {
+    "touchStart": {
       "description": "Fired when a widget is touched. See [Touch Events](../touch.md).",
       "parameters": {
         "touches": {
@@ -500,7 +500,7 @@
         }
       }
     },
-    "touchmove": {
+    "touchMove": {
       "description": "Fired repeatedly while swiping across the screen.",
       "parameters": {
         "touches": {
@@ -509,7 +509,7 @@
         }
       }
     },
-    "touchend": {
+    "touchEnd": {
       "description": "Fired when a touch ends on the same widget than it started on.",
       "parameters": {
         "touches": {
@@ -518,8 +518,8 @@
         }
       }
     },
-    "touchcancel": {
-      "description": "Fired instead of touchend when the touch ends on another widget than it started on.",
+    "touchCancel": {
+      "description": "Fired instead of touchEnd when the touch ends on another widget than it started on.",
       "parameters": {
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
