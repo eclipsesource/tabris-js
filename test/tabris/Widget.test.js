@@ -233,9 +233,9 @@ describe('Widget', function() {
         expect(client.calls({op: 'destroy', id: child.cid}).length).to.equal(0);
       });
 
-      it("notifies parent's `removechild` listener", function() {
+      it("notifies parent's `removeChild` listener", function() {
         let listener = spy();
-        parent.on('removechild', listener);
+        parent.on('removeChild', listener);
 
         child.dispose();
 
@@ -243,10 +243,10 @@ describe('Widget', function() {
         expect(listener).to.have.been.calledWithMatch({target: parent, child, index: 0});
       });
 
-      it("notifies parent's `removechild` listener with correct index", function() {
+      it("notifies parent's `removeChild` listener with correct index", function() {
         new TestWidget().insertBefore(child);
         let listener = spy();
-        parent.on('removechild', listener);
+        parent.on('removeChild', listener);
 
         child.dispose();
 
@@ -315,7 +315,7 @@ describe('Widget', function() {
       describe('when called with a widget', function() {
 
         beforeEach(function() {
-          widget.on('addchild', listener);
+          widget.on('addChild', listener);
           result = widget.append(child1);
         });
 
@@ -329,7 +329,7 @@ describe('Widget', function() {
           expect(result).to.equal(widget);
         });
 
-        it('notifies `addchild` listener with arguments parent, child, event', function() {
+        it('notifies `addChild` listener with arguments parent, child, event', function() {
           expect(listener).to.have.been.calledOnce;
           expect(listener).to.have.been.calledWithMatch({target: widget, child: child1, index: 0});
         });
@@ -585,7 +585,7 @@ describe('Widget', function() {
         });
 
         it('triggers remove event with index', function() {
-          parent1.on('removechild', listener);
+          parent1.on('removeChild', listener);
 
           widget.insertBefore(other);
 
@@ -593,7 +593,7 @@ describe('Widget', function() {
         });
 
         it('triggers add event with index', function() {
-          parent2.on('addchild', listener);
+          parent2.on('addChild', listener);
 
           widget.insertBefore(other);
 
@@ -693,16 +693,16 @@ describe('Widget', function() {
           expect(children.indexOf(widget)).to.equal(children.indexOf(other) + 1);
         });
 
-        it('triggers `removechild` event with index', function() {
-          parent1.on('removechild', listener);
+        it('triggers `removeChild` event with index', function() {
+          parent1.on('removeChild', listener);
 
           widget.insertAfter(other);
 
           expect(listener).to.have.been.calledWithMatch({target: parent1, child: widget, index: 0});
         });
 
-        it('triggers `addchild` event with index', function() {
-          parent2.on('addchild', listener);
+        it('triggers `addChild` event with index', function() {
+          parent2.on('addChild', listener);
 
           widget.insertAfter(other);
 

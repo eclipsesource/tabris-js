@@ -95,6 +95,7 @@ More changes to events:
 ### Event names and properties
 
 * Gesture events have been renamed to camel case, so that e.g. `swipe:left` becomes `swipeLeft`, `pan:horizontal` becomes `panHorizontal` etc.
+* The events `addchild` and `removechild` have been renamed to camel case, i.e. `addChild` and `removeChild`.
 * Change events are now named after the pattern `<property>Changed`. For example, the event `change:text` becomes `textChanged` etc.
 * The events `animationstart` and `animationend` have been removed, use the Promise returned by `animate()`.
 * The properties `pageX` and `pageY` that was available on touch events have been renamed to `absoluteX` and `absoluteY`.

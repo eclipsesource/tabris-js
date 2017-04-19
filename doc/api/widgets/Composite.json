@@ -37,7 +37,7 @@
     ]
   },
   "events": {
-    "addchild": {
+    "addChild": {
       "description": "Fired when a child is added to this widget.",
       "parameters": {
         "child": {
@@ -50,7 +50,7 @@
         }
       }
     },
-    "removechild": {
+    "removeChild": {
       "description": "Fired when a child is removed from this widget.",
       "parameters": {
         "child": {

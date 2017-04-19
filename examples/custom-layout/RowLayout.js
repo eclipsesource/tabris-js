@@ -7,8 +7,8 @@ RowLayout.prototype = {
 
   attachTo: function(parent) {
     this.parent = parent;
-    this.parent.on('addchild', onAddChild, this);
-    this.parent.on('removechild', onRemoveChild, this);
+    this.parent.on('addChild', onAddChild, this);
+    this.parent.on('removeChild', onRemoveChild, this);
     return this;
   },
 

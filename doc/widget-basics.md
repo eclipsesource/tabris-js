@@ -153,7 +153,7 @@ var button = new tabris.Button({
 }).appendTo(page);
 ```
 
-If the widget already has a parent, it is de-registered from the actual parent and registered with the new one. Triggers an *addchild* event on the parent.
+If the widget already has a parent, it is de-registered from the actual parent and registered with the new one. Triggers an *addChild* event on the parent.
 
 It's also possible to add any number of widgets to the same parent using `append`:
 
@@ -178,7 +178,7 @@ The result list of children is an array-like object of the type [`WidgetCollecti
 
 ## Disposing of a Widget
 
-The `dispose` method disposes of the widget and all of its children. Triggers a *removechild* event on the parent and a *dispose* event on itself.
+The `dispose` method disposes of the widget and all of its children. Triggers a *removeChild* event on the parent and a *dispose* event on itself.
 
 Example:
 
