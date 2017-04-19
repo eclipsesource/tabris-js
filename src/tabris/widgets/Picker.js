@@ -3,38 +3,37 @@ import Widget from '../Widget';
 
 export default class Picker extends Widget {
 
+  constructor(properties) {
+    super(Object.assign({selectionIndex: 0}, properties));
+    tabris.on('flush', this._update, this);
+    this.on('dispose', () => tabris.off('flush', this._update, this));
+  }
+
   get _nativeType() {
     return 'tabris.Picker';
   }
 
-  _create(type, properties = {}) {
-    let initProperties = ('selection' in properties) ? {} : {selectionIndex: 0};
-    super._create(type, Object.assign(initProperties, properties));
-    return this;
-  }
-
-  _reorderProperties(properties) {
-    // items property depends on itemText, selection/selectionIndex depend on items
-    let deferred = ['items', 'selection', 'selectionIndex'];
-    return properties.filter(name => deferred.indexOf(name) === -1)
-      .concat(deferred.filter(name => properties.indexOf(name) !== -1));
-  }
-
-  _getItem(index) {
-    return this.items[index];
-  }
-
-  _getItemIndex(item) {
-    return this.items.indexOf(item);
+  _update() {
+    if (this.$needsUpdateItems) {
+      let items = new Array(this.itemCount);
+      for (let index = 0; index < items.length; index++) {
+        items[index] = this.itemText(index);
+      }
+      this._nativeSet('items', items);
+      delete this.$needsUpdateItems;
+    }
+    if (this.$newSelectionIndex >= 0) {
+      this._nativeSet('selectionIndex', this.$newSelectionIndex);
+      this._triggerChangeEvent('selectionIndex', this.$newSelectionIndex);
+      delete this.$newSelectionIndex;
+    }
   }
 
   _listen(name, listening) {
     if (name === 'select') {
       this._nativeListen(name, listening);
-    } else if (name === 'selectionChanged') {
-      this._onoff('select', listening, this.$triggerChangeSelection);
     } else if (name === 'selectionIndexChanged') {
-      this._onoff('select', listening, this.$triggerChangeSelectionIndex);
+      this._onoff('select', listening, this.$triggerSelectionIndexChanged);
     } else {
       super._listen(name, listening);
     }
@@ -42,62 +41,42 @@ export default class Picker extends Widget {
 
   _trigger(name, event) {
     if (name === 'select') {
-      return super._trigger('select', {item: this._getItem(event.selectionIndex), index: event.selectionIndex});
+      return super._trigger('select', {index: event.selectionIndex});
     }
     return super._trigger(name, event);
   }
 
-  $triggerChangeSelection({item}) {
-    this._triggerChangeEvent('selection', item);
-  }
-
-  $triggerChangeSelectionIndex({index}) {
+  $triggerSelectionIndexChanged({index}) {
     this._triggerChangeEvent('selectionIndex', index);
   }
 
 }
 
 NativeObject.defineProperties(Picker.prototype, {
-  items: {
-    type: 'array',
-    default() {
-      return [];
-    },
+  itemCount: {
+    type: 'natural',
+    default: 0,
     set(name, value) {
       this._storeProperty(name, value);
-      this._nativeSet('items', value.map(this.itemText));
+      this.$needsUpdateItems = true;
     }
   },
   itemText: {
     type: 'function',
-    default() {
-      return function(item) {
-        return item == null ? '' : item.toString();
-      };
-    },
+    default: () => () => '',
     set(name, value) {
+      this.$needsUpdateItems = true;
       this._storeProperty(name, value);
     }
   },
   selectionIndex: {
     type: 'natural',
+    default: 0,
     set(name, value) {
-      this._nativeSet(name, value);
-      this._triggerChangeEvent(name, value);
-    }
-  },
-  selection: {
-    set(name, item) {
-      let index = this._getItemIndex(item);
-      if (index !== -1) {
-        this.selectionIndex = index;
-        this._triggerChangeEvent(name, item);
-      } else {
-        console.warn('Could not set picker selection ' + item + ': item not found');
-      }
+      this.$newSelectionIndex = value;
     },
-    get() {
-      return this._getItem(this.selectionIndex);
+    get(name) {
+      return this._nativeGet(name);
     }
   },
   fillColor: {type: 'color'},
