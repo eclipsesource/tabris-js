@@ -281,7 +281,7 @@
         }
       }
     },
-    "pan:up": {
+    "panUp": {
       "description": "Fired when a finger starts moving up.",
       "parameters": {
         "state": {
@@ -310,7 +310,7 @@
         }
       }
     },
-    "pan:down": {
+    "panDown": {
       "description": "Fired when a finger starts moving down.",
       "parameters": {
         "state": {
@@ -339,7 +339,7 @@
         }
       }
     },
-    "pan:left": {
+    "panLeft": {
       "description": "Fired when a finger starts moving left.",
       "parameters": {
         "state": {
@@ -368,7 +368,7 @@
         }
       }
     },
-    "pan:right": {
+    "panRight": {
       "description": "Fired when a finger starts moving right.",
       "parameters": {
         "state": {
@@ -397,7 +397,7 @@
         }
       }
     },
-    "pan:horizontal": {
+    "panHorizontal": {
       "description": "Fired when a finger starts moving left or right.",
       "parameters": {
         "state": {
@@ -426,7 +426,7 @@
         }
       }
     },
-    "pan:vertical": {
+    "panVertical": {
       "description": "Fired when a finger starts moving up or down.",
       "parameters": {
         "state": {
@@ -455,7 +455,7 @@
         }
       }
     },
-    "swipe:up": {
+    "swipeUp": {
       "description": "Fired when a finger moves up quickly.",
       "parameters": {
         "touches": {
@@ -464,7 +464,7 @@
         }
       }
     },
-    "swipe:down": {
+    "swipeDown": {
       "description": "Fired when a finger moves down quickly.",
       "parameters": {
         "touches": {
@@ -473,7 +473,7 @@
         }
       }
     },
-    "swipe:left": {
+    "swipeLeft": {
       "description": "Fired when a finger moves left quickly.",
       "parameters": {
         "touches": {
@@ -482,7 +482,7 @@
         }
       }
     },
-    "swipe:right": {
+    "swipeRight": {
       "description": "Fired when a finger moves right quickly.",
       "parameters": {
         "touches": {

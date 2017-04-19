@@ -73,7 +73,7 @@ trayContent.on('resize', function() {
   }
 });
 
-strap.on('pan:vertical', function({state, translation, velocity}) {
+strap.on('panVertical', function({state, translation, velocity}) {
   if (state === 'start' && (trayState === 'up' || trayState === 'down')) {
     trayState = 'dragging';
     dragOffset = tray.transform.translationY - translation.y;

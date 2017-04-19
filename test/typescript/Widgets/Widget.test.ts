@@ -149,7 +149,7 @@ widget.on('longpress', (event) => {
   let touch: {x: number, y: number} = event.touches[0];
 });
 
-widget.on('swipe:left', (event) => {
+widget.on('swipeLeft', (event) => {
   let target: Widget = event.target;
   let state: string = event.state;
   let touch: {x: number, y: number} = event.touches[0];

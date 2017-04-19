@@ -8,21 +8,21 @@ In Tabris.js there are 13 gesture events based on 4 basic gesture types:
 - `tap` - Fired once when a finger briefly touched the widget.
 - `longpress` - Fired when a finger touched the widget for a longer period of time (about a second, may depend on the platform), and again when lifting the finger.
 - `pan` - Starts firing continuously as soon as a finger moved in any direction for a certain distance (about 5px, may depend on the platform). The event is always fired on the widget where the finger first touched, even if the finger is moved outside the widget.
-- `pan:left` - Starts firing continuously as soon as a finger moved to the left for a certain distance.
-- `pan:right` - Starts firing continuously as soon as a finger moved to the right for a certain distance.
-- `pan:up` - Starts firing continuously as soon as a finger moved upwards for a certain distance.
-- `pan:down` - Starts firing continuously as soon as a finger moved downwards for a certain distance.
-- `pan:horizontal` - Starts firing continuously as soon as a finger moved to the left or right for a certain distance.
-- `pan:vertical` - Starts firing continuously as soon as a finger moved upwards or downwards for a certain distance.
-- `swipe:left` - Fired once when a finger quickly moved to the left for a certain (longer) distance (may depend on platform).
-- `swipe:right` - Fired once when a finger quickly moved to the right for a certain (longer) distance (may depend on platform).
-- `swipe:up` - Fired once when a finger quickly moved upwards for a certain (longer) distance (may depend on platform).
-- `swipe:down` - Fired once when a finger quickly moved downwards for a certain (longer) distance (may depend on platform).
+- `panLeft` - Starts firing continuously as soon as a finger moved to the left for a certain distance.
+- `panRight` - Starts firing continuously as soon as a finger moved to the right for a certain distance.
+- `panUp` - Starts firing continuously as soon as a finger moved upwards for a certain distance.
+- `panDown` - Starts firing continuously as soon as a finger moved downwards for a certain distance.
+- `panHorizontal` - Starts firing continuously as soon as a finger moved to the left or right for a certain distance.
+- `panVertical` - Starts firing continuously as soon as a finger moved upwards or downwards for a certain distance.
+- `swipeLeft` - Fired once when a finger quickly moved to the left for a certain (longer) distance (may depend on platform).
+- `swipeRight` - Fired once when a finger quickly moved to the right for a certain (longer) distance (may depend on platform).
+- `swipeUp` - Fired once when a finger quickly moved upwards for a certain (longer) distance (may depend on platform).
+- `swipeDown` - Fired once when a finger quickly moved downwards for a certain (longer) distance (may depend on platform).
 
 Example:
 
 ```js
-widget.on("swipe:left", function(event) {
+widget.on("swipeLeft", function(event) {
   moveWidgetLeft();
 });
 ```
@@ -51,7 +51,7 @@ Event states:
 
 ### Gestures in scrollable/panable Widgets
 
-In a scrollable widget, like `ScrollView` or `CollectionView`, a recognized **pan** or **swipe** gesture in a non-scrollable direction will prevent scrolling. Therefore, attaching a `pan:horizontal` listener to a widget in a vertically scrolling `ScrollView`, will prevent scrolling for any gesture that starts with a horizontal movement. When no pan listener is attached or the movement starts in a vertical direction, scrolling is still possible.
+In a scrollable widget, like `ScrollView` or `CollectionView`, a recognized **pan** or **swipe** gesture in a non-scrollable direction will prevent scrolling. Therefore, attaching a `panHorizontal` listener to a widget in a vertically scrolling `ScrollView`, will prevent scrolling for any gesture that starts with a horizontal movement. When no pan listener is attached or the movement starts in a vertical direction, scrolling is still possible.
 
 ## Touch Events
 

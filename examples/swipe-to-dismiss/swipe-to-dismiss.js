@@ -20,7 +20,7 @@ var collectionView = new tabris.CollectionView({
     var container = new tabris.Composite({
       left: 0, top: 0, bottom: 0, right: 0,
       background: 'white'
-    }).on('pan:horizontal', function(event) {
+    }).on('panHorizontal', function(event) {
       handlePan(event);
     }).appendTo(cell);
     var senderView = new tabris.TextView({

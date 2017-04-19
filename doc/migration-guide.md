@@ -91,9 +91,13 @@ More changes to events:
 
 * Calling `off()` without arguments or with a single argument is not supported anymore.
 * Calling `on(event, listener)` or `once(event, listener)` multiple times with identical parameters will register the listener only once.
+
+### Event names and properties
+
+* Gesture events have been renamed to camel case, so that e.g. `swipe:left` becomes `swipeLeft`, `pan:horizontal` becomes `panHorizontal` etc.
+* Change events are now named after the pattern `<property>Changed`. For example, the event `change:text` becomes `textChanged` etc.
 * The events `animationstart` and `animationend` have been removed, use the Promise returned by `animate()`.
 * The properties `pageX` and `pageY` that was available on touch events have been renamed to `absoluteX` and `absoluteY`.
-* Change events are now named after the pattern `<property>Changed`.
 
 ## Widgets
 
