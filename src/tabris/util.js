@@ -21,3 +21,7 @@ export function omit(object, keys) {
 export function isObject(value) {
   return value !== null && typeof value === 'object';
 }
+
+export function capitalizeFirstChar(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}

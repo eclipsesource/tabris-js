@@ -22,9 +22,9 @@ new tabris.Button({
       'cancel': 'Discard',
       'neutral': 'Keep editing'
     }
-  }).on('close:ok', function() {console.log('Replace');})
-    .on('close:neutral', function() {console.log('Keep editing');})
-    .on('close:cancel', function() {console.log('Discard');})
+  }).on('closeOk', function() {console.log('Replace');})
+    .on('closeNeutral', function() {console.log('Keep editing');})
+    .on('closeCancel', function() {console.log('Discard');})
     .on('close', function({button}) {console.log('Dialog closed: ' + button);})
     .open();
 }).appendTo(tabris.ui.contentView);

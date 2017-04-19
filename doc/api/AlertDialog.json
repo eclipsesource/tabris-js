@@ -38,13 +38,13 @@
         }
       }
     },
-    "close:ok": {
+    "closeOk": {
       "description": "Fired when the dialog was closed by pressing the 'ok' button."
     },
-    "close:cancel": {
+    "closeCancel": {
       "description": "Fired when the dialog was closed by pressing the 'cancel' button."
     },
-    "close:neutral": {
+    "closeNeutral": {
       "description": "Fired when the dialog was closed by pressing the 'neutral' button."
     }
   },

@@ -14,7 +14,7 @@ describe('AlertDialog', function() {
 
   afterEach(restore);
 
-  describe('title:', function() {
+  describe('title', function() {
 
     it('initial value is empty string', function() {
       expect(dialog.title).to.equal('');
@@ -28,7 +28,7 @@ describe('AlertDialog', function() {
 
   });
 
-  describe('message:', function() {
+  describe('message', function() {
 
     it('initial value is empty string', function() {
       expect(dialog.message).to.equal('');
@@ -42,7 +42,7 @@ describe('AlertDialog', function() {
 
   });
 
-  describe('buttons:', function() {
+  describe('buttons', function() {
 
     it('initial value is empty object', function() {
       expect(dialog.buttons).to.deep.equal({});
@@ -84,7 +84,7 @@ describe('AlertDialog', function() {
 
   });
 
-  describe('open:', function() {
+  describe('open', function() {
 
     it('returns this', function() {
       expect(dialog.open()).to.equal(dialog);
@@ -103,7 +103,7 @@ describe('AlertDialog', function() {
 
   });
 
-  describe('close:', function() {
+  describe('close', function() {
 
     it('returns this', function() {
       expect(dialog.close()).to.equal(dialog);
@@ -116,7 +116,7 @@ describe('AlertDialog', function() {
 
   });
 
-  describe('close event:', function() {
+  describe('close event', function() {
 
     it('dialog always LISTENs to close', function() {
       expect(client.calls({op: 'listen'})[0]).to.deep.equal({
@@ -127,10 +127,10 @@ describe('AlertDialog', function() {
       });
     });
 
-    it('with button fires close:<button> and close', function() {
+    it('with button fires close<Button> and close', function() {
       let closeOk = spy();
       let close = spy();
-      dialog.on('close:ok', closeOk);
+      dialog.on('closeOk', closeOk);
       dialog.on('close', close);
 
       tabris._notify(dialog.cid, 'close', {button: 'ok'});
@@ -144,7 +144,7 @@ describe('AlertDialog', function() {
     it('without button fires close only', function() {
       let closeOk = spy();
       let close = spy();
-      dialog.on('close:ok', closeOk);
+      dialog.on('closeOk', closeOk);
       dialog.on('close', close);
 
       tabris._notify(dialog.cid, 'close', {});

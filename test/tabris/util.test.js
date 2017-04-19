@@ -1,5 +1,5 @@
 import {expect} from '../test';
-import {pick, omit, isObject} from '../../src/tabris/util';
+import {pick, omit, isObject, capitalizeFirstChar} from '../../src/tabris/util';
 
 describe('util', function() {
 
@@ -51,6 +51,21 @@ describe('util', function() {
       expect(isObject(undefined)).to.be.false;
       expect(isObject(23)).to.be.false;
       expect(isObject('foo')).to.be.false;
+    });
+
+  });
+
+  describe('capitalizeFirstChar', function() {
+
+    it('replaces first letter with upper case', function() {
+      expect(capitalizeFirstChar('f')).to.equal('F');
+      expect(capitalizeFirstChar('foo')).to.equal('Foo');
+      expect(capitalizeFirstChar('fooBar')).to.equal('FooBar');
+      expect(capitalizeFirstChar('FOO')).to.equal('FOO');
+    });
+
+    it('does not change empty string', function() {
+      expect(capitalizeFirstChar('')).to.equal('');
     });
 
   });
