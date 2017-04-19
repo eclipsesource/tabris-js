@@ -795,6 +795,14 @@ describe('CollectionView', function() {
 
     });
 
+    it('does not crash when disposed right after setting itemCount (bugfix)', function() {
+      let view = new CollectionView();
+      view.itemCount = 23;
+      view.dispose();
+      tabris.trigger('flush');
+      expect(view.isDisposed()).to.equal(true);
+    });
+
   });
 
 });

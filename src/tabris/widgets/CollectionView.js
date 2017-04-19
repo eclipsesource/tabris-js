@@ -11,7 +11,8 @@ export default class CollectionView extends Composite {
     this._nativeListen('requestinfo', true);
     this._nativeListen('createitem', true);
     this._nativeListen('populateitem', true);
-    tabris.on('flush', () => this._reload());
+    tabris.on('flush', this._reload, this);
+    this.on('dispose', () => tabris.off('flush', this._reload, this));
   }
 
   get _nativeType() {
@@ -62,8 +63,8 @@ export default class CollectionView extends Composite {
     // We defer the reload call until the end of create/set in order to ensure that
     // we don't receive events before the listeners are attached
     if (this._needsReload) {
-      this._nativeCall('reload', {'items': this.itemCount});
       delete this._needsReload;
+      this._nativeCall('reload', {'items': this.itemCount});
     }
   }
 
