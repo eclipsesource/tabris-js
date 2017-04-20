@@ -37,10 +37,11 @@
       "type": "Color",
       "description": "The color used for action texts. Only applied on Android. IOS uses the `actionColor` to colorize the action text."
     },
-    "animated": {
-      "type": "boolean",
-      "default": true,
-      "description": "Controls whether page transitions are animated."
+    "pageAnimation": {
+      "type": "string",
+      "values": ["default", "none"],
+      "default": "default",
+      "description": "Controls what animation to use when animating a page transition."
     },
     "win_toolbarTheme": {
       "type": "string",

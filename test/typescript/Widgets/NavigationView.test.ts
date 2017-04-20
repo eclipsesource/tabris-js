@@ -5,7 +5,7 @@ let widget: NavigationView = new NavigationView;
 // Properties
 let actionColor: Color;
 let actionTextColor: Color;
-let animated: boolean;
+let pageAnimation: 'default' | 'none';
 let drawerActionVisible: boolean;
 let titleTextColor: Color;
 let toolbarColor: Color;
@@ -13,7 +13,7 @@ let toolbarVisible: boolean;
 
 actionColor = widget.actionColor;
 actionTextColor = widget.actionTextColor;
-animated = widget.animated;
+pageAnimation = widget.pageAnimation;
 drawerActionVisible = widget.drawerActionVisible;
 titleTextColor = widget.titleTextColor;
 toolbarColor = widget.toolbarColor;
@@ -21,7 +21,7 @@ toolbarVisible = widget.toolbarVisible;
 
 widget.actionColor = actionColor;
 widget.actionTextColor = actionTextColor;
-widget.animated = animated;
+widget.pageAnimation = pageAnimation;
 widget.drawerActionVisible = drawerActionVisible;
 widget.titleTextColor = titleTextColor;
 widget.toolbarColor = toolbarColor;

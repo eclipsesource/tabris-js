@@ -182,16 +182,16 @@ describe('NavigationView', function() {
 
   });
 
-  describe('animated', function() {
+  describe('pageAnimation', function() {
 
-    it('is true by default', function() {
-      expect(navigationView.animated).to.be.true;
+    it('is "default" by default', function() {
+      expect(navigationView.pageAnimation).to.be.equal('default');
     });
 
     it('is rendered', function() {
-      navigationView.animated = false;
+      navigationView.pageAnimation = 'none';
 
-      expect(client.calls({id: navigationView.cid})[0].properties).to.deep.equal({animated: false});
+      expect(client.calls({id: navigationView.cid})[0].properties).to.deep.equal({pageAnimation: 'none'});
     });
 
   });

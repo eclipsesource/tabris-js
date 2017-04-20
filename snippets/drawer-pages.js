@@ -1,7 +1,7 @@
 var navigationView = new tabris.NavigationView({
   left: 0, top: 0, right: 0, bottom: 0,
   drawerActionVisible: true,
-  animated: false,
+  pageAnimation: 'none',
   win_drawerActionBackground: '#009688',
   win_drawerActionTheme: 'dark'
 }).appendTo(tabris.ui.contentView);

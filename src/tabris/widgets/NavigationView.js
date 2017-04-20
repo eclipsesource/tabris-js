@@ -104,7 +104,7 @@ NativeObject.defineProperties(NavigationView.prototype, {
   titleTextColor: {type: 'color'},
   actionColor: {type: 'color'},
   actionTextColor: {type: 'color'},
-  animated: {type: 'boolean', default: true},
+  pageAnimation: {type: ['choice', ['default', 'none']], default: 'default'},
   win_toolbarTheme: {type: ['choice', ['default', 'light', 'dark']], default: 'default'},
   win_toolbarOverflowTheme: {type: ['choice', ['default', 'light', 'dark']], default: 'default'},
   win_drawerActionTheme: {type: ['choice', ['default', 'light', 'dark']], default: 'default'},
