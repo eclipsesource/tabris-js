@@ -113,7 +113,7 @@ export default class WebSocket {
     if (reason && getStringByteSize(reason) > 123) {
       throw new Error('The close reason can not be larger than 123 utf-8 bytes');
     }
-    if (this.readyState !== CLOSING || this.readyState !== CLOSED) {
+    if (this.readyState !== CLOSING && this.readyState !== CLOSED) {
       this.readyState = CLOSING;
       let properties = {};
       if (code) {

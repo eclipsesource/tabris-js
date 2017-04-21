@@ -281,11 +281,15 @@ describe('WebSocket', function() {
     it("does not call 'close' when readyState is CLOSING", function() {
       webSocket.readyState = webSocket.CLOSING;
 
+      webSocket.close();
+
       expect(client.call).to.have.not.been.called;
     });
 
     it("does not call 'close' when readyState is CLOSED", function() {
-      webSocket.readyState = webSocket.OPEN;
+      webSocket.readyState = webSocket.CLOSED;
+
+      webSocket.close();
 
       expect(client.call).to.have.not.been.called;
     });
