@@ -6,7 +6,7 @@ Tabris.js is a mobile framework that lets you develop native iOS and Android app
 
 ## Getting Started
 - [Quick Start Guide](getting-started.md) - Create your first Tabris.js App
-- [Getting Started Ebook](https://tabrisjs.com/downloads/ebook/tabrisjs-2.0.0-beta1.pdf) - Create, deploy and test your first Tabris.js app (a detailed tutorial)
+- [Getting Started Ebook](https://tabrisjs.com/downloads/ebook/tabrisjs-2.0.0-rc1.pdf) - Create, deploy and test your first Tabris.js app (a detailed tutorial)
 - [The Tabris.js Developer App](developer-app.md) - Get the most out of our developer app
 
 ## Documentation
