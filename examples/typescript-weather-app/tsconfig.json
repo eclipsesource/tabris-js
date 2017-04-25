@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es5",
+    "target": "es6",
     "outDir": "./dist/",
-    "lib": ["es5", "es2015.promise" ],
+    "lib": ["es6", "es2015.promise" ],
     "noUnusedParameters" : true,
     "noUnusedLocals" : true
   },

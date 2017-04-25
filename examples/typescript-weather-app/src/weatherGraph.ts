@@ -46,7 +46,8 @@ export default class WeatherGraph extends Canvas {
   }
 
   public setScale(newMin: number, newMax: number) {
-    [this.scale.minX, this.scale.maxX] = [newMin, newMax];
+    this.scale.minX = newMin;
+    this.scale.maxX = newMax;
     this.initDataPoints();
     this.initScale();
     this.draw();
