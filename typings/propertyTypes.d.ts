@@ -21,8 +21,7 @@ interface ImageData {
 
 }
 
-// TODO A plain string can be used as a shorthand, e.g. \`"image.jpg"\` equals \`{src: "image.jpg"}\`.
-interface Image {
+type Image = string | {
 
   /**
    * Image path or URL.
