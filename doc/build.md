@@ -118,7 +118,7 @@ Tabris.js accepts the following custom preferences:
 | ThemeSplash             | <ul><li>`@style/Theme.Tabris.SplashScreen`</li><li>`@style/Theme.Tabris.Light.SplashScreen` (Default)</ul>The splash screen is shown to the user while the app is starting up. By default this screen has a white background. The `ThemeSplash` preference allows to set one of the bundled themes or to provide a custom theme.<br/><br/>Example: `<preference name="ThemeSplash" value="@style/Theme.Tabris.SplashScreen" />`<br/><br/>Note that the `config.xml` element `<splash .. />` can be used to set an image on the splash screen. For styling guides see the material design guidelines on [launch screens](https://material.google.com/patterns/launch-screens.html). |
 
 ### Windows specific preferences
-Windows apps always have a splash screen. If you do not configure one, the default Tabris.js splash screen is used. To configure your own splash creen, you have to give a logo in three different resolutions and the background color, like this:
+Windows apps always have a splash screen. If you do not configure one, the default Tabris.js splash screen is used. To configure your own splash creen, you have to give a logo in three different resolutions and the background color. The naming of the files has to match those given here:
 
 ```xml
 <platform name="windows">
@@ -126,5 +126,19 @@ Windows apps always have a splash screen. If you do not configure one, the defau
     <splash src="resources/windows/splash/SplashScreen.scale-150.png" width="930" height="450"/>
     <splash src="resources/windows/splash/SplashScreen.scale-200.png" width="1240" height="600"/>
     <preference name="SplashScreenBackgroundColor" value="#009688"/>
+</platform>
+```
+
+To replace the tabris logo on the launcher tile, windows store and task icon you also have to give all of the following files. Again, naming is relevant:
+
+```xml
+<platform name="windows">
+    <icon src="res/windows/storelogo.png" target="StoreLogo" />
+    <icon src="res/windows/smalllogo.png" target="Square30x30Logo" />
+    <icon src="res/Windows/Square44x44Logo.png" target="Square44x44Logo" />
+    <icon src="res/Windows/Small71x71Logo.png" target="Square71x71Logo" />
+    <icon src="res/Windows/Square150x150Logo.png" target="Square150x150Logo" />
+    <icon src="res/Windows/Large310x310Logo.png" target="Square310x310Logo" />
+    <icon src="res/Windows/Wide310x150Logo.png" target="Wide310x150Logo" />
 </platform>
 ```

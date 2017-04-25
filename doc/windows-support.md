@@ -1,11 +1,23 @@
 # Notes on Windows 10 Support
 
+## Developer App
+
+The developer app for Windows can run – without emulation or Windows SDK – on the same machine that you use for Tabris.js app development. When doing so you should know a few things:
+
+1. The mouse does not always replace a touchscreen. Some gestures will not be recognized using mouse input. Owners of laptop/tablet hybrid devices have an advantage here.
+
+2. The one-finger-edge-swipe gesture to open the developer console won’t work: That gesture is reserved by the OS to open the action center. As a replacement, you can use the mouse or a pen to do the gesture, use two finger to do it (may require more precision), or simply press F12 on your keyboard.
+
+3. Loopback addresses (`localhost`, `127.0.0.1`) do not work out-of-the-box. To allow the developer app to access a tabris http-server running on the same machine, you need to enable it once using this command in an admin command prompt window:
+
+`CheckNetIsolation.exe LoopbackExempt -a -p="S-1-15-2-2113086592-2161398931-2814723024-3165814665-986162242-220195364-2881192403"`
+
+
 ## API
 
 Windows 10 (UWP/Store Apps) support was added in Tabris.js 2.0 and is still catching up to the other platforms in terms of API support. It also features a few APIs specific to Windows. These are prefixed with `win_` and documented in the API reference.
 
 The following classes and objects are not yet supported on Windows:
- - `crypto`
  - `app`
  - `AlertDialog`
  - `WebSocket`
@@ -16,7 +28,7 @@ The following classes and objects are not yet supported on Windows:
  The following Classes and objects are currently only partially supported:
   - `Drawer`: No `open` and `close` events fired.
   - `Button`: Property `alignment` is ignored. Button content is always centered.
-  - `CollectionView`: Methods `insert`, `refresh`, `remove` and `reveal`, as well as the properties `refreshEnabled` and `columnCount` are ignored.
+  - `CollectionView`: Methods `reveal`, as well as the properties `cellType`, `refreshEnabled`, and `columnCount` are ignored.
   - `ImageView`: Property `tintColor` is ignored.
   - `NavigationView`: Properties `toolbarVisible` and `animated` are ignored. Both behave as if `true`.
   - `ScrollView`: Methods `scrollToX` and `scrollToY` have no effect. Event `scrollX` does not fire.

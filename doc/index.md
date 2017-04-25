@@ -18,6 +18,7 @@ Tabris.js is a mobile framework that lets you develop native iOS and Android app
 - [Touch Events](touch.md) - Processing widget gesture/touch events.
 - [W3C Compatibility](w3c-api.md) - XMLHttpRequest, LocalStorage and timer.
 - [Cordova Support](cordova.md) - Using Cordova plug-ins, including Dialogs, File and Camera.
+- [Windows Support](windows-support.md) - Important notes on Windows 10 support.
 - [Build your app](build.md) - Create a standalone app from your Tabris.js project files.
 - [Local Build](local-build.md) - Build your Tabris.js app locally.
 - [Patch your app](patch.md) - Hotfix critical issues without waiting for app store submission.
