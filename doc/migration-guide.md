@@ -95,11 +95,13 @@ More changes to events:
 ### Event names and properties
 
 * Gesture events have been renamed to camel case, so that e.g. `swipe:left` becomes `swipeLeft`, `pan:horizontal` becomes `panHorizontal` etc.
+* Touch events have been renamed to camel case as well, e.g. `touchstart` becomes `touchStart`.
 * The events `addchild` and `removechild` have been renamed to camel case, i.e. `addChild` and `removeChild`.
 * Change events are now named after the pattern `<property>Changed`. For example, the event `change:text` becomes `textChanged` etc.
 * The variants of the `close` event on `AlertDialog` have been renamed from `close:ok`, `close:cancel` and `close:neutral` to `closeOk`, `closeCancel`, and `closeNeutral`.
 * The events `animationstart` and `animationend` have been removed, use the Promise returned by `animate()`.
-* The properties `pageX` and `pageY` that was available on touch events have been renamed to `absoluteX` and `absoluteY`.
+* On touch events, the properties `pageX` and `pageY` have been renamed to `absoluteX` and `absoluteY`. Moreover, `time` has been replaced by `timeStamp`.
+* On pan events, the property `translation` has been replaced by individual properties `translationX` and `translationY`. Likewise, `velocity` has been replaced by `velocityX` and `velocityY`.
 
 ## Widgets
 
