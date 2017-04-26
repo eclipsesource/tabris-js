@@ -20,3 +20,13 @@ let thisReturnValue: AlertDialog;
 
 thisReturnValue = alertDialog.close();
 thisReturnValue = alertDialog.open();
+
+// Events
+let button: '' | 'ok' | 'cancel' | 'neutral';
+
+alertDialog.on({
+  close: event => button = event.button,
+  closeCancel: event => {},
+  closeNeutral: event => {},
+  closeOk: event => {}
+});

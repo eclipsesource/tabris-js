@@ -76,7 +76,13 @@
       "parameters": {
         "value": {
           "description": "The new value of the `orientation` property.",
-          "type": "string"
+          "type": "string",
+          "values": [
+            "portrait-primary",
+            "portrait-secondary",
+            "landscape-primary",
+            "landscape-secondary"
+          ]
         }
       }
     }

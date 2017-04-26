@@ -30,3 +30,7 @@ voidReturnValue = widget.pause();
 voidReturnValue = widget.play();
 voidReturnValue = widget.play(speed);
 voidReturnValue = widget.seek(position);
+
+widget.on({
+  stateChanged: event => state = event.value
+});

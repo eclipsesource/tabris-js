@@ -23,3 +23,13 @@ widget.itemText = itemText;
 widget.items = items;
 widget.selection = selection;
 widget.selectionIndex = selectionIndex;
+
+// Events
+widget.on({
+  selectionIndexChanged: event => selectionIndex = event.value,
+  selectionChanged: event => selection = event.value,
+  select: event => {
+    selection = event.selection;
+    selectionIndex = event.index;
+  }
+});

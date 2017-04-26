@@ -11,3 +11,9 @@ text = widget.text;
 
 widget.checked = checked;
 widget.text = text;
+
+// Events
+widget.on({
+  checkedChanged: event => checked = event.value,
+  select: event => checked = event.checked
+});

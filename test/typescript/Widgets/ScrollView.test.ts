@@ -22,3 +22,9 @@ thisReturnValue = widget.scrollToX(offset);
 thisReturnValue = widget.scrollToX(offset, options);
 thisReturnValue = widget.scrollToY(offset);
 thisReturnValue = widget.scrollToY(offset, options);
+
+// Events
+widget.on({
+  scrollX: event => offset = event.offset,
+  scrollY: event => offset = event.offset
+});

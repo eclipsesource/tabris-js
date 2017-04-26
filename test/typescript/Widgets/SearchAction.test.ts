@@ -19,3 +19,9 @@ widget.text = text;
 let voidReturnValue: void;
 
 voidReturnValue = widget.open();
+
+// Events
+widget.on({
+  input: event => text = event.text,
+  accept: event => text = event.text
+});

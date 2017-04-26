@@ -15,3 +15,8 @@ text = widget.text;
 widget.alignment = alignment;
 widget.image = image;
 widget.text = text;
+
+// Events
+widget.on({
+  select: event => {}
+});

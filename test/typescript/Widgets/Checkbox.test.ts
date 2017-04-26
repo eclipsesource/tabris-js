@@ -13,8 +13,7 @@ widget.checked = checked;
 widget.text = text;
 
 // Events
-
-widget.on('checkedChanged', (event) => {
-  let self: CheckBox = event.target;
-  let checked: boolean = event.value;
+widget.on({
+  checkedChanged: event => checked = event.value,
+  select: event => checked = event.checked
 });

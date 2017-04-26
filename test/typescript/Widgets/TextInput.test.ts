@@ -44,3 +44,13 @@ widget.enterKeyType = enterKeyType;
 widget.message = message;
 widget.text = text;
 widget.type = type;
+
+// Events
+
+widget.on({
+  accept: event => text = event.text,
+  blur: event => {},
+  focus: event => {},
+  textChanged: event => text = event.value,
+  input: event => text = event.text
+});

@@ -17,7 +17,8 @@ export as namespace tabris;
 `.trim();
 
 const PROPERTIES_OBJECT = 'PropertiesObject';
-const CLASS_DEPENDENT_TYPES = [PROPERTIES_OBJECT];
+const EVENTS_OBJECT = 'EventsObject';
+const CLASS_DEPENDENT_TYPES = [PROPERTIES_OBJECT, EVENTS_OBJECT];
 
 module.exports = function(grunt) {
 
@@ -71,6 +72,8 @@ module.exports = function(grunt) {
     if (def.isNativeObject) {
       result.append('');
       addPropertyInterface(result, def);
+      result.append('');
+      addEventsInterface(result, def);
     }
     result.append('');
     addClass(result, def);
@@ -142,6 +145,62 @@ module.exports = function(grunt) {
     return str + ' {';
   }
 
+  function addEventsInterface(result, def) {
+    result.append(createEventsInterfaceDef(def));
+    result.indent++;
+    addEvents(result, def);
+    result.indent--;
+    result.append('}');
+  }
+
+  function createEventsInterfaceDef(def) {
+    let str = 'interface ' + def.type + 'Events<T>';
+    if (def.extends) {
+      str += ' extends ' + def.extends + 'Events<T>';
+    }
+    return str + ' {';
+  }
+
+  function addEvents(result, def) {
+    if (def.type === 'NativeObject') {
+      let indexParameter = {'[p: string]': {type: 'any'}};
+      result.append('');
+      result.append(`[k: string]: undefined | ((event: {${createEventParams(indexParameter)}}) => void);`);
+    }
+    if (def.events) {
+      Object.keys(def.events).sort().forEach((name) => {
+        result.append('');
+        result.append(createEvent(name, def.events[name]));
+      });
+    }
+  }
+
+  function createEvent(name, def) {
+    let result = [];
+    result.push(createDoc(Object.assign({}, def, {parameters: []})));
+    result.push(`${name}?: (event: {${createEventParams(def.parameters)}}) => void;`);
+    return result.join('\n');
+  }
+
+  function createEventParams(params) {
+    let result = [];
+    let standardParameters = {
+      target: {type: 'T'},
+      type: {type: 'string'},
+      timeStamp: {type: 'number'}
+    };
+    let parameters = Object.assign({}, params, standardParameters);
+    Object.keys(parameters).sort().forEach((name) => {
+      let values = [];
+      (parameters[name].values || []).sort().forEach((value) => {
+        values.push(`"${value}"`);
+      });
+      let valuesType = (values || []).join(' | ');
+      result.push(`${name}: ${valuesType || parameters[name].type}`);
+    });
+    return result.join(', ');
+  }
+
   function addMethods(result, def) {
     let methods = Object.assign({}, def.methods, inheritClassDependentMethods(def.parent));
     Object.keys(methods).sort().forEach((name) => {
@@ -211,10 +270,16 @@ module.exports = function(grunt) {
   }
 
   function decodeType(type, className) {
-    if (type === PROPERTIES_OBJECT) {
-      return className + 'Properties';
+    switch (type) {
+      case (PROPERTIES_OBJECT):
+        return className + 'Properties';
+
+      case (EVENTS_OBJECT):
+        return className + 'Events<this>';
+
+      default:
+        return type;
     }
-    return type;
   }
 
   function createDoc(def) {
@@ -248,6 +313,7 @@ module.exports = function(grunt) {
   function createComment(comment) {
     return ['/**'].concat(comment.map(line => ' * ' + line), ' */').join('\n');
   }
+
   function createParamAnnotations(params) {
     return params.map(param => `@param ${param.name} ${param.description || ''}`);
   }

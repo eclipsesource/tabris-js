@@ -18,3 +18,8 @@ scaleFactor = device.scaleFactor;
 screenHeight = device.screenHeight;
 screenWidth = device.screenWidth;
 version = device.version;
+
+// Events
+device.on({
+  orientationChanged: event => orientation = event.value
+});

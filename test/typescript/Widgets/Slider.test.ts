@@ -14,3 +14,9 @@ selection = widget.selection;
 widget.maximum = maximum;
 widget.minimum = minimum;
 widget.selection = selection;
+
+// Events
+widget.on({
+  selectionChanged: event => selection = event.value,
+  select: event => selection = event.selection
+});

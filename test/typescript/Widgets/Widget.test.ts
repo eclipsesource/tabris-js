@@ -124,67 +124,85 @@ widgetCollection = widget.siblings();
 widgetCollection = widget.siblings(selector);
 
 // Events
-
-widget.on('dispose', (event) => {
-  let target: Widget = event.target;
-});
-
-widget.on('resize', (event) => {
-  let target: Widget = event.target;
-  let left: number = event.left;
-  let top: number = event.top;
-  let width: number = event.width;
-  let height: number = event.height;
-});
-
-widget.on('tap', (event) => {
-  let target: Widget = event.target;
-  let state: string = event.state;
-  let touch: {x: number, y: number} = event.touches[0];
-});
-
-widget.on('longpress', (event) => {
-  let target: Widget = event.target;
-  let state: string = event.state;
-  let touch: {x: number, y: number} = event.touches[0];
-});
-
-widget.on('swipeLeft', (event) => {
-  let target: Widget = event.target;
-  let state: string = event.state;
-  let touch: {x: number, y: number} = event.touches[0];
-});
-
-widget.on('pan', (event) => {
-  let target: Widget = event.target;
-  let state: string = event.state;
-  let touch: {x: number, y: number} = event.touches[0];
-  let translationX: number = event.translationX;
-  let translationY: number = event.translationY;
-  let velocityX: number = event.velocityX;
-  let velocityY: number = event.velocityY;
-});
-
-widget.on('touchStart', (event) => {
-  let target: Widget = event.target;
-  let time: number = event.time;
-  let touch: {x: number, y: number} = event.touches[0];
-});
-
-widget.on('touchMove', (event) => {
-  let target: Widget = event.target;
-  let time: number = event.time;
-  let touch: {x: number, y: number} = event.touches[0];
-});
-
-widget.on('touchEnd', (event) => {
-  let target: Widget = event.target;
-  let time: number = event.time;
-  let touch: {x: number, y: number} = event.touches[0];
-});
-
-widget.on('touchCancel', (event) => {
-  let target: Widget = event.target;
-  let time: number = event.time;
-  let touch: {x: number, y: number} = event.touches[0];
+let state: 'start'|'change'|'end'|'cancel';
+let touches: {x: number, y: number}[];
+let absTouches: {x: number, y: number, absoluteX: number, absoluteY: number}[];
+let isNumber: number;
+widget.on({
+  dispose: event => {},
+  resize: event => {
+    isNumber = event.height;
+    isNumber = event.width;
+    isNumber = event.top;
+    isNumber = event.left;
+  },
+  swipeDown: event => touches = event.touches,
+  swipeLeft: event => touches = event.touches,
+  swipeRight: event => touches = event.touches,
+  swipeUp: event => touches = event.touches,
+  touchCancel: event => absTouches = event.touches,
+  touchEnd: event => absTouches = event.touches,
+  touchMove: event => absTouches = event.touches,
+  touchStart: event => absTouches = event.touches,
+  tap: event => touches = event.touches,
+  longpress: event => {
+    state = event.state;
+    touches = event.touches;
+  },
+  pan: event => {
+    state = event.state;
+    touches = event.touches;
+    isNumber = event.translationX;
+    isNumber = event.translationY;
+    isNumber = event.velocityX;
+    isNumber = event.velocityY;
+  },
+  panDown: event => {
+    state = event.state;
+    touches = event.touches;
+    isNumber = event.translationX;
+    isNumber = event.translationY;
+    isNumber = event.velocityX;
+    isNumber = event.velocityY;
+  },
+  panHorizontal: event => {
+    state = event.state;
+    touches = event.touches;
+    isNumber = event.translationX;
+    isNumber = event.translationY;
+    isNumber = event.velocityX;
+    isNumber = event.velocityY;
+  },
+  panLeft: event => {
+    state = event.state;
+    touches = event.touches;
+    isNumber = event.translationX;
+    isNumber = event.translationY;
+    isNumber = event.velocityX;
+    isNumber = event.velocityY;
+  },
+  panRight: event => {
+    state = event.state;
+    touches = event.touches;
+    isNumber = event.translationX;
+    isNumber = event.translationY;
+    isNumber = event.velocityX;
+    isNumber = event.velocityY;
+  },
+  panUp: event => {
+    state = event.state;
+    touches = event.touches;
+    isNumber = event.translationX;
+    isNumber = event.translationY;
+    isNumber = event.velocityX;
+    isNumber = event.velocityY;
+  },
+  panVertical: event => {
+    state = event.state;
+    touches = event.touches;
+    isNumber = event.translationX;
+    isNumber = event.translationY;
+    isNumber = event.velocityX;
+    isNumber = event.velocityY;
+  }
 });

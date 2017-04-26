@@ -26,3 +26,15 @@ let stringReturnValue: string;
 stringReturnValue = app.getResourceLocation(path);
 voidReturnValue = app.installPatch(url, callback);
 voidReturnValue = app.reload();
+
+// Events
+let preventDefault: () => void;
+
+app.on({
+  background: event => {},
+  backnavigation: event => preventDefault = event.preventDefault,
+  foreground: event => {},
+  pause: event => {},
+  resume: event => {},
+  terminate: event => {}
+});

@@ -14,3 +14,9 @@ tintColor = widget.tintColor;
 widget.image = image;
 widget.scaleMode = scaleMode;
 widget.tintColor = tintColor;
+
+// Events
+let error: boolean;
+widget.on({
+  load: event => error = event.error
+});

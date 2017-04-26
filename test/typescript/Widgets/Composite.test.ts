@@ -12,3 +12,16 @@ let thisReturnValue: Composite;
 thisReturnValue = widget.append(widgetA, widgetB);
 thisReturnValue = widget.append(widgets);
 thisReturnValue = widget.append(widgetCollection);
+
+// Events
+let index: number;
+widget.on({
+  addchild: event => {
+    widgetA = event.child;
+    index = event.index;
+  },
+  removechild: event => {
+    widgetA = event.child;
+    index = event.index;
+  }
+});

@@ -93,7 +93,8 @@
       "parameters": {
         "value": {
           "description": "The new value of the `state` property.",
-          "type": "string"
+          "type": "string",
+          "values": [ "empty", "open", "ready", "play", "stale", "pause", "finish", "fail"]
         }
       }
     }

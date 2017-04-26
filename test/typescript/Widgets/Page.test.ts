@@ -14,3 +14,9 @@ title = widget.title;
 widget.autoDispose = autoDispose;
 widget.image = image;
 widget.title = title;
+
+// Events
+widget.on({
+  appear: event => {},
+  disappear: event => {}
+});

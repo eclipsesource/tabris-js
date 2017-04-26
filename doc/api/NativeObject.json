@@ -47,7 +47,7 @@
         "parameters": [
           {
             "name": "listeners",
-            "type": "Object",
+            "type": "EventsObject",
             "description": "A key-value map where the keys are event types and the values are the listeners to register for these events, e.g. `{tap: onTap, scroll: onScroll}`."
           }
         ],
@@ -82,7 +82,7 @@
         "parameters": [
           {
             "name": "listeners",
-            "type": "Object",
+            "type": "EventsObject",
             "description": "A key-value map where the keys are event types and the values are the listeners to register for these events, e.g. `{tap: onTap, scroll: onScroll}`."
           }
         ],
@@ -117,7 +117,7 @@
         "parameters": [
           {
             "name": "listeners",
-            "type": "Object",
+            "type": "EventsObject",
             "description": "A key-value map where the keys are event types and the values are the listeners to deregister from these events, e.g. `{tap: onTap, scroll: onScroll}`."
           }
         ],

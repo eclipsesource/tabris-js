@@ -17,3 +17,14 @@ widget.paging = paging;
 widget.selection = selection;
 widget.tabBarLocation = tabBarLocation;
 widget.tabMode = tabMode;
+
+// Events
+let offset: number;
+widget.on({
+  selectionChanged: event => selection = event.value,
+  select: event => selection = event.selection,
+  scroll: event => {
+    offset = event.offset;
+    selection = event.selection;
+  }
+});

@@ -31,3 +31,10 @@ widget.toolbarVisible = toolbarVisible;
 let widgetCollection: WidgetCollection;
 
 widgetCollection = widget.pages();
+
+// Events
+let height: number;
+widget.on({
+  bottomToolbarHeightChanged: event => height = event.value,
+  topToolbarHeightChanged: event => height = event.value
+});

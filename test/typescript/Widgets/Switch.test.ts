@@ -20,3 +20,9 @@ widget.thumbOffColor = thumbOffColor;
 widget.thumbOnColor = thumbOnColor;
 widget.trackOffColor = trackOffColor;
 widget.trackOnColor = trackOnColor;
+
+// Events
+widget.on({
+  checkedChanged: event => checked = event.value,
+  select: event => checked = event.checked
+});
