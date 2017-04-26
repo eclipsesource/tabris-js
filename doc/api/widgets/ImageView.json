@@ -2,6 +2,17 @@
   "type": "ImageView",
   "description": "A widget to display an image.",
   "extends": "Widget",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "properties",
+        "type": "PropertiesObject",
+        "optional": true,
+        "description": "Sets all key-value pairs in the properties object as widget properties."
+      }
+    ]
+  },
   "properties": {
     "image": {
       "type": "Image",

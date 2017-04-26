@@ -3,6 +3,10 @@
   "object": "app",
   "extends": "NativeObject",
   "description": "The object `tabris.app` provides information about the application.",
+  "constructor": {
+    "access": "private",
+    "parameters": []
+  },
   "properties": {
     "id": {
       "type": "string",

@@ -2,6 +2,17 @@
   "type": "ActivityIndicator",
   "description": "A widget representing a spinning indicator for indeterminate loading / processing time.",
   "extends": "Widget",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "properties",
+        "type": "PropertiesObject",
+        "optional": true,
+        "description": "Sets all key-value pairs in the properties object as widget properties."
+      }
+    ]
+  },
   "links": [
     {
       "title": "Simple ActivityIndicator snippet",

@@ -1,7 +1,18 @@
 {
   "type": "AlertDialog",
   "extends": "NativeObject",
-  "description": "A `AlertDialog` represents a native dialog pop-up showing a message and up to three buttons. It is placed on top of any other API, but is not a widget itself.",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "properties",
+        "type": "PropertiesObject",
+        "optional": true,
+        "description": "Sets all key-value pairs in the properties object as widget properties."
+      }
+    ]
+  },
+  "description": "An `AlertDialog` represents a native dialog pop-up showing a message and up to three buttons. It is placed on top of any other API, but is not a widget itself.",
   "methods": {
     "open": {
       "parameters": [],

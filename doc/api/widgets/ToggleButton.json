@@ -2,6 +2,17 @@
   "type": "ToggleButton",
   "description": "A push button that \"snaps in\", i.e. it is selected when pressed and deselected when pressed again.",
   "extends": "Widget",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "properties",
+        "type": "PropertiesObject",
+        "optional": true,
+        "description": "Sets all key-value pairs in the properties object as widget properties."
+      }
+    ]
+  },
   "properties": {
     "alignment": {
       "type": "string",

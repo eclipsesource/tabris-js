@@ -1,6 +1,6 @@
-import {CanvasContext, ImageData, Color, Font} from 'tabris';
+import {Canvas, CanvasContext, ImageData, Color, Font} from 'tabris';
 
-let ctx: CanvasContext = new CanvasContext();
+let ctx: CanvasContext = new Canvas().getContext('2d', 100, 100);
 
 // Properties
 let fillStyle: Color;

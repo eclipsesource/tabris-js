@@ -1,6 +1,17 @@
 {
   "type": "InactivityTimer",
   "extends": "NativeObject",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "properties",
+        "type": "PropertiesObject",
+        "optional": true,
+        "description": "Sets all key-value pairs in the properties object as widget properties."
+      }
+    ]
+  },
   "description": "A timer that triggers when the app has not been interacted with for a configurable interval.",
   "properties": {
     "delay": {

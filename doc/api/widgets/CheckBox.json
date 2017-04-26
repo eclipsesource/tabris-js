@@ -2,6 +2,17 @@
   "type": "CheckBox",
   "description": "A check box widget.",
   "extends": "Widget",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "properties",
+        "type": "PropertiesObject",
+        "optional": true,
+        "description": "Sets all key-value pairs in the properties object as widget properties."
+      }
+    ]
+  },
   "properties": {
     "checked": {
       "type": "boolean",

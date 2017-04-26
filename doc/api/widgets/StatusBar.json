@@ -2,6 +2,17 @@
   "type": "StatusBar",
   "extends": "Widget",
   "description": "The status bar is the area where notifications, status icons and device time are displayed. The singleton instance can be accessed via `tabris.ui.statusBar`.",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "properties",
+        "type": "PropertiesObject",
+        "optional": true,
+        "description": "Sets all key-value pairs in the properties object as widget properties."
+      }
+    ]
+  },
   "properties": {
     "theme": {
       "type": "string",

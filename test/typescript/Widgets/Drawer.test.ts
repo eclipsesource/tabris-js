@@ -1,6 +1,6 @@
-import {Drawer} from 'tabris';
+import {Drawer, ui} from 'tabris';
 
-let widget: Drawer = new Drawer();
+let widget: Drawer = ui.drawer;
 
 // Propeties
 let enabled: boolean;

@@ -2,6 +2,17 @@
   "type": "NavigationBar",
   "extends": "Widget",
   "description": "The navigation bar is the onscreen area where *Back*, *Home* and similar buttons are displayed. The singleton instance can be accessed via `tabris.ui.navigationBar` and is only available on Android.",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "properties",
+        "type": "PropertiesObject",
+        "optional": true,
+        "description": "Sets all key-value pairs in the properties object as widget properties."
+      }
+    ]
+  },
   "properties": {
     "displayMode": {
       "type": "string",

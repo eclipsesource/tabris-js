@@ -1,6 +1,6 @@
-import {StatusBar, Color} from 'tabris';
+import {StatusBar, Color, ui} from 'tabris';
 
-let statusBar: StatusBar = new StatusBar();
+let statusBar: StatusBar = ui.statusBar;
 
 // Properties
 let background: Color;

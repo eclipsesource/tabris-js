@@ -2,6 +2,17 @@
   "type": "Action",
   "description": "An executable item that is integrated in the application's navigation menu. Add a listener on *select* to implement the action.",
   "extends": "Widget",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "properties",
+        "type": "PropertiesObject",
+        "optional": true,
+        "description": "Sets all key-value pairs in the properties object as widget properties."
+      }
+    ]
+  },
   "properties": {
     "image": {
       "type": "Image",

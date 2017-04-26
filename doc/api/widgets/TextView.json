@@ -2,6 +2,17 @@
   "type": "TextView",
   "description": "A widget to display a text. For images, use ImageView.",
   "extends": "Widget",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "properties",
+        "type": "PropertiesObject",
+        "optional": true,
+        "description": "Sets all key-value pairs in the properties object as widget properties."
+      }
+    ]
+  },
   "properties": {
     "alignment": {
       "type": "string",

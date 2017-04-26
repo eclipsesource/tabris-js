@@ -1,6 +1,6 @@
-import {NativeObject} from 'tabris';
+import {NativeObject, Button} from 'tabris';
 
-let nativeObject: NativeObject = new NativeObject();
+let nativeObject: NativeObject = new Button();
 
 // Properties
 let cid: string;

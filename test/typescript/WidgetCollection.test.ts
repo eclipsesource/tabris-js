@@ -1,6 +1,6 @@
 import {WidgetCollection, Transformation, AnimationOptions, Composite, Selector, Widget} from 'tabris';
 
-let widgetCollection: WidgetCollection = new WidgetCollection();
+let widgetCollection: WidgetCollection = new Composite().find();
 
 // Properties
 let length: number;

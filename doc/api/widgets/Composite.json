@@ -2,6 +2,17 @@
   "type": "Composite",
   "description": "An empty widget that can contain other widgets.",
   "extends": "Widget",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "properties",
+        "type": "PropertiesObject",
+        "optional": true,
+        "description": "Sets all key-value pairs in the properties object as widget properties."
+      }
+    ]
+  },
   "methods": {
     "append": [
       {

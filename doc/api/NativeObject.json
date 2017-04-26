@@ -1,6 +1,17 @@
 {
   "type": "NativeObject",
   "description": "Base class for all objects with a native implementation.",
+  "constructor": {
+    "access": "protected",
+    "parameters": [
+      {
+        "name": "properties",
+        "type": "PropertiesObject",
+        "optional": true,
+        "description": "Sets all key-value pairs in the properties object as widget properties."
+      }
+    ]
+  },
   "properties": {
     "cid": {
       "type": "string",

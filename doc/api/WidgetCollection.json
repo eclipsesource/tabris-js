@@ -1,6 +1,10 @@
 {
   "type": "WidgetCollection",
   "description": "A `WidgetCollection` is an array-like object representing a set of widgets, as returned by the widget methods `children` and `find`.",
+  "constructor": {
+    "access": "private",
+    "parameters": []
+  },
   "methods": {
     "on": {
       "parameters": [

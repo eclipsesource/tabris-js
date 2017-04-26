@@ -4,6 +4,7 @@ import {
  Font,
  LayoutData,
  Widget,
+ Button,
  Bounds,
  Transformation,
  Selector,
@@ -25,8 +26,10 @@ let offsetType: offset = 42;
 let offsetOrUndefined: offset | undefined;
 let dimensionType: dimension = 42;
 let dimensionOrUndefined: dimension | undefined;
-let widgetOrSelector: Widget | Selector = new Widget();
+let widgetOrSelector: Widget | Selector = new Button();
 let widgetOrSelectorOrUndefined: Widget | Selector | undefined;
+let widgetType: Widget = new Button();
+let widgetOrUndefined: Widget | undefined;
 
 // dimension
 let _dimension: dimension = numberType;

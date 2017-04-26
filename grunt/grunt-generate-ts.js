@@ -98,9 +98,20 @@ module.exports = function(grunt) {
   }
 
   function addConstructor(result, def) {
-    result.append('');
-    let str = def.isNativeObject ? `properties?: ${def.type}Properties` : '';
-    result.append('constructor(' + str + ');');
+    let constructor = inheritConstructor(def);
+    if (constructor) {
+      result.append('');
+      let access = constructor.access ? constructor.access + ' ' : '';
+      result.append(`${access}constructor(${createParamList(constructor.parameters, def.type)});`);
+    }
+  }
+
+  function inheritConstructor(def) {
+    if (def.hasOwnProperty('constructor')) {
+      return isClassDependent(def.constructor) ? def.constructor : null;
+    } else {
+      return def.parent ? inheritConstructor(def.parent) : null;
+    }
   }
 
   function addClassDef(result, def) {

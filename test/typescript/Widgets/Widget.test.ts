@@ -14,7 +14,7 @@ import {Widget,
  Composite
 } from 'tabris';
 
-let widget: Widget = new Widget();
+let widget: Widget = new Composite();
 
 // Properties
 let background: Color;
@@ -99,7 +99,7 @@ let properties: {transform?: Transformation, opacity?: number} = {};
 let parent: Composite = new Composite();
 let options: AnimationOptions = {};
 let selector: Selector = '';
-let otherWidget: Widget = new Widget();
+let otherWidget: Widget = new Composite();
 let promise: Promise<any>;
 let thisReturnValue: Widget;
 let voidReturnValue: void;
