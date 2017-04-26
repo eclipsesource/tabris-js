@@ -15,7 +15,7 @@ for (let i = 0; i < 30; i++) {
 }
 
 new tabris.CollectionView({
-  left: 0, top: 0, right: 0, bottom: '#controlsComposite',
+  left: 0, top: 0, right: 0, bottom: 0,
   itemCount: items.length,
   createCell: () => {
     const composite = new tabris.Composite();
