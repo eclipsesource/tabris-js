@@ -60,7 +60,6 @@ function createCell() {
 
 function updateCell(cell, index) {
   let page = pageConfigs[index];
-  console.log('update', index, page);
   cell.apply({
     ImageView: {image: {src: page.icon, scale: 3}},
     TextView: {text: page.title}
