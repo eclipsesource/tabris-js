@@ -6,7 +6,6 @@ const header = `
 /// <reference path="whatwg-fetch.d.ts" />
 /// <reference path="Event.d.ts" />
 /// <reference path="XMLHttpRequest.d.ts" />
-/// <reference path="ObjectAssign.d.ts" />
 
 type Partial<T> = {
   [P in keyof T]?: T[P];
