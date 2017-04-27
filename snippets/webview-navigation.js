@@ -40,7 +40,7 @@ function updateNavigationButton(button, enabled) {
   button.opacity = enabled ? 0.70 : 0.20;
 }
 
-tabris.app.on('backnavigation', (event) => {
+tabris.app.on('backNavigation', (event) => {
   if (webView.canGoBack) {
     webView.goBack();
     event.preventDefault();

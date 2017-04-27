@@ -41,7 +41,7 @@
     "terminate": {
       "description": "Fired when the app is being destroyed. After this callback no more interaction with the app is possible."
     },
-    "backnavigation": {
+    "backNavigation": {
       "description": "Fired when the back button is pressed on Android.",
       "parameters": {
         "preventDefault": {

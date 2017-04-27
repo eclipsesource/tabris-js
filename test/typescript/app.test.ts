@@ -32,7 +32,7 @@ let preventDefault: () => void;
 
 app.on({
   background: event => {},
-  backnavigation: event => preventDefault = event.preventDefault,
+  backNavigation: event => preventDefault = event.preventDefault,
   foreground: event => {},
   pause: event => {},
   resume: event => {},
