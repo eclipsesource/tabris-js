@@ -247,16 +247,18 @@ module.exports = function(grunt) {
 
     function renderMethodParamList(parameters) {
       return '\n\n' + parameters.map(param => {
-        let result = ['- ', param.name, param.optional ? '?: ' : ': '];
+        let type = '';
         if (param.type) {
-          result.push('*', renderTypeLink(param.type), '*');
+          type = '*' + renderTypeLink(param.type) + '*';
         } else if (param.value) {
-          result.push('`', param.value, '`');
+          type = '`' + param.value + '`';
         }
+        let optional = param.optional ? ' [**Optional**]' : '';
+        let result = [`- ${param.name}: ${type}${optional}`];
         if (param.description) {
-          result.push(', ' + firstCharLower(param.description));
+          result.push(`  - ${firstCharLower(param.description)}`);
         }
-        return result.join('');
+        return result.join('\n');
       }).join('\n');
     }
 
