@@ -23,7 +23,7 @@ export default class App extends NativeObject {
   }
 
   get versionCode() {
-    this._nativeGet('versionId');
+    return this._nativeGet('versionId');
   }
 
   getResourceLocation(path) {

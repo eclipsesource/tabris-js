@@ -459,10 +459,13 @@ describe('App', function() {
 
     describe('id', function() {
 
-      it('should GET "appId" from native', function() {
-        app.id;
+      it('should return `appId` from native', function() {
+        stub(client, 'get').returns('foo');
 
-        expect(client.calls({op: 'get', id: app.cid, property: 'appId'}).length).to.equal(1);
+        let result = app.id;
+
+        expect(result).to.equal('foo');
+        expect(client.get).to.have.been.calledWith(app.cid, 'appId');
       });
 
       it('should not SET native property', function() {
@@ -475,10 +478,13 @@ describe('App', function() {
 
     describe('version', function() {
 
-      it('should GET "version" from native', function() {
-        app.version;
+      it('should return `version` from native', function() {
+        stub(client, 'get').returns('foo');
 
-        expect(client.calls({op: 'get', id: app.cid, property: 'version'}).length).to.equal(1);
+        let result = app.version;
+
+        expect(result).to.equal('foo');
+        expect(client.get).to.have.been.calledWith(app.cid, 'version');
       });
 
       it('should not SET native property', function() {
@@ -491,10 +497,13 @@ describe('App', function() {
 
     describe('versionCode', function() {
 
-      it('should get "versionId" from native', function() {
-        app.versionCode;
+      it('should return `versionId` from native', function() {
+        stub(client, 'get').returns('foo');
 
-        expect(client.calls({op: 'get', id: app.cid, property: 'versionId'}).length).to.equal(1);
+        let result = app.versionCode;
+
+        expect(result).to.equal('foo');
+        expect(client.get).to.have.been.calledWith(app.cid, 'versionId');
       });
 
       it('should not SET native property', function() {
