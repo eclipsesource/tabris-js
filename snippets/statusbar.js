@@ -1,28 +1,35 @@
+const THEMES = ['default', 'light', 'dark'];
+const DISPLAY_MODES = ['default', 'float', 'hide'];
+const BACKGROUNDS = [tabris.ui.statusBar.background, 'rgba(0, 0, 0, 0.25)', 'red', 'green', 'blue'];
+
 createTextView('Theme');
 
 new tabris.Picker({
   left: '#displayMode 16', baseline: 'prev()', right: 16,
-  items: ['default', 'light', 'dark']
-}).on('selectionChanged', function({value: theme}) {
-  tabris.ui.statusBar.theme = theme;
+  itemCount: THEMES.length,
+  itemText: index => THEMES[index]
+}).on({
+  select: ({index}) => tabris.ui.statusBar.theme = THEMES[index]
 }).appendTo(tabris.ui.contentView);
 
 createTextView('Display mode', 'displayMode');
 
 new tabris.Picker({
   left: '#displayMode 16', baseline: 'prev()', right: 16,
-  items: ['default', 'float', 'hide']
-}).on('selectionChanged', function({value: displayMode}) {
-  tabris.ui.statusBar.displayMode = displayMode;
+  itemCount: DISPLAY_MODES.length,
+  itemText: index => DISPLAY_MODES[index]
+}).on({
+  select: ({index}) => tabris.ui.statusBar.displayMode = DISPLAY_MODES[index]
 }).appendTo(tabris.ui.contentView);
 
 createTextView('Background');
 
 new tabris.Picker({
   left: '#displayMode 16', baseline: 'prev()', right: 16,
-  items: [tabris.ui.statusBar.background, 'rgba(0, 0, 0, 0.25)', 'red', 'green', 'blue']
-}).on('selectionChanged', function({value: background}) {
-  tabris.ui.statusBar.background = background;
+  itemCount: BACKGROUNDS.length,
+  itemText: index => BACKGROUNDS[index]
+}).on({
+  select: ({index}) => tabris.ui.statusBar.background = BACKGROUNDS[index]
 }).appendTo(tabris.ui.contentView);
 
 createTextView('Height');

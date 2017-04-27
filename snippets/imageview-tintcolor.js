@@ -1,13 +1,14 @@
-var colors = ['initial', 'red', 'green', 'blue'];
+const COLORS = ['initial', 'red', 'green', 'blue'];
 
-var imageView = new tabris.ImageView({
+let imageView = new tabris.ImageView({
   top: 64, centerX: 0,
   image: {src: 'images/cloud-check.png', scale: 3}
 }).appendTo(tabris.ui.contentView);
 
 new tabris.Picker({
   top: [imageView, 16], centerX: 0,
-  items: colors
-}).on('selectionChanged', function({value: color}) {
-  imageView.tintColor = color;
+  itemCount: COLORS.length,
+  itemText: index => COLORS[index]
+}).on({
+  select: ({index}) => imageView.tintColor = COLORS[index]
 }).appendTo(tabris.ui.contentView);

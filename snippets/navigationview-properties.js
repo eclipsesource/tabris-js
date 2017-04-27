@@ -1,12 +1,13 @@
 // demonstrates various NavigationView properties
 
-var MARGIN = 16;
-var MARGIN_SMALL = 8;
-var LABEL_WIDTH = 144;
+const MARGIN = 16;
+const MARGIN_SMALL = 8;
+const LABEL_WIDTH = 144;
+const COLORS = [null, 'red', 'green', 'blue', 'rgba(0, 0, 0, 0.25)'];
 
 tabris.ui.drawer.enabled = true;
 
-var navigationView = new tabris.NavigationView({
+let navigationView = new tabris.NavigationView({
   left: 0, top: 0, right: 0, height: 144,
   drawerActionVisible: true
 }).on('topToolbarHeightChanged', function({value: topToolbarHeight}) {
@@ -15,7 +16,7 @@ var navigationView = new tabris.NavigationView({
   bottomToolbarHeightTextView.text = bottomToolbarHeight;
 }).appendTo(tabris.ui.contentView);
 
-var page = new tabris.Page({
+let page = new tabris.Page({
   title: 'NavigationView',
   background: '#eeeeee'
 }).appendTo(navigationView);
@@ -34,7 +35,7 @@ new tabris.Action({
   }
 }).appendTo(navigationView);
 
-var controls = new tabris.ScrollView({
+let controls = new tabris.ScrollView({
   left: 0, right: 0, top: 'prev()', bottom: 0,
   background: 'white',
   elevation: 12
@@ -50,26 +51,18 @@ createCheckBox('Show drawer action', function({value: checked}) {
   navigationView.drawerActionVisible = checked;
 });
 
-createColorPicker('Toolbar color', navigationView.toolbarColor, function({value: color}) {
-  navigationView.toolbarColor = color;
-});
+createColorPicker('Toolbar color', 'toolbarColor');
 
-createColorPicker('Title text color', navigationView.titleTextColor, function({value: color}) {
-  navigationView.titleTextColor = color;
-});
+createColorPicker('Title text color', 'titleTextColor');
 
-createColorPicker('Action color', navigationView.actionColor, function({value: color}) {
-  navigationView.actionColor = color;
-});
+createColorPicker('Action color', 'actionColor');
 
 if (tabris.device.platform === 'Android') {
-  createColorPicker('Action text color', navigationView.actionTextColor, function({value: color}) {
-    navigationView.actionTextColor = color;
-  });
+  createColorPicker('Action text color', 'actionTextColor');
 }
 
-var topToolbarHeightTextView = createTextView('Toolbar height top', navigationView.topToolbarHeight);
-var bottomToolbarHeightTextView = createTextView('Toolbar height bottom', navigationView.bottomToolbarHeight);
+let topToolbarHeightTextView = createTextView('Toolbar height top', navigationView.topToolbarHeight);
+let bottomToolbarHeightTextView = createTextView('Toolbar height bottom', navigationView.bottomToolbarHeight);
 
 function createCheckBox(text, listener) {
   return new tabris.CheckBox({
@@ -80,16 +73,19 @@ function createCheckBox(text, listener) {
     .appendTo(controls);
 }
 
-function createColorPicker(text, initialColor, listener) {
+function createColorPicker(text, property) {
+  let initialColor = navigationView.get(property);
   new tabris.TextView({
     left: MARGIN, top: ['prev()', MARGIN], width: LABEL_WIDTH,
     text: text
   }).appendTo(controls);
   new tabris.Picker({
     left: ['prev()', MARGIN], baseline: 'prev()', right: MARGIN,
-    items: [initialColor, 'red', 'green', 'blue', 'rgba(0, 0, 0, 0.25)']
-  }).on('selectionChanged', listener)
-    .appendTo(controls);
+    itemCount: COLORS.length,
+    itemText: index => COLORS[index] || initialColor
+  }).on({
+    select: ({index}) => navigationView.set(property, COLORS[index] || initialColor)
+  }).appendTo(controls);
 }
 
 function createTextView(key, value) {
