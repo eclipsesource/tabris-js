@@ -143,8 +143,6 @@ export default class NativeObject extends EventsClass {
   _triggerChangeEvent(propertyName, newEncodedValue) {
     let typeDef = this._getTypeDef(propertyName);
     let decodedValue = this._decodeProperty(typeDef, newEncodedValue);
-    // TODO 2.0: remove support for old change event names
-    this._trigger('change:' + propertyName, {value: decodedValue});
     this._trigger(propertyName + 'Changed', {value: decodedValue});
   }
 

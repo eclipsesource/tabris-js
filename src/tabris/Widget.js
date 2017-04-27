@@ -158,13 +158,9 @@ export default class Widget extends NativeObject {
     }
     if (typeof index === 'number') {
       this._children.splice(index, 0, child);
-      // TODO 2.0: remove support for old change event names
-      super._trigger('addchild', {child, index});
       super._trigger('addChild', {child, index});
     } else {
       this._children.push(child);
-      // TODO 2.0: remove support for old change event names
-      super._trigger('addchild', {child, index: this._children.length - 1});
       super._trigger('addChild', {child, index: this._children.length - 1});
     }
   }
@@ -174,8 +170,6 @@ export default class Widget extends NativeObject {
       let index = this._children.indexOf(child);
       if (index !== -1) {
         this._children.splice(index, 1);
-        // TODO 2.0: remove support for old change event names
-        super._trigger('removechild', {child, index});
         super._trigger('removeChild', {child, index});
       }
     }
@@ -414,18 +408,7 @@ let defaultGestures = {
   swipeLeft: {type: 'swipe', direction: 'left'},
   swipeRight: {type: 'swipe', direction: 'right'},
   swipeUp: {type: 'swipe', direction: 'up'},
-  swipeDown: {type: 'swipe', direction: 'down'},
-  // TODO 2.0: remove support for old gesture event names
-  'pan:left': {type: 'pan', direction: 'left'},
-  'pan:right': {type: 'pan', direction: 'right'},
-  'pan:up': {type: 'pan', direction: 'up'},
-  'pan:down': {type: 'pan', direction: 'down'},
-  'pan:horizontal': {type: 'pan', direction: 'horizontal'},
-  'pan:vertical': {type: 'pan', direction: 'vertical'},
-  'swipe:left': {type: 'swipe', direction: 'left'},
-  'swipe:right': {type: 'swipe', direction: 'right'},
-  'swipe:up': {type: 'swipe', direction: 'up'},
-  'swipe:down': {type: 'swipe', direction: 'down'}
+  swipeDown: {type: 'swipe', direction: 'down'}
 };
 
 function renderLayoutData() {

@@ -13,8 +13,6 @@ export default class AlertDialog extends NativeObject {
     if (name === 'close') {
       event.button = event.button || '';
       if (event.button) {
-        // TODO 2.0: remove support for old close event names
-        super._trigger('close:' + event.button, event);
         super._trigger('close' + capitalizeFirstChar(event.button), event);
       }
       super._trigger('close', event);
