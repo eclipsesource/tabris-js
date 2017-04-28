@@ -195,7 +195,7 @@ module.exports = function(grunt) {
         values.push(`"${value}"`);
       });
       let valuesType = (values || []).join(' | ');
-      result.push(`${name}: ${valuesType || parameters[name].type}`);
+      result.push(`readonly ${name}: ${valuesType || parameters[name].type}`);
     });
     return result.join(', ');
   }
