@@ -109,7 +109,7 @@ let composite: Composite;
 
 promise = widget.animate(properties, options);
 thisReturnValue = widget.appendTo(parent);
-thisReturnValue = widget.apply(properties);
+thisReturnValue = widget.apply({'selectorString': properties});
 widgetCollection = widget.children();
 widgetCollection = widget.children(selector);
 thisReturnValue = widget.detach();

@@ -264,7 +264,7 @@ module.exports = function(grunt) {
 
   function createParamList(parameters, className) {
     return parameters.map(param =>
-      `${param.name}${param.optional ? '?' : ''}: ${decodeType(param.type, className)}`
+      `${param.name}${param.optional ? '?' : ''}: ${decodeType(param.ts_type || param.type, className)}`
     ).join(', ');
   }
 

@@ -44,6 +44,7 @@
         {
           "name": "properties",
           "type": "Object",
+          "ts_type": "{[selector: string]: WidgetProperties & {[k: string]: any}}",
           "description": "An object in the format `{Selector: {property: value, property: value, ... }, Selector: ...}`"
         }
       ],
