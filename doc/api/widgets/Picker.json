@@ -48,10 +48,6 @@
     "select": {
       "description": "Fired when an item was selected by the user.",
       "parameters": {
-        "selection": {
-          "description": "The new value of *[selection](#selection)*.",
-          "type": "any"
-        },
         "index": {
           "description": "Contains the index of the selected item.",
           "type": "number"

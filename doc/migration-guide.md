@@ -143,6 +143,25 @@ function updateCell(cell, index) {
 
 The property `itemHeight` has been renamed to `cellHeight` for consistency.
 
+### New Picker API
+
+The Picker API now follows the same approach as CollectionView, it works on item count and indexes rather than an array of strings.
+
+The property `items` has been replaced by `itemCount`.
+The property `selection` that accepted the selected item has been removed in favor of the existing property `selectionIndex`.
+The `select` event does not contain a `selection` property anymore, only `index`.
+
+The `itemText` callback is now required to provide a text for a given item. This callback is now called with an `index` instead of an item.
+
+Example:
+```js
+let items = ['Apples', 'Oranges', 'Banana'];
+new Picker({
+  itemCount: items.length,
+  itemText: index => items[index]
+});
+```
+
 ### Stateful buttons
 
 * On `CheckBox`, `RadioButton`, `Switch` and `ToggleButton`, the property `selection` has been renamed to `checked`.
