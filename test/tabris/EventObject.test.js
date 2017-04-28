@@ -39,6 +39,14 @@ describe('EventObject', function() {
       expect(event.foo).to.equal(23);
     });
 
+    it('includes data as read-only properties', function() {
+      let event = new EventObject('type', target, {foo: 23});
+
+      event.foo = 42;
+
+      expect(event.foo).to.equal(23);
+    });
+
     it('does not copy target, type, or timeStamp from data', function() {
       let event = new EventObject('bar', target, {foo: 23, type: 'foo', target: {}, timeStamp: 42});
 
