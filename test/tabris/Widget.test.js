@@ -906,6 +906,12 @@ describe('Widget', function() {
         expect(child1.set.args.map(args => args[0].prop1)).to.eql(['v1', 'v2', 'v3', 'v4']);
       });
 
+      it('does not fail on empty widget', function() {
+        expect(() => {
+          new TestWidget().apply({foo: {bar: 23}});
+        }).not.to.throw();
+      });
+
     });
 
   });

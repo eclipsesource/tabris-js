@@ -102,7 +102,7 @@ export default class Widget extends NativeObject {
   }
 
   apply(sheet) {
-    let scope = new WidgetCollection(this._children.concat(this), '*', true);
+    let scope = new WidgetCollection((this._children || []).concat(this), '*', true);
     if (sheet['*']) {
       scope.set(sheet['*']);
     }
