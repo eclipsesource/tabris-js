@@ -1,10 +1,6 @@
 {
-  "#menuPage": {
-    "title": "Speisekarte"
-  },
-  "#langPicker": {
-    "items": ["Sprache wechseln", "de", "en"]
-  },
+  "menu": "Speisekarte",
+  "change_language": "Sprache wechseln",
   "items": [{
       "name": "Pizza Hawaii",
       "description": "Pizza aus Grundteig mit Tomatensauce, Schinken, Ananas und Käse.",

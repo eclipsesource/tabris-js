@@ -1,11 +1,18 @@
-var MARGIN = 16;
-var MARGIN_LARGE = 32;
+const MARGIN = 16;
+const MARGIN_LARGE = 32;
 
-var scaleModes = ['auto', 'fit', 'fill', 'stretch', 'none'];
+const IMAGES = [{
+  name: 'Large',
+  image: {src: 'images/salad.jpg', scale: 3}
+},{
+  name: 'Small',
+  image: {src: 'images/landscape.jpg', scale: 3}
+}];
+const SCALE_MODES = ['auto', 'fit', 'fill', 'stretch', 'none'];
 
-var imageView = new tabris.ImageView({
+let imageView = new tabris.ImageView({
   top: MARGIN, width: 200, height: 200, centerX: 0,
-  image: getImage(0),
+  image: IMAGES[0].image,
   background: 'rgb(220, 220, 220)'
 }).appendTo(tabris.ui.contentView);
 
@@ -17,9 +24,10 @@ new tabris.TextView({
 
 new tabris.Picker({
   right: MARGIN, left: '#imageSizeLabel', baseline: '#imageSizeLabel',
-  items: ['Large', 'Small']
-}).on('selectionIndexChanged', function({value: index}) {
-  imageView.image = getImage(index);
+  itemCount: IMAGES.length,
+  itemText: index => IMAGES[index].name
+}).on('selectionIndexChanged', ({value: index}) => {
+  imageView.image = IMAGES[index].image;
 }).appendTo(tabris.ui.contentView);
 
 new tabris.TextView({
@@ -30,11 +38,8 @@ new tabris.TextView({
 
 new tabris.Picker({
   right: MARGIN, left: '#scaleModeLabel', baseline: '#scaleModeLabel',
-  items: scaleModes
-}).on('selectionIndexChanged', function({value: index}) {
-  imageView.scaleMode = scaleModes[index];
+  itemCount: SCALE_MODES.length,
+  itemText: index => SCALE_MODES[index]
+}).on('selectionIndexChanged', ({value: index}) => {
+  imageView.scaleMode = SCALE_MODES[index];
 }).appendTo(tabris.ui.contentView);
-
-function getImage(index) {
-  return index === 0 ? {src: 'images/salad.jpg', scale: 3} :  {src: 'images/landscape.jpg', scale: 3};
-}

@@ -1,10 +1,6 @@
 {
-  "#menuPage": {
-    "title": "Menu"
-  },
-  "#langPicker": {
-    "items": ["Change language", "de", "en"]
-  },
+  "menu": "Menu",
+  "change_language": "Change language",
   "items": [{
       "name": "Pizza Hawaii",
       "description": "Pizza with tomato base, cheese, pieces of ham and pineapple.",

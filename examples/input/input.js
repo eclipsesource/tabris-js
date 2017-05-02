@@ -1,5 +1,8 @@
 var scrollView = new tabris.ScrollView({left: 0, top: 0, right: 0, bottom: 0}).appendTo(tabris.ui.contentView);
 
+const COUNTRIES = ['Germany', 'Canada', 'USA', 'Bulgaria'];
+const CLASSES = ['Business', 'Economy', 'Economy Plus'];
+
 new tabris.TextView({
   id: 'nameLabel',
   alignment: 'left',
@@ -40,7 +43,8 @@ new tabris.TextView({
 
 new tabris.Picker({
   id: 'countryPicker',
-  items: ['Germany', 'Canada', 'USA', 'Bulgaria']
+  itemCount: COUNTRIES.length,
+  itemText: index => COUNTRIES[index]
 }).appendTo(scrollView);
 
 new tabris.TextView({
@@ -50,7 +54,8 @@ new tabris.TextView({
 
 new tabris.Picker({
   id: 'classPicker',
-  items: ['Business', 'Economy', 'Economy Plus']
+  itemCount: CLASSES.length,
+  itemText: index => CLASSES[index]
 }).appendTo(scrollView);
 
 new tabris.TextView({
@@ -89,7 +94,7 @@ new tabris.Composite({
 ).append(
   new tabris.Slider({
     id: 'luggageSlider'
-  }).on('selectionChanged', function({value}) {
+  }).on('selectionChanged', ({value}) => {
     scrollView.find('#luggageWeight').set('text', value + ' Kg');
   })
 ).appendTo(scrollView);
@@ -117,7 +122,7 @@ new tabris.Button({
   text: 'Place Reservation',
   background: '#8b0000',
   textColor: 'white'
-}).on('select', function() {
+}).on('select', () => {
   updateMessage();
 }).appendTo(scrollView);
 
@@ -154,7 +159,7 @@ scrollView.apply({
 function updateMessage() {
   message.text = [
     'Flight booked for: ' + scrollView.children('#nameInput').first().text,
-    'Destination: ' + scrollView.children('#countryPicker').first().selection,
+    'Destination: ' + COUNTRIES[scrollView.children('#countryPicker').first().selectionIndex],
     'Seating: ' + createSeating(),
     'Luggage: ' + createWeight(),
     'Meal: ' + createMeal(),
@@ -164,12 +169,12 @@ function updateMessage() {
 
 function createSeating() {
   var seating = 'Anywhere';
-  scrollView.children('RadioButton').forEach(function(button) {
+  scrollView.children('RadioButton').forEach((button) => {
     if (button.checked) {
       seating = button.text;
     }
   });
-  seating += ', ' + scrollView.children('#classPicker').first().selection;
+  seating += ', ' + CLASSES[scrollView.children('#classPicker').first().selectionIndex];
   return seating;
 }
 
