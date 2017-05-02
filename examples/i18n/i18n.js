@@ -72,8 +72,8 @@ class MenuCell extends tabris.Composite {
 
 function loadLanguage(lang) {
   try {
-    selectedLanguage = lang;
-    texts = require('./' + lang.replace(/-.*/, '') + '.json');
+    selectedLanguage = lang.replace(/-.*/, '');
+    texts = require('./' + selectedLanguage + '.json');
   } catch (ex) {
     selectedLanguage = 'en';
     texts = require('./en.json');
