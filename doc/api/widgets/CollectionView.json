@@ -15,13 +15,13 @@
   },
   "properties": {
     "cellHeight": {
-      "type": "number|\"auto\"|((item: any, cellType: string) => number)",
+      "type": "number|\"auto\"|((index: number, cellType: string) => number)",
       "default": "auto",
-      "description": "The height of a collection cell. If set to `\"auto\"`, the cell height will be calculated individually for each cell. If set to a function, this function will be called for every item, providing the item and the cell type as parameters, and must return the item height for the given item."
+      "description": "The height of a collection cell. If set to `\"auto\"`, the cell height will be calculated individually for each cell. If set to a function, this function will be called for every item, providing the item index and the cell type as parameters, and must return the cell height for the given item."
     },
     "itemCount": {
       "type": "number",
-      "description": "The number of items to display. Setting this property will reload all items. To add or remove items, use the methods `insert` and `remove` instead of setting the `itemCount`."
+      "description": "The number of items to display. To add or remove items later, use the methods `insert` and `remove` instead of setting the `itemCount`. To display a new list of items, set this property and call `refresh()`."
     },
     "createCell": {
       "type": "(cellType: string) => Widget",
@@ -34,8 +34,8 @@
       "description": "A callback used to update a given cell widget to display the item with the given index. This callback will be called by the framework."
     },
     "cellType": {
-      "type": "string|((item: any) => string)",
-      "description": "The name of the cell type to use for a given item. This name will be passed to the `createCell`, `initializeCell`, and `itemHeight` functions. Cells will be reused only for those items that map to the same cell type. If set to a function, this function will be called for every item, providing the item as a parameter, and must return a name for the cell type to use for the given item."
+      "type": "string|((index: number) => string)",
+      "description": "The name of the cell type to use for the item at the given index. This name will be passed to the `createCell` and `cellHeight` callbacks. Cells will be reused only for those items that map to the same cell type. If set to a function, this function will be called for every item, providing the item index as a parameter, and must return a unique name for the cell type to use for the given item."
     },
     "refreshEnabled": {
       "type": "boolean",
@@ -55,12 +55,12 @@
     "firstVisibleIndex": {
       "type": "number",
       "readonly": true,
-      "description": "The first item that is currently visible on screen."
+      "description": "The index of the first item that is currently visible on screen."
     },
     "lastVisibleIndex": {
       "type": "number",
       "readonly": true,
-      "description": "The last item that is currently visible on screen."
+      "description": "The index of the last item that is currently visible on screen."
     },
     "columnCount": {
       "type": "number",
@@ -70,7 +70,7 @@
   },
   "events": {
     "select": {
-      "description": "Fired when a collection item is selected.",
+      "description": "Fired when a cell is selected.",
       "parameters": {
         "index": {
           "description": "The index of the selected item.",
