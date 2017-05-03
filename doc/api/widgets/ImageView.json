@@ -45,11 +45,5 @@
         }
       }
     }
-  },
-  "links": [
-    {
-      "title": "Image example",
-      "path": "${GITHUB_BRANCH}/examples/image/image.js"
-    }
-  ]
+  }
 }
