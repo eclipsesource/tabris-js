@@ -1,4 +1,6 @@
 {
+  "title": "Gallery",
+  "descriptions:": "Demonstrates how to display and scale images",
   "main": "gallery.js",
   "dependencies": {
     "tabris": "2.0.0-rc1"

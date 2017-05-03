@@ -1,5 +1,4 @@
 {
-  "title": "Image",
   "description": "Demonstrates how to display and scale images",
   "category": "Image, Video",
   "main": "image.js",
