@@ -1,5 +1,6 @@
 const MARGIN = 16;
 const MARGIN_SMALL = 8;
+const ITEM_FETCH_COUNT = 25;
 
 let loading;
 let items = [];
@@ -50,7 +51,7 @@ function createItemCell() {
   let cell = new tabris.Composite();
   let container = new tabris.Composite({
     id: 'container',
-    left: 16, right: 16, top: MARGIN_SMALL, bottom: MARGIN_SMALL,
+    left: MARGIN, right: MARGIN, top: MARGIN_SMALL, bottom: MARGIN_SMALL,
     cornerRadius: 2,
     elevation: 2,
     background: 'white',
@@ -96,7 +97,7 @@ function createLoadingCell() {
 
 function loadInitialItems() {
   collectionView.refreshIndicator = true;
-  getJSON(createUrl({limit: 25})).then(json => {
+  getJSON(createUrl({limit: ITEM_FETCH_COUNT})).then(json => {
     items = json.data.children;
     collectionView.itemCount = items.length;
     collectionView.refreshIndicator = false;
@@ -106,7 +107,7 @@ function loadInitialItems() {
 function loadNewItems() {
   if (!loading) {
     loading = true;
-    getJSON(createUrl({limit: 25, before: getFirstId()})).then(json => {
+    getJSON(createUrl({limit: ITEM_FETCH_COUNT, before: getFirstId()})).then(json => {
       loading = false;
       collectionView.refreshIndicator = false;
       if (json.data.children.length > 0) {
@@ -124,8 +125,8 @@ function loadMoreItems() {
     let lastId = getLastId();
     // insert placeholder item
     items.push({loading: true});
-    collectionView.insert(-1, 1);
-    getJSON(createUrl({limit: 25, after: lastId})).then(json => {
+    collectionView.insert(items.length, 1);
+    getJSON(createUrl({limit: ITEM_FETCH_COUNT, after: lastId})).then(json => {
       loading = false;
       // remove placeholder item
       items.splice(items.length - 1, 1);
@@ -147,7 +148,7 @@ function getFirstId() {
 }
 
 function getLastId() {
-  return getRedditId(items[items.length - 2]) || null;
+  return getRedditId(items[items.length - 1]) || null;
 }
 
 function getRedditId(item) {
