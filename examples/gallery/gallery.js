@@ -13,11 +13,11 @@ class FilmStrip extends tabris.ScrollView {
   }
 
   show() {
-    this.animate({transform: {translationY: 0}});
+    this.animate({transform: {translationY: 0}}, {easing: 'ease-out'});
   }
 
   hide() {
-    this.animate({transform: {translationY: this.bounds.height}});
+    this.animate({transform: {translationY: this.bounds.height}}, {easing: 'ease-out'});
   }
 
   toggleShowing() {
@@ -31,7 +31,7 @@ class FilmStrip extends tabris.ScrollView {
 
   resetHideTimeout() {
     clearTimeout(this._timeout);
-    this._timeout = setTimeout(() => filmStrip.hide(), 5000);
+    this._timeout = setTimeout(() => this.hide(), 4000);
   }
 }
 
@@ -62,7 +62,7 @@ IMAGES.forEach((image) => {
     image: {src: `images/${image}`, width: IMAGE_SIZE, height: IMAGE_SIZE},
     scaleMode: 'fill',
     highlightOnTouch: true
-  }).on('tap', function() {
+  }).on('tap', () => {
     fullImage.image = {src: `images/${image}`};
     filmStrip.resetHideTimeout();
   }).appendTo(filmStrip);
