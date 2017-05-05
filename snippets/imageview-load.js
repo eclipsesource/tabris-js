@@ -27,5 +27,5 @@ new tabris.TextView({
 }).appendTo(tabris.ui.contentView);
 
 function handleLoad({target, error}) {
-  tabris.ui.contentView.find('#label-' + target.id).set('text', error ? 'Error' : 'Success');
+  tabris.ui.contentView.find('#label-' + target.id).text = error ? 'Error' : 'Success';
 }

@@ -9,5 +9,5 @@
 });
 
 tabris.device.on('orientationChanged', function({value: orientation}) {
-  tabris.ui.contentView.find('#orientation').set('text', 'orientation: ' + orientation);
+  tabris.ui.contentView.find('#orientation').text = 'orientation: ' + orientation;
 });

@@ -4,7 +4,7 @@ var page = module.exports = new tabris.Page({
   title: 'Animation',
   autoDispose: false
 }).on('disappear', function() {
-  page.children('#animateCheckBox').set('checked', false);
+  page.children('#animateCheckBox').checked = false;
 });
 
 new tabris.Canvas({

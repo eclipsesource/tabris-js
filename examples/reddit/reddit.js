@@ -29,10 +29,10 @@ let collectionView = new tabris.CollectionView({
     let item = items[index];
     if (!(item.loading)) {
       view.find('#container').first().item = item;
-      view.find('#itemImage').set('image', {src: item.data.thumbnail, width: 80, height: 80});
-      view.find('#nameText').set('text', item.data.title);
-      view.find('#commentText').set('text', item.data.num_comments + ' comments');
-      view.find('#authorText').set('text', item.data.author);
+      view.find('#itemImage').image = {src: item.data.thumbnail, width: 80, height: 80};
+      view.find('#nameText').text = item.data.title;
+      view.find('#commentText').text = item.data.num_comments + ' comments';
+      view.find('#authorText').text = item.data.author;
     }
   }
 }).on('refresh', loadNewItems)

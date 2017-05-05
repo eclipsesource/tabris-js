@@ -43,8 +43,8 @@ new tabris.CollectionView({
   },
   updateCell: (view, index) => {
     let page = pageConfigurations[index];
-    view.find('#bookImage').set('image', page.image);
-    view.find('#bookTitle').set('text', page.title);
+    view.find('#bookImage').image = page.image;
+    view.find('#bookTitle').text = page.title;
   }
 }).on('select', ({index}) => {
   tabris.ui.drawer.close();
@@ -164,9 +164,9 @@ function createBooksList(books) {
     },
     updateCell: (view, index) => {
       let book = books[index];
-      view.find('#bookImage').set('image', book.image);
-      view.find('#bookTitle').set('text', book.title);
-      view.find('#bookAuthor').set('text', book.author);
+      view.find('#bookImage').image = book.image;
+      view.find('#bookTitle').text = book.title;
+      view.find('#bookAuthor').text = book.author;
     }
   }).on('select', ({index}) => createBookPage(books[index]).appendTo(navigationView));
 }
@@ -232,5 +232,5 @@ function createLicenseWebviewPage() {
 }
 
 function actionVisbility(isVisible) {
-  tabris.ui.children('#licenseToggler').set('visible', isVisible);
+  tabris.ui.children('#licenseToggler').visible = isVisible;
 }
