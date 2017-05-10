@@ -48,9 +48,9 @@ let collectionView = new tabris.CollectionView({
   updateCell: (view, index) => {
     let item = items[index];
     view.find('#container').first().item = item;
-    view.find('#senderText').set('text', item.sender);
-    view.find('#titleText').set('text', item.title);
-    view.find('#timeText').set('text', item.time);
+    view.find('#senderText').text = item.sender;
+    view.find('#titleText').text = item.title;
+    view.find('#timeText').text = item.time;
   }
 }).appendTo(tabris.ui.contentView);
 
