@@ -799,13 +799,11 @@ describe('property-types', function() {
       });
     });
 
-    it('fails for out-of-bounds numbers', function() {
-      let values = [-0.1, -1, 1.01, 2];
-      values.forEach((value) => {
-        expect(() => {
-          encode(value);
-        }).to.throw(Error, 'Number is out of bounds: ' + value);
-      });
+    it('clamps out-of-bounds numbers', function() {
+      expect(encode(-1)).to.equal(0);
+      expect(encode(-0.1)).to.equal(0);
+      expect(encode(1.1)).to.equal(1);
+      expect(encode(1e10)).to.equal(1);
     });
 
     it('accepts strings', function() {

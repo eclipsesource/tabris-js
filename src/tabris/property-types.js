@@ -192,10 +192,7 @@ export let types = {
   opacity: {
     encode(value) {
       value = encodeNumber(value);
-      if (value < 0 || value > 1) {
-        throw new Error('Number is out of bounds: ' + value);
-      }
-      return value;
+      return Math.max(0, Math.min(1, value));
     }
   },
 
