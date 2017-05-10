@@ -103,7 +103,11 @@
     },
     "fillColor": {
       "type": "Color",
-      "description": "The color of the background of the TextInput - applies only to iOS."
+      "description": "The color of the background of the TextInput - applies only to iOS.",
+      "platforms": {
+        "windows": false,
+        "android": false
+      }
     },
     "borderColor": {
       "type": "Color",

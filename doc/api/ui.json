@@ -14,7 +14,11 @@
     },
     "navigationBar": {
       "type": "NavigationBar",
-      "description": "Represents the system navigation bar is the onscreen area where *Back*, *Home* and similar buttons are displayed. It is only available on Android."
+      "description": "Represents the system navigation bar is the onscreen area where *Back*, *Home* and similar buttons are displayed. It is only available on Android.",
+      "platforms": {
+        "windows": false,
+        "ios": false
+      }
     },
     "contentView": {
       "type": "Composite",

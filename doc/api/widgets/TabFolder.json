@@ -23,7 +23,11 @@
       ],
       "default": "fixed",
       "static": true,
-      "description": "Controls how the tabs make use of the available horizontal space. Setting the `tabMode` to `\"fixed\"` makes the tabs span the entire available space. In case of a very wide `TabFolder` the `\"fixed\"` mode centers the tabs. The mode `\"scrollable\"` left aligns the tabs and allows to scroll the tabs if there are more tabs than would fit in the available space. Available on Android only."
+      "description": "Controls how the tabs make use of the available horizontal space. Setting the `tabMode` to `\"fixed\"` makes the tabs span the entire available space. In case of a very wide `TabFolder` the `\"fixed\"` mode centers the tabs. The mode `\"scrollable\"` left aligns the tabs and allows to scroll the tabs if there are more tabs than would fit in the available space. Available on Android only.",
+      "platforms": {
+        "ios": false,
+        "windows": false
+      }
     },
     "paging": {
       "type": "boolean",

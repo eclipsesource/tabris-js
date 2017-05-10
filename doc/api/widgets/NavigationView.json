@@ -35,7 +35,10 @@
     },
     "actionTextColor": {
       "type": "Color",
-      "description": "The color used for action texts. Only applied on Android. IOS uses the `actionColor` to colorize the action text."
+      "description": "The color used for action texts. Only applied on Android and Windows. IOS uses the `actionColor` to colorize the action text.",
+      "platforms": {
+        "ios": false
+      }
     },
     "pageAnimation": {
       "type": "string",
@@ -47,23 +50,39 @@
       "type": "string",
       "values": ["light", "dark", "default"],
       "default": "default",
-      "description": "Controls the color scheme used for the toolbar. When set to `\"default\"` the theme is inherited from the NavigationView. Available only on Windows."
+      "description": "Controls the color scheme used for the toolbar. When set to `\"default\"` the theme is inherited from the NavigationView. Available only on Windows.",
+      "platforms": {
+        "ios": false,
+        "android": false
+      }
     },
     "win_toolbarOverflowTheme": {
       "type": "string",
       "values": ["light", "dark", "default"],
       "default": "default",
-      "description": "Controls the color scheme used for the toolbar's overflow menu. When set to `\"default\"` the theme is inherited from the toolbar. Available only on Windows."
+      "description": "Controls the color scheme used for the toolbar's overflow menu. When set to `\"default\"` the theme is inherited from the toolbar. Available only on Windows.",
+      "platforms": {
+        "ios": false,
+        "android": false
+      }
     },
     "win_drawerActionTheme": {
       "type": "string",
       "values": ["light", "dark", "default"],
       "default": "default",
-      "description": "Controls the color scheme used for the drawer action. When set to `\"default\"` the theme is inherited from the NavigationView. Available only on Windows."
+      "description": "Controls the color scheme used for the drawer action. When set to `\"default\"` the theme is inherited from the NavigationView. Available only on Windows.",
+      "platforms": {
+        "ios": false,
+        "android": false
+      }
     },
     "win_drawerActionBackground": {
       "type": "Color",
-      "description": "The background color used for the drawer action. It is common to the make this the same color as the splash screen. Available only on Windows."
+      "description": "The background color used for the drawer action. It is common to the make this the same color as the splash screen. Available only on Windows.",
+      "platforms": {
+        "ios": false,
+        "android": false
+      }
     }
   },
   "events": {

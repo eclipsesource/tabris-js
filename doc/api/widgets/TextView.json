@@ -26,7 +26,11 @@
     },
     "selectable": {
       "type": "boolean",
-      "description": "Whether the text can be selected or not. Currently only support on Android."
+      "description": "Whether the text can be selected or not. Currently only support on Android.",
+      "platforms": {
+        "ios": false,
+        "windows": false
+      }
     },
     "markupEnabled": {
       "type": "boolean",

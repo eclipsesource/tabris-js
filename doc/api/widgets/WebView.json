@@ -52,6 +52,10 @@
     },
     "download": {
       "description": "Fired when the WebView requests a download. The download event provides the properties `url`, `mimeType`, `contentLength` and `contentDisposition`. Supported only on Android.",
+      "platforms": {
+        "windows": false,
+        "ios": false
+      },
       "parameters": {
         "url": {
           "description": "The URL of the resource to be downloaded.",

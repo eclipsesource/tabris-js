@@ -17,7 +17,11 @@
     },
     "badge": {
       "type": "string",
-      "description": "A badge to attach to the tab. Only supported on iOS."
+      "description": "A badge to attach to the tab. Only supported on iOS.",
+      "platforms": {
+        "windows": false,
+        "android": false
+      }
     }
   },
   "links": [

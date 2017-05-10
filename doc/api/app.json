@@ -39,7 +39,10 @@
       "description": "Fired when the app becomes invisible. Either because another app is in the foreground or the user has returned to the home screen."
     },
     "terminate": {
-      "description": "Fired when the app is being destroyed. After this callback no more interaction with the app is possible."
+      "description": "Fired when the app is being destroyed. After this callback no more interaction with the app is possible.",
+      "platforms": {
+        "windows": false
+      }
     },
     "backNavigation": {
       "description": "Fired when the back button is pressed on Android.",

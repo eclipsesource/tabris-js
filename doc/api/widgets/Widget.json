@@ -182,11 +182,18 @@
     },
     "elevation": {
       "type": "number",
-      "description": "The position of the widget on the z-axis. Currently only supported on Android 5.0+."
+      "description": "The position of the widget on the z-axis. Currently only supported on Android 5.0+.",
+      "platforms": {
+        "windows": false,
+        "ios": false
+      }
     },
     "cornerRadius": {
       "type": "number",
-      "description": "Configure a widget to have rounded corners. Each corner is affected equally. Supported on iOS and Android 5.0+."
+      "description": "Configure a widget to have rounded corners. Each corner is affected equally. Supported on iOS and Android 5.0+.",
+      "platforms": {
+        "windows": false
+      }
     },
     "font": {
       "type": "Font",
@@ -223,7 +230,11 @@
       "type": "string",
       "values": ["light", "dark", "default"],
       "default": "default",
-      "description": "Controls the color scheme used for this widget. When set to `\"default\"` the theme is inherited from either the parent (if present) or the OS settings. Available only on windows."
+      "description": "Controls the color scheme used for this widget. When set to `\"default\"` the theme is inherited from either the parent (if present) or the OS settings. Available only on windows.",
+      "platforms": {
+        "ios": false,
+        "android": false
+      }
     }
   },
   "events": {

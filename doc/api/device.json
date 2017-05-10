@@ -61,13 +61,21 @@
     "win_keyboardPresent": {
       "type": "boolean",
       "readonly": true,
-      "description": "Returns `true` if a hardware keyboard is present. The developer may choose to handle some user input differently in that case. Available only on windows."
+      "description": "Returns `true` if a hardware keyboard is present. The developer may choose to handle some user input differently in that case. Available only on windows.",
+      "platforms": {
+        "ios": false,
+        "android": false
+      }
     },
     "win_primaryInput": {
       "type": "boolean",
       "readonly": true,
       "values": ["touch", "mouse"],
-      "description": "On a PC this returns `\"touch\"` when in tablet mode, otherwise `\"mouse\"`. On phones this this returns `\"mouse\"` when displayed on an external display (\"Continuum\"), otherwise `\"touch\"`. Available only on windows"
+      "description": "On a PC this returns `\"touch\"` when in tablet mode, otherwise `\"mouse\"`. On phones this this returns `\"mouse\"` when displayed on an external display (\"Continuum\"), otherwise `\"touch\"`. Available only on windows",
+      "platforms": {
+        "ios": false,
+        "android": false
+      }
     }
   },
   "events": {

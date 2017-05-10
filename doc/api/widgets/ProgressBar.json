@@ -41,7 +41,10 @@
         "error"
       ],
       "default": "normal",
-      "description": "This property affects the color of the progress indicator. Not supported on iOS."
+      "description": "This property affects the color of the progress indicator. Not supported on iOS.",
+      "platforms": {
+        "ios": false
+      }
     }
   },
   "links": [
