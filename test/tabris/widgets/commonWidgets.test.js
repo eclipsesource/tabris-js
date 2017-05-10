@@ -100,7 +100,7 @@ describe('Common Widgets', function() {
     widget = new CheckBox().on('checkedChanged', listener);
     tabris._notify(widget.cid, 'select', {checked: true});
     expect(listener).to.have.been.calledOnce;
-    expect(listener).to.have.been.calledWithMatch({target: widget, 'value': true});
+    expect(listener).to.have.been.calledWithMatch({target: widget, value: true});
     checkListen('select');
   });
 

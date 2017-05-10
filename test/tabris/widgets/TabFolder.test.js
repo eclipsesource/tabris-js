@@ -54,7 +54,12 @@ describe('TabFolder', function() {
     });
 
     it('getter gets tab properties from cache', function() {
-      tab.set({title: 'foo', 'badge': 'bar', image: 'foobar.jpg', selectedImage: 'selectedFoobar.jpg'});
+      tab.set({
+        title: 'foo',
+        badge: 'bar',
+        image: 'foobar.jpg',
+        selectedImage: 'selectedFoobar.jpg'
+      });
 
       expect(tab.title).to.equal('foo');
       expect(tab.badge).to.equal('bar');

@@ -64,7 +64,7 @@ export default class CollectionView extends Composite {
     // we don't receive events before the listeners are attached
     if (this._needsReload) {
       delete this._needsReload;
-      this._nativeCall('reload', {'items': this.itemCount});
+      this._nativeCall('reload', {items: this.itemCount});
     }
   }
 

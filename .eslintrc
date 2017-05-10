@@ -28,6 +28,7 @@
     "space-unary-ops": "error",
     "max-len": ["error", 120, 2, {"ignoreUrls": true, "ignorePattern": "\\/\\^"}],
     "quotes": ["error", "single", "avoid-escape"],
+    "quote-props": ["error", "consistent-as-needed"],
     "curly": ["error", "all"],
     "eol-last": "error",
     "no-with": "error",

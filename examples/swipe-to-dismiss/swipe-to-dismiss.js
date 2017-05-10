@@ -16,7 +16,9 @@ let collectionView = new tabris.CollectionView({
   itemCount: items.length,
   cellHeight: 64,
   createCell: () => {
-    let cell = new tabris.Composite({'background': '#d0d0d0'});
+    let cell = new tabris.Composite({
+      background: '#d0d0d0'
+    });
     let container = new tabris.Composite({
       id: 'container',
       left: 0, top: 0, bottom: 0, right: 0,

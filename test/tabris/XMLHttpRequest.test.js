@@ -738,7 +738,7 @@ describe('XMLHttpRequest', function() {
         state: 'headers',
         code: 200,
         headers: {
-          Status: 'foo',
+          'Status': 'foo',
           'Set-Cookie': 'foo',
           'X-Custom-Header': 'bar, baz'
         }
