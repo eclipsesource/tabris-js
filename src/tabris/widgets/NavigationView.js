@@ -8,7 +8,7 @@ export default class NavigationView extends Composite {
 
   constructor(properties) {
     super(properties);
-    this._nativeListen('backnavigation', true);
+    this._nativeListen('backNavigation', true);
   }
 
   get _nativeType() {
@@ -64,7 +64,7 @@ export default class NavigationView extends Composite {
   }
 
   _trigger(name, event) {
-    if (name === 'backnavigation') {
+    if (name === 'backNavigation') {
       this._handleBackNavigation();
     } else if (name === 'change_topToolbarHeight') {
       this._triggerChangeEvent('topToolbarHeight', event.value);
