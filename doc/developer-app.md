@@ -40,7 +40,7 @@ You can edit the code in the playground and reload to see the changes in action.
 
 ## The Tabris.js Snippets
 
-On the [tabrisjs.com snippets page](https://tabrisjs.com/snippets/) you can find a code snippet for nearly every feature in Tabris.js. You can run a snippet immediately on your device by clicking the **link** button next to it...
+In our [collection of snippets](https://github.com/eclipsesource/tabris-js/tree/master/snippets) you can find a code snippet for nearly every feature in Tabris.js. You can run a snippet immediately on your device by clicking the **link** button next to it...
 
 ![Android Developer App](img/button-unlinked.png)
 

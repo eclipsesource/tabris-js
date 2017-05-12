@@ -15,13 +15,13 @@ Widgets can be added to the content view, and optionally to the drawer.
 
 ## The Status Bar
 
-The status bar is the small area on the top of the screen that displays notifications, status icons and the time. The object [tabris.ui.statusBar](../api/StatusBar.md) can be used to control different aspects of its look and feel, such as background color and visibility.
+The status bar is the small area on the top of the screen that displays notifications, status icons and the time. The object [tabris.ui.statusBar](api/StatusBar.md) can be used to control different aspects of its look and feel, such as background color and visibility.
 
 ![StatusBar](img/statusbar.png)
 
 ## The Navigation Bar
 
-The navigation bar is the area that contains the *Back*, *Home*, etc. buttons on Android. The object [tabris.ui.navigationBar](../api/NavigationBar.md) can be used to control its background color and visibility.
+The navigation bar is the area that contains the *Back*, *Home*, etc. buttons on Android. The object [tabris.ui.navigationBar](api/NavigationBar.md) can be used to control its background color and visibility.
 
 ![NavigationBar](img/navigationbar.png)
 

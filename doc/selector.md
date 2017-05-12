@@ -125,7 +125,7 @@ page.apply({
 
 ### How to use it
 
-While we used object literals in the examples above, the apply method can be very effectively used with [modules](module), allowing most or all property values (except IDs) to be extracted from your code.
+While we used object literals in the examples above, the apply method can be very effectively used with [modules](modules.md), allowing most or all property values (except IDs) to be extracted from your code.
 
 Imagine, for example, that you want to apply different texts to your widgets depending on your locale. You could do it like this:
 
