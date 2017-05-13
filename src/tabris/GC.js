@@ -1,13 +1,44 @@
 import NativeObject from './NativeObject';
 
+export const OPCODES = {
+  arc: 1,
+  arcTo: 2,
+  beginPath: 3,
+  bezierCurveTo: 4,
+  clearRect: 5,
+  closePath: 6,
+  fill: 7,
+  fillRect: 8,
+  fillStyle: 9,
+  fillText: 10,
+  lineCap: 11,
+  lineJoin: 12,
+  lineTo: 13,
+  lineWidth: 14,
+  moveTo: 15,
+  quadraticCurveTo: 16,
+  rect: 17,
+  restore: 18,
+  rotate: 19,
+  save: 20,
+  scale: 21,
+  setTransform: 22,
+  stroke: 23,
+  strokeRect: 24,
+  strokeStyle: 25,
+  strokeText: 26,
+  textAlign: 27,
+  textBaseline: 28,
+  transform: 29,
+  translate: 30,
+};
+
 export default class GC extends NativeObject {
 
   constructor(properties) {
     super();
     this._create('tabris.GC', properties);
     this._operations = [];
-    this._opCodes = [];
-    this._newOpCodes = [];
     this._doubles = [];
     this._booleans = [];
     this._strings = [];
@@ -42,11 +73,11 @@ export default class GC extends NativeObject {
     if (this._isIOS) {
       this._operations.push([operation]);
     } else {
-      if (this._opCodes.indexOf(operation) < 0) {
-        this._newOpCodes.push(operation);
-        this._opCodes.push(operation);
+      let opCode = OPCODES[operation];
+      if (!opCode) {
+        throw new Error('Invalid operation');
       }
-      this._operations.push(this._opCodes.indexOf(operation));
+      this._operations.push(opCode);
     }
   }
 
@@ -76,7 +107,6 @@ export default class GC extends NativeObject {
         this._nativeCall('draw', {operations: this._operations});
       } else {
         this._nativeCall('draw', {packedOperations: [
-          this._newOpCodes,
           this._operations,
           this._doubles,
           this._booleans,
@@ -84,7 +114,6 @@ export default class GC extends NativeObject {
           this._ints
         ]});
       }
-      this._newOpCodes = [];
       this._operations = [];
       this._doubles = [];
       this._booleans = [];
