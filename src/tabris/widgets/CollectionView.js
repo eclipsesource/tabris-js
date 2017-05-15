@@ -8,11 +8,11 @@ export default class CollectionView extends Composite {
 
   constructor(properties) {
     super(properties);
-    this._nativeListen('requestinfo', true);
-    this._nativeListen('createitem', true);
-    this._nativeListen('populateitem', true);
-    tabris.on('flush', this._reload, this);
-    this.on('dispose', () => tabris.off('flush', this._reload, this));
+    this._nativeListen('requestInfo', true);
+    this._nativeListen('createCell', true);
+    this._nativeListen('updateCell', true);
+    tabris.on('flush', this._flush, this);
+    this.on('dispose', () => tabris.off('flush', this._flush, this));
   }
 
   get _nativeType() {
@@ -22,18 +22,21 @@ export default class CollectionView extends Composite {
   reveal(index) {
     index = this._checkIndex(index);
     if (index >= 0 && index < this.itemCount) {
+      this._flush();
       this._nativeCall('reveal', {index});
     }
   }
 
   refresh(index) {
     if (arguments.length === 0) {
-      this._nativeCall('update', {reload: [0, this.itemCount]});
+      this._flush();
+      this._nativeCall('refresh', {index: 0, count: this.itemCount});
       return;
     }
     index = this._checkIndex(index);
     if (index >= 0 && index < this.itemCount) {
-      this._nativeCall('update', {reload: [index, 1]});
+      this._flush();
+      this._nativeCall('refresh', {index, count: 1});
     }
   }
 
@@ -43,7 +46,8 @@ export default class CollectionView extends Composite {
       throw new Error('Invalid insert count');
     }
     this._storeProperty('itemCount', this.itemCount + count);
-    this._nativeCall('update', {insert: [index, count]});
+    this._flush();
+    this._nativeCall('insert', {index, count});
   }
 
   remove(index, count = 1) {
@@ -55,16 +59,17 @@ export default class CollectionView extends Composite {
     }
     if (index >= 0 && index < this.itemCount && count > 0) {
       this._storeProperty('itemCount', this.itemCount - count);
-      this._nativeCall('update', {remove: [index, count]});
+      this._flush();
+      this._nativeCall('remove', {index, count});
     }
   }
 
-  _reload() {
-    // We defer the reload call until the end of create/set in order to ensure that
-    // we don't receive events before the listeners are attached
+  _flush() {
+    // Load new items if needed after all properties have been set
+    // to avoid intercepting the aggregation of properties in set.
     if (this._needsReload) {
       delete this._needsReload;
-      this._nativeCall('reload', {items: this.itemCount});
+      this._nativeCall('load', {itemCount: this.itemCount});
     }
   }
 
@@ -88,17 +93,17 @@ export default class CollectionView extends Composite {
   }
 
   _trigger(name, event) {
-    if (name === 'requestinfo') {
+    if (name === 'requestInfo') {
       let type = resolveProperty(this, 'cellType', event.index);
       let height = resolveProperty(this, 'cellHeight', event.index, type);
       return {
         type: encodeCellType(this, type),
         height: encodeCellHeight(height)
       };
-    } else if (name === 'createitem') {
+    } else if (name === 'createCell') {
       let item = this._createCell(event.type);
       return item.cid;
-    } else if (name === 'populateitem') {
+    } else if (name === 'updateCell') {
       this.updateCell(tabris._proxies.find(event.widget), event.index);
     } else if (name === 'select') {
       return super._trigger('select', {index: event.index});
@@ -129,10 +134,8 @@ NativeObject.defineProperties(CollectionView.prototype, {
     type: 'natural',
     default: 0,
     set(name, value) {
-      if (value !== this.itemCount) {
-        this._storeProperty(name, value);
-        this._needsReload = true;
-      }
+      this._storeProperty(name, value);
+      this._needsReload = true;
     }
   },
   cellType: {
