@@ -55,7 +55,7 @@
     },
     {
       "title": "Snippet for TextView with markup",
-      "path": "${GITHUB_BRANCH}/snippets/textview-markup.js"
+      "path": "${GITHUB_BRANCH}/snippets/textview-markupenabled.js"
     }
   ]
 }
