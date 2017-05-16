@@ -27,7 +27,7 @@ The _Tabris CLI_ will ask you a number of questions including the project's name
 Choose _JavaScript App_ for your first project.
 The CLI will then create a simple example project and install the dependencies. Let's have a look at the most important files:
 
-- `package.json`: This is the central manifest file of your project. It includes your app's name and version, dependencies, and a pointer to the app's main module in the `main` field. For the details, see the [npm doc on package.json](https://www.npmjs.org/doc/files/package.json.html).
+- `package.json`: This is the central manifest file of your project. It includes your app's name and version, dependencies, and a pointer to the app's main module in the `main` field. For the details, see the [npm doc on package.json](https://www.npmjs.com/doc/files/package.json.html).
 - `src/app.js`: That's your app's main JS file. You are free to change its name and location, but you have to adjust the `main` field in the `package.json`.
 - `cordova/config.xml`: This is the Cordova configuration file. You don't need this file until you build your app (see [build documentation](build.md)).
 

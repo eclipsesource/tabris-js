@@ -96,9 +96,9 @@ A folder module may consist of multiple internal file modules, but only the firs
 
 ## npm Support
 
-Tabris.js supports loading [npm](https://www.npmjs.org) modules, though the compatibility of the module depends on the API it expects.
+Tabris.js supports loading [npm](https://www.npmjs.com) modules, though the compatibility of the module depends on the API it expects.
 
-Use the [npm command line interface](https://www.npmjs.org/doc/) to install any Tabris.js compatible module into your project folder.
+Use the [npm command line interface](https://www.npmjs.com/doc/) to install any Tabris.js compatible module into your project folder.
 
 > <img align="left" src="img/note.png"> <i>Tabris.js does *not* support globally installed npm modules, only those installed locally in the projects `node_modules` folder.</i>
 
