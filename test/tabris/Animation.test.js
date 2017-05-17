@@ -70,7 +70,7 @@ describe('Animation', function() {
     it('does not keep references to Animation object after completion', function() {
       widget.animate({}, {});
       let animation = findProxy(animationId());
-      animation._trigger('Completion', {});
+      animation._trigger('completed', {});
       spy(animation, 'dispose');
 
       widget.dispose();
@@ -160,12 +160,12 @@ describe('Animation', function() {
       expect(createOp().properties).to.eql({opacity: 0});
     });
 
-    it('issues listen call for Completion', function() {
+    it('issues listen call for completed', function() {
       widget.animate({}, {});
       expect(client.calls({
         op: 'listen',
         id: animationId(),
-        event: 'Completion',
+        event: 'completed',
         listen: true
       }).length).to.equal(1);
     });
@@ -179,7 +179,7 @@ describe('Animation', function() {
       widget.animate({}, {});
       expect(client.calls({op: 'destroy', id: animationId()}).length).to.equal(0);
 
-      findProxy(animationId())._trigger('Completion', {});
+      findProxy(animationId())._trigger('completed', {});
       expect(client.calls({op: 'destroy', id: animationId()}).length).to.equal(1);
     });
 
@@ -198,7 +198,7 @@ describe('Animation', function() {
       let thenCallback = spy();
       widget.animate({}, {}).then(thenCallback);
 
-      findProxy(animationId())._trigger('Completion', {});
+      findProxy(animationId())._trigger('completed', {});
 
       setTimeout(function() {
         expect(thenCallback).to.have.been.called;

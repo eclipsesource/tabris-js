@@ -17,11 +17,11 @@ class Animation extends NativeObject {
   constructor(properties) {
     super();
     this._create('tabris.Animation', properties);
-    this._nativeListen('Completion', true);
+    this._nativeListen('completed', true);
   }
 
   _trigger(name, event) {
-    if (name === 'Completion') {
+    if (name === 'completed') {
       this.target.off('dispose', this.abort, this);
       if (this._resolve) {
         this._resolve();
