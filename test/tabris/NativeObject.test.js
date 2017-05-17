@@ -293,6 +293,14 @@ describe('NativeObject', function() {
         expect(listener).to.have.been.calledWithMatch({target: object, value: 23});
       });
 
+      it('does not call possibly overridden _listen', function() {
+        spy(object, '_listen');
+
+        object._triggerChangeEvent('foo', 23);
+
+        expect(object._listen).not.to.have.been.called;
+      });
+
     });
 
     describe('on', function() {

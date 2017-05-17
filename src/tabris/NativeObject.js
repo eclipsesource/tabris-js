@@ -143,7 +143,7 @@ export default class NativeObject extends EventsClass {
   _triggerChangeEvent(propertyName, newEncodedValue) {
     let typeDef = this._getTypeDef(propertyName);
     let decodedValue = this._decodeProperty(typeDef, newEncodedValue);
-    this._trigger(propertyName + 'Changed', {value: decodedValue});
+    this.$trigger(propertyName + 'Changed', {value: decodedValue});
   }
 
   _create(type, properties = {}) {
@@ -192,6 +192,10 @@ export default class NativeObject extends EventsClass {
   }
 
   _trigger(name, eventData = {}) {
+    return this.$trigger(name, eventData);
+  }
+
+  $trigger(name, eventData = {}) {
     let event = new EventObject(name, this, eventData);
     this.trigger(name, event);
     return !!event.defaultPrevented;
