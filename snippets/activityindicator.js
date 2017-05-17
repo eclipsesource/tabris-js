@@ -1,23 +1,24 @@
+const {ui, ActivityIndicator, Button} = require('tabris');
+
 // Create the activity indicator centered in the page
-var activityIndicator = new tabris.ActivityIndicator({
+let activityIndicator = new ActivityIndicator({
   centerX: 0,
   centerY: 0
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
 // Create reload button
-var reloadButton = new tabris.Button({
+let reloadButton = new Button({
   centerX: 0, centerY: 0,
   text: 'Run Task'
-}).on('select', function() {
-  executeLongRunningTask();
-}).appendTo(tabris.ui.contentView);
+}).on('select', () => executeLongRunningTask())
+  .appendTo(ui.contentView);
 
 function executeLongRunningTask() {
   // Toggle visibility of elements
   activityIndicator.visible = true;
   reloadButton.visible = false;
 
-  setTimeout(function() {
+  setTimeout(() => {
     // Async action is done
     activityIndicator.visible = false;
     reloadButton.visible = true;
