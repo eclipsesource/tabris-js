@@ -54,10 +54,8 @@ export default class NavigationView extends Composite {
   }
 
   _listen(name, listening) {
-    if (name === 'topToolbarHeightChanged') {
-      this._nativeListen('change_topToolbarHeight', listening);
-    } else if (name === 'bottomToolbarHeightChanged') {
-      this._nativeListen('change_bottomToolbarHeight', listening);
+    if (name === 'topToolbarHeightChanged' || name === 'bottomToolbarHeightChanged') {
+      this._nativeListen(name, listening);
     } else {
       super._listen(name, listening);
     }
@@ -66,10 +64,10 @@ export default class NavigationView extends Composite {
   _trigger(name, event) {
     if (name === 'backNavigation') {
       this._handleBackNavigation();
-    } else if (name === 'change_topToolbarHeight') {
-      this._triggerChangeEvent('topToolbarHeight', event.value);
-    } else if (name === 'change_bottomToolbarHeight') {
-      this._triggerChangeEvent('bottomToolbarHeight', event.value);
+    } else if (name === 'topToolbarHeightChanged') {
+      this._triggerChangeEvent('topToolbarHeight', event.topToolbarHeight);
+    } else if (name === 'bottomToolbarHeightChanged') {
+      this._triggerChangeEvent('bottomToolbarHeight', event.bottomToolbarHeight);
     } else {
       return super._trigger(name, event);
     }

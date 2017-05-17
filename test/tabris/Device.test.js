@@ -77,10 +77,10 @@ describe('Device', function() {
       expect(device.language).to.equal('en');
     });
 
-    it('adds listener for orientationchange event', function() {
+    it('adds listener for orientationChanged event', function() {
       device.on('orientationChanged', function() {});
 
-      let calls = client.calls({id: 'tabris.Device', op: 'listen', event: 'orientationchange'});
+      let calls = client.calls({id: 'tabris.Device', op: 'listen', event: 'orientationChanged'});
       expect(calls[0].listen).to.equal(true);
     });
 
@@ -88,7 +88,7 @@ describe('Device', function() {
       let listener = spy();
       device.on('orientationChanged', listener);
 
-      tabris._notify('tabris.Device', 'orientationchange', {orientation: 'portrait'});
+      tabris._notify('tabris.Device', 'orientationChanged', {orientation: 'portrait'});
 
       expect(listener).to.have.been.calledOnce;
       expect(listener).to.have.been.calledWithMatch({target: device, value: 'portrait'});

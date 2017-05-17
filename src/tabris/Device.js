@@ -12,14 +12,14 @@ export default class Device extends NativeObject {
 
   _listen(name, listening) {
     if (name === 'orientationChanged') {
-      this._nativeListen('orientationchange', listening);
+      this._nativeListen(name, listening);
     } else {
       super._listen(name, listening);
     }
   }
 
   _trigger(name, event) {
-    if (name === 'orientationchange') {
+    if (name === 'orientationChanged') {
       this._triggerChangeEvent('orientation', event.orientation);
     } else {
       super._trigger(name, event);

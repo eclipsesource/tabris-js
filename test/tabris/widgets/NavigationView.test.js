@@ -95,9 +95,9 @@ describe('NavigationView', function() {
       let listener = spy();
       navigationView.on('topToolbarHeightChanged', listener);
 
-      tabris._notify(navigationView.cid, 'change_topToolbarHeight', {value: 23});
+      tabris._notify(navigationView.cid, 'topToolbarHeightChanged', {topToolbarHeight: 23});
 
-      expect(client.calls({op: 'listen', id: navigationView.cid, event: 'change_topToolbarHeight'})[0].listen)
+      expect(client.calls({op: 'listen', id: navigationView.cid, event: 'topToolbarHeightChanged'})[0].listen)
         .to.be.true;
       expect(listener).to.have.been.calledOnce;
       expect(listener).to.have.been.calledWithMatch({target: navigationView, value: 23});
@@ -132,9 +132,9 @@ describe('NavigationView', function() {
       let listener = spy();
       navigationView.on('bottomToolbarHeightChanged', listener);
 
-      tabris._notify(navigationView.cid, 'change_bottomToolbarHeight', {value: 23});
+      tabris._notify(navigationView.cid, 'bottomToolbarHeightChanged', {bottomToolbarHeight: 23});
 
-      expect(client.calls({op: 'listen', id: navigationView.cid, event: 'change_bottomToolbarHeight'})[0].listen)
+      expect(client.calls({op: 'listen', id: navigationView.cid, event: 'bottomToolbarHeightChanged'})[0].listen)
         .to.be.true;
       expect(listener).to.have.been.calledOnce;
       expect(listener).to.have.been.calledWithMatch({target: navigationView, value: 23});
