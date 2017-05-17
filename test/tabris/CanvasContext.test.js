@@ -60,7 +60,7 @@ describe('CanvasContext', function() {
   describe('OPCODES', function() {
 
     it('are unique', function() {
-      let codes = Object.values(OPCODES).sort();
+      let codes = Object.keys(OPCODES).map(key => OPCODES[key]).sort();
       for (let i = 1; i < codes.length; i++) {
         expect(codes[i] !== codes[i - 1]);
       }
