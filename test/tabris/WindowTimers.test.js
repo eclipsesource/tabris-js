@@ -36,7 +36,7 @@ describe('WindowTimers', function() {
     let callback;
     let method;
     let createCall = function() { return client.calls({op: 'create', type: 'tabris.Timer'})[0]; };
-    let listenCall = function() { return client.calls({id: createCall().id, op: 'listen', event: 'Run'})[0]; };
+    let listenCall = function() { return client.calls({id: createCall().id, op: 'listen', event: 'run'})[0]; };
     let startCall = function() { return client.calls({id: createCall().id, op: 'call', method: 'start'})[0]; };
     let isInterval = name === 'setInterval';
 
@@ -77,7 +77,7 @@ describe('WindowTimers', function() {
         expect(createCall().properties.repeat).to.equal(isInterval);
       });
 
-      it('listens on Run event of native Timer', function() {
+      it('listens on run event of native Timer', function() {
         expect(listenCall().listen).to.be.true;
       });
 
@@ -111,7 +111,7 @@ describe('WindowTimers', function() {
       describe('and timer is notified, ', function() {
 
         beforeEach(function() {
-          tabris._notify(createCall().id, 'Run', {});
+          tabris._notify(createCall().id, 'run', {});
         });
 
         it('callback is called', function() {
@@ -197,21 +197,21 @@ describe('WindowTimers', function() {
 
     it('passes zero parameters to callback', function() {
       method(callback, delay);
-      tabris._notify(createCall().id, 'Run', {});
+      tabris._notify(createCall().id, 'run', {});
 
       expect(callback).to.have.been.calledWith();
     });
 
     it('passes one parameter to callback', function() {
       method(callback, delay, 1);
-      tabris._notify(createCall().id, 'Run', {});
+      tabris._notify(createCall().id, 'run', {});
 
       expect(callback).to.have.been.calledWith(1);
     });
 
     it('passes four parameter to callback', function() {
       method(callback, delay, 1, 2, 3, 4);
-      tabris._notify(createCall().id, 'Run', {});
+      tabris._notify(createCall().id, 'run', {});
 
       expect(callback).to.have.been.calledWith(1, 2, 3, 4);
     });

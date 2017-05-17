@@ -5,7 +5,7 @@ class Timer extends NativeObject {
   constructor(properties) {
     super();
     this._create('tabris.Timer', properties);
-    this._nativeListen('Run', true);
+    this._nativeListen('run', true);
   }
 
 }
@@ -29,7 +29,7 @@ export function addWindowTimerMethods(target) {
       let timer = new Timer({
         delay,
         repeat
-      }).on('Run', () => {
+      }).on('run', () => {
         fn.apply(target, args);
         if (!repeat) {
           timer.dispose();
