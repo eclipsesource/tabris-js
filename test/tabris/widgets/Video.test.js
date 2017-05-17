@@ -60,18 +60,43 @@ describe('Video', function() {
       video.on('stateChanged', listener);
     });
 
-    it('sends listen for statechange', function() {
+    it('calls native listen for stateChanged', function() {
       let listen = client.calls({op: 'listen', id: video.cid});
       expect(listen.length).to.equal(1);
-      expect(listen[0].event).to.equal('statechange');
+      expect(listen[0].event).to.equal('stateChanged');
       expect(listen[0].listen).to.equal(true);
     });
 
     it('is fired with parameters', function() {
-      tabris._notify(video.cid, 'statechange', {state: 'play'});
+      tabris._notify(video.cid, 'stateChanged', {state: 'play'});
 
       expect(listener).to.have.been.calledOnce;
       expect(listener).to.have.been.calledWithMatch({target: video, value: 'play'});
+    });
+
+  });
+
+  describe('speedChanged', function() {
+
+    let listener;
+
+    beforeEach(function() {
+      listener = stub();
+      video.on('speedChanged', listener);
+    });
+
+    it('calls native listen for speedChanged', function() {
+      let listen = client.calls({op: 'listen', id: video.cid});
+      expect(listen.length).to.equal(1);
+      expect(listen[0].event).to.equal('speedChanged');
+      expect(listen[0].listen).to.equal(true);
+    });
+
+    it('is fired with parameters', function() {
+      tabris._notify(video.cid, 'speedChanged', {speed: 2});
+
+      expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWithMatch({target: video, value: 2});
     });
 
   });

@@ -9,16 +9,18 @@ export default class Video extends Widget {
   }
 
   _listen(name, listening) {
-    if (name === 'stateChanged') {
-      this._nativeListen('statechange', listening) ;
+    if (name === 'stateChanged' || name === 'speedChanged') {
+      this._nativeListen(name, listening) ;
     } else {
       super._listen(name, listening);
     }
   }
 
   _trigger(name, event) {
-    if (name === 'statechange') {
+    if (name === 'stateChanged') {
       return this._triggerChangeEvent('state', event.state);
+    } else if (name === 'speedChanged') {
+      return this._triggerChangeEvent('speed', event.speed);
     }
     return super._trigger(name, event);
   }
