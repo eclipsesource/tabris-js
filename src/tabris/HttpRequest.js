@@ -5,9 +5,9 @@ export default class HttpRequest extends NativeObject {
   constructor() {
     super();
     this._create('tabris.HttpRequest');
-    this._nativeListen('StateChange', true);
-    this._nativeListen('DownloadProgress', true);
-    this._nativeListen('UploadProgress', true);
+    this._nativeListen('stateChanged', true);
+    this._nativeListen('downloadProgress', true);
+    this._nativeListen('uploadProgress', true);
   }
 
   abort() {

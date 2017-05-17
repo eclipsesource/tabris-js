@@ -12,7 +12,7 @@ export function fetch(input, init) {
     let request = new Request(input, init);
     let hr = new HttpRequest();
     let options = {};
-    hr.on('StateChange', (event) => {
+    hr.on('stateChanged', (event) => {
       switch (event.state) {
         case 'headers':
           options.status = event.code;

@@ -191,9 +191,9 @@ export default class XMLHttpRequest {
 
   send(data) {
     this.$proxy = new HttpRequest()
-      .on('StateChange', event => handleStateChange(event, this))
-      .on('DownloadProgress', event => dispatchProgressEvent('progress', this, event))
-      .on('UploadProgress', event => dispatchProgressEvent('progress', this.upload, event));
+      .on('stateChanged', event => handleStateChange(event, this))
+      .on('downloadProgress', event => dispatchProgressEvent('progress', this, event))
+      .on('uploadProgress', event => dispatchProgressEvent('progress', this.upload, event));
     if (this.$readyState !== OPENED) { // (1)
       throw new Error(
           "InvalidStateError: Object's state must be 'OPENED', failed to execute 'send'"
@@ -449,7 +449,7 @@ function dispatchErrorProgressEvents(type, target) {
 }
 
 function dispatchFinishedProgressEvents(target) {
-  // Note: progress event is dispatched separately by the DownloadProgress/UploadProgress callbacks
+  // Note: progress event is dispatched separately by the downloadProgress/uploadProgress callbacks
   dispatchProgressEvent('load', target);
   dispatchProgressEvent('loadend', target);
 }

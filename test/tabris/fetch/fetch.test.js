@@ -58,13 +58,13 @@ describe('fetch', function() {
 
     beforeEach(function() {
       promise = fetch('http://example.org');
-      proxy._trigger('StateChange', {
+      proxy._trigger('stateChanged', {
         state: 'headers',
         code: 418,
         message: "I'm a teapot",
         headers: {'X-Foo': '23,42'}
       });
-      proxy._trigger('StateChange', {
+      proxy._trigger('stateChanged', {
         state: 'finished',
         response: "I can't brew coffee!"
       });
@@ -92,7 +92,7 @@ describe('fetch', function() {
 
     beforeEach(function() {
       promise = fetch('http://example.org');
-      proxy._trigger('StateChange', {state: 'error'});
+      proxy._trigger('stateChanged', {state: 'error'});
     });
 
     it('rejects promise with error', function() {
@@ -114,7 +114,7 @@ describe('fetch', function() {
 
     beforeEach(function() {
       promise = fetch('http://example.org');
-      proxy._trigger('StateChange', {state: 'timeout'});
+      proxy._trigger('stateChanged', {state: 'timeout'});
     });
 
     it('rejects promise with error', function() {
@@ -136,7 +136,7 @@ describe('fetch', function() {
 
     beforeEach(function() {
       promise = fetch('http://example.org');
-      proxy._trigger('StateChange', {state: 'abort'});
+      proxy._trigger('stateChanged', {state: 'abort'});
     });
 
     it('rejects promise with error', function() {

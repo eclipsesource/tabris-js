@@ -30,9 +30,9 @@ describe('HttpRequest', function() {
 
       let calls = client.calls({op: 'listen', id: request.cid});
       expect(calls.map(call => [call.event, call.listen])).to.deep.equal([
-        ['StateChange', true],
-        ['DownloadProgress', true],
-        ['UploadProgress', true],
+        ['stateChanged', true],
+        ['downloadProgress', true],
+        ['uploadProgress', true],
       ]);
     });
 
