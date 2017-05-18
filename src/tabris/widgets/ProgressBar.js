@@ -12,6 +12,7 @@ export default class ProgressBar extends Widget {
 NativeObject.defineProperties(ProgressBar.prototype, {
   minimum: {type: 'integer', default: 0},
   maximum: {type: 'integer', default: 100},
+  tintColor: {type: 'color'},
   selection: {type: 'integer', default: 0},
   state: {type: ['choice', ['normal', 'paused', 'error']], default: 'normal'}
 });

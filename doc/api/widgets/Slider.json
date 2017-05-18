@@ -28,6 +28,10 @@
       "type": "number",
       "default": "0",
       "description": "The actual value."
+    },
+    "tintColor": {
+      "type": "Color",
+      "description": "The color used to display the current selection."
     }
   },
   "events": {

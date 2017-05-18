@@ -24,6 +24,10 @@
       "default": "100",
       "description": "The value that represents a progress of 100%."
     },
+    "tintColor": {
+      "type": "Color",
+      "description": "The color used to display the current progress."
+    },
     "selection": {
       "type": "number",
       "default": "0",

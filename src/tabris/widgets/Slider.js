@@ -26,5 +26,6 @@ export default class Slider extends Widget {
 NativeObject.defineProperties(Slider.prototype, {
   minimum: {type: 'integer', default: 0},
   maximum: {type: 'integer', default: 100},
-  selection: {type: 'integer', nocache: true}
+  selection: {type: 'integer', nocache: true},
+  tintColor: {type: 'color'}
 });
