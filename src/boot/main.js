@@ -29,7 +29,6 @@ tabris._start = function(client) {
       try {
         rootModule.require('./');
         tabris.trigger('flush');
-        tabris.trigger('flushed');
       } catch (error) {
         console.error('Could not load main module: ' + error);
         console.log(error.stack);
@@ -42,7 +41,6 @@ tabris._start = function(client) {
       loadMain();
     }
     tabris.trigger('flush');
-    tabris.trigger('flushed');
   } catch (ex) {
     console.error(ex);
     console.log(ex.stack);

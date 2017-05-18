@@ -43,7 +43,6 @@ export default class Tabris {
         }
       }
       this.trigger('flush');
-      this.trigger('flushed');
     } catch (ex) {
       console.error(ex);
       console.log(ex.stack);
