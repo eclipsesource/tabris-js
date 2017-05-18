@@ -22,6 +22,10 @@
     "text": {
       "type": "string",
       "description": "The label text of the radio button."
+    },
+    "textColor": {
+      "type": "Color",
+      "description": "The color of the text."
     }
   },
   "events": {

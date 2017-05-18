@@ -30,6 +30,10 @@
       "type": "string",
       "description": "The text in the input field."
     },
+    "textColor": {
+      "type": "Color",
+      "description": "The color of the text."
+    },
     "message": {
       "type": "string",
       "description": "A hint text that is displayed when the input field is empty. Does not apply on iOS when `type` is set to `multiline`."

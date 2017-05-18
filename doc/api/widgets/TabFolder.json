@@ -32,6 +32,10 @@
     "selection": {
       "type": "Tab",
       "description": "The currently selected tab."
+    },
+    "textColor": {
+      "type": "Color",
+      "description": "The color used for the text of the tab headers."
     }
   },
   "events": {

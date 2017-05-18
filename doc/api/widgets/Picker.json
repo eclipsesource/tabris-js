@@ -33,6 +33,10 @@
     "borderColor": {
       "type": "Color",
       "description": "The color of the border of the Picker. On iOS this is a rectangular border around the Picker, on Android it is a single line below the Picker."
+    },
+    "textColor": {
+      "type": "Color",
+      "description": "The color of the text."
     }
   },
   "events": {

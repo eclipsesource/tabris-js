@@ -1,4 +1,4 @@
-import {TextInput, Color} from 'tabris';
+import {Color, TextInput} from 'tabris';
 
 let widget: TextInput = new TextInput();
 
@@ -15,6 +15,7 @@ let keyboard: 'ascii' | 'decimal' | 'default' | 'email' | 'number' | 'numbersAnd
 let enterKeyType: 'default' | 'done' | 'next' | 'send' | 'search' | 'go';
 let message: string;
 let text: string;
+let textColor: Color;
 let type: 'default' | 'multiline' | 'password' | 'search';
 
 alignment = widget.alignment;
@@ -29,6 +30,7 @@ keyboard = widget.keyboard;
 enterKeyType = widget.enterKeyType;
 message = widget.message;
 text = widget.text;
+textColor = widget.textColor;
 type = widget.type;
 
 widget.alignment = alignment;
@@ -43,6 +45,7 @@ widget.keyboard = keyboard;
 widget.enterKeyType = enterKeyType;
 widget.message = message;
 widget.text = text;
+widget.textColor = textColor;
 widget.type = type;
 
 // Events

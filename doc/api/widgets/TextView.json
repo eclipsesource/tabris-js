@@ -37,6 +37,10 @@
       "type": "string",
       "description": "The text to display."
     },
+    "textColor": {
+      "type": "Color",
+      "description": "The color of the text."
+    },
     "maxLines": {
       "type": "number|null",
       "default": "null",

@@ -59,5 +59,6 @@ NativeObject.defineProperties(TabFolder.prototype, {
       let selection = this._nativeGet('selection');
       return selection ? tabris._proxies.find(selection) : null;
     }
-  }
+  },
+  textColor: {type: 'color'}
 });

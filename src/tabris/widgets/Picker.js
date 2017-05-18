@@ -80,5 +80,6 @@ NativeObject.defineProperties(Picker.prototype, {
     }
   },
   fillColor: {type: 'color'},
-  borderColor: {type: 'color'}
+  borderColor: {type: 'color'},
+  textColor: {type: 'color'}
 });

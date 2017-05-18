@@ -22,5 +22,6 @@ NativeObject.defineProperties(TextView.prototype, {
       this._storeProperty(name, value);
     }
   },
-  text: {type: 'string', default: ''}
+  text: {type: 'string', default: ''},
+  textColor: {type: 'color'}
 });

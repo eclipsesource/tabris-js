@@ -312,20 +312,6 @@ NativeObject.defineProperties(Widget.prototype, {
       this._storeProperty(name, value);
     }
   },
-  textColor: {
-    type: 'color',
-    set(name, value) {
-      this._nativeSet('foreground', value === undefined ? null : value);
-      this._storeProperty(name, value);
-    },
-    get(name) {
-      let result = this._getStoredProperty(name);
-      if (result === undefined) {
-        result = this._nativeGet('foreground');
-      }
-      return result;
-    }
-  },
   opacity: {
     type: 'opacity',
     default: 1

@@ -20,5 +20,6 @@ export default class Button extends Widget {
 NativeObject.defineProperties(Button.prototype, {
   alignment: {type: ['choice', ['left', 'right', 'center']], default: 'center'},
   image: {type: 'image', default: null},
-  text: {type: 'string', default: ''}
+  text: {type: 'string', default: ''},
+  textColor: {type: 'color'}
 });

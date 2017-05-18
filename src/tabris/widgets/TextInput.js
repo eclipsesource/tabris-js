@@ -44,5 +44,6 @@ NativeObject.defineProperties(TextInput.prototype, {
   },
   focused: {type: 'boolean', nocache: true},
   fillColor: {type: 'color'},
-  borderColor: {type: 'color'}
+  borderColor: {type: 'color'},
+  textColor: {type: 'color'}
 });

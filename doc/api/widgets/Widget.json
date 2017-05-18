@@ -205,10 +205,6 @@
       "type": "Color",
       "description": "Background color of the widget."
     },
-    "textColor": {
-      "type": "Color",
-      "description": "Text color of the widget."
-    },
     "opacity": {
       "type": "number",
       "default": "1",

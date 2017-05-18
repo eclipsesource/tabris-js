@@ -46,11 +46,10 @@ describe('Widget', function() {
       expect(widget).to.be.instanceof(Widget);
     });
 
-    it('translates textColor and background colors to arrays', function() {
-      widget.set({textColor: 'red', background: 'rgba(1, 2, 3, 0.5)'});
+    it('translates background color to arrays', function() {
+      widget.set({background: 'rgba(1, 2, 3, 0.5)'});
 
       let call = client.calls({op: 'set'})[0];
-      expect(call.properties.foreground).to.eql([255, 0, 0, 255]);
       expect(call.properties.background).to.eql([1, 2, 3, 128]);
     });
 
@@ -128,13 +127,12 @@ describe('Widget', function() {
       expect(widget.win_theme).to.equal('default');
     });
 
-    it("support 'initial' for textColor, background and font", function() {
-      widget.set({textColor: 'red', background: 'green', font: '23px Arial'});
+    it("support 'initial' for background and font", function() {
+      widget.set({background: 'green', font: '23px Arial'});
       client.resetCalls();
-      widget.set({textColor: 'initial', background: 'initial', font: 'initial'});
+      widget.set({background: 'initial', font: 'initial'});
 
       let call = client.calls({op: 'set'})[0];
-      expect(call.properties.foreground).to.be.null;
       expect(call.properties.background).to.be.null;
       expect(call.properties.font).to.be.null;
     });
@@ -923,14 +921,6 @@ describe('Widget', function() {
     beforeEach(function() {
       widget = new TestWidget();
       client.resetCalls();
-    });
-
-    it('translates textColor to string', function() {
-      stub(client, 'get').returns([170, 255, 0, 128]);
-
-      let result = widget.textColor;
-
-      expect(result).to.equal('rgba(170, 255, 0, 0.5)');
     });
 
     it('translates background to string', function() {

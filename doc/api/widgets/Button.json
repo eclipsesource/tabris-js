@@ -31,6 +31,10 @@
     "text": {
       "type": "string",
       "description": "The button's label text."
+    },
+    "textColor": {
+      "type": "Color",
+      "description": "The color of the text."
     }
   },
   "events": {
