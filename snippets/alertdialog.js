@@ -1,4 +1,4 @@
-const {ui, AlertDialog, Button} = require('tabris');
+const {AlertDialog, Button, ui} = require('tabris');
 
 // AlertDialog example
 

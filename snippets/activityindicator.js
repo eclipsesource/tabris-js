@@ -1,4 +1,4 @@
-const {ui, ActivityIndicator, Button} = require('tabris');
+const {ActivityIndicator, Button, ui} = require('tabris');
 
 // Create the activity indicator centered in the page
 let activityIndicator = new ActivityIndicator({

@@ -1,4 +1,4 @@
-const {app, ui, Composite, TextView, Button} = require('tabris');
+const {Composite, TextView, Button, app, ui} = require('tabris');
 
 // React to application hibernation, resume and back navigation
 
