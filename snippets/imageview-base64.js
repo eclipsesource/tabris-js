@@ -1,6 +1,8 @@
+const {ImageView, ui} = require('tabris');
+
 // Display a base64 encoded image in an ImageView
 
-new tabris.ImageView({
+new ImageView({
   centerX: 0, centerY: 0, width: 96, height: 96,
   background: '#aaaaaa',
   scaleMode: 'fit',
@@ -40,4 +42,4 @@ new tabris.ImageView({
     'aEL/Xmej5vca7d8D/D/jQoKicMJC4fRhdrlDpbTjFKHDo4JC/EC36RE+NvAJqkCnh/SL6oSx8wPHDh4AHhS/kKAAvVBHEPqAoFA/4GMGzBg5' +
     'LXDkjK7/+C/UKmCXwVcZZgAAAABJRU5ErkJggg=='
   }
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);

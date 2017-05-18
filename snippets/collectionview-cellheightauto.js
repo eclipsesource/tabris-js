@@ -1,3 +1,5 @@
+const {TextView, ImageView, Composite, CollectionView, ui} = require('tabris');
+
 const MARGIN = 16;
 const TEXT = 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem' +
   ' accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab' +
@@ -14,21 +16,21 @@ for (let i = 0; i < 30; i++) {
   items[i] = TEXT.substring(0, (i + 1) * 50);
 }
 
-new tabris.CollectionView({
+new CollectionView({
   left: 0, top: 0, right: 0, bottom: 0,
   itemCount: items.length,
   createCell: () => {
-    const composite = new tabris.Composite();
-    new tabris.ImageView({
+    const composite = new Composite();
+    new ImageView({
       id: 'imageView',
       left: MARGIN, top: MARGIN,
       image: {src: 'images/arrow-forward-black-24dp@3x.png', scale: 3}
     }).appendTo(composite);
-    new tabris.TextView({
+    new TextView({
       id: 'textView',
       left: ['#imageView', MARGIN], top: MARGIN, right: MARGIN
     }).appendTo(composite);
     return composite;
   },
   updateCell: (cell, index) => cell.find('#textView').set('text', items[index])
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);

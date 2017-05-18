@@ -1,24 +1,26 @@
-let columnCountTextView = new tabris.TextView({
+const {TextView, CollectionView, Slider, ui} = require('tabris');
+
+let columnCountTextView = new TextView({
   bottom: 16, right: 16, width: 32,
   font: 'bold 14px'
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
-let slider = new tabris.Slider({
+let slider = new Slider({
   left: 16, bottom: 0, right: [columnCountTextView, 16], height: 48,
   minimum: 1,
   maximum: 8
-}).on('selectionChanged', function({value: selection}) {
+}).on('selectionChanged', ({value: selection}) => {
   collectionView.columnCount = selection;
   columnCountTextView.text = selection;
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
 let items = createItems();
 
-let collectionView = new tabris.CollectionView({
+let collectionView = new CollectionView({
   left: 0, top: 0, right: 0, bottom: slider,
   itemCount: items.length,
   cellHeight: 128,
-  createCell: () => new tabris.TextView({
+  createCell: () => new TextView({
     font: 'bold 32px',
     textColor: '#555555',
     alignment: 'center',
@@ -30,7 +32,7 @@ let collectionView = new tabris.CollectionView({
       background: index % 2 === 0 ? '#CFD8DC' : '#ffffff'
     });
   }
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
 slider.selection = 3;
 

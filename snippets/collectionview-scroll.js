@@ -1,5 +1,7 @@
-let SECTION_HEIGHT = 48;
-let ITEM_HEIGHT = 32;
+const {CollectionView, TextView, ui} = require('tabris');
+
+const SECTION_HEIGHT = 48;
+const ITEM_HEIGHT = 32;
 
 let scrollPosition = 0;
 let items = createItems();
@@ -7,7 +9,7 @@ let items = createItems();
 let floatingSection = createSectionView('section');
 floatingSection.text = 'Section 1';
 
-new tabris.CollectionView({
+new CollectionView({
   left: 0, top: 0, right: 0, bottom: 0,
   itemCount: items.length,
   cellType: index => items[index].type,
@@ -21,9 +23,9 @@ new tabris.CollectionView({
     text: getCurrentSection(firstVisibleItem).name,
     transform: {translationY: getSectionTranslationY(firstVisibleItem)}
   });
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
-floatingSection.appendTo(tabris.ui.contentView);
+floatingSection.appendTo(ui.contentView);
 
 function getSectionTranslationY(firstVisibleItem) {
   if (scrollPosition < 0) {
@@ -57,7 +59,7 @@ function getCurrentSection(firstVisibleItem) {
 }
 
 function createSectionView() {
-  return new tabris.TextView({
+  return new TextView({
     top: 0, height: SECTION_HEIGHT, left: 0, right: 0,
     background: '#aaaaaa',
     textColor: 'white',
@@ -67,7 +69,7 @@ function createSectionView() {
 }
 
 function createItemView() {
-  return new tabris.TextView({
+  return new TextView({
     top: 2, bottom: 2, left: 5, right: 5,
     font: '14px',
     alignment: 'left'

@@ -1,9 +1,10 @@
+const {CheckBox, ui} = require('tabris');
+
 // Create a check box with a checked handler
 
-new tabris.CheckBox({
+new CheckBox({
   left: 10, top: 10,
   checked: true,
   text: 'checked'
-}).on('checkedChanged', function(event) {
-  event.target.text = event.value ? 'checked' : 'unchecked';
-}).appendTo(tabris.ui.contentView);
+}).on('checkedChanged', event => event.target.text = event.value ? 'checked' : 'unchecked')
+  .appendTo(ui.contentView);

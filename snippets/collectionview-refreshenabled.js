@@ -1,13 +1,15 @@
+const {CollectionView, TextView, ui} = require('tabris');
+
 let items = [];
 
-let view = new tabris.CollectionView({
+let view = new CollectionView({
   left: 0, top: 0, right: 0, bottom: 0,
   cellHeight: 25,
   refreshEnabled: true,
-  createCell: () => new tabris.TextView(),
+  createCell: () => new TextView(),
   updateCell: (cell, index) => cell.text = items[index]
 }).on('refresh', loadItems)
-  .appendTo(tabris.ui.contentView);
+  .appendTo(ui.contentView);
 
 loadItems();
 

@@ -1,13 +1,15 @@
+const {TextView, device, ui} = require('tabris');
+
 // Display available device information
 
-['platform', 'version', 'model', 'language', 'orientation'].forEach(function(property) {
-  new tabris.TextView({
+['platform', 'version', 'model', 'language', 'orientation'].forEach((property) => {
+  new TextView({
     id: property,
     left: 10, right: 10, top: 'prev() 10',
-    text: property + ': ' + tabris.device[property]
-  }).appendTo(tabris.ui.contentView);
+    text: property + ': ' + device[property]
+  }).appendTo(ui.contentView);
 });
 
-tabris.device.on('orientationChanged', function({value: orientation}) {
-  tabris.ui.contentView.find('#orientation').set('text', 'orientation: ' + orientation);
+device.on('orientationChanged', ({value: orientation}) => {
+  ui.contentView.find('#orientation').set('text', 'orientation: ' + orientation);
 });
