@@ -1,12 +1,14 @@
+const {RadioButton, ui} = require('tabris');
+
 // Create radio buttons with checked handlers
 
-['One', 'Two', 'Three'].forEach(function(title) {
-  new tabris.RadioButton({
+['One', 'Two', 'Three'].forEach((title) => {
+  new RadioButton({
     left: 10, top: 'prev() 10',
     text: title
-  }).on('checkedChanged', function({target, value: checked}) {
+  }).on('checkedChanged', ({target, value: checked}) => {
     if (checked) {
       console.log(target.text + ' checked');
     }
-  }).appendTo(tabris.ui.contentView);
+  }).appendTo(ui.contentView);
 });

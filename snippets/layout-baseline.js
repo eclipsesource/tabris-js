@@ -1,9 +1,11 @@
-var textView = new tabris.TextView({
+const {TextInput, TextView, ui} = require('tabris');
+
+let textView = new TextView({
   left: 20, top: 20,
   text: 'Label:'
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
-new tabris.TextInput({
+new TextInput({
   left: [textView, 10], width: 300, baseline: textView,
   message: 'Text'
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);

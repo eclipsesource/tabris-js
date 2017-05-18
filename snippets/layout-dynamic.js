@@ -1,25 +1,27 @@
-var MARGIN = 16;
+const {Composite, ui} = require('tabris');
 
-var PORTRAIT = {
+const MARGIN = 16;
+
+const PORTRAIT = {
   '#red': {layoutData: {left: MARGIN, top: MARGIN, right: MARGIN, height: '192'}},
   '#green': {layoutData: {left: MARGIN, top: ['#red', MARGIN], right: MARGIN, bottom: MARGIN}}
 };
 
-var LANDSCAPE = {
+const LANDSCAPE = {
   '#red': {layoutData: {left: MARGIN, top: MARGIN, bottom: MARGIN, width: '192'}},
   '#green': {layoutData: {left: ['#red', MARGIN], top: MARGIN, right: MARGIN, bottom: MARGIN}}
 };
 
-new tabris.Composite({
+new Composite({
   id: 'red',
   background: 'red'
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
-new tabris.Composite({
+new Composite({
   id: 'green',
   background: 'green'
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
-tabris.ui.contentView.on('resize', function({width, height}) {
-  tabris.ui.contentView.apply(height > width ? PORTRAIT : LANDSCAPE);
+ui.contentView.on('resize', ({width, height}) => {
+  ui.contentView.apply(height > width ? PORTRAIT : LANDSCAPE);
 });

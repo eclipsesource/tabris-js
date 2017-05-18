@@ -1,17 +1,19 @@
+const {Button, Composite, NavigationView, Page, Tab, TabFolder, TextView, app, ui} = require('tabris');
+
 // demonstrates NavigationViews as children of a TabFolder
 
-var tabFolder = new tabris.TabFolder({
+let tabFolder = new TabFolder({
   left: 0, top: 0, right: 0, bottom: 0,
   tabBarLocation: 'bottom',
   background: 'white'
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
 function createTab(title, image) {
-  var tab = new tabris.Tab({
+  let tab = new Tab({
     title: title,
     image: {src: image, scale: 2}
   }).appendTo(tabFolder);
-  var navigationView = new tabris.NavigationView({
+  let navigationView = new NavigationView({
     id: 'navigationView',
     left: 0, top: 0, right: 0, bottom: 0
   }).appendTo(tab);
@@ -19,40 +21,38 @@ function createTab(title, image) {
 }
 
 function createPage(navigationView, title) {
-  var text = title || 'Page ' + (navigationView.pages().length + 1);
-  var page = new tabris.Page({
+  let text = title || 'Page ' + (navigationView.pages().length + 1);
+  let page = new Page({
     title: text,
     background: '#eeeeee'
   }).appendTo(navigationView);
-  var controls = new tabris.Composite({
+  let controls = new Composite({
     centerX: 0, centerY: 0
   }).appendTo(page);
-  new tabris.TextView({
+  new TextView({
     centerX: 0,
     text
   }).appendTo(controls);
-  new tabris.Button({
+  new Button({
     top: 'prev() 16', centerX: 0,
     text: 'Add Page'
-  }).on('select', function() {
-    createPage(navigationView);
-  }).appendTo(controls);
-  new tabris.Button({
+  }).on('select', () => createPage(navigationView))
+    .appendTo(controls);
+  new Button({
     top: 'prev() 16', centerX: 0,
     text: 'Remove Page'
-  }).on('select', function() {
-    page.dispose();
-  }).appendTo(controls);
+  }).on('select', () => page.dispose())
+    .appendTo(controls);
 }
 
 createTab('Cart', 'images/cart.png');
 createTab('Pay', 'images/card.png');
 createTab('Statistic', 'images/chart.png');
 
-tabris.app.on('backNavigation', function(event) {
+app.on('backNavigation', (event) => {
   // handle the "physical" back button on Android
-  var navigationView = tabFolder.selection.find('#navigationView').first();
-  var page = navigationView.pages().last();
+  let navigationView = tabFolder.selection.find('#navigationView').first();
+  let page = navigationView.pages().last();
   if (page !== undefined) {
     page.dispose();
     event.preventDefault();

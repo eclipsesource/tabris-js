@@ -1,37 +1,37 @@
+const {Picker, TextView, ui} = require('tabris');
+
 const DISPLAY_MODES = ['default', 'float', 'hide'];
-const BACKGROUNDS = [tabris.ui.navigationBar.background, 'rgba(0, 0, 0, 0.25)', 'red', 'green', 'blue'];
+const BACKGROUNDS = [ui.navigationBar.background, 'rgba(0, 0, 0, 0.25)', 'red', 'green', 'blue'];
 
 createTextView('Display mode', 'displayMode');
 
-new tabris.Picker({
+new Picker({
   left: '#displayMode 16', baseline: 'prev()', right: 16,
   itemCount: DISPLAY_MODES.length,
   itemText: index => DISPLAY_MODES[index]
-}).on({
-  select: ({index}) => tabris.ui.navigationBar.displayMode = DISPLAY_MODES[index]
-}).appendTo(tabris.ui.contentView);
+}).on('select', ({index}) => ui.navigationBar.displayMode = DISPLAY_MODES[index])
+  .appendTo(ui.contentView);
 
 createTextView('Background');
 
-new tabris.Picker({
+new Picker({
   left: '#displayMode 16', baseline: 'prev()', right: 16,
   itemCount: BACKGROUNDS.length,
   itemText: index => BACKGROUNDS[index]
-}).on({
-  select: ({index}) => tabris.ui.navigationBar.background = BACKGROUNDS[index]
-}).appendTo(tabris.ui.contentView);
+}).on('select', ({index}) => ui.navigationBar.background = BACKGROUNDS[index])
+  .appendTo(ui.contentView);
 
 createTextView('Height');
 
-new tabris.TextView({
+new TextView({
   left: '#displayMode 16', baseline: 'prev()', right: 16,
-  text: tabris.ui.navigationBar.height
-}).appendTo(tabris.ui.contentView);
+  text: ui.navigationBar.height
+}).appendTo(ui.contentView);
 
 function createTextView(text, id) {
-  new tabris.TextView({
+  new TextView({
     id: id,
     left: 16, top: 'prev() 16',
     text: text
-  }).appendTo(tabris.ui.contentView);
+  }).appendTo(ui.contentView);
 }

@@ -1,3 +1,5 @@
+const {Picker, ui} = require('tabris');
+
 // Create a picker widget to select a string from a list
 
 const AIRPORTS = [
@@ -15,11 +17,11 @@ const AIRPORTS = [
   }
 ];
 
-let picker = new tabris.Picker({
+let picker = new Picker({
   left: 20, top: 20, right: 20,
   itemCount: AIRPORTS.length,
   itemText: (index) => AIRPORTS[index].name,
   selectionIndex: 1
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
 picker.on('select', ({index}) => console.log('Selected ' + AIRPORTS[index].id));

@@ -1,31 +1,31 @@
-var pageCount = 0;
+const {Button, NavigationView, Page, ui} = require('tabris');
 
-var navigationView = new tabris.NavigationView({
+let pageCount = 0;
+
+let navigationView = new NavigationView({
   left: 0, top: 0, right: 0, bottom: 0
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
 createPage();
 
 function createPage(title) {
-  var page = new tabris.Page({
+  let page = new Page({
     title: title || 'Initial Page'
   }).appendTo(navigationView);
-  new tabris.Button({
+  new Button({
     left: 16, top: 16, right: 16,
     text: 'Create another page'
-  }).on('select', function() {
-    createPage('Page ' + (++pageCount));
-  }).appendTo(page);
-  new tabris.Button({
+  }).on('select', () => createPage('Page ' + (++pageCount)))
+    .appendTo(page);
+  new Button({
     left: 16, top: 'prev() 16', right: 16,
     text: 'Go back'
-  }).on('select', function() {
-    page.dispose();
-  }).appendTo(page);
-  new tabris.Button({
+  }).on('select', () => page.dispose())
+    .appendTo(page);
+  new Button({
     left: 16, top: 'prev() 16', right: 16,
     text: 'Go to initial page'
-  }).on('select', function() {
+  }).on('select', () => {
     navigationView.pages().dispose();
     createPage();
   }).appendTo(page);
