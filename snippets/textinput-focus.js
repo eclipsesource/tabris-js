@@ -1,16 +1,19 @@
-new tabris.TextInput({
+const {TextInput, ui} = require('tabris');
+
+new TextInput({
   top: 20, left: '20%', right: '20%',
   message: 'Colorful typing...',
   font: '22px sans-serif'
-}).on('focus', function() {
-  this.fillColor = 'yellow';
-  this.borderColor = 'yellow';
-}).on('blur', function() {
-  this.borderColor = 'red';
-}).appendTo(tabris.ui.contentView);
+}).on({
+  focus: ({target}) => {
+    target.fillColor = 'yellow';
+    target.borderColor = 'yellow';
+  },
+  blur: ({target}) => target.borderColor = 'red'
+}).appendTo(ui.contentView);
 
-new tabris.TextInput({
+new TextInput({
   top: 'prev() 20', left: '20%', right: '20%',
   message: 'This text field keeps its focus forever',
   keepFocus: true
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);

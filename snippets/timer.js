@@ -1,10 +1,12 @@
-new tabris.Button({
+const {Button, ui} = require('tabris');
+
+new Button({
   centerX: 0, centerY: 0,
   text: 'Press me!'
-}).on('select', function({target}) {
+}).on('select', ({target}) => {
   target.text = 'Please wait...';
   setTimeout(sayThanks, 2000, target);
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
 function sayThanks(widget) {
   widget.text = 'Thank you!';

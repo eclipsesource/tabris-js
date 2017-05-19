@@ -1,6 +1,8 @@
-let scrollView = new tabris.ScrollView({
+const {ScrollView, TextInput, ui} = require('tabris');
+
+let scrollView = new ScrollView({
   left: 0, top: 0, right: 0, bottom: 0
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
 createTextInput('default', 'multiline');
 createTextInput('send', 'multiline');
@@ -16,11 +18,11 @@ createTextInput('next').on('accept', () => textInput.focused = true);
 createTextInput();
 
 function createTextInput(enterKeyType = 'default', type = 'default') {
-  return new tabris.TextInput({
+  return new TextInput({
     top: 'prev()', left: '16', right: '16',
     message: message(enterKeyType, type),
-    type: type,
-    enterKeyType: enterKeyType
+    type,
+    enterKeyType
   }).on('accept', () => console.log(message(enterKeyType, type)))
     .appendTo(scrollView);
 }

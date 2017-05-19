@@ -1,5 +1,7 @@
-var PARALLAX = 0.1;
-var PEOPLE = [
+const {Composite, ImageView, Tab, TabFolder, TextView, ui} = require('tabris');
+
+const PARALLAX = 0.1;
+const PEOPLE = [
   {name: 'Ian Bull', image: 'images/ian.jpg'},
   {name: 'Jochen Krause', image: 'images/jochen.jpg'},
   {name: 'Markus Knauer', image: 'images/markus.jpg'},
@@ -7,20 +9,20 @@ var PEOPLE = [
   {name: 'Tim Buschtöns', image: 'images/tim.jpg'}
 ];
 
-var imageContainer = new tabris.Composite({
+let imageContainer = new Composite({
   left: 0, top: 0, right: 0, bottom: 0,
   background: 'white'
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
-var tabFolder = new tabris.TabFolder({
+let tabFolder = new TabFolder({
   left: 0, top: 0, right: 0, bottom: 0,
   paging: true,
   tabBarLocation: 'hidden'
-}).on('scroll', function({selection, offset}) {
-  var imageViews = imageContainer.children();
-  var tabIndex = tabFolder.children().indexOf(selection);
-  var tabFolderWidth = tabFolder.bounds.width;
-  var offsetPercent = offset / tabFolderWidth;
+}).on('scroll', ({selection, offset}) => {
+  let imageViews = imageContainer.children();
+  let tabIndex = tabFolder.children().indexOf(selection);
+  let tabFolderWidth = tabFolder.bounds.width;
+  let offsetPercent = offset / tabFolderWidth;
   imageViews[tabIndex].set({
     opacity: 1 - Math.abs(offsetPercent),
     transform: {translationX: -offset * PARALLAX}
@@ -37,13 +39,13 @@ var tabFolder = new tabris.TabFolder({
       transform: {translationX: Math.abs(1 - offsetPercent) * tabFolderWidth * PARALLAX}
     });
   }
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
-for (var i = 0; i < PEOPLE.length; i++) {
-  var person = PEOPLE[i];
-  new tabris.Tab().appendTo(tabFolder)
+for (let i = 0; i < PEOPLE.length; i++) {
+  let person = PEOPLE[i];
+  new Tab().appendTo(tabFolder)
     .append(
-      new tabris.TextView({
+      new TextView({
         left: 0, right: 0, bottom: 0, height: 56,
         alignment: 'center',
         background: 'rgba(0, 0, 0, 0.3)',
@@ -51,7 +53,7 @@ for (var i = 0; i < PEOPLE.length; i++) {
         textColor: 'white',
         text: person.name
       }));
-  new tabris.ImageView({
+  new ImageView({
     left: 0, top: 0, right: 0, bottom: 0,
     scaleMode: 'fill',
     opacity: i === 0 ? 1 : 0,

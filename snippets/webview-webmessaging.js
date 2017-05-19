@@ -1,31 +1,28 @@
-new tabris.Button({
+const {Button, Composite, TextView, WebView, ui} = require('tabris');
+
+new Button({
   left: 16, right: 16, bottom: 16,
   text: 'Send message to WebView'
-}).on('select', function () {
-  webView.postMessage('Hello from Tabris.js', '*');
-}).appendTo(tabris.ui.contentView);
+}).on('select', () => webView.postMessage('Hello from Tabris.js', '*'))
+  .appendTo(ui.contentView);
 
-var statusTextView = new tabris.TextView({
+let statusTextView = new TextView({
   left: 16, right: 16, bottom: 'prev()', height: 48,
   alignment: 'center',
   text: 'No message received from WebView'
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
-new tabris.Composite({
+new Composite({
   left: 0, right: 0, bottom: 'prev()', height: 1,
   background: '#e1e1e1'
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
-var webView = new tabris.WebView({
+let webView = new WebView({
   left: 0, top: 0, right: 0, bottom: 'prev()'
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
-fetch('./html/website.html').then(function(result) {
-  return result.text();
-}).then(function(text) {
-  webView.html = text;
-});
+fetch('./html/website.html')
+  .then(result => result.text())
+  .then(text => webView.html = text);
 
-webView.on('message', function({data}) {
-  statusTextView.text = 'Message received: ' + data;
-});
+webView.on('message', ({data}) => statusTextView.text = 'Message received: ' + data);

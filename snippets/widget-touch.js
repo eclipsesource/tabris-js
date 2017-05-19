@@ -1,22 +1,28 @@
-var textView = new tabris.TextView({
+const {TextView, ui} = require('tabris');
+
+let textView = new TextView({
   left: 20, top: 20, right: 20,
   text: 'Touch anywhere...'
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
-tabris.ui.contentView.on('touchStart', function({touches}) {
-  printXY('touchStart', touches);
-  tabris.ui.contentView.background = 'yellow';
-}).on('touchMove', function({touches}) {
-  printXY('touchMove', touches);
-}).on('touchEnd', function({touches}) {
-  printXY('touchEnd', touches);
-  tabris.ui.contentView.background = 'green';
-}).on('touchCancel', function({touches}) {
-  printXY('touchCancel', touches);
-  tabris.ui.contentView.background = 'red';
-}).on('longpress', function({touches}) {
-  tabris.ui.contentView.background = 'blue';
-  printXY('longpress', touches);
+ui.contentView.on({
+  touchStart: ({touches}) => {
+    printXY('touchStart', touches);
+    ui.contentView.background = 'yellow';
+  },
+  touchMove: ({touches}) => printXY('touchMove', touches),
+  touchEnd: ({touches}) => {
+    printXY('touchEnd', touches);
+    ui.contentView.background = 'green';
+  },
+  touchCancel: ({touches}) => {
+    printXY('touchCancel', touches);
+    ui.contentView.background = 'red';
+  },
+  longpress: ({touches}) => {
+    ui.contentView.background = 'blue';
+    printXY('longpress', touches);
+  }
 });
 
 function printXY(prefix, touches) {

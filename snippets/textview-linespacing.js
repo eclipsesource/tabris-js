@@ -1,4 +1,6 @@
-var textView = new tabris.TextView({
+const {Slider, TextView, ui} = require('tabris');
+
+let textView = new TextView({
   left: 16, top: 16, right: 16,
   text: 'And thus the first man of the Pequod that mounted the mast to look out for ' +
   'the White Whale, on the White Whale\'s own peculiar ground; that man was ' +
@@ -8,20 +10,20 @@ var textView = new tabris.TextView({
   'future, but as the fulfilment of an evil already presaged. They declared ' +
   'that now they knew the reason of those wild shrieks they had heard the ' +
   'night before. But again the old Manxman said nay.'
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
-var spacingView = new tabris.TextView({
+let spacingView = new TextView({
   bottom: 16, right: 16, width: 32
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
-var slider = new tabris.Slider({
+let slider = new Slider({
   left: 16, bottom: 16, right: [spacingView, 16],
   minimum: 2,
   maximum: 50
-}).on('selectionChanged', function({value}) {
-  var lineSpacing = value / 10;
+}).on('selectionChanged', ({value}) => {
+  let lineSpacing = value / 10;
   textView.lineSpacing = lineSpacing;
   spacingView.text = lineSpacing;
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
 slider.selection = 15;
