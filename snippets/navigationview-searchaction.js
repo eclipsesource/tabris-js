@@ -24,7 +24,7 @@ let action = new SearchAction({
     src: device.platform === 'iOS' ? 'images/search-black-24dp@3x.png' : 'images/search-white-24dp@3x.png',
     scale: 3
   }
-}).on('select', () => this.text = '')
+}).on('select', ({target}) => target.text = '')
   .on('input', ({text}) => updateProposals(text))
   .on('accept', ({text}) => textView.text = 'Selected "' + text + '"')
   .appendTo(navigationView);

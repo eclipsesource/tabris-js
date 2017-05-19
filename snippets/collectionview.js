@@ -35,6 +35,5 @@ new CollectionView({
       TextView: {text: person.firstName}
     });
   }
-}).on('select', function({index}) {
-  console.log('selected', people[index].firstName);
-}).appendTo(ui.contentView);
+}).on('select', ({index}) => console.log('selected', people[index].firstName))
+  .appendTo(ui.contentView);

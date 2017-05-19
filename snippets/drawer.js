@@ -2,14 +2,14 @@ const {TextView, ui} = require('tabris');
 
 // Enable the drawer and append a widget to it
 
-var drawer = ui.drawer;
+let drawer = ui.drawer;
 
 drawer.enabled = true;
 
 drawer.on('open', () => console.log('drawer opened'))
   .on('close', () => console.log('drawer closed'));
 
-var arrow = String.fromCharCode(8592);
+let arrow = String.fromCharCode(8592);
 createLabel(arrow + ' Swipe from left or tap here')
   .on('tap', () => drawer.open())
   .appendTo(ui.contentView);
