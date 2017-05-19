@@ -15,7 +15,7 @@
         "iOS",
         "windows"
       ],
-      "description": "The name of the platform. Currently either `\"Android\"` or `\"iOS\"`. This property is also available globally as `device.platform`."
+      "description": "The name of the platform. Currently either `\"Android\"`, `\"iOS\"`, or `\"windows\"`. This property is also available globally as `device.platform`."
     },
     "version": {
       "type": "string",
