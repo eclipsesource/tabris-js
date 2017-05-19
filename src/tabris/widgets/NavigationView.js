@@ -87,8 +87,8 @@ export default class NavigationView extends Composite {
     }
   }
 
-  pages() {
-    return this.children().filter(child => child instanceof Page);
+  pages(selector) {
+    return this.children(selector).filter(child => child instanceof Page);
   }
 
 }

@@ -234,15 +234,20 @@ describe('NavigationView', function() {
 
     describe('when pages are added', function() {
 
-      let pages;
+      let pages, page1;
 
       beforeEach(function() {
-        pages = [new Page(), new Page(), new Page()];
+        pages = [page1 = new Page({id: 'page1'}), new Page(), new Page()];
         navigationView.append(pages);
       });
 
       it('contains added pages', function() {
         expect(navigationView.pages().toArray()).to.deep.equal(pages);
+      });
+
+      it('accepts a selector argument', function() {
+        let pages = navigationView.pages('#page1').toArray();
+        expect(pages).to.deep.equal([page1]);
       });
 
       it('does not contain other children', function() {
