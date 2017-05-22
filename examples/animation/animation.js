@@ -1,15 +1,17 @@
-var MARGIN = 12;
+const {Button, Page, TextView} = require('tabris');
 
-var page = new tabris.Page({
+const MARGIN = 12;
+
+let page = new Page({
   title: 'Simple Animation',
   autoDispose: false
 });
 
-new tabris.Button({
+new Button({
   left: MARGIN, right: MARGIN, top: MARGIN,
   id: 'animateButton',
   text: 'Animate'
-}).on('select', function({target: button}) {
+}).on('select', ({target: button}) => {
   button.enabled = false;
   page.children('#helloLabel').first().animate({
     opacity: 0.25,
@@ -26,12 +28,10 @@ new tabris.Button({
     repeat: 1,
     reverse: true,
     easing: 'ease-out' // "linear", "ease-in", "ease-out", "ease-in-out"
-  }).then(function() {
-    button.enabled = true;
-  });
+  }).then(() => button.enabled = true);
 }).appendTo(page);
 
-new tabris.TextView({
+new TextView({
   left: MARGIN, top: ['#animateButton', MARGIN],
   id: 'helloLabel',
   background: '#6aa',

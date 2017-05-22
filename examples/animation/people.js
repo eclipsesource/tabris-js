@@ -1,44 +1,42 @@
-var IMAGE_PATH = 'images/';
-var IMAGE_SIZE = 128;
-var THUMB_SIZE = 48;
-var MARGIN_SMALL = 4;
-var MARGIN = 12;
-var MARGIN_LARGE = 24;
-var ANIMATION_START_DELAY = 500;
+const {Composite, ImageView, Page, TextView} = require('tabris');
 
-var people = [
+const IMAGE_PATH = 'images/';
+const IMAGE_SIZE = 128;
+const THUMB_SIZE = 48;
+const MARGIN_SMALL = 4;
+const MARGIN = 12;
+const MARGIN_LARGE = 24;
+const ANIMATION_START_DELAY = 500;
+
+const PEOPLE = [
   ['Ian', 'Bull', 'ian.jpg'],
   ['Jochen', 'Krause', 'jochen.jpg'],
   ['Markus ', 'Knauer', 'markus.jpg'],
   ['Moritz', 'Post', 'moritz.jpg'],
   ['Tim', 'Buschtöns', 'tim.jpg']
-].map(function(element) {
-  return {firstName: element[0], lastName: element[1], image: IMAGE_PATH + element[2]};
-});
+].map(([firstName, lastName, image]) => ({firstName, lastName, image: IMAGE_PATH + image}));
 
-var page = new tabris.Page({
+let page = new Page({
   title: 'People',
   autoDispose: false
 });
 
-var detailsParent = new tabris.Composite({
+let detailsParent = new Composite({
   left: MARGIN, top: MARGIN_LARGE, right: MARGIN
 }).appendTo(page);
 
-var detailView = createPersonDetail(detailsParent, people[2], ANIMATION_START_DELAY);
+let detailView = createPersonDetail(detailsParent, PEOPLE[2], ANIMATION_START_DELAY);
 
-new tabris.Composite({
+new Composite({
   left: 0, top: [detailsParent, MARGIN], right: 0, height: 96
-}).on('resize', function({target: container, width}) {
-  this.children().dispose();
-  var thumbsize = Math.min(64, width / people.length - MARGIN);
-  people.forEach(function(person, index) {
-    var personThumb = createPersonThumb(person, thumbsize).appendTo(container);
+}).on('resize', ({target: container, width}) => {
+  container.children().dispose();
+  let thumbsize = Math.min(64, width / PEOPLE.length - MARGIN);
+  PEOPLE.forEach((person, index) => {
+    let personThumb = createPersonThumb(person, thumbsize).appendTo(container);
     animateInFromBottom(personThumb, index);
   });
 }).appendTo(page);
-
-module.exports = page;
 
 function animateInFromBottom(widget, index) {
   widget.set({
@@ -92,34 +90,34 @@ function animateOutLeftCreateCurrentPerson(person) {
 }
 
 function createPersonDetail(parent, person, delay) {
-  var composite = new tabris.Composite({
+  let composite = new Composite({
     left: 0, right: 0, top: 0, height: IMAGE_SIZE + MARGIN_LARGE
   }).appendTo(parent);
-  var personImage = new tabris.ImageView({
+  let personImage = new ImageView({
     left: 0, top: 0, width: IMAGE_SIZE, height: IMAGE_SIZE,
     image: {src: person.image, width: IMAGE_SIZE, height: IMAGE_SIZE},
     opacity: 0.0
-  }).on('resize', function() {
-    this.transform = {
+  }).on('resize', () => {
+    personImage.transform = {
       scaleX: 0.75,
       scaleY: 0.75
     };
-    animateInScaleUp(this, delay);
+    animateInScaleUp(personImage, delay);
   }).appendTo(composite);
-  var nameTextView = new tabris.TextView({
+  let nameTextView = new TextView({
     left: [personImage, MARGIN], top: 0,
     text: person.firstName + ' ' + person.lastName,
     font: 'bold 18px'
   }).appendTo(composite);
-  var professionTextView = new tabris.TextView({
+  let professionTextView = new TextView({
     left: [personImage, MARGIN], top: [nameTextView, MARGIN],
     text: 'Software developer'
   }).appendTo(composite);
-  var companyTextView = new tabris.TextView({
+  let companyTextView = new TextView({
     left: [personImage, MARGIN], top: [professionTextView, MARGIN_SMALL],
     text: 'EclipseSource'
   }).appendTo(composite);
-  var mailTextView = new tabris.TextView({
+  let mailTextView = new TextView({
     left: [personImage, MARGIN], top: [companyTextView, MARGIN],
     text: 'mail@eclipsesource.com',
     font: 'italic 14px'
@@ -132,18 +130,17 @@ function createPersonDetail(parent, person, delay) {
 }
 
 function createPersonThumb(person, thumbsize) {
-  var font = (thumbsize < 48) ? '9px' : '12px';
-  var composite = new tabris.Composite({
+  let font = (thumbsize < 48) ? '9px' : '12px';
+  let composite = new Composite({
     left: ['prev()', MARGIN], top: 0
   });
-  var personView = new tabris.ImageView({
+  let personView = new ImageView({
     left: 0, top: 0, width: thumbsize, height: thumbsize,
     image: {src: person.image, width: thumbsize, height: thumbsize},
     highlightOnTouch: true
-  }).on('tap', function() {
-    animateOutLeftCreateCurrentPerson(person);
-  }).appendTo(composite);
-  new tabris.TextView({
+  }).on('tap', () => animateOutLeftCreateCurrentPerson(person))
+    .appendTo(composite);
+  new TextView({
     alignment: 'center',
     left: 0, top: personView, width: thumbsize,
     text: person.firstName,
@@ -151,3 +148,5 @@ function createPersonThumb(person, thumbsize) {
   }).appendTo(composite);
   return composite;
 }
+
+module.exports = page;

@@ -1,20 +1,22 @@
-var MARGIN = 8;
+const animationPage = require('./animation');
+const peoplePage = require('./people');
+const trayPage = require('./tray');
+const {Button, NavigationView, Page, ui} = require('tabris');
 
-var animationPage = require('./animation.js');
-var peoplePage = require('./people.js');
-var trayPage = require('./tray.js');
+const MARGIN = 8;
 
-var navigationView = new tabris.NavigationView({
+let navigationView = new NavigationView({
   left: 0, top: 0, right: 0, bottom: 0
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
-var mainPage = new tabris.Page({
+let mainPage = new Page({
   title: 'Animation Examples'
 }).appendTo(navigationView);
 
-[animationPage, peoplePage, trayPage].forEach(function(page) {
-  new tabris.Button({
+[animationPage, peoplePage, trayPage].forEach((page) => {
+  new Button({
     left: MARGIN, top: ['prev()', MARGIN],
     text: page.title
-  }).on('select', function() {page.appendTo(navigationView);}).appendTo(mainPage);
+  }).on('select', () => page.appendTo(navigationView))
+    .appendTo(mainPage);
 });
