@@ -1,24 +1,27 @@
+const {Composite, TextView, ui} = require('tabris');
+
 // Original source: https://github.com/tonylukasavage/Automata
 // This example was initially developed to showcase Titanium performance characteristics
 // The author himself explains that Titanium is not well suited for this kind of application
 // It resides in this example directory because we wanted to get an idea how this
 // performs with Tabris.js
 
-let height = tabris.ui.contentView.bounds.height;
-let width = tabris.ui.contentView.bounds.width;
-let CELL_SIZE = Math.floor(Math.min(height,width) / 30);
-let xSize = width / CELL_SIZE;
-let ySize = height / CELL_SIZE;
-let universe = tabris.ui.contentView.set({
+const HEIGHT = ui.contentView.bounds.height;
+const WIDTH = ui.contentView.bounds.width;
+const CELL_SIZE = Math.floor(Math.min(HEIGHT,WIDTH) / 30);
+const X_SIZE = WIDTH / CELL_SIZE;
+const Y_SIZE = HEIGHT / CELL_SIZE;
+
+let universe = ui.contentView.set({
   background: '#000'
 });
 
 function getNextState(x, y, alive) {
   let count = 0,
     xm1 = x > 0,
-    xp1 = x + 1 < xSize,
+    xp1 = x + 1 < X_SIZE,
     ym1 = y > 0,
-    yp1 = y + 1 < ySize;
+    yp1 = y + 1 < Y_SIZE;
 
   if (xm1) {
     if (ym1 && cells[x - 1][y - 1].lastAlive) { count++; }
@@ -38,12 +41,12 @@ function getNextState(x, y, alive) {
 
 // seed the grid
 let cells = [];
-for (let x = 0; x < xSize; x++) {
+for (let x = 0; x < X_SIZE; x++) {
   cells[x] = [];
-  for (let y = 0; y < ySize; y++) {
+  for (let y = 0; y < Y_SIZE; y++) {
     let alive = Math.random() >= 0.5;
     cells[x][y] = {
-      proxy: new tabris.Composite({
+      proxy: new Composite({
         height: CELL_SIZE,
         width: CELL_SIZE,
         background: '#fff',
@@ -59,7 +62,7 @@ for (let x = 0; x < xSize; x++) {
 }
 
 // add FPS label
-let label = new tabris.TextView({
+let label = new TextView({
   text: 'FPS: ',
   textColor: '#fff',
   background: '#a00',
@@ -78,10 +81,11 @@ let lastTime = new Date().getTime(),
   thisTime;
 
 let x, y, cell;
-function render () {
+
+function render() {
   // render current generation
-  for (x = 0; x < xSize; x++) {
-    for (y = 0; y < ySize; y++) {
+  for (x = 0; x < X_SIZE; x++) {
+    for (y = 0; y < Y_SIZE; y++) {
       cell = cells[x][y];
 
       // minimize number of times we need to modify the proxy object
@@ -95,8 +99,8 @@ function render () {
   }
 
   // build next generation
-  for (x = 0; x < xSize; x++) {
-    for (y = 0; y < ySize; y++) {
+  for (x = 0; x < X_SIZE; x++) {
+    for (y = 0; y < Y_SIZE; y++) {
       cell = cells[x][y];
       cell.alive = getNextState(x, y, cell.lastAlive);
     }
