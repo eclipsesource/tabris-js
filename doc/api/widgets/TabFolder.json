@@ -39,7 +39,16 @@
     },
     "textColor": {
       "type": "Color",
-      "description": "The color used for the text of the tab headers."
+      "description": "The color used for the text of the tab headers.",
+      "platforms": {
+        "windows": false
+      }
+    },
+    "win_tabBarTheme": {
+      "type": "string",
+      "values": ["light", "dark", "default"],
+      "default": "default",
+      "description": "Controls the color scheme used for the tabBar. When set to `\"default\"` the theme is inherited from the TabFolder. Available only on Windows."
     }
   },
   "events": {
