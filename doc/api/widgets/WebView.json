@@ -38,7 +38,7 @@
       "description": "Fired when the WebView is about to navigate to a new URL.",
       "parameters": {
         "preventDefault": {
-          "description": "Call to intercept the navigation.",
+          "description": "Call to intercept the navigation.  Not possible when the event is only an anchor navigation",
           "type": "() => void"
         },
         "url": {
