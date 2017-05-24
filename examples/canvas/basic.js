@@ -1,13 +1,15 @@
-var page = module.exports = new tabris.Page({
+const {Canvas, Page} = require('tabris');
+
+let page = new Page({
   title: 'Basic Shapes',
   autoDispose: false
 });
 
-var canvas = new tabris.Canvas({
+let canvas = new Canvas({
   left: 10, top: 10, right: 10, bottom: 10
 }).appendTo(page);
 
-var ctx = canvas.getContext('2d', 400, 400);
+let ctx = canvas.getContext('2d', 400, 400);
 
 ctx.fillStyle = 'rgba(255, 100, 100, 0.5)';
 ctx.fillRect(50, 20, 20, 80);
@@ -78,3 +80,5 @@ function drawArc(ctx, x, y) {
   ctx.arc(x + 40, y + 40, 40, Math.PI / 4, -Math.PI / 4);
   ctx.closePath();
 }
+
+module.exports = page;

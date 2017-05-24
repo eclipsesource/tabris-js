@@ -1,25 +1,21 @@
-var MARGIN = 8;
+const animationPage = require('./animation.js');
+const basicPage = require('./basic.js');
+const arcPage = require('./arc.js');
+const textPage = require('./text.js');
+const {Button, NavigationView, Page, ui} = require('tabris');
 
-var navigationView = new tabris.NavigationView({
+let navigationView = new NavigationView({
   left: 0, top: 0, right: 0, bottom: 0
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
-var animationPage = require('./animation.js');
-var basicPage = require('./basic.js');
-var arcPage = require('./arc.js');
-var textPage = require('./text.js');
-
-var mainPage = new tabris.Page({
+let mainPage = new Page({
   title: 'Canvas Example'
 }).appendTo(navigationView);
 
-
-[animationPage, basicPage, arcPage, textPage].forEach(function(page) {
-  new tabris.Button({
-    left: MARGIN, top: ['prev()', MARGIN],
+[animationPage, basicPage, arcPage, textPage].forEach((page) => {
+  new Button({
+    left: 8, top: 'prev() 8', right: 8,
     text: page.title
-  }).on('select', function() {
-    page.appendTo(navigationView);
-  }).appendTo(mainPage);
+  }).on('select', () => page.appendTo(navigationView))
+    .appendTo(mainPage);
 });
-

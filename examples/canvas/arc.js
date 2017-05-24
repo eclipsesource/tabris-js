@@ -1,26 +1,27 @@
-var CANVAS_WIDTH = 210;
-var CANVAS_HEIGHT = 300;
+const {Canvas, CheckBox, Page} = require('tabris');
 
-var ARC_RADIUS = 20;
+const CANVAS_WIDTH = 210;
+const CANVAS_HEIGHT = 300;
+const ARC_RADIUS = 20;
 
-var page = module.exports = new tabris.Page({
+let page = new Page({
   title: 'Arcs',
   autoDispose: false
 });
 
-var canvas = new tabris.Canvas({
+let canvas = new Canvas({
   centerX: 0, top: 32, width: CANVAS_WIDTH, height: CANVAS_HEIGHT
 }).appendTo(page);
 
-new tabris.CheckBox({
+new CheckBox({
   centerX: 0, top: [canvas, 16],
   text: 'Counterclockwise'
-}).on('checkedChanged', function({value}) {
+}).on('checkedChanged', ({value}) => {
   clearCanvas();
   drawArcs(value);
 }).appendTo(page);
 
-var context = canvas.getContext('2d', CANVAS_WIDTH, CANVAS_HEIGHT);
+let context = canvas.getContext('2d', CANVAS_WIDTH, CANVAS_HEIGHT);
 context.textAlign = 'center';
 context.textBaseline = 'top';
 
@@ -58,3 +59,5 @@ function drawArc(x, y, startAngle, endAngle, counterClockwise) {
   context.fillStyle = 'black';
   context.fillText(startAngle.toString().concat(', ').concat(endAngle), x + ARC_RADIUS, y + ARC_RADIUS * 2);
 }
+
+module.exports = page;
