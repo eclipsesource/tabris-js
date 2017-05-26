@@ -1,123 +1,127 @@
-var scrollView = new tabris.ScrollView({left: 0, top: 0, right: 0, bottom: 0}).appendTo(tabris.ui.contentView);
+const {
+  Button, CheckBox, Composite, TextView, TextInput, Picker, RadioButton, ScrollView, Slider, Switch, ui
+} = require('tabris');
+
+let scrollView = new ScrollView({left: 0, top: 0, right: 0, bottom: 0}).appendTo(ui.contentView);
 
 const COUNTRIES = ['Germany', 'Canada', 'USA', 'Bulgaria'];
 const CLASSES = ['Business', 'Economy', 'Economy Plus'];
 
-new tabris.TextView({
+new TextView({
   id: 'nameLabel',
   alignment: 'left',
   text: 'Name:'
 }).appendTo(scrollView);
 
-new tabris.TextInput({
+new TextInput({
   id: 'nameInput',
   message: 'Full Name'
 }).appendTo(scrollView);
 
-new tabris.TextView({
+new TextView({
   id: 'flyerNumberLabel',
   text: 'Flyer Number:'
 }).appendTo(scrollView);
 
-new tabris.TextInput({
+new TextInput({
   id: 'flyerNumberInput',
   keyboard: 'number',
   message: 'Flyer Number'
 }).appendTo(scrollView);
 
-new tabris.TextView({
+new TextView({
   id: 'passphraseLabel',
   text: 'Passphrase:'
 }).appendTo(scrollView);
 
-new tabris.TextInput({
+new TextInput({
   id: 'passphraseInput',
   type: 'password',
   message: 'Passphrase'
 }).appendTo(scrollView);
 
-new tabris.TextView({
+new TextView({
   id: 'countryLabel',
   text: 'Country:'
 }).appendTo(scrollView);
 
-new tabris.Picker({
+new Picker({
   id: 'countryPicker',
   itemCount: COUNTRIES.length,
   itemText: index => COUNTRIES[index]
 }).appendTo(scrollView);
 
-new tabris.TextView({
+new TextView({
   id: 'classLabel',
   text: 'Class:'
 }).appendTo(scrollView);
 
-new tabris.Picker({
+new Picker({
   id: 'classPicker',
   itemCount: CLASSES.length,
   itemText: index => CLASSES[index]
 }).appendTo(scrollView);
 
-new tabris.TextView({
+new TextView({
   id: 'seatLabel',
   text: 'Seat:'
 }).appendTo(scrollView);
 
-new tabris.RadioButton({
+new RadioButton({
   id: 'windowSeat',
   text: 'Window'
 }).appendTo(scrollView);
 
-new tabris.RadioButton({
+new RadioButton({
   id: 'aisleSeat',
   text: 'Aisle'
 }).appendTo(scrollView);
 
-new tabris.RadioButton({
+new RadioButton({
   id: 'anySeat',
   text: "Don't care",
   checked: true
 }).appendTo(scrollView);
 
-new tabris.Composite({
+new Composite({
   id: 'luggagePanel'
 }).append(
-  new tabris.TextView({
+  new TextView({
     id: 'luggageLabel',
     text: 'Luggage:'
   })
 ).append(
-  new tabris.TextView({
+  new TextView({
     id: 'luggageWeight',
     text: '0 Kg'
   })
 ).append(
-  new tabris.Slider({
+  new Slider({
     id: 'luggageSlider'
   }).on('selectionChanged', ({value}) => {
     scrollView.find('#luggageWeight').set('text', value + ' Kg');
   })
 ).appendTo(scrollView);
 
-new tabris.CheckBox({
+new CheckBox({
   id: 'veggieChoice',
   text: 'Vegetarian'
 }).appendTo(scrollView);
 
-new tabris.Composite({
+new Composite({
   id: 'milesPanel'
 }).append(
-  new tabris.TextView({
+  new TextView({
     id: 'milesLabel',
     text: 'Redeem miles:'
   })
 ).append(
-  new tabris.Switch({
+  new Switch({
     id: 'milesSwitch'
   })
 ).appendTo(scrollView);
 
-new tabris.Button({
+new Button({
   id: 'reservationButton',
   text: 'Place Reservation',
   background: '#8b0000',
@@ -126,7 +130,7 @@ new tabris.Button({
   updateMessage();
 }).appendTo(scrollView);
 
-let message = new tabris.TextView({
+let message = new TextView({
   left: 10, right: 10, top: '#reservationButton 10'
 }).appendTo(scrollView);
 
@@ -168,7 +172,7 @@ function updateMessage() {
 }
 
 function createSeating() {
-  var seating = 'Anywhere';
+  let seating = 'Anywhere';
   scrollView.children('RadioButton').forEach((button) => {
     if (button.checked) {
       seating = button.text;
@@ -179,7 +183,7 @@ function createSeating() {
 }
 
 function createWeight() {
-  var panel = scrollView.children('#luggagePanel');
+  let panel = scrollView.children('#luggagePanel');
   return panel.children('#luggageSlider').first().selection + ' Kg';
 }
 
@@ -188,8 +192,8 @@ function createMeal() {
 }
 
 function createFrequentFlyerInfo() {
-  var panel = scrollView.children('#milesPanel');
-  var info = panel.children('#milesSwitch').first().checked ? 'Yes' : 'No';
+  let panel = scrollView.children('#milesPanel');
+  let info = panel.children('#milesSwitch').first().checked ? 'Yes' : 'No';
   info += ', acct: ' + scrollView.children('#flyerNumberInput').first().text;
   return info;
 }
