@@ -1,16 +1,18 @@
-var CHAT_SERVER_URL = 'ws://192.168.6.150:9000';
+const {Button, Composite, ScrollView, TextInput, TextView, device, ui} = require('tabris');
 
-var socket = new WebSocket(CHAT_SERVER_URL, 'chat-protocol');
+const CHAT_SERVER_URL = 'ws://192.168.6.150:9000';
+
+let socket = new WebSocket(CHAT_SERVER_URL, 'chat-protocol');
 
 logWebSocketState();
 
-socket.onopen = function(event) {
+socket.onopen = (event) => {
   console.info('Connection opened: ' + JSON.stringify(event));
   appendToChat('Connected.<br/>');
   logWebSocketState();
 };
 
-socket.onmessage = function(event) {
+socket.onmessage = (event) => {
   console.info('Server message: ' + JSON.stringify(event));
   if (typeof event.data === 'string') {
     appendToChat('Text: ' + event.data);
@@ -20,46 +22,46 @@ socket.onmessage = function(event) {
   logWebSocketState();
 };
 
-socket.onerror = function(event) {
+socket.onerror = (event) => {
   console.info('Error: ' + JSON.stringify(event));
   appendToChat('Error:' + JSON.stringify(event));
   logWebSocketState();
 };
 
-socket.onclose = function(event) {
+socket.onclose = (event) => {
   console.info('Close connection ' + JSON.stringify(event));
   appendToChat('Close:' + JSON.stringify(event));
   logWebSocketState();
 };
 
-var inputContainer = new tabris.Composite({
+let inputContainer = new Composite({
   left: 0, right: 0, bottom: 0, height: 64,
   background: '#f5f5f5'
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
-var chatInput = new tabris.TextInput({
+let chatInput = new TextInput({
   left: 16, right: ['#sendButton', 16], centerY: 0,
   message: 'Enter chat message...',
   text: 'Hello Chat!'
 }).appendTo(inputContainer);
 
-new tabris.Button({
+new Button({
   id: 'sendButton',
   right: 16, width: 76, centerY: 0,
   text: 'Send'
-}).on('select', function() {
-  socket.send('<b>' + tabris.device.model + '</b>: ' + chatInput.text);
+}).on('select', () => {
+  socket.send('<b>' + device.model + '</b>: ' + chatInput.text);
   chatInput.text = '';
   logWebSocketState();
 }).appendTo(inputContainer);
 
-var scrollView = new tabris.ScrollView({
+let scrollView = new ScrollView({
   left: 0, right: 0, top: 0, bottom: inputContainer,
   background: 'white',
   elevation: 2
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
-var chatTextView = new tabris.TextView({
+let chatTextView = new TextView({
   left: 16, right: 16, top: 16,
   text: 'Connecting to ' + CHAT_SERVER_URL,
   markupEnabled: true
