@@ -1,19 +1,19 @@
-const MARGIN = 16;
-const MARGIN_SMALL = 8;
+const {CollectionView, Composite, ImageView, NavigationView, Page, TextView, WebView, ui} = require('tabris');
+
 const ITEM_FETCH_COUNT = 25;
 
 let loading;
 let items = [];
 
-let navigationView = new tabris.NavigationView({
+let navigationView = new NavigationView({
   left: 0, top: 0, right: 0, bottom: 0
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
-let page = new tabris.Page({
+let page = new Page({
   title: 'Reddit - Pets'
 }).appendTo(navigationView);
 
-let collectionView = new tabris.CollectionView({
+let collectionView = new CollectionView({
   left: 0, top: 0, right: 0, bottom: 0,
   background: '#f5f5f5',
   refreshEnabled: true,
@@ -48,39 +48,39 @@ let collectionView = new tabris.CollectionView({
 loadInitialItems();
 
 function createItemCell() {
-  let cell = new tabris.Composite();
-  let container = new tabris.Composite({
+  let cell = new Composite();
+  let container = new Composite({
     id: 'container',
-    left: MARGIN, right: MARGIN, top: MARGIN_SMALL, bottom: MARGIN_SMALL,
+    left: 16, right: 16, top: 8, bottom: 8,
     cornerRadius: 2,
     elevation: 2,
     background: 'white',
     highlightOnTouch: true
   }).on('tap', ({target: view}) => createDetailsPage(view.item.data))
     .appendTo(cell);
-  new tabris.ImageView({
+  new ImageView({
     id: 'itemImage',
     background: '#e0e0e0',
     width: 80, height: 80,
     scaleMode: 'fill'
   }).appendTo(container);
-  new tabris.TextView({
+  new TextView({
     id: 'nameText',
-    top: MARGIN_SMALL, left: ['#itemImage', MARGIN], right: MARGIN,
+    top: 8, left: ['#itemImage', 16], right: 16,
     textColor: '#202020',
     font: 'medium 14px',
     maxLines: 2
   }).appendTo(container);
-  new tabris.TextView({
+  new TextView({
     id: 'commentText',
-    bottom: MARGIN_SMALL, right: MARGIN,
+    bottom: 8, right: 16,
     alignment: 'right',
     textColor: '#7CB342',
     font: '12px'
   }).appendTo(container);
-  new tabris.TextView({
+  new TextView({
     id: 'authorText',
-    bottom: MARGIN_SMALL, left: ['#itemImage', MARGIN], right: ['#commentText', MARGIN],
+    bottom: 8, left: '#itemImage 16', right: '#commentText 16',
     textColor: '#767676',
     font: '12px'
   }).appendTo(container);
@@ -88,7 +88,7 @@ function createItemCell() {
 }
 
 function createLoadingCell() {
-  return new tabris.TextView({
+  return new TextView({
     centerY: 0,
     alignment: 'center',
     text: 'Loading...'
@@ -156,18 +156,18 @@ function getRedditId(item) {
 }
 
 function createDetailsPage(data) {
-  let detailsPage = new tabris.Page({
+  let detailsPage = new Page({
     background: 'black',
     title: data.title
   }).appendTo(navigationView);
   if (data.url.substr(-4, 4) === '.jpg') {
-    new tabris.ImageView({
+    new ImageView({
       left: 0, top: 0, right: 0, bottom: 0,
       image: data.url,
       scaleMode: 'fit'
     }).appendTo(detailsPage);
   } else {
-    new tabris.WebView({
+    new WebView({
       left: 0, top: 0, right: 0, bottom: 0,
       url: data.url
     }).appendTo(detailsPage);
