@@ -1,5 +1,4 @@
-const MARGIN = 16;
-const MARGIN_SMALL = 8;
+const {Composite, CollectionView, Picker, TextView, ui} = require('tabris');
 
 const LANGUAGES = [{
   id: 'en',
@@ -10,10 +9,10 @@ const LANGUAGES = [{
 }];
 let selectedLanguage, texts;
 
-loadLanguage(tabris.device.language);
+loadLanguage(device.language);
 
-new tabris.Picker({
-  left: MARGIN, top: MARGIN_SMALL, right: MARGIN,
+new Picker({
+  left: 16, top: 8, right: 16,
   itemCount: LANGUAGES.length,
   itemText: index => LANGUAGES[index].name,
   selectionIndex: LANGUAGES.map(element => element.id).indexOf(selectedLanguage)
@@ -21,42 +20,42 @@ new tabris.Picker({
   loadLanguage(LANGUAGES[index].id);
   collectionView.itemCount = texts.items.length;
   collectionView.refresh();
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
-let collectionView = new tabris.CollectionView({
-  left: 0, top: ['prev()', MARGIN_SMALL], right: 0, bottom: 0,
+let collectionView = new CollectionView({
+  left: 0, top: 'prev() 8', right: 0, bottom: 0,
   itemCount: texts.items.length,
   cellHeight: 54,
   createCell: () => new MenuCell(),
   updateCell: (cell, index) => cell.dish = texts.items[index]
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
-tabris.ui.contentView.apply(texts);
+ui.contentView.apply(texts);
 
-class MenuCell extends tabris.Composite {
+class MenuCell extends Composite {
 
   constructor(properties) {
     super(properties);
-    new tabris.TextView({
+    new TextView({
       id: 'priceText',
-      top: MARGIN_SMALL, right: MARGIN,
+      top: 8, right: 16,
       alignment: 'right',
       font: '14px',
       textColor: '#7CB342'
     }).appendTo(this);
-    new tabris.TextView({
+    new TextView({
       id: 'nameText',
-      left: MARGIN, top: MARGIN_SMALL, right: ['#priceText', 0],
+      left: 16, top: 8, right: '#priceText',
       textColor: '#202020',
       font: 'bold 14px'
     }).appendTo(this);
-    new tabris.TextView({
+    new TextView({
       id: 'descriptionText',
       textColor: '#767676',
       maxLines: 1,
-      left: MARGIN, top: ['#nameText', 0], right: ['#priceText', MARGIN]
+      left: 16, top: '#nameText', right: '#priceText 16'
     }).appendTo(this);
-    new tabris.Composite({
+    new Composite({
       left: 0, bottom: 0, right: 0, height: 1,
       background: '#e3e3e3'
     }).appendTo(this);
