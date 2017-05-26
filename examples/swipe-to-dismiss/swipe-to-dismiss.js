@@ -1,7 +1,6 @@
-const HORIZONTAL_MARGIN = 16;
-const VERTICAL_MARGIN = 8;
+const {CollectionView, Composite, TextView, ui} = require('tabris');
 
-const items = [
+const ITEMS = [
   {title: 'Up for lunch?', sender: 'John Smith', time: '11:35'},
   {title: 'JavaScript for mobile applications', sender: 'JavaScript Newsletter', time: '08:03'},
   {title: 'This is just a spam message', sender: 'Spammer', time: '04:32'},
@@ -11,48 +10,48 @@ const items = [
   {title: 'Fraud mail', sender: 'Unsuspicious Jack', time: 'yesterday'}
 ];
 
-let collectionView = new tabris.CollectionView({
+let collectionView = new CollectionView({
   left: 0, right: 0, top: 0, bottom: 0,
-  itemCount: items.length,
+  itemCount: ITEMS.length,
   cellHeight: 64,
   createCell: () => {
-    let cell = new tabris.Composite({
+    let cell = new Composite({
       background: '#d0d0d0'
     });
-    let container = new tabris.Composite({
+    let container = new Composite({
       id: 'container',
       left: 0, top: 0, bottom: 0, right: 0,
       background: 'white'
     }).on('panHorizontal', event => handlePan(event))
       .appendTo(cell);
-    new tabris.TextView({
+    new TextView({
       id: 'senderText',
-      top: VERTICAL_MARGIN, left: HORIZONTAL_MARGIN,
+      top: 8, left: 16,
       font: 'bold 18px'
     }).appendTo(container);
-    new tabris.TextView({
+    new TextView({
       id: 'titleText',
-      bottom: VERTICAL_MARGIN, left: HORIZONTAL_MARGIN
+      bottom: 8, left: 16
     }).appendTo(container);
-    new tabris.TextView({
+    new TextView({
       id: 'timeText',
       textColor: '#b8b8b8',
-      top: VERTICAL_MARGIN, right: HORIZONTAL_MARGIN
+      top: 8, right: 16
     }).appendTo(container);
-    new tabris.Composite({
+    new Composite({
       left: 0, bottom: 0, right: 0, height: 1,
       background: '#b8b8b8'
     }).appendTo(cell);
     return cell;
   },
   updateCell: (view, index) => {
-    let item = items[index];
+    let item = ITEMS[index];
     view.find('#container').first().item = item;
     view.find('#senderText').set('text', item.sender);
     view.find('#titleText').set('text', item.title);
     view.find('#timeText').set('text', item.time);
   }
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
 function handlePan(event) {
   let {target, state, translationX} = event;
@@ -85,8 +84,8 @@ function animateDismiss({target, translationX}) {
     duration: 200,
     easing: 'ease-out'
   }).then(() => {
-    let index = items.indexOf(target.item);
-    items.splice(index, 1);
+    let index = ITEMS.indexOf(target.item);
+    ITEMS.splice(index, 1);
     collectionView.remove(index);
   });
 }
