@@ -1,34 +1,42 @@
+const {Button, Page, ScrollView, ui} = require('tabris');
+const ToastPage = require('./ToastPage');
+const SharingPage = require('./SharingPage');
+const MotionPage = require('./MotionPage');
+const NetworkPage = require('./NetworkPage');
+const MediaPage = require('./MediaPage');
+const CameraPage = require('./CameraPage');
+const ActionSheetPage = require('./ActionSheetPage');
+const BarcodeScannerPage = require('./BarcodeScannerPage');
+const {view: navigationView} = require('./navigation');
 
-var navigationView = new tabris.NavigationView({
-  left: 0, top: 0, right: 0, bottom: 0
-}).appendTo(tabris.ui.contentView);
+navigationView.appendTo(ui.contentView);
 
-var mainPage = new tabris.Page({
+let mainPage = new Page({
   title: 'Cordova Examples'
 }).appendTo(navigationView);
 
-var contentContainer = new tabris.ScrollView({
+let contentContainer = new ScrollView({
   left: 0, top: 0, right: 0, bottom: 0
 }).appendTo(mainPage);
 
 [
-  './modules/SharingPage',
-  './modules/ToastPage',
-  './modules/MotionPage',
-  './modules/NetworkPage',
-  './modules/CameraPage',
-  './modules/BarcodeScannerPage',
-  './modules/MediaPage',
-  './modules/ActionSheetPage'
-].forEach(function(page) {
-  addPageSelector(require(page).create().page);
+  SharingPage,
+  ToastPage,
+  MotionPage,
+  NetworkPage,
+  CameraPage,
+  BarcodeScannerPage,
+  MediaPage,
+  ActionSheetPage
+].forEach(Page => {
+  let page = new Page();
+  addPageSelector(page);
 });
 
 function addPageSelector(page) {
-  new tabris.Button({
-    left: 16, top: ['prev()', 16], right: 16,
+  new Button({
+    left: 16, top: 'prev() 8', right: 16,
     text: page.title
-  }).on('select', function() {
-    page.appendTo(navigationView);
-  }).appendTo(contentContainer);
+  }).on('select', () => page.appendTo(navigationView))
+    .appendTo(contentContainer);
 }
