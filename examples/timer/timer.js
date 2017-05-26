@@ -1,66 +1,65 @@
-var MARGIN = 16;
-var MARGIN_LARGE = 24;
+const {Button, CheckBox,TextInput, TextView, ui} = require('tabris');
 
-var cpsCount = 0;
-var startTime = new Date().getTime();
-var taskId;
+let cpsCount = 0;
+let startTime = new Date().getTime();
+let taskId;
 
-var statusTextView = new tabris.TextView({
-  left: MARGIN, top: MARGIN_LARGE, right: MARGIN,
+let statusTextView = new TextView({
+  left: 16, top: 24, right: 16,
   text: 'Last update: <none>'
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
-var cpsTextView = new tabris.TextView({
-  left: MARGIN, top: [statusTextView, MARGIN], right: MARGIN,
+let cpsTextView = new TextView({
+  left: 16, top: [statusTextView, 16], right: 16,
   text: 'Calls per second: <none>'
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
-var delayTextView = new tabris.TextView({
-  left: MARGIN, top: [cpsTextView, MARGIN_LARGE],
+let delayTextView = new TextView({
+  left: 16, top: [cpsTextView, 24],
   text: 'Delay (ms):'
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
-var delayTextInput = new tabris.TextInput({
-  left: [delayTextView, MARGIN], baseline: delayTextView,
+let delayTextInput = new TextInput({
+  left: [delayTextView, 16], baseline: delayTextView,
   id: 'delayTextInput',
   text: '1000',
   message: 'Delay (ms)'
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
-var repeatCheckbox = new tabris.CheckBox({
-  left: MARGIN, top: delayTextInput,
+let repeatCheckbox = new CheckBox({
+  left: 16, top: delayTextInput,
   text: 'Repeat'
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
-var startButton = new tabris.Button({
-  left: ['50%', MARGIN / 4], top: [repeatCheckbox, MARGIN_LARGE], right: MARGIN,
+let startButton = new Button({
+  left: ['50%', 16 / 4], top: [repeatCheckbox, 24], right: 16,
   text: 'Start timer'
-}).on('select', function() {
-  var delay = parseInt(delayTextInput.text);
+}).on('select', () => {
+  let delay = parseInt(delayTextInput.text);
   if (repeatCheckbox.checked) {
     taskId = setInterval(updateStatusTextViews, delay);
   } else {
-    taskId = setTimeout(function() {
+    taskId = setTimeout(() => {
       updateStatusTextViews();
       enableTimerStart(true);
     }, delay);
   }
   enableTimerStart(false);
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
-var cancelButton = new tabris.Button({
-  left: MARGIN, top: [repeatCheckbox, MARGIN_LARGE], right: ['50%', MARGIN / 4],
+let cancelButton = new Button({
+  left: 16, top: [repeatCheckbox, 24], right: ['50%', 16 / 4],
   text: 'Cancel timer',
   enabled: false
-}).on('select', function() {
+}).on('select', () => {
   clearTimeout(taskId);
   enableTimerStart(true);
-}).appendTo(tabris.ui.contentView);
+}).appendTo(ui.contentView);
 
 function updateStatusTextViews() {
   cpsCount++;
-  var curTime = new Date().getTime();
-  var diff = curTime - startTime;
+  let curTime = new Date().getTime();
+  let diff = curTime - startTime;
   if (diff >= 1000) {
     cpsTextView.text = 'Calls per second: ' + cpsCount;
     cpsCount = 0;
