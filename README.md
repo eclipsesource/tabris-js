@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/eclipsesource/tabris-js.png?label=ready&title=Ready)](https://waffle.io/eclipsesource/tabris-js)
 # Tabris.js
 
 [![Build Status](https://travis-ci.org/eclipsesource/tabris-js.svg?branch=master)](https://travis-ci.org/eclipsesource/tabris-js)
