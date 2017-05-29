@@ -214,22 +214,36 @@ module.exports = function(grunt) {
       if (!def.events || !Object.keys(def.events).length) {
         return '';
       }
-      let result = ['## Events\n\n'];
-      Object.keys(def.events).sort().forEach(name => {
-        let event = def.events[name];
-        result.push('### ', name, '\n');
-        if (event.description) {
-          result.push(event.description + '\n');
-        }
-        if (event.provisional) {
-          result.push(MSG_PROVISIONAL);
-        }
-        if (event.parameters) {
-          result.push('\n#### Event Parameters ' + renderEventParamList(event.parameters) + '\n');
-        }
-        result.push('\n\n');
-      });
-      return result.join('');
+      let widgetEvents = Object.keys(def.events).map(name => Object.assign({name}, def.events[name]));
+      let changeEvents = createChangeEvents(def.properties);
+      let events = [...widgetEvents, ...changeEvents].sort((a, b) => a.name.localeCompare(b.name));
+      return [
+        '## Events\n\n',
+        ...events.map(({name, description, provisional, parameters}) => ([
+          '### ', name, '\n',
+          description ? description + '\n' : '',
+          provisional ? MSG_PROVISIONAL : '',
+          parameters ? '\n#### Event Parameters ' + renderEventParamList(parameters) + '\n' : ''
+        ]).join('')),
+        '\n\n'
+      ].join('');
+    }
+
+    function createChangeEvents(properties) {
+      if (!properties || !Object.keys(properties).length) {
+        return [];
+      }
+      return Object.keys(properties)
+        .filter(name => !properties[name].static)
+        .map(name => ({
+          name: `change:${name}`,
+          description: `Fired when the [*${name}*](#${name}) property changes.`,
+          parameters: [{
+            name: 'value',
+            type: properties[name].type,
+            description: `The new value of [*${name}*](#${name}).`
+          }]
+        }));
     }
 
     function renderSignature(parameters) {
