@@ -235,6 +235,11 @@
         "ios": false,
         "android": false
       }
+    },
+    "data": {
+      "type": "Object",
+      "readonly": true,
+      "description": "A general-purpose object that allows the application to attach arbitrary data to the widget. Manipulations on this object have no effect on the widget itself in any way. Example: `widget.data.myData = myData;`"
     }
   },
   "events": {

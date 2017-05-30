@@ -124,6 +124,13 @@ export default class Widget extends NativeObject {
     return this;
   }
 
+  get data() {
+    if (!this.$data) {
+      this.$data = {};
+    }
+    return this.$data;
+  }
+
   _getContainer() {
     return this;
   }

@@ -191,6 +191,14 @@ describe('Widget', function() {
       });
     });
 
+    it('has read-only data object', function() {
+      let data = widget.data;
+      widget.data = {};
+
+      expect(widget.data.constructor).to.equal(Object);
+      expect(widget.data).to.equal(data);
+    });
+
     describe('dispose', function() {
 
       let parent, child;
