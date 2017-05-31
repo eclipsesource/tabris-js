@@ -278,7 +278,7 @@ describe('App', function() {
 
     beforeEach(function() {
       let origGet = client.get;
-      stub(client, 'get', function() {
+      stub(client, 'get').callsFake(() => {
         origGet.apply(client, arguments);
         return '/root';
       });
@@ -438,7 +438,7 @@ describe('App', function() {
       });
 
       it('notifies callback', function() {
-        expect(callback).to.have.been.calledWith(new Error(error));
+        expect(callback).to.have.been.calledWithMatch({message: error});
       });
 
       it('stops LISTEN on `patchInstall` event', function() {

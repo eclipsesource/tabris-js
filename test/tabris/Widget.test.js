@@ -439,7 +439,7 @@ describe('Widget', function() {
 
         it('throws an error', function() {
           let child = new TestWidget();
-          stub(widget, '_acceptChild', () => false);
+          stub(widget, '_acceptChild').callsFake(() => false);
 
           expect(() => {
             widget.append(child);

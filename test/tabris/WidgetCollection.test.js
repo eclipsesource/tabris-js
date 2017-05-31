@@ -232,7 +232,7 @@ describe('WidgetCollection', function() {
     });
 
     it('get() is delegated to first', function() {
-      stub(widgets[0], 'get', () => 'foo');
+      stub(widgets[0], 'get').callsFake(() => 'foo');
       expect(collection.get('bar')).to.equal('foo');
       expect(widgets[0].get).to.have.been.calledWith('bar');
     });

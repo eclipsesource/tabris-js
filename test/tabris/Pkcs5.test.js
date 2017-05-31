@@ -13,7 +13,7 @@ describe('Pkcs5', function() {
     client = new ClientStub();
     mockTabris(client);
     pkcs5 = new Pkcs5();
-    stub(client, 'call', (id, method) => {
+    stub(client, 'call').callsFake((id, method) => {
       if (method === 'start') {
         setTimeout(() => {
           global.tabris._notify(id, 'done', {key: returnValue});

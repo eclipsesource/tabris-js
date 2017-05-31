@@ -144,9 +144,9 @@ describe('Module', function() {
       });
 
       it('requests alternate file name .js', function() {
-        stub(Module, 'createLoader', (path) => {
+        stub(Module, 'createLoader').callsFake((path) => {
           if (path === './foo.js') {
-            return function(module) {module.exports = module;};
+            return module => module.exports = module;
           }
         });
 
@@ -170,7 +170,7 @@ describe('Module', function() {
 
       it('requests file specified in /package.json', function() {
         stub(Module, 'createLoader').returns(undefined);
-        stub(Module, 'readJSON', function(url) {
+        stub(Module, 'readJSON').callsFake((url) => {
           if (url === './foo/package.json') {
             return {main: 'bar'};
           }
@@ -191,7 +191,7 @@ describe('Module', function() {
 
       it("requests file specified in /package.json containing '.' segment", function() {
         stub(Module, 'createLoader').returns(undefined);
-        stub(Module, 'readJSON', function(url) {
+        stub(Module, 'readJSON').callsFake((url) => {
           if (url === './foo/package.json') {
             return {main: './bar'};
           }
@@ -212,9 +212,9 @@ describe('Module', function() {
 
       it('requests alternate file name /index.js', function() {
         spy(Module, 'readJSON');
-        stub(Module, 'createLoader', (path) => {
+        stub(Module, 'createLoader').callsFake((path) => {
           if (path === './foo/index.js') {
-            return function(module) {module.exports = module;};
+            return module => module.exports = module;
           }
         });
 
@@ -228,14 +228,14 @@ describe('Module', function() {
       });
 
       it('requests index.js if package.json has no main', function() {
-        stub(Module, 'readJSON', function(url) {
+        stub(Module, 'readJSON').callsFake((url) => {
           if (url === './foo/package.json') {
             return {not_main: './bar'};
           }
         });
-        stub(Module, 'createLoader', (path) => {
+        stub(Module, 'createLoader').callsFake((path) => {
           if (path === './foo/index.js') {
-            return function(module) {module.exports = module;};
+            return module => module.exports = module;
           }
         });
 
@@ -246,7 +246,7 @@ describe('Module', function() {
 
       it('requests alternate file name /index.json', function() {
         stub(Module, 'createLoader').returns(undefined);
-        stub(Module, 'readJSON', function(url) {
+        stub(Module, 'readJSON').callsFake((url) => {
           if (url === './foo/index.json') {
             return {data: 'bar'};
           }
@@ -281,9 +281,9 @@ describe('Module', function() {
 
       it('requests module from node_modules folder', function() {
         stub(Module, 'readJSON').returns(undefined);
-        stub(Module, 'createLoader', (path) => {
+        stub(Module, 'createLoader').callsFake((path) => {
           if (path === './node_modules/foo/index.js') {
-            return function() {};
+            return () => {};
           }
         });
 
@@ -342,12 +342,12 @@ describe('Module', function() {
 
       it('does not request module from node_modules folder at top-level', function() {
         module = new Module('./foo/script.js');
-        stub(Module, 'createLoader', (path) => {
+        stub(Module, 'createLoader').callsFake((path) => {
           if (path === './foo/node_modules/bar/script2.js') {
-            return function(module) {module.exports = 2;};
+            return (module) => module.exports = 2;
           }
         });
-        stub(Module, 'readJSON', function(path) {
+        stub(Module, 'readJSON').callsFake((path) => {
           if (path === './foo/node_modules/bar/package.json') {
             return {main: 'script2.js'};
           }
@@ -389,7 +389,7 @@ describe('Module', function() {
       });
 
       it('supports loading a package.json directly', function() {
-        stub(Module, 'readJSON', function(path) {
+        stub(Module, 'readJSON').callsFake((path) => {
           if (path === './node_modules/foo/package.json') {
             return {main: 'foo.js'};
           }
@@ -401,16 +401,14 @@ describe('Module', function() {
       });
 
       it('caches node modules', function() {
-        stub(Module, 'readJSON', function(url) {
+        stub(Module, 'readJSON').callsFake((url) => {
           if (url === './foo/package.json') {
             return {main: 'foo.js'};
           }
         });
-        stub(Module, 'createLoader', (url) => {
+        stub(Module, 'createLoader').callsFake((url) => {
           if (url === './foo/foo.js') {
-            return function(module) {
-              module.exports = module;
-            };
+            return module => module.exports = module;
           }
         });
 
@@ -425,7 +423,7 @@ describe('Module', function() {
       });
 
       it('supports node modules loading each other', function() {
-        stub(Module, 'readJSON', function(path) {
+        stub(Module, 'readJSON').callsFake((path) => {
           if (path === './node_modules/foo/package.json') {
             return {main: 'foo.js'};
           }
@@ -433,15 +431,15 @@ describe('Module', function() {
             return {main: 'bar.js'};
           }
         });
-        stub(Module, 'createLoader', (path) => {
+        stub(Module, 'createLoader').callsFake((path) => {
           if (path === './node_modules/foo/foo.js') {
-            return function(module) {
+            return (module) => {
               module.exports.x = 1;
               module.exports.y = module.require('bar');
             };
           }
           if (path === './node_modules/bar/bar.js') {
-            return function(module) {
+            return (module) => {
               module.exports = module.require('foo').x + 1;
             };
           }
@@ -487,14 +485,12 @@ describe('Module', function() {
         });
 
         it('during module loading creates module with plain id', function() {
-          stub(Module, 'createLoader', (path) => {
+          stub(Module, 'createLoader').callsFake((path) => {
             if (path === './foo/baz.js') {
-              return function(module, exports, require) {
-                module.exports = require('./foo');
-              };
+              return (module, exports, require) => module.exports = require('./foo');
             }
             if (path === './foo/foo.js') {
-              return function(module) {module.exports = module;};
+              return module => module.exports = module;
             }
           });
 

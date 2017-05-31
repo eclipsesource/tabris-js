@@ -43,7 +43,7 @@
     "mocha": "^3.0.2",
     "promise": "^7.1.1",
     "rollup": "^0.34.3",
-    "sinon": "^1.17.5",
+    "sinon": "^2.3.2",
     "sinon-chai": "^2.8.0",
     "tslint": "^4.4.2",
     "typescript": "^2.1.5",

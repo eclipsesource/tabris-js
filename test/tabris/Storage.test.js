@@ -10,7 +10,7 @@ describe('Storage', function() {
   beforeEach(function() {
     client = new ClientStub();
     mockTabris(client);
-    stub(client, 'call', () => returnValue);
+    stub(client, 'call').callsFake(() => returnValue);
   });
 
   afterEach(restore);

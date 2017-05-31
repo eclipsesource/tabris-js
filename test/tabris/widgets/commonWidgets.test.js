@@ -237,7 +237,7 @@ describe('Common Widgets', function() {
 
     it('autoCapitalize property', function() {
       let textInput = new TextInput({text: 'foo'});
-      stub(client, 'get', () => false);
+      stub(client, 'get').callsFake(() => false);
 
       expect(textInput.autoCapitalize).to.equal(false);
       expect(client.get).to.have.been.called;

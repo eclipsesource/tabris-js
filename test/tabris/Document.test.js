@@ -120,7 +120,7 @@ describe('Document', function() {
       target.document.head.appendChild(script1);
 
       expect(script1.onload).to.have.not.been.called;
-      expect(script1.onerror).to.have.been.calledWith(new Error('Could not load foo.js'));
+      expect(script1.onerror).to.have.been.calledWithMatch({message: 'Could not load foo.js'});
     });
 
     it('calls onerror when script throws error', function() {

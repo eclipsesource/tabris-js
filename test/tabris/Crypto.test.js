@@ -12,7 +12,7 @@ describe('Crypto', function() {
     client = new ClientStub();
     mockTabris(client);
     crypto = new Crypto();
-    stub(client, 'call', (id, method) => method === 'getRandomValues' ? returnValue : null);
+    stub(client, 'call').callsFake((id, method) => method === 'getRandomValues' ? returnValue : null);
   });
 
   afterEach(function() {

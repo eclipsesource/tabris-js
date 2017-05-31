@@ -16,7 +16,7 @@ describe('XMLHttpRequest', function() {
     client = new ClientStub();
     mockTabris(client);
     let origCreate = tabris._nativeBridge.create;
-    stub(tabris._nativeBridge, 'create', (cid, type) => {
+    stub(tabris._nativeBridge, 'create').callsFake((cid, type) => {
       if (type === 'tabris.HttpRequest') {
         proxy = tabris._proxies.find(cid);
         spy(proxy, 'send');

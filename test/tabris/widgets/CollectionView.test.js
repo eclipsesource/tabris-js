@@ -221,7 +221,7 @@ describe('CollectionView', function() {
           let listener = spy();
           let index = 23;
           view.on(changeEvent, listener);
-          stub(client, 'get', () => index);
+          stub(client, 'get').callsFake(() => index);
 
           view._trigger('scroll', {});
           view._trigger('scroll', {});

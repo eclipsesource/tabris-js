@@ -30,7 +30,7 @@ describe('Device', function() {
 
     beforeEach(function() {
       results = {};
-      stub(client, 'get', function(id, name) {
+      stub(client, 'get').callsFake((id, name) => {
         if (id === 'tabris.Device') {
           return results[name];
         }
@@ -120,7 +120,7 @@ describe('Device', function() {
       };
       target = {};
       mockTabris(client);
-      stub(client, 'get', function(id, name) {
+      stub(client, 'get').callsFake((id, name) => {
         if (id === 'tabris.Device') {
           return device[name];
         }

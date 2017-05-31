@@ -125,9 +125,7 @@ describe('NativeBridge', function() {
     });
 
     it('flushes layout queue first', function() {
-      stub(Layout, 'flushQueue', function() {
-        bridge.set('id2', {bar: 23});
-      });
+      stub(Layout, 'flushQueue').callsFake(() => bridge.set('id2', {bar: 23}));
 
       bridge.get('id', 'foo');
 
@@ -156,9 +154,7 @@ describe('NativeBridge', function() {
     });
 
     it('allows operation to be added in beforeFlush event', function() {
-      stub(Layout, 'flushQueue', function() {
-        bridge.set('id2', {bar: 23});
-      });
+      stub(Layout, 'flushQueue').callsFake(() => bridge.set('id2', {bar: 23}));
 
       bridge.call('id', 'foo', {foo: 23});
 

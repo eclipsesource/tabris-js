@@ -63,7 +63,7 @@ describe('ClientInterface', function() {
     });
 
     it('returns return value from widget', function() {
-      stub(widget, '_trigger', () => 'result');
+      stub(widget, '_trigger').callsFake(() => 'result');
 
       let result = tabris._notify(widget.cid, 'foo');
 
