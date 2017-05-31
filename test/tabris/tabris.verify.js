@@ -199,6 +199,7 @@ describe('tabris', function() {
       expect(tabris.ui).to.be.instanceOf(tabris.Ui);
       expect(tabris.app).to.be.instanceOf(tabris.App);
       expect(tabris.device).to.be.instanceOf(tabris.Device);
+      expect(tabris.fs).to.be.instanceOf(tabris.FileSystem);
     });
 
     it('creates DOM API singletons', function() {

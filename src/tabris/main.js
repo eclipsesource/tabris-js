@@ -5,6 +5,7 @@ import Tabris from './Tabris';
 import Device, {create as createDevice, publishDeviceProperties} from './Device';
 import App, {create as createApp} from './App';
 import Ui, {create as createUi} from './widgets/Ui';
+import FileSystem, {create as createFileSystem} from './FileSystem';
 import {addDOMDocument} from './Document';
 import {addDOMEventTargetMethods} from './Event';
 import {addWindowTimerMethods} from './WindowTimers';
@@ -72,6 +73,7 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   Device,
   Drawer,
   Event,
+  FileSystem,
   ImageData,
   ImageView,
   InactivityTimer,
@@ -125,6 +127,7 @@ tabris.on('start', () => {
   checkVersion(tabris.version, tabris.app._nativeGet('tabrisJsVersion'));
   tabris.ui = createUi();
   tabris.device = createDevice();
+  tabris.fs = createFileSystem();
   publishDeviceProperties(tabris.device, window);
   window.localStorage = tabris.localStorage = createStorage();
   if (tabris.device.platform === 'iOS') {
