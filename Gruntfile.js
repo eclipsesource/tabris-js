@@ -31,12 +31,6 @@ module.exports = function(grunt) {
         dest: 'build/boot.js'
       }
     },
-    uglify: {
-      polyfill: {
-        src: 'build/polyfill.js',
-        dest: 'build/tabris/polyfill.js'
-      }
-    },
     doc: {
       api: 'doc/api/**/*.json',
       typings: 'typings/propertyTypes.d.ts',
@@ -101,16 +95,6 @@ module.exports = function(grunt) {
         ]
       }
     },
-    webpack: {
-      polyfill: {
-        entry: './src/polyfill.js',
-        output: {
-          filename: 'build/polyfill.js',
-          library: 'polyfill',
-          libraryTarget: 'commonjs2'
-        }
-      }
-    },
     exec: {
       verify_typings: {
         cmd: 'npm install && node node_modules/typescript/bin/tsc -p . --noImplicitAny',
@@ -155,10 +139,8 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-compress');
-  grunt.loadNpmTasks('grunt-webpack');
   grunt.loadNpmTasks('grunt-exec');
   grunt.loadTasks('./grunt');
 
@@ -186,8 +168,6 @@ module.exports = function(grunt) {
     'exec:bundle_boot',
     'exec:transpile_boot',
     'concat:boot',
-    'webpack:polyfill',
-    'uglify:polyfill',
     'package',
     'copy:readme',
     'copy:typings',
