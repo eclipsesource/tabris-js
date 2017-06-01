@@ -251,7 +251,7 @@ module.exports = function(grunt) {
       values.push(`"${value}"`);
     });
     let valuesType = (values || []).join(' | ');
-    result.push(`${def.readonly ? 'readonly ' : ''}${name}: ${valuesType || def.type};`);
+    result.push(`${def.readonly ? 'readonly ' : ''}${name}: ${valuesType || def.ts_type || def.type};`);
     return result.join('\n');
   }
 

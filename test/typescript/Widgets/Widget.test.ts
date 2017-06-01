@@ -42,6 +42,10 @@ let transform: Transformation;
 let visible: boolean;
 let width: dimension;
 
+
+
+// Properties
+
 background = widget.background;
 backgroundImage = widget.backgroundImage;
 baseline = widget.baseline;
@@ -75,6 +79,7 @@ widget.centerX = centerX;
 widget.centerY = centerY;
 widget.class = _class;
 widget.classList = classList;
+widget.data.foo = 42;
 widget.cornerRadius = cornerRadius;
 widget.elevation = elevation;
 widget.enabled = enabled;
