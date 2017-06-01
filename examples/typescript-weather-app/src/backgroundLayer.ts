@@ -32,7 +32,7 @@ export default class BackgroundLayer extends Composite {
     for (let i = 0; i < count; i++) {
       this.clouds[i] = this.generateCloud(positions[i], Math.random() * 10);
     }
-  };
+  }
 
   private generateDistribution(n: number) {
     let result = [];

@@ -113,7 +113,7 @@ export default class WeatherGraph extends Canvas {
       this.getX(endTime) - this.getX(startTime),
       graphHeight
     );
-  };
+  }
 
   private drawTemperatureScale(ctx: CanvasContext) {
     let degreeHeight = this.getY(this.scale.minY) - this.getY(this.scale.minY + 1);
@@ -241,4 +241,4 @@ export default class WeatherGraph extends Canvas {
   }
 }
 
-interface Point { x: number; y: number; dydx?: number; };
+interface Point { x: number; y: number; dydx?: number; }
