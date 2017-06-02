@@ -73,7 +73,7 @@ See [W3C](http://dev.w3.org/html5/webstorage/) / [MDN](https://developer.mozilla
 * The `sessionStorage` is not supported, as it would serve no purpose in a non-browser environment.
 * The storage event is currently not supported.
 
-> <img align="left" src="img/note.png"> <i>The `localStorage` is only meant to store relatively short strings. To store larger amounts of data it is recommended to use the cordova [`FileSystem`](http://plugins.cordova.io/#/package/org.apache.cordova.file) plugin.</i>
+> <img align="left" src="img/note.png"> <i>The `localStorage` is only meant to store relatively short strings. To store larger amounts of data it is recommended to use the cordova [`FileSystem`](https://www.npmjs.com/package/cordova-plugin-file) plugin.</i>
 
 ## Canvas Context
 

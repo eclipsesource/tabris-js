@@ -33,7 +33,7 @@ For details please refer to the [Cordova documentation](https://cordova.apache.o
 
 You can integrate all available [Cordova Plugins](http://plugins.cordova.io/#/) by including them in your `config.xml`.
 
-For example, to add the [Cordova Camera Plugin](http://plugins.cordova.io/#/package/org.apache.cordova.camera), you'd add this line:
+For example, to add the [Cordova Camera Plugin](https://www.npmjs.com/package/cordova-plugin-camera), you'd add this line:
 
 ```
 <plugin name="cordova-plugin-camera" spec="^2.3.0" />
