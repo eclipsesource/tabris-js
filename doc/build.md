@@ -31,6 +31,119 @@ To prepare your project for the build, you have to create a subdirectory named `
 |- .tabrisignore
 ```
 
+### The package.json file
+
+See [package.json | npm documentation](https://docs.npmjs.com/files/package.json) for information about the package.json format.
+
+`package.json` contains, among other configurations, references to the app's main script and npm module dependencies:
+
+```json
+{
+  // ...
+  "main": "src/app.js",
+  "dependencies": {
+    "tabris": "^2.0.0",
+    "left-pad": "^1.1.3",
+    // ...
+  }
+  // ...
+}
+```
+
+Dependencies are automatically installed during the build process.
+
+#### Build scripts
+
+When a Tabris.js app is built, `build` scripts given in the `package.json` are executed before the JavaScript code is bundled into the app. They can be used to transpile the JavaScript app code.
+
+```json
+{
+  ...
+  "scripts": {
+    ...
+    "build": "..."
+  }
+  ...
+}
+```
+
+Supported build script hooks are:
+
+  - `"build"`: executed for all platform builds
+  - `"build:android"`: executed for Android builds
+  - `"build:ios"`: executed for iOS builds
+  - `"build:windows"`: executed for Windows builds
+
+Make sure the `"build"` script is executed before executing `tabris serve` (when running the app locally). This step can be automated by using the watch mode of your transpiler, which will compile the file on change (refer to your transpiler's documentation). A module like [npm-run-all](https://www.npmjs.com/package/npm-run-all) can help run the transpiler in watch mode and `tabris serve` at the same time.
+
+For bigger projects you may want to use a module bundler like [rollup.js](https://rollupjs.org). It removes the overhead of loading multiple modules and uses static analysis to remove unused code from the bundled artifact.
+
+#### Example: Transpiling ES6 code
+
+Install the Babel transpiler and the necessary plug-ins. The `--save-dev` option will add the dependencies to your `package.json`:
+
+```
+npm install --save-dev babel-cli babel-plugin-transform-es2015-modules-commonjs
+```
+
+Create a `.babelrc` file in the root of your project:
+
+```json
+{
+  "plugins": ["transform-es2015-modules-commonjs"]
+}
+```
+
+Include the following build script in the `scripts` sections of your `package.json`:
+
+```json
+{
+  "scripts": {
+    "build": "babel --compact false --out-dir dist/ src/"
+  }
+  ...
+}
+```
+
+Let the `main` field point to the *transpiled* `app.js` in `dist/`:
+
+```json
+{
+  "main": "dist/app.js",
+  ...
+}
+```
+
+In case iOS 8 and 9 support is desired, more Babel plugins can be added to compensate for missing ES6 features. See [ECMAScript 6 compatibility table](http://kangax.github.io/compat-table/es6/) for more information about supported ES6 features in iOS 8 and 9.
+
+#### Example: Transpiling TypeScript code
+
+Install the TypeScript compiler:
+
+```
+npm install --save-dev typescript
+```
+
+Include the following build script in the `scripts` sections of your `package.json`:
+
+```json
+{
+  "scripts": {
+    "build": "tsc -p ."
+  }
+  ...
+}
+```
+
+Let the `main` field point to the *transpiled* `app.js` in `dist/`:
+
+```json
+{
+  "main": "dist/app.js",
+  ...
+}
+```
+
 ### The config.xml file
 
 The minimal build configuration you need is a `cordova/config.xml` file that describes your app. It contains information like the id of your app, its version, icons and splash screens. The format of the `config.xml` is the same as a standard [Cordova config.xml](https://cordova.apache.org/docs/en/4.0.0/config_ref_index.md.html#The%20config.xml%20File) file. A minimal example config could look like this:
@@ -68,7 +181,7 @@ You can integrate all available [Cordova Plugins](http://plugins.cordova.io/#/) 
 The optional `<content>` element defines the app's starting page in ordinary Cordova apps. In Tabris.js you can use it to define an alternative location of the `package.json` file. Example:
 
 ```xml
-<content src="mySubFolder/package.json"/>
+<content src="mySubFolder/package.json" />
 ```
 
 #### Preferences
@@ -185,8 +298,6 @@ Extract the content of the downloaded archive and create an environment variable
 ```
 tabris build [android|ios|windows]
 ```
-
-This command will first run the npm scripts `build` or `build:<platform>`, if they exist in your `package.json`.
 
 To build a Windows app signed with your own key, run
 `cordova build windows --release -- --packageCertificateKeyFile="<absolute-path-to-pfx>" --bundle`
