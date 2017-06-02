@@ -33,7 +33,7 @@ The height of the widget in dip
 
 Example:
 ```js
-var buttonWidth = button.bounds.width;
+let buttonWidth = button.bounds.width;
 ```
 
 See also [Layout](layout.md).

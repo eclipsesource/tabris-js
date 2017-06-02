@@ -22,9 +22,7 @@ In Tabris.js there are 13 gesture events based on 4 basic gesture types:
 Example:
 
 ```js
-widget.on("swipeLeft", function(event) {
-  moveWidgetLeft();
-});
+widget.on("swipeLeft", event => moveWidgetLeft());
 ```
 
 All gesture events have the following common properties:
@@ -66,13 +64,13 @@ The event object includes the following properties:
 
 - **target**: *Widget* - the widget that received the event
 - **timeStamp**: *number* - the time at which the event was created, in milliseconds
-- **touches**: *{x: number, y: number, absoluteX: number, absoluteY: number}[]* - an array of touch coordinates for all current touches. The x/y coordinates are relative to the parent of the widget whereas the absoluteX/absoluteY coordinates are relative to the `tabris.ui.contentView`. Since multiple touches are currently not supported, the array always has one element.
+- **touches**: *{x: number, y: number, absoluteX: number, absoluteY: number}[]* - an array of touch coordinates for all current touches. The x/y coordinates are relative to the parent of the widget whereas the absoluteX/absoluteY coordinates are relative to the `ui.contentView`. Since multiple touches are currently not supported, the array always has one element.
 
 Example:
 ```js
-widget.on("touchStart", function(widget, event) {
-  var x = event.touches[0].absoluteX;
-  var y = event.touches[0].absoluteY;
+widget.on("touchStart", ({touches: [{absoluteX, absoluteY}]}) => {
+  let x = absoluteX;
+  let y = absoluteY;
   ...
 });
 ```

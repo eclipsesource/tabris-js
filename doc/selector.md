@@ -15,7 +15,7 @@ page.find('CheckBox').set('selection', false);
 The `id` of a widget is a property like any other. It is initially undefined, so you have to assign an ID yourself to refer to the widget. Usually you would do this when you create the widget:
 
 ```js
-new tabris.Button({id: 'submit'});
+new Button({id: 'submit'});
 ```
 
 To select a widget by its ID, you can use the selector expression `'#id'` where `id` is the ID of the widget:
@@ -31,7 +31,7 @@ IDs should be unique. Although this is not enforced by the framework, it's a goo
 The `class` property is a string containing a whitespace separated list of "classes". A class is an arbitrary name for a state or category the widget should be identifiable by. It may only contain alphanumeric characters, `'_'` and `'-'`.
 
 ```js
-new tabris.TextView({class: 'label important'});
+new TextView({class: 'label important'});
 ```
 
 Classes may be mixed, re-used and changed on any widget at any time. Using the `classList` property is a handy way to do so:
@@ -60,7 +60,7 @@ The following types of selector expressions are supported:
 All methods that accept a selector expression can also be called with a predicate function to test each widget of a collection. This function will be called for each widget and returns `true` to include the widget, and `false` to skip it. For example, the following snippet would select all visible widgets on a page:
 
 ```js
-var visibleChildren = page.children(widget => widget.visible);
+let visibleChildren = page.children(widget => widget.visible);
 ```
 
 ## Working with Selectors
@@ -74,8 +74,8 @@ The following methods on Widget accept a selector expression:
 These methods return a [WidgetCollection](api/WidgetCollection.md). You can extract widgets from the collection using the methods `first()` and `last()` or using array index notation:
 
 ```js
-var submitButton = page.find('#submit').first(); // or
-var submitButton = page.find('#submit')[0];
+let submitButton = page.find('#submit').first(); // or
+let submitButton = page.find('#submit')[0];
 ```
 
 You can also set properties on the included widgets without extracting them:
@@ -130,7 +130,7 @@ While we used object literals in the examples above, the apply method can be ver
 Imagine, for example, that you want to apply different texts to your widgets depending on your locale. You could do it like this:
 
 ```js
-var lang = tabris.device.language;
+let lang = device.language;
 try {
   page.apply(module.require('./texts-' + lang));
 } catch() {
@@ -151,29 +151,27 @@ Since JSON files can be used as modules, your language file (e.g. `texts-en.json
 An alternative pattern would be to always use the same module...
 
 ```js
-  page.apply(module.require('./texts'));
-}
+page.apply(module.require('./texts'));
 ```
 
 But use scripting within the module to calculate the actual values:
 
 ```js
-var texts = {
+let texts = {
   en: {
     '#okbutton': {text: 'OK!'}
     '#cancelbutton': {text: 'Cancel!'}
   },
   //...
 };
-module.exports = texts[tabris.device.language] || texts.en;
+module.exports = texts[device.language] || texts.en;
 ```
 
 The same pattern can be applied for platform-specific colors, font-sizes based on screen width, or layout data depending on device orientation:
 
 ```js
-page.on('resize', function() {
-  var bounds = page.bounds;
-  page.apply(require('./layout-' + (bounds.width > bounds.height) ? 'landscape' : 'portrait'));
+page.on('resize', ({width, height}) => {
+  page.apply(require('./layout-' + (width > height) ? 'landscape' : 'portrait'));
 });
 ```
 

@@ -5,8 +5,8 @@ It combines a subset of the JavaScript Array API with a subset of the Tabris.js 
 Example:
 
 ```js
-var children = page.children();
-for (var child of children) {
+let children = page.children();
+for (let child of children) {
   console.log(child.id);
 }
 ```

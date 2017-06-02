@@ -6,7 +6,7 @@
     "access": "private",
     "parameters": []
   },
-  "description": "The object `tabris.device` provides information about the device that executes the application.",
+  "description": "Provides information about the device that executes the application.",
   "properties": {
     "platform": {
       "type": "string",

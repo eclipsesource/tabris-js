@@ -1,7 +1,5 @@
 Example:
 
 ```js
-tabris.app.on("pause", function() {
-  saveMyData();
-});
+app.on("pause", () => pauseVideo());
 ```

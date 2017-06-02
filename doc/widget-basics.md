@@ -7,7 +7,7 @@ The UI of a Tabris.js app consists of native widgets, represented by JavaScript 
 Every widget constructor accepts an object with initial property values to create the native widget with. Here's how you create and initialize a widget in Tabris.js:
 
 ```js
-let button = new tabris.Button({
+let button = new Button({
   left: 10,
   top: 10,
   text: 'OK'
@@ -84,7 +84,7 @@ In addition to the common event properties, change events have a property `value
 Example:
 
 ```js
-new tabris.TextInput().on('textChanged', (event) => {
+new TextInput().on('textChanged', (event) => {
   console.log('The text has changed to: ' + event.value);
 });
 ```
@@ -124,12 +124,12 @@ label.animate({
 
 ### Setting the Parent
 
-To become visible, a widget needs a parent. The top-level parent of all widgets is the content view (`tabris.ui.contentView`). Widgets can be included in the widget hierarchy using `append()` or `appendTo()`.
+To become visible, a widget needs a parent. The top-level parent of all widgets is the content view (`ui.contentView`). Widgets can be included in the widget hierarchy using `append()` or `appendTo()`.
 
 Example:
 
 ```js
-let button = new tabris.Button({
+let button = new Button({
   text: 'OK',
   ...
 }).appendTo(parent);

@@ -4,12 +4,12 @@ Custom widgets are written in JavaScript and the language available for the nati
 
 ## Defining a Custom Widget in JavaScript
 
-Custom widgets must extend `tabris.Widget`. It enables communication with the native part of the custom widget.
+Custom widgets must extend `Widget`. It enables communication with the native part of the custom widget.
 
 Custom widget classes must overwrite the `_nativeType` property getter to return a type matching the native implementation:
 
 ```js
-class MyCustomWidget extends tabris.Widget {
+class MyCustomWidget extends Widget {
 
   get _nativeType() {
     return 'myLibrary.MyCustomWidget';
@@ -23,7 +23,7 @@ class MyCustomWidget extends tabris.Widget {
 Call `_nativeSet(name, value)` and `_nativeGet(name)` to exchange properties with the native client.
 
 ```js
-class MyCustomWidget extends tabris.Widget {
+class MyCustomWidget extends Widget {
 
   ...
 
@@ -45,7 +45,7 @@ class MyCustomWidget extends tabris.Widget {
 Overwrite the `_listen` method and call `_nativeListen` to get notified when an event gets fired by the native widget part.
 
 ```js
-class MyCustomWidget extends tabris.Widget {
+class MyCustomWidget extends Widget {
 
   ...
 

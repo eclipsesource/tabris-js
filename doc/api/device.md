@@ -1,9 +1,7 @@
 Example:
 
 ```js
-var lang = tabris.device.language;
+let lang = device.language;
 
-tabris.device.on("orientationChanged", function(event) {
-  console.log("new orientation:", event.value);
-});
+device.on("orientationChanged", ({value: orientation}) => console.log("new orientation: ", orientation));
 ```

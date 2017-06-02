@@ -1,7 +1,7 @@
 {
   "type": "StatusBar",
   "extends": "Widget",
-  "description": "The status bar is the area where notifications, status icons and device time are displayed. The singleton instance can be accessed via `tabris.ui.statusBar`.",
+  "description": "The status bar is the area where notifications, status icons and device time are displayed. The singleton instance can be accessed via `ui.statusBar`.",
   "constructor": {
     "access": "public",
     "parameters": [
@@ -32,7 +32,7 @@
         "float"
       ],
       "default": "default",
-      "description": "Controls how the status bar is positioned relative to the `tabris.ui.contentView`. The value `default` places the content below the status bar. The `hide` option lets the status bar disappear, making more room for the content. The `float` option lets the content flow underneath the status bar."
+      "description": "Controls how the status bar is positioned relative to the `ui.contentView`. The value `default` places the content below the status bar. The `hide` option lets the status bar disappear, making more room for the content. The `float` option lets the content flow underneath the status bar."
     },
     "height": {
       "type": "number",
