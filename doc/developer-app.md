@@ -1,6 +1,6 @@
 # The Tabris.js Developer App
 
-The Tabris.js Developer App is the easiest way to start developing mobile apps without using a [build service](build.md) or [local build](local-build.md). It is available for free on the App Store and Play Store respectively. Simply follow the links below or search for "Tabris.js" in the store on your mobile device.
+The Tabris.js Developer App is the easiest way to start developing mobile apps without having to perform an app build. It is available for free on the App Store and Play Store respectively. Simply follow the links below or search for "Tabris.js" in the store on your mobile device.
 
 [![Tabris.js on Google play](https://tabrisjs.com/assets/img/playstore-badge.png)](https://play.google.com/store/apps/details?id=com.eclipsesource.tabrisjs2) [![Tabris.js on Apple App Store](https://tabrisjs.com/assets/img/appstore-badge.png)](https://itunes.apple.com/us/app/tabris.js-2/id1166468326?mt=8)
 

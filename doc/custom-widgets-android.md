@@ -2,7 +2,7 @@
 
 A Tabris.js widget consists of a [JavaScript API](custom-widgets.md) and a native client side implementation. This document describes how to create the native implementation for a custom widget on the Android platform.
 
-In order to implement a custom widget you will need to build locally. Follow the [Local Build guide](local-build.md).
+In order to implement a custom widget you will need to [build locally](build.md).
 
 ### Building upon Cordova infrastructure
 
@@ -143,7 +143,7 @@ private class OnDateChangeListener implements CalendarView.OnDateChangeListener 
 
 ## Destroying a widget
 
-When a widget is no longer being used we also need to take care of destroying it. In case of our custom Android `View` we receive a destroy operation in the `Operator` and are responsible for cleaning up any resources that are not required anymore. When an `Operator` inherits from the `AbstractViewOperator` the destroy operation will remove the view from the view hierarchy. 
+When a widget is no longer being used we also need to take care of destroying it. In case of our custom Android `View` we receive a destroy operation in the `Operator` and are responsible for cleaning up any resources that are not required anymore. When an `Operator` inherits from the `AbstractViewOperator` the destroy operation will remove the view from the view hierarchy.
 
 ```java
 @Override

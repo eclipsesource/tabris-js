@@ -1,6 +1,6 @@
 # Building a Tabris.js App
 
-Tabris.js utilizes [Apache Cordova](http://cordova.apache.org) to build and package apps. Apps can be built without any local setup using the free online build service on tabrisjs.com. To [build an app on your local machine](local-build.md), you need to setup developer tools like Xcode, Visual Studio or the Android SDK. The following features are supported by the two different build types.
+Tabris.js utilizes [Apache Cordova](http://cordova.apache.org) to build and package apps. Apps can be built without any local setup using the free online build service on tabrisjs.com. To [build an app on your local machine](#local-build), you need to setup developer tools like Xcode, Visual Studio or the Android SDK. The following features are supported by the two different build types.
 
 |                           | Build Service | Local Build |
 | :------------------------ |:---------------:| :---------------: |
@@ -14,7 +14,7 @@ Tabris.js utilizes [Apache Cordova](http://cordova.apache.org) to build and pack
 | Using own build hardware  |              |       ✓      |
 | Other SCMs than Git       |              |       ✓      |
 
-> <img align="left" src="img/note.png"> <i>The online build service is free for unlimited public GitHub repositories and 1 private repository. To build from unlimited private repositories, you need a [Pro account](https://tabrisjs.com/pricing/). Local build is free for everyone. To build locally you need to follow the [local build guide](local-build.md).</i>
+> <img align="left" src="img/note.png"> <i>The online build service is free for unlimited public GitHub repositories and 1 private repository. To build from unlimited private repositories, you need a [Pro account](https://tabrisjs.com/pricing/). [Local builds](#local-build) are free for everyone.</i>
 
 ## Project Layout
 
@@ -31,9 +31,9 @@ To prepare your project for the build, you have to create a subdirectory named `
 |- .tabrisignore
 ```
 
-### The config.xml
+### The config.xml file
 
-The minimal build configuration you need is a `config.xml` file that describes your app. The `config.xml` contains information like the id of your app, its version, icons and splash screens. The format of the `config.xml` is the same as a standard [Cordova config.xml](https://cordova.apache.org/docs/en/4.0.0/config_ref_index.md.html#The%20config.xml%20File) file. A minimal example config could look like this:
+The minimal build configuration you need is a `cordova/config.xml` file that describes your app. It contains information like the id of your app, its version, icons and splash screens. The format of the `config.xml` is the same as a standard [Cordova config.xml](https://cordova.apache.org/docs/en/4.0.0/config_ref_index.md.html#The%20config.xml%20File) file. A minimal example config could look like this:
 
 ```xml
 <?xml version='1.0' encoding='utf-8'?>
@@ -48,11 +48,87 @@ The minimal build configuration you need is a `config.xml` file that describes y
 </widget>
 ```
 
+#### Integrating Cordova plugins
+
+To add a set of Apache Cordova plug-ins you only need to add them to `config.xml` using the `<plugin />` tag. It allows you to add plug-ins using an ID, an HTTP URL or a git URL.
+
+For example, to add the [Cordova Camera Plugin](http://plugins.cordova.io/#/package/org.apache.cordova.camera), you'd add this line:
+
+```xml
+<plugin name="cordova-plugin-camera" spec="^2.3.0" />
+```
+
+You can integrate all available [Cordova Plugins](http://plugins.cordova.io/#/) by including them in your `config.xml`.
+
+**Important:** You can install all available Cordova Plugins. Most of the Plugins will work out of the box. However, since Tabris.js uses a **native UI** and **no HTML5**, plugins that rely on an HTML5 UI (i.e. the DOM) won't work.
+
+
+#### The content element
+
+The optional `<content>` element defines the app's starting page in ordinary Cordova apps. In Tabris.js you can use it to define an alternative location of the `package.json` file. Example:
+
+```xml
+<content src="mySubFolder/package.json"/>
+```
+
+#### Preferences
+
+In addition to the settings described in the [Cordova config.xml Guide](http://cordova.apache.org/docs/en/dev/config_ref/), Tabris.js also accepts the following custom preferences:
+
+| Name                   | Allowed Values | Default Value | Description |
+|------------------------|----------------|---------------|-------------|
+| EnableDeveloperConsole | true/false     | false         | Enables/Disables the [Tabris.js Developer Console](getting-started.md#the-developer-console).             |
+| UseStrictSSL           | true/false     | true          | Activate/Deactivate SSL certificate validation on [XHR](w3c-api.md#xmlhttprequest). When disabled self signed SSL certificates are accepted. Should be enabled in production. |
+
+Example:
+```xml
+<preference name="EnableDeveloperConsole" value="true" />
+```
+
+#### Android specific preferences
+
+| Name                    | Value |
+|-------------------------|-------|
+| Theme                   | <ul><li>`@style/Theme.Tabris`</li><li>`@style/Theme.Tabris.Light`</li><li>`@style/Theme.Tabris.Light.DarkAppBar` (Default)</ul>In addition to the bundled Tabris themes, a resource reference to a custom Android theme can be specified. Custom themes have to inherit from one of the Tabris base themes.<br/><br/>Example: `<preference name="Theme" value="@style/Theme.MyAppTheme" />` |
+| ThemeSplash             | <ul><li>`@style/Theme.Tabris.SplashScreen`</li><li>`@style/Theme.Tabris.Light.SplashScreen` (Default)</ul>The splash screen is shown to the user while the app is starting up. By default this screen has a white background. The `ThemeSplash` preference allows to set one of the bundled themes or to provide a custom theme.<br/><br/>Example: `<preference name="ThemeSplash" value="@style/Theme.Tabris.SplashScreen" />`<br/><br/>Note that the `config.xml` element `<splash .. />` can be used to set an image on the splash screen. For styling guides see the material design guidelines on [launch screens](https://material.google.com/patterns/launch-screens.html). |
+
+#### Windows specific preferences
+
+Windows apps always have a splash screen. If you do not configure one, the default Tabris.js splash screen is used. To configure your own splash screen, you have to give a logo in three different resolutions and the background color. The naming of the files has to match those given here:
+
+```xml
+<platform name="windows">
+    <splash src="resources/windows/splash/SplashScreen.scale-100.png" width="620" height="300"/>
+    <splash src="resources/windows/splash/SplashScreen.scale-150.png" width="930" height="450"/>
+    <splash src="resources/windows/splash/SplashScreen.scale-200.png" width="1240" height="600"/>
+    <preference name="SplashScreenBackgroundColor" value="#009688"/>
+</platform>
+```
+
+To replace the tabris logo on the launcher tile, Windows store and task icon you also have to give all of the following files. Again, naming is relevant:
+
+```xml
+<platform name="windows">
+    <icon src="res/windows/storelogo.png" target="StoreLogo" />
+    <icon src="res/windows/smalllogo.png" target="Square30x30Logo" />
+    <icon src="res/Windows/Square44x44Logo.png" target="Square44x44Logo" />
+    <icon src="res/Windows/Small71x71Logo.png" target="Square71x71Logo" />
+    <icon src="res/Windows/Square150x150Logo.png" target="Square150x150Logo" />
+    <icon src="res/Windows/Large310x310Logo.png" target="Square310x310Logo" />
+    <icon src="res/Windows/Wide310x150Logo.png" target="Wide310x150Logo" />
+</platform>
+```
+
 ### The .tabrisignore file
 
-The build service packages the contents of your project into the app. You can exclude certain files or directories that are not required in the packaged app, such as tests or developer documentation. Files and directories to be ignored by the build can be listed in a file named `.tabrisignore`. The format of this ignore file follows the same rules as a [`.gitignore`](http://git-scm.com/docs/gitignore) file.
+The tabris.js build packages the contents of your project into the app. You can exclude certain files or directories that are not required in the packaged app, such as tests or developer documentation. Files and directories to be ignored by the build can be listed in a file named `.tabrisignore`. The format of this ignore file follows the same rules as a [`.gitignore`](http://git-scm.com/docs/gitignore) file.
 
-> <img align="left" src="img/note.png"> <i>The .tabrisignore file is only relevant for the build service. In a local build, you have to manage the packaged files yourself (see below).</i>
+The following folders are excluded by default and don't have to be listed in the `.tabrisignore`:
+
+* `.git/`
+* `node_modules/`
+* `build/`
+* The file `.tabrisignore` itself
 
 ## Build Service
 
@@ -67,6 +143,7 @@ After your app has become valid, you are ready to execute the first build. Just 
 > <img align="left" src="img/note.png"> <i>When building Windows apps, please also read the [Windows Support Documentation](windows-support.md)</i>
 
 ### Settings
+
 ![App Settings](img/build-app-settings.png)
 
 * **Repository URL:** This is the URL of your git repository. If you're using the free build, it should point to a GitHub repository. Users who are on the [Pro plan](https://tabrisjs.com/pricing/) can also use custom repository locations.
@@ -80,65 +157,36 @@ After your app has become valid, you are ready to execute the first build. Just 
 * **Tabris.js Version:** The Tabris.js *client* version to use in the app. In contrast to the "tabris" dependency to your `package.json` which defines the version of the JavaScript module, this setting defines the version of the native client that will interpret your JavaScript code. In most cases, the value `latest` is good enough here. But if you want to stick to a fixed Tabris.js version you can configure it here.
 * **Debug:** Enables the *debug mode*. If set to `ON`, your app will be built including debug symbols and it will be packaged into the Tabris.js Developer App to make development easier. This allows you to use all the benefits like the developer console or the reload also with your own app. Please be aware that debug versions can not be submitted to the app stores. Debug `OFF` means your app will be built to be ready for release: no Developer App, no console, no reload. Only your JavaScript code is executed.
 
-### Adding Plug-ins
-To add a set of Apache Cordova plug-ins you only need to add them to the `config.xml`. The online build supports the Cordova `<plugin />` tag. This tag allows you to add plug-ins using an ID, an HTTP URL or a git URL. A sample `config.xml` including two Cordova plug-ins could look like this:
-```xml
-<?xml version='1.0' encoding='utf-8'?>
-<widget
-    id="my.first.app"
-    version="1.0.0"
-    xmlns="http://www.w3.org/ns/widgets"
-    xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    ...
-  <plugin name="cordova-plugin-camera" spec="1.2.0" />
-  <plugin name="cordova-plugin-dialogs" spec="1.1.1" />
-</widget>
+## Local Build
+
+You can build Tabris.js apps on your local machine using the [Tabris CLI](https://www.npmjs.com/package/tabris-cli).
+
+### Prerequisites
+
+If you're targeting iOS you will need macOS, while Windows apps need a Windows PC with Visual Studio 2015.
+Android apps can be build on any OS that is supported by the Android SDK.
+
+The Tabris CLI should be installed globally on your system:
+
+```
+npm install -g tabris-cli
 ```
 
-## Configuration
+The Tabris CLI uses Cordova to build apps, so you also need a Cordova installation. Follow the [Cordova Installation Guide](http://cordova.apache.org/docs/en/edge/guide_cli_index.md.html#The%20Command-Line%20Interface_installing_the_cordova_cli) and install the latest Cordova version on your system.
 
-In addition to the settings described in the [Cordova config.xml Guide](http://cordova.apache.org/docs/en/edge/config_ref_index.md.html#The%20config.xml%20File), Tabris.js also takes the following modified/additional `config.xml` attributes into account. These attributes apply to both, the online and the local build.
+### Downloading Tabris.js platforms
 
-### content
-The optional `<content>` element defines the app's starting page in ordinary Cordova apps. In Tabris.js you can use it to define the location of the `package.json` file within the `www` folder. E.g. `<content src="mySubFolder/package.json"/>`
+Tabris.js ships custom Cordova platforms for Android, iOS, and Windows. Visit the [Tabris.js download page](https://tabrisjs.com/download) and download the platform of your choice (make sure to sign in to Tabrisjs.com).
 
-### preferences
-Tabris.js accepts the following custom preferences:
+Extract the content of the downloaded archive and create an environment variable `TABRIS_ANDROID_PLATFORM`, `TABRIS_IOS_PLATFORM`, or `TABRIS_WINDOWS_PLATFORM`, respectively, that contains the path to the extracted folder.
 
-| Name                   | Allowed Values | Default Value | Description |
-|------------------------|----------------|---------------|-------------|
-| EnableDeveloperConsole | true/false     | false         | Enables/Disables the [Tabris.js Developer Console](getting-started.md#the-developer-console).             |
-| UseStrictSSL           | true/false     | true          | Activate/Deactivate SSL certificate validation on [XHR](w3c-api.md#xmlhttprequest). When disabled self signed SSL certificates are accepted. Should be enabled in production. |
+### Building an App
 
-### Android specific preferences
-
-| Name                    | Value |
-|-------------------------|-------|
-| Theme                   | <ul><li>`@style/Theme.Tabris`</li><li>`@style/Theme.Tabris.Light`</li><li>`@style/Theme.Tabris.Light.DarkAppBar` (Default)</ul>In addition to the bundled Tabris themes, a resource reference to a custom Android theme can be specified. Custom themes have to inherit from one of the Tabris base themes.<br/><br/>Example: `<preference name="Theme" value="@style/Theme.MyAppTheme" />` |
-| ThemeSplash             | <ul><li>`@style/Theme.Tabris.SplashScreen`</li><li>`@style/Theme.Tabris.Light.SplashScreen` (Default)</ul>The splash screen is shown to the user while the app is starting up. By default this screen has a white background. The `ThemeSplash` preference allows to set one of the bundled themes or to provide a custom theme.<br/><br/>Example: `<preference name="ThemeSplash" value="@style/Theme.Tabris.SplashScreen" />`<br/><br/>Note that the `config.xml` element `<splash .. />` can be used to set an image on the splash screen. For styling guides see the material design guidelines on [launch screens](https://material.google.com/patterns/launch-screens.html). |
-
-### Windows specific preferences
-Windows apps always have a splash screen. If you do not configure one, the default Tabris.js splash screen is used. To configure your own splash creen, you have to give a logo in three different resolutions and the background color. The naming of the files has to match those given here:
-
-```xml
-<platform name="windows">
-    <splash src="resources/windows/splash/SplashScreen.scale-100.png" width="620" height="300"/>
-    <splash src="resources/windows/splash/SplashScreen.scale-150.png" width="930" height="450"/>
-    <splash src="resources/windows/splash/SplashScreen.scale-200.png" width="1240" height="600"/>
-    <preference name="SplashScreenBackgroundColor" value="#009688"/>
-</platform>
+```
+tabris build [android|ios|windows]
 ```
 
-To replace the tabris logo on the launcher tile, windows store and task icon you also have to give all of the following files. Again, naming is relevant:
+This command will first run the npm scripts `build` or `build:<platform>`, if they exist in your `package.json`.
 
-```xml
-<platform name="windows">
-    <icon src="res/windows/storelogo.png" target="StoreLogo" />
-    <icon src="res/windows/smalllogo.png" target="Square30x30Logo" />
-    <icon src="res/Windows/Square44x44Logo.png" target="Square44x44Logo" />
-    <icon src="res/Windows/Small71x71Logo.png" target="Square71x71Logo" />
-    <icon src="res/Windows/Square150x150Logo.png" target="Square150x150Logo" />
-    <icon src="res/Windows/Large310x310Logo.png" target="Square310x310Logo" />
-    <icon src="res/Windows/Wide310x150Logo.png" target="Wide310x150Logo" />
-</platform>
-```
+To build a Windows app signed with your own key, run
+`cordova build windows --release -- --packageCertificateKeyFile="<absolute-path-to-pfx>" --bundle`
