@@ -10,11 +10,13 @@ This means:
 
 The main module will be loaded when the application is started. To define a script as the main module, simply add it to your projects `package.json`, like this:
 
-    {
-      "name": "my-app",
-      "version": "1.0",
-      "main": "my-main-script.js"
-    }
+```json
+{
+  "name": "my-app",
+  "version": "1.0",
+  "main": "my-main-script.js"
+}
+```
 
 ## require
 
@@ -23,24 +25,32 @@ Most commonly the identifier string is the path to the module without file exten
 
 A module may be a `.js` file, a `.json` file, or a folder. The `require` method will look for these different types of modules in this order. So to import "mymodule.js" from the same folder as the current script, simply write:
 
-     const myModuleImport = require("./mymodule");
+```js
+const myModuleImport = require("./mymodule");
+```
 
 **The leading dot is mandatory.** Without it the module is looked for elsewhere. (See [npm Support](#npm-support))
 
 Your modules may also be located in a different folder:
 
-     const module1 = require("./subfolder/module1");
-     const module2 = require("../sibling_folder/module2");
+```js
+const module1 = require("./subfolder/module1");
+const module2 = require("../sibling_folder/module2");
+```
 
 To deal with ambiguous scenarios (multiple module with the same name), the module identifier string may also include the file extension or a trailing slash (for folders):
 
-     const myJsModule = require("./mymodule.js");
-     const myJsonModule = require("./mymodule.json");
-     const myFolderModule = require("./mymodule/");
+```js
+const myJsModule = require("./mymodule.js");
+const myJsonModule = require("./mymodule.json");
+const myFolderModule = require("./mymodule/");
+```
 
 Every module is loaded exactly once, no matter how often it is imported. Therefore:
 
-    require("./mymodule") === require("./mymodule")
+```js
+require("./mymodule") === require("./mymodule")
+```
 
 This is also true when the module imported using different identifier strings, i.e. with and without extension, or from different scripts.
 
@@ -54,20 +64,26 @@ Any JavaScript file may be loaded as a module. However, loading a module should 
 
 Instead, modules should export data (which may include functions) to be used by other modules. By default the export of any module is a plain, empty object. This object is present in the module script as a local variable called `exports`. It may be modified in any way by the script, for example:
 
-    exports.foo = 1;
-    exports.bar = 2;
+```js
+exports.foo = 1;
+exports.bar = 2;
+```
 
 To export another type of object, (or any other data type), ignore `exports` and use `module` instead. For example:
 
-    module.exports = class MyClass {
+```js
+module.exports = class MyClass {
 
-    };
+};
+```
 
 The require method importing this module will return this class:
 
-    const MyClass = require("./mymodule");
+```js
+const MyClass = require("./mymodule");
 
-    new MyClass();
+new MyClass();
+```
 
 The main module can not have any useful exports. The `module` and `exports` objects are present, but completely ignored.
 
@@ -75,16 +91,20 @@ The main module can not have any useful exports. The `module` and `exports` obje
 
 When a `.json` file is used as a module, the export is simply the contents of the file. For example:
 
-    {
-      "foo": 1,
-      "bar": 2
-    }
+```js
+{
+  "foo": 1,
+  "bar": 2
+}
+```
 
 Request this file in another module:
 
-    const data = require("./myjson");
-    console.log(data.foo === 1);
-    console.log(data.bar === 2);
+```js
+const data = require("./myjson");
+console.log(data.foo === 1);
+console.log(data.bar === 2);
+```
 
 ### Folder Modules
 
@@ -106,7 +126,9 @@ Use the [npm command line interface](https://www.npmjs.com/doc/) to install any 
 
 To load a locally installed npm module, simply use its name as the identifier string, with no leading dot. For example:
 
-    const _ = require("underscore");
+```js
+const _ = require("underscore");
+```
 
 Modules that have been tested with Tabris.js are tracked as [GitHub issues](https://github.com/eclipsesource/tabris-js/issues?q=label%3A%22compatibility+npm%22). If the module is confirmed to work the issue is closed. Please feel free to add issues for modules that you tested.
 
