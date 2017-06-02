@@ -46,3 +46,4 @@ This blog post series takes a closer look at the examples.
 ## Custom Widget Documentation
 - [Custom Widgets](custom-widgets.md) - JavaScript implementation
 - [Custom Widgets - Android](custom-widgets-android.md) - Android implementation
+- [Custom Widgets - iOS](custom-widgets-ios.md) - iOS implementation
