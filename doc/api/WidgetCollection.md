@@ -7,7 +7,7 @@ Example:
 ```js
 var children = page.children();
 for (var child of children) {
-  console.log(child.get('id'));
+  console.log(child.id);
 }
 ```
 

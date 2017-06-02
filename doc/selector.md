@@ -130,7 +130,7 @@ While we used object literals in the examples above, the apply method can be ver
 Imagine, for example, that you want to apply different texts to your widgets depending on your locale. You could do it like this:
 
 ```js
-var lang = tabris.device.get('language');
+var lang = tabris.device.language;
 try {
   page.apply(module.require('./texts-' + lang));
 } catch() {
@@ -165,14 +165,14 @@ var texts = {
   },
   //...
 };
-module.exports = texts[tabris.device.get('language')] || texts.en;
+module.exports = texts[tabris.device.language] || texts.en;
 ```
 
 The same pattern can be applied for platform-specific colors, font-sizes based on screen width, or layout data depending on device orientation:
 
 ```js
 page.on('resize', function() {
-  var bounds = page.get('bounds');
+  var bounds = page.bounds;
   page.apply(require('./layout-' + (bounds.width > bounds.height) ? 'landscape' : 'portrait'));
 });
 ```
