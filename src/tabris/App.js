@@ -7,7 +7,7 @@ const EVENT_TYPES = ['foreground', 'background', 'pause', 'resume', 'terminate',
 export default class App extends NativeObject {
 
   constructor() {
-    super('tabris.App');
+    super();
     if (arguments[0] !== true) {
       throw new Error('App can not be created');
     }

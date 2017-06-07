@@ -3,14 +3,14 @@ import NativeObject from './NativeObject';
 
 class ClientStore extends NativeObject {
   constructor() {
-    super('tabris.ClientStore');
+    super();
     this._create('tabris.ClientStore');
   }
 }
 
 class SecureStore extends NativeObject {
   constructor() {
-    super('tabris.SecureStore');
+    super();
     this._create('tabris.SecureStore');
   }
 }

@@ -31,11 +31,15 @@ describe('Storage', function() {
 
   describe('instance', function() {
 
-    let storage;
-    let cid = 'tabris.ClientStore';
+    let storage, cid;
 
     beforeEach(function() {
       storage = createStorage();
+      stub(client, 'create').callsFake((id, type) => {
+        if (type === 'tabris.ClientStore') {
+          cid = id;
+        }
+      });
     });
 
     it('does not have any enumerable Object keys', function() {
@@ -170,7 +174,7 @@ describe('Storage', function() {
         expect(Storage).to.be.a('function');
       });
 
-      it('does not declare formal paramters', function() {
+      it('does not declare formal parameters', function() {
         expect(Storage.length).to.equal(0);
       });
 
