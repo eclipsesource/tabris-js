@@ -5,8 +5,8 @@ export default class ProxyStore {
     this.$proxies = {};
   }
 
-  register(proxy, withcid) {
-    let cid = withcid || this.$generateId();
+  register(proxy) {
+    let cid = this.$generateId();
     if (cid in this.$proxies) {
       throw new Error('cid already in use: ' + cid);
     }
