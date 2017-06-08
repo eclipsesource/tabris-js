@@ -9,7 +9,7 @@ module.exports = class CoversGalleryPage extends Page {
     super(Object.assign({title: TITLE}, properties));
     this._createUI();
     this._applyLayout();
-    this.on('appear', () => ui.find('#settingsAction').first().visible = false);
+    this.on('appear', () => ui.find('#aboutAction').first().visible = false);
   }
 
   _createUI() {

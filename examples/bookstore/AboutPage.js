@@ -1,7 +1,7 @@
 const {Page, TextView, ui} = require('tabris');
 const CoversGalleryPage = require('./CoversGalleryPage');
 
-const TITLE = 'License';
+const TITLE = 'About';
 const LICENSE_TEXT = 'Book covers under CC BY 2.0';
 const COVERS_LINK_TEXT = 'Covers on flickr';
 const ATTRIBUTION_TEXT =
@@ -14,13 +14,13 @@ const ATTRIBUTION_TEXT =
   Marc Storrs and Rob Morphy - Zegar Pomaranczowy Pracz<br/>
   Andrew Evan Harner - Ksiega Dzungli`;
 
-module.exports = class SettingsPage extends Page {
+module.exports = class AboutPage extends Page {
 
   constructor(properties) {
     super(Object.assign({title: TITLE}, properties));
     this.on({
-      appear: () => ui.find('#settingsAction').first().visible = false,
-      disappear: () => ui.find('#settingsAction').first().visible = true
+      appear: () => ui.find('#aboutAction').first().visible = false,
+      disappear: () => ui.find('#aboutAction').first().visible = true
     });
     this._createUI();
     this._applyLayout();
