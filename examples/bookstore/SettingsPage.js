@@ -6,13 +6,13 @@ const LICENSE_TEXT = 'Book covers under CC BY 2.0';
 const COVERS_LINK_TEXT = 'Covers on flickr';
 const ATTRIBUTION_TEXT =
   `<i>Authors of book covers:</i><br/>
-  'Paula Rodriguez - 1984<br/>
-  'Marc Storrs and Rob Morphy - Na Tropie Nieznanych<br/>
-  'Cat Finnie - Stary Czlowiek I Morze<br/>
-  'Andrew Brozyna - Hobbit<br/>
-  'Viacheslav Vystupov - Wojna Swiatow<br/>
-  'Marc Storrs and Rob Morphy - Zegar Pomaranczowy Pracz<br/>
-  'Andrew Evan Harner - Ksiega Dzungli`;
+  Paula Rodriguez - 1984<br/>
+  Marc Storrs and Rob Morphy - Na Tropie Nieznanych<br/>
+  Cat Finnie - Stary Czlowiek I Morze<br/>
+  Andrew Brozyna - Hobbit<br/>
+  Viacheslav Vystupov - Wojna Swiatow<br/>
+  Marc Storrs and Rob Morphy - Zegar Pomaranczowy Pracz<br/>
+  Andrew Evan Harner - Ksiega Dzungli`;
 
 module.exports = class SettingsPage extends Page {
 
