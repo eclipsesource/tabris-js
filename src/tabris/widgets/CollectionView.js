@@ -19,6 +19,14 @@ export default class CollectionView extends Composite {
     return 'tabris.CollectionView';
   }
 
+  load(itemCount) {
+    if (!isNumber(itemCount) || itemCount < 0) {
+      throw new Error('Invalid itemCount');
+    }
+    this._storeProperty('itemCount', itemCount);
+    this._nativeCall('load', {itemCount});
+  }
+
   reveal(index) {
     index = this._checkIndex(index);
     if (index >= 0 && index < this.itemCount) {

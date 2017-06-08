@@ -90,7 +90,7 @@ describe('CollectionView', function() {
       });
 
       it('calls native load with item count', function() {
-        view.itemCount = 10;
+        view.load(10);
         client.resetCalls();
 
         view.createCell = spy();
@@ -133,7 +133,7 @@ describe('CollectionView', function() {
       });
 
       it('calls native load with item count', function() {
-        view.itemCount = 10;
+        view.load(10);
         client.resetCalls();
 
         view.updateCell = spy();
@@ -286,7 +286,7 @@ describe('CollectionView', function() {
       });
 
       it('calls native load with item count', function() {
-        view.itemCount = 10;
+        view.load(10);
         client.resetCalls();
 
         view.cellType = 'cellType';
@@ -339,7 +339,7 @@ describe('CollectionView', function() {
       });
 
       it('calls native load with item count', function() {
-        view.itemCount = 10;
+        view.load(10);
         client.resetCalls();
 
         view.cellHeight = 48;
@@ -584,10 +584,45 @@ describe('CollectionView', function() {
 
     });
 
+    describe('load', function() {
+
+      beforeEach(function() {
+        view.load(23);
+        client.resetCalls();
+      });
+
+      it('fails when index is not a number', function() {
+        expect(() => view.load(NaN)).to.throw(Error, 'Invalid itemCount');
+        expect(() => view.load({})).to.throw(Error, 'Invalid itemCount');
+      });
+
+      it('fails when count is negative', function() {
+        expect(() => view.load(-1)).to.throw(Error, 'Invalid itemCount');
+      });
+
+      it('accepts zero', function() {
+        view.load(0);
+        expect(view.itemCount).to.equal(0);
+      });
+
+      it('sets itemCount property', function() {
+        view.load(42);
+        expect(view.itemCount).to.equal(42);
+      });
+
+      it('calls native load', function() {
+        view.load(42);
+
+        let loadCall = client.calls({op: 'call', method: 'load', id: view.cid})[0];
+        expect(loadCall.parameters).to.deep.equal({itemCount: 42});
+      });
+
+    });
+
     describe('insert', function() {
 
       beforeEach(function() {
-        view.itemCount = 3;
+        view.load(3);
         client.resetCalls();
       });
 
@@ -612,7 +647,7 @@ describe('CollectionView', function() {
       });
 
       it('calls load first if needed', function() {
-        view.itemCount = (42);
+        view.itemCount = 42;
         view.insert(1);
 
         let calls = client.calls({op: 'call', id: view.cid});
@@ -682,7 +717,7 @@ describe('CollectionView', function() {
       });
 
       it('calls native load first if needed', function() {
-        view.itemCount = (42);
+        view.itemCount = 42;
         view.remove(1);
 
         let calls = client.calls({op: 'call', id: view.cid});
@@ -747,7 +782,7 @@ describe('CollectionView', function() {
     describe('refresh', function() {
 
       beforeEach(function() {
-        view.itemCount = 3;
+        view.load(3);
         client.resetCalls();
       });
 
@@ -766,7 +801,7 @@ describe('CollectionView', function() {
       });
 
       it('calls native load first if needed', function() {
-        view.itemCount = (42);
+        view.itemCount = 42;
         view.refresh(1);
 
         let calls = client.calls({op: 'call', id: view.cid});
@@ -798,7 +833,7 @@ describe('CollectionView', function() {
     describe('reveal', function() {
 
       beforeEach(function() {
-        view.itemCount = 3;
+        view.load(3);
         client.resetCalls();
       });
 
@@ -838,11 +873,6 @@ describe('CollectionView', function() {
       tabris.trigger('flush');
       expect(view.isDisposed()).to.equal(true);
     });
-
-  });
-
-  describe('TODO flush', function() {
-
 
   });
 
