@@ -19,7 +19,7 @@ let widget: Widget = new Composite();
 // Properties
 let background: Color;
 let backgroundImage: Image;
-let baseline: Widget;
+let baseline: Widget | Selector;
 let bottom: margin;
 let bounds: Bounds;
 let centerX: offset;

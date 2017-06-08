@@ -5,6 +5,7 @@ const header = `
 /// <reference path="timer.d.ts" />
 /// <reference path="whatwg-fetch.d.ts" />
 /// <reference path="Event.d.ts" />
+/// <reference path="JSX.d.ts" />
 /// <reference path="XMLHttpRequest.d.ts" />
 
 type Partial<T> = {

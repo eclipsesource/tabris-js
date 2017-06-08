@@ -177,7 +177,7 @@
       "description": "The vertical position of the widget's center relative to the parent's center."
     },
     "baseline": {
-      "type": "Widget",
+      "type": "Widget|Selector",
       "description": "The vertical position of the widget's baseline relative to a sibling widget."
     },
     "elevation": {

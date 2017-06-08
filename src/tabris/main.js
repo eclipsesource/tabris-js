@@ -10,6 +10,7 @@ import {addDOMDocument} from './Document';
 import {addDOMEventTargetMethods} from './Event';
 import {addWindowTimerMethods} from './WindowTimers';
 import Storage, {create as createStorage} from './Storage';
+import * as JSX from './JSX';
 import Action from './widgets/Action';
 import ActivityIndicator from './widgets/ActivityIndicator';
 import AlertDialog from './AlertDialog';
@@ -119,7 +120,8 @@ Object.assign(window, {
   fetch,
   Headers,
   Request,
-  Response
+  Response,
+  JSX
 });
 
 tabris.on('start', () => {

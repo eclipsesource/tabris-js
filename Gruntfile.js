@@ -54,6 +54,7 @@ module.exports = function(grunt) {
         cwd: 'typings/',
         src: [
           'whatwg-fetch.d.ts',
+          'JSX.d.ts',
           'timer.d.ts',
           'console.d.ts',
           'localStorage.d.ts',
@@ -65,7 +66,7 @@ module.exports = function(grunt) {
       test_ts: {
         expand: true,
         cwd: 'test/typescript/',
-        src: ['**/*.test.ts', 'package.json', 'tsconfig.json'],
+        src: ['**/*.test.ts', '**/*.test.tsx', 'package.json', 'tsconfig.json'],
         dest: 'build/typescript/'
       }
     },
