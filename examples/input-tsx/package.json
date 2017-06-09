@@ -9,7 +9,7 @@
     "serve": "tabris serve"
   },
   "dependencies": {
-    "tabris": "2.0.0-rc1"
+    "tabris": "2.0.0-rc2"
   },
   "devDependencies": {
     "typescript": "^2.3.3"

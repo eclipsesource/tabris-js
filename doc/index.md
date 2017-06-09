@@ -1,4 +1,4 @@
-# Tabris.js - 2.0 RC 1
+# Tabris.js - 2.0 RC 2
 
 ## Introduction
 
