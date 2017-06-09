@@ -4,6 +4,7 @@
   "command": "grunt",
   "showOutput": "always",
   "isShellCommand": true,
+  "runner": "terminal",
   "tasks": [
     {
       "suppressTaskName": true,
