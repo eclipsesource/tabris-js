@@ -12,10 +12,6 @@ ui.drawer.enabled = true;
 let navigationView = new NavigationView({
   left: 0, top: 0, right: 0, height: 144,
   drawerActionVisible: true
-}).on('topToolbarHeightChanged', ({value: topToolbarHeight}) => {
-  topToolbarHeightTextView.text = topToolbarHeight;
-}).on('bottomToolbarHeightChanged', ({value: bottomToolbarHeight}) => {
-  bottomToolbarHeightTextView.text = bottomToolbarHeight;
 }).appendTo(ui.contentView);
 
 let page = new Page({
@@ -65,6 +61,11 @@ if (device.platform === 'Android') {
 
 let topToolbarHeightTextView = createTextView('Toolbar height top', navigationView.topToolbarHeight);
 let bottomToolbarHeightTextView = createTextView('Toolbar height bottom', navigationView.bottomToolbarHeight);
+
+navigationView.on({
+  topToolbarHeightChanged: ({value}) => topToolbarHeightTextView.text = value,
+  bottomToolbarHeightChanged: ({value}) => bottomToolbarHeightTextView.text = value
+});
 
 function createCheckBox(text, listener) {
   return new CheckBox({
