@@ -1,49 +1,16 @@
-# Tabris.js - 2.0 RC 2
+# Introduction
 
-## Introduction
-
-Tabris.js is a mobile framework that lets you develop native iOS and Android apps from a single code base written entirely in JavaScript. Tabris.js is a good choice when you are looking for native performance and look & feel while leveraging your JavaScript know-how. Tabris.js has been crafted with web APIs and extensibility on our minds. You can use existing JavaScript libraries and native extensions to extend the core functionality.
+Tabris.js is a mobile framework that lets you develop native apps for iOS, Android and Windows from a single code base written entirely in JavaScript.
+It provides access to native widgets and functions, delivering native performance and look & feel.
+Tabris.js has been crafted with compatibility and extensibility in mind.
+The framework exposes various well-known JavaScript APIs such as [Timers](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout), [Console](https://developer.mozilla.org/en-US/docs/Web/API/Console), [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), and [WebSockets](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket).
+You can use existing JavaScript libraries from the [npm](http://npmjs.com/) ecosystem and [Cordova](https://cordova.apache.org/plugins/) plug-ins to access device functions that are not accessible by Tabris.js directly.
 
 ## Getting Started
-- [Quick Start Guide](getting-started.md) - Create your first Tabris.js App
-- [Getting Started Ebook](https://tabrisjs.com/downloads/ebook/tabrisjs-2.0.0-rc1.pdf) - Create, deploy and test your first Tabris.js app (a detailed tutorial)
-- [The Tabris.js Developer App](developer-app.md) - Get the most out of our developer app
 
-## Documentation
-- [Module System](modules.md) - How to organize and load scripts.
-- [Widget Basics](widget-basics.md) - Native widget handling.
-- [UI Model](ui.md) - Pages, Actions and Drawer.
-- [Using Selectors](selector.md) - Working more efficiently with widgets.
-- [Layouts](layout.md) - Layouting widgets.
-- [Touch Events](touch.md) - Processing widget gesture/touch events.
-- [W3C Compatibility](w3c-api.md) - XMLHttpRequest, LocalStorage and timer.
-- [Cordova Support](cordova.md) - Using Cordova plug-ins, including Dialogs, File and Camera.
-- [Windows Support](windows-support.md) - Important notes on Windows 10 support.
-- [Build your app](build.md) - Create a standalone app from your Tabris.js project files.
-- [Local Build](local-build.md) - Build your Tabris.js app locally.
-- [Patch your app](patch.md) - Hotfix critical issues without waiting for app store submission.
+You can try out Tabris.js without installing anything on your computer.
+Install the [Tabris.js Developer App](developer-app.md) on your device and browse through the included examples.
+You can also edit the source code of a simple Tabris.js app online in the [Tabris.js Playground](https://tabrisjs.com/playground) and load it via the Developer App.
 
-## API Reference
-
-<%= api %>
-- [Property Types](types.md)
-
-### Widgets
-<%= widgets %>
-
-### Tabris.js Examples
-This blog post series takes a closer look at the examples.
-
-- [Hello World!](http://eclipsesource.com/blogs/2015/02/20/tabris-js-examples-hello-world/)
-- [User Input](http://eclipsesource.com/blogs/2015/02/25/tabris-js-examples-user-input/)
-- [Local Storage](http://eclipsesource.com/blogs/2015/03/04/tabris-js-examples-local-storage/)
-- [Images](http://eclipsesource.com/blogs/2015/03/10/tabris-js-examples-images/)
-- [Parallax Scrolling](http://eclipsesource.com/blogs/2015/03/24/tabris-js-examples-parallax-scrolling/)
-- [Animations](http://eclipsesource.com/blogs/2015/04/14/tabris-js-examples-animations/)
-- [Drawing on the Canvas](http://eclipsesource.com/blogs/2015/04/15/tabris-js-examples-drawing-on-the-canvas/)
-- [Network Access](http://eclipsesource.com/blogs/2015/04/24/tabris-js-examples-network-access/)
-
-## Custom Widget Documentation
-- [Custom Widgets](custom-widgets.md) - JavaScript implementation
-- [Custom Widgets - Android](custom-widgets-android.md) - Android implementation
-- [Custom Widgets - iOS](custom-widgets-ios.md) - iOS implementation
+To really start developing a full fledged Tabris.js app, follow the [Quick Start Guide](getting-started.md).
+We also have an excellent [Ebook](https://tabrisjs.com/downloads/ebook/tabrisjs-2.0.0-rc2.pdf) that explains how to create, deploy and test your first Tabris.js app.
