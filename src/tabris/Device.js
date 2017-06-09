@@ -3,7 +3,7 @@ import NativeObject from './NativeObject';
 export default class Device extends NativeObject {
 
   constructor() {
-    super();
+    super('tabris.Device');
     if (arguments[0] !== true) {
       throw new Error('Device can not be created');
     }

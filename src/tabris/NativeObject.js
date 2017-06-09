@@ -34,7 +34,7 @@ export default class NativeObject extends EventsClass {
     };
   }
 
-  constructor() {
+  constructor(cid) {
     super();
     if (!tabris._nativeBridge) {
       throw new Error('tabris.js not started');
@@ -42,7 +42,7 @@ export default class NativeObject extends EventsClass {
     if (this.constructor === NativeObject) {
       throw new Error('Cannot instantiate abstract NativeObject');
     }
-    let cid = tabris._proxies.register(this);
+    cid = tabris._proxies.register(this, cid);
     Object.defineProperty(this, 'cid', {value: cid});
   }
 

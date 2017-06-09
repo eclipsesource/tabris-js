@@ -31,7 +31,7 @@ describe('Device', function() {
     beforeEach(function() {
       results = {};
       stub(client, 'get').callsFake((id, name) => {
-        if (id === device.cid) {
+        if (id === 'tabris.Device') {
           return results[name];
         }
       });
@@ -80,7 +80,7 @@ describe('Device', function() {
     it('adds listener for orientationChanged event', function() {
       device.on('orientationChanged', function() {});
 
-      let calls = client.calls({id: device.cid, op: 'listen', event: 'orientationChanged'});
+      let calls = client.calls({id: 'tabris.Device', op: 'listen', event: 'orientationChanged'});
       expect(calls[0].listen).to.equal(true);
     });
 
@@ -88,7 +88,7 @@ describe('Device', function() {
       let listener = spy();
       device.on('orientationChanged', listener);
 
-      tabris._notify(device.cid, 'orientationChanged', {orientation: 'portrait'});
+      tabris._notify('tabris.Device', 'orientationChanged', {orientation: 'portrait'});
 
       expect(listener).to.have.been.calledOnce;
       expect(listener).to.have.been.calledWithMatch({target: device, value: 'portrait'});

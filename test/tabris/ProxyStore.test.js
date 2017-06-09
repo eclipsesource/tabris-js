@@ -10,7 +10,7 @@ describe('ProxyStore', function() {
     proxy = {};
   });
 
-  describe('register', function() {
+  describe('register without cid', function() {
 
     it('returns generated cid', function() {
       let cid = store.register(proxy);
@@ -25,11 +25,30 @@ describe('ProxyStore', function() {
 
   });
 
+  describe('register with fixed cid', function() {
+
+    it('returns given cid', function() {
+      let cid = store.register(proxy, 'fixed');
+      expect(cid).to.equal('fixed');
+    });
+
+    it('throws when registered twice', function() {
+      store.register(proxy, 'fixed');
+      expect(() => store.register(proxy, 'fixed')).to.throw(Error, /cid.*fixed/);
+    });
+
+  });
+
   describe('find', function() {
 
     it('returns proxy with generated cid', function() {
       let cid = store.register(proxy);
       expect(store.find(cid)).to.equal(proxy);
+    });
+
+    it('returns proxy with fixed cid', function() {
+      store.register(proxy, 'fixed');
+      expect(store.find('fixed')).to.equal(proxy);
     });
 
     it('returns null for unknown cid', function() {

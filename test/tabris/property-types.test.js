@@ -413,15 +413,15 @@ describe('property-types', function() {
     let decode = types.proxy.decode;
 
     it('translates widgets to ids in properties', function() {
-      let value = new CustomNativeObject();
+      let value = new CustomNativeObject('other-id');
 
-      expect(encode(value)).to.equal(value.cid);
+      expect(encode(value)).to.equal('other-id');
     });
 
     it('translates widget collection to first ids in properties', function() {
-      let value = new WidgetCollection([new CustomNativeObject()]);
+      let value = new WidgetCollection([new CustomNativeObject('cid-23')]);
 
-      expect(encode(value)).to.equal(value[0].cid);
+      expect(encode(value)).to.equal('cid-23');
     });
 
     it('does not translate objects with id field to ids', function() {
@@ -431,9 +431,9 @@ describe('property-types', function() {
     });
 
     it('translates ids to widgets', function() {
-      let value = new CustomNativeObject();
+      let value = new CustomNativeObject('cid-42');
 
-      expect(decode(value.cid)).to.equal(value);
+      expect(decode('cid-42')).to.equal(value);
     });
 
   });
