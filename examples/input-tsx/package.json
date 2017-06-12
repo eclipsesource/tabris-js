@@ -1,7 +1,5 @@
 {
-  "title": "Input Elements with tsx",
   "description": "Showcases declarative ui with tsx",
-  "category": "Small Apps",
   "main": "input.js",
   "scripts": {
     "start": "npm run build && npm run serve",
