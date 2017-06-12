@@ -34,85 +34,11 @@
 
 - title: API Reference
   pages:
-    - title: AlertDialog
-      url: api/AlertDialog.html
-    - title: app
-      url: api/app.html
-    - title: CanvasContext
-      url: api/CanvasContext.html
-    - title: device
-      url: api/device.html
-    - title: InactivityTimer
-      url: api/InactivityTimer.html
-    - title: NativeObject
-      url: api/NativeObject.html
-    - title: window
-      url: api/window.html
-    - title: ui
-      url: api/ui.html
-    - title: WidgetCollection
-      url: api/WidgetCollection.html
-    - title: Property Types
-      url: types.html
+<%= api %>
 
 - title: Widgets
   pages:
-    - title: Action
-      url: api/Action.html
-    - title: ActivityIndicator
-      url: api/ActivityIndicator.html
-    - title: Button
-      url: api/Button.html
-    - title: Canvas
-      url: api/Canvas.html
-    - title: CheckBox
-      url: api/CheckBox.html
-    - title: CollectionView
-      url: api/CollectionView.html
-    - title: Composite
-      url: api/Composite.html
-    - title: Drawer
-      url: api/Drawer.html
-    - title: ImageView
-      url: api/ImageView.html
-    - title: NavigationBar
-      url: api/NavigationBar.html
-    - title: NavigationView
-      url: api/NavigationView.html
-    - title: Page
-      url: api/Page.html
-    - title: Picker
-      url: api/Picker.html
-    - title: ProgressBar
-      url: api/ProgressBar.html
-    - title: RadioButton
-      url: api/RadioButton.html
-    - title: ScrollView
-      url: api/ScrollView.html
-    - title: SearchAction
-      url: api/SearchAction.html
-    - title: Slider
-      url: api/Slider.html
-    - title: StatusBar
-      url: api/StatusBar.html
-    - title: Switch
-      url: api/Switch.html
-    - title: Tab
-      url: api/Tab.html
-    - title: TabFolder
-      url: api/TabFolder.html
-    - title: TextInput
-      url: api/TextInput.html
-    - title: TextView
-      url: api/TextView.html
-    - title: ToggleButton
-      url: api/ToggleButton.html
-    - title: Video
-      url: api/Video.html
-    - title: WebView
-      url: api/WebView.html
-    - title: Widget
-      url: api/Widget.html
+<%= widgets %>
 
 - title: Custom Widgets
   pages:
@@ -121,4 +47,4 @@
     - title: Custom Widgets - Android
       url: custom-widgets-android.html
     - title: Custom Widgets - iOS
-      url: custom-widgets-ios.md
+      url: custom-widgets-ios.html

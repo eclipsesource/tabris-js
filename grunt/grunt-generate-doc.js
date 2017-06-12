@@ -1,4 +1,4 @@
-let path = require('path');
+const {join, parse, relative, sep} = require('path');
 
 const SNIPPETS_LOCATION = 'snippets';
 
@@ -9,8 +9,10 @@ const MSG_STATIC_PROP = 'This property can only be set on widget creation. Once 
 module.exports = function(grunt) {
 
   grunt.registerTask('generate-doc', () => {
-    let indexPath = grunt.config('doc').index;
     let targetPath = grunt.config('doc').target;
+    let apiPath = join(targetPath, 'api');
+    let typesFile = join(targetPath, 'types.md');
+    let tocFile = join(targetPath, 'toc.yml');
     let api = readAPI();
     let types = readTypes();
 
@@ -28,29 +30,28 @@ module.exports = function(grunt) {
     }
 
     function readTypes() {
-      let types = grunt.config('doc').types;
       return {
-        list: grunt.file.read(types).match(/^##\ *(.*)$/gm).map(heading => heading.slice(3).toLowerCase()),
-        path: path.relative(targetPath, types).replace(path.sep, '/')
+        list: grunt.file.read(typesFile).match(/^##\ *(.*)$/gm).map(heading => heading.slice(3).toLowerCase()),
+        path: relative(apiPath, typesFile).replace(sep, '/')
       };
     }
 
     function renderAPI() {
       Object.keys(api).forEach(type => {
-        let targetFile = path.join(targetPath, path.parse(api[type].file).name + '.md');
+        let targetFile = join(apiPath, parse(api[type].file).name + '.md');
         grunt.file.write(targetFile, renderDocument(type));
       });
     }
 
     function renderIndex() {
       grunt.log.verbose.writeln('Generating index');
-      let types = Object.keys(api).sort().map(type => api[type]);
-      let render = def => `- [${title(def)}](api/${path.parse(def.file).name}.md)`;
+      let types = Object.keys(api).map(type => api[type]).sort(compareTypes);
+      let render = def => `    - title: ${title(def)}\n      url: api/${parse(def.file).name}.html`;
       let data = {
         api: types.filter(type => !type.isWidget).map(render).join('\n'),
         widgets: types.filter(type => type.isWidget).map(render).join('\n')
       };
-      grunt.file.write(indexPath, grunt.template.process(grunt.file.read(indexPath), {data}));
+      grunt.file.write(tocFile, grunt.template.process(grunt.file.read(tocFile), {data}));
     }
 
     function renderDocument(type) {
@@ -77,14 +78,14 @@ module.exports = function(grunt) {
     }
 
     function renderExample(def) {
-      let exampleFile = path.join(targetPath, path.parse(def.file).name + '.md');
+      let exampleFile = join(apiPath, parse(def.file).name + '.md');
       if (grunt.file.isFile(exampleFile)) {
         return grunt.file.read(exampleFile);
       }
     }
 
     function renderSnippet(def) {
-      let snippetPath = path.join(SNIPPETS_LOCATION, `${def.type.toLowerCase()}.js`);
+      let snippetPath = join(SNIPPETS_LOCATION, `${def.type.toLowerCase()}.js`);
       if (grunt.file.isFile(snippetPath)) {
         return [
           '## Example',
@@ -96,9 +97,9 @@ module.exports = function(grunt) {
     }
 
     function renderImages(def) {
-      let androidImage = path.join('img/android', path.parse(def.file).name + '.png');
-      let iosImage = path.join('img/ios', path.parse(def.file).name + '.png');
-      let exists = image => grunt.file.isFile(path.join('doc/api', image));
+      let androidImage = join('img/android', parse(def.file).name + '.png');
+      let iosImage = join('img/ios', parse(def.file).name + '.png');
+      let exists = image => grunt.file.isFile(join('doc/api', image));
       if (exists(androidImage) && exists(iosImage)) {
         return [
           'Android | iOS',
@@ -313,6 +314,19 @@ module.exports = function(grunt) {
 
   function title(def) {
     return def.object || def.type;
+  }
+
+  function isLowerCase(str) {
+    return str.charAt(0).toLowerCase() === str.charAt(0);
+  }
+
+  function compareTypes(a, b) {
+    let ta = title(a);
+    let tb = title(b);
+    if (isLowerCase(ta) !== isLowerCase(tb)) {
+      return isLowerCase(ta) ? -1 : 1;
+    }
+    return ta.localeCompare(tb, 'en');
   }
 
 };

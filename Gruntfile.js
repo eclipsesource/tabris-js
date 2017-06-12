@@ -34,15 +34,13 @@ module.exports = function(grunt) {
     doc: {
       api: 'doc/api/**/*.json',
       typings: 'typings/propertyTypes.d.ts',
-      target: 'build/doc/api/',
-      index: 'build/doc/index.md',
-      types: 'build/doc/types.md'
+      target: 'build/doc/'
     },
     copy: {
       doc: {
         expand: true,
         cwd: 'doc/',
-        src: ['*.md', 'api/*.md', 'api/img/**/*.*', 'img/*.*'],
+        src: ['*.md', 'api/*.md', 'api/img/**/*.*', 'img/*.*', 'toc.yml'],
         dest: 'build/doc/'
       },
       readme: {
