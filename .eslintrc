@@ -34,7 +34,6 @@
     "no-with": "error",
     "no-var": "error",
     "prefer-arrow-callback": "error",
-    "arrow-body-style": ["error", "as-needed"],
     "object-shorthand": ["error", "always"]
   }
 }
