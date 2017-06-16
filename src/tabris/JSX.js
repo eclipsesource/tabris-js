@@ -1,14 +1,18 @@
 import Widget from './Widget';
+import Styles from './Styles';
 
 export function createElement(jsxType, properties, ...children) {
   let Type = typeToConstructor(jsxType);
-  let on = {}, once = {};
+  let on = {}, once = {}, style;
   for (let ev in properties) {
     if (ev.indexOf('once-') > -1) {
       once[ev.substr(5)] = properties[ev];
       delete properties[ev];
     } else if (ev.indexOf('on-') > -1) {
       on[ev.substr(3)] = properties[ev];
+      delete properties[ev];
+    } else if (ev === 'style') {
+      style = Styles(properties[ev]);
       delete properties[ev];
     }
   }
@@ -21,6 +25,9 @@ export function createElement(jsxType, properties, ...children) {
   }
   for (let ev in once) {
     result.once(ev, once[ev]);
+  }
+  if (style) {
+    result.apply(style);
   }
   return result.append.apply(result, children);
 }

@@ -9,6 +9,9 @@ import FileSystem, {create as createFileSystem} from './FileSystem';
 import {addDOMDocument} from './Document';
 import {addDOMEventTargetMethods} from './Event';
 import {addWindowTimerMethods} from './WindowTimers';
+import addAnimationFrame from './addAnimationFrame';
+import addSVGSupport from './SVGSupport';
+import {addDocSupport} from './dummyDoc';
 import Storage, {create as createStorage} from './Storage';
 import * as JSX from './JSX';
 import Action from './widgets/Action';
@@ -146,3 +149,7 @@ tabris.on('start', () => {
 addDOMDocument(window);
 addDOMEventTargetMethods(window);
 addWindowTimerMethods(window);
+addAnimationFrame(window);
+addSVGSupport(window);
+addDocSupport(window);
+addDocSupport(global);
