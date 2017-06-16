@@ -19,7 +19,9 @@ import Canvas from './widgets/Canvas';
 import CheckBox from './widgets/CheckBox';
 import CollectionView from './widgets/CollectionView';
 import Composite from './widgets/Composite';
+import View from './widgets/View';
 import ContentView from './widgets/ContentView';
+import Component from './Component';
 import Crypto from './Crypto';
 import Drawer from './widgets/Drawer';
 import Event from './Event';
@@ -69,7 +71,9 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   CheckBox,
   CollectionView,
   Composite,
+  Component,
   ContentView,
+  View,
   Crypto,
   Device,
   Drawer,
