@@ -8,6 +8,7 @@ export default class Component extends Widget {
     this.setState = this.setState.bind(this);
   }
   run () {
+    this._release();
     this.append(this.render());
     return this;
   }

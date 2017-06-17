@@ -56,6 +56,7 @@ import WebSocket from './WebSocket';
 import Widget from './Widget';
 import WidgetCollection from './WidgetCollection';
 import XMLHttpRequest from './XMLHttpRequest';
+import {Tween, Easing, Interpolation} from './Tweening';
 
 import {fetch} from './fetch/fetch';
 import Headers from './fetch/Headers';
@@ -114,7 +115,10 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   fetch,
   Headers,
   Request,
-  Response
+  Response,
+  Tween,
+  Easing,
+  Interpolation
 });
 
 Object.assign(window, {
