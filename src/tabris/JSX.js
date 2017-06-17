@@ -27,7 +27,7 @@ export function createElement(jsxType, properties, ...children) {
     result.once(ev, once[ev]);
   }
   if (style) {
-    result.apply(style);
+    result.set(style);
   }
   return result.append.apply(result, children);
 }

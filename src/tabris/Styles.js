@@ -1,8 +1,8 @@
 const Converter = require('css-to-js-object');
 
 const ConvertizeMap = {
-  color: 'textColor'
-  , align: 'alignment'
+  color: 'textColor',
+  align: 'alignment'
 };
 
 export class CSSParser {
