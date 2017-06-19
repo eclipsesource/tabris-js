@@ -2,7 +2,7 @@
 import Module from './Module';
 
 global.window = global.self = global;
-global.tabris = {};
+global.tabris = {}; // provisional object, will be replaced by tabris module
 
 tabris._start = function(client) {
   try {
@@ -19,12 +19,13 @@ tabris._start = function(client) {
     tabris._defineModule = function(id, fn) {
       return new Module(id, rootModule, fn);
     };
-    let cordovaScript = document.createElement('script');
-    cordovaScript.src = './cordova.js';
-    document.head.appendChild(cordovaScript);
+    // Initialize tabris (including version check) before loading cordova (see #1379)
     if (tabris._init) {
       tabris._init(client);
     }
+    let cordovaScript = document.createElement('script');
+    cordovaScript.src = './cordova.js';
+    document.head.appendChild(cordovaScript);
     let loadMain = function() {
       try {
         rootModule.require('./');
