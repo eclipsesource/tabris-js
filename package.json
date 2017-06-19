@@ -31,6 +31,7 @@
     "chai": "^3.5.0",
     "eslint": "^3.7.1",
     "format-json": "^1.0.3",
+    "fs-extra": "^3.0.1",
     "grunt": "^1.0.1",
     "grunt-contrib-clean": "^1.0.0",
     "grunt-contrib-compress": "^1.1.0",

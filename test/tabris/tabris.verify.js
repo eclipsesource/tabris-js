@@ -1,8 +1,9 @@
 global.self = global;
-let tabris = require('../../build/tabris/');
-let expect = require('chai').expect;
+const {expect} = require('chai');
+const {copySync, removeSync} = require('fs-extra');
+const tabris = require('../../build/tabris');
 
-let window = global.window;
+const window = global.window;
 
 describe('global object', function() {
 
@@ -60,6 +61,12 @@ describe('window', function() {
 });
 
 describe('tabris', function() {
+
+  it('throws when loaded twice', function() {
+    copySync('build/tabris', 'build/tabris-copy');
+    expect(() => require('../../build/tabris-copy')).to.throw('tabris module already loaded');
+    removeSync('build/tabris-copy');
+  });
 
   it('contains version', function() {
     expect(tabris.version).to.match(/\d+\.\d+\.\d+/);

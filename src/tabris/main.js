@@ -59,6 +59,10 @@ import Response from './fetch/Response';
 
 const window = global.window;
 
+if (global.tabris && global.tabris.version) {
+  throw new Error('tabris module already loaded. Ensure the module is installed only once.');
+}
+
 module.exports = global.tabris = Object.assign(new Tabris(), {
   Action,
   ActivityIndicator,
