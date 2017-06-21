@@ -325,10 +325,12 @@ describe('Widget', function() {
           result = widget.append(child1);
         });
 
-        it("sets the child's parent", function() {
+        it("sets the child's parent and calls native `insert` method", function() {
           let calls = client.calls();
-          expect(calls.length).to.equal(1);
+          expect(calls.length).to.equal(2);
           expect(calls[0]).to.eql({op: 'set', id: child1.cid, properties: {parent: widget.cid}});
+          expect(calls[1]).to.eql({op: 'call', id: widget.cid, method: 'insert',
+            parameters: {child: child1.cid, index: 0}});
         });
 
         it('returns self to allow chaining', function() {
@@ -357,10 +359,12 @@ describe('Widget', function() {
           result = widget.append(child1, child2);
         });
 
-        it("sets the children's parent", function() {
+        it("sets the children's parent and calls native `insert` method", function() {
           let calls = client.calls();
-          expect(calls.length).to.equal(2);
-          expect(calls[1]).to.eql({op: 'set', id: child2.cid, properties: {parent: widget.cid}});
+          expect(calls.length).to.equal(4);
+          expect(calls[0]).to.eql({op: 'set', id: child1.cid, properties: {parent: widget.cid}});
+          expect(calls[1]).to.eql({op: 'call', id: widget.cid, method: 'insert',
+            parameters: {child: child1.cid, index: 0}});
         });
 
         it('returns self to allow chaining', function() {
@@ -385,11 +389,15 @@ describe('Widget', function() {
           result = widget.append([child1, child2]);
         });
 
-        it("sets the widgets' parent", function() {
+        it("sets the widgets' parent and calls native `insert` method", function() {
           let calls = client.calls();
-          expect(calls.length).to.equal(2);
+          expect(calls.length).to.equal(4);
           expect(calls[0]).to.eql({op: 'set', id: child1.cid, properties: {parent: widget.cid}});
-          expect(calls[1]).to.eql({op: 'set', id: child2.cid, properties: {parent: widget.cid}});
+          expect(calls[1]).to.eql({op: 'call', id: widget.cid, method: 'insert',
+            parameters: {child: child1.cid, index: 0}});
+          expect(calls[2]).to.eql({op: 'set', id: child2.cid, properties: {parent: widget.cid}});
+          expect(calls[3]).to.eql({op: 'call', id: widget.cid, method: 'insert',
+            parameters: {child: child2.cid, index: 1}});
         });
 
         it('adds the widgets to children list', function() {
@@ -408,11 +416,15 @@ describe('Widget', function() {
           result = widget.append(new WidgetCollection([child1, child2]));
         });
 
-        it("sets the widgets' parent", function() {
+        it("sets the widgets' native parent and calls native `insert`", function() {
           let calls = client.calls();
-          expect(calls.length).to.equal(2);
+          expect(calls.length).to.equal(4);
           expect(calls[0]).to.eql({op: 'set', id: child1.cid, properties: {parent: widget.cid}});
-          expect(calls[1]).to.eql({op: 'set', id: child2.cid, properties: {parent: widget.cid}});
+          expect(calls[1]).to.eql({op: 'call', id: widget.cid, method: 'insert',
+            parameters: {child: child1.cid, index: 0}});
+          expect(calls[2]).to.eql({op: 'set', id: child2.cid, properties: {parent: widget.cid}});
+          expect(calls[3]).to.eql({op: 'call', id: widget.cid, method: 'insert',
+            parameters: {child: child2.cid, index: 1}});
         });
 
         it('adds the widgets to children list', function() {
@@ -1059,43 +1071,29 @@ describe('Widget', function() {
       expect(call.properties.layoutData).to.eql(expected);
     });
 
-    it('SET layoutData again until selector resolves by adding sibling', function() {
+    it('SET layoutData again when selector resolves by adding sibling', function() {
       other.dispose();
-
       widget.layoutData = {right: '#other'};
-      let withoutSibling = client.calls({op: 'set'});
-      let retry = client.calls({op: 'set'});
-      other = new TestWidget({id: 'other'}).appendTo(parent);
-      let withSibling = client.calls({op: 'set'});
-      let noRetry = client.calls({op: 'set'});
-
-      expect(withoutSibling.length).to.equal(1);
-      expect(retry.length).to.equal(1);
-      expect(withSibling.length).to.equal(2);
-      expect(noRetry.length).to.equal(2);
-      expect(withoutSibling[0].properties.layoutData).to.eql({right: [0, 0]});
-      expect(withSibling[1].properties.layoutData).to.eql({right: [other.cid, 0]});
-    });
-
-    it('SET layoutData again until selector resolves by setting parent', function() {
-      widget = new TestWidget();
-      let oldParent = new TestWidget();
-      widget.appendTo(oldParent);
       client.resetCalls();
 
-      widget.layoutData = {right: '#other'};
-      let withoutParent = client.calls({op: 'set'});
-      let retry = client.calls({op: 'set'});
-      widget.appendTo(parent);
-      let withParent = client.calls({op: 'set'});
-      let noRetry = client.calls({op: 'set'});
+      other = new TestWidget({id: 'other'}).appendTo(parent);
 
-      expect(withoutParent.length).to.equal(1);
-      expect(retry.length).to.equal(1);
-      expect(withParent.length).to.equal(2);
-      expect(noRetry.length).to.equal(2);
-      expect(withoutParent[0].properties.layoutData).to.eql({right: [0, 0]});
-      expect(withParent[1].properties.layoutData).to.eql({right: [other.cid, 0]});
+      let setCalls = client.calls({op: 'set'});
+      expect(setCalls.length).to.equal(1);
+      expect(setCalls[0].properties.layoutData).to.eql({right: [other.cid, 0]});
+    });
+
+    it('SET layoutData again when selector resolves by setting parent', function() {
+      widget = new TestWidget();
+      widget.appendTo(new TestWidget());
+      widget.layoutData = {right: '#other'};
+      client.resetCalls();
+
+      widget.appendTo(parent);
+
+      let setCalls = client.calls({op: 'set'});
+      expect(setCalls.length).to.equal(2);
+      expect(setCalls[1].properties.layoutData).to.eql({right: [other.cid, 0]});
     });
 
   });
