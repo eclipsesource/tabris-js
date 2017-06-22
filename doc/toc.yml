@@ -25,6 +25,8 @@
       url: w3c-api.html
     - title: Cordova Support
       url: cordova.html
+    - title: ES6, TypeScript and JSX
+      url: lang.html
     - title: Windows Support
       url: windows-support.html
     - title: Build your app
