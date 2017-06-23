@@ -1,8 +1,0 @@
-{
-  "name": "tabris-typescript-test",
-  "private": true,
-  "dependencies": {
-    "tabris": "../tabris",
-    "typescript": "^2.1.5"
-  }
-}

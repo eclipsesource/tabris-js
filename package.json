@@ -2,6 +2,7 @@
   "name": "tez-native",
   "version": "2.0.0-rc2",
   "description": "Mobile apps with native UIs in JavaScript",
+  "main": "tabris.js",
   "keywords": [
     "native",
     "mobile",
@@ -15,40 +16,18 @@
     "url": "https://github.com/dalisoft/tez-native.git"
   },
   "devDependencies": {
-    "babel-cli": "^6.14.0",
-	"css-to-js-object": "latest",
-	"canvg": "latest",
-    "es6-tween": "latest",
-    "babel-core": "^6.14.0",
-    "babel-plugin-array-includes": "^2.0.3",
-    "babel-plugin-transform-es2015-arrow-functions": "^6.8.0",
-    "babel-plugin-transform-es2015-block-scoping": "^6.15.0",
-    "babel-plugin-transform-es2015-classes": "^6.14.0",
-    "babel-plugin-transform-es2015-computed-properties": "^6.8.0",
-    "babel-plugin-transform-es2015-for-of": "^6.18.0",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.14.0",
-    "babel-plugin-transform-es2015-parameters": "^6.17.0",
-    "babel-plugin-transform-es2015-shorthand-properties": "^6.8.0",
-    "babel-plugin-transform-es2015-template-literals": "^6.8.0",
-    "babel-preset-babili": "0.0.11",
-    "chai": "^3.5.0",
-    "eslint": "^3.7.1",
-    "format-json": "^1.0.3",
-    "grunt": "^1.0.1",
-    "grunt-contrib-clean": "^1.0.0",
-    "grunt-contrib-compress": "^1.1.0",
-    "grunt-contrib-concat": "^1.0.0",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-exec": "^2.0.0",
-    "mocha": "^3.0.2",
     "rollup": "^0.41.6",
-    "sinon": "^2.3.2",
-    "sinon-chai": "^2.8.0",
-    "tslint": "^5.4.0",
-    "typescript": "^2.1.5",
-    "webpack": "^2.2.1"
+	"rollup-plugin-buble": "^0.15.0",
+	"rollup-watch": "^3.2.2",
+	"css-to-js-object": "latest",
+    "es6-tween": "latest"
   },
   "scripts": {
-    "test": "grunt test"
+    "build": "rollup -c --environment BUILD:prod",
+	"source": "rollup -c",
+	"sourcemap": "rollup -c  --sourcemap",
+	"prepublish": "npm run source && npm run build && npm run sourcemap",
+	"dev": "rollup -c -w --sourcemap",
+	"test": "npm run sourcemap"
   }
 }
