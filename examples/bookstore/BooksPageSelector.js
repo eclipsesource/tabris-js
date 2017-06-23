@@ -27,11 +27,11 @@ module.exports = class BooksPageSelector extends Composite {
 
   _createUI() {
     this.append(
-      PAGE_DATA.map(({title, drawerIcon, filter}) =>
+      PAGE_DATA.map(data =>
         new Composite({class: 'pageEntry', highlightOnTouch: true}).append(
-          new ImageView({class: 'image', image: drawerIcon}),
-          new TextView({class: 'titleLabel', text: title})
-        ).on('tap', () => this._open(new BooksPage({title, filter})))
+          new ImageView({class: 'image', image: data.drawerIcon}),
+          new TextView({class: 'titleLabel', text: data.title})
+        ).on('tap', () => this._open(new BooksPage({title: data.title, filter: data.filter})))
       )
     );
   }
