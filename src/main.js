@@ -144,7 +144,7 @@ export default Object.assign(new Tabris(), {
   TextInput,
   TextView,
   ToggleButton,
-  Ui,
+  ui: Ui,
   Video,
   WebSocket,
   WebView,

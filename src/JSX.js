@@ -17,9 +17,6 @@ export function createElement(jsxType, properties, ...children) {
     }
   }
   let result = new Type(properties);
-  if (!(result instanceof Widget)) {
-    throw new Error(('JSX: Unsupported type ' + Type.name).trim());
-  }
   for (let ev in on) {
     result.on(ev, on[ev]);
   }
@@ -28,6 +25,10 @@ export function createElement(jsxType, properties, ...children) {
   }
   if (style) {
     result.set(style);
+  }
+  if (!(result instanceof Widget)) {
+    throw new Error(('JSX: Unsupported type ' + Type.name).trim());
+	return;
   }
   return result.append.apply(result, children);
 }
