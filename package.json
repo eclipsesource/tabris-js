@@ -28,7 +28,7 @@
     "build": "rollup -c --environment BUILD:prod",
     "source": "rollup -c",
     "sourcemap": "rollup -c  --sourcemap",
-    "prepublish": "npm run source && npm run build && npm run sourcemap",
+    "prepublishOnly": "npm run source && npm run build && npm run sourcemap",
     "dev": "rollup -c -w --sourcemap",
     "test": "npm run sourcemap"
   }
