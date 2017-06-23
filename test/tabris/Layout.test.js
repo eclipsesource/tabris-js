@@ -1,7 +1,6 @@
 import ClientStub from './ClientStub';
 import {expect, mockTabris, stub, spy, restore} from '../test';
 import Layout from '../../src/tabris/Layout';
-import Composite from '../../src/tabris/widgets/Composite';
 import Widget from '../../src/tabris/Widget';
 
 describe('Layout', function() {
@@ -39,7 +38,7 @@ describe('Layout', function() {
     it('skips overridden properties from layoutData (height)', function() {
       let result = check({top: 0, left: 0, bottom: 0, height: 100});
 
-      expect(result).to.eql({top: 0, left: 0, bottom: 0});
+      expect(result).to.deep.equal({top: 0, left: 0, bottom: 0});
     });
 
     it('raises a warning for inconsistent layoutData (centerX)', function() {
@@ -85,9 +84,12 @@ describe('Layout', function() {
 
   describe('resolveReferences', function() {
 
-    class TestType extends Widget {
+    class TestWidget extends Widget {
       get _nativeType() {
         return 'TestType';
+      }
+      _acceptChild() {
+        return true;
       }
     }
 
@@ -96,9 +98,9 @@ describe('Layout', function() {
 
     beforeEach(function() {
       mockTabris(new ClientStub());
-      parent = new Composite();
-      widget = new TestType().appendTo(parent);
-      other = new TestType({id: 'other'}).appendTo(parent);
+      parent = new TestWidget();
+      widget = new TestWidget().appendTo(parent);
+      other = new TestWidget({id: 'other'}).appendTo(parent);
     });
 
     it('translates widget to ids', function() {
@@ -133,29 +135,69 @@ describe('Layout', function() {
       let input = {centerX: 23, left: [30, 42]};
       let expected = {centerX: 23, left: [30, 42]};
 
-      expect(resolve(input, widget)).to.eql(expected);
+      expect(resolve(input, widget)).to.deep.equal(expected);
     });
 
     it('treats ambiguous string as selector', function() {
-      let freak1 = new TestType({class: 'foo%'}).appendTo(parent);
-      let freak2 = new TestType({id: '23%'}).appendTo(parent);
+      let freak1 = new TestWidget({class: 'foo%'}).appendTo(parent);
+      let freak2 = new TestWidget({id: '23%'}).appendTo(parent);
 
-      expect(resolve({left: ['.foo%', 23], top: ['#23%', 42], right: ['Foo%', 47]}, widget))
-        .to.eql({left: [freak1.cid, 23], top: [freak2.cid, 42], right: [0, 47]});
+      let input = {left: ['.foo%', 23], top: ['#23%', 42], right: ['Foo%', 47]};
+      let expected = {left: [freak1.cid, 23], top: [freak2.cid, 42], right: [0, 47]};
+
+      expect(resolve(input, widget)).to.deep.equal(expected);
     });
 
     it('replaces unresolved selector (due to missing sibling) with 0', function() {
       other.dispose();
 
-      expect(resolve({baseline: '#noone', left: ['#noone', 42]}, widget))
-        .to.eql({baseline: 0, left: [0, 42]});
+      let input = {baseline: '#other', left: ['#other', 42]};
+      let expected = {baseline: 0, left: [0, 42]};
+
+      expect(resolve(input, widget)).to.deep.equal(expected);
     });
 
     it('replaces unresolved selector (due to missing parent) with 0', function() {
-      widget = new TestType();
+      widget = new TestWidget();
 
-      expect(resolve({baseline: '#noone', left: ['#noone', 42]}, widget))
-        .to.eql({baseline: 0, left: [0, 42]});
+      let input = {baseline: '#other', left: ['#other', 42]};
+      let expected = {baseline: 0, left: [0, 42]};
+
+      expect(resolve(input, widget)).to.deep.equal(expected);
+    });
+
+    it('replaces widget itself with 0', function() {
+      let input = {baseline: widget, left: [widget, 42]};
+      let expected = {baseline: 0, left: [0, 42]};
+
+      expect(resolve(input, widget)).to.deep.equal(expected);
+    });
+
+    it('replaces ref to widget itself with 0', function() {
+      widget.id = 'myself';
+
+      let input = {baseline: '#myself', left: ['#myself', 42]};
+      let expected = {baseline: 0, left: [0, 42]};
+
+      expect(resolve(input, widget)).to.deep.equal(expected);
+    });
+
+    it('replaces non-siblings with 0', function() {
+      let child = new TestWidget().appendTo(widget);
+
+      let input = {baseline: parent, left: [child, 42]};
+      let expected = {baseline: 0, left: [0, 42]};
+
+      expect(resolve(input, widget)).to.deep.equal(expected);
+    });
+
+    it('replaces refs to non-siblings with 0', function() {
+      new TestWidget({id: 'child'}).appendTo(widget);
+
+      let input = {baseline: '#parent', left: ['#child', 42]};
+      let expected = {baseline: 0, left: [0, 42]};
+
+      expect(resolve(input, widget)).to.deep.equal(expected);
     });
 
   });
