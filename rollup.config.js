@@ -12,12 +12,8 @@ const plugins = [buble({
 export default {
 	entry: 'src/main.js',
 	format: 'umd',
-	dest: 'tabris.js', // equivalent to --output
-	globals: {
-		'es6-tween': 'TWEEN'
-	},
-	moduleName: 'tabris',
-	//external,
-	//exports: 'default',
+	dest: 'tezNative.js', // equivalent to --output
+	moduleName: 'tezNative',
+	external,
 	plugins: plugins
 }

@@ -63,9 +63,48 @@ import Headers from './fetch/Headers';
 import Request from './fetch/Request';
 import Response from './fetch/Response';
 
+
+
 const window = global.window;
 
-module.exports = global.tabris = Object.assign(new Tabris(), {
+Object.assign(window, {
+  Crypto,
+  ImageData,
+  ProgressEvent,
+  Storage,
+  WebSocket,
+  XMLHttpRequest,
+  fetch,
+  Headers,
+  Request,
+  Response,
+  JSX
+});
+
+tabris.on('start', () => {
+  tabris.app = createApp();
+  checkVersion(tabris.version, tabris.app._nativeGet('tabrisJsVersion'));
+  tabris.ui = createUi();
+  tabris.device = createDevice();
+  tabris.fs = createFileSystem();
+  publishDeviceProperties(tabris.device, window);
+  window.localStorage = tabris.localStorage = createStorage();
+  if (tabris.device.platform === 'iOS') {
+    window.secureStorage = tabris.secureStorage = createStorage(true);
+  }
+  window.crypto = tabris.crypto = new Crypto();
+  tabris.pkcs5 = new Pkcs5();
+});
+
+addDOMDocument(window);
+addDOMEventTargetMethods(window);
+addWindowTimerMethods(window);
+addAnimationFrame(window);
+addSVGSupport(window);
+addDocSupport(window);
+addDocSupport(global);
+
+export default Object.assign(new Tabris(), {
   Action,
   ActivityIndicator,
   AlertDialog,
@@ -118,42 +157,6 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   Response,
   Tween,
   Easing,
-  Interpolation
+  Interpolation,
+  window: window
 });
-
-Object.assign(window, {
-  Crypto,
-  ImageData,
-  ProgressEvent,
-  Storage,
-  WebSocket,
-  XMLHttpRequest,
-  fetch,
-  Headers,
-  Request,
-  Response,
-  JSX
-});
-
-tabris.on('start', () => {
-  tabris.app = createApp();
-  checkVersion(tabris.version, tabris.app._nativeGet('tabrisJsVersion'));
-  tabris.ui = createUi();
-  tabris.device = createDevice();
-  tabris.fs = createFileSystem();
-  publishDeviceProperties(tabris.device, window);
-  window.localStorage = tabris.localStorage = createStorage();
-  if (tabris.device.platform === 'iOS') {
-    window.secureStorage = tabris.secureStorage = createStorage(true);
-  }
-  window.crypto = tabris.crypto = new Crypto();
-  tabris.pkcs5 = new Pkcs5();
-});
-
-addDOMDocument(window);
-addDOMEventTargetMethods(window);
-addWindowTimerMethods(window);
-addAnimationFrame(window);
-addSVGSupport(window);
-addDocSupport(window);
-addDocSupport(global);

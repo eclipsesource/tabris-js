@@ -5,3 +5,5 @@ build/
 node_modules/
 platforms/
 npm-debug.log*
+tabris.js
+tabris.js.map
