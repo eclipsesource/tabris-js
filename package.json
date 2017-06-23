@@ -1,6 +1,6 @@
 {
   "name": "tez-native",
-  "version": "2.0.0-rc2",
+  "version": "2.0.1-alpha",
   "description": "Mobile apps with native UIs in JavaScript",
   "main": "tabris.js",
   "keywords": [
