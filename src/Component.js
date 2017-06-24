@@ -5,17 +5,17 @@ export default class Component extends Widget {
     super();
     this.props = props;
     this.state = {};
-    this.setState = this.setState.bind(this);
   }
-  run () {
-    this._release();
-    this.append(this.render());
-    return this;
+  _acceptChild() {
+    return true;
+  }
+  get _nativeType() {
+    return 'tabris.Composite';
   }
   setState (fn) {
-    this._release();
+	this.children.dispose();
     this.state = fn(this.state);
-    this.append(this.render());
+	this._addChild(this.render(this.props, this.state));
     return this;
   }
   render () {}

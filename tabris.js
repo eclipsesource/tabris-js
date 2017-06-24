@@ -4084,6 +4084,39 @@ var Styles = function(input) {
     .convertTo();
 };
 
+var Component = (function (Widget$$1) {
+  function Component (props) {
+    if ( props === void 0 ) props = {};
+
+    Widget$$1.call(this);
+    this.props = props;
+    this.state = {};
+  }
+
+  if ( Widget$$1 ) Component.__proto__ = Widget$$1;
+  Component.prototype = Object.create( Widget$$1 && Widget$$1.prototype );
+  Component.prototype.constructor = Component;
+
+  var prototypeAccessors = { _nativeType: {} };
+  Component.prototype._acceptChild = function _acceptChild () {
+    return true;
+  };
+  prototypeAccessors._nativeType.get = function () {
+    return 'tabris.Composite';
+  };
+  Component.prototype.setState = function setState (fn) {
+	this.children.dispose();
+    this.state = fn(this.state);
+	this._addChild(this.render(this.props, this.state));
+    return this;
+  };
+  Component.prototype.render = function render () {};
+
+  Object.defineProperties( Component.prototype, prototypeAccessors );
+
+  return Component;
+}(Widget));
+
 function createElement(jsxType, properties) {
   var children = [], len = arguments.length - 2;
   while ( len-- > 0 ) children[ len ] = arguments[ len + 2 ];
@@ -4115,6 +4148,9 @@ function createElement(jsxType, properties) {
   if (!(result instanceof Widget)) {
     throw new Error(('JSX: Unsupported type ' + Type.name).trim());
 	return;
+  }
+  if (result instanceof Component) {
+	result = result.render(result.props, result.state);
   }
   return result.append.apply(result, children);
 }
@@ -4613,35 +4649,6 @@ function createDelegate(prop) {
 function isNumber$1(value) {
   return typeof value === 'number' && isFinite(value);
 }
-
-var Component = (function (Widget$$1) {
-  function Component (props) {
-    if ( props === void 0 ) props = {};
-
-    Widget$$1.call(this);
-    this.props = props;
-    this.state = {};
-    this.setState = this.setState.bind(this);
-  }
-
-  if ( Widget$$1 ) Component.__proto__ = Widget$$1;
-  Component.prototype = Object.create( Widget$$1 && Widget$$1.prototype );
-  Component.prototype.constructor = Component;
-  Component.prototype.run = function run () {
-    this._release();
-    this.append(this.render());
-    return this;
-  };
-  Component.prototype.setState = function setState (fn) {
-    this._release();
-    this.state = fn(this.state);
-    this.append(this.render());
-    return this;
-  };
-  Component.prototype.render = function render () {};
-
-  return Component;
-}(Widget));
 
 var Crypto = (function (NativeObject$$1) {
   function Crypto() {

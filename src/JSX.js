@@ -1,5 +1,6 @@
 import Widget from './Widget';
 import Styles from './Styles';
+import Component from './Component';
 
 export function createElement(jsxType, properties, ...children) {
   let Type = typeToConstructor(jsxType);
@@ -29,6 +30,9 @@ export function createElement(jsxType, properties, ...children) {
   if (!(result instanceof Widget)) {
     throw new Error(('JSX: Unsupported type ' + Type.name).trim());
 	return;
+  }
+  if (result instanceof Component) {
+	result = result.render(result.props, result.state);
   }
   return result.append.apply(result, children);
 }
