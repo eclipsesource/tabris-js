@@ -1,6 +1,6 @@
 {
   "name": "tez-native",
-  "version": "2.0.1-rc2-pre",
+  "version": "2.0.1-rc2-pre2",
   "description": "Mobile apps with native UIs in JavaScript",
   "main": "tezNative.js",
   "keywords": [
@@ -16,7 +16,7 @@
     "url": "https://github.com/dalisoft/tez-native.git"
   },
   "dependencies": {
-    "css-to-js-object": "latest"
+    
   },
   "devDependencies": {
     "es6-tween": "latest",

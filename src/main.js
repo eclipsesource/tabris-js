@@ -159,6 +159,5 @@ addDOMEventTargetMethods(window);
 addWindowTimerMethods(window);
 addAnimationFrame(window);
 addSVGSupport(window);
-addDocSupport(window);
 
 export default tabris;
