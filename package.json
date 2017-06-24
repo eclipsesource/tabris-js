@@ -1,6 +1,6 @@
 {
   "name": "tez-native",
-  "version": "2.0.2-alpha",
+  "version": "2.0.2-alpha2",
   "description": "Mobile apps with native UIs in JavaScript",
   "main": "tezNative.js",
   "keywords": [
@@ -26,7 +26,7 @@
     "build": "rollup -c --environment BUILD:prod",
     "source": "rollup -c",
     "sourcemap": "rollup -c  --sourcemap",
-    "prepublishOnly": "npm run source && npm run build && npm run sourcemap",
+    "prepublishOnly": "npm run sourcemap",
     "dev": "rollup -c -w --sourcemap",
     "test": "npm run sourcemap"
   }
