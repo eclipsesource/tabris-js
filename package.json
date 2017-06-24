@@ -1,6 +1,6 @@
 {
   "name": "tez-native",
-  "version": "2.0.2-alpha2",
+  "version": "2.0.2-alpha3",
   "description": "Mobile apps with native UIs in JavaScript",
   "main": "tezNative.js",
   "keywords": [

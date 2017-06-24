@@ -154,7 +154,6 @@ tabris.on('start', () => {
   tabris.pkcs5 = new Pkcs5();
 });
 
-addDOMDocument(window);
 addDOMEventTargetMethods(window);
 addWindowTimerMethods(window);
 addAnimationFrame(window);
