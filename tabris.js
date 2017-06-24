@@ -6788,10 +6788,10 @@ var animFrame = 'AnimationFrame';
 var rafSuffixForVendor = 'Request' + animFrame;
 var cafSuffixForVendor = 'Cancel' + animFrame;
 var cafSuffixForVendor2 = 'CancelRequest' + animFrame;
-var _timeout = setTimeout;
-var _clearTimeout = clearTimeout;
+var _timeout = ROOT.setTimeout;
+var _clearTimeout = ROOT.clearTimeout;
 
-if ( ROOT.requestAnimationFrame === undefined ) {
+if ( _timeout && ROOT.requestAnimationFrame === undefined ) {
 
 	var _raf, now, lastTime = Date.now(), frameMs = (50 / 3), fpsSec = frameMs;
 
@@ -6812,7 +6812,7 @@ if ( ROOT.requestAnimationFrame === undefined ) {
 	}
 }
 
-if ( ROOT.cancelAnimationFrame === undefined && (ROOT.cancelAnimationFrame = ROOT.cancelRequestAnimationFrame) === undefined ) {
+if ( _clearTimeout && ROOT.cancelAnimationFrame === undefined && (ROOT.cancelAnimationFrame = ROOT.cancelRequestAnimationFrame) === undefined ) {
 	var _caf;
 
 	_vendor.map(function (vendor) {
@@ -8522,12 +8522,8 @@ Object.assign(window$1, {
   Response: Response,
   JSX: JSX
 });
-
-addDOMDocument(window$1);
-addDOMEventTargetMethods(window$1);
 addWindowTimerMethods(window$1);
 addAnimationFrame(window$1);
-addSVGSupport(window$1);
 
 var tabris$1 = global.tabris = Object.assign(new Tabris(), {
   Action: Action,
@@ -8602,6 +8598,10 @@ tabris$1.on('start', function () {
   window$1.crypto = tabris$1.crypto = new Crypto();
   tabris$1.pkcs5 = new Pkcs5();
 });
+
+addDOMDocument(window$1);
+addDOMEventTargetMethods(window$1);
+addSVGSupport(window$1);
 
 return tabris$1;
 

@@ -23,7 +23,7 @@
     "rollup-watch": "^3.2.2"
   },
   "scripts": {
-    "dev": "rollup -c -w --sourcemap"
+    "dev": "rollup -c -w --sourcemap",
     "build": "rollup -c --sourcemap"
   }
 }

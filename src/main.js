@@ -79,12 +79,8 @@ Object.assign(window, {
   Response,
   JSX
 });
-
-addDOMDocument(window);
-addDOMEventTargetMethods(window);
 addWindowTimerMethods(window);
 addAnimationFrame(window);
-addSVGSupport(window);
 
 import {Tween, Easing, Interpolation} from './Tweening';
 
@@ -161,5 +157,9 @@ tabris.on('start', () => {
   window.crypto = tabris.crypto = new Crypto();
   tabris.pkcs5 = new Pkcs5();
 });
+
+addDOMDocument(window);
+addDOMEventTargetMethods(window);
+addSVGSupport(window);
 
 export default tabris;
