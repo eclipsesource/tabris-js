@@ -81,30 +81,7 @@ Object.assign(window, {
   JSX
 });
 
-tabris.on('start', () => {
-  tabris.app = createApp();
-  checkVersion(tabris.version, tabris.app._nativeGet('tabrisJsVersion'));
-  tabris.ui = createUi();
-  tabris.device = createDevice();
-  tabris.fs = createFileSystem();
-  publishDeviceProperties(tabris.device, window);
-  window.localStorage = tabris.localStorage = createStorage();
-  if (tabris.device.platform === 'iOS') {
-    window.secureStorage = tabris.secureStorage = createStorage(true);
-  }
-  window.crypto = tabris.crypto = new Crypto();
-  tabris.pkcs5 = new Pkcs5();
-});
-
-addDOMDocument(window);
-addDOMEventTargetMethods(window);
-addWindowTimerMethods(window);
-addAnimationFrame(window);
-addSVGSupport(window);
-addDocSupport(window);
-addDocSupport(global);
-
-export default Object.assign(new Tabris(), {
+const tabris = global.tabris = Object.assign(new Tabris(), {
   Action,
   ActivityIndicator,
   AlertDialog,
@@ -160,3 +137,30 @@ export default Object.assign(new Tabris(), {
   Interpolation,
   window: window
 });
+
+
+
+tabris.on('start', () => {
+  tabris.app = createApp();
+  checkVersion(tabris.version, tabris.app._nativeGet('tabrisJsVersion'));
+  tabris.ui = createUi();
+  tabris.device = createDevice();
+  tabris.fs = createFileSystem();
+  publishDeviceProperties(tabris.device, window);
+  window.localStorage = tabris.localStorage = createStorage();
+  if (tabris.device.platform === 'iOS') {
+    window.secureStorage = tabris.secureStorage = createStorage(true);
+  }
+  window.crypto = tabris.crypto = new Crypto();
+  tabris.pkcs5 = new Pkcs5();
+});
+
+addDOMDocument(window);
+addDOMEventTargetMethods(window);
+addWindowTimerMethods(window);
+addAnimationFrame(window);
+addSVGSupport(window);
+addDocSupport(window);
+addDocSupport(global);
+
+export default tabris;
