@@ -1,9 +1,0 @@
-{
-  "title": "Swipe to dismiss",
-  "description": "Showcases a CollectionView where elements can be swiped-to-dismiss.",
-  "category": "Small Apps",
-  "main": "swipe-to-dismiss.js",
-  "dependencies": {
-    "tabris": "2.0.0-rc2"
-  }
-}

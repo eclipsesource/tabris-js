@@ -3277,6 +3277,81 @@ function defineEventHandlerProperty(target, type) {
   });
 }
 
+function addDOMDocument(target) {
+
+  var HTMLElement = function HTMLElement(tagName) {
+    this.tagName = (tagName || '').toUpperCase();
+    this.children = [];
+  };
+
+  HTMLElement.prototype.setAttribute = function setAttribute () {
+  };
+
+  HTMLElement.prototype.appendChild = function appendChild (el) {
+    this.children.push(el);
+    handleElementInserted(this, el, target);
+    return el;
+  };
+
+  HTMLElement.prototype.cloneNode = function cloneNode () {
+    return new HTMLElement();
+  };
+
+  HTMLElement.prototype.lastChild = function lastChild () {
+    return new HTMLElement();
+  };
+
+  target.document = {
+    documentElement: {},
+    createDocumentFragment: function createDocumentFragment() {return new HTMLElement();},
+    createElement: function createElement(tagName) {return new HTMLElement(tagName);},
+    location: {href: ''},
+    readyState: 'loading',
+    head: new HTMLElement('head'),
+    getElementsByTagName: function getElementsByTagName(tagName) {
+      return this.head.children.filter(function (node) { return node.tagName === tagName.toUpperCase(); });
+    },
+    createEvent: function createEvent(type) {
+      return new Event(type);
+    }
+  };
+
+  addDOMEventTargetMethods(target.document);
+  if (typeof target.location === 'undefined') {
+    target.location = target.document.location;
+  }
+
+  tabris.once('start', function () {
+    target.document.readyState = 'complete';
+    var event = new Event('DOMContentLoaded', false, false);
+    target.document.dispatchEvent(event);
+  });
+
+}
+
+function handleElementInserted(parent, child, target) {
+  if (parent.tagName === 'HEAD' && child.tagName === 'SCRIPT' && child.src) {
+    var result;
+    try {
+      result = tabris._client.loadAndExecute(child.src, '', '');
+    } catch (ex) {
+      console.error('Error loading ' + child.src + ':', ex);
+      console.log(ex.stack);
+      if (typeof child.onerror === 'function') {
+        child.onerror.call(target, ex);
+      }
+      return;
+    }
+    if (result.loadError) {
+      if (typeof child.onerror === 'function') {
+        child.onerror.call(target, new Error('Could not load ' + child.src));
+      }
+    } else if (typeof child.onload === 'function') {
+      child.onload.call(target);
+    }
+  }
+}
+
 var Timer = (function (NativeObject$$1) {
   function Timer(properties) {
     NativeObject$$1.call(this);
@@ -6313,6 +6388,386 @@ function dispatchFinishedProgressEvents(target) {
   dispatchProgressEvent('loadend', target);
 }
 
+/**
+ * Original work Copyright (c) 2014-2016 GitHub, Inc.
+ * Implementation based on https://github.com/github/fetch
+ */
+var Headers = function Headers(headers) {
+  var this$1 = this;
+
+  this.$map = {};
+  if (headers instanceof Headers) {
+    headers.forEach(function (value, name) { return this$1.append(name, value); });
+  } else if (Array.isArray(headers)) {
+    headers.forEach(function (header) { return this$1.append(header[0], header[1]); });
+  } else if (headers) {
+    Object.getOwnPropertyNames(headers).forEach(function (name) { return this$1.append(name, headers[name]); });
+  }
+};
+
+Headers.prototype.append = function append (name, value) {
+  name = normalizeName(name);
+  var oldValue = this.$map[name];
+  this.$map[name] = oldValue ? oldValue + ',' + value : '' + value;
+};
+
+Headers.prototype.delete = function delete$1 (name) {
+  delete this.$map[normalizeName(name)];
+};
+
+Headers.prototype.get = function get (name) {
+  name = normalizeName(name);
+  return this.has(name) ? this.$map[name] : null;
+};
+
+Headers.prototype.has = function has (name) {
+  return this.$map.hasOwnProperty(normalizeName(name));
+};
+
+Headers.prototype.set = function set (name, value) {
+  this.$map[normalizeName(name)] = '' + value;
+};
+
+Headers.prototype.forEach = function forEach (callback, thisArg) {
+    var this$1 = this;
+
+  for (var name in this$1.$map) {
+    if (this$1.$map.hasOwnProperty(name)) {
+      callback.call(thisArg, this$1.$map[name], name, this$1);
+    }
+  }
+};
+
+Headers.prototype.keys = function keys () {
+  var items = [];
+  this.forEach(function (value, name) { return items.push(name); });
+  return iteratorFor(items);
+};
+
+Headers.prototype.values = function values () {
+  var items = [];
+  this.forEach(function (value) { return items.push(value); });
+  return iteratorFor(items);
+};
+
+Headers.prototype.entries = function entries () {
+  var items = [];
+  this.forEach(function (value, name) { return items.push([name, value]); });
+  return iteratorFor(items);
+};
+
+Headers.prototype[iteratorSymbol()] = function () {
+  return this.entries();
+};
+
+function normalizeName(name) {
+  name = '' + name;
+  if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
+    throw new TypeError('Invalid character in header field name');
+  }
+  return name.toLowerCase();
+}
+
+function iteratorFor(items) {
+  var iterator = {
+    next: function next() {
+      var value = items.shift();
+      return {done: value === undefined, value: value};
+    }
+  };
+  iterator[iteratorSymbol()] = function() {
+    return iterator;
+  };
+  return iterator;
+}
+
+// TODO replace when ES6 iterator is available on all platforms
+function iteratorSymbol() {
+  return 'Symbol' in global && 'iterator' in global.Symbol ? global.Symbol.iterator : '@@iterator';
+}
+
+var SUPPORTED_ENCODINGS = ['ascii', 'utf-8'];
+
+var TextDecoder = (function (NativeObject$$1) {
+  function TextDecoder() {
+    NativeObject$$1.call(this);
+    this._create('tabris.TextDecoder');
+    this._nativeListen('result', true);
+    this._nativeListen('error', true);
+  }
+
+  if ( NativeObject$$1 ) TextDecoder.__proto__ = NativeObject$$1;
+  TextDecoder.prototype = Object.create( NativeObject$$1 && NativeObject$$1.prototype );
+  TextDecoder.prototype.constructor = TextDecoder;
+
+  TextDecoder.prototype.decode = function decode (buffer, encoding) {
+    this._nativeCall('decode', {data: buffer, encoding: encoding});
+  };
+
+  return TextDecoder;
+}(NativeObject));
+
+function decode(buffer, encoding) {
+  return new Promise(function (resolve, reject) {
+    if (ArrayBuffer.isView(buffer)) {
+      buffer = buffer.buffer;
+    }
+    if (!(buffer instanceof ArrayBuffer)) {
+      throw new Error('Invalid buffer type');
+    }
+    encoding = encoding || 'utf-8';
+    if (!SUPPORTED_ENCODINGS.includes(encoding)) {
+      throw new Error(("Unsupported encoding: '" + encoding + "'"));
+    }
+    new TextDecoder()
+      .on('result', function (ref) {
+        var target = ref.target;
+        var string = ref.string;
+
+        resolve(string);
+        target.dispose();
+      })
+      .on('error', function (ref) {
+        var target = ref.target;
+
+        reject(new Error('Could not decode ' + encoding));
+        target.dispose();
+      })
+      .decode(buffer, encoding);
+  });
+}
+
+/**
+ * Original work Copyright (c) 2014-2016 GitHub, Inc.
+ * Implementation based on https://github.com/github/fetch
+ */
+var Body = function Body () {};
+
+var prototypeAccessors$6 = { bodyUsed: {},_encoding: {} };
+
+Body.prototype._initBody = function _initBody (body) {
+  this._bodyInit = body;
+  if (!body) {
+    this._bodyText = '';
+  } else if (typeof body === 'string') {
+    this._bodyText = body;
+  } else if ((ArrayBuffer.prototype.isPrototypeOf(body) || ArrayBuffer.isView(body))) {
+    this._bodyBuffer = body.slice(0);
+  } else {
+    throw new Error('unsupported BodyInit type');
+  }
+};
+
+Body.prototype.text = function text () {
+  return this.$consumed() || Promise.resolve(this._bodyBuffer ?
+    decode(this._bodyBuffer, this._encoding) :
+    this._bodyText);
+};
+
+Body.prototype.json = function json () {
+  return this.text().then(JSON.parse);
+};
+
+Body.prototype.arrayBuffer = function arrayBuffer () {
+  return this.$consumed() || Promise.resolve(this._bodyBuffer);
+};
+
+prototypeAccessors$6.bodyUsed.get = function () {
+  return !!this.$bodyUsed;
+};
+
+Body.prototype.$consumed = function $consumed () {
+  if (this.$bodyUsed) {
+    return Promise.reject(new TypeError('Already read'));
+  }
+  this.$bodyUsed = true;
+};
+
+prototypeAccessors$6._encoding.get = function () {};
+
+Object.defineProperties( Body.prototype, prototypeAccessors$6 );
+
+/**
+ * Original work Copyright (c) 2014-2016 GitHub, Inc.
+ * Implementation based on https://github.com/github/fetch
+ */
+// HTTP methods whose capitalization should be normalized
+var METHODS = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT'];
+
+var Request = (function (Body$$1) {
+  function Request(input, options) {
+    if ( options === void 0 ) options = {};
+
+    Body$$1.call(this);
+    var body = options.body;
+    if (input instanceof Request) {
+      if (input.bodyUsed) {
+        throw new TypeError('Already read');
+      }
+      if (!body && input._bodyInit != null) {
+        body = input._bodyInit;
+        input.$bodyUsed = true;
+      }
+    } else {
+      input = {
+        url: input
+      };
+    }
+    Object.defineProperties(this, {
+      url: {value: '' + input.url},
+      method: {value: normalizeMethod(options.method || input.method || 'GET')},
+      headers: {value: new Headers(options.headers || input.headers || {})},
+      credentials: {value: options.credentials || input.credentials || 'omit'},
+      mode: {value: options.mode || input.mode || null},
+      referrer: {value: ''},
+      timeout: {value: options.timeout || 0}
+    });
+    if ((this.method === 'GET' || this.method === 'HEAD') && body) {
+      throw new TypeError('Body not allowed for GET or HEAD requests');
+    }
+    this._initBody(body);
+  }
+
+  if ( Body$$1 ) Request.__proto__ = Body$$1;
+  Request.prototype = Object.create( Body$$1 && Body$$1.prototype );
+  Request.prototype.constructor = Request;
+
+  Request.prototype.clone = function clone () {
+    return new Request(this, {
+      body: this._bodyInit
+    });
+  };
+
+  return Request;
+}(Body));
+
+function normalizeMethod(method) {
+  var upcased = method.toUpperCase();
+  return METHODS.includes(upcased) ? upcased : method;
+}
+
+/**
+ * Original work Copyright (c) 2014-2016 GitHub, Inc.
+ * Implementation based on https://github.com/github/fetch
+ */
+var REDIRECT_STATUSES = [301, 302, 303, 307, 308];
+
+var Response = (function (Body$$1) {
+  function Response(bodyInit, options) {
+    if ( options === void 0 ) options = {};
+
+    Body$$1.call(this);
+    Object.defineProperties(this, {
+      url: {value: options.url || ''},
+      type: {value: options._type || 'default'},
+      status: {value: 'status' in options ? options.status : 200},
+      statusText: {value: 'statusText' in options ? options.statusText : 'OK'},
+      headers: {value: new Headers(options.headers)}
+    });
+    this._initBody(bodyInit);
+  }
+
+  if ( Body$$1 ) Response.__proto__ = Body$$1;
+  Response.prototype = Object.create( Body$$1 && Body$$1.prototype );
+  Response.prototype.constructor = Response;
+
+  var prototypeAccessors = { ok: {},_encoding: {} };
+
+  prototypeAccessors.ok.get = function () {
+    return this.status >= 200 && this.status < 300;
+  };
+
+  Response.prototype.clone = function clone () {
+    return new Response(this._bodyInit, {
+      status: this.status,
+      statusText: this.statusText,
+      headers: new Headers(this.headers),
+      url: this.url
+    });
+  };
+
+  prototypeAccessors._encoding.get = function () {
+    var contentType = this.headers.get('content-type') || '';
+    var parameters = contentType.split(';').slice(1);
+    for (var i = 0, list = parameters; i < list.length; i += 1) {
+      var param = list[i];
+
+      var match = /charset=(\S+)/i.exec(param.trim());
+      if (match) {
+        return match[1].toLowerCase();
+      }
+    }
+    return null;
+  };
+
+  Response.error = function error () {
+    return new Response(null, {status: 0, statusText: '', _type: 'error'});
+  };
+
+  Response.redirect = function redirect (url, status) {
+    if (!REDIRECT_STATUSES.includes(status)) {
+      throw new RangeError('Invalid status code');
+    }
+    return new Response(null, {status: status, headers: {location: url}});
+  };
+
+  Object.defineProperties( Response.prototype, prototypeAccessors );
+
+  return Response;
+}(Body));
+
+/**
+ * Original work Copyright (c) 2014-2016 GitHub, Inc.
+ * Implementation based on https://github.com/github/fetch
+ */
+function fetch(input, init) {
+  return new Promise(function (resolve, reject) {
+    var request = new Request(input, init);
+    var hr = new HttpRequest();
+    var options = {};
+    hr.on('stateChanged', function (event) {
+      switch (event.state) {
+        case 'headers':
+          options.status = event.code;
+          options.statusText = event.message;
+          options.headers = new Headers(event.headers);
+          break;
+        case 'finished':
+          options.url = options.headers.get('X-Request-URL') || request.url;
+          resolve(new Response(event.response, options));
+          hr.dispose();
+          break;
+        case 'error':
+          reject(new TypeError('Network request failed'));
+          hr.dispose();
+          break;
+        case 'timeout':
+          reject(new TypeError('Network request timed out'));
+          hr.dispose();
+          break;
+        case 'abort':
+          reject(new TypeError('Network request aborted'));
+          hr.dispose();
+          break;
+      }
+    });
+    hr.send({
+      url: request.url,
+      method: request.method,
+      responseType: 'arraybuffer',
+      data: typeof request._bodyInit === 'undefined' ? null : request._bodyInit,
+      headers: encodeHeaders(request.headers),
+      timeout: request.timeout
+    });
+  });
+}
+
+function encodeHeaders(headers) {
+  var map = {};
+  headers.forEach(function (value, name) { return map[name] = value; });
+  return map;
+}
+
 if ( Object.assign === undefined ) {
 	Object.assign = function (first) {
 			var args = [], len = arguments.length - 1;
@@ -7991,14 +8446,14 @@ var Composite$2 = function Composite(domNode) {
 	return this;
 };
 
-var prototypeAccessors$6 = { object: {} };
+var prototypeAccessors$7 = { object: {} };
 Composite$2.prototype.applyPlugin = function applyPlugin (name) {
 	if (Plugins[name] !== undefined) {
 		this.plugins[name] = Plugins[name](this);
 	}
 	return this;
 };
-prototypeAccessors$6.object.set = function (obj) {
+prototypeAccessors$7.object.set = function (obj) {
 	return this.render(obj);
 };
 Composite$2.prototype.cloneLayer = function cloneLayer () {
@@ -8009,7 +8464,7 @@ Composite$2.prototype.appendTo = function appendTo (node) {
 	return this;
 };
 
-Object.defineProperties( Composite$2.prototype, prototypeAccessors$6 );
+Object.defineProperties( Composite$2.prototype, prototypeAccessors$7 );
 
 var Timeline = function Timeline () {
 	this._private = {
@@ -8052,386 +8507,6 @@ Timeline.prototype.start = function start () {
 
 autoPlay(true);
 
-/**
- * Original work Copyright (c) 2014-2016 GitHub, Inc.
- * Implementation based on https://github.com/github/fetch
- */
-var Headers = function Headers(headers) {
-  var this$1 = this;
-
-  this.$map = {};
-  if (headers instanceof Headers) {
-    headers.forEach(function (value, name) { return this$1.append(name, value); });
-  } else if (Array.isArray(headers)) {
-    headers.forEach(function (header) { return this$1.append(header[0], header[1]); });
-  } else if (headers) {
-    Object.getOwnPropertyNames(headers).forEach(function (name) { return this$1.append(name, headers[name]); });
-  }
-};
-
-Headers.prototype.append = function append (name, value) {
-  name = normalizeName(name);
-  var oldValue = this.$map[name];
-  this.$map[name] = oldValue ? oldValue + ',' + value : '' + value;
-};
-
-Headers.prototype.delete = function delete$1 (name) {
-  delete this.$map[normalizeName(name)];
-};
-
-Headers.prototype.get = function get (name) {
-  name = normalizeName(name);
-  return this.has(name) ? this.$map[name] : null;
-};
-
-Headers.prototype.has = function has (name) {
-  return this.$map.hasOwnProperty(normalizeName(name));
-};
-
-Headers.prototype.set = function set (name, value) {
-  this.$map[normalizeName(name)] = '' + value;
-};
-
-Headers.prototype.forEach = function forEach (callback, thisArg) {
-    var this$1 = this;
-
-  for (var name in this$1.$map) {
-    if (this$1.$map.hasOwnProperty(name)) {
-      callback.call(thisArg, this$1.$map[name], name, this$1);
-    }
-  }
-};
-
-Headers.prototype.keys = function keys () {
-  var items = [];
-  this.forEach(function (value, name) { return items.push(name); });
-  return iteratorFor(items);
-};
-
-Headers.prototype.values = function values () {
-  var items = [];
-  this.forEach(function (value) { return items.push(value); });
-  return iteratorFor(items);
-};
-
-Headers.prototype.entries = function entries () {
-  var items = [];
-  this.forEach(function (value, name) { return items.push([name, value]); });
-  return iteratorFor(items);
-};
-
-Headers.prototype[iteratorSymbol()] = function () {
-  return this.entries();
-};
-
-function normalizeName(name) {
-  name = '' + name;
-  if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
-    throw new TypeError('Invalid character in header field name');
-  }
-  return name.toLowerCase();
-}
-
-function iteratorFor(items) {
-  var iterator = {
-    next: function next() {
-      var value = items.shift();
-      return {done: value === undefined, value: value};
-    }
-  };
-  iterator[iteratorSymbol()] = function() {
-    return iterator;
-  };
-  return iterator;
-}
-
-// TODO replace when ES6 iterator is available on all platforms
-function iteratorSymbol() {
-  return 'Symbol' in global && 'iterator' in global.Symbol ? global.Symbol.iterator : '@@iterator';
-}
-
-var SUPPORTED_ENCODINGS = ['ascii', 'utf-8'];
-
-var TextDecoder = (function (NativeObject$$1) {
-  function TextDecoder() {
-    NativeObject$$1.call(this);
-    this._create('tabris.TextDecoder');
-    this._nativeListen('result', true);
-    this._nativeListen('error', true);
-  }
-
-  if ( NativeObject$$1 ) TextDecoder.__proto__ = NativeObject$$1;
-  TextDecoder.prototype = Object.create( NativeObject$$1 && NativeObject$$1.prototype );
-  TextDecoder.prototype.constructor = TextDecoder;
-
-  TextDecoder.prototype.decode = function decode (buffer, encoding) {
-    this._nativeCall('decode', {data: buffer, encoding: encoding});
-  };
-
-  return TextDecoder;
-}(NativeObject));
-
-function decode(buffer, encoding) {
-  return new Promise(function (resolve, reject) {
-    if (ArrayBuffer.isView(buffer)) {
-      buffer = buffer.buffer;
-    }
-    if (!(buffer instanceof ArrayBuffer)) {
-      throw new Error('Invalid buffer type');
-    }
-    encoding = encoding || 'utf-8';
-    if (!SUPPORTED_ENCODINGS.includes(encoding)) {
-      throw new Error(("Unsupported encoding: '" + encoding + "'"));
-    }
-    new TextDecoder()
-      .on('result', function (ref) {
-        var target = ref.target;
-        var string = ref.string;
-
-        resolve(string);
-        target.dispose();
-      })
-      .on('error', function (ref) {
-        var target = ref.target;
-
-        reject(new Error('Could not decode ' + encoding));
-        target.dispose();
-      })
-      .decode(buffer, encoding);
-  });
-}
-
-/**
- * Original work Copyright (c) 2014-2016 GitHub, Inc.
- * Implementation based on https://github.com/github/fetch
- */
-var Body = function Body () {};
-
-var prototypeAccessors$7 = { bodyUsed: {},_encoding: {} };
-
-Body.prototype._initBody = function _initBody (body) {
-  this._bodyInit = body;
-  if (!body) {
-    this._bodyText = '';
-  } else if (typeof body === 'string') {
-    this._bodyText = body;
-  } else if ((ArrayBuffer.prototype.isPrototypeOf(body) || ArrayBuffer.isView(body))) {
-    this._bodyBuffer = body.slice(0);
-  } else {
-    throw new Error('unsupported BodyInit type');
-  }
-};
-
-Body.prototype.text = function text () {
-  return this.$consumed() || Promise.resolve(this._bodyBuffer ?
-    decode(this._bodyBuffer, this._encoding) :
-    this._bodyText);
-};
-
-Body.prototype.json = function json () {
-  return this.text().then(JSON.parse);
-};
-
-Body.prototype.arrayBuffer = function arrayBuffer () {
-  return this.$consumed() || Promise.resolve(this._bodyBuffer);
-};
-
-prototypeAccessors$7.bodyUsed.get = function () {
-  return !!this.$bodyUsed;
-};
-
-Body.prototype.$consumed = function $consumed () {
-  if (this.$bodyUsed) {
-    return Promise.reject(new TypeError('Already read'));
-  }
-  this.$bodyUsed = true;
-};
-
-prototypeAccessors$7._encoding.get = function () {};
-
-Object.defineProperties( Body.prototype, prototypeAccessors$7 );
-
-/**
- * Original work Copyright (c) 2014-2016 GitHub, Inc.
- * Implementation based on https://github.com/github/fetch
- */
-// HTTP methods whose capitalization should be normalized
-var METHODS = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT'];
-
-var Request = (function (Body$$1) {
-  function Request(input, options) {
-    if ( options === void 0 ) options = {};
-
-    Body$$1.call(this);
-    var body = options.body;
-    if (input instanceof Request) {
-      if (input.bodyUsed) {
-        throw new TypeError('Already read');
-      }
-      if (!body && input._bodyInit != null) {
-        body = input._bodyInit;
-        input.$bodyUsed = true;
-      }
-    } else {
-      input = {
-        url: input
-      };
-    }
-    Object.defineProperties(this, {
-      url: {value: '' + input.url},
-      method: {value: normalizeMethod(options.method || input.method || 'GET')},
-      headers: {value: new Headers(options.headers || input.headers || {})},
-      credentials: {value: options.credentials || input.credentials || 'omit'},
-      mode: {value: options.mode || input.mode || null},
-      referrer: {value: ''},
-      timeout: {value: options.timeout || 0}
-    });
-    if ((this.method === 'GET' || this.method === 'HEAD') && body) {
-      throw new TypeError('Body not allowed for GET or HEAD requests');
-    }
-    this._initBody(body);
-  }
-
-  if ( Body$$1 ) Request.__proto__ = Body$$1;
-  Request.prototype = Object.create( Body$$1 && Body$$1.prototype );
-  Request.prototype.constructor = Request;
-
-  Request.prototype.clone = function clone () {
-    return new Request(this, {
-      body: this._bodyInit
-    });
-  };
-
-  return Request;
-}(Body));
-
-function normalizeMethod(method) {
-  var upcased = method.toUpperCase();
-  return METHODS.includes(upcased) ? upcased : method;
-}
-
-/**
- * Original work Copyright (c) 2014-2016 GitHub, Inc.
- * Implementation based on https://github.com/github/fetch
- */
-var REDIRECT_STATUSES = [301, 302, 303, 307, 308];
-
-var Response = (function (Body$$1) {
-  function Response(bodyInit, options) {
-    if ( options === void 0 ) options = {};
-
-    Body$$1.call(this);
-    Object.defineProperties(this, {
-      url: {value: options.url || ''},
-      type: {value: options._type || 'default'},
-      status: {value: 'status' in options ? options.status : 200},
-      statusText: {value: 'statusText' in options ? options.statusText : 'OK'},
-      headers: {value: new Headers(options.headers)}
-    });
-    this._initBody(bodyInit);
-  }
-
-  if ( Body$$1 ) Response.__proto__ = Body$$1;
-  Response.prototype = Object.create( Body$$1 && Body$$1.prototype );
-  Response.prototype.constructor = Response;
-
-  var prototypeAccessors = { ok: {},_encoding: {} };
-
-  prototypeAccessors.ok.get = function () {
-    return this.status >= 200 && this.status < 300;
-  };
-
-  Response.prototype.clone = function clone () {
-    return new Response(this._bodyInit, {
-      status: this.status,
-      statusText: this.statusText,
-      headers: new Headers(this.headers),
-      url: this.url
-    });
-  };
-
-  prototypeAccessors._encoding.get = function () {
-    var contentType = this.headers.get('content-type') || '';
-    var parameters = contentType.split(';').slice(1);
-    for (var i = 0, list = parameters; i < list.length; i += 1) {
-      var param = list[i];
-
-      var match = /charset=(\S+)/i.exec(param.trim());
-      if (match) {
-        return match[1].toLowerCase();
-      }
-    }
-    return null;
-  };
-
-  Response.error = function error () {
-    return new Response(null, {status: 0, statusText: '', _type: 'error'});
-  };
-
-  Response.redirect = function redirect (url, status) {
-    if (!REDIRECT_STATUSES.includes(status)) {
-      throw new RangeError('Invalid status code');
-    }
-    return new Response(null, {status: status, headers: {location: url}});
-  };
-
-  Object.defineProperties( Response.prototype, prototypeAccessors );
-
-  return Response;
-}(Body));
-
-/**
- * Original work Copyright (c) 2014-2016 GitHub, Inc.
- * Implementation based on https://github.com/github/fetch
- */
-function fetch(input, init) {
-  return new Promise(function (resolve, reject) {
-    var request = new Request(input, init);
-    var hr = new HttpRequest();
-    var options = {};
-    hr.on('stateChanged', function (event) {
-      switch (event.state) {
-        case 'headers':
-          options.status = event.code;
-          options.statusText = event.message;
-          options.headers = new Headers(event.headers);
-          break;
-        case 'finished':
-          options.url = options.headers.get('X-Request-URL') || request.url;
-          resolve(new Response(event.response, options));
-          hr.dispose();
-          break;
-        case 'error':
-          reject(new TypeError('Network request failed'));
-          hr.dispose();
-          break;
-        case 'timeout':
-          reject(new TypeError('Network request timed out'));
-          hr.dispose();
-          break;
-        case 'abort':
-          reject(new TypeError('Network request aborted'));
-          hr.dispose();
-          break;
-      }
-    });
-    hr.send({
-      url: request.url,
-      method: request.method,
-      responseType: 'arraybuffer',
-      data: typeof request._bodyInit === 'undefined' ? null : request._bodyInit,
-      headers: encodeHeaders(request.headers),
-      timeout: request.timeout
-    });
-  });
-}
-
-function encodeHeaders(headers) {
-  var map = {};
-  headers.forEach(function (value, name) { return map[name] = value; });
-  return map;
-}
-
 var window$1 = global.window;
 
 Object.assign(window$1, {
@@ -8447,6 +8522,12 @@ Object.assign(window$1, {
   Response: Response,
   JSX: JSX
 });
+
+addDOMDocument(window$1);
+addDOMEventTargetMethods(window$1);
+addWindowTimerMethods(window$1);
+addAnimationFrame(window$1);
+addSVGSupport(window$1);
 
 var tabris$1 = global.tabris = Object.assign(new Tabris(), {
   Action: Action,
@@ -8521,11 +8602,6 @@ tabris$1.on('start', function () {
   window$1.crypto = tabris$1.crypto = new Crypto();
   tabris$1.pkcs5 = new Pkcs5();
 });
-
-addDOMEventTargetMethods(window$1);
-addWindowTimerMethods(window$1);
-addAnimationFrame(window$1);
-addSVGSupport(window$1);
 
 return tabris$1;
 

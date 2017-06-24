@@ -1,6 +1,6 @@
 {
   "name": "tabris",
-  "version": "2.0.2-alpha4",
+  "version": "2.0.0-rc2",
   "description": "Mobile apps with native UIs in JavaScript",
   "main": "tabris.js",
   "keywords": [
@@ -23,9 +23,7 @@
     "rollup-watch": "^3.2.2"
   },
   "scripts": {
-    "build": "rollup -c  --sourcemap",
-    "prepublishOnly": "npm run build",
-    "dev": "rollup -c -w --sourcemap",
-    "test": "npm run build"
+    "dev": "rollup -c -w --sourcemap"
+    "build": "rollup -c --sourcemap"
   }
 }

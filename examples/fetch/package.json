@@ -1,9 +1,0 @@
-{
-  "title": "fetch()",
-  "description": "How to use fetch() to make HTTP requests",
-  "category": "Web APIs",
-  "main": "fetch.js",
-  "dependencies": {
-    "tabris": "2.0.0-rc2"
-  }
-}

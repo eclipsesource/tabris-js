@@ -1,9 +1,0 @@
-{
-  "title": "Reddit Pet Pictures",
-  "description": "A small app using reddit API to show a listing of pet pictures",
-  "category": "Small Apps",
-  "main": "reddit.js",
-  "dependencies": {
-    "tabris": "2.0.0-rc2"
-  }
-}

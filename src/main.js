@@ -7,6 +7,7 @@ import App, {create as createApp} from './App';
 import Ui, {create as createUi} from './widgets/Ui';
 import FileSystem, {create as createFileSystem} from './FileSystem';
 import {addDOMEventTargetMethods} from './Event';
+import {addDOMDocument} from './Document';
 import {addWindowTimerMethods} from './WindowTimers';
 import addAnimationFrame from './addAnimationFrame';
 import addSVGSupport from './SVGSupport';
@@ -55,7 +56,6 @@ import WebSocket from './WebSocket';
 import Widget from './Widget';
 import WidgetCollection from './WidgetCollection';
 import XMLHttpRequest from './XMLHttpRequest';
-import {Tween, Easing, Interpolation} from './Tweening';
 
 import {fetch} from './fetch/fetch';
 import Headers from './fetch/Headers';
@@ -79,6 +79,14 @@ Object.assign(window, {
   Response,
   JSX
 });
+
+addDOMDocument(window);
+addDOMEventTargetMethods(window);
+addWindowTimerMethods(window);
+addAnimationFrame(window);
+addSVGSupport(window);
+
+import {Tween, Easing, Interpolation} from './Tweening';
 
 const tabris = global.tabris = Object.assign(new Tabris(), {
   Action,
@@ -153,10 +161,5 @@ tabris.on('start', () => {
   window.crypto = tabris.crypto = new Crypto();
   tabris.pkcs5 = new Pkcs5();
 });
-
-addDOMEventTargetMethods(window);
-addWindowTimerMethods(window);
-addAnimationFrame(window);
-addSVGSupport(window);
 
 export default tabris;

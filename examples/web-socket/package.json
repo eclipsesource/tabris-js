@@ -1,8 +1,0 @@
-{
-  "category": "WebSocket",
-  "description": "Create websocket connection",
-  "main": "web-socket.js",
-  "dependencies": {
-    "tabris": "^2.0.0-rc2"
-  }
-}

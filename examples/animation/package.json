@@ -1,9 +1,0 @@
-{
-  "title": "Animations",
-  "category": "Animation",
-  "description": "Animations can be used to change properties",
-  "main": "app.js",
-  "dependencies": {
-    "tabris": "2.0.0-rc2"
-  }
-}
