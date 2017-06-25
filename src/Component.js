@@ -18,7 +18,7 @@ export default class Component extends Widget {
   }
   setState (fn) {
 	
-    this.state = fn(this.state);
+    this.state = Object.assign(this.state, fn(this.state));
 	this.rendered = VChange(this.rendered, this.rendered, this.render());
 
     return this;

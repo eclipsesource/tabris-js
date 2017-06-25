@@ -4266,7 +4266,7 @@ var Component = (function (Widget$$1) {
   };
   Component.prototype.setState = function setState (fn) {
 	
-    this.state = fn(this.state);
+    this.state = Object.assign(this.state, fn(this.state));
 	this.rendered = VChange(this.rendered, this.rendered, this.render());
 
     return this;
