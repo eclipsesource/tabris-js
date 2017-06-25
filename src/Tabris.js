@@ -11,7 +11,7 @@ export default class Tabris {
   }
 
   get version() {
-    return '${VERSION}';
+    return '2.0';
   }
 
   get started() {
