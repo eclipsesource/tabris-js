@@ -3434,6 +3434,13 @@ function addWindowTimerMethods(target) {
     }
   };
 
+  var lastTime = Date.now(), fps = 50/3;
+  target.performance = {
+	now: function now () {
+		return (Date.now() - lastTime) + (Math.random() * fps);
+	}
+  };
+
 }
 
 function adjustDelay(value) {
@@ -3683,6 +3690,8 @@ CanvasContext.prototype._init = function _init (width, height) {
     strokeStyle: [0, 0, 0, 255]
   });
 };
+
+// State operations
 
 defineMethod('save', 0, function() {
   this._savedStates.push(Object.assign({}, this._state));
@@ -6756,6 +6765,7 @@ Object.defineProperties( Body.prototype, prototypeAccessors$6 );
  * Original work Copyright (c) 2014-2016 GitHub, Inc.
  * Implementation based on https://github.com/github/fetch
  */
+// HTTP methods whose capitalization should be normalized
 var METHODS = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT'];
 
 var Request = (function (Body$$1) {
@@ -7911,6 +7921,9 @@ function toNumber(val) {
 	return typeof floatedVal === "number" && !isNaN(floatedVal) ? floatedVal : val;
 }
 
+// Credits:
+// @jkroso for string parse library
+// Optimized, Extended by @dalisoft
 var Number_Match_RegEx = /\s+|([A-Za-z?().,{}:""\[\]#]+)|([-+\/*%]+=)?([-+*\/%]+)?(?:\d+\.?\d*|\.?\d+)(?:[eE][-+]?\d+)?/gi;
 
 var Tween = function Tween(object, instate) {

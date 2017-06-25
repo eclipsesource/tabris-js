@@ -78,6 +78,13 @@ export function addWindowTimerMethods(target) {
     }
   };
 
+  let lastTime = Date.now(), fps = 50/3;
+  target.performance = {
+	now () {
+		return (Date.now() - lastTime) + (Math.random() * fps);
+	}
+  };
+
 }
 
 function adjustDelay(value) {

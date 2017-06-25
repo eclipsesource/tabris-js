@@ -12,6 +12,8 @@ Implemented features:
 * `View`, `SVGSupport` (not tested) component
 * `JSX Event system`
 * `JSX "style" attribute`
+* `performance.now` implementation
+* `requestAnimationFrame` implementation
 
 To-Do:
 * `Hot-Reload` implementation
