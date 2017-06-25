@@ -3691,8 +3691,6 @@ CanvasContext.prototype._init = function _init (width, height) {
   });
 };
 
-// State operations
-
 defineMethod('save', 0, function() {
   this._savedStates.push(Object.assign({}, this._state));
 });
@@ -4109,7 +4107,8 @@ function keys( tree ) {
 // Compares tree and gets result
 function VCompare( old, tree ) {
   var diff = {},
-    diffAct = {};
+    diffAct = {},
+	objP = keys(old).length > keys(tree) ? old : tree;
   var loop = function ( p ) {
     if ( p === '_children' && ( old[ p ] || tree[ p ] ) ) {
       diffAct[ p ] = [];
@@ -4137,7 +4136,8 @@ function VCompare( old, tree ) {
 // Compare two object
 function VObjCompare( old, tree ) {
   var diff = {},
-    diffAct = {};
+    diffAct = {},
+	objP = keys(old).length > keys(tree) ? old : tree;
   var loop = function ( p ) {
     if ( p === '_children' && ( old[ p ] || tree[ p ] ) ) {
       diffAct[ p ] = [];
@@ -4155,7 +4155,7 @@ function VObjCompare( old, tree ) {
     }
   };
 
-  for ( var p in old ) loop( p );
+  for ( var p in objP ) loop( p );
   return {
     diff: diff,
     diffAct: diffAct
@@ -4230,12 +4230,21 @@ function VChange( set, old, tree, man, diff ) {
     var action = ref.action;
     var property = ref.property;
     var value = ref.value;
+	var ntree = tree[property];
+	var otree = old[property];
     if ( property === "_children" && Array.isArray( value ) ) {
-      value.map( function ( vChild, i ) {
-        VChange( old[ property ][ i ], old[ property ][ i ], tree[ property ][ i ], vChild );
+	  var longMap = keys(otree).length > keys(ntree).length ? old[property] : ntree;
+      longMap.map( function ( vChild, i ) {
+		if (otree[ i ] && ntree[ i ] === undefined) {
+			otree[ i ].dispose(); // remove from old, because it removed
+			return false;
+		} else if (old[ property ][ i ] === undefined && ntree[ i ]) {
+			otree.push(ntree[ i ]);
+		}
+        VChange( otree[ i ], otree[ i ], ntree[ i ], value[i] );
       } );
     } else if ( typeof value === "object" ) {
-      VChange( set, old[ property ], tree[ property ], VObjCompare( old[ property ], value ) );
+      VChange( set, old[ property ], ntree, VObjCompare( otree, value ) );
     } else {
       VPatch( set, old, tree, action, property, value );
     }
@@ -6759,7 +6768,6 @@ Object.defineProperties( Body.prototype, prototypeAccessors$6 );
  * Original work Copyright (c) 2014-2016 GitHub, Inc.
  * Implementation based on https://github.com/github/fetch
  */
-// HTTP methods whose capitalization should be normalized
 var METHODS = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT'];
 
 var Request = (function (Body$$1) {
@@ -7915,9 +7923,6 @@ function toNumber(val) {
 	return typeof floatedVal === "number" && !isNaN(floatedVal) ? floatedVal : val;
 }
 
-// Credits:
-// @jkroso for string parse library
-// Optimized, Extended by @dalisoft
 var Number_Match_RegEx = /\s+|([A-Za-z?().,{}:""\[\]#]+)|([-+\/*%]+=)?([-+*\/%]+)?(?:\d+\.?\d*|\.?\d+)(?:[eE][-+]?\d+)?/gi;
 
 var Tween = function Tween(object, instate) {

@@ -18,7 +18,8 @@ function keys( tree ) {
 // Compares tree and gets result
 function VCompare( old, tree ) {
   let diff = {},
-    diffAct = {};
+    diffAct = {},
+	objP = keys(old).length > keys(tree) ? old : tree;
   for ( let p in _VDiff ) {
     if ( p === '_children' && ( old[ p ] || tree[ p ] ) ) {
       diffAct[ p ] = [];
@@ -44,8 +45,9 @@ function VCompare( old, tree ) {
 // Compare two object
 function VObjCompare( old, tree ) {
   let diff = {},
-    diffAct = {};
-  for ( let p in old ) {
+    diffAct = {},
+	objP = keys(old).length > keys(tree) ? old : tree;
+  for ( let p in objP ) {
     if ( p === '_children' && ( old[ p ] || tree[ p ] ) ) {
       diffAct[ p ] = [];
       if ( old[ p ] === undefined )
@@ -142,12 +144,21 @@ function VChange( set, old, tree, man, diff ) {
       property,
       value
     } = checkDiff.diff[ prop ];
+	let ntree = tree[property];
+	let otree = old[property];
     if ( property === "_children" && Array.isArray( value ) ) {
-      value.map( ( vChild, i ) => {
-        VChange( old[ property ][ i ], old[ property ][ i ], tree[ property ][ i ], vChild );
+	  let longMap = keys(otree).length > keys(ntree).length ? old[property] : ntree;
+      longMap.map( ( vChild, i ) => {
+		if (otree[ i ] && ntree[ i ] === undefined) {
+			otree[ i ].dispose(); // remove from old, because it removed
+			return false;
+		} else if (old[ property ][ i ] === undefined && ntree[ i ]) {
+			otree.push(ntree[ i ]);
+		}
+        VChange( otree[ i ], otree[ i ], ntree[ i ], value[i] );
       } );
     } else if ( typeof value === "object" ) {
-      VChange( set, old[ property ], tree[ property ], VObjCompare( old[ property ], value ) );
+      VChange( set, old[ property ], ntree, VObjCompare( otree, value ) );
     } else {
       VPatch( set, old, tree, action, property, value );
     }
