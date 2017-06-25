@@ -32,6 +32,11 @@ export function createElement(jsxType, properties, ...children) {
 	return;
   }
   if (result instanceof Component) {
+	result.rendered = result.render(result.props, result.state);
+	if (result.rendered !== undefined && result.componentDidMount) {
+		result.componentDidMount = result.componentDidMount.bind(result);
+		result.componentDidMount();
+	}
 	result = result.rendered;
   }
   return result.append.apply(result, children);

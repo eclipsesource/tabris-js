@@ -3691,8 +3691,6 @@ CanvasContext.prototype._init = function _init (width, height) {
   });
 };
 
-// State operations
-
 defineMethod('save', 0, function() {
   this._savedStates.push(Object.assign({}, this._state));
 });
@@ -4257,7 +4255,13 @@ var Component = (function (Widget$$1) {
     Widget$$1.call(this);
     this.props = props;
     this.state = {};
-	this.rendered = this.render();
+	
+	if (this.rendered !== undefined && this.componentWillMount) {
+		this.componentWillMount();
+	}
+	if (this.componentWillUnmount) {
+	this.on('dispose', this.componentWillUnmount.bind(this));
+	}
   }
 
   if ( Widget$$1 ) Component.__proto__ = Widget$$1;
@@ -4271,10 +4275,15 @@ var Component = (function (Widget$$1) {
   prototypeAccessors._nativeType.get = function () {
     return 'tabris.Composite';
   };
-  Component.prototype.setState = function setState (fn) {
-	
-    this.state = Object.assign(this.state, fn(this.state));
-	this.rendered = VChange(this.rendered, this.rendered, this.render());
+  Component.prototype.setState = function setState (state) {
+    this.state = Object.assign(this.state, state);
+	if (this.componentWillUpdate) {
+		this.componentWillUpdate();
+	}
+	this.rendered = VChange(this.rendered, this.rendered, this.render(this.props, this.state));
+	if (this.componentDidUpdate) {
+		this.componentDidUpdate();
+	}
 
     return this;
   };
@@ -4318,6 +4327,11 @@ function createElement(jsxType, properties) {
 	return;
   }
   if (result instanceof Component) {
+	result.rendered = result.render(result.props, result.state);
+	if (result.rendered !== undefined && result.componentDidMount) {
+		result.componentDidMount = result.componentDidMount.bind(result);
+		result.componentDidMount();
+	}
 	result = result.rendered;
   }
   return result.append.apply(result, children);
@@ -6766,7 +6780,6 @@ Object.defineProperties( Body.prototype, prototypeAccessors$6 );
  * Original work Copyright (c) 2014-2016 GitHub, Inc.
  * Implementation based on https://github.com/github/fetch
  */
-// HTTP methods whose capitalization should be normalized
 var METHODS = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT'];
 
 var Request = (function (Body$$1) {
@@ -7922,9 +7935,6 @@ function toNumber(val) {
 	return typeof floatedVal === "number" && !isNaN(floatedVal) ? floatedVal : val;
 }
 
-// Credits:
-// @jkroso for string parse library
-// Optimized, Extended by @dalisoft
 var Number_Match_RegEx = /\s+|([A-Za-z?().,{}:""\[\]#]+)|([-+\/*%]+=)?([-+*\/%]+)?(?:\d+\.?\d*|\.?\d+)(?:[eE][-+]?\d+)?/gi;
 
 var Tween = function Tween(object, instate) {

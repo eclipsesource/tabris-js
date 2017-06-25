@@ -8,7 +8,13 @@ export default class Component extends Widget {
     super();
     this.props = props;
     this.state = {};
-	this.rendered = this.render();
+	
+	if (this.rendered !== undefined && this.componentWillMount) {
+		this.componentWillMount();
+	}
+	if (this.componentWillUnmount) {
+	this.on('dispose', this.componentWillUnmount.bind(this));
+	}
   }
   _acceptChild() {
     return true;
@@ -16,10 +22,15 @@ export default class Component extends Widget {
   get _nativeType() {
     return 'tabris.Composite';
   }
-  setState (fn) {
-	
-    this.state = Object.assign(this.state, fn(this.state));
-	this.rendered = VChange(this.rendered, this.rendered, this.render());
+  setState (state) {
+    this.state = Object.assign(this.state, state);
+	if (this.componentWillUpdate) {
+		this.componentWillUpdate();
+	}
+	this.rendered = VChange(this.rendered, this.rendered, this.render(this.props, this.state));
+	if (this.componentDidUpdate) {
+		this.componentDidUpdate();
+	}
 
     return this;
   }
