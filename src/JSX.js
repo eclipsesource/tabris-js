@@ -32,7 +32,7 @@ export function createElement(jsxType, properties, ...children) {
 	return;
   }
   if (result instanceof Component) {
-	result = result.render(result.props, result.state);
+	result = result.rendered;
   }
   return result.append.apply(result, children);
 }

@@ -1,10 +1,14 @@
+import Composite from './widgets/Composite';
 import Widget from './Widget';
+import VChange from './VChange';
+
 
 export default class Component extends Widget {
   constructor (props = {}) {
     super();
     this.props = props;
     this.state = {};
+	this.rendered = this.render();
   }
   _acceptChild() {
     return true;
@@ -13,9 +17,10 @@ export default class Component extends Widget {
     return 'tabris.Composite';
   }
   setState (fn) {
-	this.children.dispose();
+	
     this.state = fn(this.state);
-	this._addChild(this.render(this.props, this.state));
+	this.rendered = VChange(this.rendered, this.rendered, this.render());
+
     return this;
   }
   render () {}

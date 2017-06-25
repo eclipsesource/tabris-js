@@ -3684,8 +3684,6 @@ CanvasContext.prototype._init = function _init (width, height) {
   });
 };
 
-// State operations
-
 defineMethod('save', 0, function() {
   this._savedStates.push(Object.assign({}, this._state));
 });
@@ -3948,8 +3946,6 @@ var Canvas = (function (Composite$$1) {
   return Canvas;
 }(Composite));
 
-//import dummyDoc from './dummyDoc';
-
 var Path2D = Path2D || (function () {
   function Path2D() {
     console.log('It is fake Path2D constructor');
@@ -4084,6 +4080,165 @@ var Styles = function(input) {
     .convertTo();
 };
 
+// Compare object tree-table
+var _VDiff = {
+  _props: null,
+  _children: null,
+  _layoutData: null
+};
+
+// Compare string, object, number, boolean
+function VStringCompare( old, _new ) {
+  return JSON.stringify( old ) !== JSON.stringify( _new );
+}
+
+// Get objet property as array
+function keys( tree ) {
+  return Object.keys( tree );
+}
+
+// Compares tree and gets result
+function VCompare( old, tree ) {
+  var diff = {},
+    diffAct = {};
+  var loop = function ( p ) {
+    if ( p === '_children' && ( old[ p ] || tree[ p ] ) ) {
+      diffAct[ p ] = [];
+      if ( old[ p ] === undefined )
+        { old[ p ] = []; }
+      if ( tree[ p ] === undefined )
+        { tree[ p ] = []; }
+      diff[ p ] = tree[ p ].map( function ( comp, i ) {
+        diffAct[ p ] = VAction( old[ p ][ i ], comp );
+        return VCompare( old[ p ][ i ], comp );
+      } );
+    } else if ( VStringCompare( old[ p ], tree[ p ] ) ) {
+      diff[ p ] = tree[ p ];
+      diffAct[ p ] = VAction( old[ p ], tree[ p ] );
+    }
+  };
+
+  for ( var p in _VDiff ) loop( p );
+  return {
+    diff: diff,
+    diffAct: diffAct
+  };
+}
+
+// Compare two object
+function VObjCompare( old, tree ) {
+  var diff = {},
+    diffAct = {};
+  var loop = function ( p ) {
+    if ( p === '_children' && ( old[ p ] || tree[ p ] ) ) {
+      diffAct[ p ] = [];
+      if ( old[ p ] === undefined )
+        { old[ p ] = []; }
+      if ( tree[ p ] === undefined )
+        { tree[ p ] = []; }
+      diff[ p ] = tree[ p ].map( function ( comp, i ) {
+        diffAct[ p ] = VAction( old[ p ][ i ], comp );
+        return VCompare( old[ p ][ i ], comp );
+      } );
+    } else if ( VStringCompare( old[ p ], tree[ p ] ) ) {
+      diff[ p ] = tree[ p ];
+      diffAct[ p ] = VAction( old[ p ], tree[ p ] );
+    }
+  };
+
+  for ( var p in old ) loop( p );
+  return {
+    diff: diff,
+    diffAct: diffAct
+  };
+}
+
+// Action types
+[ 'STAY', 'ADD', 'REMOVE', 'CHANGE', 'NOTHING', 'UNDEF' ].map( function (type) {
+  VAction[ 'ACTION_' + type ] = type;
+} );
+
+// Checks and gives action based on change
+function VAction( hasInOld, hasInTree ) {
+  return ( hasInOld !== undefined && hasInTree !== undefined && hasInOld === hasInTree ) ? VAction.ACTION_STAY : (
+    hasInOld !== undefined && hasInTree === undefined ) ? VAction.ACTION_REMOVE : ( hasInOld === undefined &&
+    hasInTree !== undefined ) ? VAction.ACTION_ADD : ( hasInOld !== undefined && hasInTree !== undefined && hasInOld !==
+    hasInTree ) ? VAction.ACTION_CHANGE : VAction.ACTION_NOTHING;
+}
+
+// Normalizes the comparision (best for Redux, Vuex)
+function VNorm( old, tree, man ) {
+  var VComp = man !== undefined ? man : VCompare( old, tree );
+  var diff = VComp.diff;
+  var diffAct = VComp.diffAct;
+  var normalizedVTree = {};
+  for ( var p in diff ) {
+    if ( diffAct[ p ] ) {
+      normalizedVTree[ p ] = {
+        property: p,
+        action: diffAct[ p ],
+        value: diff[ p ]
+      };
+    } else {
+      normalizedVTree[ p ] = {
+        property: p,
+        action: VAction.ACTION_UNDEF,
+        value: diff[ p ]
+      };
+    }
+  }
+  return normalizedVTree;
+}
+
+// Simple VDiff function
+function VDiff( old, tree, man ) {
+  var diff = VNorm( old, tree, man );
+  var key = keys( diff );
+  return key.length ? {
+      diff: diff,
+      key: key
+    } :
+    null;
+}
+
+function VError( err ) {
+  throw err;
+}
+
+function VPatch( set, old, tree, action, property, value ) {
+  if ( action === VAction.ACTION_CHANGE || action === VAction.ACTION_ADD ) {
+    set[ property ] = value;
+  } else if ( action === VAction.ACTION_REMOVE ) {
+    delete set[ property ];
+  }
+  return old;
+}
+
+function VChange( set, old, tree, man, diff ) {
+  var checkDiff = diff !== undefined ? diff : VDiff( old, tree, man );
+  if ( checkDiff === null ) {
+    return old;
+  }
+  
+  checkDiff.key.map( function (prop) {
+      var ref = checkDiff.diff[ prop ];
+      var action = ref.action;
+      var property = ref.property;
+      var value = ref.value;
+      if ( property === "_children" && Array.isArray(value) ) {
+		value.map(function (vChild, i) {
+			VChange(old[property][i], old[property][i], tree[property][i], vChild);
+		});
+	  } else if ( typeof value === "object" ) {
+        VChange( set, old[ property], tree[ property ], VObjCompare( old[ property ], value ) );
+        }
+        else {
+          VPatch( set, old, tree, action, property, value );
+        }
+      } );
+    return old;
+  }
+
 var Component = (function (Widget$$1) {
   function Component (props) {
     if ( props === void 0 ) props = {};
@@ -4091,6 +4246,7 @@ var Component = (function (Widget$$1) {
     Widget$$1.call(this);
     this.props = props;
     this.state = {};
+	this.rendered = this.render();
   }
 
   if ( Widget$$1 ) Component.__proto__ = Widget$$1;
@@ -4105,9 +4261,10 @@ var Component = (function (Widget$$1) {
     return 'tabris.Composite';
   };
   Component.prototype.setState = function setState (fn) {
-	this.children.dispose();
+	
     this.state = fn(this.state);
-	this._addChild(this.render(this.props, this.state));
+	this.rendered = VChange(this.rendered, this.rendered, this.render());
+
     return this;
   };
   Component.prototype.render = function render () {};
@@ -4150,7 +4307,7 @@ function createElement(jsxType, properties) {
 	return;
   }
   if (result instanceof Component) {
-	result = result.render(result.props, result.state);
+	result = result.rendered;
   }
   return result.append.apply(result, children);
 }
@@ -6598,7 +6755,6 @@ Object.defineProperties( Body.prototype, prototypeAccessors$6 );
  * Original work Copyright (c) 2014-2016 GitHub, Inc.
  * Implementation based on https://github.com/github/fetch
  */
-// HTTP methods whose capitalization should be normalized
 var METHODS = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT'];
 
 var Request = (function (Body$$1) {
@@ -7754,9 +7910,6 @@ function toNumber(val) {
 	return typeof floatedVal === "number" && !isNaN(floatedVal) ? floatedVal : val;
 }
 
-// Credits:
-// @jkroso for string parse library
-// Optimized, Extended by @dalisoft
 var Number_Match_RegEx = /\s+|([A-Za-z?().,{}:""\[\]#]+)|([-+\/*%]+=)?([-+*\/%]+)?(?:\d+\.?\d*|\.?\d+)(?:[eE][-+]?\d+)?/gi;
 
 var Tween = function Tween(object, instate) {
