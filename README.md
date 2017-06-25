@@ -7,6 +7,16 @@ Requires apps:
 * `node`
 * `npm`
 
+Implemented features:
+* `React`-like class based state-ful custom components
+* `View`, `SVGSupport` (not tested) component
+* `JSX Event system`
+* `JSX "style" attribute`
+
+To-Do:
+* `Hot-Reload` implementation
+* `SVGSupport` implementation
+
 
 Steps:
 * Download this repo
