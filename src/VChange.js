@@ -133,7 +133,6 @@ function VPatch( set, old, tree, action, property, value ) {
 function VChange( set, old, tree, man, diff ) {
   let checkDiff = diff !== undefined ? diff : VDiff( old, tree, man );
   if ( checkDiff === null ) {
-    VError( "Please, make sure, you using correct tree data" );
     return old;
   }
 
@@ -145,7 +144,6 @@ function VChange( set, old, tree, man, diff ) {
     } = checkDiff.diff[ prop ];
     if ( property === "_children" && Array.isArray( value ) ) {
       value.map( ( vChild, i ) => {
-        console.log( set[ property ], old[ property ], tree[ property ] );
         VChange( old[ property ][ i ], old[ property ][ i ], tree[ property ][ i ], vChild );
       } );
     } else if ( typeof value === "object" ) {
