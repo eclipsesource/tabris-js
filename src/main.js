@@ -161,5 +161,6 @@ tabris.on('start', () => {
 addDOMDocument(window);
 addDOMEventTargetMethods(window);
 addSVGSupport(window);
+addSVGSupport(tabris);
 
 export default tabris;

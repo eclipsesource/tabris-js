@@ -1,5 +1,4 @@
 import Canvas from './widgets/Canvas';
-//import dummyDoc from './dummyDoc';
 
 const Path2D = Path2D || class Path2D {
   constructor() {

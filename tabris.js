@@ -4217,27 +4217,28 @@ function VPatch( set, old, tree, action, property, value ) {
 function VChange( set, old, tree, man, diff ) {
   var checkDiff = diff !== undefined ? diff : VDiff( old, tree, man );
   if ( checkDiff === null ) {
+    VError( "Please, make sure, you using correct tree data" );
     return old;
   }
-  
+
   checkDiff.key.map( function (prop) {
-      var ref = checkDiff.diff[ prop ];
-      var action = ref.action;
-      var property = ref.property;
-      var value = ref.value;
-      if ( property === "_children" && Array.isArray(value) ) {
-		value.map(function (vChild, i) {
-			VChange(old[property][i], old[property][i], tree[property][i], vChild);
-		});
-	  } else if ( typeof value === "object" ) {
-        VChange( set, old[ property], tree[ property ], VObjCompare( old[ property ], value ) );
-        }
-        else {
-          VPatch( set, old, tree, action, property, value );
-        }
+    var ref = checkDiff.diff[ prop ];
+    var action = ref.action;
+    var property = ref.property;
+    var value = ref.value;
+    if ( property === "_children" && Array.isArray( value ) ) {
+      value.map( function ( vChild, i ) {
+        console.log( set[ property ], old[ property ], tree[ property ] );
+        VChange( old[ property ][ i ], old[ property ][ i ], tree[ property ][ i ], vChild );
       } );
-    return old;
-  }
+    } else if ( typeof value === "object" ) {
+      VChange( set, old[ property ], tree[ property ], VObjCompare( old[ property ], value ) );
+    } else {
+      VPatch( set, old, tree, action, property, value );
+    }
+  } );
+  return old;
+}
 
 var Component = (function (Widget$$1) {
   function Component (props) {
@@ -8762,6 +8763,7 @@ tabris$1.on('start', function () {
 addDOMDocument(window$1);
 addDOMEventTargetMethods(window$1);
 addSVGSupport(window$1);
+addSVGSupport(tabris$1);
 
 return tabris$1;
 

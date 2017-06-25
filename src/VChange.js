@@ -136,26 +136,25 @@ function VChange( set, old, tree, man, diff ) {
     VError( "Please, make sure, you using correct tree data" );
     return old;
   }
-  
-  checkDiff.key.map( prop => {
-      let {
-        action,
-        property,
-        value
-      } = checkDiff.diff[ prop ];
-      if ( property === "_children" && Array.isArray(value) ) {
-		value.map((vChild, i) => {
-			console.log(set[property], old[property], tree[property]);
-			VChange(old[property][i], old[property][i], tree[property][i], vChild);
-		});
-	  } else if ( typeof value === "object" ) {
-        VChange( set, old[ property], tree[ property ], VObjCompare( old[ property ], value ) );
-        }
-        else {
-          VPatch( set, old, tree, action, property, value );
-        }
-      } );
-    return old;
-  }
 
-  export default VChange;
+  checkDiff.key.map( prop => {
+    let {
+      action,
+      property,
+      value
+    } = checkDiff.diff[ prop ];
+    if ( property === "_children" && Array.isArray( value ) ) {
+      value.map( ( vChild, i ) => {
+        console.log( set[ property ], old[ property ], tree[ property ] );
+        VChange( old[ property ][ i ], old[ property ][ i ], tree[ property ][ i ], vChild );
+      } );
+    } else if ( typeof value === "object" ) {
+      VChange( set, old[ property ], tree[ property ], VObjCompare( old[ property ], value ) );
+    } else {
+      VPatch( set, old, tree, action, property, value );
+    }
+  } );
+  return old;
+}
+
+export default VChange;
