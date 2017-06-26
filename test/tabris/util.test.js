@@ -1,5 +1,5 @@
 import {expect} from '../test';
-import {pick, omit, isObject, capitalizeFirstChar} from '../../src/tabris/util';
+import {pick, omit, isObject, capitalizeFirstChar, normalizePath, normalizePathUrl} from '../../src/tabris/util';
 
 describe('util', function() {
 
@@ -66,6 +66,79 @@ describe('util', function() {
 
     it('does not change empty string', function() {
       expect(capitalizeFirstChar('')).to.equal('');
+    });
+
+  });
+
+  describe('normalizePath', function() {
+
+    it('throws if path is missing or not a string', function() {
+      expect(() => normalizePath()).to.throw(Error, 'must be a string');
+      expect(() => normalizePath(null)).to.throw(Error, 'must be a string');
+      expect(() => normalizePath(23)).to.throw(Error, 'must be a string');
+    });
+
+    it('throws if path is the empty string', function() {
+      expect(() => normalizePath('')).to.throw(Error, 'must not be empty');
+    });
+
+    it('throws if path contains `..` segments', function() {
+      expect(() => normalizePath('/foo/../bar')).to.throw(Error, 'must not contain \'..\'');
+      expect(() => normalizePath('/foo/..')).to.throw(Error, 'must not contain \'..\'');
+      expect(() => normalizePath('/../foo')).to.throw(Error, 'must not contain \'..\'');
+      expect(() => normalizePath('../foo')).to.throw(Error, 'must not contain \'..\'');
+    });
+
+    it('accepts absolute paths', function() {
+      expect(normalizePath('/foo/bar')).to.equal('/foo/bar');
+    });
+
+    it('accepts relative paths', function() {
+      expect(normalizePath('foo/bar')).to.equal('foo/bar');
+      expect(normalizePath('./foo/bar')).to.equal('foo/bar');
+    });
+
+    it('accepts current path', function() {
+      expect(normalizePath('./')).to.equal('.');
+    });
+
+    it('accepts root path', function() {
+      expect(normalizePath('/')).to.equal('/');
+    });
+
+    it('eliminates redundant slashes and dots', function() {
+      expect(normalizePath('//foo///././bar/')).to.equal('/foo/bar');
+    });
+
+  });
+
+  describe('normalizePathUrl', function() {
+
+    it('throws if URL is missing or not a string', function() {
+      expect(() => normalizePathUrl()).to.throw(Error, 'must be a string');
+      expect(() => normalizePathUrl(null)).to.throw(Error, 'must be a string');
+      expect(() => normalizePathUrl(23)).to.throw(Error, 'must be a string');
+    });
+
+    it('throws if URL path is empty', function() {
+      expect(() => normalizePathUrl('http://')).to.throw(Error, 'must not be empty');
+      expect(() => normalizePathUrl('')).to.throw(Error, 'must not be empty');
+    });
+
+    it('throws if URL or path contains `..` segments', function() {
+      expect(() => normalizePathUrl('foo://foo/../bar')).to.throw(Error, 'must not contain \'..\'');
+      expect(() => normalizePathUrl('/../foo')).to.throw(Error, 'must not contain \'..\'');
+      expect(() => normalizePathUrl('../foo')).to.throw(Error, 'must not contain \'..\'');
+    });
+
+    it('eliminates redundant slashes and dots from paths', function() {
+      expect(normalizePathUrl('//foo///././bar/')).to.equal('/foo/bar');
+      expect(normalizePathUrl('foo///././bar/')).to.equal('foo/bar');
+    });
+
+    it('eliminates redundant slashes and dots from URLs', function() {
+      expect(normalizePathUrl('http://foo///././bar/')).to.equal('http://foo/bar');
+      expect(normalizePathUrl('file:///foo///././bar/')).to.equal('file:///foo/bar');
     });
 
   });

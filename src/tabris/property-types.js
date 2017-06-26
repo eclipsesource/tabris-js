@@ -1,3 +1,4 @@
+import {normalizePathUrl} from './util';
 import {imageToArray, imageFromArray} from './util-images';
 import {colorArrayToString, colorStringToArray} from './util-colors';
 import {fontObjectToString, fontStringToObject} from './util-fonts';
@@ -101,11 +102,10 @@ export let types = {
       if (typeof value !== 'object') {
         throw new Error('Not an image: ' + value);
       }
-      if (typeof value.src !== 'string') {
-        throw new Error('image.src is not a string');
-      }
-      if (value.src === '') {
-        throw new Error('image.src is an empty string');
+      try {
+        value.src = normalizePathUrl(value.src);
+      } catch (err) {
+        throw new Error('Invalid image.src: ' + err.message);
       }
       ['scale', 'width', 'height'].forEach((prop) => {
         if (prop in value && !isDimension(value[prop])) {

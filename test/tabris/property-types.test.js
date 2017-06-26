@@ -477,13 +477,19 @@ describe('property-types', function() {
     it('fails if src is undefined', function() {
       expect(() => {
         encode({});
-      }).to.throw(Error, 'image.src is not a string');
+      }).to.throw(Error, 'Invalid image.src: must be a string');
     });
 
     it('fails if src is empty string', function() {
       expect(() => {
         encode({src: ''});
-      }).to.throw(Error, 'image.src is an empty string');
+      }).to.throw(Error, 'Invalid image.src: must not be empty');
+    });
+
+    it('fails if src contains ../ segments', function() {
+      expect(() => {
+        encode({src: '../test.png'});
+      }).to.throw(Error, "Invalid image.src: must not contain '..'");
     });
 
     it('fails if width/height/scale values are invalid number', function() {

@@ -1,6 +1,6 @@
 import {expect, mockTabris, spy, stub} from '../test';
 import ClientStub from './ClientStub';
-import FileSystem, {create as createFileSystem, createError, normalizePath} from '../../src/tabris/FileSystem';
+import FileSystem, {create as createFileSystem, createError} from '../../src/tabris/FileSystem';
 
 describe('FileSystem', function() {
 
@@ -34,7 +34,7 @@ describe('FileSystem', function() {
     ['cacheDir', 'filesDir'].forEach(prop => describe(prop, function() {
 
       it('gets native property', function() {
-        stub(client, 'get', () => '/path');
+        stub(client, 'get').callsFake(() => '/path');
         expect(fs[prop]).to.equal('/path');
       });
 
@@ -45,7 +45,7 @@ describe('FileSystem', function() {
       });
 
       it('can not be modified', function() {
-        stub(client, 'get', () => '/path');
+        stub(client, 'get').callsFake(() => '/path');
         fs[prop] = '/other';
         expect(fs[prop]).to.equal('/path');
       });
@@ -64,7 +64,7 @@ describe('FileSystem', function() {
       it('rejects invalid path', function() {
         return fs.readFile('/foo/../bar').then(expectFail, err => {
           expect(err).to.be.instanceOf(Error);
-          expect(err.message).to.equal("Path must not contain '..'");
+          expect(err.message).to.equal("Invalid file name: must not contain '..'");
         });
       });
 
@@ -75,7 +75,7 @@ describe('FileSystem', function() {
       });
 
       it('rejects in case of error', function() {
-        stub(client, 'call', (id, method, args) => args.onError('ENOENT'));
+        stub(client, 'call').callsFake((id, method, args) => args.onError('ENOENT'));
         return fs.readFile('/foo').then(expectFail, err => {
           expect(err).to.be.instanceOf(Error);
           expect(err.message).to.equal('No such file or directory: /foo');
@@ -83,7 +83,7 @@ describe('FileSystem', function() {
       });
 
       it('resolves with data', function() {
-        stub(client, 'call', (id, method, args) => args.onSuccess(data));
+        stub(client, 'call').callsFake((id, method, args) => args.onSuccess(data));
         return fs.readFile('/foo').then(result => {
           expect(result).to.equal(data);
         });
@@ -103,7 +103,7 @@ describe('FileSystem', function() {
       it('rejects invalid path', function() {
         return fs.writeFile('/foo/../bar', data).then(expectFail, err => {
           expect(err).to.be.instanceOf(Error);
-          expect(err.message).to.equal("Path must not contain '..'");
+          expect(err.message).to.equal("Invalid file name: must not contain '..'");
         });
       });
 
@@ -121,14 +121,14 @@ describe('FileSystem', function() {
       });
 
       it('resolves on success', function() {
-        stub(client, 'call', (id, method, args) => args.onSuccess());
+        stub(client, 'call').callsFake((id, method, args) => args.onSuccess());
         return fs.writeFile('/foo', data).then(result => {
           expect(result).to.be.undefined;
         });
       });
 
       it('rejects in case of error', function() {
-        stub(client, 'call', (id, method, args) => args.onError('ENOENT'));
+        stub(client, 'call').callsFake((id, method, args) => args.onError('ENOENT'));
         return fs.writeFile('/foo', data).then(expectFail, err => {
           expect(err).to.be.instanceOf(Error);
           expect(err.message).to.equal('No such file or directory: /foo');
@@ -149,7 +149,7 @@ describe('FileSystem', function() {
       it('rejects invalid path', function() {
         return fs.removeFile('/foo/../bar').then(expectFail, err => {
           expect(err).to.be.instanceOf(Error);
-          expect(err.message).to.equal("Path must not contain '..'");
+          expect(err.message).to.equal("Invalid file name: must not contain '..'");
         });
       });
 
@@ -160,14 +160,14 @@ describe('FileSystem', function() {
       });
 
       it('resolves on success', function() {
-        stub(client, 'call', (id, method, args) => args.onSuccess());
+        stub(client, 'call').callsFake((id, method, args) => args.onSuccess());
         return fs.removeFile('/foo').then(result => {
           expect(result).to.be.undefined;
         });
       });
 
       it('rejects in case of error', function() {
-        stub(client, 'call', (id, method, args) => args.onError('ENOENT'));
+        stub(client, 'call').callsFake((id, method, args) => args.onError('ENOENT'));
         return fs.removeFile('/foo').then(expectFail, err => {
           expect(err).to.be.instanceOf(Error);
           expect(err.message).to.equal('No such file or directory: /foo');
@@ -221,26 +221,6 @@ describe('FileSystem', function() {
     it('includes message for unknown error codes', function() {
       expect(createError('Drastic failure', '/foo').message)
         .to.equal('Drastic failure: /foo');
-    });
-
-  });
-
-  describe('normalizePath', function() {
-
-    it('fails if path is not a string', function() {
-      expect(() => normalizePath(23)).to.throw(Error, 'Path must be a string');
-    });
-
-    it('fails if path is not absolute', function() {
-      expect(() => normalizePath('foo/bar')).to.throw(Error, 'Path must be absolute');
-    });
-
-    it('fails if path contains ..', function() {
-      expect(() => normalizePath('/foo/../bar')).to.throw(Error, "Path must not contain '..'");
-    });
-
-    it('eliminates redundant slashes and dots', function() {
-      expect(normalizePath('//foo///././bar/')).to.equal('/foo/bar');
     });
 
   });

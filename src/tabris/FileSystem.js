@@ -1,4 +1,5 @@
 import NativeObject from './NativeObject';
+import {normalizePath} from './util';
 
 const ERRORS = {
   EACCES: 'Permission denied',
@@ -33,7 +34,7 @@ export default class FileSystem extends NativeObject {
         throw new Error('Not enough arguments to readFile');
       }
       this._nativeCall('readFile', {
-        path: normalizePath(path),
+        path: checkPath(path),
         onError: (err) => reject(createError(err, path)),
         onSuccess: (data) => resolve(data)
       });
@@ -46,7 +47,7 @@ export default class FileSystem extends NativeObject {
         throw new Error('Not enough arguments to writeFile');
       }
       this._nativeCall('writeFile', {
-        path: normalizePath(path),
+        path: checkPath(path),
         data: checkBuffer(data),
         onError: (err) => reject(createError(err, path)),
         onSuccess: () => resolve()
@@ -60,7 +61,7 @@ export default class FileSystem extends NativeObject {
         throw new Error('Not enough arguments to removeFile');
       }
       this._nativeCall('removeFile', {
-        path: normalizePath(path),
+        path: checkPath(path),
         onError: (err) => reject(createError(err, path)),
         onSuccess: () => resolve()
       });
@@ -88,19 +89,12 @@ export function createError(err, path) {
   return error;
 }
 
-export function normalizePath(path) {
-  if (typeof path !== 'string') {
-    throw new TypeError('Path must be a string');
+function checkPath(path) {
+  try {
+    return normalizePath(path);
+  } catch (err) {
+    throw new Error('Invalid file name: ' + err.message);
   }
-  if (!path.startsWith('/')) {
-    throw new Error('Path must be absolute');
-  }
-  return '/' + path.split(/\/+/).map((segment) => {
-    if (segment === '..') {
-      throw new Error("Path must not contain '..'");
-    }
-    return segment === '.' ? '' : segment;
-  }).filter(string => !!string).join('/');
 }
 
 function checkBuffer(buffer) {
