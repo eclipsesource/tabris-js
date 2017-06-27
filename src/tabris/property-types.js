@@ -17,7 +17,7 @@ export let types = {
 
   string: {
     encode(str) {
-      return '' + str;
+      return str == null ? '' : '' + str;
     }
   },
 

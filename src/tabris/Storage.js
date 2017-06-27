@@ -1,4 +1,3 @@
-import {types} from './property-types';
 import NativeObject from './NativeObject';
 
 class ClientStore extends NativeObject {
@@ -14,8 +13,6 @@ class SecureStore extends NativeObject {
     this._create('tabris.SecureStore');
   }
 }
-
-let encode = types.string.encode;
 
 export default class Storage {
 
@@ -59,6 +56,10 @@ export default class Storage {
     this._proxy._nativeCall('clear');
   }
 
+}
+
+function encode(value) {
+  return '' + value;
 }
 
 export function create(secure) {

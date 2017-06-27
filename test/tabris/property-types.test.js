@@ -564,12 +564,15 @@ describe('property-types', function() {
 
     let encode = types.string.encode;
 
-    it('translates any value to string', function() {
+    it('translates null to empty string', function() {
+      expect(encode(null)).to.equal('');
+      expect(encode(undefined)).to.equal('');
+    });
+
+    it('translates other types to string', function() {
       expect(encode('str')).to.equal('str');
       expect(encode(23)).to.equal('23');
       expect(encode(false)).to.equal('false');
-      expect(encode(null)).to.equal('null');
-      expect(encode(undefined)).to.equal('undefined');
       expect(encode({})).to.equal('[object Object]');
       expect(encode([1, 2, 3])).to.equal('1,2,3');
       expect(encode({toString() {return 'foo';}})).to.equal('foo');
