@@ -350,4 +350,17 @@ describe('Common Widgets', function() {
     checkListen('select');
   });
 
+  it('sets native color properties as RGBA arrays', function() {
+    widget = new TextInput({text: 'foo', textColor: 'red'});
+
+    expect(getCreate().properties.textColor).to.deep.equal([255, 0, 0, 255]);
+  });
+
+  it('resets native color properties by null', function() {
+    widget = new TextInput({text: 'foo', textColor: 'red'});
+    widget.textColor = 'initial';
+
+    expect(getCreate().properties.textColor).to.be.null;
+  });
+
 });

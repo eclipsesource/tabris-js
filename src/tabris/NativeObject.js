@@ -285,7 +285,7 @@ function readOnlySetter(name) {
 }
 
 function defaultSetter(name, value) {
-  this._nativeSet(name, value);
+  this._nativeSet(name, value === undefined ? null : value);
   if (this['$prop_' + name].nocache) {
     this._triggerChangeEvent(name, value);
   } else {
