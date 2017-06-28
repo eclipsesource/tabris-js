@@ -325,11 +325,11 @@ describe('Widget', function() {
           result = widget.append(child1);
         });
 
-        it("sets the child's parent and calls native `insert` method", function() {
+        it("sets the child's parent and calls native `insertChild` method", function() {
           let calls = client.calls();
           expect(calls.length).to.equal(2);
           expect(calls[0]).to.eql({op: 'set', id: child1.cid, properties: {parent: widget.cid}});
-          expect(calls[1]).to.eql({op: 'call', id: widget.cid, method: 'insert',
+          expect(calls[1]).to.eql({op: 'call', id: widget.cid, method: 'insertChild',
             parameters: {child: child1.cid, index: 0}});
         });
 
@@ -359,11 +359,11 @@ describe('Widget', function() {
           result = widget.append(child1, child2);
         });
 
-        it("sets the children's parent and calls native `insert` method", function() {
+        it("sets the children's parent and calls native `insertChild` method", function() {
           let calls = client.calls();
           expect(calls.length).to.equal(4);
           expect(calls[0]).to.eql({op: 'set', id: child1.cid, properties: {parent: widget.cid}});
-          expect(calls[1]).to.eql({op: 'call', id: widget.cid, method: 'insert',
+          expect(calls[1]).to.eql({op: 'call', id: widget.cid, method: 'insertChild',
             parameters: {child: child1.cid, index: 0}});
         });
 
@@ -389,14 +389,14 @@ describe('Widget', function() {
           result = widget.append([child1, child2]);
         });
 
-        it("sets the widgets' parent and calls native `insert` method", function() {
+        it("sets the widgets' parent and calls native `insertChild` method", function() {
           let calls = client.calls();
           expect(calls.length).to.equal(4);
           expect(calls[0]).to.eql({op: 'set', id: child1.cid, properties: {parent: widget.cid}});
-          expect(calls[1]).to.eql({op: 'call', id: widget.cid, method: 'insert',
+          expect(calls[1]).to.eql({op: 'call', id: widget.cid, method: 'insertChild',
             parameters: {child: child1.cid, index: 0}});
           expect(calls[2]).to.eql({op: 'set', id: child2.cid, properties: {parent: widget.cid}});
-          expect(calls[3]).to.eql({op: 'call', id: widget.cid, method: 'insert',
+          expect(calls[3]).to.eql({op: 'call', id: widget.cid, method: 'insertChild',
             parameters: {child: child2.cid, index: 1}});
         });
 
@@ -416,14 +416,14 @@ describe('Widget', function() {
           result = widget.append(new WidgetCollection([child1, child2]));
         });
 
-        it("sets the widgets' native parent and calls native `insert`", function() {
+        it("sets the widgets' native parent and calls native `insertChild`", function() {
           let calls = client.calls();
           expect(calls.length).to.equal(4);
           expect(calls[0]).to.eql({op: 'set', id: child1.cid, properties: {parent: widget.cid}});
-          expect(calls[1]).to.eql({op: 'call', id: widget.cid, method: 'insert',
+          expect(calls[1]).to.eql({op: 'call', id: widget.cid, method: 'insertChild',
             parameters: {child: child1.cid, index: 0}});
           expect(calls[2]).to.eql({op: 'set', id: child2.cid, properties: {parent: widget.cid}});
-          expect(calls[3]).to.eql({op: 'call', id: widget.cid, method: 'insert',
+          expect(calls[3]).to.eql({op: 'call', id: widget.cid, method: 'insertChild',
             parameters: {child: child2.cid, index: 1}});
         });
 
