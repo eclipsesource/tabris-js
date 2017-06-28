@@ -220,7 +220,7 @@ describe('TabFolder', function() {
       tabris._notify(tabFolder.cid, 'select', {selection: tab.cid});
 
       expect(listener).to.have.been.calledOnce;
-      expect(listener.firstCall).to.have.been.calledWithMatch({target: tabFolder, tab});
+      expect(listener.firstCall).to.have.been.calledWithMatch({target: tabFolder, selection: tab});
     });
 
   });
