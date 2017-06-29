@@ -122,6 +122,9 @@ module.exports = function(grunt) {
       result.append(`interface ${def.type} extends _${def.type}Properties {}`);
     }
     let str = 'export class ' + def.type;
+    if (def.generics) {
+      str += '<' + def.generics + '>';
+    }
     if (def.extends) {
       str += ' extends ' + def.extends;
     }
@@ -259,7 +262,8 @@ module.exports = function(grunt) {
   function createMethod(name, def, className) {
     let result = [];
     result.push(createDoc(def));
-    result.push(`${name}(${createParamList(def.parameters, className)}): ${def.returns || 'void'};`);
+    result.push(`${name}${def.generics ? `<${def.generics}>` : ''}`
+      + `(${createParamList(def.parameters, className)}): ${def.ts_returns || def.returns || 'void'};`);
     return result.join('\n');
   }
 

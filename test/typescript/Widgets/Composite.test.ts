@@ -6,7 +6,7 @@ let widget: Composite = new Composite();
 let widgets: Widget[] = [];
 let widgetA: Widget = new Button();
 let widgetB: Widget = new Button();
-let widgetCollection: WidgetCollection = new Composite().find();
+let widgetCollection: WidgetCollection<Widget> = new Composite().find();
 let thisReturnValue: Composite;
 
 thisReturnValue = widget.append(widgetA, widgetB);

@@ -1,5 +1,6 @@
 {
   "type": "WidgetCollection",
+  "generics": "T extends Widget",
   "description": "A `WidgetCollection` is an array-like object representing a set of widgets, as returned by the widget methods `children` and `find`.",
   "constructor": {
     "access": "private",
@@ -115,33 +116,66 @@
         "returns": "this"
       }
     ],
-    "children": {
-      "parameters": [
-        {
-          "name": "selector",
-          "type": "Selector",
-          "optional": true,
-          "description": "A selector expression or a predicate function to filter the results."
-        }
-      ],
-      "returns": "WidgetCollection",
-      "description": "Returns a collection containing all children of all widgets in this collection that match the given selector."
-    },
-    "find": {
-      "parameters": [
-        {
-          "name": "selector",
-          "type": "Selector",
-          "optional": true,
-          "description": "A selector expression or a predicate function to filter the results."
-        }
-      ],
-      "returns": "WidgetCollection",
-      "description": "Returns a collection containing all descendants of all widgets in this collection that match the given selector."
-    },
+    "children": [
+      {
+        "parameters": [
+          {
+            "name": "selector",
+            "type": "Selector",
+            "optional": true,
+            "description": "A selector expression or a predicate function to filter the results."
+          }
+        ],
+        "returns": "WidgetCollection",
+        "ts_returns": "WidgetCollection<Widget>",
+        "description": "Returns a collection containing all children of all widgets in this collection that match the given selector."
+      },
+      {
+        "ts_only": true,
+        "generics": "U extends Widget",
+        "parameters": [
+          {
+            "name": "constructor",
+            "type": "{ new (...args: any[]): U }",
+            "description": "A class to filter the results."
+          }
+        ],
+        "returns": "WidgetCollection<U>",
+        "description": "Returns a collection containing all children of all widgets in this collection that are instances of the given class."
+      }
+    ],
+    "find": [
+      {
+        "parameters": [
+          {
+            "name": "selector",
+            "type": "Selector",
+            "optional": true,
+            "description": "A selector expression or a predicate function to filter the results."
+          }
+        ],
+        "returns": "WidgetCollection",
+        "ts_returns": "WidgetCollection<Widget>",
+        "description": "Returns a collection containing all descendants of all widgets in this collection that match the given selector."
+      },
+      {
+        "ts_only": true,
+        "generics": "U extends Widget",
+        "parameters": [
+          {
+            "name": "constructor",
+            "type": "{ new (...args: any[]): U }",
+            "description": "A class to filter the results."
+          }
+        ],
+        "returns": "WidgetCollection<U>",
+        "description": "Returns a collection containing all descendants of all widgets in this collection that are instances of the given class."
+      }
+    ],
     "parent": {
       "parameters": [],
       "returns": "WidgetCollection",
+      "ts_returns": "WidgetCollection<Widget>",
       "description": "Returns a collection containing all direct parents of the widgets in this collection."
     },
     "appendTo": {
@@ -177,16 +211,19 @@
     "first": {
       "parameters": [],
       "returns": "Widget",
+      "ts_returns": "T",
       "description": "Returns the first widget in the collection. Same as `collection[0]`."
     },
     "last": {
       "parameters": [],
       "returns": "Widget",
+      "ts_returns": "T",
       "description": "Returns the last widget in the collection. Same as `collection[collection.length - 1]`."
     },
     "toArray": {
       "parameters": [],
       "returns": "Widget[]",
+      "ts_returns": "T[]",
       "description": "Returns an Array containing all widgets in the collection."
     },
     "forEach": {
@@ -194,27 +231,45 @@
         {
           "name": "callback",
           "type": "(widget: Widget, index: number, collection: WidgetCollection) => void",
+          "ts_type": "(widget: T, index: number, collection: WidgetCollection<T>) => void",
           "description": "The function to call for each widget. The arguments are: *widget*, *index*, *collection*"
         }
       ],
       "description": "Calls the given callback function once for each widget in the collection."
     },
-    "filter": {
-      "parameters": [
-        {
-          "name": "selector",
-          "type": "Selector",
-          "description": "A selector expression or a predicate function to filter the results."
-        }
-      ],
-      "returns": "WidgetCollection",
-      "description": "Returns a new *WidgetCollection* containing all widgets in this collection that match the given selector."
-    },
+    "filter": [
+      {
+        "parameters": [
+          {
+            "name": "selector",
+            "type": "Selector",
+            "description": "A selector expression or a predicate function to filter the results."
+          }
+        ],
+        "returns": "WidgetCollection",
+        "ts_returns": "WidgetCollection<T>",
+        "description": "Returns a new *WidgetCollection* containing all widgets in this collection that match the given selector."
+      },
+      {
+        "ts_only": true,
+        "generics": "U extends Widget",
+        "parameters": [
+          {
+            "name": "constructor",
+            "type": "{ new (...args: any[]): U }",
+            "description": "A class to filter the results."
+          }
+        ],
+        "returns": "WidgetCollection<U>",
+        "description": "Returns a new *WidgetCollection* containing all widgets in this collection that are instances of the given class."
+      }
+    ],
     "indexOf": {
       "parameters": [
         {
           "name": "widget",
           "type": "Widget",
+          "ts_type": "T",
           "description": "The widget to locate in the collection."
         }
       ],
@@ -226,6 +281,7 @@
         {
           "name": "widget",
           "type": "Widget",
+          "ts_type": "T",
           "description": "The widget to search in the collection."
         }
       ],

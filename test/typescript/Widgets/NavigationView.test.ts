@@ -1,4 +1,4 @@
-import {NavigationView, Color, WidgetCollection} from 'tabris';
+import { NavigationView, Color, WidgetCollection, Page, Selector } from 'tabris';
 
 let widget: NavigationView = new NavigationView;
 
@@ -28,9 +28,13 @@ widget.toolbarColor = toolbarColor;
 widget.toolbarVisible = toolbarVisible;
 
 // Methods
-let widgetCollection: WidgetCollection;
+class Foo extends Page {}
+let widgetCollection: WidgetCollection<Page>;
+let fooCollection: WidgetCollection<Foo>;
+let selector: Selector = '';
 
-widgetCollection = widget.pages();
+widgetCollection = widget.pages(selector);
+fooCollection = widget.pages(Foo);
 
 // Events
 let height: number;

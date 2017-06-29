@@ -141,7 +141,7 @@ module.exports = function(grunt) {
       let result = ['## Methods\n\n'];
       Object.keys(def.methods).sort().forEach(name => {
         if (Array.isArray(def.methods[name])) {
-          def.methods[name].forEach(desc => {
+          def.methods[name].filter(desc => !desc.ts_only).forEach(desc => {
             result.push(renderMethod(name, desc));
           });
         } else {

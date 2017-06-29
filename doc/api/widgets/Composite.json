@@ -39,7 +39,8 @@
         "parameters": [
           {
             "name": "widgets",
-            "type": "WidgetCollection"
+            "type": "WidgetCollection",
+            "ts_type": "WidgetCollection<Widget>"
           }
         ],
         "returns": "this",

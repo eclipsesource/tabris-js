@@ -1,10 +1,10 @@
-import {Widget, Button, Slider, TextView, Picker, CheckBox, Switch, TextInput, ui} from 'tabris';
+import {Widget, ScrollView, Button, Slider, TextView, Picker, CheckBox, Switch, TextInput, ui} from 'tabris';
 
 const COUNTRIES = ['Germany', 'Canada', 'USA', 'Bulgaria'];
 const CLASSES = ['Business', 'Economy', 'Economy Plus'];
 
-let scrollView: tabris.ScrollView = (
-  <scrollView class='stretch' direction='vertical'>
+ui.contentView.append(
+  <scrollView id='scrollView' class='stretch' direction='vertical'>
     <textView class='col1 label' alignment='left' text='Name:'/>
     <textInput class='col2 labeled' id='name' message='Full Name'/>
     <textView class='col1 label' text='Flyer Number:'/>
@@ -32,7 +32,21 @@ let scrollView: tabris.ScrollView = (
     <button class='colspan' id='confirm' text='Place Reservation' background='#8b0000' textColor='white'/>
     <textView class='colspan' id='message'/>
   </scrollView>
-).apply({
+);
+
+let
+  scrollView = ui.find(ScrollView).filter('#scrollView').first(),
+  confirmButton = ui.find(Button).filter('#confirm').first(),
+  luggageSlider = ui.find(Slider).filter('#luggageSlider').first(),
+  luggageWeight = ui.find(TextView).filter('#luggageWeight').first(),
+  veggie = ui.find(CheckBox).filter('#veggie').first(),
+  miles = ui.find(Switch).filter('#miles').first(),
+  message = ui.find(TextView).filter('#message').first(),
+  nameInput = ui.find(TextInput).filter('#name').first(),
+  countryPicker = ui.find(Picker).filter('#country').first(),
+  classPicker = ui.find(Picker).filter('#class').first();
+
+scrollView.apply({
   '.stretch': {left: 0, right: 0, top: 0, bottom: 0},
   '.col1': {left: 10, width: 120},
   '.col2': {left: 140, right: 10},
@@ -44,21 +58,21 @@ let scrollView: tabris.ScrollView = (
   '.colspan': {left: 10, right: 10, top: 'prev() 18'},
   '#luggageSlider': {left: 140, right: 70},
   '#luggageWeight': {right: 10, width: 50}
-}).appendTo(ui.contentView);
+});
 
-$(Button, 'confirm').on('select', () => updateMessage());
-$(Slider, 'luggageSlider').on({
-  selectionChanged: ({value}) => $(TextView, 'luggageWeight').text = `${value} Kg`
+confirmButton.on({select: () => updateMessage()});
+luggageSlider.on({
+  selectionChanged: ({value}) => luggageWeight.text = `${value} Kg`
 });
 
 function updateMessage() {
-  $(TextView, 'message').text = [
-    'Flight booked for: ' + $(TextInput, 'name').text,
-    'Destination: ' + COUNTRIES[$(Picker, 'country').selectionIndex],
+  message.text = [
+    'Flight booked for: ' + nameInput.text,
+    'Destination: ' + COUNTRIES[countryPicker.selectionIndex],
     'Seating: ' + createSeating(),
-    'Luggage: ' + ($(Slider, 'luggageSlider').selection + ' Kg'),
-    'Meal: ' + ($(CheckBox, 'veggie').checked ? 'Vegetarian' : 'Standard'),
-    'Redeem miles: ' + ($(Switch, 'miles').checked ? 'Yes' : 'No')
+    'Luggage: ' + luggageSlider.selection + ' Kg',
+    'Meal: ' + veggie.checked ? 'Vegetarian' : 'Standard',
+    'Redeem miles: ' + (miles.checked ? 'Yes' : 'No')
   ].join('\n') + '\n';
 }
 
@@ -69,17 +83,6 @@ function createSeating() {
       seating = button.text;
     }
   });
-  seating += ', ' + CLASSES[$(Picker, 'class').selectionIndex];
+  seating += ', ' + CLASSES[classPicker.selectionIndex];
   return seating;
-}
-
-function $<T extends Widget>(type: {new (): T}, id: string): T {
-  let result = scrollView.find('#' + id).first() as T;
-  if (result == null) {
-    throw new Error(`${id} does not exit`);
-  }
-  if (!(result instanceof type)) {
-    throw new Error(`type mismatch: ${id} is not a ${type.name}`);
-  }
-  return result as T;
 }

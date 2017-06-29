@@ -94,6 +94,11 @@ describe('WidgetCollection', function() {
       expect(collection.filter(widget => widget !== widgets[1]).toArray()).to.deep.equal([widgets[0], widgets[2]]);
     });
 
+    it('with type', function() {
+      expect(collection.filter(Foo).toArray()).to.deep.equal(widgets);
+      expect(collection.filter(Bar).toArray()).to.deep.equal([widgets[1]]);
+    });
+
     it('with type selector', function() {
       expect(collection.filter('Foo').toArray()).to.deep.equal([widgets[0], widgets[2]]);
     });

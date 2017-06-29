@@ -3,42 +3,90 @@
   "description": "Base class for all widgets",
   "extends": "NativeObject",
   "methods": {
-    "children": {
-      "parameters": [
-        {
-          "name": "selector",
-          "type": "Selector",
-          "optional": true,
-          "description": "A selector expression or a predicate function to filter the results."
-        }
-      ],
-      "returns": "WidgetCollection",
-      "description": "Returns a (possibly empty) collection of all children of this widget that match the given selector."
-    },
-    "siblings": {
-      "parameters": [
-        {
-          "name": "selector",
-          "type": "Selector",
-          "optional": true,
-          "description": "A selector expression or a predicate function to filter the results."
-        }
-      ],
-      "returns": "WidgetCollection",
-      "description": "Returns a (possibly empty) collection of all siblings of this widget that match the given selector."
-    },
-    "find": {
-      "parameters": [
-        {
-          "name": "selector",
-          "type": "Selector",
-          "optional": true,
-          "description": "A selector expression or a predicate function to filter the results."
-        }
-      ],
-      "returns": "WidgetCollection",
-      "description": "Returns a (possibly empty) collection of all descendants of this widget that match the given selector."
-    },
+    "children": [
+      {
+        "parameters": [
+          {
+            "name": "selector",
+            "type": "Selector",
+            "optional": true,
+            "description": "A selector expression or a predicate function to filter the results."
+          }
+        ],
+        "returns": "WidgetCollection",
+        "ts_returns": "WidgetCollection<Widget>",
+        "description": "Returns a (possibly empty) collection of all children of this widget that match the given selector."
+      },
+      {
+        "ts_only": true,
+        "generics": "U extends Widget",
+        "parameters": [
+          {
+            "name": "constructor",
+            "type": "{ new (...args: any[]): U }",
+            "description": "A class to filter the results."
+          }
+        ],
+        "returns": "WidgetCollection<U>",
+        "description": "Returns a collection containing all children of all widgets in this collection that are instances of the given class."
+      }
+    ],
+    "siblings": [
+      {
+        "parameters": [
+          {
+            "name": "selector",
+            "type": "Selector",
+            "optional": true,
+            "description": "A selector expression or a predicate function to filter the results."
+          }
+        ],
+        "returns": "WidgetCollection",
+        "ts_returns": "WidgetCollection<Widget>",
+        "description": "Returns a (possibly empty) collection of all siblings of this widget that match the given selector."
+      },
+      {
+        "ts_only": true,
+        "generics": "U extends Widget",
+        "parameters": [
+          {
+            "name": "constructor",
+            "type": "{ new (...args: any[]): U }",
+            "description": "A class to filter the results."
+          }
+        ],
+        "returns": "WidgetCollection<U>",
+        "description": "Returns a (possibly empty) collection of all siblings of this widget that are instances of the given class."
+      }
+    ],
+    "find": [
+      {
+        "parameters": [
+          {
+            "name": "selector",
+            "type": "Selector",
+            "optional": true,
+            "description": "A selector expression or a predicate function to filter the results."
+          }
+        ],
+        "returns": "WidgetCollection",
+        "ts_returns": "WidgetCollection<Widget>",
+        "description": "Returns a collection containing all descendants of all widgets in this collection that match the given selector."
+      },
+      {
+        "ts_only": true,
+        "generics": "U extends Widget",
+        "parameters": [
+          {
+            "name": "constructor",
+            "type": "{ new (...args: any[]): U }",
+            "description": "A class to filter the results."
+          }
+        ],
+        "returns": "WidgetCollection<U>",
+        "description": "Returns a collection containing all descendants of all widgets in this collection that are instances of the given class."
+      }
+    ],
     "apply": {
       "parameters": [
         {

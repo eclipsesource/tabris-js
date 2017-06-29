@@ -97,6 +97,9 @@ widget.visible = visible;
 widget.width = width;
 
 // Methods
+class Foo extends Composite {}
+let fooCollection: WidgetCollection<Foo>;
+let widgetCollection: WidgetCollection<Widget>;
 let properties: {transform?: Transformation, opacity?: number} = {};
 let parent: Composite = new Composite();
 let options: AnimationOptions = {};
@@ -105,7 +108,6 @@ let otherWidget: Widget = new Composite();
 let promise: Promise<any>;
 let thisReturnValue: Widget;
 let voidReturnValue: void;
-let widgetCollection: WidgetCollection;
 let bool: boolean;
 let composite: Composite;
 
@@ -114,16 +116,19 @@ thisReturnValue = widget.appendTo(parent);
 thisReturnValue = widget.apply({'selectorString': properties});
 widgetCollection = widget.children();
 widgetCollection = widget.children(selector);
+fooCollection = widget.children(Foo);
 thisReturnValue = widget.detach();
 voidReturnValue = widget.dispose();
 widgetCollection = widget.find();
 widgetCollection = widget.find(selector);
+fooCollection = widget.find(Foo);
 thisReturnValue = widget.insertAfter(otherWidget);
 thisReturnValue = widget.insertBefore(otherWidget);
 bool = widget.isDisposed();
 composite = widget.parent();
 widgetCollection = widget.siblings();
 widgetCollection = widget.siblings(selector);
+fooCollection = widget.siblings(Foo);
 
 // Events
 let state: 'start'|'change'|'end'|'cancel';
