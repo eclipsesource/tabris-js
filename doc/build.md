@@ -114,7 +114,8 @@ Let the `main` field point to the *transpiled* `app.js` in `dist/`:
 }
 ```
 
-In case iOS 8 and 9 support is desired, more Babel plugins can be added to compensate for missing ES6 features. See [ECMAScript 6 compatibility table](http://kangax.github.io/compat-table/es6/) for more information about supported ES6 features in iOS 8 and 9.
+In case iOS 9 support is desired, more Babel plugins can be added to compensate for missing ES6 features.
+See [EcmaScript 6](lang.md#ecmascript-6) for more information about supported ES6 features in iOS 9.
 
 #### Example: Transpiling TypeScript code
 

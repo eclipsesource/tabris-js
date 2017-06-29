@@ -62,6 +62,6 @@ class MyCustomWidget extends Widget {
 }
 ```
 
-### Compatibility with iOS 8 and 9
+### Compatibility with iOS 9
 
-For compatibility with the JavaScriptCore environment version used in iOS 8 and 9, ES6 language features must be transpiled. See http://kangax.github.io/compat-table/es6/
+For compatibility with the JavaScriptCore version used in iOS 9, some ES6 language features must be transpiled (see [EcmaScript 6](lang.md#ecmascript-6)).
