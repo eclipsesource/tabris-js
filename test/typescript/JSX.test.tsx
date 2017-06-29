@@ -25,6 +25,8 @@ let video: tabris.Video = <video autoPlay={true}/>;
 let webView: tabris.WebView = <webView url='http://localhost/'/>;
 
 let noAttributes: tabris.Composite = <composite/>;
+let widgetCollection = <widgetCollection><button/><textView/></widgetCollection>;
+let compositeWithChildren = <composite><button/><widgetCollection><textView/></widgetCollection></composite>;
 
 class MyCustomWidget extends tabris.Composite {
 

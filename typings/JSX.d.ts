@@ -38,7 +38,8 @@ declare global {
       textView: tabris.TextViewProperties,
       toggleButton: tabris.ToggleButtonProperties,
       video: tabris.VideoProperties,
-      webView: tabris.WebViewProperties
+      webView: tabris.WebViewProperties,
+      widgetCollection: {}
     }
 
   }
