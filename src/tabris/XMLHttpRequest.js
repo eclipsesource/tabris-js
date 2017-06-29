@@ -151,28 +151,18 @@ export default class XMLHttpRequest {
     }
   }
 
-  open(method, url, async, username, password) {
+  open(method, url, async) {
     let parsedUrl = {};
     // (2), (3), (4): we don't implement the 'settings' object
     validateRequiredOpenArgs(method, url);
     parsedUrl.source = url; // (8), (9): experimental non-standard parsing implementation:
-    // regex taken from http://stackoverflow.com/a/8206299:
-    let urlWithoutProtocol = url.replace(/.*?:\/\//g, '');
     // regex taken from http://stackoverflow.com/a/19709846:
     parsedUrl.isRelative = !new RegExp('^(?:[a-z]+:)?//', 'i').test(url);
-    parsedUrl.userdata = urlWithoutProtocol.substring(0, urlWithoutProtocol.indexOf('@'));
     if (typeof async === 'undefined') { // (10)
       async = true;
-      username = null;
-      password = null;
     }
     if (!async) {
       throw new Error('Only asynchronous request supported.');
-    }
-    if (parsedUrl.isRelative) { // (11)
-      if (username && password) {
-        parsedUrl.userdata = username + ':' + password;
-      }
     }
     // (12): superfluous as we don't support synchronous requests
     // TODO: (13) - should we call 'abort' to the proxy? We'd need to move the creation of the proxy
@@ -215,12 +205,6 @@ export default class XMLHttpRequest {
     // (8): uploadEvents is relevant for the "force preflight flag", but this logic is handled by
     // the client
     // Basic access authentication
-    if (this.$withCredentials) {
-      // TODO: encode userdata in base64, will not function if not encoded
-      if (this.$requestUrl.userdata) {
-        this.setRequestHeader('Authorization', 'Basic ' + this.$requestUrl.userdata);
-      }
-    }
     this.$sendInvoked = true; // (9.1)
     dispatchProgressEvent('loadstart', this); // (9.2)
     if (!this.$uploadComplete) {

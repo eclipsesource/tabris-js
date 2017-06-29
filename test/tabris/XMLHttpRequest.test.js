@@ -151,25 +151,6 @@ describe('XMLHttpRequest', function() {
       expect(xhr.readyState).to.equal(xhr.UNSENT);
     });
 
-    it('sets url username and password if url relative', function() {
-      xhr.withCredentials = true;
-      xhr.open('GET', 'index.json', true, 'user', 'password');
-      xhr.send();
-      expect(proxy.send).to.have.been.calledWithMatch({
-        headers: {Authorization: 'Basic user:password'}
-      });
-    });
-
-    it("doesn't set url username and password if url relative and username or password null",
-    function() {
-      xhr.withCredentials = true;
-      xhr.open('GET', 'index.json', true, 'user', null);
-      xhr.send();
-      expect(proxy.send).not.to.have.been.calledWithMatch({
-        headers: {Authorization: 'Basic user:password'}
-      });
-    });
-
   });
 
   describe('send', function() {
@@ -312,32 +293,6 @@ describe('XMLHttpRequest', function() {
       xhr.open('POST', 'http://foobar.com');
       xhr.send('foo');
       expect(xhr.upload.onloadstart).to.have.been.called;
-    });
-
-    it('sends basic access authentication header when withCredentials true', function() {
-      xhr.withCredentials = true;
-      xhr.open('GET', 'http://user:password@foobar.com');
-      xhr.send();
-      expect(proxy.send).to.have.been.calledWithMatch({
-        headers: {Authorization: 'Basic user:password'}
-      });
-    });
-
-    it("doesn't send basic access authentication header when withCredentials false", function() {
-      xhr.open('GET', 'http://user:password@foobar.com');
-      xhr.send();
-      expect(proxy.send).not.to.have.been.calledWithMatch({
-        headers: {Authorization: 'Basic user:password'}
-      });
-    });
-
-    it("doesn't send basic access authentication header when userdata null", function() {
-      xhr.withCredentials = true;
-      xhr.open('GET', 'http://foobar.com');
-      xhr.send();
-      expect(proxy.send).not.to.have.been.calledWithMatch({
-        headers: {Authorization: 'Basic user:password'}
-      });
     });
 
     describe('proxy stateChanged callback', function() {
