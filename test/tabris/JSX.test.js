@@ -17,11 +17,11 @@ describe('JSX', function() {
 
     it('creates widget by string', function() {
       global.tabris.CheckBox = CheckBox;
-      expect(createElement('checkBox')).to.be.an.instanceof(CheckBox);
+      expect(createElement('checkBox', null)).to.be.an.instanceof(CheckBox);
     });
 
     it('creates widget by Constructor', function() {
-      expect(createElement(CheckBox)).to.be.an.instanceof(CheckBox);
+      expect(createElement(CheckBox, null)).to.be.an.instanceof(CheckBox);
     });
 
     it('sets properties', function() {
@@ -43,31 +43,31 @@ describe('JSX', function() {
     });
 
     it('fails for non-widget native type', function() {
-      expect(() => createElement(AlertDialog)).to.throw();
+      expect(() => createElement(AlertDialog, null)).to.throw();
     });
 
     it('fails for non-widget named custom type', function() {
       expect(() => createElement(class Foo {
         set() {}
         append() {}
-      })).to.throw(Error, 'JSX: Unsupported type Foo');
+      }), null).to.throw(Error, 'JSX: Unsupported type Foo');
     });
 
     it('fails for non-widget named custom type', function() {
       expect(() => createElement(class {
         set() {}
         append() {}
-      })).to.throw(Error, 'JSX: Unsupported type');
+      }, null)).to.throw(Error, 'JSX: Unsupported type');
     });
 
     it('fails for string pointing to non-function', function() {
       global.tabris.Foo = 'bar';
-      expect(() => createElement('foo')).to.throw(Error, 'JSX: Unsupported type');
+      expect(() => createElement('foo', null)).to.throw(Error, 'JSX: Unsupported type');
     });
 
     it('fails for unrecognized string', function() {
       global.tabris.CheckBox = CheckBox;
-      expect(() => createElement('composite')).to.throw();
+      expect(() => createElement('composite', null)).to.throw();
     });
 
   });

@@ -2,7 +2,7 @@ import Widget from './Widget';
 
 export function createElement(jsxType, properties, ...children) {
   let Type = typeToConstructor(jsxType);
-  let result = new Type(properties);
+  let result = new Type(properties || {});
   if (!(result instanceof Widget)) {
     throw new Error(('JSX: Unsupported type ' + Type.name).trim());
   }

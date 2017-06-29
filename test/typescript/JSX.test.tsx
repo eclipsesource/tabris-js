@@ -24,6 +24,8 @@ let toggleButton: tabris.ToggleButton = <toggleButton text='red'/>;
 let video: tabris.Video = <video autoPlay={true}/>;
 let webView: tabris.WebView = <webView url='http://localhost/'/>;
 
+let noAttributes: tabris.Composite = <composite/>;
+
 class MyCustomWidget extends tabris.Composite {
 
   private jsxProperties: {
