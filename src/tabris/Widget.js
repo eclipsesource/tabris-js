@@ -198,6 +198,9 @@ export default class Widget extends NativeObject {
   }
 
   _listen(name, listening) {
+    if (this._isDisposed) {
+      return;
+    }
     if (this.gestures[name]) {
       if (listening) {
         let properties = Object.assign({target: this}, this.gestures[name]);

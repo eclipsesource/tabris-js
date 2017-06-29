@@ -284,24 +284,78 @@ describe('Widget', function() {
         expect(log).to.eql(['parent', 'child', 'grandchild']);
       });
 
-      describe('when disposed', function() {
+    });
 
-        beforeEach(function() {
-          widget.dispose();
-        });
+    describe('when disposed', function() {
 
-        it('calling append fails', function() {
-          expect(() => {
-            widget.append();
-          }).to.throw(Error, 'Object is disposed');
-        });
+      beforeEach(function() {
+        widget.dispose();
+      });
 
-        it('calling appendTo fails', function() {
-          expect(() => {
-            widget.append();
-          }).to.throw(Error, 'Object is disposed');
-        });
+      it('on() does not throw', function() {
+        expect(() => widget.on('dispose', () => {})).not.to.throw;
+      });
 
+      it('off() does not throw', function() {
+        expect(() => widget.off('dispose', () => {})).not.to.throw;
+      });
+
+      it('once() does not throw', function() {
+        expect(() => widget.once('dispose', () => {})).not.to.throw;
+      });
+
+      it('set() does not throw', function() {
+        expect(() => widget.set('id', 'foo')).not.to.throw;
+      });
+
+      it('get() returns undefined', function() {
+        expect(widget.get('id')).to.be.undefined;
+      });
+
+      it('parent() returns null', function() {
+        expect(widget.parent()).to.be.null;
+      });
+
+      it('children() returns empty list', function() {
+        expect(widget.children().length).to.equal(0);
+      });
+
+      it('siblings() returns empty list', function() {
+        expect(widget.siblings().length).to.equal(0);
+      });
+
+      it('find() returns empty list', function() {
+        expect(widget.find().length).to.equal(0);
+      });
+
+      it('append() fails', function() {
+        expect(() => {
+          widget.append();
+        }).to.throw(Error, 'Object is disposed');
+      });
+
+      it('appendTo() fails', function() {
+        expect(() => {
+          widget.appendTo();
+        }).to.throw(Error, 'Object is disposed');
+      });
+
+      it('insertBefore() fails', function() {
+        expect(() => {
+          widget.insertBefore();
+        }).to.throw(Error, 'Object is disposed');
+      });
+
+      it('insertAfter() fails', function() {
+        expect(() => {
+          widget.insertAfter();
+        }).to.throw(Error, 'Object is disposed');
+      });
+
+      it('detach() fails', function() {
+        expect(() => {
+          widget.detach();
+        }).to.throw(Error, 'Object is disposed');
       });
 
     });
