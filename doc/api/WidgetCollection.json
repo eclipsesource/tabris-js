@@ -209,18 +209,62 @@
       "parameters": [],
       "description": "Disposes all widgets in this collection."
     },
-    "first": {
-      "parameters": [],
-      "returns": "Widget",
-      "ts_returns": "T",
-      "description": "Returns the first widget in the collection. Same as `collection[0]`."
-    },
-    "last": {
-      "parameters": [],
-      "returns": "Widget",
-      "ts_returns": "T",
-      "description": "Returns the last widget in the collection. Same as `collection[collection.length - 1]`."
-    },
+    "first": [
+      {
+        "parameters": [
+          {
+            "name": "selector",
+            "type": "Selector",
+            "optional": true,
+            "description": "A selector expression or a predicate function to filter the results."
+          }
+        ],
+        "returns": "Widget",
+        "ts_returns": "T",
+        "description": "Returns the first widget in the collection that is matched by the selector. Without selector, it is the same as `collection[0]`."
+      },
+      {
+        "ts_only": true,
+        "generics": "U extends Widget",
+        "parameters": [
+          {
+            "name": "constructor",
+            "type": "{ new (...args: any[]): U }",
+            "description": "A class to filter the results."
+          }
+        ],
+        "returns": "U",
+        "description": "Returns the first widget in the collection that is an instance of the given class."
+      }
+    ],
+    "last": [
+      {
+        "parameters": [
+          {
+            "name": "selector",
+            "type": "Selector",
+            "optional": true,
+            "description": "A selector expression or a predicate function to filter the results."
+          }
+        ],
+        "returns": "Widget",
+        "ts_returns": "T",
+        "description": "Returns the last widget in the collection that is matched by the selector. Without selector, it is the same as `collection[collection.length - 1]`."
+      },
+      {
+        "ts_only": true,
+        "generics": "U extends Widget",
+        "parameters": [
+          {
+            "name": "constructor",
+            "type": "{ new (...args: any[]): U }",
+            "description": "A class to filter the results."
+          }
+        ],
+        "returns": "U",
+        "description": "Returns the last widget in the collection that is an instance of the given class."
+      }
+    ],
     "toArray": {
       "parameters": [],
       "returns": "Widget[]",

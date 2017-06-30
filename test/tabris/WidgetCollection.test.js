@@ -36,8 +36,16 @@ describe('WidgetCollection', function() {
     expect(collection.first()).to.equal(widgets[0]);
   });
 
+  it('first(selector)', function() {
+    expect(collection.first(Bar)).to.equal(widgets[1]);
+  });
+
   it('last()', function() {
     expect(collection.last()).to.equal(widgets[2]);
+  });
+
+  it('last(selector)', function() {
+    expect(collection.last(Bar)).to.equal(widgets[1]);
   });
 
   it('toArray()', function() {

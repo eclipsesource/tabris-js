@@ -13,11 +13,17 @@ export default class WidgetCollection {
     return this._array.length;
   }
 
-  first() {
+  first(selector) {
+    if (selector) {
+      return this.filter(selector).first();
+    }
     return this._array[0];
   }
 
-  last() {
+  last(selector) {
+    if (selector) {
+      return this.filter(selector).last();
+    }
     return this._array[this._array.length - 1];
   }
 

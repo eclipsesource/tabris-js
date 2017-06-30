@@ -35,16 +35,16 @@ ui.contentView.append(
 );
 
 let
-  scrollView = ui.find(ScrollView).filter('#scrollView').first(),
-  confirmButton = ui.find(Button).filter('#confirm').first(),
-  luggageSlider = ui.find(Slider).filter('#luggageSlider').first(),
-  luggageWeight = ui.find(TextView).filter('#luggageWeight').first(),
-  veggie = ui.find(CheckBox).filter('#veggie').first(),
-  miles = ui.find(Switch).filter('#miles').first(),
-  message = ui.find(TextView).filter('#message').first(),
-  nameInput = ui.find(TextInput).filter('#name').first(),
-  countryPicker = ui.find(Picker).filter('#country').first(),
-  classPicker = ui.find(Picker).filter('#class').first();
+  scrollView = ui.find(ScrollView).first('#scrollView'),
+  confirmButton = ui.find(Button).first('#confirm'),
+  luggageSlider = ui.find(Slider).first('#luggageSlider'),
+  luggageWeight = ui.find(TextView).first('#luggageWeight'),
+  veggie = ui.find(CheckBox).first('#veggie'),
+  miles = ui.find(Switch).first('#miles'),
+  message = ui.find(TextView).first('#message'),
+  nameInput = ui.find(TextInput).first('#name'),
+  countryPicker = ui.find(Picker).first('#country'),
+  classPicker = ui.find(Picker).first('#class');
 
 scrollView.apply({
   '.stretch': {left: 0, right: 0, top: 0, bottom: 0},
