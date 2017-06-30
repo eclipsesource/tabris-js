@@ -1,5 +1,4 @@
 {
-  "description": "Showcases declarative ui with tsx",
   "main": "input.js",
   "scripts": {
     "start": "npm run build && npm run serve",
