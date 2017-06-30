@@ -1204,7 +1204,7 @@ function deepSelect(result, array, filter) {
 
 function getFilter(selector) {
   var matches = {};
-  var filter = selector instanceof Function ? selector : createMatcher(selector);
+  var filter = isFilter(selector) ? selector : createMatcher(selector);
   return function (widget) {
     if (matches[widget.cid]) {
       return false;
@@ -1218,6 +1218,9 @@ function getFilter(selector) {
 }
 
 function createMatcher(selector) {
+  if (selector instanceof Function) {
+    return function (widget) { return widget instanceof selector; };
+  }
   if (selector.charAt(0) === '#') {
     var expectedId = selector.slice(1);
     return function (widget) { return expectedId === widget.id; };
@@ -1230,6 +1233,22 @@ function createMatcher(selector) {
     return function () { return true; };
   }
   return function (widget) { return selector === widget.constructor.name; };
+}
+
+function isFilter(selector) {
+  return selector instanceof Function && !isWidgetConstructor(selector);
+}
+
+function isWidgetConstructor(fn) {
+  var proto = fn.prototype;
+  while (proto) {
+    // Use NativeObject since importing Widget would causes circulary module dependency issues
+    if (proto === NativeObject.prototype) {
+      return true;
+    }
+    proto = Object.getPrototypeOf(proto);
+  }
+  return false;
 }
 
 var types = {
@@ -1669,9 +1688,6 @@ var Layout = {
   },
 
   resolveReferences: function resolveReferences(layoutData, targetWidget) {
-    if (!targetWidget) {
-      return layoutData;
-    }
     var result = {};
     for (var key in layoutData) {
       result[key] = resolveAttribute(layoutData[key], targetWidget);
@@ -1721,10 +1737,13 @@ function toProxyId(ref, widget) {
     return 0;
   }
   if (typeof ref === 'string') {
-    var proxy = getParent(widget).children(ref)[0];
+    var proxy = widget.siblings(ref)[0];
     return types.proxy.encode(proxy) || 0;
   }
-  return types.proxy.encode(ref) || 0;
+  if (widget.siblings().toArray().includes(ref)) {
+	  return types.proxy.encode(ref) || 0;
+  }
+  return 0;
 }
 
 function isNumber(value) {
@@ -2423,11 +2442,11 @@ var Widget = (function (NativeObject$$1) {
     }
     if (typeof index === 'number') {
       this._children.splice(index, 0, child);
-      NativeObject$$1.prototype._trigger.call(this, 'addChild', {child: child, index: index});
     } else {
-      this._children.push(child);
-      NativeObject$$1.prototype._trigger.call(this, 'addChild', {child: child, index: this._children.length - 1});
+      index = this._children.push(child) - 1;
     }
+    NativeObject$$1.prototype._trigger.call(this, 'addChild', {child: child, index: index});
+    this._nativeCall('insertChild', {child: child.cid, index: index});
   };
 
   Widget.prototype._removeChild = function _removeChild (child) {
@@ -2458,6 +2477,9 @@ var Widget = (function (NativeObject$$1) {
   Widget.prototype._listen = function _listen (name, listening) {
     var this$1 = this;
 
+    if (this._isDisposed) {
+      return;
+    }
     if (this.gestures[name]) {
       if (listening) {
         var properties = Object.assign({target: this}, this.gestures[name]);
@@ -4298,7 +4320,14 @@ function createElement(jsxType, properties) {
   var children = [], len = arguments.length - 2;
   while ( len-- > 0 ) children[ len ] = arguments[ len + 2 ];
 
+  properties = properties || {};
   var Type = typeToConstructor(jsxType);
+  if (Type === WidgetCollection) {
+    if (properties) {
+      throw new Error('JSX: WidgetCollection can not have attributes');
+    }
+    return new WidgetCollection(flattenChildren(children));
+  }
   var on = {}, once = {}, style;
   for (var ev in properties) {
     if (ev.indexOf('once-') > -1) {
@@ -4334,7 +4363,7 @@ function createElement(jsxType, properties) {
 	}
 	result = result.rendered;
   }
-  return result.append.apply(result, children);
+  return result.append.apply(result, flattenChildren(children));
 }
 
 function typeToConstructor(jsxType) {
@@ -4349,6 +4378,19 @@ function typeToConstructor(jsxType) {
   return Type;
 }
 
+function flattenChildren(children) {
+  var result = [];
+  for (var i = 0, list = children; i < list.length; i += 1) {
+    var child = list[i];
+
+    if (child instanceof WidgetCollection) {
+      result = result.concat(flattenChildren(child.toArray()));
+    } else {
+      result.push(child);
+    }
+  }
+  return result;
+}
 
 var JSX = Object.freeze({
 	createElement: createElement
@@ -4980,7 +5022,8 @@ NativeObject.defineProperties(SearchAction.prototype, {
   title: {type: 'string', default: ''},
   proposals: {default: function default$1() {return [];}},
   text: {type: 'string', nocache: true},
-  message: {type: 'string', default: ''}
+  message: {type: 'string', default: ''},
+  win_symbol: {type: 'string', default: ''}
 });
 
 var NavigationView = (function (Composite$$1) {
@@ -5588,20 +5631,20 @@ var TabFolder = (function (Composite$$1) {
 
   TabFolder.prototype._trigger = function _trigger (name, event) {
     if (name === 'select') {
-      var tab = tabris._proxies.find(event.selection);
-      return Composite$$1.prototype._trigger.call(this, 'select', {tab: tab});
+      var selection = tabris._proxies.find(event.selection);
+      return Composite$$1.prototype._trigger.call(this, 'select', {selection: selection});
     }
     if (name === 'scroll') {
-      var selection = event.selection ? tabris._proxies.find(event.selection) : null;
-      return Composite$$1.prototype._trigger.call(this, 'scroll', {selection: selection, offset: event.offset});
+      var selection$1 = event.selection ? tabris._proxies.find(event.selection) : null;
+      return Composite$$1.prototype._trigger.call(this, 'scroll', {selection: selection$1, offset: event.offset});
     }
     return Composite$$1.prototype._trigger.call(this, name, event);
   };
 
   TabFolder.prototype.$triggerChangeSelection = function $triggerChangeSelection (ref) {
-    var tab = ref.tab;
+    var selection = ref.selection;
 
-    this._triggerChangeEvent('selection', tab);
+    this._triggerChangeEvent('selection', selection);
   };
 
   Object.defineProperties( TabFolder.prototype, prototypeAccessors );
@@ -6094,6 +6137,34 @@ function extractScheme(url) {
   var match = /^(\S+?):/.exec(url);
   return match ? match[1] : null;
 }
+
+var HotReload = (function (WebSocket$$1) {
+	function HotReload (ip, port) {
+		if ( ip === void 0 ) ip = '127.0.0.1';
+		if ( port === void 0 ) port = 80;
+
+		WebSocket$$1.call(this, ("ws://" + ip + ":" + port), 'chat-protocol');
+		this.socket = new WebSocket$$1(("ws://" + ip + ":" + port), 'chat-protocol');
+	}
+
+	if ( WebSocket$$1 ) HotReload.__proto__ = WebSocket$$1;
+	HotReload.prototype = Object.create( WebSocket$$1 && WebSocket$$1.prototype );
+	HotReload.prototype.constructor = HotReload;
+	HotReload.prototype.on = function on (name, callback) {
+		this['on' + name] = callback;
+		return this;
+	};
+	HotReload.prototype.receive = function receive (callback) {
+		return this.on('message', callback);
+	};
+	HotReload.prototype.activate = function activate () {
+		return this.receive(function (event) {
+			tabris.app.reload();
+		});
+	};
+
+	return HotReload;
+}(WebSocket));
 
 var HttpRequest = (function (NativeObject$$1) {
   function HttpRequest() {
@@ -8771,6 +8842,7 @@ var tabris$1 = global.tabris = Object.assign(new Tabris(), {
 
 tabris$1.on('start', function () {
   tabris$1.app = create$1();
+  tabris$1.hot = new HotReload(undefined, 8085);
   checkVersion(tabris$1.version, tabris$1.app._nativeGet('tabrisJsVersion'));
   tabris$1.ui = create$2();
   tabris$1.device = create();

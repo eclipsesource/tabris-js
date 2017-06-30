@@ -165,11 +165,11 @@ export default class Widget extends NativeObject {
     }
     if (typeof index === 'number') {
       this._children.splice(index, 0, child);
-      super._trigger('addChild', {child, index});
     } else {
-      this._children.push(child);
-      super._trigger('addChild', {child, index: this._children.length - 1});
+      index = this._children.push(child) - 1;
     }
+    super._trigger('addChild', {child, index});
+    this._nativeCall('insertChild', {child: child.cid, index});
   }
 
   _removeChild(child) {
@@ -198,6 +198,9 @@ export default class Widget extends NativeObject {
   }
 
   _listen(name, listening) {
+    if (this._isDisposed) {
+      return;
+    }
     if (this.gestures[name]) {
       if (listening) {
         let properties = Object.assign({target: this}, this.gestures[name]);

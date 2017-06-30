@@ -53,6 +53,7 @@ import ToggleButton from './widgets/ToggleButton';
 import Video from './widgets/Video';
 import WebView from './widgets/WebView';
 import WebSocket from './WebSocket';
+import HotReload from './HotReload';
 import Widget from './Widget';
 import WidgetCollection from './WidgetCollection';
 import XMLHttpRequest from './XMLHttpRequest';
@@ -145,6 +146,7 @@ const tabris = global.tabris = Object.assign(new Tabris(), {
 
 tabris.on('start', () => {
   tabris.app = createApp();
+  tabris.hot = new HotReload(undefined, 8085);
   checkVersion(tabris.version, tabris.app._nativeGet('tabrisJsVersion'));
   tabris.ui = createUi();
   tabris.device = createDevice();

@@ -34,9 +34,6 @@ export default {
   },
 
   resolveReferences(layoutData, targetWidget) {
-    if (!targetWidget) {
-      return layoutData;
-    }
     let result = {};
     for (let key in layoutData) {
       result[key] = resolveAttribute(layoutData[key], targetWidget);
@@ -86,10 +83,13 @@ function toProxyId(ref, widget) {
     return 0;
   }
   if (typeof ref === 'string') {
-    let proxy = getParent(widget).children(ref)[0];
+    let proxy = widget.siblings(ref)[0];
     return types.proxy.encode(proxy) || 0;
   }
-  return types.proxy.encode(ref) || 0;
+  if (widget.siblings().toArray().includes(ref)) {
+	  return types.proxy.encode(ref) || 0;
+  }
+  return 0;
 }
 
 function isNumber(value) {

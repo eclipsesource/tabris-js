@@ -30,5 +30,6 @@ NativeObject.defineProperties(SearchAction.prototype, {
   title: {type: 'string', default: ''},
   proposals: {default() {return [];}},
   text: {type: 'string', nocache: true},
-  message: {type: 'string', default: ''}
+  message: {type: 'string', default: ''},
+  win_symbol: {type: 'string', default: ''}
 });

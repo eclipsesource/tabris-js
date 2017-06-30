@@ -1,3 +1,5 @@
+import NativeObject from './NativeObject';
+
 export default class WidgetCollection {
 
   constructor(arr, selector, deep) {
@@ -137,7 +139,7 @@ function deepSelect(result, array, filter) {
 
 function getFilter(selector) {
   let matches = {};
-  let filter = selector instanceof Function ? selector : createMatcher(selector);
+  let filter = isFilter(selector) ? selector : createMatcher(selector);
   return (widget) => {
     if (matches[widget.cid]) {
       return false;
@@ -151,6 +153,9 @@ function getFilter(selector) {
 }
 
 function createMatcher(selector) {
+  if (selector instanceof Function) {
+    return widget => widget instanceof selector;
+  }
   if (selector.charAt(0) === '#') {
     let expectedId = selector.slice(1);
     return widget => expectedId === widget.id;
@@ -163,4 +168,20 @@ function createMatcher(selector) {
     return () => true;
   }
   return widget => selector === widget.constructor.name;
+}
+
+function isFilter(selector) {
+  return selector instanceof Function && !isWidgetConstructor(selector);
+}
+
+function isWidgetConstructor(fn) {
+  let proto = fn.prototype;
+  while (proto) {
+    // Use NativeObject since importing Widget would causes circulary module dependency issues
+    if (proto === NativeObject.prototype) {
+      return true;
+    }
+    proto = Object.getPrototypeOf(proto);
+  }
+  return false;
 }
