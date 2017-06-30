@@ -174,7 +174,7 @@ module.exports = function(grunt) {
         return '';
       }
       let result = ['## Properties\n\n'];
-      Object.keys(def.properties).sort().forEach(name => {
+      Object.keys(def.properties).filter(name => !def.properties[name].ts_only).sort().forEach(name => {
         let property = def.properties[name];
         result.push('### ', name, '\n\n');
         if (property.readonly) {
