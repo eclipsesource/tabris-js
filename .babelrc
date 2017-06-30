@@ -2,7 +2,6 @@
   "env": {
     "build": {
       "plugins": [
-        "array-includes",
         "transform-es2015-arrow-functions",
         "transform-es2015-block-scoping",
         "transform-es2015-classes",
