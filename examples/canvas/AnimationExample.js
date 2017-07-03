@@ -51,10 +51,10 @@ module.exports = class AnimationExample {
     this._drawCircle(this._angle);
     this._drawLever(this._angle);
     this._drawFpsLabel();
-    this._speedometer.update();
-    this._angle = this._normalizeAngle(this._angle - Math.PI / 90);
     // re-schedule
     if (this._animating) {
+      this._speedometer.update();
+      this._angle = this._normalizeAngle(this._angle - Math.PI / 90);
       this._timerId = setTimeout(() => this._draw(), 0);
     }
   }

@@ -1,4 +1,4 @@
-import {Canvas, CanvasContext, CompositeProperties} from 'tabris';
+import {Canvas, CanvasContext, CompositeProperties, device} from 'tabris';
 import {omit} from './util';
 import {WeatherData, WeatherDatum} from './weatherService';
 
@@ -54,7 +54,9 @@ export default class WeatherGraph extends Canvas {
   }
 
   public draw() {
-    let ctx = this.getContext('2d', this.bounds.width, this.bounds.height);
+    let width = this.bounds.width * device.scaleFactor;
+    let height = this.bounds.height * device.scaleFactor;
+    let ctx = this.getContext('2d', width, height);
     this.drawBackground(ctx);
     this.drawTemperatureScale(ctx);
     this.drawTimeScale(ctx);

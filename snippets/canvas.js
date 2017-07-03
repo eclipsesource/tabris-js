@@ -1,11 +1,12 @@
-const {Canvas, ui} = require('tabris');
+const {Canvas, ui, device} = require('tabris');
 
 // Draw shapes on a canvas using HTML5 Canvas API
 
 new Canvas({
   left: 10, top: 10, right: 10, bottom: 10
 }).on('resize', ({target: canvas, width, height}) => {
-  let ctx = canvas.getContext('2d', width, height);
+  let scaleFactor = device.scaleFactor;
+  let ctx = canvas.getContext('2d', width * scaleFactor, height * scaleFactor);
   ctx.strokeStyle = 'rgb(78, 154, 217)';
   ctx.lineWidth = 10;
   ctx.moveTo(20, 20);

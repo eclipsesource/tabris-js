@@ -1,4 +1,7 @@
-const {Canvas, Page} = require('tabris');
+const {Canvas, Page, device} = require('tabris');
+
+let CANVAS_WIDTH = 400;
+let CANVAS_HEIGHT = 400;
 
 let page = new Page({
   title: 'Basic Shapes',
@@ -6,10 +9,11 @@ let page = new Page({
 });
 
 let canvas = new Canvas({
-  left: 10, top: 10, right: 10, bottom: 10
+  left: 10, top: 10, width: CANVAS_WIDTH, height: CANVAS_HEIGHT
 }).appendTo(page);
 
-let ctx = canvas.getContext('2d', 400, 400);
+let scaleFactor = device.scaleFactor;
+let ctx = canvas.getContext('2d', CANVAS_WIDTH * scaleFactor, CANVAS_HEIGHT * scaleFactor);
 
 ctx.fillStyle = 'rgba(255, 100, 100, 0.5)';
 ctx.fillRect(50, 20, 20, 80);

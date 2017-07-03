@@ -1,4 +1,4 @@
-const {Canvas, CheckBox, Page} = require('tabris');
+const {Canvas, CheckBox, Page, device} = require('tabris');
 
 const CANVAS_WIDTH = 210;
 const CANVAS_HEIGHT = 300;
@@ -21,7 +21,8 @@ new CheckBox({
   drawArcs(value);
 }).appendTo(page);
 
-let context = canvas.getContext('2d', CANVAS_WIDTH, CANVAS_HEIGHT);
+let scaleFactor = device.scaleFactor;
+let context = canvas.getContext('2d', CANVAS_WIDTH * scaleFactor, CANVAS_HEIGHT * scaleFactor);
 context.textAlign = 'center';
 context.textBaseline = 'top';
 
