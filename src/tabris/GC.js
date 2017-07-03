@@ -43,7 +43,6 @@ export default class GC extends NativeObject {
     this._booleans = [];
     this._strings = [];
     this._ints = [];
-    this._isIOS = tabris.device.platform === 'iOS';
     let listener = () => this.flush();
     tabris.on('flush', listener);
     this.on('dispose', () => tabris.off('flush', listener));
@@ -70,50 +69,38 @@ export default class GC extends NativeObject {
   }
 
   addOperation(operation) {
-    if (this._isIOS) {
-      this._operations.push([operation]);
-    } else {
-      let opCode = OPCODES[operation];
-      if (!opCode) {
-        throw new Error('Invalid operation');
-      }
-      this._operations.push(opCode);
+    let opCode = OPCODES[operation];
+    if (!opCode) {
+      throw new Error('Invalid operation');
     }
+    this._operations.push(opCode);
   }
 
   addBoolean() {
-    let array = this._isIOS ? this._operations[this._operations.length - 1] : this._booleans;
-    Array.prototype.push.apply(array, arguments);
+    Array.prototype.push.apply(this._booleans, arguments);
   }
 
   addDouble() {
-    let array = this._isIOS ? this._operations[this._operations.length - 1] : this._doubles;
-    Array.prototype.push.apply(array, arguments);
+    Array.prototype.push.apply(this._doubles, arguments);
   }
 
   addInt() {
-    let array = this._isIOS ? this._operations[this._operations.length - 1] : this._ints;
-    Array.prototype.push.apply(array, arguments);
+    Array.prototype.push.apply(this._ints, arguments);
   }
 
   addString() {
-    let array = this._isIOS ? this._operations[this._operations.length - 1] : this._strings;
-    Array.prototype.push.apply(array, arguments);
+    Array.prototype.push.apply(this._strings, arguments);
   }
 
   flush() {
     if (this._operations.length > 0) {
-      if (this._isIOS) {
-        this._nativeCall('draw', {operations: this._operations});
-      } else {
-        this._nativeCall('draw', {packedOperations: [
-          this._operations,
-          this._doubles,
-          this._booleans,
-          this._strings,
-          this._ints
-        ]});
-      }
+      this._nativeCall('draw', {packedOperations: [
+        this._operations,
+        this._doubles,
+        this._booleans,
+        this._strings,
+        this._ints
+      ]});
       this._operations = [];
       this._doubles = [];
       this._booleans = [];
