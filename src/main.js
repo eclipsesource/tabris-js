@@ -53,10 +53,10 @@ import ToggleButton from './widgets/ToggleButton';
 import Video from './widgets/Video';
 import WebView from './widgets/WebView';
 import WebSocket from './WebSocket';
-import HotReload from './HotReload';
 import Widget from './Widget';
 import WidgetCollection from './WidgetCollection';
 import XMLHttpRequest from './XMLHttpRequest';
+import HotReload from './HotReload';
 
 import {fetch} from './fetch/fetch';
 import Headers from './fetch/Headers';
@@ -139,14 +139,14 @@ const tabris = global.tabris = Object.assign(new Tabris(), {
   Tween,
   Easing,
   Interpolation,
-  window: window
+  window: window,
+  HotReload
 });
 
 
 
 tabris.on('start', () => {
   tabris.app = createApp();
-  tabris.hot = new HotReload(undefined, 8085);
   checkVersion(tabris.version, tabris.app._nativeGet('tabrisJsVersion'));
   tabris.ui = createUi();
   tabris.device = createDevice();

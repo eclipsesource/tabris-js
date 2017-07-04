@@ -8,16 +8,18 @@ Requires apps:
 * `npm`
 
 Implemented features:
-* `React`-like class based state-ful custom components
+* `React`-like class based state-ful and life-cycle method supported custom components
 * `View`, `SVGSupport` (not tested) component
-* `JSX Event system`
+* `JSX Event system`, amazing feature by other tabris.js contributor, helps alot
 * `JSX "style" attribute`
-* `performance.now` implementation
-* `requestAnimationFrame` implementation
+* `JSX "append" system`, for reducing code and better code-style
+* `performance.now` implementation, for accurate timing with subprecision
+* `requestAnimationFrame` implementation, for new bie devs
+* `Hot-Reload` implementation, not best as other, but helps in many ways
+* `Virtual Tabris Widgets Tree` implementation, not too performant, but does really improvement for performance if you create real app with much of change
 
 To-Do:
-* `Hot-Reload` implementation
-* `SVGSupport` implementation
+* `SVGSupport` full implementation
 
 
 Steps:

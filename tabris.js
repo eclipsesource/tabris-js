@@ -3565,7 +3565,6 @@ var GC = (function (NativeObject$$1) {
     this._booleans = [];
     this._strings = [];
     this._ints = [];
-    this._isIOS = tabris.device.platform === 'iOS';
     var listener = function () { return this$1.flush(); };
     tabris.on('flush', listener);
     this.on('dispose', function () { return tabris.off('flush', listener); });
@@ -3596,50 +3595,38 @@ var GC = (function (NativeObject$$1) {
   };
 
   GC.prototype.addOperation = function addOperation (operation) {
-    if (this._isIOS) {
-      this._operations.push([operation]);
-    } else {
       var opCode = OPCODES[operation];
       if (!opCode) {
         throw new Error('Invalid operation');
       }
       this._operations.push(opCode);
-    }
   };
 
   GC.prototype.addBoolean = function addBoolean () {
-    var array = this._isIOS ? this._operations[this._operations.length - 1] : this._booleans;
-    Array.prototype.push.apply(array, arguments);
+    Array.prototype.push.apply(this._booleans, arguments);
   };
 
   GC.prototype.addDouble = function addDouble () {
-    var array = this._isIOS ? this._operations[this._operations.length - 1] : this._doubles;
-    Array.prototype.push.apply(array, arguments);
+    Array.prototype.push.apply(this._doubles, arguments);
   };
 
   GC.prototype.addInt = function addInt () {
-    var array = this._isIOS ? this._operations[this._operations.length - 1] : this._ints;
-    Array.prototype.push.apply(array, arguments);
+    Array.prototype.push.apply(this._ints, arguments);
   };
 
   GC.prototype.addString = function addString () {
-    var array = this._isIOS ? this._operations[this._operations.length - 1] : this._strings;
-    Array.prototype.push.apply(array, arguments);
+    Array.prototype.push.apply(this._strings, arguments);
   };
 
   GC.prototype.flush = function flush () {
     if (this._operations.length > 0) {
-      if (this._isIOS) {
-        this._nativeCall('draw', {operations: this._operations});
-      } else {
-        this._nativeCall('draw', {packedOperations: [
+      this._nativeCall('draw', {packedOperations: [
           this._operations,
           this._doubles,
           this._booleans,
           this._strings,
           this._ints
         ]});
-      }
       this._operations = [];
       this._doubles = [];
       this._booleans = [];
@@ -4109,181 +4096,238 @@ var Styles = function(input) {
     .convertTo();
 };
 
-// Compare object tree-table
 var _VDiff = {
-	_props: null,
-	_children: null,
-	_layoutData: null
+  _props: null,
+  _children: null,
+  _layoutData: null
 };
 
-// Compare string, object, number, boolean
-function VStringCompare(old, _new) {
-	return JSON.stringify(old) !== JSON.stringify(_new);
+var children = "_children";
+var props = "_props";
+var layout = "_layoutData";
+var _ts = "string";
+var _tn = "number";
+var _tb = "boolean";
+var _to = "object";
+var _u = undefined;
+function VChange(old, tree, childs) {
+  if (old === _u && tree !== _u) { return tree; }
+  if (old !== _u && tree === _u) { return old; }
+  if (childs && tree) {
+    for (var i = 0, len = childs.length; i < len; i++) {
+      childs[i].appendTo(tree);
+    }
+    childs = null;
+  }
+  for (var p in _VDiff) {
+    var a = old[p],
+      b = tree[p];
+    if (a === _u && b === _u) {
+      continue;
+    } else if (p === children) {
+      for (var i$1 = 0, len$1 = Math.max(a.length, b.length); i$1 < len$1; i$1++) {
+        var _a = a[i$1],
+          _b = b[i$1];
+        if (_a === _u && _b !== _u) {
+          if (old.append !== _u) {
+            old.append(_b);
+          }
+        } else if (_a !== _u && _b === _u) {
+          if (_a.dispose !== _u) {
+            _a.dispose();
+          }
+        } else if (_a !== _u && _b !== _u) {
+          a[i$1] = VChange(_a, _b);
+        }
+      }
+      tree[p] = b = null;
+    } else if (p === props || p === layout) {
+      if (a === _u && b === _u) { continue; }
+      if (b === _u) {
+        continue;
+      }
+      if (a === _u) {
+        for (var p$1 in b) {
+          old[p$1] = b[p$1];
+        }
+        tree[p] = b = null;
+        continue;
+      }
+      for (var p2 in b) {
+        var av = a[p2],
+          bv = b[p2];
+        var _type = typeof bv;
+        if (_type === _ts || _type === _tn || _type === _tb) {
+          if (av !== bv) {
+            old[p2] = bv;
+          }
+        } else if (_type === _to && JSON.stringify(av) !== JSON.stringify(bv)) {
+          old[p2] = bv;
+        }
+      }
+      tree[p] = b = null;
+    }
+  }
+  return old;
 }
 
-// Get objet property as array
-function keys(tree) {
-	return typeof tree === "object" && Object.keys(tree);
-}
+var MapHas = typeof(window) !== "undefined" && window.Map ? window.Map : typeof(exports) !== "undefined" && exports.Map ? exports.Map : typeof(global) !== "undefined" && global.Map ? global.Map : undefined;
 
-// Compares tree and gets result
-function VCompare(old, tree, own) {
-	var diff = {},
-	diffAct = {},
-	objP = keys(old).length > keys(tree).length ? old : tree,
-	iter = own ? objP : _VDiff;
-	var loop = function ( p ) {
-		if (old[p] === undefined && tree[p] !== undefined) {
-			diff[p] = tree[p];
-			diffAct[p] = VAction.ACTION_ADD;
-			return;
-		} else if (old[p] !== undefined && tree[p] === undefined) {
-			diff[p] = old[p];
-			diffAct[p] = VAction.ACTION_REMOVE;
-		} else if (p === '_children' && (old[p] || tree[p])) {
-			diffAct[p] = [];
-			if (old[p] === undefined)
-				{ old[p] = []; }
-			if (tree[p] === undefined) {
-				tree[p] = [];
-			}
-			var largetree = old[p].length > tree[p].length ? old[p] : tree[p];
-			diff[p] = largetree.map(function (comp, i) {
-				if (tree[p][i] === undefined && old[p][i] !== undefined) {
-					if (typeof old[p][i].dispose === "function") {
-						old[p][i].dispose();
+		var MapMgr = {
+			Map2Obj: function Map2Obj(map) {
+				var obj = {};
+				if (MapHas && map instanceof MapHas) {
+					map.forEach(function (val, prop) {
+						if (MapHas && typeof val === "object" && val instanceof MapHas) {
+							obj[prop] = MapMgr.Map2Obj(val);
+						} else {
+							obj[prop] = val;
+						}
+					});
+				} else {
+					obj = JSON.parse(JSON.stringify(map));
+				}
+				return obj;
+			},
+			Obj2Map: function Obj2Map(obj) {
+				var map = new Map();
+				for (var prop in obj) {
+					if (typeof obj[prop] === "object" && !(obj[prop]instanceof MapHas)) {
+						map.set(prop, MapMgr.Obj2Map(obj[prop]));
 					} else {
-						old[p].splice(i, 1);
+						map.set(prop, obj[prop]);
 					}
-					return false;
-				} else if (tree[p][i] !== undefined && old[p][i] === undefined) {
-					diffAct[p][i] = VAction.ACTION_ADD;
-					return tree[p][i];
 				}
-					diffAct[p][i] = VAction(old[p][i], tree[p][i]);
-					return VCompare(old[p][i], tree[p][i]);
-				}).filter(function (p) { return p; });
-		} else if (VStringCompare(old[p], tree[p])) {
-			diff[p] = tree[p];
-			diffAct[p] = VAction(old[p], tree[p]);
-		}
-	};
+				return map;
+			}
+		};
 
-	for (var p in iter) loop( p );
-	return {
-		diff: diff,
-		diffAct: diffAct
-	};
-}
-
-// Compare two object
-function VObjCompare(old, tree) {
-	return VCompare(old, tree, true);
-}
-
-// Action types
-['STAY', 'ADD', 'REMOVE', 'CHANGE', 'NOTHING', 'UNDEF'].map(function (type) {
-	VAction['ACTION_' + type] = type;
-});
-
-// Checks and gives action based on change
-function VAction(hasInOld, hasInTree) {
-	return (hasInOld !== undefined && hasInTree !== undefined && hasInOld === hasInTree) ? VAction.ACTION_STAY : (
-		hasInOld !== undefined && hasInTree === undefined) ? VAction.ACTION_REMOVE : (hasInOld === undefined &&
-		hasInTree !== undefined) ? VAction.ACTION_ADD : (hasInOld !== undefined && hasInTree !== undefined && hasInOld !==
-		hasInTree) ? VAction.ACTION_CHANGE : VAction.ACTION_NOTHING;
-}
-
-// Normalizes the comparision (best for Redux, Vuex)
-function VNorm(old, tree, man) {
-	var VComp = man !== undefined ? man : VCompare(old, tree);
-	var diff = VComp.diff;
-	var diffAct = VComp.diffAct;
-	var normalizedVTree = {};
-	for (var p in diff) {
-		if (diffAct[p]) {
-			normalizedVTree[p] = {
-				property: p,
-				action: diffAct[p],
-				value: diff[p]
-			};
-		} else {
-			normalizedVTree[p] = {
-				property: p,
-				action: VAction.ACTION_UNDEF,
-				value: diff[p]
-			};
-		}
-	}
-	return normalizedVTree;
-}
-
-// Simple VDiff function
-function VDiff(old, tree, man) {
-	var diff = VNorm(old, tree, man);
-	var key = keys(diff);
-	return key.length ? {
-		diff: diff,
-		key: key
-	}
-	 :
-	null;
-}
-
-function VPatch(set, old, tree, action, property, value) {
-	if (action === VAction.ACTION_CHANGE || action === VAction.ACTION_ADD) {
-		set[property] = value;
-	} else if (action === VAction.ACTION_REMOVE) {
-		delete set[property];
-	}
-	return old;
-}
-
-function VChange(set, old, tree, man, diff) {
-	var checkDiff = diff !== undefined ? diff : VDiff(old, tree, man);
-	if (checkDiff === null) {
-		return old;
-	}
-
-	checkDiff.key.map(function (prop) {
-		var ref = checkDiff.diff[prop];
-		var action = ref.action;
-		var property = ref.property;
-		var value = ref.value;
-		var ntree = tree[property];
-		var otree = old[property];
-		if (property === "_children" && Array.isArray(value)) {
-			var longMap = keys(otree).length > keys(ntree).length ? old[property] : ntree;
-			longMap.map(function (vChild, i) {
-				if (otree[i] === undefined && ntree[i] !== undefined) {
-					set.append(ntree[i]);
-					return false;
+var isFrozen = {};
+		var ObjectMod = {
+			freeze: function freeze(obj, deep, writable) {
+				if (writable === undefined) {
+					writable = false;
 				}
-				VChange(otree[i], otree[i], ntree[i], value[i]);
-			});
-		} else if (typeof value === "object") {
-			VChange(set, otree, ntree, VObjCompare(otree, value));
-		} else {
-			VPatch(set, old, tree, action, property, value);
-		}
-	});
-	return old;
-}
+				if (isFrozen[obj] && !writable) { return obj; }
+				if (deep) {
+					Object.getOwnPropertyNames(obj).map(function(name) {
+						var prop = obj[name];
+
+						// Freeze prop if it is an object
+						if (typeof prop == 'object') {
+							ObjectMod.freeze(prop, deep, writable);
+						}
+					});
+				}
+				for (var prop in obj) {
+					Object.defineProperty(obj, prop, {
+						value: obj[prop],
+						writable: writable
+					});
+				}
+				isFrozen[obj] = !writable;
+				return obj;
+			},
+			unfreeze: function unfreeze(obj, deep) {
+				if (!isFrozen[obj])
+					{ return obj; }
+				return ObjectMod.freeze(obj, deep, true);
+			},
+			findObjByProp: function findObjByProp(obj, prop, val) {
+				var find = val;
+				var prop2 = Array.isArray(prop) ? prop.shift() : prop;
+				for (var p in obj) {
+					if (obj[prop2] !== undefined) {
+						find = obj[prop2];
+						if (val !== undefined) {
+							obj[prop2] = val;
+						}
+						if (prop.length > 0) {
+							find = findObjByProp(find, prop, val);
+							if (prop.length === 0) { return find; }
+						}
+					} else {
+						find = findObjByProp(obj[p], prop2, val); 
+					}
+				}
+				return find;
+			},
+			isFrozen: function isFrozen(obj) {
+				return isFrozen[obj];
+			},
+			assign: function assign() {
+				var args = [].slice.call(arguments);
+				var orig = args.shift();
+				var force = typeof args[args.length - 1] === "boolean" ? args.pop() : false;
+				args.map(function(arg) {
+					for (var p in arg) {
+						if (force && orig) {
+							orig[p] = ObjectMod.assign(arg[p], orig[p]);
+						} else {
+							if (orig && orig[p] === undefined) {
+								orig[p] = arg[p];
+							}
+						}
+
+					}
+				});
+				return orig;
+			}
+		};
+
+var Data = function Data(d) {
+				ObjectMod.assign(this, MapMgr.Map2Obj(d || {}), true);
+				ObjectMod.freeze(this, true);
+				return this;
+			};
+			Data.prototype = {
+				set: function (d, v) {
+					ObjectMod.unfreeze(this, true);
+					if (typeof d === "object" && !Array.isArray(d)) {
+						ObjectMod.assign(this, MapMgr.Map2Obj(d || {}), true);
+					} else {
+						if (typeof d === "string") {
+							this[d] = typeof(v) === "function" ? v(this[d]) : v;
+						} else if (Array.isArray(d)) {
+							ObjectMod.findObjByProp(this, d, v);
+						}
+					}
+					ObjectMod.freeze(this, true);
+					return this;
+				},
+				get: function (prop) {
+					if (typeof prop === "object") {
+						return ObjectMod.findObjByProp(this, prop);
+					} else {
+						return this[prop];
+					}
+					return null;
+				},
+				map: function (fn, scope) {
+					var this$1 = this;
+
+					for (var p in this$1) {
+						fn.call(scope || this$1, this$1[p], p);
+					}
+					return this;
+				}
+			};
+			Data.prototype.constructor = Data;
 
 var Component = (function (Widget$$1) {
-  function Component (props) {
+  function Component(props) {
     if ( props === void 0 ) props = {};
 
     Widget$$1.call(this);
     this.props = props;
     this.state = {};
-	
-	if (this.rendered !== undefined && this.componentWillMount) {
-		this.componentWillMount();
-	}
-	if (this.componentWillUnmount) {
-	this.on('dispose', this.componentWillUnmount.bind(this));
-	}
+
+    if (this.rendered !== undefined && this.componentWillMount) {
+      this.componentWillMount();
+    }
+    if (this.componentWillUnmount) {
+      this.on('dispose', this.componentWillUnmount.bind(this));
+    }
   }
 
   if ( Widget$$1 ) Component.__proto__ = Widget$$1;
@@ -4297,15 +4341,16 @@ var Component = (function (Widget$$1) {
   prototypeAccessors._nativeType.get = function () {
     return 'tabris.Composite';
   };
-  Component.prototype.setState = function setState (state) {
-    this.state = Object.assign(this.state, state);
-	if (this.componentWillUpdate) {
-		this.componentWillUpdate();
-	}
-	this.rendered = VChange(this.rendered, this.rendered, this.render(this.props, this.state));
-	if (this.componentDidUpdate) {
-		this.componentDidUpdate();
-	}
+  Component.prototype.setState = function setState (state, val) {
+    if (this.componentWillUpdate) {
+      this.componentWillUpdate();
+    }
+    this.state.set(state, val);
+    var children = this.render.call(this, this.props, this.state);
+    this.rendered = VChange(this.rendered, children, this.children);
+    if (this.componentDidUpdate) {
+      this.componentDidUpdate();
+    }
 
     return this;
   };
@@ -4316,11 +4361,15 @@ var Component = (function (Widget$$1) {
   return Component;
 }(Widget));
 
+var _myProps = ["append", "destroy"];
+
 function createElement(jsxType, properties) {
   var children = [], len = arguments.length - 2;
   while ( len-- > 0 ) children[ len ] = arguments[ len + 2 ];
 
   properties = properties || {};
+  children = children || [];
+  children = flattenChildren(children);
   var Type = typeToConstructor(jsxType);
   if (Type === WidgetCollection) {
     if (properties) {
@@ -4328,47 +4377,65 @@ function createElement(jsxType, properties) {
     }
     return new WidgetCollection(flattenChildren(children));
   }
-  var on = {}, once = {}, style;
+  var on = {}, once = {}, style, props = {};
   for (var ev in properties) {
     if (ev.indexOf('once-') > -1) {
-      once[ev.substr(5)] = properties[ev];
+      once[ev.substr(5)] = properties[ev].bind(result);
       delete properties[ev];
     } else if (ev.indexOf('on-') > -1) {
-      on[ev.substr(3)] = properties[ev];
+      on[ev.substr(3)] = properties[ev].bind(result);
       delete properties[ev];
     } else if (ev === 'style') {
       style = Styles(properties[ev]);
       delete properties[ev];
-    }
+    } else if (Type[ev] && _myProps.indexOf(ev) !== -1) {
+		props[ev] = properties[ev];
+		delete properties[ev];
+	}
   }
-  var result = new Type(properties);
-  for (var ev$1 in on) {
-    result.on(ev$1, on[ev$1]);
+  var isFunc = typeof(Type) === "function";
+  var result = isFunc ? new Type(properties) : Type;
+  for (var ev$1 in props) {
+	if (typeof result[ev$1] === "function" && props[ev$1] !== undefined) {
+    result[ev$1](props[ev$1]);
+	}
   }
-  for (var ev$2 in once) {
-    result.once(ev$2, once[ev$2]);
+  for (var ev$2 in on) {
+    result.on(ev$2, on[ev$2]);
+  }
+  for (var ev$3 in once) {
+    result.once(ev$3, once[ev$3]);
   }
   if (style) {
     result.set(style);
+  }
+  if (!isFunc) {
+	  return;
   }
   if (!(result instanceof Widget)) {
     throw new Error(('JSX: Unsupported type ' + Type.name).trim());
 	return;
   }
   if (result instanceof Component) {
-	result.rendered = result.render(result.props, result.state);
+	result.state = result.state instanceof Data ? result.state : new Data(result.state);
+	result.props = result.props instanceof Data ? result.props : new Data(result.props);
+	result.children = children;
+		result.rendered = result.render.call(result, result.props, result.state);
 	if (result.rendered !== undefined && result.componentDidMount) {
-		result.componentDidMount = result.componentDidMount.bind(result);
-		result.componentDidMount();
+		result.componentDidMount.call(result, result.props, result.state);
 	}
 	result = result.rendered;
   }
-  return result.append.apply(result, flattenChildren(children));
+  return result.append.apply(result, children);
 }
 
 function typeToConstructor(jsxType) {
   if (jsxType instanceof Function) {
     return jsxType;
+  } else if (global.tabris.ui[jsxType] !== undefined) {
+	return global.tabris.ui[jsxType];
+  } else if (global.tabris[jsxType] !== undefined) {
+	  return global.tabris[jsxType];
   }
   var typeName = jsxType.charAt(0).toUpperCase() + jsxType.slice(1);
   var Type =  global.tabris[typeName];
@@ -6005,7 +6072,7 @@ NativeObject.defineProperties(_WebSocket.prototype, {
   bufferedAmount: {type: 'number', nocache: true}
 });
 
-var WebSocket = function WebSocket(url, protocol) {
+var WebSocket$1 = function WebSocket(url, protocol) {
   if (typeof url !== 'string') {
     throw new Error('The WebSocket url has to be of type string');
   }
@@ -6028,7 +6095,7 @@ var WebSocket = function WebSocket(url, protocol) {
 
 var prototypeAccessors$4 = { binaryType: {},bufferedAmount: {} };
 
-WebSocket.prototype.$createProxy = function $createProxy (url, protocols) {
+WebSocket$1.prototype.$createProxy = function $createProxy (url, protocols) {
     var this$1 = this;
 
   return new _WebSocket({
@@ -6068,7 +6135,7 @@ prototypeAccessors$4.bufferedAmount.get = function () {
   return this._proxy.bufferedAmount;
 };
 
-WebSocket.prototype.send = function send (data) {
+WebSocket$1.prototype.send = function send (data) {
   if (this.readyState === CONNECTING) {
     throw new Error("Can not 'send' WebSocket message when WebSocket state is CONNECTING");
   }
@@ -6081,7 +6148,7 @@ WebSocket.prototype.send = function send (data) {
   }
 };
 
-WebSocket.prototype.close = function close (code, reason) {
+WebSocket$1.prototype.close = function close (code, reason) {
   if (code &&
     (typeof code !== 'number' || !(typeof code === 'number' && (code === 1000 || code >= 3000 && code <= 4999)))) {
     throw new Error('A given close code has to be either 1000 or in the range 3000 - 4999 inclusive');
@@ -6102,10 +6169,10 @@ WebSocket.prototype.close = function close (code, reason) {
   }
 };
 
-Object.defineProperties( WebSocket.prototype, prototypeAccessors$4 );
+Object.defineProperties( WebSocket$1.prototype, prototypeAccessors$4 );
 
-Object.defineProperties(WebSocket, CONSTANTS);
-Object.defineProperties(WebSocket.prototype, CONSTANTS);
+Object.defineProperties(WebSocket$1, CONSTANTS);
+Object.defineProperties(WebSocket$1.prototype, CONSTANTS);
 
 function getStringByteSize(input) {
   var len = 0;
@@ -6137,34 +6204,6 @@ function extractScheme(url) {
   var match = /^(\S+?):/.exec(url);
   return match ? match[1] : null;
 }
-
-var HotReload = (function (WebSocket$$1) {
-	function HotReload (ip, port) {
-		if ( ip === void 0 ) ip = '127.0.0.1';
-		if ( port === void 0 ) port = 80;
-
-		WebSocket$$1.call(this, ("ws://" + ip + ":" + port), 'chat-protocol');
-		this.socket = new WebSocket$$1(("ws://" + ip + ":" + port), 'chat-protocol');
-	}
-
-	if ( WebSocket$$1 ) HotReload.__proto__ = WebSocket$$1;
-	HotReload.prototype = Object.create( WebSocket$$1 && WebSocket$$1.prototype );
-	HotReload.prototype.constructor = HotReload;
-	HotReload.prototype.on = function on (name, callback) {
-		this['on' + name] = callback;
-		return this;
-	};
-	HotReload.prototype.receive = function receive (callback) {
-		return this.on('message', callback);
-	};
-	HotReload.prototype.activate = function activate () {
-		return this.receive(function (event) {
-			tabris.app.reload();
-		});
-	};
-
-	return HotReload;
-}(WebSocket));
 
 var HttpRequest = (function (NativeObject$$1) {
   function HttpRequest() {
@@ -6205,7 +6244,7 @@ var UPLOAD_EVENT_TYPES = ['progress', 'loadstart', 'load', 'loadend', 'timeout',
 
 var SUPPORTED_SCHEMES = ['http', 'https', 'file'];
 
-var XMLHttpRequest = function XMLHttpRequest() {
+var XMLHttpRequest$1 = function XMLHttpRequest() {
   this.$authorRequestHeaders = {};
   this.$timeout = 0;
   this.$status = 0;
@@ -6339,7 +6378,7 @@ prototypeAccessors$5.withCredentials.set = function (value) {
   }
 };
 
-XMLHttpRequest.prototype.open = function open (method, url, async, username, password) {
+XMLHttpRequest$1.prototype.open = function open (method, url, async) {
   var parsedUrl = {};
   // (2), (3), (4): we don't implement the 'settings' object
   validateRequiredOpenArgs(method, url);
@@ -6351,16 +6390,9 @@ XMLHttpRequest.prototype.open = function open (method, url, async, username, pas
   parsedUrl.userdata = urlWithoutProtocol.substring(0, urlWithoutProtocol.indexOf('@'));
   if (typeof async === 'undefined') { // (10)
     async = true;
-    username = null;
-    password = null;
   }
   if (!async) {
     throw new Error('Only asynchronous request supported.');
-  }
-  if (parsedUrl.isRelative) { // (11)
-    if (username && password) {
-      parsedUrl.userdata = username + ':' + password;
-    }
   }
   // (12): superfluous as we don't support synchronous requests
   // TODO: (13) - should we call 'abort' to the proxy? We'd need to move the creation of the proxy
@@ -6377,7 +6409,7 @@ XMLHttpRequest.prototype.open = function open (method, url, async, username, pas
   }
 };
 
-XMLHttpRequest.prototype.send = function send (data) {
+XMLHttpRequest$1.prototype.send = function send (data) {
     var this$1 = this;
 
   this.$proxy = new HttpRequest()
@@ -6405,12 +6437,6 @@ XMLHttpRequest.prototype.send = function send (data) {
   // (8): uploadEvents is relevant for the "force preflight flag", but this logic is handled by
   // the client
   // Basic access authentication
-  if (this.$withCredentials) {
-    // TODO: encode userdata in base64, will not function if not encoded
-    if (this.$requestUrl.userdata) {
-      this.setRequestHeader('Authorization', 'Basic ' + this.$requestUrl.userdata);
-    }
-  }
   this.$sendInvoked = true; // (9.1)
   dispatchProgressEvent('loadstart', this); // (9.2)
   if (!this.$uploadComplete) {
@@ -6427,7 +6453,7 @@ XMLHttpRequest.prototype.send = function send (data) {
   });
 };
 
-XMLHttpRequest.prototype.abort = function abort () {
+XMLHttpRequest$1.prototype.abort = function abort () {
   if (this.$proxy) {
     this.$proxy.abort(); // (1)
   }
@@ -6445,7 +6471,7 @@ XMLHttpRequest.prototype.abort = function abort () {
   this.$readyState = UNSENT; // (3)
 };
 
-XMLHttpRequest.prototype.setRequestHeader = function setRequestHeader (header, value) { // #dom-xmlhttprequest-setrequestheader
+XMLHttpRequest$1.prototype.setRequestHeader = function setRequestHeader (header, value) { // #dom-xmlhttprequest-setrequestheader
   if (this.$readyState !== OPENED) { // (1)
     throw new Error('InvalidStateError: ' +
             "Object's state must be 'OPENED', failed to execute 'setRequestHeader'");
@@ -6468,7 +6494,7 @@ XMLHttpRequest.prototype.setRequestHeader = function setRequestHeader (header, v
   }
 };
 
-XMLHttpRequest.prototype.getResponseHeader = function getResponseHeader (header) {
+XMLHttpRequest$1.prototype.getResponseHeader = function getResponseHeader (header) {
     var this$1 = this;
  // #the-getresponseheader()-method
   if ([UNSENT, OPENED].indexOf(this.readyState) > -1) { // (1)
@@ -6486,7 +6512,7 @@ XMLHttpRequest.prototype.getResponseHeader = function getResponseHeader (header)
   return null; // (6)
 };
 
-XMLHttpRequest.prototype.getAllResponseHeaders = function getAllResponseHeaders () {
+XMLHttpRequest$1.prototype.getAllResponseHeaders = function getAllResponseHeaders () {
     var this$1 = this;
  // #the-getallresponseheaders()-method
   if ([UNSENT, OPENED].indexOf(this.readyState) > -1) { // (1)
@@ -6502,9 +6528,9 @@ XMLHttpRequest.prototype.getAllResponseHeaders = function getAllResponseHeaders 
   return result.join('\r\n');
 };
 
-Object.defineProperties( XMLHttpRequest.prototype, prototypeAccessors$5 );
+Object.defineProperties( XMLHttpRequest$1.prototype, prototypeAccessors$5 );
 
-Object.defineProperties(XMLHttpRequest.prototype, {
+Object.defineProperties(XMLHttpRequest$1.prototype, {
   UNSENT: {value: UNSENT},
   OPENED: {value: OPENED},
   HEADERS_RECEIVED: {value: HEADERS_RECEIVED},
@@ -6647,6 +6673,106 @@ function dispatchFinishedProgressEvents(target) {
   dispatchProgressEvent('load', target);
   dispatchProgressEvent('loadend', target);
 }
+
+var XHRHotReload = function XHRHotReload (app, adress, ms) {
+	if ( ms === void 0 ) ms = 1000;
+
+	this.app = app;
+	this.xhr = new XMLHttpRequest();
+	this.adress = adress;
+	this.ms = ms;
+};
+XHRHotReload.prototype.on = function on ( ev, fn ) {
+	this.xhr['on' + ev] = fn;
+	return this;
+};
+XHRHotReload.prototype.load = function load (fn) {
+		var this$1 = this;
+
+	return this.on('load', function (ref) {
+			var $responseData = ref.$target.$responseData;
+
+		if ($responseData === 'APP_RELOAD') {
+			this$1.app.reload();
+		} else if ($responseData === 'APP_LOAD') {
+			if (fn) { fn.call(this$1, $target); }
+		}
+	});
+};
+XHRHotReload.prototype.start = function start () {
+		var this$1 = this;
+
+	this.load();
+	this.interval = setInterval(function () { return this$1.run(); }, this.ms);
+	return this;
+};
+XHRHotReload.prototype.run = function run () {
+	this.xhr.open('GET', this.adress, true);
+	this.xhr.send(null);
+	return this;
+};
+XHRHotReload.prototype.close = function close () {
+	clearInterval(this.interval);
+	return this;
+};
+
+var WSHotReload = function WSHotReload (app, adress, protocol) {
+	if ( protocol === void 0 ) protocol = 'chat-protocol';
+
+	this.app = app;
+	this.adress = adress;
+	this.ws = new WebSocket(adress, protocol);
+};
+WSHotReload.prototype.on = function on ( ev, fn ) {
+	this.ws['on' + ev] = fn;
+	return this;
+};
+WSHotReload.prototype.load = function load (fn) {
+		var this$1 = this;
+
+	return this.on('message', function (ref) {
+			var data = ref.data;
+
+		if (data === 'APP_RELOAD') {
+			this$1.app.reload();
+		} else if (data === 'APP_LOAD') {
+			if (fn) { fn.call(this$1, data); }
+		}
+	}).on('error', function () {
+		this$1.ws = new XHRHotReload(this$1.app, this$1.adress.replace(/ws/g, 'http'), 2000).start();
+	});
+};
+WSHotReload.prototype.start = function start () {
+	return this.load();
+};
+WSHotReload.prototype.close = function close () {
+	this.ws.close();
+};
+
+var HotReload = (function (Widget$$1) {
+	function HotReload (ref) {
+	var app = ref.app;
+	var ms = ref.ms; if ( ms === void 0 ) ms = 2000;
+	var procotol = ref.procotol; if ( procotol === void 0 ) procotol = 'chat-protocol';
+	var port = ref.port; if ( port === void 0 ) port = 9000;
+
+	Widget$$1.call(this);
+	var location = app.getResourceLocation();
+	var isRemote = location.indexOf('192.168.') !== -1;
+	if (!isRemote) { return; }
+	location = location.split(":");
+	location[location.length - 1] = port;
+	location[0] = 'ws';
+	location = location.join(":");
+	this.module = new WSHotReload(app, location, procotol).start();
+	}
+
+	if ( Widget$$1 ) HotReload.__proto__ = Widget$$1;
+	HotReload.prototype = Object.create( Widget$$1 && Widget$$1.prototype );
+	HotReload.prototype.constructor = HotReload;
+
+	return HotReload;
+}(Widget));
 
 /**
  * Original work Copyright (c) 2014-2016 GitHub, Inc.
@@ -8770,8 +8896,8 @@ Object.assign(window$1, {
   ImageData: ImageData,
   ProgressEvent: ProgressEvent,
   Storage: Storage,
-  WebSocket: WebSocket,
-  XMLHttpRequest: XMLHttpRequest,
+  WebSocket: WebSocket$1,
+  XMLHttpRequest: XMLHttpRequest$1,
   fetch: fetch,
   Headers: Headers,
   Request: Request,
@@ -8823,11 +8949,11 @@ var tabris$1 = global.tabris = Object.assign(new Tabris(), {
   ToggleButton: ToggleButton,
   ui: Ui,
   Video: Video,
-  WebSocket: WebSocket,
+  WebSocket: WebSocket$1,
   WebView: WebView,
   Widget: Widget,
   WidgetCollection: WidgetCollection,
-  XMLHttpRequest: XMLHttpRequest,
+  XMLHttpRequest: XMLHttpRequest$1,
   fetch: fetch,
   Headers: Headers,
   Request: Request,
@@ -8835,14 +8961,14 @@ var tabris$1 = global.tabris = Object.assign(new Tabris(), {
   Tween: Tween,
   Easing: Easing,
   Interpolation: Interpolation,
-  window: window$1
+  window: window$1,
+  HotReload: HotReload
 });
 
 
 
 tabris$1.on('start', function () {
   tabris$1.app = create$1();
-  tabris$1.hot = new HotReload(undefined, 8085);
   checkVersion(tabris$1.version, tabris$1.app._nativeGet('tabrisJsVersion'));
   tabris$1.ui = create$2();
   tabris$1.device = create();
