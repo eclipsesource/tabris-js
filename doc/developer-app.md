@@ -2,7 +2,9 @@
 
 The Tabris.js Developer App is the easiest way to start developing mobile apps without having to perform an app build. It is available for free on the App Store and Play Store respectively. Simply follow the links below or search for "Tabris.js" in the store on your mobile device.
 
-[![Tabris.js on Google play](https://tabrisjs.com/assets/img/playstore-badge.png)](https://play.google.com/store/apps/details?id=com.eclipsesource.tabrisjs2) [![Tabris.js on Apple App Store](https://tabrisjs.com/assets/img/appstore-badge.png)](https://itunes.apple.com/us/app/tabris.js-2/id1166468326?mt=8)
+[![Tabris.js on Google play](https://tabrisjs.com/assets/img/playstore-badge.png)](https://play.google.com/store/apps/details?id=com.eclipsesource.tabrisjs2)
+[![Tabris.js on Apple App Store](https://tabrisjs.com/assets/img/appstore-badge.png)](https://itunes.apple.com/us/app/tabris.js-2/id1166468326?mt=8)
+[![Tabris.js on Windows Store](https://tabrisjs.com/assets/img/windows-badge.png)](https://www.microsoft.com/store/apps/9n8z4pp9chtx)
 
 After launching the app you can sign in with your GitHub account (the same you use on tabrisjs.com). This will let you access your saved scripts.
 
