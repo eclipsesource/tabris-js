@@ -1,6 +1,6 @@
 const http = require('http');
 const fs = require('fs');
-const WebSocketServer = require('websocket').Server;
+const WebSocketServer = require('websocket').server;
 
 const PORT = 9000;
 //let RELOAD = false;
