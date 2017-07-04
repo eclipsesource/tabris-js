@@ -1,0 +1,27 @@
+{
+  "name": "my-sample-app",
+  "version": "0.1.0",
+  "main": "dist.js",
+  "private": false,
+  "scripts": {
+    "test": "eslint .",
+    "start": "tabris serve",
+    "minify": "rollup -c --environment BUILD:prod",
+    "source": "rollup -c",
+    "android": "npm run source && tabris run android",
+    "prepublishOnly": "npm run source && npm run minify",
+    "dev": "rollup -c -w"
+  },
+  "dependencies": {
+    "tabris": "git://github.com/dalisoft/tez-native.git#master"
+  },
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "rollup": "^0.41.6",
+    "rollup-plugin-buble": "^0.15.0",
+    "rollup-plugin-uglify": "^2.0.1",
+    "rollup-watch": "^3.2.2",
+    "uglify-es": "^3.0.11",
+    "websocket": "^1.0.24"
+  }
+}
