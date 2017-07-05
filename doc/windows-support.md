@@ -18,20 +18,14 @@ The developer app for Windows can run – without emulation or Windows SDK – o
 Windows 10 (UWP/Store Apps) support was added in Tabris.js 2.0 and is still catching up to the other platforms in terms of API support. It also features a few APIs specific to Windows. These are prefixed with `win_` and documented in the API reference.
 
 The following APIs are not yet supported on Windows:
-  - `SearchAction`
-  - `ui.statusBar`
+  - `ui.statusBar`: Property `theme`. Property `displayMode` is partially supported (`float` is treated the same as `hide`).
   - `ui.navigationBar`
   - `Drawer`: Events `open` and `close`.
-  - `Button`: Property `alignment`. (Button content is always centered.)
   - `CollectionView`: Properties `refreshEnabled`, and `columnCount`.
   - `ImageView`: Property `tintColor`.
-  - `NavigationView`: Properties `toolbarVisible` and `animated`. (Both behave as if `true`.)
-  - `ScrollView`: Methods `scrollToX` and `scrollToY`. Event `scrollX`.
   - `Tab`: Properties `badge`, `image` and `selectedImage`.
   - `TabFolder`: Property `paging`. (Behaves as if always `true`.)
-  - `TextInput`: Properties `alignment`, `autoCapitalize`, `editable`, `fillColor`, `borderColor`, `keepFocus`, `focused`. `type` is partially supported. (Can not be set to `search`).
-  - `TextView`: Properties `maxLines`, `selectable` and `lineSpacing`.
-  - `ToggleButton`: Properties `image` and `alignment`. (Content is always centered.)
+  - `TextInput`: Properties `alignment`, `autoCapitalize`, `fillColor`, `borderColor`, `keepFocus`. `type` is partially supported. (Can not be set to `search`).
   - `WebView`: Events `download` and `message`. Method `postMessage`.
 
 There are also some APIs only supported on Windows which are prefixed with `win_`:
@@ -75,7 +69,7 @@ The other option is to install the app from a Windows PC. This requires the Wind
  - Enter `"C:\Program Files (x86)\Windows Kits\10\bin\x86\WinAppDeployCmd.exe" install -file "<path-to-your-appxbundle>" -g <GUID-of-your-phone>`
 
 ## Generating keys for the Windows Store
- - To create an `appxupload` file that is accepted by the Windows Store you will need to sign it using a `.pfx` file specific to your Windows Store account. This requires the tools `makecert.exe` and `pvk2pfx.exe`. If you have Visual Studio 2016 (or just the Windows 10 SDK) installed you can find it in `C:\Program Files (x86)\Windows Kits\10\bin\x64\`. If not you can [download a standalone SDK from Microsoft](https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk). 
+ - To create an `appxupload` file that is accepted by the Windows Store you will need to sign it using a `.pfx` file specific to your Windows Store account. This requires the tools `makecert.exe` and `pvk2pfx.exe`. If you have Visual Studio 2016 (or just the Windows 10 SDK) installed you can find it in `C:\Program Files (x86)\Windows Kits\10\bin\x64\`. If not you can [download a standalone SDK from Microsoft](https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk).
 
  On the developer dash board go to the account settings (upper right) to find the "Windows publisher ID".
 
