@@ -139,6 +139,7 @@ describe('util', function() {
     it('eliminates redundant slashes and dots from URLs', function() {
       expect(normalizePathUrl('http://foo///././bar/')).to.equal('http://foo/bar');
       expect(normalizePathUrl('file:///foo///././bar/')).to.equal('file:///foo/bar');
+      expect(normalizePathUrl('ms-appdata:///foo///././bar/')).to.equal('ms-appdata:///foo/bar');
     });
 
   });

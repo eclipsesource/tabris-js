@@ -47,7 +47,7 @@ export function normalizePathUrl(url) {
   if (typeof url !== 'string') {
     throw new Error('must be a string');
   }
-  let parts = /^([a-z]+:\/\/)?(.*)/.exec(url);
+  let parts = /^([a-z\-]+:\/\/)?(.*)/.exec(url);
   let schema = parts[1] || '';
   let content = parts[2] || '';
   return schema + normalizePath(content);
