@@ -122,13 +122,13 @@ module.exports = function(grunt) {
     }
 
     function renderDescription(def) {
-      let result = def.description || '';
+      let result = def.description ? def.description + '\n\n' : '';
       if (def.namespace === 'global') {
-        result += 'This API is available in the global namespace. You do not need to import it explicitly';
+        result += `This ${def.object ? 'object' : 'API'} is available in the global namespace. `;
+        result += 'You do not need to import it explicitly.\n';
       } else {
-        result += '\n\n';
         result += `Import this ${def.object ? 'object' : 'type'} with `;
-        result += `"\`const {${def.object || def.type}} = require('tabris');\`"\n\n`;
+        result += `"\`const {${def.object || def.type}} = require('tabris');\`"\n`;
       }
       return result;
     }
