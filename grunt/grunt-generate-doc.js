@@ -24,7 +24,11 @@ module.exports = function(grunt) {
       grunt.file.expand(grunt.config('doc').api).forEach(file => {
         let isWidget = file.indexOf('/widgets/') !== -1;
         let def = Object.assign(grunt.file.readJSON(file), {file, isWidget});
-        api[def.type] = def;
+        let key = def.type; // TODO:Use a different field as key to avoid needing pseudo-types.
+        if (api[key]) {
+          throw new Error('Duplicate key ' + key);
+        }
+        api[key] = def;
       });
       return api;
     }
@@ -37,9 +41,9 @@ module.exports = function(grunt) {
     }
 
     function renderAPI() {
-      Object.keys(api).forEach(type => {
-        let targetFile = join(apiPath, parse(api[type].file).name + '.md');
-        grunt.file.write(targetFile, renderDocument(type));
+      Object.keys(api).forEach(definition => {
+        let targetFile = join(apiPath, parse(api[definition].file).name + '.md');
+        grunt.file.write(targetFile, renderDocument(definition));
       });
     }
 
@@ -54,9 +58,9 @@ module.exports = function(grunt) {
       grunt.file.write(tocFile, grunt.template.process(grunt.file.read(tocFile), {data}));
     }
 
-    function renderDocument(type) {
-      grunt.log.verbose.writeln('Generating DOC for ' + type);
-      let def = api[type];
+    function renderDocument(key) {
+      grunt.log.verbose.writeln('Generating DOC for ' + key);
+      let def = api[key];
       return [
         '# ' + title(def) + '\n',
         renderDescription(def),
@@ -117,10 +121,15 @@ module.exports = function(grunt) {
     }
 
     function renderDescription(def) {
-      if (def.description) {
-        return def.description + '\n';
+      let result = def.description || '';
+      if (def.namespace === 'global') {
+        result += 'This API is available in the global namespace. You do not need to import it explicitly';
+      } else {
+        result += '\n\n';
+        result += `Import this ${def.object ? 'object' : 'type'} with `;
+        result += `"\`const {${def.object || def.type}} = require('tabris');\`"\n\n`;
       }
-      return '';
+      return result;
     }
 
     function renderExtends(def) {
