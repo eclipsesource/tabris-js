@@ -217,7 +217,12 @@ module.exports = function(grunt) {
       }
       let widgetEvents = Object.keys(def.events).map(name => Object.assign({name}, def.events[name]));
       let changeEvents = createChangeEvents(def.properties);
-      let events = [...widgetEvents, ...changeEvents].sort((a, b) => a.name.localeCompare(b.name));
+      for (let changeEvent of changeEvents) {
+        if (!(widgetEvents.some(widgetEvent => widgetEvent.name === changeEvent.name))) {
+          widgetEvents.push(changeEvent);
+        }
+      }
+      let events = widgetEvents.sort((a, b) => a.name.localeCompare(b.name));
       return [
         '## Events\n\n',
         ...events.map(({name, description, provisional, parameters}) => ([
@@ -237,8 +242,8 @@ module.exports = function(grunt) {
       return Object.keys(properties)
         .filter(name => !properties[name].static)
         .map(name => ({
-          name: `change:${name}`,
-          description: `Fired when the [*${name}*](#${name}) property changes.`,
+          name: `${name}Changed`,
+          description: `Fired when the [*${name}*](#${name}) property has changed.`,
           parameters: [{
             name: 'value',
             type: properties[name].type,
