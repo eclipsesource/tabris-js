@@ -14,7 +14,7 @@ By leveraging the Cordova plugin architecture, we make use of the Cordova build 
 
 ## Implementing your new widget
 
-> <img align="left" src="img/note.png"> <i>When implementing and/or overriding a method, check if you need to call `super`!</i>
+> :point_right: When implementing and/or overriding a method, check if you need to call `super`!
 
 ### Initializers
 

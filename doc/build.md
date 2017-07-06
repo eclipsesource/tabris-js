@@ -14,7 +14,7 @@ Tabris.js utilizes [Apache Cordova](http://cordova.apache.org) to build and pack
 | Using own build hardware  |              |       ✓      |
 | Other SCMs than Git       |              |       ✓      |
 
-> <img align="left" src="img/note.png"> <i>The online build service is free for unlimited public GitHub repositories and 1 private repository. To build from unlimited private repositories, you need a [Pro account](https://tabrisjs.com/pricing/). [Local builds](#local-build) are free for everyone.</i>
+> :point_right: The online build service is free for unlimited public GitHub repositories and 1 private repository. To build from unlimited private repositories, you need a [Pro account](https://tabrisjs.com/pricing/). [Local builds](#local-build) are free for everyone.
 
 ## Project Layout
 
@@ -252,9 +252,9 @@ After you have selected your repository it’s going to be validated. The valida
 ![Valid App](img/build-valid-app.png)
 After your app has become valid, you are ready to execute the first build. Just select the newly created app and click the "Start Android Build" button. A few minutes later you will get an Android .apk file which is ready to be installed on your device. But what about iOS, production builds and signing? All these things can be configured using the "Settings".
 
-> <img align="left" src="img/note.png"> <i>The build service installs the dependencies specified in your package.json from npm (except devDependencies). As a result, you don't have to put the `node_modules` folder under version control.</i>
+> :point_right: The build service installs the dependencies specified in your package.json from npm (except devDependencies). As a result, you don't have to put the `node_modules` folder under version control.
 
-> <img align="left" src="img/note.png"> <i>When building Windows apps, please also read the [Windows Support Documentation](windows-support.md)</i>
+> :point_right: When building Windows apps, please also read the [Windows Support Documentation](windows-support.md)
 
 ### Settings
 

@@ -121,7 +121,7 @@ page.apply({
 });
 ```
 
-> <img align="left" src="img/note.png"> <i>The on-screen order of the properties in the object literal is meaningless. According to the EcmaScript standard the members of a JavaScript object do not have a defined order.</i>
+> :point_right: The on-screen order of the properties in the object literal is meaningless. According to the EcmaScript standard the members of a JavaScript object do not have a defined order.
 
 ### How to use it
 
@@ -175,4 +175,4 @@ page.on('resize', ({width, height}) => {
 });
 ```
 
-> <img align="left" src="img/note.png"> <i>It is better to use the aspect ratio of the page as a basis for selecting a layout than the device orientation. This is because when the device is re-oriented, the page is first re-sized, and then rotated in an animation. Also, in future Tabris.js versions a page may not always have the same aspect ratio as the screen.</i>
+> :point_right: It is better to use the aspect ratio of the page as a basis for selecting a layout than the device orientation. This is because when the device is re-oriented, the page is first re-sized, and then rotated in an animation. Also, in future Tabris.js versions a page may not always have the same aspect ratio as the screen.

@@ -45,7 +45,7 @@ There are also some APIs only supported on Windows which are prefixed with `win_
  - Now double click the `appxbundle`. Windows Smartscreen may warn you about installing the app, but by clicking "More Information" you can continue anyway.
  - After the installation is done the app will appear in the start menu.
 
-> <img align="left" src="img/note.png"> <i>The tabris build service uses the cordova key to sign the app in case no other key is provided.</i> You can download it [here](https://github.com/apache/cordova-windows/raw/4.2.x/template/CordovaApp_TemporaryKey.pfx).
+> :point_right: The tabris build service uses the cordova key to sign the app in case no other key is provided. You can download it [here](https://github.com/apache/cordova-windows/raw/4.2.x/template/CordovaApp_TemporaryKey.pfx).
 
 
 ## Sideloading apps on Windows 10 (Mobile):
@@ -59,7 +59,7 @@ Now there are two options. You may download the `appxbundle` directly from your 
  - Tap the app. Confirm that you want to install the app.
  - The app is installed in the background. Unfortunately you don't get any feedback when the process is done. The app should appear after a minute or so on the "all apps" screen.
 
- > <img align="left" src="img/note.png"> <i>When you download an `appxbundle` file using the Edge browser, it may rename it to a `.zip` file.</i> You must use the file explorer to rename it to its original.
+ > :point_right: When you download an `appxbundle` file using the Edge browser, it may rename it to a `.zip` file. You must use the file explorer to rename it to its original.
 
 The other option is to install the app from a Windows PC. This requires the Windows 10 SDK to be installed.
  - Attach the phone to your Windows PC using an USB cable.

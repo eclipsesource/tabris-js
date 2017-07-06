@@ -44,7 +44,7 @@ See [W3C](http://www.w3.org/TR/XMLHttpRequest/) / [MDN](https://developer.mozill
 As a more powerful and flexible alternative to XHR, you can also use the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
 As of Tabris.js 1.7, an implementation of this API is included.
 
-> <img align="left" src="img/note.png"> <i>To load static resources, working with URLs relative to the current [module](modules.md) may be more convenient. In the case of a JSON file, this can be done simply by using the `require` method instead of XHR. For other types of files, use the `__dirname` variable, e.g. `xhr.open("GET", __dirname + "/foo.txt");`.</i>
+> :point_right: To load static resources, working with URLs relative to the current [module](modules.md) may be more convenient. In the case of a JSON file, this can be done simply by using the `require` method instead of XHR. For other types of files, use the `__dirname` variable, e.g. `xhr.open("GET", __dirname + "/foo.txt");`.
 
 ## WebSocket
 
@@ -73,7 +73,7 @@ See [W3C](http://dev.w3.org/html5/webstorage/) / [MDN](https://developer.mozilla
 * The `sessionStorage` is not supported, as it would serve no purpose in a non-browser environment.
 * The storage event is currently not supported.
 
-> <img align="left" src="img/note.png"> <i>The `localStorage` is only meant to store relatively short strings. To store larger amounts of data it is recommended to use the cordova [`FileSystem`](https://www.npmjs.com/package/cordova-plugin-file) plugin.</i>
+> :point_right: The `localStorage` is only meant to store relatively short strings. To store larger amounts of data it is recommended to use the cordova [`FileSystem`](https://www.npmjs.com/package/cordova-plugin-file) plugin.
 
 ## Canvas Context
 

@@ -60,7 +60,7 @@ The listener function is called with an event object that contains a number of p
 * `target`: the widget that received the event
 * `timeStamp`: the time at which the event was created, in milliseconds
 
-> <img align="left" src="img/note.png"> <i>Event types are case sensitive.</i>
+> :point_right: Event types are case sensitive.
 
 A *context* object may be given as the third parameter to `on()`. This object will then be available as `this` inside the listener function.
 

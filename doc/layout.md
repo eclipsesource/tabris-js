@@ -16,7 +16,7 @@ All widgets support a property `layoutData` that defines how the widget should b
 - `width`
 - `height`
 
-> <img align="left" src="img/note.png"> <i>All layout attributes can also be set directly on the widget as a normal property. The advantage of using the `layoutData` property is that all currently set layout attributes not in the new `layoutData` object will be implicitly reset to null (i.e. "not specified").</i>
+> :point_right: All layout attributes can also be set directly on the widget as a normal property. The advantage of using the `layoutData` property is that all currently set layout attributes not in the new `layoutData` object will be implicitly reset to null (i.e. "not specified").
 
 ### top, right, bottom, left
 Defines the position of the widget's edge.
