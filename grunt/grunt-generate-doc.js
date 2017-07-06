@@ -62,6 +62,7 @@ module.exports = function(grunt) {
       grunt.log.verbose.writeln('Generating DOC for ' + key);
       let def = api[key];
       return [
+        '---\n---',
         '# ' + title(def) + '\n',
         renderDescription(def),
         renderImages(def),
