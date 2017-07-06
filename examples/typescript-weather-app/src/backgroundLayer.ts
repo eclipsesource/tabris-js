@@ -6,7 +6,9 @@ export default class BackgroundLayer extends Composite {
   constructor(properties: CompositeProperties) {
     super(properties);
     this.clouds = [];
-    this.on('resize', () => this.generateNewClouds());
+    this.on({
+      resize: () => this.generateNewClouds()
+    });
   }
 
   public scroll(offset: number) {

@@ -7,14 +7,18 @@ import WeatherGraph from './weatherGraph';
 import {pollWeatherData, WeatherData} from './weatherService';
 
 ui.contentView.background = 'rgb(83,100,160)';
-ui.contentView.on('resize', () => applyLayout());
+ui.contentView.on({
+  resize: () => applyLayout()
+});
 
 let background = new BackgroundLayer({
   left: 0, right: 0, top: 0, height: ui.contentView.height
 }).appendTo(ui.contentView);
 
-let scrollView = new ScrollView({left: 0, right: 0, top: 0, bottom: 0}).on('scrollY', ({offset}) => {
-  background.scroll(-offset);
+let scrollView = new ScrollView({
+  left: 0, right: 0, top: 0, bottom: 0
+}).on({
+  scrollY: ({offset}) => background.scroll(-offset)
 }).appendTo(ui.contentView);
 
 let input = new TextInput({
@@ -24,10 +28,11 @@ let input = new TextInput({
     textColor: '#FFFFFF',
     background: 'rgba(255, 255, 255, 0)',
     font: 'normal thin 32px sans-serif'
-  }).on('focus', () => input.text = '')
-    .on('blur', () => input.text = localStorage.getItem('city') || '')
-    .on('accept', () => loadCity(input.text))
-    .appendTo(scrollView);
+  }).on({
+    focus: () => input.text = '',
+    blur: () => input.text = localStorage.getItem('city') || '',
+    accept: () => loadCity(input.text)
+  }).appendTo(scrollView);
 
 if (localStorage.getItem('city')) {
   loadCity(localStorage.getItem('city'));
@@ -53,20 +58,21 @@ function presentWeather(data: WeatherData) {
   applyLayout();
 }
 
-function createWeatherInformation(data: WeatherData) {
+function createWeatherInformation(weatherData: WeatherData) {
   new Composite({class: 'weatherInfo', id: 'container'}).append(
-    new CurrentWeatherView({data, class: 'weatherInfo', id: 'current'}),
-    new WeatherGraph({data, class: 'weatherInfo', id: 'graph'}),
-    new ForecastTabView({data, class: 'weatherInfo', id: 'forecast'})
-      .on('selectionChanged', ({target, value}) => {
-        changeGraphFocus(target as ForecastTabView, value, data);
+    new CurrentWeatherView({weatherData, class: 'weatherInfo', id: 'current'}),
+    new WeatherGraph({weatherData, class: 'weatherInfo', id: 'graph'}),
+    new ForecastTabView({weatherData, class: 'weatherInfo', id: 'forecast'}).on({
+      selectionChanged: ({target, value}) => changeGraphFocus(target as ForecastTabView, value, weatherData)
       }),
-    new ForecastOverview({data, class: 'weatherInfo', id: 'overview'}).on('daySelect', (index) => {
+    new ForecastOverview({weatherData, class: 'weatherInfo', id: 'overview'}).on({
+      daySelect: ({dayIndex}) => {
       let forecastTabView = ui.find('#forecast').first() as ForecastTabView;
-      forecastTabView.selection = forecastTabView.getTab(index);
-    })
-  ).on('resize', ({top, height}) => background.height = height + top)
-   .appendTo(scrollView);
+      forecastTabView.selection = forecastTabView.getTab(dayIndex);
+    }})
+  ).on({
+    resize: ({top, height}) => background.height = height + top
+  }).appendTo(scrollView);
 }
 
 function applyLayout() {
@@ -79,10 +85,9 @@ function applyLayout() {
   });
 }
 
-
 function changeGraphFocus(forecastTabView: ForecastTabView, selection: Tab, data: WeatherData) {
   let day = forecastTabView.getTabIndex(selection);
-  let graph = ui.contentView.find('#graph').first() as WeatherGraph;
+  let graph = ui.contentView.find(WeatherGraph).first();
   if (day === 0) {
     animateGraphChange(graph, data.list[0].date.getTime(), data.list[data.list.length - 1].date.getTime());
   } else {

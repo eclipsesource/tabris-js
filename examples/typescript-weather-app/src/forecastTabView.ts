@@ -18,22 +18,22 @@ const FORECAST_BOX_HEIGHT = 45;
 const WEATHER_ICON_SIZE = 35;
 
 interface ForecastTabViewProperties extends TabFolderProperties {
-  data: WeatherData;
+  weatherData: WeatherData;
 }
 
 export default class ForecastTabView extends TabFolder {
-  private data: WeatherData;
+  private weatherData: WeatherData;
   private tabs: Tab[];
 
   constructor(properties: ForecastTabViewProperties) {
     properties.tabBarLocation = 'hidden';
     properties.paging = true;
     super(omit(properties, 'data'));
-    this.data = properties.data;
+    this.weatherData = properties.weatherData;
     this.tabs = [this.createTab(0, 'today')];
     this.append(this.tabs[0]);
-    for (let index = 1; index < this.data.days.length; index++) {
-      let headerName = DAY_NAMES[this.data.days[index][0].date.getDay()];
+    for (let index = 1; index < this.weatherData.days.length; index++) {
+      let headerName = DAY_NAMES[this.weatherData.days[index][0].date.getDay()];
       this.tabs.push(this.createTab(index, headerName));
       this.append(this.tabs[index]);
     }
@@ -50,7 +50,7 @@ export default class ForecastTabView extends TabFolder {
   private createTab(dayIndex: number, text: string) {
     let tab = new Tab();
     this.createHeader(text, dayIndex).appendTo(tab);
-    for (let forecast of this.data.days[dayIndex]) {
+    for (let forecast of this.weatherData.days[dayIndex]) {
       this.createForecastBox(forecast).appendTo(tab);
     }
     return tab;
@@ -71,7 +71,7 @@ export default class ForecastTabView extends TabFolder {
     if (tabIndex !== 0) {
       this.createArrowImage('left').appendTo(background);
     }
-    if (tabIndex !== this.data.days.length - 1) {
+    if (tabIndex !== this.weatherData.days.length - 1) {
       this.createArrowImage('right').appendTo(background);
     }
     return container;

@@ -14,7 +14,7 @@ const BIG_FONT = 'thin 28px sans-serif';
 const SMALL_FONT_ITALIC = 'italic thin 22px sans-serif';
 
 interface ForecastOverviewProperties extends CompositeProperties {
-  data: WeatherData;
+  weatherData: WeatherData;
 }
 
 export default class ForecastOverview extends Composite {
@@ -22,7 +22,7 @@ export default class ForecastOverview extends Composite {
 
   constructor(properties: ForecastOverviewProperties) {
     super(omit(properties, 'data'));
-    this.days = properties.data.days;
+    this.days = properties.weatherData.days;
     for (let index = 0; index < this.days.length; index++) {
       this.createDayInformationBox(index).appendTo(this);
     }
@@ -41,7 +41,9 @@ export default class ForecastOverview extends Composite {
       right: MARGIN,
       background: INFO_BOX_COLOR,
       highlightOnTouch: true
-    }).on('tap', () => this.trigger('daySelect', dayIndex)).appendTo(container);
+    }).on({
+      tap: () => this.trigger('daySelect', {dayIndex})
+    }).appendTo(container);
     let minTemp = Math.min(...dayForecasts.map((forecast) => forecast.temperature));
     let maxTemp = Math.max(...dayForecasts.map((forecast) => forecast.temperature));
     this.createDayText(dayForecasts[0]).appendTo(infoBox);

@@ -8,14 +8,14 @@ const FONT = 'thin 100px sans-serif';
 const ICON_SIZE = 100;
 
 interface CurrentWeatherViewProperties extends CompositeProperties {
-  data: WeatherData;
+  weatherData: WeatherData;
 }
 
 export default class CurrentWeatherView extends Composite {
 
   constructor(properties: CurrentWeatherViewProperties) {
-    super(omit(properties, 'data'));
-    let data = properties.data;
+    super(omit(properties, 'weatherData'));
+    let data = properties.weatherData;
     let centerBox = new Composite({ top: 0, centerX: 0 }).appendTo(this);
     this.createWeatherIcon(data.list[0].weatherIcon).appendTo(centerBox);
     this.createTemperatureText(Math.round(data.list[0].temperature)).appendTo(centerBox);

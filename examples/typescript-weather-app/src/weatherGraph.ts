@@ -18,30 +18,30 @@ const DAY_COLOR = 'rgba(131,156,188,0.286)';
 const margins = { top: 20, left: 30, bottom: 13, right: 10 };
 
 interface WeatherGraphProperties extends CompositeProperties {
-  data: WeatherData;
+  weatherData: WeatherData;
 }
 
 
 export default class WeatherGraph extends Canvas {
   private canvas: Canvas;
   private dataPoints: WeatherDatum[];
-  private data: WeatherData;
+  private weatherData: WeatherData;
   private scale: { minX: number, maxX: number, minY: number, maxY: number };
 
   constructor(properties: WeatherGraphProperties) {
     super(omit(properties, 'data'));
-    this.data = properties.data;
+    this.weatherData = properties.weatherData;
     this.scale = {
-      minX: this.data.list[0].date.getTime(),
-      maxX: this.data.list[this.data.list.length - 1].date.getTime(),
+      minX: this.weatherData.list[0].date.getTime(),
+      maxX: this.weatherData.list[this.weatherData.list.length - 1].date.getTime(),
       minY: 0,
       maxY: 0
     };
     this.initDataPoints();
     this.initScale();
     this.canvas = new Canvas({ top: 0, left: 0, right: 0, bottom: 0 });
-    this.on('resize', () => {
-      this.draw();
+    this.on({
+      resize: () => this.draw()
     });
   }
 
@@ -64,16 +64,16 @@ export default class WeatherGraph extends Canvas {
   }
 
   private initDataPoints() {
-    this.dataPoints = this.data.list.filter((datum) =>
+    this.dataPoints = this.weatherData.list.filter((datum) =>
       (datum.date.getTime() > this.scale.minX && datum.date.getTime() < this.scale.maxX)
     );
-    let firstIndex = this.data.list.indexOf(this.dataPoints[0]);
-    let lastIndex = this.data.list.indexOf(this.dataPoints[this.dataPoints.length - 1]);
+    let firstIndex = this.weatherData.list.indexOf(this.dataPoints[0]);
+    let lastIndex = this.weatherData.list.indexOf(this.dataPoints[this.dataPoints.length - 1]);
     if (firstIndex > 0) {
-      this.dataPoints.unshift(this.data.getWeatherAtDate(new Date(this.scale.minX)));
+      this.dataPoints.unshift(this.weatherData.getWeatherAtDate(new Date(this.scale.minX)));
     }
-    if (lastIndex < this.data.list.length - 1) {
-      this.dataPoints.push(this.data.getWeatherAtDate(new Date(this.scale.maxX)));
+    if (lastIndex < this.weatherData.list.length - 1) {
+      this.dataPoints.push(this.weatherData.getWeatherAtDate(new Date(this.scale.maxX)));
     }
   }
 
@@ -88,9 +88,9 @@ export default class WeatherGraph extends Canvas {
 
   private drawBackground(ctx: CanvasContext) {
     let now = this.scale.minX;
-    let dayOffset = new Date(now).getDate() - this.data.list[0].date.getDate();
-    let sunriseTime = this.data.sunriseTime.getTime() + dayOffset * DAY_LENGTH;
-    let sunsetTime = this.data.sunsetTime.getTime() + dayOffset * DAY_LENGTH;
+    let dayOffset = new Date(now).getDate() - this.weatherData.list[0].date.getDate();
+    let sunriseTime = this.weatherData.sunriseTime.getTime() + dayOffset * DAY_LENGTH;
+    let sunsetTime = this.weatherData.sunsetTime.getTime() + dayOffset * DAY_LENGTH;
     let isDay = (sunriseTime < now && now < sunsetTime);
     sunriseTime += (now > sunriseTime) ? DAY_LENGTH : 0;
     sunsetTime += (now > sunsetTime) ? DAY_LENGTH : 0;
