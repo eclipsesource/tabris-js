@@ -64,10 +64,10 @@ module.exports = function(grunt) {
       return [
         '---\n---',
         '# ' + title(def) + '\n',
+        renderExtends(def),
         renderDescription(def),
         renderImages(def),
         renderExample(def),
-        renderExtends(def),
         renderMembers(def),
         renderSnippet(def),
         renderLinks(def)
