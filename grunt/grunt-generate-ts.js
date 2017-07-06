@@ -56,6 +56,10 @@ module.exports = function(grunt) {
 
   function prepareTypeDefs(defs) {
     Object.keys(defs).forEach((name) => {
+      if (defs[name].ts_ignore) {
+        delete defs[name];
+        return;
+      }
       defs[name].isNativeObject = isNativeObject(defs, defs[name]);
       if (defs[name].extends) {
         defs[name].parent = defs[defs[name].extends];

@@ -1,6 +1,7 @@
 {
   "type": "Timer",
   "object": "window",
+  "ts_ignore": true,
   "constructor": {
     "access": "private",
     "parameters": []
