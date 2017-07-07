@@ -13,63 +13,75 @@ module.exports = function(grunt) {
     let apiPath = join(targetPath, 'api');
     let typesFile = join(targetPath, 'types.md');
     let tocFile = join(targetPath, 'toc.yml');
-    let api = readAPI();
-    let types = readTypes();
+    let typeLinks = {};
+    let api = {};
 
+    readPropertyTypes();
+    readAPI();
     renderAPI();
     renderIndex();
 
     function readAPI() {
-      let api = {};
       grunt.file.expand(grunt.config('doc').api).forEach(file => {
         let isWidget = file.indexOf('/widgets/') !== -1;
-        let def = Object.assign(grunt.file.readJSON(file), {file, isWidget});
-        let key = def.type; // TODO:Use a different field as key to avoid needing pseudo-types.
-        if (api[key]) {
-          throw new Error('Duplicate key ' + key);
+        let def = grunt.file.readJSON(file);
+        let title = getTitle(def);
+        Object.assign(def, {title, file, isWidget});
+        if (api[title]) {
+          throw new Error('Duplicate title ' + title);
         }
-        api[key] = def;
+        api[title] = def;
+        if (def.type) {
+          addTypeLink(def.type, `${def.type}.md`);
+        }
       });
-      return api;
     }
 
-    function readTypes() {
-      return {
-        list: grunt.file.read(typesFile).match(/^##\ *(.*)$/gm).map(heading => heading.slice(3).toLowerCase()),
-        path: relative(apiPath, typesFile).replace(sep, '/')
-      };
+    function readPropertyTypes() {
+      let path = relative(apiPath, typesFile).replace(sep, '/');
+      let list = grunt.file.read(typesFile).match(/^##\ *(.*)$/gm).map(heading => heading.slice(3));
+      for (let type of list) {
+        addTypeLink(type, `${path}#${type.toLowerCase()}`);
+      }
+    }
+
+    function addTypeLink(type, link) {
+      if (typeLinks[type]) {
+        throw new Error('Duplicate type ' + type);
+      }
+      typeLinks[type] = link;
     }
 
     function renderAPI() {
-      Object.keys(api).forEach(definition => {
-        let targetFile = join(apiPath, parse(api[definition].file).name + '.md');
-        grunt.file.write(targetFile, renderDocument(definition));
+      Object.keys(api).forEach(title => {
+        let targetFile = join(apiPath, parse(api[title].file).name + '.md');
+        grunt.file.write(targetFile, renderDocument(title));
       });
     }
 
     function renderIndex() {
       grunt.log.verbose.writeln('Generating index');
-      let types = Object.keys(api).map(type => api[type]).sort(compareTypes);
-      let render = def => `    - title: ${title(def)}\n      url: api/${parse(def.file).name}.html`;
+      let sortedAPI = Object.keys(api).map(title => api[title]).sort(compareTitles);
+      let render = def => `    - title: ${def.title}\n      url: api/${parse(def.file).name}.html`;
       let data = {
-        api: types.filter(type => !type.isWidget).map(render).join('\n'),
-        widgets: types.filter(type => type.isWidget).map(render).join('\n')
+        api: sortedAPI.filter(def => !def.isWidget).map(render).join('\n'),
+        widgets: sortedAPI.filter(def => def.isWidget).map(render).join('\n')
       };
       grunt.file.write(tocFile, grunt.template.process(grunt.file.read(tocFile), {data}));
     }
 
-    function renderDocument(key) {
-      grunt.log.verbose.writeln('Generating DOC for ' + key);
-      let def = api[key];
+    function renderDocument(title) {
+      grunt.log.verbose.writeln('Generating DOC for ' + title);
+      let def = api[title];
       return [
         '---\n---',
-        '# ' + title(def) + '\n',
+        '# ' + title + '\n',
         renderExtends(def),
         renderDescription(def),
         renderImages(def),
         renderExample(def),
         renderMembers(def),
-        renderSnippet(def),
+        renderSnippet(title),
         renderLinks(def)
       ].filter(value => !!value).join('\n');
     }
@@ -89,8 +101,8 @@ module.exports = function(grunt) {
       }
     }
 
-    function renderSnippet(def) {
-      let snippetPath = join(SNIPPETS_LOCATION, `${def.type.toLowerCase()}.js`);
+    function renderSnippet(title) {
+      let snippetPath = join(SNIPPETS_LOCATION, `${title.toLowerCase()}.js`);
       if (grunt.file.isFile(snippetPath)) {
         return [
           '## Example',
@@ -308,40 +320,31 @@ module.exports = function(grunt) {
     }
 
     function renderTypeLink(name) {
-      if (types.list.indexOf(name.toLowerCase()) !== -1) {
-        return `[${name}](${types.path}#${name.toLowerCase()})`;
+      if (!typeLinks[name]) {
+        return name;
       }
-      if (api[firstCharUp(name)]) {
-        return `[${name}](${name}.md)`;
-      }
-      return name;
+      return `[${name}](${typeLinks[name]})`;
     }
 
   });
-
-  function firstCharUp(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
 
   function firstCharLower(str) {
     return str.charAt(0).toLowerCase() + str.slice(1);
   }
 
-  function title(def) {
-    return def.object || def.type;
+  function getTitle(def) {
+    return def.title || def.object || def.type;
   }
 
   function isLowerCase(str) {
     return str.charAt(0).toLowerCase() === str.charAt(0);
   }
 
-  function compareTypes(a, b) {
-    let ta = title(a);
-    let tb = title(b);
-    if (isLowerCase(ta) !== isLowerCase(tb)) {
-      return isLowerCase(ta) ? -1 : 1;
+  function compareTitles(a, b) {
+    if (isLowerCase(a.title) !== isLowerCase(b.title)) {
+      return isLowerCase(a.title) ? -1 : 1;
     }
-    return ta.localeCompare(tb, 'en');
+    return a.title.localeCompare(b.title, 'en');
   }
 
 };

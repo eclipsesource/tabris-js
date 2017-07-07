@@ -37,7 +37,9 @@ module.exports = function(grunt) {
     files.forEach((file) => {
       let json = grunt.file.readJSON(file);
       json.file = file;
-      defs[json.type] = json;
+      if (!json.ts_ignore) {
+        defs[json.type] = json;
+      }
     });
     return defs;
   }
@@ -58,10 +60,6 @@ module.exports = function(grunt) {
 
   function prepareTypeDefs(defs) {
     Object.keys(defs).forEach((name) => {
-      if (defs[name].ts_ignore) {
-        delete defs[name];
-        return;
-      }
       defs[name].isNativeObject = isNativeObject(defs, defs[name]);
       if (defs[name].extends) {
         defs[name].parent = defs[defs[name].extends];
