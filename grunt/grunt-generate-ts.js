@@ -8,6 +8,7 @@ const header = `
 /// <reference path="JSX.d.ts" />
 /// <reference path="XMLHttpRequest.d.ts" />
 /// <reference path="WebSocket.d.ts" />
+/// <reference path="EventObject.d.ts" />
 
 type Partial<T> = {
   [P in keyof T]?: T[P];
@@ -171,9 +172,8 @@ module.exports = function(grunt) {
 
   function addEvents(result, def) {
     if (def.type === 'NativeObject') {
-      let indexParameter = {'[p: string]': {type: 'any'}};
       result.append('');
-      result.append(`[k: string]: undefined | ((event: {${createEventParams(indexParameter)}}) => void);`);
+      result.append('[k: string]: undefined | ((event: EventObject<T>) => void);');
     }
     if (def.events) {
       Object.keys(def.events).sort().forEach((name) => {

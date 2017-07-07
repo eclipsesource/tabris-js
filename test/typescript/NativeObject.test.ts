@@ -16,11 +16,12 @@ let properties: Object = {};
 let thisReturnValue: NativeObject;
 let value: any;
 let timeStamp: number;
+let eventObject: EventObject<NativeObject> = {timeStamp: 32, target: nativeObject, type: 'foo'};
 
 thisReturnValue = nativeObject.on(type, listener, context);
 thisReturnValue = nativeObject.once(type, listener, context);
 thisReturnValue = nativeObject.off(type, listener, context);
-thisReturnValue = nativeObject.trigger(type, type);
+thisReturnValue = nativeObject.trigger(type, eventObject);
 thisReturnValue = nativeObject.get(property);
 thisReturnValue = nativeObject.set(property, value);
 thisReturnValue = nativeObject.set(properties);

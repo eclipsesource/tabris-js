@@ -135,6 +135,7 @@
         {
           "name": "event",
           "type": "Object",
+          "ts_type": "EventObject<this>",
           "description": "The event object to pass to listener functions."
         }
       ],
