@@ -57,7 +57,8 @@ module.exports = function(grunt) {
           'console.d.ts',
           'localStorage.d.ts',
           'XMLHttpRequest.d.ts',
-          'Event.d.ts'
+          'Event.d.ts',
+          'WebSocket.d.ts'
         ],
         dest: 'build/tabris/'
       },

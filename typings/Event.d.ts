@@ -86,3 +86,67 @@ declare var ErrorEvent: {
     prototype: ErrorEvent;
     new(type: string, errorEventInitDict?: ErrorEventInit): ErrorEvent;
 }
+
+interface CloseEventInit extends EventInit {
+    wasClean?: boolean;
+    code?: number;
+    reason?: string;
+}
+
+interface CloseEvent extends Event {
+    readonly code: number;
+    readonly reason: string;
+    readonly wasClean: boolean;
+    initCloseEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, wasCleanArg: boolean, codeArg: number, reasonArg: string): void;
+}
+
+declare var CloseEvent: {
+    prototype: CloseEvent;
+    new(typeArg: string, eventInitDict?: CloseEventInit): CloseEvent;
+}
+
+
+interface MessageEventInit extends EventInit {
+    lastEventId?: string;
+    channel?: string;
+    data?: any;
+    origin?: string;
+    source?: any;
+    ports?: MessagePort[];
+}
+
+interface MessageEvent extends Event {
+    readonly data: any;
+    readonly origin: string;
+    readonly ports: any;
+    readonly source: any;
+    initMessageEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, dataArg: any, originArg: string, lastEventIdArg: string, sourceArg: any): void;
+}
+
+declare var MessageEvent: {
+    prototype: MessageEvent;
+    new(type: string, eventInitDict?: MessageEventInit): MessageEvent;
+}
+
+declare var MessageEvent: {
+    prototype: MessageEvent;
+    new(type: string, eventInitDict?: MessageEventInit): MessageEvent;
+}
+
+interface MessagePortEventMap {
+    "message": MessageEvent;
+}
+
+interface MessagePort extends EventTarget {
+    onmessage: (this: MessagePort, ev: MessageEvent) => any;
+    close(): void;
+    postMessage(message?: any, transfer?: any[]): void;
+    start(): void;
+    addEventListener<K extends keyof MessagePortEventMap>(type: K, listener: (this: MessagePort, ev: MessagePortEventMap[K]) => any, useCapture?: boolean): void;
+}
+
+declare var MessagePort: {
+    prototype: MessagePort;
+    new(): MessagePort;
+}
+

@@ -103,3 +103,64 @@ let linenoArg: number = 42;
 isVoid = errorEvent.initErrorEvent(
   typeArg, canBubbleArg, cancelableArg, messageArg, filenameArg, linenoArg
 );
+
+// CloseEvent
+let code: number = 42;
+let reason: string = '';
+let wasClean: boolean = false;
+let codeArg: number = 42;
+let reasonArg: string = '';
+let wasCleanArg: boolean = false;
+let closeEventInit: CloseEventInit;
+let closeEvent: CloseEvent;
+
+closeEventInit = {};
+closeEventInit = {wasClean, code, reason};
+closeEvent = new CloseEvent(typeArg);
+closeEvent = new CloseEvent(typeArg, closeEventInit);
+isNumber = closeEvent.code;
+isString = closeEvent.reason;
+isBoolean = closeEvent.wasClean;
+isVoid = closeEvent.initCloseEvent(typeArg, canBubbleArg, cancelableArg, wasCleanArg, codeArg, reasonArg);
+
+// MessageEvent
+let lastEventId: string = '';
+let channel: string = '';
+let data: any = {};
+let origin: string = '';
+let source: any = {};
+let lastEventIdArg: string = '';
+let dataArg: any = {};
+let originArg: string = '';
+let sourceArg: any = {};
+let ports: MessagePort[] = [];
+let messageEventInit: MessageEventInit;
+let messageEvent: MessageEvent;
+
+
+messageEventInit = {};
+messageEventInit = {lastEventId, channel, data, origin, source, ports };
+messageEvent = new MessageEvent(type);
+messageEvent = new MessageEvent(type, messageEventInit);
+isAny = messageEvent.data;
+isString = messageEvent.origin;
+isAny = messageEvent.ports;
+isAny = messageEvent.source;
+isVoid = messageEvent.initMessageEvent(typeArg, canBubbleArg, cancelableArg, dataArg, originArg, lastEventIdArg, sourceArg);
+
+// MessagePort
+let transfer: any;
+let messagePort: MessagePort = new MessagePort();
+let messagePortEventMap: MessagePortEventMap = {message: new MessageEvent(type)};
+let isMessageFn: (this: MessagePort, ev: MessageEvent) => any;
+let listenerType: 'message' = 'message';
+let listenerFn: (this: MessagePort, ev: MessageEvent) => any = function(this, ev) {};
+
+
+isMessageFn = messagePort.onmessage;
+isVoid = messagePort.close();
+isVoid = messagePort.postMessage();
+isVoid = messagePort.postMessage(message, transfer);
+isVoid = messagePort.start();
+isVoid = messagePort.addEventListener(listenerType, listenerFn);
+isVoid = messagePort.addEventListener(listenerType, listenerFn, useCapture);

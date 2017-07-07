@@ -7,6 +7,7 @@ const header = `
 /// <reference path="Event.d.ts" />
 /// <reference path="JSX.d.ts" />
 /// <reference path="XMLHttpRequest.d.ts" />
+/// <reference path="WebSocket.d.ts" />
 
 type Partial<T> = {
   [P in keyof T]?: T[P];
