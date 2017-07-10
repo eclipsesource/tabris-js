@@ -15,4 +15,4 @@ Install the [Tabris.js Developer App](developer-app.md) on your device and brows
 You can also edit the source code of a simple Tabris.js app online in the [Tabris.js Playground](https://tabrisjs.com/playground) and load it via the Developer App.
 
 To really start developing a full fledged Tabris.js app, follow the [Quick Start Guide](getting-started.md).
-We also have an excellent [Ebook](https://tabrisjs.com/downloads/ebook/tabrisjs-2.0.0-rc2.pdf) that explains how to create, deploy and test your first Tabris.js app.
+We also have an excellent [ebook](https://tabrisjs.com/downloads/ebook/tabrisjs-2.0.0-rc2.pdf) that explains how to create, deploy and test your first Tabris.js app.

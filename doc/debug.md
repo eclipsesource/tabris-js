@@ -2,7 +2,7 @@
 ---
 # Debugging Tabris.js
 
-Tabris.js supports the `console.log`, `info`, `warn`, and `error` functions that are useful for debugging.  However for more complex applications it is often perferred to use a full-fledged debugger, allowing the developer to pause script execution by setting breakpoints, allowing the inspection and redefinition of variables currently in scope.  Tabris.js supports several debuggers:
+Tabris.js supports the `console.log`, `info`, `warn`, and `error` functions that are useful for debugging. However, for more complex applications it is often preferred to use a full-fledged debugger, allowing the developer to pause script execution by setting breakpoints, allowing the inspection and redefinition of variables currently in scope.  Tabris.js supports several debuggers:
 
 ## Android
 

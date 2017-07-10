@@ -17,7 +17,7 @@ The developer app for Windows can run – without emulation or Windows SDK – o
 
 ## API
 
-Windows 10 (UWP/Store Apps) support was added after Android and iOS. For that reason some APIs available on these platforms are not (yet) supported on Windows. Consult the API reference for details. Also, there are some new APIs specific to windows-ony features. These are prefixed with `win_` and also  documented in the API reference.
+Windows 10 (UWP/Store Apps) support was added after Android and iOS. For that reason, some APIs available on these platforms are not (yet) supported on Windows. Consult the API reference for details. Also, there are some new APIs specific to windows-ony features. These are prefixed with `win_` and also  documented in the API reference.
 
 ## Sideloading apps on Windows 10 (PC):
 
@@ -72,4 +72,4 @@ Open a Windows commandline (`cmd.exe`) and enter the following commands *exactly
 
 When prompted, leave the password field blank. Otherwise the `.pfx` won't be useable for signing on the build service.
 
-You should now have a `.pfx` file in your users home directoy.
+You should now have a `.pfx` file in your users home directory.

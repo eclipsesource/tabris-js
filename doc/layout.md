@@ -26,7 +26,7 @@ Defines the position of the widget's edge.
 Accepted values:
 
 - *offset*: the distance from the parent's opposing edge in device independent pixels
-- *widget*: attach this edge to the given siblings's opposing edge
+- *widget*: attach this edge to the given sibling's opposing edge
 - *percentage*: the distance from the parent's opposing edge in percent of the parent's width
 - [*percentage*, *offset*]: the distance from the parent's opposing edge in percent of the parent's width plus a fixed offset in pixels
 - "*percentage* *offset*": Same as above, but as space-separated string list instead of array
