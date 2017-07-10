@@ -82,6 +82,9 @@
           "description": "The sent message.",
           "type": "string"
         }
+      },
+      "platforms": {
+        "windows": false
       }
     }
   },
@@ -100,7 +103,10 @@
         }
       ],
       "description": "Posts a web message to the underlying `window` object of the WebView. The website in the `WebView` can register for the message in the following fashion: `window.addEventListener('message', callbackFunction)`. For more information see [`Window.postMessage()`](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) API.",
-      "returns": "this"
+      "returns": "this",
+      "platforms": {
+        "windows": false
+      }
     },
     "goBack": [
       {

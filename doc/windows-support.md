@@ -17,26 +17,7 @@ The developer app for Windows can run – without emulation or Windows SDK – o
 
 ## API
 
-Windows 10 (UWP/Store Apps) support was added in Tabris.js 2.0 and is still catching up to the other platforms in terms of API support. It also features a few APIs specific to Windows. These are prefixed with `win_` and documented in the API reference.
-
-The following APIs are not yet supported on Windows:
-  - `ui.statusBar`: Property `theme`. Property `displayMode` is partially supported (`float` is treated the same as `hide`).
-  - `ui.navigationBar`
-  - `Drawer`: Events `open` and `close`.
-  - `CollectionView`: Properties `refreshEnabled`, and `columnCount`.
-  - `ImageView`: Property `tintColor`.
-  - `Tab`: Properties `badge`, `image` and `selectedImage`.
-  - `TabFolder`: Property `paging`. (Behaves as if always `true`.)
-  - `TextInput`: Properties `alignment`, `autoCapitalize`, `fillColor`, `borderColor`, `keepFocus`. `type` is partially supported. (Can not be set to `search`).
-  - `WebView`: Events `download` and `message`. Method `postMessage`.
-
-There are also some APIs only supported on Windows which are prefixed with `win_`:
- - `device`: Properties `win_keyboardPresent` and `win_primariyInput`.
- - `Widget`: Property `win_theme`.
- - `Action`: Property `win_symbol`.
- - `Drawer`: Properties `win_targetView` and `win_displayMode`.
- - `NavigationView`: Properties `win_toolbarTheme`, `win_toolbarOverflowTheme`, `win_drawerActionTheme` and `win_drawerActionBackground`.
- - `TabFolder`: Property `win_tabBarTheme`.
+Windows 10 (UWP/Store Apps) support was added after Android and iOS. For that reason some APIs available on these platforms are not (yet) supported on Windows. Consult the API reference for details. Also, there are some new APIs specific to windows-ony features. These are prefixed with `win_` and also  documented in the API reference.
 
 ## Sideloading apps on Windows 10 (PC):
 

@@ -3,7 +3,7 @@
   "extends": "Widget",
   "description": "The status bar is the area where notifications, status icons and device time are displayed. The singleton instance can be accessed via `ui.statusBar`.",
   "constructor": {
-    "access": "public",
+    "access": "private",
     "parameters": [
       {
         "name": "properties",
@@ -22,7 +22,10 @@
         "dark"
       ],
       "default": "default",
-      "description": "Defines the shade used on the status bar. A `dark` theme sets the foreground icons to be of a light color, whereas `light` sets the icons to a dark color. The theme should be set in conjunction with the `background` property for contrast. The value `default` selects the default theme that depends on the device and on the app. Available on iOS and Android 6+."
+      "description": "Defines the shade used on the status bar. A `dark` theme sets the foreground icons to be of a light color, whereas `light` sets the icons to a dark color. The theme should be set in conjunction with the `background` property for contrast. The value `default` selects the default theme that depends on the device and on the app. Available on iOS and Android 6+.",
+      "platforms": {
+        "windows": false
+      }
     },
     "displayMode": {
       "type": "string",
@@ -32,7 +35,7 @@
         "float"
       ],
       "default": "default",
-      "description": "Controls how the status bar is positioned relative to the `ui.contentView`. The value `default` places the content below the status bar. The `hide` option lets the status bar disappear, making more room for the content. The `float` option lets the content flow underneath the status bar."
+      "description": "Controls how the status bar is positioned relative to the `ui.contentView`. The value `default` places the content below the status bar. The `hide` option lets the status bar disappear, making more room for the content. The `float` option lets the content flow underneath the status bar. *On Windows `float` is currently not supported and treated as `hide`.*"
     },
     "height": {
       "type": "number",

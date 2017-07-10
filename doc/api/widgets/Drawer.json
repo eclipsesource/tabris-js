@@ -8,10 +8,16 @@
   },
   "events": {
     "open": {
-      "description": "Fired when the drawer is opened and has reached its resting position."
+      "description": "Fired when the drawer is opened and has reached its resting position.",
+      "platforms": {
+        "windows": false
+      }
     },
     "close": {
-      "description": "Fired when the drawer is closed and has reached its resting position."
+      "description": "Fired when the drawer is closed and has reached its resting position.",
+      "platforms": {
+        "windows": false
+      }
     }
   },
   "properties": {

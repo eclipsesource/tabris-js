@@ -40,19 +40,26 @@
     "refreshEnabled": {
       "type": "boolean",
       "default": "false",
-      "description": "Enables the user to trigger a refresh by using the pull-to-refresh gesture."
+      "description": "Enables the user to trigger a refresh by using the pull-to-refresh gesture.",
+      "platforms": {
+        "windows": false
+      }
     },
     "refreshIndicator": {
       "type": "boolean",
       "default": "false",
-      "description": "Whether the refresh indicator is currently visible. Will be set to `true` when a *refresh* event is triggered. Reset it to `false` when the refresh is finished."
+      "description": "Whether the refresh indicator is currently visible. Will be set to `true` when a *refresh* event is triggered. Reset it to `false` when the refresh is finished.",
+      "platforms": {
+        "windows": false
+      }
     },
     "refreshMessage": {
       "type": "string",
       "default": "\"\"",
       "description": "The message text displayed together with the refresh indicator. Currently not supported on Android.",
       "platforms": {
-        "android": false
+        "android": false,
+        "windows": false
       }
     },
     "firstVisibleIndex": {
@@ -68,7 +75,10 @@
     "columnCount": {
       "type": "number",
       "default": 1,
-      "description": "The number of columns to display in the collection view. If set to a value `n > 1`, each row will contain `n` items. The available space will be equally distributed between columns."
+      "description": "The number of columns to display in the collection view. If set to a value `n > 1`, each row will contain `n` items. The available space will be equally distributed between columns.",
+      "platforms": {
+        "windows": false
+      }
     }
   },
   "events": {
@@ -82,7 +92,10 @@
       }
     },
     "refresh": {
-      "description": "Fired when the user requested a refresh. An event listener should reset the *refreshIndicator* property when refresh is finished."
+      "description": "Fired when the user requested a refresh. An event listener should reset the *refreshIndicator* property when refresh is finished.",
+      "platforms": {
+        "windows": false
+      }
     },
     "scroll": {
       "description": "Fired while the collection view is scrolling.",

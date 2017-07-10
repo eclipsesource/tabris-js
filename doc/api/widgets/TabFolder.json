@@ -31,7 +31,10 @@
     },
     "paging": {
       "type": "boolean",
-      "description": "Enables swiping through tabs."
+      "description": "Enables swiping through tabs. Always enabled on Windows.",
+      "platforms": {
+        "windows": false
+      }
     },
     "selection": {
       "type": "Tab",

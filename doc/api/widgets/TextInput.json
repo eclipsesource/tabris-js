@@ -24,7 +24,7 @@
       ],
       "default": "default",
       "static": true,
-      "description": "The type of the text widget."
+      "description": "The type of the text widget. Windows 10 currently interprets `search`  as `default`."
     },
     "text": {
       "type": "string",
@@ -51,7 +51,10 @@
         "center"
       ],
       "default": "left",
-      "description": "The horizontal alignment of the text."
+      "description": "The horizontal alignment of the text.",
+      "platforms": {
+        "windows": false
+      }
     },
     "autoCorrect": {
       "type": "boolean",
@@ -61,7 +64,10 @@
     "autoCapitalize": {
       "type": "boolean",
       "default": "false",
-      "description": "Automatically switch to capital letters after every key pressed."
+      "description": "Automatically switch to capital letters after every key pressed.",
+      "platforms": {
+        "windows": false
+      }
     },
     "keyboard": {
       "type": "string",
@@ -99,7 +105,10 @@
     "keepFocus": {
       "type": "boolean",
       "default": "false",
-      "description": "When `true` the `TextInput` will keep its focus, even when tapped outside of the widget bounds."
+      "description": "When `true` the `TextInput` will keep its focus, even when tapped outside of the widget bounds.",
+      "platforms": {
+        "windows": false
+      }
     },
     "fillColor": {
       "type": "Color",
@@ -111,7 +120,10 @@
     },
     "borderColor": {
       "type": "Color",
-      "description": "The color of the border of the TextInput. On iOS this is a rectangular border around the TextInput, on Android it is a single line below the TextInput."
+      "description": "The color of the border of the TextInput. On iOS this is a rectangular border around the TextInput, on Android it is a single line below the TextInput.",
+      "platforms": {
+        "windows": false
+      }
     }
   },
   "events": {

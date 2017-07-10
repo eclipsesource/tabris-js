@@ -9,15 +9,21 @@
     },
     "image": {
       "type": "Image",
-      "description": "An image to be displayed on the tab.  Will not be shown on iOS if the `TabFolder`'s `tabBarLocation` is set to `top`"
+      "description": "An image to be displayed on the tab.  Will not be shown on iOS if the `TabFolder`'s `tabBarLocation` is set to `top`",
+      "platforms": {
+        "windows": false
+      }
     },
     "selectedImage": {
       "type": "Image",
-      "description": "An image to be displayed on the currently active tab."
+      "description": "An image to be displayed on the currently active tab.",
+      "platforms": {
+        "windows": false
+      }
     },
     "badge": {
       "type": "string",
-      "description": "A badge to attach to the tab. Only supported on iOS.",
+      "description": "A badge to attach to the tab.",
       "platforms": {
         "windows": false,
         "android": false
