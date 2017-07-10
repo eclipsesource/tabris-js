@@ -1,3 +1,5 @@
+---
+---
 A `WidgetCollection` is an array-like object that represents any number of widgets - it can also be empty.
 
 It combines a subset of the JavaScript Array API with a subset of the Tabris.js Widget API. Like an array, the widgets within the collection may be accessed directly using the `[index]` syntax. The number of widgets is stored in the `length` field. Instances of *WidgetCollection* are immutable.

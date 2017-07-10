@@ -1,3 +1,5 @@
+---
+---
 # Selector API
 
 Modifying a widget usually requires direct access to the object. However, assigning all mutable widgets to variables can quickly clutter your UI code. For this reason, the Tabris.js API offers methods to find widgets by certain attributes, and even to manipulate multiple widgets at once. Widgets can be selected by their *type*, their *ID*, or their *class* attributes, using a format established by CSS.

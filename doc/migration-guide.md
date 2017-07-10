@@ -1,3 +1,5 @@
+---
+---
 # Migration Guide 1.x to 2.0
 
 Tabris.js 2.0 introduces a number of API changes that require adjustments in your app code.

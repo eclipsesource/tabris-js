@@ -1,3 +1,5 @@
+---
+---
 # Custom Widgets
 
 Custom widgets are written in JavaScript and the language available for the native platforms. They use the interfaces of the native Tabris.js clients and are wrapped in a Cordova plug-in. This article covers the JavaScript part of the implementation.

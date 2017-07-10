@@ -1,3 +1,5 @@
+---
+---
 # Patching a Tabris.js App
 
 Publishing a new app version to the app stores can take time. Tabris.js allows you to deploy hotfixes to your users immediately, without waiting for an app store update.

@@ -1,3 +1,5 @@
+---
+---
 # Widget Basics
 
 The UI of a Tabris.js app consists of native widgets, represented by JavaScript objects. There are different types of widgets such as `Button`, `TextView`, or `ScrollView`. Every widget type is a subtype of [Widget](api/Widget.md) which provides common methods to get and set properties, be notified of events, and append widgets to a parent widget. Most of these methods return the widget itself to allow method chaining.

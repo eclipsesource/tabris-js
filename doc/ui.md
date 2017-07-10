@@ -1,3 +1,5 @@
+---
+---
 # The Widget Tree
 
 The UI of a Tabris.js app consists of native [Widgets](widget-basics.md). These widgets are implemented in native code, and represented by JavaScript objects. Every widget must have a parent to become visible on the screen. You can add a widget to a parent widget using its `appendTo` method.

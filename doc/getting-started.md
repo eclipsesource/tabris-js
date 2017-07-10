@@ -1,3 +1,5 @@
+---
+---
 # Quick Start Guide
 
 This guide will help you create the foundation of a Tabris.js app and test it on a mobile device.

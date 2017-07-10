@@ -1,3 +1,5 @@
+---
+---
 # W3C APIs
 
 Tabris implements a subset of popular W3C standards. Besides providing web developers with familiar APIs, this also enables you to use libraries developed for a browser environment.

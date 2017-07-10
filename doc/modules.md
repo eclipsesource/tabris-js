@@ -1,3 +1,5 @@
+---
+---
 # Modules
 
 All JavaScript files in a Tabris.js project, including the main script, are *modules*. If you are familiar with the Node.js module system ("CommonJS"), it is exactly the same.
