@@ -175,7 +175,7 @@ module.exports = function(grunt) {
 
     function renderMethod(name, desc) {
       let result = [];
-      result.push('### ' + name + renderSignature(desc.parameters) + '\n');
+      result.push('### ' + name + renderSignature(desc.parameters) + renderPlatforms(desc.platforms) + '\n');
       if (desc.parameters && desc.parameters.length) {
         result.push('**Parameters:** ' + renderMethodParamList(desc.parameters) + '\n');
       }
@@ -198,7 +198,7 @@ module.exports = function(grunt) {
       let result = ['## Properties\n\n'];
       Object.keys(def.properties).filter(name => !def.properties[name].ts_only).sort().forEach(name => {
         let property = def.properties[name];
-        result.push('### ', name, '\n\n');
+        result.push('### ', name, renderPlatforms(property.platforms), '\n\n');
         if (property.readonly) {
           result.push('**read-only**<br/>\n');
         }
@@ -219,6 +219,20 @@ module.exports = function(grunt) {
         result.push('\n\n');
       });
       return result.join('');
+    }
+
+    function renderPlatforms(platforms) {
+      if (!platforms) {
+        return '';
+      }
+      let result = [' '];
+      let names = {ios: 'iOS', android: 'Android', windows: 'Windows 10'};
+      for (let platform in names) {
+        if (platforms[platform] !== false) {
+          result.push(`<span class="${platform}-tag"/>${names[platform]}</span>`);
+        }
+      }
+      return result.join(' ');
     }
 
     function renderPropertyType(property) {
@@ -247,8 +261,8 @@ module.exports = function(grunt) {
       let events = widgetEvents.sort((a, b) => a.name.localeCompare(b.name));
       return [
         '## Events\n\n',
-        ...events.map(({name, description, provisional, parameters}) => ([
-          '### ', name, '\n',
+        ...events.map(({name, description, provisional, parameters, platforms}) => ([
+          '### ', name, renderPlatforms(platforms), '\n',
           description ? description + '\n' : '',
           provisional ? MSG_PROVISIONAL : '',
           parameters ? '\n#### Event Parameters ' + renderEventParamList(parameters) + '\n' : ''
