@@ -29,7 +29,21 @@ module.exports = function(grunt) {
         },
         src: ['build/boot-transpiled.js'],
         dest: 'build/boot.js'
-      }
+      },
+      typings: {
+        src: [
+          'typings/whatwg-fetch.d.ts',
+          'typings/JSX.d.ts',
+          'typings/timer.d.ts',
+          'typings/console.d.ts',
+          'typings/localStorage.d.ts',
+          'typings/XMLHttpRequest.d.ts',
+          'typings/Event.d.ts',
+          'typings/WebSocket.d.ts',
+          'typings/EventObject.d.ts'
+        ],
+        dest: 'build/tabris/globals.d.ts'
+      },
     },
     doc: {
       api: 'doc/api/**/*.json',
@@ -45,22 +59,6 @@ module.exports = function(grunt) {
       },
       readme: {
         src: 'README.md',
-        dest: 'build/tabris/'
-      },
-      typings: {
-        expand: true,
-        cwd: 'typings/',
-        src: [
-          'whatwg-fetch.d.ts',
-          'JSX.d.ts',
-          'timer.d.ts',
-          'console.d.ts',
-          'localStorage.d.ts',
-          'XMLHttpRequest.d.ts',
-          'Event.d.ts',
-          'WebSocket.d.ts',
-          'EventObject.d.ts'
-        ],
         dest: 'build/tabris/'
       },
       test_ts: {
@@ -171,7 +169,7 @@ module.exports = function(grunt) {
     'concat:boot',
     'package',
     'copy:readme',
-    'copy:typings',
+    'concat:typings',
     'generate-tsd',
     'compress:tabris'
   ]);

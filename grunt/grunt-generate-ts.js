@@ -1,14 +1,6 @@
 const header = `
 // Type definitions for Tabris.js \${VERSION}
-/// <reference path="console.d.ts" />
-/// <reference path="localStorage.d.ts" />
-/// <reference path="timer.d.ts" />
-/// <reference path="whatwg-fetch.d.ts" />
-/// <reference path="Event.d.ts" />
-/// <reference path="JSX.d.ts" />
-/// <reference path="XMLHttpRequest.d.ts" />
-/// <reference path="WebSocket.d.ts" />
-/// <reference path="EventObject.d.ts" />
+/// <reference path="globals.d.ts" />
 
 type Partial<T> = {
   [P in keyof T]?: T[P];
