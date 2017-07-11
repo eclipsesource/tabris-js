@@ -1,6 +1,6 @@
 const {CollectionView, Composite, TextView, ui} = require('tabris');
 
-const ITEMS = [
+let items = [
   {title: 'Up for lunch?', sender: 'John Smith', time: '11:35'},
   {title: 'JavaScript for mobile applications', sender: 'JavaScript Newsletter', time: '08:03'},
   {title: 'This is just a spam message', sender: 'Spammer', time: '04:32'},
@@ -12,7 +12,7 @@ const ITEMS = [
 
 let collectionView = new CollectionView({
   left: 0, right: 0, top: 0, bottom: 0,
-  itemCount: ITEMS.length,
+  itemCount: items.length,
   cellHeight: 64,
   createCell: () => {
     let cell = new Composite({
@@ -45,7 +45,8 @@ let collectionView = new CollectionView({
     return cell;
   },
   updateCell: (view, index) => {
-    let item = ITEMS[index];
+    let item = items[index];
+    view.find('#container').set('transform', {translationX: 0});
     view.find('#container').first().item = item;
     view.find('#senderText').set('text', item.sender);
     view.find('#titleText').set('text', item.title);
@@ -84,8 +85,8 @@ function animateDismiss({target, translationX}) {
     duration: 200,
     easing: 'ease-out'
   }).then(() => {
-    let index = ITEMS.indexOf(target.item);
-    ITEMS.splice(index, 1);
+    let index = items.indexOf(target.item);
+    items.splice(index, 1);
     collectionView.remove(index);
   });
 }
