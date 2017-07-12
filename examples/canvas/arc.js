@@ -23,6 +23,7 @@ new CheckBox({
 
 let scaleFactor = device.scaleFactor;
 let context = canvas.getContext('2d', CANVAS_WIDTH * scaleFactor, CANVAS_HEIGHT * scaleFactor);
+context.scale(scaleFactor, scaleFactor);
 context.textAlign = 'center';
 context.textBaseline = 'top';
 

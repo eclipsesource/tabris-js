@@ -14,6 +14,7 @@ let canvas = new Canvas({
 
 let scaleFactor = device.scaleFactor;
 let ctx = canvas.getContext('2d', CANVAS_WIDTH * scaleFactor, CANVAS_HEIGHT * scaleFactor);
+ctx.scale(scaleFactor, scaleFactor);
 
 ctx.fillStyle = 'rgba(255, 100, 100, 0.5)';
 ctx.fillRect(50, 20, 20, 80);

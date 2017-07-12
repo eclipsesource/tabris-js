@@ -7,6 +7,7 @@ new Canvas({
 }).on('resize', ({target: canvas, width, height}) => {
   let scaleFactor = device.scaleFactor;
   let ctx = canvas.getContext('2d', width * scaleFactor, height * scaleFactor);
+  ctx.scale(scaleFactor, scaleFactor);
   ctx.strokeStyle = 'rgb(78, 154, 217)';
   ctx.lineWidth = 10;
   ctx.moveTo(20, 20);

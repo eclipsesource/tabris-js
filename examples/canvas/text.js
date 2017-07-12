@@ -14,6 +14,7 @@ let canvas = new Canvas({
 
 let scaleFactor = device.scaleFactor;
 let ctx = canvas.getContext('2d', CANVAS_WIDTH * scaleFactor, CANVAS_HEIGHT * scaleFactor);
+ctx.scale(scaleFactor, scaleFactor);
 ctx.strokeStyle = 'red';
 
 let x = 50;

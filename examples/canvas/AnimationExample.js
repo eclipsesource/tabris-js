@@ -18,10 +18,10 @@ module.exports = class AnimationExample {
     return this._animating;
   }
 
-  draw(ctx) {
+  draw(ctx, width, height) {
     this._ctx = ctx;
-    this._width = this._ctx.canvas.width;
-    this._height = this._ctx.canvas.height;
+    this._width = width;
+    this._height = height;
     this._ctx.font = '18px sans-serif';
     this._ctx.lineJoin = 'round';
     this._cx = Math.floor(this._width / 3);
