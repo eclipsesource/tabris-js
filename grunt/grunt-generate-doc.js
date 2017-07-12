@@ -229,7 +229,8 @@ module.exports = function(grunt) {
       let names = {ios: 'iOS', android: 'Android', windows: 'Windows 10'};
       for (let platform in names) {
         if (platforms[platform] !== false) {
-          result.push(`<span class="${platform}-tag"/>${names[platform]}</span>`);
+          let name = names[platform];
+          result.push(`<span class="${platform}-tag" title="supported on ${name}">${name}</span>`);
         }
       }
       result.push('</p>');
