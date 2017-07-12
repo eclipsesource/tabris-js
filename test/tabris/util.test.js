@@ -142,6 +142,10 @@ describe('util', function() {
       expect(normalizePathUrl('ms-appdata:///foo///././bar/')).to.equal('ms-appdata:///foo/bar');
     });
 
+    it('accepts base64 URLs', function() {
+      expect(normalizePathUrl('data:image/png;base64,abc///def')).to.equal('data:image/png;base64,abc///def');
+    });
+
   });
 
 });

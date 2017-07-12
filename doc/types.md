@@ -119,7 +119,7 @@ Examples:
 Images are specified as objects with the following properties:
 
 * **src**: *string*
-    Image path, URL or [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme). Relative paths are resolved relative to 'package.json'. On Android the name of a bundled [drawable resource](https://developer.android.com/guide/topics/resources/drawable-resource.html) can be provided with the url scheme `android-drawable`, e.g. `android-drawable://ic_info_black`.
+    File system path, relative path or URL. Android and iOS also support [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme). Relative paths are resolved relative to 'package.json'. On Android the name of a bundled [drawable resource](https://developer.android.com/guide/topics/resources/drawable-resource.html) can be provided with the url scheme `android-drawable`, e.g. `android-drawable://ic_info_black`.
 * **width**: *number (optional)*
     Image width in dip, extracted from the image file when missing.
 * **height**: *number (optional)*
