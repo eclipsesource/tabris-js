@@ -184,11 +184,11 @@ function createSeating() {
 
 function createWeight() {
   let panel = scrollView.children('#luggagePanel');
-  return panel.children('#luggageSlider').first().selection + ' Kg';
+  return panel.children('#luggageSlider').first().selection + ' kg';
 }
 
 function createMeal() {
-  return scrollView.children('#veggieChoice').checked ? 'Vegetarian' : 'Standard';
+  return scrollView.children('#veggieChoice').first().checked ? 'Vegetarian' : 'Standard';
 }
 
 function createFrequentFlyerInfo() {
