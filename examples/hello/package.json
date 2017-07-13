@@ -7,6 +7,6 @@
     "start": "tabris serve"
   },
   "dependencies": {
-    "tabris": "2.0.0-rc2"
+    "tabris": "2.0.0"
   }
 }
