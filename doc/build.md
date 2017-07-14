@@ -2,7 +2,7 @@
 ---
 # Building a Tabris.js App
 
-Tabris.js utilizes [Apache Cordova](http://cordova.apache.org) to build and package apps. Apps can be built without any local setup using the free online build service on tabrisjs.com. To [build an app on your local machine](#local-build), you need to setup developer tools like Xcode, Visual Studio or the Android SDK. The following features are supported by the two different build types.
+Tabris.js utilizes [Apache Cordova](http://cordova.apache.org) to build and package apps. Apps can be built without any local setup [using the free online build service](#build-service) on tabrisjs.com. To [build an app on your local machine](#local-build), you need to setup developer tools like Xcode, Visual Studio or the Android SDK. The following features are supported by the two different build types.
 
 |                           | Build Service | Local Build |
 | :------------------------ |:---------------:| :---------------: |
@@ -17,6 +17,8 @@ Tabris.js utilizes [Apache Cordova](http://cordova.apache.org) to build and pack
 | Other SCMs than Git       |              |       ✓      |
 
 > :point_right: The online build service is free for unlimited public GitHub repositories and 1 private repository. To build from unlimited private repositories, you need a [Pro account](https://tabrisjs.com/pricing/). [Local builds](#local-build) are free for everyone.
+
+> :point_right: When building Windows apps, please also read the [Windows Support Documentation](windows-support.md) on the topic.
 
 ## Project Layout
 
@@ -256,8 +258,6 @@ After your app has become valid, you are ready to execute the first build. Just 
 
 > :point_right: The build service installs the dependencies specified in your package.json from npm (except devDependencies). As a result, you don't have to put the `node_modules` folder under version control.
 
-> :point_right: When building Windows apps, please also read the [Windows Support Documentation](windows-support.md)
-
 ### Settings
 
 ![App Settings](img/build-app-settings.png)
@@ -268,6 +268,7 @@ After your app has become valid, you are ready to execute the first build. Just 
 * **App Directory:** The directory within your repository that contains your Tabris.js app. The value must be relative to the repository root.
 * **iOS Signing Key:** iOS apps can not be deployed to a mobile device without being signed. If you want to build an iOS app you need an Apple Developer account and provide the certificate together with the provisioning profile. A very good tutorial on how to get these files can be found in the [Phonegap Build documentation](http://docs.build.phonegap.com/en_US/signing_signing-ios.md.html#iOS%20Signing).
 * **Android Signing Key:** Android apps need to be signed with a certificate only if you want to deploy them to Play Store. You can find a very good tutorial in the [Phonegap Build documentation](http://docs.phonegap.com/phonegap-build/signing/android/) as well.
+* **Windows Architecure** Choose which CPU architecture you want to build your package for.
 * **Environment Variables:** Key/Value pairs that will be stored and transferred encrypted to the build machines. They can be used within the config.xml or custom hooks. Use cases are adding plug-ins from private git repositories or handling access keys.
 * **Builds to keep:** Specifies the number of builds that should be kept before deleting them automatically.
 * **Tabris.js Version:** The Tabris.js *client* version to use in the app. In contrast to the "tabris" dependency to your `package.json` which defines the version of the JavaScript module, this setting defines the version of the native client that will interpret your JavaScript code. In most cases, the value `latest` is good enough here. But if you want to stick to a fixed Tabris.js version you can configure it here.
@@ -301,6 +302,3 @@ Extract the content of the downloaded archive and create an environment variable
 ```
 tabris build [android|ios|windows]
 ```
-
-To build a Windows app signed with your own key, run
-`cordova build windows --release -- --packageCertificateKeyFile="<absolute-path-to-pfx>" --bundle`

@@ -17,7 +17,14 @@ The developer app for Windows can run – without emulation or Windows SDK – o
 
 ## API
 
-Windows 10 (UWP/Store Apps) support was added after Android and iOS. For that reason, some APIs available on these platforms are not (yet) supported on Windows. Consult the API reference for details. Also, there are some new APIs specific to windows-ony features. These are prefixed with `win_` and also  documented in the API reference.
+Windows 10 (UWP/Store Apps) support was added after Android and iOS. For that reason, some APIs available on these platforms are not (yet) supported on Windows. Consult the API reference for details. Also, there are some new APIs specific to windows-ony features. These are prefixed with `win_` and also documented in the API reference.
+
+## Building an App
+
+To avoid packaging problems during a [local windows build]((./build.md)) you should always clean the `./build/cordova/platforms/windows/AppPackages` directory before each build. Windows-specific `config.xml` preferences are covered [here](./build.html#windows-specific-preferences).
+
+> :point_right: The windows build is currently only creating packages for side-loading. If you need to upload an app to the Windows store you have to make a local build and upload via Visual Studio.
+
 
 ## Sideloading apps on Windows 10 (PC):
 
@@ -25,10 +32,10 @@ Windows 10 (UWP/Store Apps) support was added after Android and iOS. For that re
  - If a previous version of this app exists, uninstall it.
  - If you do not already have it, [get the App Installer from the Windows Store](https://www.microsoft.com/store/apps/9nblggh4nns1).
  - You may have to install the certificate used to sign the app. Get the `.cer` or `.pfx` and double click it. Install it on "Local Computer" in the "Trusted Root Certification Authorities" group.
- - Now double click the `appxbundle`. Windows Smartscreen may warn you about installing the app, but by clicking "More Information" you can continue anyway.
+ - Now double click the `.appx` file. Windows Smartscreen may warn you about installing the app, but by clicking "More Information" you can continue anyway.
  - After the installation is done the app will appear in the start menu.
 
-> :point_right: The tabris build service uses the cordova key to sign the app in case no other key is provided. You can download it [here](https://github.com/apache/cordova-windows/raw/4.2.x/template/CordovaApp_TemporaryKey.pfx).
+> :point_right: The tabris build service currently always uses the cordova key to sign the app. In the future you will be able to use your own key to build Windows-Store-ready packages.
 
 
 ## Sideloading apps on Windows 10 (Mobile):
@@ -36,40 +43,15 @@ Windows 10 (UWP/Store Apps) support was added after Android and iOS. For that re
  - If not already done, put the phone in to developer mode: `Settings -> Update & security -> For developers -> Developer mode`.
  - If a previous version of this app exists, uninstall it.
 
-Now there are two options. You may download the `appxbundle` directly from your phone (or copy to it via USB) and install it from there:
- - Move the `appxbundle` to your phone.
+Now there are two options. You may copy the `.appx` to your phone via USB and install it from there:
+ - Move the `.appx` to your phone.
  - Find the file in the file explorer app.
  - Tap the app. Confirm that you want to install the app.
  - The app is installed in the background. Unfortunately you don't get any feedback when the process is done. The app should appear after a minute or so on the "all apps" screen.
-
- > :point_right: When you download an `appxbundle` file using the Edge browser, it may rename it to a `.zip` file. You must use the file explorer to rename it to its original.
 
 The other option is to install the app from a Windows PC. This requires the Windows 10 SDK to be installed.
  - Attach the phone to your Windows PC using an USB cable.
  - Open a command prompt (`cmd.exe`).
  - Enter `"C:\Program Files (x86)\Windows Kits\10\bin\x86\WinAppDeployCmd.exe" devices`
  - Copy the GUID of your phone.
- - Enter `"C:\Program Files (x86)\Windows Kits\10\bin\x86\WinAppDeployCmd.exe" install -file "<path-to-your-appxbundle>" -g <GUID-of-your-phone>`
-
-## Generating keys for the Windows Store
- - To create an `appxupload` file that is accepted by the Windows Store you will need to sign it using a `.pfx` file specific to your Windows Store account. This requires the tools `makecert.exe` and `pvk2pfx.exe`. If you have Visual Studio 2016 (or just the Windows 10 SDK) installed you can find it in `C:\Program Files (x86)\Windows Kits\10\bin\x64\`. If not you can [download a standalone SDK from Microsoft](https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk).
-
- On the developer dash board go to the account settings (upper right) to find the "Windows publisher ID".
-
-<img align="left" src="img/windows-publisher-id.png">
-
-Open a Windows commandline (`cmd.exe`) and enter the following commands *exactly*, but replace
-
- - <publisher-id> with your publisher ID including `CN=` (!),
- - <date> with an expiration date (`mm/dd/yyyy`) of your choice,
- - <key-name> with the desired name of the `.pfx` file.
-
-```
-"C:\Program Files (x86)\Windows Kits\10\bin\x64\makecert.exe" -n "<publisher-id>" -r -h 0 -eku "1.3.6.1.5.5.7.3.3,1.3.6.1.4.1.311.10.3.13" -e "<date>" -sv <key-name>.pvk <key-name>.cer
-
-"C:\Program Files (x86)\Windows Kits\10\bin\x64\pvk2pfx.exe" -pvk <key-name>.pvk -spc <key-name>.cer -pfx <key-name>.pfx
-```
-
-When prompted, leave the password field blank. Otherwise the `.pfx` won't be useable for signing on the build service.
-
-You should now have a `.pfx` file in your users home directory.
+ - Enter `"C:\Program Files (x86)\Windows Kits\10\bin\x86\WinAppDeployCmd.exe" install -file "<path-to-your-appx>" -g <GUID-of-your-phone>`
