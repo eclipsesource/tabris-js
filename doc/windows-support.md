@@ -39,9 +39,8 @@ The windows-specific `config.xml` preferences are covered [here](./build.html#wi
 
  - If not already done, put the PC in to developer mode: `Settings -> Update & security -> For developers -> Developer mode`.
  - If a previous version of this app exists, uninstall it.
- - If you do not already have it, [get the App Installer from the Windows Store](https://www.microsoft.com/store/apps/9nblggh4nns1).
  - You may have to install the certificate used to sign the app. Get the `.cer` or `.pfx` and double click it. Install it on "Local Computer" in the "Trusted Root Certification Authorities" group.
- - Now double click the `.appx` file. Windows Smartscreen may warn you about installing the app, but by clicking "More Information" you can continue anyway.
+ - Now double click the `Add-AppDevPackage.ps1` file. This will start the installation.
  - After the installation is done the app will appear in the start menu.
 
 > :point_right: The tabris build service currently always uses the cordova key to sign the app. In the future you will be able to use your own key to build Windows-Store-ready packages.
