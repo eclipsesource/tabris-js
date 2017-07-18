@@ -57,7 +57,10 @@
   "methods": {
     "reload": {
       "parameters": [],
-      "description": "Forces the running application to reload the main module and start over."
+      "description": "Forces the running application to reload the main module and start over.",
+      "platforms": {
+        "windows": false
+      }
     },
     "getResourceLocation": {
       "parameters": [

@@ -84,6 +84,9 @@
           "description": "Number of pixels the current tab has scrolled horizontally.",
           "type": "number"
         }
+      },
+      "platforms": {
+        "windows": false
       }
     }
   },
