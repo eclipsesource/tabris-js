@@ -21,9 +21,18 @@ Windows 10 (UWP/Store Apps) support was added after Android and iOS. For that re
 
 ## Building an App
 
-To avoid packaging problems during a [local windows build]((./build.md)) you should always clean the `./build/cordova/platforms/windows/AppPackages` directory before each build. Windows-specific `config.xml` preferences are covered [here](./build.html#windows-specific-preferences).
+To avoid packaging problems (specific to the windows platform) during a [local build]((./build.md)) you should create packages for different CPU architecture separately, e.g.
 
-> :point_right: The windows build is currently only creating packages for side-loading. If you need to upload an app to the Windows store you have to make a local build and upload via Visual Studio.
+```
+tabris clean
+tabris build windows --release -- --archs="<cpu>"
+```
+
+Where `<cpu>` can be 'x64', 'x86' or 'arm'. Copy the package in to a separate directory and repeat this step for the next architecture.
+
+The windows-specific `config.xml` preferences are covered [here](./build.html#windows-specific-preferences).
+
+> :point_right: The windows build is currently only creating packages for side-loading. For now, if you need to upload an app to the Windows store you have to make a local build and upload it via Visual Studio.
 
 
 ## Sideloading apps on Windows 10 (PC):
