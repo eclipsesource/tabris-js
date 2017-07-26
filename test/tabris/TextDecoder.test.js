@@ -9,7 +9,7 @@ describe('TextDecoder', function() {
   beforeEach(function() {
     client = new ClientStub();
     mockTabris(client);
-    buffer = new Uint8Array();
+    buffer = new Uint8Array().buffer;
   });
 
   afterEach(restore);

@@ -193,7 +193,8 @@ describe('tabris', function() {
     });
 
     it('creates a pkcs5 object on tabris', function() {
-      expect(tabris.pkcs5).to.be.an('object');
+      // TODO: revert to `to.be.an('object')` when https://github.com/chaijs/type-detect/issues/98 is fixed
+      expect(typeof tabris.pkcs5).to.equal('object');
       expect(tabris.pkcs5.pbkdf2).to.be.a('function');
     });
 
