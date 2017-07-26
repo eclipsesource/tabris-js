@@ -280,25 +280,28 @@ You can build Tabris.js apps on your local machine using the [Tabris CLI](https:
 
 ### Prerequisites
 
-If you're targeting iOS you will need macOS, while Windows apps need a Windows PC with Visual Studio 2015.
-Android apps can be build on any OS that is supported by the Android SDK.
+To build apps on your machine, the development environment for the target platform must be installed.
+If you're targeting iOS, you need macOS with a recent version of Xcode.
+For Windows, you need a Windows PC with Visual Studio 2017.
+Android apps can be build on any OS with the latest Android SDK installed.
 
-The Tabris CLI should be installed globally on your system:
+The Tabris CLI must be installed globally on your system:
 
 ```
 npm install -g tabris-cli
 ```
 
-The Tabris CLI uses Cordova to build apps, so you also need a Cordova installation. Follow the [Cordova Installation Guide](http://cordova.apache.org/docs/en/edge/guide_cli_index.md.html#The%20Command-Line%20Interface_installing_the_cordova_cli) and install the latest Cordova version on your system.
-
-### Downloading Tabris.js platforms
-
-Tabris.js ships custom Cordova platforms for Android, iOS, and Windows. Visit the [Tabris.js download page](https://tabrisjs.com/download) and download the platform of your choice (make sure to sign in to Tabrisjs.com).
-
-Extract the content of the downloaded archive and create an environment variable `TABRIS_ANDROID_PLATFORM`, `TABRIS_IOS_PLATFORM`, or `TABRIS_WINDOWS_PLATFORM`, respectively, that contains the path to the extracted folder.
+You also need an account on [tabrisjs.com](https://tabrisjs.com). A free account is sufficient.
 
 ### Building an App
+
+On the first start, the Tabris CLI will ask for a build key.
+You can find this key on your [profile page](https://tabrisjs.com/settings/account).
+
+To build your app, run
 
 ```
 tabris build [android|ios|windows]
 ```
+
+For more command-line options, please refer to the [CLI documentation](https://www.npmjs.com/package/tabris-cli).
