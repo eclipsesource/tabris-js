@@ -91,8 +91,7 @@ class SharingSection extends Composite {
       new TextView({id: 'descriptionLabel', text: this.description, font: '14px'}),
       ...this.options.map(option =>
         new Button({class: 'optionsButton', text: option.name})
-          .on('select', () => option.handler(this.message)
-        )
+          .on('select', () => option.handler(this.message))
       )
     );
   }

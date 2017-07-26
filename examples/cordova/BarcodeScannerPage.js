@@ -24,8 +24,8 @@ module.exports = class BarcodeScannerPage extends PluginPage {
     let resultDisplay = this.find('#resultDisplay').first();
     let onSuccess = (result) => {
       resultDisplay.text = result.cancelled ?
-                        '<b>Scan cancelled</b>' :
-                        '<b>Scan result:</b> ' + result.text + ' (' + result.format + ')';
+        '<b>Scan cancelled</b>' :
+        '<b>Scan result:</b> ' + result.text + ' (' + result.format + ')';
     };
     let onError = error => resultDisplay.text = '<b>Error:</b> ' + error;
     cordova.plugins.barcodeScanner.scan(onSuccess, onError);

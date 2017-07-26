@@ -138,7 +138,7 @@ export default class XMLHttpRequest {
   set withCredentials(value) {
     if (this.$readyState !== UNSENT && this.$readyState !== OPENED) {
       throw new Error(
-          "InvalidStateError: state must be 'UNSENT' or 'OPENED' when setting withCredentials"
+        "InvalidStateError: state must be 'UNSENT' or 'OPENED' when setting withCredentials"
       );
     }
     if (this.$sendInvoked) {
@@ -186,7 +186,7 @@ export default class XMLHttpRequest {
       .on('uploadProgress', event => dispatchProgressEvent('progress', this.upload, event));
     if (this.$readyState !== OPENED) { // (1)
       throw new Error(
-          "InvalidStateError: Object's state must be 'OPENED', failed to execute 'send'"
+        "InvalidStateError: Object's state must be 'OPENED', failed to execute 'send'"
       );
     }
     if (this.$sendInvoked) { // (2)
@@ -377,18 +377,14 @@ function validateMethod(method) {
   }
   let forbiddenTokens = ['CONNECT', 'TRACE', 'TRACK']; // (7)
   if (forbiddenTokens.indexOf(method) >= 0) {
-    throw new Error(
-            "SecurityError: '" + method + "' HTTP method is not secure, failed to execute 'open'"
-    );
+    throw new Error(`SecurityError: '${method}' HTTP method is not secure, failed to execute 'open'`);
   }
 }
 
 function validHttpToken(httpToken) {
   // RFC-compliant validation for HTTP tokens ported from Chromium:
   // https://chromium.googlesource.com/chromium/blink.git/+/master/Source/platform/network/HTTPParsers.cpp
-  let forbiddenCharacters = [
-    '(', ')', '<', '>', '@', ',', ';', ':', '\\', '"', '\/', '[', ']', '?', '=', '{', '}'
-  ];
+  let forbiddenCharacters = ['(', ')', '<', '>', '@', ',', ';', ':', '\\', '"', '/', '[', ']', '?', '=', '{', '}'];
   return !(/[^\x21-\x7E]/.test(httpToken) || forbiddenCharacters.indexOf(httpToken) >= 0);
 }
 

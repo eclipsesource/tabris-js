@@ -86,9 +86,9 @@ describe('util-fonts', function() {
       expect(parse('12px   Arial ,   Fantasy').family).to.eql(['Arial', 'Fantasy']);
       expect(parse('12px bold italic').family).to.eql(['bold italic']);
       expect(parse('12px Arial, Times New Roman ,Fantasy').family)
-          .to.eql(['Arial', 'Times New Roman', 'Fantasy']);
+        .to.eql(['Arial', 'Times New Roman', 'Fantasy']);
       expect(parse('12px \' Arial \', "Times New Roman",Fantasy').family)
-          .to.eql(['Arial', 'Times New Roman', 'Fantasy']);
+        .to.eql(['Arial', 'Times New Roman', 'Fantasy']);
     });
 
     it('throws error for strings with invalid family syntax', function() {

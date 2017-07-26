@@ -39,7 +39,7 @@ module.exports = function(grunt) {
 
     function readPropertyTypes() {
       let path = relative(apiPath, typesFile).replace(sep, '/');
-      let list = grunt.file.read(typesFile).match(/^##\ *(.*)$/gm).map(heading => heading.slice(3));
+      let list = grunt.file.read(typesFile).match(/^## *(.*)$/gm).map(heading => heading.slice(3));
       for (let type of list) {
         addTypeLink(type, `${path}#${type.toLowerCase()}`);
       }

@@ -30,7 +30,7 @@ export function colorStringToArray(str) {
     ];
   }
   // #rgb(r, g, b)
-  if (/^rgb\s*\(\s*([+\-]?[0-9]+)\s*,\s*([+\-]?[0-9]+)\s*,\s*([+\-]?[0-9]+)\s*\)$/.test(str)) {
+  if (/^rgb\s*\(\s*([+-]?[0-9]+)\s*,\s*([+-]?[0-9]+)\s*,\s*([+-]?[0-9]+)\s*\)$/.test(str)) {
     return [
       Math.max(0, Math.min(255, parseInt(RegExp.$1))),
       Math.max(0, Math.min(255, parseInt(RegExp.$2))),
@@ -39,7 +39,7 @@ export function colorStringToArray(str) {
     ];
   }
   // rgba(r, g, b, a)
-  if (/^rgba\s*\(\s*([+\-]?[0-9]+)\s*,\s*([+\-]?[0-9]+)\s*,\s*([+\-]?[0-9]+)\s*,\s*([+\-]?([0-9]*\.)?[0-9]+)\s*\)$/.test(str)) {
+  if (/^rgba\s*\(\s*([+-]?[0-9]+)\s*,\s*([+-]?[0-9]+)\s*,\s*([+-]?[0-9]+)\s*,\s*([+-]?([0-9]*\.)?[0-9]+)\s*\)$/.test(str)) {
     return [
       Math.max(0, Math.min(255, parseInt(RegExp.$1))),
       Math.max(0, Math.min(255, parseInt(RegExp.$2))),
