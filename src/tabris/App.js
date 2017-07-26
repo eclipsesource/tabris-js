@@ -26,6 +26,22 @@ export default class App extends NativeObject {
     return this._nativeGet('versionId');
   }
 
+  launch(url) {
+    return new Promise((resolve, reject) => {
+      if (arguments.length < 1) {
+        throw new Error('Not enough arguments to launch');
+      }
+      if (typeof url !== 'string') {
+        throw new Error('url is not a string');
+      }
+      this._nativeCall('launch', {
+        url,
+        onError: (err) => reject(new Error(err)),
+        onSuccess: () => resolve()
+      });
+    });
+  }
+
   getResourceLocation(path) {
     if (!this._resourceBaseUrl) {
       this._resourceBaseUrl = this._nativeGet('resourceBaseUrl');

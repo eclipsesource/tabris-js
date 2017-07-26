@@ -55,6 +55,17 @@
     }
   },
   "methods": {
+    "launch": {
+      "parameters": [
+        {
+          "name": "url",
+          "type": "string",
+          "description": "The URL to launch."
+        }
+      ],
+      "returns": "Promise<void>",
+      "description": "Asks the operating system to open the given URL in an external app. Operating systems usually support a variety of URL schemes including `http`, `https`, `mailto`, `tel`, and `sms`. Apps can also register for custom URL schemes."
+    },
     "reload": {
       "parameters": [],
       "description": "Forces the running application to reload the main module and start over.",

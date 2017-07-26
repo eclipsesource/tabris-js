@@ -262,6 +262,45 @@ describe('App', function() {
     expect(returnValue).to.equal(true);
   });
 
+  describe('launch', function() {
+
+    it('rejects if parameter missing', function() {
+      return app.launch().then(expectFail, error => {
+        expect(error.message).to.equal('Not enough arguments to launch');
+      });
+    });
+
+    it('rejects invalid url type`', function() {
+      return app.launch(23).then(expectFail, error => {
+        expect(error.message).to.equal('url is not a string');
+      });
+    });
+
+    it('calls native `launch`', function() {
+      spy(client, 'call');
+
+      app.launch('tel:123-45-67');
+
+      expect(client.call).to.have.been.calledWithMatch(app.cid, 'launch', {url: 'tel:123-45-67'});
+    });
+
+    it('resolves on success', function() {
+      stub(client, 'call').callsFake((id, method, args) => args.onSuccess());
+      return app.launch('tel:123-45-67').then(result => {
+        expect(result).to.be.undefined;
+      });
+    });
+
+    it('rejects in case of error', function() {
+      stub(client, 'call').callsFake((id, method, args) => args.onError('Bang'));
+      return app.launch('tel:123-45-67').then(expectFail, err => {
+        expect(err).to.be.instanceOf(Error);
+        expect(err.message).to.equal('Bang');
+      });
+    });
+
+  });
+
   describe('reload', function() {
 
     it('CALLs `reload`', function() {
@@ -516,3 +555,7 @@ describe('App', function() {
   });
 
 });
+
+function expectFail() {
+  throw new Error('Expected to fail');
+}

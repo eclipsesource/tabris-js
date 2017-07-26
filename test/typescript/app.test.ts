@@ -21,11 +21,13 @@ let path: string = '';
 let url: string = '';
 let callback: (error: Error|null, patch: any|null) => void = () => {};
 let voidReturnValue: void;
+let voidPromiseReturnValue: Promise<void>;
 let stringReturnValue: string;
 
 stringReturnValue = app.getResourceLocation(path);
 voidReturnValue = app.installPatch(url, callback);
 voidReturnValue = app.reload();
+voidPromiseReturnValue = app.launch(url);
 
 // Events
 let preventDefault: () => void;
