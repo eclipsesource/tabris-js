@@ -91,6 +91,21 @@ export let types = {
     }
   },
 
+  boxDimensions: {
+    encode(value) {
+      if (value === 'initial') {
+        return undefined;
+      }
+      if (value === null || typeof value === 'number') {
+        return {left: value || 0, right: value || 0, top: value || 0, bottom: value || 0};
+      }
+      if (typeof value === 'object') {
+        return value;
+      }
+      throw new Error('Invalid type: ' + value);
+    }
+  },
+
   image: {
     encode(value) {
       if (!value) {

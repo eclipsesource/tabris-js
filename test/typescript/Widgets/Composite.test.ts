@@ -1,6 +1,14 @@
-import {Composite, Widget, Button, WidgetCollection} from 'tabris';
+import {Composite, Widget, Button, WidgetCollection, BoxDimensions} from 'tabris';
 
 let widget: Composite = new Composite();
+
+// Properties
+let padding: BoxDimensions | number;
+
+padding = widget.padding;
+
+widget.padding = padding;
+widget.padding = 12;
 
 // Methods
 let widgets: Widget[] = [];

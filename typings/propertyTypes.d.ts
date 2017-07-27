@@ -206,3 +206,30 @@ interface AnimationOptions {
    */
   name?: string;
 }
+
+/**
+ * Represents dimensions on four edges of a box, as used for padding.
+ */
+interface BoxDimensions {
+
+  /**
+   * The left part, in dip.
+   */
+  left?: number;
+
+  /**
+   * The right part, in dip.
+   */
+  right?: number;
+
+  /**
+   * The top part, in dip.
+   */
+  top?: number;
+
+  /**
+   * The bottom part, in dip.
+   */
+  bottom?: number;
+
+}

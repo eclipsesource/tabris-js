@@ -928,4 +928,28 @@ describe('property-types', function() {
 
   });
 
+  describe('boxDimensions encode', function() {
+
+    let encode = types.boxDimensions.encode;
+
+    it('passes objects', function() {
+      expect(encode({left: 1, right: 2, top: 3, bottom: 4})).to.deep.equal({left: 1, right: 2, top: 3, bottom: 4});
+    });
+
+    it('converts numbers to objects', function() {
+      expect(encode(4)).to.deep.equal({left: 4, right: 4, top: 4, bottom: 4});
+    });
+
+    it('converts null to 0', function() {
+      expect(encode(null)).to.deep.equal({left: 0, right: 0, top: 0, bottom: 0});
+    });
+
+    it('fails for invalid types', function() {
+      expect(() => encode('foo')).to.throw(Error, 'Invalid type: foo');
+      expect(() => encode(false)).to.throw(Error, 'Invalid type: false');
+      expect(() => encode(true)).to.throw(Error, 'Invalid type: true');
+    });
+
+  });
+
 });

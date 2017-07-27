@@ -40,6 +40,24 @@ let buttonWidth = button.bounds.width;
 
 See also [Layout](layout.md).
 
+## BoxDimensions
+
+Dimensions to be applied on all four sides of a widget, as used for padding.
+
+* **left**: *number*
+The offset from the left edge in dip
+* **right**: *number*
+The offset from the right edge in dip
+* **top**: *number*
+The offset from the top edge in dip
+* **bottom**: *number*
+The offset from the bottom edge in dip
+
+Example:
+```js
+composite.padding = {left: 8, right: 8, top: 0, bottom: 0};
+```
+
 ## ChangeEvent
 
 An event fired when an object property changes. It has following properties:

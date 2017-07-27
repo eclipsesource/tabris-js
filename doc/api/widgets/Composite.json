@@ -13,6 +13,13 @@
       }
     ]
   },
+  "properties": {
+    "padding": {
+      "type": "BoxDimensions|number",
+      "default": "0",
+      "description": "Additional space to add inside the widget's bounds. If set to a number, this padding will be applied on all four sides."
+    }
+  },
   "methods": {
     "append": [
       {
