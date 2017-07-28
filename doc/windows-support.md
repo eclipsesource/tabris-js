@@ -21,6 +21,8 @@ Windows 10 (UWP/Store Apps) support was added after Android and iOS. For that re
 
 ## Building an App
 
+For the tabris-CLI to find the correct Visual Studio version (2017) you need to set an environment variable `VSINSTALLDIR` with the path to the installation directory. For the Community Edition of Visual Studio this is usually `C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\`.
+
 To avoid packaging problems (specific to the windows platform) during a [local build]((./build.md)) you should create packages for different CPU architecture separately, e.g.
 
 ```
