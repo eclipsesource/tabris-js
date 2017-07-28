@@ -27,4 +27,5 @@ NativeObject.defineProperties(RadioButton.prototype, {
   text: {type: 'string', default: ''},
   checked: {type: 'boolean', nocache: true},
   textColor: {type: 'color'},
+  tintColor: {type: 'color'}
 });

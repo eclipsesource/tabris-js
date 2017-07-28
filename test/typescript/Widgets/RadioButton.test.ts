@@ -5,15 +5,17 @@ let widget: RadioButton = new RadioButton();
 // Properties
 let checked: boolean;
 let text: string;
-let textColor: Color;
+let color: Color;
 
 checked = widget.checked;
 text = widget.text;
-textColor = widget.textColor;
+color = widget.textColor;
+color = widget.tintColor;
 
 widget.checked = checked;
 widget.text = text;
-widget.textColor = textColor;
+widget.textColor = color;
+widget.tintColor = color;
 
 // Events
 widget.on({

@@ -26,6 +26,13 @@
     "textColor": {
       "type": "Color",
       "description": "The color of the text."
+    },
+    "tintColor": {
+      "type": "Color",
+      "description": "The color of the check mark.",
+      "platforms": {
+        "windows": false
+      }
     }
   },
   "events": {
