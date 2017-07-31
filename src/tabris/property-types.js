@@ -61,7 +61,7 @@ export let types = {
 
   color: {
     encode(value) {
-      if (value === 'initial') {
+      if (value === null || value === 'initial') {
         return undefined;
       }
       return colorStringToArray(value);
@@ -77,7 +77,7 @@ export let types = {
 
   font: {
     encode(value) {
-      if (value === 'initial') {
+      if (value === null || value === 'initial') {
         return undefined;
       }
       return fontStringToObject(value);

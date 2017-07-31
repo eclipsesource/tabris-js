@@ -385,24 +385,24 @@ describe('property-types', function() {
 
   describe('color', function() {
 
-    it('encode translates initial to undefined', function() {
-      let inValue = 'initial';
+    it('encode translates "initial" to `undefined`', function() {
+      expect(types.color.encode('initial')).to.equal(undefined);
+    });
 
-      let result = types.color.encode(inValue);
-
-      expect(result).to.equal(undefined);
+    it('encode translates `null` to `undefined`', function() {
+      expect(types.color.encode(null)).to.equal(undefined);
     });
 
   });
 
   describe('font', function() {
 
-    it('encode translates initial to undefined', function() {
-      let inValue = 'initial';
+    it('encode translates "initial" to `undefined`', function() {
+      expect(types.font.encode('initial')).to.equal(undefined);
+    });
 
-      let result = types.font.encode(inValue);
-
-      expect(result).to.equal(undefined);
+    it('encode translates `null` to `undefined`', function() {
+      expect(types.font.encode(null)).to.equal(undefined);
     });
 
   });
