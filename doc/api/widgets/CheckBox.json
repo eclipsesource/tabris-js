@@ -29,7 +29,14 @@
     },
     "tintColor": {
       "type": "Color",
-      "description": "The color of the check mark.",
+      "description": "The color of the selectable area.",
+      "platforms": {
+        "windows": false
+      }
+    },
+    "checkedTintColor": {
+      "type": "Color",
+      "description": "The color of the selectable area in checked state. Will fall back to `tintColor` if not set.",
       "platforms": {
         "windows": false
       }

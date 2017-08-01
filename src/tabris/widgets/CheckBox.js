@@ -27,5 +27,6 @@ NativeObject.defineProperties(CheckBox.prototype, {
   text: {type: 'string', default: ''},
   checked: {type: 'boolean', nocache: true},
   textColor: {type: 'color'},
-  tintColor: {type: 'color'}
+  tintColor: {type: 'color'},
+  checkedTintColor: {type: 'color'}
 });
