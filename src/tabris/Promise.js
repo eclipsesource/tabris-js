@@ -78,10 +78,12 @@ export default function Promise(fn) {
   if (typeof fn !== 'function') {
     throw new TypeError('not a function');
   }
-  this._deferredState = 0;
-  this._state = 0;
-  this._value = null;
-  this._deferreds = null;
+  Object.defineProperties(this, {
+    _deferredState: {value: 0, writable: true},
+    _state: {value: 0, writable: true},
+    _value: {value: null, writable: true},
+    _deferreds: {value: null, writable: true},
+  });
   if (fn === noop) {return;}
   doResolve(fn, this);
 }
@@ -325,3 +327,17 @@ Promise.race = function(values) {
 Promise.prototype.catch = function(onRejected) {
   return this.then(null, onRejected);
 };
+
+/* Inspection Methods */
+
+export function isPending(promise) {
+  return promise._state === 0;
+}
+
+export function isRejected(promise) {
+  return promise._state === 2;
+}
+
+export function getPromiseResult(promise) {
+  return promise._value;
+}
