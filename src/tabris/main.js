@@ -6,6 +6,7 @@ import Device, {create as createDevice, publishDeviceProperties} from './Device'
 import App, {create as createApp} from './App';
 import Ui, {create as createUi} from './widgets/Ui';
 import FileSystem, {create as createFileSystem} from './FileSystem';
+import {createConsole} from './Console';
 import {addDOMDocument} from './Document';
 import {addDOMEventTargetMethods} from './Event';
 import {addWindowTimerMethods} from './WindowTimers';
@@ -140,6 +141,9 @@ tabris.on('start', () => {
     window.secureStorage = tabris.secureStorage = createStorage(true);
   }
   window.crypto = tabris.crypto = new Crypto();
+  if (window.console.print) {
+    window.console = createConsole(window.console);
+  }
   tabris.pkcs5 = new Pkcs5();
 });
 
