@@ -1,3 +1,7 @@
+const {generateDoc} = require('./grunt/grunt-generate-doc');
+const {generateTsd} = require('./grunt/grunt-generate-ts');
+const {copyExamples} = require('./grunt/grunt-copy-examples');
+
 module.exports = function(grunt) {
 
   let pkg = grunt.file.readJSON('package.json');
@@ -125,7 +129,22 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-exec');
-  grunt.loadTasks('./grunt');
+
+  grunt.registerTask('copy-examples', () => {
+    copyExamples('examples', 'build/examples');
+  });
+
+  grunt.registerTask('generate-doc', () => {
+    let targetPath = grunt.config('doc').target;
+    let files = grunt.file.expand(grunt.config('doc').api);
+    generateDoc({files, targetPath, version});
+  });
+
+  grunt.registerTask('generate-tsd', () => {
+    let files = grunt.file.expand(grunt.config('doc').api);
+    let typings = grunt.file.read(grunt.config('doc').typings);
+    generateTsd({files, typings, version});
+  });
 
   /* runs static code analysis tools */
   grunt.registerTask('lint', [
@@ -177,11 +196,6 @@ module.exports = function(grunt) {
     'generate-doc'
   ]);
 
-  /* packages example code */
-  grunt.registerTask('examples', [
-    'copy-examples'
-  ]);
-
   grunt.registerTask('default', [
     'clean',
     'lint',
@@ -189,7 +203,7 @@ module.exports = function(grunt) {
     'build',
     'verify',
     'doc',
-    'examples'
+    'copy-examples'
   ]);
 
   function blockComment(text) {
