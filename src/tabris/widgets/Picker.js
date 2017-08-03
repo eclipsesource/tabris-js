@@ -5,15 +5,15 @@ export default class Picker extends Widget {
 
   constructor(properties) {
     super(Object.assign({selectionIndex: 0}, properties));
-    tabris.on('flush', this._flush, this);
-    this.on('dispose', () => tabris.off('flush', this._flush, this));
+    tabris.on('flush', this.$flush, this);
+    this.on('dispose', () => tabris.off('flush', this.$flush, this));
   }
 
   get _nativeType() {
     return 'tabris.Picker';
   }
 
-  _flush() {
+  $flush() {
     if (this.$needsUpdateItems) {
       let items = new Array(this.itemCount);
       for (let index = 0; index < items.length; index++) {

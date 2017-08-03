@@ -11,8 +11,8 @@ export default class CollectionView extends Composite {
     this._nativeListen('requestInfo', true);
     this._nativeListen('createCell', true);
     this._nativeListen('updateCell', true);
-    tabris.on('flush', this._flush, this);
-    this.on('dispose', () => tabris.off('flush', this._flush, this));
+    tabris.on('flush', this.$flush, this);
+    this.on('dispose', () => tabris.off('flush', this.$flush, this));
   }
 
   get _nativeType() {
@@ -28,38 +28,38 @@ export default class CollectionView extends Composite {
   }
 
   reveal(index) {
-    index = this._checkIndex(index);
+    index = this.$checkIndex(index);
     if (index >= 0 && index < this.itemCount) {
-      this._flush();
+      this.$flush();
       this._nativeCall('reveal', {index});
     }
   }
 
   refresh(index) {
     if (arguments.length === 0) {
-      this._flush();
+      this.$flush();
       this._nativeCall('refresh', {index: 0, count: this.itemCount});
       return;
     }
-    index = this._checkIndex(index);
+    index = this.$checkIndex(index);
     if (index >= 0 && index < this.itemCount) {
-      this._flush();
+      this.$flush();
       this._nativeCall('refresh', {index, count: 1});
     }
   }
 
   insert(index, count = 1) {
-    index = Math.min(Math.max(0, this._checkIndex(index)), this.itemCount);
+    index = Math.min(Math.max(0, this.$checkIndex(index)), this.itemCount);
     if (!isNumber(count) || count <= 0) {
       throw new Error('Invalid insert count');
     }
     this._storeProperty('itemCount', this.itemCount + count);
-    this._flush();
+    this.$flush();
     this._nativeCall('insert', {index, count});
   }
 
   remove(index, count = 1) {
-    index = this._checkIndex(index);
+    index = this.$checkIndex(index);
     if (isNumber(count) && count >= 0) {
       count = Math.min(count, this.itemCount - index);
     } else {
@@ -67,12 +67,12 @@ export default class CollectionView extends Composite {
     }
     if (index >= 0 && index < this.itemCount && count > 0) {
       this._storeProperty('itemCount', this.itemCount - count);
-      this._flush();
+      this.$flush();
       this._nativeCall('remove', {index, count});
     }
   }
 
-  _flush() {
+  $flush() {
     // Load new items if needed after all properties have been set
     // to avoid intercepting the aggregation of properties in set.
     if (this._needsReload) {
@@ -81,7 +81,7 @@ export default class CollectionView extends Composite {
     }
   }
 
-  _checkIndex(index) {
+  $checkIndex(index) {
     if (!isNumber(index)) {
       throw new Error('Invalid index');
     }
@@ -109,7 +109,7 @@ export default class CollectionView extends Composite {
         height: encodeCellHeight(height)
       };
     } else if (name === 'createCell') {
-      let item = this._createCell(event.type);
+      let item = this.$createCell(event.type);
       return item.cid;
     } else if (name === 'updateCell') {
       this.updateCell(tabris._proxies.find(event.widget), event.index);
@@ -120,7 +120,7 @@ export default class CollectionView extends Composite {
     }
   }
 
-  _createCell(type) {
+  $createCell(type) {
     let cell = this.createCell(decodeCellType(this, type));
     if (!(cell instanceof Widget)) {
       throw new Error('Created cell is not a widget');

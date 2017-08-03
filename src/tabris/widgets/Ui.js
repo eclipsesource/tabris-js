@@ -12,10 +12,10 @@ export default class Ui extends Composite {
       throw new Error('Ui can not be created');
     }
     super();
-    this._appendNamedChild('contentView', createContentView());
-    this._appendNamedChild('statusBar', createStatusBar());
-    this._appendNamedChild('navigationBar', createNavigationBar());
-    this._appendNamedChild('drawer', createDrawer());
+    this.$appendNamedChild('contentView', createContentView());
+    this.$appendNamedChild('statusBar', createStatusBar());
+    this.$appendNamedChild('navigationBar', createNavigationBar());
+    this.$appendNamedChild('drawer', createDrawer());
   }
 
   get _nativeType() {
@@ -29,7 +29,7 @@ export default class Ui extends Composite {
         || child === this.drawer;
   }
 
-  _appendNamedChild(name, child) {
+  $appendNamedChild(name, child) {
     Object.defineProperty(this, name, {value: child});
     this.append(child);
   }

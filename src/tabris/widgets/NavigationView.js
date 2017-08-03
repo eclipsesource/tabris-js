@@ -22,30 +22,30 @@ export default class NavigationView extends Composite {
   _addChild(child, index) {
     let isTopPage = (child instanceof Page && typeof index !== 'number' || index === this.pages().length);
     if (isTopPage) {
-      this._triggerDisappear();
+      this.$triggerDisappear();
     }
     super._addChild(child, index);
     if (isTopPage) {
-      this._triggerAppear();
+      this.$triggerAppear();
     }
   }
 
   _removeChild(child) {
     let isTopPage = (child instanceof Page && child === this.pages().last());
     if (isTopPage) {
-      this._triggerDisappear();
+      this.$triggerDisappear();
     }
     super._removeChild(child);
     if (isTopPage) {
-      this._triggerAppear();
+      this.$triggerAppear();
     }
   }
 
-  _handleBackNavigation() {
-    this._pop(this.pages().last());
+  $handleBackNavigation() {
+    this.$pop(this.pages().last());
   }
 
-  _pop(page) {
+  $pop(page) {
     if (page && page.autoDispose) {
       page.dispose();
     } else if (page) {
@@ -63,7 +63,7 @@ export default class NavigationView extends Composite {
 
   _trigger(name, event) {
     if (name === 'backNavigation') {
-      this._handleBackNavigation();
+      this.$handleBackNavigation();
     } else if (name === 'topToolbarHeightChanged') {
       this._triggerChangeEvent('topToolbarHeight', event.topToolbarHeight);
     } else if (name === 'bottomToolbarHeightChanged') {
@@ -73,14 +73,14 @@ export default class NavigationView extends Composite {
     }
   }
 
-  _triggerAppear() {
+  $triggerAppear() {
     let topPage = this.pages().last();
     if (topPage) {
       topPage.trigger('appear', {target: topPage});
     }
   }
 
-  _triggerDisappear() {
+  $triggerDisappear() {
     let topPage = this.pages().last();
     if (topPage) {
       topPage.trigger('disappear', {target: topPage});
