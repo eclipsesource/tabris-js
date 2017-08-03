@@ -68,32 +68,6 @@ module.exports = function(grunt) {
         dest: 'build/typescript/'
       }
     },
-    compress: {
-      doc: {
-        options: {
-          archive: 'build/doc.zip'
-        },
-        files: [
-          {expand: true, cwd: 'build', src: ['doc/**'], filter: 'isFile'}
-        ]
-      },
-      examples: {
-        options: {
-          archive: 'build/examples.zip'
-        },
-        files: [
-          {expand: true, cwd: 'build/', src: ['examples/**'], filter: 'isFile'}
-        ]
-      },
-      tabris: {
-        options: {
-          archive: 'build/tabris.tgz'
-        },
-        files: [
-          {expand: true, cwd: 'build/', src: ['tabris/**'], filter: 'isFile'}
-        ]
-      }
-    },
     exec: {
       verify_typings: {
         cmd: 'npm install && node node_modules/typescript/bin/tsc -p . --noImplicitAny',
@@ -139,7 +113,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-compress');
   grunt.loadNpmTasks('grunt-exec');
   grunt.loadTasks('./grunt');
 
@@ -170,8 +143,7 @@ module.exports = function(grunt) {
     'package',
     'copy:readme',
     'concat:typings',
-    'generate-tsd',
-    'compress:tabris'
+    'generate-tsd'
   ]);
 
   grunt.registerTask('test', [
@@ -189,14 +161,12 @@ module.exports = function(grunt) {
   /* generates reference documentation */
   grunt.registerTask('doc', [
     'copy:doc',
-    'generate-doc',
-    'compress:doc'
+    'generate-doc'
   ]);
 
   /* packages example code */
   grunt.registerTask('examples', [
-    'copy-examples',
-    'compress:examples'
+    'copy-examples'
   ]);
 
   grunt.registerTask('default', [
