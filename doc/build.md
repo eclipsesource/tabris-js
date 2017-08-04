@@ -195,7 +195,7 @@ In addition to the settings described in the [Cordova config.xml Guide](http://c
 
 | Name                   | Allowed Values | Default Value | Description |
 |------------------------|----------------|---------------|-------------|
-| EnableDeveloperConsole | true/false     | false         | Enables/Disables the [Tabris.js Developer Console](getting-started.md#the-developer-console).             |
+| EnableDeveloperConsole | true/false     | false         | Enables/Disables the [Tabris.js Developer Console](getting-started.md#the-developer-console). Setting the value to `$IS_DEBUG` will make the value follow the value for [debug mode](#settings)|
 | UseStrictSSL           | true/false     | true          | Activate/Deactivate SSL certificate validation on [XHR](w3c-api.md#xmlhttprequest). When disabled self signed SSL certificates are accepted. Should be enabled in production. |
 
 Example:
