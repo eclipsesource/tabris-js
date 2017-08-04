@@ -98,14 +98,25 @@ module.exports = function(grunt) {
         cmd: 'node node_modules/rollup/bin/rollup --format=cjs --output=build/boot-bundle.js -- src/boot/main.js'
       },
       transpile_tabris: {
-        options: {env: Object.assign({}, process.env, {BABEL_ENV: 'build'})},
         cmd: 'node node_modules/babel-cli/bin/babel.js --compact false ' +
-          '--out-file build/tabris-transpiled.js build/tabris-bundle.js'
+          '--out-file build/tabris-transpiled.js build/tabris-bundle.js',
+        options: {
+          env: Object.assign({}, process.env, {BABEL_ENV: 'build'})
+        }
+      },
+      uglify_tabris: {
+        cmd: 'node node_modules/uglify-es/bin/uglifyjs --mangle --keep-fnames --compress ' +
+          '-o build/tabris/tabris.min.js build/tabris/tabris.js'
       },
       transpile_boot: {
-        options: {env: Object.assign({}, process.env, {BABEL_ENV: 'build'})},
         cmd: 'node node_modules/babel-cli/bin/babel.js --compact false ' +
-          '--out-file build/boot-transpiled.js build/boot-bundle.js'
+          '--out-file build/boot-transpiled.js build/boot-bundle.js',
+        options: {
+          env: Object.assign({}, process.env, {BABEL_ENV: 'build'})
+        }
+      },
+      uglify_boot: {
+        cmd: 'node node_modules/uglify-es/bin/uglifyjs --mangle --compress -o build/boot.min.js build/boot.js'
       }
     }
   });
@@ -126,7 +137,7 @@ module.exports = function(grunt) {
     let stringify = require('format-json');
     let pack = grunt.file.readJSON('package.json');
     delete pack.devDependencies;
-    pack.main = 'tabris.js';
+    pack.main = 'tabris.min.js';
     pack.typings = 'tabris.d.ts';
     pack.version = version;
     grunt.file.write('build/tabris/package.json', stringify.plain(pack));
@@ -137,9 +148,11 @@ module.exports = function(grunt) {
     'exec:bundle_tabris',
     'exec:transpile_tabris',
     'concat:tabris',
+    'exec:uglify_tabris',
     'exec:bundle_boot',
     'exec:transpile_boot',
     'concat:boot',
+    'exec:uglify_boot',
     'package',
     'copy:readme',
     'concat:typings',
