@@ -10,12 +10,12 @@
     "filesDir": {
       "type": "string",
       "readonly": true,
-      "description": "The path to a directory that the app may use to store persistent files."
+      "description": "The path of a directory that the app may use to store persistent files."
     },
     "cacheDir": {
       "type": "string",
       "readonly": true,
-      "description": "The path to a directory that the app may use to store cached files. The OS may delete files in this directory when the device runs low on storage. Only use this location for data that can easily be re-created."
+      "description": "The path of a directory that the app may use to store cached files. The OS may delete files in this directory when the device runs low on storage. Only use this location for data that can easily be re-created."
     }
   },
   "methods": {
@@ -24,18 +24,29 @@
         {
           "name": "path",
           "type": "string",
-          "description": "The path to the file to read."
+          "description": "The path of the file to read."
         }
       ],
       "returns": "Promise<ArrayBuffer>",
       "description": "Reads the given file and returns a promise that resolves to the contents of the file on success and rejects with an Error in case of a failure. The file contents are returned as an ArrayBuffer."
+    },
+    "readDir": {
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "description": "The path of the directory to read."
+        }
+      ],
+      "returns": "Promise<string[]>",
+      "description": "Reads the contents of a given directory. Returns a promise that resolves on success to an array of the names of the files in the directory excluding '.' and '..'. In case of failure, the Promise rejects with an Error."
     },
     "writeFile": {
       "parameters": [
         {
           "name": "path",
           "type": "string",
-          "description": "The path to the file to write."
+          "description": "The path of the file to write."
         },
         {
           "name": "data",
@@ -51,7 +62,7 @@
         {
           "name": "path",
           "type": "string",
-          "description": "The path to the file to remove."
+          "description": "The path of the file to remove."
         }
       ],
       "returns": "Promise<void>",

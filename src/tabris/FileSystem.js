@@ -68,6 +68,19 @@ export default class FileSystem extends NativeObject {
     });
   }
 
+  readDir(path) {
+    return new Promise((resolve, reject) => {
+      if (arguments.length < 1) {
+        throw new Error('Not enough arguments to readDir');
+      }
+      this._nativeCall('readDir', {
+        path: checkPath(path),
+        onError: (err) => reject(createError(err, path)),
+        onSuccess: (data) => resolve(data)
+      });
+    });
+  }
+
   dispose() {
     throw new Error('Cannot dispose fs object');
   }

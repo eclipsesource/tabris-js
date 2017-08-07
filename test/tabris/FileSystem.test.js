@@ -91,6 +91,45 @@ describe('FileSystem', function() {
 
     });
 
+    describe('readDir', function() {
+
+      it('rejects if parameter missing', function() {
+        return fs.readDir().then(expectFail, err => {
+          expect(err).to.be.instanceOf(Error);
+          expect(err.message).to.equal('Not enough arguments to readDir');
+        });
+      });
+
+      it('rejects invalid path', function() {
+        return fs.readDir('/foo/../bar').then(expectFail, err => {
+          expect(err).to.be.instanceOf(Error);
+          expect(err.message).to.equal("Invalid file name: must not contain '..'");
+        });
+      });
+
+      it('calls native method', function() {
+        spy(client, 'call');
+        fs.readDir('/foo');
+        expect(client.call).to.have.been.calledWithMatch(fs.cid, 'readDir', {path: '/foo'});
+      });
+
+      it('resolves on success', function() {
+        stub(client, 'call').callsFake((id, method, args) => args.onSuccess(['foo', 'bar']));
+        return fs.readDir('/foo').then(result => {
+          expect(result).to.deep.equal(['foo', 'bar']);
+        });
+      });
+
+      it('rejects in case of error', function() {
+        stub(client, 'call').callsFake((id, method, args) => args.onError('ENOTDIR'));
+        return fs.readDir('/foo').then(expectFail, err => {
+          expect(err).to.be.instanceOf(Error);
+          expect(err.message).to.equal('Not a directory: /foo');
+        });
+      });
+
+    });
+
     describe('writeFile', function() {
 
       it('rejects if parameter missing', function() {
