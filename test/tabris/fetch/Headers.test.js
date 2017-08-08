@@ -154,7 +154,6 @@ describe('Headers', function() {
 
     });
 
-
     describe('values', function() {
 
       it('returns iterator of values', function() {

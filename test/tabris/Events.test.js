@@ -407,5 +407,4 @@ describe('Events', function() {
 
   });
 
-
 });

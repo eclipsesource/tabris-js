@@ -217,7 +217,6 @@ describe('NavigationView', function() {
       expect(client.calls({op: 'set'}).length).to.equal(0);
     });
 
-
     it(`return ${prop} default value`, function() {
       expect(navigationView.get(prop)).to.equal('default');
     });

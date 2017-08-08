@@ -15,6 +15,7 @@
     "no-empty": "off",
     "no-console": "off",
     "no-control-regex": "off",
+    "no-multiple-empty-lines": ["error", { "max": 1 }],
     "semi": "error",
     "eqeqeq": ["error", "allow-null"],
     "indent": ["error", 2, {"SwitchCase": 1}],

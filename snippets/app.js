@@ -26,7 +26,6 @@ new Button({
 }).on('select', () => app.reload())
   .appendTo(ui.contentView);
 
-
 app.on('pause', () => paused = Date.now())
   .on('resume', () => {
     if (paused > 0) {

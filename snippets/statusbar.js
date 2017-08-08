@@ -17,13 +17,11 @@ new Picker({
   .appendTo(ui.contentView);
 
 new Picker({
-
   left: '#displayMode 16', baseline: '#displayMode', right: 16,
   itemCount: DISPLAY_MODES.length,
   itemText: index => DISPLAY_MODES[index]
 }).on('select', ({index}) => ui.statusBar.displayMode = DISPLAY_MODES[index])
   .appendTo(ui.contentView);
-
 
 new Picker({
   left: '#displayMode 16', baseline: '#background', right: 16,
@@ -31,7 +29,6 @@ new Picker({
   itemText: index => BACKGROUNDS[index]
 }).on('select', ({index}) => ui.statusBar.background = BACKGROUNDS[index])
   .appendTo(ui.contentView);
-
 
 new TextView({
   left: '#displayMode 16', baseline: '#height', right: 16,

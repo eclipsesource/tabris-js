@@ -1390,7 +1390,6 @@ describe('Widget', function() {
       });
     });
 
-
   });
 
 });
