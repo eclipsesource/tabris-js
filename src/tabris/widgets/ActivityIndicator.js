@@ -1,4 +1,5 @@
 import Widget from '../Widget';
+import NativeObject from '../NativeObject';
 
 export default class ActivityIndicator extends Widget {
 
@@ -7,3 +8,7 @@ export default class ActivityIndicator extends Widget {
   }
 
 }
+
+NativeObject.defineProperties(ActivityIndicator.prototype, {
+  tintColor: {type: 'color'}
+});

@@ -13,6 +13,15 @@
       }
     ]
   },
+  "properties": {
+    "tintColor": {
+      "type": "Color",
+      "description": "The color of the indicator.",
+      "platforms": {
+        "windows": false
+      }
+    }
+  },
   "links": [
     {
       "title": "Simple ActivityIndicator snippet",
