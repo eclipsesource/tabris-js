@@ -104,6 +104,8 @@ describe('tabris', function() {
   it('contains widget constructors', function() {
     expect(tabris.Action).to.be.a('function');
     expect(tabris.Action.name).to.equal('Action');
+    expect(tabris.ActionSheet).to.be.a('function');
+    expect(tabris.ActionSheet.name).to.equal('ActionSheet');
     expect(tabris.ActivityIndicator).to.be.a('function');
     expect(tabris.ActivityIndicator.name).to.equal('ActivityIndicator');
     expect(tabris.Button).to.be.a('function');

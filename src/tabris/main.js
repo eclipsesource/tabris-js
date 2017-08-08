@@ -8,11 +8,12 @@ import Ui, {create as createUi} from './widgets/Ui';
 import FileSystem, {create as createFileSystem} from './FileSystem';
 import {createConsole} from './Console';
 import {addDOMDocument} from './Document';
-import {addDOMEventTargetMethods} from './Event';
+import Event, {addDOMEventTargetMethods} from './Event';
 import {addWindowTimerMethods} from './WindowTimers';
 import Storage, {create as createStorage} from './Storage';
 import * as JSX from './JSX';
 import Action from './widgets/Action';
+import ActionSheet from './ActionSheet';
 import ActivityIndicator from './widgets/ActivityIndicator';
 import AlertDialog from './AlertDialog';
 import Button from './widgets/Button';
@@ -23,7 +24,6 @@ import Composite from './widgets/Composite';
 import ContentView from './widgets/ContentView';
 import Crypto from './Crypto';
 import Drawer from './widgets/Drawer';
-import Event from './Event';
 import ImageData from './ImageData';
 import ImageView from './widgets/ImageView';
 import InactivityTimer from './InactivityTimer.js';
@@ -66,6 +66,7 @@ if (global.tabris && global.tabris.version) {
 
 module.exports = global.tabris = Object.assign(new Tabris(), {
   Action,
+  ActionSheet,
   ActivityIndicator,
   AlertDialog,
   App,
