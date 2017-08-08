@@ -107,8 +107,8 @@ describe('CanvasContext', function() {
       canvas.getContext('2d', 100, 200);
 
       let call = client.calls({op: 'call', method: 'init'})[0];
-      expect(call.parameters.width).to.deep.equal(100);
-      expect(call.parameters.height).to.deep.equal(200);
+      expect(call.parameters.width).to.equal(100);
+      expect(call.parameters.height).to.equal(200);
     });
 
     it('calls init everytime', function() {
@@ -117,15 +117,15 @@ describe('CanvasContext', function() {
       canvas.getContext('2d', 200, 100);
 
       let call = client.calls({op: 'call', method: 'init'})[1];
-      expect(call.parameters.width).to.deep.equal(200);
-      expect(call.parameters.height).to.deep.equal(100);
+      expect(call.parameters.width).to.equal(200);
+      expect(call.parameters.height).to.equal(100);
     });
 
     it('updates width and height in canvas dummy', function() {
       ctx = canvas.getContext('2d', 100, 200);
 
-      expect(ctx.canvas.width).to.deep.equal(100);
-      expect(ctx.canvas.height).to.deep.equal(200);
+      expect(ctx.canvas.width).to.equal(100);
+      expect(ctx.canvas.height).to.equal(200);
     });
 
     it('allows to set canvas.style attributes', function() {
@@ -141,13 +141,13 @@ describe('CanvasContext', function() {
     describe('lineWidth', function() {
 
       it('defaults to 1', function() {
-        expect(ctx.lineWidth).to.deep.equal(1);
+        expect(ctx.lineWidth).to.equal(1);
       });
 
       it('accepts changes', function() {
         ctx.lineWidth = 2;
 
-        expect(ctx.lineWidth).to.deep.equal(2);
+        expect(ctx.lineWidth).to.equal(2);
       });
 
       it('renders changes', function() {
@@ -164,7 +164,7 @@ describe('CanvasContext', function() {
         ctx.lineWidth = 0;
         ctx.lineWidth = -1;
 
-        expect(ctx.lineWidth).to.deep.equal(3);
+        expect(ctx.lineWidth).to.equal(3);
         expect(console.warn).to.have.been.calledWith('Unsupported value for lineWidth: 0');
         expect(console.warn).to.have.been.calledWith('Unsupported value for lineWidth: -1');
       });
@@ -174,13 +174,13 @@ describe('CanvasContext', function() {
     describe('lineCap', function() {
 
       it("defaults to 'butt'", function() {
-        expect(ctx.lineCap).to.deep.equal('butt');
+        expect(ctx.lineCap).to.equal('butt');
       });
 
       it('accepts changes', function() {
         ctx.lineCap = 'round';
 
-        expect(ctx.lineCap).to.deep.equal('round');
+        expect(ctx.lineCap).to.equal('round');
       });
 
       it('renders changes', function() {
@@ -197,7 +197,7 @@ describe('CanvasContext', function() {
 
         ctx.lineCap = 'foo';
 
-        expect(ctx.lineCap).to.deep.equal('round');
+        expect(ctx.lineCap).to.equal('round');
         expect(console.warn).to.have.been.calledWith('Unsupported value for lineCap: foo');
       });
 
@@ -206,13 +206,13 @@ describe('CanvasContext', function() {
     describe('lineJoin', function() {
 
       it("defaults to 'miter'", function() {
-        expect(ctx.lineJoin).to.deep.equal('miter');
+        expect(ctx.lineJoin).to.equal('miter');
       });
 
       it('accepts changes', function() {
         ctx.lineJoin = 'round';
 
-        expect(ctx.lineJoin).to.deep.equal('round');
+        expect(ctx.lineJoin).to.equal('round');
       });
 
       it('renders changes', function() {
@@ -228,7 +228,7 @@ describe('CanvasContext', function() {
 
         ctx.lineJoin = 'foo';
 
-        expect(ctx.lineJoin).to.deep.equal('round');
+        expect(ctx.lineJoin).to.equal('round');
         expect(console.warn).to.have.been.calledWith('Unsupported value for lineJoin: foo');
       });
 
@@ -237,13 +237,13 @@ describe('CanvasContext', function() {
     describe('fillStyle', function() {
 
       it('defaults to black', function() {
-        expect(ctx.fillStyle).to.deep.equal('rgba(0, 0, 0, 1)');
+        expect(ctx.fillStyle).to.equal('rgba(0, 0, 0, 1)');
       });
 
       it('accepts changes', function() {
         ctx.fillStyle = 'red';
 
-        expect(ctx.fillStyle).to.deep.equal('rgba(255, 0, 0, 1)');
+        expect(ctx.fillStyle).to.equal('rgba(255, 0, 0, 1)');
       });
 
       it('renders changes', function() {
@@ -259,7 +259,7 @@ describe('CanvasContext', function() {
 
         ctx.fillStyle = 'no-such-color';
 
-        expect(ctx.fillStyle).to.deep.equal('rgba(255, 0, 0, 1)');
+        expect(ctx.fillStyle).to.equal('rgba(255, 0, 0, 1)');
         expect(console.warn).to.have.been.calledWith('Unsupported value for fillStyle: no-such-color');
       });
 
@@ -268,13 +268,13 @@ describe('CanvasContext', function() {
     describe('strokeStyle', function() {
 
       it('defaults to black', function() {
-        expect(ctx.strokeStyle).to.deep.equal('rgba(0, 0, 0, 1)');
+        expect(ctx.strokeStyle).to.equal('rgba(0, 0, 0, 1)');
       });
 
       it('accepts changes', function() {
         ctx.strokeStyle = 'red';
 
-        expect(ctx.strokeStyle).to.deep.equal('rgba(255, 0, 0, 1)');
+        expect(ctx.strokeStyle).to.equal('rgba(255, 0, 0, 1)');
       });
 
       it('renders changes', function() {
@@ -290,7 +290,7 @@ describe('CanvasContext', function() {
 
         ctx.strokeStyle = 'no-such-color';
 
-        expect(ctx.strokeStyle).to.deep.equal('rgba(255, 0, 0, 1)');
+        expect(ctx.strokeStyle).to.equal('rgba(255, 0, 0, 1)');
         expect(console.warn).to.have.been.calledWith('Unsupported value for strokeStyle: no-such-color');
       });
 
@@ -299,13 +299,13 @@ describe('CanvasContext', function() {
     describe('textAlign', function() {
 
       it("defaults to 'start'", function() {
-        expect(ctx.textAlign).to.deep.equal('start');
+        expect(ctx.textAlign).to.equal('start');
       });
 
       it('accepts changes', function() {
         ctx.textAlign = 'center';
 
-        expect(ctx.textAlign).to.deep.equal('center');
+        expect(ctx.textAlign).to.equal('center');
       });
 
       it('renders changes', function() {
@@ -321,7 +321,7 @@ describe('CanvasContext', function() {
 
         ctx.textAlign = 'foo';
 
-        expect(ctx.textAlign).to.deep.equal('center');
+        expect(ctx.textAlign).to.equal('center');
         expect(console.warn).to.have.been.calledWith('Unsupported value for textAlign: foo');
       });
 
@@ -330,13 +330,13 @@ describe('CanvasContext', function() {
     describe('textBaseline', function() {
 
       it("defaults to 'alphabetic'", function() {
-        expect(ctx.textBaseline).to.deep.equal('alphabetic');
+        expect(ctx.textBaseline).to.equal('alphabetic');
       });
 
       it('accepts changes', function() {
         ctx.textBaseline = 'middle';
 
-        expect(ctx.textBaseline).to.deep.equal('middle');
+        expect(ctx.textBaseline).to.equal('middle');
       });
 
       it('renders changes', function() {
@@ -352,8 +352,43 @@ describe('CanvasContext', function() {
 
         ctx.textBaseline = 'foo';
 
-        expect(ctx.textBaseline).to.deep.equal('middle');
+        expect(ctx.textBaseline).to.equal('middle');
         expect(console.warn).to.have.been.calledWith('Unsupported value for textBaseline: foo');
+      });
+
+    });
+
+    describe('font', function() {
+
+      it('defaults to sans-serif, 12px', function() {
+        expect(ctx.font).to.equal('12px sans-serif');
+      });
+
+      it('accepts changes', function() {
+        ctx.font = '14px Helvetica';
+
+        expect(ctx.font).to.equal('14px Helvetica');
+      });
+
+      it('renders changes', function() {
+        ctx.font = 'bold italic 14px Helvetica';
+        flush();
+
+        expect(decodeLastPacket()).to.deep.equal({
+          ops: ['font'],
+          strings: ['Helvetica', 'italic', 'bold'],
+          doubles: [14]
+        });
+      });
+
+      it('ignores illegal values, but prints a warning', function() {
+        stub(console, 'warn');
+        ctx.font = '14px Helvetica';
+
+        ctx.font = 23;
+
+        expect(ctx.font).to.equal('14px Helvetica');
+        expect(console.warn).to.have.been.calledWith('Unsupported value for font: 23');
       });
 
     });
@@ -366,7 +401,7 @@ describe('CanvasContext', function() {
       ctx.strokeStyle = 'red';
       ctx.save();
 
-      expect(ctx.strokeStyle).to.deep.equal('rgba(255, 0, 0, 1)');
+      expect(ctx.strokeStyle).to.equal('rgba(255, 0, 0, 1)');
     });
 
     it('renders save operation', function() {
@@ -387,7 +422,7 @@ describe('CanvasContext', function() {
 
       ctx.restore();
 
-      expect(ctx.strokeStyle).to.deep.equal('rgba(255, 0, 0, 1)');
+      expect(ctx.strokeStyle).to.equal('rgba(255, 0, 0, 1)');
     });
 
     it('restores multiple steps', function() {
@@ -399,7 +434,7 @@ describe('CanvasContext', function() {
       ctx.restore();
       ctx.restore();
 
-      expect(ctx.strokeStyle).to.deep.equal('rgba(255, 0, 0, 1)');
+      expect(ctx.strokeStyle).to.equal('rgba(255, 0, 0, 1)');
     });
 
     it('does not change current state when stack is empty', function() {
@@ -407,7 +442,7 @@ describe('CanvasContext', function() {
 
       ctx.restore();
 
-      expect(ctx.strokeStyle).to.deep.equal('rgba(255, 0, 0, 1)');
+      expect(ctx.strokeStyle).to.equal('rgba(255, 0, 0, 1)');
     });
 
     it('renders restore operation', function() {

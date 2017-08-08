@@ -1,4 +1,5 @@
 import {colorStringToArray, colorArrayToString} from './util-colors';
+import {fontStringToObject, fontObjectToString} from './util-fonts';
 import ImageData from './ImageData';
 import GC from './GC';
 
@@ -230,6 +231,15 @@ let properties = {
     decode: passThrough,
     addOperations(value) {
       this._gc.addString(value);
+    }
+  },
+  font: {
+    init: {family: ['sans-serif'], size: 12, weight: 'normal', style: 'normal'},
+    encode: fontStringToObject,
+    decode: fontObjectToString,
+    addOperations(font) {
+      this._gc.addString(font.family.join(', '), font.style, font.weight);
+      this._gc.addDouble(font.size);
     }
   }
 };

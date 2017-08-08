@@ -31,6 +31,7 @@ export const OPCODES = {
   textBaseline: 28,
   transform: 29,
   translate: 30,
+  font: 31
 };
 
 export default class GC extends NativeObject {
