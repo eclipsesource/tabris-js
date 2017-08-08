@@ -9,7 +9,12 @@ export function fontStringToObject(str) {
 }
 
 export function fontObjectToString(font) {
-  return [font.style, font.weight, font.size + 'px', font.family.join(', ')].join(' ').trim();
+  return [
+    font.style === 'normal' ? '' : font.style,
+    font.weight === 'normal' ? '' : font.weight,
+    font.size + 'px',
+    font.family.join(', ')
+  ].filter(str => !!str).join(' ').trim();
 }
 
 function parseStyles(fontArr, styles) {

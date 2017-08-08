@@ -114,19 +114,19 @@ describe('util-fonts', function() {
 
     it('creates string from object', function() {
       expect(decode({family: ['Arial'], size: 12, weight: 'normal', style: 'normal'}))
-        .to.equal('normal normal 12px Arial');
+        .to.equal('12px Arial');
       expect(decode({
         family: ['Arial', 'Times New Roman'],
         size: 12,
         weight: 'normal',
         style: 'normal'
-      })).to.equal('normal normal 12px Arial, Times New Roman');
+      })).to.equal('12px Arial, Times New Roman');
       expect(decode({family: [''], size: 12, weight: 'normal', style: 'normal'}))
-        .to.equal('normal normal 12px');
+        .to.equal('12px');
       expect(decode({family: [''], size: 12, weight: 'bold', style: 'normal'}))
-        .to.equal('normal bold 12px');
+        .to.equal('bold 12px');
       expect(decode({family: [''], size: 12, weight: 'normal', style: 'italic'}))
-        .to.equal('italic normal 12px');
+        .to.equal('italic 12px');
       expect(decode({family: [''], size: 12, weight: 'thin', style: 'italic'}))
         .to.equal('italic thin 12px');
       expect(decode({family: ['Arial'], size: 12, weight: 'medium', style: 'italic'}))
