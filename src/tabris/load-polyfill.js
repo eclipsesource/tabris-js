@@ -1,5 +1,3 @@
-import Promise from './Promise';
-
 global.Promise = Promise;
 
 if (typeof window === 'undefined') {

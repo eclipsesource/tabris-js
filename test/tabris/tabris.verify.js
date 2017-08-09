@@ -9,6 +9,7 @@ describe('global object', function() {
 
   it('contains Promise', function() {
     expect(global.Promise).to.be.a('function');
+    expect(global.Promise.name).to.equal('Promise');
   });
 
   it('contains fetch', function() {
