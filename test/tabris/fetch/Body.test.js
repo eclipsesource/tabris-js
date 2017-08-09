@@ -1,6 +1,6 @@
 import {expect, stub, restore} from '../../test';
 import Body from '../../../src/tabris/fetch/Body';
-import * as TextDecoder from '../../../src/tabris/TextDecoder';
+import TextDecoder from '../../../src/tabris/TextDecoder';
 
 describe('Body', function() {
 

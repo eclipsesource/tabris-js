@@ -2,7 +2,7 @@
  * Original work Copyright (c) 2014-2016 GitHub, Inc.
  * Implementation based on https://github.com/github/fetch
  */
-import {decode} from '../TextDecoder';
+import TextDecoder from '../TextDecoder';
 
 export default class Body {
 
@@ -21,7 +21,7 @@ export default class Body {
 
   text() {
     return this.$consumed() || Promise.resolve(this._bodyBuffer ?
-      decode(this._bodyBuffer, this._encoding) :
+      TextDecoder.decode(this._bodyBuffer, this._encoding) :
       this._bodyText);
   }
 
