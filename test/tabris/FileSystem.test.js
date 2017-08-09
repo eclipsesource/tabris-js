@@ -1,6 +1,10 @@
-import {expect, mockTabris, spy, stub} from '../test';
+import {expect, mockTabris, spy, stub, restore} from '../test';
 import ClientStub from './ClientStub';
 import FileSystem, {create as createFileSystem, createError} from '../../src/tabris/FileSystem';
+import TextEncoder from '../../src/tabris/TextEncoder';
+import TextDecoder from '../../src/tabris/TextDecoder';
+
+const text = 'Lorem ipsum';
 
 describe('FileSystem', function() {
 
@@ -11,6 +15,8 @@ describe('FileSystem', function() {
     mockTabris(client);
     data = new Uint8Array([0, 1, 2, 3, 127, 128, 255]).buffer;
   });
+
+  afterEach(restore);
 
   it('cannot be instantiated', function() {
     expect(() => new FileSystem()).to.throw(Error, 'FileSystem can not be created');
@@ -68,6 +74,14 @@ describe('FileSystem', function() {
         });
       });
 
+      it('rejects invalid encoding', function() {
+        stub(client, 'call').callsFake((id, method, args) => args.onSuccess(data));
+        return fs.readFile('/foo', 'foo').then(expectFail, err => {
+          expect(err).to.be.instanceOf(Error);
+          expect(err.message).to.equal('Unsupported encoding: \'foo\'');
+        });
+      });
+
       it('calls native method', function() {
         spy(client, 'call');
         fs.readFile('/foo');
@@ -86,6 +100,22 @@ describe('FileSystem', function() {
         stub(client, 'call').callsFake((id, method, args) => args.onSuccess(data));
         return fs.readFile('/foo').then(result => {
           expect(result).to.equal(data);
+        });
+      });
+
+      it('decodes data with given encoding', function() {
+        stub(TextDecoder, 'decode').returns(Promise.resolve(text));
+        stub(client, 'call').callsFake((id, method, args) => args.onSuccess(data));
+        return fs.readFile('/foo', 'ascii').then(() => {
+          expect(TextDecoder.decode).to.have.been.calledWith(data, 'ascii');
+        });
+      });
+
+      it('resolves with decoded data', function() {
+        stub(TextDecoder, 'decode').returns(Promise.resolve(text));
+        stub(client, 'call').callsFake((id, method, args) => args.onSuccess(data));
+        return fs.readFile('/foo', 'utf-8').then(result => {
+          expect(result).to.equal(text);
         });
       });
 
@@ -153,10 +183,42 @@ describe('FileSystem', function() {
         });
       });
 
+      it('rejects invalid encoding', function() {
+        return fs.writeFile('/foo', 'string', 'foo').then(expectFail, err => {
+          expect(err).to.be.instanceOf(Error);
+          expect(err.message).to.equal('Unsupported encoding: \'foo\'');
+        });
+      });
+
       it('calls native method', function() {
         spy(client, 'call');
         fs.writeFile('/foo', data);
         expect(client.call).to.have.been.calledWithMatch(fs.cid, 'writeFile', {path: '/foo'});
+      });
+
+      it('encodes text with given encoding', function() {
+        stub(TextEncoder, 'encode').returns(Promise.resolve(data));
+        stub(client, 'call').callsFake((id, method, args) => args.onSuccess());
+        return fs.writeFile('/foo', text, 'ascii').then(() => {
+          expect(TextEncoder.encode).to.have.been.calledWith(text, 'ascii');
+        });
+      });
+
+      it('encodes text with utf-8 by default', function() {
+        stub(TextEncoder, 'encode').returns(Promise.resolve(data));
+        stub(client, 'call').callsFake((id, method, args) => args.onSuccess());
+        return fs.writeFile('/foo', text).then(() => {
+          expect(TextEncoder.encode).to.have.been.calledWith(text, 'utf-8');
+        });
+      });
+
+      it('calls native method with encoded text', function() {
+        stub(TextEncoder, 'encode').withArgs(text, 'utf-8').returns(Promise.resolve(data));
+        stub(client, 'call').callsFake((id, method, args) => args.onSuccess());
+        return fs.writeFile('/foo', text, 'utf-8').then(() => {
+          expect(client.call).to.have.been.calledWithMatch(fs.cid, 'writeFile', {path: '/foo', data});
+          expect(client.call.args[0][2].data).to.deep.equal(data);
+        });
       });
 
       it('resolves on success', function() {

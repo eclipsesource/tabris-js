@@ -1,4 +1,6 @@
 import NativeObject from './NativeObject';
+import TextEncoder from './TextEncoder';
+import TextDecoder from './TextDecoder';
 import {normalizePath} from './util';
 
 const ERRORS = {
@@ -28,7 +30,7 @@ export default class FileSystem extends NativeObject {
     return this._nativeGet('cacheDir');
   }
 
-  readFile(path) {
+  readFile(path, encoding) {
     return new Promise((resolve, reject) => {
       if (arguments.length < 1) {
         throw new Error('Not enough arguments to readFile');
@@ -36,22 +38,27 @@ export default class FileSystem extends NativeObject {
       this._nativeCall('readFile', {
         path: checkPath(path),
         onError: (err) => reject(createError(err, path)),
-        onSuccess: (data) => resolve(data)
+        onSuccess: (data) => encoding ? TextDecoder.decode(data, encoding).then(resolve, reject) : resolve(data)
       });
     });
   }
 
-  writeFile(path, data) {
+  writeFile(path, data, encoding) {
     return new Promise((resolve, reject) => {
       if (arguments.length < 2) {
         throw new Error('Not enough arguments to writeFile');
       }
-      this._nativeCall('writeFile', {
+      let write = data => this._nativeCall('writeFile', {
         path: checkPath(path),
         data: checkBuffer(data),
         onError: (err) => reject(createError(err, path)),
         onSuccess: () => resolve()
       });
+      if (typeof data === 'string') {
+        TextEncoder.encode(data, encoding || 'utf-8').then(write, reject);
+      } else {
+        write(data);
+      }
     });
   }
 
