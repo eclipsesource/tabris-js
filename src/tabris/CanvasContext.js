@@ -53,13 +53,7 @@ export default class CanvasContext {
   _init(width, height) {
     this.canvas.width = width;
     this.canvas.height = height;
-    this._gc.init({
-      width,
-      height,
-      font: [['sans-serif'], 12, false, false],
-      fillStyle: [0, 0, 0, 255],
-      strokeStyle: [0, 0, 0, 255]
-    });
+    this._gc.init({width, height});
   }
 
 }
