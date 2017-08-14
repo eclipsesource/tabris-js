@@ -12,7 +12,7 @@ tabris._start = function(client) {
       rootModule.require('tabris');
       tabris._client = client; // required by head.append
     } catch (error) {
-      console.print('error', 'Could not load tabris module: ' + (error.stack || error));
+      printError('Could not load tabris module:', error);
       return;
     }
     tabris._defineModule = function(id, fn) {
@@ -30,7 +30,7 @@ tabris._start = function(client) {
         rootModule.require('./');
         tabris.trigger('flush');
       } catch (error) {
-        console.print('error', 'Could not load main module: ' + (error.stack || error));
+        printError('Could not load main module:', error);
       }
     };
     if (tabris._entryPoint) {
@@ -41,7 +41,7 @@ tabris._start = function(client) {
     }
     tabris.trigger('flush');
   } catch (error) {
-    console.print('error', (error.stack || error));
+    printError('Could not start tabris:', error);
   }
 };
 
@@ -49,3 +49,8 @@ tabris._notify = function() {
   // client may get the reference to _notify before tabris has been loaded
   return tabris._notify.apply(this, arguments);
 };
+
+function printError(msg, error) {
+  console.print ? console.print('error', msg + (error.stack || error)) : console.error(msg, error);
+
+}
