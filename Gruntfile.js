@@ -32,7 +32,7 @@ module.exports = function(grunt) {
           process: src => src.replace(/\${VERSION}/g, version)
         },
         src: ['build/boot-transpiled.js'],
-        dest: 'build/boot.js'
+        dest: 'build/tabris/boot.js'
       },
       typings: {
         src: [
@@ -121,7 +121,8 @@ module.exports = function(grunt) {
         }
       },
       uglify_boot: {
-        cmd: 'node node_modules/uglify-es/bin/uglifyjs --mangle --compress -o build/boot.min.js build/boot.js'
+        cmd: 'node node_modules/uglify-es/bin/uglifyjs --mangle --compress ' +
+          '-o build/tabris/boot.min.js build/tabris/boot.js'
       }
     }
   });
