@@ -51,5 +51,4 @@ tabris._notify = function() {
 
 function printError(msg, error) {
   console.print ? console.print('error', msg + (error.stack || error)) : console.error(msg, error);
-
 }
