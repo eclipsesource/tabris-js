@@ -342,10 +342,9 @@ exports.generateDoc = function generateDoc({files, targetPath, version}) {
   }
 
   function renderTypeLink(name) {
-    if (!typeLinks[name]) {
-      return name;
-    }
-    return `[${name}](${typeLinks[name]})`;
+    return name.split('|')
+      .map(name => typeLinks[name] ? `[${name}](${typeLinks[name]})` : name)
+      .join('\\|');
   }
 
 };
