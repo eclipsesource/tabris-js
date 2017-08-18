@@ -1,25 +1,71 @@
 {
 
   "version": "0.1.0",
-  "command": "grunt",
   "showOutput": "always",
   "isShellCommand": true,
-  "runner": "terminal",
+  "runner": "process",
   "tasks": [
     {
+      "taskName": "serve",
+      "command": "tabris",
       "suppressTaskName": true,
-      "taskName": " test all",
+      "args": ["serve", "${file}"]
+    },
+    {
+      "taskName": "build",
+      "command": "grunt",
+      "suppressTaskName": true,
+      "args": ["clean", "build"]
+    },
+    {
+      "taskName": "serve (current build)",
+      "command": "bash",
+      "suppressTaskName": true,
+      "isBuildCommand": true,
+      "args": ["-c", "cd ${fileDirname} && npm install ${workspaceRoot}/build/tabris && tabris serve ${file}"],
+      "windows": {
+        "command": "cmd",
+        "args": ["/c", "\"cd ${fileDirname} & npm install ${workspaceRoot}\\build\\tabris & tabris serve ${file}\""]
+      }
+    },
+    {
+      "taskName": "serve (fresh build)",
+      "command": "bash",
+      "suppressTaskName": true,
+      "args": ["-c", "grunt clean build && cd ${fileDirname} && npm install ${workspaceRoot}/build/tabris && tabris serve ${file}"],
+      "windows": {
+        "command": "cmd",
+        "args": ["/c", "\"grunt clean build & cd ${fileDirname} & npm install ${workspaceRoot}\\build\\tabris & tabris serve ${file}\""]
+      }
+    },
+    {
+      "taskName": "serve (default build)",
+      "command": "bash",
+      "suppressTaskName": true,
+      "isBuildCommand": true,
+      "args": ["-c", "cd ${fileDirname} && npm remove tabris && npm install tabris && tabris serve ${file}"],
+      "windows": {
+        "command": "cmd",
+        "args": ["/c", "\"cd ${fileDirname} & npm remove tabris & npm install tabris & tabris serve ${file}\""]
+      }
+    },
+    {
+      "command": "grunt",
+      "suppressTaskName": true,
+      "taskName": "test all",
       "args": ["test"]
     },
     {
+      "command": "grunt",
       "suppressTaskName": true,
-      "taskName": " test spec",
+      "taskName": "test spec",
       "args": ["exec:test_spec", "--spec=${file}"],
       "isTestCommand": true
     },
     {
+      "command": "grunt",
       "suppressTaskName": true,
-      "taskName": " test typings",
+      "taskName": "test typings",
       "args": ["clean", "build", "copy:test_ts", "exec:test_typings"]
     }
   ]
