@@ -24,7 +24,7 @@ export default class CollectionView extends Composite {
       throw new Error('Invalid itemCount');
     }
     this._storeProperty('itemCount', itemCount);
-    this._nativeCall('load', {itemCount});
+    this._needsReload = true;
   }
 
   reveal(index) {

@@ -610,8 +610,16 @@ describe('CollectionView', function() {
         expect(view.itemCount).to.equal(42);
       });
 
-      it('calls native load', function() {
+      it('does not call native load before flash', function() {
         view.load(42);
+
+        let calls = client.calls({op: 'call', id: view.cid, method: 'load'});
+        expect(calls).to.be.empty;
+      });
+
+      it('calls native load after flush', function() {
+        view.load(42);
+        tabris.trigger('flush');
 
         let loadCall = client.calls({op: 'call', method: 'load', id: view.cid})[0];
         expect(loadCall.parameters).to.deep.equal({itemCount: 42});
