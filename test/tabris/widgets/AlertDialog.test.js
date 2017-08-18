@@ -98,7 +98,7 @@ describe('AlertDialog', function() {
     it('throws if dialog was closed', function() {
       dialog.open();
       dialog.close();
-      expect(() => dialog.open()).to.throw('Can not open a dialog that was closed');
+      expect(() => dialog.open()).to.throw('Can not open a popup that was disposed');
     });
 
   });

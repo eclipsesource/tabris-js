@@ -1,6 +1,6 @@
 {
   "type": "ActionSheet",
-  "extends": "NativeObject",
+  "extends": "Popup",
   "constructor": {
     "access": "public",
     "parameters": [
@@ -12,21 +12,9 @@
       }
     ]
   },
-  "description": "A pop up dialog that offers a selection.",
+  "description": "A pop up dialog that offers a selection. Is automatically disposed when closed.",
   "platforms": {
     "windows": false
-  },
-  "methods": {
-    "open": {
-      "parameters": [],
-      "description": "Makes the action sheet visible.",
-      "returns": "this"
-    },
-    "close": {
-      "parameters": [],
-      "description": "Hides the action sheet permanently. It can not be made visible anymore.",
-      "returns": "this"
-    }
   },
   "properties": {
     "title": {

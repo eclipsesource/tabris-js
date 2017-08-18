@@ -1,12 +1,14 @@
+import Popup from './Popup';
 import NativeObject from './NativeObject';
 import {capitalizeFirstChar} from './util';
 
-export default class AlertDialog extends NativeObject {
+export default class AlertDialog extends Popup {
 
   constructor(properties) {
     super();
     this._create('tabris.AlertDialog', properties);
     this._nativeListen('close', true);
+    this._autoDispose = true;
   }
 
   _trigger(name, event) {
@@ -20,19 +22,6 @@ export default class AlertDialog extends NativeObject {
     } else {
       return super._trigger(name, event);
     }
-  }
-
-  open() {
-    if (this.isDisposed()) {
-      throw new Error('Can not open a dialog that was closed');
-    }
-    this._nativeCall('open');
-    return this;
-  }
-
-  close() {
-    this.dispose();
-    return this;
   }
 
 }

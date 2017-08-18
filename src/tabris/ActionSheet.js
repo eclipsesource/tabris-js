@@ -1,10 +1,12 @@
+import Popup from './Popup';
 import NativeObject from './NativeObject';
 import {types} from './property-types';
 
-export default class ActionSheet extends NativeObject {
+export default class ActionSheet extends Popup {
 
   constructor(properties) {
     super();
+    this._autoDispose = true;
     this._create('tabris.ActionSheet', properties);
   }
 
@@ -31,18 +33,6 @@ export default class ActionSheet extends NativeObject {
     }
   }
 
-  open() {
-    if (this.isDisposed()) {
-      throw new Error('Can not open a ActionSheet that was closed');
-    }
-    this._nativeCall('open');
-    return this;
-  }
-
-  close() {
-    this.dispose();
-    return this;
-  }
 }
 
 NativeObject.defineProperties(ActionSheet.prototype, {
