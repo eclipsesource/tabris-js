@@ -1,4 +1,6 @@
-import {Color, TextInput} from 'tabris';
+import {
+  Color, TextInput, TextInputAcceptEvent, TextInputTextChangedEvent, TextInputInputEvent, EventObject
+} from 'tabris';
 
 let widget: TextInput = new TextInput();
 
@@ -16,7 +18,7 @@ let enterKeyType: 'default' | 'done' | 'next' | 'send' | 'search' | 'go';
 let message: string;
 let text: string;
 let textColor: Color;
-let type: 'default' | 'multiline' | 'password' | 'search';
+let textInputType: 'default' | 'multiline' | 'password' | 'search';
 
 alignment = widget.alignment;
 autoCapitalize = widget.autoCapitalize;
@@ -31,7 +33,7 @@ enterKeyType = widget.enterKeyType;
 message = widget.message;
 text = widget.text;
 textColor = widget.textColor;
-type = widget.type;
+textInputType = widget.type;
 
 widget.alignment = alignment;
 widget.autoCapitalize = autoCapitalize;
@@ -46,14 +48,24 @@ widget.enterKeyType = enterKeyType;
 widget.message = message;
 widget.text = text;
 widget.textColor = textColor;
-widget.type = type;
+widget.type = textInputType;
 
 // Events
+let target: TextInput = widget;
+let timeStamp: number = 0;
+let type: string = 'foo';
+let value: string = 'bar';
+
+let acceptEvent: TextInputAcceptEvent = {target, timeStamp, type, text};
+let blurEvent: EventObject<TextInput> = {target, timeStamp, type};
+let focusEvent: EventObject<TextInput> = {target, timeStamp, type};
+let inputEvent: TextInputInputEvent = {target, timeStamp, type, text};
+let textChangedEvent: TextInputTextChangedEvent = {target, timeStamp, type, value};
 
 widget.on({
-  accept: event => text = event.text,
-  blur: event => {},
-  focus: event => {},
-  textChanged: event => text = event.value,
-  input: event => text = event.text
+  accept: (event: TextInputAcceptEvent) => {},
+  blur: (event: EventObject<TextInput>) => {},
+  focus: (event: EventObject<TextInput>) => {},
+  textChanged: (event: TextInputTextChangedEvent) => {},
+  input: (event: TextInputInputEvent) => {}
 });

@@ -1,4 +1,4 @@
-import {SearchAction} from 'tabris';
+import {SearchAction, SearchActionInputEvent, SearchActionAcceptEvent} from 'tabris';
 
 let widget: SearchAction = new SearchAction();
 
@@ -21,7 +21,14 @@ let voidReturnValue: void;
 voidReturnValue = widget.open();
 
 // Events
+let target: SearchAction = widget;
+let timeStamp: number = 0;
+let type: string = 'foo';
+
+let inputEvent: SearchActionInputEvent = {target, timeStamp, type, text};
+let acceptEvent: SearchActionAcceptEvent = {target, timeStamp, type, text};
+
 widget.on({
-  input: event => text = event.text,
-  accept: event => text = event.text
+  input: (event: SearchActionInputEvent) => {},
+  accept: (event: SearchActionAcceptEvent) => {}
 });

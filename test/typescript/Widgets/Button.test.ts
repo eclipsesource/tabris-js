@@ -1,4 +1,4 @@
-import {Button, Color, Image} from 'tabris';
+import {Button, Color, Image, EventObject} from 'tabris';
 
 let widget: Button = new Button();
 
@@ -21,6 +21,12 @@ widget.text = text;
 widget.textColor = textColor;
 
 // Events
+let target: Button = widget;
+let timeStamp: number = 0;
+let type: string = 'foo';
+
+let buttonSelectEvent: EventObject<Button> = {target, timeStamp, type};
+
 widget.on({
-  select: event => {}
+  select: (event: EventObject<Button>) => {}
 });

@@ -1,4 +1,11 @@
-import { NavigationView, Color, WidgetCollection, Page, Selector } from 'tabris';
+import {
+  NavigationView,
+  Color,
+  WidgetCollection,
+  Page,
+  Selector,
+  NavigationViewToolbarHeightChangedEvent,
+} from 'tabris';
 
 let widget: NavigationView = new NavigationView;
 
@@ -37,8 +44,17 @@ widgetCollection = widget.pages(selector);
 fooCollection = widget.pages(Foo);
 
 // Events
-let height: number;
+let target: NavigationView = widget;
+let timeStamp: number = 0;
+let type: string = 'foo';
+let value: number = 0;
+
+let bottomToolbarHeightChangedEvent: NavigationViewToolbarHeightChangedEvent
+  = {target, timeStamp, type, value};
+let topToolbarHeightChangedEvent: NavigationViewToolbarHeightChangedEvent
+  = {target, timeStamp, type, value};
+
 widget.on({
-  bottomToolbarHeightChanged: event => height = event.value,
-  topToolbarHeightChanged: event => height = event.value
+  bottomToolbarHeightChanged: (event: NavigationViewToolbarHeightChangedEvent) => {},
+  topToolbarHeightChanged: (event: NavigationViewToolbarHeightChangedEvent) => {},
 });

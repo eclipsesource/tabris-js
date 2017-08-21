@@ -1,4 +1,4 @@
-import {AlertDialog} from 'tabris';
+import {AlertDialog, AlertDialogCloseEvent, EventObject} from 'tabris';
 
 let alertDialog: AlertDialog = new AlertDialog();
 
@@ -22,11 +22,19 @@ thisReturnValue = alertDialog.close();
 thisReturnValue = alertDialog.open();
 
 // Events
-let button: '' | 'ok' | 'cancel' | 'neutral';
+let target: AlertDialog = alertDialog;
+let timeStamp: number = 0;
+let type: string = 'foo';
+let button: '' | 'ok' | 'cancel' | 'neutral' = 'ok';
+
+let alertDialogCloseEvent: AlertDialogCloseEvent = {target, timeStamp, type, button};
+let closeCancelEvent: EventObject<AlertDialog> = {target, timeStamp, type};
+let closeNeutralEvent: EventObject<AlertDialog> = {target, timeStamp, type};
+let closeOkEvent: EventObject<AlertDialog> = {target, timeStamp, type};
 
 alertDialog.on({
-  close: event => button = event.button,
-  closeCancel: event => {},
-  closeNeutral: event => {},
-  closeOk: event => {}
+  close: (event: AlertDialogCloseEvent) => {},
+  closeCancel: (event: EventObject<AlertDialog>) => {},
+  closeNeutral: (event: EventObject<AlertDialog>) => {},
+  closeOk: (event: EventObject<AlertDialog>) => {}
 });

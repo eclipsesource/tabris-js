@@ -1,4 +1,4 @@
-import {Drawer, ui} from 'tabris';
+import {Drawer, ui, EventObject} from 'tabris';
 
 let widget: Drawer = ui.drawer;
 
@@ -14,3 +14,14 @@ let thisReturnValue: Drawer;
 
 thisReturnValue = widget.close();
 thisReturnValue = widget.open();
+
+// Events
+let target: Drawer = widget;
+let timeStamp: number = 0;
+let type: string = 'foo';
+
+let drawerCloseEvent: EventObject<Drawer> = {target, timeStamp, type};
+
+widget.on({
+  close: (event: EventObject<Drawer>) => {}
+});

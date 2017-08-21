@@ -344,6 +344,7 @@
       }
     },
     "panUp": {
+      "eventObject": "WidgetPanEvent",
       "description": "Fired when a finger starts moving up.",
       "parameters": {
         "state": {
@@ -373,6 +374,7 @@
       }
     },
     "panDown": {
+      "eventObject": "WidgetPanEvent",
       "description": "Fired when a finger starts moving down.",
       "parameters": {
         "state": {
@@ -402,6 +404,7 @@
       }
     },
     "panLeft": {
+      "eventObject": "WidgetPanEvent",
       "description": "Fired when a finger starts moving left.",
       "parameters": {
         "state": {
@@ -431,6 +434,7 @@
       }
     },
     "panRight": {
+      "eventObject": "WidgetPanEvent",
       "description": "Fired when a finger starts moving right.",
       "parameters": {
         "state": {
@@ -460,6 +464,7 @@
       }
     },
     "panHorizontal": {
+      "eventObject": "WidgetPanEvent",
       "description": "Fired when a finger starts moving left or right.",
       "parameters": {
         "state": {
@@ -489,6 +494,7 @@
       }
     },
     "panVertical": {
+      "eventObject": "WidgetPanEvent",
       "description": "Fired when a finger starts moving up or down.",
       "parameters": {
         "state": {
@@ -518,6 +524,7 @@
       }
     },
     "swipeUp": {
+      "eventObject": "WidgetSwipeEvent",
       "description": "Fired when a finger moves up quickly.",
       "parameters": {
         "touches": {
@@ -527,6 +534,7 @@
       }
     },
     "swipeDown": {
+      "eventObject": "WidgetSwipeEvent",
       "description": "Fired when a finger moves down quickly.",
       "parameters": {
         "touches": {
@@ -536,6 +544,7 @@
       }
     },
     "swipeLeft": {
+      "eventObject": "WidgetSwipeEvent",
       "description": "Fired when a finger moves left quickly.",
       "parameters": {
         "touches": {
@@ -545,6 +554,7 @@
       }
     },
     "swipeRight": {
+      "eventObject": "WidgetSwipeEvent",
       "description": "Fired when a finger moves right quickly.",
       "parameters": {
         "touches": {
@@ -554,6 +564,7 @@
       }
     },
     "touchStart": {
+      "eventObject": "WidgetTouchEvent",
       "description": "Fired when a widget is touched. See [Touch Events](../touch.md).",
       "parameters": {
         "touches": {
@@ -563,6 +574,7 @@
       }
     },
     "touchMove": {
+      "eventObject": "WidgetTouchEvent",
       "description": "Fired repeatedly while swiping across the screen.",
       "parameters": {
         "touches": {
@@ -572,6 +584,7 @@
       }
     },
     "touchEnd": {
+      "eventObject": "WidgetTouchEvent",
       "description": "Fired when a touch ends on the same widget than it started on.",
       "parameters": {
         "touches": {
@@ -581,6 +594,7 @@
       }
     },
     "touchCancel": {
+      "eventObject": "WidgetTouchEvent",
       "description": "Fired instead of touchEnd when the touch ends on another widget than it started on.",
       "parameters": {
         "touches": {

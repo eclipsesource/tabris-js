@@ -1,4 +1,12 @@
-import {Color, TabFolder, Tab} from 'tabris';
+import {
+  Color,
+  TabFolder,
+  Tab,
+  TabFolderScrollEvent,
+  TabFolderSelectEvent,
+  TabFolderSelectionChangedEvent
+} from 'tabris';
+
 
 let widget: TabFolder = new TabFolder;
 
@@ -22,12 +30,18 @@ widget.tabMode = tabMode;
 widget.textColor = textColor;
 
 // Events
-let offset: number;
+let target: TabFolder = widget;
+let timeStamp: number = 0;
+let type: string = 'foo';
+let offset: number = 0;
+let value: Tab = widget.selection;
+
+let tabFolderScrollEvent: TabFolderScrollEvent = {target, timeStamp, type, offset, selection};
+let tabFolderSelectEvent: TabFolderSelectEvent = {target, timeStamp, type, selection};
+let tabFolderSelectionChangedEvent: TabFolderSelectionChangedEvent = {target, timeStamp, type, value};
+
 widget.on({
-  selectionChanged: event => selection = event.value,
-  select: event => selection = event.selection,
-  scroll: event => {
-    offset = event.offset;
-    selection = event.selection;
-  }
+  selectionChanged: (event: TabFolderSelectionChangedEvent) => {},
+  select: (event: TabFolderSelectEvent) => {},
+  scroll: (event: TabFolderScrollEvent) => {}
 });

@@ -11,7 +11,14 @@ import {Widget,
  AnimationOptions,
  Selector,
  WidgetCollection,
- Composite
+ Composite,
+ EventObject,
+ WidgetResizeEvent,
+ WidgetSwipeEvent,
+ WidgetTouchEvent,
+ WidgetTapEvent,
+ WidgetLongpressEvent,
+ WidgetPanEvent,
 } from 'tabris';
 
 let widget: Widget = new Composite();
@@ -98,14 +105,14 @@ widget.width = width;
 
 // Methods
 class Foo extends Composite {}
-let fooCollection: WidgetCollection<Foo>;
+let fooCollection: WidgetCollection<Widget>;
 let widgetCollection: WidgetCollection<Widget>;
 let properties: {transform?: Transformation, opacity?: number} = {};
 let parent: Composite = new Composite();
 let options: AnimationOptions = {};
 let selector: Selector = '';
 let otherWidget: Widget = new Composite();
-let promise: Promise<any>;
+let promise: Promise<Widget>;
 let thisReturnValue: Widget;
 let voidReturnValue: void;
 let bool: boolean;
@@ -131,85 +138,70 @@ widgetCollection = widget.siblings(selector);
 fooCollection = widget.siblings(Foo);
 
 // Events
-let state: 'start'|'change'|'end'|'cancel';
-let touches: {x: number, y: number}[];
-let absTouches: {x: number, y: number, absoluteX: number, absoluteY: number}[];
-let isNumber: number;
+let target: Widget = widget;
+let timeStamp: number = 0;
+let type: string = 'foo';
+let state: 'start'|'change'|'end'|'cancel' = 'start';
+let touches: {x: number, y: number}[] = [];
+let absTouches: {x: number, y: number, absoluteX: number, absoluteY: number}[] = [];
+let translationX: number = 0;
+let translationY: number = 0;
+let velocityX: number = 0;
+let velocityY: number = 0;
+
+let disposeEvent: EventObject<Widget> = {target, timeStamp, type};
+let resizeEvent: WidgetResizeEvent = {target, timeStamp, type, height, left, top, width};
+let swipeDownEvent: WidgetSwipeEvent = {target, timeStamp, type, touches};
+let swipeLeftEvent: WidgetSwipeEvent = {target, timeStamp, type, touches};
+let swipeRightEvent: WidgetSwipeEvent = {target, timeStamp, type, touches};
+let swipeUpEvent: WidgetSwipeEvent = {target, timeStamp, type, touches};
+let touchCancelEvent: WidgetTouchEvent = {target, timeStamp, type, touches: absTouches};
+let touchEndEvent: WidgetTouchEvent = {target, timeStamp, type, touches: absTouches};
+let touchMoveEvent: WidgetTouchEvent = {target, timeStamp, type, touches: absTouches};
+let touchStartEvent: WidgetTouchEvent = {target, timeStamp, type, touches: absTouches};
+let tapEvent: WidgetTapEvent = {target, timeStamp, type, touches};
+let longpressEvent: WidgetLongpressEvent = {target, timeStamp, type, state, touches};
+let panEvent: WidgetPanEvent = {
+  target, timeStamp, type, state, touches, translationX, translationY, velocityX, velocityY
+};
+let panDownEvent: WidgetPanEvent = {
+  target, timeStamp, type, state, touches, translationX, translationY, velocityX, velocityY
+};
+let panHorizontalEvent: WidgetPanEvent = {
+  target, timeStamp, type, state, touches, translationX, translationY, velocityX, velocityY
+};
+let panLeftEvent: WidgetPanEvent = {
+  target, timeStamp, type, state, touches, translationX, translationY, velocityX, velocityY
+};
+let panRightEvent: WidgetPanEvent = {
+  target, timeStamp, type, state, touches, translationX, translationY, velocityX, velocityY
+};
+let panUpEvent: WidgetPanEvent = {
+  target, timeStamp, type, state, touches, translationX, translationY, velocityX, velocityY
+};
+let panVerticalEvent: WidgetPanEvent = {
+  target, timeStamp, type, state, touches, translationX, translationY, velocityX, velocityY
+};
+
+
 widget.on({
-  dispose: event => {},
-  resize: event => {
-    isNumber = event.height;
-    isNumber = event.width;
-    isNumber = event.top;
-    isNumber = event.left;
-  },
-  swipeDown: event => touches = event.touches,
-  swipeLeft: event => touches = event.touches,
-  swipeRight: event => touches = event.touches,
-  swipeUp: event => touches = event.touches,
-  touchCancel: event => absTouches = event.touches,
-  touchEnd: event => absTouches = event.touches,
-  touchMove: event => absTouches = event.touches,
-  touchStart: event => absTouches = event.touches,
-  tap: event => touches = event.touches,
-  longpress: event => {
-    state = event.state;
-    touches = event.touches;
-  },
-  pan: event => {
-    state = event.state;
-    touches = event.touches;
-    isNumber = event.translationX;
-    isNumber = event.translationY;
-    isNumber = event.velocityX;
-    isNumber = event.velocityY;
-  },
-  panDown: event => {
-    state = event.state;
-    touches = event.touches;
-    isNumber = event.translationX;
-    isNumber = event.translationY;
-    isNumber = event.velocityX;
-    isNumber = event.velocityY;
-  },
-  panHorizontal: event => {
-    state = event.state;
-    touches = event.touches;
-    isNumber = event.translationX;
-    isNumber = event.translationY;
-    isNumber = event.velocityX;
-    isNumber = event.velocityY;
-  },
-  panLeft: event => {
-    state = event.state;
-    touches = event.touches;
-    isNumber = event.translationX;
-    isNumber = event.translationY;
-    isNumber = event.velocityX;
-    isNumber = event.velocityY;
-  },
-  panRight: event => {
-    state = event.state;
-    touches = event.touches;
-    isNumber = event.translationX;
-    isNumber = event.translationY;
-    isNumber = event.velocityX;
-    isNumber = event.velocityY;
-  },
-  panUp: event => {
-    state = event.state;
-    touches = event.touches;
-    isNumber = event.translationX;
-    isNumber = event.translationY;
-    isNumber = event.velocityX;
-    isNumber = event.velocityY;
-  },
-  panVertical: event => {
-    state = event.state;
-    touches = event.touches;
-    isNumber = event.translationX;
-    isNumber = event.translationY;
-    isNumber = event.velocityX;
-    isNumber = event.velocityY;
-  }
+  dispose: (event: EventObject<Widget>) => {},
+  resize: (event: WidgetResizeEvent) => {},
+  swipeDown: (event: WidgetSwipeEvent) => {},
+  swipeLeft: (event: WidgetSwipeEvent) => {},
+  swipeRight: (event: WidgetSwipeEvent) => {},
+  swipeUp: (event: WidgetSwipeEvent) => {},
+  touchCancel: (event: WidgetTouchEvent) => {},
+  touchEnd: (event: WidgetTouchEvent) => {},
+  touchMove: (event: WidgetTouchEvent) => {},
+  touchStart: (event: WidgetTouchEvent) => {},
+  tap: (event: WidgetTapEvent) => {},
+  longpress: (event: WidgetLongpressEvent) => {},
+  pan: (event: WidgetPanEvent) => {},
+  panDown: (event: WidgetPanEvent) => {},
+  panHorizontal: (event: WidgetPanEvent) => {},
+  panLeft: (event: WidgetPanEvent) => {},
+  panRight: (event: WidgetPanEvent) => {},
+  panUp: (event: WidgetPanEvent) => {},
+  panVertical: (event: WidgetPanEvent) => {}
 });

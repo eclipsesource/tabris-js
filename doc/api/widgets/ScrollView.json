@@ -62,6 +62,7 @@
   },
   "events": {
     "scrollX": {
+      "eventObject": "ScrollViewScrollEvent",
       "description": "Fired while scrolling horizontally.",
       "parameters": {
         "offset": {
@@ -71,6 +72,7 @@
       }
     },
     "scrollY": {
+      "eventObject": "ScrollViewScrollEvent",
       "description": "Fired while scrolling vertically.",
       "parameters": {
         "offset": {

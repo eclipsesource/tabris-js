@@ -1,4 +1,4 @@
-import {Color, Image, ToggleButton} from 'tabris';
+import {Color, Image, ToggleButton, ToggleButtonCheckedChangedEvent, ToggleButtonSelectEvent} from 'tabris';
 
 let widget: ToggleButton = new ToggleButton();
 
@@ -22,7 +22,15 @@ widget.text = text;
 widget.textColor = textColor;
 
 // Events
+let target: ToggleButton = widget;
+let timeStamp: number = 0;
+let type: string = 'foo';
+let value: boolean = true;
+
+let checkedChangedEvent: ToggleButtonCheckedChangedEvent = {target, timeStamp, type, value};
+let toggleButtonSelectEvent: ToggleButtonSelectEvent = {target, timeStamp, type, checked};
+
 widget.on({
-  checkedChanged: event => checked = event.value,
-  select: event => checked = event.checked
+  checkedChanged: (event: ToggleButtonCheckedChangedEvent) => {},
+  select: (event: ToggleButtonSelectEvent) => {},
 });

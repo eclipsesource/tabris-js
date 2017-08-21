@@ -1,4 +1,4 @@
-import {Page, Image} from 'tabris';
+import {Page, Image, EventObject} from 'tabris';
 
 let widget: Page = new Page();
 
@@ -16,7 +16,14 @@ widget.image = image;
 widget.title = title;
 
 // Events
+let target: Page = widget;
+let timeStamp: number = 0;
+let type: string = 'foo';
+
+let appearEvent: EventObject<Page> = {target, timeStamp, type};
+let disappearEvent: EventObject<Page> = {target, timeStamp, type};
+
 widget.on({
-  appear: event => {},
-  disappear: event => {}
+  appear: (event: EventObject<Page>) => {},
+  disappear: (event: EventObject<Page>) => {},
 });

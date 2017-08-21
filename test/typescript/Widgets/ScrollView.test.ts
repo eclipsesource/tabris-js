@@ -1,4 +1,4 @@
-import {ScrollView} from 'tabris';
+import {ScrollView, ScrollViewScrollEvent} from 'tabris';
 
 let widget: ScrollView = new ScrollView();
 
@@ -24,7 +24,14 @@ thisReturnValue = widget.scrollToY(offset);
 thisReturnValue = widget.scrollToY(offset, options);
 
 // Events
+let target: ScrollView = widget;
+let timeStamp: number = 0;
+let type: string = 'foo';
+
+let scrollXEvent: ScrollViewScrollEvent = {target, timeStamp, type, offset};
+let scrollYEvent: ScrollViewScrollEvent = {target, timeStamp, type, offset};
+
 widget.on({
-  scrollX: event => offset = event.offset,
-  scrollY: event => offset = event.offset
+  scrollX: (event: ScrollViewScrollEvent) => {},
+  scrollY: (event: ScrollViewScrollEvent) => {}
 });

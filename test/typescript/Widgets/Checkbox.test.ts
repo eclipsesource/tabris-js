@@ -1,4 +1,4 @@
-import {CheckBox, Color} from 'tabris';
+import {CheckBox, Color, CheckBoxSelectEvent, CheckBoxCheckedChangedEvent} from 'tabris';
 
 let widget: CheckBox = new CheckBox();
 
@@ -20,7 +20,15 @@ widget.tintColor = color;
 widget.checkedTintColor = color;
 
 // Events
+let target: CheckBox = widget;
+let timeStamp: number = 0;
+let type: string = 'foo';
+let value: boolean = true;
+
+let checkedChangedEvent: CheckBoxCheckedChangedEvent = {target, timeStamp, type, value};
+let checkBoxSelectEvent: CheckBoxSelectEvent = {target, timeStamp, type, checked};
+
 widget.on({
-  checkedChanged: event => checked = event.value,
-  select: event => checked = event.checked
+  checkedChanged: (event: CheckBoxCheckedChangedEvent) => {},
+  select: (event: CheckBoxSelectEvent) => {}
 });

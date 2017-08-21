@@ -1,4 +1,4 @@
-import {app} from 'tabris';
+import {App, app, EventObject, AppBackNavigationEvent} from 'tabris';
 
 // Properties
 let id: string;
@@ -30,13 +30,23 @@ voidReturnValue = app.reload();
 voidPromiseReturnValue = app.launch(url);
 
 // Events
-let preventDefault: () => void;
+let target: App = app;
+let timeStamp: number = 0;
+let type: string = 'foo';
+let preventDefault: () => void = () => {};
+
+let backgroundEvent: EventObject<App> = {target, timeStamp, type};
+let backNavigationEvent: AppBackNavigationEvent = {target, timeStamp, type, preventDefault};
+let foregroundEvent: EventObject<App> = {target, timeStamp, type};
+let pauseEvent: EventObject<App> = {target, timeStamp, type};
+let resumeEvent: EventObject<App> = {target, timeStamp, type};
+let terminateEvent: EventObject<App> = {target, timeStamp, type};
 
 app.on({
-  background: event => {},
-  backNavigation: event => preventDefault = event.preventDefault,
-  foreground: event => {},
-  pause: event => {},
-  resume: event => {},
-  terminate: event => {}
+  background: (event: EventObject<App>) => {},
+  backNavigation: (event: EventObject<App>) => {},
+  foreground: (event: EventObject<App>) => {},
+  pause: (event: EventObject<App>) => {},
+  resume: (event: EventObject<App>) => {},
+  terminate: (event: EventObject<App>) => {}
 });

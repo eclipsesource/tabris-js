@@ -14,7 +14,9 @@ export as namespace tabris;
 
 const PROPERTIES_OBJECT = 'PropertiesObject';
 const EVENTS_OBJECT = 'EventsObject';
+const EVENT_OBJECT = 'EventObject<T>';
 const CLASS_DEPENDENT_TYPES = [PROPERTIES_OBJECT, EVENTS_OBJECT];
+let eventObjectNames = [EVENT_OBJECT];
 
 exports.generateTsd = function generateTsd({files, typings, version}) {
   let defs = readJsonDefs(files);
@@ -68,6 +70,8 @@ function createTypeDef(result, def) {
     addPropertyInterface(result, def);
     result.append('');
     addEventsInterface(result, def);
+    result.append('');
+    addEventObjectInterfaces(result, def);
   }
   result.append('');
   addClass(result, def);
@@ -159,43 +163,57 @@ function createEventsInterfaceDef(def) {
 }
 
 function addEvents(result, def) {
-  if (def.type === 'NativeObject') {
-    result.append('');
-    result.append('[k: string]: undefined | ((event: EventObject<NativeObject>) => void);');
-  }
   if (def.events) {
-    let type = def.type;
-    Object.keys(def.events).sort().forEach((eventName) => {
+    Object.keys(def.events).sort().forEach((name) => {
       result.append('');
-      result.append(createEvent(type, eventName, def.events[eventName]));
+      result.append(createEvent(name, def));
     });
   }
 }
 
-function createEvent(type, name, def) {
+function createEvent(name, def) {
   let result = [];
-  result.push(createDoc(Object.assign({}, def, {parameters: []})));
-  result.push(`${name}?: (event: {${createEventParams(type, def.parameters)}}) => void;`);
+  result.push(createDoc(Object.assign({}, def.events[name], {parameters: []})));
+  result.push(`${name}?: (event: ${getEventType(name, def)}) => void;`);
   return result.join('\n');
 }
 
-function createEventParams(type, params) {
-  let result = [];
-  let standardParameters = {
-    target: {type},
-    type: {type: 'string'},
-    timeStamp: {type: 'number'}
-  };
-  let parameters = Object.assign({}, params, standardParameters);
-  Object.keys(parameters).sort().forEach((name) => {
+function addEventObjectInterfaces(result, def) {
+  if (def.events) {
+    Object.keys(def.events).filter(name => !!def.events[name].parameters).sort().forEach((name) => {
+      let eventType = getEventType(name, def);
+      if (!eventObjectNames.find(name => name === eventType)) {
+        eventObjectNames.push(eventType);
+        result.append('');
+        addEventObjectInterface(result, name, def);
+      }
+    });
+  }
+}
+
+function getEventType(name, def) {
+  if (def.events[name].parameters) {
+    return def.events[name].eventObject || (def.type + capitalizeFirstChar(name) + 'Event');
+  } else {
+    return `EventObject<${def.type}>`;
+  }
+}
+
+function addEventObjectInterface(result, name, def) {
+  let parameters = def.events[name].parameters || {};
+  let eventType = getEventType(name, def);
+  result.append(`interface ${eventType} extends EventObject<${def.type}> {`);
+  result.indent++;
+  Object.keys(parameters).sort().forEach(name => {
     let values = [];
     (parameters[name].values || []).sort().forEach((value) => {
       values.push(`"${value}"`);
     });
     let valuesType = (values || []).join(' | ');
-    result.push(`readonly ${name}: ${valuesType || parameters[name].type}`);
+    result.append(`readonly ${name}: ${valuesType || parameters[name].type};`);
   });
-  return result.join(', ');
+  result.indent--;
+  result.append('}');
 }
 
 function addMethods(result, def) {
@@ -340,6 +358,10 @@ function splitIntoLines(text, maxlen) {
     }
   }
   return linesOut;
+}
+
+function capitalizeFirstChar(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 class Text {

@@ -87,6 +87,7 @@
   },
   "events": {
     "topToolbarHeightChanged": {
+      "eventObject": "NavigationViewToolbarHeightChangedEvent",
       "description": "Fired when the height of the top toolbar changes, e.g. if it changes visibility.",
       "parameters": {
         "value": {
@@ -96,6 +97,7 @@
       }
     },
     "bottomToolbarHeightChanged": {
+      "eventObject": "NavigationViewToolbarHeightChangedEvent",
       "description": "Fired when the height of the bottom toolbar changes, e.g. if it changes visibility.",
       "parameters": {
         "value": {

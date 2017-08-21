@@ -1,4 +1,6 @@
-import {Composite, Widget, Button, WidgetCollection, BoxDimensions} from 'tabris';
+import {
+  Composite, Widget, Button, WidgetCollection, CompositeAddChildEvent, CompositeRemoveChildEvent, BoxDimensions
+} from 'tabris';
 
 let widget: Composite = new Composite();
 
@@ -22,14 +24,16 @@ thisReturnValue = widget.append(widgets);
 thisReturnValue = widget.append(widgetCollection);
 
 // Events
-let index: number;
+let target: Composite = widget;
+let timeStamp: number = 0;
+let type: string = 'foo';
+let child: Widget = widgetA;
+let index: number = 0;
+
+let addChildEvent: CompositeAddChildEvent = {target, timeStamp, type, child, index};
+let removeChildEvent: CompositeRemoveChildEvent = {target, timeStamp, type, child, index};
+
 widget.on({
-  addchild: event => {
-    widgetA = event.child;
-    index = event.index;
-  },
-  removechild: event => {
-    widgetA = event.child;
-    index = event.index;
-  }
+  addChild: (event: CompositeAddChildEvent) => {},
+  removeChild: (event: CompositeRemoveChildEvent) => {}
 });

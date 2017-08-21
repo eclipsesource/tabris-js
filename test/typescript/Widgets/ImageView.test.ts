@@ -1,4 +1,4 @@
-import {ImageView, Image, Color} from 'tabris';
+import {ImageView, Image, Color, ImageViewLoadEvent} from 'tabris';
 
 let widget: ImageView = new ImageView;
 
@@ -16,7 +16,13 @@ widget.scaleMode = scaleMode;
 widget.tintColor = tintColor;
 
 // Events
-let error: boolean;
+let target: ImageView = widget;
+let timeStamp: number = 0;
+let type: string = 'foo';
+let error: boolean = false;
+
+let imageViewLoadEvent: ImageViewLoadEvent = {target, timeStamp, type, error};
+
 widget.on({
-  load: event => error = event.error
+  load: (event: ImageViewLoadEvent) => {}
 });

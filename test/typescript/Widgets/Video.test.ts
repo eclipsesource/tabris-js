@@ -1,4 +1,4 @@
-import {Video} from 'tabris';
+import {Video, VideoStateChangedEvent} from 'tabris';
 
 let widget: Video = new Video();
 
@@ -31,6 +31,14 @@ voidReturnValue = widget.play();
 voidReturnValue = widget.play(speed);
 voidReturnValue = widget.seek(position);
 
+// Events
+let target: Video = widget;
+let timeStamp: number = 0;
+let type: string = 'foo';
+let value: 'empty' | 'fail' | 'finish' | 'open' | 'pause' | 'play' | 'ready' | 'stale' = 'play';
+
+let stateChangedEvent: VideoStateChangedEvent = {target, timeStamp, type, value};
+
 widget.on({
-  stateChanged: event => state = event.value
+  stateChanged: (event: VideoStateChangedEvent) => {}
 });

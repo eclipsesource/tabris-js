@@ -1,4 +1,4 @@
-import {Color, Picker} from 'tabris';
+import {Color, Picker, PickerSelectEvent, PickerSelectionIndexChangedEvent} from 'tabris';
 
 let widget: Picker = new Picker();
 
@@ -25,7 +25,16 @@ widget.selectionIndex = selectionIndex;
 widget.textColor = textColor;
 
 // Events
+let target: Picker = widget;
+let timeStamp: number = 0;
+let type: string = 'foo';
+let index: number = 0;
+let value: number = 0;
+
+let selectionIndexChangedEvent: PickerSelectionIndexChangedEvent = {target, timeStamp, type, value};
+let pickerSelectEvent: PickerSelectEvent = {target, timeStamp, type, index};
+
 widget.on({
-  selectionIndexChanged: event => selectionIndex = event.value,
-  select: event => selectionIndex = event.index
+  selectionIndexChanged: (event: PickerSelectionIndexChangedEvent) => {},
+  select: (event: PickerSelectEvent) => {}
 });

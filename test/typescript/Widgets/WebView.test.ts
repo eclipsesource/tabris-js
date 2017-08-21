@@ -1,4 +1,4 @@
-import {WebView} from 'tabris';
+import {WebView, EventObject, WebViewNavigateEvent, WebViewDownloadEvent, WebViewMessageEvent} from 'tabris';
 
 let widget: WebView = new WebView();
 
@@ -24,21 +24,22 @@ let thisReturnValue: WebView;
 thisReturnValue = widget.postMessage(message, targetOrigin);
 
 // Events
-let contentDisposition: string;
-let contentLength: number;
-let mimeType: string;
-let preventDefault: () => void;
+let target: WebView = widget;
+let timeStamp: number = 0;
+let type: string = 'foo';
+let contentDisposition: string = 'foo';
+let contentLength: number = 42;
+let mimeType: string = 'foo';
+let preventDefault: () => void = () => {};
+
+let navigateEvent: WebViewNavigateEvent = {target, timeStamp, type, url, preventDefault};
+let loadEvent: EventObject<WebView> = {target, timeStamp, type};
+let messageEvent: WebViewMessageEvent = {target, timeStamp, type, data};
+let downloadEvent: WebViewDownloadEvent = {target, timeStamp, type, contentDisposition, contentLength, mimeType, url};
+
 widget.on({
-  navigate: event => {
-    url = event.url;
-    preventDefault = event.preventDefault;
-  },
-  load: event => {},
-  message: event => message = event.data,
-  download: event => {
-    contentDisposition = event.contentDisposition;
-    contentLength = event.contentLength;
-    mimeType = event.mimeType;
-    url = event.url;
-  }
+  navigate: (event: WebViewNavigateEvent) => {},
+  load: (event: EventObject<WebView>) => {},
+  message: (event: WebViewMessageEvent) => {},
+  download: (event: WebViewDownloadEvent) => {}
 });

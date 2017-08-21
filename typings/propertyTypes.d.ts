@@ -233,3 +233,9 @@ interface BoxDimensions {
   bottom?: number;
 
 }
+
+interface EventObject<T> {
+  readonly target: T,
+  readonly timeStamp: number,
+  readonly type: string
+}

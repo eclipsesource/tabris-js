@@ -1,4 +1,4 @@
-import {NativeObject, Button} from 'tabris';
+import {NativeObject, Button, EventObject} from 'tabris';
 
 let nativeObject: NativeObject = new Button();
 
@@ -25,29 +25,3 @@ thisReturnValue = nativeObject.trigger(type, eventObject);
 thisReturnValue = nativeObject.get(property);
 thisReturnValue = nativeObject.set(property, value);
 thisReturnValue = nativeObject.set(properties);
-
-// Events
-
-nativeObject.on({
-  someEvent: event => {
-    nativeObject = event.target;
-    type = event.type;
-    timeStamp = event.timeStamp;
-  }
-});
-
-nativeObject.once({
-  someEvent: event => {
-    nativeObject = event.target;
-    type = event.type;
-    timeStamp = event.timeStamp;
-  }
-});
-
-nativeObject.off({
-  someEvent: event => {
-    nativeObject = event.target;
-    type = event.type;
-    timeStamp = event.timeStamp;
-  }
-});
