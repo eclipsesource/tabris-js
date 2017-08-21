@@ -1,4 +1,4 @@
-import {expect, mockTabris} from '../test';
+import {expect, mockTabris, spy} from '../test';
 import ClientStub from './ClientStub';
 import {createElement} from '../../src/tabris/JSX';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
@@ -29,6 +29,38 @@ describe('JSX', function() {
 
     it('sets properties', function() {
       expect(createElement(CheckBox, {text: 'foo'}).text).to.equal('foo');
+    });
+
+    it('attaches camelCase listeners', function() {
+      let selectSpy = spy();
+      let fooSpyA = spy();
+      let fooSpyZ = spy();
+
+      let widget = createElement(CheckBox, {onSelect: selectSpy, onAFoo: fooSpyA, onZFoo: fooSpyZ});
+      widget.trigger('select', {data: 1});
+      widget.trigger('aFoo', {data: 2});
+      widget.trigger('zFoo', {data: 3});
+
+      expect(selectSpy).to.have.been.calledOnce;
+      expect(selectSpy).to.have.been.calledWith({data: 1});
+      expect(fooSpyA).to.have.been.calledOnce;
+      expect(fooSpyA).to.have.been.calledWith({data: 2});
+      expect(fooSpyZ).to.have.been.calledOnce;
+      expect(fooSpyZ).to.have.been.calledWith({data: 3});
+    });
+
+    it('does not attach non-camelCase listeners', function() {
+      let selectSpy = spy();
+      let fooSpyA = spy();
+      let fooSpyZ = spy();
+
+      let widget = createElement(CheckBox, {onselect: selectSpy, onafoo: fooSpyA, onzfoo: fooSpyZ});
+      widget.trigger('select', {data: 1});
+      widget.trigger('foo', {data: 2});
+
+      expect(selectSpy).not.to.have.been.called;
+      expect(fooSpyA).not.to.have.been.called;
+      expect(fooSpyZ).not.to.have.been.called;
     });
 
     it('appends children', function() {

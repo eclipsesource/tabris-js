@@ -1,5 +1,6 @@
 const {generateDoc} = require('./grunt/grunt-generate-doc');
 const {generateTsd} = require('./grunt/grunt-generate-ts');
+const {generateJsx} = require('./grunt/grunt-generate-jsx');
 const {copyExamples} = require('./grunt/grunt-copy-examples');
 
 module.exports = function(grunt) {
@@ -37,13 +38,13 @@ module.exports = function(grunt) {
       typings: {
         src: [
           'typings/whatwg-fetch.d.ts',
-          'typings/JSX.d.ts',
           'typings/timer.d.ts',
           'typings/console.d.ts',
           'typings/localStorage.d.ts',
           'typings/XMLHttpRequest.d.ts',
           'typings/Event.d.ts',
-          'typings/WebSocket.d.ts'
+          'typings/WebSocket.d.ts',
+          'build/typings/JSX.d.ts'
         ],
         dest: 'build/tabris/globals.d.ts'
       },
@@ -141,6 +142,11 @@ module.exports = function(grunt) {
     generateDoc({files, targetPath, version});
   });
 
+  grunt.registerTask('generate-jsx', () => {
+    let files = grunt.file.expand(grunt.config('doc').api);
+    generateJsx({files});
+  });
+
   grunt.registerTask('generate-tsd', () => {
     let files = grunt.file.expand(grunt.config('doc').api);
     let typings = grunt.file.read(grunt.config('doc').typings);
@@ -175,6 +181,7 @@ module.exports = function(grunt) {
     'exec:uglify_boot',
     'package',
     'copy:readme',
+    'generate-jsx',
     'concat:typings',
     'generate-tsd'
   ]);

@@ -71,6 +71,8 @@ function createTypeDef(result, def) {
     result.append('');
     addEventsInterface(result, def);
     result.append('');
+    addJsxEventsInterface(result, def);
+    result.append('');
     addEventObjectInterfaces(result, def);
   }
   result.append('');
@@ -214,6 +216,38 @@ function addEventObjectInterface(result, name, def) {
   });
   result.indent--;
   result.append('}');
+}
+
+function addJsxEventsInterface(result, def) {
+  result.append(createJsxEventsInterfaceDef(def));
+  result.indent++;
+  addJsxEvents(result, def);
+  result.indent--;
+  result.append('}');
+}
+
+function createJsxEventsInterfaceDef(def) {
+  let str = 'interface ' + def.type + 'JsxEvents';
+  if (def.extends) {
+    str += ' extends ' + def.extends + 'JsxEvents';
+  }
+  return str + ' {';
+}
+
+function addJsxEvents(result, def) {
+  if (def.events) {
+    Object.keys(def.events).sort().forEach((name) => {
+      result.append('');
+      result.append(createJsxEvent(name, def));
+    });
+  }
+}
+
+function createJsxEvent(name, def) {
+  let result = [];
+  result.push(createDoc(Object.assign({}, def.events[name], {parameters: []})));
+  result.push(`on${capitalizeFirstChar(name)}?: (event: ${getEventType(name, def)}) => void;`);
+  return result.join('\n');
 }
 
 function addMethods(result, def) {

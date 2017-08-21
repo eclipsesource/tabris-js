@@ -21,7 +21,10 @@ ui.contentView.append(
     <radioButton class='col2 stacked' text="Don't care" checked={true} />
     <composite class='group'>
       <textView class='col1 grouped' text='Luggage:'/>
-      <slider class='grouped' id='luggageSlider'/>
+      <slider
+          class='grouped'
+          id='luggageSlider'
+          onSelectionChanged={({value}) => luggageWeight.text = `${value} Kg`}/>
       <textView class='grouped' id='luggageWeight' text='0 Kg'/>
     </composite>
     <checkBox class='col2 stacked' id='veggie' text='Vegetarian'/>
@@ -29,7 +32,13 @@ ui.contentView.append(
       <textView class='col1 grouped' text='Redeem miles:'/>
       <switch class='col2 grouped' id='miles'/>
     </composite>
-    <button class='colspan' id='confirm' text='Place Reservation' background='#8b0000' textColor='white'/>
+    <button
+        class='colspan'
+        id='confirm'
+        text='Place Reservation'
+        background='#8b0000'
+        textColor='white'
+        onSelect={updateMessage}/>
     <textView class='colspan' id='message'/>
   </scrollView>
 );
@@ -58,11 +67,6 @@ scrollView.apply({
   '.colspan': {left: 10, right: 10, top: 'prev() 18'},
   '#luggageSlider': {left: 140, right: 70},
   '#luggageWeight': {right: 10, width: 50}
-});
-
-confirmButton.on({select: () => updateMessage()});
-luggageSlider.on({
-  selectionChanged: ({value}) => luggageWeight.text = `${value} Kg`
 });
 
 function updateMessage() {

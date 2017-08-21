@@ -1,7 +1,9 @@
 import * as tabris from 'tabris';
 
-let action: tabris.Action = <action title='foo'/>;
-let button: tabris.Button = <button text='foo'/>;
+let onPanHandler: (event: tabris.WidgetPanEvent) => void = (event) => {};
+
+let action: tabris.Action = <action title='foo' onSelect={()=>{}}/>;
+let button: tabris.Button = <button text='foo' onPanUp={onPanHandler}/>;
 let canvas: tabris.Canvas = <canvas transform={{rotation: 360}}/>;
 let checkBox: tabris.CheckBox = <checkBox checked={true}/>;
 let collectionView: tabris.CollectionView = <collectionView refreshEnabled={true}/>;
