@@ -151,9 +151,9 @@ function addEventsInterface(result, def) {
 }
 
 function createEventsInterfaceDef(def) {
-  let str = 'interface ' + def.type + 'Events<T>';
+  let str = 'interface ' + def.type + 'Events';
   if (def.extends) {
-    str += ' extends ' + def.extends + 'Events<T>';
+    str += ' extends ' + def.extends + 'Events';
   }
   return str + ' {';
 }
@@ -161,27 +161,28 @@ function createEventsInterfaceDef(def) {
 function addEvents(result, def) {
   if (def.type === 'NativeObject') {
     result.append('');
-    result.append('[k: string]: undefined | ((event: EventObject<T>) => void);');
+    result.append('[k: string]: undefined | ((event: EventObject<NativeObject>) => void);');
   }
   if (def.events) {
-    Object.keys(def.events).sort().forEach((name) => {
+    let type = def.type;
+    Object.keys(def.events).sort().forEach((eventName) => {
       result.append('');
-      result.append(createEvent(name, def.events[name]));
+      result.append(createEvent(type, eventName, def.events[eventName]));
     });
   }
 }
 
-function createEvent(name, def) {
+function createEvent(type, name, def) {
   let result = [];
   result.push(createDoc(Object.assign({}, def, {parameters: []})));
-  result.push(`${name}?: (event: {${createEventParams(def.parameters)}}) => void;`);
+  result.push(`${name}?: (event: {${createEventParams(type, def.parameters)}}) => void;`);
   return result.join('\n');
 }
 
-function createEventParams(params) {
+function createEventParams(type, params) {
   let result = [];
   let standardParameters = {
-    target: {type: 'T'},
+    target: {type},
     type: {type: 'string'},
     timeStamp: {type: 'number'}
   };
@@ -272,7 +273,7 @@ function decodeType(type, className) {
       return className + 'Properties';
 
     case (EVENTS_OBJECT):
-      return className + 'Events<this>';
+      return className + 'Events';
 
     default:
       return type;
