@@ -1,7 +1,7 @@
 import {CollectionView, Widget} from 'tabris';
 
 // Properties
-let cellHeight: number|'auto'|((index: number, cellType: string) => number);
+let cellHeight: number|'auto'|((index: number, cellType: string) => number|'auto');
 let cellType: string|((index: number) => string);
 let columnCount: number;
 let createCell:  (cellType: string) => Widget;
