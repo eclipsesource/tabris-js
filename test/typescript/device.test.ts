@@ -1,4 +1,4 @@
-import {Device, device, DeviceOrientationChangedEvent} from 'tabris';
+import {Device, device} from 'tabris';
 
 // Properties
 let language: string;
@@ -25,8 +25,6 @@ let timeStamp: number = 0;
 let type: string = 'foo';
 let value: 'landscape-primary' | 'landscape-secondary' | 'portrait-primary' | 'portrait-secondary' = orientation;
 
-let orientationChangedEvent: DeviceOrientationChangedEvent = {target, timeStamp, type, value};
-
 device.on({
-  orientationChanged: (event: DeviceOrientationChangedEvent) => {}
+  fasdfa: () => {}
 });

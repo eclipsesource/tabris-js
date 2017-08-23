@@ -19,11 +19,14 @@
     },
     "topToolbarHeight": {
       "type": "number",
-      "description": "The height of the top toolbar. Is 0 if not visible."
+      "description": "The height of the top toolbar. Is 0 if not visible.",
+      "changeEventDescription": "Fired when the height of the top toolbar changes, e.g. if it changes visibility."
+
     },
     "bottomToolbarHeight": {
       "type": "number",
-      "description": "The height of the bottom toolbar. Is 0 if not visible or unsupported by the platform."
+      "description": "The height of the bottom toolbar. Is 0 if not visible or unsupported by the platform.",
+      "changeEventDescription": "Fired when the height of the bottom toolbar changes, e.g. if it changes visibility."
     },
     "titleTextColor": {
       "type": "Color",
@@ -82,28 +85,6 @@
       "platforms": {
         "ios": false,
         "android": false
-      }
-    }
-  },
-  "events": {
-    "topToolbarHeightChanged": {
-      "eventObject": "NavigationViewToolbarHeightChangedEvent",
-      "description": "Fired when the height of the top toolbar changes, e.g. if it changes visibility.",
-      "parameters": {
-        "value": {
-          "description": "The new height",
-          "type": "number"
-        }
-      }
-    },
-    "bottomToolbarHeightChanged": {
-      "eventObject": "NavigationViewToolbarHeightChangedEvent",
-      "description": "Fired when the height of the bottom toolbar changes, e.g. if it changes visibility.",
-      "parameters": {
-        "value": {
-          "description": "The new height",
-          "type": "number"
-        }
       }
     }
   },

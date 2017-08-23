@@ -1,4 +1,4 @@
-import {Color, Slider, SliderSelectionChangedEvent, SliderSelectEvent} from 'tabris';
+import {Color, Slider, SliderSelectEvent} from 'tabris';
 
 let widget: Slider = new Slider();
 
@@ -25,9 +25,7 @@ let type: string = 'foo';
 let value: number = 0;
 
 let sliderSelectEvent: SliderSelectEvent = {target, timeStamp, type, selection};
-let sliderSelectionChangedEvent: SliderSelectionChangedEvent = {target, timeStamp, type, value};
 
 widget.on({
-  selectionChanged: (event: SliderSelectionChangedEvent) => {},
   select: (event: SliderSelectEvent) => {}
 });

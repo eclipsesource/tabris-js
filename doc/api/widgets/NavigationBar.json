@@ -31,6 +31,7 @@
     "height": {
       "type": "number",
       "readonly": true,
+      "static": true,
       "description": "The height of the navigation bar in device independent pixel. Can be used in conjunction with the `displayMode` `float` to offset the content as to not have it covered by the navigation bar.",
       "platforms": {
         "windows": false,

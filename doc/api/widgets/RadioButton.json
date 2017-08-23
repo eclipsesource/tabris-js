@@ -43,15 +43,6 @@
     }
   },
   "events": {
-    "checkedChanged": {
-      "description": "Fired when the checked property changes.",
-      "parameters": {
-        "value": {
-          "description": "The new value of the `checked` property.",
-          "type": "boolean"
-        }
-      }
-    },
     "select": {
       "description": "Fired when the radio button is selected or deselected by the user.",
       "parameters": {

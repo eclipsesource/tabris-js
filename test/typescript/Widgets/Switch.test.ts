@@ -1,4 +1,4 @@
-import {Switch, Color, SwitchSelectEvent, SwitchCheckedChangedEvent} from 'tabris';
+import {Switch, Color, SwitchSelectEvent} from 'tabris';
 
 let widget: Switch = new Switch();
 
@@ -27,10 +27,8 @@ let timeStamp: number = 0;
 let type: string = 'foo';
 let value: boolean = false;
 
-let checkedChangedEvent: SwitchCheckedChangedEvent = {target, timeStamp, type, value};
 let SwitchSelectEvent: SwitchSelectEvent = {target, timeStamp, type, checked};
 
 widget.on({
-  checkedChanged: (event: SwitchCheckedChangedEvent) => {},
   select: (event: SwitchSelectEvent) => {},
 });

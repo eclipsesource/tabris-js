@@ -1,5 +1,5 @@
 import {
-  Color, TextInput, TextInputAcceptEvent, TextInputTextChangedEvent, TextInputInputEvent, EventObject
+  Color, TextInput, TextInputAcceptEvent, TextInputInputEvent, EventObject
 } from 'tabris';
 
 let widget: TextInput = new TextInput();
@@ -60,12 +60,10 @@ let acceptEvent: TextInputAcceptEvent = {target, timeStamp, type, text};
 let blurEvent: EventObject<TextInput> = {target, timeStamp, type};
 let focusEvent: EventObject<TextInput> = {target, timeStamp, type};
 let inputEvent: TextInputInputEvent = {target, timeStamp, type, text};
-let textChangedEvent: TextInputTextChangedEvent = {target, timeStamp, type, value};
 
 widget.on({
   accept: (event: TextInputAcceptEvent) => {},
   blur: (event: EventObject<TextInput>) => {},
   focus: (event: EventObject<TextInput>) => {},
-  textChanged: (event: TextInputTextChangedEvent) => {},
   input: (event: TextInputInputEvent) => {}
 });

@@ -3,8 +3,7 @@ import {
   Color,
   WidgetCollection,
   Page,
-  Selector,
-  NavigationViewToolbarHeightChangedEvent,
+  Selector
 } from 'tabris';
 
 let widget: NavigationView = new NavigationView;
@@ -42,19 +41,3 @@ let selector: Selector = '';
 
 widgetCollection = widget.pages(selector);
 fooCollection = widget.pages(Foo);
-
-// Events
-let target: NavigationView = widget;
-let timeStamp: number = 0;
-let type: string = 'foo';
-let value: number = 0;
-
-let bottomToolbarHeightChangedEvent: NavigationViewToolbarHeightChangedEvent
-  = {target, timeStamp, type, value};
-let topToolbarHeightChangedEvent: NavigationViewToolbarHeightChangedEvent
-  = {target, timeStamp, type, value};
-
-widget.on({
-  bottomToolbarHeightChanged: (event: NavigationViewToolbarHeightChangedEvent) => {},
-  topToolbarHeightChanged: (event: NavigationViewToolbarHeightChangedEvent) => {},
-});

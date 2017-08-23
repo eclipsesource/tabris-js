@@ -3,8 +3,7 @@ import {
   TabFolder,
   Tab,
   TabFolderScrollEvent,
-  TabFolderSelectEvent,
-  TabFolderSelectionChangedEvent
+  TabFolderSelectEvent
 } from 'tabris';
 
 
@@ -38,10 +37,8 @@ let value: Tab = widget.selection;
 
 let tabFolderScrollEvent: TabFolderScrollEvent = {target, timeStamp, type, offset, selection};
 let tabFolderSelectEvent: TabFolderSelectEvent = {target, timeStamp, type, selection};
-let tabFolderSelectionChangedEvent: TabFolderSelectionChangedEvent = {target, timeStamp, type, value};
 
 widget.on({
-  selectionChanged: (event: TabFolderSelectionChangedEvent) => {},
   select: (event: TabFolderSelectEvent) => {},
   scroll: (event: TabFolderScrollEvent) => {}
 });

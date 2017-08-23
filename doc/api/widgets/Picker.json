@@ -44,15 +44,6 @@
     }
   },
   "events": {
-    "selectionIndexChanged": {
-      "description": "Fired when the selectionIndex property changes.",
-      "parameters": {
-        "value": {
-          "description": "The new value of the `selectionIndex` property.",
-          "type": "number"
-        }
-      }
-    },
     "select": {
       "description": "Fired when an item was selected by the user.",
       "parameters": {

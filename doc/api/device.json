@@ -63,7 +63,8 @@
         "landscape-primary",
         "landscape-secondary"
       ],
-      "description": "The device orientation. One of `portrait-primary`, `portrait-secondary`, `landscape-primary`, and `landscape-secondary`."
+      "description": "The device orientation. One of `portrait-primary`, `portrait-secondary`, `landscape-primary`, and `landscape-secondary`.",
+      "changeEventDescription": "Fired when the `orientation` property has changed and the rotation animation has finished."
     },
     "win_keyboardPresent": {
       "type": "boolean",
@@ -82,23 +83,6 @@
       "platforms": {
         "ios": false,
         "android": false
-      }
-    }
-  },
-  "events": {
-    "orientationChanged": {
-      "description": "Fired when the `orientation` property has changed and the rotation animation has finished.",
-      "parameters": {
-        "value": {
-          "description": "The new value of the `orientation` property.",
-          "type": "string",
-          "values": [
-            "portrait-primary",
-            "portrait-secondary",
-            "landscape-primary",
-            "landscape-secondary"
-          ]
-        }
       }
     }
   }

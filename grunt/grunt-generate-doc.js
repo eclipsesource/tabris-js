@@ -34,6 +34,13 @@ exports.generateDoc = function generateDoc({files, targetPath, version}) {
         addTypeLink(def.type, `${def.type}.md`);
       }
     });
+    Object.keys(api).forEach(title => {
+      api[title].isNativeObject = isNativeObject(api, api[title]);
+    });
+  }
+
+  function isNativeObject(defs, def) {
+    return def && (def.type === 'NativeObject' || isNativeObject(defs, defs[def.extends]));
   }
 
   function readPropertyTypes() {
@@ -248,17 +255,15 @@ exports.generateDoc = function generateDoc({files, targetPath, version}) {
   }
 
   function renderEvents(def) {
-    if (!def.events || !Object.keys(def.events).length) {
+    if (!def.isNativeObject) {
       return '';
     }
-    let widgetEvents = Object.keys(def.events).map(name => Object.assign({name}, def.events[name]));
+    let widgetEvents = Object.keys(def.events || {}).map(name => Object.assign({name}, def.events[name]));
     let changeEvents = createChangeEvents(def.properties);
-    for (let changeEvent of changeEvents) {
-      if (!(widgetEvents.some(widgetEvent => widgetEvent.name === changeEvent.name))) {
-        widgetEvents.push(changeEvent);
-      }
+    let events = widgetEvents.concat(changeEvents).sort((a, b) => a.name.localeCompare(b.name));
+    if (!events || !Object.keys(events).length) {
+      return '';
     }
-    let events = widgetEvents.sort((a, b) => a.name.localeCompare(b.name));
     return [
       '## Events\n\n',
       ...events.map(({name, description, provisional, parameters, platforms}) => ([
@@ -277,15 +282,18 @@ exports.generateDoc = function generateDoc({files, targetPath, version}) {
     }
     return Object.keys(properties)
       .filter(name => !properties[name].static)
-      .map(name => ({
-        name: `${name}Changed`,
-        description: `Fired when the [*${name}*](#${name}) property has changed.`,
-        parameters: [{
-          name: 'value',
-          type: properties[name].type,
-          description: `The new value of [*${name}*](#${name}).`
-        }]
-      }));
+      .map(name => {
+        let standardDescription = `Fired when the [*${name}*](#${name}) property has changed.`;
+        return {
+          name: `${name}Changed`,
+          description: properties[name].changeEventDescription || standardDescription,
+          parameters: [{
+            name: 'value',
+            type: properties[name].type,
+            description: `The new value of [*${name}*](#${name}).`
+          }]
+        };
+      });
   }
 
   function renderSignature(parameters) {

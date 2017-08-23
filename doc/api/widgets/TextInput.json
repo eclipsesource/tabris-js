@@ -142,15 +142,6 @@
     "focus": {
       "description": "Fired when the widget gains focus."
     },
-    "textChanged": {
-      "description": "Fired when the text property changes.",
-      "parameters": {
-        "value": {
-          "description": "The new value of the `text` property.",
-          "type": "string"
-        }
-      }
-    },
     "input": {
       "description": "Fired when the text was changed by the user.",
       "parameters": {

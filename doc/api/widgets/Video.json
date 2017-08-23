@@ -87,18 +87,6 @@
       "description": "Starts playing the video, *[state](#state)* changes to `play`. Has no effect unless the current state is either `pause` or `ready`."
     }
   },
-  "events": {
-    "stateChanged": {
-      "description": "Fired when the state property changes.",
-      "parameters": {
-        "value": {
-          "description": "The new value of the `state` property.",
-          "type": "string",
-          "values": [ "empty", "open", "ready", "play", "stale", "pause", "finish", "fail"]
-        }
-      }
-    }
-  },
   "links": [
     {
       "title": "Snippet for creating a video widget",

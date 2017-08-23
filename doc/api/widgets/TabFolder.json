@@ -55,15 +55,6 @@
     }
   },
   "events": {
-    "selectionChanged": {
-      "description": "Fired when the selection property changes.",
-      "parameters": {
-        "value": {
-          "description": "The new value of the `selection` property.",
-          "type": "Tab"
-        }
-      }
-    },
     "select": {
       "description": "Fired when the selection property changes by user interaction.",
       "parameters": {
