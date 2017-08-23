@@ -1,6 +1,7 @@
 import * as tabris from 'tabris';
 
 let onPanHandler: (event: tabris.WidgetPanEvent) => void = (event) => {};
+let onTextChangedHandler: (event: tabris.PropertyChangedEvent<tabris.TextInput, string>) => void = (event) => {};
 
 let action: tabris.Action = <action title='foo' onSelect={()=>{}}/>;
 let button: tabris.Button = <button text='foo' onPanUp={onPanHandler}/>;
@@ -20,7 +21,7 @@ let slider: tabris.Slider = <slider maximum={100}/>;
 let switchButton: tabris.Switch = <switch thumbOnColor='red'/>;
 let tab: tabris.Tab = <tab badge='3'/>;
 let tabFolder: tabris.TabFolder = <tabFolder tabBarLocation='top'/>;
-let textInput: tabris.TextInput = <textInput autoCapitalize={true}/>;
+let textInput: tabris.TextInput = <textInput autoCapitalize={true} onTextChanged={onTextChangedHandler}/>;
 let textView: tabris.TextView = <textView alignment='right'/>;
 let toggleButton: tabris.ToggleButton = <toggleButton text='red'/>;
 let video: tabris.Video = <video autoPlay={true}/>;

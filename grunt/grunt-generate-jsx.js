@@ -1,6 +1,11 @@
 const {readJsonSync, writeFileSync} = require('fs-extra');
 
+const BASIC_TYPES = ['boolean', 'number', 'string', 'symbol', 'any', 'Object'];
+
 const header = `
+type Image = tabris.Image;
+type Selector = tabris.Selector;
+
 declare namespace JSX {
 
   function createElement(type: string|Function, properties: Object, ...children: Array<ElementClass>): ElementClass;
@@ -42,8 +47,8 @@ function createTypeDefs(defs) {
   let result = new Text();
   Object.keys(defs).forEach((name) => {
     addEventsInterface(result, defs[name]);
+    result.append('');
   });
-  result.append('');
   result.append(header);
   result.append('');
   result.indent++;
@@ -83,27 +88,62 @@ function createEventsInterfaceDef(def) {
 }
 
 function addEvents(result, def) {
-  if (def.events) {
-    Object.keys(def.events).sort().forEach((name) => {
-      result.append('');
-      result.append(createEvent(name, def));
-    });
+  if (def.isNativeObject) {
+    if (def.events) {
+      Object.keys(def.events).sort().forEach((name) => {
+        result.append('');
+        result.append(createEvent(def.type, name, def.events[name]));
+      });
+    }
+    if (def.properties) {
+      Object.keys(def.properties).filter(name => !def.properties[name].static).sort().forEach(name => {
+        result.append('');
+        result.append(createPropertyChangedEvent(def.type, name, def.properties[name]));
+      });
+    }
   }
 }
 
-function createEvent(name, def) {
+function createEvent(widgetName, eventName, def) {
   let result = [];
-  result.push(createDoc(Object.assign({}, def.events[name], {parameters: []})));
-  result.push(`on${capitalizeFirstChar(name)}?: (event: tabris.${getEventType(name, def)}) => void;`);
+  result.push(createDoc(Object.assign({}, def, {parameters: []})));
+  result.push(`on${capitalizeFirstChar(eventName)}?: `
+    + `(event: tabris.${getEventType(widgetName, eventName, def)}) => void;`);
   return result.join('\n');
 }
 
-function getEventType(name, def) {
-  if (def.events[name].parameters) {
-    return (def.events[name].eventObject || (def.type + capitalizeFirstChar(name) + 'Event'));
+function getEventType(widgetName, eventName, def) {
+  if (def.parameters) {
+    return (def.eventObject || (widgetName + capitalizeFirstChar(eventName) + 'Event'));
   } else {
-    return `EventObject<tabris.${def.type}>`;
+    return `EventObject<tabris.${widgetName}>`;
   }
+}
+
+function createPropertyChangedEvent(widgetName, propName, def) {
+  let result = [];
+  let standardDescription = `Fired when the [*${propName}*](#${propName}) property has changed.`;
+  let changeEvent = {
+    description: def.changeEventDescription || standardDescription,
+    parameters: [{
+      name: 'value',
+      type: def.type,
+      description: `The new value of [*${propName}*](#${propName}).`
+    }]
+  };
+  result.push(createDoc(changeEvent));
+  let type = (isBasicType(def.type) ? '' : 'tabris.') + def.type;
+  result.push(`on${capitalizeFirstChar(propName)}Changed?: `
+    + `(event: tabris.PropertyChangedEvent<tabris.${widgetName}, ${type}>) => void;`);
+  return result.join('\n');
+}
+
+function isBasicType(type) {
+  let isBasicType = type[0] === '{' || type[0] === '(';
+  for (let basicType of BASIC_TYPES) {
+    isBasicType |= type.startsWith(basicType);
+  }
+  return isBasicType;
 }
 
 function addInstrinsicElementsInterface(result, defs) {
