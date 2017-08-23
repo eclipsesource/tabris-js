@@ -43,8 +43,7 @@ module.exports = function(grunt) {
           'typings/localStorage.d.ts',
           'typings/XMLHttpRequest.d.ts',
           'typings/Event.d.ts',
-          'typings/WebSocket.d.ts',
-          'build/typings/JSX.d.ts'
+          'typings/WebSocket.d.ts'
         ],
         dest: 'build/tabris/globals.d.ts'
       },
