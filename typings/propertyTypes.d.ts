@@ -239,3 +239,10 @@ interface EventObject<T> {
   readonly timeStamp: number,
   readonly type: string
 }
+
+interface PropertyChangedEvent<T,U> {
+  readonly target: T,
+  readonly timeStamp: number,
+  readonly type: string,
+  readonly value: U
+}

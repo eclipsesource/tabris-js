@@ -1,4 +1,4 @@
-import {Color, RadioButton, RadioButtonSelectEvent} from 'tabris';
+import {Color, RadioButton, PropertyChangedEvent, RadioButtonSelectEvent} from 'tabris';
 
 let widget: RadioButton = new RadioButton();
 
@@ -25,8 +25,10 @@ let timeStamp: number = 0;
 let type: string = 'foo';
 let value: boolean = true;
 
+let checkedChangedEvent: PropertyChangedEvent<RadioButton, boolean> = {target, timeStamp, type, value};
 let radioButtonSelectEvent: RadioButtonSelectEvent = {target, timeStamp, type, checked};
 
 widget.on({
+  checkedChanged: (event: PropertyChangedEvent<RadioButton, boolean>) => {},
   select: (event: RadioButtonSelectEvent) => {}
 });

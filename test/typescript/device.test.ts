@@ -1,9 +1,10 @@
-import {Device, device} from 'tabris';
+import {Device, device, PropertyChangedEvent} from 'tabris';
 
+type Orientation = 'landscape-primary' | 'landscape-secondary' | 'portrait-primary' | 'portrait-secondary';
 // Properties
 let language: string;
 let model: string;
-let orientation: 'landscape-primary' | 'landscape-secondary' | 'portrait-primary' | 'portrait-secondary';
+let orientation: Orientation;
 let platform: 'Android' | 'iOS' | 'windows';
 let scaleFactor: number;
 let screenHeight: number;
@@ -23,8 +24,10 @@ version = device.version;
 let target: Device = device;
 let timeStamp: number = 0;
 let type: string = 'foo';
-let value: 'landscape-primary' | 'landscape-secondary' | 'portrait-primary' | 'portrait-secondary' = orientation;
+let value: Orientation = orientation;
+
+let orientationChangedEvent: PropertyChangedEvent<Device, Orientation> = {target, timeStamp, type, value};
 
 device.on({
-  fasdfa: () => {}
+  orientationChanged: (event: PropertyChangedEvent<Device, Orientation>) => {}
 });

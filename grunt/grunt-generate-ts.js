@@ -167,22 +167,44 @@ function addEvents(result, def) {
   if (def.events) {
     Object.keys(def.events).sort().forEach((name) => {
       result.append('');
-      result.append(createEvent(name, def));
+      result.append(createEvent(def.type, name, def.events[name]));
+    });
+  }
+  if (def.properties) {
+    Object.keys(def.properties).filter(name => !def.properties[name].static).sort().forEach(name => {
+      result.append('');
+      result.append(createPropertyChangedEvent(def.type, name, def.properties[name]));
     });
   }
 }
 
-function createEvent(name, def) {
+function createEvent(widgetName, eventName, def) {
   let result = [];
-  result.push(createDoc(Object.assign({}, def.events[name], {parameters: []})));
-  result.push(`${name}?: (event: ${getEventType(name, def)}) => void;`);
+  result.push(createDoc(Object.assign({}, def, {parameters: []})));
+  result.push(`${eventName}?: (event: ${getEventType(widgetName, eventName, def)}) => void;`);
+  return result.join('\n');
+}
+
+function createPropertyChangedEvent(widgetName, propName, def) {
+  let result = [];
+  let standardDescription = `Fired when the [*${propName}*](#${propName}) property has changed.`;
+  let changeEvent = {
+    description: def.changeEventDescription || standardDescription,
+    parameters: [{
+      name: 'value',
+      type: def.type,
+      description: `The new value of [*${propName}*](#${propName}).`
+    }]
+  };
+  result.push(createDoc(changeEvent));
+  result.push(`${propName}Changed?: (event: PropertyChangedEvent<${widgetName}, ${def.type}>) => void;`);
   return result.join('\n');
 }
 
 function addEventObjectInterfaces(result, def) {
   if (def.events) {
     Object.keys(def.events).filter(name => !!def.events[name].parameters).sort().forEach((name) => {
-      let eventType = getEventType(name, def);
+      let eventType = getEventType(def.type, name, def.events[name]);
       if (!eventObjectNames.find(name => name === eventType)) {
         eventObjectNames.push(eventType);
         result.append('');
@@ -192,17 +214,9 @@ function addEventObjectInterfaces(result, def) {
   }
 }
 
-function getEventType(name, def) {
-  if (def.events[name].parameters) {
-    return def.events[name].eventObject || (def.type + capitalizeFirstChar(name) + 'Event');
-  } else {
-    return `EventObject<${def.type}>`;
-  }
-}
-
 function addEventObjectInterface(result, name, def) {
   let parameters = def.events[name].parameters || {};
-  let eventType = getEventType(name, def);
+  let eventType = getEventType(def.type, name, def.events[name]);
   result.append(`interface ${eventType} extends EventObject<${def.type}> {`);
   result.indent++;
   Object.keys(parameters).sort().forEach(name => {
@@ -215,6 +229,14 @@ function addEventObjectInterface(result, name, def) {
   });
   result.indent--;
   result.append('}');
+}
+
+function getEventType(widgetName, eventName, def) {
+  if (def.parameters) {
+    return def.eventObject || (widgetName + capitalizeFirstChar(eventName) + 'Event');
+  } else {
+    return `EventObject<${widgetName}>`;
+  }
 }
 
 function addMethods(result, def) {
