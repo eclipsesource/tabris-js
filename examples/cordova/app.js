@@ -5,7 +5,6 @@ const MotionPage = require('./MotionPage');
 const NetworkPage = require('./NetworkPage');
 const MediaPage = require('./MediaPage');
 const CameraPage = require('./CameraPage');
-const ActionSheetPage = require('./ActionSheetPage');
 const BarcodeScannerPage = require('./BarcodeScannerPage');
 
 let navigationView = new NavigationView({left: 0, top: 0, right: 0, bottom: 0})
@@ -31,7 +30,6 @@ let contentContainer = new ScrollView({
     CameraPage,
     BarcodeScannerPage,
     MediaPage,
-    ActionSheetPage
   ]
 ).forEach(Page => {
   let page = new Page();
