@@ -48,7 +48,7 @@ As long as the task is still running, changes to your TypeScript code (any `.ts`
 
 In TypeScript not all APIs, not even all Tabris.js APIs, are perfectly type safe. It's therefore recommended to follow these general guidelines:
 
-<b>Casting</b>: Ideally, perform `instanceof` checks before casting. In TypeScript, castings can fail silently.
+<b>Casting</b>: Avoid explicit casting, as it can fail silently. Use [type guards](http://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types) instead.
 
 <b>Implicit "any"</b>: In TypeScript a value of the type `any` is essentially the same as a JavaScript value. The compiler will accept any actions on this value, including assigning it to typed variables. An implicit `any` may occur if
 you do not give a type for a variable, field or parameter, and none can be inferred by assignment. <em>Always give the type of function parameters. Fields and variables are safe only if they are assigned a value on declaration</em>.
@@ -63,6 +63,17 @@ you do not give a type for a variable, field or parameter, and none can be infer
 
 <b>NPM modules:</B> The `tabris` module is automatically type-safe, but the same is not true for all modules that can be installed via `npm`. You may have to <em>[manually install declaration files](http://www.typescriptlang.org/docs/handbook/declaration-files/consumption.html)</em> for each installed npm module.
 
+### Interfaces
+
+When used in TypeScript the tabris module exports interfaces used by the tabris API. These are:
+
+ * Property/parameter types: [`Image`](./types.md#Image), [`Color`](./types.md#Color), [`Font`](./types.md#Font), [`LayoutData`](./types.md#LayoutData), [`Bounds`](./types.md#Bounds), [`Transformation`](./types.md#Transformation), [`margin`](./types.md#Margin), [`dimension`](./types.md#Dimension), [`offset`](./types.md#Offset), [`BoxDimensions`](./types.md#BoxDimensions),  [`ImageData`](./types.md#ImageData), [`Selector`](./types.md#Selector) and [`AnimationOptions`](./types.md#AnimationOptions)
+ * The generic event object: [`EventObject<T>`](./widget-basics.md#Events), where `T` is the type of the `target` event property. Used for events  that have no type-specific properties. Also the basis for all other event interfaces.
+ * The change event object: [`PropertyChangedEvent<T, U>`](./types.md#PropertyChangedEvent), where `T` is the type of the `target` event property and `U` is the type of the `value` property. Used for all events matching the naming scheme `{propertyName}Changed`, e.g. `BackgroundChanged`.
+ * Special event objects: All other events use specific interfaces that follow the naming scheme `{TargetType}{EventName}Event`, e.g. `PickerSelectEvent`. You may want to use those to define listeners that do not use parameter destructuring.
+ * Property maps: These are the interfaces used by the [`set`](./api/NativeObject.md#set) method and widget constructors. You may want to use them for defining your own property maps when extending widget classes. They follow the naming scheme `{TargetType}Properties`, e.g. `CompositeProperties`.
+ * Listener maps: These are the interfaces used by the [`on`](./api/NativeObject.md#on) and [`off`](./api/NativeObject.md#off) methods. You may want to use them for defining your own listener maps when extending widget classes. They follow the naming scheme `{TargetType}Events`, e.g. `CompositeEvents`.
+
 ## JSX
 
 JSX is an extension to the JavaScript/TypeScript syntax that allows mixing code with XML-like declarations. Tabris 2 supports <em>type-safe JSX</em> out of the box with any TypeScript based project. All you have to do is name your files `.tsx` instead of `.ts`. You can then use JSX expressions to create widgets. For example...
@@ -70,7 +81,7 @@ JSX is an extension to the JavaScript/TypeScript syntax that allows mixing code 
 ```jsx
 ui.contentView.append(
   <composite left={0} top={0} right={0} bottom={0}>
-    <button centerX={0} top={100} text='Show Message'/>
+    <button centerX={0} top={100} text='Show Message' onSelect={handleButtonSelect}/>
     <textView centerX={0} top='prev() 50' font='24px'/>
   </composite>
 );
@@ -81,7 +92,7 @@ ui.contentView.append(
 ```js
 ui.contentView.append(
   new Composite({left: 0, top: 0, right: 0, bottom: 0}).append(
-    new Button({centerX: 0, top: 100, text: 'Show Message'}),
+    new Button({centerX: 0, top: 100, text: 'Show Message'}).on({select: handleButtonSelect}),
     new TextView({centerX: 0, top: 'prev() 50', font: '24px'})
   )
 );
@@ -89,10 +100,12 @@ ui.contentView.append(
 
 JSX in Tabris.js TypeScript apps follows these specific rules:
  * Every JSX element is a constructor call. If nested directly in code, they need to be separated from each other (see below).
- * Attributes can be either strings (using single or double quotation marks) or JavaScript/TypeScript expressions (using curly braces).
- * Each elements may have any number of children, all of which are appended to their parent in the given order.
  * Element names starting lowercase are intrinsic elements. These include all instantiable widget build into Tabris.js, as well as `WidgetCollection`. The types of these elements don't need to be explicitly imported.
  * Element names starting with uppercase are user defined elements, i.e. any class extending a Tabris.js widget. These <em>do</em> need to be imported.
+ * Attributes can be either strings (using single or double quotation marks) or JavaScript/TypeScript expressions (using curly braces).
+ * An attribute of the same name as a property is used to set that property via constructor.
+ * An attribute that follows the naming scheme `on{EventType}` is used to register a listener with that event.
+ * Each element may have any number of children (if that type supports children), all of which are appended to their parent in the given order.
  * To support attribute checks on user defined elements, add a field on your custom widget called `jsxProperties`. The type <em>must</em> match the type of the first constructor parameter. You do not have to assign anything to the field.
  * While the JSX expressions themselves are type-safe, <em>their return type is not</em> (it's `any`), so follow the instructions for casting above. It can be considered safe to use unchecked JSX expressions within `widget.append()`, as all JSX elements are appendable types.
 

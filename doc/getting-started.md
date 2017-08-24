@@ -23,7 +23,10 @@ On your development machine, the following software needs to be installed:
 ## Create your first app
 
 Create a new empty directory for your project, open a terminal in this directory and type `tabris init`.
-The _Tabris CLI_ will ask you a number of questions including the project's name and version and the type of project to create: a _JavaScript App_ or a _TypeScript App_.
+The _Tabris CLI_ will ask you a number of questions including the project's name and version and the type of project to create: a _JavaScript App_ or a _TypeScript App_. 
+
+> :point_right:  TypeScript projects are more complex, but also provide type safety, better tooling and out-of-the-box declarative UI using JSX. It's especially recommendable for experienced developers coming from Java or C#.
+
 Choose _JavaScript App_ for your first project.
 The CLI will then create a simple example project and install the required dependencies. Let's have a look at the most important files:
 

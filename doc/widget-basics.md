@@ -16,6 +16,8 @@ let button = new Button({
 });
 ```
 
+If you prefer declarative UI, you may also [use `JSX` to create widgets](./lang.md#JSX). When you [generate a Tabris.js TypeScript project](./getting-started.md#create-your-first-app), JSX support is already set up.
+
 ## Widget Properties
 
 Every native widget supports a set of properties (e.g. a text or a color). These properties can be read and written directly or using the Widget's `get()` and `set()` methods.

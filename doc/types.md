@@ -58,7 +58,7 @@ Example:
 composite.padding = {left: 8, right: 8, top: 0, bottom: 0};
 ```
 
-## ChangeEvent
+## PropertyChangedEvent
 
 An event fired when an object property changes. It has following properties:
 
