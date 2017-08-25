@@ -26,7 +26,8 @@ On Android, you can also press the system's back button to go back.
 ## The Developer Console
 
 While running Tabris.js scripts in the Developer App, you can open a developer console by sliding from the right edge of the screen to the left.
-On iOS you may have to start sliding from the edge itself to open the drawer.
+On iOS you may have to start sliding from the edge itself to open the drawer. You can also use a four-finger double tap instead.
+On Windows you can also press F12, if a keyboard is present.
 
 In the developer console you'll see messages and errors logged by the running script.
 You can even enter JavaScript expressions that will be evaluated in the context of your script.
@@ -34,6 +35,7 @@ You can even enter JavaScript expressions that will be evaluated in the context 
 In the header, you'll find a *Reload* action that loads and starts the running script from scratch.
 The *Home* action lets you go back to the Developer App.
 You'll also find actions to filter the log and to share it (e.g. by email).
+Finally, you can enter a different script URL directly in the header.
 
 ![Developer Console](img/console-android.png)
 

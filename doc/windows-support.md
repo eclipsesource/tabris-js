@@ -34,7 +34,7 @@ Where `<cpu>` can be 'x64', 'x86' or 'arm'. Copy the package in to a separate di
 
 The windows-specific `config.xml` preferences are covered [here](./build.html#windows-specific-preferences).
 
-> :point_right: The windows build is currently only creating packages for side-loading. For now, if you need to upload an app to the Windows store you have to make a local build and upload it via Visual Studio.
+> :point_right: The Tabris.js Windows build can not yet sign packages for the Windows Store. For now, if you need to upload an app to the Windows Store you have to make a local build via tabris CLI and [use  Visual Studio to create `.appxupload` packages](https://docs.microsoft.com/en-us/windows/uwp/packaging/packaging-uwp-apps#create-an-app-package). It's recommended not to bundle them, as this may cause issues when updating the store submission with packages created by the Tabris.js build service later on.
 
 
 ## Sideloading apps on Windows 10 (PC):
