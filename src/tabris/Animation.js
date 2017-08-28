@@ -1,4 +1,5 @@
 import NativeObject from './NativeObject';
+import {warn} from './Console';
 
 const ANIMATABLE_PROPERTIES = ['opacity', 'transform'];
 
@@ -59,15 +60,15 @@ export function animate(properties, options) {
           this._encodeProperty(this._getTypeDef(property), properties[property]);
         this._storeProperty(property, animatedProps[property], options);
       } catch (ex) {
-        console.warn(this + ': Ignored invalid animation property value for "' + property + '"');
+        warn(this + ': Ignored invalid animation property value for "' + property + '"');
       }
     } else {
-      console.warn(this + ': Ignored invalid animation property "' + property + '"');
+      warn(this + ': Ignored invalid animation property "' + property + '"');
     }
   }
   for (let option in options) {
     if (!(option in PROPERTIES) && option !== 'name') {
-      console.warn(this + ': Ignored invalid animation option "' + option + '"');
+      warn(this + ': Ignored invalid animation option "' + option + '"');
     }
   }
   return new Promise((resolve, reject) => {

@@ -1,6 +1,7 @@
 import NativeObject from '../NativeObject';
 import Composite from './Composite';
 import Tab from './Tab';
+import {warn} from '../Console';
 
 const EVENT_TYPES = ['select', 'scroll'];
 
@@ -49,7 +50,7 @@ NativeObject.defineProperties(TabFolder.prototype, {
   selection: {
     set(name, tab) {
       if (this._children.indexOf(tab) < 0) {
-        console.warn('Can not set TabFolder selection to ' + tab);
+        warn('Can not set TabFolder selection to ' + tab);
         return;
       }
       this._nativeSet('selection', tab.cid);

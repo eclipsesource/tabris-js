@@ -1,6 +1,7 @@
 import Events from './Events';
 import NativeBridge from './NativeBridge';
 import ProxyStore from './ProxyStore';
+import {error, log} from './Console';
 
 export default class Tabris {
 
@@ -38,14 +39,14 @@ export default class Tabris {
         try {
           returnValue = proxy._trigger(event, param);
         } catch (error) {
-          console.error(error);
-          console.log(error.stack);
+          error(error);
+          log(error.stack);
         }
       }
       this.trigger('flush');
     } catch (ex) {
-      console.error(ex);
-      console.log(ex.stack);
+      error(ex);
+      log(ex.stack);
     }
     return returnValue;
   }

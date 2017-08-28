@@ -1,4 +1,5 @@
 import {types} from './property-types';
+import {warn} from './Console';
 import EventObject from './EventObject';
 import Events from './Events';
 
@@ -63,7 +64,7 @@ export default class NativeObject extends EventsClass {
 
   $getProperty(name) {
     if (this._isDisposed) {
-      console.warn('Cannot get property "' + name + '" on disposed object');
+      warn('Cannot get property "' + name + '" on disposed object');
       return;
     }
     let getter = this.$getPropertyGetter(name) || this._getStoredProperty;
@@ -73,7 +74,7 @@ export default class NativeObject extends EventsClass {
 
   $setProperty(name, value) {
     if (this._isDisposed) {
-      console.warn('Cannot set property "' + name + '" on disposed object');
+      warn('Cannot set property "' + name + '" on disposed object');
       return;
     }
     let typeDef = this._getTypeDef(name);
@@ -81,7 +82,7 @@ export default class NativeObject extends EventsClass {
     try {
       encodedValue = this._encodeProperty(typeDef, value);
     } catch (ex) {
-      console.warn(this + ': Ignored unsupported value for property "' + name + '": ' + ex.message);
+      warn(this + ': Ignored unsupported value for property "' + name + '": ' + ex.message);
       return;
     }
     let setter = this.$getPropertySetter(name) || this._storeProperty;
@@ -236,7 +237,7 @@ function setExistingProperty(name, value) {
   if (name in this) {
     this[name] = value;
   } else {
-    console.warn('Unknown property "' + name + '"');
+    warn('Unknown property "' + name + '"');
   }
 }
 
@@ -281,7 +282,7 @@ function wrapCoder(fn, args) {
 }
 
 function readOnlySetter(name) {
-  console.warn(`Can not set read-only property "${name}"`);
+  warn(`Can not set read-only property "${name}"`);
 }
 
 function defaultSetter(name, value) {

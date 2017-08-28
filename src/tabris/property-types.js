@@ -4,6 +4,7 @@ import {colorArrayToString, colorStringToArray} from './util-colors';
 import {fontObjectToString, fontStringToObject} from './util-fonts';
 import NativeObject from './NativeObject';
 import WidgetCollection from './WidgetCollection';
+import {warn} from './Console';
 
 export let types = {
 
@@ -128,7 +129,7 @@ export let types = {
         }
       });
       if ('scale' in value && ('width' in value || 'height' in value)) {
-        console.warn('Image scale is ignored if width or height are given');
+        warn('Image scale is ignored if width or height are given');
       }
       return imageToArray(value);
     },

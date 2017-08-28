@@ -2,6 +2,7 @@ import {colorStringToArray, colorArrayToString} from './util-colors';
 import {fontStringToObject, fontObjectToString} from './util-fonts';
 import ImageData from './ImageData';
 import GC from './GC';
+import {warn} from './Console';
 
 export default class CanvasContext {
 
@@ -293,7 +294,7 @@ function defineProperty(context, name) {
         context._gc.addOperation(name);
         prop.addOperations.call(context, context._state[name]);
       } catch (error) {
-        console.warn('Unsupported value for ' + name + ': ' + value);
+        warn('Unsupported value for ' + name + ': ' + value);
       }
     }
   });

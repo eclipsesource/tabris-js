@@ -1,6 +1,7 @@
 import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 import Composite from './Composite';
+import {warn} from '../Console';
 
 const EVENT_TYPES = ['refresh', 'select', 'scroll'];
 
@@ -130,8 +131,8 @@ export default class CollectionView extends Composite {
     }
     cell._parent = this;
     this._addChild(cell);
-    cell._setParent = () => console.warn('Cannot re-parent collection view cell');
-    cell.dispose = () => console.warn('Cannot dispose of collection view cell');
+    cell._setParent = () => warn('Cannot re-parent collection view cell');
+    cell.dispose = () => warn('Cannot dispose of collection view cell');
     return cell;
   }
 
@@ -241,7 +242,7 @@ function encodeCellHeight(value) {
   if (isNumber(value)) {
     return Math.max(-1, value);
   }
-  console.warn('Invalid cell height: ' + value);
+  warn('Invalid cell height: ' + value);
 }
 
 let triggerChangeFirstVisibleIndex = createDelegate('firstVisibleIndex');

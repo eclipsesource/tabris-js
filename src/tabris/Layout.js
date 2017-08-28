@@ -1,5 +1,6 @@
 import {omit} from './util';
 import {types} from './property-types';
+import {warn} from './Console';
 
 export default {
 
@@ -7,27 +8,27 @@ export default {
     let result = layoutData;
     if ('centerX' in result) {
       if (('left' in result) || ('right' in result)) {
-        console.warn('Inconsistent layoutData: centerX overrides left and right');
+        warn('Inconsistent layoutData: centerX overrides left and right');
         result = omit(result, ['left', 'right']);
       }
     }
     if ('baseline' in result) {
       if (('top' in result) || ('bottom' in result) || ('centerY' in result)) {
-        console.warn('Inconsistent layoutData: baseline overrides top, bottom, and centerY');
+        warn('Inconsistent layoutData: baseline overrides top, bottom, and centerY');
         result = omit(result, ['top', 'bottom', 'centerY']);
       }
     } else if ('centerY' in result) {
       if (('top' in result) || ('bottom' in result)) {
-        console.warn('Inconsistent layoutData: centerY overrides top and bottom');
+        warn('Inconsistent layoutData: centerY overrides top and bottom');
         result = omit(result, ['top', 'bottom']);
       }
     }
     if ('left' in result && 'right' in result && 'width' in result) {
-      console.warn('Inconsistent layoutData: left and right are set, ignore width');
+      warn('Inconsistent layoutData: left and right are set, ignore width');
       result = omit(result, ['width']);
     }
     if ('top' in result && 'bottom' in result && 'height' in result) {
-      console.warn('Inconsistent layoutData: top and bottom are set, ignore height');
+      warn('Inconsistent layoutData: top and bottom are set, ignore height');
       result = omit(result, ['height']);
     }
     return result;

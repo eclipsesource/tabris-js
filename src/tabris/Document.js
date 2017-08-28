@@ -1,4 +1,5 @@
 import Event, {addDOMEventTargetMethods} from './Event';
+import {log, error} from './Console';
 
 export function addDOMDocument(target) {
 
@@ -62,8 +63,8 @@ function handleElementInserted(parent, child, target) {
     try {
       result = tabris._client.loadAndExecute(child.src, '', '');
     } catch (ex) {
-      console.error('Error loading ' + child.src + ':', ex);
-      console.log(ex.stack);
+      error('Error loading ' + child.src + ':', ex);
+      log(ex.stack);
       if (typeof child.onerror === 'function') {
         child.onerror.call(target, ex);
       }
