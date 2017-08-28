@@ -169,7 +169,6 @@ export default class Widget extends NativeObject {
       index = this._children.push(child) - 1;
     }
     super._trigger('addChild', {child, index});
-    this._nativeCall('insertChild', {child: child.cid, index});
   }
 
   _removeChild(child) {
