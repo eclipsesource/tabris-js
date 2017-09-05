@@ -44,6 +44,14 @@ No, the JavaScript code is executed directly on the mobile device inside a JavaS
 
 No, that would be ["Tabris for RAP"](https://eclipsesource.com/products/tabris), the predecessor of Tabris.js.
 
+### What platform versions does Tabris.js support?
+
+|         | Tabris.js 1.x | Tabris.js 2.x |
+|---------|---------------|---------------|
+| Android | 4.1 and up    | 4.2 and up    |
+| iOS     | iOS 8 and up  | iOS 9 and up  |
+| Windows | N/A           | 10            |
+
 ## Development
 
 ### Do I need to have prior mobile development or JavaScript experience?
