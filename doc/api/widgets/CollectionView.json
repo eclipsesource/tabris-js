@@ -75,10 +75,7 @@
     "columnCount": {
       "type": "number",
       "default": 1,
-      "description": "The number of columns to display in the collection view. If set to a value `n > 1`, each row will contain `n` items. The available space will be equally distributed between columns.",
-      "platforms": {
-        "windows": false
-      }
+      "description": "The number of columns to display in the collection view. If set to a value `n > 1`, each row will contain `n` items. The available space will be equally distributed between columns. On Windows, this feature cannot be combined with variable cell height."
     }
   },
   "events": {
