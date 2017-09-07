@@ -38,9 +38,9 @@ export default class Tabris {
       if (proxy) {
         try {
           returnValue = proxy._trigger(event, param);
-        } catch (error) {
-          error(error);
-          log(error.stack);
+        } catch (err) {
+          error(err);
+          log(err.stack);
         }
       }
       this.trigger('flush');
