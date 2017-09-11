@@ -200,6 +200,11 @@ function formatValue(ctx, value, recurseTimes) {
     });
   }
 
+  // On iOS, errors have these extra enumerable fields
+  if (isError(value) && tabris.device.platform === 'iOS') {
+    keys = keys.filter((key) => !['line', 'column', 'sourceURL'].includes(key));
+  }
+
   let constructor = getConstructorOf(value);
 
   // Some type of object without properties can be shortcutted.
@@ -380,7 +385,13 @@ function formatPrimitive(ctx, value) {
 }
 
 function formatError(value) {
-  return value.stack || `[${errorToString.call(value)}]`;
+  if (!value.stack) {
+    return `[${errorToString.call(value)}]`;
+  }
+  if (tabris.device.platform === 'iOS') {
+    return value.constructor.name + ': ' + value.message + '\n  ' + value.stack.split('\n').join('\n  ');
+  }
+  return value.stack;
 }
 
 function formatObject(ctx, value, recurseTimes, visibleKeys, keys) {
