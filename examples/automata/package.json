@@ -1,6 +1,6 @@
 {
   "main": "automata.js",
   "dependencies": {
-    "tabris": "2.0.0"
+    "tabris": "^2.1.0"
   }
 }

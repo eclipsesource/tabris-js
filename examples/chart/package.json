@@ -4,7 +4,7 @@
   "category": "Web APIs",
   "dependencies": {
     "chart.js": "1.0.1",
-    "tabris": "2.0.0"
+    "tabris": "^2.1.0"
   },
   "main": "chartdemo.js"
 }
