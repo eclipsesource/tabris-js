@@ -22,4 +22,4 @@ You can try out Tabris.js without installing anything on your computer.
 * Load your edited version in the Developer App by scanning the bar code on the playground page.
 
 To start developing a real Tabris.js app, follow the [Quick Start Guide](getting-started.md).
-We also have an excellent [ebook](https://tabrisjs.com/downloads/ebook/tabrisjs-2.0.0.pdf) that explains how to create, deploy and test your first Tabris.js app.
+We also have an excellent [ebook](https://tabrisjs.com/downloads/ebook/tabrisjs-2.1.0.pdf) that explains how to create, deploy and test your first Tabris.js app.
