@@ -31,7 +31,6 @@ NativeObject.defineProperties(NavigationBar.prototype, {
   displayMode: {type: ['choice', ['default', 'float', 'hide']], default: 'default'},
   height: {
     type: 'number',
-    nocache: true,
     readonly: true
   },
   background: {type: 'color', nocache: true}

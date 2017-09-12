@@ -43,7 +43,7 @@ NativeObject.defineProperties(WebView.prototype, {
   url: {type: 'string', nocache: true},
   html: {type: 'string', nocache: true},
   headers: {type: 'any', default: {}},
-  canGoBack: {type: 'boolean', nocache: true, readonly: true},
-  canGoForward: {type: 'boolean', nocache: true, readonly: true},
+  canGoBack: {type: 'boolean', readonly: true},
+  canGoForward: {type: 'boolean', readonly: true},
   initScript: {type: 'string'}
 });
