@@ -29,7 +29,16 @@ describe('Device', function() {
     let results;
 
     beforeEach(function() {
-      results = {};
+      results = {
+        model: 'x1',
+        platform: 'foo',
+        version: '23',
+        language: 'es',
+        screenWidth: 23,
+        screenHeight: 42,
+        scaleFactor: 2.5,
+        orientation: 'portrait',
+      };
       stub(client, 'get').callsFake((id, name) => {
         if (id === device.cid) {
           return results[name];
@@ -40,21 +49,28 @@ describe('Device', function() {
     });
 
     it('provides properties', function() {
-      results.model = 'x1';
-      results.platform = 'foo';
-      results.version = '23';
-      results.language = 'es';
-      results.screenWidth = 23;
-      results.screenHeight = 42;
-      results.orientation = 'portrait';
-
       expect(device.model).to.equal('x1');
       expect(device.platform).to.equal('foo');
       expect(device.version).to.equal('23');
       expect(device.language).to.equal('es');
       expect(device.screenWidth).to.equal(23);
       expect(device.screenHeight).to.equal(42);
+      expect(device.scaleFactor).to.equal(2.5);
       expect(device.orientation).to.equal('portrait');
+    });
+
+    it('caches static properties', function() {
+      device.model;
+      device.platform;
+      device.version;
+      device.scaleFactor;
+
+      results = {};
+
+      expect(device.model).to.equal('x1');
+      expect(device.platform).to.equal('foo');
+      expect(device.version).to.equal('23');
+      expect(device.scaleFactor).to.equal(2.5);
     });
 
     it('setting properties does not call native SET', function() {
@@ -71,10 +87,9 @@ describe('Device', function() {
     });
 
     it('prevents overwriting properties', function() {
-      results.language = 'en';
       device.language = 'fr';
 
-      expect(device.language).to.equal('en');
+      expect(device.language).to.equal('es');
     });
 
     it('adds listener for orientationChanged event', function() {

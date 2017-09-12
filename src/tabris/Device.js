@@ -33,16 +33,16 @@ export default class Device extends NativeObject {
 }
 
 NativeObject.defineProperties(Device.prototype, {
-  model: {type: 'any', readonly: true},
-  platform: {type: 'any', readonly: true},
-  version: {type: 'any', readonly: true},
-  language: {type: 'any', readonly: true},
-  orientation: {type: 'any', readonly: true},
-  screenWidth: {type: 'any', readonly: true},
-  screenHeight: {type: 'any', readonly: true},
-  scaleFactor: {type: 'any', readonly: true},
-  win_keyboardPresent: {type: 'any', readonly: true},
-  win_primaryInput: {type: 'any', readonly: true}
+  model: {readonly: true, get: getOnce},
+  platform: {readonly: true, get: getOnce},
+  version: {readonly: true, get: getOnce},
+  language: {readonly: true},
+  orientation: {readonly: true},
+  screenWidth: {readonly: true},
+  screenHeight: {readonly: true},
+  scaleFactor: {readonly: true, get: getOnce},
+  win_keyboardPresent: {readonly: true},
+  win_primaryInput: {readonly: true}
 });
 
 export function create() {
@@ -83,4 +83,13 @@ function defineReadOnlyProperty(target, name, getter) {
     get: getter,
     set() {}
   });
+}
+
+function getOnce(name) {
+  let value = this._getStoredProperty(name);
+  if (!value) {
+    value = this._nativeGet(name);
+    this._storeProperty(name, value);
+  }
+  return value;
 }
