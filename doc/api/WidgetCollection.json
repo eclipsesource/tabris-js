@@ -3,8 +3,14 @@
   "generics": "T extends Widget",
   "description": "A `WidgetCollection` is an array-like object representing a set of widgets, as returned by the widget methods `children` and `find`.",
   "constructor": {
-    "access": "private",
-    "parameters": []
+    "access": "public",
+    "parameters": [
+      {
+        "name": "widgets",
+        "type": "Widget[]",
+        "description": "Array of widgets to include in the WidgetCollection"
+      }
+    ]
   },
   "methods": {
     "on": {
