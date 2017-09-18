@@ -100,20 +100,16 @@ function addClass(result, def) {
 }
 
 function addConstructor(result, def) {
-  let constructor = inheritConstructor(def);
+  let constructor = def.constructor || inheritConstructor(def.parent);
   if (constructor) {
     result.append('');
     let access = constructor.access ? constructor.access + ' ' : '';
-    result.append(`${access}constructor(${createParamList(constructor.parameters, def.type)});`);
+    result.append(`${access}constructor(${createParamList(constructor.parameters || [], def.type)});`);
   }
 }
 
 function inheritConstructor(def) {
-  if (def.hasOwnProperty('constructor')) {
-    return isClassDependent(def.constructor) ? def.constructor : null;
-  } else {
-    return def.parent ? inheritConstructor(def.parent) : null;
-  }
+  return def.constructor || def.parent ? inheritConstructor(def.parent) : null;
 }
 
 function addClassDef(result, def) {
@@ -265,8 +261,8 @@ function inheritClassDependentMethods(def) {
   return result;
 }
 
-function isClassDependent(def) {
-  let variants = Array.isArray(def) ? def : [def];
+function isClassDependent(method) { // methods with parameters that must be adjusted in each subclass
+  let variants = Array.isArray(method) ? method : [method];
   return variants.some(variant =>
     (variant.parameters || []).some(param => CLASS_DEPENDENT_TYPES.includes(param.type))
   );

@@ -2,7 +2,7 @@
   "type": "Popup",
   "extends": "NativeObject",
   "constructor": {
-    "access": "private"
+    "access": "protected"
   },
   "description": "Base class for all pop-up UI elements. Pop-ups are placed on top of all other UI, but are not widgets. Some pop-ups can be opened only once.",
   "methods": {
