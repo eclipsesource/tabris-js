@@ -1,5 +1,5 @@
 const {Button, Canvas, CheckBox, Composite, Page, device} = require('tabris');
-const Chart = require('chart.js/Chart.min.js');
+const Chart = require('chart.js');
 
 const DRAW_CHART_BUTTON_TEXT = 'Draw graph';
 const ANIMATE_CHECKBOX_TEXT = 'Animate';
