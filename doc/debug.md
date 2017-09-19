@@ -26,6 +26,8 @@ How to Debug:
 
 If the Android Device does not show up in Chrome you can try disable and re-enable USB debugging on your device or switch between connecting it as a media device ("MTP") or Camera ("PTP"). It can take a few seconds for the device to appear in Chrome. If nothing else helps use the `adb` tool (part of the [Android SDK platform tools]((https://developer.android.com/studio/releases/platform-tools.html))) and run `adb devices` to make sure the device is detected.
 
+In this state you are debugging the source code as it is bundled with the app. You can also use the developer console to load javascript files from your developer machine via `tabris serve`. That way you don't need to re-build the app for each change.
+
 ## iOS using Safari
 
 Developer Machine Requirements:
@@ -41,6 +43,8 @@ How to Debug:
 * Start the Tabris.js app.
 * In Safari go to "Develop -> \{name-of-your-device} -> \{name-of-your-app} -> JSContext" (If there are multiple entries, kill and restart the entire app)
 * Go to the "Resources" tab and set a breakpoint.
+
+In this state you are debugging the source code as it is bundled with the app. You can also use the developer console to load javascript files from your developer machine via `tabris serve`. That way you don't need to re-build the app for each change.
 
 ## Windows using Visual Studio
 
@@ -64,7 +68,7 @@ How to Debug:
 * Start the app in the "Debug" configuration for the desired target and architecture (not "Any CPU").
 * Once you encounter the breakpoint, a dialog may appear that will let you choose a debugger. Simply click "Yes".
 
-In this state you are debugging a _copy_ of your sources. Any changes on the copy or the original will have to manually copied to the other. If you want to avoid this, do the following:
+In this state you are debugging the source code as it is bundled with the solution. Any changes on the copy or the original will have to be manually copied to the other. If you want to avoid this, do the following:
 
 * Close the Solution
 * In Windows Explorer, delete the contents of `{project-dir}\build\cordova\platforms\windows\www\app`
