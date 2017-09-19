@@ -1,3 +1,4 @@
+const os = require('os');
 const WebSocketServer = require('websocket').server;
 const http = require('http');
 const PORT = 9000;
@@ -11,7 +12,18 @@ let server = http.createServer((request, response) => {
   response.end();
 });
 
-server.listen(PORT, () => console.log((new Date()) + ' Server is listening on port ' + PORT));
+server.listen(PORT, () => console.log(
+  new Date() + ' Server is listening on: ' +
+  externalAddresses().map(address => `  ws://${address}:${PORT}`).join('\n')
+));
+
+function externalAddresses() {
+  let interfaces = os.networkInterfaces();
+  return Object.keys(interfaces)
+    .map(key => interfaces[key].find(details => details.family === 'IPv4' && details.internal === false))
+    .filter(val => !!val)
+    .map(iface => iface.address);
+}
 
 let wsServer = new WebSocketServer({
   httpServer: server

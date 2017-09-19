@@ -1,10 +1,13 @@
 # Chat example
 
-To run this example, start your own chat server.
+## Running the example
 
-In `web-socket.js`, adjust `CHAT_SERVER_URL` to your server IP.
+* Start the chat server by running:
 
-In the `server` folder execute:
+  ```
+  npm run server
+  ```
 
-    npm install
-    npm start
+  The server URL will be output to the console.
+
+* Start the example and enter the server URL when prompted, then confirm.

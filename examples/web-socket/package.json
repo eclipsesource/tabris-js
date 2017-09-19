@@ -1,7 +1,10 @@
 {
   "category": "WebSocket",
   "description": "Create websocket connection",
-  "main": "web-socket.js",
+  "main": "app.js",
+  "scripts": {
+    "server": "cd server && npm i && npm start"
+  },
   "dependencies": {
     "tabris": "^2.1.0"
   }
