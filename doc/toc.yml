@@ -27,6 +27,8 @@
       url: cordova.html
     - title: ES6, TypeScript and JSX
       url: lang.html
+    - title: Debugging
+      url: debug.html
     - title: Windows Support
       url: windows-support.html
     - title: Build your app
