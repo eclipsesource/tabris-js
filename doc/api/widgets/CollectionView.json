@@ -34,7 +34,7 @@
       "description": "A callback used to update a given cell widget to display the item with the given index. This callback will be called by the framework."
     },
     "cellType": {
-      "type": "string|((index: number) => string)",
+      "type": "string|((index: number) => string)|null",
       "description": "The name of the cell type to use for the item at the given index. This name will be passed to the `createCell` and `cellHeight` callbacks. Cells will be reused only for those items that map to the same cell type. If set to a function, this function will be called for every item, providing the item index as a parameter, and must return a unique name for the cell type to use for the given item."
     },
     "refreshEnabled": {

@@ -11,11 +11,13 @@ let lastVisibleIndex: number;
 let refreshEnabled: boolean;
 let refreshIndicator: boolean;
 let refreshMessage: string;
+let nullValue: null;
 
 let widget: CollectionView = new CollectionView();
 
 cellHeight = widget.cellHeight;
-cellType = widget.cellType;
+cellType = widget.cellType as string|((index: number) => string);
+nullValue = widget.cellType as null;
 columnCount = widget.columnCount;
 createCell = widget.createCell;
 updateCell = widget.updateCell;
@@ -27,6 +29,7 @@ refreshMessage = widget.refreshMessage;
 
 widget.cellHeight = cellHeight;
 widget.cellType = cellType;
+widget.cellType = nullValue;
 widget.columnCount = columnCount;
 widget.createCell = createCell;
 widget.updateCell = updateCell;

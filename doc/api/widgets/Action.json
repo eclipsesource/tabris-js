@@ -16,6 +16,7 @@
   "properties": {
     "image": {
       "type": "Image",
+      "ts_type": "Image|null",
       "description": "Icon image for the action."
     },
     "placementPriority": {

@@ -16,14 +16,16 @@ setTimeout(callback);
 setTimeout(callback, delay);
 setTimeout(callback, delay, paramA, paramB);
 
-let item: string | null;
+let item: string;
 let key: string = '';
 let data: string = '';
+let nullValue: null;
 
 voidReturnValue = localStorage.clear();
 voidReturnValue = localStorage.removeItem(key);
 voidReturnValue = localStorage.setItem(key, data);
-item = localStorage.getItem(key);
+item = localStorage.getItem(key) as string;
+nullValue = localStorage.getItem(key) as null;
 
 let message: any;
 

@@ -5,6 +5,7 @@
   "properties": {
     "image": {
       "type": "Image",
+      "ts_type": "Image|null",
       "description": "An image to be displayed in the navigation bar. Not supported on Windows.",
       "platforms": {
         "windows": false

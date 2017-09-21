@@ -7,15 +7,20 @@ let badge: string;
 let image: Image;
 let selectedImage: Image;
 let title: string;
+let nullValue: null;
 
 badge = widget.badge;
-image = widget.image;
-selectedImage = widget.selectedImage;
+image = widget.image as Image;
+nullValue = widget.image as null;
+selectedImage = widget.selectedImage as Image;
+nullValue = widget.selectedImage as null;
 title = widget.title;
 
 widget.badge = badge;
 widget.image = image;
+widget.image = nullValue;
 widget.selectedImage = selectedImage;
+widget.selectedImage = nullValue;
 widget.title = title;
 
 let properties: TabProperties = {badge, image, selectedImage, title};

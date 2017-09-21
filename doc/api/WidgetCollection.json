@@ -226,7 +226,7 @@
           }
         ],
         "returns": "Widget",
-        "ts_returns": "T",
+        "ts_returns": "T|undefined",
         "description": "Returns the first widget in the collection that is matched by the selector. Without selector, it is the same as `collection[0]`."
       },
       {
@@ -235,7 +235,7 @@
         "parameters": [
           {
             "name": "constructor",
-            "type": "{ new (...args: any[]): U }",
+            "type": "{ new (...args: any[]): U }|undefined",
             "description": "A class to filter the results."
           }
         ],
@@ -254,7 +254,7 @@
           }
         ],
         "returns": "Widget",
-        "ts_returns": "T",
+        "ts_returns": "T | undefined",
         "description": "Returns the last widget in the collection that is matched by the selector. Without selector, it is the same as `collection[collection.length - 1]`."
       },
       {
@@ -263,7 +263,7 @@
         "parameters": [
           {
             "name": "constructor",
-            "type": "{ new (...args: any[]): U }",
+            "type": "{ new (...args: any[]): U } | undefined",
             "description": "A class to filter the results."
           }
         ],

@@ -6,12 +6,15 @@ let widget: ImageView = new ImageView;
 let image: Image;
 let scaleMode: 'auto' | 'fill' | 'fit' | 'none' | 'stretch';
 let tintColor: Color;
+let nullValue: null;
 
-image = widget.image;
+image = widget.image as Image;
+nullValue = widget.image as null;
 scaleMode = widget.scaleMode;
 tintColor = widget.tintColor;
 
 widget.image = image;
+widget.image = nullValue;
 widget.scaleMode = scaleMode;
 widget.tintColor = tintColor;
 

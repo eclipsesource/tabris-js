@@ -26,6 +26,7 @@
     },
     "image": {
       "type": "Image",
+      "ts_type": "Image|null",
       "description": "An image to be displayed on the button."
     },
     "checked": {

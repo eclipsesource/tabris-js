@@ -10,15 +10,18 @@ let image: Image;
 let checked: boolean;
 let text: string;
 let textColor: Color;
+let nullValue: null;
 
 alignment = widget.alignment;
-image = widget.image;
-checked = widget.checked;
+image = widget.image as Image;
+nullValue = widget.image as null;
 text = widget.text;
 textColor = widget.textColor;
+checked = widget.checked;
 
 widget.alignment = alignment;
 widget.image = image;
+widget.image = nullValue;
 widget.checked = checked;
 widget.text = text;
 widget.textColor = textColor;

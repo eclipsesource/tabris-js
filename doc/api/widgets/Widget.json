@@ -245,6 +245,7 @@
     },
     "font": {
       "type": "Font",
+      "ts_type": "Font|null",
       "description": "The font used for the widget."
     },
     "backgroundImage": {

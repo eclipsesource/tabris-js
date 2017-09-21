@@ -50,6 +50,7 @@ let transform: Transformation;
 let visible: boolean;
 let width: dimension;
 let data: any;
+let nullValue: null;
 
 background = widget.background;
 backgroundImage = widget.backgroundImage;
@@ -63,7 +64,8 @@ classList = widget.classList;
 cornerRadius = widget.cornerRadius;
 elevation = widget.elevation;
 enabled = widget.enabled;
-font = widget.font;
+font = widget.font as Font;
+nullValue = widget.font as null;
 height = widget.height;
 highlightOnTouch = widget.highlightOnTouch;
 id = widget.id;

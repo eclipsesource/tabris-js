@@ -6,13 +6,16 @@ let widget: Page = new Page();
 let autoDispose: boolean;
 let image: Image;
 let title: string;
+let nullValue: null;
 
 autoDispose = widget.autoDispose;
-image = widget.image;
+image = widget.image as Image;
+nullValue = widget.image as null;
 title = widget.title;
 
 widget.autoDispose = autoDispose;
 widget.image = image;
+widget.image = nullValue;
 widget.title = title;
 
 let properties: PageProperties = {autoDispose, image, title};
