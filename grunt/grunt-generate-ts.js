@@ -100,7 +100,8 @@ function addClass(result, def) {
 }
 
 function addConstructor(result, def) {
-  let constructor = def.constructor || inheritConstructor(def.parent);
+  let hasConstructor = typeof def.constructor === 'object';
+  let constructor = hasConstructor ? def.constructor : inheritConstructor(def.parent);
   if (constructor) {
     result.append('');
     let access = constructor.access ? constructor.access + ' ' : '';
@@ -109,7 +110,13 @@ function addConstructor(result, def) {
 }
 
 function inheritConstructor(def) {
-  return def.constructor || def.parent ? inheritConstructor(def.parent) : null;
+  if (!def) {
+    return null;
+  }
+  if (typeof def.constructor === 'object') {
+    return def.constructor;
+  }
+  return def.parent ? inheritConstructor(def.parent) : null;
 }
 
 function addClassDef(result, def) {
@@ -268,6 +275,14 @@ function isClassDependent(method) { // methods with parameters that must be adju
   );
 }
 
+function createMethod(name, def, className) {
+  let result = [];
+  result.push(createDoc(def));
+  result.push(`${name}${def.generics ? `<${def.generics}>` : ''}`
+    + `(${createParamList(def.parameters, className)}): ${def.ts_returns || def.returns || 'void'};`);
+  return result.join('\n');
+}
+
 function addProperties(result, def, filter) {
   if (def.properties) {
     let propertiesFilter = filter ? name => filter(def.properties[name]) : () => true;
@@ -287,14 +302,6 @@ function createProperty(name, def) {
   });
   let valuesType = (values || []).join(' | ');
   result.push(`${def.readonly ? 'readonly ' : ''}${name}: ${valuesType || def.ts_type || def.type};`);
-  return result.join('\n');
-}
-
-function createMethod(name, def, className) {
-  let result = [];
-  result.push(createDoc(def));
-  result.push(`${name}${def.generics ? `<${def.generics}>` : ''}`
-    + `(${createParamList(def.parameters, className)}): ${def.ts_returns || def.returns || 'void'};`);
   return result.join('\n');
 }
 
