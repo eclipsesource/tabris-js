@@ -1,4 +1,4 @@
-import {Tab, Image} from 'tabris';
+import {Tab, Image, TabProperties} from 'tabris';
 
 let widget: Tab = new Tab();
 
@@ -17,3 +17,7 @@ widget.badge = badge;
 widget.image = image;
 widget.selectedImage = selectedImage;
 widget.title = title;
+
+let properties: TabProperties = {badge, image, selectedImage, title};
+widget = new Tab(properties);
+widget.set(properties);

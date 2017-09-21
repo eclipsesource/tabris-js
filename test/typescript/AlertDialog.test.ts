@@ -1,4 +1,4 @@
-import {AlertDialog, AlertDialogCloseEvent, EventObject} from 'tabris';
+import {AlertDialog, AlertDialogCloseEvent, EventObject, AlertDialogProperties} from 'tabris';
 
 let alertDialog: AlertDialog = new AlertDialog();
 
@@ -14,6 +14,10 @@ title = alertDialog.title;
 alertDialog.buttons = buttons;
 alertDialog.message = message;
 alertDialog.title = title;
+
+let properties: AlertDialogProperties = {buttons, message, title};
+alertDialog = new AlertDialog(properties);
+alertDialog.set(properties);
 
 // Methods
 let thisReturnValue: AlertDialog;

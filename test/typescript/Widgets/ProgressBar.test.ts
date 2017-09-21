@@ -1,8 +1,8 @@
-import {Color, ProgressBar} from 'tabris';
+import {Color, ProgressBar, ProgressBarProperties} from 'tabris';
 
 let widget: ProgressBar = new ProgressBar();
 
-// Parameters
+// Properties
 let maximum: number;
 let minimum: number;
 let tintColor: Color;
@@ -20,3 +20,7 @@ widget.minimum = minimum;
 widget.tintColor = tintColor;
 widget.selection = selection;
 widget.state = state;
+
+let properties: ProgressBarProperties = {maximum, minimum, tintColor, selection, state};
+widget = new ProgressBar(properties);
+widget.set(properties);

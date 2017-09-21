@@ -1,4 +1,4 @@
-import {ScrollView, ScrollViewScrollEvent} from 'tabris';
+import {ScrollView, ScrollViewScrollEvent, ScrollViewProperties} from 'tabris';
 
 let widget: ScrollView = new ScrollView();
 
@@ -12,6 +12,10 @@ offsetX = widget.offsetX;
 offsetY = widget.offsetY;
 
 widget.direction = direction;
+
+let properties: ScrollViewProperties = {direction};
+widget = new ScrollView(properties);
+widget.set(properties);
 
 // Methods
 let offset: number = 42;

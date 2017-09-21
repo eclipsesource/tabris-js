@@ -1,23 +1,29 @@
-import {CheckBox, Color, CheckBoxSelectEvent, PropertyChangedEvent} from 'tabris';
+import {CheckBox, Color, CheckBoxSelectEvent, PropertyChangedEvent, CheckBoxProperties} from 'tabris';
 
 let widget: CheckBox = new CheckBox();
 
 // Properties
 let checked: boolean;
 let text: string;
-let color: Color;
+let textColor: Color;
+let tintColor: Color;
+let checkedTintColor: Color;
 
 checked = widget.checked;
 text = widget.text;
-color = widget.textColor;
-color = widget.tintColor;
-color = widget.checkedTintColor;
+textColor = widget.textColor;
+tintColor = widget.tintColor;
+checkedTintColor = widget.checkedTintColor;
 
 widget.checked = checked;
 widget.text = text;
-widget.textColor = color;
-widget.tintColor = color;
-widget.checkedTintColor = color;
+widget.textColor = textColor;
+widget.tintColor = tintColor;
+widget.checkedTintColor = checkedTintColor;
+
+let properties: CheckBoxProperties = {checked, text, textColor, tintColor, checkedTintColor};
+widget = new CheckBox(properties);
+widget.set(properties);
 
 // Events
 let target: CheckBox = widget;

@@ -1,4 +1,4 @@
-import {Color, TextView} from 'tabris';
+import {Color, TextView, TextViewProperties} from 'tabris';
 
 let widget: TextView = new TextView();
 
@@ -26,3 +26,9 @@ widget.maxLines = maxLines;
 widget.selectable = selectable;
 widget.text = text;
 widget.textColor = textColor;
+
+let properties: TextViewProperties = {
+  alignment, lineSpacing, markupEnabled, maxLines, selectable, text, textColor
+};
+widget = new TextView(properties);
+widget.set(properties);

@@ -4,7 +4,8 @@ import {
   Tab,
   TabFolderScrollEvent,
   TabFolderSelectEvent,
-  PropertyChangedEvent
+  PropertyChangedEvent,
+  TabFolderProperties
 } from 'tabris';
 
 
@@ -28,6 +29,10 @@ widget.selection = selection;
 widget.tabBarLocation = tabBarLocation;
 widget.tabMode = tabMode;
 widget.textColor = textColor;
+
+let properties: TabFolderProperties = {paging, selection, tabBarLocation, tabMode, textColor};
+widget = new TabFolder(properties);
+widget.set(properties);
 
 // Events
 let target: TabFolder = widget;

@@ -1,4 +1,4 @@
-import {Video, PropertyChangedEvent} from 'tabris';
+import {Video, PropertyChangedEvent, VideoProperties} from 'tabris';
 
 let widget: Video = new Video();
 type VideoState = 'empty' | 'fail' | 'finish' | 'open' | 'pause' | 'play' | 'ready' | 'stale';
@@ -23,6 +23,10 @@ url = widget.url;
 widget.autoPlay = autoPlay;
 widget.controlsVisible = controlsVisible;
 widget.url = url;
+
+let properties: VideoProperties = {autoPlay, controlsVisible, url};
+widget = new Video(properties);
+widget.set(properties);
 
 // Methods
 let voidReturnValue: void;

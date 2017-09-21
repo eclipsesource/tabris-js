@@ -1,4 +1,6 @@
-import {WebView, EventObject, WebViewNavigateEvent, WebViewDownloadEvent, WebViewMessageEvent} from 'tabris';
+import {
+  WebView, EventObject, WebViewNavigateEvent, WebViewDownloadEvent, WebViewMessageEvent, WebViewProperties
+} from 'tabris';
 
 let widget: WebView = new WebView();
 
@@ -15,6 +17,10 @@ canGoForward = widget.canGoForward;
 
 widget.html = html;
 widget.url = url;
+
+let properties: WebViewProperties = {html, url};
+widget = new WebView(properties);
+widget.set(properties);
 
 // Methods
 let targetOrigin: string = '';

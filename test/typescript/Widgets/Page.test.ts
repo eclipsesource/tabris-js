@@ -1,4 +1,4 @@
-import {Page, Image, EventObject} from 'tabris';
+import {Page, Image, EventObject, PageProperties} from 'tabris';
 
 let widget: Page = new Page();
 
@@ -14,6 +14,10 @@ title = widget.title;
 widget.autoDispose = autoDispose;
 widget.image = image;
 widget.title = title;
+
+let properties: PageProperties = {autoDispose, image, title};
+widget = new Page(properties);
+widget.set(properties);
 
 // Events
 let target: Page = widget;

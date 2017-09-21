@@ -1,4 +1,4 @@
-import {Color, Picker, PickerSelectEvent, PropertyChangedEvent} from 'tabris';
+import {Color, Picker, PickerSelectEvent, PropertyChangedEvent, PickerProperties} from 'tabris';
 
 let widget: Picker = new Picker();
 
@@ -23,6 +23,10 @@ widget.itemCount = itemCount;
 widget.itemText = itemText;
 widget.selectionIndex = selectionIndex;
 widget.textColor = textColor;
+
+let properties: PickerProperties = {borderColor, fillColor, itemCount, itemText, selectionIndex, textColor};
+widget = new Picker(properties);
+widget.set(properties);
 
 // Events
 let target: Picker = widget;

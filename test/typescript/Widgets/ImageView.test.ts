@@ -1,4 +1,4 @@
-import {ImageView, Image, Color, ImageViewLoadEvent} from 'tabris';
+import {ImageView, Image, Color, ImageViewLoadEvent, ImageViewProperties} from 'tabris';
 
 let widget: ImageView = new ImageView;
 
@@ -14,6 +14,10 @@ tintColor = widget.tintColor;
 widget.image = image;
 widget.scaleMode = scaleMode;
 widget.tintColor = tintColor;
+
+let properties: ImageViewProperties = {image, scaleMode, tintColor};
+widget = new ImageView(properties);
+widget.set(properties);
 
 // Events
 let target: ImageView = widget;

@@ -1,5 +1,5 @@
 import {
-  Color, TextInput, TextInputAcceptEvent, PropertyChangedEvent, TextInputInputEvent, EventObject
+  Color, TextInput, TextInputAcceptEvent, PropertyChangedEvent, TextInputInputEvent, EventObject, TextInputProperties
 } from 'tabris';
 
 let widget: TextInput = new TextInput();
@@ -49,6 +49,25 @@ widget.message = message;
 widget.text = text;
 widget.textColor = textColor;
 widget.type = textInputType;
+
+let properties: TextInputProperties = {
+  alignment,
+  autoCapitalize,
+  autoCorrect,
+  borderColor,
+  editable,
+  fillColor,
+  focused,
+  keepFocus,
+  keyboard,
+  enterKeyType,
+  message,
+  text,
+  textColor,
+  type: textInputType
+};
+widget = new TextInput(properties);
+widget.set(properties);
 
 // Events
 let target: TextInput = widget;

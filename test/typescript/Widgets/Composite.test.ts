@@ -1,5 +1,12 @@
 import {
-  Composite, Widget, Button, WidgetCollection, CompositeAddChildEvent, CompositeRemoveChildEvent, BoxDimensions
+  Composite,
+  Widget,
+  Button,
+  WidgetCollection,
+  CompositeAddChildEvent,
+  CompositeRemoveChildEvent,
+  BoxDimensions,
+  CompositeProperties
 } from 'tabris';
 
 let widget: Composite = new Composite();
@@ -10,7 +17,10 @@ let padding: BoxDimensions | number;
 padding = widget.padding;
 
 widget.padding = padding;
-widget.padding = 12;
+
+let properties: CompositeProperties = {padding};
+widget = new Composite(properties);
+widget.set(properties);
 
 // Methods
 let widgets: Widget[] = [];

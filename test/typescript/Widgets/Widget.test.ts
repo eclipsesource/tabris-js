@@ -19,6 +19,7 @@ import {Widget,
  WidgetTapEvent,
  WidgetLongpressEvent,
  WidgetPanEvent,
+ WidgetProperties
 } from 'tabris';
 
 let widget: Widget = new Composite();
@@ -48,10 +49,7 @@ let top: margin;
 let transform: Transformation;
 let visible: boolean;
 let width: dimension;
-
-
-
-// Properties
+let data: any;
 
 background = widget.background;
 backgroundImage = widget.backgroundImage;
@@ -77,6 +75,7 @@ top = widget.top;
 transform = widget.transform;
 visible = widget.visible;
 width = widget.width;
+data = widget.data;
 
 widget.background = background;
 widget.backgroundImage = backgroundImage;
@@ -103,11 +102,38 @@ widget.transform = transform;
 widget.visible = visible;
 widget.width = width;
 
+let properties: WidgetProperties = {
+  background,
+  backgroundImage,
+  baseline,
+  bottom,
+  centerX,
+  centerY,
+  class: _class,
+  classList,
+  cornerRadius,
+  elevation,
+  enabled,
+  font,
+  height,
+  highlightOnTouch,
+  id,
+  layoutData,
+  left,
+  opacity,
+  right,
+  top,
+  transform,
+  visible,
+  width
+};
+widget.set(properties);
+
 // Methods
 class Foo extends Composite {}
 let fooCollection: WidgetCollection<Widget>;
 let widgetCollection: WidgetCollection<Widget>;
-let properties: {transform?: Transformation, opacity?: number} = {};
+let animationProperties: {transform?: Transformation, opacity?: number} = {};
 let parent: Composite = new Composite();
 let options: AnimationOptions = {};
 let selector: Selector = '';
@@ -118,7 +144,7 @@ let voidReturnValue: void;
 let bool: boolean;
 let composite: Composite;
 
-promise = widget.animate(properties, options);
+promise = widget.animate(animationProperties, options);
 thisReturnValue = widget.appendTo(parent);
 thisReturnValue = widget.apply({'selectorString': properties});
 widgetCollection = widget.children();

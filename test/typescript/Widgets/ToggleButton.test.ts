@@ -1,4 +1,6 @@
-import {Color, Image, ToggleButton, PropertyChangedEvent, ToggleButtonSelectEvent} from 'tabris';
+import {
+  Color, Image, ToggleButton, PropertyChangedEvent, ToggleButtonSelectEvent, ToggleButtonProperties
+} from 'tabris';
 
 let widget: ToggleButton = new ToggleButton();
 
@@ -20,6 +22,10 @@ widget.image = image;
 widget.checked = checked;
 widget.text = text;
 widget.textColor = textColor;
+
+let properties: ToggleButtonProperties = {alignment, image, checked, text, textColor};
+widget = new ToggleButton(properties);
+widget.set(properties);
 
 // Events
 let target: ToggleButton = widget;

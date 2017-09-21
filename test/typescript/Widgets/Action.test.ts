@@ -1,4 +1,4 @@
-import {Action, Image} from 'tabris';
+import {Action, Image, ActionProperties} from 'tabris';
 
 let widget: Action = new Action();
 
@@ -15,3 +15,7 @@ title = widget.title;
 widget.placementPriority = placementPriority;
 widget.image = image;
 widget.title = title;
+
+let properties: ActionProperties = {placementPriority, image, title};
+widget = new Action(properties);
+widget.set(properties);

@@ -1,4 +1,4 @@
-import {CollectionView, Widget} from 'tabris';
+import {CollectionView, Widget, CollectionViewProperties} from 'tabris';
 
 // Properties
 let cellHeight: number|'auto'|((index: number, cellType: string) => number|'auto');
@@ -33,6 +33,12 @@ widget.updateCell = updateCell;
 widget.refreshEnabled = refreshEnabled;
 widget.refreshIndicator = refreshIndicator;
 widget.refreshMessage = refreshMessage;
+
+let properties: CollectionViewProperties = {
+  cellHeight, cellType, columnCount, createCell, updateCell, refreshEnabled, refreshIndicator, refreshMessage
+};
+widget = new CollectionView(properties);
+widget.set(properties);
 
 // Methods
 let index: number = 42;

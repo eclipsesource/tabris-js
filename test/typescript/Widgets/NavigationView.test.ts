@@ -5,9 +5,10 @@ import {
   Page,
   Selector,
   PropertyChangedEvent,
+  NavigationViewProperties
 } from 'tabris';
 
-let widget: NavigationView = new NavigationView;
+let widget: NavigationView = new NavigationView();
 
 // Properties
 let actionColor: Color;
@@ -33,6 +34,12 @@ widget.drawerActionVisible = drawerActionVisible;
 widget.titleTextColor = titleTextColor;
 widget.toolbarColor = toolbarColor;
 widget.toolbarVisible = toolbarVisible;
+
+let properties: NavigationViewProperties = {
+  actionColor, actionTextColor, pageAnimation, drawerActionVisible, titleTextColor, toolbarColor, toolbarVisible
+};
+widget = new NavigationView(properties);
+widget.set(properties);
 
 // Methods
 class Foo extends Page {}
