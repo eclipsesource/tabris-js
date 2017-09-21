@@ -11,10 +11,7 @@ pinnedCertificates = app.pinnedCertificates;
 version = app.version;
 versionCode = app.versionCode;
 
-app.id = id;
 app.pinnedCertificates = pinnedCertificates;
-app.version = version;
-app.versionCode = versionCode;
 
 // Methods
 let path: string = '';

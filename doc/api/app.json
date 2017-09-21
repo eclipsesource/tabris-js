@@ -10,14 +10,17 @@
   "properties": {
     "id": {
       "type": "string",
+      "readonly": true,
       "description": "Uniquely identifies the app."
     },
     "version": {
       "type": "string",
+      "readonly": true,
       "description": "The user facing version number, e.g. '2.1-beta3'."
     },
     "versionCode": {
       "type": "number",
+      "readonly": true,
       "description": "An alternative version number used in app stores to identify different versions of an app. Usually incremented with each release. This property reflects the `versionCode` on Android and `CFBundleVersion` on iOS."
     },
     "pinnedCertificates": {
