@@ -1,4 +1,4 @@
-import {expect, spy, stub, restore, mockTabris} from '../../test';
+import {expect, spy, stub, restore, match, mockTabris} from '../../test';
 import ClientStub from '../ClientStub';
 import Page from '../../../src/tabris/widgets/Page';
 import Action from '../../../src/tabris/widgets/Action';
@@ -6,6 +6,7 @@ import SearchAction from '../../../src/tabris/widgets/SearchAction';
 import Composite from '../../../src/tabris/widgets/Composite';
 import NavigationView from '../../../src/tabris/widgets/NavigationView';
 import WidgetCollection from '../../../src/tabris/WidgetCollection';
+import EventObject from '../../../src/tabris/EventObject';
 
 describe('NavigationView', function() {
 
@@ -277,6 +278,14 @@ describe('NavigationView', function() {
       expect(listener).to.have.been.calledWithMatch({target: page1});
     });
 
+    it('is an EventObject', function() {
+      page1.on('appear', listener);
+
+      navigationView.append(page1);
+
+      expect(listener).to.have.been.calledWith(match.instanceOf(EventObject));
+    });
+
     it('is triggered when a covering page is removed', function() {
       navigationView.append(page1, page2);
       page1.on('appear', listener);
@@ -318,6 +327,15 @@ describe('NavigationView', function() {
 
       expect(listener).to.have.been.calledOnce;
       expect(listener).to.have.been.calledWithMatch({target: page1});
+    });
+
+    it('is an EventObject', function() {
+      navigationView.append(page1);
+      page1.on('disappear', listener);
+
+      page1.detach();
+
+      expect(listener).to.have.been.calledWith(match.instanceOf(EventObject));
     });
 
     it('is triggered when page is disposed', function() {

@@ -76,14 +76,14 @@ export default class NavigationView extends Composite {
   $triggerAppear() {
     let topPage = this.pages().last();
     if (topPage) {
-      topPage.trigger('appear', {target: topPage});
+      topPage.$trigger('appear');
     }
   }
 
   $triggerDisappear() {
     let topPage = this.pages().last();
     if (topPage) {
-      topPage.trigger('disappear', {target: topPage});
+      topPage.$trigger('disappear');
     }
   }
 
