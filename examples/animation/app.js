@@ -1,4 +1,4 @@
-const animationPage = require('./animation');
+const animationPage = require('./simple');
 const peoplePage = require('./people');
 const trayPage = require('./tray');
 const {Button, NavigationView, Page, ui} = require('tabris');

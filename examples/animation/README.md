@@ -1,17 +1,20 @@
 # Animation Examples
-The animation examples consist of three parts, each part is on a separate Tabris page.
 
-## Easings
-Animations with different easings make up this example. 
+The animation examples consist of three parts, each on a separate page.
 
-![Animations at work](https://tabrisjs.com/assets/public-content/img/examples/animation-people-android.gif)
+## Simple Animation: Transform, Repeat, Reverse
 
-## Transform, Repeat, Reverse
-The bouncing element demonstrates a very simple animation.
+The bouncing element demonstrates a simple animation of different properties of a widget.
+Using the animation's `repeat` and `reverse` properties, the animation is played backwards once finished to restore the widget's original state.
 
-![Simple Button Animation](https://tabrisjs.com/assets/public-content/img/examples/simple-animation.gif)
+## People: Different Easings
 
-## Tray
-The tray example shows how to integrate a user controlled (event based) interaction with an animation. A typical usecase for this integration is a tray. You may drag it manually into place, but when you stop dragging an animation will finish the job for you and continue to move the tray into its final position. The demo uses touch events and combines them with animation start, progress and cancel.
+This example shows multiple animations with different easing functions.
 
-![Tray in Action](https://tabrisjs.com/assets/public-content/img/examples/animation-tray-android.gif)
+## Tray: User Controlled
+
+This example shows how to integrate a user controlled (event based) interaction with an animation.
+A typical use case for this integration is a tray.
+
+The tray can be dragged into place manually, but when the finger is lifted, an animation will continue to move the tray into its final position.
+The demo uses touch events and combines them with an animation.
