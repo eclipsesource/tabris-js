@@ -1,7 +1,6 @@
 const {generateDoc} = require('./grunt/grunt-generate-doc');
 const {generateTsd} = require('./grunt/grunt-generate-ts');
 const {generateJsx} = require('./grunt/grunt-generate-jsx');
-const {copyExamples} = require('./grunt/grunt-copy-examples');
 
 module.exports = function(grunt) {
 
@@ -131,10 +130,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-exec');
 
-  grunt.registerTask('copy-examples', () => {
-    copyExamples('examples', 'build/examples');
-  });
-
   grunt.registerTask('generate-doc', () => {
     let targetPath = grunt.config('doc').target;
     let files = grunt.file.expand(grunt.config('doc').api);
@@ -209,8 +204,7 @@ module.exports = function(grunt) {
     'test',
     'build',
     'verify',
-    'doc',
-    'copy-examples'
+    'doc'
   ]);
 
   function blockComment(text) {
