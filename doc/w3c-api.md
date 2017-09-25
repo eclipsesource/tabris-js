@@ -10,7 +10,7 @@ In JavaScript there is always an object that represents the global scope. All gl
 
 ## console object
 
-As in the browser, messages can be logged to the [developer console](getting-started#the-developer-console) using the global `console` object:
+As in the browser, messages can be logged to the [developer console](developer-app.md#the-developer-console) using the global `console` object:
 
 ```js
 console.log("A log message");
@@ -24,7 +24,7 @@ Calling `console.error` will also cause a message to pop up (even if the develop
 
 ## Timer
 
-Tabris supports the timer methods `setTimeout`, `setInterval`, `clearTimeout` and `clearInterval`. See [window](api/window.md).
+Tabris supports the timer methods `setTimeout`, `setInterval`, `clearTimeout` and `clearInterval`. See [timer](api/timer.md).
 
 See [W3C](http://www.w3.org/TR/2011/WD-html5-20110525/timers.html#timers) / [MDN](https://developer.mozilla.org/en-US/Add-ons/Code_snippets/Timers)
 
@@ -39,7 +39,7 @@ See [W3C](http://www.w3.org/TR/XMLHttpRequest/) / [MDN](https://developer.mozill
 * Only asynchronous requests are supported. Attempting a synchronous request will cause an error.
 * When a relative URL is given, Tabris.js will interpret it as a path relative to the application's `package.json`. This allows you to read static resources (files residing in your project folder).
 * When using a custom built developer client, a relative URL may be used to access local files (bundled with the client as a resource) as well as those residing in the remote project folder (from which the code is loaded via HTTP). Local files take precedence.
-* To enable access to SSL protected resources that use self signed certificates, use the `UseStrictSSL` preference in the config.xml. See the [Cordova documentation](cordova.md#preferences).
+* To enable access to SSL protected resources that use self signed certificates, use the `UseStrictSSL` preference in the config.xml. See [Building a Tabris.js App](build.md#preferences).
 
 ## Fetch
 

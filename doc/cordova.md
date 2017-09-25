@@ -8,7 +8,7 @@ The JavaScript API documentation of Cordova plug-ins is also valid in Tabris.js,
 
 ## Default Plug-Ins
 
-While using the [Tabris.js Developer App](getting-started.md), your application can directly access the following pre-packaged plug-ins:
+While using the [Tabris.js Developer App](developer-app.md), your application can directly access the following pre-packaged plug-ins:
 
 * [Badge](https://www.npmjs.com/package/de.appplant.cordova.plugin.badge)
 * [Camera](https://www.npmjs.com/package/cordova-plugin-camera)
