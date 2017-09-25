@@ -374,7 +374,11 @@ function createComment(comment) {
 }
 
 function createParamAnnotations(params) {
-  return params.map(param => `@param ${param.name} ${param.description || ''}`);
+  return params.map(param => {
+    let name = param.name.startsWith('...') ? param.name.slice(3) : param.name;
+    let description = param.description || '';
+    return `@param ${name} ${description}`;
+  });
 }
 
 function splitIntoLines(text, maxlen) {
