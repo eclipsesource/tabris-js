@@ -126,23 +126,36 @@
         "description": "Removes all listeners in the given object from the event type indicated by their key."
       }
     ],
-    "trigger": {
-      "parameters": [
-        {
-          "name": "type",
-          "type": "string",
-          "description": "The type of event to trigger"
-        },
-        {
-          "name": "event",
-          "type": "Object",
-          "ts_type": "EventObject<this>",
-          "description": "The event object to pass to listener functions."
-        }
-      ],
-      "returns": "this",
-      "description": "Notifies all registered listeners for the given *type* and passes the *event* object to the listeners."
-    },
+    "trigger": [
+      {
+        "parameters": [
+          {
+            "name": "type",
+            "type": "string",
+            "description": "The type of event to trigger"
+          },
+          {
+            "name": "event",
+            "type": "Object",
+            "ts_type": "EventObject<this>",
+            "description": "The event object to pass to listener functions."
+          }
+        ],
+        "returns": "this",
+        "description": "Notifies all registered listeners for the given *type* and passes the *event* object to the listeners."
+      },
+      {
+        "parameters": [
+          {
+            "name": "type",
+            "type": "string",
+            "description": "The type of event to trigger"
+          }
+        ],
+        "returns": "this",
+        "description": "Notifies all registered listeners for the given *type*."
+      }
+    ],
     "set": [
       {
         "parameters": [
