@@ -1,5 +1,6 @@
 import {expect, spy, restore} from '../test';
 import Events from '../../src/tabris/Events';
+import EventObject from '../../src/tabris/EventObject';
 
 describe('Events', function() {
 
@@ -255,13 +256,23 @@ describe('Events', function() {
       expect(listener).to.have.been.calledWith({});
     });
 
-    it('triggers listener with event object', function() {
+    it('triggers listener with empty object', function() {
       object.on('foo', listener);
       let event = {};
 
       object.trigger('foo', event);
 
       expect(listener).to.have.been.calledWith(event);
+    });
+
+    it('initializes instances of EventObject', function() {
+      object.on('foo', listener);
+      let event = new EventObject();
+
+      object.trigger('foo', event);
+
+      expect(event.target).to.equal(object);
+      expect(event.type).to.equal('foo');
     });
 
     it('triggers listener with default context', function() {

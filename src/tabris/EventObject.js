@@ -1,19 +1,13 @@
 export default class EventObject {
 
-  constructor(type, target, data = {}) {
-    if (arguments.length < 2) {
-      throw new Error('Not enough arguments to Event');
-    }
+  constructor() {
+    this.$type = '';
+    this.$target = null;
     Object.defineProperties(this, {
-      type: {enumerable: true, value: type},
-      target: {enumerable: true, value: target},
+      type: {enumerable: true, get: () => this.$type},
+      target: {enumerable: true, get: () => this.$target},
       timeStamp: {enumerable: true, value: Date.now()}
     });
-    for (let key in data) {
-      if (!(key in this)) {
-        Object.defineProperty(this, key, {enumerable: true, value: data[key]});
-      }
-    }
   }
 
   get defaultPrevented() {
@@ -22,6 +16,14 @@ export default class EventObject {
 
   preventDefault() {
     this.$defaultPrevented = true;
+  }
+
+  _initEvent(type, target) {
+    if (arguments.length < 2) {
+      throw new Error('Not enough arguments to initEvent');
+    }
+    this.$type = type;
+    this.$target = target;
   }
 
 }

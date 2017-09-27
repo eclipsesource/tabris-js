@@ -1,4 +1,5 @@
 import {isObject} from './util';
+import EventObject from './EventObject';
 
 export default {
 
@@ -81,6 +82,9 @@ export default {
   trigger(type, event = {}) {
     if (!this._isDisposed) {
       if (this._callbacks && type in this._callbacks) {
+        if (event instanceof EventObject) {
+          event._initEvent(type, this);
+        }
         let callbacks = this._callbacks[type];
         for (let i = 0; i < callbacks.length; i++) {
           let callback = callbacks[i];

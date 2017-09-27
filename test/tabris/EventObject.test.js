@@ -3,67 +3,35 @@ import EventObject from '../../src/tabris/EventObject';
 
 describe('EventObject', function() {
 
-  let target;
+  let target, event;
 
   beforeEach(function() {
     target = {};
+    event = new EventObject();
   });
 
   describe('constructor', function() {
 
-    it('throws for missing parameter', function() {
-      expect(() => new EventObject()).to.throw(Error, 'Not enough arguments');
-      expect(() => new EventObject('foo')).to.throw(Error, 'Not enough arguments');
-    });
-
-    it('sets type from parameter', function() {
-      let event = new EventObject('foo', target);
-      expect(event.type).to.equal('foo');
-    });
-
-    it('sets target from parameter', function() {
-      let event = new EventObject('type', target);
-      expect(event.target).to.equal(target);
-    });
-
     it('sets current timestamp', function() {
-      let event = new EventObject('type', target);
-
       expect(event.timeStamp).to.be.above(0);
       expect(event.timeStamp).to.be.closeTo(Date.now(), 100);
     });
 
-    it('copies data into instance', function() {
-      let event = new EventObject('type', target, {foo: 23});
-
-      expect(event.foo).to.equal(23);
-    });
-
-    it('includes data as read-only properties', function() {
-      let event = new EventObject('type', target, {foo: 23});
-
-      event.foo = 42;
-
-      expect(event.foo).to.equal(23);
-    });
-
-    it('does not copy target, type, or timeStamp from data', function() {
-      let event = new EventObject('bar', target, {foo: 23, type: 'foo', target: {}, timeStamp: 42});
-
-      expect(event.foo).to.equal(23);
-      expect(event.type).to.equal('bar');
-      expect(event.target).to.equal(target);
-      expect(event.timeStamp).to.not.equal(42);
+    it('other properties have default values', function() {
+      expect(event.type).to.be.equal('');
+      expect(event.target).to.be.null;
     });
 
   });
 
-  describe('instance', function() {
-
-    let event;
+  describe('initialized instance', function() {
 
     beforeEach(function() {
-      event = new EventObject('foo', target);
+      event._initEvent('foo', target);
+    });
+
+    it('can not be initialized again', function() {
+      expect(() => event._initEvent('foo', target)).to.throw;
     });
 
     describe('type', function() {

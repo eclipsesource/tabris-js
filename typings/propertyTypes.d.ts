@@ -233,15 +233,6 @@ interface BoxDimensions {
 
 }
 
-interface EventObject<T> {
-  readonly target: T,
-  readonly timeStamp: number,
-  readonly type: string
-}
-
-interface PropertyChangedEvent<T,U> {
-  readonly target: T,
-  readonly timeStamp: number,
-  readonly type: string,
+interface PropertyChangedEvent<T,U> extends EventObject<T>{
   readonly value: U
 }

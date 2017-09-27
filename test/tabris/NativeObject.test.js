@@ -2,6 +2,7 @@ import {expect, mockTabris, spy, stub, restore} from '../test';
 import NativeObject from '../../src/tabris/NativeObject';
 import ProxyStore from '../../src/tabris/ProxyStore';
 import NativeBridge from '../../src/tabris/NativeBridge';
+import EventObject from '../../src/tabris/EventObject';
 import ClientStub from './ClientStub';
 
 describe('NativeObject', function() {
@@ -265,13 +266,44 @@ describe('NativeObject', function() {
         listener = spy();
       });
 
-      it('notifies listeners', function() {
+      it('notifies listeners with event arguments', function() {
         object.on('bar', listener);
 
         object._trigger('bar', {bar: 23});
 
         expect(listener).to.have.been.calledOnce;
         expect(listener).to.have.been.calledWithMatch({target: object, bar: 23});
+      });
+
+      it('notifies listeners with EventObject', function() {
+        object.on('bar', listener);
+
+        object._trigger('bar', {foo: 23});
+
+        let event = listener.args[0][0];
+        expect(event).to.be.instanceOf(EventObject);
+      });
+
+      it('includes data as read-only properties', function() {
+        object.on('bar', listener);
+        object._trigger('bar', {foo: 23});
+        let event = listener.args[0][0];
+
+        event.foo = 42;
+
+        expect(event.foo).to.equal(23);
+      });
+
+      it('does not copy target, type, or timeStamp from data', function() {
+        object.on('bar', listener);
+
+        object._trigger('bar', {foo: 23, type: 'foo', target: {}, timeStamp: 42});
+
+        let event = listener.args[0][0];
+        expect(event.foo).to.equal(23);
+        expect(event.type).to.equal('bar');
+        expect(event.target).to.equal(object);
+        expect(event.timeStamp).to.not.equal(42);
       });
 
     });

@@ -197,7 +197,12 @@ export default class NativeObject extends EventsClass {
   }
 
   $trigger(name, eventData = {}) {
-    let event = new EventObject(name, this, eventData);
+    let event = new EventObject();
+    for (let key in eventData) {
+      if (!(key in event)) {
+        Object.defineProperty(event, key, {enumerable: true, value: eventData[key]});
+      }
+    }
     this.trigger(name, event);
     return !!event.defaultPrevented;
   }

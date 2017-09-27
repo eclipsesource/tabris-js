@@ -142,7 +142,7 @@
           }
         ],
         "returns": "this",
-        "description": "Notifies all registered listeners for the given *type* and passes the *event* object to the listeners."
+        "description": "Notifies all registered listeners for the given *type*."
       },
       {
         "parameters": [
@@ -150,10 +150,32 @@
             "name": "type",
             "type": "string",
             "description": "The type of event to trigger"
+          },
+          {
+            "name": "object",
+            "type": "Object",
+            "description": "The object to pass to listener functions."
           }
         ],
         "returns": "this",
-        "description": "Notifies all registered listeners for the given *type*."
+        "description": "Notifies all registered listeners for the given *type* and passes the object to the listeners."
+      },
+      {
+        "parameters": [
+          {
+            "name": "type",
+            "type": "string",
+            "description": "The type of event to trigger"
+          },
+          {
+            "name": "eventObject",
+            "type": "EventObject",
+            "ts_type": "EventObject<this>",
+            "description": "An instance of `EventObject` to pass to listener functions. Initializes the `target` and `type` properties of the object."
+          }
+        ],
+        "returns": "this",
+        "description": "Notifies all registered listeners for the given *type* and passes the *event* object to the listeners."
       }
     ],
     "set": [

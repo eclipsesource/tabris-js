@@ -58,11 +58,7 @@ function selectionHandler(event) {
 button.on('select', selectionHandler);
 ```
 
-The listener function is called with an event object that contains a number of properties depending on the event type. All events have the following common properties:
-
-* `type`: the event type
-* `target`: the widget that received the event
-* `timeStamp`: the time at which the event was created, in milliseconds
+The listener function is called with an instance of [EventObject](./api/EventObject.md) that may include a number of additional properties depending on the event type.
 
 > :point_right: Event types are case sensitive.
 

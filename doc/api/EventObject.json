@@ -1,0 +1,27 @@
+{
+  "type": "EventObject",
+  "generics": "T",
+  "description": "Base class for all events fired by the framework. Instances may include additional properties, which are documented together with the event type. Change events also have a `value` property. \n\n When the trigger method is called with a new instance of `EventObject`, `type`, `target` and `timeStamp` are initialized automatically.\n\nIn TypeScript this is a generic class, with the parameter `T` defining the type of the `target` property.",
+  "constructor": {
+    "access": "public",
+    "parameters": []
+  },
+  "properties": {
+    "type": {
+      "type": "string",
+      "readonly": true,
+      "description": "The event type."
+    },
+    "target": {
+      "type": "object",
+      "ts_type": "T",
+      "readonly": true,
+      "description": "The object that fired the event."
+    },
+    "timeStamp": {
+      "type": "number",
+      "readonly": true,
+      "description": "The time at which the event was created, in milliseconds."
+    }
+  }
+}
