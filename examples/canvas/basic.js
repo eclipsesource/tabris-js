@@ -1,7 +1,7 @@
 const {Canvas, Page, device} = require('tabris');
 
-let CANVAS_WIDTH = 400;
-let CANVAS_HEIGHT = 400;
+let CANVAS_WIDTH = 300;
+let CANVAS_HEIGHT = 300;
 
 let page = new Page({
   title: 'Basic Shapes',
@@ -9,80 +9,86 @@ let page = new Page({
 });
 
 let canvas = new Canvas({
-  left: 10, top: 10, width: CANVAS_WIDTH, height: CANVAS_HEIGHT
+  centerX: 0, top: 32, width: CANVAS_WIDTH, height: CANVAS_HEIGHT
 }).appendTo(page);
 
 let scaleFactor = device.scaleFactor;
 let ctx = canvas.getContext('2d', CANVAS_WIDTH * scaleFactor, CANVAS_HEIGHT * scaleFactor);
 ctx.scale(scaleFactor, scaleFactor);
+ctx.textBaseline = 'top';
+ctx.textAlign = 'center';
 
-ctx.fillStyle = 'rgba(255, 100, 100, 0.5)';
-ctx.fillRect(50, 20, 20, 80);
-ctx.fillStyle = 'rgba(100, 100, 255, 0.5)';
-ctx.fillRect(20, 50, 80, 20);
-ctx.fillText('transparency', 20, 120);
-
-drawPolygon(ctx, 20, 150);
-ctx.stroke();
-ctx.fillText('polygon', 20, 225);
-
-drawArc(ctx, 20, 250);
-ctx.fill();
-ctx.stroke();
-ctx.fillText('arc', 20, 345);
-
-ctx.strokeStyle = 'blue';
-drawLinear(ctx, 140, 20);
-ctx.stroke();
-ctx.fillText('linear', 140, 75);
+ctx.fillStyle = '#db4437aa';
+ctx.fillRect(40, 20, 80, 60);
+ctx.fillStyle = '#3f51b5aa';
+ctx.fillRect(60, 40, 80, 60);
+ctx.fillStyle = '#8dbd00aa';
+ctx.fillRect(20, 60, 80, 60);
+ctx.fillStyle = 'black';
+ctx.fillText('transparency', 80, 130);
 
 ctx.lineWidth = 2;
-ctx.strokeStyle = 'purple';
-drawQuadratic(ctx, 140, 100);
+ctx.strokeStyle = '#db4437';
+drawLinear(ctx, 220, 40);
 ctx.stroke();
-ctx.fillText('quadratic', 140, 155);
 
-ctx.lineWidth = 4;
-ctx.strokeStyle = 'olive';
-drawBezier(ctx, 140, 180);
+ctx.strokeStyle = '#3f51b5';
+drawQuadratic(ctx, 220, 70);
 ctx.stroke();
-ctx.fillText('bezier', 140, 240);
+
+ctx.strokeStyle = '#8dbd00';
+drawBezier(ctx, 220, 100);
+ctx.stroke();
+ctx.fillText('curves', 220, 130);
+
+ctx.lineWidth = 2;
+ctx.strokeStyle = 'black';
+drawPath(ctx, 80, 220, 50);
+ctx.stroke();
+ctx.fillText('path', 80, 270);
+
+drawArc(ctx, 220, 220, 45);
+ctx.fillStyle = '#fed100';
+ctx.fill();
+ctx.fillStyle = 'black';
+ctx.fillText('arc', 220, 270);
 
 function drawLinear(ctx, x, y) {
   ctx.beginPath();
-  ctx.moveTo(x, y + 25);
-  ctx.lineTo(x + 25, y + 10);
-  ctx.lineTo(x + 75, y + 40);
-  ctx.lineTo(x + 100, y + 25);
+  ctx.moveTo(x - 50, y);
+  ctx.lineTo(x - 25, y - 15);
+  ctx.lineTo(x + 25, y + 15);
+  ctx.lineTo(x + 50, y);
 }
 
 function drawQuadratic(ctx, x, y) {
   ctx.beginPath();
-  ctx.moveTo(x, y + 25);
-  ctx.quadraticCurveTo(x + 25, y, x + 50, y + 25);
-  ctx.quadraticCurveTo(x + 75, y + 50, x + 100, y + 25);
+  ctx.moveTo(x - 50, y);
+  ctx.quadraticCurveTo(x - 25, y - 25, x, y);
+  ctx.quadraticCurveTo(x + 25, y + 25, x + 50, y);
 }
 
 function drawBezier(ctx, x, y) {
   ctx.beginPath();
-  ctx.moveTo(x, y + 25);
-  ctx.bezierCurveTo(x, y, x + 50, y, x + 50, y + 25);
-  ctx.bezierCurveTo(x + 50, y + 50, x + 100, y + 50, x + 100, y + 25);
+  ctx.moveTo(x - 50, y);
+  ctx.bezierCurveTo(x - 50, y - 25, x, y - 25, x, y);
+  ctx.bezierCurveTo(x, y + 25, x + 50, y + 25, x + 50, y);
 }
 
-function drawPolygon(ctx, x, y) {
+function drawPath(ctx, x, y, radius) {
   ctx.beginPath();
-  ctx.moveTo(x, y + 30);
-  ctx.lineTo(x + 50, y);
-  ctx.lineTo(x + 100, y + 30);
-  ctx.lineTo(x + 50, y + 60);
+  let rotate = -Math.PI / 2;
+  ctx.moveTo(x, y - radius);
+  for (let i = 0; i <= 4 * Math.PI; i += (4 * Math.PI) / 5) {
+    ctx.lineTo(x + radius * Math.cos(i + rotate), y + radius * Math.sin(i + rotate));
+  }
   ctx.closePath();
 }
 
-function drawArc(ctx, x, y) {
+function drawArc(ctx, x, y, radius) {
   ctx.beginPath();
-  ctx.moveTo(x + 40, y + 40);
-  ctx.arc(x + 40, y + 40, 40, Math.PI / 4, -Math.PI / 4);
+  ctx.moveTo(x, y);
+  ctx.arc(x, y, radius, Math.PI / 4, -Math.PI / 4);
   ctx.closePath();
 }
 

@@ -1,14 +1,21 @@
 # Canvas Example
-The Canvas example consists of four parts, each part is on a separate tabris page. The Tabris.js Canvas implements a subset of the HTML5 canvas API.
+
+The Tabris.js Canvas implements a subset of the HTML5 Canvas API.
+This example consists of four parts, each on a separate page.
 
 ## Animation
-The example showcases an animated canvas. Animation is done with a timer function. The example also displays the framerate the animation achieves on your device.
+
+Showcases an animated drawing on a canvas, where the single steps are drawn using a timer.
+The frame rate depends on the device, it's displayed in the upper left.
 
 ## Basic Shapes
+
 Demonstrates basic drawing functions with different shape types, path and transparency.
 
 ## Arcs
-A set of arcs with their radiant definitions.
+
+Displays a set of arcs with different angle definitions.
 
 ## Text
-Positions and aligns text on the canvas.
+
+Outlines different placement and alignment options for text on a canvas.

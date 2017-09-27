@@ -9,11 +9,13 @@ let page = new Page({
 });
 
 let canvas = new Canvas({
-  left: 10, top: 10, width: CANVAS_WIDTH, height: CANVAS_HEIGHT
+  centerX: 0, top: 32, width: CANVAS_WIDTH, height: CANVAS_HEIGHT
 }).appendTo(page);
 
 let scaleFactor = device.scaleFactor;
 let ctx = canvas.getContext('2d', CANVAS_WIDTH * scaleFactor, CANVAS_HEIGHT * scaleFactor);
+ctx.font = '14px';
+
 ctx.scale(scaleFactor, scaleFactor);
 ctx.strokeStyle = 'red';
 
