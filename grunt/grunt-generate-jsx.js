@@ -26,9 +26,18 @@ const footer = `
 
 exports.generateJsx = function generateJsx({files}) {
   let defs = readJsonDefs(files);
-  let tsd = createTypeDefs(defs);
+  let tsd = createTypeDefs(filter(defs, def => !def.namespace || def.namespace === 'tabris'));
   writeFileSync('build/tabris/Jsx.d.ts', tsd);
 };
+
+function filter(obj, filterFunction) {
+  return Object.keys(obj)
+    .filter(key => filterFunction(obj[key]))
+    .reduce((result, key) => {
+      result[key] = obj[key];
+      return result;
+    }, {});
+}
 
 function readJsonDefs(files) {
   let defs = {};
@@ -36,7 +45,7 @@ function readJsonDefs(files) {
     let json = readJsonSync(file);
     json.file = file;
     if (!json.ts_ignore) {
-      defs[json.type] = json;
+      defs[json.type || json.object || json.  title] = json;
     }
   });
   return defs;

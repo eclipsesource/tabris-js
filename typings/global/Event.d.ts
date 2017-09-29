@@ -149,4 +149,3 @@ declare var MessagePort: {
     prototype: MessagePort;
     new(): MessagePort;
 }
-

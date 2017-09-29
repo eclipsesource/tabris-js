@@ -2,8 +2,10 @@
   "type": "Storage",
   "namespace": "global",
   "object": "localStorage",
-  "ts_ignore": true,
   "description": "The `localStorage` object allows storing key-value pairs in a persistent store. Both keys and values are stored as strings.\n\nOn iOS, there is an additional object `secureStorage` available in the global scope. This is a drop-in replacement for `localStorage` that keeps data in the encrypted iOS Keychain.\n\nThe `localStorage` is only meant to store relatively short strings. To store larger amounts of data it is recommended to use the [FileSystem](./fs.html) API.",
+  "constructor": {
+    "access": "private"
+  },
   "methods": {
     "clear": {
       "description": "Remove all key/value pairs from the storage.",
@@ -30,6 +32,7 @@
         }
       ],
       "returns": "string",
+      "ts_returns": "string|null",
       "description": "Retrieves the value associated with the given key."
     },
     "removeItem": {

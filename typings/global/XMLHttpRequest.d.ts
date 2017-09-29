@@ -1,4 +1,3 @@
-
 interface XMLHttpRequestEventTarget {
     onabort: (this: XMLHttpRequestEventTarget, ev: Event) => any;
     onerror: (this: XMLHttpRequestEventTarget, ev: ErrorEvent) => any;

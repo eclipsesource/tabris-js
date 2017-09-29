@@ -34,22 +34,11 @@ module.exports = function(grunt) {
         src: ['build/boot-transpiled.js'],
         dest: 'build/tabris/boot.js'
       },
-      typings: {
-        src: [
-          'typings/whatwg-fetch.d.ts',
-          'typings/timer.d.ts',
-          'typings/console.d.ts',
-          'typings/localStorage.d.ts',
-          'typings/XMLHttpRequest.d.ts',
-          'typings/Event.d.ts',
-          'typings/WebSocket.d.ts'
-        ],
-        dest: 'build/tabris/globals.d.ts'
-      },
     },
     doc: {
       api: 'doc/api/**/*.json',
-      typings: 'typings/propertyTypes.d.ts',
+      propertyTypes: 'typings/propertyTypes.d.ts',
+      globalTypings: 'typings/global/*.d.ts',
       target: 'build/doc/'
     },
     copy: {
@@ -143,8 +132,9 @@ module.exports = function(grunt) {
 
   grunt.registerTask('generate-tsd', () => {
     let files = grunt.file.expand(grunt.config('doc').api);
-    let typings = grunt.file.read(grunt.config('doc').typings);
-    generateTsd({files, typings, version});
+    let propertyTypes = grunt.file.read(grunt.config('doc').propertyTypes);
+    let globalTypeDefFiles = grunt.file.expand(grunt.config('doc').globalTypings);
+    generateTsd({files, propertyTypes, globalTypeDefFiles, version});
   });
 
   /* runs static code analysis tools */
@@ -176,7 +166,6 @@ module.exports = function(grunt) {
     'package',
     'copy:readme',
     'generate-jsx',
-    'concat:typings',
     'generate-tsd'
   ]);
 

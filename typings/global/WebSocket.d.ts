@@ -1,5 +1,3 @@
-
-
 interface WebSocketEventMap {
     "close": CloseEvent;
     "error": Event;

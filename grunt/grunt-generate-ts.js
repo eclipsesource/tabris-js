@@ -1,4 +1,4 @@
-const {readJsonSync, writeFileSync} = require('fs-extra');
+const {readJsonSync, writeFileSync, readFileSync} = require('fs-extra');
 
 const header = `
 // Type definitions for Tabris.js \${VERSION}
@@ -10,8 +10,7 @@ type Partial<T> = {
 };
 
 export as namespace tabris;
-
-`.trim();
+`;
 
 const PROPERTIES_OBJECT = 'PropertiesObject';
 const EVENTS_OBJECT = 'EventsObject';
@@ -19,11 +18,26 @@ const EVENT_OBJECT = 'EventObject<T>';
 const CLASS_DEPENDENT_TYPES = [PROPERTIES_OBJECT, EVENTS_OBJECT];
 let eventObjectNames = [EVENT_OBJECT];
 
-exports.generateTsd = function generateTsd({files, typings, version}) {
+exports.generateTsd = function generateTsd({files, propertyTypes, globalTypeDefFiles, version}) {
   let defs = readJsonDefs(files);
-  let tsd = createTypeDefs(defs, typings).replace(/\${VERSION}/g, version);
-  writeFileSync('build/tabris/tabris.d.ts', tsd);
+  let globalDefs = filter(defs, def => def.namespace && def.namespace === 'global');
+  let globals = globalTypeDefFiles.map((file) => readFileSync(file));
+  globals.push(createTypeDefs(globalDefs));
+  writeFileSync('build/tabris/globals.d.ts', globals.join('\n'));
+  let tabrisDefs = filter(defs, def => !def.namespace || def.namespace === 'tabris');
+  let tsd = [header.replace(/\${VERSION}/g, version), propertyTypes];
+  tsd.push(createTypeDefs(tabrisDefs));
+  writeFileSync('build/tabris/tabris.d.ts', tsd.join('\n'));
 };
+
+function filter(obj, filterFunction) {
+  return Object.keys(obj)
+    .filter(key => filterFunction(obj[key]))
+    .reduce((result, key) => {
+      result[key] = obj[key];
+      return result;
+    }, {});
+}
 
 function readJsonDefs(files) {
   let defs = {};
@@ -31,18 +45,14 @@ function readJsonDefs(files) {
     let json = readJsonSync(file);
     json.file = file;
     if (!json.ts_ignore) {
-      defs[json.type] = json;
+      defs[json.type || json.object || json.title] = json;
     }
   });
   return defs;
 }
 
-function createTypeDefs(defs, typings) {
+function createTypeDefs(defs) {
   let result = new Text();
-  result.append(header);
-  result.append('');
-  result.append(typings);
-  result.append('');
   prepareTypeDefs(defs);
   Object.keys(defs).forEach((name) => {
     createTypeDef(result, defs[name]);
@@ -65,7 +75,7 @@ function isNativeObject(defs, def) {
 }
 
 function createTypeDef(result, def) {
-  result.append('// ' + def.type);
+  result.append('// ' + (def.type || def.object || def.title));
   if (def.isNativeObject) {
     result.append('');
     addPropertyInterface(result, def);
@@ -75,8 +85,12 @@ function createTypeDef(result, def) {
     addEventObjectInterfaces(result, def);
   }
   result.append('');
-  addClass(result, def);
-  addInstance(result, def);
+  if (def.type) {
+    addClass(result, def);
+    addInstance(result, def);
+  } else {
+    addMethods(result, def);
+  }
   result.append('');
 }
 
@@ -123,7 +137,8 @@ function addClassDef(result, def) {
   if (def.isNativeObject) {
     result.append(`interface ${def.type} extends _${def.type}Properties {}`);
   }
-  let str = 'export class ' + def.type;
+  let str = (def.namespace && def.namespace === 'global') ? 'declare ' : ' export';
+  str += ' class ' + def.type;
   if (def.generics) {
     str += '<' + def.generics + '>';
   }
@@ -278,8 +293,10 @@ function isClassDependent(method) { // methods with parameters that must be adju
 function createMethod(name, def, className) {
   let result = [];
   result.push(createDoc(def));
-  result.push(`${name}${def.generics ? `<${def.generics}>` : ''}`
-    + `(${createParamList(def.parameters, className)}): ${def.ts_returns || def.returns || 'void'};`);
+  let declaration = (className ? '' : 'declare function ')
+    + `${name}${def.generics ? `<${def.generics}>` : ''}`
+    + `(${createParamList(def.parameters, className)}): ${def.ts_returns || def.returns || 'void'};`;
+  result.push(declaration);
   return result.join('\n');
 }
 

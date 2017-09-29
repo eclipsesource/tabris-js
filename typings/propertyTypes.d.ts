@@ -1,4 +1,3 @@
-
 /**
  * Represents pixel data of a `Canvas` widget.
  */

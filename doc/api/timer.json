@@ -1,7 +1,6 @@
 {
   "title": "Timer",
   "namespace": "global",
-  "ts_ignore": true,
   "methods": {
     "setTimeout": {
       "parameters": [
