@@ -1,0 +1,151 @@
+{
+  "type": "Console",
+  "description": "The Console object provides access to the debugging console",
+  "namespace": "global",
+  "object": "console",
+  "constructor": {
+    "access": "private"
+  },
+  "methods": {
+    "log": [
+      {
+        "description": "Outputs a message to the console.",
+        "parameters": [
+          {
+            "description": "A list of JavaScript objects to output. The string representations of each of these objects are appended together in the order listed and output.",
+            "name": "...objects",
+            "type": "any[]"
+          }
+        ]
+      },
+      {
+        "description": "Outputs a message to the console.",
+        "parameters": [
+          {
+            "description": "A JavaScript string containing zero or more substitution strings.",
+            "name": "message",
+            "type": "string",
+            "optional": true
+          },
+          {
+            "description": "JavaScript objects with which to replace substitution strings within message",
+            "name": "...substitutions",
+            "type": "any[]"
+          }
+        ]
+      }
+    ],
+    "warn": [
+      {
+        "description": "Outputs a warning message to the console.",
+        "parameters": [
+          {
+            "description": "A list of JavaScript objects to output. The string representations of each of these objects are appended together in the order listed and output.",
+            "name": "...objects",
+            "type": "any[]"
+          }
+        ]
+      },
+      {
+        "description": "Outputs a warning message to the console.",
+        "parameters": [
+          {
+            "description": "A JavaScript string containing zero or more substitution strings.",
+            "name": "message",
+            "type": "string",
+            "optional": true
+          },
+          {
+            "description": "JavaScript objects with which to replace substitution strings within message",
+            "name": "...substitutions",
+            "type": "any[]"
+          }
+        ]
+      }
+    ],
+    "debug": [
+      {
+        "description": "Outputs a debug message to the console.",
+        "parameters": [
+          {
+            "description": "A list of JavaScript objects to output. The string representations of each of these objects are appended together in the order listed and output.",
+            "name": "...objects",
+            "type": "any[]"
+          }
+        ]
+      },
+      {
+        "description": "Outputs a debug message to the console.",
+        "parameters": [
+          {
+            "description": "A JavaScript string containing zero or more substitution strings.",
+            "name": "message",
+            "type": "string",
+            "optional": true
+          },
+          {
+            "description": "JavaScript objects with which to replace substitution strings within message",
+            "name": "...substitutions",
+            "type": "any[]"
+          }
+        ]
+      }
+    ],
+    "info": [
+      {
+        "description": "Outputs an info message to the console.",
+        "parameters": [
+          {
+            "description": "A list of JavaScript objects to output. The string representations of each of these objects are appended together in the order listed and output.",
+            "name": "...objects",
+            "type": "any[]"
+          }
+        ]
+      },
+      {
+        "description": "Outputs an info message to the console.",
+        "parameters": [
+          {
+            "description": "A JavaScript string containing zero or more substitution strings.",
+            "name": "message",
+            "type": "string",
+            "optional": true
+          },
+          {
+            "description": "JavaScript objects with which to replace substitution strings within message",
+            "name": "...substitutions",
+            "type": "any[]"
+          }
+        ]
+      }
+    ],
+    "error": [
+      {
+        "description": "Outputs an error message to the console.",
+        "parameters": [
+          {
+            "description": "A list of JavaScript objects to output. The string representations of each of these objects are appended together in the order listed and output.",
+            "name": "...objects",
+            "type": "any[]"
+          }
+        ]
+      },
+      {
+        "description": "Outputs an error message to the console.",
+        "parameters": [
+          {
+            "description": "A JavaScript string containing zero or more substitution strings.",
+            "name": "message",
+            "type": "string",
+            "optional": true
+          },
+          {
+            "description": "JavaScript objects with which to replace substitution strings within message",
+            "name": "...substitutions",
+            "type": "any[]"
+          }
+        ]
+      }
+    ]
+  }
+}

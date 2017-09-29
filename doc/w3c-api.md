@@ -20,7 +20,7 @@ console.info("An info message");
 console.debug("A debug Message");
 ```
 
-Calling `console.error` will also cause a message to pop up (even if the developer console is closed), but it won't interrupt script execution.
+Calling `console.error` will also cause a message to pop up (even if the developer console is closed), but it won't interrupt script execution. See [Console](api/console.md).
 
 ## Timer
 
