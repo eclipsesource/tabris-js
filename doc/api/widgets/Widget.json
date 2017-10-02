@@ -91,7 +91,7 @@
       "parameters": [
         {
           "name": "properties",
-          "type": "Object",
+          "type": "object",
           "ts_type": "{[selector: string]: WidgetProperties & {[k: string]: any}}",
           "description": "An object in the format `{Selector: {property: value, property: value, ... }, Selector: ...}`"
         }
@@ -286,7 +286,7 @@
       }
     },
     "data": {
-      "type": "Object",
+      "type": "object",
       "ts_type": "{[k: string]: any}",
       "readonly": true,
       "description": "A general-purpose object that allows the application to attach arbitrary data to the widget. Manipulations on this object have no effect on the widget itself in any way. Example: `widget.data.myData = myData;`"

@@ -1,6 +1,6 @@
 import 'tabris';
 
-declare type T = Object;
+declare type T = object;
 
 let result: Promise<Response> = fetch('URL');
 result.then((response) => {

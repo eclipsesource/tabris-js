@@ -24,7 +24,7 @@ let listener: Function = () => {};
 let context: WidgetCollection<Widget>;
 let property: string = '';
 let value: any;
-let Properties: Object;
+let Properties: object;
 let event: string = '';
 let thisReturnValue: WidgetCollection<Widget>;
 let voidReturnValue: void;

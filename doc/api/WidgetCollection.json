@@ -115,7 +115,7 @@
         "parameters": [
           {
             "name": "properties",
-            "type": "Object",
+            "type": "object",
             "ts_type": "WidgetProperties & {[k: string]: any}"
           }
         ],

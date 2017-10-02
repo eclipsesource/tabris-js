@@ -9,10 +9,10 @@ cid = nativeObject.cid;
 
 // Methods
 let type: string = '';
-let listener: (event: Object) => void = () => {};
+let listener: (event: object) => void = () => {};
 let context: NativeObject = nativeObject;
 let property: string = '';
-let properties: Object = {};
+let properties: object = {};
 let thisReturnValue: NativeObject;
 let value: any;
 let timeStamp: number;

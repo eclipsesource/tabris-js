@@ -1,6 +1,6 @@
 const {readJsonSync, writeFileSync} = require('fs-extra');
 
-const BASIC_TYPES = ['boolean', 'number', 'string', 'symbol', 'any', 'Object', 'Date'];
+const BASIC_TYPES = ['boolean', 'number', 'string', 'symbol', 'any', 'object', 'Date'];
 
 const header = `
 type Image = tabris.Image;
@@ -8,7 +8,7 @@ type Selector = tabris.Selector;
 
 declare namespace JSX {
 
-  function createElement(type: string|Function, properties: Object, ...children: Array<ElementClass>): ElementClass;
+  function createElement(type: string|Function, properties: object, ...children: Array<ElementClass>): ElementClass;
 
   interface ElementClass extends tabris.Widget { }
 
