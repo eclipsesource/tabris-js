@@ -5,10 +5,6 @@ const header = `
 /// <reference path="globals.d.ts" />
 /// <reference path="Jsx.d.ts" />
 
-type Partial<T> = {
-  [P in keyof T]?: T[P];
-};
-
 export as namespace tabris;
 `;
 
