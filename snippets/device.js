@@ -2,7 +2,7 @@ const {TextView, device, ui} = require('tabris');
 
 // Display available device information
 
-['platform', 'version', 'model', 'language', 'orientation'].forEach((property) => {
+['platform', 'version', 'model', 'vendor', 'language', 'orientation'].forEach((property) => {
   new TextView({
     id: property,
     left: 10, right: 10, top: 'prev() 10',
