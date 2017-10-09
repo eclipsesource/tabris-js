@@ -30,6 +30,12 @@
       "static": true,
       "description": "The name of the device model. For example `\"iPad4,1\"` or `\"Nexus 7\"`. This property is also available globally as `device.model`."
     },
+    "vendor": {
+      "type": "string",
+      "readonly": true,
+      "static": true,
+      "description": "The name of the device manufacture. For example `\"Samsung\"` or `\"Apple\"`. This property is also available globally as `device.vendor`."
+    },
     "language": {
       "type": "string",
       "readonly": true,

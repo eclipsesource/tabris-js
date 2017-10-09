@@ -34,6 +34,7 @@ export default class Device extends NativeObject {
 
 NativeObject.defineProperties(Device.prototype, {
   model: {readonly: true, get: getOnce},
+  vendor: {readonly: true, get: getOnce},
   platform: {readonly: true, get: getOnce},
   version: {readonly: true, get: getOnce},
   language: {readonly: true},
@@ -58,7 +59,7 @@ export function publishDeviceProperties(device, target) {
 
 function createDevice(device) {
   let dev = {};
-  ['model', 'platform', 'version'].forEach((name) => {
+  ['model', 'vendor', 'platform', 'version'].forEach((name) => {
     defineReadOnlyProperty(dev, name, () => device[name]);
   });
   return dev;

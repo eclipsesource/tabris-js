@@ -31,6 +31,7 @@ describe('Device', function() {
     beforeEach(function() {
       results = {
         model: 'x1',
+        vendor: 'xyz',
         platform: 'foo',
         version: '23',
         language: 'es',
@@ -47,9 +48,9 @@ describe('Device', function() {
       spy(client, 'set');
       device = createDevice();
     });
-
     it('provides properties', function() {
       expect(device.model).to.equal('x1');
+      expect(device.vendor).to.equal('xyz');
       expect(device.platform).to.equal('foo');
       expect(device.version).to.equal('23');
       expect(device.language).to.equal('es');
@@ -61,6 +62,7 @@ describe('Device', function() {
 
     it('caches static properties', function() {
       device.model;
+      device.vendor;
       device.platform;
       device.version;
       device.scaleFactor;
@@ -68,6 +70,7 @@ describe('Device', function() {
       results = {};
 
       expect(device.model).to.equal('x1');
+      expect(device.vendor).to.equal('xyz');
       expect(device.platform).to.equal('foo');
       expect(device.version).to.equal('23');
       expect(device.scaleFactor).to.equal(2.5);
@@ -76,6 +79,7 @@ describe('Device', function() {
     it('setting properties does not call native SET', function() {
       stub(console, 'warn');
       device.model = 'x1';
+      device.vendor = 'xyz';
       device.platform = 'foo';
       device.version = '23';
       device.language = 'es';
@@ -162,6 +166,17 @@ describe('Device', function() {
       device.model = 'x1';
       target.device.model = 'x2';
       expect(target.device.model).to.equal('x1');
+    });
+
+    it('provides device.vendor', function() {
+      device.vendor = 'xyz';
+      expect(target.device.vendor).to.equal('xyz');
+    });
+
+    it('prevents overwriting device.vendor', function() {
+      device.vendor = 'xyz1';
+      target.device.vendor = 'xyz2';
+      expect(target.device.vendor).to.equal('xyz1');
     });
 
     it('provides device.platform', function() {
