@@ -120,6 +120,8 @@ describe('tabris', function() {
     expect(tabris.Composite.name).to.equal('Composite');
     expect(tabris.ContentView).to.be.a('function');
     expect(tabris.ContentView.name).to.equal('ContentView');
+    expect(tabris.DateDialog).to.be.a('function');
+    expect(tabris.DateDialog.name).to.equal('DateDialog');
     expect(tabris.Drawer).to.be.a('function');
     expect(tabris.Drawer.name).to.equal('Drawer');
     expect(tabris.ImageView).to.be.a('function');

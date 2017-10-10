@@ -1,0 +1,56 @@
+{
+  "type": "DateDialog",
+  "extends": "Popup",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "properties",
+        "type": "PropertiesObject",
+        "optional": true,
+        "description": "Sets all key-value pairs in the properties object as widget properties."
+      }
+    ]
+  },
+  "description": "A `DateDialog` represents a native dialog pop-up allowing the user to pick a date. Properties can only be set before open() is called. The dialog is automatically disposed when closed.",
+  "properties": {
+    "date": {
+      "type": "Date",
+      "description": "The date to be displayed in the dialog. The current date is used when no date is provided."
+    },
+    "minDate": {
+      "type": "Date",
+      "description": "Limits the selectable date range to the given past date. No limit is applied when not set."
+    },
+    "maxDate": {
+      "type": "Date",
+      "description": "Limits the selectable date range to the given future date. No limit is applied when not set."
+    }
+  },
+  "events": {
+    "close": {
+      "parameters": {
+        "date": {
+          "type": "Date",
+          "description": "The selected date. Can be `undefined` when no date was selected."
+        }
+      },
+      "description": "Fired when the date dialog was closed."
+    },
+    "select": {
+      "parameters": {
+        "date": {
+          "type": "Date",
+          "description": "The selected date. Only the date components reflect the users selection. The time component values are undefined."
+        }
+      },
+      "description": "Fired when a date was selected by the user."
+    }
+  },
+  "links": [
+    {
+      "title": "Simple DateDialog snippet",
+      "path": "${GITHUB_BRANCH}/snippets/datedialog.js"
+    }
+  ]
+}

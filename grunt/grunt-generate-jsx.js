@@ -1,6 +1,6 @@
 const {readJsonSync, writeFileSync} = require('fs-extra');
 
-const BASIC_TYPES = ['boolean', 'number', 'string', 'symbol', 'any', 'Object'];
+const BASIC_TYPES = ['boolean', 'number', 'string', 'symbol', 'any', 'Object', 'Date'];
 
 const header = `
 type Image = tabris.Image;

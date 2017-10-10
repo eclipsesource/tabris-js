@@ -24,6 +24,7 @@ import Composite from './widgets/Composite';
 import ContentView from './widgets/ContentView';
 import Crypto from './Crypto';
 import Drawer from './widgets/Drawer';
+import DateDialog from './DateDialog';
 import ImageData from './ImageData';
 import ImageView from './widgets/ImageView';
 import InactivityTimer from './InactivityTimer.js';
@@ -77,6 +78,7 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   Composite,
   ContentView,
   Crypto,
+  DateDialog,
   Device,
   Drawer,
   Event,
