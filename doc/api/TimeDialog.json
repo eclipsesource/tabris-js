@@ -1,0 +1,51 @@
+{
+  "type": "TimeDialog",
+  "extends": "Popup",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "properties",
+        "type": "PropertiesObject",
+        "optional": true,
+        "description": "Sets all key-value pairs in the properties object as widget properties."
+      }
+    ]
+  },
+  "description": "A `TimeDialog` represents a native dialog pop-up allowing the user to pick a time of day. Properties can only be set before open() is called. The dialog is automatically disposed when closed.",
+  "platforms": {
+    "windows": false
+  },
+  "properties": {
+    "date": {
+      "type": "Date",
+      "description": "The time to be displayed in the dialog. The current date is used when no date is provided."
+    }
+  },
+  "events": {
+    "close": {
+      "parameters": {
+        "date": {
+          "type": "Date",
+          "description": "The selected time. Can be `undefined` when no date was selected."
+        }
+      },
+      "description": "Fired when the time dialog was closed."
+    },
+    "select": {
+      "parameters": {
+        "date": {
+          "type": "Date",
+          "description": "The selected time. Only the time components reflect the users selection. The date component values are undefined."
+        }
+      },
+      "description": "Fired when a time was selected by the user."
+    }
+  },
+  "links": [
+    {
+      "title": "Simple TimeDialog snippet",
+      "path": "${GITHUB_BRANCH}/snippets/timedialog.js"
+    }
+  ]
+}

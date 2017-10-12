@@ -158,6 +158,8 @@ describe('tabris', function() {
     expect(tabris.TextInput.name).to.equal('TextInput');
     expect(tabris.TextView).to.be.a('function');
     expect(tabris.TextView.name).to.equal('TextView');
+    expect(tabris.TimeDialog).to.be.a('function');
+    expect(tabris.TimeDialog.name).to.equal('TimeDialog');
     expect(tabris.ToggleButton).to.be.a('function');
     expect(tabris.ToggleButton.name).to.equal('ToggleButton');
     expect(tabris.Video).to.be.a('function');

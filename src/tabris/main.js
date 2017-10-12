@@ -46,6 +46,7 @@ import Tab from './widgets/Tab';
 import TabFolder from './widgets/TabFolder';
 import TextInput from './widgets/TextInput';
 import TextView from './widgets/TextView';
+import TimeDialog from './TimeDialog';
 import ToggleButton from './widgets/ToggleButton';
 import Video from './widgets/Video';
 import WebView from './widgets/WebView';
@@ -104,6 +105,7 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   TabFolder,
   TextInput,
   TextView,
+  TimeDialog,
   ToggleButton,
   Ui,
   Video,
