@@ -105,7 +105,6 @@ JSX in Tabris.js TypeScript apps follows these specific rules:
  * An attribute of the same name as a property is used to set that property via constructor.
  * An attribute that follows the naming scheme `on{EventType}` is used to register a listener with that event.
  * Each element may have any number of children (if that type supports children), all of which are appended to their parent in the given order.
- * To support attribute checks on user defined elements, add a field on your custom widget called `jsxProperties`. The type <em>must</em> match the type of the first constructor parameter. You do not have to assign anything to the field.
  * While the JSX expressions themselves are type-safe, <em>their return type is not</em> (it's `any`), so follow the instructions for casting above. It can be considered safe to use unchecked JSX expressions within `widget.append()`, as all JSX elements are appendable types.
 
 Note that this is <em>not</em> valid:
@@ -136,6 +135,50 @@ ui.contentView.append(
   </widgetCollection>
 );
 ```
+
+To support your own attributes on a user defined element, add a field on your custom widget called `jsxProperties`. The *type* of the field defines what attributes are accepted. (The assigned value is irrelevant.) It should be an interface that includes some or all properties supported by the object. It can also include fields for listeners following the naming scheme `on{EventType}`. To support all JSX attributes of the super class as well, extend the corresponding interface exported by the JSX namespace.
+
+An example with a new property `foo` and a matching change event would look like this:
+
+```ts
+import {Composite, CompositeProperties, EventObject, ui} from 'tabris';
+
+type MyViewProperties = { foo?: string; };
+
+class MyView extends Composite implements MyViewProperties {
+
+  private jsxProperties: JSX.CompositeProperties & MyViewProperties & {
+    onFooChanged?: (ev: EventObject<MyView> & {value: string}) => void;
+  };
+
+  private _foo: string = '';
+
+  constructor(properties: CompositeProperties & MyViewProperties) {
+    super(properties);
+  }
+
+  public set foo(value: string) {
+    if (this._foo !== value) {
+      this._foo = value;
+      this.trigger('fooChanged', Object.assign(new EventObject(), {value}));
+    }
+  }
+
+  public get foo() {
+    return this._foo;
+  }
+
+}
+```
+
+The result can be used like this:
+
+```jsx
+ui.contentView.append(
+  <MyView foo='Hello' onFooChanged={({value}) => console.log(value)} />
+);
+```
+
 
 ### JSX without TypeScript
 

@@ -54,11 +54,15 @@ function readJsonDefs(files) {
 function createTypeDefs(defs) {
   prepareTypeDefs(defs);
   let result = new Text();
+  result.append(header);
   Object.keys(defs).forEach((name) => {
     addEventsInterface(result, defs[name]);
     result.append('');
   });
-  result.append(header);
+  Object.keys(defs).forEach((name) => {
+    addJsxPropertiesInterface(result, defs[name]);
+    result.append('');
+  });
   result.append('');
   result.indent++;
   addInstrinsicElementsInterface(result, defs);
@@ -155,21 +159,28 @@ function isBasicType(type) {
   return isBasicType;
 }
 
+function addJsxPropertiesInterface(result, def) {
+  if (def.isNativeObject) {
+    result.append(createJsxPropertiesInterface(def));
+  }
+}
+
 function addInstrinsicElementsInterface(result, defs) {
   result.append('interface IntrinsicElements {');
   result.indent++;
   Object.keys(defs).filter(name => defs[name].isNativeObject).forEach((name) => {
-    result.append(createIntrinsicElement(defs[name]));
+    let propertiesInterface = `${defs[name].type}Properties`;
+    result.append(`${lowercaseFirstChar(defs[name].type)}: ${propertiesInterface};\n`);
   });
   result.append('widgetCollection: {}');
   result.indent--;
   result.append('}');
 }
 
-function createIntrinsicElement(def) {
-  let propetiesInterface = `tabris.${def.type}Properties`;
+function createJsxPropertiesInterface(def) {
+  let propertiesInterface = `${def.type}Properties`;
   let eventsInterface = `${def.type}Events`;
-  return `${lowercaseFirstChar(def.type)}: ${propetiesInterface} & ${eventsInterface}`;
+  return `export type ${propertiesInterface} = tabris.${propertiesInterface} & ${eventsInterface};`;
 }
 
 function lowercaseFirstChar(string) {
