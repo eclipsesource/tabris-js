@@ -33,39 +33,39 @@ class ReservationForm extends Composite {
     this.append(
       <scrollView class='stretch' direction='vertical'>
         <composite id='interactive' class='top'>
-          <textView class='col1 label' alignment='left' text='Name:'/>
+          <textView class='col1 label' alignment='left'>Name:</textView>
           <textInput class='col2 labeled' id='name' message='Full Name'/>
-          <textView class='col1 label' text='Flyer Number:'/>
+          <textView class='col1 label'>Flyer Number</textView>
           <textInput class='col2 labeled' keyboard='number' message='Flyer Number'/>
-          <textView class='col1 label' text='Passphrase:'/>
+          <textView class='col1 label'>Passphrase:</textView>
           <textInput class='col2 labeled' type='password' message='Passphrase'/>
-          <textView class='col1 label' text='Country:'/>
+          <textView class='col1 label'>Country:</textView>
           <picker
               id='country'
               class='col2 labeled'
               itemCount={countries.length}
               itemText={index => countries[index]}/>
-          <textView class='col1 label' text='Class:'/>
+          <textView class='col1 label'>Class:</textView>
           <picker
               id='class'
               class='col2 labeled'
               itemCount={classes.length}
               itemText={index => classes[index]}/>
-          <textView class='col1 label' text='Seat:'/>
-          <radioButton class='col2 labeled' text='Window'/>
-          <radioButton class='col2 stacked' text='Aisle'/>
-          <radioButton class='col2 stacked' text='Anywhere' checked={true} />
+          <textView class='col1 label'>Seat:</textView>
+          <radioButton class='col2 labeled'>Window</radioButton>
+          <radioButton class='col2 stacked'>Aisle</radioButton>
+          <radioButton class='col2 stacked' checked={true}>Anywhere</radioButton>
           <composite class='group'>
-            <textView class='col1 grouped' text='Luggage:'/>
+            <textView class='col1 grouped'>Luggage:</textView>
             <slider
                 class='grouped'
                 id='luggageSlider'
                 onSelectionChanged={ev => this.luggageWeightText = `${ev.value} Kg`}/>
-            <textView class='grouped' id='luggageWeight' text='0 Kg'/>
+            <textView class='grouped' id='luggageWeight'>0 Kg</textView>
           </composite>
-          <checkBox class='col2 stacked' id='veggie' text='Vegetarian'/>
+          <checkBox class='col2 stacked' id='veggie'>Vegetarian</checkBox>
           <composite class='group'>
-            <textView class='col1 grouped' text='Redeem miles:'/>
+            <textView class='col1 grouped'>Vegetarian</textView>
             <switch class='col2 grouped' id='miles'/>
           </composite>
           <button

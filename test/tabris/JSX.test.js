@@ -125,6 +125,28 @@ describe('JSX', function() {
       expect(children[2]).to.be.instanceof(Switch);
     });
 
+    it('appends text on widget supporting text', function() {
+      let button = createElement(
+        Button,
+        null,
+        'Hello',
+        'World!'
+      );
+
+      expect(button.text).to.equal('Hello World!');
+    });
+
+    it('appends no text on widget not accepting text', function() {
+      let composite = createElement(
+        Composite,
+        null,
+        'Hello',
+        'World!'
+      );
+
+      expect(composite.text).to.be.undefined;
+    });
+
     it('creates widgetCollection with children', function() {
       let collection = createElement(
         'widgetCollection',

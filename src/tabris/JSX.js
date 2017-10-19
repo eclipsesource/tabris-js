@@ -4,18 +4,19 @@ import {omit} from './util';
 
 export function createElement(jsxType, attributes, ...children) {
   let Type = typeToConstructor(jsxType);
+  let appendable = flattenChildren(children).filter(child => child instanceof Widget);
   if (Type === WidgetCollection) {
     if (attributes) {
       throw new Error('JSX: WidgetCollection can not have attributes');
     }
-    return new WidgetCollection(flattenChildren(children));
+    return new WidgetCollection(appendable);
   }
-  let result = new Type(getPropertiesMap(attributes || {}));
+  let result = new Type(getPropertiesMap(attributes || {}, children));
   if (!(result instanceof Widget)) {
     throw new Error(('JSX: Unsupported type ' + Type.name).trim());
   }
   result.on(getListenersMap(attributes || {}));
-  return result.append.apply(result, flattenChildren(children));
+  return result.append.apply(result, appendable);
 }
 
 function typeToConstructor(jsxType) {
@@ -42,8 +43,13 @@ function flattenChildren(children) {
   return result;
 }
 
-function getPropertiesMap(attributes) {
-  return omit(attributes, Object.keys(attributes).filter(isEventAttribute));
+function getPropertiesMap(attributes, children) {
+  let properties = omit(attributes, Object.keys(attributes).filter(isEventAttribute));
+  let texts = children.filter(child => typeof child === 'string');
+  if (texts.length) {
+    properties.text = texts.join(' ');
+  }
+  return properties;
 }
 
 function getListenersMap(attributes) {
