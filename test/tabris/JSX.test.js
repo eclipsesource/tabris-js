@@ -147,6 +147,20 @@ describe('JSX', function() {
       expect(composite.text).to.be.undefined;
     });
 
+    it('executes given function', function() {
+      let fn = spy(() => new WidgetCollection([new Button()]));
+      let collection = createElement(
+        fn,
+        {foo: 'bar'},
+        {child: 1},
+        {child: 2}
+      );
+
+      expect(collection).to.be.instanceof(WidgetCollection);
+      expect(collection.length).to.equal(1);
+      expect(fn).to.have.been.calledWith({foo: 'bar'}, [{child: 1}, {child: 2}]);
+    });
+
     it('creates widgetCollection with children', function() {
       let collection = createElement(
         'widgetCollection',

@@ -220,7 +220,7 @@ JSX in Tabris.js TypeScript apps follows these specific rules:
  * Attributes can be either strings (using single or double quotation marks) or JavaScript/TypeScript expressions (using curly braces).
  * An attribute of the same name as a property is used to set that property via constructor.
  * An attribute that follows the naming scheme `on{EventType}` is used to register a listener with that event.
- * Each element may have any number of child elements (if that type supports children), all of which are appended to their parent in the given order. An element that has a `text` attribute may also use plain text a child element, e.g. `<textView>Hello</textView>`.
+ * Each element may have any number of child elements (if that type supports children), all of which are appended to their parent in the given order. An element that has a `text` attribute may also use plain text a child element, e.g. `<textView>Hello</textView>`. A child can also be a JavaScript expression wrapped in `{}`, just like attributes can be.
  * While the JSX expressions themselves are type-safe, <em>their return type is not</em> (it's `any`), so follow the instructions for casting above. It can be considered safe to use unchecked JSX expressions within `widget.append()`, as all JSX elements are appendable types.
 
 Note that this is <em>not</em> valid:
@@ -295,6 +295,27 @@ ui.contentView.append(
 );
 ```
 
+Another kind of supported user defined element are functions that return a WidgetCollection. As per convention their name has to start with an uppercase letter. The function is called with two arguments: The element's attributes as an object and its children (if any) as an array. An example of this feature would be to call a given widget factory a given number of times:
+
+```ts
+function Repeat(properties: {times: number}, [callback]: [() => Widget]): WidgetCollection<Widget> {
+  let result = [];
+  for (let i = 0; i < properties.times; i++) {
+    result[i] = callback();
+  }
+  return new WidgetCollection(result);
+}
+```
+
+It can then be used like a regular element:
+
+```jsx
+ui.contentView.append(
+  <Repeat times={10}>{() => <textView top='prev() 10'>Hello Again!</textView>}</Repeat>
+)
+```
+
+Note that this example assumes that the element has exactly one child (the `callback` function), but the type and number of children are not checked at compile time. (The attributes are.) It would therefore be a good idea to check the type of the children at runtime.
 
 ### JSX without TypeScript
 

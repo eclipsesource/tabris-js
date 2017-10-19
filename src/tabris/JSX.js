@@ -11,12 +11,14 @@ export function createElement(jsxType, attributes, ...children) {
     }
     return new WidgetCollection(appendable);
   }
-  let result = new Type(getPropertiesMap(attributes || {}, children));
-  if (!(result instanceof Widget)) {
-    throw new Error(('JSX: Unsupported type ' + Type.name).trim());
+  let result = new Type(getPropertiesMap(attributes || {}, children), children);
+  if (result instanceof WidgetCollection) {
+    return result;
+  } else if (result instanceof Widget) {
+    result.on(getListenersMap(attributes || {}));
+    return result.append.apply(result, appendable);
   }
-  result.on(getListenersMap(attributes || {}));
-  return result.append.apply(result, appendable);
+  throw new Error(('JSX: Unsupported type ' + Type.name).trim());
 }
 
 function typeToConstructor(jsxType) {
