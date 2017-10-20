@@ -97,7 +97,8 @@ function createTypeDef(result, def) {
 function addInstance(result, def) {
   if (def.object) {
     result.append('');
-    result.append(`declare let ${def.object}: ${def.type};`);
+    let isGlobal = (def.namespace && def.namespace === 'global');
+    result.append(`declare ${isGlobal ? 'var' : 'let'} ${def.object}: ${def.type};`);
   }
 }
 
@@ -137,7 +138,7 @@ function addClassDef(result, def) {
   if (def.isNativeObject) {
     result.append(`interface ${def.type} extends _${def.type}Properties {}`);
   }
-  let str = (def.namespace && def.namespace === 'global') ? 'declare ' : ' export';
+  let str = (def.namespace && def.namespace === 'global') ? 'declare' : ' export';
   str += ' class ' + def.type;
   if (def.generics) {
     str += '<' + def.generics + '>';

@@ -1,6 +1,6 @@
 {
   "type": "Console",
-  "description": "The Console object provides access to the debugging console",
+  "description": "The console object provides access to the debugging console",
   "namespace": "global",
   "object": "console",
   "constructor": {
