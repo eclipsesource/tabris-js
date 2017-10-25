@@ -174,14 +174,17 @@
     ],
     "set": [
       {
+        "generics": "T extends keyof Properties<this>",
         "parameters": [
           {
             "name": "property",
-            "type": "string"
+            "type": "string",
+            "ts_type": "T"
           },
           {
             "name": "value",
-            "type": "any"
+            "type": "any",
+            "ts_type": "Properties<this>[T]"
           }
         ],
         "description": "Sets the given property.",
@@ -191,7 +194,8 @@
         "parameters": [
           {
             "name": "properties",
-            "type": "PropertiesObject"
+            "type": "PropertiesObject",
+            "ts_type": "Properties<this>"
           }
         ],
         "description": "Sets all key-value pairs in the properties object as widget properties.",
@@ -199,13 +203,15 @@
       }
     ],
     "get": {
+      "generics": "T extends keyof Properties<this>",
       "parameters": [
         {
           "name": "property",
-          "type": "string"
+          "type": "string",
+          "ts_type": "T"
         }
       ],
-      "returns": "any",
+      "returns": "Properties<this>[T]",
       "description": "Gets the current value of the given *property*."
     }
   }

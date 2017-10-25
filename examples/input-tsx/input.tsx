@@ -1,9 +1,8 @@
-import {Widget, ScrollView, Slider, TextView, Picker, CheckBox, Switch, TextInput, ui, ScrollViewProperties, EventObject, RadioButton} from 'tabris';
+import {Widget, ScrollView, Slider, TextView, Picker, CheckBox, Switch, TextInput, ui, ScrollViewProperties, EventObject, RadioButton, Properties, Partial, CompositeProperties, Composite} from 'tabris';
 
-const COUNTRIES = ['Germany', 'Canada', 'USA', 'Bulgaria'];
-const CLASSES = ['Business', 'Economy', 'Economy Plus'];
 const STYLE = {
   '.stretch': {left: 0, right: 0, top: 0, bottom: 0},
+  '.top': {left: 0, right: 0, top: 0},
   '.col1': {left: 10, width: 120},
   '.col2': {left: 140, right: 10},
   '.label': {top: 'prev() 18'},
@@ -16,53 +15,70 @@ const STYLE = {
   '#luggageWeight': {right: 10, width: 50}
 };
 
-class FlightReservationView extends ScrollView {
+type ReservationFormCreateArgs = Properties<ReservationForm> & {
+  classes: string[]; countries: string[];
+};
 
-  private jsxProperties: JSX.ScrollViewProperties & {
-    onConfirm?: (ev: EventObject<FlightReservationView>) => void
+class ReservationForm extends Composite {
+
+  public readonly tsProperties: CompositeProperties & Partial<this, 'message'>;
+
+  public readonly jsxProperties: ReservationFormCreateArgs & JSX.CompositeEvents & {
+    onConfirm?: (ev: EventObject<ReservationForm>) => void
   };
 
-  constructor(properties?: ScrollViewProperties) {
-    super(properties);
+  constructor(args?: ReservationFormCreateArgs) {
+    super();
+    let {classes, countries, ...properties} = args;
     this.append(
-      <scrollView id='scrollView' class='stretch' direction='vertical'>
-        <textView class='col1 label' alignment='left' text='Name:'/>
-        <textInput class='col2 labeled' id='name' message='Full Name'/>
-        <textView class='col1 label' text='Flyer Number:'/>
-        <textInput class='col2 labeled' keyboard='number' message='Flyer Number'/>
-        <textView class='col1 label' text='Passphrase:'/>
-        <textInput class='col2 labeled' type='password' message='Passphrase'/>
-        <textView class='col1 label' text='Country:'/>
-        <picker class='col2 labeled' id='country' itemCount={COUNTRIES.length} itemText={index => COUNTRIES[index]}/>
-        <textView class='col1 label' text='Class:'/>
-        <picker class='col2 labeled' id='class' itemCount={CLASSES.length} itemText={index => CLASSES[index]}/>
-        <textView class='col1 label' text='Seat:'/>
-        <radioButton class='col2 labeled' text='Window'/>
-        <radioButton class='col2 stacked' text='Aisle'/>
-        <radioButton class='col2 stacked' text='Anywhere' checked={true} />
-        <composite class='group'>
-          <textView class='col1 grouped' text='Luggage:'/>
-          <slider
-              class='grouped'
-              id='luggageSlider'
-              onSelectionChanged={ev => this.luggageWeightText = `${ev.value} Kg`}/>
-          <textView class='grouped' id='luggageWeight' text='0 Kg'/>
+      <scrollView class='stretch' direction='vertical'>
+        <composite id='interactive' class='top'>
+          <textView class='col1 label' alignment='left' text='Name:'/>
+          <textInput class='col2 labeled' id='name' message='Full Name'/>
+          <textView class='col1 label' text='Flyer Number:'/>
+          <textInput class='col2 labeled' keyboard='number' message='Flyer Number'/>
+          <textView class='col1 label' text='Passphrase:'/>
+          <textInput class='col2 labeled' type='password' message='Passphrase'/>
+          <textView class='col1 label' text='Country:'/>
+          <picker
+              id='country'
+              class='col2 labeled'
+              itemCount={countries.length}
+              itemText={index => countries[index]}/>
+          <textView class='col1 label' text='Class:'/>
+          <picker
+              id='class'
+              class='col2 labeled'
+              itemCount={classes.length}
+              itemText={index => classes[index]}/>
+          <textView class='col1 label' text='Seat:'/>
+          <radioButton class='col2 labeled' text='Window'/>
+          <radioButton class='col2 stacked' text='Aisle'/>
+          <radioButton class='col2 stacked' text='Anywhere' checked={true} />
+          <composite class='group'>
+            <textView class='col1 grouped' text='Luggage:'/>
+            <slider
+                class='grouped'
+                id='luggageSlider'
+                onSelectionChanged={ev => this.luggageWeightText = `${ev.value} Kg`}/>
+            <textView class='grouped' id='luggageWeight' text='0 Kg'/>
+          </composite>
+          <checkBox class='col2 stacked' id='veggie' text='Vegetarian'/>
+          <composite class='group'>
+            <textView class='col1 grouped' text='Redeem miles:'/>
+            <switch class='col2 grouped' id='miles'/>
+          </composite>
+          <button
+              class='colspan'
+              id='confirm'
+              text='Place Reservation'
+              background='#8b0000'
+              textColor='white'
+              onSelect={() => this.trigger('confirm', new EventObject<this>()) }/>
         </composite>
-        <checkBox class='col2 stacked' id='veggie' text='Vegetarian'/>
-        <composite class='group'>
-          <textView class='col1 grouped' text='Redeem miles:'/>
-          <switch class='col2 grouped' id='miles'/>
-        </composite>
-        <button
-            class='colspan'
-            id='confirm'
-            text='Place Reservation'
-            background='#8b0000'
-            textColor='white'
-            onSelect={() => this.trigger('confirm', new EventObject<this>()) }/>
         <textView class='colspan' id='message'/>
       </scrollView>
-    ).apply(STYLE);
+    ).apply(STYLE).set(properties);
   }
 
   public get name() {
@@ -82,11 +98,12 @@ class FlightReservationView extends ScrollView {
   }
 
   public get country() {
-    return COUNTRIES[this.find(Picker).first('#country').selectionIndex];
-  }
+    let picker = this.find(Picker).first('#country');
+    return picker.itemText(picker.selectionIndex);  }
 
   public get serviceClass() {
-    return CLASSES[this.find(Picker).first('#class').selectionIndex];
+    let picker = this.find(Picker).first('#class');
+    return picker.itemText(picker.selectionIndex);
   }
 
   public get seat() {
@@ -97,6 +114,14 @@ class FlightReservationView extends ScrollView {
     this.find(TextView).first('#message').text = text;
   }
 
+  public set enabled(enabled: boolean) {
+    this.find('#interactive').set({enabled});
+  }
+
+  public get enabled() {
+    return this.find('#interactive').first().enabled;
+  }
+
   private set luggageWeightText(text: string) {
     this.find(TextView).first('#luggageWeight').text = text;
   }
@@ -104,16 +129,23 @@ class FlightReservationView extends ScrollView {
 }
 
 ui.contentView.append(
-  <FlightReservationView left={0} top={0} right={0} bottom={0} onConfirm={updateMessage} />
+  <ReservationForm
+      left={0} top={0} right={0} bottom={0}
+      classes={['Business', 'Economy', 'Economy Plus']}
+      countries={['Germany', 'Canada', 'USA', 'Bulgaria']}
+      message='No flight reserved yet'
+      onConfirm={updateMessage} />
 );
 
-function updateMessage({target}: EventObject<FlightReservationView>) {
-  target.message = [
+function updateMessage({target}: EventObject<ReservationForm>) {
+  target.set({
+    enabled: false,
+    message: [
     'Flight booked for: ' + target.name,
     'Destination: ' + target.country,
     'Seating: ' + target.seat + ', ' + target.serviceClass,
     'Luggage: ' + target.luggageWeight + ' Kg',
-    'Meal: ' + target.veggie ? 'Vegetarian' : 'Standard',
+    'Meal: ' + (target.veggie ? 'Vegetarian' : 'Standard'),
     'Redeem miles: ' + (target.miles ? 'Yes' : 'No')
-  ].join('\n') + '\n';
+  ].join('\n') + '\n'});
 }

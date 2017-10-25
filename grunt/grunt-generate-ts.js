@@ -1,12 +1,26 @@
 const {readJsonSync, writeFileSync, readFileSync} = require('fs-extra');
 
-const header = `
+const HEADER = `
 // Type definitions for Tabris.js \${VERSION}
 /// <reference path="globals.d.ts" />
 /// <reference path="Jsx.d.ts" />
 
+type TypeScriptPropertiesKey = 'tsProperties';
+
+type Properties<T extends NativeObject, U extends keyof T = TypeScriptPropertiesKey> = T[U];
+
+type Partial<T, U extends keyof T = keyof T> = {
+  [P in U]?: T[P]
+};
+
 export as namespace tabris;
 `;
+
+const TS_PROPERTIES_DOC = `
+/**
+ * The type of this property defines the interface used by \`set\`, \`get\`, and
+ * the \`Properties\` interface. It's value is always undefined.
+ */`;
 
 const PROPERTIES_OBJECT = 'PropertiesObject';
 const EVENTS_OBJECT = 'EventsObject';
@@ -21,7 +35,7 @@ exports.generateTsd = function generateTsd({files, propertyTypes, globalTypeDefF
   globals.push(createTypeDefs(globalDefs));
   writeFileSync('build/tabris/globals.d.ts', globals.join('\n'));
   let tabrisDefs = filter(defs, def => !def.namespace || def.namespace === 'tabris');
-  let tsd = [header.replace(/\${VERSION}/g, version), propertyTypes];
+  let tsd = [HEADER.replace(/\${VERSION}/g, version), propertyTypes];
   tsd.push(createTypeDefs(tabrisDefs));
   writeFileSync('build/tabris/tabris.d.ts', tsd.join('\n'));
 };
@@ -102,6 +116,11 @@ function addClass(result, def) {
   result.append(createDoc(def));
   addClassDef(result, def);
   result.indent++;
+  if (def.isNativeObject) {
+    result.append('');
+    result.append(TS_PROPERTIES_DOC);
+    result.append(`public readonly tsProperties: ${def.type}Properties;`);
+  }
   addConstructor(result, def);
   addMethods(result, def);
   let propertiesFilter = def.isNativeObject ? prop => prop.readonly : () => true;
@@ -283,7 +302,7 @@ function inheritClassDependentMethods(def) {
 function isClassDependent(method) { // methods with parameters that must be adjusted in each subclass
   let variants = Array.isArray(method) ? method : [method];
   return variants.some(variant =>
-    (variant.parameters || []).some(param => CLASS_DEPENDENT_TYPES.includes(param.type))
+    (variant.parameters || []).some(param => CLASS_DEPENDENT_TYPES.includes(param.ts_type || param.type))
   );
 }
 

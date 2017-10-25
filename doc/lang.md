@@ -53,8 +53,6 @@ In TypeScript not all APIs, not even all Tabris.js APIs, are perfectly type safe
 <b>Implicit "any"</b>: In TypeScript a value of the type `any` is essentially the same as a JavaScript value. The compiler will accept any actions on this value, including assigning it to typed variables. An implicit `any` may occur if
 you do not give a type for a variable, field or parameter, and none can be inferred by assignment. <em>Always give the type of function parameters. Fields and variables are safe only if they are assigned a value on declaration</em>.
 
-<b>Widget property access:</b> Do <em>not</em> use `widget.set(key, value)` or `widget.get(key)`. Instead access properties <em>directly</em> like this: `widget.key = value`. You can also safely <em>use property objects</em>: like `widget.set({key: value})` and `new Widget({key: value})`.
-
 <b>Widget event handling:</b> Do not use `widget.on(event, handler)`. Instead, use `widget.on({event: handler})`.
 
 <b>Widget apply method:</b> Use `widget.apply` <em>only</em> to set properties of the base `Widget` class, like `layoutData`.
@@ -65,13 +63,131 @@ you do not give a type for a variable, field or parameter, and none can be infer
 
 ### Interfaces
 
-When used in TypeScript the tabris module exports interfaces used by the tabris API. These are:
+When used in TypeScript the tabris module exports the following interfaces used by the specific widget properties:
+ * [`Image`](./types.md#image)
+ * [`Color`](./types.md#color)
+ * [`Font`](./types.md#font)
+ * [`LayoutData`](./types.md#layoutData)
+ * [`Bounds`](./types.md#bounds)
+ * [`Transformation`](./types.md#transformation)
+ * [`margin`](./types.md#margin)
+ * [`dimension`](./types.md#dimension)
+ * [`offset`](./types.md#offset)
+ * [`BoxDimensions`](./types.md#boxdimensions)
+ * [`ImageData`](./types.md#imagedata)
+ * [`Selector`](./types.md#selector) 
+ * [`AnimationOptions`](./types.md#animationoptions)
 
- * Property/parameter types: [`Image`](./types.md#image), [`Color`](./types.md#color), [`Font`](./types.md#font), [`LayoutData`](./types.md#layoutData), [`Bounds`](./types.md#bounds), [`Transformation`](./types.md#transformation), [`margin`](./types.md#margin), [`dimension`](./types.md#dimension), [`offset`](./types.md#offset), [`BoxDimensions`](./types.md#boxdimensions),  [`ImageData`](./types.md#imagedata), [`Selector`](./types.md#selector) and [`AnimationOptions`](./types.md#animationoptions)
- * The change event object: [`PropertyChangedEvent<T, U>`](./types.md#propertychangedevent), where `T` is the type of the `target` event property and `U` is the type of the `value` property. Used for all events matching the naming scheme `{propertyName}Changed`, e.g. `BackgroundChanged`.
- * Special event objects: Some events use specific interfaces that follow the naming scheme `{TargetType}{EventName}Event`, e.g. `PickerSelectEvent`. You may want to use those to define listeners that do not use parameter destructuring.
- * Property maps: These are the interfaces used by the [`set`](./api/NativeObject.md#set) method and widget constructors. You may want to extend them to define your own property maps when extending widget classes. They follow the naming scheme `{TargetType}Properties`, e.g. `CompositeProperties`.
- * Listener maps: These are the interfaces used by the [`on`](./api/NativeObject.md#on) and [`off`](./api/NativeObject.md#off) methods. You may want to extend them to define your own listener maps when extending widget classes. They follow the naming scheme `{TargetType}Events`, e.g. `CompositeEvents`.
+You may want to use these for your own custom UI component properties:
+
+```ts
+import {Composite, Color} from 'tabris';
+
+class MyCustomButton extends Composite {
+
+  /* ... constructor, etc ... */
+
+  public set textColor(value: Color) {
+    this.internalLabel.textColor = value;
+  }
+
+}
+```
+
+The tabris module also exports the following event object types:
+
+ * [`EventObject<T>`](./api/EventObject.md) class, where `T` is the type of the `target` event property. Used for events that have no type-specific properties and also the basis for all other event interfaces.
+ * [`PropertyChangedEvent<T, U>`](./types.md#propertychangedevent) interface, where `T` is the type of the `target` property and `U` is the type of the `value` property. Used for all events matching the naming scheme `{propertyName}Changed`, e.g. `BackgroundChanged`.
+ * *Target-specific events* following the naming scheme `{TargetType}{EventName}Event`, for example `PickerSelectEvent`.
+
+These can be used to define listeners outside as class members:
+
+```ts
+import {Composite, Picker, PickerSelectEvent} from 'tabris';
+
+class MyCustomForm extends Composite {
+
+  constructor() {
+    super();
+    /* .... */
+    new Picker()
+      .appendTo(this)
+      .on({select: this.handlePickerSelect});
+  }
+
+  private handlePickerSelect(ev: PickerSelectEvent) {
+    /* .... */
+  }
+
+}
+```
+
+You can also directly create instances of `EventObject` (since it's a class, not an interface) and use them to trigger events that have no type-specific properties, and you can use it as a base for event objects that have additional properties, such as change events.
+
+Interfaces relating to `set`, `get` and the constructor `properties` parameters:
+* `{TargetType}Properties` interface, e.g. `CompositeProperties`
+* `Properties<T extends NativeObject>`
+* `Partial<T extends NativeObject, U extends keyof T>`
+
+These interfaces can be used to extend the properties accepted by the `set` and `get` methods, as well as those supported by the constructor of your own class. Let's look at a simple constructor first:
+
+```ts
+import {Composite, CompositeProperties} from 'tabris';
+
+class MyCustomForm extends Composite {
+
+  constructor(properties?: CompositeProperties) {
+    super(properties);
+    /* .... */
+  }
+
+}
+```
+
+This just makes your class accept all properties of the class it extends (`Composite`). For every built-in widget, there is a matching **properties interface** (`CompositeProperties` in this case) that can be used in this way.
+
+The special interface `Properties` provides a generic way to reference the properties interface belonging to a widget. Thus, the above can also be written as:
+
+```ts
+import {Composite, Properties} from 'tabris';
+
+class MyCustomForm extends Composite {
+
+  constructor(properties?: Properties<MyCustomForm>) {
+    super(properties);
+    /* .... */
+  }
+
+}
+```
+
+In order to make `set`, `get` and the constructor (if declared as above) accept the properties added in your class, the properties interface of your class must be extended. This can be done by overriding a special property called `tsProperties` and extending its type. For this we are using the properties interface for the super class and *the Tabris' version* of the `Partial` interface. For example, let's add properties `foo` and `bar` to a custom component:
+
+```ts
+import {Composite, Partial, Properties} from 'tabris';
+
+class MyCustomForm extends Composite {
+
+  public tsProperties: Properties<Composite> & Partial<this, 'foo' | 'bar'>;
+
+  // initializing plain properties is a must for "super" and "set" to work as a expected.
+  public foo: string = null;
+  public bar: number = null;
+
+  constructor(properties?: Properties<MyCustomForm>) {
+    super(properties);
+  }
+
+}
+```
+> :point_right: Instead of `Properties<Composite>` you can also use `CompositeProperties` in this example. Do NOT use `Properties<MyCustomForm>` to define `tsProperties` (it creates a circular reference).
+
+> :point_right: If you add a property to your class, but not to `tsProperties`, you can still access it directly (i.e. `instance.foo`), but not in `set`, `get` or the constructor. Also, you can of course extend (or completely exchange) the interface used by the constructor, for example to define constructor arguments that are not settable public properties. An example for this can be found in [this snippet](https://github.com/eclipsesource/tabris-js/blob/master/examples/input-tsx/input.tsx)
+
+> :point_right: 
+*How does this Work?* The generic `Properties<T>` interface references the type of `tsProperties` on `T`. The `set` and `get` methods use the interface `Properties<this>`, thereby always referencing `tsProperties`. (The actual value of the `tsProperties` property is not relevant to this mechanism - it is always `undefined`.) In the above examples `tsProperties` is overwritten using `&` to extend the properties interface of the super class  with selected properties of your own class. In the `Partial<T, U>` interface `U` is a TypeScript string union type that is used to filter the properties of `T`. Both of these "special" interfaces use a TypeScript technique known as "mapped types".
+
+Finally, there are the `{TargetType}Events` interfaces, e.g. `CompositeEvents`. These are used by the [`on`](./api/NativeObject.md#on) and [`off`](./api/NativeObject.md#off) methods. You may want to extend them to define your own `on`/`off` methods when extending widget classes.
 
 ## JSX
 
