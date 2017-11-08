@@ -303,10 +303,9 @@
     },
     "elevation": {
       "type": "number",
-      "description": "The position of the widget on the z-axis. Currently only supported on Android 5.0+.",
+      "description": "The position of the widget on the z-axis. Supported on iOS and Android 5.0+.",
       "platforms": {
-        "windows": false,
-        "ios": false
+        "windows": false
       }
     },
     "cornerRadius": {
