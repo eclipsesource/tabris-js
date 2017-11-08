@@ -403,6 +403,11 @@ describe('Widget', function() {
           expect(widget.children().toArray()).to.deep.contain(child1);
         });
 
+        it('_children() contains appended child when children() is overwritten', function() {
+          widget.children = () => new WidgetCollection();
+          expect(widget._children().toArray()).to.contain(child1);
+        });
+
       });
 
       describe('when called with multiple widgets', function() {
@@ -906,6 +911,36 @@ describe('Widget', function() {
         expect(widget.find('.bar').toArray()).to.eql([child1_2, child2]);
       });
 
+      it('returns no descendants when children() is overwritten to return empty collection', function() {
+        widget.children = () => new WidgetCollection();
+        expect(widget.find('*').toArray()).to.eql([]);
+      });
+
+      it('returns no descendants when children() is overwritten to return empty array', function() {
+        widget.children = () => [];
+        expect(widget.find('*').toArray()).to.eql([]);
+      });
+
+      it('returns no descendants when children() is overwritten to return empty null', function() {
+        widget.children = () => null;
+        expect(widget.find('*').toArray()).to.eql([]);
+      });
+
+      it('"protected" version returns descendants when children() is overwritten', function() {
+        widget.children = () => new WidgetCollection();
+        expect(widget._find('*').toArray()).to.eql([child1, child1_1, child1_2, child1_2_1, child2]);
+      });
+
+      it('returns partial descendants when children() is overwritten on child', function() {
+        child1_2.children = () => new WidgetCollection();
+        expect(widget.find('*').toArray()).to.eql([child1, child1_1, child1_2, child2]);
+      });
+
+      it('"protected" version returns partial descendants when children() is overwritten on child', function() {
+        child1_2.children = () => new WidgetCollection();
+        expect(widget._find('*').toArray()).to.eql([child1, child1_1, child1_2, child2]);
+      });
+
     });
 
     describe('apply', function() {
@@ -970,6 +1005,102 @@ describe('Widget', function() {
         expect(() => {
           new TestWidget().apply({foo: {bar: 23}});
         }).not.to.throw();
+      });
+
+      it('exclude children if children() is overwritten to return empty collection', function() {
+        widget.children = () => new WidgetCollection();
+        let props = {prop1: 'v1', prop2: 'v2'};
+
+        widget.apply({'*': props});
+
+        expect(widget.set).to.have.been.calledWith(props);
+        expect(child1.set).not.to.have.been.calledWith(props);
+        expect(child2.set).not.to.have.been.calledWith(props);
+        expect(child1_1.set).not.to.have.been.calledWith(props);
+      });
+
+      it('exclude children if children() is overwritten to return empty array', function() {
+        widget.children = () => [];
+        let props = {prop1: 'v1', prop2: 'v2'};
+
+        widget.apply({'*': props});
+
+        expect(widget.set).to.have.been.calledWith(props);
+        expect(child1.set).not.to.have.been.calledWith(props);
+        expect(child2.set).not.to.have.been.calledWith(props);
+        expect(child1_1.set).not.to.have.been.calledWith(props);
+      });
+
+      it('exclude children if children() is overwritten to return null', function() {
+        widget.children = () => null;
+        let props = {prop1: 'v1', prop2: 'v2'};
+
+        widget.apply({'*': props});
+
+        expect(widget.set).to.have.been.calledWith(props);
+        expect(child1.set).not.to.have.been.calledWith(props);
+        expect(child2.set).not.to.have.been.calledWith(props);
+        expect(child1_1.set).not.to.have.been.calledWith(props);
+      });
+
+      it('applies partially if children() on child is overwritten to return empty collection', function() {
+        child1.children = () => new WidgetCollection();
+        let props = {prop1: 'v1', prop2: 'v2'};
+
+        widget.apply({'*': props});
+
+        expect(widget.set).to.have.been.calledWith(props);
+        expect(child1.set).to.have.been.calledWith(props);
+        expect(child2.set).to.have.been.calledWith(props);
+        expect(child1_1.set).not.to.have.been.calledWith(props);
+      });
+
+      it('applies partially if children() on child is overwritten to return empty array', function() {
+        child1.children = () => [];
+        let props = {prop1: 'v1', prop2: 'v2'};
+
+        widget.apply({'*': props});
+
+        expect(widget.set).to.have.been.calledWith(props);
+        expect(child1.set).to.have.been.calledWith(props);
+        expect(child2.set).to.have.been.calledWith(props);
+        expect(child1_1.set).not.to.have.been.calledWith(props);
+      });
+
+      it('applies partially if children() on child is overwritten to return null', function() {
+        child1.children = () => null;
+        let props = {prop1: 'v1', prop2: 'v2'};
+
+        widget.apply({'*': props});
+
+        expect(widget.set).to.have.been.calledWith(props);
+        expect(child1.set).to.have.been.calledWith(props);
+        expect(child2.set).to.have.been.calledWith(props);
+        expect(child1_1.set).not.to.have.been.calledWith(props);
+      });
+
+      it('"protected" version still works if children() is overwritten', function() {
+        widget.children = () => new WidgetCollection();
+        let props = {prop1: 'v1', prop2: 'v2'};
+
+        widget._apply({'*': props});
+
+        expect(widget.set).to.have.been.calledWith(props);
+        expect(child1.set).to.have.been.calledWith(props);
+        expect(child2.set).to.have.been.calledWith(props);
+        expect(child1_1.set).to.have.been.calledWith(props);
+      });
+
+      it('"protected" variant applies partially if children() on child is overwritten', function() {
+        child1.children = () => new WidgetCollection();
+        let props = {prop1: 'v1', prop2: 'v2'};
+
+        widget._apply({'*': props});
+
+        expect(widget.set).to.have.been.calledWith(props);
+        expect(child1.set).to.have.been.calledWith(props);
+        expect(child2.set).to.have.been.calledWith(props);
+        expect(child1_1.set).not.to.have.been.calledWith(props);
       });
 
     });

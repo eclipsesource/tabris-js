@@ -309,7 +309,7 @@ function isClassDependent(method) { // methods with parameters that must be adju
 function createMethod(name, def, className) {
   let result = [];
   result.push(createDoc(def));
-  let declaration = (className ? '' : 'declare function ')
+  let declaration = (className ? (def.protected ? 'protected ' : '') : 'declare function ')
     + `${name}${def.generics ? `<${def.generics}>` : ''}`
     + `(${createParamList(def.parameters, className)}): ${def.ts_returns || def.returns || 'void'};`;
   result.push(declaration);

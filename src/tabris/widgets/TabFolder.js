@@ -49,7 +49,7 @@ NativeObject.defineProperties(TabFolder.prototype, {
   tabMode: {type: ['choice', ['fixed', 'scrollable']], default: 'fixed'},
   selection: {
     set(name, tab) {
-      if (this._children.indexOf(tab) < 0) {
+      if (this._children().indexOf(tab) < 0) {
         warn('Can not set TabFolder selection to ' + tab);
         return;
       }

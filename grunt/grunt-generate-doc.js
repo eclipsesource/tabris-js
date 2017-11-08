@@ -166,7 +166,9 @@ exports.generateDoc = function generateDoc({files, targetPath, version}) {
       return '';
     }
     let result = ['## Methods\n\n'];
-    Object.keys(def.methods).sort().forEach(name => {
+    let publicMethodKeys = Object.keys(def.methods).filter(method => method[0] !== '_').sort();
+    let protectedMethodKeys = Object.keys(def.methods).filter(method => method[0] === '_').sort();
+    publicMethodKeys.concat(protectedMethodKeys).forEach(name => {
       if (Array.isArray(def.methods[name])) {
         def.methods[name].filter(desc => !desc.ts_only).forEach(desc => {
           result.push(renderMethod(name, desc));

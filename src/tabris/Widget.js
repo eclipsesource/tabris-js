@@ -57,7 +57,7 @@ export default class Widget extends NativeObject {
     if (!parent) {
       throw new Error('Cannot insert before orphan');
     }
-    let index = parent._children.indexOf(widget);
+    let index = parent.$children.indexOf(widget);
     this._setParent(parent, index);
     return this;
   }
@@ -72,7 +72,7 @@ export default class Widget extends NativeObject {
     if (!parent) {
       throw new Error('Cannot insert after orphan');
     }
-    let index = parent._children.indexOf(widget);
+    let index = parent.$children.indexOf(widget);
     this._setParent(parent, index + 1);
     return this;
   }
@@ -88,21 +88,47 @@ export default class Widget extends NativeObject {
   }
 
   children(selector) {
-    return new WidgetCollection(this._getSelectableChildren(), selector);
+    return this._children(selector);
   }
 
   siblings(selector) {
-    let siblings = (this._parent ? this._parent._getSelectableChildren() : []);
+    let siblings = (this._parent ? this._parent._children() : []);
     let filtered = siblings.filter(widget => widget !== this);
     return new WidgetCollection(filtered, selector);
   }
 
   find(selector) {
-    return new WidgetCollection(this._getSelectableChildren(), selector, true);
+    return new WidgetCollection(this.children(), selector, true);
   }
 
   apply(sheet) {
-    let scope = new WidgetCollection((this._children || []).concat(this), '*', true);
+    let scope = new WidgetCollection(asArray(this.children()).concat(this), '*', true);
+    return this._apply(sheet, scope);
+  }
+
+  get data() {
+    if (!this.$data) {
+      this.$data = {};
+    }
+    return this.$data;
+  }
+
+  _getContainer() {
+    return this;
+  }
+
+  _children(selector) {
+    return new WidgetCollection(this.$children, selector);
+  }
+
+  _find(selector) {
+    return new WidgetCollection(this._children(), selector, true);
+  }
+
+  _apply(sheet, scope) {
+    if (arguments.length === 1) {
+      scope = new WidgetCollection(asArray(this._children()).concat(this), '*', true);
+    }
     if (sheet['*']) {
       scope.set(sheet['*']);
     }
@@ -122,21 +148,6 @@ export default class Widget extends NativeObject {
       }
     }
     return this;
-  }
-
-  get data() {
-    if (!this.$data) {
-      this.$data = {};
-    }
-    return this.$data;
-  }
-
-  _getContainer() {
-    return this;
-  }
-
-  _getSelectableChildren() {
-    return this._children;
   }
 
   _setParent(parent, index) {
@@ -160,34 +171,34 @@ export default class Widget extends NativeObject {
     if (!this._acceptChild(child)) {
       throw new Error(child + ' could not be appended to ' + this);
     }
-    if (!this._children) {
-      this._children = [];
+    if (!this.$children) {
+      this.$children = [];
     }
     if (typeof index === 'number') {
-      this._children.splice(index, 0, child);
+      this.$children.splice(index, 0, child);
     } else {
-      index = this._children.push(child) - 1;
+      index = this.$children.push(child) - 1;
     }
     super._trigger('addChild', {child, index});
   }
 
   _removeChild(child) {
-    if (this._children) {
-      let index = this._children.indexOf(child);
+    if (this.$children) {
+      let index = this.$children.indexOf(child);
       if (index !== -1) {
-        this._children.splice(index, 1);
+        this.$children.splice(index, 1);
         super._trigger('removeChild', {child, index});
       }
     }
   }
 
   _release() {
-    if (this._children) {
-      let children = this._children.concat();
+    if (this.$children) {
+      let children = this.$children.concat();
       for (let i = 0; i < children.length; i++) {
         children[i]._dispose(true);
       }
-      delete this._children;
+      delete this.$children;
     }
     if (this._parent) {
       this._parent._removeChild(this);
@@ -249,8 +260,8 @@ export default class Widget extends NativeObject {
   }
 
   _flushLayout() {
-    if (this._children) {
-      this._children.forEach((child) => {
+    if (this.$children) {
+      this.$children.forEach((child) => {
         renderLayoutData.call(child);
       });
     }
@@ -429,4 +440,14 @@ function setLayoutProperty(name, value) {
 
 function getLayoutProperty(name) {
   return this._layoutData && this._layoutData[name] != null ? this._layoutData[name] : null;
+}
+
+function asArray(value) {
+  if (!value) {
+    return [];
+  }
+  if (value instanceof WidgetCollection) {
+    return value.toArray();
+  }
+  return value;
 }

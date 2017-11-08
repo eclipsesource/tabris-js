@@ -251,7 +251,7 @@ describe('WidgetCollection', function() {
     });
 
     it('get() returns undefined for empty collection', function() {
-      expect((new WidgetCollection([])).get('foo')).to.be.undefined;
+      expect((new WidgetCollection()).get('foo')).to.be.undefined;
     });
 
     it('parent() returns all parents', function() {
@@ -273,7 +273,7 @@ describe('WidgetCollection', function() {
     });
 
     it('parent() returns undefined for empty collection', function() {
-      expect((new WidgetCollection([])).parent()).to.be.undefined;
+      expect((new WidgetCollection()).parent()).to.be.undefined;
     });
 
     it('appendTo(parent) calls parent.append', function() {

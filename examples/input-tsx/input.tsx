@@ -1,4 +1,7 @@
-import {Widget, ScrollView, Slider, TextView, Picker, CheckBox, Switch, TextInput, ui, ScrollViewProperties, EventObject, RadioButton, Properties, Partial, CompositeProperties, Composite} from 'tabris';
+import {
+  Widget, ScrollView, Slider, TextView, Picker, CheckBox, Switch, TextInput, ui, ScrollViewProperties,
+  EventObject, RadioButton, Properties, Partial, CompositeProperties, Composite, WidgetCollection
+} from 'tabris';
 
 const STYLE = {
   '.stretch': {left: 0, right: 0, top: 0, bottom: 0},
@@ -78,52 +81,57 @@ class ReservationForm extends Composite {
         </composite>
         <textView class='colspan' id='message'/>
       </scrollView>
-    ).apply(STYLE).set(properties);
+    ).set(properties)._apply(STYLE);
+  }
+
+  public children() {
+    // prevent outside access to my children:
+    return new WidgetCollection();
   }
 
   public get name() {
-    return this.find(TextInput).first('#name').text;
+    return this._find(TextInput).first('#name').text;
   }
 
   public get luggageWeight() {
-    return this.find(Slider).first('#luggageSlider').selection;
+    return this._find(Slider).first('#luggageSlider').selection;
   }
 
   public get veggie() {
-    return this.find(CheckBox).first('#veggie').checked;
+    return this._find(CheckBox).first('#veggie').checked;
   }
 
   public get miles() {
-    return this.find(Switch).first('#miles').checked;
+    return this._find(Switch).first('#miles').checked;
   }
 
   public get country() {
-    let picker = this.find(Picker).first('#country');
+    let picker = this._find(Picker).first('#country');
     return picker.itemText(picker.selectionIndex);  }
 
   public get serviceClass() {
-    let picker = this.find(Picker).first('#class');
+    let picker = this._find(Picker).first('#class');
     return picker.itemText(picker.selectionIndex);
   }
 
   public get seat() {
-    return this.find(RadioButton).filter((button: RadioButton) => button.checked).first().text;
+    return this._find(RadioButton).filter((button: RadioButton) => button.checked).first().text;
   }
 
   public set message(text: string) {
-    this.find(TextView).first('#message').text = text;
+    this._find(TextView).first('#message').text = text;
   }
 
   public set enabled(enabled: boolean) {
-    this.find('#interactive').set({enabled});
+    this._find('#interactive').set({enabled});
   }
 
   public get enabled() {
-    return this.find('#interactive').first().enabled;
+    return this._find('#interactive').first().enabled;
   }
 
   private set luggageWeightText(text: string) {
-    this.find(TextView).first('#luggageWeight').text = text;
+    this._find(TextView).first('#luggageWeight').text = text;
   }
 
 }

@@ -8,6 +8,7 @@
       {
         "name": "widgets",
         "type": "Widget[]",
+        "optional": true,
         "description": "Array of widgets to include in the WidgetCollection"
       }
     ]

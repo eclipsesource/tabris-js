@@ -2,7 +2,8 @@ import NativeObject from './NativeObject';
 
 export default class WidgetCollection {
 
-  constructor(arr, selector, deep) {
+  constructor(collection, selector, deep) {
+    let arr = collection instanceof WidgetCollection ? collection.toArray() : collection;
     this._array = select(arr, selector || '*', deep);
     for (let i = 0; i < this._array.length; i++) {
       this[i] = this._array[i];
@@ -69,7 +70,7 @@ export default class WidgetCollection {
   children(selector) {
     let result = [];
     for (let widget of this._array) {
-      result.push.apply(result, widget._getSelectableChildren() || []);
+      result.push.apply(result, widget.children());
     }
     return new WidgetCollection(result, selector);
   }
@@ -115,6 +116,15 @@ export default class WidgetCollection {
     this._array.forEach(widget => widget.dispose.apply(widget, arguments));
   }
 
+  [Symbol.iterator]() {
+    let index = 0;
+    return {
+      next: () => index < this.length
+        ? {value: this[index++], done: false}
+        : {done: true}
+    };
+  }
+
 }
 
 function select(array, selector, deep) {
@@ -131,13 +141,14 @@ function select(array, selector, deep) {
   return array.filter(filter);
 }
 
-function deepSelect(result, array, filter) {
-  for (let widget of array) {
+function deepSelect(result, iterable, filter) {
+  for (let widget of iterable) {
     if (filter(widget)) {
       result.push(widget);
     }
-    if (widget._children) {
-      deepSelect(result, widget._getSelectableChildren(), filter);
+    let children = widget.children();
+    if (children instanceof WidgetCollection && children.length) {
+      deepSelect(result, children, filter);
     }
   }
   return result;
