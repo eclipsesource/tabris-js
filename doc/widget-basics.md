@@ -54,7 +54,7 @@ Example:
 ```js
 function selectionHandler(event) {
   console.log('Button ' + event.target.text + ' selected!');
-};
+}
 button.on('select', selectionHandler);
 ```
 
@@ -67,7 +67,7 @@ A *context* object may be given as the third parameter to `on()`. This object wi
 ```js
 function selectionHandler() {
   console.log(this.foo);
-};
+}
 button.on('select', selectionHandler, {foo: 'Hello World'});
 ```
 
@@ -86,7 +86,7 @@ Example:
 ```js
 new TextInput().on('textChanged', (event) => {
   console.log('The text has changed to: ' + event.value);
-});
+})
 ```
 
 It's often convenient to use the [ES6 destructuring syntax](http://exploringjs.com/es6/ch_destructuring.html) for the event parameter, which allows to extract event properties as named variables:
@@ -94,7 +94,7 @@ It's often convenient to use the [ES6 destructuring syntax](http://exploringjs.c
 ```js
 checkBox.on('selectionChanged', ({target, value: checked}) => {
   target.text = checked ? 'checked' : 'unchecked';
-});
+})
 ```
 
 ## Animations
