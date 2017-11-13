@@ -1,5 +1,7 @@
 const {DateDialog, TextView, Button, ui} = require('tabris');
 
+const FIVE_DAYS = 432000000;
+
 new Button({
   left: 16, right: 16, top: 16,
   text: 'Show DateDialog'
@@ -12,12 +14,14 @@ let selectionTextView = new TextView({
 }).appendTo(ui.contentView);
 
 function showDateDialog() {
+  let date = new Date();
+
   return new DateDialog({
-    date: new Date(1507725444000),
-    minDate: new Date(1507465725000),
-    maxDate: new Date(1510748925000)
+    date: date,
+    minDate: new Date(date.getTime() - FIVE_DAYS),
+    maxDate: new Date(date.getTime() + FIVE_DAYS)
   }).on({
-    select: ({date}) => selectionTextView.text = date.toString(),
+    select: ({date}) => selectionTextView.text = date,
     close: () => console.log('DateDialog closed')
   }).open();
 }

@@ -13,7 +13,7 @@ let selectionTextView = new TextView({
 
 function showTimeDialog() {
   return new TimeDialog({
-    date: new Date(1507725444000),
+    date: new Date(),
   }).on({
     select: ({date}) => selectionTextView.text = date.toString(),
     close: () => console.log('TimeDialog closed')
