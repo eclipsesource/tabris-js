@@ -1,4 +1,4 @@
-const {Slider, TextView, ui} = require('tabris');
+const {Composite, Slider, TextView, ui} = require('tabris');
 
 let textView = new TextView({
   left: 16, top: 16, right: 16,
@@ -12,18 +12,22 @@ let textView = new TextView({
   'night before. But again the old Manxman said nay.'
 }).appendTo(ui.contentView);
 
-let spacingView = new TextView({
-  bottom: 16, right: 16, width: 32
+let controls = new Composite({
+  left: 0, right: 0, bottom: 0,
 }).appendTo(ui.contentView);
 
+let spacingView = new TextView({
+  right: 16, width: 32, centerY: 0,
+}).appendTo(controls);
+
 let slider = new Slider({
-  left: 16, bottom: 16, right: [spacingView, 16],
+  left: 16, right: [spacingView, 16], bottom: 16, top: 16,
   minimum: 2,
   maximum: 50
 }).on('selectionChanged', ({value}) => {
   let lineSpacing = value / 10;
   textView.lineSpacing = lineSpacing;
   spacingView.text = lineSpacing;
-}).appendTo(ui.contentView);
+}).appendTo(controls);
 
 slider.selection = 15;
