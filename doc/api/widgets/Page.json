@@ -2,6 +2,18 @@
   "type": "Page",
   "description": "A container representing a single page of a NavigationView widget.",
   "extends": "Composite",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "properties",
+        "type": "PropertiesObject",
+        "ts_type": "Properties<Page>",
+        "optional": true,
+        "description": "Sets all key-value pairs in the properties object as widget properties."
+      }
+    ]
+  },
   "properties": {
     "image": {
       "type": "Image",

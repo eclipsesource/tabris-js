@@ -2,6 +2,18 @@
   "type": "Widget",
   "description": "Base class for all widgets",
   "extends": "NativeObject",
+  "constructor": {
+    "access": "protected",
+    "parameters": [
+      {
+        "name": "properties",
+        "type": "PropertiesObject",
+        "ts_type": "Properties<Widget>",
+        "optional": true,
+        "description": "Sets all key-value pairs in the properties object as widget properties."
+      }
+    ]
+  },
   "methods": {
     "children": [
       {

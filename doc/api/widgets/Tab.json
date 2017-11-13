@@ -2,6 +2,18 @@
   "type": "Tab",
   "description": "A container representing a single tab of a TabFolder widget.",
   "extends": "Composite",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "properties",
+        "type": "PropertiesObject",
+        "ts_type": "Properties<Tab>",
+        "optional": true,
+        "description": "Sets all key-value pairs in the properties object as widget properties."
+      }
+    ]
+  },
   "properties": {
     "title": {
       "type": "string",

@@ -25,7 +25,7 @@ const TS_PROPERTIES_DOC = `
 const PROPERTIES_OBJECT = 'PropertiesObject';
 const EVENTS_OBJECT = 'EventsObject';
 const EVENT_OBJECT = 'EventObject<T>';
-const CLASS_DEPENDENT_TYPES = [PROPERTIES_OBJECT, EVENTS_OBJECT];
+const CLASS_DEPENDENT_TYPES = [EVENTS_OBJECT];
 let eventObjectNames = [EVENT_OBJECT];
 
 exports.generateTsd = function generateTsd({files, propertyTypes, globalTypeDefFiles, version}) {
