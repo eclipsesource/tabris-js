@@ -78,7 +78,7 @@ NativeObject.defineProperties(Picker.prototype, {
       this.$newSelectionIndex = value;
     },
     get(name) {
-      return this._nativeGet(name);
+      return this.$newSelectionIndex >= 0 ? this.$newSelectionIndex : this._nativeGet(name);
     }
   },
   fillColor: {type: 'color'},

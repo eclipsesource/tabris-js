@@ -149,13 +149,22 @@ describe('Picker', function() {
         expect(client.calls({op: 'set', id: picker.cid})[0].properties).to.deep.equal({selectionIndex: 23});
       });
 
-    });
+      it('gets native property `selectionIndex`', function() {
+        stub(client, 'get').returns(23);
 
-    it('gets native property `selectionIndex`', function() {
-      stub(client, 'get').returns(23);
+        expect(picker.selectionIndex).to.equal(23);
+        expect(client.get).to.have.been.calledWith(picker.cid, 'selectionIndex');
+      });
 
-      expect(picker.selectionIndex).to.equal(23);
-      expect(client.get).to.have.been.calledWith(picker.cid, 'selectionIndex');
+      it('gets cached value before flush', function() {
+        spy(client, 'get');
+
+        picker.selectionIndex = 23;
+
+        expect(picker.selectionIndex).to.equal(23);
+        expect(client.get).not.to.have.been.called;
+      });
+
     });
 
   });
