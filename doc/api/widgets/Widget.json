@@ -357,7 +357,7 @@
     "highlightOnTouch": {
       "type": "boolean",
       "default": "false",
-      "description": "Whether the entire widget should be highlighted while touched. Enabling `highlightOnTouch` will block touch events from propagating to widgets underneath. The behavior is similar to how `tap` or `touchEnd` listeners stop touch event propagation."
+      "description": "Whether the widget should show visual feedback while touched. Enabling `highlightOnTouch` will not prevent the touch event from being propagated to the parent widget."
     },
     "win_theme": {
       "type": "string",
