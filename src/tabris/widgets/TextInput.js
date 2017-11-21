@@ -30,7 +30,7 @@ NativeObject.defineProperties(TextInput.prototype, {
   text: {type: 'string', nocache: true},
   message: {type: 'string', default: ''},
   editable: {type: 'boolean', default: true},
-  keepFocus: {type: 'boolean'},
+  keepFocus: {type: 'boolean', default: false},
   alignment: {type: ['choice', ['left', 'center', 'right']], default: 'left'},
   autoCorrect: {type: 'boolean', default: false},
   autoCapitalize: {type: 'boolean', nocache: true},
