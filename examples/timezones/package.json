@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "main": "timezones.js",
   "dependencies": {
-    "tabris": "^2.2.0",
-    "moment": "~2.8.4",
-    "moment-timezone": "~0.2.5"
+    "moment": "^2.19.2",
+    "moment-timezone": "^0.5.14",
+    "tabris": "^2.2.0"
   }
 }
