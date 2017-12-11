@@ -83,11 +83,11 @@ module.exports = function(grunt) {
         cmd: 'node node_modules/tslint/bin/tslint --exclude "**/*.d.ts" "examples/**/*.ts" "test/**/*.ts"'
       },
       bundle_tabris: {
-        cmd: 'node node_modules/rollup/bin/rollup --config rollup.config.js --format=cjs ' +
-          '--output=build/tabris-bundle.js -- src/tabris/main.js'
+        cmd: 'node node_modules/rollup/bin/rollup --config rollup.config.js -f cjs ' +
+          '-o build/tabris-bundle.js -- src/tabris/main.js'
       },
       bundle_boot: {
-        cmd: 'node node_modules/rollup/bin/rollup --format=cjs --output=build/boot-bundle.js -- src/boot/main.js'
+        cmd: 'node node_modules/rollup/bin/rollup -f cjs -o build/boot-bundle.js -- src/boot/main.js'
       },
       transpile_tabris: {
         cmd: 'node node_modules/babel-cli/bin/babel.js --compact false ' +
