@@ -4,7 +4,7 @@ const COLORS = ['initial', 'red', 'green', 'blue'];
 
 let imageView = new ImageView({
   top: 64, centerX: 0,
-  image: {src: 'images/cloud-check.png', scale: 3}
+  image: {src: 'resources/cloud-check.png', scale: 3}
 }).appendTo(ui.contentView);
 
 new Picker({

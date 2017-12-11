@@ -9,7 +9,7 @@ createImageView('fill');
 function createImageView(scaleMode) {
   new ImageView({
     left: 10, top: 'prev() 10', width: 250, height: 100,
-    image: 'images/target_200.png',
+    image: 'resources/target_200.png',
     background: '#aaaaaa',
     scaleMode: scaleMode
   }).appendTo(ui.contentView);

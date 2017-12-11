@@ -2,7 +2,7 @@ const {ImageView, Slider, ui} = require('tabris');
 
 let imageView = new ImageView({
   left: 20, top: 20, width: 100, height: 250,
-  image: 'images/target_200.png',
+  image: 'resources/target_200.png',
   background: '#aaaaaa',
   scaleMode: 'auto'
 }).appendTo(ui.contentView);

@@ -28,7 +28,7 @@ new Action({title: 'Search'}).appendTo(navigationView);
 new Action({
   title: 'Share',
   image: {
-    src: device.platform === 'iOS' ? 'images/share-black-24dp@3x.png' : 'images/share-white-24dp@3x.png',
+    src: device.platform === 'iOS' ? 'resources/share-black-24dp@3x.png' : 'resources/share-white-24dp@3x.png',
     scale: 3
   }
 }).appendTo(navigationView);

@@ -1,8 +1,8 @@
 const {Button, CollectionView, Composite, ImageView, NavigationView, Page, TextView, ui} = require('tabris');
 
 const PAGE_CONFIGS = [
-  {title: 'Basket', icon: 'images/page.png'},
-  {title: 'Checkout', icon: 'images/page.png'}
+  {title: 'Basket', icon: 'resources/page.png'},
+  {title: 'Checkout', icon: 'resources/page.png'}
 ];
 
 let navigationView = new NavigationView({
@@ -22,7 +22,7 @@ ui.drawer.set({
 if (device.platform !== 'windows') {
   new ImageView({
     left: 0, right: 0, top: 0, height: 200,
-    image: 'images/landscape.jpg',
+    image: 'resources/landscape.jpg',
     scaleMode: 'fill'
   }).appendTo(ui.drawer);
 }
@@ -39,7 +39,7 @@ let pageSelector = new CollectionView({
   createPage(PAGE_CONFIGS[index]).appendTo(navigationView);
 }).appendTo(ui.drawer);
 
-createPage({title: 'Initial Page', icon: 'images/page.png'}).appendTo(navigationView);
+createPage({title: 'Initial Page', icon: 'resources/page.png'}).appendTo(navigationView);
 
 function createCell() {
   let cell = new Composite();
@@ -75,7 +75,7 @@ function createPage(config) {
     left: 20, right: 20, top: 20,
     text: 'Create page in drawer'
   }).on('select', () => {
-    PAGE_CONFIGS.push({title: 'Another Page', icon: 'images/page.png'});
+    PAGE_CONFIGS.push({title: 'Another Page', icon: 'resources/page.png'});
     pageSelector.insert(PAGE_CONFIGS.length - 1);
   }).appendTo(page);
   return page;

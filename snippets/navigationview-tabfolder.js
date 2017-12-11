@@ -45,9 +45,9 @@ function createPage(navigationView, title) {
     .appendTo(controls);
 }
 
-createTab('Cart', 'images/cart.png');
-createTab('Pay', 'images/card.png');
-createTab('Statistic', 'images/chart.png');
+createTab('Cart', 'resources/cart.png');
+createTab('Pay', 'resources/card.png');
+createTab('Statistic', 'resources/chart.png');
 
 app.on('backNavigation', (event) => {
   // handle the "physical" back button on Android

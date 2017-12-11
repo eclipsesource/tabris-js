@@ -10,7 +10,7 @@ let navigationView = new NavigationView({
 new Action({
   title: 'Action',
   image: {
-    src: device.platform === 'iOS' ? 'images/share-black-24dp@3x.png' : 'images/share-white-24dp@3x.png',
+    src: device.platform === 'iOS' ? 'resources/share-black-24dp@3x.png' : 'resources/share-white-24dp@3x.png',
     scale: 3
   }
 }).on('select', () => console.log('Action selected.'))

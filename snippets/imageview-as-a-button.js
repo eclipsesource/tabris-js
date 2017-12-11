@@ -3,7 +3,7 @@ const {ImageView, TextView, ui} = require('tabris');
 let touched = 0;
 new ImageView({
   centerX: 0, centerY: 0,
-  image: 'images/target_200.png',
+  image: 'resources/target_200.png',
   highlightOnTouch: true
 }).on('tap', () => {
   touched++;

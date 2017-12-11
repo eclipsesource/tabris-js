@@ -8,14 +8,14 @@ ui.contentView.background = '#f5f5f5';
 let back = new ImageView({
   left: MARGIN, width: NAV_SIZE, height: NAV_SIZE, top: MARGIN,
   highlightOnTouch: true,
-  image: {src: 'images/arrow-back-black-24dp@3x.png', scale: 3},
+  image: {src: 'resources/arrow-back-black-24dp@3x.png', scale: 3},
 }).on('tap', () => webView.goBack())
   .appendTo(ui.contentView);
 
 let forward = new ImageView({
   left: back, width: NAV_SIZE, height: NAV_SIZE, top: MARGIN,
   highlightOnTouch: true,
-  image: {src: 'images/arrow-forward-black-24dp@3x.png', scale: 3},
+  image: {src: 'resources/arrow-forward-black-24dp@3x.png', scale: 3},
 }).on('tap', () => webView.goForward())
   .appendTo(ui.contentView);
 

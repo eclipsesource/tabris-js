@@ -21,7 +21,7 @@ let textView = new TextView().appendTo(searchBox);
 let action = new SearchAction({
   title: 'Search',
   image: {
-    src: device.platform === 'iOS' ? 'images/search-black-24dp@3x.png' : 'images/search-white-24dp@3x.png',
+    src: device.platform === 'iOS' ? 'resources/search-black-24dp@3x.png' : 'resources/search-white-24dp@3x.png',
     scale: 3
   }
 }).on('select', ({target}) => target.text = '')

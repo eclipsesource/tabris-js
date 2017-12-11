@@ -2,7 +2,7 @@ const {CollectionView, TextView, ImageView, ui} = require('tabris');
 
 let items = [];
 for (let section of ['settings-black-24dp@3x.png', 'share-black-24dp@3x.png', 'search-black-24dp@3x.png']) {
-  items.push({type: 'section', image: {src: `images/${section}`, scale: 3}});
+  items.push({type: 'section', image: {src: `resources/${section}`, scale: 3}});
   for (let i = 1; i <= 25; i++) {
     items.push({type: 'item', text: `Item ${i}`});
   }

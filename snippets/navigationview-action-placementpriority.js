@@ -17,5 +17,5 @@ function createAction(title, image, placementPriority) {
 }
 
 function getImage(image) {
-  return 'images/' + image + (device.platform === 'iOS' ? '-black-24dp@3x.png' : '-white-24dp@3x.png');
+  return 'resources/' + image + (device.platform === 'iOS' ? '-black-24dp@3x.png' : '-white-24dp@3x.png');
 }

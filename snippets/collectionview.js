@@ -1,6 +1,6 @@
 // Create a collection view, initialize its cells and fill it with items
 const {CollectionView, Composite, ImageView, TextView, ui} = require('tabris');
-const IMAGE_PATH = 'images/';
+const IMAGE_PATH = 'resources/';
 
 let people = [
   ['Holger', 'Staudacher', 'holger.jpg'],

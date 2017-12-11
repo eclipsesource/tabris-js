@@ -7,9 +7,9 @@ let tabFolder = new TabFolder({
   paging: true // enables swiping. To still be able to open the developer console in iOS, swipe from the bottom right.
 }).appendTo(ui.contentView);
 
-createTab('Cart', 'images/cart.png', 'images/cart-filled.png');
-createTab('Pay', 'images/card.png', 'images/card-filled.png');
-createTab('Statistic', 'images/chart.png', 'images/chart-filled.png');
+createTab('Cart', 'resources/cart.png', 'resources/cart-filled.png');
+createTab('Pay', 'resources/card.png', 'resources/card-filled.png');
+createTab('Statistic', 'resources/chart.png', 'resources/chart-filled.png');
 
 tabFolder.on('selectionChanged', ({value: tab}) => console.log(tab.title));
 

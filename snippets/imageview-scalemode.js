@@ -4,8 +4,8 @@ const MARGIN = 16;
 const MARGIN_LARGE = 32;
 
 const IMAGES = [
-  {name: 'Large', src: 'images/salad.jpg', scale: 3},
-  {name: 'Small', src: 'images/landscape.jpg', scale: 3}
+  {name: 'Large', src: 'resources/salad.jpg', scale: 3},
+  {name: 'Small', src: 'resources/landscape.jpg', scale: 3}
 ];
 const SCALE_MODES = ['auto', 'fit', 'fill', 'stretch', 'none'];
 

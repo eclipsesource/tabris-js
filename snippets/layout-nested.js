@@ -12,7 +12,7 @@ function createLayout(depth) {
 
   let imageView = new ImageView({
     left: MARGIN, top: MARGIN, width: 56,
-    image: 'images/target_200.png',
+    image: 'resources/target_200.png',
     background: '#aaaaaa'
   }).appendTo(composite);
 

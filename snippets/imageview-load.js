@@ -4,7 +4,7 @@ new ImageView({
   id: 'image1',
   right: '50% +8', bottom: '50% +8', width: 64, height: 64,
   background: '#dedede',
-  image: {src: 'images/cloud-check.png', scale: 3}
+  image: {src: 'resources/cloud-check.png', scale: 3}
 }).on('load', handleLoad)
   .appendTo(ui.contentView);
 

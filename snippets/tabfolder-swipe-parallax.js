@@ -2,11 +2,11 @@ const {Composite, ImageView, Tab, TabFolder, TextView, ui} = require('tabris');
 
 const PARALLAX = 0.1;
 const PEOPLE = [
-  {name: 'Ian Bull', image: 'images/ian.jpg'},
-  {name: 'Jochen Krause', image: 'images/jochen.jpg'},
-  {name: 'Markus Knauer', image: 'images/markus.jpg'},
-  {name: 'Moritz Post', image: 'images/moritz.jpg'},
-  {name: 'Tim Buschtöns', image: 'images/tim.jpg'}
+  {name: 'Ian Bull', image: 'resources/ian.jpg'},
+  {name: 'Jochen Krause', image: 'resources/jochen.jpg'},
+  {name: 'Markus Knauer', image: 'resources/markus.jpg'},
+  {name: 'Moritz Post', image: 'resources/moritz.jpg'},
+  {name: 'Tim Buschtöns', image: 'resources/tim.jpg'}
 ];
 
 let imageContainer = new Composite({

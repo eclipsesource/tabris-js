@@ -24,7 +24,7 @@ new CollectionView({
     new ImageView({
       id: 'imageView',
       left: MARGIN, top: MARGIN,
-      image: {src: 'images/arrow-forward-black-24dp@3x.png', scale: 3}
+      image: {src: 'resources/arrow-forward-black-24dp@3x.png', scale: 3}
     }).appendTo(composite);
     new TextView({
       id: 'textView',
