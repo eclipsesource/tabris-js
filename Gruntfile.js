@@ -65,16 +65,16 @@ module.exports = function(grunt) {
         cwd: 'build/typescript'
       },
       test_boot: {
-        cmd: 'node node_modules/mocha/bin/mocha --colors --compilers js:babel-core/register "test/boot/**/*.test.js"'
+        cmd: 'node node_modules/mocha/bin/mocha --colors --require babel-core/register "test/boot/**/*.test.js"'
       },
       verify_tabris: {
         cmd: 'node node_modules/mocha/bin/mocha --colors "test/**/*.verify.js"'
       },
       test_tabris: {
-        cmd: 'node node_modules/mocha/bin/mocha --colors --compilers js:babel-core/register "test/tabris/**/*.test.js"'
+        cmd: 'node node_modules/mocha/bin/mocha --colors --require babel-core/register "test/tabris/**/*.test.js"'
       },
       test_spec: {
-        cmd: `node node_modules/mocha/bin/mocha --colors --compilers js:babel-core/register "${grunt.option('spec')}"`
+        cmd: `node node_modules/mocha/bin/mocha --colors --require babel-core/register "${grunt.option('spec')}"`
       },
       eslint: {
         cmd: 'node node_modules/eslint/bin/eslint.js --color .'
