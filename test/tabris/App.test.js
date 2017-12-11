@@ -301,6 +301,30 @@ describe('App', function() {
 
   });
 
+  describe('registerFont', () => {
+
+    it('rejects if parameter missing', () => {
+      expect(() => app.registerFont('Arial')).to.throw(Error, 'Not enough arguments to register a font');
+    });
+
+    it('rejects invalid alias type', () => {
+      expect(() => app.registerFont(23, 'arial.ttf')).to.throw(Error, 'alias is not a string');
+    });
+
+    it('rejects invalid font type', () => {
+      expect(() => app.registerFont('Arial', 23)).to.throw(Error, 'file is not a string');
+    });
+
+    it('calls native `registerFont`', () => {
+      spy(client, 'call');
+
+      app.registerFont('Arial', 'arial.ttf');
+
+      expect(client.call).to.have.been.calledWithMatch(app.cid, 'registerFont', {alias: 'Arial', file: 'arial.ttf'});
+    });
+
+  });
+
   describe('reload', function() {
 
     it('CALLs `reload`', function() {

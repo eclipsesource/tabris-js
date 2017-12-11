@@ -87,6 +87,21 @@
       "returns": "string",
       "description": "Returns the URL for a given resource that is bundled with the app. Can be used to access app resources like images, videos, etc. Note that these resources can only be accessed in read-only mode."
     },
+    "registerFont": {
+      "parameters": [
+        {
+          "name": "alias",
+          "type": "string",
+          "description": "An identifier for the registered font. The alias can be used in places where a font can be configures, e.g.: `TextView` or `GraphicalContext`"
+        },
+        {
+          "name": "file",
+          "type": "string",
+          "description": "The font file to register for later use. Similar to images paths, the file path can be absolute, relative or an URL.\n\nOn the Windows platform it is required to provide the font-family name to reference the font in the given file. The font-family name is provided as a fragment postfix to the file name. For example `arial.ttf#Arial` can be used the load a font named 'Arial' from the file 'arial.ttf'. The file also has to be bundled with the app to work, loading it remotely (e.g. via the developer app) will not work."
+        }
+      ],
+      "description": "Allows to register a font to use throughout the app. Once a font is registered its alias can be used to apply the font where ever a font can be configured, e.g. in `TextView` or `GraphicalContext`. Tabris.js currently supports TrueType fonts (*.ttf) and OpenType fonts (*.otf)."
+    },
     "installPatch": {
       "parameters": [
         {
@@ -103,5 +118,15 @@
       "description": "Installs a patch from the given URL. When the patch is successfully installed, it will remain inactive until the application is reloaded. Not supported on Windows.",
       "provisional": true
     }
-  }
+  },
+  "links": [
+    {
+      "title": "Snippet showing various capabilities of the `App` object",
+      "path": "${GITHUB_BRANCH}/snippets/app.js"
+    },
+    {
+      "title": "Snippet to register and use an external font",
+      "path": "${GITHUB_BRANCH}/snippets/textview-font-external.js"
+    }
+  ]
 }

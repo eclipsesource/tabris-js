@@ -16,6 +16,8 @@ app.pinnedCertificates = pinnedCertificates;
 // Methods
 let path: string = '';
 let url: string = '';
+let alias = '';
+let file = '';
 let callback: (error: Error|null, patch: any|null) => void = () => {};
 let voidReturnValue: void;
 let voidPromiseReturnValue: Promise<void>;
@@ -24,6 +26,7 @@ let stringReturnValue: string;
 stringReturnValue = app.getResourceLocation(path);
 voidReturnValue = app.installPatch(url, callback);
 voidReturnValue = app.reload();
+voidReturnValue = app.registerFont(alias, file);
 voidPromiseReturnValue = app.launch(url);
 
 // Events

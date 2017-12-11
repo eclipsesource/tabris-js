@@ -58,6 +58,19 @@ export default class App extends NativeObject {
     this._nativeCall('reload', {});
   }
 
+  registerFont(alias, file) {
+    if (arguments.length < 2) {
+      throw new Error('Not enough arguments to register a font');
+    }
+    if (typeof alias !== 'string') {
+      throw new Error('alias is not a string');
+    }
+    if (typeof file !== 'string') {
+      throw new Error('file is not a string');
+    }
+    this._nativeCall('registerFont', {alias, file});
+  }
+
   installPatch(url, callback) {
     if (typeof url !== 'string') {
       throw new Error('parameter url is not a string');
