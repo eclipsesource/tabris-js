@@ -1,6 +1,6 @@
-const {generateDoc} = require('./grunt/grunt-generate-doc');
-const {generateTsd} = require('./grunt/grunt-generate-ts');
-const {generateJsx} = require('./grunt/grunt-generate-jsx');
+const {generateDoc} = require('./tools/generate-doc');
+const {generateTsd} = require('./tools/generate-ts');
+const {generateJsx} = require('./tools/generate-jsx');
 
 module.exports = function(grunt) {
 
