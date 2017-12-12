@@ -5,4 +5,5 @@ build/
 node_modules/
 platforms/
 npm-debug.log*
+package-lock.json
 *~
