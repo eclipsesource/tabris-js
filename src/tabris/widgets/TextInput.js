@@ -33,7 +33,20 @@ NativeObject.defineProperties(TextInput.prototype, {
   keepFocus: {type: 'boolean', default: false},
   alignment: {type: ['choice', ['left', 'center', 'right']], default: 'left'},
   autoCorrect: {type: 'boolean', default: false},
-  autoCapitalize: {type: 'boolean', nocache: true},
+  autoCapitalize: {
+    type: ['choice', [true, false, 'none', 'sentence', 'word', 'all']],
+    default: false,
+    set(name, value) {
+      if (value === true) {
+        this._nativeSet(name, 'all');
+      } else if (value === false) {
+        this._nativeSet(name, 'none');
+      } else {
+        this._nativeSet(name, value);
+      }
+      this._storeProperty(name, value);
+    }
+  },
   keyboard: {
     type: ['choice', ['ascii', 'decimal', 'email', 'number', 'numbersAndPunctuation', 'phone', 'url', 'default']],
     default: 'default'

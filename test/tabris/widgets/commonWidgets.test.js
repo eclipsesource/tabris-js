@@ -1,4 +1,4 @@
-import {expect, spy, stub, restore, mockTabris} from '../../test';
+import {expect, mockTabris, restore, spy} from '../../test';
 import ClientStub from '../ClientStub';
 import Composite from '../../../src/tabris/widgets/Composite';
 import Canvas from '../../../src/tabris/widgets/Canvas';
@@ -235,12 +235,26 @@ describe('Common Widgets', function() {
       expect(textInput.autoCorrect).to.equal(false);
     });
 
-    it('autoCapitalize property', function() {
-      let textInput = new TextInput({text: 'foo'});
-      stub(client, 'get').callsFake(() => false);
+    describe('autoCapitalize', function() {
 
-      expect(textInput.autoCapitalize).to.equal(false);
-      expect(client.get).to.have.been.called;
+      it('should native set value to "none" when false given', function() {
+        new TextInput({autoCapitalize: false});
+
+        expect(getCreate().properties.autoCapitalize).to.equal('none');
+      });
+
+      it('should native set value to "all" when true given', function() {
+        new TextInput({autoCapitalize: true});
+
+        expect(getCreate().properties.autoCapitalize).to.equal('all');
+      });
+
+      it('should native set given value', function() {
+        new TextInput({autoCapitalize: 'sentence'});
+
+        expect(getCreate().properties.autoCapitalize).to.equal('sentence');
+      });
+
     });
 
     it('input event', function() {

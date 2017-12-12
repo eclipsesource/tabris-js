@@ -63,9 +63,17 @@
       "description": "Enables the spell checker and auto-correction feature."
     },
     "autoCapitalize": {
-      "type": "boolean",
-      "default": "false",
-      "description": "Automatically switch to capital letters after every key pressed.",
+      "type": "any",
+      "default": false,
+      "values": [
+        true,
+        false,
+        "none",
+        "sentence",
+        "word",
+        "all"
+      ],
+      "description": "Control how text input is capitalized.\n\n`none` - Do not change any text input\n`sentence` - Capitalize the first word of a sentence\n`word` - Capitalize every word\n`all` - Capitalize every letter\n\nThe boolean value `false` maps to `none` whereas `true` is equal to `all`.",
       "platforms": {
         "windows": false
       }

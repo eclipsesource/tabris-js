@@ -6,7 +6,7 @@ let widget: TextInput = new TextInput();
 
 // Properties
 let alignment: 'center' | 'left' | 'right';
-let autoCapitalize: boolean;
+let autoCapitalize: true | false | 'none' | 'sentence' | 'word' | 'all';
 let autoCorrect: boolean;
 let borderColor: Color;
 let editable: boolean;
