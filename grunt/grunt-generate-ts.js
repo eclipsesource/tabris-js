@@ -331,7 +331,10 @@ function createProperty(name, def) {
   result.push(createDoc(def));
   let values = [];
   (def.values || []).sort().forEach((value) => {
-    values.push(`"${value}"`);
+    if (typeof value === 'string') {
+      value = `"${value}"`;
+    }
+    values.push(`${value}`);
   });
   let valuesType = (values || []).join(' | ');
   result.push(`${def.readonly ? 'readonly ' : ''}${name}: ${valuesType || def.ts_type || def.type};`);
