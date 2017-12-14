@@ -38,6 +38,7 @@ import NativeObject from './NativeObject';
 import NavigationView from './widgets/NavigationView';
 import NavigationBar from './widgets/NavigationBar';
 import RadioButton from './widgets/RadioButton';
+import RefreshComposite from './widgets/RefreshComposite';
 import ScrollView from './widgets/ScrollView';
 import SearchAction from './widgets/SearchAction';
 import Slider from './widgets/Slider';
@@ -97,6 +98,7 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   ProgressBar,
   ProgressEvent,
   RadioButton,
+  RefreshComposite,
   ScrollView,
   SearchAction,
   Slider,

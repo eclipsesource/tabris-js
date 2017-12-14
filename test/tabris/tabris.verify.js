@@ -140,6 +140,7 @@ describe('tabris', function() {
     expect(tabris.ProgressBar.name).to.equal('ProgressBar');
     expect(tabris.RadioButton).to.be.a('function');
     expect(tabris.RadioButton.name).to.equal('RadioButton');
+    expect(tabris.RefreshComposite.name).to.equal('RefreshComposite');
     expect(tabris.ScrollView).to.be.a('function');
     expect(tabris.ScrollView.name).to.equal('ScrollView');
     expect(tabris.SearchAction).to.be.a('function');

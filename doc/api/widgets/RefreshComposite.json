@@ -1,0 +1,48 @@
+{
+  "type": "RefreshComposite",
+  "description": "A composite allowing to use a pull-to-refresh gesture to trigger and visualize a long running operation.",
+  "extends": "Composite",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "properties",
+        "type": "PropertiesObject",
+        "ts_type": "Properties<RefreshComposite>",
+        "optional": true,
+        "description": "Sets all key-value pairs in the properties object as widget properties."
+      }
+    ]
+  },
+  "properties": {
+    "refreshEnabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether the pull-to-refresh gesture can be performed by the user. When disabled, the `RefreshComposite` behaves like a regular `Composite`."
+    },
+    "refreshIndicator": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to visualize a long running operation. After the user has triggered a manual refresh, this property is `true` and should be set to `false` when the operation ended."
+    },
+    "refreshMessage": {
+      "type": "string",
+      "default": "",
+      "description": "A message to show to the user during the refresh operation.",
+      "platforms": {
+        "android": false
+      }
+    }
+  },
+  "events": {
+    "refresh": {
+      "description": "Fired when a refresh is triggered by the user."
+    }
+  },
+  "links": [
+    {
+      "title": "Simple RefreshComposite snippet",
+      "path": "${GITHUB_BRANCH}/snippets/refreshcomposite.js"
+    }
+  ]
+}
