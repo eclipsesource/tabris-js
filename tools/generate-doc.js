@@ -26,12 +26,14 @@ exports.generateDoc = function generateDoc({files, targetPath, version}) {
       let def = readJsonSync(file);
       let title = getTitle(def);
       Object.assign(def, {title, file, isWidget});
-      if (api[title]) {
-        throw new Error('Duplicate title ' + title);
-      }
-      api[title] = def;
-      if (def.type) {
-        addTypeLink(def.type, `${def.type}.md`);
+      if (!def.doc_ignore) {
+        if (api[title]) {
+          throw new Error('Duplicate title ' + title);
+        }
+        api[title] = def;
+        if (def.type) {
+          addTypeLink(def.type, `${def.type}.md`);
+        }
       }
     });
     Object.keys(api).forEach(title => {
