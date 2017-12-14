@@ -54,9 +54,7 @@ function readJsonDefs(files) {
   files.forEach((file) => {
     let json = readJsonSync(file);
     json.file = file;
-    if (!json.ts_ignore) {
-      defs[json.type || json.object || json.title] = json;
-    }
+    defs[json.type || json.object || json.title] = json;
   });
   return defs;
 }
