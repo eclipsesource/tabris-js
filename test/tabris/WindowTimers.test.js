@@ -1,25 +1,27 @@
-import {expect, mockTabris, spy, restore} from '../test';
+import {expect, mockTabris, restore, spy} from '../test';
 import ClientStub from './ClientStub';
 import {addWindowTimerMethods} from '../../src/tabris/WindowTimers';
+import {create} from '../../src/tabris/App';
 
-describe('WindowTimers', function() {
+describe('WindowTimers', () => {
 
   let client;
   let target;
 
-  beforeEach(function() {
+  beforeEach(() => {
     client = new ClientStub();
     mockTabris(client);
     target = {};
+    tabris.app = create();
   });
 
   afterEach(restore);
 
-  it('does not overwrite existing window methods', function() {
-    let setTimeout = target.setTimeout = function() {};
-    let setInterval = target.setInterval = function() {};
-    let clearTimeout = target.clearTimeout = function() {};
-    let clearInterval = target.clearInterval = function() {};
+  it('does not overwrite existing window methods', () => {
+    let setTimeout = target.setTimeout = () => {};
+    let setInterval = target.setInterval = () => {};
+    let clearTimeout = target.clearTimeout = () => {};
+    let clearInterval = target.clearInterval = () => {};
 
     addWindowTimerMethods(target);
 
@@ -29,130 +31,79 @@ describe('WindowTimers', function() {
     expect(target.clearInterval).to.equal(clearInterval);
   });
 
-  ['setTimeout', 'setInterval'].forEach(name => describe(name, function() {
+  ['setTimeout', 'setInterval'].forEach(name => describe(name, () => {
 
     let delay = 23;
-    let taskId;
+    let timerId;
     let callback;
     let method;
-    let createCall = function() { return client.calls({op: 'create', type: 'tabris.Timer'})[0]; };
-    let listenCall = function() { return client.calls({id: createCall().id, op: 'listen', event: 'run'})[0]; };
-    let startCall = function() { return client.calls({id: createCall().id, op: 'call', method: 'start'})[0]; };
+    let startTimer = () => client.calls({id: tabris.app.cid, op: 'call', method: 'startTimer'})[0];
+    let cancelTimer = () => client.calls({id: tabris.app.cid, op: 'call', method: 'cancelTimer'})[0];
     let isInterval = name === 'setInterval';
 
-    beforeEach(function() {
+    beforeEach(() => {
       addWindowTimerMethods(target);
       callback = spy();
       method = target[name];
     });
 
-    describe('when called without parameters', function() {
+    describe('when called without parameters', () => {
 
-      it('throws an error', function() {
+      it('throws an error', () => {
         expect(method).to.throw('Not enough arguments to ' + name);
       });
 
     });
 
-    describe('when called with illegal first parameter', function() {
+    describe('when called with illegal first parameter', () => {
 
-      it('throws an error', function() {
+      it('throws an error', () => {
         expect(() => method(23)).to.throw('Illegal argument to ' + name + ': not a function');
       });
 
     });
 
-    describe('when called with delay', function() {
+    describe('when called with delay', () => {
 
-      beforeEach(function() {
-        taskId = method(callback, delay);
+      beforeEach(() => {
+        timerId = method(callback, delay);
       });
 
-      it('creates native Timer', function() {
-        expect(createCall()).not.to.be.undefined;
+      it('calls app._startTimer()', () => {
+        expect(startTimer().parameters).to.contain({id: 0, delay: 23, repeat: isInterval});
       });
 
-      it('passes arguments to Timer creation', function() {
-        expect(createCall().properties.delay).to.equal(delay);
-        expect(createCall().properties.repeat).to.equal(isInterval);
+      it('returns a number', () => {
+        expect(timerId).to.be.a('number');
       });
 
-      it('listens on run event of native Timer', function() {
-        expect(listenCall().listen).to.be.true;
+      it('returns ascending numbers', () => {
+        let nextTimerId = method(callback, 23);
+        expect(nextTimerId).to.be.above(timerId);
       });
 
-      it('starts the native Timer', function() {
-        expect(startCall()).not.to.be.undefined;
-      });
-
-      it('create, listen, start are called in this order', function() {
-        let createPosition = client.calls().indexOf(createCall());
-        let listenPosition = client.calls().indexOf(listenCall());
-        let startPosition = client.calls().indexOf(startCall());
-        expect(listenPosition).to.be.above(createPosition);
-        expect(startPosition).to.be.above(listenPosition);
-      });
-
-      it('returns a number', function() {
-        expect(taskId).to.be.a('number');
-      });
-
-      it('returns ascending numbers', function() {
-        let nextTaskId = method(callback, 23);
-        expect(nextTaskId).to.be.above(taskId);
-      });
-
-      it("returned numbers don't clash with other method", function() {
+      it("returned numbers don't clash with other method", () => {
         let otherMethod = isInterval ? 'setTimeout' : 'setInterval';
-        let timeoutTaskId = target[otherMethod](callback, delay);
-        expect(timeoutTaskId).to.be.above(taskId);
-      });
-
-      describe('and timer is notified, ', function() {
-
-        beforeEach(function() {
-          tabris._notify(createCall().id, 'run', {});
-        });
-
-        it('callback is called', function() {
-          expect(callback).to.have.been.called;
-        });
-
-        if (isInterval) {
-          it('timer is not disposed', function() {
-            let destroyCall = client.calls({id: createCall().id, op: 'destroy'})[0];
-            expect(destroyCall).to.be.undefined;
-          });
-        } else {
-          it('timer is disposed', function() {
-            let destroyCall = client.calls({id: createCall().id, op: 'destroy'})[0];
-            expect(destroyCall).not.to.be.undefined;
-          });
-        }
-
+        let timeoutTimerId = target[otherMethod](callback, delay);
+        expect(timeoutTimerId).to.be.above(timerId);
       });
 
       ['clearTimeout', 'clearInterval'].forEach((clearMethod) => {
 
-        describe('and ' + clearMethod + ' is called', function() {
+        describe('and ' + clearMethod + ' is called', () => {
 
-          beforeEach(function() {
-            target[clearMethod](taskId);
+          beforeEach(() => {
+            target[clearMethod](timerId);
           });
 
-          it('calls native cancelTask', function() {
-            let cancelCall = client.calls({id: createCall().id, op: 'call', method: 'cancel'})[0];
-            expect(cancelCall).not.to.be.undefined;
+          it('calls app._cancelTimer()', () => {
+            target.clearTimeout(23);
+            expect(cancelTimer().parameters).to.contain({id: 0});
           });
 
-          it('destroys native timer', function() {
-            let destroyCall = client.calls({id: createCall().id, op: 'destroy'})[0];
-            expect(destroyCall).not.to.be.undefined;
-          });
-
-          it('tolerates unknown taskId', function() {
+          it('tolerates unknown timerId', () => {
             expect(() => {
-              target.clearInterval(taskId + 1);
+              target.clearInterval(timerId + 1);
             }).to.not.throw();
           });
 
@@ -162,56 +113,50 @@ describe('WindowTimers', function() {
 
     });
 
-    it('creates native Timer on load callback', function() {
-      taskId = method(callback, delay);
-
-      expect(createCall()).not.to.be.undefined;
-    });
-
-    it('passes 0 delay when argument is left out', function() {
+    it('passes 0 delay when argument is left out', () => {
       method(callback);
 
-      expect(createCall().properties.delay).to.equal(0);
+      expect(startTimer().parameters.delay).to.equal(0);
     });
 
-    it('passes 0 delay when argument is not a number', function() {
+    it('passes 0 delay when argument is not a number', () => {
       [1 / 0, NaN, '', {}, false].forEach((value) => {
         client.resetCalls();
         method(callback, value);
 
-        expect(createCall().properties.delay).to.equal(0);
+        expect(startTimer().parameters.delay).to.equal(0);
       });
     });
 
-    it('passes 0 delay when argument is negative', function() {
+    it('passes 0 delay when argument is negative', () => {
       method(callback, -1);
 
-      expect(createCall().properties.delay).to.equal(0);
+      expect(startTimer().parameters.delay).to.equal(0);
     });
 
-    it('passes rounded delay', function() {
+    it('passes rounded delay', () => {
       method(callback, 3.14);
 
-      expect(createCall().properties.delay).to.equal(3);
+      expect(startTimer().parameters.delay).to.equal(3);
     });
 
-    it('passes zero parameters to callback', function() {
+    it('passes zero parameters to callback', () => {
       method(callback, delay);
-      tabris._notify(createCall().id, 'run', {});
+      startTimer().parameters.callback();
 
       expect(callback).to.have.been.calledWith();
     });
 
-    it('passes one parameter to callback', function() {
+    it('passes one parameter to callback', () => {
       method(callback, delay, 1);
-      tabris._notify(createCall().id, 'run', {});
+      startTimer().parameters.callback();
 
       expect(callback).to.have.been.calledWith(1);
     });
 
-    it('passes four parameter to callback', function() {
+    it('passes four parameter to callback', () => {
       method(callback, delay, 1, 2, 3, 4);
-      tabris._notify(createCall().id, 'run', {});
+      startTimer().parameters.callback();
 
       expect(callback).to.have.been.calledWith(1, 2, 3, 4);
     });

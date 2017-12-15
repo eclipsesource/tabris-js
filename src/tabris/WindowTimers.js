@@ -1,50 +1,27 @@
-import NativeObject from './NativeObject';
-
-class Timer extends NativeObject {
-
-  constructor(properties) {
-    super();
-    this._create('tabris.Timer', properties);
-    this._nativeListen('run', true);
-  }
-
-}
-
-NativeObject.defineProperties(Timer.prototype, {delay: 'any', repeat: 'any'});
-
 export function addWindowTimerMethods(target) {
 
   if (typeof target.setTimeout === 'function') {
     return;
   }
 
-  let taskSequence = 0;
-  let timers = {};
+  let idSequence = 0;
 
   function createTimer(fn, delay, repeat, args) {
-    let taskId = taskSequence++;
+    let id = idSequence++;
     // If tabris is not ready, create the timer on load.
     // However, clearTimeout won't work until after load.
-    let create = () => {
-      let timer = new Timer({
-        delay,
-        repeat
-      }).on('run', () => {
+    let create = () => tabris.app._nativeCall('startTimer', {
+      id, delay, repeat, callback: () => {
         fn.apply(target, args);
-        if (!repeat) {
-          timer.dispose();
-          delete timers[taskId];
-        }
-      });
-      timer._nativeCall('start');
-      timers[taskId] = timer;
-    };
+        tabris.trigger('flush');
+      }
+    });
     if (tabris.started) {
       create();
     } else {
       tabris.once('start', create);
     }
-    return taskId;
+    return id;
   }
 
   target.setTimeout = function(fn, delay) {
@@ -69,14 +46,7 @@ export function addWindowTimerMethods(target) {
     return createTimer(fn, adjustDelay(delay), true, args);
   };
 
-  target.clearTimeout = target.clearInterval = function(taskId) {
-    let timer = timers[taskId];
-    if (timer) {
-      timer._nativeCall('cancel', {});
-      timer.dispose();
-      delete timers[taskId];
-    }
-  };
+  target.clearTimeout = target.clearInterval = id => tabris.app._nativeCall('cancelTimer', {id});
 
 }
 
