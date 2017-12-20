@@ -4,6 +4,6 @@
   "category": "Cordova",
   "main": "app.js",
   "dependencies": {
-    "tabris": "^2.2.0"
+    "tabris": "^2.3.0"
   }
 }
