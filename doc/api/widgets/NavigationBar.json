@@ -15,6 +15,20 @@
     ]
   },
   "properties": {
+    "theme": {
+      "type": "string",
+      "values": [
+        "default",
+        "light",
+        "dark"
+      ],
+      "default": "default",
+      "description": "Defines the appearance used on the navigation bar. A `dark` theme sets the foreground navigation icons to be of a light color, whereas `light` sets the icons to a dark color. The theme should be set in conjunction with the `background` property for contrast. The value `default` selects the default theme that depends on the device and on the app. Available on Android 8+.",
+      "platforms": {
+        "windows": false,
+        "ios": false
+      }
+    },
     "displayMode": {
       "type": "string",
       "values": [

@@ -48,6 +48,18 @@ describe('NavigationBar', function() {
     }).to.throw(Error);
   });
 
+  it('supports property "theme" light', () => {
+    navigationBar.theme = 'light';
+
+    expect(navigationBar.theme).to.eq('light');
+  });
+
+  it('supports property "theme" dark', () => {
+    navigationBar.theme = 'dark';
+
+    expect(navigationBar.theme).to.eq('dark');
+  });
+
   it('supports property "displayMode"', () => {
     navigationBar.displayMode = 'hide';
 

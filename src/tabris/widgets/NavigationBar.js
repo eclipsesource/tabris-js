@@ -28,6 +28,7 @@ export default class NavigationBar extends Widget {
 }
 
 NativeObject.defineProperties(NavigationBar.prototype, {
+  theme: {type: ['choice', ['default', 'light', 'dark']], default: 'default'},
   displayMode: {type: ['choice', ['default', 'float', 'hide']], default: 'default'},
   height: {
     type: 'number',

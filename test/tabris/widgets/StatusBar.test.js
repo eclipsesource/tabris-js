@@ -48,16 +48,16 @@ describe('StatusBar', function() {
     }).to.throw(Error);
   });
 
-  it('supports property "theme"', () => {
+  it('supports property "theme" light', () => {
     statusBar.theme = 'light';
 
     expect(statusBar.theme).to.eq('light');
   });
 
-  it('supports property "theme"', () => {
-    statusBar.theme = 'light';
+  it('supports property "theme" dark', () => {
+    statusBar.theme = 'dark';
 
-    expect(statusBar.theme).to.eq('light');
+    expect(statusBar.theme).to.eq('dark');
   });
 
   it('supports property "displayMode"', () => {
