@@ -1,6 +1,5 @@
 {
   "type": "RefreshComposite",
-  "doc_ignore": true,
   "description": "A composite allowing to use a pull-to-refresh gesture to trigger and visualize a long running operation.",
   "extends": "Composite",
   "constructor": {
