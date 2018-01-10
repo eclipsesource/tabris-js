@@ -21,7 +21,7 @@ NativeObject.defineProperties(RefreshComposite.prototype, {
 
   refreshEnabled: {
     type: 'boolean',
-    default: false
+    default: true
   },
   refreshIndicator: {
     type: 'boolean',
