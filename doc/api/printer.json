@@ -1,0 +1,38 @@
+{
+  "type": "Printer",
+  "object": "printer",
+  "extends": "NativeObject",
+  "description": "Allows to print PDF documents from the device. A printer object is always available from tabris.printer.",
+  "constructor": {
+    "access": "private",
+    "parameters": []
+  },
+  "methods": {
+    "print": {
+      "parameters": [
+        {
+          "name": "data",
+          "type": "any",
+          "description": "The bytes of the document to print. The value can either be an ArrayBuffer or a typed array."
+        },
+        {
+          "name": "options",
+          "type": "{jobName?: string}",
+          "optional": true,
+          "description": "An optional set of configuration parameters. Setting the `jobName` allows to provide the document name shown the user."
+        }
+      ],
+      "returns": "Promise<any>",
+      "description": "Prints a PDF document using the native printing capabilities of the device. The data has to be provided as an `ArrayBuffer` or typed array. The method returns a promise which resolves to an event object with the property `result`. The `result` can either be `completed` or `canceled`. When printing fails the promise is rejected with an `Error` parameter containing additional information about the error. Supported on iOS and Android 4.4+.",
+      "platforms": {
+        "windows": false
+      }
+    }
+  },
+  "links": [
+    {
+      "title": "Snippet showing how to print a PDF document bundled in the app",
+      "path": "${GITHUB_BRANCH}/snippets/printer.js"
+    }
+  ]
+}

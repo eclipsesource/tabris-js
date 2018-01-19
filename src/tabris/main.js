@@ -3,6 +3,7 @@ import './load-polyfill';
 import {checkVersion} from './version';
 import Tabris from './Tabris';
 import Device, {create as createDevice, publishDeviceProperties} from './Device';
+import Printer, {create as createPrinter} from './Printer';
 import App, {create as createApp} from './App';
 import Ui, {create as createUi} from './widgets/Ui';
 import FileSystem, {create as createFileSystem} from './FileSystem';
@@ -95,6 +96,7 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   NavigationBar,
   Page,
   Picker,
+  Printer,
   ProgressBar,
   ProgressEvent,
   RadioButton,
@@ -143,6 +145,7 @@ tabris.on('start', () => {
   checkVersion(tabris.version, tabris.app._nativeGet('tabrisJsVersion'));
   tabris.ui = createUi();
   tabris.device = createDevice();
+  tabris.printer = createPrinter();
   tabris.fs = createFileSystem();
   publishDeviceProperties(tabris.device, window);
   window.localStorage = tabris.localStorage = createStorage();
