@@ -15,6 +15,19 @@ export default class TabFolder extends Composite {
     return child instanceof Tab;
   }
 
+  _removeChild(child) {
+    let childIndex = this.$children.indexOf(child);
+    let rightNeighbor = this.$children[childIndex + 1];
+    let leftNeighbor = this.$children[childIndex - 1];
+    let newSelection = rightNeighbor || leftNeighbor;
+    if (newSelection) {
+      this.selection = newSelection;
+    } else {
+      this._triggerChangeEvent('selection', null);
+    }
+    super._removeChild(child);
+  }
+
   _listen(name, listening) {
     if (EVENT_TYPES.includes(name)) {
       this._nativeListen(name, listening);
@@ -57,6 +70,9 @@ NativeObject.defineProperties(TabFolder.prototype, {
       this._triggerChangeEvent('selection', tab);
     },
     get() {
+      if (!this.$children.length) {
+        return null;
+      }
       let selection = this._nativeGet('selection');
       return selection ? tabris._proxies.find(selection) : null;
     }

@@ -97,11 +97,76 @@ describe('TabFolder', function() {
 
       beforeEach(function() {
         client.resetCalls();
-        tab.dispose();
       });
 
       it('then destroys the tab', function() {
+        tab.dispose();
+
         expect(client.calls({op: 'destroy', id: tab.cid})[0]).to.be.ok;
+      });
+
+      it('triggers selectionChanged without selection', function() {
+        let listener = spy();
+
+        tabFolder.on({selectionChanged: listener});
+        tab.dispose();
+
+        expect(listener).to.have.been.calledOnce;
+        expect(listener.firstCall).to.have.been.calledWithMatch({target: tabFolder, value: null});
+      });
+
+      it('triggers selectionChanged with selection', function() {
+        let tab2 = new Tab({id: 'foo'}).appendTo(tabFolder);
+        let listener = spy();
+
+        tabFolder.on({selectionChanged: listener});
+        tab.dispose();
+
+        expect(listener).to.have.been.calledOnce;
+        expect(listener.firstCall).to.have.been.calledWithMatch({target: tabFolder, value: tab2});
+      });
+
+      it('selection returns tab when non-last tab disposed', function() {
+        let tab2 = new Tab({id: 'foo'}).appendTo(tabFolder);
+        stub(client, 'get').returns(tab2.cid);
+
+        tab.dispose();
+
+        expect(tabFolder.selection).to.equal(tab2);
+      });
+
+      it('selection returns null independently from client after disposing last tab', function() {
+        let tab2 = new Tab();
+        stub(client, 'get').returns(tab2.cid);
+
+        tab.dispose();
+
+        expect(tabFolder.selection).to.equal(null);
+      });
+
+      it('does not SET selection when last tab disposed', function() {
+        tab.dispose();
+
+        expect(client.calls({op: 'set', id: tabFolder.cid}).length).to.equal(0);
+      });
+
+      it('SETs selection to the right neighbor', function() {
+        let tab2 = new Tab({id: 'foo'}).appendTo(tabFolder);
+        let tab3 = new Tab({id: 'foo'}).appendTo(tabFolder);
+
+        tab2.dispose();
+
+        let setCall = client.calls({op: 'set', id: tabFolder.cid})[0];
+        expect(setCall.properties.selection).to.equal(tab3.cid);
+      });
+
+      it('SETs selection to the left neighbor', function() {
+        let tab2 = new Tab({id: 'foo'}).appendTo(tabFolder);
+
+        tab2.dispose();
+
+        let setCall = client.calls({op: 'set', id: tabFolder.cid})[0];
+        expect(setCall.properties.selection).to.equal(tab.cid);
       });
 
     });
