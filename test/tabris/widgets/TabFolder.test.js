@@ -123,7 +123,8 @@ describe('TabFolder', function() {
         tab.dispose();
 
         expect(listener).to.have.been.calledOnce;
-        expect(listener.firstCall).to.have.been.calledWithMatch({target: tabFolder, value: tab2});
+        expect(listener.firstCall.args[0].target).to.equal(tabFolder);
+        expect(listener.firstCall.args[0].value).to.equal(tab2);
       });
 
       it('selection returns tab when non-last tab disposed', function() {
@@ -224,7 +225,8 @@ describe('TabFolder', function() {
       tabFolder.selection = tab;
 
       expect(listener).to.have.been.calledOnce;
-      expect(listener.firstCall).to.have.been.calledWithMatch({target: tabFolder, value: tab});
+      expect(listener.firstCall.args[0].target).to.equal(tabFolder);
+      expect(listener.firstCall.args[0].value).to.equal(tab);
     });
 
     it('Ignores setting null with warning', function() {
@@ -275,7 +277,8 @@ describe('TabFolder', function() {
       tabris._notify(tabFolder.cid, 'select', {selection: tab.cid});
 
       expect(listener).to.have.been.calledOnce;
-      expect(listener.firstCall).to.have.been.calledWithMatch({target: tabFolder, value: tab});
+      expect(listener.firstCall.args[0].target).to.equal(tabFolder);
+      expect(listener.firstCall.args[0].value).to.equal(tab);
     });
 
     it('supports native event select', function() {
@@ -285,7 +288,8 @@ describe('TabFolder', function() {
       tabris._notify(tabFolder.cid, 'select', {selection: tab.cid});
 
       expect(listener).to.have.been.calledOnce;
-      expect(listener.firstCall).to.have.been.calledWithMatch({target: tabFolder, selection: tab});
+      expect(listener.firstCall.args[0].target).to.equal(tabFolder);
+      expect(listener.firstCall.args[0].selection).to.equal(tab);
     });
 
   });
@@ -381,6 +385,69 @@ describe('TabFolder', function() {
     });
 
   });
+
+  describe('appear event', function() {
+
+    let tab1, tab2, listener;
+
+    beforeEach(function() {
+      tab1 = new Tab();
+      tab2 = new Tab();
+      listener = spy();
+      stub(client, 'get').returns(tab1.cid);
+    });
+
+    it('is triggered for the first appended tab', function() {
+      tab1
+        .on('appear', listener)
+        .appendTo(tabFolder);
+
+      expect(listener).to.have.been.calledOnce;
+      expect(listener.firstCall.args[0].target).to.equal(tab1);
+    });
+
+    it('is triggered when the Tab becomes the selection of the TabFolder', function() {
+      tab1.appendTo(tabFolder);
+      tab2.on('appear', listener).appendTo(tabFolder);
+
+      tabFolder._triggerChangeEvent('selection', tab2);
+
+      expect(listener).to.have.been.calledOnce;
+      expect(listener.firstCall.args[0].target).to.equal(tab2);
+    });
+
+  });
+
+  describe('disappear event', function() {
+
+    let tab1, tab2, listener;
+
+    beforeEach(function() {
+      tab1 = new Tab().appendTo(tabFolder);
+      tab2 = new Tab().appendTo(tabFolder);
+      listener = spy();
+      stub(client, 'get');
+    });
+
+    it('is triggered when the Tab is no longer the selection of the TabFolder', function() {
+      tab1.on('disappear', listener);
+
+      tabFolder._triggerChangeEvent('selection', tab2);
+
+      expect(listener).to.have.been.calledOnce;
+      expect(listener.firstCall.args[0].target).to.equal(tab1);
+    });
+
+    it('is not triggered when the Tab appears', function() {
+      tab2.on('disappear', listener);
+
+      tabFolder._triggerChangeEvent('selection', tab2);
+
+      expect(listener).not.to.have.been.called;
+    });
+
+  });
+
   describe('scroll event', function() {
 
     let tab;
@@ -397,7 +464,9 @@ describe('TabFolder', function() {
 
       checkListen('scroll');
       expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWithMatch({target: tabFolder, selection: tab, offset: 48});
+      expect(listener.firstCall.args[0].target).to.equal(tabFolder);
+      expect(listener.firstCall.args[0].selection).to.equal(tab);
+      expect(listener.firstCall.args[0].offset).to.equal(48);
     });
 
     it('fires scroll event with null selection if tab not found', function() {
@@ -408,7 +477,9 @@ describe('TabFolder', function() {
 
       checkListen('scroll');
       expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWithMatch({target: tabFolder, selection: null, offset: 48});
+      expect(listener.firstCall.args[0].target).to.equal(tabFolder);
+      expect(listener.firstCall.args[0].selection).to.equal(null);
+      expect(listener.firstCall.args[0].offset).to.equal(48);
     });
 
   });

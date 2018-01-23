@@ -44,6 +44,14 @@
       }
     }
   },
+  "events": {
+    "appear": {
+      "description": "Fired when the tab will become visible, i.e. the selection of its TabFolder."
+    },
+    "disappear": {
+      "description": "Fired when the tab is no longer visible, i.e. it no longer is the selection of its TabFolder."
+    }
+  },
   "links": [
     {
       "title": "Snippet with a TabFolder and Tabs",

@@ -15,6 +15,14 @@ export default class TabFolder extends Composite {
     return child instanceof Tab;
   }
 
+  _addChild(child, index) {
+    super._addChild(child, index);
+    if (this.$children.indexOf(child) === 0) {
+      child.$trigger('appear');
+      this.$previousSelection = child;
+    }
+  }
+
   _removeChild(child) {
     let childIndex = this.$children.indexOf(child);
     let rightNeighbor = this.$children[childIndex + 1];
@@ -48,6 +56,19 @@ export default class TabFolder extends Composite {
       return super._trigger('scroll', {selection, offset: event.offset});
     }
     return super._trigger(name, event);
+  }
+
+  _triggerChangeEvent(name, value) {
+    super._triggerChangeEvent(name, value);
+    if (name === 'selection') {
+      if (this.$previousSelection) {
+        this.$previousSelection._trigger('disappear');
+      }
+      if (value) {
+        value._trigger('appear');
+      }
+      this.$previousSelection = value;
+    }
   }
 
   $triggerChangeSelection({selection}) {
