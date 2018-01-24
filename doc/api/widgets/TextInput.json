@@ -133,6 +133,13 @@
       "platforms": {
         "windows": false
       }
+    },
+    "revealPassword": {
+      "type": "boolean",
+      "description": "Makes the text visible when the `TextInput` has the type `password`.",
+      "platforms": {
+        "windows": false
+      }
     }
   },
   "events": {
