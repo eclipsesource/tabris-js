@@ -38,6 +38,37 @@
       "platforms": {
         "windows": false
       }
+    },
+    "zoomEnabled": {
+      "type": "boolean",
+      "description": "Enables the pinch-to-zoom gesture on the `ImageView` and makes the properties `zoomLevel`, `minZoomLevel` and `maxZoomLevel` available. Setting `zoomEnabled` to `false` also resets the `zoomLevel`, `minZoomLevel`, `maxZoomLevel` to their respective defaults.",
+      "platforms": {
+        "windows": false
+      }
+    },
+    "zoomLevel": {
+      "type": "number",
+      "description": "The amount that the image is zoomed in or out. The default position without any zooming has the value 1.0.",
+      "default": 1.0,
+      "platforms": {
+        "windows": false
+      }
+    },
+    "minZoomLevel": {
+      "type": "number",
+      "description": "The lowest amount the image can be zoomed out to. Setting the `minZoomLevel` to a level larger than the current `zoomLevel` changes the `zoomLevel` to be the same as the new `minZoomLevel`. ",
+      "default": 1.0,
+      "platforms": {
+        "windows": false
+      }
+    },
+    "maxZoomLevel": {
+      "type": "number",
+      "description": "The highest amount the image can be zoomed in to. Setting the `maxZoomLevel` to a level smaller than the current `zoomLevel` changes the `zoomLevel` to be the same as the new `maxZoomLevel`.",
+      "default": 3.0,
+      "platforms": {
+        "windows": false
+      }
     }
   },
   "events": {
@@ -47,6 +78,15 @@
         "error": {
           "description": "Contains the final status of the loading process",
           "type": "boolean"
+        }
+      }
+    },
+    "zoom": {
+      "description": "Fired when the user zooms the image in or out. The `zoom` event indicates a change to the `zoomLevel` property.",
+      "parameters": {
+        "zoomLevel": {
+          "description": "The new value of *[zoomLevel](#zoomLevel)*.",
+          "type": "number"
         }
       }
     }
