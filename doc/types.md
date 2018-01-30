@@ -109,13 +109,16 @@ Distance to a parent's or sibling's opposing edge in one of these formats:
 * [`Widget`](api/Widget.md)
 * [`"selector"`](#selector)
 * `"prev()"`
+* `"next()"`
 * `"percentage offset"`
 * `"selector offset"`
 * `"prev() offset"`
+* `"next() offset"`
 * `[Widget, offset]`
 * `[percentage, offset]`
 * `[selector, offset]`
 * `["prev()", offset]`
+* `["next()", offset]`
 
 See also [Layout](layout.md).
 

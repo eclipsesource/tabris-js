@@ -31,11 +31,11 @@ Accepted values:
 - [*percentage*, *offset*]: the distance from the parent's opposing edge in percent of the parent's width plus a fixed offset in pixels
 - "*percentage* *offset*": Same as above, but as space-separated string list instead of array
 - [*widget*, *offset*]: the distance from the given widget's opposing edge in pixel
-- "*widget* *offset*": Same as above, but as space-separated string list instead of array. Since this is a string the widget can be a selector or `"prev()"`, but not a direct reference.
+- "*widget* *offset*": Same as above, but as space-separated string list instead of array. Since this is a string the widget can be a selector or a symbolic widget reference like `"prev()"` or `"next()"`, but not a direct reference.
 
 All **percentages** are provided as strings with a percent suffix, e.g. `"50%"`.
 
-**References to other widgets** can be given as a variable, a [selector string](selector.md) (filtering all siblings of the widget), or the symbolic reference `"prev()"` (used to refer to the preceding sibling). Widget references are resolved dynamically, that is, if a referenced widget is added or removed later, the layout will adjust. When a widget reference does not match any of the current siblings, it will be treated like an offset of zero.
+**References to other widgets** can be given as a variable, a [selector string](selector.md) (filtering all siblings of the widget), or a symbolic reference like `"prev()"` and `"next()"`. Widget references are resolved dynamically, that is, if a referenced widget is added or removed later, the layout will adjust. When a widget reference does not match any of the current siblings, it will be treated like an offset of zero.
 
 ### centerX
 
@@ -62,7 +62,7 @@ Accepted values:
 
 - *widget*: a reference to another widget to baseline-align
 
-The widget may be referenced with a variable, a [selector string](selector.md), or with `"prev()"`.
+The widget may be referenced with a variable, a [selector string](selector.md), or with `"prev()"` and `"next()"`.
 
 At the moment, this property is only supported for widgets that contain text, i.e. both the actual and the referenced widget must be one of `TextView`, `TextInput`, or `Button`.
 

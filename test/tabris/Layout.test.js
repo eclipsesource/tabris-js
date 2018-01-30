@@ -131,6 +131,20 @@ describe('Layout', function() {
       expect(resolve(input, widget)).to.eql(expected);
     });
 
+    it("translates 'next()' selector to id", function() {
+      let input = {baseline: 'next()', left: ['next()', 42]};
+      let expected = {baseline: other.cid, left: [other.cid, 42]};
+
+      expect(resolve(input, widget)).to.eql(expected);
+    });
+
+    it("translates 'next()' selector to 0 on last widget", function() {
+      let input = {baseline: 'next()', left: ['next()', 42]};
+      let expected = {baseline: 0, left: [0, 42]};
+
+      expect(resolve(input, other)).to.eql(expected);
+    });
+
     it('does not modify numbers', function() {
       let input = {centerX: 23, left: [30, 42]};
       let expected = {centerX: 23, left: [30, 42]};

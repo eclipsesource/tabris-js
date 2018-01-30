@@ -83,6 +83,14 @@ function toProxyId(ref, widget) {
     }
     return 0;
   }
+  if (ref === 'next()') {
+    let children = getParent(widget).children();
+    let index = children.indexOf(widget);
+    if (index + 1 < children.length) {
+      return types.proxy.encode(children[index + 1]) || 0;
+    }
+    return 0;
+  }
   if (typeof ref === 'string') {
     let proxy = widget.siblings(ref)[0];
     return types.proxy.encode(proxy) || 0;
