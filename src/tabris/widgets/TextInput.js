@@ -59,5 +59,6 @@ NativeObject.defineProperties(TextInput.prototype, {
   fillColor: {type: 'color'},
   borderColor: {type: 'color'},
   textColor: {type: 'color'},
-  revealPassword: {type: 'boolean'}
+  revealPassword: {type: 'boolean'},
+  cursorColor: {type: 'color'}
 });

@@ -140,6 +140,14 @@
       "platforms": {
         "windows": false
       }
+    },
+    "cursorColor": {
+      "type": "Color",
+      "description": "The color of the cursor in the `TextInput`.",
+      "platforms": {
+        "windows": false,
+        "android": false
+      }
     }
   },
   "events": {

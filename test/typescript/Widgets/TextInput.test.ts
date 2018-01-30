@@ -11,6 +11,7 @@ let autoCorrect: boolean;
 let borderColor: Color;
 let editable: boolean;
 let fillColor: Color;
+let cursorColor: Color;
 let focused: boolean;
 let keepFocus: boolean;
 let keyboard: 'ascii' | 'decimal' | 'default' | 'email' | 'number' | 'numbersAndPunctuation' | 'phone' | 'url';
@@ -26,6 +27,7 @@ autoCorrect = widget.autoCorrect;
 borderColor = widget.borderColor;
 editable = widget.editable;
 fillColor = widget.fillColor;
+cursorColor = widget.cursorColor;
 focused = widget.focused;
 keepFocus = widget.keepFocus;
 keyboard = widget.keyboard;
@@ -41,6 +43,7 @@ widget.autoCorrect = autoCorrect;
 widget.borderColor = borderColor;
 widget.editable = editable;
 widget.fillColor = fillColor;
+widget.cursorColor = cursorColor;
 widget.focused = focused;
 widget.keepFocus = keepFocus;
 widget.keyboard = keyboard;
@@ -57,6 +60,7 @@ let properties: TextInputProperties = {
   borderColor,
   editable,
   fillColor,
+  cursorColor,
   focused,
   keepFocus,
   keyboard,
