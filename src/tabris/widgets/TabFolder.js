@@ -89,6 +89,9 @@ NativeObject.defineProperties(TabFolder.prototype, {
         warn('Can not set TabFolder selection to ' + tab);
         return;
       }
+      if (this.selection === tab) {
+        return;
+      }
       this._nativeSet('selection', tab.cid);
       this._triggerChangeEvent('selection', tab);
     },

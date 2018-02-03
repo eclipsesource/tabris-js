@@ -238,6 +238,16 @@ describe('TabFolder', function() {
       expect(listener.firstCall.args[0].value).to.equal(tab);
     });
 
+    it('Setting a Tab does not trigger change event when the tab was already selected', function() {
+      let listener = spy();
+      tabFolder.on('selectionChanged', listener);
+
+      stub(client, 'get').returns(tab.cid);
+      tabFolder.selection = tab;
+
+      expect(listener).not.to.have.been.called;
+    });
+
     it('Ignores setting null with warning', function() {
       stub(console, 'warn');
 
