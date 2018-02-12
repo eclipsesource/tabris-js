@@ -26,6 +26,7 @@ let stringReturnValue: string;
 stringReturnValue = app.getResourceLocation(path);
 voidReturnValue = app.installPatch(url, callback);
 voidReturnValue = app.reload();
+voidReturnValue = app.close();
 voidReturnValue = app.registerFont(alias, file);
 voidPromiseReturnValue = app.launch(url);
 

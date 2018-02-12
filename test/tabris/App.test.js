@@ -337,6 +337,18 @@ describe('App', function() {
 
   });
 
+  describe('close', function() {
+
+    it('calls `close`', function() {
+      spy(client, 'call');
+
+      app.close();
+
+      expect(client.call).to.have.been.calledWith(app.cid, 'close');
+    });
+
+  });
+
   describe('getResourceLocation', function() {
 
     beforeEach(function() {

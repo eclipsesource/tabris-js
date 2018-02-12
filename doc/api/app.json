@@ -76,6 +76,14 @@
         "windows": false
       }
     },
+    "close": {
+      "parameters": [],
+      "description": "Shuts down the running application and its process.",
+      "platforms": {
+        "ios": false,
+        "windows": false
+      }
+    },
     "getResourceLocation": {
       "parameters": [
         {

@@ -1,4 +1,4 @@
-const {Composite, TextView, Button, app, ui} = require('tabris');
+const {Composite, TextView, Button, app, ui, device} = require('tabris');
 
 // React to application hibernation, resume and back navigation
 
@@ -25,6 +25,14 @@ new Button({
   text: 'Reload app'
 }).on('select', () => app.reload())
   .appendTo(ui.contentView);
+
+if (device.platform === 'Android') {
+  new Button({
+    left: 16, right: 16, bottom: 'prev() 16',
+    text: 'Close app'
+  }).on('select', () => app.close())
+    .appendTo(ui.contentView);
+}
 
 app.on('pause', () => paused = Date.now())
   .on('resume', () => {

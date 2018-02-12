@@ -58,6 +58,10 @@ export default class App extends NativeObject {
     this._nativeCall('reload', {});
   }
 
+  close() {
+    this._nativeCall('close');
+  }
+
   registerFont(alias, file) {
     if (arguments.length < 2) {
       throw new Error('Not enough arguments to register a font');
