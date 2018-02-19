@@ -78,7 +78,7 @@
     },
     "close": {
       "parameters": [],
-      "description": "Shuts down the running application and its process.",
+      "description": "Shuts down the running application and closes the UI.",
       "platforms": {
         "ios": false,
         "windows": false
