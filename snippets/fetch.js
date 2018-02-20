@@ -15,7 +15,7 @@ let textView = new TextView({
 function loadData() {
   fetch('https://freegeoip.net/json/')
     .then(response => checkStatus(response) && response.json())
-    .then(json => textView.text = 'You appear to be in ' + json.city)
+    .then(json => textView.text = `You appear to be in ${json.city ? json.city : json.country_name}`)
     .catch(err => console.error(err)); // Never forget the final catch!
 }
 
