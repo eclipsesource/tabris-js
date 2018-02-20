@@ -1,11 +1,11 @@
 const {TextInput, TextView, ui} = require('tabris');
 
 let textView = new TextView({
-  left: 20, top: 20,
+  left: 16, top: 16,
   text: 'Label:'
 }).appendTo(ui.contentView);
 
 new TextInput({
-  left: [textView, 10], width: 300, baseline: textView,
+  left: [textView, 16], right: 16, baseline: textView,
   message: 'Text'
 }).appendTo(ui.contentView);
