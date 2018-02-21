@@ -29,7 +29,7 @@ new CheckBox({
   controls.children().filter(widget => widget !== checkBox).set('enabled', zoomEnabled);
 }).appendTo(controls);
 
-let zoomLevelSlider = createSlider('Zoom level', 10)
+let zoomLevelSlider = createSlider('Zoom level', imageView.zoomLevel * 10)
   .on('select', ({selection}) => {
     let zoomLevel = selection / 10;
     if (imageView.zoomEnabled && zoomLevel > imageView.minZoomLevel && zoomLevel < imageView.maxZoomLevel) {
@@ -37,7 +37,7 @@ let zoomLevelSlider = createSlider('Zoom level', 10)
     }
   });
 
-let minZoomSlider = createSlider('Min zoom', 10)
+let minZoomSlider = createSlider('Min zoom', imageView.minZoomLevel * 10)
   .on('selectionChanged', ({value: minZoomLevel}) => {
     if (maxZoomSlider.selection < minZoomLevel) {
       maxZoomSlider.selection = minZoomLevel;
@@ -50,7 +50,7 @@ let minZoomSlider = createSlider('Min zoom', 10)
     }
   });
 
-let maxZoomSlider = createSlider('Max zoom', 30)
+let maxZoomSlider = createSlider('Max zoom', imageView.maxZoomLevel * 10)
   .on('selectionChanged', ({value: maxZoomLevel}) => {
     if (minZoomSlider.selection > maxZoomLevel) {
       minZoomSlider.selection = maxZoomLevel;
