@@ -4,6 +4,6 @@
   "category": "Small Apps",
   "main": "reddit.js",
   "dependencies": {
-    "tabris": "^2.3.0"
+    "tabris": "^2.4.0"
   }
 }
