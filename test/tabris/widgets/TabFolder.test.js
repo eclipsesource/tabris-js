@@ -170,6 +170,15 @@ describe('TabFolder', function() {
         expect(setCall.properties.selection).to.equal(tab.cid);
       });
 
+      it('does not SET selection to the left neighbor when TabFolder disposed', function() {
+        spy(client, 'set');
+        new Tab({id: 'foo'}).appendTo(tabFolder);
+
+        tabFolder.dispose();
+
+        expect(client.set).to.have.not.been.called;
+      });
+
     });
 
     describe('and the TabFolder is disposed', function() {

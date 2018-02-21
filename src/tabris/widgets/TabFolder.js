@@ -24,14 +24,16 @@ export default class TabFolder extends Composite {
   }
 
   _removeChild(child) {
-    let childIndex = this.$children.indexOf(child);
-    let rightNeighbor = this.$children[childIndex + 1];
-    let leftNeighbor = this.$children[childIndex - 1];
-    let newSelection = rightNeighbor || leftNeighbor;
-    if (newSelection) {
-      this.selection = newSelection;
-    } else {
-      this._triggerChangeEvent('selection', null);
+    if (!this._inDispose) {
+      let childIndex = this.$children.indexOf(child);
+      let rightNeighbor = this.$children[childIndex + 1];
+      let leftNeighbor = this.$children[childIndex - 1];
+      let newSelection = rightNeighbor || leftNeighbor;
+      if (newSelection) {
+        this.selection = newSelection;
+      } else {
+        this._triggerChangeEvent('selection', null);
+      }
     }
     super._removeChild(child);
   }
