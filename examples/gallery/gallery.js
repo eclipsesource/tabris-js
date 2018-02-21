@@ -47,7 +47,8 @@ ui.statusBar.set({
 let fullImage = new ImageView({
   top: 0, bottom: 0, left: 0, right: 0,
   image: `images/${IMAGES[0]}`,
-  scaleMode: 'fill'
+  scaleMode: 'fit',
+  zoomEnabled: true
 }).on('tap', () => filmStrip.toggleShowing())
   .appendTo(ui.contentView);
 

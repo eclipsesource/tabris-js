@@ -164,7 +164,8 @@ function createDetailsPage(data) {
     new ImageView({
       left: 0, top: 0, right: 0, bottom: 0,
       image: data.url,
-      scaleMode: 'fit'
+      scaleMode: 'fit',
+      zoomEnabled: true
     }).appendTo(detailsPage);
   } else {
     new WebView({
