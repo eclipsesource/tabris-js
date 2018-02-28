@@ -243,7 +243,7 @@ export let types = {
 };
 
 let numberRegex = /^[+-]?([0-9]+|[0-9]*\.[0-9]+)$/;
-let selectorRegex = /^(\*|prev\(\)|([#.]?[A-Za-z_][A-Za-z0-9_-]+))$/;
+let selectorRegex = /^(\*|prev\(\)|next\(\)|([#.]?[A-Za-z_][A-Za-z0-9_-]+))$/;
 
 function isDimension(value) {
   return typeof value === 'number' && !isNaN(value) && value >= 0 && value !== Infinity;

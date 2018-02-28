@@ -34,6 +34,7 @@ describe('property-types', function() {
 
     it('accepts selector strings', function() {
       expect(encode('prev()')).to.equal('prev()');
+      expect(encode('next()')).to.equal('next()');
       expect(encode('#foo')).to.equal('#foo');
     });
 
@@ -61,6 +62,7 @@ describe('property-types', function() {
 
     it('passes values through', function() {
       expect(decode('prev()')).to.equal('prev()');
+      expect(decode('next()')).to.equal('next()');
       expect(decode('#foo')).to.equal('#foo');
       expect(decode(widget)).to.equal(widget);
     });
@@ -81,6 +83,7 @@ describe('property-types', function() {
     it('rejects non-numeric strings', function() {
       expect(() => encode('*')).to.throw(Error, "Not a number: '*'");
       expect(() => encode('prev()')).to.throw(Error, "Not a number: 'prev()'");
+      expect(() => encode('next()')).to.throw(Error, "Not a number: 'next()'");
       expect(() => encode('23px')).to.throw(Error, "Not a number: '23px'");
       expect(() => encode('')).to.throw(Error, "Not a number: ''");
     });
@@ -134,6 +137,7 @@ describe('property-types', function() {
     it('accepts selector strings', function() {
       expect(encode('*')).to.eql(['*', 0]);
       expect(encode('prev()')).to.eql(['prev()', 0]);
+      expect(encode('next()')).to.eql(['next()', 0]);
       expect(encode('.foo')).to.eql(['.foo', 0]);
       expect(encode('#foo')).to.eql(['#foo', 0]);
       expect(encode('Type')).to.eql(['Type', 0]);
@@ -168,7 +172,7 @@ describe('property-types', function() {
       expect(encode([30, '10'])).to.eql([30, 10]);
       expect(encode(['30%', '10'])).to.eql([30, 10]);
       expect(encode(['prev()', 10])).to.eql(['prev()', 10]);
-      expect(encode(['prev()', 10])).to.eql(['prev()', 10]);
+      expect(encode(['next()', 10])).to.eql(['next()', 10]);
       expect(encode([widget, 10])).to.eql([widget, 10]);
     });
 
@@ -227,6 +231,7 @@ describe('property-types', function() {
     let decode = types.edge.decode;
 
     it('passes scalar values through', function() {
+      expect(decode('next()')).to.equal('next()');
       expect(decode('prev()')).to.equal('prev()');
       expect(decode('30%')).to.equal('30%');
       expect(decode(10)).to.equal(10);
