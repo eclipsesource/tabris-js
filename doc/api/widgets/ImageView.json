@@ -42,6 +42,7 @@
     "zoomEnabled": {
       "type": "boolean",
       "description": "Enables the pinch-to-zoom gesture on the `ImageView` and makes the properties `zoomLevel`, `minZoomLevel` and `maxZoomLevel` available. Setting `zoomEnabled` to `false` also resets the `zoomLevel`, `minZoomLevel`, `maxZoomLevel` to their respective defaults.",
+      "default": false,
       "platforms": {
         "windows": false
       }

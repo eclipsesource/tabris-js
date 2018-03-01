@@ -37,14 +37,17 @@ NativeObject.defineProperties(ImageView.prototype, {
   },
   zoomEnabled: {
     type: 'boolean',
+    default: false,
     set(name, value) {
-      if (!value) {
-        this.minZoomLevel = 1;
-        this.maxZoomLevel = 3;
-        this.zoomLevel = 1;
+      if (this.zoomEnabled !== value) {
+        if (!value) {
+          this.minZoomLevel = 1;
+          this.maxZoomLevel = 3;
+          this.zoomLevel = 1;
+        }
+        this._nativeSet(name, value);
+        this._storeProperty(name, value);
       }
-      this._nativeSet(name, value);
-      this._storeProperty(name, value);
     }
   },
   zoomLevel: {

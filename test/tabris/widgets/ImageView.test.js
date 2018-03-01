@@ -83,6 +83,14 @@ describe('ImageView', function() {
         expect(client.calls({op: 'set', id: imageView.cid})[1].properties.zoomLevel).to.equal(1.0);
       });
 
+      it('set false does not reset zoomLevel, minZoomLevel and maxZoomLevel when already disabled', function() {
+        imageView.zoomEnabled = false;
+        client.resetCalls();
+        imageView.zoomEnabled = false;
+
+        expect(client.calls({op: 'set', id: imageView.cid})).to.be.empty;
+      });
+
     });
 
     describe('zoomLevel', function() {
