@@ -2,7 +2,7 @@
   "type": "Printer",
   "object": "printer",
   "extends": "NativeObject",
-  "description": "Allows to print PDF documents from the device. A printer object is always available from tabris.printer.",
+  "description": "Allows to print PDF documents or images from the device. A printer object is always available from tabris.printer.",
   "constructor": {
     "access": "private",
     "parameters": []
@@ -13,13 +13,13 @@
         {
           "name": "data",
           "type": "any",
-          "description": "The bytes of the document to print. The value can either be an ArrayBuffer or a typed array."
+          "description": "The bytes of the document to print. The value can either be an ArrayBuffer or a typed array containing the bytes of a PDF document or image."
         },
         {
           "name": "options",
-          "type": "{jobName?: string}",
+          "type": "{jobName?: string, contentType?: string}",
           "optional": true,
-          "description": "An optional set of configuration parameters. Setting the `jobName` allows to provide the document name shown the user."
+          "description": "An optional set of configuration parameters. Setting the `jobName` allows to provide the document name shown the user. The `contentType` is required when printing a specific document format. By default `application/pdf` is used but it needs to be changed to `image/*` when printing an image"
         }
       ],
       "returns": "Promise<any>",
