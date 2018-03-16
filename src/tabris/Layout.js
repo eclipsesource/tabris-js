@@ -76,7 +76,7 @@ function resolveArray(array, widget) {
 
 function toProxyId(ref, widget) {
   if (ref === 'prev()') {
-    let children = getParent(widget).children();
+    let children = getParent(widget)._children();
     let index = children.indexOf(widget);
     if (index > 0) {
       return types.proxy.encode(children[index - 1]) || 0;
@@ -84,7 +84,7 @@ function toProxyId(ref, widget) {
     return 0;
   }
   if (ref === 'next()') {
-    let children = getParent(widget).children();
+    let children = getParent(widget)._children();
     let index = children.indexOf(widget);
     if (index + 1 < children.length) {
       return types.proxy.encode(children[index + 1]) || 0;
