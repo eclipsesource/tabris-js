@@ -2,6 +2,7 @@ import ClientStub from './ClientStub';
 import {expect, mockTabris, stub, spy, restore} from '../test';
 import Layout from '../../src/tabris/Layout';
 import Widget from '../../src/tabris/Widget';
+import WidgetCollection from '../../src/tabris/WidgetCollection';
 
 describe('Layout', function() {
 
@@ -124,6 +125,14 @@ describe('Layout', function() {
       expect(resolve(input, other)).to.eql(expected);
     });
 
+    it("translates 'prev()' when parent children() is overwritten", function() {
+      parent.children = () => new WidgetCollection([]);
+      let input = {baseline: 'prev()', left: ['prev()', 42]};
+      let expected = {baseline: widget.cid, left: [widget.cid, 42]};
+
+      expect(resolve(input, other)).to.eql(expected);
+    });
+
     it("translates 'prev()' selector to 0 on first widget", function() {
       let input = {baseline: 'prev()', left: ['prev()', 42]};
       let expected = {baseline: 0, left: [0, 42]};
@@ -132,6 +141,14 @@ describe('Layout', function() {
     });
 
     it("translates 'next()' selector to id", function() {
+      let input = {baseline: 'next()', left: ['next()', 42]};
+      let expected = {baseline: other.cid, left: [other.cid, 42]};
+
+      expect(resolve(input, widget)).to.eql(expected);
+    });
+
+    it("translates 'next()' selector to id when parent children() is overwritten", function() {
+      parent.children = () => new WidgetCollection([]);
       let input = {baseline: 'next()', left: ['next()', 42]};
       let expected = {baseline: other.cid, left: [other.cid, 42]};
 
