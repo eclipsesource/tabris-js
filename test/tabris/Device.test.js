@@ -34,6 +34,7 @@ describe('Device', function() {
         vendor: 'xyz',
         platform: 'foo',
         version: '23',
+        name: 'xyz',
         language: 'es',
         screenWidth: 23,
         screenHeight: 42,
@@ -53,6 +54,7 @@ describe('Device', function() {
       expect(device.vendor).to.equal('xyz');
       expect(device.platform).to.equal('foo');
       expect(device.version).to.equal('23');
+      expect(device.name).to.equal('xyz');
       expect(device.language).to.equal('es');
       expect(device.screenWidth).to.equal(23);
       expect(device.screenHeight).to.equal(42);
@@ -82,6 +84,7 @@ describe('Device', function() {
       device.vendor = 'xyz';
       device.platform = 'foo';
       device.version = '23';
+      device.name = 'xyz';
       device.language = 'es';
       device.screenWidth = 23;
       device.screenHeight = 42;
@@ -199,6 +202,17 @@ describe('Device', function() {
       device.version = '23';
       target.device.version = '42';
       expect(target.device.version).to.equal('23');
+    });
+
+    it('provides device.name', function() {
+      device.name = 'xyz';
+      expect(target.device.name).to.equal('xyz');
+    });
+
+    it('prevents overwriting device.name', function() {
+      device.name = 'xyz1';
+      target.device.name = 'xyz2';
+      expect(target.device.name).to.equal('xyz1');
     });
 
     it('provides devicePixelRatio', function() {

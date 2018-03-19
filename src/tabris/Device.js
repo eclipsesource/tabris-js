@@ -37,6 +37,7 @@ NativeObject.defineProperties(Device.prototype, {
   vendor: {readonly: true, get: getOnce},
   platform: {readonly: true, get: getOnce},
   version: {readonly: true, get: getOnce},
+  name: {readonly: true},
   language: {readonly: true},
   orientation: {readonly: true},
   screenWidth: {readonly: true},
@@ -59,7 +60,7 @@ export function publishDeviceProperties(device, target) {
 
 function createDevice(device) {
   let dev = {};
-  ['model', 'vendor', 'platform', 'version'].forEach((name) => {
+  ['model', 'vendor', 'platform', 'version', 'name'].forEach((name) => {
     defineReadOnlyProperty(dev, name, () => device[name]);
   });
   return dev;

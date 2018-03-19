@@ -10,6 +10,7 @@ let scaleFactor: number;
 let screenHeight: number;
 let screenWidth: number;
 let version: string;
+let name: string;
 
 language = device.language;
 model = device.model;
@@ -19,6 +20,7 @@ scaleFactor = device.scaleFactor;
 screenHeight = device.screenHeight;
 screenWidth = device.screenWidth;
 version = device.version;
+name = device.name;
 
 // Events
 let target: Device = device;

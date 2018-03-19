@@ -36,6 +36,16 @@
       "static": true,
       "description": "The name of the device manufacture. For example `\"Samsung\"` or `\"Apple\"`. This property is also available globally as `device.vendor`."
     },
+    "name": {
+      "type": "string",
+      "readonly": true,
+      "static": true,
+      "description": "The name of the device set by owner. For example `\"John's iPhone\"`. This property is also available globally as `device.name`.",
+      "platforms": {
+        "windows": false,
+        "android": false
+      }
+    },
     "language": {
       "type": "string",
       "readonly": true,
