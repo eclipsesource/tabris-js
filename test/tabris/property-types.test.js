@@ -1,9 +1,10 @@
-import {expect, mockTabris, stub, restore} from '../test';
+import {expect, mockTabris, restore, stub} from '../test';
 import ClientStub from './ClientStub';
 import NativeObject from '../../src/tabris/NativeObject';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
 import {types} from '../../src/tabris/property-types';
 import {omit} from '../../src/tabris/util';
+import {ColorShader, LinearGradientShader} from '../../src/tabris/util-shaders';
 
 describe('property-types', function() {
 
@@ -396,6 +397,43 @@ describe('property-types', function() {
 
     it('encode translates `null` to `undefined`', function() {
       expect(types.color.encode(null)).to.equal(undefined);
+    });
+
+  });
+
+  describe('shader', function() {
+
+    it('encode translates "initial" to `undefined`', function() {
+      expect(types.shader.encode('initial')).to.equal(undefined);
+    });
+
+    it('encode translates `null` to `undefined`', function() {
+      expect(types.shader.encode(null)).to.equal(undefined);
+    });
+
+    it('encode converts linear gradient definition to LinearGradientShader', function() {
+      expect(types.shader.encode('linear-gradient(red, blue)')).to.be.instanceof(LinearGradientShader);
+    });
+
+    it('encode converts color to ColorShader', function() {
+      expect(types.shader.encode('red')).to.be.instanceof(ColorShader);
+    });
+
+    it('decode converts falsy to transparent color', function() {
+      expect(types.shader.decode(null)).to.equal('rgba(0, 0, 0, 0)');
+    });
+
+    it('decode converts LinearGradientShader to css gradient definition', function() {
+      const shader = new LinearGradientShader('linear-gradient(red, blue)');
+      expect(types.shader.decode(shader)).to.equal('linear-gradient(red, blue)');
+    });
+
+    it('decode converts ColorShader to css color definition', function() {
+      expect(types.shader.decode(new ColorShader([0, 0, 255, 255]))).to.equal('rgba(0, 0, 255, 1)');
+    });
+
+    it('decode converts Array to css color definition', function() {
+      expect(types.shader.decode([0, 0, 255, 255])).to.equal('rgba(0, 0, 255, 1)');
     });
 
   });

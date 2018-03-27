@@ -1,10 +1,11 @@
-import {expect, mockTabris, spy, stub, restore} from '../test';
+import {expect, mockTabris, restore, spy, stub} from '../test';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
 import Layout from '../../src/tabris/Layout';
 import ClientStub from './ClientStub';
 import Widget from '../../src/tabris/Widget';
 import Composite from '../../src/tabris/widgets/Composite';
 import {omit} from '../../src/tabris/util';
+import {ColorShader} from '../../src/tabris/util-shaders';
 
 describe('Widget', function() {
 
@@ -46,11 +47,11 @@ describe('Widget', function() {
       expect(widget).to.be.instanceof(Widget);
     });
 
-    it('translates background color to arrays', function() {
+    it('translates background color to ColorShader', function() {
       widget.set({background: 'rgba(1, 2, 3, 0.5)'});
 
       let call = client.calls({op: 'set'})[0];
-      expect(call.properties.background).to.eql([1, 2, 3, 128]);
+      expect(call.properties.background).to.eql(new ColorShader([1, 2, 3, 128]));
     });
 
     it('translates font string to object', function() {

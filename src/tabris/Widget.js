@@ -326,7 +326,7 @@ NativeObject.defineProperties(Widget.prototype, {
     readonly: true
   },
   background: {
-    type: 'color',
+    type: 'shader',
     set(name, value) {
       this._nativeSet(name, value === undefined ? null : value);
       this._storeProperty(name, value);

@@ -1,7 +1,8 @@
 import {normalizePathUrl} from './util';
-import {imageToArray, imageFromArray} from './util-images';
+import {imageFromArray, imageToArray} from './util-images';
 import {colorArrayToString, colorStringToArray} from './util-colors';
 import {fontObjectToString, fontStringToObject} from './util-fonts';
+import {ColorShader, LinearGradientShader} from './util-shaders';
 import NativeObject from './NativeObject';
 import WidgetCollection from './WidgetCollection';
 import {warn} from './Console';
@@ -55,6 +56,36 @@ export let types = {
     encode(value, acceptable) {
       if (acceptable.indexOf(value) === -1) {
         throwNotAcceptedError(acceptable, value);
+      }
+      return value;
+    }
+  },
+
+  shader: {
+    encode(value) {
+      if (value === null || value === 'initial') {
+        return undefined;
+      }
+      if (typeof value === 'string') {
+        if (value.trim().startsWith('linear-gradient')) {
+          return new LinearGradientShader(value);
+        } else {
+          return new ColorShader(colorStringToArray(value));
+        }
+      }
+      return value;
+    },
+    decode(value) {
+      if (!value) {
+        // NOTE: null is only returned for "background" where it means "no background"
+        return 'rgba(0, 0, 0, 0)';
+      }
+      if (value instanceof ColorShader) {
+        return colorArrayToString(value.color);
+      } else if (value instanceof LinearGradientShader) {
+        return value.css;
+      } else if (value instanceof Array) {
+        return colorArrayToString(value);
       }
       return value;
     }
