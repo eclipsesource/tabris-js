@@ -56,7 +56,7 @@
       "type": "number",
       "readonly": true,
       "static": true,
-      "description": "The entire width of the device's screen in device independent pixel. Depends on the current device orientation. This property is also available as globally as [screen.width](https://developer.mozilla.org/en-US/docs/Web/API/Screen.width)."
+      "description": "The entire width of the device's screen in device independent pixel. Depends on the current device orientation. This property is also available globally as [screen.width](https://developer.mozilla.org/en-US/docs/Web/API/Screen.width)."
     },
     "screenHeight": {
       "type": "number",
