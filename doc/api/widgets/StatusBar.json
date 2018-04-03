@@ -49,6 +49,21 @@
       "description": "Background color of the status bar. Should be used in conjunction with the `theme` property to keep the status bar icons legible."
     }
   },
+  "events": {
+    "tap": {
+      "description": "Fired when status bar is tapped.",
+      "parameters": {
+        "touches": {
+          "description": "Touch coordinates relative to the origin coordinates of the widget.",
+          "type": "{x: number, y: number}[]"
+        }
+      },
+      "platforms": {
+        "android": false,
+        "windows": false
+      }
+    }
+  },
   "links": [
     {
       "title": "Snippet demonstrating various properties on the `StatusBar`",

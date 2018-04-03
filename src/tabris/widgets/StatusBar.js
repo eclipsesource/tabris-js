@@ -1,6 +1,8 @@
 import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 
+const EVENT_TYPES = ['tap'];
+
 export default class StatusBar extends Widget {
 
   constructor() {
@@ -12,6 +14,14 @@ export default class StatusBar extends Widget {
 
   get _nativeType() {
     return 'tabris.StatusBar';
+  }
+
+  _listen(name, listening) {
+    if (EVENT_TYPES.includes(name)) {
+      this._nativeListen(name, listening);
+    } else {
+      super._listen(name, listening);
+    }
   }
 
   _setParent(parent, index) {

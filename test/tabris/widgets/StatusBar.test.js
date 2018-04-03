@@ -1,4 +1,4 @@
-import {expect, mockTabris, restore, stub} from '../../test';
+import {expect, mockTabris, restore, spy, stub} from '../../test';
 import ClientStub from '../ClientStub';
 import {create as createUi} from '../../../src/tabris/widgets/Ui';
 import StatusBar from '../../../src/tabris/widgets/StatusBar';
@@ -7,6 +7,13 @@ import Composite from '../../../src/tabris/widgets/Composite';
 describe('StatusBar', function() {
 
   let ui, statusBar, client;
+
+  let checkListen = function(event) {
+    let listen = client.calls({op: 'listen', id: statusBar.cid});
+    expect(listen.length).to.equal(1);
+    expect(listen[0].event).to.equal(event);
+    expect(listen[0].listen).to.equal(true);
+  };
 
   beforeEach(function() {
     client = new ClientStub();
@@ -79,6 +86,17 @@ describe('StatusBar', function() {
 
     expect(client.calls({op: 'set', id: statusBar.cid}).length).to.equal(0);
     expect(console.warn).to.have.been.calledWith('Can not set read-only property "height"');
+  });
+
+  it('fires tap event', function() {
+    let listener = spy();
+    statusBar.on('tap', listener);
+
+    tabris._notify(statusBar.cid, 'tap', {x: 30, y: 10});
+
+    checkListen('tap');
+    expect(listener).to.have.been.calledOnce;
+    expect(listener).to.have.been.calledWithMatch({target: statusBar});
   });
 
 });

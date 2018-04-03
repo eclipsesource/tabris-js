@@ -42,3 +42,5 @@ function createTextView(text, id) {
     text: text
   }).appendTo(ui.contentView);
 }
+
+ui.statusBar.on('tap', () => console.log('Status bar tapped'));
