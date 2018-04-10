@@ -61,6 +61,14 @@
       "default": "default",
       "description": "Controls what animation to use when animating a page transition."
     },
+    "navigationAction": {
+      "type": "Action",
+      "default": "null",
+      "description": "Action that replaces back button.",
+      "platforms": {
+        "windows": false
+      }
+    },
     "win_toolbarTheme": {
       "type": "string",
       "values": ["light", "dark", "default"],

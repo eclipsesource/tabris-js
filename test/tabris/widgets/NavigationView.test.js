@@ -55,6 +55,14 @@ describe('NavigationView', function() {
     expect(navigationView.children()[0]).to.equal(action);
   });
 
+  it('can set navigationAction', function() {
+    let action = new Action();
+
+    navigationView.navigationAction = action;
+
+    expect(navigationView.navigationAction).to.equal(action);
+  });
+
   describe('toolbarVisible', function() {
 
     it('is true by default', function() {

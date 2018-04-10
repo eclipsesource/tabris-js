@@ -102,6 +102,7 @@ NativeObject.defineProperties(NavigationView.prototype, {
   titleTextColor: {type: 'color'},
   actionColor: {type: 'color'},
   actionTextColor: {type: 'color'},
+  navigationAction: {type: 'proxy', default: null},
   pageAnimation: {type: ['choice', ['default', 'none']], default: 'default'},
   win_toolbarTheme: {type: ['choice', ['default', 'light', 'dark']], default: 'default'},
   win_toolbarOverflowTheme: {type: ['choice', ['default', 'light', 'dark']], default: 'default'},
