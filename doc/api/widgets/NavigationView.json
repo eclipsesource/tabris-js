@@ -64,7 +64,7 @@
     "navigationAction": {
       "type": "Action",
       "default": "null",
-      "description": "Action that replaces back button.",
+      "description": "Action that replaces back button and arrow. When it is replaced the developer is responsible for prividing a way to go back on the page stack. Setting the action to null restores back button and arrow.",
       "platforms": {
         "windows": false
       }
