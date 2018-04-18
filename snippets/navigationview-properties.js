@@ -49,6 +49,21 @@ createCheckBox('Show drawer action', ({value: checked}) => {
   navigationView.drawerActionVisible = checked;
 });
 
+createCheckBox('Custom navigation action', function({value: checked}) {
+  if (checked) {
+    navigationView.navigationAction = new Action({
+      title: 'Settings',
+      image: {
+        src: device.platform === 'iOS' ? 'resources/settings-black-24dp@3x.png'
+          : 'resources/settings-white-24dp@3x.png',
+        scale: 3
+      }
+    }).on('select', () => console.log('navigationAction selected'));
+  } else {
+    navigationView.navigationAction = null;
+  }
+}, false);
+
 createColorPicker('Toolbar color', 'toolbarColor');
 
 createColorPicker('Title text color', 'titleTextColor');
@@ -67,11 +82,11 @@ navigationView.on({
   bottomToolbarHeightChanged: ({value}) => bottomToolbarHeightTextView.text = value
 });
 
-function createCheckBox(text, listener) {
+function createCheckBox(text, listener, checked = true) {
   return new CheckBox({
     left: MARGIN, top: ['prev()', MARGIN_SMALL], right: MARGIN,
     text: text,
-    checked: true
+    checked: checked
   }).on('checkedChanged', listener)
     .appendTo(controls);
 }
