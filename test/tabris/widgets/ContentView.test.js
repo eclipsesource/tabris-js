@@ -1,54 +1,43 @@
-import {expect, restore,mockTabris} from '../../test';
+import {expect, mockTabris, restore} from '../../test';
 import ClientStub from '../ClientStub';
-import {create as createUi} from '../../../src/tabris/widgets/Ui';
 import ContentView from '../../../src/tabris/widgets/ContentView';
 import Composite from '../../../src/tabris/widgets/Composite';
 
-describe('ContentView', function() {
+describe('ContentView', () => {
 
-  let ui, contentView, client;
+  let contentView, client;
 
-  beforeEach(function() {
+  beforeEach(() => {
     client = new ClientStub();
     mockTabris(client);
-    ui = createUi();
-    contentView = ui.contentView;
+    contentView = new ContentView(true);
   });
 
   afterEach(restore);
 
-  it('can not be created standalone', function() {
+  it('can not be created standalone', () => {
     expect(() => {
       new ContentView({});
     }).to.throw(Error);
   });
 
-  it('is a ContentView', function() {
+  it('is a ContentView', () => {
     expect(contentView).to.be.an.instanceOf(ContentView);
   });
 
-  it('CREATEs Composite', function() {
+  it('CREATEs Composite', () => {
     let createCall = client.calls({op: 'create', id: contentView.cid})[0];
     expect(createCall.type).to.equal('tabris.Composite');
-    expect(createCall.properties).to.contain.all.keys({root: true});
   });
 
-  it('SETs parent', function() {
-    let createCall = client.calls({op: 'create', id: contentView.cid})[0];
-    expect(createCall.properties).to.contain.all.keys({parent: ui.cid});
-  });
-
-  it('is child of ui', function() {
-    expect(contentView.parent()).to.equal(ui);
-  });
-
-  it('can not be disposed', function() {
+  it('can not be disposed', () => {
     expect(() => {
       contentView.dispose();
     }).to.throw(Error);
   });
 
-  it('can not be reparented', function() {
+  it('can not be reparented', () => {
+    new Composite().append(contentView);
     expect(() => {
       new Composite().append(contentView);
     }).to.throw(Error);

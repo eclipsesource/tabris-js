@@ -12,7 +12,9 @@ export default class Ui extends Composite {
       throw new Error('Ui can not be created');
     }
     super();
-    this.$appendNamedChild('contentView', createContentView());
+    let contentView = createContentView();
+    contentView._nativeSet('root', true);
+    this.$appendNamedChild('contentView', contentView);
     this.$appendNamedChild('statusBar', createStatusBar());
     this.$appendNamedChild('navigationBar', createNavigationBar());
     this.$appendNamedChild('drawer', createDrawer());

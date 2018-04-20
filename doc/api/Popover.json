@@ -1,0 +1,45 @@
+{
+  "type": "Popover",
+  "extends": "Popup",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "properties",
+        "type": "PropertiesObject",
+        "ts_type": "Properties<Popover>",
+        "optional": true,
+        "description": "Sets all key-value pairs in the properties object on the `Popover`."
+      }
+    ]
+  },
+  "description": "An `Popover` represents a modal ui container that is shown above the apps content. It provides the root element of a new layout hierarchy in the form of its `contentView` property. User provided widgets can be attached to the `contentView` similarly to the `tabris.ui.contentView`. In order to close the `Popover` the `close()` method can be used.\n\nThe appearance of the `Popover` depends on the device size: On larger devices (like tablets) the `Popover` is shown as a floating window whereas on smaller devices it is shown as a fullscreen sheet covering the entire app. When used on larger devices, the size _has_ to be provded via the `width` and `height` properties.",
+  "properties": {
+    "width": {
+      "type": "dimension",
+      "description": "The width of the `Popover` when shown in windowed mode on large screen devices."
+    },
+    "height": {
+      "type": "dimension",
+      "description": "The height of the `Popover` when shown in windowed mode on large screen devices"
+    },
+    "anchor": {
+      "type": "Widget",
+      "description": "An anchor `Widget` the `Popover` should attach to. When the anchor is given the `Popover` is positioned next to the anchor `Widget` and provides a visual indication of its relation. When omitted the `Popover` is positioned centered on the screen.",
+      "platforms": {
+        "android": false
+      }
+    }
+  },
+  "events": {
+    "close": {
+      "description": "Fired when the `Popover` was closed."
+    }
+  },
+  "links": [
+    {
+      "title": "Popover snippet using a NavigationView as its header bar",
+      "path": "${GITHUB_BRANCH}/snippets/popover.js"
+    }
+  ]
+}

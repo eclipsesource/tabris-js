@@ -35,6 +35,7 @@ import Picker from './widgets/Picker';
 import Pkcs5 from './Pkcs5';
 import ProgressEvent from './ProgressEvent';
 import ProgressBar from './widgets/ProgressBar';
+import Popover from './Popover';
 import NativeObject from './NativeObject';
 import NavigationView from './widgets/NavigationView';
 import NavigationBar from './widgets/NavigationBar';
@@ -94,6 +95,7 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   NativeObject,
   NavigationView,
   NavigationBar,
+  Popover,
   Page,
   Picker,
   Printer,

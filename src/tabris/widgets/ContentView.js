@@ -9,11 +9,6 @@ export default class ContentView extends Composite {
     super();
   }
 
-  _create(type, properties) {
-    super._create(type, properties);
-    this._nativeSet('root', true);
-  }
-
   _setParent(parent, index) {
     if (this._parent) {
       throw new Error('Parent of ContentView can not be changed');

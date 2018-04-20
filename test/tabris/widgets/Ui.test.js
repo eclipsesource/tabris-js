@@ -85,6 +85,9 @@ describe('Ui', function() {
       expect(ui.contentView).to.equal(contentView);
     });
 
+    it('has root property set to true', function() {
+      expect(client.calls({op: 'create', id: ui.contentView.cid})[0].properties.root).to.be.true;
+    });
   });
 
 });
