@@ -3,6 +3,7 @@ import WidgetCollection from '../../src/tabris/WidgetCollection';
 import Layout from '../../src/tabris/Layout';
 import ClientStub from './ClientStub';
 import Widget from '../../src/tabris/Widget';
+import Ui from '../../src/tabris/widgets/Ui';
 import Composite from '../../src/tabris/widgets/Composite';
 import {omit} from '../../src/tabris/util';
 import {ColorShader} from '../../src/tabris/util-shaders';
@@ -20,6 +21,7 @@ describe('Widget', function() {
   beforeEach(function() {
     client = new ClientStub();
     mockTabris(client);
+    global.tabris.ui = new Ui(true);
   });
 
   afterEach(restore);
@@ -1013,6 +1015,17 @@ describe('Widget', function() {
         expect(child1_1.set).not.to.have.been.called;
       });
 
+      it('applies properties to children with specific depth', function() {
+        widget.apply({':root': {prop1: 'v1'}});
+        widget.apply({':root > *': {prop1: 'v2'}});
+        widget.apply({':root > * > *': {prop1: 'v3'}});
+
+        expect(widget.set).to.have.been.calledWith({prop1: 'v1'});
+        expect(child1.set).to.have.been.calledWith({prop1: 'v2'});
+        expect(child2.set).to.have.been.calledWith({prop1: 'v2'});
+        expect(child1_1.set).to.have.been.calledWith({prop1: 'v3'});
+      });
+
       it('applies properties in order *, Type, (pseudo-)class, id', function() {
         widget.apply({
           '#foo': {prop1: 'v4'},
@@ -1024,6 +1037,18 @@ describe('Widget', function() {
 
         expect(child1.set.args.map(args => args[0].prop1)).to.eql(['v1', 'v2', 'v3', 'v4']);
         expect(widget.set.args.map(args => args[0].prop1)).to.eql(['v1', 'v2', 'v3']);
+      });
+
+      it('applies properties in order of combined weight', function() {
+        widget.apply({
+          'TestWidget > #foo': {prop1: 'v4'},
+          'TestWidget > .myclass': {prop1: 'v3'},
+          ':root > TestWidget': {prop1: 'v3'},
+          'TestWidget': {prop1: 'v2'},
+          '* > *': {prop1: 'v1'}
+        });
+
+        expect(child1.set.args.map(args => args[0].prop1)).to.eql(['v1', 'v2', 'v3', 'v3', 'v4']);
       });
 
       it('does not fail on empty widget', function() {

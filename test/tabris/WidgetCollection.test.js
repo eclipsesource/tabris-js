@@ -140,6 +140,27 @@ describe('WidgetCollection', function() {
       expect(collection.filter('#foo').toArray()).to.deep.equal([widgets[0], widgets[2]]);
     });
 
+    it('with child selectors', function() {
+      let tree = new WidgetCollection([new Foo(), new Foo(), new Foo(), new Foo(), new Foo(), new Foo()]);
+      tree[0].set('class', 'foo').append(
+        tree[1].set('class', 'bar').append(
+          tree[2].set('class', 'foo').append(
+            tree[4].set('class', 'foo'),
+            tree[5].set('class', 'baz')
+          ),
+          tree[3].set('class', 'bar')
+        )
+      );
+
+      expect(tree.filter('.foo > *').toArray()).to.deep.equal([tree[1], tree[4], tree[5]]);
+      expect(tree.filter('.bar > *').toArray()).to.deep.equal([tree[2], tree[3]]);
+      expect(tree.filter('.baz> *').toArray()).to.deep.equal([]);
+      expect(tree.filter('* >.foo').toArray()).to.deep.equal([tree[2], tree[4]]);
+      expect(tree.filter('.bar>.foo').toArray()).to.deep.equal([tree[2]]);
+      expect(tree.filter('.foo > * > *').toArray()).to.deep.equal([tree[2], tree[3]]);
+      expect(tree.filter('.foo > * > .foo').toArray()).to.deep.equal([tree[2]]);
+    });
+
   });
 
   describe('delegation:', function() {
