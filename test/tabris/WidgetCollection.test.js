@@ -1,6 +1,7 @@
 import {expect, mockTabris, spy, stub, restore} from '../test';
 import ClientStub from './ClientStub';
 import Composite from '../../src/tabris/widgets/Composite';
+import Ui from '../../src/tabris/widgets/Ui';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
 
 class Foo extends Composite {
@@ -113,6 +114,14 @@ describe('WidgetCollection', function() {
 
     it('with * selector', function() {
       expect(collection.filter('*').toArray()).to.deep.equal(widgets);
+    });
+
+    it('with :root selector', function() {
+      global.tabris.ui = new Ui(true);
+      expect(collection.filter(':root').toArray()).to.deep.equal([]);
+      expect(new WidgetCollection(
+        [tabris.ui].concat(collection.toArray())
+      ).filter(':root').toArray()).to.deep.equal([global.tabris.ui]);
     });
 
     it('with .class selectors', function() {

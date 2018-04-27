@@ -58,6 +58,9 @@ function createMatcher(selector) {
   if (selector === '*') {
     return () => true;
   }
+  if (selector === ':root') {
+    return widget => widget === tabris.ui;
+  }
   return widget => selector === widget.constructor.name;
 }
 

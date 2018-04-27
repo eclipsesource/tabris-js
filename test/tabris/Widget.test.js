@@ -982,7 +982,7 @@ describe('Widget', function() {
         expect(child1_1.set).not.to.have.been.called;
       });
 
-      it('applies properties to children with specific type', function() {
+      it('applies properties to children with specific class', function() {
         widget.apply({'.myclass': {prop1: 'v1'}});
 
         expect(widget.set).not.to.have.been.called;
@@ -991,15 +991,39 @@ describe('Widget', function() {
         expect(child1_1.set).not.to.have.been.called;
       });
 
-      it('applies properties in order *, Type, class, id', function() {
+      it('applies properties to :root', function() {
+        widget.apply({':root': {prop1: 'v1'}});
+
+        expect(widget.set).to.have.been.calledWith({prop1: 'v1'});
+        expect(child1.set).not.to.have.been.called;
+        expect(child2.set).not.to.have.been.called;
+        expect(child1_1.set).not.to.have.been.called;
+      });
+
+      it('applies properties to children with specific type', function() {
+        let composite = new Composite();
+        composite.set = spy();
+        widget.append(composite);
+        widget.apply({Composite: {prop1: 'v1'}});
+
+        expect(composite.set).to.have.been.calledWith({prop1: 'v1'});
+        expect(widget.set).not.to.have.been.called;
+        expect(child1.set).not.to.have.been.called;
+        expect(child2.set).not.to.have.been.called;
+        expect(child1_1.set).not.to.have.been.called;
+      });
+
+      it('applies properties in order *, Type, (pseudo-)class, id', function() {
         widget.apply({
           '#foo': {prop1: 'v4'},
           '.myclass': {prop1: 'v3'},
+          ':root': {prop1: 'v3'},
           'TestWidget': {prop1: 'v2'},
           '*': {prop1: 'v1'}
         });
 
         expect(child1.set.args.map(args => args[0].prop1)).to.eql(['v1', 'v2', 'v3', 'v4']);
+        expect(widget.set.args.map(args => args[0].prop1)).to.eql(['v1', 'v2', 'v3']);
       });
 
       it('does not fail on empty widget', function() {

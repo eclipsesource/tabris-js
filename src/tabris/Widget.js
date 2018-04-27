@@ -140,6 +140,8 @@ export default class Widget extends NativeObject {
     for (let selector in sheet) {
       if (selector[0] === '.') {
         scope.filter(selector).set(sheet[selector]);
+      } else if (selector === ':root') {
+        this.set(sheet[selector]);
       }
     }
     for (let selector in sheet) {
