@@ -1,4 +1,4 @@
-const {ProgressBar, ui} = require('tabris');
+import {ProgressBar, ui} from 'tabris';
 
 // A progress bar that is animated using a timer
 

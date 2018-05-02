@@ -1,4 +1,4 @@
-const {RefreshComposite, CheckBox, ScrollView, TextView, ui} = require('tabris');
+import {RefreshComposite, CheckBox, ScrollView, TextView, ui} from 'tabris';
 
 let refreshComposite = new RefreshComposite({
   left: 0, right: 0, top: 0, bottom: 0,

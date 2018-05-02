@@ -1,4 +1,4 @@
-const {Composite, ui} = require('tabris');
+import {Composite, ui} from 'tabris';
 
 ['red', 'green', 'blue'].forEach((color, index) => {
   let offset = 50 + index * 50;

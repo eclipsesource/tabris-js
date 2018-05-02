@@ -1,4 +1,4 @@
-const {Button, ScrollView, TextView, ui} = require('tabris');
+import {Button, ScrollView, TextView, ui} from 'tabris';
 
 // Create a horizontal scroll view and populate it with text views
 

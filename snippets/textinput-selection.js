@@ -1,4 +1,4 @@
-const {TextInput, TextView, Button, ui} = require('tabris');
+import {TextInput, TextView, Button, ui} from 'tabris';
 
 // Create a text input field with text selection
 

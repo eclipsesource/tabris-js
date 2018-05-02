@@ -1,4 +1,4 @@
-const {Action, NavigationView, ui} = require('tabris');
+import {Action, NavigationView, ui} from 'tabris';
 
 // Create an action with an image and a selection handler
 

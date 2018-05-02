@@ -1,4 +1,4 @@
-const {Button, Video, ui} = require('tabris');
+import {Button, Video, ui} from 'tabris';
 
 let button = new Button({
   id: 'button',

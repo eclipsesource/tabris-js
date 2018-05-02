@@ -1,4 +1,4 @@
-const {Composite, ui} = require('tabris');
+import {Composite, ui} from 'tabris';
 
 new Composite({
   left: '30%', top: '30%', right: '30%', bottom: '30%',

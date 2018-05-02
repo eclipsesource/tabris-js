@@ -1,4 +1,4 @@
-const {CollectionView, TextView, ui} = require('tabris');
+import {CollectionView, TextView, ui} from 'tabris';
 
 let items = [];
 

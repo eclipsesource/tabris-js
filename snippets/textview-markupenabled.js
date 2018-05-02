@@ -1,4 +1,4 @@
-const {TextView, CheckBox, ui} = require('tabris');
+import {TextView, CheckBox, ui} from 'tabris';
 
 let markup = '<b>bold</b>, <i>italic</i>, <big>big</big>, <small>small</small>, ' +
   '<ins>ins</ins>, <del>del</del>, <a href="http://tabrisjs.com">link</a>';

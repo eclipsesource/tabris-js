@@ -1,4 +1,4 @@
-const {TextView, ui} = require('tabris');
+import {TextView, ui} from 'tabris';
 
 ['normal', 'interactive', 'prio-high', 'missing', 'prio-high missing'].forEach((style) => {
   new TextView({

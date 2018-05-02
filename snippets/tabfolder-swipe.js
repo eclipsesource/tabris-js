@@ -1,4 +1,4 @@
-const {Tab, TabFolder, TextView, ui} = require('tabris');
+import {Tab, TabFolder, TextView, ui} from 'tabris';
 
 let tabFolder = new TabFolder({
   left: 0, top: 0, right: 0, bottom: 0,

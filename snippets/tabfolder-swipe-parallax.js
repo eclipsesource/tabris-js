@@ -1,4 +1,4 @@
-const {Composite, ImageView, Tab, TabFolder, TextView, ui} = require('tabris');
+import {Composite, ImageView, Tab, TabFolder, TextView, ui} from 'tabris';
 
 const PARALLAX = 0.1;
 const PEOPLE = [

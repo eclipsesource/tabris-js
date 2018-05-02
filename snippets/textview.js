@@ -1,4 +1,4 @@
-const {TextView, ui} = require('tabris');
+import {TextView, ui} from 'tabris';
 
 // Create text views with different alignments
 

@@ -1,4 +1,4 @@
-const {Button, ui} = require('tabris');
+import {Button, ui} from 'tabris';
 
 // Create a push button that counts up on selection
 

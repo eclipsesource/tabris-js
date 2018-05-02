@@ -1,4 +1,4 @@
-const {DateDialog, TextView, Button, ui} = require('tabris');
+import {DateDialog, TextView, Button, ui} from 'tabris';
 
 const FIVE_DAYS = 432000000;
 

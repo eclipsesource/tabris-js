@@ -1,7 +1,7 @@
 // Download HTTP content using the fetch API
 // See https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
 
-const {Button, TextView, ui} = require('tabris');
+import {Button, TextView, ui} from 'tabris';
 
 new Button({
   left: 16, right: 16, top: 'prev() 12',

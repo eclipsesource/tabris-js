@@ -1,4 +1,4 @@
-const {ImageView, Picker, TextView, ui} = require('tabris');
+import {ImageView, Picker, TextView, ui} from 'tabris';
 
 const MARGIN = 16;
 const MARGIN_LARGE = 32;

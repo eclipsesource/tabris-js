@@ -1,8 +1,8 @@
-const {ActionSheet, TextView, Button, ui} = require('tabris');
+import {ActionSheet, TextView, Button, ui} from 'tabris';
 
 new Button({
   left: 16, right: 16, top: 16,
-  text: 'Show ActionSheet'
+  text: 'Show ActionSheet2'
 }).on({select: showActionSheet})
   .appendTo(ui.contentView);
 

@@ -1,4 +1,4 @@
-const {ScrollView, TextView, ui, app} = require('tabris');
+import {ScrollView, TextView, ui, app} from 'tabris';
 
 app.registerFont('pacifico', 'resources/pacifico.ttf#Pacifico');
 

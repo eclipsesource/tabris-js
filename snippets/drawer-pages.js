@@ -1,4 +1,4 @@
-const {Button, CollectionView, Composite, ImageView, NavigationView, Page, TextView, ui} = require('tabris');
+import {Button, CollectionView, Composite, ImageView, NavigationView, Page, TextView, ui} from 'tabris';
 
 const PAGE_CONFIGS = [
   {title: 'Basket', icon: 'resources/page.png'},

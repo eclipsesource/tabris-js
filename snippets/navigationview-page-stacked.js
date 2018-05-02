@@ -1,4 +1,4 @@
-const {Button, NavigationView, Page, ui} = require('tabris');
+import {Button, NavigationView, Page, ui} from 'tabris';
 
 let pageCount = 0;
 

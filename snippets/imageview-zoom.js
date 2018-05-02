@@ -1,4 +1,4 @@
-const {ImageView, TextView, CheckBox, Slider, Composite, ui} = require('tabris');
+import {ImageView, TextView, CheckBox, Slider, Composite, ui} from 'tabris';
 
 let imageView = new ImageView({
   left: 0, right: 0, top: 0, bottom: '#controls',

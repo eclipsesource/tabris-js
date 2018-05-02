@@ -1,4 +1,4 @@
-const {TextInput, WebView, ui} = require('tabris');
+import {TextInput, WebView, ui} from 'tabris';
 
 // Create a web view to show a web page
 

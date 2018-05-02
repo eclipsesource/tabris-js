@@ -1,4 +1,4 @@
-const {Composite, TextView, ui} = require('tabris');
+import {Composite, TextView, ui} from 'tabris';
 
 // Create composites and append children to them
 

@@ -1,4 +1,4 @@
-const {TextView, Composite, ScrollView, WebView, ui} = require('tabris');
+import {TextView, Composite, ScrollView, WebView, ui} from 'tabris';
 
 const BACKGROUNDS = [
   'linear-gradient(#f00, #00f)',

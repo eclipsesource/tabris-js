@@ -1,4 +1,4 @@
-const {Picker, TextView, ui} = require('tabris');
+import {Picker, TextView, ui} from 'tabris';
 
 const THEMES = ['default', 'light', 'dark'];
 const DISPLAY_MODES = ['default', 'float', 'hide'];

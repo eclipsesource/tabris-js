@@ -1,4 +1,4 @@
-const {ImageView, ui} = require('tabris');
+import {ImageView, ui} from 'tabris';
 
 // Display images with different scale modes
 

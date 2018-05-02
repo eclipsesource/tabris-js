@@ -1,4 +1,4 @@
-const {Button, Composite, NavigationView, Page, SearchAction, TextView, ui} = require('tabris');
+import {Button, Composite, NavigationView, Page, SearchAction, TextView, ui} from 'tabris';
 
 // Create an action on NavigationView to perform a search with dynamic proposals
 

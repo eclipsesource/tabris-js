@@ -1,4 +1,4 @@
-const {TextInput, TextView, ui} = require('tabris');
+import {TextInput, TextView, ui} from 'tabris';
 
 // Create a text input field with input finished listener
 

@@ -1,4 +1,4 @@
-const {Button, InactivityTimer, TextView, ui} = require('tabris');
+import {Button, InactivityTimer, TextView, ui} from 'tabris';
 
 let timer = new InactivityTimer({
   delay: 2000

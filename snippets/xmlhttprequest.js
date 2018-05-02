@@ -1,4 +1,4 @@
-const {Button, TextView, ui} = require('tabris');
+import {Button, TextView, ui} from 'tabris';
 
 new Button({
   left: 10, top: 10,

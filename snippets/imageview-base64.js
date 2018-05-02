@@ -1,4 +1,4 @@
-const {ImageView, ui} = require('tabris');
+import {ImageView, ui} from 'tabris';
 
 // Display a base64 encoded image in an ImageView
 

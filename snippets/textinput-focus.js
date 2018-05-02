@@ -1,4 +1,4 @@
-const {TextInput, ui} = require('tabris');
+import {TextInput, ui} from 'tabris';
 
 new TextInput({
   top: 20, left: '20%', right: '20%',

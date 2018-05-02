@@ -1,4 +1,4 @@
-const {TextView, ImageView, Composite, CollectionView, ui} = require('tabris');
+import {TextView, ImageView, Composite, CollectionView, ui} from 'tabris';
 
 const MARGIN = 16;
 const TEXT = 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem' +

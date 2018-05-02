@@ -1,4 +1,4 @@
-const {ImageView, TextInput, WebView, app, ui} = require('tabris');
+import {ImageView, TextInput, WebView, app, ui} from 'tabris';
 
 const MARGIN = 8;
 const NAV_SIZE = device.platform === 'Android' ? 48 : 30;

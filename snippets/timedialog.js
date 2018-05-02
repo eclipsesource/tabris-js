@@ -1,4 +1,4 @@
-const {TimeDialog, TextView, Button, ui} = require('tabris');
+import {TimeDialog, TextView, Button, ui} from 'tabris';
 
 new Button({
   left: 16, right: 16, top: 16,

@@ -1,4 +1,4 @@
-const {Tab, TabFolder, TextView, ui} = require('tabris');
+import {Tab, TabFolder, TextView, ui} from 'tabris';
 
 // Create a swipe enabled tab folder with 3 tabs
 

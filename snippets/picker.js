@@ -1,4 +1,4 @@
-const {Picker, ui} = require('tabris');
+import {Picker, ui} from 'tabris';
 
 // Create a picker widget to select a string from a list
 

@@ -1,4 +1,4 @@
-const {TextInput, TextView, ui} = require('tabris');
+import {TextInput, TextView, ui} from 'tabris';
 
 let textView = new TextView({
   left: 16, top: 16,

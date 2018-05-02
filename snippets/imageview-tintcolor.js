@@ -1,4 +1,4 @@
-const {ImageView, Picker, ui} = require('tabris');
+import {ImageView, Picker, ui} from 'tabris';
 
 const COLORS = ['initial', 'red', 'green', 'blue'];
 

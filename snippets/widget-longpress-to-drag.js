@@ -1,4 +1,4 @@
-const {Composite, TextView, ui} = require('tabris');
+import {Composite, TextView, ui} from 'tabris';
 
 const LABEL_TEXT = 'Long press the box to drag it';
 

@@ -1,4 +1,4 @@
-const {Composite, TextView, ui} = require('tabris');
+import {Composite, TextView, ui} from 'tabris';
 
 let composite = new Composite({
   left: 16, right: 16, top: 16,

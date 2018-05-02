@@ -1,9 +1,9 @@
-const {
+import {
   NativeObject, ui, TextView, app, Button, Picker, Composite, CheckBox, Page, NavigationView, Action, device,
   SearchAction, TabFolder, Popover, ProgressBar, RadioButton, RefreshComposite, ScrollView, Slider, Switch,
   ToggleButton, TextInput, CollectionView, TimeDialog, Video, WebView, ImageView, ActivityIndicator, AlertDialog,
   ActionSheet, Canvas, DateDialog
-} = require('tabris');
+} from 'tabris';
 
 // Use these to exclude tests where they are broken due to a platform bug
 const ios = device.platform === 'iOS';

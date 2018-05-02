@@ -1,4 +1,4 @@
-const {ScrollView, TextView, ui} = require('tabris');
+import {ScrollView, TextView, ui} from 'tabris';
 
 let FAMILIES = ['sans-serif', 'serif', 'condensed', 'monospace'];
 let STYLES = ['normal', 'italic'];

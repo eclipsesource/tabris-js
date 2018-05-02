@@ -1,7 +1,7 @@
 // Tabris.js implements a subset of the W3C Web Storage Recommendation.
 // See https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
 
-const {Button, TextInput, TextView, ui, localStorage} = require('tabris');
+import {Button, TextInput, TextView, ui, localStorage} from 'tabris';
 
 const KEY = 'snippet-value';
 

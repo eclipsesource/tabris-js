@@ -1,4 +1,4 @@
-const {Composite, ImageView, TextView, ui} = require('tabris');
+import {Composite, ImageView, TextView, ui} from 'tabris';
 
 // Create recursively nested layout hierarchy
 

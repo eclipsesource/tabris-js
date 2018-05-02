@@ -1,4 +1,4 @@
-const {Action, NavigationView, ui} = require('tabris');
+import {Action, NavigationView, ui} from 'tabris';
 
 let navigationView = new NavigationView({
   left: 0, top: 0, right: 0, bottom: 0

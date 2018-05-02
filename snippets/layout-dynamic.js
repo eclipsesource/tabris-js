@@ -1,4 +1,4 @@
-const {Composite, ui} = require('tabris');
+import {Composite, ui} from 'tabris';
 
 const MARGIN = 16;
 

@@ -1,4 +1,4 @@
-const {Button, Composite, NavigationView, Page, Tab, TabFolder, TextView, app, ui} = require('tabris');
+import {Button, Composite, NavigationView, Page, Tab, TabFolder, TextView, app, ui} from 'tabris';
 
 // demonstrates NavigationViews as children of a TabFolder
 

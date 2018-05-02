@@ -1,4 +1,4 @@
-const {TextView, crypto, ui} = require('tabris');
+import {TextView, crypto, ui} from 'tabris';
 
 let buffer = new Uint8Array(24);
 crypto.getRandomValues(buffer);

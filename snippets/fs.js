@@ -1,4 +1,4 @@
-const {ImageView, fs, ui} = require('tabris');
+import {ImageView, fs, ui} from 'tabris';
 
 let file = fs.cacheDir + '/test.png';
 

@@ -1,4 +1,4 @@
-const {CheckBox, ui} = require('tabris');
+import {CheckBox, ui} from 'tabris';
 
 // Create a check box with a checked handler
 

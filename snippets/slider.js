@@ -1,4 +1,4 @@
-const {Slider, TextView, ui} = require('tabris');
+import {Slider, TextView, ui} from 'tabris';
 
 // Create a slider with a selection handler
 

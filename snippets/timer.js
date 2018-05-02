@@ -1,4 +1,4 @@
-const {Button, ui} = require('tabris');
+import {Button, ui} from 'tabris';
 
 new Button({
   centerX: 0, centerY: 0,

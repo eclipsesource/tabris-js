@@ -1,4 +1,4 @@
-const {AlertDialog, Button, TextInput, ui} = require('tabris');
+import {AlertDialog, Button, TextInput, ui} from 'tabris';
 
 // AlertDialog example
 

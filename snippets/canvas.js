@@ -1,4 +1,4 @@
-const {Canvas, ui, device} = require('tabris');
+import {Canvas, ui, device} from 'tabris';
 
 // Draw shapes on a canvas using HTML5 Canvas API
 

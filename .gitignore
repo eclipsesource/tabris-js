@@ -7,3 +7,5 @@ platforms/
 npm-debug.log*
 package-lock.json
 *~
+snippets/dist
+.project

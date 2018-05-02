@@ -1,4 +1,4 @@
-const {RadioButton, ui} = require('tabris');
+import {RadioButton, ui} from 'tabris';
 
 // Create radio buttons with checked handlers
 

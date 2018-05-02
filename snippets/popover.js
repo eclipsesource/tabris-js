@@ -1,4 +1,4 @@
-const {Action, NavigationView, Page, Popover, Button, TextView, ui, device} = require('tabris');
+import {Action, NavigationView, Page, Popover, Button, TextView, ui, device} from 'tabris';
 
 let button = new Button({
   left: 16, right: 16, top: 24,

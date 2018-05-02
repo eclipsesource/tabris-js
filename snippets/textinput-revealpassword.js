@@ -1,4 +1,4 @@
-const {TextInput, CheckBox, ui} = require('tabris');
+import {TextInput, CheckBox, ui} from 'tabris';
 
 // Create a password text input field where the password can be revealed or hidden
 

@@ -1,72 +1,161 @@
 {
-
-  "version": "0.1.0",
-  "showOutput": "always",
-  "isShellCommand": true,
-  "runner": "process",
+  "version": "2.0.0",
+  "presentation": {
+    "reveal": "always",
+    "focus": false,
+    "panel": "new",
+    "showReuseMessage": false
+  },
+  "type": "shell",
   "tasks": [
     {
-      "taskName": "serve",
+      "label": "build",
+      "group": {
+        "isDefault": true,
+        "kind": "build"
+      },
+      "command": "grunt",
+      "args": [
+        "clean",
+        "build"
+      ]
+    },
+    {
+      "label": "serve snippet",
       "command": "tabris",
-      "suppressTaskName": true,
-      "args": ["serve", "${file}"]
+      "group": "build",
+      "args": [
+        "serve",
+        "-a",
+        "-i",
+        "-w",
+        "-p",
+        "${fileDirname}",
+        "-m",
+        "dist/${fileBasename}"
+      ],
+      "problemMatcher": [
+        "$tsc-watch"
+      ],
+      "isBackground": true
     },
     {
-      "taskName": "build",
-      "command": "grunt",
-      "suppressTaskName": true,
-      "args": ["clean", "build"]
-    },
-    {
-      "taskName": "serve (current build)",
-      "command": "bash",
-      "suppressTaskName": true,
-      "isBuildCommand": true,
-      "args": ["-c", "cd ${fileDirname} && npm install ${workspaceRoot}/build/tabris && tabris serve ${file}"],
+      "label": "serve snippet (current build)",
+      "group": "build",
+      "linux": {
+        "command": "bash",
+        "args": [
+          "-c",
+          "cd ${fileDirname} && npm install ${workspaceRoot}/build/tabris && tabris serve  -a -i -w -m ./dist/${fileBasename}"
+        ],
+      },
+      "osx": {
+        "command": "bash",
+        "args": [
+          "-c",
+          "cd ${fileDirname} && npm install ${workspaceRoot}/build/tabris && tabris serve  -a -i -w -m ./dist/${fileBasename}"
+        ],
+      },
       "windows": {
         "command": "cmd",
-        "args": ["/c", "\"cd ${fileDirname} & npm install ${workspaceRoot}\\build\\tabris & tabris serve ${file}\""]
+        "args": [
+          "/c",
+          "\"cd ${fileDirname} & npm install ${workspaceRoot}\\build\\tabris & tabris serve -a -i -w -m ./dist/${fileBasename}\""
+        ]
+      },
+      "problemMatcher": [
+        "$tsc-watch"
+      ],
+      "isBackground": true
+    },
+    {
+      "label": "serve snippet (fresh build)",
+      "osx": {
+        "command": "bash",
+        "args": [
+          "-c",
+          "grunt clean build && cd ${fileDirname} && npm install ${workspaceRoot}/build/tabris && tabris serve -a -i -w -m ./dist/${fileBasename}"
+        ],
+      },
+      "linux": {
+        "command": "bash",
+        "args": [
+          "-c",
+          "grunt clean build && cd ${fileDirname} && npm install ${workspaceRoot}/build/tabris && tabris serve -a -i -w -m ./dist/${fileBasename}"
+        ],
+      },
+      "windows": {
+        "command": "cmd",
+        "args": [
+          "/c",
+          "\"grunt clean build & cd ${fileDirname} & npm install ${workspaceRoot}\\build\\tabris & tabris serve -a -i -w -m ./dist/${fileBasename}\""
+        ]
+      },
+      "problemMatcher": [
+        "$tsc-watch"
+      ],
+      "isBackground": true
+    },
+    {
+      "label": "serve snippet (default build)",
+      "group": "build",
+      "osx": {
+        "command": "bash",
+        "args": [
+          "-c",
+          "cd ${fileDirname} && npm remove tabris && npm install tabris && tabris serve -a -i -w -m ./dist/${fileBasename}"
+        ],
+      },
+      "linux": {
+        "command": "bash",
+        "args": [
+          "-c",
+          "cd ${fileDirname} && npm remove tabris && npm install tabris && tabris serve -a -i -w -m ./dist/${fileBasename}"
+        ],
+      },
+      "windows": {
+        "command": "cmd",
+        "args": [
+          "/c",
+          "\"cd ${fileDirname} & npm remove tabris & npm install tabris & tabris serve -a -i -w -m ./dist/${fileBasename}\""
+        ]
+      },
+      "problemMatcher": [
+        "$tsc-watch"
+      ],
+      "isBackground": true
+    },
+    {
+      "label": "test all",
+      "command": "grunt",
+      "args": [
+        "test"
+      ],
+      "group": "test"
+    },
+    {
+      "label": "test spec",
+      "command": "grunt",
+      "args": [
+        "exec:test_spec",
+        "--spec=${file}"
+      ],
+      "group": {
+        "kind": "test",
+        "isDefault": true
       }
     },
     {
-      "taskName": "serve (fresh build)",
-      "command": "bash",
-      "suppressTaskName": true,
-      "args": ["-c", "grunt clean build && cd ${fileDirname} && npm install ${workspaceRoot}/build/tabris && tabris serve ${file}"],
-      "windows": {
-        "command": "cmd",
-        "args": ["/c", "\"grunt clean build & cd ${fileDirname} & npm install ${workspaceRoot}\\build\\tabris & tabris serve ${file}\""]
-      }
-    },
-    {
-      "taskName": "serve (default build)",
-      "command": "bash",
-      "suppressTaskName": true,
-      "isBuildCommand": true,
-      "args": ["-c", "cd ${fileDirname} && npm remove tabris && npm install tabris && tabris serve ${file}"],
-      "windows": {
-        "command": "cmd",
-        "args": ["/c", "\"cd ${fileDirname} & npm remove tabris & npm install tabris & tabris serve ${file}\""]
-      }
-    },
-    {
+      "label": "test typings",
       "command": "grunt",
-      "suppressTaskName": true,
-      "taskName": "test all",
-      "args": ["test"]
-    },
-    {
-      "command": "grunt",
-      "suppressTaskName": true,
-      "taskName": "test spec",
-      "args": ["exec:test_spec", "--spec=${file}"],
-      "isTestCommand": true
-    },
-    {
-      "command": "grunt",
-      "suppressTaskName": true,
-      "taskName": "test typings",
-      "args": ["clean", "build", "copy:test_ts", "exec:test_typings"]
+      "group": "test",
+      "args": [
+        "clean",
+        "build",
+        "copy:test_ts",
+        "exec:verify_typings",
+        "verify_typings_fail"
+      ]
     }
   ]
 }

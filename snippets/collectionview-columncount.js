@@ -1,4 +1,4 @@
-const {TextView, CollectionView, Slider, ui} = require('tabris');
+import {TextView, CollectionView, Slider, ui} from 'tabris';
 
 let columnCountTextView = new TextView({
   bottom: 16, right: 16, width: 32,

@@ -1,4 +1,4 @@
-const {TextView, device, ui} = require('tabris');
+import {TextView, device, ui} from 'tabris';
 
 // Display available device information
 

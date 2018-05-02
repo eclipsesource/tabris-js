@@ -1,4 +1,4 @@
-const {Composite, ui} = require('tabris');
+import {Composite, ui} from 'tabris';
 
 let redbox = new Composite({
   left: 10, top: 10, width: 100, height: 100,

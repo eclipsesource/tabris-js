@@ -1,4 +1,4 @@
-const {Button, TextInput, ui} = require('tabris');
+import {Button, TextInput, ui} from 'tabris';
 
 let logTextInput = new TextInput({
   left: 10, top: 20, right: 10,

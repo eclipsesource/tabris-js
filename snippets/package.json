@@ -1,13 +1,12 @@
 {
   "name": "tabris-js-snippets",
-  "version": "2.3.0",
+  "version": "3.0.0",
   "dependencies": {
-    "colors": "^1.1.2",
-    "ecstatic": "^2.1.0",
-    "tabris": "^2.3.0",
-    "union": "^0.4.4"
+    "tabris": "^2.6.1",
+    "typescript": "^2.9.2"
   },
   "scripts": {
-    "start": "tabris serve"
+    "build": "tsc -p .",
+    "watch": "tsc -p . -w --preserveWatchOutput"
   }
 }

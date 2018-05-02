@@ -1,4 +1,4 @@
-const {ToggleButton, ui} = require('tabris');
+import {ToggleButton, ui} from 'tabris';
 
 // Create a toggle button with a checked handler
 

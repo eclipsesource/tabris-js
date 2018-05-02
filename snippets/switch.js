@@ -1,4 +1,4 @@
-const {Button, Switch, TextView, ui} = require('tabris');
+import {Button, Switch, TextView, ui} from 'tabris';
 
 // Create a switch with a checked handler
 

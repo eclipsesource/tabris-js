@@ -1,4 +1,4 @@
-const {Action, CheckBox, NavigationView, Page, Picker, ScrollView, TextView, ui} = require('tabris');
+import {Action, CheckBox, NavigationView, Page, Picker, ScrollView, TextView, ui} from 'tabris';
 
 // demonstrates various NavigationView properties
 

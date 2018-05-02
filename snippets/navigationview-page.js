@@ -1,4 +1,4 @@
-const {NavigationView, Page, ui} = require('tabris');
+import {NavigationView, Page, ui} from 'tabris';
 
 // Create and open a page
 

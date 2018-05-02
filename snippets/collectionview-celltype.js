@@ -1,4 +1,4 @@
-const {CollectionView, TextView, ImageView, ui} = require('tabris');
+import {CollectionView, TextView, ImageView, ui} from 'tabris';
 
 let items = [];
 for (let section of ['settings-black-24dp@3x.png', 'share-black-24dp@3x.png', 'search-black-24dp@3x.png']) {

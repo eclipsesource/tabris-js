@@ -1,4 +1,4 @@
-const {ScrollView, TextInput, ui} = require('tabris');
+import {ScrollView, TextInput, ui} from 'tabris';
 
 let scrollView = new ScrollView({
   left: 0, top: 0, right: 0, bottom: 0

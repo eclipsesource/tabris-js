@@ -1,4 +1,4 @@
-const {ImageView, TextView, ui} = require('tabris');
+import {ImageView, TextView, ui} from 'tabris';
 
 let touched = 0;
 new ImageView({

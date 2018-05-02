@@ -1,4 +1,4 @@
-const {Button, printer, ui, app} = require('tabris');
+import {Button, printer, ui, app} from 'tabris';
 
 // Print a bundled PDF
 

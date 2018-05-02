@@ -1,4 +1,4 @@
-const {TextView, ui} = require('tabris');
+import {TextView, ui} from 'tabris';
 
 const KEY = 'localStorageSnippetCount';
 
