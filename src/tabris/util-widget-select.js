@@ -15,11 +15,14 @@ export function select(array, selector, deep, root) {
   return array.filter(filter);
 }
 
-export function splitSelectorString(selector, rootElement) {
+export function splitSelectorString(selector, hostElement) {
+  if (!selector) {
+    return ['*'];
+  }
   let result = selector.split('>').map(str => str.trim());
-  let rootIndex = result.indexOf(':root');
+  let rootIndex = result.indexOf(':host');
   if (rootIndex !== -1) {
-    result[rootIndex] = rootElement || tabris.ui;
+    result[rootIndex] = hostElement || tabris.ui;
   }
   return result;
 }
@@ -98,9 +101,6 @@ function createMatcher(selectorArg) {
   }
   if (selector === '*') {
     return () => true;
-  }
-  if (selector === ':root') {
-    return widget => widget === tabris.ui;
   }
   return widget => selector === widget.constructor.name;
 }

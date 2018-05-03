@@ -99,7 +99,8 @@ export default class Widget extends NativeObject {
   }
 
   find(selector) {
-    return new WidgetCollection(this.children(), selector, true);
+    let selectorArr = splitSelectorString(selector, this);
+    return new WidgetCollection(this.children(), selectorArr, true);
   }
 
   apply(sheet) {
@@ -123,7 +124,8 @@ export default class Widget extends NativeObject {
   }
 
   _find(selector) {
-    return new WidgetCollection(this._children(), selector, true);
+    let selectorArr = splitSelectorString(selector, this);
+    return new WidgetCollection(this._children(), selectorArr, true);
   }
 
   _apply(sheet, scope) {

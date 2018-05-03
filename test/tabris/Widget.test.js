@@ -914,6 +914,18 @@ describe('Widget', function() {
         expect(widget.find('.bar').toArray()).to.eql([child1_2, child2]);
       });
 
+      it(':host selector by itself returns nothing since host itself is not in scope', function() {
+        expect(widget.find(':host').toArray()).to.eql([]);
+      });
+
+      it(':host > * returns direct children', function() {
+        expect(widget.find(':host > *').toArray()).to.eql([child1, child2]);
+      });
+
+      it(':host > * > * returns grandchildren', function() {
+        expect(widget.find(':host > * > *').toArray()).to.eql([child1_1, child1_2]);
+      });
+
       it('returns no descendants when children() is overwritten to return empty collection', function() {
         widget.children = () => new WidgetCollection();
         expect(widget.find('*').toArray()).to.eql([]);
@@ -929,6 +941,11 @@ describe('Widget', function() {
         expect(widget.find('*').toArray()).to.eql([]);
       });
 
+      it(':host > *  returns nothing  when children() is overwritten to return empty null', function() {
+        widget.children = () => new WidgetCollection();
+        expect(widget.find(':host > *').toArray()).to.eql([]);
+      });
+
       it('"protected" version returns descendants when children() is overwritten', function() {
         widget.children = () => new WidgetCollection();
         expect(widget._find('*').toArray()).to.eql([child1, child1_1, child1_2, child1_2_1, child2]);
@@ -942,6 +959,11 @@ describe('Widget', function() {
       it('"protected" version returns partial descendants when children() is overwritten on child', function() {
         child1_2.children = () => new WidgetCollection();
         expect(widget._find('*').toArray()).to.eql([child1, child1_1, child1_2, child2]);
+      });
+
+      it(':host > * returns direct children on protected version', function() {
+        widget.children = () => new WidgetCollection();
+        expect(widget._find(':host > *').toArray()).to.eql([child1, child2]);
       });
 
     });
@@ -993,8 +1015,8 @@ describe('Widget', function() {
         expect(child1_1.set).not.to.have.been.called;
       });
 
-      it('applies properties to :root', function() {
-        widget.apply({':root': {prop1: 'v1'}});
+      it('applies properties to :host', function() {
+        widget.apply({':host': {prop1: 'v1'}});
 
         expect(widget.set).to.have.been.calledWith({prop1: 'v1'});
         expect(child1.set).not.to.have.been.called;
@@ -1016,9 +1038,9 @@ describe('Widget', function() {
       });
 
       it('applies properties to children with specific depth', function() {
-        widget.apply({':root': {prop1: 'v1'}});
-        widget.apply({':root > *': {prop1: 'v2'}});
-        widget.apply({':root > * > *': {prop1: 'v3'}});
+        widget.apply({':host': {prop1: 'v1'}});
+        widget.apply({':host > *': {prop1: 'v2'}});
+        widget.apply({':host > * > *': {prop1: 'v3'}});
 
         expect(widget.set).to.have.been.calledWith({prop1: 'v1'});
         expect(child1.set).to.have.been.calledWith({prop1: 'v2'});
@@ -1030,7 +1052,7 @@ describe('Widget', function() {
         widget.apply({
           '#foo': {prop1: 'v4'},
           '.myclass': {prop1: 'v3'},
-          ':root': {prop1: 'v3'},
+          ':host': {prop1: 'v3'},
           'TestWidget': {prop1: 'v2'},
           '*': {prop1: 'v1'}
         });
@@ -1043,7 +1065,7 @@ describe('Widget', function() {
         widget.apply({
           'TestWidget > #foo': {prop1: 'v4'},
           'TestWidget > .myclass': {prop1: 'v3'},
-          ':root > TestWidget': {prop1: 'v3'},
+          ':host > TestWidget': {prop1: 'v3'},
           'TestWidget': {prop1: 'v2'},
           '* > *': {prop1: 'v1'}
         });
