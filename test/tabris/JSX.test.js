@@ -91,6 +91,19 @@ describe('JSX', function() {
       expect(children[2]).to.be.instanceof(Switch);
     });
 
+    it('appends children given as array', function() {
+      let children = createElement(
+        Composite,
+        null,
+        [createElement(Button), createElement(CheckBox)],
+        createElement(Switch)
+      ).children();
+
+      expect(children[0]).to.be.instanceof(Button);
+      expect(children[1]).to.be.instanceof(CheckBox);
+      expect(children[2]).to.be.instanceof(Switch);
+    });
+
     it('appends widgetCollection', function() {
       let children = createElement(
         Composite,
@@ -167,6 +180,21 @@ describe('JSX', function() {
         null,
         createElement(Button),
         createElement(CheckBox),
+        createElement(Switch)
+      );
+
+      expect(collection).to.be.instanceOf(WidgetCollection);
+      expect(collection.length).to.equal(3);
+      expect(collection[0]).to.be.instanceof(Button);
+      expect(collection[1]).to.be.instanceof(CheckBox);
+      expect(collection[2]).to.be.instanceof(Switch);
+    });
+
+    it('creates widgetCollection from array', function() {
+      let collection = createElement(
+        'widgetCollection',
+        null,
+        [createElement(Button), createElement(CheckBox)],
         createElement(Switch)
       );
 

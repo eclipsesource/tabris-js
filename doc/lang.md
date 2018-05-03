@@ -220,7 +220,7 @@ JSX in Tabris.js TypeScript apps follows these specific rules:
  * Attributes can be either strings (using single or double quotation marks) or JavaScript/TypeScript expressions (using curly braces).
  * An attribute of the same name as a property is used to set that property via constructor.
  * An attribute that follows the naming scheme `on{EventType}` is used to register a listener with that event.
- * Each element may have any number of child elements (if that type supports children), all of which are appended to their parent in the given order. An element that has a `text` attribute may also use plain text a child element, e.g. `<textView>Hello</textView>`. A child can also be a JavaScript expression wrapped in `{}`, just like attributes can be.
+ * Each element may have any number of child elements (if that type supports children), all of which are appended to their parent in the given order. An element that has a `text` attribute may also use plain text a child element, e.g. `<textView>Hello</textView>`. A child can also be a JavaScript expression wrapped in `{}`, just like attributes can be. The expression may result in an instance of `WidgetCollection` or an array of widgets.
  * While the JSX expressions themselves are type-safe, <em>their return type is not</em> (it's `any`), so follow the instructions for casting above. It can be considered safe to use unchecked JSX expressions within `widget.append()`, as all JSX elements are appendable types.
 
 Note that this is <em>not</em> valid:

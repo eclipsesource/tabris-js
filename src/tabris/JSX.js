@@ -38,6 +38,8 @@ function flattenChildren(children) {
   for (let child of children) {
     if (child instanceof WidgetCollection) {
       result = result.concat(flattenChildren(child.toArray()));
+    } else if (child instanceof Array) {
+      result = result.concat(flattenChildren(child));
     } else {
       result.push(child);
     }
