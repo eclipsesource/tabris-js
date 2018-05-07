@@ -12,6 +12,20 @@ The simplest method to select widgets is to refer to their type. For example, th
 page.find('CheckBox').set('selection', false);
 ```
 
+You may also give the type via the constructor instead of a string:
+
+```js
+page.find(CheckBox).set('selection', false);
+```
+
+This is mainly useful in TypeScript (provides better autocompletion), or to select all widgets that _extend_ a given widget class:
+
+```js
+page.find(Composite).set('background', 'green');
+```
+
+This would make all composites green, including, for example, instances of `TabFolder`.
+
 ## Selecting widgets by ID
 
 The `id` of a widget is a property like any other. It is initially undefined, so you have to assign an ID yourself to refer to the widget. Usually you would do this when you create the widget:
@@ -48,6 +62,45 @@ To select a widget by a class attribute, use the selector expression `'.class'` 
 page.find('.important').set('textColor', 'red');
 ```
 
+## Selecting by parent-child relationship
+
+A widget may also selected by its parent. This is done by giving first the selector of the parent, followed by `' > '`, and then the selector of the child.
+
+Example: Let's say you have a page with two buttons:
+
+```js
+page.append(
+  new Button(),
+  new Composite().append(new Button)
+);
+```
+
+In this case you can of course select both buttons:
+
+```js
+page.find('Button').set('textColor', 'red');
+```
+
+But also only the button inside the composite:
+
+```js
+page.find('Composite > Button').set('textColor', 'red');
+```
+
+Or only the button attached to the page directly:
+
+```js
+page.find('Page > Button').set('textColor', 'red');
+```
+
+The latter example can also be expressed more precisely using the `:host` pseudo class:
+
+```js
+page.find(':host > Button').set('textColor', 'red');
+```
+
+In this case the `:host` refers specifically to the widget that `find` is called on, not just any `Page` instance that could technically be nested inside `page` (via another `NavigationView`).
+
 ## Selector Expressions
 
 The following types of selector expressions are supported:
@@ -56,6 +109,8 @@ The following types of selector expressions are supported:
 - `'Type'` matches all widgets of the given type, e.g. `'Button'` matches all Button widgets.
 - `'.class'` matches all widgets that have the given class in their class list, e.g. `'.foo'` matches a widget with `class` set to `'foo'`, but also `'foo bar`'.
 - `'#id'` matches all widgets with the given ID, e.g. `'#foo'` matches all widgets with the ID `'foo'`.
+- `selector1 > selector2` matches all widgets that match `selector2` that also have a parent that matches `selector1`.
+- `:host` matches the widget the selector is used with. It currently does not match anything when used on a `WidgetCollection` instance.
 
 ## Selector Functions
 
@@ -65,6 +120,8 @@ All methods that accept a selector expression can also be called with a predicat
 let visibleChildren = page.children(widget => widget.visible);
 ```
 
+When the given function is a constructor it will _not_ be called, but used to match all instances of that constructor.
+
 ## Working with Selectors
 
 The following methods on Widget accept a selector expression:
@@ -73,11 +130,20 @@ The following methods on Widget accept a selector expression:
 - `widget.children(selector)` will select all direct children that match the selector, but not their children.
 - `widget.siblings(selector)` will select all siblings of the widget that match the selector.
 
-These methods return a [WidgetCollection](api/WidgetCollection.md). You can extract widgets from the collection using the methods `first()` and `last()` or using array index notation:
+The selector parameter defaults to `*`, so `find()` is the same as `find('*')`.
+
+These methods all return a [WidgetCollection](api/WidgetCollection.md), You can extract individual widgets from the collection using the methods `first()` and `last()` or using array index notation:
 
 ```js
 let submitButton = page.find('#submit').first(); // or
 let submitButton = page.find('#submit')[0];
+```
+
+Both `first` and `last` also support selectors, as does the `filter` method:
+
+```js
+let lastButton = page.find('*').last(Button);
+let importantComposites = page.find('Composite').filter('.important');
 ```
 
 You can also set properties on the included widgets without extracting them:
@@ -86,21 +152,32 @@ You can also set properties on the included widgets without extracting them:
 page.find('.input').set('enabled', false);
 ```
 
+Since the scope of `page.find()` excludes `page` itself, the `:host` pseudo class by itself does not select anything.
+
+```js
+console.log(page.find(':host').length); // '0'
+console.log(page.find(':host > *') === page.children()); // 'true'
+```
+
 ## The apply method
 
 An efficient way to configure multiple widgets in a component is using the `apply()` method on the parent.
 
-### How it works
-
 - `apply({<selector: properties>*})`
 
-The apply method uses selectors to apply different sets of properties to different widgets in one call. For example, to apply a background color to all widgets within a page you could call:
+The apply method uses selectors expressions to apply different sets of properties to different widgets in one call. For example, to apply a background color to all widgets within a page you could call:
 
 ```js
 page.apply({'*': {background: 'green'}});
 ```
 
-You can also set different properties on different widgets:
+This _also_ sets the background of `page` itself, since the scope of `apply` includes the widget it is called on:
+
+```js
+page.apply({':host': {background: 'green'}}); // same as "page.background = green";
+```
+
+With `apply` you can set different properties on different widgets in one call:
 
 ```js
 page.apply({
@@ -123,58 +200,13 @@ page.apply({
 });
 ```
 
-> :point_right: The on-screen order of the properties in the object literal is meaningless. According to the EcmaScript standard the members of a JavaScript object do not have a defined order.
-
-### How to use it
-
-While we used object literals in the examples above, the apply method can be very effectively used with [modules](modules.md), allowing most or all property values (except IDs) to be extracted from your code.
-
-Imagine, for example, that you want to apply different texts to your widgets depending on your locale. You could do it like this:
+When using child selectors, the more specific selector wins. In this example, all buttons are green except for those directly attached to `page`, which are red.
 
 ```js
-let lang = device.language;
-try {
-  page.apply(module.require('./texts-' + lang));
-} catch() {
-  // fallback if the desired language file does not exist:
-  page.apply(module.require('./texts-en'));
-}
-```
-
-Since JSON files can be used as modules, your language file (e.g. `texts-en.json`) could simply look like this:
-
-```json
-{
-  '#okbutton': {'text': 'OK'},
-  '#cancelbutton': {'text': 'Cancel'}
-}
-```
-
-An alternative pattern would be to always use the same module...
-
-```js
-page.apply(module.require('./texts'));
-```
-
-But use scripting within the module to calculate the actual values:
-
-```js
-let texts = {
-  en: {
-    '#okbutton': {text: 'OK!'}
-    '#cancelbutton': {text: 'Cancel!'}
-  },
-  //...
-};
-module.exports = texts[device.language] || texts.en;
-```
-
-The same pattern can be applied for platform-specific colors, font-sizes based on screen width, or layout data depending on device orientation:
-
-```js
-page.on('resize', ({width, height}) => {
-  page.apply(require('./layout-' + (width > height) ? 'landscape' : 'portrait'));
+page.apply({
+  ':host > Button': {background: 'red'},
+  'Button': {background: 'green'}
 });
 ```
 
-> :point_right: It is better to use the aspect ratio of the page as a basis for selecting a layout than the device orientation. This is because when the device is re-oriented, the page is first re-sized, and then rotated in an animation. Also, in future Tabris.js versions a page may not always have the same aspect ratio as the screen.
+> :point_right: The on-screen order of the properties in the object literal is meaningless. According to the EcmaScript standard the members of a JavaScript object do not have a defined order. The priority of two selectors with the same specificity is undefined.

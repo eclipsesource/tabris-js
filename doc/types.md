@@ -201,9 +201,11 @@ This transformation will make the widget twice as big and rotate it by 135&deg;.
 ## Selector
 
 Selectors are used to filter a given list of widgets. A selector can be a string, a widget constructor, or a filter function.
-* When it is a string, it may either reference a widget type (e.g. `'Button'`, `'TextView'`), its id (`'#myButton'`, `'#myTextView'`), or its class property (`'.myButtons'`). A `'*'` matches all widgets.
+* When it is a string, it may either reference a widget type (e.g. `'Button'`, `'TextView'`), its id (`'#myButton'`, `'#myTextView'`), or its class property (`'.myButtons'`). A `'*'` matches all widgets. When selectors are used with the widget methods `find` and `apply`, the `:host` selector matches the widget that the selector is used on. This is useful in combination with child selectors, which use the syntax `Selector1 > Selector2`, so for example `:host > Button`.
 * When it is a widget constructor, a widget matches if it is an instance of that class/type. This is different from giving the type as a string, as subclasses are also matched. For example, `Composite` would match also match an instance of `Tab` or `Page`.
 * When it is a filter function, the function must accept a widget as the first parameter and return a boolean to indicate a match.
+
+For more information, see [this article](./selector.md).
 
 ## ImageData
 
