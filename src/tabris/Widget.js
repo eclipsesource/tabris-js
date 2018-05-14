@@ -4,7 +4,7 @@ import WidgetCollection from './WidgetCollection';
 import GestureRecognizer from './GestureRecognizer';
 import {animate} from './Animation';
 import {types} from './property-types';
-import {splitSelectorString, getSelectorSpecificity} from './util-widget-select';
+import {createSelectorArray, getSelectorSpecificity} from './util-widget-select';
 
 const EVENT_TYPES = ['touchStart', 'touchMove', 'touchEnd', 'touchCancel', 'resize'];
 
@@ -99,7 +99,7 @@ export default class Widget extends NativeObject {
   }
 
   find(selector) {
-    let selectorArr = splitSelectorString(selector, this);
+    let selectorArr = createSelectorArray(selector, this);
     return new WidgetCollection(this.children(), selectorArr, true);
   }
 
@@ -124,7 +124,7 @@ export default class Widget extends NativeObject {
   }
 
   _find(selector) {
-    let selectorArr = splitSelectorString(selector, this);
+    let selectorArr = createSelectorArray(selector, this);
     return new WidgetCollection(this._children(), selectorArr, true);
   }
 
@@ -133,7 +133,7 @@ export default class Widget extends NativeObject {
       scope = new WidgetCollection(asArray(this._children()).concat(this), '*', true);
     }
     Object.keys(sheet)
-      .map(key => [splitSelectorString(key, this), sheet[key]])
+      .map(key => [createSelectorArray(key, this), sheet[key]])
       .sort(rule => getSelectorSpecificity(rule[0]))
       .forEach(rule => {
         scope.filter(rule[0]).set(rule[1]);

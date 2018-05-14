@@ -15,9 +15,12 @@ export function select(array, selector, deep, root) {
   return array.filter(filter);
 }
 
-export function splitSelectorString(selector, hostElement) {
+export function createSelectorArray(selector, hostElement) {
   if (!selector) {
     return ['*'];
+  }
+  if (selector instanceof Function) {
+    return [selector];
   }
   let result = selector.split('>').map(str => str.trim());
   let rootIndex = result.indexOf(':host');
@@ -89,7 +92,7 @@ function createMatcher(selectorArg) {
     return widget => widget === selector;
   }
   if (selector.indexOf('>') !== -1) {
-    return createChildMatcher(splitSelectorString(selector));
+    return createChildMatcher(createSelectorArray(selector));
   }
   if (selector.charAt(0) === '#') {
     let expectedId = selector.slice(1);

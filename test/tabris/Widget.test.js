@@ -966,6 +966,11 @@ describe('Widget', function() {
         expect(widget._find(':host > *').toArray()).to.eql([child1, child2]);
       });
 
+      it('returns children by Type', function() {
+        expect(widget.find('TestWidget').toArray()).to.eql([child1, child1_1, child1_2, child1_2_1, child2]);
+        expect(widget.find(TestWidget).toArray()).to.eql([child1, child1_1, child1_2, child1_2_1, child2]);
+      });
+
     });
 
     describe('apply', function() {
