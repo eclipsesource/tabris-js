@@ -1055,10 +1055,10 @@ describe('Widget', function() {
 
       it('applies properties in order *, Type, (pseudo-)class, id', function() {
         widget.apply({
+          'TestWidget': {prop1: 'v2'},
           '#foo': {prop1: 'v4'},
           '.myclass': {prop1: 'v3'},
           ':host': {prop1: 'v3'},
-          'TestWidget': {prop1: 'v2'},
           '*': {prop1: 'v1'}
         });
 

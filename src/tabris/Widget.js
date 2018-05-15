@@ -134,7 +134,7 @@ export default class Widget extends NativeObject {
     }
     Object.keys(sheet)
       .map(key => [createSelectorArray(key, this), sheet[key]])
-      .sort(rule => getSelectorSpecificity(rule[0]))
+      .sort((rule1, rule2) => getSelectorSpecificity(rule1[0]) - getSelectorSpecificity(rule2[0]))
       .forEach(rule => {
         scope.filter(rule[0]).set(rule[1]);
       });
