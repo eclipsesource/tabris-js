@@ -23,6 +23,10 @@
       "type": "string",
       "description": "The message to display inside the dialog."
     },
+    "textInputs": {
+      "type": "TextInput[]",
+      "description": "A list of `TextInput` widgets to be displayed alongside the `title` and `message`. The text values inserted by the user can be read in the dialogs `close` event from the respective `TextInputs`. Eg.: `dialog.on('close', (e) => e.target.textInputs[0].text)`"
+    },
     "buttons": {
       "type": "{ok?: string, cancel?: string, neutral?: string}",
       "description": "An object with the texts of the buttons to display. There are up to three buttons: `ok`, `cancel` and `neutral`. If no text is given for a button it will not be displayed. Example: `{ok: 'Yes', cancel: 'No'}` shows 'Yes' and 'No', but no 'neutral' button."
@@ -50,7 +54,7 @@
   },
   "links": [
     {
-      "title": "Simple AlertDialog snippet",
+      "title": "AlertDialog snippet",
       "path": "${GITHUB_BRANCH}/snippets/alertdialog.js"
     }
   ]

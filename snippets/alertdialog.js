@@ -1,4 +1,4 @@
-const {AlertDialog, Button, ui} = require('tabris');
+const {AlertDialog, Button, TextInput, ui} = require('tabris');
 
 // AlertDialog example
 
@@ -7,7 +7,7 @@ new Button({
   text: 'Show simple dialog'
 }).on('select', () => {
   new AlertDialog({
-    message: 'Your comment has been saved.',
+    title: 'Comment saved',
     buttons: {ok: 'Acknowledge'}
   }).open();
 }).appendTo(ui.contentView);
@@ -42,3 +42,15 @@ new Button({
   }).open();
   setTimeout(() => alertDialog.close(), 3000);
 }).appendTo(ui.contentView);
+
+new Button({
+  left: 16, top: 'prev() 16', right: 16,
+  text: 'Show text input dialog'
+}).on('select', () => new AlertDialog({
+  title: 'Sign-in required',
+  message: 'Provide sign-in credentials to access your personalized content.',
+  buttons: {ok: 'Sign-in', cancel: 'Cancel'},
+  textInputs: [new TextInput({message: 'Username'}), new TextInput({message: 'Password', type: 'password'})]
+}).on('close', ({target: dialog}) => console.log(`Input: ${dialog.textInputs[0].text} / ${dialog.textInputs[1].text}`))
+  .open())
+  .appendTo(ui.contentView);

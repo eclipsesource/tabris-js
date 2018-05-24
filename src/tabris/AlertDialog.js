@@ -1,6 +1,7 @@
 import Popup from './Popup';
 import NativeObject from './NativeObject';
 import {capitalizeFirstChar} from './util';
+import TextInput from './widgets/TextInput';
 
 export default class AlertDialog extends Popup {
 
@@ -24,11 +25,41 @@ export default class AlertDialog extends Popup {
     }
   }
 
+  _dispose() {
+    if (!this.isDisposed() && this.textInputs instanceof Array) {
+      this.textInputs.forEach(textInput => textInput.dispose());
+    }
+    super._dispose();
+  }
+
 }
 
 NativeObject.defineProperties(AlertDialog.prototype, {
   title: {type: 'string', default: ''},
   message: {type: 'string', default: ''},
+  textInputs: {
+    type: {
+      encode(textInputs) {
+        if (textInputs instanceof Array) {
+          return textInputs.map((textInput) => {
+            if (!(textInput instanceof TextInput)) {
+              throw new Error('Only TextInput widgets are allowed');
+            }
+            return textInput.cid;
+          });
+        }
+        throw new Error('TextInputs is not of type Array');
+      },
+      decode(cids) {
+        if (cids instanceof Array) {
+          return cids
+            .map(cid => tabris._proxies.find(cid))
+            .filter(textInput => textInput != null);
+        }
+        return null;
+      }
+    }
+  },
   buttons: {
     type: {
       encode(value) {

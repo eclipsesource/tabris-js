@@ -1,6 +1,8 @@
-import {expect, spy, stub, restore, mockTabris} from '../../test';
+import {expect, mockTabris, restore, spy, stub} from '../../test';
 import ClientStub from '../ClientStub';
 import AlertDialog from '../../../src/tabris/AlertDialog';
+import TextInput from '../../../src/tabris/widgets/TextInput';
+import Button from '../../../src/tabris/widgets/Button';
 
 describe('AlertDialog', function() {
 
@@ -38,6 +40,50 @@ describe('AlertDialog', function() {
       dialog.message = 'foo';
       expect(dialog.message).to.equal('foo');
       expect(client.calls({op: 'set'})[0].properties.message).to.equal('foo');
+    });
+
+  });
+
+  describe('textInputs', function() {
+
+    it('initial value is null', function() {
+      expect(dialog.textInputs).to.equal(null);
+    });
+
+    it('can be set to array of TextInputs', function() {
+      let textInput = new TextInput();
+
+      dialog.textInputs = [textInput];
+
+      expect(client.calls({op: 'set'})[0].properties.textInputs).to.deep.equal([textInput.cid]);
+    });
+
+    it('can not be set to different type ', function() {
+      stub(console, 'warn');
+
+      dialog.textInputs = [new Button()];
+
+      let calls = client.calls({op: 'set', id: dialog.cid});
+      expect(calls.length).to.equal(0);
+      expect(console.warn).to.have.been.calledOnce;
+    });
+
+    it('can be gotten as array of TextInputs', function() {
+      let textInput = new TextInput();
+      let textInputs = [textInput];
+
+      dialog.textInputs = textInputs;
+
+      expect(dialog.textInputs).to.deep.equal(textInputs);
+    });
+
+    it('should be disposed when dialog is disposed', function() {
+      let textInput = new TextInput();
+      dialog.textInputs = [textInput];
+
+      dialog.dispose();
+
+      expect(textInput.isDisposed()).to.equal(true);
     });
 
   });
