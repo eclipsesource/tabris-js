@@ -53,7 +53,7 @@ describe('Console', function() {
       console = createConsole(nativeConsole);
     });
 
-    ['debug', 'log', 'info', 'warn', 'error'].forEach(method => describe(method, function() {
+    methods.forEach(method => describe(method, function() {
 
       it('succeeds without arguments', function() {
         console[method]();
@@ -68,6 +68,45 @@ describe('Console', function() {
       it('replaces placeholders with arguments', function() {
         console[method]('foo %dk', 23);
         expect(nativeConsole.print).to.have.been.calledWithMatch(method, 'foo 23k');
+      });
+
+    }));
+
+  });
+
+  describe('Console print trigger log event', function() {
+
+    let console, nativeConsole;
+
+    beforeEach(function() {
+      nativeConsole = {
+        print: spy()
+      };
+      console = createConsole(nativeConsole);
+    });
+
+    methods.forEach(method => describe(method, function() {
+
+      it(`fire event on ${method} without arguments`, function() {
+        const listener = spy();
+        tabris.on('log', listener);
+        console[method]();
+        expect(listener).to.have.been.calledOnce;
+      });
+
+      it(`fire event on ${method} with multiple arguments`, function() {
+        const listener = spy();
+        tabris.on('log', listener);
+        console[method]('foo', 'bar', 0, 1);
+        expect(listener).to.have.been.calledOnce;
+      });
+
+      it(`fire event on ${method} when replacing placeholders with arguments`, function() {
+        const listener = spy();
+        tabris.on('log', listener);
+        console[method]('%s %s %d %d', 'foo', 'bar', 0, 1);
+        expect(listener).to.have.been.calledOnce
+        && expect(nativeConsole.print).to.have.been.calledWithMatch(method, 'foo bar 0 1');
       });
 
     }));

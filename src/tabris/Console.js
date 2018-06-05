@@ -19,9 +19,11 @@ export const error = function(...args) { defaultConsole.error(...args); };
 
 export function createConsole(nativeConsole) {
   let console = {};
-  for (let name of ['debug', 'info', 'log', 'warn', 'error']) {
-    console[name] = function(...args) {
-      nativeConsole.print(name, format(...args));
+  for (let level of ['debug', 'info', 'log', 'warn', 'error']) {
+    console[level] = function(...args) {
+      const message = format(...args);
+      tabris.trigger('log', {level, message});
+      nativeConsole.print(level, message);
     };
   }
   return console;

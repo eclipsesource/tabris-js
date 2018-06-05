@@ -26,6 +26,9 @@ tabris._start = function(client) {
     }
     let loadMain = function() {
       try {
+        if (global.debugClient) {
+          global.debugClient.start();
+        }
         rootModule.require('./');
         tabris.trigger('flush');
       } catch (error) {
