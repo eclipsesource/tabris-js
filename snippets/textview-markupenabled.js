@@ -1,15 +1,23 @@
-const {TextView, ui} = require('tabris');
+const {TextView, CheckBox, ui} = require('tabris');
 
 let markup = '<b>bold</b>, <i>italic</i>, <big>big</big>, <small>small</small>, ' +
-             '<ins>ins</ins>, <del>del</del>, <a>link</a>';
+  '<ins>ins</ins>, <del>del</del>, <a href="http://tabrisjs.com">link</a>';
 
 new TextView({
-  left: 10, top: 10, right: 10,
-  text: 'TextView with markup not enabled:\n' + markup
+  left: 16, top: 16, right: 16,
+  text: 'TextView with markup:\n' + markup
 }).appendTo(ui.contentView);
 
-new TextView({
-  left: 10, top: 'prev() 30', right: 10,
-  text: 'TextView with markup enabled:\n' + markup,
+let markupTextView = new TextView({
+  left: 16, top: 'prev() 16', right: 16,
+  text: 'TextView with markup:\n' + markup,
   markupEnabled: true
-}).appendTo(ui.contentView);
+}).on('tapLink', ({url}) => console.log(`tab link ${url}`))
+  .appendTo(ui.contentView);
+
+new CheckBox({
+  left: 16, top: 'prev() 16', right: 16,
+  text: 'Render markup',
+  checked: markupTextView.markupEnabled
+}).on('checkedChanged', ({value: markupEnabled}) => markupTextView.markupEnabled = markupEnabled)
+  .appendTo(ui.contentView);

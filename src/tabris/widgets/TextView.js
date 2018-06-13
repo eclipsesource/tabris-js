@@ -7,6 +7,14 @@ export default class TextView extends Widget {
     return 'tabris.TextView';
   }
 
+  _listen(name, listening) {
+    if (name === 'tapLink') {
+      this._nativeListen(name, listening);
+    } else {
+      super._listen(name, listening);
+    }
+  }
+
 }
 
 NativeObject.defineProperties(TextView.prototype, {

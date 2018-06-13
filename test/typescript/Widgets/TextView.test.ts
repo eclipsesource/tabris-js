@@ -1,4 +1,4 @@
-import {Color, TextView, TextViewProperties} from 'tabris';
+import {Color, TextView, TextViewTapLinkEvent, TextViewProperties} from 'tabris';
 
 let widget: TextView = new TextView();
 
@@ -32,3 +32,15 @@ let properties: TextViewProperties = {
 };
 widget = new TextView(properties);
 widget.set(properties);
+
+// Events
+let target: TextView = widget;
+let timeStamp: number = 0;
+let type: string = 'foo';
+let url: string = 'http://foo.com';
+
+let tapLinkEvent: TextViewTapLinkEvent = {target, timeStamp, type, url};
+
+widget.on({
+    tapLink: (event: TextViewTapLinkEvent) => {},
+});

@@ -57,6 +57,18 @@
       "description": "The amount of space between each line of text. The `lineSpacing` property is a factor with a default value of `1.0`."
     }
   },
+  "events": {
+    "tapLink": {
+      "eventObject": "TextViewTapLinkEvent",
+      "description": "Fires when the user clicks on a link in an html text. Requires to set `markupEnabled` to true and to provide a text containing an anchor (`<a>`) with an `href` attribute. Eg. `textView.text = 'Website: <a href=\"http://example.com>example.com</a>'`. The event object contains a property `url` which provides the anchors `href` url.",
+      "parameters": {
+        "url": {
+          "description": "The url referenced by the `href` attribute of the anchor.",
+          "type": "string"
+        }
+      }
+    }
+  },
   "links": [
     {
       "title": "Simple TextView snippet",
