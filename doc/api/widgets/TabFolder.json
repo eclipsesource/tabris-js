@@ -68,10 +68,10 @@
   },
   "events": {
     "select": {
-      "description": "Fired when the selection property changes by user interaction.",
+      "description": "Fired when the user taps on a tab. The event also fires when the same tab is tapped multiple times.",
       "parameters": {
         "selection": {
-          "description": "The new value of *selection*.",
+          "description": "The `Tap` selected by the user.",
           "type": "Tab"
         }
       }
