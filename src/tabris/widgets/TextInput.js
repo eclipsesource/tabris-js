@@ -1,7 +1,7 @@
 import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 
-const EVENT_TYPES = ['focus', 'blur', 'accept', 'input'];
+const EVENT_TYPES = ['focus', 'blur', 'accept', 'input', 'select'];
 
 export default class TextInput extends Widget {
 
@@ -13,14 +13,20 @@ export default class TextInput extends Widget {
     if (EVENT_TYPES.includes(name)) {
       this._nativeListen(name, listening);
     } else if (name === 'textChanged') {
-      this._onoff('input', listening, this.$triggerChangeSelection);
+      this._onoff('input', listening, this.$triggerChangeText);
+    } else if (name === 'selectionChanged') {
+      this._onoff('select', listening, this.$triggerChangeSelection);
     } else {
       super._listen(name, listening);
     }
   }
 
-  $triggerChangeSelection({text}) {
+  $triggerChangeText({text}) {
     this._triggerChangeEvent('text', text);
+  }
+
+  $triggerChangeSelection({selection}) {
+    this._triggerChangeEvent('selection', selection);
   }
 
 }
@@ -60,5 +66,22 @@ NativeObject.defineProperties(TextInput.prototype, {
   borderColor: {type: 'color'},
   textColor: {type: 'color'},
   revealPassword: {type: 'boolean'},
-  cursorColor: {type: 'color'}
+  cursorColor: {type: 'color'},
+  selection: {
+    type: 'array',
+    set(name, value) {
+      if (value.length !== 2) {
+        throw new Error(`Selection has to be a two element array with start and end position but is ${value}`);
+      }
+      let textLength = this.text.length;
+      if (value[1] > textLength || value[0] > textLength || value[1] < 0 || value[0] < 0) {
+        throw new Error(`The selection has to be in the range of 0 to text length [0-${textLength}] but is ${value}`);
+      }
+      this._nativeSet(name, value);
+      this.$triggerChangeSelection({selection: value});
+    },
+    get(name) {
+      return this._nativeGet(name);
+    }
+  }
 });

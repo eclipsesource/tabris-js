@@ -1,5 +1,6 @@
 import {
-  Color, TextInput, TextInputAcceptEvent, PropertyChangedEvent, TextInputInputEvent, EventObject, TextInputProperties
+  Color, EventObject, PropertyChangedEvent, TextInput, TextInputAcceptEvent, TextInputInputEvent, TextInputProperties,
+  TextInputSelectEvent
 } from 'tabris';
 
 let widget: TextInput = new TextInput();
@@ -20,6 +21,7 @@ let message: string;
 let text: string;
 let textColor: Color;
 let textInputType: 'default' | 'multiline' | 'password' | 'search';
+let selection: number[];
 
 alignment = widget.alignment;
 autoCapitalize = widget.autoCapitalize;
@@ -36,6 +38,7 @@ message = widget.message;
 text = widget.text;
 textColor = widget.textColor;
 textInputType = widget.type;
+selection = widget.selection;
 
 widget.alignment = alignment;
 widget.autoCapitalize = autoCapitalize;
@@ -52,6 +55,7 @@ widget.message = message;
 widget.text = text;
 widget.textColor = textColor;
 widget.type = textInputType;
+widget.selection = selection;
 
 let properties: TextInputProperties = {
   alignment,
@@ -68,6 +72,7 @@ let properties: TextInputProperties = {
   message,
   text,
   textColor,
+  selection,
   type: textInputType
 };
 widget = new TextInput(properties);
@@ -77,18 +82,23 @@ widget.set(properties);
 let target: TextInput = widget;
 let timeStamp: number = 0;
 let type: string = 'foo';
-let value: string = 'bar';
+let textValue: string = 'bar';
+let selectionValue: number[] = [1, 2];
 
 let acceptEvent: TextInputAcceptEvent = {target, timeStamp, type, text};
 let blurEvent: EventObject<TextInput> = {target, timeStamp, type};
 let focusEvent: EventObject<TextInput> = {target, timeStamp, type};
 let inputEvent: TextInputInputEvent = {target, timeStamp, type, text};
-let textChangedEvent: PropertyChangedEvent<TextInput, string> = {target, timeStamp, type, value};
+let textChangedEvent: PropertyChangedEvent<TextInput, string> = {target, timeStamp, type, value: textValue};
+let selectEvent: TextInputSelectEvent = {target, timeStamp, type, selection};
+let selectionChangedEvent: PropertyChangedEvent<TextInput, number[]> = {target, timeStamp, type, value: selectionValue};
 
 widget.on({
   accept: (event: TextInputAcceptEvent) => {},
   blur: (event: EventObject<TextInput>) => {},
   focus: (event: EventObject<TextInput>) => {},
   input: (event: TextInputInputEvent) => {},
-  textChanged: (event: PropertyChangedEvent<TextInput, string>) => {}
+  select: (event: TextInputSelectEvent) => {},
+  textChanged: (event: PropertyChangedEvent<TextInput, string>) => {},
+  selectionChanged: (event: PropertyChangedEvent<TextInput, number[]>) => {}
 });
