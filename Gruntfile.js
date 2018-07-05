@@ -29,7 +29,7 @@ module.exports = function(grunt) {
       boot: {
         options: {
           banner,
-          process: src => src.replace(/\${VERSION}/g, version)
+          process: src => '(function(){\n' + src.replace(/\${VERSION}/g, version) + '}());'
         },
         src: ['build/boot-transpiled.js'],
         dest: 'build/tabris/boot.js'
