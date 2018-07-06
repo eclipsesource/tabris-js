@@ -53,7 +53,7 @@ function deepSelect(result, iterable, filter) {
     if (filter(widget)) {
       result.push(widget);
     }
-    let children = widget.children();
+    let children = widget.children ? widget.children() : null;
     if (children instanceof WidgetCollection && children.length) {
       deepSelect(result, children, filter);
     }

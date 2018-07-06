@@ -16,7 +16,7 @@ export function createElement(jsxType, attributes, ...children) {
     return result;
   } else if (result instanceof Widget) {
     result.on(getListenersMap(attributes || {}));
-    return result.append.apply(result, appendable);
+    return result.append instanceof Function ? result.append.apply(result, appendable) : result;
   }
   throw new Error(('JSX: Unsupported type ' + Type.name).trim());
 }

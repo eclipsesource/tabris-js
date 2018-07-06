@@ -6,7 +6,8 @@ import {
   CompositeAddChildEvent,
   CompositeRemoveChildEvent,
   BoxDimensions,
-  CompositeProperties
+  CompositeProperties,
+  Selector
 } from 'tabris';
 
 let widget: Composite = new Composite();
@@ -28,10 +29,20 @@ let widgetA: Widget = new Button();
 let widgetB: Widget = new Button();
 let widgetCollection: WidgetCollection<Widget> = new Composite().find();
 let thisReturnValue: Composite;
+let fooCollection: WidgetCollection<Widget>;
+let selector: Selector = '';
+class Foo extends Composite {}
 
 thisReturnValue = widget.append(widgetA, widgetB);
 thisReturnValue = widget.append(widgets);
 thisReturnValue = widget.append(widgetCollection);
+thisReturnValue = widget.apply({'selectorString': properties});
+widgetCollection = widget.children();
+widgetCollection = widget.children(selector);
+fooCollection = widget.children(Foo);
+widgetCollection = widget.find();
+widgetCollection = widget.find(selector);
+fooCollection = widget.find(Foo);
 
 // Events
 let target: Composite = widget;

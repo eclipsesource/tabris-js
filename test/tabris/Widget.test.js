@@ -5,6 +5,7 @@ import ClientStub from './ClientStub';
 import Widget from '../../src/tabris/Widget';
 import Ui from '../../src/tabris/widgets/Ui';
 import Composite from '../../src/tabris/widgets/Composite';
+import TextView from '../../src/tabris/widgets/TextView';
 import {omit} from '../../src/tabris/util';
 import {ColorShader} from '../../src/tabris/util-shaders';
 
@@ -899,7 +900,7 @@ describe('Widget', function() {
         child2 = new TestWidget({class: 'bar'}).appendTo(widget);
         child1_1 = new TestWidget({}).appendTo(child1);
         child1_2 = new TestWidget({class: 'bar'}).appendTo(child1);
-        child1_2_1 = new TestWidget({id: 'foo'}).appendTo(child1_2);
+        child1_2_1 = new TextView({id: 'foo'}).appendTo(child1_2);
       });
 
       it('* selector returns all descendants', function() {
@@ -967,8 +968,8 @@ describe('Widget', function() {
       });
 
       it('returns children by Type', function() {
-        expect(widget.find('TestWidget').toArray()).to.eql([child1, child1_1, child1_2, child1_2_1, child2]);
-        expect(widget.find(TestWidget).toArray()).to.eql([child1, child1_1, child1_2, child1_2_1, child2]);
+        expect(widget.find('TestWidget').toArray()).to.eql([child1, child1_1, child1_2, child2]);
+        expect(widget.find(TestWidget).toArray()).to.eql([child1, child1_1, child1_2, child2]);
       });
 
     });

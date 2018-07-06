@@ -148,15 +148,8 @@ let composite: Composite;
 
 promise = widget.animate(animationProperties, options);
 thisReturnValue = widget.appendTo(parent);
-thisReturnValue = widget.apply({'selectorString': properties});
-widgetCollection = widget.children();
-widgetCollection = widget.children(selector);
-fooCollection = widget.children(Foo);
 thisReturnValue = widget.detach();
 voidReturnValue = widget.dispose();
-widgetCollection = widget.find();
-widgetCollection = widget.find(selector);
-fooCollection = widget.find(Foo);
 thisReturnValue = widget.insertAfter(otherWidget);
 thisReturnValue = widget.insertBefore(otherWidget);
 bool = widget.isDisposed();

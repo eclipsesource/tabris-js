@@ -1,8 +1,8 @@
 import ClientStub from './ClientStub';
 import {expect, mockTabris, stub, spy, restore} from '../test';
 import Layout from '../../src/tabris/Layout';
-import Widget from '../../src/tabris/Widget';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
+import Composite from '../../src/tabris/widgets/Composite';
 
 describe('Layout', function() {
 
@@ -85,7 +85,7 @@ describe('Layout', function() {
 
   describe('resolveReferences', function() {
 
-    class TestWidget extends Widget {
+    class TestWidget extends Composite {
       get _nativeType() {
         return 'TestType';
       }
