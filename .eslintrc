@@ -21,7 +21,10 @@
     "XMLHttpRequest": false,
     "fetch": false,
     "device": false,
-    "ImageData": false
+    "ImageData": false,
+    "Worker": false,
+    "onmessage": true,
+    "postMessage": false
   },
   "rules": {
     "no-empty": "off",

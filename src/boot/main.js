@@ -21,26 +21,28 @@ tabris._start = function(client) {
     let cordovaScript = document.createElement('script');
     cordovaScript.src = './cordova.js';
     document.head.appendChild(cordovaScript);
+    let isWorker = global.workerScriptPath !== undefined;
     if (tabris._init) {
-      tabris._init(client);
+      tabris._init(client, {headless: isWorker});
     }
-    let loadMain = function() {
+    let loadModule = function() {
       try {
-        if (global.debugClient) {
+        if (global.debugClient && !isWorker) {
           global.debugClient.start();
         }
-        rootModule.require('./');
+        rootModule.require('./' + (isWorker ? global.workerScriptPath : ''));
         tabris.trigger('flush');
       } catch (error) {
-        printError('Could not load main module:', error);
+        printError('Could not load ' + (isWorker ? 'worker' : 'main module') + ':', error);
       }
     };
     if (tabris._entryPoint) {
-      tabris._entryPoint(loadMain);
+      tabris._entryPoint(loadModule);
       delete tabris._entryPoint;
     } else {
-      loadMain();
+      loadModule();
     }
+    delete global.workerScriptPath;
     tabris.trigger('flush');
   } catch (error) {
     printError('Could not start tabris:', error);

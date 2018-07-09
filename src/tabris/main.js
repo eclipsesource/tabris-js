@@ -58,6 +58,7 @@ import WebView from './widgets/WebView';
 import WebSocket from './WebSocket';
 import Widget from './Widget';
 import WidgetCollection from './WidgetCollection';
+import Worker from './Worker';
 import XMLHttpRequest from './XMLHttpRequest';
 
 import {fetch} from './fetch/fetch';
@@ -125,6 +126,7 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   Widget,
   WidgetCollection,
   XMLHttpRequest,
+  Worker,
   fetch,
   Headers,
   Request,
@@ -142,15 +144,18 @@ Object.assign(window, {
   Headers,
   Request,
   Response,
-  JSX: createJsxProcessor()
+  JSX: createJsxProcessor(),
+  Worker
 });
 
-tabris.on('start', () => {
+tabris.on('start', (options) => {
   tabris.app = createApp();
   checkVersion(tabris.version, tabris.app._nativeGet('tabrisJsVersion'));
-  tabris.ui = createUi();
+  if (!options || !options.headless) {
+    tabris.ui = createUi();
+    tabris.printer = createPrinter();
+  }
   tabris.device = createDevice();
-  tabris.printer = createPrinter();
   tabris.fs = createFileSystem();
   publishDeviceProperties(tabris.device, window);
   window.localStorage = tabris.localStorage = createStorage();

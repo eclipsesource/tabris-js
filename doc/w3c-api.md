@@ -61,6 +61,38 @@ Further documentation:
 * https://tools.ietf.org/html/rfc6455
 * https://html.spec.whatwg.org/multipage/comms.html#websocket
 
+## Worker
+
+Workers are a simple mechanism to run a script in a background thread. The worker thread can perform tasks without interfering with the user interface. In addition, they can perform I/O using XMLHttpRequest or the file system api. Once created, a worker can send messages to the JavaScript code that created it by posting messages to an event handler specified by that code (and vice versa).
+
+The tabris support for workers allows to send data to a running worker via the `worker.postMessage(data, transferList)` method. The `transferList` is currently ignored. The types currently supported in the data field are:
+
+* `null`
+* `undefined`
+* `string`
+* `number`
+* `Boolean`
+* `Object`
+* `Array`
+* `ImageData`
+* `ArrayBuffer`
+* `ArrayBufferView/TypedArray`
+
+Inside a worker no Tabris.js ui elements are available. Calling any unsupported APIs has no effect. However the 
+following list of Tabris.js APIs can be used:
+
+* localStorage
+* App (Except: `restart()`, `close()` and `closeKeyboard()`)
+* Crypto
+* Device
+* file system
+* XHR/fetch
+* TextEncoder
+* WebSocket
+* Worker
+
+See [W3C](https://www.w3.org/TR/workers/) / [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Worker)
+
 ## Persistent Storage
 
 Tabris supports the global object `localStorage`, which allows storing key-value pairs in a persistent store. Both keys and values are stored as strings.

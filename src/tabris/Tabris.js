@@ -19,11 +19,11 @@ export default class Tabris {
     return !!this._started;
   }
 
-  _init(client) {
+  _init(client, options) {
     this._client = client;
     this._proxies = new ProxyStore();
     this._nativeBridge = new NativeBridge(client);
-    this.trigger('start');
+    this.trigger('start', options);
     this._started = true;
   }
 
