@@ -86,7 +86,7 @@ function createCheckBox(text, listener, checked = true) {
 }
 
 function createColorPicker(text, property) {
-  let initialColor = navigationView.get(property);
+  let initialColor = navigationView[property];
   new TextView({
     left: MARGIN, top: ['prev()', MARGIN], width: LABEL_WIDTH,
     text: text
@@ -96,7 +96,7 @@ function createColorPicker(text, property) {
     itemCount: COLORS.length,
     itemText: index => COLORS[index] || initialColor
   }).on({
-    select: ({index}) => navigationView.set(property, COLORS[index] || initialColor)
+    select: ({index}) => navigationView[property] = COLORS[index] || initialColor
   }).appendTo(controls);
 }
 
