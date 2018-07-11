@@ -55,6 +55,11 @@
       "type": "number",
       "default": "1.0",
       "description": "The amount of space between each line of text. The `lineSpacing` property is a factor with a default value of `1.0`."
+    },
+    "font": {
+      "type": "Font",
+      "ts_type": "Font|null",
+      "description": "The font used for the text."
     }
   },
   "events": {

@@ -6,6 +6,11 @@ import Widget from '../../src/tabris/Widget';
 import Ui from '../../src/tabris/widgets/Ui';
 import Composite from '../../src/tabris/widgets/Composite';
 import TextView from '../../src/tabris/widgets/TextView';
+import RadioButton from '../../src/tabris/widgets/RadioButton';
+import Button from '../../src/tabris/widgets/Button';
+import CheckBox from '../../src/tabris/widgets/CheckBox';
+import ToggleButton from '../../src/tabris/widgets/ToggleButton';
+import TextInput from '../../src/tabris/widgets/TextInput';
 import {omit} from '../../src/tabris/util';
 import {ColorShader} from '../../src/tabris/util-shaders';
 
@@ -57,25 +62,47 @@ describe('Widget', function() {
       expect(call.properties.background).to.eql(new ColorShader([1, 2, 3, 128]));
     });
 
-    it('translates font string to object', function() {
-      widget.set({font: '12px Arial'});
+    [TextView, RadioButton, Button, CheckBox, ToggleButton, TextInput].forEach((type) => {
 
-      let call = client.calls({op: 'set'})[0];
-      expect(call.properties.font)
-        .to.eql({family: ['Arial'], size: 12, style: 'normal', weight: 'normal'});
-    });
+      describe(type.name + ' font', function() {
 
-    it('normalizes font string', function() {
-      widget.set({font: 'bold italic   12px Arial'});
+        beforeEach(function() {
+          widget = new type();
+          client.resetCalls();
+        });
 
-      expect(widget.font).to.eql('italic bold 12px Arial');
-    });
+        it('translates font string to object', function() {
+          widget.set({font: '12px Arial'});
 
-    it("returns 'initial' when no value is cached", function() {
-      spy(client, 'get');
+          let call = client.calls({op: 'set'})[0];
+          expect(call.properties.font)
+            .to.eql({family: ['Arial'], size: 12, style: 'normal', weight: 'normal'});
+        });
 
-      expect(widget.font).to.eql('initial');
-      expect(client.get).not.to.have.been.called;
+        it('normalizes font string', function() {
+          widget.set({font: 'bold italic   12px Arial'});
+
+          expect(widget.font).to.eql('italic bold 12px Arial');
+        });
+
+        it("support setting initial 'initial'", function() {
+          widget.set({font: '23px Arial'});
+          client.resetCalls();
+          widget.set({font: 'initial'});
+
+          let call = client.calls({op: 'set'})[0];
+          expect(call.properties.font).to.be.null;
+        });
+
+        it("returns 'initial' when no font value is cached", function() {
+          spy(client, 'get');
+
+          expect(widget.font).to.eql('initial');
+          expect(client.get).not.to.have.been.called;
+        });
+
+      });
+
     });
 
     it('translates backgroundImage to array', function() {
@@ -131,14 +158,13 @@ describe('Widget', function() {
       expect(widget.win_theme).to.equal('default');
     });
 
-    it("support 'initial' for background and font", function() {
-      widget.set({background: 'green', font: '23px Arial'});
+    it("support 'initial' for background", function() {
+      widget.set({background: 'green'});
       client.resetCalls();
-      widget.set({background: 'initial', font: 'initial'});
+      widget.set({background: 'initial'});
 
       let call = client.calls({op: 'set'})[0];
       expect(call.properties.background).to.be.null;
-      expect(call.properties.font).to.be.null;
     });
 
     it('stores id property in widget.id', function() {

@@ -186,11 +186,6 @@
         "windows": false
       }
     },
-    "font": {
-      "type": "Font",
-      "ts_type": "Font|null",
-      "description": "The font used for the widget."
-    },
     "backgroundImage": {
       "type": "Image",
       "description": "An image to be displayed on the widget's background. If the image is smaller than the widget, it will be tiled."

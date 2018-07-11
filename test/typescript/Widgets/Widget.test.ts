@@ -4,7 +4,6 @@ import {Widget,
  margin,
  Bounds,
  offset,
- Font,
  dimension,
  LayoutData,
  Transformation,
@@ -37,7 +36,6 @@ let classList: string[];
 let cornerRadius: number;
 let elevation: number;
 let enabled: boolean;
-let font: Font;
 let height: dimension;
 let highlightOnTouch: boolean;
 let id: string;
@@ -50,7 +48,6 @@ let transform: Transformation;
 let visible: boolean;
 let width: dimension;
 let data: any;
-let nullValue: null;
 
 background = widget.background;
 backgroundImage = widget.backgroundImage;
@@ -64,8 +61,6 @@ classList = widget.classList;
 cornerRadius = widget.cornerRadius;
 elevation = widget.elevation;
 enabled = widget.enabled;
-font = widget.font as Font;
-nullValue = widget.font as null;
 height = widget.height;
 highlightOnTouch = widget.highlightOnTouch;
 id = widget.id;
@@ -91,7 +86,6 @@ widget.data.foo = 42;
 widget.cornerRadius = cornerRadius;
 widget.elevation = elevation;
 widget.enabled = enabled;
-widget.font = font;
 widget.height = height;
 widget.highlightOnTouch = highlightOnTouch;
 widget.id = id;
@@ -116,7 +110,6 @@ let properties: WidgetProperties = {
   cornerRadius,
   elevation,
   enabled,
-  font,
   height,
   highlightOnTouch,
   id,

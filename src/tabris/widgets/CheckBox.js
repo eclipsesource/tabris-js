@@ -28,5 +28,13 @@ NativeObject.defineProperties(CheckBox.prototype, {
   checked: {type: 'boolean', nocache: true},
   textColor: {type: 'color'},
   tintColor: {type: 'color'},
-  checkedTintColor: {type: 'color'}
+  checkedTintColor: {type: 'color'},
+  font: {
+    type: 'font',
+    set(name, value) {
+      this._nativeSet(name, value === undefined ? null : value);
+      this._storeProperty(name, value);
+    },
+    default: null
+  }
 });

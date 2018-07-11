@@ -41,6 +41,11 @@
       "platforms": {
         "windows": false
       }
+    },
+    "font": {
+      "type": "Font",
+      "ts_type": "Font|null",
+      "description": "The font used for the text."
     }
   },
   "events": {

@@ -194,14 +194,6 @@ NativeObject.defineProperties(Widget.prototype, {
     type: 'number',
     default: 0
   },
-  font: {
-    type: 'font',
-    set(name, value) {
-      this._nativeSet(name, value === undefined ? null : value);
-      this._storeProperty(name, value);
-    },
-    default: null
-  },
   backgroundImage: {
     type: 'image'
   },

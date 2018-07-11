@@ -42,6 +42,11 @@
     "textColor": {
       "type": "Color",
       "description": "The color of the text."
+    },
+    "font": {
+      "type": "Font",
+      "ts_type": "Font|null",
+      "description": "The font used for the text."
     }
   },
   "events": {

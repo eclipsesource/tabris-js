@@ -25,6 +25,11 @@
       "default": "center",
       "description": "The horizontal alignment of the button text."
     },
+    "font": {
+      "type": "Font",
+      "ts_type": "Font|null",
+      "description": "The font used for the button text."
+    },
     "image": {
       "type": "Image",
       "ts_type": "Image|null",

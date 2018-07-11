@@ -83,5 +83,13 @@ NativeObject.defineProperties(TextInput.prototype, {
     get(name) {
       return this._nativeGet(name);
     }
+  },
+  font: {
+    type: 'font',
+    set(name, value) {
+      this._nativeSet(name, value === undefined ? null : value);
+      this._storeProperty(name, value);
+    },
+    default: null
   }
 });
