@@ -261,10 +261,6 @@ NativeObject.defineProperties(Widget.prototype, {
       }
       return this._gestures;
     }
-  },
-  win_theme: {
-    type: ['choice', ['default', 'light', 'dark']],
-    default: 'default'
   }
 });
 

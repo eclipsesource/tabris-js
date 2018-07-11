@@ -8,7 +8,7 @@ This guide will help you create the foundation of a Tabris.js app and test it on
 
 ## Set up a mobile device
 
-All you need is an Android, iOS, or Windows device, connected to the same network as your development machine.
+All you need is an Android or iOS device, connected to the same network as your development machine.
 Install the [Tabris.js 2 Developer App](developer-app.md).
 Start the app and (optional) log in with your GitHub account.
 

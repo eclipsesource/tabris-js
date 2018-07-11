@@ -235,7 +235,7 @@ exports.generateDoc = function generateDoc({files, targetPath, version}) {
       return '';
     }
     let result = ['<p class="platforms">'];
-    let names = {ios: 'iOS', android: 'Android', windows: 'Windows 10'};
+    let names = {ios: 'iOS', android: 'Android'};
     for (let platform in names) {
       if (platforms[platform] !== false) {
         let name = names[platform];

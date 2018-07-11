@@ -8,7 +8,6 @@ Tabris.js utilizes [Apache Cordova](http://cordova.apache.org) to build and pack
 | :------------------------ |:---------------:| :---------------: |
 | Building iOS Apps         |       ✓         |       ✓      |
 | Building Android Apps     |       ✓         |       ✓      |
-| Building Windows Apps     |       ✓         |       ✓      |
 | [Integrate Cordova Plugins](cordova.md)     |       ✓      |       ✓      |
 | [Cordova Build Hooks](http://cordova.apache.org/docs/en/edge/guide_appdev_hooks_index.md.html#Hooks%20Guide)       |       ✓      |       ✓      |
 | Custom Project Structure  |       ✓      |       ✓      |
@@ -17,8 +16,6 @@ Tabris.js utilizes [Apache Cordova](http://cordova.apache.org) to build and pack
 | Other SCMs than Git       |              |       ✓      |
 
 > :point_right: The online build service is free for unlimited public GitHub repositories and 1 private repository. To build from unlimited private repositories, you need a [Pro account](https://tabrisjs.com/pricing/). [Local builds](#local-build) are free for everyone.
-
-> :point_right: When building Windows apps, please also read the [Windows Support Documentation](windows-support.md) on the topic.
 
 ## Project Layout
 
@@ -76,7 +73,6 @@ Supported build script hooks are:
   - `"build"`: executed for all platform builds
   - `"build:android"`: executed for Android builds
   - `"build:ios"`: executed for iOS builds
-  - `"build:windows"`: executed for Windows builds
 
 Make sure the `"build"` script is executed before executing `tabris serve` (when running the app locally). This step can be automated by using the watch mode of your transpiler, which will compile the file on change (refer to your transpiler's documentation). A module like [npm-run-all](https://www.npmjs.com/package/npm-run-all) can help run the transpiler in watch mode and `tabris serve` at the same time.
 
@@ -210,33 +206,6 @@ Example:
 | Theme                   |- `@style/Theme.Tabris`<br/>- `@style/Theme.Tabris.Light`<br/>- `@style/Theme.Tabris.Light.DarkAppBar` (Default)<br/><br/>In addition to the bundled Tabris themes, a resource reference to a custom Android theme can be specified. Custom themes have to inherit from one of the Tabris base themes.<br/><br/>Example: `<preference name="Theme" value="@style/Theme.MyAppTheme" />` |
 | ThemeSplash             | - `@style/Theme.Tabris.SplashScreen`<br/>- `@style/Theme.Tabris.Light.SplashScreen` (Default)<br/><br/>The splash screen is shown to the user while the app is starting up. By default this screen has a white background. The `ThemeSplash` preference allows to set one of the bundled themes or to provide a custom theme.<br/><br/>Example: `<preference name="ThemeSplash" value="@style/Theme.Tabris.SplashScreen" />`<br/><br/>Note that the `config.xml` element `<splash .. />` can be used to set an image on the splash screen. For styling guides see the material design guidelines on [launch screens](https://material.google.com/patterns/launch-screens.html). |
 
-#### Windows specific preferences
-
-Windows apps always have a splash screen. If you do not configure one, the default Tabris.js splash screen is used. To configure your own splash screen, you have to give a logo in three different resolutions and the background color. The naming of the files has to match those given here:
-
-```xml
-<platform name="windows">
-    <splash src="resources/windows/splash/SplashScreen.scale-100.png" width="620" height="300"/>
-    <splash src="resources/windows/splash/SplashScreen.scale-150.png" width="930" height="450"/>
-    <splash src="resources/windows/splash/SplashScreen.scale-200.png" width="1240" height="600"/>
-    <preference name="SplashScreenBackgroundColor" value="#009688"/>
-</platform>
-```
-
-To replace the tabris logo on the launcher tile, Windows store and task icon you also have to give all of the following files. Again, naming is relevant:
-
-```xml
-<platform name="windows">
-    <icon src="res/windows/storelogo.png" target="StoreLogo" />
-    <icon src="res/windows/smalllogo.png" target="Square30x30Logo" />
-    <icon src="res/Windows/Square44x44Logo.png" target="Square44x44Logo" />
-    <icon src="res/Windows/Small71x71Logo.png" target="Square71x71Logo" />
-    <icon src="res/Windows/Square150x150Logo.png" target="Square150x150Logo" />
-    <icon src="res/Windows/Large310x310Logo.png" target="Square310x310Logo" />
-    <icon src="res/Windows/Wide310x150Logo.png" target="Wide310x150Logo" />
-</platform>
-```
-
 ### The .tabrisignore file
 
 The tabris.js build packages the contents of your project into the app. You can exclude certain files or directories that are not required in the packaged app, such as tests or developer documentation. Files and directories to be ignored by the build can be listed in a file named `.tabrisignore`. The format of this ignore file follows the same rules as a [`.gitignore`](http://git-scm.com/docs/gitignore) file.
@@ -268,7 +237,6 @@ After your app has become valid, you are ready to execute the first build. Just 
 * **App Directory:** The directory within your repository that contains your Tabris.js app. The value must be relative to the repository root.
 * **iOS Signing Key:** iOS apps can not be deployed to a mobile device without being signed. If you want to build an iOS app you need an Apple Developer account and provide the certificate together with the provisioning profile. A very good tutorial on how to get these files can be found in the [Phonegap Build documentation](http://docs.phonegap.com/phonegap-build/signing/ios/).
 * **Android Signing Key:** Android apps need to be signed with a certificate only if you want to deploy them to Play Store. You can find a very good tutorial in the [Phonegap Build documentation](http://docs.phonegap.com/phonegap-build/signing/android/) as well.
-* **Windows Architecure** Choose which CPU architecture you want to build your package for.
 * **Environment Variables:** Key/Value pairs that will be stored and transferred encrypted to the build machines. They can be used within the config.xml or custom hooks. Use cases are adding plug-ins from private git repositories or handling access keys.
 * **Builds to keep:** Specifies the number of builds that should be kept before deleting them automatically.
 * **Tabris.js Version:** The Tabris.js *client* version to use in the app. In contrast to the "tabris" dependency to your `package.json` which defines the version of the JavaScript module, this setting defines the version of the native client that will interpret your JavaScript code. In most cases, the value `latest` is good enough here. But if you want to stick to a fixed Tabris.js version you can configure it here.
@@ -282,7 +250,6 @@ You can build Tabris.js apps on your local machine using the [Tabris CLI](https:
 
 To build apps on your machine, the development environment for the target platform must be installed.
 If you're targeting iOS, you need macOS with a recent version of Xcode.
-For Windows, you need a Windows PC with Visual Studio 2017.
 Android apps can be build on any OS with the latest Android SDK installed.
 
 The Tabris CLI must be installed globally on your system:
@@ -301,7 +268,7 @@ You can find this key on your [profile page](https://tabrisjs.com/settings/accou
 To build your app, run
 
 ```
-tabris build [android|ios|windows]
+tabris build [android|ios]
 ```
 
 For more command-line options, please refer to the [CLI documentation](https://www.npmjs.com/package/tabris-cli).

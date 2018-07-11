@@ -103,6 +103,5 @@ NativeObject.defineProperties(TabFolder.prototype, {
       return selection ? tabris._proxies.find(selection) : null;
     }
   },
-  textColor: {type: 'color'},
-  win_tabBarTheme: {type: ['choice', ['default', 'light', 'dark']], default: 'default'},
+  textColor: {type: 'color'}
 });

@@ -49,13 +49,6 @@ NativeObject.defineProperties(Drawer.prototype, {
   enabled: {
     type: 'boolean',
     default: false
-  },
-  win_targetView: {
-    type: 'proxy'
-  },
-  win_displayMode: {
-    type: ['choice', ['overlay', 'compactOverlay', 'inline', 'compactInline']],
-    default: 'overlay'
   }
 });
 

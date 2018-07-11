@@ -17,10 +17,7 @@
   "properties": {
     "tintColor": {
       "type": "Color",
-      "description": "The color of the indicator.",
-      "platforms": {
-        "windows": false
-      }
+      "description": "The color of the indicator."
     }
   },
   "links": [

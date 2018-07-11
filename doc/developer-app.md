@@ -7,7 +7,6 @@ It is available for free in the app stores – just follow the links below or se
 
 [![Tabris.js on Google play](https://tabrisjs.com/assets/img/playstore-badge.png)](https://play.google.com/store/apps/details?id=com.eclipsesource.tabrisjs2)
 [![Tabris.js on Apple App Store](https://tabrisjs.com/assets/img/appstore-badge.png)](https://itunes.apple.com/us/app/tabris.js-2/id1166468326?mt=8)
-[![Tabris.js on Windows Store](https://tabrisjs.com/assets/img/windows-badge.png)](https://www.microsoft.com/store/apps/9n8z4pp9chtx)
 
 ## Try the Examples
 
@@ -27,7 +26,6 @@ On Android, you can also press the system's back button to go back.
 
 While running Tabris.js scripts in the Developer App, you can open a developer console by sliding from the right edge of the screen to the left.
 On iOS you may have to start sliding from the edge itself to open the drawer. You can also use a four-finger double tap instead.
-On Windows you can also press F12, if a keyboard is present.
 
 In the developer console you'll see messages and errors logged by the running script.
 You can even enter JavaScript expressions that will be evaluated in the context of your script.

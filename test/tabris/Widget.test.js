@@ -135,29 +135,6 @@ describe('Widget', function() {
       expect(call.properties.cornerRadius).to.equal(4);
     });
 
-    ['light', 'dark', 'default'].forEach((value) => {
-
-      it('sets win_theme to valid value', function() {
-        widget.win_theme = value;
-
-        let call = client.calls({op: 'set'})[0];
-        expect(call.properties.win_theme).to.equal(value);
-      });
-
-    });
-
-    it('ignores setting win_theme to invalid value', function() {
-      stub(console, 'warn');
-
-      widget.win_theme = 'foo';
-
-      expect(client.calls({op: 'set'}).length).to.equal(0);
-    });
-
-    it('returns win_theme default value', function() {
-      expect(widget.win_theme).to.equal('default');
-    });
-
     it("support 'initial' for background", function() {
       widget.set({background: 'green'});
       client.resetCalls();

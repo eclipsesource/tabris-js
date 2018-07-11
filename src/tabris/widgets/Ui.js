@@ -1,5 +1,4 @@
 import Composite from './Composite';
-import NativeObject from '../NativeObject';
 import {create as createContentView} from './ContentView';
 import {create as createStatusBar} from './StatusBar';
 import {create as createNavigationBar} from './NavigationBar';
@@ -50,9 +49,3 @@ export function create() {
   return new Ui(true);
 }
 
-NativeObject.defineProperties(Ui.prototype, {
-  win_theme: {
-    type: ['choice', ['default', 'light', 'dark']],
-    default: 'light'
-  }
-});

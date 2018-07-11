@@ -8,24 +8,18 @@ const PAGE_CONFIGS = [
 let navigationView = new NavigationView({
   left: 0, top: 0, right: 0, bottom: 0,
   drawerActionVisible: true,
-  pageAnimation: 'none',
-  win_drawerActionBackground: '#009688',
-  win_drawerActionTheme: 'dark'
+  pageAnimation: 'none'
 }).appendTo(ui.contentView);
 
 ui.drawer.set({
-  enabled: true,
-  win_targetView: navigationView,
-  win_displayMode: 'compactOverlay'
+  enabled: true
 });
 
-if (device.platform !== 'windows') {
-  new ImageView({
-    left: 0, right: 0, top: 0, height: 200,
-    image: 'resources/landscape.jpg',
-    scaleMode: 'fill'
-  }).appendTo(ui.drawer);
-}
+new ImageView({
+  left: 0, right: 0, top: 0, height: 200,
+  image: 'resources/landscape.jpg',
+  scaleMode: 'fill'
+}).appendTo(ui.drawer);
 
 let pageSelector = new CollectionView({
   left: 0, top: 'prev()', right: 0, bottom: 0,
@@ -43,18 +37,16 @@ createPage({title: 'Initial Page', icon: 'resources/page.png'}).appendTo(navigat
 
 function createCell() {
   let cell = new Composite();
-  if (device.platform !== 'windows') {
-    new Composite({
-      left: device.platform === 'iOS' ? 60 : 72, right: 0, bottom: 0, height: 1,
-      background: '#e7e7e7'
-    }).appendTo(cell);
-  }
+  new Composite({
+    left: device.platform === 'iOS' ? 60 : 72, right: 0, bottom: 0, height: 1,
+    background: '#e7e7e7'
+  }).appendTo(cell);
   new ImageView({
-    left: select({iOS: 14, Android: 14, windows: 8}), top: 10, bottom: 10
+    left: select({iOS: 14, Android: 14}), top: 10, bottom: 10
   }).appendTo(cell);
   new TextView({
-    left: select({iOS: 60, Android: 72, windows: 56}), centerY: 0,
-    font: select({iOS: '17px .HelveticaNeueInterface-Regular', Android: '14px Roboto Medium', windows: '18px default'}),
+    left: select({iOS: 60, Android: 72}), centerY: 0,
+    font: select({iOS: '17px .HelveticaNeueInterface-Regular', Android: '14px Roboto Medium'}),
     textColor: '#212121'
   }).appendTo(cell);
   return cell;

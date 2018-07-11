@@ -2,11 +2,10 @@
 ---
 # Introduction
 
-Tabris.js is a mobile framework that lets you develop apps for *iOS, Android and Windows* from a *single code base* written entirely in *JavaScript* or *TypeScript* and *JSX*.
+Tabris.js is a mobile framework that lets you develop apps for *iOS and Android* from a *single code base* written entirely in *JavaScript* or *TypeScript* and *JSX*.
 It provides access to *native widgets* and functions, delivering native performance and look & feel on each platform.
 
 <img src="https://user-images.githubusercontent.com/255637/28335462-c04bb540-6bfe-11e7-8e1d-69b9e2e0c66b.png" alt="Bookstore example on Android" width="180" style="margin: 5px" />
-<img src="https://user-images.githubusercontent.com/255637/28335472-c5f154aa-6bfe-11e7-905d-742218d40b19.png" alt="Bookstore example on Windows" width="180" style="margin: 5px" />
 <img src="https://user-images.githubusercontent.com/255637/28335465-c37e7bc6-6bfe-11e7-92c8-97ce71ad6d90.png" alt="Bookstore example on iOS" width="180" style="margin: 5px" />
 
 Tabris.js has been crafted with compatibility and extensibility in mind.

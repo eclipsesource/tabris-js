@@ -42,9 +42,7 @@ NativeObject.defineProperties(Device.prototype, {
   orientation: {readonly: true},
   screenWidth: {readonly: true},
   screenHeight: {readonly: true},
-  scaleFactor: {readonly: true, get: getOnce},
-  win_keyboardPresent: {readonly: true},
-  win_primaryInput: {readonly: true}
+  scaleFactor: {readonly: true, get: getOnce}
 });
 
 export function create() {

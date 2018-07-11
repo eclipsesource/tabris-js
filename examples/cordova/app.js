@@ -1,4 +1,4 @@
-const {Button, Page, NavigationView, ScrollView, device, ui} = require('tabris');
+const {Button, Page, NavigationView, ScrollView, ui} = require('tabris');
 const ToastPage = require('./ToastPage');
 const SharingPage = require('./SharingPage');
 const MotionPage = require('./MotionPage');
@@ -18,20 +18,15 @@ let contentContainer = new ScrollView({
   left: 0, top: 0, right: 0, bottom: 0
 }).appendTo(mainPage);
 
-(
-  device.platform === 'windows' ? [
-    MotionPage,
-    NetworkPage
-  ] : [
-    SharingPage,
-    ToastPage,
-    MotionPage,
-    NetworkPage,
-    CameraPage,
-    BarcodeScannerPage,
-    MediaPage,
-  ]
-).forEach(Page => {
+[
+  SharingPage,
+  ToastPage,
+  MotionPage,
+  NetworkPage,
+  CameraPage,
+  BarcodeScannerPage,
+  MediaPage
+].forEach(Page => {
   let page = new Page();
   addPageSelector(page);
 });

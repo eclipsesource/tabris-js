@@ -12,11 +12,10 @@
       "type": "string",
       "values": [
         "Android",
-        "iOS",
-        "windows"
+        "iOS"
       ],
       "static": true,
-      "description": "The name of the platform. Currently either `\"Android\"`, `\"iOS\"`, or `\"windows\"`. This property is also available globally as `device.platform`."
+      "description": "The name of the platform. Currently either `\"Android\"` or `\"iOS\"`. This property is also available globally as `device.platform`."
     },
     "version": {
       "type": "string",
@@ -42,7 +41,6 @@
       "static": true,
       "description": "The name of the device set by owner. For example `\"John's iPhone\"`. This property is also available globally as `device.name`.",
       "platforms": {
-        "windows": false,
         "android": false
       }
     },
@@ -81,25 +79,6 @@
       ],
       "description": "The device orientation. One of `portrait-primary`, `portrait-secondary`, `landscape-primary`, and `landscape-secondary`.",
       "changeEventDescription": "Fired when the `orientation` property has changed and the rotation animation has finished."
-    },
-    "win_keyboardPresent": {
-      "type": "boolean",
-      "readonly": true,
-      "description": "Returns `true` if a hardware keyboard is present. The developer may choose to handle some user input differently in that case. Available only on windows.",
-      "platforms": {
-        "ios": false,
-        "android": false
-      }
-    },
-    "win_primaryInput": {
-      "type": "boolean",
-      "readonly": true,
-      "values": ["touch", "mouse"],
-      "description": "On a PC this returns `\"touch\"` when in tablet mode, otherwise `\"mouse\"`. On phones this this returns `\"mouse\"` when displayed on an external display (\"Continuum\"), otherwise `\"touch\"`. Available only on windows",
-      "platforms": {
-        "ios": false,
-        "android": false
-      }
     }
   }
 }

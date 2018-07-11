@@ -29,8 +29,7 @@
       "type": "boolean",
       "description": "Whether the text can be selected or not. Currently only support on Android.",
       "platforms": {
-        "ios": false,
-        "windows": false
+        "ios": false
       }
     },
     "markupEnabled": {

@@ -22,24 +22,17 @@
     "image": {
       "type": "Image",
       "ts_type": "Image|null",
-      "description": "An image to be displayed on the tab.  Will not be shown on iOS if the `TabFolder`'s `tabBarLocation` is set to `top`",
-      "platforms": {
-        "windows": false
-      }
+      "description": "An image to be displayed on the tab.  Will not be shown on iOS if the `TabFolder`'s `tabBarLocation` is set to `top`"
     },
     "selectedImage": {
       "type": "Image",
       "ts_type": "Image|null",
-      "description": "An image to be displayed on the currently active tab.",
-      "platforms": {
-        "windows": false
-      }
+      "description": "An image to be displayed on the currently active tab."
     },
     "badge": {
       "type": "string",
       "description": "A badge to attach to the tab.",
       "platforms": {
-        "windows": false,
         "android": false
       }
     }

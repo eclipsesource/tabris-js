@@ -5,7 +5,7 @@ type Orientation = 'landscape-primary' | 'landscape-secondary' | 'portrait-prima
 let language: string;
 let model: string;
 let orientation: Orientation;
-let platform: 'Android' | 'iOS' | 'windows';
+let platform: 'Android' | 'iOS';
 let scaleFactor: number;
 let screenHeight: number;
 let screenWidth: number;

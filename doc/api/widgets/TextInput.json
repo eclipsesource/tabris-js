@@ -25,7 +25,7 @@
       ],
       "default": "default",
       "static": true,
-      "description": "The type of the text widget. Windows 10 currently interprets `search`  as `default`."
+      "description": "The type of the text widget."
     },
     "text": {
       "type": "string",
@@ -52,10 +52,7 @@
         "center"
       ],
       "default": "left",
-      "description": "The horizontal alignment of the text.",
-      "platforms": {
-        "windows": false
-      }
+      "description": "The horizontal alignment of the text."
     },
     "autoCorrect": {
       "type": "boolean",
@@ -73,10 +70,7 @@
         "word",
         "all"
       ],
-      "description": "Control how text input is capitalized.\n\n`none` - Do not change any text input\n`sentence` - Capitalize the first word of a sentence\n`word` - Capitalize every word\n`all` - Capitalize every letter\n\nThe boolean value `false` maps to `none` whereas `true` is equal to `all`.",
-      "platforms": {
-        "windows": false
-      }
+      "description": "Control how text input is capitalized.\n\n`none` - Do not change any text input\n`sentence` - Capitalize the first word of a sentence\n`word` - Capitalize every word\n`all` - Capitalize every letter\n\nThe boolean value `false` maps to `none` whereas `true` is equal to `all`."
     },
     "keyboard": {
       "type": "string",
@@ -114,47 +108,33 @@
     "keepFocus": {
       "type": "boolean",
       "default": "false",
-      "description": "When `true` the `TextInput` will keep its focus, even when tapped outside of the widget bounds.",
-      "platforms": {
-        "windows": false
-      }
+      "description": "When `true` the `TextInput` will keep its focus, even when tapped outside of the widget bounds."
     },
     "fillColor": {
       "type": "Color",
       "description": "The color of the background of the TextInput - applies only to iOS.",
       "platforms": {
-        "windows": false,
         "android": false
       }
     },
     "borderColor": {
       "type": "Color",
-      "description": "The color of the border of the TextInput. On iOS this is a rectangular border around the TextInput, on Android it is a single line below the TextInput.",
-      "platforms": {
-        "windows": false
-      }
+      "description": "The color of the border of the TextInput. On iOS this is a rectangular border around the TextInput, on Android it is a single line below the TextInput."
     },
     "revealPassword": {
       "type": "boolean",
-      "description": "Makes the text visible when the `TextInput` has the type `password`.",
-      "platforms": {
-        "windows": false
-      }
+      "description": "Makes the text visible when the `TextInput` has the type `password`."
     },
     "cursorColor": {
       "type": "Color",
       "description": "The color of the cursor in the `TextInput`.",
       "platforms": {
-        "windows": false,
         "android": false
       }
     },
     "selection": {
       "type": "number[]",
-      "description": "The `selection` is a two element number array representing the text selections start and end position. The native platform usually shows selection handles so that the selection can be changed by the user. A `selection` array where both numbers are the same represent a single cursor at the given position. The selection start is the index of the first character where as the end is the index of the last character + 1. E.g. to select the word \"ok\" the selection would be `[0, 2]`.\n\nTo make a selection visible the `TextInput` has to be in focus. Consequently the selection is preserved when the focus is lost and regained. When the user gives the `TextInput` focus by tapping on it, the selection is changed to represent his touch position.\n\n Getting the `selection` upon user interaction (e.g. a button press) the focus would be lost and possibly the `selection` altered due to user interaction. In such a scenario it is recommended to set the [`keepFocus`](#keepFocus) property to `true`.",
-      "platforms": {
-        "windows": false
-      }
+      "description": "The `selection` is a two element number array representing the text selections start and end position. The native platform usually shows selection handles so that the selection can be changed by the user. A `selection` array where both numbers are the same represent a single cursor at the given position. The selection start is the index of the first character where as the end is the index of the last character + 1. E.g. to select the word \"ok\" the selection would be `[0, 2]`.\n\nTo make a selection visible the `TextInput` has to be in focus. Consequently the selection is preserved when the focus is lost and regained. When the user gives the `TextInput` focus by tapping on it, the selection is changed to represent his touch position.\n\n Getting the `selection` upon user interaction (e.g. a button press) the focus would be lost and possibly the `selection` altered due to user interaction. In such a scenario it is recommended to set the [`keepFocus`](#keepFocus) property to `true`."
     },
     "font": {
       "type": "Font",

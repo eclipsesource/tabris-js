@@ -13,9 +13,6 @@
     ]
   },
   "description": "A `TimeDialog` represents a native dialog pop-up allowing the user to pick a time of day. Properties can only be set before open() is called. The dialog is automatically disposed when closed.",
-  "platforms": {
-    "windows": false
-  },
   "properties": {
     "date": {
       "type": "Date",

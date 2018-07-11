@@ -14,9 +14,6 @@
     ]
   },
   "description": "A pop up dialog that offers a selection. Is automatically disposed when closed.",
-  "platforms": {
-    "windows": false
-  },
   "properties": {
     "title": {
       "type": "string",

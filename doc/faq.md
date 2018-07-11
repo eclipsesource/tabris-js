@@ -28,7 +28,7 @@ Tabris.js uses Cordova in two ways:
 
 The Tabris.js developers have no affiliation with the [Apache Software Foundation](http://apache.org/).
 
-### Can I really build one iOS/Android/Windows app from a single JavaScript codebase?
+### Can I really build one iOS/Android app from a single JavaScript codebase?
 
 Yes. Tabris.js maps JavaScript widgets to native widgets which lets you create a distinctive UI and user experience on all three platforms. Unlike HTML based apps, it does *not* look the same on each platform. Instead it matches the native styles of each platform.
 
@@ -44,13 +44,17 @@ No, the JavaScript code is executed directly on the mobile device inside a JavaS
 
 No, that would be ["Tabris for RAP"](https://eclipsesource.com/products/tabris), the predecessor of Tabris.js.
 
-### What platform versions does Tabris.js support?
+### For what platforms can I create Tabris.js apps?
 
-|         | Tabris.js 1.x | Tabris.js 2.x |
-|---------|---------------|---------------|
-| Android | 4.1 and up    | 4.2 and up    |
-| iOS     | iOS 8 and up  | iOS 9 and up  |
-| Windows | N/A           | 10            |
+|         | Tabris.js 1.x | Tabris.js 2.x | Tabris.js 3.x |
+|---------|---------------|---------------|---------------|
+| Android | 4.1 and up    | 4.2 and up    | 4.2 and up    |
+| iOS     | iOS 8 and up  | iOS 9 and up  | iOS 9 and up  |
+| Windows | N/A           | 10            | N/A           |
+
+### Can I create "modern" (UWP) Windows / Windows Mobile apps with Tabris.js?
+
+You can with Tabris.js 2.x. Tabris.js 3.x currently does not provide free support for the Universal Windows Platform. If you represent an organization interested in Windows app development based on Tabris.js, please [contact our support](https://tabris.com/contact/).
 
 ## Development
 
@@ -86,7 +90,7 @@ See [Local Build](../latest/build.md#local-build) for a detailed guide.
 
 ### Is Tabris.js 100% compatible with Cordova plug-ins?
 
-No, plug-ins that access the DOM of an HTML page won't work because Tabris.js uses a native UI. This is especially true on Windows, where most Cordova plug-ins use HTML in some way. However, many Cordova plug-ins that provide access to device functions such as sensors will work out of the box.
+No, plug-ins that access the DOM of an HTML page won't work because Tabris.js uses a native UI. However, many Cordova plug-ins that provide access to device functions such as sensors will work out of the box.
 
 ### How can I test Cordova plug-ins?
 
@@ -126,13 +130,3 @@ You have to use an app store provisioning profile if you want to submit the app 
 ### My app builds correctly when using "debug", but fails in release mode. What can I do?
 
 Make sure that you have downloaded the right certificate and provisioning profile from [developer.apple.com](https://developer.apple.com). The certificate should be for "Production" use and the provisioning profile for "Distribution". Then upload the provisioning profile with the corresponding p12 file at [tabrisjs.com](https://tabrisjs.com).
-
-## Windows-specific Questions
-
-### How do I connect to a localhost/127.0.0.1 URL?
-
-Windows apps need a special permission to enable loopback addresses. It's explained [in the Windows article](../latest/windows-support.md) how to do this.
-
-### How can I submit my app to the Windows Store?
-
-See "Building an App" in the [in the Windows article](../latest/windows-support.md).

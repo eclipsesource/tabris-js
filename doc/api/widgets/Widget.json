@@ -174,17 +174,11 @@
     },
     "elevation": {
       "type": "number",
-      "description": "The position of the widget on the z-axis. Supported on iOS and Android 5.0+.",
-      "platforms": {
-        "windows": false
-      }
+      "description": "The position of the widget on the z-axis. Supported on iOS and Android 5.0+."
     },
     "cornerRadius": {
       "type": "number",
-      "description": "Configure a widget to have rounded corners. Each corner is affected equally. Supported on iOS and Android 5.0+.",
-      "platforms": {
-        "windows": false
-      }
+      "description": "Configure a widget to have rounded corners. Each corner is affected equally. Supported on iOS and Android 5.0+."
     },
     "backgroundImage": {
       "type": "Image",
@@ -212,16 +206,6 @@
       "type": "boolean",
       "default": "false",
       "description": "Whether the widget should show visual feedback while touched. Enabling `highlightOnTouch` will not prevent the touch event from being propagated to the parent widget."
-    },
-    "win_theme": {
-      "type": "string",
-      "values": ["light", "dark", "default"],
-      "default": "default",
-      "description": "Controls the color scheme used for this widget. When set to `\"default\"` the theme is inherited from either the parent (if present) or the OS settings. Available only on windows.",
-      "platforms": {
-        "ios": false,
-        "android": false
-      }
     },
     "data": {
       "type": "object",

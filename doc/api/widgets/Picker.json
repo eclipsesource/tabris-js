@@ -31,7 +31,6 @@
       "type": "Color",
       "description": "The color of the background of the Picker - applies only to iOS.",
       "platforms": {
-        "windows": false,
         "android": false
       }
     },

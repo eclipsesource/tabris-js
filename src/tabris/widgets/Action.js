@@ -27,6 +27,5 @@ NativeObject.defineProperties(Action.prototype, {
     },
     default: 'normal'
   },
-  title: {type: 'string', default: ''},
-  win_symbol: {type: 'string', default: ''}
+  title: {type: 'string', default: ''}
 });

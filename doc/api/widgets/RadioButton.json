@@ -30,17 +30,11 @@
     },
     "tintColor": {
       "type": "Color",
-      "description": "The color of the selectable area.",
-      "platforms": {
-        "windows": false
-      }
+      "description": "The color of the selectable area."
     },
     "checkedTintColor": {
       "type": "Color",
-      "description": "The color of the selectable area in checked state. Will fall back to `tintColor` if not set.",
-      "platforms": {
-        "windows": false
-      }
+      "description": "The color of the selectable area in checked state. Will fall back to `tintColor` if not set."
     },
     "font": {
       "type": "Font",

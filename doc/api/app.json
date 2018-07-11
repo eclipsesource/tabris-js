@@ -42,10 +42,7 @@
       "description": "Fired when the app becomes invisible. Either because another app is in the foreground or the user has returned to the home screen."
     },
     "terminate": {
-      "description": "Fired when the app is being destroyed. After this callback no more interaction with the app is possible.",
-      "platforms": {
-        "windows": false
-      }
+      "description": "Fired when the app is being destroyed. After this callback no more interaction with the app is possible."
     },
     "backNavigation": {
       "description": "Fired when the back button is pressed on Android.",
@@ -71,17 +68,13 @@
     },
     "reload": {
       "parameters": [],
-      "description": "Forces the running application to reload the main module and start over.",
-      "platforms": {
-        "windows": false
-      }
+      "description": "Forces the running application to reload the main module and start over."
     },
     "close": {
       "parameters": [],
       "description": "Shuts down the running application and closes the UI.",
       "platforms": {
-        "ios": false,
-        "windows": false
+        "ios": false
       }
     },
     "getResourceLocation": {
@@ -105,7 +98,7 @@
         {
           "name": "file",
           "type": "string",
-          "description": "The font file to register for later use. Similar to images paths, the file path can be absolute, relative or an URL.\n\nOn the Windows platform it is required to provide the font-family name to reference the font in the given file. The font-family name is provided as a fragment postfix to the file name. For example `arial.ttf#Arial` can be used the load a font named 'Arial' from the file 'arial.ttf'. The file also has to be bundled with the app to work, loading it remotely (e.g. via the developer app) will not work."
+          "description": "The font file to register for later use. Similar to images paths, the file path can be absolute, relative or an URL."
         }
       ],
       "description": "Allows to register a font to use throughout the app. Once a font is registered its alias can be used to apply the font where ever a font can be configured, e.g. in `TextView` or `GraphicalContext`. Tabris.js currently supports TrueType fonts (*.ttf) and OpenType fonts (*.otf)."
@@ -123,7 +116,7 @@
           "description": "A callback function to be called when the installation has finished or failed. In case of a failure, the callback will receive a parameter `error` that contains an Error object. If the installation succeeds, this parameter will be `null` and a second parameter will contain the parsed content of the file `patch.json` from the installed patch."
         }
       ],
-      "description": "Installs a patch from the given URL. When the patch is successfully installed, it will remain inactive until the application is reloaded. Not supported on Windows. For more information see [Patching a Tabris.js App](../patch.md)",
+      "description": "Installs a patch from the given URL. When the patch is successfully installed, it will remain inactive until the application is reloaded. For more information see [Patching a Tabris.js App](../patch.md)",
       "provisional": true
     }
   },
