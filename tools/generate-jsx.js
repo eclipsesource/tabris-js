@@ -136,18 +136,19 @@ function getEventType(widgetName, eventName, def) {
 function createPropertyChangedEvent(widgetName, propName, def) {
   let result = [];
   let standardDescription = `Fired when the [*${propName}*](#${propName}) property has changed.`;
+  let defType = def.ts_type || def.type;
   let changeEvent = {
     description: def.changeEventDescription || standardDescription,
     parameters: [{
       name: 'value',
-      type: def.type,
+      type: defType,
       description: `The new value of [*${propName}*](#${propName}).`
     }]
   };
   result.push(createDoc(changeEvent));
-  let type = (isBasicType(def.type) ? '' : 'tabris.') + def.type;
+  let fullType = (isBasicType(defType) ? '' : 'tabris.') + defType;
   result.push(`on${capitalizeFirstChar(propName)}Changed?: `
-    + `(event: tabris.PropertyChangedEvent<tabris.${widgetName}, ${type}>) => void;`);
+    + `(event: tabris.PropertyChangedEvent<tabris.${widgetName}, ${fullType}>) => void;`);
   return result.join('\n');
 }
 

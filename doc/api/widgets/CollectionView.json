@@ -26,12 +26,12 @@
     },
     "createCell": {
       "type": "(cellType: string) => Widget",
-      "static": true,
+      "ts_type": "(cellType: string) => tabris.Widget",
       "description": "A callback used to create a new reusable cell widget for a given type. This callback will be called by the framework and the created cell will be reused for different items. The created widget should be populated in the `updateCell` function."
     },
     "updateCell": {
       "type": "(cell: Widget, index: number) => void",
-      "static": true,
+      "ts_type": "(cell: tabris.Widget, index: number) => void",
       "description": "A callback used to update a given cell widget to display the item with the given index. This callback will be called by the framework."
     },
     "cellType": {

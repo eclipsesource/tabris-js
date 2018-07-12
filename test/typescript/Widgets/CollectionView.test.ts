@@ -42,6 +42,8 @@ let properties: CollectionViewProperties = {
 };
 widget = new CollectionView(properties);
 widget.set(properties);
+widget.createCell = createCell;
+widget.updateCell = updateCell;
 
 // Methods
 let index: number = 42;
@@ -58,5 +60,7 @@ noReturnValue = widget.reveal(index);
 
 widget.on({
   firstVisibleIndexChanged: (ev: PropertyChangedEvent<CollectionView, number>) => {},
-  lastVisibleIndexChanged: (ev: PropertyChangedEvent<CollectionView, number>) => {}
+  lastVisibleIndexChanged: (ev: PropertyChangedEvent<CollectionView, number>) => {},
+  createCellChanged: (ev: PropertyChangedEvent<CollectionView, typeof widget.createCell>) => {},
+  updateCellChanged: (ev: PropertyChangedEvent<CollectionView, typeof widget.updateCell>) => {}
 });

@@ -224,7 +224,7 @@ function createPropertyChangedEvent(widgetName, propName, def) {
     description: def.changeEventDescription || standardDescription,
     parameters: [{
       name: 'value',
-      type: def.type,
+      type: def.ts_type || def.type,
       description: `The new value of [*${propName}*](#${propName}).`
     }]
   };
