@@ -73,41 +73,6 @@ export default class App extends NativeObject {
     this._nativeCall('registerFont', {alias, file});
   }
 
-  installPatch(url, callback) {
-    if (typeof url !== 'string') {
-      throw new Error('parameter url is not a string');
-    }
-    if (!this._pendingPatchCallback) {
-      this._pendingPatchCallback = callback || true;
-      this._nativeListen('patchInstall', true);
-      this._nativeCall('installPatch', {url});
-    } else if (typeof callback === 'function') {
-      callback(new Error('Another installPatch operation is already pending.'));
-    }
-  }
-
-  _trigger(name, event = {}) {
-    if (name === 'patchInstall') {
-      this._nativeListen('patchInstall', false);
-      const callback = this._pendingPatchCallback;
-      delete this._pendingPatchCallback;
-      if (typeof callback === 'function') {
-        if (event.error) {
-          callback(new Error(event.error));
-        } else {
-          try {
-            const patch = event.success ? JSON.parse(event.success) : null;
-            callback(null, patch);
-          } catch (error) {
-            callback(new Error('Failed to parse patch.json'));
-          }
-        }
-      }
-    } else {
-      return super._trigger(name, event);
-    }
-  }
-
   _validateCertificate(event) {
     const hashes = this.$pinnedCerts[event.host];
     if (hashes && !hashes.some(hash => event.hashes.includes(hash))) {

@@ -18,13 +18,11 @@ let path: string = '';
 let url: string = '';
 let alias = '';
 let file = '';
-let callback: (error: Error|null, patch: any|null) => void = () => {};
 let voidReturnValue: void;
 let voidPromiseReturnValue: Promise<void>;
 let stringReturnValue: string;
 
 stringReturnValue = app.getResourceLocation(path);
-voidReturnValue = app.installPatch(url, callback);
 voidReturnValue = app.reload();
 voidReturnValue = app.close();
 voidReturnValue = app.registerFont(alias, file);

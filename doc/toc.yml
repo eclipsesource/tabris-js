@@ -37,8 +37,6 @@
       url: debug.html
     - title: Build your app
       url: build.html
-    - title: Patch your app
-      url: patch.html
 
 - title: API Reference
   pages:

@@ -53,6 +53,10 @@ and `baz = obj.get(bar)` can be replaced with `baz = obj[bar]`.
 On `WidgetCollection`, `bar = wc.get('foo');` can be replaced with `bar = wc.first().foo`,
 and `baz = wc.get(bar)` can be replaced with `baz = wc.first()[bar]`.
 
+### app.installPatch removed
+
+You can no longer patch your application using this method.
+
 ### "trigger" object/eventObject parameter is now cloned
 
 **This is relevant only if in your application you are passing values to `trigger` of types other than `Object` or `EventObject`.** Examples would be passing primitives (e.g. `trigger('select', selectionIndex);`) or instances of classes other than `Object` (e.g. `trigger('select', someArray);`). If you do that you need to change this to pass an object that references the value instead (e.g. `trigger('select', {selectionIndex});`)
@@ -144,3 +148,4 @@ import { ui, TextView } from 'tabris';
 
 ui.contentView.append(<TextView text='foo' />);
 ```
+Only widgets actually supporting different fonts now have a font property. Most applications should not have to adjust to this change.
