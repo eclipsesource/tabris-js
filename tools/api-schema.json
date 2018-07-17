@@ -1,0 +1,226 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tabris.com/api-schema.json",
+  "title": "Tabris.js API Definition JSON Schema",
+  "definitions": {
+    "api": {
+      "properties": {
+        "title": {
+          "description": "The title of the document. Will default to object or type name.",
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "namespace": {
+          "enum": ["global", "tabris"]
+        },
+        "type": {
+          "description": "Name of the class",
+          "type": "string"
+        },
+        "object": {
+          "description": "Name of the instance (for singletons)",
+          "type": "string"
+        },
+        "extends": {
+          "type": "string"
+        },
+        "generics": {
+          "description": "Typescript only",
+          "type": "string"
+        },
+        "constructor": {
+          "properties": {
+            "access" : {
+              "enum": [
+                "public",
+                "protected",
+                "private"
+              ]
+            },
+            "parameters": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/parameter"
+              }
+            }
+          },
+          "required": ["access"],
+          "additionalProperties": false
+        },
+        "properties": {
+          "description": "Change events will be generated automatically if type extends NativeObject",
+          "type": "object",
+          "patternProperties": {
+            "^_?[a-z]\\w+$": {"$ref": "#/definitions/property"},
+            "^\\[key\\: number\\]$": {"$ref": "#/definitions/property"}
+          },
+          "additionalProperties": false
+        },
+        "methods": {
+          "type": "object",
+          "patternProperties": {
+            "^_?[a-z]\\w+$": {
+              "anyOf": [
+                {"$ref": "#/definitions/method"},
+                {"type": "array", "items": {"$ref": "#/definitions/method"}}
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        "events": {
+          "type": "object",
+          "patternProperties": {
+            "^[a-z]\\w+$": {"$ref": "#/definitions/event"}
+          },
+          "additionalProperties": false
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "properties": {
+              "title": {"type": "string"},
+              "path": {"type": "string"}
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "dependencies": {
+        "extends": ["type"],
+        "object": ["type"],
+        "generics": ["type"],
+        "constructor": ["type"],
+        "events": ["type"]
+      },
+      "allOf": [
+        {
+          "$comment": "Where is the API located?",
+          "anyOf": [
+            {"required": ["type"]},
+            {"required": ["object"]},
+            {"required": ["namespace"]}
+          ]
+        },
+        {
+          "$comment": "What is the document named?",
+          "anyOf": [
+            {"required": ["title"]},
+            {"required": ["object"]},
+            {"required": ["type"]}
+          ]
+        }
+      ],
+      "additionalProperties": false
+    },
+    "property": {
+      "properties": {
+        "description": {"type": "string"},
+        "changeEventDescription": {"type": "string"},
+        "type": {"type": "string"},
+        "ts_type": {
+          "description": "Overrides \"type\" for TypeScript declarations",
+          "type": "string"
+        },
+        "ts_only": {
+          "description": "Exclude this property from documentation",
+          "type": "boolean"
+        },
+        "platforms": {"$ref": "#/definitions/platforms"},
+        "readonly": {
+          "description": "Indicates that this property can not be set. However, if the property is not \"static\", it may change by itself. Defaults to false",
+          "type": "boolean"
+        },
+        "static": {
+          "description": "Indicates that this property can not change during the lifetime of this object. However, if there is a public constructor and the property is not \"readonly\", it can be set via constructor. No change events will be generated for this property. Defaults to false",
+          "type": "boolean"
+        },
+        "default": {
+          "description": "Default value of this property"
+        },
+        "values": {
+          "description": "Limits the possible values of this property",
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {"type": "string"},
+              {"type": "number"},
+              {"type": "boolean"}
+            ]
+          }
+        }
+      },
+      "required": ["type"],
+      "additionalProperties": false
+    },
+    "event": {
+      "properties": {
+        "description": {"type": "string"},
+        "eventObject": {
+          "type": "string",
+          "description": "The name of the generated event object interface for TypeScript declaration. Defaults to \"{TypeName}{EventName}Event\". Useful for merging multiple identical event interfaces."
+        },
+        "platforms": {"$ref": "#/definitions/platforms"},
+        "parameters": {
+          "type": "object",
+          "patternProperties": {
+            "^_?[a-z]\\w+$": {"$ref": "#/definitions/property"}
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "method": {
+      "properties": {
+        "parameters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/parameter"
+          }
+        },
+        "returns": {"type": "string"},
+        "ts_returns": {
+          "description": "Overrides \"returns\" for TypeScript declarations",
+          "type": "string"
+        },
+        "description": {"type": "string"},
+        "generics": {
+          "description": "TypeScript only",
+          "type": "string"
+        },
+        "platforms": {"$ref": "#/definitions/platforms"},
+        "protected": {"type": "boolean"},
+        "provisional": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "parameter": {
+      "properties": {
+        "name": {"type": "string"},
+        "description": {"type": "string"},
+        "type": {"type": "string"},
+        "ts_type": {
+          "description": "Overrides \"type\" for TypeScript declarations",
+          "type": "string"
+        },
+        "optional": {
+          "description": "Defaults to false",
+          "type": "boolean"
+        }
+      },
+      "required": ["name", "type"],
+      "additionalProperties": false
+    },
+    "platforms": {
+      "type": "object",
+      "properties": {
+        "ios": {"type": "boolean", "description": "Defaults to true"},
+        "android": {"type": "boolean", "description": "Defaults to true"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "$ref": "#/definitions/api"
+}

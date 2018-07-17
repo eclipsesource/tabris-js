@@ -1,6 +1,7 @@
 const {generateDoc} = require('./tools/generate-doc');
 const {generateTsd} = require('./tools/generate-ts');
 const {generateJsx} = require('./tools/generate-jsx');
+const {Validator} = require('jsonschema');
 
 module.exports = function(grunt) {
 
@@ -37,6 +38,7 @@ module.exports = function(grunt) {
     },
     doc: {
       api: 'doc/api/**/*.json',
+      schema: 'tools/api-schema.json',
       propertyTypes: 'typings/propertyTypes.d.ts',
       globalTypings: 'typings/global/*.d.ts',
       target: 'build/doc/'
@@ -119,6 +121,22 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-exec');
 
+  grunt.registerTask('validate-json', () => {
+    let validator = new Validator();
+    let schema = grunt.file.readJSON(grunt.config('doc').schema);
+    let files = grunt.file.expand(grunt.config('doc').api);
+    let allResults = [];
+    files.forEach(file => {
+      let results = validator.validate(grunt.file.readJSON(file), schema, {nestedErrors: true});
+      if (results.errors.length) {
+        allResults.push(`${file}:\n${results.errors.join('\n')}`);
+      }
+    });
+    if (allResults.length > 0) {
+      grunt.fail.warn('Invalid JSON found\n' + allResults.join('\n') + '\n');
+    }
+  });
+
   grunt.registerTask('generate-doc', () => {
     let targetPath = grunt.config('doc').target;
     let files = grunt.file.expand(grunt.config('doc').api);
@@ -140,7 +158,8 @@ module.exports = function(grunt) {
   /* runs static code analysis tools */
   grunt.registerTask('lint', [
     'exec:eslint',
-    'exec:tslint'
+    'exec:tslint',
+    'validate-json'
   ]);
 
   grunt.registerTask('package', 'create package.json', () => {

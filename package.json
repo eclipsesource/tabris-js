@@ -34,6 +34,7 @@
     "grunt-contrib-concat": "^1.0.0",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-exec": "^2.0.0",
+    "jsonschema": "^1.2.4",
     "mocha": "^4.0.1",
     "rollup": "^0.52.1",
     "rollup-plugin-inject": "^2.0.0",
