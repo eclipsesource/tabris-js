@@ -9,7 +9,7 @@ import {
 } from 'tabris';
 
 
-let widget: TabFolder = new TabFolder;
+let widget: TabFolder = new TabFolder({tabBarLocation: 'top'});
 
 // Properties
 let paging: boolean;

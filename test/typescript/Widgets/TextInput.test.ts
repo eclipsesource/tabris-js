@@ -3,7 +3,7 @@ import {
   TextInputSelectEvent, Font
 } from 'tabris';
 
-let widget: TextInput = new TextInput();
+let widget: TextInput = new TextInput({type: 'password'});
 
 // Properties
 let alignment: 'center' | 'left' | 'right';

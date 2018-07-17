@@ -1,6 +1,6 @@
 import {Color, TextView, TextViewTapLinkEvent, TextViewProperties, Font} from 'tabris';
 
-let widget: TextView = new TextView();
+let widget: TextView = new TextView({markupEnabled: true});
 
 // Properties
 let alignment: 'center' | 'left' | 'right';

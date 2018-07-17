@@ -1,5 +1,6 @@
 import {
-  WebView, EventObject, WebViewNavigateEvent, WebViewDownloadEvent, WebViewMessageEvent, WebViewProperties
+  WebView, EventObject, WebViewNavigateEvent, WebViewDownloadEvent, WebViewMessageEvent, WebViewProperties,
+  PropertyChangedEvent
 } from 'tabris';
 
 let widget: WebView = new WebView();
@@ -47,5 +48,7 @@ widget.on({
   navigate: (event: WebViewNavigateEvent) => {},
   load: (event: EventObject<WebView>) => {},
   message: (event: WebViewMessageEvent) => {},
-  download: (event: WebViewDownloadEvent) => {}
+  download: (event: WebViewDownloadEvent) => {},
+  canGoForwardChanged: (event: PropertyChangedEvent<WebView, boolean>) => {},
+  canGoBackChanged: (event: PropertyChangedEvent<WebView, boolean>) => {}
 });

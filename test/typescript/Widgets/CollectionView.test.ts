@@ -1,4 +1,4 @@
-import {CollectionView, Widget, CollectionViewProperties} from 'tabris';
+import {CollectionView, Widget, CollectionViewProperties, PropertyChangedEvent} from 'tabris';
 
 // Properties
 let cellHeight: number|'auto'|((index: number, cellType: string) => number|'auto');
@@ -55,3 +55,8 @@ noReturnValue = widget.refresh(index);
 noReturnValue = widget.remove(index);
 noReturnValue = widget.remove(index, count);
 noReturnValue = widget.reveal(index);
+
+widget.on({
+  firstVisibleIndexChanged: (ev: PropertyChangedEvent<CollectionView, number>) => {},
+  lastVisibleIndexChanged: (ev: PropertyChangedEvent<CollectionView, number>) => {}
+});

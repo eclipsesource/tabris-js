@@ -18,7 +18,8 @@ import {Widget,
  WidgetTapEvent,
  WidgetLongpressEvent,
  WidgetPanEvent,
- WidgetProperties
+ WidgetProperties,
+ PropertyChangedEvent
 } from 'tabris';
 
 let widget: Widget = new Composite();
@@ -201,6 +202,8 @@ let panVerticalEvent: WidgetPanEvent = {
 widget.on({
   dispose: (event: EventObject<Widget>) => {},
   resize: (event: WidgetResizeEvent) => {},
+  boundsChanged: (event: PropertyChangedEvent<Widget, Bounds>) => {},
+  idChanged: (event: PropertyChangedEvent<Widget, string>) => {},
   swipeDown: (event: WidgetSwipeEvent) => {},
   swipeLeft: (event: WidgetSwipeEvent) => {},
   swipeRight: (event: WidgetSwipeEvent) => {},
