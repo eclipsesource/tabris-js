@@ -31,6 +31,16 @@ describe('ScrollView', function() {
       expect(scrollView.direction).to.equal('vertical');
     });
 
+    it('defaults to true scrollbarVisible', function() {
+      expect(scrollView.scrollbarVisible).to.be.true;
+    });
+
+    it('sets scrollbarVisible', function() {
+      scrollView.scrollbarVisible = false;
+
+      expect(client.calls({id: scrollView.cid})[0].properties).to.deep.equal({scrollbarVisible: false});
+    });
+
     describe('when a child is appended', function() {
 
       let result, child;

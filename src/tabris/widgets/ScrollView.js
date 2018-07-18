@@ -53,5 +53,6 @@ NativeObject.defineProperties(ScrollView.prototype, {
     default: 'vertical'
   },
   offsetX: {type: 'number', nocache: true, readonly: true},
-  offsetY: {type: 'number', nocache: true, readonly: true}
+  offsetY: {type: 'number', nocache: true, readonly: true},
+  scrollbarVisible: {type: 'boolean', default: true}
 });

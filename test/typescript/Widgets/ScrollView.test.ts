@@ -6,10 +6,12 @@ let widget: ScrollView = new ScrollView();
 let direction: 'horizontal' | 'vertical';
 let offsetX: number;
 let offsetY: number;
+let scrollbarVisible: boolean;
 
 direction = widget.direction;
 offsetX = widget.offsetX;
 offsetY = widget.offsetY;
+scrollbarVisible = widget.scrollbarVisible;
 
 widget.direction = direction;
 

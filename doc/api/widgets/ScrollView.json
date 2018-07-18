@@ -34,6 +34,11 @@
       "type": "number",
       "readonly": true,
       "description": "The vertical scrolling position in dip."
+    },
+    "scrollbarVisible": {
+      "type": "boolean",
+      "default": "true",
+      "description": "Allows to show or hide scroll bar for current direction."
     }
   },
   "methods": {
