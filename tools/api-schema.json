@@ -4,6 +4,7 @@
   "title": "Tabris.js API Definition JSON Schema",
   "definitions": {
     "api": {
+      "type": "object",
       "properties": {
         "title": {
           "description": "The title of the document. Will default to object or type name.",
@@ -116,6 +117,7 @@
       "additionalProperties": false
     },
     "property": {
+      "type": "object",
       "properties": {
         "description": {"type": "string"},
         "changeEventDescription": {"type": "string"},
@@ -156,6 +158,7 @@
       "additionalProperties": false
     },
     "event": {
+      "type": "object",
       "properties": {
         "description": {"type": "string"},
         "eventObject": {
@@ -173,6 +176,7 @@
       "additionalProperties": false
     },
     "method": {
+      "type": "object",
       "properties": {
         "parameters": {
           "type": "array",
@@ -181,6 +185,7 @@
           }
         },
         "returns": {"type": "string"},
+        "ts_only": {"type": "boolean"},
         "ts_returns": {
           "description": "Overrides \"returns\" for TypeScript declarations",
           "type": "string"
@@ -197,6 +202,7 @@
       "additionalProperties": false
     },
     "parameter": {
+      "type": "object",
       "properties": {
         "name": {"type": "string"},
         "description": {"type": "string"},
@@ -222,5 +228,5 @@
       "additionalProperties": false
     }
   },
-  "$ref": "#/definitions/api"
+  "oneOf": [{"$ref": "#/definitions/api"}]
 }

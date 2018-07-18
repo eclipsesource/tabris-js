@@ -1,5 +1,6 @@
+require('ts-node').register({compilerOptions: {module: 'commonjs', lib: ['es2016']}});
 const {generateDoc} = require('./tools/generate-doc');
-const {generateTsd} = require('./tools/generate-ts');
+const {generateDts} = require('./tools/generate-dts');
 const {generateJsx} = require('./tools/generate-jsx');
 const {Validator} = require('jsonschema');
 
@@ -152,7 +153,7 @@ module.exports = function(grunt) {
     let files = grunt.file.expand(grunt.config('doc').api);
     let propertyTypes = grunt.file.read(grunt.config('doc').propertyTypes);
     let globalTypeDefFiles = grunt.file.expand(grunt.config('doc').globalTypings);
-    generateTsd({files, propertyTypes, globalTypeDefFiles, version});
+    generateDts({files, propertyTypes, globalTypeDefFiles, version});
   });
 
   /* runs static code analysis tools */
