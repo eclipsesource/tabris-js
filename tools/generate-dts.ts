@@ -2,7 +2,7 @@ import * as fs from 'fs-extra';
 import * as schema from './api-schema';
 import {
   TextBuilder, asArray, filter, ApiDefinitions, ExtendedApi, Methods,
-  readJsonDefs, extendTypeDefs, createDoc, createEventTypeName
+  readJsonDefs, createDoc, createEventTypeName
 } from './common';
 
 const HEADER = `
@@ -61,7 +61,6 @@ function writeTabrisDts(config) {
 //#region render objects/types
 
 function renderDts(text: TextBuilder, apiDefinitions: ApiDefinitions) {
-  extendTypeDefs(apiDefinitions);
   Object.keys(apiDefinitions).forEach(name => {
     renderTypeDefinition(text, apiDefinitions[name]);
   });

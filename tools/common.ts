@@ -2,9 +2,10 @@ import * as fs from 'fs-extra';
 import * as schema from './api-schema';
 
 // TODO: Rename "constructor" property in schema since this name is already used by plain JavaScript objects
-export type ExtendedApi = schema.Api & Partial<{isNativeObject: boolean, parent: ExtendedApi}>;
+export type ExtendedApi = schema.Api & Partial<{isNativeObject: boolean, parent: ExtendedApi, file: string, isWidget: boolean}>;
 export type ApiDefinitions = {[name: string]: ExtendedApi};
 export type Methods = schema.Method | schema.Method[];
+export type Properties = {[name: string]: schema.Property};
 
 export function capitalizeFirstChar(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -56,23 +57,24 @@ export function filter<T>(obj: T, filterFunction): T {
     }, {}) as T;
 }
 
-export function readJsonDefs(files) {
+export function readJsonDefs(files: string[]) {
   const defs = {};
   files.forEach(file => {
-    const json = fs.readJsonSync(file);
-    json.file = file;
-    defs[json.type || json.object || json.title] = json;
+    const def = fs.readJsonSync(file);
+    def.file = file;
+    def.isWidget = file.indexOf('/widgets/') !== -1;
+    const title = getTitle(def);
+    if (defs[title]) {
+      throw new Error('Duplicate entry ' + title);
+    }
+    defs[title] = def;
   });
+  extendTypeDefs(defs);
   return defs as ApiDefinitions;
 }
 
-export function extendTypeDefs(defs: ApiDefinitions) {
-  Object.keys(defs).forEach(name => {
-    defs[name].isNativeObject = isNativeObject(defs, defs[name]);
-    if (defs[name].extends) {
-      defs[name].parent = defs[defs[name].extends];
-    }
-  });
+export function getTitle(def: ExtendedApi): string {
+  return def.type || def.object || def.title;
 }
 
 export function createDoc(documentable: ExtendedApi | schema.Property | schema.Method | schema.Event | schema.Event) {
@@ -135,6 +137,15 @@ function splitIntoLines(text: string, maxLength: number) {
   return linesOut;
 }
 
+function extendTypeDefs(defs: ApiDefinitions) {
+  Object.keys(defs).forEach(name => {
+    defs[name].isNativeObject = isNativeObject(defs, defs[name]);
+    if (defs[name].extends) {
+      defs[name].parent = defs[defs[name].extends];
+    }
+  });
+}
+
 export function createEventTypeName(widgetName: string, eventName: string, event: schema.Event) {
   if (event.parameters) {
     return event.eventObject || (widgetName + capitalizeFirstChar(eventName) + 'Event');
@@ -143,6 +154,6 @@ export function createEventTypeName(widgetName: string, eventName: string, event
   }
 }
 
-function isNativeObject(defs, def) {
+export function isNativeObject(defs, def) {
   return def && (def.type === 'NativeObject' || isNativeObject(defs, defs[def.extends]));
 }

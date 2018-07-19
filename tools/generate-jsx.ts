@@ -1,8 +1,8 @@
 import * as fs from 'fs-extra';
 import * as schema from './api-schema';
 import {
-  TextBuilder, asArray, capitalizeFirstChar, filter, ApiDefinitions, ExtendedApi, Methods,
-  readJsonDefs, extendTypeDefs, lowercaseFirstChar, createDoc, createEventTypeName
+  TextBuilder, capitalizeFirstChar, filter, ApiDefinitions, ExtendedApi, Methods,
+  readJsonDefs, lowercaseFirstChar, createDoc, createEventTypeName
 } from './common';
 
 const BASIC_TYPES = ['boolean', 'number', 'string', 'symbol', 'any', 'object', 'Date'];
@@ -37,7 +37,6 @@ exports.generateJsx = function generateJsx({files}) {
 };
 
 function renderDts(text: TextBuilder, apiDefinitions: ApiDefinitions) {
-  extendTypeDefs(apiDefinitions);
   text.append(header);
   Object.keys(apiDefinitions).forEach(name => {
     appendEventsInterface(text, apiDefinitions[name]);

@@ -33,7 +33,9 @@ export interface Api {
   /**
    * Change events will be generated automatically if type extends NativeObject
    */
-  properties?: {};
+  properties?: {
+    [k: string]: Property;
+  };
   methods?: {
     /**
      * This interface was referenced by `undefined`'s JSON-Schema definition
@@ -64,10 +66,7 @@ export interface Parameter {
 }
 /**
  * This interface was referenced by `undefined`'s JSON-Schema definition
- * via the `patternProperty` "^_?[a-z]\w+$".
- *
- * This interface was referenced by `undefined`'s JSON-Schema definition
- * via the `patternProperty` "^\[key\: number\]$".
+ * via the `patternProperty` "(^_?[a-z]\w+$)|(^\[key\: number\]$)".
  *
  * This interface was referenced by `undefined`'s JSON-Schema definition
  * via the `patternProperty` "^_?[a-z]\w+$".
@@ -117,6 +116,7 @@ export interface Platforms {
 export interface Method {
   parameters?: Parameter[];
   returns?: string;
+  ts_only?: boolean;
   /**
    * Overrides "returns" for TypeScript declarations
    */

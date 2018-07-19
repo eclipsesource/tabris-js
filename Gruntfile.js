@@ -141,19 +141,31 @@ module.exports = function(grunt) {
   grunt.registerTask('generate-doc', () => {
     let targetPath = grunt.config('doc').target;
     let files = grunt.file.expand(grunt.config('doc').api);
-    generateDoc({files, targetPath, version});
+    try {
+      generateDoc({files, targetPath, version});
+    } catch (ex) {
+      grunt.fail.warn(ex.stack);
+    }
   });
 
   grunt.registerTask('generate-jsx', () => {
     let files = grunt.file.expand(grunt.config('doc').api);
-    generateJsx({files});
+    try {
+      generateJsx({files});
+    } catch (ex) {
+      grunt.fail.warn(ex.stack);
+    }
   });
 
   grunt.registerTask('generate-tsd', () => {
     let files = grunt.file.expand(grunt.config('doc').api);
     let propertyTypes = grunt.file.read(grunt.config('doc').propertyTypes);
     let globalTypeDefFiles = grunt.file.expand(grunt.config('doc').globalTypings);
-    generateDts({files, propertyTypes, globalTypeDefFiles, version});
+    try {
+      generateDts({files, propertyTypes, globalTypeDefFiles, version});
+    } catch (ex) {
+      grunt.fail.warn(ex.stack);
+    }
   });
 
   /* runs static code analysis tools */

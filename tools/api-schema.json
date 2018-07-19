@@ -54,8 +54,7 @@
           "description": "Change events will be generated automatically if type extends NativeObject",
           "type": "object",
           "patternProperties": {
-            "^_?[a-z]\\w+$": {"$ref": "#/definitions/property"},
-            "^\\[key\\: number\\]$": {"$ref": "#/definitions/property"}
+            "(^_?[a-z]\\w+$)|(^\\[key\\: number\\]$)": {"$ref": "#/definitions/property"}
           },
           "additionalProperties": false
         },
