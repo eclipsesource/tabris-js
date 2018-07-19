@@ -1,10 +1,9 @@
 import * as fs from 'fs-extra';
 import * as schema from './api-schema';
-
-// TODO: Rename "constructor" property in schema since this name is already used by plain JavaScript objects
-type ExtendedApi = schema.Api & Partial<{isNativeObject: boolean, parent: ExtendedApi}>;
-type ApiDefinitions = {[name: string]: ExtendedApi};
-type Methods = schema.Method | schema.Method[];
+import {
+  TextBuilder, asArray, filter, ApiDefinitions, ExtendedApi, Methods,
+  readJsonDefs, extendTypeDefs, createDoc, createEventTypeName
+} from './common';
 
 const HEADER = `
 // Type definitions for Tabris.js \${VERSION}
@@ -55,16 +54,6 @@ function writeTabrisDts(config) {
   const text = new TextBuilder([HEADER.replace(/\${VERSION}/g, config.version), config.propertyTypes]);
   renderDts(text, tabrisApiDefinitions);
   fs.writeFileSync('build/tabris/tabris.d.ts', text.toString());
-}
-
-function readJsonDefs(files) {
-  const defs = {};
-  files.forEach(file => {
-    const json = fs.readJsonSync(file);
-    json.file = file;
-    defs[json.type || json.object || json.title] = json;
-  });
-  return defs as ApiDefinitions;
 }
 
 //#endregion
@@ -206,26 +195,26 @@ function renderEvents(text: TextBuilder, def: ExtendedApi) {
   }
 }
 
-function createEvent(widgetName: string, eventName, def: schema.Event) {
+function createEvent(widgetName: string, eventName, event: schema.Event) {
   const result = [];
-  result.push(createDoc(Object.assign({}, def, {parameters: []})));
-  result.push(`${eventName}?: (event: ${createEventTypeName(widgetName, eventName, def)}) => void;`);
+  result.push(createDoc(Object.assign({}, event, {parameters: []})));
+  result.push(`${eventName}?: (event: ${createEventTypeName(widgetName, eventName, event)}) => void;`);
   return result.join('\n');
 }
 
-function createPropertyChangedEvent(widgetName: string, propName: string, def: schema.Property) {
+function createPropertyChangedEvent(widgetName: string, propName: string, property: schema.Property) {
   const result = [];
   const standardDescription = `Fired when the [*${propName}*](#${propName}) property has changed.`;
   const changeEvent = {
-    description: def.changeEventDescription || standardDescription,
+    description: property.changeEventDescription || standardDescription,
     parameters: [{
       name: 'value',
-      type: def.ts_type || def.type,
+      type: property.ts_type || property.type,
       description: `The new value of [*${propName}*](#${propName}).`
     }]
   };
   result.push(createDoc(changeEvent));
-  result.push(`${propName}Changed?: (event: PropertyChangedEvent<${widgetName}, ${def.type}>) => void;`);
+  result.push(`${propName}Changed?: (event: PropertyChangedEvent<${widgetName}, ${property.type}>) => void;`);
   return result.join('\n');
 }
 
@@ -259,14 +248,6 @@ function renderEventObjectInterface(text: TextBuilder, name: string, def: Extend
   text.append('}');
 }
 
-function createEventTypeName(widgetName: string, eventName: string, def: schema.Event) {
-  if (def.parameters) {
-    return def.eventObject || (widgetName + capitalizeFirstChar(eventName) + 'Event');
-  } else {
-    return `EventObject<${widgetName}>`;
-  }
-}
-
 //#endregion
 
 //#region render members
@@ -281,6 +262,16 @@ function renderMethods(text: TextBuilder, def: ExtendedApi) {
   });
 }
 
+function createMethod(name: string, method: schema.Method, className) {
+  const result = [];
+  result.push(createDoc(method));
+  const declaration = (className ? (method.protected ? 'protected ' : '') : 'declare function ')
+    + `${name}${method.generics ? `<${method.generics}>` : ''}`
+    + `(${createParamList(method.parameters, className)}): ${method.ts_returns || method.returns || 'void'};`;
+  result.push(declaration);
+  return result.join('\n');
+}
+
 function renderProperties(text: TextBuilder, def: ExtendedApi, filter: (value) => boolean) {
   if (def.properties) {
     const propertiesFilter = filter ? name => filter(def.properties[name]) : () => true;
@@ -291,18 +282,18 @@ function renderProperties(text: TextBuilder, def: ExtendedApi, filter: (value) =
   }
 }
 
-function createProperty(name: string, def: schema.Property) {
+function createProperty(name: string, property: schema.Property) {
   const result = [];
-  result.push(createDoc(def));
+  result.push(createDoc(property));
   const values = [];
-  (def.values || []).sort().forEach(value => {
+  (property.values || []).sort().forEach(value => {
     if (typeof value === 'string') {
       value = `"${value}"`;
     }
     values.push(`${value}`);
   });
   const valuesType = (values || []).join(' | ');
-  result.push(`${def.readonly ? 'readonly ' : ''}${name}: ${valuesType || def.ts_type || def.type};`);
+  result.push(`${property.readonly ? 'readonly ' : ''}${name}: ${valuesType || property.ts_type || property.type};`);
   return result.join('\n');
 }
 
@@ -325,55 +316,9 @@ function decodeParamType(type: string, className: string) {
   }
 }
 
-function createDoc(documentable: ExtendedApi | schema.Property | schema.Method | schema.Event | schema.Event) {
-  const def = documentable as Partial<ExtendedApi & schema.Property & schema.Method & schema.Event & schema.Event>;
-  if (!def.description && !def.static && !def.provisional) {
-    return;
-  }
-  const result: string[] = [];
-  if (def.description) {
-    splitIntoLines(def.description, 100).forEach(line => {
-      result.push(line);
-    });
-  }
-  if (def.parameters) {
-    createParamAnnotations(def.parameters).forEach(line => {
-      result.push(line);
-    });
-  }
-  if (def.static) {
-    result.push('@static');
-  }
-  if (def.provisional) {
-    result.push('@provisional');
-  }
-  return createComment(result);
-}
-
-function createComment(comment: string[]) {
-  return ['/**'].concat(comment.map(line => ' * ' + line), ' */').join('\n');
-}
-
-function createParamAnnotations(params: schema.Parameter[]) {
-  return params.map(param => {
-    const name = param.name.startsWith('...') ? param.name.slice(3) : param.name;
-    const description = param.description || '';
-    return `@param ${name} ${description}`;
-  });
-}
-
 //#endregion
 
 //#region definitions helper
-
-function extendTypeDefs(defs: ApiDefinitions) {
-  Object.keys(defs).forEach(name => {
-    defs[name].isNativeObject = isNativeObject(defs, defs[name]);
-    if (defs[name].extends) {
-      defs[name].parent = defs[defs[name].extends];
-    }
-  });
-}
 
 function overrideClassDependentMethods(def: ExtendedApi) {
   const result = {};
@@ -393,16 +338,6 @@ function isClassDependent(method: Methods) { // methods with parameters that mus
   );
 }
 
-function createMethod(name: string, def: schema.Method, className) {
-  const result = [];
-  result.push(createDoc(def));
-  const declaration = (className ? (def.protected ? 'protected ' : '') : 'declare function ')
-    + `${name}${def.generics ? `<${def.generics}>` : ''}`
-    + `(${createParamList(def.parameters, className)}): ${def.ts_returns || def.returns || 'void'};`;
-  result.push(declaration);
-  return result.join('\n');
-}
-
 function getInheritedConstructor(def: ExtendedApi): typeof def.constructor {
   if (!def) {
     return null;
@@ -411,83 +346,6 @@ function getInheritedConstructor(def: ExtendedApi): typeof def.constructor {
     return def.constructor;
   }
   return def.parent ? getInheritedConstructor(def.parent) : null;
-}
-
-function isNativeObject(defs, def) {
-  return def && (def.type === 'NativeObject' || isNativeObject(defs, defs[def.extends]));
-}
-
-//#endregion
-
-//#region text and array helper
-
-function splitIntoLines(text: string, maxLength: number) {
-  const linesIn = text.split('\n');
-  const linesOut = [];
-  for (const lineIn of linesIn) {
-    let lineOut = '';
-    const words = lineIn.split(' ');
-    for (const word of words) {
-      if (lineOut.length + word.length > maxLength) {
-        linesOut.push(lineOut);
-        lineOut = '';
-      }
-      if (lineOut.length > 0) {
-        lineOut += ' ';
-      }
-      lineOut += word;
-    }
-    if (lineOut.length > 0) {
-      linesOut.push(lineOut);
-    }
-  }
-  return linesOut;
-}
-
-function capitalizeFirstChar(str: string) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-class TextBuilder {
-
-  public lines: string[];
-  public indent: number;
-
-  constructor(initial?: string[]) {
-    this.lines = initial || [];
-    this.indent = 0;
-  }
-
-  public append(...args: string[]) {
-    Array.prototype.forEach.call(arguments, arg => {
-      const lines = typeof arg === 'string' ? arg.split('\n') : arg;
-      for (const line of lines) {
-        this.lines.push(this._indentLine(line));
-      }
-    }, this);
-  }
-
-  public toString() {
-    return this.lines.join('\n');
-  }
-
-  private _indentLine(line) {
-    return line.length > 0 ? '  '.repeat(this.indent) + line : line;
-  }
-
-}
-
-function asArray<T>(value: T | T[]): T[] {
-  return Array.isArray(value) ? value : [value];
-}
-
-function filter<T>(obj: T, filterFunction): T {
-  return Object.keys(obj)
-    .filter(key => filterFunction(obj[key]))
-    .reduce((result, key) => {
-      result[key] = obj[key];
-      return result;
-    }, {}) as T;
 }
 
 //#endregion
