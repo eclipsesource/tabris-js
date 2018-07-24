@@ -1,4 +1,4 @@
-import {Switch, Color, SwitchSelectEvent, PropertyChangedEvent, SwitchProperties} from 'tabris';
+import {Switch, Color, SwitchSelectEvent, PropertyChangedEvent, SwitchProperties, Properties} from 'tabris';
 
 let widget: Switch = new Switch();
 
@@ -38,3 +38,10 @@ widget.on({
   checkedChanged: (event: PropertyChangedEvent<Switch, boolean>) => {},
   select: (event: SwitchSelectEvent) => {},
 });
+
+class CustomComponent extends Switch {
+  public foo: string;
+  constructor(props: Properties<CustomComponent>) { super(props); }
+}
+
+new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

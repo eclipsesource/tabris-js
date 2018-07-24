@@ -1,4 +1,4 @@
-import {Color, Slider, PropertyChangedEvent, SliderSelectEvent, SliderProperties} from 'tabris';
+import {Color, Slider, PropertyChangedEvent, SliderSelectEvent, SliderProperties, Properties} from 'tabris';
 
 let widget: Slider = new Slider();
 
@@ -35,3 +35,10 @@ widget.on({
   selectionChanged: (event: PropertyChangedEvent<Slider, number>) => {},
   select: (event: SliderSelectEvent) => {}
 });
+
+class CustomComponent extends Slider {
+  public foo: string;
+  constructor(props: Properties<CustomComponent>) { super(props); }
+}
+
+new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

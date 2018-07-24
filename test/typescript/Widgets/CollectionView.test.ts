@@ -1,4 +1,4 @@
-import {CollectionView, Widget, CollectionViewProperties, PropertyChangedEvent} from 'tabris';
+import {CollectionView, Widget, CollectionViewProperties, PropertyChangedEvent, Properties} from 'tabris';
 
 // Properties
 let cellHeight: number|'auto'|((index: number, cellType: string) => number|'auto');
@@ -64,3 +64,10 @@ widget.on({
   createCellChanged: (ev: PropertyChangedEvent<CollectionView, typeof widget.createCell>) => {},
   updateCellChanged: (ev: PropertyChangedEvent<CollectionView, typeof widget.updateCell>) => {}
 });
+
+class CustomComponent extends CollectionView {
+  public foo: string;
+  constructor(props: Properties<CustomComponent>) { super(props); }
+}
+
+new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

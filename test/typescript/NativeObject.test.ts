@@ -1,8 +1,6 @@
-import {NativeObject, Composite, Button, EventObject, Properties, Partial} from 'tabris';
+import {NativeObject, Composite, Button, EventObject, Properties} from 'tabris';
 
 class CustomComponent extends Composite {
-
-  public tsProperties: Properties<Composite> & Partial<this, 'foo' | 'bar'>;
 
   public foo: string = '';
   public bar: number = 0;

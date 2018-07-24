@@ -6,7 +6,8 @@ import {
   Selector,
   PropertyChangedEvent,
   NavigationViewProperties,
-  Action
+  Action,
+  Properties
 } from 'tabris';
 
 let widget: NavigationView = new NavigationView();
@@ -66,3 +67,10 @@ widget.on({
   bottomToolbarHeightChanged: (event: PropertyChangedEvent<NavigationView, number>) => {},
   topToolbarHeightChanged: (event: PropertyChangedEvent<NavigationView, number>) => {},
 });
+
+class CustomComponent extends NavigationView {
+  public foo: string;
+  constructor(props: Properties<CustomComponent>) { super(props); }
+}
+
+new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

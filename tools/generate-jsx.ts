@@ -43,6 +43,7 @@ function renderDts(text: TextBuilder, apiDefinitions: ApiDefinitions) {
     text.append('');
   });
   Object.keys(apiDefinitions).forEach(name => {
+    if (!apiDefinitions[name].isWidget) { return; }
     appendJsxPropertiesInterface(text, apiDefinitions[name]);
     text.append('');
   });
@@ -122,7 +123,7 @@ function appendJsxPropertiesInterface(text: TextBuilder, def: ExtendedApi) {
 function appendIntrinsicElementsInterface(text: TextBuilder, apiDefinitions: ApiDefinitions) {
   text.append('interface IntrinsicElements {');
   text.indent++;
-  Object.keys(apiDefinitions).filter(name => apiDefinitions[name].isNativeObject).forEach(name => {
+  Object.keys(apiDefinitions).filter(name => apiDefinitions[name].isWidget).forEach(name => {
     let propertiesInterface = `${apiDefinitions[name].type}Properties`;
     text.append(`${lowercaseFirstChar(apiDefinitions[name].type)}: ${propertiesInterface};\n`);
   });

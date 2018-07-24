@@ -1,5 +1,5 @@
 import {
-  Color, Image, ToggleButton, PropertyChangedEvent, ToggleButtonSelectEvent, ToggleButtonProperties, Font
+  Color, Image, ToggleButton, PropertyChangedEvent, ToggleButtonSelectEvent, ToggleButtonProperties, Font, Properties
 } from 'tabris';
 
 let widget: ToggleButton = new ToggleButton();
@@ -46,3 +46,10 @@ widget.on({
   checkedChanged: (event: PropertyChangedEvent<ToggleButton, boolean>) => {},
   select: (event: ToggleButtonSelectEvent) => {},
 });
+
+class CustomComponent extends ToggleButton {
+  public foo: string;
+  constructor(props: Properties<CustomComponent>) { super(props); }
+}
+
+new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

@@ -2,35 +2,27 @@ import * as fs from 'fs-extra';
 import * as schema from './api-schema';
 import {
   TextBuilder, asArray, filter, ApiDefinitions, ExtendedApi, Methods,
-  readJsonDefs, createDoc, createEventTypeName
+  readJsonDefs, createDoc, createEventTypeName, isNativeObject
 } from './common';
+
+type PropertyOps = {hasContext: boolean, excludeStatics: boolean};
 
 const HEADER = `
 // Type definitions for Tabris.js \${VERSION}
 /// <reference path="globals.d.ts" />
 /// <reference path="Jsx.d.ts" />
 
-type TypeScriptPropertiesKey = 'tsProperties';
-
-type Properties<T extends NativeObject, U extends keyof T = TypeScriptPropertiesKey> = T[U];
-
-type Partial<T, U extends keyof T = keyof T> = {
-  [P in U]?: T[P]
-};
+type Omit<T, U> = Pick<T, Exclude<keyof T, U>>;
+type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
+type NativeObjectProperties<T extends NativeObject> = Partial<Omit<T, FunctionPropertyNames<T> | 'cid'>>;
+type Properties<T extends Widget> = Partial<Omit<T, FunctionPropertyNames<T> | 'bounds' | 'data' | 'cid'>>;
 
 export as namespace tabris;
 `;
 
-const TS_PROPERTIES_DOC = `
-/**
- * The type of this property defines the interface used by \`set\`, \`get\`, and
- * the \`Properties\` interface. It's value is always undefined.
- */`;
-
 const PROPERTIES_OBJECT = 'PropertiesObject';
 const EVENTS_OBJECT = 'EventsObject';
 const EVENT_OBJECT = 'EventObject<T>';
-const CLASS_DEPENDENT_TYPES = [EVENTS_OBJECT];
 const eventObjectNames = [EVENT_OBJECT];
 
 exports.generateDts = function generateTsd(config) {
@@ -72,9 +64,11 @@ function renderTypeDefinition(text: TextBuilder, def: ExtendedApi) {
   text.append('// ' + (def.type || def.object || def.title));
   if (def.isNativeObject) {
     text.append('');
-    renderPropertiesInterface(text, def);
-    text.append('');
     renderEventsInterface(text, def);
+    text.append('');
+    if (def.type !== 'NativeObject') {
+      text.append(`type ${def.type}Properties = ${createPropertiesObject(def, {hasContext: false, excludeStatics: false})};`);
+    }
     text.append('');
     renderEventObjectInterfaces(text, def);
   }
@@ -98,25 +92,16 @@ function renderSingletonVariable(text: TextBuilder, def: ExtendedApi) {
 
 function renderClass(text: TextBuilder, def: ExtendedApi) {
   text.append(createDoc(def));
-  renderClassBodyOpen(text, def);
+  renderClassHead(text, def);
   text.indent++;
-  if (def.isNativeObject) {
-    text.append('');
-    text.append(TS_PROPERTIES_DOC);
-    text.append(`public readonly tsProperties: ${def.type}Properties;`);
-  }
   renderConstructor(text, def);
   renderMethods(text, def);
-  const propertiesFilter = def.isNativeObject ? prop => prop.readonly : () => true;
-  renderProperties(text, def, propertiesFilter);
+  renderProperties(text, def, () => true);
   text.indent--;
   text.append('}');
 }
 
-function renderClassBodyOpen(text: TextBuilder, def: ExtendedApi) {
-  if (def.isNativeObject) {
-    text.append(`interface ${def.type} extends _${def.type}Properties {}`);
-  }
+function renderClassHead(text: TextBuilder, def: ExtendedApi) {
   let str = (def.namespace && def.namespace === 'global') ? 'declare' : ' export';
   str += ' class ' + def.type;
   if (def.generics) {
@@ -134,29 +119,9 @@ function renderConstructor(text: TextBuilder, def: ExtendedApi) {
   if (constructor) {
     text.append('');
     const access = constructor.access ? constructor.access + ' ' : '';
-    text.append(`${access}constructor(${createParamList(constructor.parameters || [], def.type)});`);
+    const paramList = createParamList(def, constructor.parameters || [], {hasContext: false, excludeStatics: false});
+    text.append(`${access}constructor(${paramList});`);
   }
-}
-
-//#endregion
-
-//#region render properties interfaces
-
-function renderPropertiesInterface(text: TextBuilder, def: ExtendedApi) {
-  text.append(createPropertiesInterfaceBodyOpen(def));
-  text.indent++;
-  renderProperties(text, def, prop => !prop.readonly);
-  text.indent--;
-  text.append('}');
-  text.append(`type ${def.type}Properties = Partial<_${def.type}Properties>`);
-}
-
-function createPropertiesInterfaceBodyOpen(def: ExtendedApi) {
-  let str = 'interface _' + def.type + 'Properties';
-  if (def.extends) {
-    str += ' extends _' + def.extends + 'Properties';
-  }
-  return str + ' {';
 }
 
 //#endregion
@@ -252,21 +217,24 @@ function renderEventObjectInterface(text: TextBuilder, name: string, def: Extend
 //#region render members
 
 function renderMethods(text: TextBuilder, def: ExtendedApi) {
-  const methods = Object.assign({}, def.methods, overrideClassDependentMethods(def.parent));
+  const methods = Object.assign({}, def.methods, getClassDependentMethods(def));
   Object.keys(methods).sort().forEach(name => {
     asArray(methods[name]).forEach(method => {
       text.append('');
-      text.append(createMethod(name, method, def.type));
+      text.append(createMethod(name, method, def));
     });
   });
 }
 
-function createMethod(name: string, method: schema.Method, className) {
+function createMethod(
+  name: string, method: schema.Method, def: ExtendedApi
+) {
   const result = [];
   result.push(createDoc(method));
-  const declaration = (className ? (method.protected ? 'protected ' : '') : 'declare function ')
+  const paramList = createParamList(def, method.parameters, {hasContext: true, excludeStatics: true});
+  const declaration = (def.type ? (method.protected ? 'protected ' : '') : 'declare function ')
     + `${name}${method.generics ? `<${method.generics}>` : ''}`
-    + `(${createParamList(method.parameters, className)}): ${method.ts_returns || method.returns || 'void'};`;
+    + `(${paramList}): ${method.ts_returns || method.returns || 'void'};`;
   result.push(declaration);
   return result.join('\n');
 }
@@ -292,49 +260,124 @@ function createProperty(name: string, property: schema.Property) {
     values.push(`${value}`);
   });
   const valuesType = (values || []).join(' | ');
-  result.push(`${property.readonly ? 'readonly ' : ''}${name}: ${valuesType || property.ts_type || property.type};`);
+  const readonly = property.readonly || property.static;
+  result.push(`${readonly ? 'readonly ' : ''}${name}: ${valuesType || property.ts_type || property.type};`);
   return result.join('\n');
 }
 
-function createParamList(parameters: schema.Parameter[], className: string) {
+function createParamList(def: ExtendedApi, parameters: schema.Parameter[], ops: PropertyOps) {
   return parameters.map(param =>
-    `${param.name}${param.optional ? '?' : ''}: ${decodeParamType(param.ts_type || param.type, className)}`
+    `${param.name}${param.optional ? '?' : ''}: ${decodeParamType(param, def, ops)}`
   ).join(', ');
 }
 
-function decodeParamType(type: string, className: string) {
-  switch (type) {
+function decodeParamType(param: schema.Parameter, def: ExtendedApi, ops: PropertyOps) {
+  switch (param.type) {
     case (PROPERTIES_OBJECT):
-      return className + 'Properties';
+      return createPropertiesObject(def, ops);
 
     case (EVENTS_OBJECT):
-      return className + 'Events';
+      return def.type + 'Events';
 
     default:
-      return type;
+      return param.ts_type || param.type;
   }
+}
+
+function createPropertiesObject(def: ExtendedApi, ops: PropertyOps) {
+  const hasNoProperties = def.type === 'NativeObject'
+    || (def.parent.type === 'NativeObject' && !hasSettableProperties(def, ops));
+  if (hasNoProperties) {
+    return 'never';
+  }
+  const removeProps = readOnlyPropertiesOf(def).concat(ops.excludeStatics ? staticPropertiesOf(def) : []);
+  const addProps = functionPropertiesOf(def);
+  const genericType = def.isWidget ? 'Properties' : 'NativeObjectProperties';
+  const baseType = ops.hasContext ? 'this' : def.type;
+  return remove(`${genericType}<${baseType}>`, removeProps) + add(baseType, addProps);
+}
+
+function add(type: string, props: string[]) {
+  if (!props || !props.length) {
+    return '';
+  }
+  return ` & Partial<Pick<${type}, '${props.join(`' | '`)}'>>`;
+}
+
+function remove(type: string, props: string[]) {
+  if (!props || !props.length) {
+    return type;
+  }
+  return `Omit<${type}, '${props.join(`' | '`)}'>`;
 }
 
 //#endregion
 
 //#region definitions helper
 
-function overrideClassDependentMethods(def: ExtendedApi) {
-  const result = {};
-  if (def) {
-    Object.keys(def.methods || {})
-      .filter(methodName => isClassDependent(def.methods[methodName]))
-      .forEach(methodName => result[methodName] = def.methods[methodName]);
-    Object.assign(result, overrideClassDependentMethods(def.parent));
+function getClassDependentMethods(def: ExtendedApi) {
+  const result: Methods = {};
+  let baseType = def;
+  while (baseType && baseType.parent)  {
+    baseType = baseType.parent;
+    Object.keys(baseType.methods || {})
+      .filter(methodName => isClassDependent(def, baseType.methods[methodName]))
+      .forEach(methodName => result[methodName] = baseType.methods[methodName]);
   }
-  return result as ExtendedApi;
+  return result;
 }
 
-function isClassDependent(method: Methods) { // methods with parameters that must be adjusted in each subclass
+function isClassDependent(def: ExtendedApi, method: Methods) { // methods with parameters that must be adjusted in some subclasses
   const variants = asArray(method);
   return variants.some(variant =>
-    (variant.parameters || []).some(param => CLASS_DEPENDENT_TYPES.includes(param.ts_type || param.type))
+    (variant.parameters || []).some(param => isClassDependentParameter(def, param))
   );
+}
+
+function isClassDependentParameter(def: ExtendedApi, parameter: schema.Parameter) {
+  const autoExtendable = def.isWidget
+    && def.type !== 'Widget'
+    && !hasReadOnlyProperties(def)
+    && !hasFunctionProperties(def)
+    && !hasStaticProperties(def);
+  const newProps = Object.keys(def.properties || {}).filter(prop => !def.properties[prop].readonly);
+  return parameter.type === EVENTS_OBJECT || (parameter.type === PROPERTIES_OBJECT && newProps && !autoExtendable);
+}
+
+function hasReadOnlyProperties(def: ExtendedApi) {
+  return readOnlyPropertiesOf(def).length > 0;
+}
+
+function hasStaticProperties(def: ExtendedApi) {
+  return staticPropertiesOf(def).length > 0;
+}
+
+function hasFunctionProperties(def: ExtendedApi) {
+  return functionPropertiesOf(def).length > 0;
+}
+
+function hasSettableProperties(def: ExtendedApi, ops: PropertyOps) {
+  return settablePropertiesOf(def, ops).length > 0;
+}
+
+function readOnlyPropertiesOf(def: ExtendedApi): string[] {
+  if (def.type === 'NativeObject' || def.type === 'Widget') {
+    return []; // The read-only properties of these are excluded via generic types "Properties" and "NativeObjectProperties"
+  }
+  return Object.keys(def.properties || {}).filter(prop => def.properties[prop].readonly);
+}
+
+function functionPropertiesOf(def: ExtendedApi): string[] {
+  return Object.keys(def.properties || {}).filter(prop => def.properties[prop].type.indexOf('=>') !== -1);
+}
+
+function staticPropertiesOf(def: ExtendedApi): string[] {
+  return Object.keys(def.properties || {}).filter(prop => def.properties[prop].static);
+}
+
+function settablePropertiesOf(def: ExtendedApi, {excludeStatics}: PropertyOps) {
+  return Object.keys(def.properties || {})
+    .filter(prop => !def.properties[prop].readonly && (!excludeStatics || !def.properties[prop].static));
 }
 
 function getInheritedConstructor(def: ExtendedApi): typeof def.constructor {

@@ -1,11 +1,32 @@
 import * as fs from 'fs-extra';
 import * as schema from './api-schema';
 
+const doNotCapitalize = {
+  any: true,
+  null: true,
+  undefined: true,
+  object: true,
+  string: true,
+  number: true,
+  boolean: true,
+  'this': true
+};
+
 // TODO: Rename "constructor" property in schema since this name is already used by plain JavaScript objects
 export type ExtendedApi = schema.Api & Partial<{isNativeObject: boolean, parent: ExtendedApi, file: string, isWidget: boolean}>;
 export type ApiDefinitions = {[name: string]: ExtendedApi};
 export type Methods = schema.Method | schema.Method[];
 export type Properties = {[name: string]: schema.Property};
+
+export function capitalizeType(type: string) {
+  if (type.indexOf('=>') !== -1) {
+    return type; // currently there is no case where this needs to be changed
+  }
+  return type.split('|').map(part => {
+    let testType = part.endsWith('[]') ? part.slice(0, -2) : part;
+    return doNotCapitalize[testType] ? part : capitalizeFirstChar(part);
+  }).join('|');
+}
 
 export function capitalizeFirstChar(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -94,7 +115,7 @@ export function createDoc(documentable: ExtendedApi | schema.Property | schema.M
     });
   }
   if (def.static) {
-    result.push('@static');
+    result.push('@constant');
   }
   if (def.provisional) {
     result.push('@provisional');
@@ -110,7 +131,7 @@ function createParamAnnotations(params: schema.Parameter[]) {
   return params.map(param => {
     const name = param.name.startsWith('...') ? param.name.slice(3) : param.name;
     const description = param.description || '';
-    return `@param ${name} ${description}`;
+    return `@param ${name} ${description}`.trim();
   });
 }
 

@@ -1,4 +1,4 @@
-import {Page, Image, EventObject, PageProperties} from 'tabris';
+import {Page, Image, EventObject, PageProperties, Properties} from 'tabris';
 
 let widget: Page = new Page();
 
@@ -34,3 +34,10 @@ widget.on({
   appear: (event: EventObject<Page>) => {},
   disappear: (event: EventObject<Page>) => {},
 });
+
+class CustomComponent extends Page {
+  public foo: string;
+  constructor(props: Properties<CustomComponent>) { super(props); }
+}
+
+new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

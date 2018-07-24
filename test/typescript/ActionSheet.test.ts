@@ -1,4 +1,4 @@
-import {ActionSheet, Image, Color, ActionSheetProperties} from 'tabris';
+import {ActionSheet, Image, ActionSheetProperties, ActionSheetSelectEvent, EventObject, Properties} from 'tabris';
 
 let widget: ActionSheet = new ActionSheet();
 
@@ -22,6 +22,6 @@ widget.set(properties);
 // Events
 let index: number;
 widget.on({
-  select: event => index = event.index,
-  close: event => {}
+  select: (event: ActionSheetSelectEvent) => index = event.index,
+  close: (event: EventObject<ActionSheet>) => {}
 });

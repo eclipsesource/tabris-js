@@ -7,7 +7,6 @@
       {
         "name": "properties",
         "type": "PropertiesObject",
-        "ts_type": "Properties<NativeObject>",
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
@@ -32,7 +31,8 @@
           },
           {
             "name": "listener",
-            "type": "(event: any) => void",
+            "type": "(event: EventObject) => void",
+            "ts_type": "(event: EventObject<NativeObject>) => void",
             "description": "The listener function to register. This function will be called with an event object."
           },
           {
@@ -175,17 +175,14 @@
     ],
     "set": [
       {
-        "generics": "T extends keyof Properties<this>",
         "parameters": [
           {
             "name": "property",
-            "type": "string",
-            "ts_type": "T"
+            "type": "string"
           },
           {
             "name": "value",
-            "type": "any",
-            "ts_type": "Properties<this>[T]"
+            "type": "any"
           }
         ],
         "description": "Sets the given property.",
@@ -195,8 +192,7 @@
         "parameters": [
           {
             "name": "properties",
-            "type": "PropertiesObject",
-            "ts_type": "Properties<this>"
+            "type": "PropertiesObject"
           }
         ],
         "description": "Sets all key-value pairs in the properties object as widget properties.",
@@ -204,15 +200,13 @@
       }
     ],
     "get": {
-      "generics": "T extends keyof Properties<this>",
       "parameters": [
         {
           "name": "property",
-          "type": "string",
-          "ts_type": "T"
+          "type": "string"
         }
       ],
-      "returns": "Properties<this>[T]",
+      "returns": "any",
       "description": "Gets the current value of the given *property*."
     }
   }

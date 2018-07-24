@@ -1,6 +1,6 @@
 import {
   Color, EventObject, PropertyChangedEvent, TextInput, TextInputAcceptEvent, TextInputInputEvent, TextInputProperties,
-  TextInputSelectEvent, Font
+  TextInputSelectEvent, Font, Properties
 } from 'tabris';
 
 let widget: TextInput = new TextInput({type: 'password'});
@@ -56,7 +56,6 @@ widget.enterKeyType = enterKeyType;
 widget.message = message;
 widget.text = text;
 widget.textColor = textColor;
-widget.type = textInputType;
 widget.selection = selection;
 widget.font = font;
 
@@ -105,3 +104,10 @@ widget.on({
   textChanged: (event: PropertyChangedEvent<TextInput, string>) => {},
   selectionChanged: (event: PropertyChangedEvent<TextInput, number[]>) => {}
 });
+
+class CustomComponent extends TextInput {
+  public foo: string;
+  constructor(props: Properties<CustomComponent>) { super(props); }
+}
+
+new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

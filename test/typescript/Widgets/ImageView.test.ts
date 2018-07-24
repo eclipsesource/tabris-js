@@ -1,4 +1,4 @@
-import {ImageView, Image, Color, ImageViewLoadEvent, ImageViewZoomEvent, ImageViewProperties, PropertyChangedEvent} from 'tabris';
+import {ImageView, Image, Color, ImageViewLoadEvent, ImageViewZoomEvent, ImageViewProperties, PropertyChangedEvent, Properties} from 'tabris';
 
 let widget: ImageView = new ImageView;
 
@@ -51,3 +51,10 @@ widget.on({
   zoomLevelChanged: (event: PropertyChangedEvent<ImageView, number>) => {},
   zoom: (event: ImageViewZoomEvent) => {}
 });
+
+class CustomComponent extends ImageView {
+  public foo: string;
+  constructor(props: Properties<CustomComponent>) { super(props); }
+}
+
+new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

@@ -1,4 +1,4 @@
-import {Color, ProgressBar, ProgressBarProperties} from 'tabris';
+import {Color, ProgressBar, ProgressBarProperties, Properties} from 'tabris';
 
 let widget: ProgressBar = new ProgressBar();
 
@@ -24,3 +24,10 @@ widget.state = state;
 let properties: ProgressBarProperties = {maximum, minimum, tintColor, selection, state};
 widget = new ProgressBar(properties);
 widget.set(properties);
+
+class CustomComponent extends ProgressBar {
+  public foo: string;
+  constructor(props: Properties<CustomComponent>) { super(props); }
+}
+
+new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

@@ -13,6 +13,9 @@ widget.set({cid});
 widget.cid = cid;
 widget.on({cidChanged: function() {}});
 
+widget.set({on: (ev: any) => widget});
+widget.set({on: undefined});
+
 /*Expected
 (6,25): error TS2345
 (7,13): error TS2345
@@ -23,4 +26,7 @@ widget.on({cidChanged: function() {}});
 (13,8): error TS2540: Cannot assign to 'cid' because it is a constant or a read-only property.
 (14,12): error TS2345
 'cidChanged' does not exist
+
+(16,
+(17,
  */

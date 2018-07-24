@@ -210,11 +210,18 @@ module.exports = function(grunt) {
     grunt.file.expand('build/typescript/**/*.fail.ts').forEach(file => {
       const childProcess = require('child_process').spawnSync(
         'node',
-        ['node_modules/typescript/bin/tsc', '--noImplicitAny', '--lib', 'es6,es2015.promise',  `./${file}`],
+        [
+          'node_modules/typescript/bin/tsc',
+          '--noImplicitAny',
+          '--target', 'es6',
+          '--module', 'commonjs',
+          '--lib', 'es6,es2015.promise',
+          `./${file}`
+        ],
         {encoding: 'utf-8'}
       );
       if (childProcess.error || childProcess.status !== 2) {
-        grunt.fail.warn('Unexpected tsc status ' + (childProcess.error || childProcess.status));
+        grunt.fail.warn('Unexpected tsc status ' + (childProcess.error || childProcess.status) + 'in ' + file);
       }
       const matches = grunt.file.read(file).match(/\/\*Expected\n([\w\W]+)\*\//);
       if (!matches || matches.length !== 2) {

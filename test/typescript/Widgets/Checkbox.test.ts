@@ -1,4 +1,4 @@
-import {CheckBox, Color, CheckBoxSelectEvent, PropertyChangedEvent, CheckBoxProperties, Font} from 'tabris';
+import {CheckBox, Color, CheckBoxSelectEvent, PropertyChangedEvent, CheckBoxProperties, Font, Properties} from 'tabris';
 
 let widget: CheckBox = new CheckBox();
 
@@ -41,3 +41,10 @@ widget.on({
   checkedChanged: (event: PropertyChangedEvent<CheckBox, boolean>) => {},
   select: (event: CheckBoxSelectEvent) => {}
 });
+
+class CustomComponent extends CheckBox {
+  public foo: string;
+  constructor(props: Properties<CustomComponent>) { super(props); }
+}
+
+new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

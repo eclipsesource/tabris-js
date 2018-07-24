@@ -1,4 +1,4 @@
-import {ScrollView, ScrollViewScrollEvent, ScrollViewProperties} from 'tabris';
+import {ScrollView, ScrollViewScrollEvent, ScrollViewProperties, Properties} from 'tabris';
 
 let widget: ScrollView = new ScrollView();
 
@@ -12,8 +12,6 @@ direction = widget.direction;
 offsetX = widget.offsetX;
 offsetY = widget.offsetY;
 scrollbarVisible = widget.scrollbarVisible;
-
-widget.direction = direction;
 
 let properties: ScrollViewProperties = {direction};
 widget = new ScrollView(properties);
@@ -41,3 +39,10 @@ widget.on({
   scrollX: (event: ScrollViewScrollEvent) => {},
   scrollY: (event: ScrollViewScrollEvent) => {}
 });
+
+class CustomComponent extends ScrollView {
+  public foo: string;
+  constructor(props: Properties<CustomComponent>) { super(props); }
+}
+
+new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

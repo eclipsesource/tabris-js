@@ -1,4 +1,22 @@
 /**
+ * Distance to a parent's or sibling's opposing edge in one of these formats:
+ * - **offset** the distance from the parent's opposing edge in device independent pixels
+ * - **percentage** the distance from the parent's opposing edge in percent of the parent's width
+ * - **Widget** attach this edge to the given siblings's opposing edge
+ * - **"selector"**
+ * - **"prev()"** Same as above, but as space-separated string list instead of array
+ * - **"selector offset"**
+ * - **"prev() offset"**
+ * - **[Widget, offset]** the distance from the given widget's opposing edge in pixel
+ * - **"Widget, offset"**Same as above, but as space-separated string list instead of array.
+ * - **[percentage, offset]** the distance from the parent's opposing edge in percent of the parent's width plus a fixed offset in pixels
+ * - **"percentage offset"** Same as above, but as space-separated string list instead of array
+ * - **[selector, offset]**
+ * - **["prev()", offset]**
+ */
+type margin = [string | Widget | number, Widget | number] | string | number | Widget | undefined;
+
+/**
  * Represents pixel data of a `Canvas` widget.
  */
 interface ImageData {
@@ -154,24 +172,6 @@ type dimension = number;
  * A positive or negative float, or 0, representing device independent pixels.
  */
 type offset = number;
-
-/**
- * Distance to a parent's or sibling's opposing edge in one of these formats:
- * - **offset** the distance from the parent's opposing edge in device independent pixels
- * - **percentage** the distance from the parent's opposing edge in percent of the parent's width
- * - **Widget** attach this edge to the given siblings's opposing edge
- * - **"selector"**
- * - **"prev()"** Same as above, but as space-separated string list instead of array
- * - **"selector offset"**
- * - **"prev() offset"**
- * - **[Widget, offset]** the distance from the given widget's opposing edge in pixel
- * - **"Widget, offset"**Same as above, but as space-separated string list instead of array.
- * - **[percentage, offset]** the distance from the parent's opposing edge in percent of the parent's width plus a fixed offset in pixels
- * - **"percentage offset"** Same as above, but as space-separated string list instead of array
- * - **[selector, offset]**
- * - **["prev()", offset]**
- */
-type margin = any;
 
 interface AnimationOptions {
 

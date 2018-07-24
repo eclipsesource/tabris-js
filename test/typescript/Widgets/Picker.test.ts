@@ -1,4 +1,4 @@
-import {Color, Picker, PickerSelectEvent, PropertyChangedEvent, PickerProperties} from 'tabris';
+import {Color, Picker, PickerSelectEvent, PropertyChangedEvent, PickerProperties, Properties} from 'tabris';
 
 let widget: Picker = new Picker();
 
@@ -42,3 +42,10 @@ widget.on({
   selectionIndexChanged: (event: PropertyChangedEvent<Picker, number>) => {},
   select: (event: PickerSelectEvent) => {}
 });
+
+class CustomComponent extends Picker {
+  public foo: string;
+  constructor(props: Properties<CustomComponent>) { super(props); }
+}
+
+new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

@@ -1,4 +1,4 @@
-import {Action, Image, ActionProperties} from 'tabris';
+import {Action, Image, ActionProperties, Properties} from 'tabris';
 
 let widget: Action = new Action();
 
@@ -21,3 +21,10 @@ widget.title = title;
 let properties: ActionProperties = {placementPriority, image, title};
 widget = new Action(properties);
 widget.set(properties);
+
+class CustomComponent extends Action {
+  public foo: string;
+  constructor(props: Properties<CustomComponent>) { super(props); }
+}
+
+new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

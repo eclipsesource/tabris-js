@@ -1,4 +1,4 @@
-import {EventObject, PropertyChangedEvent, RefreshComposite, RefreshCompositeProperties} from 'tabris';
+import {EventObject, PropertyChangedEvent, RefreshComposite, RefreshCompositeProperties, Properties} from 'tabris';
 
 let widget: RefreshComposite = new RefreshComposite();
 
@@ -27,6 +27,13 @@ let type: string = 'foo';
 let sliderSelectEvent: EventObject<RefreshComposite> = {target, timeStamp, type};
 
 widget.on({
-    refresh: (event: EventObject<RefreshComposite>) => {
-    }
+  refresh: (event: EventObject<RefreshComposite>) => {
+  }
 });
+
+class CustomComponent extends RefreshComposite {
+  public foo: string;
+  constructor(props: Properties<CustomComponent>) { super(props); }
+}
+
+new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

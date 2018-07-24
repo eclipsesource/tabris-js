@@ -28,7 +28,7 @@ let widget: Widget = new Composite();
 let background: Color;
 let backgroundImage: Image;
 let baseline: Widget | Selector;
-let bottom: margin;
+let bottomMargin: margin;
 let bounds: Bounds;
 let centerX: offset;
 let centerY: offset;
@@ -41,19 +41,21 @@ let height: dimension;
 let highlightOnTouch: boolean;
 let id: string;
 let layoutData: LayoutData;
-let left: margin;
+let leftMargin: margin;
 let opacity: number;
-let right: margin;
-let top: margin;
+let rightMargin: margin;
+let topMargin: margin;
 let transform: Transformation;
 let visible: boolean;
 let width: dimension;
-let data: any;
+let data: object;
+let leftOffset: number = 0;
+let topOffset: number  = 0;
 
 background = widget.background;
 backgroundImage = widget.backgroundImage;
 baseline = widget.baseline;
-bottom = widget.bottom;
+bottomMargin = widget.bottom;
 bounds = widget.bounds;
 centerX = widget.centerX;
 centerY = widget.centerY;
@@ -66,10 +68,10 @@ height = widget.height;
 highlightOnTouch = widget.highlightOnTouch;
 id = widget.id;
 layoutData = widget.layoutData;
-left = widget.left;
+leftMargin = widget.left;
 opacity = widget.opacity;
-right = widget.right;
-top = widget.top;
+rightMargin = widget.right;
+topMargin = widget.top;
 transform = widget.transform;
 visible = widget.visible;
 width = widget.width;
@@ -78,7 +80,7 @@ data = widget.data;
 widget.background = background;
 widget.backgroundImage = backgroundImage;
 widget.baseline = baseline;
-widget.bottom = bottom;
+widget.bottom = bottomMargin;
 widget.centerX = centerX;
 widget.centerY = centerY;
 widget.class = _class;
@@ -91,10 +93,10 @@ widget.height = height;
 widget.highlightOnTouch = highlightOnTouch;
 widget.id = id;
 widget.layoutData = layoutData;
-widget.left = left;
+widget.left = leftMargin;
 widget.opacity = opacity;
-widget.right = right;
-widget.top = top;
+widget.right = rightMargin;
+widget.top = topMargin;
 widget.transform = transform;
 widget.visible = visible;
 widget.width = width;
@@ -103,7 +105,7 @@ let properties: WidgetProperties = {
   background,
   backgroundImage,
   baseline,
-  bottom,
+  bottom: bottomMargin,
   centerX,
   centerY,
   class: _class,
@@ -115,10 +117,10 @@ let properties: WidgetProperties = {
   highlightOnTouch,
   id,
   layoutData,
-  left,
+  left: leftMargin,
   opacity,
-  right,
-  top,
+  right: rightMargin,
+  top: topMargin,
   transform,
   visible,
   width
@@ -165,7 +167,7 @@ let velocityX: number = 0;
 let velocityY: number = 0;
 
 let disposeEvent: EventObject<Widget> = {target, timeStamp, type};
-let resizeEvent: WidgetResizeEvent = {target, timeStamp, type, height, left, top, width};
+let resizeEvent: WidgetResizeEvent = {target, timeStamp, type, height, left: leftOffset, top: topOffset, width};
 let swipeDownEvent: WidgetSwipeEvent = {target, timeStamp, type, touches};
 let swipeLeftEvent: WidgetSwipeEvent = {target, timeStamp, type, touches};
 let swipeRightEvent: WidgetSwipeEvent = {target, timeStamp, type, touches};

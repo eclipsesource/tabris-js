@@ -1,4 +1,4 @@
-import {Tab, Image, TabProperties} from 'tabris';
+import {Tab, Image, TabProperties, Properties} from 'tabris';
 
 let widget: Tab = new Tab();
 
@@ -26,3 +26,10 @@ widget.title = title;
 let properties: TabProperties = {badge, image, selectedImage, title};
 widget = new Tab(properties);
 widget.set(properties);
+
+class CustomComponent extends Tab {
+  public foo: string;
+  constructor(props: Properties<CustomComponent>) { super(props); }
+}
+
+new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

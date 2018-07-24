@@ -3,7 +3,7 @@ import * as tabris from 'tabris';
 let onPanHandler: (event: tabris.WidgetPanEvent) => void = (event) => {};
 let onTextChangedHandler: (event: tabris.PropertyChangedEvent<tabris.TextInput, string>) => void = (event) => {};
 
-let action: tabris.Action = <action title='foo' onSelect={()=>{}}/>;
+let action: tabris.Action = <action title='foo' onSelect={() => {}}/>;
 let button: tabris.Button = <button text='foo' onPanUp={onPanHandler}/>;
 let canvas: tabris.Canvas = <canvas transform={{rotation: 360}}/>;
 let checkBox: tabris.CheckBox = <checkBox checked={true}/>;

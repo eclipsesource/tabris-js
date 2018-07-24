@@ -1,4 +1,4 @@
-import {Video, PropertyChangedEvent, VideoProperties} from 'tabris';
+import {Video, PropertyChangedEvent, VideoProperties, Properties} from 'tabris';
 
 let widget: Video = new Video();
 type VideoState = 'empty' | 'fail' | 'finish' | 'open' | 'pause' | 'play' | 'ready' | 'stale';
@@ -47,3 +47,10 @@ let stateChangedEvent: PropertyChangedEvent<Video, VideoState> = {target, timeSt
 widget.on({
   stateChanged: (event: PropertyChangedEvent<Video, VideoState>) => {}
 });
+
+class CustomComponent extends Video {
+  public foo: string;
+  constructor(props: Properties<CustomComponent>) { super(props); }
+}
+
+new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

@@ -8,7 +8,6 @@
       {
         "name": "properties",
         "type": "PropertiesObject",
-        "ts_type": "Properties<ScrollView>",
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }

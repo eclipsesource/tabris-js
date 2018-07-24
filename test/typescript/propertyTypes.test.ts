@@ -1,18 +1,19 @@
 import {
- Image,
- Color,
- Font,
- LayoutData,
- Widget,
- Button,
- Bounds,
- Transformation,
- Selector,
- SelectorFunction,
- dimension,
- offset,
- margin,
- AnimationOptions,
+  Image,
+  Color,
+  Font,
+  LayoutData,
+  Widget,
+  Composite,
+  Button,
+  Bounds,
+  Transformation,
+  Selector,
+  SelectorFunction,
+  dimension,
+  offset,
+  margin,
+  AnimationOptions,
 } from 'tabris';
 
 let stringType: string = '';
@@ -21,7 +22,12 @@ let numberType: number = 42;
 let numberOrUndefined: number | undefined;
 let booleanType: boolean = false;
 let booleanOrUndefined: boolean | undefined;
-let marginType: margin;
+let marginType: margin = ['#foo', 23];
+marginType = [new Composite(), 23];
+marginType = [23, 23];
+marginType = 23;
+marginType = 'foo';
+marginType = new Composite();
 let offsetType: offset = 42;
 let offsetOrUndefined: offset | undefined;
 let dimensionType: dimension = 42;

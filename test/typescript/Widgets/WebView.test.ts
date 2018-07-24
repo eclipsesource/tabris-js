@@ -1,6 +1,6 @@
 import {
   WebView, EventObject, WebViewNavigateEvent, WebViewDownloadEvent, WebViewMessageEvent, WebViewProperties,
-  PropertyChangedEvent
+  PropertyChangedEvent, Properties
 } from 'tabris';
 
 let widget: WebView = new WebView();
@@ -52,3 +52,10 @@ widget.on({
   canGoForwardChanged: (event: PropertyChangedEvent<WebView, boolean>) => {},
   canGoBackChanged: (event: PropertyChangedEvent<WebView, boolean>) => {}
 });
+
+class CustomComponent extends WebView {
+  public foo: string;
+  constructor(props: Properties<CustomComponent>) { super(props); }
+}
+
+new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

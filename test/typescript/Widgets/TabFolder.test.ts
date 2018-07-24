@@ -5,7 +5,8 @@ import {
   TabFolderScrollEvent,
   TabFolderSelectEvent,
   PropertyChangedEvent,
-  TabFolderProperties
+  TabFolderProperties,
+  Properties
 } from 'tabris';
 
 
@@ -26,8 +27,6 @@ textColor = widget.textColor;
 
 widget.paging = paging;
 widget.selection = selection;
-widget.tabBarLocation = tabBarLocation;
-widget.tabMode = tabMode;
 widget.textColor = textColor;
 
 let properties: TabFolderProperties = {paging, selection, tabBarLocation, tabMode, textColor};
@@ -50,3 +49,10 @@ widget.on({
   select: (event: TabFolderSelectEvent) => {},
   scroll: (event: TabFolderScrollEvent) => {}
 });
+
+class CustomComponent extends TabFolder {
+  public foo: string;
+  constructor(props: Properties<CustomComponent>) { super(props); }
+}
+
+new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

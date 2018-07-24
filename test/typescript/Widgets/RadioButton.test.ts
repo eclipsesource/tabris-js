@@ -1,4 +1,4 @@
-import {Color, RadioButton, PropertyChangedEvent, RadioButtonSelectEvent, RadioButtonProperties, Font} from 'tabris';
+import {Color, RadioButton, PropertyChangedEvent, RadioButtonSelectEvent, RadioButtonProperties, Font, Properties} from 'tabris';
 
 let widget: RadioButton = new RadioButton();
 
@@ -41,3 +41,10 @@ widget.on({
   checkedChanged: (event: PropertyChangedEvent<RadioButton, boolean>) => {},
   select: (event: RadioButtonSelectEvent) => {}
 });
+
+class CustomComponent extends RadioButton {
+  public foo: string;
+  constructor(props: Properties<CustomComponent>) { super(props); }
+}
+
+new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

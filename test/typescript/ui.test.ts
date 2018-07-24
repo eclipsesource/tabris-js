@@ -10,8 +10,3 @@ contentView = ui.contentView;
 drawer = ui.drawer;
 navigationBar = ui.navigationBar;
 statusBar = ui.statusBar;
-
-ui.contentView = contentView;
-ui.drawer = drawer;
-ui.navigationBar = navigationBar;
-ui.statusBar = statusBar;
