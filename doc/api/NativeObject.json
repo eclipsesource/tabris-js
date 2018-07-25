@@ -177,20 +177,6 @@
       {
         "parameters": [
           {
-            "name": "property",
-            "type": "string"
-          },
-          {
-            "name": "value",
-            "type": "any"
-          }
-        ],
-        "description": "Sets the given property.",
-        "returns": "this"
-      },
-      {
-        "parameters": [
-          {
             "name": "properties",
             "type": "PropertiesObject"
           }
@@ -198,16 +184,6 @@
         "description": "Sets all key-value pairs in the properties object as widget properties.",
         "returns": "this"
       }
-    ],
-    "get": {
-      "parameters": [
-        {
-          "name": "property",
-          "type": "string"
-        }
-      ],
-      "returns": "any",
-      "description": "Gets the current value of the given *property*."
-    }
+    ]
   }
 }

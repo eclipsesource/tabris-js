@@ -20,21 +20,14 @@ If you prefer declarative UI, you may also [use `JSX` to create widgets](./lang.
 
 ## Widget Properties
 
-Every native widget supports a set of properties (e.g. a text or a color). These properties can be read and written directly or using the Widget's `get()` and `set()` methods.
+Every native widget supports a set of properties (e.g. a text or a color). 
 
 ```js
 widget.text = 'Hello World';
 let text = widget.text;
 ```
 
-Example with `get()` and `set()`:
-
-```js
-widget.set('text', 'Hello World');
-let text = widget.get('text');
-```
-
-Like with the constructor, it's also possible to set multiple property values:
+Using the `set()` method, it's also possible to set multiple property values:
 
 ```js
 button.set({

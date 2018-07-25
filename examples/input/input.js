@@ -99,7 +99,7 @@ new Composite({
   new Slider({
     id: 'luggageSlider'
   }).on('selectionChanged', ({value}) => {
-    scrollView.find('#luggageWeight').set('text', value + ' Kg');
+    scrollView.find('#luggageWeight').set({text: value + ' Kg'});
   })
 ).appendTo(scrollView);
 

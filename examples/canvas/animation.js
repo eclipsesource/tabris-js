@@ -7,7 +7,7 @@ let page = new Page({
   title: 'Animation',
   autoDispose: false
 }).on('disappear', () => {
-  page.children('#animateCheckBox').set('checked', false);
+  page.children('#animateCheckBox').set({checked: false});
 });
 
 new Canvas({

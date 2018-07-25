@@ -73,46 +73,18 @@ describe('NativeObject', function() {
       expect(object.isDisposed()).to.equal(false);
     });
 
-    describe('get', function() {
-
-      it('calls property getter', function() {
-        Object.defineProperty(TestType.prototype, 'foo', {get: () => 23});
-
-        let result = object.get('foo');
-
-        expect(result).to.equal(23);
-      });
-
-      it('calls property getter on super class', function() {
-        Object.defineProperty(TestType.prototype, 'foo', {get: () => 23});
-        class SubType extends TestType {}
-        object = new SubType();
-
-        let result = object.get('foo');
-
-        expect(result).to.equal(23);
-      });
-
-      it('returns undefined for non-existing property', function() {
-        let result = object.get('unknown');
-
-        expect(result).to.be.undefined;
-      });
-
-    });
-
     describe('set', function() {
 
       it('calls property setter', function() {
         let setter = spy();
         Object.defineProperty(TestType.prototype, 'foo', {set: setter});
 
-        object.set('foo', 23);
+        object.set({foo: 23});
 
         expect(setter).to.have.been.calledWith(23);
       });
 
-      it('supports property objects', function() {
+      it('supports multiple property objects', function() {
         Object.assign(TestType.prototype, {foo: 0, bar: 0});
 
         object.set({foo: 23, bar: 42});
@@ -127,25 +99,25 @@ describe('NativeObject', function() {
         class SubClass extends TestType {}
         object = new SubClass();
 
-        object.set('foo', 23);
+        object.set({foo: 23});
 
         expect(setter).to.have.been.calledWith(23);
       });
 
       it('does not set non-existing property', function() {
-        object.set('unknown', 23);
+        object.set({unknown: 23});
 
         expect(object.unknown).to.be.undefined;
       });
 
       it('prints warnings for non-existing property', function() {
-        object.set('unknown', 23);
+        object.set({unknown: 23});
 
         expect(console.warn).to.have.been.calledWith('Unknown property "unknown"');
       });
 
       it('returns self to allow chaining', function() {
-        let result = object.set('foo', 23);
+        let result = object.set({foo: 23});
 
         expect(result).to.equal(object);
       });

@@ -312,11 +312,11 @@ describe('Widget', function() {
       });
 
       it('set() does not throw', function() {
-        expect(() => widget.set('id', 'foo')).not.to.throw;
+        expect(() => widget.set({id: 'foo'})).not.to.throw;
       });
 
       it('get() returns undefined', function() {
-        expect(widget.get('id')).to.be.undefined;
+        expect(widget.id).to.be.undefined;
       });
 
       it('parent() returns null', function() {
@@ -1366,7 +1366,7 @@ describe('Widget', function() {
     ['left', 'right', 'top', 'bottom'].forEach((attr) => {
 
       it('modifies layoutData', function() {
-        widget.set(attr, ['#other', 10]);
+        widget[attr] = ['#other', 10];
 
         expect(widget.layoutData[attr]).to.eql(['#other', 10]);
       });
@@ -1374,49 +1374,49 @@ describe('Widget', function() {
       it('resets layoutData properties', function() {
         let layoutData = {left: 1, right: 2, top: 3, bottom: 4};
         widget.layoutData = layoutData;
-        widget.set(attr, null);
+        widget[attr] = null;
 
         expect(widget.layoutData).to.eql(omit(layoutData, attr));
       });
 
       it('getter does not translate selectors', function() {
-        widget.set(attr, ['#other', 10]);
+        widget[attr] = ['#other', 10];
 
-        expect(widget.get(attr)).to.eql(['#other', 10]);
+        expect(widget[attr]).to.eql(['#other', 10]);
       });
 
       it('getter does not translate widgets', function() {
-        widget.set(attr, [other, 42]);
+        widget[attr] = [other, 42];
 
-        expect(widget.get(attr)).to.eql([other, 42]);
+        expect(widget[attr]).to.eql([other, 42]);
       });
 
       it('getter returns normalized percentages in arrays', function() {
-        widget.set(attr, [23, 42]);
+        widget[attr] = [23, 42];
 
-        expect(widget.get(attr)).to.eql(['23%', 42]);
+        expect(widget[attr]).to.eql(['23%', 42]);
       });
 
       it('getter returns arrays with zero percentage as plain offset', function() {
-        widget.set(attr, [0, 42]);
+        widget[attr] = [0, 42];
 
-        expect(widget.get(attr)).to.equal(42);
+        expect(widget[attr]).to.equal(42);
       });
 
       it('getter returns offset 0 as plain 0', function() {
-        widget.set(attr, 0);
+        widget[attr] = 0;
 
-        expect(widget.get(attr)).to.equal(0);
+        expect(widget[attr]).to.equal(0);
       });
 
       it('getter normalizes arrays with zero offset', function() {
-        widget.set(attr, ['#other', 0]);
+        widget[attr] = ['#other', 0];
 
-        expect(widget.get(attr)).to.equal('#other');
+        expect(widget[attr]).to.equal('#other');
       });
 
       it('SETs layoutData', function() {
-        widget.set(attr, 23);
+        widget[attr] = 23;
 
         let call = client.calls({op: 'set'})[0];
         let expected = {};
@@ -1429,7 +1429,7 @@ describe('Widget', function() {
     ['width', 'height', 'centerX', 'centerY'].forEach((attr) => {
 
       it('modifies layoutData', function() {
-        widget.set(attr, 23);
+        widget[attr] = 23;
 
         expect(widget.layoutData[attr]).to.equal(23);
       });
@@ -1437,13 +1437,13 @@ describe('Widget', function() {
       it('resets layoutData properties', function() {
         let layoutData = {centerX: 0, centerY: 0, width: 100, height: 200};
         widget.layoutData = layoutData;
-        widget.set(attr, null);
+        widget[attr] = null;
 
         expect(widget.layoutData).to.eql(omit(layoutData, attr));
       });
 
       it('SETs layoutData', function() {
-        widget.set(attr, 23);
+        widget[attr] = 23;
 
         let call = client.calls({op: 'set'})[0];
         let expected = {};

@@ -46,11 +46,11 @@ let collectionView = new CollectionView({
   },
   updateCell: (view, index) => {
     let item = items[index];
-    view.find('#container').set('transform', {translationX: 0});
+    view.find('#container').set({transform: {translationX: 0}});
     view.find('#container').first().item = item;
-    view.find('#senderText').set('text', item.sender);
-    view.find('#titleText').set('text', item.title);
-    view.find('#timeText').set('text', item.time);
+    view.find('#senderText').set({text: item.sender});
+    view.find('#titleText').set({text: item.title});
+    view.find('#timeText').set({text: item.time});
   }
 }).appendTo(ui.contentView);
 

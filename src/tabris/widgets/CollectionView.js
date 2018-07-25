@@ -250,7 +250,7 @@ let triggerChangeLastVisibleIndex = createDelegate('lastVisibleIndex');
 
 function createDelegate(prop) {
   return function() {
-    let actual = this.get(prop);
+    let actual = this[prop];
     if (actual !== this['_prev:' + prop]) {
       this._triggerChangeEvent(prop, actual);
     }

@@ -4,6 +4,27 @@
 
 ## Widgets
 
+### "set" and "get" methods
+
+On instances of `NativeObject` (including widgets) and `WidgetCollection`, `get(prop)` and `set(prop, value)` are no longer supported.
+The `set` method now only takes one argument (properties object), and `get` has been removed entirely.
+
+#### Alternatives for `set(prop, value)`:
+
+On both `NativeObject` and `WidgetCollection`, `obj.set('foo', baz)` can be replaced with `obj.set({foo: baz})`, 
+and `obj.set(bar, baz)` can be replaced with `obj.set([foo]: baz})`.
+
+On `NativeObject` only, `obj.set('foo', baz)` can be replaced with `obj.foo = baz`, 
+and `obj.set(bar, baz)` can be replaced with `obj[bar] = baz`. This does not work when chaining calls on the object.
+
+#### Alternatives for `get(prop)`:
+
+On `NativeObject`, `bar = obj.get('foo')` can be replaced with `bar = obj.foo`,
+and `baz = obj.get(bar)` can be replaced with `baz = obj[bar]`.
+
+On `WidgetCollection`, `bar = wc.get('foo');` can be replaced with `bar = wc.first().foo`,
+and `baz = wc.get(bar)` can be replaced with `baz = wc.first()[bar]`.
+
 ### "append", "children", "find", "apply" moved to Composite
 
 Only `Composite` and it sub classes can contain children. Therefore methods dealing with child handling have no purpose on the `Widget` class and have been moved to `Composite`. Since calling these methods on non-composites has no effect or causes errors, most applications should not have adjust to this change.

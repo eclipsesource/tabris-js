@@ -26,7 +26,7 @@ new CheckBox({
   minZoomSlider.selection = 10;
   maxZoomSlider.selection = 30;
   imageView.zoomEnabled = zoomEnabled;
-  controls.children().filter(widget => widget !== checkBox).set('enabled', zoomEnabled);
+  controls.children().filter(widget => widget !== checkBox).set({enabled: zoomEnabled});
 }).appendTo(controls);
 
 let zoomLevelSlider = createSlider('Zoom level', imageView.zoomLevel * 10)

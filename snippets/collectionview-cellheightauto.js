@@ -32,5 +32,5 @@ new CollectionView({
     }).appendTo(composite);
     return composite;
   },
-  updateCell: (cell, index) => cell.find('#textView').set('text', items[index])
+  updateCell: (cell, index) => cell.find('#textView').set({text: items[index]})
 }).appendTo(ui.contentView);

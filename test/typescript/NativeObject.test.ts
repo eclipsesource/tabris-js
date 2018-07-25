@@ -39,9 +39,5 @@ thisReturnValue = nativeObject.trigger(type);
 
 // Custom properties
 
-let foo: string | undefined = customComponent.get('foo');
-let bar: number | undefined = customComponent.get('bar');
-customComponent.set('foo', 'fooValue');
-customComponent.set('bar', 23);
 customComponent.set({foo: 'fooValue'});
 customComponent.set({bar: 34});

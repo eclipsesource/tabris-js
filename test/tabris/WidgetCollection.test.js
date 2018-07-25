@@ -133,13 +133,13 @@ describe('WidgetCollection', function() {
 
     it('with child selectors', function() {
       let tree = new WidgetCollection([new Foo(), new Foo(), new Foo(), new Foo(), new Foo(), new Foo()]);
-      tree[0].set('class', 'foo').append(
-        tree[1].set('class', 'bar').append(
-          tree[2].set('class', 'foo').append(
-            tree[4].set('class', 'foo'),
-            tree[5].set('class', 'baz')
+      tree[0].set({class: 'foo'}).append(
+        tree[1].set({class: 'bar'}).append(
+          tree[2].set({class: 'foo'}).append(
+            tree[4].set({class: 'foo'}),
+            tree[5].set({class: 'baz'})
           ),
-          tree[3].set('class', 'bar')
+          tree[3].set({class: 'bar'})
         )
       );
 
@@ -157,7 +157,7 @@ describe('WidgetCollection', function() {
   describe('delegation:', function() {
 
     it('set() is delegated', function() {
-      collection.set('foo', 'bar');
+      collection.set({foo: 'bar'});
 
       expect(widgets[0].foo).to.equal('bar');
       expect(widgets[1].foo).to.equal('bar');
@@ -165,7 +165,7 @@ describe('WidgetCollection', function() {
     });
 
     it('set() returns collection', function() {
-      expect(collection.set('foo', 'bar')).to.equal(collection);
+      expect(collection.set({foo: 'bar'})).to.equal(collection);
     });
 
     it('animate() is delegated', function() {
@@ -263,16 +263,6 @@ describe('WidgetCollection', function() {
 
     it('dispose() returns undefined', function() {
       expect(collection.dispose()).to.be.undefined;
-    });
-
-    it('get() is delegated to first', function() {
-      stub(widgets[0], 'get').callsFake(() => 'foo');
-      expect(collection.get('bar')).to.equal('foo');
-      expect(widgets[0].get).to.have.been.calledWith('bar');
-    });
-
-    it('get() returns undefined for empty collection', function() {
-      expect((new WidgetCollection()).get('foo')).to.be.undefined;
     });
 
     it('parent() returns all parents', function() {

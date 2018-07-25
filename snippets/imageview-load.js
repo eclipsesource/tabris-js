@@ -29,5 +29,5 @@ new TextView({
 }).appendTo(ui.contentView);
 
 function handleLoad({target, error}) {
-  ui.contentView.find('#label-' + target.id).set('text', error ? 'Error' : 'Success');
+  ui.contentView.find('#label-' + target.id).set({text: error ? 'Error' : 'Success'});
 }

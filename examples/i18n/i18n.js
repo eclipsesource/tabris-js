@@ -62,9 +62,9 @@ class MenuCell extends Composite {
   }
 
   set dish(dish) {
-    this.find('#priceText').set('text', dish.price);
-    this.find('#nameText').set('text', dish.name);
-    this.find('#descriptionText').set('text', dish.description);
+    this.find('#priceText').set({text: dish.price});
+    this.find('#nameText').set({text: dish.name});
+    this.find('#descriptionText').set({text: dish.description});
   }
 
 }

@@ -48,12 +48,6 @@ export default class WidgetCollection {
     return new WidgetCollection(this._array, selector);
   }
 
-  get(prop) {
-    if (this._array[0]) {
-      return this._array[0].get(prop);
-    }
-  }
-
   parent() {
     let result = [];
     for (let widget of this._array) {

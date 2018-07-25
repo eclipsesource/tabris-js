@@ -13,5 +13,5 @@ const {TextView, device, ui} = require('tabris');
   });
 
 device.on('orientationChanged', ({value: orientation}) => {
-  ui.contentView.find('#orientation').set('text', 'orientation: ' + orientation);
+  ui.contentView.find('#orientation').set({text: 'orientation: ' + orientation});
 });

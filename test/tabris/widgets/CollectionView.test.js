@@ -186,7 +186,7 @@ describe('CollectionView', function() {
         it('GETs property from client', function() {
           stub(client, 'get').returns(23);
 
-          let result = view.get(prop);
+          let result = view[prop];
 
           expect(result).to.equal(23);
           expect(client.get).to.have.been.called;
@@ -196,7 +196,7 @@ describe('CollectionView', function() {
           stub(console, 'warn');
           spy(client, 'set');
 
-          view.set(prop, 23);
+          view[prop] = 23;
 
           expect(client.set).to.have.not.been.called;
           expect(console.warn).to.have.been.called;

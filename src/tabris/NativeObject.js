@@ -47,19 +47,14 @@ export default class NativeObject extends EventsClass {
     Object.defineProperty(this, 'cid', {value: cid});
   }
 
-  set(arg1, arg2) {
-    if (typeof arg1 === 'string') {
-      setExistingProperty.call(this, arg1, arg2);
-    } else {
-      this._reorderProperties(Object.keys(arg1)).forEach(function(name) {
-        setExistingProperty.call(this, name, arg1[name]);
-      }, this);
+  set(properties) {
+    if (arguments.length > 1) {
+      throw new Error('Too many arguments');
     }
+    this._reorderProperties(Object.keys(properties)).forEach(function(name) {
+      setExistingProperty.call(this, name, properties[name]);
+    }, this);
     return this;
-  }
-
-  get(name) {
-    return this[name];
   }
 
   $getProperty(name) {
