@@ -1,10 +1,10 @@
 import {Widget,
  Color,
  Image,
- margin,
+ Margin,
  Bounds,
- offset,
- dimension,
+ Offset,
+ Dimension,
  LayoutData,
  Transformation,
  AnimationOptions,
@@ -28,26 +28,26 @@ let widget: Widget = new Composite();
 let background: Color;
 let backgroundImage: Image;
 let baseline: Widget | Selector;
-let bottomMargin: margin;
+let bottomMargin: Margin;
 let bounds: Bounds;
-let centerX: offset;
-let centerY: offset;
+let centerX: Offset;
+let centerY: Offset;
 let _class: string;
 let classList: string[];
 let cornerRadius: number;
 let elevation: number;
 let enabled: boolean;
-let height: dimension;
+let height: Dimension;
 let highlightOnTouch: boolean;
 let id: string;
 let layoutData: LayoutData;
-let leftMargin: margin;
+let leftMargin: Margin;
 let opacity: number;
-let rightMargin: margin;
-let topMargin: margin;
+let rightMargin: Margin;
+let topMargin: Margin;
 let transform: Transformation;
 let visible: boolean;
-let width: dimension;
+let width: Dimension;
 let data: object;
 let leftOffset: number = 0;
 let topOffset: number  = 0;

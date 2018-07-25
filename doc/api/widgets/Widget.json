@@ -137,34 +137,42 @@
     },
     "left": {
       "type": "margin",
+      "ts_type": "Margin",
       "description": "The position of the widget's left edge relative to the parent or a sibling widget."
     },
     "right": {
       "type": "margin",
+      "ts_type": "Margin",
       "description": "The position of the widget's right edge relative to the parent or a sibling widget."
     },
     "top": {
       "type": "margin",
+      "ts_type": "Margin",
       "description": "The position of the widget's top edge relative to the parent or a sibling widget."
     },
     "bottom": {
       "type": "margin",
+      "ts_type": "Margin",
       "description": "The position of the widget's bottom edge relative to the parent or a sibling widget."
     },
     "width": {
       "type": "dimension",
+      "ts_type": "Dimension",
       "description": "The width of the widget."
     },
     "height": {
       "type": "dimension",
+      "ts_type": "Dimension",
       "description": "The height of the widget."
     },
     "centerX": {
       "type": "offset",
+      "ts_type": "Offset",
       "description": "The horizontal position of the widget's center relative to the parent's center."
     },
     "centerY": {
       "type": "offset",
+      "ts_type": "Offset",
       "description": "The vertical position of the widget's center relative to the parent's center."
     },
     "baseline": {

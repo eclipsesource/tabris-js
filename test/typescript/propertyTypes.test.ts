@@ -10,9 +10,9 @@ import {
   Transformation,
   Selector,
   SelectorFunction,
-  dimension,
-  offset,
-  margin,
+  Dimension,
+  Offset,
+  Margin,
   AnimationOptions,
 } from 'tabris';
 
@@ -22,27 +22,27 @@ let numberType: number = 42;
 let numberOrUndefined: number | undefined;
 let booleanType: boolean = false;
 let booleanOrUndefined: boolean | undefined;
-let marginType: margin = ['#foo', 23];
+let marginType: Margin = ['#foo', 23];
 marginType = [new Composite(), 23];
 marginType = [23, 23];
 marginType = 23;
 marginType = 'foo';
 marginType = new Composite();
-let offsetType: offset = 42;
-let offsetOrUndefined: offset | undefined;
-let dimensionType: dimension = 42;
-let dimensionOrUndefined: dimension | undefined;
+let offsetType: Offset = 42;
+let offsetOrUndefined: Offset | undefined;
+let dimensionType: Dimension = 42;
+let dimensionOrUndefined: Dimension | undefined;
 let widgetOrSelector: Widget | Selector = new Button();
 let widgetOrSelectorOrUndefined: Widget | Selector | undefined;
 let widgetType: Widget = new Button();
 let widgetOrUndefined: Widget | undefined;
 
 // dimension
-let _dimension: dimension = numberType;
-numberType = _dimension;
+let dimension: Dimension = numberType;
+numberType = dimension;
 
-// offset
-let _offset: offset = numberType;
+// Offset
+let _offset: Offset = numberType;
 numberType = _offset;
 
 // Image

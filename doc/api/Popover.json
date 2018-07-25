@@ -16,10 +16,12 @@
   "properties": {
     "width": {
       "type": "dimension",
+      "ts_type": "Dimension",
       "description": "The width of the `Popover` when shown in windowed mode on large screen devices."
     },
     "height": {
       "type": "dimension",
+      "ts_type": "Dimension",
       "description": "The height of the `Popover` when shown in windowed mode on large screen devices"
     },
     "anchor": {

@@ -21,3 +21,7 @@ It is no longer necessary to create a property `tsProperties` on classes inherit
 ### type "Partial"
 
 The helper type `Partial<T, U>` was removed to avoid confusion with the `Partial` type built in to newer TypeScript versions. It can be replaced with `Partial<Pick<T, U>>`.
+
+### types "margin", "dimension" and "offset"
+
+These types have been renamed to start with an upper case.

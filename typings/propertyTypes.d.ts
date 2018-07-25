@@ -14,7 +14,7 @@
  * - **[selector, offset]**
  * - **["prev()", offset]**
  */
-type margin = [string | Widget | number, Widget | number] | string | number | Widget | undefined;
+type Margin = [string | Widget | number, Widget | number] | string | number | Widget | undefined;
 
 /**
  * Represents pixel data of a `Canvas` widget.
@@ -86,15 +86,15 @@ type Font = string;
  * Defines how the widget should be arranged. When setting the layout of a widget using **LayoutData**, all currently set layout attributes not in the new LayoutData object will be implicitly reset to null (i.e. "not specified").
  */
 interface LayoutData {
-    left?: margin;
-    right?: margin;
-    top?: margin;
-    bottom?: margin;
-    centerX?: offset;
-    centerY?: offset;
+    left?: Margin;
+    right?: Margin;
+    top?: Margin;
+    bottom?: Margin;
+    centerX?: Offset;
+    centerY?: Offset;
     baseline?: Widget | Selector;
-    width?: dimension;
-    height?: dimension;
+    width?: Dimension;
+    height?: Dimension;
 }
 
 /**
@@ -167,11 +167,11 @@ type SelectorFunction = (widget: Widget) => boolean;
 /**
  * A positive float, or 0, representing device independent pixels.
  */
-type dimension = number;
+type Dimension = number;
 /**
  * A positive or negative float, or 0, representing device independent pixels.
  */
-type offset = number;
+type Offset = number;
 
 interface AnimationOptions {
 

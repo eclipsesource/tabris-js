@@ -178,7 +178,7 @@ function createPropertyChangedEvent(widgetName: string, propName: string, proper
     }]
   };
   result.push(createDoc(changeEvent));
-  result.push(`${propName}Changed?: (event: PropertyChangedEvent<${widgetName}, ${property.type}>) => void;`);
+  result.push(`${propName}Changed?: (event: PropertyChangedEvent<${widgetName}, ${property.ts_type || property.type}>) => void;`);
   return result.join('\n');
 }
 
