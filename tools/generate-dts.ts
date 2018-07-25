@@ -16,6 +16,8 @@ type Omit<T, U> = Pick<T, Exclude<keyof T, U>>;
 type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
 type NativeObjectProperties<T extends NativeObject> = Partial<Omit<T, FunctionPropertyNames<T> | 'cid'>>;
 type Properties<T extends Widget> = Partial<Omit<T, FunctionPropertyNames<T> | 'bounds' | 'data' | 'cid'>>;
+type ParamType<T extends (arg: any) => any> = T extends (arg: infer P) => any ? P : any;
+type SettableProperties<T extends NativeObject> = ParamType<T['set']>;
 
 export as namespace tabris;
 `;

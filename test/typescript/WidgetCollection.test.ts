@@ -1,6 +1,6 @@
-import {WidgetCollection, Transformation, AnimationOptions, Composite, Selector, Widget} from 'tabris';
+import {WidgetCollection, Transformation, AnimationOptions, Composite, Selector, Widget, BoxDimensions} from 'tabris';
 
-let widgetCollection: WidgetCollection<Widget> = new WidgetCollection([new Composite()]);
+let widgetCollection: WidgetCollection = new WidgetCollection([new Composite()]);
 
 // Properties
 let length: number;
@@ -8,16 +8,18 @@ let length: number;
 length = widgetCollection.length;
 
 // Methods
-class Foo extends Composite {}
+class Foo extends Composite {
+  public bar: string;
+}
 
-let fooCollection: WidgetCollection<Foo>;
-let properties: {transform?: Transformation, opacity?: number} = {};
+let fooCollection: WidgetCollection<Foo> = new WidgetCollection([new Foo()]);
+let properties: {transform?: Transformation, opacity?: number, bar?: 'bar', padding?: BoxDimensions | number} = {};
 let options: AnimationOptions = {};
 let parent: Composite = new Composite();
 let selector: Selector = '';
-let callback: (widget: Widget, index: number, collection: WidgetCollection<Widget>) => void = () => {};
-let widget: Widget;
-let foo: Foo;
+let callback: (widget: Widget, index: number, collection: WidgetCollection<Foo>) => void = () => {};
+let widget: Widget | undefined;
+let foo: Foo | undefined;
 let widgetArray: Widget[];
 let fooArray: Foo[];
 let listener: Function = () => {};
@@ -26,7 +28,7 @@ let property: string = '';
 let value: any;
 let Properties: object;
 let event: string = '';
-let thisReturnValue: WidgetCollection<Widget>;
+let thisReturnValue: WidgetCollection<Foo>;
 let voidReturnValue: void;
 let anyReturnValue: any;
 let booleanReturnValue: boolean;
@@ -34,7 +36,7 @@ let numberReturnValue: number;
 let undefinedValue: undefined;
 
 voidReturnValue = widgetCollection.animate(properties, options);
-thisReturnValue = widgetCollection.appendTo(parent);
+thisReturnValue = fooCollection.appendTo(parent);
 widgetCollection = widgetCollection.children();
 widgetCollection = widgetCollection.children(selector);
 fooCollection = widgetCollection.children(Foo);
@@ -49,27 +51,24 @@ widgetCollection = widgetCollection.find(selector);
 fooCollection = widgetCollection.find(Foo);
 widgetCollection = fooCollection.find();
 widgetCollection = fooCollection.find(selector);
-widget = widgetCollection.first() as Widget;
-undefinedValue = widgetCollection.first() as undefined;
-foo = fooCollection.first() as Foo;
-widget = widgetCollection.first(selector) as Widget;
-foo = fooCollection.first(selector) as Foo;
+widget = widgetCollection.first();
+foo = fooCollection.first();
+widget = widgetCollection.first(selector);
+foo = fooCollection.first(selector);
 voidReturnValue = widgetCollection.forEach(callback);
-booleanReturnValue = widgetCollection.includes(widget);
-numberReturnValue = widgetCollection.indexOf(widget);
-widget = widgetCollection.last() as Widget;
-foo = fooCollection.last() as Foo;
-undefinedValue = widgetCollection.last() as undefined;
-widget = widgetCollection.last(selector) as Widget;
-foo = fooCollection.last(selector) as Foo;
-thisReturnValue = widgetCollection.off(event, listener);
-thisReturnValue = widgetCollection.on(event, listener);
-thisReturnValue = widgetCollection.once(event, listener);
-widgetCollection = widgetCollection.parent();
+booleanReturnValue = widgetCollection.includes(widget as Widget);
+numberReturnValue = widgetCollection.indexOf(widget as Widget);
+widget = widgetCollection.last();
+foo = fooCollection.last();
+widget = widgetCollection.last(selector);
+foo = fooCollection.last(selector);
+thisReturnValue = fooCollection.off(event, listener);
+thisReturnValue = fooCollection.on(event, listener);
+thisReturnValue = fooCollection.once(event, listener);
 widgetCollection = fooCollection.parent();
-thisReturnValue = widgetCollection.set(properties);
+thisReturnValue = fooCollection.set(properties);
 widgetArray = widgetCollection.toArray();
 fooArray = fooCollection.toArray();
-thisReturnValue = widgetCollection.trigger(event);
+thisReturnValue = fooCollection.trigger(event);
 widget = widgetCollection[0];
 foo = fooCollection[0];

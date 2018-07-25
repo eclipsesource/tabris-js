@@ -1,6 +1,6 @@
 {
   "type": "WidgetCollection",
-  "generics": "T extends Widget",
+  "generics": "T extends Widget = Widget",
   "description": "A `WidgetCollection` is an array-like object representing a set of widgets, as returned by the widget methods `children` and `find`.",
   "constructor": {
     "access": "public",
@@ -93,7 +93,7 @@
           {
             "name": "properties",
             "type": "object",
-            "ts_type": "WidgetProperties & {[k: string]: any}"
+            "ts_type": "SettableProperties<T>"
           }
         ],
         "description": "Sets all key-value pairs in the properties object on all widgets in this collection. See also `Widget.set()`.",
