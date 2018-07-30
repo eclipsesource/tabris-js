@@ -75,9 +75,19 @@ class DocGenerator {
 
   private renderDocument(title: string) {
     const def = this.defs[title];
+    let heading = title;
+    if (def.namespace === 'global' && def.object) {
+      heading = `Global object "${def.object}"`;
+    } else if (def.object) {
+      heading = `Object "${def.object}"`;
+    } else if (def.isWidget) {
+      heading = `Widget "${def.type}"`;
+    } else if (def.type) {
+      heading = `Type "${def.type}"`;
+    }
     return [
       '---\n---',
-      '# ' + title + '\n',
+      '# ' + heading + '\n',
       this.renderExtends(def),
       this.renderDescription(def),
       this.renderImages(def),
