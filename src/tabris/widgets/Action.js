@@ -7,14 +7,6 @@ export default class Action extends Widget {
     return 'tabris.Action';
   }
 
-  _listen(name, listening) {
-    if (name === 'select') {
-      this._nativeListen(name, listening);
-    } else {
-      super._listen(name, listening);
-    }
-  }
-
 }
 
 NativeObject.defineProperties(Action.prototype, {
@@ -28,4 +20,8 @@ NativeObject.defineProperties(Action.prototype, {
     default: 'normal'
   },
   title: {type: 'string', default: ''}
+});
+
+NativeObject.defineEvents(Action.prototype, {
+  select: {native: true}
 });

@@ -57,7 +57,7 @@ describe('Video', function() {
 
     beforeEach(function() {
       listener = stub();
-      video.on('stateChanged', listener);
+      video.onStateChanged(listener);
     });
 
     it('calls native listen for stateChanged', function() {
@@ -82,7 +82,7 @@ describe('Video', function() {
 
     beforeEach(function() {
       listener = stub();
-      video.on('speedChanged', listener);
+      video.onSpeedChanged(listener);
     });
 
     it('calls native listen for speedChanged', function() {

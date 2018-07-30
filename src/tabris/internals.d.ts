@@ -31,10 +31,31 @@ interface PropertyDefinition<ApiType = any, NativeType = any> {
   default?: ApiType;
   nocache?: boolean;
   readonly?: boolean;
+  static?: boolean;
   set?: (name: string, value: ApiType) => void;
   get?: (name: string) => ApiType;
 }
 
 interface PropertyDefinitions {
   [property: string]: PropertyDefinition | TabrisType
+}
+
+interface EventDefinition {
+  native?: boolean;
+
+  /**
+   * Fire change events for the given property if this event fires
+   */
+  changes?: string;
+
+  /**
+   * When creating the change event, this is the field name on the
+   * event object containing the new value. Falls back to the name of the property.
+   * Requires "changes".
+   */
+  changeValue?: string;
+}
+
+interface EventDefinitions {
+  [eventType: string]: EventDefinition | true;
 }

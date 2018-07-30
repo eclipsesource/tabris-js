@@ -31,20 +31,15 @@ export default class TimeDialog extends Popup {
     this.dispose();
   }
 
-  _listen(name, listening) {
-    if (name === 'select') {
-      this._nativeListen(name, listening);
-    } else if (name === 'close') {
-      this._nativeListen(name, listening);
-    } else {
-      super._listen(name, listening);
-    }
-  }
-
 }
 
 NativeObject.defineProperties(TimeDialog.prototype, {
   date: {type: 'any', default: undefined, set: setDate},
+});
+
+NativeObject.defineEvents(TimeDialog.prototype, {
+  select: {native: true},
+  close: {native: true}
 });
 
 function setDate(name, value) {

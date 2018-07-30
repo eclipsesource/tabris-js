@@ -31,22 +31,17 @@ export default class DateDialog extends Popup {
     this.dispose();
   }
 
-  _listen(name, listening) {
-    if (name === 'select') {
-      this._nativeListen(name, listening);
-    } else if (name === 'close') {
-      this._nativeListen(name, listening);
-    } else {
-      super._listen(name, listening);
-    }
-  }
-
 }
 
 NativeObject.defineProperties(DateDialog.prototype, {
   date: {type: 'any', default: undefined, set: setDate},
   maxDate: {type: 'any', default: undefined, set: setDate},
   minDate: {type: 'any', default: undefined, set: setDate}
+});
+
+NativeObject.defineEvents(DateDialog.prototype, {
+  select: {native: true},
+  close: {native: true}
 });
 
 function setDate(name, value) {

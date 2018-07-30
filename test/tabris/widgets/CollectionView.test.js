@@ -464,7 +464,7 @@ describe('CollectionView', function() {
 
       it('triggers select on the collection view', function() {
         let listener = spy();
-        view.on('select', listener);
+        view.onSelect(listener);
 
         view._trigger('select', {index: 0});
 
@@ -478,7 +478,7 @@ describe('CollectionView', function() {
 
       it('triggers `scroll` on collection view', function() {
         let listener = spy();
-        view.on('scroll', listener);
+        view.onScroll(listener);
 
         view._trigger('scroll', {deltaX: 23, deltaY: 42});
 

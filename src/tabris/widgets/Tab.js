@@ -23,3 +23,8 @@ NativeObject.defineProperties(Tab.prototype, {
   selectedImage: {type: 'image', default: null},
   badge: {type: 'string', default: ''}
 });
+
+NativeObject.defineEvents(Tab.prototype, {
+  disappear: true,
+  appear: true
+});

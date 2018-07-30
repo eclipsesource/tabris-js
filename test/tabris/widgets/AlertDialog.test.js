@@ -176,8 +176,8 @@ describe('AlertDialog', function() {
     it('with button fires close<Button> and close', function() {
       let closeOk = spy();
       let close = spy();
-      dialog.on('closeOk', closeOk);
-      dialog.on('close', close);
+      dialog.onCloseOk(closeOk);
+      dialog.onClose(close);
 
       tabris._notify(dialog.cid, 'close', {button: 'ok'});
 
@@ -190,8 +190,8 @@ describe('AlertDialog', function() {
     it('without button fires close only', function() {
       let closeOk = spy();
       let close = spy();
-      dialog.on('closeOk', closeOk);
-      dialog.on('close', close);
+      dialog.onCloseOk(closeOk);
+      dialog.onClose(close);
 
       tabris._notify(dialog.cid, 'close', {});
 

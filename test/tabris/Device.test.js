@@ -100,7 +100,7 @@ describe('Device', function() {
     });
 
     it('adds listener for orientationChanged event', function() {
-      device.on('orientationChanged', function() {});
+      device.onOrientationChanged(function() {});
 
       let calls = client.calls({id: device.cid, op: 'listen', event: 'orientationChanged'});
       expect(calls[0].listen).to.equal(true);
@@ -108,7 +108,7 @@ describe('Device', function() {
 
     it('triggers orientationChanged event', function() {
       let listener = spy();
-      device.on('orientationChanged', listener);
+      device.onOrientationChanged(listener);
 
       tabris._notify(device.cid, 'orientationChanged', {orientation: 'portrait'});
 
@@ -120,6 +120,18 @@ describe('Device', function() {
       expect(() => {
         device.dispose();
       }).to.throw(Error, 'Cannot dispose device object');
+    });
+
+    it('has no listener registration functions for static properties', function() {
+      expect(device.onPlatformChanged).to.be.undefined;
+      expect(device.onVersionChanged).to.be.undefined;
+      expect(device.onModelChanged).to.be.undefined;
+      expect(device.onVendorChanged).to.be.undefined;
+      expect(device.onNameChanged).to.be.undefined;
+      expect(device.onLanguageChanged).to.be.undefined;
+      expect(device.onScreenWidthChanged).to.be.undefined;
+      expect(device.onScreenHeightChanged).to.be.undefined;
+      expect(device.onScaleFactorChanged).to.be.undefined;
     });
 
   });

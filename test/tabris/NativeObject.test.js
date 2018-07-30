@@ -396,7 +396,7 @@ describe('NativeObject', function() {
 
       it('notifies dispose listeners', function() {
         let listener = spy();
-        object.on('dispose', listener);
+        object.onDispose(listener);
 
         object.dispose();
 
@@ -404,7 +404,7 @@ describe('NativeObject', function() {
       });
 
       it('notifies dispose listeners before native destroy', function() {
-        object.on('dispose', () => {
+        object.onDispose(() => {
           expect(client.calls({op: 'destroy'}).length).to.eql(0);
         });
 
@@ -419,7 +419,7 @@ describe('NativeObject', function() {
       });
 
       it('can be called from within a dispose listener', function() {
-        object.on('dispose', () => object.dispose());
+        object.onDispose(() => object.dispose());
 
         expect(() => {
           object.dispose();
@@ -474,6 +474,12 @@ describe('NativeObject.extend', function() {
 
     expect(typeof instance.cid).to.equal('string');
     expect(instance.cid.length).to.be.above(0);
+  });
+
+  it('has no cid change event', function() {
+    let instance = new CustomWidget({foo: 42});
+
+    expect(instance.onCidChanged).to.be.undefined;
   });
 
   it('issues a create operation with type and properties', function() {

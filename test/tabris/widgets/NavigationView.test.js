@@ -102,7 +102,7 @@ describe('NavigationView', function() {
 
     it('support change event', function() {
       let listener = spy();
-      navigationView.on('topToolbarHeightChanged', listener);
+      navigationView.onTopToolbarHeightChanged(listener);
 
       tabris._notify(navigationView.cid, 'topToolbarHeightChanged', {topToolbarHeight: 23});
 
@@ -139,7 +139,7 @@ describe('NavigationView', function() {
 
     it('support change event', function() {
       let listener = spy();
-      navigationView.on('bottomToolbarHeightChanged', listener);
+      navigationView.onBottomToolbarHeightChanged(listener);
 
       tabris._notify(navigationView.cid, 'bottomToolbarHeightChanged', {bottomToolbarHeight: 23});
 
@@ -251,7 +251,7 @@ describe('NavigationView', function() {
     });
 
     it('is triggered when a page is appended', function() {
-      page1.on('appear', listener);
+      page1.onAppear(listener);
 
       navigationView.append(page1);
 
@@ -260,7 +260,7 @@ describe('NavigationView', function() {
     });
 
     it('is an EventObject', function() {
-      page1.on('appear', listener);
+      page1.onAppear(listener);
 
       navigationView.append(page1);
 
@@ -269,8 +269,8 @@ describe('NavigationView', function() {
 
     it('is triggered when a covering page is removed', function() {
       navigationView.append(page1, page2);
-      page1.on('appear', listener);
-      page2.on('appear', listener);
+      page1.onAppear(listener);
+      page2.onAppear(listener);
 
       page2.detach();
 
@@ -280,8 +280,8 @@ describe('NavigationView', function() {
 
     it('is not triggered when hidden page is removed', function() {
       navigationView.append(page1, page2);
-      page1.on('appear', listener);
-      page2.on('appear', listener);
+      page1.onAppear(listener);
+      page2.onAppear(listener);
 
       page1.detach();
 
@@ -302,7 +302,7 @@ describe('NavigationView', function() {
 
     it('is triggered when page is detached', function() {
       navigationView.append(page1);
-      page1.on('disappear', listener);
+      page1.onDisappear(listener);
 
       page1.detach();
 
@@ -312,7 +312,7 @@ describe('NavigationView', function() {
 
     it('is an EventObject', function() {
       navigationView.append(page1);
-      page1.on('disappear', listener);
+      page1.onDisappear(listener);
 
       page1.detach();
 
@@ -321,7 +321,7 @@ describe('NavigationView', function() {
 
     it('is triggered when page is disposed', function() {
       navigationView.append(page1);
-      page1.on('disappear', listener);
+      page1.onDisappear(listener);
 
       page1.dispose();
 
@@ -331,8 +331,8 @@ describe('NavigationView', function() {
 
     it('is triggered when a page is covered by another page', function() {
       navigationView.append(page1);
-      page1.on('disappear', listener);
-      page2.on('disappear', listener);
+      page1.onDisappear(listener);
+      page2.onDisappear(listener);
 
       navigationView.append(page2);
 
@@ -342,8 +342,8 @@ describe('NavigationView', function() {
 
     it('is not triggered when a page in the middle is removed', function() {
       navigationView.append(page1, page2);
-      page1.on('disappear', listener);
-      page2.on('disappear', listener);
+      page1.onDisappear(listener);
+      page2.onDisappear(listener);
 
       page1.detach();
 

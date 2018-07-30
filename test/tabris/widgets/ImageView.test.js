@@ -40,7 +40,7 @@ describe('ImageView', function() {
     });
 
     it('zoom', function() {
-      imageView.on('zoom', listener);
+      imageView.onZoom(listener);
       imageView.zoomLevel = 2;
 
       tabris._notify(imageView.cid, 'zoom', {zoomLevel: 3});
@@ -51,7 +51,7 @@ describe('ImageView', function() {
     });
 
     it('zoomLevelChanged', function() {
-      imageView.on('zoomLevelChanged', listener);
+      imageView.onZoomLevelChanged(listener);
 
       tabris._notify(imageView.cid, 'zoom', {zoomLevel: 3});
 

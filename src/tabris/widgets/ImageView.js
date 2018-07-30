@@ -1,26 +1,10 @@
 import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 
-const EVENT_TYPES = ['load', 'zoom'];
-
 export default class ImageView extends Widget {
 
   get _nativeType() {
     return 'tabris.ImageView';
-  }
-
-  _listen(name, listening) {
-    if (EVENT_TYPES.includes(name)) {
-      this._nativeListen(name, listening);
-    } else if (name === 'zoomLevelChanged') {
-      this._onoff('zoom', listening, this.$triggerChangeZoomLevel);
-    } else {
-      super._listen(name, listening);
-    }
-  }
-
-  $triggerChangeZoomLevel({zoomLevel}) {
-    this._triggerChangeEvent('zoomLevel', zoomLevel);
   }
 
 }
@@ -100,4 +84,9 @@ NativeObject.defineProperties(ImageView.prototype, {
       this._storeProperty(name, value);
     }
   }
+});
+
+NativeObject.defineEvents(ImageView.prototype, {
+  load: {native: true},
+  zoom: {native: true, changes: 'zoomLevel'}
 });

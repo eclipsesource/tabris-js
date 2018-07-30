@@ -2,6 +2,7 @@ import {types} from './property-types';
 import {warn} from './Console';
 import EventObject from './EventObject';
 import Events from './Events';
+import Listeners from './Listeners';
 
 function EventsClass() {}
 Object.assign(EventsClass.prototype, Events);
@@ -9,9 +10,9 @@ Object.assign(EventsClass.prototype, Events);
 export default class NativeObject extends EventsClass {
 
   /**
- * @param {object} target
- * @param {PropertyDefinitions} definitions
- */
+   * @param {object} target
+   * @param {PropertyDefinitions} definitions
+   */
   static defineProperties(target, definitions) {
     for (let name in definitions) {
       NativeObject.defineProperty(target, name, definitions[name]);
@@ -28,6 +29,45 @@ export default class NativeObject extends EventsClass {
         return this.$getProperty(name);
       }
     });
+    if (typeof definition !== 'object' || !definition.static) {
+      this.defineEvent(target, name + 'Changed', true);
+    }
+  }
+
+  /**
+   * @param {object} target
+   * @param {EventDefinitions} definitions
+   */
+  static defineEvents(target, definitions) {
+    for (let name in definitions) {
+      NativeObject.defineEvent(target, name, definitions[name]);
+    }
+  }
+
+  static defineEvent(target, name, definition) {
+    const property = 'on' + name.charAt(0).toUpperCase() + name.slice(1);
+    const $property = '$' + property;
+    Object.defineProperty(target, property, {
+      get() {
+        if (!this[$property]) {
+          this[$property] = new Listeners(this, name);
+        }
+        return this[$property];
+      }
+    });
+    if (typeof definition === 'object') {
+      if (definition.native) {
+        target['$listen_' + name] = function(listening) {
+          this._nativeListen(name, listening);
+        };
+      }
+      if (definition.changes) {
+        const prop = definition.changes;
+        target['$listen_' + prop + 'Changed'] = function(listening) {
+          this._onoff(name, listening, ev => this._triggerChangeEvent(prop, ev[definition.changeValue || prop]));
+        };
+      }
+    }
   }
 
   static extend(nativeType, superType = NativeObject) {
@@ -183,7 +223,11 @@ export default class NativeObject extends EventsClass {
     return !!this._isDisposed;
   }
 
-  _listen(/* name, listening */) {
+  _listen(name, listening) {
+    const listenHandler = this['$listen_' + name];
+    if (listenHandler) {
+      listenHandler.call(this, listening);
+    }
   }
 
   _nativeListen(event, state) {
@@ -237,6 +281,10 @@ export default class NativeObject extends EventsClass {
 
 }
 
+NativeObject.defineEvents(NativeObject.prototype, {
+  dispose: true
+});
+
 function setExistingProperty(name, value) {
   if (name in this) {
     this[name] = value;
@@ -250,6 +298,7 @@ function normalizeProperty(property) {
   return {
     type: resolveType(config.type || 'any'),
     default: config.default,
+    static: config.static,
     nocache: config.nocache,
     set: config.readonly && readOnlySetter || config.set || defaultSetter,
     get: config.get || defaultGetter

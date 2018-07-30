@@ -148,7 +148,7 @@ describe('App', function() {
   it('listens for pause event', function() {
     let listener = spy();
 
-    app.on('pause', listener);
+    app.onPause(listener);
 
     let calls = client.calls({id: app.cid, op: 'listen', event: 'pause'});
     expect(calls[0].listen).to.equal(true);
@@ -156,7 +156,7 @@ describe('App', function() {
 
   it('triggers pause event', function() {
     let listener = spy();
-    app.on('pause', listener);
+    app.onPause(listener);
 
     tabris._notify(app.cid, 'pause');
 
@@ -167,7 +167,7 @@ describe('App', function() {
   it('listens for resume event', function() {
     let listener = spy();
 
-    app.on('resume', listener);
+    app.onResume(listener);
 
     let calls = client.calls({id: app.cid, op: 'listen', event: 'resume'});
     expect(calls[0].listen).to.equal(true);
@@ -175,7 +175,7 @@ describe('App', function() {
 
   it('triggers resume event', function() {
     let listener = spy();
-    app.on('resume', listener);
+    app.onResume(listener);
 
     tabris._notify(app.cid, 'resume');
 
@@ -186,7 +186,7 @@ describe('App', function() {
   it('listens for foreground event', function() {
     let listener = spy();
 
-    app.on('foreground', listener);
+    app.onForeground(listener);
 
     let calls = client.calls({id: app.cid, op: 'listen', event: 'foreground'});
     expect(calls[0].listen).to.equal(true);
@@ -194,7 +194,7 @@ describe('App', function() {
 
   it('triggers foreground event', function() {
     let listener = spy();
-    app.on('foreground', listener);
+    app.onForeground(listener);
 
     tabris._notify(app.cid, 'foreground');
 
@@ -205,7 +205,7 @@ describe('App', function() {
   it('listens for background event', function() {
     let listener = spy();
 
-    app.on('background', listener);
+    app.onBackground(listener);
 
     let calls = client.calls({id: app.cid, op: 'listen', event: 'background'});
     expect(calls[0].listen).to.equal(true);
@@ -213,7 +213,7 @@ describe('App', function() {
 
   it('triggers background event', function() {
     let listener = spy();
-    app.on('background', listener);
+    app.onBackground(listener);
 
     tabris._notify(app.cid, 'background');
 
@@ -228,7 +228,7 @@ describe('App', function() {
   });
 
   it('listens for backNavigation event', function() {
-    app.on('backNavigation', spy());
+    app.onBackNavigation(spy());
 
     let calls = client.calls({id: app.cid, op: 'listen', event: 'backNavigation'});
     expect(calls[0].listen).to.equal(true);
@@ -236,7 +236,7 @@ describe('App', function() {
 
   it('triggers backNavigation event', function() {
     let listener = spy();
-    app.on('backNavigation', listener);
+    app.onBackNavigation(listener);
 
     tabris._notify(app.cid, 'backNavigation');
 
@@ -245,7 +245,7 @@ describe('App', function() {
   });
 
   it('backNavigation event returns false by default', function() {
-    app.on('backNavigation', spy());
+    app.onBackNavigation(spy());
 
     let returnValue = tabris._notify(app.cid, 'backNavigation');
 
@@ -253,7 +253,7 @@ describe('App', function() {
   });
 
   it('backNavigation event returns true if preventDefault is called', function() {
-    app.on('backNavigation', function(event) {
+    app.onBackNavigation(function(event) {
       event.preventDefault();
     });
 

@@ -1,32 +1,10 @@
 import NativeObject from '../NativeObject';
 import Composite from './Composite';
 
-const EVENT_TYPES = ['scrollX', 'scrollY'];
-
 export default class ScrollView extends Composite {
 
   get _nativeType() {
     return 'tabris.ScrollView';
-  }
-
-  _listen(name, listening) {
-    if (EVENT_TYPES.includes(name)) {
-      this._nativeListen(name, listening);
-    } else if (name === 'offsetXChanged') {
-      this._onoff('scrollX', listening, this.$triggerChangeOffsetX);
-    } else if (name === 'offsetYChanged') {
-      this._onoff('scrollY', listening, this.$triggerChangeOffsetY);
-    } else {
-      super._listen(name, listening);
-    }
-  }
-
-  $triggerChangeOffsetX({offset}) {
-    this._triggerChangeEvent('offsetX', offset);
-  }
-
-  $triggerChangeOffsetY({offset}) {
-    this._triggerChangeEvent('offsetY', offset);
   }
 
   scrollToY(offset, options) {
@@ -50,9 +28,15 @@ export default class ScrollView extends Composite {
 NativeObject.defineProperties(ScrollView.prototype, {
   direction: {
     type: ['choice', ['horizontal', 'vertical']],
-    default: 'vertical'
+    default: 'vertical',
+    static: true
   },
   offsetX: {type: 'number', nocache: true, readonly: true},
   offsetY: {type: 'number', nocache: true, readonly: true},
   scrollbarVisible: {type: 'boolean', default: true}
+});
+
+NativeObject.defineEvents(ScrollView.prototype, {
+  scrollX: {native: true, changes: 'offsetX', changeValue: 'offset'},
+  scrollY: {native: true, changes: 'offsetY', changeValue: 'offset'}
 });

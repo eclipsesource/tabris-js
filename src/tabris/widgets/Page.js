@@ -30,3 +30,8 @@ NativeObject.defineProperties(Page.prototype, {
   title: {type: 'string', default: ''},
   autoDispose: {type: 'boolean', default: true}
 });
+
+NativeObject.defineEvents(Page.prototype, {
+  appear: true,
+  disappear: true
+});

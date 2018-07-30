@@ -7,20 +7,6 @@ export default class CheckBox extends Widget {
     return 'tabris.CheckBox';
   }
 
-  _listen(name, listening) {
-    if (name === 'checkedChanged') {
-      this._onoff('select', listening, this.$triggerChangeChecked);
-    } else if (name === 'select') {
-      this._nativeListen(name, listening);
-    } else {
-      super._listen(name, listening);
-    }
-  }
-
-  $triggerChangeChecked({checked}) {
-    this._triggerChangeEvent('checked', checked);
-  }
-
 }
 
 NativeObject.defineProperties(CheckBox.prototype, {
@@ -37,4 +23,8 @@ NativeObject.defineProperties(CheckBox.prototype, {
     },
     default: null
   }
+});
+
+NativeObject.defineEvents(CheckBox.prototype, {
+  select: {native: true, changes: 'checked'},
 });

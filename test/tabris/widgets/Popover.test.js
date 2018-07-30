@@ -86,7 +86,7 @@ describe('Popover', () => {
       let closeOk = spy();
       let close = spy();
       popover.on('closeOk', closeOk);
-      popover.on('close', close);
+      popover.onClose(close);
 
       tabris._notify(popover.cid, 'close', {});
 

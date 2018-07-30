@@ -96,7 +96,7 @@ describe('SearchAction', function() {
     }
 
     it('select', function() {
-      action.on('select', listener);
+      action.onSelect(listener);
       tabris._notify(action.cid, 'select', {});
 
       checkListen('select');
@@ -105,7 +105,7 @@ describe('SearchAction', function() {
     });
 
     it('accept', function() {
-      action.on('accept', listener);
+      action.onAccept(listener);
       tabris._notify(action.cid, 'accept', {text: 'foo'});
 
       checkListen('accept');

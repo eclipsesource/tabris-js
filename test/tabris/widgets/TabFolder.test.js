@@ -229,7 +229,7 @@ describe('TabFolder', function() {
 
     it('Setting a Tab triggers change event', function() {
       let listener = spy();
-      tabFolder.on('selectionChanged', listener);
+      tabFolder.onSelectionChanged(listener);
 
       tabFolder.selection = tab;
 
@@ -240,7 +240,7 @@ describe('TabFolder', function() {
 
     it('Setting a Tab does not trigger change event when the tab was already selected', function() {
       let listener = spy();
-      tabFolder.on('selectionChanged', listener);
+      tabFolder.onSelectionChanged(listener);
 
       stub(client, 'get').returns(tab.cid);
       tabFolder.selection = tab;
@@ -291,7 +291,7 @@ describe('TabFolder', function() {
 
     it('supports native event selectionChanged', function() {
       let listener = spy();
-      tabFolder.on('selectionChanged', listener);
+      tabFolder.onSelectionChanged(listener);
 
       tabris._notify(tabFolder.cid, 'select', {selection: tab.cid});
 
@@ -302,7 +302,7 @@ describe('TabFolder', function() {
 
     it('supports native event select', function() {
       let listener = spy();
-      tabFolder.on('select', listener);
+      tabFolder.onSelect(listener);
 
       tabris._notify(tabFolder.cid, 'select', {selection: tab.cid});
 
@@ -317,6 +317,10 @@ describe('TabFolder', function() {
 
     beforeEach(function() {
       client.resetCalls();
+    });
+
+    it('does not support change event', function() {
+      expect(tabFolder.onTabBarLocationChanged).to.be.undefined;
     });
 
     it('passes property to client', function() {
@@ -372,6 +376,10 @@ describe('TabFolder', function() {
       client.resetCalls();
     });
 
+    it('does not support change event', function() {
+      expect(tabFolder.onTabModeChanged).to.be.undefined;
+    });
+
     it('passes property to client', function() {
       tabFolder = new TabFolder({tabMode: 'fixed'});
 
@@ -418,7 +426,7 @@ describe('TabFolder', function() {
 
     it('is triggered for the first appended tab', function() {
       tab1
-        .on('appear', listener)
+        .onAppear(listener)
         .appendTo(tabFolder);
 
       expect(listener).to.have.been.calledOnce;
@@ -427,7 +435,7 @@ describe('TabFolder', function() {
 
     it('is triggered when the Tab becomes the selection of the TabFolder', function() {
       tab1.appendTo(tabFolder);
-      tab2.on('appear', listener).appendTo(tabFolder);
+      tab2.onAppear(listener).appendTo(tabFolder);
 
       tabFolder._triggerChangeEvent('selection', tab2);
 
@@ -449,7 +457,7 @@ describe('TabFolder', function() {
     });
 
     it('is triggered when the Tab is no longer the selection of the TabFolder', function() {
-      tab1.on('disappear', listener);
+      tab1.onDisappear(listener);
 
       tabFolder._triggerChangeEvent('selection', tab2);
 
@@ -458,7 +466,7 @@ describe('TabFolder', function() {
     });
 
     it('is not triggered when the Tab appears', function() {
-      tab2.on('disappear', listener);
+      tab2.onDisappear(listener);
 
       tabFolder._triggerChangeEvent('selection', tab2);
 
@@ -477,7 +485,7 @@ describe('TabFolder', function() {
 
     it('fires scroll event with tab instance', function() {
       let listener = spy();
-      tabFolder.on('scroll', listener);
+      tabFolder.onScroll(listener);
 
       tabris._notify(tabFolder.cid, 'scroll', {selection: tab.cid, offset: 48});
 
@@ -490,7 +498,7 @@ describe('TabFolder', function() {
 
     it('fires scroll event with null selection if tab not found', function() {
       let listener = spy();
-      tabFolder.on('scroll', listener);
+      tabFolder.onScroll(listener);
 
       tabris._notify(tabFolder.cid, 'scroll', {selection: 'not tab', offset: 48});
 

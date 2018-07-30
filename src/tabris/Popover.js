@@ -26,18 +26,14 @@ export default class Popover extends Popup {
     }
   }
 
-  _listen(name, listening) {
-    if (name === 'close') {
-      this._nativeListen(name, listening);
-    } else {
-      super._listen(name, listening);
-    }
-  }
-
 }
 
 NativeObject.defineProperties(Popover.prototype, {
   anchor: {type: 'proxy', default: null},
   width: {type: 'dimension', nocache: true},
   height: {type: 'dimension', nocache: true},
+});
+
+NativeObject.defineEvents(Popover.prototype, {
+  close: {}
 });

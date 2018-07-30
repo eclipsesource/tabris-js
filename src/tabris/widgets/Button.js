@@ -7,14 +7,6 @@ export default class Button extends Widget {
     return 'tabris.Button';
   }
 
-  _listen(name, listening) {
-    if (name === 'select') {
-      this._nativeListen(name, listening);
-    } else {
-      super._listen(name, listening);
-    }
-  }
-
 }
 
 NativeObject.defineProperties(Button.prototype, {
@@ -30,4 +22,8 @@ NativeObject.defineProperties(Button.prototype, {
     },
     default: null
   }
+});
+
+NativeObject.defineEvents(Button.prototype, {
+  select: {native: true},
 });

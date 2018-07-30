@@ -5,8 +5,6 @@ import GestureRecognizer from './GestureRecognizer';
 import {animate} from './Animation';
 import {types} from './property-types';
 
-const EVENT_TYPES = ['touchStart', 'touchMove', 'touchEnd', 'touchCancel', 'resize'];
-
 export default class Widget extends NativeObject {
 
   constructor(properties) {
@@ -128,8 +126,6 @@ export default class Widget extends NativeObject {
       }
     } else if (name === 'boundsChanged') {
       this._onoff('resize', listening, this.$triggerChangeBounds);
-    } else if (EVENT_TYPES.includes(name)) {
-      this._nativeListen(name, listening);
     } else {
       super._listen(name, listening);
     }
@@ -262,6 +258,29 @@ NativeObject.defineProperties(Widget.prototype, {
       return this._gestures;
     }
   }
+});
+
+NativeObject.defineEvents(Widget.prototype, {
+  tap: true,
+  longpress: true,
+  pan: true,
+  panLeft: true,
+  panRight: true,
+  panUp: true,
+  panDown: true,
+  panHorizontal: true,
+  panVertical: true,
+  swipeLeft: true,
+  swipeRight: true,
+  swipeUp: true,
+  swipeDown: true,
+  touchStart: {native: true},
+  touchMove: {native: true},
+  touchEnd: {native: true},
+  touchCancel: {native: true},
+  resize: {native: true},
+  addChild: true,
+  removeChild: true
 });
 
 Widget.prototype.animate = animate;

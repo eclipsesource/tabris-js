@@ -248,7 +248,7 @@ describe('Widget', function() {
 
       it("notifies parent's `removeChild` listener", function() {
         let listener = spy();
-        parent.on('removeChild', listener);
+        parent.onRemoveChild(listener);
 
         child.dispose();
 
@@ -259,7 +259,7 @@ describe('Widget', function() {
       it("notifies parent's `removeChild` listener with correct index", function() {
         new TestWidget().insertBefore(child);
         let listener = spy();
-        parent.on('removeChild', listener);
+        parent.onRemoveChild(listener);
 
         child.dispose();
 
@@ -269,9 +269,9 @@ describe('Widget', function() {
       it("notifies all children's dispose listeners", function() {
         let log = [];
         let child2 = new TestWidget().appendTo(parent);
-        parent.on('dispose', () => log.push('parent'));
-        child.on('dispose', () => log.push('child'));
-        child2.on('dispose', () => log.push('child2'));
+        parent.onDispose(() => log.push('parent'));
+        child.onDispose(() => log.push('child'));
+        child2.onDispose(() => log.push('child2'));
 
         parent.dispose();
 
@@ -282,9 +282,9 @@ describe('Widget', function() {
         let log = [];
         child = new TestWidget().appendTo(parent);
         let grandchild = new TestWidget().appendTo(child);
-        parent.on('dispose', () => log.push('parent'));
-        child.on('dispose', () => log.push('child'));
-        grandchild.on('dispose', () => log.push('grandchild'));
+        parent.onDispose(() => log.push('parent'));
+        child.onDispose(() => log.push('child'));
+        grandchild.onDispose(() => log.push('grandchild'));
 
         parent.dispose();
 
@@ -300,7 +300,7 @@ describe('Widget', function() {
       });
 
       it('on() does not throw', function() {
-        expect(() => widget.on('dispose', () => {})).not.to.throw;
+        expect(() => widget.onDispose(() => {})).not.to.throw;
       });
 
       it('off() does not throw', function() {
@@ -382,7 +382,7 @@ describe('Widget', function() {
       describe('when called with a widget', function() {
 
         beforeEach(function() {
-          widget.on('addChild', listener);
+          widget.onAddChild(listener);
           result = widget.append(child1);
         });
 
@@ -657,7 +657,7 @@ describe('Widget', function() {
         });
 
         it('triggers remove event with index', function() {
-          parent1.on('removeChild', listener);
+          parent1.onRemoveChild(listener);
 
           widget.insertBefore(other);
 
@@ -665,7 +665,7 @@ describe('Widget', function() {
         });
 
         it('triggers add event with index', function() {
-          parent2.on('addChild', listener);
+          parent2.onAddChild(listener);
 
           widget.insertBefore(other);
 
@@ -766,7 +766,7 @@ describe('Widget', function() {
         });
 
         it('triggers `removeChild` event with index', function() {
-          parent1.on('removeChild', listener);
+          parent1.onRemoveChild(listener);
 
           widget.insertAfter(other);
 
@@ -774,7 +774,7 @@ describe('Widget', function() {
         });
 
         it('triggers `addChild` event with index', function() {
-          parent2.on('addChild', listener);
+          parent2.onAddChild(listener);
 
           widget.insertAfter(other);
 
@@ -1559,7 +1559,7 @@ describe('Widget', function() {
     });
 
     it('boundsChanged', function() {
-      widget = new TestWidget().on('boundsChanged', listener);
+      widget = new TestWidget().onBoundsChanged(listener);
 
       widget._trigger('resize', {bounds: [1, 2, 3, 4]});
 
@@ -1569,7 +1569,7 @@ describe('Widget', function() {
     });
 
     it('resize', function() {
-      widget = new TestWidget().on('resize', listener);
+      widget = new TestWidget().onResize(listener);
 
       widget._trigger('resize', {bounds: [1, 2, 3, 4]});
 

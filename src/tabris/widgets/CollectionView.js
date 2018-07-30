@@ -3,8 +3,6 @@ import Widget from '../Widget';
 import Composite from './Composite';
 import {warn} from '../Console';
 
-const EVENT_TYPES = ['refresh', 'select', 'scroll'];
-
 export default class CollectionView extends Composite {
 
   constructor(properties) {
@@ -94,8 +92,6 @@ export default class CollectionView extends Composite {
       this._onoff('scroll', listening, triggerChangeFirstVisibleIndex);
     } else if (name === 'lastVisibleIndexChanged') {
       this._onoff('scroll', listening, triggerChangeLastVisibleIndex);
-    } else if (EVENT_TYPES.includes(name)) {
-      this._nativeListen(name, listening);
     } else {
       super._listen(name, listening);
     }
@@ -211,6 +207,12 @@ NativeObject.defineProperties(CollectionView.prototype, {
     type: 'number',
     default: 1
   }
+});
+
+NativeObject.defineEvents(CollectionView.prototype, {
+  refresh: {native: true},
+  select: {native: true},
+  scroll: {native: true}
 });
 
 function resolveProperty(ctx, name) {

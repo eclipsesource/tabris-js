@@ -7,20 +7,6 @@ export default class Switch extends Widget {
     return 'tabris.Switch';
   }
 
-  _listen(name, listening) {
-    if (name === 'select') {
-      this._nativeListen(name, listening);
-    } else if (name === 'checkedChanged') {
-      this._onoff('select', listening, this.$triggerChangeChecked);
-    } else {
-      super._listen(name, listening);
-    }
-  }
-
-  $triggerChangeChecked({checked}) {
-    this._triggerChangeEvent('checked', checked);
-  }
-
 }
 
 NativeObject.defineProperties(Switch.prototype, {
@@ -29,4 +15,8 @@ NativeObject.defineProperties(Switch.prototype, {
   thumbOffColor: {type: 'color'},
   trackOnColor: {type: 'color'},
   trackOffColor: {type: 'color'}
+});
+
+NativeObject.defineEvents(Switch.prototype, {
+  select: {native: true, changes: 'checked'},
 });

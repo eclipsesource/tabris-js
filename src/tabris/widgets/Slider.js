@@ -7,20 +7,6 @@ export default class Slider extends Widget {
     return 'tabris.Slider';
   }
 
-  _listen(name, listening) {
-    if (name === 'select') {
-      this._nativeListen(name, listening);
-    } else if (name === 'selectionChanged') {
-      this._onoff('select', listening, this.$triggerChangeSelection);
-    } else {
-      super._listen(name, listening);
-    }
-  }
-
-  $triggerChangeSelection({selection}) {
-    this._triggerChangeEvent('selection', selection);
-  }
-
 }
 
 NativeObject.defineProperties(Slider.prototype, {
@@ -28,4 +14,8 @@ NativeObject.defineProperties(Slider.prototype, {
   maximum: {type: 'integer', default: 100},
   selection: {type: 'integer', nocache: true},
   tintColor: {type: 'color'}
+});
+
+NativeObject.defineEvents(Slider.prototype, {
+  select: {native: true, changes: 'selection'}
 });

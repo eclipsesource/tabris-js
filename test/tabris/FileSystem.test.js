@@ -58,6 +58,11 @@ describe('FileSystem', function() {
 
     }));
 
+    it('has no listener registration functions for static properties', function() {
+      expect(fs.onCacheDirChanged).to.be.undefined;
+      expect(fs.onFilesDirChanged).to.be.undefined;
+    });
+
     describe('readFile', function() {
 
       it('rejects if parameter missing', function() {

@@ -31,25 +31,11 @@ export default class Picker extends Widget {
     }
   }
 
-  _listen(name, listening) {
-    if (name === 'select') {
-      this._nativeListen(name, listening);
-    } else if (name === 'selectionIndexChanged') {
-      this._onoff('select', listening, this.$triggerSelectionIndexChanged);
-    } else {
-      super._listen(name, listening);
-    }
-  }
-
   _trigger(name, event) {
     if (name === 'select') {
       return super._trigger('select', {index: event.selectionIndex});
     }
     return super._trigger(name, event);
-  }
-
-  $triggerSelectionIndexChanged({index}) {
-    this._triggerChangeEvent('selectionIndex', index);
   }
 
 }
@@ -84,4 +70,8 @@ NativeObject.defineProperties(Picker.prototype, {
   fillColor: {type: 'color'},
   borderColor: {type: 'color'},
   textColor: {type: 'color'}
+});
+
+NativeObject.defineEvents(Picker.prototype, {
+  select: {native: true, changes: 'selectionIndex', changeValue: 'index'},
 });

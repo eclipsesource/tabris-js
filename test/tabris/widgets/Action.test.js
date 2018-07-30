@@ -86,7 +86,7 @@ describe('Action', function() {
     });
 
     it('sends listen for select', function() {
-      action.on('select', listener);
+      action.onSelect(listener);
 
       let listen = client.calls({op: 'listen', id: action.cid});
       expect(listen.length).to.equal(1);
@@ -95,7 +95,7 @@ describe('Action', function() {
     });
 
     it('is fired with parameters', function() {
-      action.on('select', listener);
+      action.onSelect(listener);
 
       tabris._notify(action.cid, 'select', {});
 

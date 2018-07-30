@@ -90,7 +90,7 @@ describe('StatusBar', function() {
 
   it('fires tap event', function() {
     let listener = spy();
-    statusBar.on('tap', listener);
+    statusBar.onTap(listener);
 
     tabris._notify(statusBar.cid, 'tap', {x: 30, y: 10});
 

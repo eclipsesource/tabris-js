@@ -42,7 +42,7 @@ describe('Picker', function() {
     });
 
     it('select', function() {
-      picker.on('select', listener);
+      picker.onSelect(listener);
       picker.itemCount = 2;
 
       tabris._notify(picker.cid, 'select', {selectionIndex: 1});
@@ -53,7 +53,7 @@ describe('Picker', function() {
     });
 
     it('selectionIndexChanged', function() {
-      picker.on('selectionIndexChanged', listener);
+      picker.onSelectionIndexChanged(listener);
 
       tabris._notify(picker.cid, 'select', {selectionIndex: 23});
 

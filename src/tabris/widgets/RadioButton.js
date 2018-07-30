@@ -7,20 +7,6 @@ export default class RadioButton extends Widget {
     return 'tabris.RadioButton';
   }
 
-  _listen(name, listening) {
-    if (name === 'select') {
-      this._nativeListen(name, listening);
-    } else if (name === 'checkedChanged') {
-      this._onoff('select', listening, this.$triggerChangeChecked);
-    } else {
-      super._listen(name, listening);
-    }
-  }
-
-  $triggerChangeChecked({checked}) {
-    this._triggerChangeEvent('checked', checked);
-  }
-
 }
 
 NativeObject.defineProperties(RadioButton.prototype, {
@@ -37,4 +23,8 @@ NativeObject.defineProperties(RadioButton.prototype, {
     },
     default: null
   }
+});
+
+NativeObject.defineEvents(RadioButton.prototype, {
+  select: {native: true, changes: 'checked'},
 });

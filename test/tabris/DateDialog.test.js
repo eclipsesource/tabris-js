@@ -119,7 +119,7 @@ describe('DateDialog', function() {
 
     it('fires close event', function() {
       let close = spy();
-      dialog.on('close', close);
+      dialog.onClose(close);
 
       tabris._notify(dialog.cid, 'close');
 
@@ -135,8 +135,8 @@ describe('DateDialog', function() {
       let date = new Date();
       let select = spy();
       let close = spy();
-      dialog.on('select', select);
-      dialog.on('close', close);
+      dialog.onSelect(select);
+      dialog.onClose(close);
 
       tabris._notify(dialog.cid, 'select', {date: date.getTime()});
 

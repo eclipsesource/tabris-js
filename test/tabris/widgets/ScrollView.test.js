@@ -31,6 +31,10 @@ describe('ScrollView', function() {
       expect(scrollView.direction).to.equal('vertical');
     });
 
+    it('does not support direction change event', function() {
+      expect(scrollView.onDirectionChanged).to.be.undefined;
+    });
+
     it('defaults to true scrollbarVisible', function() {
       expect(scrollView.scrollbarVisible).to.be.true;
     });
@@ -95,7 +99,7 @@ describe('ScrollView', function() {
 
     it('fires scroll event', function() {
       let listener = spy();
-      scrollView.on('scrollY', listener);
+      scrollView.onScrollY(listener);
 
       tabris._notify(scrollView.cid, 'scrollY', {offset: 42});
 
@@ -106,7 +110,7 @@ describe('ScrollView', function() {
 
     it('fires offsetYChanged event', function() {
       let listener = spy();
-      scrollView.on('offsetYChanged', listener);
+      scrollView.onOffsetYChanged(listener);
 
       tabris._notify(scrollView.cid, 'scrollY', {offset: 42});
 
@@ -117,7 +121,7 @@ describe('ScrollView', function() {
 
     it('does not fire offsetXChanged event', function() {
       let listener = spy();
-      scrollView.on('offsetXChanged', listener);
+      scrollView.onOffsetXChanged(listener);
 
       tabris._notify(scrollView.cid, 'scrollY', {offset: 42});
 
@@ -157,7 +161,7 @@ describe('ScrollView', function() {
 
     it('fires scrollX event', function() {
       let listener = spy();
-      scrollView.on('scrollX', listener);
+      scrollView.onScrollX(listener);
 
       tabris._notify(scrollView.cid, 'scrollX', {offset: 42});
 
@@ -168,7 +172,7 @@ describe('ScrollView', function() {
 
     it('fires offsetXChanged event', function() {
       let listener = spy();
-      scrollView.on('offsetXChanged', listener);
+      scrollView.onOffsetXChanged(listener);
 
       tabris._notify(scrollView.cid, 'scrollX', {offset: 42});
 
@@ -179,7 +183,7 @@ describe('ScrollView', function() {
 
     it('does not fire offsetYChanged event', function() {
       let listener = spy();
-      scrollView.on('offsetYChanged', listener);
+      scrollView.onOffsetYChanged(listener);
 
       tabris._notify(scrollView.cid, 'scrollX', {offset: 42});
 

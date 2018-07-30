@@ -1,8 +1,6 @@
 import NativeObject from './NativeObject';
 
 const CERTIFICATE_ALGORITHMS = ['RSA2048', 'RSA4096', 'ECDSA256'];
-const EVENT_TYPES = ['foreground', 'background', 'pause', 'resume', 'terminate', 'backNavigation',
-  'certificatesReceived'];
 
 export default class App extends NativeObject {
 
@@ -88,14 +86,6 @@ export default class App extends NativeObject {
     }
   }
 
-  _listen(name, listening) {
-    if (EVENT_TYPES.includes(name)) {
-      this._nativeListen(name, listening);
-    } else {
-      super._listen(name, listening);
-    }
-  }
-
   _trigger(name, event = {}) {
     if (name === 'patchInstall') {
       this._nativeListen('patchInstall', false);
@@ -140,6 +130,16 @@ NativeObject.defineProperties(App.prototype, {
       this._nativeSet(name, value);
     }
   }
+});
+
+NativeObject.defineEvents(App.prototype, {
+  foreground: {native: true},
+  background: {native: true},
+  pause: {native: true},
+  resume: {native: true},
+  terminate: {native: true},
+  backNavigation: {native: true},
+  certificatesReceived: {native: true}
 });
 
 function checkCertificates(certificates) {

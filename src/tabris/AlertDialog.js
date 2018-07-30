@@ -82,3 +82,10 @@ NativeObject.defineProperties(AlertDialog.prototype, {
     default: () => ({})
   }
 });
+
+NativeObject.defineEvents(AlertDialog.prototype, {
+  close: true,
+  closeOk: true,
+  closeCancel: true,
+  closeNeutral: true
+});

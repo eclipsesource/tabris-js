@@ -3,8 +3,6 @@ import Composite from './Composite';
 import Tab from './Tab';
 import {warn} from '../Console';
 
-const EVENT_TYPES = ['select', 'scroll'];
-
 export default class TabFolder extends Composite {
 
   get _nativeType() {
@@ -38,16 +36,6 @@ export default class TabFolder extends Composite {
     super._removeChild(child);
   }
 
-  _listen(name, listening) {
-    if (EVENT_TYPES.includes(name)) {
-      this._nativeListen(name, listening);
-    } else if (name === 'selectionChanged') {
-      this._onoff('select', listening, this.$triggerChangeSelection);
-    } else {
-      super._listen(name, listening);
-    }
-  }
-
   _trigger(name, event) {
     if (name === 'select') {
       let selection = tabris._proxies.find(event.selection);
@@ -73,16 +61,12 @@ export default class TabFolder extends Composite {
     }
   }
 
-  $triggerChangeSelection({selection}) {
-    this._triggerChangeEvent('selection', selection);
-  }
-
 }
 
 NativeObject.defineProperties(TabFolder.prototype, {
   paging: {type: 'boolean', default: false},
-  tabBarLocation: {type: ['choice', ['top', 'bottom', 'hidden', 'auto']], default: 'auto'},
-  tabMode: {type: ['choice', ['fixed', 'scrollable']], default: 'fixed'},
+  tabBarLocation: {type: ['choice', ['top', 'bottom', 'hidden', 'auto']], default: 'auto', static: true},
+  tabMode: {type: ['choice', ['fixed', 'scrollable']], default: 'fixed', static: true},
   selection: {
     set(name, tab) {
       if (this._children().indexOf(tab) < 0) {
@@ -104,4 +88,9 @@ NativeObject.defineProperties(TabFolder.prototype, {
     }
   },
   textColor: {type: 'color'}
+});
+
+NativeObject.defineEvents(TabFolder.prototype, {
+  scroll: {native: true},
+  select: {native: true, changes: 'selection'}
 });

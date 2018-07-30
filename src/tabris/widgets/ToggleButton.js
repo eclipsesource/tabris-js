@@ -7,20 +7,6 @@ export default class ToggleButton extends Widget {
     return 'tabris.ToggleButton';
   }
 
-  _listen(name, listening) {
-    if (name === 'select') {
-      this._nativeListen(name, listening);
-    } else if (name === 'checkedChanged') {
-      this._onoff('select', listening, this.$triggerChangeChecked);
-    } else {
-      super._listen(name, listening);
-    }
-  }
-
-  $triggerChangeChecked({checked}) {
-    this._triggerChangeEvent('checked', checked);
-  }
-
 }
 
 NativeObject.defineProperties(ToggleButton.prototype, {
@@ -37,4 +23,8 @@ NativeObject.defineProperties(ToggleButton.prototype, {
     },
     default: null
   },
+});
+
+NativeObject.defineEvents(ToggleButton.prototype, {
+  select: {native: true, changes: 'checked'},
 });

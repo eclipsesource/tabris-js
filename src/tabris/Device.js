@@ -33,16 +33,16 @@ export default class Device extends NativeObject {
 }
 
 NativeObject.defineProperties(Device.prototype, {
-  model: {readonly: true, get: getOnce},
-  vendor: {readonly: true, get: getOnce},
-  platform: {readonly: true, get: getOnce},
-  version: {readonly: true, get: getOnce},
-  name: {readonly: true},
-  language: {readonly: true},
+  model: {readonly: true, get: getOnce, static: true},
+  vendor: {readonly: true, get: getOnce, static: true},
+  platform: {readonly: true, get: getOnce, static: true},
+  version: {readonly: true, get: getOnce, static: true},
+  name: {readonly: true, static: true},
+  language: {readonly: true, static: true},
   orientation: {readonly: true},
-  screenWidth: {readonly: true},
-  screenHeight: {readonly: true},
-  scaleFactor: {readonly: true, get: getOnce}
+  screenWidth: {readonly: true, static: true},
+  screenHeight: {readonly: true, static: true},
+  scaleFactor: {readonly: true, get: getOnce, static: true}
 });
 
 export function create() {

@@ -105,3 +105,7 @@ NativeObject.defineProperties(NavigationView.prototype, {
   navigationAction: {type: 'proxy', default: null},
   pageAnimation: {type: ['choice', ['default', 'none']], default: 'default'}
 });
+
+NativeObject.defineEvents(NavigationView.prototype, {
+  backNavigation: true
+});

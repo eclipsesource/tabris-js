@@ -66,6 +66,13 @@ describe('Ui', function() {
     expect(ui.parent()).to.be.null;
   });
 
+  it('has no listener registration functions for static properties', function() {
+    expect(ui.onStatusBarChanged).to.be.undefined;
+    expect(ui.onNavigationBarChanged).to.be.undefined;
+    expect(ui.onContentViewChanged).to.be.undefined;
+    expect(ui.onDrawerChanged).to.be.undefined;
+  });
+
   describe('contentView', function() {
 
     it('is instance of ContentView', function() {

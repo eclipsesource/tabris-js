@@ -1,38 +1,16 @@
 import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 
-const EVENT_TYPES = ['focus', 'blur', 'accept', 'input', 'select'];
-
 export default class TextInput extends Widget {
 
   get _nativeType() {
     return 'tabris.TextInput';
   }
 
-  _listen(name, listening) {
-    if (EVENT_TYPES.includes(name)) {
-      this._nativeListen(name, listening);
-    } else if (name === 'textChanged') {
-      this._onoff('input', listening, this.$triggerChangeText);
-    } else if (name === 'selectionChanged') {
-      this._onoff('select', listening, this.$triggerChangeSelection);
-    } else {
-      super._listen(name, listening);
-    }
-  }
-
-  $triggerChangeText({text}) {
-    this._triggerChangeEvent('text', text);
-  }
-
-  $triggerChangeSelection({selection}) {
-    this._triggerChangeEvent('selection', selection);
-  }
-
 }
 
 NativeObject.defineProperties(TextInput.prototype, {
-  type: {type: ['choice', ['default', 'password', 'search', 'multiline']]},
+  type: {type: ['choice', ['default', 'password', 'search', 'multiline']], static: true},
   text: {type: 'string', nocache: true},
   message: {type: 'string', default: ''},
   editable: {type: 'boolean', default: true},
@@ -92,4 +70,12 @@ NativeObject.defineProperties(TextInput.prototype, {
     },
     default: null
   }
+});
+
+NativeObject.defineEvents(TextInput.prototype, {
+  focus: {native: true},
+  blur: {native: true},
+  accept: {native: true},
+  input: {native: true, changes: 'text'},
+  select: {native: true, changes: 'selection'}
 });
