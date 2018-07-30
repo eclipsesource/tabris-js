@@ -12,12 +12,24 @@ const HEADER = `
 /// <reference path="globals.d.ts" />
 /// <reference path="Jsx.d.ts" />
 
+interface Constructor<T> {new(...args: any[]): T; }
 type Omit<T, U> = Pick<T, Exclude<keyof T, U>>;
 type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
 type NativeObjectProperties<T extends NativeObject> = Partial<Omit<T, FunctionPropertyNames<T> | 'cid'>>;
 type Properties<T extends Widget> = Partial<Omit<T, FunctionPropertyNames<T> | 'bounds' | 'data' | 'cid'>>;
 type ParamType<T extends (arg: any) => any> = T extends (arg: infer P) => any ? P : any;
 type SettableProperties<T extends NativeObject> = ParamType<T['set']>;
+type ExtendedEvent<EventData, Target = {}> = EventObject<Target> & EventData;
+type Listener<T = {}> = (ev: ExtendedEvent<T>) => any;
+type Diff<T, U> = T extends U ? never : T;
+type ListenersTriggerParam<T> = {[P in Diff<keyof T, keyof EventObject<object>>]: T[P]};
+type MinimalEventObject<T extends object> = {target: T};
+type TargetType<E extends object> = E extends MinimalEventObject<infer Target> ? Target : object;
+
+interface Listeners<EventData extends object = MinimalEventObject<object>> {
+  // tslint:disable-next-line:callable-types
+  (listener: Listener<ExtendedEvent<EventData>>): TargetType<EventData>;
+}
 
 export as namespace tabris;
 `;
@@ -268,7 +280,7 @@ function createProperty(name: string, property: schema.Property) {
 }
 
 function createParamList(def: ExtendedApi, parameters: schema.Parameter[], ops: PropertyOps) {
-  return parameters.map(param =>
+  return (parameters || []).map(param =>
     `${param.name}${param.optional ? '?' : ''}: ${decodeParamType(param, def, ops)}`
   ).join(', ');
 }

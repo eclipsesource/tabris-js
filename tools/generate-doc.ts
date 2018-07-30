@@ -287,7 +287,7 @@ class DocGenerator {
   }
 
   private renderSignature(parameters: schema.Parameter[]) {
-    return '(' + parameters.map(param => typeof param === 'object' ? param.name : param).join(', ') + ')';
+    return '(' + (parameters || []).map(param => typeof param === 'object' ? param.name : param).join(', ') + ')';
   }
 
   private renderEventParamList(parameters: {[name: string]: schema.Property}) {

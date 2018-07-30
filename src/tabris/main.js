@@ -30,6 +30,7 @@ import EventObject from './EventObject';
 import ImageData from './ImageData';
 import ImageView from './widgets/ImageView';
 import InactivityTimer from './InactivityTimer.js';
+import Listeners from './Listeners.js';
 import Page from './widgets/Page';
 import Picker from './widgets/Picker';
 import Pkcs5 from './Pkcs5';
@@ -92,6 +93,7 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   ImageData,
   ImageView,
   InactivityTimer,
+  Listeners,
   NativeObject,
   NavigationView,
   NavigationBar,

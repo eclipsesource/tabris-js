@@ -1,5 +1,6 @@
 import {isObject} from './util';
 import EventObject from './EventObject';
+import {omit} from './util';
 
 export default {
 
@@ -79,16 +80,28 @@ export default {
     return this.on(type, wrappedCallback, context);
   },
 
-  trigger(type, event = {}) {
+  trigger(type, eventData = {}) {
     if (!this._isDisposed) {
       if (this._callbacks && type in this._callbacks) {
-        if (event instanceof EventObject) {
-          event._initEvent(type, this);
+        const uninitialized = (eventData instanceof EventObject) && !eventData.type;
+        const dispatchObject = uninitialized ? eventData : new EventObject();
+        const target = this.$eventTarget || this;
+        if (eventData && (eventData !== dispatchObject)) {
+          let copyData = omit(eventData, ['type', 'target', 'timeStamp']);
+          Object.assign(dispatchObject, copyData);
         }
-        let callbacks = this._callbacks[type];
+        if (dispatchObject._initEvent instanceof Function) {
+          dispatchObject._initEvent(type, target);
+        }
+        const callbacks = this._callbacks[type];
         for (let i = 0; i < callbacks.length; i++) {
-          let callback = callbacks[i];
-          callback.fn.call(callback.ctx || this, event);
+          const callback = callbacks[i];
+          const returnValue = callback.fn.call(callback.ctx || this, dispatchObject);
+          if (returnValue instanceof Promise) {
+            returnValue.catch(ex => console.error(
+              `Listener for ${target.constructor.name} event "${type}" rejected with ${ex.stack || ex}`
+            ));
+          }
         }
       }
     }

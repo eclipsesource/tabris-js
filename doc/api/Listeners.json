@@ -1,0 +1,163 @@
+{
+  "type": "Listeners",
+  "generics": "EventData extends object = MinimalEventObject<object>",
+  "description": "Objects of the type `Listeners` provide methods to manage listeners and trigger events. They encapsulate the tabris event system in a way that is more convenient to use with TypeScript and the ES2017 `async`/`await` feature.",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "target",
+        "type": "object",
+        "ts_type": "TargetType<EventData>"
+      },
+      {
+        "name": "type",
+        "type": "string"
+      }
+    ]
+  },
+  "properties": {
+    "type": {
+      "type": "string",
+      "readonly": true,
+      "description": "The event type. This value will be set in the `type` field of the event object given to the listener. It is the same value used by the [on](NativeObject#ontype-listener-context) and [trigger](http://docs.tabris.com/latest/api/NativeObject.html#triggertype) methods."
+    },
+    "target": {
+      "type": "object",
+      "ts_type": "TargetType<EventData>",
+      "readonly": true,
+      "description": "The object that issues the events, e.g. a widget."
+    }
+  },
+  "methods": {
+    "addListener": [
+      {
+        "description": "Registers a listener to be notified by new events. Each listener can only be added once. Returns the target object. **Instances of  `Listeners` can also be called directly as a function to register a new listener.** I.e. `widget.onResize(listener);` is the same as `widget.onResize.addListener(listener);` It is also the same as `widget.on('resize', listener');`, but with better TypeScript support. ",
+        "parameters": [
+          {
+            "name": "listener",
+            "type": "(event: EventObject) => void",
+            "ts_type": "Listener<EventData>"
+          }
+        ],
+        "returns": "this.target",
+        "ts_returns": "TargetType<EventData>"
+      }
+    ],
+    "removeListener": [
+      {
+        "description": "Deregisters a listener, it will not be notified of future events. Returns the target object.",
+        "parameters": [
+          {
+            "name": "listener",
+            "type": "(event: EventObject) => void",
+            "ts_type": "Listener<EventData>"
+          }
+        ],
+        "returns": "this.target",
+        "ts_returns": "TargetType<EventData>"
+      }
+    ],
+    "once": [
+      {
+        "description": "Notifies the given listener the next time an event is issued, but not afterwards. Returns the target object.",
+        "parameters": [
+          {
+            "name": "listener",
+            "type": "(event: EventObject) => void",
+            "ts_type": "Listener<EventData>"
+          }
+        ],
+        "returns": "this.target",
+        "ts_returns": "TargetType<EventData>"
+      }
+    ],
+    "resolve" : [
+      {
+        "description": "Returns a promise that resolves the next time an event is issued. The dispatched event object will be used as the resolved value.",
+        "returns": "Promise",
+        "ts_returns": "Promise<ExtendedEvent<EventData>>"
+      },
+      {
+        "generics": "U",
+        "description": "Returns a promise that resolves the next time an event is issued. The given value will passed to the promise.",
+        "parameters": [
+          {
+            "name": "value",
+            "type": "any",
+            "ts_type": "U"
+          }
+        ],
+        "returns": "Promise",
+        "ts_returns": "Promise<U>"
+      }
+    ],
+    "reject" : [
+      {
+        "description": "Returns a promise that rejects the next time an event is issued. The rejection value will be an instance of `Error` merged with the dispatched event object.",
+        "ts_returns": "Promise<never>"
+      },
+      {
+        "description": "Returns a promise that rejects the next time an event is issued. The rejection value will be an instance of the given `Error` constructor.",
+        "parameters": [
+          {
+            "name": "constructor",
+            "type": "function",
+            "ts_type": "Constructor<Error>"
+          }
+        ],
+        "ts_returns": "Promise<never>"
+      },
+      {
+        "description": "Returns a promise that rejects the next time an event is issued. The rejection value will be the given `Error` instance",
+        "parameters": [
+          {
+            "name": "error",
+            "type": "Error"
+          }
+        ],
+        "ts_returns": "Promise<never>"
+      },
+      {
+        "description": "Returns a promise that rejects the next time an event is issued. The rejection value will  be an instance of `Error` merged with the given data object.",
+        "parameters": [
+          {
+            "name": "data",
+            "type": "object"
+          }
+        ],
+        "ts_returns": "Promise<never>"
+      },
+      {
+        "description": "Returns a promise that rejects the next time an event is issued. The rejection value will always be an instance of `Error with the given string as the message.",
+        "parameters": [
+          {
+            "name": "message",
+            "type": "string"
+          }
+        ],
+        "ts_returns": "Promise<never>"
+      }
+    ],
+    "trigger" : [
+      {
+        "description": "Issues a plain event object to all registered listeners with a newly constructed event object.",
+        "returns": "this.target",
+        "ts_returns": "TargetType<EventData>"
+      },
+      {
+        "description": "Issues an event object to all registered listeners. If an _uninitialized_ (not previously issued) instance of `EventObject` is given as the argument it will be issued directly as-is. Any other type of object (including an already initialized/previously issued event object) will be copied to create a new event object. This allows for simple event re-routing.",
+        "parameters": [
+          {
+            "name": "eventData",
+            "optional": true,
+            "type": "object",
+            "ts_type": "ListenersTriggerParam<EventData>"
+          }
+        ],
+        "returns": "this.target",
+        "ts_returns": "TargetType<EventData>"
+      }
+    ]
+  }
+}

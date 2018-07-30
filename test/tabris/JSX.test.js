@@ -42,11 +42,11 @@ describe('JSX', function() {
       widget.trigger('zFoo', {data: 3});
 
       expect(selectSpy).to.have.been.calledOnce;
-      expect(selectSpy).to.have.been.calledWith({data: 1});
+      expect(selectSpy).to.have.been.calledWithMatch({data: 1});
       expect(fooSpyA).to.have.been.calledOnce;
-      expect(fooSpyA).to.have.been.calledWith({data: 2});
+      expect(fooSpyA).to.have.been.calledWithMatch({data: 2});
       expect(fooSpyZ).to.have.been.calledOnce;
-      expect(fooSpyZ).to.have.been.calledWith({data: 3});
+      expect(fooSpyZ).to.have.been.calledWithMatch({data: 3});
     });
 
     it('does not attach non-camelCase listeners', function() {

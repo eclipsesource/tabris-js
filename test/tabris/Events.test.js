@@ -191,11 +191,11 @@ describe('Events', function() {
 
     it('forwards event object to wrapped listener', function() {
       object.once('foo', listener);
-      let event = {};
+      let event = {fooEvent: 'foo'};
 
       object.trigger('foo', event);
 
-      expect(listener).to.have.been.calledWith(event);
+      expect(listener).to.have.been.calledWithMatch(event);
     });
 
     it('uses given context', function() {
@@ -248,21 +248,21 @@ describe('Events', function() {
       expect(listener).to.have.been.calledOnce;
     });
 
-    it('triggers listener with default empty object', function() {
+    it('triggers listener with default empty event object', function() {
       object.on('foo', listener);
 
       object.trigger('foo');
 
-      expect(listener).to.have.been.calledWith({});
+      expect(listener).to.have.been.calledWithMatch({target: object, type: 'foo'});
     });
 
-    it('triggers listener with empty object', function() {
+    it('triggers listener with extended event object', function() {
       object.on('foo', listener);
-      let event = {};
+      let event = {bar: 'bar'};
 
       object.trigger('foo', event);
 
-      expect(listener).to.have.been.calledWith(event);
+      expect(listener).to.have.been.calledWithMatch({target: object, type: 'foo', bar: 'bar'});
     });
 
     it('initializes instances of EventObject', function() {

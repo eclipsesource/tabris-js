@@ -149,11 +149,11 @@
           {
             "name": "object",
             "type": "object",
-            "description": "The object to pass to listener functions."
+            "description": "The data to pass to listener functions."
           }
         ],
         "returns": "this",
-        "description": "Passes the given *object* it to all listeners registered for this event *type*."
+        "description": "Passes the fields of the given *object* to all listeners registered for this event *type*."
       },
       {
         "parameters": [
@@ -170,7 +170,7 @@
           }
         ],
         "returns": "this",
-        "description": "Initializes the given *eventObject*  and passes it to all listeners registered for this event *type*."
+        "description": "Initializes the given *eventObject* and passes it to all listeners registered for this event *type*. If *eventObject* was already initialized its fields are copied to a new event object."
       }
     ],
     "set": [

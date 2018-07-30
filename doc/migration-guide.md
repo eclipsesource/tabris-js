@@ -2,6 +2,14 @@
 ---
 # Migration Guide 2.x to 3.0
 
+## Event Handling
+
+### "trigger" object/eventObject parameter is now cloned
+
+The second parameter of the `trigger` method was previously directly passed on to all listeners in all scenarios. This is no longer the case. To ensure that listeners always receive a valid `EventObject` instance, the values of the parameter are now copied to a new object, *unless* the given parameter is an instance of `EventObject` that has not been initialized yet.
+
+This is relevant only if in your application you are passing values to `trigger` of types other than `Object` or `EventObject`. If you do so you need to pass an object referencing that value. E.g. `trigger('select', selection);` could become `trigger('select', {selection});`.
+
 ## Widgets
 
 ### "set" and "get" methods
