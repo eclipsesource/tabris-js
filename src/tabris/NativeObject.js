@@ -8,6 +8,10 @@ Object.assign(EventsClass.prototype, Events);
 
 export default class NativeObject extends EventsClass {
 
+  /**
+ * @param {object} target
+ * @param {PropertyDefinitions} definitions
+ */
   static defineProperties(target, definitions) {
     for (let name in definitions) {
       NativeObject.defineProperty(target, name, definitions[name]);
