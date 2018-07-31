@@ -26,10 +26,7 @@ let type: string = 'foo';
 
 let sliderSelectEvent: EventObject<RefreshComposite> = {target, timeStamp, type};
 
-widget.on({
-  refresh: (event: EventObject<RefreshComposite>) => {
-  }
-});
+widget.onRefresh((event: EventObject<RefreshComposite>) => {});
 
 class CustomComponent extends RefreshComposite {
   public foo: string;

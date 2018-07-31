@@ -46,11 +46,10 @@ let imageViewZoomLevelChangedEvent: PropertyChangedEvent<ImageView, number> = {t
 let imageViewZoomEvent: ImageViewZoomEvent = {target, timeStamp, type, zoomLevel};
 
 
-widget.on({
-  load: (event: ImageViewLoadEvent) => {},
-  zoomLevelChanged: (event: PropertyChangedEvent<ImageView, number>) => {},
-  zoom: (event: ImageViewZoomEvent) => {}
-});
+widget
+  .onLoad((event: ImageViewLoadEvent) => {})
+  .onZoomLevelChanged((event: PropertyChangedEvent<ImageView, number>) => {})
+  .onZoom((event: ImageViewZoomEvent) => {});
 
 class CustomComponent extends ImageView {
   public foo: string;

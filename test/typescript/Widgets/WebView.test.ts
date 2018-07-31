@@ -44,14 +44,13 @@ let loadEvent: EventObject<WebView> = {target, timeStamp, type};
 let messageEvent: WebViewMessageEvent = {target, timeStamp, type, data};
 let downloadEvent: WebViewDownloadEvent = {target, timeStamp, type, contentDisposition, contentLength, mimeType, url};
 
-widget.on({
-  navigate: (event: WebViewNavigateEvent) => {},
-  load: (event: EventObject<WebView>) => {},
-  message: (event: WebViewMessageEvent) => {},
-  download: (event: WebViewDownloadEvent) => {},
-  canGoForwardChanged: (event: PropertyChangedEvent<WebView, boolean>) => {},
-  canGoBackChanged: (event: PropertyChangedEvent<WebView, boolean>) => {}
-});
+widget
+  .onNavigate((event: WebViewNavigateEvent) => {})
+  .onLoad((event: EventObject<WebView>) => {})
+  .onMessage((event: WebViewMessageEvent) => {})
+  .onDownload((event: WebViewDownloadEvent) => {})
+  .onCanGoForwardChanged((event: PropertyChangedEvent<WebView, boolean>) => {})
+  .onCanGoBackChanged((event: PropertyChangedEvent<WebView, boolean>) => {});
 
 class CustomComponent extends WebView {
   public foo: string;

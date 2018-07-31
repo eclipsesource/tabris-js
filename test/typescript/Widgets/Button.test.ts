@@ -34,9 +34,7 @@ let type: string = 'foo';
 
 let buttonSelectEvent: EventObject<Button> = {target, timeStamp, type};
 
-widget.on({
-  select: (event: EventObject<Button>) => {}
-});
+widget.onSelect((event: EventObject<Button>) => {});
 
 class CustomComponent extends Button {
   public foo: string;

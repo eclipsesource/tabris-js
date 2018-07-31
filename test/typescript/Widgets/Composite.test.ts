@@ -54,10 +54,9 @@ let index: number = 0;
 let addChildEvent: CompositeAddChildEvent = {target, timeStamp, type, child, index};
 let removeChildEvent: CompositeRemoveChildEvent = {target, timeStamp, type, child, index};
 
-widget.on({
-  addChild: (event: CompositeAddChildEvent) => {},
-  removeChild: (event: CompositeRemoveChildEvent) => {}
-});
+widget
+  .onAddChild((event: CompositeAddChildEvent) => {})
+  .onRemoveChild((event: CompositeRemoveChildEvent) => {});
 
 class CustomComponent extends Composite {
   public foo: string;

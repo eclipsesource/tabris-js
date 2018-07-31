@@ -30,6 +30,4 @@ let value: Orientation = orientation;
 
 let orientationChangedEvent: PropertyChangedEvent<Device, Orientation> = {target, timeStamp, type, value};
 
-device.on({
-  orientationChanged: (event: PropertyChangedEvent<Device, Orientation>) => {}
-});
+device.onOrientationChanged((event: PropertyChangedEvent<Device, Orientation>) => {});

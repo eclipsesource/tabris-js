@@ -34,10 +34,9 @@ let value: boolean = false;
 let checkedChangedEvent: PropertyChangedEvent<Switch, boolean> = {target, timeStamp, type, value};
 let SwitchSelectEvent: SwitchSelectEvent = {target, timeStamp, type, checked};
 
-widget.on({
-  checkedChanged: (event: PropertyChangedEvent<Switch, boolean>) => {},
-  select: (event: SwitchSelectEvent) => {},
-});
+widget
+  .onCheckedChanged((event: PropertyChangedEvent<Switch, boolean>) => {})
+  .onSelect((event: SwitchSelectEvent) => {});
 
 class CustomComponent extends Switch {
   public foo: string;

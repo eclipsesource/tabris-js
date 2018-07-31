@@ -201,26 +201,25 @@ let panVerticalEvent: WidgetPanEvent = {
 };
 
 
-widget.on({
-  dispose: (event: EventObject<Widget>) => {},
-  resize: (event: WidgetResizeEvent) => {},
-  boundsChanged: (event: PropertyChangedEvent<Widget, Bounds>) => {},
-  idChanged: (event: PropertyChangedEvent<Widget, string>) => {},
-  swipeDown: (event: WidgetSwipeEvent) => {},
-  swipeLeft: (event: WidgetSwipeEvent) => {},
-  swipeRight: (event: WidgetSwipeEvent) => {},
-  swipeUp: (event: WidgetSwipeEvent) => {},
-  touchCancel: (event: WidgetTouchEvent) => {},
-  touchEnd: (event: WidgetTouchEvent) => {},
-  touchMove: (event: WidgetTouchEvent) => {},
-  touchStart: (event: WidgetTouchEvent) => {},
-  tap: (event: WidgetTapEvent) => {},
-  longpress: (event: WidgetLongpressEvent) => {},
-  pan: (event: WidgetPanEvent) => {},
-  panDown: (event: WidgetPanEvent) => {},
-  panHorizontal: (event: WidgetPanEvent) => {},
-  panLeft: (event: WidgetPanEvent) => {},
-  panRight: (event: WidgetPanEvent) => {},
-  panUp: (event: WidgetPanEvent) => {},
-  panVertical: (event: WidgetPanEvent) => {}
-});
+widget
+  .onDispose((event: EventObject<Widget>) => {})
+  .onResize((event: WidgetResizeEvent) => {})
+  .onBoundsChanged((event: PropertyChangedEvent<Widget, Bounds>) => {})
+  .onIdChanged((event: PropertyChangedEvent<Widget, string>) => {})
+  .onSwipeDown((event: WidgetSwipeEvent) => {})
+  .onSwipeLeft((event: WidgetSwipeEvent) => {})
+  .onSwipeRight((event: WidgetSwipeEvent) => {})
+  .onSwipeUp((event: WidgetSwipeEvent) => {})
+  .onTouchCancel((event: WidgetTouchEvent) => {})
+  .onTouchEnd((event: WidgetTouchEvent) => {})
+  .onTouchMove((event: WidgetTouchEvent) => {})
+  .onTouchStart((event: WidgetTouchEvent) => {})
+  .onTap((event: WidgetTapEvent) => {})
+  .onLongpress((event: WidgetLongpressEvent) => {})
+  .onPan((event: WidgetPanEvent) => {})
+  .onPanDown((event: WidgetPanEvent) => {})
+  .onPanHorizontal((event: WidgetPanEvent) => {})
+  .onPanLeft((event: WidgetPanEvent) => {})
+  .onPanRight((event: WidgetPanEvent) => {})
+  .onPanUp((event: WidgetPanEvent) => {})
+  .onPanVertical((event: WidgetPanEvent) => {});

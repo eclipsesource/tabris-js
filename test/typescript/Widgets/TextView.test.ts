@@ -43,9 +43,7 @@ let url: string = 'http://foo.com';
 
 let tapLinkEvent: TextViewTapLinkEvent = {target, timeStamp, type, url};
 
-widget.on({
-    tapLink: (event: TextViewTapLinkEvent) => {},
-});
+widget.onTapLink((event: TextViewTapLinkEvent) => {});
 
 class CustomComponent extends TextView {
   public foo: string;

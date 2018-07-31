@@ -37,10 +37,9 @@ let value: boolean = true;
 let checkedChangedEvent: PropertyChangedEvent<RadioButton, boolean> = {target, timeStamp, type, value};
 let radioButtonSelectEvent: RadioButtonSelectEvent = {target, timeStamp, type, checked};
 
-widget.on({
-  checkedChanged: (event: PropertyChangedEvent<RadioButton, boolean>) => {},
-  select: (event: RadioButtonSelectEvent) => {}
-});
+widget
+  .onCheckedChanged((event: PropertyChangedEvent<RadioButton, boolean>) => {})
+  .onSelect((event: RadioButtonSelectEvent) => {});
 
 class CustomComponent extends RadioButton {
   public foo: string;

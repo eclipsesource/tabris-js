@@ -1,4 +1,4 @@
-import {Color, DateDialog, DateDialogProperties, DateDialogSelectEvent, Image} from 'tabris';
+import {DateDialog, DateDialogProperties, DateDialogSelectEvent, DateDialogCloseEvent} from 'tabris';
 
 let dateDialog: DateDialog = new DateDialog();
 
@@ -26,9 +26,6 @@ let type: string = 'foo';
 
 let dateDialogSelectEvent: DateDialogSelectEvent = {target, timeStamp, type, date};
 
-dateDialog.on({
-    select: (event: DateDialogSelectEvent) => {
-    },
-    close: (event) => {
-    }
-});
+dateDialog
+  .onSelect((event: DateDialogSelectEvent) => {})
+  .onClose((event: DateDialogCloseEvent) => {});

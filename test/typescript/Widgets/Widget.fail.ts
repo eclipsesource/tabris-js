@@ -11,7 +11,7 @@ const cid = widget.cid;
 widget = new Composite({cid});
 widget.set({cid});
 widget.cid = cid;
-widget.on({cidChanged: function() {}});
+widget.onCidChanged(function() {});
 
 widget.set({on: (ev: any) => widget});
 widget.set({on: undefined});
@@ -24,8 +24,7 @@ widget.set({on: undefined});
 (11,25): error TS2345
 (12,13): error TS2345
 (13,8): error TS2540: Cannot assign to 'cid' because it is a constant or a read-only property.
-(14,12): error TS2345
-'cidChanged' does not exist
+(14,8): error TS2551
 
 (16,
 (17,

@@ -58,12 +58,12 @@ noReturnValue = widget.remove(index);
 noReturnValue = widget.remove(index, count);
 noReturnValue = widget.reveal(index);
 
-widget.on({
-  firstVisibleIndexChanged: (ev: PropertyChangedEvent<CollectionView, number>) => {},
-  lastVisibleIndexChanged: (ev: PropertyChangedEvent<CollectionView, number>) => {},
-  createCellChanged: (ev: PropertyChangedEvent<CollectionView, typeof widget.createCell>) => {},
-  updateCellChanged: (ev: PropertyChangedEvent<CollectionView, typeof widget.updateCell>) => {}
-});
+widget
+  .onFirstVisibleIndexChanged((ev: PropertyChangedEvent<CollectionView, number>) => {})
+  .onLastVisibleIndexChanged((ev: PropertyChangedEvent<CollectionView, number>) => {})
+  .onCreateCellChanged((ev: PropertyChangedEvent<CollectionView, typeof widget.createCell>) => {})
+  .onUpdateCellChanged((ev: PropertyChangedEvent<CollectionView, typeof widget.updateCell>) => {});
+
 
 class CustomComponent extends CollectionView {
   public foo: string;

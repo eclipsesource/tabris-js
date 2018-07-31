@@ -38,10 +38,9 @@ let value: number = 0;
 let selectionIndexChangedEvent: PropertyChangedEvent<Picker, number> = {target, timeStamp, type, value};
 let pickerSelectEvent: PickerSelectEvent = {target, timeStamp, type, index};
 
-widget.on({
-  selectionIndexChanged: (event: PropertyChangedEvent<Picker, number>) => {},
-  select: (event: PickerSelectEvent) => {}
-});
+widget
+  .onSelectionIndexChanged((event: PropertyChangedEvent<Picker, number>) => {})
+  .onSelect((event: PickerSelectEvent) => {});
 
 class CustomComponent extends Picker {
   public foo: string;

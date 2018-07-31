@@ -1,4 +1,4 @@
-import {Color, TimeDialog, TimeDialogProperties, TimeDialogSelectEvent, Image} from 'tabris';
+import {TimeDialogCloseEvent, TimeDialog, TimeDialogProperties, TimeDialogSelectEvent} from 'tabris';
 
 let timeDialog: TimeDialog = new TimeDialog();
 
@@ -20,9 +20,6 @@ let type: string = 'foo';
 
 let timeDialogSelectEvent: TimeDialogSelectEvent = {target, timeStamp, type, date};
 
-timeDialog.on({
-    select: (event: TimeDialogSelectEvent) => {
-    },
-    close: (event) => {
-    }
-});
+timeDialog
+  .onSelect((event: TimeDialogSelectEvent) => {})
+  .onClose((event: TimeDialogCloseEvent) => {});

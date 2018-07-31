@@ -42,10 +42,9 @@ let value: boolean = true;
 let checkedChangedEvent: PropertyChangedEvent<ToggleButton, boolean> = {target, timeStamp, type, value};
 let toggleButtonSelectEvent: ToggleButtonSelectEvent = {target, timeStamp, type, checked};
 
-widget.on({
-  checkedChanged: (event: PropertyChangedEvent<ToggleButton, boolean>) => {},
-  select: (event: ToggleButtonSelectEvent) => {},
-});
+widget
+  .onCheckedChanged((event: PropertyChangedEvent<ToggleButton, boolean>) => {})
+  .onSelect((event: ToggleButtonSelectEvent) => {});
 
 class CustomComponent extends ToggleButton {
   public foo: string;

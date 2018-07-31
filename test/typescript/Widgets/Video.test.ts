@@ -44,9 +44,7 @@ let value: VideoState = 'pause';
 
 let stateChangedEvent: PropertyChangedEvent<Video, VideoState> = {target, timeStamp, type, value};
 
-widget.on({
-  stateChanged: (event: PropertyChangedEvent<Video, VideoState>) => {}
-});
+widget.onStateChanged((event: PropertyChangedEvent<Video, VideoState>) => {});
 
 class CustomComponent extends Video {
   public foo: string;

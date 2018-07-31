@@ -26,6 +26,4 @@ thisReturnValue = popover.close();
 thisReturnValue = popover.open();
 
 // Events
-popover.on({
-  close: (event: EventObject<Popover>) => {},
-});
+popover.onClose((event: EventObject<Popover>) => {});

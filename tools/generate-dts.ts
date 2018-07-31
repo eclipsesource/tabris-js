@@ -2,7 +2,7 @@ import * as fs from 'fs-extra';
 import * as schema from './api-schema';
 import {
   TextBuilder, asArray, filter, ApiDefinitions, ExtendedApi, Methods,
-  readJsonDefs, createDoc, createEventTypeName, isNativeObject
+  readJsonDefs, createDoc, createEventTypeName, capitalizeFirstChar
 } from './common';
 
 type PropertyOps = {hasContext: boolean, excludeStatics: boolean};
@@ -111,6 +111,7 @@ function renderClass(text: TextBuilder, def: ExtendedApi) {
   renderConstructor(text, def);
   renderMethods(text, def);
   renderProperties(text, def, () => true);
+  renderEventProperties(text, def);
   text.indent--;
   text.append('}');
 }
@@ -261,6 +262,50 @@ function renderProperties(text: TextBuilder, def: ExtendedApi, filter: (value) =
       text.append(createProperty(name, def.properties[name]));
     });
   }
+}
+
+function renderEventProperties(text: TextBuilder, def: ExtendedApi) {
+  if (def.isNativeObject) {
+    if (def.events) {
+      Object.keys(def.events).sort().forEach(name => {
+        text.append('');
+        text.append(createEventProperty(def.type, name, def.events[name]));
+      });
+    }
+    if (def.properties) {
+      Object.keys(def.properties).filter(name => !def.properties[name].static).sort().forEach(name => {
+        text.append('');
+        text.append(createPropertyChangedEventProperty(def.type, name, def.properties[name]));
+      });
+    }
+  }
+}
+
+
+function createEventProperty(widgetName: string, eventName: string, event: schema.Event) {
+  const result = [];
+  result.push(createDoc(Object.assign({}, event, {parameters: []})));
+  result.push(`on${capitalizeFirstChar(eventName)}: `
+    + `Listeners<${createEventTypeName(widgetName, eventName, event)}>;`);
+  return result.join('\n');
+}
+
+function createPropertyChangedEventProperty(widgetName: string, propName: string, property: schema.Property) {
+  const result = [];
+  const standardDescription = `Fired when the [*${propName}*](#${propName}) property has changed.`;
+  const defType = property.ts_type || property.type;
+  const changeEvent = {
+    description: property.changeEventDescription || standardDescription,
+    parameters: [{
+      name: 'value',
+      type: defType,
+      description: `The new value of [*${propName}*](#${propName}).`
+    }]
+  };
+  result.push(createDoc(changeEvent));
+  result.push(`on${capitalizeFirstChar(propName)}Changed: `
+    + `Listeners<PropertyChangedEvent<tabris.${widgetName}, ${defType}>>;`);
+  return result.join('\n');
 }
 
 function createProperty(name: string, property: schema.Property) {

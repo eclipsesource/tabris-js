@@ -39,9 +39,8 @@ let closeCancelEvent: EventObject<AlertDialog> = {target, timeStamp, type};
 let closeNeutralEvent: EventObject<AlertDialog> = {target, timeStamp, type};
 let closeOkEvent: EventObject<AlertDialog> = {target, timeStamp, type};
 
-alertDialog.on({
-  close: (event: AlertDialogCloseEvent) => {},
-  closeCancel: (event: EventObject<AlertDialog>) => {},
-  closeNeutral: (event: EventObject<AlertDialog>) => {},
-  closeOk: (event: EventObject<AlertDialog>) => {}
-});
+alertDialog
+  .onClose((event: AlertDialogCloseEvent) => {})
+  .onCloseCancel((event: EventObject<AlertDialog>) => {})
+  .onCloseNeutral((event: EventObject<AlertDialog>) => {})
+  .onCloseOk((event: EventObject<AlertDialog>) => {});

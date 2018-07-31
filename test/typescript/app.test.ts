@@ -43,11 +43,10 @@ let pauseEvent: EventObject<App> = {target, timeStamp, type};
 let resumeEvent: EventObject<App> = {target, timeStamp, type};
 let terminateEvent: EventObject<App> = {target, timeStamp, type};
 
-app.on({
-  background: (event: EventObject<App>) => {},
-  backNavigation: (event: EventObject<App>) => {},
-  foreground: (event: EventObject<App>) => {},
-  pause: (event: EventObject<App>) => {},
-  resume: (event: EventObject<App>) => {},
-  terminate: (event: EventObject<App>) => {}
-});
+app
+  .onBackground((event: EventObject<App>) => {})
+  .onBackNavigation((event: EventObject<App>) => {})
+  .onForeground((event: EventObject<App>) => {})
+  .onPause((event: EventObject<App>) => {})
+  .onResume((event: EventObject<App>) => {})
+  .onTerminate((event: EventObject<App>) => {});

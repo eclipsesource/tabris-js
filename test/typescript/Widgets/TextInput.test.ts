@@ -95,15 +95,14 @@ let textChangedEvent: PropertyChangedEvent<TextInput, string> = {target, timeSta
 let selectEvent: TextInputSelectEvent = {target, timeStamp, type, selection};
 let selectionChangedEvent: PropertyChangedEvent<TextInput, number[]> = {target, timeStamp, type, value: selectionValue};
 
-widget.on({
-  accept: (event: TextInputAcceptEvent) => {},
-  blur: (event: EventObject<TextInput>) => {},
-  focus: (event: EventObject<TextInput>) => {},
-  input: (event: TextInputInputEvent) => {},
-  select: (event: TextInputSelectEvent) => {},
-  textChanged: (event: PropertyChangedEvent<TextInput, string>) => {},
-  selectionChanged: (event: PropertyChangedEvent<TextInput, number[]>) => {}
-});
+widget
+  .onAccept((event: TextInputAcceptEvent) => {})
+  .onBlur((event: EventObject<TextInput>) => {})
+  .onFocus((event: EventObject<TextInput>) => {})
+  .onInput((event: TextInputInputEvent) => {})
+  .onSelect((event: TextInputSelectEvent) => {})
+  .onTextChanged((event: PropertyChangedEvent<TextInput, string>) => {})
+  .onSelectionChanged((event: PropertyChangedEvent<TextInput, number[]>) => {});
 
 class CustomComponent extends TextInput {
   public foo: string;

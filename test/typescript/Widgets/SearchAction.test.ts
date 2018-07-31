@@ -32,10 +32,9 @@ let type: string = 'foo';
 let inputEvent: SearchActionInputEvent = {target, timeStamp, type, text};
 let acceptEvent: SearchActionAcceptEvent = {target, timeStamp, type, text};
 
-widget.on({
-  input: (event: SearchActionInputEvent) => {},
-  accept: (event: SearchActionAcceptEvent) => {}
-});
+widget
+  .onInput((event: SearchActionInputEvent) => {})
+  .onAccept((event: SearchActionAcceptEvent) => {});
 
 class CustomComponent extends SearchAction {
   public foo: string;

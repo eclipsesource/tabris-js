@@ -25,6 +25,4 @@ let type: string = 'foo';
 
 let drawerCloseEvent: EventObject<Drawer> = {target, timeStamp, type};
 
-widget.on({
-  close: (event: EventObject<Drawer>) => {}
-});
+widget.onClose((event: EventObject<Drawer>) => {});

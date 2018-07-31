@@ -6,15 +6,15 @@ const versionCode = app.versionCode;
 
 app.set({id});
 app.id = id;
-app.on({idChanged: function() {}});
+app.onIdChanged(function() {});
 
 app.set({version});
 app.version = version;
-app.on({versionChanged: function() {}});
+app.onVersionChanged(function() {});
 
 app.set({versionCode});
 app.versionCode = versionCode;
-app.on({versionCodeChanged: function() {}});
+app.onVersionCodeChanged(function() {});
 
 /*Expected
 (7,10): error TS2345

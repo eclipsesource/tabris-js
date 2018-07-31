@@ -37,10 +37,9 @@ let value: boolean = true;
 let checkedChangedEvent: PropertyChangedEvent<CheckBox, boolean> = {target, timeStamp, type, value};
 let checkBoxSelectEvent: CheckBoxSelectEvent = {target, timeStamp, type, checked};
 
-widget.on({
-  checkedChanged: (event: PropertyChangedEvent<CheckBox, boolean>) => {},
-  select: (event: CheckBoxSelectEvent) => {}
-});
+widget
+  .onCheckedChanged((event: PropertyChangedEvent<CheckBox, boolean>) => {})
+  .onSelect((event: CheckBoxSelectEvent) => {});
 
 class CustomComponent extends CheckBox {
   public foo: string;

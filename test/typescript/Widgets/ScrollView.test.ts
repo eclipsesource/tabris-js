@@ -35,10 +35,9 @@ let type: string = 'foo';
 let scrollXEvent: ScrollViewScrollEvent = {target, timeStamp, type, offset};
 let scrollYEvent: ScrollViewScrollEvent = {target, timeStamp, type, offset};
 
-widget.on({
-  scrollX: (event: ScrollViewScrollEvent) => {},
-  scrollY: (event: ScrollViewScrollEvent) => {}
-});
+widget
+  .onScrollX((event: ScrollViewScrollEvent) => {})
+  .onScrollY((event: ScrollViewScrollEvent) => {});
 
 class CustomComponent extends ScrollView {
   public foo: string;

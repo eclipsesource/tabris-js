@@ -44,11 +44,10 @@ let tabFolderScrollEvent: TabFolderScrollEvent = {target, timeStamp, type, offse
 let tabFolderSelectEvent: TabFolderSelectEvent = {target, timeStamp, type, selection};
 let tabFolderSelectionChangedEvent: PropertyChangedEvent<TabFolder, Tab> = {target, timeStamp, type, value};
 
-widget.on({
-  selectionChanged: (event: PropertyChangedEvent<TabFolder, Tab>) => {},
-  select: (event: TabFolderSelectEvent) => {},
-  scroll: (event: TabFolderScrollEvent) => {}
-});
+widget
+  .onSelectionChanged((event: PropertyChangedEvent<TabFolder, Tab>) => {})
+  .onSelect((event: TabFolderSelectEvent) => {})
+  .onScroll((event: TabFolderScrollEvent) => {});
 
 class CustomComponent extends TabFolder {
   public foo: string;

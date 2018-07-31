@@ -30,10 +30,9 @@ let type: string = 'foo';
 let appearEvent: EventObject<Page> = {target, timeStamp, type};
 let disappearEvent: EventObject<Page> = {target, timeStamp, type};
 
-widget.on({
-  appear: (event: EventObject<Page>) => {},
-  disappear: (event: EventObject<Page>) => {},
-});
+widget
+  .onAppear((event: EventObject<Page>) => {})
+  .onDisappear((event: EventObject<Page>) => {});
 
 class CustomComponent extends Page {
   public foo: string;
