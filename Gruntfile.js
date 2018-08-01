@@ -58,7 +58,7 @@ module.exports = function(grunt) {
       test_ts: {
         expand: true,
         cwd: 'test/typescript/',
-        src: ['**/*.test.ts', '**/*.test.tsx', '**/*.fail.ts', 'package.json', 'tsconfig.json', 'tsconfig.fail.json'],
+        src: ['**/*.test.ts*', '**/*.fail.ts*', 'package.json', 'tsconfig.json', 'tsconfig.fail.json'],
         dest: 'build/typescript/'
       }
     },
@@ -207,12 +207,14 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('verify_typings_fail', () => {
-    grunt.file.expand('build/typescript/**/*.fail.ts').forEach(file => {
+    grunt.file.expand('build/typescript/**/*.fail.ts*').forEach(file => {
       const childProcess = require('child_process').spawnSync(
         'node',
         [
           'node_modules/typescript/bin/tsc',
           '--noImplicitAny',
+          '--jsx', 'react',
+          '--jsxFactory', 'JSX.createElement',
           '--target', 'es6',
           '--module', 'commonjs',
           '--lib', 'es6,es2015.promise',
@@ -229,11 +231,14 @@ module.exports = function(grunt) {
           `No expectations found in ${file}. Suggestion:\n--\n/*Expected\n${childProcess.stdout}*/\n--\n`
         );
       }
-      const exp = matches[1].trim().split('\n');
+      const exp = matches[1].trim().split('\n').filter(match => match.trim().length > 0);
+      let remaining = childProcess.stdout;
       for (let i = 0; i < exp.length; i++) {
-        if (childProcess.stdout.indexOf(exp[i]) === -1) {
-          grunt.fail.warn(`${file} is missing compiler output "${exp[i]}" in:\n${childProcess.stdout}`);
+        const matchIndex = remaining.indexOf(exp[i]);
+        if (matchIndex === -1) {
+          grunt.fail.warn(`${file} is missing compiler output "${exp[i]}" in:\n${remaining}`);
         }
+        remaining = remaining.slice(matchIndex);
       }
     });
   });

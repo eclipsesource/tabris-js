@@ -2,7 +2,7 @@ import * as fs from 'fs-extra';
 import * as schema from './api-schema';
 import {
   TextBuilder, asArray, filter, ApiDefinitions, ExtendedApi, Methods,
-  readJsonDefs, createDoc, createEventTypeName, capitalizeFirstChar
+  readJsonDefs, createDoc, createEventTypeName, capitalizeFirstChar, Properties
 } from './common';
 
 type PropertyOps = {hasContext: boolean, excludeStatics: boolean};
@@ -15,8 +15,10 @@ const HEADER = `
 interface Constructor<T> {new(...args: any[]): T; }
 type Omit<T, U> = Pick<T, Exclude<keyof T, U>>;
 type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
-type NativeObjectProperties<T extends NativeObject> = Partial<Omit<T, FunctionPropertyNames<T> | 'cid'>>;
-type Properties<T extends Widget> = Partial<Omit<T, FunctionPropertyNames<T> | 'bounds' | 'data' | 'cid'>>;
+type NativeObjectProperties<T extends NativeObject> = Partial<Omit<T, FunctionPropertyNames<T> | 'cid' | 'jsxProperties'>>;
+type Properties<T extends Widget> = Partial<Omit<T, FunctionPropertyNames<T> | 'bounds' | 'data' | 'cid' | 'jsxProperties'>>;
+type UnpackListeners<T> = T extends Listeners<infer U> ? Listener<U> : T;
+type JSXProperties<T, U extends keyof T> = { [Key in U]?: UnpackListeners<T[Key]>};
 type ParamType<T extends (arg: any) => any> = T extends (arg: infer P) => any ? P : any;
 type SettableProperties<T extends NativeObject> = ParamType<T['set']>;
 type ExtendedEvent<EventData, Target = {}> = EventObject<Target> & EventData;
@@ -35,6 +37,7 @@ export as namespace tabris;
 `;
 
 const PROPERTIES_OBJECT = 'PropertiesObject';
+const JSX_PROPERTIES_OBJECT = 'JsxPropertiesObject';
 const EVENTS_OBJECT = 'EventsObject';
 const EVENT_OBJECT = 'EventObject<T>';
 const eventObjectNames = [EVENT_OBJECT];
@@ -110,7 +113,7 @@ function renderClass(text: TextBuilder, def: ExtendedApi) {
   text.indent++;
   renderConstructor(text, def);
   renderMethods(text, def);
-  renderProperties(text, def, () => true);
+  renderProperties(text, def);
   renderEventProperties(text, def);
   text.indent--;
   text.append('}');
@@ -254,14 +257,13 @@ function createMethod(
   return result.join('\n');
 }
 
-function renderProperties(text: TextBuilder, def: ExtendedApi, filter: (value) => boolean) {
-  if (def.properties) {
-    const propertiesFilter = filter ? name => filter(def.properties[name]) : () => true;
-    Object.keys(def.properties || {}).filter(propertiesFilter).sort().forEach(name => {
-      text.append('');
-      text.append(createProperty(name, def.properties[name]));
-    });
-  }
+function renderProperties(text: TextBuilder, def: ExtendedApi) {
+  const properties = Object.assign({}, def.properties, getClassDependentProperties(def));
+  const filter = name => name !== 'jsxProperties' || def.constructor.access !== 'protected';
+  Object.keys(properties || {}).filter(filter).sort().forEach(name => {
+    text.append('');
+    text.append(createProperty(name, properties, def));
+  });
 }
 
 function renderEventProperties(text: TextBuilder, def: ExtendedApi) {
@@ -308,30 +310,30 @@ function createPropertyChangedEventProperty(widgetName: string, propName: string
   return result.join('\n');
 }
 
-function createProperty(name: string, property: schema.Property) {
+function createProperty(name: string, properties: Properties, def: ExtendedApi) {
   const result = [];
+  const property = properties[name];
   result.push(createDoc(property));
-  const values = [];
-  (property.values || []).sort().forEach(value => {
-    if (typeof value === 'string') {
-      value = `"${value}"`;
-    }
-    values.push(`${value}`);
-  });
-  const valuesType = (values || []).join(' | ');
   const readonly = property.readonly || property.static;
-  result.push(`${readonly ? 'readonly ' : ''}${name}: ${valuesType || property.ts_type || property.type};`);
+  const type = decodeType(property, def, {hasContext: true, excludeStatics: false});
+  result.push(`${readonly ? 'readonly ' : ''}${name}: ${type};`);
   return result.join('\n');
 }
 
 function createParamList(def: ExtendedApi, parameters: schema.Parameter[], ops: PropertyOps) {
   return (parameters || []).map(param =>
-    `${param.name}${param.optional ? '?' : ''}: ${decodeParamType(param, def, ops)}`
+    `${param.name}${param.optional ? '?' : ''}: ${decodeType(param, def, ops)}`
   ).join(', ');
 }
 
-function decodeParamType(param: schema.Parameter, def: ExtendedApi, ops: PropertyOps) {
+function decodeType(param: Partial<schema.Parameter & schema.Property>, def: ExtendedApi, ops: PropertyOps) {
+  if (param.values) {
+    return param.values.sort().map(value => typeof value === 'string' ? `"${value}"` : `${value}`).join(' | ');
+  }
   switch (param.type) {
+    case (JSX_PROPERTIES_OBJECT):
+      return createJsxPropertiesObject(def);
+
     case (PROPERTIES_OBJECT):
       return createPropertiesObject(def, ops);
 
@@ -349,11 +351,32 @@ function createPropertiesObject(def: ExtendedApi, ops: PropertyOps) {
   if (hasNoProperties) {
     return 'never';
   }
-  const removeProps = readOnlyPropertiesOf(def).concat(ops.excludeStatics ? staticPropertiesOf(def) : []);
-  const addProps = functionPropertiesOf(def);
+  const removeProps = def.type === 'Widget'
+    ? [] // handled by Properties<T extends Widgets>
+    : readOnlyPropertiesOf(def).concat(ops.excludeStatics ? staticPropertiesOf(def) : []).filter(onlyUnique);
+  const addProps = def.type === 'Widget' ? [] : functionPropertiesOf(def);
   const genericType = def.isWidget ? 'Properties' : 'NativeObjectProperties';
   const baseType = ops.hasContext ? 'this' : def.type;
   return remove(`${genericType}<${baseType}>`, removeProps) + add(baseType, addProps);
+}
+
+function createJsxPropertiesObject(def: ExtendedApi) {
+  if (def.constructor.access !== 'public') {
+    return 'never';
+  }
+  // NOTE: unlike with method parameters (i.e. "set(properties)") TypeScript can not auto-exclude properties
+  // of specific types because mapped types do not always work correctly with "this" based properties.
+  // For that reason all supporter JSX properties need to be added explicitly.
+  const inherit = def.isWidget && def.parent.type !== 'Widget';
+  const props = jsxPropertiesOf(def).concat(!inherit ? jsxPropertiesOf(def.parent) : []);
+  if (inherit && props.length) {
+    return `${def.parent.type}['jsxProperties'] & JSXProperties<${def.type}, '${props.join(`' | '`)}'>`;
+  } else if (inherit && !props.length) {
+    return `${def.parent.type}['jsxProperties']`;
+  } else if (!inherit && props.length) {
+    return `JSXProperties<${def.type}, '${props.join(`' | '`)}'>`;
+  }
+  return '{}';
 }
 
 function add(type: string, props: string[]) {
@@ -380,17 +403,33 @@ function getClassDependentMethods(def: ExtendedApi) {
   while (baseType && baseType.parent)  {
     baseType = baseType.parent;
     Object.keys(baseType.methods || {})
-      .filter(methodName => isClassDependent(def, baseType.methods[methodName]))
+      .filter(methodName => isClassDependentMethod(def, baseType.methods[methodName]))
       .forEach(methodName => result[methodName] = baseType.methods[methodName]);
   }
   return result;
 }
 
-function isClassDependent(def: ExtendedApi, method: Methods) { // methods with parameters that must be adjusted in some subclasses
+function getClassDependentProperties(def: ExtendedApi) {
+  const result: Properties = {};
+  let baseType = def;
+  while (baseType && baseType.parent)  {
+    baseType = baseType.parent;
+    Object.keys(baseType.properties || {})
+      .filter(propertyName => isClassDependentProperty(def, baseType.properties[propertyName]))
+      .forEach(propertyName => result[propertyName] = baseType.properties[propertyName]);
+  }
+  return result;
+}
+
+function isClassDependentMethod(def: ExtendedApi, method: Methods) { // methods with parameters that must be adjusted in some subclasses
   const variants = asArray(method);
   return variants.some(variant =>
     (variant.parameters || []).some(param => isClassDependentParameter(def, param))
   );
+}
+
+function isClassDependentProperty(def: ExtendedApi, property: schema.Property): boolean {
+  return property.type === JSX_PROPERTIES_OBJECT;
 }
 
 function isClassDependentParameter(def: ExtendedApi, parameter: schema.Parameter) {
@@ -434,7 +473,16 @@ function staticPropertiesOf(def: ExtendedApi): string[] {
   return Object.keys(def.properties || {}).filter(prop => def.properties[prop].static);
 }
 
-function settablePropertiesOf(def: ExtendedApi, {excludeStatics}: PropertyOps) {
+function jsxPropertiesOf(def: ExtendedApi) {
+  if (!def) {
+    return [];
+  }
+  return settablePropertiesOf(def, {excludeStatics: false})
+    .concat(Object.keys(def.events || {}).map(name => `on${capitalizeFirstChar(name)}`))
+    .concat(settablePropertiesOf(def, {excludeStatics: true}).map(name => `on${capitalizeFirstChar(name)}Changed`));
+}
+
+function settablePropertiesOf(def: ExtendedApi, {excludeStatics}: Partial<PropertyOps>) {
   return Object.keys(def.properties || {})
     .filter(prop => !def.properties[prop].readonly && (!excludeStatics || !def.properties[prop].static));
 }
@@ -447,6 +495,10 @@ function getInheritedConstructor(def: ExtendedApi): typeof def.constructor {
     return def.constructor;
   }
   return def.parent ? getInheritedConstructor(def.parent) : null;
+}
+
+function onlyUnique(value, index, self) {
+  return self.indexOf(value) === index;
 }
 
 //#endregion

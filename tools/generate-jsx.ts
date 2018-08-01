@@ -15,7 +15,7 @@ declare namespace JSX {
 
   function createElement(type: string|Function, properties: object, ...children: Array<ElementClass>): ElementClass;
 
-  interface ElementClass extends tabris.Widget { }
+  interface ElementClass { jsxProperties: object; }
 
   type Element = any;
 

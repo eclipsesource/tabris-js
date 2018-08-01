@@ -109,6 +109,12 @@
     }
   },
   "properties": {
+    "jsxProperties": {
+      "static": true,
+      "readonly": true,
+      "type": "JsxPropertiesObject",
+      "description": "When using JSX with TypeScript (`.tsx` files), the type of this property determines which JSX attributes are valid for this widget."
+    },
     "id": {
       "type": "string",
       "description": "A string to identify the widget by using selectors. IDs are optional. It is strongly recommended that they are unique within a page."
@@ -218,6 +224,7 @@
       "type": "object",
       "ts_type": "{[k: string]: any}",
       "readonly": true,
+      "static": true,
       "description": "A general-purpose object that allows the application to attach arbitrary data to the widget. Manipulations on this object have no effect on the widget itself in any way. Example: `widget.data.myData = myData;`"
     }
   },
