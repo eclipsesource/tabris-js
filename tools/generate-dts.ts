@@ -10,7 +10,6 @@ type PropertyOps = {hasContext: boolean, excludeStatics: boolean};
 const HEADER = `
 // Type definitions for Tabris.js \${VERSION}
 /// <reference path="globals.d.ts" />
-/// <reference path="Jsx.d.ts" />
 
 interface Constructor<T> {new(...args: any[]): T; }
 type Omit<T, U> = Pick<T, Exclude<keyof T, U>>;

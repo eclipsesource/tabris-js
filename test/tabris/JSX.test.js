@@ -19,10 +19,6 @@ describe('JSX', function() {
 
   describe('createElement', function() {
 
-    it('creates widget by string', function() {
-      expect(createElement('checkBox', null)).to.be.an.instanceof(CheckBox);
-    });
-
     it('creates widget by Constructor', function() {
       expect(createElement(CheckBox, null)).to.be.an.instanceof(CheckBox);
     });
@@ -176,7 +172,7 @@ describe('JSX', function() {
 
     it('creates widgetCollection with children', function() {
       let collection = createElement(
-        'widgetCollection',
+        WidgetCollection,
         null,
         createElement(Button),
         createElement(CheckBox),
@@ -192,7 +188,7 @@ describe('JSX', function() {
 
     it('creates widgetCollection from array', function() {
       let collection = createElement(
-        'widgetCollection',
+        WidgetCollection,
         null,
         [createElement(Button), createElement(CheckBox)],
         createElement(Switch)
@@ -207,7 +203,7 @@ describe('JSX', function() {
 
     it('creates empty widgetCollection', function() {
       let collection = createElement(
-        'widgetCollection',
+        WidgetCollection,
         null
       );
 

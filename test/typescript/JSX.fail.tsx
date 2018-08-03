@@ -57,6 +57,8 @@ class MyCustomWidgetWithWrongJsx extends tabris.Composite {
 
 }
 
+let noIntrinsicElements: any = <textInput />;
+
 /*Expected
 (3,
 'getContext' does not exist
@@ -93,5 +95,7 @@ class MyCustomWidgetWithWrongJsx extends tabris.Composite {
 (51,
 Types of property 'onFooChanged' are incompatible.
 (56,
-jsxProperties' in type 'MyCustomWidgetWithWrongJsx' is not assignable
+'jsxProperties' in type 'MyCustomWidgetWithWrongJsx' is not assignable
+(60,
+'textInput' does not exist
 */

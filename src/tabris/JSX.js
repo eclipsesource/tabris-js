@@ -25,12 +25,7 @@ function typeToConstructor(jsxType) {
   if (jsxType instanceof Function) {
     return jsxType;
   }
-  let typeName = jsxType.charAt(0).toUpperCase() + jsxType.slice(1);
-  let Type =  global.tabris[typeName];
-  if (!(Type instanceof Function)) {
-    throw new Error(('JSX: Unsupported type ' + jsxType).trim());
-  }
-  return Type;
+  throw new Error(('JSX: Unsupported type ' + jsxType).trim());
 }
 
 function flattenChildren(children) {

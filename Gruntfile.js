@@ -1,7 +1,6 @@
 require('ts-node').register({compilerOptions: {module: 'commonjs', lib: ['es2016']}});
 const {generateDoc} = require('./tools/generate-doc');
 const {generateDts} = require('./tools/generate-dts');
-const {generateJsx} = require('./tools/generate-jsx');
 const {Validator} = require('jsonschema');
 
 module.exports = function(grunt) {
@@ -148,15 +147,6 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('generate-jsx', () => {
-    let files = grunt.file.expand(grunt.config('doc').api);
-    try {
-      generateJsx({files});
-    } catch (ex) {
-      grunt.fail.warn(ex.stack);
-    }
-  });
-
   grunt.registerTask('generate-tsd', () => {
     let files = grunt.file.expand(grunt.config('doc').api);
     let propertyTypes = grunt.file.read(grunt.config('doc').propertyTypes);
@@ -197,7 +187,6 @@ module.exports = function(grunt) {
     'exec:uglify_boot',
     'package',
     'copy:readme',
-    'generate-jsx',
     'generate-tsd'
   ]);
 

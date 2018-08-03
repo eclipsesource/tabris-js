@@ -19,10 +19,10 @@ The `set` method now only takes one argument (properties object), and `get` has 
 
 #### Alternatives for `set(prop, value)`:
 
-On both `NativeObject` and `WidgetCollection`, `obj.set('foo', baz)` can be replaced with `obj.set({foo: baz})`, 
+On both `NativeObject` and `WidgetCollection`, `obj.set('foo', baz)` can be replaced with `obj.set({foo: baz})`,
 and `obj.set(bar, baz)` can be replaced with `obj.set([foo]: baz})`.
 
-On `NativeObject` only, `obj.set('foo', baz)` can be replaced with `obj.foo = baz`, 
+On `NativeObject` only, `obj.set('foo', baz)` can be replaced with `obj.foo = baz`,
 and `obj.set(bar, baz)` can be replaced with `obj[bar] = baz`. This does not work when chaining calls on the object.
 
 #### Alternatives for `get(prop)`:
@@ -54,3 +54,15 @@ The helper type `Partial<T, U>` was removed to avoid confusion with the `Partial
 ### types "margin", "dimension" and "offset"
 
 These types have been renamed to start with an upper case.
+
+## JSX
+
+### Elements need to be imported
+
+Tabris no longer provides intrinsic elements. This means that instead of creating a built-in widget via a lowercase element (`<textView />`) it has to be done by referencing the actual widget class:
+
+```jsx
+import { ui, TextView } from 'tabris';
+
+ui.contentView.append(<TextView />);
+```
