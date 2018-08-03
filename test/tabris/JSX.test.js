@@ -1,6 +1,6 @@
 import {expect, mockTabris, spy} from '../test';
 import ClientStub from './ClientStub';
-import {createElement} from '../../src/tabris/JSX';
+import {createElement, jsxFactory} from '../../src/tabris/JSX';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
 import Composite from '../../src/tabris/widgets/Composite';
 import Button from '../../src/tabris/widgets/Button';
@@ -240,6 +240,32 @@ describe('JSX', function() {
 
     it('fails for unrecognized string', function() {
       expect(() => createElement('unknownWidget', null)).to.throw();
+    });
+
+    it('calls factory of custom type', function() {
+      class Foo {
+
+        constructor() {
+          this.isFoo = true;
+        }
+
+        [jsxFactory](type, props, children) {
+          let result = new Foo();
+          result.jsxType = type;
+          result.that = this;
+          result.props = props;
+          result.children = children;
+          return result;
+        }
+      }
+
+      expect(createElement(Foo, {foo: 'bar'}, 'a', 'b')).to.deep.equal({
+        isFoo: true,
+        jsxType: Foo,
+        that: null,
+        props: {foo: 'bar'},
+        children: ['a', 'b']
+      });
     });
 
   });

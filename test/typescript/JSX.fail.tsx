@@ -80,14 +80,9 @@ let noIntrinsicElements: any = <textInput />;
 (13,
 (14,
 (15,
-(16,
-'jsxProperties' is missing in type 'Widget'
 (17,
-'jsxProperties' is missing in type 'NativeObject'
 (18,
-'jsxProperties' is missing in type 'Device'
 (19,
-'jsxProperties' is missing in type 'App'
 (28,
 'foo' does not exist
 (39,

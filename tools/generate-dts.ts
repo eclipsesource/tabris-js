@@ -202,7 +202,7 @@ function createMethod(
 
 function renderProperties(text: TextBuilder, def: ExtendedApi) {
   const properties = Object.assign({}, def.properties, getClassDependentProperties(def));
-  const filter = name => name !== 'jsxProperties' || def.constructor.access !== 'protected';
+  const filter = name => name !== '[JSX.jsxFactory]' || def.constructor.access !== 'protected';
   Object.keys(properties || {}).filter(filter).sort().forEach(name => {
     text.append('');
     text.append(createProperty(name, properties, def));
@@ -280,6 +280,9 @@ function decodeType(param: Partial<schema.Parameter & schema.Property>, def: Ext
     case (PROPERTIES_OBJECT):
       return createPropertiesObject(def, ops);
 
+    case ('JSX.JsxFactory'):
+      return def.constructor.access !== 'public' ? 'never' : param.type;
+
     default:
       return param.ts_type || param.type;
   }
@@ -301,15 +304,15 @@ function createPropertiesObject(def: ExtendedApi, ops: PropertyOps) {
 }
 
 function createJsxPropertiesObject(def: ExtendedApi) {
-  if (def.constructor.access !== 'public') {
-    return 'never';
-  }
   // NOTE: unlike with method parameters (i.e. "set(properties)") TypeScript can not auto-exclude properties
   // of specific types because mapped types do not always work correctly with "this" based properties.
   // For that reason all supporter JSX properties need to be added explicitly.
-  const inherit = def.isWidget && def.parent.type !== 'Widget';
+  const forbidden = def.constructor.access !== 'public' && def.parent && def.parent.constructor.access === 'public';
+  const inherit = def.isWidget && def.parent.type !== 'NativeObject';
   const props = jsxPropertiesOf(def).concat(!inherit ? jsxPropertiesOf(def.parent) : []);
-  if (inherit && props.length) {
+  if (forbidden) {
+    return 'never';
+  } else if (inherit && props.length) {
     return `${def.parent.type}['jsxProperties'] & JSXProperties<${def.type}, '${props.join(`' | '`)}'>`;
   } else if (inherit && !props.length) {
     return `${def.parent.type}['jsxProperties']`;
@@ -369,17 +372,23 @@ function isClassDependentMethod(def: ExtendedApi, method: Methods) { // methods 
 }
 
 function isClassDependentProperty(def: ExtendedApi, property: schema.Property): boolean {
+  if (property.type === 'JSX.JsxFactory') {
+    return (def.constructor.access === 'public' && def.parent && def.parent.constructor.access === 'protected')
+      || (def.constructor.access === 'private' && def.parent && def.parent.constructor.access === 'public');
+  }
   return property.type === JSX_PROPERTIES_OBJECT;
 }
 
 function isClassDependentParameter(def: ExtendedApi, parameter: schema.Parameter) {
-  const autoExtendable = def.isWidget
-    && def.type !== 'Widget'
-    && !hasReadOnlyProperties(def)
-    && !hasFunctionProperties(def)
-    && !hasStaticProperties(def);
-  const newProps = Object.keys(def.properties || {}).filter(prop => !def.properties[prop].readonly);
-  return parameter.type === PROPERTIES_OBJECT && newProps && !autoExtendable;
+  if (parameter.type === PROPERTIES_OBJECT) {
+    const autoExtendable = def.isWidget
+      && !hasReadOnlyProperties(def)
+      && !hasFunctionProperties(def)
+      && !hasStaticProperties(def);
+    const newProps = Object.keys(def.properties || {}).filter(prop => !def.properties[prop].readonly);
+    return newProps && !autoExtendable;
+  }
+  return false;
 }
 
 function hasReadOnlyProperties(def: ExtendedApi) {

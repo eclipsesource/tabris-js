@@ -1,6 +1,6 @@
 import {
-  Widget, ScrollView, Slider, TextView, Picker, CheckBox, Switch, TextInput, ui, ScrollViewProperties,
-  EventObject, RadioButton, Properties, Partial, CompositeProperties, Composite, WidgetCollection
+  Slider, TextView, Picker, CheckBox, Switch, TextInput, ui, ScrollView, Button,
+  EventObject, RadioButton, Properties, Composite, WidgetCollection, JSXProperties, Listeners
 } from 'tabris';
 
 const STYLE = {
@@ -18,70 +18,68 @@ const STYLE = {
   '#luggageWeight': {right: 10, width: 50}
 };
 
-type ReservationFormCreateArgs = Properties<ReservationForm> & {
-  classes: string[]; countries: string[];
-};
-
 class ReservationForm extends Composite {
 
-  public readonly tsProperties: CompositeProperties & Partial<this, 'message'>;
+  public readonly jsxProperties: Composite['jsxProperties']
+    & JSXProperties<this, 'classes' | 'countries' | 'message' | 'onConfirm'>;
+  public readonly classes: string[];
+  public readonly countries: string[];
+  public readonly onConfirm: Listeners = new Listeners(this, 'confirm');
 
-  public readonly jsxProperties: ReservationFormCreateArgs & JSX.CompositeEvents & {
-    onConfirm?: (ev: EventObject<ReservationForm>) => void
-  };
-
-  constructor(args?: ReservationFormCreateArgs) {
-    super();
-    let {classes, countries, ...properties} = args;
+  constructor({classes, countries, message, ...properties}: Properties<ReservationForm>) {
+    super(properties);
+    this.classes = classes;
+    this.countries = countries;
     this.append(
-      <scrollView class='stretch' direction='vertical'>
-        <composite id='interactive' class='top'>
-          <textView class='col1 label' alignment='left'>Name:</textView>
-          <textInput class='col2 labeled' id='name' message='Full Name'/>
-          <textView class='col1 label'>Flyer Number</textView>
-          <textInput class='col2 labeled' keyboard='number' message='Flyer Number'/>
-          <textView class='col1 label'>Passphrase:</textView>
-          <textInput class='col2 labeled' type='password' message='Passphrase'/>
-          <textView class='col1 label'>Country:</textView>
-          <picker
+      <ScrollView class='stretch' direction='vertical'>
+        <Composite id='interactive' class='top'>
+          <TextView class='col1 label' alignment='left'>Name:</TextView>
+          <TextInput class='col2 labeled' id='name' message='Full Name'/>
+          <TextView class='col1 label'>Flyer Number</TextView>
+          <TextInput class='col2 labeled' keyboard='number' message='Flyer Number'/>
+          <TextView class='col1 label'>Passphrase:</TextView>
+          <TextInput class='col2 labeled' type='password' message='Passphrase'/>
+          <TextView class='col1 label'>Country:</TextView>
+          <Picker
               id='country'
               class='col2 labeled'
-              itemCount={countries.length}
-              itemText={index => countries[index]}/>
-          <textView class='col1 label'>Class:</textView>
-          <picker
+              itemCount={this.countries.length}
+              itemText={index => this.countries[index]}/>
+          <TextView class='col1 label'>Class:</TextView>
+          <Picker
               id='class'
               class='col2 labeled'
-              itemCount={classes.length}
-              itemText={index => classes[index]}/>
-          <textView class='col1 label'>Seat:</textView>
-          <radioButton class='col2 labeled'>Window</radioButton>
-          <radioButton class='col2 stacked'>Aisle</radioButton>
-          <radioButton class='col2 stacked' checked={true}>Anywhere</radioButton>
-          <composite class='group'>
-            <textView class='col1 grouped'>Luggage:</textView>
-            <slider
+              itemCount={this.classes.length}
+              itemText={index => this.classes[index]}/>
+          <TextView class='col1 label'>Seat:</TextView>
+          <RadioButton class='col2 labeled'>Window</RadioButton>
+          <RadioButton class='col2 stacked'>Aisle</RadioButton>
+          <RadioButton class='col2 stacked' checked={true}>Anywhere</RadioButton>
+          <Composite class='group'>
+            <TextView class='col1 grouped'>Luggage:</TextView>
+            <Slider
                 class='grouped'
                 id='luggageSlider'
                 onSelectionChanged={ev => this.luggageWeightText = `${ev.value} Kg`}/>
-            <textView class='grouped' id='luggageWeight'>0 Kg</textView>
-          </composite>
-          <checkBox class='col2 stacked' id='veggie'>Vegetarian</checkBox>
-          <composite class='group'>
-            <textView class='col1 grouped'>Vegetarian</textView>
-            <switch class='col2 grouped' id='miles'/>
-          </composite>
-          <button
+            <TextView class='grouped' id='luggageWeight'>0 Kg</TextView>
+          </Composite>
+          <CheckBox class='col2 stacked' id='veggie'>Vegetarian</CheckBox>
+          <Composite class='group'>
+            <TextView class='col1 grouped'>Vegetarian</TextView>
+            <Switch class='col2 grouped' id='miles'/>
+          </Composite>
+          <Button
               class='colspan'
               id='confirm'
               text='Place Reservation'
               background='#8b0000'
               textColor='white'
               onSelect={() => this.trigger('confirm', new EventObject<this>()) }/>
-        </composite>
-        <textView class='colspan' id='message'/>
-      </scrollView>
-    ).set(properties)._apply(STYLE);
+        </Composite>
+        <TextView class='colspan' id='message'/>
+      </ScrollView>
+    )._apply(STYLE);
+    this.message = message;
   }
 
   public children() {

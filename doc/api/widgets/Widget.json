@@ -115,6 +115,12 @@
       "type": "JsxPropertiesObject",
       "description": "When using JSX with TypeScript (`.tsx` files), the type of this property determines which JSX attributes are valid for this widget."
     },
+    "[JSX.jsxFactory]": {
+      "description": "This function is called to create JSX widget elements. You may override it in your own subclass to create custom JSX behavior. **The function is not called with any context, i.e. `this` is not available.**",
+      "type": "JSX.JsxFactory",
+      "static": true,
+      "readonly": true
+    },
     "id": {
       "type": "string",
       "description": "A string to identify the widget by using selectors. IDs are optional. It is strongly recommended that they are unique within a page."

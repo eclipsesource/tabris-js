@@ -2,15 +2,20 @@ import Widget from './Widget';
 import WidgetCollection from './WidgetCollection';
 import {omit} from './util';
 
+export const jsxFactory = Symbol('jsxFactory');
+
 export function createElement(jsxType, attributes, ...children) {
-  let Type = typeToConstructor(jsxType);
-  let appendable = flattenChildren(children).filter(child => child instanceof Widget);
-  if (Type === WidgetCollection) {
-    if (attributes) {
-      throw new Error('JSX: WidgetCollection can not have attributes');
-    }
-    return new WidgetCollection(appendable);
+  const fn = typeAsFunction(jsxType);
+  if (fn.prototype && fn.prototype[jsxFactory]) {
+    return fn.prototype[jsxFactory].call(null, fn, attributes, children);
+  } else if (!fn.prototype) {
+    return fn.call(null, attributes, children);
   }
+  throw new Error(('JSX: Unsupported type ' + fn.name).trim());
+}
+
+Widget.prototype[jsxFactory] = (Type, attributes, children) => {
+  let appendable = flattenChildren(children).filter(child => child instanceof Widget);
   let result = new Type(getPropertiesMap(attributes || {}, children), children);
   if (result instanceof WidgetCollection) {
     return result;
@@ -19,9 +24,17 @@ export function createElement(jsxType, attributes, ...children) {
     return result.append instanceof Function ? result.append.apply(result, appendable) : result;
   }
   throw new Error(('JSX: Unsupported type ' + Type.name).trim());
-}
+};
 
-function typeToConstructor(jsxType) {
+WidgetCollection.prototype[jsxFactory] = (Type, attributes, children) => {
+  let appendable = flattenChildren(children).filter(child => child instanceof Widget);
+  if (attributes) {
+    throw new Error('JSX: WidgetCollection can not have attributes');
+  }
+  return new WidgetCollection(appendable);
+};
+
+function typeAsFunction(jsxType) {
   if (jsxType instanceof Function) {
     return jsxType;
   }

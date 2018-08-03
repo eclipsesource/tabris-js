@@ -56,6 +56,11 @@ class MyCustomWidgetWithUnpackedListeners extends tabris.Composite {
 
 }
 
+class NonWidgetElement implements JSX.ElementClass {
+  [JSX.jsxFactory](type: {new (): any }, properties: object, children: Array<any>) {
+    return new type();
+  }
+}
 
 let custom1: MyCustomWidget = <MyCustomWidget height={23}/>;
 let custom2: MyCustomWidgetWithCustomJsx = <MyCustomWidgetWithCustomJsx height={23} bar='foo'/>;
@@ -67,3 +72,4 @@ let custom3: MyCustomWidgetWithUnpackedListeners = <MyCustomWidgetWithUnpackedLi
     const widget: MyCustomWidgetWithUnpackedListeners = event.target;
   }}
   />;
+let custom4: NonWidgetElement = <NonWidgetElement />;
