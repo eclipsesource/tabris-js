@@ -55,6 +55,10 @@ The helper type `Partial<T, U>` was removed to avoid confusion with the `Partial
 
 These types have been renamed to start with an upper case.
 
+## Event handling
+
+The methods `on` and `once` no longer widget-specific type information, instead allowing any string as the event type and a listener accepting `EventObject<NativeObject>`. To get full type information use the new `Listeners` API which provides separate listener registration functions for each event type, e.g. `widget.onResize(listener);`.
+
 ## JSX
 
 ### Elements need to be imported

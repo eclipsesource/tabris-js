@@ -37,7 +37,6 @@ export as namespace tabris;
 
 const PROPERTIES_OBJECT = 'PropertiesObject';
 const JSX_PROPERTIES_OBJECT = 'JsxPropertiesObject';
-const EVENTS_OBJECT = 'EventsObject';
 const EVENT_OBJECT = 'EventObject<T>';
 const eventObjectNames = [EVENT_OBJECT];
 
@@ -80,7 +79,6 @@ function renderTypeDefinition(text: TextBuilder, def: ExtendedApi) {
   text.append('// ' + (def.type || def.object || def.title));
   if (def.isNativeObject) {
     text.append('');
-    renderEventsInterface(text, def);
     text.append('');
     if (def.type !== 'NativeObject') {
       text.append(`type ${def.type}Properties = ${createPropertiesObject(def, {hasContext: false, excludeStatics: false})};`);
@@ -144,60 +142,6 @@ function renderConstructor(text: TextBuilder, def: ExtendedApi) {
 //#endregion
 
 //#region render events interfaces
-
-function renderEventsInterface(text: TextBuilder, def: ExtendedApi) {
-  text.append(createEventsInterfaceBodyOpen(def));
-  text.indent++;
-  renderEvents(text, def);
-  text.indent--;
-  text.append('}');
-}
-
-function createEventsInterfaceBodyOpen(def: ExtendedApi) {
-  let str = 'interface ' + def.type + 'Events';
-  if (def.extends) {
-    str += ' extends ' + def.extends + 'Events';
-  }
-  return str + ' {';
-}
-
-function renderEvents(text: TextBuilder, def: ExtendedApi) {
-  if (def.events) {
-    Object.keys(def.events).sort().forEach(name => {
-      text.append('');
-      text.append(createEvent(def.type, name, def.events[name]));
-    });
-  }
-  if (def.properties) {
-    Object.keys(def.properties).filter(name => !def.properties[name].static).sort().forEach(name => {
-      text.append('');
-      text.append(createPropertyChangedEvent(def.type, name, def.properties[name]));
-    });
-  }
-}
-
-function createEvent(widgetName: string, eventName, event: schema.Event) {
-  const result = [];
-  result.push(createDoc(Object.assign({}, event, {parameters: []})));
-  result.push(`${eventName}?: (event: ${createEventTypeName(widgetName, eventName, event)}) => void;`);
-  return result.join('\n');
-}
-
-function createPropertyChangedEvent(widgetName: string, propName: string, property: schema.Property) {
-  const result = [];
-  const standardDescription = `Fired when the [*${propName}*](#${propName}) property has changed.`;
-  const changeEvent = {
-    description: property.changeEventDescription || standardDescription,
-    parameters: [{
-      name: 'value',
-      type: property.ts_type || property.type,
-      description: `The new value of [*${propName}*](#${propName}).`
-    }]
-  };
-  result.push(createDoc(changeEvent));
-  result.push(`${propName}Changed?: (event: PropertyChangedEvent<${widgetName}, ${property.ts_type || property.type}>) => void;`);
-  return result.join('\n');
-}
 
 function renderEventObjectInterfaces(text: TextBuilder, def: ExtendedApi) {
   if (def.events) {
@@ -336,9 +280,6 @@ function decodeType(param: Partial<schema.Parameter & schema.Property>, def: Ext
     case (PROPERTIES_OBJECT):
       return createPropertiesObject(def, ops);
 
-    case (EVENTS_OBJECT):
-      return def.type + 'Events';
-
     default:
       return param.ts_type || param.type;
   }
@@ -438,7 +379,7 @@ function isClassDependentParameter(def: ExtendedApi, parameter: schema.Parameter
     && !hasFunctionProperties(def)
     && !hasStaticProperties(def);
   const newProps = Object.keys(def.properties || {}).filter(prop => !def.properties[prop].readonly);
-  return parameter.type === EVENTS_OBJECT || (parameter.type === PROPERTIES_OBJECT && newProps && !autoExtendable);
+  return parameter.type === PROPERTIES_OBJECT && newProps && !autoExtendable;
 }
 
 function hasReadOnlyProperties(def: ExtendedApi) {

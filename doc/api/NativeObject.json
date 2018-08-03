@@ -33,7 +33,7 @@
             "name": "listener",
             "type": "(event: EventObject) => void",
             "ts_type": "(event: EventObject<NativeObject>) => void",
-            "description": "The listener function to register. This function will be called with an event object."
+            "description": "The listener function to register. This function will be called with an event object.\n\nIn TypeScript you should use the alternative `Listeners` API, e.g. `widget.onResize(listener);` instead of `widget.on({resize: listener});` The former provides more type information."
           },
           {
             "name": "context",
@@ -49,12 +49,13 @@
         "parameters": [
           {
             "name": "listeners",
-            "type": "EventsObject",
+            "type": "{event: Listener}",
+            "ts_type": "{[event: string]: (event: EventObject<NativeObject>) => void}",
             "description": "A key-value map where the keys are event types and the values are the listeners to register for these events, e.g. `{tap: onTap, scroll: onScroll}`."
           }
         ],
         "returns": "this",
-        "description": "Registers all listeners in the given object for the event type indicated by their key."
+        "description": "Registers all listeners in the given object for the event type indicated by their key.\n\nIn TypeScript you should use the alternative `Listeners` API, e.g. `widget.onResize(listener);` instead of `widget.on('resize', listener);` The former provides more type information."
       }
     ],
     "once": [
@@ -67,7 +68,7 @@
           },
           {
             "name": "listener",
-            "type": "(event: any) => void",
+            "type": "(event: EventObject<NativeObject>) => void",
             "description": "The listener function to register. This function will be called with an event object."
           },
           {
@@ -78,18 +79,19 @@
           }
         ],
         "returns": "this",
-        "description": "Same as `on`, but removes the listener after it has been invoked by an event."
+        "description": "Same as `on`, but removes the listener after it has been invoked by an event.\n\nIn TypeScript you should use the alternative `Listeners` API, e.g. `widget.onResize.once(listener);` instead of `widget.once('resize', listener);` The former provides more type information."
       },
       {
         "parameters": [
           {
             "name": "listeners",
             "type": "EventsObject",
+            "ts_type": "{[event: string]: (event: EventObject<NativeObject>) => void}",
             "description": "A key-value map where the keys are event types and the values are the listeners to register for these events, e.g. `{tap: onTap, scroll: onScroll}`."
           }
         ],
         "returns": "this",
-        "description": "Same as `on`, but removes the listener after it has been invoked by an event."
+        "description": "Same as `on`, but removes the listener after it has been invoked by an event.\n\nIn TypeScript you should use the alternative `Listeners` API, e.g. `widget.onResize.once(listener);` instead of `widget.once({resize: listener});` The former provides more type information."
       }
     ],
     "off": [
@@ -102,7 +104,7 @@
           },
           {
             "name": "listener",
-            "type": "(event: any) => void",
+            "type": "(event: EventObject<NativeObject>) => void",
             "description": "The listener function to remove."
           },
           {
@@ -113,18 +115,19 @@
           }
         ],
         "returns": "this",
-        "description": "Removes all occurrences of *listener* that are bound to *type* and *context* from this widget."
+        "description": "Removes all occurrences of *listener* that are bound to *type* and *context* from this widget.\n\nIn TypeScript you should use the alternative `Listeners` API, e.g. `widget.onResize.off(listener);` instead of `widget.off('resize', listener});` The former provides more type information."
       },
       {
         "parameters": [
           {
             "name": "listeners",
             "type": "EventsObject",
+            "ts_type": "{[event: string]: (event: EventObject<NativeObject>) => void}",
             "description": "A key-value map where the keys are event types and the values are the listeners to deregister from these events, e.g. `{tap: onTap, scroll: onScroll}`."
           }
         ],
         "returns": "this",
-        "description": "Removes all listeners in the given object from the event type indicated by their key."
+        "description": "Removes all listeners in the given object from the event type indicated by their key.\n\nIn TypeScript you should use the alternative `Listeners` API, e.g. `widget.onResize.off(listener);` instead of `widget.off({resize: listener});` The former provides more type information."
       }
     ],
     "trigger": [
@@ -137,7 +140,7 @@
           }
         ],
         "returns": "this",
-        "description": "Notifies all registered listeners for the given *type*."
+        "description": "Notifies all registered listeners for the given *type*.\n\nIn TypeScript you should use the alternative `Listeners` API, e.g. `widget.myEvent.trigger();` instead of `widget.trigger('myEvent');` The former provides more type information."
       },
       {
         "parameters": [
@@ -153,7 +156,7 @@
           }
         ],
         "returns": "this",
-        "description": "Passes the fields of the given *object* to all listeners registered for this event *type*."
+        "description": "Passes the fields of the given *object* to all listeners registered for this event *type*.\n\nIn TypeScript you should use the alternative `Listeners` API, e.g. `widget.myEvent.trigger(eventData);` instead of `widget.trigger('myEvent', eventData});` The former provides more type information."
       },
       {
         "parameters": [
@@ -170,7 +173,7 @@
           }
         ],
         "returns": "this",
-        "description": "Initializes the given *eventObject* and passes it to all listeners registered for this event *type*. If *eventObject* was already initialized its fields are copied to a new event object."
+        "description": "Initializes the given *eventObject* and passes it to all listeners registered for this event *type*. If *eventObject* was already initialized its fields are copied to a new event object.\n\nIn TypeScript you should use the alternative `Listeners` API, e.g. `widget.myEvent.trigger(eventObject);` instead of `widget.trigger('myEvent', eventObject});` The former provides more type information."
       }
     ],
     "set": [
