@@ -14,17 +14,20 @@ import Switch from '../../../src/tabris/widgets/Switch';
 import ToggleButton from '../../../src/tabris/widgets/ToggleButton';
 import WebView from '../../../src/tabris/widgets/WebView';
 import ActivityIndicator from '../../../src/tabris/widgets/ActivityIndicator';
+import {createJsxProcessor} from '../../../src/tabris/JsxProcessor';
 
 describe('Common Widgets', function() {
 
   let client;
   let widget;
   let listener;
+  let jsx;
 
   beforeEach(function() {
     client = new ClientStub();
     mockTabris(client);
     listener = spy();
+    jsx = createJsxProcessor();
   });
 
   afterEach(function() {
@@ -70,6 +73,35 @@ describe('Common Widgets', function() {
     checkListen('select');
   });
 
+  it('Button JSX with text property', function() {
+    let button = jsx.createElement(
+      Button,
+      {text: 'Hello World!'}
+    );
+
+    expect(button.text).to.equal('Hello World!');
+  });
+
+  it('Button JSX with text content', function() {
+    let button = jsx.createElement(
+      Button,
+      null,
+      'Hello',
+      'World!'
+    );
+
+    expect(button.text).to.equal('Hello World!');
+  });
+
+  it('Button JSX with text content and text property', function() {
+    expect(() => jsx.createElement(
+      Button,
+      {text: 'Hello World!'},
+      'Hello',
+      'World!'
+    )).to.throw(/text given twice/);
+  });
+
   it('Canvas', function() {
     let canvas = new Canvas({visible: false});
 
@@ -102,6 +134,35 @@ describe('Common Widgets', function() {
     expect(listener).to.have.been.calledOnce;
     expect(listener).to.have.been.calledWithMatch({target: widget, value: true});
     checkListen('select');
+  });
+
+  it('CheckBox JSX with text property', function() {
+    let widget = jsx.createElement(
+      CheckBox,
+      {text: 'Hello World!'}
+    );
+
+    expect(widget.text).to.equal('Hello World!');
+  });
+
+  it('CheckBox JSX with text content', function() {
+    let widget = jsx.createElement(
+      CheckBox,
+      null,
+      'Hello',
+      'World!'
+    );
+
+    expect(widget.text).to.equal('Hello World!');
+  });
+
+  it('CheckBox JSX with text content and text property', function() {
+    expect(() => jsx.createElement(
+      CheckBox,
+      {text: 'Hello World!'},
+      'Hello',
+      'World!'
+    )).to.throw(/text given twice/);
   });
 
   it('Composite', function() {
@@ -158,6 +219,35 @@ describe('Common Widgets', function() {
     checkListen('select');
   });
 
+  it('RadioButton JSX with text property', function() {
+    let widget = jsx.createElement(
+      RadioButton,
+      {text: 'Hello World!'}
+    );
+
+    expect(widget.text).to.equal('Hello World!');
+  });
+
+  it('RadioButton JSX with text content', function() {
+    let button = jsx.createElement(
+      RadioButton,
+      null,
+      'Hello',
+      'World!'
+    );
+
+    expect(button.text).to.equal('Hello World!');
+  });
+
+  it('RadioButton JSX with text content and text property', function() {
+    expect(() => jsx.createElement(
+      RadioButton,
+      {text: 'Hello World!'},
+      'Hello',
+      'World!'
+    )).to.throw(/text given twice/);
+  });
+
   it('TextView', function() {
     let textView = new TextView({text: 'foo'});
 
@@ -180,6 +270,35 @@ describe('Common Widgets', function() {
     new TextView({text: 'foo', maxLines: -1});
 
     expect(getCreate().properties.maxLines).to.be.null;
+  });
+
+  it('TextView JSX with text property', function() {
+    let widget = jsx.createElement(
+      TextView,
+      {text: 'Hello World!'}
+    );
+
+    expect(widget.text).to.equal('Hello World!');
+  });
+
+  it('TextView JSX with text content', function() {
+    let button = jsx.createElement(
+      TextView,
+      null,
+      'Hello',
+      'World!'
+    );
+
+    expect(button.text).to.equal('Hello World!');
+  });
+
+  it('TextView JSX with text content and text property', function() {
+    expect(() => jsx.createElement(
+      TextView,
+      {text: 'Hello World!'},
+      'Hello',
+      'World!'
+    )).to.throw(/text given twice/);
   });
 
   it('Slider', function() {
@@ -284,6 +403,35 @@ describe('Common Widgets', function() {
     expect(listener).to.have.been.calledOnce;
     expect(listener).to.have.been.calledWithMatch({target: widget, checked: true});
     checkListen('select');
+  });
+
+  it('ToggleButton JSX with text property', function() {
+    let widget = jsx.createElement(
+      ToggleButton,
+      {text: 'Hello World!'}
+    );
+
+    expect(widget.text).to.equal('Hello World!');
+  });
+
+  it('ToggleButton JSX with text content', function() {
+    let button = jsx.createElement(
+      ToggleButton,
+      null,
+      'Hello',
+      'World!'
+    );
+
+    expect(button.text).to.equal('Hello World!');
+  });
+
+  it('ToggleButton JSX with text content and text property', function() {
+    expect(() => jsx.createElement(
+      ToggleButton,
+      {text: 'Hello World!'},
+      'Hello',
+      'World!'
+    )).to.throw(/text given twice/);
   });
 
   it('sets native color properties as RGBA arrays', function() {

@@ -40,6 +40,7 @@ export as namespace tabris;
 
 const PROPERTIES_OBJECT = 'PropertiesObject';
 const JSX_PROPERTIES_OBJECT = 'JsxPropertiesObject';
+const JSX_FACTORY = 'JSX.JsxFactory';
 const EVENT_OBJECT = 'EventObject<T>';
 const eventObjectNames = [EVENT_OBJECT];
 
@@ -278,7 +279,7 @@ function decodeType(param: Partial<schema.Parameter & schema.Property>, def: Ext
     case (PROPERTIES_OBJECT):
       return createPropertiesObject(def, ops);
 
-    case ('JSX.JsxFactory'):
+    case (JSX_FACTORY):
       return def.constructor.access !== 'public' ? 'never' : param.type;
 
     default:
@@ -306,17 +307,19 @@ function createPropertiesObject(def: ExtendedApi, ops: PropertyOps) {
 function createJsxPropertiesObject(def: ExtendedApi) {
   const forbidden = def.constructor.access !== 'public' && def.parent && def.parent.constructor.access === 'public';
   const inherit = def.isWidget && def.parent.type !== 'NativeObject';
+  const parentType = def.ts_extends || def.extends;
   const props = jsxPropertiesOf(def).concat(!inherit ? jsxPropertiesOf(def.parent) : []);
+  const children = def.jsxChildren ? ` & {children?: ${def.jsxChildren}}` : '';
   if (forbidden) {
     return 'never';
   } else if (inherit && props.length) {
-    return `${def.parent.type}['jsxProperties'] & JSXProperties<${def.type}, ${union(props)}>`;
+    return `${parentType}['jsxProperties'] & JSXProperties<${def.type}, ${union(props)}>${children}`;
   } else if (inherit && !props.length) {
-    return `${def.parent.type}['jsxProperties']`;
+    return `${parentType}['jsxProperties']${children}`;
   } else if (!inherit && props.length) {
-    return `JSXProperties<${def.type}, ${union(props)}>`;
+    return `JSXProperties<${def.type}, ${union(props)}>${children}`;
   }
-  return '{}';
+  return `{}${children}`;
 }
 
 function union(values: any[]) {
@@ -366,7 +369,7 @@ function isClassDependentMethod(def: ExtendedApi, method: Methods) { // methods 
 }
 
 function isClassDependentProperty(def: ExtendedApi, property: schema.Property): boolean {
-  if (property.type === 'JSX.JsxFactory') {
+  if (property.type === JSX_FACTORY) {
     return (def.constructor.access === 'public' && def.parent && def.parent.constructor.access === 'protected')
       || (def.constructor.access === 'private' && def.parent && def.parent.constructor.access === 'public');
   }

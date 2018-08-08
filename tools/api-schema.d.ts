@@ -18,6 +18,10 @@ export interface Api {
    */
   type?: string;
   /**
+   * The type of children accepted via JSX.
+   */
+  jsxChildren?: string;
+  /**
    * Name of the instance (for singletons)
    */
   object?: string;
@@ -84,6 +88,10 @@ export interface Property {
    * Exclude this property from documentation
    */
   ts_only?: boolean;
+  /**
+   * JSX child elements are mapped to this property
+   */
+  jsxContentProperty?: boolean;
   platforms?: Platforms;
   /**
    * Indicates that this property can not be set. However, if the property is not a "const", it may change by itself. Defaults to false

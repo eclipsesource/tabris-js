@@ -1,10 +1,16 @@
 import NativeObject from '../NativeObject';
 import Widget from '../Widget';
+import {jsxFactory} from '../JsxProcessor';
 
 export default class Action extends Widget {
 
   get _nativeType() {
     return 'tabris.Action';
+  }
+
+  /** @this {import("../JsxProcessor").default} */
+  [jsxFactory](Type, props, children) {
+    return super[jsxFactory](Type, this.withTextContent(props, children, 'title'));
   }
 
 }

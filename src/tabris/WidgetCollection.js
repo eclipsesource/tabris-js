@@ -1,4 +1,5 @@
 import {select} from './util-widget-select';
+import {jsxFactory} from './JsxProcessor';
 
 export default class WidgetCollection {
 
@@ -117,6 +118,14 @@ export default class WidgetCollection {
         ? {value: this[index++], done: false}
         : {done: true}
     };
+  }
+
+  /** @this {import("../JsxProcessor").default} */
+  [jsxFactory](Type, props, children) {
+    if (props) {
+      throw new Error('JSX: WidgetCollection can not have attributes');
+    }
+    return new Type(this.normalizeChildren(children));
   }
 
 }

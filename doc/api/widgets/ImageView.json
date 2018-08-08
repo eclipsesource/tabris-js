@@ -2,6 +2,7 @@
   "type": "ImageView",
   "description": "A widget to display an image.",
   "extends": "Widget",
+  "jsxChildren": "never",
   "constructor": {
     "access": "public",
     "parameters": [

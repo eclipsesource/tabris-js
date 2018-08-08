@@ -7,7 +7,7 @@ import * as tabris from 'tabris';
 <tabris.TextInput height={23} onTypeChanged={function() {}} />;
 <tabris.TextView alignment='top'/>;
 <tabris.Video autoPlay={0}/>;
-<tabris.WidgetCollection length={2}><tabris.Button/><tabris.TextView/></tabris.WidgetCollection>;
+<tabris.WidgetCollection length={2}>{[new tabris.Button(), new tabris.TextView()]}</tabris.WidgetCollection>;
 <tabris.UI />;
 
 <tabris.Drawer />;
@@ -59,6 +59,33 @@ class MyCustomWidgetWithWrongJsx extends tabris.Composite {
 
 let noIntrinsicElements: any = <textInput />;
 
+/** Invalid children **/
+
+<tabris.Action left={10}>{new tabris.Button()}</tabris.Action>;
+<tabris.Button left={10}>{new tabris.Button()}</tabris.Button>;
+<tabris.Canvas left={10}>foo</tabris.Canvas>;
+<tabris.CheckBox left={10}>{new tabris.Button()}</tabris.CheckBox>;
+<tabris.CollectionView left={10}>{new tabris.Button()}</tabris.CollectionView>;
+<tabris.Composite left={10}>foo</tabris.Composite>;
+<tabris.ImageView left={10}>{new tabris.Button()}</tabris.ImageView>;
+<tabris.NavigationView left={10}>{new tabris.Button()}</tabris.NavigationView>;
+<tabris.Page left={10}>foo</tabris.Page>;
+<tabris.Picker left={10}>{new tabris.Button()}</tabris.Picker>;
+<tabris.ProgressBar left={10}>{new tabris.Button()}</tabris.ProgressBar>;
+<tabris.RadioButton left={10}>{new tabris.Button()}</tabris.RadioButton>;
+<tabris.ScrollView left={10}>foo</tabris.ScrollView>;
+<tabris.SearchAction left={10}>{new tabris.Button()}</tabris.SearchAction>;
+<tabris.Slider left={10}>{new tabris.Button()}</tabris.Slider>;
+<tabris.Switch left={10}>{new tabris.Button()}</tabris.Switch>;
+<tabris.Tab title='foo'>foo</tabris.Tab>;
+<tabris.TabFolder left={10}>{new tabris.Button()}</tabris.TabFolder>;
+<tabris.TextInput left={10}>{new tabris.Button()}</tabris.TextInput>;
+<tabris.TextView left={10}>{new tabris.Button()}</tabris.TextView>;
+<tabris.ToggleButton left={10}>{new tabris.Button()}</tabris.ToggleButton>;
+<tabris.Video left={10}>{new tabris.Button()}</tabris.Video>;
+<tabris.WebView left={10}>{new tabris.Button()}</tabris.WebView>;
+<tabris.WidgetCollection>foo</tabris.WidgetCollection>;
+
 /*Expected
 (3,
 'getContext' does not exist
@@ -93,4 +120,27 @@ Types of property 'onFooChanged' are incompatible.
 'jsxProperties' in type 'MyCustomWidgetWithWrongJsx' is not assignable
 (60,
 'textInput' does not exist
+(64,
+(66,
+(67,
+(68,
+(69,
+(70,
+(71,
+(72,
+(73,
+(74,
+(75,
+(76,
+(77,
+(78,
+(79,
+(80,
+(81,
+(82,
+(83,
+(84,
+(85,
+(86,
+(87,
 */

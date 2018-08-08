@@ -2,6 +2,7 @@
   "type": "WidgetCollection",
   "generics": "T extends Widget = Widget",
   "description": "A `WidgetCollection` is an array-like object representing a set of widgets, as returned by the widget methods `children` and `find`.",
+  "jsxChildren": "T|WidgetCollection<T>|Array<T|WidgetCollection<T>>|undefined",
   "constructor": {
     "access": "public",
     "parameters": [
@@ -318,6 +319,13 @@
     }
   },
   "properties": {
+    "jsxProperties": {
+      "const": true,
+      "readonly": true,
+      "ts_only": true,
+      "type": "JsxPropertiesObject",
+      "description": "When using JSX with TypeScript (`.tsx` files), the type of this property determines which JSX attributes are valid for this widget."
+    },
     "[JSX.jsxFactory]": {
       "description": "This function is called by the framework to create JSX elements from the WidgetCollection class.",
       "type": "JSX.JsxFactory",

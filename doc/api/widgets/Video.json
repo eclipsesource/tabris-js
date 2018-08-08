@@ -2,6 +2,7 @@
   "type": "Video",
   "description": "A widget that plays a video from an URL.",
   "extends": "Widget",
+  "jsxChildren": "never",
   "constructor": {
     "access": "public",
     "parameters": [

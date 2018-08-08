@@ -3,6 +3,7 @@ import NativeObject from '../NativeObject';
 import {createSelectorArray, getSelectorSpecificity} from '../util-widget-select';
 import Layout from '../Layout';
 import WidgetCollection from '../WidgetCollection';
+import {jsxFactory} from '../JsxProcessor';
 
 export default class Composite extends Widget {
 
@@ -117,6 +118,12 @@ export default class Composite extends Widget {
       let checkedData = Layout.checkConsistency(this._layoutData);
       this._nativeSet('layoutData', Layout.resolveReferences(checkedData, this));
     }
+  }
+
+  /** @this {import("../JsxProcessor").default} */
+  [jsxFactory](Type, props, children) {
+    const result = super[jsxFactory](Type, props);
+    return result.append(this.normalizeChildren(children));
   }
 
 }

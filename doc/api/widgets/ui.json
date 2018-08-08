@@ -3,6 +3,7 @@
   "object": "ui",
   "description": "Represents the top-level parent for all widgets. It provides access to the status bar, the navigation bar, the drawer and the content view.",
   "extends": "Composite",
+  "jsxChildren": "never",
   "constructor": {
     "access": "private",
     "parameters": []

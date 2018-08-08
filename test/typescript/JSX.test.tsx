@@ -3,33 +3,42 @@ import * as tabris from 'tabris';
 let onPanHandler: (event: tabris.WidgetPanEvent) => void = (event) => {};
 let onTextChangedHandler: (event: tabris.PropertyChangedEvent<tabris.TextInput, string>) => void = (event) => {};
 
-let action: tabris.Action = <tabris.Action title='foo' onSelect={() => {}}/>;
-let button: tabris.Button = <tabris.Button text='foo' onPanUp={onPanHandler}/>;
+let action: tabris.Action = <tabris.Action title='foo' onSelect={() => {}}>foo</tabris.Action>;
+let button: tabris.Button = <tabris.Button onPanUp={onPanHandler}>foo</tabris.Button>;
 let canvas: tabris.Canvas = <tabris.Canvas onResize={function() {}} left={23} transform={{rotation: 360}}/>;
-let checkBox: tabris.CheckBox = <tabris.CheckBox checked={true}/>;
-let collectionView: tabris.CollectionView = <tabris.CollectionView  refreshEnabled={true} cellHeight={x => 23} />;
+let checkBox: tabris.CheckBox = <tabris.CheckBox checked={true}>foo</tabris.CheckBox>;
+let collectionView: tabris.CollectionView = <tabris.CollectionView refreshEnabled={true} cellHeight={x => 23} />;
 let composite: tabris.Composite = <tabris.Composite onPaddingChanged={function() {}} layoutData={{width: 100}}/>;
 let imageView: tabris.ImageView = <tabris.ImageView image='./foo.jpg'/>;
 let navigationView: tabris.NavigationView = <tabris.NavigationView actionColor='red'/>;
 let page: tabris.Page = <tabris.Page autoDispose={false}/>;
 let picker: tabris.Picker = <tabris.Picker selectionIndex={3} itemText={x => 'foo'} />;
 let progressBar: tabris.ProgressBar = <tabris.ProgressBar maximum={100}/>;
-let radioButton: tabris.RadioButton = <tabris.RadioButton checked={true}/>;
+let radioButton: tabris.RadioButton = <tabris.RadioButton checked={true}>foo</tabris.RadioButton>;
 let scrollView: tabris.ScrollView = <tabris.ScrollView background='blue' padding={23} direction='vertical'/>;
-let searchAction: tabris.SearchAction = <tabris.SearchAction text='foo'/>;
+let searchAction: tabris.SearchAction = <tabris.SearchAction title='bar'>foo</tabris.SearchAction>;
 let slider: tabris.Slider = <tabris.Slider maximum={100}/>;
-let switchButton: tabris.Switch = <tabris.Switch thumbOnColor='red'/>;
+let switchButton: tabris.Switch = <tabris.Switch thumbOnColor='red'>foo</tabris.Switch>;
 let tab: tabris.Tab = <tabris.Tab badge='3'/>;
 let tabFolder: tabris.TabFolder = <tabris.TabFolder tabBarLocation='top'/>;
-let textInput: tabris.TextInput = <tabris.TextInput autoCapitalize={true} onTextChanged={onTextChangedHandler}/>;
-let textView: tabris.TextView = <tabris.TextView alignment='right'/>;
-let toggleButton: tabris.ToggleButton = <tabris.ToggleButton text='red'/>;
+let textInput: tabris.TextInput = <tabris.TextInput autoCapitalize={true} onTextChanged={onTextChangedHandler}>foo</tabris.TextInput>;
+let textView: tabris.TextView = <tabris.TextView alignment='right'>foo</tabris.TextView>;
+let toggleButton: tabris.ToggleButton = <tabris.ToggleButton text='red'>foo</tabris.ToggleButton>;
 let video: tabris.Video = <tabris.Video autoPlay={true}/>;
 let webView: tabris.WebView = <tabris.WebView url='http://localhost/'/>;
 
 let noAttributes: tabris.Composite = <tabris.Composite/>;
-let widgetCollection = <tabris.WidgetCollection><tabris.Button/><tabris.TextView/></tabris.WidgetCollection>;
-let compositeWithChildren =  <tabris.Composite><tabris.Button/><tabris.WidgetCollection><tabris.TextView/></tabris.WidgetCollection></tabris.Composite>;
+
+// Valid children
+let widgetCollection: tabris.WidgetCollection = <tabris.WidgetCollection>{[new tabris.Button(), new tabris.TextView()]}</tabris.WidgetCollection>;
+widgetCollection = <tabris.WidgetCollection children={[new tabris.Button(), new tabris.TextView()]} />;
+let compositeWithChildren: tabris.Composite = <tabris.Composite>{[new tabris.Button(), new tabris.WidgetCollection<tabris.TextView>([])]}</tabris.Composite>;
+let canvasWithChildren: tabris.Canvas = <tabris.Canvas>{new tabris.Button()}</tabris.Canvas>;
+let navigationViewWidthChildren: tabris.NavigationView = <tabris.NavigationView>{new tabris.Page()}</tabris.NavigationView>;
+let pageWidthChildren: tabris.Page = <tabris.Page>{new tabris.Button()}</tabris.Page>;
+let scrollViewWidthChildren: tabris.ScrollView = <tabris.ScrollView>{new tabris.Button()}</tabris.ScrollView>;
+let tabWidthChildren: tabris.Tab = <tabris.Tab>{new tabris.Button()}</tabris.Tab>;
+let tabFolderWidthChildren: tabris.TabFolder = <tabris.TabFolder>{new tabris.Tab()}</tabris.TabFolder>;
 
 class MyCustomWidget extends tabris.Composite {
 
@@ -56,12 +65,6 @@ class MyCustomWidgetWithUnpackedListeners extends tabris.Composite {
 
 }
 
-class NonWidgetElement implements JSX.ElementClass {
-  [JSX.jsxFactory](type: {new (): any }, properties: object, children: Array<any>) {
-    return new type();
-  }
-}
-
 let custom1: MyCustomWidget = <MyCustomWidget height={23}/>;
 let custom2: MyCustomWidgetWithCustomJsx = <MyCustomWidgetWithCustomJsx height={23} bar='foo'/>;
 let custom3: MyCustomWidgetWithUnpackedListeners = <MyCustomWidgetWithUnpackedListeners
@@ -72,4 +75,3 @@ let custom3: MyCustomWidgetWithUnpackedListeners = <MyCustomWidgetWithUnpackedLi
     const widget: MyCustomWidgetWithUnpackedListeners = event.target;
   }}
   />;
-let custom4: NonWidgetElement = <NonWidgetElement />;

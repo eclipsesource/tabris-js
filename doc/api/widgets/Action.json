@@ -2,6 +2,7 @@
   "type": "Action",
   "description": "An executable item that is integrated in the application's navigation menu. Add a listener on *select* to implement the action.",
   "extends": "Widget",
+  "jsxChildren": "string",
   "constructor": {
     "access": "public",
     "parameters": [
@@ -101,7 +102,8 @@
     },
     "title": {
       "type": "string",
-      "description": "The text to be displayed for the action."
+      "description": "The text to be displayed for the action.",
+      "jsxContentProperty": true
     }
   },
   "events": {

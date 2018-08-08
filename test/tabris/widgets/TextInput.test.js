@@ -1,6 +1,7 @@
 import {expect, mockTabris, restore, spy} from '../../test';
 import ClientStub from '../ClientStub';
 import TextInput from '../../../src/tabris/widgets/TextInput';
+import {createJsxProcessor} from '../../../src/tabris/JsxProcessor';
 
 describe('TextInput', function() {
 
@@ -136,6 +137,45 @@ describe('TextInput', function() {
     expect(listener).to.have.been.calledOnce;
     expect(listener).to.have.been.calledWithMatch({target: widget, value: 'foo'});
     checkListen('input');
+  });
+
+  describe('JSX', function() {
+
+    let jsx;
+
+    beforeEach(function() {
+      jsx = createJsxProcessor();
+    });
+
+    it('with text property', function() {
+      let widget = jsx.createElement(
+        TextInput,
+        {text: 'Hello World!'}
+      );
+
+      expect(widget.text).to.equal('Hello World!');
+    });
+
+    it('with text content', function() {
+      let widget = jsx.createElement(
+        TextInput,
+        null,
+        'Hello',
+        'World!'
+      );
+
+      expect(widget.text).to.equal('Hello World!');
+    });
+
+    it('with text content and text property', function() {
+      expect(() => jsx.createElement(
+        TextInput,
+        {text: 'Hello World!'},
+        'Hello',
+        'World!'
+      )).to.throw(/text given twice/);
+    });
+
   });
 
 });

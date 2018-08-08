@@ -2,6 +2,7 @@
   "type": "CheckBox",
   "description": "A check box widget.",
   "extends": "Widget",
+  "jsxChildren": "string",
   "constructor": {
     "access": "public",
     "parameters": [
@@ -21,7 +22,8 @@
     },
     "text": {
       "type": "string",
-      "description": "The label text of the check box."
+      "description": "The label text of the check box.",
+      "jsxContentProperty": true
     },
     "textColor": {
       "type": "Color",

@@ -217,6 +217,9 @@ class DocGenerator {
       if (property.description) {
         result.push('\n' + property.description);
       }
+      if (property.jsxContentProperty) {
+        result.push(`\n\nIn JSX the content of the *${def.type}* element is mapped to this property. Therefore \`<${def.type} ${name}='Hello World' />\` is the same as \`<${def.type}>Hello World</${def.type}>\`.`);
+      }
       if (property.const) {
         result.push('<br/>' + MSG_CONST_PROP);
       }

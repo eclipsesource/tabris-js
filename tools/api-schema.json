@@ -20,6 +20,10 @@
           "description": "Name of the class",
           "type": "string"
         },
+        "jsxChildren": {
+          "description": "The type of children accepted via JSX.",
+          "type": "string"
+        },
         "object": {
           "description": "Name of the instance (for singletons)",
           "type": "string"
@@ -130,6 +134,10 @@
         },
         "ts_only": {
           "description": "Exclude this property from documentation",
+          "type": "boolean"
+        },
+        "jsxContentProperty": {
+          "description": "JSX child elements are mapped to this property",
           "type": "boolean"
         },
         "platforms": {"$ref": "#/definitions/platforms"},

@@ -2,6 +2,7 @@
   "type": "Switch",
   "description": "A switch widget that can be toggled.",
   "extends": "Widget",
+  "jsxChildren": "string",
   "constructor": {
     "access": "public",
     "parameters": [

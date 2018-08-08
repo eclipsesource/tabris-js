@@ -12,7 +12,7 @@ import {addDOMDocument} from './Document';
 import Event, {addDOMEventTargetMethods} from './Event';
 import {addWindowTimerMethods} from './WindowTimers';
 import Storage, {create as createStorage} from './Storage';
-import * as JSX from './JSX';
+import JsxProcessor, {createJsxProcessor} from './JsxProcessor';
 import Action from './widgets/Action';
 import ActionSheet from './ActionSheet';
 import ActivityIndicator from './widgets/ActivityIndicator';
@@ -93,6 +93,7 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   ImageData,
   ImageView,
   InactivityTimer,
+  JsxProcessor,
   Listeners,
   NativeObject,
   NavigationView,
@@ -141,7 +142,7 @@ Object.assign(window, {
   Headers,
   Request,
   Response,
-  JSX
+  JSX: createJsxProcessor()
 });
 
 tabris.on('start', () => {

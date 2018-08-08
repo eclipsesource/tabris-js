@@ -2,6 +2,7 @@
   "type": "ToggleButton",
   "description": "A push button that \"snaps in\", i.e. it is selected when pressed and deselected when pressed again.",
   "extends": "Widget",
+  "jsxChildren": "string",
   "constructor": {
     "access": "public",
     "parameters": [
@@ -36,7 +37,8 @@
     },
     "text": {
       "type": "string",
-      "description": "The button's label text."
+      "description": "The button's label text.",
+      "jsxContentProperty": true
     },
     "textColor": {
       "type": "Color",

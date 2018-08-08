@@ -2,6 +2,7 @@
   "type": "RadioButton",
   "description": "A radio button. Selecting a radio button de-selects all its siblings (i.e. all radio buttons within the same parent).",
   "extends": "Widget",
+  "jsxChildren": "string",
   "constructor": {
     "access": "public",
     "parameters": [
@@ -21,7 +22,8 @@
     },
     "text": {
       "type": "string",
-      "description": "The label text of the radio button."
+      "description": "The label text of the radio button.",
+      "jsxContentProperty": true
     },
     "textColor": {
       "type": "Color",

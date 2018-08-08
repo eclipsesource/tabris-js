@@ -2,6 +2,7 @@
   "type": "TextView",
   "description": "A widget to display a text. For images, use ImageView.",
   "extends": "Widget",
+  "jsxChildren": "string",
   "constructor": {
     "access": "public",
     "parameters": [
@@ -38,7 +39,8 @@
     },
     "text": {
       "type": "string",
-      "description": "The text to display."
+      "description": "The text to display.",
+      "jsxContentProperty": true
     },
     "textColor": {
       "type": "Color",

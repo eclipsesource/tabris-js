@@ -2,6 +2,7 @@
   "type": "TextInput",
   "description": "A widget that allows to enter text.",
   "extends": "Widget",
+  "jsxChildren": "string",
   "constructor": {
     "access": "public",
     "parameters": [
@@ -28,7 +29,8 @@
     },
     "text": {
       "type": "string",
-      "description": "The text in the input field."
+      "description": "The text in the input field.",
+      "jsxContentProperty": true
     },
     "textColor": {
       "type": "Color",

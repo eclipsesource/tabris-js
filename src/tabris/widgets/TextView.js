@@ -1,5 +1,6 @@
 import NativeObject from '../NativeObject';
 import Widget from '../Widget';
+import {jsxFactory} from '../JsxProcessor';
 
 export default class TextView extends Widget {
 
@@ -13,6 +14,11 @@ export default class TextView extends Widget {
     } else {
       super._listen(name, listening);
     }
+  }
+
+  /** @this {import("../JsxProcessor").default} */
+  [jsxFactory](Type, props, children) {
+    return super[jsxFactory](Type, this.withTextContent(props, children, 'text'));
   }
 
 }

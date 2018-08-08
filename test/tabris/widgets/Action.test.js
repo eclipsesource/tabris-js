@@ -1,6 +1,7 @@
 import {expect, spy, restore, mockTabris} from '../../test';
 import ClientStub from '../ClientStub';
 import Action from '../../../src/tabris/widgets/Action';
+import {createJsxProcessor} from '../../../src/tabris/JsxProcessor';
 
 describe('Action', function() {
 
@@ -101,6 +102,45 @@ describe('Action', function() {
 
       expect(listener).to.have.been.calledOnce;
       expect(listener).to.have.been.calledWithMatch({target: action});
+    });
+
+  });
+
+  describe('JSX', function() {
+
+    let jsx;
+
+    beforeEach(function() {
+      jsx = createJsxProcessor();
+    });
+
+    it('with title property', function() {
+      let widget = jsx.createElement(
+        Action,
+        {title: 'Hello World!'}
+      );
+
+      expect(widget.title).to.equal('Hello World!');
+    });
+
+    it('with text content', function() {
+      let widget = jsx.createElement(
+        Action,
+        null,
+        'Hello',
+        'World!'
+      );
+
+      expect(widget.title).to.equal('Hello World!');
+    });
+
+    it('with text content and title property', function() {
+      expect(() => jsx.createElement(
+        Action,
+        {title: 'Hello World!'},
+        'Hello',
+        'World!'
+      )).to.throw(/title given twice/);
     });
 
   });

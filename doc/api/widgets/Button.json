@@ -2,6 +2,7 @@
   "type": "Button",
   "description": "A push button. Can contain a text or an image.",
   "extends": "Widget",
+  "jsxChildren": "string",
   "constructor": {
     "access": "public",
     "parameters": [
@@ -36,7 +37,8 @@
     },
     "text": {
       "type": "string",
-      "description": "The button's label text."
+      "description": "The button's label text.",
+      "jsxContentProperty": true
     },
     "textColor": {
       "type": "Color",

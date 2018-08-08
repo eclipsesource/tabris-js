@@ -2,6 +2,7 @@
   "type": "Picker",
   "description": "A widget with a drop-down list of items to choose from.",
   "extends": "Widget",
+  "jsxChildren": "never",
   "constructor": {
     "access": "public",
     "parameters": [

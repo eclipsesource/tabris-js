@@ -1,6 +1,6 @@
-import {expect, mockTabris, spy} from '../test';
+import {expect, mockTabris, spy, stub} from '../test';
 import ClientStub from './ClientStub';
-import {createElement, jsxFactory} from '../../src/tabris/JSX';
+import {createJsxProcessor, jsxFactory} from '../../src/tabris/JsxProcessor';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
 import Composite from '../../src/tabris/widgets/Composite';
 import Button from '../../src/tabris/widgets/Button';
@@ -8,23 +8,26 @@ import CheckBox from '../../src/tabris/widgets/CheckBox';
 import Switch from '../../src/tabris/widgets/Switch';
 import AlertDialog from '../../src/tabris/AlertDialog';
 
-describe('JSX', function() {
+describe('JsxProcessor', function() {
+
+  let jsx;
 
   beforeEach(function() {
     mockTabris(new ClientStub());
     // main.js does this usually, but is not executed in tests:
     global.tabris.CheckBox = CheckBox;
     global.tabris.WidgetCollection = WidgetCollection;
+    jsx = createJsxProcessor();
   });
 
   describe('createElement', function() {
 
     it('creates widget by Constructor', function() {
-      expect(createElement(CheckBox, null)).to.be.an.instanceof(CheckBox);
+      expect(jsx.createElement(CheckBox, null)).to.be.an.instanceof(CheckBox);
     });
 
     it('sets properties', function() {
-      expect(createElement(CheckBox, {text: 'foo'}).text).to.equal('foo');
+      expect(jsx.createElement(CheckBox, {text: 'foo'}).text).to.equal('foo');
     });
 
     it('attaches camelCase listeners', function() {
@@ -32,7 +35,7 @@ describe('JSX', function() {
       let fooSpyA = spy();
       let fooSpyZ = spy();
 
-      let widget = createElement(CheckBox, {onSelect: selectSpy, onAFoo: fooSpyA, onZFoo: fooSpyZ});
+      let widget = jsx.createElement(CheckBox, {onSelect: selectSpy, onAFoo: fooSpyA, onZFoo: fooSpyZ});
       widget.trigger('select', {data: 1});
       widget.trigger('aFoo', {data: 2});
       widget.trigger('zFoo', {data: 3});
@@ -50,7 +53,7 @@ describe('JSX', function() {
       let fooSpyA = spy();
       let fooSpyZ = spy();
 
-      let widget = createElement(CheckBox, {onselect: selectSpy, onafoo: fooSpyA, onzfoo: fooSpyZ});
+      let widget = jsx.createElement(CheckBox, {onselect: selectSpy, onafoo: fooSpyA, onzfoo: fooSpyZ});
       widget.trigger('select', {data: 1});
       widget.trigger('foo', {data: 2});
 
@@ -60,26 +63,12 @@ describe('JSX', function() {
     });
 
     it('appends children', function() {
-      let children = createElement(
-        Composite,
-        {},
-        createElement(Button),
-        createElement(CheckBox),
-        createElement(Switch)
-      ).children();
-
-      expect(children[0]).to.be.instanceof(Button);
-      expect(children[1]).to.be.instanceof(CheckBox);
-      expect(children[2]).to.be.instanceof(Switch);
-    });
-
-    it('appends children', function() {
-      let children = createElement(
+      let children = jsx.createElement(
         Composite,
         null,
-        createElement(Button),
-        createElement(CheckBox),
-        createElement(Switch)
+        jsx.createElement(Button),
+        jsx.createElement(CheckBox),
+        jsx.createElement(Switch)
       ).children();
 
       expect(children[0]).to.be.instanceof(Button);
@@ -88,11 +77,11 @@ describe('JSX', function() {
     });
 
     it('appends children given as array', function() {
-      let children = createElement(
+      let children = jsx.createElement(
         Composite,
         null,
-        [createElement(Button), createElement(CheckBox)],
-        createElement(Switch)
+        [jsx.createElement(Button), jsx.createElement(CheckBox)],
+        jsx.createElement(Switch)
       ).children();
 
       expect(children[0]).to.be.instanceof(Button);
@@ -101,13 +90,13 @@ describe('JSX', function() {
     });
 
     it('appends widgetCollection', function() {
-      let children = createElement(
+      let children = jsx.createElement(
         Composite,
         null,
         new WidgetCollection([
-          createElement(Button),
-          createElement(CheckBox),
-          createElement(Switch)
+          jsx.createElement(Button),
+          jsx.createElement(CheckBox),
+          jsx.createElement(Switch)
         ])
       ).children();
 
@@ -117,14 +106,14 @@ describe('JSX', function() {
     });
 
     it('appends widgetCollection and children mixed', function() {
-      let children = createElement(
+      let children = jsx.createElement(
         Composite,
         null,
-        createElement(Button),
+        jsx.createElement(Button),
         new WidgetCollection([
-          createElement(CheckBox),
+          jsx.createElement(CheckBox),
           new WidgetCollection([
-            createElement(Switch)
+            jsx.createElement(Switch)
           ])
         ])
       ).children();
@@ -134,20 +123,43 @@ describe('JSX', function() {
       expect(children[2]).to.be.instanceof(Switch);
     });
 
-    it('appends text on widget supporting text', function() {
-      let button = createElement(
-        Button,
-        null,
-        'Hello',
-        'World!'
-      );
+    it('appends children via properties', function() {
+      debugger; // eslint-disable-line
+      let children = jsx.createElement(
+        Composite,
+        {
+          children: [
+            jsx.createElement(Button),
+            jsx.createElement(CheckBox),
+            jsx.createElement(Switch)
+          ]
+        }
+      ).children();
 
-      expect(button.text).to.equal('Hello World!');
+      expect(children[0]).to.be.instanceof(Button);
+      expect(children[1]).to.be.instanceof(CheckBox);
+      expect(children[2]).to.be.instanceof(Switch);
+    });
+
+    it('throws if children are given via properties and body', function() {
+      expect(() => jsx.createElement(
+        Composite,
+        {
+          children: [
+            jsx.createElement(Button),
+            jsx.createElement(CheckBox),
+            jsx.createElement(Switch)
+          ]
+        },
+        jsx.createElement(Button),
+        jsx.createElement(CheckBox),
+        jsx.createElement(Switch)
+      )).to.throw(/children/);
     });
 
     it('executes given function', function() {
       let fn = spy(() => new WidgetCollection([new Button()]));
-      let collection = createElement(
+      let collection = jsx.createElement(
         fn,
         {foo: 'bar'},
         {child: 1},
@@ -160,12 +172,12 @@ describe('JSX', function() {
     });
 
     it('creates widgetCollection with children', function() {
-      let collection = createElement(
+      let collection = jsx.createElement(
         WidgetCollection,
         null,
-        createElement(Button),
-        createElement(CheckBox),
-        createElement(Switch)
+        jsx.createElement(Button),
+        jsx.createElement(CheckBox),
+        jsx.createElement(Switch)
       );
 
       expect(collection).to.be.instanceOf(WidgetCollection);
@@ -176,11 +188,11 @@ describe('JSX', function() {
     });
 
     it('creates widgetCollection from array', function() {
-      let collection = createElement(
+      let collection = jsx.createElement(
         WidgetCollection,
         null,
-        [createElement(Button), createElement(CheckBox)],
-        createElement(Switch)
+        [jsx.createElement(Button), jsx.createElement(CheckBox)],
+        jsx.createElement(Switch)
       );
 
       expect(collection).to.be.instanceOf(WidgetCollection);
@@ -191,7 +203,7 @@ describe('JSX', function() {
     });
 
     it('creates empty widgetCollection', function() {
-      let collection = createElement(
+      let collection = jsx.createElement(
         WidgetCollection,
         null
       );
@@ -201,22 +213,22 @@ describe('JSX', function() {
     });
 
     it('fails for widgetCollection with attributes', function() {
-      expect(() => createElement('widgetCollection',{foo: 'bar'}).to.throw());
+      expect(() => jsx.createElement('widgetCollection',{foo: 'bar'}).to.throw());
     });
 
     it('fails for non-widget native type', function() {
-      expect(() => createElement(AlertDialog, null)).to.throw();
+      expect(() => jsx.createElement(AlertDialog, null)).to.throw();
     });
 
     it('fails for non-widget named custom type', function() {
-      expect(() => createElement(class Foo {
+      expect(() => jsx.createElement(class Foo {
         set() {}
         append() {}
       }), null).to.throw(Error, 'JSX: Unsupported type Foo');
     });
 
     it('fails for non-widget named custom type', function() {
-      expect(() => createElement(class {
+      expect(() => jsx.createElement(class {
         set() {}
         append() {}
       }, null)).to.throw(Error, 'JSX: Unsupported type');
@@ -224,37 +236,67 @@ describe('JSX', function() {
 
     it('fails for string pointing to non-function', function() {
       global.tabris.Foo = 'bar';
-      expect(() => createElement('foo', null)).to.throw(Error, 'JSX: Unsupported type');
+      expect(() => jsx.createElement('foo', null)).to.throw(Error, 'JSX: Unsupported type');
     });
 
     it('fails for unrecognized string', function() {
-      expect(() => createElement('unknownWidget', null)).to.throw();
+      expect(() => jsx.createElement('unknownWidget', null)).to.throw();
     });
 
-    it('calls factory of custom type', function() {
-      class Foo {
+    describe('with custom type', function() {
 
-        constructor() {
-          this.isFoo = true;
-        }
+      let Foo;
 
-        [jsxFactory](type, props, children) {
-          let result = new Foo();
-          result.jsxType = type;
-          result.that = this;
-          result.props = props;
-          result.children = children;
-          return result;
-        }
-      }
-
-      expect(createElement(Foo, {foo: 'bar'}, 'a', 'b')).to.deep.equal({
-        isFoo: true,
-        jsxType: Foo,
-        that: null,
-        props: {foo: 'bar'},
-        children: ['a', 'b']
+      beforeEach(function() {
+        Foo = class {
+          constructor(args) { this.args = args; }
+          [jsxFactory](type, props, children) { return new Foo([type, props, children]); }
+        };
       });
+
+      it('calls factory of custom type', function() {
+        const props = {foo: 'bar'};
+        Foo.prototype[jsxFactory] = stub();
+
+        jsx.createElement(Foo, props, 'a', 'b');
+
+        expect(Foo.prototype[jsxFactory]).to.have.been.calledWith(Foo, props, ['a', 'b']);
+      });
+
+      it('calls factory with children from properties', function() {
+        const props = {foo: 'bar', children: ['a', 'b']};
+        Foo.prototype[jsxFactory] = stub();
+
+        jsx.createElement(Foo, props);
+
+        expect(Foo.prototype[jsxFactory]).to.have.been.calledWith(Foo, {foo: 'bar'}, ['a', 'b']);
+      });
+
+      it('calls factory with processor context', function() {
+        const props = {foo: 'bar'};
+        Foo.prototype[jsxFactory] = stub();
+
+        jsx.createElement(Foo, props, 'a', 'b');
+
+        expect(Foo.prototype[jsxFactory]).to.have.been.calledOn(jsx);
+      });
+
+      it('returns factory return value', function() {
+        expect(jsx.createElement(Foo)).to.be.instanceOf(Foo);
+      });
+
+      it('factory supports super call', function() {
+        class Bar extends Foo {
+          [jsxFactory]() {
+            return super[jsxFactory](Bar, {a: 'b'}, ['a', 'b']);
+          }
+        }
+
+        const bar = jsx.createElement(Bar, {a: 'b'}, 'a', 'b');
+
+        expect(bar.args).to.deep.equal([Bar, {a: 'b'}, ['a', 'b']]);
+      });
+
     });
 
   });

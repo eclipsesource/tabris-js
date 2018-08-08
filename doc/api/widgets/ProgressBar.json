@@ -2,6 +2,7 @@
   "type": "ProgressBar",
   "description": "A widget representing a numeric value as a horizontal bar with a growing indicator.",
   "extends": "Widget",
+  "jsxChildren": "never",
   "constructor": {
     "access": "public",
     "parameters": [

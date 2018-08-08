@@ -3,6 +3,7 @@ import NativeObject from './NativeObject';
 import WidgetCollection from './WidgetCollection';
 import GestureRecognizer from './GestureRecognizer';
 import {animate} from './Animation';
+import {jsxFactory} from './JsxProcessor';
 import {types} from './property-types';
 
 export default class Widget extends NativeObject {
@@ -73,13 +74,11 @@ export default class Widget extends NativeObject {
     return new WidgetCollection(filtered, selector);
   }
 
-  toXML() {
-    const content = this._getXMLContent();
-    const hasChild = content !== '';
-    if (!hasChild) {
-      return this._getXMLHeader(hasChild);
+  get classList() {
+    if (!this._classList) {
+      this._classList = [];
     }
-    return `${this._getXMLHeader(hasChild)}\n${content}\n${this._getXMLFooter(hasChild)}`;
+    return this._classList;
   }
 
   get data() {
@@ -87,6 +86,15 @@ export default class Widget extends NativeObject {
       this.$data = {};
     }
     return this.$data;
+  }
+
+  toXML() {
+    const content = this._getXMLContent();
+    const hasChild = content !== '';
+    if (!hasChild) {
+      return this._getXMLHeader(hasChild);
+    }
+    return `${this._getXMLHeader(hasChild)}\n${content}\n${this._getXMLFooter(hasChild)}`;
   }
 
   _getXMLContent() {
@@ -189,11 +197,9 @@ export default class Widget extends NativeObject {
     super._trigger('boundsChanged', {value: {left, top, width, height}});
   }
 
-  get classList() {
-    if (!this._classList) {
-      this._classList = [];
-    }
-    return this._classList;
+  /** @this {import("../JsxProcessor").default} */
+  [jsxFactory](Type, props, children) {
+    return this.createNativeObject(Type, props, children);
   }
 
 }

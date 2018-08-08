@@ -2,6 +2,7 @@
   "type": "CollectionView",
   "description": "A scrollable list that displays data items in cells, one per row. Cells are created on demand by the *createCell* callback and reused on scrolling.",
   "extends": "Widget",
+  "jsxChildren": "never",
   "constructor": {
     "access": "public",
     "parameters": [
