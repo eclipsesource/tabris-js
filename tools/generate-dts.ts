@@ -122,7 +122,7 @@ function renderClassHead(text: TextBuilder, def: ExtendedApi) {
     str += '<' + def.generics + '>';
   }
   if (def.extends) {
-    str += ' extends ' + def.extends;
+    str += ' extends ' + (def.ts_extends || def.extends);
   }
   text.append(str + ' {');
 }

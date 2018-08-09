@@ -27,6 +27,9 @@
         "extends": {
           "type": "string"
         },
+        "ts_extends": {
+          "type": "string"
+        },
         "generics": {
           "description": "Typescript only",
           "type": "string"

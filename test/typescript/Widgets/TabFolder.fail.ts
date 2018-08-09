@@ -1,4 +1,4 @@
-import {TabFolder} from 'tabris';
+import {TabFolder, Button} from 'tabris';
 
 
 let widget = new TabFolder();
@@ -13,6 +13,8 @@ widget.set({tabMode});
 widget.tabMode = tabMode;
 widget.onTabModeChanged(function() {});
 
+widget.append(new Button());
+
 /*Expected
 (7,
 tabBarLocation
@@ -25,4 +27,6 @@ tabMode
 (13,
 tabMode
 (14,
+(16,
+'Button' is not assignable to parameter
 */

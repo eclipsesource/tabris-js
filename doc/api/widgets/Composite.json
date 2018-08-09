@@ -1,6 +1,7 @@
 {
   "type": "Composite",
   "description": "An empty widget that can contain other widgets.",
+  "generics": "ChildType extends Widget = Widget",
   "extends": "Widget",
   "constructor": {
     "access": "public",
@@ -17,7 +18,7 @@
     "padding": {
       "type": "BoxDimensions|number",
       "default": "0",
-      "description": "Additional space to add inside the widget's bounds. If set to a number, this padding will be applied on all four sides."
+      "description": "Additional space to add inside the widgets bounds. If set to a number, this padding will be applied on all four sides."
     }
   },
   "methods": {
@@ -26,7 +27,8 @@
         "parameters": [
           {
             "name": "...widgets",
-            "type": "Widget[]"
+            "type": "Widget[]",
+            "ts_type": "ChildType[]"
           }
         ],
         "returns": "this",
@@ -36,7 +38,8 @@
         "parameters": [
           {
             "name": "widgets",
-            "type": "Widget[]"
+            "type": "Widget[]",
+            "ts_type": "ChildType[]"
           }
         ],
         "returns": "this",
@@ -47,7 +50,7 @@
           {
             "name": "widgets",
             "type": "WidgetCollection",
-            "ts_type": "WidgetCollection<Widget>"
+            "ts_type": "WidgetCollection<ChildType>"
           }
         ],
         "returns": "this",
@@ -65,7 +68,7 @@
           }
         ],
         "returns": "WidgetCollection",
-        "ts_returns": "WidgetCollection<Widget>",
+        "ts_returns": "WidgetCollection<ChildType>",
         "description": "Returns a (possibly empty) collection of all children of this widget that match the given selector.\n\nWhen writing custom UI components it may be useful to overwrite this method to prevent access to the internal children by external code. Doing so also affects `find` and `apply`, on this widget as well as on all parents, thereby preventing accidental clashes of widget id or class values. See also `_children`, `_find` and `_apply`."
       },
       {
@@ -94,7 +97,7 @@
           }
         ],
         "returns": "WidgetCollection",
-        "ts_returns": "WidgetCollection<Widget>",
+        "ts_returns": "WidgetCollection<ChildType>",
         "description": "Identical to the `children` method, but intended to be used by subclasses in case the `children` method was overwritten. See `children` for details."
       },
       {

@@ -13,6 +13,76 @@
       }
     ]
   },
+  "methods": {
+    "parent": {
+      "parameters": [],
+      "ts_only": true,
+      "returns": "NavigationView",
+      "description": "Returns the `NavigationView` the `Action` is hosted in or `null` if it has no parent."
+    },
+    "appendTo": {
+      "parameters": [
+        {
+          "name": "parent",
+          "type": "NavigationView"
+        }
+      ],
+      "ts_only": true,
+      "returns": "this",
+      "description": "Appends this widget to the given `NavigationView` instance."
+    },
+    "insertBefore": {
+      "parameters": [
+        {
+          "name": "widget",
+          "type": "Action"
+        }
+      ],
+      "ts_only": true,
+      "returns": "this",
+      "description": "Inserts this widget directly before the given Action."
+    },
+    "insertAfter": {
+      "parameters": [
+        {
+          "name": "widget",
+          "type": "Action"
+        }
+      ],
+      "ts_only": true,
+      "returns": "this",
+      "description": "Inserts this widget directly after the given Action."
+    },
+    "siblings": [
+      {
+        "parameters": [
+          {
+            "name": "selector",
+            "type": "Selector",
+            "optional": true,
+            "description": "A selector expression or a predicate function to filter the results."
+          }
+        ],
+        "ts_only": true,
+        "returns": "WidgetCollection",
+        "ts_returns": "WidgetCollection<Page|Action>",
+        "description": "Returns a (possibly empty) collection of all siblings of this widget that match the given selector."
+      },
+      {
+        "generics": "U extends Page|Action",
+        "parameters": [
+          {
+            "name": "constructor",
+            "type": "{ new (...args: any[]): U }",
+            "description": "A class to filter the results."
+          }
+        ],
+        "ts_only": true,
+        "returns": "WidgetCollection<U>",
+        "description": "Returns a (possibly empty) collection of all siblings of this widget that are instances of the given class."
+      }
+    ]
+  },
   "properties": {
     "image": {
       "type": "Image",

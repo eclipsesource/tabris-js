@@ -1,4 +1,4 @@
-import {Action, Image, Properties} from 'tabris';
+import {Action, Image, Properties, NavigationView, Page, WidgetCollection} from 'tabris';
 
 let widget: Action = new Action();
 
@@ -21,6 +21,13 @@ widget.title = title;
 let properties: Properties<typeof Action> = {placementPriority, image, title};
 widget = new Action(properties);
 widget.set(properties);
+
+widget.appendTo(new NavigationView());
+widget.insertBefore(new Action());
+widget.insertAfter(new Action());
+const siblings: WidgetCollection<Page|Action> = widget.siblings();
+const actions: WidgetCollection<Action> = widget.siblings(Action);
+const pages: WidgetCollection<Page> = widget.siblings(Page);
 
 class CustomComponent extends Action {
   public foo: string;

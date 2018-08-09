@@ -1,4 +1,4 @@
-import {Tab, Image, Properties} from 'tabris';
+import {Tab, TabFolder, Image, Properties, WidgetCollection} from 'tabris';
 
 let widget: Tab = new Tab();
 
@@ -27,9 +27,16 @@ let properties: Properties<typeof Tab> = {badge, image, selectedImage, title};
 widget = new Tab(properties);
 widget.set(properties);
 
+widget.appendTo(new TabFolder());
+widget.insertBefore(new Tab());
+widget.insertAfter(new Tab());
+const siblings: WidgetCollection<Tab> = widget.siblings();
+
 class CustomComponent extends Tab {
   public foo: string;
   constructor(props: Properties<typeof Tab> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});
+
+const components: WidgetCollection<CustomComponent> = widget.siblings(CustomComponent);

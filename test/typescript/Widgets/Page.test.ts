@@ -1,4 +1,4 @@
-import {Page, Image, EventObject, Properties} from 'tabris';
+import {Page, Action, Image, EventObject, Properties, NavigationView, WidgetCollection} from 'tabris';
 
 let widget: Page = new Page();
 
@@ -21,6 +21,13 @@ widget.title = title;
 let properties: Properties<typeof Page> = {autoDispose, image, title};
 widget = new Page(properties);
 widget.set(properties);
+
+widget.appendTo(new NavigationView());
+widget.insertBefore(new Page());
+widget.insertAfter(new Page());
+const siblings: WidgetCollection<Page|Action> = widget.siblings();
+const actions: WidgetCollection<Action> = widget.siblings(Action);
+const pages: WidgetCollection<Page> = widget.siblings(Page);
 
 // Events
 let target: Page = widget;

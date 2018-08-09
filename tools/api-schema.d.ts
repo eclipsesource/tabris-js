@@ -22,6 +22,7 @@ export interface Api {
    */
   object?: string;
   extends?: string;
+  ts_extends?: string;
   /**
    * Typescript only
    */
@@ -39,7 +40,7 @@ export interface Api {
   methods?: {
     /**
      * This interface was referenced by `undefined`'s JSON-Schema definition
-     * via the `patternProperty` "^_?[a-z]\w+$".
+     * via the `patternProperty` "(^_?[a-z]\w+$)|(^\[.*\]$)".
      */
     [k: string]: Method | Method[];
   };
@@ -66,7 +67,7 @@ export interface Parameter {
 }
 /**
  * This interface was referenced by `undefined`'s JSON-Schema definition
- * via the `patternProperty` "(^_?[a-z]\w+$)|(^\[key\: number\]$)".
+ * via the `patternProperty` "(^_?[a-z]\w+$)|(^\[.*\]$)".
  *
  * This interface was referenced by `undefined`'s JSON-Schema definition
  * via the `patternProperty` "^_?[a-z]\w+$".

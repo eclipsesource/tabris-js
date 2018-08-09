@@ -1,4 +1,7 @@
-import {SearchAction, SearchActionInputEvent, SearchActionAcceptEvent, Properties} from 'tabris';
+import {
+  SearchAction, SearchActionInputEvent, SearchActionAcceptEvent, Properties, Action, Page, NavigationView,
+  WidgetCollection
+} from 'tabris';
 
 let widget: SearchAction = new SearchAction();
 
@@ -18,6 +21,15 @@ widget.text = text;
 let properties: Properties<typeof SearchAction> = {message, text, proposals};
 widget = new SearchAction(properties);
 widget.set(properties);
+
+widget.appendTo(new NavigationView());
+widget.insertBefore(new Action());
+widget.insertAfter(new Action());
+widget.insertBefore(new SearchAction());
+widget.insertAfter(new SearchAction());
+const siblings: WidgetCollection<Page|Action> = widget.siblings();
+const actions: WidgetCollection<Action> = widget.siblings(Action);
+const pages: WidgetCollection<Page> = widget.siblings(Page);
 
 // Methods
 let voidReturnValue: void;

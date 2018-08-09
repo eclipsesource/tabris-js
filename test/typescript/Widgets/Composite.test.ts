@@ -23,9 +23,11 @@ widget = new Composite(properties);
 widget.set(properties);
 
 // Methods
+let buttonsComposite: Composite<Button> = new Composite<Button>();
 let widgets: Widget[] = [];
 let widgetA: Widget = new Button();
 let widgetB: Widget = new Button();
+let button: Button = new Button();
 let widgetCollection: WidgetCollection<Widget> = new Composite().find();
 let thisReturnValue: Composite;
 let fooCollection: WidgetCollection<Widget>;
@@ -35,8 +37,12 @@ class Foo extends Composite {}
 thisReturnValue = widget.append(widgetA, widgetB);
 thisReturnValue = widget.append(widgets);
 thisReturnValue = widget.append(widgetCollection);
+thisReturnValue = buttonsComposite.append(button);
+thisReturnValue = buttonsComposite.append([button]);
+thisReturnValue = buttonsComposite.append(new WidgetCollection<Button>([button]));
 thisReturnValue = widget.apply({'selectorString': properties});
 widgetCollection = widget.children();
+button = buttonsComposite.children()[0];
 widgetCollection = widget.children(selector);
 fooCollection = widget.children(Foo);
 widgetCollection = widget.find();

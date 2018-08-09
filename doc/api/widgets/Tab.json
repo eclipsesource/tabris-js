@@ -13,6 +13,75 @@
       }
     ]
   },
+  "methods": {
+    "parent": {
+      "parameters": [],
+      "ts_only": true,
+      "returns": "TabFolder",
+      "description": "Returns the `TabFolder` the `Tab` is hosted in or `null` if it has no parent."
+    },
+    "appendTo": {
+      "parameters": [
+        {
+          "name": "parent",
+          "type": "TabFolder"
+        }
+      ],
+      "ts_only": true,
+      "returns": "this",
+      "description": "Appends this widget to the given `TabFolder` instance."
+    },
+    "insertBefore": {
+      "parameters": [
+        {
+          "name": "widget",
+          "type": "Tab"
+        }
+      ],
+      "returns": "this",
+      "description": "Inserts this widget directly before the given `Tab`."
+    },
+    "insertAfter": {
+      "parameters": [
+        {
+          "name": "widget",
+          "type": "Tab"
+        }
+      ],
+      "ts_only": true,
+      "returns": "this",
+      "description": "Inserts this widget directly after the given `Tab`."
+    },
+    "siblings": [
+      {
+        "parameters": [
+          {
+            "name": "selector",
+            "type": "Selector",
+            "optional": true,
+            "description": "A selector expression or a predicate function to filter the results."
+          }
+        ],
+        "ts_only": true,
+        "returns": "WidgetCollection",
+        "ts_returns": "WidgetCollection<Tab>",
+        "description": "Returns a (possibly empty) collection of all siblings of this widget that match the given selector."
+      },
+      {
+        "generics": "U extends Tab",
+        "parameters": [
+          {
+            "name": "constructor",
+            "type": "{ new (...args: any[]): U }",
+            "description": "A class to filter the results."
+          }
+        ],
+        "ts_only": true,
+        "returns": "WidgetCollection<U>",
+        "description": "Returns a (possibly empty) collection of all siblings of this widget that are instances of the given class."
+      }
+    ]
+  },
   "properties": {
     "title": {
       "type": "string",
