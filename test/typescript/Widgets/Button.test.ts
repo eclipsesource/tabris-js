@@ -1,4 +1,4 @@
-import {Button, Color, Image, EventObject, ButtonProperties, Font, Properties} from 'tabris';
+import {Button, Color, Image, EventObject, Font, Properties} from 'tabris';
 
 let widget: Button = new Button();
 
@@ -23,7 +23,7 @@ widget.text = text;
 widget.textColor = textColor;
 font = widget.font;
 
-let properties: ButtonProperties = {alignment, image, text, textColor, font};
+let properties: Properties<typeof Button> = {alignment, image, text, textColor, font};
 widget = new Button(properties);
 widget.set(properties);
 
@@ -38,7 +38,7 @@ widget.onSelect((event: EventObject<Button>) => {});
 
 class CustomComponent extends Button {
   public foo: string;
-  constructor(props: Properties<CustomComponent>) { super(props); }
+  constructor(props: Properties<typeof Button> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

@@ -1,5 +1,5 @@
 import {types} from './property-types';
-import {warn} from './Console';
+import {warn, debug} from './Console';
 import EventObject from './EventObject';
 import Events from './Events';
 import Listeners from './Listeners';
@@ -286,11 +286,10 @@ NativeObject.defineEvents(NativeObject.prototype, {
 });
 
 function setExistingProperty(name, value) {
-  if (name in this) {
-    this[name] = value;
-  } else {
-    warn('Unknown property "' + name + '"');
+  if (!(name in this)) {
+    debug('Setting undefined property "' + name + '"');
   }
+  this[name] = value;
 }
 
 function normalizeProperty(property) {

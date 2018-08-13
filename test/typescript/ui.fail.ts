@@ -21,32 +21,32 @@ ui.statusBar = statusBar;
 ui.onStatusBarChanged(function() {});
 
 /*Expected
-(4,9): error
-'contentView' does not exist
-(5,4): error
-Cannot assign to 'contentView'
-(6,4): error
+(4,
+contentView
+(5,
+contentView
+(6,
 'onContentViewChanged' does not exist
 
 
-(9,9): error
-'drawer' does not exist
-(10,4): error
-Cannot assign to 'drawer'
-(11,4): error
+(9,
+drawer
+(10,
+drawer
+(11,
 'onDrawerChanged' does not exist
 
-(14,9): error
-'navigationBar' does not exist
-(15,4): error
-Cannot assign to 'navigationBar'
-(16,4): error
+(14,
+navigationBar
+(15,
+navigationBar
+(16,
 'onNavigationBarChanged' does not exist
 
-(19,9): error
-'statusBar' does not exist
-(20,4): error
-Cannot assign to 'statusBar'
-(21,4): error
+(19,
+statusBar
+(20,
+statusBar
+(21,
 'onStatusBarChanged' does not exist
 */

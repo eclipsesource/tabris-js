@@ -1,4 +1,4 @@
-import {Switch, Color, SwitchSelectEvent, PropertyChangedEvent, SwitchProperties, Properties} from 'tabris';
+import {Switch, Color, SwitchSelectEvent, PropertyChangedEvent, Properties} from 'tabris';
 
 let widget: Switch = new Switch();
 
@@ -21,7 +21,7 @@ widget.thumbOnColor = thumbOnColor;
 widget.trackOffColor = trackOffColor;
 widget.trackOnColor = trackOnColor;
 
-let properties: SwitchProperties = {checked, thumbOffColor, thumbOnColor, trackOffColor, trackOnColor};
+let properties: Properties<typeof Switch> = {checked, thumbOffColor, thumbOnColor, trackOffColor, trackOnColor};
 widget = new Switch(properties);
 widget.set(properties);
 
@@ -40,7 +40,7 @@ widget
 
 class CustomComponent extends Switch {
   public foo: string;
-  constructor(props: Properties<CustomComponent>) { super(props); }
+  constructor(props: Properties<typeof Switch> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

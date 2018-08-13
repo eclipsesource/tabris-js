@@ -1,5 +1,5 @@
 import {
-  Color, EventObject, PropertyChangedEvent, TextInput, TextInputAcceptEvent, TextInputInputEvent, TextInputProperties,
+  Color, EventObject, PropertyChangedEvent, TextInput, TextInputAcceptEvent, TextInputInputEvent,
   TextInputSelectEvent, Font, Properties
 } from 'tabris';
 
@@ -59,7 +59,7 @@ widget.textColor = textColor;
 widget.selection = selection;
 widget.font = font;
 
-let properties: TextInputProperties = {
+let properties: Properties<typeof TextInput> = {
   alignment,
   autoCapitalize,
   autoCorrect,
@@ -106,7 +106,7 @@ widget
 
 class CustomComponent extends TextInput {
   public foo: string;
-  constructor(props: Properties<CustomComponent>) { super(props); }
+  constructor(props: Properties<typeof TextInput> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

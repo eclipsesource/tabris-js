@@ -13,13 +13,15 @@ widget.set({lastVisibleIndex});
 widget.lastVisibleIndex = lastVisibleIndex;
 
 /*Expected
-(6,30): error TS2345
-(7,13): error TS2345
-'firstVisibleIndex' does not exist
-(8,8): error TS2540: Cannot assign to 'firstVisibleIndex' because it is a constant or a read-only property.
+(6,
+(7,
+firstVisibleIndex
+(8,
+firstVisibleIndex
 
-(11,30): error TS2345
-(12,13): error TS2345
-'lastVisibleIndex' does not exist
-(13,8): error TS2540: Cannot assign to 'lastVisibleIndex' because it is a constant or a read-only property.
+(11,
+(12,
+lastVisibleIndex
+(13,
+lastVisibleIndex
 */

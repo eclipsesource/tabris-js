@@ -1,4 +1,4 @@
-import {ActionSheet, Image, ActionSheetProperties, ActionSheetSelectEvent, EventObject, PropertyChangedEvent} from 'tabris';
+import {ActionSheet, Image, ActionSheetSelectEvent, EventObject, Properties} from 'tabris';
 
 let widget: ActionSheet = new ActionSheet();
 
@@ -15,7 +15,7 @@ widget.title = title;
 widget.message = message;
 widget.actions = actions;
 
-let properties: ActionSheetProperties = {title, message, actions};
+let properties: Properties<typeof ActionSheet> = {title, message, actions};
 widget = new ActionSheet(properties);
 widget.set(properties);
 

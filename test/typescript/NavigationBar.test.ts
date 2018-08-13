@@ -1,4 +1,4 @@
-import {NavigationBar, Color, ui, NavigationBarProperties} from 'tabris';
+import {NavigationBar, Color, Properties, ui} from 'tabris';
 
 let navigationBar: NavigationBar = ui.navigationBar;
 
@@ -17,5 +17,5 @@ navigationBar.background = background;
 navigationBar.displayMode = displayMode;
 navigationBar.theme = theme;
 
-let properties: NavigationBarProperties = {background, displayMode};
+let properties: Properties<NavigationBar> = {background, displayMode};
 navigationBar.set(properties);

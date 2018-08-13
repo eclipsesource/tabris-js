@@ -67,6 +67,7 @@ describe('NativeObject', function() {
       object = new TestType();
       client.resetCalls();
       stub(console, 'warn');
+      stub(console, 'debug');
     });
 
     it('isDisposed() returns false', function() {
@@ -104,16 +105,16 @@ describe('NativeObject', function() {
         expect(setter).to.have.been.calledWith(23);
       });
 
-      it('does not set non-existing property', function() {
+      it('does set non-existing property', function() {
         object.set({unknown: 23});
 
-        expect(object.unknown).to.be.undefined;
+        expect(object.unknown).to.equal(23);
       });
 
-      it('prints warnings for non-existing property', function() {
+      it('prints debug message for non-existing property', function() {
         object.set({unknown: 23});
 
-        expect(console.warn).to.have.been.calledWith('Unknown property "unknown"');
+        expect(console.debug).to.have.been.calledWith('Setting undefined property "unknown"');
       });
 
       it('returns self to allow chaining', function() {

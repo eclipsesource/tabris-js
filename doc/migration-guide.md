@@ -12,10 +12,15 @@ This is relevant only if in your application you are passing values to `trigger`
 
 ## Widgets
 
+### Constructors
+
+Widget constructors now allows setting unknown properties via the first argument. They print a debug message if that happens. Previously they would refuse to set an unknown property and print a warning instead.
+
 ### "set" and "get" methods
 
 On instances of `NativeObject` (including widgets) and `WidgetCollection`, `get(prop)` and `set(prop, value)` are no longer supported.
-The `set` method now only takes one argument (properties object), and `get` has been removed entirely.
+The `set` method now only takes one argument (the properties object), and `get` has been removed entirely.
+Also, `set` now allows setting unknown properties. It prints a debug message if that happens. Previously it would refuse to set an unknown property and print a warning instead.
 
 #### Alternatives for `set(prop, value)`:
 
@@ -42,6 +47,10 @@ Only `Composite` and it sub classes can contain children. Therefore methods deal
 Only widgets actually support different fonts now have a font property. Most applications should not have adjust to this change.
 
 ## TypeScript
+
+### Properties interfaces removed
+
+The tabris module no longer exports an "Properties" interfaces for every built-in type. They can be replaced with generic type `Properties`. E.g. `CompositeProperties` can be replaced with `Properties<typeof Composite>` (contains all properties recognized by the `Composite` constructor) or with `Properties<Composite>` (contains all properties recognized by the `set` method of `Composite`). Unlike the previous interfaces, these have an indexer, i.e. they also permit unknown properties to be present. For example, `{foo: 'bar'}` would not have been assignable to `CompositeProperties`, but it is assignable to `Properties<Composite>`.
 
 ### "tsProperties" property no longer supported
 

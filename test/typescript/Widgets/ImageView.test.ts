@@ -1,4 +1,4 @@
-import {ImageView, Image, Color, ImageViewLoadEvent, ImageViewZoomEvent, ImageViewProperties, PropertyChangedEvent, Properties} from 'tabris';
+import {ImageView, Image, Color, ImageViewLoadEvent, ImageViewZoomEvent, PropertyChangedEvent, Properties} from 'tabris';
 
 let widget: ImageView = new ImageView;
 
@@ -30,7 +30,7 @@ widget.zoomLevel = zoomLevel;
 widget.minZoomLevel = minZoomLevel;
 widget.maxZoomLevel = maxZoomLevel;
 
-let properties: ImageViewProperties = {image, scaleMode, tintColor, zoomEnabled, zoomLevel, minZoomLevel, maxZoomLevel};
+let properties: Properties<typeof ImageView> = {image, scaleMode, tintColor, zoomEnabled, zoomLevel, minZoomLevel, maxZoomLevel};
 widget = new ImageView(properties);
 widget.set(properties);
 
@@ -53,7 +53,7 @@ widget
 
 class CustomComponent extends ImageView {
   public foo: string;
-  constructor(props: Properties<CustomComponent>) { super(props); }
+  constructor(props: Properties<typeof ImageView> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

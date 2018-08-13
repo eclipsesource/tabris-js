@@ -1,4 +1,4 @@
-import {SearchAction, SearchActionInputEvent, SearchActionAcceptEvent, SearchActionProperties, Properties} from 'tabris';
+import {SearchAction, SearchActionInputEvent, SearchActionAcceptEvent, Properties} from 'tabris';
 
 let widget: SearchAction = new SearchAction();
 
@@ -15,7 +15,7 @@ widget.message = message;
 widget.proposals = proposals;
 widget.text = text;
 
-let properties: SearchActionProperties = {message, text, proposals};
+let properties: Properties<typeof SearchAction> = {message, text, proposals};
 widget = new SearchAction(properties);
 widget.set(properties);
 
@@ -38,7 +38,7 @@ widget
 
 class CustomComponent extends SearchAction {
   public foo: string;
-  constructor(props: Properties<CustomComponent>) { super(props); }
+  constructor(props: Properties<typeof SearchAction> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

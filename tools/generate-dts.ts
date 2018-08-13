@@ -12,28 +12,31 @@ const HEADER = `
 /// <reference path="globals.d.ts" />
 
 interface Constructor<T> {new(...args: any[]): T; }
-type Omit<T, U> = Pick<T, Exclude<keyof T, U>>;
-type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
-type NativeObjectProperties<T extends NativeObject> = Partial<Omit<T, FunctionPropertyNames<T> | 'cid' | 'jsxProperties'>>;
-type Properties<T extends Widget> = Partial<Omit<T, FunctionPropertyNames<T> | 'bounds' | 'data' | 'cid' | 'jsxProperties'>>;
 type UnpackListeners<T> = T extends Listeners<infer U> ? Listener<U> : T;
 type JSXProperties<T, U extends keyof T> = { [Key in U]?: UnpackListeners<T[Key]>};
 type ParamType<T extends (arg: any) => any> = T extends (arg: infer P) => any ? P : any;
-type SettableProperties<T extends NativeObject> = ParamType<T['set']>;
+type SettableProperties<T> = T extends NativeObject ? ParamType<T['set']> : {};
+type ConstructorParam<T extends {new(properties: object): any; }> = T extends {new(properties: infer P): any; } ? P :any
+type Properties<T>
+  =   T extends NativeObject ? SettableProperties<T>
+    : T extends {new(properties: object): NativeObject; } ? ConstructorParam<T>
+    : T extends {prototype: T} ? SettableProperties<T>
+    : never;
+type ExtendProperties<Base, Target, Filter extends keyof Target> = Properties<Base> & Partial<Pick<Target, Filter>>;
+type ReadOnly<T extends keyof any> = Partial<Record<T, never>>;
 type ExtendedEvent<EventData, Target = {}> = EventObject<Target> & EventData;
 type Listener<T = {}> = (ev: ExtendedEvent<T>) => any;
 type Diff<T, U> = T extends U ? never : T;
 type ListenersTriggerParam<T> = {[P in Diff<keyof T, keyof EventObject<object>>]: T[P]};
 type MinimalEventObject<T extends object> = {target: T};
 type TargetType<E extends object> = E extends MinimalEventObject<infer Target> ? Target : object;
-
 interface Listeners<EventData extends object = MinimalEventObject<object>> {
   // tslint:disable-next-line:callable-types
   (listener: Listener<ExtendedEvent<EventData>>): TargetType<EventData>;
 }
 
 export as namespace tabris;
-`;
+`.trim();
 
 const PROPERTIES_OBJECT = 'PropertiesObject';
 const JSX_PROPERTIES_OBJECT = 'JsxPropertiesObject';
@@ -68,6 +71,7 @@ function writeTabrisDts(config) {
 //#region render objects/types
 
 function renderDts(text: TextBuilder, apiDefinitions: ApiDefinitions) {
+  text.append('');
   Object.keys(apiDefinitions).forEach(name => {
     renderTypeDefinition(text, apiDefinitions[name]);
   });
@@ -78,11 +82,6 @@ function renderDts(text: TextBuilder, apiDefinitions: ApiDefinitions) {
 function renderTypeDefinition(text: TextBuilder, def: ExtendedApi) {
   text.append('// ' + (def.type || def.object || def.title));
   if (def.isNativeObject) {
-    text.append('');
-    text.append('');
-    if (def.type !== 'NativeObject') {
-      text.append(`type ${def.type}Properties = ${createPropertiesObject(def, {hasContext: false, excludeStatics: false})};`);
-    }
     text.append('');
     renderEventObjectInterfaces(text, def);
   }
@@ -164,10 +163,9 @@ function renderEventObjectInterface(text: TextBuilder, name: string, def: Extend
   Object.keys(parameters).sort().forEach(name => {
     const values = [];
     (parameters[name].values || []).sort().forEach(value => {
-      values.push(`"${value}"`);
+      values.push(`'${value}'`);
     });
-    const valuesType = (values || []).join(' | ');
-    text.append(`readonly ${name}: ${valuesType || parameters[name].type};`);
+    text.append(`readonly ${name}: ${union(values) || parameters[name].type};`);
   });
   text.indent--;
   text.append('}');
@@ -271,7 +269,7 @@ function createParamList(def: ExtendedApi, parameters: schema.Parameter[], ops: 
 
 function decodeType(param: Partial<schema.Parameter & schema.Property>, def: ExtendedApi, ops: PropertyOps) {
   if (param.values) {
-    return param.values.sort().map(value => typeof value === 'string' ? `"${value}"` : `${value}`).join(' | ');
+    return union(param.values);
   }
   switch (param.type) {
     case (JSX_PROPERTIES_OBJECT):
@@ -289,51 +287,47 @@ function decodeType(param: Partial<schema.Parameter & schema.Property>, def: Ext
 }
 
 function createPropertiesObject(def: ExtendedApi, ops: PropertyOps) {
-  const hasNoProperties = def.type === 'NativeObject'
-    || (def.parent.type === 'NativeObject' && !hasSettableProperties(def, ops));
-  if (hasNoProperties) {
-    return 'never';
+  const newProps = settablePropertiesOf(def, ops);
+  const neverProps = readOnlyPropertiesOf(def)
+    .concat(ops.excludeStatics ? staticPropertiesOf(def) : [])
+    .filter(onlyUnique)
+    .filter(name => !name.startsWith('['));
+  const excludes = neverProps.length ? ` & ReadOnly<${union(neverProps)}>` : '';
+  if (!def.parent && !newProps.length) {
+    return `{[key: string]: any}${excludes}`;
+  } else if (!def.parent && newProps.length) {
+    return `{[key: string]: any} & Partial<Pick<${def.type}, ${union(newProps)}>>${excludes}`;
+  } else if (def.parent && !newProps.length) {
+    return `Properties<${def.parent.type}>${excludes}`;
   }
-  const removeProps = def.type === 'Widget'
-    ? [] // handled by Properties<T extends Widgets>
-    : readOnlyPropertiesOf(def).concat(ops.excludeStatics ? staticPropertiesOf(def) : []).filter(onlyUnique);
-  const addProps = def.type === 'Widget' ? [] : functionPropertiesOf(def);
-  const genericType = def.isWidget ? 'Properties' : 'NativeObjectProperties';
-  const baseType = ops.hasContext ? 'this' : def.type;
-  return remove(`${genericType}<${baseType}>`, removeProps) + add(baseType, addProps);
+  return `ExtendProperties<${def.parent.type}, ${def.type}, ${union(newProps)}>${excludes}`;
 }
 
 function createJsxPropertiesObject(def: ExtendedApi) {
-  // NOTE: unlike with method parameters (i.e. "set(properties)") TypeScript can not auto-exclude properties
-  // of specific types because mapped types do not always work correctly with "this" based properties.
-  // For that reason all supporter JSX properties need to be added explicitly.
   const forbidden = def.constructor.access !== 'public' && def.parent && def.parent.constructor.access === 'public';
   const inherit = def.isWidget && def.parent.type !== 'NativeObject';
   const props = jsxPropertiesOf(def).concat(!inherit ? jsxPropertiesOf(def.parent) : []);
   if (forbidden) {
     return 'never';
   } else if (inherit && props.length) {
-    return `${def.parent.type}['jsxProperties'] & JSXProperties<${def.type}, '${props.join(`' | '`)}'>`;
+    return `${def.parent.type}['jsxProperties'] & JSXProperties<${def.type}, ${union(props)}>`;
   } else if (inherit && !props.length) {
     return `${def.parent.type}['jsxProperties']`;
   } else if (!inherit && props.length) {
-    return `JSXProperties<${def.type}, '${props.join(`' | '`)}'>`;
+    return `JSXProperties<${def.type}, ${union(props)}>`;
   }
   return '{}';
 }
 
-function add(type: string, props: string[]) {
-  if (!props || !props.length) {
-    return '';
-  }
-  return ` & Partial<Pick<${type}, '${props.join(`' | '`)}'>>`;
+function union(values: any[]) {
+  return (values || []).sort().map(value => typeof value === 'string' ? `'${value}'` : `${value}`).join(' | ');
 }
 
 function remove(type: string, props: string[]) {
   if (!props || !props.length) {
     return type;
   }
-  return `Omit<${type}, '${props.join(`' | '`)}'>`;
+  return `Omit<${type}, ${union(props)}>`;
 }
 
 //#endregion
@@ -408,9 +402,6 @@ function hasSettableProperties(def: ExtendedApi, ops: PropertyOps) {
 }
 
 function readOnlyPropertiesOf(def: ExtendedApi): string[] {
-  if (def.type === 'NativeObject' || def.type === 'Widget') {
-    return []; // The read-only properties of these are excluded via generic types "Properties" and "NativeObjectProperties"
-  }
   return Object.keys(def.properties || {}).filter(prop => def.properties[prop].readonly);
 }
 
@@ -432,6 +423,9 @@ function jsxPropertiesOf(def: ExtendedApi) {
 }
 
 function settablePropertiesOf(def: ExtendedApi, {excludeStatics}: Partial<PropertyOps>) {
+  if (!def) {
+    return [];
+  }
   return Object.keys(def.properties || {})
     .filter(prop => !def.properties[prop].readonly && (!excludeStatics || !def.properties[prop].static));
 }

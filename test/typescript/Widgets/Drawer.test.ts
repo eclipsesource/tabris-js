@@ -1,4 +1,4 @@
-import {Drawer, ui, EventObject, DrawerProperties} from 'tabris';
+import {Drawer, ui, EventObject, Properties} from 'tabris';
 
 let widget: Drawer = ui.drawer;
 
@@ -9,7 +9,7 @@ enabled = widget.enabled;
 
 widget.enabled = enabled;
 
-let properties: DrawerProperties = {enabled};
+let properties: Properties<Drawer> = {enabled};
 widget.set(properties);
 
 // Methods

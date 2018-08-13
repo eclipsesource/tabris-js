@@ -175,7 +175,7 @@
         {
           "name": "properties",
           "type": "object",
-          "ts_type": "{[selector: string]: WidgetProperties & {[k: string]: any}}",
+          "ts_type": "{[selector: string]: SettableProperties<Widget>}",
           "description": "An object in the format `{Selector: {property: value, property: value, ... }, Selector: ...}`"
         }
       ],
@@ -188,7 +188,7 @@
         {
           "name": "properties",
           "type": "object",
-          "ts_type": "{[selector: string]: WidgetProperties & {[k: string]: any}}",
+          "ts_type": "{[selector: string]: SettableProperties<Widget>}",
           "description": "An object in the format `{Selector: {property: value, property: value, ... }, Selector: ...}`"
         }
       ],

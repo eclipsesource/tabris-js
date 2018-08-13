@@ -1,4 +1,4 @@
-import {Color, Picker, PickerSelectEvent, PropertyChangedEvent, PickerProperties, Properties} from 'tabris';
+import {Color, Picker, PickerSelectEvent, PropertyChangedEvent, Properties} from 'tabris';
 
 let widget: Picker = new Picker();
 
@@ -24,7 +24,7 @@ widget.itemText = itemText;
 widget.selectionIndex = selectionIndex;
 widget.textColor = textColor;
 
-let properties: PickerProperties = {borderColor, fillColor, itemCount, itemText, selectionIndex, textColor};
+let properties: Properties<typeof Picker> = {borderColor, fillColor, itemCount, itemText, selectionIndex, textColor};
 widget = new Picker(properties);
 widget.set(properties);
 
@@ -44,7 +44,7 @@ widget
 
 class CustomComponent extends Picker {
   public foo: string;
-  constructor(props: Properties<CustomComponent>) { super(props); }
+  constructor(props: Properties<typeof Picker> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

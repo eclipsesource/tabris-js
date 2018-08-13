@@ -1,5 +1,5 @@
 import {
-  Color, Image, ToggleButton, PropertyChangedEvent, ToggleButtonSelectEvent, ToggleButtonProperties, Font, Properties
+  Color, Image, ToggleButton, PropertyChangedEvent, ToggleButtonSelectEvent, Font, Properties
 } from 'tabris';
 
 let widget: ToggleButton = new ToggleButton();
@@ -29,7 +29,7 @@ widget.text = text;
 widget.textColor = textColor;
 widget.font = font;
 
-let properties: ToggleButtonProperties = {alignment, image, checked, text, textColor};
+let properties: Properties<typeof ToggleButton> = {alignment, image, checked, text, textColor};
 widget = new ToggleButton(properties);
 widget.set(properties);
 
@@ -48,7 +48,7 @@ widget
 
 class CustomComponent extends ToggleButton {
   public foo: string;
-  constructor(props: Properties<CustomComponent>) { super(props); }
+  constructor(props: Properties<typeof ToggleButton> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

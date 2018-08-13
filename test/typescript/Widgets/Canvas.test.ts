@@ -11,7 +11,7 @@ let context: CanvasContext = canvas.getContext(contextType, width, height);
 
 class CustomComponent extends Canvas {
   public foo: string;
-  constructor(props: Properties<CustomComponent>) { super(props); }
+  constructor(props: Properties<CustomComponent> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

@@ -28,9 +28,7 @@ textInputCollection.set({type: 'password'});
 
 /*Expected
 (14,
-'cid' does not exist
-(17,
-'text' does not exist
+cid
 (18,
 (19,
 (20,
@@ -40,5 +38,5 @@ textInputCollection.set({type: 'password'});
 (24,
 Type 'Foo' is not assignable to type 'TextInput'.
 (27,
-'type' does not exist
+type
 */

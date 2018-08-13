@@ -5,7 +5,6 @@ import {
   Page,
   Selector,
   PropertyChangedEvent,
-  NavigationViewProperties,
   Action,
   Properties
 } from 'tabris';
@@ -39,7 +38,7 @@ widget.titleTextColor = titleTextColor;
 widget.toolbarColor = toolbarColor;
 widget.toolbarVisible = toolbarVisible;
 
-let properties: NavigationViewProperties = {
+let properties: Properties<typeof NavigationView> = {
   actionColor, actionTextColor, pageAnimation, drawerActionVisible, navigationAction, titleTextColor, toolbarColor, toolbarVisible
 };
 widget = new NavigationView(properties);
@@ -69,7 +68,7 @@ widget
 
 class CustomComponent extends NavigationView {
   public foo: string;
-  constructor(props: Properties<CustomComponent>) { super(props); }
+  constructor(props: Properties<typeof NavigationView> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

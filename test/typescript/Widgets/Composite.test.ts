@@ -6,9 +6,8 @@ import {
   CompositeAddChildEvent,
   CompositeRemoveChildEvent,
   BoxDimensions,
-  CompositeProperties,
-  Selector
-, Properties} from 'tabris';
+  Selector,
+  Properties} from 'tabris';
 
 let widget: Composite = new Composite();
 
@@ -19,7 +18,7 @@ padding = widget.padding;
 
 widget.padding = padding;
 
-let properties: CompositeProperties = {padding};
+let properties: Properties<typeof Composite> = {padding};
 widget = new Composite(properties);
 widget.set(properties);
 
@@ -60,7 +59,7 @@ widget
 
 class CustomComponent extends Composite {
   public foo: string;
-  constructor(props: Properties<CustomComponent>) { super(props); }
+  constructor(props: Properties<typeof Composite> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
-new CustomComponent({foo: 'bar'}).set({foo: 'bar'});
+new CustomComponent({foo: 'bar', bar: 'foo'}).set({foo: 'bar', bar: 'foo'});

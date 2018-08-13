@@ -18,8 +18,8 @@ import {Widget,
  WidgetTapEvent,
  WidgetLongpressEvent,
  WidgetPanEvent,
- WidgetProperties,
- PropertyChangedEvent
+ PropertyChangedEvent,
+ Properties
 } from 'tabris';
 
 let widget: Widget = new Composite();
@@ -101,7 +101,7 @@ widget.transform = transform;
 widget.visible = visible;
 widget.width = width;
 
-let properties: WidgetProperties = {
+let properties: Properties<Widget> = {
   background,
   backgroundImage,
   baseline,
@@ -223,3 +223,5 @@ widget
   .onPanRight((event: WidgetPanEvent) => {})
   .onPanUp((event: WidgetPanEvent) => {})
   .onPanVertical((event: WidgetPanEvent) => {});
+
+widget.set({noKnownProperty: 12});

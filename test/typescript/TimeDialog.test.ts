@@ -1,4 +1,4 @@
-import {TimeDialogCloseEvent, TimeDialog, TimeDialogProperties, TimeDialogSelectEvent} from 'tabris';
+import {TimeDialogCloseEvent, TimeDialog, Properties, TimeDialogSelectEvent} from 'tabris';
 
 let timeDialog: TimeDialog = new TimeDialog();
 
@@ -9,7 +9,7 @@ date = timeDialog.date;
 
 timeDialog.date = date;
 
-let properties: TimeDialogProperties = {date};
+let properties: Properties<typeof TimeDialog> = {date};
 timeDialog = new TimeDialog(properties);
 timeDialog.set(properties);
 

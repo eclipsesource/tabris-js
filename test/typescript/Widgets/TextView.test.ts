@@ -1,4 +1,4 @@
-import {Color, TextView, TextViewTapLinkEvent, TextViewProperties, Font, Properties} from 'tabris';
+import {Color, TextView, TextViewTapLinkEvent, Font, Properties} from 'tabris';
 
 let widget: TextView = new TextView({markupEnabled: true});
 
@@ -29,7 +29,7 @@ widget.text = text;
 widget.textColor = textColor;
 widget.font = font;
 
-let properties: TextViewProperties = {
+let properties: Properties<typeof TextView> = {
   alignment, lineSpacing, markupEnabled, maxLines, selectable, text, textColor
 };
 widget = new TextView(properties);
@@ -47,7 +47,7 @@ widget.onTapLink((event: TextViewTapLinkEvent) => {});
 
 class CustomComponent extends TextView {
   public foo: string;
-  constructor(props: Properties<CustomComponent>) { super(props); }
+  constructor(props: Properties<typeof TextView> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

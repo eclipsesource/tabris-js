@@ -145,17 +145,6 @@ describe('JSX', function() {
       expect(button.text).to.equal('Hello World!');
     });
 
-    it('appends no text on widget not accepting text', function() {
-      let composite = createElement(
-        Composite,
-        null,
-        'Hello',
-        'World!'
-      );
-
-      expect(composite.text).to.be.undefined;
-    });
-
     it('executes given function', function() {
       let fn = spy(() => new WidgetCollection([new Button()]));
       let collection = createElement(

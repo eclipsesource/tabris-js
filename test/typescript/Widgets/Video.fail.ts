@@ -23,23 +23,27 @@ widget.set({state});
 widget.state = 'empty';
 
 /*Expected
-(6,21): error TS2345
-(7,13): error TS2345
-'speed' does not exist
-(8,8): error TS2540: Cannot assign to 'speed' because it is a constant or a read-only property.
+(6,
+(7,
+speed
+(8,
+speed
 
-(11,21): error TS2345
-(12,13): error TS2345
-'position' does not exist
-(13,8): error TS2540: Cannot assign to 'position' because it is a constant or a read-only property.
+(11,
+(12,
+position
+(13,
+position
 
-(16,21): error TS2345
-(17,13): error TS2345
-'duration' does not exist
-(18,8): error TS2540: Cannot assign to 'duration' because it is a constant or a read-only property.
+(16,
+(17,
+duration
+(18,
+duration
 
-(21,21): error TS2345
-(22,13): error TS2345
-'state' does not exist
-(23,8): error TS2540: Cannot assign to 'state' because it is a constant or a read-only property.
+(21,
+(22,
+state
+(23,
+state
 */

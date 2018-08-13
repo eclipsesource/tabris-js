@@ -1,4 +1,4 @@
-import {DateDialog, DateDialogProperties, DateDialogSelectEvent, DateDialogCloseEvent} from 'tabris';
+import {DateDialog, DateDialogSelectEvent, DateDialogCloseEvent, Properties} from 'tabris';
 
 let dateDialog: DateDialog = new DateDialog();
 
@@ -15,7 +15,7 @@ dateDialog.date = date;
 dateDialog.minDate = minDate;
 dateDialog.maxDate = maxDate;
 
-let properties: DateDialogProperties = {date, minDate, maxDate};
+let properties: Properties<typeof DateDialog> = {date, minDate, maxDate};
 dateDialog = new DateDialog(properties);
 dateDialog.set(properties);
 

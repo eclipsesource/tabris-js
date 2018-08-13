@@ -1,4 +1,4 @@
-import {EventObject, PropertyChangedEvent, RefreshComposite, RefreshCompositeProperties, Properties} from 'tabris';
+import {EventObject, RefreshComposite, Properties} from 'tabris';
 
 let widget: RefreshComposite = new RefreshComposite();
 
@@ -15,7 +15,7 @@ widget.refreshEnabled = refreshEnabled;
 widget.refreshIndicator = refreshIndicator;
 widget.refreshMessage = refreshMessage;
 
-let properties: RefreshCompositeProperties = {refreshEnabled, refreshIndicator, refreshMessage};
+let properties: Properties<typeof RefreshComposite> = {refreshEnabled, refreshIndicator, refreshMessage};
 widget = new RefreshComposite(properties);
 widget.set(properties);
 
@@ -30,7 +30,7 @@ widget.onRefresh((event: EventObject<RefreshComposite>) => {});
 
 class CustomComponent extends RefreshComposite {
   public foo: string;
-  constructor(props: Properties<CustomComponent>) { super(props); }
+  constructor(props: Properties<typeof RefreshComposite> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});
