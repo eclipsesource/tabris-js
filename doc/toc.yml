@@ -50,3 +50,8 @@
       url: custom-widgets-android.html
     - title: Custom Widgets - iOS
       url: custom-widgets-ios.html
+
+- title: FAQ
+  pages:
+    - title: FAQ
+      url: faq.html
