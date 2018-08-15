@@ -56,7 +56,7 @@ NativeObject.defineProperties(TextInput.prototype, {
         throw new Error(`The selection has to be in the range of 0 to text length [0-${textLength}] but is ${value}`);
       }
       this._nativeSet(name, value);
-      this.$triggerChangeSelection({selection: value});
+      this._triggerChangeEvent('selection', value);
     },
     get(name) {
       return this._nativeGet(name);
