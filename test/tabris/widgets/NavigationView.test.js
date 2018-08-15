@@ -77,73 +77,36 @@ describe('NavigationView', function() {
 
   });
 
-  describe('topToolbarHeight', function() {
+  describe('toolbarHeight', function() {
 
     it('supports get', function() {
       stub(client, 'get').returns(23);
 
-      let height = navigationView.topToolbarHeight;
+      let height = navigationView.toolbarHeight;
 
       expect(height).to.equal(23);
-      expect(client.get).to.have.been.calledWith(navigationView.cid, 'topToolbarHeight');
+      expect(client.get).to.have.been.calledWith(navigationView.cid, 'toolbarHeight');
     });
 
     it('ignores set', function() {
       stub(console, 'warn');
       stub(client, 'get').returns(23);
       spy(client, 'set');
-      navigationView.topToolbarHeight = 12;
+      navigationView.toolbarHeight = 12;
 
-      let height = navigationView.topToolbarHeight;
+      let height = navigationView.toolbarHeight;
 
       expect(height).to.equal(23);
-      expect(client.set).not.to.have.been.calledWith(navigationView.cid, 'topToolbarHeight');
+      expect(client.set).not.to.have.been.calledWith(navigationView.cid, 'toolbarHeight');
     });
 
     it('support change event', function() {
       let listener = spy();
-      navigationView.onTopToolbarHeightChanged(listener);
+      navigationView.onToolbarHeightChanged(listener);
 
-      tabris._notify(navigationView.cid, 'topToolbarHeightChanged', {topToolbarHeight: 23});
+      tabris._notify(navigationView.cid, 'toolbarHeightChanged', {toolbarHeight: 23});
 
-      expect(client.calls({op: 'listen', id: navigationView.cid, event: 'topToolbarHeightChanged'})[0].listen)
-        .to.be.true;
-      expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWithMatch({target: navigationView, value: 23});
-    });
-
-  });
-
-  describe('bottomToolbarHeight', function() {
-
-    it('supports get', function() {
-      stub(client, 'get').returns(23);
-
-      let height = navigationView.bottomToolbarHeight;
-
-      expect(height).to.equal(23);
-      expect(client.get).to.have.been.calledWith(navigationView.cid, 'bottomToolbarHeight');
-    });
-
-    it('ignores set', function() {
-      stub(console, 'warn');
-      stub(client, 'get').returns(23);
-      spy(client, 'set');
-      navigationView.bottomToolbarHeight = 12;
-
-      let height = navigationView.bottomToolbarHeight;
-
-      expect(height).to.equal(23);
-      expect(client.set).not.to.have.been.calledWith(navigationView.cid, 'bottomToolbarHeight');
-    });
-
-    it('support change event', function() {
-      let listener = spy();
-      navigationView.onBottomToolbarHeightChanged(listener);
-
-      tabris._notify(navigationView.cid, 'bottomToolbarHeightChanged', {bottomToolbarHeight: 23});
-
-      expect(client.calls({op: 'listen', id: navigationView.cid, event: 'bottomToolbarHeightChanged'})[0].listen)
+      expect(client.calls({op: 'listen', id: navigationView.cid, event: 'toolbarHeightChanged'})[0].listen)
         .to.be.true;
       expect(listener).to.have.been.calledOnce;
       expect(listener).to.have.been.calledWithMatch({target: navigationView, value: 23});

@@ -59,12 +59,9 @@ let timeStamp: number = 0;
 let type: string = 'foo';
 let value: number = 0;
 
-let bottomToolbarHeightChangedEvent: PropertyChangedEvent<NavigationView, number> = {target, timeStamp, type, value};
-let topToolbarHeightChangedEvent: PropertyChangedEvent<NavigationView, number> = {target, timeStamp, type, value};
+let toolbarHeightChangedEvent: PropertyChangedEvent<NavigationView, number> = {target, timeStamp, type, value};
 
-widget
-  .onBottomToolbarHeightChanged((event: PropertyChangedEvent<NavigationView, number>) => {})
-  .onTopToolbarHeightChanged((event: PropertyChangedEvent<NavigationView, number>) => {});
+widget.onToolbarHeightChanged((event: PropertyChangedEvent<NavigationView, number>) => {});
 
 class CustomComponent extends NavigationView {
   public foo: string;

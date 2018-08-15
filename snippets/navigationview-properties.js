@@ -41,8 +41,7 @@ let controls = new ScrollView({
 
 createCheckBox('Show toolbar', ({value: checked}) => {
   navigationView.toolbarVisible = checked;
-  topToolbarHeightTextView.text = navigationView.topToolbarHeight;
-  bottomToolbarHeightTextView.text = navigationView.bottomToolbarHeight;
+  toolbarHeightTextView.text = navigationView.toolbarHeight;
 });
 
 createCheckBox('Show drawer action', ({value: checked}) => {
@@ -73,13 +72,9 @@ if (device.platform === 'Android') {
   createColorPicker('Action text color', 'actionTextColor');
 }
 
-let topToolbarHeightTextView = createTextView('Toolbar height top', navigationView.topToolbarHeight);
-let bottomToolbarHeightTextView = createTextView('Toolbar height bottom', navigationView.bottomToolbarHeight);
+let toolbarHeightTextView = createTextView('Toolbar height', navigationView.toolbarHeight);
 
-navigationView.on({
-  topToolbarHeightChanged: ({value}) => topToolbarHeightTextView.text = value,
-  bottomToolbarHeightChanged: ({value}) => bottomToolbarHeightTextView.text = value
-});
+navigationView.on({toolbarHeightChanged: ({value}) => toolbarHeightTextView.text = value});
 
 function createCheckBox(text, listener, checked = true) {
   return new CheckBox({

@@ -54,7 +54,7 @@ export default class NavigationView extends Composite {
   }
 
   _listen(name, listening) {
-    if (name === 'topToolbarHeightChanged' || name === 'bottomToolbarHeightChanged') {
+    if (name === 'toolbarHeightChanged') {
       this._nativeListen(name, listening);
     } else {
       super._listen(name, listening);
@@ -64,10 +64,8 @@ export default class NavigationView extends Composite {
   _trigger(name, event) {
     if (name === 'backNavigation') {
       this.$handleBackNavigation();
-    } else if (name === 'topToolbarHeightChanged') {
-      this._triggerChangeEvent('topToolbarHeight', event.topToolbarHeight);
-    } else if (name === 'bottomToolbarHeightChanged') {
-      this._triggerChangeEvent('bottomToolbarHeight', event.bottomToolbarHeight);
+    } else if (name === 'toolbarHeightChanged') {
+      this._triggerChangeEvent('toolbarHeight', event.toolbarHeight);
     } else {
       return super._trigger(name, event);
     }
@@ -97,8 +95,7 @@ NativeObject.defineProperties(NavigationView.prototype, {
   drawerActionVisible: {type: 'boolean', default: false},
   toolbarVisible: {type: 'boolean', default: true},
   toolbarColor: {type: 'color'},
-  topToolbarHeight: {readonly: true},
-  bottomToolbarHeight: {readonly: true},
+  toolbarHeight: {readonly: true},
   titleTextColor: {type: 'color'},
   actionColor: {type: 'color'},
   actionTextColor: {type: 'color'},
