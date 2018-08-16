@@ -143,6 +143,14 @@ export default class Widget extends NativeObject {
     }
   }
 
+  _release() {
+    if (this._parent) {
+      this._parent._removeChild(this);
+      Layout.addToQueue(this._parent);
+      delete this._parent;
+    }
+  }
+
   $triggerChangeBounds({left, top, width, height}) {
     super._trigger('boundsChanged', {value: {left, top, width, height}});
   }

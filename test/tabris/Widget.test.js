@@ -212,7 +212,7 @@ describe('Widget', function() {
 
       beforeEach(function() {
         parent = new TestWidget();
-        child = new TestWidget().appendTo(parent);
+        child = new TextView().appendTo(parent);
         client.resetCalls();
       });
 

@@ -101,11 +101,7 @@ export default class Composite extends Widget {
       }
       delete this.$children;
     }
-    if (this._parent) {
-      this._parent._removeChild(this);
-      Layout.addToQueue(this._parent);
-      delete this._parent;
-    }
+    super._release();
   }
 
   _flushLayout() {
