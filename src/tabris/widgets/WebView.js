@@ -47,3 +47,7 @@ NativeObject.defineProperties(WebView.prototype, {
   canGoForward: {type: 'boolean', readonly: true},
   initScript: {type: 'string'}
 });
+
+NativeObject.defineEvents(WebView.prototype, {
+  load: {native: true}
+});

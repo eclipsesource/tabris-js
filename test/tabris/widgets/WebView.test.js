@@ -1,4 +1,4 @@
-import {expect, mockTabris} from '../../test';
+import {expect, mockTabris, spy} from '../../test';
 import ClientStub from '../ClientStub';
 import WebView from '../../../src/tabris/widgets/WebView';
 
@@ -11,6 +11,13 @@ describe('WebView', () => {
     mockTabris(client);
     webView = new WebView({url: 'http://wikipedia.com'});
   });
+
+  function checkListen(event) {
+    let listen = client.calls({op: 'listen', id: webView.cid});
+    expect(listen.length).to.equal(1);
+    expect(listen[0].event).to.equal(event);
+    expect(listen[0].listen).to.equal(true);
+  }
 
   describe('when created', () => {
 
@@ -39,6 +46,21 @@ describe('WebView', () => {
       let call = client.calls({op: 'call', id: webView.cid});
       expect(call.length).to.equal(1);
       expect(call[0].method).to.equal('goForward');
+    });
+
+  });
+
+  describe('event', () => {
+
+    it('onLoad', () => {
+      const listener = spy();
+      webView.onLoad(listener);
+
+      tabris._notify(webView.cid, 'load', {});
+
+      expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWithMatch({target: webView});
+      checkListen('load');
     });
 
   });
