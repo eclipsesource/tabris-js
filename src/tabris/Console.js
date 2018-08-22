@@ -1,5 +1,89 @@
 import {format} from './Formatter';
 
+export default class Console {
+
+  constructor() {
+    this._registerPrintMethods(arguments[0]);
+    this._prefixSpaces = 0;
+    this._count = {};
+  }
+
+  assert(expression, ...args) {
+    if (!expression) {
+      args[0] = `Assertion failed${args.length === 0 ? '' : `: ${args[0]}`}`;
+      this.error(...args);
+    }
+  }
+
+  count(label) {
+    label = label ? label : 'default';
+    if (!this._count[label]) {
+      this._count[label] = 0;
+    }
+    this.log('%s: %s', label, ++this._count[label]);
+  }
+
+  countReset(label) {
+    label = label ? label : 'default';
+    this.log('%s: %s', label, this._count[label] = 0);
+  }
+
+  group(...args) {
+    this.log(...args);
+    this._prefixSpaces += 2;
+  }
+
+  groupEnd() {
+    if (this._prefixSpaces > 0) {
+      this._prefixSpaces -= 2;
+    }
+  }
+
+  debug(...args) {
+    this._console.debug(...args);
+  }
+
+  info(...args) {
+    this._console.info(...args);
+  }
+
+  log(...args) {
+    this._console.log(...args);
+  }
+
+  warn(...args) {
+    this._console.warn(...args);
+  }
+
+  error(...args) {
+    this._console.error(...args);
+  }
+
+  _registerPrintMethods(nativeConsole) {
+    this._console = {};
+    for (let level of ['debug', 'info', 'log', 'warn', 'error']) {
+      this._console[level] = (...args) => {
+        const message = this._prepareOutput(...args);
+        tabris.trigger('log', {level, message});
+        nativeConsole.print(level, message);
+      };
+    }
+  }
+
+  _prepareOutput(...args) {
+    let output = format(...args);
+    if (this._prefixSpaces > 0) {
+      output = `${' '.repeat(this._prefixSpaces)}${output}`;
+    }
+    return output;
+  }
+
+}
+
+export function createConsole(nativeConsole) {
+  return new Console(nativeConsole);
+}
+
 const defaultConsole = global.console.print
   ? createConsole(global.console)
   : global.console;
@@ -16,15 +100,3 @@ export const info = function(...args) { defaultConsole.info(...args); };
 export const log = function(...args) { defaultConsole.log(...args); };
 export const warn = function(...args) { defaultConsole.warn(...args); };
 export const error = function(...args) { defaultConsole.error(...args); };
-
-export function createConsole(nativeConsole) {
-  let console = {};
-  for (let level of ['debug', 'info', 'log', 'warn', 'error']) {
-    console[level] = function(...args) {
-      const message = format(...args);
-      tabris.trigger('log', {level, message});
-      nativeConsole.print(level, message);
-    };
-  }
-  return console;
-}

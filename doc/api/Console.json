@@ -7,6 +7,108 @@
     "access": "private"
   },
   "methods": {
+    "assert": [
+      {
+        "description": "Outputs an error message to the console if the first argument is false.",
+        "parameters": [
+          {
+            "description": "Any boolean expression. If the assertion is false, the error message is written to the console.",
+            "name": "expression",
+            "type": "boolean"
+          },
+          {
+            "description": "A list of JavaScript objects to output. The string representations of each of these objects are appended together in the order listed and output.",
+            "name": "...objects",
+            "type": "any[]"
+          }
+        ]
+      },
+      {
+        "description": "Outputs an error message to the console if the first argument is false.",
+        "parameters": [
+          {
+            "description": "Any boolean expression. If the assertion is false, the error message is written to the console.",
+            "name": "expression",
+            "type": "boolean"
+          },
+          {
+            "description": "A JavaScript string containing zero or more substitution strings.",
+            "name": "message",
+            "type": "string",
+            "optional": true
+          },
+          {
+            "description": "JavaScript objects with which to replace substitution strings within message",
+            "name": "...substitutions",
+            "type": "any[]"
+          }
+        ]
+      }
+    ],
+    "count": [
+      {
+        "description": "Logs the number of times that this particular call to count() has been called.",
+        "parameters": [
+          {
+            "description": "If supplied, count() outputs the number of times it has been called with that label.",
+            "name": "label",
+            "type": "string",
+            "optional": true
+          }
+        ]
+      }
+    ],
+    "countReset": [
+      {
+        "description": "Resets the counter.",
+        "parameters": [
+          {
+            "description": "If label supplied, this function resets the count associated with that particular label.",
+            "name": "label",
+            "type": "string",
+            "optional": true
+          }
+        ]
+      }
+    ],
+    "group": [
+      {
+        "description": "Creates a new inline group in the console output. This indents following console messages by an additional spaces, until console.groupEnd() is called.",
+        "parameters": [
+          {
+            "description": "A list of JavaScript objects to output. The string representations of each of these objects are appended together in the order listed and output.",
+            "name": "...objects",
+            "type": "any[]"
+          }
+        ]
+      },
+      {
+        "description": "Creates a new inline group in the console output. This indents following console messages by an additional spaces, until console.groupEnd() is called.",
+        "parameters": [
+          {
+            "description": "A JavaScript string containing zero or more substitution strings.",
+            "name": "message",
+            "type": "string",
+            "optional": true
+          },
+          {
+            "description": "JavaScript objects with which to replace substitution strings within message",
+            "name": "...substitutions",
+            "type": "any[]"
+          }
+        ]
+      }
+    ],
+    "groupEnd": [
+      {
+        "description": "Exits the current inline group in the console.",
+        "parameters": []
+      },
+      {
+        "description": "Exits the current inline group in the console.",
+        "parameters": []
+      }
+    ],
     "log": [
       {
         "description": "Outputs a message to the console.",
