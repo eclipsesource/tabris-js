@@ -86,13 +86,13 @@ export interface Property {
   ts_only?: boolean;
   platforms?: Platforms;
   /**
-   * Indicates that this property can not be set. However, if the property is not "static", it may change by itself. Defaults to false
+   * Indicates that this property can not be set. However, if the property is not a "const", it may change by itself. Defaults to false
    */
   readonly?: boolean;
   /**
    * Indicates that this property can not change during the lifetime of this object. However, if there is a public constructor and the property is not "readonly", it can be set via constructor. No change events will be generated for this property. Defaults to false
    */
-  static?: boolean;
+  const?: boolean;
   /**
    * Default value of this property
    */

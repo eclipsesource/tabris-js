@@ -65,8 +65,8 @@ export default class TabFolder extends Composite {
 
 NativeObject.defineProperties(TabFolder.prototype, {
   paging: {type: 'boolean', default: false},
-  tabBarLocation: {type: ['choice', ['top', 'bottom', 'hidden', 'auto']], default: 'auto', static: true},
-  tabMode: {type: ['choice', ['fixed', 'scrollable']], default: 'fixed', static: true},
+  tabBarLocation: {type: ['choice', ['top', 'bottom', 'hidden', 'auto']], default: 'auto', const: true},
+  tabMode: {type: ['choice', ['fixed', 'scrollable']], default: 'fixed', const: true},
   selection: {
     set(name, tab) {
       if (this._children().indexOf(tab) < 0) {

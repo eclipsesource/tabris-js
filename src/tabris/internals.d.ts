@@ -31,7 +31,7 @@ interface PropertyDefinition<ApiType = any, NativeType = any> {
   default?: ApiType;
   nocache?: boolean;
   readonly?: boolean;
-  static?: boolean;
+  const?: boolean;
   set?: (name: string, value: ApiType) => void;
   get?: (name: string) => ApiType;
 }

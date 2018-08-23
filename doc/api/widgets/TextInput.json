@@ -23,7 +23,7 @@
         "multiline"
       ],
       "default": "default",
-      "static": true,
+      "const": true,
       "description": "The type of the text widget."
     },
     "text": {

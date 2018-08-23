@@ -10,13 +10,13 @@
     "filesDir": {
       "type": "string",
       "readonly": true,
-      "static": true,
+      "const": true,
       "description": "The path of a directory that the app may use to store persistent files."
     },
     "cacheDir": {
       "type": "string",
       "readonly": true,
-      "static": true,
+      "const": true,
       "description": "The path of a directory that the app may use to store cached files. The OS may delete files in this directory when the device runs low on storage. Only use this location for data that can easily be re-created."
     }
   },

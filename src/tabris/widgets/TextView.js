@@ -19,7 +19,7 @@ export default class TextView extends Widget {
 
 NativeObject.defineProperties(TextView.prototype, {
   alignment: {type: ['choice', ['left', 'right', 'center']], default: 'left'},
-  markupEnabled: {type: 'boolean', default: false, static: true}, // TODO: readonly
+  markupEnabled: {type: 'boolean', default: false, const: true}, // TODO: readonly
   lineSpacing: {type: 'number', default: 1},
   selectable: {type: 'boolean', default: false},
   maxLines: {

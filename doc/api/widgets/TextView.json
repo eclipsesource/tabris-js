@@ -33,7 +33,7 @@
     },
     "markupEnabled": {
       "type": "boolean",
-      "static": true,
+      "const": true,
       "description": "Allows for a subset of HTML tags in the text. Supported tags are: `a`, `del`, `ins`, `b`, `i`, `strong`, `em`, `big`, `small`, `br`. All tags must be closed (e.g. use `<br/>` instead of `<br>`). Nesting tags is currently not supported."
     },
     "text": {

@@ -24,7 +24,7 @@
         "auto"
       ],
       "default": "auto",
-      "static": true,
+      "const": true,
       "description": "The placement of the tab titles. When set to `\"hidden\"`, the tab bar will not be visible. When set to `\"auto\"`, the position is platform dependent."
     },
     "tabMode": {
@@ -34,7 +34,7 @@
         "scrollable"
       ],
       "default": "fixed",
-      "static": true,
+      "const": true,
       "description": "Controls how the tabs make use of the available horizontal space. Setting the `tabMode` to `\"fixed\"` makes the tabs span the entire available space. In case of a very wide `TabFolder` the `\"fixed\"` mode centers the tabs. The mode `\"scrollable\"` left aligns the tabs and allows to scroll the tabs if there are more tabs than would fit in the available space. Available on Android only.",
       "platforms": {
         "ios": false

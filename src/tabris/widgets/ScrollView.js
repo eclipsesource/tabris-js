@@ -29,7 +29,7 @@ NativeObject.defineProperties(ScrollView.prototype, {
   direction: {
     type: ['choice', ['horizontal', 'vertical']],
     default: 'vertical',
-    static: true
+    const: true
   },
   offsetX: {type: 'number', nocache: true, readonly: true},
   offsetY: {type: 'number', nocache: true, readonly: true},

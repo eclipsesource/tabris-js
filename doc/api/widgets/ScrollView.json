@@ -21,7 +21,7 @@
         "horizontal"
       ],
       "default": "vertical",
-      "static": true,
+      "const": true,
       "description": "Specifies the scrolling direction of the scroll composite."
     },
     "offsetX": {

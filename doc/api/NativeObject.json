@@ -16,7 +16,7 @@
     "cid": {
       "type": "string",
       "readonly": true,
-      "static": true,
+      "const": true,
       "description": "An application-wide unique identifier automatically assigned to all native objects on creation."
     }
   },

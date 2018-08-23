@@ -5,7 +5,7 @@ import {
   readJsonDefs, createDoc, createEventTypeName, capitalizeFirstChar, Properties
 } from './common';
 
-type PropertyOps = {hasContext: boolean, excludeStatics: boolean};
+type PropertyOps = {hasContext: boolean, excludeConsts: boolean};
 
 const HEADER = `
 // Type definitions for Tabris.js \${VERSION}
@@ -133,7 +133,7 @@ function renderConstructor(text: TextBuilder, def: ExtendedApi) {
   if (constructor) {
     text.append('');
     const access = constructor.access ? constructor.access + ' ' : '';
-    const paramList = createParamList(def, constructor.parameters || [], {hasContext: false, excludeStatics: false});
+    const paramList = createParamList(def, constructor.parameters || [], {hasContext: false, excludeConsts: false});
     text.append(`${access}constructor(${paramList});`);
   }
 }
@@ -190,7 +190,7 @@ function createMethod(
 ) {
   const result = [];
   result.push(createDoc(method));
-  const paramList = createParamList(def, method.parameters, {hasContext: true, excludeStatics: true});
+  const paramList = createParamList(def, method.parameters, {hasContext: true, excludeConsts: true});
   const declaration = (def.type ? (method.protected ? 'protected ' : '') : 'declare function ')
     + `${name}${method.generics ? `<${method.generics}>` : ''}`
     + `(${paramList}): ${method.ts_returns || method.returns || 'void'};`;
@@ -216,7 +216,7 @@ function renderEventProperties(text: TextBuilder, def: ExtendedApi) {
       });
     }
     if (def.properties) {
-      Object.keys(def.properties).filter(name => !def.properties[name].static).sort().forEach(name => {
+      Object.keys(def.properties).filter(name => !def.properties[name].const).sort().forEach(name => {
         text.append('');
         text.append(createPropertyChangedEventProperty(def.type, name, def.properties[name]));
       });
@@ -255,8 +255,8 @@ function createProperty(name: string, properties: Properties, def: ExtendedApi) 
   const result = [];
   const property = properties[name];
   result.push(createDoc(property));
-  const readonly = property.readonly || property.static;
-  const type = decodeType(property, def, {hasContext: true, excludeStatics: false});
+  const readonly = property.readonly || property.const;
+  const type = decodeType(property, def, {hasContext: true, excludeConsts: false});
   result.push(`${readonly ? 'readonly ' : ''}${name}: ${type};`);
   return result.join('\n');
 }
@@ -289,7 +289,7 @@ function decodeType(param: Partial<schema.Parameter & schema.Property>, def: Ext
 function createPropertiesObject(def: ExtendedApi, ops: PropertyOps) {
   const newProps = settablePropertiesOf(def, ops);
   const neverProps = readOnlyPropertiesOf(def)
-    .concat(ops.excludeStatics ? staticPropertiesOf(def) : [])
+    .concat(ops.excludeConsts ? constPropertiesOf(def) : [])
     .filter(onlyUnique)
     .filter(name => !name.startsWith('['));
   const excludes = neverProps.length ? ` & ReadOnly<${union(neverProps)}>` : '';
@@ -378,7 +378,7 @@ function isClassDependentParameter(def: ExtendedApi, parameter: schema.Parameter
     const autoExtendable = def.isWidget
       && !hasReadOnlyProperties(def)
       && !hasFunctionProperties(def)
-      && !hasStaticProperties(def);
+      && !hasConstProperties(def);
     const newProps = Object.keys(def.properties || {}).filter(prop => !def.properties[prop].readonly);
     return newProps && !autoExtendable;
   }
@@ -389,8 +389,8 @@ function hasReadOnlyProperties(def: ExtendedApi) {
   return readOnlyPropertiesOf(def).length > 0;
 }
 
-function hasStaticProperties(def: ExtendedApi) {
-  return staticPropertiesOf(def).length > 0;
+function hasConstProperties(def: ExtendedApi) {
+  return constPropertiesOf(def).length > 0;
 }
 
 function hasFunctionProperties(def: ExtendedApi) {
@@ -409,25 +409,25 @@ function functionPropertiesOf(def: ExtendedApi): string[] {
   return Object.keys(def.properties || {}).filter(prop => def.properties[prop].type.indexOf('=>') !== -1);
 }
 
-function staticPropertiesOf(def: ExtendedApi): string[] {
-  return Object.keys(def.properties || {}).filter(prop => def.properties[prop].static);
+function constPropertiesOf(def: ExtendedApi): string[] {
+  return Object.keys(def.properties || {}).filter(prop => def.properties[prop].const);
 }
 
 function jsxPropertiesOf(def: ExtendedApi) {
   if (!def) {
     return [];
   }
-  return settablePropertiesOf(def, {excludeStatics: false})
+  return settablePropertiesOf(def, {excludeConsts: false})
     .concat(Object.keys(def.events || {}).map(name => `on${capitalizeFirstChar(name)}`))
-    .concat(settablePropertiesOf(def, {excludeStatics: true}).map(name => `on${capitalizeFirstChar(name)}Changed`));
+    .concat(settablePropertiesOf(def, {excludeConsts: true}).map(name => `on${capitalizeFirstChar(name)}Changed`));
 }
 
-function settablePropertiesOf(def: ExtendedApi, {excludeStatics}: Partial<PropertyOps>) {
+function settablePropertiesOf(def: ExtendedApi, {excludeConsts}: Partial<PropertyOps>) {
   if (!def) {
     return [];
   }
   return Object.keys(def.properties || {})
-    .filter(prop => !def.properties[prop].readonly && (!excludeStatics || !def.properties[prop].static));
+    .filter(prop => !def.properties[prop].readonly && (!excludeConsts || !def.properties[prop].const));
 }
 
 function getInheritedConstructor(def: ExtendedApi): typeof def.constructor {

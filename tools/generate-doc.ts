@@ -9,7 +9,7 @@ type NamedEvents = Array<schema.Event & {name: string}>;
 const SNIPPETS_LOCATION = 'snippets';
 const MSG_DEPRECATED = '**Deprecated**';
 const MSG_PROVISIONAL = '**Note:** this API is provisional and may change in a future release.';
-const MSG_STATIC_PROP = 'This property can only be set on widget creation. Once set, it cannot be changed anymore.';
+const MSG_CONST_PROP = 'This property can only be set on widget creation. Once set, it cannot be changed anymore.';
 
 exports.generateDoc = function generateDoc({files, targetPath, version}) {
   const generator = new DocGenerator(files, targetPath, version);
@@ -217,8 +217,8 @@ class DocGenerator {
       if (property.description) {
         result.push('\n' + property.description);
       }
-      if (property.static) {
-        result.push('<br/>' + MSG_STATIC_PROP);
+      if (property.const) {
+        result.push('<br/>' + MSG_CONST_PROP);
       }
       result.push('\n\n');
     });
@@ -279,7 +279,7 @@ class DocGenerator {
       return [];
     }
     return Object.keys(properties)
-      .filter(name => !properties[name].static)
+      .filter(name => !properties[name].const)
       .map(name => {
         let standardDescription = `Fired when the [*${name}*](#${name}) property has changed.`;
         return {

@@ -110,7 +110,7 @@
   },
   "properties": {
     "jsxProperties": {
-      "static": true,
+      "const": true,
       "readonly": true,
       "type": "JsxPropertiesObject",
       "description": "When using JSX with TypeScript (`.tsx` files), the type of this property determines which JSX attributes are valid for this widget."
@@ -118,7 +118,7 @@
     "[JSX.jsxFactory]": {
       "description": "This function is called to create JSX widget elements. You may override it in your own subclass to create custom JSX behavior. **The function is not called with any context, i.e. `this` is not available.**",
       "type": "JSX.JsxFactory",
-      "static": true,
+      "const": true,
       "readonly": true
     },
     "id": {
@@ -230,7 +230,7 @@
       "type": "object",
       "ts_type": "{[k: string]: any}",
       "readonly": true,
-      "static": true,
+      "const": true,
       "description": "A general-purpose object that allows the application to attach arbitrary data to the widget. Manipulations on this object have no effect on the widget itself in any way. Example: `widget.data.myData = myData;`"
     }
   },

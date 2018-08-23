@@ -321,19 +321,19 @@
     "[JSX.jsxFactory]": {
       "description": "This function is called by the framework to create JSX elements from the WidgetCollection class.",
       "type": "JSX.JsxFactory",
-      "static": true,
+      "const": true,
       "readonly": true,
       "ts_only": true
     },
     "length": {
-      "static": true,
+      "const": true,
       "type": "number",
       "readonly": true,
       "description": "Contains the number of widgets in the collection."
     },
     "[key: number]": {
       "readonly": true,
-      "static": true,
+      "const": true,
       "ts_only": true,
       "type": "T"
     }

@@ -29,7 +29,7 @@ export default class NativeObject extends EventsClass {
         return this.$getProperty(name);
       }
     });
-    if (typeof definition !== 'object' || !definition.static) {
+    if (typeof definition !== 'object' || !definition.const) {
       this.defineEvent(target, name + 'Changed', true);
     }
   }
@@ -297,7 +297,7 @@ function normalizeProperty(property) {
   return {
     type: resolveType(config.type || 'any'),
     default: config.default,
-    static: config.static,
+    const: config.const,
     nocache: config.nocache,
     set: config.readonly && readOnlySetter || config.set || defaultSetter,
     get: config.get || defaultGetter
