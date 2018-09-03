@@ -100,7 +100,7 @@ export function getTitle(def: ExtendedApi): string {
 
 export function createDoc(documentable: ExtendedApi | schema.Property | schema.Method | schema.Event | schema.Event) {
   const def = documentable as Partial<ExtendedApi & schema.Property & schema.Method & schema.Event & schema.Event>;
-  if (!def.description && !def.static && !def.provisional) {
+  if (!def.description && !def.const && !def.provisional) {
     return;
   }
   const result: string[] = [];
@@ -114,7 +114,7 @@ export function createDoc(documentable: ExtendedApi | schema.Property | schema.M
       result.push(line);
     });
   }
-  if (def.static) {
+  if (def.const) {
     result.push('@constant');
   }
   if (def.provisional) {
