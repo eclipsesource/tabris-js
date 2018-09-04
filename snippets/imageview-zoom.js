@@ -77,7 +77,7 @@ function createSlider(title, selection) {
     left: 'prev() 16', right: 40, centerY: 0,
     minimum: 5,
     maximum: 50,
-    selection: selection
+    selection
   }).on('selectionChanged', ({value: level}) => sliderValue.text = (level / 10).toFixed(1))
     .appendTo(container);
 

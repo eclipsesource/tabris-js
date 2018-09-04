@@ -24,8 +24,8 @@ new ImageView({
 let pageSelector = new CollectionView({
   left: 0, top: 'prev()', right: 0, bottom: 0,
   itemCount: PAGE_CONFIGS.length,
-  createCell: createCell,
-  updateCell: updateCell,
+  createCell,
+  updateCell,
   cellHeight: 48
 }).on('select', ({index}) => {
   ui.drawer.close();

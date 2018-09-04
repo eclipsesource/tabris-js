@@ -17,7 +17,7 @@ new Button({
 function print(file, contentType, jobName) {
   fetch(app.getResourceLocation(file))
     .then(res => res.arrayBuffer())
-    .then(data => printer.print(data, {jobName: jobName, contentType: contentType}))
+    .then(data => printer.print(data, {jobName, contentType}))
     .then(event => console.log('Printing finished', event))
     .catch(err => console.error(err));
 }

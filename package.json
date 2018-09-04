@@ -27,6 +27,7 @@
     "babel-plugin-transform-es2015-template-literals": "^6.8.0",
     "chai": "^4.1.0",
     "eslint": "^4.3.0",
+    "eslint-plugin-react": "^7.11.1",
     "format-json": "^1.0.3",
     "fs-extra": "^4.0.0",
     "grunt": "^1.0.1",

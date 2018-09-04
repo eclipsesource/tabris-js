@@ -10,8 +10,8 @@ createAction('Settings', getImage('settings'), 'low');
 
 function createAction(title, image, placementPriority) {
   new Action({
-    title: title,
-    placementPriority: placementPriority,
+    title,
+    placementPriority,
     image: {src: image, scale: 3}
   }).appendTo(navigationView);
 }

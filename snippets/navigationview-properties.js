@@ -48,7 +48,7 @@ createCheckBox('Show drawer action', ({value: checked}) => {
   navigationView.drawerActionVisible = checked;
 });
 
-createCheckBox('Custom navigation action', function({value: checked}) {
+createCheckBox('Custom navigation action', ({value: checked}) => {
   if (checked) {
     navigationView.navigationAction = new Action({
       title: 'Close',
@@ -79,8 +79,8 @@ navigationView.on({toolbarHeightChanged: ({value}) => toolbarHeightTextView.text
 function createCheckBox(text, listener, checked = true) {
   return new CheckBox({
     left: MARGIN, top: ['prev()', MARGIN_SMALL], right: MARGIN,
-    text: text,
-    checked: checked
+    text,
+    checked
   }).on('checkedChanged', listener)
     .appendTo(controls);
 }
@@ -89,7 +89,7 @@ function createColorPicker(text, property) {
   let initialColor = navigationView[property];
   new TextView({
     left: MARGIN, top: ['prev()', MARGIN], width: LABEL_WIDTH,
-    text: text
+    text
   }).appendTo(controls);
   new Picker({
     left: ['prev()', MARGIN], baseline: 'prev()', right: MARGIN,

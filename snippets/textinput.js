@@ -8,6 +8,6 @@ new TextInput({
 }).on('accept', ({text}) => {
   new TextView({
     top: 'prev() 20', left: '20%',
-    text: text
+    text
   }).appendTo(ui.contentView);
 }).appendTo(ui.contentView);

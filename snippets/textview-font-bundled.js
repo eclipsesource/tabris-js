@@ -19,7 +19,7 @@ for (let style of STYLES) {
       new TextView({
         left: 16, top: 'prev() 8', right: 16,
         text: 'Sphinx of black quartz, judge my vow',
-        font: font
+        font
       }).appendTo(scrollView);
     }
   }

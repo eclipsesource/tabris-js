@@ -1,15 +1,15 @@
-import {ActionSheet, TextView, Button, ui} from 'tabris';
+import {ActionSheet, TextView, Button, WidgetCollection} from 'tabris';
 
-new Button({
-  left: 16, right: 16, top: 16,
-  text: 'Show ActionSheet2'
-}).on({select: showActionSheet})
-  .appendTo(ui.contentView);
+tabris.ui.contentView.append(
+  <WidgetCollection>
+    <Button left={16} right={16} top={16} onSelect={showActionSheet}>
+      Show ActionSheet2
+    </Button>
+    <TextView left={16} right={16} top='prev() 16' alignment='center'/>
+  </WidgetCollection>
+);
 
-let selectionTextView = new TextView({
-  left: 16, right: 16, top: ['prev()', 16],
-  alignment: 'center'
-}).appendTo(ui.contentView);
+const textView = tabris.ui.contentView.find(TextView).first();
 
 function showActionSheet() {
   new ActionSheet({
@@ -23,7 +23,7 @@ function showActionSheet() {
       {title: 'Cancel', image: {src: 'resources/close-black-24dp@3x.png', scale: 3}, style: 'cancel'},
     ]
   }).on({
-    select: ({target: actionSheet, index}) => selectionTextView.text = `"${actionSheet.actions[index].title}" selected`,
+    select: ({target: actionSheet, index}) => textView.text = `"${actionSheet.actions[index].title}" selected`,
     close: () => console.log('ActionSheet closed')
   }).open();
 }

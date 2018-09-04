@@ -21,7 +21,7 @@ createLabel('Thank you!')
 function createLabel(text) {
   return new TextView({
     left: 10, centerY: 0,
-    text: text,
+    text,
     font: '22px Arial'
   });
 }

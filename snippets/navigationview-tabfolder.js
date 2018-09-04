@@ -10,7 +10,7 @@ let tabFolder = new TabFolder({
 
 function createTab(title, image) {
   let tab = new Tab({
-    title: title,
+    title,
     image: {src: image, scale: 2}
   }).appendTo(tabFolder);
   let navigationView = new NavigationView({

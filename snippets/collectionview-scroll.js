@@ -81,10 +81,10 @@ function createItems() {
   let items = [];
   let top = 0;
   for (let j = 1; j <= 10; j++) {
-    items.push({name: 'Section ' + j, type: 'section', top: top});
+    items.push({name: 'Section ' + j, type: 'section', top});
     top += SECTION_HEIGHT;
     for (let i = 0; i < 5; i++) {
-      items.push({name: 'Item ' + count++, type: 'item', top: top});
+      items.push({name: 'Item ' + count++, type: 'item', top});
       top += ITEM_HEIGHT;
     }
   }

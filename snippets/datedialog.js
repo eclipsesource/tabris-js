@@ -16,7 +16,7 @@ let selectionTextView = new TextView({
 function showDateDialog() {
   let date = new Date();
   new DateDialog({
-    date: date,
+    date,
     minDate: new Date(date.getTime() - FIVE_DAYS),
     maxDate: new Date(date.getTime() + FIVE_DAYS)
   }).on({

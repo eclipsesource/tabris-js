@@ -37,9 +37,9 @@ new TextView({
 
 function createTextView(text, id) {
   new TextView({
-    id: id,
+    id,
     left: 16, top: 'prev() 16',
-    text: text
+    text
   }).appendTo(ui.contentView);
 }
 

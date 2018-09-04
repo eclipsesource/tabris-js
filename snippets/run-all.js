@@ -760,10 +760,10 @@ function scroll(target) {
   if (target instanceof CollectionView) {
     return wait(500)
       .then(() => target.reveal(target.itemCount - 1))
-      .then(() => target.trigger('scroll', {target: target, deltaY: 0}))
+      .then(() => target.trigger('scroll', {target, deltaY: 0}))
       .then(() => wait(1000))
       .then(() => target.reveal(0))
-      .then(() => target.trigger('scroll', {target: target, deltaY: 0}))
+      .then(() => target.trigger('scroll', {target, deltaY: 0}))
       .then(() => wait(500));
   } else if (target instanceof ScrollView) {
     let outerHeight = target.bounds.height;

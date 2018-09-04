@@ -15,7 +15,7 @@ tabFolder.on('selectionChanged', ({value: tab}) => console.log(`selection change
 
 function createTab(title, image, seletedImage) {
   let tab = new Tab({
-    title: title, // converted to upper-case on Android
+    title, // converted to upper-case on Android
     image: {src: image, scale: 2},
     selectedImage: {src: seletedImage, scale: 2}
   }).on({

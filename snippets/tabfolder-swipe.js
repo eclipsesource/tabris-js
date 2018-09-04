@@ -14,6 +14,6 @@ function createTab(text) {
   let tab = new Tab().appendTo(tabFolder);
   new TextView({
     centerX: 0, centerY: 0,
-    text: text
+    text
   }).appendTo(tab);
 }

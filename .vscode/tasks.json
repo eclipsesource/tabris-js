@@ -32,7 +32,7 @@
         "-p",
         "${fileDirname}",
         "-m",
-        "dist/${fileBasename}"
+        "dist/${fileBasenameNoExtension}.js"
       ],
       "problemMatcher": [
         "$tsc-watch"
@@ -46,21 +46,21 @@
         "command": "bash",
         "args": [
           "-c",
-          "cd ${fileDirname} && npm install ${workspaceRoot}/build/tabris && tabris serve  -a -i -w -m ./dist/${fileBasename}"
+          "cd ${fileDirname} && npm install ${workspaceRoot}/build/tabris && tabris serve  -a -i -w -m ./dist/${fileBasenameNoExtension}.js"
         ],
       },
       "osx": {
         "command": "bash",
         "args": [
           "-c",
-          "cd ${fileDirname} && npm install ${workspaceRoot}/build/tabris && tabris serve  -a -i -w -m ./dist/${fileBasename}"
+          "cd ${fileDirname} && npm install ${workspaceRoot}/build/tabris && tabris serve  -a -i -w -m ./dist/${fileBasenameNoExtension}.js"
         ],
       },
       "windows": {
         "command": "cmd",
         "args": [
           "/c",
-          "\"cd ${fileDirname} & npm install ${workspaceRoot}\\build\\tabris & tabris serve -a -i -w -m ./dist/${fileBasename}\""
+          "\"cd ${fileDirname} & npm install ${workspaceRoot}\\build\\tabris & tabris serve -a -i -w -m ./dist/${fileBasenameNoExtension}.js\""
         ]
       },
       "problemMatcher": [
@@ -74,21 +74,21 @@
         "command": "bash",
         "args": [
           "-c",
-          "grunt clean build && cd ${fileDirname} && npm install ${workspaceRoot}/build/tabris && tabris serve -a -i -w -m ./dist/${fileBasename}"
+          "grunt clean build && cd ${fileDirname} && npm install ${workspaceRoot}/build/tabris && tabris serve -a -i -w -m ./dist/${fileBasenameNoExtension}.js"
         ],
       },
       "linux": {
         "command": "bash",
         "args": [
           "-c",
-          "grunt clean build && cd ${fileDirname} && npm install ${workspaceRoot}/build/tabris && tabris serve -a -i -w -m ./dist/${fileBasename}"
+          "grunt clean build && cd ${fileDirname} && npm install ${workspaceRoot}/build/tabris && tabris serve -a -i -w -m ./dist/${fileBasenameNoExtension}.js"
         ],
       },
       "windows": {
         "command": "cmd",
         "args": [
           "/c",
-          "\"grunt clean build & cd ${fileDirname} & npm install ${workspaceRoot}\\build\\tabris & tabris serve -a -i -w -m ./dist/${fileBasename}\""
+          "\"grunt clean build & cd ${fileDirname} & npm install ${workspaceRoot}\\build\\tabris & tabris serve -a -i -w -m ./dist/${fileBasenameNoExtension}.js\""
         ]
       },
       "problemMatcher": [
@@ -103,21 +103,21 @@
         "command": "bash",
         "args": [
           "-c",
-          "cd ${fileDirname} && npm remove tabris && npm install tabris && tabris serve -a -i -w -m ./dist/${fileBasename}"
+          "cd ${fileDirname} && npm remove tabris && npm install tabris && tabris serve -a -i -w -m ./dist/${fileBasenameNoExtension}.js"
         ],
       },
       "linux": {
         "command": "bash",
         "args": [
           "-c",
-          "cd ${fileDirname} && npm remove tabris && npm install tabris && tabris serve -a -i -w -m ./dist/${fileBasename}"
+          "cd ${fileDirname} && npm remove tabris && npm install tabris && tabris serve -a -i -w -m ./dist/${fileBasenameNoExtension}.js"
         ],
       },
       "windows": {
         "command": "cmd",
         "args": [
           "/c",
-          "\"cd ${fileDirname} & npm remove tabris & npm install tabris & tabris serve -a -i -w -m ./dist/${fileBasename}\""
+          "\"cd ${fileDirname} & npm remove tabris & npm install tabris & tabris serve -a -i -w -m ./dist/${fileBasenameNoExtension}.js\""
         ]
       },
       "problemMatcher": [
