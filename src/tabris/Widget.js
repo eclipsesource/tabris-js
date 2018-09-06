@@ -73,11 +73,45 @@ export default class Widget extends NativeObject {
     return new WidgetCollection(filtered, selector);
   }
 
+  toXML() {
+    const content = this._getXMLContent();
+    const hasChild = content !== '';
+    if (!hasChild) {
+      return this._getXMLHeader(hasChild);
+    }
+    return `${this._getXMLHeader(hasChild)}\n${content}\n${this._getXMLFooter(hasChild)}`;
+  }
+
   get data() {
     if (!this.$data) {
       this.$data = {};
     }
     return this.$data;
+  }
+
+  _getXMLContent() {
+    const children = [];
+    const prefix = '    ';
+    if (this.$children) {
+      for (let i = 0; i < this.$children.length; ++i) {
+        const widget = this.$children[i];
+        if (widget instanceof Widget) {
+          children.push(widget.toXML().split('\n').map(line => prefix + line).join('\n'));
+        }
+      }
+    }
+    return children.join('\n');
+  }
+
+  _getXMLHeader(hasChild) {
+    const id = this.id ? ` id='${this.id}'` : '';
+    const className = this.class ? ` class='${this.class}'` : '';
+    const values = `${this.constructor.name}${id}${className}`;
+    return hasChild ? `<${values}>` : `<${values}/>`;
+  }
+
+  _getXMLFooter(hasChild) {
+    return hasChild ? `</${this.constructor.name}>` : '';
   }
 
   _getContainer() {

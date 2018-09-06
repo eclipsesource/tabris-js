@@ -28,6 +28,14 @@ export default class Console {
     this.log('%s: %s', label, this._count[label] = 0);
   }
 
+  dirxml(obj) {
+    if (obj && obj.toXML instanceof Function) {
+      this.log(obj.toXML());
+    } else {
+      this.log(obj);
+    }
+  }
+
   group(...args) {
     this.log(...args);
     this._prefixSpaces += 2;

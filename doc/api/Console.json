@@ -71,6 +71,18 @@
         ]
       }
     ],
+    "dirxml": [
+      {
+        "description": "XML tree representation of a given object if it has 'toXML' method, otherwise prints as log method.",
+        "parameters": [
+          {
+            "description": "A JavaScript object",
+            "name": "object",
+            "type": "any"
+          }
+        ]
+      }
+    ],
     "group": [
       {
         "description": "Creates a new inline group in the console output. This indents following console messages by an additional spaces, until console.groupEnd() is called.",
