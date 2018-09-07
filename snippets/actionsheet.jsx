@@ -16,11 +16,11 @@ function showActionSheet() {
     title: 'Actions',
     message: 'Select any of the actions below to proceed.',
     actions: [
-      {title: 'Search', image: {src: 'resources/search-black-24dp@3x.png', scale: 3}},
-      {title: 'Share', image: {src: 'resources/share-black-24dp@3x.png', scale: 3}},
-      {title: 'Settings', image: {src: 'resources/settings-black-24dp@3x.png', scale: 3}},
-      {title: 'Delete', image: {src: 'resources/delete-black-24dp@3x.png', scale: 3}, style: 'destructive'},
-      {title: 'Cancel', image: {src: 'resources/close-black-24dp@3x.png', scale: 3}, style: 'cancel'},
+      {title: 'Search', image: 'resources/search-black-24dp@3x.png'},
+      {title: 'Share', image: 'resources/share-black-24dp@3x.png'},
+      {title: 'Settings', image: 'resources/settings-black-24dp@3x.png'},
+      {title: 'Delete', image: 'resources/delete-black-24dp@3x.png', style: 'destructive'},
+      {title: 'Cancel', image: 'resources/close-black-24dp@3x.png', style: 'cancel'},
     ]
   }).on({
     select: ({target: actionSheet, index}) => textView.text = `"${actionSheet.actions[index].title}" selected`,

@@ -503,8 +503,44 @@ describe('property-types', function() {
       expect(console.warn).not.to.have.been.called;
     });
 
+    it('succeeds for image with scale', function() {
+      stub(console, 'warn');
+
+      let result = encode({src: 'foo.png', scale: 1.4});
+
+      expect(result).to.eql(['foo.png', null, null, 1.4]);
+      expect(console.warn).not.to.have.been.called;
+    });
+
     it('succeeds for string', function() {
       expect(encode('foo.jpg')).to.eql(['foo.jpg', null, null, null]);
+    });
+
+    it('succeeds for string with scale detection via file name', function() {
+      expect(encode('foo@2x.jpg')).to.eql(['foo@2x.jpg', null, null, 2]);
+      expect(encode('foo@1.4x.jpg')).to.eql(['foo@1.4x.jpg', null, null, 1.4]);
+      expect(encode('foo@2.jpg')).to.eql(['foo@2.jpg', null, null, null]);
+      expect(encode('foo2x.jpg')).to.eql(['foo2x.jpg', null, null, null]);
+      expect(encode('foo2x.jpg')).to.eql(['foo2x.jpg', null, null, null]);
+    });
+
+    it('succeeds for object with scale detection via file name', function() {
+      expect(encode({src: 'foo@2x.jpg'})).to.eql(['foo@2x.jpg', null, null, 2]);
+      expect(encode({src: 'foo@1.4x.jpg'})).to.eql(['foo@1.4x.jpg', null, null, 1.4]);
+      expect(encode({src: 'foo@2.jpg'})).to.eql(['foo@2.jpg', null, null, null]);
+      expect(encode({src: 'foo2x.jpg'})).to.eql(['foo2x.jpg', null, null, null]);
+      expect(encode({src: 'foo2x.jpg'})).to.eql(['foo2x.jpg', null, null, null]);
+    });
+
+    it('overrides scale detection with explicit scale or dimensions', function() {
+      expect(encode({src: 'foo@2x.jpg', scale: 1})).to.eql(['foo@2x.jpg', null, null, 1]);
+      expect(encode({src: 'foo@1.4x.jpg', width: 10})).to.eql(['foo@1.4x.jpg', 10, null, null]);
+      expect(encode({src: 'foo@1.4x.jpg', height: 10})).to.eql(['foo@1.4x.jpg', null, 10, null]);
+    });
+
+    it('has no scale detection for scale pattern in path', function() {
+      expect(encode('foo@2x/bar.jpg')).to.eql(['foo@2x/bar.jpg', null, null, null]);
+      expect(encode('foo@3x/bar@2x.jpg')).to.eql(['foo@3x/bar@2x.jpg', null, null, 2]);
     });
 
     it('succeeds for null', function() {

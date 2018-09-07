@@ -162,6 +162,12 @@ export let types = {
       if ('scale' in value && ('width' in value || 'height' in value)) {
         warn('Image scale is ignored if width or height are given');
       }
+      if (!('scale' in value) && !('width' in value) && !('height' in value)) {
+        const autoScaleMatch = /@([0-9]\.?[0-9]*)x/.exec(value.src.split('/').pop());
+        if (autoScaleMatch && autoScaleMatch[1]) {
+          value.scale = parseFloat(autoScaleMatch[1], 10);
+        }
+      }
       return imageToArray(value);
     },
     decode(value) {

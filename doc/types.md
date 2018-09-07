@@ -140,7 +140,7 @@ Examples:
 Images are specified as objects with the following properties:
 
 * **src**: *string*
-    File system path, relative path or URL. Android and iOS also support [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme). Relative paths are resolved relative to 'package.json'. On Android the name of a bundled [drawable resource](https://developer.android.com/guide/topics/resources/drawable-resource.html) can be provided with the url scheme `android-drawable`, e.g. `android-drawable://ic_info_black`.
+    File system path, relative path or URL. The [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme) scheme is also supported. Relative paths are resolved relative to 'package.json'. On Android the name of a bundled [drawable resource](https://developer.android.com/guide/topics/resources/drawable-resource.html) can be provided with the url scheme `android-drawable`, e.g. `android-drawable://ic_info_black`.
 * **width**: *number (optional)*
     Image width in dip, extracted from the image file when missing.
 * **height**: *number (optional)*
@@ -148,12 +148,13 @@ Images are specified as objects with the following properties:
 * **scale**: *number (optional)*
     Image scale factor - the image will be scaled down by this factor. Ignored when width or height are set.
 
-A plain string can be used as a shorthand, e.g. `"image.jpg"` equals `{src: "image.jpg"}`.
+A plain string can be used as a shorthand, e.g. `"image.jpg"` equals `{src: "image.jpg"}`. The scale can also be part of the file name in the patter of "@\<scale\>x", e.g. `"image@2x.jpg"`. The pattern is ignored if `scale`, `width` or `height` are explicitly given.
 
 Examples:
 
 ```js
 "images/catseye.jpg"
+"images/catseye@1.5x.jpg"
 {src: "images/catseye.jpg", width: 300, height: 200}
 {src: "http://example.com/catseye.jpg", scale: 2}
 ```
