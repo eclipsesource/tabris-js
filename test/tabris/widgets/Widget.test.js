@@ -1,18 +1,18 @@
-import {expect, mockTabris, restore, spy, stub} from '../test';
-import WidgetCollection from '../../src/tabris/WidgetCollection';
-import Layout from '../../src/tabris/Layout';
-import ClientStub from './ClientStub';
-import Widget from '../../src/tabris/Widget';
-import Ui from '../../src/tabris/widgets/Ui';
-import Composite from '../../src/tabris/widgets/Composite';
-import TextView from '../../src/tabris/widgets/TextView';
-import RadioButton from '../../src/tabris/widgets/RadioButton';
-import Button from '../../src/tabris/widgets/Button';
-import CheckBox from '../../src/tabris/widgets/CheckBox';
-import ToggleButton from '../../src/tabris/widgets/ToggleButton';
-import TextInput from '../../src/tabris/widgets/TextInput';
-import {omit} from '../../src/tabris/util';
-import {ColorShader} from '../../src/tabris/util-shaders';
+import {expect, mockTabris, restore, spy, stub} from '../../test';
+import WidgetCollection from '../../../src/tabris/WidgetCollection';
+import Layout from '../../../src/tabris/Layout';
+import ClientStub from '.././ClientStub';
+import Widget from '../../../src/tabris/Widget';
+import Ui from '../../../src/tabris/widgets/Ui';
+import Composite from '../../../src/tabris/widgets/Composite';
+import TextView from '../../../src/tabris/widgets/TextView';
+import RadioButton from '../../../src/tabris/widgets/RadioButton';
+import Button from '../../../src/tabris/widgets/Button';
+import CheckBox from '../../../src/tabris/widgets/CheckBox';
+import ToggleButton from '../../../src/tabris/widgets/ToggleButton';
+import TextInput from '../../../src/tabris/widgets/TextInput';
+import {omit} from '../../../src/tabris/util';
+import {ColorShader} from '../../../src/tabris/util-shaders';
 
 describe('Widget', function() {
 

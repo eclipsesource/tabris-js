@@ -1,8 +1,8 @@
-import {expect, mockTabris, restore, spy, stub} from '../../test';
-import ClientStub from '../ClientStub';
-import AlertDialog from '../../../src/tabris/AlertDialog';
-import TextInput from '../../../src/tabris/widgets/TextInput';
-import Button from '../../../src/tabris/widgets/Button';
+import {expect, mockTabris, restore, spy, stub} from './../test';
+import ClientStub from './ClientStub';
+import AlertDialog from './../../src/tabris/AlertDialog';
+import TextInput from './../../src/tabris/widgets/TextInput';
+import Button from './../../src/tabris/widgets/Button';
 
 describe('AlertDialog', function() {
 

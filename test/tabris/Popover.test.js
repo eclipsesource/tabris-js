@@ -1,7 +1,7 @@
-import {expect, mockTabris, restore, spy} from '../../test';
-import ClientStub from '../ClientStub';
-import Popover from '../../../src/tabris/Popover';
-import ContentView from '../../../src/tabris/widgets/ContentView';
+import {expect, mockTabris, restore, spy} from './../test';
+import ClientStub from './ClientStub';
+import Popover from './../../src/tabris/Popover';
+import ContentView from './../../src/tabris/widgets/ContentView';
 
 describe('Popover', () => {
 
