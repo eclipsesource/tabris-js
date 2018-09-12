@@ -23,16 +23,6 @@ export default class ActionSheet extends Popup {
     }
   }
 
-  _listen(name, listening) {
-    if (name === 'select') {
-      this._nativeListen(name, listening);
-    } else if (name === 'close') {
-      this._nativeListen(name, listening);
-    } else {
-      super._listen(name, listening);
-    }
-  }
-
 }
 
 NativeObject.defineProperties(ActionSheet.prototype, {
@@ -61,4 +51,9 @@ NativeObject.defineProperties(ActionSheet.prototype, {
     },
     default: () => []
   }
+});
+
+NativeObject.defineEvents(ActionSheet.prototype, {
+  close: {native: true},
+  select: {native: true}
 });
