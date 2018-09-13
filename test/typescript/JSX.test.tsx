@@ -3,6 +3,7 @@ import * as tabris from 'tabris';
 let onPanHandler: (event: tabris.WidgetPanEvent) => void = (event) => {};
 let onTextChangedHandler: (event: tabris.PropertyChangedEvent<tabris.TextInput, string>) => void = (event) => {};
 
+// Widgets
 let action: tabris.Action = <tabris.Action title='foo' onSelect={() => {}}>foo</tabris.Action>;
 let button: tabris.Button = <tabris.Button onPanUp={onPanHandler}>foo</tabris.Button>;
 let canvas: tabris.Canvas = <tabris.Canvas onResize={function() {}} left={23} transform={{rotation: 360}}/>;
@@ -29,9 +30,6 @@ let webView: tabris.WebView = <tabris.WebView url='http://localhost/'/>;
 
 let noAttributes: tabris.Composite = <tabris.Composite/>;
 
-// Valid children
-let widgetCollection: tabris.WidgetCollection = <tabris.WidgetCollection>{[new tabris.Button(), new tabris.TextView()]}</tabris.WidgetCollection>;
-widgetCollection = <tabris.WidgetCollection children={[new tabris.Button(), new tabris.TextView()]} />;
 let compositeWithChildren: tabris.Composite = <tabris.Composite>{[new tabris.Button(), new tabris.WidgetCollection<tabris.TextView>([])]}</tabris.Composite>;
 let canvasWithChildren: tabris.Canvas = <tabris.Canvas>{new tabris.Button()}</tabris.Canvas>;
 let navigationViewWidthChildren: tabris.NavigationView = <tabris.NavigationView>{new tabris.Page()}</tabris.NavigationView>;
@@ -75,3 +73,18 @@ let custom3: MyCustomWidgetWithUnpackedListeners = <MyCustomWidgetWithUnpackedLi
     const widget: MyCustomWidgetWithUnpackedListeners = event.target;
   }}
   />;
+
+// WidgetCollection
+let widgetCollection: tabris.WidgetCollection = <tabris.WidgetCollection>{[new tabris.Button(), new tabris.TextView()]}</tabris.WidgetCollection>;
+widgetCollection = <tabris.WidgetCollection children={[new tabris.Button(), new tabris.TextView()]} />;
+
+// Popup
+
+const actions: tabris.ActionSheetItem[] = [
+  {title: 'foo', image: 'foo.jpg', style: 'default'}
+];
+
+let actionSheet: tabris.ActionSheet = <tabris.ActionSheet title='foo' message='foo' actions={actions} />;
+actionSheet = <tabris.ActionSheet title='foo' actions={actions}>foo</tabris.ActionSheet>;
+actionSheet = <tabris.ActionSheet title='foo'>{actions}</tabris.ActionSheet>;
+actionSheet = <tabris.ActionSheet title='foo'>{['foo', 'bar', actions[0]]}</tabris.ActionSheet>;

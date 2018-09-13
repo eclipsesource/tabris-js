@@ -10,7 +10,7 @@ export default class ToggleButton extends Widget {
 
   /** @this {import("../JsxProcessor").default} */
   [jsxFactory](Type, props, children) {
-    return super[jsxFactory](Type, this.withTextContent(props, children, 'text'));
+    return super[jsxFactory](Type, this.withContentText(props, children, 'text'));
   }
 
 }

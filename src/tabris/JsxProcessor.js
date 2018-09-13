@@ -37,7 +37,7 @@ export default class JsxProcessor {
     if (children && children.length) {
       throw new Error(`JSX: ${Type.name} can not have children`);
     }
-    let result = new Type(this.getProperties(attributes || {}, children), children);
+    let result = new Type(this.getProperties(attributes || {}));
     this.registerListeners(result, attributes);
     return result;
   }
@@ -60,12 +60,20 @@ export default class JsxProcessor {
     Listeners.getListenerStore(obj).on(this.getListeners(attributes));
   }
 
-  withTextContent(attributes, children, property) {
-    if (attributes && attributes[property] && children && children.length) {
+  withContentText(attributes, content, property) {
+    if (attributes && attributes[property] && content && content.length) {
       throw new Error(`JSX: ${property} given twice`);
     }
-    const text = attributes && attributes[property] ? attributes[property].toString() : (children || []).join(' ');
+    const text = attributes && attributes[property] ? attributes[property].toString() : (content || []).join(' ');
     return Object.assign(attributes || {}, text ? {[property]: text} : {});
+  }
+
+  withContentChildren(attributes, content, property) {
+    if (attributes && attributes[property] && content && content.length) {
+      throw new Error(`JSX: ${property} given twice`);
+    }
+    const children = attributes && attributes[property] ? attributes[property] : (content || []);
+    return Object.assign(attributes || {}, children ? {[property]: children} : {});
   }
 
   getProperties(attributes) {

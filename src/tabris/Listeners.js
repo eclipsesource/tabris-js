@@ -1,5 +1,4 @@
 import Events from './Events';
-import NativeObject from './NativeObject';
 
 const DELEGATE_FIELDS = ['reject', 'resolve', 'addListener', 'removeListener', 'once', 'trigger'];
 const storeKey = Symbol('ListenersStore');
@@ -7,7 +6,9 @@ const storeKey = Symbol('ListenersStore');
 export default class Listeners {
 
   static getListenerStore(target) {
-    if (target instanceof NativeObject) {
+    // NOTE: we do not use an instanceof NativeObject check here since
+    // importing NativeObject causes circular dependency issues
+    if (target.on instanceof Function) {
       return target;
     }
     if (!target[storeKey]) {

@@ -10,7 +10,7 @@ export default class Action extends Widget {
 
   /** @this {import("../JsxProcessor").default} */
   [jsxFactory](Type, props, children) {
-    return super[jsxFactory](Type, this.withTextContent(props, children, 'title'));
+    return super[jsxFactory](Type, this.withContentText(props, children, 'title'));
   }
 
 }

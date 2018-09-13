@@ -218,7 +218,17 @@ class DocGenerator {
         result.push('\n' + property.description);
       }
       if (property.jsxContentProperty) {
-        result.push(`\n\nIn JSX the content of the *${def.type}* element is mapped to this property. Therefore \`<${def.type} ${name}='Hello World' />\` is the same as \`<${def.type}>Hello World</${def.type}>\`.`);
+        const isString = property.type === 'string';
+        result.push(`\n\nIn JSX the `);
+        result.push(isString ? `text content ` : `child elements `);
+        result.push(`of the *${def.type}* element `);
+        result.push(isString ? `is ` : `are `);
+        result.push(`mapped to this property. `);
+        result.push(`Therefore \`<${def.type}>`);
+        result.push(isString ? 'Hello World' : `{${name}}`);
+        result.push(`</${def.type}>\` is the same as \`<${def.type} ${name}=`);
+        result.push(isString ? `'Hello World'` : `{${name}}`);
+        result.push(` />\`.`);
       }
       if (property.const) {
         result.push('<br/>' + MSG_CONST_PROP);

@@ -124,7 +124,6 @@ describe('JsxProcessor', function() {
     });
 
     it('appends children via properties', function() {
-      debugger; // eslint-disable-line
       let children = jsx.createElement(
         Composite,
         {

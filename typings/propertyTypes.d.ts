@@ -236,3 +236,9 @@ interface BoxDimensions {
 interface PropertyChangedEvent<T,U> extends EventObject<T>{
   readonly value: U
 }
+
+type ActionSheetItem = {
+  readonly title: string,
+  readonly image?: Image,
+  readonly style?: 'default'|'cancel'|'destructive'
+};

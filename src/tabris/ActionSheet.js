@@ -1,6 +1,7 @@
 import Popup from './Popup';
 import NativeObject from './NativeObject';
 import {types} from './property-types';
+import {jsxFactory} from './JsxProcessor';
 
 export default class ActionSheet extends Popup {
 
@@ -21,6 +22,22 @@ export default class ActionSheet extends Popup {
     } else {
       return super._trigger(name, event);
     }
+  }
+
+  /** @this {import("../JsxProcessor").default} */
+  [jsxFactory](Type, props, children) {
+    const flatChildren = this.normalizeChildren(children);
+    const propsWithActions = this.withContentChildren(
+      props,
+      flatChildren.filter(child => child instanceof Object),
+      'actions'
+    );
+    const finalProps = this.withContentText(
+      propsWithActions,
+      flatChildren.filter(child => !(child instanceof Object)),
+      'message'
+    );
+    return this.createNativeObject(Type, finalProps);
   }
 
 }

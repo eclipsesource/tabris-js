@@ -1,3 +1,4 @@
+import {createJsxProcessor} from '../../src/tabris/JsxProcessor';
 import {expect, mockTabris, restore, spy} from '../test';
 import ClientStub from './ClientStub';
 import ActionSheet from '../../src/tabris/ActionSheet';
@@ -132,6 +133,94 @@ describe('ActionSheet', () => {
 
       expect(select).to.have.been.calledOnce;
       expect(select).to.have.been.calledWithMatch({target: actionSheet});
+    });
+
+  });
+
+  describe('JSX', () => {
+
+    let jsx;
+
+    beforeEach(function() {
+      jsx = createJsxProcessor();
+    });
+
+    it('with message property', function() {
+      let popup = jsx.createElement(
+        ActionSheet,
+        {message: 'Hello World!'}
+      );
+
+      expect(popup).to.be.instanceOf(ActionSheet);
+      expect(popup.message).to.equal('Hello World!');
+    });
+
+    it('with text content', function() {
+      let popup = jsx.createElement(
+        ActionSheet,
+        null,
+        'Hello',
+        'World!'
+      );
+
+      expect(popup.message).to.equal('Hello World!');
+    });
+
+    it('with text content and message property', function() {
+      expect(() => jsx.createElement(
+        ActionSheet,
+        {message: 'Hello World!'},
+        'Hello',
+        'World!'
+      )).to.throw(/message given twice/);
+    });
+
+    it('with actions property', function() {
+      let popup = jsx.createElement(
+        ActionSheet,
+        {actions: [{title: 'Hello World!'}]}
+      );
+
+      expect(popup.actions).to.deep.equal([{title: 'Hello World!'}]);
+    });
+
+    it('with actions as content', function() {
+      let popup = jsx.createElement(
+        ActionSheet,
+        null,
+        {title: 'foo'},
+        {title: 'bar'}
+      );
+
+      expect(popup.actions).to.deep.equal([{title: 'foo'}, {title: 'bar'}]);
+    });
+
+    it('with actions property and content', function() {
+      expect(() => jsx.createElement(
+        ActionSheet,
+        {actions: [{title: 'bar'}]},
+        {title: 'foo'}
+      )).to.throw(/actions given twice/);
+    });
+
+    it('with select event listener', () => {
+      let select = spy();
+
+      let popup = jsx.createElement(ActionSheet, {onSelect: select});
+      tabris._notify(popup.cid, 'select', {});
+
+      expect(select).to.have.been.calledOnce;
+      expect(select).to.have.been.calledWithMatch({target: popup});
+    });
+
+    it('with close event listener', () => {
+      let close = spy();
+
+      let popup = jsx.createElement(ActionSheet, {onClose: close});
+      tabris._notify(popup.cid, 'close', {});
+
+      expect(close).to.have.been.calledOnce;
+      expect(close).to.have.been.calledWithMatch({target: popup});
     });
 
   });
