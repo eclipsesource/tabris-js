@@ -12,7 +12,7 @@
       }
     ]
   },
-  "jsxChildren": "string|ActionSheetItem|Array<string|ActionSheetItem>",
+  "jsxChildren": "string|{title: string, image?: Image, style?: 'default'|'cancel'|'destructive'}[]|Array<string|{title: string, image?: Image, style?: 'default'|'cancel'|'destructive'}>",
   "description": "A pop up dialog that offers a selection. Is automatically disposed when closed.",
   "properties": {
     "title": {
@@ -26,7 +26,7 @@
     },
     "actions": {
       "type": "{title: string, image?: Image, style?: 'default'|'cancel'|'destructive'}[]",
-      "ts_type": "ActionSheetItem[]",
+      "jsxType": "ActionSheetItem",
       "jsxContentProperty": true,
       "description": "An array of objects describing the actions to be displayed. Each action must have a title and it can also have an image. Actions with the style `cancel` or `destructive` are displayed in a special way."
     },

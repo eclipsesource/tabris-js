@@ -89,7 +89,11 @@ export interface Property {
    */
   ts_only?: boolean;
   /**
-   * JSX child elements are mapped to this property
+   * The type of JSX element that may be used to express the value(s) of this property
+   */
+  jsxType?: string;
+  /**
+   * JSX child elements of the matching type are mapped to this property
    */
   jsxContentProperty?: boolean;
   platforms?: Platforms;

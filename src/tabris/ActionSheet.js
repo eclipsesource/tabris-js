@@ -64,6 +64,13 @@ NativeObject.defineProperties(ActionSheet.prototype, {
           }
           return result;
         });
+      },
+      decode(value) {
+        return value.map(action => ({
+          title: action.title,
+          image: types.image.decode(action.image),
+          style: action.style || 'default'
+        }));
       }
     },
     default: () => []
@@ -74,3 +81,18 @@ NativeObject.defineEvents(ActionSheet.prototype, {
   close: {native: true},
   select: {native: true}
 });
+
+export class ActionSheetItem {
+
+  constructor({title, image, style} = {}) {
+    Object.defineProperty(this, 'title', {get() { return title || ''; }, enumerable: true});
+    Object.defineProperty(this, 'image', {get() { return image || null; }, enumerable: true});
+    Object.defineProperty(this, 'style', {get() { return style || 'default'; }, enumerable: true});
+  }
+
+  /** @this {import("./JsxProcessor").default} */
+  [jsxFactory](Type, props, children) {
+    return new Type(this.withContentText(props, children, 'title'));
+  }
+
+}

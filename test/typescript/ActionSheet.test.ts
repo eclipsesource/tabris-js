@@ -5,7 +5,7 @@ let widget: ActionSheet = new ActionSheet();
 // Properties
 let title: string;
 let message: string;
-let actions: {title: string, image?: Image, style?: 'default'|'cancel'|'destructive'}[];
+let actions: Array<{title: string, image?: Image, style?: 'default'|'cancel'|'destructive'}>;
 
 title = widget.title;
 message = widget.message;

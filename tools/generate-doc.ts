@@ -226,9 +226,12 @@ class DocGenerator {
         result.push(`mapped to this property. `);
         result.push(`Therefore \`<${def.type}>`);
         result.push(isString ? 'Hello World' : `{${name}}`);
-        result.push(`</${def.type}>\` is the same as \`<${def.type} ${name}=`);
+        result.push(`</${def.type}>\` would be the same as \`<${def.type} ${name}=`);
         result.push(isString ? `'Hello World'` : `{${name}}`);
-        result.push(` />\`.`);
+        result.push(` />\`.${property.jsxType ? ' ' : ''}`);
+      }
+      if (property.jsxType) {
+        result.push(`You can also import \`${property.jsxType}\` from the \`tabris\` module and use it as an JSX element to represent ${name}.`);
       }
       if (property.const) {
         result.push('<br/>' + MSG_CONST_PROP);
@@ -247,7 +250,7 @@ class DocGenerator {
     for (let platform in names) {
       if (platforms[platform] !== false) {
         let name = names[platform];
-        result.push(`<span class="${platform}-tag" title="supported on ${name}">${name}</span>`);
+        result.push(` < span class = '${platform}-tag' title = 'supported on ${name}' > ${name} < /span>`);
       }
     }
     result.push('</p>');

@@ -136,8 +136,12 @@
           "description": "Exclude this property from documentation",
           "type": "boolean"
         },
+        "jsxType": {
+          "description": "The type of JSX element that may be used to express the value(s) of this property",
+          "type": "string"
+        },
         "jsxContentProperty": {
-          "description": "JSX child elements are mapped to this property",
+          "description": "JSX child elements of the matching type are mapped to this property",
           "type": "boolean"
         },
         "platforms": {"$ref": "#/definitions/platforms"},

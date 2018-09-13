@@ -1,7 +1,7 @@
 import {createJsxProcessor} from '../../src/tabris/JsxProcessor';
 import {expect, mockTabris, restore, spy} from '../test';
 import ClientStub from './ClientStub';
-import ActionSheet from '../../src/tabris/ActionSheet';
+import ActionSheet, {ActionSheetItem} from '../../src/tabris/ActionSheet';
 
 describe('ActionSheet', () => {
 
@@ -181,7 +181,9 @@ describe('ActionSheet', () => {
         {actions: [{title: 'Hello World!'}]}
       );
 
-      expect(popup.actions).to.deep.equal([{title: 'Hello World!'}]);
+      expect(popup.actions).to.deep.equal([
+        {title: 'Hello World!', style: 'default', image: null}
+      ]);
     });
 
     it('with actions as content', function() {
@@ -192,7 +194,24 @@ describe('ActionSheet', () => {
         {title: 'bar'}
       );
 
-      expect(popup.actions).to.deep.equal([{title: 'foo'}, {title: 'bar'}]);
+      expect(popup.actions).to.deep.equal([
+        {title: 'foo', style: 'default', image: null},
+        {title: 'bar', style: 'default', image: null}
+      ]);
+    });
+
+    it('with ActionSheetItems as content', function() {
+      let popup = jsx.createElement(
+        ActionSheet,
+        null,
+        jsx.createElement(ActionSheetItem, {title: 'foo', image: {src: 'foo.jpg'}, style: 'cancel'}),
+        jsx.createElement(ActionSheetItem)
+      );
+
+      expect(popup.actions).to.deep.equal([
+        {title: 'foo', image: {src: 'foo.jpg'}, style: 'cancel'},
+        {title: '', image: null, style: 'default'}
+      ]);
     });
 
     it('with actions property and content', function() {
@@ -221,6 +240,23 @@ describe('ActionSheet', () => {
 
       expect(close).to.have.been.calledOnce;
       expect(close).to.have.been.calledWithMatch({target: popup});
+    });
+
+    it('ActionSheetItem is immutable', function() {
+      let item = jsx.createElement(ActionSheetItem, {title: 'foo', image: {src: 'foo.jpg'}, style: 'default'});
+
+      item.title = null;
+      item.image = null;
+      item.style = null;
+
+      expect(item).to.be.instanceOf(ActionSheetItem);
+      expect(item).to.deep.equal({title: 'foo', image: {src: 'foo.jpg'}, style: 'default'});
+    });
+
+    it('ActionSheetItem supports text content', function() {
+      let item = jsx.createElement(ActionSheetItem, {image: {src: 'foo.jpg'}, style: 'default'}, 'foo');
+
+      expect(item).to.deep.equal({title: 'foo', image: {src: 'foo.jpg'}, style: 'default'});
     });
 
   });

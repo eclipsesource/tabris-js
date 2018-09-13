@@ -80,7 +80,7 @@ widgetCollection = <tabris.WidgetCollection children={[new tabris.Button(), new 
 
 // Popup
 
-const actions: tabris.ActionSheetItem[] = [
+const actions: Array<{title: string, image?: tabris.Image, style?: 'default'|'cancel'|'destructive'}> = [
   {title: 'foo', image: 'foo.jpg', style: 'default'}
 ];
 
@@ -88,3 +88,5 @@ let actionSheet: tabris.ActionSheet = <tabris.ActionSheet title='foo' message='f
 actionSheet = <tabris.ActionSheet title='foo' actions={actions}>foo</tabris.ActionSheet>;
 actionSheet = <tabris.ActionSheet title='foo'>{actions}</tabris.ActionSheet>;
 actionSheet = <tabris.ActionSheet title='foo'>{['foo', 'bar', actions[0]]}</tabris.ActionSheet>;
+actionSheet = <tabris.ActionSheet title='foo'><tabris.ActionSheetItem image='foo.jpg' title='foo' style='cancel'/></tabris.ActionSheet>;
+actionSheet = <tabris.ActionSheet title='foo'><tabris.ActionSheetItem>foo</tabris.ActionSheetItem></tabris.ActionSheet>;

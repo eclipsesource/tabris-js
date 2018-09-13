@@ -14,7 +14,7 @@ import {addWindowTimerMethods} from './WindowTimers';
 import Storage, {create as createStorage} from './Storage';
 import JsxProcessor, {createJsxProcessor} from './JsxProcessor';
 import Action from './widgets/Action';
-import ActionSheet from './ActionSheet';
+import ActionSheet, {ActionSheetItem} from './ActionSheet';
 import ActivityIndicator from './widgets/ActivityIndicator';
 import AlertDialog from './AlertDialog';
 import Button from './widgets/Button';
@@ -75,6 +75,7 @@ if (global.tabris && global.tabris.version) {
 module.exports = global.tabris = Object.assign(new Tabris(), {
   Action,
   ActionSheet,
+  ActionSheetItem,
   ActivityIndicator,
   AlertDialog,
   App,
