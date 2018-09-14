@@ -130,6 +130,7 @@ export interface Method {
   parameters?: Parameter[];
   returns?: string;
   ts_only?: boolean;
+  static?: boolean;
   /**
    * Overrides "returns" for TypeScript declarations
    */

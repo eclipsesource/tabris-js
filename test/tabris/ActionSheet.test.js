@@ -32,6 +32,25 @@ describe('ActionSheet', () => {
       expect(() => actionSheet.open()).to.throw('Can not open a popup that was disposed');
     });
 
+    describe('as static method', () => {
+
+      it('returns actionSheet', () => {
+        expect(ActionSheet.open(actionSheet)).to.equal(actionSheet);
+      });
+
+      it('calls open', () => {
+        ActionSheet.open(actionSheet);
+        expect(client.calls({op: 'call'})[0].method).to.equal('open');
+      });
+
+      it('throws if actionSheet was closed', () => {
+        actionSheet.open();
+        actionSheet.close();
+        expect(() => ActionSheet.open(actionSheet)).to.throw('Can not open a popup that was disposed');
+      });
+
+    });
+
   });
 
   describe('actions', () => {

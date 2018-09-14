@@ -1,4 +1,4 @@
-import {ActionSheet, Image, ActionSheetSelectEvent, EventObject, Properties} from 'tabris';
+import {ActionSheet, Popup, Image, ActionSheetSelectEvent, EventObject, Properties} from 'tabris';
 
 let widget: ActionSheet = new ActionSheet();
 
@@ -24,3 +24,7 @@ let index: number;
 widget
   .onSelect((event: ActionSheetSelectEvent) => index = event.index)
   .onClose((event: EventObject<ActionSheet>) => {});
+
+// open
+widget = widget.open();
+const popup: Popup = ActionSheet.open(widget);

@@ -192,11 +192,15 @@ function createMethod(
   const result = [];
   result.push(createDoc(method));
   const paramList = createParamList(def, method.parameters, {hasContext: true, excludeConsts: true});
-  const declaration = (def.type ? (method.protected ? 'protected ' : '') : 'declare function ')
+  const declaration = (def.type ? createMethodModifiers(method) : 'declare function ')
     + `${name}${method.generics ? `<${method.generics}>` : ''}`
     + `(${paramList}): ${method.ts_returns || method.returns || 'void'};`;
   result.push(declaration);
   return result.join('\n');
+}
+
+function createMethodModifiers(method: schema.Method) {
+  return (method.protected ? 'protected ' : '') + (method.static ? 'static ' : '');
 }
 
 function renderProperties(text: TextBuilder, def: ExtendedApi) {

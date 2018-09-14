@@ -186,7 +186,8 @@ class DocGenerator {
 
   private renderMethod(name: string, method: schema.Method) {
     let result = [];
-    result.push('### ' + name + this.renderSignature(method.parameters) + '\n' + this.renderPlatforms(method.platforms) + '\n');
+    result.push('### ' + (method.static ? 'static ' : '') + name + this.renderSignature(method.parameters)) + '\n';
+    result.push(this.renderPlatforms(method.platforms) + '\n');
     if (method.parameters && method.parameters.length) {
       result.push('**Parameters:** ' + this.renderMethodParamList(method.parameters) + '\n');
     }
@@ -198,6 +199,9 @@ class DocGenerator {
     }
     if (method.description) {
       result.push(method.description + '\n');
+    }
+    if (method.static) {
+      result.push('This is a static method. It is called directly on the class, not the instance.\n');
     }
     return result.join('\n') + '\n';
   }

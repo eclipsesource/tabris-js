@@ -200,6 +200,7 @@
         },
         "returns": {"type": "string"},
         "ts_only": {"type": "boolean"},
+        "static": {"type": "boolean"},
         "ts_returns": {
           "description": "Overrides \"returns\" for TypeScript declarations",
           "type": "string"
