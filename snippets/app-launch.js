@@ -2,7 +2,7 @@ import {TextInput, TextView, Button, app, ui} from 'tabris';
 
 let textInput = new TextInput({
   left: 16, right: 16, top: 16,
-  text: 'http://tabrisjs.com'
+  text: 'http://tabris.com'
 }).appendTo(ui.contentView);
 
 new Button({
