@@ -72,12 +72,14 @@ export default class Worker {
       typeof message === 'string' ||
       typeof message === 'number' ||
       typeof message === 'boolean' ||
-      message && (
+      message &&
+      (
         message.constructor === Object ||
         message.constructor === Array ||
         message.constructor === DataView ||
         message.constructor === ArrayBuffer ||
-        message.constructor === ImageData);
+        message.constructor === ImageData
+      );
   }
 
   terminate() {
