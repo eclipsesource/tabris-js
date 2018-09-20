@@ -6,6 +6,8 @@
       url: getting-started.html
     - title: The Tabris.js Developer App
       url: developer-app.html
+    - title: Tabris 2.x to 3.x Migration Guide
+      url: migration-guide.html
 
 - title: Developer Guide
   pages:
