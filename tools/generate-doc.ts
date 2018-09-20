@@ -149,13 +149,17 @@ class DocGenerator {
   private renderDescription(def: ExtendedApi) {
     let result = def.description ? def.description + '\n\n' : '';
     if (def.namespace === 'global') {
-      result += `This ${def.object ? 'object' : 'API'} is available in the global namespace. `;
-      result += 'You do not need to import it explicitly.\n';
+      result += `This ${def.object ? 'object' : 'API'} can be used anywhere without importing it.`;
     } else {
-      result += `Import this ${def.object ? 'object' : 'type'} with `;
-      result += `"\`const {${def.object || def.type}} = require('tabris');\`"\n`;
+      result += `You can import this ${def.object ? 'object' : 'type'} like this:\n`;
+      result += this.renderCodeBlock(`import {${def.object || def.type}} from 'tabris';`);
+      result += `Or reference it directly form anywhere as "\`tabris.${def.object || def.type}\`".`;
     }
     return result;
+  }
+
+  private renderCodeBlock(content: string) {
+    return '```js\n' + content + '\n```\n';
   }
 
   private renderExtends(def: ExtendedApi) {
