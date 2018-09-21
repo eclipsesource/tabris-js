@@ -15,6 +15,7 @@ tabris._start = function(client) {
       printError('Could not load tabris module:', error);
       return;
     }
+    tabris.Module = Module;
     tabris._defineModule = function(id, fn) {
       return new Module(id, rootModule, fn);
     };
@@ -28,7 +29,7 @@ tabris._start = function(client) {
     let loadModule = function() {
       try {
         if (global.debugClient && !isWorker) {
-          global.debugClient.start();
+          global.debugClient.start(rootModule);
         }
         rootModule.require('./' + (isWorker ? global.workerScriptPath : ''));
         tabris.trigger('flush');
