@@ -2,32 +2,40 @@
 ---
 # Widget Basics
 
-The UI of a Tabris.js app consists of native widgets, represented by JavaScript objects. There are different types of widgets such as `Button`, `TextView`, or `ScrollView`. Every widget type is a subtype of [Widget](api/Widget.md) which provides common methods to get and set properties, be notified of events, and append widgets to a parent widget. Most of these methods return the widget itself to allow method chaining.
+The UI of a Tabris.js app consists of native widgets, represented by JavaScript objects. There are different types of widgets such as `Button`, `TextView`, or `ScrollView`. Every widget type is a subclass of [Widget](api/widgets/Widget.md) and [NativeObject](api/NativeObject.md), which provide some common API. For example:
 
-## Creating Native Widgets
-
-Every widget constructor accepts an object with initial property values to create the native widget with. Here's how you create and initialize a widget in Tabris.js:
-
-```js
-let button = new Button({
-  left: 10,
-  top: 10,
-  text: 'OK'
-});
+```
+tabris.NativeObject
+ |- tabris.Widget
+    |- tabris.Button
 ```
 
-If you prefer declarative UI, you may also [use `JSX` to create widgets](./lang.md#JSX). When you [generate a Tabris.js TypeScript project](./getting-started.md#create-your-first-app), JSX support is already set up.
+You can omit the `tabris` namespace when you explicitly [import](./modules.md) the widget from the tabris module. We will assume this to be the case in all following examples.
+
+## Creating Widgets
+
+Every widget constructor accepts an object with initial property values to create the widget with. Here's how you create and initialize a widget in Tabris.js:
+
+```js
+const button = new Button({left: 10, top: 10, text: 'OK'});
+```
+
+If you prefer declarative UI, you may also [use JSX to create widgets](./lang.md#JSX) within `.jsx` (for JavaScript) or `.tsx` (for TypeScript) files:
+
+```jsx
+const button = <Button left={10} top={10} text='OK' />;
+```
 
 ## Widget Properties
 
-Every native widget supports a set of properties (e.g. a text or a color). 
+Every widget supports a fixed set of properties (e.g. a text or a color). They can be set on widget creation (via constructor or JSX), or directly on the instance:
 
 ```js
 widget.text = 'Hello World';
-let text = widget.text;
+const text = widget.text;
 ```
 
-Using the `set()` method, it's also possible to set multiple property values:
+Using the `set()` method, it's also possible to set multiple properties in one call:
 
 ```js
 button.set({
@@ -36,107 +44,110 @@ button.set({
 });
 ```
 
-When trying to set an invalid value (e.g. a value of the wrong type), the value will be converted if possible, otherwise it will be ignored with a warning printed to the developer console. The `set()` method will also print a warning for unsupported properties.
+When trying to set an invalid value (e.g. of the wrong type), the value will be converted if possible, otherwise it will be ignored with a warning printed to the developer console.
 
-## Events
+## Setting the Parent
 
-Widgets can notify listeners of events such as a user interaction or a property change. Event listeners can be added using the methods `on()` and `once()`, and removed using `off()`.
+To become visible, a widget needs to be added to a parent. The top-level parent of all widgets on the main screen is the content view (`ui.contentView`). Widgets can be included in the widget hierarchy using `append()` or `appendTo()`.
+
+Therefore a complete "Hello World" app could look like this:
+
+```js
+import { ui, TextView } from 'tabris';
+
+new TextView({text: 'Hello World'}).appendTo(ui.contentView);
+```
+
+If the widget already has a parent, it is removed from the actual parent and appended to the new one. An *addChild* event is triggered on the new parent.
+
+With `append()` you can also add multiple widgets in one call:
+
+```js
+new Page().append(
+  new TextView(),
+  new Button()
+);
+```
+
+Or in JSX:
+
+```jsx
+<Page>
+  <TextView>
+  <Button>
+</Page>
+```
+
+JSX also supports WidgetCollection as an element which is useful for appending to already existing widgets:
+
+```jsx
+page.append(
+  <WidgetCollection>
+    <TextView>
+    <Button>
+  </WidgetCollection>
+);
+```
+
+## Event Handling
+
+Widgets can notify event callback functions ("listeners") of events such as a user interaction or a property change. For each type of event supported by a widget there is a matching method to register a listener. These all start with an `on` followed by the name of the event, e.g. `onSelect`.
 
 Example:
 
 ```js
-function selectionHandler(event) {
-  console.log('Button ' + event.target.text + ' selected!');
+function listener() {
+  console.log('Button selected!');
 }
-button.on('select', selectionHandler);
+
+button.onSelect(listener);
+```
+
+Inside a class (e.g. its constructor) it is recommended to use arrow functions to avoid `this` having unexpected values.
+
+```js
+button.onSelect(() => this.doSomething());
+```
+
+In JSX you can use attributes following the same naming pattern to register listener:
+
+```js
+const listener = () => console.log('Button selected!');
+const button = <Button onSelect={listener} />;
 ```
 
 The listener function is called with an instance of [EventObject](./api/EventObject.md) that may include a number of additional properties depending on the event type.
 
-> :point_right: Event types are case sensitive.
-
-A *context* object may be given as the third parameter to `on()`. This object will then be available as `this` inside the listener function.
+The listener registration method is also an object of the [Listeners](./api/Listeners.md) type that provides additional API for event handling. This is how you de-register a listener again:
 
 ```js
-function selectionHandler() {
-  console.log(this.foo);
-}
-button.on('select', selectionHandler, {foo: 'Hello World'});
+button.onSelect.removeListener(listener);
 ```
 
-The method `once()` does the same as `on()`, but it removes the listener after it has been invoked by an event.
+You can also add and remove listener with the widget methods `on` and `off`:
 
-To remove a listener, use the method `off()`.
+```js
+button.on('select', listener);
+button.off('select', listener);
+```
+
+> :point_right: You should avoid `on` and `off` when using TypeScript, as they are not type-safe.
 
 ### Change Events
 
-All widgets support property change events that are fired when a property value changes. All change events are named `[propertyName]Changed` and provide a `ChangeEvent`.
+All widgets support property change events that are fired when a property value changes. All change events are named `[propertyName]Changed` and provide a `ChangeEvent` object.
 
 In addition to the common event properties, change events have a property `value` that contains the new value of the property.
 
 Example:
 
 ```js
-new TextInput().on('textChanged', (event) => {
+new TextInput().onTextChanged(event => {
   console.log('The text has changed to: ' + event.value);
 })
 ```
 
-It's often convenient to use the [ES6 destructuring syntax](http://exploringjs.com/es6/ch_destructuring.html) for the event parameter, which allows to extract event properties as named variables:
-
-```js
-checkBox.on('selectionChanged', ({target, value: checked}) => {
-  target.text = checked ? 'checked' : 'unchecked';
-})
-```
-
-## Animations
-
-All widgets have the method [`animate(properties, options)`](api/Widget.md#animateproperties-options). It expects a map of properties to animate (akin to the `set` method), and a set of options for the animation itself.
-All animated properties are set to their target value as soon as the animation starts. Therefore, calling `get` will always return either the start or target value, never one in between.
-Only the properties `transform` and `opacity` can be animated.
-
-The `animate` method returns a Promise that is resolved once the animation is completed. If the animation is aborted, e.g. by disposing the widget, the promise is rejected.
-
-Example:
-
-```js
-label.animate({
-  opacity: 0,
-  transform: {
-    translationX: 200,
-    scaleX: 0.1
-  }
-}, {
-  duration: 1000,
-  easing: 'ease-out'
-}).then(() => label.dispose());
-```
-
-## The Widget Tree
-
-### Setting the Parent
-
-To become visible, a widget needs a parent. The top-level parent of all widgets is the content view (`ui.contentView`). Widgets can be included in the widget hierarchy using `append()` or `appendTo()`.
-
-Example:
-
-```js
-let button = new Button({
-  text: 'OK',
-  ...
-}).appendTo(parent);
-```
-
-If the widget already has a parent, it is removed from the actual parent and appended to the new one. An *addChild* event is triggered on the parent.
-
-It's also possible to add multiple widgets to the same parent using `append()`:
-
-```js
-page.append(okButton, cancelButton);
-```
-
-### Traversing
+## Traversing the Widget Tree
 
 See also: [Selector API](selector.md)
 
@@ -152,6 +163,29 @@ let lastChild = parent.children().last();
 ```
 
 The result list of children is an array-like object of the type [`WidgetCollection`](api/WidgetCollection.md).
+
+## Animations
+
+All widgets have the method [`animate(properties, options)`](api/Widget.md#animateproperties-options). It expects a map of properties to animate (akin to the `set` method), and a set of options for the animation itself.
+All animated properties are set to their target value as soon as the animation starts. Therefore, reading the property value will always result in either the start or target value, never one in between.
+
+Only the properties `transform` and `opacity` can be animated.
+
+The `animate` method returns a Promise that is resolved once the animation is completed. If the animation is aborted, e.g. by disposing the widget, the promise is rejected.
+
+In this example we use the `async/await` syntax to wait for the animation to finish, then dispose the widget.
+
+```js
+async function fadeOut(widget) {
+  await widget.animate(
+    {opacity: 0}
+    {duration: 1000, easing: 'ease-out'}
+  );
+  widget.dispose());
+}
+
+fadeOut(myLabel);
+```
 
 ## Disposing of a Widget
 
