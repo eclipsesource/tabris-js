@@ -11,6 +11,8 @@
 
 - title: Developer Guide
   pages:
+    - title: Runtime
+      url: runtime.html
     - title: Module System
       url: modules.html
     - title: Widget Basics
@@ -27,8 +29,10 @@
       url: w3c-api.html
     - title: Cordova Support
       url: cordova.html
-    - title: ES6, TypeScript and JSX
-      url: lang.html
+    - title: TypeScript Support
+      url: typescript.html
+    - title: JSX Support
+      url: JSX.html
     - title: Debugging
       url: debug.html
     - title: Build your app
