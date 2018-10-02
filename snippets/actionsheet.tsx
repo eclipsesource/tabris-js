@@ -1,17 +1,21 @@
-import {ActionSheet, ActionSheetItem, TextView, Button, WidgetCollection} from 'tabris';
+import {ActionSheet, ActionSheetItem, TextView, Button, WidgetCollection, ui} from 'tabris';
 
-tabris.ui.contentView.append(
+const StyledText = (properties: TextView['jsxProperties']) =>
+  <TextView textColor='red' {...properties} />;
+
+ui.contentView.append(
   <WidgetCollection>
     <Button left={16} right={16} top={16} onSelect={showActionSheet}>Show ActionSheet</Button>
-    <TextView left={16} right={16} top='prev() 16' alignment='center'/>
+    <StyledText left={16} right={16} top='prev() 16' alignment='center'/>
   </WidgetCollection>
 );
 
-const textView = tabris.ui.contentView.find(TextView).first();
+const textView = ui.contentView.find(TextView).first();
 const onSelect = ({target, index}) => textView.text = `"${target.actions[index].title}" selected`;
 const onClose = () => console.log('ActionSheet closed');
 
-function showActionSheet() {
+function showActionSheet(...args) {
+  console.log(args);
   ActionSheet.open(
     <ActionSheet title='Actions' onSelect={onSelect} onClose={onClose}>
       Select any of the actions below to proceed.
@@ -23,3 +27,19 @@ function showActionSheet() {
     </ActionSheet>
   );
 }
+
+type LinearGradient = string | {angle: number, colors: string[]};
+type LinearGradientShader = {linearGradient: LinearGradient};
+type ColorShader = {color: string};
+
+class Foo {
+
+  background: LinearGradientShader | ColorShader;
+  backgroundGradient: LinearGradient;
+  backgroundColor: string;
+
+}
+
+new Foo().background = {color: 'foo', linearGradient: {}};
+new Color({r})
+[255, 255, 0]

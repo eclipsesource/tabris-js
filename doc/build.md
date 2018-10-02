@@ -43,7 +43,7 @@ See [package.json | npm documentation](https://docs.npmjs.com/files/package.json
   // ...
   "main": "src/app.js",
   "dependencies": {
-    "tabris": "^2.0.0",
+    "tabris": "^3.0.0",
     "left-pad": "^1.1.3",
     // ...
   }

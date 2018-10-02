@@ -4,6 +4,6 @@
   "category": "Web APIs",
   "main": "app.js",
   "dependencies": {
-    "tabris": "file:../../build/tabris"
+    "tabris": "3.0.0-beta1"
   }
 }
