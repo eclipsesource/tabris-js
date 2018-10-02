@@ -57,6 +57,7 @@ Feature|Example|Note
 [WeakSet](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet)|`new WeakSet(iterable)`|
 
 Notable feature NOT supported:
+
 Feature|Example|Alternative
 --- | --- | ---
 [import/](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import])[export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export])|`import * as foo from 'foo';`|`const foo = require('foo');`
