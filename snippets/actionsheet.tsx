@@ -15,7 +15,6 @@ const onSelect = ({target, index}) => textView.text = `"${target.actions[index].
 const onClose = () => console.log('ActionSheet closed');
 
 function showActionSheet(...args) {
-  console.log(args);
   ActionSheet.open(
     <ActionSheet title='Actions' onSelect={onSelect} onClose={onClose}>
       Select any of the actions below to proceed.
@@ -27,19 +26,3 @@ function showActionSheet(...args) {
     </ActionSheet>
   );
 }
-
-type LinearGradient = string | {angle: number, colors: string[]};
-type LinearGradientShader = {linearGradient: LinearGradient};
-type ColorShader = {color: string};
-
-class Foo {
-
-  background: LinearGradientShader | ColorShader;
-  backgroundGradient: LinearGradient;
-  backgroundColor: string;
-
-}
-
-new Foo().background = {color: 'foo', linearGradient: {}};
-new Color({r})
-[255, 255, 0]
