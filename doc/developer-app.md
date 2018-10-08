@@ -2,11 +2,11 @@
 ---
 # The Tabris.js Developer App
 
-The *Tabris.js 2* Developer App is the easiest way to see some Tabris.js examples and to start developing mobile apps without having to perform an app build.
+The *Tabris.js 3* Developer App is the easiest way to see some Tabris.js examples and to start developing mobile apps without having to perform an app build.
 It is available for free in the app stores – just follow the links below or search for "Tabris.js" in the store on your mobile device.
 
-[![Tabris.js on Google play](https://tabrisjs.com/assets/img/playstore-badge.png)](https://play.google.com/store/apps/details?id=com.eclipsesource.tabrisjs2)
-[![Tabris.js on Apple App Store](https://tabrisjs.com/assets/img/appstore-badge.png)](https://itunes.apple.com/us/app/tabris.js-2/id1166468326?mt=8)
+[![Tabris.js on Google play](https://tabrisjs.com/assets/img/playstore-badge.png)](https://play.google.com/store/apps/details?id=com.eclipsesource.tabris.js)
+[![Tabris.js on Apple App Store](https://tabrisjs.com/assets/img/appstore-badge.png)](https://itunes.apple.com/us/app/tabris-js/id939600018?mt=8)
 
 ## Try the Examples
 
@@ -25,7 +25,7 @@ On Android, you can also press the system's back button to go back.
 ## The Developer Console
 
 While running Tabris.js scripts in the Developer App, you can open a developer console by sliding from the right edge of the screen to the left.
-On iOS you may have to start sliding from the edge itself to open the drawer. You can also use a four-finger double tap instead.
+On iPads you may have to start sliding from the edge itself with two fingers. You can also use a four-finger double tap instead.
 
 In the developer console you'll see messages and errors logged by the running script.
 You can even enter JavaScript expressions that will be evaluated in the context of your script.

@@ -9,7 +9,7 @@ This guide will help you create the foundation of a Tabris.js app and test it on
 ## Set up a mobile device
 
 All you need is an Android or iOS device, connected to the same network as your development machine.
-Install the [Tabris.js 2 Developer App](developer-app.md).
+Install the [Tabris.js 3 Developer App](developer-app.md).
 Start the app and (optional) log in with your GitHub account.
 
 ## Set up your development machine
@@ -23,15 +23,14 @@ On your development machine, the following software needs to be installed:
 ## Create your first app
 
 Create a new empty directory for your project, open a terminal in this directory and type `tabris init`.
-The _Tabris CLI_ will ask you a number of questions including the project's name and version and the type of project to create: a _JavaScript App_ or a _TypeScript App_. 
+The _Tabris CLI_ will ask you a number of questions including the project's name and version and the type of project to create: a _JavaScript App_ or a _TypeScript App_.
 
 > :point_right:  TypeScript projects are more complex, but also provide type safety, better tooling and out-of-the-box declarative UI using JSX. It's especially recommendable for experienced developers coming from Java or C#.
 
-Choose _JavaScript App_ for your first project.
 The CLI will then create a simple example project and install the required dependencies. Let's have a look at the most important files:
 
 - `package.json`: This is the central manifest file of your project. It includes your app's name and version, dependencies, and a pointer to the app's main module in the `main` field. For the details, see the [npm doc on package.json](https://www.npmjs.com/doc/files/package.json.html).
-- `src/app.js`: That's your app's main JS file. You are free to change its name and location, but you have to adjust the `main` field in the `package.json`.
+- `src/app.js`, `src/app.jsx` or `src/app.tsx`: That's your app's main JS/TypeScript file. You are free to change its name and location, but you have to adjust the `main` field in the `package.json`.
 - `cordova/config.xml`: This is the Cordova configuration file. You won't need this file until you build your app (see [build documentation](build.md)).
 
 Of course, you can also set up your projects manually. At the very least, you need a `package.json` with a dependency to tabris and a main JavaScript file. If you setup your project manually, you'll have to run `npm install` in this directory to install the tabris module.
