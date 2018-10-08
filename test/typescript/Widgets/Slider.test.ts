@@ -1,4 +1,4 @@
-import {Color, Slider, PropertyChangedEvent, SliderSelectEvent, Properties} from 'tabris';
+import {ColorValue, Slider, PropertyChangedEvent, SliderSelectEvent, Properties} from 'tabris';
 
 let widget: Slider = new Slider();
 
@@ -6,7 +6,7 @@ let widget: Slider = new Slider();
 let maximum: number;
 let minimum: number;
 let selection: number;
-let tintColor: Color;
+let tintColor: ColorValue;
 
 maximum = widget.maximum;
 minimum = widget.minimum;

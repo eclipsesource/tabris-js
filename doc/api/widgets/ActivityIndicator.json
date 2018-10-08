@@ -16,7 +16,7 @@
   },
   "properties": {
     "tintColor": {
-      "type": "Color",
+      "type": "ColorValue",
       "description": "The color of the indicator."
     }
   },

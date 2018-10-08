@@ -26,15 +26,15 @@
       "jsxContentProperty": true
     },
     "textColor": {
-      "type": "Color",
+      "type": "ColorValue",
       "description": "The color of the text."
     },
     "tintColor": {
-      "type": "Color",
+      "type": "ColorValue",
       "description": "The color of the selectable area."
     },
     "checkedTintColor": {
-      "type": "Color",
+      "type": "ColorValue",
       "description": "The color of the selectable area in checked state. Will fall back to `tintColor` if not set."
     },
     "font": {

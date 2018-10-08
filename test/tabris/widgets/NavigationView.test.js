@@ -7,6 +7,7 @@ import Composite from '../../../src/tabris/widgets/Composite';
 import NavigationView from '../../../src/tabris/widgets/NavigationView';
 import WidgetCollection from '../../../src/tabris/WidgetCollection';
 import EventObject from '../../../src/tabris/EventObject';
+import Color from '../../../src/tabris/Color';
 
 describe('NavigationView', function() {
 
@@ -119,7 +120,7 @@ describe('NavigationView', function() {
     it('supports colors', function() {
       navigationView.toolbarColor = 'red';
 
-      expect(navigationView.toolbarColor).to.equal('rgba(255, 0, 0, 1)');
+      expect(Color.from(navigationView.toolbarColor).toArray()).to.deep.equal([255, 0, 0, 255]);
     });
 
   });
@@ -129,7 +130,7 @@ describe('NavigationView', function() {
     it('supports colors', function() {
       navigationView.titleTextColor = '#00ff00';
 
-      expect(navigationView.titleTextColor).to.equal('rgba(0, 255, 0, 1)');
+      expect(Color.from(navigationView.titleTextColor).toArray()).to.deep.equal([0, 255, 0, 255]);
     });
 
   });
@@ -139,7 +140,7 @@ describe('NavigationView', function() {
     it('supports colors', function() {
       navigationView.actionColor = 'red';
 
-      expect(navigationView.actionColor).to.equal('rgba(255, 0, 0, 1)');
+      expect(Color.from(navigationView.actionColor).toArray()).to.deep.equal([255, 0, 0, 255]);
     });
 
   });
@@ -149,7 +150,7 @@ describe('NavigationView', function() {
     it('supports colors', function() {
       navigationView.actionTextColor = 'blue';
 
-      expect(navigationView.actionTextColor).to.equal('rgba(0, 0, 255, 1)');
+      expect(Color.from(navigationView.actionTextColor).toArray()).to.deep.equal([0, 0, 255, 255]);
     });
 
   });

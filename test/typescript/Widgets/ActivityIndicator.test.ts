@@ -1,9 +1,9 @@
-import {ActivityIndicator, Color, Properties} from 'tabris';
+import {ActivityIndicator, ColorValue, Properties} from 'tabris';
 
 let widget: ActivityIndicator = new ActivityIndicator();
 
 // Properties
-let tintColor: Color;
+let tintColor: ColorValue;
 
 tintColor = widget.tintColor;
 

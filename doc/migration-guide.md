@@ -35,6 +35,9 @@ and `baz = wc.get(bar)` can be replaced with `baz = wc.first()[bar]`.
 
  Previously the second parameter of the `trigger` method was  directly passed on to all listeners in all cases. However, we want to ensure that listeners can always expect to be called with a valid `EventObject` instance. For that reason the values of the `trigger` parameter are now copied to a new event object, *unless* the given parameter is already an instance of `EventObject` and has not been initialized yet.
 
+### Color properties
+
+All color properties are now of the type "ColorValue". While these properties still accept the same string values as in 2.x, they will return a "Color" class instance instead of a string. The exception is CanvasContext, where color properties still return a string for W3C compatibility.
 
 ## TypeScript
 

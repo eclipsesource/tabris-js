@@ -26,7 +26,7 @@
       "description": "Whether the toolbar is visible."
     },
     "toolbarColor": {
-      "type": "Color",
+      "type": "ColorValue",
       "description": "The background color of the toolbar."
     },
     "toolbarHeight": {
@@ -36,15 +36,15 @@
 
     },
     "titleTextColor": {
-      "type": "Color",
+      "type": "ColorValue",
       "description": "The text color used for page titles."
     },
     "actionColor": {
-      "type": "Color",
+      "type": "ColorValue",
       "description": "The color used for action icons."
     },
     "actionTextColor": {
-      "type": "Color",
+      "type": "ColorValue",
       "description": "The color used for action texts. Only applied on Android, IOS uses the `actionColor` to colorize the action text.",
       "platforms": {
         "ios": false

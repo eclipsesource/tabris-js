@@ -1,6 +1,6 @@
 import {
   Image,
-  Color,
+  ColorValue,
   Font,
   LayoutData,
   Widget,
@@ -59,7 +59,7 @@ numberOrUndefined = image.height;
 numberOrUndefined = image.scale;
 
 // Color
-let color: Color = stringType;
+let color: ColorValue = stringType;
 stringType = color;
 
 // Font

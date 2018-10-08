@@ -1,5 +1,5 @@
 import {
-  Color, EventObject, PropertyChangedEvent, TextInput, TextInputAcceptEvent, TextInputInputEvent,
+  ColorValue, EventObject, PropertyChangedEvent, TextInput, TextInputAcceptEvent, TextInputInputEvent,
   TextInputSelectEvent, Font, Properties
 } from 'tabris';
 
@@ -9,17 +9,17 @@ let widget: TextInput = new TextInput({type: 'password'});
 let alignment: 'center' | 'left' | 'right';
 let autoCapitalize: true | false | 'none' | 'sentence' | 'word' | 'all';
 let autoCorrect: boolean;
-let borderColor: Color;
+let borderColor: ColorValue;
 let editable: boolean;
-let fillColor: Color;
-let cursorColor: Color;
+let fillColor: ColorValue;
+let cursorColor: ColorValue;
 let focused: boolean;
 let keepFocus: boolean;
 let keyboard: 'ascii' | 'decimal' | 'default' | 'email' | 'number' | 'numbersAndPunctuation' | 'phone' | 'url';
 let enterKeyType: 'default' | 'done' | 'next' | 'send' | 'search' | 'go';
 let message: string;
 let text: string;
-let textColor: Color;
+let textColor: ColorValue;
 let textInputType: 'default' | 'multiline' | 'password' | 'search';
 let selection: number[];
 let font: Font | null;

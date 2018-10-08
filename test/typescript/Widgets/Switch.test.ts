@@ -1,13 +1,13 @@
-import {Switch, Color, SwitchSelectEvent, PropertyChangedEvent, Properties} from 'tabris';
+import {Switch, ColorValue, SwitchSelectEvent, PropertyChangedEvent, Properties} from 'tabris';
 
 let widget: Switch = new Switch();
 
 // Properties
 let checked: boolean;
-let thumbOffColor: Color;
-let thumbOnColor: Color;
-let trackOffColor: Color;
-let trackOnColor: Color;
+let thumbOffColor: ColorValue;
+let thumbOnColor: ColorValue;
+let trackOffColor: ColorValue;
+let trackOnColor: ColorValue;
 
 checked = widget.checked;
 thumbOffColor = widget.thumbOffColor;

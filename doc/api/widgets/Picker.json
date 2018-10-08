@@ -28,18 +28,18 @@
       "description": "The index of the currently selected item."
     },
     "fillColor": {
-      "type": "Color",
+      "type": "ColorValue",
       "description": "The color of the background of the Picker - applies only to iOS.",
       "platforms": {
         "android": false
       }
     },
     "borderColor": {
-      "type": "Color",
+      "type": "ColorValue",
       "description": "The color of the border of the Picker. On iOS this is a rectangular border around the Picker, on Android it is a single line below the Picker."
     },
     "textColor": {
-      "type": "Color",
+      "type": "ColorValue",
       "description": "The color of the text."
     }
   },

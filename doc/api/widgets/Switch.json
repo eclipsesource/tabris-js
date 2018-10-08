@@ -21,19 +21,19 @@
       "description": "The checked state of the switch."
     },
     "thumbOnColor": {
-      "type": "Color",
+      "type": "ColorValue",
       "description": "The color of the movable thumb, when switched *on*."
     },
     "thumbOffColor": {
-      "type": "Color",
+      "type": "ColorValue",
       "description": "The color of the movable thumb, when switched *off*."
     },
     "trackOnColor": {
-      "type": "Color",
+      "type": "ColorValue",
       "description": "The color of the track that holds the thumb, when switched *on*."
     },
     "trackOffColor": {
-      "type": "Color",
+      "type": "ColorValue",
       "description": "The color of the track that holds the thumb, when switched *off*."
     }
   },

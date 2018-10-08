@@ -1,5 +1,5 @@
 import {
-  Color,
+  ColorValue,
   TabFolder,
   Tab,
   TabFolderScrollEvent,
@@ -16,7 +16,7 @@ let paging: boolean;
 let selection: Tab;
 let tabBarLocation: 'auto' | 'bottom' | 'hidden' | 'top';
 let tabMode: 'fixed' | 'scrollable';
-let textColor: Color;
+let textColor: ColorValue;
 
 paging = widget.paging;
 selection = widget.selection;

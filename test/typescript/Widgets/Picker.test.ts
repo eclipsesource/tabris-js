@@ -1,14 +1,14 @@
-import {Color, Picker, PickerSelectEvent, PropertyChangedEvent, Properties} from 'tabris';
+import {ColorValue, Picker, PickerSelectEvent, PropertyChangedEvent, Properties} from 'tabris';
 
 let widget: Picker = new Picker();
 
 // Properties
-let borderColor: Color;
-let fillColor: Color;
+let borderColor: ColorValue;
+let fillColor: ColorValue;
 let itemCount: number;
 let itemText: (index: number) => string;
 let selectionIndex: number;
-let textColor: Color;
+let textColor: ColorValue;
 
 borderColor = widget.borderColor;
 fillColor = widget.fillColor;

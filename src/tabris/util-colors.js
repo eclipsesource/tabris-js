@@ -59,7 +59,7 @@ export function colorStringToArray(str) {
  * Basic color keywords as defined in CSS 3
  * See http://www.w3.org/TR/css3-color/#html4
  */
-let NAMES = {
+export let NAMES = {
   black: [0, 0, 0],
   silver: [192, 192, 192],
   gray: [128, 128, 128],

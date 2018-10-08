@@ -18,9 +18,9 @@ export default class CheckBox extends Widget {
 NativeObject.defineProperties(CheckBox.prototype, {
   text: {type: 'string', default: ''},
   checked: {type: 'boolean', nocache: true},
-  textColor: {type: 'color'},
-  tintColor: {type: 'color'},
-  checkedTintColor: {type: 'color'},
+  textColor: {type: 'ColorValue'},
+  tintColor: {type: 'ColorValue'},
+  checkedTintColor: {type: 'ColorValue'},
   font: {
     type: 'font',
     set(name, value) {

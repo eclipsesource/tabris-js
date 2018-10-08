@@ -67,9 +67,9 @@ NativeObject.defineProperties(Picker.prototype, {
       return this.$newSelectionIndex >= 0 ? this.$newSelectionIndex : this._nativeGet(name);
     }
   },
-  fillColor: {type: 'color'},
-  borderColor: {type: 'color'},
-  textColor: {type: 'color'}
+  fillColor: {type: 'ColorValue'},
+  borderColor: {type: 'ColorValue'},
+  textColor: {type: 'ColorValue'}
 });
 
 NativeObject.defineEvents(Picker.prototype, {

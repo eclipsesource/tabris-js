@@ -10,5 +10,5 @@ export default class ActivityIndicator extends Widget {
 }
 
 NativeObject.defineProperties(ActivityIndicator.prototype, {
-  tintColor: {type: 'color'}
+  tintColor: {type: 'ColorValue'}
 });

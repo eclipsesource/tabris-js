@@ -13,7 +13,7 @@ NativeObject.defineProperties(ImageView.prototype, {
   image: {type: 'image', default: null},
   scaleMode: {type: ['choice', ['auto', 'fit', 'fill', 'stretch', 'none']], default: 'auto'},
   tintColor: {
-    type: 'color',
+    type: 'ColorValue',
     set(name, value) {
       this._nativeSet(name, value === undefined ? null : value);
       this._storeProperty(name, value);

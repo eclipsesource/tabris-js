@@ -31,7 +31,7 @@
       "description": "The actual value."
     },
     "tintColor": {
-      "type": "Color",
+      "type": "ColorValue",
       "description": "The color used to display the current selection."
     }
   },

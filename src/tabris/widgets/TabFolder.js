@@ -87,7 +87,7 @@ NativeObject.defineProperties(TabFolder.prototype, {
       return selection ? tabris._proxies.find(selection) : null;
     }
   },
-  textColor: {type: 'color'}
+  textColor: {type: 'ColorValue'}
 });
 
 NativeObject.defineEvents(TabFolder.prototype, {

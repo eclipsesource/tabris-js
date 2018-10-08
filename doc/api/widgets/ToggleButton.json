@@ -41,7 +41,7 @@
       "jsxContentProperty": true
     },
     "textColor": {
-      "type": "Color",
+      "type": "ColorValue",
       "description": "The color of the text."
     },
     "font": {

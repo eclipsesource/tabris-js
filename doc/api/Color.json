@@ -1,0 +1,117 @@
+{
+  "type": "Color",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "red",
+        "type": "number",
+        "description": "A number between and including 0 and 255"
+      },
+      {
+        "name": "green",
+        "type": "number",
+        "description": "A number between and including 0 and 255"
+      },
+      {
+        "name": "blue",
+        "type": "number",
+        "description": "A number between and including 0 and 255"
+      },
+      {
+        "name": "alpha",
+        "type": "number",
+        "optional": true,
+        "description": "A number between and including 0 and 255. Defaults to 255."
+      }
+    ]
+  },
+  "description": "Represents a color. See also [ColorValue](./types.html#ColorValue)",
+  "properties": {
+    "red": {
+      "type": "number",
+      "description": "A number between and including 0 and 255",
+      "const": true
+    },
+    "green": {
+      "type": "number",
+      "description": "A number between and including 0 and 255",
+      "const": true
+    },
+    "blue": {
+      "type": "number",
+      "description": "A number between and including 0 and 255",
+      "const": true
+    },
+    "alpha": {
+      "type": "number",
+      "description": "A number between and including 0 and 255",
+      "const": true
+    }
+  },
+  "methods": {
+    "toString": {
+      "description": "Returns a string representation of the color. Is either in `rgb(red, green, blue)` or `rgba(red, green, blue, alpha)` format. Note that alpha is a value between 0 and 1 in the string representation, but between 0 and 255 on the Color object.",
+      "returns": "string"
+    },
+    "toArray": {
+      "description": "Returns a array representation of the color in the format of `[red, green, blue, alpha]`. Each value is a number between (and in including) 0 and 255.",
+      "returns": "[number, number, number, number]"
+    }
+  },
+  "statics": {
+    "methods": {
+      "from": {
+        "parameters": [
+          {
+            "name": "colorValue",
+            "description": "The value to create a Color instance from",
+            "type": "ColorValue"
+          }
+        ],
+        "description": "Creates a new instance of Color using any valid color expression. For any other value the method throws.",
+        "returns": "Color"
+      },
+      "isColorValue": {
+        "parameters": [
+          {
+            "name": "value",
+            "description": "The value to test",
+            "type": "any"
+          }
+        ],
+        "description": "Returns true if value is a ColorValue. This includes `null` and `'initial'`.",
+        "returns": "value is ColorValue"
+      },
+      "isValidColorValue": {
+        "parameters": [
+          {
+            "name": "value",
+            "description": "The value to test",
+            "type": "any"
+          }
+        ],
+        "description": "Returns true if value is a valid ColorValue. This excludes `null` and `'initial'`.",
+        "returns": "value is ColorValue"
+      }
+    },
+    "properties": {
+      "black": {"type": "Color", "const": true, "readonly": true},
+      "silver": {"type": "Color", "const": true, "readonly": true},
+      "gray": {"type": "Color", "const": true, "readonly": true},
+      "white": {"type": "Color", "const": true, "readonly": true},
+      "maroon": {"type": "Color", "const": true, "readonly": true},
+      "red": {"type": "Color", "const": true, "readonly": true},
+      "purple": {"type": "Color", "const": true, "readonly": true},
+      "fuchsia": {"type": "Color", "const": true, "readonly": true},
+      "green": {"type": "Color", "const": true, "readonly": true},
+      "lime": {"type": "Color", "const": true, "readonly": true},
+      "olive": {"type": "Color", "const": true, "readonly": true},
+      "yellow": {"type": "Color", "const": true, "readonly": true},
+      "navy": {"type": "Color", "const": true, "readonly": true},
+      "blue": {"type": "Color", "const": true, "readonly": true},
+      "teal": {"type": "Color", "const": true, "readonly": true},
+      "aqua": {"type": "Color", "const": true, "readonly": true}
+    }
+  }
+}

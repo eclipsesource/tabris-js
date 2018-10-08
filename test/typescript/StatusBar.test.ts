@@ -1,9 +1,9 @@
-import {StatusBar, Color, ui} from 'tabris';
+import {StatusBar, ColorValue, ui} from 'tabris';
 
 let statusBar: StatusBar = ui.statusBar;
 
 // Properties
-let background: Color;
+let background: ColorValue;
 let displayMode: 'default' | 'float' | 'hide';
 let height: number;
 let theme: 'dark' | 'default' | 'light';

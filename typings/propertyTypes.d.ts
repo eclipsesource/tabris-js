@@ -62,9 +62,21 @@ type Image = string | {
   scale?: number;
 }
 
+type ColorArray = [number, number, number, number]|[number, number, number];
+type ColorLikeObject = {red: number, green: number, blue: number, alpha?: number};
+
 /**
- * Colors are specified as strings using one of the following formats:
+ * Colors can be specified as strings, arrays or Color/Color-like objects.
  *
+ * A **Color** instance can be created with the **Color** constructor or using **Color.from**.
+ *
+ * A **Color**-like object is a plain object with "red", "green", "blue" and optional "alpha" properties.
+ * Example: **{red: 0, green: 127, blue: 255, alpha: 120}**
+ *
+ * A color array has consist of 3 or 4 numbers between (and including) 0 and 255,
+ * i.e. **[red, green, blue, alpha]**. If omitted, alpha is 255.
+ *
+ * As a string the following formats can be used:
  * - **"#xxxxxx"**
  * - **"#xxx"**
  * - **"#xxxxxxxx"**
@@ -74,8 +86,12 @@ type Image = string | {
  * - a color name from the CSS3 specification.
  * - **"transparent"** sets a fully transparent color. This is a shortcut for **"rgba(0, 0, 0, 0)"**.
  * - **"initial"** resets the color to its (platform-dependent) default.
+ *
+ * Setting a ColorValue property to null also resets it to the default color.
+ *
+ * Type guards for `ColorValue` are available as **Color.isColorValue** and **Color.isValidColorValue**
  */
-type Color = string;
+type ColorValue = ColorLikeObject|ColorArray|string;
 
 /**
  * Fonts are specified as strings using the shorthand syntax known from CSS, specifically **"[font-style] [font-weight] font-size [font-family[, font-family]*]"**. The font family may be omitted, in this case the default system font will be used. Generic font families supported across all platforms are **"serif"**, **"sans-serif"**, **"condensed"** and **"monospace"**. Supported font weights are **"light"**, **"thin"**, **"normal"**, **"medium"**, **"bold"** and **"black"**. The value **"initial"** represents the platform default.

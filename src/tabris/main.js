@@ -21,6 +21,7 @@ import Button from './widgets/Button';
 import Canvas from './widgets/Canvas';
 import CheckBox from './widgets/CheckBox';
 import CollectionView from './widgets/CollectionView';
+import Color from './Color';
 import Composite from './widgets/Composite';
 import ContentView from './widgets/ContentView';
 import Crypto from './Crypto';
@@ -83,6 +84,7 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   Canvas,
   CheckBox,
   CollectionView,
+  Color,
   Composite,
   ContentView,
   Crypto,

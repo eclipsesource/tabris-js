@@ -19,7 +19,7 @@ NativeObject.defineProperties(Button.prototype, {
   alignment: {type: ['choice', ['left', 'right', 'center']], default: 'center'},
   image: {type: 'image', default: null},
   text: {type: 'string', default: ''},
-  textColor: {type: 'color'},
+  textColor: {type: 'ColorValue'},
   font: {
     type: 'font',
     set(name, value) {

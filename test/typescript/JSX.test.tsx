@@ -20,13 +20,13 @@ let scrollView: tabris.ScrollView = <tabris.ScrollView background='blue' padding
 let searchAction: tabris.SearchAction = <tabris.SearchAction title='bar'>foo</tabris.SearchAction>;
 let slider: tabris.Slider = <tabris.Slider maximum={100}/>;
 let switchButton: tabris.Switch = <tabris.Switch thumbOnColor='red'>foo</tabris.Switch>;
-let tab: tabris.Tab = <tabris.Tab badge='3'/>;
+let tab: tabris.Tab = <tabris.Tab background={[255, 255, 255, 0]} badge='3'/>;
 let tabFolder: tabris.TabFolder = <tabris.TabFolder tabBarLocation='top'/>;
 let textInput: tabris.TextInput = <tabris.TextInput autoCapitalize={true} onTextChanged={onTextChangedHandler}>foo</tabris.TextInput>;
 let textView: tabris.TextView = <tabris.TextView alignment='right'>foo</tabris.TextView>;
 let toggleButton: tabris.ToggleButton = <tabris.ToggleButton text='red'>foo</tabris.ToggleButton>;
-let video: tabris.Video = <tabris.Video autoPlay={true}/>;
-let webView: tabris.WebView = <tabris.WebView url='http://localhost/'/>;
+let video: tabris.Video = <tabris.Video background={[255, 255, 255]} autoPlay={true}/>;
+let webView: tabris.WebView = <tabris.WebView background={new tabris.Color(255, 255, 255)} url='http://localhost/'/>;
 
 let noAttributes: tabris.Composite = <tabris.Composite/>;
 

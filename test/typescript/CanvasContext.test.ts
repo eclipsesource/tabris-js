@@ -1,14 +1,14 @@
-import {Canvas, CanvasContext, ImageData, Color, Font} from 'tabris';
+import {Canvas, CanvasContext, ImageData, ColorValue, Font} from 'tabris';
 
 let ctx: CanvasContext = new Canvas().getContext('2d', 100, 100);
 
 // Properties
-let fillStyle: Color;
+let fillStyle: ColorValue;
 let font: Font;
 let lineCap: 'butt' | 'round' | 'square';
 let lineJoin: 'bevel' | 'miter' | 'round';
 let lineWidth: number;
-let strokeStyle: Color;
+let strokeStyle: ColorValue;
 let textAlign: 'center' | 'end' | 'left' | 'right' | 'start';
 let textBaseline: 'alphabetic' | 'bottom' | 'hanging' | 'ideographic' | 'middle' | 'top';
 

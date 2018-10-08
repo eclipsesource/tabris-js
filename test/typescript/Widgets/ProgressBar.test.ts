@@ -1,11 +1,11 @@
-import {Color, ProgressBar, Properties} from 'tabris';
+import {ColorValue, ProgressBar, Properties} from 'tabris';
 
 let widget: ProgressBar = new ProgressBar();
 
 // Properties
 let maximum: number;
 let minimum: number;
-let tintColor: Color;
+let tintColor: ColorValue;
 let selection: number;
 let state: 'error' | 'normal' | 'paused';
 

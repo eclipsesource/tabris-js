@@ -33,7 +33,7 @@
       "jsxContentProperty": true
     },
     "textColor": {
-      "type": "Color",
+      "type": "ColorValue",
       "description": "The color of the text."
     },
     "message": {
@@ -112,14 +112,14 @@
       "description": "When `true` the `TextInput` will keep its focus, even when tapped outside of the widget bounds."
     },
     "fillColor": {
-      "type": "Color",
+      "type": "ColorValue",
       "description": "The color of the background of the TextInput - applies only to iOS.",
       "platforms": {
         "android": false
       }
     },
     "borderColor": {
-      "type": "Color",
+      "type": "ColorValue",
       "description": "The color of the border of the TextInput. On iOS this is a rectangular border around the TextInput, on Android it is a single line below the TextInput."
     },
     "revealPassword": {
@@ -127,7 +127,7 @@
       "description": "Makes the text visible when the `TextInput` has the type `password`."
     },
     "cursorColor": {
-      "type": "Color",
+      "type": "ColorValue",
       "description": "The color of the cursor in the `TextInput`.",
       "platforms": {
         "android": false

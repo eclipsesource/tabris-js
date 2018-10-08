@@ -94,11 +94,11 @@ export default class NavigationView extends Composite {
 NativeObject.defineProperties(NavigationView.prototype, {
   drawerActionVisible: {type: 'boolean', default: false},
   toolbarVisible: {type: 'boolean', default: true},
-  toolbarColor: {type: 'color'},
+  toolbarColor: {type: 'ColorValue'},
   toolbarHeight: {readonly: true},
-  titleTextColor: {type: 'color'},
-  actionColor: {type: 'color'},
-  actionTextColor: {type: 'color'},
+  titleTextColor: {type: 'ColorValue'},
+  actionColor: {type: 'ColorValue'},
+  actionTextColor: {type: 'ColorValue'},
   navigationAction: {type: 'proxy', default: null},
   pageAnimation: {type: ['choice', ['default', 'none']], default: 'default'}
 });

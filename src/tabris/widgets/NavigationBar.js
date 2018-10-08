@@ -34,7 +34,7 @@ NativeObject.defineProperties(NavigationBar.prototype, {
     type: 'number',
     readonly: true
   },
-  background: {type: 'color', nocache: true}
+  background: {type: 'ColorValue', nocache: true}
 });
 
 export function create() {

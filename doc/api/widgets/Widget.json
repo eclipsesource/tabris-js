@@ -209,7 +209,7 @@
       "description": "The actual location and size of the widget, relative to its parent."
     },
     "background": {
-      "type": "Color",
+      "type": "ColorValue",
       "description": "Background color of the widget."
     },
     "opacity": {

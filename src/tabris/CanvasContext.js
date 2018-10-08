@@ -1,4 +1,5 @@
-import {colorStringToArray, colorArrayToString} from './util-colors';
+import {colorArrayToString} from './util-colors';
+import Color from './Color';
 import {fontStringToObject, fontObjectToString} from './util-fonts';
 import ImageData from './ImageData';
 import GC from './GC';
@@ -202,7 +203,7 @@ let properties = {
   },
   fillStyle: {
     init: [0, 0, 0, 255],
-    encode: colorStringToArray,
+    encode: value => Color.from(value).toArray(),
     decode: colorArrayToString,
     addOperations(value) {
       this._gc.addInt(value[0], value[1], value[2], value[3]);
@@ -210,7 +211,7 @@ let properties = {
   },
   strokeStyle: {
     init: [0, 0, 0, 255],
-    encode: colorStringToArray,
+    encode: value => Color.from(value).toArray(),
     decode: colorArrayToString,
     addOperations(value) {
       this._gc.addInt(value[0], value[1], value[2], value[3]);

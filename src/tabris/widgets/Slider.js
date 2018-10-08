@@ -13,7 +13,7 @@ NativeObject.defineProperties(Slider.prototype, {
   minimum: {type: 'integer', default: 0},
   maximum: {type: 'integer', default: 100},
   selection: {type: 'integer', nocache: true},
-  tintColor: {type: 'color'}
+  tintColor: {type: 'ColorValue'}
 });
 
 NativeObject.defineEvents(Slider.prototype, {

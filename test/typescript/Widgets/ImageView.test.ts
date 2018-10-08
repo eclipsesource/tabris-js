@@ -1,11 +1,11 @@
-import {ImageView, Image, Color, ImageViewLoadEvent, ImageViewZoomEvent, PropertyChangedEvent, Properties} from 'tabris';
+import {ImageView, Image, ColorValue, ImageViewLoadEvent, ImageViewZoomEvent, PropertyChangedEvent, Properties} from 'tabris';
 
 let widget: ImageView = new ImageView;
 
 // Properties
 let image: Image;
 let scaleMode: 'auto' | 'fill' | 'fit' | 'none' | 'stretch';
-let tintColor: Color;
+let tintColor: ColorValue;
 let nullValue: null;
 let zoomEnabled: boolean;
 let zoomLevel: number;

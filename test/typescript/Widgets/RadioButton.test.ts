@@ -1,13 +1,13 @@
-import {Color, RadioButton, PropertyChangedEvent, RadioButtonSelectEvent, Font, Properties} from 'tabris';
+import {ColorValue, RadioButton, PropertyChangedEvent, RadioButtonSelectEvent, Font, Properties} from 'tabris';
 
 let widget: RadioButton = new RadioButton();
 
 // Properties
 let checked: boolean;
 let text: string;
-let textColor: Color;
-let tintColor: Color;
-let checkedTintColor: Color;
+let textColor: ColorValue;
+let tintColor: ColorValue;
+let checkedTintColor: ColorValue;
 let font: Font | null;
 
 checked = widget.checked;

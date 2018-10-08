@@ -1,6 +1,6 @@
 import {
   NavigationView,
-  Color,
+  ColorValue,
   WidgetCollection,
   Page,
   Selector,
@@ -12,13 +12,13 @@ import {
 let widget: NavigationView = new NavigationView();
 
 // Properties
-let actionColor: Color;
-let actionTextColor: Color;
+let actionColor: ColorValue;
+let actionTextColor: ColorValue;
 let pageAnimation: 'default' | 'none';
 let drawerActionVisible: boolean;
 let navigationAction: Action;
-let titleTextColor: Color;
-let toolbarColor: Color;
+let titleTextColor: ColorValue;
+let toolbarColor: ColorValue;
 let toolbarVisible: boolean;
 
 actionColor = widget.actionColor;

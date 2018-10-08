@@ -42,6 +42,8 @@
 
 - title: API Reference
   pages:
+    - title: Property Types
+      url: api/types.html
 <%= api %>
 
 - title: Widgets

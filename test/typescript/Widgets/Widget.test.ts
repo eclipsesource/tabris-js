@@ -1,5 +1,5 @@
 import {Widget,
- Color,
+ ColorValue,
  Image,
  Margin,
  Bounds,
@@ -25,7 +25,7 @@ import {Widget,
 let widget: Widget = new Composite();
 
 // Properties
-let background: Color;
+let background: ColorValue;
 let backgroundImage: Image;
 let baseline: Widget | Selector;
 let bottomMargin: Margin;

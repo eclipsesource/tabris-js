@@ -67,10 +67,17 @@ The widget the event was fired on.
 - **value**: *any*
 The new value of the changed property.
 
-## Color
+## ColorValue
 
-Colors are specified as strings using one of the following formats:
+Colors can be specified as strings, arrays or [Color](./Color.html)/Color-like objects.
 
+A `Color` instance can be created with the `Color` constructor or using `Color.from`.
+
+A `Color`-like object is a plain object with "red", "green", "blue" and optional "alpha" properties.
+
+A color array has consist of 3 or 4 numbers between (and including) 0 and 255, i.e. `[red, green, blue, alpha]`. If omitted, alpha is 255.
+
+As a string the following formats can be used:
 * `#xxxxxx` Hexadecimal rgb
 * `#xxx` Hexadecimal rgb
 * `#xxxxxxxx` Hexadecimal rgba
@@ -81,9 +88,21 @@ Colors are specified as strings using one of the following formats:
 * `transparent` sets a fully transparent color. This is a shortcut for `rgba(0, 0, 0, 0)`.
 * `initial` resets the color to its (platform-dependent) default.
 
+Setting a ColorValue property to null also resets it to the default.
+
+<span class='typescript-only'>
+In TypeScript you can import this union type with `import {ColorValue} from 'tabris';` or use `tabris.ColorValue`. Type guards for `ColorValue` are available as [`Color.isColorValue`](./Color.html#isColorValue) and [`Color.isValidColorValue`](./Color.html#isValidColorValue).
+
+</span>
 Examples:
 
 ```js
+new Color(255, 0, 0)
+new Color(255, 0, 0, 200)
+[255, 0, 0]
+[255, 0, 0, 200]
+{red: 255, green: 255, blue: 255}
+{red: 255, green: 255, blue: 255, alpha: 200}
 "#f00"
 "#ff0000"
 "#ff000080" // 50% opacity red
@@ -91,7 +110,7 @@ Examples:
 "rgb(255, 0, 0)"
 "rgba(255, 0, 0, 0.8)"
 "red"
-"initial"
+"initial" // same as null
 ```
 
 ## Dimension

@@ -389,14 +389,14 @@ describe('property-types', function() {
 
   });
 
-  describe('color', function() {
+  describe('ColorValue', function() {
 
     it('encode translates "initial" to `undefined`', function() {
-      expect(types.color.encode('initial')).to.equal(undefined);
+      expect(types.ColorValue.encode('initial')).to.equal(undefined);
     });
 
     it('encode translates `null` to `undefined`', function() {
-      expect(types.color.encode(null)).to.equal(undefined);
+      expect(types.ColorValue.encode(null)).to.equal(undefined);
     });
 
   });

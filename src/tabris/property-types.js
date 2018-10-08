@@ -6,6 +6,7 @@ import {ColorShader, LinearGradientShader} from './util-shaders';
 import NativeObject from './NativeObject';
 import WidgetCollection from './WidgetCollection';
 import {warn} from './Console';
+import Color from './Color';
 
 export let types = {
 
@@ -91,19 +92,19 @@ export let types = {
     }
   },
 
-  color: {
+  ColorValue: {
     encode(value) {
       if (value === null || value === 'initial') {
         return undefined;
       }
-      return colorStringToArray(value);
+      return Color.from(value).toArray();
     },
     decode(value) {
       if (!value) {
         // NOTE: null is only returned for "background" where it means "no background"
-        return 'rgba(0, 0, 0, 0)';
+        return Color.transparent;
       }
-      return colorArrayToString(value);
+      return Color.from(value);
     }
   },
 

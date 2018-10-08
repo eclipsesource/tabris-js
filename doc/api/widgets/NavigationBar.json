@@ -51,7 +51,7 @@
       }
     },
     "background": {
-      "type": "Color",
+      "type": "ColorValue",
       "description": "Background color of the navigation bar.",
       "platforms": {
         "ios": false

@@ -18,9 +18,9 @@ export default class RadioButton extends Widget {
 NativeObject.defineProperties(RadioButton.prototype, {
   text: {type: 'string', default: ''},
   checked: {type: 'boolean', nocache: true},
-  textColor: {type: 'color'},
-  tintColor: {type: 'color'},
-  checkedTintColor: {type: 'color'},
+  textColor: {type: 'ColorValue'},
+  tintColor: {type: 'ColorValue'},
+  checkedTintColor: {type: 'ColorValue'},
   font: {
     type: 'font',
     set(name, value) {
