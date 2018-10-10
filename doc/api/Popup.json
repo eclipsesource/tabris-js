@@ -6,14 +6,20 @@
   },
   "description": "Base class for all pop-up UI elements. Pop-ups are placed on top of all other UI, but are not widgets. Some pop-ups can be opened only once.",
   "methods": {
-    "open": [
-      {
-        "parameters": [],
-        "description": "Makes the popup visible.",
-        "returns": "this"
-      },
-      {
-        "static": true,
+    "open": {
+      "parameters": [],
+      "description": "Makes the popup visible.",
+      "returns": "this"
+    },
+    "close": {
+      "parameters": [],
+      "description": "Hides the popup.",
+      "returns": "this"
+    }
+  },
+  "statics": {
+    "methods": {
+      "open": {
         "parameters": [
           {
             "name": "popup",
@@ -24,11 +30,6 @@
         "description": "Makes the given popup visible.",
         "returns": "Popup"
       }
-    ],
-    "close": {
-      "parameters": [],
-      "description": "Hides the popup.",
-      "returns": "this"
     }
   }
 }

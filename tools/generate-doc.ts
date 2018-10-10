@@ -2,14 +2,13 @@ import {join, parse, relative, sep} from 'path';
 import * as fs from 'fs-extra';
 import * as schema from './api-schema';
 import {asArray, ApiDefinitions, ExtendedApi, readJsonDefs,  getTitle, Properties, lowercaseFirstChar} from './common';
+import { SchemaSchema } from 'json-schema-to-typescript/dist/src/types/JSONSchema';
 
 type TypeLinks = {[type: string]: string};
 type NamedEvents = Array<schema.Event & {name: string}>;
 
 const SNIPPETS_LOCATION = 'snippets';
-const MSG_DEPRECATED = '**Deprecated**';
 const MSG_PROVISIONAL = '**Note:** this API is provisional and may change in a future release.';
-const MSG_CONST_PROP = 'This property can only be set on widget creation. Once set, it cannot be changed anymore.';
 
 exports.generateDoc = function generateDoc({files, targetPath, version}) {
   const generator = new DocGenerator(files, targetPath, version);
@@ -100,8 +99,8 @@ class DocGenerator {
 
   private renderMembers(def: ExtendedApi) {
     return [
-      this.renderMethods(def),
-      this.renderProperties(def),
+      this.renderAllMethods(def),
+      this.renderAllProperties(def),
       this.renderEvents(def)
     ].filter(value => !!value).join('\n');
   }
@@ -173,15 +172,35 @@ class DocGenerator {
     return '';
   }
 
-  private renderMethods(def: ExtendedApi) {
-    if (!def.methods || !Object.keys(def.methods).length) {
-      return '';
+  private renderAllMethods({type, methods, statics}: ExtendedApi) {
+    let result = [];
+    let publicMethodKeys = Object.keys(methods || {})
+      .filter(name => isPublic(name) && isJS(methods[name])).sort();
+    let protectedMethodKeys = Object.keys(methods || {})
+      .filter(name => !isPublic(name) && isJS(methods[name])).sort();
+    let staticMethodKeys = Object.keys((statics || {}).methods || {})
+      .filter(name => isJS(statics.methods[name])).sort();
+    if (publicMethodKeys.length) {
+      result.push('## Methods\n\n');
+      result.push(this.renderMethods(methods, publicMethodKeys));
     }
-    let result = ['## Methods\n\n'];
-    let publicMethodKeys = Object.keys(def.methods).filter(method => method[0] !== '_').sort();
-    let protectedMethodKeys = Object.keys(def.methods).filter(method => method[0] === '_').sort();
-    publicMethodKeys.concat(protectedMethodKeys).forEach(name => {
-      asArray(def.methods[name]).filter(method => !method.ts_only).forEach(desc => {
+    if (protectedMethodKeys.length) {
+      result.push('## Protected Methods\n\n');
+      result.push(`These methods are accessible only in classes extending *${type}*.\n\n`);
+      result.push(this.renderMethods(methods, protectedMethodKeys));
+    }
+    if (staticMethodKeys.length) {
+      result.push('## Static Methods\n\n');
+      result.push(`These methods are called directly on the *${type}* class, not its instance.\n\n`);
+      result.push(this.renderMethods(statics.methods, staticMethodKeys));
+    }
+    return result.join('');
+  }
+
+  private renderMethods(methods: {[name: string]: schema.Method|schema.Method[]}, names: string[]) {
+    const result = [];
+    names.forEach(name => {
+      asArray(methods[name]).forEach(desc => {
         result.push(this.renderMethod(name, desc));
       });
     });
@@ -190,7 +209,7 @@ class DocGenerator {
 
   private renderMethod(name: string, method: schema.Method) {
     let result = [];
-    result.push('### ' + (method.static ? 'static ' : '') + name + this.renderSignature(method.parameters)) + '\n';
+    result.push('### ' + name + this.renderSignature(method.parameters)) + '\n';
     result.push(this.renderPlatforms(method.platforms) + '\n');
     if (method.parameters && method.parameters.length) {
       result.push('**Parameters:** ' + this.renderMethodParamList(method.parameters) + '\n');
@@ -204,48 +223,75 @@ class DocGenerator {
     if (method.description) {
       result.push(method.description + '\n');
     }
-    if (method.static) {
-      result.push('This is a static method. It is called directly on the class, not the instance.\n');
-    }
     return result.join('\n') + '\n';
   }
 
-  private renderProperties(def: ExtendedApi) {
-    if (!def.properties || !Object.keys(def.properties).length) {
-      return '';
+  private renderAllProperties({properties, statics, type}: ExtendedApi) {
+    let result = [];
+    let publicPropertyKeys = Object.keys(properties || {})
+      .filter(name => isPublic(name) && isJS(properties[name])).sort();
+    let protectedPropertyKeys = Object.keys(properties || {})
+      .filter(name => !isPublic(name) && isJS(properties[name])).sort();
+    let staticPropertyKeys = Object.keys((statics || {}).properties || {})
+      .filter(name => isJS(statics.properties[name])).sort();
+    if (publicPropertyKeys.length) {
+      result.push('## Properties\n\n');
+      publicPropertyKeys.forEach(name => {
+        result.push(this.renderProperty(properties, name, type));
+      });
     }
-    let result = ['## Properties\n\n'];
-    Object.keys(def.properties).filter(name => !def.properties[name].ts_only).sort().forEach(name => {
-      let property = def.properties[name];
-      result.push('### ', name, '\n', this.renderPlatforms(property.platforms), '\n\n');
-      if (property.readonly) {
-        result.push('**read-only**<br/>\n');
-      }
-      result.push('Type: ', this.renderPropertyType(property), '\n');
-      if (property.description) {
-        result.push('\n' + property.description);
-      }
-      if (property.jsxContentProperty) {
-        const isString = property.type === 'string';
-        result.push(`\n\nIn JSX the `);
-        result.push(isString ? `text content ` : `child elements `);
-        result.push(`of the *${def.type}* element `);
-        result.push(isString ? `is ` : `are `);
-        result.push(`mapped to this property. `);
-        result.push(`Therefore \`<${def.type}>`);
-        result.push(isString ? 'Hello World' : `{${name}}`);
-        result.push(`</${def.type}>\` would be the same as \`<${def.type} ${name}=`);
-        result.push(isString ? `'Hello World'` : `{${name}}`);
-        result.push(` />\`.${property.jsxType ? ' ' : ''}`);
-      }
-      if (property.jsxType) {
-        result.push(`You can also import \`${property.jsxType}\` from the \`tabris\` module and use it as an JSX element to represent ${name}.`);
-      }
-      if (property.const) {
-        result.push('<br/>' + MSG_CONST_PROP);
-      }
-      result.push('\n\n');
-    });
+    if (protectedPropertyKeys.length) {
+      result.push('## Protected Properties\n\n');
+      result.push(`These properties are accessible only in classes extending *${type}*.\n\n`);
+      protectedPropertyKeys.forEach(name => {
+        result.push(this.renderProperty(properties, name, type));
+      });
+    }
+    if (staticPropertyKeys.length) {
+      result.push('## Static Properties\n\n');
+      result.push(`These properties are accessible directly on the *${type}* class, not its instance.\n\n`);
+      staticPropertyKeys.forEach(name => {
+        result.push(this.renderProperty(statics.properties, name, type, true));
+      });
+    }
+    return result.join('');
+  }
+
+  private renderProperty(
+    properties: {[key: string]: schema.Property},
+    name: string, type: string,
+    isStatic: boolean = false
+  ) {
+    const result = [];
+    let property = properties[name];
+    result.push('### ', name, '\n', this.renderPlatforms(property.platforms), '\n\n');
+    if (property.readonly) {
+      result.push('**read-only**\n\n');
+    }
+    result.push('Type: ', this.renderPropertyType(property), '\n');
+    if (property.description) {
+      result.push('\n' + property.description);
+    }
+    if (property.jsxContentProperty) {
+      const isString = property.type === 'string';
+      result.push(`\n\nIn JSX the `);
+      result.push(isString ? `text content ` : `child elements `);
+      result.push(`of the *${type}* element `);
+      result.push(isString ? `is ` : `are `);
+      result.push(`mapped to this property. `);
+      result.push(`Therefore \`<${type}>`);
+      result.push(isString ? 'Hello World' : `{${name}}`);
+      result.push(`</${type}>\` would be the same as \`<${type} ${name}=`);
+      result.push(isString ? `'Hello World'` : `{${name}}`);
+      result.push(` />\`.${property.jsxType ? ' ' : ''}`);
+    }
+    if (property.jsxType) {
+      result.push(`You can also import \`${property.jsxType}\` from the \`tabris\` module and use it as an JSX element to represent ${name}.`);
+    }
+    if (property.const && !isStatic) {
+      result.push('\n\nThis property can only be set on widget creation. Once set, it cannot change anymore.');
+    }
+    result.push('\n\n');
     return result.join('');
   }
 
@@ -400,4 +446,14 @@ function isFileSync(fpath: string): boolean {
     }
     throw err;
   }
+}
+
+type Member = schema.Method | schema.Method[] | schema.Property;
+
+function isJS(member: Member) {
+  return asArray(member).some(variant => !variant.ts_only);
+}
+
+function isPublic(name: string) {
+  return name[0] !== '_';
 }

@@ -51,6 +51,7 @@ export interface Api {
   events?: {
     [k: string]: Event;
   };
+  statics?: Statics;
   links?: {
     title?: string;
     path?: string;
@@ -75,6 +76,9 @@ export interface Parameter {
  *
  * This interface was referenced by `undefined`'s JSON-Schema definition
  * via the `patternProperty` "^_?[a-z]\w+$".
+ *
+ * This interface was referenced by `undefined`'s JSON-Schema definition
+ * via the `patternProperty` "(^_?[a-z]\w+$)|(^\[.*\]$)".
  */
 export interface Property {
   description?: string;
@@ -130,7 +134,6 @@ export interface Method {
   parameters?: Parameter[];
   returns?: string;
   ts_only?: boolean;
-  static?: boolean;
   /**
    * Overrides "returns" for TypeScript declarations
    */
@@ -158,4 +161,17 @@ export interface Event {
   parameters?: {
     [k: string]: Property;
   };
+}
+export interface Statics {
+  properties?: {
+    [k: string]: Property;
+  };
+  methods?: {
+    /**
+     * This interface was referenced by `undefined`'s JSON-Schema definition
+     * via the `patternProperty` "(^_?[a-z]\w+$)|(^\[.*\]$)".
+     */
+    [k: string]: Method | Method[];
+  };
+  [k: string]: any;
 }

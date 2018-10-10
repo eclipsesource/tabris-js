@@ -184,23 +184,31 @@ function renderMethods(text: TextBuilder, def: ExtendedApi) {
       text.append(createMethod(name, method, def));
     });
   });
+  if (def.statics && def.statics.methods) {
+    Object.keys(def.statics.methods).sort().forEach(name => {
+      asArray(def.statics.methods[name]).forEach(method => {
+        text.append('');
+        text.append(createMethod(name, method, def, true));
+      });
+    });
+  }
 }
 
 function createMethod(
-  name: string, method: schema.Method, def: ExtendedApi
+  name: string, method: schema.Method, def: ExtendedApi, isStatic: boolean = false
 ) {
   const result = [];
   result.push(createDoc(method));
   const paramList = createParamList(def, method.parameters, {hasContext: true, excludeConsts: true});
-  const declaration = (def.type ? createMethodModifiers(method) : 'declare function ')
+  const declaration = (def.type ? createMethodModifiers(method, isStatic) : 'declare function ')
     + `${name}${method.generics ? `<${method.generics}>` : ''}`
     + `(${paramList}): ${method.ts_returns || method.returns || 'void'};`;
   result.push(declaration);
   return result.join('\n');
 }
 
-function createMethodModifiers(method: schema.Method) {
-  return (method.protected ? 'protected ' : '') + (method.static ? 'static ' : '');
+function createMethodModifiers(method: schema.Method, isStatic: boolean) {
+  return (method.protected ? 'protected ' : '') + (isStatic ? 'static ' : '');
 }
 
 function renderProperties(text: TextBuilder, def: ExtendedApi) {
@@ -210,6 +218,12 @@ function renderProperties(text: TextBuilder, def: ExtendedApi) {
     text.append('');
     text.append(createProperty(name, properties, def));
   });
+  if (def.statics && def.statics.properties) {
+    Object.keys(def.statics.properties || {}).filter(filter).sort().forEach(name => {
+      text.append('');
+      text.append(createProperty(name, def.statics.properties, def, true));
+    });
+  }
 }
 
 function renderEventProperties(text: TextBuilder, def: ExtendedApi) {
@@ -256,13 +270,13 @@ function createPropertyChangedEventProperty(widgetName: string, propName: string
   return result.join('\n');
 }
 
-function createProperty(name: string, properties: Properties, def: ExtendedApi) {
+function createProperty(name: string, properties: Properties, def: ExtendedApi, isStatic: boolean = false) {
   const result = [];
   const property = properties[name];
   result.push(createDoc(property));
   const readonly = property.readonly || property.const;
-  const type = decodeType(property, def, {hasContext: true, excludeConsts: false});
-  result.push(`${readonly ? 'readonly ' : ''}${name}: ${type};`);
+  const type = decodeType(property, def, {hasContext: false, excludeConsts: false});
+  result.push(`${isStatic ? 'static ' : ''}${readonly ? 'readonly ' : ''}${name}: ${type};`);
   return result.join('\n');
 }
 
