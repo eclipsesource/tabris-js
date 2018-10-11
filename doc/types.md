@@ -150,7 +150,7 @@ Examples:
 ```js
 "bold 24px"
 "12px sans-serif"
-"thin italic 12px sans-serif"
+"italic thin 12px sans-serif"
 "initial"
 ```
 
