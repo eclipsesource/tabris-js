@@ -91,6 +91,7 @@ class DocGenerator {
       this.renderDescription(def),
       this.renderImages(def),
       this.renderExample(def),
+      this.renderConstructor(def),
       this.renderMembers(def),
       this.renderSnippet(title),
       this.renderLinks(def)
@@ -103,6 +104,22 @@ class DocGenerator {
       this.renderAllProperties(def),
       this.renderEvents(def)
     ].filter(value => !!value).join('\n');
+  }
+
+  private renderConstructor(def: ExtendedApi) {
+    if (!def.constructor || def.constructor.access !== 'public') {
+      return '';
+    }
+    const result = [
+      '## Constructor\n\n',
+      `### new ${def.type}${this.renderSignature(def.constructor.parameters)}\n\n`
+    ];
+    if (def.constructor.parameters) {
+      result.push('**Parameters:**');
+      result.push(this.renderMethodParamList(def.constructor.parameters, def, false));
+      result.push('\n');
+    }
+    return result.join('');
   }
 
   private renderExample(def: ExtendedApi) {
@@ -172,47 +189,47 @@ class DocGenerator {
     return '';
   }
 
-  private renderAllMethods({type, methods, statics}: ExtendedApi) {
+  private renderAllMethods(def: ExtendedApi) {
     let result = [];
-    let publicMethodKeys = Object.keys(methods || {})
-      .filter(name => isPublic(name) && isJS(methods[name])).sort();
-    let protectedMethodKeys = Object.keys(methods || {})
-      .filter(name => !isPublic(name) && isJS(methods[name])).sort();
-    let staticMethodKeys = Object.keys((statics || {}).methods || {})
-      .filter(name => isJS(statics.methods[name])).sort();
+    let publicMethodKeys = Object.keys(def.methods || {})
+      .filter(name => isPublic(name) && isJS(def.methods[name])).sort();
+    let protectedMethodKeys = Object.keys(def.methods || {})
+      .filter(name => !isPublic(name) && isJS(def.methods[name])).sort();
+    let staticMethodKeys = Object.keys((def.statics || {}).methods || {})
+      .filter(name => isJS(def.statics.methods[name])).sort();
     if (publicMethodKeys.length) {
       result.push('## Methods\n\n');
-      result.push(this.renderMethods(methods, publicMethodKeys));
+      result.push(this.renderMethods(def.methods, publicMethodKeys, def));
     }
     if (protectedMethodKeys.length) {
       result.push('## Protected Methods\n\n');
-      result.push(`These methods are accessible only in classes extending *${type}*.\n\n`);
-      result.push(this.renderMethods(methods, protectedMethodKeys));
+      result.push(`These methods are accessible only in classes extending *${def.type}*.\n\n`);
+      result.push(this.renderMethods(def.methods, protectedMethodKeys, def));
     }
     if (staticMethodKeys.length) {
       result.push('## Static Methods\n\n');
-      result.push(`These methods are called directly on the *${type}* class, not its instance.\n\n`);
-      result.push(this.renderMethods(statics.methods, staticMethodKeys));
+      result.push(`These methods are called directly on the *${def.type}* class, not its instance.\n\n`);
+      result.push(this.renderMethods(def.statics.methods, staticMethodKeys, def));
     }
     return result.join('');
   }
 
-  private renderMethods(methods: {[name: string]: schema.Method|schema.Method[]}, names: string[]) {
+  private renderMethods(methods: {[name: string]: schema.Method|schema.Method[]}, names: string[], def: ExtendedApi) {
     const result = [];
     names.forEach(name => {
       asArray(methods[name]).forEach(desc => {
-        result.push(this.renderMethod(name, desc));
+        result.push(this.renderMethod(name, desc, def));
       });
     });
     return result.join('');
   }
 
-  private renderMethod(name: string, method: schema.Method) {
+  private renderMethod(name: string, method: schema.Method, def: ExtendedApi) {
     let result = [];
     result.push('### ' + name + this.renderSignature(method.parameters)) + '\n';
     result.push(this.renderPlatforms(method.platforms) + '\n');
     if (method.parameters && method.parameters.length) {
-      result.push('**Parameters:** ' + this.renderMethodParamList(method.parameters) + '\n');
+      result.push('**Parameters:** ' + this.renderMethodParamList(method.parameters, def, true) + '\n');
     }
     if (method.returns) {
       result.push('**Returns:** *' + this.renderTypeLink(method.returns) + '*\n');
@@ -379,11 +396,11 @@ class DocGenerator {
     return result;
   }
 
-  private renderMethodParamList(parameters: schema.Parameter[]) {
+  private renderMethodParamList(parameters: schema.Parameter[], def: ExtendedApi, hasContext: boolean) {
     return '\n\n' + parameters.map(param => {
       let type = '';
       if (param.type) {
-        type = '*' + this.renderTypeLink(param.type) + '*';
+        type = '*' + this.renderTypeLink(this.decodeType(param.type, def, hasContext)) + '*';
       }
       let optional = param.optional ? ' [**Optional**]' : '';
       let result = [`- ${param.name}: ${type}${optional}`];
@@ -420,6 +437,15 @@ class DocGenerator {
     return name.split('|')
       .map(name => this.typeLinks[name] ? `[${name}](${this.typeLinks[name]})` : name)
       .join('\\|');
+  }
+
+  private decodeType(type: string, def: ExtendedApi, hasContext: boolean) {
+    if (type !== 'PropertiesObject') {
+      return type;
+    } else if (hasContext) {
+      return `Properties&lt;${def.type}&gt;`;
+    }
+    return `Properties&lt;typeof ${def.type}%gt;`;
   }
 
 }
