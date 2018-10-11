@@ -2,7 +2,6 @@ import {join, parse, relative, sep} from 'path';
 import * as fs from 'fs-extra';
 import * as schema from './api-schema';
 import {asArray, ApiDefinitions, ExtendedApi, readJsonDefs,  getTitle, Properties, lowercaseFirstChar} from './common';
-import { SchemaSchema } from 'json-schema-to-typescript/dist/src/types/JSONSchema';
 
 type TypeLinks = {[type: string]: string};
 type NamedEvents = Array<schema.Event & {name: string}>;
@@ -11,22 +10,23 @@ const SNIPPETS_LOCATION = 'snippets';
 const MSG_PROVISIONAL = '**Note:** this API is provisional and may change in a future release.';
 
 exports.generateDoc = function generateDoc({files, targetPath, version}) {
-  const generator = new DocGenerator(files, targetPath, version);
+  const generator = new DocumentationGenerator(targetPath, version, files);
   generator.generate();
 };
 
-class DocGenerator {
+class DocumentationGenerator {
 
-  private defs: ApiDefinitions;
-  private typeLinks: TypeLinks = {};
+  public readonly defs: ApiDefinitions;
+  public readonly typeLinks: TypeLinks = {};
 
   constructor(
-    private readonly files: string[],
-    private readonly targetPath: string,
-    private readonly version: string
+    public readonly targetPath: string,
+    public readonly tabrisVersion: string,
+    files: string[],
   ) {
     this.readPropertyTypes();
-    this.readAPI();
+    this.defs = readJsonDefs(files);
+    this.preProcessDefinitions();
   }
 
   public generate() {
@@ -34,8 +34,7 @@ class DocGenerator {
     this.renderIndex();
   }
 
-  private readAPI() {
-    this.defs = readJsonDefs(this.files);
+  private preProcessDefinitions() {
     Object.keys(this.defs).forEach(title => {
       if (this.defs[title].type) {
         this.addTypeLink(this.defs[title].type, `${this.defs[title].type}.md`);
@@ -53,17 +52,17 @@ class DocGenerator {
   }
 
   private renderAPI() {
-    let apiPath = join(this.targetPath, 'api');
+    const apiPath = join(this.targetPath, 'api');
     Object.keys(this.defs).forEach(title => {
-      let targetFile = join(apiPath, parse(this.defs[title].file).name + '.md');
-      fs.writeFileSync(targetFile, this.renderDocument(title));
+      const targetFile = join(apiPath, parse(this.defs[title].file).name + '.md');
+      fs.writeFileSync(targetFile, new DocumentRenderer(this, title).render());
     });
   }
 
   private renderIndex() {
     let tocFile = join(this.targetPath, 'toc.yml');
     let sortedAPI = Object.keys(this.defs).map(key => this.defs[key]).sort(compareTitles);
-    let render = (def: ExtendedApi) => `    - title: ${getTitle(def)}\n      url: api/${parse(def.file).name}.html`;
+    let render = (def) => `    - title: ${getTitle(def)}\n      url: api/${parse(def.file).name}.html`;
     let content = {
       api: sortedAPI.filter(def => !def.isWidget).map(render).join('\n'),
       widgets: sortedAPI.filter(def => def.isWidget).map(render).join('\n')
@@ -72,66 +71,91 @@ class DocGenerator {
     fs.writeFileSync(tocFile, text);
   }
 
-  private renderDocument(title: string) {
-    const def = this.defs[title];
-    let heading = title;
-    if (def.namespace === 'global' && def.object) {
-      heading = `Global object "${def.object}"`;
-    } else if (def.object) {
-      heading = `Object "${def.object}"`;
-    } else if (def.isWidget) {
-      heading = `Widget "${def.type}"`;
-    } else if (def.type) {
-      heading = `Type "${def.type}"`;
+  private addTypeLink(type, link) {
+    if (this.typeLinks[type]) {
+      throw new Error('Duplicate type ' + type);
+    }
+    this.typeLinks[type] = link;
+  }
+
+}
+
+class DocumentRenderer {
+
+  private readonly defs: ApiDefinitions;
+  private readonly def: ExtendedApi;
+  private readonly typeLinks: TypeLinks;
+  private readonly targetPath: string;
+  private readonly tabrisVersion: string;
+
+  constructor(docGenerator: DocumentationGenerator, private readonly title: string) {
+    this.title = title;
+    this.targetPath = docGenerator.targetPath;
+    this.defs = docGenerator.defs;
+    this.typeLinks = docGenerator.typeLinks;
+    this.tabrisVersion = docGenerator.tabrisVersion;
+    this.def = this.defs[this.title];
+  }
+
+  public render() {
+    let heading = this.title;
+    if (this.def.namespace === 'global' && this.def.object) {
+      heading = `Global object "${this.def.object}"`;
+    } else if (this.def.object) {
+      heading = `Object "${this.def.object}"`;
+    } else if (this.def.isWidget) {
+      heading = `Widget "${this.def.type}"`;
+    } else if (this.def.type) {
+      heading = `Type "${this.def.type}"`;
     }
     return [
       '---\n---',
       '# ' + heading + '\n',
-      this.renderExtends(def),
-      this.renderDescription(def),
-      this.renderImages(def),
-      this.renderExample(def),
-      this.renderConstructor(def),
-      this.renderMembers(def),
-      this.renderSnippet(title),
-      this.renderLinks(def)
+      this.renderExtends(),
+      this.renderDescription(),
+      this.renderImages(),
+      this.renderExample(),
+      this.renderConstructor(),
+      this.renderMembers(),
+      this.renderSnippet(),
+      this.renderLinks()
     ].filter(value => !!value).join('\n');
   }
 
-  private renderMembers(def: ExtendedApi) {
+  private renderMembers() {
     return [
-      this.renderAllMethods(def),
-      this.renderAllProperties(def),
-      this.renderEvents(def)
+      this.renderAllMethods(),
+      this.renderAllProperties(),
+      this.renderAllEvents()
     ].filter(value => !!value).join('\n');
   }
 
-  private renderConstructor(def: ExtendedApi) {
-    if (!def.constructor || def.constructor.access !== 'public') {
+  private renderConstructor() {
+    if (!this.def.constructor || this.def.constructor.access !== 'public') {
       return '';
     }
     const result = [
       '## Constructor\n\n',
-      `### new ${def.type}${this.renderSignature(def.constructor.parameters)}\n\n`
+      `### new ${this.def.type}${this.renderSignature(this.def.constructor.parameters)}\n\n`
     ];
-    if (def.constructor.parameters) {
+    if (this.def.constructor.parameters) {
       result.push('**Parameters:**');
-      result.push(this.renderMethodParamList(def.constructor.parameters, def, false));
+      result.push(this.renderMethodParamList(this.def.constructor.parameters, false));
       result.push('\n');
     }
     return result.join('');
   }
 
-  private renderExample(def: ExtendedApi) {
+  private renderExample() {
     let apiPath = join(this.targetPath, 'api');
-    let exampleFile = join(apiPath, parse(def.file).name + '.md');
+    let exampleFile = join(apiPath, parse(this.def.file).name + '.md');
     if (isFileSync(exampleFile)) {
       return fs.readFileSync(exampleFile, 'utf-8');
     }
   }
 
-  private renderSnippet(title: string) {
-    let snippetPath = join(SNIPPETS_LOCATION, `${title.toLowerCase()}.js`);
+  private renderSnippet() {
+    let snippetPath = join(SNIPPETS_LOCATION, `${this.title.toLowerCase()}.js`);
     if (isFileSync(snippetPath)) {
       return [
         '## Example',
@@ -142,34 +166,34 @@ class DocGenerator {
     }
   }
 
-  private renderImages(def: ExtendedApi) {
-    let androidImage = join('img/android', parse(def.file).name + '.png');
-    let iosImage = join('img/ios', parse(def.file).name + '.png');
+  private renderImages() {
+    let androidImage = join('img/android', parse(this.def.file).name + '.png');
+    let iosImage = join('img/ios', parse(this.def.file).name + '.png');
     let exists = image => isFileSync(join('doc/api', image));
     if (exists(androidImage) && exists(iosImage)) {
       return [
         'Android | iOS',
         '--- | ---',
-        `![${def.type} on Android](${androidImage}) | ![${def.type} on iOS](${iosImage})`,
+        `![${this.def.type} on Android](${androidImage}) | ![${this.def.type} on iOS](${iosImage})`,
       ].join('\n') + '\n';
     }
     if (exists(androidImage)) {
-      return `![${def.type} on Android](${androidImage})\n`;
+      return `![${this.def.type} on Android](${androidImage})\n`;
     }
     if (exists(iosImage)) {
-      return `![${def.type} on iOS](${iosImage})\n`;
+      return `![${this.def.type} on iOS](${iosImage})\n`;
     }
     return '';
   }
 
-  private renderDescription(def: ExtendedApi) {
-    let result = def.description ? def.description + '\n\n' : '';
-    if (def.namespace === 'global') {
-      result += `This ${def.object ? 'object' : 'API'} can be used anywhere without importing it.`;
+  private renderDescription() {
+    let result = this.def.description ? this.def.description + '\n\n' : '';
+    if (this.def.namespace === 'global') {
+      result += `This ${this.def.object ? 'object' : 'API'} can be used anywhere without importing it.`;
     } else {
-      result += `You can import this ${def.object ? 'object' : 'type'} like this:\n`;
-      result += this.renderCodeBlock(`import {${def.object || def.type}} from 'tabris';`);
-      result += `Or reference it directly form anywhere as "\`tabris.${def.object || def.type}\`".`;
+      result += `You can import this ${this.def.object ? 'object' : 'type'} like this:\n`;
+      result += this.renderCodeBlock(`import {${this.def.object || this.def.type}} from 'tabris';`);
+      result += `Or reference it directly form anywhere as "\`tabris.${this.def.object || this.def.type}\`".`;
     }
     return result;
   }
@@ -178,58 +202,58 @@ class DocGenerator {
     return '```js\n' + content + '\n```\n';
   }
 
-  private renderExtends(def: ExtendedApi) {
-    if (def.extends) {
-      if (!(def.extends in this.defs)) {
-        throw new Error('Could not find super type for ' + def.type);
+  private renderExtends() {
+    if (this.def.extends) {
+      if (!(this.def.extends in this.defs)) {
+        throw new Error('Could not find super type for ' + this.def.type);
       }
-      let sup = this.defs[def.extends];
+      let sup = this.defs[this.def.extends];
       return `Extends [${sup.type}](${sup.type}.md)\n`;
     }
     return '';
   }
 
-  private renderAllMethods(def: ExtendedApi) {
+  private renderAllMethods() {
     let result = [];
-    let publicMethodKeys = Object.keys(def.methods || {})
-      .filter(name => isPublic(name) && isJS(def.methods[name])).sort();
-    let protectedMethodKeys = Object.keys(def.methods || {})
-      .filter(name => !isPublic(name) && isJS(def.methods[name])).sort();
-    let staticMethodKeys = Object.keys((def.statics || {}).methods || {})
-      .filter(name => isJS(def.statics.methods[name])).sort();
+    let publicMethodKeys = Object.keys(this.def.methods || {})
+      .filter(name => isPublic(name) && isJS(this.def.methods[name])).sort();
+    let protectedMethodKeys = Object.keys(this.def.methods || {})
+      .filter(name => !isPublic(name) && isJS(this.def.methods[name])).sort();
+    let staticMethodKeys = Object.keys((this.def.statics || {}).methods || {})
+      .filter(name => isJS(this.def.statics.methods[name])).sort();
     if (publicMethodKeys.length) {
       result.push('## Methods\n\n');
-      result.push(this.renderMethods(def.methods, publicMethodKeys, def));
+      result.push(this.renderMethods(this.def.methods, publicMethodKeys));
     }
     if (protectedMethodKeys.length) {
       result.push('## Protected Methods\n\n');
-      result.push(`These methods are accessible only in classes extending *${def.type}*.\n\n`);
-      result.push(this.renderMethods(def.methods, protectedMethodKeys, def));
+      result.push(`These methods are accessible only in classes extending *${this.def.type}*.\n\n`);
+      result.push(this.renderMethods(this.def.methods, protectedMethodKeys));
     }
     if (staticMethodKeys.length) {
       result.push('## Static Methods\n\n');
-      result.push(`These methods are called directly on the *${def.type}* class, not its instance.\n\n`);
-      result.push(this.renderMethods(def.statics.methods, staticMethodKeys, def));
+      result.push(`These methods are called directly on the *${this.def.type}* class, not its instance.\n\n`);
+      result.push(this.renderMethods(this.def.statics.methods, staticMethodKeys));
     }
     return result.join('');
   }
 
-  private renderMethods(methods: {[name: string]: schema.Method|schema.Method[]}, names: string[], def: ExtendedApi) {
+  private renderMethods(methods: {[name: string]: schema.Method|schema.Method[]}, names: string[]) {
     const result = [];
     names.forEach(name => {
       asArray(methods[name]).forEach(desc => {
-        result.push(this.renderMethod(name, desc, def));
+        result.push(this.renderMethod(name, desc));
       });
     });
     return result.join('');
   }
 
-  private renderMethod(name: string, method: schema.Method, def: ExtendedApi) {
+  private renderMethod(name: string, method: schema.Method) {
     let result = [];
     result.push('### ' + name + this.renderSignature(method.parameters)) + '\n';
     result.push(this.renderPlatforms(method.platforms) + '\n');
     if (method.parameters && method.parameters.length) {
-      result.push('**Parameters:** ' + this.renderMethodParamList(method.parameters, def, true) + '\n');
+      result.push('**Parameters:** ' + this.renderMethodParamList(method.parameters, true) + '\n');
     }
     if (method.returns) {
       result.push('**Returns:** *' + this.renderTypeLink(method.returns) + '*\n');
@@ -243,7 +267,8 @@ class DocGenerator {
     return result.join('\n') + '\n';
   }
 
-  private renderAllProperties({properties, statics, type}: ExtendedApi) {
+  private renderAllProperties() {
+    const {properties, statics, type} = this.def;
     let result = [];
     let publicPropertyKeys = Object.keys(properties || {})
       .filter(name => isPublic(name) && isJS(properties[name])).sort();
@@ -340,12 +365,12 @@ class DocGenerator {
     return result.join('');
   }
 
-  private renderEvents(def: ExtendedApi) {
-    if (!def.isNativeObject) {
+  private renderAllEvents() {
+    if (!this.def.isNativeObject) {
       return '';
     }
-    let widgetEvents: NamedEvents = Object.keys(def.events || {}).map(name => Object.assign({name}, def.events[name]));
-    let changeEvents: NamedEvents = this.createChangeEvents(def.properties);
+    let widgetEvents: NamedEvents = Object.keys(this.def.events || {}).map(name => Object.assign({name}, this.def.events[name]));
+    let changeEvents: NamedEvents = this.createChangeEvents();
     let events = widgetEvents.concat(changeEvents).sort((a, b) => a.name.localeCompare(b.name));
     if (!events || !Object.keys(events).length) {
       return '';
@@ -361,7 +386,8 @@ class DocGenerator {
     ].join('');
   }
 
-  private createChangeEvents(properties: Properties): NamedEvents {
+  private createChangeEvents(): NamedEvents {
+    const properties = this.def.properties;
     if (!properties || !Object.keys(properties).length) {
       return [];
     }
@@ -396,11 +422,11 @@ class DocGenerator {
     return result;
   }
 
-  private renderMethodParamList(parameters: schema.Parameter[], def: ExtendedApi, hasContext: boolean) {
+  private renderMethodParamList(parameters: schema.Parameter[], hasContext: boolean) {
     return '\n\n' + parameters.map(param => {
       let type = '';
       if (param.type) {
-        type = '*' + this.renderTypeLink(this.decodeType(param.type, def, hasContext)) + '*';
+        type = '*' + this.renderTypeLink(this.decodeType(param.type, hasContext)) + '*';
       }
       let optional = param.optional ? ' [**Optional**]' : '';
       let result = [`- ${param.name}: ${type}${optional}`];
@@ -415,20 +441,13 @@ class DocGenerator {
     return `- **${name}**: *${this.renderTypeLink(type)}*\n    ${description}\n\n`;
   }
 
-  private addTypeLink(type, link) {
-    if (this.typeLinks[type]) {
-      throw new Error('Duplicate type ' + type);
-    }
-    this.typeLinks[type] = link;
-  }
-
-  private renderLinks(def: ExtendedApi) {
-    if (!def.links || !def.links.length) {
+  private renderLinks() {
+    if (!this.def.links || !this.def.links.length) {
       return '';
     }
-    return ['## See also\n'].concat(def.links.map(link => {
+    return ['## See also\n'].concat(this.def.links.map(link => {
       let path = link.path.replace('${GITHUB_BRANCH}',
-        'https://github.com/eclipsesource/tabris-js/tree/v' + this.version);
+        'https://github.com/eclipsesource/tabris-js/tree/v' + this.tabrisVersion);
       return `- [${link.title}](${path})`;
     })).join('\n') + '\n';
   }
@@ -439,13 +458,13 @@ class DocGenerator {
       .join('\\|');
   }
 
-  private decodeType(type: string, def: ExtendedApi, hasContext: boolean) {
+  private decodeType(type: string, hasContext: boolean) {
     if (type !== 'PropertiesObject') {
       return type;
     } else if (hasContext) {
-      return `Properties&lt;${def.type}&gt;`;
+      return `Properties&lt;${this.def.type}&gt;`;
     }
-    return `Properties&lt;typeof ${def.type}%gt;`;
+    return `Properties&lt;typeof ${this.def.type}%gt;`;
   }
 
 }
