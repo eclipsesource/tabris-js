@@ -1,13 +1,16 @@
 import {join, parse, relative, sep} from 'path';
 import * as fs from 'fs-extra';
 import * as schema from './api-schema';
-import {asArray, ApiDefinitions, ExtendedApi, readJsonDefs,  getTitle, Properties, lowercaseFirstChar} from './common';
+import {asArray, ApiDefinitions, ExtendedApi, readJsonDefs,  getTitle} from './common';
 
 type TypeLinks = {[type: string]: string};
 type NamedEvents = Array<schema.Event & {name: string}>;
 
 const SNIPPETS_LOCATION = 'snippets';
 const MSG_PROVISIONAL = '**Note:** this API is provisional and may change in a future release.';
+const LANG_TYPE_LINKS: TypeLinks = {
+  Object: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object'
+};
 
 exports.generateDoc = function generateDoc({files, targetPath, version}) {
   const generator = new DocumentationGenerator(targetPath, version, files);
@@ -17,7 +20,7 @@ exports.generateDoc = function generateDoc({files, targetPath, version}) {
 class DocumentationGenerator {
 
   public readonly defs: ApiDefinitions;
-  public readonly typeLinks: TypeLinks = {};
+  public readonly typeLinks: TypeLinks = Object.assign({}, LANG_TYPE_LINKS);
 
   constructor(
     public readonly targetPath: string,
@@ -103,22 +106,20 @@ class DocumentRenderer {
       heading = `Global object "${this.def.object}"`;
     } else if (this.def.object) {
       heading = `Object "${this.def.object}"`;
-    } else if (this.def.isWidget) {
-      heading = `Widget "${this.def.type}"`;
-    } else if (this.def.type) {
-      heading = `Type "${this.def.type}"`;
+    } else if (this.def.isWidget || this.def.type) {
+      heading = `Class "${this.def.type}"`;
     }
     return [
       '---\n---',
       '# ' + heading + '\n',
       this.renderExtends(),
-      this.renderDescription(),
       this.renderImages(),
-      this.renderExample(),
-      this.renderConstructor(),
-      this.renderMembers(),
+      this.renderSummary(),
+      this.renderDescriptionFile(),
       this.renderSnippet(),
-      this.renderLinks()
+      this.renderLinks(),
+      this.renderConstructor(),
+      this.renderMembers()
     ].filter(value => !!value).join('\n');
   }
 
@@ -139,18 +140,19 @@ class DocumentRenderer {
       `### new ${this.def.type}${this.renderSignature(this.def.constructor.parameters)}\n\n`
     ];
     if (this.def.constructor.parameters) {
-      result.push('**Parameters:**');
       result.push(this.renderMethodParamList(this.def.constructor.parameters, false));
       result.push('\n');
     }
     return result.join('');
   }
 
-  private renderExample() {
+  private renderDescriptionFile() {
     let apiPath = join(this.targetPath, 'api');
     let exampleFile = join(apiPath, parse(this.def.file).name + '.md');
     if (isFileSync(exampleFile)) {
       return fs.readFileSync(exampleFile, 'utf-8');
+    } else {
+      console.warn('No description file for ' + this.title);
     }
   }
 
@@ -158,11 +160,13 @@ class DocumentRenderer {
     let snippetPath = join(SNIPPETS_LOCATION, `${this.title.toLowerCase()}.js`);
     if (isFileSync(snippetPath)) {
       return [
-        '## Example',
+        'Example:',
         '```js',
         fs.readFileSync(snippetPath, 'utf-8').trim(),
         '```'
       ].join('\n');
+    } else {
+      console.warn('No Snippet for ' + this.title);
     }
   }
 
@@ -183,34 +187,98 @@ class DocumentRenderer {
     if (exists(iosImage)) {
       return `![${this.def.type} on iOS](${iosImage})\n`;
     }
+    if (this.def.type !== 'Widget' && (this.def.isWidget || this.def.extends === 'Popup')) {
+      console.warn('No image for ' + this.def.type);
+    }
     return '';
   }
 
-  private renderDescription() {
-    let result = this.def.description ? this.def.description + '\n\n' : '';
-    if (this.def.namespace === 'global') {
-      result += `This ${this.def.object ? 'object' : 'API'} can be used anywhere without importing it.`;
-    } else {
-      result += `You can import this ${this.def.object ? 'object' : 'type'} like this:\n`;
-      result += this.renderCodeBlock(`import {${this.def.object || this.def.type}} from 'tabris';`);
-      result += `Or reference it directly form anywhere as "\`tabris.${this.def.object || this.def.type}\`".`;
+  private renderSummary() {
+    let result = [];
+    if (this.def.type) {
+      if (this.def.generics || this.def.ts_extends) {
+        result.push('* TypeScript type: `', this.def.type);
+        if (this.def.generics) {
+          result.push('<', this.def.generics,  '>');
+        }
+        result.push(' extends ', this.def.ts_extends || this.def.extends || 'Object', '`\n');
+      }
+      result.push('* Constructor: *', this.def.constructor.access || 'public', '*\n');
+      result.push('* Singleton: ', this.def.object ? '`' + this.def.object + '`' : '*No*', '\n');
+      result.push('* Namespace: `', this.def.namespace || 'tabris', '`\n');
+      result.push(this.renderJSXSummary());
+      const subclasses = Object.keys(this.defs).filter(def => this.defs[def].extends === this.def.type);
+      result.push('* Direct subclasses: ');
+      if (subclasses.length) {
+        result.push(subclasses.map(name => this.renderTypeLink(name)).join(', '), '\n');
+      } else {
+        result.push('*None*\n');
+      }
+      result.push('--------\n');
     }
-    return result;
+    result.push(this.def.description ? this.def.description + '\n\n' : '');
+    return result.join('');
   }
 
-  private renderCodeBlock(content: string) {
-    return '```js\n' + content + '\n```\n';
+  private renderJSXSummary() {
+    const jsx = (this.def.isWidget || this.def.extends === 'Popup' )
+      && this.def.constructor.access === 'public';
+    const result = [];
+    result.push('* JSX support:\n');
+    if (jsx) {
+      const contentProps =
+        Object.keys(this.def.properties || {}).filter(prop => this.def.properties[prop].jsxContentProperty);
+      result.push('  * Element: `<', this.def.type, '/>`\n');
+      if (this.def.isWidget) {
+        const parentElement = (this.def.methods && this.def.methods.parent)
+          ? this.renderJSXLink((this.def.methods.parent as schema.Method).returns)
+          : this.renderJSXLink('Composite') + ' *and any widget extending* ' + this.renderTypeLink('Composite');
+        result.push('  * Parent element: ', parentElement, '\n');
+      }
+      result.push('  * Child elements: ');
+      const childTypes = [];
+      if (this.def.type === 'Composite' || (this.def.extends === 'Composite' && !this.def.ts_extends)) {
+        childTypes.push('*Widgets*');
+      } else if (this.def.ts_extends && /Composite<(.+)>$/.test(this.def.ts_extends))  {
+        childTypes.push('`<' + RegExp.$1 + '/>`');
+      }
+      contentProps.forEach(propName => {
+        if (this.def.properties[propName].jsxType) {
+          childTypes.push('[`<' + this.def.properties[propName].jsxType + '/>`](#' + propName + ')');
+        }
+      });
+      if (!childTypes.length) {
+        childTypes.push('*None*');
+      }
+      result.push(childTypes.join(', '), '\n');
+      let textContent = null;
+      contentProps.forEach(propName => {
+        if (!this.def.properties[propName].jsxType) {
+          textContent = '*Sets [' + propName + '](#' + propName + ') property*';
+        }
+      });
+      result.push('  * Text content: ', textContent || '*Not supported*', '\n');
+    }
+    return result.join('');
   }
 
   private renderExtends() {
-    if (this.def.extends) {
-      if (!(this.def.extends in this.defs)) {
-        throw new Error('Could not find super type for ' + this.def.type);
-      }
-      let sup = this.defs[this.def.extends];
-      return `Extends [${sup.type}](${sup.type}.md)\n`;
+    if (!this.def.type) {
+      return '';
     }
-    return '';
+    const hierarchy = [];
+    let currentType = this.def.type;
+    while (currentType) {
+      hierarchy.unshift(this.renderTypeLink(currentType));
+      if (currentType === 'Object') {
+        currentType = null;
+      } else if (this.defs[currentType]) {
+        currentType = this.defs[currentType].extends || 'Object';
+      } else {
+        throw new Error('Could not find super type for ' + currentType);
+      }
+    }
+    return hierarchy.join(' > ') + '\n';
   }
 
   private renderAllMethods() {
@@ -232,7 +300,6 @@ class DocumentRenderer {
     }
     if (staticMethodKeys.length) {
       result.push('## Static Methods\n\n');
-      result.push(`These methods are called directly on the *${this.def.type}* class, not its instance.\n\n`);
       result.push(this.renderMethods(this.def.statics.methods, staticMethodKeys));
     }
     return result.join('');
@@ -250,21 +317,21 @@ class DocumentRenderer {
 
   private renderMethod(name: string, method: schema.Method) {
     let result = [];
-    result.push('### ' + name + this.renderSignature(method.parameters)) + '\n';
-    result.push(this.renderPlatforms(method.platforms) + '\n');
+    result.push('### ' + name + this.renderSignature(method.parameters)) + '\n\n';
+    result.push(this.renderPlatforms(method.platforms) + '\n\n');
     if (method.parameters && method.parameters.length) {
-      result.push('**Parameters:** ' + this.renderMethodParamList(method.parameters, true) + '\n');
+      result.push('\n\n', this.renderMethodParamList(method.parameters, true), '\n');
     }
-    if (method.returns) {
-      result.push('**Returns:** *' + this.renderTypeLink(method.returns) + '*\n');
-    }
+    result.push('* Returns: ', this.renderTypeLink(method.returns || 'void'), '\n');
     if (method.provisional) {
-      result.push(MSG_PROVISIONAL + '\n');
+      result.push('\n', MSG_PROVISIONAL, '\n');
     }
     if (method.description) {
-      result.push(method.description + '\n');
+      result.push('\n', method.description, '\n');
+    } else {
+      console.warn('No description for ' + this.title + ' method ' + name);
     }
-    return result.join('\n') + '\n';
+    return result.join('') + '\n';
   }
 
   private renderAllProperties() {
@@ -291,7 +358,6 @@ class DocumentRenderer {
     }
     if (staticPropertyKeys.length) {
       result.push('## Static Properties\n\n');
-      result.push(`These properties are accessible directly on the *${type}* class, not its instance.\n\n`);
       staticPropertyKeys.forEach(name => {
         result.push(this.renderProperty(statics.properties, name, type, true));
       });
@@ -307,31 +373,31 @@ class DocumentRenderer {
     const result = [];
     let property = properties[name];
     result.push('### ', name, '\n', this.renderPlatforms(property.platforms), '\n\n');
-    if (property.readonly) {
-      result.push('**read-only**\n\n');
-    }
-    result.push('Type: ', this.renderPropertyType(property), '\n');
+    result.push(this.renderPropertySummary(property, name), '\n\n');
     if (property.description) {
       result.push('\n' + property.description);
     }
     if (property.jsxContentProperty) {
-      const isString = property.type === 'string';
-      result.push(`\n\nIn JSX the `);
-      result.push(isString ? `text content ` : `child elements `);
-      result.push(`of the *${type}* element `);
-      result.push(isString ? `is ` : `are `);
-      result.push(`mapped to this property. `);
-      result.push(`Therefore \`<${type}>`);
-      result.push(isString ? 'Hello World' : `{${name}}`);
-      result.push(`</${type}>\` would be the same as \`<${type} ${name}=`);
-      result.push(isString ? `'Hello World'` : `{${name}}`);
-      result.push(` />\`.${property.jsxType ? ' ' : ''}`);
+      result.push(`\n\nWhen using ${this.def.type} as an JSX element `);
+      result.push(property.jsxType ? 'its child elements are' : 'the element content is');
+      result.push(` mapped to this property. `);
+      result.push(`Therefore\n\`\`\`jsx\n<${type}>`);
+      result.push(property.jsxType ? `{${name}}` : 'Hello World');
+      result.push(`</${type}>\n\`\`\`\n has the same effect as:\n\`\`\`jsx\n<${type} ${name}=`);
+      result.push(property.jsxType ? `{${name}}` : `'Hello World'`);
+      result.push(` />${property.jsxType ? ' ' : ''}\n\`\`\`\n`);
     }
     if (property.jsxType) {
-      result.push(`You can also import \`${property.jsxType}\` from the \`tabris\` module and use it as an JSX element to represent ${name}.`);
+      // TODO: create items overview document to link
+      result.push(`The \`${property.jsxType}\` element needs to be imported from the \`tabris\` module separately`);
+      result.push(` and has the same attributes as the property type.`);
     }
     if (property.const && !isStatic) {
-      result.push('\n\nThis property can only be set on widget creation. Once set, it cannot change anymore.');
+      result.push('\n\nThis property can only be set via constructor ');
+      if (this.def.isWidget || this.def.extends === 'Popup') {
+        result.push('or JSX');
+      }
+      result.push('. Once set, it cannot change anymore.');
     }
     result.push('\n\n');
     return result.join('');
@@ -353,37 +419,56 @@ class DocumentRenderer {
     return result.join('');
   }
 
-  private renderPropertyType(property: schema.Property) {
-    let name = property.type;
-    let result = ['*', this.renderTypeLink(name), '*'];
-    if (property.values) {
-      result.push(', supported values: `' + property.values.join('`, `') + '`');
+  private renderPropertySummary(property: schema.Property, name: string) {
+    let result = ['* Type: '];
+    if (property.values) { // TODO: remove in favor of using only union types
+      result.push(property.values.map(v => literal(v, property.type)).join('|'));
+    } else {
+      result.push(this.renderTypeLink(property.type));
     }
+    result.push('\n');
     if (property.default) {
-      result.push(', default: `' + property.default + '`');
+      result.push('* Default ', literal(property.default, property.type), '\n');
+    }
+    result.push('* Settable: ');
+    if (property.readonly) {
+      result.push('*No*\n');
+    } else if (property.const) {
+      result.push('*On creation*\n');
+    } else {
+      result.push('*Yes*\n');
+    }
+    if (property.jsxContentProperty) {
+      result.push('* JSX Content Type: `', property.jsxType || property.type, '`\n');
+    }
+    if (!property.default && !property.readonly) {
+      console.warn('No default value for ' + this.title + ' property ' + name);
     }
     return result.join('');
   }
 
   private renderAllEvents() {
-    if (!this.def.isNativeObject) {
-      return '';
-    }
-    let widgetEvents: NamedEvents = Object.keys(this.def.events || {}).map(name => Object.assign({name}, this.def.events[name]));
+    let typeEvents: NamedEvents = Object.keys(this.def.events || {})
+      .map(name => Object.assign({name}, this.def.events[name]));
     let changeEvents: NamedEvents = this.createChangeEvents();
-    let events = widgetEvents.concat(changeEvents).sort((a, b) => a.name.localeCompare(b.name));
-    if (!events || !Object.keys(events).length) {
-      return '';
+    const result = [];
+    if (Object.keys(typeEvents).length) {
+      result.push('## Events\n\n');
+      result.push(this.renderEvents(typeEvents));
     }
-    return [
-      '## Events\n\n',
-      ...events.map(({name, description, parameters, platforms}) => ([
-        '### ', name, '\n', this.renderPlatforms(platforms), '\n',
-        description ? description + '\n' : '',
-        parameters ? '\n#### Event Parameters ' + this.renderEventParamList(parameters) + '\n' : ''
-      ]).join('')),
-      '\n\n'
-    ].join('');
+    if (Object.keys(changeEvents).length) {
+      result.push('## Change Events\n\n');
+      result.push(this.renderEvents(changeEvents));
+    }
+    return result.join('');
+  }
+
+  private renderEvents(events: NamedEvents) {
+    return events.map(({name, description, parameters, platforms}) => [
+      '### ', name, '\n\n', this.renderPlatforms(platforms),
+      parameters ? this.renderEventParamList(parameters) : '',
+      description ? description + '\n\n' : '\n'
+    ].join('')).join('');
   }
 
   private createChangeEvents(): NamedEvents {
@@ -410,61 +495,74 @@ class DocumentRenderer {
   }
 
   private renderSignature(parameters: schema.Parameter[]) {
-    return '(' + (parameters || []).map(param => typeof param === 'object' ? param.name : param).join(', ') + ')';
+    // TODO: support defaults
+    return '(' + (parameters || []).map(param => {
+      const paramObject = typeof param === 'object' ? param : {name: param, optional: false};
+      return paramObject.name + (paramObject.optional ? '?' : '');
+    }).join(', ') + ')';
   }
 
   private renderEventParamList(parameters: {[name: string]: schema.Property}) {
-    let result = '\n';
-    result += this.renderEventParameter({name: 'target', type: 'this', description: 'The widget the event was fired on.'});
-    Object.keys(parameters).sort().forEach((name) => {
-      result += this.renderEventParameter(Object.assign({name}, parameters[name]));
-    });
-    return result;
+    // TODO: create event objects overview article to link here instead
+    return 'parameter|type|description\n-|-|-\n' + Object.keys(parameters).sort().map(key => {
+      const param = parameters[key];
+      let type = 'any';
+      if (param.type) {
+        type = this.renderTypeLink(this.decodeType(param.type, true));
+      } else {
+        console.warn('No type for event parameter ' + key + ' in ' + this.title);
+      }
+      if (!param.description) {
+        console.warn('No description for event parameter ' + key + ' in ' + this.title);
+      }
+      return [key, type, param.description || ''].join('|');
+    }).join('\n') + '\n\n';
   }
 
   private renderMethodParamList(parameters: schema.Parameter[], hasContext: boolean) {
-    return '\n\n' + parameters.map(param => {
-      let type = '';
+    return 'parameter|type|optional|description\n-|-|-|-\n' + parameters.map(param => {
+      let type = 'any';
       if (param.type) {
-        type = '*' + this.renderTypeLink(this.decodeType(param.type, hasContext)) + '*';
+        type = this.renderTypeLink(this.decodeType(param.type, hasContext));
+      } else {
+        console.warn('No type for parameter ' + param.name + ' in ' + this.title);
       }
-      let optional = param.optional ? ' [**Optional**]' : '';
-      let result = [`- ${param.name}: ${type}${optional}`];
-      if (param.description) {
-        result.push(`  - ${lowercaseFirstChar(param.description)}`);
+      if (!param.description) {
+        console.warn('No description for parameter ' + param.name + ' in ' + this.title);
       }
-      return result.join('\n');
+      return [param.name, type, param.optional ? 'Yes' : 'No', param.description || ''].join('|');
     }).join('\n');
   }
 
-  private renderEventParameter({name, type, description}: schema.Parameter) {
-    return `- **${name}**: *${this.renderTypeLink(type)}*\n    ${description}\n\n`;
-  }
-
   private renderLinks() {
+    // TODO: replace by either description text and/or examples field in members
     if (!this.def.links || !this.def.links.length) {
       return '';
     }
-    return ['## See also\n'].concat(this.def.links.map(link => {
+    return ['See also:\n'].concat(this.def.links.map(link => {
       let path = link.path.replace('${GITHUB_BRANCH}',
         'https://github.com/eclipsesource/tabris-js/tree/v' + this.tabrisVersion);
       return `- [${link.title}](${path})`;
     })).join('\n') + '\n';
   }
 
-  private renderTypeLink(name: string) {
-    return name.split('|')
-      .map(name => this.typeLinks[name] ? `[${name}](${this.typeLinks[name]})` : name)
-      .join('\\|');
+  private renderTypeLink(type: string): string {
+    return '<span style="white-space:nowrap;">' + type.split('|')
+      .map(name => this.typeLinks[name] ? `[\`${name}\`](${this.typeLinks[name]})` : '`' + name + '`')
+      .join('\\|') + '</span>';
+  }
+
+  private renderJSXLink(name: string) {
+    return this.typeLinks[name] ? `[\`<${name}/>\`](${this.typeLinks[name]})` : '`<' + name + '/>`';
   }
 
   private decodeType(type: string, hasContext: boolean) {
     if (type !== 'PropertiesObject') {
       return type;
     } else if (hasContext) {
-      return `Properties&lt;${this.def.type}&gt;`;
+      return `Properties<${this.def.type}>`;
     }
-    return `Properties&lt;typeof ${this.def.type}%gt;`;
+    return `Properties<typeof ${this.def.type}>`;
   }
 
 }
@@ -501,4 +599,11 @@ function isJS(member: Member) {
 
 function isPublic(name: string) {
   return name[0] !== '_';
+}
+
+function literal(value: any, type: string) {
+  if (type === 'string') {
+    return '`\'' + value + '\'`';
+  }
+  return '`' + value + '`';
 }

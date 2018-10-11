@@ -179,6 +179,7 @@
           "type": "boolean"
         },
         "default": {
+          "type": "string|number|boolean",
           "description": "Default value of this property"
         },
         "values": {
