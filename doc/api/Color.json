@@ -69,7 +69,7 @@
             "type": "ColorValue"
           }
         ],
-        "description": "Creates a new instance of Color using any valid color expression. For any other value the method throws.",
+        "description": "Creates a new instance of Color using any valid color expression. For any other value, including `null` and `'initial'` the method throws.",
         "returns": "Color"
       },
       "isColorValue": {
@@ -80,7 +80,7 @@
             "type": "any"
           }
         ],
-        "description": "Returns true if value is a ColorValue. This includes `null` and `'initial'`.",
+        "description": "Returns true if value is a ColorValue. This includes `null` and `'initial'`. Use this to check if a value will be accepted by a color property. This is also a valid TypeScript type guard function.",
         "returns": "value is ColorValue"
       },
       "isValidColorValue": {
@@ -91,7 +91,7 @@
             "type": "any"
           }
         ],
-        "description": "Returns true if value is a valid ColorValue. This excludes `null` and `'initial'`.",
+        "description": "Returns true if value is a valid ColorValue. This excludes `null` and `'initial'`. Use this to check if a value will be accepted by Color.from. This is also a valid TypeScript type guard function.",
         "returns": "value is ColorValue"
       }
     },

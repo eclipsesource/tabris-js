@@ -91,7 +91,7 @@ type ColorLikeObject = {red: number, green: number, blue: number, alpha?: number
  *
  * Type guards for `ColorValue` are available as **Color.isColorValue** and **Color.isValidColorValue**
  */
-type ColorValue = ColorLikeObject|ColorArray|string;
+type ColorValue = ColorLikeObject|ColorArray|string|'initial'|null;
 
 type FontWeight = 'black' | 'bold' | 'medium' | 'thin' | 'light' | 'normal';
 type FontStyle = 'italic' | 'normal';
