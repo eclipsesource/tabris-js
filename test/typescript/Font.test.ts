@@ -53,3 +53,9 @@ if (Font.isFontValue(obj)) {
 if (Font.isValidFontValue(obj)) {
   fontValue = obj;
 }
+
+let fontFamily: string;
+fontFamily = Font.serif;
+fontFamily = Font.sansSerif;
+fontFamily = Font.condensed;
+fontFamily = Font.monospace;

@@ -298,4 +298,26 @@ describe('Font', function() {
 
   });
 
+  describe('consts', function() {
+
+    it('values', function() {
+      expect(Font.sansSerif).to.equal('sans-serif');
+      expect(Font.monospace).to.equal('monospace');
+      expect(Font.serif).to.equal('serif');
+      expect(Font.condensed).to.equal('condensed');
+    });
+
+    it('readonly', function() {
+      Font.serif = 'foo';
+      Font.sansSerif = 'foo';
+      Font.condensed = 'foo';
+      Font.monospace = 'foo';
+      expect(Font.serif).to.equal('serif');
+      expect(Font.sansSerif).to.equal('sans-serif');
+      expect(Font.condensed).to.equal('condensed');
+      expect(Font.monospace).to.equal('monospace');
+    });
+
+  });
+
 });

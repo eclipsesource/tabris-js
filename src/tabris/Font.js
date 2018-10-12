@@ -37,6 +37,22 @@ export default class Font {
     throw new Error('Not a valid FontValue: ' + value);
   }
 
+  static get sansSerif() {
+    return 'sans-serif';
+  }
+
+  static get serif() {
+    return 'serif';
+  }
+
+  static get monospace() {
+    return 'monospace';
+  }
+
+  static get condensed() {
+    return 'condensed';
+  }
+
   constructor(size, family = [], weight = 'normal', style = 'normal') {
     if (arguments.length < 1) {
       throw new Error('Not enough arguments');

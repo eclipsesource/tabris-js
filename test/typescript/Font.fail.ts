@@ -12,6 +12,10 @@ fontValue = new Font(16, 'foo', 'black', 'italic');
 fontValue = Font.from({});
 fontValue = Font.from(5);
 fontValue = Font.from({size: 5, foo: 'bar'});
+Font.serif = 'foo';
+Font.sansSerif = 'foo';
+Font.condensed = 'foo';
+Font.monospace = 'foo';
 
 /*Expected
 (3,
@@ -38,4 +42,12 @@ not assignable
 not assignable
 (14,
 not assignable
+(15,
+read-only
+(16,
+read-only
+(17,
+read-only
+(18,
+read-only
 */

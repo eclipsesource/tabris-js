@@ -58,6 +58,12 @@
     }
   },
   "statics": {
+    "properties": {
+      "sansSerif": { "type": "\"sans-serif\"", "readonly": true },
+      "serif": { "type": "\"serif\"", "readonly": true },
+      "condensed": { "type": "\"condensed\"", "readonly": true },
+      "monospace": { "type": "\"monospace\"", "readonly": true }
+    },
     "methods": {
       "from": {
         "parameters": [
