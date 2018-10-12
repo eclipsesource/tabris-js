@@ -1,10 +1,14 @@
+const FONT_STYLES = ['italic', 'normal'];
+const FONT_WEIGHTS = ['black', 'bold', 'medium', 'thin', 'light', 'normal'];
+
 export function fontStringToObject(str) {
   let result = {family: [], size: 0, style: 'normal', weight: 'normal'};
   let parts = str.split(/(?:\s|^)\d+px(?:\s|$)/);
-  checkTruthy(parts.length === 2 || parts.length === 1, 'Invalid font syntax');
+  checkTruthy(parts.length === 2, 'Invalid font syntax');
+  let [sizePrefix, sizeSuffix] = parts;
   result.size = parseInt(/(?:\s|^)(\d+)px(?:\s|$)/.exec(str)[1], 10);
-  parseStyles(result, parts[0]);
-  parseFamily(result, parts[1]);
+  parseSizePrefix(result, sizePrefix);
+  parseFamily(result, sizeSuffix);
   return result;
 }
 
@@ -17,39 +21,73 @@ export function fontObjectToString(font) {
   ].filter(str => !!str).join(' ').trim();
 }
 
-function parseStyles(fontArr, styles) {
-  let styleArr = styles.trim().split(/\s+/);
-  checkTruthy(styleArr.length <= 2, 'Too many font styles');
-  styleArr.forEach((property) => {
-    switch (property.trim()) {
-      case 'italic':
-        checkTruthy(fontArr.style === 'normal', 'Invalid font variant');
-        fontArr.style = 'italic';
-        break;
-      case 'black':
-      case 'bold':
-      case 'medium':
-      case 'thin':
-      case 'light':
-        checkTruthy(fontArr.weight === 'normal', 'Invalid font weight');
-        fontArr.weight = property.trim();
-        break;
-      case 'normal':
-      case '':
-        break;
-      default:
-        throw new Error('Unknown font property: ' + property.trim());
+export function validateFamily(name) {
+  let valid = /(?:^\s*[^"']+\s*$)|(?:^\s*"[^"']+"\s*$)|(?:^\s*'[^"']+'\s*$)/.exec(name);
+  checkTruthy(valid, 'Invalid font family: ' + name);
+}
+
+export function validateStyle(style) {
+  checkTruthy(isStyle(style), `Invalid font style ${style}`);
+}
+
+export function validateWeight(weight) {
+  checkTruthy(isWeight(weight), `Invalid font weight ${weight}`);
+}
+
+export function normalizeFamily(value) {
+  return /^\s*["']?([^"']*)/.exec(value)[1].trim();
+}
+
+export function normalizeWeight(value) {
+  return value.trim();
+}
+
+export function normalizeStyle(value) {
+  return value.trim();
+}
+
+function parseSizePrefix(fontObj, prefix) {
+  let prefixes = prefix.trim().split(/\s+/);
+  checkTruthy(prefixes.length <= 2, 'Too many font size prefixes');
+  let {style, weight} = parseSizePrefixes(prefixes);
+  fontObj.style = style;
+  fontObj.weight = weight;
+}
+
+function parseSizePrefixes(prefixes) {
+  // [styleOrWeight]
+  // [style, weight]
+  if (prefixes.length === 1) {
+    let prefix = prefixes[0];
+    if (isStyle(prefix)) {
+      return {weight: 'normal', style: normalizeStyle(prefix)};
+    } else if (isWeight(prefix)) {
+      return {weight: normalizeWeight(prefix), style: 'normal'};
+    } else if (prefix === 'normal' || prefix === '') {
+      return {style: 'normal', weight: 'normal'};
     }
-  });
+    throw new Error(`Invalid font style or weight ${prefix}`);
+  } else if (prefixes.length === 2) {
+    validateStyle(prefixes[0]);
+    validateWeight(prefixes[1]);
+    return {style: normalizeStyle(prefixes[0]), weight: normalizeWeight(prefixes[1])};
+  }
+}
+
+function isStyle(value) {
+  return typeof value === 'string' && FONT_STYLES.includes(value.trim());
+}
+
+function isWeight(value) {
+  return typeof value === 'string' && FONT_WEIGHTS.includes(value.trim());
 }
 
 function parseFamily(fontArr, family) {
   // NOTE: Currently family is optional to allow for default fonts, but this is
   //       not CSS font syntax. See https://github.com/eclipsesource/tabris-js/issues/24
   (family ? family.split(',') : []).forEach((name) => {
-    let valid = /(?:^\s*[^"']+\s*$)|(?:^\s*"[^"']+"\s*$)|(?:^\s*'[^"']+'\s*$)/.exec(name);
-    checkTruthy(valid, 'Invalid font family: ' + name);
-    fontArr.family.push(/^\s*["']?([^"']*)/.exec(name)[1].trim());
+    validateFamily(name);
+    fontArr.family.push(normalizeFamily(name));
   });
 }
 

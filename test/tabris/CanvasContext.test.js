@@ -371,7 +371,7 @@ describe('CanvasContext', function() {
       });
 
       it('renders changes', function() {
-        ctx.font = 'bold italic 14px Helvetica';
+        ctx.font = 'italic bold 14px Helvetica';
         flush();
 
         expect(decodeLastPacket()).to.deep.equal({

@@ -23,30 +23,29 @@ describe('util-fonts', function() {
       expect(parse('  50px  ').size).to.equal(50);
       expect(parse('12px').size).to.equal(12);
       expect(parse('italic 12px').size).to.equal(12);
-      expect(parse('bold italic 12px').size).to.equal(12);
+      expect(parse('italic bold 12px').size).to.equal(12);
       expect(parse('12px Arial, Fantasy').size).to.equal(12);
       expect(parse("12px 'Times New Roman', Arial").size).to.equal(12);
       expect(parse('12px "Times New Roman", Arial').size).to.equal(12);
     });
 
     it('throws error for strings without valid size', function() {
-      expect(parsing('12pxf')).to.throw();
-      expect(parsing('12p x')).to.throw();
-      expect(parsing('-1px')).to.throw();
-      expect(parsing('foo13px')).to.throw();
-      expect(parsing('8 px ')).to.throw();
-      expect(parsing(' 18pt')).to.throw();
-      expect(parsing('  px  ')).to.throw();
-      expect(parsing('23')).to.throw();
+      expect(parsing('12pxf')).to.throw('Invalid font syntax');
+      expect(parsing('12p x')).to.throw('Invalid font syntax');
+      expect(parsing('-1px')).to.throw('Invalid font syntax');
+      expect(parsing('foo13px')).to.throw('Invalid font syntax');
+      expect(parsing('8 px ')).to.throw('Invalid font syntax');
+      expect(parsing(' 18pt')).to.throw('Invalid font syntax');
+      expect(parsing('  px  ')).to.throw('Invalid font syntax');
+      expect(parsing('23')).to.throw('Invalid font syntax');
     });
 
     it('parses valid styles', function() {
       expect(parse('italic 12px').style).to.equal('italic');
-      expect(parse('bold italic 12px').style).to.equal('italic');
       expect(parse('italic bold 12px').style).to.equal('italic');
       expect(parse('italic bold 12px Arial, Times').style).to.equal('italic');
       expect(parse('normal normal 12px').style).to.equal('normal');
-      expect(parse('bold normal 12px').style).to.equal('normal');
+      expect(parse('normal bold 12px').style).to.equal('normal');
       expect(parse('normal 12px').style).to.equal('normal');
       expect(parse('12px').style).to.equal('normal');
       expect(parse('12px italic').style).to.equal('normal');
@@ -55,7 +54,7 @@ describe('util-fonts', function() {
     it('parses valid weight', function() {
       expect(parse('bold 12px').weight).to.equal('bold');
       expect(parse('black 12px').weight).to.equal('black');
-      expect(parse('light   italic 12px').weight).to.equal('light');
+      expect(parse('italic   light 12px').weight).to.equal('light');
       expect(parse('  italic thin 12px').weight).to.equal('thin');
       expect(parse(' italic  medium 12px Arial, Times').weight).to.equal('medium');
       expect(parse('normal normal 12px').weight).to.equal('normal');
@@ -80,7 +79,7 @@ describe('util-fonts', function() {
     it('parses valid font families', function() {
       expect(parse('12px  ').family).to.eql(['']);
       expect(parse('12px Arial').family).to.eql(['Arial']);
-      expect(parse('bold italic 12px Arial').family).to.eql(['Arial']);
+      expect(parse('italic bold 12px Arial').family).to.eql(['Arial']);
       expect(parse('12px Arial, Fantasy').family).to.eql(['Arial', 'Fantasy']);
       expect(parse('12px Times New Roman,Fantasy').family).to.eql(['Times New Roman', 'Fantasy']);
       expect(parse('12px   Arial ,   Fantasy').family).to.eql(['Arial', 'Fantasy']);

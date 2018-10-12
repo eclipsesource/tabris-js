@@ -80,7 +80,7 @@ describe('Widget', function() {
         });
 
         it('normalizes font string', function() {
-          widget.set({font: 'bold italic   12px Arial'});
+          widget.set({font: 'italic bold   12px Arial'});
 
           expect(widget.font).to.eql('italic bold 12px Arial');
         });
