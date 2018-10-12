@@ -1,7 +1,7 @@
 import {
   Image,
   ColorValue,
-  Font,
+  FontValue,
   LayoutData,
   Widget,
   Composite,
@@ -63,7 +63,7 @@ let color: ColorValue = stringType;
 stringType = color;
 
 // Font
-let font: Font = stringType;
+let font: FontValue = stringType;
 stringType = font;
 
 // LayoutData

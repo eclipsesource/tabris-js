@@ -141,9 +141,19 @@ Distance to a parent's or sibling's opposing edge in one of these formats:
 
 See also [Layout](layout.md).
 
-## Font
+## FontValue
 
-Fonts are specified as strings using the shorthand syntax known from CSS, specifically `"[font-style] [font-weight] font-size [font-family[, font-family]*]"`. The font family may be omitted, in this case the default system font will be used. Generic font families supported across all platforms are `"serif"`, `"sans-serif"`, `"condensed"` and `"monospace"`. Supported font weights are `"light"`, `"thin"`, `"normal"`, `"medium"`, `"bold"` and `"black"`. The value `"initial"` represents the platform default.
+Fonts can be specified as strings or [Font](./Font.html)/Font-like objects.
+
+A **Font** instance can be created with the **Font** constructor or using **Font.from**.
+
+Generic font families supported across all platforms are **"serif"**, **"sans-serif"**, **"condensed"** and **"monospace"**.
+Supported font weights are **"light"**, **"thin"**, **"normal"**, **"medium"**, **"bold"** and **"black"**.
+
+A **Font**-like object is a plain object with "size" and optional "family", "weight" and "style" properties.
+Example: **{size: 16, family: ['serif'], weight: 'bold', style: 'italic'}**
+
+As a string, the shorthand syntax known from CSS is used: **"[font-style] [font-weight] font-size [font-family[, font-family]*]"**. The font family may be omitted, in this case the default system font will be used. The value **"initial"** represents the platform default.
 
 Examples:
 

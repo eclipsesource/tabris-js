@@ -22,7 +22,7 @@ NativeObject.defineProperties(ToggleButton.prototype, {
   alignment: {type: ['choice', ['left', 'right', 'center']], default: 'center'},
   textColor: {type: 'ColorValue'},
   font: {
-    type: 'font',
+    type: 'FontValue',
     set(name, value) {
       this._nativeSet(name, value === undefined ? null : value);
       this._storeProperty(name, value);

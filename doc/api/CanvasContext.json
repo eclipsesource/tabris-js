@@ -33,7 +33,7 @@
       "description": "Specifies the color to use inside shapes."
     },
     "font": {
-      "type": "Font",
+      "type": "FontValue",
       "description": "Specifies the current text style being used when drawing text."
     },
     "strokeStyle": {

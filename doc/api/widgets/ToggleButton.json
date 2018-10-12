@@ -45,8 +45,7 @@
       "description": "The color of the text."
     },
     "font": {
-      "type": "Font",
-      "ts_type": "Font|null",
+      "type": "FontValue",
       "description": "The font used for the text."
     }
   },

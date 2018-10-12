@@ -69,7 +69,7 @@ NativeObject.defineProperties(TextInput.prototype, {
     }
   },
   font: {
-    type: 'font',
+    type: 'FontValue',
     set(name, value) {
       this._nativeSet(name, value === undefined ? null : value);
       this._storeProperty(name, value);

@@ -1,4 +1,4 @@
-import {ColorValue, TextView, TextViewTapLinkEvent, Font, Properties} from 'tabris';
+import {ColorValue, TextView, TextViewTapLinkEvent, Properties, FontValue} from 'tabris';
 
 let widget: TextView = new TextView({markupEnabled: true});
 
@@ -10,7 +10,7 @@ let maxLines: number|null;
 let selectable: boolean;
 let text: string;
 let textColor: ColorValue;
-let font: Font | null;
+let font: FontValue;
 
 alignment = widget.alignment;
 lineSpacing = widget.lineSpacing;

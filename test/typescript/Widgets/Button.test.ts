@@ -1,4 +1,4 @@
-import {Button, ColorValue, Image, EventObject, Font, Properties} from 'tabris';
+import {Button, ColorValue, Image, EventObject, Properties, FontValue} from 'tabris';
 
 let widget: Button = new Button();
 
@@ -8,7 +8,7 @@ let image: Image;
 let text: string;
 let textColor: ColorValue;
 let nullValue: null;
-let font: Font | null;
+let font: FontValue;
 
 alignment = widget.alignment;
 image = widget.image as Image;

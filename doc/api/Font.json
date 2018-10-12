@@ -1,0 +1,97 @@
+{
+  "type": "Font",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "size",
+        "type": "number",
+        "description": "Positive number in dip"
+      },
+      {
+        "name": "family",
+        "type": "string[]",
+        "description": "Prioritized list of font families",
+        "optional": true
+      },
+      {
+        "name": "weight",
+        "type": "'black' | 'bold' | 'medium' | 'thin' | 'light' | 'normal'",
+        "description": "Boldness of the font",
+        "optional": true
+      },
+      {
+        "name": "style",
+        "type": "'italic' | 'normal'",
+        "description": "Face of the font family to be used",
+        "optional": true
+      }
+    ]
+  },
+  "description": "Represents a font. See also [FontValue](./types.html#FontValue)",
+  "properties": {
+    "size": {
+      "type": "number",
+      "description": "Positive number in dip",
+      "const": true
+    },
+    "family": {
+      "type": "string[]",
+      "description": "Prioritized list of font families",
+      "const": true
+    },
+    "weight": {
+      "type": "'black' | 'bold' | 'medium' | 'thin' | 'light' | 'normal'",
+      "description": "Boldness of the font",
+      "const": true
+    },
+    "style": {
+      "type": "'italic' | 'normal'",
+      "description": "Face of the font family to be used",
+      "const": true
+    }
+  },
+  "methods": {
+    "toString": {
+      "description": "Returns a string representation of the font using the CSS font shorthand syntax.",
+      "returns": "string"
+    }
+  },
+  "statics": {
+    "methods": {
+      "from": {
+        "parameters": [
+          {
+            "name": "fontValue",
+            "description": "The value to create a Font instance from",
+            "type": "FontValue"
+          }
+        ],
+        "description": "Creates a new instance of Font using any valid font expression. For any other value, including `null` and `'initial'` the method throws.",
+        "returns": "Font"
+      },
+      "isFontValue": {
+        "parameters": [
+          {
+            "name": "value",
+            "description": "The value to test",
+            "type": "any"
+          }
+        ],
+        "description": "Returns true if value is a FontValue. This includes `null` and `'initial'`. Use this to check if a value will be accepted by a font property. This is also a valid TypeScript type guard function.",
+        "returns": "value is FontValue"
+      },
+      "isValidFontValue": {
+        "parameters": [
+          {
+            "name": "value",
+            "description": "The value to test",
+            "type": "any"
+          }
+        ],
+        "description": "Returns true if value is a valid FontValue. This excludes `null` and `'initial'`. Use this to check if a value will be accepted by Font.from. This is also a valid TypeScript type guard function.",
+        "returns": "value is FontValue"
+      }
+    }
+  }
+}

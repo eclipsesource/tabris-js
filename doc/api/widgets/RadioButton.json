@@ -38,8 +38,7 @@
       "description": "The color of the selectable area in checked state. Will fall back to `tintColor` if not set."
     },
     "font": {
-      "type": "Font",
-      "ts_type": "Font|null",
+      "type": "FontValue",
       "description": "The font used for the text."
     }
   },

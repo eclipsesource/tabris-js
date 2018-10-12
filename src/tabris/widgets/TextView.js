@@ -39,7 +39,7 @@ NativeObject.defineProperties(TextView.prototype, {
   text: {type: 'string', default: ''},
   textColor: {type: 'ColorValue'},
   font: {
-    type: 'font',
+    type: 'FontValue',
     set(name, value) {
       this._nativeSet(name, value === undefined ? null : value);
       this._storeProperty(name, value);

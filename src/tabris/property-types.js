@@ -1,12 +1,12 @@
 import {normalizePathUrl} from './util';
 import {imageFromArray, imageToArray} from './util-images';
 import {colorArrayToString, colorStringToArray} from './util-colors';
-import {fontObjectToString, fontStringToObject} from './util-fonts';
 import {ColorShader, LinearGradientShader} from './util-shaders';
 import NativeObject from './NativeObject';
 import WidgetCollection from './WidgetCollection';
 import {warn} from './Console';
 import Color from './Color';
+import Font from './Font';
 
 export let types = {
 
@@ -108,19 +108,19 @@ export let types = {
     }
   },
 
-  font: {
+  FontValue: {
     encode(value) {
       if (value === null || value === 'initial') {
         return undefined;
       }
-      return fontStringToObject(value);
+      return Font.from(value);
     },
     decode(value) {
       if (!value) {
         // NOTE: workaround to allow triggering a change event when setting font to "initial"
         return 'initial';
       }
-      return fontObjectToString(value);
+      return Font.from(value).toString();
     }
   },
 

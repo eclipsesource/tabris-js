@@ -22,7 +22,7 @@ NativeObject.defineProperties(RadioButton.prototype, {
   tintColor: {type: 'ColorValue'},
   checkedTintColor: {type: 'ColorValue'},
   font: {
-    type: 'font',
+    type: 'FontValue',
     set(name, value) {
       this._nativeSet(name, value === undefined ? null : value);
       this._storeProperty(name, value);

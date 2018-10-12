@@ -441,11 +441,11 @@ describe('property-types', function() {
   describe('font', function() {
 
     it('encode translates "initial" to `undefined`', function() {
-      expect(types.font.encode('initial')).to.equal(undefined);
+      expect(types.FontValue.encode('initial')).to.equal(undefined);
     });
 
     it('encode translates `null` to `undefined`', function() {
-      expect(types.font.encode(null)).to.equal(undefined);
+      expect(types.FontValue.encode(null)).to.equal(undefined);
     });
 
   });

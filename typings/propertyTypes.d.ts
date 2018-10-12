@@ -93,10 +93,23 @@ type ColorLikeObject = {red: number, green: number, blue: number, alpha?: number
  */
 type ColorValue = ColorLikeObject|ColorArray|string;
 
+type FontWeight = 'black' | 'bold' | 'medium' | 'thin' | 'light' | 'normal';
+type FontStyle = 'italic' | 'normal';
+type FontLikeObject = {size: number, family?: string[], weight?: FontWeight, style?: FontStyle};
 /**
- * Fonts are specified as strings using the shorthand syntax known from CSS, specifically **"[font-style] [font-weight] font-size [font-family[, font-family]*]"**. The font family may be omitted, in this case the default system font will be used. Generic font families supported across all platforms are **"serif"**, **"sans-serif"**, **"condensed"** and **"monospace"**. Supported font weights are **"light"**, **"thin"**, **"normal"**, **"medium"**, **"bold"** and **"black"**. The value **"initial"** represents the platform default.
+ * Fonts can be specified as strings or Font/Font-like objects.
+ *
+ * A **Font** instance can be created with the **Font** constructor or using **Font.from**.
+ *
+ * A **Font**-like object is a plain object with "size" and optional "family", "weight" and "style" properties.
+ * Example: **{size: 16, family: ['serif'], weight: 'bold', style: 'italic'}**
+ *
+ * Generic font families supported across all platforms are **"serif"**, **"sans-serif"**, **"condensed"** and **"monospace"**.
+ * Supported font weights are **"light"**, **"thin"**, **"normal"**, **"medium"**, **"bold"** and **"black"**.
+ *
+ * As a string, the shorthand syntax known from CSS is used: **"[font-style] [font-weight] font-size [font-family[, font-family]*]"**. The font family may be omitted, in this case the default system font will be used. The value **"initial"** represents the platform default.
  */
-type Font = string;
+type FontValue = FontLikeObject|string|'initial'|null;
 
 /**
  * Defines how the widget should be arranged. When setting the layout of a widget using **LayoutData**, all currently set layout attributes not in the new LayoutData object will be implicitly reset to null (i.e. "not specified").
