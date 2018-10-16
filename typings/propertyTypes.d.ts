@@ -37,30 +37,36 @@ interface ImageData {
   readonly height: number;
 
 }
+/**
+ * A plain object with following properties:
+ *
+ * **src**: *string*
+ *    File system path, relative path or URL. The [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme) scheme is also supported. Relative paths are resolved relative to 'package.json'. On Android the name of a bundled [drawable resource](https://developer.android.com/guide/topics/resources/drawable-resource.html) can be provided with the url scheme `android-drawable`, e.g. `android-drawable://ic_info_black`.
+ *
+ * **width**: *number | 'auto' (optional)*
+ *    Image width in dip, extracted from the image file when missing or `'auto'`.
+ *
+ * **height**: *number | 'auto' (optional)*
+ *    Image height in dip, extracted from the image file when missing or `'auto'`.
+ *
+ * **scale**: *number | 'auto' (optional)*
+ *    Image scale factor, the image will be scaled down by this factor. The scale will be inferred from the image file name if it follows the pattern "@\<scale\>x", e.g. `"image@2x.jpg"`. The pattern is ignored if `scale`, `width` or `height` are set to a number or if `scale` is set to `"auto"`.
+ */
 
-type Image = string | {
+type ImageLikeObject = {src: string, scale?: number|"auto", width?: number|"auto", height?: number|"auto"};
 
-  /**
-   * Image path or URL.
-   */
-  src: string;
+/**
+ * Images can be specified as strings or Image/ImageLikeObject.
+ *
+ * An **Image** instance can be created using the **Image** constructor or using **Image.from**.
+ *
+ * The string shorthand `"image.jpg"` equals `{src: "image.jpg"}`.
+ *
+ * The scale can be part of the file name in the pattern of "@\<scale\>x", e.g. `"image@2x.jpg"`. The pattern is ignored if `scale`, `width` or `height` are set to a number or if `scale` is set to `"auto"`.
+ */
 
-  /**
-   * Image width, extracted from the image file when missing.
-   */
-  width?: number;
+type ImageValue = ImageLikeObject|Image|string|null;
 
-  /**
-   * Image height, extracted from the image file when missing.
-   */
-  height?: number;
-
-  /**
-   * Image scale factor - the image will be scaled down by this factor.
-   * Ignored when width or height are set.
-   */
-  scale?: number;
-}
 
 type ColorArray = [number, number, number, number]|[number, number, number];
 type ColorLikeObject = {red: number, green: number, blue: number, alpha?: number};
@@ -271,7 +277,7 @@ declare class ActionSheetItem {
   constructor(props?: Partial<Pick<ActionSheetItem, 'title' | 'image' | 'style'>>);
 
   readonly title: string;
-  readonly image?: Image;
+  readonly image?: ImageValue;
   readonly style?: 'default'|'cancel'|'destructive';
 
   readonly [JSX.jsxFactory]: JSX.JsxFactory;

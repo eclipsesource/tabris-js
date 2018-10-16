@@ -1,18 +1,18 @@
-import {Tab, TabFolder, Image, Properties, WidgetCollection} from 'tabris';
+import {Tab, TabFolder, ImageValue, Properties, WidgetCollection} from 'tabris';
 
 let widget: Tab = new Tab();
 
 // Properties
 let badge: string;
-let image: Image;
-let selectedImage: Image;
+let image: ImageValue;
+let selectedImage: ImageValue;
 let title: string;
 let nullValue: null;
 
 badge = widget.badge;
-image = widget.image as Image;
+image = widget.image as ImageValue;
 nullValue = widget.image as null;
-selectedImage = widget.selectedImage as Image;
+selectedImage = widget.selectedImage as ImageValue;
 nullValue = widget.selectedImage as null;
 title = widget.title;
 

@@ -80,7 +80,7 @@ widgetCollection = <tabris.WidgetCollection children={[new tabris.Button(), new 
 
 // Popup
 
-const actions: Array<{title: string, image?: tabris.Image, style?: 'default'|'cancel'|'destructive'}> = [
+const actions: Array<{title: string, image?: tabris.ImageValue, style?: 'default'|'cancel'|'destructive'}> = [
   {title: 'foo', image: 'foo.jpg', style: 'default'}
 ];
 

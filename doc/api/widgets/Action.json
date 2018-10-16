@@ -86,8 +86,7 @@
   },
   "properties": {
     "image": {
-      "type": "Image",
-      "ts_type": "Image|null",
+      "type": "ImageValue",
       "description": "Icon image for the action."
     },
     "placementPriority": {

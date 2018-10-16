@@ -1,11 +1,11 @@
-import {ActionSheet, Popup, Image, ActionSheetSelectEvent, EventObject, Properties} from 'tabris';
+import {ActionSheet, Popup, ActionSheetSelectEvent, EventObject, Properties, ImageValue} from 'tabris';
 
 let widget: ActionSheet = new ActionSheet();
 
 // Properties
 let title: string;
 let message: string;
-let actions: Array<{title: string, image?: Image, style?: 'default'|'cancel'|'destructive'}>;
+let actions: Array<{title: string, image?: ImageValue, style?: 'default'|'cancel'|'destructive'}>;
 
 title = widget.title;
 message = widget.message;

@@ -17,7 +17,7 @@ export default class ToggleButton extends Widget {
 
 NativeObject.defineProperties(ToggleButton.prototype, {
   text: {type: 'string', default: ''},
-  image: {type: 'image', default: null},
+  image: {type: 'ImageValue', default: null},
   checked: {type: 'boolean', nocache: true},
   alignment: {type: ['choice', ['left', 'right', 'center']], default: 'center'},
   textColor: {type: 'ColorValue'},

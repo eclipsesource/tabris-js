@@ -158,35 +158,46 @@ As a string, the shorthand syntax known from CSS is used: **"[font-style] [font-
 Examples:
 
 ```js
+new Font({size: 16, family: Font.sansSerif})
+{size: 16, weight: 'bold'}
 "bold 24px"
 "12px sans-serif"
 "italic thin 12px sans-serif"
 "initial"
 ```
 
-## Image
+## ImageValue
 
-Images are specified as objects with the following properties:
+Images can be specified as strings or [Image](./Image.html)/[ImageLikeObject](#imagelikeobject).
 
-* **src**: *string*
-    File system path, relative path or URL. The [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme) scheme is also supported. Relative paths are resolved relative to 'package.json'. On Android the name of a bundled [drawable resource](https://developer.android.com/guide/topics/resources/drawable-resource.html) can be provided with the url scheme `android-drawable`, e.g. `android-drawable://ic_info_black`.
-* **width**: *number (optional)*
-    Image width in dip, extracted from the image file when missing.
-* **height**: *number (optional)*
-    Image height in dip, extracted from the image file when missing.
-* **scale**: *number (optional)*
-    Image scale factor - the image will be scaled down by this factor. Ignored when width or height are set.
+An **Image** instance can be created using the **Image** constructor or using **Image.from**.
 
-A plain string can be used as a shorthand, e.g. `"image.jpg"` equals `{src: "image.jpg"}`. The scale can also be part of the file name in the patter of "@\<scale\>x", e.g. `"image@2x.jpg"`. The pattern is ignored if `scale`, `width` or `height` are explicitly given.
+The string shorthand `"image.jpg"` equals `{src: "image.jpg"}`.
+
+The scale can be part of the file name in the pattern of "@\<scale\>x", e.g. `"image@2x.jpg"`. The pattern is ignored if `scale`, `width` or `height` are explicitly given.
 
 Examples:
 
 ```js
+new Image({src: "http://example.com/catseye.jpg"})
+new Image({src: "http://example.com/catseye.jpg", scale: 2})
 "images/catseye.jpg"
 "images/catseye@1.5x.jpg"
 {src: "images/catseye.jpg", width: 300, height: 200}
 {src: "http://example.com/catseye.jpg", scale: 2}
 ```
+
+## ImageLikeObject
+An plain object with following properties:
+
+* **src**: *string*
+    File system path, relative path or URL. The [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme) scheme is also supported. Relative paths are resolved relative to 'package.json'. On Android the name of a bundled [drawable resource](https://developer.android.com/guide/topics/resources/drawable-resource.html) can be provided with the url scheme `android-drawable`, e.g. `android-drawable://ic_info_black`.
+* **width**: *number | 'auto' (optional)*
+    Image width in dip, extracted from the image file when missing or `'auto'`.
+* **height**: *number | 'auto' (optional)*
+    Image height in dip, extracted from the image file when missing or `'auto'`.
+* **scale**: *number | 'auto' (optional)*
+    Image scale factor, the image will be scaled down by this factor. The scale will be inferred from the image file name if it follows the pattern "@\<scale\>x", e.g. `"image@2x.jpg"`. The pattern is ignored if `scale`, `width` or `height` are set to a number or if `scale` is set to `"auto"`.
 
 ## LayoutData
 

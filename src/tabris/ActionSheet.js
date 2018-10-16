@@ -54,7 +54,7 @@ NativeObject.defineProperties(ActionSheet.prototype, {
         return value.map(action => {
           let result = {title: '' + action.title};
           if ('image' in action) {
-            result.image = types.image.encode(action.image);
+            result.image = types.ImageValue.encode(action.image);
           }
           if ('style' in action) {
             if (!['default', 'cancel', 'destructive'].includes(action.style)) {
@@ -68,7 +68,7 @@ NativeObject.defineProperties(ActionSheet.prototype, {
       decode(value) {
         return value.map(action => ({
           title: action.title,
-          image: types.image.decode(action.image),
+          image: types.ImageValue.decode(action.image),
           style: action.style || 'default'
         }));
       }

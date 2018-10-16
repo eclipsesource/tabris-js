@@ -1,15 +1,15 @@
-import {Page, Action, Image, EventObject, Properties, NavigationView, WidgetCollection} from 'tabris';
+import {Page, Action, ImageValue, EventObject, Properties, NavigationView, WidgetCollection} from 'tabris';
 
 let widget: Page = new Page();
 
 // Properties
 let autoDispose: boolean;
-let image: Image;
+let image: ImageValue;
 let title: string;
 let nullValue: null;
 
 autoDispose = widget.autoDispose;
-image = widget.image as Image;
+image = widget.image as ImageValue;
 nullValue = widget.image as null;
 title = widget.title;
 

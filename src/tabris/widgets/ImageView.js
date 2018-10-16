@@ -10,7 +10,7 @@ export default class ImageView extends Widget {
 }
 
 NativeObject.defineProperties(ImageView.prototype, {
-  image: {type: 'image', default: null},
+  image: {type: 'ImageValue', default: null},
   scaleMode: {type: ['choice', ['auto', 'fit', 'fill', 'stretch', 'none']], default: 'auto'},
   tintColor: {
     type: 'ColorValue',

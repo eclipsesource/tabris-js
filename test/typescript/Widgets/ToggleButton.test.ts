@@ -1,12 +1,12 @@
 import {
-  ColorValue, Image, ToggleButton, PropertyChangedEvent, ToggleButtonSelectEvent, Properties, FontValue
+  ColorValue, ImageValue, ToggleButton, PropertyChangedEvent, ToggleButtonSelectEvent, Properties, FontValue
 } from 'tabris';
 
 let widget: ToggleButton = new ToggleButton();
 
 // Properties
 let alignment: 'center' | 'left' | 'right';
-let image: Image;
+let image: ImageValue;
 let checked: boolean;
 let text: string;
 let textColor: ColorValue;
@@ -14,7 +14,7 @@ let nullValue: null;
 let font: FontValue;
 
 alignment = widget.alignment;
-image = widget.image as Image;
+image = widget.image as ImageValue;
 nullValue = widget.image as null;
 text = widget.text;
 textColor = widget.textColor;

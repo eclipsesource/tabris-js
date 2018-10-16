@@ -16,8 +16,7 @@
   },
   "properties": {
     "image": {
-      "type": "Image",
-      "ts_type": "Image|null",
+      "type": "ImageValue",
       "description": "The image to display. Providing the `width` and `height` attributes on the image will resize it internally. When no dimensions are given the image will be loaded with its original size. Since the full size image might occupy a lot of memory, it's recommended to provide exact dimensions."
     },
     "scaleMode": {

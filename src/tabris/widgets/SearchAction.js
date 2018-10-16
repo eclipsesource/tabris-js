@@ -15,7 +15,7 @@ export default class SearchAction extends Widget {
 }
 
 NativeObject.defineProperties(SearchAction.prototype, {
-  image: {type: 'image', default: null},
+  image: {type: 'ImageValue', default: null},
   placementPriority: {type: ['choice', ['low', 'high', 'normal']], default: 'normal'},
   title: {type: 'string', default: ''},
   proposals: {default() {return [];}},

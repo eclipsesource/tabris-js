@@ -1,0 +1,73 @@
+{
+  "type": "Image",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "imageLike",
+        "type": "ImageLikeObject",
+        "description": "An image configuration. See [ImageLikeObject](./types.html#imagelikeobject)"
+      }
+    ]
+  },
+  "description": "Represents an image. See also [ImageValue](./types.html#ImageValue)",
+  "properties": {
+    "src": {
+      "type": "string",
+      "description": "File system path, relative path or URL. Android and iOS also support [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme). Relative paths are resolved relative to ‘package.json’. On Android the name of a bundled [drawable resource](https://developer.android.com/guide/topics/resources/drawable-resource) can be provided with the url scheme android-drawable, e.g. android-drawable://ic_info_black.",
+      "const": true
+    },
+    "width": {
+      "type": "number | 'auto'",
+      "description": "Image width in dip. Extracted from the image file when 'auto'.",
+      "const": true
+    },
+    "height": {
+      "type": "number | 'auto'",
+      "description": "Image height in dip. Extracted from the image file when 'auto'.",
+      "const": true
+    },
+    "scale": {
+      "type": "number | 'auto'",
+      "description": "Image scale factor - the image will be scaled down by this factor.",
+      "const": true
+    }
+  },
+  "statics": {
+    "methods": {
+      "from": {
+        "parameters": [
+          {
+            "name": "imageValue",
+            "description": "The value to create an Image instance from. See [ImageValue](./types.html#ImageValue)",
+            "type": "ImageValue"
+          }
+        ],
+        "description": "Creates a new instance of Image using any valid Image expression. For any other value, including `null`, the method throws.",
+        "returns": "Image"
+      },
+      "isImageValue": {
+        "parameters": [
+          {
+            "name": "value",
+            "description": "The value to test",
+            "type": "any"
+          }
+        ],
+        "description": "Returns true if value is an ImageValue. This includes `null`. Use this to check if a value will be accepted by an image property. This is also a valid TypeScript type guard function.",
+        "returns": "value is ImageValue"
+      },
+      "isValidImageValue": {
+        "parameters": [
+          {
+            "name": "value",
+            "description": "The value to test",
+            "type": "any"
+          }
+        ],
+        "description": "Returns true if value is a valid ImageValue. This excludes `null`. Use this to check if a value will be accepted by Image.from. This is also a valid TypeScript type guard function.",
+        "returns": "value is ImageValue"
+      }
+    }
+  }
+}

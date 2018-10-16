@@ -1,6 +1,5 @@
 import {Widget,
  ColorValue,
- Image,
  Margin,
  Bounds,
  Offset,
@@ -19,14 +18,15 @@ import {Widget,
  WidgetLongpressEvent,
  WidgetPanEvent,
  PropertyChangedEvent,
- Properties
+ Properties,
+ ImageValue
 } from 'tabris';
 
 let widget: Widget = new Composite();
 
 // Properties
 let background: ColorValue;
-let backgroundImage: Image;
+let backgroundImage: ImageValue;
 let baseline: Widget | Selector;
 let bottomMargin: Margin;
 let bounds: Bounds;

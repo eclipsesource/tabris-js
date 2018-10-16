@@ -483,7 +483,7 @@ describe('property-types', function() {
 
   describe('image', function() {
 
-    let encode = types.image.encode;
+    let encode = types.ImageValue.encode;
 
     it('succeeds for minimal image value', function() {
       stub(console, 'warn');
@@ -594,17 +594,21 @@ describe('property-types', function() {
     it('warns if scale and width are given', function() {
       stub(console, 'warn');
 
-      expect(() => {
-        encode({src: 'foo.png', width: 23, scale: 2});
-      }).to.throw(Error, '"scale" cannot be used with "width" and "height"');
+      encode({src: 'foo.png', width: 23, scale: 2});
+
+      expect(console.warn).to.have.been.calledWith(
+        'Image "scale" ignored when "width" and/or "height" are set to a number'
+      );
     });
 
     it('warns if scale and height are given', function() {
       stub(console, 'warn');
 
-      expect(() => {
-        encode({src: 'foo.png', height: 23, scale: 2});
-      }).to.throw(Error, '"scale" cannot be used with "width" and "height"');
+      encode({src: 'foo.png', height: 23, scale: 2});
+
+      expect(console.warn).to.have.been.calledWith(
+        'Image "scale" ignored when "width" and/or "height" are set to a number'
+      );
     });
 
   });

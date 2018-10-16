@@ -1,7 +1,9 @@
 import Image from '../../src/tabris/Image';
-import {expect} from '../test';
+import {expect, spy, restore} from '../test';
 
 describe('Image', function() {
+
+  afterEach(restore);
 
   describe('constructor', function() {
 
@@ -123,6 +125,17 @@ describe('Image', function() {
     it('rejects image-like without size', function() {
       expect(() => Image.from({})).to.throw('"src" missing');
       expect(() => Image.from('')).to.throw('"src" must not be empty');
+    });
+
+    it('prints a warning when inconsistent properties given', function() {
+      spy(console, 'warn');
+
+      let image = Image.from({src: 'foo', width: 5, scale: 4});
+
+      expect(console.warn).to.have.been.calledWith(
+        'Image "scale" ignored when "width" and/or "height" are set to a number'
+      );
+      expect(image).to.deep.equal({src: 'foo', width: 5, height: 'auto', scale: 'auto'});
     });
 
   });

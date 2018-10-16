@@ -88,13 +88,11 @@
       "description": "The title to be displayed on the tab."
     },
     "image": {
-      "type": "Image",
-      "ts_type": "Image|null",
+      "type": "ImageValue",
       "description": "An image to be displayed on the tab.  Will not be shown on iOS if the `TabFolder`'s `tabBarLocation` is set to `top`"
     },
     "selectedImage": {
-      "type": "Image",
-      "ts_type": "Image|null",
+      "type": "ImageValue",
       "description": "An image to be displayed on the currently active tab."
     },
     "badge": {

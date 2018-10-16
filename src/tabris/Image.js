@@ -7,6 +7,10 @@ export default class Image {
       return value;
     }
     if (value instanceof Object) {
+      if (hasInconsistentDimensions(value)) {
+        console.warn('Image "scale" ignored when "width" and/or "height" are set to a number');
+        return new Image(Object.assign({}, value, {scale: 'auto'}));
+      }
       return new Image(value);
     }
     if (typeof value === 'string') {
@@ -69,9 +73,13 @@ function checkSrc(imageLike) {
 }
 
 function checkConsistentDimensions(imageLike) {
-  if (hasExplicit(imageLike, 'scale') && (hasExplicit(imageLike, 'width') || hasExplicit(imageLike, 'height'))) {
+  if (hasInconsistentDimensions(imageLike)) {
     throw new Error('Image "scale" cannot be used with "width" and "height"');
   }
+}
+
+function hasInconsistentDimensions(imageLike) {
+  return hasExplicit(imageLike, 'scale') && (hasExplicit(imageLike, 'width') || hasExplicit(imageLike, 'height'));
 }
 
 function setDimension(image, property, value) {

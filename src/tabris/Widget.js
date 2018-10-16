@@ -240,7 +240,7 @@ NativeObject.defineProperties(Widget.prototype, {
     default: 0
   },
   backgroundImage: {
-    type: 'image'
+    type: 'ImageValue'
   },
   bounds: {
     type: 'bounds',

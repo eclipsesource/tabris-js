@@ -43,6 +43,10 @@ All color properties are now of the type "ColorValue". While these properties st
 
 All font properties are now of the type "FontValue". While these properties still accept the same string values as in 2.x, they will return a "Font" class instance instead of a string. The exception is CanvasContext, where font properties still return a string for W3C compatibility.
 
+### Image properties
+
+All image properties are now of the type "ImageValue". While these properties still accept the same string values as in 2.x, they will return an "Image" class instance instead of a string.
+
 ## TypeScript
 
 ### Properties interfaces removed

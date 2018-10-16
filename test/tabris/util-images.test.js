@@ -1,7 +1,9 @@
-import {expect} from '../test';
+import {expect, stub, restore} from '../test';
 import {imageToArray, imageFromArray} from '../../src/tabris/util-images';
 
 describe('util-images', function() {
+
+  afterEach(restore);
 
   describe('imageToArray', function() {
 
@@ -24,10 +26,14 @@ describe('util-images', function() {
       expect(result).to.eql({src: 'foo', width: 23, height: 42, scale: 'auto'});
     });
 
-    it('fails for inconsistent configuration', function() {
-      expect(() => {
-        imageFromArray(['foo', 23, 42, 3.14]);
-      }).to.throw('"scale" cannot be used with "width" and "height"');
+    it('prints a warning for inconsistent configuration', function() {
+      stub(console, 'warn');
+
+      imageFromArray(['foo', 23, 42, 3.14]);
+
+      expect(console.warn).to.have.been.calledWith(
+        'Image "scale" ignored when "width" and/or "height" are set to a number'
+      );
     });
 
     it('skips missing width, height, and scale values', function() {

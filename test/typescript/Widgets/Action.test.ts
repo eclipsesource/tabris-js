@@ -1,15 +1,15 @@
-import {Action, Image, Properties, NavigationView, Page, WidgetCollection} from 'tabris';
+import {Action, ImageValue, Properties, NavigationView, Page, WidgetCollection} from 'tabris';
 
 let widget: Action = new Action();
 
 // Properties
 let placementPriority: 'low'|'normal'|'high';
-let image: Image;
+let image: ImageValue;
 let title: string;
 let nullValue: null;
 
 placementPriority = widget.placementPriority;
-image = widget.image as Image;
+image = widget.image as ImageValue;
 nullValue = widget.image as null;
 title = widget.title;
 

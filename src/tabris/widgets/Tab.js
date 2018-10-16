@@ -19,8 +19,8 @@ export default class Tab extends Composite {
 
 NativeObject.defineProperties(Tab.prototype, {
   title: {type: 'string', default: ''},
-  image: {type: 'image', default: null},
-  selectedImage: {type: 'image', default: null},
+  image: {type: 'ImageValue', default: null},
+  selectedImage: {type: 'ImageValue', default: null},
   badge: {type: 'string', default: ''}
 });
 

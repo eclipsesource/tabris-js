@@ -26,7 +26,7 @@ export default class Page extends Composite {
 }
 
 NativeObject.defineProperties(Page.prototype, {
-  image: {type: 'image', default: null},
+  image: {type: 'ImageValue', default: null},
   title: {type: 'string', default: ''},
   autoDispose: {type: 'boolean', default: true}
 });

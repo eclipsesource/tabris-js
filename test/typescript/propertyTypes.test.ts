@@ -2,6 +2,7 @@ import {
   Image,
   ColorValue,
   FontValue,
+  ImageValue,
   LayoutData,
   Widget,
   Composite,
@@ -20,7 +21,7 @@ import {
 let stringType: string = '';
 let stringOrUndefined: string | undefined;
 let numberType: number = 42;
-let numberOrUndefined: number | undefined;
+let numberOrUndefinedOrAuto: number | undefined | 'auto';
 let booleanType: boolean = false;
 let booleanOrUndefined: boolean | undefined;
 let marginType: Margin = ['#foo', 23];
@@ -47,17 +48,16 @@ let _offset: Offset = numberType;
 numberType = _offset;
 
 // Image
-let image: Image = {
+let image: ImageValue = {
   src: stringType,
   width: numberType,
-  height: numberType,
-  scale: numberType
+  height: numberType
 };
 image = {src: ''};
 stringType = image.src;
-numberOrUndefined = image.width;
-numberOrUndefined = image.height;
-numberOrUndefined = image.scale;
+numberOrUndefinedOrAuto = image.width;
+numberOrUndefinedOrAuto = image.height;
+numberOrUndefinedOrAuto = image.scale;
 
 // Color
 let color: ColorValue = stringType;
@@ -113,12 +113,12 @@ let transformation: Transformation = {
   translationZ: numberType
 };
 transformation = {};
-numberOrUndefined = transformation.rotation;
-numberOrUndefined = transformation.scaleX;
-numberOrUndefined = transformation.scaleY;
-numberOrUndefined = transformation.translationX;
-numberOrUndefined = transformation.translationY;
-numberOrUndefined = transformation.translationZ;
+numberOrUndefinedOrAuto = transformation.rotation;
+numberOrUndefinedOrAuto = transformation.scaleX;
+numberOrUndefinedOrAuto = transformation.scaleY;
+numberOrUndefinedOrAuto = transformation.translationX;
+numberOrUndefinedOrAuto = transformation.translationY;
+numberOrUndefinedOrAuto = transformation.translationZ;
 
 // SelectorFunction
 let selectorFunctionType: (widget: Widget, index: number, collection: WidgetCollection) => boolean = () => true;
@@ -144,9 +144,9 @@ let animationOptions: AnimationOptions = {
   name: stringType
 };
 animationOptions = {};
-numberOrUndefined = animationOptions.delay;
-numberOrUndefined = animationOptions.duration;
+numberOrUndefinedOrAuto = animationOptions.delay;
+numberOrUndefinedOrAuto = animationOptions.duration;
 easingOrUndefined = animationOptions.easing;
-numberOrUndefined = animationOptions.repeat;
+numberOrUndefinedOrAuto = animationOptions.repeat;
 booleanOrUndefined = animationOptions.reverse;
 stringOrUndefined = animationOptions.name;

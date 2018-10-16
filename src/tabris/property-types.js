@@ -138,7 +138,7 @@ export let types = {
     }
   },
 
-  image: {
+  ImageValue: {
     encode(value) {
       if (!value) {
         return null;

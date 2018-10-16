@@ -200,7 +200,7 @@
       "description": "Configure a widget to have rounded corners. Each corner is affected equally. Supported on iOS and Android 5.0+."
     },
     "backgroundImage": {
-      "type": "Image",
+      "type": "ImageValue",
       "description": "An image to be displayed on the widget's background. If the image is smaller than the widget, it will be tiled."
     },
     "bounds": {

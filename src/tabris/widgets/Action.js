@@ -16,7 +16,7 @@ export default class Action extends Widget {
 }
 
 NativeObject.defineProperties(Action.prototype, {
-  image: {type: 'image', default: null},
+  image: {type: 'ImageValue', default: null},
   placementPriority: {
     type: ['choice', ['low', 'high', 'normal']],
     set(name, value) {
