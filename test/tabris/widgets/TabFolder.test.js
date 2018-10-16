@@ -63,8 +63,8 @@ describe('TabFolder', function() {
 
       expect(tab.title).to.equal('foo');
       expect(tab.badge).to.equal('bar');
-      expect(tab.image).to.eql({src: 'foobar.jpg'});
-      expect(tab.selectedImage).to.eql({src: 'selectedFoobar.jpg'});
+      expect(tab.image).to.eql({src: 'foobar.jpg', width: 'auto', height: 'auto', scale: 'auto'});
+      expect(tab.selectedImage).to.eql({src: 'selectedFoobar.jpg', width: 'auto', height: 'auto', scale: 'auto'});
     });
 
     it('children list contains only the tab', function() {

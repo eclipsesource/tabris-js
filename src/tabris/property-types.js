@@ -1,11 +1,10 @@
-import {normalizePathUrl} from './util';
 import {imageFromArray, imageToArray} from './util-images';
 import {colorArrayToString, colorStringToArray} from './util-colors';
 import {ColorShader, LinearGradientShader} from './util-shaders';
 import NativeObject from './NativeObject';
 import WidgetCollection from './WidgetCollection';
-import {warn} from './Console';
 import Color from './Color';
+import Image from './Image';
 import Font from './Font';
 
 export let types = {
@@ -144,32 +143,7 @@ export let types = {
       if (!value) {
         return null;
       }
-      if (typeof value === 'string') {
-        value = {src: value};
-      }
-      if (typeof value !== 'object') {
-        throw new Error('Not an image: ' + value);
-      }
-      try {
-        value.src = normalizePathUrl(value.src);
-      } catch (err) {
-        throw new Error('Invalid image.src: ' + err.message);
-      }
-      ['scale', 'width', 'height'].forEach((prop) => {
-        if (prop in value && !isDimension(value[prop])) {
-          throw new Error('image.' + prop + ' is not a dimension: ' + value[prop]);
-        }
-      });
-      if ('scale' in value && ('width' in value || 'height' in value)) {
-        warn('Image scale is ignored if width or height are given');
-      }
-      if (!('scale' in value) && !('width' in value) && !('height' in value)) {
-        const autoScaleMatch = /@([0-9]\.?[0-9]*)x/.exec(value.src.split('/').pop());
-        if (autoScaleMatch && autoScaleMatch[1]) {
-          value.scale = parseFloat(autoScaleMatch[1], 10);
-        }
-      }
-      return imageToArray(value);
+      return imageToArray(Image.from(value));
     },
     decode(value) {
       if (!value) {
@@ -282,10 +256,6 @@ export let types = {
 
 let numberRegex = /^[+-]?([0-9]+|[0-9]*\.[0-9]+)$/;
 let selectorRegex = /^(\*|prev\(\)|next\(\)|([#.]?[A-Za-z_][A-Za-z0-9_-]+))$/;
-
-function isDimension(value) {
-  return typeof value === 'number' && !isNaN(value) && value >= 0 && value !== Infinity;
-}
 
 function throwNotAcceptedError(acceptable, given) {
   let message = ['Accepting "'];

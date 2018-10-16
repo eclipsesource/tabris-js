@@ -550,25 +550,25 @@ describe('property-types', function() {
     it('fails if image value is not an object', function() {
       expect(() => {
         encode(23);
-      }).to.throw(Error, 'Not an image: 23');
+      }).to.throw(Error, 'Not a valid ImageValue: 23');
     });
 
     it('fails if src is undefined', function() {
       expect(() => {
         encode({});
-      }).to.throw(Error, 'Invalid image.src: must be a string');
+      }).to.throw(Error, '"src" missing');
     });
 
     it('fails if src is empty string', function() {
       expect(() => {
         encode({src: ''});
-      }).to.throw(Error, 'Invalid image.src: must not be empty');
+      }).to.throw(Error, '"src" must not be empty');
     });
 
     it('fails if src contains ../ segments', function() {
       expect(() => {
         encode({src: '../test.png'});
-      }).to.throw(Error, "Invalid image.src: must not contain '..'");
+      }).to.throw(Error, 'Invalid image "src": must not contain \'..\'');
     });
 
     it('fails if width/height/scale values are invalid number', function() {
@@ -586,7 +586,7 @@ describe('property-types', function() {
           expect(() => checkWith(prop, value)).not.to.throw();
         });
         badValues.forEach((value) => {
-          expect(() => checkWith(prop, value)).to.throw(Error, 'image.' + prop + ' is not a dimension: ' + value);
+          expect(() => checkWith(prop, value)).to.throw(Error, `"${prop}" is not a dimension`);
         });
       });
     });
@@ -594,19 +594,17 @@ describe('property-types', function() {
     it('warns if scale and width are given', function() {
       stub(console, 'warn');
 
-      encode({src: 'foo.png', width: 23, scale: 2});
-
-      let warning = 'Image scale is ignored if width or height are given';
-      expect(console.warn).to.have.been.calledWith(warning);
+      expect(() => {
+        encode({src: 'foo.png', width: 23, scale: 2});
+      }).to.throw(Error, '"scale" cannot be used with "width" and "height"');
     });
 
     it('warns if scale and height are given', function() {
       stub(console, 'warn');
 
-      encode({src: 'foo.png', height: 23, scale: 2});
-
-      let warning = 'Image scale is ignored if width or height are given';
-      expect(console.warn).to.have.been.calledWith(warning);
+      expect(() => {
+        encode({src: 'foo.png', height: 23, scale: 2});
+      }).to.throw(Error, '"scale" cannot be used with "width" and "height"');
     });
 
   });

@@ -73,7 +73,7 @@ describe('ActionSheet', () => {
 
       actionSheet.actions = [{image: 23}];
 
-      expect(console.warn).to.have.been.calledWithMatch(/Not an image/);
+      expect(console.warn).to.have.been.calledWithMatch(/Not a valid ImageValue/);
       expect(actionSheet.actions).to.deep.equal([]);
     });
 
@@ -228,7 +228,7 @@ describe('ActionSheet', () => {
       );
 
       expect(popup.actions).to.deep.equal([
-        {title: 'foo', image: {src: 'foo.jpg'}, style: 'cancel'},
+        {title: 'foo', image: {src: 'foo.jpg', width: 'auto', height: 'auto', scale: 'auto'}, style: 'cancel'},
         {title: '', image: null, style: 'default'}
       ]);
     });

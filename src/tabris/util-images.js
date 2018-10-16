@@ -1,5 +1,10 @@
+import Image from './Image';
+
 export function imageToArray(value) {
-  return [value.src, checkValue(value.width), checkValue(value.height), checkValue(value.scale)];
+  let width = value.width === 'auto' ? null : value.width;
+  let height = value.height === 'auto' ? null : value.height;
+  let scale = value.scale === 'auto' ? null : value.scale;
+  return [value.src, checkValue(width), checkValue(height), checkValue(scale)];
 }
 
 export function imageFromArray(value) {
@@ -13,7 +18,7 @@ export function imageFromArray(value) {
   if (value[3]) {
     result.scale = value[3];
   }
-  return result;
+  return Image.from(result);
 }
 
 function checkValue(value) {

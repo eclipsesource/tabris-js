@@ -1285,7 +1285,7 @@ describe('Widget', function() {
 
       let result = widget.backgroundImage;
 
-      expect(result).to.eql({src: 'foo', width: 23, height: 42});
+      expect(result).to.eql({src: 'foo', width: 23, height: 42, scale: 'auto'});
     });
 
   });
