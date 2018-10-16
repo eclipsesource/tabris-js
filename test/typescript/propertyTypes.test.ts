@@ -14,6 +14,7 @@ import {
   Offset,
   Margin,
   AnimationOptions,
+  WidgetCollection
 } from 'tabris';
 
 let stringType: string = '';
@@ -120,12 +121,12 @@ numberOrUndefined = transformation.translationY;
 numberOrUndefined = transformation.translationZ;
 
 // SelectorFunction
-let selectorFunctionType: (widget: Widget) => boolean = () => true;
-let selectorFunction: SelectorFunction = selectorFunctionType;
-selectorFunctionType = selectorFunction;
+let selectorFunctionType: (widget: Widget, index: number, collection: WidgetCollection) => boolean = () => true;
+let selectorFunction: Selector = selectorFunctionType;
+selectorFunctionType = selectorFunction as typeof selectorFunctionType;
 
 // Selector
-let selectorType: string | SelectorFunction = '';
+let selectorType: string | SelectorFunction<Widget> = '';
 let selector: Selector = selectorType;
 selectorType = selector;
 

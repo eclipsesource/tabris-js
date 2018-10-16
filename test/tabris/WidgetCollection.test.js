@@ -16,12 +16,14 @@ class Bar extends Foo {}
 
 describe('WidgetCollection', function() {
 
-  let widgets, collection;
+  let widgets, collection, host;
 
   beforeEach(function() {
     mockTabris(new ClientStub());
+    host = new Bar();
     widgets = [new Foo(), new Bar(), new Foo()];
-    collection = new WidgetCollection(widgets);
+    host.append(widgets);
+    collection = new WidgetCollection(widgets, {origin: host});
   });
 
   afterEach(restore);
@@ -30,6 +32,15 @@ describe('WidgetCollection', function() {
     expect(collection[0]).to.equal(widgets[0]);
     expect(collection[1]).to.equal(widgets[1]);
     expect(collection[2]).to.equal(widgets[2]);
+  });
+
+  it('sets host', function() {
+    expect(collection.host).to.equal(host);
+  });
+
+  it('makes host readonly', function() {
+    collection.host = new Foo();
+    expect(collection.host).to.equal(host);
   });
 
   it('first()', function() {
@@ -102,6 +113,16 @@ describe('WidgetCollection', function() {
       expect(collection.filter(widget => widget !== widgets[1]).toArray()).to.deep.equal([widgets[0], widgets[2]]);
     });
 
+    it('calls callback with index and WidgetCollection', function() {
+      const callback = spy();
+
+      collection.filter(callback);
+
+      expect(callback).to.have.been.calledWith(widgets[0], 0, collection);
+      expect(callback).to.have.been.calledWith(widgets[1], 1, collection);
+      expect(callback).to.have.been.calledWith(widgets[2], 2, collection);
+    });
+
     it('with type', function() {
       expect(collection.filter(Foo).toArray()).to.deep.equal(widgets);
       expect(collection.filter(Bar).toArray()).to.deep.equal([widgets[1]]);
@@ -132,7 +153,11 @@ describe('WidgetCollection', function() {
     });
 
     it('with child selectors', function() {
-      let tree = new WidgetCollection([new Foo(), new Foo(), new Foo(), new Foo(), new Foo(), new Foo()]);
+      let tree = new WidgetCollection(
+        [new Foo(), new Foo(), new Foo(), new Foo(), new Foo(), new Foo()],
+        {origin: host}
+      );
+      host.append(tree);
       tree[0].set({class: 'foo'}).append(
         tree[1].set({class: 'bar'}).append(
           tree[2].set({class: 'foo'}).append(
@@ -143,10 +168,11 @@ describe('WidgetCollection', function() {
         )
       );
 
+      expect(tree.filter(':host > *').toArray()).to.deep.equal([tree[0]]);
       expect(tree.filter('.foo > *').toArray()).to.deep.equal([tree[1], tree[4], tree[5]]);
       expect(tree.filter('.bar > *').toArray()).to.deep.equal([tree[2], tree[3]]);
       expect(tree.filter('.baz> *').toArray()).to.deep.equal([]);
-      expect(tree.filter('* >.foo').toArray()).to.deep.equal([tree[2], tree[4]]);
+      expect(tree.filter('* >.foo').toArray()).to.deep.equal([tree[0], tree[2], tree[4]]);
       expect(tree.filter('.bar>.foo').toArray()).to.deep.equal([tree[2]]);
       expect(tree.filter('.foo > * > *').toArray()).to.deep.equal([tree[2], tree[3]]);
       expect(tree.filter('.foo > * > .foo').toArray()).to.deep.equal([tree[2]]);
@@ -265,10 +291,18 @@ describe('WidgetCollection', function() {
       expect(collection.dispose()).to.be.undefined;
     });
 
-    it('parent() returns all parents', function() {
-      let parents = [new Foo(), new Bar()];
+    it('parent() returns WidgetCollection with host', function() {
+      let parents = [host, new Bar()];
 
-      widgets[0].appendTo(parents[0]);
+      widgets[2].appendTo(parents[1]);
+
+      expect(collection.parent()).to.be.instanceof(WidgetCollection);
+      expect(collection.parent().host).to.equal(host);
+    });
+
+    it('parent() returns all parents', function() {
+      let parents = [host, new Bar()];
+
       widgets[2].appendTo(parents[1]);
 
       expect(collection.parent().toArray()).to.deep.equal(parents);
@@ -295,6 +329,11 @@ describe('WidgetCollection', function() {
       expect(parent.append).to.have.been.calledWith(collection);
     });
 
+    it('children() returns WidgetCollection', function() {
+      expect(collection.children()).to.be.instanceof(WidgetCollection);
+      expect(collection.children().host).to.equal(host);
+    });
+
     it('children() returns children from all in collection', function() {
       let children = [new Foo(), new Bar(), new Foo(), new Bar()];
       widgets[0].append(children.slice(0, 2));
@@ -309,6 +348,11 @@ describe('WidgetCollection', function() {
       widgets[2].append(children.slice(2, 4));
 
       expect(collection.children('Foo').toArray()).to.deep.equal([children[0], children[2]]);
+    });
+
+    it('find() returns WidgetCollection with host', function() {
+      expect(collection.find()).to.be.instanceof(WidgetCollection);
+      expect(collection.find().host).to.equal(host);
     });
 
     it('find("*") returns descendants from all widgets in collection', function() {

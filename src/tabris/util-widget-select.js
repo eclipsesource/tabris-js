@@ -1,21 +1,21 @@
 import NativeObject from './NativeObject';
 import WidgetCollection from './WidgetCollection';
 
-export function select(array, selector, deep, root) {
+export function select(array, selector, deep, widgetCollection) {
   if (!array || array.length === 0) {
     return [];
   }
   if (selector === '*' && !deep) {
     return array.concat();
   }
-  let filter = getFilter(selector, root);
+  let filter = getFilter(selector, widgetCollection);
   if (deep) {
     return deepSelect([], array, filter);
   }
   return array.filter(filter);
 }
 
-export function createSelectorArray(selector, hostElement) {
+export function createSelectorArray(selector, host) {
   if (!selector) {
     return ['*'];
   }
@@ -25,7 +25,7 @@ export function createSelectorArray(selector, hostElement) {
   let result = selector.split('>').map(str => str.trim());
   let rootIndex = result.indexOf(':host');
   if (rootIndex !== -1) {
-    result[rootIndex] = hostElement || tabris.ui;
+    result[rootIndex] = host || tabris.ui;
   }
   return result;
 }
@@ -61,14 +61,14 @@ function deepSelect(result, iterable, filter) {
   return result;
 }
 
-function getFilter(selector) {
+function getFilter(selector, widgetCollection) {
   let matches = {};
-  let filter = isFilter(selector) ? selector : createMatcher(selector);
-  return (widget) => {
+  let filter = isFilter(selector) ? selector : createMatcher(selector, widgetCollection);
+  return (widget, index) => {
     if (matches[widget.cid]) {
       return false;
     }
-    if (filter(widget)) {
+    if (filter(widget, index, widgetCollection)) {
       matches[widget.cid] = true;
       return true;
     }
@@ -76,13 +76,13 @@ function getFilter(selector) {
   };
 }
 
-function createMatcher(selectorArg) {
+function createMatcher(selectorArg, widgetCollection) {
   let selector = selectorArg;
   if (selector instanceof Array) {
     if (selector.length === 1) {
       selector = selector[0];
     } else {
-      return createChildMatcher(selector);
+      return createChildMatcher(selector, widgetCollection);
     }
   }
   if (selector instanceof Function) {
@@ -92,7 +92,7 @@ function createMatcher(selectorArg) {
     return widget => widget === selector;
   }
   if (selector.indexOf('>') !== -1) {
-    return createChildMatcher(createSelectorArray(selector));
+    return createChildMatcher(createSelectorArray(selector, widgetCollection.host), widgetCollection);
   }
   if (selector.charAt(0) === '#') {
     let expectedId = selector.slice(1);
@@ -108,8 +108,9 @@ function createMatcher(selectorArg) {
   return widget => selector === widget.constructor.name;
 }
 
-function createChildMatcher(selectors) {
-  let matchers = selectors.map(createMatcher).reverse();
+function createChildMatcher(selectors, widgetCollection) {
+  let matchers = selectors
+    .map(selector => createMatcher(selector, widgetCollection)).reverse();
   return widget => {
     let current = widget;
     for (let i = 0; i < matchers.length; i++) {

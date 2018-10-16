@@ -63,7 +63,7 @@
         "parameters": [
           {
             "name": "selector",
-            "type": "Selector",
+            "type": "Selector<ChildType>",
             "optional": true,
             "description": "A selector expression or a predicate function to filter the results."
           }
@@ -92,7 +92,7 @@
         "parameters": [
           {
             "name": "selector",
-            "type": "Selector",
+            "type": "Selector<ChildType>",
             "optional": true,
             "description": "A selector expression or a predicate function to filter the results."
           }
@@ -121,7 +121,7 @@
         "parameters": [
           {
             "name": "selector",
-            "type": "Selector",
+            "type": "Selector<ChildType>",
             "optional": true,
             "description": "A selector expression or a predicate function to filter the results."
           }
@@ -150,7 +150,7 @@
         "parameters": [
           {
             "name": "selector",
-            "type": "Selector",
+            "type": "Selector<ChildType>",
             "optional": true,
             "description": "A selector expression or a predicate function to filter the results."
           }

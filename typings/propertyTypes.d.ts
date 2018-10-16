@@ -190,8 +190,8 @@ interface Transformation {
 /**
  * An expression or a predicate function to select a set of widgets.
  */
-type Selector = string | SelectorFunction;
-type SelectorFunction = (widget: Widget) => boolean;
+type Selector<T extends Widget = Widget> = string | SelectorFunction<T>;
+type SelectorFunction<T extends Widget> = (widget: T, index: number, collection: WidgetCollection<T>) => boolean;
 
 /**
  * A positive float, or 0, representing device independent pixels.

@@ -26,12 +26,13 @@ export default class Composite extends Widget {
   }
 
   find(selector) {
-    let selectorArr = createSelectorArray(selector, this);
-    return new WidgetCollection(this.children(), selectorArr, true);
+    return new WidgetCollection(this.children(), {selector, origin: this, deep: true});
   }
 
   apply(sheet) {
-    let scope = new WidgetCollection(asArray(this.children()).concat(this), '*', true);
+    let scope = new WidgetCollection(
+      asArray(this.children()).concat(this), {selector: '*', origin: this, deep: true}
+    );
     return this._apply(sheet, scope);
   }
 
@@ -40,17 +41,18 @@ export default class Composite extends Widget {
   }
 
   _children(selector) {
-    return new WidgetCollection(this.$children, selector);
+    return new WidgetCollection(this.$children, {selector, origin: this});
   }
 
   _find(selector) {
-    let selectorArr = createSelectorArray(selector, this);
-    return new WidgetCollection(this._children(), selectorArr, true);
+    return new WidgetCollection(this._children(), {selector, origin: this, deep: true});
   }
 
   _apply(sheet, scope) {
     if (arguments.length === 1) {
-      scope = new WidgetCollection(asArray(this._children()).concat(this), '*', true);
+      scope = new WidgetCollection(
+        asArray(this._children()).concat(this), {selector: '*', origin: this, deep: true}
+      );
     }
     Object.keys(sheet)
       .map(key => [createSelectorArray(key, this), sheet[key]])

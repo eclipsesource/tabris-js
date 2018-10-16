@@ -43,10 +43,12 @@ thisReturnValue = buttonsComposite.append(new WidgetCollection<Button>([button])
 thisReturnValue = widget.apply({'selectorString': properties});
 widgetCollection = widget.children();
 button = buttonsComposite.children()[0];
+button = buttonsComposite.children(button => button.text === 'foo')[0];
 widgetCollection = widget.children(selector);
 fooCollection = widget.children(Foo);
 widgetCollection = widget.find();
 widgetCollection = widget.find(selector);
+widgetCollection = buttonsComposite.find(button => button.text === 'foo');
 fooCollection = widget.find(Foo);
 
 // Events

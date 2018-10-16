@@ -271,7 +271,7 @@
         "parameters": [
           {
             "name": "selector",
-            "type": "Selector",
+            "type": "Selector<T>",
             "description": "A selector expression or a predicate function to filter the results."
           }
         ],
@@ -338,6 +338,12 @@
       "type": "number",
       "readonly": true,
       "description": "Contains the number of widgets in the collection."
+    },
+    "host": {
+      "const": true,
+      "type": "Widget",
+      "readonly": true,
+      "description": "The widget this WidgetCollection was created from. Corresponds to the ':host' selector."
     },
     "[key: number]": {
       "readonly": true,

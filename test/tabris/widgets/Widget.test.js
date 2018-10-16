@@ -452,6 +452,11 @@ describe('Widget', function() {
           expect(listener).to.have.been.calledWithMatch({target: widget, child: child1, index: 0});
         });
 
+        it('children() returns WidgetCollection with host', function() {
+          expect(widget.children()).to.be.instanceOf(WidgetCollection);
+          expect(widget.children().host).to.equal(widget);
+        });
+
         it('children() contains appended child', function() {
           expect(widget.children().toArray()).to.contain(child1);
         });
@@ -912,20 +917,23 @@ describe('Widget', function() {
         child3 = new TestWidget();
       });
 
-      it('returns empty collection when called without a parent', function() {
+      it('returns empty collection without host when called without a parent', function() {
         expect(widget.siblings().toArray()).to.eql([]);
+        expect(widget.siblings().host).to.be.null;
       });
 
-      it('returns empty collection when there are no siblings', function() {
+      it('returns empty collection with host when there are no siblings', function() {
         widget.append(child1);
 
         expect(child1.siblings().toArray()).to.eql([]);
+        expect(child1.siblings().host).to.eql(widget);
       });
 
-      it('returns collection with all siblings', function() {
+      it('returns collection with all siblings and host', function() {
         widget.append(child1, child2, child3);
 
         expect(child2.siblings().toArray()).to.eql([child1, child3]);
+        expect(child1.siblings().host).to.eql(widget);
       });
 
       it('does not include grand children', function() {
@@ -943,6 +951,17 @@ describe('Widget', function() {
         expect(child1.siblings('.child').toArray()).to.eql([button1, button2]);
       });
 
+      it('calls filter callback with correct widgetCollection', function() {
+        widget.append(child1, child2, child3);
+        let filterCollection = null;
+
+        const result = child2.siblings((widget, index, collection) => filterCollection = collection);
+
+        expect(filterCollection).to.not.equal(result);
+        expect(filterCollection.toArray()).to.eql([child1, child3]);
+        expect(filterCollection.host).to.equal(widget);
+      });
+
     });
 
     describe('find', function() {
@@ -955,6 +974,11 @@ describe('Widget', function() {
         child1_1 = new TestWidget({}).appendTo(child1);
         child1_2 = new TestWidget({class: 'bar'}).appendTo(child1);
         child1_2_1 = new TextView({id: 'foo'}).appendTo(child1_2);
+      });
+
+      it('returns WidgetCollection with host', function() {
+        expect(widget.find('*')).to.be.instanceOf(WidgetCollection);
+        expect(widget.find('*').host).to.eql(widget);
       });
 
       it('* selector returns all descendants', function() {

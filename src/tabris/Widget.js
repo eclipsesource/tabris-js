@@ -69,9 +69,10 @@ export default class Widget extends NativeObject {
   }
 
   siblings(selector) {
-    let siblings = (this._parent ? this._parent._children() : []);
-    let filtered = siblings.filter(widget => widget !== this);
-    return new WidgetCollection(filtered, selector);
+    if (!this._parent) {
+      return new WidgetCollection([]);
+    }
+    return this._parent._children(widget => widget !== this).filter(selector);
   }
 
   get classList() {

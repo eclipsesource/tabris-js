@@ -3,9 +3,13 @@ import {jsxFactory} from './JsxProcessor';
 
 export default class WidgetCollection {
 
-  constructor(collection, selector, deep) {
+  constructor(collection, {selector, deep, origin} = {}) {
+    if (selector && !origin) {
+      throw new Error('WidgetCollection can not be constructed with an selector but no origin');
+    }
     let arr = collection instanceof WidgetCollection ? collection.toArray() : collection;
-    this._array = select(arr, selector || '*', deep);
+    Object.defineProperty(this, 'host', {value: getHost(origin)});
+    this._array = select(arr, selector || '*', deep, origin instanceof WidgetCollection ? origin : this);
     for (let i = 0; i < this._array.length; i++) {
       this[i] = this._array[i];
     }
@@ -46,7 +50,7 @@ export default class WidgetCollection {
   }
 
   filter(selector) {
-    return new WidgetCollection(this._array, selector);
+    return new WidgetCollection(this._array, {selector, origin: this});
   }
 
   parent() {
@@ -58,7 +62,7 @@ export default class WidgetCollection {
       }
     }
     if (result.length) {
-      return new WidgetCollection(result);
+      return new WidgetCollection(result, {origin: this});
     }
   }
 
@@ -67,11 +71,11 @@ export default class WidgetCollection {
     for (let widget of this._array) {
       result.push.apply(result, widget.children());
     }
-    return new WidgetCollection(result, selector);
+    return new WidgetCollection(result, {selector, origin: this});
   }
 
   find(selector) {
-    return new WidgetCollection(this.children()._array, selector, true);
+    return new WidgetCollection(this.children()._array, {selector, deep: true, origin: this});
   }
 
   appendTo(parent) {
@@ -128,4 +132,10 @@ export default class WidgetCollection {
     return new Type(this.normalizeChildren(children));
   }
 
+}
+function getHost(origin) {
+  if (origin instanceof WidgetCollection) {
+    return origin.host;
+  }
+  return origin || null;
 }
