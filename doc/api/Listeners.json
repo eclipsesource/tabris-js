@@ -72,71 +72,11 @@
         "ts_returns": "TargetType<EventData>"
       }
     ],
-    "resolve" : [
+    "promise" : [
       {
         "description": "Returns a promise that resolves the next time an event is issued. The dispatched event object will be used as the resolved value.",
         "returns": "Promise",
         "ts_returns": "Promise<ExtendedEvent<EventData>>"
-      },
-      {
-        "generics": "U",
-        "description": "Returns a promise that resolves the next time an event is issued. The given value will passed to the promise.",
-        "parameters": [
-          {
-            "name": "value",
-            "type": "any",
-            "ts_type": "U"
-          }
-        ],
-        "returns": "Promise",
-        "ts_returns": "Promise<U>"
-      }
-    ],
-    "reject" : [
-      {
-        "description": "Returns a promise that rejects the next time an event is issued. The rejection value will be an instance of `Error` merged with the dispatched event object.",
-        "ts_returns": "Promise<never>"
-      },
-      {
-        "description": "Returns a promise that rejects the next time an event is issued. The rejection value will be an instance of the given `Error` constructor.",
-        "parameters": [
-          {
-            "name": "constructor",
-            "type": "function",
-            "ts_type": "Constructor<Error>"
-          }
-        ],
-        "ts_returns": "Promise<never>"
-      },
-      {
-        "description": "Returns a promise that rejects the next time an event is issued. The rejection value will be the given `Error` instance",
-        "parameters": [
-          {
-            "name": "error",
-            "type": "Error"
-          }
-        ],
-        "ts_returns": "Promise<never>"
-      },
-      {
-        "description": "Returns a promise that rejects the next time an event is issued. The rejection value will  be an instance of `Error` merged with the given data object.",
-        "parameters": [
-          {
-            "name": "data",
-            "type": "object"
-          }
-        ],
-        "ts_returns": "Promise<never>"
-      },
-      {
-        "description": "Returns a promise that rejects the next time an event is issued. The rejection value will always be an instance of `Error with the given string as the message.",
-        "parameters": [
-          {
-            "name": "message",
-            "type": "string"
-          }
-        ],
-        "ts_returns": "Promise<never>"
       }
     ],
     "trigger" : [

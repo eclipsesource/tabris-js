@@ -86,13 +86,7 @@ myFooListeners.trigger(ev);
 myExtendedEventListeners.trigger(new MyExtendedEvent());
 
 // promises
-let promiseStr: Promise<string> = voidListeners.resolve('foo');
-let promiseEv: Promise<EventObject<object>> = voidListeners.resolve();
-let promiseMyEv: Promise<MyEvent> = myEventListeners.resolve();
-let promiseFooEv: Promise<MyFooEvent> = myFooListeners.resolve();
-let promiseExtEv: Promise<MyExtendedEvent> = myExtendedEventListeners.resolve();
-let promiseNever: Promise<never> = voidListeners.reject();
-voidListeners.reject(new CustomError());
-voidListeners.reject(CustomError);
-voidListeners.reject('foo');
-voidListeners.reject({foo2: 'bar2'});
+let promiseEv: Promise<EventObject<object>> = voidListeners.promise();
+let promiseMyEv: Promise<MyEvent> = myEventListeners.promise();
+let promiseFooEv: Promise<MyFooEvent> = myFooListeners.promise();
+let promiseExtEv: Promise<MyExtendedEvent> = myExtendedEventListeners.promise();

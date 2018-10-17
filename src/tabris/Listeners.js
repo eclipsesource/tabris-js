@@ -1,6 +1,6 @@
 import Events from './Events';
 
-const DELEGATE_FIELDS = ['reject', 'resolve', 'addListener', 'removeListener', 'once', 'trigger'];
+const DELEGATE_FIELDS = ['promise', 'addListener', 'removeListener', 'once', 'trigger'];
 const storeKey = Symbol('ListenersStore');
 
 export default class Listeners {
@@ -34,39 +34,8 @@ export default class Listeners {
     return this.target;
   }
 
-  reject(value) {
-    return this.resolve().then(event => {
-      let error = null;
-      if (value instanceof Error) {
-        error = value;
-      }
-      if (!error && value instanceof Function && value.prototype instanceof Error) {
-        try {
-          error = new value();
-        } catch(ex) { /* that's OK, try something else */ }
-      }
-      if (!error && (!value || value instanceof Object)) {
-        error = new Error(`${this.type} fired`);
-        Object.assign(error, value || event);
-      }
-      if (!error) {
-        error = new Error(value + '');
-      }
-      throw error;
-    });
-  }
-
-  resolve(value) {
-    let hasValue = typeof value !== 'undefined';
-    return new Promise(resolve => {
-      this.once(ev => {
-        if (hasValue) {
-          resolve(value);
-        } else {
-          resolve(ev);
-        }
-      });
-    });
+  promise() {
+    return new Promise(resolve => this.once(resolve));
   }
 
   once(listener) {

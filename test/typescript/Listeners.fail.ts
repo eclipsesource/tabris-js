@@ -56,8 +56,8 @@ myEventListeners.trigger({foo: 'bar', target: fooTarget});
 myEventListeners.trigger({foo: 23});
 
 // promised value mismatch
-let promiseStr: Promise<string> = voidListeners.resolve(23);
-let promiseEv: Promise<MyFooEvent> = voidListeners.resolve();
+let promiseStr: Promise<string> = voidListeners.promise();
+let promiseEv: Promise<MyFooEvent> = voidListeners.promise();
 
 /*Expected
 (25,58): error TS2345

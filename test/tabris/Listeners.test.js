@@ -173,8 +173,8 @@ describe('Listeners', function() {
   });
 
   it('resolves previous promises', function() {
-    let promise1 = myListeners.resolve();
-    let promise2 = myListeners.resolve();
+    let promise1 = myListeners.promise();
+    let promise2 = myListeners.promise();
 
     myListeners.trigger();
 
@@ -185,8 +185,8 @@ describe('Listeners', function() {
   });
 
   it('resolves previous typed promises', function() {
-    let promise1 = myListeners.resolve();
-    let promise2 = myListeners.resolve();
+    let promise1 = myListeners.promise();
+    let promise2 = myListeners.promise();
 
     myListeners.trigger({foo: 'bar'});
 
@@ -198,102 +198,10 @@ describe('Listeners', function() {
     });
   });
 
-  it('resolves promises with pre-defined value', function() {
-    let promise = myListeners.resolve('foo');
-
-    myListeners.trigger({foo: 'bar'});
-
-    return promise.then(result => {
-      expect(result).to.equal('foo');
-    });
-
-  });
-
-  it('resolves promises with pre-defined falsy value', function() {
-    let promise = myListeners.resolve(false);
-
-    myListeners.trigger({foo: 'bar'});
-
-    return promise.then(ev => expect(ev).to.equal(false));
-  });
-
-  it('rejects promises with pre-defined error value', function() {
-    let value = new Error('foo');
-    let promise = myListeners.reject(value);
-
-    myListeners.trigger({foo: 'bar'});
-
-    return promise.then(() => {
-      fail('Promise should not resolve');
-    }).catch(ex => {
-      expect(ex).to.be.instanceof(Error);
-      expect(ex.message).to.equal('foo');
-    });
-  });
-
-  it('rejects promises with instance of given Error class', function() {
-    class CustomError extends Error {
-      constructor() {
-        super('foo');
-      }
-    }
-    let promise = myListeners.reject(CustomError);
-
-    myListeners.trigger({foo: 'bar'});
-
-    return promise.then(() => {
-      fail('Promise should not resolve');
-    }).catch(ex => {
-      expect(ex).to.be.instanceof(Error);
-      expect(ex.message).to.equal('foo');
-    });
-  });
-
-  it('rejects promises with given string value as error message', function() {
-    let promise = myListeners.reject('foo');
-
-    myListeners.trigger({foo: 'bar'});
-
-    return promise.then(() => {
-      fail('Promise should not resolve');
-    }).catch(ex => {
-      expect(ex).to.be.instanceof(Error);
-      expect(ex.message).to.equal('foo');
-    });
-  });
-
-  it('rejects promises with given object merged in to error', function() {
-    let promise = myListeners.reject({foo2: 'bar2'});
-
-    myListeners.trigger({foo: 'bar'});
-
-    return promise.then(() => {
-      fail('Promise should not resolve');
-    }).catch(ex => {
-      expect(ex).to.be.instanceof(Error);
-      expect(ex.message).to.equal('myEventType fired');
-      expect(ex.foo2).to.equal('bar2');
-    });
-  });
-
-  it('rejects promises with Error/Event merge', function() {
-    let promise = myListeners.reject();
-
-    myListeners.trigger({foo: 'bar'});
-
-    return promise.then(() => {
-      fail('Promise should not resolve');
-    }).catch(ex => {
-      expect(ex).to.be.instanceof(Error);
-      expect(ex.message).to.equal('myEventType fired');
-      expect(ex.foo).to.equal('bar');
-    });
-  });
-
   it('does not resolve new promise', done => {
     myListeners.trigger({foo: 'bar'});
 
-    myListeners.resolve().then(
+    myListeners.promise().then(
       () => fail('Should not resolve'),
       () => fail('Should not reject')
     );
