@@ -47,6 +47,17 @@
   },
   "events": {
     "close": {
+      "parameters": {
+        "index": {
+          "type": "number|null",
+          "description": "The index of the selected action. If no action was selected the value is `null`."
+        },
+        "action": {
+          "type": "{title: string, image: ImageValue, style: 'default'|'cancel'|'destructive'}|null",
+          "ts_type": "ActionSheetItem|null",
+          "description": "A copy of the selected action as an instance of ActionSheetItem. If no action was selected the value is `null`."
+        }
+      },
       "description": "Fired when the action sheet was closed."
     },
     "select": {
@@ -54,6 +65,11 @@
         "index": {
           "type": "number",
           "description": "The index of the selected action."
+        },
+        "action": {
+          "type": "{title: string, image: ImageValue, style: 'default'|'cancel'|'destructive'}",
+          "ts_type": "ActionSheetItem",
+          "description": "A copy of the selected action as an instance of ActionSheetItem."
         }
       },
       "description": "Fired when an action was selected."

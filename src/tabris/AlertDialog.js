@@ -14,7 +14,7 @@ export default class AlertDialog extends Popup {
 
   _trigger(name, event) {
     if (name === 'close') {
-      event.button = event.button || '';
+      event.button = event.button || null;
       if (event.button) {
         super._trigger('close' + capitalizeFirstChar(event.button), event);
       }

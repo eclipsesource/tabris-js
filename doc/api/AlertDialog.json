@@ -36,8 +36,8 @@
       "description": "Fired when the dialog was closed for any reason.",
       "parameters": {
         "button": {
-          "description": "The type of button that was used to close the dialog. Can also be an empty string, e.g. when the global back button was pressed.",
-          "type": "'ok'|'cancel'|'neutral'|''"
+          "description": "The type of button that was used to close the dialog. Can also be null, e.g. when the global back button was pressed.",
+          "type": "'ok'|'cancel'|'neutral'|null"
         }
       }
     },

@@ -34,9 +34,9 @@ export default class DateDialog extends Popup {
 }
 
 NativeObject.defineProperties(DateDialog.prototype, {
-  date: {type: 'any', default: undefined, set: setDate},
-  maxDate: {type: 'any', default: undefined, set: setDate},
-  minDate: {type: 'any', default: undefined, set: setDate}
+  date: {type: 'any', default: null, set: setDate},
+  maxDate: {type: 'any', default: null, set: setDate},
+  minDate: {type: 'any', default: null, set: setDate}
 });
 
 NativeObject.defineEvents(DateDialog.prototype, {

@@ -197,7 +197,7 @@ describe('AlertDialog', function() {
 
       expect(closeOk).not.to.have.been.called;
       expect(close).to.have.been.calledOnce;
-      expect(close).to.have.been.calledWithMatch({target: dialog, button: ''});
+      expect(close).to.have.been.calledWithMatch({target: dialog, button: null});
     });
 
   });

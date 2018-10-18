@@ -31,8 +31,8 @@
     "close": {
       "parameters": {
         "date": {
-          "type": "Date",
-          "description": "The selected date. Can be `undefined` when no date was selected."
+          "type": "Date|null",
+          "description": "The selected date. Can be `null` when no date was selected."
         }
       },
       "description": "Fired when the date dialog was closed."

@@ -16,8 +16,8 @@ describe('DateDialog', function() {
 
   describe('date', function() {
 
-    it('initial value is undefined', function() {
-      expect(dialog.date).to.equal(undefined);
+    it('initial value is null', function() {
+      expect(dialog.date).to.equal(null);
     });
 
     it('can be set to Date', function() {
@@ -36,8 +36,8 @@ describe('DateDialog', function() {
 
   describe('minDate', function() {
 
-    it('initial value is undefined', function() {
-      expect(dialog.minDate).to.equal(undefined);
+    it('initial value is null', function() {
+      expect(dialog.minDate).to.equal(null);
     });
 
     it('can be set to minDate', function() {
@@ -56,8 +56,8 @@ describe('DateDialog', function() {
 
   describe('maxDate', function() {
 
-    it('initial value is undefined', function() {
-      expect(dialog.maxDate).to.equal(undefined);
+    it('initial value is null', function() {
+      expect(dialog.maxDate).to.equal(null);
     });
 
     it('can be set to maxDate', function() {

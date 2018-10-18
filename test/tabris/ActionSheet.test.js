@@ -92,6 +92,32 @@ describe('ActionSheet', () => {
         properties: {actions: [{title: 'foo'}]}
       });
     });
+
+    it('stringifies title', () => {
+      client.resetCalls();
+
+      actionSheet.actions = [{title: {toString: () => 'foo'}}];
+
+      expect(client.calls({op: 'set'})[0]).to.deep.equal({
+        op: 'set',
+        id: actionSheet.cid,
+        properties: {actions: [{title: 'foo'}]}
+      });
+    });
+
+    it('returns ActionSheetItem instance', () => {
+      actionSheet.actions = [{title: 'foo'}];
+
+      expect(actionSheet.actions[0]).be.instanceof(ActionSheetItem);
+    });
+
+    it('returned ActionSheetItem implements toString', () => {
+      actionSheet.actions = [{title: 'foo'}, {}];
+
+      expect(actionSheet.actions[0].toString()).equal('foo');
+      expect(actionSheet.actions[1].toString()).equal('[object ActionSheetItem]');
+    });
+
   });
 
   describe('close', () => {
@@ -112,7 +138,7 @@ describe('ActionSheet', () => {
     it('actionSheet LISTENs to close', () => {
       actionSheet.onClose(spy());
 
-      expect(client.calls({op: 'listen'})[0]).to.deep.equal({
+      expect(client.calls({op: 'listen'})[1]).to.deep.equal({
         op: 'listen',
         id: actionSheet.cid,
         event: 'close',
@@ -120,7 +146,7 @@ describe('ActionSheet', () => {
       });
     });
 
-    it('fires close event', () => {
+    it('fires close event with no selection', () => {
       let closeOk = spy();
       let close = spy();
       actionSheet.on('closeOk', closeOk);
@@ -130,16 +156,26 @@ describe('ActionSheet', () => {
 
       expect(closeOk).not.to.have.been.called;
       expect(close).to.have.been.calledOnce;
-      expect(close).to.have.been.calledWithMatch({target: actionSheet});
+      expect(close).to.have.been.calledWithMatch({target: actionSheet, index: null, action: null});
+    });
+
+    it('fires close event with selected index and item', () => {
+      const action = {title: 'Foo'};
+      actionSheet.actions = [action];
+      let close = spy();
+      actionSheet.onClose(close);
+
+      tabris._notify(actionSheet.cid, 'select', {index: 0});
+      tabris._notify(actionSheet.cid, 'close', {});
+
+      expect(close).to.have.been.calledWithMatch({target: actionSheet, index: 0, action});
     });
 
   });
 
   describe('select event', () => {
 
-    it('actionSheet LISTENs to select', () => {
-      actionSheet.onSelect(spy());
-
+    it('actionSheet always LISTENs to select', () => {
       expect(client.calls({op: 'listen'})[0]).to.deep.equal({
         op: 'listen',
         id: actionSheet.cid,
@@ -148,14 +184,15 @@ describe('ActionSheet', () => {
       });
     });
 
-    it('fires select event', () => {
+    it('fires select event with action', () => {
       let select = spy();
+      actionSheet.actions = [{title: 'foo'}];
       actionSheet.onSelect(select);
 
-      tabris._notify(actionSheet.cid, 'select', {});
+      tabris._notify(actionSheet.cid, 'select', {index: 0});
 
       expect(select).to.have.been.calledOnce;
-      expect(select).to.have.been.calledWithMatch({target: actionSheet});
+      expect(select).to.have.been.calledWithMatch({target: actionSheet, action: {title: 'foo'}});
     });
 
   });

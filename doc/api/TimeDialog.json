@@ -23,8 +23,8 @@
     "close": {
       "parameters": {
         "date": {
-          "type": "Date",
-          "description": "The selected time. Can be `undefined` when no date was selected."
+          "type": "Date|null",
+          "description": "The selected time. Can be `null` when no date was selected."
         }
       },
       "description": "Fired when the time dialog was closed."

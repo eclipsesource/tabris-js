@@ -14,8 +14,11 @@ export default class ActionSheet extends Popup {
 
   constructor(properties) {
     super();
+    this._index = null;
+    this._action = null;
     this._autoDispose = true;
     this._create('tabris.ActionSheet', properties);
+    this._nativeListen('select', true);
   }
 
   get _nativeType() {
@@ -23,8 +26,12 @@ export default class ActionSheet extends Popup {
   }
 
   _trigger(name, event) {
-    if (name === 'close') {
-      super._trigger('close', event);
+    if (name === 'select') {
+      this._index = event.index;
+      this._action = this.actions[this._index];
+      super._trigger('select', Object.assign(event, {action: this._action}));
+    } else if (name === 'close') {
+      super._trigger('close', Object.assign(event, {index: this._index, action: this._action}));
       this.dispose();
     } else {
       return super._trigger(name, event);
@@ -59,7 +66,7 @@ NativeObject.defineProperties(ActionSheet.prototype, {
           throw new Error('value is not an array');
         }
         return value.map(action => {
-          let result = {title: '' + action.title};
+          let result = {title: '' + (action.title || '')};
           if ('image' in action) {
             result.image = types.ImageValue.encode(action.image);
           }
@@ -73,10 +80,10 @@ NativeObject.defineProperties(ActionSheet.prototype, {
         });
       },
       decode(value) {
-        return value.map(action => ({
+        return value.map(action => new ActionSheetItem({
           title: action.title,
           image: types.ImageValue.decode(action.image),
-          style: action.style || 'default'
+          style: action.style
         }));
       }
     },
@@ -92,9 +99,13 @@ NativeObject.defineEvents(ActionSheet.prototype, {
 export class ActionSheetItem {
 
   constructor({title, image, style} = {}) {
-    Object.defineProperty(this, 'title', {get() { return title || ''; }, enumerable: true});
-    Object.defineProperty(this, 'image', {get() { return image || null; }, enumerable: true});
-    Object.defineProperty(this, 'style', {get() { return style || 'default'; }, enumerable: true});
+    Object.defineProperty(this, 'title', {value: title || '', enumerable: true});
+    Object.defineProperty(this, 'image', {value: image || null, enumerable: true});
+    Object.defineProperty(this, 'style', {value: style || 'default', enumerable: true});
+  }
+
+  toString() {
+    return this.title || '[object ActionSheetItem]';
   }
 
   /** @this {import("./JsxProcessor").default} */

@@ -16,8 +16,8 @@ describe('TimeDialog', function() {
 
   describe('date', function() {
 
-    it('initial value is undefined', function() {
-      expect(dialog.date).to.equal(undefined);
+    it('initial value is null', function() {
+      expect(dialog.date).to.equal(null);
     });
 
     it('can be set to Date', function() {

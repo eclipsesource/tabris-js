@@ -166,7 +166,7 @@ function renderEventObjectInterface(text: TextBuilder, name: string, def: Extend
     (parameters[name].values || []).sort().forEach(value => {
       values.push(`'${value}'`);
     });
-    text.append(`readonly ${name}: ${union(values) || parameters[name].type};`);
+    text.append(`readonly ${name}: ${union(values) || parameters[name].ts_type || parameters[name].type};`);
   });
   text.indent--;
   text.append('}');

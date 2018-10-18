@@ -32,7 +32,7 @@ thisReturnValue = alertDialog.open();
 let target: AlertDialog = alertDialog;
 let timeStamp: number = 0;
 let type: string = 'foo';
-let button: '' | 'ok' | 'cancel' | 'neutral' = 'ok';
+let button: null | 'ok' | 'cancel' | 'neutral' = 'ok';
 
 let alertDialogCloseEvent: AlertDialogCloseEvent = {target, timeStamp, type, button};
 let closeCancelEvent: EventObject<AlertDialog> = {target, timeStamp, type};
