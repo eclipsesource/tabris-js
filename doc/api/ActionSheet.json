@@ -58,5 +58,20 @@
       },
       "description": "Fired when an action was selected."
     }
+  },
+  "statics": {
+    "methods": {
+      "open": {
+        "parameters": [
+          {
+            "name": "actionSheet",
+            "description": "The action sheet to open",
+            "type": "ActionSheet"
+          }
+        ],
+        "description": "Makes the given action sheet visible. Meant to be used with inline-JSX. In TypeScript it also casts the given JSX element from `any` to an actual ActionSheet.",
+        "returns": "ActionSheet"
+      }
+    }
   }
 }

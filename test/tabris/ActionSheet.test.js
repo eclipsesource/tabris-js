@@ -43,6 +43,10 @@ describe('ActionSheet', () => {
         expect(client.calls({op: 'call'})[0].method).to.equal('open');
       });
 
+      it('throws if argument is not an actionSheet', () => {
+        expect(() => ActionSheet.open('foo')).to.throw('Not an ActionSheet');
+      });
+
       it('throws if actionSheet was closed', () => {
         actionSheet.open();
         actionSheet.close();

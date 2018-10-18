@@ -5,6 +5,13 @@ import {jsxFactory} from './JsxProcessor';
 
 export default class ActionSheet extends Popup {
 
+  static open(actionSheet) {
+    if (!(actionSheet instanceof ActionSheet)) {
+      throw new Error('Not an ActionSheet: ' + actionSheet);
+    }
+    return actionSheet.open();
+  }
+
   constructor(properties) {
     super();
     this._autoDispose = true;

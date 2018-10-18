@@ -16,20 +16,5 @@
       "description": "Hides the popup.",
       "returns": "this"
     }
-  },
-  "statics": {
-    "methods": {
-      "open": {
-        "parameters": [
-          {
-            "name": "popup",
-            "description": "The pop-up to open",
-            "type": "Popup"
-          }
-        ],
-        "description": "Makes the given popup visible.",
-        "returns": "Popup"
-      }
-    }
   }
 }
