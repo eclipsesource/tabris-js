@@ -55,3 +55,19 @@ export function normalizePathUrl(url) {
   }
   return schema + normalizePath(content);
 }
+
+/**
+ * Check if a given value is a number and in closed range.
+ * @param value Value to check.
+ * @param range An array of min and max value of a closed range.
+ * @param errorPrefix Prefix to prepend to messages of thrown errors.
+ */
+export function checkNumber(value, range = [-Infinity, Infinity], errorPrefix) {
+  let prefix = errorPrefix ? errorPrefix + ': ' : '';
+  if (typeof value !== 'number' || isNaN(value) || !isFinite(value)) {
+    throw new Error(`${prefix}Invalid number ${value}`);
+  }
+  if (value < range[0] || value > range[1]) {
+    throw new Error(`${prefix}Number ${value} out of range`);
+  }
+}

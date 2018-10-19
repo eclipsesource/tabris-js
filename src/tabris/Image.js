@@ -1,4 +1,4 @@
-import {normalizePathUrl} from './util';
+import {normalizePathUrl, checkNumber} from './util';
 
 export default class Image {
 
@@ -84,12 +84,7 @@ function hasInconsistentDimensions(imageLike) {
 
 function setDimension(image, property, value) {
   if (value !== 'auto') {
-    if (typeof value !== 'number' || isNaN(value) || !isFinite(value)) {
-      throw new Error(`Image "${property}" is not a dimension: invalid number ${value}`);
-    }
-    if (value < 0) {
-      throw new Error(`Image "${property}" is not a dimension: number ${value} out of range`);
-    }
+    checkNumber(value, [0, Infinity], `Image "${property}" is not a dimension`);
   }
   Object.defineProperty(image, property, {enumerable: true, value});
 }

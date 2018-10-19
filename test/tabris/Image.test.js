@@ -39,16 +39,16 @@ describe('Image', function() {
       ['width', 'height', 'scale'].forEach((property) => {
         expect(() => {
           new Image({src: 'foo', [property]: -1});
-        }).to.throw(`"${property}" is not a dimension: number -1 out of range`);
+        }).to.throw(`Image "${property}" is not a dimension: Number -1 out of range`);
         expect(() => {
           new Image({src: 'foo', [property]: 'foo'});
-        }).to.throw(`"${property}" is not a dimension: invalid number foo`);
+        }).to.throw(`Image "${property}" is not a dimension: Invalid number foo`);
         expect(() => {
           new Image({src: 'foo', [property]: NaN});
-        }).to.throw(`"${property}" is not a dimension: invalid number NaN`);
+        }).to.throw(`Image "${property}" is not a dimension: Invalid number NaN`);
         expect(() => {
           new Image({src: 'foo', [property]: Infinity});
-        }).to.throw(`"${property}" is not a dimension: invalid number Infinity`);
+        }).to.throw(`Image "${property}" is not a dimension: Invalid number Infinity`);
       });
     });
 

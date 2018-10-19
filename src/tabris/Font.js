@@ -8,6 +8,7 @@ import {
   normalizeWeight,
   normalizeStyle
 } from './util-fonts';
+import {checkNumber} from './util';
 
 export default class Font {
 
@@ -76,12 +77,7 @@ function setFamily(font, family) {
 }
 
 function setSize(font, value) {
-  if (typeof value !== 'number' || isNaN(value) || !isFinite(value)) {
-    throw new Error(`Invalid number ${value}`);
-  }
-  if (value < 0) {
-    throw new Error(`Number ${value} out of range`);
-  }
+  checkNumber(value, [0, Infinity]);
   Object.defineProperty(font, 'size', {enumerable: true, value});
 }
 

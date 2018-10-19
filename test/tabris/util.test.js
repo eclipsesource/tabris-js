@@ -1,5 +1,13 @@
 import {expect} from '../test';
-import {pick, omit, isObject, capitalizeFirstChar, normalizePath, normalizePathUrl} from '../../src/tabris/util';
+import {
+  pick,
+  omit,
+  isObject,
+  capitalizeFirstChar,
+  normalizePath,
+  normalizePathUrl,
+  checkNumber
+} from '../../src/tabris/util';
 
 describe('util', function() {
 
@@ -146,6 +154,33 @@ describe('util', function() {
       expect(normalizePathUrl('data:image/png;base64,abc///def')).to.equal('data:image/png;base64,abc///def');
     });
 
+  });
+
+  describe('checkNumber', function() {
+    it('throws for invalid numbers', function() {
+      expect(() => checkNumber('foo')).to.throw('Invalid number foo');
+      expect(() => checkNumber(NaN)).to.throw('Invalid number NaN');
+      expect(() => checkNumber(Infinity)).to.throw('Invalid number Infinity');
+    });
+    it('throws for numbers out of range', function() {
+      expect(() => checkNumber(5, [0, 4])).to.throw('Number 5 out of range');
+      expect(() => checkNumber(-1, [0, Infinity])).to.throw('Number -1 out of range');
+    });
+    it('does not throw for valid numbers', function() {
+      expect(() => checkNumber(5, [0, Infinity])).not.to.throw();
+      expect(() => checkNumber(-5, [-Infinity, 5])).not.to.throw();
+      expect(() => checkNumber(0, [0, 5])).not.to.throw();
+      expect(() => checkNumber(5, [0, 5])).not.to.throw();
+      expect(() => checkNumber(4, [0, 5])).not.to.throw();
+    });
+    it('prepends error message', function() {
+      expect(() => {
+        checkNumber('foo', [-Infinity, Infinity], 'Invalid bar');
+      }).to.throw('Invalid bar: Invalid number foo');
+      expect(() => {
+        checkNumber(6, [-1, 5], 'Invalid bar');
+      }).to.throw('Invalid bar: Number 6 out of range');
+    });
   });
 
 });
