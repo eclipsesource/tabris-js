@@ -166,6 +166,20 @@ new Font({size: 16, family: Font.sansSerif})
 "initial"
 ```
 
+## PercentValue
+
+Percentages can be specified as strings or [Percent](./Percent.html)/Percent-like objects.
+
+A **Percent** instance can be created with the **Percent** constructor or using **Percent.from**.
+
+A **Percent**-like object is a plain object with a *percent* property, which is a number between and including 0 and 100.
+
+Example: `{percent: 50}`
+
+A percent string contains a number between and including 0 and 100 and ends with `%`.
+
+Example: `"50%"`
+
 ## ImageValue
 
 Images can be specified as strings or [Image](./Image.html)/[ImageLikeObject](#imagelikeobject).

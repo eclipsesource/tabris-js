@@ -117,6 +117,21 @@ type FontLikeObject = {size: number, family?: string[], weight?: FontWeight, sty
  */
 type FontValue = FontLikeObject|string|'initial'|null;
 
+type PercentLikeObject = {percent: number};
+/**
+ *
+ * Percents can be specified as strings or Percent/Percent-like objects.
+ *
+ * A **Percent** instance can be created with the **Percent** constructor or using **Percent.from**.
+ *
+ * A **Percent**-like object is a plain object with a *percent* property with a number between and including 0 and 100.
+ *
+ * A percent string contains a number between and including 0 and 100 and and ends with `%`.
+ *
+ */
+
+type PercentValue = string|PercentLikeObject|null;
+
 /**
  * Defines how the widget should be arranged. When setting the layout of a widget using **LayoutData**, all currently set layout attributes not in the new LayoutData object will be implicitly reset to null (i.e. "not specified").
  */

@@ -1,0 +1,57 @@
+{
+  "type": "Percent",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "value",
+        "type": "number",
+        "description": "A number between and including 0 and 100"
+      }
+    ]
+  },
+  "description": "Represents a percentage. See also [PercentValue](./types.html#PercentValue)",
+  "properties": {
+    "percent": {
+      "type": "number",
+      "description": "A number between and including 0 and 100",
+      "const": true
+    }
+  },
+  "methods": {
+    "toString": {
+      "description": "Returns a string representation of the percent (a number followed by '%').",
+      "returns": "string"
+    },
+    "valueOf": {
+      "description": "Returns the percent number",
+      "returns": "number"
+    }
+  },
+  "statics": {
+    "methods": {
+      "from": {
+        "parameters": [
+          {
+            "name": "percentValue",
+            "description": "The value to create a Percent instance from",
+            "type": "PercentValue"
+          }
+        ],
+        "description": "Creates a new instance of Percent using any valid percent expression. For any other value, including `null` the method throws.",
+        "returns": "Percent"
+      },
+      "isValidPercentValue": {
+        "parameters": [
+          {
+            "name": "value",
+            "description": "The value to test",
+            "type": "any"
+          }
+        ],
+        "description": "Returns true if value is a valid PercentValue. This excludes `null`. Use this to check if a value will be accepted by Percent.from. This is also a valid TypeScript type guard function.",
+        "returns": "value is PercentValue"
+      }
+    }
+  }
+}
