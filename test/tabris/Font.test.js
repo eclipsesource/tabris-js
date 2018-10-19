@@ -30,10 +30,10 @@ describe('Font', function() {
     });
 
     it('throws for invalid parameters', function() {
-      expect(() => new Font('foo')).to.throw('Invalid number');
-      expect(() => new Font(-1)).to.throw('Number -1 out of range');
-      expect(() => new Font(NaN)).to.throw('Invalid number NaN');
-      expect(() => new Font(Infinity)).to.throw('Invalid number Infinity');
+      expect(() => new Font('foo')).to.throw('Invalid font size: Invalid number foo');
+      expect(() => new Font(-1)).to.throw('Invalid font size: Number -1 out of range');
+      expect(() => new Font(NaN)).to.throw('Invalid font size: Invalid number NaN');
+      expect(() => new Font(Infinity)).to.throw('Invalid font size: Invalid number Infinity');
       expect(() => new Font(5, ['"f"oo'])).to.throw('Invalid font family: "f"oo');
       expect(() => new Font(5, ["'f'oo"])).to.throw("Invalid font family: 'f'oo");
       expect(() => new Font(5, undefined, 'foo')).to.throw('Invalid font weight foo');

@@ -77,7 +77,7 @@ function setFamily(font, family) {
 }
 
 function setSize(font, value) {
-  checkNumber(value, [0, Infinity]);
+  checkNumber(value, [0, Infinity], 'Invalid font size');
   Object.defineProperty(font, 'size', {enumerable: true, value});
 }
 

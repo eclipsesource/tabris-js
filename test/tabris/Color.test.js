@@ -36,14 +36,14 @@ describe('Color', function() {
       expect(() => new Color()).to.throw('Not enough arguments');
       expect(() => new Color(0, 0)).to.throw('Not enough arguments');
       expect(() => new Color(0, 0, 0, 0, 0)).to.throw('Too many arguments');
-      expect(() => new Color(-1, 0, 0)).to.throw('Number -1 out of range');
-      expect(() => new Color(0, 256, 0)).to.throw('Number 256 out of range');
-      expect(() => new Color(0, 'foo', 0)).to.throw('Invalid number foo');
-      expect(() => new Color(0, 0, 0, 'bar')).to.throw('Invalid number bar');
-      expect(() => new Color(0, NaN, 0)).to.throw('Invalid number NaN');
-      expect(() => new Color(0, Infinity, 0)).to.throw('Invalid number Infinity');
-      expect(() => new Color(0, 0, 0, -0.1)).to.throw('Number -0.1 out of range');
-      expect(() => new Color(0, 0, 0, 255.1)).to.throw('Number 255.1 out of range');
+      expect(() => new Color(-1, 0, 0)).to.throw('Invalid color value "red": Number -1 out of range');
+      expect(() => new Color(0, 256, 0)).to.throw('Invalid color value "green": Number 256 out of range');
+      expect(() => new Color(0, 'foo', 0)).to.throw('Invalid color value "green": Invalid number foo');
+      expect(() => new Color(0, 0, 0, 'bar')).to.throw('Invalid color value "alpha": Invalid number bar');
+      expect(() => new Color(0, NaN, 0)).to.throw('Invalid color value "green": Invalid number NaN');
+      expect(() => new Color(0, Infinity, 0)).to.throw('Invalid color value "green": Invalid number Infinity');
+      expect(() => new Color(0, 0, 0, -0.1)).to.throw('Invalid color value "alpha": Number -0.1 out of range');
+      expect(() => new Color(0, 0, 0, 255.1)).to.throw('Invalid color value "alpha": Number 255.1 out of range');
     });
 
   });

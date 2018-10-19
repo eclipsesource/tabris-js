@@ -63,7 +63,7 @@ Object.keys(NAMES).forEach(name => {
 });
 
 function setChannel(color, channel, value) {
-  checkNumber(value, [0, 255]);
+  checkNumber(value, [0, 255], `Invalid color value "${channel}"`);
   Object.defineProperty(color, channel, {enumerable: true, value: Math.round(value)});
 }
 
