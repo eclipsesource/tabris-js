@@ -23,7 +23,7 @@ export default class Constraint {
       return fromArray(constraintValue);
     }
     if (typeof constraintValue === 'number') {
-      return new Constraint(zeroPercent, normalizeOffset(constraintValue));
+      return new Constraint(zeroPercent, normalizeNumber(constraintValue));
     }
     if (constraintValue instanceof Widget
       || typeof constraintValue === 'symbol'
@@ -41,14 +41,8 @@ export default class Constraint {
     if (typeof reference === 'string' && !selectorRegex.test(reference)) {
       throw new Error('Invalid sibling selector: ' + reference);
     }
-    if (
-      typeof reference !== 'string'
-      && !(reference instanceof Widget)
-      && !(reference instanceof Percent)
-      && reference !== Constraint.next
-      && reference !== Constraint.prev
-    ) {
-      throw new Error('Invalid constraint reference: ' + reference);
+    if (!(reference instanceof Percent)) {
+      checkIsValidSiblingReference(reference);
     }
     checkNumber(offset);
     Object.defineProperty(this, 'reference', {enumerable: true, value: reference});
@@ -68,19 +62,42 @@ export default class Constraint {
 Constraint.next = Symbol('next()');
 Constraint.prev = Symbol('prev()');
 
-function fromArray(array) {
-  if (array.length !== 2) {
-    throw new Error('Wrong number of elements in constraint array: ' + array.length);
+export function checkIsValidSiblingReference(reference) {
+  if (typeof reference === 'string' && !selectorRegex.test(reference)) {
+    throw new Error('Invalid sibling selector: ' + reference);
   }
-  return new Constraint(normalizeReference(array[0]), normalizeOffset(array[1]));
+  if (
+    typeof reference !== 'string'
+    && !(reference instanceof Widget)
+    && reference !== Constraint.next
+    && reference !== Constraint.prev
+  ) {
+    throw new Error('Invalid constraint reference: ' + reference);
+  }
 }
 
-function normalizeReference(reference) {
-  if (reference instanceof Widget || reference === Constraint.next || reference === Constraint.prev) {
-    return reference;
+export function referenceToString(reference) {
+  if (reference instanceof Percent) {
+    return reference + '%';
   }
+  if (reference instanceof Widget) {
+    return `${reference.constructor.name}[cid="${reference.cid}"]`;
+  }
+  if (reference === Constraint.next) {
+    return 'next()';
+  }
+  if (reference === Constraint.prev) {
+    return 'prev()';
+  }
+  return reference;
+}
+
+export function normalizeReference(reference) {
   if (Percent.isValidPercentValue(reference)) {
     return Percent.from(reference);
+  }
+  if (reference instanceof Widget || reference === Constraint.next || reference === Constraint.prev) {
+    return reference;
   }
   if (typeof reference === 'string') {
     const str = reference.trim();
@@ -97,22 +114,16 @@ function normalizeReference(reference) {
   throw new Error('Not a percentage or widget reference: ' + reference);
 }
 
-function normalizeOffset(value) {
+export function normalizeNumber(value) {
   if (typeof value === 'string' && numberRegex.test(value)) {
     return parseFloat(value);
   }
   return value;
 }
 
-function referenceToString(reference) {
-  if (reference instanceof Widget) {
-    return `${reference.constructor.name}[cid="${reference.cid}"]`;
+function fromArray(array) {
+  if (array.length !== 2) {
+    throw new Error('Wrong number of elements in constraint array: ' + array.length);
   }
-  if (reference === Constraint.next) {
-    return 'next()';
-  }
-  if (reference === Constraint.prev) {
-    return 'prev()';
-  }
-  return reference;
+  return new Constraint(normalizeReference(array[0]), normalizeNumber(array[1]));
 }
