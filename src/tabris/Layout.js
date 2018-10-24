@@ -1,43 +1,50 @@
-import {omit} from './util';
 import {types} from './property-types';
 import {warn} from './Console';
+import LayoutData from './LayoutData';
+import Constraint from './Constraint';
+import Percent from './Percent';
+
+const layoutDataProps = ['left', 'right', 'top', 'bottom', 'width', 'height', 'centerX', 'centerY', 'baseline'];
 
 export default {
 
   checkConsistency(layoutData) {
     let result = layoutData;
-    if ('centerX' in result) {
-      if (('left' in result) || ('right' in result)) {
+    if (result.centerX !== 'auto') {
+      if (result.left !== 'auto' || result.right !== 'auto') {
         warn('Inconsistent layoutData: centerX overrides left and right');
-        result = omit(result, ['left', 'right']);
+        result = makeAuto(result, 'left', 'right');
       }
     }
-    if ('baseline' in result) {
-      if (('top' in result) || ('bottom' in result) || ('centerY' in result)) {
+    if (result.baseline !== 'auto') {
+      if (result.top !== 'auto' || result.bottom !== 'auto' || result.centerY !== 'auto') {
         warn('Inconsistent layoutData: baseline overrides top, bottom, and centerY');
-        result = omit(result, ['top', 'bottom', 'centerY']);
+        result = makeAuto(result, 'top', 'bottom', 'centerY');
       }
-    } else if ('centerY' in result) {
-      if (('top' in result) || ('bottom' in result)) {
+    } else if (result.centerY !== 'auto') {
+      if (result.top !== 'auto' || result.bottom !== 'auto') {
         warn('Inconsistent layoutData: centerY overrides top and bottom');
-        result = omit(result, ['top', 'bottom']);
+        result = makeAuto(result, 'top', 'bottom');
       }
     }
-    if ('left' in result && 'right' in result && 'width' in result) {
+    if (result.left !== 'auto' && result.right !== 'auto' && result.width !== 'auto') {
       warn('Inconsistent layoutData: left and right are set, ignore width');
-      result = omit(result, ['width']);
+      result = makeAuto(result, 'width');
     }
-    if ('top' in result && 'bottom' in result && 'height' in result) {
+    if (result.top !== 'auto' && result.bottom !== 'auto' && result.height !== 'auto') {
       warn('Inconsistent layoutData: top and bottom are set, ignore height');
-      result = omit(result, ['height']);
+      result = makeAuto(result, 'height');
     }
     return result;
   },
 
   resolveReferences(layoutData, targetWidget) {
     let result = {};
-    for (let key in layoutData) {
-      result[key] = resolveAttribute(layoutData[key], targetWidget);
+    for (let i = 0; i < layoutDataProps.length; i++) {
+      const prop = layoutDataProps[i];
+      if (prop in layoutData && layoutData[prop] !== 'auto') {
+        result[prop] = resolveAttribute(layoutData[prop], targetWidget);
+      }
     }
     return result;
   },
@@ -58,8 +65,8 @@ export default {
 let layoutQueue = {};
 
 function resolveAttribute(value, widget) {
-  if (Array.isArray(value)) {
-    return resolveArray(value, widget);
+  if (value instanceof Constraint) {
+    return resolveConstraint(value, widget);
   }
   if (isNumber(value)) {
     return value;
@@ -67,15 +74,18 @@ function resolveAttribute(value, widget) {
   return toProxyId(value, widget);
 }
 
-function resolveArray(array, widget) {
-  if (isNumber(array[0])) {
-    return array;
+function resolveConstraint(constraint, widget) {
+  if (constraint.reference instanceof Percent) {
+    if (constraint.reference.percent === 0) {
+      return constraint.offset;
+    }
+    return [constraint.reference.percent, constraint.offset];
   }
-  return [toProxyId(array[0], widget), array[1]];
+  return [toProxyId(constraint.reference, widget), constraint.offset];
 }
 
 function toProxyId(ref, widget) {
-  if (ref === 'prev()') {
+  if (ref === LayoutData.prev) {
     let children = getParent(widget)._children();
     let index = children.indexOf(widget);
     if (index > 0) {
@@ -83,7 +93,7 @@ function toProxyId(ref, widget) {
     }
     return 0;
   }
-  if (ref === 'next()') {
+  if (ref === LayoutData.next) {
     let children = getParent(widget)._children();
     let index = children.indexOf(widget);
     if (index + 1 < children.length) {
@@ -107,6 +117,14 @@ function isNumber(value) {
 
 function getParent(widget) {
   return widget.parent() || emptyParent;
+}
+
+function makeAuto(layoutData, ...props) {
+  const override = {};
+  for (let i = 0; i < props.length; i++) {
+    override[props[i]] = 'auto';
+  }
+  return LayoutData.from(Object.assign({}, layoutData, override));
 }
 
 let emptyParent = {

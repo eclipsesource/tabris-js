@@ -5,6 +5,7 @@ import GestureRecognizer from './GestureRecognizer';
 import {animate} from './Animation';
 import {jsxFactory} from './JsxProcessor';
 import {types} from './property-types';
+import LayoutData from './LayoutData';
 
 export default class Widget extends NativeObject {
 
@@ -214,27 +215,6 @@ NativeObject.defineProperties(Widget.prototype, {
     type: 'boolean',
     default: true
   },
-  layoutData: {
-    type: 'layoutData',
-    set(name, value) {
-      this._layoutData = value;
-      if (this._parent) {
-        Layout.addToQueue(this._parent);
-      }
-    },
-    get() {
-      return this._layoutData || null;
-    }
-  },
-  left: {type: 'edge', get: getLayoutProperty, set: setLayoutProperty},
-  right: {type: 'edge', get: getLayoutProperty, set: setLayoutProperty},
-  top: {type: 'edge', get: getLayoutProperty, set: setLayoutProperty},
-  bottom: {type: 'edge', get: getLayoutProperty, set: setLayoutProperty},
-  width: {type: 'dimension', get: getLayoutProperty, set: setLayoutProperty},
-  height: {type: 'dimension', get: getLayoutProperty, set: setLayoutProperty},
-  centerX: {type: 'dimension', get: getLayoutProperty, set: setLayoutProperty},
-  centerY: {type: 'dimension', get: getLayoutProperty, set: setLayoutProperty},
-  baseline: {type: 'sibling', get: getLayoutProperty, set: setLayoutProperty},
   elevation: {
     type: 'number',
     default: 0
@@ -309,6 +289,42 @@ NativeObject.defineProperties(Widget.prototype, {
   }
 });
 
+const layoutDataProps = ['left', 'right', 'top', 'bottom', 'width', 'height', 'centerX', 'centerY', 'baseline'];
+
+NativeObject.defineProperty(Widget.prototype, 'layoutData', {
+  set(name, value) {
+    const oldLayoutData = this._layoutData;
+    this._layoutData = value ? LayoutData.from(value) : new LayoutData({});
+    if (this._parent) {
+      Layout.addToQueue(this._parent);
+    }
+    this._triggerChangeEvent(name, this._layoutData);
+    layoutDataProps.forEach(prop => {
+      const oldValue = oldLayoutData ? oldLayoutData[prop] : 'auto';
+      if (oldValue !== this._layoutData[prop]) {
+        this._triggerChangeEvent(prop, this._layoutData[prop]);
+      }
+    });
+  },
+  get() {
+    if (!this._layoutData) {
+      this._layoutData = new LayoutData({});
+    }
+    return this._layoutData;
+  }
+});
+
+layoutDataProps.forEach(prop => {
+  NativeObject.defineProperty(Widget.prototype, prop, {
+    set(name, value) {
+      this.layoutData = LayoutData.from(Object.assign({}, this.layoutData, {[name]: value}));
+    },
+    get(name) {
+      return this._layoutData[name];
+    }
+  });
+});
+
 NativeObject.defineEvents(Widget.prototype, {
   tap: true,
   longpress: true,
@@ -356,21 +372,3 @@ let defaultGestures = {
   swipeUp: {type: 'swipe', direction: 'up'},
   swipeDown: {type: 'swipe', direction: 'down'}
 };
-
-function setLayoutProperty(name, value) {
-  if (!this._layoutData) {
-    this._layoutData = {};
-  }
-  if (value == null) {
-    delete this._layoutData[name];
-  } else {
-    this._layoutData[name] = value;
-  }
-  if (this._parent) {
-    Layout.addToQueue(this._parent);
-  }
-}
-
-function getLayoutProperty(name) {
-  return this._layoutData && this._layoutData[name] != null ? this._layoutData[name] : null;
-}

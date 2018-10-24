@@ -1,8 +1,16 @@
-import Constraint from './Constraint';
+import * as ConstraintExports from './Constraint'; // work around circular dependency
 import {checkIsValidSiblingReference, referenceToString, normalizeNumber, normalizeReference} from './Constraint';
 import {checkNumber} from './util';
 
 export default class LayoutData {
+
+  static get next() {
+    return ConstraintExports.default.next;
+  }
+
+  static get prev() {
+    return ConstraintExports.default.prev;
+  }
 
   static from(layoutDataValue) {
     if (!(layoutDataValue instanceof Object)) {
@@ -15,10 +23,10 @@ export default class LayoutData {
       throw new Error('Not a parameter object: ' + layoutDataValue.constructor.name);
     }
     return new LayoutData({
-      left: has(layoutDataValue, 'left') ? Constraint.from(layoutDataValue.left) : 'auto',
-      right: has(layoutDataValue, 'right') ? Constraint.from(layoutDataValue.right) : 'auto',
-      top: has(layoutDataValue, 'top') ? Constraint.from(layoutDataValue.top) : 'auto',
-      bottom: has(layoutDataValue, 'bottom') ? Constraint.from(layoutDataValue.bottom) : 'auto',
+      left: has(layoutDataValue, 'left') ? ConstraintExports.default.from(layoutDataValue.left) : 'auto',
+      right: has(layoutDataValue, 'right') ? ConstraintExports.default.from(layoutDataValue.right) : 'auto',
+      top: has(layoutDataValue, 'top') ? ConstraintExports.default.from(layoutDataValue.top) : 'auto',
+      bottom: has(layoutDataValue, 'bottom') ? ConstraintExports.default.from(layoutDataValue.bottom) : 'auto',
       centerX: has(layoutDataValue, 'centerX') ? normalizeNumber(layoutDataValue.centerX) : 'auto',
       centerY: has(layoutDataValue, 'centerY') ? normalizeNumber(layoutDataValue.centerY) : 'auto',
       baseline: has(layoutDataValue, 'baseline') ? normalizeReference(layoutDataValue.baseline) : 'auto',
@@ -61,16 +69,13 @@ export default class LayoutData {
 
 }
 
-LayoutData.prev = Constraint.prev;
-LayoutData.next = Constraint.next;
-
 function has(layoutDataValue, prop) {
   return layoutDataValue[prop] != null && layoutDataValue[prop] !== 'auto';
 }
 
 function setConstraintValue(layoutData, parameters, property) {
   const value = (property in parameters) ? parameters[property] : 'auto';
-  if (value === 'auto' || value instanceof Constraint) {
+  if (value === 'auto' || value instanceof ConstraintExports.default) {
     return Object.defineProperty(layoutData, property, {enumerable: true, value});
   }
   throw new Error(`Invalid ${property} constraint ${value}`);
@@ -87,7 +92,7 @@ function setDimension(layoutData, parameters, property) {
 function setOffset(layoutData, parameters, property) {
   const value = (property in parameters) ? parameters[property] : 'auto';
   if (value !== 'auto') {
-    checkNumber(value);
+    checkNumber(value, [-Infinity, Infinity], `Invalid ${property}`);
   }
   Object.defineProperty(layoutData, property, {enumerable: true, value});
 }

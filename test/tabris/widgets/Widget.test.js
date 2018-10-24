@@ -12,6 +12,8 @@ import ToggleButton from '../../../src/tabris/widgets/ToggleButton';
 import TextInput from '../../../src/tabris/widgets/TextInput';
 import {omit} from '../../../src/tabris/util';
 import {ColorShader} from '../../../src/tabris/util-shaders';
+import LayoutData from '../../../src/tabris/LayoutData';
+import Constraint from '../../../src/tabris/Constraint';
 
 describe('Widget', function() {
 
@@ -182,7 +184,7 @@ describe('Widget', function() {
       expect(widget.highlightOnTouch).to.be.false;
       expect(widget.enabled).to.be.true;
       expect(widget.visible).to.be.true;
-      expect(widget.layoutData).to.be.null;
+      expect(widget.layoutData).to.deep.equal(new LayoutData({}));
       expect(widget.elevation).to.equal(0);
       expect(widget.cornerRadius).to.equal(0);
       expect(widget.opacity).to.equal(1);
@@ -1323,50 +1325,50 @@ describe('Widget', function() {
       client.resetCalls();
     });
 
-    it('return null for undefined layoutData', function() {
-      expect(widget.layoutData).to.be.null;
+    it('return all-auto layoutData', function() {
+      expect(widget.layoutData).to.deep.equal(new LayoutData({}));
     });
 
-    it('store layoutData property locally', function() {
+    it('normalize layoutData', function() {
       widget.layoutData = {top: 10, left: ['#other', 10]};
 
-      expect(widget.layoutData).to.eql({top: 10, left: ['#other', 10]});
+      expect(widget.layoutData).to.deep.equal(LayoutData.from({top: 10, left: ['#other', 10]}));
     });
 
-    it('getter does not translate selectors', function() {
-      widget.layoutData = {top: '#other', left: ['#other', 42]};
+    it('keep same same layoutData instance', function() {
+      const layoutData = LayoutData.from({top: 10, left: ['#other', 10]});
+      widget.layoutData = layoutData;
 
-      expect(widget.layoutData).to.eql({top: '#other', left: ['#other', 42]});
+      expect(widget.layoutData).to.equal(layoutData);
     });
 
-    it('getter does not translate widgets', function() {
-      widget.layoutData = {top: other, left: [other, 42]};
+    it('fires layoutDataChanged', function() {
+      const listener = spy();
+      const layoutData = LayoutData.from({top: 10, left: ['#other', 10]});
+      widget.onLayoutDataChanged(listener);
 
-      expect(widget.layoutData).to.eql({top: other, left: [other, 42]});
+      widget.layoutData = layoutData;
+
+      expect(listener).to.have.been.calledWithMatch({value: layoutData});
     });
 
-    it('getter returns normalized percentages in arrays', function() {
-      widget.layoutData = {left: '32%', top: [23, 42]};
+    it('fires change event for individual constraint properties', function() {
+      const listenerLeft = spy();
+      const listenerTop = spy();
+      const listenerRight = spy();
+      const listenerBottom = spy();
+      const layoutData = LayoutData.from({top: 10, left: ['#other', 10]});
+      widget.onLeftChanged(listenerLeft);
+      widget.onRightChanged(listenerRight);
+      widget.onTopChanged(listenerTop);
+      widget.onBottomChanged(listenerBottom);
 
-      expect(widget.layoutData).to.eql({left: '32%', top: ['23%', 42]});
-    });
+      widget.layoutData = layoutData;
 
-    it('getter returns arrays with zero percentage as plain offset', function() {
-      widget.layoutData = {left: '32%', top: [0, 42]};
-
-      expect(widget.layoutData).to.eql({left: '32%', top: 42});
-    });
-
-    it('getter normalizes arrays with zero offset', function() {
-      widget.layoutData = {left: ['#other', 0], top: [33, 0]};
-
-      expect(widget.layoutData).to.eql({left: '#other', top: '33%'});
-    });
-
-    it('getter replaces zero percentage', function() {
-      widget.layoutData = {left: '0%', top: ['0%', 23]};
-
-      expect(widget.layoutData).to.eql({left: 0, top: 23});
+      expect(listenerLeft).to.have.been.calledWithMatch({value: layoutData.left});
+      expect(listenerTop).to.have.been.calledWithMatch({value: layoutData.top});
+      expect(listenerRight).not.to.have.been.called;
+      expect(listenerBottom).not.to.have.been.called;
     });
 
     it('SET layoutData after widget referenced by selector is added to parent', function() {
@@ -1391,7 +1393,7 @@ describe('Widget', function() {
     });
 
     it('SET preliminary layoutData if selector does not resolve in flush', function() {
-      widget.layoutData = {left: 23, baseline: '#mother', right: ['other', 42]};
+      widget.layoutData = {left: 23, baseline: '#mother', right: ['Other', 42]};
 
       let call = client.calls({op: 'set'})[0];
       let expected = {left: 23, baseline: 0, right: [0, 42]};
@@ -1441,7 +1443,16 @@ describe('Widget', function() {
       it('modifies layoutData', function() {
         widget[attr] = ['#other', 10];
 
-        expect(widget.layoutData[attr]).to.eql(['#other', 10]);
+        expect(widget.layoutData[attr]).to.deep.equal(Constraint.from(['#other', 10]));
+      });
+
+      it('fires layoutDataChanged', function() {
+        const listener = spy();
+        widget.onLayoutDataChanged(listener);
+
+        widget[attr] = ['#other', 10];
+
+        expect(listener).to.have.been.calledWithMatch({value: widget.layoutData});
       });
 
       it('resets layoutData properties', function() {
@@ -1449,51 +1460,32 @@ describe('Widget', function() {
         widget.layoutData = layoutData;
         widget[attr] = null;
 
-        expect(widget.layoutData).to.eql(omit(layoutData, attr));
+        expect(widget.layoutData).to.deep.equal(LayoutData.from(omit(layoutData, attr)));
       });
 
       it('getter does not translate selectors', function() {
         widget[attr] = ['#other', 10];
 
-        expect(widget[attr]).to.eql(['#other', 10]);
+        expect(widget[attr]).to.deep.equal(Constraint.from(['#other', 10]));
       });
 
       it('getter does not translate widgets', function() {
         widget[attr] = [other, 42];
 
-        expect(widget[attr]).to.eql([other, 42]);
+        expect(widget[attr]).to.deep.equal(Constraint.from([other, 42]));
       });
 
-      it('getter returns normalized percentages in arrays', function() {
-        widget[attr] = [23, 42];
+      it('getter normalizes constraints', function() {
+        widget[attr] = ['23%', 42];
 
-        expect(widget[attr]).to.eql(['23%', 42]);
-      });
-
-      it('getter returns arrays with zero percentage as plain offset', function() {
-        widget[attr] = [0, 42];
-
-        expect(widget[attr]).to.equal(42);
-      });
-
-      it('getter returns offset 0 as plain 0', function() {
-        widget[attr] = 0;
-
-        expect(widget[attr]).to.equal(0);
-      });
-
-      it('getter normalizes arrays with zero offset', function() {
-        widget[attr] = ['#other', 0];
-
-        expect(widget[attr]).to.equal('#other');
+        expect(widget[attr]).to.deep.equal(Constraint.from(['23%', 42]));
       });
 
       it('SETs layoutData', function() {
         widget[attr] = 23;
 
         let call = client.calls({op: 'set'})[0];
-        let expected = {};
-        expected[attr] = 23;
+        let expected = {[attr]: 23};
         expect(call.properties.layoutData).to.eql(expected);
       });
 
@@ -1512,7 +1504,7 @@ describe('Widget', function() {
         widget.layoutData = layoutData;
         widget[attr] = null;
 
-        expect(widget.layoutData).to.eql(omit(layoutData, attr));
+        expect(widget.layoutData).to.deep.equal(LayoutData.from(omit(layoutData, attr)));
       });
 
       it('SETs layoutData', function() {
@@ -1521,7 +1513,7 @@ describe('Widget', function() {
         let call = client.calls({op: 'set'})[0];
         let expected = {};
         expected[attr] = 23;
-        expect(call.properties.layoutData).to.eql(expected);
+        expect(call.properties.layoutData).to.deep.equal(expected);
       });
 
     });

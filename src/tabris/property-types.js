@@ -43,6 +43,12 @@ export let types = {
     }
   },
 
+  dimension: {
+    encode(value) {
+      return value == null ? null : encodeNumber(value);
+    }
+  },
+
   function: {
     encode(value) {
       if ('function' !== typeof value) {
@@ -153,36 +159,6 @@ export let types = {
     }
   },
 
-  layoutData: {
-    encode(value) {
-      return encodeLayoutData(value);
-    },
-    decode(value) {
-      return decodeLayoutData(value);
-    }
-  },
-
-  edge: {
-    encode(value) {
-      return value == null ? null : encodeEdge(value);
-    },
-    decode: decodeLayoutAttr
-  },
-
-  dimension: {
-    encode(value) {
-      return value == null ? null : encodeNumber(value);
-    },
-    decode: decodeLayoutAttr
-  },
-
-  sibling: {
-    encode(value) {
-      return value == null ? null : encodeWidgetRef(value);
-    },
-    decode: decodeLayoutAttr
-  },
-
   bounds: {
     encode(value) {
       return [value.left, value.top, value.width, value.height];
@@ -255,7 +231,6 @@ export let types = {
 };
 
 let numberRegex = /^[+-]?([0-9]+|[0-9]*\.[0-9]+)$/;
-let selectorRegex = /^(\*|prev\(\)|next\(\)|([#.]?[A-Za-z_][A-Za-z0-9_-]+))$/;
 
 function throwNotAcceptedError(acceptable, given) {
   let message = ['Accepting "'];
@@ -285,139 +260,6 @@ let transformDefaults = {
   translationY: 0,
   translationZ: 0
 };
-
-let layoutEncoders = {
-  width: encodeNumber,
-  height: encodeNumber,
-  left: encodeEdge,
-  right: encodeEdge,
-  top: encodeEdge,
-  bottom: encodeEdge,
-  centerX: encodeNumber,
-  centerY: encodeNumber,
-  baseline: encodeWidgetRef
-};
-
-function encodeLayoutData(layoutData) {
-  let result = {};
-  for (let key in layoutData) {
-    if (layoutData[key] != null) {
-      if (!(key in layoutEncoders)) {
-        throw new Error("Invalid key '" + key + "' in layoutData");
-      }
-      try {
-        result[key] = layoutEncoders[key](layoutData[key]);
-      } catch (error) {
-        throw new Error("Invalid value for '" + key + "': " + error.message);
-      }
-    }
-  }
-  return result;
-}
-
-function encodeEdge(value) {
-  if (typeof value === 'string') {
-    if (value.indexOf(' ') !== -1) {
-      return encodeEdgeArray(value.split(/\s+/));
-    }
-    if (value[value.length - 1] === '%') {
-      let percentage = encodePercentage(value);
-      return percentage === 0 ? 0 : [percentage, 0];
-    }
-    if (numberRegex.test(value)) {
-      return [0, parseFloat(value)];
-    }
-    if (selectorRegex.test(value)) {
-      return [value, 0];
-    }
-    throw new Error('Invalid dimension: ' + toString(value));
-  }
-  if (typeof value === 'number') {
-    if (!isFinite(value)) {
-      throw new Error('Invalid number: ' + toString(value));
-    }
-    return value;
-  }
-  if (Array.isArray(value)) {
-    return encodeEdgeArray(value);
-  }
-  if (value instanceof NativeObject) {
-    return [value, 0];
-  }
-  throw new Error('Invalid dimension: ' + toString(value));
-}
-
-function encodeEdgeArray(array) {
-  if (array.length !== 2) {
-    throw new Error('Wrong number of elements (must be 2): ' + toString(array));
-  }
-  let ref = encodeEdgeRef(array[0]);
-  let offset = encodeNumber(array[1]);
-  return ref === 0 ? offset : [ref, offset];
-}
-
-function encodeEdgeRef(value) {
-  if (typeof value === 'string') {
-    if (value[value.length - 1] === '%') {
-      return encodePercentage(value);
-    }
-    if (selectorRegex.test(value)) {
-      return value;
-    }
-  }
-  if (typeof value === 'number') {
-    if (!isFinite(value)) {
-      throw new Error('Invalid number: ' + toString(value));
-    }
-    return value;
-  }
-  if (value instanceof NativeObject) {
-    return value;
-  }
-  throw new Error('Not a percentage or widget reference: ' + toString(value));
-}
-
-function encodePercentage(value) {
-  let sub = value.substr(0, value.length - 1);
-  if (numberRegex.test(sub)) {
-    return parseFloat(sub);
-  }
-  throw new Error('Invalid percentage value: ' + toString(value));
-}
-
-function encodeWidgetRef(value) {
-  if (value instanceof NativeObject) {
-    return value;
-  }
-  if (typeof value === 'string' && selectorRegex.test(value)) {
-    return value;
-  }
-  throw new Error('Not a widget reference: ' + toString(value));
-}
-
-function decodeLayoutData(layoutData) {
-  if (!layoutData) {
-    return null;
-  }
-  let result = {};
-  for (let key in layoutData) {
-    result[key] = decodeLayoutAttr(layoutData[key]);
-  }
-  return result;
-}
-
-function decodeLayoutAttr(value) {
-  if (Array.isArray(value)) {
-    if (value[0] === 0) {
-      return value[1];
-    }
-    if (value[1] === 0) {
-      return typeof value[0] === 'number' ? value[0] + '%' : value[0];
-    }
-    return [typeof value[0] === 'number' ? value[0] + '%' : value[0], value[1]];
-  }
-  return value;
-}
 
 function toString(value) {
   if (typeof value === 'string') {

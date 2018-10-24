@@ -1,4 +1,4 @@
-import Widget from '../../src/tabris/Widget';
+import * as WidgetExports from '../../src/tabris/Widget'; // work around circular dependency
 import Percent from './Percent';
 import {checkNumber} from './util';
 
@@ -25,7 +25,7 @@ export default class Constraint {
     if (typeof constraintValue === 'number') {
       return new Constraint(zeroPercent, normalizeNumber(constraintValue));
     }
-    if (constraintValue instanceof Widget
+    if (constraintValue instanceof WidgetExports.default
       || typeof constraintValue === 'symbol'
       || Percent.isValidPercentValue(constraintValue)
     ) {
@@ -68,7 +68,7 @@ export function checkIsValidSiblingReference(reference) {
   }
   if (
     typeof reference !== 'string'
-    && !(reference instanceof Widget)
+    && !(reference instanceof WidgetExports.default)
     && reference !== Constraint.next
     && reference !== Constraint.prev
   ) {
@@ -80,7 +80,7 @@ export function referenceToString(reference) {
   if (reference instanceof Percent) {
     return reference + '%';
   }
-  if (reference instanceof Widget) {
+  if (reference instanceof WidgetExports.default) {
     return `${reference.constructor.name}[cid="${reference.cid}"]`;
   }
   if (reference === Constraint.next) {
@@ -96,7 +96,7 @@ export function normalizeReference(reference) {
   if (Percent.isValidPercentValue(reference)) {
     return Percent.from(reference);
   }
-  if (reference instanceof Widget || reference === Constraint.next || reference === Constraint.prev) {
+  if (reference instanceof WidgetExports.default || reference === Constraint.next || reference === Constraint.prev) {
     return reference;
   }
   if (typeof reference === 'string') {

@@ -1,6 +1,7 @@
 import ClientStub from './ClientStub';
 import {expect, mockTabris, stub, spy, restore} from '../test';
 import Layout from '../../src/tabris/Layout';
+import LayoutData from '../../src/tabris/LayoutData';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
 import Composite from '../../src/tabris/widgets/Composite';
 
@@ -8,7 +9,9 @@ describe('Layout', function() {
 
   describe('checkConsistency', function() {
 
-    let check = Layout.checkConsistency;
+    function check(layoutData) {
+      return Layout.checkConsistency(LayoutData.from(layoutData));
+    }
 
     beforeEach(function() {
       stub(console, 'warn');
@@ -23,10 +26,10 @@ describe('Layout', function() {
       expect(console.warn).to.have.been.calledWith(warning);
     });
 
-    it('skips overridden properties from layoutData (width)', function() {
+    it('overrides properties from layoutData (width)', function() {
       let result = check({top: 0, left: 0, right: 0, width: 100});
 
-      expect(result).to.eql({top: 0, left: 0, right: 0});
+      expect(result).to.deep.equal(LayoutData.from({top: 0, left: 0, right: 0}));
     });
 
     it('raises a warning for inconsistent layoutData (height)', function() {
@@ -39,7 +42,7 @@ describe('Layout', function() {
     it('skips overridden properties from layoutData (height)', function() {
       let result = check({top: 0, left: 0, bottom: 0, height: 100});
 
-      expect(result).to.deep.equal({top: 0, left: 0, bottom: 0});
+      expect(result).to.deep.equal(LayoutData.from({top: 0, left: 0, bottom: 0}));
     });
 
     it('raises a warning for inconsistent layoutData (centerX)', function() {
@@ -52,7 +55,7 @@ describe('Layout', function() {
     it('skips overridden properties from layoutData (centerX)', function() {
       let result = check({top: 1, left: 2, right: 3, centerX: 4});
 
-      expect(result).to.eql({top: 1, centerX: 4});
+      expect(result).to.deep.equal(LayoutData.from({top: 1, centerX: 4}));
     });
 
     it('raises a warning for inconsistent layoutData (centerY)', function() {
@@ -65,7 +68,7 @@ describe('Layout', function() {
     it('skips overridden properties from layoutData (centerY)', function() {
       let result = check({left: 1, top: 2, bottom: 3, centerY: 4});
 
-      expect(result).to.eql({left: 1, centerY: 4});
+      expect(result).to.deep.equal(LayoutData.from({left: 1, centerY: 4}));
     });
 
     it('raises a warning for inconsistent layoutData (baseline)', function() {
@@ -76,9 +79,9 @@ describe('Layout', function() {
     });
 
     it('skips overridden properties from layoutData (baseline)', function() {
-      let result = check({left: 1, top: 2, bottom: 3, centerY: 4, baseline: 'other'});
+      let result = check({left: 1, top: 2, bottom: 3, centerY: 4, baseline: 'Other'});
 
-      expect(result).to.eql({left: 1, baseline: 'other'});
+      expect(result).to.deep.equal(LayoutData.from({left: 1, baseline: 'Other'}));
     });
 
   });
@@ -94,7 +97,10 @@ describe('Layout', function() {
       }
     }
 
-    let resolve = Layout.resolveReferences;
+    function resolve(layoutData, targetWidget) {
+      return Layout.resolveReferences(LayoutData.from(layoutData), targetWidget);
+    }
+
     let parent, widget, other;
 
     beforeEach(function() {
@@ -105,24 +111,24 @@ describe('Layout', function() {
     });
 
     it('translates widget to ids', function() {
-      let input = {centerY: other, left: [other, 42]};
-      let expected = {centerY: other.cid, left: [other.cid, 42]};
+      let input = {right: other, left: [other, 42]};
+      let expected = {right: [other.cid, 0], left: [other.cid, 42]};
 
-      expect(resolve(input, widget)).to.eql(expected);
+      expect(resolve(input, widget)).to.deep.equal(expected);
     });
 
     it('translates selectors to ids', function() {
       let input = {baseline: '#other', left: ['#other', 42]};
       let expected = {baseline: other.cid, left: [other.cid, 42]};
 
-      expect(resolve(input, widget)).to.eql(expected);
+      expect(resolve(input, widget)).to.deep.equal(expected);
     });
 
     it("translates 'prev()' selector to id", function() {
       let input = {baseline: 'prev()', left: ['prev()', 42]};
       let expected = {baseline: widget.cid, left: [widget.cid, 42]};
 
-      expect(resolve(input, other)).to.eql(expected);
+      expect(resolve(input, other)).to.deep.equal(expected);
     });
 
     it("translates 'prev()' when parent children() is overwritten", function() {
@@ -130,21 +136,21 @@ describe('Layout', function() {
       let input = {baseline: 'prev()', left: ['prev()', 42]};
       let expected = {baseline: widget.cid, left: [widget.cid, 42]};
 
-      expect(resolve(input, other)).to.eql(expected);
+      expect(resolve(input, other)).to.deep.equal(expected);
     });
 
     it("translates 'prev()' selector to 0 on first widget", function() {
       let input = {baseline: 'prev()', left: ['prev()', 42]};
       let expected = {baseline: 0, left: [0, 42]};
 
-      expect(resolve(input, widget)).to.eql(expected);
+      expect(resolve(input, widget)).to.deep.equal(expected);
     });
 
     it("translates 'next()' selector to id", function() {
       let input = {baseline: 'next()', left: ['next()', 42]};
       let expected = {baseline: other.cid, left: [other.cid, 42]};
 
-      expect(resolve(input, widget)).to.eql(expected);
+      expect(resolve(input, widget)).to.deep.equal(expected);
     });
 
     it("translates 'next()' selector to id when parent children() is overwritten", function() {
@@ -152,29 +158,19 @@ describe('Layout', function() {
       let input = {baseline: 'next()', left: ['next()', 42]};
       let expected = {baseline: other.cid, left: [other.cid, 42]};
 
-      expect(resolve(input, widget)).to.eql(expected);
+      expect(resolve(input, widget)).to.deep.equal(expected);
     });
 
     it("translates 'next()' selector to 0 on last widget", function() {
       let input = {baseline: 'next()', left: ['next()', 42]};
       let expected = {baseline: 0, left: [0, 42]};
 
-      expect(resolve(input, other)).to.eql(expected);
+      expect(resolve(input, other)).to.deep.equal(expected);
     });
 
     it('does not modify numbers', function() {
-      let input = {centerX: 23, left: [30, 42]};
+      let input = {centerX: 23, left: ['30%', 42]};
       let expected = {centerX: 23, left: [30, 42]};
-
-      expect(resolve(input, widget)).to.deep.equal(expected);
-    });
-
-    it('treats ambiguous string as selector', function() {
-      let freak1 = new TestWidget({class: 'foo%'}).appendTo(parent);
-      let freak2 = new TestWidget({id: '23%'}).appendTo(parent);
-
-      let input = {left: ['.foo%', 23], top: ['#23%', 42], right: ['Foo%', 47]};
-      let expected = {left: [freak1.cid, 23], top: [freak2.cid, 42], right: [0, 47]};
 
       expect(resolve(input, widget)).to.deep.equal(expected);
     });
