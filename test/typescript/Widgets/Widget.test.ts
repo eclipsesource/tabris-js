@@ -1,57 +1,57 @@
 import {Widget,
- ColorValue,
- Margin,
- Bounds,
- Offset,
- Dimension,
- LayoutData,
- Transformation,
- AnimationOptions,
- Selector,
- WidgetCollection,
- Composite,
- EventObject,
- WidgetResizeEvent,
- WidgetSwipeEvent,
- WidgetTouchEvent,
- WidgetTapEvent,
- WidgetLongpressEvent,
- WidgetPanEvent,
- PropertyChangedEvent,
- Properties,
- ImageValue
-} from 'tabris';
+  ColorValue,
+  ConstraintValue,
+  Bounds,
+  Offset,
+  Dimension,
+  Transformation,
+  AnimationOptions,
+  Selector,
+  WidgetCollection,
+  Composite,
+  EventObject,
+  WidgetResizeEvent,
+  WidgetSwipeEvent,
+  WidgetTouchEvent,
+  WidgetTapEvent,
+  WidgetLongpressEvent,
+  WidgetPanEvent,
+  PropertyChangedEvent,
+  Properties,
+  ImageValue,
+  SiblingReferenceValue,
+  LayoutDataValue
+ } from 'tabris';
 
-let widget: Widget = new Composite();
+ let widget: Widget = new Composite();
 
 // Properties
 let background: ColorValue;
 let backgroundImage: ImageValue;
-let baseline: Widget | Selector;
-let bottomMargin: Margin;
+let baseline: SiblingReferenceValue|'auto';
+let bottomMargin: ConstraintValue|'auto';
 let bounds: Bounds;
-let centerX: Offset;
-let centerY: Offset;
+let centerX: Offset|'auto';
+let centerY: Offset|'auto';
 let _class: string;
 let classList: string[];
 let cornerRadius: number;
 let elevation: number;
 let enabled: boolean;
-let height: Dimension;
+let height: Dimension|'auto';
 let highlightOnTouch: boolean;
 let id: string;
-let layoutData: LayoutData;
-let leftMargin: Margin;
+let layoutData: LayoutDataValue;
+let leftMargin: ConstraintValue;
 let opacity: number;
-let rightMargin: Margin;
-let topMargin: Margin;
+let rightMargin: ConstraintValue;
+let topMargin: ConstraintValue;
 let transform: Transformation;
 let visible: boolean;
-let width: Dimension;
+let width: Dimension|'auto';
 let data: object;
 let leftOffset: number = 0;
 let topOffset: number  = 0;
-
 background = widget.background;
 backgroundImage = widget.backgroundImage;
 baseline = widget.baseline;
@@ -76,7 +76,6 @@ transform = widget.transform;
 visible = widget.visible;
 width = widget.width;
 data = widget.data;
-
 widget.background = background;
 widget.backgroundImage = backgroundImage;
 widget.baseline = baseline;
@@ -100,7 +99,6 @@ widget.top = topMargin;
 widget.transform = transform;
 widget.visible = visible;
 widget.width = width;
-
 let properties: Properties<Widget> = {
   background,
   backgroundImage,
@@ -126,7 +124,6 @@ let properties: Properties<Widget> = {
   width
 };
 widget.set(properties);
-
 // Methods
 class Foo extends Composite {}
 let fooCollection: WidgetCollection<Widget>;
@@ -141,7 +138,6 @@ let thisReturnValue: Widget;
 let voidReturnValue: void;
 let bool: boolean;
 let composite: Composite;
-
 promise = widget.animate(animationProperties, options);
 thisReturnValue = widget.appendTo(parent);
 thisReturnValue = widget.detach();
@@ -153,7 +149,6 @@ composite = widget.parent();
 widgetCollection = widget.siblings();
 widgetCollection = widget.siblings(selector);
 fooCollection = widget.siblings(Foo);
-
 // Events
 let target: Widget = widget;
 let timeStamp: number = 0;
@@ -165,9 +160,8 @@ let translationX: number = 0;
 let translationY: number = 0;
 let velocityX: number = 0;
 let velocityY: number = 0;
-
 let disposeEvent: EventObject<Widget> = {target, timeStamp, type};
-let resizeEvent: WidgetResizeEvent = {target, timeStamp, type, height, left: leftOffset, top: topOffset, width};
+let resizeEvent: WidgetResizeEvent = {target, timeStamp, type, height: 0, left: leftOffset, top: topOffset, width: 0};
 let swipeDownEvent: WidgetSwipeEvent = {target, timeStamp, type, touches};
 let swipeLeftEvent: WidgetSwipeEvent = {target, timeStamp, type, touches};
 let swipeRightEvent: WidgetSwipeEvent = {target, timeStamp, type, touches};
@@ -199,8 +193,6 @@ let panUpEvent: WidgetPanEvent = {
 let panVerticalEvent: WidgetPanEvent = {
   target, timeStamp, type, state, touches, translationX, translationY, velocityX, velocityY
 };
-
-
 widget
   .onDispose((event: EventObject<Widget>) => {})
   .onResize((event: WidgetResizeEvent) => {})
@@ -223,5 +215,4 @@ widget
   .onPanRight((event: WidgetPanEvent) => {})
   .onPanUp((event: WidgetPanEvent) => {})
   .onPanVertical((event: WidgetPanEvent) => {});
-
 widget.set({noKnownProperty: 12});

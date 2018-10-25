@@ -1,9 +1,7 @@
 import {
-  Image,
   ColorValue,
   FontValue,
   ImageValue,
-  LayoutData,
   Widget,
   Composite,
   Button,
@@ -13,9 +11,10 @@ import {
   SelectorFunction,
   Dimension,
   Offset,
-  Margin,
+  ConstraintValue,
   AnimationOptions,
-  WidgetCollection
+  WidgetCollection,
+  SiblingReferenceValue
 } from 'tabris';
 
 let stringType: string = '';
@@ -24,20 +23,17 @@ let numberType: number = 42;
 let numberOrUndefinedOrAuto: number | undefined | 'auto';
 let booleanType: boolean = false;
 let booleanOrUndefined: boolean | undefined;
-let marginType: Margin = ['#foo', 23];
-marginType = [new Composite(), 23];
-marginType = [23, 23];
-marginType = 23;
-marginType = 'foo';
-marginType = new Composite();
+let constraintType: ConstraintValue|'auto' = ['#foo', 23];
+constraintType = [new Composite(), 23];
+constraintType = 23;
+constraintType = 'foo';
+constraintType = new Composite();
 let offsetType: Offset = 42;
-let offsetOrUndefined: Offset | undefined;
+let offsetOrAuto: Offset | 'auto';
 let dimensionType: Dimension = 42;
-let dimensionOrUndefined: Dimension | undefined;
+let dimensionOrAuto: Dimension | 'auto';
 let widgetOrSelector: Widget | Selector = new Button();
-let widgetOrSelectorOrUndefined: Widget | Selector | undefined;
-let widgetType: Widget = new Button();
-let widgetOrUndefined: Widget | undefined;
+let widgetOrSelectorOrAuto: SiblingReferenceValue | 'auto';
 
 // dimension
 let dimension: Dimension = numberType;
@@ -66,29 +62,6 @@ stringType = color;
 // Font
 let font: FontValue = stringType;
 stringType = font;
-
-// LayoutData
-let layoutData: LayoutData = {
-    left: marginType,
-    right: marginType,
-    top: marginType,
-    bottom: marginType,
-    centerX: offsetType,
-    centerY: offsetType,
-    baseline: widgetOrSelector,
-    width: dimensionType,
-    height: dimensionType
-};
-layoutData = {};
-marginType = layoutData.left;
-marginType = layoutData.right;
-marginType = layoutData.top;
-marginType = layoutData.bottom;
-offsetOrUndefined = layoutData.centerX;
-offsetOrUndefined = layoutData.centerY;
-widgetOrSelectorOrUndefined = layoutData.baseline;
-dimensionOrUndefined = layoutData.width;
-dimensionOrUndefined = layoutData.height;
 
 // Bounds
 let bounds: Bounds = {

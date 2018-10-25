@@ -1,0 +1,103 @@
+{
+  "type": "LayoutData",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "parameters",
+        "type": "LayoutDataProperties",
+        "description": "An object containing some or all `LayoutData` properties. Constraints have to be instances of the Constraint class. Any omitted property defaults to 'auto'."
+      }
+    ]
+  },
+  "description": "Provides layout information for a widget to be used by the parent widget when determining its size and position. See also [LayoutDataValue](./types.md#layoutDataValue)",
+  "properties": {
+    "left": {
+      "type": "Constraint | 'auto'",
+      "description": "The position of the widget's left edge relative to the parent or a sibling widget.",
+      "const": true,
+      "default": "'auto'"
+    },
+    "top": {
+      "type": "Constraint | 'auto'",
+      "description": "The position of the widget's top edge relative to the parent or a sibling widget.",
+      "const": true,
+      "default": "'auto'"
+    },
+    "right": {
+      "type": "Constraint | 'auto'",
+      "description": "The position of the widget's right edge relative to the parent or a sibling widget.",
+      "const": true,
+      "default": "'auto'"
+    },
+    "bottom": {
+      "type": "Constraint | 'auto'",
+      "description": "The position of the widget's bottom edge relative to the parent or a sibling widget.",
+      "const": true,
+      "default": "'auto'"
+    },
+    "width": {
+      "type": "Dimension | 'auto'",
+      "description": "The width of the widget.",
+      "const": true,
+      "default": "'auto'"
+    },
+    "height": {
+      "type": "Dimension | 'auto'",
+      "description": "The height of the widget.",
+      "const": true,
+      "default": "'auto'"
+    },
+    "centerX": {
+      "type": "Offset | 'auto'",
+      "description": "The horizontal position of the widget's center relative to the parent's center.",
+      "const": true,
+      "default": "'auto'"
+    },
+    "centerY": {
+      "type": "Offset | 'auto'",
+      "description": "The vertical position of the widget's center relative to the parent's center.",
+      "const": true,
+      "default": "'auto'"
+    },
+    "baseline": {
+      "type": "SiblingReference | 'auto'",
+      "description": "The vertical position of the widget's baseline relative to a sibling widget.",
+      "const": true,
+      "default": "'auto'"
+    }
+  },
+  "methods": {
+    "toString": {
+      "description": "Returns a string representation of LayoutData.",
+      "returns": "string"
+    }
+  },
+  "statics": {
+    "methods": {
+      "from": {
+        "parameters": [
+          {
+            "name": "layoutDataValue",
+            "description": "The value to create",
+            "type": "LayoutDataValue"
+          }
+        ],
+        "description": "Creates a new instance of LayoutData using any valid layoutData expression. For any other value, including `null`, the method throws.",
+        "returns": "LayoutData"
+      }
+    },
+    "properties": {
+      "next": {
+        "readonly": true,
+        "type": "typeof Constraint.next",
+        "description": "A [SiblingReference](./types.md#SiblingReference) indicating the next widget in the list of children attached to the same parent. Used by the [`baseline`](#baseline) property. An alias of `Constraint.next`."
+      },
+      "prev": {
+        "readonly": true,
+        "type": "typeof Constraint.prev",
+        "description": "A [SiblingReference](./types.md#SiblingReference) indicating the previous widget in the list of children attached to the same parent. Used by the [`baseline`](#baseline) property. An alias of `Constraint.next`."
+      }
+    }
+  }
+}

@@ -1,20 +1,3 @@
-/**
- * Distance to a parent's or sibling's opposing edge in one of these formats:
- * - **offset** the distance from the parent's opposing edge in device independent pixels
- * - **percentage** the distance from the parent's opposing edge in percent of the parent's width
- * - **Widget** attach this edge to the given siblings's opposing edge
- * - **"selector"**
- * - **"prev()"** Same as above, but as space-separated string list instead of array
- * - **"selector offset"**
- * - **"prev() offset"**
- * - **[Widget, offset]** the distance from the given widget's opposing edge in pixel
- * - **"Widget, offset"**Same as above, but as space-separated string list instead of array.
- * - **[percentage, offset]** the distance from the parent's opposing edge in percent of the parent's width plus a fixed offset in pixels
- * - **"percentage offset"** Same as above, but as space-separated string list instead of array
- * - **[selector, offset]**
- * - **["prev()", offset]**
- */
-type Margin = [string | Widget | number, Widget | number] | string | number | Widget | undefined;
 
 /**
  * Represents pixel data of a `Canvas` widget.
@@ -130,21 +113,33 @@ type PercentLikeObject = {percent: number};
  *
  */
 
-type PercentValue = string|PercentLikeObject|null;
+type PercentValue = string|PercentLikeObject;
 
 /**
  * Defines how the widget should be arranged. When setting the layout of a widget using **LayoutData**, all currently set layout attributes not in the new LayoutData object will be implicitly reset to null (i.e. "not specified").
  */
-interface LayoutData {
-    left?: Margin;
-    right?: Margin;
-    top?: Margin;
-    bottom?: Margin;
-    centerX?: Offset;
-    centerY?: Offset;
-    baseline?: Widget | Selector;
-    width?: Dimension;
-    height?: Dimension;
+interface LayoutDataValue {
+    left?: 'auto'|ConstraintValue;
+    right?: 'auto'|ConstraintValue;
+    top?: 'auto'|ConstraintValue;
+    bottom?: 'auto'|ConstraintValue;
+    centerX?: 'auto'|Offset;
+    centerY?: 'auto'|Offset;
+    baseline?: 'auto'|SiblingReferenceValue;
+    width?: 'auto'|Dimension;
+    height?: 'auto'|Dimension;
+}
+
+interface LayoutDataProperties {
+    left?: 'auto'|Constraint;
+    right?: 'auto'|Constraint;
+    top?: 'auto'|Constraint;
+    bottom?: 'auto'|Constraint;
+    centerX?: 'auto'|Offset;
+    centerY?: 'auto'|Offset;
+    baseline?: 'auto'|SiblingReference;
+    width?: 'auto'|Dimension;
+    height?: 'auto'|Dimension;
 }
 
 /**
@@ -208,10 +203,12 @@ interface Transformation {
 
 }
 
+type SelectorString = string;
+
 /**
  * An expression or a predicate function to select a set of widgets.
  */
-type Selector<T extends Widget = Widget> = string | SelectorFunction<T>;
+type Selector<T extends Widget = Widget> = SelectorString | SelectorFunction<T>;
 type SelectorFunction<T extends Widget> = (widget: T, index: number, collection: WidgetCollection<T>) => boolean;
 
 /**
@@ -222,6 +219,48 @@ type Dimension = number;
  * A positive or negative float, or 0, representing device independent pixels.
  */
 type Offset = number;
+
+type PrevString = 'prev()';
+type NextString = 'next()';
+
+type SiblingReference = Widget | typeof LayoutData.next | typeof LayoutData.prev | SelectorString;
+
+type SiblingReferenceValue = Widget | typeof LayoutData.next | typeof LayoutData.prev | SelectorString;
+
+type ConstraintArray = [SiblingReferenceValue | PercentValue, Offset];
+
+type ConstraintArrayValue = [SiblingReference | PercentValue, Offset];
+
+type ConstraintLikeObject = {
+  reference: SiblingReferenceValue | PercentValue;
+  offset?: Offset;
+}|{
+  reference?: SiblingReferenceValue | PercentValue;
+  offset: Offset;
+};
+
+/**
+ * Distance to a parent's or sibling's opposing edge in one of these formats:
+ * - **offset** the distance from the parent's opposing edge in device independent pixels
+ * - **percentage** the distance from the parent's opposing edge in percent of the parent's width
+ * - **Widget** attach this edge to the given siblings's opposing edge
+ * - **"selector"**
+ * - **"prev()"** Same as above, but as space-separated string list instead of array
+ * - **"selector offset"**
+ * - **"prev() offset"**
+ * - **[Widget, offset]** the distance from the given widget's opposing edge in pixel
+ * - **"Widget, offset"**Same as above, but as space-separated string list instead of array.
+ * - **[percentage, offset]** the distance from the parent's opposing edge in percent of the parent's width plus a fixed offset in pixels
+ * - **"percentage offset"** Same as above, but as space-separated string list instead of array
+ * - **[selector, offset]**
+ * - **["prev()", offset]**
+ */
+type ConstraintValue = Constraint
+  | ConstraintArrayValue
+  | ConstraintLikeObject
+  | Offset
+  | PercentValue
+  | SiblingReferenceValue;
 
 interface AnimationOptions {
 

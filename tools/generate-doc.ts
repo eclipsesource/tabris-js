@@ -9,7 +9,18 @@ type NamedEvents = Array<schema.Event & {name: string}>;
 const SNIPPETS_LOCATION = 'snippets';
 const MSG_PROVISIONAL = '**Note:** this API is provisional and may change in a future release.';
 const LANG_TYPE_LINKS: TypeLinks = {
-  Object: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object'
+  Object: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object',
+  object: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object',
+  string: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type',
+  'string[]': 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type',
+  boolean: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type',
+  number: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type',
+  'number[]': 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type',
+  null: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Null_type',
+  undefined: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Undefined_type',
+  any: 'https://www.typescriptlang.org/docs/handbook/basic-types.html#any',
+  void: 'https://www.typescriptlang.org/docs/handbook/basic-types.html#void',
+  this: '#'
 };
 
 exports.generateDoc = function generateDoc({files, targetPath, version}) {
@@ -48,7 +59,7 @@ class DocumentationGenerator {
   private readPropertyTypes() {
     const typesFile = join(this.targetPath, 'types.md');
     const path = relative(join(this.targetPath, 'api'), typesFile).replace(sep, '/');
-    const list = fs.readFileSync(typesFile, 'utf-8').match(/^## *(.*)$/gm).map(heading => heading.slice(3));
+    const list = fs.readFileSync(typesFile, 'utf-8').match(/^### *(.*)$/gm).map(heading => heading.slice(4));
     for (let type of list) {
       this.addTypeLink(type, `${path}#${type.toLowerCase()}`);
     }
@@ -224,8 +235,9 @@ class DocumentRenderer {
     const jsx = (this.def.isWidget || this.def.extends === 'Popup' )
       && this.def.constructor.access === 'public';
     const result = [];
-    result.push('* JSX support:\n');
+    result.push('* JSX support:');
     if (jsx) {
+      result.push('\n');
       const contentProps =
         Object.keys(this.def.properties || {}).filter(prop => this.def.properties[prop].jsxContentProperty);
       result.push('  * Element: `<', this.def.type, '/>`\n');
@@ -258,6 +270,8 @@ class DocumentRenderer {
         }
       });
       result.push('  * Text content: ', textContent || '*Not supported*', '\n');
+    } else {
+      result.push(' *No*\n');
     }
     return result.join('');
   }
@@ -422,7 +436,7 @@ class DocumentRenderer {
   private renderPropertySummary(property: schema.Property, name: string) {
     let result = ['* Type: '];
     if (property.values) { // TODO: remove in favor of using only union types
-      result.push(property.values.map(v => literal(v, property.type)).join('|'));
+      result.push(property.values.map(v => literal(v, property.type)).join(' | '));
     } else {
       result.push(this.renderTypeLink(property.type));
     }
@@ -442,6 +456,7 @@ class DocumentRenderer {
       result.push('* JSX Content Type: `', property.jsxType || property.type, '`\n');
     }
     if (!property.default && !property.readonly) {
+      // TODO: how to handle non-primitives?
       console.warn('No default value for ' + this.title + ' property ' + name);
     }
     return result.join('');
@@ -504,7 +519,7 @@ class DocumentRenderer {
 
   private renderEventParamList(parameters: {[name: string]: schema.Property}) {
     // TODO: create event objects overview article to link here instead
-    return 'parameter|type|description\n-|-|-\n' + Object.keys(parameters).sort().map(key => {
+    return 'Parameter|Type|Description\n-|-|-\n' + Object.keys(parameters).sort().map(key => {
       const param = parameters[key];
       let type = 'any';
       if (param.type) {
@@ -515,12 +530,12 @@ class DocumentRenderer {
       if (!param.description) {
         console.warn('No description for event parameter ' + key + ' in ' + this.title);
       }
-      return [key, type, param.description || ''].join('|');
+      return [key, type, param.description || ''].join(' | ');
     }).join('\n') + '\n\n';
   }
 
   private renderMethodParamList(parameters: schema.Parameter[], hasContext: boolean) {
-    return 'parameter|type|optional|description\n-|-|-|-\n' + parameters.map(param => {
+    return 'Parameter|Type|Optional|Description\n-|-|-|-\n' + parameters.map(param => {
       let type = 'any';
       if (param.type) {
         type = this.renderTypeLink(this.decodeType(param.type, hasContext));
@@ -530,7 +545,7 @@ class DocumentRenderer {
       if (!param.description) {
         console.warn('No description for parameter ' + param.name + ' in ' + this.title);
       }
-      return [param.name, type, param.optional ? 'Yes' : 'No', param.description || ''].join('|');
+      return [param.name, type, param.optional ? 'Yes' : 'No', param.description || ''].join(' | ');
     }).join('\n');
   }
 
@@ -548,8 +563,14 @@ class DocumentRenderer {
 
   private renderTypeLink(type: string): string {
     return '<span style="white-space:nowrap;">' + type.split('|')
-      .map(name => this.typeLinks[name] ? `[\`${name}\`](${this.typeLinks[name]})` : '`' + name + '`')
-      .join('\\|') + '</span>';
+      .map(name => name.trim())
+      .map(name => {
+        if (!this.typeLinks[name] && name[0] !== '\'' && name[0] !== '[' && name[0] !== '{') {
+          console.warn('No type link for ' + name);
+        }
+        return this.typeLinks[name] ? `[\`${name}\`](${this.typeLinks[name]})` : '`' + name + '`';
+      })
+      .join(' \\| ') + '</span>';
   }
 
   private renderJSXLink(name: string) {

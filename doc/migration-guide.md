@@ -91,9 +91,22 @@ It is no longer necessary to create a property `tsProperties` on classes inherit
 
 The helper type `Partial<T, U>` was removed to avoid confusion with the `Partial` type built in to newer TypeScript versions. It can be replaced with `Partial<Pick<T, U>>`.
 
-### types "margin", "dimension" and "offset"
+### types "dimension" and "offset"
 
-These types have been renamed to start with an upper case.
+Types "dimension" and "offset" have been renamed to start with an upper case.
+Type "margin" has been replaced with "ConstraintValue", which includes the former "margin" type.
+
+### LayoutData and related properties
+
+The `layoutData` property is now of the type `LayoutDataValue`. The values that were accepted in 2.x are still accepted, with one exception: It was previously possible to give a percentage as a number type within a `margin` (now `ConstraintValue`) type array, i.e. `[number, number]`. However, this was an undocumented feature, as the documentation stated:
+
+> "All **percentages** are provided as strings with a percent suffix, e.g. `"50%"`."
+
+All percentages are now of the `PercentValue` type, i.e. a string like `"50%"`, an instance of the `Percent` class, or a `Percent`-like object, e.g. `{percent: 50}`.
+
+The return value of the `layoutData` property is now always an instance of the `LayoutData` class instead of a plain object.
+
+The shorthand properties to `layoutData` now also return the normalized types used in the `LayoutData` class, i.e. an instance of `Constraint` (for `left`, `right`, `top` and `bottom`) or `SiblingReference` (for `baseline`), a number (for `width`, `height`, `centerX` and `centerY`), or `"auto"` (the default for all of these).
 
 ### Event handling
 

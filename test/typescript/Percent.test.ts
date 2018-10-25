@@ -3,7 +3,6 @@ import {Percent, PercentValue} from 'tabris';
 let percentValue: PercentValue = new Percent(0);
 percentValue = '5%';
 percentValue = {percent: 5};
-percentValue = null;
 
 let percent: Percent = new Percent(5);
 percent = Percent.from('foo');

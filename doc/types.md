@@ -1,73 +1,261 @@
 ---
 ---
-Property Types
-==============
+Data Types
+==========
 
-## AnimationOptions
-
-Options of the [`animate()`](api/Widget.md#animateproperties-options) method. They have following properties:
-
-- **delay**: *number*, default: `0`
-Time until the animation starts in ms.
-- **duration**: *number*
-Animation duration in ms.
-- **easing**: *string*
-One of `linear`, `ease-in`, `ease-out`, `ease-in-out`.
-- **repeat**: *number*, default: `0`
-Number of times to repeat the animation.
-- **reverse**: *boolean*
-`true` to alternate the direction of the animation on every repeat.
-- **name**: *string*
-No effect, but will be given in animation events.
-
-## Bounds
-
-Widget bounds are represented as an object with the following properties:
-
-* **left**: *number*
-The horizontal offset from the parent's left edge in dip
-* **top**: *number*
-The vertical offset from the parent's top edge in dip
-* **width**: *number*
-The width of the widget in dip
-* **height**: *number*
-The height of the widget in dip
-
-Example:
-```js
-let buttonWidth = button.bounds.width;
-```
+## Layout API
 
 See also [Layout](layout.md).
 
-## BoxDimensions
+### Bounds
 
-Dimensions to be applied on all four sides of a widget, as used for padding.
+* JavaScript Type: `Object`
+* TypeScript Type: `tabris.Bounds`
+* JSX support: *No*
+* Used by: [`widget.bounds`](./api/Widget.md#bounds), [`widget.onResize`](./api/Widget.md#resize)
 
-* **left**: *number*
-The offset from the left edge in dip
-* **right**: *number*
-The offset from the right edge in dip
-* **top**: *number*
-The offset from the top edge in dip
-* **bottom**: *number*
-The offset from the bottom edge in dip
+Property | Type     | Optional | Description
+---------|----------|----------|--------------------------------------------------
+left     | `number` |  No      | The horizontal offset from the parent's left edge
+top      | `number` |  No      | The vertical offset from the parent's top edge
+width    | `number` |  No      | The width of the widget
+height   | `number` |  No      | The height of the widget
+
+The bounds of a rectangle in relation to the top-left corner of a containing element in device-independent pixel (DIP).
 
 Example:
+
+```js
+const buttonRight = button.bounds.left + button.bounds.width;
+```
+
+### BoxDimensions
+
+* JavaScript Type: `Object`
+* TypeScript Type: `tabris.BoxDimensions`
+* JSX support: *No*
+* Used by: [`composite.padding`](./api/Composite.md#padding)
+
+Property | Type                      | Optional | Description
+---------|---------------------------|----------|--------------------------------------------------
+left     | [`Dimension`](#Dimension) |  No      | The offset from the left edge
+right    | [`Dimension`](#Dimension) |  No      | The vertical offset from the parent's top edge
+top      | [`Dimension`](#Dimension) |  No      | The width of the widget
+bottom   | [`Dimension`](#Dimension) |  No      | The height of the widget
+
+The bounds of a rectangle in relation to the four edges of a containing element in device-independent pixel (DIP).
+
+Example:
+
 ```js
 composite.padding = {left: 8, right: 8, top: 0, bottom: 0};
 ```
 
-## PropertyChangedEvent
+### ConstraintValue
 
-An event fired when an object property changes. It has following properties:
+* JavaScript Type: `tabris.Constraint`, `tabris.Widget`, `tabris.Percent`, `Symbol`, `Array`, `Object`, `string` or `number`
+* TypeScript Type: `tabris.ConstraintValue`
+* JSX support: *No*
+* Used by:
+  * [`layoutDataValue.left`](#LayoutDataValue), [`layoutDataValue.top`](#LayoutDataValue), [`layoutDataValue.right`](#LayoutDataValue), [`layoutDataValue.bottom`](#LayoutDataValue)
+  * [`widget.left`](./api/Widget.md#left), [`widget.top`](./api/Widget.md#top), [`widget.right`](./api/Widget.md#right), [`widget.bottom`](./api/Widget.md#bottom)
+  * [`Constraint.from`](./api/Constraint.md#from)
 
-- **target**: *Widget*
-The widget the event was fired on.
-- **value**: *any*
-The new value of the changed property.
+A `ConstraintValue` represents a constraint on the layout of a widget that the parent uses to determine the position of one of its edges. This type allows various expressions that can all be used in place of a [`Constraint`](./api/Constraint.md) instance for convenience. All API that accept these expressions will convert them to a `Constraint` object.
 
-## ColorValue
+Every expression of `ConstraintValue` consists of a [`reference`](./api/Constraint.md#reference) value and/or an [`offset`](./api/Constraint.md#offset) value. The following are all valid `ConstraintValue` types:
+
+#### Offset-only constraints
+
+Simply the [`Offset`](#offset) number by itself, a positive float including zero.
+
+Examples:
+
+```js
+widget.left = 12.5;
+widget.right = 8;
+widget.top = 0;
+widget.bottom = 0;
+```
+
+#### Reference-only constraints
+
+Either a [`PercentValue`](#PercentValue) or a [`SiblingReferenceValue`](#SiblingReferenceValue).
+
+Examples:
+
+```js
+widget.left = '12%';
+widget.right = {percent: 50};
+widget.top = new Percent(50);
+widget.bottom = '0%';
+```
+
+#### Constraint instance
+
+An instance of the [`Constraint`](./api/Constraint.md) class naturally is also a valid `ConstraintValue`. It may be created via its [constructor](./api/Constraint.md#constructor) or the less strict [`Constraint.from`](./api/Constraint.md#from) factory.
+
+#### ConstraintLikeObject
+
+A plain object in the format of `{reference, offset}`, where `reference` is either a [`PercentValue`](#PercentValue) or a [`SiblingReferenceValue`](#SiblingReferenceValue), and offset is an [`Offset`](#offset), i.e. a `number`. Either of the two entries may be omitted, but not both.
+
+Examples:
+
+```js
+widget.left = {reference: sibling, offset: 12};
+widget.right = {reference: '23%', offset: 12};
+widget.top = {reference: Constraint.prev};
+widget.bottom = {offset: 12};
+```
+
+#### ConstraintArrayValue
+
+A tuple in the format of `[reference, offset]`, where `reference` is either a [`PercentValue`](#PercentValue) or a [`SiblingReferenceValue`](#SiblingReferenceValue), and offset is an [`Offset`](#offset), i.e. a `number`.
+
+Examples:
+
+```js
+widget.left = [sibling, 0];
+widget.right = ['#foo', 0];
+widget.top = [{percent: 23}, 12];
+widget.bottom = [Constraint.prev, 12];
+```
+
+#### Constraint String
+
+This is often the most compact way to express a constraint, but it may not be the preferred way in TypeScript projects if type safety is a priority. The string consists of a space separated list of two values in the pattern of `'reference offset'`. The reference part may be of any string as accepted by [`SiblingReferenceValue`](#SiblingReferenceValue) or [`PercentValue`](#PercentValue). The offset has to be a positive (including zero) float, just like [`Offset`](#offset).
+
+Examples:
+
+```js
+widget.left = '.bar 0';
+widget.right = '#foo 0'
+widget.top = '23% 12';
+widget.bottom = 'prev() 12';
+```
+
+### Dimension
+
+* JavaScript Type: `number`
+* TypeScript Type: `tabris.Dimension`, an alias for `number`
+* JSX support: *No*
+
+A positive float, or 0, representing device independent pixels (DIP).
+
+### LayoutDataValue
+
+* JavaScript Type: `tabris.LayoutData`, `Object`
+* TypeScript Type: `tabris.LayoutDataValue`
+* JSX support: *No*
+* Used by: [`widget.layoutData`](./api/Widget.md#layoutData), [`LayoutData.from`](./api/LayoutData.md#from)
+
+A `LayoutDataValue` provides layout information for a widget to be used its parent when determining its size and position. It allows various expressions that can all be used in place of a [`LayoutData`](./api/LayoutData.md) instance for convenience. All API that accepts these expressions will convert them to a `LayoutData` object.
+
+The following are all valid `LayoutDataValue` types:
+
+#### LayoutData instance
+
+An instance of the [`LayoutData`](./api/LayoutData.md) class naturally is also a valid `LayoutDataValue`. It may be created via its [constructor](./api/LayoutData.md#constructor) or the less strict [`LayoutData.from`](./api/LayoutData.md#from) factory.
+
+#### LayoutDataLikeObject
+
+A plain object containing properties for some or all properties present on the [`LayoutData`](./api/LayoutData.md) class type. Unlike [`LayoutData`](./api/LayoutData.md) all properties are optional and less strict. For example `left`, `top`, `right` and `bottom` accept [`ConstraintValue`](#ConstraintValue) (e.g. a `number`) in place of a [`Constraint`](./api/Constraint.md) instance.
+
+Property  | Type                                                          | Optional | Default   | Description
+----------|---------------------------------------------------------------|----------|-----------|--------------------------------------------------------
+left      | [`ConstraintValue`](#ConstraintValue) \| `'auto'`             |  Yes     | `'auto'`  | See [layoutData.left](./api/LayoutData.md#left)
+top       | [`ConstraintValue`](#ConstraintValue) \| `'auto'`             |  Yes     | `'auto'`  | See [layoutData.top](./api/LayoutData.md#top)
+right     | [`ConstraintValue`](#ConstraintValue) \| `'auto'`             |  Yes     | `'auto'`  | See [layoutData.right](./api/LayoutData.md#right)
+bottom    | [`ConstraintValue`](#ConstraintValue) \| `'auto'`             |  Yes     | `'auto'`  | See [layoutData.bottom](./api/LayoutData.md#bottom)
+width     | [`Dimension`](#Dimension) \| `'auto'`                         |  Yes     | `'auto'`  | See [layoutData.width](./api/LayoutData.md#width)
+heigh     | [`Dimension`](#Dimension) \| `'auto'`                         |  Yes     | `'auto'`  | See [layoutData.heigh](./api/LayoutData.md#heigh)
+centerX   | [`Offset`](#Offset) \| `'auto'`                               |  Yes     | `'auto'`  | See [layoutData.centerX](./api/LayoutData.md#centerX)
+centerY   | [`Offset`](#Offset) \| `'auto'`                               |  Yes     | `'auto'`  | See [layoutData.centerY](./api/LayoutData.md#centerY)
+baseline  | [`SiblingReferenceValue`](#SiblingReferenceValue) \| `'auto'` |  Yes     | `'auto'`  | See [layoutData.baseline](./api/LayoutData.md#baseline)
+
+Example:
+
+```js
+widget.layoutData = {
+    baseline: 'prev()',
+    left: 10,
+    width: 100
+}
+```
+
+### Offset
+
+* JavaScript Type: `number`
+* TypeScript Type: `tabris.Offset`, an alias for `number`
+
+A positive or negative float, or 0, representing device independent pixels (DIP).
+
+### PercentValue
+
+* JavaScript Type: `tabris.Percent`, `Object`, `string`
+* TypeScript Type: `tabris.PercentValue`
+* JSX support: *No*
+* Used by: [`ConstraintLikeObject`](#ConstraintLikeObject), [`ConstraintArrayValue`](#ConstraintArrayValue), [`Percent.from`](./api/Percent.md#from)
+
+Represents a percentage. This type includes various expressions that can all be used in place of a [`Percent`](./api/Percent.md) instance for convenience. All APIs that accept these expressions will convert them to a `Percent` object.
+
+#### Percent instance
+
+An instance of the [`Percent`](./api/Percent.md) class naturally is also a valid `PercentValue`. It may be created via its [constructor](./api/Percent.md#constructor) or the more versatile [`Percent.from`](./api/Percent.md#from) factory.
+
+#### PercentLikeObject
+
+A plain object in the format of `{percent: number}`, where `100` presents 100%.
+
+Examples:
+
+```js
+widget.left = {percent: 50};
+```
+
+#### Percent String
+
+A number followed by `%`.
+
+Example: `'50%'`
+
+### SiblingReference
+
+* JavaScript Type: `tabris.Widget`, `Symbol`, `string`
+* TypeScript Type: `tabris.SiblingReference`
+* JSX support: *No*
+* Used by: [`constraint.reference`](./api/Constraint.md#reference), [`layoutData.baseline`](./api/LayoutData.md#baseline),
+
+A `SiblingReference` indicates a single sibling of a given Widget. Differs from the type [`SiblingReferenceValue`](#SiblingReferenceValue) in that it only allows valid selectors as a string. There are three variants of `SiblingReference`:
+
+#### Sibling instance
+
+Any widget instance that has the same parent.
+
+#### Sibling Selector String
+
+A simple selector string of the format `'#Type'`, `'#id'`, `'.class'`. No child selectors. The first matching sibling is selected.
+
+#### Sibling Reference Symbol
+
+The constants [`Constraint.prev`]('./api/Constraint#prev') and [`Constraint.next`]('./api/Constraint#next') (also available as) [`LayoutData.prev`]('./api/LayoutData#prev') and [`LayoutData.next`]('./api/LayoutData#next') may be used to point to the sibling directly before/after the reference widget in the parents children list.
+
+### SiblingReferenceValue
+
+* JavaScript Type: `tabris.Widget`, `Symbol`, `string`
+* TypeScript Type: `tabris.SiblingReferenceValue`
+* JSX support: *No*
+* Used by: [`ConstraintValue`](#ConstraintValue), [`LayoutDataValue`](#LayoutDataValue)
+
+Same as [`SiblingReference`](#SiblingReference), except that it also allows the strings `'next()` and `'prev()'` in place of the [`prev`]('./api/Constraint#prev') and [`next`]('./api/Constraint#next') constants. As a result a `SiblingReferenceValue` may not be a valid selector string.
+
+The following are all valid `LayoutDataValue` types:
+
+## Styling Related Types
+
+Types related to the visual presentation of a widget.
+
+### ColorValue
 
 Colors can be specified as strings, arrays or [Color](./Color.html)/Color-like objects.
 
@@ -113,35 +301,8 @@ new Color(255, 0, 0, 200)
 "initial" // same as null
 ```
 
-## Dimension
 
-A positive float, or 0, representing device independent pixels.
-
-See also [Layout](layout.md).
-
-## Margin
-
-Distance to a parent's or sibling's opposing edge in one of these formats:
-
-* [`offset`](#offset)
-* [`percentage`](#percentage)
-* [`Widget`](api/Widget.md)
-* [`"selector"`](#selector)
-* `"prev()"`
-* `"next()"`
-* `"percentage offset"`
-* `"selector offset"`
-* `"prev() offset"`
-* `"next() offset"`
-* `[Widget, offset]`
-* `[percentage, offset]`
-* `[selector, offset]`
-* `["prev()", offset]`
-* `["next()", offset]`
-
-See also [Layout](layout.md).
-
-## FontValue
+### FontValue
 
 Fonts can be specified as strings or [Font](./Font.html)/Font-like objects.
 
@@ -166,21 +327,7 @@ new Font({size: 16, family: Font.sansSerif})
 "initial"
 ```
 
-## PercentValue
-
-Percentages can be specified as strings or [Percent](./Percent.html)/Percent-like objects.
-
-A **Percent** instance can be created with the **Percent** constructor or using **Percent.from**.
-
-A **Percent**-like object is a plain object with a *percent* property, which is a number between and including 0 and 100.
-
-Example: `{percent: 50}`
-
-A percent string contains a number between and including 0 and 100 and ends with `%`.
-
-Example: `"50%"`
-
-## ImageValue
+### ImageValue
 
 Images can be specified as strings or [Image](./Image.html)/[ImageLikeObject](#imagelikeobject).
 
@@ -201,7 +348,7 @@ new Image({src: "http://example.com/catseye.jpg", scale: 2})
 {src: "http://example.com/catseye.jpg", scale: 2}
 ```
 
-## ImageLikeObject
+### ImageLikeObject
 An plain object with following properties:
 
 * **src**: *string*
@@ -213,23 +360,48 @@ An plain object with following properties:
 * **scale**: *number | 'auto' (optional)*
     Image scale factor, the image will be scaled down by this factor. The scale will be inferred from the image file name if it follows the pattern "@\<scale\>x", e.g. `"image@2x.jpg"`. The pattern is ignored if `scale`, `width` or `height` are set to a number or if `scale` is set to `"auto"`.
 
-## LayoutData
 
-Used to define how a widget should be arranged within its parent. See ["Layouts"](layout.md).
+## Binary Types
 
-## Offset
+### ImageData
 
-A positive or negative float, or 0, representing device independent pixels.
+Represents the underlying pixel data of an area of a canvas element. It is created using the creator methods on the [CanvasContext](api/CanvasContext.md): createImageData() and getImageData(). It can also be used to set a part of the canvas by using putImageData().
+An ImageData object has the following read-only properties:
+* **data**: *Uint8ClampedArray* one-dimensional array containing the data in the RGBA order, with integer values between `0` and `255`
+* **width**: *number* width in pixels of the ImageData
+* **height**: *number* height in pixels of the ImageData
 
-See also [Layout](layout.md).
+## Selector API
 
-## Percentage
+### Selector
 
-A string starting with a number (int) followed directly by `%`. May be negative.
+Selectors are used to filter a given list of widgets. A selector can be a string, a widget constructor, or a filter function.
+* When it is a string, it may either reference a widget type (e.g. `'Button'`, `'TextView'`), its id (`'#myButton'`, `'#myTextView'`), or its class property (`'.myButtons'`). A `'*'` matches all widgets. When selectors are used with the widget methods `find` and `apply`, the `:host` selector matches the widget that the selector is used on. This is useful in combination with child selectors, which use the syntax `Selector1 > Selector2`, so for example `:host > Button`.
+* When it is a widget constructor, a widget matches if it is an instance of that class/type. This is different from giving the type as a string, as subclasses are also matched. For example, `Composite` would match also match an instance of `Tab` or `Page`.
+* When it is a filter function, the function must accept a widget as the first parameter and return a boolean to indicate a match.
 
-See also [Layout](layout.md).
+For more information, see [this article](./selector.md).
 
-## Transformation
+## Animation API
+
+### AnimationOptions
+
+Options of the [`animate()`](api/Widget.md#animateproperties-options) method. They have following properties:
+
+- **delay**: *number*, default: `0`
+Time until the animation starts in ms.
+- **duration**: *number*
+Animation duration in ms.
+- **easing**: *string*
+One of `linear`, `ease-in`, `ease-out`, `ease-in-out`.
+- **repeat**: *number*, default: `0`
+Number of times to repeat the animation.
+- **reverse**: *boolean*
+`true` to alternate the direction of the animation on every repeat.
+- **name**: *string*
+No effect, but will be given in animation events.
+
+### Transformation
 
 Transformations are specified as an object with the following properties:
 
@@ -253,19 +425,13 @@ Example:
 ```
 This transformation will make the widget twice as big and rotate it by 135&deg;.
 
-## Selector
+## Event Handling
 
-Selectors are used to filter a given list of widgets. A selector can be a string, a widget constructor, or a filter function.
-* When it is a string, it may either reference a widget type (e.g. `'Button'`, `'TextView'`), its id (`'#myButton'`, `'#myTextView'`), or its class property (`'.myButtons'`). A `'*'` matches all widgets. When selectors are used with the widget methods `find` and `apply`, the `:host` selector matches the widget that the selector is used on. This is useful in combination with child selectors, which use the syntax `Selector1 > Selector2`, so for example `:host > Button`.
-* When it is a widget constructor, a widget matches if it is an instance of that class/type. This is different from giving the type as a string, as subclasses are also matched. For example, `Composite` would match also match an instance of `Tab` or `Page`.
-* When it is a filter function, the function must accept a widget as the first parameter and return a boolean to indicate a match.
+### PropertyChangedEvent
 
-For more information, see [this article](./selector.md).
+An event fired when an object property changes. It has following properties:
 
-## ImageData
-
-Represents the underlying pixel data of an area of a canvas element. It is created using the creator methods on the [CanvasContext](api/CanvasContext.md): createImageData() and getImageData(). It can also be used to set a part of the canvas by using putImageData().
-An ImageData object has the following read-only properties:
-* **data**: *Uint8ClampedArray* one-dimensional array containing the data in the RGBA order, with integer values between `0` and `255`
-* **width**: *number* width in pixels of the ImageData
-* **height**: *number* height in pixels of the ImageData
+- **target**: *Widget*
+The widget the event was fired on.
+- **value**: *any*
+The new value of the changed property.

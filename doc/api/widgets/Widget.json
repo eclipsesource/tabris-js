@@ -144,52 +144,54 @@
       "description": "Whether the widget is visible."
     },
     "layoutData": {
-      "type": "LayoutData",
-      "description": "Shorthand for all layout properties. See [Layout](../layout.md)."
+      "type": "LayoutDataValue",
+      "description": "Provides information for a widget to be used by the parent when determining its size and position. While this property accepts any valid LayoutData expression (see [LayoutDataValue](./types.md#LayoutDataValue), it will always return an instance of the class [LayoutData](./LayoutData.md).\n\n Widget provides an alias property for each property of LayoutData. Setting these properties will change the value of the `layoutData` property, while getting them is the same as accessing them via the `layoutData` property. I.e. `widget.left === widget.layoutData.left`.",
+      "default": "LayoutData"
     },
     "left": {
-      "type": "margin",
-      "ts_type": "Margin",
-      "description": "The position of the widget's left edge relative to the parent or a sibling widget."
+      "type": "ConstraintValue",
+      "description": "The position of the widget's left edge relative to the parent or a sibling widget.",
+      "default": "'auto'"
     },
     "right": {
-      "type": "margin",
-      "ts_type": "Margin",
-      "description": "The position of the widget's right edge relative to the parent or a sibling widget."
+      "type": "ConstraintValue",
+      "description": "The position of the widget's right edge relative to the parent or a sibling widget.",
+      "default": "'auto'"
     },
     "top": {
-      "type": "margin",
-      "ts_type": "Margin",
-      "description": "The position of the widget's top edge relative to the parent or a sibling widget."
+      "type": "ConstraintValue",
+      "description": "The position of the widget's top edge relative to the parent or a sibling widget.",
+      "default": "'auto'"
     },
     "bottom": {
-      "type": "margin",
-      "ts_type": "Margin",
-      "description": "The position of the widget's bottom edge relative to the parent or a sibling widget."
+      "type": "ConstraintValue",
+      "description": "The position of the widget's bottom edge relative to the parent or a sibling widget.",
+      "default": "'auto'"
     },
     "width": {
-      "type": "dimension",
-      "ts_type": "Dimension",
-      "description": "The width of the widget."
+      "type": "Dimension | 'auto'",
+      "description": "The width of the widget.",
+      "default": "'auto'"
     },
     "height": {
-      "type": "dimension",
-      "ts_type": "Dimension",
-      "description": "The height of the widget."
+      "type": "Dimension | 'auto'",
+      "description": "The height of the widget.",
+      "default": "'auto'"
     },
     "centerX": {
-      "type": "offset",
-      "ts_type": "Offset",
-      "description": "The horizontal position of the widget's center relative to the parent's center."
+      "type": "Offset | 'auto'",
+      "description": "The horizontal position of the widget's center relative to the parent's center.",
+      "default": "'auto'"
     },
     "centerY": {
-      "type": "offset",
-      "ts_type": "Offset",
-      "description": "The vertical position of the widget's center relative to the parent's center."
+      "type": "Offset | 'auto'",
+      "description": "The vertical position of the widget's center relative to the parent's center.",
+      "default": "'auto'"
     },
     "baseline": {
-      "type": "Widget|Selector",
-      "description": "The vertical position of the widget's baseline relative to a sibling widget."
+      "type": "SiblingReferenceValue | 'auto'",
+      "description": "The vertical position of the widget's baseline relative to a sibling widget.",
+      "default": "'auto'"
     },
     "elevation": {
       "type": "number",
@@ -249,7 +251,7 @@
       "parameters": {
         "state": {
           "description": "'start' when the widget has been hold down long enough, 'end' when the finger has been lifted and 'cancel' when the gesture has been interrupted.",
-          "type": "'start'|'end'|'cancel'"
+          "type": "'start' | 'end' | 'cancel'"
         },
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
@@ -262,7 +264,7 @@
       "parameters": {
         "state": {
           "description": "'start' when the finger starts moving, 'change' while the finger is moving, 'end' when the finger has been lifted and 'cancel' when the gesture has been interrupted.",
-          "type": "'start'|'change'|'end'|'cancel'"
+          "type": "'start' | 'change' | 'end' | 'cancel'"
         },
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
@@ -292,7 +294,7 @@
       "parameters": {
         "state": {
           "description": "'start' when the finger starts moving, 'change' while the finger is moving, 'end' when the finger has been lifted and 'cancel' when the gesture has been interrupted.",
-          "type": "'start'|'change'|'end'|'cancel'"
+          "type": "'start' | 'change' | 'end' | 'cancel'"
         },
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
@@ -322,7 +324,7 @@
       "parameters": {
         "state": {
           "description": "'start' when the finger starts moving, 'change' while the finger is moving, 'end' when the finger has been lifted and 'cancel' when the gesture has been interrupted.",
-          "type": "'start'|'change'|'end'|'cancel'"
+          "type": "'start' | 'change' | 'end' | 'cancel'"
         },
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
@@ -352,7 +354,7 @@
       "parameters": {
         "state": {
           "description": "'start' when the finger starts moving, 'change' while the finger is moving, 'end' when the finger has been lifted and 'cancel' when the gesture has been interrupted.",
-          "type": "'start'|'change'|'end'|'cancel'"
+          "type": "'start' | 'change' | 'end' | 'cancel'"
         },
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
@@ -382,7 +384,7 @@
       "parameters": {
         "state": {
           "description": "'start' when the finger starts moving, 'change' while the finger is moving, 'end' when the finger has been lifted and 'cancel' when the gesture has been interrupted.",
-          "type": "'start'|'change'|'end'|'cancel'"
+          "type": "'start' | 'change' | 'end' | 'cancel'"
         },
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
@@ -412,7 +414,7 @@
       "parameters": {
         "state": {
           "description": "'start' when the finger starts moving, 'change' while the finger is moving, 'end' when the finger has been lifted and 'cancel' when the gesture has been interrupted.",
-          "type": "'start'|'change'|'end'|'cancel'"
+          "type": "'start' | 'change' | 'end' | 'cancel'"
         },
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
@@ -442,7 +444,7 @@
       "parameters": {
         "state": {
           "description": "'start' when the finger starts moving, 'change' while the finger is moving, 'end' when the finger has been lifted and 'cancel' when the gesture has been interrupted.",
-          "type": "'start'|'change'|'end'|'cancel'"
+          "type": "'start' | 'change' | 'end' | 'cancel'"
         },
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
