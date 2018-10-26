@@ -49,6 +49,6 @@ function setDate(name, value) {
     this._nativeSet(name, value.getTime());
     this._storeProperty(name, value);
   } else {
-    throw new Error('date is not of type Date');
+    throw new Error(`${name} is not of type Date`);
   }
 }
