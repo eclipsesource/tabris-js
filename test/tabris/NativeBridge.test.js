@@ -1,6 +1,6 @@
 import {expect, stub, spy, restore} from '../test';
 import NativeBridge from '../../src/tabris/NativeBridge';
-import Layout from '../../src/tabris/Layout';
+import {LayoutQueue} from '../../src/tabris/Layout';
 
 describe('NativeBridge', function() {
 
@@ -125,7 +125,7 @@ describe('NativeBridge', function() {
     });
 
     it('flushes layout queue first', function() {
-      stub(Layout, 'flushQueue').callsFake(() => bridge.set('id2', {bar: 23}));
+      stub(LayoutQueue.instance, 'flush').callsFake(() => bridge.set('id2', {bar: 23}));
 
       bridge.get('id', 'foo');
 
@@ -154,7 +154,7 @@ describe('NativeBridge', function() {
     });
 
     it('allows operation to be added in beforeFlush event', function() {
-      stub(Layout, 'flushQueue').callsFake(() => bridge.set('id2', {bar: 23}));
+      stub(LayoutQueue.instance, 'flush').callsFake(() => bridge.set('id2', {bar: 23}));
 
       bridge.call('id', 'foo', {foo: 23});
 

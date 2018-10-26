@@ -1,6 +1,6 @@
 import {expect, mockTabris, restore, spy, stub} from '../../test';
 import WidgetCollection from '../../../src/tabris/WidgetCollection';
-import Layout from '../../../src/tabris/Layout';
+import Layout, {LayoutQueue} from '../../../src/tabris/Layout';
 import ClientStub from '.././ClientStub';
 import Widget from '../../../src/tabris/Widget';
 import Composite from '../../../src/tabris/widgets/Composite';
@@ -18,6 +18,11 @@ import Constraint from '../../../src/tabris/Constraint';
 describe('Widget', function() {
 
   class TestWidget extends Composite {
+
+    constructor(props) {
+      super(Object.assign({layout: null}, props));
+    }
+
     get _nativeType() {
       return 'TestWidget';
     }
@@ -304,7 +309,9 @@ describe('Widget', function() {
         child.dispose();
 
         expect(listener).to.have.been.calledOnce;
-        expect(listener).to.have.been.calledWithMatch({target: parent, child, index: 0});
+        expect(listener.getCall(0).args[0].target).to.equal(parent);
+        expect(listener.getCall(0).args[0].child).to.equal(child);
+        expect(listener.getCall(0).args[0].index).to.equal(0);
       });
 
       it("notifies parent's `removeChild` listener with correct index", function() {
@@ -314,7 +321,9 @@ describe('Widget', function() {
 
         child.dispose();
 
-        expect(listener).to.have.been.calledWithMatch({target: parent, child, index: 1});
+        expect(listener.getCall(0).args[0].target).to.equal(parent);
+        expect(listener.getCall(0).args[0].child).to.equal(child);
+        expect(listener.getCall(0).args[0].index).to.equal(1);
       });
 
       it("notifies all children's dispose listeners", function() {
@@ -449,7 +458,9 @@ describe('Widget', function() {
 
         it('notifies `addChild` listener with arguments parent, child, event', function() {
           expect(listener).to.have.been.calledOnce;
-          expect(listener).to.have.been.calledWithMatch({target: widget, child: child1, index: 0});
+          expect(listener.getCall(0).args[0].target).to.equal(widget);
+          expect(listener.getCall(0).args[0].child).to.equal(child1);
+          expect(listener.getCall(0).args[0].index).to.equal(0);
         });
 
         it('children() returns WidgetCollection with host', function() {
@@ -717,7 +728,9 @@ describe('Widget', function() {
 
           widget.insertBefore(other);
 
-          expect(listener).to.have.been.calledWithMatch({target: parent1, child: widget, index: 0});
+          expect(listener.getCall(0).args[0].target).to.equal(parent1);
+          expect(listener.getCall(0).args[0].child).to.equal(widget);
+          expect(listener.getCall(0).args[0].index).to.equal(0);
         });
 
         it('triggers add event with index', function() {
@@ -725,7 +738,9 @@ describe('Widget', function() {
 
           widget.insertBefore(other);
 
-          expect(listener).to.have.been.calledWithMatch({target: parent2, child: widget, index: 0});
+          expect(listener.getCall(0).args[0].target).to.equal(parent2);
+          expect(listener.getCall(0).args[0].child).to.equal(widget);
+          expect(listener.getCall(0).args[0].index).to.equal(0);
         });
 
       });
@@ -826,7 +841,9 @@ describe('Widget', function() {
 
           widget.insertAfter(other);
 
-          expect(listener).to.have.been.calledWithMatch({target: parent1, child: widget, index: 0});
+          expect(listener.getCall(0).args[0].target).to.equal(parent1);
+          expect(listener.getCall(0).args[0].child).to.equal(widget);
+          expect(listener.getCall(0).args[0].index).to.equal(0);
         });
 
         it('triggers `addChild` event with index', function() {
@@ -834,7 +851,9 @@ describe('Widget', function() {
 
           widget.insertAfter(other);
 
-          expect(listener).to.have.been.calledWithMatch({target: parent2, child: widget, index: 1});
+          expect(listener.getCall(0).args[0].target).to.equal(parent2);
+          expect(listener.getCall(0).args[0].child).to.equal(widget);
+          expect(listener.getCall(0).args[0].index).to.equal(1);
         });
 
       });
@@ -1314,14 +1333,74 @@ describe('Widget', function() {
 
   });
 
+  describe('layout', function() {
+
+    class TestLayout extends Layout {
+
+      constructor() {
+        super(new LayoutQueue());
+      }
+
+    }
+
+    let parent, defaultLayout, testLayout;
+
+    beforeEach(function() {
+      defaultLayout = Layout.default();
+      testLayout = new TestLayout();
+      spy(defaultLayout, 'add');
+      spy(defaultLayout, 'remove');
+      spy(testLayout, 'add');
+      spy(testLayout, 'remove');
+      parent = new Composite();
+    });
+
+    it('initial value is default', function() {
+      expect(parent.layout).to.equal(defaultLayout);
+    });
+
+    it('calls only add on default layout exactly once with self', function() {
+      expect(defaultLayout.add).to.have.been.calledOnce;
+      expect(defaultLayout.add).to.have.been.calledWith(parent);
+      expect(defaultLayout.remove).not.to.have.been.called;
+    });
+
+    it('calls remove on dispose', function() {
+      parent.dispose();
+      expect(defaultLayout.remove).to.have.been.calledOnce;
+      expect(defaultLayout.remove).to.have.been.calledWith(parent);
+    });
+
+    it('calls remove on setting new layout', function() {
+      parent.layout = testLayout;
+      expect(defaultLayout.remove).to.have.been.calledOnce;
+      expect(defaultLayout.remove).to.have.been.calledWith(parent);
+    });
+
+    it('calls add on setting new layout', function() {
+      parent.layout = testLayout;
+      expect(testLayout.add).to.have.been.calledOnce;
+      expect(testLayout.add).to.have.been.calledWith(parent);
+    });
+
+    it('calls add on custom initial layout only', function() {
+      defaultLayout.add.resetHistory();
+      parent = new TestWidget({layout: testLayout});
+      expect(defaultLayout.add).not.to.have.been.called;
+      expect(testLayout.add).to.have.been.calledOnce;
+      expect(testLayout.add).to.have.been.calledWith(parent);
+    });
+
+  });
+
   describe('layoutData:', function() {
 
     let parent, widget, other;
 
     beforeEach(function() {
-      parent = new TestWidget();
-      widget = new TestWidget().appendTo(parent);
-      other = new TestWidget({id: 'other'}).appendTo(parent);
+      parent = new TestWidget({layout: Layout.default()});
+      widget = new TestWidget({layout: Layout.default()}).appendTo(parent);
+      other = new TestWidget({id: 'other', layout: Layout.default()}).appendTo(parent);
       client.resetCalls();
     });
 
@@ -1407,7 +1486,7 @@ describe('Widget', function() {
 
       other = new TestWidget({id: 'other'}).appendTo(parent);
 
-      let setCalls = client.calls({op: 'set'});
+      let setCalls = client.calls({op: 'set', id: widget.cid});
       expect(setCalls.length).to.equal(1);
       expect(setCalls[0].properties.layoutData).to.eql({right: [other.cid, 0]});
     });
@@ -1420,9 +1499,9 @@ describe('Widget', function() {
 
       widget.appendTo(parent);
 
-      let setCalls = client.calls({op: 'set'});
-      expect(setCalls.length).to.equal(1);
-      expect(setCalls[0].properties.layoutData).to.eql({right: [other.cid, 0]});
+      let setCalls = client.calls({op: 'set', id: widget.cid});
+      expect(setCalls.length).to.equal(2);
+      expect(setCalls[1].properties.layoutData).to.eql({right: [other.cid, 0]});
     });
 
   });
@@ -1432,7 +1511,7 @@ describe('Widget', function() {
     let parent, widget, other;
 
     beforeEach(function() {
-      parent = new TestWidget();
+      parent = new Composite();
       other = new TestWidget({id: 'other'}).appendTo(parent);
       widget = new TestWidget().appendTo(parent);
       client.resetCalls();
@@ -1484,7 +1563,7 @@ describe('Widget', function() {
       it('SETs layoutData', function() {
         widget[attr] = 23;
 
-        let call = client.calls({op: 'set'})[0];
+        let call = client.calls({op: 'set', id: widget.cid})[0];
         let expected = {[attr]: 23};
         expect(call.properties.layoutData).to.eql(expected);
       });
@@ -1510,7 +1589,7 @@ describe('Widget', function() {
       it('SETs layoutData', function() {
         widget[attr] = 23;
 
-        let call = client.calls({op: 'set'})[0];
+        let call = client.calls({op: 'set', id: widget.cid})[0];
         let expected = {};
         expected[attr] = 23;
         expect(call.properties.layoutData).to.deep.equal(expected);
@@ -1526,7 +1605,7 @@ describe('Widget', function() {
       widget.right = 10;
       widget.left = null;
 
-      let call = client.calls({op: 'set'})[0];
+      let call = client.calls({op: 'set', id: widget.cid})[0];
       let expected = {right: 10, width: 10};
       expect(call.properties.layoutData).to.eql(expected);
       expect(console.warn).not.to.have.been.called;
@@ -1539,71 +1618,10 @@ describe('Widget', function() {
       widget.width = 10;
       widget.right = 10;
 
-      let call = client.calls({op: 'set'})[0];
+      let call = client.calls({op: 'set', id: widget.cid})[0];
       let expected = {right: 10, left: 10};
       expect(call.properties.layoutData).to.eql(expected);
       expect(console.warn).to.have.been.called;
-    });
-
-  });
-
-  describe('flushLayout', function() {
-
-    let parent, child;
-
-    beforeEach(function() {
-      parent = new TestWidget();
-      Layout.flushQueue();
-    });
-
-    it('calls renderLayoutData on children', function() {
-      child = new TestWidget({
-        layoutData: {left: 23, top: 42}
-      }).appendTo(parent);
-      client.resetCalls();
-
-      parent._flushLayout();
-
-      let call = client.calls({op: 'set', id: child.cid})[0];
-      expect(call.properties.layoutData).to.eql({left: 23, top: 42});
-    });
-
-    it('does not fail when there are no children', function() {
-      expect(() => {
-        parent._flushLayout();
-      }).not.to.throw();
-    });
-
-    it('is triggered by appending a child', function() {
-      spy(parent, '_flushLayout');
-      child = new TestWidget();
-
-      child.appendTo(parent);
-      Layout.flushQueue();
-
-      expect(parent._flushLayout).to.have.been.called;
-    });
-
-    it('is triggered by re-parenting a child', function() {
-      let parent2 = new TestWidget();
-      child = new TestWidget().appendTo(parent);
-      spy(parent, '_flushLayout');
-      spy(parent2, '_flushLayout');
-
-      child.appendTo(parent2);
-      Layout.flushQueue();
-
-      expect(parent._flushLayout).to.have.been.called;
-    });
-
-    it('is triggered by disposing of a child', function() {
-      child = new TestWidget().appendTo(parent);
-      spy(parent, '_flushLayout');
-
-      child.dispose();
-      Layout.flushQueue();
-
-      expect(parent._flushLayout).to.have.been.called;
     });
 
   });
@@ -1629,7 +1647,8 @@ describe('Widget', function() {
       widget._trigger('resize', {bounds: [1, 2, 3, 4]});
 
       expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWithMatch({target: widget, value: {left: 1, top: 2, width: 3, height: 4}});
+      expect(listener.getCall(0).args[0].target).to.equal(widget);
+      expect(listener.getCall(0).args[0].value).to.deep.equal({left: 1, top: 2, width: 3, height: 4});
       checkListen('resize');
     });
 
@@ -1639,7 +1658,8 @@ describe('Widget', function() {
       widget._trigger('resize', {bounds: [1, 2, 3, 4]});
 
       expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWithMatch({target: widget, left: 1, top: 2, width: 3, height: 4});
+      expect(listener.getCall(0).args[0].target).to.equal(widget);
+      expect(listener).to.have.been.calledWithMatch({left: 1, top: 2, width: 3, height: 4});
       checkListen('resize');
     });
 
@@ -1650,7 +1670,7 @@ describe('Widget', function() {
         widget._trigger(name, {});
 
         expect(listener).to.have.been.calledOnce;
-        expect(listener).to.have.been.calledWithMatch({target: widget});
+        expect(listener.getCall(0).args[0].target).to.equal(widget);
         checkListen(name);
       });
     });

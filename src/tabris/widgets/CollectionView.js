@@ -18,6 +18,8 @@ export default class CollectionView extends Composite {
     return 'tabris.CollectionView';
   }
 
+  _initLayout() {}
+
   load(itemCount) {
     if (!isNumber(itemCount) || itemCount < 0) {
       throw new Error('Invalid itemCount');
@@ -206,6 +208,16 @@ NativeObject.defineProperties(CollectionView.prototype, {
   columnCount: {
     type: 'number',
     default: 1
+  },
+  layout: {
+    set(name, value) {
+      if (value) {
+        throw new Error('CollectionView does not support layouts');
+      }
+    },
+    get() {
+      return null;
+    }
   }
 });
 

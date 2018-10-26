@@ -63,6 +63,7 @@ describe('NavigationBar', function() {
 
   it('does not set read-only property "height"', () => {
     stub(console, 'warn');
+    client.resetCalls();
 
     navigationBar.height = 64;
 

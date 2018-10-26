@@ -1,23 +1,179 @@
 import ClientStub from './ClientStub';
 import {expect, mockTabris, stub, spy, restore} from '../test';
-import Layout from '../../src/tabris/Layout';
+import Layout, {LayoutQueue} from '../../src/tabris/Layout';
 import LayoutData from '../../src/tabris/LayoutData';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
 import Composite from '../../src/tabris/widgets/Composite';
 
 describe('Layout', function() {
 
+  class TestWidget extends Composite {
+
+    get _nativeType() {
+      return 'TestType';
+    }
+
+    set layout(value) {
+      this._layout = value;
+    }
+
+    get layout() {
+      return this._layout;
+    }
+
+    _acceptChild() {
+      return true;
+    }
+
+  }
+
+  class TestLayout extends Layout {
+
+    checkConsistency(layoutData) {
+      return this._checkConsistency(layoutData);
+    }
+
+    resolveReferences(layoutData, targetWidget) {
+      return this._resolveReferences(layoutData, targetWidget);
+    }
+
+  }
+
+  let parent, widget, other, layout, client, queue;
+
+  beforeEach(function() {
+    client = new ClientStub();
+    mockTabris(client);
+    queue = new LayoutQueue();
+    layout = new TestLayout(queue);
+    spy(layout, 'render');
+    parent = new TestWidget();
+    widget = new TestWidget().appendTo(parent);
+    other = new TestWidget({id: 'other'}).appendTo(parent);
+    parent.layout = layout;
+    queue.flush();
+  });
+
+  afterEach(restore);
+
+  describe('render', function() {
+
+    it('SETs layoutData on children', function() {
+      widget.layoutData = {left: 23, top: 42};
+      client.resetCalls();
+
+      layout.render(parent);
+
+      let call = client.calls({op: 'set', id: widget.cid})[0];
+      expect(call.properties.layoutData).to.eql({left: 23, top: 42});
+    });
+
+    it('does not fail when there are no children', function() {
+      expect(() => {
+        layout.render(widget);
+      }).not.to.throw();
+    });
+
+  });
+
+  describe('add', function() {
+
+    beforeEach(function() {
+      layout.add(parent);
+    });
+
+    it('ignores being called twice', function() {
+      expect(() => layout.add(parent)).not.to.throw();
+    });
+
+    it('ignores being called twice', function() {
+      expect(() => layout.add(parent)).not.to.throw();
+    });
+
+    it('throws being called with null', function() {
+      expect(() => layout.add(null)).to.throw();
+    });
+
+    it('throws if layout is not set', function() {
+      parent.layout = null;
+      expect(() => layout.add(parent)).to.throw();
+    });
+
+    it('triggers render after flush', function() {
+      queue.flush();
+      expect(layout.render).to.have.been.calledWith(parent);
+    });
+
+    it('triggers render when appending a child', function() {
+      queue.flush();
+      layout.render.resetHistory();
+
+      parent.append(new TestWidget());
+      queue.flush();
+
+      expect(layout.render).to.have.been.calledWith(parent);
+    });
+
+    it('triggers render when detaching a child', function() {
+      queue.flush();
+      layout.render.resetHistory();
+
+      widget.detach();
+      queue.flush();
+
+      expect(layout.render).to.have.been.calledWith(parent);
+    });
+
+    it('triggers render when disposing a child', function() {
+      queue.flush();
+      layout.render.resetHistory();
+
+      widget.dispose();
+      queue.flush();
+
+      expect(layout.render).to.have.been.calledWith(parent);
+    });
+
+    describe('followed by remove', function() {
+
+      beforeEach(function() {
+        queue.flush();
+        layout.render.resetHistory();
+        layout.remove(parent);
+        queue.flush();
+      });
+
+      it('ignores being called twice', function() {
+        expect(() => layout.remove(parent)).not.to.throw();
+      });
+
+      it('no longer triggers render when appending a child', function() {
+        parent.append(new TestWidget());
+        queue.flush();
+
+        expect(layout.render).not.to.have.been.called;
+      });
+
+      it('no longer triggers render when detaching a child', function() {
+        widget.detach();
+        queue.flush();
+
+        expect(layout.render).not.to.have.been.called;
+      });
+
+    });
+
+  });
+
   describe('checkConsistency', function() {
 
     function check(layoutData) {
-      return Layout.checkConsistency(LayoutData.from(layoutData));
+      return layout.checkConsistency(LayoutData.from(layoutData));
     }
 
     beforeEach(function() {
       stub(console, 'warn');
     });
-
-    afterEach(restore);
 
     it('raises a warning for inconsistent layoutData (width)', function() {
       check({top: 0, left: 0, right: 0, width: 100});
@@ -88,27 +244,9 @@ describe('Layout', function() {
 
   describe('resolveReferences', function() {
 
-    class TestWidget extends Composite {
-      get _nativeType() {
-        return 'TestType';
-      }
-      _acceptChild() {
-        return true;
-      }
-    }
-
     function resolve(layoutData, targetWidget) {
-      return Layout.resolveReferences(LayoutData.from(layoutData), targetWidget);
+      return layout.resolveReferences(LayoutData.from(layoutData), targetWidget);
     }
-
-    let parent, widget, other;
-
-    beforeEach(function() {
-      mockTabris(new ClientStub());
-      parent = new TestWidget();
-      widget = new TestWidget().appendTo(parent);
-      other = new TestWidget({id: 'other'}).appendTo(parent);
-    });
 
     it('translates widget to ids', function() {
       let input = {right: other, left: [other, 42]};
@@ -229,20 +367,34 @@ describe('Layout', function() {
 
   });
 
-  describe('layoutQueue', function() {
+  describe('default', function() {
 
-    it("calls '_flushLayout' on registered widgets once", function() {
-      let widget = {
-        _flushLayout: spy()
-      };
-      Layout.addToQueue(widget);
-
-      Layout.flushQueue(widget);
-      Layout.flushQueue(widget);
-
-      expect(widget._flushLayout).to.have.been.calledOnce;
+    it('always returns same layout', function() {
+      expect(Layout.default()).to.equal(Layout.default());
     });
 
+  });
+
+});
+
+describe('LayoutQueue', function() {
+
+  let queue;
+
+  beforeEach(function() {
+    queue = new LayoutQueue();
+  });
+
+  it('calls layout.render on registered composite once', function() {
+    let composite = {
+      layout: {render: spy()}
+    };
+    queue.add(composite);
+
+    queue.flush();
+    queue.flush();
+
+    expect(composite.layout.render).to.have.been.calledOnce;
   });
 
 });

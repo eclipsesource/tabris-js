@@ -6,9 +6,93 @@ import Percent from './Percent';
 
 const layoutDataProps = ['left', 'right', 'top', 'bottom', 'width', 'height', 'centerX', 'centerY', 'baseline'];
 
-export default {
+export default class Layout {
 
-  checkConsistency(layoutData) {
+  static default() {
+    if (!this._default) {
+      this._default = new ConstraintLayout();
+    }
+    return this._default;
+  }
+
+  constructor(queue) {
+    if (this.constructor === Layout) {
+      throw new Error('Can not create instance of abstract class "Layout"');
+    }
+    if (!(queue instanceof LayoutQueue)) {
+      throw new Error('LayoutQueue missing');
+    }
+    this._layoutQueue = queue;
+    this._handleAddChildEvent = this._handleAddChildEvent.bind(this);
+    this._handleRemoveChildEvent = this._handleRemoveChildEvent.bind(this);
+    this._handleChildLayoutDataChangedEvent = this._handleChildLayoutDataChangedEvent.bind(this);
+    this._renderLayoutData = this._renderLayoutData.bind(this);
+    this._addChild = this._addChild.bind(this);
+    this._removeChild = this._removeChild.bind(this);
+  }
+
+  add(composite) {
+    if (!composite || composite.layout !== this) {
+      throw new Error(`Invalid layout target ${composite}. Do not call layout.add directly.`);
+    }
+    composite.on({
+      addChild: this._handleAddChildEvent,
+      removeChild: this._handleRemoveChildEvent
+    });
+    if (composite.$children) {
+      composite.$children.forEach(this._addChild);
+    }
+    this._layoutQueue.add(composite);
+  }
+
+  remove(composite) {
+    composite.off({
+      addChild: this._handleAddChildEvent,
+      removeChild: this._handleRemoveChildEvent
+    });
+    if (composite.$children) {
+      composite.$children.forEach(this._removeChild);
+    }
+  }
+
+  render(composite) {
+    if (composite.$children) {
+      composite.$children.forEach(this._renderLayoutData);
+    }
+  }
+
+  _handleAddChildEvent({child}) {
+    this._addChild(child);
+    this._layoutQueue.add(child._parent);
+  }
+
+  _handleRemoveChildEvent({child}) {
+    this._removeChild(child);
+    this._layoutQueue.add(child._parent);
+  }
+
+  _addChild(child) {
+    child.on({
+      layoutDataChanged: this._handleChildLayoutDataChangedEvent
+    });
+  }
+
+  _removeChild(child) {
+    child.off({
+      layoutDataChanged: this._handleChildLayoutDataChangedEvent
+    });
+  }
+
+  _handleChildLayoutDataChangedEvent({target}) {
+    this._layoutQueue.add(target._parent);
+  }
+
+  _renderLayoutData(child) {
+    let checkedData = this._checkConsistency(child.layoutData);
+    child._nativeSet('layoutData', this._resolveReferences(checkedData, child));
+  }
+
+  _checkConsistency(layoutData) {
     let result = layoutData;
     if (result.centerX !== 'auto') {
       if (result.left !== 'auto' || result.right !== 'auto') {
@@ -36,9 +120,9 @@ export default {
       result = makeAuto(result, 'height');
     }
     return result;
-  },
+  }
 
-  resolveReferences(layoutData, targetWidget) {
+  _resolveReferences(layoutData, targetWidget) {
     let result = {};
     for (let i = 0; i < layoutDataProps.length; i++) {
       const prop = layoutDataProps[i];
@@ -47,22 +131,45 @@ export default {
       }
     }
     return result;
-  },
-
-  addToQueue(parent) {
-    layoutQueue[parent.cid] = parent;
-  },
-
-  flushQueue() {
-    for (let cid in layoutQueue) {
-      layoutQueue[cid]._flushLayout();
-    }
-    layoutQueue = {};
   }
 
-};
+}
 
-let layoutQueue = {};
+export class ConstraintLayout extends Layout {
+
+  constructor() {
+    super(LayoutQueue.instance);
+  }
+
+}
+
+export class LayoutQueue {
+
+  static get instance () {
+    if (!this._instance) {
+      this._instance = new LayoutQueue();
+    }
+    return this._instance;
+  }
+
+  constructor() {
+    this._map = {};
+  }
+
+  add(composite) {
+    this._map[composite.cid] = composite;
+  }
+
+  flush() {
+    for (let cid in this._map) {
+      if (!this._map[cid]._isDisposed && this._map[cid].layout) {
+        this._map[cid].layout.render(this._map[cid]);
+      }
+    }
+    this._map = {};
+  }
+
+}
 
 function resolveAttribute(value, widget) {
   if (value instanceof Constraint) {

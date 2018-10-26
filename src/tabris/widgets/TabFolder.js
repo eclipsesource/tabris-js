@@ -9,6 +9,8 @@ export default class TabFolder extends Composite {
     return 'tabris.TabFolder';
   }
 
+  _initLayout() {}
+
   _acceptChild(child) {
     return child instanceof Tab;
   }
@@ -87,7 +89,17 @@ NativeObject.defineProperties(TabFolder.prototype, {
       return selection ? tabris._proxies.find(selection) : null;
     }
   },
-  textColor: {type: 'ColorValue'}
+  textColor: {type: 'ColorValue'},
+  layout: {
+    set(name, value) {
+      if (value) {
+        throw new Error('TabFolder does not support layouts');
+      }
+    },
+    get() {
+      return null;
+    }
+  }
 });
 
 NativeObject.defineEvents(TabFolder.prototype, {

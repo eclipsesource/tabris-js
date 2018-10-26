@@ -1,4 +1,4 @@
-import Layout from './Layout';
+import {LayoutQueue} from './Layout';
 
 export default class NativeBridge {
 
@@ -47,7 +47,7 @@ export default class NativeBridge {
   }
 
   flush() {
-    Layout.flushQueue();
+    LayoutQueue.instance.flush();
     let operations = this.$operations;
     this.$operations = [];
     this.$currentOperation = {id: null};

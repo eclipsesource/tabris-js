@@ -7,6 +7,7 @@ import Composite from '../../../src/tabris/widgets/Composite';
 import NavigationView from '../../../src/tabris/widgets/NavigationView';
 import WidgetCollection from '../../../src/tabris/WidgetCollection';
 import EventObject from '../../../src/tabris/EventObject';
+import Layout from '../../../src/tabris/Layout';
 import Color from '../../../src/tabris/Color';
 
 describe('NavigationView', function() {
@@ -30,6 +31,14 @@ describe('NavigationView', function() {
     expect(() => {
       navigationView.append(new Composite());
     }).to.throw();
+  });
+
+  it('layout is null', function() {
+    expect(navigationView.layout).to.equal(null);
+  });
+
+  it('layout can not be set', function() {
+    expect(() => navigationView.layout = Layout.default()).to.throw();
   });
 
   it('can append a Page', function() {
@@ -110,7 +119,8 @@ describe('NavigationView', function() {
       expect(client.calls({op: 'listen', id: navigationView.cid, event: 'toolbarHeightChanged'})[0].listen)
         .to.be.true;
       expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWithMatch({target: navigationView, value: 23});
+      expect(listener.firstCall.args[0].target).to.equal(navigationView);
+      expect(listener.firstCall.args[0].value).to.equal(23);
     });
 
   });
@@ -220,7 +230,7 @@ describe('NavigationView', function() {
       navigationView.append(page1);
 
       expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWithMatch({target: page1});
+      expect(listener.firstCall.args[0].target).to.equal(page1);
     });
 
     it('is an EventObject', function() {
@@ -239,7 +249,7 @@ describe('NavigationView', function() {
       page2.detach();
 
       expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWithMatch({target: page1});
+      expect(listener.firstCall.args[0].target).to.equal(page1);
     });
 
     it('is not triggered when hidden page is removed', function() {
@@ -271,7 +281,7 @@ describe('NavigationView', function() {
       page1.detach();
 
       expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWithMatch({target: page1});
+      expect(listener.firstCall.args[0].target).to.equal(page1);
     });
 
     it('is an EventObject', function() {
@@ -290,7 +300,7 @@ describe('NavigationView', function() {
       page1.dispose();
 
       expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWithMatch({target: page1});
+      expect(listener.firstCall.args[0].target).to.equal(page1);
     });
 
     it('is triggered when a page is covered by another page', function() {
@@ -301,7 +311,7 @@ describe('NavigationView', function() {
       navigationView.append(page2);
 
       expect(listener).to.have.been.calledOnce;
-      expect(listener).to.have.been.calledWithMatch({target: page1});
+      expect(listener.firstCall.args[0].target).to.equal(page1);
     });
 
     it('is not triggered when a page in the middle is removed', function() {

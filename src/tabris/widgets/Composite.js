@@ -7,6 +7,11 @@ import {jsxFactory} from '../JsxProcessor';
 
 export default class Composite extends Widget {
 
+  constructor(props) {
+    super(props);
+    this._initLayout(props);
+  }
+
   append() {
     this._checkDisposed();
     let accept = (widget) => {
@@ -38,6 +43,12 @@ export default class Composite extends Widget {
 
   children(selector) {
     return this._children(selector);
+  }
+
+  _initLayout(props) {
+    if (!props || !('layout' in props)) {
+      this.layout = Layout.default();
+    }
   }
 
   _children(selector) {
@@ -104,22 +115,10 @@ export default class Composite extends Widget {
       }
       delete this.$children;
     }
+    if (this._layout) {
+      this._layout.remove(this);
+    }
     super._release();
-  }
-
-  _flushLayout() {
-    if (this.$children) {
-      this.$children.forEach((child) => {
-        this._renderLayoutData.call(child);
-      });
-    }
-  }
-
-  _renderLayoutData() {
-    if (this._layoutData) {
-      let checkedData = Layout.checkConsistency(this._layoutData);
-      this._nativeSet('layoutData', Layout.resolveReferences(checkedData, this));
-    }
   }
 
   /** @this {import("../JsxProcessor").default} */
@@ -134,6 +133,23 @@ NativeObject.defineProperties(Composite.prototype, {
   padding: {
     type: 'boxDimensions',
     default: {left: 0, right: 0, top: 0, bottom: 0}
+  },
+  layout: {
+    set(name, value) {
+      if (this._layout) {
+        this._layout.remove(this);
+      }
+      if (value && !(value instanceof Layout)) {
+        throw new Error('Not an instance of "Layout"');
+      }
+      this._layout = value;
+      if (this._layout) {
+        this._layout.add(this);
+      }
+    },
+    get() {
+      return this._layout;
+    }
   }
 });
 

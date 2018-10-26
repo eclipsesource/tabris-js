@@ -1,4 +1,3 @@
-import Layout from './Layout';
 import NativeObject from './NativeObject';
 import WidgetCollection from './WidgetCollection';
 import GestureRecognizer from './GestureRecognizer';
@@ -132,12 +131,10 @@ export default class Widget extends NativeObject {
     this._nativeSet('parent', parent ? types.proxy.encode(parent._getContainer(this)) : null);
     if (this._parent) {
       this._parent._removeChild(this);
-      Layout.addToQueue(this._parent);
     }
     this._parent = parent;
     if (this._parent) {
       this._parent._addChild(this, index);
-      Layout.addToQueue(this._parent);
     }
   }
 
@@ -190,7 +187,6 @@ export default class Widget extends NativeObject {
   _release() {
     if (this._parent) {
       this._parent._removeChild(this);
-      Layout.addToQueue(this._parent);
       delete this._parent;
     }
   }
@@ -295,9 +291,6 @@ NativeObject.defineProperty(Widget.prototype, 'layoutData', {
   set(name, value) {
     const oldLayoutData = this._layoutData;
     this._layoutData = value ? LayoutData.from(value) : new LayoutData({});
-    if (this._parent) {
-      Layout.addToQueue(this._parent);
-    }
     this._triggerChangeEvent(name, this._layoutData);
     layoutDataProps.forEach(prop => {
       const oldValue = oldLayoutData ? oldLayoutData[prop] : 'auto';

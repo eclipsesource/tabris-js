@@ -1,6 +1,7 @@
 import {expect, mockTabris, restore, spy, stub} from '../../test';
 import ClientStub from '../ClientStub';
 import Tab from '../../../src/tabris/widgets/Tab';
+import Layout from '../../../src/tabris/Layout';
 import TabFolder from '../../../src/tabris/widgets/TabFolder';
 import Composite from '../../../src/tabris/widgets/Composite';
 
@@ -11,7 +12,7 @@ describe('TabFolder', function() {
   beforeEach(function() {
     client = new ClientStub();
     mockTabris(client);
-    parent = new Composite();
+    parent = new Composite({layout: null});
     client.resetCalls();
     tabFolder = new TabFolder().appendTo(parent);
   });
@@ -24,6 +25,14 @@ describe('TabFolder', function() {
 
   it('paging is false', function() {
     expect(tabFolder.paging).to.equal(false);
+  });
+
+  it('layout is null', function() {
+    expect(tabFolder.layout).to.equal(null);
+  });
+
+  it('layout can not be set', function() {
+    expect(() => tabFolder.layout = Layout.default()).to.throw();
   });
 
   it('returns initial property values', function() {
@@ -112,7 +121,8 @@ describe('TabFolder', function() {
         tab.dispose();
 
         expect(listener).to.have.been.calledOnce;
-        expect(listener.firstCall).to.have.been.calledWithMatch({target: tabFolder, value: null});
+        expect(listener.firstCall.args[0].target).to.equal(tabFolder);
+        expect(listener.firstCall.args[0].value).to.be.null;
       });
 
       it('triggers selectionChanged with selection', function() {

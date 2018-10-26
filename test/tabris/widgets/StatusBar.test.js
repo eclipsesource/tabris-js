@@ -70,6 +70,7 @@ describe('StatusBar', function() {
 
   it('does not set read-only property "height"', () => {
     stub(console, 'warn');
+    client.resetCalls();
 
     statusBar.height = 64;
 
