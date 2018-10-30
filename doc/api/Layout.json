@@ -1,0 +1,51 @@
+{
+  "type": "Layout",
+  "constructor": {
+    "access": "protected"
+  },
+  "description": "Base class for all layout managers.",
+  "methods": {
+    "add": {
+      "ts_only": true,
+      "parameters": [
+        {
+          "name": "composite",
+          "type": "Composite"
+        }
+      ],
+      "description": "Callback used internally by widgets to register themselves as managed by this layout."
+    },
+    "remove": {
+      "ts_only": true,
+      "parameters": [
+        {
+          "name": "composite",
+          "type": "Composite"
+        }
+      ],
+      "description": "Callback used internally by widgets to de-register themselves as managed by this layout."
+    },
+    "render": {
+      "ts_only": true,
+      "parameters": [
+        {
+          "name": "composite",
+          "type": "Composite"
+        }
+      ],
+      "description": "Callback used internally by the framework to process layoutData."
+    }
+  },
+  "statics": {
+    "methods": {
+      "default": {
+        "description": "Returns the default, constraints-based instance of Layout.",
+        "returns": "Layout"
+      },
+      "column": {
+        "description": "Returns the column-based layout manager.",
+        "returns": "ColumnLayout"
+      }
+    }
+  }
+}

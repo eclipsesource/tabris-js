@@ -173,6 +173,13 @@ describe('tabris', function() {
     expect(tabris.App).to.be.a('function');
     expect(tabris.Device).to.be.a('function');
     expect(tabris.Widget).to.be.a('function');
+    expect(tabris.Constraint).to.be.a('function');
+    expect(tabris.Font).to.be.a('function');
+    expect(tabris.Color).to.be.a('function');
+    expect(tabris.LayoutData).to.be.a('function');
+    expect(tabris.Image).to.be.a('function');
+    expect(tabris.Layout).to.be.a('function');
+    expect(tabris.ColumnLayout).to.be.a('function');
     expect(tabris.WidgetCollection).to.be.a('function');
   });
 

@@ -313,7 +313,7 @@ layoutDataProps.forEach(prop => {
       this.layoutData = LayoutData.from(Object.assign({}, this.layoutData, {[name]: value}));
     },
     get(name) {
-      return this._layoutData[name];
+      return this.layoutData[name];
     }
   });
 });

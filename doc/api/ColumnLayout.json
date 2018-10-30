@@ -1,0 +1,8 @@
+{
+  "type": "ColumnLayout",
+  "extends": "Layout",
+  "constructor": {
+    "access": "private"
+  },
+  "description": "Column based layout manager. Instances can be obtained from [`Layout.column()`](./Layout.md#column())"
+}

@@ -7,6 +7,7 @@ import Printer, {create as createPrinter} from './Printer';
 import App, {create as createApp} from './App';
 import FileSystem, {create as createFileSystem} from './FileSystem';
 import {createConsole} from './Console';
+import Constraint from './Constraint';
 import {addDOMDocument} from './Document';
 import Event, {addDOMEventTargetMethods} from './Event';
 import {addWindowTimerMethods} from './WindowTimers';
@@ -21,16 +22,21 @@ import Canvas from './widgets/Canvas';
 import CheckBox from './widgets/CheckBox';
 import CollectionView from './widgets/CollectionView';
 import Color from './Color';
+import ColumnLayout from './ColumnLayout';
 import Composite from './widgets/Composite';
 import ContentView, {create as createContentView} from './widgets/ContentView';
 import Crypto from './Crypto';
 import Drawer, {create as createDrawer} from './widgets/Drawer';
 import DateDialog from './DateDialog';
 import EventObject from './EventObject';
+import Font from './Font';
+import Image from './Image';
 import ImageData from './ImageData';
 import ImageView from './widgets/ImageView';
 import InactivityTimer from './InactivityTimer.js';
 import Listeners from './Listeners.js';
+import Layout from './Layout.js';
+import LayoutData from './LayoutData.js';
 import Page from './widgets/Page';
 import Picker from './widgets/Picker';
 import Pkcs5 from './Pkcs5';
@@ -84,7 +90,9 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   CheckBox,
   CollectionView,
   Color,
+  ColumnLayout,
   Composite,
+  Constraint,
   ContentView,
   Crypto,
   DateDialog,
@@ -93,11 +101,15 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   Event,
   EventObject,
   FileSystem,
+  Font,
+  Image,
   ImageData,
   ImageView,
   InactivityTimer,
   JsxProcessor,
   Listeners,
+  Layout,
+  LayoutData,
   NativeObject,
   NavigationView,
   NavigationBar,

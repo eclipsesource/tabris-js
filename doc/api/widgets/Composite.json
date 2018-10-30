@@ -16,6 +16,11 @@
     ]
   },
   "properties": {
+    "layout": {
+      "type": "Layout|null",
+      "default": "Layout",
+      "description": "The layout manager responsible for interpreting the [`layoutData`](./Widget.md#layoutData) of the child widgets of this Composite."
+    },
     "padding": {
       "type": "BoxDimensions|number",
       "default": "0",

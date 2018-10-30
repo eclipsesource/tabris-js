@@ -10,7 +10,7 @@ export default class Layout {
 
   static default() {
     if (!this._default) {
-      this._default = new ConstraintLayout();
+      this._default = new ConstraintLayout(LayoutQueue.instance);
     }
     return this._default;
   }
@@ -88,8 +88,12 @@ export default class Layout {
   }
 
   _renderLayoutData(child) {
-    let checkedData = this._checkConsistency(child.layoutData);
-    child._nativeSet('layoutData', this._resolveReferences(checkedData, child));
+    const layoutData = this._getLayoutData(child);
+    child._nativeSet('layoutData', this._resolveReferences(layoutData, child));
+  }
+
+  _getLayoutData(child) {
+    return this._checkConsistency(child.layoutData, child);
   }
 
   _checkConsistency(layoutData) {
@@ -137,8 +141,13 @@ export default class Layout {
 
 export class ConstraintLayout extends Layout {
 
-  constructor() {
-    super(LayoutQueue.instance);
+  constructor(queue) {
+    if (!(queue instanceof LayoutQueue)) {
+      throw new Error(
+        'ConstraintLayout constructor is private. Use Layout.default() to get ConstraintLayout instances.'
+      );
+    }
+    super(queue);
   }
 
 }
