@@ -14,6 +14,7 @@
       }
     ]
   },
+  "object": "statusBar",
   "properties": {
     "theme": {
       "type": "string",

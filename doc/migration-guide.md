@@ -6,6 +6,30 @@ Note that this guide refers to a pre-release version of Tabris.js 3. Further bre
 
 ## General
 
+### Removed ui object
+
+The `ui` object (`tabris.ui`) and `Ui` class no longer exist. All properties formerly hosted by `ui` are now directly attached to the `tabris` object/namespace. Example:
+
+Tabris 2.x
+```js
+import {ui} from 'tabris';
+
+ui.contentView.background = 'red';
+ui.drawer.background = 'red';
+ui.statusBar.background = 'red';
+ui.navigationBar.background = 'red';
+```
+
+Tabris 3.0
+```js
+import {contentView, drawer, statusBar, navigationBar} from 'tabris';
+
+contentView.background = 'red';
+drawer.background = 'red';
+statusBar.background = 'red';
+navigationBar.background = 'red';
+```
+
 ### Removed `get("prop")` and `set("prop", value)`
 
 This concerns all instances of `NativeObject` (including widgets) and `WidgetCollection`.

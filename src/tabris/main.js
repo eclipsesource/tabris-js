@@ -5,7 +5,6 @@ import Tabris from './Tabris';
 import Device, {create as createDevice, publishDeviceProperties} from './Device';
 import Printer, {create as createPrinter} from './Printer';
 import App, {create as createApp} from './App';
-import Ui, {create as createUi} from './widgets/Ui';
 import FileSystem, {create as createFileSystem} from './FileSystem';
 import {createConsole} from './Console';
 import {addDOMDocument} from './Document';
@@ -23,9 +22,9 @@ import CheckBox from './widgets/CheckBox';
 import CollectionView from './widgets/CollectionView';
 import Color from './Color';
 import Composite from './widgets/Composite';
-import ContentView from './widgets/ContentView';
+import ContentView, {create as createContentView} from './widgets/ContentView';
 import Crypto from './Crypto';
-import Drawer from './widgets/Drawer';
+import Drawer, {create as createDrawer} from './widgets/Drawer';
 import DateDialog from './DateDialog';
 import EventObject from './EventObject';
 import ImageData from './ImageData';
@@ -40,13 +39,13 @@ import ProgressBar from './widgets/ProgressBar';
 import Popover from './Popover';
 import NativeObject from './NativeObject';
 import NavigationView from './widgets/NavigationView';
-import NavigationBar from './widgets/NavigationBar';
+import NavigationBar, {create as createNavigationBar} from './widgets/NavigationBar';
 import RadioButton from './widgets/RadioButton';
 import RefreshComposite from './widgets/RefreshComposite';
 import ScrollView from './widgets/ScrollView';
 import SearchAction from './widgets/SearchAction';
 import Slider from './widgets/Slider';
-import StatusBar from './widgets/StatusBar';
+import StatusBar, {create as createStatusBar} from './widgets/StatusBar';
 import Switch from './widgets/Switch';
 import Tab from './widgets/Tab';
 import TabFolder from './widgets/TabFolder';
@@ -122,7 +121,6 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   TextView,
   TimeDialog,
   ToggleButton,
-  Ui,
   Video,
   WebSocket,
   WebView,
@@ -133,7 +131,7 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   fetch,
   Headers,
   Request,
-  Response
+  Response,
 });
 
 Object.assign(window, {
@@ -155,7 +153,14 @@ tabris.on('start', (options) => {
   tabris.app = createApp();
   checkVersion(tabris.version, tabris.app._nativeGet('tabrisJsVersion'));
   if (!options || !options.headless) {
-    tabris.ui = createUi();
+    tabris.contentView = createContentView();
+    createLegacyDelegate('contentView');
+    tabris.drawer = createDrawer();
+    createLegacyDelegate('drawer');
+    tabris.navigationBar = createNavigationBar();
+    createLegacyDelegate('navigationBar');
+    tabris.statusBar = createStatusBar();
+    createLegacyDelegate('statusBar');
     tabris.printer = createPrinter();
   }
   tabris.device = createDevice();
@@ -175,3 +180,13 @@ tabris.on('start', (options) => {
 addDOMDocument(window);
 addDOMEventTargetMethods(window);
 addWindowTimerMethods(window);
+
+function createLegacyDelegate(property) {
+  Object.defineProperty(tabris.ui = tabris.ui || {}, property, {
+    configurable: true,
+    get() {
+      console.warn(`ui.${property} is deprecated and will be removed in 3.0.0!`);
+      return tabris[property];
+    }
+  });
+}

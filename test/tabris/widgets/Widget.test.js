@@ -3,7 +3,6 @@ import WidgetCollection from '../../../src/tabris/WidgetCollection';
 import Layout from '../../../src/tabris/Layout';
 import ClientStub from '.././ClientStub';
 import Widget from '../../../src/tabris/Widget';
-import Ui from '../../../src/tabris/widgets/Ui';
 import Composite from '../../../src/tabris/widgets/Composite';
 import TextView from '../../../src/tabris/widgets/TextView';
 import RadioButton from '../../../src/tabris/widgets/RadioButton';
@@ -27,7 +26,6 @@ describe('Widget', function() {
   beforeEach(function() {
     client = new ClientStub();
     mockTabris(client);
-    global.tabris.ui = new Ui(true);
   });
 
   afterEach(restore);

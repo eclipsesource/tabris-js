@@ -1,10 +1,13 @@
-import {ui} from 'tabris';
+import {navigationBar} from 'tabris';
 
-const height = ui.navigationBar.height;
-ui.navigationBar.set({height});
-ui.navigationBar.height = height;
-ui.navigationBar.onHeightChanged(function() {});
+const height = navigationBar.height;
+navigationBar.set({height});
+navigationBar.height = height;
+navigationBar.onHeightChanged(function() {});
 
 /*Expected
-(5,18): error TS2540: Cannot assign to 'height' because it is a constant or a read-only property
+(4,
+is not assignable to parameter of type
+(5,
+Cannot assign to 'height' because it is a constant or a read-only property
 */

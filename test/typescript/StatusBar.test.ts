@@ -1,6 +1,6 @@
-import {StatusBar, ColorValue, ui} from 'tabris';
+import {StatusBar, ColorValue, statusBar} from 'tabris';
 
-let statusBar: StatusBar = ui.statusBar;
+const object: StatusBar = statusBar;
 
 // Properties
 let background: ColorValue;

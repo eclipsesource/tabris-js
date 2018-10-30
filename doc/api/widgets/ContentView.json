@@ -1,0 +1,17 @@
+{
+  "type": "ContentView",
+  "description": "A composite that does not require (or support) a parent to be visible. It also can not be disposed. Every instance of `ContentView` is controlled by an associated non-widget object, either an instance of `Popover` or the global `tabris` object.",
+  "extends": "Composite",
+  "object": "contentView",
+  "constructor": {
+    "access": "protected",
+    "parameters": [
+      {
+        "name": "properties",
+        "type": "PropertiesObject",
+        "optional": true,
+        "description": "Sets all key-value pairs in the properties object as widget properties."
+      }
+    ]
+  }
+}

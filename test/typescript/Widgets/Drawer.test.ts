@@ -1,28 +1,29 @@
-import {Drawer, ui, EventObject, Properties} from 'tabris';
+import {Drawer, drawer, EventObject, Properties, ContentView} from 'tabris';
 
-let widget: Drawer = ui.drawer;
+const object: Drawer = drawer;
+const conentView: ContentView = drawer;
 
 // Propeties
 let enabled: boolean;
 
-enabled = widget.enabled;
+enabled = drawer.enabled;
 
-widget.enabled = enabled;
+drawer.enabled = enabled;
 
 let properties: Properties<Drawer> = {enabled};
-widget.set(properties);
+drawer.set(properties);
 
 // Methods
 let thisReturnValue: Drawer;
 
-thisReturnValue = widget.close();
-thisReturnValue = widget.open();
+thisReturnValue = drawer.close();
+thisReturnValue = drawer.open();
 
 // Events
-let target: Drawer = widget;
+let target: Drawer = drawer;
 let timeStamp: number = 0;
 let type: string = 'foo';
 
 let drawerCloseEvent: EventObject<Drawer> = {target, timeStamp, type};
 
-widget.onClose((event: EventObject<Drawer>) => {});
+drawer.onClose((event: EventObject<Drawer>) => {});

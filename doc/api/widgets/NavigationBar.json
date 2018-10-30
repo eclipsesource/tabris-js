@@ -14,6 +14,7 @@
       }
     ]
   },
+  "object": "navigationBar",
   "properties": {
     "theme": {
       "type": "string",

@@ -1,11 +1,12 @@
-import Events from './Events';
+import NativeObject from './NativeObject';
 import NativeBridge from './NativeBridge';
 import ProxyStore from './ProxyStore';
 import {error} from './Console';
 
-export default class Tabris {
+export default class Tabris extends NativeObject {
 
   constructor() {
+    super();
     this._started = false;
     this._init = this._init.bind(this);
     this._notify = this._notify.bind(this);
@@ -19,10 +20,27 @@ export default class Tabris {
     return !!this._started;
   }
 
+  set contentView(contentView) {
+    if (!this.$contentView) {
+      this.$contentView = contentView;
+      this._nativeSet('contentView', contentView.cid);
+    }
+  }
+
+  get contentView() {
+    return this.$contentView;
+  }
+
+  _register() {
+    this._proxies = new ProxyStore();
+    const cid = this._proxies.register(this);
+    Object.defineProperty(this, 'cid', {value: cid});
+  }
+
   _init(client, options) {
     this._client = client;
-    this._proxies = new ProxyStore();
     this._nativeBridge = new NativeBridge(client);
+    this._nativeBridge.create(this.cid, 'tabris.Tabris');
     this.trigger('start', options);
     this._started = true;
   }
@@ -50,5 +68,3 @@ export default class Tabris {
   }
 
 }
-
-Object.assign(Tabris.prototype, Events);

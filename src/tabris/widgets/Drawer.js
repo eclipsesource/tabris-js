@@ -1,24 +1,21 @@
 import NativeObject from '../NativeObject';
-import Composite from './Composite';
+import ContentView from './ContentView';
 
-export default class Drawer extends Composite {
+export default class Drawer extends ContentView {
 
   constructor() {
     if (arguments[0] !== true) {
       throw new Error('Drawer can not be created');
     }
-    super();
+    super(true);
   }
 
   get _nativeType() {
     return 'tabris.Drawer';
   }
 
-  _setParent(parent, index) {
-    if (this._parent) {
-      throw new Error('Parent of Drawer can not be changed');
-    }
-    super._setParent(parent, index);
+  _setParent() {
+    throw new Error('Parent of Drawer can not be changed');
   }
 
   _listen(name, listening) {

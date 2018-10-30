@@ -1,12 +1,11 @@
 import {expect, mockTabris, restore, spy, stub} from '../../test';
 import ClientStub from '../ClientStub';
-import {create as createUi} from '../../../src/tabris/widgets/Ui';
-import StatusBar from '../../../src/tabris/widgets/StatusBar';
+import StatusBar, {create} from '../../../src/tabris/widgets/StatusBar';
 import Composite from '../../../src/tabris/widgets/Composite';
 
 describe('StatusBar', function() {
 
-  let ui, statusBar, client;
+  let statusBar, client;
 
   let checkListen = function(event) {
     let listen = client.calls({op: 'listen', id: statusBar.cid});
@@ -18,8 +17,7 @@ describe('StatusBar', function() {
   beforeEach(function() {
     client = new ClientStub();
     mockTabris(client);
-    ui = createUi();
-    statusBar = ui.statusBar;
+    statusBar = create();
   });
 
   afterEach(restore);
@@ -32,15 +30,6 @@ describe('StatusBar', function() {
 
   it('is a StatusBar', function() {
     expect(statusBar).to.be.an.instanceOf(StatusBar);
-  });
-
-  it('SETs parent', function() {
-    let createCall = client.calls({op: 'create', id: statusBar.cid})[0];
-    expect(createCall.properties).to.contain.all.keys({parent: ui.cid});
-  });
-
-  it('is child of ui', function() {
-    expect(statusBar.parent()).to.equal(ui);
   });
 
   it('can not be disposed', function() {

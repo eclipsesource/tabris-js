@@ -1,6 +1,7 @@
 import {expect, spy, stub, restore} from '../test';
 import NativeObject from '../../src/tabris/NativeObject';
 import ClientInterface from '../../src/tabris/Tabris';
+import {create as createContentView} from '../../src/tabris/widgets/ContentView';
 import ClientStub from './ClientStub';
 import '../../src/tabris/Tabris';
 
@@ -40,6 +41,29 @@ describe('ClientInterface', function() {
       tabris._init.call(null, client);
 
       expect(client.calls({op: 'create', type: 'test.Type'}).length).to.equal(1);
+    });
+
+  });
+
+  describe('contentView', function() {
+
+    beforeEach(function() {
+      tabris._init(client);
+    });
+
+    it('can be set only once', function() {
+      const contentView = tabris.contentView = createContentView();
+
+      tabris.contentView = null;
+
+      expect(tabris.contentView).to.equal(contentView);
+    });
+
+    it('SETs contentView', function() {
+      const contentView = tabris.contentView = createContentView();
+
+      expect(client.calls({op: 'set', id: tabris.cid})[0].properties)
+        .to.deep.equal({contentView: contentView.cid});
     });
 
   });

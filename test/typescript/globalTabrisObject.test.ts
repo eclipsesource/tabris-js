@@ -1,1 +1,1 @@
-new tabris.TextView({text: 'foo'}).appendTo(tabris.ui.contentView);
+new tabris.TextView({text: 'foo'}).appendTo(tabris.contentView);

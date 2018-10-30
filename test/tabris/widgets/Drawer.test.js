@@ -1,19 +1,18 @@
 import {expect, restore, mockTabris} from '../../test';
 import ClientStub from '../ClientStub';
-import {create as createUi} from '../../../src/tabris/widgets/Ui';
-import Drawer from '../../../src/tabris/widgets/Drawer';
+import Drawer, {create} from '../../../src/tabris/widgets/Drawer';
 import Composite from '../../../src/tabris/widgets/Composite';
 import TextView from '../../../src/tabris/widgets/TextView';
+import ContentView from '../../../src/tabris/widgets/ContentView';
 
 describe('Drawer', function() {
 
-  let ui, drawer, client;
+  let drawer, client;
 
   beforeEach(function() {
     client = new ClientStub();
     mockTabris(client);
-    ui = createUi();
-    drawer = ui.drawer;
+    drawer = create();
   });
 
   afterEach(restore);
@@ -28,13 +27,8 @@ describe('Drawer', function() {
     expect(drawer).to.be.an.instanceOf(Drawer);
   });
 
-  it('SETs parent', function() {
-    let createCall = client.calls({op: 'create', id: drawer.cid})[0];
-    expect(createCall.properties).to.contain.all.keys({parent: ui.cid});
-  });
-
-  it('is child of ui', function() {
-    expect(drawer.parent()).to.equal(ui);
+  it('is a ContentView', function() {
+    expect(drawer).to.be.an.instanceOf(ContentView);
   });
 
   it('can not be disposed', function() {

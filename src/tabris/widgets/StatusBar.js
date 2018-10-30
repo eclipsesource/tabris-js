@@ -22,11 +22,8 @@ export default class StatusBar extends Widget {
     }
   }
 
-  _setParent(parent, index) {
-    if (this._parent) {
-      throw new Error('Parent of StatusBar can not be changed');
-    }
-    super._setParent(parent, index);
+  _setParent() {
+    throw new Error('Parent of StatusBar can not be changed');
   }
 
   _dispose() {

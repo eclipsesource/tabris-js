@@ -1,10 +1,13 @@
-import {ui} from 'tabris';
+import {statusBar} from 'tabris';
 
-const height = ui.statusBar.height;
-ui.statusBar.set({height});
-ui.statusBar.height = height;
-ui.statusBar.onHeightChanged(function() {});
+const height = statusBar.height;
+statusBar.set({height});
+statusBar.height = height;
+statusBar.onHeightChanged(function() {});
 
 /*Expected
-(5,14): error TS2540: Cannot assign to 'height' because it is a constant or a read-only property
+(4,
+is not assignable to parameter of type
+(5,
+Cannot assign to 'height' because it is a constant or a read-only property
 */

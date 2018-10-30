@@ -14,11 +14,8 @@ export default class NavigationBar extends Widget {
     return 'tabris.NavigationBar';
   }
 
-  _setParent(parent, index) {
-    if (this._parent) {
-      throw new Error('Parent of NavigationBar can not be changed');
-    }
-    super._setParent(parent, index);
+  _setParent() {
+    throw new Error('Parent of NavigationBar can not be changed');
   }
 
   _dispose() {

@@ -171,7 +171,6 @@ describe('tabris', function() {
 
   it('contains other constructors', function() {
     expect(tabris.App).to.be.a('function');
-    expect(tabris.Ui).to.be.a('function');
     expect(tabris.Device).to.be.a('function');
     expect(tabris.Widget).to.be.a('function');
     expect(tabris.WidgetCollection).to.be.a('function');
@@ -212,7 +211,7 @@ describe('tabris', function() {
     });
 
     it('creates service objects on tabris', function() {
-      expect(tabris.ui).to.be.instanceOf(tabris.Ui);
+      expect(tabris.contentView).to.be.instanceOf(tabris.ContentView);
       expect(tabris.app).to.be.instanceOf(tabris.App);
       expect(tabris.device).to.be.instanceOf(tabris.Device);
       expect(tabris.fs).to.be.instanceOf(tabris.FileSystem);
