@@ -89,6 +89,18 @@ export default class Widget extends NativeObject {
     return this.$data;
   }
 
+  toString() {
+    const type = this.constructor.name;
+    const cidAttr = `[cid="${this.cid}"]`;
+    const id = this.id ? '#' + this.id : '';
+    const classes = this.classList.length ? '.' + this.classList.join('.') : '';
+    return type + cidAttr + id + classes;
+  }
+
+  get [Symbol.toStringTag]() {
+    return this.constructor.name;
+  }
+
   toXML() {
     const content = this._getXMLContent();
     const hasChild = content !== '';

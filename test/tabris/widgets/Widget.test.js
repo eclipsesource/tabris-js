@@ -262,6 +262,19 @@ describe('Widget', function() {
 
     });
 
+    it('provides string tag', function() {
+      expect(Object.prototype.toString.call(widget)).to.equal('[object TestWidget]');
+    });
+
+    it('overrides toString', function() {
+      expect(widget.toString()).to.equal(`TestWidget[cid="${widget.cid}"]`);
+      expect((widget = new TestWidget({id: 'foo'})).toString()).to.equal(`TestWidget[cid="${widget.cid}"]#foo`);
+      expect((widget = new TestWidget({class: 'foo bar'})).toString())
+        .to.equal(`TestWidget[cid="${widget.cid}"].foo.bar`);
+      expect((widget = new TestWidget({id: 'foo', class: 'bar'})).toString())
+        .to.equal(`TestWidget[cid="${widget.cid}"]#foo.bar`);
+    });
+
     describe('dispose', function() {
 
       let parent, child;
@@ -576,7 +589,7 @@ describe('Widget', function() {
 
           expect(() => {
             widget.append(child);
-          }).to.throw(Error, 'TestWidget could not be appended to TestWidget');
+          }).to.throw(Error, /TestWidget\[cid=".*"\] could not be appended to TestWidget\[cid=".*"\]/);
           expect(widget.children().toArray()).not.to.contain(child);
         });
 

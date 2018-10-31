@@ -276,7 +276,7 @@ describe('TabFolder', function() {
 
       let calls = client.calls({op: 'set', id: tabFolder.cid});
       expect(calls.length).to.equal(0);
-      expect(console.warn).to.have.been.calledWith('Can not set TabFolder selection to Tab');
+      expect(console.warn).to.have.been.calledWithMatch(/Can not set TabFolder selection to Tab\[cid=".*"\]/);
     });
 
     it('Ignores setting non tab', function() {
