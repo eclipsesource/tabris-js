@@ -128,7 +128,7 @@ export default class Widget extends NativeObject {
   }
 
   _setParent(parent, index) {
-    this._nativeSet('parent', parent ? types.proxy.encode(parent._getContainer(this)) : null);
+    this._nativeSet('parent', parent ? types.NativeObject.encode(parent._getContainer(this)) : null);
     if (this._parent) {
       this._parent._removeChild(this);
     }

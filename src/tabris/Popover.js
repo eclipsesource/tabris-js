@@ -29,7 +29,7 @@ export default class Popover extends Popup {
 }
 
 NativeObject.defineProperties(Popover.prototype, {
-  anchor: {type: 'proxy', default: null},
+  anchor: {type: 'NativeObject', default: null},
   width: {type: 'dimension', nocache: true},
   height: {type: 'dimension', nocache: true},
 });

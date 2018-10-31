@@ -29,7 +29,7 @@ export default class Worker {
     }
     addDOMEventTargetMethods(this);
     defineEventHandlerProperties(this, EVENT_TYPES);
-    this._proxy = this.$createProxy({scriptPath});
+    this._nativeObject = this.$createProxy({scriptPath});
   }
 
   $createProxy(scriptPath) {
@@ -45,7 +45,7 @@ export default class Worker {
 
   postMessage(message, transferList) {
     this._validateMessage(message);
-    this._proxy._nativeCall('postMessage', {message, transferList});
+    this._nativeObject._nativeCall('postMessage', {message, transferList});
   }
 
   _validateMessage(message) {
@@ -83,7 +83,7 @@ export default class Worker {
   }
 
   terminate() {
-    this._proxy._nativeCall('terminate');
+    this._nativeObject._nativeCall('terminate');
   }
 
 }

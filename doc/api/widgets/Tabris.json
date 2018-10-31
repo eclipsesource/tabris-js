@@ -1,0 +1,30 @@
+{
+  "type": "Tabris",
+  "description": "The object exported by the `tabris` module hosting all the classes and singletons it provides (not listed here). Is also available in the global namespace as `tabris`.",
+  "extends": "NativeObject",
+  "object": "tabris",
+  "constructor": {
+    "access": "private",
+    "parameters": []
+  },
+  "properties": {
+    "started": {
+      "type": "boolean",
+      "default": false,
+      "readonly": true,
+      "description": "Indicates that the framework has been fully initialized. This happens before the main application module is parsed and executed, so it is only relevant for framework and plug-in developers."
+    },
+    "version": {
+      "type": "string",
+      "readonly": true,
+      "const": true,
+      "description": "The version of the tabris module."
+    }
+  },
+  "links": [
+    {
+      "title": "Modules",
+      "path": "../modules.md"
+    }
+  ]
+}

@@ -54,13 +54,13 @@ describe('Storage', function() {
         }).to.throw("Not enough arguments to 'setItem'");
       });
 
-      it('calls proxy add with key and value', function() {
+      it('calls nativeObject add with key and value', function() {
         storage.setItem('foo', 'bar');
 
         expect(client.call).to.have.been.calledWith(cid, 'add', {key: 'foo', value: 'bar'});
       });
 
-      it('call proxy add with stringified key', function() {
+      it('call nativeObject add with stringified key', function() {
         storage.setItem(2, 'bar');
 
         expect(client.call).to.have.been.calledWith(cid, 'add', {key: '2', value: 'bar'});
@@ -90,7 +90,7 @@ describe('Storage', function() {
         }).to.throw("Not enough arguments to 'getItem'");
       });
 
-      it('calls proxy get with key', function() {
+      it('calls nativeObject get with key', function() {
         storage.getItem('foo');
 
         expect(client.call).to.have.been.calledWith(cid, 'get', {key: 'foo'});
@@ -136,13 +136,13 @@ describe('Storage', function() {
         }).to.throw("Not enough arguments to 'removeItem'");
       });
 
-      it('calls proxy remove with keys array', function() {
+      it('calls nativeObject remove with keys array', function() {
         storage.removeItem('foo');
 
         expect(client.call).to.have.been.calledWith(cid, 'remove', {keys: ['foo']});
       });
 
-      it('calls proxy remove with keys array with stringified key', function() {
+      it('calls nativeObject remove with keys array with stringified key', function() {
         storage.removeItem(3);
 
         expect(client.call).to.have.been.calledWith(cid, 'remove', {keys: ['3']});
@@ -160,7 +160,7 @@ describe('Storage', function() {
 
     describe('clear', function() {
 
-      it('calls proxy clear', function() {
+      it('calls nativeObject clear', function() {
         storage.clear();
 
         expect(client.call).to.have.been.calledWith(cid, 'clear', undefined);

@@ -11,8 +11,8 @@ describe('Animation', function() {
     return client.calls({op: 'create', type: 'tabris.Animation'}).pop().id;
   }
 
-  function findProxy(cid) {
-    return tabris._proxies.find(cid);
+  function findNativeObject(cid) {
+    return tabris._nativeObjectRegistry.find(cid);
   }
 
   function createOp() {
@@ -60,7 +60,7 @@ describe('Animation', function() {
 
     it('disposes Animation object on widget dispose', function() {
       widget.animate({}, {}).catch(() => {});
-      let animation = findProxy(animationId());
+      let animation = findNativeObject(animationId());
 
       widget.dispose();
 
@@ -69,7 +69,7 @@ describe('Animation', function() {
 
     it('does not keep references to Animation object after completion', function() {
       widget.animate({}, {});
-      let animation = findProxy(animationId());
+      let animation = findNativeObject(animationId());
       animation._trigger('completed', {});
       spy(animation, 'dispose');
 
@@ -179,7 +179,7 @@ describe('Animation', function() {
       widget.animate({}, {});
       expect(client.calls({op: 'destroy', id: animationId()}).length).to.equal(0);
 
-      findProxy(animationId())._trigger('completed', {});
+      findNativeObject(animationId())._trigger('completed', {});
       expect(client.calls({op: 'destroy', id: animationId()}).length).to.equal(1);
     });
 
@@ -198,7 +198,7 @@ describe('Animation', function() {
       let thenCallback = spy();
       widget.animate({}, {}).then(thenCallback);
 
-      findProxy(animationId())._trigger('completed', {});
+      findNativeObject(animationId())._trigger('completed', {});
 
       setTimeout(function() {
         expect(thenCallback).to.have.been.called;

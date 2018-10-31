@@ -112,4 +112,4 @@ export default class GC extends NativeObject {
 
 }
 
-NativeObject.defineProperties(GC.prototype, {parent: 'proxy'});
+NativeObject.defineProperties(GC.prototype, {parent: 'NativeObject'});

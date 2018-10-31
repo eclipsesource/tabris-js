@@ -187,7 +187,7 @@ function resolveAttribute(value, widget) {
   if (isNumber(value)) {
     return value;
   }
-  return toProxyId(value, widget);
+  return toCid(value, widget);
 }
 
 function resolveConstraint(constraint, widget) {
@@ -197,15 +197,15 @@ function resolveConstraint(constraint, widget) {
     }
     return [constraint.reference.percent, constraint.offset];
   }
-  return [toProxyId(constraint.reference, widget), constraint.offset];
+  return [toCid(constraint.reference, widget), constraint.offset];
 }
 
-function toProxyId(ref, widget) {
+function toCid(ref, widget) {
   if (ref === LayoutData.prev) {
     let children = getParent(widget)._children();
     let index = children.indexOf(widget);
     if (index > 0) {
-      return types.proxy.encode(children[index - 1]) || 0;
+      return types.NativeObject.encode(children[index - 1]) || 0;
     }
     return 0;
   }
@@ -213,16 +213,16 @@ function toProxyId(ref, widget) {
     let children = getParent(widget)._children();
     let index = children.indexOf(widget);
     if (index + 1 < children.length) {
-      return types.proxy.encode(children[index + 1]) || 0;
+      return types.NativeObject.encode(children[index + 1]) || 0;
     }
     return 0;
   }
   if (typeof ref === 'string') {
-    let proxy = widget.siblings(ref)[0];
-    return types.proxy.encode(proxy) || 0;
+    let sibling = widget.siblings(ref)[0];
+    return types.NativeObject.encode(sibling) || 0;
   }
   if (widget.siblings().toArray().includes(ref)) {
-    return types.proxy.encode(ref) || 0;
+    return types.NativeObject.encode(ref) || 0;
   }
   return 0;
 }

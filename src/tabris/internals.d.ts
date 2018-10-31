@@ -17,7 +17,7 @@ type TabrisType = 'any'
   | 'dimension'
   | 'sibling'
   | 'bounds'
-  | 'proxy'
+  | 'NativeObject'
   | 'opacity'
   | 'transform';
 

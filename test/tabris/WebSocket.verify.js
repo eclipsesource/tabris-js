@@ -28,11 +28,11 @@ describe('WebSocket', function() {
   afterEach(restore);
 
   it('calls send with string data', function() {
-    tabris._notify(webSocket._proxy.cid, 'open', {});
+    tabris._notify(webSocket._nativeObject.cid, 'open', {});
 
     webSocket.send('hello');
 
-    expect(client.call).to.have.been.calledWith(webSocket._proxy.cid, 'send', {data: 'hello'});
+    expect(client.call).to.have.been.calledWith(webSocket._nativeObject.cid, 'send', {data: 'hello'});
   });
 
 });

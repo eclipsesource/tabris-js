@@ -1,4 +1,4 @@
-import ProxyStore from '../src/tabris/ProxyStore';
+import NativeObjectRegistry from '../src/tabris/NativeObjectRegistry';
 import NativeBridge from '../src/tabris/NativeBridge';
 import Events from '../src/tabris/Events';
 
@@ -8,8 +8,8 @@ export function mockTabris(client) {
   }
   global.tabris = Object.assign({
     _client: client,
-    _proxies: new ProxyStore(),
-    _notify: (cid, event, param) => tabris._proxies.find(cid)._trigger(event, param),
+    _nativeObjectRegistry: new NativeObjectRegistry(),
+    _notify: (cid, event, param) => tabris._nativeObjectRegistry.find(cid)._trigger(event, param),
     started: true,
     device: {platform: 'test'}
   }, Events);

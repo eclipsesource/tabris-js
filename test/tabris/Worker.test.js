@@ -31,7 +31,7 @@ describe('Worker', () => {
     it('creates Worker from script path', () => {
       worker = new Worker('script.js');
 
-      expect(worker._proxy.scriptPath).to.equal('script.js');
+      expect(worker._nativeObject.scriptPath).to.equal('script.js');
     });
 
   });

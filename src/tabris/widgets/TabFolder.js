@@ -40,11 +40,11 @@ export default class TabFolder extends Composite {
 
   _trigger(name, event) {
     if (name === 'select') {
-      let selection = tabris._proxies.find(event.selection);
+      let selection = tabris._nativeObjectRegistry.find(event.selection);
       return super._trigger('select', {selection});
     }
     if (name === 'scroll') {
-      let selection = event.selection ? tabris._proxies.find(event.selection) : null;
+      let selection = event.selection ? tabris._nativeObjectRegistry.find(event.selection) : null;
       return super._trigger('scroll', {selection, offset: event.offset});
     }
     return super._trigger(name, event);
@@ -86,7 +86,7 @@ NativeObject.defineProperties(TabFolder.prototype, {
         return null;
       }
       let selection = this._nativeGet('selection');
-      return selection ? tabris._proxies.find(selection) : null;
+      return selection ? tabris._nativeObjectRegistry.find(selection) : null;
     }
   },
   textColor: {type: 'ColorValue'},

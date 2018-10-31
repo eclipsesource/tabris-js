@@ -52,7 +52,7 @@ export default class WebSocket {
     this.extensions = '';
     addDOMEventTargetMethods(this);
     defineEventHandlerProperties(this, EVENT_TYPES);
-    this._proxy = this.$createProxy(url, protocols);
+    this._nativeObject = this.$createProxy(url, protocols);
   }
 
   $createProxy(url, protocols) {
@@ -78,11 +78,11 @@ export default class WebSocket {
   }
 
   set binaryType(binaryType) {
-    this._proxy.binaryType = binaryType;
+    this._nativeObject.binaryType = binaryType;
   }
 
   get binaryType() {
-    return this._proxy.binaryType;
+    return this._nativeObject.binaryType;
   }
 
   set bufferedAmount(bufferedAmount) {
@@ -90,7 +90,7 @@ export default class WebSocket {
   }
 
   get bufferedAmount() {
-    return this._proxy.bufferedAmount;
+    return this._nativeObject.bufferedAmount;
   }
 
   send(data) {
@@ -98,9 +98,9 @@ export default class WebSocket {
       throw new Error("Can not 'send' WebSocket message when WebSocket state is CONNECTING");
     }
     if (typeof data === 'string') {
-      this._proxy._nativeCall('send', {data});
+      this._nativeObject._nativeCall('send', {data});
     } else if (data instanceof ArrayBuffer || ArrayBuffer.isView(data)) {
-      this._proxy._nativeCall('send', {data});
+      this._nativeObject._nativeCall('send', {data});
     } else {
       throw new Error('Data of type ' + typeof data + " is not supported in WebSocket 'send' operation");
     }
@@ -123,7 +123,7 @@ export default class WebSocket {
       if (reason) {
         properties.reason = reason;
       }
-      this._proxy._nativeCall('close', properties);
+      this._nativeObject._nativeCall('close', properties);
     }
   }
 

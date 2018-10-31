@@ -1,6 +1,6 @@
 import {expect, mockTabris, spy, stub, restore} from '../test';
 import NativeObject from '../../src/tabris/NativeObject';
-import ProxyStore from '../../src/tabris/ProxyStore';
+import NativeObjectRegistry from '../../src/tabris/NativeObjectRegistry';
 import NativeBridge from '../../src/tabris/NativeBridge';
 import EventObject from '../../src/tabris/EventObject';
 import ClientStub from './ClientStub';
@@ -47,7 +47,7 @@ describe('NativeObject', function() {
     });
 
     it('translates properties', function() {
-      NativeObject.defineProperties(TestType.prototype, {bar: {type: 'proxy'}});
+      NativeObject.defineProperties(TestType.prototype, {bar: {type: 'NativeObject'}});
       let other = new TestType();
 
       object._create('TestType', {bar: other});
@@ -453,7 +453,7 @@ describe('NativeObject.extend', function() {
     client = new ClientStub();
     global.tabris = {
       on: () => {},
-      _proxies: new ProxyStore()
+      _nativeObjectRegistry: new NativeObjectRegistry()
     };
     global.tabris._nativeBridge = new NativeBridge(client);
     stub(console, 'warn');

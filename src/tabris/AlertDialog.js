@@ -53,7 +53,7 @@ NativeObject.defineProperties(AlertDialog.prototype, {
       decode(cids) {
         if (cids instanceof Array) {
           return cids
-            .map(cid => tabris._proxies.find(cid))
+            .map(cid => tabris._nativeObjectRegistry.find(cid))
             .filter(textInput => textInput != null);
         }
         return null;

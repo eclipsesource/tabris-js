@@ -168,7 +168,7 @@ export let types = {
     }
   },
 
-  proxy: {
+  NativeObject: {
     encode(value) {
       if (value instanceof NativeObject) {
         return value.cid;
@@ -180,7 +180,7 @@ export let types = {
       return value;
     },
     decode(cid) {
-      return tabris._proxies.find(cid);
+      return tabris._nativeObjectRegistry.find(cid);
     }
   },
 

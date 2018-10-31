@@ -165,7 +165,7 @@ export default class XMLHttpRequest {
       throw new Error('Only asynchronous request supported.');
     }
     // (12): superfluous as we don't support synchronous requests
-    // TODO: (13) - should we call 'abort' to the proxy? We'd need to move the creation of the proxy
+    // TODO: (13) - should we call 'abort' to the nativeObject? We'd need to move the creation of the nativeObject
     // to the open() function
     this.$requestMethod = method; // (14)
     this.$requestUrl = parsedUrl;
@@ -180,7 +180,7 @@ export default class XMLHttpRequest {
   }
 
   send(data) {
-    this.$proxy = new HttpRequest()
+    this.$nativeObject = new HttpRequest()
       .on('stateChanged', event => handleStateChange(event, this))
       .on('downloadProgress', event => dispatchProgressEvent('progress', this, event))
       .on('uploadProgress', event => dispatchProgressEvent('progress', this.upload, event));
@@ -211,7 +211,7 @@ export default class XMLHttpRequest {
       dispatchProgressEvent('loadstart', this.upload); // (9.3)
     }
     // (10): only handling the same origin case
-    this.$proxy.send({ // request URL fetch
+    this.$nativeObject.send({ // request URL fetch
       url: this.$requestUrl.source,
       method: this.$requestMethod,
       timeout: this.timeout,
@@ -222,8 +222,8 @@ export default class XMLHttpRequest {
   }
 
   abort() {
-    if (this.$proxy) {
-      this.$proxy.abort(); // (1)
+    if (this.$nativeObject) {
+      this.$nativeObject.abort(); // (1)
     }
     if (!([UNSENT, OPENED].indexOf(this.$readyState) > -1 && !this.$sendInvoked ||
         this.$readyState === DONE)) { // send() interrupted
@@ -325,8 +325,8 @@ function handleStateChange(event, xhr) {
       dispatchEvent('readystatechange', xhr);
       dispatchFinishedProgressEvents(xhr);
       dispatchFinishedProgressEvents(xhr.upload);
-      xhr.$proxy.dispose();
-      xhr.$proxy = null;
+      xhr.$nativeObject.dispose();
+      xhr.$nativeObject = null;
       break;
     case 'error':
       handleRequestError('error', xhr);
@@ -350,8 +350,8 @@ function handleRequestError(type, xhr) {
     xhr.$uploadComplete = true;
     dispatchErrorProgressEvents(type, xhr.upload);
   }
-  xhr.$proxy.dispose();
-  xhr.$proxy = null;
+  xhr.$nativeObject.dispose();
+  xhr.$nativeObject = null;
 }
 
 function validateRequiredOpenArgs(method, url) {

@@ -128,7 +128,7 @@ export default class NativeObject extends EventsClass {
     if (typeof tabris === 'undefined' || !tabris._nativeBridge) {
       throw new Error('tabris.js not started');
     }
-    const cid = tabris._proxies.register(this);
+    const cid = tabris._nativeObjectRegistry.register(this);
     Object.defineProperty(this, 'cid', {value: cid});
   }
 
@@ -214,7 +214,7 @@ export default class NativeObject extends EventsClass {
       if (!skipNative) {
         tabris._nativeBridge.destroy(this.cid);
       }
-      tabris._proxies.remove(this.cid);
+      tabris._nativeObjectRegistry.remove(this.cid);
       delete this._props;
       this._isDisposed = true;
     }

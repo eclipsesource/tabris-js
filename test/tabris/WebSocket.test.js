@@ -77,19 +77,19 @@ describe('WebSocket', function() {
   describe('open event', function() {
 
     it('sets readyState to OPEN', function() {
-      tabris._notify(webSocket._proxy.cid, 'open', {});
+      tabris._notify(webSocket._nativeObject.cid, 'open', {});
 
       expect(webSocket.readyState).to.equal(webSocket.OPEN);
     });
 
     it('sets protocol to protocol parameter', function() {
-      tabris._notify(webSocket._proxy.cid, 'open', {protocol: 'chat-protocol'});
+      tabris._notify(webSocket._nativeObject.cid, 'open', {protocol: 'chat-protocol'});
 
       expect(webSocket.protocol).to.equal('chat-protocol');
     });
 
     it('sets extensions to extensions parameter', function() {
-      tabris._notify(webSocket._proxy.cid, 'open', {extensions: 'compress'});
+      tabris._notify(webSocket._nativeObject.cid, 'open', {extensions: 'compress'});
 
       expect(webSocket.extensions).to.equal('compress');
     });
@@ -98,7 +98,7 @@ describe('WebSocket', function() {
       let listener = spy();
       webSocket.onopen = listener;
 
-      tabris._notify(webSocket._proxy.cid, 'open', {protocol: 'chat-protocol', extensions: 'compress'});
+      tabris._notify(webSocket._nativeObject.cid, 'open', {protocol: 'chat-protocol', extensions: 'compress'});
 
       expect(listener).to.have.been.calledWithMatch({
         target: webSocket,
@@ -115,9 +115,9 @@ describe('WebSocket', function() {
     it('notifies onmessage listener', function() {
       let listener = spy();
       webSocket.onmessage = listener;
-      tabris._notify(webSocket._proxy.cid, 'open', {data: 'message'});
+      tabris._notify(webSocket._nativeObject.cid, 'open', {data: 'message'});
 
-      tabris._notify(webSocket._proxy.cid, 'message', {data: 'message'});
+      tabris._notify(webSocket._nativeObject.cid, 'message', {data: 'message'});
 
       expect(listener).to.have.been.calledWithMatch({target: webSocket, data: 'message'});
       expect(listener.firstCall.args[0]).to.be.instanceOf(Event);
@@ -128,7 +128,7 @@ describe('WebSocket', function() {
   describe('close event', function() {
 
     it('sets readyState to CLOSED', function() {
-      tabris._notify(webSocket._proxy.cid, 'close', {});
+      tabris._notify(webSocket._nativeObject.cid, 'close', {});
 
       expect(webSocket.readyState).to.equal(webSocket.CLOSED);
     });
@@ -137,7 +137,7 @@ describe('WebSocket', function() {
       let listener = spy();
       webSocket.onclose = listener;
 
-      tabris._notify(webSocket._proxy.cid, 'close', {});
+      tabris._notify(webSocket._nativeObject.cid, 'close', {});
 
       expect(listener).to.have.been.calledWithMatch({target: webSocket});
       expect(listener.firstCall.args[0]).to.be.instanceOf(Event);
@@ -148,7 +148,7 @@ describe('WebSocket', function() {
   describe('error event', function() {
 
     it('sets readyState to CLOSED', function() {
-      tabris._notify(webSocket._proxy.cid, 'error', {});
+      tabris._notify(webSocket._nativeObject.cid, 'error', {});
 
       expect(webSocket.readyState).to.equal(webSocket.CLOSED);
     });
@@ -157,7 +157,7 @@ describe('WebSocket', function() {
       let listener = spy();
       webSocket.onerror = listener;
 
-      tabris._notify(webSocket._proxy.cid, 'error', {});
+      tabris._notify(webSocket._nativeObject.cid, 'error', {});
 
       expect(listener).to.have.been.calledWithMatch({target: webSocket});
       expect(listener.firstCall.args[0]).to.be.instanceOf(Event);
@@ -196,7 +196,7 @@ describe('WebSocket', function() {
     it('set calls setter', function() {
       webSocket.binaryType = 'blob';
 
-      expect(client.calls({op: 'set', id: webSocket._proxy.cid})[0].properties).to.eql({binaryType: 'blob'});
+      expect(client.calls({op: 'set', id: webSocket._nativeObject.cid})[0].properties).to.eql({binaryType: 'blob'});
     });
 
     it('get calls getter', function() {
@@ -215,35 +215,36 @@ describe('WebSocket', function() {
     });
 
     it('throws when data is not string, typedarray or arraybuffer', function() {
-      tabris._notify(webSocket._proxy.cid, 'open', {});
+      tabris._notify(webSocket._nativeObject.cid, 'open', {});
 
       expect(() => webSocket.send(123))
         .to.throw("Data of type number is not supported in WebSocket 'send' operation");
     });
 
     it("calls 'send' with string data", function() {
-      tabris._notify(webSocket._proxy.cid, 'open', {});
+      tabris._notify(webSocket._nativeObject.cid, 'open', {});
 
       webSocket.send('hello');
 
-      expect(client.call).to.have.been.calledWith(webSocket._proxy.cid, 'send', {data: 'hello'});
+      expect(client.call).to.have.been.calledWith(webSocket._nativeObject.cid, 'send', {data: 'hello'});
     });
 
     it("calls 'send' with typedarray data", function() {
-      tabris._notify(webSocket._proxy.cid, 'open', {});
+      tabris._notify(webSocket._nativeObject.cid, 'open', {});
 
       webSocket.send(new Int8Array([1, 2, 3]));
 
-      expect(client.call).to.have.been.calledWith(webSocket._proxy.cid, 'send', {data: new Int8Array([1, 2, 3])});
+      expect(client.call).to.have.been
+        .calledWith(webSocket._nativeObject.cid, 'send', {data: new Int8Array([1, 2, 3])});
     });
 
     it("calls 'send' with arraybuffer data", function() {
-      tabris._notify(webSocket._proxy.cid, 'open', {});
+      tabris._notify(webSocket._nativeObject.cid, 'open', {});
       let data = new Int8Array([1, 2, 3]).buffer;
 
       webSocket.send(data);
 
-      expect(client.call).to.have.been.calledWith(webSocket._proxy.cid, 'send', {data});
+      expect(client.call).to.have.been.calledWith(webSocket._nativeObject.cid, 'send', {data});
     });
 
   });
@@ -297,7 +298,8 @@ describe('WebSocket', function() {
     it("calls 'close' with code and reason", function() {
       webSocket.close(1000, 'message');
 
-      expect(client.call).to.have.been.calledWith(webSocket._proxy.cid, 'close', {code: 1000, reason: 'message'});
+      expect(client.call).to.have.been
+        .calledWith(webSocket._nativeObject.cid, 'close', {code: 1000, reason: 'message'});
     });
   });
 

@@ -83,10 +83,10 @@ describe('property-types', function() {
 
   });
 
-  describe('proxy', function() {
+  describe('NativeObject', function() {
 
-    let encode = types.proxy.encode;
-    let decode = types.proxy.decode;
+    let encode = types.NativeObject.encode;
+    let decode = types.NativeObject.decode;
 
     it('translates widgets to ids in properties', function() {
       let value = new CustomNativeObject();

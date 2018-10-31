@@ -10,7 +10,7 @@ const PROPERTIES = {
   repeat: {type: 'natural'},
   reverse: {type: 'boolean'},
   easing: {type: ['choice', ['linear', 'ease-in', 'ease-out', 'ease-in-out']]},
-  target: {type: 'proxy'}
+  target: {type: 'NativeObject'}
 };
 
 class Animation extends NativeObject {

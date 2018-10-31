@@ -19,7 +19,7 @@ export default class GestureRecognizer extends NativeObject {
 
 NativeObject.defineProperties(GestureRecognizer.prototype, {
   type: 'string',
-  target: 'proxy',
+  target: 'NativeObject',
   fingers: 'natural',
   touches: 'natural',
   duration: 'natural',

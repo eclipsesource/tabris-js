@@ -1,6 +1,6 @@
 import NativeObject from './NativeObject';
 import NativeBridge from './NativeBridge';
-import ProxyStore from './ProxyStore';
+import NativeObjectRegistry from './NativeObjectRegistry';
 import {error} from './Console';
 
 export default class Tabris extends NativeObject {
@@ -32,8 +32,8 @@ export default class Tabris extends NativeObject {
   }
 
   _register() {
-    this._proxies = new ProxyStore();
-    const cid = this._proxies.register(this);
+    this._nativeObjectRegistry = new NativeObjectRegistry();
+    const cid = this._nativeObjectRegistry.register(this);
     Object.defineProperty(this, 'cid', {value: cid});
   }
 
@@ -52,10 +52,10 @@ export default class Tabris extends NativeObject {
   _notify(cid, event, param) {
     let returnValue;
     try {
-      let proxy = this._proxies.find(cid);
-      if (proxy) {
+      let nativeObject = this._nativeObjectRegistry.find(cid);
+      if (nativeObject) {
         try {
-          returnValue = proxy._trigger(event, param);
+          returnValue = nativeObject._trigger(event, param);
         } catch (err) {
           error(err);
         }

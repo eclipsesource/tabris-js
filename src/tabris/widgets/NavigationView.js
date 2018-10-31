@@ -101,7 +101,7 @@ NativeObject.defineProperties(NavigationView.prototype, {
   titleTextColor: {type: 'ColorValue'},
   actionColor: {type: 'ColorValue'},
   actionTextColor: {type: 'ColorValue'},
-  navigationAction: {type: 'proxy', default: null},
+  navigationAction: {type: 'NativeObject', default: null},
   pageAnimation: {type: ['choice', ['default', 'none']], default: 'default'},
   layout: {
     set(name, value) {

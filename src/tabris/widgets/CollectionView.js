@@ -111,7 +111,7 @@ export default class CollectionView extends Composite {
       let item = this.$createCell(event.type);
       return item.cid;
     } else if (name === 'updateCell') {
-      this.updateCell(tabris._proxies.find(event.widget), event.index);
+      this.updateCell(tabris._nativeObjectRegistry.find(event.widget), event.index);
     } else if (name === 'select') {
       return super._trigger('select', {index: event.index});
     } else {
