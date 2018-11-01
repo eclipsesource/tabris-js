@@ -1,4 +1,5 @@
-import {expect, spy, stub, restore} from '../test';
+import {expect, spy, stub, restore, mockTabris} from '../test';
+import ClientStub from './ClientStub';
 import {createConsole} from '../../src/tabris/Console';
 import * as defaultConsole from '../../src/tabris/Console';
 import Composite from '../../src/tabris/widgets/Composite';
@@ -9,6 +10,10 @@ const realConsole = console;
 describe('Console', function() {
 
   afterEach(restore);
+
+  beforeEach(function() {
+    mockTabris(new ClientStub());
+  });
 
   describe('default', function() {
 
@@ -195,6 +200,109 @@ describe('Console', function() {
         const object = {id: 'widget'};
         console.dirxml(object);
         expect(nativeConsole.print).to.have.been.calledWithMatch('log', "{ id: 'widget' }");
+      });
+
+    });
+
+    describe('trace', function() {
+
+      let stack;
+
+      const stacks = {
+        android: {
+          production:
+`Error
+  at doSomethingElse (./dist/console.js:23:17)
+  at doSomething (./dist/console.js:20:5)
+  at Button.start (./dist/console.js:17:5)
+  at ./node_modules/tabris/tabris.min.js:1:27243
+  at Button.trigger (./node_modules/tabris/tabris.min.js:1:27407)
+  at Button.$trigger (./node_modules/tabris/tabris.min.js:1:48355)
+  at Tabris._notify (./node_modules/tabris/tabris.min.js:1:74931)`,
+          debug:
+`Error
+  at doSomethingElse (./dist/console.js:23:17)
+  at doSomething (./dist/console.js:20:5)
+  at Button.start (./dist/console.js:17:5)
+  at ./node_modules/tabris/tabris.js:1:27243
+  at Button.trigger (./node_modules/tabris/tabris.js:1:27407)
+  at Button.$trigger (./node_modules/tabris/tabris.js:1:48355)
+  at Tabris._notify (./node_modules/tabris/tabris.js:1:74931)`
+        },
+        ios: {
+          production:
+`doSomethingElse@http://192.168.6.77:8080/dist/console.js:23:17
+doSomething@http://192.168.6.77:8080/dist/console.js:20:5
+start@http://192.168.6.77:8080/dist/console.js:17:5
+http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:27243
+trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:27407
+$trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:48355
+_notify@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:74931
+_notify@[native code]`,
+          debug:
+`doSomethingElse@http://192.168.6.77:8080/dist/console.js:23:17
+doSomething@http://192.168.6.77:8080/dist/console.js:20:5
+start@http://192.168.6.77:8080/dist/console.js:17:5
+http://192.168.6.77:8080/node_modules/tabris/tabris.js:1:27243
+trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.js:1:27407
+$trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.js:1:48355
+_notify@http://192.168.6.77:8080/node_modules/tabris/tabris.js:1:74931
+_notify@[native code]`
+        }
+      };
+
+      class CustomError extends Error {
+
+        constructor() {
+          super();
+          this.stack = stack;
+        }
+      }
+
+      const OrgError = Error;
+
+      beforeEach(function() {
+        global.Error = CustomError;
+      });
+
+      afterEach(function() {
+        global.Error = OrgError;
+      });
+
+      ['android', 'ios'].forEach(function(platform) {
+
+        it(platform + ' prints simplified stack trace in production', function() {
+          tabris.device.platform = platform;
+          stack = stacks[platform].production;
+          const expected =
+`doSomethingElse (./dist/console.js:23:17)
+doSomething (./dist/console.js:20:5)
+start (./dist/console.js:17:5)`;
+
+          console.trace();
+
+          expect(nativeConsole.print).to.have.been
+            .calledWith('log', expected);
+        });
+
+        it(platform + ' prints full stack trace in debug mode (non-minified)', function() {
+          tabris.device.platform = platform;
+          stack = stacks[platform].debug;
+          const expected =
+`doSomethingElse (./dist/console.js:23:17)
+doSomething (./dist/console.js:20:5)
+start (./dist/console.js:17:5)
+./node_modules/tabris/tabris.js:1:27243
+trigger (./node_modules/tabris/tabris.js:1:27407)
+$trigger (./node_modules/tabris/tabris.js:1:48355)
+_notify (./node_modules/tabris/tabris.js:1:74931)`;
+
+          console.trace();
+
+          expect(nativeConsole.print).to.have.been
+            .calledWith('log', expected);
+        });
+
       });
 
     });

@@ -260,6 +260,9 @@
           }
         ]
       }
-    ]
+    ],
+    "trace": {
+      "description": "Prints a stack trace in a platform-independent format. Framework internals are omitted."
+    }
   }
 }

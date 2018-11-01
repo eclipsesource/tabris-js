@@ -6,7 +6,7 @@ let logTextInput = new TextInput({
   message: 'Log message'
 }).appendTo(ui.contentView);
 
-['debug', 'log', 'info', 'warn', 'error'].forEach((method) => {
+['debug', 'log', 'info', 'warn', 'error', 'trace'].forEach((method) => {
   new Button({
     left: 10, right: 10, top: 'prev() 10',
     text: method

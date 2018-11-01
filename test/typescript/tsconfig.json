@@ -8,7 +8,8 @@
     "alwaysStrict": true,
     "strictNullChecks": true,
     "jsx": "react",
-    "jsxFactory": "JSX.createElement"
+    "jsxFactory": "JSX.createElement",
+    "typeRoots": []
   },
   "include": [
     "**/*.test.ts",
