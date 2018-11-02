@@ -1,6 +1,6 @@
 import {expect, mockTabris, restore, spy, stub} from '../../test';
 import WidgetCollection from '../../../src/tabris/WidgetCollection';
-import Layout, {LayoutQueue} from '../../../src/tabris/Layout';
+import Layout, {LayoutQueue, ConstraintLayout} from '../../../src/tabris/Layout';
 import ClientStub from '.././ClientStub';
 import Widget from '../../../src/tabris/Widget';
 import Composite from '../../../src/tabris/widgets/Composite';
@@ -1359,7 +1359,7 @@ describe('Widget', function() {
     let parent, defaultLayout, testLayout;
 
     beforeEach(function() {
-      defaultLayout = Layout.default();
+      defaultLayout = ConstraintLayout.create();
       testLayout = new TestLayout();
       spy(defaultLayout, 'add');
       spy(defaultLayout, 'remove');
@@ -1411,9 +1411,9 @@ describe('Widget', function() {
     let parent, widget, other;
 
     beforeEach(function() {
-      parent = new TestWidget({layout: Layout.default()});
-      widget = new TestWidget({layout: Layout.default()}).appendTo(parent);
-      other = new TestWidget({id: 'other', layout: Layout.default()}).appendTo(parent);
+      parent = new TestWidget({layout: ConstraintLayout.create()});
+      widget = new TestWidget({layout: ConstraintLayout.create()}).appendTo(parent);
+      other = new TestWidget({id: 'other', layout: ConstraintLayout.create()}).appendTo(parent);
       client.resetCalls();
     });
 

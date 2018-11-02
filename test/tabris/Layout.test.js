@@ -1,6 +1,6 @@
 import ClientStub from './ClientStub';
 import {expect, mockTabris, stub, spy, restore} from '../test';
-import Layout, {LayoutQueue} from '../../src/tabris/Layout';
+import Layout, {LayoutQueue, ConstraintLayout} from '../../src/tabris/Layout';
 import LayoutData from '../../src/tabris/LayoutData';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
 import Composite from '../../src/tabris/widgets/Composite';
@@ -367,12 +367,16 @@ describe('Layout', function() {
 
   });
 
-  describe('default', function() {
+});
 
-    it('always returns same layout', function() {
-      expect(Layout.default()).to.equal(Layout.default());
-    });
+describe('ConstraintLayout.create()', function() {
 
+  it('returns ConstraintLayout', function() {
+    expect(ConstraintLayout.create()).to.be.instanceof(ConstraintLayout);
+  });
+
+  it('always returns same layout', function() {
+    expect(ConstraintLayout.create()).to.equal(ConstraintLayout.create());
   });
 
 });

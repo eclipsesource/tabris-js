@@ -8,7 +8,7 @@ const layoutDataProps = ['left', 'right', 'top', 'bottom', 'width', 'height', 'c
 
 export default class Layout {
 
-  static default() {
+  static create() {
     if (!this._default) {
       this._default = new ConstraintLayout(LayoutQueue.instance);
     }
@@ -144,7 +144,7 @@ export class ConstraintLayout extends Layout {
   constructor(queue) {
     if (!(queue instanceof LayoutQueue)) {
       throw new Error(
-        'ConstraintLayout constructor is private. Use Layout.default() to get ConstraintLayout instances.'
+        'ConstraintLayout constructor is private. Use ConstraintLayout.create()'
       );
     }
     super(queue);

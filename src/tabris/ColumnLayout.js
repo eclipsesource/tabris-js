@@ -4,10 +4,17 @@ import LayoutData from './LayoutData';
 
 export default class ColumnLayout extends Layout {
 
+  static create() {
+    if (!this._column) {
+      this._column = new ColumnLayout(LayoutQueue.instance);
+    }
+    return this._column;
+  }
+
   constructor(queue) {
     if (!(queue instanceof LayoutQueue)) {
       throw new Error(
-        'ColumnLayout constructor is private. Use Layout.column() to get ColumnLayout instances.'
+        'ColumnLayout constructor is private. Use ColumnLayout.create().'
       );
     }
     super(queue);
@@ -19,12 +26,3 @@ export default class ColumnLayout extends Layout {
   }
 
 }
-
-// This method can not be defined in Layout.js without
-// causing circular dependency issues
-Layout.column = (function() {
-  if (!this._column) {
-    this._column = new ColumnLayout(LayoutQueue.instance);
-  }
-  return this._column;
-}).bind(Layout);

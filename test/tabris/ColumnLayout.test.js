@@ -1,6 +1,5 @@
 import ClientStub from './ClientStub';
 import {expect, mockTabris, restore} from '../test';
-import Layout from '../../src/tabris/Layout';
 import Composite from '../../src/tabris/widgets/Composite';
 import TextView from '../../src/tabris/widgets/TextView';
 import ColumnLayout from '../../src/tabris/ColumnLayout';
@@ -34,15 +33,15 @@ describe('ColumnLayout', function() {
 
   });
 
-  describe('Layout.column()', function() {
+  describe('ColumnLayout.create()', function() {
 
     it('always returns same ColumnLayout', function() {
-      expect(Layout.column()).to.be.instanceof(ColumnLayout);
-      expect(Layout.column()).to.equal(Layout.column());
+      expect(ColumnLayout.create()).to.be.instanceof(ColumnLayout);
+      expect(ColumnLayout.create()).to.equal(ColumnLayout.create());
     });
 
     it('renders existing children layoutData with default settings', function() {
-      parent.layout = Layout.column();
+      parent.layout = ColumnLayout.create();
       const all = render();
       const cid = parent.children().toArray().map(child => child.cid);
 

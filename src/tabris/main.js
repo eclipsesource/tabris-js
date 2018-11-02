@@ -35,7 +35,7 @@ import ImageData from './ImageData';
 import ImageView from './widgets/ImageView';
 import InactivityTimer from './InactivityTimer.js';
 import Listeners from './Listeners.js';
-import Layout from './Layout.js';
+import Layout, {ConstraintLayout} from './Layout.js';
 import LayoutData from './LayoutData.js';
 import Page from './widgets/Page';
 import Picker from './widgets/Picker';
@@ -90,6 +90,7 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   CheckBox,
   CollectionView,
   Color,
+  ConstraintLayout,
   ColumnLayout,
   Composite,
   Constraint,

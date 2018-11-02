@@ -35,17 +35,5 @@
       ],
       "description": "Callback used internally by the framework to process layoutData."
     }
-  },
-  "statics": {
-    "methods": {
-      "default": {
-        "description": "Returns the default, constraints-based instance of Layout.",
-        "returns": "Layout"
-      },
-      "column": {
-        "description": "Returns the column-based layout manager.",
-        "returns": "ColumnLayout"
-      }
-    }
   }
 }

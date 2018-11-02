@@ -4,5 +4,13 @@
   "constructor": {
     "access": "private"
   },
-  "description": "Column based layout manager. Instances can be obtained from [`Layout.column()`](./Layout.md#column())"
+  "description": "Column based layout manager. Instances can be obtained from [`Layout.column()`](./Layout.md#column())",
+  "statics": {
+    "methods": {
+      "create": {
+        "description": "Returns instance of ColumnLayout with all settings at their default value.",
+        "returns": "ColumnLayout"
+      }
+    }
+  }
 }

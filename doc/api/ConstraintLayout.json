@@ -1,0 +1,16 @@
+{
+  "type": "ConstraintLayout",
+  "extends": "Layout",
+  "constructor": {
+    "access": "private"
+  },
+  "description": "The default, constraints-based layout.",
+  "statics": {
+    "methods": {
+      "create": {
+        "description": "Returns instance of ConstraintLayout as used by default by all Composite.",
+        "returns": "ConstraintLayout"
+      }
+    }
+  }
+}

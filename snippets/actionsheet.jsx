@@ -1,6 +1,6 @@
-import {ActionSheet, ActionSheetItem, TextView, Button, WidgetCollection, ui, Layout} from 'tabris';
+import {ActionSheet, ActionSheetItem, TextView, Button, WidgetCollection, ui, ColumnLayout} from 'tabris';
 
-ui.contentView.set({layout: Layout.column()}).append(
+ui.contentView.set({layout: ColumnLayout.create()}).append(
   <WidgetCollection>
     <Button onSelect={showActionSheet}>Show ActionSheet</Button>
     <TextView alignment='center'/>

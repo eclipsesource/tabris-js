@@ -1,7 +1,7 @@
 import Widget from '../Widget';
 import NativeObject from '../NativeObject';
 import {createSelectorArray, getSelectorSpecificity} from '../util-widget-select';
-import Layout from '../Layout';
+import Layout, {ConstraintLayout} from '../Layout';
 import WidgetCollection from '../WidgetCollection';
 import {jsxFactory} from '../JsxProcessor';
 
@@ -47,7 +47,7 @@ export default class Composite extends Widget {
 
   _initLayout(props) {
     if (!props || !('layout' in props)) {
-      this.layout = Layout.default();
+      this.layout = ConstraintLayout.create();
     }
   }
 
