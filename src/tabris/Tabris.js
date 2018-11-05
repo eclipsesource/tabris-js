@@ -32,6 +32,11 @@ export default class Tabris extends NativeObject {
     return this.$contentView;
   }
 
+  flush() {
+    this.trigger('flush');
+    this._nativeBridge.flush();
+  }
+
   _register() {
     this._nativeObjectRegistry = new NativeObjectRegistry();
     const cid = this._nativeObjectRegistry.register(this);
@@ -61,7 +66,7 @@ export default class Tabris extends NativeObject {
           error(err);
         }
       }
-      this.trigger('flush');
+      this.flush();
     } catch (err) {
       error(err);
     }

@@ -485,10 +485,16 @@ describe('Widget', function() {
           result = widget.append(child1);
         });
 
-        it("sets the child's parent", function() {
+        it('does not call native bridge', function() {
+          const calls = client.calls();
+          expect(calls.length).to.equal(0);
+        });
+
+        it('SETs children after flush', function() {
+          tabris.flush();
           const calls = client.calls();
           expect(calls.length).to.equal(1);
-          expect(calls[0]).to.eql({op: 'set', id: child1.cid, properties: {parent: widget.cid}});
+          expect(calls[0]).to.eql({op: 'set', id: widget.cid, properties: {children: [child1.cid]}});
         });
 
         it('returns self to allow chaining', function() {
@@ -529,10 +535,23 @@ describe('Widget', function() {
           result = widget.append(child1, child2);
         });
 
-        it("sets the children's parent", function() {
+        it('SETs children after flush', function() {
+          tabris.flush();
           const calls = client.calls();
-          expect(calls.length).to.equal(2);
-          expect(calls[0]).to.eql({op: 'set', id: child1.cid, properties: {parent: widget.cid}});
+          expect(calls.length).to.equal(1);
+          expect(calls[0]).to.eql({op: 'set', id: widget.cid, properties: {children: [child1.cid, child2.cid]}});
+        });
+
+        it('SETs children only once', function() {
+          child1.detach();
+          child2.detach();
+          widget.append(child1, child2);
+
+          tabris.flush();
+
+          const calls = client.calls();
+          expect(calls.length).to.equal(1);
+          expect(calls[0]).to.eql({op: 'set', id: widget.cid, properties: {children: [child1.cid, child2.cid]}});
         });
 
         it('returns self to allow chaining', function() {
@@ -555,13 +574,13 @@ describe('Widget', function() {
 
         beforeEach(function() {
           result = widget.append([child1, child2]);
+          tabris.flush();
         });
 
-        it("sets the widgets' parent", function() {
+        it('SETs children', function() {
           const calls = client.calls();
-          expect(calls.length).to.equal(2);
-          expect(calls[0]).to.eql({op: 'set', id: child1.cid, properties: {parent: widget.cid}});
-          expect(calls[1]).to.eql({op: 'set', id: child2.cid, properties: {parent: widget.cid}});
+          expect(calls.length).to.equal(1);
+          expect(calls[0]).to.eql({op: 'set', id: widget.cid, properties: {children: [child1.cid, child2.cid]}});
         });
 
         it('adds the widgets to children list', function() {
@@ -578,13 +597,13 @@ describe('Widget', function() {
 
         beforeEach(function() {
           result = widget.append(new WidgetCollection([child1, child2]));
+          tabris.flush();
         });
 
-        it("sets the widgets' native parent`", function() {
+        it('SETs children', function() {
           const calls = client.calls();
-          expect(calls.length).to.equal(2);
-          expect(calls[0]).to.eql({op: 'set', id: child1.cid, properties: {parent: widget.cid}});
-          expect(calls[1]).to.eql({op: 'set', id: child2.cid, properties: {parent: widget.cid}});
+          expect(calls.length).to.equal(1);
+          expect(calls[0]).to.eql({op: 'set', id: widget.cid, properties: {children: [child1.cid, child2.cid]}});
         });
 
         it('adds the widgets to children list', function() {
@@ -631,6 +650,7 @@ describe('Widget', function() {
         parent1 = new TestWidget();
         client.resetCalls();
         result = widget.appendTo(parent1);
+        tabris.flush();
       });
 
       describe('when called with a parent', function() {
@@ -639,9 +659,10 @@ describe('Widget', function() {
           expect(result).to.equal(widget);
         });
 
-        it("sets the widget's parent", function() {
-          const setCall = client.calls({op: 'set', id: widget.cid})[0];
-          expect(setCall.properties.parent).to.eql(parent1.cid);
+        it('SETs children', function() {
+          const calls = client.calls();
+          expect(calls.length).to.equal(1);
+          expect(calls[0]).to.eql({op: 'set', id: parent1.cid, properties: {children: [widget.cid]}});
         });
 
         it("is added to parent's children list", function() {
@@ -656,7 +677,10 @@ describe('Widget', function() {
 
         beforeEach(function() {
           parent2 = new TestWidget();
+          tabris.flush();
+          client.resetCalls();
           widget.appendTo(parent2);
+          tabris.flush();
         });
 
         it("is removed from old parent's children list", function() {
@@ -666,6 +690,19 @@ describe('Widget', function() {
         it("is added to new parent's children list", function() {
           expect(parent2.children().toArray()).to.contain(widget);
         });
+
+        it('SETs children on old parent', function() {
+          const calls = client.calls({op: 'set', id: parent1.cid});
+          expect(calls.length).to.equal(1);
+          expect(calls[0].properties).to.eql({children: []});
+        });
+
+        it('SETs children on new parent', function() {
+          const calls = client.calls({op: 'set', id: parent2.cid});
+          expect(calls.length).to.equal(1);
+          expect(calls[0].properties).to.eql({children: [widget.cid]});
+        });
+
       });
 
       describe('when called with a collection', function() {
@@ -744,6 +781,8 @@ describe('Widget', function() {
         beforeEach(function() {
           widget.appendTo(parent1);
           other = new TestWidget().appendTo(parent2);
+          tabris.flush();
+          client.resetCalls();
         });
 
         it("removes widget from its old parent's children list", function() {
@@ -760,6 +799,24 @@ describe('Widget', function() {
           widget.insertBefore(other);
           const children = parent2.children();
           expect(children.indexOf(widget)).to.equal(children.indexOf(other) - 1);
+        });
+
+        it('SETs children on old parent', function() {
+          widget.insertBefore(other);
+          tabris.flush();
+
+          const calls = client.calls({op: 'set', id: parent1.cid});
+          expect(calls.length).to.equal(1);
+          expect(calls[0].properties).to.eql({children: []});
+        });
+
+        it('SETs children on new parent', function() {
+          widget.insertBefore(other);
+          tabris.flush();
+
+          const calls = client.calls({op: 'set', id: parent2.cid});
+          expect(calls.length).to.equal(1);
+          expect(calls[0].properties).to.eql({children: [widget.cid, other.cid]});
         });
 
         it('triggers remove event with index', function() {
@@ -789,11 +846,20 @@ describe('Widget', function() {
         beforeEach(function() {
           other = new TestWidget().appendTo(parent1);
           widget.appendTo(parent1);
+          tabris.flush();
+          client.resetCalls();
           widget.insertBefore(other);
+          tabris.flush();
         });
 
         it('re-orders widgets', function() {
           expect(parent1.children().toArray()).to.eql([widget, other]);
+        });
+
+        it('SETs children', function() {
+          const calls = client.calls({op: 'set', id: parent1.cid});
+          expect(calls.length).to.equal(1);
+          expect(calls[0].properties).to.eql({children: [widget.cid, other.cid]});
         });
 
       });
@@ -804,12 +870,21 @@ describe('Widget', function() {
           new TestWidget({class: 'child'}).appendTo(parent1);
           new TestWidget({class: 'child'}).appendTo(parent2);
           const grandparent = new TestWidget().append(parent1, parent2);
+          tabris.flush();
+          client.resetCalls();
           widget.insertBefore(grandparent.find('.child'));
+          tabris.flush();
         });
 
         it('inserts only before the first the widget of the collection', function() {
           expect(parent1.children().toArray()).to.contain(widget);
           expect(parent2.children().toArray()).not.to.contain(widget);
+        });
+
+        it('SETs children only once', function() {
+          const calls = client.calls({op: 'set'});
+          expect(calls.length).to.equal(1);
+          expect(calls[0].id).to.eql(parent1.cid);
         });
 
       });
@@ -854,9 +929,14 @@ describe('Widget', function() {
 
       describe('when called with a widget', function() {
 
+        let next;
+
         beforeEach(function() {
           widget.appendTo(parent1);
           other = new TestWidget().appendTo(parent2);
+          next = new TestWidget().appendTo(parent2);
+          tabris.flush();
+          client.resetCalls();
         });
 
         it("removes widget from its old parent's children list", function() {
@@ -873,6 +953,24 @@ describe('Widget', function() {
           widget.insertAfter(other);
           const children = parent2.children();
           expect(children.indexOf(widget)).to.equal(children.indexOf(other) + 1);
+        });
+
+        it('SETs children on old parent', function() {
+          widget.insertAfter(other);
+          tabris.flush();
+
+          const calls = client.calls({op: 'set', id: parent1.cid});
+          expect(calls.length).to.equal(1);
+          expect(calls[0].properties).to.eql({children: []});
+        });
+
+        it('SETs children on new parent', function() {
+          widget.insertAfter(other);
+          tabris.flush();
+
+          const calls = client.calls({op: 'set', id: parent2.cid});
+          expect(calls.length).to.equal(1);
+          expect(calls[0].properties).to.eql({children: [other.cid, widget.cid, next.cid]});
         });
 
         it('triggers `removeChild` event with index', function() {
@@ -899,14 +997,29 @@ describe('Widget', function() {
 
       describe('when called with a sibling widget', function() {
 
+        let next;
+
         beforeEach(function() {
           widget.appendTo(parent1);
           other = new TestWidget().appendTo(parent1);
+          next = new TestWidget().appendTo(parent1);
+          tabris.flush();
+          client.resetCalls();
           widget.insertAfter(other);
+          tabris.flush();
         });
 
         it('re-orders widgets', function() {
-          expect(parent1.children().toArray()).to.eql([other, widget]);
+          expect(parent1.children().length).to.equal(3);
+          expect(parent1.children()[0] === other).to.be.true;
+          expect(parent1.children()[1] === widget).to.be.true;
+          expect(parent1.children()[2] === next).to.be.true;
+        });
+
+        it('SETs children', function() {
+          const calls = client.calls({op: 'set', id: parent1.cid});
+          expect(calls.length).to.equal(1);
+          expect(calls[0].properties).to.eql({children: [other.cid, widget.cid, next.cid]});
         });
 
       });
@@ -917,12 +1030,21 @@ describe('Widget', function() {
           new TestWidget({class: 'child'}).appendTo(parent1);
           new TestWidget({class: 'child'}).appendTo(parent2);
           const grandparent = new TestWidget().append(parent1, parent2);
+          tabris.flush();
+          client.resetCalls();
           widget.insertAfter(grandparent.find('.child'));
+          tabris.flush();
         });
 
         it('inserts only before the first the widget of the collection', function() {
           expect(parent1.children().toArray()).to.contain(widget);
           expect(parent2.children().toArray()).not.to.contain(widget);
+        });
+
+        it('SETs children only once', function() {
+          const calls = client.calls({op: 'set'});
+          expect(calls.length).to.equal(1);
+          expect(calls[0].id).to.eql(parent1.cid);
         });
 
       });
@@ -947,6 +1069,20 @@ describe('Widget', function() {
 
         expect(parent.children().toArray()).to.eql([]);
         expect(widget.parent()).to.be.null;
+      });
+
+      it('SETs children of parent', function() {
+        const parent = new TestWidget();
+        widget.appendTo(parent);
+        tabris.flush();
+        client.resetCalls();
+
+        widget.detach();
+        tabris.flush();
+
+        const calls = client.calls({op: 'set'});
+        expect(calls.length).to.equal(1);
+        expect(calls[0]).to.eql({op: 'set', id: parent.cid, properties: {children: []}});
       });
 
     });
@@ -1497,6 +1633,7 @@ describe('Widget', function() {
       widget.layoutData = {left: 23, baseline: '#other', right: ['#other', 42]};
       other = new TestWidget({id: 'other'}).appendTo(parent);
 
+      tabris.flush();
       const call = client.calls({op: 'set', id: widget.cid})[0];
       const expected = {left: 23, baseline: other.cid, right: [other.cid, 42]};
       expect(call.properties.layoutData).to.eql(expected);
@@ -1508,6 +1645,7 @@ describe('Widget', function() {
       widget.layoutData = {left: 23, baseline: '#other', right: ['#other', 42]};
       widget.appendTo(parent);
 
+      tabris.flush();
       const call = client.calls({op: 'create'})[0];
       const expected = {left: 23, baseline: other.cid, right: [other.cid, 42]};
       expect(call.properties.layoutData).to.eql(expected);
@@ -1528,6 +1666,7 @@ describe('Widget', function() {
 
       other = new TestWidget({id: 'other'}).appendTo(parent);
 
+      tabris.flush();
       const setCalls = client.calls({op: 'set', id: widget.cid});
       expect(setCalls.length).to.equal(1);
       expect(setCalls[0].properties.layoutData).to.eql({right: [other.cid, 0]});
@@ -1541,9 +1680,10 @@ describe('Widget', function() {
 
       widget.appendTo(parent);
 
+      tabris.flush();
       const setCalls = client.calls({op: 'set', id: widget.cid});
-      expect(setCalls.length).to.equal(2);
-      expect(setCalls[1].properties.layoutData).to.eql({right: [other.cid, 0]});
+      expect(setCalls.length).to.equal(1);
+      expect(setCalls[0].properties.layoutData).to.eql({right: [other.cid, 0]});
     });
 
   });
@@ -1605,6 +1745,7 @@ describe('Widget', function() {
       it('SETs layoutData', function() {
         widget[attr] = 23;
 
+        tabris.flush();
         const call = client.calls({op: 'set', id: widget.cid})[0];
         const expected = {[attr]: 23};
         expect(call.properties.layoutData).to.eql(expected);

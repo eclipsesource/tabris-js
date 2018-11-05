@@ -16,7 +16,7 @@ export function addWindowTimerMethods(target) {
         const oldStack = tabris._stackTraceStack;
         tabris._stackTraceStack = stackTraceStack;
         fn.apply(target, args);
-        tabris.trigger('flush');
+        tabris.flush();
         tabris._stackTraceStack = oldStack;
       }
     });

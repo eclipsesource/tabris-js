@@ -118,6 +118,7 @@ export default class Composite extends Widget {
     } else {
       index = this.$children.push(child) - 1;
     }
+    this._scheduleRenderChildren();
     super._trigger('addChild', {child, index});
   }
 
@@ -126,6 +127,7 @@ export default class Composite extends Widget {
       const index = this.$children.indexOf(child);
       if (index !== -1) {
         this.$children.splice(index, 1);
+        this._scheduleRenderChildren();
         super._trigger('removeChild', {child, index});
       }
     }
@@ -151,6 +153,16 @@ export default class Composite extends Widget {
       content.push(this.$children[i][toXML]().split('\n').map(line => '  ' + line).join('\n'));
     }
     return content;
+  }
+
+  _scheduleRenderChildren() {
+    tabris.once('flush', this._flushChildren, this);
+  }
+
+  _flushChildren() {
+    if (this.$children) {
+      this._nativeSet('children', this.$children.map(toCid));
+    }
   }
 
   /** @this {import("../JsxProcessor").default} */
@@ -184,4 +196,8 @@ function asArray(value) {
     return value.toArray();
   }
   return value;
+}
+
+function toCid(widget) {
+  return widget.cid;
 }

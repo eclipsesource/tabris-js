@@ -32,7 +32,7 @@ tabris._start = function(client) {
           global.debugClient.start(rootModule);
         }
         rootModule.require('./' + (isWorker ? global.workerScriptPath : ''));
-        tabris.trigger('flush');
+        tabris.flush();
       } catch (error) {
         printError('Could not load ' + (isWorker ? 'worker' : 'main module') + ':', error);
       }
@@ -44,7 +44,7 @@ tabris._start = function(client) {
       loadModule();
     }
     delete global.workerScriptPath;
-    tabris.trigger('flush');
+    tabris.flush();
   } catch (error) {
     printError('Could not start tabris:', error);
   }

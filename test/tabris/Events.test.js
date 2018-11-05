@@ -186,7 +186,17 @@ describe('Events', function() {
 
       object.trigger('foo');
 
-      expect(listener).to.have.been.called;
+      expect(listener).to.have.been.calledOnce;
+    });
+
+    it('triggers listener once after multiple calls', function() {
+      object.once('foo', listener);
+      object.once('foo', listener);
+      object.once('foo', listener);
+
+      object.trigger('foo');
+
+      expect(listener).to.have.been.calledOnce;
     });
 
     it('forwards event object to wrapped listener', function() {

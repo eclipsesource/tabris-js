@@ -54,11 +54,12 @@ describe('ScrollView', function() {
         child = new Composite();
         client.resetCalls();
         result = scrollView.append(child);
+        tabris.flush();
       });
 
-      it("sets child's parent to scrollView", function() {
-        const call = client.calls({op: 'set', id: child.cid})[0];
-        expect(call.properties.parent).to.equal(scrollView.cid);
+      it('SETs children', function() {
+        const call = client.calls({op: 'set', id: scrollView.cid})[0];
+        expect(call.properties.children).to.deep.equal([child.cid]);
       });
 
       it('returns self to allow chaining', function() {

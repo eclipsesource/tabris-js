@@ -201,6 +201,31 @@ describe('NavigationView', function() {
         expect(navigationView.pages().toArray()).to.deep.equal(pages);
       });
 
+      it('SETs children after flush', function() {
+        client.resetCalls();
+
+        tabris.flush();
+
+        const calls = client.calls();
+        expect(calls.length).to.equal(1);
+        expect(calls[0]).to.eql({op: 'set', id: navigationView.cid, properties: {
+          children: [pages[0].cid, pages[1].cid, pages[2].cid]
+        }});
+      });
+
+      it('SETs children after adding more pages', function() {
+        const page4 = new Page().appendTo(navigationView);
+        client.resetCalls();
+
+        tabris.flush();
+
+        const calls = client.calls();
+        expect(calls.length).to.equal(1);
+        expect(calls[0]).to.eql({op: 'set', id: navigationView.cid, properties: {
+          children: [pages[0].cid, pages[1].cid, pages[2].cid, page4.cid]
+        }});
+      });
+
       it('accepts a selector argument', function() {
         const pages = navigationView.pages('#page1').toArray();
         expect(pages).to.deep.equal([page1]);

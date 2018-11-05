@@ -1,5 +1,6 @@
 import {expect, stub, spy, restore} from '../test';
 import NativeBridge from '../../src/tabris/NativeBridge';
+import Events from '../../src/tabris/Events';
 import {LayoutQueue} from '../../src/tabris/Layout';
 
 describe('NativeBridge', function() {
@@ -9,9 +10,12 @@ describe('NativeBridge', function() {
   let log;
 
   beforeEach(function() {
-    global.tabris = {
-      on: () => {}
-    };
+    global.tabris = Object.assign({
+      flush() {
+        this.trigger('flush');
+        this._nativeBridge.flush();
+      }
+    }, Events);
     log = [];
     native = {};
     ['create', 'destroy', 'listen', 'set', 'get', 'call'].forEach(method => {

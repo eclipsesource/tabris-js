@@ -53,6 +53,7 @@ export default class Widget extends NativeObject {
     if (!parent) {
       throw new Error('Cannot insert after orphan');
     }
+    this.detach();
     const index = parent.$children.indexOf(widget);
     this._setParent(parent, index + 1);
     return this;
@@ -124,12 +125,7 @@ export default class Widget extends NativeObject {
     return result;
   }
 
-  _getContainer() {
-    return this;
-  }
-
   _setParent(parent, index) {
-    this._nativeSet('parent', parent ? types.NativeObject.encode(parent._getContainer(this)) : null);
     if (this._parent) {
       this._parent._removeChild(this);
     }

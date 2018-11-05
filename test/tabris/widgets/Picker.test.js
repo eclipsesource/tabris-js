@@ -11,7 +11,7 @@ describe('Picker', function() {
     client = new ClientStub();
     mockTabris(client);
     picker = new Picker();
-    tabris.trigger('flush');
+    tabris.flush();
   });
 
   afterEach(restore);
@@ -92,7 +92,7 @@ describe('Picker', function() {
       it('sets native property `items` on flush', function() {
         picker.itemCount = 3;
 
-        tabris.trigger('flush');
+        tabris.flush();
 
         const call = client.calls({op: 'set', id: picker.cid})[0];
         expect(call.properties).to.deep.equal({items: ['', '', '']});
@@ -104,7 +104,7 @@ describe('Picker', function() {
 
       beforeEach(function() {
         picker.itemCount = 3;
-        tabris.trigger('flush');
+        tabris.flush();
         client.resetCalls();
       });
 
@@ -133,7 +133,7 @@ describe('Picker', function() {
       it('updates native property `items` on flush', function() {
         picker.itemText = () => 'foo';
 
-        tabris.trigger('flush');
+        tabris.flush();
 
         expect(client.calls({op: 'set', id: picker.cid})[0].properties).to.deep.equal({items: ['foo', 'foo', 'foo']});
       });
@@ -145,7 +145,7 @@ describe('Picker', function() {
       it('set native property `selectionIndex` on flush', function() {
         picker.selectionIndex = 23;
 
-        tabris.trigger('flush');
+        tabris.flush();
 
         expect(client.calls({op: 'set', id: picker.cid})[0].properties).to.deep.equal({selectionIndex: 23});
       });

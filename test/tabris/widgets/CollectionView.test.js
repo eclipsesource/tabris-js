@@ -96,7 +96,7 @@ describe('CollectionView', function() {
 
         view.createCell = spy();
 
-        tabris.trigger('flush');
+        tabris.flush();
         const calls = client.calls({op: 'call', id: view.cid, method: 'load'});
         expect(calls[0].parameters).to.deep.equal({itemCount: 10});
       });
@@ -104,11 +104,11 @@ describe('CollectionView', function() {
       it('does not call native load when unchanged', function() {
         const fn = spy();
         view.createCell = fn;
-        tabris.trigger('flush');
+        tabris.flush();
         client.resetCalls();
 
         view.createCell = fn;
-        tabris.trigger('flush');
+        tabris.flush();
 
         const calls = client.calls({op: 'call', id: view.cid, method: 'load'});
         expect(calls).to.be.empty;
@@ -139,7 +139,7 @@ describe('CollectionView', function() {
 
         view.updateCell = spy();
 
-        tabris.trigger('flush');
+        tabris.flush();
         const calls = client.calls({op: 'call', id: view.cid, method: 'load'});
         expect(calls[0].parameters).to.deep.equal({itemCount: 10});
       });
@@ -147,11 +147,11 @@ describe('CollectionView', function() {
       it('does not call native load when unchanged', function() {
         const fn = spy();
         view.updateCell = fn;
-        tabris.trigger('flush');
+        tabris.flush();
         client.resetCalls();
 
         view.updateCell = fn;
-        tabris.trigger('flush');
+        tabris.flush();
 
         const calls = client.calls({op: 'call', id: view.cid, method: 'load'});
         expect(calls).to.be.empty;
@@ -266,6 +266,7 @@ describe('CollectionView', function() {
     describe('cellType', function() {
 
       beforeEach(function() {
+        tabris.flush();
         spy(client, 'set');
       });
 
@@ -282,7 +283,7 @@ describe('CollectionView', function() {
 
       it('does not SET native property', function() {
         view.cellType = 'foo';
-        tabris._nativeBridge.flush();
+        tabris.flush();
         expect(client.set).to.have.not.been.called;
       });
 
@@ -292,18 +293,18 @@ describe('CollectionView', function() {
 
         view.cellType = 'cellType';
 
-        tabris.trigger('flush');
+        tabris.flush();
         const calls = client.calls({op: 'call', id: view.cid, method: 'load'});
         expect(calls[0].parameters).to.deep.equal({itemCount: 10});
       });
 
       it('does not call native load when unchanged', function() {
         view.cellType = 'cellType';
-        tabris.trigger('flush');
+        tabris.flush();
         client.resetCalls();
 
         view.cellType = 'cellType';
-        tabris.trigger('flush');
+        tabris.flush();
 
         const calls = client.calls({op: 'call', id: view.cid, method: 'load'});
         expect(calls).to.be.empty;
@@ -314,6 +315,7 @@ describe('CollectionView', function() {
     describe('cellHeight', function() {
 
       beforeEach(function() {
+        tabris.flush();
         spy(client, 'set');
       });
 
@@ -335,7 +337,6 @@ describe('CollectionView', function() {
 
       it('does not SET native property', function() {
         view.cellHeight = 23;
-        tabris._nativeBridge.flush();
         expect(client.set).to.have.not.been.called;
       });
 
@@ -345,18 +346,18 @@ describe('CollectionView', function() {
 
         view.cellHeight = 48;
 
-        tabris.trigger('flush');
+        tabris.flush();
         const calls = client.calls({op: 'call', id: view.cid, method: 'load'});
         expect(calls[0].parameters).to.deep.equal({itemCount: 10});
       });
 
       it('does not call native load when unchanged', function() {
         view.cellHeight = 48;
-        tabris.trigger('flush');
+        tabris.flush();
         client.resetCalls();
 
         view.cellHeight = 48;
-        tabris.trigger('flush');
+        tabris.flush();
 
         const calls = client.calls({op: 'call', id: view.cid, method: 'load'});
         expect(calls).to.be.empty;
@@ -372,18 +373,18 @@ describe('CollectionView', function() {
 
       it('calls native load with item count', function() {
         view.itemCount = 23;
-        tabris.trigger('flush');
+        tabris.flush();
         const calls = client.calls({op: 'call', id: view.cid, method: 'load'});
         expect(calls[0].parameters).to.deep.equal({itemCount: 23});
       });
 
       it('also calls native load when unchanged', function() {
         view.itemCount = 23;
-        tabris.trigger('flush');
+        tabris.flush();
         client.resetCalls();
 
         view.itemCount = 23;
-        tabris.trigger('flush');
+        tabris.flush();
 
         const calls = client.calls({op: 'call', id: view.cid, method: 'load'});
         expect(calls[0].parameters).to.deep.equal({itemCount: 23});
@@ -620,7 +621,7 @@ describe('CollectionView', function() {
 
       it('calls native load after flush', function() {
         view.load(42);
-        tabris.trigger('flush');
+        tabris.flush();
 
         const loadCall = client.calls({op: 'call', method: 'load', id: view.cid})[0];
         expect(loadCall.parameters).to.deep.equal({itemCount: 42});
@@ -891,7 +892,7 @@ describe('CollectionView', function() {
       const view = new CollectionView();
       view.itemCount = 23;
       view.dispose();
-      tabris.trigger('flush');
+      tabris.flush();
       expect(view.isDisposed()).to.equal(true);
     });
 

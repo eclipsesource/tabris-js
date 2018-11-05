@@ -2,7 +2,6 @@ import {expect, restore, mockTabris} from '../../test';
 import ClientStub from '../ClientStub';
 import Drawer, {create} from '../../../src/tabris/widgets/Drawer';
 import Composite from '../../../src/tabris/widgets/Composite';
-import TextView from '../../../src/tabris/widgets/TextView';
 import ContentView from '../../../src/tabris/widgets/ContentView';
 
 describe('Drawer', function() {
@@ -47,23 +46,6 @@ describe('Drawer', function() {
 
     beforeEach(function() {
       client.resetCalls();
-    });
-
-    describe('when a child is appended', function() {
-
-      let child;
-
-      beforeEach(function() {
-        child = new TextView();
-        client.resetCalls();
-        drawer.append(child);
-      });
-
-      it("child's parent is set to the drawer", function() {
-        const call = client.calls({op: 'set', id: child.cid})[0];
-        expect(call.properties.parent).to.eql(drawer.cid);
-      });
-
     });
 
     it('has "enabled" set to "false" by default', function() {

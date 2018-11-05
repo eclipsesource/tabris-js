@@ -6,7 +6,6 @@ export default class NativeBridge {
     this.$bridge = bridge;
     this.$operations = [];
     this.$currentOperation = {id: null};
-    tabris.on('flush', this.flush, this);
   }
 
   create(id, type) {

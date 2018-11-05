@@ -42,7 +42,7 @@ describe('TabFolder', function() {
 
   describe('when a Tab is appended', function() {
 
-    let tab, create;
+    let tab;
 
     beforeEach(function() {
       client.resetCalls();
@@ -54,13 +54,13 @@ describe('TabFolder', function() {
         background: '#010203',
         visible: false
       });
-      create = client.calls({op: 'create'})[0];
       tab.appendTo(tabFolder);
+      tabris.flush();
     });
 
-    it("sets the tabs's parent", function() {
-      const call = client.calls({op: 'set', id: create.id})[0];
-      expect(call.properties.parent).to.equal(tabFolder.cid);
+    it('SETs children', function() {
+      const call = client.calls({op: 'set', id: tabFolder.cid})[0];
+      expect(call.properties.children).to.deep.equal([tab.cid]);
     });
 
     it('getter gets tab properties from cache', function() {

@@ -52,9 +52,10 @@ describe('Page', function() {
     const child = new Composite();
     client.resetCalls();
     page.append(child);
+    tabris.flush();
 
-    const call = client.calls({op: 'set', id: child.cid})[0];
-    expect(call.properties.parent).to.equal(page.cid);
+    const call = client.calls({op: 'set', id: page.cid})[0];
+    expect(call.properties.children).to.deep.equal([child.cid]);
   });
 
   it('prevents insertBefore', function() {

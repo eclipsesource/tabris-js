@@ -10,7 +10,7 @@ describe('ImageView', function() {
     client = new ClientStub();
     mockTabris(client);
     imageView = new ImageView({zoomEnabled: true});
-    tabris.trigger('flush');
+    tabris.flush();
   });
 
   afterEach(restore);

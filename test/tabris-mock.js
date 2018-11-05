@@ -8,6 +8,10 @@ export function mockTabris(client) {
   }
   global.tabris = Object.assign({
     Module: {getSourceMap() { return null; }},
+    flush() {
+      this.trigger('flush');
+      this._nativeBridge.flush();
+    },
     _client: client,
     _stackTraceStack: [],
     _nativeObjectRegistry: new NativeObjectRegistry(),

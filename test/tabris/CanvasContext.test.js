@@ -24,7 +24,7 @@ describe('CanvasContext', function() {
   });
 
   function flush() {
-    tabris.trigger('flush');
+    tabris.flush();
   }
 
   function getLastPacket() {

@@ -62,6 +62,7 @@ export default class ClientStub {
   }
 
   properties(id) {
+    tabris._nativeBridge.flush();
     if (!(id in this.$objects)) {
       throw new Error('No object with id ' + id);
     }
