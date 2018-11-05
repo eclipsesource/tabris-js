@@ -23,8 +23,7 @@ describe('Constraint', function() {
   describe('constructor', function() {
 
     it('creates instance from percent and offset', function() {
-      // TODO: Percent should allow values < 0 and > 100
-      [40.4, 0].forEach(value => {
+      [40.4, 0, -100, 200].forEach(value => {
         const constraint = new Constraint(new Percent(value), 23.1);
 
         expect(constraint.reference).to.be.instanceof(Percent);

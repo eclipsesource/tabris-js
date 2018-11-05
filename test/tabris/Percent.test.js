@@ -13,11 +13,10 @@ describe('Percent', function() {
 
     it('throws for invalid parameters', function() {
       expect(() => new Percent()).to.throw('Not enough arguments');
-      expect(() => new Percent(101)).to.throw('Invalid Percent: Number 101 out of range');
-      expect(() => new Percent(-1)).to.throw('Invalid Percent: Number -1 out of range');
       expect(() => new Percent('foo')).to.throw('Invalid Percent: Invalid number foo');
       expect(() => new Percent(NaN)).to.throw('Invalid Percent: Invalid number NaN');
       expect(() => new Percent(Infinity)).to.throw('Invalid Percent: Invalid number Infinity');
+      expect(() => new Percent(-Infinity)).to.throw('Invalid Percent: Invalid number -Infinity');
     });
 
   });
@@ -72,7 +71,8 @@ describe('Percent', function() {
       expect(() => Percent.from('foo')).to.throw('Invalid percent string foo: It must be a number followed by "%"');
       expect(() => Percent.from('foo%')).to.throw('Invalid percent string foo%: It must be a number followed by "%"');
       expect(() => Percent.from('NaN')).to.throw('Invalid percent string NaN: It must be a number followed by "%"');
-      expect(() => Percent.from('-5%')).to.throw('Invalid percent string -5%: Number -5 out of range');
+      expect(() => Percent.from(Infinity)).to.throw('Not a valid PercentValue: Infinity');
+      expect(() => Percent.from(-Infinity)).to.throw('Not a valid PercentValue: -Infinity');
     });
 
   });
@@ -83,14 +83,16 @@ describe('Percent', function() {
       expect(Percent.isValidPercentValue(new Percent(0))).to.be.true;
       expect(Percent.isValidPercentValue({percent: 5})).to.be.true;
       expect(Percent.isValidPercentValue('5%')).to.be.true;
+      expect(Percent.isValidPercentValue('105%')).to.be.true;
+      expect(Percent.isValidPercentValue('-5%')).to.be.true;
     });
 
     it('returns false for non-percent values including null', function() {
       expect(Percent.isValidPercentValue(null)).to.be.false;
       expect(Percent.isValidPercentValue(5)).to.be.false;
-      expect(Percent.isValidPercentValue('-5%')).to.be.false;
+      expect(Percent.isValidPercentValue({percent: Infinity})).to.be.false;
+      expect(Percent.isValidPercentValue({percent: -Infinity})).to.be.false;
       expect(Percent.isValidPercentValue(NaN)).to.be.false;
-      expect(Percent.isValidPercentValue({percent: -5})).to.be.false;
       expect(Percent.isValidPercentValue(' ')).to.be.false;
     });
 
