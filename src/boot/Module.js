@@ -54,8 +54,12 @@ export default class Module {
     return result.executeResult;
   }
 
+  static execute(code, url) {
+    return tabris._client.execute(code, url).executeResult;
+  }
+
   static readJSON(url) {
-    let src = tabris._client.load(url);
+    let src = this.load(url);
     if (src) {
       try {
         return JSON.parse(src);
@@ -63,6 +67,14 @@ export default class Module {
         throw new Error('Could not parse ' + url);
       }
     }
+  }
+
+  static getSourceMap() {
+    return null;
+  }
+
+  static load(url) {
+    return tabris._client.load(url);
   }
 
 }

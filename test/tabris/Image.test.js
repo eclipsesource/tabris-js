@@ -30,7 +30,7 @@ describe('Image', function() {
       expect(() => new Image({})).to.throw('"src" missing');
       expect(() => new Image({src: 5})).to.throw('"src" 5 must be a string');
       expect(() => new Image({src: ''})).to.throw('"src" must not be empty');
-      expect(() => new Image({src: '..'})).to.throw('Invalid image "src": must not contain \'..\'');
+      expect(() => new Image({src: '..'})).to.throw('Invalid image "src": Path must not start with \'..\'');
       ['width', 'height'].forEach(property => {
         expect(() => {
           new Image({src: 'foo', [property]: 5, scale: 5});

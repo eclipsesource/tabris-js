@@ -194,10 +194,10 @@ describe('property-types', function() {
       }).to.throw(Error, '"src" must not be empty');
     });
 
-    it('fails if src contains ../ segments', function() {
+    it('fails if src contains invalid ../ segments', function() {
       expect(() => {
         encode({src: '../test.png'});
-      }).to.throw(Error, 'Invalid image "src": must not contain \'..\'');
+      }).to.throw(Error, 'Invalid image "src": Path must not start with \'..\'');
     });
 
     it('fails if width/height/scale values are invalid number', function() {

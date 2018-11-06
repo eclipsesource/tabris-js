@@ -90,13 +90,6 @@ describe('util', function() {
       expect(() => normalizePath('')).to.throw(Error, 'must not be empty');
     });
 
-    it('throws if path contains `..` segments', function() {
-      expect(() => normalizePath('/foo/../bar')).to.throw(Error, 'must not contain \'..\'');
-      expect(() => normalizePath('/foo/..')).to.throw(Error, 'must not contain \'..\'');
-      expect(() => normalizePath('/../foo')).to.throw(Error, 'must not contain \'..\'');
-      expect(() => normalizePath('../foo')).to.throw(Error, 'must not contain \'..\'');
-    });
-
     it('accepts absolute paths', function() {
       expect(normalizePath('/foo/bar')).to.equal('/foo/bar');
     });
@@ -116,6 +109,13 @@ describe('util', function() {
 
     it('eliminates redundant slashes and dots', function() {
       expect(normalizePath('//foo///././bar/')).to.equal('/foo/bar');
+      expect(normalizePath('/foo/../bar')).to.equal('/bar');
+      expect(normalizePath('/foo/..')).to.equal('/');
+    });
+
+    it('throws for paths starting with ..', function() {
+      expect(normalizePath('//foo///././bar/')).to.equal('/foo/bar');
+      expect(() => normalizePath('../foo')).to.throw();
     });
 
   });
@@ -131,12 +131,6 @@ describe('util', function() {
     it('throws if URL path is empty', function() {
       expect(() => normalizePathUrl('http://')).to.throw(Error, 'must not be empty');
       expect(() => normalizePathUrl('')).to.throw(Error, 'must not be empty');
-    });
-
-    it('throws if URL or path contains `..` segments', function() {
-      expect(() => normalizePathUrl('foo://foo/../bar')).to.throw(Error, 'must not contain \'..\'');
-      expect(() => normalizePathUrl('/../foo')).to.throw(Error, 'must not contain \'..\'');
-      expect(() => normalizePathUrl('../foo')).to.throw(Error, 'must not contain \'..\'');
     });
 
     it('eliminates redundant slashes and dots from paths', function() {

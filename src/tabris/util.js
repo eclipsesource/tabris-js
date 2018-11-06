@@ -34,13 +34,23 @@ export function normalizePath(path) {
     throw new Error('must not be empty');
   }
   let prefix = path.startsWith('/') ? '/' : '';
-  let result = prefix + path.split(/\/+/).map((segment) => {
+  let segments = [];
+  let pathSegments = path.split('/');
+  for (let i = 0; i < pathSegments.length; i++) {
+    let segment = pathSegments[i];
     if (segment === '..') {
-      throw new Error("must not contain '..'");
+      let removed = segments.pop();
+      if (!removed || removed === '.') {
+        throw new Error('Path must not start with \'..\'');
+      }
+    } else if (segment !== '.' && segment !== '') {
+      segments.push(segment);
     }
-    return segment === '.' ? '' : segment;
-  }).filter(string => !!string).join('/');
-  return result ? result : '.';
+  }
+  if (!segments.length) {
+    return prefix || '.';
+  }
+  return prefix + segments.join('/');
 }
 
 export function normalizePathUrl(url) {
@@ -54,6 +64,13 @@ export function normalizePathUrl(url) {
     return url;
   }
   return schema + normalizePath(content);
+}
+
+export function dirname(path) {
+  if (!path || path.slice(0, 1) !== '.') {
+    return './';
+  }
+  return path.slice(0, path.lastIndexOf('/'));
 }
 
 /**

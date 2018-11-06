@@ -10,7 +10,7 @@ export default class Console {
   }
 
   trace() {
-    this.log(getStackTrace(new Error));
+    this.log(getStackTrace(new Error('StackTrace')));
   }
 
   assert(expression, ...args) {

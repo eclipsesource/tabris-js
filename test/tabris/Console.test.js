@@ -205,8 +205,16 @@ describe('Console', function() {
     });
 
     describe('trace', function() {
+      let stack, sourceMapCopy;
 
-      let stack;
+      const sourceMap = {
+        version: 3,
+        file: 'console.js',
+        sourceRoot: '',
+        sources: ['../console.js'],
+        names: [],
+        mappings: ';;AAAA,mCAA6C;AAE7C,IAAI,YAAY,GAAG,IAAI,kBAAS,CAAC;IAC/B,IAAI,EAAE,EAAE,EAAE,GAAG,EAAE,EAAE,EAAE,KAAK,EAAE,EAAE;IAC5B,IAAI,EAAE,SAAS;IACf,OAAO,EAAE,aAAa;CACvB,CAAC,CAAC,QAAQ,CAAC,WAAE,CAAC,WAAW,CAAC,CAAC;AAE5B,CAAC,OAAO,EAAE,KAAK,EAAE,MAAM,EAAE,MAAM,EAAE,OAAO,EAAE,OAAO,CAAC,CAAC,OAAO,CAAC,CAAC,MAAM,EAAE,EAAE;IACpE,IAAI,eAAM,CAAC;QACT,IAAI,EAAE,EAAE,EAAE,KAAK,EAAE,EAAE,EAAE,GAAG,EAAE,WAAW;QACrC,IAAI,EAAE,MAAM;KACb,CAAC,CAAC,EAAE,CAAC,QAAQ,EAAG,KAAK,CAAC;SACtB,QAAQ,CAAC,WAAE,CAAC,WAAW,CAAC,CAAC;AAC5B,CAAC,CAAC,CAAC;AAEH,SAAS,KAAK;IACZ,MAAM,GAAG,GAAW,WAAW,EAAE,CAAC;AACpC,CAAC;AAED,SAAS,WAAW;IACnB,eAAe,EAAE,CAAC;AACnB,CAAC;AAED,SAAS,eAAe;IACtB,OAAO,CAAC,GAAG,CAAC,IAAI,KAAK,EAAE,CAAC,KAAK,CAAC,CAAC;AACjC,CAAC'// eslint-disable-line
+      };
 
       const stacks = {
         Android: {
@@ -214,7 +222,7 @@ describe('Console', function() {
 `Error
   at doSomethingElse (./dist/console.js:23:17)
   at doSomething (./dist/console.js:20:5)
-  at Button.start (./dist/console.js:17:5)
+  at Button.start (./dist/console.js:17:17)
   at ./node_modules/tabris/tabris.min.js:1:27243
   at Button.trigger (./node_modules/tabris/tabris.min.js:1:27407)
   at Button.$trigger (./node_modules/tabris/tabris.min.js:1:48355)
@@ -223,7 +231,7 @@ describe('Console', function() {
 `Error
   at doSomethingElse (./dist/console.js:23:17)
   at doSomething (./dist/console.js:20:5)
-  at Button.start (./dist/console.js:17:5)
+  at Button.start (./dist/console.js:17:17)
   at ./node_modules/tabris/tabris.js:1:27243
   at Button.trigger (./node_modules/tabris/tabris.js:1:27407)
   at Button.$trigger (./node_modules/tabris/tabris.js:1:48355)
@@ -233,7 +241,7 @@ describe('Console', function() {
           production:
 `doSomethingElse@http://192.168.6.77:8080/dist/console.js:23:17
 doSomething@http://192.168.6.77:8080/dist/console.js:20:5
-start@http://192.168.6.77:8080/dist/console.js:17:5
+start@http://192.168.6.77:8080/dist/console.js:17:17
 http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:27243
 trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:27407
 $trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:48355
@@ -242,65 +250,111 @@ _notify@[native code]`,
           debug:
 `doSomethingElse@http://192.168.6.77:8080/dist/console.js:23:17
 doSomething@http://192.168.6.77:8080/dist/console.js:20:5
-start@http://192.168.6.77:8080/dist/console.js:17:5
+start@http://192.168.6.77:8080/dist/console.js:17:17
 http://192.168.6.77:8080/node_modules/tabris/tabris.js:1:27243
 trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.js:1:27407
 $trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.js:1:48355
 _notify@http://192.168.6.77:8080/node_modules/tabris/tabris.js:1:74931
 _notify@[native code]`
+        },
+        expected: {
+          simplified:
+`doSomethingElse (./dist/console.js:23:17)
+doSomething (./dist/console.js:20:5)
+start (./dist/console.js:17:17)`,
+          full:
+`doSomethingElse (./dist/console.js:23:17)
+doSomething (./dist/console.js:20:5)
+start (./dist/console.js:17:17)
+./node_modules/tabris/tabris.js:1:27243
+trigger (./node_modules/tabris/tabris.js:1:27407)
+$trigger (./node_modules/tabris/tabris.js:1:48355)
+_notify (./node_modules/tabris/tabris.js:1:74931)`,
+          sourceMapped:
+`doSomethingElse (./console.js:26:15)
+doSomething (./console.js:22:2)
+start (./console.js:18:23)`
         }
       };
 
       class CustomError extends Error {
 
-        constructor() {
-          super();
+        constructor(message) {
+          super(message);
+          this.orgStack = this.stack;
           this.stack = stack;
         }
       }
 
       const OrgError = Error;
 
-      beforeEach(function() {
-        global.Error = CustomError;
-      });
-
-      afterEach(function() {
-        global.Error = OrgError;
-      });
-
       ['Android', 'iOS'].forEach(function(platform) {
 
-        it(platform + ' prints simplified stack trace in production', function() {
-          tabris.device.platform = platform;
-          stack = stacks[platform].production;
-          const expected =
-`doSomethingElse (./dist/console.js:23:17)
-doSomething (./dist/console.js:20:5)
-start (./dist/console.js:17:5)`;
+        describe(platform, function() {
 
-          console.trace();
+          beforeEach(function() {
+            global.Error = CustomError;
+            tabris.device.platform = platform;
+            stack = stacks[platform].production;
+            sourceMapCopy = Object.assign({}, sourceMap);
+          });
 
-          expect(nativeConsole.print).to.have.been
-            .calledWith('log', expected);
-        });
+          afterEach(function() {
+            global.Error = OrgError;
+          });
 
-        it(platform + ' prints full stack trace in debug mode (non-minified)', function() {
-          tabris.device.platform = platform;
-          stack = stacks[platform].debug;
-          const expected =
-`doSomethingElse (./dist/console.js:23:17)
-doSomething (./dist/console.js:20:5)
-start (./dist/console.js:17:5)
-./node_modules/tabris/tabris.js:1:27243
-trigger (./node_modules/tabris/tabris.js:1:27407)
-$trigger (./node_modules/tabris/tabris.js:1:48355)
-_notify (./node_modules/tabris/tabris.js:1:74931)`;
+          it('prints simplified stack trace in production', function() {
+            console.trace();
+            expect(nativeConsole.print).to.have.been.calledWith('log', stacks.expected.simplified);
+          });
 
-          console.trace();
+          it('prints full stack trace in debug mode (non-minified)', function() {
+            stack = stacks[platform].debug;
 
-          expect(nativeConsole.print).to.have.been
-            .calledWith('log', expected);
+            console.trace();
+
+            expect(nativeConsole.print).to.have.been.calledWith('log', stacks.expected.full);
+          });
+
+          it('prints source-mapped stack trace', function() {
+            stub(tabris.Module, 'getSourceMap').withArgs('./dist/console.js').returns(sourceMapCopy);
+
+            console.trace();
+
+            expect(nativeConsole.print).to.have.been.calledWith('log', stacks.expected.sourceMapped);
+          });
+
+          it('caches parsed mappings', function() {
+            stub(tabris.Module, 'getSourceMap').withArgs('./dist/console.js').returns(sourceMapCopy);
+            console.trace();
+            nativeConsole.print.resetHistory();
+
+            sourceMapCopy.mappings = {};
+            console.trace();
+
+            expect(nativeConsole.print).to.have.been.calledWith('log', stacks.expected.sourceMapped);
+          });
+
+          it('does not cache source map itself', function() {
+            stub(tabris.Module, 'getSourceMap').withArgs('./dist/console.js').returns(sourceMapCopy);
+            console.trace();
+            nativeConsole.print.resetHistory();
+            tabris.Module.getSourceMap.resetBehavior();
+
+            console.trace();
+
+            expect(nativeConsole.print).to.have.been.calledWith('log',  stacks.expected.simplified);
+          });
+
+          it('prints original stack trace for malformed sourceMap', function() {
+            sourceMapCopy.mappings = 'not-valid-mappings';
+            stub(tabris.Module, 'getSourceMap').withArgs('./dist/console.js').returns(sourceMapCopy);
+
+            console.trace();
+
+            expect(nativeConsole.print).to.have.been.calledWith('log',  stacks[platform].production);
+          });
+
         });
 
       });

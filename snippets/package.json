@@ -7,6 +7,6 @@
   },
   "scripts": {
     "build": "tsc -p .",
-    "watch": "tsc -p . -w --preserveWatchOutput"
+    "watch": "tsc -p . -w --preserveWatchOutput --inlineSourceMap"
   }
 }

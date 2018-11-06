@@ -73,9 +73,9 @@ describe('FileSystem', function() {
       });
 
       it('rejects invalid path', function() {
-        return fs.readFile('/foo/../bar').then(expectFail, err => {
+        return fs.readFile('/../bar').then(expectFail, err => {
           expect(err).to.be.instanceOf(Error);
-          expect(err.message).to.equal("Invalid file name: must not contain '..'");
+          expect(err.message).to.equal("Invalid file name: Path must not start with '..'");
         });
       });
 
@@ -136,9 +136,9 @@ describe('FileSystem', function() {
       });
 
       it('rejects invalid path', function() {
-        return fs.readDir('/foo/../bar').then(expectFail, err => {
+        return fs.readDir('/../bar').then(expectFail, err => {
           expect(err).to.be.instanceOf(Error);
-          expect(err.message).to.equal("Invalid file name: must not contain '..'");
+          expect(err.message).to.equal("Invalid file name: Path must not start with '..'");
         });
       });
 
@@ -175,9 +175,9 @@ describe('FileSystem', function() {
       });
 
       it('rejects invalid path', function() {
-        return fs.writeFile('/foo/../bar', data).then(expectFail, err => {
+        return fs.writeFile('/../bar', data).then(expectFail, err => {
           expect(err).to.be.instanceOf(Error);
-          expect(err.message).to.equal("Invalid file name: must not contain '..'");
+          expect(err.message).to.equal("Invalid file name: Path must not start with '..'");
         });
       });
 
@@ -253,9 +253,9 @@ describe('FileSystem', function() {
       });
 
       it('rejects invalid path', function() {
-        return fs.removeFile('/foo/../bar').then(expectFail, err => {
+        return fs.removeFile('/../bar').then(expectFail, err => {
           expect(err).to.be.instanceOf(Error);
-          expect(err.message).to.equal("Invalid file name: must not contain '..'");
+          expect(err.message).to.equal("Invalid file name: Path must not start with '..'");
         });
       });
 
