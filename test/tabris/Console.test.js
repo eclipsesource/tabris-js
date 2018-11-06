@@ -209,7 +209,7 @@ describe('Console', function() {
       let stack;
 
       const stacks = {
-        android: {
+        Android: {
           production:
 `Error
   at doSomethingElse (./dist/console.js:23:17)
@@ -229,7 +229,7 @@ describe('Console', function() {
   at Button.$trigger (./node_modules/tabris/tabris.js:1:48355)
   at Tabris._notify (./node_modules/tabris/tabris.js:1:74931)`
         },
-        ios: {
+        iOS: {
           production:
 `doSomethingElse@http://192.168.6.77:8080/dist/console.js:23:17
 doSomething@http://192.168.6.77:8080/dist/console.js:20:5
@@ -269,7 +269,7 @@ _notify@[native code]`
         global.Error = OrgError;
       });
 
-      ['android', 'ios'].forEach(function(platform) {
+      ['Android', 'iOS'].forEach(function(platform) {
 
         it(platform + ' prints simplified stack trace in production', function() {
           tabris.device.platform = platform;

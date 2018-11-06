@@ -12,15 +12,15 @@ export function getStackTrace(error) {
 }
 
 function filterStackLine(line) {
-  if (tabris.device.platform === 'android' && !androidStackLineNoNameRegex.test(line)) {
+  if (tabris.device.platform === 'Android' && !androidStackLineNoNameRegex.test(line)) {
     return false;
   }
   return line.indexOf('tabris/tabris.min.js:') === -1 && line.indexOf('@[native code]') === -1;
 }
 
 function normalizeStackLine(line) {
-  const regex = tabris.device.platform === 'android' ? androidStackLineRegex : iosStackLineRegex;
-  const noNameRegex = tabris.device.platform === 'android' ? androidStackLineNoNameRegex : iosStackLineNoNameRegex;
+  const regex = tabris.device.platform === 'Android' ? androidStackLineRegex : iosStackLineRegex;
+  const noNameRegex = tabris.device.platform === 'Android' ? androidStackLineNoNameRegex : iosStackLineNoNameRegex;
   const fullMatch = line.match(regex);
   const noNameMatch = line.match(noNameRegex);
   if (fullMatch && fullMatch.length === 5) {
