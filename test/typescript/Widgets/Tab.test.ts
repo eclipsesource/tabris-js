@@ -1,4 +1,4 @@
-import {Tab, TabFolder, ImageValue, Properties, WidgetCollection} from 'tabris';
+import {ColorValue, ImageValue, Properties, Tab, TabFolder, WidgetCollection} from 'tabris';
 
 let widget: Tab = new Tab();
 
@@ -8,6 +8,7 @@ let image: ImageValue;
 let selectedImage: ImageValue;
 let title: string;
 let nullValue: null;
+let badgeColor: ColorValue;
 
 badge = widget.badge;
 image = widget.image as ImageValue;
@@ -15,6 +16,7 @@ nullValue = widget.image as null;
 selectedImage = widget.selectedImage as ImageValue;
 nullValue = widget.selectedImage as null;
 title = widget.title;
+badgeColor = widget.badgeColor;
 
 widget.badge = badge;
 widget.image = image;
@@ -22,8 +24,9 @@ widget.image = nullValue;
 widget.selectedImage = selectedImage;
 widget.selectedImage = nullValue;
 widget.title = title;
+widget.badgeColor = badgeColor;
 
-let properties: Properties<typeof Tab> = {badge, image, selectedImage, title};
+let properties: Properties<typeof Tab> = {badge, image, selectedImage, title, badgeColor};
 widget = new Tab(properties);
 widget.set(properties);
 

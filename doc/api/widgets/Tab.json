@@ -101,6 +101,13 @@
       "platforms": {
         "android": false
       }
+    },
+    "badgeColor": {
+      "type": "ColorValue",
+      "description": "The color used for the `badge` indicator.",
+      "platforms": {
+        "android": false
+      }
     }
   },
   "events": {

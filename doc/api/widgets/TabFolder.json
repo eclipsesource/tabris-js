@@ -48,9 +48,31 @@
       "type": "Tab",
       "description": "The currently selected tab."
     },
-    "textColor": {
+    "tabTintColor": {
       "type": "ColorValue",
-      "description": "The color used for the text of the tab headers."
+      "description": "The color used for the text and icon of a tab.\n\nWhen the `tabBarLocation` is `top` on iOS, this property affects the entire appearance of the bar. No other color properties have an effect in that configuration."
+    },
+    "selectedTabTintColor": {
+      "type": "ColorValue",
+      "description": "The color used for the text and icon of a selected tab."
+    },
+    "tabBarBackground": {
+      "type": "ColorValue",
+      "description": "The color used for the background of the bar containing the tabs."
+    },
+    "selectedTabIndicatorTintColor": {
+      "type": "ColorValue",
+      "description": "The color used for the underline strip of the selected tab. Only applies on Android when the `tabBarLocation` is `top`.",
+      "platforms": {
+        "ios": false
+      }
+    },
+    "tabBarElevation": {
+      "type": "number",
+      "description": "The elevation of the tab bar. Depending on the `tabBarLocation` different defaults are applied.",
+      "platforms": {
+        "ios": false
+      }
     }
   },
   "events": {

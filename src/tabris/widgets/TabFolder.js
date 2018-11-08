@@ -89,7 +89,11 @@ NativeObject.defineProperties(TabFolder.prototype, {
       return selection ? tabris._nativeObjectRegistry.find(selection) : null;
     }
   },
-  textColor: {type: 'ColorValue'},
+  tabTintColor: {type: 'ColorValue'},
+  selectedTabTintColor: {type: 'ColorValue'},
+  tabBarBackground: {type: 'ColorValue'},
+  tabBarElevation: {type: 'number', nocache: true},
+  selectedTabIndicatorTintColor: {type: 'ColorValue'},
   layout: {
     set(name, value) {
       if (value) {

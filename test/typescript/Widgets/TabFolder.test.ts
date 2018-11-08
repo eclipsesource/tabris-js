@@ -1,13 +1,12 @@
 import {
   ColorValue,
-  TabFolder,
-  Tab,
-  TabFolderScrollEvent,
-  TabFolderSelectEvent,
+  Properties,
   PropertyChangedEvent,
-  Properties
+  Tab,
+  TabFolder,
+  TabFolderScrollEvent,
+  TabFolderSelectEvent
 } from 'tabris';
-
 
 let widget: TabFolder = new TabFolder({tabBarLocation: 'top'});
 
@@ -16,19 +15,42 @@ let paging: boolean;
 let selection: Tab;
 let tabBarLocation: 'auto' | 'bottom' | 'hidden' | 'top';
 let tabMode: 'fixed' | 'scrollable';
-let textColor: ColorValue;
+let tabTintColor: ColorValue;
+let selectedTabTintColor: ColorValue;
+let tabBarBackground: ColorValue;
+let selectedTabIndicatorTintColor: ColorValue;
+let badgeColor: ColorValue;
+let tabBarElevation: number;
 
 paging = widget.paging;
 selection = widget.selection;
 tabBarLocation = widget.tabBarLocation;
 tabMode = widget.tabMode;
-textColor = widget.textColor;
+tabTintColor = widget.tabTintColor;
+selectedTabTintColor = widget.selectedTabTintColor;
+tabBarBackground = widget.tabBarBackground;
+selectedTabIndicatorTintColor = widget.selectedTabIndicatorTintColor;
+tabBarElevation = widget.tabBarElevation;
 
 widget.paging = paging;
 widget.selection = selection;
-widget.textColor = textColor;
+widget.tabTintColor = tabTintColor;
+widget.selectedTabTintColor = selectedTabTintColor;
+widget.tabBarBackground = tabBarBackground;
+widget.selectedTabIndicatorTintColor = selectedTabIndicatorTintColor;
+widget.tabBarElevation = tabBarElevation;
 
-let properties: Properties<typeof TabFolder> = {paging, selection, tabBarLocation, tabMode, textColor};
+let properties: Properties<typeof TabFolder> = {
+  paging,
+  selection,
+  tabBarLocation,
+  tabMode,
+  tabTintColor,
+  selectedTabTintColor,
+  tabBarBackground,
+  selectedTabIndicatorTintColor,
+  tabBarElevation
+};
 widget = new TabFolder(properties);
 widget.set(properties);
 
