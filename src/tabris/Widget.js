@@ -112,7 +112,7 @@ export default class Widget extends NativeObject {
 
   _getXMLContent() {
     const children = [];
-    const prefix = '    ';
+    const prefix = '  ';
     if (this.$children) {
       for (let i = 0; i < this.$children.length; ++i) {
         const widget = this.$children[i];
@@ -125,10 +125,20 @@ export default class Widget extends NativeObject {
   }
 
   _getXMLHeader(hasChild) {
-    const id = this.id ? ` id='${this.id}'` : '';
-    const className = this.class ? ` class='${this.class}'` : '';
-    const values = `${this.constructor.name}${id}${className}`;
-    return hasChild ? `<${values}>` : `<${values}/>`;
+    const attributes = this._getXMLAttributes();
+    const attrString = (attributes.length ? ' ' : '') + attributes.join(' ');
+    return `<${this.constructor.name}${attrString}${!hasChild ? '/' : ''}>`;
+  }
+
+  _getXMLAttributes() {
+    const result = [];
+    if (this.id) {
+      result.push(`id='${this.id}'`);
+    }
+    if (this.class) {
+      result.push(`class='${this.class}'`);
+    }
+    return result;
   }
 
   _getXMLFooter(hasChild) {
