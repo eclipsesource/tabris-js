@@ -11,7 +11,6 @@ import CheckBox from '../../../src/tabris/widgets/CheckBox';
 import ToggleButton from '../../../src/tabris/widgets/ToggleButton';
 import TextInput from '../../../src/tabris/widgets/TextInput';
 import {omit} from '../../../src/tabris/util';
-import {ColorShader} from '../../../src/tabris/util-shaders';
 import LayoutData from '../../../src/tabris/LayoutData';
 import Constraint from '../../../src/tabris/Constraint';
 
@@ -60,11 +59,11 @@ describe('Widget', function() {
       expect(widget).to.be.instanceof(Widget);
     });
 
-    it('translates background color to ColorShader', function() {
+    it('translates background color to a color shader', function() {
       widget.set({background: 'rgba(1, 2, 3, 0.5)'});
 
       let call = client.calls({op: 'set'})[0];
-      expect(call.properties.background).to.eql(new ColorShader([1, 2, 3, 128]));
+      expect(call.properties.background).to.eql({type: 'color', color: ([1, 2, 3, 128])});
     });
 
     [TextView, RadioButton, Button, CheckBox, ToggleButton, TextInput].forEach((type) => {

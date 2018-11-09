@@ -6,18 +6,6 @@ class Shader {
   }
 }
 
-export class ColorShader extends Shader {
-
-  constructor(color) {
-    if (!(color instanceof Array)) {
-      throw new Error('Argument is not an Array');
-    }
-    super('color');
-    this.color = color;
-  }
-
-}
-
 export class LinearGradientShader extends Shader {
 
   constructor(css) {

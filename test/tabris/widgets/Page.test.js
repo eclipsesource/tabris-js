@@ -3,7 +3,6 @@ import ClientStub from '../ClientStub';
 import NavigationView from '../../../src/tabris/widgets/NavigationView';
 import Page from '../../../src/tabris/widgets/Page';
 import Composite from '../../../src/tabris/widgets/Composite';
-import {ColorShader} from '../../../src/tabris/util-shaders';
 
 describe('Page', function() {
 
@@ -39,7 +38,7 @@ describe('Page', function() {
     expect(setCalls.length).to.equal(1);
     expect(setCalls[0].properties.title).to.equal('title');
     expect(setCalls[0].properties.image).to.deep.equal(['image', null, null, null]);
-    expect(setCalls[0].properties.background).to.deep.equal(new ColorShader([255, 0, 0, 255]));
+    expect(setCalls[0].properties.background).to.deep.equal({type: 'color', color: [255, 0, 0, 255]});
   });
 
   it('get returns default values', function() {

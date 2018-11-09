@@ -1,23 +1,7 @@
 import {expect} from '../test';
-import {ColorShader, LinearGradientShader} from '../../src/tabris/util-shaders';
+import {LinearGradientShader} from '../../src/tabris/util-shaders';
 
 describe('util-shaders', () => {
-
-  describe('ColorShader', () => {
-
-    it('throws when input is not an array', () => {
-      expect(() => new ColorShader('string')).to.throw('Argument is not an Array');
-    });
-
-    it('has type "color"', () => {
-      expect(new ColorShader([1, 2, 3]).type).to.equal('color');
-    });
-
-    it('stores value of color', () => {
-      expect(new ColorShader([1, 2, 3]).color).to.deep.equal([1, 2, 3]);
-    });
-
-  });
 
   describe('LinearGradientShader', () => {
 

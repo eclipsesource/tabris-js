@@ -1,6 +1,6 @@
 import {imageFromArray, imageToArray} from './util-images';
-import {colorArrayToString, colorStringToArray} from './util-colors';
-import {ColorShader, LinearGradientShader} from './util-shaders';
+import {colorArrayToString} from './util-colors';
+import {LinearGradientShader} from './util-shaders';
 import NativeObject from './NativeObject';
 import WidgetCollection from './WidgetCollection';
 import Color from './Color';
@@ -76,7 +76,7 @@ export let types = {
         if (value.trim().startsWith('linear-gradient')) {
           return new LinearGradientShader(value);
         } else {
-          return new ColorShader(colorStringToArray(value));
+          return {type: 'color', color: Color.from(value).toArray()};
         }
       }
       return value;
@@ -86,8 +86,8 @@ export let types = {
         // NOTE: null is only returned for "background" where it means "no background"
         return 'rgba(0, 0, 0, 0)';
       }
-      if (value instanceof ColorShader) {
-        return colorArrayToString(value.color);
+      if (value.type === 'color') {
+        return Color.from(value.color).toString();
       } else if (value instanceof LinearGradientShader) {
         return value.css;
       } else if (value instanceof Array) {

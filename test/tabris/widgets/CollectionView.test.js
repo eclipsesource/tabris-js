@@ -2,7 +2,6 @@ import {expect, match, mockTabris, restore, spy, stub} from '../../test';
 import ClientStub from '../ClientStub';
 import CollectionView from '../../../src/tabris/widgets/CollectionView';
 import Composite from '../../../src/tabris/widgets/Composite';
-import {ColorShader} from '../../../src/tabris/util-shaders';
 
 describe('CollectionView', function() {
 
@@ -32,7 +31,7 @@ describe('CollectionView', function() {
 
     it('includes standard properties in native create', function() {
       let createCalls = client.calls({op: 'create'});
-      expect(createCalls[0].properties.background).to.deep.equal(new ColorShader([255, 255, 0, 255]));
+      expect(createCalls[0].properties.background).to.deep.equal({type: 'color', color: ([255, 255, 0, 255])});
     });
 
     it('listens on native events `requestInfo`, `createCell`, and `updateCell`', function() {
