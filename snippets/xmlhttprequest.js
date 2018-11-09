@@ -2,9 +2,9 @@ import {Button, TextView, ui} from 'tabris';
 
 new Button({
   left: 10, top: 10,
-  text: "Find words starting with 'mobile'"
+  text: 'Find words starting with "mobile"'
 }).on('select', () => {
-  let xhr = new XMLHttpRequest();
+  const xhr = new XMLHttpRequest();
   xhr.onreadystatechange = () => {
     if (xhr.readyState === xhr.DONE) {
       new TextView({

@@ -1,8 +1,8 @@
 import {ImageView, fs, ui} from 'tabris';
 
-let file = fs.cacheDir + '/test.png';
+const file = fs.cacheDir + '/test.png';
 
-let imageView = new ImageView({
+const imageView = new ImageView({
   centerX: 0, centerY: 0, width: 400, height: 200,
   background: '#aaaaaa'
 }).appendTo(ui.contentView);

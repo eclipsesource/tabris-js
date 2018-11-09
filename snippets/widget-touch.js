@@ -1,6 +1,6 @@
 import {TextView, ui} from 'tabris';
 
-let textView = new TextView({
+const textView = new TextView({
   left: 20, top: 20, right: 20,
   text: 'Touch anywhere...'
 }).appendTo(ui.contentView);

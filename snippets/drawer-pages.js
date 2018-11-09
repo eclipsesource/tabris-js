@@ -5,7 +5,7 @@ const PAGE_CONFIGS = [
   {title: 'Checkout', icon: 'resources/page.png'}
 ];
 
-let navigationView = new NavigationView({
+const navigationView = new NavigationView({
   left: 0, top: 0, right: 0, bottom: 0,
   drawerActionVisible: true,
   pageAnimation: 'none'
@@ -21,7 +21,7 @@ new ImageView({
   scaleMode: 'fill'
 }).appendTo(ui.drawer);
 
-let pageSelector = new CollectionView({
+const pageSelector = new CollectionView({
   left: 0, top: 'prev()', right: 0, bottom: 0,
   itemCount: PAGE_CONFIGS.length,
   createCell,
@@ -36,7 +36,7 @@ let pageSelector = new CollectionView({
 createPage({title: 'Initial Page', icon: 'resources/page.png'}).appendTo(navigationView);
 
 function createCell() {
-  let cell = new Composite();
+  const cell = new Composite();
   new Composite({
     left: device.platform === 'iOS' ? 60 : 72, right: 0, bottom: 0, height: 1,
     background: '#e7e7e7'
@@ -53,7 +53,7 @@ function createCell() {
 }
 
 function updateCell(cell, index) {
-  let page = PAGE_CONFIGS[index];
+  const page = PAGE_CONFIGS[index];
   cell.apply({
     ImageView: {image: {src: page.icon, scale: 3}},
     TextView: {text: page.title}
@@ -61,7 +61,7 @@ function updateCell(cell, index) {
 }
 
 function createPage(config) {
-  let page = new Page({title: config.title});
+  const page = new Page({title: config.title});
   page.icon = config.icon;
   new Button({
     left: 20, right: 20, top: 20,

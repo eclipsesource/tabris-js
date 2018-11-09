@@ -2,18 +2,18 @@ import {Button, Composite, NavigationView, Page, Tab, TabFolder, TextView, app, 
 
 // demonstrates NavigationViews as children of a TabFolder
 
-let tabFolder = new TabFolder({
+const tabFolder = new TabFolder({
   left: 0, top: 0, right: 0, bottom: 0,
   tabBarLocation: 'bottom',
   background: 'white'
 }).appendTo(ui.contentView);
 
 function createTab(title, image) {
-  let tab = new Tab({
+  const tab = new Tab({
     title,
     image: {src: image, scale: 2}
   }).appendTo(tabFolder);
-  let navigationView = new NavigationView({
+  const navigationView = new NavigationView({
     id: 'navigationView',
     left: 0, top: 0, right: 0, bottom: 0
   }).appendTo(tab);
@@ -21,12 +21,12 @@ function createTab(title, image) {
 }
 
 function createPage(navigationView, title) {
-  let text = title || 'Page ' + (navigationView.pages().length + 1);
-  let page = new Page({
+  const text = title || 'Page ' + (navigationView.pages().length + 1);
+  const page = new Page({
     title: text,
     background: '#eeeeee'
   }).appendTo(navigationView);
-  let controls = new Composite({
+  const controls = new Composite({
     centerX: 0, centerY: 0
   }).appendTo(page);
   new TextView({
@@ -51,8 +51,8 @@ createTab('Statistic', 'resources/chart.png');
 
 app.on('backNavigation', (event) => {
   // handle the "physical" back button on Android
-  let navigationView = tabFolder.selection.find('#navigationView').first();
-  let page = navigationView.pages().last();
+  const navigationView = tabFolder.selection.find('#navigationView').first();
+  const page = navigationView.pages().last();
   if (page !== undefined) {
     page.dispose();
     event.preventDefault();

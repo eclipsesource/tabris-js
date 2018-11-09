@@ -1,6 +1,6 @@
 import {Composite, ui} from 'tabris';
 
-let redbox = new Composite({
+const redbox = new Composite({
   left: 10, top: 10, width: 100, height: 100,
   background: 'red'
 }).appendTo(ui.contentView);

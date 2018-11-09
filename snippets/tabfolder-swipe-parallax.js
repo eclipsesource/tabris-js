@@ -9,20 +9,20 @@ const PEOPLE = [
   {name: 'Tim Buschtöns', image: 'resources/tim.jpg'}
 ];
 
-let imageContainer = new Composite({
+const imageContainer = new Composite({
   left: 0, top: 0, right: 0, bottom: 0,
   background: 'white'
 }).appendTo(ui.contentView);
 
-let tabFolder = new TabFolder({
+const tabFolder = new TabFolder({
   left: 0, top: 0, right: 0, bottom: 0,
   paging: true,
   tabBarLocation: 'hidden'
 }).on('scroll', ({selection, offset}) => {
-  let imageViews = imageContainer.children();
-  let tabIndex = tabFolder.children().indexOf(selection);
-  let tabFolderWidth = tabFolder.bounds.width;
-  let offsetPercent = offset / tabFolderWidth;
+  const imageViews = imageContainer.children();
+  const tabIndex = tabFolder.children().indexOf(selection);
+  const tabFolderWidth = tabFolder.bounds.width;
+  const offsetPercent = offset / tabFolderWidth;
   imageViews[tabIndex].set({
     opacity: 1 - Math.abs(offsetPercent),
     transform: {translationX: -offset * PARALLAX}
@@ -42,7 +42,7 @@ let tabFolder = new TabFolder({
 }).appendTo(ui.contentView);
 
 for (let i = 0; i < PEOPLE.length; i++) {
-  let person = PEOPLE[i];
+  const person = PEOPLE[i];
   new Tab().appendTo(tabFolder)
     .append(
       new TextView({

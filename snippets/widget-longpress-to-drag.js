@@ -5,7 +5,7 @@ const LABEL_TEXT = 'Long press the box to drag it';
 let previousTouch;
 let drag;
 
-let composite = new Composite({centerX: 0, centerY: 0, width: 100, height: 100, background: 'red'})
+const composite = new Composite({centerX: 0, centerY: 0, width: 100, height: 100, background: 'red'})
   .appendTo(ui.contentView)
   .once('longpress', () => label.dispose())
   .on('longpress', ({state}) => {
@@ -29,7 +29,7 @@ let composite = new Composite({centerX: 0, centerY: 0, width: 100, height: 100, 
     disableDrag();
   });
 
-let label = new TextView({
+const label = new TextView({
   centerX: 0, top: [composite, 8],
   text: LABEL_TEXT
 }).appendTo(ui.contentView);

@@ -6,14 +6,14 @@ new Button({
 }).on({select: showTimeDialog})
   .appendTo(ui.contentView);
 
-let selectionTextView = new TextView({
+const selectionTextView = new TextView({
   left: 16, right: 16, top: ['prev()', 16],
   alignment: 'center'
 }).appendTo(ui.contentView);
 
 function showTimeDialog() {
   return new TimeDialog({
-    date: new Date(),
+    date: new Date()
   }).on({
     select: ({date}) => selectionTextView.text = date.toString(),
     close: () => console.log('TimeDialog closed')

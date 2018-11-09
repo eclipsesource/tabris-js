@@ -8,15 +8,14 @@ new Button({
 }).on({select: showDateDialog})
   .appendTo(ui.contentView);
 
-let selectionTextView = new TextView({
+const selectionTextView = new TextView({
   left: 16, right: 16, top: ['prev()', 16],
   alignment: 'center'
 }).appendTo(ui.contentView);
 
 function showDateDialog() {
-  let date = new Date();
   new DateDialog({
-    date,
+    date: new Date(),
     minDate: new Date(date.getTime() - FIVE_DAYS),
     maxDate: new Date(date.getTime() + FIVE_DAYS)
   }).on({

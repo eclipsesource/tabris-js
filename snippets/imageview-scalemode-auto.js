@@ -1,6 +1,6 @@
 import {ImageView, Slider, ui} from 'tabris';
 
-let imageView = new ImageView({
+const imageView = new ImageView({
   left: 20, top: 20, width: 100, height: 250,
   image: 'resources/target_200.png',
   background: '#aaaaaa',

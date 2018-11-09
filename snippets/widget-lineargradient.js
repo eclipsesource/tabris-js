@@ -15,10 +15,10 @@ const BACKGROUNDS = [
   'linear-gradient(400deg, red, blue 50%)',
   'linear-gradient(to right, red -30%, blue 50%)',
   'linear-gradient(0deg, red 0%, red 25%, teal 25%, teal 50%, black 50%, black 75%, green 75%)',
-  'linear-gradient(to left, #333, #333 50%, #eee 75%, #333 75%)',
+  'linear-gradient(to left, #333, #333 50%, #eee 75%, #333 75%)'
 ];
 
-let scrollView = new ScrollView({
+const scrollView = new ScrollView({
   left: 0, right: 0, top: 0, bottom: 0
 }).appendTo(ui.contentView);
 
@@ -37,13 +37,13 @@ new TextView({
 }).appendTo(scrollView);
 
 BACKGROUNDS.forEach((gradient) => {
-  let composite = new Composite({
+  const composite = new Composite({
     left: 0, right: 0, top: 'prev() 16',
     padding: {bottom: 8}
   }).appendTo(scrollView);
   new Composite({
     left: 16, top: 0, right: ['50%', 8], height: 96,
-    background: gradient,
+    background: gradient
   }).appendTo(composite);
   new WebView({
     left: ['50%', 8], top: 0, right: 16, height: 96,

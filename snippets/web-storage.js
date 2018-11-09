@@ -2,7 +2,7 @@ import {TextView, ui} from 'tabris';
 
 const KEY = 'localStorageSnippetCount';
 
-let startCount = parseInt(localStorage.getItem(KEY) || '0') + 1;
+const startCount = parseInt(localStorage.getItem(KEY) || '0', 10) + 1;
 localStorage.setItem(KEY, startCount.toString());
 new TextView({
   left: 10, right: 10, centerY: 0,

@@ -1,6 +1,6 @@
 import {ScrollView, TextInput, ui} from 'tabris';
 
-let scrollView = new ScrollView({
+const scrollView = new ScrollView({
   left: 0, top: 0, right: 0, bottom: 0
 }).appendTo(ui.contentView);
 
@@ -8,11 +8,11 @@ createTextInput('default', 'multiline');
 createTextInput('send', 'multiline');
 createTextInput('done', 'multiline');
 
-let textInput = createTextInput();
+const textInput = createTextInput();
 createTextInput('send');
 createTextInput('go');
 createTextInput('search');
-createTextInput('done').on('accept', ({target: textInput}) => textInput.focused = false);
+createTextInput('done').on('accept', () => textInput.focused = false);
 createTextInput('next');
 createTextInput('next').on('accept', () => textInput.focused = true);
 createTextInput();

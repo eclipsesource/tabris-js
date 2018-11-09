@@ -2,7 +2,7 @@
 import {CollectionView, Composite, ImageView, TextView, ui} from 'tabris';
 const IMAGE_PATH = 'resources/';
 
-let people = [
+const people = [
   ['Holger', 'Staudacher', 'holger.jpg'],
   ['Ian', 'Bull', 'ian.jpg'],
   ['Jochen', 'Krause', 'jochen.jpg'],
@@ -18,7 +18,7 @@ new CollectionView({
   itemCount: people.length,
   cellHeight: 256,
   createCell: () => {
-    let cell = new Composite();
+    const cell = new Composite();
     new ImageView({
       top: 16, centerX: 0, width: 200, height: 200
     }).appendTo(cell);
@@ -29,7 +29,7 @@ new CollectionView({
     return cell;
   },
   updateCell: (cell, index) => {
-    let person = people[index];
+    const person = people[index];
     cell.apply({
       ImageView: {image: person.image},
       TextView: {text: person.firstName}

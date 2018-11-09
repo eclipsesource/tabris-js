@@ -9,11 +9,12 @@ const doNotCapitalize = {
   string: true,
   number: true,
   boolean: true,
-  'this': true
+  this: true
 };
 
 // TODO: Rename "constructor" property in schema since this name is already used by plain JavaScript objects
-export type ExtendedApi = schema.Api & Partial<{isNativeObject: boolean, parent: ExtendedApi, file: string, isWidget: boolean}>;
+export type ExtendedApi
+  = schema.Api & Partial<{isNativeObject: boolean, parent: ExtendedApi, file: string, isWidget: boolean}>;
 export type ApiDefinitions = {[name: string]: ExtendedApi};
 export type Methods = schema.Method | schema.Method[];
 export type Properties = {[name: string]: schema.Property};
@@ -23,7 +24,7 @@ export function capitalizeType(type: string) {
     return type; // currently there is no case where this needs to be changed
   }
   return type.split('|').map(part => {
-    let testType = part.endsWith('[]') ? part.slice(0, -2) : part;
+    const testType = part.endsWith('[]') ? part.slice(0, -2) : part;
     return doNotCapitalize[testType] ? part : capitalizeFirstChar(part);
   }).join('|');
 }
@@ -59,7 +60,7 @@ export class TextBuilder {
     return this.lines.join('\n');
   }
 
-  private _indentLine(line) {
+  private _indentLine(line: string) {
     return line.length > 0 ? '  '.repeat(this.indent) + line : line;
   }
 
@@ -69,7 +70,7 @@ export function asArray<T>(value: T | T[]): T[] {
   return Array.isArray(value) ? value : [value];
 }
 
-export function filter<T>(obj: T, filterFunction): T {
+export function filter<T>(obj: T, filterFunction: (v: ExtendedApi) => boolean): T {
   return Object.keys(obj)
     .filter(key => filterFunction(obj[key]))
     .reduce((result, key) => {
@@ -175,6 +176,6 @@ export function createEventTypeName(widgetName: string, eventName: string, event
   }
 }
 
-export function isNativeObject(defs, def) {
+export function isNativeObject(defs: ApiDefinitions, def: ExtendedApi) {
   return def && (def.type === 'NativeObject' || isNativeObject(defs, defs[def.extends]));
 }

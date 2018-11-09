@@ -1,6 +1,6 @@
 import {ImageView, TextView, CheckBox, Slider, Composite, ui} from 'tabris';
 
-let imageView = new ImageView({
+const imageView = new ImageView({
   left: 0, right: 0, top: 0, bottom: '#controls',
   image: 'resources/salad.jpg',
   background: '#f5f5f5',
@@ -8,7 +8,7 @@ let imageView = new ImageView({
 }).on('zoom', ({zoomLevel}) => zoomLevelSlider.selection = zoomLevel * 10)
   .appendTo(ui.contentView);
 
-let controls = new Composite({
+const controls = new Composite({
   id: 'controls',
   left: 0, right: 0, bottom: 0, height: tabris.device.platform === 'iOS' ? 204 : undefined,
   background: 'white',
@@ -20,7 +20,7 @@ new CheckBox({
   id: 'zoomEnabled',
   left: 0, right: 0, top: 0,
   checked: true,
-  text: 'Zoom enabled',
+  text: 'Zoom enabled'
 }).on('checkedChanged', ({target: checkBox, value: zoomEnabled}) => {
   zoomLevelSlider.selection = 10;
   minZoomSlider.selection = 10;
@@ -29,15 +29,15 @@ new CheckBox({
   controls.children().filter(widget => widget !== checkBox).set({enabled: zoomEnabled});
 }).appendTo(controls);
 
-let zoomLevelSlider = createSlider('Zoom level', imageView.zoomLevel * 10)
+const zoomLevelSlider = createSlider('Zoom level', imageView.zoomLevel * 10)
   .on('select', ({selection}) => {
-    let zoomLevel = selection / 10;
+    const zoomLevel = selection / 10;
     if (imageView.zoomEnabled && zoomLevel > imageView.minZoomLevel && zoomLevel < imageView.maxZoomLevel) {
       imageView.zoomLevel = zoomLevel;
     }
   });
 
-let minZoomSlider = createSlider('Min zoom', imageView.minZoomLevel * 10)
+const minZoomSlider = createSlider('Min zoom', imageView.minZoomLevel * 10)
   .on('selectionChanged', ({value: minZoomLevel}) => {
     if (maxZoomSlider.selection < minZoomLevel) {
       maxZoomSlider.selection = minZoomLevel;
@@ -50,7 +50,7 @@ let minZoomSlider = createSlider('Min zoom', imageView.minZoomLevel * 10)
     }
   });
 
-let maxZoomSlider = createSlider('Max zoom', imageView.maxZoomLevel * 10)
+const maxZoomSlider = createSlider('Max zoom', imageView.maxZoomLevel * 10)
   .on('selectionChanged', ({value: maxZoomLevel}) => {
     if (minZoomSlider.selection > maxZoomLevel) {
       minZoomSlider.selection = maxZoomLevel;
@@ -64,16 +64,16 @@ let maxZoomSlider = createSlider('Max zoom', imageView.maxZoomLevel * 10)
   });
 
 function createSlider(title, selection) {
-  let container = new Composite({
+  const container = new Composite({
     left: 0, top: 'prev() 16', right: 0
   }).appendTo(controls);
 
   new TextView({
     left: 0, width: 72, centerY: 0,
-    text: title,
+    text: title
   }).appendTo(container);
 
-  let slider = new Slider({
+  const slider = new Slider({
     left: 'prev() 16', right: 40, centerY: 0,
     minimum: 5,
     maximum: 50,
@@ -81,10 +81,10 @@ function createSlider(title, selection) {
   }).on('selectionChanged', ({value: level}) => sliderValue.text = (level / 10).toFixed(1))
     .appendTo(container);
 
-  let sliderValue = new TextView({
+  const sliderValue = new TextView({
     right: 0, centerY: 0,
     alignment: 'right',
-    text: (slider.selection / 10).toFixed(1),
+    text: (slider.selection / 10).toFixed(1)
   }).appendTo(container);
   return slider;
 }

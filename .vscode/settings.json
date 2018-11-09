@@ -6,5 +6,6 @@
         ],
         "url": "./tools/api-schema.json"
     }
-  ]
+  ],
+  "tslint.jsEnable": true
 }

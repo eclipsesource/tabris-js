@@ -6,7 +6,7 @@ new Button({
 }).on('select', () => webView.postMessage('Hello from Tabris.js', '*'))
   .appendTo(ui.contentView);
 
-let statusTextView = new TextView({
+const statusTextView = new TextView({
   left: 16, right: 16, bottom: 'prev()', height: 48,
   alignment: 'center',
   text: 'No message received from WebView'
@@ -17,7 +17,7 @@ new Composite({
   background: '#e1e1e1'
 }).appendTo(ui.contentView);
 
-let webView = new WebView({
+const webView = new WebView({
   left: 0, top: 0, right: 0, bottom: 'prev()'
 }).appendTo(ui.contentView);
 

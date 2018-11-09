@@ -1,6 +1,6 @@
 import {TextView, CheckBox, ui} from 'tabris';
 
-let markup = '<b>bold</b>, <i>italic</i>, <big>big</big>, <small>small</small>, ' +
+const markup = '<b>bold</b>, <i>italic</i>, <big>big</big>, <small>small</small>, ' +
   '<ins>ins</ins>, <del>del</del>, <a href="http://tabrisjs.com">link</a>';
 
 new TextView({
@@ -8,7 +8,7 @@ new TextView({
   text: 'TextView with markup:\n' + markup
 }).appendTo(ui.contentView);
 
-let markupTextView = new TextView({
+const markupTextView = new TextView({
   left: 16, top: 'prev() 16', right: 16,
   text: 'TextView with markup:\n' + markup,
   markupEnabled: true

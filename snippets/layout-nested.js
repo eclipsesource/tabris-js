@@ -5,18 +5,18 @@ import {Composite, ImageView, TextView, ui} from 'tabris';
 const MARGIN = 8;
 
 function createLayout(depth) {
-  let composite = new Composite({
+  const composite = new Composite({
     left: MARGIN, top: ['prev()', MARGIN], right: MARGIN,
     background: '#f3f3f3'
   });
 
-  let imageView = new ImageView({
+  const imageView = new ImageView({
     left: MARGIN, top: MARGIN, width: 56,
     image: 'resources/target_200.png',
     background: '#aaaaaa'
   }).appendTo(composite);
 
-  let innerComposite = new Composite({
+  const innerComposite = new Composite({
     left: imageView, right: MARGIN, centerY: 0
   }).appendTo(composite);
 

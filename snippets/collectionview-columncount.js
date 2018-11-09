@@ -1,11 +1,11 @@
 import {TextView, CollectionView, Slider, ui} from 'tabris';
 
-let columnCountTextView = new TextView({
+const columnCountTextView = new TextView({
   bottom: 16, right: 16, width: 32,
   font: 'bold 14px'
 }).appendTo(ui.contentView);
 
-let slider = new Slider({
+const slider = new Slider({
   left: 16, bottom: 0, right: [columnCountTextView, 16], height: 48,
   minimum: 1,
   maximum: 8
@@ -14,9 +14,9 @@ let slider = new Slider({
   columnCountTextView.text = selection;
 }).appendTo(ui.contentView);
 
-let items = createItems();
+const items = createItems();
 
-let collectionView = new CollectionView({
+const collectionView = new CollectionView({
   left: 0, top: 0, right: 0, bottom: slider,
   itemCount: items.length,
   cellHeight: 128,
@@ -37,9 +37,9 @@ let collectionView = new CollectionView({
 slider.selection = 3;
 
 function createItems() {
-  let items = [];
+  const result = [];
   for (let i = 1; i <= 100; i++) {
-    items.push(i);
+    result.push(i);
   }
-  return items;
+  return result;
 }

@@ -9,6 +9,6 @@ new ImageView({
   touched++;
   touchedLabel.text = 'touched ' + touched + ' times';
 }).appendTo(ui.contentView);
-let touchedLabel = new TextView({
+const touchedLabel = new TextView({
   top: 'prev() 10', centerX: 0
 }).appendTo(ui.contentView);

@@ -2,7 +2,7 @@ import {TextInput, CheckBox, ui} from 'tabris';
 
 // Create a password text input field where the password can be revealed or hidden
 
-let textInput = new TextInput({
+const textInput = new TextInput({
   left: 16, right: 16, top: 16,
   type: 'password',
   message: 'Test password',

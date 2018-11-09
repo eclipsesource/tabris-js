@@ -2,7 +2,7 @@ import {Slider, TextView, ui} from 'tabris';
 
 // Create a slider with a selection handler
 
-let textView = new TextView({
+const textView = new TextView({
   left: 10, right: 10, top: '30%',
   alignment: 'center',
   font: '22px sans-serif',

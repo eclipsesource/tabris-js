@@ -2,7 +2,7 @@ import {Button, Switch, TextView, ui} from 'tabris';
 
 // Create a switch with a checked handler
 
-let MARGIN = 16;
+const MARGIN = 16;
 
 new Switch({
   left: MARGIN, top: MARGIN,
@@ -22,6 +22,6 @@ new Button({
   left: MARGIN, top: ['#switch', MARGIN],
   text: 'Toggle Switch'
 }).on('select', () => {
-  let switcher = ui.contentView.find('#switch').first();
+  const switcher = ui.contentView.find('#switch').first();
   switcher.checked = !switcher.checked;
 }).appendTo(ui.contentView);

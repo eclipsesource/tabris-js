@@ -1,6 +1,6 @@
 import {TextInput, TextView, ui} from 'tabris';
 
-let textView = new TextView({
+const textView = new TextView({
   left: 16, top: 16,
   text: 'Label:'
 }).appendTo(ui.contentView);

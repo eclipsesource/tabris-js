@@ -5,8 +5,8 @@ import {Canvas, ui, device} from 'tabris';
 new Canvas({
   left: 10, top: 10, right: 10, bottom: 10
 }).on('resize', ({target: canvas, width, height}) => {
-  let scaleFactor = device.scaleFactor;
-  let ctx = canvas.getContext('2d', width * scaleFactor, height * scaleFactor);
+  const scaleFactor = device.scaleFactor;
+  const ctx = canvas.getContext('2d', width * scaleFactor, height * scaleFactor);
   ctx.scale(scaleFactor, scaleFactor);
   ctx.strokeStyle = 'rgb(78, 154, 217)';
   ctx.lineWidth = 10;
@@ -18,16 +18,16 @@ new Canvas({
   ctx.putImageData(createImageData(80, 40), 100, 100);
 
   // copy region
-  let data = ctx.getImageData(0, 0, 100, 100);
+  const data = ctx.getImageData(0, 0, 100, 100);
   ctx.putImageData(data, 180, 100);
 
 }).appendTo(ui.contentView);
 
 function createImageData(width, height) {
-  let array = [];
+  const array = [];
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
-      let alpha = x % 20 > y % 20 ? 255 : 0;
+      const alpha = x % 20 > y % 20 ? 255 : 0;
       array.push(200, 0, 0, alpha);
     }
   }

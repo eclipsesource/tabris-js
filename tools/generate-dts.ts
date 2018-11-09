@@ -44,14 +44,16 @@ const JSX_FACTORY = 'JSX.JsxFactory';
 const EVENT_OBJECT = 'EventObject<T>';
 const eventObjectNames = [EVENT_OBJECT];
 
-exports.generateDts = function generateTsd(config) {
+type Config = {files: string[], globalTypeDefFiles: string[], version: string, propertyTypes: string};
+
+exports.generateDts = function generateTsd(config: Config) {
   writeGlobalsDts(config);
   writeTabrisDts(config);
 };
 
 //#region read/write
 
-function writeGlobalsDts(config) {
+function writeGlobalsDts(config: Config) {
   const apiDefinitions = readJsonDefs(config.files);
   const globalApiDefinitions = filter(apiDefinitions, def => def.namespace && def.namespace === 'global');
   const text = new TextBuilder(config.globalTypeDefFiles.map(file => fs.readFileSync(file)));
@@ -59,7 +61,7 @@ function writeGlobalsDts(config) {
   fs.writeFileSync('build/tabris/globals.d.ts', text.toString());
 }
 
-function writeTabrisDts(config) {
+function writeTabrisDts(config: Config) {
   const apiDefinitions = readJsonDefs(config.files);
   const tabrisApiDefinitions = filter(apiDefinitions, def => !def.namespace || def.namespace === 'tabris');
   const text = new TextBuilder([HEADER.replace(/\${VERSION}/g, config.version), config.propertyTypes]);
@@ -147,7 +149,7 @@ function renderEventObjectInterfaces(text: TextBuilder, def: ExtendedApi) {
   if (def.events) {
     Object.keys(def.events).filter(name => !!def.events[name].parameters).sort().forEach(name => {
       const eventType = createEventTypeName(def.type, name, def.events[name]);
-      if (!eventObjectNames.find(name => name === eventType)) {
+      if (!eventObjectNames.find(eventObjectName => eventObjectName === eventType)) {
         eventObjectNames.push(eventType);
         text.append('');
         renderEventObjectInterface(text, name, def);
@@ -161,12 +163,12 @@ function renderEventObjectInterface(text: TextBuilder, name: string, def: Extend
   const eventType = createEventTypeName(def.type, name, def.events[name]);
   text.append(`interface ${eventType} extends EventObject<${def.type}> {`);
   text.indent++;
-  Object.keys(parameters).sort().forEach(name => {
+  Object.keys(parameters).sort().forEach(param => {
     const values = [];
-    (parameters[name].values || []).sort().forEach(value => {
+    (parameters[param].values || []).sort().forEach(value => {
       values.push(`'${value}'`);
     });
-    text.append(`readonly ${name}: ${union(values) || parameters[name].ts_type || parameters[name].type};`);
+    text.append(`readonly ${param}: ${union(values) || parameters[param].ts_type || parameters[param].type};`);
   });
   text.indent--;
   text.append('}');
@@ -213,13 +215,13 @@ function createMethodModifiers(method: schema.Method, isStatic: boolean) {
 
 function renderProperties(text: TextBuilder, def: ExtendedApi) {
   const properties = Object.assign({}, def.properties, getClassDependentProperties(def));
-  const filter = name => name !== '[JSX.jsxFactory]' || def.constructor.access !== 'protected';
-  Object.keys(properties || {}).filter(filter).sort().forEach(name => {
+  const propertyFilter = name => name !== '[JSX.jsxFactory]' || def.constructor.access !== 'protected';
+  Object.keys(properties || {}).filter(propertyFilter).sort().forEach(name => {
     text.append('');
     text.append(createProperty(name, properties, def));
   });
   if (def.statics && def.statics.properties) {
-    Object.keys(def.statics.properties || {}).filter(filter).sort().forEach(name => {
+    Object.keys(def.statics.properties || {}).filter(propertyFilter).sort().forEach(name => {
       text.append('');
       text.append(createProperty(name, def.statics.properties, def, true));
     });
@@ -242,7 +244,6 @@ function renderEventProperties(text: TextBuilder, def: ExtendedApi) {
     }
   }
 }
-
 
 function createEventProperty(widgetName: string, eventName: string, event: schema.Event) {
   const result = [];
@@ -340,7 +341,7 @@ function createJsxPropertiesObject(def: ExtendedApi) {
   return `{}${children}`;
 }
 
-function union(values: any[]) {
+function union(values: Array<string|number|boolean>) {
   return (values || []).sort().map(value => typeof value === 'string' ? `'${value}'` : `${value}`).join(' | ');
 }
 
@@ -379,7 +380,8 @@ function getClassDependentProperties(def: ExtendedApi) {
   return result;
 }
 
-function isClassDependentMethod(def: ExtendedApi, method: Methods) { // methods with parameters that must be adjusted in some subclasses
+// methods with parameters that must be adjusted in some subclasses
+function isClassDependentMethod(def: ExtendedApi, method: Methods) {
   const variants = asArray(method);
   return variants.some(variant =>
     (variant.parameters || []).some(param => isClassDependentParameter(def, param))
@@ -461,7 +463,7 @@ function getInheritedConstructor(def: ExtendedApi): typeof def.constructor {
   return def.parent ? getInheritedConstructor(def.parent) : null;
 }
 
-function onlyUnique(value, index, self) {
+function onlyUnique(value: string, index: number, self: string[]) {
   return self.indexOf(value) === index;
 }
 

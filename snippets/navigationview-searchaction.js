@@ -4,21 +4,21 @@ import {Button, Composite, NavigationView, Page, SearchAction, TextView, ui} fro
 
 const PROPOSALS = ['baseball', 'batman', 'battleship', 'bangkok', 'bangladesh', 'banana'];
 
-let navigationView = new NavigationView({
+const navigationView = new NavigationView({
   left: 0, top: 0, right: 0, bottom: 0
 }).appendTo(ui.contentView);
 
-let page = new Page({
+const page = new Page({
   title: 'Search action'
 }).appendTo(navigationView);
 
-let searchBox = new Composite({
+const searchBox = new Composite({
   centerX: 0, centerY: 0
 }).appendTo(page);
 
-let textView = new TextView().appendTo(searchBox);
+const textView = new TextView().appendTo(searchBox);
 
-let action = new SearchAction({
+const action = new SearchAction({
   title: 'Search',
   image: {
     src: device.platform === 'iOS' ? 'resources/search-black-24dp@3x.png' : 'resources/search-white-24dp@3x.png',

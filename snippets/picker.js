@@ -17,7 +17,7 @@ const AIRPORTS = [
   }
 ];
 
-let picker = new Picker({
+const picker = new Picker({
   left: 20, top: 20, right: 20,
   itemCount: AIRPORTS.length,
   itemText: (index) => AIRPORTS[index].name,

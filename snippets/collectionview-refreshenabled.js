@@ -1,8 +1,8 @@
 import {CollectionView, TextView, ui} from 'tabris';
 
-let items = [];
+const items = [];
 
-let view = new CollectionView({
+const view = new CollectionView({
   left: 0, top: 0, right: 0, bottom: 0,
   cellHeight: 25,
   refreshEnabled: true,

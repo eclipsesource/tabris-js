@@ -4,9 +4,9 @@ const SECTION_HEIGHT = 48;
 const ITEM_HEIGHT = 32;
 
 let scrollPosition = 0;
-let items = createItems();
+const items = createItems();
 
-let floatingSection = createSectionView('section');
+const floatingSection = createSectionView('section');
 floatingSection.text = 'Section 1';
 
 new CollectionView({
@@ -18,7 +18,7 @@ new CollectionView({
   updateCell: (cell, index) => cell.text = items[index].name
 }).on('scroll', ({target, deltaY}) => {
   scrollPosition += deltaY;
-  let firstVisibleItem = target.firstVisibleIndex;
+  const firstVisibleItem = target.firstVisibleIndex;
   floatingSection.set({
     text: getCurrentSection(firstVisibleItem).name,
     transform: {translationY: getSectionTranslationY(firstVisibleItem)}
@@ -31,7 +31,7 @@ function getSectionTranslationY(firstVisibleItem) {
   if (scrollPosition < 0) {
     return -scrollPosition;
   }
-  let nextSectionOffset = scrollPosition + SECTION_HEIGHT - getNextSection(firstVisibleItem).top;
+  const nextSectionOffset = scrollPosition + SECTION_HEIGHT - getNextSection(firstVisibleItem).top;
   if (nextSectionOffset > 0) {
     return -nextSectionOffset;
   }
@@ -40,7 +40,7 @@ function getSectionTranslationY(firstVisibleItem) {
 
 function getNextSection(firstVisibleItem) {
   for (let i = firstVisibleItem + 1; i < items.length; i++) {
-    let item = items[i];
+    const item = items[i];
     if (item.type === 'section') {
       return item;
     }
@@ -50,7 +50,7 @@ function getNextSection(firstVisibleItem) {
 
 function getCurrentSection(firstVisibleItem) {
   for (let i = firstVisibleItem; i >= 0; i--) {
-    let item = items[i];
+    const item = items[i];
     if (item.type === 'section') {
       return item;
     }
@@ -78,15 +78,15 @@ function createItemView() {
 
 function createItems() {
   let count = 1;
-  let items = [];
+  const result = [];
   let top = 0;
   for (let j = 1; j <= 10; j++) {
-    items.push({name: 'Section ' + j, type: 'section', top});
+    result.push({name: 'Section ' + j, type: 'section', top});
     top += SECTION_HEIGHT;
     for (let i = 0; i < 5; i++) {
-      items.push({name: 'Item ' + count++, type: 'item', top});
+      result.push({name: 'Item ' + count++, type: 'item', top});
       top += ITEM_HEIGHT;
     }
   }
-  return items;
+  return result;
 }

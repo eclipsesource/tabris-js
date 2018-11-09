@@ -5,12 +5,12 @@ import {Button, TextInput, TextView, ui, localStorage} from 'tabris';
 
 const KEY = 'snippet-value';
 
-let valueLabel = new TextView({
+const valueLabel = new TextView({
   left: 32, top: 32,
   text: 'Value:'
 }).appendTo(ui.contentView);
 
-let valueField = new TextInput({
+const valueField = new TextInput({
   left: 'prev() 12', baseline: valueLabel, right: 32,
   text: localStorage.getItem(KEY) || 'Hello world!'
 }).appendTo(ui.contentView);

@@ -9,13 +9,13 @@ const IMAGES = [
 ];
 const SCALE_MODES = ['auto', 'fit', 'fill', 'stretch', 'none'];
 
-let imageView = new ImageView({
+const imageView = new ImageView({
   top: MARGIN, width: 200, height: 200, centerX: 0,
   image: IMAGES[0],
   background: 'rgb(220, 220, 220)'
 }).appendTo(ui.contentView);
 
-let imageSizeLabel = new TextView({
+const imageSizeLabel = new TextView({
   left: MARGIN, top: [imageView, MARGIN_LARGE], width: 96,
   text: 'Image'
 }).appendTo(ui.contentView);
@@ -28,7 +28,7 @@ new Picker({
   select: ({index}) => imageView.image = IMAGES[index]
 }).appendTo(ui.contentView);
 
-let scaleModeTextView = new TextView({
+const scaleModeTextView = new TextView({
   left: MARGIN, top: [imageSizeLabel, MARGIN_LARGE], width: 96,
   text: 'Scale mode'
 }).appendTo(ui.contentView);

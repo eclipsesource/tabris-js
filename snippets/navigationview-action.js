@@ -2,7 +2,7 @@ import {Action, NavigationView, ui} from 'tabris';
 
 // Create an action with an image and a selection handler
 
-let navigationView = new NavigationView({
+const navigationView = new NavigationView({
   left: 0, top: 0, right: 0, bottom: 0,
   background: '#e7e7e7'
 }).appendTo(ui.contentView);

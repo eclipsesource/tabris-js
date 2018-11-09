@@ -1,6 +1,6 @@
 import {Composite, Slider, TextView, ui} from 'tabris';
 
-let textView = new TextView({
+const textView = new TextView({
   left: 16, top: 16, right: 16,
   text: 'And thus the first man of the Pequod that mounted the mast to look out for ' +
   'the White Whale, on the White Whale\'s own peculiar ground; that man was ' +
@@ -12,20 +12,20 @@ let textView = new TextView({
   'night before. But again the old Manxman said nay.'
 }).appendTo(ui.contentView);
 
-let controls = new Composite({
-  left: 0, right: 0, bottom: 0,
+const controls = new Composite({
+  left: 0, right: 0, bottom: 0
 }).appendTo(ui.contentView);
 
-let spacingView = new TextView({
-  right: 16, width: 32, centerY: 0,
+const spacingView = new TextView({
+  right: 16, width: 32, centerY: 0
 }).appendTo(controls);
 
-let slider = new Slider({
+const slider = new Slider({
   left: 16, right: [spacingView, 16], bottom: 16, top: 16,
   minimum: 2,
   maximum: 50
 }).on('selectionChanged', ({value}) => {
-  let lineSpacing = value / 10;
+  const lineSpacing = value / 10;
   textView.lineSpacing = lineSpacing;
   spacingView.text = lineSpacing;
 }).appendTo(controls);

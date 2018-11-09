@@ -81,8 +81,11 @@ module.exports = function(grunt) {
       eslint: {
         cmd: 'node node_modules/eslint/bin/eslint.js --color .'
       },
-      tslint: {
-        cmd: 'node node_modules/tslint/bin/tslint --exclude "**/*.d.ts" "examples/**/*.ts" "test/**/*.ts"'
+      tslint_tools: {
+        cmd: 'node node_modules/tslint/bin/tslint --project ./tools'
+      },
+      tslint_snippets: {
+        cmd: 'node node_modules/tslint/bin/tslint --project ./snippets'
       },
       bundle_tabris: {
         cmd: 'node node_modules/rollup/bin/rollup --config rollup.config.js -f cjs ' +
@@ -161,7 +164,8 @@ module.exports = function(grunt) {
   /* runs static code analysis tools */
   grunt.registerTask('lint', [
     'exec:eslint',
-    'exec:tslint',
+    'exec:tslint_tools',
+    'exec:tslint_snippets',
     'validate-json'
   ]);
 

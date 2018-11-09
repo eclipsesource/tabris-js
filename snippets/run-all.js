@@ -365,14 +365,14 @@ const snippets = [
   ['web-storage.js', () => confirm(TextView, {text: /started\s[0-9]+\stime/})],
   ['webview.js', () => confirm(WebView, {url: /wikipedia/})
     .then(() => input(find(TextInput), 'http://goolge.com', true))
-    .then(() => timeout(find(WebView).onLoad.resolve()))
+    .then(() => timeout(find(WebView).onLoad.promise()))
     .then(() => confirm(WebView, {url: /google/}))
     .then(() => wait(1000))
   ],
   ['webview-navigation.js', () => confirm(WebView, {url: /wikipedia/})
     .then(() => confirm(ImageView, {enabled: false}, 2))
     .then(() => input(find(TextInput), 'http://goolge.com', true))
-    .then(() => timeout(find(WebView).onLoad.resolve()))
+    .then(() => timeout(find(WebView).onLoad.promise()))
     .then(() => wait(1000))
     .then(() => confirm(WebView, {url: /google/}))
     .then(() => confirm(TextInput, {text: /google/}))
@@ -380,13 +380,13 @@ const snippets = [
     .then(() => confirm(ImageView, {image: /forward/, enabled: false}))
     .then(() => wait(1000))
     .then(() => tap(find(ImageView, {image: /back/})))
-    .then(() => timeout(find(WebView).onLoad.resolve()))
+    .then(() => timeout(find(WebView).onLoad.promise()))
     .then(() => confirm(WebView, {url: /wikipedia/}))
     .then(() => confirm(TextInput, {text: /wikipedia/}))
     .then(() => confirm(ImageView, {image: /back/, enabled: false}))
     .then(() => confirm(ImageView, {image: /forward/, enabled: true}))
     .then(() => tap(find(ImageView, {image: /forward/})))
-    .then(() => timeout(find(WebView).onLoad.resolve()))
+    .then(() => timeout(find(WebView).onLoad.promise()))
     .then(() => confirm(WebView, {url: /google/}))
     .then(() => confirm(TextInput, {text: /google/}))
     .then(() => confirm(ImageView, {image: /back/, enabled: true}))
@@ -408,7 +408,7 @@ const snippets = [
   ['widget-elevation.js', () => confirm(Composite, {elevation: 8})],
   ios && ['widget-highlightontouch.js', () => confirm(Composite, {highlightOnTouch: true})],
   ['widget-lineargradient.js', () => confirm(ScrollView)
-    .then(() => timeout(findAll(WebView).pop().onLoad.resolve(), 4000, true))
+    .then(() => timeout(findAll(WebView).pop().onLoad.promise(), 4000, true))
     .then(() => scroll(find(ScrollView)))
   ],
   ['widget-longpress-to-drag.js', () => confirm(Composite)
@@ -464,12 +464,14 @@ if (!showIntro()) {
     const test = typeof current === 'string' ? () => Promise.resolve() : current[1];
     initErrorLog();
     wait(300).then(() => {
+      console.log(`require('./${file});`);
       require('./' + file);
-      return test().catch(ex => console.error(ex));
+      return test().catch(ex => console.error(ex.message + '\n' + ex.stack)).then(() => console.log('test finished'));
     }).then(errorCheck)
       .then(() => showOptions(file + ' - OK', 'next'))
       .catch(ex => {
-        showOptions(file + ' - ' + ex.message, 'error');
+        console.log(ex.stack);
+        showOptions(file + ' - ' + ex, 'error');
       });
   }
 }
@@ -503,15 +505,17 @@ function showIntro() {
 
 function initErrorLog() {
   const orgError = console.error;
-  console.error = function() {
-    errors.push(arguments);
-    orgError.apply(console, arguments);
+  console.error = (...args) => {
+    errors.push(args.concat('stack trace:', new Error('').stack));
+    orgError.apply(console, args);
   };
   const orgTrigger = NativeObject.prototype._trigger;
   NativeObject.prototype._trigger = function() {
     try {
+      // tslint:disable-next-line:no-invalid-this
       orgTrigger.apply(this, arguments);
     } catch (ex) {
+      console.log('trigger error');
       console.error(ex);
     }
   };
@@ -520,13 +524,13 @@ function initErrorLog() {
 function errorCheck() {
   if (errors.length) {
     throw new Error(errors.map(
-      args => Array.prototype.map.call(args, ex => ex + '\n' + (ex && ex.stack || ''))
-    ).join(', '));
+      args => Array.prototype.map.call(args, msg => msg.stack ? msg.message + '\n' + msg.stack : msg).join('\n')
+    ).join('\n'));
   }
 }
 
 function showOptions(msg, state) {
-  console.log(msg);
+  console.log('result: ' + msg);
   const autoContinue = localStorage.getItem(KEY_AUTO_CONTINUE) === 'true';
   const useTimer = state === 'next' && autoContinue;
   const background = state === 'error' ? 'rgba(255, 30, 30, 0.8)' :
@@ -618,7 +622,7 @@ function showOptions(msg, state) {
 function stop() {
   // Android crashes if disposing widget in gesture event:
   wait(0).then(() => {
-    options ? options.dispose() : null;
+    if (options) { options.dispose(); }
     localStorage.removeItem(KEY_SNIPPET_INDEX);
     app.reload();
   });
@@ -626,7 +630,7 @@ function stop() {
 
 function next() {
   wait(0).then(() => {
-    options ? options.dispose() : null;
+    if (options) { options.dispose(); }
     localStorage.setItem(KEY_SNIPPET_INDEX, (getSnippetIndex() + 1));
     app.reload();
   });
@@ -634,7 +638,7 @@ function next() {
 
 function prev() {
   wait(0).then(() => {
-    options ? options.dispose() : null;
+    if (options) { options.dispose(); }
     if (getSnippetIndex() === 0) {
       return;
     }
@@ -653,7 +657,7 @@ function getSnippetIndex() {
 
 function confirm(type, props = {}, count = 1) {
   return wait(300).then(() => {
-    let results = findAll(type, props).map(element => element.contentView || element);
+    const results = findAll(type, props).map(element => element.contentView || element);
     if (results.length !== count) {
       console.log(props, results);
       throw new Error(`Expected ${count} matching ${type.name}, found ${results.length}`);
@@ -746,7 +750,6 @@ function select(target, value) {
 function input(target, text, accept) {
   target.focused = true;
   return wait(300).then(() => {
-  }).then(() => {
     target.text = text;
     target.trigger('input', {target, text});
   }).then(() => {
@@ -766,10 +769,10 @@ function scroll(target) {
       .then(() => target.trigger('scroll', {target, deltaY: 0}))
       .then(() => wait(500));
   } else if (target instanceof ScrollView) {
-    let outerHeight = target.bounds.height;
+    const outerHeight = target.bounds.height;
     let innerHeight = 0;
     target.children().forEach(child => innerHeight = Math.max(innerHeight, child.bounds.top + child.bounds.height));
-    let steps = Math.ceil(innerHeight / outerHeight);
+    const steps = Math.ceil(innerHeight / outerHeight);
     return forAsync(steps, i => target.scrollToY(i * outerHeight), 1000);
   }
 }
@@ -787,7 +790,7 @@ function forAsync(times, cb, pause = 500, afterEach = () => null) {
 
 function forEachAsync(items, cb, pause = 1000, afterEach = () => null) {
   let promiseChain = wait(0);
-  for (let item of items) {
+  for (const item of items) {
     promiseChain = promiseChain
       .then(() => cb(item))
       .then(() => wait(pause))
@@ -797,7 +800,7 @@ function forEachAsync(items, cb, pause = 1000, afterEach = () => null) {
 }
 
 function has(obj1, obj2) {
-  for (let key in obj2) {
+  for (const key in obj2) {
     if (obj2[key] instanceof RegExp) {
       if (!obj2[key].test(JSON.stringify(obj1[key]))) {
         console.log(key + ' is ' + obj1[key] + ', not matching ' + obj2[key]);
@@ -816,20 +819,20 @@ function has(obj1, obj2) {
   return true;
 }
 
-function waitFor(type, eventType, count = 1, timeout = 1000) {
-  let targets = findAll(type);
+function waitFor(type, eventType, count = 1, ms = 1000) {
+  const targets = findAll(type);
   if (targets.length !== count) {
     throw new Error(`Expected ${count} ${type.name}, found ${targets.length}`);
   }
   return new Promise((resolve, reject) => {
     Promise.all(targets.map(target => new Promise(handle => target.once(eventType, handle))))
       .then(resolve);
-    setTimeout(() => reject(new Error('Timeout')), timeout);
+    setTimeout(() => reject(new Error('Timeout')), ms);
   });
 }
 
 function find(type, props = {}, pos = 0) {
-  let all = findAll(type, props);
+  const all = findAll(type, props);
   if (!all[pos]) {
     throw new Error(`No matching ${type.name}`);
   }
@@ -837,10 +840,10 @@ function find(type, props = {}, pos = 0) {
 }
 
 function findAll(type, props = {}) {
-  let results = [];
-  for (let cid in tabris._proxies.$proxies) {
-    if (tabris._proxies.$proxies[cid].constructor === type) {
-      results.push(tabris._proxies.$proxies[cid]);
+  const results = [];
+  for (const cid in tabris._nativeObjectRegistry.$objects) {
+    if (tabris._nativeObjectRegistry.$objects[cid].constructor === type) {
+      results.push(tabris._nativeObjectRegistry.$objects[cid]);
     }
   }
   return results.filter(obj => has(obj, props));

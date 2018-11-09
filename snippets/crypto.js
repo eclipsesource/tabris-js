@@ -1,6 +1,6 @@
 import {TextView, crypto, ui} from 'tabris';
 
-let buffer = new Uint8Array(24);
+const buffer = new Uint8Array(24);
 crypto.getRandomValues(buffer);
 
 new TextView({
@@ -9,7 +9,7 @@ new TextView({
   text: join(buffer)
 }).appendTo(ui.contentView);
 
-function join(buffer) {
+function join(arr) {
   // TypedArray.join not supported on iOS
-  return Array.prototype.join.call(buffer, ' ');
+  return Array.prototype.join.call(arr, ' ');
 }

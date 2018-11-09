@@ -9,12 +9,12 @@ const COLORS = [null, 'red', 'green', 'blue', 'rgba(0, 0, 0, 0.25)'];
 
 ui.drawer.enabled = true;
 
-let navigationView = new NavigationView({
+const navigationView = new NavigationView({
   left: 0, top: 0, right: 0, height: 144,
   drawerActionVisible: true
 }).appendTo(ui.contentView);
 
-let page = new Page({
+const page = new Page({
   title: 'NavigationView',
   background: '#eeeeee'
 }).appendTo(navigationView);
@@ -33,7 +33,7 @@ new Action({
   }
 }).appendTo(navigationView);
 
-let controls = new ScrollView({
+const controls = new ScrollView({
   left: 0, right: 0, top: 'prev()', bottom: 0,
   background: 'white',
   elevation: 12
@@ -72,7 +72,7 @@ if (device.platform === 'Android') {
   createColorPicker('Action text color', 'actionTextColor');
 }
 
-let toolbarHeightTextView = createTextView('Toolbar height', navigationView.toolbarHeight);
+const toolbarHeightTextView = createTextView('Toolbar height', navigationView.toolbarHeight);
 
 navigationView.on({toolbarHeightChanged: ({value}) => toolbarHeightTextView.text = value});
 
@@ -86,7 +86,7 @@ function createCheckBox(text, listener, checked = true) {
 }
 
 function createColorPicker(text, property) {
-  let initialColor = navigationView[property];
+  const initialColor = navigationView[property];
   new TextView({
     left: MARGIN, top: ['prev()', MARGIN], width: LABEL_WIDTH,
     text

@@ -1,14 +1,8 @@
 {
   "extends": "eslint:recommended",
-  "plugins": [
-    "react"
-  ],
   "parserOptions": {
     "ecmaVersion": 6,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true
-    }
+    "sourceType": "module"
   },
   "env": {
     "node": true,
@@ -51,16 +45,6 @@
     "no-var": "error",
     "prefer-arrow-callback": "error",
     "arrow-body-style": ["error", "as-needed"],
-    "object-shorthand": ["error", "always"],
-    "jsx-quotes": ["error", "prefer-single"],
-    "react/jsx-uses-vars": "error",
-    "react/jsx-boolean-value": "error",
-    "react/jsx-closing-tag-location": "error",
-    "react/jsx-equals-spacing": ["error", "never"],
-    "react/jsx-filename-extension": [1, { "extensions": [".jsx"] }],
-    "react/jsx-indent": ["error", 2],
-    "react/jsx-no-duplicate-props": "error",
-    "react/jsx-no-undef": "error",
-    "react/jsx-curly-brace-presence": "error"
+    "object-shorthand": ["error", "always"]
   }
 }

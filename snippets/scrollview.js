@@ -2,7 +2,7 @@ import {Button, ScrollView, TextView, ui} from 'tabris';
 
 // Create a horizontal scroll view and populate it with text views
 
-let scrollView = new ScrollView({
+const scrollView = new ScrollView({
   left: 0, right: 0, top: '40%', bottom: '40%',
   direction: 'horizontal',
   background: '#234'

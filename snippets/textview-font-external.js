@@ -2,11 +2,11 @@ import {ScrollView, TextView, ui, app} from 'tabris';
 
 app.registerFont('pacifico', 'resources/pacifico.ttf#Pacifico');
 
-let scrollView = new ScrollView({
+const scrollView = new ScrollView({
   left: 0, top: 0, right: 0, bottom: 0
 }).appendTo(ui.contentView);
 
-let font = '20px pacifico';
+const font = '20px pacifico';
 new TextView({
   left: 16, top: 'prev() 24', right: 16,
   text: font

@@ -1,7 +1,18 @@
-import {join, parse, relative, sep} from 'path';
 import * as fs from 'fs-extra';
 import * as schema from './api-schema';
-import {asArray, ApiDefinitions, ExtendedApi, readJsonDefs,  getTitle} from './common';
+import {
+  ApiDefinitions,
+  asArray,
+  ExtendedApi,
+  getTitle,
+  readJsonDefs
+  } from './common';
+import {
+  join,
+  parse,
+  relative,
+  sep
+  } from 'path';
 
 type TypeLinks = {[type: string]: string};
 type NamedEvents = Array<schema.Event & {name: string}>;
@@ -9,21 +20,23 @@ type NamedEvents = Array<schema.Event & {name: string}>;
 const SNIPPETS_LOCATION = 'snippets';
 const MSG_PROVISIONAL = '**Note:** this API is provisional and may change in a future release.';
 const LANG_TYPE_LINKS: TypeLinks = {
-  Object: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object',
-  object: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object',
-  string: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type',
+  'Object': 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object',
+  'object': 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object',
+  'string': 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type',
   'string[]': 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type',
-  boolean: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type',
-  number: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type',
+  'boolean': 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type',
+  'number': 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type',
   'number[]': 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type',
-  null: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Null_type',
-  undefined: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Undefined_type',
-  any: 'https://www.typescriptlang.org/docs/handbook/basic-types.html#any',
-  void: 'https://www.typescriptlang.org/docs/handbook/basic-types.html#void',
-  this: '#'
+  'null': 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Null_type',
+  'undefined': 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Undefined_type',
+  'any': 'https://www.typescriptlang.org/docs/handbook/basic-types.html#any',
+  'void': 'https://www.typescriptlang.org/docs/handbook/basic-types.html#void',
+  'this': '#'
 };
 
-exports.generateDoc = function generateDoc({files, targetPath, version}) {
+type Config = {files: string[], targetPath: string, version: string};
+
+exports.generateDoc = function generateDoc({files, targetPath, version}: Config) {
   const generator = new DocumentationGenerator(targetPath, version, files);
   generator.generate();
 };
@@ -36,7 +49,7 @@ class DocumentationGenerator {
   constructor(
     public readonly targetPath: string,
     public readonly tabrisVersion: string,
-    files: string[],
+    files: string[]
   ) {
     this.readPropertyTypes();
     this.defs = readJsonDefs(files);
@@ -60,7 +73,7 @@ class DocumentationGenerator {
     const typesFile = join(this.targetPath, 'types.md');
     const path = relative(join(this.targetPath, 'api'), typesFile).replace(sep, '/');
     const list = fs.readFileSync(typesFile, 'utf-8').match(/^### *(.*)$/gm).map(heading => heading.slice(4));
-    for (let type of list) {
+    for (const type of list) {
       this.addTypeLink(type, `${path}#${type.toLowerCase()}`);
     }
   }
@@ -74,18 +87,18 @@ class DocumentationGenerator {
   }
 
   private renderIndex() {
-    let tocFile = join(this.targetPath, 'toc.yml');
-    let sortedAPI = Object.keys(this.defs).map(key => this.defs[key]).sort(compareTitles);
-    let render = (def) => `    - title: ${getTitle(def)}\n      url: api/${parse(def.file).name}.html`;
-    let content = {
+    const tocFile = join(this.targetPath, 'toc.yml');
+    const sortedAPI = Object.keys(this.defs).map(key => this.defs[key]).sort(compareTitles);
+    const render = (def) => `    - title: ${getTitle(def)}\n      url: api/${parse(def.file).name}.html`;
+    const content = {
       api: sortedAPI.filter(def => !def.isWidget).map(render).join('\n'),
       widgets: sortedAPI.filter(def => def.isWidget).map(render).join('\n')
     };
-    let text = fs.readFileSync(tocFile, 'utf-8').replace(/<%=\s*(\S+)\s*%>/g, (match, word) => content[word]);
+    const text = fs.readFileSync(tocFile, 'utf-8').replace(/<%=\s*(\S+)\s*%>/g, (match, word) => content[word]);
     fs.writeFileSync(tocFile, text);
   }
 
-  private addTypeLink(type, link) {
+  private addTypeLink(type: string, link: string) {
     if (this.typeLinks[type]) {
       throw new Error('Duplicate type ' + type);
     }
@@ -158,8 +171,8 @@ class DocumentRenderer {
   }
 
   private renderDescriptionFile() {
-    let apiPath = join(this.targetPath, 'api');
-    let exampleFile = join(apiPath, parse(this.def.file).name + '.md');
+    const apiPath = join(this.targetPath, 'api');
+    const exampleFile = join(apiPath, parse(this.def.file).name + '.md');
     if (isFileSync(exampleFile)) {
       return fs.readFileSync(exampleFile, 'utf-8');
     } else {
@@ -168,7 +181,7 @@ class DocumentRenderer {
   }
 
   private renderSnippet() {
-    let snippetPath = join(SNIPPETS_LOCATION, `${this.title.toLowerCase()}.js`);
+    const snippetPath = join(SNIPPETS_LOCATION, `${this.title.toLowerCase()}.js`);
     if (isFileSync(snippetPath)) {
       return [
         'Example:',
@@ -182,14 +195,14 @@ class DocumentRenderer {
   }
 
   private renderImages() {
-    let androidImage = join('img/android', parse(this.def.file).name + '.png');
-    let iosImage = join('img/ios', parse(this.def.file).name + '.png');
-    let exists = image => isFileSync(join('doc/api', image));
+    const androidImage = join('img/android', parse(this.def.file).name + '.png');
+    const iosImage = join('img/ios', parse(this.def.file).name + '.png');
+    const exists = image => isFileSync(join('doc/api', image));
     if (exists(androidImage) && exists(iosImage)) {
       return [
         'Android | iOS',
         '--- | ---',
-        `![${this.def.type} on Android](${androidImage}) | ![${this.def.type} on iOS](${iosImage})`,
+        `![${this.def.type} on Android](${androidImage}) | ![${this.def.type} on iOS](${iosImage})`
       ].join('\n') + '\n';
     }
     if (exists(androidImage)) {
@@ -205,7 +218,7 @@ class DocumentRenderer {
   }
 
   private renderSummary() {
-    let result = [];
+    const result = [];
     if (this.def.type) {
       if (this.def.generics || this.def.ts_extends) {
         result.push('* TypeScript type: `', this.def.type);
@@ -296,12 +309,12 @@ class DocumentRenderer {
   }
 
   private renderAllMethods() {
-    let result = [];
-    let publicMethodKeys = Object.keys(this.def.methods || {})
+    const result = [];
+    const publicMethodKeys = Object.keys(this.def.methods || {})
       .filter(name => isPublic(name) && isJS(this.def.methods[name])).sort();
-    let protectedMethodKeys = Object.keys(this.def.methods || {})
+    const protectedMethodKeys = Object.keys(this.def.methods || {})
       .filter(name => !isPublic(name) && isJS(this.def.methods[name])).sort();
-    let staticMethodKeys = Object.keys((this.def.statics || {}).methods || {})
+    const staticMethodKeys = Object.keys((this.def.statics || {}).methods || {})
       .filter(name => isJS(this.def.statics.methods[name])).sort();
     if (publicMethodKeys.length) {
       result.push('## Methods\n\n');
@@ -330,8 +343,8 @@ class DocumentRenderer {
   }
 
   private renderMethod(name: string, method: schema.Method) {
-    let result = [];
-    result.push('### ' + name + this.renderSignature(method.parameters)) + '\n\n';
+    const result = [];
+    result.push('### ' + name + this.renderSignature(method.parameters));
     result.push(this.renderPlatforms(method.platforms) + '\n\n');
     if (method.parameters && method.parameters.length) {
       result.push('\n\n', this.renderMethodParamList(method.parameters, true), '\n');
@@ -350,12 +363,12 @@ class DocumentRenderer {
 
   private renderAllProperties() {
     const {properties, statics, type} = this.def;
-    let result = [];
-    let publicPropertyKeys = Object.keys(properties || {})
+    const result = [];
+    const publicPropertyKeys = Object.keys(properties || {})
       .filter(name => isPublic(name) && isJS(properties[name])).sort();
-    let protectedPropertyKeys = Object.keys(properties || {})
+    const protectedPropertyKeys = Object.keys(properties || {})
       .filter(name => !isPublic(name) && isJS(properties[name])).sort();
-    let staticPropertyKeys = Object.keys((statics || {}).properties || {})
+    const staticPropertyKeys = Object.keys((statics || {}).properties || {})
       .filter(name => isJS(statics.properties[name])).sort();
     if (publicPropertyKeys.length) {
       result.push('## Properties\n\n');
@@ -385,7 +398,7 @@ class DocumentRenderer {
     isStatic: boolean = false
   ) {
     const result = [];
-    let property = properties[name];
+    const property = properties[name];
     result.push('### ', name, '\n', this.renderPlatforms(property.platforms), '\n\n');
     result.push(this.renderPropertySummary(property, name), '\n\n');
     if (property.description) {
@@ -421,11 +434,11 @@ class DocumentRenderer {
     if (!platforms) {
       return '';
     }
-    let result = ['<p class="platforms">'];
-    let names = {ios: 'iOS', android: 'Android'};
-    for (let platform in names) {
+    const result = ['<p class="platforms">'];
+    const names = {ios: 'iOS', android: 'Android'};
+    for (const platform in names) {
       if (platforms[platform] !== false) {
-        let name = names[platform];
+        const name = names[platform];
         result.push(` < span class = '${platform}-tag' title = 'supported on ${name}' > ${name} < /span>`);
       }
     }
@@ -434,7 +447,7 @@ class DocumentRenderer {
   }
 
   private renderPropertySummary(property: schema.Property, name: string) {
-    let result = ['* Type: '];
+    const result = ['* Type: '];
     if (property.values) { // TODO: remove in favor of using only union types
       result.push(property.values.map(v => literal(v, property.type)).join(' | '));
     } else {
@@ -463,9 +476,9 @@ class DocumentRenderer {
   }
 
   private renderAllEvents() {
-    let typeEvents: NamedEvents = Object.keys(this.def.events || {})
+    const typeEvents: NamedEvents = Object.keys(this.def.events || {})
       .map(name => Object.assign({name}, this.def.events[name]));
-    let changeEvents: NamedEvents = this.createChangeEvents();
+    const changeEvents: NamedEvents = this.createChangeEvents();
     const result = [];
     if (Object.keys(typeEvents).length) {
       result.push('## Events\n\n');
@@ -494,7 +507,7 @@ class DocumentRenderer {
     return Object.keys(properties)
       .filter(name => !properties[name].const)
       .map(name => {
-        let standardDescription = `Fired when the [*${name}*](#${name}) property has changed.`;
+        const standardDescription = `Fired when the [*${name}*](#${name}) property has changed.`;
         return {
           name: `${name}Changed`,
           description: properties[name].changeEventDescription || standardDescription,
@@ -555,7 +568,7 @@ class DocumentRenderer {
       return '';
     }
     return ['See also:\n'].concat(this.def.links.map(link => {
-      let path = link.path.replace('${GITHUB_BRANCH}',
+      const path = link.path.replace('${GITHUB_BRANCH}',
         'https://github.com/eclipsesource/tabris-js/tree/v' + this.tabrisVersion);
       return `- [${link.title}](${path})`;
     })).join('\n') + '\n';
@@ -622,7 +635,7 @@ function isPublic(name: string) {
   return name[0] !== '_';
 }
 
-function literal(value: any, type: string) {
+function literal(value: string|boolean|number|{[key: string]: string}, type: string) {
   if (type === 'string') {
     return '`\'' + value + '\'`';
   }

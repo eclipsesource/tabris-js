@@ -1,10 +1,10 @@
 import {Button, InactivityTimer, TextView, ui} from 'tabris';
 
-let timer = new InactivityTimer({
+const timer = new InactivityTimer({
   delay: 2000
 }).on('timeout', () => label.text = 'inactive!');
 
-let label = new TextView({
+const label = new TextView({
   centerX: 0, top: 16,
   text: ''
 }).appendTo(ui.contentView);

@@ -8,7 +8,7 @@ new Button({
   text: 'load'
 }).on('select', loadData).appendTo(ui.contentView);
 
-let textView = new TextView({
+const textView = new TextView({
   left: 16, right: 16, top: 'prev() 12'
 }).appendTo(ui.contentView);
 

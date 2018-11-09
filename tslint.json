@@ -1,57 +1,167 @@
 {
+  "extends": "tslint:recommended",
   "rules": {
-    "class-name": true,
-    "comment-format": [
-      true,
-      "check-space"
+    "no-console": false,
+    "variable-name": {
+      "options": "allow-leading-underscore"
+    },
+    "ordered-imports": [
+      false
     ],
-    "indent": [
-      true,
-      "spaces"
-    ],
-    "no-eval": true,
-    "no-internal-module": true,
-    "no-trailing-whitespace": true,
-    "no-unsafe-finally": true,
-    "no-var-keyword": true,
-    "one-line": [
-      true,
-      "check-open-brace",
-      "check-whitespace"
-    ],
+    "object-literal-sort-keys": false,
     "quotemark": [
       true,
       "single"
     ],
-    "semicolon": [
-      true,
-      "always"
-    ],
-    "triple-equals": [
-      true,
-      "allow-null-check"
-    ],
-    "typedef-whitespace": [
+    "trailing-comma": [
       true,
       {
-        "call-signature": "nospace",
-        "index-signature": "nospace",
-        "parameter": "nospace",
-        "property-declaration": "nospace",
-        "variable-declaration": "nospace"
+        "multiline": "never",
+        "singleline": "never"
       }
     ],
-    "variable-name": [
-      true,
-      "ban-keywords"
+    "await-promise": true,
+    "indent": false,
+    "forin": false,
+    "interface-name": [
+      false
     ],
+    "one-line": false,
+    "arrow-parens": false,
+    "only-arrow-functions": [
+      true,
+      "allow-declarations",
+      "allow-named-functions"
+    ],
+    "prefer-const": true,
+    "no-invalid-this": true,
+    "no-namespace": false,
+    "match-default-export-name": true,
+    "max-line-length": [
+      true,
+      {
+        "limit": 120,
+        "ignore-pattern": "^import"
+      }
+    ],
+    "max-classes-per-file": false,
     "whitespace": [
       true,
-      "check-branch",
-      "check-decl",
-      "check-operator",
-      "check-separator",
-      "check-type"
+      "check-module"
+    ],
+    "interface-over-type-literal": false,
+    "no-conditional-assignment": false,
+    "typedef": [
+      true,
+      "member-variable-declaration",
+      "parameter",
+      "property-declaration"
+    ],
+    "member-ordering": [
+      true,
+      {
+        "order": [
+          "public-static-field",
+          "private-static-field",
+          "public-static-method",
+          "public-instance-field",
+          "protected-instance-field",
+          "private-instance-field",
+          "public-constructor",
+          "protected-constructor",
+          "private-constructor",
+          "public-instance-method",
+          "protected-instance-method",
+          "private-instance-method",
+          "private-static-method"
+        ]
+      }
+    ],
+    "promise-function-async": true,
+    "no-floating-promises": true,
+    "encoding": true,
+    "linebreak-style": true,
+    "no-any": true,
+    "no-boolean-literal-compare": true
+  },
+  "jsRules": {
+    "no-console": false,
+    "variable-name": {
+      "options": "allow-leading-underscore"
+    },
+    "ordered-imports": [
+      false
+    ],
+    "object-literal-sort-keys": false,
+    "quotemark": [
+      true,
+      "single"
+    ],
+    "trailing-comma": [
+      true,
+      {
+        "multiline": "never",
+        "singleline": "never"
+      }
+    ],
+    "indent": false,
+    "forin": false,
+    "interface-name": [
+      false
+    ],
+    "one-line": false,
+    "arrow-parens": false,
+    "only-arrow-functions": [
+      true,
+      "allow-declarations",
+      "allow-named-functions"
+    ],
+    "prefer-const": true,
+    "no-invalid-this": true,
+    "no-namespace": false,
+    "max-line-length": [
+      true,
+      {
+        "limit": 120,
+        "ignore-pattern": "^import"
+      }
+    ],
+    "max-classes-per-file": false,
+    "whitespace": [true],
+    "interface-over-type-literal": false,
+    "no-conditional-assignment": false,
+    "member-ordering": [
+      true,
+      {
+        "order": [
+          "public-static-field",
+          "private-static-field",
+          "public-static-method",
+          "public-instance-field",
+          "protected-instance-field",
+          "private-instance-field",
+          "public-constructor",
+          "protected-constructor",
+          "private-constructor",
+          "public-instance-method",
+          "protected-instance-method",
+          "private-instance-method",
+          "private-static-method"
+        ]
+      }
+    ],
+    "encoding": true,
+    "linebreak-style": true
+  },
+  "linterOptions": {
+    "exclude": [
+      "./src/**",
+      "./test/**",
+      "./examples/**",
+      "dist",
+      "./**/*.d.ts",
+      "./**/*.json",
+      "./**/*.md"
     ]
   }
 }

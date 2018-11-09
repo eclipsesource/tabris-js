@@ -36,7 +36,7 @@ new Button({
   left: 16, top: 'prev() 16', right: 16,
   text: 'Show self closing dialog'
 }).on('select', () => {
-  let alertDialog = new AlertDialog({
+  const alertDialog = new AlertDialog({
     message: 'This dialogs closes in 3 seconds.',
     buttons: {ok: 'OK'}
   }).open();

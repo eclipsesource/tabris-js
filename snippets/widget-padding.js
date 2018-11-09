@@ -1,6 +1,6 @@
 import {Composite, TextView, ui} from 'tabris';
 
-let composite = new Composite({
+const composite = new Composite({
   left: 16, right: 16, top: 16,
   background: 'gray',
   padding: 8

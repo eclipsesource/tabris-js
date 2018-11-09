@@ -2,7 +2,7 @@ import {TextInput, TextView, Button, ui} from 'tabris';
 
 // Create a text input field with text selection
 
-let textInput = new TextInput({
+const textInput = new TextInput({
   top: 32, left: 16, right: 16,
   text: 'Hello World',
   focused: true,
@@ -11,7 +11,7 @@ let textInput = new TextInput({
 }).on('selectionChanged', ({value: selection}) => selectionTextView.text = `Selection changed ${selection}`)
   .appendTo(ui.contentView);
 
-let selectionTextView = new TextView({
+const selectionTextView = new TextView({
   top: 'prev() 96', left: 16, right: 16,
   text: `Selection changed ${textInput.selection}`
 }).appendTo(ui.contentView);

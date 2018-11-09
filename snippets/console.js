@@ -1,6 +1,6 @@
 import {Button, TextInput, ui} from 'tabris';
 
-let logTextInput = new TextInput({
+const logTextInput = new TextInput({
   left: 10, top: 20, right: 10,
   text: 'Message',
   message: 'Log message'
