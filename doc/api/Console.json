@@ -73,7 +73,7 @@
     ],
     "dirxml": [
       {
-        "description": "XML tree representation of a given object if it has 'toXML' method, otherwise prints as log method.",
+        "description": "XML tree representation of a given object if it has 'toXML' method, otherwise prints as log method.\n\n*The output is NOT JSX, it is a human-readable summary that displays XML-conforming string representations of some select property values.",
         "parameters": [
           {
             "description": "A JavaScript object",

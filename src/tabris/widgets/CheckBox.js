@@ -8,6 +8,13 @@ export default class CheckBox extends Widget {
     return 'tabris.CheckBox';
   }
 
+  _getXMLAttributes() {
+    return super._getXMLAttributes().concat([
+      ['text', this.text],
+      ['checked', this.checked]
+    ]);
+  }
+
   /** @this {import("../JsxProcessor").default} */
   [jsxFactory](Type, props, children) {
     return super[jsxFactory](Type, this.withContentText(props, children, 'text'));

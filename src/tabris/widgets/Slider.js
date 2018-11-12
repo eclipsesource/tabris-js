@@ -7,6 +7,14 @@ export default class Slider extends Widget {
     return 'tabris.Slider';
   }
 
+  _getXMLAttributes() {
+    return super._getXMLAttributes().concat([
+      ['selection', this.selection],
+      ['minimum', this.minimum],
+      ['maximum', this.maximum]
+    ]);
+  }
+
 }
 
 NativeObject.defineProperties(Slider.prototype, {

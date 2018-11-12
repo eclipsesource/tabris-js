@@ -12,6 +12,17 @@ export default class SearchAction extends Widget {
     return this;
   }
 
+  _getXMLAttributes() {
+    const result = super._getXMLAttributes().concat([['title', this.title]]);
+    if (this.text) {
+      result.push(['text', this.text]);
+    }
+    if (this.message) {
+      result.push(['message', this.message]);
+    }
+    return result;
+  }
+
 }
 
 NativeObject.defineProperties(SearchAction.prototype, {

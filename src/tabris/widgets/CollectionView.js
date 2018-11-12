@@ -73,6 +73,13 @@ export default class CollectionView extends Composite {
     }
   }
 
+  _getXMLAttributes() {
+    return super._getXMLAttributes().concat([
+      ['itemCount', this.itemCount],
+      ['firstVisibleIndex', this.firstVisibleIndex]
+    ]);
+  }
+
   $flush() {
     // Load new items if needed after all properties have been set
     // to avoid intercepting the aggregation of properties in set.

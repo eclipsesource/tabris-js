@@ -8,6 +8,41 @@ export default class TextInput extends Widget {
     return 'tabris.TextInput';
   }
 
+  _getXMLContent() {
+    let content = super._getXMLContent();
+    if (this._shouldPrintTextAsXMLContent()) {
+      content = content.concat(this.text.split('\n').map(line => '  ' + line));
+    }
+    return content;
+  }
+
+  _getXMLAttributes() {
+    const result = super._getXMLAttributes();
+    if (this.type !== 'default') {
+      result.push(['type', this.type]);
+    }
+    if (!this._shouldPrintTextAsXMLContent()) {
+      result.push(['text', this.text]);
+    }
+    if (this.message) {
+      result.push(['message', this.message]);
+    }
+    if (!this.editable) {
+      result.push(['editable', 'false']);
+    }
+    if (this.focused) {
+      result.push(['focused', 'true']);
+    }
+    if (this.keepFocus) {
+      result.push(['keepFocus', 'true']);
+    }
+    return result;
+  }
+
+  _shouldPrintTextAsXMLContent() {
+    return this.text.length > 25 || this.text.indexOf('\n') !== -1;
+  }
+
   /** @this {import("../JsxProcessor").default} */
   [jsxFactory](Type, props, children) {
     return super[jsxFactory](Type, this.withContentText(props, children, 'text'));
@@ -16,7 +51,7 @@ export default class TextInput extends Widget {
 }
 
 NativeObject.defineProperties(TextInput.prototype, {
-  type: {type: ['choice', ['default', 'password', 'search', 'multiline']], const: true},
+  type: {type: ['choice', ['default', 'password', 'search', 'multiline']], const: true, default: 'default'},
   text: {type: 'string', nocache: true},
   message: {type: 'string', default: ''},
   editable: {type: 'boolean', default: true},

@@ -167,6 +167,19 @@ describe('Picker', function() {
 
     });
 
+    describe('toXML', function() {
+
+      it('prints xml element with itemCount and selectionIndex', function() {
+        stub(client, 'get').returns({});
+
+        picker.itemCount = 23;
+        picker.selectionIndex = 2;
+
+        expect(picker.toXML()).to.match(/<Picker .* itemCount='23' selectionIndex='2'\/>/);
+      });
+
+    });
+
   });
 
 });

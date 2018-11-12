@@ -1,4 +1,4 @@
-import {expect, mockTabris, restore} from '../../test';
+import {expect, mockTabris, restore, stub} from '../../test';
 import ClientStub from '../ClientStub';
 import NavigationView from '../../../src/tabris/widgets/NavigationView';
 import Page from '../../../src/tabris/widgets/Page';
@@ -74,6 +74,13 @@ describe('Page', function() {
     expect(() => {
       page.appendTo(new Composite());
     }).to.throw(Error, 'Page could not be appended to Composite');
+  });
+
+  it('toXML prints xml element with title', function() {
+    stub(client, 'get').returns({});
+    expect(page.set({title: 'foo'}).toXML()).to.match(
+      /<Page .* title='foo'\/>/
+    );
   });
 
 });

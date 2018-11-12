@@ -8,6 +8,29 @@ export default class TextView extends Widget {
     return 'tabris.TextView';
   }
 
+  _getXMLContent() {
+    let content = super._getXMLContent();
+    if (this._shouldPrintTextAsXMLContent()) {
+      content = content.concat(this.text.split('\n').map(line => '  ' + line));
+    }
+    return content;
+  }
+
+  _getXMLAttributes() {
+    const result = super._getXMLAttributes();
+    if (this.markupEnabled) {
+      result.push(['markupEnabled', 'true']);
+    }
+    if (!this._shouldPrintTextAsXMLContent()) {
+      result.push(['text', this.text]);
+    }
+    return result;
+  }
+
+  _shouldPrintTextAsXMLContent() {
+    return this.markupEnabled || this.text.length > 25 || this.text.indexOf('\n') !== -1;
+  }
+
   _listen(name, listening) {
     if (name === 'tapLink') {
       this._nativeListen(name, listening);

@@ -7,6 +7,13 @@ export default class Switch extends Widget {
     return 'tabris.Switch';
   }
 
+  _getXMLAttributes() {
+    return super._getXMLAttributes().concat([
+      ['text', this.text],
+      ['checked', this.checked]
+    ]);
+  }
+
 }
 
 NativeObject.defineProperties(Switch.prototype, {

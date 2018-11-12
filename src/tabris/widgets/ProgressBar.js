@@ -7,6 +7,14 @@ export default class ProgressBar extends Widget {
     return 'tabris.ProgressBar';
   }
 
+  _getXMLAttributes() {
+    return super._getXMLAttributes().concat([
+      ['selection', this.selection],
+      ['minimum', this.minimum],
+      ['maximum', this.maximum]
+    ]);
+  }
+
 }
 
 NativeObject.defineProperties(ProgressBar.prototype, {

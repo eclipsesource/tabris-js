@@ -532,6 +532,23 @@ describe('TabFolder', function() {
 
   });
 
+  describe('toXML', function() {
+
+    it('prints xml element with selection stringified', function() {
+      const tabs = [new Tab({id: 'bar'}), new Tab({id: 'foo'})];
+      tabFolder.append(tabs);
+      stub(client, 'get')
+        .withArgs(tabFolder.cid, 'selection').returns(tabs[1].cid)
+        .withArgs(tabFolder.cid, 'bounds').returns({})
+        .withArgs(tabs[0].cid, 'bounds').returns({})
+        .withArgs(tabs[1].cid, 'bounds').returns({});
+      expect(tabFolder.toXML()).to.match(
+        /<TabFolder .* selection='Tab\[cid=".*"\]#foo'>[\s\S.]*<\/TabFolder>/
+      );
+    });
+
+  });
+
   let checkListen = function(event) {
     let listen = client.calls({op: 'listen', id: tabFolder.cid});
     expect(listen.length).to.equal(1);

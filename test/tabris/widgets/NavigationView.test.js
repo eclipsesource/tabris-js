@@ -344,4 +344,18 @@ describe('NavigationView', function() {
 
   });
 
+  describe('toXML', function() {
+
+    it('prints xml element with drawerActionVisible and toolbarVisible if false', function() {
+      stub(client, 'get').returns([0, 1, 2, 3]);
+      expect(navigationView.set({drawerActionVisible: true, toolbarVisible: true}).toXML()).to.equal(
+        `<NavigationView cid='${navigationView.cid}' bounds='{left: 0, top: 1, width: 2, height: 3}'/>`
+      );
+      expect(navigationView.set({drawerActionVisible: false, toolbarVisible: false}).toXML()).to.match(
+        /<NavigationView .* drawerActionVisible='false' toolbarVisible='false'\/>/
+      );
+    });
+
+  });
+
 });

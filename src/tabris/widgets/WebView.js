@@ -37,6 +37,22 @@ export default class WebView extends Widget {
     this._nativeCall('loadData', {data, mimeType});
   }
 
+  _getXMLContent() {
+    let content = super._getXMLContent();
+    if (this.html) {
+      content = content.concat(this.html.split('\n').map(line => '  ' + line));
+    }
+    return content;
+  }
+
+  _getXMLAttributes() {
+    const result = super._getXMLAttributes();
+    if (this.url) {
+      result.push(['url', this.url]);
+    }
+    return result;
+  }
+
 }
 
 NativeObject.defineProperties(WebView.prototype, {

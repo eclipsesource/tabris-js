@@ -8,6 +8,10 @@ export default class Action extends Widget {
     return 'tabris.Action';
   }
 
+  _getXMLAttributes() {
+    return super._getXMLAttributes().concat([['title', this.title]]);
+  }
+
   /** @this {import("../JsxProcessor").default} */
   [jsxFactory](Type, props, children) {
     return super[jsxFactory](Type, this.withContentText(props, children, 'title'));

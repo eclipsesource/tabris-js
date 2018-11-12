@@ -101,20 +101,6 @@ export default class Widget extends NativeObject {
     return this.constructor.name;
   }
 
-  _getXMLContent() {
-    const content = super._getXMLContent();
-    const prefix = '  ';
-    if (this.$children) {
-      for (let i = 0; i < this.$children.length; ++i) {
-        const widget = this.$children[i];
-        if (widget instanceof Widget) {
-          content.push(widget.toXML().split('\n').map(line => prefix + line).join('\n'));
-        }
-      }
-    }
-    return content;
-  }
-
   _getXMLAttributes() {
     const result = super._getXMLAttributes();
     if (this.id) {
@@ -122,6 +108,18 @@ export default class Widget extends NativeObject {
     }
     if (this.class) {
       result.push(['class', this.class]);
+    }
+    const bounds = this.bounds;
+    result.push([
+      'bounds',
+      `{left: ${Math.round(bounds.left)}, top: ${Math.round(bounds.top)}, ` +
+      `width: ${Math.round(bounds.width)}, height: ${Math.round(bounds.height)}}`
+    ]);
+    if (!this.enabled) {
+      result.push(['enabled', 'false']);
+    }
+    if (!this.visible) {
+      result.push(['visible', 'false']);
     }
     return result;
   }

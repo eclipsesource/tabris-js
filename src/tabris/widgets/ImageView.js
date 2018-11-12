@@ -7,6 +7,12 @@ export default class ImageView extends Widget {
     return 'tabris.ImageView';
   }
 
+  _getXMLAttributes() {
+    return super._getXMLAttributes().concat([
+      ['image', (this.image || {src: ''}).src],
+    ]);
+  }
+
 }
 
 NativeObject.defineProperties(ImageView.prototype, {

@@ -292,7 +292,9 @@ export default class NativeObject extends EventsClass {
   }
 
   _getXMLHeader(hasChild) {
-    const attributes = this._getXMLAttributes().map(entry => `${entry[0]}='${entry[1]}'`).join(' ');
+    const attributes = this._getXMLAttributes()
+      .map(entry => `${entry[0]}='${('' + entry[1]).replace(/'/g, '\\\'').replace(/\n/g, '\\n')}'`)
+      .join(' ');
     return `<${this.constructor.name} ${attributes}${!hasChild ? '/' : ''}>`;
   }
 

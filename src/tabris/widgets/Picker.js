@@ -13,6 +13,13 @@ export default class Picker extends Widget {
     return 'tabris.Picker';
   }
 
+  _getXMLAttributes() {
+    return super._getXMLAttributes().concat([
+      ['itemCount', this.itemCount],
+      ['selectionIndex', this.selectionIndex]
+    ]);
+  }
+
   $flush() {
     if (this.$needsUpdateItems) {
       let items = new Array(this.itemCount);

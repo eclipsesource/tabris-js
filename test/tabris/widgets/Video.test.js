@@ -148,4 +148,33 @@ describe('Video', function() {
     }).to.throw();
   });
 
+  describe('toXML', function() {
+
+    it('toXML prints xml element with state only', function() {
+      stub(client, 'get')
+        .withArgs(video.cid, 'state').returns('empty')
+        .withArgs(video.cid, 'speed').returns(1)
+        .withArgs(video.cid, 'duration').returns(0)
+        .withArgs(video.cid, 'position').returns(0)
+        .withArgs(video.cid, 'bounds').returns({});
+
+      expect(video.toXML()).to.match(/<Video .* state='empty'\/>/);
+    });
+
+    it('toXML prints xml element with essential non-default value', function() {
+      video.url = './foo.mp4';
+      stub(client, 'get')
+        .withArgs(video.cid, 'state').returns('play')
+        .withArgs(video.cid, 'speed').returns(1.1)
+        .withArgs(video.cid, 'duration').returns(100)
+        .withArgs(video.cid, 'position').returns(0)
+        .withArgs(video.cid, 'bounds').returns({});
+
+      expect(video.toXML()).to.match(
+        /<Video .* url='.\/foo.mp4' state='play' speed='1.1' position='0' duration='100'\/>/
+      );
+    });
+
+  });
+
 });

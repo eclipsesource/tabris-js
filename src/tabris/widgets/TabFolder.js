@@ -67,6 +67,13 @@ export default class TabFolder extends Composite {
     }
   }
 
+  _getXMLAttributes() {
+    const tab = this.selection;
+    return super._getXMLAttributes().concat([
+      ['selection', tab ? tab.toString() : '']
+    ]);
+  }
+
 }
 
 NativeObject.defineProperties(TabFolder.prototype, {

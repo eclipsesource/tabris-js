@@ -1,4 +1,4 @@
-import {expect, mockTabris, restore, spy} from '../../test';
+import {expect, mockTabris, restore, spy, stub} from '../../test';
 import ClientStub from '../ClientStub';
 import SearchAction from '../../../src/tabris/widgets/SearchAction';
 
@@ -135,6 +135,26 @@ describe('SearchAction', function() {
       let result = action.open();
 
       expect(result).to.equal(action);
+    });
+
+  });
+
+  describe('toXML', function() {
+
+    it('prints xml element with text', function() {
+      const action = new SearchAction({title: 'Foo'});
+      stub(client, 'get')
+        .withArgs(action.cid, 'bounds').returns({})
+        .withArgs(action.cid, 'text').returns('');
+      expect(action.toXML()).to.match(/<SearchAction .* title='Foo'\/>/);
+    });
+
+    it('prints xml element with title, text and message', function() {
+      const action = new SearchAction({title: 'Foo', message: 'baz'});
+      stub(client, 'get')
+        .withArgs(action.cid, 'bounds').returns({})
+        .withArgs(action.cid, 'text').returns('bar');
+      expect(action.toXML()).to.match(/<SearchAction .* title='Foo' text='bar' message='baz'\/>/);
     });
 
   });

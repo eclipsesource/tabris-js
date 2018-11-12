@@ -1,4 +1,4 @@
-import {expect, mockTabris} from '../../test';
+import {expect, mockTabris, stub} from '../../test';
 import ClientStub from '../ClientStub';
 import Tab from '../../../src/tabris/widgets/Tab';
 import Composite from '../../../src/tabris/widgets/Composite';
@@ -48,6 +48,11 @@ describe('Tab', function() {
       expect(() => {
         tab.appendTo(new Composite());
       }).to.throw('Tab could not be appended to Composite');
+    });
+
+    it('toXML prints xml element with title', function() {
+      stub(client, 'get').returns({});
+      expect(tab.toXML()).to.match(/<Tab .* title='foo'\/>/);
     });
 
   });

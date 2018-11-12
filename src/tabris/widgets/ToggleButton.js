@@ -8,6 +8,13 @@ export default class ToggleButton extends Widget {
     return 'tabris.ToggleButton';
   }
 
+  _getXMLAttributes() {
+    return super._getXMLAttributes().concat([
+      ['text', this.text],
+      ['checked', this.checked]
+    ]);
+  }
+
   /** @this {import("../JsxProcessor").default} */
   [jsxFactory](Type, props, children) {
     return super[jsxFactory](Type, this.withContentText(props, children, 'text'));

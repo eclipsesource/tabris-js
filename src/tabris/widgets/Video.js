@@ -39,6 +39,24 @@ export default class Video extends Widget {
     this._nativeCall('seek', {position: types.number.encode(position)});
   }
 
+  _getXMLAttributes() {
+    const result = super._getXMLAttributes();
+    if (this.url) {
+      result.push(['url', this.url]);
+    }
+    result.push(['state', this.state]);
+    if (this.state === 'play') {
+      result.push(['speed', this.speed]);
+    }
+    if (this.state !== 'empty') {
+      result.push(['position', this.position]);
+    }
+    if (this.duration) {
+      result.push(['duration', this.duration]);
+    }
+    return result;
+  }
+
 }
 
 NativeObject.defineProperties(Video.prototype, {

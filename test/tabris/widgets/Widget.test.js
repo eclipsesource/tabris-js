@@ -214,38 +214,51 @@ describe('Widget', function() {
 
       let parent, child, child2;
 
+      const bounds = 'bounds=\'{left: 0, top: 1, width: 2, height: 3}\'';
+
       beforeEach(function() {
         parent = new TestWidget();
         child = new Composite();
         child2 = new Button();
+        stub(client, 'get').returns([0, 1, 2, 3]);
       });
 
       it('prints xml element', function() {
-        expect(widget.toXML()).to.be.equal(`<TestWidget cid='${widget.cid}'/>`);
+        expect(widget.toXML()).to.be.equal(
+          `<TestWidget cid='${widget.cid}' ${bounds}/>`
+        );
       });
 
       it('prints xml element with id if given', function() {
         parent.id = 'test-id';
-        expect(parent.toXML()).to.be.equal(`<TestWidget cid='${parent.cid}' id='${parent.id}'/>`);
+        expect(parent.toXML()).to.be.equal(`<TestWidget cid='${parent.cid}' id='${parent.id}' ${bounds}/>`);
       });
 
       it('prints xml element with class if given', function() {
         parent.class = 'test-class';
-        expect(parent.toXML()).to.be.equal(`<TestWidget cid='${parent.cid}' class='${parent.class}'/>`);
+        expect(parent.toXML()).to.be.equal(`<TestWidget cid='${parent.cid}' class='${parent.class}' ${bounds}/>`);
       });
 
       it('prints xml element with both id and class', function() {
         parent.id = 'test-id';
         parent.class = 'test-class';
         expect(parent.toXML()).to.be.equal(
-          `<TestWidget cid='${parent.cid}' id='${parent.id}' class='${parent.class}'/>`
+          `<TestWidget cid='${parent.cid}' id='${parent.id}' class='${parent.class}' ${bounds}/>`
+        );
+      });
+
+      it('prints xml element with visible and enabled', function() {
+        parent.visible = false;
+        parent.enabled = false;
+        expect(parent.toXML()).to.be.equal(
+          `<TestWidget cid='${parent.cid}' ${bounds} enabled='false' visible='false'/>`
         );
       });
 
       it('prints xml tree with one child', function() {
         child.appendTo(parent);
         expect(parent.toXML()).to.equal(
-          `<TestWidget cid='${parent.cid}'>\n  <Composite cid='${child.cid}'/>\n</TestWidget>`
+          `<TestWidget cid='${parent.cid}' ${bounds}>\n  <Composite cid='${child.cid}' ${bounds}/>\n</TestWidget>`
         );
       });
 
@@ -253,9 +266,9 @@ describe('Widget', function() {
         child.appendTo(parent);
         child2.appendTo(parent);
         expect(parent.toXML()).to.equal(
-          `<TestWidget cid='${parent.cid}'>\n` +
-          `  <Composite cid='${child.cid}'/>\n` +
-          `  <Button cid='${child2.cid}'/>\n` +
+          `<TestWidget cid='${parent.cid}' ${bounds}>\n` +
+          `  <Composite cid='${child.cid}' ${bounds}/>\n` +
+          `  <Button cid='${child2.cid}' ${bounds} text=''/>\n` +
           '</TestWidget>'
         );
       });
@@ -264,9 +277,9 @@ describe('Widget', function() {
         child2.appendTo(child);
         child.appendTo(parent);
         expect(parent.toXML()).to.equal(
-          `<TestWidget cid='${parent.cid}'>\n` +
-          `  <Composite cid='${child.cid}'>\n` +
-          `    <Button cid='${child2.cid}'/>\n` +
+          `<TestWidget cid='${parent.cid}' ${bounds}>\n` +
+          `  <Composite cid='${child.cid}' ${bounds}>\n` +
+          `    <Button cid='${child2.cid}' ${bounds} text=''/>\n` +
           '  </Composite>\n' +
           '</TestWidget>'
         );

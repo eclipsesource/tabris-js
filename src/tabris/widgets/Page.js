@@ -23,6 +23,10 @@ export default class Page extends Composite {
     super._setParent(parent, index);
   }
 
+  _getXMLAttributes() {
+    return super._getXMLAttributes().concat([['title', this.title]]);
+  }
+
 }
 
 NativeObject.defineProperties(Page.prototype, {

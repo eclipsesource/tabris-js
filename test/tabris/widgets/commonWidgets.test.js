@@ -1,4 +1,4 @@
-import {expect, mockTabris, restore, spy} from '../../test';
+import {expect, mockTabris, restore, spy, stub} from '../../test';
 import ClientStub from '../ClientStub';
 import Composite from '../../../src/tabris/widgets/Composite';
 import Canvas from '../../../src/tabris/widgets/Canvas';
@@ -102,6 +102,12 @@ describe('Common Widgets', function() {
     )).to.throw(/text given twice/);
   });
 
+  it('Button toXML prints xml element with text', function() {
+    widget = new Button({text: 'foo'});
+    stub(client, 'get').withArgs(widget.cid, 'bounds').returns({});
+    expect(widget.toXML()).to.match(/<Button .* text='foo'\/>/);
+  });
+
   it('Canvas', function() {
     let canvas = new Canvas({visible: false});
 
@@ -165,6 +171,14 @@ describe('Common Widgets', function() {
     )).to.throw(/text given twice/);
   });
 
+  it('CheckBox toXML prints xml element with text and checked', function() {
+    widget = new CheckBox({text: 'foo'});
+    stub(client, 'get')
+      .withArgs(widget.cid, 'bounds').returns({})
+      .withArgs(widget.cid, 'checked').returns(false);
+    expect(widget.toXML()).to.match(/<CheckBox .* text='foo' checked='false'\/>/);
+  });
+
   it('Composite', function() {
     let composite = new Composite();
 
@@ -181,6 +195,12 @@ describe('Common Widgets', function() {
     expect(imageView.scaleMode).to.equal('auto');
   });
 
+  it('ImageView toXML prints xml element with image src', function() {
+    stub(client, 'get').returns({});
+    expect(new ImageView().toXML()).to.match(/<ImageView .* image=''\/>/);
+    expect(new ImageView({image: 'foo.jpg'}).toXML()).to.match(/<ImageView .* image='foo.jpg'\/>/);
+  });
+
   it('ProgressBar', function() {
     let progressBar = new ProgressBar();
 
@@ -190,6 +210,12 @@ describe('Common Widgets', function() {
     expect(progressBar.maximum).to.equal(100);
     expect(progressBar.selection).to.equal(0);
     expect(progressBar.state).to.equal('normal');
+  });
+
+  it('ProgressBar toXML prints xml element with minimum, maximum and selection', function() {
+    widget = new ProgressBar({minimum: 10, maximum: 20, selection: 13});
+    stub(client, 'get').returns({});
+    expect(widget.toXML()).to.match(/<ProgressBar .* selection='13' minimum='10' maximum='20'\/>/);
   });
 
   it('RadioButton', function() {
@@ -248,6 +274,14 @@ describe('Common Widgets', function() {
     )).to.throw(/text given twice/);
   });
 
+  it('RadioButton toXML prints xml element with text and checked', function() {
+    widget = new RadioButton({text: 'foo'});
+    stub(client, 'get')
+      .withArgs(widget.cid, 'bounds').returns({})
+      .withArgs(widget.cid, 'checked').returns(false);
+    expect(widget.toXML()).to.match(/<RadioButton .* text='foo' checked='false'\/>/);
+  });
+
   it('TextView', function() {
     let textView = new TextView({text: 'foo'});
 
@@ -301,6 +335,23 @@ describe('Common Widgets', function() {
     )).to.throw(/text given twice/);
   });
 
+  it('TextView toXML prints xml element with markupEnabled false', function() {
+    widget = new TextView({text: 'f\'oo'});
+    stub(client, 'get').returns({});
+    expect(widget.toXML()).to.match(/<TextView .* text='f\\'oo'\/>/);
+  });
+
+  it('TextView toXML prints xml element with markupEnabled true', function() {
+    widget = new TextView({text: 'f\'o\no', markupEnabled: true});
+    stub(client, 'get').returns([0, 1, 2, 3]);
+    expect(widget.toXML()).to.equal(
+      `<TextView cid='${widget.cid}' bounds='{left: 0, top: 1, width: 2, height: 3}' markupEnabled='true'>\n` +
+      '  f\'o\n' +
+      '  o\n' +
+      '</TextView>'
+    );
+  });
+
   it('Slider', function() {
     let slider = new Slider({selection: 23});
 
@@ -330,12 +381,44 @@ describe('Common Widgets', function() {
     checkListen('select');
   });
 
+  it('Slider toXML prints xml element with minimum, maximum and selection', function() {
+    widget = new Slider({minimum: 10, maximum: 20, selection: 13});
+    stub(client, 'get').returns(13);
+    expect(widget.toXML()).to.match(/<Slider .* selection='13' minimum='10' maximum='20'\/>/);
+  });
+
   it('WebView', function() {
     let webView = new WebView({html: 'foo'});
 
     expect(getCreate().type).to.equal('tabris.WebView');
     expect(getCreate().properties).to.deep.equal({html: 'foo'});
     expect(webView.constructor.name).to.equal('WebView');
+  });
+
+  it('WebView toXML prints xml element with url', function() {
+    widget = new WebView();
+    stub(client, 'get')
+      .withArgs(widget.cid, 'url').returns('foo.com')
+      .withArgs(widget.cid, 'html').returns('')
+      .withArgs(widget.cid, 'bounds').returns([0, 1, 2, 3]);
+    expect(widget.toXML()).to.match(/<WebView .* url='foo.com'\/>/);
+  });
+
+  it('WebView toXML prints xml element with html', function() {
+    widget = new WebView();
+    stub(client, 'get')
+      .withArgs(widget.cid, 'html').returns('<html>\n  <body>\n    Hello World!\n  </body>\n</html>')
+      .withArgs(widget.cid, 'url').returns('')
+      .withArgs(widget.cid, 'bounds').returns([0, 1, 2, 3]);
+    expect(widget.toXML()).to.equal(
+      `<WebView cid='${widget.cid}' bounds='{left: 0, top: 1, width: 2, height: 3}'>\n` +
+      '  <html>\n' +
+      '    <body>\n' +
+      '      Hello World!\n' +
+      '    </body>\n' +
+      '  </html>\n' +
+      '</WebView>'
+    );
   });
 
   it('Switch', function() {
@@ -373,6 +456,14 @@ describe('Common Widgets', function() {
     expect(listener).to.have.been.calledOnce;
     expect(listener).to.have.been.calledWithMatch({target: widget, checked: true});
     checkListen('select');
+  });
+
+  it('Switch toXML prints xml element with text and checked', function() {
+    widget = new Switch({text: 'foo'});
+    stub(client, 'get')
+      .withArgs(widget.cid, 'bounds').returns({})
+      .withArgs(widget.cid, 'checked').returns(false);
+    expect(widget.toXML()).to.match(/<Switch .* text='foo' checked='false'\/>/);
   });
 
   it('ToggleButton', function() {
@@ -432,6 +523,14 @@ describe('Common Widgets', function() {
       'Hello',
       'World!'
     )).to.throw(/text given twice/);
+  });
+
+  it('ToggleButton toXML prints xml element with text and checked', function() {
+    widget = new ToggleButton({text: 'foo'});
+    stub(client, 'get')
+      .withArgs(widget.cid, 'bounds').returns({})
+      .withArgs(widget.cid, 'checked').returns(false);
+    expect(widget.toXML()).to.match(/<ToggleButton .* text='foo' checked='false'\/>/);
   });
 
   it('sets native color properties as RGBA arrays', function() {

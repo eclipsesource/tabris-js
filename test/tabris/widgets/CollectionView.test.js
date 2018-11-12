@@ -874,6 +874,18 @@ describe('CollectionView', function() {
 
     });
 
+    describe('toXML', function() {
+
+      it('prints xml element with itemCount and firstVisibleIndex', function() {
+        stub(client, 'get')
+          .withArgs(view.cid, 'bounds').returns({})
+          .withArgs(view.cid, 'firstVisibleIndex').returns(23);
+        view.load(45);
+        expect(view.toXML()).to.match(/<CollectionView .* itemCount='45' firstVisibleIndex='23'\/>/);
+      });
+
+    });
+
     it('does not crash when disposed right after setting itemCount (bugfix)', function() {
       let view = new CollectionView();
       view.itemCount = 23;

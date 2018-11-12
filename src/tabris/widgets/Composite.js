@@ -121,6 +121,14 @@ export default class Composite extends Widget {
     super._release();
   }
 
+  _getXMLContent() {
+    const content = super._getXMLContent();
+    for (let i = 0; i < (this.$children || []).length; ++i) {
+      content.push(this.$children[i].toXML().split('\n').map(line => '  ' + line).join('\n'));
+    }
+    return content;
+  }
+
   /** @this {import("../JsxProcessor").default} */
   [jsxFactory](Type, props, children) {
     const result = super[jsxFactory](Type, props);

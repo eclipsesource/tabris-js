@@ -1,4 +1,4 @@
-import {expect, spy, restore, mockTabris} from '../../test';
+import {expect, spy, restore, mockTabris, stub} from '../../test';
 import ClientStub from '../ClientStub';
 import Action from '../../../src/tabris/widgets/Action';
 import {createJsxProcessor} from '../../../src/tabris/JsxProcessor';
@@ -141,6 +141,16 @@ describe('Action', function() {
         'Hello',
         'World!'
       )).to.throw(/title given twice/);
+    });
+
+  });
+
+  describe('toXML', function() {
+
+    it('prints xml element with title', function() {
+      stub(client, 'get').returns({});
+      const action = new Action({title: 'Foo'});
+      expect(action.toXML()).to.match(/<Action .* title='Foo'\/>/);
     });
 
   });

@@ -23,6 +23,14 @@ export default class ScrollView extends Composite {
     return this;
   }
 
+  _getXMLAttributes() {
+    const offset = this.direction === 'vertical' ? 'offsetY' : 'offsetX';
+    return super._getXMLAttributes().concat([
+      ['direction', this.direction],
+      [offset, this[offset]]
+    ]);
+  }
+
 }
 
 NativeObject.defineProperties(ScrollView.prototype, {

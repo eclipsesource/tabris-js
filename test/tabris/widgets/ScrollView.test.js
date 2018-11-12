@@ -366,4 +366,28 @@ describe('ScrollView', function() {
 
   });
 
+  describe('toXML', function() {
+
+    it('prints xml element with direction and offsetY', function() {
+      scrollView = new ScrollView();
+      stub(client, 'get')
+        .withArgs(scrollView.cid, 'offsetX').returns(1)
+        .withArgs(scrollView.cid, 'offsetY').returns(2)
+        .withArgs(scrollView.cid, 'bounds').returns({});
+
+      expect(scrollView.toXML()).to.match(/<ScrollView .* direction='vertical' offsetY='2'\/>/);
+    });
+
+    it('prints xml element with direction and offsetX', function() {
+      scrollView = new ScrollView({direction: 'horizontal'});
+      stub(client, 'get')
+        .withArgs(scrollView.cid, 'offsetX').returns(1)
+        .withArgs(scrollView.cid, 'offsetY').returns(2)
+        .withArgs(scrollView.cid, 'bounds').returns({});
+
+      expect(scrollView.toXML()).to.match(/<ScrollView .* direction='horizontal' offsetX='1'\/>/);
+    });
+
+  });
+
 });

@@ -91,6 +91,17 @@ export default class NavigationView extends Composite {
     return this.children(selector).filter(child => child instanceof Page);
   }
 
+  _getXMLAttributes() {
+    const result = super._getXMLAttributes();
+    if (!this.drawerActionVisible) {
+      result.push(['drawerActionVisible', 'false']);
+    }
+    if (!this.toolbarVisible) {
+      result.push(['toolbarVisible', 'false']);
+    }
+    return result;
+  }
+
 }
 
 NativeObject.defineProperties(NavigationView.prototype, {
