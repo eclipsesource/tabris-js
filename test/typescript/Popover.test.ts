@@ -1,4 +1,4 @@
-import {EventObject, Popover, Widget, Properties} from 'tabris';
+import {EventObject, Popover, Widget, Properties, ContentView} from 'tabris';
 
 let popover: Popover = new Popover();
 
@@ -6,10 +6,12 @@ let popover: Popover = new Popover();
 let width: number;
 let height: number;
 let anchor: Widget;
+let contentView: ContentView;
 
 width = popover.width;
 height = popover.height;
 anchor = popover.anchor;
+contentView = popover.contentView;
 
 popover.width = width;
 popover.height = height;
