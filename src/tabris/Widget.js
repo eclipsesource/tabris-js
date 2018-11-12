@@ -101,48 +101,29 @@ export default class Widget extends NativeObject {
     return this.constructor.name;
   }
 
-  toXML() {
-    const content = this._getXMLContent();
-    const hasChild = content !== '';
-    if (!hasChild) {
-      return this._getXMLHeader(hasChild);
-    }
-    return `${this._getXMLHeader(hasChild)}\n${content}\n${this._getXMLFooter(hasChild)}`;
-  }
-
   _getXMLContent() {
-    const children = [];
+    const content = super._getXMLContent();
     const prefix = '  ';
     if (this.$children) {
       for (let i = 0; i < this.$children.length; ++i) {
         const widget = this.$children[i];
         if (widget instanceof Widget) {
-          children.push(widget.toXML().split('\n').map(line => prefix + line).join('\n'));
+          content.push(widget.toXML().split('\n').map(line => prefix + line).join('\n'));
         }
       }
     }
-    return children.join('\n');
-  }
-
-  _getXMLHeader(hasChild) {
-    const attributes = this._getXMLAttributes();
-    const attrString = (attributes.length ? ' ' : '') + attributes.join(' ');
-    return `<${this.constructor.name}${attrString}${!hasChild ? '/' : ''}>`;
+    return content;
   }
 
   _getXMLAttributes() {
-    const result = [];
+    const result = super._getXMLAttributes();
     if (this.id) {
-      result.push(`id='${this.id}'`);
+      result.push(['id', this.id]);
     }
     if (this.class) {
-      result.push(`class='${this.class}'`);
+      result.push(['class', this.class]);
     }
     return result;
-  }
-
-  _getXMLFooter(hasChild) {
-    return hasChild ? `</${this.constructor.name}>` : '';
   }
 
   _getContainer() {

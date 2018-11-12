@@ -2,7 +2,6 @@ import {expect, spy, stub, restore, mockTabris} from '../test';
 import ClientStub from './ClientStub';
 import {createConsole} from '../../src/tabris/Console';
 import * as defaultConsole from '../../src/tabris/Console';
-import Composite from '../../src/tabris/widgets/Composite';
 
 const methods = ['debug', 'log', 'info', 'warn', 'error'];
 const realConsole = console;
@@ -190,13 +189,12 @@ describe('Console', function() {
 
     describe('dirxml', function() {
 
-      it('prints xml tree when Widget is given', function() {
-        const widget = new Composite();
-        console.dirxml(widget);
-        expect(nativeConsole.print).to.have.been.calledWithMatch('log', '<Composite/>');
+      it('prints xml when object has toXML', function() {
+        console.dirxml({toXML() { return '<Foo/>'; }});
+        expect(nativeConsole.print).to.have.been.calledWithMatch('log', '<Foo/>');
       });
 
-      it('does not print xml tree when non Widget is given', function() {
+      it('does not print xml tree when object does not have toXML', function() {
         const object = {id: 'widget'};
         console.dirxml(object);
         expect(nativeConsole.print).to.have.been.calledWithMatch('log', "{ id: 'widget' }");

@@ -441,6 +441,14 @@ describe('NativeObject', function() {
 
     });
 
+    describe('toXML', function() {
+
+      it('prints xml element', function() {
+        expect(object.toXML()).to.be.equal(`<TestType cid='${object.cid}'/>`);
+      });
+
+    });
+
   });
 
 });

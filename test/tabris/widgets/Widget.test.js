@@ -221,41 +221,54 @@ describe('Widget', function() {
       });
 
       it('prints xml element', function() {
-        expect(widget.toXML()).to.be.equal('<TestWidget/>');
+        expect(widget.toXML()).to.be.equal(`<TestWidget cid='${widget.cid}'/>`);
       });
 
       it('prints xml element with id if given', function() {
         parent.id = 'test-id';
-        expect(parent.toXML()).to.be.equal(`<TestWidget id='${parent.id}'/>`);
+        expect(parent.toXML()).to.be.equal(`<TestWidget cid='${parent.cid}' id='${parent.id}'/>`);
       });
 
       it('prints xml element with class if given', function() {
         parent.class = 'test-class';
-        expect(parent.toXML()).to.be.equal(`<TestWidget class='${parent.class}'/>`);
+        expect(parent.toXML()).to.be.equal(`<TestWidget cid='${parent.cid}' class='${parent.class}'/>`);
       });
 
       it('prints xml element with both id and class', function() {
         parent.id = 'test-id';
         parent.class = 'test-class';
-        expect(parent.toXML()).to.be.equal(`<TestWidget id='${parent.id}' class='${parent.class}'/>`);
+        expect(parent.toXML()).to.be.equal(
+          `<TestWidget cid='${parent.cid}' id='${parent.id}' class='${parent.class}'/>`
+        );
       });
 
       it('prints xml tree with one child', function() {
         child.appendTo(parent);
-        expect(parent.toXML()).to.equal('<TestWidget>\n  <Composite/>\n</TestWidget>');
+        expect(parent.toXML()).to.equal(
+          `<TestWidget cid='${parent.cid}'>\n  <Composite cid='${child.cid}'/>\n</TestWidget>`
+        );
       });
 
       it('prints xml tree with multiple children', function() {
         child.appendTo(parent);
         child2.appendTo(parent);
-        expect(parent.toXML()).to.equal('<TestWidget>\n  <Composite/>\n  <Button/>\n</TestWidget>');
+        expect(parent.toXML()).to.equal(
+          `<TestWidget cid='${parent.cid}'>\n` +
+          `  <Composite cid='${child.cid}'/>\n` +
+          `  <Button cid='${child2.cid}'/>\n` +
+          '</TestWidget>'
+        );
       });
 
       it('prints xml tree with grandchild', function() {
         child2.appendTo(child);
         child.appendTo(parent);
         expect(parent.toXML()).to.equal(
-          '<TestWidget>\n  <Composite>\n    <Button/>\n  </Composite>\n</TestWidget>'
+          `<TestWidget cid='${parent.cid}'>\n` +
+          `  <Composite cid='${child.cid}'>\n` +
+          `    <Button cid='${child2.cid}'/>\n` +
+          '  </Composite>\n' +
+          '</TestWidget>'
         );
       });
 

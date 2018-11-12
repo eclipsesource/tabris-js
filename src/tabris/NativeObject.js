@@ -283,6 +283,31 @@ export default class NativeObject extends EventsClass {
     return this.constructor.name;
   }
 
+  toXML() {
+    const content = this._getXMLContent();
+    if (!content.length) {
+      return this._getXMLHeader(false);
+    }
+    return `${this._getXMLHeader(true)}\n${content.join('\n')}\n${this._getXMLFooter(true)}`;
+  }
+
+  _getXMLHeader(hasChild) {
+    const attributes = this._getXMLAttributes().map(entry => `${entry[0]}='${entry[1]}'`).join(' ');
+    return `<${this.constructor.name} ${attributes}${!hasChild ? '/' : ''}>`;
+  }
+
+  _getXMLFooter(hasChild) {
+    return hasChild ? `</${this.constructor.name}>` : '';
+  }
+
+  _getXMLAttributes() {
+    return [['cid', this.cid]];
+  }
+
+  _getXMLContent() {
+    return [];
+  }
+
 }
 
 NativeObject.defineEvents(NativeObject.prototype, {
