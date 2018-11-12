@@ -7,8 +7,8 @@ let drag;
 
 const composite = new Composite({centerX: 0, centerY: 0, width: 100, height: 100, background: 'red'})
   .appendTo(ui.contentView)
-  .once('longpress', () => label.dispose())
-  .on('longpress', ({state}) => {
+  .once('longPress', () => label.dispose())
+  .on('longPress', ({state}) => {
     if (state === 'start') {
       enableDrag();
     }

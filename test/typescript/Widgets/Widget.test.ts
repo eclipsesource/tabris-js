@@ -14,7 +14,7 @@ import {Widget,
   WidgetSwipeEvent,
   WidgetTouchEvent,
   WidgetTapEvent,
-  WidgetLongpressEvent,
+  WidgetLongPressEvent,
   WidgetPanEvent,
   PropertyChangedEvent,
   Properties,
@@ -171,7 +171,7 @@ let touchEndEvent: WidgetTouchEvent = {target, timeStamp, type, touches: absTouc
 let touchMoveEvent: WidgetTouchEvent = {target, timeStamp, type, touches: absTouches};
 let touchStartEvent: WidgetTouchEvent = {target, timeStamp, type, touches: absTouches};
 let tapEvent: WidgetTapEvent = {target, timeStamp, type, touches};
-let longpressEvent: WidgetLongpressEvent = {target, timeStamp, type, state, touches};
+let longPressEvent: WidgetLongPressEvent = {target, timeStamp, type, state, touches};
 let panEvent: WidgetPanEvent = {
   target, timeStamp, type, state, touches, translationX, translationY, velocityX, velocityY
 };
@@ -207,7 +207,7 @@ widget
   .onTouchMove((event: WidgetTouchEvent) => {})
   .onTouchStart((event: WidgetTouchEvent) => {})
   .onTap((event: WidgetTapEvent) => {})
-  .onLongpress((event: WidgetLongpressEvent) => {})
+  .onLongPress((event: WidgetLongPressEvent) => {})
   .onPan((event: WidgetPanEvent) => {})
   .onPanDown((event: WidgetPanEvent) => {})
   .onPanHorizontal((event: WidgetPanEvent) => {})

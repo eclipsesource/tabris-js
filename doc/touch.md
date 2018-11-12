@@ -8,7 +8,7 @@ Gesture and Touch Events
 In Tabris.js there are 13 gesture events based on 4 basic gesture types:
 
 - `tap` - Fired once when a finger briefly touched the widget.
-- `longpress` - Fired when a finger touched the widget for a longer period of time (about a second, may depend on the platform), and again when lifting the finger.
+- `longPress` - Fired when a finger touched the widget for a longer period of time (about a second, may depend on the platform), and again when lifting the finger.
 - `pan` - Starts firing continuously as soon as a finger moved in any direction for a certain distance (about 5px, may depend on the platform). The event is always fired on the widget where the finger first touched, even if the finger is moved outside the widget.
 - `panLeft` - Starts firing continuously as soon as a finger moved to the left for a certain distance.
 - `panRight` - Starts firing continuously as soon as a finger moved to the right for a certain distance.
@@ -44,10 +44,10 @@ Pan gesture events also contain these additional properties:
 Event states:
 
 - `"recognized"`: the state for gestures that fire only once (`tap` and `swipe`).
-- `"start"`: the gesture started, i.e. the finger starts moving (`pan`) or has been hold down long enough (`longpress`).
+- `"start"`: the gesture started, i.e. the finger starts moving (`pan`) or has been hold down long enough (`longPress`).
 - `"change"`: the gesture continued by moving a finger (`pan` only).
-- `"end"`: the gesture ended by lifting all fingers (`pan` and `longpress`).
-- `"cancel"`: the gesture was interrupted, e.g. by a dialog pop-up (`pan` and `longpress`).
+- `"end"`: the gesture ended by lifting all fingers (`pan` and `longPress`).
+- `"cancel"`: the gesture was interrupted, e.g. by a dialog pop-up (`pan` and `longPress`).
 
 ### Gestures in scrollable/panable Widgets
 

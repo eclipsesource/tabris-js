@@ -19,9 +19,9 @@ ui.contentView.on({
     printXY('touchCancel', touches);
     ui.contentView.background = 'red';
   },
-  longpress: ({touches}) => {
+  longPress: ({touches}) => {
     ui.contentView.background = 'blue';
-    printXY('longpress', touches);
+    printXY('longPress', touches);
   }
 });
 

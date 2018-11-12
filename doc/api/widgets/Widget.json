@@ -246,7 +246,7 @@
         }
       }
     },
-    "longpress": {
+    "longPress": {
       "description": "Fired after pressing a widget for a specific amount of time (about a second), and again on lifting the finger.",
       "parameters": {
         "state": {

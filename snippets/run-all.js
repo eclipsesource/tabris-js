@@ -414,7 +414,7 @@ const snippets = [
   ['widget-longpress-to-drag.js', () => confirm(Composite)
     .then(() => confirm(TextView))
     .then(() => find(Composite).onTouchStart.trigger({touches: [{absoluteX: 100, absoluteY: 100}]}))
-    .then(() => find(Composite).onLongpress.trigger({state: 'start'}))
+    .then(() => find(Composite).onLongPress.trigger({state: 'start'}))
     .then(() => confirm(TextView, {}, 0))
     .then(() => wait(200))
     .then(() => forAsync(
@@ -437,8 +437,8 @@ const snippets = [
     ))
     .then(() => ui.contentView.onTouchEnd.trigger({touches: [{x: 0, y: 0}]}))
     .then(() => confirm(TextView, {text: 'touchEnd: 0 X 0'}))
-    .then(() => ui.contentView.onLongpress.trigger({touches: [{x: 0, y: 0}]}))
-    .then(() => confirm(TextView, {text: 'longpress: 0 X 0'}))
+    .then(() => ui.contentView.onLongPress.trigger({touches: [{x: 0, y: 0}]}))
+    .then(() => confirm(TextView, {text: 'longPress: 0 X 0'}))
   ],
   ['xmlhttprequest.js', () => confirm(Button)
     .then(() => tap(find(Button)))
@@ -586,7 +586,7 @@ function showOptions(msg, state) {
         text: state === 'pause' ? '/  Continue' : '/  Next',
         textColor: 'white',
         highlightOnTouch: true
-      }).on({tap: next, longpress: prev})
+      }).on({tap: next, longPress: prev})
     );
   } else if (state !== 'success' && !autoContinue) {
     options.append(

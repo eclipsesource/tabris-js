@@ -71,6 +71,10 @@ All font properties are now of the type "FontValue". While these properties stil
 
 All image properties are now of the type "ImageValue". While these properties still accept the same string values as in 2.x, they will return an "Image" class instance instead of a string.
 
+### Gesture event "longpress" renamed to "longPress"
+
+To be consistent with the event naming scheme of gesture events, the event "longpress" has been renamed to "longPress".
+
 ## TypeScript
 
 ### Properties interfaces removed

@@ -332,7 +332,7 @@ layoutDataProps.forEach(prop => {
 
 NativeObject.defineEvents(Widget.prototype, {
   tap: true,
-  longpress: true,
+  longPress: true,
   pan: true,
   panLeft: true,
   panRight: true,
@@ -364,7 +364,7 @@ function hasAndroidResizeBug() {
 
 let defaultGestures = {
   tap: {type: 'tap'},
-  longpress: {type: 'longpress'},
+  longPress: {type: 'longPress'},
   pan: {type: 'pan'},
   panLeft: {type: 'pan', direction: 'left'},
   panRight: {type: 'pan', direction: 'right'},

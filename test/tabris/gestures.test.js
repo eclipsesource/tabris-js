@@ -30,7 +30,7 @@ describe('gestures:', function() {
   it('getter returns object with pre-configured gestures as initial value', function() {
     let gestures = new TestType().gestures;
     expect(gestures.tap).to.eql({type: 'tap'});
-    expect(gestures.longpress).to.eql({type: 'longpress'});
+    expect(gestures.longPress).to.eql({type: 'longPress'});
   });
 
   describe('setting single gesture', function() {
