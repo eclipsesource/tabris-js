@@ -51,15 +51,19 @@ export default class TabFolder extends Composite {
   }
 
   _triggerChangeEvent(name, value) {
-    super._triggerChangeEvent(name, value);
     if (name === 'selection') {
-      if (this.$previousSelection) {
-        this.$previousSelection._trigger('disappear');
+      if (this.$previousSelection !== value) {
+        super._triggerChangeEvent(name, value);
+        if (this.$previousSelection) {
+          this.$previousSelection._trigger('disappear');
+        }
+        if (value) {
+          value._trigger('appear');
+        }
+        this.$previousSelection = value;
       }
-      if (value) {
-        value._trigger('appear');
-      }
-      this.$previousSelection = value;
+    } else {
+      super._triggerChangeEvent(name, value);
     }
   }
 

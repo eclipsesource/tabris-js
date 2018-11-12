@@ -11,7 +11,8 @@ createTab('Cart', 'resources/cart.png', 'resources/cart-filled.png');
 createTab('Pay', 'resources/card.png', 'resources/card-filled.png');
 createTab('Statistic', 'resources/chart.png', 'resources/chart-filled.png');
 
-tabFolder.on('selectionChanged', ({value: tab}) => console.log(`selection changed to ${tab.title}`));
+tabFolder.on('selectionChanged', ({value: tab}) => console.log(`selectionChanged to ${tab.title}`));
+tabFolder.on('select', ({value: tab}) => console.log(`select event`));
 
 function createTab(title, image, seletedImage) {
   const tab = new Tab({

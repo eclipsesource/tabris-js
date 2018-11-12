@@ -238,6 +238,7 @@ describe('TabFolder', function() {
     });
 
     it('Setting a Tab triggers change event', function() {
+      tabFolder.selection = new Tab().appendTo(tabFolder);
       let listener = spy();
       tabFolder.onSelectionChanged(listener);
 
@@ -246,6 +247,15 @@ describe('TabFolder', function() {
       expect(listener).to.have.been.calledOnce;
       expect(listener.firstCall.args[0].target).to.equal(tabFolder);
       expect(listener.firstCall.args[0].value).to.equal(tab);
+    });
+
+    it('Setting a Tab on active tab does not trigger change event', function() {
+      let listener = spy();
+      tabFolder.onSelectionChanged(listener);
+
+      tabFolder.selection = tab;
+
+      expect(listener).to.have.not.been.called;
     });
 
     it('Setting a Tab does not trigger change event when the tab was already selected', function() {
@@ -300,6 +310,7 @@ describe('TabFolder', function() {
     });
 
     it('supports native event selectionChanged', function() {
+      tabFolder.selection = new Tab().appendTo(tabFolder);
       let listener = spy();
       tabFolder.onSelectionChanged(listener);
 
