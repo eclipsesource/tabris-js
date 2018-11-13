@@ -9,6 +9,7 @@ export function mockTabris(client) {
   global.tabris = Object.assign({
     Module: {getSourceMap() { return null; }},
     _client: client,
+    _stackTraceStack: [],
     _nativeObjectRegistry: new NativeObjectRegistry(),
     _notify: (cid, event, param) => tabris._nativeObjectRegistry.find(cid)._trigger(event, param),
     started: true,

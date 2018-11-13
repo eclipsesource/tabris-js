@@ -9,7 +9,7 @@ const urlBaseRegEx = /^[a-z]+:\/\/[^/]+\//;
 
 export function getStackTrace(error) {
   try {
-    let stack = error.stack.split('\n');
+    let stack = [error.stack].concat(tabris._stackTraceStack).join('\n').split('\n');
     stack = stack.filter(filterStackLine);
     stack = stack.map(normalizeStackLine);
     return stack.join('\n');

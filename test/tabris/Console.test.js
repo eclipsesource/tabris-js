@@ -2,16 +2,21 @@ import {expect, spy, stub, restore, mockTabris} from '../test';
 import ClientStub from './ClientStub';
 import {createConsole} from '../../src/tabris/Console';
 import * as defaultConsole from '../../src/tabris/Console';
+import {addWindowTimerMethods}  from '../../src/tabris/WindowTimers';
+import {create as createApp} from '../../src/tabris/App';
 
 const methods = ['debug', 'log', 'info', 'warn', 'error'];
 const realConsole = console;
 
 describe('Console', function() {
 
+  let client;
+
   afterEach(restore);
 
   beforeEach(function() {
-    mockTabris(new ClientStub());
+    client = new ClientStub();
+    mockTabris(client);
   });
 
   describe('default', function() {
@@ -203,7 +208,12 @@ describe('Console', function() {
     });
 
     describe('trace', function() {
-      let stack, sourceMapCopy;
+
+      let stack, sourceMapCopy, timers;
+
+      function callback(index) {
+        return client.calls({id: tabris.app.cid, op: 'call', method: 'startTimer'})[index].parameters.callback;
+      }
 
       const sourceMap = {
         version: 3,
@@ -233,7 +243,22 @@ describe('Console', function() {
   at ./node_modules/tabris/tabris.js:1:27243
   at Button.trigger (./node_modules/tabris/tabris.js:1:27407)
   at Button.$trigger (./node_modules/tabris/tabris.js:1:48355)
-  at Tabris._notify (./node_modules/tabris/tabris.js:1:74931)`
+  at Tabris._notify (./node_modules/tabris/tabris.js:1:74931)`,
+          timer2:
+`Error
+  at done (./dist/timer.js:19:17)
+  at sayThanks (./dist/timer.js:16:5)
+  at callback (./node_modules/tabris/tabris.min.js:1:94811)`,
+          timer1:
+`Error
+  at createTimer (./node_modules/tabris/tabris.min.js:1:94713)
+  at start (./dist/timer.js:10:9)
+  at ./node_modules/tabris/tabris.min.js:1:29551
+  at Button.trigger (./node_modules/tabris/tabris.min.js:1:29715)
+  at Button.$trigger (./node_modules/tabris/tabris.min.js:1:50664)
+  at Button._trigger (./node_modules/tabris/tabris.min.js:1:50434)
+  at Button._trigger (./node_modules/tabris/tabris.min.js:1:59239)
+  at Tabris._notify (./node_modules/tabris/tabris.min.js:1:77730)`
         },
         iOS: {
           production:
@@ -253,7 +278,19 @@ http://192.168.6.77:8080/node_modules/tabris/tabris.js:1:27243
 trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.js:1:27407
 $trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.js:1:48355
 _notify@http://192.168.6.77:8080/node_modules/tabris/tabris.js:1:74931
-_notify@[native code]`
+_notify@[native code]`,
+          timer2:
+`_notify@[native code]
+done@http://192.168.6.77:8080/dist/timer.js:19:17
+sayThanks@http://192.168.6.77:8080/dist/timer.js:16:5
+callback@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:94847`,
+          timer1:
+`createTimer@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:94722
+start@http://192.168.6.77:8080/dist/timer.js:10:9
+http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:29555
+trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:29715
+$trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:50671
+_notify@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:77738`,
         },
         expected: {
           simplified:
@@ -271,7 +308,23 @@ _notify (./node_modules/tabris/tabris.js:1:74931)`,
           sourceMapped:
 `doSomethingElse (./console.js:26:15)
 doSomething (./console.js:22:2)
-start (./console.js:18:23)`
+start (./console.js:18:23)`,
+          timer:
+`done (./dist/timer.js:19:17)
+sayThanks (./dist/timer.js:16:5)
+start (./dist/timer.js:10:9)`,
+          timerNested:
+`done (./dist/timer.js:19:17)
+sayThanks (./dist/timer.js:16:5)
+doSomethingElse (./dist/console.js:23:17)
+doSomething (./dist/console.js:20:5)
+start (./dist/console.js:17:17)
+start (./dist/timer.js:10:9)`,
+          timerParallel:
+`doSomethingElse (./dist/console.js:23:17)
+doSomething (./dist/console.js:20:5)
+start (./dist/console.js:17:17)
+start (./dist/timer.js:10:9)`
         }
       };
 
@@ -295,6 +348,9 @@ start (./console.js:18:23)`
             tabris.device.platform = platform;
             stack = stacks[platform].production;
             sourceMapCopy = Object.assign({}, sourceMap);
+            tabris.app = createApp();
+            timers = {};
+            addWindowTimerMethods(timers);
           });
 
           afterEach(function() {
@@ -350,7 +406,46 @@ start (./console.js:18:23)`
 
             console.trace();
 
-            expect(nativeConsole.print).to.have.been.calledWith('log',  stacks[platform].production);
+            expect(nativeConsole.print).to.have.been.calledWith('log', stacks[platform].production);
+          });
+
+          it('prints stack trace across timer', function() {
+            stack = stacks[platform].timer1;
+
+            timers.setTimeout(() => console.trace());
+            stack = stacks[platform].timer2;
+            callback(0)();
+
+            expect(nativeConsole.print).to.have.been.calledWith('log', stacks.expected.timer);
+          });
+
+          it('prints stack trace across nested timers', function() {
+            stack = stacks[platform].timer1;
+
+            timers.setTimeout(() => {
+              stack = stacks[platform].production;
+              timers.setTimeout(() => console.trace());
+            });
+            callback(0)();
+            stack = stacks[platform].timer2;
+            callback(1)();
+
+            expect(nativeConsole.print).to.have.been.calledWith('log', stacks.expected.timerNested);
+          });
+
+          it('prints stack trace across parallel timers', function() {
+            stack = stacks[platform].timer1;
+
+            timers.setTimeout(() => console.trace());
+            timers.setTimeout(() => console.trace());
+            stack = stacks[platform].timer2;
+            callback(0)();
+            stack = stacks[platform].production;
+            callback(1)();
+
+            expect(nativeConsole.print).to.have.been.calledTwice;
+            expect(nativeConsole.print.getCalls()[0].args[1]).to.equal(stacks.expected.timer);
+            expect(nativeConsole.print.getCalls()[1].args[1]).to.equal(stacks.expected.timerParallel);
           });
 
         });

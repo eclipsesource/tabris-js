@@ -10,6 +10,7 @@ export default class Tabris extends NativeObject {
     this._started = false;
     this._init = this._init.bind(this);
     this._notify = this._notify.bind(this);
+    this._stackTraceStack = [];
   }
 
   get version() {
