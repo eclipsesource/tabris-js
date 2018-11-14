@@ -3,10 +3,11 @@ import ClientStub from './ClientStub';
 import {addWindowTimerMethods}  from '../../src/tabris/WindowTimers';
 import {create as createApp} from '../../src/tabris/App';
 import {getStackTrace} from '../../src/tabris/util-stacktrace';
+import PromisePolyfill from '../../src/tabris/Promise';
 
 describe('util-stacktrace', function() {
 
-  let client;
+  let client, stack;
 
   const stacks = {
     Android: {
@@ -42,7 +43,25 @@ describe('util-stacktrace', function() {
   at Button.$trigger (./node_modules/tabris/tabris.min.js:1:50664)
   at Button._trigger (./node_modules/tabris/tabris.min.js:1:50434)
   at Button._trigger (./node_modules/tabris/tabris.min.js:1:59239)
-  at Tabris._notify (./node_modules/tabris/tabris.min.js:1:77730)`
+  at Tabris._notify (./node_modules/tabris/tabris.min.js:1:77730)`,
+      trace1:
+`Error
+  at new Promise (./node_modules/tabris/tabris.min.js:1:1896)
+  at Listeners.promise (./node_modules/tabris/tabris.min.js:1:31118)
+  at Button.showActionSheet (./dist/actionsheet.js:15:25)
+  at ./node_modules/tabris/tabris.min.js:1:30065
+  at Button.trigger (./node_modules/tabris/tabris.min.js:1:30229)
+  at Button.$trigger (./node_modules/tabris/tabris.min.js:1:51178)
+  at Button._trigger (./node_modules/tabris/tabris.min.js:1:50948)
+  at Button._trigger (./node_modules/tabris/tabris.min.js:1:59753)
+  at Tabris._notify (./node_modules/tabris/tabris.min.js:1:78266)`,
+      trace2:
+`Error
+  at actionSheet.onClose.promise.then (./dist/actionsheet.js:17:21)
+  at <anonymous> (./dist/actionsheet.js:16:1)
+  at tryCallOne (./node_modules/tabris/tabris.min.js:1:1588)
+  at ./node_modules/tabris/tabris.min.js:1:3001
+  at callback (./node_modules/tabris/tabris.min.js:1:95457)`
     },
     iOS: {
       production:
@@ -75,6 +94,22 @@ http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:29555
 trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:29715
 $trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:50671
 _notify@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:77738`,
+      trace1:
+`Promise@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:1905
+promise@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:31129
+promise@[native code]
+showActionSheet@./dist/actionsheet.js:15:25
+http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:30069
+trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:30229
+$trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:51185
+_notify@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:78274
+_notify@[native code]`,
+      trace2:
+`./dist/actionsheet.js:17:21
+./dist/actionsheet.js:16:1
+tryCallOne@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:1589
+http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:3011
+callback@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:95462`
     },
     expected: {
       simplified:
@@ -104,9 +139,31 @@ start (./dist/timer.js:10:9)`,
 `doSomethingElse (./dist/console.js:23:17)
 doSomething (./dist/console.js:20:5)
 start (./dist/console.js:17:17)
-start (./dist/timer.js:10:9)`
+start (./dist/timer.js:10:9)`,
+      promise:
+`./dist/actionsheet.js:17:21
+./dist/actionsheet.js:16:1
+showActionSheet (./dist/actionsheet.js:15:25)`,
+      promiseNested:
+`./dist/actionsheet.js:17:21
+./dist/actionsheet.js:16:1
+doSomethingElse (./dist/console.js:23:17)
+doSomething (./dist/console.js:20:5)
+start (./dist/console.js:17:17)
+showActionSheet (./dist/actionsheet.js:15:25)`
     }
   };
+
+  class CustomError extends Error {
+
+    constructor(message) {
+      super(message);
+      this.orgStack = this.stack;
+      this.stack = stack;
+    }
+  }
+
+  const OrgError = Error;
 
   beforeEach(function() {
     client = new ClientStub();
@@ -114,6 +171,7 @@ start (./dist/timer.js:10:9)`
   });
 
   afterEach(function() {
+    global.Error = OrgError;
     restore();
   });
 
@@ -197,34 +255,19 @@ start (./dist/timer.js:10:9)`
 
       describe('across timer', function() {
 
-        let stack, timers;
+        let timers;
 
         function callback(index) {
           return client.calls({id: tabris.app.cid, op: 'call', method: 'startTimer'})[index].parameters.callback;
         }
 
-        class CustomError extends Error {
-
-          constructor(message) {
-            super(message);
-            this.orgStack = this.stack;
-            this.stack = stack;
-          }
-        }
-
-        const OrgError = Error;
-
         beforeEach(function() {
+          global.Error = CustomError;
           timers = {};
           addWindowTimerMethods(timers);
         });
 
-        afterEach(function() {
-          global.Error = OrgError;
-        });
-
         it('prints stack trace across timer', function() {
-          global.Error = CustomError;
           stack = stacks[platform].timer1;
           let actual;
 
@@ -235,7 +278,6 @@ start (./dist/timer.js:10:9)`
         });
 
         it('prints stack trace across nested timers', function() {
-          global.Error = CustomError;
           stack = stacks[platform].timer1;
           let actual;
 
@@ -250,7 +292,6 @@ start (./dist/timer.js:10:9)`
         });
 
         it('prints stack trace across parallel timers', function() {
-          global.Error = CustomError;
           stack = stacks[platform].timer1;
           let actual1, actual2;
 
@@ -261,6 +302,38 @@ start (./dist/timer.js:10:9)`
 
           expect(actual1).to.equal(stacks.expected.timer);
           expect(actual2).to.equal(stacks.expected.timerParallel);
+        });
+
+      });
+
+      describe('with Promises', function() {
+
+        beforeEach(function() {
+          global.Error = CustomError;
+        });
+
+        it('prints stack trace across one Promise', function() {
+          stack = stacks[platform].trace1;
+          return new PromisePolyfill(resolve => resolve()).then(() => {
+            expect(getStackTrace({stack: stacks[platform].trace2})).to.equal(stacks.expected.promise);
+          });
+        });
+
+        it('prints stack trace across chained Promises', function() {
+          stack = stacks[platform].trace1;
+          return new PromisePolyfill(resolve => resolve()).then(() => true).then(() => {
+            expect(getStackTrace({stack: stacks[platform].trace2})).to.equal(stacks.expected.promise);
+          });
+        });
+
+        it('prints stack trace across nested Promises', function() {
+          stack = stacks[platform].trace1;
+          return new PromisePolyfill(resolve => resolve()).then(() => {
+            stack = stacks[platform].production;
+            return new PromisePolyfill(resolve => resolve()).then(() => {
+              expect(getStackTrace({stack: stacks[platform].trace2})).to.equal(stacks.expected.promiseNested);
+            });
+          });
         });
 
       });

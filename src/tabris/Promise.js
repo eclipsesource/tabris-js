@@ -71,7 +71,19 @@ function tryCallTwo(fn, a, b) {
   }
 }
 
+// Promise may be used before tabris is initialized:
+function getStackTraceStack() {
+  return global.tabris ? global.tabris._stackTraceStack : [];
+}
+
+function setStackTraceStack(value) {
+  if (global.tabris) {
+    global.tabris._stackTraceStack = value;
+  }
+}
+
 export default function Promise(fn) {
+  const stackTraceStack = [new Error().stack].concat(getStackTraceStack());
   if (typeof this !== 'object') {
     throw new TypeError('Promises must be constructed via new');
   }
@@ -82,6 +94,7 @@ export default function Promise(fn) {
     _deferredState: {value: 0, writable: true},
     _state: {value: 0, writable: true},
     _value: {value: null, writable: true},
+    _stackTraceStack: {value: stackTraceStack, writable: false},
     _deferreds: {value: null, writable: true},
   });
   if (fn === noop) {return;}
@@ -143,7 +156,10 @@ function handleResolved(self, deferred) {
       }
       return;
     }
+    const oldStack = getStackTraceStack();
+    setStackTraceStack(self._stackTraceStack);
     const ret = tryCallOne(cb, self._value);
+    setStackTraceStack(oldStack);
     if (ret === IS_ERROR) {
       reject(deferred.promise, LAST_ERROR);
     } else {
@@ -243,13 +259,6 @@ function doResolve(fn, promise) {
 
 /* Static Functions */
 
-const TRUE = valuePromise(true);
-const FALSE = valuePromise(false);
-const NULL = valuePromise(null);
-const UNDEFINED = valuePromise(undefined);
-const ZERO = valuePromise(0);
-const EMPTYSTRING = valuePromise('');
-
 function valuePromise(value) {
   const p = new Promise(Promise._noop);
   p._state = 1;
@@ -258,13 +267,6 @@ function valuePromise(value) {
 }
 Promise.resolve = function(value) {
   if (value instanceof Promise) {return value;}
-
-  if (value === null) {return NULL;}
-  if (value === undefined) {return UNDEFINED;}
-  if (value === true) {return TRUE;}
-  if (value === false) {return FALSE;}
-  if (value === 0) {return ZERO;}
-  if (value === '') {return EMPTYSTRING;}
 
   if (typeof value === 'object' || typeof value === 'function') {
     try {

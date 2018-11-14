@@ -28,30 +28,47 @@ function filterStackLine(line) {
 }
 
 function normalizeStackLine(line) {
+  const mapped = applySourceMap(parseLine(line));
+  if (!mapped) {
+    return null;
+  }
+  if (!mapped.fn) {
+    return `${mapped.url}:${mapped.line}:${mapped.column}`;
+  }
+  return `${mapped.fn} (${mapped.url}:${mapped.line}:${mapped.column})`;
+}
+
+function parseLine(line) {
   const regex = tabris.device.platform === 'Android' ? androidStackLineRegex : iosStackLineRegex;
   const noNameRegex = tabris.device.platform === 'Android' ? androidStackLineNoNameRegex : iosStackLineNoNameRegex;
   const fullMatch = line.match(regex);
   const noNameMatch = line.match(noNameRegex);
   if (fullMatch && fullMatch.length === 5) {
     const  [, fn, url, line, column] = fullMatch;
-    const mapped = applySourceMap({
-      fn: fn.split('.').pop(),
+    return {
+      fn: normalizeFunctionName(fn),
       url: fixUrl(url),
       line: parseInt(line, 10),
       column: parseInt(column, 10)
-    });
-    return mapped ? `${mapped.fn} (${mapped.url}:${mapped.line}:${mapped.column})` : '';
+    };
   } else if (noNameMatch && noNameMatch.length === 4) {
     const [, url, line, column] = noNameMatch;
-    const mapped = applySourceMap({
+    return {
+      fn: null,
       url: fixUrl(url),
       line: parseInt(line, 10),
       column: parseInt(column, 10)
-    });
-    return mapped ? `${mapped.url}:${mapped.line}:${mapped.column}` : '';
-  } else {
-    return line;
+    };
   }
+  return null;
+}
+
+function normalizeFunctionName(fn) {
+  let result = fn.split('.').pop();
+  if (result === 'then' || result === '<anonymous>') {
+    result = null;
+  }
+  return result;
 }
 
 function fixUrl(url) {
@@ -63,6 +80,9 @@ function fixUrl(url) {
 }
 
 function applySourceMap(stackLineData) {
+  if (!stackLineData) {
+    return null;
+  }
   const {fn} = stackLineData;
   let {url, line, column} = stackLineData;
   const sourceMap = tabris.Module.getSourceMap(url);
