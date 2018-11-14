@@ -12,6 +12,7 @@ export function getStackTrace(error) {
     let stack = [error.stack].concat(tabris._stackTraceStack).join('\n').split('\n');
     stack = stack.filter(filterStackLine);
     stack = stack.map(normalizeStackLine);
+    stack = stack.filter(line => !!line);
     return stack.join('\n');
   } catch (ex) {
     warn(`Could not process stack trace (${ex.message}), delivering original.`);
@@ -39,7 +40,7 @@ function normalizeStackLine(line) {
       line: parseInt(line, 10),
       column: parseInt(column, 10)
     });
-    return `${mapped.fn} (${mapped.url}:${mapped.line}:${mapped.column})`;
+    return mapped ? `${mapped.fn} (${mapped.url}:${mapped.line}:${mapped.column})` : '';
   } else if (noNameMatch && noNameMatch.length === 4) {
     const [, url, line, column] = noNameMatch;
     const mapped = applySourceMap({
@@ -47,7 +48,7 @@ function normalizeStackLine(line) {
       line: parseInt(line, 10),
       column: parseInt(column, 10)
     });
-    return `${mapped.url}:${mapped.line}:${mapped.column}`;
+    return mapped ? `${mapped.url}:${mapped.line}:${mapped.column}` : '';
   } else {
     return line;
   }
@@ -75,6 +76,8 @@ function applySourceMap(stackLineData) {
       url = './' + normalizePath(dirname(url) + '/' + sourceMap.sources[orgFile]);
       line = orgLine + 1;
       column = column + (orgColumn - generatedColumn);
+    } else {
+      return null;
     }
   }
   return {fn, url, line, column};

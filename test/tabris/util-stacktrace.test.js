@@ -164,7 +164,7 @@ start (./dist/timer.js:10:9)`
           stub(tabris.Module, 'getSourceMap').withArgs('./dist/console.js').returns(sourceMapCopy);
           getStackTrace({stack: stacks[platform].production});
 
-          sourceMapCopy.mappings = {};
+          sourceMapCopy.mappings = '';
 
           expect(getStackTrace({stack: stacks[platform].production})).to.equal(sourceMappedStack);
         });
@@ -175,6 +175,15 @@ start (./dist/timer.js:10:9)`
           tabris.Module.getSourceMap.resetBehavior();
 
           expect(getStackTrace({stack: stacks[platform].production})).to.equal(stacks.expected.simplified);
+        });
+
+        it('skips lines with no mapping', function() {
+          sourceMapCopy.mappings = sourceMapCopy.mappings.split(';').slice(0, -2).join(';');
+          stub(tabris.Module, 'getSourceMap').withArgs('./dist/console.js').returns(sourceMapCopy);
+
+          expect(getStackTrace({stack: stacks[platform].production})).to.equal(
+            'doSomething (./console.js:22:2)\nstart (./console.js:18:23)'
+          );
         });
 
         it('prints original stack trace for malformed sourceMap', function() {
