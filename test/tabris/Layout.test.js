@@ -4,6 +4,8 @@ import Layout, {LayoutQueue, ConstraintLayout} from '../../src/tabris/Layout';
 import LayoutData from '../../src/tabris/LayoutData';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
 import Composite from '../../src/tabris/widgets/Composite';
+import Page from '../../src/tabris/widgets/Page';
+import NavigationView from '../../src/tabris/widgets/NavigationView';
 
 describe('Layout', function() {
 
@@ -29,8 +31,8 @@ describe('Layout', function() {
 
   class TestLayout extends Layout {
 
-    checkConsistency(layoutData) {
-      return this._checkConsistency(layoutData);
+    getLayoutData(child) {
+      return this._getLayoutData(child);
     }
 
     resolveReferences(layoutData, targetWidget) {
@@ -165,20 +167,26 @@ describe('Layout', function() {
 
   });
 
-  describe('checkConsistency', function() {
+  describe('getLayoutData', function() {
+
+    let parent;
 
     function check(layoutData) {
-      return layout.checkConsistency(LayoutData.from(layoutData));
+      const widget = new TestWidget({layoutData: LayoutData.from(layoutData), layout: null})
+        .appendTo(parent);
+      return layout.getLayoutData(widget);
     }
 
     beforeEach(function() {
       stub(console, 'warn');
+      parent = new Page({layout: null}).appendTo(new NavigationView({id: 'root', layout: null}));
     });
 
     it('raises a warning for inconsistent layoutData (width)', function() {
       check({top: 0, left: 0, right: 0, width: 100});
 
-      let warning = 'Inconsistent layoutData: left and right are set, ignore width';
+      let warning = 'Inconsistent layoutData: left and right are set, ignore width.\n';
+      warning += 'Target: NavigationView[cid="$5"]#root > Page[cid="$4"] > TestWidget[cid="$6"]';
       expect(console.warn).to.have.been.calledWith(warning);
     });
 
@@ -191,7 +199,8 @@ describe('Layout', function() {
     it('raises a warning for inconsistent layoutData (height)', function() {
       check({top: 0, left: 0, bottom: 0, height: 100});
 
-      let warning = 'Inconsistent layoutData: top and bottom are set, ignore height';
+      let warning = 'Inconsistent layoutData: top and bottom are set, ignore height.\n';
+      warning += 'Target: NavigationView[cid="$5"]#root > Page[cid="$4"] > TestWidget[cid="$6"]';
       expect(console.warn).to.have.been.calledWith(warning);
     });
 
@@ -204,7 +213,8 @@ describe('Layout', function() {
     it('raises a warning for inconsistent layoutData (centerX)', function() {
       check({top: 0, left: 0, centerX: 0});
 
-      let warning = 'Inconsistent layoutData: centerX overrides left and right';
+      let warning = 'Inconsistent layoutData: centerX overrides left and right.\n';
+      warning += 'Target: NavigationView[cid="$5"]#root > Page[cid="$4"] > TestWidget[cid="$6"]';
       expect(console.warn).to.have.been.calledWith(warning);
     });
 
@@ -217,7 +227,8 @@ describe('Layout', function() {
     it('raises a warning for inconsistent layoutData (centerY)', function() {
       check({left: 0, top: 0, centerY: 0});
 
-      let warning = 'Inconsistent layoutData: centerY overrides top and bottom';
+      let warning = 'Inconsistent layoutData: centerY overrides top and bottom.\n';
+      warning += 'Target: NavigationView[cid="$5"]#root > Page[cid="$4"] > TestWidget[cid="$6"]';
       expect(console.warn).to.have.been.calledWith(warning);
     });
 
@@ -230,7 +241,8 @@ describe('Layout', function() {
     it('raises a warning for inconsistent layoutData (baseline)', function() {
       check({left: 0, top: 0, baseline: '#other'});
 
-      let warning = 'Inconsistent layoutData: baseline overrides top, bottom, and centerY';
+      let warning = 'Inconsistent layoutData: baseline overrides top, bottom, and centerY.\n';
+      warning += 'Target: NavigationView[cid="$5"]#root > Page[cid="$4"] > TestWidget[cid="$6"]';
       expect(console.warn).to.have.been.calledWith(warning);
     });
 

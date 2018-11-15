@@ -93,34 +93,30 @@ export default class Layout {
   }
 
   _getLayoutData(child) {
-    return this._checkConsistency(child.layoutData, child);
-  }
-
-  _checkConsistency(layoutData) {
-    let result = layoutData;
+    let result = child.layoutData;
     if (result.centerX !== 'auto') {
       if (result.left !== 'auto' || result.right !== 'auto') {
-        warn('Inconsistent layoutData: centerX overrides left and right');
+        warn('Inconsistent layoutData: centerX overrides left and right.\nTarget: ' + getPath(child));
         result = makeAuto(result, 'left', 'right');
       }
     }
     if (result.baseline !== 'auto') {
       if (result.top !== 'auto' || result.bottom !== 'auto' || result.centerY !== 'auto') {
-        warn('Inconsistent layoutData: baseline overrides top, bottom, and centerY');
+        warn('Inconsistent layoutData: baseline overrides top, bottom, and centerY.\nTarget: ' + getPath(child));
         result = makeAuto(result, 'top', 'bottom', 'centerY');
       }
     } else if (result.centerY !== 'auto') {
       if (result.top !== 'auto' || result.bottom !== 'auto') {
-        warn('Inconsistent layoutData: centerY overrides top and bottom');
+        warn('Inconsistent layoutData: centerY overrides top and bottom.\nTarget: ' + getPath(child));
         result = makeAuto(result, 'top', 'bottom');
       }
     }
     if (result.left !== 'auto' && result.right !== 'auto' && result.width !== 'auto') {
-      warn('Inconsistent layoutData: left and right are set, ignore width');
+      warn('Inconsistent layoutData: left and right are set, ignore width.\nTarget: ' + getPath(child));
       result = makeAuto(result, 'width');
     }
     if (result.top !== 'auto' && result.bottom !== 'auto' && result.height !== 'auto') {
-      warn('Inconsistent layoutData: top and bottom are set, ignore height');
+      warn('Inconsistent layoutData: top and bottom are set, ignore height.\nTarget: ' + getPath(child));
       result = makeAuto(result, 'height');
     }
     return result;
@@ -241,6 +237,16 @@ function makeAuto(layoutData, ...props) {
     override[props[i]] = 'auto';
   }
   return LayoutData.from(Object.assign({}, layoutData, override));
+}
+
+function getPath(widget) {
+  const path = [widget];
+  let parent = widget.parent();
+  while (parent) {
+    path.unshift(parent);
+    parent = parent.parent();
+  }
+  return path.join(' > ');
 }
 
 let emptyParent = {
