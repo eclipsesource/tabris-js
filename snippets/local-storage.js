@@ -1,39 +1,45 @@
-// Tabris.js implements a subset of the W3C Web Storage Recommendation.
-// See https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
+import {Button, TextView, TextInput, contentView, ColumnLayout, WidgetCollection} from 'tabris';
 
-import {Button, TextInput, TextView, ui, localStorage} from 'tabris';
+contentView.set({layout: ColumnLayout.create()}).append(
+  <WidgetCollection>
+    <TextInput id='key' message='Key' text='Key'/>
+    <TextInput id='value' message='Value' text='Value' onAccept={setValue}/>
+    <Button text='Set' onSelect={setValue}/>
+    <Button text='Get' onSelect={getValue}/>
+    <Button text='Remove' onSelect={removeValue}/>
+    <Button text='Clear' onSelect={clearAll}/>
+    <Button text='List Keys' onSelect={showKeys}/>
+    <TextView id='output'/>
+  </WidgetCollection>
+);
 
-const KEY = 'snippet-value';
+const keyField = contentView.find('#key').first(TextInput);
+const valueField = contentView.find('#value').first(TextInput);
+const output = contentView.find('#output').first(TextView);
 
-const valueLabel = new TextView({
-  left: 32, top: 32,
-  text: 'Value:'
-}).appendTo(ui.contentView);
+function setValue() {
+  localStorage.setItem(keyField.text, valueField.text);
+  output.text = `"${keyField.text}" set to "${valueField.text}"`;
+}
 
-const valueField = new TextInput({
-  left: 'prev() 12', baseline: valueLabel, right: 32,
-  text: localStorage.getItem(KEY) || 'Hello world!'
-}).appendTo(ui.contentView);
+function getValue() {
+  output.text = `"${keyField.text}" is "${localStorage.getItem(keyField.text)}"`;
+}
 
-new Button({
-  left: 24, right: '66%', top: [valueLabel, 24],
-  text: 'Set'
-}).on('select', () => {
-  localStorage.setItem(KEY, valueField.text);
-  valueField.text = '';
-}).appendTo(ui.contentView);
+function removeValue() {
+  localStorage.removeItem(keyField.text);
+  output.text = `Removed "${valueField.text}"`;
+}
 
-new Button({
-  left: '33% 12', right: '33% 12', top: [valueLabel, 24],
-  text: 'Get'
-}).on('select', () => {
-  valueField.text = localStorage.getItem(KEY) || '';
-}).appendTo(ui.contentView);
+function clearAll() {
+  localStorage.clear();
+  output.text = 'localStorage is now empty';
+}
 
-new Button({
-  left: '66%', right: 24, top: [valueLabel, 24],
-  text: 'Remove'
-}).on('select', () => {
-  localStorage.removeItem(KEY);
-  valueField.text = '';
-}).appendTo(ui.contentView);
+function showKeys() {
+  const keys = [];
+  for (var i = 0; i < localStorage.length; i++) {
+    keys.push(`"${localStorage.key(i)}"`);
+  }
+  output.text = keys.join(', ');
+}

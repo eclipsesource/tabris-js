@@ -168,6 +168,44 @@ describe('Storage', function() {
 
     });
 
+    describe('length', function() {
+
+      beforeEach(function() {
+        returnValue = ['0', '1', '2', '3', '4'];
+      });
+
+      it('calls keys', function() {
+        storage.length;
+
+        expect(client.call).to.have.been.calledWith(cid, 'keys');
+      });
+
+      it('returns keys length', function() {
+        expect(storage.length).to.equal(5);
+      });
+
+    });
+
+    describe('key', function() {
+
+      beforeEach(function() {
+        returnValue = ['0', '1', '2', '3', '4'];
+      });
+
+      it('calls keys', function() {
+        storage.length;
+
+        expect(client.call).to.have.been.calledWith(cid, 'keys');
+      });
+
+      it('returns keys entry', function() {
+        expect(storage.key(0)).to.equal('0');
+        expect(storage.key(4)).to.equal('4');
+        expect(storage.key(5)).to.be.null;
+      });
+
+    });
+
     describe('Storage constructor', function() {
 
       it('is a function', function() {

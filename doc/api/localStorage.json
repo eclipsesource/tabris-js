@@ -43,6 +43,23 @@
         }
       ],
       "description": "Removes the given key/value pair from the storage."
+    },
+    "key": {
+      "parameters": [
+        {
+          "name": "index",
+          "type": "number"
+        }
+      ],
+      "returns": "string",
+      "description": "Returns the name of the key at the given index in the storage. The order of keys is platform dependent, you should not rely on it to be deterministic"
+    }
+  },
+  "properties": {
+    "length": {
+      "readonly": true,
+      "type": "number",
+      "description": "The number of items in the storage."
     }
   }
 }

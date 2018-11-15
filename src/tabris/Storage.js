@@ -56,6 +56,14 @@ export default class Storage {
     this._nativeObject._nativeCall('clear');
   }
 
+  key(index) {
+    return this._nativeObject._nativeCall('keys')[index] || null;
+  }
+
+  get length() {
+    return this._nativeObject._nativeCall('keys').length;
+  }
+
 }
 
 function encode(value) {
