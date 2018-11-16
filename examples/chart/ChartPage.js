@@ -33,7 +33,7 @@ module.exports = class ChartPage extends Page {
   }
 
   _drawChart() {
-    let ctx = this._createCanvasContext();
+    const ctx = this._createCanvasContext();
     // workaround for scaling to native pixels by chart.js
     ctx.scale(1 / window.devicePixelRatio, 1 / window.devicePixelRatio);
     new Chart(ctx)[this.chart.type](this.chart.data, {
@@ -45,11 +45,11 @@ module.exports = class ChartPage extends Page {
   }
 
   _createCanvasContext() {
-    let canvas = this.find(Canvas).first();
-    let scaleFactor = device.scaleFactor;
-    let bounds = canvas.bounds;
-    let width = bounds.width * scaleFactor;
-    let height = bounds.height * scaleFactor;
+    const canvas = this.find(Canvas).first();
+    const scaleFactor = device.scaleFactor;
+    const bounds = canvas.bounds;
+    const width = bounds.width * scaleFactor;
+    const height = bounds.height * scaleFactor;
     return canvas.getContext('2d', width, height);
   }
 

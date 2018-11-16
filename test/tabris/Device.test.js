@@ -102,12 +102,12 @@ describe('Device', function() {
     it('adds listener for orientationChanged event', function() {
       device.onOrientationChanged(function() {});
 
-      let calls = client.calls({id: device.cid, op: 'listen', event: 'orientationChanged'});
+      const calls = client.calls({id: device.cid, op: 'listen', event: 'orientationChanged'});
       expect(calls[0].listen).to.equal(true);
     });
 
     it('triggers orientationChanged event', function() {
-      let listener = spy();
+      const listener = spy();
       device.onOrientationChanged(listener);
 
       tabris._notify(device.cid, 'orientationChanged', {orientation: 'portrait'});

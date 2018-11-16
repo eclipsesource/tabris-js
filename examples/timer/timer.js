@@ -4,38 +4,38 @@ let cpsCount = 0;
 let startTime = new Date().getTime();
 let taskId;
 
-let statusTextView = new TextView({
+const statusTextView = new TextView({
   left: 16, top: 24, right: 16,
   text: 'Last update: <none>'
 }).appendTo(ui.contentView);
 
-let cpsTextView = new TextView({
+const cpsTextView = new TextView({
   left: 16, top: [statusTextView, 16], right: 16,
   text: 'Calls per second: <none>'
 }).appendTo(ui.contentView);
 
-let delayTextView = new TextView({
+const delayTextView = new TextView({
   left: 16, top: [cpsTextView, 24],
   text: 'Delay (ms):'
 }).appendTo(ui.contentView);
 
-let delayTextInput = new TextInput({
+const delayTextInput = new TextInput({
   left: [delayTextView, 16], baseline: delayTextView,
   id: 'delayTextInput',
   text: '1000',
   message: 'Delay (ms)'
 }).appendTo(ui.contentView);
 
-let repeatCheckbox = new CheckBox({
+const repeatCheckbox = new CheckBox({
   left: 16, top: delayTextInput,
   text: 'Repeat'
 }).appendTo(ui.contentView);
 
-let startButton = new Button({
+const startButton = new Button({
   left: ['50%', 16 / 4], top: [repeatCheckbox, 24], right: 16,
   text: 'Start timer'
 }).on('select', () => {
-  let delay = parseInt(delayTextInput.text);
+  const delay = parseInt(delayTextInput.text);
   if (repeatCheckbox.checked) {
     taskId = setInterval(updateStatusTextViews, delay);
   } else {
@@ -47,7 +47,7 @@ let startButton = new Button({
   enableTimerStart(false);
 }).appendTo(ui.contentView);
 
-let cancelButton = new Button({
+const cancelButton = new Button({
   left: 16, top: [repeatCheckbox, 24], right: ['50%', 16 / 4],
   text: 'Cancel timer',
   enabled: false
@@ -58,8 +58,8 @@ let cancelButton = new Button({
 
 function updateStatusTextViews() {
   cpsCount++;
-  let curTime = new Date().getTime();
-  let diff = curTime - startTime;
+  const curTime = new Date().getTime();
+  const diff = curTime - startTime;
   if (diff >= 1000) {
     cpsTextView.text = 'Calls per second: ' + cpsCount;
     cpsCount = 0;

@@ -1,9 +1,9 @@
 const {Canvas, CheckBox, Page, device} = require('tabris');
 const AnimationExample = require('./AnimationExample');
 
-let animationExample = new AnimationExample();
+const animationExample = new AnimationExample();
 
-let page = new Page({
+const page = new Page({
   title: 'Animation',
   autoDispose: false
 }).on('disappear', () => {
@@ -13,8 +13,8 @@ let page = new Page({
 new Canvas({
   left: 10, top: 10, right: 10, bottom: '#animateCheckBox 10'
 }).on('resize', ({target, width, height}) => {
-  let scaleFactor = device.scaleFactor;
-  let ctx = target.getContext('2d', width * scaleFactor, height * scaleFactor);
+  const scaleFactor = device.scaleFactor;
+  const ctx = target.getContext('2d', width * scaleFactor, height * scaleFactor);
   ctx.scale(scaleFactor, scaleFactor);
   animationExample.draw(ctx, width, height);
 }).appendTo(page);

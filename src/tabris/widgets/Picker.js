@@ -22,7 +22,7 @@ export default class Picker extends Widget {
 
   $flush() {
     if (this.$needsUpdateItems) {
-      let items = new Array(this.itemCount);
+      const items = new Array(this.itemCount);
       for (let index = 0; index < items.length; index++) {
         items[index] = this.itemText(index);
       }

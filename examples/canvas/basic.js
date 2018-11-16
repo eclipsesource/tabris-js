@@ -1,19 +1,19 @@
 const {Canvas, Page, device} = require('tabris');
 
-let CANVAS_WIDTH = 300;
-let CANVAS_HEIGHT = 300;
+const CANVAS_WIDTH = 300;
+const CANVAS_HEIGHT = 300;
 
-let page = new Page({
+const page = new Page({
   title: 'Basic Shapes',
   autoDispose: false
 });
 
-let canvas = new Canvas({
+const canvas = new Canvas({
   centerX: 0, top: 32, width: CANVAS_WIDTH, height: CANVAS_HEIGHT
 }).appendTo(page);
 
-let scaleFactor = device.scaleFactor;
-let ctx = canvas.getContext('2d', CANVAS_WIDTH * scaleFactor, CANVAS_HEIGHT * scaleFactor);
+const scaleFactor = device.scaleFactor;
+const ctx = canvas.getContext('2d', CANVAS_WIDTH * scaleFactor, CANVAS_HEIGHT * scaleFactor);
 ctx.scale(scaleFactor, scaleFactor);
 ctx.textBaseline = 'top';
 ctx.textAlign = 'center';
@@ -77,7 +77,7 @@ function drawBezier(ctx, x, y) {
 
 function drawPath(ctx, x, y, radius) {
   ctx.beginPath();
-  let rotate = -Math.PI / 2;
+  const rotate = -Math.PI / 2;
   ctx.moveTo(x, y - radius);
   for (let i = 0; i <= 4 * Math.PI; i += (4 * Math.PI) / 5) {
     ctx.lineTo(x + radius * Math.cos(i + rotate), y + radius * Math.sin(i + rotate));

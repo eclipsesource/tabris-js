@@ -28,20 +28,20 @@ describe('CanvasContext', function() {
   }
 
   function getLastPacket() {
-    let calls = client.calls({id: gc.cid, op: 'call', method: 'draw'});
+    const calls = client.calls({id: gc.cid, op: 'call', method: 'draw'});
     return calls.length ? calls[calls.length - 1].parameters.packedOperations : undefined;
   }
 
   function decodeLastPacket() {
-    let calls = client.calls({id: gc.cid, op: 'call', method: 'draw'});
+    const calls = client.calls({id: gc.cid, op: 'call', method: 'draw'});
     return calls.length ? decode(calls[calls.length - 1].parameters.packedOperations) : {};
   }
 
   function decode(packet) {
-    let values = {};
+    const values = {};
     values.ops = packet[0].map(opCode => findOpCode(opCode));
     ['doubles', 'booleans', 'strings', 'ints'].forEach((name, index) => {
-      let slot = packet[index + 1];
+      const slot = packet[index + 1];
       if (slot.length) {
         values[name] = slot;
       }
@@ -50,7 +50,7 @@ describe('CanvasContext', function() {
   }
 
   function findOpCode(opCode) {
-    for (let name in OPCODES) {
+    for (const name in OPCODES) {
       if (OPCODES[name] === opCode) {
         return name;
       }
@@ -60,7 +60,7 @@ describe('CanvasContext', function() {
   describe('OPCODES', function() {
 
     it('are unique', function() {
-      let codes = Object.keys(OPCODES).map(key => OPCODES[key]).sort();
+      const codes = Object.keys(OPCODES).map(key => OPCODES[key]).sort();
       for (let i = 1; i < codes.length; i++) {
         expect(codes[i] !== codes[i - 1]);
       }
@@ -84,21 +84,21 @@ describe('CanvasContext', function() {
     it('creates a native GC with parent', function() {
       canvas.getContext('2d', 100, 200);
 
-      let createCalls = client.calls({op: 'create', type: 'tabris.GC'});
+      const createCalls = client.calls({op: 'create', type: 'tabris.GC'});
       expect(createCalls.length).to.equal(1);
       expect(createCalls[0].properties.parent).to.equal(canvas.cid);
     });
 
     it('creates and returns graphics context', function() {
-      let ctx = canvas.getContext('2d', 100, 200);
+      const ctx = canvas.getContext('2d', 100, 200);
 
       expect(ctx).to.be.an.instanceof(CanvasContext);
     });
 
     it('returns same instance everytime', function() {
-      let ctx1 = canvas.getContext('2d', 100, 200);
+      const ctx1 = canvas.getContext('2d', 100, 200);
 
-      let ctx2 = canvas.getContext('2d', 100, 200);
+      const ctx2 = canvas.getContext('2d', 100, 200);
 
       expect(ctx2).to.equal(ctx1);
     });
@@ -106,7 +106,7 @@ describe('CanvasContext', function() {
     it('calls init', function() {
       canvas.getContext('2d', 100, 200);
 
-      let call = client.calls({op: 'call', method: 'init'})[0];
+      const call = client.calls({op: 'call', method: 'init'})[0];
       expect(call.parameters.width).to.equal(100);
       expect(call.parameters.height).to.equal(200);
     });
@@ -116,7 +116,7 @@ describe('CanvasContext', function() {
 
       canvas.getContext('2d', 200, 100);
 
-      let call = client.calls({op: 'call', method: 'init'})[1];
+      const call = client.calls({op: 'call', method: 'init'})[1];
       expect(call.parameters.width).to.equal(200);
       expect(call.parameters.height).to.equal(100);
     });
@@ -187,7 +187,7 @@ describe('CanvasContext', function() {
         ctx.lineCap = 'round';
         flush();
 
-        let pkg = decodeLastPacket();
+        const pkg = decodeLastPacket();
         expect(pkg).to.deep.equal({ops: ['lineCap'], strings: ['round']});
       });
 
@@ -890,7 +890,7 @@ describe('CanvasContext', function() {
   describe('createImageData', function() {
 
     it('creates ImageData from width and height', function() {
-      let result = ctx.createImageData(10, 20);
+      const result = ctx.createImageData(10, 20);
 
       expect(result).to.be.an.instanceof(ImageData);
       expect(result.width).to.equal(10);
@@ -898,10 +898,10 @@ describe('CanvasContext', function() {
     });
 
     it('creates ImageData from ImageData', function() {
-      let array = new Uint8ClampedArray(60).fill(128);
-      let input = new ImageData(array, 3, 5);
+      const array = new Uint8ClampedArray(60).fill(128);
+      const input = new ImageData(array, 3, 5);
 
-      let result = ctx.createImageData(input);
+      const result = ctx.createImageData(input);
 
       expect(result).to.be.an.instanceof(ImageData);
       expect(result.width).to.equal(3);
@@ -938,7 +938,7 @@ describe('CanvasContext', function() {
     });
 
     it('returns value from native', function() {
-      let result = ctx.getImageData(10, 20, 5, 3);
+      const result = ctx.getImageData(10, 20, 5, 3);
 
       expect(result.data).to.deep.equal(array);
     });

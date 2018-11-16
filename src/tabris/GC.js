@@ -44,7 +44,7 @@ export default class GC extends NativeObject {
     this._booleans = [];
     this._strings = [];
     this._ints = [];
-    let listener = () => this.flush();
+    const listener = () => this.flush();
     tabris.on('flush', listener);
     this.on('dispose', () => tabris.off('flush', listener));
   }
@@ -54,7 +54,7 @@ export default class GC extends NativeObject {
   }
 
   getImageData(x, y, width, height) {
-    let array = this._nativeCall('getImageData', {x, y, width, height});
+    const array = this._nativeCall('getImageData', {x, y, width, height});
     // TODO: remove when iOS returns a typed array
     return array instanceof Uint8ClampedArray ? array : new Uint8ClampedArray(array);
   }
@@ -70,7 +70,7 @@ export default class GC extends NativeObject {
   }
 
   addOperation(operation) {
-    let opCode = OPCODES[operation];
+    const opCode = OPCODES[operation];
     if (!opCode) {
       throw new Error('Invalid operation');
     }

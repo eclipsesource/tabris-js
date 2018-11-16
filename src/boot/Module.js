@@ -8,7 +8,7 @@ export default class Module {
     this.parent = parent || null;
     let exports = {};
     let resolved = false;
-    let require = this.require.bind(this);
+    const require = this.require.bind(this);
     this._cache = this.parent ? this.parent._cache : {};
     if (id) {
       this._cache[id] = this;
@@ -59,7 +59,7 @@ export default class Module {
   }
 
   static readJSON(url) {
-    let src = this.load(url);
+    const src = this.load(url);
     if (src) {
       try {
         return JSON.parse(src);
@@ -80,8 +80,8 @@ export default class Module {
 }
 
 function findFileModule(request) {
-  let path = normalizePath(dirname(this.id) + '/' + request);
-  let result = findModule.call(this, path, getPostfixes(request));
+  const path = normalizePath(dirname(this.id) + '/' + request);
+  const result = findModule.call(this, path, getPostfixes(request));
   if (!result) {
     throw new Error("Cannot find module '" + request + "'");
   }
@@ -90,9 +90,9 @@ function findFileModule(request) {
 
 function findNodeModule(request) {
   let currentDir = dirname(this.id);
-  let postfixes = getPostfixes(request);
-  let modulesPath = '/node_modules';
-  let filePath = modulesPath + '/' + request;
+  const postfixes = getPostfixes(request);
+  const modulesPath = '/node_modules';
+  const filePath = modulesPath + '/' + request;
   let result;
   do {
     result = findModule.call(this, normalizePath(currentDir + filePath), postfixes);
@@ -113,7 +113,7 @@ function findModule(path, postfixes) {
       let module = getModule.call(this, path + postfixes[i]);
       if (postfixes[i] === '/package.json') {
         if (getMain(module)) {
-          let normalizedPath = normalizePath(path + '/' + getMain(module));
+          const normalizedPath = normalizePath(path + '/' + getMain(module));
           module = findModule.call(this, normalizedPath, FILE_POSTFIXES);
         } else {
           module = null;
@@ -135,12 +135,12 @@ function getModule(url) {
     return this._cache[url];
   }
   if (url.slice(-5) === '.json') {
-    let data = Module.readJSON(url);
+    const data = Module.readJSON(url);
     if (data) {
       return new Module(url, this, data);
     }
   } else {
-    let loader = Module.createLoader(url);
+    const loader = Module.createLoader(url);
     if (loader) {
       return new Module(url, this, loader);
     }
@@ -152,8 +152,8 @@ function getPostfixes(request) {
   return request.slice(-1) === '/' ? FOLDER_POSTFIXES : FILE_POSTFIXES;
 }
 
-let modulePrefix = '(function (module, exports, require, __filename, __dirname) { ';
-let modulePostfix = '\n});';
+const modulePrefix = '(function (module, exports, require, __filename, __dirname) { ';
+const modulePostfix = '\n});';
 
 function dirname(id) {
   if (!id || id.slice(0, 1) !== '.') {
@@ -163,12 +163,12 @@ function dirname(id) {
 }
 
 function normalizePath(path) {
-  let segments = [];
-  let pathSegments = path.split('/');
+  const segments = [];
+  const pathSegments = path.split('/');
   for (let i = 0; i < pathSegments.length; i++) {
-    let segment = pathSegments[i];
+    const segment = pathSegments[i];
     if (segment === '..') {
-      let removed = segments.pop();
+      const removed = segments.pop();
       if (!removed || removed === '.') {
         return null;
       }

@@ -53,7 +53,7 @@ describe('Image', function() {
     });
 
     it('normalizes path', function() {
-      let image = new Image({src: './foo'});
+      const image = new Image({src: './foo'});
 
       expect(image.src).to.equal('foo');
     });
@@ -86,7 +86,7 @@ describe('Image', function() {
   describe('instance', function () {
 
     it('properties are read-only', function() {
-      let image = new Image({src: 'foo'});
+      const image = new Image({src: 'foo'});
 
       image.src = 'bar';
       image.width = 1;
@@ -100,7 +100,7 @@ describe('Image', function() {
     });
 
     it('properties are enumerable', function() {
-      let imageLike = {src: 'foo', width: 5, height: 6, scale: 'auto'};
+      const imageLike = {src: 'foo', width: 5, height: 6, scale: 'auto'};
       expect(Object.assign({}, new Image(imageLike))).to.deep.equal(imageLike);
     });
 
@@ -130,7 +130,7 @@ describe('Image', function() {
     it('prints a warning when inconsistent properties given', function() {
       spy(console, 'warn');
 
-      let image = Image.from({src: 'foo', width: 5, scale: 4});
+      const image = Image.from({src: 'foo', width: 5, scale: 4});
 
       expect(console.warn).to.have.been.calledWith(
         'Image "scale" ignored when "width" and/or "height" are set to a number'

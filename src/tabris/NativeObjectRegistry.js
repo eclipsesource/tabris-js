@@ -6,7 +6,7 @@ export default class NativeObjectRegistry {
   }
 
   register(nativeObject) {
-    let cid = this.$generateId();
+    const cid = this.$generateId();
     if (cid in this.$objects) {
       throw new Error('cid already in use: ' + cid);
     }

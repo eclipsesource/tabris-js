@@ -58,7 +58,7 @@ describe('TabFolder', function() {
     });
 
     it("sets the tabs's parent", function() {
-      let call = client.calls({op: 'set', id: create.id})[0];
+      const call = client.calls({op: 'set', id: create.id})[0];
       expect(call.properties.parent).to.equal(tabFolder.cid);
     });
 
@@ -93,12 +93,12 @@ describe('TabFolder', function() {
     });
 
     it('children can be filtered with id selector', function() {
-      let tab2 = new Tab({id: 'foo'}).appendTo(tabFolder);
+      const tab2 = new Tab({id: 'foo'}).appendTo(tabFolder);
       expect(tabFolder.children('#foo').toArray()).to.eql([tab2]);
     });
 
     it('find list can be filtered with id selector', function() {
-      let tab2 = new Tab({id: 'foo'}).appendTo(tabFolder);
+      const tab2 = new Tab({id: 'foo'}).appendTo(tabFolder);
       expect(tabFolder.parent().find('#foo').toArray()).to.eql([tab2]);
     });
 
@@ -115,7 +115,7 @@ describe('TabFolder', function() {
       });
 
       it('triggers selectionChanged without selection', function() {
-        let listener = spy();
+        const listener = spy();
 
         tabFolder.on({selectionChanged: listener});
         tab.dispose();
@@ -126,8 +126,8 @@ describe('TabFolder', function() {
       });
 
       it('triggers selectionChanged with selection', function() {
-        let tab2 = new Tab({id: 'foo'}).appendTo(tabFolder);
-        let listener = spy();
+        const tab2 = new Tab({id: 'foo'}).appendTo(tabFolder);
+        const listener = spy();
 
         tabFolder.on({selectionChanged: listener});
         tab.dispose();
@@ -138,7 +138,7 @@ describe('TabFolder', function() {
       });
 
       it('selection returns tab when non-last tab disposed', function() {
-        let tab2 = new Tab({id: 'foo'}).appendTo(tabFolder);
+        const tab2 = new Tab({id: 'foo'}).appendTo(tabFolder);
         stub(client, 'get').returns(tab2.cid);
 
         tab.dispose();
@@ -147,7 +147,7 @@ describe('TabFolder', function() {
       });
 
       it('selection returns null independently from client after disposing last tab', function() {
-        let tab2 = new Tab();
+        const tab2 = new Tab();
         stub(client, 'get').returns(tab2.cid);
 
         tab.dispose();
@@ -162,21 +162,21 @@ describe('TabFolder', function() {
       });
 
       it('SETs selection to the right neighbor', function() {
-        let tab2 = new Tab({id: 'foo'}).appendTo(tabFolder);
-        let tab3 = new Tab({id: 'foo'}).appendTo(tabFolder);
+        const tab2 = new Tab({id: 'foo'}).appendTo(tabFolder);
+        const tab3 = new Tab({id: 'foo'}).appendTo(tabFolder);
 
         tab2.dispose();
 
-        let setCall = client.calls({op: 'set', id: tabFolder.cid})[0];
+        const setCall = client.calls({op: 'set', id: tabFolder.cid})[0];
         expect(setCall.properties.selection).to.equal(tab3.cid);
       });
 
       it('SETs selection to the left neighbor', function() {
-        let tab2 = new Tab({id: 'foo'}).appendTo(tabFolder);
+        const tab2 = new Tab({id: 'foo'}).appendTo(tabFolder);
 
         tab2.dispose();
 
-        let setCall = client.calls({op: 'set', id: tabFolder.cid})[0];
+        const setCall = client.calls({op: 'set', id: tabFolder.cid})[0];
         expect(setCall.properties.selection).to.equal(tab.cid);
       });
 
@@ -212,7 +212,7 @@ describe('TabFolder', function() {
     });
 
     it("sets the 'paging' property", function() {
-      let setOp = client.calls({id: tabFolder.cid, op: 'create'})[0];
+      const setOp = client.calls({id: tabFolder.cid, op: 'create'})[0];
       expect(setOp.properties.paging).to.eql(true);
     });
 
@@ -233,13 +233,13 @@ describe('TabFolder', function() {
     it('Setting a Tab SETs tab id', function() {
       tabFolder.selection = tab;
 
-      let setCall = client.calls({op: 'set', id: tabFolder.cid})[0];
+      const setCall = client.calls({op: 'set', id: tabFolder.cid})[0];
       expect(setCall.properties.selection).to.equal(tab.cid);
     });
 
     it('Setting a Tab triggers change event', function() {
       tabFolder.selection = new Tab().appendTo(tabFolder);
-      let listener = spy();
+      const listener = spy();
       tabFolder.onSelectionChanged(listener);
 
       tabFolder.selection = tab;
@@ -250,7 +250,7 @@ describe('TabFolder', function() {
     });
 
     it('Setting a Tab on active tab does not trigger change event', function() {
-      let listener = spy();
+      const listener = spy();
       tabFolder.onSelectionChanged(listener);
 
       tabFolder.selection = tab;
@@ -259,7 +259,7 @@ describe('TabFolder', function() {
     });
 
     it('Setting a Tab does not trigger change event when the tab was already selected', function() {
-      let listener = spy();
+      const listener = spy();
       tabFolder.onSelectionChanged(listener);
 
       stub(client, 'get').returns(tab.cid);
@@ -273,7 +273,7 @@ describe('TabFolder', function() {
 
       tabFolder.selection = null;
 
-      let calls = client.calls({op: 'set', id: tabFolder.cid});
+      const calls = client.calls({op: 'set', id: tabFolder.cid});
       expect(calls.length).to.equal(0);
       expect(console.warn).to.have.been.calledWith('Can not set TabFolder selection to null');
     });
@@ -284,7 +284,7 @@ describe('TabFolder', function() {
 
       tabFolder.selection = tab;
 
-      let calls = client.calls({op: 'set', id: tabFolder.cid});
+      const calls = client.calls({op: 'set', id: tabFolder.cid});
       expect(calls.length).to.equal(0);
       expect(console.warn).to.have.been.calledWithMatch(/Can not set TabFolder selection to Tab\[cid=".*"\]/);
     });
@@ -294,7 +294,7 @@ describe('TabFolder', function() {
 
       tabFolder.selection = 'foo';
 
-      let calls = client.calls({op: 'set', id: tabFolder.cid});
+      const calls = client.calls({op: 'set', id: tabFolder.cid});
       expect(calls.length).to.equal(0);
       expect(console.warn).to.have.been.calledWith('Can not set TabFolder selection to foo');
     });
@@ -311,7 +311,7 @@ describe('TabFolder', function() {
 
     it('supports native event selectionChanged', function() {
       tabFolder.selection = new Tab().appendTo(tabFolder);
-      let listener = spy();
+      const listener = spy();
       tabFolder.onSelectionChanged(listener);
 
       tabris._notify(tabFolder.cid, 'select', {selection: tab.cid});
@@ -322,7 +322,7 @@ describe('TabFolder', function() {
     });
 
     it('supports native event select', function() {
-      let listener = spy();
+      const listener = spy();
       tabFolder.onSelect(listener);
 
       tabris._notify(tabFolder.cid, 'select', {selection: tab.cid});
@@ -347,7 +347,7 @@ describe('TabFolder', function() {
     it('passes property to client', function() {
       tabFolder = new TabFolder({tabBarLocation: 'top'});
 
-      let properties = client.calls({id: tabFolder.cid, op: 'create'})[0].properties;
+      const properties = client.calls({id: tabFolder.cid, op: 'create'})[0].properties;
       expect(properties.tabBarLocation).to.equal('top');
     });
 
@@ -355,7 +355,7 @@ describe('TabFolder', function() {
       spy(client, 'get');
       tabFolder = new TabFolder({tabBarLocation: 'top'});
 
-      let result = tabFolder.tabBarLocation;
+      const result = tabFolder.tabBarLocation;
 
       expect(client.get).to.have.not.been.called;
       expect(result).to.equal('top');
@@ -364,28 +364,28 @@ describe('TabFolder', function() {
     it("sets value tabBarLocation 'top'", function() {
       tabFolder = new TabFolder({tabBarLocation: 'top'});
 
-      let properties = client.calls({id: tabFolder.cid, op: 'create'})[0].properties;
+      const properties = client.calls({id: tabFolder.cid, op: 'create'})[0].properties;
       expect(properties.tabBarLocation).to.eql('top');
     });
 
     it("sets tabBarLocation 'bottom'", function() {
       tabFolder = new TabFolder({tabBarLocation: 'bottom'});
 
-      let properties = client.calls({id: tabFolder.cid, op: 'create'})[0].properties;
+      const properties = client.calls({id: tabFolder.cid, op: 'create'})[0].properties;
       expect(properties.tabBarLocation).to.eql('bottom');
     });
 
     it("sets tabBarLocation 'hidden'", function() {
       tabFolder = new TabFolder({tabBarLocation: 'hidden'});
 
-      let properties = client.calls({id: tabFolder.cid, op: 'create'})[0].properties;
+      const properties = client.calls({id: tabFolder.cid, op: 'create'})[0].properties;
       expect(properties.tabBarLocation).to.eql('hidden');
     });
 
     it("sets tabBarLocation 'auto'", function() {
       tabFolder = new TabFolder({tabBarLocation: 'auto'});
 
-      let properties = client.calls({id: tabFolder.cid, op: 'create'})[0].properties;
+      const properties = client.calls({id: tabFolder.cid, op: 'create'})[0].properties;
       expect(properties.tabBarLocation).to.eql('auto');
     });
 
@@ -404,7 +404,7 @@ describe('TabFolder', function() {
     it('passes property to client', function() {
       tabFolder = new TabFolder({tabMode: 'fixed'});
 
-      let properties = client.calls({id: tabFolder.cid, op: 'create'})[0].properties;
+      const properties = client.calls({id: tabFolder.cid, op: 'create'})[0].properties;
       expect(properties.tabMode).to.equal('fixed');
     });
 
@@ -412,7 +412,7 @@ describe('TabFolder', function() {
       spy(client, 'get');
       tabFolder = new TabFolder({tabMode: 'fixed'});
 
-      let result = tabFolder.tabMode;
+      const result = tabFolder.tabMode;
 
       expect(client.get).to.have.not.been.called;
       expect(result).to.equal('fixed');
@@ -421,14 +421,14 @@ describe('TabFolder', function() {
     it("sets value tabMode 'fixed'", function() {
       tabFolder = new TabFolder({tabMode: 'fixed'});
 
-      let properties = client.calls({id: tabFolder.cid, op: 'create'})[0].properties;
+      const properties = client.calls({id: tabFolder.cid, op: 'create'})[0].properties;
       expect(properties.tabMode).to.eql('fixed');
     });
 
     it("sets tabMode 'scrollable'", function() {
       tabFolder = new TabFolder({tabMode: 'scrollable'});
 
-      let properties = client.calls({id: tabFolder.cid, op: 'create'})[0].properties;
+      const properties = client.calls({id: tabFolder.cid, op: 'create'})[0].properties;
       expect(properties.tabMode).to.eql('scrollable');
     });
 
@@ -505,7 +505,7 @@ describe('TabFolder', function() {
     });
 
     it('fires scroll event with tab instance', function() {
-      let listener = spy();
+      const listener = spy();
       tabFolder.onScroll(listener);
 
       tabris._notify(tabFolder.cid, 'scroll', {selection: tab.cid, offset: 48});
@@ -518,7 +518,7 @@ describe('TabFolder', function() {
     });
 
     it('fires scroll event with null selection if tab not found', function() {
-      let listener = spy();
+      const listener = spy();
       tabFolder.onScroll(listener);
 
       tabris._notify(tabFolder.cid, 'scroll', {selection: 'not tab', offset: 48});
@@ -549,8 +549,8 @@ describe('TabFolder', function() {
 
   });
 
-  let checkListen = function(event) {
-    let listen = client.calls({op: 'listen', id: tabFolder.cid});
+  const checkListen = function(event) {
+    const listen = client.calls({op: 'listen', id: tabFolder.cid});
     expect(listen.length).to.equal(1);
     expect(listen[0].event).to.equal(event);
     expect(listen[0].listen).to.equal(true);

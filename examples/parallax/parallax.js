@@ -16,17 +16,17 @@ let titleCompY = 0;
 
 ui.statusBar.background = rgba(255, 152, 0, 1);
 
-let scrollView = new ScrollView({
+const scrollView = new ScrollView({
   left: 0, right: 0, top: 0, bottom: 0
 }).appendTo(ui.contentView);
 
-let imageView = new ImageView({
+const imageView = new ImageView({
   left: 0, top: 0, right: 0,
   image: 'images/salad.jpg',
   scaleMode: 'fill'
 }).appendTo(scrollView);
 
-let contentComposite = new Composite({
+const contentComposite = new Composite({
   left: 0, right: 0, top: '#titleComposite', height: 1000,
   background: 'white'
 }).appendTo(scrollView);
@@ -36,7 +36,7 @@ new TextView({
   text: RECIPE
 }).appendTo(contentComposite);
 
-let titleComposite = new Composite({
+const titleComposite = new Composite({
   left: 0, right: 0, height: 78,
   id: 'titleComposite',
   background: rgba(255, 152, 0, INITIAL_TITLE_COMPOSITE_OPACITY)
@@ -58,7 +58,7 @@ new TextView({
 
 scrollView.on('resize', ({height}) => {
   imageView.height  = height / 2;
-  let titleCompHeight = titleComposite.height;
+  const titleCompHeight = titleComposite.height;
   // We need the offset of the title composite in each scroll event.
   // As it can only change on resize, we assign it here.
   titleCompY = Math.min(imageView.height - titleCompHeight, height / 2);
@@ -68,13 +68,13 @@ scrollView.on('resize', ({height}) => {
 scrollView.on('scrollY', ({offset}) => {
   imageView.transform = {translationY: Math.max(0, offset * 0.4)};
   titleComposite.transform = {translationY: Math.max(0, offset - titleCompY)};
-  let opacity = calculateTitleCompositeOpacity(offset, titleCompY);
+  const opacity = calculateTitleCompositeOpacity(offset, titleCompY);
   titleComposite.background = rgba(255, 152, 0, opacity);
 });
 
 function calculateTitleCompositeOpacity(scrollViewOffsetY, titleCompY) {
-  let titleCompDistanceToTop = titleCompY - scrollViewOffsetY;
-  let opacity = 1 - (titleCompDistanceToTop * (1 - INITIAL_TITLE_COMPOSITE_OPACITY)) / titleCompY;
+  const titleCompDistanceToTop = titleCompY - scrollViewOffsetY;
+  const opacity = 1 - (titleCompDistanceToTop * (1 - INITIAL_TITLE_COMPOSITE_OPACITY)) / titleCompY;
   return opacity <= 1 ? opacity : 1;
 }
 

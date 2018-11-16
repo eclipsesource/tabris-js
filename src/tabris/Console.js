@@ -74,7 +74,7 @@ export default class Console {
 
   _registerPrintMethods(nativeConsole) {
     this._console = {};
-    for (let level of ['debug', 'info', 'log', 'warn', 'error']) {
+    for (const level of ['debug', 'info', 'log', 'warn', 'error']) {
       this._console[level] = (...args) => {
         const message = this._prepareOutput(...args);
         tabris.trigger('log', {level, message});

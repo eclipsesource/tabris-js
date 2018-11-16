@@ -22,7 +22,7 @@ export default class NavigationView extends Composite {
   }
 
   _addChild(child, index) {
-    let isTopPage = (child instanceof Page && typeof index !== 'number' || index === this.pages().length);
+    const isTopPage = (child instanceof Page && typeof index !== 'number' || index === this.pages().length);
     if (isTopPage) {
       this.$triggerDisappear();
     }
@@ -33,7 +33,7 @@ export default class NavigationView extends Composite {
   }
 
   _removeChild(child) {
-    let isTopPage = (child instanceof Page && child === this.pages().last());
+    const isTopPage = (child instanceof Page && child === this.pages().last());
     if (isTopPage) {
       this.$triggerDisappear();
     }
@@ -74,14 +74,14 @@ export default class NavigationView extends Composite {
   }
 
   $triggerAppear() {
-    let topPage = this.pages().last();
+    const topPage = this.pages().last();
     if (topPage) {
       topPage.$trigger('appear');
     }
   }
 
   $triggerDisappear() {
-    let topPage = this.pages().last();
+    const topPage = this.pages().last();
     if (topPage) {
       topPage.$trigger('disappear');
     }

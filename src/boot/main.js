@@ -7,7 +7,7 @@ global.tabris = {};
 tabris._start = function(client) {
   try {
     tabris._client = client;
-    let rootModule = new Module();
+    const rootModule = new Module();
     try {
       rootModule.require('tabris');
       tabris._client = client; // required by head.append
@@ -19,14 +19,14 @@ tabris._start = function(client) {
     tabris._defineModule = function(id, fn) {
       return new Module(id, rootModule, fn);
     };
-    let cordovaScript = document.createElement('script');
+    const cordovaScript = document.createElement('script');
     cordovaScript.src = './cordova.js';
     document.head.appendChild(cordovaScript);
-    let isWorker = global.workerScriptPath !== undefined;
+    const isWorker = global.workerScriptPath !== undefined;
     if (tabris._init) {
       tabris._init(client, {headless: isWorker});
     }
-    let loadModule = function() {
+    const loadModule = function() {
       try {
         if (global.debugClient && !isWorker) {
           global.debugClient.start(rootModule);

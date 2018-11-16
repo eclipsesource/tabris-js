@@ -14,7 +14,7 @@ describe('TextInput', function() {
   }
 
   function checkListen(event) {
-    let listen = client.calls({op: 'listen', id: widget.cid});
+    const listen = client.calls({op: 'listen', id: widget.cid});
     expect(listen.length).to.equal(1);
     expect(listen[0].event).to.equal(event);
     expect(listen[0].listen).to.equal(true);
@@ -40,13 +40,13 @@ describe('TextInput', function() {
   });
 
   it('constructor name', function() {
-    let textInput = new TextInput({text: 'foo'});
+    const textInput = new TextInput({text: 'foo'});
 
     expect(textInput.constructor.name).to.equal('TextInput');
   });
 
   it('properties', function() {
-    let textInput = new TextInput({text: 'foo'});
+    const textInput = new TextInput({text: 'foo'});
 
     expect(textInput.message).to.equal('');
     expect(textInput.alignment).to.equal('left');
@@ -148,7 +148,7 @@ describe('TextInput', function() {
     });
 
     it('with text property', function() {
-      let widget = jsx.createElement(
+      const widget = jsx.createElement(
         TextInput,
         {text: 'Hello World!'}
       );
@@ -157,7 +157,7 @@ describe('TextInput', function() {
     });
 
     it('with text content', function() {
-      let widget = jsx.createElement(
+      const widget = jsx.createElement(
         TextInput,
         null,
         'Hello',

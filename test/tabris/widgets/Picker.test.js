@@ -31,7 +31,7 @@ describe('Picker', function() {
 
     let listener;
     function checkListen(event) {
-      let listen = client.calls({op: 'listen', id: picker.cid});
+      const listen = client.calls({op: 'listen', id: picker.cid});
       expect(listen.length).to.equal(1);
       expect(listen[0].event).to.equal(event);
       expect(listen[0].listen).to.equal(true);
@@ -93,7 +93,7 @@ describe('Picker', function() {
 
         tabris.trigger('flush');
 
-        let call = client.calls({op: 'set', id: picker.cid})[0];
+        const call = client.calls({op: 'set', id: picker.cid})[0];
         expect(call.properties).to.deep.equal({items: ['', '', '']});
       });
 
@@ -112,7 +112,7 @@ describe('Picker', function() {
       });
 
       it('initial function translates to empty string', function() {
-        let fn = picker.itemText;
+        const fn = picker.itemText;
 
         expect(fn(0)).to.equal('');
       });

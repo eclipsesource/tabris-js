@@ -115,7 +115,7 @@ describe('NativeBridge', function() {
     });
 
     it('returns a value', function() {
-      let result = bridge.get('id', 'foo');
+      const result = bridge.get('id', 'foo');
       expect(result).to.equal(23);
     });
 
@@ -144,7 +144,7 @@ describe('NativeBridge', function() {
     });
 
     it('returns a value', function() {
-      let result = bridge.call('id', 'foo', {foo: 23});
+      const result = bridge.call('id', 'foo', {foo: 23});
       expect(result).to.equal(23);
     });
 

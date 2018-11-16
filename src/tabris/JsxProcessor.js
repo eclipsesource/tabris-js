@@ -37,14 +37,14 @@ export default class JsxProcessor {
     if (children && children.length) {
       throw new Error(`JSX: ${Type.name} can not have children`);
     }
-    let result = new Type(this.getProperties(attributes || {}));
+    const result = new Type(this.getProperties(attributes || {}));
     this.registerListeners(result, attributes);
     return result;
   }
 
   normalizeChildren(children) {
     let result = [];
-    for (let child of (children || [])) {
+    for (const child of (children || [])) {
       if (child.toArray) {
         result = result.concat(this.normalizeChildren(child.toArray()));
       } else if (child instanceof Array) {
@@ -81,10 +81,10 @@ export default class JsxProcessor {
   }
 
   getListeners(attributes) {
-    let listeners = {};
-    for (let attribute in attributes) {
+    const listeners = {};
+    for (const attribute in attributes) {
       if (this.isEventAttribute(attribute)) {
-        let event = attribute[2].toLocaleLowerCase() + attribute.slice(3);
+        const event = attribute[2].toLocaleLowerCase() + attribute.slice(3);
         listeners[event] = attributes[attribute];
       }
     }

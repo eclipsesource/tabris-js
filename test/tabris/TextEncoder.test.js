@@ -24,7 +24,7 @@ describe('TextEncoder', function() {
 
     it('creates native object tabris.TextEncoder', function() {
       encode(text);
-      let createCalls = client.calls({op: 'create', type: 'tabris.TextEncoder'});
+      const createCalls = client.calls({op: 'create', type: 'tabris.TextEncoder'});
       expect(createCalls.length).to.equal(1);
       expect(createCalls[0].properties).to.deep.equal({});
     });
@@ -61,25 +61,25 @@ describe('TextEncoder', function() {
 
     it('passes parameters to native call', function() {
       encode(text, 'ascii');
-      let call = client.calls({op: 'call', method: 'encode'})[0];
+      const call = client.calls({op: 'call', method: 'encode'})[0];
       expect(call.parameters).to.deep.equal({text, encoding: 'ascii'});
     });
 
     it('defaults to utf-8', function() {
       encode(text);
-      let call = client.calls({op: 'call', method: 'encode'})[0];
+      const call = client.calls({op: 'call', method: 'encode'})[0];
       expect(call.parameters.encoding).to.equal('utf-8');
     });
 
     it('replaces null with utf-8 ', function() {
       encode(text, null);
-      let call = client.calls({op: 'call', method: 'encode'})[0];
+      const call = client.calls({op: 'call', method: 'encode'})[0];
       expect(call.parameters.encoding).to.equal('utf-8');
     });
 
     it('resolves with result ArrayBuffer', function() {
-      let buffer = new Uint8Array(1, 2, 3).buffer;
-      let promise = encode(text);
+      const buffer = new Uint8Array(1, 2, 3).buffer;
+      const promise = encode(text);
       tabris._notify(created().id, 'result', {data: buffer});
       return promise.then(result => {
         expect(result).to.equal(buffer);
@@ -87,7 +87,7 @@ describe('TextEncoder', function() {
     });
 
     it('destroys remote object when result received', function() {
-      let promise = encode(text);
+      const promise = encode(text);
       tabris._notify(created().id, 'result', {data: new Uint8Array(1, 2, 3).buffer});
       return promise.then(() => {
         expect(client.calls({op: 'destroy', id: created().id})).not.to.be.empty;
@@ -95,7 +95,7 @@ describe('TextEncoder', function() {
     });
 
     it('rejects when error received', function() {
-      let promise = encode(text);
+      const promise = encode(text);
       tabris._notify(created().id, 'error', {});
       return promise.then(expectFail, err => {
         expect(err.message).to.equal('Could not encode utf-8');
@@ -103,7 +103,7 @@ describe('TextEncoder', function() {
     });
 
     it('destroys remote object when error received', function() {
-      let promise = encode(text);
+      const promise = encode(text);
       tabris._notify(created().id, 'error', {});
       return promise.then(expectFail, () => {
         expect(client.calls({op: 'destroy', id: created().id})).not.to.be.empty;

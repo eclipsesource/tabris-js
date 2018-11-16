@@ -6,18 +6,18 @@ export default class ClientStub {
   }
 
   create() {
-    let [id, type, properties] = arguments;
+    const [id, type, properties] = arguments;
     this.$calls.push({op: 'create', id, type, properties});
     this.$objects[id] = {type, properties};
   }
 
   get() {
-    let [id, property] = arguments;
+    const [id, property] = arguments;
     this.$calls.push({op: 'get', id, property});
   }
 
   set() {
-    let [id, properties] = arguments;
+    const [id, properties] = arguments;
     this.$calls.push({op: 'set', id, properties});
     if (!(id in this.$objects)) {
       this.$objects[id] = {properties: {}};
@@ -26,17 +26,17 @@ export default class ClientStub {
   }
 
   call() {
-    let [id, method, parameters] = arguments;
+    const [id, method, parameters] = arguments;
     this.$calls.push({op: 'call', id, method, parameters});
   }
 
   listen() {
-    let [id, event, listen] = arguments;
+    const [id, event, listen] = arguments;
     this.$calls.push({op: 'listen', id, event, listen});
   }
 
   destroy() {
-    let [id] = arguments;
+    const [id] = arguments;
     this.$calls.push({op: 'destroy', id});
     delete this.$objects[id];
   }
@@ -72,7 +72,7 @@ export default class ClientStub {
 
 function select(filterProperties) {
   return this.filter((call) => {
-    for (let key in filterProperties) {
+    for (const key in filterProperties) {
       if (filterProperties[key] !== call[key]) {
         return false;
       }

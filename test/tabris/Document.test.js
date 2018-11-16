@@ -27,7 +27,7 @@ describe('Document', function() {
 
   it('can create mocked HTML elements', function() {
     ['createElement', 'createDocumentFragment'].forEach((method) => {
-      let element = target.document[method]();
+      const element = target.document[method]();
 
       expect(element.setAttribute()).to.be.undefined;
       expect(element.appendChild(23)).to.equal(23);
@@ -45,7 +45,7 @@ describe('Document', function() {
 
   it('fires DOMContentLoaded on tabris.load', function() {
     expect(target.document.readyState).to.equal('loading');
-    let listener = spy();
+    const listener = spy();
     target.document.addEventListener('DOMContentLoaded', listener);
 
     tabris.trigger('start');
@@ -55,7 +55,7 @@ describe('Document', function() {
   });
 
   it('can create HTML Element events', function() {
-    let event = target.document.createEvent('foo');
+    const event = target.document.createEvent('foo');
 
     expect(event).to.be.an.instanceof(Event);
     expect(event.type).to.equal('foo');
@@ -76,7 +76,7 @@ describe('Document', function() {
       target.document.head.appendChild(script2);
       target.document.head.appendChild(nonScript);
 
-      let result = target.document.getElementsByTagName('script');
+      const result = target.document.getElementsByTagName('script');
       expect(result).to.contain(script1);
       expect(result).to.contain(script2);
       expect(result).not.to.contain(nonScript);
@@ -124,7 +124,7 @@ describe('Document', function() {
     });
 
     it('calls onerror when script throws error', function() {
-      let error = new Error('bang');
+      const error = new Error('bang');
       client.loadAndExecute = stub().throws(error);
       script1.src = 'foo.js';
       script1.onload = spy();

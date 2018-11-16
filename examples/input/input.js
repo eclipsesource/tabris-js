@@ -2,7 +2,7 @@ const {
   Button, CheckBox, Composite, TextView, TextInput, Picker, RadioButton, ScrollView, Slider, Switch, ui
 } = require('tabris');
 
-let scrollView = new ScrollView({left: 0, top: 0, right: 0, bottom: 0}).appendTo(ui.contentView);
+const scrollView = new ScrollView({left: 0, top: 0, right: 0, bottom: 0}).appendTo(ui.contentView);
 
 const COUNTRIES = ['Germany', 'Canada', 'USA', 'Bulgaria'];
 const CLASSES = ['Business', 'Economy', 'Economy Plus'];
@@ -130,7 +130,7 @@ new Button({
   updateMessage();
 }).appendTo(scrollView);
 
-let message = new TextView({
+const message = new TextView({
   left: 10, right: 10, top: '#reservationButton 10'
 }).appendTo(scrollView);
 
@@ -183,7 +183,7 @@ function createSeating() {
 }
 
 function createWeight() {
-  let panel = scrollView.children('#luggagePanel');
+  const panel = scrollView.children('#luggagePanel');
   return panel.children('#luggageSlider').first().selection + ' kg';
 }
 
@@ -192,7 +192,7 @@ function createMeal() {
 }
 
 function createFrequentFlyerInfo() {
-  let panel = scrollView.children('#milesPanel');
+  const panel = scrollView.children('#milesPanel');
   let info = panel.children('#milesSwitch').first().checked ? 'Yes' : 'No';
   info += ', acct: ' + scrollView.children('#flyerNumberInput').first().text;
   return info;

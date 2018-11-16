@@ -5,11 +5,11 @@ describe('util-fonts', function() {
 
   describe('fontStringToObject', function() {
 
-    let parse = function(str) {
+    const parse = function(str) {
       return fontStringToObject(str);
     };
 
-    let parsing = function(str) {
+    const parsing = function(str) {
       return function() {
         return fontStringToObject(str);
       };
@@ -107,7 +107,7 @@ describe('util-fonts', function() {
 
   describe('fontObjectToString', function() {
 
-    let decode = function(arr) {
+    const decode = function(arr) {
       return fontObjectToString(arr);
     };
 

@@ -66,7 +66,7 @@ describe('Layout', function() {
 
       layout.render(parent);
 
-      let call = client.calls({op: 'set', id: widget.cid})[0];
+      const call = client.calls({op: 'set', id: widget.cid})[0];
       expect(call.properties.layoutData).to.eql({left: 23, top: 42});
     });
 
@@ -191,7 +191,7 @@ describe('Layout', function() {
     });
 
     it('overrides properties from layoutData (width)', function() {
-      let result = check({top: 0, left: 0, right: 0, width: 100});
+      const result = check({top: 0, left: 0, right: 0, width: 100});
 
       expect(result).to.deep.equal(LayoutData.from({top: 0, left: 0, right: 0}));
     });
@@ -205,7 +205,7 @@ describe('Layout', function() {
     });
 
     it('skips overridden properties from layoutData (height)', function() {
-      let result = check({top: 0, left: 0, bottom: 0, height: 100});
+      const result = check({top: 0, left: 0, bottom: 0, height: 100});
 
       expect(result).to.deep.equal(LayoutData.from({top: 0, left: 0, bottom: 0}));
     });
@@ -219,7 +219,7 @@ describe('Layout', function() {
     });
 
     it('skips overridden properties from layoutData (centerX)', function() {
-      let result = check({top: 1, left: 2, right: 3, centerX: 4});
+      const result = check({top: 1, left: 2, right: 3, centerX: 4});
 
       expect(result).to.deep.equal(LayoutData.from({top: 1, centerX: 4}));
     });
@@ -233,7 +233,7 @@ describe('Layout', function() {
     });
 
     it('skips overridden properties from layoutData (centerY)', function() {
-      let result = check({left: 1, top: 2, bottom: 3, centerY: 4});
+      const result = check({left: 1, top: 2, bottom: 3, centerY: 4});
 
       expect(result).to.deep.equal(LayoutData.from({left: 1, centerY: 4}));
     });
@@ -247,7 +247,7 @@ describe('Layout', function() {
     });
 
     it('skips overridden properties from layoutData (baseline)', function() {
-      let result = check({left: 1, top: 2, bottom: 3, centerY: 4, baseline: 'Other'});
+      const result = check({left: 1, top: 2, bottom: 3, centerY: 4, baseline: 'Other'});
 
       expect(result).to.deep.equal(LayoutData.from({left: 1, baseline: 'Other'}));
     });
@@ -261,66 +261,66 @@ describe('Layout', function() {
     }
 
     it('translates widget to ids', function() {
-      let input = {right: other, left: [other, 42]};
-      let expected = {right: [other.cid, 0], left: [other.cid, 42]};
+      const input = {right: other, left: [other, 42]};
+      const expected = {right: [other.cid, 0], left: [other.cid, 42]};
 
       expect(resolve(input, widget)).to.deep.equal(expected);
     });
 
     it('translates selectors to ids', function() {
-      let input = {baseline: '#other', left: ['#other', 42]};
-      let expected = {baseline: other.cid, left: [other.cid, 42]};
+      const input = {baseline: '#other', left: ['#other', 42]};
+      const expected = {baseline: other.cid, left: [other.cid, 42]};
 
       expect(resolve(input, widget)).to.deep.equal(expected);
     });
 
     it("translates 'prev()' selector to id", function() {
-      let input = {baseline: 'prev()', left: ['prev()', 42]};
-      let expected = {baseline: widget.cid, left: [widget.cid, 42]};
+      const input = {baseline: 'prev()', left: ['prev()', 42]};
+      const expected = {baseline: widget.cid, left: [widget.cid, 42]};
 
       expect(resolve(input, other)).to.deep.equal(expected);
     });
 
     it("translates 'prev()' when parent children() is overwritten", function() {
       parent.children = () => new WidgetCollection([]);
-      let input = {baseline: 'prev()', left: ['prev()', 42]};
-      let expected = {baseline: widget.cid, left: [widget.cid, 42]};
+      const input = {baseline: 'prev()', left: ['prev()', 42]};
+      const expected = {baseline: widget.cid, left: [widget.cid, 42]};
 
       expect(resolve(input, other)).to.deep.equal(expected);
     });
 
     it("translates 'prev()' selector to 0 on first widget", function() {
-      let input = {baseline: 'prev()', left: ['prev()', 42]};
-      let expected = {baseline: 0, left: [0, 42]};
+      const input = {baseline: 'prev()', left: ['prev()', 42]};
+      const expected = {baseline: 0, left: [0, 42]};
 
       expect(resolve(input, widget)).to.deep.equal(expected);
     });
 
     it("translates 'next()' selector to id", function() {
-      let input = {baseline: 'next()', left: ['next()', 42]};
-      let expected = {baseline: other.cid, left: [other.cid, 42]};
+      const input = {baseline: 'next()', left: ['next()', 42]};
+      const expected = {baseline: other.cid, left: [other.cid, 42]};
 
       expect(resolve(input, widget)).to.deep.equal(expected);
     });
 
     it("translates 'next()' selector to id when parent children() is overwritten", function() {
       parent.children = () => new WidgetCollection([]);
-      let input = {baseline: 'next()', left: ['next()', 42]};
-      let expected = {baseline: other.cid, left: [other.cid, 42]};
+      const input = {baseline: 'next()', left: ['next()', 42]};
+      const expected = {baseline: other.cid, left: [other.cid, 42]};
 
       expect(resolve(input, widget)).to.deep.equal(expected);
     });
 
     it("translates 'next()' selector to 0 on last widget", function() {
-      let input = {baseline: 'next()', left: ['next()', 42]};
-      let expected = {baseline: 0, left: [0, 42]};
+      const input = {baseline: 'next()', left: ['next()', 42]};
+      const expected = {baseline: 0, left: [0, 42]};
 
       expect(resolve(input, other)).to.deep.equal(expected);
     });
 
     it('does not modify numbers', function() {
-      let input = {centerX: 23, left: ['30%', 42]};
-      let expected = {centerX: 23, left: [30, 42]};
+      const input = {centerX: 23, left: ['30%', 42]};
+      const expected = {centerX: 23, left: [30, 42]};
 
       expect(resolve(input, widget)).to.deep.equal(expected);
     });
@@ -328,8 +328,8 @@ describe('Layout', function() {
     it('replaces unresolved selector (due to missing sibling) with 0', function() {
       other.dispose();
 
-      let input = {baseline: '#other', left: ['#other', 42]};
-      let expected = {baseline: 0, left: [0, 42]};
+      const input = {baseline: '#other', left: ['#other', 42]};
+      const expected = {baseline: 0, left: [0, 42]};
 
       expect(resolve(input, widget)).to.deep.equal(expected);
     });
@@ -337,15 +337,15 @@ describe('Layout', function() {
     it('replaces unresolved selector (due to missing parent) with 0', function() {
       widget = new TestWidget();
 
-      let input = {baseline: '#other', left: ['#other', 42]};
-      let expected = {baseline: 0, left: [0, 42]};
+      const input = {baseline: '#other', left: ['#other', 42]};
+      const expected = {baseline: 0, left: [0, 42]};
 
       expect(resolve(input, widget)).to.deep.equal(expected);
     });
 
     it('replaces widget itself with 0', function() {
-      let input = {baseline: widget, left: [widget, 42]};
-      let expected = {baseline: 0, left: [0, 42]};
+      const input = {baseline: widget, left: [widget, 42]};
+      const expected = {baseline: 0, left: [0, 42]};
 
       expect(resolve(input, widget)).to.deep.equal(expected);
     });
@@ -353,17 +353,17 @@ describe('Layout', function() {
     it('replaces ref to widget itself with 0', function() {
       widget.id = 'myself';
 
-      let input = {baseline: '#myself', left: ['#myself', 42]};
-      let expected = {baseline: 0, left: [0, 42]};
+      const input = {baseline: '#myself', left: ['#myself', 42]};
+      const expected = {baseline: 0, left: [0, 42]};
 
       expect(resolve(input, widget)).to.deep.equal(expected);
     });
 
     it('replaces non-siblings with 0', function() {
-      let child = new TestWidget().appendTo(widget);
+      const child = new TestWidget().appendTo(widget);
 
-      let input = {baseline: parent, left: [child, 42]};
-      let expected = {baseline: 0, left: [0, 42]};
+      const input = {baseline: parent, left: [child, 42]};
+      const expected = {baseline: 0, left: [0, 42]};
 
       expect(resolve(input, widget)).to.deep.equal(expected);
     });
@@ -371,8 +371,8 @@ describe('Layout', function() {
     it('replaces refs to non-siblings with 0', function() {
       new TestWidget({id: 'child'}).appendTo(widget);
 
-      let input = {baseline: '#parent', left: ['#child', 42]};
-      let expected = {baseline: 0, left: [0, 42]};
+      const input = {baseline: '#parent', left: ['#child', 42]};
+      const expected = {baseline: 0, left: [0, 42]};
 
       expect(resolve(input, widget)).to.deep.equal(expected);
     });
@@ -402,7 +402,7 @@ describe('LayoutQueue', function() {
   });
 
   it('calls layout.render on registered composite once', function() {
-    let composite = {
+    const composite = {
       layout: {render: spy()}
     };
     queue.add(composite);

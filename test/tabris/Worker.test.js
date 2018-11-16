@@ -80,7 +80,7 @@ describe('Worker', () => {
     });
 
     function expectOnMessageErrorToBeCalled(message) {
-      let onMessageErrorListener = spy();
+      const onMessageErrorListener = spy();
       worker.onmessageerror = onMessageErrorListener;
 
       worker.postMessage(message);

@@ -5,13 +5,13 @@ const {Validator} = require('jsonschema');
 
 module.exports = function(grunt) {
 
-  let pkg = grunt.file.readJSON('package.json');
+  const pkg = grunt.file.readJSON('package.json');
   let version = pkg.version;
-  let release = grunt.option('release');
+  const release = grunt.option('release');
   if (!release) {
     version += '-dev.' + grunt.template.today('yyyymmdd+HHMM');
   }
-  let banner = blockComment('Tabris.js ' + version + '\n\n' + grunt.file.read('LICENSE'));
+  const banner = blockComment('Tabris.js ' + version + '\n\n' + grunt.file.read('LICENSE'));
 
   grunt.log.writeln('Building version ' + version);
 
@@ -125,12 +125,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-exec');
 
   grunt.registerTask('validate-json', () => {
-    let validator = new Validator();
-    let schema = grunt.file.readJSON(grunt.config('doc').schema);
-    let files = grunt.file.expand(grunt.config('doc').api);
-    let allResults = [];
+    const validator = new Validator();
+    const schema = grunt.file.readJSON(grunt.config('doc').schema);
+    const files = grunt.file.expand(grunt.config('doc').api);
+    const allResults = [];
     files.forEach(file => {
-      let results = validator.validate(grunt.file.readJSON(file), schema, {nestedErrors: true});
+      const results = validator.validate(grunt.file.readJSON(file), schema, {nestedErrors: true});
       if (results.errors.length) {
         allResults.push(`${file}:\n${results.errors.join('\n')}`);
       }
@@ -141,8 +141,8 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('generate-doc', () => {
-    let targetPath = grunt.config('doc').target;
-    let files = grunt.file.expand(grunt.config('doc').api);
+    const targetPath = grunt.config('doc').target;
+    const files = grunt.file.expand(grunt.config('doc').api);
     try {
       generateDoc({files, targetPath, version});
     } catch (ex) {
@@ -151,9 +151,9 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('generate-tsd', () => {
-    let files = grunt.file.expand(grunt.config('doc').api);
-    let propertyTypes = grunt.file.read(grunt.config('doc').propertyTypes);
-    let globalTypeDefFiles = grunt.file.expand(grunt.config('doc').globalTypings);
+    const files = grunt.file.expand(grunt.config('doc').api);
+    const propertyTypes = grunt.file.read(grunt.config('doc').propertyTypes);
+    const globalTypeDefFiles = grunt.file.expand(grunt.config('doc').globalTypings);
     try {
       generateDts({files, propertyTypes, globalTypeDefFiles, version});
     } catch (ex) {
@@ -170,8 +170,8 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('package', 'create package.json', () => {
-    let stringify = require('format-json');
-    let pack = grunt.file.readJSON('package.json');
+    const stringify = require('format-json');
+    const pack = grunt.file.readJSON('package.json');
     delete pack.devDependencies;
     pack.main = 'tabris.min.js';
     pack.typings = 'tabris.d.ts';
@@ -260,7 +260,7 @@ module.exports = function(grunt) {
   ]);
 
   function blockComment(text) {
-    let commented = text.trim().split('\n').map(line => ' * ' + line).join('\n');
+    const commented = text.trim().split('\n').map(line => ' * ' + line).join('\n');
     return '/*!\n' + commented + '\n */\n';
   }
 

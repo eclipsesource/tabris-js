@@ -17,7 +17,7 @@ export default class Headers {
 
   append(name, value) {
     name = normalizeName(name);
-    let oldValue = this.$map[name];
+    const oldValue = this.$map[name];
     this.$map[name] = oldValue ? oldValue + ',' + value : '' + value;
   }
 
@@ -39,7 +39,7 @@ export default class Headers {
   }
 
   forEach(callback, thisArg) {
-    for (let name in this.$map) {
+    for (const name in this.$map) {
       if (this.$map.hasOwnProperty(name)) {
         callback.call(thisArg, this.$map[name], name, this);
       }
@@ -47,19 +47,19 @@ export default class Headers {
   }
 
   keys() {
-    let items = [];
+    const items = [];
     this.forEach((value, name) => items.push(name));
     return iteratorFor(items);
   }
 
   values() {
-    let items = [];
+    const items = [];
     this.forEach(value => items.push(value));
     return iteratorFor(items);
   }
 
   entries() {
-    let items = [];
+    const items = [];
     this.forEach((value, name) => items.push([name, value]));
     return iteratorFor(items);
   }
@@ -79,9 +79,9 @@ function normalizeName(name) {
 }
 
 function iteratorFor(items) {
-  let iterator = {
+  const iterator = {
     next() {
-      let value = items.shift();
+      const value = items.shift();
       return {done: value === undefined, value};
     }
   };

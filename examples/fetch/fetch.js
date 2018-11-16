@@ -23,7 +23,7 @@ function loadData() {
   ui.contentView.children('#reloadButton').dispose();
 
   // Create loading indicator
-  let activityIndicator = new ActivityIndicator({
+  const activityIndicator = new ActivityIndicator({
     centerX: 0, centerY: 0
   }).appendTo(ui.contentView);
 

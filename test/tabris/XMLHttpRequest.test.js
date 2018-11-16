@@ -15,7 +15,7 @@ describe('XMLHttpRequest', function() {
   beforeEach(function() {
     client = new ClientStub();
     mockTabris(client);
-    let origCreate = tabris._nativeBridge.create;
+    const origCreate = tabris._nativeBridge.create;
     stub(tabris._nativeBridge, 'create').callsFake((cid, type) => {
       if (type === 'tabris.HttpRequest') {
         nativeObject = tabris._nativeObjectRegistry.find(cid);
@@ -33,8 +33,8 @@ describe('XMLHttpRequest', function() {
   });
 
   it('is an EventTarget', function() {
-    let handler1 = spy();
-    let handler2 = spy();
+    const handler1 = spy();
+    const handler2 = spy();
     xhr.addEventListener('foo', handler1);
     xhr.addEventListener('bar', handler2);
     xhr.removeEventListener('foo', handler1);
@@ -297,8 +297,8 @@ describe('XMLHttpRequest', function() {
 
     describe('nativeObject stateChanged callback', function() {
 
-      let requestErrors = ['timeout', 'abort', 'error'];
-      let progressEvents =  ['load', 'loadend'];
+      const requestErrors = ['timeout', 'abort', 'error'];
+      const progressEvents =  ['load', 'loadend'];
 
       beforeEach(function() {
         sendRequest(xhr);
@@ -338,7 +338,7 @@ describe('XMLHttpRequest', function() {
 
       it("calls upload progress events on nativeObject event state 'headers'", function() {
         progressEvents.forEach((event) => {
-          let handler = 'on' + event;
+          const handler = 'on' + event;
           xhr.upload[handler] = spy();
           nativeObject.trigger('stateChanged', {state: 'headers'});
           expect(xhr.upload[handler]).to.have.been.called;
@@ -347,7 +347,7 @@ describe('XMLHttpRequest', function() {
 
       it("calls progress events on nativeObject event state 'finished'", function() {
         progressEvents.forEach((event) => {
-          let handler = 'on' + event;
+          const handler = 'on' + event;
           xhr[handler] = spy();
           nativeObject.trigger('stateChanged', {state: 'finished'});
           expect(xhr[handler]).to.have.been.called;
@@ -357,7 +357,7 @@ describe('XMLHttpRequest', function() {
 
       it("calls upload progress events on nativeObject event state 'finished'", function() {
         progressEvents.forEach((event) => {
-          let handler = 'on' + event;
+          const handler = 'on' + event;
           xhr.upload[handler] = spy();
           nativeObject.trigger('stateChanged', {state: 'finished'});
           expect(xhr.upload[handler]).to.have.been.called;
@@ -432,7 +432,7 @@ describe('XMLHttpRequest', function() {
 
       it('calls progress event handlers on request error', function() {
         requestErrors.forEach((entry) => {
-          let handler = 'on' + entry;
+          const handler = 'on' + entry;
           xhr.onprogress = spy();
           xhr[handler] = spy();
           xhr.onloadend = spy();
@@ -446,7 +446,7 @@ describe('XMLHttpRequest', function() {
 
       it('calls upload progress event handlers on request error', function() {
         requestErrors.forEach((entry) => {
-          let handler = 'on' + entry;
+          const handler = 'on' + entry;
           xhr.upload.onprogress = spy();
           xhr.upload[handler] = spy();
           xhr.upload.onloadend = spy();
@@ -461,7 +461,7 @@ describe('XMLHttpRequest', function() {
 
       it("doesn't call upload event handler on request error when upload complete", function() {
         requestErrors.forEach((entry) => {
-          let handler = 'on' + entry;
+          const handler = 'on' + entry;
           xhr.upload.onprogress = spy();
           xhr.upload[handler] = spy();
           xhr.upload.onloadend = spy();
@@ -526,7 +526,7 @@ describe('XMLHttpRequest', function() {
 
   describe('abort', function() {
 
-    let handlers = ['onprogress', 'onloadend', 'onabort'];
+    const handlers = ['onprogress', 'onloadend', 'onabort'];
 
     it("doesn't fail without nativeObject", function() {
       expect(() => {
@@ -744,8 +744,8 @@ describe('XMLHttpRequest', function() {
   describe('upload', function() {
 
     it('is an EventTarget', function() {
-      let handler1 = spy();
-      let handler2 = spy();
+      const handler1 = spy();
+      const handler2 = spy();
       xhr.upload.addEventListener('foo', handler1);
       xhr.upload.addEventListener('bar', handler2);
       xhr.upload.removeEventListener('foo', handler1);
@@ -756,7 +756,7 @@ describe('XMLHttpRequest', function() {
     });
 
     it('is readonly', function() {
-      let obj = {Foo: 'Bar'};
+      const obj = {Foo: 'Bar'};
       xhr.upload = obj;
       expect(xhr.upload).not.to.equal(obj);
     });
@@ -844,7 +844,7 @@ describe('XMLHttpRequest', function() {
       });
 
       it("returns response data when responseType is 'arraybuffer'", function() {
-        let buffer = new ArrayBuffer(8);
+        const buffer = new ArrayBuffer(8);
         xhr.responseType = 'arraybuffer';
         sendRequest(xhr);
         nativeObject.trigger('stateChanged', {state: 'finished', response: buffer});
@@ -1047,16 +1047,16 @@ describe('XMLHttpRequest', function() {
 
   });
 
-  let eventHandlers = {
+  const eventHandlers = {
     eventTypes: [
       'loadstart', 'readystatechange', 'load', 'loadend', 'progress', 'timeout', 'abort', 'error'
     ],
     uploadEventTypes: ['progress', 'loadstart', 'load', 'loadend', 'timeout', 'abort', 'error']
   };
 
-  let describeEventHandlers = function(name, eventTypes, property) {
+  const describeEventHandlers = function(name, eventTypes, property) {
 
-    let getTarget = function(property) {
+    const getTarget = function(property) {
       if (property) {
         return xhr[property];
       }
@@ -1067,7 +1067,7 @@ describe('XMLHttpRequest', function() {
 
       it('are initialized with null', function() {
         eventTypes.forEach((type) => {
-          let handler = 'on' + type;
+          const handler = 'on' + type;
           expect(getTarget(property)[handler]).to.equal(null);
         });
       });
@@ -1076,26 +1076,26 @@ describe('XMLHttpRequest', function() {
 
         it("doesn't set value when value not a function", function() {
           eventTypes.forEach((type) => {
-            let handler = 'on' + type;
+            const handler = 'on' + type;
             getTarget(property)[handler] = 'foo';
             expect(getTarget(property)[handler]).to.equal(null);
           });
         });
 
         it('sets value to function', function() {
-          let foo = function() {};
+          const foo = function() {};
           eventTypes.forEach((type) => {
-            let handler = 'on' + type;
+            const handler = 'on' + type;
             getTarget(property)[handler] = foo;
             expect(getTarget(property)[handler]).to.equal(foo);
           });
         });
 
         it('replaces existing listener', function() {
-          let handler1 = spy();
-          let handler2 = spy();
+          const handler1 = spy();
+          const handler2 = spy();
           eventTypes.forEach((type) => {
-            let handler = 'on' + type;
+            const handler = 'on' + type;
             getTarget(property)[handler] = handler1;
             getTarget(property)[handler] = handler2;
             getTarget(property).dispatchEvent(new Event(type));

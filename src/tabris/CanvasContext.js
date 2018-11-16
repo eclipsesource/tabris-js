@@ -16,7 +16,7 @@ export default class CanvasContext {
       height: 0,
       style: {}
     };
-    for (let name in properties) {
+    for (const name in properties) {
       defineProperty(this, name);
     }
   }
@@ -32,7 +32,7 @@ export default class CanvasContext {
     checkRequiredArgs(arguments, 4, 'CanvasContext.getImageData');
     this._gc.flush();
     // TODO check validity of args
-    let array = this._gc.getImageData(x, y, width, height);
+    const array = this._gc.getImageData(x, y, width, height);
     return new ImageData(array, width, height);
   }
 
@@ -44,7 +44,7 @@ export default class CanvasContext {
 
   createImageData(width, height) {
     if (arguments[0] instanceof ImageData) {
-      let data = arguments[0];
+      const data = arguments[0];
       width = data.width;
       height = data.height;
     } else {
@@ -169,7 +169,7 @@ CanvasContext.getContext = function(canvas, width, height) {
   return canvas._ctx;
 };
 
-let properties = {
+const properties = {
   lineWidth: {
     init: 1,
     encode(value) {
@@ -258,7 +258,7 @@ function checkValue(value) {
 }
 
 function toObject(array) {
-  let obj = {};
+  const obj = {};
   array.forEach((name) => {
     obj[name] = true;
   });
@@ -266,8 +266,8 @@ function toObject(array) {
 }
 
 function createState() {
-  let state = {};
-  for (let name in properties) {
+  const state = {};
+  for (const name in properties) {
     state[name] = properties[name].init;
   }
   return state;
@@ -284,7 +284,7 @@ function defineMethod(name, reqArgCount, fn) {
 }
 
 function defineProperty(context, name) {
-  let prop = properties[name];
+  const prop = properties[name];
   Object.defineProperty(context, name, {
     get() {
       return prop.decode(context._state[name]);

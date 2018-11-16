@@ -63,7 +63,8 @@ function fixUrl(url) {
 }
 
 function applySourceMap(stackLineData) {
-  let {fn, url, line, column} = stackLineData;
+  const {fn} = stackLineData;
+  let {url, line, column} = stackLineData;
   const sourceMap = tabris.Module.getSourceMap(url);
   if (sourceMap) {
     if (!sourceMap.decodedMappings) {
@@ -124,12 +125,11 @@ function decodeMappings(mappings) {
     .map(line => {
       let generatedCodeColumn = 0;
       return line.map(segment => {
-        let result;
         if (segment.length === 0) {
           return null;
         }
         generatedCodeColumn += segment[0];
-        result = [generatedCodeColumn];
+        const result = [generatedCodeColumn];
         if (segment.length === 1) {
           return result;// ???
         }

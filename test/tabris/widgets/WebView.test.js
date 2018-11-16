@@ -13,7 +13,7 @@ describe('WebView', () => {
   });
 
   function checkListen(event) {
-    let listen = client.calls({op: 'listen', id: webView.cid});
+    const listen = client.calls({op: 'listen', id: webView.cid});
     expect(listen.length).to.equal(1);
     expect(listen[0].event).to.equal(event);
     expect(listen[0].listen).to.equal(true);
@@ -22,7 +22,7 @@ describe('WebView', () => {
   describe('when created', () => {
 
     it('creates a WebView', () => {
-      let create = client.calls({op: 'create', id: webView.cid})[0];
+      const create = client.calls({op: 'create', id: webView.cid})[0];
       expect(create.type).to.equal('tabris.WebView');
       expect(create.id).to.equal(webView.cid);
       expect(create.properties.url).to.equal('http://wikipedia.com');
@@ -35,7 +35,7 @@ describe('WebView', () => {
     it('goBack() calls "goBack"', () => {
       webView.goBack();
 
-      let call = client.calls({op: 'call', id: webView.cid});
+      const call = client.calls({op: 'call', id: webView.cid});
       expect(call.length).to.equal(1);
       expect(call[0].method).to.equal('goBack');
     });
@@ -43,7 +43,7 @@ describe('WebView', () => {
     it('goForward() calls "goForward"', () => {
       webView.goForward();
 
-      let call = client.calls({op: 'call', id: webView.cid});
+      const call = client.calls({op: 'call', id: webView.cid});
       expect(call.length).to.equal(1);
       expect(call[0].method).to.equal('goForward');
     });

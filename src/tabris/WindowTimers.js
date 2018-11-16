@@ -8,10 +8,10 @@ export function addWindowTimerMethods(target) {
 
   function createTimer(fn, delay, repeat, args) {
     const stackTraceStack = [new Error().stack].concat(tabris._stackTraceStack);
-    let id = idSequence++;
+    const id = idSequence++;
     // If tabris is not ready, create the timer on load.
     // However, clearTimeout won't work until after load.
-    let create = () => tabris.app._nativeCall('startTimer', {
+    const create = () => tabris.app._nativeCall('startTimer', {
       id, delay, repeat, callback: () => {
         const oldStack = tabris._stackTraceStack;
         tabris._stackTraceStack = stackTraceStack;
@@ -35,7 +35,7 @@ export function addWindowTimerMethods(target) {
     if (typeof fn !== 'function') {
       throw new TypeError('Illegal argument to setTimeout: not a function');
     }
-    let args = Array.prototype.slice.call(arguments, 2);
+    const args = Array.prototype.slice.call(arguments, 2);
     return createTimer(fn, adjustDelay(delay), false, args);
   };
 
@@ -46,7 +46,7 @@ export function addWindowTimerMethods(target) {
     if (typeof fn !== 'function') {
       throw new TypeError('Illegal argument to setInterval: not a function');
     }
-    let args = Array.prototype.slice.call(arguments, 2);
+    const args = Array.prototype.slice.call(arguments, 2);
     return createTimer(fn, adjustDelay(delay), true, args);
   };
 

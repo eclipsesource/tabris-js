@@ -4,9 +4,9 @@ const http = require('http');
 const PORT = 9000;
 
 let count = 0;
-let clients = {};
+const clients = {};
 
-let server = http.createServer((request, response) => {
+const server = http.createServer((request, response) => {
   console.log((new Date()) + ' Received request for ' + request.url);
   response.writeHead(404);
   response.end();
@@ -18,36 +18,36 @@ server.listen(PORT, () => console.log(
 ));
 
 function externalAddresses() {
-  let interfaces = os.networkInterfaces();
+  const interfaces = os.networkInterfaces();
   return Object.keys(interfaces)
     .map(key => interfaces[key].find(details => details.family === 'IPv4' && details.internal === false))
     .filter(val => !!val)
     .map(iface => iface.address);
 }
 
-let wsServer = new WebSocketServer({
+const wsServer = new WebSocketServer({
   httpServer: server
 });
 
 wsServer.on('request', (request) => {
-  let connection = request.accept('chat-protocol', request.origin);
+  const connection = request.accept('chat-protocol', request.origin);
   connection.sendUTF('MOTD: <b>Welcome to the Tabris.js lounge</b><br/>');
   console.log((new Date()) + ' Connection accepted.');
   console.log('Origin ' + request.origin);
 
-  let id = count++;
+  const id = count++;
   clients[id] = connection;
 
   connection.on('message', (message) => {
     if (message.type === 'utf8') {
       console.log('Received Message: ' + message.utf8Data);
-      for (let i in clients) {
+      for (const i in clients) {
         clients[i].sendUTF(message.utf8Data);
       }
     } else if (message.type === 'binary') {
       console.log('Received binary message of ' + message.binaryData.length + ' bytes.' +
         ' As Uint8Array: ' + new Uint8Array(message.binaryData));
-      for (let i in clients) {
+      for (const i in clients) {
         clients[i].sendBytes(message.binaryData);
       }
 

@@ -143,7 +143,7 @@ export function format(f) {
 
 function inspect(obj) {
   // default options
-  let ctx = {
+  const ctx = {
     seen: [],
     breakLength: 60,
     maxArrayLength: 20
@@ -152,9 +152,9 @@ function inspect(obj) {
 }
 
 function arrayToHash(array) {
-  let hash = Object.create(null);
+  const hash = Object.create(null);
   for (let i = 0; i < array.length; i++) {
-    let val = array[i];
+    const val = array[i];
     hash[val] = true;
   }
   return hash;
@@ -162,14 +162,14 @@ function arrayToHash(array) {
 
 function formatValue(ctx, value, recurseTimes) {
   // Primitive types cannot have properties
-  let primitive = formatPrimitive(ctx, value);
+  const primitive = formatPrimitive(ctx, value);
   if (primitive) {
     return primitive;
   }
 
   // Look up the keys of the object.
   let keys = Object.keys(value);
-  let visibleKeys = arrayToHash(keys);
+  const visibleKeys = arrayToHash(keys);
   const symbolKeys = Object.getOwnPropertySymbols(value);
   const enumSymbolKeys = symbolKeys.filter((key) => propertyIsEnumerable.call(value, key));
   keys = keys.concat(enumSymbolKeys);
@@ -343,7 +343,7 @@ function formatValue(ctx, value, recurseTimes) {
   }
 
   ctx.seen.push(value);
-  let output = formatter(ctx, value, recurseTimes, visibleKeys, keys);
+  const output = formatter(ctx, value, recurseTimes, visibleKeys, keys);
   ctx.seen.pop();
   return reduceToSingleString(output, base, braces, ctx.breakLength);
 }
@@ -364,9 +364,9 @@ function formatPrimitive(ctx, value) {
   if (value === null) {
     return 'null';
   }
-  let type = typeof value;
+  const type = typeof value;
   if (type === 'string') {
-    let simple = JSON.stringify(value)
+    const simple = JSON.stringify(value)
       .replace(/^"|"$/g, '')
       .replace(/'/g, "\\'")
       .replace(/\\"/g, '"');
@@ -399,7 +399,7 @@ function formatObject(ctx, value, recurseTimes, visibleKeys, keys) {
 }
 
 function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
-  let output = [];
+  const output = [];
   let visibleLength = 0;
   let index = 0;
   while (index < value.length && visibleLength < ctx.maxArrayLength) {
@@ -418,12 +418,12 @@ function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
     }
     visibleLength++;
   }
-  let remaining = value.length - index;
+  const remaining = value.length - index;
   if (remaining > 0) {
     output.push(`... ${remaining} more item${remaining > 1 ? 's' : ''}`);
   }
   for (let n = 0; n < keys.length; n++) {
-    let key = keys[n];
+    const key = keys[n];
     if (typeof key === 'symbol' || !numbersOnlyRE.test(key)) {
       output.push(formatProperty(ctx, value, recurseTimes, visibleKeys, key, true));
     }
@@ -434,7 +434,7 @@ function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
 function formatTypedArray(ctx, value, recurseTimes, visibleKeys, keys) {
   const maxLength = Math.min(Math.max(0, ctx.maxArrayLength), value.length);
   const remaining = value.length - maxLength;
-  let output = new Array(maxLength);
+  const output = new Array(maxLength);
   for (let i = 0; i < maxLength; ++i) {
     output[i] = formatNumber(ctx, value[i]);
   }
@@ -454,9 +454,9 @@ function formatPromise(ctx, value, recurseTimes, visibleKeys, keys) {
   if (isPending(value)) {
     output.push('<pending>');
   } else {
-    let nextRecurseTimes = recurseTimes === null ? null : recurseTimes - 1;
-    let result = getPromiseResult(value);
-    let str = formatValue(ctx, result, nextRecurseTimes);
+    const nextRecurseTimes = recurseTimes === null ? null : recurseTimes - 1;
+    const result = getPromiseResult(value);
+    const str = formatValue(ctx, result, nextRecurseTimes);
     if (isRejected(value)) {
       output.push(`<rejected> ${str}`);
     } else {
@@ -470,8 +470,8 @@ function formatPromise(ctx, value, recurseTimes, visibleKeys, keys) {
 }
 
 function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
-  let name, str, desc;
-  desc = Object.getOwnPropertyDescriptor(value, key) || {value: value[key]};
+  let name, str;
+  const desc = Object.getOwnPropertyDescriptor(value, key) || {value: value[key]};
   if (desc.get) {
     if (desc.set) {
       str = '[Getter/Setter]';
@@ -526,7 +526,7 @@ function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
 }
 
 function reduceToSingleString(output, base, braces, breakLength) {
-  let length = output.reduce((prev, cur) => prev + cur.replace(/\u001b\[\d\d?m/g, '').length + 1, 0);
+  const length = output.reduce((prev, cur) => prev + cur.replace(/\u001b\[\d\d?m/g, '').length + 1, 0);
   if (length > breakLength) {
     return braces[0] +
            // If the opening "brace" is too large, like in the case of "Set {",
@@ -571,7 +571,7 @@ const typedArrayTypes = [
   'Uint32Array'
 ];
 const typedArrayNames = {};
-for (let type of typedArrayTypes) {
+for (const type of typedArrayTypes) {
   typedArrayNames[`[object ${type}]`] = true;
 }
 
@@ -585,7 +585,7 @@ function isArrayBuffer(value) {
 
 function getConstructorOf(obj) {
   while (obj) {
-    let descriptor = Object.getOwnPropertyDescriptor(obj, 'constructor');
+    const descriptor = Object.getOwnPropertyDescriptor(obj, 'constructor');
     if (descriptor !== undefined && typeof descriptor.value === 'function' && descriptor.value.name !== '') {
       return descriptor.value;
     }

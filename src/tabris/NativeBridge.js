@@ -10,7 +10,7 @@ export default class NativeBridge {
   }
 
   create(id, type) {
-    let properties = {};
+    const properties = {};
     this.$operations.push(['create', id, type, properties]);
     this.$currentOperation = {id, properties};
   }
@@ -19,7 +19,7 @@ export default class NativeBridge {
     if (this.$currentOperation.id === id) {
       this.$currentOperation.properties[name] = value;
     } else {
-      let properties = {};
+      const properties = {};
       properties[name] = value;
       this.$operations.push(['set', id, properties]);
       this.$currentOperation = {id, properties};
@@ -48,14 +48,14 @@ export default class NativeBridge {
 
   flush() {
     LayoutQueue.instance.flush();
-    let operations = this.$operations;
+    const operations = this.$operations;
     this.$operations = [];
     this.$currentOperation = {id: null};
-    let length = operations.length;
+    const length = operations.length;
     // Using apply() on the native bridge does not work with Rhino. It seems that the parameter
     // count must be known in order to find the associated native method.
     for (let i = 0; i < length; i++) {
-      let op = operations[i];
+      const op = operations[i];
       switch (op[0]) {
         case 'create':
           this.$bridge.create(op[1], op[2], op[3]);

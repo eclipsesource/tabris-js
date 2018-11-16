@@ -51,7 +51,7 @@ export function addDOMDocument(target) {
 
   tabris.once('start', () => {
     target.document.readyState = 'complete';
-    let event = new Event('DOMContentLoaded', false, false);
+    const event = new Event('DOMContentLoaded', false, false);
     target.document.dispatchEvent(event);
   });
 

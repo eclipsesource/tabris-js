@@ -9,9 +9,9 @@ import HttpRequest from '../HttpRequest';
 
 export function fetch(input, init) {
   return new Promise((resolve, reject) => {
-    let request = new Request(input, init);
-    let hr = new HttpRequest();
-    let options = {};
+    const request = new Request(input, init);
+    const hr = new HttpRequest();
+    const options = {};
     hr.on('stateChanged', (event) => {
       switch (event.state) {
         case 'headers':
@@ -50,7 +50,7 @@ export function fetch(input, init) {
 }
 
 function encodeHeaders(headers) {
-  let map = {};
+  const map = {};
   headers.forEach((value, name) => map[name] = value);
   return map;
 }

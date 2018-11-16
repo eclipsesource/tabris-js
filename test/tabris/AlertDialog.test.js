@@ -52,7 +52,7 @@ describe('AlertDialog', function() {
     });
 
     it('can be set to array of TextInputs', function() {
-      let textInput = new TextInput();
+      const textInput = new TextInput();
 
       dialog.textInputs = [textInput];
 
@@ -64,14 +64,14 @@ describe('AlertDialog', function() {
 
       dialog.textInputs = [new Button()];
 
-      let calls = client.calls({op: 'set', id: dialog.cid});
+      const calls = client.calls({op: 'set', id: dialog.cid});
       expect(calls.length).to.equal(0);
       expect(console.warn).to.have.been.calledOnce;
     });
 
     it('can be gotten as array of TextInputs', function() {
-      let textInput = new TextInput();
-      let textInputs = [textInput];
+      const textInput = new TextInput();
+      const textInputs = [textInput];
 
       dialog.textInputs = textInputs;
 
@@ -79,7 +79,7 @@ describe('AlertDialog', function() {
     });
 
     it('should be disposed when dialog is disposed', function() {
-      let textInput = new TextInput();
+      const textInput = new TextInput();
       dialog.textInputs = [textInput];
 
       dialog.dispose();
@@ -114,7 +114,7 @@ describe('AlertDialog', function() {
         doesNotExist: 'bar'
       };
 
-      let expected = {
+      const expected = {
         ok: 'undefined',
         cancel: '23',
         neutral: 'null'
@@ -203,8 +203,8 @@ describe('AlertDialog', function() {
     });
 
     it('with button fires close<Button> and close', function() {
-      let closeOk = spy();
-      let close = spy();
+      const closeOk = spy();
+      const close = spy();
       dialog.onCloseOk(closeOk);
       dialog.onClose(close);
 
@@ -217,8 +217,8 @@ describe('AlertDialog', function() {
     });
 
     it('without button fires close only', function() {
-      let closeOk = spy();
-      let close = spy();
+      const closeOk = spy();
+      const close = spy();
       dialog.onCloseOk(closeOk);
       dialog.onClose(close);
 
@@ -230,11 +230,11 @@ describe('AlertDialog', function() {
     });
 
     it('contain texts', function() {
-      let textInput = new TextInput();
+      const textInput = new TextInput();
       stub(client, 'get').withArgs(textInput.cid, 'text').returns('foo');
       dialog.textInputs = [textInput];
-      let closeOk = spy();
-      let close = spy();
+      const closeOk = spy();
+      const close = spy();
       dialog.onCloseOk(closeOk);
       dialog.onClose(close);
 
@@ -257,7 +257,7 @@ describe('AlertDialog', function() {
     });
 
     it('with message property', function() {
-      let popup = jsx.createElement(
+      const popup = jsx.createElement(
         AlertDialog,
         {message: 'Hello World!'}
       );
@@ -267,7 +267,7 @@ describe('AlertDialog', function() {
     });
 
     it('with text content', function() {
-      let popup = jsx.createElement(
+      const popup = jsx.createElement(
         AlertDialog,
         null,
         'Hello',
@@ -288,7 +288,7 @@ describe('AlertDialog', function() {
 
     it('with textInputs property', function() {
       const textInputs = [new TextInput(), new TextInput()];
-      let popup = jsx.createElement(
+      const popup = jsx.createElement(
         AlertDialog, {textInputs}
       );
 
@@ -299,7 +299,7 @@ describe('AlertDialog', function() {
 
     it('with TextInput as content', function() {
       const textInputs = [new TextInput(), new TextInput()];
-      let popup = jsx.createElement(
+      const popup = jsx.createElement(
         AlertDialog,
         null,
         textInputs[0],

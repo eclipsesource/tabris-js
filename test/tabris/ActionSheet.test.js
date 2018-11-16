@@ -147,8 +147,8 @@ describe('ActionSheet', () => {
     });
 
     it('fires close event with no selection', () => {
-      let closeOk = spy();
-      let close = spy();
+      const closeOk = spy();
+      const close = spy();
       actionSheet.on('closeOk', closeOk);
       actionSheet.onClose(close);
 
@@ -162,7 +162,7 @@ describe('ActionSheet', () => {
     it('fires close event with selected index and item', () => {
       const action = {title: 'Foo'};
       actionSheet.actions = [action];
-      let close = spy();
+      const close = spy();
       actionSheet.onClose(close);
 
       tabris._notify(actionSheet.cid, 'select', {index: 0});
@@ -185,7 +185,7 @@ describe('ActionSheet', () => {
     });
 
     it('fires select event with action', () => {
-      let select = spy();
+      const select = spy();
       actionSheet.actions = [{title: 'foo'}];
       actionSheet.onSelect(select);
 
@@ -206,7 +206,7 @@ describe('ActionSheet', () => {
     });
 
     it('with message property', function() {
-      let popup = jsx.createElement(
+      const popup = jsx.createElement(
         ActionSheet,
         {message: 'Hello World!'}
       );
@@ -216,7 +216,7 @@ describe('ActionSheet', () => {
     });
 
     it('with text content', function() {
-      let popup = jsx.createElement(
+      const popup = jsx.createElement(
         ActionSheet,
         null,
         'Hello',
@@ -236,7 +236,7 @@ describe('ActionSheet', () => {
     });
 
     it('with actions property', function() {
-      let popup = jsx.createElement(
+      const popup = jsx.createElement(
         ActionSheet,
         {actions: [{title: 'Hello World!'}]}
       );
@@ -247,7 +247,7 @@ describe('ActionSheet', () => {
     });
 
     it('with actions as content', function() {
-      let popup = jsx.createElement(
+      const popup = jsx.createElement(
         ActionSheet,
         null,
         {title: 'foo'},
@@ -261,7 +261,7 @@ describe('ActionSheet', () => {
     });
 
     it('with ActionSheetItems as content', function() {
-      let popup = jsx.createElement(
+      const popup = jsx.createElement(
         ActionSheet,
         null,
         jsx.createElement(ActionSheetItem, {title: 'foo', image: {src: 'foo.jpg'}, style: 'cancel'}),
@@ -283,9 +283,9 @@ describe('ActionSheet', () => {
     });
 
     it('with select event listener', () => {
-      let select = spy();
+      const select = spy();
 
-      let popup = jsx.createElement(ActionSheet, {onSelect: select});
+      const popup = jsx.createElement(ActionSheet, {onSelect: select});
       tabris._notify(popup.cid, 'select', {});
 
       expect(select).to.have.been.calledOnce;
@@ -293,9 +293,9 @@ describe('ActionSheet', () => {
     });
 
     it('with close event listener', () => {
-      let close = spy();
+      const close = spy();
 
-      let popup = jsx.createElement(ActionSheet, {onClose: close});
+      const popup = jsx.createElement(ActionSheet, {onClose: close});
       tabris._notify(popup.cid, 'close', {});
 
       expect(close).to.have.been.calledOnce;
@@ -303,7 +303,7 @@ describe('ActionSheet', () => {
     });
 
     it('ActionSheetItem is immutable', function() {
-      let item = jsx.createElement(ActionSheetItem, {title: 'foo', image: {src: 'foo.jpg'}, style: 'default'});
+      const item = jsx.createElement(ActionSheetItem, {title: 'foo', image: {src: 'foo.jpg'}, style: 'default'});
 
       item.title = null;
       item.image = null;
@@ -314,7 +314,7 @@ describe('ActionSheet', () => {
     });
 
     it('ActionSheetItem supports text content', function() {
-      let item = jsx.createElement(ActionSheetItem, {image: {src: 'foo.jpg'}, style: 'default'}, 'foo');
+      const item = jsx.createElement(ActionSheetItem, {image: {src: 'foo.jpg'}, style: 'default'}, 'foo');
 
       expect(item).to.deep.equal({title: 'foo', image: {src: 'foo.jpg'}, style: 'default'});
     });

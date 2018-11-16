@@ -60,7 +60,7 @@ describe('Drawer', function() {
       });
 
       it("child's parent is set to the drawer", function() {
-        let call = client.calls({op: 'set', id: child.cid})[0];
+        const call = client.calls({op: 'set', id: child.cid})[0];
         expect(call.properties.parent).to.eql(drawer.cid);
       });
 

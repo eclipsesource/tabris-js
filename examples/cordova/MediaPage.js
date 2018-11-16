@@ -25,8 +25,8 @@ module.exports = class MediaPage extends PluginPage {
     if (tabris.device.platform === 'iOS') {
       path = path.substr(path.indexOf('/www/') + 5);
     }
-    let onSuccess = () => console.log('Audio file loaded successfully');
-    let onError = err => console.log('Unable to play audio file: ' + err.code + ' - ' + err.message);
+    const onSuccess = () => console.log('Audio file loaded successfully');
+    const onError = err => console.log('Unable to play audio file: ' + err.code + ' - ' + err.message);
     return new Media(path, onSuccess, onError);
   }
 

@@ -31,7 +31,7 @@ module.exports = class NetworkPage extends PluginPage {
   }
 
   _showNetworkState() {
-    let state = navigator.connection.type;
+    const state = navigator.connection.type;
     this.find('#networkStateDisplay').first().text = NETWORK_STATES[state];
   }
 

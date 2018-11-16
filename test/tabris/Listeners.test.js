@@ -66,7 +66,7 @@ describe('Listeners', function() {
 
   it('passes through uninitialized EventObject', function() {
     myListeners.addListener(listener);
-    let ev = Object.assign(new EventObject(), {foo: 'bar'});
+    const ev = Object.assign(new EventObject(), {foo: 'bar'});
 
     myListeners.trigger(ev);
 
@@ -75,7 +75,7 @@ describe('Listeners', function() {
 
   it('passes through uninitialized custom EventObject', function() {
     myFooListeners.addListener(listener);
-    let ev = Object.assign(new MyExtendedEvent(), {ext: 'bar'});
+    const ev = Object.assign(new MyExtendedEvent(), {ext: 'bar'});
 
     myFooListeners.trigger(ev);
 
@@ -83,8 +83,8 @@ describe('Listeners', function() {
   });
 
   it('copies initialized EventObject', function() {
-    let ev = Object.assign(new EventObject(), {foo: 'bar'});
-    let events = [];
+    const ev = Object.assign(new EventObject(), {foo: 'bar'});
+    const events = [];
     myListeners.addListener(event => events.push(event));
     myFooListeners.addListener(event => events.push(event));
 
@@ -101,7 +101,7 @@ describe('Listeners', function() {
 
   it('notifies listener with unbound trigger', function() {
     myListeners.addListener(listener);
-    let trigger = myListeners.trigger;
+    const trigger = myListeners.trigger;
 
     trigger();
 
@@ -173,8 +173,8 @@ describe('Listeners', function() {
   });
 
   it('resolves previous promises', function() {
-    let promise1 = myListeners.promise();
-    let promise2 = myListeners.promise();
+    const promise1 = myListeners.promise();
+    const promise2 = myListeners.promise();
 
     myListeners.trigger();
 
@@ -185,8 +185,8 @@ describe('Listeners', function() {
   });
 
   it('resolves previous typed promises', function() {
-    let promise1 = myListeners.promise();
-    let promise2 = myListeners.promise();
+    const promise1 = myListeners.promise();
+    const promise2 = myListeners.promise();
 
     myListeners.trigger({foo: 'bar'});
 
@@ -213,7 +213,7 @@ describe('Listeners', function() {
     function asyncListener() {
       return Promise.reject('someError');
     }
-    let errorSpy = spy(console, 'error');
+    const errorSpy = spy(console, 'error');
     myListeners(asyncListener);
 
     myListeners.trigger();
@@ -237,7 +237,7 @@ describe('Listeners', function() {
     }
 
     it('synthesizes tabris events on NativeObjects', function() {
-      let object = new MyNativeObject();
+      const object = new MyNativeObject();
       object.on({myEvent: listener});
       object.onMyEvent.trigger({});
 
@@ -245,7 +245,7 @@ describe('Listeners', function() {
     });
 
     it('receives events on NativeObjects', function() {
-      let object = new MyNativeObject();
+      const object = new MyNativeObject();
       object.onMyEvent(listener);
       object.trigger('myEvent', {foo: 'bar'});
 
@@ -254,18 +254,18 @@ describe('Listeners', function() {
     });
 
     it('forwards given event object to tabris event', function() {
-      let object = new MyNativeObject();
+      const object = new MyNativeObject();
       object.on({myEvent: listener});
-      let eventData = {target: object, type: 'myEvent', foo: 'bar'};
+      const eventData = {target: object, type: 'myEvent', foo: 'bar'};
       object.onMyEvent.trigger(eventData);
 
       expect(listener).to.have.been.calledWithMatch({target: object, type: 'myEvent', foo: 'bar'});
     });
 
     it('adjusts target and type on forwarded event', function() {
-      let object = new MyNativeObject();
+      const object = new MyNativeObject();
       object.on({myEvent: listener});
-      let eventData = {target: new Date(), type: 'baz', foo: 'bar'};
+      const eventData = {target: new Date(), type: 'baz', foo: 'bar'};
       object.onMyEvent.trigger(eventData);
 
       expect(listener).to.have.been.calledWithMatch({target: object, type: 'myEvent', foo: 'bar'});

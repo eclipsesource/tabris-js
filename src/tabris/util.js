@@ -1,6 +1,6 @@
 export function pick(object, keys) {
-  let result = {};
-  for (let key in object) {
+  const result = {};
+  for (const key in object) {
     if (keys.includes(key)) {
       result[key] = object[key];
     }
@@ -9,8 +9,8 @@ export function pick(object, keys) {
 }
 
 export function omit(object, keys) {
-  let result = {};
-  for (let key in object) {
+  const result = {};
+  for (const key in object) {
     if (!keys.includes(key)) {
       result[key] = object[key];
     }
@@ -33,13 +33,13 @@ export function normalizePath(path) {
   if (path === '') {
     throw new Error('must not be empty');
   }
-  let prefix = path.startsWith('/') ? '/' : '';
-  let segments = [];
-  let pathSegments = path.split('/');
+  const prefix = path.startsWith('/') ? '/' : '';
+  const segments = [];
+  const pathSegments = path.split('/');
   for (let i = 0; i < pathSegments.length; i++) {
-    let segment = pathSegments[i];
+    const segment = pathSegments[i];
     if (segment === '..') {
-      let removed = segments.pop();
+      const removed = segments.pop();
       if (!removed || removed === '.') {
         throw new Error('Path must not start with \'..\'');
       }
@@ -57,9 +57,9 @@ export function normalizePathUrl(url) {
   if (typeof url !== 'string') {
     throw new Error('must be a string');
   }
-  let parts = /^([a-z-]+:(\/\/)?)?(.*)/.exec(url);
-  let schema = parts[1] || '';
-  let content = parts[3] || '';
+  const parts = /^([a-z-]+:(\/\/)?)?(.*)/.exec(url);
+  const schema = parts[1] || '';
+  const content = parts[3] || '';
   if (schema === 'data:') {
     return url;
   }
@@ -80,7 +80,7 @@ export function dirname(path) {
  * @param errorPrefix Prefix to prepend to messages of thrown errors.
  */
 export function checkNumber(value, range = [-Infinity, Infinity], errorPrefix) {
-  let prefix = errorPrefix ? errorPrefix + ': ' : '';
+  const prefix = errorPrefix ? errorPrefix + ': ' : '';
   if (typeof value !== 'number' || isNaN(value) || !isFinite(value)) {
     throw new Error(`${prefix}Invalid number ${value}`);
   }

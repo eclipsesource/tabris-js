@@ -17,7 +17,7 @@ let trayState = 'down';
 let trayHeight;
 let dragOffset;
 
-let page = new Page({
+const page = new Page({
   title: 'Tray',
   autoDispose: false
 });
@@ -28,22 +28,22 @@ new TextView({
   textColor: '#777'
 }).appendTo(page);
 
-let shade = new Composite({
+const shade = new Composite({
   left: 0, right: 0, top: 0, bottom: 0,
   background: 'black',
   opacity: 0
 }).appendTo(page);
 
-let tray = new Composite({
+const tray = new Composite({
   left: 0, right: 0, top: '30%', bottom: 0
 }).appendTo(page);
 
-let strap = new Composite({
+const strap = new Composite({
   left: '40%', right: '40%', top: 0, height: 65,
   background: '#259b24'
 }).appendTo(tray);
 
-let strapIcon = new TextView({
+const strapIcon = new TextView({
   left: MARGIN, right: MARGIN, top: 20,
   alignment: 'center',
   text: '⇧',
@@ -51,7 +51,7 @@ let strapIcon = new TextView({
   textColor: 'white'
 }).appendTo(strap);
 
-let trayContent = new Composite({
+const trayContent = new Composite({
   left: MARGIN, right: MARGIN, top: [strap, 0], bottom: 0,
   background: '#8bc34a'
 }).appendTo(tray);
@@ -65,7 +65,7 @@ new TextView({
 }).appendTo(trayContent);
 
 trayContent.on('resize', () => {
-  let bounds = trayContent.bounds;
+  const bounds = trayContent.bounds;
   trayHeight = bounds.height;
   if (trayState === 'dragging') {
     positionTrayInRestingState(2000);
@@ -80,7 +80,7 @@ strap.on('panVertical', ({state, translation, velocity}) => {
     dragOffset = tray.transform.translationY - translation.y;
   }
   if (trayState === 'dragging') {
-    let offsetY = Math.min(Math.max(translation.y + dragOffset, 0), trayHeight);
+    const offsetY = Math.min(Math.max(translation.y + dragOffset, 0), trayHeight);
     tray.transform = {translationY: offsetY};
     shade.opacity = getShadeOpacity(offsetY);
     strapIcon.transform = getStrapIconTransform(offsetY);
@@ -98,8 +98,8 @@ strap.on('tap', () => {
 
 function positionTrayInRestingState(velocity) {
   trayState = 'animating';
-  let translationY = velocity > 0 ? trayHeight : 0;
-  let options = {
+  const translationY = velocity > 0 ? trayHeight : 0;
+  const options = {
     duration: Math.min(Math.abs(trayHeight / velocity * 1000), 800),
     easing: Math.abs(velocity) >= 1000 ? 'ease-out' : 'ease-in-out'
   };
@@ -111,12 +111,12 @@ function positionTrayInRestingState(velocity) {
 }
 
 function getShadeOpacity(translationY) {
-  let traveled = translationY / trayHeight;
+  const traveled = translationY / trayHeight;
   return Math.max(0, 0.75 - traveled);
 }
 
 function getStrapIconTransform(translationY) {
-  let traveled = translationY / trayHeight;
+  const traveled = translationY / trayHeight;
   return {rotation: traveled * Math.PI - Math.PI};
 }
 

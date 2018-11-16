@@ -92,7 +92,7 @@ NativeObject.defineProperties(TextInput.prototype, {
       if (value.length !== 2) {
         throw new Error(`Selection has to be a two element array with start and end position but is ${value}`);
       }
-      let textLength = this.text.length;
+      const textLength = this.text.length;
       if (value[1] > textLength || value[0] > textLength || value[1] < 0 || value[0] < 0) {
         throw new Error(`The selection has to be in the range of 0 to text length [0-${textLength}] but is ${value}`);
       }

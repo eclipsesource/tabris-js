@@ -21,7 +21,7 @@ describe('TimeDialog', function() {
     });
 
     it('can be set to Date', function() {
-      let date = new Date();
+      const date = new Date();
 
       dialog.date = date;
 
@@ -78,7 +78,7 @@ describe('TimeDialog', function() {
     });
 
     it('fires close event', function() {
-      let close = spy();
+      const close = spy();
       dialog.onClose(close);
 
       tabris._notify(dialog.cid, 'close');
@@ -92,9 +92,9 @@ describe('TimeDialog', function() {
   describe('select event', function() {
 
     it('fires select and close', function() {
-      let date = new Date();
-      let select = spy();
-      let close = spy();
+      const date = new Date();
+      const select = spy();
+      const close = spy();
       dialog.onSelect(select);
       dialog.onClose(close);
 

@@ -81,7 +81,7 @@ describe('App', function() {
       it('sets pinned certificates on native side', function() {
         app.pinnedCertificates = [{host: 'example.com', hash: 'sha256/abc'}];
 
-        let setCall = client.calls({op: 'set', id: app.cid})[0];
+        const setCall = client.calls({op: 'set', id: app.cid})[0];
         expect(setCall.properties).to.deep.equal({
           pinnedCertificates: [{host: 'example.com', hash: 'sha256/abc'}]
         });
@@ -91,7 +91,7 @@ describe('App', function() {
         tabris.device.platform = 'iOS';
         app.pinnedCertificates = [{host: 'example.com', hash: 'sha256/abc', algorithm: 'RSA4096'}];
 
-        let setCall = client.calls({op: 'set', id: app.cid})[0];
+        const setCall = client.calls({op: 'set', id: app.cid})[0];
         expect(setCall.properties).to.deep.equal({
           pinnedCertificates: [{host: 'example.com', hash: 'sha256/abc', algorithm: 'RSA4096'}]
         });
@@ -106,7 +106,7 @@ describe('App', function() {
       it('adds native listener on certificatesReceived', function() {
         app.pinnedCertificates = [{host: 'example.com', hash: 'sha256/abc', algorithm: 'RSA4096'}];
 
-        let listenCall = client.calls({op: 'listen', id: app.cid})[0];
+        const listenCall = client.calls({op: 'listen', id: app.cid})[0];
         expect(listenCall.event).to.equal('certificatesReceived');
         expect(listenCall.listen).to.be.true;
       });
@@ -114,7 +114,7 @@ describe('App', function() {
       it('cancels certificateReceived event with invalid certificate', function() {
         app.pinnedCertificates = [{host: 'example.com', hash: 'sha256/abc', algorithm: 'RSA4096'}];
 
-        let cancelled = app._trigger('certificatesReceived', {
+        const cancelled = app._trigger('certificatesReceived', {
           host: 'example.com',
           hashes: ['sha256/uvw', 'sha256/xyz']
         });
@@ -125,7 +125,7 @@ describe('App', function() {
       it('does not cancel certificateReceived event with valid certificate', function() {
         app.pinnedCertificates = [{host: 'example.com', hash: 'sha256/abc', algorithm: 'RSA4096'}];
 
-        let cancelled = app._trigger('certificatesReceived', {
+        const cancelled = app._trigger('certificatesReceived', {
           host: 'example.com',
           hashes: ['sha256/xyz', 'sha256/abc']
         });
@@ -136,7 +136,7 @@ describe('App', function() {
       it('does not cancel certificateReceived event with unpinned host', function() {
         app.pinnedCertificates = [{host: 'example.com', hash: 'sha256/abc', algorithm: 'RSA4096'}];
 
-        let cancelled = app._trigger('certificatesReceived', {host: 'somewhere-else.com', hashes: ['sha256/xyz']});
+        const cancelled = app._trigger('certificatesReceived', {host: 'somewhere-else.com', hashes: ['sha256/xyz']});
 
         expect(cancelled).to.be.false;
       });
@@ -146,16 +146,16 @@ describe('App', function() {
   });
 
   it('listens for pause event', function() {
-    let listener = spy();
+    const listener = spy();
 
     app.onPause(listener);
 
-    let calls = client.calls({id: app.cid, op: 'listen', event: 'pause'});
+    const calls = client.calls({id: app.cid, op: 'listen', event: 'pause'});
     expect(calls[0].listen).to.equal(true);
   });
 
   it('triggers pause event', function() {
-    let listener = spy();
+    const listener = spy();
     app.onPause(listener);
 
     tabris._notify(app.cid, 'pause');
@@ -165,16 +165,16 @@ describe('App', function() {
   });
 
   it('listens for resume event', function() {
-    let listener = spy();
+    const listener = spy();
 
     app.onResume(listener);
 
-    let calls = client.calls({id: app.cid, op: 'listen', event: 'resume'});
+    const calls = client.calls({id: app.cid, op: 'listen', event: 'resume'});
     expect(calls[0].listen).to.equal(true);
   });
 
   it('triggers resume event', function() {
-    let listener = spy();
+    const listener = spy();
     app.onResume(listener);
 
     tabris._notify(app.cid, 'resume');
@@ -184,16 +184,16 @@ describe('App', function() {
   });
 
   it('listens for foreground event', function() {
-    let listener = spy();
+    const listener = spy();
 
     app.onForeground(listener);
 
-    let calls = client.calls({id: app.cid, op: 'listen', event: 'foreground'});
+    const calls = client.calls({id: app.cid, op: 'listen', event: 'foreground'});
     expect(calls[0].listen).to.equal(true);
   });
 
   it('triggers foreground event', function() {
-    let listener = spy();
+    const listener = spy();
     app.onForeground(listener);
 
     tabris._notify(app.cid, 'foreground');
@@ -203,16 +203,16 @@ describe('App', function() {
   });
 
   it('listens for background event', function() {
-    let listener = spy();
+    const listener = spy();
 
     app.onBackground(listener);
 
-    let calls = client.calls({id: app.cid, op: 'listen', event: 'background'});
+    const calls = client.calls({id: app.cid, op: 'listen', event: 'background'});
     expect(calls[0].listen).to.equal(true);
   });
 
   it('triggers background event', function() {
-    let listener = spy();
+    const listener = spy();
     app.onBackground(listener);
 
     tabris._notify(app.cid, 'background');
@@ -230,12 +230,12 @@ describe('App', function() {
   it('listens for backNavigation event', function() {
     app.onBackNavigation(spy());
 
-    let calls = client.calls({id: app.cid, op: 'listen', event: 'backNavigation'});
+    const calls = client.calls({id: app.cid, op: 'listen', event: 'backNavigation'});
     expect(calls[0].listen).to.equal(true);
   });
 
   it('triggers backNavigation event', function() {
-    let listener = spy();
+    const listener = spy();
     app.onBackNavigation(listener);
 
     tabris._notify(app.cid, 'backNavigation');
@@ -247,7 +247,7 @@ describe('App', function() {
   it('backNavigation event returns false by default', function() {
     app.onBackNavigation(spy());
 
-    let returnValue = tabris._notify(app.cid, 'backNavigation');
+    const returnValue = tabris._notify(app.cid, 'backNavigation');
 
     expect(returnValue).to.equal(false);
   });
@@ -257,7 +257,7 @@ describe('App', function() {
       event.preventDefault();
     });
 
-    let returnValue = tabris._notify(app.cid, 'backNavigation');
+    const returnValue = tabris._notify(app.cid, 'backNavigation');
 
     expect(returnValue).to.equal(true);
   });
@@ -360,7 +360,7 @@ describe('App', function() {
   describe('getResourceLocation', function() {
 
     beforeEach(function() {
-      let origGet = client.get;
+      const origGet = client.get;
       stub(client, 'get').callsFake(() => {
         origGet.apply(client, arguments);
         return '/root';
@@ -381,19 +381,19 @@ describe('App', function() {
     });
 
     it('appends normalized parameter', function() {
-      let result = app.getResourceLocation('foo//bar');
+      const result = app.getResourceLocation('foo//bar');
 
       expect(result).to.equal('/root/foo/bar');
     });
 
     it('strips leading and trailing slash', function() {
-      let result = app.getResourceLocation('/foo/bar/');
+      const result = app.getResourceLocation('/foo/bar/');
 
       expect(result).to.equal('/root/foo/bar');
     });
 
     it("ignores '.' segments", function() {
-      let result = app.getResourceLocation('./foo/bar');
+      const result = app.getResourceLocation('./foo/bar');
 
       expect(result).to.equal('/root/foo/bar');
     });
@@ -545,7 +545,7 @@ describe('App', function() {
       it('should return `appId` from native', function() {
         stub(client, 'get').returns('foo');
 
-        let result = app.id;
+        const result = app.id;
 
         expect(result).to.equal('foo');
         expect(client.get).to.have.been.calledWith(app.cid, 'appId');
@@ -564,7 +564,7 @@ describe('App', function() {
       it('should return `version` from native', function() {
         stub(client, 'get').returns('foo');
 
-        let result = app.version;
+        const result = app.version;
 
         expect(result).to.equal('foo');
         expect(client.get).to.have.been.calledWith(app.cid, 'version');
@@ -583,7 +583,7 @@ describe('App', function() {
       it('should return `versionId` from native', function() {
         stub(client, 'get').returns('foo');
 
-        let result = app.versionCode;
+        const result = app.versionCode;
 
         expect(result).to.equal('foo');
         expect(client.get).to.have.been.calledWith(app.cid, 'versionId');

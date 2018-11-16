@@ -4,7 +4,7 @@ const AboutPage = require('./AboutPage');
 
 const ABOUT_ACTION_TITLE = 'About';
 
-let navigationView = new NavigationView({
+const navigationView = new NavigationView({
   left: 0, top: 0, right: 0, bottom: 0,
   drawerActionVisible: true
 }).appendTo(ui.contentView);

@@ -26,7 +26,7 @@ describe('ContentView', () => {
   });
 
   it('CREATEs Composite', () => {
-    let createCall = client.calls({op: 'create', id: contentView.cid})[0];
+    const createCall = client.calls({op: 'create', id: contentView.cid})[0];
     expect(createCall.type).to.equal('tabris.Composite');
   });
 

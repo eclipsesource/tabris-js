@@ -44,7 +44,7 @@ export default class App extends NativeObject {
     if (!this._resourceBaseUrl) {
       this._resourceBaseUrl = this._nativeGet('resourceBaseUrl');
     }
-    let subPath = path != null ? '/' + normalizePath('' + path) : '';
+    const subPath = path != null ? '/' + normalizePath('' + path) : '';
     return this._resourceBaseUrl + subPath;
   }
 
@@ -89,14 +89,14 @@ export default class App extends NativeObject {
   _trigger(name, event = {}) {
     if (name === 'patchInstall') {
       this._nativeListen('patchInstall', false);
-      let callback = this._pendingPatchCallback;
+      const callback = this._pendingPatchCallback;
       delete this._pendingPatchCallback;
       if (typeof callback === 'function') {
         if (event.error) {
           callback(new Error(event.error));
         } else {
           try {
-            let patch = event.success ? JSON.parse(event.success) : null;
+            const patch = event.success ? JSON.parse(event.success) : null;
             callback(null, patch);
           } catch (error) {
             callback(new Error('Failed to parse patch.json'));
@@ -109,7 +109,7 @@ export default class App extends NativeObject {
   }
 
   _validateCertificate(event) {
-    let hashes = this.$pinnedCerts[event.host];
+    const hashes = this.$pinnedCerts[event.host];
     if (hashes && !hashes.some(hash => event.hashes.includes(hash))) {
       event.preventDefault();
     }
@@ -143,8 +143,8 @@ NativeObject.defineEvents(App.prototype, {
 });
 
 function checkCertificates(certificates) {
-  let hashes = {};
-  for (let cert of certificates) {
+  const hashes = {};
+  for (const cert of certificates) {
     if (typeof cert.host !== 'string') {
       throw new Error('Invalid host for pinned certificate: ' + cert.host);
     }

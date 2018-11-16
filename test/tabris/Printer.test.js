@@ -60,7 +60,7 @@ describe('Printer', function() {
 
     it('calls native `print`', function() {
       spy(client, 'call');
-      let data = new ArrayBuffer(8);
+      const data = new ArrayBuffer(8);
 
       printer.print(data, {jobName: 'print job'});
 

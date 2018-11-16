@@ -14,8 +14,8 @@ export default class Crypto extends NativeObject {
     if (!isIntArray(typedArray)) {
       throw new Error('Unsupported type in Crypto.getRandomValues');
     }
-    let byteLength = typedArray.byteLength;
-    let values = new Uint8Array(this._nativeCall('getRandomValues', {byteLength}));
+    const byteLength = typedArray.byteLength;
+    const values = new Uint8Array(this._nativeCall('getRandomValues', {byteLength}));
     if (values.byteLength !== byteLength) {
       throw new Error('Not enough random bytes available');
     }

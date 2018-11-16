@@ -123,7 +123,7 @@ export default class Layout {
   }
 
   _resolveReferences(layoutData, targetWidget) {
-    let result = {};
+    const result = {};
     for (let i = 0; i < layoutDataProps.length; i++) {
       const prop = layoutDataProps[i];
       if (prop in layoutData && layoutData[prop] !== 'auto') {
@@ -166,7 +166,7 @@ export class LayoutQueue {
   }
 
   flush() {
-    for (let cid in this._map) {
+    for (const cid in this._map) {
       if (!this._map[cid]._isDisposed && this._map[cid].layout) {
         this._map[cid].layout.render(this._map[cid]);
       }
@@ -198,23 +198,23 @@ function resolveConstraint(constraint, widget) {
 
 function toCid(ref, widget) {
   if (ref === LayoutData.prev) {
-    let children = getParent(widget)._children();
-    let index = children.indexOf(widget);
+    const children = getParent(widget)._children();
+    const index = children.indexOf(widget);
     if (index > 0) {
       return types.NativeObject.encode(children[index - 1]) || 0;
     }
     return 0;
   }
   if (ref === LayoutData.next) {
-    let children = getParent(widget)._children();
-    let index = children.indexOf(widget);
+    const children = getParent(widget)._children();
+    const index = children.indexOf(widget);
     if (index + 1 < children.length) {
       return types.NativeObject.encode(children[index + 1]) || 0;
     }
     return 0;
   }
   if (typeof ref === 'string') {
-    let sibling = widget.siblings(ref)[0];
+    const sibling = widget.siblings(ref)[0];
     return types.NativeObject.encode(sibling) || 0;
   }
   if (widget.siblings().toArray().includes(ref)) {
@@ -249,7 +249,7 @@ function getPath(widget) {
   return path.join(' > ');
 }
 
-let emptyParent = {
+const emptyParent = {
   children() {
     return [];
   }

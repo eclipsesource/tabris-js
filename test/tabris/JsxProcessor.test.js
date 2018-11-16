@@ -31,11 +31,11 @@ describe('JsxProcessor', function() {
     });
 
     it('attaches camelCase listeners', function() {
-      let selectSpy = spy();
-      let fooSpyA = spy();
-      let fooSpyZ = spy();
+      const selectSpy = spy();
+      const fooSpyA = spy();
+      const fooSpyZ = spy();
 
-      let widget = jsx.createElement(CheckBox, {onSelect: selectSpy, onAFoo: fooSpyA, onZFoo: fooSpyZ});
+      const widget = jsx.createElement(CheckBox, {onSelect: selectSpy, onAFoo: fooSpyA, onZFoo: fooSpyZ});
       widget.trigger('select', {data: 1});
       widget.trigger('aFoo', {data: 2});
       widget.trigger('zFoo', {data: 3});
@@ -49,11 +49,11 @@ describe('JsxProcessor', function() {
     });
 
     it('does not attach non-camelCase listeners', function() {
-      let selectSpy = spy();
-      let fooSpyA = spy();
-      let fooSpyZ = spy();
+      const selectSpy = spy();
+      const fooSpyA = spy();
+      const fooSpyZ = spy();
 
-      let widget = jsx.createElement(CheckBox, {onselect: selectSpy, onafoo: fooSpyA, onzfoo: fooSpyZ});
+      const widget = jsx.createElement(CheckBox, {onselect: selectSpy, onafoo: fooSpyA, onzfoo: fooSpyZ});
       widget.trigger('select', {data: 1});
       widget.trigger('foo', {data: 2});
 
@@ -63,7 +63,7 @@ describe('JsxProcessor', function() {
     });
 
     it('appends children', function() {
-      let children = jsx.createElement(
+      const children = jsx.createElement(
         Composite,
         null,
         jsx.createElement(Button),
@@ -77,7 +77,7 @@ describe('JsxProcessor', function() {
     });
 
     it('appends children given as array', function() {
-      let children = jsx.createElement(
+      const children = jsx.createElement(
         Composite,
         null,
         [jsx.createElement(Button), jsx.createElement(CheckBox)],
@@ -90,7 +90,7 @@ describe('JsxProcessor', function() {
     });
 
     it('appends widgetCollection', function() {
-      let children = jsx.createElement(
+      const children = jsx.createElement(
         Composite,
         null,
         new WidgetCollection([
@@ -106,7 +106,7 @@ describe('JsxProcessor', function() {
     });
 
     it('appends widgetCollection and children mixed', function() {
-      let children = jsx.createElement(
+      const children = jsx.createElement(
         Composite,
         null,
         jsx.createElement(Button),
@@ -124,7 +124,7 @@ describe('JsxProcessor', function() {
     });
 
     it('appends children via properties', function() {
-      let children = jsx.createElement(
+      const children = jsx.createElement(
         Composite,
         {
           children: [
@@ -157,8 +157,8 @@ describe('JsxProcessor', function() {
     });
 
     it('executes given function', function() {
-      let fn = spy(() => new WidgetCollection([new Button()]));
-      let collection = jsx.createElement(
+      const fn = spy(() => new WidgetCollection([new Button()]));
+      const collection = jsx.createElement(
         fn,
         {foo: 'bar'},
         {child: 1},
@@ -171,7 +171,7 @@ describe('JsxProcessor', function() {
     });
 
     it('creates widgetCollection with children', function() {
-      let collection = jsx.createElement(
+      const collection = jsx.createElement(
         WidgetCollection,
         null,
         jsx.createElement(Button),
@@ -187,7 +187,7 @@ describe('JsxProcessor', function() {
     });
 
     it('creates widgetCollection from array', function() {
-      let collection = jsx.createElement(
+      const collection = jsx.createElement(
         WidgetCollection,
         null,
         [jsx.createElement(Button), jsx.createElement(CheckBox)],
@@ -202,7 +202,7 @@ describe('JsxProcessor', function() {
     });
 
     it('creates empty widgetCollection', function() {
-      let collection = jsx.createElement(
+      const collection = jsx.createElement(
         WidgetCollection,
         null
       );

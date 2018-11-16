@@ -41,7 +41,7 @@ describe('Popover', () => {
     });
 
     it('is read-only', () => {
-      let contentView = popover.contentView;
+      const contentView = popover.contentView;
 
       delete popover.contentView;
       popover.contentView = undefined;
@@ -83,8 +83,8 @@ describe('Popover', () => {
     });
 
     it('fires close event', () => {
-      let closeOk = spy();
-      let close = spy();
+      const closeOk = spy();
+      const close = spy();
       popover.on('closeOk', closeOk);
       popover.onClose(close);
 

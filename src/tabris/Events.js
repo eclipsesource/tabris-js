@@ -6,15 +6,15 @@ export default {
 
   on(type, callback, context) {
     if (isObject(type)) {
-      for (let key in type) {
+      for (const key in type) {
         this.on(key, type[key]);
       }
       return this;
     }
-    let wasListening = this._isListening(type);
+    const wasListening = this._isListening(type);
     this._callbacks = this._callbacks || [];
     this._callbacks[type] = (this._callbacks[type] || []).concat();
-    let alreadyAdded = this._callbacks[type].some(entry => (
+    const alreadyAdded = this._callbacks[type].some(entry => (
       (entry.fn === callback || '_callback' in callback && entry.fn._callback === callback._callback) &&
       (entry.ctx === context)
     ));
@@ -29,7 +29,7 @@ export default {
 
   off(type, callback, context) {
     if (isObject(type)) {
-      for (let key in type) {
+      for (const key in type) {
         this.off(key, type[key]);
       }
       return this;
@@ -39,7 +39,7 @@ export default {
     }
     if (this._callbacks) {
       if (type in this._callbacks) {
-        let callbacks = this._callbacks[type].concat();
+        const callbacks = this._callbacks[type].concat();
         for (let i = callbacks.length - 1; i >= 0; i--) {
           if ((callbacks[i].fn === callback || callbacks[i].fn._callback === callback) &&
             callbacks[i].ctx === context) {
@@ -64,13 +64,13 @@ export default {
 
   once(type, callback, context) {
     if (isObject(type)) {
-      for (let key in type) {
+      for (const key in type) {
         this.once(key, type[key]);
       }
       return this;
     }
-    let self = this;
-    let wrappedCallback = function() {
+    const self = this;
+    const wrappedCallback = function() {
       if (!self._isDisposed) {
         self.off(type, wrappedCallback, context);
       }
@@ -87,7 +87,7 @@ export default {
         const dispatchObject = uninitialized ? eventData : new EventObject();
         const target = this.$eventTarget || this;
         if (eventData && (eventData !== dispatchObject)) {
-          let copyData = omit(eventData, ['type', 'target', 'timeStamp']);
+          const copyData = omit(eventData, ['type', 'target', 'timeStamp']);
           Object.assign(dispatchObject, copyData);
         }
         if (dispatchObject._initEvent instanceof Function) {

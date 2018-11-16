@@ -46,7 +46,7 @@ describe('Action', function() {
     it('translates placement priority to uppercase', function() {
       action.placementPriority = 'low';
 
-      let call = client.calls({op: 'set'})[0];
+      const call = client.calls({op: 'set'})[0];
       expect(call.properties.placementPriority).to.equal('LOW');
     });
 
@@ -70,7 +70,7 @@ describe('Action', function() {
     it('returns cached placementPriority', function() {
       action.placementPriority = 'low';
 
-      let result = action.placementPriority;
+      const result = action.placementPriority;
 
       expect(result).to.equal('low');
     });
@@ -89,7 +89,7 @@ describe('Action', function() {
     it('sends listen for select', function() {
       action.onSelect(listener);
 
-      let listen = client.calls({op: 'listen', id: action.cid});
+      const listen = client.calls({op: 'listen', id: action.cid});
       expect(listen.length).to.equal(1);
       expect(listen[0].event).to.equal('select');
       expect(listen[0].listen).to.equal(true);
@@ -115,7 +115,7 @@ describe('Action', function() {
     });
 
     it('with title property', function() {
-      let widget = jsx.createElement(
+      const widget = jsx.createElement(
         Action,
         {title: 'Hello World!'}
       );
@@ -124,7 +124,7 @@ describe('Action', function() {
     });
 
     it('with text content', function() {
-      let widget = jsx.createElement(
+      const widget = jsx.createElement(
         Action,
         null,
         'Hello',

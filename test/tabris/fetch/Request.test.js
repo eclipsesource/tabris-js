@@ -7,28 +7,28 @@ describe('Request', function() {
   describe('constructor', function() {
 
     it('succeeds without arguments', function() {
-      let request = new Request();
+      const request = new Request();
       expect(request.bodyUsed).to.be.false;
     });
 
     it('accepts string', function() {
-      let request = new Request('http://example.com');
+      const request = new Request('http://example.com');
       expect(request.url).to.equal('http://example.com');
     });
 
     it('accepts unused Request object', function() {
-      let request = new Request(new Request('http://example.com'));
+      const request = new Request(new Request('http://example.com'));
       expect(request.url).to.equal('http://example.com');
     });
 
     it('rejects used Request object', function() {
-      let request = new Request('http://example.com');
+      const request = new Request('http://example.com');
       request.text();
       expect(() => new Request(request)).to.throw(Error, 'Already read');
     });
 
     it('accepts init object', function() {
-      let request = new Request('http://example.com', {
+      const request = new Request('http://example.com', {
         method: 'post',
         headers: {foo: 23},
         body: '{"result": true}'
@@ -85,7 +85,7 @@ describe('Request', function() {
       });
 
       it('is read-only', function() {
-        let orig = request.headers;
+        const orig = request.headers;
         request.headers = new Headers();
         expect(request.headers).to.equal(orig);
       });
@@ -150,10 +150,10 @@ describe('Request', function() {
   describe('clone', function() {
 
     it('works with GET request', function() {
-      let request = new Request('http://example.com', {
+      const request = new Request('http://example.com', {
         headers: {foo: 23}
       });
-      let clone = request.clone();
+      const clone = request.clone();
       expect(clone.url).to.equal(request.url);
       expect(clone.method).to.equal(request.method);
       expect(Array.from(clone.headers.entries())).to.deep.equal(Array.from(request.headers.entries()));
@@ -161,12 +161,12 @@ describe('Request', function() {
     });
 
     it('works with POST request', function() {
-      let request = new Request('http://example.com', {
+      const request = new Request('http://example.com', {
         method: 'post',
         headers: {foo: 23},
         body: '{"result": true}'
       });
-      let clone = request.clone();
+      const clone = request.clone();
       expect(clone.url).to.equal(request.url);
       expect(clone.method).to.equal(request.method);
       expect(Array.from(clone.headers.entries())).to.deep.equal(Array.from(request.headers.entries()));

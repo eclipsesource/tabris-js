@@ -14,7 +14,7 @@ export default class NativeObject extends EventsClass {
    * @param {PropertyDefinitions} definitions
    */
   static defineProperties(target, definitions) {
-    for (let name in definitions) {
+    for (const name in definitions) {
       NativeObject.defineProperty(target, name, definitions[name]);
     }
   }
@@ -39,7 +39,7 @@ export default class NativeObject extends EventsClass {
    * @param {EventDefinitions} definitions
    */
   static defineEvents(target, definitions) {
-    for (let name in definitions) {
+    for (const name in definitions) {
       NativeObject.defineEvent(target, name, definitions[name]);
     }
   }
@@ -102,8 +102,8 @@ export default class NativeObject extends EventsClass {
       warn('Cannot get property "' + name + '" on disposed object');
       return;
     }
-    let getter = this.$getPropertyGetter(name) || this._getStoredProperty;
-    let value = getter.call(this, name);
+    const getter = this.$getPropertyGetter(name) || this._getStoredProperty;
+    const value = getter.call(this, name);
     return this._decodeProperty(this._getTypeDef(name), value);
   }
 
@@ -112,7 +112,7 @@ export default class NativeObject extends EventsClass {
       warn('Cannot set property "' + name + '" on disposed object');
       return;
     }
-    let typeDef = this._getTypeDef(name);
+    const typeDef = this._getTypeDef(name);
     let encodedValue;
     try {
       encodedValue = this._encodeProperty(typeDef, value);
@@ -120,7 +120,7 @@ export default class NativeObject extends EventsClass {
       warn(this + ': Ignored unsupported value for property "' + name + '": ' + ex.message);
       return;
     }
-    let setter = this.$getPropertySetter(name) || this._storeProperty;
+    const setter = this.$getPropertySetter(name) || this._storeProperty;
     setter.call(this, name, encodedValue);
   }
 
@@ -133,7 +133,7 @@ export default class NativeObject extends EventsClass {
   }
 
   _storeProperty(name, encodedValue) {
-    let oldEncodedValue = this._getStoredProperty(name);
+    const oldEncodedValue = this._getStoredProperty(name);
     if (encodedValue === oldEncodedValue) {
       return;
     }
@@ -157,12 +157,12 @@ export default class NativeObject extends EventsClass {
   }
 
   _getTypeDef(name) {
-    let prop = this['$prop_' + name];
+    const prop = this['$prop_' + name];
     return prop ? prop.type : null;
   }
 
   _getDefaultPropertyValue(name) {
-    let prop = this['$prop_' + name];
+    const prop = this['$prop_' + name];
     return prop ? valueOf(prop.default) : undefined;
   }
 
@@ -175,18 +175,18 @@ export default class NativeObject extends EventsClass {
   }
 
   $getPropertyGetter(name) {
-    let prop = this['$prop_' + name];
+    const prop = this['$prop_' + name];
     return prop ? prop.get : undefined;
   }
 
   $getPropertySetter(name) {
-    let prop = this['$prop_' + name];
+    const prop = this['$prop_' + name];
     return prop ? prop.set : undefined;
   }
 
   _triggerChangeEvent(propertyName, newEncodedValue) {
-    let typeDef = this._getTypeDef(propertyName);
-    let decodedValue = this._decodeProperty(typeDef, newEncodedValue);
+    const typeDef = this._getTypeDef(propertyName);
+    const decodedValue = this._decodeProperty(typeDef, newEncodedValue);
     this.$trigger(propertyName + 'Changed', {value: decodedValue});
   }
 
@@ -244,8 +244,8 @@ export default class NativeObject extends EventsClass {
   }
 
   $trigger(name, eventData = {}) {
-    let event = new EventObject();
-    for (let key in eventData) {
+    const event = new EventObject();
+    for (const key in eventData) {
       if (!(key in event)) {
         Object.defineProperty(event, key, {enumerable: true, value: eventData[key]});
       }
@@ -324,7 +324,7 @@ function setExistingProperty(name, value) {
 }
 
 function normalizeProperty(property) {
-  let config = typeof property === 'string' ? {type: property} : property;
+  const config = typeof property === 'string' ? {type: property} : property;
   return {
     type: resolveType(config.type || 'any'),
     default: config.default,
@@ -347,7 +347,7 @@ function resolveType(type) {
   }
   if (Array.isArray(type)) {
     typeDef = Object.assign({}, typeDef);
-    let args = type.slice(1);
+    const args = type.slice(1);
     if (typeDef.encode) {
       typeDef.encode = wrapCoder(typeDef.encode, args);
     }

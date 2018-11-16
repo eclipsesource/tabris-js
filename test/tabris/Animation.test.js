@@ -60,7 +60,7 @@ describe('Animation', function() {
 
     it('disposes Animation object on widget dispose', function() {
       widget.animate({}, {}).catch(() => {});
-      let animation = findNativeObject(animationId());
+      const animation = findNativeObject(animationId());
 
       widget.dispose();
 
@@ -69,7 +69,7 @@ describe('Animation', function() {
 
     it('does not keep references to Animation object after completion', function() {
       widget.animate({}, {});
-      let animation = findNativeObject(animationId());
+      const animation = findNativeObject(animationId());
       animation._trigger('completed', {});
       spy(animation, 'dispose');
 
@@ -80,7 +80,7 @@ describe('Animation', function() {
 
     it('sets animated properties on animation', function() {
       widget.animate({opacity: 0.4, transform: {rotation: 0.5}}, {});
-      let expected = {
+      const expected = {
         opacity: 0.4,
         transform: {rotation: 0.5, scaleX: 1, scaleY: 1, translationX: 0, translationY: 0, translationZ: 0}
       };
@@ -184,7 +184,7 @@ describe('Animation', function() {
     });
 
     it('returns unresolved Promise', function(done) {
-      let thenCallback = spy();
+      const thenCallback = spy();
 
       widget.animate({}, {}).then(thenCallback);
 
@@ -195,7 +195,7 @@ describe('Animation', function() {
     });
 
     it('returns Promise that resolves on completion', function(done) {
-      let thenCallback = spy();
+      const thenCallback = spy();
       widget.animate({}, {}).then(thenCallback);
 
       findNativeObject(animationId())._trigger('completed', {});
@@ -207,8 +207,8 @@ describe('Animation', function() {
     });
 
     it('returns Promise that rejects on widget dispose', function(done) {
-      let thenCallback = spy();
-      let rejectCallback = spy();
+      const thenCallback = spy();
+      const rejectCallback = spy();
       widget.animate({}, {}).then(thenCallback, rejectCallback);
 
       widget.dispose();

@@ -27,7 +27,7 @@ describe('util-shaders', () => {
     });
 
     it('maps direction to angle', () => {
-      let directions = {
+      const directions = {
         'top': 0,
         'right': 90,
         'bottom': 180,
@@ -37,14 +37,14 @@ describe('util-shaders', () => {
         'right top': 45,
         'right bottom': 135
       };
-      for (let direction in directions) {
+      for (const direction in directions) {
         expect(new LinearGradientShader(`linear-gradient(to ${direction}, red)`).angle)
           .to.equal(directions[direction]);
       }
     });
 
     it('parses linear gradient definition correctly', () => {
-      let gradients = {
+      const gradients = {
         'linear-gradient(#f00, #00f)': {
           type: 'linearGradient', angle: 180,
           colors: [[[255, 0, 0, 255], null], [[0, 0, 255, 255], null]]
@@ -117,8 +117,8 @@ describe('util-shaders', () => {
           colors: [[[170, 255, 0, 128], 0], [[0, 255, 0, 255], 1]]
         }
       };
-      for (let gradientDefinition in gradients) {
-        let target = gradients[gradientDefinition];
+      for (const gradientDefinition in gradients) {
+        const target = gradients[gradientDefinition];
         target.css = gradientDefinition;
         expect(new LinearGradientShader(gradientDefinition)).to.deep.equal(target);
       }

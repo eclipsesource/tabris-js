@@ -28,7 +28,7 @@ describe('gestures:', function() {
   }
 
   it('getter returns object with pre-configured gestures as initial value', function() {
-    let gestures = new TestType().gestures;
+    const gestures = new TestType().gestures;
     expect(gestures.tap).to.eql({type: 'tap'});
     expect(gestures.longPress).to.eql({type: 'longPress'});
   });
@@ -56,7 +56,7 @@ describe('gestures:', function() {
     });
 
     it('prevents overwriting global default gestures', function() {
-      let defaultGestures = new TestType().gestures;
+      const defaultGestures = new TestType().gestures;
       defaultGestures.tap = false;
       expect(new TestType().gestures.tap).to.eql({type: 'tap'});
     });
@@ -68,7 +68,7 @@ describe('gestures:', function() {
 
     describe('and adding matching gesture listener', function() {
 
-      let listener = function() {};
+      const listener = function() {};
 
       beforeEach(function() {
         widget.on('foo', listener);
@@ -91,7 +91,7 @@ describe('gestures:', function() {
       });
 
       it('GestureRecognizer LISTENs to gesture events', function() {
-        let call = client.calls({op: 'listen', id: gestureCreate()[0].id, event: 'gesture'})[0];
+        const call = client.calls({op: 'listen', id: gestureCreate()[0].id, event: 'gesture'})[0];
         expect(call.listen).to.equal(true);
       });
 
@@ -117,7 +117,7 @@ describe('gestures:', function() {
       describe(', then notifying the recognizer', function() {
 
         it('triggers matching widget event', function() {
-          let listener = spy();
+          const listener = spy();
           widget.on('foo', listener);
 
           tabris._notify(gestureCreate()[0].id, 'gesture', {});
@@ -126,7 +126,7 @@ describe('gestures:', function() {
         });
 
         it('forwards event object', function() {
-          let listener = spy();
+          const listener = spy();
           widget.on('foo', listener);
 
           tabris._notify(gestureCreate()[0].id, 'gesture', {state: 'recognized'});
@@ -155,7 +155,7 @@ describe('gestures:', function() {
 
   describe('listening to multiple gestures', function() {
 
-    let barListener = function() {};
+    const barListener = function() {};
 
     beforeEach(function() {
       widget = new TestType({

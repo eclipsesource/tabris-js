@@ -305,13 +305,13 @@ describe('FileSystem', function() {
     });
 
     it('includes path and code', function() {
-      let error = createError('ENOENT', '/foo');
+      const error = createError('ENOENT', '/foo');
       expect(error.path).to.equal('/foo');
       expect(error.code).to.equal('ENOENT');
     });
 
     it('includes message in toString()', function() {
-      let error = createError('ENOENT', '/foo');
+      const error = createError('ENOENT', '/foo');
       expect(error.toString()).to.match(/^Error: No such file or directory: \/foo/);
     });
 

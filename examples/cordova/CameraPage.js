@@ -21,8 +21,8 @@ module.exports = class CameraPage extends PluginPage {
   }
 
   _takePicture() {
-    let onSuccess = image => this.find('#image').first().image = image;
-    let onFail = message => console.log('Camera failed because: ' + message);
+    const onSuccess = image => this.find('#image').first().image = image;
+    const onFail = message => console.log('Camera failed because: ' + message);
     navigator.camera.getPicture(onSuccess, onFail, {
       quality: 50,
       targetWidth: 1024,

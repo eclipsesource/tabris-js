@@ -50,7 +50,7 @@ describe('Crypto', function() {
     });
 
     it('fills a given Int8Array', function() {
-      let buffer = new Int8Array(3);
+      const buffer = new Int8Array(3);
       returnValue = new Uint8Array([0, 1, 255]);
 
       crypto.getRandomValues(buffer);
@@ -61,7 +61,7 @@ describe('Crypto', function() {
     });
 
     it('fills a given Uint8Array', function() {
-      let buffer = new Uint8Array(3);
+      const buffer = new Uint8Array(3);
       returnValue = new Uint8Array([0, 1, 255]);
 
       crypto.getRandomValues(buffer);
@@ -72,7 +72,7 @@ describe('Crypto', function() {
     });
 
     it('fills a given Uint8ClampedArray', function() {
-      let buffer = new Uint8ClampedArray(3);
+      const buffer = new Uint8ClampedArray(3);
       returnValue = new Uint8Array([0, 1, 255]);
 
       crypto.getRandomValues(buffer);
@@ -83,7 +83,7 @@ describe('Crypto', function() {
     });
 
     it('fills a given Int16Arrray', function() {
-      let buffer = new Int16Array(3);
+      const buffer = new Int16Array(3);
       returnValue = new Uint8Array([0, 0, 0, 1, 255, 255]);
 
       crypto.getRandomValues(buffer);
@@ -95,7 +95,7 @@ describe('Crypto', function() {
     });
 
     it('fills a given Uint16Arrray', function() {
-      let buffer = new Uint16Array(3);
+      const buffer = new Uint16Array(3);
       returnValue = new Uint8Array([0, 0, 0, 1, 255, 255]);
 
       crypto.getRandomValues(buffer);
@@ -107,7 +107,7 @@ describe('Crypto', function() {
     });
 
     it('fills a given Int32Arrray', function() {
-      let buffer = new Int32Array(3);
+      const buffer = new Int32Array(3);
       returnValue = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 1, 255, 255, 255, 255]);
 
       crypto.getRandomValues(buffer);
@@ -119,7 +119,7 @@ describe('Crypto', function() {
     });
 
     it('fills a given Uint32Arrray', function() {
-      let buffer = new Uint32Array(3);
+      const buffer = new Uint32Array(3);
       returnValue = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 1, 255, 255, 255, 255]);
 
       crypto.getRandomValues(buffer);

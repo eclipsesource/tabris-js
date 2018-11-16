@@ -17,7 +17,7 @@ class SecureStore extends NativeObject {
 export default class Storage {
 
   constructor() {
-    let nativeObject = arguments[0];
+    const nativeObject = arguments[0];
     if (!(nativeObject instanceof NativeObject)) {
       throw new Error('Cannot instantiate Storage');
     }
@@ -40,7 +40,7 @@ export default class Storage {
     if (arguments.length < 1) {
       throw new TypeError("Not enough arguments to 'getItem'");
     }
-    let result = this._nativeObject._nativeCall('get', {key: encode(key)});
+    const result = this._nativeObject._nativeCall('get', {key: encode(key)});
     // Note: iOS can not return null, only undefined:
     return result === undefined ? null : result;
   }
@@ -63,6 +63,6 @@ function encode(value) {
 }
 
 export function create(secure) {
-  let nativeObject = secure ? new SecureStore() : new ClientStore();
+  const nativeObject = secure ? new SecureStore() : new ClientStore();
   return new Storage(nativeObject);
 }

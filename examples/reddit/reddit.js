@@ -5,15 +5,15 @@ const ITEM_FETCH_COUNT = 25;
 let loading;
 let items = [];
 
-let navigationView = new NavigationView({
+const navigationView = new NavigationView({
   left: 0, top: 0, right: 0, bottom: 0
 }).appendTo(ui.contentView);
 
-let page = new Page({
+const page = new Page({
   title: 'Reddit - Pets'
 }).appendTo(navigationView);
 
-let collectionView = new CollectionView({
+const collectionView = new CollectionView({
   left: 0, top: 0, right: 0, bottom: 0,
   background: '#f5f5f5',
   refreshEnabled: true,
@@ -26,7 +26,7 @@ let collectionView = new CollectionView({
     return createLoadingCell();
   },
   updateCell: (view, index) => {
-    let item = items[index];
+    const item = items[index];
     if (!(item.loading)) {
       view.find('#container').first().item = item;
       view.find('#itemImage').set({image: {src: item.data.thumbnail, width: 80, height: 80}});
@@ -38,7 +38,7 @@ let collectionView = new CollectionView({
 }).on('refresh', loadNewItems)
   .on('scroll', ({target: scrollView, deltaY}) => {
     if (deltaY > 0) {
-      let remaining = items.length - scrollView.lastVisibleIndex;
+      const remaining = items.length - scrollView.lastVisibleIndex;
       if (remaining < 20) {
         loadMoreItems();
       }
@@ -48,8 +48,8 @@ let collectionView = new CollectionView({
 loadInitialItems();
 
 function createItemCell() {
-  let cell = new Composite();
-  let container = new Composite({
+  const cell = new Composite();
+  const container = new Composite({
     id: 'container',
     left: 16, right: 16, top: 8, bottom: 8,
     cornerRadius: 2,
@@ -122,7 +122,7 @@ function loadNewItems() {
 function loadMoreItems() {
   if (!loading) {
     loading = true;
-    let lastId = getLastId();
+    const lastId = getLastId();
     // insert placeholder item
     items.push({loading: true});
     collectionView.insert(items.length, 1);
@@ -132,7 +132,7 @@ function loadMoreItems() {
       items.splice(items.length - 1, 1);
       collectionView.remove(-1);
       // insert new items
-      let insertionIndex = items.length;
+      const insertionIndex = items.length;
       items = items.concat(json.data.children);
       collectionView.insert(insertionIndex, json.data.children.length);
     });
@@ -156,7 +156,7 @@ function getRedditId(item) {
 }
 
 function createDetailsPage(data) {
-  let detailsPage = new Page({
+  const detailsPage = new Page({
     background: 'black',
     title: data.title
   }).appendTo(navigationView);

@@ -109,7 +109,7 @@ export function addDOMEventTargetMethods(target) {
       throw new Error('Not enough arguments to removeEventListener');
     }
     if (listeners && type in listeners) {
-      let index = listeners[type].indexOf(listener);
+      const index = listeners[type].indexOf(listener);
       if (index !== -1) {
         listeners[type].splice(index, 1);
       }
@@ -125,7 +125,7 @@ export function addDOMEventTargetMethods(target) {
     }
     event.$target = target;
     if (listeners && event.type in listeners) {
-      for (let listener of listeners[event.type]) {
+      for (const listener of listeners[event.type]) {
         listener.call(this, event);
       }
     }
@@ -139,7 +139,7 @@ export function defineEventHandlerProperties(target, types) {
 }
 
 function defineEventHandlerProperty(target, type) {
-  let handler = 'on' + type;
+  const handler = 'on' + type;
   let listener = null;
   Object.defineProperty(target, handler, {
     get() {

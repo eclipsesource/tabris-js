@@ -24,7 +24,7 @@ describe('TextDecoder', function() {
 
     it('creates native object tabris.TextDecoder', function() {
       decode(buffer);
-      let createCalls = client.calls({op: 'create', type: 'tabris.TextDecoder'});
+      const createCalls = client.calls({op: 'create', type: 'tabris.TextDecoder'});
       expect(createCalls.length).to.equal(1);
       expect(createCalls[0].properties).to.deep.equal({});
     });
@@ -61,31 +61,31 @@ describe('TextDecoder', function() {
 
     it('passes parameters to native call', function() {
       decode(buffer, 'ascii');
-      let call = client.calls({op: 'call', method: 'decode'})[0];
+      const call = client.calls({op: 'call', method: 'decode'})[0];
       expect(call.parameters).to.deep.equal({data: buffer, encoding: 'ascii'});
     });
 
     it('defaults to utf-8', function() {
       decode(buffer);
-      let call = client.calls({op: 'call', method: 'decode'})[0];
+      const call = client.calls({op: 'call', method: 'decode'})[0];
       expect(call.parameters.encoding).to.equal('utf-8');
     });
 
     it('replaces null with utf-8 ', function() {
       decode(buffer, null);
-      let call = client.calls({op: 'call', method: 'decode'})[0];
+      const call = client.calls({op: 'call', method: 'decode'})[0];
       expect(call.parameters.encoding).to.equal('utf-8');
     });
 
     it('extracts ArrayBuffer from ArrayBufferView', function() {
-      let bufferView = new Uint8Array();
+      const bufferView = new Uint8Array();
       decode(bufferView);
-      let call = client.calls({op: 'call', method: 'decode'})[0];
+      const call = client.calls({op: 'call', method: 'decode'})[0];
       expect(call.parameters.data).to.equal(bufferView.buffer);
     });
 
     it('resolves with result string', function() {
-      let promise = decode(buffer);
+      const promise = decode(buffer);
       tabris._notify(created().id, 'result', {string: 'foo'});
       return promise.then(result => {
         expect(result).to.equal('foo');
@@ -93,7 +93,7 @@ describe('TextDecoder', function() {
     });
 
     it('destroys remote object when result received', function() {
-      let promise = decode(buffer);
+      const promise = decode(buffer);
       tabris._notify(created().id, 'result', {string: 'foo'});
       return promise.then(() => {
         expect(client.calls({op: 'destroy', id: created().id})).not.to.be.empty;
@@ -101,7 +101,7 @@ describe('TextDecoder', function() {
     });
 
     it('rejects when error received', function() {
-      let promise = decode(buffer);
+      const promise = decode(buffer);
       tabris._notify(created().id, 'error', {});
       return promise.then(expectFail, err => {
         expect(err.message).to.equal('Could not decode utf-8');
@@ -109,7 +109,7 @@ describe('TextDecoder', function() {
     });
 
     it('destroys remote object when error received', function() {
-      let promise = decode(buffer);
+      const promise = decode(buffer);
       tabris._notify(created().id, 'error', {});
       return promise.then(expectFail, () => {
         expect(client.calls({op: 'destroy', id: created().id})).not.to.be.empty;

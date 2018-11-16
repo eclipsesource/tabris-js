@@ -4,12 +4,12 @@ const CANVAS_WIDTH = 210;
 const CANVAS_HEIGHT = 300;
 const ARC_RADIUS = 20;
 
-let page = new Page({
+const page = new Page({
   title: 'Arcs',
   autoDispose: false
 });
 
-let canvas = new Canvas({
+const canvas = new Canvas({
   centerX: 0, top: 32, width: CANVAS_WIDTH, height: CANVAS_HEIGHT
 }).appendTo(page);
 
@@ -21,8 +21,8 @@ new CheckBox({
   drawArcs(value);
 }).appendTo(page);
 
-let scaleFactor = device.scaleFactor;
-let context = canvas.getContext('2d', CANVAS_WIDTH * scaleFactor, CANVAS_HEIGHT * scaleFactor);
+const scaleFactor = device.scaleFactor;
+const context = canvas.getContext('2d', CANVAS_WIDTH * scaleFactor, CANVAS_HEIGHT * scaleFactor);
 context.scale(scaleFactor, scaleFactor);
 context.textAlign = 'center';
 context.textBaseline = 'top';

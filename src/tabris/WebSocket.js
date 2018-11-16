@@ -38,14 +38,14 @@ export default class WebSocket {
     if (typeof url !== 'string') {
       throw new Error('The WebSocket url has to be of type string');
     }
-    let scheme = extractScheme(url);
+    const scheme = extractScheme(url);
     if (!(scheme === 'ws' || scheme === 'wss')) {
       throw new Error("The WebSocket url has to have a scheme of 'ws' or 'wss' but is '" + scheme + "'");
     }
     if (typeof protocol !== 'string' && !Array.isArray(protocol)) {
       throw new Error('The WebSocket protocol has too be a string or an array of strings');
     }
-    let protocols = Array.isArray(protocol) ? protocol : [protocol];
+    const protocols = Array.isArray(protocol) ? protocol : [protocol];
     this.url = url;
     this.readyState = CONNECTING;
     this.protocol = '';
@@ -116,7 +116,7 @@ export default class WebSocket {
     }
     if (this.readyState !== CLOSING && this.readyState !== CLOSED) {
       this.readyState = CLOSING;
-      let properties = {};
+      const properties = {};
       if (code) {
         properties.code = code;
       }
@@ -139,7 +139,7 @@ function getStringByteSize(input) {
     return 0;
   }
   for (let i = 0; i < input.length; i++) {
-    let code = input.charCodeAt(i);
+    const code = input.charCodeAt(i);
     if (code <= 0x7f) {
       len += 1;
     } else if (code <= 0x7ff) {
@@ -159,6 +159,6 @@ function getStringByteSize(input) {
 }
 
 function extractScheme(url) {
-  let match = /^(\S+?):/.exec(url);
+  const match = /^(\S+?):/.exec(url);
   return match ? match[1] : null;
 }

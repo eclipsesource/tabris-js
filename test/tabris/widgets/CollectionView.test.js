@@ -24,13 +24,13 @@ describe('CollectionView', function() {
     });
 
     it('creates a native view', function() {
-      let createCalls = client.calls({op: 'create'});
+      const createCalls = client.calls({op: 'create'});
       expect(createCalls.length).to.equal(1);
       expect(createCalls[0].type).to.equal('tabris.CollectionView');
     });
 
     it('includes standard properties in native create', function() {
-      let createCalls = client.calls({op: 'create'});
+      const createCalls = client.calls({op: 'create'});
       expect(createCalls[0].properties.background).to.deep.equal({type: 'color', color: ([255, 255, 0, 255])});
     });
 
@@ -79,7 +79,7 @@ describe('CollectionView', function() {
       });
 
       it('accepts function', function() {
-        let fn = spy();
+        const fn = spy();
         view.createCell = fn;
         expect(view.createCell).to.equal(fn);
       });
@@ -96,12 +96,12 @@ describe('CollectionView', function() {
         view.createCell = spy();
 
         tabris.trigger('flush');
-        let calls = client.calls({op: 'call', id: view.cid, method: 'load'});
+        const calls = client.calls({op: 'call', id: view.cid, method: 'load'});
         expect(calls[0].parameters).to.deep.equal({itemCount: 10});
       });
 
       it('does not call native load when unchanged', function() {
-        let fn = spy();
+        const fn = spy();
         view.createCell = fn;
         tabris.trigger('flush');
         client.resetCalls();
@@ -109,7 +109,7 @@ describe('CollectionView', function() {
         view.createCell = fn;
         tabris.trigger('flush');
 
-        let calls = client.calls({op: 'call', id: view.cid, method: 'load'});
+        const calls = client.calls({op: 'call', id: view.cid, method: 'load'});
         expect(calls).to.be.empty;
       });
 
@@ -122,7 +122,7 @@ describe('CollectionView', function() {
       });
 
       it('accepts function', function() {
-        let fn = spy();
+        const fn = spy();
         view.updateCell = fn;
         expect(view.updateCell).to.equal(fn);
       });
@@ -139,12 +139,12 @@ describe('CollectionView', function() {
         view.updateCell = spy();
 
         tabris.trigger('flush');
-        let calls = client.calls({op: 'call', id: view.cid, method: 'load'});
+        const calls = client.calls({op: 'call', id: view.cid, method: 'load'});
         expect(calls[0].parameters).to.deep.equal({itemCount: 10});
       });
 
       it('does not call native load when unchanged', function() {
-        let fn = spy();
+        const fn = spy();
         view.updateCell = fn;
         tabris.trigger('flush');
         client.resetCalls();
@@ -152,7 +152,7 @@ describe('CollectionView', function() {
         view.updateCell = fn;
         tabris.trigger('flush');
 
-        let calls = client.calls({op: 'call', id: view.cid, method: 'load'});
+        const calls = client.calls({op: 'call', id: view.cid, method: 'load'});
         expect(calls).to.be.empty;
       });
     });
@@ -171,7 +171,7 @@ describe('CollectionView', function() {
       });
 
       it('throws when createCell returns widget with a parent', function() {
-        let cell = new Composite().appendTo(new Composite());
+        const cell = new Composite().appendTo(new Composite());
         view.createCell = spy(() => cell);
         expect(() => view._trigger('createCell', {type: 0})).to.throw(Error, 'Created cell already has a parent');
       });
@@ -185,7 +185,7 @@ describe('CollectionView', function() {
         it('GETs property from client', function() {
           stub(client, 'get').returns(23);
 
-          let result = view[prop];
+          const result = view[prop];
 
           expect(result).to.equal(23);
           expect(client.get).to.have.been.called;
@@ -204,12 +204,12 @@ describe('CollectionView', function() {
 
       });
 
-      let changeEvent = prop + 'Changed';
+      const changeEvent = prop + 'Changed';
 
       describe(changeEvent, function() {
 
         it('issues native listen once', function() {
-          let listener = spy();
+          const listener = spy();
 
           view.on(changeEvent, listener);
           view.on(changeEvent, listener);
@@ -218,7 +218,7 @@ describe('CollectionView', function() {
         });
 
         it('listener is notified once for every new index', function() {
-          let listener = spy();
+          const listener = spy();
           let index = 23;
           view.on(changeEvent, listener);
           stub(client, 'get').callsFake(() => index);
@@ -236,7 +236,7 @@ describe('CollectionView', function() {
         });
 
         it('listener is notified once even if other listeners are attached', function() {
-          let listener = spy();
+          const listener = spy();
           view.on(changeEvent, listener);
           view.on(changeEvent, function() {});
           stub(client, 'get').returns(23);
@@ -247,7 +247,7 @@ describe('CollectionView', function() {
         });
 
         it('listener is notified once after on-off-on', function() {
-          let listener = spy();
+          const listener = spy();
           view.on(changeEvent, listener);
           view.off(changeEvent, listener);
           view.on(changeEvent, listener);
@@ -269,7 +269,7 @@ describe('CollectionView', function() {
       });
 
       it('accepts and returns function', function() {
-        let fn = spy();
+        const fn = spy();
         view.cellType = fn;
         expect(view.cellType).to.equal(fn);
       });
@@ -292,7 +292,7 @@ describe('CollectionView', function() {
         view.cellType = 'cellType';
 
         tabris.trigger('flush');
-        let calls = client.calls({op: 'call', id: view.cid, method: 'load'});
+        const calls = client.calls({op: 'call', id: view.cid, method: 'load'});
         expect(calls[0].parameters).to.deep.equal({itemCount: 10});
       });
 
@@ -304,7 +304,7 @@ describe('CollectionView', function() {
         view.cellType = 'cellType';
         tabris.trigger('flush');
 
-        let calls = client.calls({op: 'call', id: view.cid, method: 'load'});
+        const calls = client.calls({op: 'call', id: view.cid, method: 'load'});
         expect(calls).to.be.empty;
       });
 
@@ -317,7 +317,7 @@ describe('CollectionView', function() {
       });
 
       it('accepts and returns function', function() {
-        let fn = spy();
+        const fn = spy();
         view.cellHeight = fn;
         expect(view.cellHeight).to.equal(fn);
       });
@@ -345,7 +345,7 @@ describe('CollectionView', function() {
         view.cellHeight = 48;
 
         tabris.trigger('flush');
-        let calls = client.calls({op: 'call', id: view.cid, method: 'load'});
+        const calls = client.calls({op: 'call', id: view.cid, method: 'load'});
         expect(calls[0].parameters).to.deep.equal({itemCount: 10});
       });
 
@@ -357,7 +357,7 @@ describe('CollectionView', function() {
         view.cellHeight = 48;
         tabris.trigger('flush');
 
-        let calls = client.calls({op: 'call', id: view.cid, method: 'load'});
+        const calls = client.calls({op: 'call', id: view.cid, method: 'load'});
         expect(calls).to.be.empty;
       });
     });
@@ -372,7 +372,7 @@ describe('CollectionView', function() {
       it('calls native load with item count', function() {
         view.itemCount = 23;
         tabris.trigger('flush');
-        let calls = client.calls({op: 'call', id: view.cid, method: 'load'});
+        const calls = client.calls({op: 'call', id: view.cid, method: 'load'});
         expect(calls[0].parameters).to.deep.equal({itemCount: 23});
       });
 
@@ -384,14 +384,14 @@ describe('CollectionView', function() {
         view.itemCount = 23;
         tabris.trigger('flush');
 
-        let calls = client.calls({op: 'call', id: view.cid, method: 'load'});
+        const calls = client.calls({op: 'call', id: view.cid, method: 'load'});
         expect(calls[0].parameters).to.deep.equal({itemCount: 23});
       });
 
       it('does not set native property', function() {
         view.itemCount = 23;
 
-        let calls = client.calls({op: 'set', id: view.cid});
+        const calls = client.calls({op: 'set', id: view.cid});
         expect(calls).to.be.empty;
       });
 
@@ -462,7 +462,7 @@ describe('CollectionView', function() {
     describe('when `select` event is received', function() {
 
       it('triggers select on the collection view', function() {
-        let listener = spy();
+        const listener = spy();
         view.onSelect(listener);
 
         view._trigger('select', {index: 0});
@@ -476,7 +476,7 @@ describe('CollectionView', function() {
     describe('when `scroll` event is received', function() {
 
       it('triggers `scroll` on collection view', function() {
-        let listener = spy();
+        const listener = spy();
         view.onScroll(listener);
 
         view._trigger('scroll', {deltaX: 23, deltaY: 42});
@@ -528,7 +528,7 @@ describe('CollectionView', function() {
         });
 
         it('a warning is logged', function() {
-          let warning = 'Cannot dispose of collection view cell';
+          const warning = 'Cannot dispose of collection view cell';
           expect(console.warn).to.have.been.calledWith(warning);
         });
 
@@ -546,7 +546,7 @@ describe('CollectionView', function() {
         });
 
         it('a warning is logged', function() {
-          let warning = 'Cannot re-parent collection view cell';
+          const warning = 'Cannot re-parent collection view cell';
           expect(console.warn).to.have.been.calledWith(warning);
         });
 
@@ -613,7 +613,7 @@ describe('CollectionView', function() {
       it('does not call native load before flash', function() {
         view.load(42);
 
-        let calls = client.calls({op: 'call', id: view.cid, method: 'load'});
+        const calls = client.calls({op: 'call', id: view.cid, method: 'load'});
         expect(calls).to.be.empty;
       });
 
@@ -621,7 +621,7 @@ describe('CollectionView', function() {
         view.load(42);
         tabris.trigger('flush');
 
-        let loadCall = client.calls({op: 'call', method: 'load', id: view.cid})[0];
+        const loadCall = client.calls({op: 'call', method: 'load', id: view.cid})[0];
         expect(loadCall.parameters).to.deep.equal({itemCount: 42});
       });
 
@@ -650,7 +650,7 @@ describe('CollectionView', function() {
       it('calls native update', function() {
         view.insert(0, 3);
 
-        let updateCall = client.calls({op: 'call', method: 'insert', id: view.cid})[0];
+        const updateCall = client.calls({op: 'call', method: 'insert', id: view.cid})[0];
         expect(updateCall.parameters).to.deep.equal({index: 0, count: 3});
       });
 
@@ -658,7 +658,7 @@ describe('CollectionView', function() {
         view.itemCount = 42;
         view.insert(1);
 
-        let calls = client.calls({op: 'call', id: view.cid});
+        const calls = client.calls({op: 'call', id: view.cid});
         expect(calls.map(call => call.method)).to.deep.equal(['load', 'insert']);
       });
 
@@ -671,7 +671,7 @@ describe('CollectionView', function() {
       it('handles single parameter', function() {
         view.insert(2);
 
-        let updateCall = client.calls({op: 'call', method: 'insert', id: view.cid})[0];
+        const updateCall = client.calls({op: 'call', method: 'insert', id: view.cid})[0];
         expect(updateCall.parameters).to.deep.equal({index: 2, count: 1});
         expect(view.itemCount).to.equal(4);
       });
@@ -679,7 +679,7 @@ describe('CollectionView', function() {
       it('handles negative index', function() {
         view.insert(-1);
 
-        let updateCall = client.calls({op: 'call', method: 'insert', id: view.cid})[0];
+        const updateCall = client.calls({op: 'call', method: 'insert', id: view.cid})[0];
         expect(updateCall.parameters).to.deep.equal({index: 2, count: 1});
         expect(view.itemCount).to.equal(4);
       });
@@ -687,7 +687,7 @@ describe('CollectionView', function() {
       it('adjusts index to bounds', function() {
         view.insert(5);
 
-        let call = client.calls({op: 'call', method: 'insert', id: view.cid})[0];
+        const call = client.calls({op: 'call', method: 'insert', id: view.cid})[0];
         expect(call.parameters).to.deep.equal({index: 3, count: 1});
         expect(view.itemCount).to.equal(4);
       });
@@ -695,7 +695,7 @@ describe('CollectionView', function() {
       it('adjusts negative index to bounds', function() {
         view.insert(-5);
 
-        let call = client.calls({op: 'call', method: 'insert', id: view.cid})[0];
+        const call = client.calls({op: 'call', method: 'insert', id: view.cid})[0];
         expect(call.parameters).to.deep.equal({index: 0, count: 1});
         expect(view.itemCount).to.equal(4);
       });
@@ -720,7 +720,7 @@ describe('CollectionView', function() {
       it('calls native update', function() {
         view.remove(1, 2);
 
-        let updateCall = client.calls({op: 'call', method: 'remove', id: view.cid})[0];
+        const updateCall = client.calls({op: 'call', method: 'remove', id: view.cid})[0];
         expect(updateCall.parameters).to.deep.equal({index: 1, count: 2});
       });
 
@@ -728,7 +728,7 @@ describe('CollectionView', function() {
         view.itemCount = 42;
         view.remove(1);
 
-        let calls = client.calls({op: 'call', id: view.cid});
+        const calls = client.calls({op: 'call', id: view.cid});
         expect(calls.map(call => call.method)).to.deep.equal(['load', 'remove']);
       });
 
@@ -741,7 +741,7 @@ describe('CollectionView', function() {
       it('handles single parameter', function() {
         view.remove(1);
 
-        let updateCall = client.calls({op: 'call', method: 'remove', id: view.cid})[0];
+        const updateCall = client.calls({op: 'call', method: 'remove', id: view.cid})[0];
         expect(updateCall.parameters).to.deep.equal({index: 1, count: 1});
         expect(view.itemCount).to.equal(2);
       });
@@ -749,7 +749,7 @@ describe('CollectionView', function() {
       it('handles negative index', function() {
         view.remove(-1);
 
-        let updateCall = client.calls({op: 'call', method: 'remove', id: view.cid})[0];
+        const updateCall = client.calls({op: 'call', method: 'remove', id: view.cid})[0];
         expect(updateCall.parameters).to.deep.equal({index: 2, count: 1});
         expect(view.itemCount).to.equal(2);
       });
@@ -757,7 +757,7 @@ describe('CollectionView', function() {
       it('ignores index out of bounds', function() {
         view.remove(5, 2);
 
-        let updateCalls = client.calls({op: 'call', method: 'update', id: view.cid});
+        const updateCalls = client.calls({op: 'call', method: 'update', id: view.cid});
         expect(updateCalls).to.be.empty;
         expect(view.itemCount).to.equal(3);
       });
@@ -765,14 +765,14 @@ describe('CollectionView', function() {
       it('ignores negative index out of bounds', function() {
         view.remove(-5, 2);
 
-        let updateCalls = client.calls({op: 'call', method: 'update', id: view.cid});
+        const updateCalls = client.calls({op: 'call', method: 'update', id: view.cid});
         expect(updateCalls).to.be.empty;
       });
 
       it('repairs count if exceeding', function() {
         view.remove(2, 5);
 
-        let updateCall = client.calls({op: 'call', method: 'remove', id: view.cid})[0];
+        const updateCall = client.calls({op: 'call', method: 'remove', id: view.cid})[0];
         expect(updateCall.parameters).to.deep.equal({index: 2, count: 1});
         expect(view.itemCount).to.equal(2);
       });
@@ -780,7 +780,7 @@ describe('CollectionView', function() {
       it('ignores zero count', function() {
         view.remove(2, 0);
 
-        let updateCalls = client.calls({op: 'call', method: 'update', id: view.cid});
+        const updateCalls = client.calls({op: 'call', method: 'update', id: view.cid});
         expect(updateCalls).to.be.empty;
         expect(view.itemCount).to.equal(3);
       });
@@ -797,14 +797,14 @@ describe('CollectionView', function() {
       it('without parameters calls native update', function() {
         view.refresh();
 
-        let updateCall = client.calls({op: 'call', method: 'refresh', id: view.cid})[0];
+        const updateCall = client.calls({op: 'call', method: 'refresh', id: view.cid})[0];
         expect(updateCall.parameters).to.deep.equal({index: 0, count: 3});
       });
 
       it('calls native update', function() {
         view.refresh(1);
 
-        let updateCall = client.calls({op: 'call', method: 'refresh', id: view.cid})[0];
+        const updateCall = client.calls({op: 'call', method: 'refresh', id: view.cid})[0];
         expect(updateCall.parameters).to.deep.equal({index: 1, count: 1});
       });
 
@@ -812,21 +812,21 @@ describe('CollectionView', function() {
         view.itemCount = 42;
         view.refresh(1);
 
-        let calls = client.calls({op: 'call', id: view.cid});
+        const calls = client.calls({op: 'call', id: view.cid});
         expect(calls.map(call => call.method)).to.deep.equal(['load', 'refresh']);
       });
 
       it('accepts negative index', function() {
         view.refresh(-1);
 
-        let updateCall = client.calls({op: 'call', method: 'refresh', id: view.cid})[0];
+        const updateCall = client.calls({op: 'call', method: 'refresh', id: view.cid})[0];
         expect(updateCall.parameters).to.deep.equal({index: 2, count: 1});
       });
 
       it('ignores out-of-bounds index', function() {
         view.refresh(5);
 
-        let calls = client.calls({op: 'call', method: 'update', id: view.cid});
+        const calls = client.calls({op: 'call', method: 'update', id: view.cid});
         expect(calls).to.be.empty;
       });
 
@@ -848,21 +848,21 @@ describe('CollectionView', function() {
       it('calls native reveal with index', function() {
         view.reveal(1);
 
-        let call = client.calls({op: 'call', method: 'reveal', id: view.cid})[0];
+        const call = client.calls({op: 'call', method: 'reveal', id: view.cid})[0];
         expect(call.parameters).to.deep.equal({index: 1});
       });
 
       it('accepts negative index', function() {
         view.reveal(-1);
 
-        let call = client.calls({op: 'call', method: 'reveal', id: view.cid})[0];
+        const call = client.calls({op: 'call', method: 'reveal', id: view.cid})[0];
         expect(call.parameters).to.deep.equal({index: 2});
       });
 
       it('ignores out-of-bounds index', function() {
         view.reveal(5);
 
-        let calls = client.calls({op: 'call', method: 'reveal', id: view.cid});
+        const calls = client.calls({op: 'call', method: 'reveal', id: view.cid});
         expect(calls).to.be.empty;
       });
 
@@ -887,7 +887,7 @@ describe('CollectionView', function() {
     });
 
     it('does not crash when disposed right after setting itemCount (bugfix)', function() {
-      let view = new CollectionView();
+      const view = new CollectionView();
       view.itemCount = 23;
       view.dispose();
       tabris.trigger('flush');

@@ -2,10 +2,10 @@ const FONT_STYLES = ['italic', 'normal'];
 const FONT_WEIGHTS = ['black', 'bold', 'medium', 'thin', 'light', 'normal'];
 
 export function fontStringToObject(str) {
-  let result = {family: [], size: 0, style: 'normal', weight: 'normal'};
-  let parts = str.split(/(?:\s|^)\d+px(?:\s|$)/);
+  const result = {family: [], size: 0, style: 'normal', weight: 'normal'};
+  const parts = str.split(/(?:\s|^)\d+px(?:\s|$)/);
   checkTruthy(parts.length === 2, 'Invalid font syntax');
-  let [sizePrefix, sizeSuffix] = parts;
+  const [sizePrefix, sizeSuffix] = parts;
   result.size = parseInt(/(?:\s|^)(\d+)px(?:\s|$)/.exec(str)[1], 10);
   parseSizePrefix(result, sizePrefix);
   parseFamily(result, sizeSuffix);
@@ -22,7 +22,7 @@ export function fontObjectToString(font) {
 }
 
 export function validateFamily(name) {
-  let valid = /(?:^\s*[^"']+\s*$)|(?:^\s*"[^"']+"\s*$)|(?:^\s*'[^"']+'\s*$)/.exec(name);
+  const valid = /(?:^\s*[^"']+\s*$)|(?:^\s*"[^"']+"\s*$)|(?:^\s*'[^"']+'\s*$)/.exec(name);
   checkTruthy(valid, 'Invalid font family: ' + name);
 }
 
@@ -47,9 +47,9 @@ export function normalizeStyle(value) {
 }
 
 function parseSizePrefix(fontObj, prefix) {
-  let prefixes = prefix.trim().split(/\s+/);
+  const prefixes = prefix.trim().split(/\s+/);
   checkTruthy(prefixes.length <= 2, 'Too many font size prefixes');
-  let {style, weight} = parseSizePrefixes(prefixes);
+  const {style, weight} = parseSizePrefixes(prefixes);
   fontObj.style = style;
   fontObj.weight = weight;
 }
@@ -58,7 +58,7 @@ function parseSizePrefixes(prefixes) {
   // [styleOrWeight]
   // [style, weight]
   if (prefixes.length === 1) {
-    let prefix = prefixes[0];
+    const prefix = prefixes[0];
     if (isStyle(prefix)) {
       return {weight: 'normal', style: normalizeStyle(prefix)};
     } else if (isWeight(prefix)) {

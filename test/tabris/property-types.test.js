@@ -16,7 +16,7 @@ describe('property-types', function() {
   }
 
   beforeEach(function() {
-    let client = new ClientStub();
+    const client = new ClientStub();
     mockTabris(client);
   });
 
@@ -81,29 +81,29 @@ describe('property-types', function() {
 
   describe('NativeObject', function() {
 
-    let encode = types.NativeObject.encode;
-    let decode = types.NativeObject.decode;
+    const encode = types.NativeObject.encode;
+    const decode = types.NativeObject.decode;
 
     it('translates widgets to ids in properties', function() {
-      let value = new CustomNativeObject();
+      const value = new CustomNativeObject();
 
       expect(encode(value)).to.equal(value.cid);
     });
 
     it('translates widget collection to first ids in properties', function() {
-      let value = new WidgetCollection([new CustomNativeObject()]);
+      const value = new WidgetCollection([new CustomNativeObject()]);
 
       expect(encode(value)).to.equal(value[0].cid);
     });
 
     it('does not translate objects with id field to ids', function() {
-      let value = {id: '23', name: 'bar'};
+      const value = {id: '23', name: 'bar'};
 
       expect(encode(value)).to.equal(value);
     });
 
     it('translates ids to widgets', function() {
-      let value = new CustomNativeObject();
+      const value = new CustomNativeObject();
 
       expect(decode(value.cid)).to.equal(value);
     });
@@ -112,12 +112,12 @@ describe('property-types', function() {
 
   describe('image', function() {
 
-    let encode = types.ImageValue.encode;
+    const encode = types.ImageValue.encode;
 
     it('succeeds for minimal image value', function() {
       stub(console, 'warn');
 
-      let result = encode({src: 'foo.png'});
+      const result = encode({src: 'foo.png'});
 
       expect(result).to.eql(['foo.png', null, null, null]);
       expect(console.warn).not.to.have.been.called;
@@ -126,7 +126,7 @@ describe('property-types', function() {
     it('succeeds for image with width and height', function() {
       stub(console, 'warn');
 
-      let result = encode({src: 'foo.png', width: 10, height: 10});
+      const result = encode({src: 'foo.png', width: 10, height: 10});
 
       expect(result).to.eql(['foo.png', 10, 10, null]);
       expect(console.warn).not.to.have.been.called;
@@ -135,7 +135,7 @@ describe('property-types', function() {
     it('succeeds for image with scale', function() {
       stub(console, 'warn');
 
-      let result = encode({src: 'foo.png', scale: 1.4});
+      const result = encode({src: 'foo.png', scale: 1.4});
 
       expect(result).to.eql(['foo.png', null, null, 1.4]);
       expect(console.warn).not.to.have.been.called;
@@ -201,11 +201,11 @@ describe('property-types', function() {
     });
 
     it('fails if width/height/scale values are invalid number', function() {
-      let goodValues = [0, 1, 1 / 3, 0.5, Math.PI];
-      let badValues = [-1, NaN, 1 / 0, -1 / 0, '1', true, false, {}];
-      let props = ['width', 'height', 'scale'];
-      let checkWith = function(prop, value) {
-        let image = {src: 'foo'};
+      const goodValues = [0, 1, 1 / 3, 0.5, Math.PI];
+      const badValues = [-1, NaN, 1 / 0, -1 / 0, '1', true, false, {}];
+      const props = ['width', 'height', 'scale'];
+      const checkWith = function(prop, value) {
+        const image = {src: 'foo'};
         image[prop] = value;
         encode(image);
       };
@@ -244,7 +244,7 @@ describe('property-types', function() {
 
   describe('boolean', function() {
 
-    let encode = types.boolean.encode;
+    const encode = types.boolean.encode;
 
     it('passes through true', function() {
       expect(encode(true)).to.equal(true);
@@ -272,7 +272,7 @@ describe('property-types', function() {
 
   describe('string', function() {
 
-    let encode = types.string.encode;
+    const encode = types.string.encode;
 
     it('translates null to empty string', function() {
       expect(encode(null)).to.equal('');
@@ -292,7 +292,7 @@ describe('property-types', function() {
 
   describe('number', function() {
 
-    let encode = types.number.encode;
+    const encode = types.number.encode;
 
     it('fails for non-numbers', function() {
       expect(() => encode()).to.throw(Error, 'Not a number: undefined');
@@ -305,7 +305,7 @@ describe('property-types', function() {
     });
 
     it('fails for invalid numbers', function() {
-      let values = [NaN, 1 / 0, -1 / 0];
+      const values = [NaN, 1 / 0, -1 / 0];
       values.forEach((value) => {
         expect(() => {
           encode(value);
@@ -334,7 +334,7 @@ describe('property-types', function() {
 
   describe('natural', function() {
 
-    let encode = types.natural.encode;
+    const encode = types.natural.encode;
 
     it('fails for non-numbers', function() {
       expect(() => encode()).to.throw(Error, 'Not a number: undefined');
@@ -347,7 +347,7 @@ describe('property-types', function() {
     });
 
     it('fails for invalid numbers', function() {
-      let values = [NaN, 1 / 0, -1 / 0];
+      const values = [NaN, 1 / 0, -1 / 0];
       values.forEach((value) => {
         expect(() => {
           encode(value);
@@ -383,7 +383,7 @@ describe('property-types', function() {
 
   describe('integer', function() {
 
-    let encode = types.integer.encode;
+    const encode = types.integer.encode;
 
     it('fails for non-numbers', function() {
       expect(() => encode()).to.throw(Error, 'Not a number: undefined');
@@ -396,7 +396,7 @@ describe('property-types', function() {
     });
 
     it('fails for invalid numbers', function() {
-      let values = [NaN, 1 / 0, -1 / 0];
+      const values = [NaN, 1 / 0, -1 / 0];
       values.forEach((value) => {
         expect(() => {
           encode(value);
@@ -432,15 +432,15 @@ describe('property-types', function() {
 
   describe('function', function() {
 
-    let encode = types.function.encode;
+    const encode = types.function.encode;
 
     it('accepts functions', function() {
-      let fn = function() {};
+      const fn = function() {};
       expect(encode(fn)).to.equal(fn);
     });
 
     it('fails for non-functions', function() {
-      let values = ['', 'foo', 23, null, undefined, true, false, {}, []];
+      const values = ['', 'foo', 23, null, undefined, true, false, {}, []];
       values.forEach((value) => {
         expect(() => {
           encode(value);
@@ -452,10 +452,10 @@ describe('property-types', function() {
 
   describe('choice', function() {
 
-    let encode = types.choice.encode;
+    const encode = types.choice.encode;
 
     it('allows string values given in array', function() {
-      let accepted = ['1', 'foo', 'bar'];
+      const accepted = ['1', 'foo', 'bar'];
 
       expect(encode('1', accepted)).to.equal('1');
       expect(encode('foo', accepted)).to.equal('foo');
@@ -463,7 +463,7 @@ describe('property-types', function() {
     });
 
     it('rejects string values not given in array', function() {
-      let accepted = ['x', 'y', 'z'];
+      const accepted = ['x', 'y', 'z'];
 
       ['1', 'foo', 'bar'].forEach((value) => {
         expect(() => {
@@ -476,7 +476,7 @@ describe('property-types', function() {
 
   describe('nullable', function() {
 
-    let encode = types.nullable.encode;
+    const encode = types.nullable.encode;
 
     it('allows null', function() {
       expect(encode(null)).to.be.null;
@@ -497,7 +497,7 @@ describe('property-types', function() {
 
   describe('opacity', function() {
 
-    let encode = types.opacity.encode;
+    const encode = types.opacity.encode;
 
     it('fails for non-numbers', function() {
       expect(() => encode()).to.throw(Error, 'Not a number: undefined');
@@ -510,7 +510,7 @@ describe('property-types', function() {
     });
 
     it('fails for invalid numbers', function() {
-      let values = [NaN, 1 / 0, -1 / 0];
+      const values = [NaN, 1 / 0, -1 / 0];
       values.forEach((value) => {
         expect(() => {
           encode(value);
@@ -541,8 +541,8 @@ describe('property-types', function() {
 
   describe('transform', function() {
 
-    let encode = types.transform.encode;
-    let defaultValue = {
+    const encode = types.transform.encode;
+    const defaultValue = {
       rotation: 0,
       scaleX: 1,
       scaleY: 1,
@@ -550,7 +550,7 @@ describe('property-types', function() {
       translationY: 0,
       translationZ: 0
     };
-    let customValue = {
+    const customValue = {
       rotation: 1.2,
       scaleX: 2,
       scaleY: 0.5,
@@ -565,8 +565,8 @@ describe('property-types', function() {
     });
 
     it('auto-completes values', function() {
-      let value = omit(customValue, ['scaleX', 'translationY']);
-      let expected = {
+      const value = omit(customValue, ['scaleX', 'translationY']);
+      const expected = {
         rotation: 1.2,
         scaleX: 1,
         scaleY: 0.5,
@@ -603,7 +603,7 @@ describe('property-types', function() {
 
   describe('array', function() {
 
-    let encode = types.array.encode;
+    const encode = types.array.encode;
 
     it('passes any array', function() {
       expect(encode([1, 'a', true])).to.eql([1, 'a', true]);
@@ -618,12 +618,12 @@ describe('property-types', function() {
     });
 
     it('does not copy array', function() {
-      let input = [1, 2, 3];
+      const input = [1, 2, 3];
       expect(encode(input)).to.equal(input);
     });
 
     it('fails for non-arrays', function() {
-      let values = [0, 1, '', 'foo', false, true, {}, {length: 0}];
+      const values = [0, 1, '', 'foo', false, true, {}, {length: 0}];
       values.forEach((value) => {
         expect(() => {
           encode(value);
@@ -640,7 +640,7 @@ describe('property-types', function() {
 
   describe('boxDimensions encode', function() {
 
-    let encode = types.boxDimensions.encode;
+    const encode = types.boxDimensions.encode;
 
     it('passes objects', function() {
       expect(encode({left: 1, right: 2, top: 3, bottom: 4})).to.deep.equal({left: 1, right: 2, top: 3, bottom: 4});

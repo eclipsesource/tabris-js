@@ -7,7 +7,7 @@ export default class WidgetCollection {
     if (selector && !origin) {
       throw new Error('WidgetCollection can not be constructed with an selector but no origin');
     }
-    let arr = collection instanceof WidgetCollection ? collection.toArray() : collection;
+    const arr = collection instanceof WidgetCollection ? collection.toArray() : collection;
     Object.defineProperty(this, 'host', {value: getHost(origin)});
     this._array = select(arr, selector || '*', deep, origin instanceof WidgetCollection ? origin : this);
     for (let i = 0; i < this._array.length; i++) {
@@ -54,9 +54,9 @@ export default class WidgetCollection {
   }
 
   parent() {
-    let result = [];
-    for (let widget of this._array) {
-      let parent = widget.parent();
+    const result = [];
+    for (const widget of this._array) {
+      const parent = widget.parent();
       if (parent && result.indexOf(parent) === -1) {
         result.push(parent);
       }
@@ -67,8 +67,8 @@ export default class WidgetCollection {
   }
 
   children(selector) {
-    let result = [];
-    for (let widget of this._array) {
+    const result = [];
+    for (const widget of this._array) {
       result.push.apply(result, widget.children());
     }
     return new WidgetCollection(result, {selector, origin: this});

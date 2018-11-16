@@ -28,7 +28,7 @@ describe('ImageView', function() {
     let listener;
 
     function checkListen(event) {
-      let listen = client.calls({op: 'listen', id: imageView.cid});
+      const listen = client.calls({op: 'listen', id: imageView.cid});
       expect(listen.length).to.equal(1);
       expect(listen[0].event).to.equal(event);
       expect(listen[0].listen).to.equal(true);

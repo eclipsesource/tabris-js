@@ -45,7 +45,7 @@ describe('SearchAction', function() {
     it('translates placement priority to uppercase', function() {
       action.placementPriority = 'low';
 
-      let call = client.calls({op: 'set'})[0];
+      const call = client.calls({op: 'set'})[0];
       expect(call.properties.placementPriority).to.equal('low');
     });
 
@@ -63,7 +63,7 @@ describe('SearchAction', function() {
     it('returns cached placementPriority', function() {
       action.placementPriority = 'low';
 
-      let result = action.placementPriority;
+      const result = action.placementPriority;
 
       expect(result).to.equal('low');
     });
@@ -89,7 +89,7 @@ describe('SearchAction', function() {
     });
 
     function checkListen(event) {
-      let listen = client.calls({op: 'listen', id: action.cid});
+      const listen = client.calls({op: 'listen', id: action.cid});
       expect(listen.length).to.equal(1);
       expect(listen[0].event).to.equal(event);
       expect(listen[0].listen).to.equal(true);
@@ -132,7 +132,7 @@ describe('SearchAction', function() {
     });
 
     it('returns self to allow chaining', function() {
-      let result = action.open();
+      const result = action.open();
 
       expect(result).to.equal(action);
     });

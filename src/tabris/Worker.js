@@ -57,7 +57,7 @@ export default class Worker {
           this._validateMessage(message[i]);
         }
       } else if (typeof (message) === 'object') {
-        for (let property in message) {
+        for (const property in message) {
           if (message.hasOwnProperty(property)) {
             this._validateMessage(message[property]);
           }

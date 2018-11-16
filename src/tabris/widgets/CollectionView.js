@@ -108,14 +108,14 @@ export default class CollectionView extends Composite {
 
   _trigger(name, event) {
     if (name === 'requestInfo') {
-      let type = resolveProperty(this, 'cellType', event.index);
-      let height = resolveProperty(this, 'cellHeight', event.index, type);
+      const type = resolveProperty(this, 'cellType', event.index);
+      const height = resolveProperty(this, 'cellHeight', event.index, type);
       return {
         type: encodeCellType(this, type),
         height: encodeCellHeight(height)
       };
     } else if (name === 'createCell') {
-      let item = this.$createCell(event.type);
+      const item = this.$createCell(event.type);
       return item.cid;
     } else if (name === 'updateCell') {
       this.updateCell(tabris._nativeObjectRegistry.find(event.widget), event.index);
@@ -127,7 +127,7 @@ export default class CollectionView extends Composite {
   }
 
   $createCell(type) {
-    let cell = this.createCell(decodeCellType(this, type));
+    const cell = this.createCell(decodeCellType(this, type));
     if (!(cell instanceof Widget)) {
       throw new Error('Created cell is not a widget');
     }
@@ -235,7 +235,7 @@ NativeObject.defineEvents(CollectionView.prototype, {
 });
 
 function resolveProperty(ctx, name) {
-  let value = ctx[name];
+  const value = ctx[name];
   if (typeof value === 'function') {
     return value.apply(null, Array.prototype.slice.call(arguments, 2));
   }
@@ -243,7 +243,7 @@ function resolveProperty(ctx, name) {
 }
 
 function encodeCellType(ctx, type) {
-  let cellTypes = ctx._cellTypes || (ctx._cellTypes = []);
+  const cellTypes = ctx._cellTypes || (ctx._cellTypes = []);
   let index = cellTypes.indexOf(type);
   if (index === -1) {
     index += cellTypes.push(type);
@@ -252,7 +252,7 @@ function encodeCellType(ctx, type) {
 }
 
 function decodeCellType(ctx, type) {
-  let cellTypes = ctx._cellTypes || [];
+  const cellTypes = ctx._cellTypes || [];
   return cellTypes[type] || null;
 }
 
@@ -266,12 +266,12 @@ function encodeCellHeight(value) {
   warn('Invalid cell height: ' + value);
 }
 
-let triggerChangeFirstVisibleIndex = createDelegate('firstVisibleIndex');
-let triggerChangeLastVisibleIndex = createDelegate('lastVisibleIndex');
+const triggerChangeFirstVisibleIndex = createDelegate('firstVisibleIndex');
+const triggerChangeLastVisibleIndex = createDelegate('lastVisibleIndex');
 
 function createDelegate(prop) {
   return function() {
-    let actual = this[prop];
+    const actual = this[prop];
     if (actual !== this['_prev:' + prop]) {
       this._triggerChangeEvent(prop, actual);
     }

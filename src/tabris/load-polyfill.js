@@ -21,15 +21,15 @@ function assign(target) {
   if (target === undefined || target === null) {
     throw new TypeError('Cannot convert first argument to object');
   }
-  let to = Object(target);
+  const to = Object(target);
   for (let i = 1; i < arguments.length; i++) {
-    let source = arguments[i];
+    const source = arguments[i];
     if (source === undefined || source === null) {
       continue;
     }
-    let keys = Object.keys(Object(source));
-    for (let key of keys) {
-      let desc = Object.getOwnPropertyDescriptor(source, key);
+    const keys = Object.keys(Object(source));
+    for (const key of keys) {
+      const desc = Object.getOwnPropertyDescriptor(source, key);
       if (desc !== undefined && desc.enumerable) {
         to[key] = source[key];
       }

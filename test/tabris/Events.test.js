@@ -29,7 +29,7 @@ describe('Events', function() {
     });
 
     it('returns context', function() {
-      let result = object.on('foo', listener);
+      const result = object.on('foo', listener);
 
       expect(result).to.equal(object);
     });
@@ -172,7 +172,7 @@ describe('Events', function() {
     });
 
     it('returns context', function() {
-      let result = object.off('foo', listener);
+      const result = object.off('foo', listener);
 
       expect(result).to.equal(object);
     });
@@ -191,7 +191,7 @@ describe('Events', function() {
 
     it('forwards event object to wrapped listener', function() {
       object.once('foo', listener);
-      let event = {fooEvent: 'foo'};
+      const event = {fooEvent: 'foo'};
 
       object.trigger('foo', event);
 
@@ -199,7 +199,7 @@ describe('Events', function() {
     });
 
     it('uses given context', function() {
-      let context = {};
+      const context = {};
       object.once('foo', listener, context);
 
       object.trigger('foo');
@@ -208,7 +208,7 @@ describe('Events', function() {
     });
 
     it('returns context', function() {
-      let result = object.once('foo', listener);
+      const result = object.once('foo', listener);
 
       expect(result).to.equal(object);
     });
@@ -258,7 +258,7 @@ describe('Events', function() {
 
     it('triggers listener with extended event object', function() {
       object.on('foo', listener);
-      let event = {bar: 'bar'};
+      const event = {bar: 'bar'};
 
       object.trigger('foo', event);
 
@@ -267,7 +267,7 @@ describe('Events', function() {
 
     it('initializes instances of EventObject', function() {
       object.on('foo', listener);
-      let event = new EventObject();
+      const event = new EventObject();
 
       object.trigger('foo', event);
 
@@ -292,7 +292,7 @@ describe('Events', function() {
     });
 
     it('returns context', function() {
-      let result = object.trigger('foo');
+      const result = object.trigger('foo');
 
       expect(result).to.equal(object);
     });

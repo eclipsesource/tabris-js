@@ -4,7 +4,7 @@ import {expect} from '../test';
 describe('ImageData', function() {
 
   let data;
-  let array = new Uint8ClampedArray(60);
+  const array = new Uint8ClampedArray(60);
 
   describe('constructor', function() {
 

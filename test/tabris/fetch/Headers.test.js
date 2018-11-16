@@ -8,24 +8,24 @@ describe('Headers', function() {
   describe('constructor', function() {
 
     it('succeeds without arguments', function() {
-      let headers = new Headers();
+      const headers = new Headers();
       expect(Array.from(headers.entries())).to.deep.equal([]);
     });
 
     it('accepts object', function() {
-      let headers = new Headers({foo: '23', bar: '42'});
+      const headers = new Headers({foo: '23', bar: '42'});
       expect(headers.get('foo')).to.equal('23');
       expect(headers.get('bar')).to.equal('42');
     });
 
     it('accepts array of tuples', function() {
-      let headers = new Headers([['foo', '23'], ['bar', '42']]);
+      const headers = new Headers([['foo', '23'], ['bar', '42']]);
       expect(headers.get('foo')).to.equal('23');
       expect(headers.get('bar')).to.equal('42');
     });
 
     it('accepts Header instance', function() {
-      let headers = new Headers(new Headers({foo: 23}));
+      const headers = new Headers(new Headers({foo: 23}));
       expect(headers.get('foo')).to.equal('23');
     });
 
@@ -124,8 +124,8 @@ describe('Headers', function() {
     describe('forEach', function() {
 
       it('calls callback on given context', function() {
-        let callback = spy();
-        let context = {};
+        const callback = spy();
+        const context = {};
 
         headers.forEach(callback, context);
 
@@ -133,7 +133,7 @@ describe('Headers', function() {
       });
 
       it('calls callback with all entries', function() {
-        let callback = spy();
+        const callback = spy();
 
         headers.forEach(callback);
 
@@ -147,7 +147,7 @@ describe('Headers', function() {
     describe('keys', function() {
 
       it('returns iterator of keys', function() {
-        let keys = headers.keys();
+        const keys = headers.keys();
         expect(keys.next).to.be.a('function');
         expect(Array.from(keys)).to.deep.equal(['foo', 'bar']);
       });
@@ -157,7 +157,7 @@ describe('Headers', function() {
     describe('values', function() {
 
       it('returns iterator of values', function() {
-        let values = headers.values();
+        const values = headers.values();
         expect(values.next).to.be.a('function');
         expect(Array.from(values)).to.deep.equal(['23', '42']);
       });
@@ -167,7 +167,7 @@ describe('Headers', function() {
     describe('entries', function() {
 
       it('returns iterator of entries', function() {
-        let entries = headers.entries();
+        const entries = headers.entries();
         expect(entries.next).to.be.a('function');
         expect(Array.from(entries)).to.deep.equal([['foo', '23'], ['bar', '42']]);
       });

@@ -8,7 +8,7 @@ export function select(array, selector, deep, widgetCollection) {
   if (selector === '*' && !deep) {
     return array.concat();
   }
-  let filter = getFilter(selector, widgetCollection);
+  const filter = getFilter(selector, widgetCollection);
   if (deep) {
     return deepSelect([], array, filter);
   }
@@ -22,8 +22,8 @@ export function createSelectorArray(selector, host) {
   if (selector instanceof Function) {
     return [selector];
   }
-  let result = selector.split('>').map(str => str.trim());
-  let rootIndex = result.indexOf(':host');
+  const result = selector.split('>').map(str => str.trim());
+  const rootIndex = result.indexOf(':host');
   if (rootIndex !== -1) {
     result[rootIndex] = host || tabris.ui;
   }
@@ -49,11 +49,11 @@ function isIdSelector(selector) {
 }
 
 function deepSelect(result, iterable, filter) {
-  for (let widget of iterable) {
+  for (const widget of iterable) {
     if (filter(widget)) {
       result.push(widget);
     }
-    let children = widget.children ? widget.children() : null;
+    const children = widget.children ? widget.children() : null;
     if (children instanceof WidgetCollection && children.length) {
       deepSelect(result, children, filter);
     }
@@ -62,8 +62,8 @@ function deepSelect(result, iterable, filter) {
 }
 
 function getFilter(selector, widgetCollection) {
-  let matches = {};
-  let filter = isFilter(selector) ? selector : createMatcher(selector, widgetCollection);
+  const matches = {};
+  const filter = isFilter(selector) ? selector : createMatcher(selector, widgetCollection);
   return (widget, index) => {
     if (matches[widget.cid]) {
       return false;
@@ -95,11 +95,11 @@ function createMatcher(selectorArg, widgetCollection) {
     return createChildMatcher(createSelectorArray(selector, widgetCollection.host), widgetCollection);
   }
   if (selector.charAt(0) === '#') {
-    let expectedId = selector.slice(1);
+    const expectedId = selector.slice(1);
     return widget => expectedId === widget.id;
   }
   if (selector.charAt(0) === '.') {
-    let expectedClass = selector.slice(1);
+    const expectedClass = selector.slice(1);
     return widget => widget.classList.indexOf(expectedClass) !== -1;
   }
   if (selector === '*') {
@@ -109,7 +109,7 @@ function createMatcher(selectorArg, widgetCollection) {
 }
 
 function createChildMatcher(selectors, widgetCollection) {
-  let matchers = selectors
+  const matchers = selectors
     .map(selector => createMatcher(selector, widgetCollection)).reverse();
   return widget => {
     let current = widget;

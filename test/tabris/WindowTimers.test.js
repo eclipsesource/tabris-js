@@ -18,10 +18,10 @@ describe('WindowTimers', () => {
   afterEach(restore);
 
   it('does not overwrite existing window methods', () => {
-    let setTimeout = target.setTimeout = () => {};
-    let setInterval = target.setInterval = () => {};
-    let clearTimeout = target.clearTimeout = () => {};
-    let clearInterval = target.clearInterval = () => {};
+    const setTimeout = target.setTimeout = () => {};
+    const setInterval = target.setInterval = () => {};
+    const clearTimeout = target.clearTimeout = () => {};
+    const clearInterval = target.clearInterval = () => {};
 
     addWindowTimerMethods(target);
 
@@ -33,13 +33,13 @@ describe('WindowTimers', () => {
 
   ['setTimeout', 'setInterval'].forEach(name => describe(name, () => {
 
-    let delay = 23;
+    const delay = 23;
     let timerId;
     let callback;
     let method;
-    let startTimer = () => client.calls({id: tabris.app.cid, op: 'call', method: 'startTimer'})[0];
-    let cancelTimer = () => client.calls({id: tabris.app.cid, op: 'call', method: 'cancelTimer'})[0];
-    let isInterval = name === 'setInterval';
+    const startTimer = () => client.calls({id: tabris.app.cid, op: 'call', method: 'startTimer'})[0];
+    const cancelTimer = () => client.calls({id: tabris.app.cid, op: 'call', method: 'cancelTimer'})[0];
+    const isInterval = name === 'setInterval';
 
     beforeEach(() => {
       addWindowTimerMethods(target);
@@ -78,13 +78,13 @@ describe('WindowTimers', () => {
       });
 
       it('returns ascending numbers', () => {
-        let nextTimerId = method(callback, 23);
+        const nextTimerId = method(callback, 23);
         expect(nextTimerId).to.be.above(timerId);
       });
 
       it("returned numbers don't clash with other method", () => {
-        let otherMethod = isInterval ? 'setTimeout' : 'setInterval';
-        let timeoutTimerId = target[otherMethod](callback, delay);
+        const otherMethod = isInterval ? 'setTimeout' : 'setInterval';
+        const timeoutTimerId = target[otherMethod](callback, delay);
         expect(timeoutTimerId).to.be.above(timerId);
       });
 

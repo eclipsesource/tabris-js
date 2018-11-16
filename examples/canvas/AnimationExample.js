@@ -68,8 +68,8 @@ module.exports = class AnimationExample {
   }
 
   _drawAxes(angle) {
-    let p = this._normalizeAngle(Math.PI * 2 - angle);
-    let p2 = this._normalizeAngle(Math.PI - angle);
+    const p = this._normalizeAngle(Math.PI * 2 - angle);
+    const p2 = this._normalizeAngle(Math.PI - angle);
     this._ctx.strokeStyle = '#aaa';
     this._ctx.lineWidth = 1;
     this._ctx.beginPath();
@@ -105,7 +105,7 @@ module.exports = class AnimationExample {
 
   _drawSine(angle) {
     let x, y;
-    let steps = 50;
+    const steps = 50;
     this._ctx.beginPath();
     this._ctx.moveTo(this._cx, this._cy + Math.sin(angle) * this._unit);
     for (let i = 0; i <= steps; i++) {
@@ -119,7 +119,7 @@ module.exports = class AnimationExample {
   }
 
   _drawCircle() {
-    let ccx = this._cx - 1.5 * this._unit;
+    const ccx = this._cx - 1.5 * this._unit;
     this._ctx.strokeStyle = '#0af';
     this._ctx.lineWidth = 2;
     this._ctx.beginPath();
@@ -128,9 +128,9 @@ module.exports = class AnimationExample {
   }
 
   _drawLever(t) {
-    let ccx = this._cx - 1.5 * this._unit;
-    let x = ccx + Math.cos(t) * this._unit;
-    let y = this._cy + Math.sin(t) * this._unit;
+    const ccx = this._cx - 1.5 * this._unit;
+    const x = ccx + Math.cos(t) * this._unit;
+    const y = this._cy + Math.sin(t) * this._unit;
     this._ctx.strokeStyle = '#0af';
     this._ctx.fillStyle = '#fff';
     this._ctx.lineWidth = 2;
@@ -144,7 +144,7 @@ module.exports = class AnimationExample {
     // hinges
     this._ctx.lineWidth = 1;
     this._ctx.beginPath();
-    let radius = 3;
+    const radius = 3;
     this._ctx.arc(x, y, radius, 0, 2 * Math.PI);
     this._ctx.moveTo(this._cx + radius / 2, y);
     this._ctx.arc(this._cx, y, radius, 0, 2 * Math.PI);
@@ -171,8 +171,8 @@ class Speedometer {
   }
 
   update() {
-    let now = Date.now();
-    let time = now - this._start;
+    const now = Date.now();
+    const time = now - this._start;
     this._count++;
     if (this._start === 0) {
       this._start = now;

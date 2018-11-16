@@ -9,16 +9,16 @@ describe('Event', function() {
     const EVENT_CONSTANTS = {NONE: 0, CAPTURING_PHASE: 1, AT_TARGET: 2, BUBBLING_PHASE: 3};
 
     it('are available on constructor and instance', function() {
-      let event = new Event('foo');
-      for (let name in EVENT_CONSTANTS) {
+      const event = new Event('foo');
+      for (const name in EVENT_CONSTANTS) {
         expect(Event[name]).to.equal(EVENT_CONSTANTS[name]);
         expect(event[name]).to.equal(EVENT_CONSTANTS[name]);
       }
     });
 
     it('are read-only', function() {
-      let event = new Event('foo');
-      for (let name in EVENT_CONSTANTS) {
+      const event = new Event('foo');
+      for (const name in EVENT_CONSTANTS) {
         Event[name] = 23;
         event[name] = 23;
         expect(Event[name]).to.equal(EVENT_CONSTANTS[name]);
@@ -35,19 +35,19 @@ describe('Event', function() {
     });
 
     it('sets type from parameter', function() {
-      let event = new Event('type');
+      const event = new Event('type');
       expect(event.type).to.equal('type');
     });
 
     it('sets values from second parameter', function() {
-      let target = {};
-      let event = new Event('type', {bubbles: true, cancelable: true, target});
+      const target = {};
+      const event = new Event('type', {bubbles: true, cancelable: true, target});
       expect(event.bubbles).to.equal(true);
       expect(event.cancelable).to.equal(true);
     });
 
     it('sets current timestamp', function() {
-      let event = new Event('type');
+      const event = new Event('type');
 
       expect(event.timeStamp).to.be.above(0);
       expect(event.timeStamp).to.be.closeTo(Date.now(), 10);
@@ -165,8 +165,8 @@ describe('Event', function() {
     });
 
     it('does not overwrite existing window methods', function() {
-      let orig = function() {};
-      let target = {
+      const orig = function() {};
+      const target = {
         addEventListener: orig,
         removeEventListener: orig,
         dispatchEvent: orig
@@ -214,7 +214,7 @@ describe('Event', function() {
       });
 
       it('notifies all listeners for same type', function() {
-        let listener2 = spy();
+        const listener2 = spy();
         target.addEventListener('foo', listener);
         target.addEventListener('foo', listener2);
 
@@ -225,7 +225,7 @@ describe('Event', function() {
       });
 
       it('does not notify listeners for different type', function() {
-        let event = new Event('bar');
+        const event = new Event('bar');
 
         target.dispatchEvent(event);
 
@@ -234,7 +234,7 @@ describe('Event', function() {
 
       it('passes event to listeners', function() {
         target.addEventListener('foo', listener);
-        let event = new Event('foo');
+        const event = new Event('foo');
 
         target.dispatchEvent(event);
 
@@ -242,7 +242,7 @@ describe('Event', function() {
       });
 
       it('sets event target', function() {
-        let event = new Event('foo');
+        const event = new Event('foo');
 
         target.dispatchEvent(event);
 
@@ -251,7 +251,7 @@ describe('Event', function() {
 
       it('sets event target before notifying listeners', function() {
         target.addEventListener('foo', listener);
-        let event = new Event('foo');
+        const event = new Event('foo');
 
         target.dispatchEvent(event);
 
@@ -263,7 +263,7 @@ describe('Event', function() {
       });
 
       it('returns false if event is cancelled', function() {
-        let event = new Event('foo', {cancelable: true});
+        const event = new Event('foo', {cancelable: true});
 
         event.preventDefault();
 
@@ -344,7 +344,7 @@ describe('Event', function() {
     });
 
     it('on-event property returns listener', function() {
-      let listener = spy();
+      const listener = spy();
 
       target.onfoo = listener;
 
@@ -360,7 +360,7 @@ describe('Event', function() {
     it('on-event property registers function as listener', function() {
       target.onfoo = spy();
 
-      let event = new Event('foo');
+      const event = new Event('foo');
       target.dispatchEvent(event);
 
       expect(target.onfoo).to.have.been.calledOnce;
@@ -368,8 +368,8 @@ describe('Event', function() {
     });
 
     it('on-event property removes previous event handler', function() {
-      let listener1 = spy();
-      let listener2 = spy();
+      const listener1 = spy();
+      const listener2 = spy();
       target.onfoo = listener1;
 
       target.onfoo = listener2;
@@ -383,7 +383,7 @@ describe('Event', function() {
       target.onfoo = spy();
       target.onbar = spy();
 
-      let event = new Event('foo');
+      const event = new Event('foo');
       target.dispatchEvent(event);
 
       expect(target.onfoo).to.have.been.called;

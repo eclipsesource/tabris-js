@@ -94,7 +94,7 @@ NativeObject.defineProperties(AlertDialog.prototype, {
         if (typeof value !== 'object') {
           throw new Error('value is not an object');
         }
-        let encoded = {};
+        const encoded = {};
         if ('ok' in value) {
           encoded.ok = value.ok + '';
         }

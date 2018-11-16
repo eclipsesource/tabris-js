@@ -72,7 +72,7 @@ export default class Font {
 
 function setFamily(font, family) {
   family.forEach(validateFamily);
-  let value = Object.freeze(family.map(normalizeFamily));
+  const value = Object.freeze(family.map(normalizeFamily));
   Object.defineProperty(font, 'family', {enumerable: true, value});
 }
 

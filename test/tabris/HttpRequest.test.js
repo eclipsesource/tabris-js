@@ -20,7 +20,7 @@ describe('HttpRequest', function() {
     it('creates native object', function() {
       request = new HttpRequest();
 
-      let call = client.calls({op: 'create', id: request.cid})[0];
+      const call = client.calls({op: 'create', id: request.cid})[0];
       expect(call.type).to.equal('tabris.HttpRequest');
       expect(call.properties).to.deep.equal({});
     });
@@ -28,7 +28,7 @@ describe('HttpRequest', function() {
     it('adds native listeners', function() {
       request = new HttpRequest();
 
-      let calls = client.calls({op: 'listen', id: request.cid});
+      const calls = client.calls({op: 'listen', id: request.cid});
       expect(calls.map(call => [call.event, call.listen])).to.deep.equal([
         ['stateChanged', true],
         ['downloadProgress', true],
@@ -49,7 +49,7 @@ describe('HttpRequest', function() {
       it('calls native function with parameters', function() {
         request.send({foo: 23});
 
-        let call = client.calls({op: 'call', id: request.cid})[0];
+        const call = client.calls({op: 'call', id: request.cid})[0];
         expect(call.method).to.equal('send');
         expect(call.parameters).to.deep.equal({foo: 23});
       });
@@ -61,7 +61,7 @@ describe('HttpRequest', function() {
       it('calls native function', function() {
         request.abort();
 
-        let call = client.calls({op: 'call', id: request.cid})[0];
+        const call = client.calls({op: 'call', id: request.cid})[0];
         expect(call.method).to.equal('abort');
         expect(call.parameters).to.deep.equal({});
       });

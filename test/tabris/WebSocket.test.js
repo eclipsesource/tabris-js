@@ -95,7 +95,7 @@ describe('WebSocket', function() {
     });
 
     it('notifies onopen listener', function() {
-      let listener = spy();
+      const listener = spy();
       webSocket.onopen = listener;
 
       tabris._notify(webSocket._nativeObject.cid, 'open', {protocol: 'chat-protocol', extensions: 'compress'});
@@ -113,7 +113,7 @@ describe('WebSocket', function() {
   describe('message event', function() {
 
     it('notifies onmessage listener', function() {
-      let listener = spy();
+      const listener = spy();
       webSocket.onmessage = listener;
       tabris._notify(webSocket._nativeObject.cid, 'open', {data: 'message'});
 
@@ -134,7 +134,7 @@ describe('WebSocket', function() {
     });
 
     it('notifies onclose listener', function() {
-      let listener = spy();
+      const listener = spy();
       webSocket.onclose = listener;
 
       tabris._notify(webSocket._nativeObject.cid, 'close', {});
@@ -154,7 +154,7 @@ describe('WebSocket', function() {
     });
 
     it('notifies onerror listener', function() {
-      let listener = spy();
+      const listener = spy();
       webSocket.onerror = listener;
 
       tabris._notify(webSocket._nativeObject.cid, 'error', {});
@@ -240,7 +240,7 @@ describe('WebSocket', function() {
 
     it("calls 'send' with arraybuffer data", function() {
       tabris._notify(webSocket._nativeObject.cid, 'open', {});
-      let data = new Int8Array([1, 2, 3]).buffer;
+      const data = new Int8Array([1, 2, 3]).buffer;
 
       webSocket.send(data);
 

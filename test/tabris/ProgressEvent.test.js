@@ -9,16 +9,16 @@ describe('ProgressEvent', function() {
     const EVENT_CONSTANTS = {NONE: 0, CAPTURING_PHASE: 1, AT_TARGET: 2, BUBBLING_PHASE: 3};
 
     it('are available on constructor and instance', function() {
-      let event = new ProgressEvent('foo');
-      for (let name in EVENT_CONSTANTS) {
+      const event = new ProgressEvent('foo');
+      for (const name in EVENT_CONSTANTS) {
         expect(ProgressEvent[name]).to.equal(EVENT_CONSTANTS[name]);
         expect(event[name]).to.equal(EVENT_CONSTANTS[name]);
       }
     });
 
     it('are read-only', function() {
-      let event = new ProgressEvent('foo');
-      for (let name in EVENT_CONSTANTS) {
+      const event = new ProgressEvent('foo');
+      for (const name in EVENT_CONSTANTS) {
         ProgressEvent[name] = 23;
         event[name] = 23;
         expect(ProgressEvent[name]).to.equal(EVENT_CONSTANTS[name]);
@@ -35,12 +35,12 @@ describe('ProgressEvent', function() {
     });
 
     it('sets type from parameter', function() {
-      let event = new ProgressEvent('type');
+      const event = new ProgressEvent('type');
       expect(event.type).to.equal('type');
     });
 
     it('passes config to super constructor', function() {
-      let event = new ProgressEvent('type', {cancelable: true});
+      const event = new ProgressEvent('type', {cancelable: true});
       expect(event.cancelable).to.be.true;
     });
 

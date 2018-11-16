@@ -16,12 +16,12 @@ const PEOPLE = [
   ['Tim', 'Buschtöns', 'tim.jpg']
 ].map(([firstName, lastName, image]) => ({firstName, lastName, image: IMAGE_PATH + image}));
 
-let page = new Page({
+const page = new Page({
   title: 'People',
   autoDispose: false
 });
 
-let detailsParent = new Composite({
+const detailsParent = new Composite({
   left: MARGIN, top: MARGIN_LARGE, right: MARGIN
 }).appendTo(page);
 
@@ -31,9 +31,9 @@ new Composite({
   left: 0, top: [detailsParent, MARGIN], right: 0, height: 96
 }).on('resize', ({target: container, width}) => {
   container.children().dispose();
-  let thumbsize = Math.min(64, width / PEOPLE.length - MARGIN);
+  const thumbsize = Math.min(64, width / PEOPLE.length - MARGIN);
   PEOPLE.forEach((person, index) => {
-    let personThumb = createPersonThumb(person, thumbsize).appendTo(container);
+    const personThumb = createPersonThumb(person, thumbsize).appendTo(container);
     animateInFromBottom(personThumb, index);
   });
 }).appendTo(page);
@@ -90,10 +90,10 @@ function animateOutLeftCreateCurrentPerson(person) {
 }
 
 function createPersonDetail(parent, person, delay) {
-  let composite = new Composite({
+  const composite = new Composite({
     left: 0, right: 0, top: 0, height: IMAGE_SIZE + MARGIN_LARGE
   }).appendTo(parent);
-  let personImage = new ImageView({
+  const personImage = new ImageView({
     left: 0, top: 0, width: IMAGE_SIZE, height: IMAGE_SIZE,
     image: {src: person.image, width: IMAGE_SIZE, height: IMAGE_SIZE},
     opacity: 0.0
@@ -104,20 +104,20 @@ function createPersonDetail(parent, person, delay) {
     };
     animateInScaleUp(personImage, delay);
   }).appendTo(composite);
-  let nameTextView = new TextView({
+  const nameTextView = new TextView({
     left: [personImage, MARGIN], top: 0,
     text: person.firstName + ' ' + person.lastName,
     font: 'bold 18px'
   }).appendTo(composite);
-  let professionTextView = new TextView({
+  const professionTextView = new TextView({
     left: [personImage, MARGIN], top: [nameTextView, MARGIN],
     text: 'Software developer'
   }).appendTo(composite);
-  let companyTextView = new TextView({
+  const companyTextView = new TextView({
     left: [personImage, MARGIN], top: [professionTextView, MARGIN_SMALL],
     text: 'EclipseSource'
   }).appendTo(composite);
-  let mailTextView = new TextView({
+  const mailTextView = new TextView({
     left: [personImage, MARGIN], top: [companyTextView, MARGIN],
     text: 'mail@eclipsesource.com',
     font: 'italic 14px'
@@ -130,11 +130,11 @@ function createPersonDetail(parent, person, delay) {
 }
 
 function createPersonThumb(person, thumbsize) {
-  let font = (thumbsize < 48) ? '9px' : '12px';
-  let composite = new Composite({
+  const font = (thumbsize < 48) ? '9px' : '12px';
+  const composite = new Composite({
     left: ['prev()', MARGIN], top: 0
   });
-  let personView = new ImageView({
+  const personView = new ImageView({
     left: 0, top: 0, width: thumbsize, height: thumbsize,
     image: {src: person.image, width: thumbsize, height: thumbsize},
     highlightOnTouch: true

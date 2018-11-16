@@ -1,14 +1,14 @@
 import Image from './Image';
 
 export function imageToArray(value) {
-  let width = value.width === 'auto' ? null : value.width;
-  let height = value.height === 'auto' ? null : value.height;
-  let scale = value.scale === 'auto' ? null : value.scale;
+  const width = value.width === 'auto' ? null : value.width;
+  const height = value.height === 'auto' ? null : value.height;
+  const scale = value.scale === 'auto' ? null : value.scale;
   return [value.src, checkValue(width), checkValue(height), checkValue(scale)];
 }
 
 export function imageFromArray(value) {
-  let result = {src: value[0]};
+  const result = {src: value[0]};
   if (value[1]) {
     result.width = value[1];
   }

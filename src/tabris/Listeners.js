@@ -23,7 +23,7 @@ export default class Listeners {
     delegate.target = this.target = target;
     delegate.type = this.type = type;
     delegate.original = this;
-    for (let key of DELEGATE_FIELDS) {
+    for (const key of DELEGATE_FIELDS) {
       delegate[key] = this[key] = this[key].bind(this);
     }
     return delegate;

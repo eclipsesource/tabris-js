@@ -44,7 +44,7 @@ ui.statusBar.set({
   background: '#00000044'
 });
 
-let fullImage = new ImageView({
+const fullImage = new ImageView({
   top: 0, bottom: 0, left: 0, right: 0,
   image: `images/${IMAGES[0]}`,
   scaleMode: 'fit',
@@ -52,7 +52,7 @@ let fullImage = new ImageView({
 }).on('tap', () => filmStrip.toggleShowing())
   .appendTo(ui.contentView);
 
-let filmStrip = new FilmStrip({
+const filmStrip = new FilmStrip({
   left: 0, right: 0, bottom: 0, height: 112,
   direction: 'horizontal',
   background: '#00000044'

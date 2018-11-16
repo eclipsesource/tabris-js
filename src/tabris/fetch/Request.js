@@ -50,6 +50,6 @@ export default class Request extends Body {
 }
 
 function normalizeMethod(method) {
-  let upcased = method.toUpperCase();
+  const upcased = method.toUpperCase();
   return METHODS.includes(upcased) ? upcased : method;
 }

@@ -21,10 +21,10 @@ describe('ClientStub', function() {
     describe('returns recorded calls', function() {
 
       it('create', function() {
-        let props = {};
+        const props = {};
         client.create('id', 'type', props);
 
-        let call = client.calls()[0];
+        const call = client.calls()[0];
         expect(call).to.deep.equal({
           op: 'create',
           id: 'id',
@@ -36,7 +36,7 @@ describe('ClientStub', function() {
       it('get', function() {
         client.get('id', 'prop');
 
-        let call = client.calls()[0];
+        const call = client.calls()[0];
         expect(call).to.deep.equal({
           op: 'get',
           id: 'id',
@@ -45,10 +45,10 @@ describe('ClientStub', function() {
       });
 
       it('set', function() {
-        let props = {};
+        const props = {};
         client.set('id', props);
 
-        let call = client.calls()[0];
+        const call = client.calls()[0];
         expect(call).to.deep.equal({
           op: 'set',
           id: 'id',
@@ -57,10 +57,10 @@ describe('ClientStub', function() {
       });
 
       it('call', function() {
-        let params = {};
+        const params = {};
         client.call('id', 'method', params);
 
-        let call = client.calls()[0];
+        const call = client.calls()[0];
         expect(call).to.deep.equal({
           op: 'call',
           id: 'id',
@@ -72,7 +72,7 @@ describe('ClientStub', function() {
       it('listen', function() {
         client.listen('id', 'event', true);
 
-        let call = client.calls()[0];
+        const call = client.calls()[0];
         expect(call).to.deep.equal({
           op: 'listen',
           id: 'id',
@@ -84,7 +84,7 @@ describe('ClientStub', function() {
       it('destroy', function() {
         client.destroy('id');
 
-        let call = client.calls()[0];
+        const call = client.calls()[0];
         expect(call).to.deep.equal({
           op: 'destroy',
           id: 'id'

@@ -1,19 +1,19 @@
 const {Canvas, Page, device} = require('tabris');
 
-let CANVAS_WIDTH = 300;
-let CANVAS_HEIGHT = 300;
+const CANVAS_WIDTH = 300;
+const CANVAS_HEIGHT = 300;
 
-let page = new Page({
+const page = new Page({
   title: 'Text',
   autoDispose: false
 });
 
-let canvas = new Canvas({
+const canvas = new Canvas({
   centerX: 0, top: 32, width: CANVAS_WIDTH, height: CANVAS_HEIGHT
 }).appendTo(page);
 
-let scaleFactor = device.scaleFactor;
-let ctx = canvas.getContext('2d', CANVAS_WIDTH * scaleFactor, CANVAS_HEIGHT * scaleFactor);
+const scaleFactor = device.scaleFactor;
+const ctx = canvas.getContext('2d', CANVAS_WIDTH * scaleFactor, CANVAS_HEIGHT * scaleFactor);
 ctx.font = '14px';
 
 ctx.scale(scaleFactor, scaleFactor);

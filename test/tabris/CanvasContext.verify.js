@@ -15,7 +15,7 @@ describe('CanvasContext', function() {
   let context;
 
   beforeEach(function() {
-    let client = stub({
+    const client = stub({
       call: () => {},
       create: () => {},
       get: () => {},

@@ -41,18 +41,18 @@ describe('NativeObject', function() {
 
       object._create('TestType', {foo: 23});
 
-      let calls = client.calls({op: 'create', type: 'TestType'});
+      const calls = client.calls({op: 'create', type: 'TestType'});
       expect(calls.length).to.equal(1);
       expect(calls[0].properties).to.eql({foo: 23});
     });
 
     it('translates properties', function() {
       NativeObject.defineProperties(TestType.prototype, {bar: {type: 'NativeObject'}});
-      let other = new TestType();
+      const other = new TestType();
 
       object._create('TestType', {bar: other});
 
-      let properties = client.calls({op: 'create', id: object.cid})[0].properties;
+      const properties = client.calls({op: 'create', id: object.cid})[0].properties;
       expect(properties.bar).to.equal(other.cid);
     });
 
@@ -77,7 +77,7 @@ describe('NativeObject', function() {
     describe('set', function() {
 
       it('calls property setter', function() {
-        let setter = spy();
+        const setter = spy();
         Object.defineProperty(TestType.prototype, 'foo', {set: setter});
 
         object.set({foo: 23});
@@ -95,7 +95,7 @@ describe('NativeObject', function() {
       });
 
       it('calls property setter on super class', function() {
-        let setter = spy();
+        const setter = spy();
         Object.defineProperty(TestType.prototype, 'foo', {set: setter});
         class SubClass extends TestType {}
         object = new SubClass();
@@ -118,7 +118,7 @@ describe('NativeObject', function() {
       });
 
       it('returns self to allow chaining', function() {
-        let result = object.set({foo: 23});
+        const result = object.set({foo: 23});
 
         expect(result).to.equal(object);
       });
@@ -130,7 +130,7 @@ describe('NativeObject', function() {
       it('calls native SET', function() {
         object._nativeSet('foo', 23);
 
-        let call = client.calls()[0];
+        const call = client.calls()[0];
         expect(call.id).to.equal(object.cid);
         expect(call.op).to.equal('set');
         expect(call.properties).to.eql({foo: 23});
@@ -151,7 +151,7 @@ describe('NativeObject', function() {
       it('calls native GET', function() {
         object._nativeGet('foo');
 
-        let call = client.calls()[0];
+        const call = client.calls()[0];
         expect(call.id).to.equal(object.cid);
         expect(call.op).to.equal('get');
         expect(call.property).to.equal('foo');
@@ -160,7 +160,7 @@ describe('NativeObject', function() {
       it('returns value from native', function() {
         stub(client, 'get').returns(23);
 
-        let result = object._nativeGet('foo');
+        const result = object._nativeGet('foo');
 
         expect(result).to.equal(23);
       });
@@ -180,7 +180,7 @@ describe('NativeObject', function() {
       it('calls native CALL', function() {
         object._nativeCall('method', {foo: 23});
 
-        let call = client.calls()[0];
+        const call = client.calls()[0];
         expect(call.id).to.equal(object.cid);
         expect(call.op).to.equal('call');
         expect(call.method).to.equal('method');
@@ -190,7 +190,7 @@ describe('NativeObject', function() {
       it('returns value from native', function() {
         stub(client, 'call').returns(23);
 
-        let result = object._nativeCall('method', {});
+        const result = object._nativeCall('method', {});
 
         expect(result).to.equal(23);
       });
@@ -210,14 +210,14 @@ describe('NativeObject', function() {
       it('calls native LISTEN with true', function() {
         object._nativeListen('foo', true);
 
-        let call = client.calls()[0];
+        const call = client.calls()[0];
         expect(call).to.deep.equal({op: 'listen', id: object.cid, event: 'foo', listen: true});
       });
 
       it('calls native LISTEN with false', function() {
         object._nativeListen('foo', false);
 
-        let call = client.calls()[0];
+        const call = client.calls()[0];
         expect(call).to.deep.equal({op: 'listen', id: object.cid, event: 'foo', listen: false});
       });
 
@@ -253,14 +253,14 @@ describe('NativeObject', function() {
 
         object._trigger('bar', {foo: 23});
 
-        let event = listener.args[0][0];
+        const event = listener.args[0][0];
         expect(event).to.be.instanceOf(EventObject);
       });
 
       it('includes data as read-only properties', function() {
         object.on('bar', listener);
         object._trigger('bar', {foo: 23});
-        let event = listener.args[0][0];
+        const event = listener.args[0][0];
 
         event.foo = 42;
 
@@ -272,7 +272,7 @@ describe('NativeObject', function() {
 
         object._trigger('bar', {foo: 23, type: 'foo', target: {}, timeStamp: 42});
 
-        let event = listener.args[0][0];
+        const event = listener.args[0][0];
         expect(event.foo).to.equal(23);
         expect(event.type).to.equal('bar');
         expect(event.target).to.equal(object);
@@ -331,7 +331,7 @@ describe('NativeObject', function() {
       });
 
       it('returns self to allow chaining', function() {
-        let result = object.on('foo', listener);
+        const result = object.on('foo', listener);
 
         expect(result).to.equal(object);
       });
@@ -371,7 +371,7 @@ describe('NativeObject', function() {
       });
 
       it('returns self to allow chaining', function() {
-        let result = object.off('foo', listener);
+        const result = object.off('foo', listener);
 
         expect(result).to.equal(object);
       });
@@ -391,12 +391,12 @@ describe('NativeObject', function() {
       it('calls native destroy', function() {
         object.dispose();
 
-        let destroyCall = client.calls({op: 'destroy', id: object.cid})[0];
+        const destroyCall = client.calls({op: 'destroy', id: object.cid})[0];
         expect(destroyCall).not.to.be.undefined;
       });
 
       it('notifies dispose listeners', function() {
-        let listener = spy();
+        const listener = spy();
         object.onDispose(listener);
 
         object.dispose();
@@ -472,28 +472,28 @@ describe('NativeObject.extend', function() {
   afterEach(restore);
 
   it('creates a constructor', function() {
-    let instance = new CustomWidget({foo: 42});
+    const instance = new CustomWidget({foo: 42});
 
     expect(instance).to.be.instanceof(CustomWidget);
     expect(instance).to.be.instanceof(NativeObject);
   });
 
   it('creates a non-empty cid', function() {
-    let instance = new CustomWidget();
+    const instance = new CustomWidget();
 
     expect(typeof instance.cid).to.equal('string');
     expect(instance.cid.length).to.be.above(0);
   });
 
   it('has no cid change event', function() {
-    let instance = new CustomWidget({foo: 42});
+    const instance = new CustomWidget({foo: 42});
 
     expect(instance.onCidChanged).to.be.undefined;
   });
 
   it('issues a create operation with type and properties', function() {
-    let instance = new CustomWidget({foo: 23});
-    let createCall = client.calls({op: 'create', id: instance.cid})[0];
+    const instance = new CustomWidget({foo: 23});
+    const createCall = client.calls({op: 'create', id: instance.cid})[0];
 
     expect(createCall.type).to.equal('custom.Widget');
     expect(createCall.properties.foo).to.equal(23);

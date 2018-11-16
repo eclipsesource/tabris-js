@@ -22,7 +22,7 @@ new Picker({
   collectionView.refresh();
 }).appendTo(ui.contentView);
 
-let collectionView = new CollectionView({
+const collectionView = new CollectionView({
   left: 0, top: 'prev() 8', right: 0, bottom: 0,
   itemCount: texts.items.length,
   cellHeight: 54,

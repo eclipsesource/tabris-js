@@ -21,7 +21,7 @@ describe('Page', function() {
   afterEach(restore);
 
   it('is created', function() {
-    let createCalls = client.calls({op: 'create'});
+    const createCalls = client.calls({op: 'create'});
     expect(createCalls.length).to.equal(1);
     expect(createCalls[0].type).to.equal('tabris.Page');
   });
@@ -34,7 +34,7 @@ describe('Page', function() {
       background: 'red'
     });
 
-    let setCalls = client.calls({op: 'set'});
+    const setCalls = client.calls({op: 'set'});
     expect(setCalls.length).to.equal(1);
     expect(setCalls[0].properties.title).to.equal('title');
     expect(setCalls[0].properties.image).to.deep.equal(['image', null, null, null]);
@@ -48,11 +48,11 @@ describe('Page', function() {
   });
 
   it('supports children', function() {
-    let child = new Composite();
+    const child = new Composite();
     client.resetCalls();
     page.append(child);
 
-    let call = client.calls({op: 'set', id: child.cid})[0];
+    const call = client.calls({op: 'set', id: child.cid})[0];
     expect(call.properties.parent).to.equal(page.cid);
   });
 

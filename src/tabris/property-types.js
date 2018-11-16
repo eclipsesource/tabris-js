@@ -7,7 +7,7 @@ import Color from './Color';
 import Image from './Image';
 import Font from './Font';
 
-export let types = {
+export const types = {
 
   any: {},
 
@@ -202,8 +202,8 @@ export let types = {
 
   transform: {
     encode(value) {
-      let result = Object.assign({}, transformDefaults);
-      for (let key in value) {
+      const result = Object.assign({}, transformDefaults);
+      for (const key in value) {
         if (!(key in transformDefaults)) {
           throw new Error('Not a valid transformation containing "' + key + '"');
         }
@@ -230,10 +230,10 @@ export let types = {
 
 };
 
-let numberRegex = /^[+-]?([0-9]+|[0-9]*\.[0-9]+)$/;
+const numberRegex = /^[+-]?([0-9]+|[0-9]*\.[0-9]+)$/;
 
 function throwNotAcceptedError(acceptable, given) {
-  let message = ['Accepting "'];
+  const message = ['Accepting "'];
   message.push(acceptable.join('", "'));
   message.push('", given was: "', given + '"');
   throw new Error(message.join(''));
@@ -252,7 +252,7 @@ function encodeNumber(value) {
   return value;
 }
 
-let transformDefaults = {
+const transformDefaults = {
   rotation: 0,
   scaleX: 1,
   scaleY: 1,

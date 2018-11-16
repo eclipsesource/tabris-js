@@ -49,7 +49,7 @@ module.exports = class ChatScreen extends Composite {
   }
 
   _sendMessage() {
-    let chatInput = this.find('#chatInput').first();
+    const chatInput = this.find('#chatInput').first();
     this._socket.send('<b>' + device.model + '</b>: ' + chatInput.text);
     chatInput.text = '';
     this._logWebSocketState();
@@ -95,7 +95,7 @@ module.exports = class ChatScreen extends Composite {
   }
 
   _appendToChat(text) {
-    let chatTextView = this.find('#chatTextView').first();
+    const chatTextView = this.find('#chatTextView').first();
     chatTextView.set({text: chatTextView.text + '<br/>' + text});
   }
 

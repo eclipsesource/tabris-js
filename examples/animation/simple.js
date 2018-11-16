@@ -2,7 +2,7 @@ const {Button, Page, TextView} = require('tabris');
 
 const MARGIN = 12;
 
-let page = new Page({
+const page = new Page({
   title: 'Simple Animation',
   autoDispose: false
 });

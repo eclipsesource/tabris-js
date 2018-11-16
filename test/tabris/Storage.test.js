@@ -113,7 +113,7 @@ describe('Storage', function() {
       it('returns saved item', function() {
         returnValue = 'bar';
 
-        let item = storage.getItem('foo');
+        const item = storage.getItem('foo');
 
         expect(item).to.equal('bar');
       });
@@ -121,7 +121,7 @@ describe('Storage', function() {
       it('returns null for undefined', function() {
         returnValue = undefined;
 
-        let item = storage.getItem('foo');
+        const item = storage.getItem('foo');
 
         expect(item).to.equal(null);
       });

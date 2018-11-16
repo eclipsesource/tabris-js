@@ -57,7 +57,7 @@ export function publishDeviceProperties(device, target) {
 }
 
 function createDevice(device) {
-  let dev = {};
+  const dev = {};
   ['model', 'vendor', 'platform', 'version', 'name'].forEach((name) => {
     defineReadOnlyProperty(dev, name, () => device[name]);
   });
@@ -65,14 +65,14 @@ function createDevice(device) {
 }
 
 function createScreen(device) {
-  let screen = {};
+  const screen = {};
   defineReadOnlyProperty(screen, 'width', () => device.screenWidth);
   defineReadOnlyProperty(screen, 'height', () => device.screenHeight);
   return screen;
 }
 
 function createNavigator(device) {
-  let navigator = {};
+  const navigator = {};
   defineReadOnlyProperty(navigator, 'userAgent', () => 'tabris-js');
   defineReadOnlyProperty(navigator, 'language', () => device.language);
   return navigator;

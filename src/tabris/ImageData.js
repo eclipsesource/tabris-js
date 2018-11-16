@@ -34,7 +34,7 @@ function checkArray(array) {
 }
 
 function checkSize(input) {
-  let size = Math.floor(input);
+  const size = Math.floor(input);
   if (size <= 0 || !isFinite(size)) {
     throw new Error('Illegal size for ImageData');
   }

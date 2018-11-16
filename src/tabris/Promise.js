@@ -42,7 +42,7 @@ function noop() {}
 // to avoid using try/catch inside critical functions, we
 // extract them to here.
 let LAST_ERROR = null;
-let IS_ERROR = {};
+const IS_ERROR = {};
 
 function getThen(obj) {
   try {
@@ -95,14 +95,14 @@ Promise.prototype.then = function(onFulfilled, onRejected) {
   if (this.constructor !== Promise) {
     return safeThen(this, onFulfilled, onRejected);
   }
-  let res = new Promise(noop);
+  const res = new Promise(noop);
   handle(this, new Handler(onFulfilled, onRejected, res));
   return res;
 };
 
 function safeThen(self, onFulfilled, onRejected) {
   return new self.constructor((resolve, reject) => {
-    let res = new Promise(noop);
+    const res = new Promise(noop);
     res.then(resolve, reject);
     handle(self, new Handler(onFulfilled, onRejected, res));
   });
@@ -134,7 +134,7 @@ function handle(self, deferred) {
 
 function handleResolved(self, deferred) {
   asap(() => {
-    let cb = self._state === 1 ? deferred.onFulfilled : deferred.onRejected;
+    const cb = self._state === 1 ? deferred.onFulfilled : deferred.onRejected;
     if (cb === null) {
       if (self._state === 1) {
         resolve(deferred.promise, self._value);
@@ -143,7 +143,7 @@ function handleResolved(self, deferred) {
       }
       return;
     }
-    let ret = tryCallOne(cb, self._value);
+    const ret = tryCallOne(cb, self._value);
     if (ret === IS_ERROR) {
       reject(deferred.promise, LAST_ERROR);
     } else {
@@ -164,7 +164,7 @@ function resolve(self, newValue) {
     newValue &&
     (typeof newValue === 'object' || typeof newValue === 'function')
   ) {
-    let then = getThen(newValue);
+    const then = getThen(newValue);
     if (then === IS_ERROR) {
       return reject(self, LAST_ERROR);
     }
@@ -222,7 +222,7 @@ function Handler(onFulfilled, onRejected, promise) {
  */
 function doResolve(fn, promise) {
   let done = false;
-  let res = tryCallTwo(fn, (value) => {
+  const res = tryCallTwo(fn, (value) => {
     if (done) {return;}
     done = true;
     resolve(promise, value);
@@ -251,7 +251,7 @@ const ZERO = valuePromise(0);
 const EMPTYSTRING = valuePromise('');
 
 function valuePromise(value) {
-  let p = new Promise(Promise._noop);
+  const p = new Promise(Promise._noop);
   p._state = 1;
   p._value = value;
   return p;
@@ -268,7 +268,7 @@ Promise.resolve = function(value) {
 
   if (typeof value === 'object' || typeof value === 'function') {
     try {
-      let then = value.then;
+      const then = value.then;
       if (typeof then === 'function') {
         return new Promise(then.bind(value));
       }
@@ -280,7 +280,7 @@ Promise.resolve = function(value) {
 };
 
 Promise.all = function(arr) {
-  let args = Array.prototype.slice.call(arr);
+  const args = Array.prototype.slice.call(arr);
   return new Promise((resolve, reject) => {
     if (args.length === 0) {return resolve([]);}
     let remaining = args.length;
@@ -295,9 +295,9 @@ Promise.all = function(arr) {
           val.then(val => res(i, val), reject);
           return;
         } else {
-          let then = val.then;
+          const then = val.then;
           if (typeof then === 'function') {
-            let p = new Promise(then.bind(val));
+            const p = new Promise(then.bind(val));
             p.then(val => res(i, val), reject);
             return;
           }

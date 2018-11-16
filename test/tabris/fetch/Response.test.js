@@ -7,17 +7,17 @@ describe('Response', function() {
   describe('constructor', function() {
 
     it('succeeds without arguments', function() {
-      let response = new Response();
+      const response = new Response();
       expect(response.bodyUsed).to.be.false;
     });
 
     it('accepts body', function() {
-      let response = new Response('{"foo": 23}');
+      const response = new Response('{"foo": 23}');
       return response.text().then(body => expect(body).to.equal('{"foo": 23}'));
     });
 
     it('accepts options', function() {
-      let response = new Response('', {
+      const response = new Response('', {
         url: 'http://example.org/',
         status: 404,
         statusText: 'Not found',
@@ -112,7 +112,7 @@ describe('Response', function() {
       });
 
       it('is read-only', function() {
-        let orig = response.headers;
+        const orig = response.headers;
         response.headers = new Headers();
         expect(response.headers).to.equal(orig);
       });
@@ -122,26 +122,26 @@ describe('Response', function() {
     describe('clone', function() {
 
       it('creates new instance', function() {
-        let response = new Response();
-        let clone = response.clone();
+        const response = new Response();
+        const clone = response.clone();
         expect(clone).to.be.instanceOf(Response);
         expect(clone).not.to.be.equal(response);
       });
 
       it('copies response body', function() {
-        let response = new Response('content');
-        let clone = response.clone();
+        const response = new Response('content');
+        const clone = response.clone();
         return clone.text().then(body => expect(body).to.equal('content'));
       });
 
       it('copies response properties', function() {
-        let response = new Response('', {
+        const response = new Response('', {
           url: 'http://example.org/',
           status: 404,
           statusText: 'Not found',
           headers: {foo: 23}
         });
-        let clone = response.clone();
+        const clone = response.clone();
         expect(clone.url).to.equal(response.url);
         expect(clone.status).to.equal(response.status);
         expect(clone.statusText).to.equal(response.statusText);
@@ -155,32 +155,32 @@ describe('Response', function() {
       // See https://tools.ietf.org/html/rfc7231#section-3.1.1.1
 
       it('is null if no Content-Type header', function() {
-        let response = new Response();
+        const response = new Response();
         expect(response._encoding).to.be.null;
       });
 
       it('is null if not included in Content-Type header', function() {
-        let response = new Response('', {headers: {'Content-Type': 'text/plain'}});
+        const response = new Response('', {headers: {'Content-Type': 'text/plain'}});
         expect(response._encoding).to.be.null;
       });
 
       it('is extracted from Content-Type header', function() {
-        let response = new Response('', {headers: {'Content-Type': 'text/plain; charset=utf-8'}});
+        const response = new Response('', {headers: {'Content-Type': 'text/plain; charset=utf-8'}});
         expect(response._encoding).to.equal('utf-8');
       });
 
       it('handles mixed case in header name and charset parameter', function() {
-        let response = new Response('', {headers: {'content-TYPE': 'text/plain; CHARset=utf-8'}});
+        const response = new Response('', {headers: {'content-TYPE': 'text/plain; CHARset=utf-8'}});
         expect(response._encoding).to.equal('utf-8');
       });
 
       it('handles additional parameters and whitespace', function() {
-        let response = new Response('', {headers: {'Content-Type': 'text/plain; foo=23 ; charset=utf-8 ; bar=42'}});
+        const response = new Response('', {headers: {'Content-Type': 'text/plain; foo=23 ; charset=utf-8 ; bar=42'}});
         expect(response._encoding).to.equal('utf-8');
       });
 
       it('returns lower case', function() {
-        let response = new Response('', {headers: {'Content-Type': 'text/plain; charset=UTF-8'}});
+        const response = new Response('', {headers: {'Content-Type': 'text/plain; charset=UTF-8'}});
         expect(response._encoding).to.equal('utf-8');
       });
 
@@ -189,7 +189,7 @@ describe('Response', function() {
     describe('error', function() {
 
       it('returns a response object with type `error`', function() {
-        let response = Response.error();
+        const response = Response.error();
         expect(response.type).to.equal('error');
         expect(response.url).to.equal('');
         expect(response.status).to.equal(0);
@@ -201,7 +201,7 @@ describe('Response', function() {
     describe('redirect', function() {
 
       it('returns a response object with url and status', function() {
-        let response = Response.redirect('http://example.com/', 301);
+        const response = Response.redirect('http://example.com/', 301);
         expect(response.url).to.equal('');
         expect(response.status).to.equal(301);
         expect(response.statusText).to.equal('OK');

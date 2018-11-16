@@ -25,10 +25,10 @@ export default class TabFolder extends Composite {
 
   _removeChild(child) {
     if (!this._inDispose) {
-      let childIndex = this.$children.indexOf(child);
-      let rightNeighbor = this.$children[childIndex + 1];
-      let leftNeighbor = this.$children[childIndex - 1];
-      let newSelection = rightNeighbor || leftNeighbor;
+      const childIndex = this.$children.indexOf(child);
+      const rightNeighbor = this.$children[childIndex + 1];
+      const leftNeighbor = this.$children[childIndex - 1];
+      const newSelection = rightNeighbor || leftNeighbor;
       if (newSelection) {
         this.selection = newSelection;
       } else {
@@ -40,11 +40,11 @@ export default class TabFolder extends Composite {
 
   _trigger(name, event) {
     if (name === 'select') {
-      let selection = tabris._nativeObjectRegistry.find(event.selection);
+      const selection = tabris._nativeObjectRegistry.find(event.selection);
       return super._trigger('select', {selection});
     }
     if (name === 'scroll') {
-      let selection = event.selection ? tabris._nativeObjectRegistry.find(event.selection) : null;
+      const selection = event.selection ? tabris._nativeObjectRegistry.find(event.selection) : null;
       return super._trigger('scroll', {selection, offset: event.offset});
     }
     return super._trigger(name, event);
@@ -96,7 +96,7 @@ NativeObject.defineProperties(TabFolder.prototype, {
       if (!this.$children.length) {
         return null;
       }
-      let selection = this._nativeGet('selection');
+      const selection = this._nativeGet('selection');
       return selection ? tabris._nativeObjectRegistry.find(selection) : null;
     }
   },

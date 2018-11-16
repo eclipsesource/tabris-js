@@ -26,7 +26,7 @@ describe('ClientInterface', function() {
     });
 
     it('triggers start event', function() {
-      let listener = spy();
+      const listener = spy();
       tabris.on('start', listener);
 
       tabris._init.call(null, client);
@@ -89,7 +89,7 @@ describe('ClientInterface', function() {
     it('returns return value from widget', function() {
       stub(widget, '_trigger').callsFake(() => 'result');
 
-      let result = tabris._notify(widget.cid, 'foo');
+      const result = tabris._notify(widget.cid, 'foo');
 
       expect(result).to.equal('result');
     });

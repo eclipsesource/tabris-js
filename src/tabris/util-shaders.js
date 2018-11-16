@@ -30,7 +30,7 @@ export class LinearGradientShader extends Shader {
     }
     gradient = gradient.substring(1, gradient.length - 1).trim();
     gradient = this._escapeRGBColors(gradient);
-    let gradientParts = gradient.split(',');
+    const gradientParts = gradient.split(',');
     // starting point
     let startingPoint = gradientParts[0].trim();
     let colorStopPartIndex = 1;
@@ -44,12 +44,12 @@ export class LinearGradientShader extends Shader {
     }
     // color stop
     for (let i = colorStopPartIndex; i < gradientParts.length; i++) {
-      let colorStopParts = gradientParts[i].trim().split(' ');
+      const colorStopParts = gradientParts[i].trim().split(' ');
       if (colorStopParts.length === 1) {
         this.colors.push([this._readColor(colorStopParts[0]), null]);
       } else if (colorStopParts.length === 2) {
-        let color = this._readColor(colorStopParts[0]);
-        let percent = this._readPercent(colorStopParts[1]);
+        const color = this._readColor(colorStopParts[0]);
+        const percent = this._readPercent(colorStopParts[1]);
         this.colors.push([color, percent]);
       } else {
         throw new Error('Invalid color stop value');
@@ -99,7 +99,7 @@ export class LinearGradientShader extends Shader {
       if (escaping && result.endsWith(')')) {
         escaping = false;
       }
-      let currentChar = gradient.charAt(i);
+      const currentChar = gradient.charAt(i);
       if (escaping) {
         if (currentChar === ',') {
           result += '&#44';

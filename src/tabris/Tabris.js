@@ -53,7 +53,7 @@ export default class Tabris extends NativeObject {
   _notify(cid, event, param) {
     let returnValue;
     try {
-      let nativeObject = this._nativeObjectRegistry.find(cid);
+      const nativeObject = this._nativeObjectRegistry.find(cid);
       if (nativeObject) {
         try {
           returnValue = nativeObject._trigger(event, param);

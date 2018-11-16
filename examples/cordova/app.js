@@ -7,14 +7,14 @@ const MediaPage = require('./MediaPage');
 const CameraPage = require('./CameraPage');
 const BarcodeScannerPage = require('./BarcodeScannerPage');
 
-let navigationView = new NavigationView({left: 0, top: 0, right: 0, bottom: 0})
+const navigationView = new NavigationView({left: 0, top: 0, right: 0, bottom: 0})
   .appendTo(ui.contentView);
 
-let mainPage = new Page({
+const mainPage = new Page({
   title: 'Cordova Examples'
 }).appendTo(navigationView);
 
-let contentContainer = new ScrollView({
+const contentContainer = new ScrollView({
   left: 0, top: 0, right: 0, bottom: 0
 }).appendTo(mainPage);
 
@@ -27,7 +27,7 @@ let contentContainer = new ScrollView({
   BarcodeScannerPage,
   MediaPage
 ].forEach(Page => {
-  let page = new Page();
+  const page = new Page();
   addPageSelector(page);
 });
 

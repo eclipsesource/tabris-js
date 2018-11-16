@@ -106,7 +106,7 @@ class SharingSection extends Composite {
 
 }
 
-let sharingSectionConfigurations = [{
+const sharingSectionConfigurations = [{
   title: 'ShareSheet',
   description: [
     'Use the platform native sharing capabilities. There are various',

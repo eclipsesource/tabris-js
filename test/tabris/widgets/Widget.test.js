@@ -62,7 +62,7 @@ describe('Widget', function() {
     it('translates background color to a color shader', function() {
       widget.set({background: 'rgba(1, 2, 3, 0.5)'});
 
-      let call = client.calls({op: 'set'})[0];
+      const call = client.calls({op: 'set'})[0];
       expect(call.properties.background).to.eql({type: 'color', color: ([1, 2, 3, 128])});
     });
 
@@ -78,7 +78,7 @@ describe('Widget', function() {
         it('translates font string to object', function() {
           widget.set({font: '12px Arial'});
 
-          let call = client.calls({op: 'set'})[0];
+          const call = client.calls({op: 'set'})[0];
           expect(call.properties.font)
             .to.eql({family: ['Arial'], size: 12, style: 'normal', weight: 'normal'});
         });
@@ -94,7 +94,7 @@ describe('Widget', function() {
           client.resetCalls();
           widget.set({font: 'initial'});
 
-          let call = client.calls({op: 'set'})[0];
+          const call = client.calls({op: 'set'})[0];
           expect(call.properties.font).to.be.null;
         });
 
@@ -112,7 +112,7 @@ describe('Widget', function() {
     it('translates backgroundImage to array', function() {
       widget.set({backgroundImage: {src: 'bar', width: 23, height: 42}});
 
-      let call = client.calls({op: 'set'})[0];
+      const call = client.calls({op: 'set'})[0];
       expect(call.properties.backgroundImage).to.eql(['bar', 23, 42, null]);
     });
 
@@ -128,14 +128,14 @@ describe('Widget', function() {
     it('sets elevation to value', function() {
       widget.elevation = 8;
 
-      let call = client.calls({op: 'set'})[0];
+      const call = client.calls({op: 'set'})[0];
       expect(call.properties.elevation).to.equal(8);
     });
 
     it('sets cornerRadius to value', function() {
       widget.cornerRadius = 4;
 
-      let call = client.calls({op: 'set'})[0];
+      const call = client.calls({op: 'set'})[0];
       expect(call.properties.cornerRadius).to.equal(4);
     });
 
@@ -144,7 +144,7 @@ describe('Widget', function() {
       client.resetCalls();
       widget.set({background: 'initial'});
 
-      let call = client.calls({op: 'set'})[0];
+      const call = client.calls({op: 'set'})[0];
       expect(call.properties.background).to.be.null;
     });
 
@@ -203,7 +203,7 @@ describe('Widget', function() {
     });
 
     it('has read-only data object', function() {
-      let data = widget.data;
+      const data = widget.data;
       widget.data = {};
 
       expect(widget.data.constructor).to.equal(Object);
@@ -341,7 +341,7 @@ describe('Widget', function() {
       });
 
       it("notifies parent's `removeChild` listener", function() {
-        let listener = spy();
+        const listener = spy();
         parent.onRemoveChild(listener);
 
         child.dispose();
@@ -354,7 +354,7 @@ describe('Widget', function() {
 
       it("notifies parent's `removeChild` listener with correct index", function() {
         new TestWidget().insertBefore(child);
-        let listener = spy();
+        const listener = spy();
         parent.onRemoveChild(listener);
 
         child.dispose();
@@ -365,8 +365,8 @@ describe('Widget', function() {
       });
 
       it("notifies all children's dispose listeners", function() {
-        let log = [];
-        let child2 = new TestWidget().appendTo(parent);
+        const log = [];
+        const child2 = new TestWidget().appendTo(parent);
         parent.onDispose(() => log.push('parent'));
         child.onDispose(() => log.push('child'));
         child2.onDispose(() => log.push('child2'));
@@ -377,9 +377,9 @@ describe('Widget', function() {
       });
 
       it("notifies children's dispose listeners recursively", function() {
-        let log = [];
+        const log = [];
         child = new TestWidget().appendTo(parent);
-        let grandchild = new TestWidget().appendTo(child);
+        const grandchild = new TestWidget().appendTo(child);
         parent.onDispose(() => log.push('parent'));
         child.onDispose(() => log.push('child'));
         grandchild.onDispose(() => log.push('grandchild'));
@@ -485,7 +485,7 @@ describe('Widget', function() {
         });
 
         it("sets the child's parent", function() {
-          let calls = client.calls();
+          const calls = client.calls();
           expect(calls.length).to.equal(1);
           expect(calls[0]).to.eql({op: 'set', id: child1.cid, properties: {parent: widget.cid}});
         });
@@ -529,7 +529,7 @@ describe('Widget', function() {
         });
 
         it("sets the children's parent", function() {
-          let calls = client.calls();
+          const calls = client.calls();
           expect(calls.length).to.equal(2);
           expect(calls[0]).to.eql({op: 'set', id: child1.cid, properties: {parent: widget.cid}});
         });
@@ -557,7 +557,7 @@ describe('Widget', function() {
         });
 
         it("sets the widgets' parent", function() {
-          let calls = client.calls();
+          const calls = client.calls();
           expect(calls.length).to.equal(2);
           expect(calls[0]).to.eql({op: 'set', id: child1.cid, properties: {parent: widget.cid}});
           expect(calls[1]).to.eql({op: 'set', id: child2.cid, properties: {parent: widget.cid}});
@@ -580,7 +580,7 @@ describe('Widget', function() {
         });
 
         it("sets the widgets' native parent`", function() {
-          let calls = client.calls();
+          const calls = client.calls();
           expect(calls.length).to.equal(2);
           expect(calls[0]).to.eql({op: 'set', id: child1.cid, properties: {parent: widget.cid}});
           expect(calls[1]).to.eql({op: 'set', id: child2.cid, properties: {parent: widget.cid}});
@@ -609,7 +609,7 @@ describe('Widget', function() {
       describe('when child is not accepted', function() {
 
         it('throws an error', function() {
-          let child = new TestWidget();
+          const child = new TestWidget();
           stub(widget, '_acceptChild').callsFake(() => false);
 
           expect(() => {
@@ -639,7 +639,7 @@ describe('Widget', function() {
         });
 
         it("sets the widget's parent", function() {
-          let setCall = client.calls({op: 'set', id: widget.cid})[0];
+          const setCall = client.calls({op: 'set', id: widget.cid})[0];
           expect(setCall.properties.parent).to.eql(parent1.cid);
         });
 
@@ -757,7 +757,7 @@ describe('Widget', function() {
 
         it('adds widget directly before the given widget', function() {
           widget.insertBefore(other);
-          let children = parent2.children();
+          const children = parent2.children();
           expect(children.indexOf(widget)).to.equal(children.indexOf(other) - 1);
         });
 
@@ -802,7 +802,7 @@ describe('Widget', function() {
         beforeEach(function() {
           new TestWidget({class: 'child'}).appendTo(parent1);
           new TestWidget({class: 'child'}).appendTo(parent2);
-          let grandparent = new TestWidget().append(parent1, parent2);
+          const grandparent = new TestWidget().append(parent1, parent2);
           widget.insertBefore(grandparent.find('.child'));
         });
 
@@ -870,7 +870,7 @@ describe('Widget', function() {
 
         it('adds widget directly after the given widget', function() {
           widget.insertAfter(other);
-          let children = parent2.children();
+          const children = parent2.children();
           expect(children.indexOf(widget)).to.equal(children.indexOf(other) + 1);
         });
 
@@ -915,7 +915,7 @@ describe('Widget', function() {
         beforeEach(function() {
           new TestWidget({class: 'child'}).appendTo(parent1);
           new TestWidget({class: 'child'}).appendTo(parent2);
-          let grandparent = new TestWidget().append(parent1, parent2);
+          const grandparent = new TestWidget().append(parent1, parent2);
           widget.insertAfter(grandparent.find('.child'));
         });
 
@@ -939,7 +939,7 @@ describe('Widget', function() {
       });
 
       it('removes the widget from its parent', function() {
-        let parent = new TestWidget();
+        const parent = new TestWidget();
         widget.appendTo(parent);
 
         widget.detach();
@@ -957,7 +957,7 @@ describe('Widget', function() {
       });
 
       it('returns the parent when appended', function() {
-        let parent = new TestWidget();
+        const parent = new TestWidget();
         widget.appendTo(parent);
         expect(widget.parent()).to.equal(parent);
       });
@@ -1001,8 +1001,8 @@ describe('Widget', function() {
       });
 
       it('returns filtered list when called with a selector', function() {
-        let button1 = new TestWidget({class: 'child'});
-        let button2 = new TestWidget({class: 'child'});
+        const button1 = new TestWidget({class: 'child'});
+        const button2 = new TestWidget({class: 'child'});
         widget.append(child1, button1, child2, button2, child3);
 
         expect(child1.siblings('.child').toArray()).to.eql([button1, button2]);
@@ -1129,7 +1129,7 @@ describe('Widget', function() {
       });
 
       it('applies properties to all children', function() {
-        let props = {prop1: 'v1', prop2: 'v2'};
+        const props = {prop1: 'v1', prop2: 'v2'};
         widget.apply({'*': props});
 
         expect(widget.set).to.have.been.calledWith(props);
@@ -1166,7 +1166,7 @@ describe('Widget', function() {
       });
 
       it('applies properties to children with specific type', function() {
-        let composite = new Composite();
+        const composite = new Composite();
         composite.set = spy();
         widget.append(composite);
         widget.apply({Composite: {prop1: 'v1'}});
@@ -1222,7 +1222,7 @@ describe('Widget', function() {
 
       it('exclude children if children() is overwritten to return empty collection', function() {
         widget.children = () => new WidgetCollection();
-        let props = {prop1: 'v1', prop2: 'v2'};
+        const props = {prop1: 'v1', prop2: 'v2'};
 
         widget.apply({'*': props});
 
@@ -1234,7 +1234,7 @@ describe('Widget', function() {
 
       it('exclude children if children() is overwritten to return empty array', function() {
         widget.children = () => [];
-        let props = {prop1: 'v1', prop2: 'v2'};
+        const props = {prop1: 'v1', prop2: 'v2'};
 
         widget.apply({'*': props});
 
@@ -1246,7 +1246,7 @@ describe('Widget', function() {
 
       it('exclude children if children() is overwritten to return null', function() {
         widget.children = () => null;
-        let props = {prop1: 'v1', prop2: 'v2'};
+        const props = {prop1: 'v1', prop2: 'v2'};
 
         widget.apply({'*': props});
 
@@ -1258,7 +1258,7 @@ describe('Widget', function() {
 
       it('applies partially if children() on child is overwritten to return empty collection', function() {
         child1.children = () => new WidgetCollection();
-        let props = {prop1: 'v1', prop2: 'v2'};
+        const props = {prop1: 'v1', prop2: 'v2'};
 
         widget.apply({'*': props});
 
@@ -1270,7 +1270,7 @@ describe('Widget', function() {
 
       it('applies partially if children() on child is overwritten to return empty array', function() {
         child1.children = () => [];
-        let props = {prop1: 'v1', prop2: 'v2'};
+        const props = {prop1: 'v1', prop2: 'v2'};
 
         widget.apply({'*': props});
 
@@ -1282,7 +1282,7 @@ describe('Widget', function() {
 
       it('applies partially if children() on child is overwritten to return null', function() {
         child1.children = () => null;
-        let props = {prop1: 'v1', prop2: 'v2'};
+        const props = {prop1: 'v1', prop2: 'v2'};
 
         widget.apply({'*': props});
 
@@ -1294,7 +1294,7 @@ describe('Widget', function() {
 
       it('"protected" version still works if children() is overwritten', function() {
         widget.children = () => new WidgetCollection();
-        let props = {prop1: 'v1', prop2: 'v2'};
+        const props = {prop1: 'v1', prop2: 'v2'};
 
         widget._apply({'*': props});
 
@@ -1306,7 +1306,7 @@ describe('Widget', function() {
 
       it('"protected" variant applies partially if children() on child is overwritten', function() {
         child1.children = () => new WidgetCollection();
-        let props = {prop1: 'v1', prop2: 'v2'};
+        const props = {prop1: 'v1', prop2: 'v2'};
 
         widget._apply({'*': props});
 
@@ -1332,7 +1332,7 @@ describe('Widget', function() {
     it('translates background to string', function() {
       stub(client, 'get').returns([170, 255, 0, 128]);
 
-      let result = widget.background;
+      const result = widget.background;
 
       expect(result).to.equal('rgba(170, 255, 0, 0.5)');
     });
@@ -1340,7 +1340,7 @@ describe('Widget', function() {
     it('translates background null to string', function() {
       stub(client, 'get').returns(null);
 
-      let result = widget.background;
+      const result = widget.background;
 
       expect(result).to.equal('rgba(0, 0, 0, 0)');
     });
@@ -1348,7 +1348,7 @@ describe('Widget', function() {
     it('translates bounds to object', function() {
       stub(client, 'get').returns([1, 2, 3, 4]);
 
-      let result = widget.bounds;
+      const result = widget.bounds;
 
       expect(result).to.eql({left: 1, top: 2, width: 3, height: 4});
     });
@@ -1356,7 +1356,7 @@ describe('Widget', function() {
     it('translates bounds to object', function() {
       stub(client, 'get').returns([1, 2, 3, 4]);
 
-      let result = widget.bounds;
+      const result = widget.bounds;
 
       expect(result).to.eql({left: 1, top: 2, width: 3, height: 4});
     });
@@ -1364,7 +1364,7 @@ describe('Widget', function() {
     it('translates backgroundImage to object', function() {
       stub(client, 'get').returns(['foo', 23, 42]);
 
-      let result = widget.backgroundImage;
+      const result = widget.backgroundImage;
 
       expect(result).to.eql({src: 'foo', width: 23, height: 42, scale: 'auto'});
     });
@@ -1493,8 +1493,8 @@ describe('Widget', function() {
       widget.layoutData = {left: 23, baseline: '#other', right: ['#other', 42]};
       other = new TestWidget({id: 'other'}).appendTo(parent);
 
-      let call = client.calls({op: 'set', id: widget.cid})[0];
-      let expected = {left: 23, baseline: other.cid, right: [other.cid, 42]};
+      const call = client.calls({op: 'set', id: widget.cid})[0];
+      const expected = {left: 23, baseline: other.cid, right: [other.cid, 42]};
       expect(call.properties.layoutData).to.eql(expected);
     });
 
@@ -1504,16 +1504,16 @@ describe('Widget', function() {
       widget.layoutData = {left: 23, baseline: '#other', right: ['#other', 42]};
       widget.appendTo(parent);
 
-      let call = client.calls({op: 'create'})[0];
-      let expected = {left: 23, baseline: other.cid, right: [other.cid, 42]};
+      const call = client.calls({op: 'create'})[0];
+      const expected = {left: 23, baseline: other.cid, right: [other.cid, 42]};
       expect(call.properties.layoutData).to.eql(expected);
     });
 
     it('SET preliminary layoutData if selector does not resolve in flush', function() {
       widget.layoutData = {left: 23, baseline: '#mother', right: ['Other', 42]};
 
-      let call = client.calls({op: 'set'})[0];
-      let expected = {left: 23, baseline: 0, right: [0, 42]};
+      const call = client.calls({op: 'set'})[0];
+      const expected = {left: 23, baseline: 0, right: [0, 42]};
       expect(call.properties.layoutData).to.eql(expected);
     });
 
@@ -1524,7 +1524,7 @@ describe('Widget', function() {
 
       other = new TestWidget({id: 'other'}).appendTo(parent);
 
-      let setCalls = client.calls({op: 'set', id: widget.cid});
+      const setCalls = client.calls({op: 'set', id: widget.cid});
       expect(setCalls.length).to.equal(1);
       expect(setCalls[0].properties.layoutData).to.eql({right: [other.cid, 0]});
     });
@@ -1537,7 +1537,7 @@ describe('Widget', function() {
 
       widget.appendTo(parent);
 
-      let setCalls = client.calls({op: 'set', id: widget.cid});
+      const setCalls = client.calls({op: 'set', id: widget.cid});
       expect(setCalls.length).to.equal(2);
       expect(setCalls[1].properties.layoutData).to.eql({right: [other.cid, 0]});
     });
@@ -1573,7 +1573,7 @@ describe('Widget', function() {
       });
 
       it('resets layoutData properties', function() {
-        let layoutData = {left: 1, right: 2, top: 3, bottom: 4};
+        const layoutData = {left: 1, right: 2, top: 3, bottom: 4};
         widget.layoutData = layoutData;
         widget[attr] = null;
 
@@ -1601,8 +1601,8 @@ describe('Widget', function() {
       it('SETs layoutData', function() {
         widget[attr] = 23;
 
-        let call = client.calls({op: 'set', id: widget.cid})[0];
-        let expected = {[attr]: 23};
+        const call = client.calls({op: 'set', id: widget.cid})[0];
+        const expected = {[attr]: 23};
         expect(call.properties.layoutData).to.eql(expected);
       });
 
@@ -1617,7 +1617,7 @@ describe('Widget', function() {
       });
 
       it('resets layoutData properties', function() {
-        let layoutData = {centerX: 0, centerY: 0, width: 100, height: 200};
+        const layoutData = {centerX: 0, centerY: 0, width: 100, height: 200};
         widget.layoutData = layoutData;
         widget[attr] = null;
 
@@ -1627,8 +1627,8 @@ describe('Widget', function() {
       it('SETs layoutData', function() {
         widget[attr] = 23;
 
-        let call = client.calls({op: 'set', id: widget.cid})[0];
-        let expected = {};
+        const call = client.calls({op: 'set', id: widget.cid})[0];
+        const expected = {};
         expected[attr] = 23;
         expect(call.properties.layoutData).to.deep.equal(expected);
       });
@@ -1643,8 +1643,8 @@ describe('Widget', function() {
       widget.right = 10;
       widget.left = null;
 
-      let call = client.calls({op: 'set', id: widget.cid})[0];
-      let expected = {right: 10, width: 10};
+      const call = client.calls({op: 'set', id: widget.cid})[0];
+      const expected = {right: 10, width: 10};
       expect(call.properties.layoutData).to.eql(expected);
       expect(console.warn).not.to.have.been.called;
     });
@@ -1656,8 +1656,8 @@ describe('Widget', function() {
       widget.width = 10;
       widget.right = 10;
 
-      let call = client.calls({op: 'set', id: widget.cid})[0];
-      let expected = {right: 10, left: 10};
+      const call = client.calls({op: 'set', id: widget.cid})[0];
+      const expected = {right: 10, left: 10};
       expect(call.properties.layoutData).to.eql(expected);
       expect(console.warn).to.have.been.called;
     });
@@ -1669,7 +1669,7 @@ describe('Widget', function() {
     let listener, widget;
 
     function checkListen(event) {
-      let listen = client.calls({op: 'listen', id: widget.cid});
+      const listen = client.calls({op: 'listen', id: widget.cid});
       expect(listen.length).to.equal(1);
       expect(listen[0].event).to.equal(event);
       expect(listen[0].listen).to.be.true;

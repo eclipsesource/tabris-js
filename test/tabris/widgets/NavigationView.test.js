@@ -42,7 +42,7 @@ describe('NavigationView', function() {
   });
 
   it('can append a Page', function() {
-    let page = new Page();
+    const page = new Page();
 
     navigationView.append(page);
 
@@ -50,7 +50,7 @@ describe('NavigationView', function() {
   });
 
   it('can append an Action', function() {
-    let action = new Action();
+    const action = new Action();
 
     navigationView.append(action);
 
@@ -58,7 +58,7 @@ describe('NavigationView', function() {
   });
 
   it('can append a SearchAction', function() {
-    let action = new SearchAction();
+    const action = new SearchAction();
 
     navigationView.append(action);
 
@@ -66,7 +66,7 @@ describe('NavigationView', function() {
   });
 
   it('can set navigationAction', function() {
-    let action = new Action();
+    const action = new Action();
 
     navigationView.navigationAction = action;
 
@@ -92,7 +92,7 @@ describe('NavigationView', function() {
     it('supports get', function() {
       stub(client, 'get').returns(23);
 
-      let height = navigationView.toolbarHeight;
+      const height = navigationView.toolbarHeight;
 
       expect(height).to.equal(23);
       expect(client.get).to.have.been.calledWith(navigationView.cid, 'toolbarHeight');
@@ -104,14 +104,14 @@ describe('NavigationView', function() {
       spy(client, 'set');
       navigationView.toolbarHeight = 12;
 
-      let height = navigationView.toolbarHeight;
+      const height = navigationView.toolbarHeight;
 
       expect(height).to.equal(23);
       expect(client.set).not.to.have.been.calledWith(navigationView.cid, 'toolbarHeight');
     });
 
     it('support change event', function() {
-      let listener = spy();
+      const listener = spy();
       navigationView.onToolbarHeightChanged(listener);
 
       tabris._notify(navigationView.cid, 'toolbarHeightChanged', {toolbarHeight: 23});
@@ -201,7 +201,7 @@ describe('NavigationView', function() {
       });
 
       it('accepts a selector argument', function() {
-        let pages = navigationView.pages('#page1').toArray();
+        const pages = navigationView.pages('#page1').toArray();
         expect(pages).to.deep.equal([page1]);
       });
 

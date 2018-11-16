@@ -113,17 +113,17 @@ describe('Font', function() {
     });
 
     it('accepts font-like with size and family', function() {
-      let fontLike = {size: 16, family: ['bar']};
+      const fontLike = {size: 16, family: ['bar']};
       expect(Font.from(fontLike)).to.deep.equal({size: 16, family: ['bar'], style: 'normal', weight: 'normal'});
     });
 
     it('accepts font-like with size, family and weight', function() {
-      let fontLike = {size: 16, family: ['bar'], weight: 'bold'};
+      const fontLike = {size: 16, family: ['bar'], weight: 'bold'};
       expect(Font.from(fontLike)).to.deep.equal({size: 16, family: ['bar'], weight: 'bold', style: 'normal'});
     });
 
     it('accepts font-like with size, family, weight and style', function() {
-      let fontLike = {size: 16, family: ['bar'], weight: 'bold', style: 'italic'};
+      const fontLike = {size: 16, family: ['bar'], weight: 'bold', style: 'italic'};
       expect(Font.from(fontLike)).to.deep.equal({size: 16, family: ['bar'], weight: 'bold', style: 'italic'});
     });
 

@@ -21,7 +21,7 @@ module.exports = class BooksPageSelector extends Composite {
     this._createUI();
     this._applyLayout();
     this._applyStyles();
-    let {title, filter} = PAGE_DATA[0];
+    const {title, filter} = PAGE_DATA[0];
     this._open(new BooksPage({title, filter}));
   }
 
@@ -37,7 +37,7 @@ module.exports = class BooksPageSelector extends Composite {
   }
 
   _open(page) {
-    let navigationView = ui.find('NavigationView').first();
+    const navigationView = ui.find('NavigationView').first();
     navigationView.pageAnimation = 'none';
     tabris.ui.drawer.close();
     navigationView.pages().dispose();

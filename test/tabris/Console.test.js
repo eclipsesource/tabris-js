@@ -310,7 +310,7 @@ _notify@[native code]`
 });
 
 function getCallOutput(spyInstance) {
-  let messages = [];
+  const messages = [];
   for (const call of spyInstance.getCalls()) {
     messages.push(call.args
       .map(arg => typeof arg === 'object' ? JSON.stringify(arg) : arg)

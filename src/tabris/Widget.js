@@ -34,11 +34,11 @@ export default class Widget extends NativeObject {
     if (!(widget instanceof NativeObject)) {
       throw new Error('Cannot insert before non-widget');
     }
-    let parent = widget.parent();
+    const parent = widget.parent();
     if (!parent) {
       throw new Error('Cannot insert before orphan');
     }
-    let index = parent.$children.indexOf(widget);
+    const index = parent.$children.indexOf(widget);
     this._setParent(parent, index);
     return this;
   }
@@ -49,11 +49,11 @@ export default class Widget extends NativeObject {
     if (!(widget instanceof NativeObject)) {
       throw new Error('Cannot insert after non-widget');
     }
-    let parent = widget.parent();
+    const parent = widget.parent();
     if (!parent) {
       throw new Error('Cannot insert after orphan');
     }
-    let index = parent.$children.indexOf(widget);
+    const index = parent.$children.indexOf(widget);
     this._setParent(parent, index + 1);
     return this;
   }
@@ -145,8 +145,8 @@ export default class Widget extends NativeObject {
     }
     if (this.gestures[name]) {
       if (listening) {
-        let properties = Object.assign({target: this}, this.gestures[name]);
-        let recognizer = new GestureRecognizer(properties).on('gesture', event => {
+        const properties = Object.assign({target: this}, this.gestures[name]);
+        const recognizer = new GestureRecognizer(properties).on('gesture', event => {
           if (event.translation) {
             event.translationX = event.translation.x;
             event.translationY = event.translation.y;
@@ -351,7 +351,7 @@ function hasAndroidResizeBug() {
   return hasAndroidResizeBug.cache;
 }
 
-let defaultGestures = {
+const defaultGestures = {
   tap: {type: 'tap'},
   longPress: {type: 'longPress'},
   pan: {type: 'pan'},

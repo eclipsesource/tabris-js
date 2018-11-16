@@ -66,7 +66,7 @@ NativeObject.defineProperties(ActionSheet.prototype, {
           throw new Error('value is not an array');
         }
         return value.map(action => {
-          let result = {title: '' + (action.title || '')};
+          const result = {title: '' + (action.title || '')};
           if ('image' in action) {
             result.image = types.ImageValue.encode(action.image);
           }

@@ -11,7 +11,7 @@ function createTimeDisplay(timezone, name) {
     top: 'prev() 30', centerX: 0,
     text: name
   }).appendTo(ui.contentView);
-  let timeLabel = new TextView({
+  const timeLabel = new TextView({
     top: 'prev() 10', centerX: 0,
     font: 'bold 50px sans-serif'
   }).on('update', () => timeLabel.text = moment.tz(timezone).format('h:mm a'))

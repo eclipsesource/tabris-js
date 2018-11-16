@@ -52,8 +52,8 @@ class Animation extends NativeObject {
 NativeObject.defineProperties(Animation.prototype, PROPERTIES);
 
 export function animate(properties, options) {
-  let animatedProps = {};
-  for (let property in properties) {
+  const animatedProps = {};
+  for (const property in properties) {
     if (ANIMATABLE_PROPERTIES.includes(property)) {
       try {
         animatedProps[property] =
@@ -66,7 +66,7 @@ export function animate(properties, options) {
       warn(this + ': Ignored invalid animation property "' + property + '"');
     }
   }
-  for (let option in options) {
+  for (const option in options) {
     if (!(option in PROPERTIES) && option !== 'name') {
       warn(this + ': Ignored invalid animation option "' + option + '"');
     }

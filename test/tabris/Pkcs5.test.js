@@ -6,8 +6,8 @@ describe('Pkcs5', function() {
 
   let client;
   let pkcs5;
-  let returnValue = new Uint8Array(32);
-  let expectFail = () => {throw new Error('expected to fail');};
+  const returnValue = new Uint8Array(32);
+  const expectFail = () => {throw new Error('expected to fail');};
 
   beforeEach(function() {
     client = new ClientStub();
@@ -65,8 +65,8 @@ describe('Pkcs5', function() {
 
     it('destroys intermediate object after `done` event', function() {
       return pkcs5.pbkdf2('password', new Uint8Array(20), 32, 1000).then(() => {
-        let createCall = client.calls({op: 'create'})[0];
-        let destroyCall = client.calls({op: 'destroy'})[0];
+        const createCall = client.calls({op: 'create'})[0];
+        const destroyCall = client.calls({op: 'destroy'})[0];
         expect(destroyCall.id).to.equal(createCall.id);
       });
     });

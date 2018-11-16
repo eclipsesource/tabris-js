@@ -34,7 +34,7 @@ module.exports = class BooksList extends CollectionView {
 
   updateCell(view, index) {
     super.updateCell(view, index);
-    let {image, title, author} = books[index];
+    const {image, title, author} = books[index];
     Object.assign(view, {image, title, author});
   }
 

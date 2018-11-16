@@ -12,16 +12,16 @@ const CELL_SIZE = Math.floor(Math.min(HEIGHT,WIDTH) / 30);
 const X_SIZE = WIDTH / CELL_SIZE;
 const Y_SIZE = HEIGHT / CELL_SIZE;
 
-let universe = ui.contentView.set({
+const universe = ui.contentView.set({
   background: '#000'
 });
 
 function getNextState(x, y, alive) {
-  let count = 0,
-    xm1 = x > 0,
-    xp1 = x + 1 < X_SIZE,
-    ym1 = y > 0,
-    yp1 = y + 1 < Y_SIZE;
+  let count = 0;
+  const xm1 = x > 0;
+  const xp1 = x + 1 < X_SIZE;
+  const ym1 = y > 0;
+  const yp1 = y + 1 < Y_SIZE;
 
   if (xm1) {
     if (ym1 && cells[x - 1][y - 1].lastAlive) { count++; }
@@ -40,11 +40,11 @@ function getNextState(x, y, alive) {
 }
 
 // seed the grid
-let cells = [];
+const cells = [];
 for (let x = 0; x < X_SIZE; x++) {
   cells[x] = [];
   for (let y = 0; y < Y_SIZE; y++) {
-    let alive = Math.random() >= 0.5;
+    const alive = Math.random() >= 0.5;
     cells[x][y] = {
       proxy: new Composite({
         height: CELL_SIZE,
@@ -62,7 +62,7 @@ for (let x = 0; x < X_SIZE; x++) {
 }
 
 // add FPS label
-let label = new TextView({
+const label = new TextView({
   text: 'FPS: ',
   textColor: '#fff',
   background: '#a00',

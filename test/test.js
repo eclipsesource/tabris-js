@@ -5,10 +5,10 @@ import {mockTabris} from './tabris-mock';
 
 chai.use(sinonChai);
 
-let sandbox = sinon.sandbox.create();
-let spy = sandbox.spy.bind(sandbox);
-let stub = sandbox.stub.bind(sandbox);
-let restore = sandbox.restore.bind(sandbox);
-let match = sinon.match;
+const sandbox = sinon.sandbox.create();
+const spy = sandbox.spy.bind(sandbox);
+const stub = sandbox.stub.bind(sandbox);
+const restore = sandbox.restore.bind(sandbox);
+const match = sinon.match;
 
 export {expect, spy, stub, restore, match, mockTabris};

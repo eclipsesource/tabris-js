@@ -25,10 +25,10 @@ module.exports = class MotionPage extends PluginPage {
   }
 
   _startAccelerationWatch() {
-    let onSuccess = acceleration =>
+    const onSuccess = acceleration =>
       this.find('#accelerationDisplay').set({text: this._accelerationToString(acceleration)});
-    let onError = () => console.log('onError!');
-    let options = {frequency: 700};  // Update every 700ms
+    const onError = () => console.log('onError!');
+    const options = {frequency: 700};  // Update every 700ms
     this._watchID = navigator.accelerometer.watchAcceleration(onSuccess, onError, options);
   }
 

@@ -152,7 +152,7 @@ export default class XMLHttpRequest {
   }
 
   open(method, url, async) {
-    let parsedUrl = {};
+    const parsedUrl = {};
     // (2), (3), (4): we don't implement the 'settings' object
     validateRequiredOpenArgs(method, url);
     parsedUrl.source = url; // (8), (9): experimental non-standard parsing implementation:
@@ -270,7 +270,7 @@ export default class XMLHttpRequest {
       return null;
     }
     // (3) (No headers are filtered out as this restriction does not apply to native apps)
-    for (let key in this.$responseHeaders) { // (4), (5)
+    for (const key in this.$responseHeaders) { // (4), (5)
       if (key.toLowerCase() === header.toLowerCase()) {
         return this.$responseHeaders[key];
       }
@@ -285,8 +285,8 @@ export default class XMLHttpRequest {
     if (this.$error) { // (2)
       return '';
     }
-    let result = [];
-    for (let key in this.$responseHeaders) {
+    const result = [];
+    for (const key in this.$responseHeaders) {
       result.push(key + ': ' + this.$responseHeaders[key]);
     }
     return result.join('\r\n');
@@ -370,12 +370,12 @@ function validateMethod(method) {
     throw new TypeError("Invalid HTTP method, failed to execute 'open'");
   }
   // (6):
-  let tokens = ['CONNECT', 'DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'TRACE', 'TRACK'];
-  let uppercaseMethod = method.toUpperCase();
+  const tokens = ['CONNECT', 'DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'TRACE', 'TRACK'];
+  const uppercaseMethod = method.toUpperCase();
   if (tokens.indexOf(uppercaseMethod) >= 0) {
     method = uppercaseMethod;
   }
-  let forbiddenTokens = ['CONNECT', 'TRACE', 'TRACK']; // (7)
+  const forbiddenTokens = ['CONNECT', 'TRACE', 'TRACK']; // (7)
   if (forbiddenTokens.indexOf(method) >= 0) {
     throw new Error(`SecurityError: '${method}' HTTP method is not secure, failed to execute 'open'`);
   }
@@ -384,7 +384,7 @@ function validateMethod(method) {
 function validHttpToken(httpToken) {
   // RFC-compliant validation for HTTP tokens ported from Chromium:
   // https://chromium.googlesource.com/chromium/blink.git/+/master/Source/platform/network/HTTPParsers.cpp
-  let forbiddenCharacters = ['(', ')', '<', '>', '@', ',', ';', ':', '\\', '"', '/', '[', ']', '?', '=', '{', '}'];
+  const forbiddenCharacters = ['(', ')', '<', '>', '@', ',', ';', ':', '\\', '"', '/', '[', ']', '?', '=', '{', '}'];
   return !(/[^\x21-\x7E]/.test(httpToken) || forbiddenCharacters.indexOf(httpToken) >= 0);
 }
 
@@ -397,14 +397,14 @@ function isValidHttpHeaderValue(value) {
 
 function validateUrl(url) {
   // TODO: rewrite (8),(9)
-  let scheme = extractScheme(url);
+  const scheme = extractScheme(url);
   if (scheme && (SUPPORTED_SCHEMES.indexOf(scheme) === -1)) {
     throw new SyntaxError("Unsupported URL scheme, failed to execute 'open'");
   }
 }
 
 function extractScheme(url) {
-  let match = /^(\S+?):/.exec(url);
+  const match = /^(\S+?):/.exec(url);
   return match ? match[1] : null;
 }
 

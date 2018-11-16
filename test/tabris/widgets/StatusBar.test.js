@@ -7,8 +7,8 @@ describe('StatusBar', function() {
 
   let statusBar, client;
 
-  let checkListen = function(event) {
-    let listen = client.calls({op: 'listen', id: statusBar.cid});
+  const checkListen = function(event) {
+    const listen = client.calls({op: 'listen', id: statusBar.cid});
     expect(listen.length).to.equal(1);
     expect(listen[0].event).to.equal(event);
     expect(listen[0].listen).to.equal(true);
@@ -79,7 +79,7 @@ describe('StatusBar', function() {
   });
 
   it('fires tap event', function() {
-    let listener = spy();
+    const listener = spy();
     statusBar.onTap(listener);
 
     tabris._notify(statusBar.cid, 'tap', {x: 30, y: 10});

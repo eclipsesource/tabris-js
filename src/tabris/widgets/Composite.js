@@ -14,7 +14,7 @@ export default class Composite extends Widget {
 
   append() {
     this._checkDisposed();
-    let accept = (widget) => {
+    const accept = (widget) => {
       if (!(widget instanceof NativeObject)) {
         throw new Error('Cannot append non-widget');
       }
@@ -35,7 +35,7 @@ export default class Composite extends Widget {
   }
 
   apply(sheet) {
-    let scope = new WidgetCollection(
+    const scope = new WidgetCollection(
       asArray(this.children()).concat(this), {selector: '*', origin: this, deep: true}
     );
     return this._apply(sheet, scope);
@@ -99,7 +99,7 @@ export default class Composite extends Widget {
 
   _removeChild(child) {
     if (this.$children) {
-      let index = this.$children.indexOf(child);
+      const index = this.$children.indexOf(child);
       if (index !== -1) {
         this.$children.splice(index, 1);
         super._trigger('removeChild', {child, index});
@@ -109,7 +109,7 @@ export default class Composite extends Widget {
 
   _release() {
     if (this.$children) {
-      let children = this.$children.concat();
+      const children = this.$children.concat();
       for (let i = 0; i < children.length; i++) {
         children[i]._dispose(true);
       }

@@ -40,21 +40,21 @@ describe('Common Widgets', function() {
   }
 
   function checkListen(event) {
-    let listen = client.calls({op: 'listen', id: widget.cid});
+    const listen = client.calls({op: 'listen', id: widget.cid});
     expect(listen.length).to.equal(1);
     expect(listen[0].event).to.equal(event);
     expect(listen[0].listen).to.equal(true);
   }
 
   it('ActivityIndicator', function() {
-    let activityIndicator = new ActivityIndicator();
+    const activityIndicator = new ActivityIndicator();
 
     expect(getCreate().type).to.equal('tabris.ActivityIndicator');
     expect(activityIndicator.constructor.name).to.equal('ActivityIndicator');
   });
 
   it('Button', function() {
-    let button = new Button({enabled: false});
+    const button = new Button({enabled: false});
 
     expect(getCreate().type).to.equal('tabris.Button');
     expect(button.constructor.name).to.equal('Button');
@@ -74,7 +74,7 @@ describe('Common Widgets', function() {
   });
 
   it('Button JSX with text property', function() {
-    let button = jsx.createElement(
+    const button = jsx.createElement(
       Button,
       {text: 'Hello World!'}
     );
@@ -83,7 +83,7 @@ describe('Common Widgets', function() {
   });
 
   it('Button JSX with text content', function() {
-    let button = jsx.createElement(
+    const button = jsx.createElement(
       Button,
       null,
       'Hello',
@@ -109,7 +109,7 @@ describe('Common Widgets', function() {
   });
 
   it('Canvas', function() {
-    let canvas = new Canvas({visible: false});
+    const canvas = new Canvas({visible: false});
 
     expect(getCreate().type).to.equal('tabris.Canvas');
     expect(getCreate().properties.visible).to.be.false;
@@ -117,7 +117,7 @@ describe('Common Widgets', function() {
   });
 
   it('CheckBox', function() {
-    let checkBox = new CheckBox({enabled: false});
+    const checkBox = new CheckBox({enabled: false});
 
     expect(getCreate().type).to.equal('tabris.CheckBox');
     expect(checkBox.constructor.name).to.equal('CheckBox');
@@ -143,7 +143,7 @@ describe('Common Widgets', function() {
   });
 
   it('CheckBox JSX with text property', function() {
-    let widget = jsx.createElement(
+    const widget = jsx.createElement(
       CheckBox,
       {text: 'Hello World!'}
     );
@@ -152,7 +152,7 @@ describe('Common Widgets', function() {
   });
 
   it('CheckBox JSX with text content', function() {
-    let widget = jsx.createElement(
+    const widget = jsx.createElement(
       CheckBox,
       null,
       'Hello',
@@ -180,14 +180,14 @@ describe('Common Widgets', function() {
   });
 
   it('Composite', function() {
-    let composite = new Composite();
+    const composite = new Composite();
 
     expect(getCreate().type).to.equal('tabris.Composite');
     expect(composite.constructor.name).to.equal('Composite');
   });
 
   it('ImageView', function() {
-    let imageView = new ImageView();
+    const imageView = new ImageView();
 
     expect(getCreate().type).to.equal('tabris.ImageView');
     expect(imageView.constructor.name).to.equal('ImageView');
@@ -202,7 +202,7 @@ describe('Common Widgets', function() {
   });
 
   it('ProgressBar', function() {
-    let progressBar = new ProgressBar();
+    const progressBar = new ProgressBar();
 
     expect(getCreate().type).to.equal('tabris.ProgressBar');
     expect(progressBar.constructor.name).to.equal('ProgressBar');
@@ -219,7 +219,7 @@ describe('Common Widgets', function() {
   });
 
   it('RadioButton', function() {
-    let radioButton = new RadioButton({enabled: false});
+    const radioButton = new RadioButton({enabled: false});
 
     expect(getCreate().type).to.equal('tabris.RadioButton');
     expect(radioButton.constructor.name).to.equal('RadioButton');
@@ -246,7 +246,7 @@ describe('Common Widgets', function() {
   });
 
   it('RadioButton JSX with text property', function() {
-    let widget = jsx.createElement(
+    const widget = jsx.createElement(
       RadioButton,
       {text: 'Hello World!'}
     );
@@ -255,7 +255,7 @@ describe('Common Widgets', function() {
   });
 
   it('RadioButton JSX with text content', function() {
-    let button = jsx.createElement(
+    const button = jsx.createElement(
       RadioButton,
       null,
       'Hello',
@@ -283,7 +283,7 @@ describe('Common Widgets', function() {
   });
 
   it('TextView', function() {
-    let textView = new TextView({text: 'foo'});
+    const textView = new TextView({text: 'foo'});
 
     expect(getCreate().type).to.equal('tabris.TextView');
     expect(getCreate().properties).to.deep.equal({text: 'foo'});
@@ -307,7 +307,7 @@ describe('Common Widgets', function() {
   });
 
   it('TextView JSX with text property', function() {
-    let widget = jsx.createElement(
+    const widget = jsx.createElement(
       TextView,
       {text: 'Hello World!'}
     );
@@ -316,7 +316,7 @@ describe('Common Widgets', function() {
   });
 
   it('TextView JSX with text content', function() {
-    let button = jsx.createElement(
+    const button = jsx.createElement(
       TextView,
       null,
       'Hello',
@@ -353,7 +353,7 @@ describe('Common Widgets', function() {
   });
 
   it('Slider', function() {
-    let slider = new Slider({selection: 23});
+    const slider = new Slider({selection: 23});
 
     expect(getCreate().type).to.equal('tabris.Slider');
     expect(getCreate().properties).to.deep.equal({selection: 23});
@@ -388,7 +388,7 @@ describe('Common Widgets', function() {
   });
 
   it('WebView', function() {
-    let webView = new WebView({html: 'foo'});
+    const webView = new WebView({html: 'foo'});
 
     expect(getCreate().type).to.equal('tabris.WebView');
     expect(getCreate().properties).to.deep.equal({html: 'foo'});
@@ -422,7 +422,7 @@ describe('Common Widgets', function() {
   });
 
   it('Switch', function() {
-    let swtch = new Switch({checked: true});
+    const swtch = new Switch({checked: true});
 
     expect(getCreate().type).to.equal('tabris.Switch');
     expect(getCreate().properties).to.deep.equal({checked: true});
@@ -467,7 +467,7 @@ describe('Common Widgets', function() {
   });
 
   it('ToggleButton', function() {
-    let toggleButton = new ToggleButton({enabled: false});
+    const toggleButton = new ToggleButton({enabled: false});
 
     expect(getCreate().type).to.equal('tabris.ToggleButton');
     expect(toggleButton.constructor.name).to.equal('ToggleButton');
@@ -497,7 +497,7 @@ describe('Common Widgets', function() {
   });
 
   it('ToggleButton JSX with text property', function() {
-    let widget = jsx.createElement(
+    const widget = jsx.createElement(
       ToggleButton,
       {text: 'Hello World!'}
     );
@@ -506,7 +506,7 @@ describe('Common Widgets', function() {
   });
 
   it('ToggleButton JSX with text content', function() {
-    let button = jsx.createElement(
+    const button = jsx.createElement(
       ToggleButton,
       null,
       'Hello',

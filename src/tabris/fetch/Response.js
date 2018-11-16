@@ -35,10 +35,10 @@ export default class Response extends Body {
   }
 
   get _encoding() {
-    let contentType = this.headers.get('content-type') || '';
-    let parameters = contentType.split(';').slice(1);
-    for (let param of parameters) {
-      let match = /charset=(\S+)/i.exec(param.trim());
+    const contentType = this.headers.get('content-type') || '';
+    const parameters = contentType.split(';').slice(1);
+    for (const param of parameters) {
+      const match = /charset=(\S+)/i.exec(param.trim());
       if (match) {
         return match[1].toLowerCase();
       }

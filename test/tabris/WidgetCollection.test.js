@@ -60,8 +60,8 @@ describe('WidgetCollection', function() {
   });
 
   it('toArray()', function() {
-    let arr1 = collection.toArray();
-    let arr2 = collection.toArray();
+    const arr1 = collection.toArray();
+    const arr2 = collection.toArray();
 
     expect(arr1).to.deep.equal(widgets);
     expect(arr2).to.deep.equal(widgets);
@@ -69,7 +69,7 @@ describe('WidgetCollection', function() {
   });
 
   it('forEach()', function() {
-    let callback = spy();
+    const callback = spy();
 
     collection.forEach(callback);
 
@@ -153,7 +153,7 @@ describe('WidgetCollection', function() {
     });
 
     it('with child selectors', function() {
-      let tree = new WidgetCollection(
+      const tree = new WidgetCollection(
         [new Foo(), new Foo(), new Foo(), new Foo(), new Foo(), new Foo()],
         {origin: host}
       );
@@ -195,8 +195,8 @@ describe('WidgetCollection', function() {
     });
 
     it('animate() is delegated', function() {
-      let props = {foo: 'bar'};
-      let options = {delay: 3000};
+      const props = {foo: 'bar'};
+      const options = {delay: 3000};
       stub(console, 'warn');
       spy(widgets[0], 'animate');
       spy(widgets[1], 'animate');
@@ -213,7 +213,7 @@ describe('WidgetCollection', function() {
     });
 
     it('on() is delegated', function() {
-      let listener = function() {};
+      const listener = function() {};
       spy(widgets[0], 'on');
       spy(widgets[1], 'on');
       spy(widgets[2], 'on');
@@ -229,7 +229,7 @@ describe('WidgetCollection', function() {
     });
 
     it('once() is delegated', function() {
-      let listener = function() {};
+      const listener = function() {};
       spy(widgets[0], 'once');
       spy(widgets[1], 'once');
       spy(widgets[2], 'once');
@@ -245,7 +245,7 @@ describe('WidgetCollection', function() {
     });
 
     it('off() is delegated', function() {
-      let listener = function() {};
+      const listener = function() {};
       spy(widgets[0], 'off');
       spy(widgets[1], 'off');
       spy(widgets[2], 'off');
@@ -261,7 +261,7 @@ describe('WidgetCollection', function() {
     });
 
     it('trigger() is delegated', function() {
-      let event = {};
+      const event = {};
       spy(widgets[0], 'trigger');
       spy(widgets[1], 'trigger');
       spy(widgets[2], 'trigger');
@@ -292,7 +292,7 @@ describe('WidgetCollection', function() {
     });
 
     it('parent() returns WidgetCollection with host', function() {
-      let parents = [host, new Bar()];
+      const parents = [host, new Bar()];
 
       widgets[2].appendTo(parents[1]);
 
@@ -301,7 +301,7 @@ describe('WidgetCollection', function() {
     });
 
     it('parent() returns all parents', function() {
-      let parents = [host, new Bar()];
+      const parents = [host, new Bar()];
 
       widgets[2].appendTo(parents[1]);
 
@@ -309,7 +309,7 @@ describe('WidgetCollection', function() {
     });
 
     it('parent() returns only unique parents', function() {
-      let parents = [new Foo(), new Bar()];
+      const parents = [new Foo(), new Bar()];
       widgets[0].appendTo(parents[0]);
       widgets[1].appendTo(parents[0]);
       widgets[2].appendTo(parents[1]);
@@ -322,7 +322,7 @@ describe('WidgetCollection', function() {
     });
 
     it('appendTo(parent) calls parent.append', function() {
-      let parent = new Foo();
+      const parent = new Foo();
       spy(parent, 'append');
       collection.appendTo(parent);
 
@@ -335,7 +335,7 @@ describe('WidgetCollection', function() {
     });
 
     it('children() returns children from all in collection', function() {
-      let children = [new Foo(), new Bar(), new Foo(), new Bar()];
+      const children = [new Foo(), new Bar(), new Foo(), new Bar()];
       widgets[0].append(children.slice(0, 2));
       widgets[2].append(children.slice(2, 4));
 
@@ -343,7 +343,7 @@ describe('WidgetCollection', function() {
     });
 
     it('children() with matcher returns children from all in collection', function() {
-      let children = [new Foo(), new Bar(), new Foo(), new Bar()];
+      const children = [new Foo(), new Bar(), new Foo(), new Bar()];
       widgets[0].append(children.slice(0, 2));
       widgets[2].append(children.slice(2, 4));
 
@@ -356,7 +356,7 @@ describe('WidgetCollection', function() {
     });
 
     it('find("*") returns descendants from all widgets in collection', function() {
-      let children = [new Foo(), new Bar(), new Foo(), new Bar()];
+      const children = [new Foo(), new Bar(), new Foo(), new Bar()];
       widgets[0].append(children[0]);
       widgets[2].append(children[1]);
       children[1].append(children.slice(2, 4));
@@ -366,7 +366,7 @@ describe('WidgetCollection', function() {
     });
 
     it('find() returns descendants from all widgets in collection', function() {
-      let children = [new Foo(), new Foo(), new Foo(), new Foo()];
+      const children = [new Foo(), new Foo(), new Foo(), new Foo()];
       widgets[0].append(children[0]);
       widgets[2].append(children[1]);
       children[1].append(children.slice(2, 4));
@@ -376,13 +376,13 @@ describe('WidgetCollection', function() {
     });
 
     it('find() returns no duplicates', function() {
-      let children = [new Foo(), new Foo(), new Foo(), new Foo()];
+      const children = [new Foo(), new Foo(), new Foo(), new Foo()];
       widgets[0].append(children[0]);
       children[0].append(children[1]);
       children[1].append(children[2]);
       children[2].append(children[3]);
 
-      let result = collection.find('*').find('*');
+      const result = collection.find('*').find('*');
       expect(result.length).to.equal(3);
       expect(result.indexOf(children[1])).not.to.equal(-1);
       expect(result.indexOf(children[2])).not.to.equal(-1);

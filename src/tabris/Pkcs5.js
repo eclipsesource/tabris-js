@@ -33,7 +33,7 @@ export default class Pkcs5 {
       if (typeof keySize !== 'number' || keySize <= 0) {
         throw new Error('Invalid number for keySize in pbkdf2');
       }
-      let pbkdf2 = new Pbkdf2();
+      const pbkdf2 = new Pbkdf2();
       pbkdf2.on('done', (event) => {
         pbkdf2.dispose();
         resolve(event.key);
@@ -46,7 +46,7 @@ export default class Pkcs5 {
 }
 
 function toArray(typedArray) {
-  let array = new Array(typedArray.length);
+  const array = new Array(typedArray.length);
   for (let i = 0; i < typedArray.length; i++) {
     array[i] = typedArray[i];
   }
