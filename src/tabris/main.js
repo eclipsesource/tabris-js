@@ -22,6 +22,7 @@ import Canvas from './widgets/Canvas';
 import CheckBox from './widgets/CheckBox';
 import CollectionView from './widgets/CollectionView';
 import Color from './Color';
+import Column from './widgets/Column';
 import ColumnLayout from './ColumnLayout';
 import Composite from './widgets/Composite';
 import ContentView, {create as createContentView} from './widgets/ContentView';
@@ -91,6 +92,7 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   CollectionView,
   Color,
   ConstraintLayout,
+  Column,
   ColumnLayout,
   Composite,
   Constraint,

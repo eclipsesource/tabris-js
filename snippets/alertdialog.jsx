@@ -1,13 +1,13 @@
-import {AlertDialog, Button, TextInput, TextView, contentView, ColumnLayout, WidgetCollection} from 'tabris';
+import {AlertDialog, Button, TextInput, contentView, Column} from 'tabris';
 
-contentView.set({layout: ColumnLayout.create()}).append(
-  <WidgetCollection>
-    <Button text='Simple dialog' onSelect={showSimpleDialog} />
-    <Button text='Dialog with multiple buttons' onSelect={showDialogWithButtons} />
-    <Button text='Self-closing dialog' onSelect={showSelfClosingDialog} />
-    <Button text='Dialog with text fields' onSelect={showTextInputDialog} />
+contentView.append(
+  <Column left={0} right={0}>
+    <Button onSelect={showSimpleDialog}>Simple dialog</Button>
+    <Button onSelect={showDialogWithButtons}>Dialog with multiple buttons</Button>
+    <Button onSelect={showSelfClosingDialog}>Self-closing dialog</Button>
+    <Button onSelect={showTextInputDialog}>Dialog with text fields</Button>
     <TextView/>
-  </WidgetCollection>
+  </Column>
 );
 
 const textView =  contentView.find(TextView).first();

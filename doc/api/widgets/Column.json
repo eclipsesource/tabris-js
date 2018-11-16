@@ -1,0 +1,24 @@
+{
+  "type": "Column",
+  "description": "A composite with the `layout` property initialized with a `ColumnLayout` .",
+  "extends": "Composite",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "properties",
+        "type": "PropertiesObject",
+        "optional": true,
+        "description": "Sets all key-value pairs in the properties object as widget properties."
+      }
+    ]
+  },
+  "properties": {
+    "layout": {
+      "type": "ColumnLayout",
+      "default": "ColumnLayout",
+      "readonly": true,
+      "description": "The layout manager responsible for interpreting the [`layoutData`](./Widget.md#layoutData) of the child widgets of this Composite."
+    }
+  }
+}

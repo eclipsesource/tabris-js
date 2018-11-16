@@ -1,6 +1,7 @@
 import ClientStub from './ClientStub';
 import {expect, mockTabris, restore} from '../test';
 import Composite from '../../src/tabris/widgets/Composite';
+import Column from '../../src/tabris/widgets/Column';
 import TextView from '../../src/tabris/widgets/TextView';
 import ColumnLayout from '../../src/tabris/ColumnLayout';
 
@@ -51,6 +52,19 @@ describe('ColumnLayout', function() {
       expect(all[3]).to.deep.equal({top: [cid[2], 16], left: 16, right: 16});
       expect(all[4]).to.deep.equal({top: [cid[3], 16], left: 16, right: 16});
       expect(all[5]).to.deep.equal({top: [cid[4], 16], left: 16, right: 16});
+    });
+
+  });
+
+  describe('on Column widget', function() {
+
+    it('is the default layout', function() {
+      expect(new Column().layout).to.be.instanceof(ColumnLayout);
+    });
+
+    it('can not be replaced', function() {
+      expect(() => new Column({layout: ColumnLayout.create()})).to.throw();
+      expect(() => new Column().layout = ColumnLayout.create()).to.throw();
     });
 
   });

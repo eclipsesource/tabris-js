@@ -82,6 +82,12 @@ export default class Composite extends Widget {
     return true;
   }
 
+  _checkLayout(value) {
+    if (value && !(value instanceof Layout)) {
+      throw new Error('Not an instance of "Layout"');
+    }
+  }
+
   _addChild(child, index) {
     if (!this._acceptChild(child)) {
       throw new Error(child + ' could not be appended to ' + this);
@@ -144,11 +150,9 @@ NativeObject.defineProperties(Composite.prototype, {
   },
   layout: {
     set(name, value) {
+      this._checkLayout(value);
       if (this._layout) {
         this._layout.remove(this);
-      }
-      if (value && !(value instanceof Layout)) {
-        throw new Error('Not an instance of "Layout"');
       }
       this._layout = value;
       if (this._layout) {

@@ -117,6 +117,7 @@ describe('tabris', function() {
     expect(tabris.CollectionView).to.be.a('function');
     expect(tabris.CollectionView.name).to.equal('CollectionView');
     expect(tabris.Composite).to.be.a('function');
+    expect(tabris.Column).to.be.a('function');
     expect(tabris.Composite.name).to.equal('Composite');
     expect(tabris.ContentView).to.be.a('function');
     expect(tabris.ContentView.name).to.equal('ContentView');
