@@ -54,6 +54,10 @@ layoutDataValue = {
   centerX: num,
   centerY: num
 };
+layoutDataValue = 'center';
+layoutDataValue = 'fill';
 
 // Statics
 layoutData = LayoutData.from(layoutDataValue);
+layoutData = LayoutData.center;
+layoutData = LayoutData.fill;

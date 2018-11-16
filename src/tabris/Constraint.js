@@ -23,6 +23,9 @@ export default class Constraint {
       return fromArray(constraintValue);
     }
     if (typeof constraintValue === 'number') {
+      if (constraintValue === 0) {
+        return zero;
+      }
       return new Constraint(zeroPercent, normalizeNumber(constraintValue));
     }
     if (constraintValue instanceof WidgetExports.default
@@ -120,6 +123,9 @@ export function normalizeNumber(value) {
   }
   return value;
 }
+
+const zero = new Constraint(new Percent(0), 0);
+export {zero};
 
 function fromArray(array) {
   if (array.length !== 2) {

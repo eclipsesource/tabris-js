@@ -1,7 +1,7 @@
-import {AlertDialog, Button, TextInput, contentView, Column} from 'tabris';
+import {AlertDialog, Button, Column, TextInput, TextView, contentView} from 'tabris';
 
 contentView.append(
-  <Column left={0} right={0}>
+  <Column layoutData='fill'>
     <Button onSelect={showSimpleDialog}>Simple dialog</Button>
     <Button onSelect={showDialogWithButtons}>Dialog with multiple buttons</Button>
     <Button onSelect={showSelfClosingDialog}>Self-closing dialog</Button>

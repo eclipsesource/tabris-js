@@ -12,7 +12,32 @@ export default class LayoutData {
     return ConstraintExports.default.prev;
   }
 
+  static get fill() {
+    if (!this._fill) {
+      this._fill = new LayoutData({
+        left: ConstraintExports.zero,
+        top: ConstraintExports.zero,
+        right: ConstraintExports.zero,
+        bottom: ConstraintExports.zero
+      });
+    }
+    return this._fill;
+  }
+
+  static get center() {
+    if (!this._center) {
+      this._center = new LayoutData({centerX: 0, centerY: 0});
+    }
+    return this._center;
+  }
+
   static from(layoutDataValue) {
+    if (layoutDataValue === 'fill')  {
+      return LayoutData.fill;
+    }
+    if (layoutDataValue === 'center')  {
+      return LayoutData.center;
+    }
     if (!(layoutDataValue instanceof Object)) {
       throw new Error('Not an object: ' + typeof layoutDataValue);
     }

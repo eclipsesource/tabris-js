@@ -228,6 +228,14 @@ describe('LayoutData', function() {
       })).to.deep.equal(new LayoutData({}));
     });
 
+    it('creates LayoutData from string "fill"', function() {
+      expect(LayoutData.from('fill')).to.equal(LayoutData.fill);
+    });
+
+    it('creates LayoutData from string "center"', function() {
+      expect(LayoutData.from('center')).to.equal(LayoutData.center);
+    });
+
     it('normalizes layoutData', function() {
       const altExampleData = {
         left: 0,
@@ -242,6 +250,56 @@ describe('LayoutData', function() {
       };
 
       expect(LayoutData.from(altExampleData)).to.deep.equal(LayoutData.from(exampleData));
+    });
+
+  });
+
+  describe('fill', function() {
+
+    it('sets left/top/right/bottom to 0', function() {
+      expect(LayoutData.fill).to.deep.equal(new LayoutData({
+        left: new Constraint(new Percent(0), 0),
+        top: new Constraint(new Percent(0), 0),
+        width: 'auto',
+        baseline: 'auto',
+        centerX: 'auto',
+        bottom: new Constraint(new Percent(0), 0),
+        right: new Constraint(new Percent(0), 0),
+        height: 'auto',
+        centerY: 'auto'
+      }));
+    });
+
+    it('is read-only', function() {
+      const original = LayoutData.fill;
+      LayoutData.fill = null;
+
+      expect(LayoutData.fill).to.equal(original);
+    });
+
+  });
+
+  describe('center', function() {
+
+    it('center', function() {
+      expect(LayoutData.center).to.deep.equal(new LayoutData({
+        left: 'auto',
+        top: 'auto',
+        width: 'auto',
+        baseline: 'auto',
+        centerX: 0,
+        bottom: 'auto',
+        right: 'auto',
+        height: 'auto',
+        centerY: 0
+      }));
+    });
+
+    it('is read-only', function() {
+      const original = LayoutData.center;
+      LayoutData.center = null;
+
+      expect(LayoutData.center).to.equal(original);
     });
 
   });

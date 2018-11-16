@@ -50,6 +50,7 @@ LayoutData.from(null);
 LayoutData.from(undefined);
 LayoutData.from(new Date());
 LayoutData.from(constraintValue, 2);
+LayoutData.from('foo');
 
 /*Expected
 (19,
@@ -100,4 +101,6 @@ Expected 1 arguments
 Type 'Date'
 (52,
 Expected 1 argument
+(53,
+is not assignable to parameter of type 'LayoutDataValue'
 */

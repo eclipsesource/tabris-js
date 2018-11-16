@@ -118,7 +118,9 @@ type PercentValue = string|PercentLikeObject;
 /**
  * Defines how the widget should be arranged. When setting the layout of a widget using **LayoutData**, all currently set layout attributes not in the new LayoutData object will be implicitly reset to null (i.e. "not specified").
  */
-interface LayoutDataValue {
+type LayoutDataValue = LayoutDataLikeObject|'center'|'fill';
+
+interface LayoutDataLikeObject {
     left?: 'auto'|ConstraintValue;
     right?: 'auto'|ConstraintValue;
     top?: 'auto'|ConstraintValue;
