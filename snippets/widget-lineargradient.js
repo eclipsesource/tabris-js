@@ -6,7 +6,6 @@ const BACKGROUNDS = [
   'linear-gradient(to left, red, blue 50%, red, purple, green 100%)',
   'linear-gradient(0deg, red 50%, green, white, blue)',
   'linear-gradient(-90deg, red, green 15%, white, blue 70%)',
-  'linear-gradient(to right top, red 0%, green 50%, aqua 150%)',
   'linear-gradient(200deg, yellow 0%, silver 30%, blue 150%)',
   'linear-gradient(145deg, red 0%, fuchsia 50%, blue 150%)',
   'linear-gradient(145deg, red 0%, green 50%, lime 150%)',

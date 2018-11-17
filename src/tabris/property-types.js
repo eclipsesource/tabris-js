@@ -1,11 +1,10 @@
 import {imageFromArray, imageToArray} from './util-images';
-import {colorArrayToString} from './util-colors';
-import {LinearGradientShader} from './util-shaders';
 import NativeObject from './NativeObject';
 import WidgetCollection from './WidgetCollection';
 import Color from './Color';
 import Image from './Image';
 import Font from './Font';
+import LinearGradient from './LinearGradient';
 
 export const types = {
 
@@ -72,14 +71,20 @@ export const types = {
       if (value === null || value === 'initial') {
         return undefined;
       }
-      if (typeof value === 'string') {
-        if (value.trim().startsWith('linear-gradient')) {
-          return new LinearGradientShader(value);
-        } else {
-          return {type: 'color', color: Color.from(value).toArray()};
-        }
+      if (LinearGradient.isValidLinearGradientValue(value)) {
+        const {colorStops, direction} = LinearGradient.from(value);
+        return {
+          type: 'linearGradient',
+          colors: colorStops.map(stop =>
+            Color.isValidColorValue(stop) ? [stop.toArray(), null] :
+              [stop[0].toArray(), stop[1].valueOf() / 100]
+          ),
+          angle: direction
+        };
+      } else if (Color.isValidColorValue(value)) {
+        return {type: 'color', color: Color.from(value).toArray()};
       }
-      return value;
+      throw new Error(value + ' must be a valid LinearGradientValue or ColorValue.');
     },
     decode(value) {
       if (!value) {
@@ -87,11 +92,17 @@ export const types = {
         return 'rgba(0, 0, 0, 0)';
       }
       if (value.type === 'color') {
-        return Color.from(value.color).toString();
-      } else if (value instanceof LinearGradientShader) {
-        return value.css;
+        return Color.from(value.color);
+      } else if (value.type === 'linearGradient') {
+        return LinearGradient.from({
+          colorStops: value.colors.map(([color, offset]) =>
+            offset !== null ? [Color.from(color), {percent: offset * 100}] :
+              Color.from(color)
+          ),
+          direction: value.angle
+        });
       } else if (value instanceof Array) {
-        return colorArrayToString(value);
+        return Color.from(value);
       }
       return value;
     }

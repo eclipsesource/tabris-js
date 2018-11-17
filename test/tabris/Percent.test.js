@@ -61,6 +61,12 @@ describe('Percent', function() {
       expect(Percent.from(new Percent(5))).to.be.instanceOf(Percent);
     });
 
+    it('returns percent with correct value', function() {
+      expect(Percent.from('5%')).to.deep.equal({percent: 5});
+      expect(Percent.from({percent: 5})).to.deep.equal({percent: 5});
+      expect(Percent.from(new Percent(5))).to.deep.equal({percent: 5});
+    });
+
     it('passes through percent object', function() {
       const percent = new Percent(5);
       expect(Percent.from(percent)).to.equal(percent);

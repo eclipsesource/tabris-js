@@ -1334,7 +1334,7 @@ describe('Widget', function() {
 
       const result = widget.background;
 
-      expect(result).to.equal('rgba(170, 255, 0, 0.5)');
+      expect(result.toString()).to.equal('rgba(170, 255, 0, 0.5)');
     });
 
     it('translates background null to string', function() {

@@ -4,7 +4,8 @@ import NativeObject from '../../src/tabris/NativeObject';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
 import {types} from '../../src/tabris/property-types';
 import {omit} from '../../src/tabris/util';
-import {LinearGradientShader} from '../../src/tabris/util-shaders';
+import Color from '../../src/tabris/Color';
+import LinearGradient from '../../src/tabris/LinearGradient';
 
 describe('property-types', function() {
 
@@ -44,25 +45,50 @@ describe('property-types', function() {
       expect(types.shader.encode(null)).to.equal(undefined);
     });
 
-    it('encode converts linear gradient definition to LinearGradientShader', function() {
-      expect(types.shader.encode('linear-gradient(red, blue)')).to.be.instanceof(LinearGradientShader);
+    it('encode throws for invalid values', function() {
+      expect(() => types.shader.encode('foo')).to.throw('foo must be a valid LinearGradientValue or ColorValue');
+    });
+
+    it('encode converts linear gradient value to a linear gradient shader', function() {
+      const shader = types.shader.encode('linear-gradient(red -30%, blue)');
+      expect(shader.type).to.equal('linearGradient');
+      expect(shader.angle).to.equal(180);
+      expect(shader.colors[0]).to.deep.equal([Color.red.toArray(), -0.3]);
+      expect(shader.colors[1]).to.deep.equal([Color.blue.toArray(), null]);
     });
 
     it('decode converts falsy to transparent color', function() {
       expect(types.shader.decode(null)).to.equal('rgba(0, 0, 0, 0)');
     });
 
-    it('decode converts LinearGradientShader to css gradient definition', function() {
-      const shader = new LinearGradientShader('linear-gradient(red, blue)');
-      expect(types.shader.decode(shader)).to.equal('linear-gradient(red, blue)');
+    it('decode converts linear gradient shader to a LinearGradient', function() {
+      const shader = {
+        type: 'linearGradient',
+        colors: [[Color.red.toArray(), -0.3], [Color.blue.toArray(), null]],
+        angle: 180
+      };
+      const linearGradient = types.shader.decode(shader);
+      expect(linearGradient).to.be.instanceof(LinearGradient);
+      expect(linearGradient.direction).to.equal(180);
+      expect(linearGradient.colorStops).to.deep.equal([[Color.red, {percent: -30}], Color.blue]);
     });
 
-    it('decode converts color shader to css color definition', function() {
-      expect(types.shader.decode({color: [0, 0, 255, 255], type: 'color'})).to.equal('rgb(0, 0, 255)');
+    it('decode converts color shader to Color', function() {
+      const color = types.shader.decode({color: [0, 0, 255, 255], type: 'color'});
+      expect(color).to.be.instanceof(Color);
+      expect(color.toString()).to.equal('rgb(0, 0, 255)');
     });
 
-    it('decode converts Array to css color definition', function() {
-      expect(types.shader.decode([0, 0, 255, 255])).to.equal('rgba(0, 0, 255, 1)');
+    it('decode converts Array to Color', function() {
+      const color = types.shader.decode([0, 0, 255, 128]);
+      expect(color).to.be.instanceof(Color);
+      expect(color.toString()).to.equal('rgba(0, 0, 255, 0.5)');
+    });
+
+    it('decodes an encoded shader', function() {
+      const encodedShader = types.shader.encode('linear-gradient(red -30%, blue)');
+      const decodedShader = types.shader.decode(encodedShader);
+      expect(decodedShader).to.deep.equal({colorStops: [[Color.red, {percent: -30}], Color.blue], direction: 180});
     });
 
   });

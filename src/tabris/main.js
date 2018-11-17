@@ -35,9 +35,10 @@ import Image from './Image';
 import ImageData from './ImageData';
 import ImageView from './widgets/ImageView';
 import InactivityTimer from './InactivityTimer.js';
-import Listeners from './Listeners.js';
 import Layout, {ConstraintLayout} from './Layout.js';
 import LayoutData from './LayoutData.js';
+import Listeners from './Listeners.js';
+import LinearGradient from './LinearGradient';
 import Page from './widgets/Page';
 import Percent from './Percent';
 import Picker from './widgets/Picker';
@@ -111,9 +112,10 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   ImageView,
   InactivityTimer,
   JsxProcessor,
-  Listeners,
   Layout,
   LayoutData,
+  Listeners,
+  LinearGradient,
   NativeObject,
   NavigationView,
   NavigationBar,
