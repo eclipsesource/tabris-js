@@ -90,3 +90,11 @@ actionSheet = <tabris.ActionSheet title='foo'>{actions}</tabris.ActionSheet>;
 actionSheet = <tabris.ActionSheet title='foo'>{['foo', 'bar', actions[0]]}</tabris.ActionSheet>;
 actionSheet = <tabris.ActionSheet title='foo'><tabris.ActionSheetItem image='foo.jpg' title='foo' style='cancel'/></tabris.ActionSheet>;
 actionSheet = <tabris.ActionSheet title='foo'><tabris.ActionSheetItem>foo</tabris.ActionSheetItem></tabris.ActionSheet>;
+
+const textInputs: tabris.TextInput[] = [new tabris.TextInput(), new tabris.TextInput()];
+
+let alertDialog: tabris.AlertDialog = <tabris.AlertDialog title='foo' message='foo' textInputs={textInputs} />;
+actionSheet = <tabris.AlertDialog title='foo' textInputs={textInputs}>foo</tabris.AlertDialog>;
+actionSheet = <tabris.AlertDialog title='foo'>{textInputs}</tabris.AlertDialog>;
+actionSheet = <tabris.AlertDialog title='foo'>{['foo', 'bar', textInputs[0]]}</tabris.AlertDialog>;
+actionSheet = <tabris.AlertDialog title='foo'><tabris.TextInput /></tabris.AlertDialog>;

@@ -6,7 +6,7 @@ import Composite from '../../src/tabris/widgets/Composite';
 import Button from '../../src/tabris/widgets/Button';
 import CheckBox from '../../src/tabris/widgets/CheckBox';
 import Switch from '../../src/tabris/widgets/Switch';
-import AlertDialog from '../../src/tabris/AlertDialog';
+import App from '../../src/tabris/App';
 
 describe('JsxProcessor', function() {
 
@@ -216,7 +216,7 @@ describe('JsxProcessor', function() {
     });
 
     it('fails for non-widget native type', function() {
-      expect(() => jsx.createElement(AlertDialog, null)).to.throw();
+      expect(() => jsx.createElement(App, null)).to.throw();
     });
 
     it('fails for non-widget named custom type', function() {

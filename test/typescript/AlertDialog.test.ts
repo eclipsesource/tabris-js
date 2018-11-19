@@ -33,11 +33,15 @@ let target: AlertDialog = alertDialog;
 let timeStamp: number = 0;
 let type: string = 'foo';
 let button: null | 'ok' | 'cancel' | 'neutral' = 'ok';
+let texts: string[] = [];
 
-let alertDialogCloseEvent: AlertDialogCloseEvent = {target, timeStamp, type, button};
+let alertDialogCloseEvent: AlertDialogCloseEvent = {target, timeStamp, type, button, texts};
 let closeCancelEvent: EventObject<AlertDialog> = {target, timeStamp, type};
 let closeNeutralEvent: EventObject<AlertDialog> = {target, timeStamp, type};
 let closeOkEvent: EventObject<AlertDialog> = {target, timeStamp, type};
+
+texts = alertDialogCloseEvent.texts;
+button = alertDialogCloseEvent.button;
 
 alertDialog
   .onClose((event: AlertDialogCloseEvent) => {})

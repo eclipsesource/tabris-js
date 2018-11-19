@@ -86,6 +86,7 @@ let noIntrinsicElements: any = <textInput />;
 <tabris.WebView left={10}>{new tabris.Button()}</tabris.WebView>;
 <tabris.WidgetCollection>foo</tabris.WidgetCollection>;
 <tabris.ActionSheet>{new tabris.Button()}</tabris.ActionSheet>;
+<tabris.AlertDialog>{new tabris.Button()}</tabris.AlertDialog>;
 
 /*Expected
 (3,
@@ -145,4 +146,5 @@ Types of property 'onFooChanged' are incompatible.
 (86,
 (87,
 (88,
+(89,
 */

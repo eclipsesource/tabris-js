@@ -3,6 +3,7 @@ import ClientStub from './ClientStub';
 import AlertDialog from './../../src/tabris/AlertDialog';
 import TextInput from './../../src/tabris/widgets/TextInput';
 import Button from './../../src/tabris/widgets/Button';
+import {createJsxProcessor} from '../../src/tabris/JsxProcessor';
 
 describe('AlertDialog', function() {
 
@@ -147,6 +148,34 @@ describe('AlertDialog', function() {
       expect(() => dialog.open()).to.throw('Can not open a popup that was disposed');
     });
 
+    describe('as static method', () => {
+
+      it('returns alertDialog', () => {
+        expect(AlertDialog.open(dialog)).to.equal(dialog);
+      });
+
+      it('calls open', () => {
+        AlertDialog.open(dialog);
+        expect(client.calls({op: 'call'})[0].method).to.equal('open');
+      });
+
+      it('creates alertDialog for other values', () => {
+        const newDialog = AlertDialog.open('Hello World!');
+
+        expect(newDialog).to.be.instanceof(AlertDialog);
+        expect(newDialog.message).to.equal('Hello World!');
+        expect(newDialog.buttons).to.deep.equal({ok: 'OK'});
+        expect(client.calls({op: 'call', id: newDialog.cid})[0].method).to.equal('open');
+      });
+
+      it('throws if alertDialog was closed', () => {
+        dialog.open();
+        dialog.close();
+        expect(() => AlertDialog.open(dialog)).to.throw('Can not open a popup that was disposed');
+      });
+
+    });
+
   });
 
   describe('close', function() {
@@ -197,7 +226,97 @@ describe('AlertDialog', function() {
 
       expect(closeOk).not.to.have.been.called;
       expect(close).to.have.been.calledOnce;
-      expect(close).to.have.been.calledWithMatch({target: dialog, button: null});
+      expect(close).to.have.been.calledWithMatch({target: dialog, button: null, texts: []});
+    });
+
+    it('contain texts', function() {
+      let textInput = new TextInput();
+      stub(client, 'get').withArgs(textInput.cid, 'text').returns('foo');
+      dialog.textInputs = [textInput];
+      let closeOk = spy();
+      let close = spy();
+      dialog.onCloseOk(closeOk);
+      dialog.onClose(close);
+
+      tabris._notify(dialog.cid, 'close', {button: 'ok'});
+
+      expect(close).to.have.been.calledOnce;
+      expect(close).to.have.been.calledWithMatch({texts: ['foo']});
+      expect(closeOk).to.have.been.calledOnce;
+      expect(closeOk).to.have.been.calledWithMatch({texts: ['foo']});
+    });
+
+  });
+
+  describe('JSX', () => {
+
+    let jsx;
+
+    beforeEach(function() {
+      jsx = createJsxProcessor();
+    });
+
+    it('with message property', function() {
+      let popup = jsx.createElement(
+        AlertDialog,
+        {message: 'Hello World!'}
+      );
+
+      expect(popup).to.be.instanceOf(AlertDialog);
+      expect(popup.message).to.equal('Hello World!');
+    });
+
+    it('with text content', function() {
+      let popup = jsx.createElement(
+        AlertDialog,
+        null,
+        'Hello',
+        'World!'
+      );
+
+      expect(popup.message).to.equal('Hello World!');
+    });
+
+    it('with text content and message property', function() {
+      expect(() => jsx.createElement(
+        AlertDialog,
+        {message: 'Hello World!'},
+        'Hello',
+        'World!'
+      )).to.throw(/message given twice/);
+    });
+
+    it('with textInputs property', function() {
+      const textInputs = [new TextInput(), new TextInput()];
+      let popup = jsx.createElement(
+        AlertDialog, {textInputs}
+      );
+
+      expect(popup.textInputs.length).to.equal(2);
+      expect(popup.textInputs[0]).to.equal(textInputs[0]);
+      expect(popup.textInputs[1]).to.equal(textInputs[1]);
+    });
+
+    it('with TextInput as content', function() {
+      const textInputs = [new TextInput(), new TextInput()];
+      let popup = jsx.createElement(
+        AlertDialog,
+        null,
+        textInputs[0],
+        textInputs[1]
+      );
+
+      expect(popup.textInputs.length).to.equal(2);
+      expect(popup.textInputs[0]).to.equal(textInputs[0]);
+      expect(popup.textInputs[1]).to.equal(textInputs[1]);
+    });
+
+    it('with textInputs property and content', function() {
+      expect(() => jsx.createElement(
+        AlertDialog,
+        {textInputs: [new TextInput()]},
+        new TextInput()
+      )).to.throw(/textInputs given twice/);
     });
 
   });

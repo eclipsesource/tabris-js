@@ -2,8 +2,19 @@ import Popup from './Popup';
 import NativeObject from './NativeObject';
 import {capitalizeFirstChar} from './util';
 import TextInput from './widgets/TextInput';
+import {jsxFactory} from './JsxProcessor';
 
 export default class AlertDialog extends Popup {
+
+  static open(value) {
+    let alertDialog;
+    if (value instanceof AlertDialog) {
+      alertDialog = value;
+    } else {
+      alertDialog = new AlertDialog({message: value, buttons: {ok: 'OK'}});
+    }
+    return alertDialog.open();
+  }
 
   constructor(properties) {
     super();
@@ -15,6 +26,7 @@ export default class AlertDialog extends Popup {
   _trigger(name, event) {
     if (name === 'close') {
       event.button = event.button || null;
+      event.texts = (this.textInputs || []).map(textInput => textInput.text);
       if (event.button) {
         super._trigger('close' + capitalizeFirstChar(event.button), event);
       }
@@ -26,10 +38,26 @@ export default class AlertDialog extends Popup {
   }
 
   _dispose() {
-    if (!this.isDisposed() && this.textInputs instanceof Array) {
+    if (!this.isDisposed() && this.textInputs) {
       this.textInputs.forEach(textInput => textInput.dispose());
     }
     super._dispose();
+  }
+
+  /** @this {import("../JsxProcessor").default} */
+  [jsxFactory](Type, props, children) {
+    const flatChildren = this.normalizeChildren(children);
+    const propsWithTextInputs = this.withContentChildren(
+      props,
+      flatChildren.filter(child => child instanceof Object),
+      'textInputs'
+    );
+    const finalProps = this.withContentText(
+      propsWithTextInputs,
+      flatChildren.filter(child => !(child instanceof Object)),
+      'message'
+    );
+    return this.createNativeObject(Type, finalProps);
   }
 
 }
