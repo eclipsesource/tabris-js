@@ -1,7 +1,6 @@
 import NativeObject from '../NativeObject';
-import Widget from '../Widget';
 
-export default class NavigationBar extends Widget {
+export default class NavigationBar extends NativeObject {
 
   constructor() {
     if (arguments[0] !== true) {

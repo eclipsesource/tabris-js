@@ -1,6 +1,6 @@
 {
   "type": "NavigationBar",
-  "extends": "Widget",
+  "extends": "NativeObject",
   "jsxChildren": "never",
   "description": "The navigation bar is the onscreen area where *Back*, *Home* and similar buttons are displayed. The singleton instance can be accessed via `ui.navigationBar` and is only supported on Android.",
   "constructor": {

@@ -1,6 +1,6 @@
 {
   "type": "StatusBar",
-  "extends": "Widget",
+  "extends": "NativeObject",
   "description": "The status bar is the area where notifications, status icons and device time are displayed. The singleton instance can be accessed via `ui.statusBar`.",
   "jsxChildren": "never",
   "constructor": {

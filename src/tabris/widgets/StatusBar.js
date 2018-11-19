@@ -1,7 +1,6 @@
 import NativeObject from '../NativeObject';
-import Widget from '../Widget';
 
-export default class StatusBar extends Widget {
+export default class StatusBar extends NativeObject {
 
   constructor() {
     if (arguments[0] !== true) {
@@ -40,6 +39,10 @@ NativeObject.defineProperties(StatusBar.prototype, {
     readonly: true
   },
   background: {type: 'ColorValue', nocache: true}
+});
+
+NativeObject.defineEvents(StatusBar.prototype, {
+  tap: true,
 });
 
 export function create() {
