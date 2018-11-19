@@ -3,12 +3,13 @@ import NativeObject from '../NativeObject';
 import {createSelectorArray, getSelectorSpecificity} from '../util-widget-select';
 import Layout, {ConstraintLayout} from '../Layout';
 import WidgetCollection from '../WidgetCollection';
+import {omit} from '../util';
 import {jsxFactory} from '../JsxProcessor';
 
 export default class Composite extends Widget {
 
   constructor(props) {
-    super(props);
+    super(omit(props || {}, 'layout'));
     this._initLayout(props);
   }
 
@@ -45,9 +46,25 @@ export default class Composite extends Widget {
     return this._children(selector);
   }
 
-  _initLayout(props) {
-    if (!props || !('layout' in props)) {
-      this.layout = ConstraintLayout.default;
+  _initLayout(props = {}) {
+    if (!('layout' in props)) {
+      if ('padding' in props) {
+        this._layout = new ConstraintLayout({padding: props.padding});
+      } else {
+        this._layout = ConstraintLayout.default;
+      }
+    } else if (props.layout) {
+      if ('padding' in props) {
+        this._layout = new ConstraintLayout({padding: props.padding});
+      } else {
+        this._layout = props.layout;
+      }
+    } else {
+      this._layout = null;
+    }
+    if (this._layout) {
+      this._checkLayout(this._layout);
+      this._layout.add(this);
     }
   }
 
@@ -146,19 +163,12 @@ export default class Composite extends Widget {
 NativeObject.defineProperties(Composite.prototype, {
   padding: {
     type: 'boxDimensions',
-    default: {left: 0, right: 0, top: 0, bottom: 0}
+    get() {
+      return this._layout ? this._layout.padding : null;
+    }
   },
   layout: {
-    set(name, value) {
-      this._checkLayout(value);
-      if (this._layout) {
-        this._layout.remove(this);
-      }
-      this._layout = value;
-      if (this._layout) {
-        this._layout.add(this);
-      }
-    },
+    readonly: true,
     get() {
       return this._layout;
     }

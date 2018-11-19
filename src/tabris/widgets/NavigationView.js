@@ -15,7 +15,9 @@ export default class NavigationView extends Composite {
     return 'tabris.NavigationView';
   }
 
-  _initLayout() {}
+  _initLayout() {
+    this._layout = null;
+  }
 
   _acceptChild(child) {
     return child instanceof Page || child instanceof Action || child instanceof SearchAction;
@@ -113,17 +115,7 @@ NativeObject.defineProperties(NavigationView.prototype, {
   actionColor: {type: 'ColorValue'},
   actionTextColor: {type: 'ColorValue'},
   navigationAction: {type: 'NativeObject', default: null},
-  pageAnimation: {type: ['choice', ['default', 'none']], default: 'default'},
-  layout: {
-    set(name, value) {
-      if (value) {
-        throw new Error('NavigationView does not support layouts');
-      }
-    },
-    get() {
-      return null;
-    }
-  }
+  pageAnimation: {type: ['choice', ['default', 'none']], default: 'default'}
 });
 
 NativeObject.defineEvents(NavigationView.prototype, {

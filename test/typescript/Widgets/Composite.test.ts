@@ -12,11 +12,7 @@ import {
 let widget: Composite = new Composite();
 
 // Properties
-let padding: BoxDimensions | number;
-
-padding = widget.padding;
-
-widget.padding = padding;
+let padding: BoxDimensions | number | null = widget.padding;
 
 let properties: Properties<typeof Composite> = {padding};
 widget = new Composite(properties);

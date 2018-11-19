@@ -8,7 +8,7 @@
   "statics": {
     "properties": {
       "default": {
-        "description": "Instance of ColumnLayout as used by default by Column widgets. Equivalent to `new ColumnLayout()`",
+        "description": "Instance of ColumnLayout as used by default by Column widgets. Equivalent to `new ColumnLayout({padding: 16})`",
         "type": "ColumnLayout"
       }
     }

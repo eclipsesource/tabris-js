@@ -1,9 +1,23 @@
 {
   "type": "Layout",
   "constructor": {
-    "access": "protected"
+    "access": "protected",
+    "parameters": [
+      {
+        "name": "parameterObject",
+        "description": "Sets the padding property. If set to a number, this value will be used for all four edge values.",
+        "type": "{padding: BoxDimensions|number}"
+      }
+    ]
   },
   "description": "Base class for all layout managers.",
+  "properties": {
+    "padding": {
+      "type": "BoxDimensions",
+      "const": true,
+      "description": "Additional space to add inside the widgets bounds."
+    }
+  },
   "methods": {
     "add": {
       "ts_only": true,

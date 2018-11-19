@@ -1409,16 +1409,13 @@ describe('Widget', function() {
       expect(defaultLayout.remove).to.have.been.calledWith(parent);
     });
 
-    it('calls remove on setting new layout', function() {
-      parent.layout = testLayout;
-      expect(defaultLayout.remove).to.have.been.calledOnce;
-      expect(defaultLayout.remove).to.have.been.calledWith(parent);
-    });
+    it('is read-only', function() {
+      spy(console, 'warn');
 
-    it('calls add on setting new layout', function() {
       parent.layout = testLayout;
-      expect(testLayout.add).to.have.been.calledOnce;
-      expect(testLayout.add).to.have.been.calledWith(parent);
+
+      expect(parent.layout).to.equal(defaultLayout);
+      expect(console.warn).to.have.been.calledWith('Can not set read-only property "layout"');
     });
 
     it('calls add on custom initial layout only', function() {
@@ -1427,6 +1424,12 @@ describe('Widget', function() {
       expect(defaultLayout.add).not.to.have.been.called;
       expect(testLayout.add).to.have.been.calledOnce;
       expect(testLayout.add).to.have.been.calledWith(parent);
+    });
+
+    it('constructor parameter padding has priority', function() {
+      parent = new TestWidget({layout: new ConstraintLayout({padding: 12}), padding: 2});
+      expect(parent.padding).to.deep.equal({left: 2, top: 2, right: 2, bottom: 2});
+      expect(parent.layout.padding).to.deep.equal({left: 2, top: 2, right: 2, bottom: 2});
     });
 
   });

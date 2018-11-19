@@ -10,13 +10,27 @@ export default class ColumnLayout extends Layout {
     return this._column;
   }
 
-  constructor(properties, queue) {
-    super(properties, queue);
-    this._defaultLayoutData = LayoutData.from({left: 16, top: [LayoutData.prev, 16], right: 16});
+  constructor(properties = {}, queue) {
+    super('padding' in properties ? properties : {padding: 16}, queue);
+    this._firstLayoutData = LayoutData.from({
+      left: this._padding.left,
+      top: this._padding.top,
+      right: this._padding.right
+    });
+    this._defaultLayoutData = LayoutData.from({
+      left: this._padding.left,
+      top: [LayoutData.prev, 16],
+      right: this._padding.right
+    });
   }
 
-  _getLayoutData() {
-    return this._defaultLayoutData;
+  _getLayoutData(child) {
+    return child.layoutData;
+  }
+
+  _getRawLayoutData(layoutData, targetWidget, index) {
+    const targetLayoutData = index === 0 ? this._firstLayoutData : this._defaultLayoutData;
+    return super._resolveAttributes(targetLayoutData, targetWidget);
   }
 
 }

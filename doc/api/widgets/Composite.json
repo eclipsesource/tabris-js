@@ -22,9 +22,9 @@
       "description": "The layout manager responsible for interpreting the [`layoutData`](./Widget.md#layoutData) of the child widgets of this Composite."
     },
     "padding": {
-      "type": "BoxDimensions|number",
-      "default": "0",
-      "description": "Additional space to add inside the widgets bounds. If set to a number, this padding will be applied on all four sides."
+      "type": "BoxDimensions|number|null",
+      "const": true,
+      "description": "Additional space to add inside the widgets bounds. A shortcut to setting/getting the `padding` property of `layout`."
     }
   },
   "methods": {

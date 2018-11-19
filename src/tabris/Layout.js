@@ -5,10 +5,11 @@ import Constraint from './Constraint';
 import Percent from './Percent';
 
 const layoutDataProps = ['left', 'right', 'top', 'bottom', 'width', 'height', 'centerX', 'centerY', 'baseline'];
+const edges = ['left', 'top', 'right', 'bottom'];
 
 export default class Layout {
 
-  constructor(properties, queue) {
+  constructor(properties = {}, queue) {
     if (this.constructor === Layout) {
       throw new Error('Can not create instance of abstract class "Layout"');
     }
@@ -16,6 +17,8 @@ export default class Layout {
     if (!(this._layoutQueue instanceof LayoutQueue)) {
       throw new Error('Not a LayoutQueue: ' + this._layoutQueue);
     }
+    this._padding = types.boxDimensions.encode('padding' in properties ? properties.padding : 0);
+    Object.defineProperty(this, 'padding', {get: () => Object.assign({}, this._padding)});
     this._handleAddChildEvent = this._handleAddChildEvent.bind(this);
     this._handleRemoveChildEvent = this._handleRemoveChildEvent.bind(this);
     this._handleChildLayoutDataChangedEvent = this._handleChildLayoutDataChangedEvent.bind(this);
@@ -80,9 +83,10 @@ export default class Layout {
     this._layoutQueue.add(target._parent);
   }
 
-  _renderLayoutData(child) {
-    const layoutData = this._getLayoutData(child);
-    child._nativeSet('layoutData', this._resolveReferences(layoutData, child));
+  _renderLayoutData(child, index) {
+    const layoutData = this._getLayoutData(child, index);
+    const rawLayoutData = this._getRawLayoutData(layoutData, child, index);
+    child._nativeSet('layoutData', rawLayoutData);
   }
 
   _getLayoutData(child) {
@@ -115,7 +119,13 @@ export default class Layout {
     return result;
   }
 
-  _resolveReferences(layoutData, targetWidget) {
+  _getRawLayoutData(layoutData, targetWidget) {
+    const result = this._resolveAttributes(layoutData, targetWidget);
+    this._addPadding(result);
+    return result;
+  }
+
+  _resolveAttributes(layoutData, targetWidget) {
     const result = {};
     for (let i = 0; i < layoutDataProps.length; i++) {
       const prop = layoutDataProps[i];
@@ -124,6 +134,18 @@ export default class Layout {
       }
     }
     return result;
+  }
+
+  _addPadding(rawLayoutData) {
+    for (let i = 0; i < edges.length; i++) {
+      const edge = edges[i];
+      const value = rawLayoutData[edge];
+      if (typeof value === 'number') {
+        rawLayoutData[edge] += this._padding[edge];
+      } else if (value instanceof Array && (typeof rawLayoutData[edge][0] === 'number')) {
+        rawLayoutData[edge][1] += this._padding[edge];
+      }
+    }
   }
 
 }

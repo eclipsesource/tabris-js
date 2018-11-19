@@ -11,16 +11,12 @@ describe('Layout', function() {
 
   class TestWidget extends Composite {
 
+    constructor(props = {}) {
+      super(Object.assign({}, props, {layout: props.layout || null}));
+    }
+
     get _nativeType() {
       return 'TestType';
-    }
-
-    set layout(value) {
-      this._layout = value;
-    }
-
-    get layout() {
-      return this._layout;
     }
 
     _acceptChild() {
@@ -36,7 +32,7 @@ describe('Layout', function() {
     }
 
     resolveReferences(layoutData, targetWidget) {
-      return this._resolveReferences(layoutData, targetWidget);
+      return this._getRawLayoutData(layoutData, targetWidget);
     }
 
   }
@@ -49,14 +45,41 @@ describe('Layout', function() {
     queue = new LayoutQueue();
     layout = new TestLayout({}, queue);
     spy(layout, 'render');
-    parent = new TestWidget();
+    parent = new TestWidget({layout});
     widget = new TestWidget().appendTo(parent);
     other = new TestWidget({id: 'other'}).appendTo(parent);
-    parent.layout = layout;
     queue.flush();
   });
 
   afterEach(restore);
+
+  describe('padding', function() {
+
+    it('defaults to 0', function() {
+      expect(layout.padding).to.deep.equal({left: 0, top: 0, right: 0, bottom: 0});
+    });
+
+    it('is read-only', function() {
+      layout.padding = {left: 1, top: 2, right: 3, bottom: 4};
+      expect(layout.padding).to.deep.equal({left: 0, top: 0, right: 0, bottom: 0});
+    });
+
+    it('returns safe copy', function() {
+      layout.padding.left = 1;
+      expect(layout.padding).to.deep.equal({left: 0, top: 0, right: 0, bottom: 0});
+    });
+
+    it('can be set by constructor', function() {
+      layout = new ConstraintLayout({padding: {left: 1, top: 2, right: 3, bottom: 4}});
+      expect(layout.padding).to.deep.equal({left: 1, top: 2, right: 3, bottom: 4});
+    });
+
+    it('can be set by constructor shorthand', function() {
+      layout = new ConstraintLayout({padding: 12});
+      expect(layout.padding).to.deep.equal({left: 12, top: 12, right: 12, bottom: 12});
+    });
+
+  });
 
   describe('render', function() {
 
@@ -68,6 +91,30 @@ describe('Layout', function() {
 
       const call = client.calls({op: 'set', id: widget.cid})[0];
       expect(call.properties.layoutData).to.eql({left: 23, top: 42});
+    });
+
+    it('includes layout padding', function() {
+      layout = new ConstraintLayout({padding: {left: 1, top: 2, right: 3, bottom: 4}});
+      widget = new TestWidget().appendTo(parent);
+      widget.layoutData = {left: 11, top: ['10%', 12], right: 13, bottom: 14};
+      client.resetCalls();
+
+      layout.render(parent);
+
+      const call = client.calls({op: 'set', id: widget.cid})[0];
+      expect(call.properties.layoutData).to.eql({left: 12, top: [10, 14], right: 16, bottom: 18});
+    });
+
+    it('includes shorthand layout padding', function() {
+      layout = new ConstraintLayout({padding: 4});
+      widget = new TestWidget().appendTo(parent);
+      widget.layoutData = {left: 10, top: 10, right: 10, bottom: 10};
+      client.resetCalls();
+
+      layout.render(parent);
+
+      const call = client.calls({op: 'set', id: widget.cid})[0];
+      expect(call.properties.layoutData).to.eql({left: 14, top: 14, right: 14, bottom: 14});
     });
 
     it('does not fail when there are no children', function() {
@@ -97,7 +144,7 @@ describe('Layout', function() {
     });
 
     it('throws if layout is not set', function() {
-      parent.layout = null;
+      parent = new TestWidget();
       expect(() => layout.add(parent)).to.throw();
     });
 

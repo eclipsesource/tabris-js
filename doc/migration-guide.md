@@ -116,6 +116,10 @@ The return value of the `layoutData` property is now always an instance of the `
 
 The shorthand properties to `layoutData` now also return the normalized types used in the `LayoutData` class, i.e. an instance of `Constraint` (for `left`, `right`, `top` and `bottom`) or `SiblingReference` (for `baseline`), a number (for `width`, `height`, `centerX` and `centerY`), or `"auto"` (the default for all of these).
 
+### padding
+
+Tge `padding` property on `Composite` is now read-only, it can only be set via constructor. Also, it can now be `null` in case the `layout` property is null. That is the case on `NavigationView` and `TabFolder` by default.
+
 ### Event handling
 
 The methods `on` and `once` no longer have widget-specific parameters, meaning they are not type-safe anymore. Strictly speaking this is not a breaking change, but it is strongly recommended to switch to the new (type safe) `Listeners` API as soon as possible. Some examples:
