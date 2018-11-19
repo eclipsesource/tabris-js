@@ -52,8 +52,8 @@ export default class App extends NativeObject {
     throw new Error('tabris.app can not be disposed');
   }
 
-  reload() {
-    this._nativeCall('reload', {});
+  reload(url) {
+    this._nativeCall('reload', {url});
   }
 
   close() {

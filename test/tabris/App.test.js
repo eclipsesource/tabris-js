@@ -332,7 +332,15 @@ describe('App', function() {
 
       app.reload();
 
-      expect(client.call).to.have.been.calledWith(app.cid, 'reload', {});
+      expect(client.call).to.have.been.calledWith(app.cid, 'reload', {url: undefined});
+    });
+
+    it('CALLs `reload` with url', function() {
+      spy(client, 'call');
+
+      app.reload('http://url.com');
+
+      expect(client.call).to.have.been.calledWith(app.cid, 'reload', {url: 'http://url.com'});
     });
 
   });

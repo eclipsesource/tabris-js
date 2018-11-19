@@ -70,8 +70,15 @@
       "description": "Asks the operating system to open the given URL in an external app. Operating systems usually support a variety of URL schemes including `http`, `https`, `mailto`, `tel`, and `sms`. Apps can also register for custom URL schemes."
     },
     "reload": {
-      "parameters": [],
-      "description": "Forces the running application to reload the main module and start over."
+      "parameters": [
+        {
+          "name": "url",
+          "type": "string",
+          "optional": true,
+          "description": "An optional url to an app to launch"
+        }
+      ],
+      "description": "Closes the running application and either loads a different app at the given `url` or reloads the current app when no `url` is given."
     },
     "close": {
       "parameters": [],
