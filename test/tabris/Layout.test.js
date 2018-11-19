@@ -47,7 +47,7 @@ describe('Layout', function() {
     client = new ClientStub();
     mockTabris(client);
     queue = new LayoutQueue();
-    layout = new TestLayout(queue);
+    layout = new TestLayout({}, queue);
     spy(layout, 'render');
     parent = new TestWidget();
     widget = new TestWidget().appendTo(parent);
@@ -381,14 +381,14 @@ describe('Layout', function() {
 
 });
 
-describe('ConstraintLayout.create()', function() {
+describe('ConstraintLayout.default', function() {
 
   it('returns ConstraintLayout', function() {
-    expect(ConstraintLayout.create()).to.be.instanceof(ConstraintLayout);
+    expect(ConstraintLayout.default).to.be.instanceof(ConstraintLayout);
   });
 
   it('always returns same layout', function() {
-    expect(ConstraintLayout.create()).to.equal(ConstraintLayout.create());
+    expect(ConstraintLayout.default).to.equal(ConstraintLayout.default);
   });
 
 });

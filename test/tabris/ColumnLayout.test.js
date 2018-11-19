@@ -26,23 +26,15 @@ describe('ColumnLayout', function() {
 
   afterEach(restore);
 
-  describe('constructor', function() {
-
-    it('is private', function() {
-      expect(() => new ColumnLayout()).to.throw();
-    });
-
-  });
-
-  describe('ColumnLayout.create()', function() {
+  describe('ColumnLayout.default', function() {
 
     it('always returns same ColumnLayout', function() {
-      expect(ColumnLayout.create()).to.be.instanceof(ColumnLayout);
-      expect(ColumnLayout.create()).to.equal(ColumnLayout.create());
+      expect(ColumnLayout.default).to.be.instanceof(ColumnLayout);
+      expect(ColumnLayout.default).to.equal(ColumnLayout.default);
     });
 
     it('renders existing children layoutData with default settings', function() {
-      parent.layout = ColumnLayout.create();
+      parent.layout = ColumnLayout.default;
       const all = render();
       const cid = parent.children().toArray().map(child => child.cid);
 

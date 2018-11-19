@@ -8,7 +8,7 @@ export default class Column extends Composite {
   }
 
   _initLayout() {
-    this._layout = ColumnLayout.create();
+    this._layout = ColumnLayout.default;
     this._layout.add(this);
   }
 

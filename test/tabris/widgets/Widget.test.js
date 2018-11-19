@@ -1384,7 +1384,7 @@ describe('Widget', function() {
     let parent, defaultLayout, testLayout;
 
     beforeEach(function() {
-      defaultLayout = ConstraintLayout.create();
+      defaultLayout = ConstraintLayout.default;
       testLayout = new TestLayout();
       spy(defaultLayout, 'add');
       spy(defaultLayout, 'remove');
@@ -1436,9 +1436,9 @@ describe('Widget', function() {
     let parent, widget, other;
 
     beforeEach(function() {
-      parent = new TestWidget({layout: ConstraintLayout.create()});
-      widget = new TestWidget({layout: ConstraintLayout.create()}).appendTo(parent);
-      other = new TestWidget({id: 'other', layout: ConstraintLayout.create()}).appendTo(parent);
+      parent = new TestWidget({layout: ConstraintLayout.default});
+      widget = new TestWidget({layout: ConstraintLayout.default}).appendTo(parent);
+      other = new TestWidget({id: 'other', layout: ConstraintLayout.default}).appendTo(parent);
       client.resetCalls();
     });
 

@@ -8,21 +8,14 @@ const layoutDataProps = ['left', 'right', 'top', 'bottom', 'width', 'height', 'c
 
 export default class Layout {
 
-  static create() {
-    if (!this._default) {
-      this._default = new ConstraintLayout(LayoutQueue.instance);
-    }
-    return this._default;
-  }
-
-  constructor(queue) {
+  constructor(properties, queue) {
     if (this.constructor === Layout) {
       throw new Error('Can not create instance of abstract class "Layout"');
     }
-    if (!(queue instanceof LayoutQueue)) {
-      throw new Error('LayoutQueue missing');
+    this._layoutQueue = queue || LayoutQueue.instance;
+    if (!(this._layoutQueue instanceof LayoutQueue)) {
+      throw new Error('Not a LayoutQueue: ' + this._layoutQueue);
     }
-    this._layoutQueue = queue;
     this._handleAddChildEvent = this._handleAddChildEvent.bind(this);
     this._handleRemoveChildEvent = this._handleRemoveChildEvent.bind(this);
     this._handleChildLayoutDataChangedEvent = this._handleChildLayoutDataChangedEvent.bind(this);
@@ -137,13 +130,11 @@ export default class Layout {
 
 export class ConstraintLayout extends Layout {
 
-  constructor(queue) {
-    if (!(queue instanceof LayoutQueue)) {
-      throw new Error(
-        'ConstraintLayout constructor is private. Use ConstraintLayout.create()'
-      );
+  static get default() {
+    if (!this._default) {
+      this._default = new ConstraintLayout();
     }
-    super(queue);
+    return this._default;
   }
 
 }

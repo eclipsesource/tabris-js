@@ -2,14 +2,14 @@
   "type": "ColumnLayout",
   "extends": "Layout",
   "constructor": {
-    "access": "private"
+    "access": "public"
   },
-  "description": "Column based layout manager. Instances can be obtained from [`Layout.column()`](./Layout.md#column())",
+  "description": "Column based layout manager.",
   "statics": {
-    "methods": {
-      "create": {
-        "description": "Returns instance of ColumnLayout with all settings at their default value.",
-        "returns": "ColumnLayout"
+    "properties": {
+      "default": {
+        "description": "Instance of ColumnLayout as used by default by Column widgets. Equivalent to `new ColumnLayout()`",
+        "type": "ColumnLayout"
       }
     }
   }

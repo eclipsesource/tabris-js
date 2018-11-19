@@ -2,14 +2,14 @@
   "type": "ConstraintLayout",
   "extends": "Layout",
   "constructor": {
-    "access": "private"
+    "access": "public"
   },
   "description": "The default, constraints-based layout.",
   "statics": {
-    "methods": {
-      "create": {
-        "description": "Returns instance of ConstraintLayout as used by default by all Composite.",
-        "returns": "ConstraintLayout"
+    "properties": {
+      "default": {
+        "description": "Instance of ConstraintLayout used as the default `layout` property value of `Composite`, `Page`, `Tab` and `Canvas`. Equivalent to `new ConstraintLayout()`",
+        "type": "ConstraintLayout"
       }
     }
   }

@@ -47,7 +47,7 @@ export default class Composite extends Widget {
 
   _initLayout(props) {
     if (!props || !('layout' in props)) {
-      this.layout = ConstraintLayout.create();
+      this.layout = ConstraintLayout.default;
     }
   }
 
