@@ -28,9 +28,9 @@ Accepted values:
 - *offset*: the distance from the parent's opposing edge in device independent pixels
 - *widget*: attach this edge to the given sibling's opposing edge
 - *percentage*: the distance from the parent's opposing edge in percent of the parent's width
-- [*percentage*, *offset*]: the distance from the parent's opposing edge in percent of the parent's width plus a fixed offset in pixels
+- \[*percentage*, *offset*\]: the distance from the parent's opposing edge in percent of the parent's width plus a fixed offset in pixels
 - "*percentage* *offset*": Same as above, but as space-separated string list instead of array
-- [*widget*, *offset*]: the distance from the given widget's opposing edge in pixel
+- \[*widget*, *offset*\]: the distance from the given widget's opposing edge in pixel
 - "*widget* *offset*": Same as above, but as space-separated string list instead of array. Since this is a string the widget can be a selector or a symbolic widget reference like `"prev()"` or `"next()"`, but not a direct reference.
 
 All **percentages** are provided as strings with a percent suffix, e.g. `"50%"`.
