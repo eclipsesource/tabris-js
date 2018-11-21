@@ -30,7 +30,7 @@ export default class Percent {
       throw new Error('Not enough arguments');
     }
     checkNumber(percent, [-Infinity, Infinity], 'Invalid Percent');
-    Object.defineProperty(this, 'percent', {value: percent});
+    Object.defineProperty(this, 'percent', {enumerable:true, value: percent});
   }
 
   toString() {

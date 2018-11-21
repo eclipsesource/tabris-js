@@ -47,6 +47,10 @@ describe('Percent', function() {
 
     });
 
+    it('properties are enumerable', function() {
+      const percent = new Percent(100);
+      expect(Object.assign({}, percent)).to.deep.equal({percent: 100});
+    });
   });
 
   describe('from', function() {
