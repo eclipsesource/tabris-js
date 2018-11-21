@@ -211,8 +211,8 @@
       "description": "The actual location and size of the widget, relative to its parent."
     },
     "background": {
-      "type": "ColorValue",
-      "description": "Background color of the widget."
+      "type": "ColorValue | LinearGradientValue",
+      "description": "Background of the widget."
     },
     "opacity": {
       "type": "number",

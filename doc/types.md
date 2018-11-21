@@ -301,7 +301,6 @@ new Color(255, 0, 0, 200)
 "initial" // same as null
 ```
 
-
 ### FontValue
 
 Fonts can be specified as strings or [Font](./Font.html)/Font-like objects.
@@ -360,6 +359,32 @@ An plain object with following properties:
 * **scale**: *number | 'auto' (optional)*
     Image scale factor, the image will be scaled down by this factor. The scale will be inferred from the image file name if it follows the pattern "@\<scale\>x", e.g. `"image@2x.jpg"`. The pattern is ignored if `scale`, `width` or `height` are set to a number or if `scale` is set to `"auto"`.
 
+### LinearGradientValue
+
+Linear gradients can be specified as strings, [LinearGradient](./LinearGradient.html) or `LinearGradient`-like objects.
+
+A `LinearGradient` instance can be created using the `LinearGradient` constructor or using `LinearGradient.from`.
+
+A `LinearGradient`-like object is a plain object with "colorStops" and optional "direction" properties. "colorStops" is an array containing atleast one `ColorValue` or `[ColorValue, PercentValue]`. "direction" is a degree number or one of "left", "top", "right" and "bottom".
+
+As string, following CSS subset can be used:
+
+```css
+<color-stop> ::= <color> [ <number>% ]
+<linear-gradient> ::= linear-gradient( [ <number>deg | to ( left | top | right | bottom ), ] <color-stop> { , <color-stop> } )
+```
+
+Examples:
+
+```
+new LinearGradient([Color.red, Color.green]);
+new LinearGradient([[Color.red, new Percent(5)], Color.green], 90);
+LinearGradient.from({colorStops: [['red', '5%'], 'green'], direction: 'left'});
+LinearGradient.from({colorStops: [['red', '5%'], 'green'], direction: 45});
+LinearGradient.from('linear-gradient(red, green)');
+LinearGradient.from('linear-gradient(to left, red 5%, green)');
+LinearGradient.from('linear-gradient(45deg, red 5%, green)');
+```
 
 ## Binary Types
 

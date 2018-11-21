@@ -20,13 +20,14 @@ import {Widget,
   Properties,
   ImageValue,
   SiblingReferenceValue,
-  LayoutDataValue
+  LayoutDataValue,
+  LinearGradientValue
  } from 'tabris';
 
  let widget: Widget = new Composite();
 
 // Properties
-let background: ColorValue;
+let background: ColorValue | LinearGradientValue;
 let backgroundImage: ImageValue;
 let baseline: SiblingReferenceValue|'auto';
 let bottomMargin: ConstraintValue|'auto';

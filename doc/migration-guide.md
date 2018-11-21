@@ -37,7 +37,7 @@ This concerns all instances of `NativeObject` (including widgets) and `WidgetCol
 The `set` method still exists, but now only takes one argument (the properties object).
 The `get` method has been removed entirely.
 
-#### Alternatives for `set("prop", value)`:
+### Alternatives for `set("prop", value)`:
 
 On both `NativeObject` and `WidgetCollection`, `obj.set('foo', baz)` can be replaced with `obj.set({foo: baz})`,
 and `obj.set(bar, baz)` can be replaced with `obj.set([foo]: baz})`.
@@ -45,7 +45,7 @@ and `obj.set(bar, baz)` can be replaced with `obj.set([foo]: baz})`.
 On `NativeObject` only, `obj.set('foo', baz)` can be replaced with `obj.foo = baz`,
 and `obj.set(bar, baz)` can be replaced with `obj[bar] = baz`.
 
-#### Alternatives for `get("prop")`:
+### Alternatives for `get("prop")`:
 
 On `NativeObject`, `bar = obj.get('foo')` can be replaced with `bar = obj.foo`,
 and `baz = obj.get(bar)` can be replaced with `baz = obj[bar]`.
@@ -66,6 +66,10 @@ You can no longer patch your application using this method.
 ### Color properties
 
 All color properties are now of the type "ColorValue". While these properties still accept the same string values as in 2.x, they will return a "Color" class instance instead of a string. The exception is CanvasContext, where color properties still return a string for W3C compatibility.
+
+### Widget.background property
+
+Widget background setter now also accepts "ColorValue" and "LinearGradientValue" values and the getter will return instances of the "Color" and "LinearGradient" classes.
 
 ### Font properties
 

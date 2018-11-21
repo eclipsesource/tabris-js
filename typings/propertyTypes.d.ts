@@ -144,6 +144,31 @@ interface LayoutDataProperties {
     height?: 'auto'|Dimension;
 }
 
+type LinearGradientLikeObject = {
+  colorStops: (ColorValue | [ColorValue, PercentValue])[],
+  direction?: number | 'left' | 'top' | 'right' | 'bottom'
+}
+/**
+ * Linear gradients can be specified as strings or [LinearGradient](./LinearGradient.html) or
+ * `LinearGradient`-like objects.
+ *
+ * An `LinearGradient` instance can be created using the `LinearGradient` constructor or using
+ * `LinearGradient.from`.
+ *
+ * A `LinearGradient`-like object is a plain object with "colorStops" and optional "direction"
+ * properties.
+ * "colorStops" is an array containing atleast one `ColorValue` or `[ColorValue, PercentValue]`.
+ * "direction" is a number in degrees or one of "left", "top", "right" and "bottom".
+ *
+ * As string, following CSS subset can be used:
+ *
+ * <color-stop> ::= <color> [ <number>% ]
+ * <linear-gradient> ::= linear-gradient( [ <number>deg | to ( left | top | right | bottom ), ] <color-stop> { , <color-stop> } )
+ */
+
+type LinearGradientValue = LinearGradientLikeObject|string|'initial'|null;
+
+
 /**
  * A Widget's bounds
  */

@@ -1,0 +1,75 @@
+{
+  "type": "LinearGradient",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "colorStops",
+        "type": "(Color | [Color, Percent])[]",
+        "description": "An array with at least one color stop. Defines the position and the offset of the gradient color stop."
+      },
+      {
+        "name": "direction",
+        "type": "number",
+        "description": "The direction of the gradient line in degrees.",
+        "optional": true
+      }
+    ]
+  },
+  "description": "Represents a linear gradient. See also [LinearGradientValue](./types.html#LinearGradientValue)",
+  "properties": {
+    "colorStops": {
+      "type": "(Color | [Color, Percent])[]",
+      "description": "An array with the gradient color stops. Defines the position and the offset of the gradient color stop.",
+      "const": true
+    },
+    "direction": {
+      "type": "number",
+      "description": "The direction of the gradient line in degrees.",
+      "const": true
+    }
+  },
+  "methods": {
+    "toString": {
+      "description": "Returns a CSS string representation of the linear gradient.",
+      "returns": "string"
+    }
+  },
+  "statics": {
+    "methods": {
+      "from": {
+        "parameters": [
+          {
+            "name": "linearGradientValue",
+            "description": "The value to create a LinearGradient instance from",
+            "type": "LinearGradientValue"
+          }
+        ],
+        "description": "Creates a new instance of LinearGradient using any valid linear gradient expression. For any other value, including `null` and `'initial'` the method throws.",
+        "returns": "LinearGradient"
+      },
+      "isLinearGradientValue": {
+        "parameters": [
+          {
+            "name": "value",
+            "description": "The value to test",
+            "type": "any"
+          }
+        ],
+        "description": "Returns true if value is a LinearGradientValue. This includes `null` and `'initial'`. Use this to check if a value will be accepted by a linear gradient property. This is also a valid TypeScript type guard function.",
+        "returns": "value is LinearGradientValue"
+      },
+      "isValidLinearGradientValue": {
+        "parameters": [
+          {
+            "name": "value",
+            "description": "The value to test",
+            "type": "any"
+          }
+        ],
+        "description": "Returns true if value is a valid LinearGradientValue. This excludes `null` and `'initial'`. Use this to check if a value will be accepted by LinearGradient.from. This is also a valid TypeScript type guard function.",
+        "returns": "value is LinearGradientValue"
+      }
+    }
+  }
+}
