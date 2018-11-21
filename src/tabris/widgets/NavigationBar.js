@@ -7,6 +7,7 @@ export default class NavigationBar extends NativeObject {
       throw new Error('NavigationBar can not be created');
     }
     super();
+    this._create('tabris.NavigationBar');
   }
 
   get _nativeType() {

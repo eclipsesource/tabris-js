@@ -32,6 +32,10 @@ describe('StatusBar', function() {
     expect(statusBar).to.be.an.instanceOf(StatusBar);
   });
 
+  it('create CREATEs StatusBar', function() {
+    expect(client.calls({op: 'create', type: 'tabris.StatusBar'}).length).to.equal(1);
+  });
+
   it('can not be disposed', function() {
     expect(() => {
       statusBar.dispose();

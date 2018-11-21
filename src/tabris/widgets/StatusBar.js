@@ -7,6 +7,7 @@ export default class StatusBar extends NativeObject {
       throw new Error('StatusBar can not be created');
     }
     super();
+    this._create('tabris.StatusBar');
   }
 
   get _nativeType() {

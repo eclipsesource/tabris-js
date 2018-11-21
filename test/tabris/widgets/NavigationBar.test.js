@@ -25,6 +25,10 @@ describe('NavigationBar', function() {
     expect(navigationBar).to.be.an.instanceOf(NavigationBar);
   });
 
+  it('create CREATEs NavigationBar', function() {
+    expect(client.calls({op: 'create', type: 'tabris.NavigationBar'}).length).to.equal(1);
+  });
+
   it('can not be disposed', function() {
     expect(() => {
       navigationBar.dispose();
