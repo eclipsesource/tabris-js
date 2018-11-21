@@ -13,6 +13,7 @@ import TextInput from '../../../src/tabris/widgets/TextInput';
 import {omit} from '../../../src/tabris/util';
 import LayoutData from '../../../src/tabris/LayoutData';
 import Constraint from '../../../src/tabris/Constraint';
+import {toXML} from '../../../src/tabris/Console';
 
 describe('Widget', function() {
 
@@ -224,25 +225,25 @@ describe('Widget', function() {
       });
 
       it('prints xml element', function() {
-        expect(widget.toXML()).to.be.equal(
+        expect(widget[toXML]()).to.be.equal(
           `<TestWidget cid='${widget.cid}' ${bounds}/>`
         );
       });
 
       it('prints xml element with id if given', function() {
         parent.id = 'test-id';
-        expect(parent.toXML()).to.be.equal(`<TestWidget cid='${parent.cid}' id='${parent.id}' ${bounds}/>`);
+        expect(parent[toXML]()).to.be.equal(`<TestWidget cid='${parent.cid}' id='${parent.id}' ${bounds}/>`);
       });
 
       it('prints xml element with class if given', function() {
         parent.class = 'test-class';
-        expect(parent.toXML()).to.be.equal(`<TestWidget cid='${parent.cid}' class='${parent.class}' ${bounds}/>`);
+        expect(parent[toXML]()).to.be.equal(`<TestWidget cid='${parent.cid}' class='${parent.class}' ${bounds}/>`);
       });
 
       it('prints xml element with both id and class', function() {
         parent.id = 'test-id';
         parent.class = 'test-class';
-        expect(parent.toXML()).to.be.equal(
+        expect(parent[toXML]()).to.be.equal(
           `<TestWidget cid='${parent.cid}' id='${parent.id}' class='${parent.class}' ${bounds}/>`
         );
       });
@@ -250,14 +251,14 @@ describe('Widget', function() {
       it('prints xml element with visible and enabled', function() {
         parent.visible = false;
         parent.enabled = false;
-        expect(parent.toXML()).to.be.equal(
+        expect(parent[toXML]()).to.be.equal(
           `<TestWidget cid='${parent.cid}' ${bounds} enabled='false' visible='false'/>`
         );
       });
 
       it('prints xml tree with one child', function() {
         child.appendTo(parent);
-        expect(parent.toXML()).to.equal(
+        expect(parent[toXML]()).to.equal(
           `<TestWidget cid='${parent.cid}' ${bounds}>\n  <Composite cid='${child.cid}' ${bounds}/>\n</TestWidget>`
         );
       });
@@ -265,7 +266,7 @@ describe('Widget', function() {
       it('prints xml tree with multiple children', function() {
         child.appendTo(parent);
         child2.appendTo(parent);
-        expect(parent.toXML()).to.equal(
+        expect(parent[toXML]()).to.equal(
           `<TestWidget cid='${parent.cid}' ${bounds}>\n` +
           `  <Composite cid='${child.cid}' ${bounds}/>\n` +
           `  <Button cid='${child2.cid}' ${bounds} text=''/>\n` +
@@ -276,7 +277,7 @@ describe('Widget', function() {
       it('prints xml tree with grandchild', function() {
         child2.appendTo(child);
         child.appendTo(parent);
-        expect(parent.toXML()).to.equal(
+        expect(parent[toXML]()).to.equal(
           `<TestWidget cid='${parent.cid}' ${bounds}>\n` +
           `  <Composite cid='${child.cid}' ${bounds}>\n` +
           `    <Button cid='${child2.cid}' ${bounds} text=''/>\n` +

@@ -9,6 +9,7 @@ import WidgetCollection from '../../../src/tabris/WidgetCollection';
 import EventObject from '../../../src/tabris/EventObject';
 import Layout from '../../../src/tabris/Layout';
 import Color from '../../../src/tabris/Color';
+import {toXML} from '../../../src/tabris/Console';
 
 describe('NavigationView', function() {
 
@@ -348,10 +349,10 @@ describe('NavigationView', function() {
 
     it('prints xml element with drawerActionVisible and toolbarVisible if false', function() {
       stub(client, 'get').returns([0, 1, 2, 3]);
-      expect(navigationView.set({drawerActionVisible: true, toolbarVisible: true}).toXML()).to.equal(
+      expect(navigationView.set({drawerActionVisible: true, toolbarVisible: true})[toXML]()).to.equal(
         `<NavigationView cid='${navigationView.cid}' bounds='{left: 0, top: 1, width: 2, height: 3}'/>`
       );
-      expect(navigationView.set({drawerActionVisible: false, toolbarVisible: false}).toXML()).to.match(
+      expect(navigationView.set({drawerActionVisible: false, toolbarVisible: false})[toXML]()).to.match(
         /<NavigationView .* drawerActionVisible='false' toolbarVisible='false'\/>/
       );
     });

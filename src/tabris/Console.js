@@ -1,6 +1,8 @@
 import {format} from './Formatter';
 import {getStackTrace} from './util-stacktrace';
 
+export const toXML = Symbol();
+
 export default class Console {
 
   constructor() {
@@ -34,8 +36,8 @@ export default class Console {
   }
 
   dirxml(obj) {
-    if (obj && obj.toXML instanceof Function) {
-      this.log(obj.toXML());
+    if (obj && obj[toXML] instanceof Function) {
+      this.log(obj[toXML]());
     } else {
       this.log(obj);
     }

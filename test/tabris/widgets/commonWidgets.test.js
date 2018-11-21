@@ -15,6 +15,7 @@ import ToggleButton from '../../../src/tabris/widgets/ToggleButton';
 import WebView from '../../../src/tabris/widgets/WebView';
 import ActivityIndicator from '../../../src/tabris/widgets/ActivityIndicator';
 import {createJsxProcessor} from '../../../src/tabris/JsxProcessor';
+import {toXML} from '../../../src/tabris/Console';
 
 describe('Common Widgets', function() {
 
@@ -105,7 +106,7 @@ describe('Common Widgets', function() {
   it('Button toXML prints xml element with text', function() {
     widget = new Button({text: 'foo'});
     stub(client, 'get').withArgs(widget.cid, 'bounds').returns({});
-    expect(widget.toXML()).to.match(/<Button .* text='foo'\/>/);
+    expect(widget[toXML]()).to.match(/<Button .* text='foo'\/>/);
   });
 
   it('Canvas', function() {
@@ -176,7 +177,7 @@ describe('Common Widgets', function() {
     stub(client, 'get')
       .withArgs(widget.cid, 'bounds').returns({})
       .withArgs(widget.cid, 'checked').returns(false);
-    expect(widget.toXML()).to.match(/<CheckBox .* text='foo' checked='false'\/>/);
+    expect(widget[toXML]()).to.match(/<CheckBox .* text='foo' checked='false'\/>/);
   });
 
   it('Composite', function() {
@@ -197,8 +198,8 @@ describe('Common Widgets', function() {
 
   it('ImageView toXML prints xml element with image src', function() {
     stub(client, 'get').returns({});
-    expect(new ImageView().toXML()).to.match(/<ImageView .* image=''\/>/);
-    expect(new ImageView({image: 'foo.jpg'}).toXML()).to.match(/<ImageView .* image='foo.jpg'\/>/);
+    expect(new ImageView()[toXML]()).to.match(/<ImageView .* image=''\/>/);
+    expect(new ImageView({image: 'foo.jpg'})[toXML]()).to.match(/<ImageView .* image='foo.jpg'\/>/);
   });
 
   it('ProgressBar', function() {
@@ -215,7 +216,7 @@ describe('Common Widgets', function() {
   it('ProgressBar toXML prints xml element with minimum, maximum and selection', function() {
     widget = new ProgressBar({minimum: 10, maximum: 20, selection: 13});
     stub(client, 'get').returns({});
-    expect(widget.toXML()).to.match(/<ProgressBar .* selection='13' minimum='10' maximum='20'\/>/);
+    expect(widget[toXML]()).to.match(/<ProgressBar .* selection='13' minimum='10' maximum='20'\/>/);
   });
 
   it('RadioButton', function() {
@@ -279,7 +280,7 @@ describe('Common Widgets', function() {
     stub(client, 'get')
       .withArgs(widget.cid, 'bounds').returns({})
       .withArgs(widget.cid, 'checked').returns(false);
-    expect(widget.toXML()).to.match(/<RadioButton .* text='foo' checked='false'\/>/);
+    expect(widget[toXML]()).to.match(/<RadioButton .* text='foo' checked='false'\/>/);
   });
 
   it('TextView', function() {
@@ -338,13 +339,13 @@ describe('Common Widgets', function() {
   it('TextView toXML prints xml element with markupEnabled false', function() {
     widget = new TextView({text: 'f\'oo'});
     stub(client, 'get').returns({});
-    expect(widget.toXML()).to.match(/<TextView .* text='f\\'oo'\/>/);
+    expect(widget[toXML]()).to.match(/<TextView .* text='f\\'oo'\/>/);
   });
 
   it('TextView toXML prints xml element with markupEnabled true', function() {
     widget = new TextView({text: 'f\'o\no', markupEnabled: true});
     stub(client, 'get').returns([0, 1, 2, 3]);
-    expect(widget.toXML()).to.equal(
+    expect(widget[toXML]()).to.equal(
       `<TextView cid='${widget.cid}' bounds='{left: 0, top: 1, width: 2, height: 3}' markupEnabled='true'>\n` +
       '  f\'o\n' +
       '  o\n' +
@@ -384,7 +385,7 @@ describe('Common Widgets', function() {
   it('Slider toXML prints xml element with minimum, maximum and selection', function() {
     widget = new Slider({minimum: 10, maximum: 20, selection: 13});
     stub(client, 'get').returns(13);
-    expect(widget.toXML()).to.match(/<Slider .* selection='13' minimum='10' maximum='20'\/>/);
+    expect(widget[toXML]()).to.match(/<Slider .* selection='13' minimum='10' maximum='20'\/>/);
   });
 
   it('WebView', function() {
@@ -401,7 +402,7 @@ describe('Common Widgets', function() {
       .withArgs(widget.cid, 'url').returns('foo.com')
       .withArgs(widget.cid, 'html').returns('')
       .withArgs(widget.cid, 'bounds').returns([0, 1, 2, 3]);
-    expect(widget.toXML()).to.match(/<WebView .* url='foo.com'\/>/);
+    expect(widget[toXML]()).to.match(/<WebView .* url='foo.com'\/>/);
   });
 
   it('WebView toXML prints xml element with html', function() {
@@ -410,7 +411,7 @@ describe('Common Widgets', function() {
       .withArgs(widget.cid, 'html').returns('<html>\n  <body>\n    Hello World!\n  </body>\n</html>')
       .withArgs(widget.cid, 'url').returns('')
       .withArgs(widget.cid, 'bounds').returns([0, 1, 2, 3]);
-    expect(widget.toXML()).to.equal(
+    expect(widget[toXML]()).to.equal(
       `<WebView cid='${widget.cid}' bounds='{left: 0, top: 1, width: 2, height: 3}'>\n` +
       '  <html>\n' +
       '    <body>\n' +
@@ -463,7 +464,7 @@ describe('Common Widgets', function() {
     stub(client, 'get')
       .withArgs(widget.cid, 'bounds').returns({})
       .withArgs(widget.cid, 'checked').returns(false);
-    expect(widget.toXML()).to.match(/<Switch .* text='foo' checked='false'\/>/);
+    expect(widget[toXML]()).to.match(/<Switch .* text='foo' checked='false'\/>/);
   });
 
   it('ToggleButton', function() {
@@ -530,7 +531,7 @@ describe('Common Widgets', function() {
     stub(client, 'get')
       .withArgs(widget.cid, 'bounds').returns({})
       .withArgs(widget.cid, 'checked').returns(false);
-    expect(widget.toXML()).to.match(/<ToggleButton .* text='foo' checked='false'\/>/);
+    expect(widget[toXML]()).to.match(/<ToggleButton .* text='foo' checked='false'\/>/);
   });
 
   it('sets native color properties as RGBA arrays', function() {

@@ -1,6 +1,7 @@
 import {expect, mockTabris, restore, stub} from '../../test';
 import ClientStub from '../ClientStub';
 import Video from '../../../src/tabris/widgets/Video';
+import {toXML} from '../../../src/tabris/Console';
 
 describe('Video', function() {
 
@@ -158,7 +159,7 @@ describe('Video', function() {
         .withArgs(video.cid, 'position').returns(0)
         .withArgs(video.cid, 'bounds').returns({});
 
-      expect(video.toXML()).to.match(/<Video .* state='empty'\/>/);
+      expect(video[toXML]()).to.match(/<Video .* state='empty'\/>/);
     });
 
     it('toXML prints xml element with essential non-default value', function() {
@@ -170,7 +171,7 @@ describe('Video', function() {
         .withArgs(video.cid, 'position').returns(0)
         .withArgs(video.cid, 'bounds').returns({});
 
-      expect(video.toXML()).to.match(
+      expect(video[toXML]()).to.match(
         /<Video .* url='.\/foo.mp4' state='play' speed='1.1' position='0' duration='100'\/>/
       );
     });

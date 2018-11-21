@@ -4,6 +4,7 @@ import NativeObjectRegistry from '../../src/tabris/NativeObjectRegistry';
 import NativeBridge from '../../src/tabris/NativeBridge';
 import EventObject from '../../src/tabris/EventObject';
 import ClientStub from './ClientStub';
+import {toXML} from '../../src/tabris/Console';
 
 describe('NativeObject', function() {
 
@@ -444,7 +445,7 @@ describe('NativeObject', function() {
     describe('toXML', function() {
 
       it('prints xml element', function() {
-        expect(object.toXML()).to.be.equal(`<TestType cid='${object.cid}'/>`);
+        expect(object[toXML]()).to.be.equal(`<TestType cid='${object.cid}'/>`);
       });
 
     });

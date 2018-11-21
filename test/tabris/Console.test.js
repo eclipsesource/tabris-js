@@ -1,6 +1,6 @@
 import {expect, spy, stub, restore, mockTabris} from '../test';
 import ClientStub from './ClientStub';
-import {createConsole} from '../../src/tabris/Console';
+import {createConsole, toXML} from '../../src/tabris/Console';
 import * as defaultConsole from '../../src/tabris/Console';
 import {create as createApp} from '../../src/tabris/App';
 
@@ -193,8 +193,8 @@ describe('Console', function() {
 
     describe('dirxml', function() {
 
-      it('prints xml when object has toXML', function() {
-        console.dirxml({toXML() { return '<Foo/>'; }});
+      it('prints xml when object has toXML function', function() {
+        console.dirxml({[toXML]() { return '<Foo/>'; }});
         expect(nativeConsole.print).to.have.been.calledWithMatch('log', '<Foo/>');
       });
 

@@ -1,6 +1,7 @@
 import {expect, stub, spy, restore, mockTabris} from '../../test';
 import ClientStub from '../ClientStub';
 import Picker from '../../../src/tabris/widgets/Picker';
+import {toXML} from '../../../src/tabris/Console';
 
 describe('Picker', function() {
 
@@ -175,7 +176,7 @@ describe('Picker', function() {
         picker.itemCount = 23;
         picker.selectionIndex = 2;
 
-        expect(picker.toXML()).to.match(/<Picker .* itemCount='23' selectionIndex='2'\/>/);
+        expect(picker[toXML]()).to.match(/<Picker .* itemCount='23' selectionIndex='2'\/>/);
       });
 
     });

@@ -2,6 +2,7 @@ import {expect, mockTabris, restore, spy, stub} from '../../test';
 import ClientStub from '../ClientStub';
 import TextInput from '../../../src/tabris/widgets/TextInput';
 import {createJsxProcessor} from '../../../src/tabris/JsxProcessor';
+import {toXML} from '../../../src/tabris/Console';
 
 describe('TextInput', function() {
 
@@ -186,7 +187,7 @@ describe('TextInput', function() {
         .withArgs(textInput.cid, 'text').returns('foo')
         .withArgs(textInput.cid, 'bounds').returns({});
 
-      expect(textInput.toXML()).to.match(/<TextInput .* text='foo'\/>/);
+      expect(textInput[toXML]()).to.match(/<TextInput .* text='foo'\/>/);
     });
 
     it('prints xml element with text with line breaks', function() {
@@ -195,7 +196,7 @@ describe('TextInput', function() {
         .withArgs(textInput.cid, 'text').returns('foo\nbar')
         .withArgs(textInput.cid, 'bounds').returns([0, 1, 2, 3]);
 
-      expect(widget.toXML()).to.equal(
+      expect(widget[toXML]()).to.equal(
         `<TextInput cid='${widget.cid}' bounds='{left: 0, top: 1, width: 2, height: 3}'>\n` +
         '  foo\n' +
         '  bar\n' +
@@ -215,7 +216,7 @@ describe('TextInput', function() {
         .withArgs(textInput.cid, 'focused').returns(true)
         .withArgs(textInput.cid, 'bounds').returns({});
 
-      expect(textInput.toXML()).to.match(
+      expect(textInput[toXML]()).to.match(
         /<TextInput .* type='search' text='' message='bar' editable='false' focused='true' keepFocus='true'\/>/
       );
     });

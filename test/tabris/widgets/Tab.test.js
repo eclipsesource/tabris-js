@@ -2,6 +2,7 @@ import {expect, mockTabris, stub} from '../../test';
 import ClientStub from '../ClientStub';
 import Tab from '../../../src/tabris/widgets/Tab';
 import Composite from '../../../src/tabris/widgets/Composite';
+import {toXML} from '../../../src/tabris/Console';
 
 describe('Tab', function() {
 
@@ -52,7 +53,7 @@ describe('Tab', function() {
 
     it('toXML prints xml element with title', function() {
       stub(client, 'get').returns({});
-      expect(tab.toXML()).to.match(/<Tab .* title='foo'\/>/);
+      expect(tab[toXML]()).to.match(/<Tab .* title='foo'\/>/);
     });
 
   });

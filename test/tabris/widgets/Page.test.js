@@ -3,6 +3,7 @@ import ClientStub from '../ClientStub';
 import NavigationView from '../../../src/tabris/widgets/NavigationView';
 import Page from '../../../src/tabris/widgets/Page';
 import Composite from '../../../src/tabris/widgets/Composite';
+import {toXML} from '../../../src/tabris/Console';
 
 describe('Page', function() {
 
@@ -78,7 +79,7 @@ describe('Page', function() {
 
   it('toXML prints xml element with title', function() {
     stub(client, 'get').returns({});
-    expect(page.set({title: 'foo'}).toXML()).to.match(
+    expect(page.set({title: 'foo'})[toXML]()).to.match(
       /<Page .* title='foo'\/>/
     );
   });

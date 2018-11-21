@@ -3,6 +3,7 @@ import {warn, debug} from './Console';
 import EventObject from './EventObject';
 import Events from './Events';
 import Listeners from './Listeners';
+import {toXML} from './Console';
 
 function EventsClass() {}
 Object.assign(EventsClass.prototype, Events);
@@ -283,7 +284,7 @@ export default class NativeObject extends EventsClass {
     return this.constructor.name;
   }
 
-  toXML() {
+  [toXML]() {
     const content = this._getXMLContent();
     if (!content.length) {
       return this._getXMLHeader(false);

@@ -2,6 +2,7 @@ import {expect, match, mockTabris, restore, spy, stub} from '../../test';
 import ClientStub from '../ClientStub';
 import CollectionView from '../../../src/tabris/widgets/CollectionView';
 import Composite from '../../../src/tabris/widgets/Composite';
+import {toXML} from '../../../src/tabris/Console';
 
 describe('CollectionView', function() {
 
@@ -881,7 +882,7 @@ describe('CollectionView', function() {
           .withArgs(view.cid, 'bounds').returns({})
           .withArgs(view.cid, 'firstVisibleIndex').returns(23);
         view.load(45);
-        expect(view.toXML()).to.match(/<CollectionView .* itemCount='45' firstVisibleIndex='23'\/>/);
+        expect(view[toXML]()).to.match(/<CollectionView .* itemCount='45' firstVisibleIndex='23'\/>/);
       });
 
     });

@@ -4,6 +4,7 @@ import Tab from '../../../src/tabris/widgets/Tab';
 import Layout from '../../../src/tabris/Layout';
 import TabFolder from '../../../src/tabris/widgets/TabFolder';
 import Composite from '../../../src/tabris/widgets/Composite';
+import {toXML} from '../../../src/tabris/Console';
 
 describe('TabFolder', function() {
 
@@ -542,7 +543,7 @@ describe('TabFolder', function() {
         .withArgs(tabFolder.cid, 'bounds').returns({})
         .withArgs(tabs[0].cid, 'bounds').returns({})
         .withArgs(tabs[1].cid, 'bounds').returns({});
-      expect(tabFolder.toXML()).to.match(
+      expect(tabFolder[toXML]()).to.match(
         /<TabFolder .* selection='Tab\[cid=".*"\]#foo'>[\s\S.]*<\/TabFolder>/
       );
     });

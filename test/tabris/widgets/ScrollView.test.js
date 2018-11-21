@@ -2,6 +2,7 @@ import {expect, mockTabris, restore, spy, stub} from '../../test';
 import ClientStub from '../ClientStub';
 import ScrollView from '../../../src/tabris/widgets/ScrollView';
 import Composite from '../../../src/tabris/widgets/Composite';
+import {toXML} from '../../../src/tabris/Console';
 
 describe('ScrollView', function() {
 
@@ -375,7 +376,7 @@ describe('ScrollView', function() {
         .withArgs(scrollView.cid, 'offsetY').returns(2)
         .withArgs(scrollView.cid, 'bounds').returns({});
 
-      expect(scrollView.toXML()).to.match(/<ScrollView .* direction='vertical' offsetY='2'\/>/);
+      expect(scrollView[toXML]()).to.match(/<ScrollView .* direction='vertical' offsetY='2'\/>/);
     });
 
     it('prints xml element with direction and offsetX', function() {
@@ -385,7 +386,7 @@ describe('ScrollView', function() {
         .withArgs(scrollView.cid, 'offsetY').returns(2)
         .withArgs(scrollView.cid, 'bounds').returns({});
 
-      expect(scrollView.toXML()).to.match(/<ScrollView .* direction='horizontal' offsetX='1'\/>/);
+      expect(scrollView[toXML]()).to.match(/<ScrollView .* direction='horizontal' offsetX='1'\/>/);
     });
 
   });

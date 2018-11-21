@@ -1,6 +1,7 @@
 import {expect, mockTabris, restore, spy, stub} from '../../test';
 import ClientStub from '../ClientStub';
 import SearchAction from '../../../src/tabris/widgets/SearchAction';
+import {toXML} from '../../../src/tabris/Console';
 
 describe('SearchAction', function() {
 
@@ -146,7 +147,7 @@ describe('SearchAction', function() {
       stub(client, 'get')
         .withArgs(action.cid, 'bounds').returns({})
         .withArgs(action.cid, 'text').returns('');
-      expect(action.toXML()).to.match(/<SearchAction .* title='Foo'\/>/);
+      expect(action[toXML]()).to.match(/<SearchAction .* title='Foo'\/>/);
     });
 
     it('prints xml element with title, text and message', function() {
@@ -154,7 +155,7 @@ describe('SearchAction', function() {
       stub(client, 'get')
         .withArgs(action.cid, 'bounds').returns({})
         .withArgs(action.cid, 'text').returns('bar');
-      expect(action.toXML()).to.match(/<SearchAction .* title='Foo' text='bar' message='baz'\/>/);
+      expect(action[toXML]()).to.match(/<SearchAction .* title='Foo' text='bar' message='baz'\/>/);
     });
 
   });

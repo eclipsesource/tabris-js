@@ -5,6 +5,7 @@ import Layout, {ConstraintLayout} from '../Layout';
 import WidgetCollection from '../WidgetCollection';
 import {omit} from '../util';
 import {jsxFactory} from '../JsxProcessor';
+import {toXML} from '../Console';
 
 export default class Composite extends Widget {
 
@@ -147,7 +148,7 @@ export default class Composite extends Widget {
   _getXMLContent() {
     const content = super._getXMLContent();
     for (let i = 0; i < (this.$children || []).length; ++i) {
-      content.push(this.$children[i].toXML().split('\n').map(line => '  ' + line).join('\n'));
+      content.push(this.$children[i][toXML]().split('\n').map(line => '  ' + line).join('\n'));
     }
     return content;
   }
