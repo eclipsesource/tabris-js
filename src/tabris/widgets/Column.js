@@ -1,5 +1,6 @@
 import Composite from './Composite';
 import ColumnLayout from '../ColumnLayout';
+import NativeObject from '../NativeObject';
 
 export default class Column extends Composite {
 
@@ -7,13 +8,32 @@ export default class Column extends Composite {
     super(properties);
   }
 
-  _initLayout() {
-    this._layout = ColumnLayout.default;
+  _initLayout(props = {}) {
+    let layout = props.layout || ColumnLayout.default;
+    if ('padding' in props || 'spacing' in props) {
+      layout = new ColumnLayout({
+        padding: 'padding' in props ? props.padding : layout.padding,
+        spacing: 'spacing' in props ? props.spacing : layout.spacing
+      });
+    }
+    this._checkLayout(layout);
+    this._layout = layout;
     this._layout.add(this);
   }
 
-  _checkLayout() {
-    throw new Error('Property "layout" of type "Column" can not be changed');
+  _checkLayout(value) {
+    if (!(value instanceof ColumnLayout)) {
+      throw new Error('Not an instance of "ColumnLayout"');
+    }
   }
 
 }
+
+NativeObject.defineProperties(Column.prototype, {
+  spacing: {
+    type: 'number',
+    get() {
+      return this._layout.spacing;
+    }
+  }
+});

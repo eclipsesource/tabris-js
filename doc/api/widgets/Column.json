@@ -17,8 +17,14 @@
     "layout": {
       "type": "ColumnLayout",
       "default": "ColumnLayout",
-      "readonly": true,
-      "description": "The layout manager responsible for interpreting the [`layoutData`](./Widget.md#layoutData) of the child widgets of this Composite."
+      "const": true,
+      "description": "The column layout manager responsible for interpreting the [`layoutData`](./Widget.md#layoutData) of the child widgets of this Composite."
+    },
+    "spacing": {
+      "type": "number",
+      "default": 16,
+      "const": true,
+      "description": "Additional space to add between the children in device independent pixel."
     }
   }
 }

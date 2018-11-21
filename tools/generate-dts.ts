@@ -320,7 +320,8 @@ function createPropertiesObject(def: ExtendedApi, ops: PropertyOps) {
   } else if (def.parent && !newProps.length) {
     return `Properties<${def.parent.type}>${excludes}`;
   }
-  return `ExtendProperties<${def.parent.type}, ${def.type}, ${union(newProps)}>${excludes}`;
+  const base = ((ops.hasContext || def.parent.constructor.access !== 'public') ? '' : 'typeof ') + def.parent.type;
+  return `ExtendProperties<${base}, ${def.type}, ${union(newProps)}>${excludes}`;
 }
 
 function createJsxPropertiesObject(def: ExtendedApi) {

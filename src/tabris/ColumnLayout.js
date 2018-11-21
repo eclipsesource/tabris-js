@@ -1,17 +1,19 @@
 import Layout from './Layout';
 import LayoutData from './LayoutData';
+import {types} from './property-types';
 
 export default class ColumnLayout extends Layout {
 
   static get default() {
     if (!this._column) {
-      this._column = new ColumnLayout();
+      this._column = new ColumnLayout({padding: 16, spacing: 16});
     }
     return this._column;
   }
 
   constructor(properties = {}, queue) {
-    super('padding' in properties ? properties : {padding: 16}, queue);
+    super({padding: 'padding' in properties ? properties.padding : 0}, queue);
+    this._spacing = 'spacing' in properties ? types.number.encode(properties.spacing) : 0;
     this._firstLayoutData = LayoutData.from({
       left: this._padding.left,
       top: this._padding.top,
@@ -19,9 +21,13 @@ export default class ColumnLayout extends Layout {
     });
     this._defaultLayoutData = LayoutData.from({
       left: this._padding.left,
-      top: [LayoutData.prev, 16],
+      top: [LayoutData.prev, this._spacing],
       right: this._padding.right
     });
+  }
+
+  get spacing() {
+    return this._spacing;
   }
 
   _getLayoutData(child) {

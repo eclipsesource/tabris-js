@@ -18,13 +18,16 @@ export default class Layout {
       throw new Error('Not a LayoutQueue: ' + this._layoutQueue);
     }
     this._padding = types.boxDimensions.encode('padding' in properties ? properties.padding : 0);
-    Object.defineProperty(this, 'padding', {get: () => Object.assign({}, this._padding)});
     this._handleAddChildEvent = this._handleAddChildEvent.bind(this);
     this._handleRemoveChildEvent = this._handleRemoveChildEvent.bind(this);
     this._handleChildLayoutDataChangedEvent = this._handleChildLayoutDataChangedEvent.bind(this);
     this._renderLayoutData = this._renderLayoutData.bind(this);
     this._addChild = this._addChild.bind(this);
     this._removeChild = this._removeChild.bind(this);
+  }
+
+  get padding() {
+    return Object.assign({}, this._padding);
   }
 
   add(composite) {
