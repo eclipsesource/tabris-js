@@ -5,6 +5,7 @@ import WidgetCollection from '../../src/tabris/WidgetCollection';
 import {types} from '../../src/tabris/property-types';
 import {omit} from '../../src/tabris/util';
 import Color from '../../src/tabris/Color';
+import Image from '../../src/tabris/Image';
 import LinearGradient from '../../src/tabris/LinearGradient';
 
 describe('property-types', function() {
@@ -46,7 +47,7 @@ describe('property-types', function() {
     });
 
     it('encode throws for invalid values', function() {
-      expect(() => types.shader.encode('foo')).to.throw('foo must be a valid LinearGradientValue or ColorValue');
+      expect(() => types.shader.encode(12)).to.throw('12 must be a valid LinearGradientValue or ColorValue');
     });
 
     it('encode converts linear gradient value to a linear gradient shader', function() {
@@ -57,8 +58,46 @@ describe('property-types', function() {
       expect(shader.colors[1]).to.deep.equal([Color.blue.toArray(), null]);
     });
 
+    it('encode converts linear gradient value to a linear gradient shader', function() {
+      const shader = types.shader.encode('linear-gradient(red -30%, blue)');
+      expect(shader.type).to.equal('linearGradient');
+      expect(shader.angle).to.equal(180);
+      expect(shader.colors[0]).to.deep.equal([Color.red.toArray(), -0.3]);
+      expect(shader.colors[1]).to.deep.equal([Color.blue.toArray(), null]);
+    });
+
+    it('encode converts image object to image shader', function() {
+      const shader = types.shader.encode({src: 'foo.png'});
+      expect(shader.type).to.equal('image');
+      expect(shader.image).to.deep.equal(['foo.png', null, null, null]);
+    });
+
+    it('encode converts image object with scale to image shader', function() {
+      const shader = types.shader.encode({src: 'foo.png', scale: 2});
+      expect(shader.type).to.equal('image');
+      expect(shader.image).to.deep.equal(['foo.png', null, null, 2]);
+    });
+
+    it('encode converts image object with width and height to image shader', function() {
+      const shader = types.shader.encode({src: 'foo.png', width: 200, height: 100});
+      expect(shader.type).to.equal('image');
+      expect(shader.image).to.deep.equal(['foo.png', 200, 100, null]);
+    });
+
+    it('encode converts image object with width only to image shader', function() {
+      const shader = types.shader.encode({src: 'foo.png', width: 200});
+      expect(shader.type).to.equal('image');
+      expect(shader.image).to.deep.equal(['foo.png', 200, null, null]);
+    });
+
+    it('encode converts image string to image shader', function() {
+      const shader = types.shader.encode('foo.png');
+      expect(shader.type).to.equal('image');
+      expect(shader.image).to.deep.equal(['foo.png', null, null, null]);
+    });
+
     it('decode converts falsy to transparent color', function() {
-      expect(types.shader.decode(null)).to.equal('rgba(0, 0, 0, 0)');
+      expect(types.shader.decode(null)).to.equal(Color.transparent);
     });
 
     it('decode converts linear gradient shader to a LinearGradient', function() {
@@ -79,16 +118,31 @@ describe('property-types', function() {
       expect(color.toString()).to.equal('rgb(0, 0, 255)');
     });
 
-    it('decode converts Array to Color', function() {
-      const color = types.shader.decode([0, 0, 255, 128]);
-      expect(color).to.be.instanceof(Color);
-      expect(color.toString()).to.equal('rgba(0, 0, 255, 0.5)');
+    it('decode converts image shader to Image', function() {
+      const image = types.shader.decode({image: ['foo.png', null, null, null], type: 'image'});
+      expect(image).to.be.instanceof(Image);
+      expect(image.src).to.equal('foo.png');
     });
 
-    it('decodes an encoded shader', function() {
+    it('decodes an encoded gradient shader', function() {
       const encodedShader = types.shader.encode('linear-gradient(red -30%, blue)');
       const decodedShader = types.shader.decode(encodedShader);
+      expect(decodedShader).to.be.instanceof(LinearGradient);
       expect(decodedShader).to.deep.equal({colorStops: [[Color.red, {percent: -30}], Color.blue], direction: 180});
+    });
+
+    it('decodes an encoded color shader', function() {
+      const encodedShader = types.shader.encode(new Color(0, 1, 2));
+      const decodedShader = types.shader.decode(encodedShader);
+      expect(decodedShader).to.be.instanceof(Color);
+      expect(decodedShader.toString()).to.equal('rgb(0, 1, 2)');
+    });
+
+    it('decodes an encoded image shader', function() {
+      const encodedShader = types.shader.encode(new Image({src: 'foo'}));
+      const decodedShader = types.shader.decode(encodedShader);
+      expect(decodedShader).to.be.instanceof(Image);
+      expect(decodedShader.src).to.equal('foo');
     });
 
   });
@@ -139,6 +193,7 @@ describe('property-types', function() {
   describe('image', function() {
 
     const encode = types.ImageValue.encode;
+    const decode = types.ImageValue.decode;
 
     it('succeeds for minimal image value', function() {
       stub(console, 'warn');
@@ -200,6 +255,21 @@ describe('property-types', function() {
 
     it('succeeds for null', function() {
       expect(encode(null)).to.be.null;
+    });
+
+    it('decodes array with scale to Image', function() {
+      const image = decode(['foo', null, null, 2]);
+      expect(image).to.be.instanceof(Image);
+      expect(image.src).to.equal('foo');
+      expect(image.scale).to.equal(2);
+    });
+
+    it('decodes array with dimensions to Image', function() {
+      const image = decode(['foo', 100, 200, null]);
+      expect(image).to.be.instanceof(Image);
+      expect(image.src).to.equal('foo');
+      expect(image.width).to.equal(100);
+      expect(image.height).to.equal(200);
     });
 
     it('fails if image value is not an object', function() {

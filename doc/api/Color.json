@@ -111,7 +111,8 @@
       "navy": {"type": "Color", "const": true, "readonly": true},
       "blue": {"type": "Color", "const": true, "readonly": true},
       "teal": {"type": "Color", "const": true, "readonly": true},
-      "aqua": {"type": "Color", "const": true, "readonly": true}
+      "aqua": {"type": "Color", "const": true, "readonly": true},
+      "transparent": {"type": "Color", "const": true, "readonly": true}
     }
   }
 }

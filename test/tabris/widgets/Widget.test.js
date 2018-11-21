@@ -12,6 +12,8 @@ import ToggleButton from '../../../src/tabris/widgets/ToggleButton';
 import TextInput from '../../../src/tabris/widgets/TextInput';
 import {omit} from '../../../src/tabris/util';
 import LayoutData from '../../../src/tabris/LayoutData';
+import Color from '../../../src/tabris/Color';
+import Image from '../../../src/tabris/Image';
 import Constraint from '../../../src/tabris/Constraint';
 import {toXML} from '../../../src/tabris/Console';
 
@@ -110,11 +112,11 @@ describe('Widget', function() {
 
     });
 
-    it('translates backgroundImage to array', function() {
-      widget.set({backgroundImage: {src: 'bar', width: 23, height: 42}});
+    it('translates background to image shader', function() {
+      widget.set({background: {src: 'bar', width: 23, height: 42}});
 
       const call = client.calls({op: 'set'})[0];
-      expect(call.properties.backgroundImage).to.eql(['bar', 23, 42, null]);
+      expect(call.properties.background).to.eql({type: 'image', image: ['bar', 23, 42, null]});
     });
 
     it('prints warning when attempting to set bounds', function() {
@@ -1466,20 +1468,20 @@ describe('Widget', function() {
       client.resetCalls();
     });
 
-    it('translates background to string', function() {
-      stub(client, 'get').returns([170, 255, 0, 128]);
+    it('translates background color shader to Color', function() {
+      stub(client, 'get').returns({type: 'color', color: [170, 255, 0, 128]});
 
       const result = widget.background;
 
       expect(result.toString()).to.equal('rgba(170, 255, 0, 0.5)');
     });
 
-    it('translates background null to string', function() {
+    it('translates background null to Color', function() {
       stub(client, 'get').returns(null);
 
       const result = widget.background;
 
-      expect(result).to.equal('rgba(0, 0, 0, 0)');
+      expect(result).to.equal(Color.transparent);
     });
 
     it('translates bounds to object', function() {
@@ -1498,11 +1500,12 @@ describe('Widget', function() {
       expect(result).to.eql({left: 1, top: 2, width: 3, height: 4});
     });
 
-    it('translates backgroundImage to object', function() {
-      stub(client, 'get').returns(['foo', 23, 42]);
+    it('translates background image shader to Image', function() {
+      stub(client, 'get').returns({type: 'image', image: ['foo', 23, 42]});
 
-      const result = widget.backgroundImage;
+      const result = widget.background;
 
+      expect(result).to.be.instanceof(Image);
       expect(result).to.eql({src: 'foo', width: 23, height: 42, scale: 'auto'});
     });
 

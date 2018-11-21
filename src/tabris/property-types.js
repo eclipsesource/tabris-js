@@ -83,13 +83,14 @@ export const types = {
         };
       } else if (Color.isValidColorValue(value)) {
         return {type: 'color', color: Color.from(value).toArray()};
+      } else if (Image.isValidImageValue(value)) {
+        return {type: 'image', image: imageToArray(Image.from(value))};
       }
       throw new Error(value + ' must be a valid LinearGradientValue or ColorValue.');
     },
     decode(value) {
       if (!value) {
-        // NOTE: null is only returned for "background" where it means "no background"
-        return 'rgba(0, 0, 0, 0)';
+        return Color.transparent;
       }
       if (value.type === 'color') {
         return Color.from(value.color);
@@ -101,8 +102,8 @@ export const types = {
           ),
           direction: value.angle
         });
-      } else if (value instanceof Array) {
-        return Color.from(value);
+      } else if (value.type === 'image') {
+        return Image.from(imageFromArray(value.image));
       }
       return value;
     }
@@ -171,7 +172,7 @@ export const types = {
       if (!value) {
         return null;
       }
-      return imageFromArray(value);
+      return Image.from(imageFromArray(value));
     }
   },
 

@@ -45,7 +45,7 @@ describe('Page', function() {
   it('get returns default values', function() {
     expect(page.title).to.equal('');
     expect(page.image).to.be.null;
-    expect(page.background).to.equal('rgba(0, 0, 0, 0)');
+    expect(page.background.toString()).to.equal('rgba(0, 0, 0, 0)');
   });
 
   it('supports children', function() {

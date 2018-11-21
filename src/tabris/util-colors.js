@@ -75,5 +75,6 @@ export const NAMES = {
   navy: [0, 0, 128],
   blue: [0, 0, 255],
   teal: [0, 128, 128],
-  aqua: [0, 255, 255]
+  aqua: [0, 255, 255],
+  transparent: [0, 0, 0, 0]
 };

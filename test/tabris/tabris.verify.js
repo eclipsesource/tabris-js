@@ -182,6 +182,8 @@ describe('tabris', function() {
     expect(tabris.Layout).to.be.a('function');
     expect(tabris.ColumnLayout).to.be.a('function');
     expect(tabris.WidgetCollection).to.be.a('function');
+    expect(tabris.Percent).to.be.a('function');
+    expect(tabris.LinearGradient).to.be.a('function');
   });
 
   it('contains event methods', function() {

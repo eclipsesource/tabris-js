@@ -69,7 +69,11 @@ All color properties are now of the type "ColorValue". While these properties st
 
 ### Widget.background property
 
-Widget background setter now also accepts "ColorValue" and "LinearGradientValue" values and the getter will return instances of the "Color" and "LinearGradient" classes.
+Widget background setter now also accepts "ColorValue", "ImageValue", and "LinearGradientValue" values and the getter will return instances of the "Color", "Image" and "LinearGradient" classes.
+
+### Widget.backgroundImage property removed
+
+You can now set images directly on the `background` property.
 
 ### Font properties
 

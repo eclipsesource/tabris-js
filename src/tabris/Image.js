@@ -2,6 +2,19 @@ import {normalizePathUrl, checkNumber} from './util';
 
 export default class Image {
 
+  static isImageValue(value) {
+    return value == null || value === 'initial' || Image.isValidImageValue(value);
+  }
+
+  static isValidImageValue(value) {
+    try {
+      Image.from(value);
+      return true;
+    } catch(ex) {
+      return false;
+    }
+  }
+
   static from(value) {
     if (value instanceof Image) {
       return value;

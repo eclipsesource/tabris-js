@@ -212,9 +212,6 @@ NativeObject.defineProperties(Widget.prototype, {
     type: 'number',
     default: 0
   },
-  backgroundImage: {
-    type: 'ImageValue'
-  },
   bounds: {
     type: 'bounds',
     readonly: true

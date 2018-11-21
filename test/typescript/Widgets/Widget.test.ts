@@ -27,8 +27,7 @@ import {Widget,
  let widget: Widget = new Composite();
 
 // Properties
-let background: ColorValue | LinearGradientValue;
-let backgroundImage: ImageValue;
+let background: ColorValue | LinearGradientValue | ImageValue;
 let baseline: SiblingReferenceValue|'auto';
 let bottomMargin: ConstraintValue|'auto';
 let bounds: Bounds;
@@ -54,7 +53,6 @@ let data: object;
 let leftOffset: number = 0;
 let topOffset: number  = 0;
 background = widget.background;
-backgroundImage = widget.backgroundImage;
 baseline = widget.baseline;
 bottomMargin = widget.bottom;
 bounds = widget.bounds;
@@ -78,7 +76,6 @@ visible = widget.visible;
 width = widget.width;
 data = widget.data;
 widget.background = background;
-widget.backgroundImage = backgroundImage;
 widget.baseline = baseline;
 widget.bottom = bottomMargin;
 widget.centerX = centerX;
@@ -102,7 +99,6 @@ widget.visible = visible;
 widget.width = width;
 let properties: Properties<Widget> = {
   background,
-  backgroundImage,
   baseline,
   bottom: bottomMargin,
   centerX,

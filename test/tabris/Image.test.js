@@ -140,4 +140,42 @@ describe('Image', function() {
 
   });
 
+  describe('isImageValue', function() {
+
+    it('returns true for image values including null', function() {
+      expect(Image.isImageValue(null)).to.be.true;
+      expect(Image.isImageValue('foo')).to.be.true;
+      expect(Image.isImageValue({src: 'foo'})).to.be.true;
+      expect(Image.isImageValue(Image.from('foo'))).to.be.true;
+    });
+
+    it('returns false for non-image values', function() {
+      expect(Image.isImageValue([])).to.be.false;
+      expect(Image.isImageValue({})).to.be.false;
+      expect(Image.isImageValue(12)).to.be.false;
+      expect(Image.isImageValue({scale: 2})).to.be.false;
+      expect(Image.isImageValue({width: 2, height: 2})).to.be.false;
+    });
+
+  });
+
+  describe('isValidImageValue', function() {
+
+    it('returns true for image values', function() {
+      expect(Image.isValidImageValue('foo')).to.be.true;
+      expect(Image.isValidImageValue({src: 'foo'})).to.be.true;
+      expect(Image.isValidImageValue(Image.from('foo'))).to.be.true;
+    });
+
+    it('returns false for non-image values including null', function() {
+      expect(Image.isValidImageValue(null)).to.be.false;
+      expect(Image.isValidImageValue([])).to.be.false;
+      expect(Image.isValidImageValue({})).to.be.false;
+      expect(Image.isValidImageValue(12)).to.be.false;
+      expect(Image.isValidImageValue({scale: 2})).to.be.false;
+      expect(Image.isValidImageValue({width: 2, height: 2})).to.be.false;
+    });
+
+  });
+
 });
