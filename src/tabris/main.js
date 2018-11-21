@@ -39,6 +39,7 @@ import Listeners from './Listeners.js';
 import Layout, {ConstraintLayout} from './Layout.js';
 import LayoutData from './LayoutData.js';
 import Page from './widgets/Page';
+import Percent from './Percent';
 import Picker from './widgets/Picker';
 import Pkcs5 from './Pkcs5';
 import ProgressEvent from './ProgressEvent';
@@ -118,6 +119,7 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   NavigationBar,
   Popover,
   Page,
+  Percent,
   Picker,
   Printer,
   ProgressBar,
