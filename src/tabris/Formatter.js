@@ -23,6 +23,7 @@
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 import {isPending, isRejected, getPromiseResult} from './Promise';
+import {formatError} from './util-stacktrace';
 
 const numbersOnlyRE = /^\d+$/;
 
@@ -30,7 +31,6 @@ const objectHasOwnProperty = Object.prototype.hasOwnProperty;
 const propertyIsEnumerable = Object.prototype.propertyIsEnumerable;
 const regExpToString = RegExp.prototype.toString;
 const dateToISOString = Date.prototype.toISOString;
-const errorToString = Error.prototype.toString;
 
 let CIRCULAR_ERROR_MESSAGE;
 
@@ -302,7 +302,7 @@ function formatValue(ctx, value, recurseTimes) {
 
   // Make error with message first say the error
   if (isError(value)) {
-    base = ` ${formatError(value)}`;
+    return formatError(value);
   }
 
   // Make boxed primitive Strings look like such
@@ -382,16 +382,6 @@ function formatPrimitive(ctx, value) {
   if (type === 'symbol') {
     return value.toString();
   }
-}
-
-function formatError(value) {
-  if (!value.stack) {
-    return `[${errorToString.call(value)}]`;
-  }
-  if (tabris.device.platform === 'iOS') {
-    return value.constructor.name + ': ' + value.message + '\n  ' + value.stack.split('\n').join('\n  ');
-  }
-  return value.stack;
 }
 
 function formatObject(ctx, value, recurseTimes, visibleKeys, keys) {

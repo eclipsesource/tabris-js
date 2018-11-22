@@ -62,6 +62,7 @@ import TextInput from './widgets/TextInput';
 import TextView from './widgets/TextView';
 import TimeDialog from './TimeDialog';
 import ToggleButton from './widgets/ToggleButton';
+import {patchError} from './util-stacktrace';
 import Video from './widgets/Video';
 import WebView from './widgets/WebView';
 import WebSocket from './WebSocket';
@@ -169,6 +170,7 @@ Object.assign(window, {
 });
 
 tabris.on('start', (options) => {
+  patchError(Error);
   tabris.app = createApp();
   checkVersion(tabris.version, tabris.app._nativeGet('tabrisJsVersion'));
   if (!options || !options.headless) {

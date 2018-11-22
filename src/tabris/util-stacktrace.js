@@ -9,15 +9,43 @@ const urlBaseRegEx = /^[a-z]+:\/\/[^/]+\//;
 
 export function getStackTrace(error) {
   try {
-    let stack = [error.stack].concat(tabris._stackTraceStack).join('\n').split('\n');
-    stack = stack.filter(filterStackLine);
-    stack = stack.map(normalizeStackLine);
-    stack = stack.filter(line => !!line);
-    return stack.join('\n');
+    return getStackArray(error).join('\n');
   } catch (ex) {
-    warn(`Could not process stack trace (${ex.message}), delivering original.`);
+    const minimalError = (ex && ex.constructor && ex.message) ? ex.constructor.name + ': ' + ex.message : '';
+    warn(`Could not process stack trace (${minimalError || ex}), printing original.`);
     return error.stack;
   }
+}
+
+export function patchError(fn) {
+  fn.prototype.toString = function() {
+    return formatError(this);
+  };
+}
+
+export function formatError(error) {
+  let stack;
+  try {
+    if (!(error instanceof Object)) {
+      return '' + error;
+    }
+    if (!(error instanceof Error)) {
+      return error.constructor.name + ': ' + error.toString();
+    } else {
+      stack = getStackArray(error).map(line => '  at ' + line).join('\n');
+    }
+  } catch (ex) {
+    stack = error.stack;
+  }
+  return error.constructor.name + ': ' + error.message + '\n' + stack;
+}
+
+export function getStackArray(error) {
+  const stack = [error.stack].concat(tabris._stackTraceStack).join('\n').split('\n');
+  const formattedStack = stack.filter(filterStackLine)
+    .map(normalizeStackLine)
+    .filter(line => !!line);
+  return formattedStack.length ? formattedStack : stack;
 }
 
 function filterStackLine(line) {

@@ -1,12 +1,15 @@
-import {expect} from '../test';
+import {expect, mockTabris} from '../test';
 import PromisePolyfill from '../../src/tabris/Promise';
 import {format} from '../../src/tabris/Formatter';
+import ClientStub from './ClientStub';
 
 describe('format', function() {
 
-  let originalPromise;
+  let originalPromise, client;
 
   before(function() {
+    client = new ClientStub();
+    mockTabris(client);
     originalPromise = global.Promise;
     global.Promise = PromisePolyfill;
   });
@@ -109,9 +112,15 @@ describe('format', function() {
     expect(result).to.equal('Invalid Date');
   });
 
-  it('formats errors', function() {
-    const result = format(new TypeError('message'));
-    expect(result).to.match(/TypeError: message\n\s+at/);
+  it('uses util-stacktrace formatter', function() {
+    tabris.device.platform = 'Android';
+    const error = new TypeError('message');
+    error.stack = 'Error\n  at doSomethingElse (./dist/console.js:23:17)\n'
+      + 'at Tabris._notify (./node_modules/tabris/tabris.min.js:1:74931)';
+
+    const result = format(error);
+
+    expect(result).to.equal('TypeError: message\n  at doSomethingElse (./dist/console.js:23:17)');
   });
 
   it('formats typed arrays', function() {
