@@ -1,7 +1,7 @@
 import NativeObject from '../NativeObject';
 import Composite from './Composite';
 import Tab from './Tab';
-import {warn} from '../Console';
+import {hint} from '../Console';
 
 export default class TabFolder extends Composite {
 
@@ -85,7 +85,7 @@ NativeObject.defineProperties(TabFolder.prototype, {
   selection: {
     set(name, tab) {
       if (this._children().indexOf(tab) < 0) {
-        warn('Can not set TabFolder selection to ' + tab);
+        hint(this + ': Can not set selection to ' + tab);
         return;
       }
       if (this.selection === tab) {

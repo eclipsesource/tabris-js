@@ -1,7 +1,7 @@
 import NativeObject from './NativeObject';
 import Event, {addDOMEventTargetMethods, defineEventHandlerProperties} from './Event';
 import {omit} from './util';
-import {warn} from './Console';
+import {hint} from './Console';
 
 const CONNECTING = 0;
 const OPEN = 1;
@@ -86,7 +86,7 @@ export default class WebSocket {
   }
 
   set bufferedAmount(bufferedAmount) {
-    warn('Can not set read-only property "bufferedAmount"');
+    hint('WebSocket: Can not set read-only property "bufferedAmount"');
   }
 
   get bufferedAmount() {

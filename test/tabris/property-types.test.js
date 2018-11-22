@@ -321,7 +321,7 @@ describe('property-types', function() {
 
       encode({src: 'foo.png', width: 23, scale: 2});
 
-      expect(console.warn).to.have.been.calledWith(
+      expect(console.warn).to.have.been.calledWithMatch(
         'Image "scale" ignored when "width" and/or "height" are set to a number'
       );
     });
@@ -331,7 +331,7 @@ describe('property-types', function() {
 
       encode({src: 'foo.png', height: 23, scale: 2});
 
-      expect(console.warn).to.have.been.calledWith(
+      expect(console.warn).to.have.been.calledWithMatch(
         'Image "scale" ignored when "width" and/or "height" are set to a number'
       );
     });

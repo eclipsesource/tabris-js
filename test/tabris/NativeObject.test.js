@@ -448,6 +448,11 @@ describe('NativeObject', function() {
         expect(object[toXML]()).to.be.equal(`<TestType cid='${object.cid}'/>`);
       });
 
+      it('works with disposed element', function() {
+        object.dispose();
+        expect(object[toXML]()).to.be.equal(`<TestType cid='${object.cid}' disposed='true'/>`);
+      });
+
     });
 
   });

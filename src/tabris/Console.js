@@ -1,5 +1,5 @@
 import {format} from './Formatter';
-import {getStackTrace} from './util-stacktrace';
+import {getStackTrace, getCurrentLine} from './util-stacktrace';
 
 export const toXML = Symbol();
 
@@ -116,3 +116,7 @@ export const log = function(...args) { defaultConsole.log(...args); };
 export const warn = function(...args) { defaultConsole.warn(...args); };
 export const error = function(...args) { defaultConsole.error(...args); };
 
+export const hint = function(message) {
+  const line = getCurrentLine(new Error());
+  defaultConsole.warn(message + (line ? `\nSource: ${line}` : ''));
+};

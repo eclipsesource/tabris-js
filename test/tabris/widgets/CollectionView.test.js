@@ -531,7 +531,7 @@ describe('CollectionView', function() {
 
         it('a warning is logged', function() {
           const warning = 'Cannot dispose of collection view cell';
-          expect(console.warn).to.have.been.calledWith(warning);
+          expect(console.warn).to.have.been.calledWithMatch(warning);
         });
 
       });
@@ -549,7 +549,7 @@ describe('CollectionView', function() {
 
         it('a warning is logged', function() {
           const warning = 'Cannot re-parent collection view cell';
-          expect(console.warn).to.have.been.calledWith(warning);
+          expect(console.warn).to.have.been.calledWithMatch(warning);
         });
 
       });

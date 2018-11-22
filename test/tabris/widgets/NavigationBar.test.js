@@ -72,6 +72,6 @@ describe('NavigationBar', function() {
     navigationBar.height = 64;
 
     expect(client.calls({op: 'set', id: navigationBar.cid}).length).to.equal(0);
-    expect(console.warn).to.have.been.calledWith('Can not set read-only property "height"');
+    expect(console.warn).to.have.been.calledWithMatch('Can not set read-only property "height"');
   });
 });

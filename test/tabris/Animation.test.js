@@ -136,7 +136,7 @@ describe('Animation', function() {
     it('warns against invalid options', function() {
       widget.animate({}, {foo: 'bar'});
 
-      expect(console.warn).to.have.been.calledWith('TestWidget: Ignored invalid animation option "foo"');
+      expect(console.warn).to.have.been.calledWithMatch('TestWidget: Ignored invalid animation option "foo"');
     });
 
     it('does not warn for valid options', function() {
@@ -148,7 +148,7 @@ describe('Animation', function() {
     it('warns against invalid properties', function() {
       widget.animate({background: '#00ff00', opacity: 0}, {});
 
-      expect(console.warn).to.have.been.calledWith('TestWidget: Ignored invalid animation property "background"');
+      expect(console.warn).to.have.been.calledWithMatch('TestWidget: Ignored invalid animation property "background"');
       expect(createOp().properties).to.eql({opacity: 0});
     });
 
@@ -156,7 +156,7 @@ describe('Animation', function() {
       widget.animate({opacity: 0, transform: {foo: 'bar'}}, {});
 
       expect(console.warn)
-        .to.have.been.calledWith('TestWidget: Ignored invalid animation property value for "transform"');
+        .to.have.been.calledWithMatch('TestWidget: Ignored invalid animation property value for "transform"');
       expect(createOp().properties).to.eql({opacity: 0});
     });
 

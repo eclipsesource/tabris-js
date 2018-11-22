@@ -1,4 +1,5 @@
 import {normalizePathUrl, checkNumber} from './util';
+import {hint} from './Console';
 
 export default class Image {
 
@@ -21,7 +22,7 @@ export default class Image {
     }
     if (value instanceof Object) {
       if (hasInconsistentDimensions(value)) {
-        console.warn('Image "scale" ignored when "width" and/or "height" are set to a number');
+        hint('Image "scale" ignored when "width" and/or "height" are set to a number');
         return new Image(Object.assign({}, value, {scale: 'auto'}));
       }
       return new Image(value);

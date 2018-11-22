@@ -165,8 +165,8 @@ describe('CanvasContext', function() {
         ctx.lineWidth = -1;
 
         expect(ctx.lineWidth).to.equal(3);
-        expect(console.warn).to.have.been.calledWith('Unsupported value for lineWidth: 0');
-        expect(console.warn).to.have.been.calledWith('Unsupported value for lineWidth: -1');
+        expect(console.warn).to.have.been.calledWithMatch('Unsupported value for lineWidth: 0');
+        expect(console.warn).to.have.been.calledWithMatch('Unsupported value for lineWidth: -1');
       });
 
     });
@@ -198,7 +198,7 @@ describe('CanvasContext', function() {
         ctx.lineCap = 'foo';
 
         expect(ctx.lineCap).to.equal('round');
-        expect(console.warn).to.have.been.calledWith('Unsupported value for lineCap: foo');
+        expect(console.warn).to.have.been.calledWithMatch('Unsupported value for lineCap: foo');
       });
 
     });
@@ -229,7 +229,7 @@ describe('CanvasContext', function() {
         ctx.lineJoin = 'foo';
 
         expect(ctx.lineJoin).to.equal('round');
-        expect(console.warn).to.have.been.calledWith('Unsupported value for lineJoin: foo');
+        expect(console.warn).to.have.been.calledWithMatch('Unsupported value for lineJoin: foo');
       });
 
     });
@@ -260,7 +260,7 @@ describe('CanvasContext', function() {
         ctx.fillStyle = 'no-such-color';
 
         expect(ctx.fillStyle).to.equal('rgba(255, 0, 0, 1)');
-        expect(console.warn).to.have.been.calledWith('Unsupported value for fillStyle: no-such-color');
+        expect(console.warn).to.have.been.calledWithMatch('Unsupported value for fillStyle: no-such-color');
       });
 
     });
@@ -291,7 +291,7 @@ describe('CanvasContext', function() {
         ctx.strokeStyle = 'no-such-color';
 
         expect(ctx.strokeStyle).to.equal('rgba(255, 0, 0, 1)');
-        expect(console.warn).to.have.been.calledWith('Unsupported value for strokeStyle: no-such-color');
+        expect(console.warn).to.have.been.calledWithMatch('Unsupported value for strokeStyle: no-such-color');
       });
 
     });
@@ -322,7 +322,7 @@ describe('CanvasContext', function() {
         ctx.textAlign = 'foo';
 
         expect(ctx.textAlign).to.equal('center');
-        expect(console.warn).to.have.been.calledWith('Unsupported value for textAlign: foo');
+        expect(console.warn).to.have.been.calledWithMatch('Unsupported value for textAlign: foo');
       });
 
     });
@@ -353,7 +353,7 @@ describe('CanvasContext', function() {
         ctx.textBaseline = 'foo';
 
         expect(ctx.textBaseline).to.equal('middle');
-        expect(console.warn).to.have.been.calledWith('Unsupported value for textBaseline: foo');
+        expect(console.warn).to.have.been.calledWithMatch('Unsupported value for textBaseline: foo');
       });
 
     });
@@ -388,7 +388,7 @@ describe('CanvasContext', function() {
         ctx.font = 23;
 
         expect(ctx.font).to.equal('14px Helvetica');
-        expect(console.warn).to.have.been.calledWith('Unsupported value for font: 23');
+        expect(console.warn).to.have.been.calledWithMatch('Unsupported value for font: 23');
       });
 
     });

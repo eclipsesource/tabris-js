@@ -2,7 +2,7 @@ import {expect, stub, restore, mockTabris} from '../test';
 import ClientStub from './ClientStub';
 import {addWindowTimerMethods}  from '../../src/tabris/WindowTimers';
 import {create as createApp} from '../../src/tabris/App';
-import {getStackTrace, patchError, formatError} from '../../src/tabris/util-stacktrace';
+import {getStackTrace, patchError, formatError, getCurrentLine} from '../../src/tabris/util-stacktrace';
 import PromisePolyfill from '../../src/tabris/Promise';
 
 describe('util-stacktrace', function() {
@@ -369,6 +369,17 @@ showActionSheet (./dist/actionsheet.js:15:25)`
 
         it('returns object stringified', function() {
           expect(formatError({toString() { return 'foo'; }})).to.equal('Object: foo');
+        });
+
+      });
+
+      describe('getCurrentLine', function() {
+
+        it('gives first line of processed stack trace', function() {
+          stack = stacks[platform].production;
+          const error = new CustomError('Foo');
+
+          expect(getCurrentLine(error)).to.equal('doSomethingElse (./dist/console.js:23:17)');
         });
 
       });

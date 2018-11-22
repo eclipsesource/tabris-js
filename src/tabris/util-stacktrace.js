@@ -40,12 +40,23 @@ export function formatError(error) {
   return error.constructor.name + ': ' + error.message + '\n' + stack;
 }
 
-export function getStackArray(error) {
+export function getCurrentLine(error) {
+  try {
+    return getStackArray(error)[0];
+  } catch (ex) {
+    return '';
+  }
+}
+
+function getStackArray(error) {
   const stack = [error.stack].concat(tabris._stackTraceStack).join('\n').split('\n');
   const formattedStack = stack.filter(filterStackLine)
     .map(normalizeStackLine)
     .filter(line => !!line);
-  return formattedStack.length ? formattedStack : stack;
+  if (!formattedStack.length) {
+    throw new Error('Empty stacktrace');
+  }
+  return formattedStack;
 }
 
 function filterStackLine(line) {

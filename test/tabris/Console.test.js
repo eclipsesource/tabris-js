@@ -9,13 +9,46 @@ const realConsole = console;
 
 describe('Console', function() {
 
-  let client;
+  let client, stack;
+
+  const OrgError = Error;
+
+  class CustomError extends Error {
+
+    constructor(message) {
+      super(message);
+      this.orgStack = this.stack;
+      this.stack = stack;
+    }
+  }
+
+  const stacks = {
+    Android:
+`Error
+  at doSomethingElse (./dist/console.js:23:17)
+  at doSomething (./dist/console.js:20:5)
+  at Button.start (./dist/console.js:17:17)
+  at ./node_modules/tabris/tabris.min.js:1:27243
+  at Button.trigger (./node_modules/tabris/tabris.min.js:1:27407)
+  at Button.$trigger (./node_modules/tabris/tabris.min.js:1:48355)
+  at Tabris._notify (./node_modules/tabris/tabris.min.js:1:74931)`,
+    iOS:
+`doSomethingElse@http://192.168.6.77:8080/dist/console.js:23:17
+doSomething@http://192.168.6.77:8080/dist/console.js:20:5
+start@http://192.168.6.77:8080/dist/console.js:17:17
+http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:27243
+trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:27407
+$trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:48355
+_notify@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:74931
+_notify@[native code]`
+  };
 
   afterEach(restore);
 
   beforeEach(function() {
     client = new ClientStub();
     mockTabris(client);
+    tabris.app = createApp();
   });
 
   describe('default', function() {
@@ -208,42 +241,8 @@ describe('Console', function() {
 
     describe('trace', function() {
 
-      let stack;
-      const stacks = {
-        Android:
-`Error
-  at doSomethingElse (./dist/console.js:23:17)
-  at doSomething (./dist/console.js:20:5)
-  at Button.start (./dist/console.js:17:17)
-  at ./node_modules/tabris/tabris.min.js:1:27243
-  at Button.trigger (./node_modules/tabris/tabris.min.js:1:27407)
-  at Button.$trigger (./node_modules/tabris/tabris.min.js:1:48355)
-  at Tabris._notify (./node_modules/tabris/tabris.min.js:1:74931)`,
-        iOS:
-`doSomethingElse@http://192.168.6.77:8080/dist/console.js:23:17
-doSomething@http://192.168.6.77:8080/dist/console.js:20:5
-start@http://192.168.6.77:8080/dist/console.js:17:17
-http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:27243
-trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:27407
-$trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:48355
-_notify@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:74931
-_notify@[native code]`
-      };
-
-      class CustomError extends Error {
-
-        constructor(message) {
-          super(message);
-          this.orgStack = this.stack;
-          this.stack = stack;
-        }
-      }
-
-      const OrgError = Error;
-
       beforeEach(function() {
         global.Error = CustomError;
-        tabris.app = createApp();
       });
 
       afterEach(function() {
@@ -304,6 +303,45 @@ _notify@[native code]`
       });
 
     }));
+
+  });
+
+  describe('hint', function() {
+
+    beforeEach(function() {
+      global.Error = CustomError;
+      spy(realConsole, 'warn');
+    });
+
+    afterEach(function() {
+      global.Error = OrgError;
+    });
+
+    ['Android', 'iOS'].forEach(function(platform) {
+
+      it(platform + ' includes first line of simplified stack trace', function() {
+        tabris.device.platform = platform;
+        stack = stacks[platform];
+
+        defaultConsole.hint('Foo');
+
+        expect(realConsole.warn).to.have.been.calledWith(
+          'Foo\nSource: doSomethingElse (./dist/console.js:23:17)'
+        );
+
+      });
+
+      it(platform + ' includes no stack trace if simplification fails', function() {
+        tabris.device.platform = platform;
+        stack = stacks[platform].split('\n').slice(5).join('\n');
+
+        defaultConsole.hint('Foo');
+
+        expect(realConsole.warn).to.have.been.calledWith('Foo');
+
+      });
+
+    });
 
   });
 

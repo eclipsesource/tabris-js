@@ -1,7 +1,7 @@
 import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 import Composite from './Composite';
-import {warn} from '../Console';
+import {hint} from '../Console';
 
 export default class CollectionView extends Composite {
 
@@ -112,7 +112,7 @@ export default class CollectionView extends Composite {
       const height = resolveProperty(this, 'cellHeight', event.index, type);
       return {
         type: encodeCellType(this, type),
-        height: encodeCellHeight(height)
+        height: encodeCellHeight(this, height)
       };
     } else if (name === 'createCell') {
       const item = this.$createCell(event.type);
@@ -136,8 +136,8 @@ export default class CollectionView extends Composite {
     }
     cell._parent = this;
     this._addChild(cell);
-    cell._setParent = () => warn('Cannot re-parent collection view cell');
-    cell.dispose = () => warn('Cannot dispose of collection view cell');
+    cell._setParent = () => hint(this + ': Cannot re-parent collection view cell');
+    cell.dispose = () => hint(this + ': Cannot dispose of collection view cell');
     return cell;
   }
 
@@ -256,14 +256,14 @@ function decodeCellType(ctx, type) {
   return cellTypes[type] || null;
 }
 
-function encodeCellHeight(value) {
+function encodeCellHeight(ctx, value) {
   if (value === 'auto') {
     return -1;
   }
   if (isNumber(value)) {
     return Math.max(-1, value);
   }
-  warn('Invalid cell height: ' + value);
+  hint(ctx + ': Invalid cell height: ' + value);
 }
 
 const triggerChangeFirstVisibleIndex = createDelegate('firstVisibleIndex');

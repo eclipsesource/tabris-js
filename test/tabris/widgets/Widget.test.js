@@ -125,7 +125,7 @@ describe('Widget', function() {
       widget.bounds = {left: 1, top: 2, width: 3, height: 4};
 
       expect(client.calls({op: 'set'}).length).to.equal(0);
-      expect(console.warn).to.have.been.calledWith('Can not set read-only property "bounds"');
+      expect(console.warn).to.have.been.calledWithMatch('Can not set read-only property "bounds"');
     });
 
     it('sets elevation to value', function() {
@@ -301,6 +301,21 @@ describe('Widget', function() {
         .to.equal(`TestWidget[cid="${widget.cid}"].foo.bar`);
       expect((widget = new TestWidget({id: 'foo', class: 'bar'})).toString())
         .to.equal(`TestWidget[cid="${widget.cid}"]#foo.bar`);
+    });
+
+    it('toString works on disposed widget', function() {
+      widget.dispose();
+      const disposed = prop => {
+        const result = new TestWidget(prop);
+        result.dispose();
+        return result;
+      };
+      expect(widget.toString()).to.equal(`TestWidget[cid="${widget.cid}"] (disposed)`);
+      expect((widget = disposed({id: 'foo'})).toString()).to.equal(`TestWidget[cid="${widget.cid}"]#foo (disposed)`);
+      expect((widget = disposed({class: 'foo bar'})).toString())
+        .to.equal(`TestWidget[cid="${widget.cid}"].foo.bar (disposed)`);
+      expect((widget = disposed({id: 'foo', class: 'bar'})).toString())
+        .to.equal(`TestWidget[cid="${widget.cid}"]#foo.bar (disposed)`);
     });
 
     describe('dispose', function() {
@@ -1555,7 +1570,7 @@ describe('Widget', function() {
       parent.layout = testLayout;
 
       expect(parent.layout).to.equal(defaultLayout);
-      expect(console.warn).to.have.been.calledWith('Can not set read-only property "layout"');
+      expect(console.warn).to.have.been.calledWithMatch('Can not set read-only property "layout"');
     });
 
     it('calls add on custom initial layout only', function() {

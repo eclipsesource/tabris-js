@@ -276,7 +276,7 @@ describe('TabFolder', function() {
 
       const calls = client.calls({op: 'set', id: tabFolder.cid});
       expect(calls.length).to.equal(0);
-      expect(console.warn).to.have.been.calledWith('Can not set TabFolder selection to null');
+      expect(console.warn).to.have.been.calledWithMatch('Can not set selection to null');
     });
 
     it('Ignores setting disposed tab with warning', function() {
@@ -287,7 +287,9 @@ describe('TabFolder', function() {
 
       const calls = client.calls({op: 'set', id: tabFolder.cid});
       expect(calls.length).to.equal(0);
-      expect(console.warn).to.have.been.calledWithMatch(/Can not set TabFolder selection to Tab\[cid=".*"\]/);
+      expect(console.warn).to.have.been.calledWithMatch(
+        /TabFolder\[cid=".*"\]: Can not set selection to Tab\[cid=".*"\]/
+      );
     });
 
     it('Ignores setting non tab', function() {
@@ -297,7 +299,7 @@ describe('TabFolder', function() {
 
       const calls = client.calls({op: 'set', id: tabFolder.cid});
       expect(calls.length).to.equal(0);
-      expect(console.warn).to.have.been.calledWith('Can not set TabFolder selection to foo');
+      expect(console.warn).to.have.been.calledWithMatch('Can not set selection to foo');
     });
 
     it('Get returns Tab', function() {

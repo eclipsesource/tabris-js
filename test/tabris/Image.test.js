@@ -132,7 +132,7 @@ describe('Image', function() {
 
       const image = Image.from({src: 'foo', width: 5, scale: 4});
 
-      expect(console.warn).to.have.been.calledWith(
+      expect(console.warn).to.have.been.calledWithMatch(
         'Image "scale" ignored when "width" and/or "height" are set to a number'
       );
       expect(image).to.deep.equal({src: 'foo', width: 5, height: 'auto', scale: 'auto'});

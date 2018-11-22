@@ -31,7 +31,7 @@ describe('util-images', function() {
 
       imageFromArray(['foo', 23, 42, 3.14]);
 
-      expect(console.warn).to.have.been.calledWith(
+      expect(console.warn).to.have.been.calledWithMatch(
         'Image "scale" ignored when "width" and/or "height" are set to a number'
       );
     });
