@@ -149,7 +149,12 @@ export const types = {
         return {left: value || 0, right: value || 0, top: value || 0, bottom: value || 0};
       }
       if (typeof value === 'object') {
-        return value;
+        return {
+          left: typeof value.left === 'number' ? value.left : 0,
+          top: typeof value.top === 'number' ? value.top : 0,
+          right: typeof value.right === 'number' ? value.right : 0,
+          bottom: typeof value.bottom === 'number' ? value.bottom : 0
+        };
       }
       throw new Error('Invalid type: ' + value);
     }

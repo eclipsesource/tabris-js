@@ -79,6 +79,11 @@ describe('Layout', function() {
       expect(layout.padding).to.deep.equal({left: 12, top: 12, right: 12, bottom: 12});
     });
 
+    it('can be set by constructor partially', function() {
+      layout = new ConstraintLayout({padding: {left: 12, top: 13}});
+      expect(layout.padding).to.deep.equal({left: 12, top: 13, right: 0, bottom: 0});
+    });
+
   });
 
   describe('render', function() {
