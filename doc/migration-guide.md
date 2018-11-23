@@ -75,6 +75,18 @@ Widget background setter now also accepts "ColorValue", "ImageValue", and "Linea
 
 You can now set images directly on the `background` property.
 
+### TabFolder.textColor property replaced with more flexible properties
+
+The `TabFolder.textColor` property has been replaced with a set of new properties which provide more 
+control over the appearance of the TabFolder tabs:
+
+- `tabTintColor`
+- `selectedTabTintColor`
+- `tabBarBackground`
+- `selectedTabIndicatorTintColor`
+
+In addition the `TabFolder` gained the property `tabBarElevation` which is applicable on Android.
+
 ### Font properties
 
 All font properties are now of the type "FontValue". While these properties still accept the same string values as in 2.x, they will return a "Font" class instance instead of a string. The exception is CanvasContext, where font properties still return a string for W3C compatibility.
