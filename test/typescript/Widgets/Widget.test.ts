@@ -1,4 +1,4 @@
-import {Widget,
+import { Widget,
   ColorValue,
   ConstraintValue,
   Bounds,
@@ -24,10 +24,13 @@ import {Widget,
   LinearGradientValue
  } from 'tabris';
 
- let widget: Widget = new Composite();
+const widget: Widget = new Composite();
 
 // Properties
 let background: ColorValue | LinearGradientValue | ImageValue;
+let backgroundColor: ColorValue = '#fff';
+let backgroundImage: ImageValue = {src: 'foo'};
+let backgroundGradient: LinearGradientValue = 'linergradient';
 let baseline: SiblingReferenceValue|'auto';
 let bottomMargin: ConstraintValue|'auto';
 let bounds: Bounds;
@@ -50,9 +53,12 @@ let transform: Transformation;
 let visible: boolean;
 let width: Dimension|'auto';
 let data: object;
-let leftOffset: number = 0;
-let topOffset: number  = 0;
+const leftOffset: number = 0;
+const topOffset: number  = 0;
 background = widget.background;
+backgroundColor = widget.background as ColorValue;
+backgroundImage = widget.background as ImageValue;
+backgroundGradient = widget.background as LinearGradientValue;
 baseline = widget.baseline;
 bottomMargin = widget.bottom;
 bounds = widget.bounds;
@@ -76,6 +82,9 @@ visible = widget.visible;
 width = widget.width;
 data = widget.data;
 widget.background = background;
+widget.background = backgroundImage;
+widget.background = backgroundColor;
+widget.background = backgroundGradient;
 widget.baseline = baseline;
 widget.bottom = bottomMargin;
 widget.centerX = centerX;
@@ -97,7 +106,7 @@ widget.top = topMargin;
 widget.transform = transform;
 widget.visible = visible;
 widget.width = width;
-let properties: Properties<Widget> = {
+const properties: Properties<Widget> = {
   background,
   baseline,
   bottom: bottomMargin,
@@ -125,11 +134,11 @@ widget.set(properties);
 class Foo extends Composite {}
 let fooCollection: WidgetCollection<Widget>;
 let widgetCollection: WidgetCollection<Widget>;
-let animationProperties: {transform?: Transformation, opacity?: number} = {};
-let parent: Composite = new Composite();
-let options: AnimationOptions = {};
-let selector: Selector = '';
-let otherWidget: Widget = new Composite();
+const animationProperties: {transform?: Transformation, opacity?: number} = {};
+const parent: Composite = new Composite();
+const options: AnimationOptions = {};
+const selector: Selector = '';
+const otherWidget: Widget = new Composite();
 let promise: Promise<Widget>;
 let thisReturnValue: Widget;
 let voidReturnValue: void;
@@ -147,47 +156,47 @@ widgetCollection = widget.siblings();
 widgetCollection = widget.siblings(selector);
 fooCollection = widget.siblings(Foo);
 // Events
-let target: Widget = widget;
-let timeStamp: number = 0;
-let type: string = 'foo';
-let state: 'start'|'change'|'end'|'cancel' = 'start';
-let touches: {x: number, y: number}[] = [];
-let absTouches: {x: number, y: number, absoluteX: number, absoluteY: number}[] = [];
-let translationX: number = 0;
-let translationY: number = 0;
-let velocityX: number = 0;
-let velocityY: number = 0;
-let disposeEvent: EventObject<Widget> = {target, timeStamp, type};
-let resizeEvent: WidgetResizeEvent = {target, timeStamp, type, height: 0, left: leftOffset, top: topOffset, width: 0};
-let swipeDownEvent: WidgetSwipeEvent = {target, timeStamp, type, touches};
-let swipeLeftEvent: WidgetSwipeEvent = {target, timeStamp, type, touches};
-let swipeRightEvent: WidgetSwipeEvent = {target, timeStamp, type, touches};
-let swipeUpEvent: WidgetSwipeEvent = {target, timeStamp, type, touches};
-let touchCancelEvent: WidgetTouchEvent = {target, timeStamp, type, touches: absTouches};
-let touchEndEvent: WidgetTouchEvent = {target, timeStamp, type, touches: absTouches};
-let touchMoveEvent: WidgetTouchEvent = {target, timeStamp, type, touches: absTouches};
-let touchStartEvent: WidgetTouchEvent = {target, timeStamp, type, touches: absTouches};
-let tapEvent: WidgetTapEvent = {target, timeStamp, type, touches};
-let longPressEvent: WidgetLongPressEvent = {target, timeStamp, type, state, touches};
-let panEvent: WidgetPanEvent = {
+const target: Widget = widget;
+const timeStamp: number = 0;
+const type: string = 'foo';
+const state: 'start'|'change'|'end'|'cancel' = 'start';
+const touches: Array<{x: number, y: number}> = [];
+const absTouches: Array<{x: number, y: number, absoluteX: number, absoluteY: number}> = [];
+const translationX: number = 0;
+const translationY: number = 0;
+const velocityX: number = 0;
+const velocityY: number = 0;
+const disposeEvent: EventObject<Widget> = {target, timeStamp, type};
+const resizeEvent: WidgetResizeEvent = {target, timeStamp, type, height: 0, left: leftOffset, top: topOffset, width: 0};
+const swipeDownEvent: WidgetSwipeEvent = {target, timeStamp, type, touches};
+const swipeLeftEvent: WidgetSwipeEvent = {target, timeStamp, type, touches};
+const swipeRightEvent: WidgetSwipeEvent = {target, timeStamp, type, touches};
+const swipeUpEvent: WidgetSwipeEvent = {target, timeStamp, type, touches};
+const touchCancelEvent: WidgetTouchEvent = {target, timeStamp, type, touches: absTouches};
+const touchEndEvent: WidgetTouchEvent = {target, timeStamp, type, touches: absTouches};
+const touchMoveEvent: WidgetTouchEvent = {target, timeStamp, type, touches: absTouches};
+const touchStartEvent: WidgetTouchEvent = {target, timeStamp, type, touches: absTouches};
+const tapEvent: WidgetTapEvent = {target, timeStamp, type, touches};
+const longPressEvent: WidgetLongPressEvent = {target, timeStamp, type, state, touches};
+const panEvent: WidgetPanEvent = {
   target, timeStamp, type, state, touches, translationX, translationY, velocityX, velocityY
 };
-let panDownEvent: WidgetPanEvent = {
+const panDownEvent: WidgetPanEvent = {
   target, timeStamp, type, state, touches, translationX, translationY, velocityX, velocityY
 };
-let panHorizontalEvent: WidgetPanEvent = {
+const panHorizontalEvent: WidgetPanEvent = {
   target, timeStamp, type, state, touches, translationX, translationY, velocityX, velocityY
 };
-let panLeftEvent: WidgetPanEvent = {
+const panLeftEvent: WidgetPanEvent = {
   target, timeStamp, type, state, touches, translationX, translationY, velocityX, velocityY
 };
-let panRightEvent: WidgetPanEvent = {
+const panRightEvent: WidgetPanEvent = {
   target, timeStamp, type, state, touches, translationX, translationY, velocityX, velocityY
 };
-let panUpEvent: WidgetPanEvent = {
+const panUpEvent: WidgetPanEvent = {
   target, timeStamp, type, state, touches, translationX, translationY, velocityX, velocityY
 };
-let panVerticalEvent: WidgetPanEvent = {
+const panVerticalEvent: WidgetPanEvent = {
   target, timeStamp, type, state, touches, translationX, translationY, velocityX, velocityY
 };
 widget

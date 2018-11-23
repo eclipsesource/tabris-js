@@ -207,8 +207,8 @@
       "description": "The actual location and size of the widget, relative to its parent."
     },
     "background": {
-      "type": "ColorValue | LinearGradientValue",
-      "description": "Background of the widget."
+      "type": "LinearGradientValue | ColorValue | ImageValue",
+      "description": "The background of the widget. If given a plain string it is interpreted first as a gradient, then as a color, and finally as an image path, whichever passes first. Use object literals or instances of `LinearGradient`, `Color` or `Image` to avoid any ambiguity."
     },
     "opacity": {
       "type": "number",
