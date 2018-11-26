@@ -159,7 +159,7 @@ describe('TabFolder', function() {
       it('does not SET selection when last tab disposed', function() {
         tab.dispose();
 
-        expect(client.calls({op: 'set', id: tabFolder.cid}).length).to.equal(0);
+        expect(client.calls({op: 'set', id: tabFolder.cid})[0].properties.selection).to.be.undefined;
       });
 
       it('SETs selection to the right neighbor', function() {
@@ -168,7 +168,7 @@ describe('TabFolder', function() {
 
         tab2.dispose();
 
-        const setCall = client.calls({op: 'set', id: tabFolder.cid})[0];
+        const setCall = client.calls({op: 'set', id: tabFolder.cid})[1];
         expect(setCall.properties.selection).to.equal(tab3.cid);
       });
 
@@ -177,7 +177,7 @@ describe('TabFolder', function() {
 
         tab2.dispose();
 
-        const setCall = client.calls({op: 'set', id: tabFolder.cid})[0];
+        const setCall = client.calls({op: 'set', id: tabFolder.cid})[1];
         expect(setCall.properties.selection).to.equal(tab.cid);
       });
 
@@ -234,7 +234,7 @@ describe('TabFolder', function() {
     it('Setting a Tab SETs tab id', function() {
       tabFolder.selection = tab;
 
-      const setCall = client.calls({op: 'set', id: tabFolder.cid})[0];
+      const setCall = client.calls({op: 'set', id: tabFolder.cid})[1];
       expect(setCall.properties.selection).to.equal(tab.cid);
     });
 
@@ -270,6 +270,7 @@ describe('TabFolder', function() {
     });
 
     it('Ignores setting null with warning', function() {
+      client.resetCalls();
       stub(console, 'warn');
 
       tabFolder.selection = null;
@@ -282,6 +283,7 @@ describe('TabFolder', function() {
     it('Ignores setting disposed tab with warning', function() {
       stub(console, 'warn');
       tab.dispose();
+      client.resetCalls();
 
       tabFolder.selection = tab;
 
@@ -294,12 +296,20 @@ describe('TabFolder', function() {
 
     it('Ignores setting non tab', function() {
       stub(console, 'warn');
+      client.resetCalls();
 
       tabFolder.selection = 'foo';
 
       const calls = client.calls({op: 'set', id: tabFolder.cid});
       expect(calls.length).to.equal(0);
       expect(console.warn).to.have.been.calledWithMatch('Can not set selection to foo');
+    });
+
+    it('get causes SET children', function() {
+      stub(client, 'get').callsFake(
+        () => client.properties(tabFolder.cid).children[0]
+      );
+      expect(tabFolder.selection).to.equal(tab);
     });
 
     it('Get returns Tab', function() {

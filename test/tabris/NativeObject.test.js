@@ -467,6 +467,7 @@ describe('NativeObject.extend', function() {
     client = new ClientStub();
     global.tabris = {
       on: () => {},
+      trigger: () => {},
       _nativeObjectRegistry: new NativeObjectRegistry()
     };
     global.tabris._nativeBridge = new NativeBridge(client);

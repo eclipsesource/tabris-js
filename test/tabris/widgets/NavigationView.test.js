@@ -194,6 +194,7 @@ describe('NavigationView', function() {
 
       beforeEach(function() {
         pages = [page1 = new Page({id: 'page1'}), new Page(), new Page()];
+        client.resetCalls();
         navigationView.append(pages);
       });
 
@@ -202,8 +203,6 @@ describe('NavigationView', function() {
       });
 
       it('SETs children after flush', function() {
-        client.resetCalls();
-
         tabris.flush();
 
         const calls = client.calls();
@@ -214,12 +213,12 @@ describe('NavigationView', function() {
       });
 
       it('SETs children after adding more pages', function() {
-        const page4 = new Page().appendTo(navigationView);
         client.resetCalls();
+        const page4 = new Page().appendTo(navigationView);
 
         tabris.flush();
 
-        const calls = client.calls();
+        const calls = client.calls({op: 'set', id: navigationView.cid});
         expect(calls.length).to.equal(1);
         expect(calls[0]).to.eql({op: 'set', id: navigationView.cid, properties: {
           children: [pages[0].cid, pages[1].cid, pages[2].cid, page4.cid]

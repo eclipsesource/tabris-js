@@ -169,6 +169,7 @@ export class LayoutQueue {
   static get instance () {
     if (!this._instance) {
       this._instance = new LayoutQueue();
+      tabris.on('layout', () => this._instance.flush());
     }
     return this._instance;
   }

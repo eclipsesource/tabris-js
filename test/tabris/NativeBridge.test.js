@@ -10,6 +10,7 @@ describe('NativeBridge', function() {
   let log;
 
   beforeEach(function() {
+    delete LayoutQueue._instance;
     global.tabris = Object.assign({
       flush() {
         this.trigger('flush');

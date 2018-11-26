@@ -156,7 +156,7 @@ export default class Composite extends Widget {
   }
 
   _scheduleRenderChildren() {
-    tabris.once('flush', this._flushChildren, this);
+    tabris.once('layout', this._flushChildren, this);
   }
 
   _flushChildren() {

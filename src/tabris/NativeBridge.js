@@ -1,4 +1,3 @@
-import {LayoutQueue} from './Layout';
 
 export default class NativeBridge {
 
@@ -46,7 +45,7 @@ export default class NativeBridge {
   }
 
   flush() {
-    LayoutQueue.instance.flush();
+    tabris.trigger('layout');
     const operations = this.$operations;
     this.$operations = [];
     this.$currentOperation = {id: null};

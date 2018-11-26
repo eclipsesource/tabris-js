@@ -502,13 +502,7 @@ describe('Widget', function() {
           result = widget.append(child1);
         });
 
-        it('does not call native bridge', function() {
-          const calls = client.calls();
-          expect(calls.length).to.equal(0);
-        });
-
-        it('SETs children after flush', function() {
-          tabris.flush();
+        it('SETs children', function() {
           const calls = client.calls();
           expect(calls.length).to.equal(1);
           expect(calls[0]).to.eql({op: 'set', id: widget.cid, properties: {children: [child1.cid]}});
