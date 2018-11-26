@@ -1,4 +1,4 @@
-const {Composite, ImageView, TextView, ui} = require('tabris');
+const {Composite, ImageView, TextView, contentView} = require('tabris');
 const BooksPage = require('./BooksPage');
 
 const PAGE_DATA = [{
@@ -37,9 +37,9 @@ module.exports = class BooksPageSelector extends Composite {
   }
 
   _open(page) {
-    const navigationView = ui.find('NavigationView').first();
+    const navigationView = contentView.find('NavigationView').first();
     navigationView.pageAnimation = 'none';
-    tabris.ui.drawer.close();
+    tabris.drawer.close();
     navigationView.pages().dispose();
     page.appendTo(navigationView);
     navigationView.pageAnimation = 'default';

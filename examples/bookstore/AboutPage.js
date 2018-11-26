@@ -1,4 +1,4 @@
-const {Page, TextView, ui} = require('tabris');
+const {Page, TextView, contentView} = require('tabris');
 const CoversGalleryPage = require('./CoversGalleryPage');
 
 const TITLE = 'About';
@@ -19,8 +19,8 @@ module.exports = class AboutPage extends Page {
   constructor(properties) {
     super(Object.assign({title: TITLE}, properties));
     this.on({
-      appear: () => ui.find('#aboutAction').first().visible = false,
-      disappear: () => ui.find('#aboutAction').first().visible = true
+      appear: () => contentView.find('#aboutAction').first().visible = false,
+      disappear: () => contentView.find('#aboutAction').first().visible = true
     });
     this._createUI();
     this._applyLayout();
@@ -37,7 +37,7 @@ module.exports = class AboutPage extends Page {
   }
 
   _showCoversGallery() {
-    new CoversGalleryPage().appendTo(ui.find('NavigationView').first());
+    new CoversGalleryPage().appendTo(contentView.find('NavigationView').first());
   }
 
   _applyLayout() {

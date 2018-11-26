@@ -1,4 +1,4 @@
-const {ActivityIndicator, Button, TextView, ui} = require('tabris');
+const {ActivityIndicator, Button, TextView, contentView} = require('tabris');
 
 function createTextView(text) {
   new TextView({
@@ -6,7 +6,7 @@ function createTextView(text) {
     text: text,
     markupEnabled: true,
     class: 'locationData'
-  }).appendTo(ui.contentView);
+  }).appendTo(contentView);
 }
 
 function createReloadButton() {
@@ -14,18 +14,18 @@ function createReloadButton() {
     left: 16, right: 16, top: 'prev() 12',
     text: 'Reload Geo-Data',
     id: 'reloadButton'
-  }).on('select', loadData).appendTo(ui.contentView);
+  }).on('select', loadData).appendTo(contentView);
 }
 
 function loadData() {
   // Dispose existing elements via the class selector
-  ui.contentView.children('.locationData').dispose();
-  ui.contentView.children('#reloadButton').dispose();
+  contentView.children('.locationData').dispose();
+  contentView.children('#reloadButton').dispose();
 
   // Create loading indicator
   const activityIndicator = new ActivityIndicator({
     centerX: 0, centerY: 0
-  }).appendTo(ui.contentView);
+  }).appendTo(contentView);
 
   // Run async remote request with fetch
   fetch('http://ip-api.com/json')

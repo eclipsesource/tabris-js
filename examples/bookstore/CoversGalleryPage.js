@@ -1,4 +1,4 @@
-const {Page, WebView, ui} = require('tabris');
+const {Page, WebView, contentView} = require('tabris');
 
 const TITLE = 'Book covers gallery';
 const WEB_PAGE_URL = 'https://www.flickr.com/photos/ajourneyroundmyskull/sets/72157626894978086/';
@@ -9,7 +9,7 @@ module.exports = class CoversGalleryPage extends Page {
     super(Object.assign({title: TITLE}, properties));
     this._createUI();
     this._applyLayout();
-    this.on('appear', () => ui.find('#aboutAction').first().visible = false);
+    this.on('appear', () => contentView.find('#aboutAction').first().visible = false);
   }
 
   _createUI() {

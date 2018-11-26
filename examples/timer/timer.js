@@ -1,4 +1,4 @@
-const {Button, CheckBox,TextInput, TextView, ui} = require('tabris');
+const {Button, CheckBox,TextInput, TextView, contentView} = require('tabris');
 
 let cpsCount = 0;
 let startTime = new Date().getTime();
@@ -7,29 +7,29 @@ let taskId;
 const statusTextView = new TextView({
   left: 16, top: 24, right: 16,
   text: 'Last update: <none>'
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 const cpsTextView = new TextView({
   left: 16, top: [statusTextView, 16], right: 16,
   text: 'Calls per second: <none>'
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 const delayTextView = new TextView({
   left: 16, top: [cpsTextView, 24],
   text: 'Delay (ms):'
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 const delayTextInput = new TextInput({
   left: [delayTextView, 16], baseline: delayTextView,
   id: 'delayTextInput',
   text: '1000',
   message: 'Delay (ms)'
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 const repeatCheckbox = new CheckBox({
   left: 16, top: delayTextInput,
   text: 'Repeat'
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 const startButton = new Button({
   left: ['50%', 16 / 4], top: [repeatCheckbox, 24], right: 16,
@@ -45,7 +45,7 @@ const startButton = new Button({
     }, delay);
   }
   enableTimerStart(false);
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 const cancelButton = new Button({
   left: 16, top: [repeatCheckbox, 24], right: ['50%', 16 / 4],
@@ -54,7 +54,7 @@ const cancelButton = new Button({
 }).on('select', () => {
   clearTimeout(taskId);
   enableTimerStart(true);
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 function updateStatusTextViews() {
   cpsCount++;

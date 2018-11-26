@@ -1,4 +1,4 @@
-const {CollectionView, Composite, ImageView, TextView, ui} = require('tabris');
+const {CollectionView, Composite, ImageView, TextView, contentView} = require('tabris');
 const books = require('./books');
 
 module.exports = class BooksList extends CollectionView {
@@ -24,7 +24,7 @@ module.exports = class BooksList extends CollectionView {
 
   _showBookDetailsPage(book) {
     const BookDetailsPage = require('./BookDetailsPage');
-    new BookDetailsPage({title: book.title, book}).appendTo(ui.find('NavigationView').first());
+    new BookDetailsPage({title: book.title, book}).appendTo(contentView.find('NavigationView').first());
   }
 
   createCell() {

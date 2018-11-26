@@ -1,4 +1,4 @@
-const {Composite, Page, TextView, WebView, ui} = require('tabris');
+const {Composite, Page, TextView, WebView, contentView} = require('tabris');
 
 module.exports = class PluginPage extends Page {
 
@@ -18,7 +18,7 @@ module.exports = class PluginPage extends Page {
   }
 
   _openPluginInfoPage() {
-    ui.find('NavigationView').first().append(
+    contentView.find('NavigationView').first().append(
       new Page({title: 'Plugin Info'}).append(
         new WebView({
           left: 0, top: 0, right: 0, bottom: 0,

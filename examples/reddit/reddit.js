@@ -1,4 +1,4 @@
-const {CollectionView, Composite, ImageView, NavigationView, Page, TextView, WebView, ui} = require('tabris');
+const {CollectionView, Composite, ImageView, NavigationView, Page, TextView, WebView, contentView} = require('tabris');
 
 const ITEM_FETCH_COUNT = 25;
 
@@ -7,7 +7,7 @@ let items = [];
 
 const navigationView = new NavigationView({
   left: 0, top: 0, right: 0, bottom: 0
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 const page = new Page({
   title: 'Reddit - Pets'

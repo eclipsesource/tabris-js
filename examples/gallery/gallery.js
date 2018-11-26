@@ -1,4 +1,4 @@
-const {ImageView, ScrollView, ui} = require('tabris');
+const {ImageView, ScrollView, contentView} = require('tabris');
 
 const IMAGES = require('./images/index.json');
 const IMAGE_SIZE = 96;
@@ -37,8 +37,8 @@ class FilmStrip extends ScrollView {
   }
 }
 
-ui.contentView.background = 'black';
-ui.statusBar.set({
+contentView.background = 'black';
+tabris.statusBar.set({
   displayMode: 'float',
   theme: 'dark',
   background: '#00000044'
@@ -50,14 +50,14 @@ const fullImage = new ImageView({
   scaleMode: 'fit',
   zoomEnabled: true
 }).on('tap', () => filmStrip.toggleShowing())
-  .appendTo(ui.contentView);
+  .appendTo(contentView);
 
 const filmStrip = new FilmStrip({
   left: 0, right: 0, bottom: 0, height: 112,
   direction: 'horizontal',
   background: '#00000044'
 }).on('scrollX', () => filmStrip.resetHideTimeout())
-  .appendTo(ui.contentView);
+  .appendTo(contentView);
 
 IMAGES.forEach((image) => {
   new ImageView({

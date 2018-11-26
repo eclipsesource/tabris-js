@@ -1,4 +1,4 @@
-const {Composite, ImageView, Tab, TabFolder, TextView, Page, ui} = require('tabris');
+const {Composite, ImageView, Tab, TabFolder, TextView, Page, contentView} = require('tabris');
 const BookReadPage = require('./BookReadPage');
 const BooksList = require('./BooksList');
 
@@ -37,7 +37,7 @@ module.exports = class BookDetailsPage extends Page {
   }
 
   _openReadBookPage() {
-    new BookReadPage({title: this.title}).appendTo(ui.find('NavigationView').first());
+    new BookReadPage({title: this.title}).appendTo(contentView.find('NavigationView').first());
   }
 
   set book(book) {

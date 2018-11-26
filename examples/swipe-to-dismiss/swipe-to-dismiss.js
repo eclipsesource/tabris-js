@@ -1,4 +1,4 @@
-const {CollectionView, Composite, TextView, ui} = require('tabris');
+const {CollectionView, Composite, TextView, contentView} = require('tabris');
 
 const items = [
   {title: 'Up for lunch?', sender: 'John Smith', time: '11:35'},
@@ -52,7 +52,7 @@ const collectionView = new CollectionView({
     view.find('#titleText').set({text: item.title});
     view.find('#timeText').set({text: item.time});
   }
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 function handlePan(event) {
   const {target, state, translationX} = event;

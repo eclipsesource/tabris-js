@@ -1,4 +1,4 @@
-const {Composite, TextView, ui} = require('tabris');
+const {Composite, TextView, contentView} = require('tabris');
 
 // Original source: https://github.com/tonylukasavage/Automata
 // This example was initially developed to showcase Titanium performance characteristics
@@ -6,13 +6,13 @@ const {Composite, TextView, ui} = require('tabris');
 // It resides in this example directory because we wanted to get an idea how this
 // performs with Tabris.js
 
-const HEIGHT = ui.contentView.bounds.height;
-const WIDTH = ui.contentView.bounds.width;
+const HEIGHT = contentView.bounds.height;
+const WIDTH = contentView.bounds.width;
 const CELL_SIZE = Math.floor(Math.min(HEIGHT,WIDTH) / 30);
 const X_SIZE = WIDTH / CELL_SIZE;
 const Y_SIZE = HEIGHT / CELL_SIZE;
 
-const universe = ui.contentView.set({
+const universe = contentView.set({
   background: '#000'
 });
 

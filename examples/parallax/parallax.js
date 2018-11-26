@@ -1,4 +1,4 @@
-const {Composite, ImageView, TextView, ScrollView, ui} = require('tabris');
+const {Composite, ImageView, TextView, ScrollView, contentView} = require('tabris');
 
 const INITIAL_TITLE_COMPOSITE_OPACITY = 0.85;
 const TITLE = 'INDIAN SUMMER SALAD';
@@ -14,11 +14,11 @@ const RECIPE = 'Make a dressing of the yolks of 3 hard-boiled eggs pounded fine,
 
 let titleCompY = 0;
 
-ui.statusBar.background = rgba(255, 152, 0, 1);
+tabris.statusBar.background = rgba(255, 152, 0, 1);
 
 const scrollView = new ScrollView({
   left: 0, right: 0, top: 0, bottom: 0
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 const imageView = new ImageView({
   left: 0, top: 0, right: 0,

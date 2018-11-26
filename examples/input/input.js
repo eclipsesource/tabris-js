@@ -1,8 +1,8 @@
 const {
-  Button, CheckBox, Composite, TextView, TextInput, Picker, RadioButton, ScrollView, Slider, Switch, ui
+  Button, CheckBox, Composite, TextView, TextInput, Picker, RadioButton, ScrollView, Slider, Switch, contentView
 } = require('tabris');
 
-const scrollView = new ScrollView({left: 0, top: 0, right: 0, bottom: 0}).appendTo(ui.contentView);
+const scrollView = new ScrollView({left: 0, top: 0, right: 0, bottom: 0}).appendTo(contentView);
 
 const COUNTRIES = ['Germany', 'Canada', 'USA', 'Bulgaria'];
 const CLASSES = ['Business', 'Economy', 'Economy Plus'];

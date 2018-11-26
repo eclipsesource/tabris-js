@@ -1,4 +1,4 @@
-const {Composite, CollectionView, Picker, TextView, ui} = require('tabris');
+const {Composite, CollectionView, Picker, TextView, contentView} = require('tabris');
 
 const LANGUAGES = [{
   id: 'en',
@@ -20,7 +20,7 @@ new Picker({
   loadLanguage(LANGUAGES[index].id);
   collectionView.itemCount = texts.items.length;
   collectionView.refresh();
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 const collectionView = new CollectionView({
   left: 0, top: 'prev() 8', right: 0, bottom: 0,
@@ -28,9 +28,9 @@ const collectionView = new CollectionView({
   cellHeight: 54,
   createCell: () => new MenuCell(),
   updateCell: (cell, index) => cell.dish = texts.items[index]
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
-ui.contentView.apply(texts);
+contentView.apply(texts);
 
 class MenuCell extends Composite {
 

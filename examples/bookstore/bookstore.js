@@ -1,4 +1,4 @@
-const {Action, NavigationView, ui} = require('tabris');
+const {Action, NavigationView, contentView} = require('tabris');
 const BooksPageSelector = require('./BooksPageSelector');
 const AboutPage = require('./AboutPage');
 
@@ -7,10 +7,10 @@ const ABOUT_ACTION_TITLE = 'About';
 const navigationView = new NavigationView({
   left: 0, top: 0, right: 0, bottom: 0,
   drawerActionVisible: true
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
-ui.drawer.enabled = true;
-ui.drawer.append(
+tabris.drawer.enabled = true;
+tabris.drawer.append(
   new BooksPageSelector({
     left: 0, top: 16, right: 0, bottom: 0
   })

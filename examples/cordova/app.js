@@ -1,4 +1,4 @@
-const {Button, Page, NavigationView, ScrollView, ui} = require('tabris');
+const {Button, Page, NavigationView, ScrollView, contentView} = require('tabris');
 const ToastPage = require('./ToastPage');
 const SharingPage = require('./SharingPage');
 const MotionPage = require('./MotionPage');
@@ -8,7 +8,7 @@ const CameraPage = require('./CameraPage');
 const BarcodeScannerPage = require('./BarcodeScannerPage');
 
 const navigationView = new NavigationView({left: 0, top: 0, right: 0, bottom: 0})
-  .appendTo(ui.contentView);
+  .appendTo(contentView);
 
 const mainPage = new Page({
   title: 'Cordova Examples'
