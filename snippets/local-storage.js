@@ -1,7 +1,7 @@
-import {Button, TextView, TextInput, contentView, Column} from 'tabris';
+import {Button, TextView, TextInput, contentView, StackComposite} from 'tabris';
 
 contentView.append(
-  <Column layoutData='fill'>
+  <StackComposite layoutData='fill'>
     <TextInput id='key' message='Key' text='Key'/>
     <TextInput id='value' message='Value' text='Value' onAccept={setValue}/>
     <Button text='Set' onSelect={setValue}/>
@@ -10,7 +10,7 @@ contentView.append(
     <Button text='Clear' onSelect={clearAll}/>
     <Button text='List Keys' onSelect={showKeys}/>
     <TextView id='output'/>
-  </Column>
+  </StackComposite>
 );
 
 const keyField = contentView.find('#key').first(TextInput);

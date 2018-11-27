@@ -117,7 +117,7 @@ describe('tabris', function() {
     expect(tabris.CollectionView).to.be.a('function');
     expect(tabris.CollectionView.name).to.equal('CollectionView');
     expect(tabris.Composite).to.be.a('function');
-    expect(tabris.Column).to.be.a('function');
+    expect(tabris.StackComposite).to.be.a('function');
     expect(tabris.Composite.name).to.equal('Composite');
     expect(tabris.ContentView).to.be.a('function');
     expect(tabris.ContentView.name).to.equal('ContentView');
@@ -180,7 +180,7 @@ describe('tabris', function() {
     expect(tabris.LayoutData).to.be.a('function');
     expect(tabris.Image).to.be.a('function');
     expect(tabris.Layout).to.be.a('function');
-    expect(tabris.ColumnLayout).to.be.a('function');
+    expect(tabris.StackLayout).to.be.a('function');
     expect(tabris.WidgetCollection).to.be.a('function');
     expect(tabris.Percent).to.be.a('function');
     expect(tabris.LinearGradient).to.be.a('function');

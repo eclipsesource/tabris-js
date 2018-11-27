@@ -2,13 +2,13 @@ import Layout from './Layout';
 import LayoutData from './LayoutData';
 import {types} from './property-types';
 
-export default class ColumnLayout extends Layout {
+export default class StackLayout extends Layout {
 
   static get default() {
-    if (!this._column) {
-      this._column = new ColumnLayout({padding: 16, spacing: 16});
+    if (!this._default) {
+      this._default = new StackLayout({padding: 16, spacing: 16});
     }
-    return this._column;
+    return this._default;
   }
 
   constructor(properties = {}, queue) {

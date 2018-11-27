@@ -1,13 +1,13 @@
-import {AlertDialog, Button, Column, TextInput, TextView, contentView} from 'tabris';
+import {AlertDialog, Button, StackComposite, TextInput, TextView, contentView} from 'tabris';
 
 contentView.append(
-  <Column layoutData='fill'>
+  <StackComposite layoutData='fill'>
     <Button onSelect={showSimpleDialog}>Simple dialog</Button>
     <Button onSelect={showDialogWithButtons}>Dialog with multiple buttons</Button>
     <Button onSelect={showSelfClosingDialog}>Self-closing dialog</Button>
     <Button onSelect={showTextInputDialog}>Dialog with text fields</Button>
     <TextView/>
-  </Column>
+  </StackComposite>
 );
 
 const textView =  contentView.find(TextView).first();

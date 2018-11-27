@@ -1,6 +1,6 @@
 {
-  "type": "Column",
-  "description": "A composite with the `layout` property initialized with a `ColumnLayout` .",
+  "type": "StackComposite",
+  "description": "A composite with the `layout` property initialized with a `StackComposite` .",
   "extends": "Composite",
   "constructor": {
     "access": "public",
@@ -15,10 +15,10 @@
   },
   "properties": {
     "layout": {
-      "type": "ColumnLayout",
-      "default": "ColumnLayout",
+      "type": "StackLayout",
+      "default": "StackLayout",
       "const": true,
-      "description": "The column layout manager responsible for interpreting the [`layoutData`](./Widget.md#layoutData) of the child widgets of this Composite."
+      "description": "The stack layout manager responsible for interpreting the [`layoutData`](./Widget.md#layoutData) of the child widgets of this Composite."
     },
     "spacing": {
       "type": "number",

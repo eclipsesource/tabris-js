@@ -9,7 +9,7 @@ let button: tabris.Button = <tabris.Button onPanUp={onPanHandler}>foo</tabris.Bu
 let canvas: tabris.Canvas = <tabris.Canvas onResize={function() {}} left={23} transform={{rotation: 360}}/>;
 let checkBox: tabris.CheckBox = <tabris.CheckBox checked={true}>foo</tabris.CheckBox>;
 let collectionView: tabris.CollectionView = <tabris.CollectionView refreshEnabled={true} cellHeight={x => 23} />;
-let column: tabris.Column = <tabris.Column padding={10} layoutData={{width: 100}}/>;
+let stackComposite: tabris.StackComposite = <tabris.StackComposite padding={10} layoutData={{width: 100}}/>;
 let composite: tabris.Composite = <tabris.Composite padding={10} layoutData={{width: 100}}/>;
 let imageView: tabris.ImageView = <tabris.ImageView image='./foo.jpg'/>;
 let navigationView: tabris.NavigationView = <tabris.NavigationView actionColor='red'/>;

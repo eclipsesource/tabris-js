@@ -2,7 +2,7 @@ import NativeObjectRegistry from '../src/tabris/NativeObjectRegistry';
 import NativeBridge from '../src/tabris/NativeBridge';
 import Events from '../src/tabris/Events';
 import {ConstraintLayout, LayoutQueue} from '../src/tabris/Layout';
-import ColumnLayout from '../src/tabris/ColumnLayout';
+import StackLayout from '../src/tabris/StackLayout';
 
 export function mockTabris(client) {
   if (!client) {
@@ -10,7 +10,7 @@ export function mockTabris(client) {
   }
   delete ConstraintLayout._default;
   delete LayoutQueue._instance;
-  delete ColumnLayout._column;
+  delete StackLayout._default;
   global.tabris = Object.assign({
     Module: {getSourceMap() { return null; }},
     flush() {

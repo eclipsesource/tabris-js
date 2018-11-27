@@ -1,17 +1,17 @@
 import Composite from './Composite';
-import ColumnLayout from '../ColumnLayout';
+import StackLayout from '../StackLayout';
 import NativeObject from '../NativeObject';
 
-export default class Column extends Composite {
+export default class StackComposite extends Composite {
 
   constructor(properties) {
     super(properties);
   }
 
   _initLayout(props = {}) {
-    let layout = props.layout || ColumnLayout.default;
+    let layout = props.layout || StackLayout.default;
     if ('padding' in props || 'spacing' in props) {
-      layout = new ColumnLayout({
+      layout = new StackLayout({
         padding: 'padding' in props ? props.padding : layout.padding,
         spacing: 'spacing' in props ? props.spacing : layout.spacing
       });
@@ -22,14 +22,14 @@ export default class Column extends Composite {
   }
 
   _checkLayout(value) {
-    if (!(value instanceof ColumnLayout)) {
-      throw new Error('Not an instance of "ColumnLayout"');
+    if (!(value instanceof StackLayout)) {
+      throw new Error('Not an instance of "StackLayout"');
     }
   }
 
 }
 
-NativeObject.defineProperties(Column.prototype, {
+NativeObject.defineProperties(StackComposite.prototype, {
   spacing: {
     type: 'number',
     get() {

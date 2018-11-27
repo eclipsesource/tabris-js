@@ -1,5 +1,5 @@
 {
-  "type": "ColumnLayout",
+  "type": "StackLayout",
   "extends": "Layout",
   "constructor": {
     "access": "public",
@@ -12,7 +12,7 @@
       }
     ]
   },
-  "description": "Column based layout manager.",
+  "description": "Stack based layout manager.",
   "properties": {
     "spacing": {
       "type": "number",
@@ -24,8 +24,8 @@
   "statics": {
     "properties": {
       "default": {
-        "description": "Instance of ColumnLayout used as the default `layout` property value of `Column` widgets. Equivalent to `new ColumnLayout({padding: 16, spacing: 16})`",
-        "type": "ColumnLayout"
+        "description": "Instance of StackLayout used as the default `layout` property value of `StackComposite` widgets. Equivalent to `new StackLayout({padding: 16, spacing: 16})`",
+        "type": "StackLayout"
       }
     }
   }

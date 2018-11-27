@@ -22,8 +22,8 @@ import Canvas from './widgets/Canvas';
 import CheckBox from './widgets/CheckBox';
 import CollectionView from './widgets/CollectionView';
 import Color from './Color';
-import Column from './widgets/Column';
-import ColumnLayout from './ColumnLayout';
+import StackComposite from './widgets/StackComposite';
+import StackLayout from './StackLayout';
 import Composite from './widgets/Composite';
 import ContentView, {create as createContentView} from './widgets/ContentView';
 import Crypto from './Crypto';
@@ -95,8 +95,8 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   CollectionView,
   Color,
   ConstraintLayout,
-  Column,
-  ColumnLayout,
+  StackLayout,
+  StackComposite,
   Composite,
   Constraint,
   ContentView,

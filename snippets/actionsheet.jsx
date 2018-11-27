@@ -1,10 +1,10 @@
-import {ActionSheet, ActionSheetItem, TextView, Button, WidgetCollection, ui, ColumnLayout} from 'tabris';
+import {ActionSheet, ActionSheetItem, TextView, Button, contentView, StackComposite} from 'tabris';
 
-ui.contentView.set({layout: ColumnLayout.create()}).append(
-  <WidgetCollection>
+contentView.append(
+  <StackComposite>
     <Button onSelect={showActionSheet}>Show ActionSheet</Button>
     <TextView alignment='center'/>
-  </WidgetCollection>
+  </StackComposite>
 );
 
 async function showActionSheet() {

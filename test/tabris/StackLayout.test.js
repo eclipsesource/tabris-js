@@ -1,30 +1,30 @@
 import ClientStub from './ClientStub';
 import {expect, mockTabris, restore} from '../test';
 import Composite from '../../src/tabris/widgets/Composite';
-import Column from '../../src/tabris/widgets/Column';
+import StackComposite from '../../src/tabris/widgets/StackComposite';
 import TextView from '../../src/tabris/widgets/TextView';
-import ColumnLayout from '../../src/tabris/ColumnLayout';
+import StackLayout from '../../src/tabris/StackLayout';
 import {LayoutQueue, ConstraintLayout} from '../../src/tabris/Layout';
 
-describe('ColumnLayout', function() {
+describe('StackLayout', function() {
 
   afterEach(restore);
 
-  describe('ColumnLayout.default', function() {
+  describe('StackLayout.default', function() {
 
     it('has padding', function() {
-      expect(ColumnLayout.default.padding).to.deep.equal({
+      expect(StackLayout.default.padding).to.deep.equal({
         left: 16, top: 16, right: 16, bottom: 16,
       });
     });
 
     it('has spacing', function() {
-      expect(ColumnLayout.default.spacing).to.equal(16);
+      expect(StackLayout.default.spacing).to.equal(16);
     });
 
-    it('always returns same ColumnLayout', function() {
-      expect(ColumnLayout.default).to.be.instanceof(ColumnLayout);
-      expect(ColumnLayout.default).to.equal(ColumnLayout.default);
+    it('always returns same StackLayout', function() {
+      expect(StackLayout.default).to.be.instanceof(StackLayout);
+      expect(StackLayout.default).to.equal(StackLayout.default);
     });
 
   });
@@ -33,8 +33,8 @@ describe('ColumnLayout', function() {
 
     let parent, client, queue;
 
-    function render(columnProps) {
-      parent = new Composite({layout: new ColumnLayout(columnProps, queue)});
+    function render(stackProps) {
+      parent = new Composite({layout: new StackLayout(stackProps, queue)});
       for (let i = 0; i < 6; i++) {
         parent.append(new TextView());
       }
@@ -76,49 +76,49 @@ describe('ColumnLayout', function() {
 
   });
 
-  describe('on Column widget', function() {
+  describe('on Stack widget', function() {
 
     it('is the default layout', function() {
-      expect(new Column().layout).to.be.instanceof(ColumnLayout);
+      expect(new StackComposite().layout).to.be.instanceof(StackLayout);
     });
 
     it('can be replaced in constructor', function() {
-      const layout = new ColumnLayout();
-      expect(new Column({layout}).layout).to.equal(layout);
+      const layout = new StackLayout();
+      expect(new StackComposite({layout}).layout).to.equal(layout);
     });
 
     it('can not be replaced with ConstraintLayout in constructor', function() {
       const layout = new ConstraintLayout();
-      expect(() => new Column({layout})).to.throw();
+      expect(() => new StackComposite({layout})).to.throw();
     });
 
     it('can not be replaced later', function() {
-      const layout = new ColumnLayout();
-      const column = new Column({layout});
+      const layout = new StackLayout();
+      const stack = new StackComposite({layout});
 
-      column.layout = layout;
+      stack.layout = layout;
 
-      expect(column.layout).to.equal(layout);
+      expect(stack.layout).to.equal(layout);
     });
 
     it('can be created by spacing parameter', function() {
-      const layout = new Column({spacing: 2}).layout;
+      const layout = new StackComposite({spacing: 2}).layout;
       expect(layout.spacing).to.equal(2);
       expect(layout.padding).to.deep.equal({left: 16, top: 16, right: 16, bottom: 16});
     });
 
     it('can be merged with spacing parameter', function() {
-      const layout = new Column({layout: new ColumnLayout({padding: 3}), spacing: 4}).layout;
+      const layout = new StackComposite({layout: new StackLayout({padding: 3}), spacing: 4}).layout;
       expect(layout.spacing).to.equal(4);
       expect(layout.padding).to.deep.equal({left: 3, top: 3, right: 3, bottom: 3});
     });
 
     it('spacing can not be set later', function() {
-      const column = new Column({spacing: 4});
+      const stack = new StackComposite({spacing: 4});
 
-      column.spacing = 10;
+      stack.spacing = 10;
 
-      expect(column.spacing).to.equal(4);
+      expect(stack.spacing).to.equal(4);
     });
 
   });
