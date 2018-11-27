@@ -100,7 +100,7 @@ export default class NativeObject extends EventsClass {
 
   $getProperty(name) {
     if (this._isDisposed) {
-      hint(this + ': Cannot get property "' + name + '" on disposed object');
+      hint(this, 'Cannot get property "' + name + '" on disposed object');
       return;
     }
     const getter = this.$getPropertyGetter(name) || this._getStoredProperty;
@@ -110,7 +110,7 @@ export default class NativeObject extends EventsClass {
 
   $setProperty(name, value) {
     if (this._isDisposed) {
-      hint(this + ': Cannot set property "' + name + '" on disposed object');
+      hint(this, 'Cannot set property "' + name + '" on disposed object');
       return;
     }
     const typeDef = this._getTypeDef(name);
@@ -118,7 +118,7 @@ export default class NativeObject extends EventsClass {
     try {
       encodedValue = this._encodeProperty(typeDef, value);
     } catch (ex) {
-      hint(this + ': Ignored unsupported value for property "' + name + '": ' + ex.message);
+      hint(this, 'Ignored unsupported value for property "' + name + '": ' + ex.message);
       return;
     }
     const setter = this.$getPropertySetter(name) || this._storeProperty;
@@ -168,11 +168,11 @@ export default class NativeObject extends EventsClass {
   }
 
   _encodeProperty(typeDef, value) {
-    return (typeDef && typeDef.encode) ? typeDef.encode(value) : value;
+    return (typeDef && typeDef.encode) ? typeDef.encode.call(this, value) : value;
   }
 
   _decodeProperty(typeDef, value) {
-    return (typeDef && typeDef.decode) ? typeDef.decode(value) : value;
+    return (typeDef && typeDef.decode) ? typeDef.decode.call(this, value) : value;
   }
 
   $getPropertyGetter(name) {
@@ -204,8 +204,8 @@ export default class NativeObject extends EventsClass {
   }
 
   dispose() {
-    const toStringValue = this.toString() + ' (disposed)';
-    this.toString = () => toStringValue;
+    this._disposedToStringValue = this.toString();
+    this.toString = () => this._disposedToStringValue + ' (disposed)';
     this._dispose();
   }
 
@@ -371,7 +371,7 @@ function wrapCoder(fn, args) {
 }
 
 function readOnlySetter(name) {
-  hint(`${this}: Can not set read-only property "${name}"`);
+  hint(this, `Can not set read-only property "${name}"`);
 }
 
 function defaultSetter(name, value) {

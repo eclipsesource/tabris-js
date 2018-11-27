@@ -432,12 +432,33 @@ describe('NativeObject', function() {
 
     describe('when disposed', function() {
 
+      let listener;
+
       beforeEach(function() {
+        listener = spy();
+        object.on('foo', listener);
         object.dispose();
       });
 
       it('isDisposed returns true', function() {
         expect(object.isDisposed()).to.equal(true);
+      });
+
+      it('on prints warning', function() {
+        object.on('foo', spy());
+
+        expect(console.warn).to.have.been.calledWithMatch(
+          /TestType.*: Event registration warning: Can not listen for event "foo" on disposed object/
+        );
+      });
+
+      it('trigger only prints warning', function() {
+        object.trigger('foo');
+
+        expect(listener).not.to.have.been.called;
+        expect(console.warn).to.have.been.calledWithMatch(
+          /TestType.*: Trigger warning: Can not dispatch event "foo" on disposed object/
+        );
       });
 
     });

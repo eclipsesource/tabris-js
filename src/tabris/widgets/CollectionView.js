@@ -136,8 +136,8 @@ export default class CollectionView extends Composite {
     }
     cell._parent = this;
     this._addChild(cell);
-    cell._setParent = () => hint(this + ': Cannot re-parent collection view cell');
-    cell.dispose = () => hint(this + ': Cannot dispose of collection view cell');
+    cell._setParent = () => hint(this, 'Cannot re-parent collection view cell');
+    cell.dispose = () => hint(this, 'Cannot dispose of collection view cell');
     return cell;
   }
 
@@ -263,7 +263,7 @@ function encodeCellHeight(ctx, value) {
   if (isNumber(value)) {
     return Math.max(-1, value);
   }
-  hint(ctx + ': Invalid cell height: ' + value);
+  hint(ctx, 'Invalid cell height: ' + value);
 }
 
 const triggerChangeFirstVisibleIndex = createDelegate('firstVisibleIndex');

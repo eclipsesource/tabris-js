@@ -60,15 +60,15 @@ export function animate(properties, options) {
           this._encodeProperty(this._getTypeDef(property), properties[property]);
         this._storeProperty(property, animatedProps[property], options);
       } catch (ex) {
-        hint(this + ': Ignored invalid animation property value for "' + property + '"');
+        hint(this, 'Ignored invalid animation property value for "' + property + '"');
       }
     } else {
-      hint(this + ': Ignored invalid animation property "' + property + '"');
+      hint(this, 'Ignored invalid animation property "' + property + '"');
     }
   }
   for (const option in options) {
     if (!(option in PROPERTIES) && option !== 'name') {
-      hint(this + ': Ignored invalid animation option "' + option + '"');
+      hint(this, 'Ignored invalid animation option "' + option + '"');
     }
   }
   return new Promise((resolve, reject) => {

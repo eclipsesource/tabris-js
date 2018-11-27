@@ -116,7 +116,24 @@ export const log = function(...args) { defaultConsole.log(...args); };
 export const warn = function(...args) { defaultConsole.warn(...args); };
 export const error = function(...args) { defaultConsole.error(...args); };
 
-export const hint = function(message) {
-  const line = getCurrentLine(new Error());
-  defaultConsole.warn(message + (line ? `\nSource: ${line}` : ''));
+export const hint = function(source, message) {
+  let line = '';
+  let prefix = '';
+  try {
+    line = getCurrentLine(new Error());
+    if (source && typeof source === 'string') {
+      prefix = source + ': ';
+    } else if (source && source[toXML]) { // Alternative to using instanceof to avoid circular dependency
+      prefix = (source._disposedToStringValue || source.toString()) + ': ';
+    } else if (source && (source instanceof Function)) {
+      prefix = source.name + ': ';
+    } else if (source && (source.constructor instanceof Function)) {
+      prefix = source.constructor.name + ': ';
+    } else if (source) {
+      prefix = source + ' ';
+    }
+  } catch (ex) {
+    // ensure warning is printed in any case
+  }
+  defaultConsole.warn(prefix + message + (line ? `\nSource: ${line}` : ''));
 };

@@ -3,6 +3,7 @@ import ClientStub from './ClientStub';
 import {createConsole, toXML} from '../../src/tabris/Console';
 import * as defaultConsole from '../../src/tabris/Console';
 import {create as createApp} from '../../src/tabris/App';
+import NativeObject from '../../src/tabris/NativeObject';
 
 const methods = ['debug', 'log', 'info', 'warn', 'error'];
 const realConsole = console;
@@ -323,7 +324,7 @@ _notify@[native code]`
         tabris.device.platform = platform;
         stack = stacks[platform];
 
-        defaultConsole.hint('Foo');
+        defaultConsole.hint('', 'Foo');
 
         expect(realConsole.warn).to.have.been.calledWith(
           'Foo\nSource: doSomethingElse (./dist/console.js:23:17)'
@@ -335,10 +336,71 @@ _notify@[native code]`
         tabris.device.platform = platform;
         stack = stacks[platform].split('\n').slice(5).join('\n');
 
-        defaultConsole.hint('Foo');
+        defaultConsole.hint('', 'Foo');
 
         expect(realConsole.warn).to.have.been.calledWith('Foo');
 
+      });
+
+      it(platform + ' prints string source', function() {
+        tabris.device.platform = platform;
+        stack = stacks[platform];
+
+        defaultConsole.hint('Bar', 'Foo');
+
+        expect(realConsole.warn).to.have.been.calledWith(
+          'Bar: Foo\nSource: doSomethingElse (./dist/console.js:23:17)'
+        );
+      });
+
+      it(platform + ' prints constructor name', function() {
+        class Bar { }
+        tabris.device.platform = platform;
+        stack = stacks[platform];
+
+        defaultConsole.hint(Bar, 'Foo');
+
+        expect(realConsole.warn).to.have.been.calledWith(
+          'Bar: Foo\nSource: doSomethingElse (./dist/console.js:23:17)'
+        );
+      });
+
+      it(platform + ' prints object constructor name', function() {
+        class Bar { }
+        tabris.device.platform = platform;
+        stack = stacks[platform];
+
+        defaultConsole.hint(new Bar(), 'Foo');
+
+        expect(realConsole.warn).to.have.been.calledWith(
+          'Bar: Foo\nSource: doSomethingElse (./dist/console.js:23:17)'
+        );
+      });
+
+      it(platform + ' prints native object toString', function() {
+        class Bar extends NativeObject { toString() { return 'Baz'; } }
+        tabris.device.platform = platform;
+        stack = stacks[platform];
+
+        defaultConsole.hint(new Bar(), 'Foo');
+
+        expect(realConsole.warn).to.have.been.calledWith(
+          'Baz: Foo\nSource: doSomethingElse (./dist/console.js:23:17)'
+        );
+      });
+
+      it(platform + ' prints disposed native object without "(disposed)"', function() {
+        class Bar extends NativeObject {}
+        const bar = new Bar();
+        bar.dispose();
+        tabris.device.platform = platform;
+        stack = stacks[platform];
+
+        defaultConsole.hint(bar, 'Foo');
+
+        expect(realConsole.warn).to.have.been.calledWith(
+          'Bar: Foo\nSource: doSomethingElse (./dist/console.js:23:17)'
+        );
       });
 
     });

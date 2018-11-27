@@ -86,7 +86,7 @@ export default class WebSocket {
   }
 
   set bufferedAmount(bufferedAmount) {
-    hint('WebSocket: Can not set read-only property "bufferedAmount"');
+    hint(this, 'Can not set read-only property "bufferedAmount"');
   }
 
   get bufferedAmount() {

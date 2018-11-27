@@ -84,7 +84,7 @@ export const types = {
       } else if (Color.isValidColorValue(value)) {
         return {type: 'color', color: Color.from(value).toArray()};
       } else if (Image.isValidImageValue(value)) {
-        return {type: 'image', image: imageToArray(Image.from(value))};
+        return {type: 'image', image: imageToArray(Image.from.call(this, value))};
       }
       throw new Error(value + ' must be a valid LinearGradientValue or ColorValue.');
     },
@@ -166,7 +166,7 @@ export const types = {
       if (!value) {
         return null;
       }
-      return imageToArray(Image.from(value));
+      return imageToArray(Image.from.call(this, value));
     },
     decode(value) {
       if (!value) {

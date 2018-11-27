@@ -85,7 +85,7 @@ NativeObject.defineProperties(TabFolder.prototype, {
   selection: {
     set(name, tab) {
       if (this._children().indexOf(tab) < 0) {
-        hint(this + ': Can not set selection to ' + tab);
+        hint(this, 'Can not set selection to ' + tab);
         return;
       }
       if (this.selection === tab) {

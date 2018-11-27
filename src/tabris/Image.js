@@ -22,7 +22,10 @@ export default class Image {
     }
     if (value instanceof Object) {
       if (hasInconsistentDimensions(value)) {
-        hint('Image "scale" ignored when "width" and/or "height" are set to a number');
+        hint(
+          this === Image ? 'Image.from' : this,
+          'image "scale" is ignored when "width" and/or "height" are set to a number'
+        );
         return new Image(Object.assign({}, value, {scale: 'auto'}));
       }
       return new Image(value);

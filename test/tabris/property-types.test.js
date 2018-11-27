@@ -319,20 +319,20 @@ describe('property-types', function() {
     it('warns if scale and width are given', function() {
       stub(console, 'warn');
 
-      encode({src: 'foo.png', width: 23, scale: 2});
+      encode.call(class Foo {}, {src: 'foo.png', width: 23, scale: 2});
 
       expect(console.warn).to.have.been.calledWithMatch(
-        'Image "scale" ignored when "width" and/or "height" are set to a number'
+        'Foo: image "scale" is ignored when "width" and/or "height" are set to a number'
       );
     });
 
     it('warns if scale and height are given', function() {
       stub(console, 'warn');
 
-      encode({src: 'foo.png', height: 23, scale: 2});
+      encode.call(class Foo {}, {src: 'foo.png', height: 23, scale: 2});
 
       expect(console.warn).to.have.been.calledWithMatch(
-        'Image "scale" ignored when "width" and/or "height" are set to a number'
+        'Foo: image "scale" is ignored when "width" and/or "height" are set to a number'
       );
     });
 

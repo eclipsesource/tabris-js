@@ -295,7 +295,7 @@ function defineProperty(context, name) {
         context._gc.addOperation(name);
         prop.addOperations.call(context, context._state[name]);
       } catch (error) {
-        hint('Unsupported value for ' + name + ': ' + value);
+        hint(context, 'Unsupported value for ' + name + ': ' + value);
       }
     }
   });

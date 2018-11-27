@@ -1,10 +1,14 @@
 import {isObject} from './util';
 import EventObject from './EventObject';
 import {omit} from './util';
+import {hint} from './Console';
 
 export default {
 
   on(type, callback, context) {
+    if (this._isDisposed) {
+      hint(this, 'Event registration warning: Can not listen for event "foo" on disposed object');
+    }
     if (isObject(type)) {
       for (const key in type) {
         this.on(key, type[key]);
@@ -104,6 +108,8 @@ export default {
           }
         }
       }
+    } else {
+      hint(this, 'Trigger warning: Can not dispatch event "foo" on disposed object');
     }
     return this;
   },
