@@ -1,7 +1,7 @@
-import {Button, TextView, TextInput, contentView, ColumnLayout, WidgetCollection} from 'tabris';
+import {Button, TextView, TextInput, contentView, Column} from 'tabris';
 
-contentView.set({layout: ColumnLayout.create()}).append(
-  <WidgetCollection>
+contentView.append(
+  <Column layoutData='fill'>
     <TextInput id='key' message='Key' text='Key'/>
     <TextInput id='value' message='Value' text='Value' onAccept={setValue}/>
     <Button text='Set' onSelect={setValue}/>
@@ -10,7 +10,7 @@ contentView.set({layout: ColumnLayout.create()}).append(
     <Button text='Clear' onSelect={clearAll}/>
     <Button text='List Keys' onSelect={showKeys}/>
     <TextView id='output'/>
-  </WidgetCollection>
+  </Column>
 );
 
 const keyField = contentView.find('#key').first(TextInput);

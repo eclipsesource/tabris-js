@@ -288,7 +288,7 @@ export default class NativeObject extends EventsClass {
 
   [toXML]() {
     if (this._isDisposed) {
-      return `<${this.constructor.name} cid='${this.cid}' disposed='true'/>`;
+      return `<${this._getXMLElementName()} cid='${this.cid}' disposed='true'/>`;
     }
     const content = this._getXMLContent();
     if (!content.length) {
@@ -301,11 +301,15 @@ export default class NativeObject extends EventsClass {
     const attributes = this._getXMLAttributes()
       .map(entry => `${entry[0]}='${('' + entry[1]).replace(/'/g, '\\\'').replace(/\n/g, '\\n')}'`)
       .join(' ');
-    return `<${this.constructor.name} ${attributes}${!hasChild ? '/' : ''}>`;
+    return `<${this._getXMLElementName()} ${attributes}${!hasChild ? '/' : ''}>`;
   }
 
   _getXMLFooter(hasChild) {
-    return hasChild ? `</${this.constructor.name}>` : '';
+    return hasChild ? `</${this._getXMLElementName()}>` : '';
+  }
+
+  _getXMLElementName() {
+    return this.constructor.name;
   }
 
   _getXMLAttributes() {

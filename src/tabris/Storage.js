@@ -1,17 +1,38 @@
 import NativeObject from './NativeObject';
+import {toXML} from './Console';
 
-class ClientStore extends NativeObject {
-  constructor() {
-    super();
-    this._create('tabris.ClientStore');
-  }
-}
+class NativeStore extends NativeObject {
 
-class SecureStore extends NativeObject {
-  constructor() {
+  constructor(secure) {
     super();
-    this._create('tabris.SecureStore');
+    this.secure = secure;
+    this._create(secure ? 'tabris.SecureStore' : 'tabris.ClientStore');
   }
+
+  get keys() {
+    return this._nativeCall('keys');
+  }
+
+  _getXMLElementName() {
+    return 'Storage';
+  }
+
+  _getXMLAttributes() {
+    return [['length', this.keys.length]];
+  }
+
+  _getXMLContent() {
+    return this.keys.map(key => {
+      const value = this._nativeCall('get', {key});
+      const item = key.replace(/[^a-zA-Z0-9_.:-]/g, '');
+      const lines = value.split('\n');
+      if (lines.length === 1) {
+        return `  <${item}>${value}</${item}>`;
+      }
+      return `  <${item}>\n${lines.map(line => '    ' + line).join('\n')}\n  </${item}>`;
+    });
+  }
+
 }
 
 export default class Storage {
@@ -57,11 +78,15 @@ export default class Storage {
   }
 
   key(index) {
-    return this._nativeObject._nativeCall('keys')[index] || null;
+    return this._nativeObject.keys[index] || null;
+  }
+
+  [toXML]() {
+    return this._nativeObject[toXML]();
   }
 
   get length() {
-    return this._nativeObject._nativeCall('keys').length;
+    return this._nativeObject.keys.length;
   }
 
 }
@@ -71,6 +96,5 @@ function encode(value) {
 }
 
 export function create(secure) {
-  const nativeObject = secure ? new SecureStore() : new ClientStore();
-  return new Storage(nativeObject);
+  return new Storage(new NativeStore(secure));
 }

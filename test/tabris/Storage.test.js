@@ -1,5 +1,6 @@
 import {expect, mockTabris, stub, restore} from '../test';
 import Storage, {create as createStorage} from '../../src/tabris/Storage';
+import {toXML} from '../../src/tabris/Console';
 import ClientStub from './ClientStub';
 
 describe('Storage', function() {
@@ -202,6 +203,49 @@ describe('Storage', function() {
         expect(storage.key(0)).to.equal('0');
         expect(storage.key(4)).to.equal('4');
         expect(storage.key(5)).to.be.null;
+      });
+
+    });
+
+    describe('toXML', function() {
+
+      it('prints empty localStorage with length', function() {
+        client.call.withArgs(storage._nativeObject.cid, 'keys').returns([]);
+        expect(storage[toXML]()).to.be.equal('<Storage length=\'0\'/>');
+      });
+
+      it('prints empty localStorage content', function() {
+        client.call.withArgs(storage._nativeObject.cid, 'keys').returns(['a', 'b']);
+        client.call.withArgs(storage._nativeObject.cid, 'get').returns('content');
+        expect(storage[toXML]()).to.be.equal(
+          `<Storage length='2'>
+  <a>content</a>
+  <b>content</b>
+</Storage>`
+        );
+      });
+
+      it('prints empty localStorage with simplified keys', function() {
+        client.call.withArgs(storage._nativeObject.cid, 'keys').returns(['a\n\\/b c1-.:d<>_']);
+        client.call.withArgs(storage._nativeObject.cid, 'get').returns('content');
+        expect(storage[toXML]()).to.be.equal(
+          `<Storage length='1'>
+  <abc1-.:d_>content</abc1-.:d_>
+</Storage>`
+        );
+      });
+
+      it('prints empty localStorage with multi line values', function() {
+        client.call.withArgs(storage._nativeObject.cid, 'keys').returns(['a']);
+        client.call.withArgs(storage._nativeObject.cid, 'get').returns('foo\nbar');
+        expect(storage[toXML]()).to.be.equal(
+          `<Storage length='1'>
+  <a>
+    foo
+    bar
+  </a>
+</Storage>`
+        );
       });
 
     });
