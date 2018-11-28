@@ -115,7 +115,7 @@ describe('NativeObject', function() {
       it('prints debug message for non-existing property', function() {
         object.set({unknown: 23});
 
-        expect(console.debug).to.have.been.calledWith('Setting undefined property "unknown"');
+        expect(console.warn).to.have.been.calledWithMatch('There is no setter for property "unknown"');
       });
 
       it('returns self to allow chaining', function() {

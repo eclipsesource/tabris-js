@@ -1,5 +1,5 @@
 import {types} from './property-types';
-import {hint, debug} from './Console';
+import {hint} from './Console';
 import EventObject from './EventObject';
 import Events from './Events';
 import Listeners from './Listeners';
@@ -328,7 +328,7 @@ NativeObject.defineEvents(NativeObject.prototype, {
 
 function setExistingProperty(name, value) {
   if (!(name in this)) {
-    debug('Setting undefined property "' + name + '"');
+    hint(this, 'There is no setter for property "' + name + '"');
   }
   this[name] = value;
 }
