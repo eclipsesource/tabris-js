@@ -1,7 +1,7 @@
 import {ActionSheet, ActionSheetItem, TextView, Button, contentView, StackComposite} from 'tabris';
 
 contentView.append(
-  <StackComposite layoutData='fill' alignment='stretchX'>
+  <StackComposite layoutData='fill' padding={8} spacing={16} alignment='stretchX'>
     <Button onSelect={showActionSheet}>Show ActionSheet</Button>
     <TextView alignment='center'/>
   </StackComposite>

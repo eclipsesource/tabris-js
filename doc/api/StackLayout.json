@@ -30,7 +30,7 @@
   "statics": {
     "properties": {
       "default": {
-        "description": "Instance of StackLayout used as the default `layout` property value of `StackComposite` widgets. Equivalent to `new StackLayout({padding: 16, spacing: 16})`",
+        "description": "Instance of StackLayout used as the default `layout` property value of `StackComposite` widgets. Equivalent to `new StackLayout()`",
         "type": "StackLayout"
       }
     }

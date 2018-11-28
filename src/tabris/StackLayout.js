@@ -13,7 +13,7 @@ export default class StackLayout extends Layout {
 
   static get default() {
     if (!this._default) {
-      this._default = new StackLayout({padding: 16, spacing: 16});
+      this._default = new StackLayout();
     }
     return this._default;
   }

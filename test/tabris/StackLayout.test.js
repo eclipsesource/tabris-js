@@ -21,23 +21,10 @@ describe('StackLayout', function() {
 
   describe('StackLayout.default', function() {
 
-    it('has padding', function() {
-      expect(StackLayout.default.padding).to.deep.equal({
-        left: 16, top: 16, right: 16, bottom: 16,
-      });
-    });
-
-    it('has spacing', function() {
-      expect(StackLayout.default.spacing).to.equal(16);
-    });
-
-    it('has alignment', function() {
+    it('has defaults', function() {
+      expect(StackLayout.default.spacing).to.equal(0);
+      expect(StackLayout.default.padding).to.deep.equal({left: 0, top: 0, right: 0, bottom: 0});
       expect(StackLayout.default.alignment).to.equal('left');
-    });
-
-    it('always returns same StackLayout', function() {
-      expect(StackLayout.default).to.be.instanceof(StackLayout);
-      expect(StackLayout.default).to.equal(StackLayout.default);
     });
 
   });
@@ -217,14 +204,14 @@ describe('StackLayout', function() {
     it('can be created by spacing parameter', function() {
       const layout = new StackComposite({spacing: 2}).layout;
       expect(layout.spacing).to.equal(2);
-      expect(layout.padding).to.deep.equal({left: 16, top: 16, right: 16, bottom: 16});
+      expect(layout.padding).to.deep.equal({left: 0, top: 0, right: 0, bottom: 0});
       expect(layout.alignment).to.equal('left');
     });
 
     it('can be created by alignment parameter', function() {
       const layout = new StackComposite({alignment: 'right'}).layout;
-      expect(layout.spacing).to.equal(16);
-      expect(layout.padding).to.deep.equal({left: 16, top: 16, right: 16, bottom: 16});
+      expect(layout.spacing).to.equal(0);
+      expect(layout.padding).to.deep.equal({left: 0, top: 0, right: 0, bottom: 0});
       expect(layout.alignment).to.equal('right');
     });
 
