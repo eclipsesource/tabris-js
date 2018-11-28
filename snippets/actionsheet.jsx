@@ -1,7 +1,7 @@
 import {ActionSheet, ActionSheetItem, TextView, Button, contentView, StackComposite} from 'tabris';
 
 contentView.append(
-  <StackComposite>
+  <StackComposite layoutData='fill' alignment='stretchX'>
     <Button onSelect={showActionSheet}>Show ActionSheet</Button>
     <TextView alignment='center'/>
   </StackComposite>
@@ -19,5 +19,5 @@ async function showActionSheet() {
     </ActionSheet>
   );
   const {action} = await actionSheet.onClose.promise();
-  ui.contentView.find(TextView).first().text = `${action || 'Nothing'} selected`;
+  contentView.find(TextView).first().text = `${action || 'Nothing'} selected`;
 }

@@ -25,6 +25,12 @@
       "default": 16,
       "const": true,
       "description": "Additional space to add between the children in device independent pixel."
+    },
+    "alignment": {
+      "type": "'left'|'centerX'|'stretchX'|'right'",
+      "const": true,
+      "default": "'left'",
+      "description": "Determines the horizontal placement of the children."
     }
   }
 }

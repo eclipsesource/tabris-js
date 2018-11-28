@@ -1,9 +1,9 @@
 import {contentView, TextView, StackComposite} from 'tabris';
 
 contentView.append(
-  <StackComposite layoutData='fill' padding={8} spacing={4}>
-    <TextView font='64px' background='red'>Hello World</TextView>
-    <TextView font='64px' background='green'>Hello World</TextView>
-    <TextView font='64px' background='blue'>Hello World</TextView>
+  <StackComposite alignment='left' padding={8} spacing={4}>
+    <TextView background='red'>lorem</TextView>
+    <TextView background='green'>ipsum dolor</TextView>
+    <TextView background='blue'>sit amet</TextView>
   </StackComposite>
-);
+).find(TextView).set({font: '48px', textColor: 'white'});

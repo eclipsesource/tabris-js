@@ -10,10 +10,11 @@ export default class StackComposite extends Composite {
 
   _initLayout(props = {}) {
     let layout = props.layout || StackLayout.default;
-    if ('padding' in props || 'spacing' in props) {
+    if ('padding' in props || 'spacing' in props || 'alignment' in props) {
       layout = new StackLayout({
         padding: 'padding' in props ? props.padding : layout.padding,
-        spacing: 'spacing' in props ? props.spacing : layout.spacing
+        spacing: 'spacing' in props ? props.spacing : layout.spacing,
+        alignment: 'alignment' in props ? props.alignment : layout.alignment
       });
     }
     this._checkLayout(layout);
@@ -27,6 +28,12 @@ export default class StackComposite extends Composite {
     }
   }
 
+  _getXMLAttributes() {
+    const result = super._getXMLAttributes();
+    result.push(['alignment', this.alignment]);
+    return result;
+  }
+
 }
 
 NativeObject.defineProperties(StackComposite.prototype, {
@@ -34,6 +41,11 @@ NativeObject.defineProperties(StackComposite.prototype, {
     type: 'number',
     get() {
       return this._layout.spacing;
+    }
+  },
+  alignment: {
+    get() {
+      return this._layout.alignment;
     }
   }
 });
