@@ -10,7 +10,7 @@ import {toXML} from '../Console';
 export default class Composite extends Widget {
 
   constructor(props) {
-    super(omit(props || {}, 'layout'));
+    super(omit(props || {}, ['layout', 'padding']));
     this._initLayout(props);
   }
 
@@ -176,6 +176,7 @@ export default class Composite extends Widget {
 NativeObject.defineProperties(Composite.prototype, {
   padding: {
     type: 'boxDimensions',
+    readonly: true,
     get() {
       return this._layout ? this._layout.padding : null;
     }

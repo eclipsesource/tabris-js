@@ -98,30 +98,6 @@ describe('Layout', function() {
       expect(call.properties.layoutData).to.eql({left: 23, top: 42});
     });
 
-    it('includes layout padding', function() {
-      layout = new ConstraintLayout({padding: {left: 1, top: 2, right: 3, bottom: 4}});
-      widget = new TestWidget().appendTo(parent);
-      widget.layoutData = {left: 11, top: ['10%', 12], right: 13, bottom: 14};
-      client.resetCalls();
-
-      layout.render(parent);
-
-      const call = client.calls({op: 'set', id: widget.cid})[0];
-      expect(call.properties.layoutData).to.eql({left: 12, top: [10, 14], right: 16, bottom: 18});
-    });
-
-    it('includes shorthand layout padding', function() {
-      layout = new ConstraintLayout({padding: 4});
-      widget = new TestWidget().appendTo(parent);
-      widget.layoutData = {left: 10, top: 10, right: 10, bottom: 10};
-      client.resetCalls();
-
-      layout.render(parent);
-
-      const call = client.calls({op: 'set', id: widget.cid})[0];
-      expect(call.properties.layoutData).to.eql({left: 14, top: 14, right: 14, bottom: 14});
-    });
-
     it('does not fail when there are no children', function() {
       expect(() => {
         layout.render(widget);
@@ -151,6 +127,20 @@ describe('Layout', function() {
     it('throws if layout is not set', function() {
       parent = new TestWidget();
       expect(() => layout.add(parent)).to.throw();
+    });
+
+    it('does not SET padding if 0', function() {
+      expect(client.properties(parent.cid).padding).to.be.undefined;
+    });
+
+    it('SETs padding', function() {
+      layout = new TestLayout({padding: {left: 1, right: 2, top: 3, bottom: 4}}, queue);
+      parent = new TestWidget({layout});
+      widget = new TestWidget().appendTo(parent);
+      layout.add(parent);
+      expect(client.properties(parent.cid).padding).to.deep.equal(
+        {left: 1, right: 2, top: 3, bottom: 4}
+      );
     });
 
     it('triggers render after flush', function() {

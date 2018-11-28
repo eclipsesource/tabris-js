@@ -5,7 +5,6 @@ import Constraint from './Constraint';
 import Percent from './Percent';
 
 const layoutDataProps = ['left', 'right', 'top', 'bottom', 'width', 'height', 'centerX', 'centerY', 'baseline'];
-const edges = ['left', 'top', 'right', 'bottom'];
 
 export default class Layout {
 
@@ -40,6 +39,9 @@ export default class Layout {
     });
     if (composite.$children) {
       composite.$children.forEach(this._addChild);
+    }
+    if ((this._padding.left + this._padding.top + this._padding.right + this._padding.bottom) !== 0) {
+      composite._nativeSet('padding', this._padding);
     }
     this._layoutQueue.add(composite);
   }
@@ -123,9 +125,7 @@ export default class Layout {
   }
 
   _getRawLayoutData(layoutData, targetWidget) {
-    const result = this._resolveAttributes(layoutData, targetWidget);
-    this._addPadding(result);
-    return result;
+    return this._resolveAttributes(layoutData, targetWidget);
   }
 
   _resolveAttributes(layoutData, targetWidget) {
@@ -137,18 +137,6 @@ export default class Layout {
       }
     }
     return result;
-  }
-
-  _addPadding(rawLayoutData) {
-    for (let i = 0; i < edges.length; i++) {
-      const edge = edges[i];
-      const value = rawLayoutData[edge];
-      if (typeof value === 'number') {
-        rawLayoutData[edge] += this._padding[edge];
-      } else if (value instanceof Array && (typeof rawLayoutData[edge][0] === 'number')) {
-        rawLayoutData[edge][1] += this._padding[edge];
-      }
-    }
   }
 
 }

@@ -64,16 +64,16 @@ describe('StackLayout', function() {
 
     describe('with alignment left', function() {
 
-      it('renders children layoutData with padding', function() {
+      it('renders children layoutData without padding', function() {
         const all = render({padding: {left: 17, top: 18, right: 19, bottom: 20}, alignment: 'left'});
         const cid = parent.children().toArray().map(child => child.cid);
 
-        expect(all[0]).to.deep.equal({top: 18, left: 17});
-        expect(all[1]).to.deep.equal({top: [cid[0], 0], left: 17});
-        expect(all[2]).to.deep.equal({top: [cid[1], 0], left: 17});
-        expect(all[3]).to.deep.equal({top: [cid[2], 0], left: 17});
-        expect(all[4]).to.deep.equal({top: [cid[3], 0], left: 17});
-        expect(all[5]).to.deep.equal({top: [cid[4], 0], left: 17});
+        expect(all[0]).to.deep.equal({top: 0, left: 0});
+        expect(all[1]).to.deep.equal({top: [cid[0], 0], left: 0});
+        expect(all[2]).to.deep.equal({top: [cid[1], 0], left: 0});
+        expect(all[3]).to.deep.equal({top: [cid[2], 0], left: 0});
+        expect(all[4]).to.deep.equal({top: [cid[3], 0], left: 0});
+        expect(all[5]).to.deep.equal({top: [cid[4], 0], left: 0});
       });
 
       it('renders children layoutData with spacing', function() {
@@ -92,18 +92,6 @@ describe('StackLayout', function() {
 
     describe('with alignment centerX', function() {
 
-      it('renders children layoutData with padding', function() {
-        const all = render({padding: {left: 17, top: 18, right: 19, bottom: 20}, alignment: 'centerX'});
-        const cid = parent.children().toArray().map(child => child.cid);
-
-        expect(all[0]).to.deep.equal({top: 18, centerX: 0});
-        expect(all[1]).to.deep.equal({top: [cid[0], 0], centerX: 0});
-        expect(all[2]).to.deep.equal({top: [cid[1], 0], centerX: 0});
-        expect(all[3]).to.deep.equal({top: [cid[2], 0], centerX: 0});
-        expect(all[4]).to.deep.equal({top: [cid[3], 0], centerX: 0});
-        expect(all[5]).to.deep.equal({top: [cid[4], 0], centerX: 0});
-      });
-
       it('renders children layoutData with spacing', function() {
         const all = render({spacing: 16, alignment: 'centerX'});
         const cid = parent.children().toArray().map(child => child.cid);
@@ -120,16 +108,16 @@ describe('StackLayout', function() {
 
     describe('with alignment stretchX', function() {
 
-      it('renders children layoutData with padding', function() {
+      it('renders children layoutData without padding', function() {
         const all = render({padding: {left: 17, top: 18, right: 19, bottom: 20}, alignment: 'stretchX'});
         const cid = parent.children().toArray().map(child => child.cid);
 
-        expect(all[0]).to.deep.equal({top: 18, left: 17, right: 19});
-        expect(all[1]).to.deep.equal({top: [cid[0], 0], left: 17, right: 19});
-        expect(all[2]).to.deep.equal({top: [cid[1], 0], left: 17, right: 19});
-        expect(all[3]).to.deep.equal({top: [cid[2], 0], left: 17, right: 19});
-        expect(all[4]).to.deep.equal({top: [cid[3], 0], left: 17, right: 19});
-        expect(all[5]).to.deep.equal({top: [cid[4], 0], left: 17, right: 19});
+        expect(all[0]).to.deep.equal({top: 0, left: 0, right: 0});
+        expect(all[1]).to.deep.equal({top: [cid[0], 0], left: 0, right: 0});
+        expect(all[2]).to.deep.equal({top: [cid[1], 0], left: 0, right: 0});
+        expect(all[3]).to.deep.equal({top: [cid[2], 0], left: 0, right: 0});
+        expect(all[4]).to.deep.equal({top: [cid[3], 0], left: 0, right: 0});
+        expect(all[5]).to.deep.equal({top: [cid[4], 0], left: 0, right: 0});
       });
 
       it('renders children layoutData with spacing', function() {
@@ -152,12 +140,12 @@ describe('StackLayout', function() {
         const all = render({padding: {left: 17, top: 18, right: 19, bottom: 20}, alignment: 'right'});
         const cid = parent.children().toArray().map(child => child.cid);
 
-        expect(all[0]).to.deep.equal({top: 18, right: 19});
-        expect(all[1]).to.deep.equal({top: [cid[0], 0], right: 19});
-        expect(all[2]).to.deep.equal({top: [cid[1], 0], right: 19});
-        expect(all[3]).to.deep.equal({top: [cid[2], 0], right: 19});
-        expect(all[4]).to.deep.equal({top: [cid[3], 0], right: 19});
-        expect(all[5]).to.deep.equal({top: [cid[4], 0], right: 19});
+        expect(all[0]).to.deep.equal({top: 0, right: 0});
+        expect(all[1]).to.deep.equal({top: [cid[0], 0], right: 0});
+        expect(all[2]).to.deep.equal({top: [cid[1], 0], right: 0});
+        expect(all[3]).to.deep.equal({top: [cid[2], 0], right: 0});
+        expect(all[4]).to.deep.equal({top: [cid[3], 0], right: 0});
+        expect(all[5]).to.deep.equal({top: [cid[4], 0], right: 0});
       });
 
       it('renders children layoutData with spacing', function() {

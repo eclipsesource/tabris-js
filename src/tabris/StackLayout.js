@@ -24,14 +24,12 @@ export default class StackLayout extends Layout {
     this._alignment = Align[properties.alignment] || Align.left;
     const align = this._alignment;
     const baseData = {
-      left: (align === Align.left || align === Align.stretchX) ? this._padding.left : 'auto',
-      right: (align === Align.right || align === Align.stretchX) ? this._padding.right : 'auto',
+      left: (align === Align.left || align === Align.stretchX) ? 0 : 'auto',
+      right: (align === Align.right || align === Align.stretchX) ? 0 : 'auto',
       top: [LayoutData.prev, this._spacing],
       centerX: (align === Align.centerX) ? 0 : 'auto'
     };
-    this._firstLayoutData = LayoutData.from(Object.assign({}, baseData, {
-      top: this._padding.top
-    }));
+    this._firstLayoutData = LayoutData.from(Object.assign({}, baseData, {top: 0}));
     this._defaultLayoutData = LayoutData.from(baseData);
   }
 
