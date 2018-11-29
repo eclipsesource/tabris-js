@@ -109,7 +109,7 @@ export default {
         }
       }
     } else {
-      hint(this, 'Trigger warning: Can not dispatch event "foo" on disposed object');
+      hint(this, `Trigger warning: Can not dispatch event "${type}" on disposed object`);
     }
     return this;
   },
