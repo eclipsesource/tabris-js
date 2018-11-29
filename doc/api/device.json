@@ -49,7 +49,7 @@
       "type": "string",
       "readonly": true,
       "const": true,
-      "description": "The user language configured on the device as an [RFC 4646](http://tools.ietf.org/html/rfc4646) compliant string. For example `\"de\"`, `\"es-ES\"`, etc. This property is also available globally as `navigator.language`."
+      "description": "The user language configured on the device as an [RFC 4646](http://tools.ietf.org/html/rfc4646) compliant string. For example `\"de\"`, `\"es-ES\"`, etc. This property is also available globally as `navigator.language`.  Note: On iOS ≥ 11 it will only return languages declared in [CFBundleLocalizations](https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html#//apple_ref/doc/uid/TP40009249-109552-TPXREF111)."
     },
     "screenWidth": {
       "type": "number",
