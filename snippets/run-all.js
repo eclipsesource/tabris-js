@@ -146,15 +146,18 @@ const snippets = [
     .then(() => tap(find(Composite), 2, 500, 500))
   ],
   ['layout-z-order.js', () => confirm(Composite, {}, 3)],
-  ['local-storage.js', () => confirm(Button, {}, 3)
-    .then(() => confirm(TextInput, {text: 'Hello world!'}))
+  ['local-storage.js', () => confirm(Button, {}, 5)
+    .then(() => confirm(TextInput, {text: 'Key'}))
+    .then(() => confirm(TextInput, {text: 'Value'}))
     .then(() => tap(find(Button, {text: 'Set'})))
-    .then(() => confirm(TextInput, {text: ''}))
+    .then(() => confirm(TextView, {text: '"Key" set to "Value"'}))
     .then(() => tap(find(Button, {text: 'Get'})))
-    .then(() => confirm(TextInput, {text: 'Hello world!'}))
+    .then(() => confirm(TextView, {text: '"Key" is "Value"'}))
     .then(() => tap(find(Button, {text: 'Remove'})))
+    .then(() => confirm(TextView, {text: 'Removed "Key"'}))
     .then(() => tap(find(Button, {text: 'Get'})))
-    .then(() => confirm(TextInput, {text: ''}))
+    .then(() => confirm(TextView, {text: '"Key" is "null"'}))
+    .then(() => tap(find(Button, {text: 'List Keys'})))
   ],
   ['navigationbar.js', () => confirm(Picker, {}, 3)
     .then(() => selectAllItems(find(Picker, {}, 0), 300, true))
