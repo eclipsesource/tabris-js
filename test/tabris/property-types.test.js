@@ -34,6 +34,10 @@ describe('property-types', function() {
       expect(types.ColorValue.encode(null)).to.equal(undefined);
     });
 
+    it('decode translates `null` to `initial`', function() {
+      expect(types.ColorValue.decode(null)).to.equal('initial');
+    });
+
   });
 
   describe('shader', function() {
@@ -96,8 +100,8 @@ describe('property-types', function() {
       expect(shader.image).to.deep.equal(['foo.png', null, null, null]);
     });
 
-    it('decode converts falsy to transparent color', function() {
-      expect(types.shader.decode(null)).to.equal(Color.transparent);
+    it('decode converts falsy to "initial"', function() {
+      expect(types.shader.decode(null)).to.equal('initial');
     });
 
     it('decode converts linear gradient shader to a LinearGradient', function() {

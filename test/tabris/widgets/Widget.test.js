@@ -12,7 +12,6 @@ import ToggleButton from '../../../src/tabris/widgets/ToggleButton';
 import TextInput from '../../../src/tabris/widgets/TextInput';
 import {omit} from '../../../src/tabris/util';
 import LayoutData from '../../../src/tabris/LayoutData';
-import Color from '../../../src/tabris/Color';
 import Image from '../../../src/tabris/Image';
 import Constraint from '../../../src/tabris/Constraint';
 import {toXML} from '../../../src/tabris/Console';
@@ -1490,7 +1489,7 @@ describe('Widget', function() {
 
       const result = widget.background;
 
-      expect(result).to.equal(Color.transparent);
+      expect(result).to.equal('initial');
     });
 
     it('translates bounds to object', function() {

@@ -90,7 +90,7 @@ export const types = {
     },
     decode(value) {
       if (!value) {
-        return Color.transparent;
+        return 'initial';
       }
       if (value.type === 'color') {
         return Color.from(value.color);
@@ -118,8 +118,7 @@ export const types = {
     },
     decode(value) {
       if (!value) {
-        // NOTE: null is only returned for "background" where it means "no background"
-        return Color.transparent;
+        return 'initial';
       }
       return Color.from(value);
     }
