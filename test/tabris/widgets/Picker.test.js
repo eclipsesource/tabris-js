@@ -138,6 +138,15 @@ describe('Picker', function() {
         expect(client.calls({op: 'set', id: picker.cid})[0].properties).to.deep.equal({items: ['foo', 'foo', 'foo']});
       });
 
+      it('converts call back results to string', function() {
+        picker.itemText = () => null;
+
+        tabris.flush();
+
+        expect(client.calls({op: 'set', id: picker.cid})[0].properties)
+          .to.deep.equal({items: ['null', 'null', 'null']});
+      });
+
     });
 
     describe('selectionIndex', function() {

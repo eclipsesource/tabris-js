@@ -24,7 +24,7 @@ export default class Picker extends Widget {
     if (this.$needsUpdateItems) {
       const items = new Array(this.itemCount);
       for (let index = 0; index < items.length; index++) {
-        items[index] = this.itemText(index);
+        items[index] = this.itemText(index) + '';
       }
       this._nativeSet('items', items);
       tabris._nativeBridge.flush();
