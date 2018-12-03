@@ -7,7 +7,7 @@ export default {
 
   on(type, callback, context) {
     if (this._isDisposed) {
-      hint(this, 'Event registration warning: Can not listen for event "foo" on disposed object');
+      hint(this, `Event registration warning: Can not listen for event "${type}" on disposed object`);
     }
     if (isObject(type)) {
       for (const key in type) {
