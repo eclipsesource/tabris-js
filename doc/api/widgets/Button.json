@@ -15,6 +15,36 @@
     ]
   },
   "properties": {
+    "style": {
+      "type": "string",
+      "values": [
+        "default",
+        "elevate",
+        "flat",
+        "outline",
+        "text"
+      ],
+      "default": "default",
+      "const": true,
+      "description": "The `style` controls the appearance of a `Button` and has to be provided in its constructor. The `default` style creates a platform specific button, which is flat on iOS and has an elevation and shadow on Android. In addition the following specific style values can be used:\n\n- `elevate` A button with a platform specific background color, elevation and a surrounding drop shadow. Only supported on Android\n- `flat` A button with no elevation and a platform specific background color\n- `outline` A button with a transparent background and an outline stroke which can be controlled via the properties `strokeWidth` and `strokeColor`\n- `text` A button with no background and only consisting of its text label.",
+      "platforms": {
+        "ios": false
+      }
+    },
+    "strokeColor": {
+      "type": "ColorValue",
+      "description": "Controls the line width of a button with the `style` _outline_.",
+      "platforms": {
+        "ios": false
+      }
+    },
+    "strokeWidth": {
+      "type": "number",
+      "description": "Controls the line color of a button with the `style` _outline_.",
+      "platforms": {
+        "ios": false
+      }
+    },
     "alignment": {
       "type": "string",
       "values": [

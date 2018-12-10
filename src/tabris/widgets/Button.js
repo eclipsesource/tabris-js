@@ -1,5 +1,6 @@
 import NativeObject from '../NativeObject';
 import Widget from '../Widget';
+import {hint} from '../Console';
 import {jsxFactory} from '../JsxProcessor';
 
 export default class Button extends Widget {
@@ -20,6 +21,33 @@ export default class Button extends Widget {
 }
 
 NativeObject.defineProperties(Button.prototype, {
+  style: {
+    type: ['choice', ['default', 'elevate', 'flat', 'outline', 'text']],
+    const: true,
+    default: 'default'
+  },
+  strokeColor: {
+    type: 'ColorValue',
+    set(name, value) {
+      if (this.style === 'outline') {
+        this._nativeSet(name, value);
+        this._storeProperty(name, value);
+      } else {
+        hint(this, `The strokeColor can only be set on buttons with style "outline" but it has style ${this.style}.`);
+      }
+    }
+  },
+  strokeWidth: {
+    type: 'number', nocache: true,
+    set(name, value) {
+      if (this.style === 'outline') {
+        this._nativeSet(name, value);
+        this._storeProperty(name, value);
+      } else {
+        hint(this, `The strokeWidth can only be set on buttons with style "outline" but it has style ${this.style}.`);
+      }
+    }
+  },
   alignment: {type: ['choice', ['left', 'right', 'center']], default: 'center'},
   image: {type: 'ImageValue', default: null},
   text: {type: 'string', default: ''},
