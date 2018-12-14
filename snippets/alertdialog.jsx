@@ -13,7 +13,7 @@ contentView.append(
 const textView =  contentView.find(TextView).first();
 
 async function showSimpleDialog() {
-  await AlertDialog.open('Comment saved');
+  await AlertDialog.open('Comment saved').onClose.promise();
   textView.text = 'Dialog closed';
 }
 
