@@ -12,7 +12,7 @@
       }
     ]
   },
-  "description": "Stack based layout manager.",
+  "description": "Stack based layout manager. Can be set on the `layout` property of any `Composite` or widget extending `Composite` like `Page` or `Tab` widget. The `StackComposite` uses it as the default `layout`.<br/><br/> All children of the composite are automatically arranged in one vertical stack, starting from the top. The `layoutData` on the children is currently ignored.",
   "properties": {
     "spacing": {
       "type": "number",
@@ -24,7 +24,7 @@
       "type": "'left'|'centerX'|'stretchX'|'right'",
       "const": true,
       "default": "'left'",
-      "description": "Determines the horizontal placement of the children."
+      "description": "Determines the horizontal placement of the children. For the `stretchX` value to work correctly the composite needs to be given a width either by setting `width` or by setting `left` and `right`."
     }
   },
   "statics": {
