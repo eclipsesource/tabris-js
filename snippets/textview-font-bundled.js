@@ -11,7 +11,7 @@ const scrollView = new ScrollView({
 for (const style of STYLES) {
   for (const family of FAMILIES) {
     for (const weight of WEIGHTS) {
-      const font = weight + ' ' + style + ' 24px ' + family;
+      const font = style + ' ' + weight + ' 24px ' + family;
       new TextView({
         left: 16, top: 'prev() 24', right: 16,
         text: font

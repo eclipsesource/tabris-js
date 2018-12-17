@@ -2,7 +2,7 @@ import {Composite, TextView, Button, app, ui, device} from 'tabris';
 
 // React to application hibernation, resume and back navigation
 
-const paused = 0;
+let paused = 0;
 
 createTextView('Id', app.id);
 createTextView('Version', app.version);
