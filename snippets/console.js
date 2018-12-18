@@ -10,6 +10,7 @@ const logTextInput = new TextInput({
   new Button({
     left: 10, right: 10, top: 'prev() 10',
     text: method
-  }).on('select', () => console[method](logTextInput.text))
-    .appendTo(ui.contentView);
+  }).on('select', () => {
+    console[method](logTextInput.text);
+  }).appendTo(ui.contentView);
 });
