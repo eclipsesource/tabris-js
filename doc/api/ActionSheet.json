@@ -72,7 +72,7 @@
           "description": "A copy of the selected action as an instance of ActionSheetItem."
         }
       },
-      "description": "Fired when an action was selected."
+      "description": "Fired when an action was selected. Note: on iOS, tapping outside of an ActionSheet will also fire a `select` event. Its parameter will be an index of a button with type `cancel`. This happens despite the fact that no button has been pressed."
     }
   },
   "statics": {
