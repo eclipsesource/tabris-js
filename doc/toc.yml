@@ -35,6 +35,8 @@
       url: JSX.html
     - title: Debugging
       url: debug.html
+    - title: Theming Android
+      url: theming-android.html
     - title: Build your app
       url: build.html
 
@@ -42,11 +44,11 @@
   pages:
     - title: Property Types
       url: api/types.html
-<%= api %>
+  <%= api %>
 
 - title: Widgets
   pages:
-<%= widgets %>
+  <%= widgets %>
 
 - title: Custom Widgets
   pages:
