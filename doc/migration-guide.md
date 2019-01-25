@@ -77,7 +77,7 @@ You can now set images directly on the `background` property.
 
 ### TabFolder.textColor property replaced with more flexible properties
 
-The `TabFolder.textColor` property has been replaced with a set of new properties which provide more 
+The `TabFolder.textColor` property has been replaced with a set of new properties which provide more
 control over the appearance of the TabFolder tabs:
 
 - `tabTintColor`
@@ -173,3 +173,10 @@ import { ui, TextView } from 'tabris';
 ui.contentView.append(<TextView text='foo' />);
 ```
 Only widgets actually supporting different fonts now have a font property. Most applications should not have to adjust to this change.
+
+## Cordova plugins
+
+The Cordova CLI dependency has been updated from `6.5.0` to `8.1.2`. The Cordova CLI will now use the system `npm` to install plugins. This has following implications:
+
+* Plugins need to provide a `package.json` in their root directory.
+* Plugins in package [subdirectories](https://cordova.apache.org/docs/en/6.x/reference/cordova-cli/index.html#plugin-spec) are not supported anymore.
