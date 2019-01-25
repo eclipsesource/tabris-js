@@ -1,4 +1,4 @@
-import {Picker, ui} from 'tabris';
+import {Picker, contentView} from 'tabris';
 
 // Create a picker widget to select a string from a list
 
@@ -22,6 +22,6 @@ const picker = new Picker({
   itemCount: AIRPORTS.length,
   itemText: (index) => AIRPORTS[index].name,
   selectionIndex: 1
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 picker.on('select', ({index}) => console.log('Selected ' + AIRPORTS[index].id));

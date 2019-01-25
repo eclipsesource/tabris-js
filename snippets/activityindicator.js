@@ -1,17 +1,17 @@
-import {ActivityIndicator, Button, ui} from 'tabris';
+import {ActivityIndicator, Button, contentView} from 'tabris';
 
 // Create the activity indicator centered in the page
 const activityIndicator = new ActivityIndicator({
   centerX: 0,
   centerY: 0
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 // Create reload button
 const reloadButton = new Button({
   centerX: 0, centerY: 0,
   text: 'Run Task'
 }).on('select', () => executeLongRunningTask())
-  .appendTo(ui.contentView);
+  .appendTo(contentView);
 
 function executeLongRunningTask() {
   // Toggle visibility of elements

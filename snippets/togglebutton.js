@@ -1,4 +1,4 @@
-import {ToggleButton, ui} from 'tabris';
+import {ToggleButton, contentView} from 'tabris';
 
 // Create a toggle button with a checked handler
 
@@ -7,4 +7,4 @@ new ToggleButton({
   text: 'checked',
   checked: true
 }).on('checkedChanged', event => event.target.text = event.value ? 'checked' : 'not checked')
-  .appendTo(ui.contentView);
+  .appendTo(contentView);

@@ -1,4 +1,4 @@
-import {TextView, device, ui} from 'tabris';
+import {TextView, device, contentView} from 'tabris';
 
 // Display available device information
 
@@ -9,9 +9,9 @@ import {TextView, device, ui} from 'tabris';
       id: property,
       left: 10, right: 10, top: 'prev() 10',
       text: property + ': ' + device[property]
-    }).appendTo(ui.contentView);
+    }).appendTo(contentView);
   });
 
 device.on('orientationChanged', ({value: orientation}) => {
-  ui.contentView.find('#orientation').set({text: 'orientation: ' + orientation});
+  contentView.find('#orientation').set({text: 'orientation: ' + orientation});
 });

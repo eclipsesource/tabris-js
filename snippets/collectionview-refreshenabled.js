@@ -1,4 +1,4 @@
-import {CollectionView, TextView, ui} from 'tabris';
+import {CollectionView, TextView, contentView} from 'tabris';
 
 const items = [];
 
@@ -9,7 +9,7 @@ const view = new CollectionView({
   createCell: () => new TextView(),
   updateCell: (cell, index) => cell.text = items[index]
 }).on('refresh', loadItems)
-  .appendTo(ui.contentView);
+  .appendTo(contentView);
 
 loadItems();
 

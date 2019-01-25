@@ -1,4 +1,4 @@
-import {ImageView, TextView, CheckBox, Slider, Composite, ui} from 'tabris';
+import {ImageView, TextView, CheckBox, Slider, Composite, contentView} from 'tabris';
 
 const imageView = new ImageView({
   left: 0, right: 0, top: 0, bottom: '#controls',
@@ -6,7 +6,7 @@ const imageView = new ImageView({
   background: '#f5f5f5',
   zoomEnabled: true
 }).on('zoom', ({zoomLevel}) => zoomLevelSlider.selection = zoomLevel * 10)
-  .appendTo(ui.contentView);
+  .appendTo(contentView);
 
 const controls = new Composite({
   id: 'controls',
@@ -14,7 +14,7 @@ const controls = new Composite({
   background: 'white',
   padding: {left: 16, right: 16, top: 16, bottom: 24},
   elevation: 8
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 new CheckBox({
   id: 'zoomEnabled',

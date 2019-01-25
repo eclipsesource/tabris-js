@@ -1,4 +1,4 @@
-import {TextInput, TextView, ui} from 'tabris';
+import {TextInput, TextView, contentView} from 'tabris';
 
 // Create a text input field with input finished listener
 
@@ -9,5 +9,5 @@ new TextInput({
   new TextView({
     top: 'prev() 20', left: '20%',
     text
-  }).appendTo(ui.contentView);
-}).appendTo(ui.contentView);
+  }).appendTo(contentView);
+}).appendTo(contentView);

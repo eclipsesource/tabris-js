@@ -1,4 +1,4 @@
-import {Canvas, ui, device} from 'tabris';
+import {Canvas, contentView, device} from 'tabris';
 
 // Draw shapes on a canvas using HTML5 Canvas API
 
@@ -21,7 +21,7 @@ new Canvas({
   const data = ctx.getImageData(0, 0, 100, 100);
   ctx.putImageData(data, 180, 100);
 
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 function createImageData(width, height) {
   const array = [];

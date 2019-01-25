@@ -1,4 +1,4 @@
-import {Button, Composite, NavigationView, Page, Tab, TabFolder, TextView, app, ui} from 'tabris';
+import {Button, Composite, NavigationView, Page, Tab, TabFolder, TextView, app, contentView} from 'tabris';
 
 // demonstrates NavigationViews as children of a TabFolder
 
@@ -6,7 +6,7 @@ const tabFolder = new TabFolder({
   left: 0, top: 0, right: 0, bottom: 0,
   tabBarLocation: 'bottom',
   background: 'white'
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 function createTab(title, image) {
   const tab = new Tab({

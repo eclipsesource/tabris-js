@@ -1,4 +1,4 @@
-import {Action, CheckBox, NavigationView, Page, Picker, ScrollView, TextView, ui} from 'tabris';
+import {Action, CheckBox, NavigationView, Page, Picker, ScrollView, TextView, contentView, drawer} from 'tabris';
 
 // demonstrates various NavigationView properties
 
@@ -7,12 +7,12 @@ const MARGIN_SMALL = 8;
 const LABEL_WIDTH = 144;
 const COLORS = [null, 'red', 'green', 'blue', 'rgba(0, 0, 0, 0.25)'];
 
-ui.drawer.enabled = true;
+drawer.enabled = true;
 
 const navigationView = new NavigationView({
   left: 0, top: 0, right: 0, height: 144,
   drawerActionVisible: true
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 const page = new Page({
   title: 'NavigationView',
@@ -37,7 +37,7 @@ const controls = new ScrollView({
   left: 0, right: 0, top: 'prev()', bottom: 0,
   background: 'white',
   elevation: 12
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 createCheckBox('Show toolbar', ({value: checked}) => {
   navigationView.toolbarVisible = checked;

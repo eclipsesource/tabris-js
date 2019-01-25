@@ -1,4 +1,4 @@
-import {TextView, Composite, ScrollView, WebView, ui} from 'tabris';
+import {TextView, Composite, ScrollView, WebView, contentView} from 'tabris';
 
 const BACKGROUNDS = [
   'linear-gradient(#f00, #00f)',
@@ -19,7 +19,7 @@ const BACKGROUNDS = [
 
 const scrollView = new ScrollView({
   left: 0, right: 0, top: 0, bottom: 0
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 new TextView({
   left: 16, top: 16, right: ['50%', 16],

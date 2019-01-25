@@ -1,4 +1,4 @@
-import {Button, Composite, NavigationView, Page, SearchAction, TextView, ui} from 'tabris';
+import {Button, Composite, NavigationView, Page, SearchAction, TextView, contentView} from 'tabris';
 
 // Create an action on NavigationView to perform a search with dynamic proposals
 
@@ -6,7 +6,7 @@ const PROPOSALS = ['baseball', 'batman', 'battleship', 'bangkok', 'bangladesh', 
 
 const navigationView = new NavigationView({
   left: 0, top: 0, right: 0, bottom: 0
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 const page = new Page({
   title: 'Search action'

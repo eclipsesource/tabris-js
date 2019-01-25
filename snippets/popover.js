@@ -1,10 +1,10 @@
-import {Action, NavigationView, Page, Popover, Button, TextView, ui, device} from 'tabris';
+import {Action, NavigationView, Page, Popover, Button, TextView, contentView, device} from 'tabris';
 
 const button = new Button({
   left: 16, right: 16, top: 24,
   text: 'Show Popover'
 }).on('select', showPopover)
-  .appendTo(ui.contentView);
+  .appendTo(contentView);
 
 function showPopover() {
   const popover = new Popover({width: 300, height: 400, anchor: button})

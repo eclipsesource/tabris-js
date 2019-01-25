@@ -1,10 +1,10 @@
-import {ScrollView, TextView, ui, app} from 'tabris';
+import {ScrollView, TextView, contentView, app} from 'tabris';
 
 app.registerFont('pacifico', 'resources/pacifico.ttf#Pacifico');
 
 const scrollView = new ScrollView({
   left: 0, top: 0, right: 0, bottom: 0
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 const font = '20px pacifico';
 new TextView({

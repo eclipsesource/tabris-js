@@ -1,4 +1,4 @@
-import {Composite, Slider, TextView, ui} from 'tabris';
+import {Composite, Slider, TextView, contentView} from 'tabris';
 
 const textView = new TextView({
   left: 16, top: 16, right: 16,
@@ -10,11 +10,11 @@ const textView = new TextView({
   'future, but as the fulfilment of an evil already presaged. They declared ' +
   'that now they knew the reason of those wild shrieks they had heard the ' +
   'night before. But again the old Manxman said nay.'
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 const controls = new Composite({
   left: 0, right: 0, bottom: 0
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 const spacingView = new TextView({
   right: 16, width: 32, centerY: 0

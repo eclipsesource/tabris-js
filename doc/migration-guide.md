@@ -168,9 +168,9 @@ ui.contentView.append(<textView text='foo'/>);
 has to be changed to:
 
 ```jsx
-import { ui, TextView } from 'tabris';
+import { contentView, TextView } from 'tabris';
 
-ui.contentView.append(<TextView text='foo' />);
+contentView.append(<TextView text='foo' />);
 ```
 Only widgets actually supporting different fonts now have a font property. Most applications should not have to adjust to this change.
 

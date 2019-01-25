@@ -1,10 +1,10 @@
-import {Button, TextInput, ui} from 'tabris';
+import {Button, TextInput, contentView} from 'tabris';
 
 const logTextInput = new TextInput({
   left: 10, top: 20, right: 10,
   text: 'Message',
   message: 'Log message'
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 ['debug', 'log', 'info', 'warn', 'error', 'trace'].forEach((method) => {
   new Button({
@@ -12,5 +12,5 @@ const logTextInput = new TextInput({
     text: method
   }).on('select', () => {
     console[method](logTextInput.text);
-  }).appendTo(ui.contentView);
+  }).appendTo(contentView);
 });

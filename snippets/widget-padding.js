@@ -1,10 +1,10 @@
-import {Composite, TextView, ui} from 'tabris';
+import {Composite, TextView, contentView} from 'tabris';
 
 const composite = new Composite({
   left: 16, right: 16, top: 16,
   background: 'gray',
   padding: 8
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 new TextView({
   left: 0, top: 0,

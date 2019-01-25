@@ -66,7 +66,7 @@ The event object includes the following properties:
 
 - **target**: *Widget* - the widget that received the event
 - **timeStamp**: *number* - the time at which the event was created, in milliseconds
-- **touches**: *{x: number, y: number, absoluteX: number, absoluteY: number}[]* - an array of touch coordinates for all current touches. The x/y coordinates are relative to the parent of the widget whereas the absoluteX/absoluteY coordinates are relative to the `ui.contentView`. Since multiple touches are currently not supported, the array always has one element.
+- **touches**: *{x: number, y: number, absoluteX: number, absoluteY: number}[]* - an array of touch coordinates for all current touches. The x/y coordinates are relative to the parent of the widget whereas the absoluteX/absoluteY coordinates are relative to the `contentView`. Since multiple touches are currently not supported, the array always has one element.
 
 Example:
 ```js

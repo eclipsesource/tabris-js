@@ -1,5 +1,5 @@
 // Create a collection view, initialize its cells and fill it with items
-import {CollectionView, Composite, ImageView, TextView, ui} from 'tabris';
+import {CollectionView, Composite, ImageView, TextView, contentView} from 'tabris';
 const IMAGE_PATH = 'resources/';
 
 const people = [
@@ -36,4 +36,4 @@ new CollectionView({
     });
   }
 }).on('select', ({index}) => console.log('selected', people[index].firstName))
-  .appendTo(ui.contentView);
+  .appendTo(contentView);

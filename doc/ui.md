@@ -4,26 +4,26 @@
 
 The UI of a Tabris.js app consists of native [Widgets](widget-basics.md). These widgets are implemented in native code, and represented by JavaScript objects. Every widget must have a parent to become visible on the screen. You can add a widget to a parent widget using its `appendTo` method.
 
-## The UI Root
+## Top-level container
 
-The top-level parent for all widgets is represented by the object `ui`. This object contains a number of fixed children, that represent different parts of the app's user interface:
+The top-level parent for all widgets is represented by the object `tabris`. This object contains a number of fixed children, that represent different parts of the app's user interface:
 
-- `ui.statusBar` - shows the time and some system status icons
-- `ui.navigationBar` - contains the *Back*, *Home*, etc. buttons on Android
-- `ui.contentView` - contains the app's main UI
-- `ui.drawer` - can be swiped in from the left
+- `contentView` - contains the app's main UI
+- `drawer` - can be swiped in from the left
+- `Popover` - shows a modal container
+- `AlertDialog` - is able to contain `TextInputs`
 
 Widgets can be added to the content view, and optionally to the drawer.
 
 ## The Status Bar
 
-The status bar is the small area on the top of the screen that displays notifications, status icons and the time. The object [ui.statusBar](api/StatusBar.md) can be used to control different aspects of its look and feel, such as background color and visibility.
+The status bar is the small area on the top of the screen that displays notifications, status icons and the time. The object [statusBar](api/StatusBar.md) can be used to control different aspects of its look and feel, such as background color and visibility.
 
 ![StatusBar](img/statusbar.png)
 
 ## The Navigation Bar
 
-The navigation bar is the area that contains the *Back*, *Home*, etc. buttons on Android. The object [ui.navigationBar](api/NavigationBar.md) can be used to control its background color and visibility.
+The navigation bar is the area that contains the *Back*, *Home*, etc. buttons on Android. The object [navigationBar](api/NavigationBar.md) can be used to control its background color and visibility.
 
 ![NavigationBar](img/navigationbar.png)
 
@@ -36,7 +36,7 @@ The content view is the container for the widgets that constitute the app's main
 ```js
 new Button({
   left: 16, top: 16
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 ```
 
 ## The Drawer
@@ -46,7 +46,7 @@ The "drawer" is a common component of mobile applications. It's a container that
 ![Drawer](img/drawer.png)
 
 ```js
-ui.drawer.enabled = true;
+drawer.enabled = true;
 ```
 
 The drawer can be opened by a swipe from the left edge of the screen or by tapping the action on the left side of a NavigationView (so called "burger menu"). To open and close the drawer programmatically, you can use its `open()` and `close()` methods, respectively.
@@ -57,7 +57,7 @@ A drawer may contain any kind of widgets:
 new ImageView({
   left: 16, top: 16, right: 16,
   image: 'buddy-icon.png'
-}).appendTo(ui.drawer);
+}).appendTo(drawer);
 ```
 
 ## Navigation Patters
@@ -71,7 +71,7 @@ To implement a page navigation pattern, you can use a full-screen [NavigationVie
 ```js
 let navigationView = new NavigationView({
   left: 0, top: 0, right: 0, bottom: 0
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 ```
 
 When a new page is appended to the NavigationView, it is put on top and becomes visible:
@@ -91,7 +91,7 @@ The main UI of an app can also be organized in tabs. To do so, use a fullscreen 
 ```js
 let tabFolder = new TabFolder({
   left: 0, top: 0, right: 0, bottom: 0
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 new Tab({
   title: 'Cart',
   image: 'cart.png'

@@ -1,4 +1,4 @@
-import {Composite, ui} from 'tabris';
+import {Composite, contentView} from 'tabris';
 
 const MARGIN = 16;
 
@@ -15,16 +15,16 @@ const LANDSCAPE = {
 new Composite({
   id: 'red',
   background: 'red'
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 new Composite({
   id: 'green',
   background: 'green'
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
-ui.contentView.on('resize', applyLayout);
-applyLayout(ui.contentView.bounds);
+contentView.on('resize', applyLayout);
+applyLayout(contentView.bounds);
 
 function applyLayout({width, height}) {
-  ui.contentView.apply(height > width ? PORTRAIT : LANDSCAPE);
+  contentView.apply(height > width ? PORTRAIT : LANDSCAPE);
 }

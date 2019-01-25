@@ -48,14 +48,14 @@ When trying to set an invalid value (e.g. of the wrong type), the value will be 
 
 ## Setting the Parent
 
-To become visible, a widget needs to be added to a parent. The top-level parent of all widgets on the main screen is the content view (`ui.contentView`). Widgets can be included in the widget hierarchy using `append()` or `appendTo()`.
+To become visible, a widget needs to be added to a parent. The top-level parent of all widgets on the main screen is the content view (`tabris.contentView`). Widgets can be included in the widget hierarchy by using `append()` or `appendTo()`.
 
 Therefore a complete "Hello World" app could look like this:
 
 ```js
-import { ui, TextView } from 'tabris';
+import { contentView, TextView } from 'tabris';
 
-new TextView({text: 'Hello World'}).appendTo(ui.contentView);
+new TextView({text: 'Hello World'}).appendTo(contentView);
 ```
 
 If the widget already has a parent, it is removed from the actual parent and appended to the new one. An *addChild* event is triggered on the new parent.

@@ -1,16 +1,16 @@
 // Download HTTP content using the fetch API
 // See https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
 
-import {Button, TextView, ui} from 'tabris';
+import {Button, TextView, contentView} from 'tabris';
 
 new Button({
   left: 16, right: 16, top: 'prev() 12',
   text: 'load'
-}).on('select', loadData).appendTo(ui.contentView);
+}).on('select', loadData).appendTo(contentView);
 
 const textView = new TextView({
   left: 16, right: 16, top: 'prev() 12'
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 function loadData() {
   fetch('https://freegeoip.net/json/')

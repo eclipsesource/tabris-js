@@ -1,4 +1,4 @@
-import {TextInput, WebView, ui} from 'tabris';
+import {TextInput, WebView, contentView} from 'tabris';
 
 // Create a web view to show a web page
 
@@ -7,11 +7,11 @@ const urlInput = new TextInput({
   message: 'Enter URL...',
   text: 'http://en.wikipedia.org'
 }).on('accept', loadUrl)
-  .appendTo(ui.contentView);
+  .appendTo(contentView);
 
 const webView = new WebView({
   left: 0, top: 'prev() 8', right: 0, bottom: 0
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 function loadUrl() {
   webView.url = urlInput.text;

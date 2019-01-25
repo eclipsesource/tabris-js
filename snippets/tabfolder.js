@@ -1,11 +1,11 @@
-import {Tab, TabFolder, TextView, ui} from 'tabris';
+import {Tab, TabFolder, TextView, contentView} from 'tabris';
 
 // Create a swipe enabled tab folder with 3 tabs
 
 const tabFolder = new TabFolder({
   left: 0, top: 0, right: 0, bottom: 0,
   paging: true // enables swiping. To still be able to open the developer console in iOS, swipe from the bottom right.
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 createTab('Cart', 'resources/cart.png', 'resources/cart-filled.png');
 createTab('Pay', 'resources/card.png', 'resources/card-filled.png');

@@ -1,10 +1,10 @@
-import {Tab, TabFolder, TextView, ui} from 'tabris';
+import {Tab, TabFolder, TextView, contentView} from 'tabris';
 
 const tabFolder = new TabFolder({
   left: 0, top: 0, right: 0, bottom: 0,
   paging: true,
   tabBarLocation: 'hidden'
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 for (let i = 1; i <= 3; i++) {
   createTab('Page ' + i);

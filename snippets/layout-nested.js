@@ -1,4 +1,4 @@
-import {Composite, ImageView, TextView, ui} from 'tabris';
+import {Composite, ImageView, TextView, contentView} from 'tabris';
 
 // Create recursively nested layout hierarchy
 
@@ -38,4 +38,4 @@ function createLayout(depth) {
   return composite;
 }
 
-createLayout(2).appendTo(ui.contentView);
+createLayout(2).appendTo(contentView);

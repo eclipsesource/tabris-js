@@ -1,15 +1,15 @@
-import {TimeDialog, TextView, Button, ui} from 'tabris';
+import {TimeDialog, TextView, Button, contentView} from 'tabris';
 
 new Button({
   left: 16, right: 16, top: 16,
   text: 'Show TimeDialog'
 }).on({select: showTimeDialog})
-  .appendTo(ui.contentView);
+  .appendTo(contentView);
 
 const selectionTextView = new TextView({
   left: 16, right: 16, top: ['prev()', 16],
   alignment: 'center'
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 function showTimeDialog() {
   return new TimeDialog({

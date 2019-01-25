@@ -1,4 +1,4 @@
-import {ScrollView, TextView, ui} from 'tabris';
+import {ScrollView, TextView, contentView} from 'tabris';
 
 const FAMILIES = ['sans-serif', 'serif', 'condensed', 'monospace'];
 const STYLES = ['normal', 'italic'];
@@ -6,7 +6,7 @@ const WEIGHTS =  ['thin', 'light', 'normal', 'medium', 'bold', 'black'];
 
 const scrollView = new ScrollView({
   left: 0, top: 0, right: 0, bottom: 0
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 for (const style of STYLES) {
   for (const family of FAMILIES) {

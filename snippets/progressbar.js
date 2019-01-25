@@ -1,4 +1,4 @@
-import {ProgressBar, ui} from 'tabris';
+import {ProgressBar, contentView} from 'tabris';
 
 // A progress bar that is animated using a timer
 
@@ -6,7 +6,7 @@ const progressBar = new ProgressBar({
   left: 15, right: 15, centerY: 0,
   maximum: 300,
   selection: 100
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 setInterval(() => {
   const selection = progressBar.selection + 1;

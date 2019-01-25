@@ -1,5 +1,5 @@
 import {
-  Slider, TextView, Picker, CheckBox, Switch, TextInput, ui, ScrollView, Button,
+  Slider, TextView, Picker, CheckBox, Switch, TextInput, contentView, ScrollView, Button,
   EventObject, RadioButton, Properties, Composite, WidgetCollection, JSXProperties, Listeners
 } from 'tabris';
 
@@ -134,7 +134,7 @@ class ReservationForm extends Composite {
 
 }
 
-ui.contentView.append(
+contentView.append(
   <ReservationForm
       left={0} top={0} right={0} bottom={0}
       classes={['Business', 'Economy', 'Economy Plus']}

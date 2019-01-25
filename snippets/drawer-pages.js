@@ -1,4 +1,6 @@
-import {Button, CollectionView, Composite, ImageView, NavigationView, Page, TextView, ui} from 'tabris';
+import {
+  Button, CollectionView, Composite, ImageView, NavigationView, Page, TextView, contentView, drawer
+} from 'tabris';
 
 const PAGE_CONFIGS = [
   {title: 'Basket', icon: 'resources/page.png'},
@@ -9,17 +11,15 @@ const navigationView = new NavigationView({
   left: 0, top: 0, right: 0, bottom: 0,
   drawerActionVisible: true,
   pageAnimation: 'none'
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
-ui.drawer.set({
-  enabled: true
-});
+drawer.enabled = true;
 
 new ImageView({
   left: 0, right: 0, top: 0, height: 200,
   image: 'resources/landscape.jpg',
   scaleMode: 'fill'
-}).appendTo(ui.drawer);
+}).appendTo(drawer);
 
 const pageSelector = new CollectionView({
   left: 0, top: 'prev()', right: 0, bottom: 0,
@@ -28,10 +28,10 @@ const pageSelector = new CollectionView({
   updateCell,
   cellHeight: 48
 }).on('select', ({index}) => {
-  ui.drawer.close();
+  drawer.close();
   navigationView.pages().dispose();
   createPage(PAGE_CONFIGS[index]).appendTo(navigationView);
-}).appendTo(ui.drawer);
+}).appendTo(drawer);
 
 createPage({title: 'Initial Page', icon: 'resources/page.png'}).appendTo(navigationView);
 

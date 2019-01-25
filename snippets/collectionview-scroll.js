@@ -1,4 +1,4 @@
-import {CollectionView, TextView, ui} from 'tabris';
+import {CollectionView, TextView, contentView} from 'tabris';
 
 const SECTION_HEIGHT = 48;
 const ITEM_HEIGHT = 32;
@@ -23,9 +23,9 @@ new CollectionView({
     text: getCurrentSection(firstVisibleItem).name,
     transform: {translationY: getSectionTranslationY(firstVisibleItem)}
   });
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
-floatingSection.appendTo(ui.contentView);
+floatingSection.appendTo(contentView);
 
 function getSectionTranslationY(firstVisibleItem) {
   if (scrollPosition < 0) {

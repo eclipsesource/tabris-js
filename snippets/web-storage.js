@@ -1,4 +1,4 @@
-import {TextView, ui} from 'tabris';
+import {TextView, contentView} from 'tabris';
 
 const KEY = 'localStorageSnippetCount';
 
@@ -9,4 +9,4 @@ new TextView({
   alignment: 'center',
   font: '22px sans-serif',
   text: 'This application was started ' + startCount + ' time(s).'
-}).appendTo(ui.contentView);
+}).appendTo(contentView);

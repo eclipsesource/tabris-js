@@ -1,4 +1,4 @@
-import {Slider, TextView, ui} from 'tabris';
+import {Slider, TextView, contentView} from 'tabris';
 
 // Create a slider with a selection handler
 
@@ -7,7 +7,7 @@ const textView = new TextView({
   alignment: 'center',
   font: '22px sans-serif',
   text: '50'
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 new Slider({
   left: 50, top: [textView, 20], right: 50,
@@ -15,4 +15,4 @@ new Slider({
   selection: 50,
   maximum: 150
 }).on('selectionChanged', ({value}) => textView.text = value)
-  .appendTo(ui.contentView);
+  .appendTo(contentView);

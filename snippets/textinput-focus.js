@@ -1,4 +1,4 @@
-import {TextInput, ui} from 'tabris';
+import {TextInput, contentView} from 'tabris';
 
 new TextInput({
   top: 20, left: '20%', right: '20%',
@@ -10,10 +10,10 @@ new TextInput({
     target.borderColor = 'yellow';
   },
   blur: ({target}) => target.borderColor = 'red'
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 new TextInput({
   top: 'prev() 20', left: '20%', right: '20%',
   message: 'This text field keeps its focus forever',
   keepFocus: true
-}).appendTo(ui.contentView);
+}).appendTo(contentView);

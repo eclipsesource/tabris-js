@@ -1,4 +1,4 @@
-import {TextView, ImageView, Composite, CollectionView, ui} from 'tabris';
+import {TextView, ImageView, Composite, CollectionView, contentView} from 'tabris';
 
 const MARGIN = 16;
 const TEXT = 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem' +
@@ -33,4 +33,4 @@ new CollectionView({
     return composite;
   },
   updateCell: (cell, index) => cell.find('#textView').set({text: items[index]})
-}).appendTo(ui.contentView);
+}).appendTo(contentView);

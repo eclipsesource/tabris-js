@@ -1,4 +1,4 @@
-import {Composite, TextView, Button, app, ui, device} from 'tabris';
+import {Composite, TextView, Button, app, contentView, device} from 'tabris';
 
 // React to application hibernation, resume and back navigation
 
@@ -12,26 +12,26 @@ new Composite({
   left: 0, top: 'prev() 16', right: 0,
   height: 1,
   background: '#E8E8E8'
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 const label = new TextView({
   left: 16, top: 'prev() 16', right: 16,
   font: 'italic 14px',
   text: 'You can press home and reopen the app to it to see how long you were away.'
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 new Button({
   left: 16, right: 16, bottom: 16,
   text: 'Reload app'
 }).on('select', () => app.reload())
-  .appendTo(ui.contentView);
+  .appendTo(contentView);
 
 if (device.platform === 'Android') {
   new Button({
     left: 16, right: 16, bottom: 'prev() 16',
     text: 'Close app'
   }).on('select', () => app.close())
-    .appendTo(ui.contentView);
+    .appendTo(contentView);
 }
 
 app.on('pause', () => paused = Date.now())
@@ -48,7 +48,7 @@ app.on('backNavigation', (event) => {
 });
 
 function createTextView(key, value) {
-  const composite = new Composite({left: 16, top: 'prev() 8', right: 16}).appendTo(ui.contentView);
+  const composite = new Composite({left: 16, top: 'prev() 8', right: 16}).appendTo(contentView);
   new TextView({text: key}).appendTo(composite);
   new TextView({text: value, left: 128}).appendTo(composite);
 }

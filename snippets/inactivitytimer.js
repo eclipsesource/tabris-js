@@ -1,4 +1,4 @@
-import {Button, InactivityTimer, TextView, ui} from 'tabris';
+import {Button, InactivityTimer, TextView, contentView} from 'tabris';
 
 const timer = new InactivityTimer({
   delay: 2000
@@ -7,7 +7,7 @@ const timer = new InactivityTimer({
 const label = new TextView({
   centerX: 0, top: 16,
   text: ''
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 new Button({
   centerX: 0, top: 'prev()',
@@ -15,7 +15,7 @@ new Button({
 }).on('select', () => {
   timer.start();
   label.text = 'started';
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 new Button({
   centerX: 0, top: 'prev()',
@@ -23,4 +23,4 @@ new Button({
 }).on('select', () => {
   timer.cancel();
   label.text = 'cancelled';
-}).appendTo(ui.contentView);
+}).appendTo(contentView);

@@ -1,4 +1,4 @@
-import {Composite, ImageView, Tab, TabFolder, TextView, ui} from 'tabris';
+import {Composite, ImageView, Tab, TabFolder, TextView, contentView} from 'tabris';
 
 const PARALLAX = 0.1;
 const PEOPLE = [
@@ -12,7 +12,7 @@ const PEOPLE = [
 const imageContainer = new Composite({
   left: 0, top: 0, right: 0, bottom: 0,
   background: 'white'
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 const tabFolder = new TabFolder({
   left: 0, top: 0, right: 0, bottom: 0,
@@ -39,7 +39,7 @@ const tabFolder = new TabFolder({
       transform: {translationX: Math.abs(1 - offsetPercent) * tabFolderWidth * PARALLAX}
     });
   }
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 for (let i = 0; i < PEOPLE.length; i++) {
   const person = PEOPLE[i];

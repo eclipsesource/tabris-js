@@ -1,9 +1,9 @@
-import {TextInput, TextView, Button, app, ui} from 'tabris';
+import {TextInput, TextView, Button, app, contentView} from 'tabris';
 
 const textInput = new TextInput({
   left: 16, right: 16, top: 16,
   text: 'http://tabris.com'
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 new Button({
   left: 16, top: ['prev()', 16], right: 16,
@@ -12,8 +12,8 @@ new Button({
   select: () => app.launch(textInput.text)
     .then(() => textView.text = 'Url has been launched')
     .catch((e) => textView.text = e)
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 const textView = new TextView({
   left: 16, right: 16, top: ['prev()', 16]
-}).appendTo(ui.contentView);
+}).appendTo(contentView);

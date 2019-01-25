@@ -1,9 +1,9 @@
-import {TextView, CollectionView, Slider, ui} from 'tabris';
+import {TextView, CollectionView, Slider, contentView} from 'tabris';
 
 const columnCountTextView = new TextView({
   bottom: 16, right: 16, width: 32,
   font: 'bold 14px'
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 const slider = new Slider({
   left: 16, bottom: 0, right: [columnCountTextView, 16], height: 48,
@@ -12,7 +12,7 @@ const slider = new Slider({
 }).on('selectionChanged', ({value: selection}) => {
   collectionView.columnCount = selection;
   columnCountTextView.text = selection;
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 const items = createItems();
 
@@ -32,7 +32,7 @@ const collectionView = new CollectionView({
       background: index % 2 === 0 ? '#CFD8DC' : '#ffffff'
     });
   }
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 slider.selection = 3;
 

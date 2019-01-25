@@ -1,4 +1,4 @@
-import {CollectionView, TextView, ImageView, ui} from 'tabris';
+import {CollectionView, TextView, ImageView, contentView} from 'tabris';
 
 const items = [];
 for (const section of ['settings-black-24dp@3x.png', 'share-black-24dp@3x.png', 'search-black-24dp@3x.png']) {
@@ -22,4 +22,4 @@ new CollectionView({
       view.text = item.text;
     }
   }
-}).appendTo(ui.contentView);
+}).appendTo(contentView);

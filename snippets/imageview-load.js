@@ -1,4 +1,4 @@
-import {ImageView, TextView, ui} from 'tabris';
+import {ImageView, TextView, contentView} from 'tabris';
 
 new ImageView({
   id: 'image1',
@@ -6,13 +6,13 @@ new ImageView({
   background: '#dedede',
   image: {src: 'resources/cloud-check.png', scale: 3}
 }).on('load', handleLoad)
-  .appendTo(ui.contentView);
+  .appendTo(contentView);
 
 new TextView({
   id: 'label-image1',
   right:'50% +8', top: '50% +8', width: 64,
   alignment: 'center'
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 new ImageView({
   id: 'image2',
@@ -20,14 +20,14 @@ new ImageView({
   background: '#dedede',
   image: {src: 'unavailable.png', scale: 3}
 }).on('load', handleLoad)
-  .appendTo(ui.contentView);
+  .appendTo(contentView);
 
 new TextView({
   id: 'label-image2',
   left: '50% +8', top: '50% +8', width: 64,
   alignment: 'center'
-}).appendTo(ui.contentView);
+}).appendTo(contentView);
 
 function handleLoad({target, error}) {
-  ui.contentView.find('#label-' + target.id).set({text: error ? 'Error' : 'Success'});
+  contentView.find('#label-' + target.id).set({text: error ? 'Error' : 'Success'});
 }

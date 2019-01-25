@@ -1,4 +1,4 @@
-import {CheckBox, ui} from 'tabris';
+import {CheckBox, contentView} from 'tabris';
 
 // Create a check box with a checked handler
 
@@ -7,4 +7,4 @@ new CheckBox({
   checked: true,
   text: 'checked'
 }).on('checkedChanged', event => event.target.text = event.value ? 'checked' : 'unchecked')
-  .appendTo(ui.contentView);
+  .appendTo(contentView);

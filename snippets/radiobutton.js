@@ -1,4 +1,4 @@
-import {RadioButton, ui} from 'tabris';
+import {RadioButton, contentView} from 'tabris';
 
 // Create radio buttons with checked handlers
 
@@ -10,5 +10,5 @@ import {RadioButton, ui} from 'tabris';
     if (checked) {
       console.log(target.text + ' checked');
     }
-  }).appendTo(ui.contentView);
+  }).appendTo(contentView);
 });

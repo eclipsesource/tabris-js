@@ -1,4 +1,4 @@
-import {Button, printer, ui, app} from 'tabris';
+import {Button, printer, contentView, app} from 'tabris';
 
 // Print a bundled PDF
 
@@ -6,13 +6,13 @@ new Button({
   left: 16, right: 16, top: 16,
   text: 'Print PDF'
 }).on('select', () => print('resources/example.pdf', 'application/pdf', 'Example PDF'))
-  .appendTo(ui.contentView);
+  .appendTo(contentView);
 
 new Button({
   left: 16, right: 16, top: 'prev() 16',
   text: 'Print Image'
 }).on('select', () => print('resources/salad.jpg', 'image/jpg', 'Salad image'))
-  .appendTo(ui.contentView);
+  .appendTo(contentView);
 
 function print(file, contentType, jobName) {
   fetch(app.getResourceLocation(file))

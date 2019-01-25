@@ -1,11 +1,11 @@
-import {RefreshComposite, CheckBox, ScrollView, TextView, ui} from 'tabris';
+import {RefreshComposite, CheckBox, ScrollView, TextView, contentView} from 'tabris';
 
 const refreshComposite = new RefreshComposite({
   left: 0, right: 0, top: 0, bottom: 0
 }).on('refresh', ({target}) => setTimeout(() => {
   target.refreshIndicator = false;
   textView.text = `last refresh: ${new Date()}\n${textView.text}`;
-}, 1000)).appendTo(ui.contentView);
+}, 1000)).appendTo(contentView);
 
 const scrollView = new ScrollView({
   left: 0, right: 0, top: 0, bottom: 0
@@ -29,4 +29,4 @@ new CheckBox({
   text: 'Enable pull to refresh',
   checked: true
 }).on('checkedChanged', ({value: checked}) => refreshComposite.refreshEnabled = checked)
-  .appendTo(ui.contentView);
+  .appendTo(contentView);

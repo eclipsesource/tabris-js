@@ -1,4 +1,4 @@
-import {ImageView, ui} from 'tabris';
+import {ImageView, contentView} from 'tabris';
 
 // Display a base64 encoded image in an ImageView
 
@@ -42,4 +42,4 @@ new ImageView({
     'aEL/Xmej5vca7d8D/D/jQoKicMJC4fRhdrlDpbTjFKHDo4JC/EC36RE+NvAJqkCnh/SL6oSx8wPHDh4AHhS/kKAAvVBHEPqAoFA/4GMGzBg5' +
     'LXDkjK7/+C/UKmCXwVcZZgAAAABJRU5ErkJggg=='
   }
-}).appendTo(ui.contentView);
+}).appendTo(contentView);

@@ -1,4 +1,4 @@
-import {ImageView, ui} from 'tabris';
+import {ImageView, contentView} from 'tabris';
 
 // Display images with different scale modes
 
@@ -12,5 +12,5 @@ function createImageView(scaleMode) {
     image: 'resources/target_200.png',
     background: '#aaaaaa',
     scaleMode
-  }).appendTo(ui.contentView);
+  }).appendTo(contentView);
 }

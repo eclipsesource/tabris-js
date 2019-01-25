@@ -29,13 +29,13 @@ To add multiple children to an existing parent you group them using `WidgetColle
 
 ```jsx
 // JavaScript/TypeScript:
-ui.contentView.append(
+contentView.append(
   new Button(),
   new TextView()
 );
 
 // JSX:
-ui.contentView.append(
+contentView.append(
   <WidgetCollection>
     <Button />
     <TextView />
@@ -71,7 +71,7 @@ A SFC that initializes an existing widget with new default values could look lik
 const StyledText = properties => <TextView textColor='red' {...properties} />;
 
 // example usage:
-ui.contentView.append(<StyledText>Hello World!</StyledText>);
+contentView.append(<StyledText>Hello World!</StyledText>);
 ```
 
 In TypeScript you need to give the proper type of the properties object and children:

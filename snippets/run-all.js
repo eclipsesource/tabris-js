@@ -1,8 +1,8 @@
 import {
-  NativeObject, ui, TextView, app, Button, Picker, Composite, CheckBox, Page, NavigationView, Action, device,
+  NativeObject, contentView, TextView, app, Button, Picker, Composite, CheckBox, Page, NavigationView, Action, device,
   SearchAction, TabFolder, Popover, ProgressBar, RadioButton, RefreshComposite, ScrollView, Slider, Switch,
   ToggleButton, TextInput, CollectionView, TimeDialog, Video, WebView, ImageView, ActivityIndicator, AlertDialog,
-  ActionSheet, Canvas, DateDialog
+  ActionSheet, Canvas, DateDialog, drawer
 } from 'tabris';
 
 // Use these to exclude tests where they are broken due to a platform bug
@@ -77,14 +77,14 @@ const snippets = [
     .then(() => wait(1000))
   ],
   ['drawer.js', () => wait(500)
-    .then(() => ui.drawer.open())
+    .then(() => drawer.open())
     .then(() => wait(1000))
-    .then(() => ui.drawer.close())
+    .then(() => drawer.close())
     .then(() => wait(500))
   ],
   ['drawer-pages.js', () => confirm(Button)
     .then(() => tap(find(Button)))
-    .then(() => ui.drawer.open())
+    .then(() => drawer.open())
     .then(() => wait(1000))
     .then(() => select(find(CollectionView), 2))
     .then(() => confirm(Page, {title: 'Another Page'}))
@@ -431,16 +431,16 @@ const snippets = [
   android && ['widget-padding.js', () => confirm(TextView, {bounds: {left: 8, top: 8}, left: 0, top: 0})],
   ['widget-styling.js', () => confirm(TextView, {}, 5)],
   ['widget-touch.js', () => confirm(TextView, {text: 'Touch anywhere...'})
-    .then(() => ui.contentView.onTouchStart.trigger({touches: [{x: 100, y: 100}]}))
+    .then(() => contentView.onTouchStart.trigger({touches: [{x: 100, y: 100}]}))
     .then(() => wait(200))
     .then(() => forAsync(
       20,
-      i => ui.contentView.onTouchMove.trigger({touches: [{x: 100 + i * -3, y: 100 + i * -2}]}),
+      i => contentView.onTouchMove.trigger({touches: [{x: 100 + i * -3, y: 100 + i * -2}]}),
       16
     ))
-    .then(() => ui.contentView.onTouchEnd.trigger({touches: [{x: 0, y: 0}]}))
+    .then(() => contentView.onTouchEnd.trigger({touches: [{x: 0, y: 0}]}))
     .then(() => confirm(TextView, {text: 'touchEnd: 0 X 0'}))
-    .then(() => ui.contentView.onLongPress.trigger({touches: [{x: 0, y: 0}]}))
+    .then(() => contentView.onLongPress.trigger({touches: [{x: 0, y: 0}]}))
     .then(() => confirm(TextView, {text: 'longPress: 0 X 0'}))
   ],
   ['xmlhttprequest.js', () => confirm(Button)
@@ -490,19 +490,19 @@ function showIntro() {
     top: 'prev()', left: 10, right: 10,
     itemText: index => typeof snippets[index] === 'string' ? snippets[index] : snippets[index][0],
     itemCount: snippets.length
-  }).appendTo(ui.contentView);
+  }).appendTo(contentView);
   const autoCheckBox = new CheckBox({
     top: 'prev()',
     text: 'auto continue',
     checked: localStorage.getItem(KEY_AUTO_CONTINUE) === 'true'
-  }).appendTo(ui.contentView);
+  }).appendTo(contentView);
   new Button({text: 'Start', top: 'prev()'}).on({
     select: () => {
       localStorage.setItem(KEY_AUTO_CONTINUE, autoCheckBox.checked);
       localStorage.setItem(KEY_SNIPPET_INDEX, snippetPicker.selectionIndex);
       app.reload();
     }
-  }).appendTo(ui.contentView);
+  }).appendTo(contentView);
   return true;
 }
 
@@ -612,7 +612,7 @@ function showOptions(msg, state) {
     }).on({tap: () => app.reload()})
   );
   options.set({opacity: 0}).animate({opacity: 1}, {duration: 200});
-  ui.contentView.append(options);
+  contentView.append(options);
   if (useTimer) {
     wait(2000).then(() => {
       if (!options.isDisposed()) {
