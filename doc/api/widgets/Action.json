@@ -1,6 +1,6 @@
 {
   "type": "Action",
-  "description": "An executable item that is integrated in the application's navigation menu. Add a listener on *select* to implement the action.",
+  "description": "An executable item that is integrated in the application's navigation menu. Add a *select* listener to react to action taps.",
   "extends": "Widget",
   "jsxChildren": "string",
   "constructor": {
@@ -87,7 +87,7 @@
   "properties": {
     "image": {
       "type": "ImageValue",
-      "description": "Icon image for the action."
+      "description": "Icon image for the action.\n\nOn iOS the `image` is tinted with the apps default accent color whereas on Android the `image` is shown as is. When an action is placed into a `NavigationView`, the `NavigationView` property `actionColor` can be used to adjust the action tint color."
     },
     "placementPriority": {
       "type": "string",
@@ -101,7 +101,7 @@
     },
     "title": {
       "type": "string",
-      "description": "The text to be displayed for the action.",
+      "description": "The text to be displayed for the action.\n\nWhen an action is placed into a `NavigationView`, the `NavigationView` property `actionTextColor` can be used to adjust the action title color on Android.",
       "jsxContentProperty": true
     }
   },
