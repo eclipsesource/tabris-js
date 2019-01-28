@@ -420,9 +420,9 @@ class DocumentRenderer {
       result.push(` and has the same attributes as the property type.`);
     }
     if (property.const && !isStatic) {
-      result.push('\n\nThis property can only be set via constructor ');
+      result.push('\n\nThis property can only be set via constructor');
       if (this.def.isWidget || this.def.extends === 'Popup') {
-        result.push('or JSX');
+        result.push(' or JSX');
       }
       result.push('. Once set, it cannot change anymore.');
     }
