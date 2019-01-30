@@ -25,7 +25,7 @@ All widgets support a property `layoutData` that defines how the widget should b
 Defines the position of the widget's edge.
 Accepted values:
 
-- *offset*: the distance from the parent's opposing edge in device independent pixels
+- *offset*: The distance from the parent's opposing edge in device independent pixels. Must not be negative.
 - *widget*: attach this edge to the given sibling's opposing edge
 - *percentage*: the distance from the parent's opposing edge in percent of the parent's width
 - \[*percentage*, *offset*\]: the distance from the parent's opposing edge in percent of the parent's width plus a fixed offset in pixels

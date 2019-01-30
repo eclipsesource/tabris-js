@@ -136,6 +136,8 @@ The return value of the `layoutData` property is now always an instance of the `
 
 The shorthand properties to `layoutData` now also return the normalized types used in the `LayoutData` class, i.e. an instance of `Constraint` (for `left`, `right`, `top` and `bottom`) or `SiblingReference` (for `baseline`), a number (for `width`, `height`, `centerX` and `centerY`), or `"auto"` (the default for all of these).
 
+In 2.x, negative edge offsets were previously supported on some platforms. To prevent inconsistent layouts among platforms, they are not supported anymore.
+
 ### padding
 
 Tge `padding` property on `Composite` is now read-only, it can only be set via constructor. Also, it can now be `null` in case the `layout` property is null. That is the case on `NavigationView` and `TabFolder` by default.

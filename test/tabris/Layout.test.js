@@ -294,6 +294,17 @@ describe('Layout', function() {
       expect(result).to.deep.equal(LayoutData.from({left: 1, baseline: 'Other'}));
     });
 
+    ['left', 'top', 'right', 'bottom'].forEach((property) => {
+      it(`raises a warning for negative layoutData edge offset (${property})`, function() {
+        const result = check({[property]: -5, width: 5});
+
+        let warning = `Negative edge offsets are not supported. Setting ${property} to 0.\n`;
+        warning += 'Target: NavigationView[cid="$5"]#root > Page[cid="$4"] > TestWidget[cid="$6"]';
+        expect(console.warn).to.have.been.calledWith(warning);
+        expect(result).to.deep.equal(LayoutData.from({[property]: 0, width: 5}));
+      });
+    });
+
   });
 
   describe('resolveReferences', function() {

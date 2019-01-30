@@ -121,6 +121,12 @@ export default class Layout {
       warn('Inconsistent layoutData: top and bottom are set, ignore height.\nTarget: ' + getPath(child));
       result = makeAuto(result, 'height');
     }
+    const property = ['left', 'top', 'right', 'bottom'].find(prop => result[prop].offset && result[prop].offset < 0);
+    if (property) {
+      warn('Negative edge offsets are not supported. Setting ' + property + ' to 0.\nTarget: '  + getPath(child));
+      const normalizedPropertyValue = Object.assign({}, result[property], {offset: 0});
+      result = LayoutData.from(Object.assign({}, result, {[property]: normalizedPropertyValue}));
+    }
     return result;
   }
 

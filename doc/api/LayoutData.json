@@ -14,25 +14,25 @@
   "properties": {
     "left": {
       "type": "Constraint | 'auto'",
-      "description": "The position of the widget's left edge relative to the parent or a sibling widget.",
+      "description": "The position of the widget's left edge relative to the parent or a sibling widget. Must not be negative.",
       "const": true,
       "default": "'auto'"
     },
     "top": {
       "type": "Constraint | 'auto'",
-      "description": "The position of the widget's top edge relative to the parent or a sibling widget.",
+      "description": "The position of the widget's top edge relative to the parent or a sibling widget. Must not be negative.",
       "const": true,
       "default": "'auto'"
     },
     "right": {
       "type": "Constraint | 'auto'",
-      "description": "The position of the widget's right edge relative to the parent or a sibling widget.",
+      "description": "The position of the widget's right edge relative to the parent or a sibling widget. Must not be negative.",
       "const": true,
       "default": "'auto'"
     },
     "bottom": {
       "type": "Constraint | 'auto'",
-      "description": "The position of the widget's bottom edge relative to the parent or a sibling widget.",
+      "description": "The position of the widget's bottom edge relative to the parent or a sibling widget. Must not be negative.",
       "const": true,
       "default": "'auto'"
     },
