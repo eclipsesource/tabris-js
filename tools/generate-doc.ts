@@ -1,18 +1,7 @@
 import * as fs from 'fs-extra';
 import * as schema from './api-schema';
-import {
-  ApiDefinitions,
-  asArray,
-  ExtendedApi,
-  getTitle,
-  readJsonDefs
-  } from './common';
-import {
-  join,
-  parse,
-  relative,
-  sep
-  } from 'path';
+import { ApiDefinitions, asArray, ExtendedApi, getTitle, readJsonDefs } from './common';
+import { join, parse, relative, sep } from 'path';
 
 type TypeLinks = {[type: string]: string};
 type NamedEvents = Array<schema.Event & {name: string}>;
@@ -197,24 +186,25 @@ class DocumentRenderer {
   private renderImages() {
     const androidImage = join('img/android', parse(this.def.file).name + '.png');
     const iosImage = join('img/ios', parse(this.def.file).name + '.png');
-    const exists = image => isFileSync(join('doc/api', image));
-    if (exists(androidImage) && exists(iosImage)) {
-      return [
-        'Android | iOS',
-        '--- | ---',
-        `![${this.def.type} on Android](${androidImage}) | ![${this.def.type} on iOS](${iosImage})`
-      ].join('\n') + '\n';
-    }
-    if (exists(androidImage)) {
-      return `![${this.def.type} on Android](${androidImage})\n`;
-    }
-    if (exists(iosImage)) {
-      return `![${this.def.type} on iOS](${iosImage})\n`;
+    const result = this.createImageFigure(androidImage, 'Android') + this.createImageFigure(iosImage, 'iOS');
+    if (result.length !== 0) {
+      return `<div class="tabris-image">${result}</div>\n`;
     }
     if (this.def.type !== 'Widget' && (this.def.isWidget || this.def.extends === 'Popup')) {
       console.warn('No image for ' + this.def.type);
     }
     return '';
+  }
+
+  private createImageFigure(image: string, platform: string): string {
+    // a <figure> shows a content element together with a descriptive caption
+    // the child <div> is required to scale the image inside the <figure> container
+    if (isFileSync(join('doc/api', image))) {
+      return `<figure><div><img srcset="${image} 2x" src="${image}" alt="${this.def.type} on ${platform}"/></div>` +
+        `<figcaption>${platform}</figcaption></figure>`;
+    } else {
+      return '';
+    }
   }
 
   private renderSummary() {
@@ -223,7 +213,7 @@ class DocumentRenderer {
       if (this.def.generics || this.def.ts_extends) {
         result.push('* TypeScript type: `', this.def.type);
         if (this.def.generics) {
-          result.push('<', this.def.generics,  '>');
+          result.push('<', this.def.generics, '>');
         }
         result.push(' extends ', this.def.ts_extends || this.def.extends || 'Object', '`\n');
       }
@@ -245,7 +235,7 @@ class DocumentRenderer {
   }
 
   private renderJSXSummary() {
-    const jsx = (this.def.isWidget || this.def.extends === 'Popup' )
+    const jsx = (this.def.isWidget || this.def.extends === 'Popup')
       && this.def.constructor.access === 'public';
     const result = [];
     result.push('* JSX support:');
@@ -264,7 +254,7 @@ class DocumentRenderer {
       const childTypes = [];
       if (this.def.type === 'Composite' || (this.def.extends === 'Composite' && !this.def.ts_extends)) {
         childTypes.push('*Widgets*');
-      } else if (this.def.ts_extends && /Composite<(.+)>$/.test(this.def.ts_extends))  {
+      } else if (this.def.ts_extends && /Composite<(.+)>$/.test(this.def.ts_extends)) {
         childTypes.push('`<' + RegExp.$1 + '/>`');
       }
       contentProps.forEach(propName => {
@@ -332,7 +322,7 @@ class DocumentRenderer {
     return result.join('');
   }
 
-  private renderMethods(methods: {[name: string]: schema.Method|schema.Method[]}, names: string[]) {
+  private renderMethods(methods: {[name: string]: schema.Method | schema.Method[]}, names: string[]) {
     const result = [];
     names.forEach(name => {
       asArray(methods[name]).forEach(desc => {
@@ -635,7 +625,7 @@ function isPublic(name: string) {
   return name[0] !== '_';
 }
 
-function literal(value: string|boolean|number|{[key: string]: string}, type: string) {
+function literal(value: string | boolean | number | {[key: string]: string}, type: string) {
   if (type === 'string') {
     return '`\'' + value + '\'`';
   }
