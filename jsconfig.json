@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "alwaysStrict": true,
+    "checkJs": true
+  },
+ "include": [
+    "src/tabris/**/*",
+    "test/tabris/**/*"
+  ]
+}
