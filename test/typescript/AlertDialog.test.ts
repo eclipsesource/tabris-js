@@ -48,3 +48,7 @@ alertDialog
   .onCloseCancel((event: EventObject<AlertDialog>) => {})
   .onCloseNeutral((event: EventObject<AlertDialog>) => {})
   .onCloseOk((event: EventObject<AlertDialog>) => {});
+
+// open
+alertDialog = AlertDialog.open(alertDialog);
+alertDialog = AlertDialog.open('message');

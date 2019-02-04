@@ -92,7 +92,7 @@
             {
               "name": "message",
               "description": "The message to display",
-              "type": "AlertDialog"
+              "type": "string"
             }
           ],
           "description": "Creates and opens an alert dialog with one 'OK' button and the given message.",
