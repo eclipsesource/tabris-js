@@ -18,6 +18,7 @@
   "properties": {
     "layout": {
       "type": "Layout|null",
+      "const": true,
       "default": "Layout",
       "description": "The layout manager responsible for interpreting the [`layoutData`](./Widget.md#layoutData) of the child widgets of this Composite."
     },

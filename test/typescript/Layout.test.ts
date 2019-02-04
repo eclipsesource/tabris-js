@@ -1,6 +1,6 @@
 import {Layout, ConstraintLayout, StackLayout, Composite, BoxDimensions} from 'tabris';
 
-let layout: Layout = ConstraintLayout.default
+let layout: Layout|null = ConstraintLayout.default
 let constraintLayout: ConstraintLayout = ConstraintLayout.default;
 let padding: BoxDimensions | number = layout.padding;
 let alignment: 'left'|'centerX'|'stretchX'|'right' = 'left';
@@ -12,6 +12,5 @@ let stackLayout: StackLayout = StackLayout.default;
 stackLayout = new StackLayout({padding: 16, alignment});
 stackLayout = new StackLayout({padding: {left: 10, top: 10, right: 10, bottom: 10}});
 
-layout = composite.layout = layout;
+layout = composite.layout;
 alignment = stackLayout.alignment;
-composite.layout = null;

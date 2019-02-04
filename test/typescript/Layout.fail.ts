@@ -1,4 +1,4 @@
-import {Layout, ConstraintLayout, BoxDimensions} from 'tabris';
+import {Layout, ConstraintLayout, BoxDimensions, Composite} from 'tabris';
 
 let layout: Layout = ConstraintLayout.default
 let constraintLayout: ConstraintLayout = ConstraintLayout.default;

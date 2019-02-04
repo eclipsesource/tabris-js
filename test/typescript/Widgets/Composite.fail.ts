@@ -16,6 +16,7 @@ buttonsComposite.append(textView);
 buttonsComposite.append([textView]);
 buttonsComposite.append(new WidgetCollection<TextView>([textView]));
 textView = buttonsComposite.children()[0];
+buttonsComposite.onLayoutChanged(() => {});
 
 /*Expected
 (9,
@@ -30,4 +31,6 @@ not assignable to parameter
 not assignable to parameter
 (18,
 not assignable to type 'TextView'
+(19,
+'onLayoutChanged' does not exist
 */
