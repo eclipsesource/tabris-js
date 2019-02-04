@@ -2,7 +2,7 @@ import {
   NativeObject, contentView, TextView, app, Button, Picker, Composite, CheckBox, Page, NavigationView, Action, device,
   SearchAction, TabFolder, Popover, ProgressBar, RadioButton, RefreshComposite, ScrollView, Slider, Switch,
   ToggleButton, TextInput, CollectionView, TimeDialog, Video, WebView, ImageView, ActivityIndicator, AlertDialog,
-  ActionSheet, Canvas, DateDialog, drawer
+  ActionSheet, Canvas, DateDialog, drawer, Color
 } from 'tabris';
 
 // Use these to exclude tests where they are broken due to a platform bug
@@ -814,6 +814,11 @@ function has(obj1, obj2) {
     } else if (typeof obj1[key] === 'number' && typeof obj2[key] === 'number') {
       console.log(key + ' is ' + obj1[key] + ', not close to ' + obj2[key]);
       return Math.round(obj1[key]) === Math.round(obj2[key]);
+    } else if (obj1[key] instanceof Color) {
+      if (!obj1[key].toString() === obj2[key]) {
+        console.log(key + ' is ' + obj1[key] + ', not matching ' + obj2[key]);
+        return false;
+      }
     } else if (obj1[key] !== obj2[key]) {
       console.log(key + ' is ' + obj1[key] + ', not ' + obj2[key]);
       return false;
