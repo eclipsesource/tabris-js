@@ -1,5 +1,4 @@
 const {Button, Page, NavigationView, ScrollView, device, ui} = require('tabris');
-const ToastPage = require('./ToastPage');
 const SharingPage = require('./SharingPage');
 const MotionPage = require('./MotionPage');
 const NetworkPage = require('./NetworkPage');
@@ -24,7 +23,6 @@ let contentContainer = new ScrollView({
     NetworkPage
   ] : [
     SharingPage,
-    ToastPage,
     MotionPage,
     NetworkPage,
     CameraPage,
