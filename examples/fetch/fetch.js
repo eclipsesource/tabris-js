@@ -3,7 +3,7 @@ const {ActivityIndicator, Button, TextView, ui} = require('tabris');
 function createTextView(text) {
   new TextView({
     left: 16, right: 16, top: 'prev() 12',
-    text: text,
+    text,
     markupEnabled: true,
     class: 'locationData'
   }).appendTo(ui.contentView);
@@ -28,26 +28,37 @@ function loadData() {
   }).appendTo(ui.contentView);
 
   // Run async remote request with fetch
-  fetch('https://freegeoip.net/json/')
-    .then(response => response.json())
+  fetch('http://ip-api.com/json')
+    .then((response) => {
+      // Check to see if the response status code is 200-299
+      if (!response.ok) {
+        throw response.statusText;
+      }
+      return response.json();
+    })
     .then((json) => {
-      // Dispose of the activity loader via direct reference
-      activityIndicator.dispose();
+      // Check that the response contains a success status
+      if (json.status !== 'success') {
+        throw new Error(json.status || 'Response was not successful');
+      }
 
       // Show the result location data
-      createTextView('The IP address is: ' + json.ip);
+      createTextView('The IP address is: ' + json.query);
       createTextView('City: ' + json.city);
-      createTextView('Country: ' + json.country_name);
-      createTextView('Latitude: ' + json.latitude);
-      createTextView('Longitude: ' + json.longitude);
+      createTextView('Country: ' + json.country);
+      createTextView('Latitude: ' + json.lat);
+      createTextView('Longitude: ' + json.lon);
 
       // Create the reload button
       createReloadButton();
     }).catch((err) => {
-
       // On error, show what went wrong and reload button
       createTextView('Failure: ' + (err || 'Error loading geo-data'));
       createReloadButton();
+    }).then(() => {
+      // This block always executes, regardless of success or failure
+      // Dispose of the activity loader via direct reference
+      activityIndicator.dispose();
     });
 }
 
