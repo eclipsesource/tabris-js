@@ -143,6 +143,28 @@ describe('App', function() {
 
     });
 
+    describe('trustedCertificates', () => {
+
+      beforeEach(() => {
+        tabris.flush();
+      });
+
+      it('throws exception when argument array contains illegal elements', () => {
+        expect(() => {
+          app.trustedCertificates = ['string'];
+        }).to.throw(Error, /ArrayBuffer/);
+      });
+
+      it('sets trusted certificates on native side', () => {
+        const trustedCertificates = [new ArrayBuffer(8)];
+
+        app.trustedCertificates = trustedCertificates;
+
+        const setCall = client.calls({op: 'set', id: app.cid})[0];
+        expect(setCall.properties).to.deep.equal({trustedCertificates});
+      });
+    });
+
   });
 
   it('listens for pause event', function() {
@@ -367,13 +389,13 @@ describe('App', function() {
       });
     });
 
-    it("GETs 'resourceBaseUrl'", function() {
+    it('GETs \'resourceBaseUrl\'', function() {
       app.getResourceLocation();
 
       expect(client.get).to.have.been.calledWith(app.cid, 'resourceBaseUrl');
     });
 
-    it("GETs 'resourceBaseUrl' only once", function() {
+    it('GETs \'resourceBaseUrl\' only once', function() {
       app.getResourceLocation();
       app.getResourceLocation();
 
@@ -392,16 +414,16 @@ describe('App', function() {
       expect(result).to.equal('/root/foo/bar');
     });
 
-    it("ignores '.' segments", function() {
+    it('ignores \'.\' segments', function() {
       const result = app.getResourceLocation('./foo/bar');
 
       expect(result).to.equal('/root/foo/bar');
     });
 
-    it("throws on '..'", function() {
+    it('throws on \'..\'', function() {
       expect(() => {
         app.getResourceLocation('../foo');
-      }).to.throw("Path must not contain '..'");
+      }).to.throw('Path must not contain \'..\'');
     });
 
   });
