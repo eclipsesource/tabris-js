@@ -139,6 +139,21 @@ NativeObject.defineProperties(App.prototype, {
       this._storeProperty(name, value);
       this._nativeSet(name, value);
     }
+  },
+  trustedCertificates: {
+    type: 'array',
+    default: () => [],
+    set(name, value) {
+      for (let i = 0; i < value.length; i++) {
+        const certificate = value[i];
+        if (!(certificate instanceof ArrayBuffer)) {
+          throw new Error('The trustedCertificates array entries have to be of type ArrayBuffer but contain '
+            + certificate);
+        }
+      }
+      this._storeProperty(name, value);
+      this._nativeSet(name, value);
+    }
   }
 });
 

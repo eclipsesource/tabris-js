@@ -143,6 +143,28 @@ describe('App', function() {
 
     });
 
+    describe('trustedCertificates', () => {
+
+      beforeEach(() => {
+        tabris._nativeBridge.flush();
+      });
+
+      it('throws exception when argument array contains illegal elements', () => {
+        expect(() => {
+          app.trustedCertificates = ['string'];
+        }).to.throw(Error, /ArrayBuffer/);
+      });
+
+      it('sets trusted certificates on native side', () => {
+        const trustedCertificates = [new ArrayBuffer(8)];
+
+        app.trustedCertificates = trustedCertificates;
+
+        const setCall = client.calls({op: 'set', id: app.cid})[0];
+        expect(setCall.properties).to.deep.equal({trustedCertificates});
+      });
+    });
+
   });
 
   it('listens for pause event', function() {
