@@ -1,6 +1,6 @@
 {
   "type": "StackComposite",
-  "description": "A composite with the `layout` property initialized with a `StackComposite`. All children are automatically arranged in one vertical stack, starting from the top. The `layoutData` on the children is currently ignored.",
+  "description": "A composite with the `layout` property initialized with a `StackComposite`. All children are automatically arranged in one vertical stack, starting from the top. The `layoutData` on the children is ignored.",
   "extends": "Composite",
   "constructor": {
     "access": "public",

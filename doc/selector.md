@@ -2,50 +2,64 @@
 ---
 # Selector API
 
-Modifying a widget usually requires direct access to the object. However, assigning all mutable widgets to variables can quickly clutter your UI code. For this reason, the Tabris.js API offers methods to find widgets by certain attributes, and even to manipulate multiple widgets at once. Widgets can be selected by their *type*, their *ID*, or their *class* attributes, using a format established by CSS.
+Tabris.js offers APIs to find and manipulate widgets anywhere in the UI tree using selectors. A selectors is [a string, a widget constructor, or a filter function](#selector-syntax) that can be used by the framework to filter a given set of widgets and *select* only those with a specific *type*, *ID*, or *class* attribute or parent-child relationship.
 
-## Selecting widgets by type
+## Selector Syntax
 
-The simplest method to select widgets is to refer to their type. For example, the following statement would uncheck all checkboxes on a page:
+### Type Selectors
+
+The simplest method to select widgets is to refer to their type. For example, the following statement would select all instances of `CheckBox`.
 
 ```js
-page.find('CheckBox').set('selection', false);
+page.find('CheckBox')
 ```
 
 You may also give the type via the constructor instead of a string:
 
 ```js
-page.find(CheckBox).set('selection', false);
+page.find(CheckBox)
 ```
 
-This is mainly useful in TypeScript (provides better autocompletion), or to select all widgets that _extend_ a given widget class:
+This is preferable in TypeScript (as it provides better autocompletion), or to also select all widgets that _extend_ a given widget class:
 
 ```js
-page.find(Composite).set('background', 'green');
+page.find(Composite)
 ```
 
-This would make all composites green, including, for example, instances of `TabFolder`.
+This would find all instances of `Composite` or one of it's subclasses, like `TabFolder` or `Canvas`.
 
-## Selecting widgets by ID
+### ID Selectors
 
 The `id` of a widget is a property like any other. It is initially undefined, so you have to assign an ID yourself to refer to the widget. Usually you would do this when you create the widget:
 
+```jsx
+<Button id='submit'/>
+```
+... or ...
 ```js
 new Button({id: 'submit'});
 ```
 
-To select a widget by its ID, you can use the selector expression `'#id'` where `id` is the ID of the widget:
+To select a widget by its ID, you can use the selector expression `'#id'` where *id* is the ID of the widget:
 
 ```js
-page.find('#submit').set('enabled', false);
+page.find('#submit')
 ```
 
-IDs should be unique. Although this is not enforced by the framework, it's a good practice not to use the same ID twice within a component to avoid confusion.
+By convention IDs should be unique within the given subtree, although this is not enforced by the framework. See "[Encapsulation](#Encapsulation)".
 
-## Selecting widgets by class attribute
+### Class Selectors
 
-The `class` property is a string containing a whitespace separated list of "classes". A class is an arbitrary name for a state or category the widget should be identifiable by. It may only contain alphanumeric characters, `'_'` and `'-'`.
+The `class` property is a string containing a whitespace separated list of "classes".  A class is an arbitrary name for a state or category the widget should be identifiable by. It may only contain alphanumeric characters, `'_'` and `'-'`.
 
+> :point_right: The `class` attribute is comparable to the concept of a CSS class, and not related to JavaScript/TypeScript classes in any way.
+
+Examples:
+
+```jsx
+<TextView class='label important'/>
+```
+or
 ```js
 new TextView({class: 'label important'});
 ```
@@ -56,128 +70,222 @@ Classes may be mixed, re-used and changed on any widget at any time. Using the `
 textView.classList.push('important');
 ```
 
-To select a widget by a class attribute, use the selector expression `'.class'` where `class` is the class name:
+To select a widget by a class attribute, use the selector expression `'.class'` where *class* is the class name:
 
 ```js
-page.find('.important').set('textColor', 'red');
+page.find('.important')
 ```
 
-## Selecting by parent-child relationship
+### Relationship Selectors
 
 A widget may also selected by its parent. This is done by giving first the selector of the parent, followed by `' > '`, and then the selector of the child.
 
 Example: Let's say you have a page with two buttons:
 
+```jsx
+<Page>
+  <Button/>
+  <Composite>
+    <Button/>
+  </Composite>
+</Page>
+```
+
+In this case you can either select both buttons...
+
 ```js
-page.append(
-  new Button(),
-  new Composite().append(new Button)
+page.find('Button')
+```
+
+...or only the button within the composite...
+
+```js
+page.find('Composite > Button')
+```
+
+...or only the button directly attached to the page:
+
+```js
+page.find('Page > Button')
+```
+
+In this case the `'Page'` we select here is supposed to only refer to the *page* object itself, not any (potential) children that are also of the type `Page`. To avoid this ambiguity we can use the `:host` pseudo class:
+
+```js
+page.find(':host > Button')
+```
+
+The `:host` selector refers specifically to the widget that applies the selector, in this case the *page*.
+
+### Star selector
+
+The character `'*'` matches all widgets. Sometimes useful in conjunction with the [`apply`](#apply) method or [Relationship Selectors](#relationship-selectors):
+
+```js
+page.find(':host > * > Button')
+```
+
+This selects all Buttons attached to any child of *page*, regardless of the type of the child in between.
+
+### Selector Functions
+
+Filter functions are also valid selectors. These type of functions are called for each widget candidate and need to return either `true` to include it or `false` to exclude it. For example, the following snippet would select all visible widgets on a page:
+
+```js
+page.children(widget => widget.visible)
+```
+
+When the given function is a constructor it will _not_ be called, but treated as a [type selector](#type-selectors).
+
+## WidgetCollection
+
+Instances of `WidgetCollection` can be both the basis and the result of a selection. Therefore a quick overview is useful here:
+
+Widget collections are array-like objects that represent a set of widgets in Tabris.js. They are immutable and every entry is unique, i.e. they never contain any duplicates. They may also be empty, representing zero widgets.
+
+Notably, a widget collection features a subset of the widget API that allows modifying all contained widgets at once. This includes `set`, `trigger`, `on`, `off`, `once`, `append`, `appendTo`, `dispose` and `animate`. Example:
+
+```js
+collection
+  .set({background: 'blue'}) // make all widgets blue..
+  .animate({opacity: 0}, {duration: 400}); // fade out
+```
+
+The same could be done to only a specific entry:
+
+```js
+collection[3]
+  .set({background: 'blue'})
+  .animate({opacity: 0}, {duration: 400});
+```
+
+The first example will never fail, even if the collection is empty, while the second may cause an exception if the collection has less than four widgets. Like arrays, widget collections are zero indexed.
+
+While `WidgetCollection` has some array-like API (`length`, `forEach`, `indexOf`), you can also get an actual array, which is mutable safe copy:
+
+```js
+const arr = collection.toArray();
+arr.splice(2, 3);
+const collection2 = new WidgetCollection(arr);
+```
+
+JSX can be used to create a widget collection, usually to create and append multiple widgets to the same parent:
+
+```jsx
+contentView.append(
+  <WidgetCollection>
+    <TextView/>
+    <TextView/>
+    <TextView/>
+  </WidgetCollection>
 );
 ```
 
-In this case you can of course select both buttons:
+In TypeScript `WidgetCollection` is a generic type (`WidgetCollection<T extends Widget = Widget>`>)that "knows" what type of widgets are contained - if they are all of the same type:
 
 ```js
-page.find('Button').set('textColor', 'red');
+const collection: WidgetCollection<TextView> = new WidgetCollection([new TextView()]);
+collection[0].text = 'foo'; // would not compile on WidgetCollection<Widget>
 ```
 
-But also only the button inside the composite:
+Such a collection is created implicitly whenever a constructor is used as a [type selector](#type-selectors).
 
-```js
-page.find('Composite > Button').set('textColor', 'red');
+## APIs that accept Selectors
+
+### composite.children()
+
+The method `composite.children(selector)` method returns a new widget collection containing the composite's current children that match the given selector. This includes only first generation descendants, so children of children are not part of the result.
+
+The selector parameter defaults to `*`, so `children()` is the same as `children('*')`.
+
+```jsx
+(
+  <Composite>
+    <TextView/>
+    <TextView/>
+    <Composite>
+      <TextView/>
+    </Composite>
+  </Composite>
+).children(TextView).set({left: 23});
 ```
 
-Or only the button attached to the page directly:
+This will modify the first two children of the given composite since these are `TextView` instances.
 
-```js
-page.find('Page > Button').set('textColor', 'red');
-```
+### composite.find()
 
-The latter example can also be expressed more precisely using the `:host` pseudo class:
-
-```js
-page.find(':host > Button').set('textColor', 'red');
-```
-
-In this case the `:host` refers specifically to the widget that `find` is called on, not just any `Page` instance that could technically be nested inside `page` (via another `NavigationView`).
-
-## Selector Expressions
-
-The following types of selector expressions are supported:
-
-- `'*'` matches all widgets.
-- `'Type'` matches all widgets of the given type, e.g. `'Button'` matches all Button widgets.
-- `'.class'` matches all widgets that have the given class in their class list, e.g. `'.foo'` matches a widget with `class` set to `'foo'`, but also `'foo bar`'.
-- `'#id'` matches all widgets with the given ID, e.g. `'#foo'` matches all widgets with the ID `'foo'`.
-- `selector1 > selector2` matches all widgets that match `selector2` that also have a parent that matches `selector1`.
-- `:host` matches the widget the selector is used with. It currently does not match anything when used on a `WidgetCollection` instance.
-
-## Selector Functions
-
-All methods that accept a selector expression can also be called with a predicate function to test each widget of a collection. This function will be called for each widget and returns `true` to include the widget, and `false` to skip it. For example, the following snippet would select all visible widgets on a page:
-
-```js
-let visibleChildren = page.children(widget => widget.visible);
-```
-
-When the given function is a constructor it will _not_ be called, but used to match all instances of that constructor.
-
-## Working with Selectors
-
-The following methods on Widget accept a selector expression:
-
-- `widget.find(selector)` will select all descendants that match the selector.
-- `widget.children(selector)` will select all direct children that match the selector, but not their children.
-- `widget.siblings(selector)` will select all siblings of the widget that match the selector.
+The method `composite.find(selector)` returns a new widget collection containing all descendants that match the given selector. This excludes the widget the method was called on, and any descendants that are [encapsulated](#encapsulation).
 
 The selector parameter defaults to `*`, so `find()` is the same as `find('*')`.
 
-These methods all return a [WidgetCollection](api/WidgetCollection.md), You can extract individual widgets from the collection using the methods `first()` and `last()` or using array index notation:
-
-```js
-let submitButton = page.find('#submit').first(); // or
-let submitButton = page.find('#submit')[0];
+```jsx
+(
+  <Composite>
+    <TextView/>
+    <TextView/>
+    <Composite>
+      <TextView/>
+    </Composite>
+  </Composite>
+).find(TextView).set({left: 23});
 ```
 
-Both `first` and `last` also support selectors, as does the `filter` method:
+This will modify all `TextView` elements in the tree.
 
-```js
-let lastButton = page.find('*').last(Button);
-let importantComposites = page.find('Composite').filter('.important');
+### widgetCollection.filter()
+
+The method `widgetCollection.filter(selector)` returns a new widget collection containing all entries of the original collection that match the given selector. This is useful to narrow down an initial selection:
+
+```jsx
+(
+  <Composite>
+    <TextView class='foo'/>
+    <TextView class='bar'/>
+    <Button class='foo'/>
+  </Composite>
+).children(TextView).filter('.foo').set({left: 23});
 ```
 
-You can also set properties on the included widgets without extracting them:
+This will modify the first `TextView` instance, but neither the `Button` nor the second `TextView`.
+
+### widgetCollection.first() and widgetCollection.last()
+
+These return the first/last entry in the collection that match the given selector. If no element matches they return `undefined`. The selector parameter defaults to `*`, so `first()` is the same as `first('*')`. It is also effectively the same as accessing the element via index:
 
 ```js
-page.find('.input').set('enabled', false);
+page.find('#submit').first() === page.find('#submit')[0];
 ```
 
-Since the scope of `page.find()` excludes `page` itself, the `:host` pseudo class by itself does not select anything.
+In TypeScript `first(Type)` and `last(Type)` perform an implicit cast:
 
 ```js
-console.log(page.find(':host').length); // '0'
-console.log(page.find(':host > *') === page.children()); // 'true'
+page.find('#submit').first().text = 'Hello'; // does not compile
+page.find('#submit').first(Button).text = 'Hello'; // OK
 ```
 
-## The apply method
+### widgetCollection.children()
 
-An efficient way to configure multiple widgets in a component is using the `apply()` method on the parent.
-
-- `apply({<selector: properties>*})`
-
-The apply method uses selectors expressions to apply different sets of properties to different widgets in one call. For example, to apply a background color to all widgets within a page you could call:
+The method `collection.children(selector)` will apply the given selector to all children of it's own entries. This allows selecting by parent-child relationships, similar to [relationship selectors](#relationship-selectors):
 
 ```js
-page.apply({'*': {background: 'green'}});
+widget.find(':host > .foo > .bar');
+widget.children('.foo').children('.bar'); // same result
 ```
 
-This _also_ sets the background of `page` itself, since the scope of `apply` includes the widget it is called on:
+While this method is longer, it allows using non-string selector, i.e. functions/constructors.
+
+### widgetCollection.find()
+
+The method `collection.find(selector)` will apply the given selector to all descendants of its own entries. This excludes the entries themselves, effectively skipping one generation in a subtree.
 
 ```js
-page.apply({':host': {background: 'green'}}); // same as "page.background = green";
+widget.children().find('.bar'); // All descendants matching '.bar' EXCEPT direct children
+widget.children().filter('.bar'); // The opposite: ONLY direct children matching '.bar'
 ```
 
-With `apply` you can set different properties on different widgets in one call:
+### composite#.apply()
+
+A shortcut for setting different sets of properties for different selections in one method call. The method takes a plain object with selectors as keys and property objects as values:
 
 ```js
 page.apply({
@@ -185,8 +293,13 @@ page.apply({
   '#cancelbutton': {text: 'Cancel!', textColor: 'red'}
 });
 ```
+__The scope includes the widget it is called on__:
 
-The order in which these properties are applied depends on the type of selectors being used. The order is:
+```js
+page.apply({':host': {background: 'green'}}); // same as "page.background = green";
+```
+
+The order in which the property objects are applied depends on the type of selectors being used. The order is:
 
 - `'*'` > `'Type'` > `'.class'` > `'#id'`
 
@@ -209,4 +322,66 @@ page.apply({
 });
 ```
 
-> :point_right: The on-screen order of the properties in the object literal is meaningless. According to the EcmaScript standard the members of a JavaScript object do not have a defined order. The priority of two selectors with the same specificity is undefined.
+> :point_right: The order of the properties in the object literal is meaningless. According to the EcmaScript standard the members of a JavaScript object do not have a defined order. The priority of two selectors with the same specificity is undefined.
+
+## Encapsulation
+
+By default the scope of `find` and `apply` include all descendants of their hosts, including all children of a custom component. This may not be desireable:
+
+```jsx
+widget.append(
+  <Composite>
+    <Button id='primary'/>
+    <MyCustomComponent/>
+  </Composite>
+);
+```
+
+In this scenario we may want to select all '#primary' elements:
+
+```js
+widget.find('#primary').set({text: 'blue'});
+```
+
+But `MyCustomComponent` may itself also contain a match for `'#primary'`:
+
+```js
+class MyCustomComponent extends Composite {
+
+  constructor(properties) {
+    super(properties);
+    this.append(<TextView id='primary'/>);
+  }
+
+}
+```
+
+This would be an unexpected collision, assuming `MyCustomComponent` considers its own children to be internals that should not be accessed by outside code. To prevent this from happening all custom components should override their `children` methods:
+
+```js
+class MyCustomComponent extends Composite {
+
+  // ...
+
+  public children() {
+    return new WidgetCollection();
+  }
+
+}
+```
+
+This will prevent `find()` and `apply()` from including any children of `MyCustomComponent`. It will always appear as though it has no children. For `MyCustomComponent` itself to still be able to select its own children it needs to use the non-public version of the selector API:
+
+```js
+class MyCustomComponent extends Composite {
+
+  // ...
+
+  public doSomething()
+    this._children().set({background: 'red'});
+    this._find('#foo').set({background: 'green'});
+    this._apply({'.bar': {background: 'blue'}});
+  }
+
+}
+```

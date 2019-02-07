@@ -155,3 +155,23 @@ function updateMessage({target}: EventObject<ReservationForm>) {
     'Redeem miles: ' + (target.miles ? 'Yes' : 'No')
   ].join('\n') + '\n'});
 }
+
+class CustomComponent extends Composite {
+
+  public set foo(value: number) { /* ... */ }
+  public get foo() { /* ... */ }
+  public readonly onMyEvent: Listeners = new Listeners(this, 'myEvent');
+  protected readonly jsxProperties: Composite['jsxProperties'] & {
+    // Properties and events introduced in CustomComponent:
+    foo?: number;
+    onMyEvent?: Listeners;
+  };
+
+  constructor(properties: Partial<CustomComponent>) {
+    super(properties);
+    // ...
+  }
+
+  // methods...
+
+}

@@ -111,7 +111,7 @@
         {
           "name": "alias",
           "type": "string",
-          "description": "An identifier for the registered font. The alias can be used in places where a font can be configures, e.g.: `TextView` or `GraphicalContext`"
+          "description": "An identifier for the registered font. The alias can be used as a font family, e.g. in the `font` properties of `TextView` and `Button`."
         },
         {
           "name": "file",
@@ -119,7 +119,7 @@
           "description": "The font file to register for later use. Similar to images paths, the file path can be absolute, relative or an URL."
         }
       ],
-      "description": "Allows to register a font to use throughout the app. Once a font is registered its alias can be used to apply the font where ever a font can be configured, e.g. in `TextView` or `GraphicalContext`. Tabris.js currently supports TrueType fonts (*.ttf) and OpenType fonts (*.otf)."
+      "description": "Allows to register a font to use throughout the app. Once a font is registered its alias can be used to apply the font where ever a font can be configured, e.g. in `TextView` or `GraphicalContext`. Tabris.js supports TrueType fonts (*.ttf) and OpenType fonts (*.otf)."
     }
   },
   "links": [

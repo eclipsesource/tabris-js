@@ -2,118 +2,185 @@
 ---
 # Widget Basics
 
-The UI of a Tabris.js app consists of native widgets, represented by JavaScript objects. There are different types of widgets such as `Button`, `TextView`, or `ScrollView`. Every widget type is a subclass of [Widget](api/widgets/Widget.md) and [NativeObject](api/NativeObject.md), which provide some common API. For example:
+In the context of Tabris.js a widget is a native UI element that can be freely arranged, composed and configured in application code. In JavaScript these elements are represented by subclasses of `tabris.Widget`.
 
-```
-tabris.NativeObject
- |- tabris.Widget
-    |- tabris.Button
-```
+## Hello World
 
-You can omit the `tabris` namespace when you explicitly [import](./modules.md) the widget from the tabris module. We will assume this to be the case in all following examples.
+This is a complete Tabris.js app to create an onscreen button:
 
-## Creating Widgets
-
-Every widget constructor accepts an object with initial property values to create the widget with. Here's how you create and initialize a widget in Tabris.js:
-
-```js
-const button = new Button({left: 10, top: 10, text: 'OK'});
-```
-
-If you prefer declarative UI, you may also [use JSX to create widgets](./lang.md#JSX) within `.jsx` (for JavaScript) or `.tsx` (for TypeScript) files:
-
+```app.jsx```
 ```jsx
-const button = <Button left={10} top={10} text='OK' />;
+tabris.contentView.append(
+  <tabris.Button>
+    Hello World
+  </tabris.Button>
+);
+```
+
+This gets us a push button that looks and behaves like a typical Android button on an Android device, and like a typical iOS button on iOS devices.
+
+Let's look at each part of the app:
+
+Code | Explanation
+-----|------------
+`tabris.contentView`| uses the `tabris` namespace to access the [`contentView`](./api/contentview.md) widget instance, [which represents the main content of your app](./ui.md).
+`.append(`|calls the append method to add something to that area.
+&nbsp;&nbsp;&nbsp;&nbsp;`<tabris.Button>`| creates the actual button via an [JSX](./jsx.md) expression, similar to an HTML element. This is only supported in  `.jsx` or `.tsx` files in a [compiled project setup](./getting-started.md#Create-your-first-app).
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`Hello World`| is the text that the button displays. Most widgets that can display text allow defining it that way, but you can also set the `text` attribute.
+&nbsp;&nbsp;&nbsp;&nbsp;`</tabris.Button>`|closes the `Button` element and ends the JSX expression.
+`);`|ends the `append` call.
+
+### Variations
+
+You can also explicitly [import](./modules.md) any member of the `tabris` namespace from the tabris module, allowing you to omit it in the code:
+
+```app.jsx```
+```jsx
+import {contentView, Button};
+
+contentView.append(
+  <Button>Hello World</Button>
+);
+```
+
+The text content of the button [can also be set as an attribute](./JSX.md#Usage):
+
+```app.jsx```
+```jsx
+import {contentView, Button};
+
+contentView.append(
+  <Button text='Hello World' />
+);
+```
+
+And if you prefer pure JavaScript/TypeScript, equivalent code would be:
+
+```app.js```
+```js
+import {contentView, Button} from 'tabris';
+
+contentView.append(
+  new Button({text: 'Hello World!'})
+);
+```
+
+Finally, if you use a ["Vanilla"](./getting-started.md#Create-your-first-app) JS project setup without cross-compilation you can use neither JSX nor the ES6 `import` syntax:
+
+```app.js```
+```js
+const {contentView, Button} = require('tabris');
+
+contentView.append(
+  new Button({text: 'Hello World!'})
+);
 ```
 
 ## Widget Properties
 
-Every widget supports a fixed set of properties (e.g. a text or a color). They can be set on widget creation (via constructor or JSX), or directly on the instance:
+Every widget supports a fixed set of properties, like `text` or `background`, that can be specified in the JSX element or constructor call.
+
+```jsx
+contentView.append(
+  <Button text='Hello World' background={[255, 128, 0]} />
+);
+```
 
 ```js
-widget.text = 'Hello World';
-const text = widget.text;
+contentView.append(
+  new Button({text: 'Hello World!', background: [255, 128, 0]})
+);
+```
+
+> :point_right: Details about the JSX syntax for attributes can be found [here](./api.md#Usage).
+
+### Modifying Widgets
+
+To set or get a property on an existing widget you need a reference, which you can easily obtain using the [selector API](./selector.md):
+
+```js
+const button = contentView.find(Button).first();
+const oldText = button.text;
+button.text = 'New Text';
 ```
 
 Using the `set()` method, it's also possible to set multiple properties in one call:
 
 ```js
 button.set({
-  text: 'OK',
+  text: 'Hello New World',
   background: 'blue'
 });
 ```
 
-When trying to set an invalid value (e.g. of the wrong type), the value will be converted if possible, otherwise it will be ignored with a warning printed to the developer console.
-
-## Setting the Parent
-
-To become visible, a widget needs to be added to a parent. The top-level parent of all widgets on the main screen is the content view (`tabris.contentView`). Widgets can be included in the widget hierarchy by using `append()` or `appendTo()`.
-
-Therefore a complete "Hello World" app could look like this:
+With the [selector API](./selector.md) you can also set multiple properties of multiple widgets:
 
 ```js
-import { contentView, TextView } from 'tabris';
-
-new TextView({text: 'Hello World'}).appendTo(contentView);
+contentView.find('*').set({background: 'red', opacity: 0.5})
 ```
 
-If the widget already has a parent, it is removed from the actual parent and appended to the new one. An *addChild* event is triggered on the new parent.
+> :point_right: Some properties can only be set on creation and not be changed later (like `textInput#type`), while others (like `widget#bounds`) can not bet set at all.
 
-With `append()` you can also add multiple widgets in one call:
+## Composition
 
-```js
-new Page().append(
-  new TextView(),
-  new Button()
-);
-```
+Widgets can contain other widgets to form complex user interfaces. This [hierarchy](./ui.md) needs to start with an instance of `ContentView` (e.g. `tabris.contentView`) as a root element, since all other widget types needs to have a parent to be visible.
 
-Or in JSX:
+All widgets that can contain child widgets are instances of `Composite` or one of its subclasses - which include `ContentView`. With some exceptions (e.g. `NavigationView`) widgets can be freely arranged within their parent, which is the topic of [this](./layout.md) article.
+
+With JSX it is possible to create and insert an entire ui fragment in one call. In this example we create a page with content and add it to the appropriate parent:
 
 ```jsx
-<Page>
-  <TextView>
-  <Button>
-</Page>
-```
-
-JSX also supports WidgetCollection as an element which is useful for appending to already existing widgets:
-
-```jsx
-page.append(
-  <WidgetCollection>
+navigationView.append(
+  <Page>
     <TextView>
     <Button>
-  </WidgetCollection>
+  </Page>
 );
 ```
+
+In pure JavaScript this requires multiple `append` calls:
+
+```js
+navigationView.append(
+  new Page().append(
+    new TextView(),
+    new Button()
+  )
+);
+```
+
+If a widget that already has a parent is added to another, it is automatically removed from the old parent first.
+
+The current parent of a widget is returned by the [`parent`](api/Widget.md#parent) method,
+and the children by the [`children`](api/Widget.md#children) method.
 
 ## Event Handling
 
-Widgets can notify event callback functions ("listeners") of events such as a user interaction or a property change. For each type of event supported by a widget there is a matching method to register a listener. These all start with an `on` followed by the name of the event, e.g. `onSelect`.
+Widgets can notify event callback functions ("listeners") of events such as a user interaction or a property change. For each type of event supported by a widget there is a matching attribute (JSX) and method (JS) to register a listener. These all start with an `on` prefix, so the `select` event is registered with `onSelect`.
 
 Example:
 
-```js
-function listener() {
+```jsx
+const listener = () => {
   console.log('Button selected!');
 }
 
-button.onSelect(listener);
+contentView.append(
+  <Button onSelect={listener} />
+);
+
+// or ...
+
+contentView.append(
+  new Button()
+    .onSelect(listener)
+);
 ```
 
-Inside a class (e.g. its constructor) it is recommended to use arrow functions to avoid `this` having unexpected values.
+Favor arrow functions over `function` to create listeners, it avoids issues with `this` having unexpected values. A simple wrapper can suffice:
 
 ```js
-button.onSelect(() => this.doSomething());
-```
-
-In JSX you can use attributes following the same naming pattern to register listener:
-
-```js
-const listener = () => console.log('Button selected!');
-const button = <Button onSelect={listener} />;
+button.onSelect((ev) => this.doSomething(ev));
 ```
 
 The listener function is called with an instance of [EventObject](./api/EventObject.md) that may include a number of additional properties depending on the event type.
@@ -124,20 +191,11 @@ The listener registration method is also an object of the [Listeners](./api/List
 button.onSelect.removeListener(listener);
 ```
 
-You can also add and remove listener with the widget methods `on` and `off`:
-
-```js
-button.on('select', listener);
-button.off('select', listener);
-```
-
-> :point_right: You should avoid `on` and `off` when using TypeScript, as they are not type-safe.
-
 ### Change Events
 
-All widgets support property change events that are fired when a property value changes. All change events are named `[propertyName]Changed` and provide a `ChangeEvent` object.
+All widgets support property change events that are fired when a property value changes. All change events are named after the property with `Changed` as a postfix, e.g. `myValue` fires `myValueChanged`, so listeners can be registered via `onMyValueChangd`.
 
-In addition to the common event properties, change events have a property `value` that contains the new value of the property.
+In addition to the common event properties, [change events](./types.md#changeevent) have a property `value` that contains the new value of the property.
 
 Example:
 
@@ -146,23 +204,6 @@ new TextInput().onTextChanged(event => {
   console.log('The text has changed to: ' + event.value);
 })
 ```
-
-## Traversing the Widget Tree
-
-See also: [Selector API](selector.md)
-
-The current parent of a widget is returned by the [`parent`](api/Widget.md#parent) method,
-and the children by the [`children`](api/Widget.md#children) method.
-
-Example:
-
-```js
-let parent = widget.parent();
-let firstChild = parent.children()[0];
-let lastChild = parent.children().last();
-```
-
-The result list of children is an array-like object of the type [`WidgetCollection`](api/WidgetCollection.md).
 
 ## Animations
 
@@ -198,4 +239,4 @@ button.on('dispose', () => console.log('Button disposed!'));
 button.dispose();
 ```
 
-After a widget is disposed none of its methods will work except `isDisposed()`, which returns `true` if the widget has been disposed, otherwise `false`.
+After a widget has been disposed `isDisposed()` returns `true` while all other methods will throw an exception if called.

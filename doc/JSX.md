@@ -7,7 +7,7 @@ JSX is a proprietary extension to the JavaScript/TypeScript syntax that allows m
 
 ## Usage
 
-In Tabris, JSX is used to create UI elements in a declarative manner. Every constructor for a Widget, WidgetCollection or Popup based class can be used as an JSX element. (As of 3.0-beta2 only the ActionSheet and AlertDialog popup supports JSX. This will change in the final release.)
+In Tabris, JSX is used to create UI elements in a declarative manner. Every constructor for a Widget, WidgetCollection or Popup based class can be used as an JSX element.
 
 Action | JavaScript/TypeScript | JSX
 ---|---|---
@@ -85,39 +85,63 @@ const StyledText = (properties: TextView['jsxProperties']) =>
 
 ### Custom Components
 
-Any custom component (a user-defined class extending a built-in widget) can be used as a JSX element right away. The only requirement is that the constructor takes the properties object and passes it on to the base class in a `super()` call. All attributes are interpreted as either a property or a listener as you would expect.
+Any custom component (a user-defined class extending a built-in widget) can be used as a JSX element right away. The only requirement is that the constructor takes the `properties` object and passes it on to the base class in a `super(properties)` or `set(properties)` call. All attributes are interpreted as either a property or a listener as you would expect.
 
-**However, in TypeScript an extra step is needed.**
+In TypeScript the attributes that are available on the element are derived from the properties and events of the component:
 
-All classes that can be used as JSX elements have a special (TypeScript-only) property called `jsxProperties`. The *type* of this property defines what attributes are accepted. The assigned value is irrelevant. It should be an interface that includes some or all properties and event listeners supported by the class. All members should be marked as optional (using a `?` after the name), unless you want the attribute to be mandatory.
+* All public, writable properties except functions (methods) are valid attributes.
+* All events defined via `Listeners` properties are also valid listener attributes.
+* All child types accepted by the super type are still accepted.
 
-You can do this by manually extending the `jsxProperties` type of the base class:
+#### Data Binding
 
-```ts
+Declarative data binding via JSX is provided by the [`tabris-decorators` extension](http://github.com/eclipsesource/tabris-decorators). Once installed in your project, you can do one-way bindings between a property of your custom component and the property of a child like this:
+
+```tsx
+@component
 class CustomComponent extends Composite {
 
-  public jsxProperties: Composite['jsxProperties'] & {
-    foo?: number;
-    onMyEvent?: Listeners;
-  };
+  @property public myText: string = 'foo';
 
-  // ... constructor, members, etc...
+  constructor(properties: CompositeProperties) {
+    super(properties);
+    this.append(
+      <TextView bind-text='myText'/>
+    );
+  }
 
 }
 ```
 
-This is a bit cumbersome and error prone, which is why there is a helper interface called `JSXProperties` that you can import from the `'tabris'` module. It's exact type is...
+The `tabris-decorators` module also provides two-way bindings and type conversions. The API documentation can be found [here](https://github.com/eclipsesource/tabris-decorators/blob/master/doc/data-binding.md).
+
+#### Adding Special Attributes
+
+In the *rare* case that the above behavior needs to be modified, you can do so by declaring a special (TypeScript-only) property called `jsxProperties`. The *type* of this property defines what JSX attributes are accepted. The value is irrelevant, it should not be assigned to anything.
+
+The following example defines a JSX component that takes a "foo" attribute even though there is no matching property:
 
 ```ts
-JSXProperties<T, U extends keyof T>
+class CustomComponent extends tabris.Composite {
+
+  public jsxProperties: tabris.JSXProperties<this> & {foo: number};
+
+  constructor({foo, ...properties}: tabris.Properties<CustomComponent> & {foo: number}) {
+    super(properties);
+    console.log(foo);
+  }
+
+}
 ```
 
-... where `T` is your own class, and `U` is a union of the attributes you want to support. Using this interface the above example can be written like this:
+The type `JSXProperties<this>` part provides the default behavior for JSX attributes as described above. The second part `{foo: number}` is the additional attribute. In this case it would be a required attribute, but it can be made optional like this: `{foo?: number}`. The constructor properties parameter type should be extended in exactly the same way.
 
-```ts
-class CustomComponent extends Composite {
+Which elements are accepted as children is determined by a `children` entry of `jsxProperties`. If your custom component does not accept children you could disallow them like this:
 
-  public jsxProperties: Composite['jsxProperties'] & JSXProperties<CustomComponent, 'foo' | 'onMyEvent'>;
+```js
+class CustomComponent extends tabris.Composite {
+
+  public jsxProperties: tabris.JSXProperties<this> & {children?: never};
 
 }
 ```

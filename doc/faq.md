@@ -6,8 +6,7 @@
 
 ### Where can I see examples of what Tabris.js can do?
 
-To see examples of widgets and layouts, download the [Developer App](developer-app.md) and have a look at the Examples section.
-In addition, we have many code [snippets](https://github.com/eclipsesource/tabris-js/tree/master/snippets) demonstrating how to use specific API.
+To see examples of widgets and layouts, download the [Developer App](developer-app.md) and have a look at the Examples section. Then head over to the [Playground](https://playground.tabris.com/) to run (and edit) any of the many snippets showcasing Tabris.js APIs.
 
 ### Is the framework open source?
 
@@ -19,6 +18,26 @@ The source code of the native clients is available for [organization customers](
 
 No, unlike a regular Cordova app, the UI created by Tabris.js apps consists of truly native components.
 
+### For what platforms can I create Tabris.js apps?
+
+|         | Tabris.js 1.x | Tabris.js 2.x | Tabris.js 3.x |
+|---------|---------------|---------------|---------------|
+| Android | 4.1 and up    | 4.2 and up    | 5.9 and up    |
+| iOS     | iOS 8 and up  | iOS 9 and up  | iOS 9 and up  |
+| Windows | N/A           | 10            | on request    |
+
+### Can the same Tabris.js app really run on both iOS and Android?
+
+Yes. Tabris.js maps JavaScript widgets to native widgets which lets you create a distinctive UI and user experience on all supported platforms. Unlike HTML based apps, it does *not* look the same on each platform. Instead it matches the native styles of each platform.
+
+### Can I create "modern" (UWP) Windows / Windows Mobile apps with Tabris.js?
+
+You can with Tabris.js 2.x. Tabris.js 3.x currently does not provide free support for the Universal Windows Platform. If you represent an organization interested in Windows app development based on Tabris.js, please [contact our support](https://tabris.com/contact/).
+
+### Does Tabris.js compile JavaScript to native code?
+
+No, the JavaScript code is executed directly on the mobile device inside a JavaScript engine. However, if you use TypeScript and/or JSX, your code is first "compiled" to pure ES6 JavaScript in an extra build step.
+
 ### What's the relationship between Cordova/PhoneGap and Tabris.js
 
 Tabris.js uses Cordova in two ways:
@@ -26,35 +45,23 @@ Tabris.js uses Cordova in two ways:
   1. To access native APIs via Cordova plugins and
   2. To build apps via the Cordova build system
 
-The Tabris.js developers have no affiliation with the [Apache Software Foundation](http://apache.org/).
+One way to put it is "Tabris.js is Cordova with native widgets instead of HTML". The Tabris.js developers have no affiliation with the [Apache Software Foundation](http://apache.org/).
 
-### Can I really build one iOS/Android app from a single JavaScript codebase?
-
-Yes. Tabris.js maps JavaScript widgets to native widgets which lets you create a distinctive UI and user experience on all three platforms. Unlike HTML based apps, it does *not* look the same on each platform. Instead it matches the native styles of each platform.
-
-### What kind of apps can be developed with Tabris.js?
-
-Tabris.js is suitable for all kind of apps that rely on native UI components. It's not suitable for apps that rely heavily on sophisticated 2D/3D graphics or CPU intensive tasks, such as games.
-
-### Does Tabris.js compile JavaScript to native code?
-
-No, the JavaScript code is executed directly on the mobile device inside a JavaScript engine. However, if you use TypeScript and/or JSX, your code is first "transpiled" to pure JavaScript in an extra build step.
-
-### Is Tabris.js based on Eclipse technology? Can I develop in Java?
-
-No, that would be ["Tabris for RAP"](https://eclipsesource.com/products/tabris), the predecessor of Tabris.js.
-
-### For what platforms can I create Tabris.js apps?
+### What Cordova platform versions is Tabris.js based on?
 
 |         | Tabris.js 1.x | Tabris.js 2.x | Tabris.js 3.x |
 |---------|---------------|---------------|---------------|
-| Android | 4.1 and up    | 4.2 and up    | 4.2 and up    |
-| iOS     | iOS 8 and up  | iOS 9 and up  | iOS 9 and up  |
-| Windows | N/A           | 10            | N/A           |
+| Android | 4.2           | 4.4           | 5.0           |
+| iOS     | 4.5.4         | 5.0.0         | 5.0.0         |
+| Windows | N/A           | 5.0.0         | N/A           |
 
-### Can I create "modern" (UWP) Windows / Windows Mobile apps with Tabris.js?
+### Is Tabris.js based on Java?
 
-You can with Tabris.js 2.x. Tabris.js 3.x currently does not provide free support for the Universal Windows Platform. If you represent an organization interested in Windows app development based on Tabris.js, please [contact our support](https://tabris.com/contact/).
+No, that would be ["Tabris for RAP"](https://eclipsesource.com/products/tabris), the sister project of Tabris.js.
+
+### What kind of apps can be developed with Tabris.js?
+
+Tabris.js is suitable for all kind of apps that rely on native UI components. It's not optimized for apps that rely heavily on sophisticated 2D/3D graphics or CPU intensive tasks, such as games.
 
 ## Development
 
@@ -64,23 +71,19 @@ Some entry-level JavaScript (or TypeScript) knowledge is recommended. Everything
 
 ### Do I need to download any SDKs?
 
-No. As a matter of fact, using the [Developer App](developer-app.md) you can experience Tabris.js coding via the [Tabris.js Playground](https://tabrisjs.com/playground) without any further setup what so ever. If you want to get serious, [your development machine can be set up in minutes](../latest/getting-started.md).
+No. As a matter of fact, using the [Developer App](developer-app.md) you can experience Tabris.js coding via the [Tabris.js Playground](https://playground.tabris.com/) without any further setup what so ever. If you want to get serious, [your development machine can be set up in minutes](../latest/getting-started.md).
 
 ### What APIs does Tabris.js support?
 
-Tabris.js provides a JavaScript/TypeScript API to indirectly create and control native UIs. It also offers [EcmaScript 6 features](../latest/lang.md) and some [well known browser APIs](../latest/w3c-api.md), such as `fetch`, `WebSocket` or `localStorage`. In addition, native functionality like device sensors, camera or notifications are available as Cordova plugins. You can also [write your own](custom-widgets.md) Cordova plug-ins and native custom widgets.
+Tabris.js provides a JavaScript/TypeScript API to indirectly create and control native UIs. It also offers [modern EcmaScript features](../latest/runtime.md), file system and printer support, and some [well known browser APIs](../latest/w3c-api.md), such as `fetch`, `WebSocket`, `localStorage` and `Worker`. Additional native functionality like device sensors, camera or notifications are available as [Cordova plugins](../latest/cordova.md). You can also [write your own](../latest/custom-widgets.md) Cordova plug-ins and native custom widgets.
 
 ### Does Tabris.js support declarative UI?
 
 Yes, [via JSX](../latest/lang.md#JSX).
 
-### Does Tabris.js have a WYSIWYG editor?
-
-Currently no. However, thanks to [remote script loading](../latest/developer-app.md#the-developer-console), you can see the effects of changes to your UI code almost instantly. You can do this with the [Developer App](developer-app.md) or any Tabris.js app that was [built with the debug option](../latest/build.md#settings).
-
 ### How to use the "nightly" Tabris.js build?
 
-If you want to keep up with the latest developments in Tabris.js, you can consume Tabris.js from the dist tag `"nightly"`. In your `package.json`, set the dependency for the `tabris` module to `"nightly"` or run `npm install tabris@nightly`. You then have to build the app using the [build service or Tabris CLI](../latest/build.md). The [Developer Apps](developer-app.md) from the stores may not work with nightly builds of the `tabris` module.
+If you want to keep up with the latest developments in Tabris.js, you can consume Tabris.js from the dist tag `"nightly"`. In your `package.json`, set the dependency for the `tabris` module to `"nightly"` or run `npm install tabris@nightly`. You then have to build the app using the [build service or Tabris CLI](../latest/build.md). The [Developer Apps](../latest/developer-app.md) from the stores may not work with nightly builds of the `tabris` module.
 
 ### How can I build my apps locally?
 
@@ -94,14 +97,14 @@ No, plug-ins that access the DOM of an HTML page won't work because Tabris.js us
 
 ### How can I test Cordova plug-ins?
 
-You can test several prepackaged plug-ins directly from the [Tabris.js developer app](developer-app.md).
-These include camera, device motion, dialogs and more (see [Default Plug-ins](cordova.md#cordova-plugins-support)).
+You can test several prepackaged plug-ins directly from the [Tabris.js developer app](../latest/developer-app.md).
+These include camera, device motion and more (see [Default Plug-ins](../latest/cordova.md#cordova-plugins-support)).
 
 In order to test additional plug-ins you will need to [add them to your `config.xml`](../latest/build.md#integrating-cordova-plugins) and [build the app](build.md). If [you enable the debug option](../latest/build.md#settings), the developer console will still be available and allow you to load newer app code via [developer console](../latest/developer-app.md#the-developer-console) without re-building the entire app.
 
 ### Can I create my own native plugins?
 
-Yes. The [downloadable](https://tabrisjs.com/download) Tabris.js platforms (sign-in required) for Android and iOS allow you to create native plugins. See the respective docs for [Android](custom-widgets-android.md) and [iOS](custom-widgets-ios.md) for technical details.
+Yes. The [downloadable](https://tabrisjs.com/download) Tabris.js platforms (sign-in required) for Android and iOS allow you to create native plugins. See the respective docs for [Android](../latest/custom-widgets-android.md) and [iOS](../latest/custom-widgets-ios.md) for technical details.
 
 ## Payment
 

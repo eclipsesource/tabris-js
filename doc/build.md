@@ -4,16 +4,17 @@
 
 Tabris.js utilizes [Apache Cordova](http://cordova.apache.org) to build and package apps. Apps can be built without any local setup [using the free online build service](#build-service) on tabrisjs.com. To [build an app on your local machine](#local-build), you need to setup developer tools like Xcode, Visual Studio or the Android SDK. The following features are supported by the two different build types.
 
-|                           | Build Service | Local Build |
-| :------------------------ |:---------------:| :---------------: |
-| Building iOS Apps         |       ✓         |       ✓      |
-| Building Android Apps     |       ✓         |       ✓      |
-| [Integrate Cordova Plugins](cordova.md)     |       ✓      |       ✓      |
-| [Cordova Build Hooks](http://cordova.apache.org/docs/en/edge/guide_appdev_hooks_index.md.html#Hooks%20Guide)       |       ✓      |       ✓      |
-| Custom Project Structure  |       ✓      |       ✓      |
-| Own Build Scripts         |              |       ✓      |
-| Using own build hardware  |              |       ✓      |
-| Other SCMs than Git       |              |       ✓      |
+|                           | Build Service | Local Build
+|---------------------------|---------------|------------
+| Building iOS Apps |✓|✓
+| Building Android Apps|✓|✓
+| npm "build" Script|✓|✓|
+| [Integrate Cordova Plugins](cordova.md)|✓|✓
+| [Cordova Build Hooks](http://cordova.apache.org/docs/en/edge/guide_appdev_hooks_index.md.html#Hooks%20Guide)|✓|✓
+| Custom Project Structure|✓|✓|
+| Using own build hardware||✓|
+| Other SCMs than Git||✓|
+| Custom Build Environment||✓|
 
 > :point_right: The online build service is free for unlimited public GitHub repositories and 1 private repository. To build from unlimited private repositories, you need a [Pro account](https://tabrisjs.com/pricing/). [Local builds](#local-build) are free for everyone.
 
@@ -53,9 +54,9 @@ See [package.json | npm documentation](https://docs.npmjs.com/files/package.json
 
 Dependencies are automatically installed during the build process.
 
-#### Build scripts
+#### NPM Build scripts
 
-When a Tabris.js app is built, `build` scripts given in the `package.json` are executed before the JavaScript code is bundled into the app. They can be used to transpile the JavaScript app code.
+When a Tabris.js app is built, the `build` scripts given in the `package.json` are executed before the JavaScript code is bundled into the app. They can be used to transpile (source-to-source transform) the JavaScript app code.
 
 ```json
 {
@@ -68,19 +69,21 @@ When a Tabris.js app is built, `build` scripts given in the `package.json` are e
 }
 ```
 
-Supported build script hooks are:
+Supported build script names are:
 
-  - `"build"`: executed for all platform builds
-  - `"build:android"`: executed for Android builds
-  - `"build:ios"`: executed for iOS builds
+  - `"build:android"`: executed only for Android builds
+  - `"build:ios"`: executed only for iOS builds
+  - `"build"`: executed last for any platform
 
-Make sure the `"build"` script is executed before executing `tabris serve` (when running the app locally). This step can be automated by using the watch mode of your transpiler, which will compile the file on change (refer to your transpiler's documentation). A module like [npm-run-all](https://www.npmjs.com/package/npm-run-all) can help run the transpiler in watch mode and `tabris serve` at the same time.
+#### Example: TypeScript
 
-For bigger projects you may want to use a module bundler like [rollup.js](https://rollupjs.org). It removes the overhead of loading multiple modules and uses static analysis to remove unused code from the bundled artifact.
+Generate a Tabris.js app using the `tabris init` command and select *"Compiled"* as the project type. The resulting `package.json` is already configured to use the TypeScript compiler. The details are explained [here](./typescript.md#setup).
 
-#### Example: Transpiling ES6 code
+#### Example: Babel.js
 
-Install the Babel transpiler and the necessary plug-ins. The `--save-dev` option will add the dependencies to your `package.json`:
+Babel.js may be used to add support for specific [JavaScript features not natively supported by Tabris.js](./runtime.md).
+
+To do so, install the Babel transpiler and the necessary plug-ins. The `--save-dev` option will add the dependencies to your `package.json`:
 
 ```
 npm install --save-dev @babel/core @babel/cli @babel/plugin-transform-modules-commonjs @babel/plugin-transform-async-to-generator
@@ -108,7 +111,7 @@ Include the following build script in the `scripts` sections of your `package.js
 }
 ```
 
-Let the `main` field point to the *transpiled* `app.js` in `dist/`:
+Let the `main` field point to the *compiled* version of `app.js` in `dist/`:
 
 ```json
 {
@@ -117,40 +120,11 @@ Let the `main` field point to the *transpiled* `app.js` in `dist/`:
 }
 ```
 
-In case iOS 9 support is desired, more Babel plugins can be added to compensate for missing ES6 features.
-See [EcmaScript 6](lang.md#ecmascript-6) for more information about supported ES6 features in iOS 9.
-
-#### Example: Transpiling TypeScript code
-
-Install the TypeScript compiler:
-
-```
-npm install --save-dev typescript
-```
-
-Include the following build script in the `scripts` sections of your `package.json`:
-
-```json
-{
-  "scripts": {
-    "build": "tsc -p ."
-  }
-  ...
-}
-```
-
-Let the `main` field point to the *transpiled* `app.js` in `dist/`:
-
-```json
-{
-  "main": "dist/app.js",
-  ...
-}
-```
+To test the setup run `npm run build` or simply `tabris serve`.
 
 ### The config.xml file
 
-The minimal build configuration you need is a `cordova/config.xml` file that describes your app. It contains information like the id of your app, its version, icons and splash screens. The format of the `config.xml` is the same as a standard [Cordova config.xml](https://cordova.apache.org/docs/en/4.0.0/config_ref_index.md.html#The%20config.xml%20File) file. A minimal example config could look like this:
+The minimal build configuration you need is a `cordova/config.xml` file that describes your app. It contains information like the id of your app, its version, app icons and splash screens. The format of the `config.xml` is the same as a standard [Cordova config.xml](https://cordova.apache.org/docs/en/8.x/config_ref/index.html) file. A minimal example config could look like this:
 
 ```xml
 <?xml version='1.0' encoding='utf-8'?>
@@ -243,7 +217,7 @@ After your app has become valid, you are ready to execute the first build. Just 
 * **Environment Variables:** Key/Value pairs that will be stored and transferred encrypted to the build machines. They can be used within the config.xml or custom hooks. Use cases are adding plug-ins from private git repositories or handling access keys.
 * **Builds to keep:** Specifies the number of builds that should be kept before deleting them automatically.
 * **Tabris.js Version:** The Tabris.js *client* version to use in the app. In contrast to the "tabris" dependency to your `package.json` which defines the version of the JavaScript module, this setting defines the version of the native client that will interpret your JavaScript code. In most cases, the value `latest` is good enough here. But if you want to stick to a fixed Tabris.js version you can configure it here.
-* **Debug:** Enables the *debug mode*. If set to `ON`, your app will be built including debug symbols and it will be packaged into the Tabris.js Developer App to make development easier. This allows you to use all the benefits like the developer console or the reload also with your own app. Please be aware that debug versions can not be submitted to the app stores. Debug `OFF` means your app will be built to be ready for release: no Developer App, no console, no reload. Only your JavaScript code is executed.
+* **Debug:** Enables the *debug mode*. If set to `ON`, your app will be built including debug symbols and enabled [developer console](./developer-app.md#The-Developer-Console). (Assuming `EnableDeveloperConsole` is set to `$IS_DEBUG` in your [config.xml](#Preferences).) That enables [code side-loading](./developer-app.md#Code-Sideloading), logging and [attaching a debugger](./debug.md). Please be aware that debug versions can not be submitted to the app stores. Debug `OFF` means your app will be built to be ready for release.
 
 ## Local Build
 

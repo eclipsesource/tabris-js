@@ -6,7 +6,7 @@ Tabris implements a subset of popular W3C standards. Besides providing web devel
 
 ## window object
 
-In JavaScript there is always an object that represents the global scope. All global variables are members of this object. As in a web browser, this object is named `window` in Tabris.js. For example, the tabris object can be accessed either via `tabris` or `window.tabris`.
+In JavaScript there is always an object that represents the global scope. All global variables are members of this object. For compatibility this object is available as `window`, but `global` is the actual global object in Tabris.js. For example, the tabris object can be accessed either via `tabris` or `global.tabris` or `window.tabris`.
 
 ## console object
 
@@ -14,10 +14,9 @@ As in the browser, messages can be logged to the [developer console](developer-a
 
 ```js
 console.log("A log message");
-console.error("An error Message");
 console.warn("A warning message");
-console.info("An info message");
-console.debug("A debug Message");
+console.error("An error Message");
+console.trace();
 ```
 
 Calling `console.error` will also cause a message to pop up (even if the developer console is closed), but it won't interrupt script execution. See [Console](api/console.md).
@@ -26,46 +25,35 @@ Calling `console.error` will also cause a message to pop up (even if the develop
 
 Tabris supports the timer methods `setTimeout`, `setInterval`, `clearTimeout` and `clearInterval`. See [timer](api/timer.md).
 
-See [W3C](http://www.w3.org/TR/2011/WD-html5-20110525/timers.html#timers) / [MDN](https://developer.mozilla.org/en-US/Add-ons/Code_snippets/Timers)
+## Fetch
+
+Tabris supports the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) to make HTTP request and to read resources that are part of the application.
+
+When a relative URL is given, Tabris.js will interpret it as a path relative to the application's main `package.json`. This allows you to read static resources, i.e. the files residing in your project folder and not excluded via [`.tabrisignore`](./build.md#the-tabrisignore-file). You can also use URLs relative to the current [module](./modules.md) by using the `__dirname` variable, e.g. `fetch(__dirname + "/foo.txt");`.
+
+> :point_right: To enable access to SSL protected resources that use self signed certificates add them to [`app.trustedCertificates`](./api/app.md). Alternatively you can disable the `UseStrictSSL` preference in the config.xml to accept all certificates. See [Building a Tabris.js App](build.md#preferences).
 
 ## XMLHttpRequest
 
-Tabris supports the `XMLHttpRequest` to make HTTP request and to read resources that are part of the application.
+Tabris also supports `XMLHttpRequest`, though `fetch()` is recommended for convenience.
 
 See [W3C](http://www.w3.org/TR/XMLHttpRequest/) / [MDN](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)
 
-*Tabris.js specifics:*
-
-* Only asynchronous requests are supported. Attempting a synchronous request will cause an error.
-* When a relative URL is given, Tabris.js will interpret it as a path relative to the application's `package.json`. This allows you to read static resources (files residing in your project folder).
-* When using a custom built developer client, a relative URL may be used to access local files (bundled with the client as a resource) as well as those residing in the remote project folder (from which the code is loaded via HTTP). Local files take precedence.
-* To enable access to SSL protected resources that use self signed certificates, use the `UseStrictSSL` preference in the config.xml. See [Building a Tabris.js App](build.md#preferences).
-
-## Fetch
-
-As a more powerful and flexible alternative to XHR, you can also use the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
-As of Tabris.js 1.7, an implementation of this API is included.
-
-> :point_right: To load static resources, working with URLs relative to the current [module](modules.md) may be more convenient. In the case of a JSON file, this can be done simply by using the `require` method instead of XHR. For other types of files, use the `__dirname` variable, e.g. `xhr.open("GET", __dirname + "/foo.txt");`.
+> :point_right: Only asynchronous requests are supported in Tabris.js. Attempting a synchronous request will cause an error.
 
 ## WebSocket
 
 WebSockets are an advanced technology that makes it possible to open an interactive communication session between the user's client and a server. With this API, you can send messages to a server and receive event-driven responses without having to poll the server for a reply.
 
-As of Tabris.js 1.10, an implementation of this API is included.
+> The Tabris.js implementation supports to send and receive text messages as well as binary data in the form of `TypedArray` and `ArrayBuffer`, but not `Blob`.
 
-> The Tabris.js implementation supports to send and receive text messages as well as binary data in the form of `TypedArray` and `ArrayBuffer`. We currently do not support to receive data as `Blob`.
-
-Further documentation:
-
-* https://tools.ietf.org/html/rfc6455
-* https://html.spec.whatwg.org/multipage/comms.html#websocket
+See [W3C](https://www.w3.org/TR/websockets/) / [MDN](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket)
 
 ## Worker
 
 Workers are a simple mechanism to run a script in a background thread. The worker thread can perform tasks without interfering with the user interface. In addition, they can perform I/O using XMLHttpRequest or the file system api. Once created, a worker can send messages to the JavaScript code that created it by posting messages to an event handler specified by that code (and vice versa).
 
-The tabris support for workers allows to send data to a running worker via the `worker.postMessage(data, transferList)` method. The `transferList` is currently ignored. The types currently supported in the data field are:
+The tabris support for workers allows to send data to a running worker via the `worker.postMessage(data, transferList)` method. The `transferList` is ignored. The types supported in the data field are:
 
 * `null`
 * `undefined`
@@ -78,8 +66,7 @@ The tabris support for workers allows to send data to a running worker via the `
 * `ArrayBuffer`
 * `ArrayBufferView/TypedArray`
 
-Inside a worker no Tabris.js ui elements are available. Calling any unsupported APIs has no effect. However the 
-following list of Tabris.js APIs can be used:
+Only the following Tabris.js APIs can be used in a worker:
 
 * localStorage
 * App (Except: `restart()`, `close()` and `closeKeyboard()`)
@@ -91,29 +78,21 @@ following list of Tabris.js APIs can be used:
 * WebSocket
 * Worker
 
+Widget APIs are unavailable. Calling any unsupported APIs has no effect.
+
 See [W3C](https://www.w3.org/TR/workers/) / [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Worker)
 
 ## Persistent Storage
 
-Tabris supports the global object `localStorage`, which allows storing key-value pairs in a persistent store. Both keys and values are stored as strings.
+Tabris supports the global object `localStorage`, which allows storing key-value pairs in a persistent store. Both keys and values are stored as strings. See also [localStorage](./api/localStorage.md).
 
-On iOS, there is an additional object `secureStorage` available in the global scope. This is a drop-in replacement for `localStorage` that keeps data in the encrypted iOS Keychain.
-
-See [W3C](http://dev.w3.org/html5/webstorage/) / [MDN](https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Storage)
-
-*Tabris.js specifics:*
-
-* Currently, `localStorage` and `secureStorage` support the methods `setItem`, `getItem`, `removeItem`, and `clear`.
-* The `sessionStorage` is not supported, as it would serve no purpose in a non-browser environment.
-* The storage event is currently not supported.
+Note that the "storage" event is not supported. For debugging purposes the contents of the localStorage can be inspected using `console.dirxml()`[./api/console.md#dirxml]. On iOS, there is an additional object `secureStorage` available in the global scope. This is a drop-in replacement for `localStorage` that keeps data in the encrypted iOS Keychain.
 
 > :point_right: The `localStorage` is only meant to store relatively short strings. To store larger amounts of data it is recommended to use the cordova [`FileSystem`](https://www.npmjs.com/package/cordova-plugin-file) plugin.
 
 ## Canvas Context
 
 The `Canvas` widget provides an HTML5 canvas compatible "2D Context" object. See [Canvas](api/Canvas.md).
-
-See [W3C](http://www.w3.org/TR/2dcontext/) / [MDN](https://developer.mozilla.org/en/docs/Web/API/CanvasRenderingContext2D)
 
 ## Random Source (Crypto)
 

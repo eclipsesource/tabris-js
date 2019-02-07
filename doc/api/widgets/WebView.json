@@ -96,7 +96,7 @@
         {
           "name": "message",
           "type": "string",
-          "description": "The message to send. Currently supports only strings."
+          "description": "The message to send. Supports only strings."
         },
         {
           "name": "targetOrigin",

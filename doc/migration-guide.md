@@ -40,7 +40,7 @@ The `get` method has been removed entirely.
 ### Alternatives for `set("prop", value)`:
 
 On both `NativeObject` and `WidgetCollection`, `obj.set('foo', baz)` can be replaced with `obj.set({foo: baz})`,
-and `obj.set(bar, baz)` can be replaced with `obj.set([foo]: baz})`.
+and `obj.set(bar, baz)` can be replaced with `obj.set({[foo]: baz})`.
 
 On `NativeObject` only, `obj.set('foo', baz)` can be replaced with `obj.foo = baz`,
 and `obj.set(bar, baz)` can be replaced with `obj[bar] = baz`.
@@ -65,11 +65,11 @@ You can no longer patch your application using this method.
 
 ### Color properties
 
-All color properties are now of the type "ColorValue". While these properties still accept the same string values as in 2.x, they will return a "Color" class instance instead of a string. The exception is CanvasContext, where color properties still return a string for W3C compatibility.
+All color properties are now of the type `ColorValue`. While these properties still accept the same string values as in 2.x, they will return a "Color" class instance instead of a string. The exception is CanvasContext, where color properties still return a string for W3C compatibility.
 
 ### Widget.background property
 
-Widget background setter now also accepts "ColorValue", "ImageValue", and "LinearGradientValue" values and the getter will return instances of the "Color", "Image" and "LinearGradient" classes.
+Widget background setter now also accepts `ColorValue`, `ImageValue`, and `LinearGradientValue` values and the getter will return instances of the "Color", "Image" and "LinearGradient" classes.
 
 ### Widget.backgroundImage property removed
 

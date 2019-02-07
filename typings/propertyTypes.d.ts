@@ -123,9 +123,10 @@ export interface LayoutDataProperties {
 }
 
 export type LinearGradientLikeObject = {
-  colorStops: (ColorValue | [ColorValue, PercentValue])[],
+  colorStops: Array<ColorValue | [ColorValue, PercentValue]>,
   direction?: number | 'left' | 'top' | 'right' | 'bottom'
 }
+
 /**
  * Linear gradients can be specified as strings or [LinearGradient](./LinearGradient.html) or
  * `LinearGradient`-like objects.

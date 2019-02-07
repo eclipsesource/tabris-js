@@ -11,7 +11,7 @@
       "type": "string",
       "readonly": true,
       "const": true,
-      "description": "The path of a directory that the app may use to store persistent files."
+      "description": "The path of a directory that the app may use to store persistent files. This is *not* the directory that contains the files bundled with the project, e.g. images, js files, `package.json`. You can access these files using the `fetch` or `XMLHttpRequest` APIs."
     },
     "cacheDir": {
       "type": "string",

@@ -55,7 +55,7 @@
     "refreshMessage": {
       "type": "string",
       "default": "\"\"",
-      "description": "The message text displayed together with the refresh indicator. Currently not supported on Android.",
+      "description": "The message text displayed together with the refresh indicator.",
       "platforms": {
         "android": false
       }

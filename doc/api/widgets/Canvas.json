@@ -19,7 +19,7 @@
         {
           "name": "contextType",
           "type": "string",
-          "description": "The context identifier. Only `\"2d\"` is currently supported."
+          "description": "The context identifier. Only `\"2d\"` is supported."
         },
         {
           "name": "width",

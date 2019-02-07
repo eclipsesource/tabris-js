@@ -14,7 +14,7 @@
   "properties": {
     "src": {
       "type": "string",
-      "description": "File system path, relative path or URL. Android and iOS also support [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme). Relative paths are resolved relative to ‘package.json’. On Android the name of a bundled [drawable resource](https://developer.android.com/guide/topics/resources/drawable-resource) can be provided with the url scheme android-drawable, e.g. android-drawable://ic_info_black.",
+      "description": "File system path, relative path or URL. Android and iOS also support [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme). Relative paths are resolved **relative to ‘package.json’**. On Android the name of a bundled [drawable resource](https://developer.android.com/guide/topics/resources/drawable-resource) can be provided with the url scheme android-drawable, e.g. android-drawable://ic_info_black.",
       "const": true,
       "readonly": true
     },
@@ -32,7 +32,7 @@
     },
     "scale": {
       "type": "number | 'auto'",
-      "description": "Image scale factor - the image will be scaled down by this factor.",
+      "description": "Image scale factor - the image will be scaled down by this factor. See [ImageLikeObject](../types.md#ImageLikeObject) for details",
       "const": true,
       "readonly": true
     }
