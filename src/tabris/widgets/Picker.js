@@ -3,6 +3,9 @@ import Widget from '../Widget';
 
 export default class Picker extends Widget {
 
+  /**
+   * @param {Partial<Picker>} properties
+   */
   constructor(properties) {
     super(Object.assign({selectionIndex: 0}, properties));
     tabris.on('flush', this.$flush, this);

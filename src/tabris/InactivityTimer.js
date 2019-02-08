@@ -3,8 +3,7 @@ import NativeObject from './NativeObject';
 export default class InactivityTimer extends NativeObject {
 
   constructor(properties) {
-    super();
-    this._create('tabris.InactivityTimer', properties);
+    super(properties);
     this._nativeListen('timeout', true);
   }
 
@@ -14,6 +13,10 @@ export default class InactivityTimer extends NativeObject {
 
   cancel() {
     this._nativeCall('cancel');
+  }
+
+  get _nativeType() {
+    return 'tabris.InactivityTimer';
   }
 
 }

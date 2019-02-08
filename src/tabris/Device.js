@@ -2,12 +2,16 @@ import NativeObject from './NativeObject';
 
 export default class Device extends NativeObject {
 
-  constructor() {
-    super();
-    if (arguments[0] !== true) {
+  get _nativeType() {
+    return 'tabris.Device';
+  }
+
+  /** @override */
+  _nativeCreate(param) {
+    if (param !== true) {
       throw new Error('Device can not be created');
     }
-    this._create('tabris.Device');
+    super._nativeCreate();
   }
 
   _listen(name, listening) {

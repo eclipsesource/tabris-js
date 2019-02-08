@@ -2,11 +2,12 @@ import Composite from './Composite';
 
 export default class ContentView extends Composite {
 
-  constructor() {
-    if (arguments[0] !== true) {
+  /** @override */
+  _nativeCreate(param) {
+    if (param !== true) {
       throw new Error('ContentView can not be created');
     }
-    super();
+    super._nativeCreate();
   }
 
   _setParent(parent, index) {

@@ -19,28 +19,24 @@ describe('NativeObject', function() {
 
   describe('constructor', function() {
 
-    it('prevents instantiation', function() {
-      expect(() => {
-        new NativeObject();
-      }).to.throw(Error, 'Cannot instantiate abstract NativeObject');
-    });
-
-  });
-
-  describe('_create', function() {
-
     let TestType, object;
 
     beforeEach(function() {
-      TestType = class TestType extends NativeObject {};
-      object = new TestType();
-      client.resetCalls();
+      TestType = class TestType extends NativeObject {
+        get _nativeType() { return 'TestType'; }
+      };
+    });
+
+    it('prevents direct instantiation', function() {
+      expect(() => {
+        new NativeObject();
+      }).to.throw(Error, 'Can not create instance of abstract class NativeObject');
     });
 
     it('calls native create with properties', function() {
       NativeObject.defineProperties(TestType.prototype, {foo: 'any'});
 
-      object._create('TestType', {foo: 23});
+      object = new TestType({foo: 23});
 
       const calls = client.calls({op: 'create', type: 'TestType'});
       expect(calls.length).to.equal(1);
@@ -50,8 +46,9 @@ describe('NativeObject', function() {
     it('translates properties', function() {
       NativeObject.defineProperties(TestType.prototype, {bar: {type: 'NativeObject'}});
       const other = new TestType();
+      client.resetCalls();
 
-      object._create('TestType', {bar: other});
+      object = new TestType({bar: other});
 
       const properties = client.calls({op: 'create', id: object.cid})[0].properties;
       expect(properties.bar).to.equal(other.cid);
@@ -64,7 +61,9 @@ describe('NativeObject', function() {
     let TestType, object;
 
     beforeEach(function() {
-      TestType = class TestType extends NativeObject {};
+      TestType = class TestType extends NativeObject {
+        get _nativeType() { return 'TestType'; }
+      };
       object = new TestType();
       client.resetCalls();
       stub(console, 'warn');

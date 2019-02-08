@@ -3,15 +3,16 @@ import ContentView from './ContentView';
 
 export default class Drawer extends ContentView {
 
-  constructor() {
-    if (arguments[0] !== true) {
-      throw new Error('Drawer can not be created');
-    }
-    super(true);
-  }
-
   get _nativeType() {
     return 'tabris.Drawer';
+  }
+
+  /** @override */
+  _nativeCreate(param) {
+    if (param !== true) {
+      throw new Error('Drawer can not be created');
+    }
+    super._nativeCreate(true);
   }
 
   _setParent() {

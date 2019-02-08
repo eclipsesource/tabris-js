@@ -5,6 +5,9 @@ import {hint} from '../Console';
 
 export default class CollectionView extends Composite {
 
+  /**
+   * @param {Partial<CollectionView>} properties
+   */
   constructor(properties) {
     super(properties);
     this._nativeListen('requestInfo', true);

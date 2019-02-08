@@ -2,9 +2,8 @@ import NativeObject from './NativeObject';
 
 export default class Crypto extends NativeObject {
 
-  constructor() {
-    super();
-    this._create('tabris.Crypto');
+  get _nativeType() {
+    return 'tabris.Crypto';
   }
 
   getRandomValues(typedArray) {

@@ -12,9 +12,7 @@ describe('property-types', function() {
 
   // Allow creating instances of NativeObject
   class CustomNativeObject extends NativeObject {
-    constructor(cid) {
-      super(cid);
-    }
+    get _nativeType() { return 'CustomNativeObject'; }
   }
 
   beforeEach(function() {

@@ -2,16 +2,16 @@ import NativeObject from '../NativeObject';
 
 export default class NavigationBar extends NativeObject {
 
-  constructor() {
-    if (arguments[0] !== true) {
-      throw new Error('NavigationBar can not be created');
-    }
-    super();
-    this._create('tabris.NavigationBar');
-  }
-
   get _nativeType() {
     return 'tabris.NavigationBar';
+  }
+
+  /** @override */
+  _nativeCreate(param) {
+    if (param !== true) {
+      throw new Error('NavigationBar can not be created');
+    }
+    super._nativeCreate();
   }
 
   _setParent() {

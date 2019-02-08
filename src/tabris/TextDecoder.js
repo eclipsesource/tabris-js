@@ -6,7 +6,6 @@ export default class TextDecoder extends NativeObject {
 
   constructor() {
     super();
-    this._create('tabris.TextDecoder');
     this._nativeListen('result', true);
     this._nativeListen('error', true);
   }
@@ -38,6 +37,10 @@ export default class TextDecoder extends NativeObject {
         })
         .decode(buffer, encoding);
     });
+  }
+
+  get _nativeType() {
+    return 'tabris.TextDecoder';
   }
 
 }

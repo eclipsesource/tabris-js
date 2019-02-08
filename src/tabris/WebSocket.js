@@ -18,9 +18,12 @@ const EVENT_TYPES = ['open', 'message', 'close', 'error'];
 class _WebSocket extends NativeObject {
 
   constructor(properties) {
-    super();
-    this._create('tabris.WebSocket', properties);
+    super(properties);
     EVENT_TYPES.forEach(type => this._nativeListen(type, true));
+  }
+
+  get _nativeType() {
+    return 'tabris.WebSocket';
   }
 
 }

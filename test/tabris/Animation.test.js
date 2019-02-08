@@ -19,7 +19,10 @@ describe('Animation', function() {
     return client.calls({op: 'create', type: 'tabris.Animation'}).pop().properties;
   }
 
-  class TestWidget extends NativeObject {}
+  class TestWidget extends NativeObject {
+    get _nativeType() { return 'TestWidget'; }
+  }
+
   NativeObject.defineProperties(TestWidget.prototype, {
     foo: 'any',
     opacity: {

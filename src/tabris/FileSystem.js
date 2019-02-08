@@ -14,12 +14,16 @@ const ERRORS = {
 
 export default class FileSystem extends NativeObject {
 
-  constructor() {
-    super('tabris.FileSystem');
-    if (arguments[0] !== true) {
+  get _nativeType() {
+    return 'tabris.FileSystem';
+  }
+
+  /** @override */
+  _nativeCreate(param) {
+    if (param !== true) {
       throw new Error('FileSystem can not be created');
     }
-    this._create('tabris.FileSystem');
+    super._nativeCreate();
   }
 
   get filesDir() {

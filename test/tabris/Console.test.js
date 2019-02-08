@@ -378,7 +378,10 @@ _notify@[native code]`
       });
 
       it(platform + ' prints native object toString', function() {
-        class Bar extends NativeObject { toString() { return 'Baz'; } }
+        class Bar extends NativeObject {
+          get _nativeType() { return 'Bar'; }
+          toString() { return 'Baz'; }
+        }
         tabris.device.platform = platform;
         stack = stacks[platform];
 
@@ -390,7 +393,10 @@ _notify@[native code]`
       });
 
       it(platform + ' prints disposed native object without "(disposed)"', function() {
-        class Bar extends NativeObject {}
+        class Bar extends NativeObject {
+          get _nativeType() { return 'Bar'; }
+          toString() { return 'Bar'; }
+        }
         const bar = new Bar();
         bar.dispose();
         tabris.device.platform = platform;

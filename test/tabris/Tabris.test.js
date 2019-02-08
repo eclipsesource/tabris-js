@@ -35,8 +35,10 @@ describe('ClientInterface', function() {
     });
 
     it('triggers start event when tabris is set up', function() {
-      class TestType extends NativeObject {}
-      tabris.on('start', () => new TestType()._create('test.Type'));
+      class TestType extends NativeObject {
+        get _nativeType() { return 'test.Type'; }
+      }
+      tabris.on('start', () => new TestType());
 
       tabris._init.call(null, client);
 
@@ -70,7 +72,9 @@ describe('ClientInterface', function() {
 
   describe('_notify', function() {
 
-    class TestType extends NativeObject {}
+    class TestType extends NativeObject {
+      get _nativeType() { return 'test.Type'; }
+    }
     let widget;
 
     beforeEach(function() {

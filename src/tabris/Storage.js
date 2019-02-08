@@ -4,13 +4,21 @@ import {toXML} from './Console';
 class NativeStore extends NativeObject {
 
   constructor(secure) {
-    super();
-    this.secure = secure;
-    this._create(secure ? 'tabris.SecureStore' : 'tabris.ClientStore');
+    super(secure);
   }
 
   get keys() {
     return this._nativeCall('keys');
+  }
+
+  /** @override */
+  _nativeCreate(secure) {
+    this.secure = secure;
+    super._nativeCreate();
+  }
+
+  get _nativeType() {
+    return this.secure ? 'tabris.SecureStore' : 'tabris.ClientStore';
   }
 
   _getXMLElementName() {

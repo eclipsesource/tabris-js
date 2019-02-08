@@ -6,17 +6,10 @@ import {jsxFactory} from './JsxProcessor';
 import {types} from './property-types';
 import LayoutData from './LayoutData';
 
+/**
+ * @abstract
+ */
 export default class Widget extends NativeObject {
-
-  constructor(properties) {
-    super();
-    if (this.constructor === Widget) {
-      throw new Error('Cannot instantiate abstract Widget');
-    }
-    if (this._nativeType) {
-      this._create(this._nativeType, properties);
-    }
-  }
 
   appendTo(widget) {
     this._checkDisposed();

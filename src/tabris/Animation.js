@@ -16,9 +16,12 @@ const PROPERTIES = {
 class Animation extends NativeObject {
 
   constructor(properties) {
-    super();
-    this._create('tabris.Animation', properties);
+    super(properties);
     this._nativeListen('completed', true);
+  }
+
+  get _nativeType() {
+    return 'tabris.Animation';
   }
 
   _trigger(name, event) {

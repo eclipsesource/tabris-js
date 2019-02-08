@@ -2,12 +2,16 @@ import NativeObject from './NativeObject';
 
 export default class Printer extends NativeObject {
 
-  constructor() {
-    super();
-    if (arguments[0] !== true) {
+  /** @override */
+  _nativeCreate(param) {
+    if (param !== true) {
       throw new Error('Printer can not be created');
     }
-    this._create('tabris.Printer');
+    super._nativeCreate();
+  }
+
+  get _nativeType() {
+    return 'tabris.Printer';
   }
 
   print(data, options) {

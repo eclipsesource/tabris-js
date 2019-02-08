@@ -8,11 +8,14 @@ import {toXML} from './Console';
 function EventsClass() {}
 Object.assign(EventsClass.prototype, Events);
 
+/**
+ * @abstract
+ */
 export default class NativeObject extends EventsClass {
 
   /**
    * @param {object} target
-   * @param {PropertyDefinitions} definitions
+   * @param {import('./internals').PropertyDefinitions} definitions
    */
   static defineProperties(target, definitions) {
     for (const name in definitions) {
@@ -37,7 +40,7 @@ export default class NativeObject extends EventsClass {
 
   /**
    * @param {object} target
-   * @param {EventDefinitions} definitions
+   * @param {import('./internals').EventDefinitions} definitions
    */
   static defineEvents(target, definitions) {
     for (const name in definitions) {
@@ -73,22 +76,19 @@ export default class NativeObject extends EventsClass {
 
   static extend(nativeType, superType = NativeObject) {
     return class extends superType {
-      constructor(properties) {
-        super();
-        this._create(nativeType, properties || {});
-      }
+      get _nativeType() { return nativeType; }
     };
   }
 
-  constructor() {
+  /**
+   * @param {object|boolean} param
+   */
+  constructor(param) {
     super();
-    if (this.constructor === NativeObject) {
-      throw new Error('Cannot instantiate abstract NativeObject');
-    }
-    this._register();
+    this._nativeCreate(param);
   }
 
-  set(properties) {
+  set(properties = {}) {
     if (arguments.length > 1) {
       throw new Error('Too many arguments');
     }
@@ -123,14 +123,6 @@ export default class NativeObject extends EventsClass {
     }
     const setter = this.$getPropertySetter(name) || this._storeProperty;
     setter.call(this, name, encodedValue);
-  }
-
-  _register() {
-    if (typeof tabris === 'undefined' || !tabris._nativeBridge) {
-      throw new Error('tabris.js not started');
-    }
-    const cid = tabris._nativeObjectRegistry.register(this);
-    Object.defineProperty(this, 'cid', {value: cid});
   }
 
   _storeProperty(name, encodedValue) {
@@ -191,14 +183,33 @@ export default class NativeObject extends EventsClass {
     this.$trigger(propertyName + 'Changed', {value: decodedValue});
   }
 
-  _create(type, properties = {}) {
-    tabris._nativeBridge.create(this.cid, type);
-    this._reorderProperties(Object.keys(properties)).forEach(function(name) {
-      setExistingProperty.call(this, name, properties[name]);
-    }, this);
-    return this;
+  /**
+   * @abstract
+   * @type {string}
+   * */
+  get _nativeType() {
+    throw new Error('Can not create instance of abstract class ' + this.constructor.name);
   }
 
+  _nativeCreate(param) {
+    this._register();
+    tabris._nativeBridge.create(this.cid, this._nativeType);
+    if (param instanceof Object) {
+      this.set(param);
+    }
+  }
+
+  _register() {
+    if (typeof tabris === 'undefined' || !tabris._nativeBridge) {
+      throw new Error('tabris.js not started');
+    }
+    const cid = tabris._nativeObjectRegistry.register(this);
+    Object.defineProperty(this, 'cid', {value: cid});
+  }
+
+  /**
+   * @param {string[]} properties
+   */
   _reorderProperties(properties) {
     return properties;
   }

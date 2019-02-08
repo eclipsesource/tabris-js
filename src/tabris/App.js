@@ -4,12 +4,16 @@ const CERTIFICATE_ALGORITHMS = ['RSA2048', 'RSA4096', 'ECDSA256'];
 
 export default class App extends NativeObject {
 
-  constructor() {
-    super();
-    if (arguments[0] !== true) {
+  get _nativeType() {
+    return 'tabris.App';
+  }
+
+  /** @override */
+  _nativeCreate(param) {
+    if (param !== true) {
       throw new Error('App can not be created');
     }
-    this._create('tabris.App');
+    super._nativeCreate();
   }
 
   get id() {

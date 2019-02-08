@@ -12,12 +12,14 @@ export default class ActionSheet extends Popup {
     return actionSheet.open();
   }
 
+  /**
+   * @param {Partial<ActionSheet>} properties
+   */
   constructor(properties) {
-    super();
+    super(properties);
     this._index = null;
     this._action = null;
     this._autoDispose = true;
-    this._create('tabris.ActionSheet', properties);
     this._nativeListen('select', true);
   }
 

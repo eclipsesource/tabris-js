@@ -2,9 +2,8 @@ import NativeObject from './NativeObject';
 
 export default class GestureRecognizer extends NativeObject {
 
-  constructor(properties) {
-    super();
-    this._create('tabris.GestureRecognizer', properties);
+  get _nativeType() {
+    return 'tabris.GestureRecognizer';
   }
 
   _listen(name, listening) {

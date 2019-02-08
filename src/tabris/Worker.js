@@ -7,9 +7,8 @@ const EVENT_TYPES = ['message', 'error', 'messageerror'];
 
 class _Worker extends NativeObject {
 
-  constructor(properties) {
-    super();
-    this._create('tabris.Worker', properties);
+  get _nativeType() {
+    return 'tabris.Worker';
   }
 
 }

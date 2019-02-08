@@ -37,6 +37,13 @@ export default class Tabris extends NativeObject {
     this._nativeBridge.flush();
   }
 
+  get _nativeType() {
+    return 'tabris.Tabris';
+  }
+
+  /** @override */
+  _nativeCreate() {}
+
   _register() {
     this._nativeObjectRegistry = new NativeObjectRegistry();
     const cid = this._nativeObjectRegistry.register(this);
@@ -46,7 +53,8 @@ export default class Tabris extends NativeObject {
   _init(client, options) {
     this._client = client;
     this._nativeBridge = new NativeBridge(client);
-    this._nativeBridge.create(this.cid, 'tabris.Tabris');
+    this._register();
+    this._nativeBridge.create(this.cid, this._nativeType);
     this.trigger('start', options);
     this._started = true;
   }

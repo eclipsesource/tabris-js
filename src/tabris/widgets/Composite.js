@@ -9,14 +9,9 @@ import {toXML} from '../Console';
 
 export default class Composite extends Widget {
 
-  constructor(props) {
-    super(omit(props || {}, ['layout', 'padding']));
-    this._initLayout(props);
-  }
-
   append() {
     this._checkDisposed();
-    const accept = (widget) => {
+    const accept = (/** @type {Widget} */ widget) => {
       if (!(widget instanceof NativeObject)) {
         throw new Error('Cannot append non-widget');
       }
@@ -45,6 +40,11 @@ export default class Composite extends Widget {
 
   children(selector) {
     return this._children(selector);
+  }
+
+  _nativeCreate(properties) {
+    super._nativeCreate(omit(properties || {}, ['layout', 'padding']));
+    this._initLayout(properties);
   }
 
   _initLayout(props = {}) {

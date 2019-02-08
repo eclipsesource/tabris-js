@@ -2,14 +2,12 @@ import NativeObject from './NativeObject';
 
 class Pbkdf2 extends NativeObject {
 
-  constructor() {
-    super();
-    this._create('tabris.pkcs5.Pbkdf2');
-    this._nativeListen('done', true);
-  }
-
   start(parameters) {
     this._nativeCall('start', parameters);
+  }
+
+  get _nativeType() {
+    return 'tabris.pkcs5.Pbkdf2';
   }
 
 }

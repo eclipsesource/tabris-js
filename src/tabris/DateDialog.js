@@ -3,9 +3,11 @@ import NativeObject from './NativeObject';
 
 export default class DateDialog extends Popup {
 
+  /**
+   * @param {Partial<DateDialog>} properties
+   */
   constructor(properties) {
-    super();
-    this._create('tabris.DateDialog', properties);
+    super(properties);
     this._nativeListen('close', true);
     this._autoDispose = true;
   }

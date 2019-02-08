@@ -37,8 +37,7 @@ export const OPCODES = {
 export default class GC extends NativeObject {
 
   constructor(properties) {
-    super();
-    this._create('tabris.GC', properties);
+    super(properties);
     this._operations = [];
     this._doubles = [];
     this._booleans = [];
@@ -108,6 +107,10 @@ export default class GC extends NativeObject {
       this._strings = [];
       this._ints = [];
     }
+  }
+
+  get _nativeType() {
+    return 'tabris.GC';
   }
 
 }

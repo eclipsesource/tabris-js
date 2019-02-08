@@ -2,16 +2,16 @@ import NativeObject from '../NativeObject';
 
 export default class StatusBar extends NativeObject {
 
-  constructor() {
-    if (arguments[0] !== true) {
-      throw new Error('StatusBar can not be created');
-    }
-    super();
-    this._create('tabris.StatusBar');
-  }
-
   get _nativeType() {
     return 'tabris.StatusBar';
+  }
+
+  /** @override */
+  _nativeCreate(param) {
+    if (param !== true) {
+      throw new Error('StatusBar can not be created');
+    }
+    super._nativeCreate();
   }
 
   _listen(name, listening) {

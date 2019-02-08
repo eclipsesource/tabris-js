@@ -6,13 +6,16 @@ export default class TextEncoder extends NativeObject {
 
   constructor() {
     super();
-    this._create('tabris.TextEncoder');
     this._nativeListen('result', true);
     this._nativeListen('error', true);
   }
 
   encode(text, encoding) {
     this._nativeCall('encode', {text, encoding});
+  }
+
+  get _nativeType() {
+    return 'tabris.TextEncoder';
   }
 
   static encode(text, encoding) {

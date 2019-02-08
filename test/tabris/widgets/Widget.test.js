@@ -43,7 +43,7 @@ describe('Widget', function() {
     it('prevents instantiation', function() {
       expect(() => {
         new Widget();
-      }).to.throw(Error, 'Cannot instantiate abstract Widget');
+      }).to.throw(Error, 'Can not create instance of abstract class Widget');
     });
 
   });

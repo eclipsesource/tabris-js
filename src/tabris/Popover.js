@@ -4,10 +4,12 @@ import {create as createContentView} from './widgets/ContentView';
 
 export default class Popover extends Popup {
 
+  /**
+   * @param {Partial<Popover>} properties
+   */
   constructor(properties) {
-    super();
+    super(properties);
     Object.defineProperty(this, 'contentView', {value: createContentView()});
-    this._create('tabris.Popover', properties);
     this._nativeListen('close', true);
     this._autoDispose = true;
     this._nativeSet('contentView', this.contentView.cid);

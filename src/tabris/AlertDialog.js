@@ -17,10 +17,13 @@ export default class AlertDialog extends Popup {
   }
 
   constructor(properties) {
-    super();
-    this._create('tabris.AlertDialog', properties);
+    super(properties);
     this._nativeListen('close', true);
     this._autoDispose = true;
+  }
+
+  get _nativeType() {
+    return 'tabris.AlertDialog';
   }
 
   _trigger(name, event) {
