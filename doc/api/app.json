@@ -29,7 +29,10 @@
     },
     "trustedCertificates": {
       "type": "any[]",
-      "description": "Adds a set of certificates to validated ssl connections against. The certificates are applied in addition to the system wide default certificates.\n\nThe `ArrayBuffer` entries of the `trustedCertificates` array consist of the bytes of the certificate files. On Android the certificate file has to be a _*.pem_ (Privacy Enhanced Mail) file whereas on iOS  it has to be _*.der_ (Distinguished Encoding Rules) file."
+      "description": "Adds a set of certificates to validated ssl connections against. The certificates are applied in addition to the system wide default certificates.\n\nThe `ArrayBuffer` entries of the `trustedCertificates` array consist of the bytes of the certificate files. On Android the certificate file has to be a _*.pem_ (Privacy Enhanced Mail) file whereas on iOS  it has to be _*.der_ (Distinguished Encoding Rules) file.",
+      "platforms": {
+        "windows": false
+      }
     }
   },
   "events": {
