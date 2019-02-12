@@ -23,11 +23,11 @@ Windows 10 (UWP/Store Apps) support was added after Android and iOS. For that re
 
 For the Tabris CLI to find the correct Visual Studio version (2017) you need to set an environment variable `VSINSTALLDIR` with the path to the installation directory. For the Community Edition of Visual Studio this is usually `C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\`.
 
-To avoid packaging problems (specific to the windows platform) during a [local build]((./build.md)) you should create packages for different CPU architecture separately, e.g.
+App packages for different CPU architecture need to be built separately, e.g.
 
 ```
 tabris clean
-tabris build windows --release -- --archs="<cpu>"
+tabris build windows --release --arch=<cpu>
 ```
 
 Where `<cpu>` can be 'x64', 'x86' or 'arm'. Copy the package in to a separate directory and repeat this step for the next architecture.
@@ -36,7 +36,7 @@ The windows-specific `config.xml` preferences are covered [here](./build.html#wi
 
 ## Building an app for the Windows Store
 
-The Tabris.js Windows build service can not yet sign packages for the Windows Store. For now, if you need to upload an app to the Windows Store you have to make a local build. You can either create a signing key yourself and configure the Tabris CLI to use it, or pre-build the app using the CLI and then [use Visual Studio to create `.appxupload` packages](https://docs.microsoft.com/en-us/windows/uwp/packaging/packaging-uwp-apps#create-an-app-package).
+The Tabris.js Windows build service can not sign packages for the Windows Store. If you need to upload an app to the Windows Store you have to make a local build. You can either create a signing key yourself and configure the Tabris CLI to use it, or pre-build the app using the CLI and then [use Visual Studio to create `.appxupload` packages](https://docs.microsoft.com/en-us/windows/uwp/packaging/packaging-uwp-apps#create-an-app-package).
 
 ### Manually generating a signing key (.pfx file)
 
@@ -81,8 +81,7 @@ Both can also be found in the "App Identity" section of the app on Windows devel
 }
 ```
 
-You can now build your Windows app like you normally would. The result will be an `.appxupload` file that is accepted by the Windows Store. You need to build a separate package for each CPU architecture you want to support.
-
+You can now build your Windows app with the CLI using the `--release` switch. The result will be an `.appxupload` file that is accepted by the Windows Store. You need to build a separate package for each CPU architecture you want to support.
 
 ## Sideloading apps on Windows 10 (PC):
 
