@@ -4,8 +4,8 @@
 const {Button, TextView, ui} = require('tabris');
 
 new Button({
-  left: 16, right: 16, top: 'prev() 12',
-  text: 'load'
+  left: 16, right: 16, top: 'prev() 24',
+  text: 'Show my location'
 }).on('select', loadData).appendTo(ui.contentView);
 
 let textView = new TextView({
@@ -13,9 +13,9 @@ let textView = new TextView({
 }).appendTo(ui.contentView);
 
 function loadData() {
-  fetch('https://freegeoip.net/json/')
+  fetch('http://ip-api.com/json')
     .then(response => checkStatus(response) && response.json())
-    .then(json => textView.text = `You appear to be in ${json.city ? json.city : json.country_name}`)
+    .then(json => textView.text = `You appear to be in ${json.city ? json.city : json.country}`)
     .catch(err => console.error(err)); // Never forget the final catch!
 }
 
