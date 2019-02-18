@@ -2,6 +2,11 @@ import NativeObject from './NativeObject';
 
 class Pbkdf2 extends NativeObject {
 
+  constructor(properties) {
+    super(properties);
+    this._nativeListen('done', true);
+  }
+
   start(parameters) {
     this._nativeCall('start', parameters);
   }
