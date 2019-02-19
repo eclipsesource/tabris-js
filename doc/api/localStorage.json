@@ -58,6 +58,7 @@
   "properties": {
     "length": {
       "readonly": true,
+      "const": true,
       "type": "number",
       "description": "The number of items in the storage."
     }

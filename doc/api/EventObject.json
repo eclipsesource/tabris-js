@@ -10,17 +10,20 @@
     "type": {
       "type": "string",
       "readonly": true,
+      "const": true,
       "description": "The event type."
     },
     "target": {
       "type": "object",
       "ts_type": "T",
       "readonly": true,
+      "const": true,
       "description": "The object that fired the event."
     },
     "timeStamp": {
       "type": "number",
       "readonly": true,
+      "const": true,
       "description": "The time at which the event was created, in milliseconds."
     }
   }

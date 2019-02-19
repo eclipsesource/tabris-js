@@ -15,6 +15,7 @@
         "iOS"
       ],
       "const": true,
+      "readonly": true,
       "description": "The name of the platform. Currently either `\"Android\"` or `\"iOS\"`. This property is also available globally as `device.platform`."
     },
     "version": {

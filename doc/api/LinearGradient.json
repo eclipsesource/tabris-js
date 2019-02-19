@@ -21,12 +21,14 @@
     "colorStops": {
       "type": "(Color | [Color, Percent])[]",
       "description": "An array with the gradient color stops. Defines the position and the offset of the gradient color stop.",
-      "const": true
+      "const": true,
+      "readonly": true
     },
     "direction": {
       "type": "number",
       "description": "The direction of the gradient line in degrees.",
-      "const": true
+      "const": true,
+      "readonly": true
     }
   },
   "methods": {

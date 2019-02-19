@@ -15,22 +15,26 @@
     "src": {
       "type": "string",
       "description": "File system path, relative path or URL. Android and iOS also support [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme). Relative paths are resolved relative to ‘package.json’. On Android the name of a bundled [drawable resource](https://developer.android.com/guide/topics/resources/drawable-resource) can be provided with the url scheme android-drawable, e.g. android-drawable://ic_info_black.",
-      "const": true
+      "const": true,
+      "readonly": true
     },
     "width": {
       "type": "number | 'auto'",
       "description": "Image width in dip. Extracted from the image file when 'auto'.",
-      "const": true
+      "const": true,
+      "readonly": true
     },
     "height": {
       "type": "number | 'auto'",
       "description": "Image height in dip. Extracted from the image file when 'auto'.",
-      "const": true
+      "const": true,
+      "readonly": true
     },
     "scale": {
       "type": "number | 'auto'",
       "description": "Image scale factor - the image will be scaled down by this factor.",
-      "const": true
+      "const": true,
+      "readonly": true
     }
   },
   "statics": {

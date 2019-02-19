@@ -15,7 +15,8 @@
     "percent": {
       "type": "number",
       "description": "A number between and including 0 and 100",
-      "const": true
+      "const": true,
+      "readonly": true
     }
   },
   "methods": {

@@ -33,22 +33,26 @@
     "size": {
       "type": "number",
       "description": "Positive number in dip",
-      "const": true
+      "const": true,
+      "readonly": true
     },
     "family": {
       "type": "string[]",
       "description": "Prioritized list of font families",
-      "const": true
+      "const": true,
+      "readonly": true
     },
     "weight": {
       "type": "'black' | 'bold' | 'medium' | 'thin' | 'light' | 'normal'",
       "description": "Boldness of the font",
-      "const": true
+      "const": true,
+      "readonly": true
     },
     "style": {
       "type": "'italic' | 'normal'",
       "description": "Face of the font family to be used",
-      "const": true
+      "const": true,
+      "readonly": true
     }
   },
   "methods": {

@@ -16,7 +16,8 @@
       "type": "BoxDimensions",
       "const": true,
       "default": "{left: 0, top: 0, right: 0, bottom: 0}",
-      "description": "Additional space between the parents edges and its children."
+      "description": "Additional space between the parents edges and its children.",
+      "readonly": true
     }
   },
   "methods": {

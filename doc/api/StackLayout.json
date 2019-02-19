@@ -18,13 +18,15 @@
       "type": "number",
       "const": true,
       "default": 0,
-      "description": "Additional space to add between the children in device independent pixel."
+      "description": "Additional space to add between the children in device independent pixel.",
+      "readonly": true
     },
     "alignment": {
       "type": "'left'|'centerX'|'stretchX'|'right'",
       "const": true,
       "default": "'left'",
-      "description": "Determines the horizontal placement of the children. For the `stretchX` value to work correctly the composite needs to be given a width either by setting `width` or by setting `left` and `right`."
+      "description": "Determines the horizontal placement of the children. For the `stretchX` value to work correctly the composite needs to be given a width either by setting `width` or by setting `left` and `right`.",
+      "readonly": true
     }
   },
   "statics": {

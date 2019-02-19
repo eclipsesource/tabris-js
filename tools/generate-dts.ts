@@ -275,7 +275,7 @@ function createProperty(name: string, properties: Properties, def: ExtendedApi, 
   const result = [];
   const property = properties[name];
   result.push(createDoc(property));
-  const readonly = property.readonly || property.const;
+  const readonly = property.readonly;
   const type = decodeType(property, def, {hasContext: false, excludeConsts: false});
   result.push(`${isStatic ? 'static ' : ''}${readonly ? 'readonly ' : ''}${name}: ${type};`);
   return result.join('\n');

@@ -31,22 +31,26 @@
     "red": {
       "type": "number",
       "description": "A number between and including 0 and 255",
-      "const": true
+      "const": true,
+      "readonly": true
     },
     "green": {
       "type": "number",
       "description": "A number between and including 0 and 255",
-      "const": true
+      "const": true,
+      "readonly": true
     },
     "blue": {
       "type": "number",
       "description": "A number between and including 0 and 255",
-      "const": true
+      "const": true,
+      "readonly": true
     },
     "alpha": {
       "type": "number",
       "description": "A number between and including 0 and 255",
-      "const": true
+      "const": true,
+      "readonly": true
     }
   },
   "methods": {
