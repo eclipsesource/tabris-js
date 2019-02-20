@@ -1,7 +1,6 @@
 {
   "type": "NavigationBar",
   "extends": "NativeObject",
-  "jsxChildren": "never",
   "description": "The navigation bar is the onscreen area where *Back*, *Home* and similar buttons are displayed. The singleton instance can be accessed via `navigationBar` and is only supported on Android.",
   "constructor": {
     "access": "private",
@@ -16,6 +15,12 @@
   },
   "object": "navigationBar",
   "properties": {
+    "jsxProperties": {
+      "const": true,
+      "readonly": true,
+      "ts_only": true,
+      "type": "JSXProperties<this> & {children?: never}"
+    },
     "theme": {
       "type": "string",
       "values": [

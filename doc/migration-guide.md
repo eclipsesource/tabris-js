@@ -172,6 +172,10 @@ contentView.append(<TextView text='foo' />);
 ```
 Only widgets actually supporting different fonts now have a font property. Most applications should not have to adjust to this change.
 
+### jsxProperties
+
+It used to be necessary to override this property to add JSX attributes to a custom component. This now happens automatically. You can still override it in case the outcome of that is not satisfactory. That may be the case because properties that are either functions or are marked as readonly are excluded.
+
 ## Cordova plugins
 
 The Cordova CLI dependency has been updated from `6.5.0` to `8.1.2`. The Cordova CLI will now use the system `npm` to install plugins. This has following implications:

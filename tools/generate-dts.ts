@@ -18,7 +18,6 @@ type ReadOnly<T extends keyof any> = Partial<Record<T, never>>;
 type Diff<T, U> = T extends U ? never : T;
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 type MethodKeysOf<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
-type WithoutMethods<T> = Omit<T, MethodKeysOf<T>>;
 type IfEquals<X, Y, A, B> =
     (<T>() => T extends X ? 1 : 2) extends
     (<T>() => T extends Y ? 1 : 2) ? A : B;
@@ -27,13 +26,18 @@ type ReadOnlyKeysOf<T> = {
 }[keyof T];
 
 // Tabris.js Helper Types
-type UnpackListeners<T> = T extends Listeners<infer U> ? Listener<U> : T;
-type JSXProperties<T, U extends keyof T> = { [Key in U]?: UnpackListeners<T[Key]>};
 type Properties<
-  T extends {set: any},
+  T extends {set?: any},
   U = Omit<T, 'set'> // prevent self-reference issues
 > = Partial<Omit<U, MethodKeysOf<U> | ReadOnlyKeysOf<U>>>
   & {cid?: never}; // prevent empty object type as possible result, would allow any object
+type ListenersKeysOf<T> = { [K in keyof T]: T[K] extends Listeners ? K : never }[keyof T];
+type UnpackListeners<T> = T extends Listeners<infer U> ? Listener<U> : T;
+type ListenersMap<T> = { [Key in ListenersKeysOf<T>]?: UnpackListeners<T[Key]>};
+type JSXProperties<
+  T extends {set?: any; jsxProperties?: any},
+  U = Omit<T, 'set' | 'jsxProperties'> // prevent self-reference issues
+> = Properties<U> & ListenersMap<U>;
 type ExtendedEvent<EventData, Target = {}> = EventObject<Target> & EventData;
 type Listener<T = {}> = (ev: ExtendedEvent<T>) => any;
 type ListenersTriggerParam<T> = {[P in Diff<keyof T, keyof EventObject<object>>]: T[P]};
@@ -43,12 +47,12 @@ interface Listeners<EventData extends object = MinimalEventObject<object>> {
   // tslint:disable-next-line:callable-types
   (listener: Listener<ExtendedEvent<EventData>>): TargetType<EventData>;
 }
+type JSXChildren<T extends Widget> = T|WidgetCollection<T>|Array<T|WidgetCollection<T>>|undefined;
+type Flatten<T> = T|Array<T>|undefined;
 
 export as namespace tabris;
 `.trim();
 
-const JSX_PROPERTIES_OBJECT = 'JsxPropertiesObject';
-const JSX_FACTORY = 'JSX.JsxFactory';
 const EVENT_OBJECT = 'EventObject<T>';
 const eventObjectNames = [EVENT_OBJECT];
 
@@ -221,14 +225,12 @@ function createMethodModifiers(method: schema.Method, isStatic: boolean) {
 }
 
 function renderProperties(text: TextBuilder, def: ExtendedApi) {
-  const properties = Object.assign({}, def.properties, getClassDependentProperties(def));
-  const propertyFilter = name => name !== '[JSX.jsxFactory]' || def.constructor.access !== 'protected';
-  Object.keys(properties || {}).filter(propertyFilter).sort().forEach(name => {
+  Object.keys(def.properties || {}).sort().forEach(name => {
     text.append('');
-    text.append(createProperty(name, properties, def));
+    text.append(createProperty(name, def.properties, def));
   });
   if (def.statics && def.statics.properties) {
-    Object.keys(def.statics.properties || {}).filter(propertyFilter).sort().forEach(name => {
+    Object.keys(def.statics.properties || {}).sort().forEach(name => {
       text.append('');
       text.append(createProperty(name, def.statics.properties, def, true));
     });
@@ -298,129 +300,14 @@ function decodeType(param: Partial<schema.Parameter & schema.Property>, def: Ext
   if (param.values) {
     return union(param.values);
   }
-  switch (param.type) {
-    case (JSX_PROPERTIES_OBJECT):
-      return createJsxPropertiesObject(def);
-
-    case (JSX_FACTORY):
-      return def.constructor.access !== 'public' ? 'never' : param.type;
-
-    default:
-      return param.ts_type || param.type;
-  }
-}
-
-function createPropertiesObject(def: ExtendedApi, ops: PropertyOps) {
-  const newProps = settablePropertiesOf(def, ops);
-  const neverProps = readOnlyPropertiesOf(def)
-    .concat(ops.excludeConsts ? constPropertiesOf(def) : [])
-    .filter(onlyUnique)
-    .filter(name => !name.startsWith('['));
-  const excludes = neverProps.length ? ` & ReadOnly<${union(neverProps)}>` : '';
-  if (!def.parent && !newProps.length) {
-    return `{[key: string]: any}${excludes}`;
-  } else if (!def.parent && newProps.length) {
-    return `{[key: string]: any} & Partial<Pick<${def.type}, ${union(newProps)}>>${excludes}`;
-  } else if (def.parent && !newProps.length) {
-    return `Properties<${def.parent.type}>${excludes}`;
-  }
-  const base = ((ops.hasContext || def.parent.constructor.access !== 'public') ? '' : 'typeof ') + def.parent.type;
-  return `ExtendProperties<${base}, ${def.type}, ${union(newProps)}>${excludes}`;
-}
-
-function createJsxPropertiesObject(def: ExtendedApi) {
-  const forbidden = def.constructor.access !== 'public' && def.parent && def.parent.constructor.access === 'public';
-  const inherit = def.isWidget && def.parent.type !== 'NativeObject';
-  const parentType = def.ts_extends || def.extends;
-  const props = jsxPropertiesOf(def).concat(!inherit ? jsxPropertiesOf(def.parent) : []);
-  const children = def.jsxChildren ? ` & {children?: ${def.jsxChildren}}` : '';
-  if (forbidden) {
-    return 'never';
-  } else if (inherit && props.length) {
-    return `${parentType}['jsxProperties'] & JSXProperties<${def.type}, ${union(props)}>${children}`;
-  } else if (inherit && !props.length) {
-    return `${parentType}['jsxProperties']${children}`;
-  } else if (!inherit && props.length) {
-    return `JSXProperties<${def.type}, ${union(props)}>${children}`;
-  }
-  return `{}${children}`;
+  return param.ts_type || param.type;
 }
 
 function union(values: Array<string|number|boolean>) {
   return (values || []).sort().map(value => typeof value === 'string' ? `'${value}'` : `${value}`).join(' | ');
 }
 
-function remove(type: string, props: string[]) {
-  if (!props || !props.length) {
-    return type;
-  }
-  return `Omit<${type}, ${union(props)}>`;
-}
-
 //#endregion
-
-//#region definitions helper
-
-function getClassDependentProperties(def: ExtendedApi) {
-  const result: Properties = {};
-  let baseType = def;
-  while (baseType && baseType.parent)  {
-    baseType = baseType.parent;
-    Object.keys(baseType.properties || {})
-      .filter(propertyName => isClassDependentProperty(def, baseType.properties[propertyName]))
-      .forEach(propertyName => result[propertyName] = baseType.properties[propertyName]);
-  }
-  return result;
-}
-
-function isClassDependentProperty(def: ExtendedApi, property: schema.Property): boolean {
-  if (property.type === JSX_FACTORY) {
-    return (def.constructor.access === 'public' && def.parent && def.parent.constructor.access === 'protected')
-      || (def.constructor.access === 'private' && def.parent && def.parent.constructor.access === 'public');
-  }
-  return property.type === JSX_PROPERTIES_OBJECT;
-}
-
-function hasReadOnlyProperties(def: ExtendedApi) {
-  return readOnlyPropertiesOf(def).length > 0;
-}
-
-function hasConstProperties(def: ExtendedApi) {
-  return constPropertiesOf(def).length > 0;
-}
-
-function hasFunctionProperties(def: ExtendedApi) {
-  return functionPropertiesOf(def).length > 0;
-}
-
-function readOnlyPropertiesOf(def: ExtendedApi): string[] {
-  return Object.keys(def.properties || {}).filter(prop => def.properties[prop].readonly);
-}
-
-function functionPropertiesOf(def: ExtendedApi): string[] {
-  return Object.keys(def.properties || {}).filter(prop => def.properties[prop].type.indexOf('=>') !== -1);
-}
-
-function constPropertiesOf(def: ExtendedApi): string[] {
-  return Object.keys(def.properties || {}).filter(prop => def.properties[prop].const);
-}
-
-function jsxPropertiesOf(def: ExtendedApi) {
-  if (!def) {
-    return [];
-  }
-  return settablePropertiesOf(def, {excludeConsts: false})
-    .concat(Object.keys(def.events || {}).map(name => `on${capitalizeFirstChar(name)}`))
-    .concat(settablePropertiesOf(def, {excludeConsts: true}).map(name => `on${capitalizeFirstChar(name)}Changed`));
-}
-
-function settablePropertiesOf(def: ExtendedApi, {excludeConsts}: Partial<PropertyOps>) {
-  if (!def) {
-    return [];
-  }
-  return Object.keys(def.properties || {})
-    .filter(prop => !def.properties[prop].readonly && (!excludeConsts || !def.properties[prop].const));
-}
 
 function getInheritedConstructor(def: ExtendedApi): typeof def.constructor {
   if (!def) {
@@ -431,9 +318,3 @@ function getInheritedConstructor(def: ExtendedApi): typeof def.constructor {
   }
   return def.parent ? getInheritedConstructor(def.parent) : null;
 }
-
-function onlyUnique(value: string, index: number, self: string[]) {
-  return self.indexOf(value) === index;
-}
-
-//#endregion

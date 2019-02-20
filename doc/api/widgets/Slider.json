@@ -2,7 +2,6 @@
   "type": "Slider",
   "description": "A widget representing a numeric value as an movable indicator on a horizontal line.",
   "extends": "Widget",
-  "jsxChildren": "never",
   "constructor": {
     "access": "public",
     "parameters": [
@@ -15,6 +14,12 @@
     ]
   },
   "properties": {
+    "jsxProperties": {
+      "const": true,
+      "readonly": true,
+      "ts_only": true,
+      "type": "JSXProperties<this> & {children?: never}"
+    },
     "minimum": {
       "type": "number",
       "default": "0",

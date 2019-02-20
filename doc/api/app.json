@@ -8,6 +8,10 @@
     "parameters": []
   },
   "properties": {
+    "jsxProperties": {
+      "type": "never",
+      "ts_only": true
+    },
     "id": {
       "type": "string",
       "readonly": true,

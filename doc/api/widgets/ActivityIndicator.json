@@ -2,7 +2,6 @@
   "type": "ActivityIndicator",
   "description": "A widget representing a spinning indicator for indeterminate loading / processing time.",
   "extends": "Widget",
-  "jsxChildren": "never",
   "constructor": {
     "access": "public",
     "parameters": [
@@ -15,6 +14,12 @@
     ]
   },
   "properties": {
+    "jsxProperties": {
+      "const": true,
+      "readonly": true,
+      "ts_only": true,
+      "type": "JSXProperties<this> & {children?: never}"
+    },
     "tintColor": {
       "type": "ColorValue",
       "description": "The color of the indicator."

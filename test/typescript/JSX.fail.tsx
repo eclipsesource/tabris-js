@@ -43,7 +43,7 @@ class MyCustomWidgetWithUnpackedListeners extends tabris.Composite {
   public foo: number;
   public readonly bar: string;
   public onFooChanged = 23;
-  public jsxProperties: tabris.Composite['jsxProperties'] & tabris.JSXProperties<this, 'foo' | 'onFooChanged'>;
+  public jsxProperties: tabris.JSXProperties<this>;
 
 }
 
@@ -89,8 +89,6 @@ let noIntrinsicElements: any = <textInput />;
 <tabris.AlertDialog>{new tabris.Button()}</tabris.AlertDialog>;
 
 /*Expected
-(3,
-'getContext' does not exist
 (4,
 'number' is not assignable to type 'boolean'
 (5,
@@ -112,8 +110,6 @@ let noIntrinsicElements: any = <textInput />;
 (17,
 (18,
 (19,
-(28,
-'foo' does not exist
 (39,
 'string' is not assignable to type 'number'
 (51,

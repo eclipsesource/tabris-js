@@ -2,7 +2,6 @@
   "type": "Video",
   "description": "A widget that plays a video from an URL.",
   "extends": "Widget",
-  "jsxChildren": "never",
   "constructor": {
     "access": "public",
     "parameters": [
@@ -15,6 +14,12 @@
     ]
   },
   "properties": {
+    "jsxProperties": {
+      "const": true,
+      "readonly": true,
+      "ts_only": true,
+      "type": "JSXProperties<this> & {children?: never}"
+    },
     "url": {
       "type": "string",
       "description": "The URL of the video to play. Setting this property to any non-empty string changes the *[state](#state)* to `open` and the video starts loading. Setting this property to an empty string unloads the current video and the *[state](#state)* returns to `empty`."

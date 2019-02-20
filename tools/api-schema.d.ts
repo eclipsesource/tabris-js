@@ -18,10 +18,6 @@ export interface Api {
    */
   type?: string;
   /**
-   * The type of children accepted via JSX.
-   */
-  jsxChildren?: string;
-  /**
    * Name of the instance (for singletons)
    */
   object?: string;

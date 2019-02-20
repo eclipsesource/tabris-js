@@ -2,7 +2,6 @@
   "type": "Button",
   "description": "A push button. Can contain a text or an image.",
   "extends": "Widget",
-  "jsxChildren": "string",
   "constructor": {
     "access": "public",
     "parameters": [
@@ -15,6 +14,12 @@
     ]
   },
   "properties": {
+    "jsxProperties": {
+      "const": true,
+      "readonly": true,
+      "ts_only": true,
+      "type": "JSXProperties<this> & {children?: string}"
+    },
     "style": {
       "type": "string",
       "values": [

@@ -2,7 +2,6 @@
   "type": "RadioButton",
   "description": "A radio button. Selecting a radio button de-selects all its siblings (i.e. all radio buttons within the same parent).",
   "extends": "Widget",
-  "jsxChildren": "string",
   "constructor": {
     "access": "public",
     "parameters": [
@@ -15,6 +14,12 @@
     ]
   },
   "properties": {
+    "jsxProperties": {
+      "const": true,
+      "readonly": true,
+      "ts_only": true,
+      "type": "JSXProperties<this> & {children?: string}"
+    },
     "checked": {
       "type": "boolean",
       "default": "false",

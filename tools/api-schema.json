@@ -20,10 +20,6 @@
           "description": "Name of the class",
           "type": "string"
         },
-        "jsxChildren": {
-          "description": "The type of children accepted via JSX.",
-          "type": "string"
-        },
         "object": {
           "description": "Name of the instance (for singletons)",
           "type": "string"

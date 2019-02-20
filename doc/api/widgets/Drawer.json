@@ -16,6 +16,10 @@
     }
   },
   "properties": {
+    "jsxProperties": {
+      "type": "never",
+      "ts_only": true
+    },
     "enabled": {
       "type": "boolean",
       "default": "false",

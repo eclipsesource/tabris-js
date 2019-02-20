@@ -3,7 +3,6 @@
   "description": "An empty widget that can contain other widgets.",
   "generics": "ChildType extends Widget = Widget",
   "extends": "Widget",
-  "jsxChildren": "ChildType|WidgetCollection<ChildType>|Array<ChildType|WidgetCollection<ChildType>>|undefined",
   "constructor": {
     "access": "public",
     "parameters": [
@@ -16,6 +15,12 @@
     ]
   },
   "properties": {
+    "jsxProperties": {
+      "const": true,
+      "readonly": true,
+      "ts_only": true,
+      "type": "JSXProperties<this> & {children?: JSXChildren<ChildType>}"
+    },
     "layout": {
       "type": "Layout|null",
       "const": true,

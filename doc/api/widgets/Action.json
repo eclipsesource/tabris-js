@@ -2,7 +2,6 @@
   "type": "Action",
   "description": "An executable item that is integrated in the application's navigation menu. Add a *select* listener to react to action taps.",
   "extends": "Widget",
-  "jsxChildren": "string",
   "constructor": {
     "access": "public",
     "parameters": [
@@ -85,6 +84,12 @@
     ]
   },
   "properties": {
+    "jsxProperties": {
+      "const": true,
+      "readonly": true,
+      "ts_only": true,
+      "type": "JSXProperties<this> & {children?: string}"
+    },
     "image": {
       "type": "ImageValue",
       "description": "Icon image for the action.\n\nOn iOS the `image` is tinted with the apps default accent color whereas on Android the `image` is shown as is. When an action is placed into a `NavigationView`, the `NavigationView` property `actionColor` can be used to adjust the action tint color."
