@@ -24,7 +24,7 @@ widget.tintColor = tintColor;
 widget.checkedTintColor = checkedTintColor;
 widget.font = font;
 
-let properties: Properties<typeof CheckBox> = {checked, text, textColor, tintColor, checkedTintColor, font};
+let properties: Properties<CheckBox> = {checked, text, textColor, tintColor, checkedTintColor, font};
 widget = new CheckBox(properties);
 widget.set(properties);
 
@@ -43,7 +43,7 @@ widget
 
 class CustomComponent extends CheckBox {
   public foo: string;
-  constructor(props: Properties<typeof CheckBox> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
+  constructor(props: Properties<CheckBox> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

@@ -15,7 +15,7 @@ dateDialog.date = date;
 dateDialog.minDate = minDate;
 dateDialog.maxDate = maxDate;
 
-let properties: Properties<typeof DateDialog> = {date, minDate, maxDate};
+let properties: Properties<DateDialog> = {date, minDate, maxDate};
 dateDialog = new DateDialog(properties);
 dateDialog.set(properties);
 

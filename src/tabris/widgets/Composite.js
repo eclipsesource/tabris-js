@@ -47,6 +47,9 @@ export default class Composite extends Widget {
     this._initLayout(properties);
   }
 
+  /**
+   * @param {any} props
+   */
   _initLayout(props = {}) {
     if (!('layout' in props)) {
       if ('padding' in props) {
@@ -96,7 +99,8 @@ export default class Composite extends Widget {
     return 'tabris.Composite';
   }
 
-  _acceptChild() {
+  // eslint-disable-next-line no-unused-vars
+  _acceptChild(child) {
     return true;
   }
 

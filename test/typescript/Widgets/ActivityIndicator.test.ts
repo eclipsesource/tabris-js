@@ -9,13 +9,13 @@ tintColor = widget.tintColor;
 
 widget.tintColor = tintColor;
 
-let properties: Properties<typeof ActivityIndicator> = {tintColor};
+let properties: Properties<ActivityIndicator> = {tintColor};
 widget = new ActivityIndicator(properties);
 widget.set(properties);
 
 class CustomComponent extends ActivityIndicator {
   public foo: string;
-  constructor(props: Properties<typeof ActivityIndicator> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
+  constructor(props: Properties<ActivityIndicator> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

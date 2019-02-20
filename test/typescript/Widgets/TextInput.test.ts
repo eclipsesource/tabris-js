@@ -59,7 +59,7 @@ widget.textColor = textColor;
 widget.selection = selection;
 widget.font = font;
 
-let properties: Properties<typeof TextInput> = {
+let properties: Properties<TextInput> = {
   alignment,
   autoCapitalize,
   autoCorrect,
@@ -106,7 +106,7 @@ widget
 
 class CustomComponent extends TextInput {
   public foo: string;
-  constructor(props: Properties<typeof TextInput> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
+  constructor(props: Properties<TextInput> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

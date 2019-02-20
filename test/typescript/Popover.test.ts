@@ -17,7 +17,7 @@ popover.width = width;
 popover.height = height;
 popover.anchor = anchor;
 
-let properties: Properties<typeof Popover> = {width, height, anchor};
+let properties: Properties<Popover> = {width, height, anchor};
 popover = new Popover(properties);
 popover.set(properties);
 

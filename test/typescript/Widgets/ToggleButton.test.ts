@@ -29,7 +29,7 @@ widget.text = text;
 widget.textColor = textColor;
 widget.font = font;
 
-let properties: Properties<typeof ToggleButton> = {alignment, image, checked, text, textColor};
+let properties: Properties<ToggleButton> = {alignment, image, checked, text, textColor};
 widget = new ToggleButton(properties);
 widget.set(properties);
 
@@ -48,7 +48,7 @@ widget
 
 class CustomComponent extends ToggleButton {
   public foo: string;
-  constructor(props: Properties<typeof ToggleButton> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
+  constructor(props: Properties<ToggleButton> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

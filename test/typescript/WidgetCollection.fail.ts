@@ -23,9 +23,6 @@ fooCollection.forEach(textInputCallback);
 textInput = fooCollection.last();
 textInput = fooCollection.last('selector');
 
-// Can not set static property of TextInput
-textInputCollection.set({type: 'password'});
-
 /*Expected
 (14,
 cid
@@ -37,6 +34,4 @@ cid
 (23,
 (24,
 Type 'Foo' is not assignable to type 'TextInput'.
-(27,
-type
 */

@@ -45,38 +45,38 @@ device.name = name;
 device.onNameChanged(function() {});
 
 /*Expected
-(4,12): error TS2345
+(4,
 (5,8): error TS2540: Cannot assign to 'language' because it is a constant or a read-only property
 (6,8): error TS2339
 
-(9,12): error TS2345
+(9,
 (10,8): error TS2540: Cannot assign to 'model' because it is a constant or a read-only property
 (11,8): error TS2339
 
-(14,12): error TS2345
+(14,
 (15,8): error TS2540: Cannot assign to 'orientation' because it is a constant or a read-only property
 
-(18,12): error TS2345
+(18,
 (19,8): error TS2540: Cannot assign to 'platform' because it is a constant or a read-only property
 (20,8): error TS2339
 
-(23,12): error TS2345
+(23,
 (24,8): error TS2540: Cannot assign to 'scaleFactor' because it is a constant or a read-only property
 (25,8): error TS2339
 
-(28,12): error TS2345
+(28,
 (29,8): error TS2540: Cannot assign to 'screenHeight' because it is a constant or a read-only property
 (30,8): error TS2339
 
-(33,12): error TS2345
+(33,
 (34,8): error TS2540: Cannot assign to 'screenWidth' because it is a constant or a read-only property
 (35,8): error TS2339
 
-(38,12): error TS2345
+(38,
 (39,8): error TS2540: Cannot assign to 'version' because it is a constant or a read-only property
 (40,8): error TS2339
 
-(43,12): error TS2345
+(43,
 (44,8): error TS2540: Cannot assign to 'name' because it is a constant or a read-only property
 (45,8): error TS2339
 */

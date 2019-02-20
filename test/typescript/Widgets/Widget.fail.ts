@@ -12,6 +12,8 @@ widget = new Composite({cid});
 widget.set({cid});
 widget.cid = cid;
 widget.onCidChanged(function() {});
+widget.set({appendTo: (() => {}) as any})
+widget.set({trigger: (() => {}) as any})
 
 /*Expected
 (6,
@@ -24,4 +26,6 @@ bounds
 (13,
 cid
 (14,
+(15,
+(16,
  */

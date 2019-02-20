@@ -24,7 +24,7 @@ widget.tintColor = tintColor;
 widget.checkedTintColor = checkedTintColor;
 widget.font = font;
 
-let properties: Properties<typeof RadioButton> = {checked, text, textColor, tintColor, checkedTintColor};
+let properties: Properties<RadioButton> = {checked, text, textColor, tintColor, checkedTintColor};
 widget = new RadioButton(properties);
 widget.set(properties);
 
@@ -43,7 +43,7 @@ widget
 
 class CustomComponent extends RadioButton {
   public foo: string;
-  constructor(props: Properties<typeof RadioButton> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
+  constructor(props: Properties<RadioButton> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

@@ -21,7 +21,7 @@ widget.thumbOnColor = thumbOnColor;
 widget.trackOffColor = trackOffColor;
 widget.trackOnColor = trackOnColor;
 
-let properties: Properties<typeof Switch> = {checked, thumbOffColor, thumbOnColor, trackOffColor, trackOnColor};
+let properties: Properties<Switch> = {checked, thumbOffColor, thumbOnColor, trackOffColor, trackOnColor};
 widget = new Switch(properties);
 widget.set(properties);
 
@@ -40,7 +40,7 @@ widget
 
 class CustomComponent extends Switch {
   public foo: string;
-  constructor(props: Properties<typeof Switch> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
+  constructor(props: Properties<Switch> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

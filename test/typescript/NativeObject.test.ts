@@ -5,7 +5,7 @@ class CustomComponent extends Composite {
   public foo: string = '';
   public bar: number = 0;
 
-  constructor(properties?: Properties<typeof Composite> & Partial<CustomComponent>) {
+  constructor(properties?: Properties<Composite> & Partial<CustomComponent>) {
     super(properties);
   }
 

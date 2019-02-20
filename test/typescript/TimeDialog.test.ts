@@ -9,7 +9,7 @@ date = timeDialog.date;
 
 timeDialog.date = date;
 
-let properties: Properties<typeof TimeDialog> = {date};
+let properties: Properties<TimeDialog> = {date};
 timeDialog = new TimeDialog(properties);
 timeDialog.set(properties);
 

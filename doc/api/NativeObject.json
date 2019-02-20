@@ -6,7 +6,7 @@
     "parameters": [
       {
         "name": "properties",
-        "type": "PropertiesObject",
+        "type": "{[property: string]: any}",
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
@@ -181,7 +181,7 @@
         "parameters": [
           {
             "name": "properties",
-            "type": "PropertiesObject"
+            "type": "Properties<this>"
           }
         ],
         "description": "Sets all key-value pairs in the properties object as widget properties.",

@@ -11,22 +11,31 @@ const HEADER = `
 // Type definitions for Tabris.js \${VERSION}
 /// <reference path="globals.d.ts" />
 
+// General helper types
 interface Constructor<T> {new(...args: any[]): T; }
+type ParamType<T extends (arg: any) => any> = T extends (arg: infer P) => any ? P : any;
+type ReadOnly<T extends keyof any> = Partial<Record<T, never>>;
+type Diff<T, U> = T extends U ? never : T;
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+type MethodKeysOf<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
+type WithoutMethods<T> = Omit<T, MethodKeysOf<T>>;
+type IfEquals<X, Y, A, B> =
+    (<T>() => T extends X ? 1 : 2) extends
+    (<T>() => T extends Y ? 1 : 2) ? A : B;
+type ReadOnlyKeysOf<T> = {
+    [P in keyof T]: IfEquals<{ [Q in P]: T[P] }, { -readonly [Q in P]: T[P] }, never, P>
+}[keyof T];
+
+// Tabris.js Helper Types
 type UnpackListeners<T> = T extends Listeners<infer U> ? Listener<U> : T;
 type JSXProperties<T, U extends keyof T> = { [Key in U]?: UnpackListeners<T[Key]>};
-type ParamType<T extends (arg: any) => any> = T extends (arg: infer P) => any ? P : any;
-type SettableProperties<T> = T extends NativeObject ? ParamType<T['set']> : {};
-type ConstructorParam<T extends {new(properties: object): any; }> = T extends {new(properties: infer P): any; } ? P :any
-type Properties<T>
-  =   T extends NativeObject ? SettableProperties<T>
-    : T extends {new(properties: object): NativeObject; } ? ConstructorParam<T>
-    : T extends {prototype: T} ? SettableProperties<T>
-    : never;
-type ExtendProperties<Base, Target, Filter extends keyof Target> = Properties<Base> & Partial<Pick<Target, Filter>>;
-type ReadOnly<T extends keyof any> = Partial<Record<T, never>>;
+type Properties<
+  T extends {set: any},
+  U = Omit<T, 'set'> // prevent self-reference issues
+> = Partial<Omit<U, MethodKeysOf<U> | ReadOnlyKeysOf<U>>>
+  & {cid?: never}; // prevent empty object type as possible result, would allow any object
 type ExtendedEvent<EventData, Target = {}> = EventObject<Target> & EventData;
 type Listener<T = {}> = (ev: ExtendedEvent<T>) => any;
-type Diff<T, U> = T extends U ? never : T;
 type ListenersTriggerParam<T> = {[P in Diff<keyof T, keyof EventObject<object>>]: T[P]};
 type MinimalEventObject<T extends object> = {target: T};
 type TargetType<E extends object> = E extends MinimalEventObject<infer Target> ? Target : object;
@@ -38,7 +47,6 @@ interface Listeners<EventData extends object = MinimalEventObject<object>> {
 export as namespace tabris;
 `.trim();
 
-const PROPERTIES_OBJECT = 'PropertiesObject';
 const JSX_PROPERTIES_OBJECT = 'JsxPropertiesObject';
 const JSX_FACTORY = 'JSX.JsxFactory';
 const EVENT_OBJECT = 'EventObject<T>';
@@ -179,9 +187,8 @@ function renderEventObjectInterface(text: TextBuilder, name: string, def: Extend
 //#region render members
 
 function renderMethods(text: TextBuilder, def: ExtendedApi) {
-  const methods = Object.assign({}, def.methods, getClassDependentMethods(def));
-  Object.keys(methods).sort().forEach(name => {
-    asArray(methods[name]).forEach(method => {
+  Object.keys(def.methods || {}).sort().forEach(name => {
+    asArray(def.methods[name]).forEach(method => {
       text.append('');
       text.append(createMethod(name, method, def));
     });
@@ -295,9 +302,6 @@ function decodeType(param: Partial<schema.Parameter & schema.Property>, def: Ext
     case (JSX_PROPERTIES_OBJECT):
       return createJsxPropertiesObject(def);
 
-    case (PROPERTIES_OBJECT):
-      return createPropertiesObject(def, ops);
-
     case (JSX_FACTORY):
       return def.constructor.access !== 'public' ? 'never' : param.type;
 
@@ -357,18 +361,6 @@ function remove(type: string, props: string[]) {
 
 //#region definitions helper
 
-function getClassDependentMethods(def: ExtendedApi) {
-  const result: Methods = {};
-  let baseType = def;
-  while (baseType && baseType.parent)  {
-    baseType = baseType.parent;
-    Object.keys(baseType.methods || {})
-      .filter(methodName => isClassDependentMethod(def, baseType.methods[methodName]))
-      .forEach(methodName => result[methodName] = baseType.methods[methodName]);
-  }
-  return result;
-}
-
 function getClassDependentProperties(def: ExtendedApi) {
   const result: Properties = {};
   let baseType = def;
@@ -381,32 +373,12 @@ function getClassDependentProperties(def: ExtendedApi) {
   return result;
 }
 
-// methods with parameters that must be adjusted in some subclasses
-function isClassDependentMethod(def: ExtendedApi, method: Methods) {
-  const variants = asArray(method);
-  return variants.some(variant =>
-    (variant.parameters || []).some(param => isClassDependentParameter(def, param))
-  );
-}
-
 function isClassDependentProperty(def: ExtendedApi, property: schema.Property): boolean {
   if (property.type === JSX_FACTORY) {
     return (def.constructor.access === 'public' && def.parent && def.parent.constructor.access === 'protected')
       || (def.constructor.access === 'private' && def.parent && def.parent.constructor.access === 'public');
   }
   return property.type === JSX_PROPERTIES_OBJECT;
-}
-
-function isClassDependentParameter(def: ExtendedApi, parameter: schema.Parameter) {
-  if (parameter.type === PROPERTIES_OBJECT) {
-    const autoExtendable = def.isWidget
-      && !hasReadOnlyProperties(def)
-      && !hasFunctionProperties(def)
-      && !hasConstProperties(def);
-    const newProps = Object.keys(def.properties || {}).filter(prop => !def.properties[prop].readonly);
-    return newProps && !autoExtendable;
-  }
-  return false;
 }
 
 function hasReadOnlyProperties(def: ExtendedApi) {
@@ -419,10 +391,6 @@ function hasConstProperties(def: ExtendedApi) {
 
 function hasFunctionProperties(def: ExtendedApi) {
   return functionPropertiesOf(def).length > 0;
-}
-
-function hasSettableProperties(def: ExtendedApi, ops: PropertyOps) {
-  return settablePropertiesOf(def, ops).length > 0;
 }
 
 function readOnlyPropertiesOf(def: ExtendedApi): string[] {

@@ -38,7 +38,7 @@ widget.titleTextColor = titleTextColor;
 widget.toolbarColor = toolbarColor;
 widget.toolbarVisible = toolbarVisible;
 
-let properties: Properties<typeof NavigationView> = {
+let properties: Properties<NavigationView> = {
   actionColor, actionTextColor, pageAnimation, drawerActionVisible, navigationAction, titleTextColor, toolbarColor, toolbarVisible
 };
 widget = new NavigationView(properties);
@@ -65,7 +65,7 @@ widget.onToolbarHeightChanged((event: PropertyChangedEvent<NavigationView, numbe
 
 class CustomComponent extends NavigationView {
   public foo: string;
-  constructor(props: Properties<typeof NavigationView> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
+  constructor(props: Properties<NavigationView> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

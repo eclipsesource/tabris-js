@@ -7,27 +7,27 @@ import {
   CompositeRemoveChildEvent,
   BoxDimensions,
   Selector,
-  Properties} from 'tabris';
+  Properties } from 'tabris';
 
 let widget: Composite = new Composite();
 
 // Properties
-let padding: BoxDimensions | number | null = widget.padding;
+const padding: BoxDimensions | number | null = widget.padding;
 
-let properties: Properties<typeof Composite> = {padding};
+const properties: Properties<Composite> = {padding};
 widget = new Composite(properties);
 widget.set(properties);
 
 // Methods
-let buttonsComposite: Composite<Button> = new Composite<Button>();
-let widgets: Widget[] = [];
-let widgetA: Widget = new Button();
-let widgetB: Widget = new Button();
+const buttonsComposite: Composite<Button> = new Composite<Button>();
+const widgets: Widget[] = [];
+const widgetA: Widget = new Button();
+const widgetB: Widget = new Button();
 let button: Button = new Button();
 let widgetCollection: WidgetCollection<Widget> = new Composite().find();
 let thisReturnValue: Composite;
 let fooCollection: WidgetCollection<Widget>;
-let selector: Selector = '';
+const selector: Selector = '';
 class Foo extends Composite {}
 
 thisReturnValue = widget.append(widgetA, widgetB);
@@ -36,7 +36,7 @@ thisReturnValue = widget.append(widgetCollection);
 thisReturnValue = buttonsComposite.append(button);
 thisReturnValue = buttonsComposite.append([button]);
 thisReturnValue = buttonsComposite.append(new WidgetCollection<Button>([button]));
-thisReturnValue = widget.apply({'selectorString': properties});
+thisReturnValue = widget.apply({selectorString: properties});
 widgetCollection = widget.children();
 button = buttonsComposite.children()[0];
 button = buttonsComposite.children(button => button.text === 'foo')[0];
@@ -48,14 +48,14 @@ widgetCollection = buttonsComposite.find(button => button.text === 'foo');
 fooCollection = widget.find(Foo);
 
 // Events
-let target: Composite = widget;
-let timeStamp: number = 0;
-let type: string = 'foo';
-let child: Widget = widgetA;
-let index: number = 0;
+const target: Composite = widget;
+const timeStamp: number = 0;
+const type: string = 'foo';
+const child: Widget = widgetA;
+const index: number = 0;
 
-let addChildEvent: CompositeAddChildEvent = {target, timeStamp, type, child, index};
-let removeChildEvent: CompositeRemoveChildEvent = {target, timeStamp, type, child, index};
+const addChildEvent: CompositeAddChildEvent = {target, timeStamp, type, child, index};
+const removeChildEvent: CompositeRemoveChildEvent = {target, timeStamp, type, child, index};
 
 widget
   .onAddChild((event: CompositeAddChildEvent) => {})
@@ -63,7 +63,7 @@ widget
 
 class CustomComponent extends Composite {
   public foo: string;
-  constructor(props: Properties<typeof Composite> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
+  constructor(props: Properties<CustomComponent>) { super(props); }
 }
 
-new CustomComponent({foo: 'bar', bar: 'foo'}).set({foo: 'bar', bar: 'foo'});
+new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

@@ -19,7 +19,7 @@ canGoForward = widget.canGoForward;
 widget.html = html;
 widget.url = url;
 
-let properties: Properties<typeof WebView> = {html, url};
+let properties: Properties<WebView> = {html, url};
 widget = new WebView(properties);
 widget.set(properties);
 
@@ -54,7 +54,7 @@ widget
 
 class CustomComponent extends WebView {
   public foo: string;
-  constructor(props: Properties<typeof WebView> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
+  constructor(props: Properties<WebView> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

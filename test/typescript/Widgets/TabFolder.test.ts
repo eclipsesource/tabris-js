@@ -40,7 +40,7 @@ widget.tabBarBackground = tabBarBackground;
 widget.selectedTabIndicatorTintColor = selectedTabIndicatorTintColor;
 widget.tabBarElevation = tabBarElevation;
 
-let properties: Properties<typeof TabFolder> = {
+let properties: Properties<TabFolder> = {
   paging,
   selection,
   tabBarLocation,
@@ -72,7 +72,7 @@ widget
 
 class CustomComponent extends TabFolder {
   public foo: string;
-  constructor(props: Properties<typeof TabFolder> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
+  constructor(props: Properties<TabFolder> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

@@ -94,7 +94,7 @@
           {
             "name": "properties",
             "type": "object",
-            "ts_type": "SettableProperties<T>"
+            "ts_type": "Properties<T>"
           }
         ],
         "description": "Sets all key-value pairs in the properties object on all widgets in this collection. See also `Widget.set()`.",

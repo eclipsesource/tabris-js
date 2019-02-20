@@ -221,4 +221,3 @@ widget
   .onPanRight((event: WidgetPanEvent) => {})
   .onPanUp((event: WidgetPanEvent) => {})
   .onPanVertical((event: WidgetPanEvent) => {});
-widget.set({noKnownProperty: 12});

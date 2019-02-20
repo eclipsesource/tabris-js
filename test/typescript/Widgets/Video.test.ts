@@ -24,7 +24,7 @@ widget.autoPlay = autoPlay;
 widget.controlsVisible = controlsVisible;
 widget.url = url;
 
-let properties: Properties<typeof Video> = {autoPlay, controlsVisible, url};
+let properties: Properties<Video> = {autoPlay, controlsVisible, url};
 widget = new Video(properties);
 widget.set(properties);
 
@@ -48,7 +48,7 @@ widget.onStateChanged((event: PropertyChangedEvent<Video, VideoState>) => {});
 
 class CustomComponent extends Video {
   public foo: string;
-  constructor(props: Properties<typeof Video> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
+  constructor(props: Properties<Video> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

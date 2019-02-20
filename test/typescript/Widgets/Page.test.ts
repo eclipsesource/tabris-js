@@ -18,7 +18,7 @@ widget.image = image;
 widget.image = nullValue;
 widget.title = title;
 
-let properties: Properties<typeof Page> = {autoDispose, image, title};
+let properties: Properties<Page> = {autoDispose, image, title};
 widget = new Page(properties);
 widget.set(properties);
 
@@ -43,7 +43,7 @@ widget
 
 class CustomComponent extends Page {
   public foo: string;
-  constructor(props: Properties<typeof Page> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
+  constructor(props: Properties<Page> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

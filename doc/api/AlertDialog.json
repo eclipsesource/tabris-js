@@ -6,7 +6,7 @@
     "parameters": [
       {
         "name": "properties",
-        "type": "PropertiesObject",
+        "type": "Properties<AlertDialog>",
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }

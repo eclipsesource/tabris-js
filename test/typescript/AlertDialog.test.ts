@@ -18,7 +18,7 @@ alertDialog.message = message;
 alertDialog.title = title;
 alertDialog.textInputs = textInputs;
 
-let properties: Properties<typeof AlertDialog> = {buttons, message, title, textInputs};
+let properties: Properties<AlertDialog> = {buttons, message, title, textInputs};
 alertDialog = new AlertDialog(properties);
 alertDialog.set(properties);
 

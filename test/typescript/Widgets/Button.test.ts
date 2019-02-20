@@ -26,7 +26,7 @@ widget.textColor = textColor;
 font = widget.font;
 style = widget.style;
 
-let properties: Properties<typeof Button> = {alignment, image, text, textColor, font};
+let properties: Properties<Button> = {alignment, image, text, textColor, font};
 widget = new Button(properties);
 widget.set(properties);
 
@@ -41,7 +41,7 @@ widget.onSelect((event: EventObject<Button>) => {});
 
 class CustomComponent extends Button {
   public foo: string;
-  constructor(props: Properties<typeof Button> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
+  constructor(props: Properties<Button> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

@@ -18,7 +18,7 @@ widget.minimum = minimum;
 widget.selection = selection;
 widget.tintColor = tintColor;
 
-let properties: Properties<typeof Slider> = {maximum, minimum, selection, tintColor};
+let properties: Properties<Slider> = {maximum, minimum, selection, tintColor};
 widget = new Slider(properties);
 widget.set(properties);
 
@@ -37,7 +37,7 @@ widget
 
 class CustomComponent extends Slider {
   public foo: string;
-  constructor(props: Properties<typeof Slider> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
+  constructor(props: Properties<Slider> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

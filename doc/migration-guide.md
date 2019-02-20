@@ -103,17 +103,13 @@ To be consistent with the event naming scheme of gesture events, the event "long
 
 ### Properties interfaces removed
 
-The `tabris` module no longer exports a separate properties interfaces for every built-in type, e.g. `CompositeProperties` for `Composite`. These can be replaced with the generic `Properties` type. There are two variants:
+The `tabris` module no longer exports a separate properties interfaces for every built-in type. These can be replaced with the generic `Properties` type:
 
-`Properties<Composite>` contains all properties recognized by the `set` method of `Composite`.
-
-`Properties<typeof Composite>` contains all properties recognized by the `Composite` constructor.
-
-Unlike the previous interfaces, the generic `Properties` type has an indexer, i.e. it also permits excess properties to be present. For example, `{top: 3, foo: 'bar'}` would not have been assignable to `CompositeProperties`, but it is assignable to `Properties<Composite>`. This was done to match the behavior of the `set` method.
+`CompositeProperties` `=>` `Properties<Composite>`
 
 ### "tsProperties" property no longer supported
 
-It is no longer necessary to create a property `tsProperties` on classes inheriting from `Widget` to control the properties accepted by the `set` method. Instead all new public properties (except functions) are recognized by `set` automatically. To override the automatic behavior the `set` method can be overwritten.
+It is no longer necessary or supported to create a property `tsProperties` on classes inheriting from `Widget` to control the properties accepted by the `set` method. Instead all new public properties are recognized by `set` automatically. That excludes methods/functions. To extend the automatic behavior the `set` method can be overwritten.
 
 ### type "Partial"
 

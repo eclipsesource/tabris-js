@@ -13,7 +13,7 @@ offsetX = widget.offsetX;
 offsetY = widget.offsetY;
 scrollbarVisible = widget.scrollbarVisible;
 
-let properties: Properties<typeof ScrollView> = {direction};
+let properties: Properties<ScrollView> = {direction};
 widget = new ScrollView(properties);
 widget.set(properties);
 
@@ -41,7 +41,7 @@ widget
 
 class CustomComponent extends ScrollView {
   public foo: string;
-  constructor(props: Properties<typeof ScrollView> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
+  constructor(props: Properties<ScrollView> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

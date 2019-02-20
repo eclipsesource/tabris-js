@@ -9,7 +9,7 @@
     "parameters": [
       {
         "name": "properties",
-        "type": "PropertiesObject",
+        "type": "Properties<Composite>",
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
@@ -185,7 +185,7 @@
         {
           "name": "properties",
           "type": "object",
-          "ts_type": "{[selector: string]: SettableProperties<Widget>}",
+          "ts_type": "{[selector: string]: Properties<Widget>}",
           "description": "An object in the format `{Selector: {property: value, property: value, ... }, Selector: ...}`"
         }
       ],
@@ -198,7 +198,7 @@
         {
           "name": "properties",
           "type": "object",
-          "ts_type": "{[selector: string]: SettableProperties<Widget>}",
+          "ts_type": "{[selector: string]: Properties<Widget>}",
           "description": "An object in the format `{Selector: {property: value, property: value, ... }, Selector: ...}`"
         }
       ],

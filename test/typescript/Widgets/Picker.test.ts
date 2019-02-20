@@ -24,7 +24,7 @@ widget.itemText = itemText;
 widget.selectionIndex = selectionIndex;
 widget.textColor = textColor;
 
-let properties: Properties<typeof Picker> = {borderColor, fillColor, itemCount, itemText, selectionIndex, textColor};
+let properties = {borderColor, fillColor, itemCount, itemText, selectionIndex, textColor};
 widget = new Picker(properties);
 widget.set(properties);
 
@@ -44,7 +44,7 @@ widget
 
 class CustomComponent extends Picker {
   public foo: string;
-  constructor(props: Properties<typeof Picker> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
+  constructor(props: Properties<Picker> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

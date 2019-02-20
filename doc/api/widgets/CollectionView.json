@@ -8,7 +8,7 @@
     "parameters": [
       {
         "name": "properties",
-        "type": "PropertiesObject",
+        "type": "Properties<CollectionView> & Partial<Pick<CollectionView, 'cellHeight' | 'cellType' | 'createCell'>>",
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
@@ -100,6 +100,18 @@
     }
   },
   "methods": {
+    "set": [
+      {
+        "parameters": [
+          {
+            "name": "properties",
+            "type": "Properties<this> & Partial<Pick<this, 'cellHeight' | 'cellType' | 'createCell'>>"
+          }
+        ],
+        "description": "Sets all key-value pairs in the properties object as widget properties.",
+        "returns": "this"
+      }
+    ],
     "load": {
       "parameters": [
         {

@@ -29,7 +29,7 @@ widget.text = text;
 widget.textColor = textColor;
 widget.font = font;
 
-let properties: Properties<typeof TextView> = {
+let properties: Properties<TextView> = {
   alignment, lineSpacing, markupEnabled, maxLines, selectable, text, textColor
 };
 widget = new TextView(properties);
@@ -47,7 +47,7 @@ widget.onTapLink((event: TextViewTapLinkEvent) => {});
 
 class CustomComponent extends TextView {
   public foo: string;
-  constructor(props: Properties<typeof TextView> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
+  constructor(props: Properties<TextView> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

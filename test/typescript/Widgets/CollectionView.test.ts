@@ -37,7 +37,7 @@ widget.refreshEnabled = refreshEnabled;
 widget.refreshIndicator = refreshIndicator;
 widget.refreshMessage = refreshMessage;
 
-let properties: Properties<typeof CollectionView> = {
+let properties = {
   cellHeight, cellType, columnCount, createCell, updateCell, refreshEnabled, refreshIndicator, refreshMessage
 };
 widget = new CollectionView(properties);
@@ -67,7 +67,7 @@ widget
 
 class CustomComponent extends CollectionView {
   public foo: string;
-  constructor(props: Properties<typeof CollectionView> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
+  constructor(props: Properties<CollectionView> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

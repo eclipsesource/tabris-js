@@ -7,7 +7,7 @@
     "parameters": [
       {
         "name": "properties",
-        "type": "PropertiesObject",
+        "type": "Properties<Canvas>",
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }

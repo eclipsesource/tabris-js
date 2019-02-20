@@ -18,7 +18,7 @@ widget.image = image;
 widget.image = nullValue;
 widget.title = title;
 
-let properties: Properties<typeof Action> = {placementPriority, image, title};
+let properties: Properties<Action> = {placementPriority, image, title};
 widget = new Action(properties);
 widget.set(properties);
 
@@ -31,7 +31,7 @@ const pages: WidgetCollection<Page> = widget.siblings(Page);
 
 class CustomComponent extends Action {
   public foo: string;
-  constructor(props: Properties<typeof Action> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
+  constructor(props: Properties<Action> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

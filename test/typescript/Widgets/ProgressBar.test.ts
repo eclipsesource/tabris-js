@@ -21,13 +21,13 @@ widget.tintColor = tintColor;
 widget.selection = selection;
 widget.state = state;
 
-let properties: Properties<typeof ProgressBar> = {maximum, minimum, tintColor, selection, state};
+let properties: Properties<ProgressBar> = {maximum, minimum, tintColor, selection, state};
 widget = new ProgressBar(properties);
 widget.set(properties);
 
 class CustomComponent extends ProgressBar {
   public foo: string;
-  constructor(props: Properties<typeof ProgressBar> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
+  constructor(props: Properties<ProgressBar> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

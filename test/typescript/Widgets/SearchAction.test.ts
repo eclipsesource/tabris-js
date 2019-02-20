@@ -18,7 +18,7 @@ widget.message = message;
 widget.proposals = proposals;
 widget.text = text;
 
-let properties: Properties<typeof SearchAction> = {message, text, proposals};
+let properties: Properties<SearchAction> = {message, text, proposals};
 widget = new SearchAction(properties);
 widget.set(properties);
 
@@ -50,7 +50,7 @@ widget
 
 class CustomComponent extends SearchAction {
   public foo: string;
-  constructor(props: Properties<typeof SearchAction> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
+  constructor(props: Properties<SearchAction> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

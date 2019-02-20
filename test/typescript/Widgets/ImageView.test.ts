@@ -30,7 +30,7 @@ widget.zoomLevel = zoomLevel;
 widget.minZoomLevel = minZoomLevel;
 widget.maxZoomLevel = maxZoomLevel;
 
-let properties: Properties<typeof ImageView> = {image, scaleMode, tintColor, zoomEnabled, zoomLevel, minZoomLevel, maxZoomLevel};
+let properties: Properties<ImageView> = {image, scaleMode, tintColor, zoomEnabled, zoomLevel, minZoomLevel, maxZoomLevel};
 widget = new ImageView(properties);
 widget.set(properties);
 
@@ -53,7 +53,7 @@ widget
 
 class CustomComponent extends ImageView {
   public foo: string;
-  constructor(props: Properties<typeof ImageView> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
+  constructor(props: Properties<ImageView> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

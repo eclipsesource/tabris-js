@@ -26,7 +26,7 @@ widget.selectedImage = nullValue;
 widget.title = title;
 widget.badgeColor = badgeColor;
 
-let properties: Properties<typeof Tab> = {badge, image, selectedImage, title, badgeColor};
+let properties: Properties<Tab> = {badge, image, selectedImage, title, badgeColor};
 widget = new Tab(properties);
 widget.set(properties);
 
@@ -37,7 +37,7 @@ const siblings: WidgetCollection<Tab> = widget.siblings();
 
 class CustomComponent extends Tab {
   public foo: string;
-  constructor(props: Properties<typeof Tab> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
+  constructor(props: Properties<Tab> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

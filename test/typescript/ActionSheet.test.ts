@@ -15,7 +15,7 @@ widget.title = title;
 widget.message = message;
 widget.actions = actions;
 
-let properties: Properties<typeof ActionSheet> = {title, message, actions};
+let properties: Properties<ActionSheet> = {title, message, actions};
 widget = new ActionSheet(properties);
 widget.set(properties);
 

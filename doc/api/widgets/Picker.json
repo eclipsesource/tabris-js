@@ -8,7 +8,7 @@
     "parameters": [
       {
         "name": "properties",
-        "type": "PropertiesObject",
+        "type": "Properties<Picker> & Partial<Pick<Picker, 'itemText'>>",
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
@@ -42,6 +42,18 @@
       "type": "ColorValue",
       "description": "The color of the text."
     }
+  },
+  "methods": {
+    "set": [{
+      "parameters": [
+        {
+          "name": "properties",
+          "type": "Properties<this> & Partial<Pick<this, 'itemText'>>"
+        }
+      ],
+      "description": "Sets all key-value pairs in the properties object as widget properties.",
+      "returns": "this"
+    }]
   },
   "events": {
     "select": {
