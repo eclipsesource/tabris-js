@@ -212,7 +212,7 @@ NativeObject.defineProperties(Widget.prototype, {
   background: {
     type: 'shader',
     set(name, value) {
-      this._nativeSet(name, value === undefined ? null : value);
+      this._nativeSet(name, value);
       this._storeProperty(name, value);
     }
   },

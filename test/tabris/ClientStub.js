@@ -51,6 +51,10 @@ export default class ClientStub {
     };
   }
 
+  /**
+   * @param {NativeCallFilter} filterProperties
+   * @return {NativeCallResult}
+   */
   calls(filterProperties) {
     tabris._nativeBridge.flush();
     return select.call(this.$calls, filterProperties);

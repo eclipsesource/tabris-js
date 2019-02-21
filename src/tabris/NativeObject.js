@@ -5,13 +5,18 @@ import Events from './Events';
 import Listeners from './Listeners';
 import {toXML} from './Console';
 
-function EventsClass() {}
+const EventsClass = /** @type {any} */ function EventsClass() {};
 Object.assign(EventsClass.prototype, Events);
 
 /**
+ * Add indexer to NativeObject since defineProperties sabotages intellisense
+ * @typedef NativeObjectBase
+ * @type {{new(): typeof Events & {[key: string]: any}}}
+ */
+/**
  * @abstract
  */
-export default class NativeObject extends EventsClass {
+export default class NativeObject extends (/** @type {NativeObjectBase} */(EventsClass)) {
 
   /**
    * @param {object} target
@@ -81,7 +86,7 @@ export default class NativeObject extends EventsClass {
   }
 
   /**
-   * @param {object|boolean} param
+   * @param {object|boolean=} param
    */
   constructor(param) {
     super();
@@ -280,7 +285,7 @@ export default class NativeObject extends EventsClass {
 
   _nativeSet(name, value) {
     this._checkDisposed();
-    tabris._nativeBridge.set(this.cid, name, value);
+    tabris._nativeBridge.set(this.cid, name, value === undefined ? null : value);
   }
 
   _nativeGet(name) {
@@ -389,8 +394,9 @@ function readOnlySetter(name) {
   hint(this, `Can not set read-only property "${name}"`);
 }
 
+/** @this {NativeObject} */
 function defaultSetter(name, value) {
-  this._nativeSet(name, value === undefined ? null : value);
+  this._nativeSet(name, value);
   if (this['$prop_' + name].nocache) {
     this._triggerChangeEvent(name, value);
   } else {
@@ -398,6 +404,7 @@ function defaultSetter(name, value) {
   }
 }
 
+/** @this {NativeObject} */
 function defaultGetter(name) {
   let result = this._getStoredProperty(name);
   if (result === undefined) {

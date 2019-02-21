@@ -68,7 +68,7 @@ describe('Widget', function() {
       expect(call.properties.background).to.eql({type: 'color', color: ([1, 2, 3, 128])});
     });
 
-    [TextView, RadioButton, Button, CheckBox, ToggleButton, TextInput].forEach((type) => {
+    [TextView, RadioButton, CheckBox, ToggleButton, TextInput].forEach((type) => {
 
       describe(type.name + ' font', function() {
 

@@ -31,7 +31,7 @@ NativeObject.defineProperties(RadioButton.prototype, {
   font: {
     type: 'FontValue',
     set(name, value) {
-      this._nativeSet(name, value === undefined ? null : value);
+      this._nativeSet(name, value);
       this._storeProperty(name, value);
     },
     default: null

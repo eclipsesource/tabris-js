@@ -1,3 +1,5 @@
+import NativeObject from "./NativeObject";
+
 type Converter<InType, OutType> = {(value: InType): OutType};
 
 type TabrisType = 'any'
@@ -33,8 +35,8 @@ interface PropertyDefinition<ApiType = any, NativeType = any> {
   nocache?: boolean;
   readonly?: boolean;
   const?: boolean;
-  set?: (name: string, value: ApiType) => void;
-  get?: (name: string) => ApiType;
+  set?: (this: NativeObject, name: string, value: ApiType) => void;
+  get?: (this: NativeObject, name: string) => ApiType;
 }
 
 interface PropertyDefinitions {
