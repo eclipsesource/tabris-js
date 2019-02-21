@@ -28,7 +28,7 @@
       "type": "{title: string, image?: ImageValue, style?: 'default'|'cancel'|'destructive'}[]",
       "jsxType": "ActionSheetItem",
       "jsxContentProperty": true,
-      "description": "An array of objects describing the actions to be displayed. Each action must have a title and it can also have an image. Actions with the style `cancel` or `destructive` are displayed in a special way."
+      "description": "An array of objects describing the actions to be displayed. Each action must have a title and it can also have an image. Actions with the style `cancel` or `destructive` are displayed in a special way.\n\nNote: On iPad, an action with style `cancel` will not be shown in the ActionSheet as per [Apple's design approach](https://developer.apple.com/documentation/uikit/windows_and_screens/getting_the_user_s_attention_with_alerts_and_action_sheets). If such button is added tapping outside of ActionSheet is equivalent to pressing the `cancel` action on iPad. In case of tapping outside an appropriate event will be sent by the native side as if such button was pressed."
     },
     "jsxProperties": {
       "const": true,
