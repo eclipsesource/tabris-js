@@ -40,6 +40,16 @@ describe('Button', function() {
       expect(button.style).to.equal('default');
     });
 
+    it('style can not be changed', function() {
+      button.style = 'outline';
+      expect(button.style).to.equal('default');
+    });
+
+    it('strokeColor can not be changed', function() {
+      button.strokeColor = 'red';
+      expect(button.strokeColor).to.equal('initial');
+    });
+
     it('translate textColor color', function() {
       button.textColor = 'rgb(255, 254, 253)';
       expect(

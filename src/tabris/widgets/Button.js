@@ -5,6 +5,13 @@ import {jsxFactory} from '../JsxProcessor';
 
 export default class Button extends Widget {
 
+  /**
+   * @param {Partial<Button>} properties
+   */
+  constructor(properties) {
+    super(Object.assign({style: 'default'}, properties));
+  }
+
   get _nativeType() {
     return 'tabris.Button';
   }
@@ -23,8 +30,7 @@ export default class Button extends Widget {
 NativeObject.defineProperties(Button.prototype, {
   style: {
     type: ['choice', ['default', 'elevate', 'flat', 'outline', 'text']],
-    const: true,
-    default: 'default'
+    const: true
   },
   strokeColor: {
     type: 'ColorValue',

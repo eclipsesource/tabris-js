@@ -135,8 +135,8 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
     if (encodedValue === oldEncodedValue) {
       return;
     }
-    if (encodedValue === undefined && this._props) {
-      delete this._props[name];
+    if (encodedValue === undefined && !this._props) {
+      return;
     } else {
       if (!this._props) {
         this._props = {};
@@ -152,6 +152,10 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
       result = this._getDefaultPropertyValue(name);
     }
     return result;
+  }
+
+  _wasSet(name) {
+    return name in (this._props || {});
   }
 
   _getTypeDef(name) {
@@ -356,7 +360,7 @@ function normalizeProperty(property) {
     default: config.default,
     const: config.const,
     nocache: config.nocache,
-    set: config.readonly && readOnlySetter || config.set || defaultSetter,
+    set: config.readonly ? readOnlySetter : config.const ? oneTimeSetter : config.set || defaultSetter,
     get: config.get || defaultGetter
   };
 }
@@ -392,6 +396,16 @@ function wrapCoder(fn, args) {
 
 function readOnlySetter(name) {
   hint(this, `Can not set read-only property "${name}"`);
+}
+
+/** @this {NativeObject} */
+function oneTimeSetter(name, value) {
+  if (this._wasSet(name)) {
+    hint(this, `Can not re-define property "${name}"`);
+    return;
+  }
+  this._nativeSet(name, value);
+  this._storeProperty(name, value);
 }
 
 /** @this {NativeObject} */
