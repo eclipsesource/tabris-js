@@ -69,13 +69,16 @@ describe('Button', function() {
   describe('instance (style=outline)', function() {
 
     beforeEach(function() {
-      button = new Button({style: 'outline'});
+      button = new Button({text: 'hello', background: 'rgba(255, 0, 255, 0)', style: 'outline'});
       client.resetCalls();
     });
 
-    it('is a outline style Button instance', function() {
-      expect(button).to.be.instanceof(Widget);
+    it('has all initial properties set', function() {
+      // this is just a check that reorderProperties does not miss any values
+      // The correctness of the actual re-ordering can not be disproven so a test is meaningless
       expect(button.style).to.equal('outline');
+      expect(button.text).to.equal('hello');
+      expect(button.background.toString()).to.equal('rgba(255, 0, 255, 0)');
     });
 
     it('translate strokeColor color', function() {

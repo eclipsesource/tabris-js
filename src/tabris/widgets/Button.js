@@ -16,6 +16,19 @@ export default class Button extends Widget {
     return 'tabris.Button';
   }
 
+  /**
+   * @param {string[]} properties
+   */
+  _reorderProperties(properties) {
+    const styleIndex = properties.indexOf('style');
+    if (styleIndex === -1) {
+      return properties;
+    }
+    return ['style']
+      .concat(properties.slice(0, styleIndex))
+      .concat(properties.slice(styleIndex + 1));
+  }
+
   _getXMLAttributes() {
     return super._getXMLAttributes().concat([['text', this.text]]);
   }
