@@ -42,9 +42,12 @@ function toggleEnablement({value: checked}) {
 }
 
 function toggleCornerRadius({value: checked}) {
-  contentView.find(Button).forEach((button) => button.cornerRadius = checked ? 40 : 4);
+  contentView.find(Button).forEach((button) => button.cornerRadius = checked ? 20 : 4);
 }
 
 function toggleImage({value: checked}) {
-  contentView.find(Button).forEach((button) => button.image = checked ? 'resources/settings-white-24dp@3x.png' : null);
+  contentView.find(Button).forEach((button) => {
+    button.image = checked ? tabris.device.platform ===
+    'android' ? 'resources/settings-white-24dp@3x.png' : 'resources/settings-black-24dp@3x.png' : null;
+  });
 }
