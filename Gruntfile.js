@@ -1,4 +1,4 @@
-require('ts-node').register({compilerOptions: {module: 'commonjs', lib: ['es2016']}});
+require('ts-node').register({project: './tools/tsconfig.json'});
 const {generateDoc} = require('./tools/generate-doc');
 const {generateDts} = require('./tools/generate-dts');
 const {Validator} = require('jsonschema');
@@ -34,7 +34,7 @@ module.exports = function(grunt) {
         },
         src: ['build/boot-transpiled.js'],
         dest: 'build/tabris/boot.js'
-      },
+      }
     },
     doc: {
       api: 'doc/api/**/*.json',

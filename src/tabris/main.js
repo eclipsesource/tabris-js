@@ -22,6 +22,8 @@ import Canvas from './widgets/Canvas';
 import CheckBox from './widgets/CheckBox';
 import CollectionView from './widgets/CollectionView';
 import Color from './Color';
+import Console from './Console';
+import {format} from './Formatter';
 import StackComposite from './widgets/StackComposite';
 import StackLayout from './StackLayout';
 import Composite from './widgets/Composite';
@@ -34,10 +36,10 @@ import Font from './Font';
 import Image from './Image';
 import ImageData from './ImageData';
 import ImageView from './widgets/ImageView';
-import InactivityTimer from './InactivityTimer.js';
-import Layout, {ConstraintLayout} from './Layout.js';
-import LayoutData from './LayoutData.js';
-import Listeners from './Listeners.js';
+import InactivityTimer from './InactivityTimer';
+import Layout, {ConstraintLayout} from './Layout';
+import LayoutData from './LayoutData';
+import Listeners from './Listeners';
 import LinearGradient from './LinearGradient';
 import Page from './widgets/Page';
 import Percent from './Percent';
@@ -76,13 +78,11 @@ import Headers from './fetch/Headers';
 import Request from './fetch/Request';
 import Response from './fetch/Response';
 
-const window = global.window;
-
 if (global.tabris && global.tabris.version) {
   throw new Error('tabris module already loaded. Ensure the module is installed only once.');
 }
 
-module.exports = global.tabris = Object.assign(new Tabris(), {
+const tabrisMain = Object.assign(new Tabris(), {
   Action,
   ActionSheet,
   ActionSheetItem,
@@ -99,6 +99,7 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   StackComposite,
   Composite,
   Constraint,
+  Console,
   ContentView,
   Crypto,
   DateDialog,
@@ -149,12 +150,16 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   XMLHttpRequest,
   Worker,
   fetch,
+  format,
   Headers,
   Request,
   Response,
 });
 
-Object.assign(window, {
+module.exports = tabrisMain;
+global.tabris = tabrisMain;
+
+Object.assign(global, {
   Crypto,
   ImageData,
   ProgressEvent,
@@ -169,7 +174,7 @@ Object.assign(window, {
   Worker
 });
 
-tabris.on('start', (options) => {
+tabrisMain.on('start', (options) => {
   patchError(Error);
   tabris.app = createApp();
   checkVersion(tabris.version, tabris.app._nativeGet('tabrisJsVersion'));
@@ -186,28 +191,30 @@ tabris.on('start', (options) => {
   }
   tabris.device = createDevice();
   tabris.fs = createFileSystem();
-  publishDeviceProperties(tabris.device, window);
-  window.localStorage = tabris.localStorage = createStorage();
+  publishDeviceProperties(tabris.device, global);
+  tabris.localStorage = createStorage();
   if (tabris.device.platform === 'iOS') {
-    window.secureStorage = tabris.secureStorage = createStorage(true);
+    tabris.secureStorage = createStorage(true);
   }
-  window.crypto = tabris.crypto = new Crypto();
-  if (window.console.print) {
-    window.console = createConsole(window.console);
+  tabris.crypto = new Crypto();
+  if (global.console['print']) {
+    global.console = createConsole(global.console);
   }
   tabris.pkcs5 = new Pkcs5();
+  global.localStorage = tabrisMain.localStorage;
+  global.secureStorage = tabrisMain.secureStorage;
+  global.crypto = tabrisMain.crypto;
 });
-
-addDOMDocument(window);
-addDOMEventTargetMethods(window);
-addWindowTimerMethods(window);
+addDOMDocument(global);
+addDOMEventTargetMethods(global);
+addWindowTimerMethods(global);
 
 function createLegacyDelegate(property) {
-  Object.defineProperty(tabris.ui = tabris.ui || {}, property, {
+  Object.defineProperty(tabrisMain.ui = tabrisMain.ui || {}, property, {
     configurable: true,
     get() {
       console.warn(`ui.${property} is deprecated and will be removed in 3.0.0!`);
-      return tabris[property];
+      return tabrisMain[property];
     }
   });
 }

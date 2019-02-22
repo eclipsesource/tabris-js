@@ -2,9 +2,13 @@
   "compilerOptions": {
     "target": "es6",
     "alwaysStrict": true,
-    "checkJs": true
+    "checkJs": true,
+    "allowJs": true,
+    "noEmit": true,
+    "lib": ["es6"],
+    "types": []
   },
- "include": [
+  "include": [
     "src/tabris/**/*",
     "test/tabris/**/*"
   ]
