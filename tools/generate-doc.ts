@@ -6,7 +6,6 @@ import { join, parse, relative, sep } from 'path';
 type TypeLinks = {[type: string]: string};
 type NamedEvents = Array<schema.Event & {name: string}>;
 
-const SNIPPETS_LOCATION = 'snippets';
 const MSG_PROVISIONAL = '**Note:** this API is provisional and may change in a future release.';
 const LANG_TYPE_LINKS: TypeLinks = {
   'Object': 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object',
@@ -126,61 +125,50 @@ class DocumentRenderer {
       '---\n---',
       '# ' + heading + '\n',
       this.renderExtends(),
+      this.renderDescription(),
       this.renderImages(),
       this.renderSummary(),
-      this.renderDescriptionFile(),
-      this.renderSnippet(),
+      this.renderInfoFile(),
       this.renderLinks(),
       this.renderConstructor(),
       this.renderMembers()
     ].filter(value => !!value).join('\n');
   }
 
-  private renderMembers() {
-    return [
-      this.renderAllMethods(),
-      this.renderAllProperties(),
-      this.renderAllEvents()
-    ].filter(value => !!value).join('\n');
+  private renderDescription() {
+    return this.def.description ? this.def.description + '\n\n' : '';
   }
 
-  private renderConstructor() {
-    if (!this.def.constructor || this.def.constructor.access !== 'public') {
-      return '';
-    }
-    const result = [
-      '## Constructor\n\n',
-      `### new ${this.def.type}${this.renderSignature(this.def.constructor.parameters)}\n\n`
-    ];
-    if (this.def.constructor.parameters) {
-      result.push(this.renderMethodParamList(this.def.constructor.parameters, false));
-      result.push('\n');
-    }
-    return result.join('');
-  }
-
-  private renderDescriptionFile() {
+  private renderInfoFile() {
     const apiPath = join(this.targetPath, 'api');
     const exampleFile = join(apiPath, parse(this.def.file).name + '.md');
     if (isFileSync(exampleFile)) {
-      return fs.readFileSync(exampleFile, 'utf-8');
+      return [
+        '## Example',
+        fs.readFileSync(exampleFile, 'utf-8')
+      ].join('\n');
     } else {
       console.warn('No description file for ' + this.title);
     }
   }
 
-  private renderSnippet() {
-    const snippetPath = join(SNIPPETS_LOCATION, `${this.title.toLowerCase()}.js`);
-    if (isFileSync(snippetPath)) {
-      return [
-        'Example:',
-        '```js',
-        fs.readFileSync(snippetPath, 'utf-8').trim(),
-        '```'
-      ].join('\n');
-    } else {
-      console.warn('No Snippet for ' + this.title);
+  private renderExtends() {
+    if (!this.def.type) {
+      return '';
     }
+    const hierarchy = [];
+    let currentType = this.def.type;
+    while (currentType) {
+      hierarchy.unshift(this.renderTypeLink(currentType));
+      if (currentType === 'Object') {
+        currentType = null;
+      } else if (this.defs[currentType]) {
+        currentType = this.defs[currentType].extends || 'Object';
+      } else {
+        throw new Error('Could not find super type for ' + currentType);
+      }
+    }
+    return hierarchy.join(' > ') + '\n';
   }
 
   private renderImages() {
@@ -211,26 +199,25 @@ class DocumentRenderer {
     const result = [];
     if (this.def.type) {
       if (this.def.generics || this.def.ts_extends) {
-        result.push('* TypeScript type: `', this.def.type);
+        result.push('TypeScript type | `', this.def.type);
         if (this.def.generics) {
           result.push('<', this.def.generics, '>');
         }
         result.push(' extends ', this.def.ts_extends || this.def.extends || 'Object', '`\n');
       }
-      result.push('* Constructor: *', this.def.constructor.access || 'public', '*\n');
-      result.push('* Singleton: ', this.def.object ? '`' + this.def.object + '`' : '*No*', '\n');
-      result.push('* Namespace: `', this.def.namespace || 'tabris', '`\n');
-      result.push(this.renderJSXSummary());
+      result.push('Constructor | *', this.def.constructor.access || 'public', '*\n');
+      result.push('Singleton | ', this.def.object ? '`' + this.def.object + '`' : '*No*', '\n');
+      result.push('Namespace |`', this.def.namespace || 'tabris', '`\n');
       const subclasses = Object.keys(this.defs).filter(def => this.defs[def].extends === this.def.type);
-      result.push('* Direct subclasses: ');
+      result.push('Direct subclasses | ');
       if (subclasses.length) {
         result.push(subclasses.map(name => this.renderTypeLink(name)).join(', '), '\n');
       } else {
         result.push('*None*\n');
       }
-      result.push('--------\n');
+      result.push(this.renderJSXSummary());
+      result.push('\n');
     }
-    result.push(this.def.description ? this.def.description + '\n\n' : '');
     return result.join('');
   }
 
@@ -238,19 +225,18 @@ class DocumentRenderer {
     const jsx = (this.def.isWidget || this.def.extends === 'Popup')
       && this.def.constructor.access === 'public';
     const result = [];
-    result.push('* JSX support:');
+    result.push('JSX support | ');
     if (jsx) {
-      result.push('\n');
       const contentProps =
         Object.keys(this.def.properties || {}).filter(prop => this.def.properties[prop].jsxContentProperty);
-      result.push('  * Element: `<', this.def.type, '/>`\n');
+      result.push('Element: `<', this.def.type, '/>`<br/>');
       if (this.def.isWidget) {
         const parentElement = (this.def.methods && this.def.methods.parent)
           ? this.renderJSXLink((this.def.methods.parent as schema.Method).returns)
           : this.renderJSXLink('Composite') + ' *and any widget extending* ' + this.renderTypeLink('Composite');
-        result.push('  * Parent element: ', parentElement, '\n');
+        result.push('Parent element: ', parentElement, '<br/>');
       }
-      result.push('  * Child elements: ');
+      result.push('Child elements: ');
       const childTypes = [];
       if (this.def.type === 'Composite' || (this.def.extends === 'Composite' && !this.def.ts_extends)) {
         childTypes.push('*Widgets*');
@@ -265,37 +251,41 @@ class DocumentRenderer {
       if (!childTypes.length) {
         childTypes.push('*None*');
       }
-      result.push(childTypes.join(', '), '\n');
+      result.push(childTypes.join(', '), '<br/>');
       let textContent = null;
       contentProps.forEach(propName => {
         if (!this.def.properties[propName].jsxType) {
           textContent = '*Sets [' + propName + '](#' + propName + ') property*';
         }
       });
-      result.push('  * Text content: ', textContent || '*Not supported*', '\n');
+      result.push('Text content: ', textContent || '*Not supported*', '<br/>');
     } else {
-      result.push(' *No*\n');
+      result.push('*No*\n');
     }
     return result.join('');
   }
 
-  private renderExtends() {
-    if (!this.def.type) {
+  private renderMembers() {
+    return [
+      this.renderAllMethods(),
+      this.renderAllProperties(),
+      this.renderAllEvents()
+    ].filter(value => !!value).join('\n');
+  }
+
+  private renderConstructor() {
+    if (!this.def.constructor || this.def.constructor.access !== 'public') {
       return '';
     }
-    const hierarchy = [];
-    let currentType = this.def.type;
-    while (currentType) {
-      hierarchy.unshift(this.renderTypeLink(currentType));
-      if (currentType === 'Object') {
-        currentType = null;
-      } else if (this.defs[currentType]) {
-        currentType = this.defs[currentType].extends || 'Object';
-      } else {
-        throw new Error('Could not find super type for ' + currentType);
-      }
+    const result = [
+      '## Constructor\n\n',
+      `### new ${this.def.type}${this.renderSignature(this.def.constructor.parameters)}\n\n`
+    ];
+    if (this.def.constructor.parameters) {
+      result.push(this.renderMethodParamList(this.def.constructor.parameters, false));
+      result.push('\n');
     }
-    return hierarchy.join(' > ') + '\n';
+    return result.join('');
   }
 
   private renderAllMethods() {
@@ -334,12 +324,8 @@ class DocumentRenderer {
 
   private renderMethod(name: string, method: schema.Method) {
     const result = [];
-    result.push('### ' + name + this.renderSignature(method.parameters));
+    result.push('### ' + name + this.renderSignature(method.parameters) + '\n');
     result.push(this.renderPlatforms(method.platforms) + '\n\n');
-    if (method.parameters && method.parameters.length) {
-      result.push('\n\n', this.renderMethodParamList(method.parameters, true), '\n');
-    }
-    result.push('* Returns: ', this.renderTypeLink(method.returns || 'void'), '\n');
     if (method.provisional) {
       result.push('\n', MSG_PROVISIONAL, '\n');
     }
@@ -348,6 +334,10 @@ class DocumentRenderer {
     } else {
       console.warn('No description for ' + this.title + ' method ' + name);
     }
+    if (method.parameters && method.parameters.length) {
+      result.push('\n\n', this.renderMethodParamList(method.parameters, true), '\n\n');
+    }
+    result.push('\nReturns ', this.renderTypeLink(method.returns || 'void'), '\n');
     return result.join('') + '\n';
   }
 
@@ -390,10 +380,10 @@ class DocumentRenderer {
     const result = [];
     const property = properties[name];
     result.push('### ', name, '\n', this.renderPlatforms(property.platforms), '\n\n');
-    result.push(this.renderPropertySummary(property, name), '\n\n');
     if (property.description) {
-      result.push('\n' + property.description);
+      result.push(property.description + '\n');
     }
+    result.push(this.renderPropertySummary(property, name), '\n\n');
     if (property.jsxContentProperty) {
       result.push(`\n\nWhen using ${this.def.type} as an JSX element `);
       result.push(property.jsxType ? 'its child elements are' : 'the element content is');
@@ -429,7 +419,7 @@ class DocumentRenderer {
     for (const platform in names) {
       if (platforms[platform] !== false) {
         const name = names[platform];
-        result.push(` < span class = '${platform}-tag' title = 'supported on ${name}' > ${name} < /span>`);
+        result.push(`<span class='${platform}-tag' title='supported on ${name}'>${name}</span>`);
       }
     }
     result.push('</p>');
@@ -437,17 +427,17 @@ class DocumentRenderer {
   }
 
   private renderPropertySummary(property: schema.Property, name: string) {
-    const result = ['* Type: '];
+    const result = ['\nType | '];
     if (property.values) { // TODO: remove in favor of using only union types
-      result.push(property.values.map(v => literal(v, property.type)).join(' | '));
+      result.push(property.values.map(v => literal(v, property.type)).join(' \\| '));
     } else {
       result.push(this.renderTypeLink(property.type));
     }
     result.push('\n');
     if (property.default) {
-      result.push('* Default ', literal(property.default, property.type), '\n');
+      result.push('Default | ', literal(property.default, property.type), '\n');
     }
-    result.push('* Settable: ');
+    result.push('Settable | ');
     if (property.readonly) {
       result.push('*No*\n');
     } else if (property.const) {
@@ -456,7 +446,7 @@ class DocumentRenderer {
       result.push('*Yes*\n');
     }
     if (property.jsxContentProperty) {
-      result.push('* JSX Content Type: `', property.jsxType || property.type, '`\n');
+      result.push('JSX content type | `', property.jsxType || property.type, '`\n');
     }
     if (!property.default && !property.readonly) {
       // TODO: how to handle non-primitives?
@@ -484,8 +474,8 @@ class DocumentRenderer {
   private renderEvents(events: NamedEvents) {
     return events.map(({name, description, parameters, platforms}) => [
       '### ', name, '\n\n', this.renderPlatforms(platforms),
-      parameters ? this.renderEventParamList(parameters) : '',
-      description ? description + '\n\n' : '\n'
+      description ? description + '\n\n' : '\n',
+      parameters ? this.renderEventParamList(parameters) : ''
     ].join('')).join('');
   }
 
