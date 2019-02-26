@@ -3,7 +3,7 @@ import * as tabris from 'tabris';
 <tabris.Canvas height={23} getContext={function(val: any) { return val; }} />;
 <tabris.CheckBox checked={23}/>;
 <tabris.CollectionView refreshEnabled={true} firstVisibleIndex={23} />;
-<tabris.ScrollView height={23} onDirectionChanged={function () {}} />;
+<tabris.ScrollView height={23} onDirectionChanged={function() {}} />;
 <tabris.TextInput height={23} onTypeChanged={function() {}} />;
 <tabris.TextView alignment='top'/>;
 <tabris.Video autoPlay={0}/>;
@@ -25,7 +25,7 @@ class MyCustomWidget extends tabris.Composite {
 
 }
 
-let custom1: MyCustomWidget = <MyCustomWidget height={23} foo={23}/>;
+const custom1: MyCustomWidget = <MyCustomWidget height={23} foo={23}/>;
 
 class MyCustomWidgetWithCustomJsx extends tabris.Composite {
 
@@ -36,7 +36,7 @@ class MyCustomWidgetWithCustomJsx extends tabris.Composite {
 
 }
 
-let custom2: MyCustomWidgetWithCustomJsx = <MyCustomWidgetWithCustomJsx height={23} foo='foo'/>;
+const custom2: MyCustomWidgetWithCustomJsx = <MyCustomWidgetWithCustomJsx height={23} foo='foo'/>;
 
 class MyCustomWidgetWithUnpackedListeners extends tabris.Composite {
 
@@ -47,7 +47,7 @@ class MyCustomWidgetWithUnpackedListeners extends tabris.Composite {
 
 }
 
-let custom3: MyCustomWidgetWithUnpackedListeners = <MyCustomWidgetWithUnpackedListeners
+const custom3: MyCustomWidgetWithUnpackedListeners = <MyCustomWidgetWithUnpackedListeners
   onFooChanged={function() {}}
 />;
 
@@ -57,7 +57,7 @@ class MyCustomWidgetWithWrongJsx extends tabris.Composite {
 
 }
 
-let noIntrinsicElements: any = <textInput />;
+const noIntrinsicElements: any = <textInput />;
 
 /** Invalid children **/
 
@@ -87,6 +87,8 @@ let noIntrinsicElements: any = <textInput />;
 <tabris.WidgetCollection>foo</tabris.WidgetCollection>;
 <tabris.ActionSheet>{new tabris.Button()}</tabris.ActionSheet>;
 <tabris.AlertDialog>{new tabris.Button()}</tabris.AlertDialog>;
+<tabris.DateDialog>{new tabris.Button()}</tabris.DateDialog>;
+<tabris.TimeDialog>{new tabris.Button()}</tabris.TimeDialog>;
 
 /*Expected
 (4,
@@ -143,4 +145,6 @@ Types of property 'onFooChanged' are incompatible.
 (87,
 (88,
 (89,
+(90,
+(91,
 */

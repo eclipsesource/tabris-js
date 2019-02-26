@@ -1,6 +1,7 @@
 import {expect, mockTabris, restore, spy} from '../test';
 import ClientStub from './ClientStub';
 import TimeDialog from '../../src/tabris/TimeDialog';
+import {createJsxProcessor} from '../../src/tabris/JsxProcessor';
 
 describe('TimeDialog', function() {
 
@@ -51,6 +52,42 @@ describe('TimeDialog', function() {
       expect(() => dialog.open()).to.throw('Can not open a popup that was disposed');
     });
 
+    describe('as static method', () => {
+
+      it('returns timeDialog', () => {
+        expect(TimeDialog.open(dialog)).to.equal(dialog);
+      });
+
+      it('calls open', () => {
+        TimeDialog.open(dialog);
+        expect(client.calls({op: 'call'})[0].method).to.equal('open');
+      });
+
+      it('creates timeDialog for date', () => {
+        const date = new Date(2001, 1, 1, 22, 30);
+        const newDialog = TimeDialog.open(date);
+
+        expect(newDialog).to.be.instanceof(TimeDialog);
+        expect(newDialog.date.toString()).to.equal(date.toString());
+        expect(client.calls({op: 'call', id: newDialog.cid})[0].method).to.equal('open');
+      });
+
+      it('creates timeDialog for no parameter', () => {
+        const newDialog = TimeDialog.open();
+
+        expect(newDialog).to.be.instanceof(TimeDialog);
+        expect(newDialog.date).to.equal(null);
+        expect(client.calls({op: 'call', id: newDialog.cid})[0].method).to.equal('open');
+      });
+
+      it('throws if timeDialog was closed', () => {
+        dialog.open();
+        dialog.close();
+        expect(() => TimeDialog.open(dialog)).to.throw('Can not open a popup that was disposed');
+      });
+
+    });
+
   });
 
   describe('close', function() {
@@ -91,6 +128,15 @@ describe('TimeDialog', function() {
 
   describe('select event', function() {
 
+    it('dialog always listens to select', function() {
+      expect(client.calls({op: 'listen'})[1]).to.deep.equal({
+        op: 'listen',
+        id: dialog.cid,
+        event: 'select',
+        listen: true
+      });
+    });
+
     it('fires select and close', function() {
       const date = new Date();
       const select = spy();
@@ -104,6 +150,34 @@ describe('TimeDialog', function() {
       expect(select).to.have.been.calledWithMatch({target: dialog, date});
       expect(close).to.have.been.calledOnce;
       expect(close).to.have.been.calledWithMatch({target: dialog});
+    });
+
+  });
+
+  describe('JSX', () => {
+
+    let jsx;
+
+    beforeEach(function() {
+      jsx = createJsxProcessor();
+    });
+
+    it('with no properties', function() {
+      const popup = jsx.createElement(TimeDialog);
+
+      expect(popup).to.be.instanceOf(TimeDialog);
+      expect(dialog.date).to.equal(null);
+    });
+
+    it('with date property', function() {
+      const date = new Date(2000, 1, 1, 22, 30);
+
+      const popup = jsx.createElement(
+        TimeDialog,
+        {date}
+      );
+
+      expect(popup.date.toString()).to.equal(date.toString());
     });
 
   });

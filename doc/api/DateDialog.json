@@ -25,6 +25,19 @@
     "maxDate": {
       "type": "Date",
       "description": "Limits the selectable date range to the given future date. No limit is applied when not set."
+    },
+    "jsxProperties": {
+      "const": true,
+      "readonly": true,
+      "ts_only": true,
+      "type": "JSXProperties<this>"
+    },
+    "[JSX.jsxFactory]": {
+      "description": "This function is called by the framework to create JSX elements from the DateDialog class.",
+      "type": "JSX.JsxFactory",
+      "const": true,
+      "readonly": true,
+      "ts_only": true
     }
   },
   "events": {
@@ -45,6 +58,35 @@
         }
       },
       "description": "Fired when a date was selected by the user."
+    }
+  },
+  "statics": {
+    "methods": {
+      "open": [
+        {
+          "parameters": [
+            {
+              "name": "dateDialog",
+              "description": "The date dialog to open",
+              "type": "DateDialog"
+            }
+          ],
+          "description": "Makes the given date dialog visible. Meant to be used with inline-JSX. In TypeScript it also casts the given JSX element from `any` to an actual DateDialog.",
+          "returns": "DateDialog"
+        },
+        {
+          "parameters": [
+            {
+              "name": "date",
+              "optional": true,
+              "description": "The date to be displayed in the dialog. The current date is used when no date is provided.",
+              "type": "Date"
+            }
+          ],
+          "description": "Creates and opens a date dialog.",
+          "returns": "DateDialog"
+        }
+      ]
     }
   },
   "links": [

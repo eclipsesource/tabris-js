@@ -1,6 +1,7 @@
 import {expect, mockTabris, restore, spy} from '../test';
 import ClientStub from './ClientStub';
 import DateDialog from '../../src/tabris/DateDialog';
+import {createJsxProcessor} from '../../src/tabris/JsxProcessor';
 
 describe('DateDialog', function() {
 
@@ -91,6 +92,42 @@ describe('DateDialog', function() {
       expect(() => dialog.open()).to.throw('Can not open a popup that was disposed');
     });
 
+    describe('as static method', () => {
+
+      it('returns dateDialog', () => {
+        expect(DateDialog.open(dialog)).to.equal(dialog);
+      });
+
+      it('calls open', () => {
+        DateDialog.open(dialog);
+        expect(client.calls({op: 'call'})[0].method).to.equal('open');
+      });
+
+      it('creates dateDialog for date', () => {
+        const date = new Date(2001, 1);
+        const newDialog = DateDialog.open(date);
+
+        expect(newDialog).to.be.instanceof(DateDialog);
+        expect(newDialog.date.toString()).to.equal(date.toString());
+        expect(client.calls({op: 'call', id: newDialog.cid})[0].method).to.equal('open');
+      });
+
+      it('creates dateDialog for no parameter', () => {
+        const newDialog = DateDialog.open();
+
+        expect(newDialog).to.be.instanceof(DateDialog);
+        expect(newDialog.date).to.equal(null);
+        expect(client.calls({op: 'call', id: newDialog.cid})[0].method).to.equal('open');
+      });
+
+      it('throws if dateDialog was closed', () => {
+        dialog.open();
+        dialog.close();
+        expect(() => DateDialog.open(dialog)).to.throw('Can not open a popup that was disposed');
+      });
+
+    });
+
   });
 
   describe('close', function() {
@@ -131,6 +168,15 @@ describe('DateDialog', function() {
 
   describe('select event', function() {
 
+    it('dialog always listens to select', function() {
+      expect(client.calls({op: 'listen'})[1]).to.deep.equal({
+        op: 'listen',
+        id: dialog.cid,
+        event: 'select',
+        listen: true
+      });
+    });
+
     it('fires select and close', function() {
       const date = new Date();
       const select = spy();
@@ -144,6 +190,40 @@ describe('DateDialog', function() {
       expect(select).to.have.been.calledWithMatch({target: dialog, date});
       expect(close).to.have.been.calledOnce;
       expect(close).to.have.been.calledWithMatch({target: dialog});
+    });
+
+  });
+
+  describe('JSX', () => {
+
+    let jsx;
+
+    beforeEach(function() {
+      jsx = createJsxProcessor();
+    });
+
+    it('with no properties', function() {
+      const popup = jsx.createElement(DateDialog);
+
+      expect(popup).to.be.instanceOf(DateDialog);
+      expect(dialog.date).to.equal(null);
+      expect(dialog.maxDate).to.equal(null);
+      expect(dialog.minDate).to.equal(null);
+    });
+
+    it('with all properties', function() {
+      const date1 = new Date(2000, 1);
+      const date2 = new Date(2000, 2);
+      const date3 = new Date(2000, 3);
+
+      const popup = jsx.createElement(
+        DateDialog,
+        {date: date1, minDate: date2, maxDate: date3}
+      );
+
+      expect(popup.date.toString()).to.equal(date1.toString());
+      expect(popup.minDate.toString()).to.equal(date2.toString());
+      expect(popup.maxDate.toString()).to.equal(date3.toString());
     });
 
   });

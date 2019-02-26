@@ -93,19 +93,39 @@ actionSheet = <tabris.ActionSheet title='foo'>{['foo', 'bar', actions[0]]}</tabr
 actionSheet = <tabris.ActionSheet title='foo'><tabris.ActionSheetItem image='foo.jpg' title='foo' style='cancel'/></tabris.ActionSheet>;
 actionSheet = <tabris.ActionSheet title='foo'><tabris.ActionSheetItem>foo</tabris.ActionSheetItem></tabris.ActionSheet>;
 
-const textInputs: tabris.TextInput[] = [new tabris.TextInput(), new tabris.TextInput()];
-
-const alertDialog: tabris.AlertDialog = <tabris.AlertDialog title='foo' message='foo' textInputs={textInputs} />;
-actionSheet = <tabris.AlertDialog title='foo' textInputs={textInputs}>foo</tabris.AlertDialog>;
-actionSheet = <tabris.AlertDialog title='foo'>{textInputs}</tabris.AlertDialog>;
-actionSheet = <tabris.AlertDialog title='foo'>{['foo', 'bar', textInputs[0]]}</tabris.AlertDialog>;
-actionSheet = <tabris.AlertDialog title='foo'><tabris.TextInput /></tabris.AlertDialog>;
-
 // CollectionView
 const cellType: string|((index: number) => string) = () => 'foo';
 const createCell: (cellType: string) => tabris.Widget = () => <tabris.Composite />;
 const updateCell: (cell: tabris.Widget, index: number) => void = () => {};
 
+const textInputs: tabris.TextInput[] = [new tabris.TextInput(), new tabris.TextInput()];
+
 const cv: tabris.CollectionView = <tabris.CollectionView
   cellType={cellType} createCell={createCell} updateCell={updateCell}
 />;
+let alertDialog: tabris.AlertDialog = <tabris.AlertDialog
+  title='foo'
+  message='foo'
+  textInputs={textInputs}
+  onClose={(ev: tabris.AlertDialogCloseEvent) => console.log(ev.button  + ev.texts[0].trim())}
+  onCloseOk={(ev: tabris.AlertDialogCloseEvent) => console.log(ev.button === 'ok' && ev.texts[0].trim())}
+  onCloseCancel={(ev: tabris.AlertDialogCloseEvent) => console.log(ev.button === 'cancel' && ev.texts[0].trim())}
+  onCloseNeutral={(ev: tabris.AlertDialogCloseEvent) => console.log(ev.button === 'neutral' && ev.texts[0].trim())}/>;
+alertDialog = <tabris.AlertDialog title='foo' textInputs={textInputs}>foo</tabris.AlertDialog>;
+alertDialog = <tabris.AlertDialog title='foo'>{textInputs}</tabris.AlertDialog>;
+alertDialog = <tabris.AlertDialog title='foo'>{['foo', 'bar', textInputs[0]]}</tabris.AlertDialog>;
+alertDialog = <tabris.AlertDialog title='foo'><tabris.TextInput /></tabris.AlertDialog>;
+
+let dateDialog: tabris.DateDialog = <tabris.DateDialog
+  date={new Date()}
+  minDate={new Date()}
+  maxDate={new Date()}
+  onSelect={(ev: tabris.DateDialogSelectEvent) => console.log(ev.date.toDateString())}
+  onClose={(ev: tabris.DateDialogCloseEvent) => console.log(ev.date ? ev.date.toDateString() : '')}/>;
+dateDialog = <tabris.DateDialog/>;
+
+let timeDialog: tabris.TimeDialog = <tabris.TimeDialog
+  date={new Date()}
+  onSelect={(ev: tabris.TimeDialogSelectEvent) => console.log(ev.date.toTimeString())}
+  onClose={(ev: tabris.TimeDialogCloseEvent) => console.log(ev.date ? ev.date.toTimeString() : '')}/>;
+timeDialog = <tabris.TimeDialog/>;

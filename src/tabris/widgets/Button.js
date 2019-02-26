@@ -6,7 +6,7 @@ import {jsxFactory} from '../JsxProcessor';
 export default class Button extends Widget {
 
   /**
-   * @param {Partial<Button>} properties
+   * @param {Partial<Button>=} properties
    */
   constructor(properties) {
     super(Object.assign({style: 'default'}, properties));

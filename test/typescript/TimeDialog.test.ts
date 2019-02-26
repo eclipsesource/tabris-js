@@ -23,3 +23,8 @@ let timeDialogSelectEvent: TimeDialogSelectEvent = {target, timeStamp, type, dat
 timeDialog
   .onSelect((event: TimeDialogSelectEvent) => {})
   .onClose((event: TimeDialogCloseEvent) => {});
+
+// open
+timeDialog = TimeDialog.open();
+timeDialog = TimeDialog.open(new Date());
+timeDialog = TimeDialog.open(new TimeDialog());

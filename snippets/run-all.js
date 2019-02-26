@@ -68,10 +68,15 @@ const snippets = [
   ['composite.js', () => confirm(Composite, {}, 2)],
   // 'console.js',
   ['crypto.js', () => confirm(TextView, {text: /\s[0-9][0-9]/})],
-  android && ['datedialog.js', () => confirm(Button)
-    .then(() => tap(find(Button)))
-    .then(() => wait(1000))
-    .then(() => find(DateDialog).close())
+  ['datedialog.js', () => confirm(Button, {}, 3)
+    .then(() => wait(500))
+    .then(() => forEachAsync(
+      findAll(tabris.Button),
+      button => tap(button),
+      1000,
+      () => find(DateDialog).close()
+    ))
+    .then(() => wait(500))
   ],
   ['device.js', () => confirm(TextView, {text: /.+:\s.+/}, 10)
     .then(() => wait(1000))
@@ -339,13 +344,15 @@ const snippets = [
     .then(() => tap(find(CheckBox)))
     .then(() => wait(2000))
   ],
-  android && ['timedialog.js', () => confirm(Button)
-    .then(() => tap(find(Button)))
-    .then(() => wait(2000))
-    .then(() => find(TimeDialog).trigger('select', {date: find(TimeDialog).date}))
-    .then(() => find(TimeDialog).close())
-    .then(() => confirm(TimeDialog, {}, 0))
-    .then(() => wait(1000))
+  ['timedialog.js', () => confirm(Button, {}, 2)
+    .then(() => wait(500))
+    .then(() => forEachAsync(
+      findAll(tabris.Button),
+      button => tap(button),
+      1000,
+      () => find(TimeDialog).close()
+    ))
+    .then(() => wait(500))
   ],
   ['timer.js', () => confirm(Button, {text: 'Press me!'})
     .then(() => tap(find(Button)))

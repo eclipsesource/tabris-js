@@ -1,14 +1,28 @@
 import Popup from './Popup';
 import NativeObject from './NativeObject';
+import {jsxFactory} from './JsxProcessor';
 
 export default class TimeDialog extends Popup {
 
+  static open(value) {
+    let timeDialog;
+    if (value instanceof TimeDialog) {
+      timeDialog = value;
+    } else if (value instanceof Date) {
+      timeDialog = new TimeDialog({date: value});
+    } else {
+      timeDialog = new TimeDialog();
+    }
+    return timeDialog.open();
+  }
+
   /**
-   * @param {Partial<TimeDialog>} properties
+   * @param {Partial<TimeDialog>=} properties
    */
   constructor(properties) {
     super(properties);
     this._nativeListen('close', true);
+    this._nativeListen('select', true);
     this._autoDispose = true;
   }
 
@@ -31,6 +45,11 @@ export default class TimeDialog extends Popup {
   _handleCloseEvent(event) {
     super._trigger('close', event);
     this.dispose();
+  }
+
+  /** @this {import("../JsxProcessor").default} */
+  [jsxFactory](Type, props) {
+    return this.createNativeObject(Type, props);
   }
 
 }

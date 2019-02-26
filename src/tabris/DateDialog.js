@@ -1,14 +1,28 @@
 import Popup from './Popup';
 import NativeObject from './NativeObject';
+import {jsxFactory} from './JsxProcessor';
 
 export default class DateDialog extends Popup {
 
+  static open(value) {
+    let dateDialog;
+    if (value instanceof DateDialog) {
+      dateDialog = value;
+    } else if (value instanceof Date) {
+      dateDialog = new DateDialog({date: value});
+    } else {
+      dateDialog = new DateDialog();
+    }
+    return dateDialog.open();
+  }
+
   /**
-   * @param {Partial<DateDialog>} properties
+   * @param {Partial<DateDialog>=} properties
    */
   constructor(properties) {
     super(properties);
     this._nativeListen('close', true);
+    this._nativeListen('select', true);
     this._autoDispose = true;
   }
 
@@ -31,6 +45,11 @@ export default class DateDialog extends Popup {
   _handleCloseEvent(event) {
     super._trigger('close', event);
     this.dispose();
+  }
+
+  /** @this {import("../JsxProcessor").default} */
+  [jsxFactory](Type, props) {
+    return this.createNativeObject(Type, props);
   }
 
 }
