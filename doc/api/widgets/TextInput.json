@@ -76,7 +76,7 @@
         "word",
         "all"
       ],
-      "description": "Control how text input is capitalized.\n\n`none` - Do not change any text input\n`sentence` - Capitalize the first word of a sentence\n`word` - Capitalize every word\n`all` - Capitalize every letter\n\nThe boolean value `false` maps to `none` whereas `true` is equal to `all`."
+      "description": "Control how text input is capitalized.\n\n* `none` - Do not change any text input\n* `sentence` - Capitalize the first word of a sentence\n* `word` - Capitalize every word\n* `all` - Capitalize every letter\n\nThe boolean value `false` maps to `none` whereas `true` is equal to `all`."
     },
     "keyboard": {
       "type": "string",
