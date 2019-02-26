@@ -6,7 +6,7 @@
     "allowJs": true,
     "noEmit": true,
     "lib": ["es6"],
-    "types": []
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "src/tabris/**/*",
