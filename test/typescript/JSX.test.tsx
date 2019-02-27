@@ -1,4 +1,5 @@
 import * as tabris from 'tabris';
+import { Popover } from 'tabris';
 
 const onPanHandler: (event: tabris.WidgetPanEvent) => void = (event) => {};
 const onTextChangedHandler: (event: tabris.PropertyChangedEvent<tabris.TextInput, string>) => void = (event) => {};
@@ -129,3 +130,9 @@ let timeDialog: tabris.TimeDialog = <tabris.TimeDialog
   onSelect={(ev: tabris.TimeDialogSelectEvent) => console.log(ev.date.toTimeString())}
   onClose={(ev: tabris.TimeDialogCloseEvent) => console.log(ev.date ? ev.date.toTimeString() : '')}/>;
 timeDialog = <tabris.TimeDialog/>;
+
+let popover: tabris.Popover = <tabris.Popover width={100} height={200} anchor={custom1}>
+  {[new tabris.Button(), new tabris.TextView()]}
+</tabris.Popover>;
+
+popover = <tabris.Popover onClose={() => {}} />;

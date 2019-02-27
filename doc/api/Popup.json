@@ -5,6 +5,14 @@
     "access": "protected"
   },
   "description": "Base class for all pop-up UI elements. Pop-ups are placed on top of all other UI, but are not widgets. Some pop-ups can be opened only once.",
+  "properties": {
+    "[JSX.jsxFactory]": {
+      "description": "This function is called to create JSX popup elements. You may override it in your own subclass to create custom JSX behavior. **The function is not called with any context, i.e. `this` is not available.**",
+      "type": "JSX.JsxFactory",
+      "const": true,
+      "readonly": true
+    }
+  },
   "methods": {
     "open": {
       "parameters": [],

@@ -12,8 +12,14 @@
       }
     ]
   },
-  "description": "An `Popover` represents a modal ui container that is shown above the apps content. It provides the root element of a new layout hierarchy in the form of its `contentView` property. User provided widgets can be attached to the `contentView` similarly to the `tabris.contentView`. In order to close the `Popover` the `close()` method can be used.\n\nThe appearance of the `Popover` depends on the device size: On larger devices (like tablets) the `Popover` is shown as a floating window whereas on smaller devices it is shown as a fullscreen sheet covering the entire app. When used on larger devices, the size _has_ to be provided via the `width` and `height` properties.",
+  "description": "An `Popover` represents a modal ui container that is shown above the apps content. It provides the root element of a new layout hierarchy in the form of its `contentView` property. User provided widgets can be attached to the `contentView` similarly to the `tabris.contentView`. In order to close the `Popover` the `close()` method can be used.\n\nThe appearance of the `Popover` depends on the device size: On larger devices (like tablets) the `Popover` is shown as a floating window whereas on smaller devices it is shown as a fullscreen sheet covering the entire app.",
   "properties": {
+    "jsxProperties": {
+      "const": true,
+      "readonly": true,
+      "ts_only": true,
+      "type": "JSXProperties<this> & {children?: JSXChildren<Widget>}"
+    },
     "contentView": {
       "const": true,
       "readonly": true,
@@ -37,6 +43,23 @@
       "platforms": {
         "android": false
       }
+    }
+  },
+  "statics": {
+    "methods": {
+      "open": [
+        {
+          "parameters": [
+            {
+              "name": "popover",
+              "description": "The popover to open",
+              "type": "Popover"
+            }
+          ],
+          "description": "Makes the given popover visible. Meant to be used with inline-JSX. In TypeScript it also casts the given JSX element from `any` to an actual Popover.",
+          "returns": "Popover"
+        }
+      ]
     }
   },
   "events": {

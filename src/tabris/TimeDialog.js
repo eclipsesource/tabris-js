@@ -1,6 +1,5 @@
 import Popup from './Popup';
 import NativeObject from './NativeObject';
-import {jsxFactory} from './JsxProcessor';
 
 export default class TimeDialog extends Popup {
 
@@ -45,11 +44,6 @@ export default class TimeDialog extends Popup {
   _handleCloseEvent(event) {
     super._trigger('close', event);
     this.dispose();
-  }
-
-  /** @this {import("../JsxProcessor").default} */
-  [jsxFactory](Type, props) {
-    return this.createNativeObject(Type, props);
   }
 
 }

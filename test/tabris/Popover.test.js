@@ -2,10 +2,17 @@ import {expect, mockTabris, restore, spy} from './../test';
 import ClientStub from './ClientStub';
 import Popover from './../../src/tabris/Popover';
 import ContentView from './../../src/tabris/widgets/ContentView';
+import Button from './../../src/tabris/widgets/Button';
+import {createJsxProcessor} from '../../src/tabris/JsxProcessor';
+import WidgetCollection from '../../src/tabris/WidgetCollection';
 
 describe('Popover', () => {
 
-  let client, popover;
+  /** @type {ClientStub} */
+  let client;
+
+  /** @type {Popover} */
+  let popover;
 
   beforeEach(() => {
     client = new ClientStub();
@@ -32,6 +39,29 @@ describe('Popover', () => {
       expect(() => popover.open()).to.throw('Can not open a popup that was disposed');
     });
 
+    describe('as static method', () => {
+
+      it('returns popover', () => {
+        expect(Popover.open(popover)).to.equal(popover);
+      });
+
+      it('calls open', () => {
+        Popover.open(popover);
+        expect(client.calls({op: 'call'})[0].method).to.equal('open');
+      });
+
+      it('throws for other values', () => {
+        expect(() => Popover.open('Hello World!')).to.throw();
+      });
+
+      it('throws if popover was closed', () => {
+        popover.open();
+        popover.close();
+        expect(() => Popover.open(popover)).to.throw('Can not open a popup that was disposed');
+      });
+
+    });
+
   });
 
   describe('contentView', () => {
@@ -56,6 +86,7 @@ describe('Popover', () => {
         properties: {contentView: popover.contentView.cid}
       });
     });
+
   });
 
   describe('close', () => {
@@ -93,6 +124,77 @@ describe('Popover', () => {
       expect(closeOk).not.to.have.been.called;
       expect(close).to.have.been.calledOnce;
       expect(close).to.have.been.calledWithMatch({target: popover});
+    });
+
+  });
+
+  describe('JSX', () => {
+
+    let jsx, widgets;
+
+    beforeEach(function() {
+      jsx = createJsxProcessor();
+      widgets = [
+        new Button(),
+        new Button(),
+        new Button(),
+        new Button(),
+        new Button()
+      ];
+    });
+
+    it('with all properties', function() {
+      const popover = jsx.createElement(
+        Popover,
+        {width: 100, height: 200, anchor: widgets[0]}
+      );
+
+      expect(popover).to.be.instanceOf(Popover);
+      expect(client.calls({
+        op: 'create',
+        type: 'tabris.Popover',
+        id: popover.cid
+      })[0].properties).to.deep.equal({
+        width: 100, height: 200, anchor: widgets[0].cid,
+        contentView: popover.contentView.cid
+      });
+    });
+
+    it('with no properties', function() {
+      const popover = jsx.createElement(Popover);
+
+      expect(popover).to.be.instanceOf(Popover);
+      expect(client.calls({
+        op: 'create',
+        type: 'tabris.Popover',
+        id: popover.cid
+      })[0].properties).to.deep.equal({
+        contentView: popover.contentView.cid
+      });
+    });
+
+    it('with widget content', function() {
+      const popup = jsx.createElement(
+        Popover,
+        null,
+        widgets[0],
+        [widgets[1], widgets[2]],
+        new WidgetCollection([widgets[3], widgets[4]])
+      );
+
+      expect(popup.contentView.children().toArray()).to.deep.equal(widgets);
+    });
+
+    it('with widget content via property', function() {
+      const popup = jsx.createElement(
+        Popover,
+        {children: [
+          widgets[0], widgets[1], widgets[2],
+          new WidgetCollection([widgets[3], widgets[4]])
+        ]}
+      );
+
+      expect(popup.contentView.children().toArray()).to.deep.equal(widgets);
     });
 
   });

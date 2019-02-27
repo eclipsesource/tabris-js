@@ -60,7 +60,7 @@ export default class AlertDialog extends Popup {
       flatChildren.filter(child => !(child instanceof Object)),
       'message'
     );
-    return this.createNativeObject(Type, finalProps);
+    return super[jsxFactory](Type, finalProps);
   }
 
 }

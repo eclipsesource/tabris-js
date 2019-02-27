@@ -1,11 +1,22 @@
 import NativeObject from './NativeObject';
 import Popup from './Popup';
 import {create as createContentView} from './widgets/ContentView';
+import {jsxFactory} from './JsxProcessor';
 
 export default class Popover extends Popup {
 
+  static open(value) {
+    let popover;
+    if (value instanceof Popover) {
+      popover = value;
+    } else {
+      throw new Error('Not a Popover: ' + typeof value);
+    }
+    return popover.open();
+  }
+
   /**
-   * @param {Partial<Popover>} properties
+   * @param {Partial<Popover>=} properties
    */
   constructor(properties) {
     super(properties);
@@ -26,6 +37,13 @@ export default class Popover extends Popup {
     } else {
       return super._trigger(name, event);
     }
+  }
+
+  /** @this {import("./JsxProcessor").default} */
+  [jsxFactory](Type, props, children) {
+    const result = super[jsxFactory](Type, props);
+    result.contentView.append(this.normalizeChildren(children));
+    return result;
   }
 
 }

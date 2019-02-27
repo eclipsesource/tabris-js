@@ -34,13 +34,6 @@
       "readonly": true,
       "ts_only": true,
       "type": "JSXProperties<this> & {children?: Flatten<string|{title: string, image?: ImageValue, style?: 'default'|'cancel'|'destructive'}>}"
-    },
-    "[JSX.jsxFactory]": {
-      "description": "This function is called by the framework to create JSX elements from the ActionSheet class.",
-      "type": "JSX.JsxFactory",
-      "const": true,
-      "readonly": true,
-      "ts_only": true
     }
   },
   "events": {
