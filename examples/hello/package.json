@@ -7,6 +7,6 @@
     "start": "tabris serve"
   },
   "dependencies": {
-    "tabris": "3.0.0-beta1"
+    "tabris": "3.0.0-beta2"
   }
 }

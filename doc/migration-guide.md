@@ -1,6 +1,6 @@
 ---
 ---
-# Migration Guide 2.x to 3.0-beta1
+# Migration Guide 2.x to 3.0-beta2
 
 Note that this guide refers to a pre-release version of Tabris.js 3. Further breaking changes are expected for the final release.
 

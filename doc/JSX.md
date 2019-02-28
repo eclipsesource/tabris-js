@@ -7,7 +7,7 @@ JSX is a proprietary extension to the JavaScript/TypeScript syntax that allows m
 
 ## Usage
 
-In Tabris, JSX is used to create UI elements in a declarative manner. Every constructor for a Widget, WidgetCollection or Popup based class can be used as an JSX element. (As of 3.0-beta1 only the ActionSheet popup supports JSX. This will change in the final release.)
+In Tabris, JSX is used to create UI elements in a declarative manner. Every constructor for a Widget, WidgetCollection or Popup based class can be used as an JSX element. (As of 3.0-beta2 only the ActionSheet and AlertDialog popup supports JSX. This will change in the final release.)
 
 Action | JavaScript/TypeScript | JSX
 ---|---|---
