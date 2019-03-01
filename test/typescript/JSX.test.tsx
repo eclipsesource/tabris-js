@@ -100,3 +100,12 @@ actionSheet = <tabris.AlertDialog title='foo' textInputs={textInputs}>foo</tabri
 actionSheet = <tabris.AlertDialog title='foo'>{textInputs}</tabris.AlertDialog>;
 actionSheet = <tabris.AlertDialog title='foo'>{['foo', 'bar', textInputs[0]]}</tabris.AlertDialog>;
 actionSheet = <tabris.AlertDialog title='foo'><tabris.TextInput /></tabris.AlertDialog>;
+
+// CollectionView
+const cellType: string|((index: number) => string) = () => 'foo';
+const createCell: (cellType: string) => tabris.Widget = () => <tabris.Composite />;
+const updateCell: (cell: tabris.Widget, index: number) => void = () => {};
+
+const cv: tabris.CollectionView = <tabris.CollectionView
+  cellType={cellType} createCell={createCell} updateCell={updateCell}
+/>;

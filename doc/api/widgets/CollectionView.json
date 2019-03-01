@@ -7,7 +7,7 @@
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<CollectionView> & Partial<Pick<CollectionView, 'cellHeight' | 'cellType' | 'createCell'>>",
+        "type": "Properties<CollectionView> & Partial<Pick<CollectionView, 'cellHeight' | 'cellType' | 'createCell' | 'updateCell'>>",
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
@@ -18,7 +18,7 @@
       "const": true,
       "readonly": true,
       "ts_only": true,
-      "type": "JSXProperties<this> & {children?: never}"
+      "type": "JSXProperties<this> & Partial<Pick<CollectionView, 'cellHeight' | 'cellType' | 'createCell' | 'updateCell'>> & {children?: never}"
     },
     "cellHeight": {
       "type": "number|\"auto\"|((index: number, cellType: string) => number|\"auto\")",
