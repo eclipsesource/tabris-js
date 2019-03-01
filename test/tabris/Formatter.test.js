@@ -53,6 +53,16 @@ describe('format', function() {
     expect(result).to.equal('{ foo: 23, bar: 42, baz: 4711 }');
   });
 
+  it('formats objects with custom toString', function() {
+    const result = format({toString() { return 'foo';}});
+    expect(result).to.equal('foo');
+  });
+
+  it('formats objects with failing toString', function() {
+    const result = format({toString() { throw new Error('foo'); }});
+    expect(result).to.be.a.string;
+  });
+
   it('formats empty objects', function() {
     const result = format({});
     expect(result).to.equal('{}');

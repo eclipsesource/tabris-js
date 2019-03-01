@@ -274,6 +274,16 @@ function formatValue(ctx, value, recurseTimes) {
     braces = ['{', '}'];
     formatter = formatPromise;
   } else {
+    try {
+      if (value instanceof Object && (value.toString !== Object.prototype.toString)) {
+        const result = value.toString();
+        if (typeof result === 'string') {
+          return result;
+        }
+      }
+    } catch (ex) {
+      // try something else
+    }
     // Unset the constructor to prevent "Object {...}" for ordinary objects.
     if (constructor && constructor.name === 'Object') {
       constructor = null;
