@@ -189,11 +189,11 @@
     },
     "elevation": {
       "type": "number",
-      "description": "The position of the widget on the z-axis. Supported on iOS and Android 5.0+."
+      "description": "The position of the widget on the z-axis. Setting an `elevation` casts a shadow in the shape of the widget.\n\nTo have the shadow properly applied on Android it is required to set the `background` on the widget as well."
     },
     "cornerRadius": {
       "type": "number",
-      "description": "Configure a widget to have rounded corners. Each corner is affected equally. Supported on iOS and Android 5.0+."
+      "description": "Configure a widget to have equally rounded corners. The widget content is clipped by the rounded corners."
     },
     "bounds": {
       "type": "Bounds",
