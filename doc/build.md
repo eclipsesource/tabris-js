@@ -83,14 +83,17 @@ For bigger projects you may want to use a module bundler like [rollup.js](https:
 Install the Babel transpiler and the necessary plug-ins. The `--save-dev` option will add the dependencies to your `package.json`:
 
 ```
-npm install --save-dev babel-cli babel-plugin-transform-es2015-modules-commonjs
+npm install --save-dev @babel/core @babel/cli @babel/plugin-transform-modules-commonjs @babel/plugin-transform-async-to-generator
 ```
 
 Create a `.babelrc` file in the root of your project:
 
 ```json
 {
-  "plugins": ["transform-es2015-modules-commonjs"]
+  "plugins": [
+    "@babel/plugin-transform-modules-commonjs",
+    "@babel/plugin-transform-async-to-generator"
+  ]
 }
 ```
 
@@ -99,7 +102,7 @@ Include the following build script in the `scripts` sections of your `package.js
 ```json
 {
   "scripts": {
-    "build": "babel --compact false --out-dir dist/ src/"
+    "build": "babel --compact false src -d dist"
   }
   ...
 }
