@@ -1,13 +1,14 @@
 {
   "type": "CollectionView",
+  "generics": "Cell extends Widget",
   "description": "A scrollable list that displays data items in cells, one per row. Cells are created on demand by the *createCell* callback and reused on scrolling.",
-  "extends": "Widget",
+  "extends": "Composite<Cell>",
   "constructor": {
     "access": "public",
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<CollectionView> & Partial<Pick<CollectionView, 'cellHeight' | 'cellType' | 'createCell' | 'updateCell'>>",
+        "type": "Properties<CollectionView<Cell>> & Partial<Pick<CollectionView<Cell>, 'cellHeight' | 'cellType' | 'createCell' | 'updateCell'>>",
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
@@ -18,7 +19,7 @@
       "const": true,
       "readonly": true,
       "ts_only": true,
-      "type": "JSXProperties<this> & Partial<Pick<CollectionView, 'cellHeight' | 'cellType' | 'createCell' | 'updateCell'>> & {children?: never}"
+      "type": "JSXProperties<this> & Partial<Pick<CollectionView<Cell>, 'cellHeight' | 'cellType' | 'createCell' | 'updateCell'>> & {children?: never}"
     },
     "cellHeight": {
       "type": "number|\"auto\"|((index: number, cellType: string) => number|\"auto\")",
@@ -30,13 +31,11 @@
       "description": "The number of items to display. To add or remove items later, use the methods `insert()` and `remove()` instead of setting the `itemCount`. To display a new list of items, use the `load()` method."
     },
     "createCell": {
-      "type": "(cellType: string) => Widget",
-      "ts_type": "(cellType: string) => tabris.Widget",
+      "type": "(cellType: string) => Cell",
       "description": "A callback used to create a new reusable cell widget for a given type. This callback will be called by the framework and the created cell will be reused for different items. The created widget should be populated in the `updateCell` function."
     },
     "updateCell": {
-      "type": "(cell: Widget, index: number) => void",
-      "ts_type": "(cell: tabris.Widget, index: number) => void",
+      "type": "(cell: Cell, index: number) => void",
       "description": "A callback used to update a given cell widget to display the item with the given index. This callback will be called by the framework."
     },
     "cellType": {

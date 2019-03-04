@@ -164,6 +164,7 @@ class DocumentRenderer {
         currentType = null;
       } else if (this.defs[currentType]) {
         currentType = this.defs[currentType].extends || 'Object';
+        currentType = currentType.split('<')[0];
       } else {
         throw new Error('Could not find super type for ' + currentType);
       }

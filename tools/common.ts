@@ -168,14 +168,13 @@ function extendTypeDefs(defs: ApiDefinitions) {
   });
 }
 
-export function createEventTypeName(widgetName: string, eventName: string, event: schema.Event) {
-  if (event.parameters) {
-    return event.eventObject || (widgetName + capitalizeFirstChar(eventName) + 'Event');
-  } else {
-    return `EventObject<tabris.${widgetName}>`;
+export function getEventTypeName(def: ExtendedApi, eventName: string, parameters: object) {
+  if (def.events[eventName].eventObject) {
+    return def.events[eventName].eventObject;
   }
+  return parameters ? def.type + capitalizeFirstChar(eventName) + 'Event' : 'EventObject';
 }
 
 export function isNativeObject(defs: ApiDefinitions, def: ExtendedApi) {
-  return def && (def.type === 'NativeObject' || isNativeObject(defs, defs[def.extends]));
+  return def && (def.type === 'NativeObject' || isNativeObject(defs, defs[(def.extends || '').split('<')[0]]));
 }

@@ -9,7 +9,7 @@ const action: tabris.Action = <tabris.Action title='foo' onSelect={() => {}}>foo
 const button: tabris.Button = <tabris.Button onPanUp={onPanHandler}>foo</tabris.Button>;
 const canvas: tabris.Canvas = <tabris.Canvas onResize={function() {}} left={23} transform={{rotation: 360}}/>;
 const checkBox: tabris.CheckBox = <tabris.CheckBox checked={true}>foo</tabris.CheckBox>;
-const collectionView: tabris.CollectionView = <tabris.CollectionView refreshEnabled={true} cellHeight={x => 23} />;
+const collectionView: tabris.CollectionView<tabris.Widget> = <tabris.CollectionView refreshEnabled={true} cellHeight={x => 23} />;
 const stackComposite: tabris.StackComposite = <tabris.StackComposite padding={10} layoutData={{width: 100}}/>;
 const composite: tabris.Composite = <tabris.Composite padding={10} layoutData={{width: 100}}/>;
 const imageView: tabris.ImageView = <tabris.ImageView image='./foo.jpg'/>;
@@ -96,12 +96,12 @@ actionSheet = <tabris.ActionSheet title='foo'><tabris.ActionSheetItem>foo</tabri
 
 // CollectionView
 const cellType: string|((index: number) => string) = () => 'foo';
-const createCell: (cellType: string) => tabris.Widget = () => <tabris.Composite />;
-const updateCell: (cell: tabris.Widget, index: number) => void = () => {};
+const createCell: (cellType: string) => tabris.Button = () => <tabris.Composite />;
+const updateCell: (cell: tabris.Button, index: number) => void = () => {};
 
 const textInputs: tabris.TextInput[] = [new tabris.TextInput(), new tabris.TextInput()];
 
-const cv: tabris.CollectionView = <tabris.CollectionView
+const cv: tabris.CollectionView<tabris.Widget> = <tabris.CollectionView
   cellType={cellType} createCell={createCell} updateCell={updateCell}
 />;
 let alertDialog: tabris.AlertDialog = <tabris.AlertDialog

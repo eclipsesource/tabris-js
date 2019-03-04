@@ -2,7 +2,7 @@ import * as fs from 'fs-extra';
 import * as schema from './api-schema';
 import {
   TextBuilder, asArray, filter, ApiDefinitions, ExtendedApi, Methods,
-  readJsonDefs, createDoc, createEventTypeName, capitalizeFirstChar, Properties
+  readJsonDefs, createDoc, getEventTypeName, capitalizeFirstChar, Properties
 } from './common';
 
 type PropertyOps = {hasContext: boolean, excludeConsts: boolean};
@@ -132,10 +132,7 @@ function renderClass(text: TextBuilder, def: ExtendedApi) {
 
 function renderClassHead(text: TextBuilder, def: ExtendedApi) {
   let str = (def.namespace && def.namespace === 'global') ? 'declare' : ' export';
-  str += ' class ' + def.type;
-  if (def.generics) {
-    str += '<' + def.generics + '>';
-  }
+  str += ' class ' + genericType(def);
   if (def.extends) {
     str += ' extends ' + (def.ts_extends || def.extends);
   }
@@ -160,7 +157,7 @@ function renderConstructor(text: TextBuilder, def: ExtendedApi) {
 function renderEventObjectInterfaces(text: TextBuilder, def: ExtendedApi) {
   if (def.events) {
     Object.keys(def.events).filter(name => !!def.events[name].parameters).sort().forEach(name => {
-      const eventType = createEventTypeName(def.type, name, def.events[name]);
+      const eventType = getEventTypeName(def, name, def.events[name].parameters);
       if (!eventObjectNames.find(eventObjectName => eventObjectName === eventType)) {
         eventObjectNames.push(eventType);
         text.append('');
@@ -172,8 +169,9 @@ function renderEventObjectInterfaces(text: TextBuilder, def: ExtendedApi) {
 
 function renderEventObjectInterface(text: TextBuilder, name: string, def: ExtendedApi) {
   const parameters = def.events[name].parameters || {};
-  const eventType = createEventTypeName(def.type, name, def.events[name]);
-  text.append(`interface ${eventType} extends EventObject<${def.type}> {`);
+  text.append(`interface ${getEventTypeName(def, name, parameters)}<Target = ${def.generics ? 'object' : def.type}>`);
+  text.append(` extends EventObject<Target>`);
+  text.append(`{`);
   text.indent++;
   Object.keys(parameters).sort().forEach(param => {
     const values = [];
@@ -242,27 +240,29 @@ function renderEventProperties(text: TextBuilder, def: ExtendedApi) {
     if (def.events) {
       Object.keys(def.events).sort().forEach(name => {
         text.append('');
-        text.append(createEventProperty(def.type, name, def.events[name]));
+        text.append(createEventProperty(def, name));
       });
     }
     if (def.properties) {
       Object.keys(def.properties).filter(name => !def.properties[name].const).sort().forEach(name => {
         text.append('');
-        text.append(createPropertyChangedEventProperty(def.type, name, def.properties[name]));
+        text.append(createPropertyChangedEventProperty(def, name));
       });
     }
   }
 }
 
-function createEventProperty(widgetName: string, eventName: string, event: schema.Event) {
+function createEventProperty(def: ExtendedApi, eventName: string) {
+  const event = def.events[eventName];
   const result = [];
   result.push(createDoc(Object.assign({}, event, {parameters: []})));
   result.push(`on${capitalizeFirstChar(eventName)}: `
-    + `Listeners<${createEventTypeName(widgetName, eventName, event)}>;`);
+    + `Listeners<${getEventTypeName(def, eventName, event.parameters)}<this>>;`);
   return result.join('\n');
 }
 
-function createPropertyChangedEventProperty(widgetName: string, propName: string, property: schema.Property) {
+function createPropertyChangedEventProperty(def: ExtendedApi, propName: string) {
+  const property = def.properties[propName];
   const result = [];
   const standardDescription = `Fired when the [*${propName}*](#${propName}) property has changed.`;
   const defType = property.ts_type || property.type;
@@ -276,7 +276,7 @@ function createPropertyChangedEventProperty(widgetName: string, propName: string
   };
   result.push(createDoc(changeEvent));
   result.push(`on${capitalizeFirstChar(propName)}Changed: `
-    + `Listeners<PropertyChangedEvent<tabris.${widgetName}, ${defType}>>;`);
+    + `Listeners<PropertyChangedEvent<this, ${defType}>>;`);
   return result.join('\n');
 }
 
@@ -317,4 +317,12 @@ function getInheritedConstructor(def: ExtendedApi): typeof def.constructor {
     return def.constructor;
   }
   return def.parent ? getInheritedConstructor(def.parent) : null;
+}
+
+function genericType(def: ExtendedApi) {
+  let result = def.type;
+  if (def.generics) {
+    result += '<' + def.generics + '>';
+  }
+  return result;
 }

@@ -1,11 +1,11 @@
-import {CollectionView, Widget, PropertyChangedEvent, Properties} from 'tabris';
+import { CollectionView, Widget, PropertyChangedEvent, Properties, Button, Composite } from 'tabris';
 
 // Properties
 let cellHeight: number|'auto'|((index: number, cellType: string) => number|'auto');
 let cellType: string|((index: number) => string);
 let columnCount: number;
-let createCell:  (cellType: string) => Widget;
-let updateCell:  (cell: Widget, index: number) => void;
+let createCell: (cellType: string) => Widget;
+let updateCell: (cell: Widget, index: number) => void;
 let firstVisibleIndex: number;
 let lastVisibleIndex: number;
 let refreshEnabled: boolean;
@@ -13,7 +13,8 @@ let refreshIndicator: boolean;
 let refreshMessage: string;
 let nullValue: null;
 
-let widget: CollectionView = new CollectionView();
+let widget: CollectionView<Widget> = new CollectionView();
+const composite: Composite = widget;
 
 cellHeight = widget.cellHeight;
 cellType = widget.cellType as string|((index: number) => string);
@@ -37,7 +38,7 @@ widget.refreshEnabled = refreshEnabled;
 widget.refreshIndicator = refreshIndicator;
 widget.refreshMessage = refreshMessage;
 
-let properties = {
+const properties = {
   cellHeight, cellType, columnCount, createCell, updateCell, refreshEnabled, refreshIndicator, refreshMessage
 };
 widget = new CollectionView(properties);
@@ -46,8 +47,8 @@ widget.createCell = createCell;
 widget.updateCell = updateCell;
 
 // Methods
-let index: number = 42;
-let count: number = 42;
+const index: number = 42;
+const count: number = 42;
 let noReturnValue: void;
 
 noReturnValue = widget.insert(index);
@@ -59,15 +60,21 @@ noReturnValue = widget.remove(index, count);
 noReturnValue = widget.reveal(index);
 
 widget
-  .onFirstVisibleIndexChanged((ev: PropertyChangedEvent<CollectionView, number>) => {})
-  .onLastVisibleIndexChanged((ev: PropertyChangedEvent<CollectionView, number>) => {})
-  .onCreateCellChanged((ev: PropertyChangedEvent<CollectionView, typeof widget.createCell>) => {})
-  .onUpdateCellChanged((ev: PropertyChangedEvent<CollectionView, typeof widget.updateCell>) => {});
+  .onFirstVisibleIndexChanged((ev: PropertyChangedEvent<CollectionView<Widget>, number>) => {})
+  .onLastVisibleIndexChanged((ev: PropertyChangedEvent<CollectionView<Widget>, number>) => {})
+  .onCreateCellChanged((ev: PropertyChangedEvent<CollectionView<Widget>, typeof widget.createCell>) => {})
+  .onUpdateCellChanged((ev: PropertyChangedEvent<CollectionView<Widget>, typeof widget.updateCell>) => {});
 
+const buttonCV: CollectionView<Button> = new CollectionView<Button>({
+  createCell: () => new Button(),
+  updateCell: cell => cell.text = 'foo'
+});
 
-class CustomComponent extends CollectionView {
+const button: Button|undefined = buttonCV.children().first();
+
+class CustomComponent extends CollectionView<Widget> {
   public foo: string;
-  constructor(props: Properties<CollectionView> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
+  constructor(props: Properties<CustomComponent>) { super(props); }
 }
 
 new CustomComponent({foo: 'bar'}).set({foo: 'bar'});

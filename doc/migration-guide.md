@@ -115,6 +115,10 @@ It is no longer necessary or supported to create a property `tsProperties` on cl
 
 The helper type `Partial<T, U>` was removed to avoid confusion with the `Partial` type built in to newer TypeScript versions. It can be replaced with `Partial<Pick<T, U>>`.
 
+### CollectionView is generic
+
+The `CollectionView` is now a generic type `CollectionView<Cell extends Widget>`, where `Cell` is the type of widget returned by the `createCell` callback. All occurrences of `CollectionView` as a type should be replaced with the appropriate generic version, e.g. `CollectionView<Composite>`.
+
 ### types "dimension" and "offset"
 
 Types "dimension" and "offset" have been renamed to start with an upper case.
