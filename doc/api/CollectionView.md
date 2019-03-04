@@ -1,5 +1,5 @@
 ```js
-import {CollectionView, contentView} from 'tabris';
+import {CollectionView, contentView, TextView} from 'tabris';
 
 const items = ['Apple', 'Banana', 'Cherry'];
 
