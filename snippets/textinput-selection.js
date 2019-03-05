@@ -8,7 +8,7 @@ const textInput = new TextInput({
   focused: true,
   keepFocus: true,
   selection: [6, 11]
-}).on('selectionChanged', ({value: selection}) => selectionTextView.text = `Selection changed ${selection}`)
+}).onSelectionChanged(({value: selection}) => selectionTextView.text = `Selection changed ${selection}`)
   .appendTo(contentView);
 
 const selectionTextView = new TextView({
@@ -19,7 +19,7 @@ const selectionTextView = new TextView({
 new Button({
   top: 'prev() 16', left: 16, right: 16,
   text: 'Get selection'
-}).on('select', () => selectionTextView.text = 'Retrieved selection is ' + textInput.selection)
+}).onSelect(() => selectionTextView.text = 'Retrieved selection is ' + textInput.selection)
   .appendTo(contentView);
 
 new Button({

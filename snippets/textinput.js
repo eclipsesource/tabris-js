@@ -5,7 +5,7 @@ import {TextInput, TextView, contentView} from 'tabris';
 new TextInput({
   top: 20, left: '20%', right: '20%',
   message: 'Type here, then confirm'
-}).on('accept', ({text}) => {
+}).onAccept(({text}) => {
   new TextView({
     top: 'prev() 20', left: '20%',
     text

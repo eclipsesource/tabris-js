@@ -1,4 +1,4 @@
-import {Button, CheckBox, contentView, StackComposite} from 'tabris';
+import {Button, CheckBox, contentView, StackComposite, device} from 'tabris';
 
 // Create multiple buttons with various styles
 
@@ -16,7 +16,7 @@ contentView.append(
     <CheckBox text='Tint stroke' onCheckedChanged={tintStrokeColor}/>
     <CheckBox text='Wider stroke' onCheckedChanged={toggleStrokeWidth}/>
     <CheckBox text='Wider corner radius' onCheckedChanged={toggleCornerRadius}/>
-    <CheckBox text='Buttons enabled' checked='true' onCheckedChanged={toggleEnablement}/>
+    <CheckBox text='Buttons enabled' checked onCheckedChanged={toggleEnablement}/>
     <CheckBox text='Show icons' onCheckedChanged={toggleImage}/>
   </StackComposite>
 );
@@ -47,7 +47,8 @@ function toggleCornerRadius({value: checked}) {
 
 function toggleImage({value: checked}) {
   contentView.find(Button).forEach((button) => {
-    button.image = checked ? tabris.device.platform ===
-    'android' ? 'resources/settings-white-24dp@3x.png' : 'resources/settings-black-24dp@3x.png' : null;
+    button.image = checked ? device.platform === 'Android'
+      ? 'resources/settings-white-24dp@3x.png'
+      : 'resources/settings-black-24dp@3x.png' : null;
   });
 }

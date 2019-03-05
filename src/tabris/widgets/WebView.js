@@ -65,5 +65,6 @@ NativeObject.defineProperties(WebView.prototype, {
 });
 
 NativeObject.defineEvents(WebView.prototype, {
-  load: {native: true}
+  load: {native: true},
+  message: {native: true}
 });

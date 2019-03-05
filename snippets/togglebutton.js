@@ -6,5 +6,5 @@ new ToggleButton({
   left: 10, top: 10,
   text: 'checked',
   checked: true
-}).on('checkedChanged', event => event.target.text = event.value ? 'checked' : 'not checked')
+}).onCheckedChanged(event => event.target.text = event.value ? 'checked' : 'not checked')
   .appendTo(contentView);

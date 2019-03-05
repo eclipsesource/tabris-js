@@ -5,7 +5,7 @@ new ImageView({
   right: '50% +8', bottom: '50% +8', width: 64, height: 64,
   background: '#dedede',
   image: {src: 'resources/cloud-check.png', scale: 3}
-}).on('load', handleLoad)
+}).onLoad(handleLoad)
   .appendTo(contentView);
 
 new TextView({
@@ -19,7 +19,7 @@ new ImageView({
   left: '50% +8', bottom: '50% +8', width: 64, height: 64,
   background: '#dedede',
   image: {src: 'unavailable.png', scale: 3}
-}).on('load', handleLoad)
+}).onLoad(handleLoad)
   .appendTo(contentView);
 
 new TextView({
@@ -29,5 +29,5 @@ new TextView({
 }).appendTo(contentView);
 
 function handleLoad({target, error}) {
-  contentView.find('#label-' + target.id).set({text: error ? 'Error' : 'Success'});
+  contentView.find('#label-' + target.id).first(TextView).set({text: error ? 'Error' : 'Success'});
 }

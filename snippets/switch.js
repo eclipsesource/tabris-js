@@ -1,4 +1,4 @@
-import {Button, Switch, TextView, contentView} from 'tabris';
+import {Button, Switch, TextView, contentView, LayoutData} from 'tabris';
 
 // Create a switch with a checked handler
 
@@ -6,22 +6,20 @@ const MARGIN = 16;
 
 new Switch({
   left: MARGIN, top: MARGIN,
-  id: 'switch',
   checked: true
-}).on('checkedChanged', ({value: checked}) => {
-  contentView.find('#stateView').first().text = checked ? 'State: checked' : 'State: unchecked';
+}).onCheckedChanged(({value: checked}) => {
+  contentView.find(TextView).first().text = checked ? 'State: checked' : 'State: unchecked';
 }).appendTo(contentView);
 
 new TextView({
-  left: ['#switch', MARGIN], baseline: '#switch',
-  id: 'stateView',
+  left: [LayoutData.prev, MARGIN], baseline: LayoutData.prev,
   text: 'State: checked'
 }).appendTo(contentView);
 
 new Button({
-  left: MARGIN, top: ['#switch', MARGIN],
+  left: MARGIN, top: ['Switch', MARGIN],
   text: 'Toggle Switch'
-}).on('select', () => {
-  const switcher = contentView.find('#switch').first();
+}).onSelect(() => {
+  const switcher = contentView.find(Switch).first();
   switcher.checked = !switcher.checked;
 }).appendTo(contentView);

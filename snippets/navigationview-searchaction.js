@@ -1,4 +1,4 @@
-import {Button, Composite, NavigationView, Page, SearchAction, TextView, contentView} from 'tabris';
+import {Button, Composite, NavigationView, Page, SearchAction, TextView, contentView, device} from 'tabris';
 
 // Create an action on NavigationView to perform a search with dynamic proposals
 
@@ -24,9 +24,9 @@ const action = new SearchAction({
     src: device.platform === 'iOS' ? 'resources/search-black-24dp@3x.png' : 'resources/search-white-24dp@3x.png',
     scale: 3
   }
-}).on('select', ({target}) => target.text = '')
-  .on('input', ({text}) => updateProposals(text))
-  .on('accept', ({text}) => textView.text = 'Selected "' + text + '"')
+}).onSelect(({target}) => target.text = '')
+  .onInput(({text}) => updateProposals(text))
+  .onAccept(({text}) => textView.text = 'Selected "' + text + '"')
   .appendTo(navigationView);
 
 updateProposals('');

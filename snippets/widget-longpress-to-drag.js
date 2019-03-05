@@ -7,14 +7,14 @@ let drag;
 
 const composite = new Composite({centerX: 0, centerY: 0, width: 100, height: 100, background: 'red'})
   .appendTo(contentView)
-  .once('longPress', () => label.dispose())
-  .on('longPress', ({state}) => {
+  .onLongPress.once(() => label.dispose())
+  .onLongPress(({state}) => {
     if (state === 'start') {
       enableDrag();
     }
   })
-  .on('touchStart', ({touches: [touch]}) => previousTouch = touch)
-  .on('touchMove', ({target, touches: [touch]}) => {
+  .onTouchStart(({touches: [touch]}) => previousTouch = touch)
+  .onTouchMove(({target, touches: [touch]}) => {
     if (!drag) {
       return;
     }
@@ -24,7 +24,7 @@ const composite = new Composite({centerX: 0, centerY: 0, width: 100, height: 100
     };
     previousTouch = touch;
   })
-  .on('touchEnd', () => {
+  .onTouchEnd(() => {
     previousTouch = null;
     disableDrag();
   });

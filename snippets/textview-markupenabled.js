@@ -12,12 +12,12 @@ const markupTextView = new TextView({
   left: 16, top: 'prev() 16', right: 16,
   text: 'TextView with markup:\n' + markup,
   markupEnabled: true
-}).on('tapLink', ({url}) => console.log(`tab link ${url}`))
+}).onTapLink(({url}) => console.log(`tab link ${url}`))
   .appendTo(contentView);
 
 new CheckBox({
   left: 16, top: 'prev() 16', right: 16,
   text: 'Render markup',
   checked: markupTextView.markupEnabled
-}).on('checkedChanged', ({value: markupEnabled}) => markupTextView.markupEnabled = markupEnabled)
+}).onCheckedChanged(({value: markupEnabled}) => markupTextView.markupEnabled = markupEnabled)
   .appendTo(contentView);

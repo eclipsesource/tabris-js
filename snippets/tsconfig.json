@@ -6,7 +6,8 @@
     "jsx": "react",
     "jsxFactory": "JSX.createElement",
     "outDir": "dist",
-    "allowJs": true
+    "allowJs": true,
+    "checkJs": true
   },
   "include": [
     "./*.js",

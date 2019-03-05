@@ -12,5 +12,5 @@ const textInput = new TextInput({
 new CheckBox({
   left: 16, right: 16, top: 'prev() 16',
   text: 'Show password'
-}).on('checkedChanged', event => textInput.revealPassword = event.value)
+}).onCheckedChanged(event => textInput.revealPassword = event.value)
   .appendTo(contentView);

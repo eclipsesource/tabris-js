@@ -22,8 +22,6 @@ interface Event {
   readonly CAPTURING_PHASE: number;
 }
 
-type CustomEvent = Event; // Required for compatibility with @types/WinRT
-
 declare var Event: {
   prototype: Event;
   new(typeArg: string, eventInitDict?: EventInit): Event;

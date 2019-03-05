@@ -43,7 +43,7 @@ let terminateEvent: EventObject<App> = {target, timeStamp, type};
 
 app
   .onBackground((event: EventObject<App>) => {})
-  .onBackNavigation((event: EventObject<App>) => {})
+  .onBackNavigation((event: AppBackNavigationEvent) => event.preventDefault())
   .onForeground((event: EventObject<App>) => {})
   .onPause((event: EventObject<App>) => {})
   .onResume((event: EventObject<App>) => {})

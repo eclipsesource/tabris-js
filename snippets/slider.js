@@ -14,5 +14,5 @@ new Slider({
   minimum: -50,
   selection: 50,
   maximum: 150
-}).on('selectionChanged', ({value}) => textView.text = value)
+}).onSelectionChanged(({value}) => textView.text = `${value}`)
   .appendTo(contentView);

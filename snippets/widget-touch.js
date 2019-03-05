@@ -5,25 +5,24 @@ const textView = new TextView({
   text: 'Touch anywhere...'
 }).appendTo(contentView);
 
-contentView.on({
-  touchStart: ({touches}) => {
+contentView
+  .onTouchStart(({touches}) => {
     printXY('touchStart', touches);
     contentView.background = 'yellow';
-  },
-  touchMove: ({touches}) => printXY('touchMove', touches),
-  touchEnd: ({touches}) => {
+  })
+  .onTouchMove(({touches}) => printXY('touchMove', touches))
+  .onTouchEnd(({touches}) => {
     printXY('touchEnd', touches);
     contentView.background = 'green';
-  },
-  touchCancel: ({touches}) => {
+  })
+  .onTouchCancel(({touches}) => {
     printXY('touchCancel', touches);
     contentView.background = 'red';
-  },
-  longPress: ({touches}) => {
+  })
+  .onLongPress(({touches}) => {
     contentView.background = 'blue';
     printXY('longPress', touches);
-  }
-});
+  });
 
 function printXY(prefix, touches) {
   textView.text = prefix + ': ' + Math.round(touches[0].x) + ' X ' + Math.round(touches[0].y);

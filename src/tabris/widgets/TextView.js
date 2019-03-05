@@ -70,3 +70,7 @@ NativeObject.defineProperties(TextView.prototype, {
     default: null
   }
 });
+
+NativeObject.defineEvents(TextView.prototype, {
+  tapLink: {native: true}
+});

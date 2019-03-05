@@ -9,9 +9,9 @@ const slider = new Slider({
   left: 16, bottom: 0, right: [columnCountTextView, 16], height: 48,
   minimum: 1,
   maximum: 8
-}).on('selectionChanged', ({value: selection}) => {
+}).onSelectionChanged(({value: selection}) => {
   collectionView.columnCount = selection;
-  columnCountTextView.text = selection;
+  columnCountTextView.text = `${selection}`;
 }).appendTo(contentView);
 
 const items = createItems();
@@ -28,7 +28,7 @@ const collectionView = new CollectionView({
   }),
   updateCell: (cell, index) => {
     cell.set({
-      text: items[index],
+      text: `${items[index]}`,
       background: index % 2 === 0 ? '#CFD8DC' : '#ffffff'
     });
   }

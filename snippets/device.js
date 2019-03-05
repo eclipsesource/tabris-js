@@ -12,6 +12,6 @@ import {TextView, device, contentView} from 'tabris';
     }).appendTo(contentView);
   });
 
-device.on('orientationChanged', ({value: orientation}) => {
-  contentView.find('#orientation').set({text: 'orientation: ' + orientation});
+device.onOrientationChanged(({value: orientation}) => {
+  contentView.find('#orientation').first(TextView).set({text: 'orientation: ' + orientation});
 });

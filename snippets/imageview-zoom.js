@@ -1,16 +1,16 @@
-import {ImageView, TextView, CheckBox, Slider, Composite, contentView} from 'tabris';
+import {ImageView, TextView, CheckBox, Slider, Composite, contentView, device} from 'tabris';
 
 const imageView = new ImageView({
   left: 0, right: 0, top: 0, bottom: '#controls',
   image: 'resources/salad.jpg',
   background: '#f5f5f5',
   zoomEnabled: true
-}).on('zoom', ({zoomLevel}) => zoomLevelSlider.selection = zoomLevel * 10)
+}).onZoom(({zoomLevel}) => zoomLevelSlider.selection = zoomLevel * 10)
   .appendTo(contentView);
 
 const controls = new Composite({
   id: 'controls',
-  left: 0, right: 0, bottom: 0, height: tabris.device.platform === 'iOS' ? 204 : undefined,
+  left: 0, right: 0, bottom: 0, height: device.platform === 'iOS' ? 204 : undefined,
   background: 'white',
   padding: {left: 16, right: 16, top: 16, bottom: 24},
   elevation: 8
@@ -21,7 +21,7 @@ new CheckBox({
   left: 0, right: 0, top: 0,
   checked: true,
   text: 'Zoom enabled'
-}).on('checkedChanged', ({target: checkBox, value: zoomEnabled}) => {
+}).onCheckedChanged(({target: checkBox, value: zoomEnabled}) => {
   zoomLevelSlider.selection = 10;
   minZoomSlider.selection = 10;
   maxZoomSlider.selection = 30;
@@ -78,7 +78,7 @@ function createSlider(title, selection) {
     minimum: 5,
     maximum: 50,
     selection
-  }).on('selectionChanged', ({value: level}) => sliderValue.text = (level / 10).toFixed(1))
+  }).onSelectionChanged(({value: level}) => sliderValue.text = (level / 10).toFixed(1))
     .appendTo(container);
 
   const sliderValue = new TextView({

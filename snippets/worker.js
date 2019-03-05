@@ -3,11 +3,11 @@ const {Button, TextInput, TextView, contentView} = require('tabris');
 // Create a worker that receives two numbers, adds them and sends the result back to the main script
 
 console.log('hello worker');
-const number1 = new TextInput({centerX: -65, top: 24, width: '32', alignment: 'center', text: '2'})
+const number1 = new TextInput({centerX: -65, top: 24, width: 32, alignment: 'center', text: '2'})
   .appendTo(contentView);
 new TextView({left: 'prev() 16', baseline: 'prev()', text: '+'})
   .appendTo(contentView);
-const number2 = new TextInput({left: 'prev() 16', baseline: 'prev()', width: '32', alignment: 'center', text: '3'})
+const number2 = new TextInput({left: 'prev() 16', baseline: 'prev()', width: 32, alignment: 'center', text: '3'})
   .appendTo(contentView);
 new TextView({left: 'prev() 16', baseline: 'prev()', text: '='})
   .appendTo(contentView);
@@ -15,7 +15,7 @@ const result = new TextView({left: 'prev() 24', baseline: 'prev()', text: '?'})
   .appendTo(contentView);
 
 new Button({
-  left: 16, right: 16, top: [number1, '16'],
+  left: 16, right: 16, top: [number1, 16],
   text: 'Add numbers in Worker'
 }).on('select', () => {
   const worker = new Worker('resources/worker-script.js');

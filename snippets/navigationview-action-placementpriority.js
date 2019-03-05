@@ -1,4 +1,4 @@
-import {Action, NavigationView, contentView} from 'tabris';
+import {Action, NavigationView, contentView, device} from 'tabris';
 
 const navigationView = new NavigationView({
   left: 0, top: 0, right: 0, bottom: 0

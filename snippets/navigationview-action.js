@@ -1,4 +1,4 @@
-import {Action, NavigationView, contentView} from 'tabris';
+import {Action, NavigationView, contentView, device} from 'tabris';
 
 // Create an action with an image and a selection handler
 

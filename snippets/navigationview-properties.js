@@ -1,4 +1,4 @@
-import {Action, CheckBox, NavigationView, Page, Picker, ScrollView, TextView, contentView, drawer} from 'tabris';
+import {Action, CheckBox, NavigationView, Page, Picker, ScrollView, TextView, contentView, drawer, device} from 'tabris';
 
 // demonstrates various NavigationView properties
 
@@ -41,7 +41,7 @@ const controls = new ScrollView({
 
 createCheckBox('Show toolbar', ({value: checked}) => {
   navigationView.toolbarVisible = checked;
-  toolbarHeightTextView.text = navigationView.toolbarHeight;
+  toolbarHeightTextView.text = `${navigationView.toolbarHeight}`;
 });
 
 createCheckBox('Show drawer action', ({value: checked}) => {
@@ -74,7 +74,7 @@ if (device.platform === 'Android') {
 
 const toolbarHeightTextView = createTextView('Toolbar height', navigationView.toolbarHeight);
 
-navigationView.on({toolbarHeightChanged: ({value}) => toolbarHeightTextView.text = value});
+navigationView.onToolbarHeightChanged(({value}) => toolbarHeightTextView.text = `${value}`);
 
 function createCheckBox(text, listener, checked = true) {
   return new CheckBox({
@@ -95,9 +95,8 @@ function createColorPicker(text, property) {
     left: ['prev()', MARGIN], baseline: 'prev()', right: MARGIN,
     itemCount: COLORS.length,
     itemText: index => COLORS[index] || initialColor
-  }).on({
-    select: ({index}) => navigationView[property] = COLORS[index] || initialColor
-  }).appendTo(controls);
+  }).onSelect(({index}) => navigationView[property] = COLORS[index] || initialColor)
+    .appendTo(controls);
 }
 
 function createTextView(key, value) {

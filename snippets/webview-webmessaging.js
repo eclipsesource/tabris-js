@@ -25,4 +25,4 @@ fetch('./html/website.html')
   .then(result => result.text())
   .then(text => webView.html = text);
 
-webView.on('message', ({data}) => statusTextView.text = 'Message received: ' + data);
+webView.onMessage(({data}) => statusTextView.text = 'Message received: ' + data);

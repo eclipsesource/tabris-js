@@ -1,4 +1,4 @@
-import {contentView, TextView, StackLayout, StackLayout, ScrollView} from 'tabris';
+import {contentView, TextView, StackLayout, ScrollView} from 'tabris';
 
 contentView.append(
   <ScrollView layoutData='fill' layout={new StackLayout({alignment: 'stretchX'})} >

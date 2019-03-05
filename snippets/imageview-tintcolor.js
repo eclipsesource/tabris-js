@@ -11,6 +11,5 @@ new Picker({
   top: [imageView, 16], centerX: 0,
   itemCount: COLORS.length,
   itemText: index => COLORS[index]
-}).on({
-  select: ({index}) => imageView.tintColor = COLORS[index]
-}).appendTo(contentView);
+}).onSelect(({index}) => imageView.tintColor = COLORS[index])
+  .appendTo(contentView);

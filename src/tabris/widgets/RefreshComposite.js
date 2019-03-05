@@ -33,3 +33,7 @@ NativeObject.defineProperties(RefreshComposite.prototype, {
   }
 
 });
+
+NativeObject.defineEvents(RefreshComposite.prototype, {
+  refresh: {native: true}
+});

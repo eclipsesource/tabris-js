@@ -14,7 +14,6 @@ function createTab(title, image) {
     image: {src: image, scale: 2}
   }).appendTo(tabFolder);
   const navigationView = new NavigationView({
-    id: 'navigationView',
     left: 0, top: 0, right: 0, bottom: 0
   }).appendTo(tab);
   createPage(navigationView, title);
@@ -49,9 +48,9 @@ createTab('Cart', 'resources/cart.png');
 createTab('Pay', 'resources/card.png');
 createTab('Statistic', 'resources/chart.png');
 
-app.on('backNavigation', (event) => {
+app.onBackNavigation((event) => {
   // handle the "physical" back button on Android
-  const navigationView = tabFolder.selection.find('#navigationView').first();
+  const navigationView = tabFolder.selection.find(NavigationView).first();
   const page = navigationView.pages().last();
   if (page !== undefined) {
     page.dispose();

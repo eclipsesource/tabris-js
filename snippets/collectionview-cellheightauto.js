@@ -22,15 +22,13 @@ new CollectionView({
   createCell: () => {
     const composite = new Composite();
     new ImageView({
-      id: 'imageView',
       left: MARGIN, top: MARGIN,
       image: {src: 'resources/arrow-forward-black-24dp@3x.png', scale: 3}
     }).appendTo(composite);
     new TextView({
-      id: 'textView',
       left: ['#imageView', MARGIN], top: MARGIN, right: MARGIN
     }).appendTo(composite);
     return composite;
   },
-  updateCell: (cell, index) => cell.find('#textView').set({text: items[index]})
+  updateCell: (cell, index) => cell.find(TextView).set({text: items[index]})
 }).appendTo(contentView);

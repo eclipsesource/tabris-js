@@ -22,9 +22,10 @@ new Composite({
   background: 'green'
 }).appendTo(contentView);
 
-contentView.on('resize', applyLayout);
-applyLayout(contentView.bounds);
+contentView.onResize(applyLayout);
+applyLayout();
 
-function applyLayout({width, height}) {
+function applyLayout() {
+  const {width, height} = contentView.bounds;
   contentView.apply(height > width ? PORTRAIT : LANDSCAPE);
 }

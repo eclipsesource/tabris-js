@@ -6,5 +6,5 @@ new CheckBox({
   left: 10, top: 10,
   checked: true,
   text: 'checked'
-}).on('checkedChanged', event => event.target.text = event.value ? 'checked' : 'unchecked')
+}).onCheckedChanged(event => event.target.text = event.value ? 'checked' : 'unchecked')
   .appendTo(contentView);

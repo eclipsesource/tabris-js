@@ -1,4 +1,4 @@
-import {ImageView, TextInput, WebView, app, contentView} from 'tabris';
+import {ImageView, TextInput, WebView, app, contentView, device} from 'tabris';
 
 const MARGIN = 8;
 const NAV_SIZE = device.platform === 'Android' ? 48 : 30;
@@ -42,7 +42,7 @@ function updateNavigationButton(button, enabled) {
   button.opacity = enabled ? 0.70 : 0.20;
 }
 
-app.on('backNavigation', (event) => {
+app.onBackNavigation((event) => {
   if (webView.canGoBack) {
     webView.goBack();
     event.preventDefault();

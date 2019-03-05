@@ -24,10 +24,10 @@ const slider = new Slider({
   left: 16, right: [spacingView, 16], bottom: 16, top: 16,
   minimum: 2,
   maximum: 50
-}).on('selectionChanged', ({value}) => {
+}).onSelectionChanged(({value}) => {
   const lineSpacing = value / 10;
   textView.lineSpacing = lineSpacing;
-  spacingView.text = lineSpacing;
+  spacingView.text = `${lineSpacing}`;
 }).appendTo(controls);
 
 slider.selection = 15;

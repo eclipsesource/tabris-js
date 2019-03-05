@@ -12,5 +12,5 @@ new Slider({
   minimum: 50,
   selection: 100,
   maximum: 300
-}).on('selectionChanged', ({value: selection}) => imageView.set({left: 20, top: 20, width: selection, height: 250}))
+}).onSelectionChanged(({value: selection}) => imageView.set({left: 20, top: 20, width: selection, height: 250}))
   .appendTo(contentView);

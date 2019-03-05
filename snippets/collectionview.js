@@ -30,10 +30,8 @@ new CollectionView({
   },
   updateCell: (cell, index) => {
     const person = people[index];
-    cell.apply({
-      ImageView: {image: person.image},
-      TextView: {text: person.firstName}
-    });
+    cell.find(ImageView).set({image: person.image});
+    cell.find(TextView).set({text: person.firstName});
   }
-}).on('select', ({index}) => console.log('selected', people[index].firstName))
+}).onSelect(({index}) => console.log('selected', people[index].firstName))
   .appendTo(contentView);

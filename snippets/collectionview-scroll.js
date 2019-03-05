@@ -6,7 +6,7 @@ const ITEM_HEIGHT = 32;
 let scrollPosition = 0;
 const items = createItems();
 
-const floatingSection = createSectionView('section');
+const floatingSection = createSectionView();
 floatingSection.text = 'Section 1';
 
 new CollectionView({
@@ -16,7 +16,7 @@ new CollectionView({
   cellHeight: (index, type) => type === 'section' ? SECTION_HEIGHT : ITEM_HEIGHT,
   createCell: (type) => type === 'section' ? createSectionView() : createItemView(),
   updateCell: (cell, index) => cell.text = items[index].name
-}).on('scroll', ({target, deltaY}) => {
+}).onScroll(({target, deltaY}) => {
   scrollPosition += deltaY;
   const firstVisibleItem = target.firstVisibleIndex;
   floatingSection.set({

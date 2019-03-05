@@ -18,7 +18,7 @@ const tabFolder = new TabFolder({
   left: 0, top: 0, right: 0, bottom: 0,
   paging: true,
   tabBarLocation: 'hidden'
-}).on('scroll', ({selection, offset}) => {
+}).onScroll(({selection, offset}) => {
   const imageViews = imageContainer.children();
   const tabIndex = tabFolder.children().indexOf(selection);
   const tabFolderWidth = tabFolder.bounds.width;

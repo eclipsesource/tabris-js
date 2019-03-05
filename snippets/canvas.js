@@ -4,7 +4,7 @@ import {Canvas, contentView, device} from 'tabris';
 
 new Canvas({
   left: 10, top: 10, right: 10, bottom: 10
-}).on('resize', ({target: canvas, width, height}) => {
+}).onResize(({target: canvas, width, height}) => {
   const scaleFactor = device.scaleFactor;
   const ctx = canvas.getContext('2d', width * scaleFactor, height * scaleFactor);
   ctx.scale(scaleFactor, scaleFactor);

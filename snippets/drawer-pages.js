@@ -27,7 +27,7 @@ const pageSelector = new CollectionView({
   createCell,
   updateCell,
   cellHeight: 48
-}).on('select', ({index}) => {
+}).onSelect(({index}) => {
   drawer.close();
   navigationView.pages().dispose();
   createPage(PAGE_CONFIGS[index]).appendTo(navigationView);
@@ -62,7 +62,7 @@ function updateCell(cell, index) {
 
 function createPage(config) {
   const page = new Page({title: config.title});
-  page.icon = config.icon;
+  page.image = config.icon;
   new Button({
     left: 20, right: 20, top: 20,
     text: 'Create page in drawer'

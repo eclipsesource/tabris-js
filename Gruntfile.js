@@ -40,6 +40,7 @@ module.exports = function(grunt) {
       api: 'doc/api/**/*.json',
       schema: 'tools/api-schema.json',
       propertyTypes: 'typings/propertyTypes.d.ts',
+      reExports: 'typings/reExports.d.ts',
       globalTypings: 'typings/global/*.d.ts',
       target: 'build/doc/'
     },
@@ -59,12 +60,22 @@ module.exports = function(grunt) {
         cwd: 'test/typescript/',
         src: ['**/*.test.ts*', '**/*.fail.ts*', 'package.json', 'tsconfig.json', 'tsconfig.fail.json'],
         dest: 'build/typescript/'
+      },
+      snippets: {
+        expand: true,
+        cwd: 'snippets',
+        src: ['*.js', '*.jsx', '*.ts', '*.tsx', '*.json'],
+        dest: 'build/snippets/'
       }
     },
     exec: {
       verify_typings: {
         cmd: 'npm install && node node_modules/typescript/bin/tsc -p . --noImplicitAny',
         cwd: 'build/typescript'
+      },
+      transpile_snippets: {
+        cmd: 'npm install ../tabris --save && npm install && node node_modules/typescript/bin/tsc -p .',
+        cwd: 'build/snippets'
       },
       test_boot: {
         cmd: 'node node_modules/mocha/bin/mocha --colors --require babel-core/register "test/boot/**/*.test.js"'
@@ -153,9 +164,10 @@ module.exports = function(grunt) {
   grunt.registerTask('generate-tsd', () => {
     const files = grunt.file.expand(grunt.config('doc').api);
     const propertyTypes = grunt.file.read(grunt.config('doc').propertyTypes);
+    const reExports = grunt.file.read(grunt.config('doc').reExports);
     const globalTypeDefFiles = grunt.file.expand(grunt.config('doc').globalTypings);
     try {
-      generateDts({files, propertyTypes, globalTypeDefFiles, version});
+      generateDts({files, localTypeDefFiles: propertyTypes + '\n\n' + reExports, globalTypeDefFiles, version});
     } catch (ex) {
       grunt.fail.warn(ex.stack);
     }
@@ -241,6 +253,8 @@ module.exports = function(grunt) {
     'exec:verify_tabris',
     'copy:test_ts',
     'exec:verify_typings',
+    'copy:snippets',
+    'exec:transpile_snippets',
     'verify_typings_fail'
   ]);
 

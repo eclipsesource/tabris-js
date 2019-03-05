@@ -42,7 +42,7 @@ app.on('pause', () => paused = Date.now())
     }
   });
 
-app.on('backNavigation', (event) => {
+app.onBackNavigation(event => {
   event.preventDefault();
   label.text = 'Back navigation prevented.';
 });

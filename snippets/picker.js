@@ -24,4 +24,4 @@ const picker = new Picker({
   selectionIndex: 1
 }).appendTo(contentView);
 
-picker.on('select', ({index}) => console.log('Selected ' + AIRPORTS[index].id));
+picker.onSelect(({index}) => console.log('Selected ' + AIRPORTS[index].id));

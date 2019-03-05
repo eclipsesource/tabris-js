@@ -1,25 +1,3 @@
-
-/**
- * Represents pixel data of a `Canvas` widget.
- */
-interface ImageData {
-
-  /**
-   * A one-dimensional array containing the data in the RGBA order, with integer values between 0 and 255 (included).
-   */
-  readonly data: Uint8ClampedArray;
-
-  /**
-   * The actual height of the ImageData, in pixels.
-   */
-  readonly width: number;
-
-  /**
-   * The actual height of the ImageData, in pixels.
-   */
-  readonly height: number;
-
-}
 /**
  * A plain object with following properties:
  *
@@ -36,7 +14,7 @@ interface ImageData {
  *    Image scale factor, the image will be scaled down by this factor. The scale will be inferred from the image file name if it follows the pattern "@\<scale\>x", e.g. `"image@2x.jpg"`. The pattern is ignored if `scale`, `width` or `height` are set to a number or if `scale` is set to `"auto"`.
  */
 
-type ImageLikeObject = {src: string, scale?: number|"auto", width?: number|"auto", height?: number|"auto"};
+export type ImageLikeObject = {src: string, scale?: number|"auto", width?: number|"auto", height?: number|"auto"};
 
 /**
  * Images can be specified as strings or Image/ImageLikeObject.
@@ -48,11 +26,11 @@ type ImageLikeObject = {src: string, scale?: number|"auto", width?: number|"auto
  * The scale can be part of the file name in the pattern of "@\<scale\>x", e.g. `"image@2x.jpg"`. The pattern is ignored if `scale`, `width` or `height` are set to a number or if `scale` is set to `"auto"`.
  */
 
-type ImageValue = ImageLikeObject|Image|string|null;
+export type ImageValue = ImageLikeObject|Image|string|null;
 
 
-type ColorArray = [number, number, number, number]|[number, number, number];
-type ColorLikeObject = {red: number, green: number, blue: number, alpha?: number};
+export type ColorArray = [number, number, number, number]|[number, number, number];
+export type ColorLikeObject = {red: number, green: number, blue: number, alpha?: number};
 
 /**
  * Colors can be specified as strings, arrays or Color/Color-like objects.
@@ -80,11 +58,11 @@ type ColorLikeObject = {red: number, green: number, blue: number, alpha?: number
  *
  * Type guards for `ColorValue` are available as **Color.isColorValue** and **Color.isValidColorValue**
  */
-type ColorValue = ColorLikeObject|ColorArray|string|'initial'|null;
+export type ColorValue = ColorLikeObject|ColorArray|string|'initial'|null;
 
-type FontWeight = 'black' | 'bold' | 'medium' | 'thin' | 'light' | 'normal';
-type FontStyle = 'italic' | 'normal';
-type FontLikeObject = {size: number, family?: string[], weight?: FontWeight, style?: FontStyle};
+export type FontWeight = 'black' | 'bold' | 'medium' | 'thin' | 'light' | 'normal';
+export type FontStyle = 'italic' | 'normal';
+export type FontLikeObject = {size: number, family?: string[], weight?: FontWeight, style?: FontStyle};
 /**
  * Fonts can be specified as strings or Font/Font-like objects.
  *
@@ -98,9 +76,9 @@ type FontLikeObject = {size: number, family?: string[], weight?: FontWeight, sty
  *
  * As a string, the shorthand syntax known from CSS is used: **"[font-style] [font-weight] font-size [font-family[, font-family]*]"**. The font family may be omitted, in this case the default system font will be used. The value **"initial"** represents the platform default.
  */
-type FontValue = FontLikeObject|string|'initial'|null;
+export type FontValue = FontLikeObject|string|'initial'|null;
 
-type PercentLikeObject = {percent: number};
+export type PercentLikeObject = {percent: number};
 /**
  *
  * Percents can be specified as strings or Percent/Percent-like objects.
@@ -113,14 +91,14 @@ type PercentLikeObject = {percent: number};
  *
  */
 
-type PercentValue = string|PercentLikeObject;
+export type PercentValue = string|PercentLikeObject;
 
 /**
  * Defines how the widget should be arranged. When setting the layout of a widget using **LayoutData**, all currently set layout attributes not in the new LayoutData object will be implicitly reset to null (i.e. "not specified").
  */
-type LayoutDataValue = LayoutDataLikeObject|'center'|'fill';
+export type LayoutDataValue = LayoutDataLikeObject|'center'|'fill';
 
-interface LayoutDataLikeObject {
+export interface LayoutDataLikeObject {
     left?: 'auto'|ConstraintValue;
     right?: 'auto'|ConstraintValue;
     top?: 'auto'|ConstraintValue;
@@ -132,7 +110,7 @@ interface LayoutDataLikeObject {
     height?: 'auto'|Dimension;
 }
 
-interface LayoutDataProperties {
+export interface LayoutDataProperties {
     left?: 'auto'|Constraint;
     right?: 'auto'|Constraint;
     top?: 'auto'|Constraint;
@@ -144,7 +122,7 @@ interface LayoutDataProperties {
     height?: 'auto'|Dimension;
 }
 
-type LinearGradientLikeObject = {
+export type LinearGradientLikeObject = {
   colorStops: (ColorValue | [ColorValue, PercentValue])[],
   direction?: number | 'left' | 'top' | 'right' | 'bottom'
 }
@@ -166,13 +144,13 @@ type LinearGradientLikeObject = {
  * <linear-gradient> ::= linear-gradient( [ <number>deg | to ( left | top | right | bottom ), ] <color-stop> { , <color-stop> } )
  */
 
-type LinearGradientValue = LinearGradientLikeObject|string|'initial'|null;
+export type LinearGradientValue = LinearGradientLikeObject|string|'initial'|null;
 
 
 /**
  * A Widget's bounds
  */
-interface Bounds {
+export interface Bounds {
 
   /**
    * the horizontal offset from the parent's left edge in dip
@@ -196,7 +174,7 @@ interface Bounds {
 
 }
 
-interface Transformation {
+export interface Transformation {
 
   /**
    * Clock-wise rotation in radians. Defaults to \`0\`.
@@ -230,35 +208,35 @@ interface Transformation {
 
 }
 
-type SelectorString = string;
+export type SelectorString = string;
 
 /**
  * An expression or a predicate function to select a set of widgets.
  */
-type Selector<T extends Widget = Widget> = SelectorString | SelectorFunction<T>;
-type SelectorFunction<T extends Widget> = (widget: T, index: number, collection: WidgetCollection<T>) => boolean;
+export type Selector<T extends Widget = Widget> = SelectorString | SelectorFunction<T>;
+export type SelectorFunction<T extends Widget> = (widget: T, index: number, collection: WidgetCollection<T>) => boolean;
 
 /**
  * A positive float, or 0, representing device independent pixels.
  */
-type Dimension = number;
+export type Dimension = number;
 /**
  * A positive or negative float, or 0, representing device independent pixels.
  */
-type Offset = number;
+export type Offset = number;
 
-type PrevString = 'prev()';
+export type PrevString = 'prev()';
 type NextString = 'next()';
 
-type SiblingReference = Widget | typeof LayoutData.next | typeof LayoutData.prev | SelectorString;
+export type SiblingReference = Widget | typeof LayoutData.next | typeof LayoutData.prev | SelectorString;
 
-type SiblingReferenceValue = Widget | typeof LayoutData.next | typeof LayoutData.prev | SelectorString;
+export type SiblingReferenceValue = Widget | typeof LayoutData.next | typeof LayoutData.prev | SelectorString;
 
-type ConstraintArray = [SiblingReferenceValue | PercentValue, Offset];
+export type ConstraintArray = [SiblingReferenceValue | PercentValue, Offset];
 
-type ConstraintArrayValue = [SiblingReference | PercentValue, Offset];
+export type ConstraintArrayValue = [SiblingReference | PercentValue, Offset];
 
-type ConstraintLikeObject = {
+export type ConstraintLikeObject = {
   reference: SiblingReferenceValue | PercentValue;
   offset?: Offset;
 }|{
@@ -282,14 +260,14 @@ type ConstraintLikeObject = {
  * - **[selector, offset]**
  * - **["prev()", offset]**
  */
-type ConstraintValue = Constraint
+export type ConstraintValue = Constraint
   | ConstraintArrayValue
   | ConstraintLikeObject
   | Offset
   | PercentValue
   | SiblingReferenceValue;
 
-interface AnimationOptions {
+  export interface AnimationOptions {
 
   /**
    * Time until the animation starts in ms, defaults to 0.
@@ -325,7 +303,7 @@ interface AnimationOptions {
 /**
  * Represents dimensions on four edges of a box, as used for padding.
  */
-interface BoxDimensions {
+export interface BoxDimensions {
 
   /**
    * The left part, in dip.
@@ -349,11 +327,11 @@ interface BoxDimensions {
 
 }
 
-interface PropertyChangedEvent<T,U> extends EventObject<T>{
+export interface PropertyChangedEvent<T,U> extends EventObject<T>{
   readonly value: U
 }
 
-declare class ActionSheetItem {
+export class ActionSheetItem {
 
   constructor(props?: Partial<Pick<ActionSheetItem, 'title' | 'image' | 'style'>>);
 

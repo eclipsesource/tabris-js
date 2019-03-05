@@ -26,7 +26,7 @@ type ReadOnlyKeysOf<T> = {
 }[keyof T];
 
 // Tabris.js Helper Types
-type Properties<
+export type Properties<
   T extends {set?: any},
   U = Omit<T, 'set'> // prevent self-reference issues
 > = Partial<Omit<U, MethodKeysOf<U> | ReadOnlyKeysOf<U>>>
@@ -34,7 +34,7 @@ type Properties<
 type ListenersKeysOf<T> = { [K in keyof T]: T[K] extends Listeners ? K : never }[keyof T];
 type UnpackListeners<T> = T extends Listeners<infer U> ? Listener<U> : T;
 type ListenersMap<T> = { [Key in ListenersKeysOf<T>]?: UnpackListeners<T[Key]>};
-type JSXProperties<
+export type JSXProperties<
   T extends {set?: any; jsxProperties?: any},
   U = Omit<T, 'set' | 'jsxProperties'> // prevent self-reference issues
 > = Properties<U> & ListenersMap<U>;
@@ -43,11 +43,11 @@ type Listener<T = {}> = (ev: ExtendedEvent<T>) => any;
 type ListenersTriggerParam<T> = {[P in Diff<keyof T, keyof EventObject<object>>]: T[P]};
 type MinimalEventObject<T extends object> = {target: T};
 type TargetType<E extends object> = E extends MinimalEventObject<infer Target> ? Target : object;
-interface Listeners<EventData extends object = MinimalEventObject<object>> {
+export interface Listeners<EventData extends object = MinimalEventObject<object>> {
   // tslint:disable-next-line:callable-types
   (listener: Listener<ExtendedEvent<EventData>>): TargetType<EventData>;
 }
-type JSXChildren<T extends Widget> = T|WidgetCollection<T>|Array<T|WidgetCollection<T>>|undefined;
+export type JSXChildren<T extends Widget> = T|WidgetCollection<T>|Array<T|WidgetCollection<T>>|undefined;
 type Flatten<T> = T|Array<T>|undefined;
 
 export as namespace tabris;
@@ -56,7 +56,7 @@ export as namespace tabris;
 const EVENT_OBJECT = 'EventObject<T>';
 const eventObjectNames = [EVENT_OBJECT];
 
-type Config = {files: string[], globalTypeDefFiles: string[], version: string, propertyTypes: string};
+type Config = {files: string[], globalTypeDefFiles: string[], localTypeDefFiles: string, version: string};
 
 exports.generateDts = function generateTsd(config: Config) {
   writeGlobalsDts(config);
@@ -76,7 +76,7 @@ function writeGlobalsDts(config: Config) {
 function writeTabrisDts(config: Config) {
   const apiDefinitions = readJsonDefs(config.files);
   const tabrisApiDefinitions = filter(apiDefinitions, def => !def.namespace || def.namespace === 'tabris');
-  const text = new TextBuilder([HEADER.replace(/\${VERSION}/g, config.version), config.propertyTypes]);
+  const text = new TextBuilder([HEADER.replace(/\${VERSION}/g, config.version), config.localTypeDefFiles]);
   renderDts(text, tabrisApiDefinitions);
   fs.writeFileSync('build/tabris/tabris.d.ts', text.toString());
 }
@@ -113,8 +113,11 @@ function renderTypeDefinition(text: TextBuilder, def: ExtendedApi) {
 function renderSingletonVariable(text: TextBuilder, def: ExtendedApi) {
   if (def.object) {
     text.append('');
-    const isGlobal = (def.namespace && def.namespace === 'global');
-    text.append(`declare ${isGlobal ? 'var' : 'let'} ${def.object}: ${def.type};`);
+    if (def.namespace && def.namespace === 'global') {
+      text.append(`declare var ${def.object}: ${def.type};`);
+    } else {
+      text.append(`export const ${def.object}: ${def.type};`);
+    }
   }
 }
 
@@ -169,7 +172,9 @@ function renderEventObjectInterfaces(text: TextBuilder, def: ExtendedApi) {
 
 function renderEventObjectInterface(text: TextBuilder, name: string, def: ExtendedApi) {
   const parameters = def.events[name].parameters || {};
-  text.append(`interface ${getEventTypeName(def, name, parameters)}<Target = ${def.generics ? 'object' : def.type}>`);
+  text.append(
+    `export interface ${getEventTypeName(def, name, parameters)}<Target = ${def.generics ? 'object' : def.type}>`
+  );
   text.append(` extends EventObject<Target>`);
   text.append(`{`);
   text.indent++;
