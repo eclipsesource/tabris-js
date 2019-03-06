@@ -25,7 +25,7 @@ export function createSelectorArray(selector, host) {
   const result = selector.split('>').map(str => str.trim());
   const rootIndex = result.indexOf(':host');
   if (rootIndex !== -1) {
-    result[rootIndex] = host || tabris.ui;
+    result[rootIndex] = host;
   }
   return result;
 }
@@ -61,7 +61,7 @@ function deepSelect(result, iterable, filter) {
   return result;
 }
 
-function getFilter(selector, widgetCollection) {
+export function getFilter(selector, widgetCollection) {
   const matches = {};
   const filter = isFilter(selector) ? selector : createMatcher(selector, widgetCollection);
   return (widget, index) => {

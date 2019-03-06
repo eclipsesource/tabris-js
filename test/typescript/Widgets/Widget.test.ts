@@ -1,4 +1,6 @@
-import { Widget,
+import {
+  Widget,
+  TabFolder,
   ColorValue,
   ConstraintValue,
   Bounds,
@@ -152,6 +154,9 @@ thisReturnValue = widget.insertAfter(otherWidget);
 thisReturnValue = widget.insertBefore(otherWidget);
 bool = widget.isDisposed();
 composite = widget.parent();
+composite = widget.parent('#foo');
+composite = widget.parent(parent => parent.id === 'foo');
+let tf: TabFolder = widget.parent(TabFolder);
 widgetCollection = widget.siblings();
 widgetCollection = widget.siblings(selector);
 fooCollection = widget.siblings(Foo);

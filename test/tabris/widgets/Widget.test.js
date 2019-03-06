@@ -1099,14 +1099,36 @@ describe('Widget', function() {
 
     describe('parent', function() {
 
+      /** @type {TestWidget} */
+      let parent;
+      /** @type {Composite} */
+      let grandParent;
+      /** @type {Composite} */
+      let lastParent;
+
+      beforeEach(function() {
+        parent = new TestWidget();
+        grandParent = new Composite({id: 'foo'});
+        lastParent = new Composite({id: 'foo'});
+        widget.appendTo(parent);
+        parent.appendTo(grandParent);
+        grandParent.appendTo(lastParent);
+      });
+
       it('returns null by default', function() {
-        expect(widget.parent()).to.be.null;
+        expect(new TestWidget().parent()).to.be.null;
       });
 
       it('returns the parent when appended', function() {
-        const parent = new TestWidget();
-        widget.appendTo(parent);
         expect(widget.parent()).to.equal(parent);
+      });
+
+      it('with selector returns first matching parent', function() {
+        expect(widget.parent('#foo')).to.equal(grandParent);
+      });
+
+      it('with selector returns null without matching parent', function() {
+        expect(widget.parent('#bar')).to.equal(null);
       });
 
     });

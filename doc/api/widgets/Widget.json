@@ -14,11 +14,37 @@
     ]
   },
   "methods": {
-    "parent": {
-      "parameters": [],
-      "returns": "Composite",
-      "description": "Returns the parent of this widget or `null` if this widget is not appended to a parent."
-    },
+    "parent": [
+      {
+        "parameters": [],
+        "returns": "Composite",
+        "description": "Returns the parent of this widget or `null` if this widget is not appended to a parent."
+      },
+      {
+        "parameters": [
+          {
+            "name": "selector",
+            "type": "Selector",
+            "description": "A selector expression or a predicate function to filter the results."
+          }
+        ],
+        "returns": "Composite",
+        "description": "Returns the first (nearest) parent of this widget that matches the given selector, or `null` if no parent matches."
+      },
+      {
+        "ts_only": true,
+        "generics": "U extends Composite",
+        "parameters": [
+          {
+            "name": "constructor",
+            "type": "{ new (...args: any[]): U }",
+            "description": "A class to filter the results."
+          }
+        ],
+        "returns": "U",
+        "description": "Returns the first (nearest) parent of this widget that matches the given selector, or `null` if no parent matches."
+      }
+    ],
     "appendTo": {
       "parameters": [
         {

@@ -5,6 +5,7 @@ import {animate} from './Animation';
 import {jsxFactory} from './JsxProcessor';
 import {types} from './property-types';
 import LayoutData from './LayoutData';
+import {getFilter} from './util-widget-select';
 
 /**
  * @abstract
@@ -58,8 +59,16 @@ export default class Widget extends NativeObject {
     return this;
   }
 
-  parent() {
-    return this._parent || null;
+  parent(selector) {
+    if (!selector || !this._parent) {
+      return this._parent || null;
+    }
+    let candidate = this._parent;
+    const filter = getFilter(selector);
+    while (candidate && !filter(candidate)) {
+      candidate = candidate.parent();
+    }
+    return candidate;
   }
 
   siblings(selector) {
