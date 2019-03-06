@@ -461,20 +461,6 @@ describe('CollectionView', function() {
 
     });
 
-    describe('when `select` event is received', function() {
-
-      it('triggers select on the collection view', function() {
-        const listener = spy();
-        view.onSelect(listener);
-
-        view._trigger('select', {index: 0});
-
-        expect(listener).to.have.been.calledOnce;
-        expect(listener).to.have.been.calledWithMatch({target: view, index: 0});
-      });
-
-    });
-
     describe('when `scroll` event is received', function() {
 
       it('triggers `scroll` on collection view', function() {
@@ -582,6 +568,54 @@ describe('CollectionView', function() {
 
         expect(view.updateCell).to.have.been.calledOnce;
         expect(view.updateCell).to.have.been.calledWith(cell, 3);
+      });
+
+    });
+
+    describe('itemIndex', function() {
+
+      let cellA, cellB;
+
+      beforeEach(function() {
+        view.createCell = () => new Composite();
+        const registry = tabris._nativeObjectRegistry;
+        cellA = registry.find(view._trigger('createCell', {type: 0}));
+        cellB = registry.find(view._trigger('createCell', {type: 0}));
+      });
+
+      it('throws for invalid values`', function() {
+        expect(() => view.itemIndex()).to.throw();
+        expect(() => view.itemIndex(null)).to.throw();
+        expect(() => view.itemIndex(true)).to.throw();
+        expect(() => view.itemIndex(new Composite())).to.throw();
+      });
+
+      it('returns -1 for unbound cell', function() {
+        expect(view.itemIndex(cellA)).to.equal(-1);
+        expect(view.itemIndex(cellB)).to.equal(-1);
+      });
+
+      it('returns index for bound cells', function() {
+        view._trigger('updateCell', {widget: cellA.cid, index: 3});
+        view._trigger('updateCell', {widget: cellB.cid, index: 4});
+
+        expect(view.itemIndex(cellA)).to.equal(3);
+        expect(view.itemIndex(cellB)).to.equal(4);
+      });
+
+      it('returns index for cell child', function() {
+        view._trigger('updateCell', {widget: cellA.cid, index: 3});
+        const child = new Composite().appendTo(cellA);
+
+        expect(view.itemIndex(cellA)).to.equal(3);
+        expect(view.itemIndex(child)).to.equal(3);
+      });
+
+      it('always returns latest association', function() {
+        view._trigger('updateCell', {widget: cellA.cid, index: 3});
+        view._trigger('updateCell', {widget: cellA.cid, index: 4});
+
+        expect(view.itemIndex(cellA)).to.equal(4);
       });
 
     });

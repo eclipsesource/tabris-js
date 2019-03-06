@@ -87,6 +87,21 @@ control over the appearance of the TabFolder tabs:
 
 In addition the `TabFolder` gained the property `tabBarElevation` which is applicable on Android.
 
+### CollectionView select event removed
+
+The collectionView no longer provides a select event. Interactions with a cell have to be handled directly by listeners attached to the cell. A new method `itemIndex` may be used to determine the index associated with a cell:
+
+```js
+collectionView.createCell = () => {
+  const cell = new SomeWidget();
+  cell.onTap(() => {
+    const index = cell.parent(CollectionView).itemIndex(cell);
+    // do something with the item...
+  });
+  return cell;
+}
+```
+
 ### Font properties
 
 All font properties are now of the type "FontValue". While these properties still accept the same string values as in 2.x, they will return a "Font" class instance instead of a string. The exception is CanvasContext, where font properties still return a string for W3C compatibility.

@@ -47,7 +47,7 @@ widget.createCell = createCell;
 widget.updateCell = updateCell;
 
 // Methods
-const index: number = 42;
+let index: number = 42;
 const count: number = 42;
 let noReturnValue: void;
 
@@ -58,6 +58,7 @@ noReturnValue = widget.refresh(index);
 noReturnValue = widget.remove(index);
 noReturnValue = widget.remove(index, count);
 noReturnValue = widget.reveal(index);
+index = widget.itemIndex(new Composite());
 
 widget
   .onFirstVisibleIndexChanged((ev: PropertyChangedEvent<CollectionView<Widget>, number>) => {})

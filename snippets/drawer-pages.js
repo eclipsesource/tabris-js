@@ -27,10 +27,6 @@ const pageSelector = new CollectionView({
   createCell,
   updateCell,
   cellHeight: 48
-}).onSelect(({index}) => {
-  drawer.close();
-  navigationView.pages().dispose();
-  createPage(PAGE_CONFIGS[index]).appendTo(navigationView);
 }).appendTo(drawer);
 
 createPage({title: 'Initial Page', icon: 'resources/page.png'}).appendTo(navigationView);
@@ -49,6 +45,11 @@ function createCell() {
     font: select({iOS: '17px .HelveticaNeueInterface-Regular', Android: '14px Roboto Medium'}),
     textColor: '#212121'
   }).appendTo(cell);
+  cell.onTap(() => {
+    drawer.close();
+    navigationView.pages().dispose();
+    createPage(PAGE_CONFIGS[cell.parent(CollectionView).itemIndex(cell)]).appendTo(navigationView);
+  });
   return cell;
 }
 

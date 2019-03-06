@@ -18,13 +18,12 @@ contentView.append(
       itemCount={people.length}
       cellHeight={256}
       createCell={createCell}
-      updateCell={updateCell}
-      onSelect={handleSelection} />
+      updateCell={updateCell}/>
 );
 
 function createCell() {
   return (
-    <Composite>
+    <Composite onTap={handleTap}>
       <ImageView top={16} centerX={0} width={200} height={200} />
       <TextView left={30} top='prev() 16' right={30} alignment='center' />
     </Composite>
@@ -36,6 +35,7 @@ function updateCell(cell, index) {
   cell.find(TextView).set({text: people[index].firstName});
 }
 
-function handleSelection({index}) {
+function handleTap({target}) {
+  const index = target.parent(CollectionView).itemIndex(target);
   AlertDialog.open(people[index].firstName + ' ' + people[index].lastName);
 }

@@ -10,6 +10,7 @@ export default class CollectionView extends Composite {
    */
   constructor(properties) {
     super(properties);
+    this._cellMapping = new Map();
     this._nativeListen('requestInfo', true);
     this._nativeListen('createCell', true);
     this._nativeListen('updateCell', true);
@@ -92,6 +93,23 @@ export default class CollectionView extends Composite {
     }
   }
 
+  itemIndex(widget) {
+    if (!(widget instanceof Widget)) {
+      throw new Error('Not a widget: ' + widget);
+    }
+    let cell = widget;
+    while (cell && cell.parent() !== this) {
+      cell = cell.parent();
+    }
+    if (!cell) {
+      throw new Error('Not a cell or child of a cell');
+    }
+    if (this._cellMapping.has(cell)) {
+      return this._cellMapping.get(cell);
+    }
+    return -1;
+  }
+
   $checkIndex(index) {
     if (!isNumber(index)) {
       throw new Error('Invalid index');
@@ -121,9 +139,9 @@ export default class CollectionView extends Composite {
       const item = this.$createCell(event.type);
       return item.cid;
     } else if (name === 'updateCell') {
-      this.updateCell(tabris._nativeObjectRegistry.find(event.widget), event.index);
-    } else if (name === 'select') {
-      return super._trigger('select', {index: event.index});
+      const cell = tabris._nativeObjectRegistry.find(event.widget);
+      this._cellMapping.set(cell, event.index);
+      this.updateCell(cell, event.index);
     } else {
       return super._trigger(name, event);
     }
@@ -233,7 +251,6 @@ NativeObject.defineProperties(CollectionView.prototype, {
 
 NativeObject.defineEvents(CollectionView.prototype, {
   refresh: {native: true},
-  select: {native: true},
   scroll: {native: true}
 });
 

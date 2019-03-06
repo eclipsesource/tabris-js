@@ -77,15 +77,6 @@
     }
   },
   "events": {
-    "select": {
-      "description": "Fired when a cell is selected.",
-      "parameters": {
-        "index": {
-          "description": "The index of the selected item.",
-          "type": "number"
-        }
-      }
-    },
     "refresh": {
       "description": "Fired when the user requested a refresh. An event listener should reset the *refreshIndicator* property when refresh is finished."
     },
@@ -177,6 +168,17 @@
         }
       ],
       "description": "Scrolls the item with the given index into view."
+    },
+    "itemIndex": {
+      "parameters": [
+        {
+          "type": "Widget",
+          "name": "widget",
+          "description": "A widget instance created by `createCell`, or a child of that widget."
+        }
+      ],
+      "description": "Determines the item index currently associated with the given cell.",
+      "returns": "number"
     }
   },
   "links": [
