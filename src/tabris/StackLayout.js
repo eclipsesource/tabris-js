@@ -52,10 +52,15 @@ export default class StackLayout extends Layout {
    */
   _getRawLayoutData(layoutData, targetWidget, index) {
     const targetLayoutData = Object.assign({}, index === 0 ? this._firstLayoutData : this._defaultLayoutData);
+    if (layoutData.left !== 'auto' || layoutData.right !== 'auto' || layoutData.centerX !== 'auto') {
+      targetLayoutData.left = layoutData.left;
+      targetLayoutData.right = layoutData.right;
+      targetLayoutData.centerX = layoutData.centerX;
+    }
     if (layoutData.width !== 'auto') {
       targetLayoutData.width = layoutData.width;
       if (this._alignment === Align.stretchX) {
-        delete targetLayoutData.right;
+        targetLayoutData.right = 'auto';
       }
     }
     if (layoutData.height !== 'auto') {
