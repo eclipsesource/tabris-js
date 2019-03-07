@@ -45,8 +45,22 @@ export default class StackLayout extends Layout {
     return child.layoutData;
   }
 
+  /**
+   * @param {LayoutData} layoutData
+   * @param {import('./Widget').default} targetWidget
+   * @param {number} index
+   */
   _getRawLayoutData(layoutData, targetWidget, index) {
-    const targetLayoutData = index === 0 ? this._firstLayoutData : this._defaultLayoutData;
+    const targetLayoutData = Object.assign({}, index === 0 ? this._firstLayoutData : this._defaultLayoutData);
+    if (layoutData.width !== 'auto') {
+      targetLayoutData.width = layoutData.width;
+      if (this._alignment === Align.stretchX) {
+        delete targetLayoutData.right;
+      }
+    }
+    if (layoutData.height !== 'auto') {
+      targetLayoutData.height = layoutData.height;
+    }
     return super._resolveAttributes(targetLayoutData, targetWidget);
   }
 

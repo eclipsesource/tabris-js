@@ -9,7 +9,14 @@ import {toXML} from '../../src/tabris/Console';
 
 describe('StackLayout', function() {
 
-  let parent, client, queue;
+  /** @type {Composite} */
+  let parent;
+
+  /** @type {ClientStub} */
+  let client;
+
+  /** @type {LayoutQueue} */
+  let queue;
 
   beforeEach(function() {
     client = new ClientStub();
@@ -48,22 +55,33 @@ describe('StackLayout', function() {
 
   describe('instance', function() {
 
+    /** @type {TextView[]} */
+    let children;
+
+    /** @type {string[]} */
+    let cid;
+
     function render(stackProps) {
       parent = new Composite({layout: new StackLayout(stackProps, queue)});
-      for (let i = 0; i < 6; i++) {
-        parent.append(new TextView());
-      }
+      parent.append(children);
       client.resetCalls();
       parent.layout.render(parent);
       tabris.trigger('flush');
       return parent.children().toArray().map(child => client.properties(child.cid).layoutData);
     }
 
+    beforeEach(function() {
+      children = [];
+      for (let i = 0; i < 6; i++) {
+        children.push(new TextView());
+      }
+      cid = children.map(child => child.cid);
+    });
+
     describe('with alignment left', function() {
 
       it('renders children layoutData', function() {
         const all = render({alignment: 'left'});
-        const cid = parent.children().toArray().map(child => child.cid);
 
         expect(all[0]).to.deep.equal({top: 0, left: 0});
         expect(all[1]).to.deep.equal({top: [cid[0], 0], left: 0});
@@ -75,7 +93,6 @@ describe('StackLayout', function() {
 
       it('renders children layoutData with spacing', function() {
         const all = render({spacing: 16, alignment: 'left'});
-        const cid = parent.children().toArray().map(child => child.cid);
 
         expect(all[0]).to.deep.equal({top: 0, left: 0});
         expect(all[1]).to.deep.equal({top: [cid[0], 16], left: 0});
@@ -83,6 +100,19 @@ describe('StackLayout', function() {
         expect(all[3]).to.deep.equal({top: [cid[2], 16], left: 0});
         expect(all[4]).to.deep.equal({top: [cid[3], 16], left: 0});
         expect(all[5]).to.deep.equal({top: [cid[4], 16], left: 0});
+      });
+
+      it('renders children layoutData with dimension', function() {
+        children[0].width = 100;
+        children[1].height = 200;
+        children[2].set({width: 300, height: 400});
+
+        const all = render({spacing: 16, alignment: 'left'});
+
+        expect(all[0]).to.deep.equal({top: 0, left: 0, width: 100});
+        expect(all[1]).to.deep.equal({top: [cid[0], 16], left: 0, height: 200});
+        expect(all[2]).to.deep.equal({top: [cid[1], 16], left: 0, width: 300, height: 400});
+        expect(all[3]).to.deep.equal({top: [cid[2], 16], left: 0});
       });
 
     });
@@ -99,6 +129,19 @@ describe('StackLayout', function() {
         expect(all[3]).to.deep.equal({top: [cid[2], 16], centerX: 0});
         expect(all[4]).to.deep.equal({top: [cid[3], 16], centerX: 0});
         expect(all[5]).to.deep.equal({top: [cid[4], 16], centerX: 0});
+      });
+
+      it('renders children layoutData with dimension', function() {
+        children[0].width = 100;
+        children[1].height = 200;
+        children[2].set({width: 300, height: 400});
+
+        const all = render({spacing: 16, alignment: 'centerX'});
+
+        expect(all[0]).to.deep.equal({top: 0, centerX: 0, width: 100});
+        expect(all[1]).to.deep.equal({top: [cid[0], 16], centerX: 0, height: 200});
+        expect(all[2]).to.deep.equal({top: [cid[1], 16], centerX: 0, width: 300, height: 400});
+        expect(all[3]).to.deep.equal({top: [cid[2], 16], centerX: 0});
       });
 
     });
@@ -129,6 +172,19 @@ describe('StackLayout', function() {
         expect(all[5]).to.deep.equal({top: [cid[4], 16], left: 0, right: 0});
       });
 
+      it('renders children layoutData with dimension', function() {
+        children[0].width = 100;
+        children[1].height = 200;
+        children[2].set({width: 300, height: 400});
+
+        const all = render({spacing: 16, alignment: 'stretchX'});
+
+        expect(all[0]).to.deep.equal({top: 0, left: 0, width: 100});
+        expect(all[1]).to.deep.equal({top: [cid[0], 16], left: 0, right: 0, height: 200});
+        expect(all[2]).to.deep.equal({top: [cid[1], 16], left: 0, width: 300, height: 400});
+        expect(all[3]).to.deep.equal({top: [cid[2], 16], left: 0, right:0});
+      });
+
     });
 
     describe('with alignment right', function() {
@@ -155,6 +211,19 @@ describe('StackLayout', function() {
         expect(all[3]).to.deep.equal({top: [cid[2], 16], right: 0});
         expect(all[4]).to.deep.equal({top: [cid[3], 16], right: 0});
         expect(all[5]).to.deep.equal({top: [cid[4], 16], right: 0});
+      });
+
+      it('renders children layoutData with dimension', function() {
+        children[0].width = 100;
+        children[1].height = 200;
+        children[2].set({width: 300, height: 400});
+
+        const all = render({spacing: 16, alignment: 'right'});
+
+        expect(all[0]).to.deep.equal({top: 0, right: 0, width: 100});
+        expect(all[1]).to.deep.equal({top: [cid[0], 16], right: 0, height: 200});
+        expect(all[2]).to.deep.equal({top: [cid[1], 16], right: 0, width: 300, height: 400});
+        expect(all[3]).to.deep.equal({top: [cid[2], 16], right: 0});
       });
 
     });
