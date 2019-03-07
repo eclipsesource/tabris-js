@@ -43,7 +43,7 @@ export default class Composite extends Widget {
   }
 
   _nativeCreate(properties) {
-    super._nativeCreate(omit(properties || {}, ['layout', 'padding']));
+    super._nativeCreate(omit(properties || {}, ['layout']));
     this._initLayout(properties);
   }
 
@@ -52,17 +52,9 @@ export default class Composite extends Widget {
    */
   _initLayout(props = {}) {
     if (!('layout' in props)) {
-      if ('padding' in props) {
-        this._layout = new ConstraintLayout({padding: props.padding});
-      } else {
-        this._layout = ConstraintLayout.default;
-      }
+      this._layout = ConstraintLayout.default;
     } else if (props.layout) {
-      if ('padding' in props) {
-        this._layout = new ConstraintLayout({padding: props.padding});
-      } else {
-        this._layout = props.layout;
-      }
+      this._layout = props.layout;
     } else {
       this._layout = null;
     }
@@ -178,13 +170,6 @@ export default class Composite extends Widget {
 }
 
 NativeObject.defineProperties(Composite.prototype, {
-  padding: {
-    type: 'boxDimensions',
-    readonly: true,
-    get() {
-      return this._layout ? this._layout.padding : null;
-    }
-  },
   layout: {
     readonly: true,
     get() {

@@ -53,39 +53,6 @@ describe('Layout', function() {
 
   afterEach(restore);
 
-  describe('padding', function() {
-
-    it('defaults to 0', function() {
-      expect(layout.padding).to.deep.equal({left: 0, top: 0, right: 0, bottom: 0});
-    });
-
-    it('is read-only', function() {
-      layout.padding = {left: 1, top: 2, right: 3, bottom: 4};
-      expect(layout.padding).to.deep.equal({left: 0, top: 0, right: 0, bottom: 0});
-    });
-
-    it('returns safe copy', function() {
-      layout.padding.left = 1;
-      expect(layout.padding).to.deep.equal({left: 0, top: 0, right: 0, bottom: 0});
-    });
-
-    it('can be set by constructor', function() {
-      layout = new ConstraintLayout({padding: {left: 1, top: 2, right: 3, bottom: 4}});
-      expect(layout.padding).to.deep.equal({left: 1, top: 2, right: 3, bottom: 4});
-    });
-
-    it('can be set by constructor shorthand', function() {
-      layout = new ConstraintLayout({padding: 12});
-      expect(layout.padding).to.deep.equal({left: 12, top: 12, right: 12, bottom: 12});
-    });
-
-    it('can be set by constructor partially', function() {
-      layout = new ConstraintLayout({padding: {left: 12, top: 13}});
-      expect(layout.padding).to.deep.equal({left: 12, top: 13, right: 0, bottom: 0});
-    });
-
-  });
-
   describe('render', function() {
 
     it('SETs layoutData on children', function() {
@@ -127,20 +94,6 @@ describe('Layout', function() {
     it('throws if layout is not set', function() {
       parent = new TestWidget();
       expect(() => layout.add(parent)).to.throw();
-    });
-
-    it('does not SET padding if 0', function() {
-      expect(client.properties(parent.cid).padding).to.be.undefined;
-    });
-
-    it('SETs padding', function() {
-      layout = new TestLayout({padding: {left: 1, right: 2, top: 3, bottom: 4}}, queue);
-      parent = new TestWidget({layout});
-      widget = new TestWidget().appendTo(parent);
-      layout.add(parent);
-      expect(client.properties(parent.cid).padding).to.deep.equal(
-        {left: 1, right: 2, top: 3, bottom: 4}
-      );
     });
 
     it('triggers render after flush', function() {

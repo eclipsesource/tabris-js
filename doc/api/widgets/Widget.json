@@ -213,6 +213,11 @@
       "description": "The vertical position of the widget's baseline relative to a sibling widget.",
       "default": "'auto'"
     },
+    "padding": {
+      "type": "BoxDimensions|number|null",
+      "const": true,
+      "description": "Additional space to add inside the widgets bounds."
+    },
     "elevation": {
       "type": "number",
       "description": "The position of the widget on the z-axis. Setting an `elevation` casts a shadow in the shape of the widget.\n\nTo have the shadow properly applied on Android it is required to set the `background` on the widget as well."

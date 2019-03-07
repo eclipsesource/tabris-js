@@ -23,7 +23,6 @@ describe('StackLayout', function() {
 
     it('has defaults', function() {
       expect(StackLayout.default.spacing).to.equal(0);
-      expect(StackLayout.default.padding).to.deep.equal({left: 0, top: 0, right: 0, bottom: 0});
       expect(StackLayout.default.alignment).to.equal('left');
     });
 
@@ -35,15 +34,13 @@ describe('StackLayout', function() {
       const layout = new StackLayout();
 
       expect(layout.spacing).to.equal(0);
-      expect(layout.padding).to.deep.equal({left: 0, top: 0, right: 0, bottom: 0});
       expect(layout.alignment).to.equal('left');
     });
 
     it('override defaults', function() {
-      const layout = new StackLayout({padding: 1, spacing: 2, alignment: 'right'});
+      const layout = new StackLayout({spacing: 2, alignment: 'right'});
 
       expect(layout.spacing).to.equal(2);
-      expect(layout.padding).to.deep.equal({left: 1, top: 1, right: 1, bottom: 1});
       expect(layout.alignment).to.equal('right');
     });
 
@@ -64,8 +61,8 @@ describe('StackLayout', function() {
 
     describe('with alignment left', function() {
 
-      it('renders children layoutData without padding', function() {
-        const all = render({padding: {left: 17, top: 18, right: 19, bottom: 20}, alignment: 'left'});
+      it('renders children layoutData', function() {
+        const all = render({alignment: 'left'});
         const cid = parent.children().toArray().map(child => child.cid);
 
         expect(all[0]).to.deep.equal({top: 0, left: 0});
@@ -108,8 +105,8 @@ describe('StackLayout', function() {
 
     describe('with alignment stretchX', function() {
 
-      it('renders children layoutData without padding', function() {
-        const all = render({padding: {left: 17, top: 18, right: 19, bottom: 20}, alignment: 'stretchX'});
+      it('renders children layoutData', function() {
+        const all = render({alignment: 'stretchX'});
         const cid = parent.children().toArray().map(child => child.cid);
 
         expect(all[0]).to.deep.equal({top: 0, left: 0, right: 0});
@@ -136,8 +133,8 @@ describe('StackLayout', function() {
 
     describe('with alignment right', function() {
 
-      it('renders children layoutData with padding', function() {
-        const all = render({padding: {left: 17, top: 18, right: 19, bottom: 20}, alignment: 'right'});
+      it('renders children layoutData', function() {
+        const all = render({alignment: 'right'});
         const cid = parent.children().toArray().map(child => child.cid);
 
         expect(all[0]).to.deep.equal({top: 0, right: 0});
@@ -192,27 +189,23 @@ describe('StackLayout', function() {
     it('can be created by spacing parameter', function() {
       const layout = new StackComposite({spacing: 2}).layout;
       expect(layout.spacing).to.equal(2);
-      expect(layout.padding).to.deep.equal({left: 0, top: 0, right: 0, bottom: 0});
       expect(layout.alignment).to.equal('left');
     });
 
     it('can be created by alignment parameter', function() {
       const layout = new StackComposite({alignment: 'right'}).layout;
       expect(layout.spacing).to.equal(0);
-      expect(layout.padding).to.deep.equal({left: 0, top: 0, right: 0, bottom: 0});
       expect(layout.alignment).to.equal('right');
     });
 
     it('can be merged with spacing parameter', function() {
-      const layout = new StackComposite({layout: new StackLayout({padding: 3}), spacing: 4}).layout;
+      const layout = new StackComposite({layout: new StackLayout(), spacing: 4}).layout;
       expect(layout.spacing).to.equal(4);
-      expect(layout.padding).to.deep.equal({left: 3, top: 3, right: 3, bottom: 3});
     });
 
     it('can be merged with alignment parameter', function() {
-      const layout = new StackComposite({layout: new StackLayout({padding: 3}), alignment: 'right'}).layout;
+      const layout = new StackComposite({layout: new StackLayout(), alignment: 'right'}).layout;
       expect(layout.spacing).to.equal(0);
-      expect(layout.padding).to.deep.equal({left: 3, top: 3, right: 3, bottom: 3});
       expect(layout.alignment).to.deep.equal('right');
     });
 

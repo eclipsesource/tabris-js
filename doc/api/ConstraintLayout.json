@@ -6,8 +6,7 @@
     "parameters": [
       {
         "name": "parameterObject",
-        "description": "Sets the padding property. If set to a number, this value will be used for all four edge values. Defaults to 0.",
-        "type": "{padding?: BoxDimensions|number}",
+        "type": "{}",
         "optional": true
       }
     ]

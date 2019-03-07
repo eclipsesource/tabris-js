@@ -23,7 +23,8 @@ import {
   ImageValue,
   SiblingReferenceValue,
   LayoutDataValue,
-  LinearGradientValue
+  LinearGradientValue,
+  BoxDimensions
  } from 'tabris';
 
 const widget: Widget = new Composite();
@@ -36,6 +37,7 @@ let backgroundGradient: LinearGradientValue = 'linergradient';
 let baseline: SiblingReferenceValue|'auto';
 let bottomMargin: ConstraintValue|'auto';
 let bounds: Bounds;
+let boxDim: BoxDimensions|number|null;
 let centerX: Offset|'auto';
 let centerY: Offset|'auto';
 let _class: string;
@@ -64,6 +66,7 @@ backgroundGradient = widget.background as LinearGradientValue;
 baseline = widget.baseline;
 bottomMargin = widget.bottom;
 bounds = widget.bounds;
+boxDim = widget.padding;
 centerX = widget.centerX;
 centerY = widget.centerY;
 _class = widget.class;
@@ -89,6 +92,7 @@ widget.background = backgroundColor;
 widget.background = backgroundGradient;
 widget.baseline = baseline;
 widget.bottom = bottomMargin;
+widget.padding = boxDim;
 widget.centerX = centerX;
 widget.centerY = centerY;
 widget.class = _class;
@@ -156,7 +160,7 @@ bool = widget.isDisposed();
 composite = widget.parent();
 composite = widget.parent('#foo');
 composite = widget.parent(parent => parent.id === 'foo');
-let tf: TabFolder = widget.parent(TabFolder);
+const tf: TabFolder = widget.parent(TabFolder);
 widgetCollection = widget.siblings();
 widgetCollection = widget.siblings(selector);
 fooCollection = widget.siblings(Foo);

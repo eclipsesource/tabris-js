@@ -153,10 +153,6 @@ The shorthand properties to `layoutData` now also return the normalized types us
 
 In 2.x, negative edge offsets were previously supported on some platforms. To prevent inconsistent layouts among platforms, they are not supported anymore.
 
-### padding
-
-Tge `padding` property on `Composite` is now read-only, it can only be set via constructor. Also, it can now be `null` in case the `layout` property is null. That is the case on `NavigationView` and `TabFolder` by default.
-
 ### Event handling
 
 The methods `on` and `once` no longer have widget-specific parameters, meaning they are not type-safe anymore. Strictly speaking this is not a breaking change, but it is strongly recommended to switch to the new (type safe) `Listeners` API as soon as possible. Some examples:

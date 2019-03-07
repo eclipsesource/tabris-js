@@ -283,23 +283,29 @@ NativeObject.defineProperties(Widget.prototype, {
 
 const layoutDataProps = ['left', 'right', 'top', 'bottom', 'width', 'height', 'centerX', 'centerY', 'baseline'];
 
-NativeObject.defineProperty(Widget.prototype, 'layoutData', {
-  set(name, value) {
-    const oldLayoutData = this._layoutData;
-    this._layoutData = value ? LayoutData.from(value) : new LayoutData({});
-    this._triggerChangeEvent(name, this._layoutData);
-    layoutDataProps.forEach(prop => {
-      const oldValue = oldLayoutData ? oldLayoutData[prop] : 'auto';
-      if (oldValue !== this._layoutData[prop]) {
-        this._triggerChangeEvent(prop, this._layoutData[prop]);
+NativeObject.defineProperties(Widget.prototype, {
+  layoutData: {
+    set(name, value) {
+      const oldLayoutData = this._layoutData;
+      this._layoutData = value ? LayoutData.from(value) : new LayoutData({});
+      this._triggerChangeEvent(name, this._layoutData);
+      layoutDataProps.forEach(prop => {
+        const oldValue = oldLayoutData ? oldLayoutData[prop] : 'auto';
+        if (oldValue !== this._layoutData[prop]) {
+          this._triggerChangeEvent(prop, this._layoutData[prop]);
+        }
+      });
+    },
+    get() {
+      if (!this._layoutData) {
+        this._layoutData = new LayoutData({});
       }
-    });
-  },
-  get() {
-    if (!this._layoutData) {
-      this._layoutData = new LayoutData({});
+      return this._layoutData;
     }
-    return this._layoutData;
+  },
+  padding: {
+    type: 'boxDimensions',
+    default: {left: 0, right: 0, top: 0, bottom: 0}
   }
 });
 

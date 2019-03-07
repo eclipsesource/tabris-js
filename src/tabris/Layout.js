@@ -8,6 +8,7 @@ const layoutDataProps = ['left', 'right', 'top', 'bottom', 'width', 'height', 'c
 
 export default class Layout {
 
+  // eslint-disable-next-line no-unused-vars
   constructor(properties = {}, queue) {
     if (this.constructor === Layout) {
       throw new Error('Can not create instance of abstract class "Layout"');
@@ -16,7 +17,6 @@ export default class Layout {
     if (!(this._layoutQueue instanceof LayoutQueue)) {
       throw new Error('Not a LayoutQueue: ' + this._layoutQueue);
     }
-    this._padding = types.boxDimensions.encode('padding' in properties ? properties.padding : 0);
     this._handleAddChildEvent = this._handleAddChildEvent.bind(this);
     this._handleRemoveChildEvent = this._handleRemoveChildEvent.bind(this);
     this._handleChildLayoutDataChangedEvent = this._handleChildLayoutDataChangedEvent.bind(this);
@@ -24,11 +24,6 @@ export default class Layout {
     this._addChild = this._addChild.bind(this);
     this._removeChild = this._removeChild.bind(this);
   }
-
-  get padding() {
-    return Object.assign({}, this._padding);
-  }
-
   add(composite) {
     if (!composite || composite.layout !== this) {
       throw new Error(`Invalid layout target ${composite}. Do not call layout.add directly.`);
@@ -39,9 +34,6 @@ export default class Layout {
     });
     if (composite.$children) {
       composite.$children.forEach(this._addChild);
-    }
-    if ((this._padding.left + this._padding.top + this._padding.right + this._padding.bottom) !== 0) {
-      composite._nativeSet('padding', this._padding);
     }
     this._layoutQueue.add(composite);
   }
@@ -94,7 +86,12 @@ export default class Layout {
     child._nativeSet('layoutData', rawLayoutData);
   }
 
-  _getLayoutData(child) {
+  /**
+   * @param {import('./Widget').default} child
+   * @param {number} index
+   */
+  // eslint-disable-next-line no-unused-vars
+  _getLayoutData(child, index) {
     let result = child.layoutData;
     if (result.centerX !== 'auto') {
       if (result.left !== 'auto' || result.right !== 'auto') {
@@ -130,10 +127,20 @@ export default class Layout {
     return result;
   }
 
-  _getRawLayoutData(layoutData, targetWidget) {
+  /**
+   * @param {LayoutData} layoutData
+   * @param {import('./Widget').default} targetWidget
+   * @param {number} index
+   */
+  // eslint-disable-next-line no-unused-vars
+  _getRawLayoutData(layoutData, targetWidget, index) {
     return this._resolveAttributes(layoutData, targetWidget);
   }
 
+  /**
+   * @param {LayoutData} layoutData
+   * @param {import('./Widget').default} targetWidget
+   */
   _resolveAttributes(layoutData, targetWidget) {
     const result = {};
     for (let i = 0; i < layoutDataProps.length; i++) {

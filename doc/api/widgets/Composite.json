@@ -26,11 +26,6 @@
       "const": true,
       "default": "Layout",
       "description": "The layout manager responsible for interpreting the [`layoutData`](./Widget.md#layoutData) of the child widgets of this Composite."
-    },
-    "padding": {
-      "type": "BoxDimensions|number|null",
-      "const": true,
-      "description": "Additional space to add inside the widgets bounds. A shortcut to setting/getting the `padding` property of `layout`."
     }
   },
   "methods": {

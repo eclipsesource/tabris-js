@@ -34,7 +34,7 @@ const buttonRight = button.bounds.left + button.bounds.width;
 * JavaScript Type: `Object`
 * TypeScript Type: `tabris.BoxDimensions`
 * JSX support: *No*
-* Used by: [`composite.padding`](./api/Composite.md#padding)
+* Used by: [`widget.padding`](./api/Widget.md#padding)
 
 Property | Type                      | Optional | Description
 ---------|---------------------------|----------|--------------------------------------------------

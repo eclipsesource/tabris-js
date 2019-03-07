@@ -1596,10 +1596,9 @@ describe('Widget', function() {
       expect(testLayout.add).to.have.been.calledWith(parent);
     });
 
-    it('constructor parameter padding has priority', function() {
-      parent = new TestWidget({layout: new ConstraintLayout({padding: 12}), padding: 2});
+    it('constructor accepts padding', function() {
+      parent = new TestWidget({padding: 2});
       expect(parent.padding).to.deep.equal({left: 2, top: 2, right: 2, bottom: 2});
-      expect(parent.layout.padding).to.deep.equal({left: 2, top: 2, right: 2, bottom: 2});
     });
 
   });

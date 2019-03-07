@@ -19,7 +19,7 @@ export default class StackLayout extends Layout {
   }
 
   constructor(properties = {}, queue) {
-    super({padding: 'padding' in properties ? properties.padding : 0}, queue);
+    super({}, queue);
     this._spacing = 'spacing' in properties ? types.number.encode(properties.spacing) : 0;
     this._alignment = Align[properties.alignment] || Align.left;
     const align = this._alignment;

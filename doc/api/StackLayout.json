@@ -6,8 +6,8 @@
     "parameters": [
       {
         "name": "parameterObject",
-        "description": "Sets the padding and spacing properties. If padding is set to a number, that value will be used for all four edge values.",
-        "type": "{padding?: BoxDimensions|number, spacing?: number, alignment?: 'left'|'centerX'|'stretchX'|'right'}",
+        "description": "Sets the alignment and spacing properties.",
+        "type": "{spacing?: number, alignment?: 'left'|'centerX'|'stretchX'|'right'}",
         "optional": true
       }
     ]

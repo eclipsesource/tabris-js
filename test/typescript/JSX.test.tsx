@@ -12,7 +12,7 @@ const checkBox: tabris.CheckBox = <tabris.CheckBox checked={true}>foo</tabris.Ch
 const collectionView: tabris.CollectionView<tabris.Widget> = <tabris.CollectionView refreshEnabled={true} cellHeight={x => 23} />;
 const stackComposite: tabris.StackComposite = <tabris.StackComposite padding={10} layoutData={{width: 100}}/>;
 const composite: tabris.Composite = <tabris.Composite padding={10} layoutData={{width: 100}}/>;
-const imageView: tabris.ImageView = <tabris.ImageView image='./foo.jpg'/>;
+const imageView: tabris.ImageView = <tabris.ImageView padding={10} image='./foo.jpg'/>;
 const navigationView: tabris.NavigationView = <tabris.NavigationView actionColor='red'/>;
 const page: tabris.Page = <tabris.Page autoDispose={false}/>;
 const picker: tabris.Picker = <tabris.Picker selectionIndex={3} itemText={x => 'foo'} />;

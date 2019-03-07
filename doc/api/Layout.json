@@ -5,21 +5,11 @@
     "parameters": [
       {
         "name": "parameterObject",
-        "description": "Sets the padding property. If set to a number, this value will be used for all four edge values.",
-        "type": "{padding?: BoxDimensions|number}"
+        "type": "{}"
       }
     ]
   },
   "description": "Base class for all layout managers.",
-  "properties": {
-    "padding": {
-      "type": "BoxDimensions",
-      "const": true,
-      "default": "{left: 0, top: 0, right: 0, bottom: 0}",
-      "description": "Additional space between the parents edges and its children.",
-      "readonly": true
-    }
-  },
   "methods": {
     "add": {
       "ts_only": true,
