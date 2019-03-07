@@ -60,30 +60,30 @@ let promiseStr: Promise<string> = voidListeners.promise();
 let promiseEv: Promise<MyFooEvent> = voidListeners.promise();
 
 /*Expected
-(25,58): error TS2345
+(25,
 
-(34,1): error TS2322
-(35,1): error TS2322
-(36,1): error TS2322
-(37,1): error TS2322
-(38,1): error TS2322
-(39,1): error TS2322
-(40,1): error TS2322
-(41,1): error TS2322
+(34,
+(35,
+(36,
+(37,
+(38,
+(39,
+(40,
+(41,
 
-(44,15): error TS2345
-(45,20): error TS2345
-(46,27): error TS2345
-(47,30): error TS2345
-(48,18): error TS2345
-(49,23): error TS2345
-(50,30): error TS2345
-(51,33): error TS2345
+(44,
+(45,
+(46,
+(47,
+(48,
+(49,
+(50,
+(51,
 
-(54,26): error TS2345
-(55,39): error TS2345
-(56,26): error TS2345
+(54,
+(55,
+(56,
 
-(59,5): error TS2322
-(60,5): error TS2322
+(59,
+(60,
 */

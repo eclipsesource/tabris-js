@@ -59,17 +59,16 @@ Constraint.from(constraintValue, 2);
 
 /*Expected
 (22,
-not assignable to type 'SiblingReference'
-(23,
 not assignable to type
+(23,
 (24,
 not assignable to type
 (25,
-not assignable to type 'ConstraintLikeObject'
+not assignable to type
 (26,
-not assignable to type 'ConstraintLikeObject'
+not assignable to type
 (27,
-not assignable to type 'ConstraintLikeObject'
+not assignable to type
 (30,
 Expected 2 arguments
 (31,
@@ -87,11 +86,9 @@ not assignable to parameter of type 'number'
 (39,
 not assignable to parameter of type
 (42,
-Type 'number' cannot be converted to type '"auto"'
 (43,
 Cannot find name 'PercentLikeObject'
 (44,
-cannot be converted to type
 (49,
 not assignable to type 'ConstraintValue'
 (50,

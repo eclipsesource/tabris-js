@@ -2,7 +2,7 @@ import {
   Button, CollectionView, Composite, ImageView, NavigationView, Page, TextView, contentView, drawer
 } from 'tabris';
 
-const PAGE_CONFIGS = [
+const PAGE_CONFIGS: Array<{title: string, icon: string}> = [
   {title: 'Basket', icon: 'resources/page.png'},
   {title: 'Checkout', icon: 'resources/page.png'}
 ];
@@ -53,15 +53,13 @@ function createCell() {
   return cell;
 }
 
-function updateCell(cell, index) {
+function updateCell(cell: Composite, index: number) {
   const page = PAGE_CONFIGS[index];
-  cell.apply({
-    ImageView: {image: {src: page.icon, scale: 3}},
-    TextView: {text: page.title}
-  });
+  cell.find(ImageView).set({image: {src: page.icon, scale: 3}});
+  cell.find(TextView).set({text: page.title});
 }
 
-function createPage(config) {
+function createPage(config: {title: string, icon: string}) {
   const page = new Page({title: config.title});
   page.image = config.icon;
   new Button({
@@ -74,6 +72,6 @@ function createPage(config) {
   return page;
 }
 
-function select(options) {
+function select<T>(options: {Android?: T, iOS?: T}): T {
   return options[device.platform];
 }

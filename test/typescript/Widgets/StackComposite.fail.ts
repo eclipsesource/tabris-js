@@ -6,5 +6,4 @@ widget.spacing = 23;
 
 /*Expected
 (3,
-not assignable
 */

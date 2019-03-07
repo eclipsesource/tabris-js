@@ -115,7 +115,6 @@ const noIntrinsicElements: any = <textInput />;
 (39,
 'string' is not assignable to type 'number'
 (51,
-Types of property 'onFooChanged' are incompatible.
 (56,
 'jsxProperties' in type 'MyCustomWidgetWithWrongJsx' is not assignable
 (60,

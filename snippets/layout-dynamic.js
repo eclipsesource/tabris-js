@@ -1,15 +1,13 @@
 import {Composite, contentView} from 'tabris';
 
-const MARGIN = 16;
-
 const PORTRAIT = {
-  '#red': {layoutData: {left: MARGIN, top: MARGIN, right: MARGIN, height: '192'}},
-  '#green': {layoutData: {left: MARGIN, top: ['#red', MARGIN], right: MARGIN, bottom: MARGIN}}
+  '#red': {layoutData: {left: 16, top: 16, right: 16, height: 192}},
+  '#green': {layoutData: {left: 16, top: '#red 16', right: 16, bottom: 16}}
 };
 
 const LANDSCAPE = {
-  '#red': {layoutData: {left: MARGIN, top: MARGIN, bottom: MARGIN, width: '192'}},
-  '#green': {layoutData: {left: ['#red', MARGIN], top: MARGIN, right: MARGIN, bottom: MARGIN}}
+  '#red': {layoutData: {left: 16, top: 16, bottom: 16, width: 192}},
+  '#green': {layoutData: {left: '#red 16', top: 16, right: 16, bottom: 16}}
 };
 
 new Composite({

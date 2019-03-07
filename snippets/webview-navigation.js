@@ -3,7 +3,7 @@ import {ImageView, TextInput, WebView, app, contentView, device} from 'tabris';
 const MARGIN = 8;
 const NAV_SIZE = device.platform === 'Android' ? 48 : 30;
 
-contentView.background = '#f5f5f5';
+contentView.set({background: '#f5f5f5'});
 
 const back = new ImageView({
   left: MARGIN, width: NAV_SIZE, height: NAV_SIZE, top: MARGIN,

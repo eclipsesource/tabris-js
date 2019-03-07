@@ -28,13 +28,10 @@ bounds
 (10,
 bounds
 (15,
-not assignable to parameter
+not assignable
 (16,
-not assignable to parameter
 (17,
-not assignable to parameter
 (18,
-not assignable to type 'TextView'
 (19,
 'onLayoutChanged' does not exist
 (20,

@@ -11,6 +11,8 @@ fs.cacheDir = cacheDir;
 fs.onCacheDirChanged(function() {});
 
 /*Expected
-(5,4): error TS2540: Cannot assign to 'filesDir' because it is a constant or a read-only property.
-(10,4): error TS2540: Cannot assign to 'cacheDir' because it is a constant or a read-only property.
+(5,
+Cannot assign to 'filesDir'
+(10,
+Cannot assign to 'cacheDir'
 */

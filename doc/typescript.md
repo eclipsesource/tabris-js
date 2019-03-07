@@ -2,7 +2,7 @@
 ---
 # TypeScript
 
-Tabris.js 3 targets TypeScript 2.9 or later. TypeScript is a <em>type-safe</em> dialect of JavaScript/EcmaScript and also supports <em>ES6 module syntax</em> (`import` and `export` statements) and `async`/`await`. A complete guide to TypeScript can be found at [typescriptlang.org](http://www.typescriptlang.org/docs/home.html). As an IDE we can recommend [Visual Studio Code](https://code.visualstudio.com/) with the [tslint](https://marketplace.visualstudio.com/items?itemName=eg2.tslint) extension, but there are [many suitable TypeScript IDEs](https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support) out there.
+Tabris.js 3 targets TypeScript 3.3. TypeScript is a <em>type-safe</em> dialect of JavaScript/EcmaScript and also supports <em>ES6 module syntax</em> (`import` and `export` statements) and `async`/`await`. A complete guide to TypeScript can be found at [typescriptlang.org](http://www.typescriptlang.org/docs/home.html). As an IDE we can recommend [Visual Studio Code](https://code.visualstudio.com/) with the [tslint](https://marketplace.visualstudio.com/items?itemName=eg2.tslint) extension, but there are [many suitable TypeScript IDEs](https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support) out there.
 
 TypeScript files have to be compiled to JavaScript before execution. The compiler is installed in the project directory to `node_modules/.bin/tsc` when generating a new Tabris.js app using the `tabris init` command. To compile the code, simply type `npm run build`. This also happens during a full app build via `tabris build` or using the build service. Alternatively, type `npm start` to start the compiler in watch mode for incremental compiling and code side loading.
 

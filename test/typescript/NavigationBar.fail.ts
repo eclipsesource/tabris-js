@@ -9,5 +9,5 @@ navigationBar.onHeightChanged(function() {});
 (4,
 is not assignable to parameter of type
 (5,
-Cannot assign to 'height' because it is a constant or a read-only property
+Cannot assign to 'height'
 */

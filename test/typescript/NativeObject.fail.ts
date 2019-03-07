@@ -8,7 +8,6 @@ obj.set({trigger: (() => {}) as any})
 
 /*Expected
 (3,
-'cid'
 (6,
 'cid'
 (7,

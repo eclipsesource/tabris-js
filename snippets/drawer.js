@@ -2,7 +2,7 @@ import {TextView, contentView, drawer} from 'tabris';
 
 // Enable the drawer and append a widget to it
 
-drawer.enabled = true;
+drawer.set({enabled: true});
 
 drawer.on('open', () => console.log('drawer opened'))
   .on('close', () => console.log('drawer closed'));

@@ -56,23 +56,23 @@ LayoutData.from('foo');
 (19,
 Expected 1 arguments, but got 0.
 (20,
-not assignable to parameter of type 'LayoutDataProperties'
+not assignable to
 (21,
-not assignable to parameter of type 'LayoutDataProperties'
+not assignable to
 (22,
-not assignable to parameter of type 'LayoutDataProperties'
+not assignable to
 (23,
-not assignable to parameter of type 'LayoutDataProperties'
+not assignable to
 (24,
-not assignable to parameter of type 'LayoutDataProperties'
+not assignable to
 (25,
-not assignable to parameter of type 'LayoutDataProperties'
+not assignable to
 (26,
-not assignable to parameter of type 'LayoutDataProperties'
+not assignable to
 (27,
-not assignable to parameter of type 'LayoutDataProperties'
+not assignable to
 (28,
-not assignable to parameter of type 'LayoutDataProperties'
+not assignable to
 (29,
 Expected 1 arguments
 (32,
@@ -84,15 +84,15 @@ not assignable
 (35,
 not assignable
 (36,
-not assignable to type 'SiblingReference'
+not assignable to
 (37,
-not assignable to type 'SiblingReference'
+not assignable to
 (38,
-not assignable to type 'SiblingReference'
+not assignable to
 (39,
-not assignable to type 'SiblingReference'
+not assignable to
 (40,
-Type 'SiblingReference' is not assignable to type '"auto" | Constraint'
+not assignable to
 (45,
 Type 'Date'
 (48,
@@ -102,5 +102,5 @@ Type 'Date'
 (52,
 Expected 1 argument
 (53,
-is not assignable to parameter of type 'LayoutDataValue'
+not assignable to
 */

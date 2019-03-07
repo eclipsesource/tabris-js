@@ -7,7 +7,7 @@ const MARGIN_SMALL = 8;
 const LABEL_WIDTH = 144;
 const COLORS = [null, 'red', 'green', 'blue', 'rgba(0, 0, 0, 0.25)'];
 
-drawer.enabled = true;
+drawer.set({enabled: true});
 
 const navigationView = new NavigationView({
   left: 0, top: 0, right: 0, height: 144,
