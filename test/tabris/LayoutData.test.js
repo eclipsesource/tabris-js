@@ -11,7 +11,7 @@ describe('LayoutData', function() {
     left: new Constraint(new Percent(0), 0),
     top: new Constraint(new Percent(1), 1),
     width: 100,
-    baseline: LayoutData.next,
+    baseline: LayoutData.prev,
     centerX: 10,
     bottom: new Constraint(new Percent(2), 2),
     right: new Constraint(new Percent(3), 3),
@@ -154,7 +154,7 @@ describe('LayoutData', function() {
         left: '0% 0',
         top: '1% 1',
         width: 100,
-        baseline: 'next()',
+        baseline: 'prev()',
         centerX: 10,
         bottom: '2% 2',
         right: '3% 3',
@@ -241,12 +241,12 @@ describe('LayoutData', function() {
         left: 0,
         top: '1% 1',
         width: '100',
-        baseline: 'next()',
+        baseline: true,
         centerX: 10,
         bottom: '2% 2',
         right: ['3%', 3],
         height: 50,
-        centerY: 0
+        centerY: true
       };
 
       expect(LayoutData.from(altExampleData)).to.deep.equal(LayoutData.from(exampleData));
@@ -272,6 +272,7 @@ describe('LayoutData', function() {
 
     it('is read-only', function() {
       const original = LayoutData.fill;
+      // @ts-ignore
       LayoutData.fill = null;
 
       expect(LayoutData.fill).to.equal(original);
@@ -297,6 +298,7 @@ describe('LayoutData', function() {
 
     it('is read-only', function() {
       const original = LayoutData.center;
+      // @ts-ignore
       LayoutData.center = null;
 
       expect(LayoutData.center).to.equal(original);

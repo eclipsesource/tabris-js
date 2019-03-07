@@ -103,9 +103,9 @@ export interface LayoutDataLikeObject {
     right?: 'auto'|ConstraintValue;
     top?: 'auto'|ConstraintValue;
     bottom?: 'auto'|ConstraintValue;
-    centerX?: 'auto'|Offset;
-    centerY?: 'auto'|Offset;
-    baseline?: 'auto'|SiblingReferenceValue;
+    centerX?: 'auto'|Offset|true;
+    centerY?: 'auto'|Offset|true;
+    baseline?: 'auto'|SiblingReferenceValue|true;
     width?: 'auto'|Dimension;
     height?: 'auto'|Dimension;
 }

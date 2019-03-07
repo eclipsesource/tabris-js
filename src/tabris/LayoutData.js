@@ -31,32 +31,32 @@ export default class LayoutData {
     return this._center;
   }
 
-  static from(layoutDataValue) {
-    if (layoutDataValue === 'fill')  {
+  static from(value) {
+    if (value === 'fill')  {
       return LayoutData.fill;
     }
-    if (layoutDataValue === 'center')  {
+    if (value === 'center')  {
       return LayoutData.center;
     }
-    if (!(layoutDataValue instanceof Object)) {
-      throw new Error('Not an object: ' + typeof layoutDataValue);
+    if (!(value instanceof Object)) {
+      throw new Error('Not an object: ' + typeof value);
     }
-    if (layoutDataValue instanceof LayoutData) {
-      return layoutDataValue;
+    if (value instanceof LayoutData) {
+      return value;
     }
-    if (layoutDataValue.constructor !== Object) {
-      throw new Error('Not a parameter object: ' + layoutDataValue.constructor.name);
+    if (value.constructor !== Object) {
+      throw new Error('Not a parameter object: ' + value.constructor.name);
     }
     return new LayoutData({
-      left: has(layoutDataValue, 'left') ? ConstraintExports.default.from(layoutDataValue.left) : 'auto',
-      right: has(layoutDataValue, 'right') ? ConstraintExports.default.from(layoutDataValue.right) : 'auto',
-      top: has(layoutDataValue, 'top') ? ConstraintExports.default.from(layoutDataValue.top) : 'auto',
-      bottom: has(layoutDataValue, 'bottom') ? ConstraintExports.default.from(layoutDataValue.bottom) : 'auto',
-      centerX: has(layoutDataValue, 'centerX') ? normalizeNumber(layoutDataValue.centerX) : 'auto',
-      centerY: has(layoutDataValue, 'centerY') ? normalizeNumber(layoutDataValue.centerY) : 'auto',
-      baseline: has(layoutDataValue, 'baseline') ? normalizeReference(layoutDataValue.baseline) : 'auto',
-      width: has(layoutDataValue,'width') ? normalizeNumber(layoutDataValue.width)  : 'auto',
-      height: has(layoutDataValue, 'height') ? normalizeNumber(layoutDataValue.height)  : 'auto'
+      left: has(value, 'left') ? ConstraintExports.default.from(value.left) : 'auto',
+      right: has(value, 'right') ? ConstraintExports.default.from(value.right) : 'auto',
+      top: has(value, 'top') ? ConstraintExports.default.from(value.top) : 'auto',
+      bottom: has(value, 'bottom') ? ConstraintExports.default.from(value.bottom) : 'auto',
+      centerX: has(value, 'centerX') ? normalizeNumber(value.centerX, 0) : 'auto',
+      centerY: has(value, 'centerY') ? normalizeNumber(value.centerY, 0) : 'auto',
+      baseline: has(value, 'baseline') ? normalizeReference(value.baseline, LayoutData.prev) : 'auto',
+      width: has(value,'width') ? normalizeNumber(value.width)  : 'auto',
+      height: has(value, 'height') ? normalizeNumber(value.height)  : 'auto'
     });
   }
 

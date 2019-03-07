@@ -95,7 +95,10 @@ export function referenceToString(reference) {
   return reference;
 }
 
-export function normalizeReference(reference) {
+export function normalizeReference(reference, shorthand) {
+  if (reference === true && shorthand !== undefined) {
+    return shorthand;
+  }
   if (Percent.isValidPercentValue(reference)) {
     return Percent.from(reference);
   }
@@ -117,7 +120,10 @@ export function normalizeReference(reference) {
   throw new Error('Not a percentage or widget reference: ' + reference);
 }
 
-export function normalizeNumber(value) {
+export function normalizeNumber(value, shorthand) {
+  if (value === true && shorthand !== undefined) {
+    return shorthand;
+  }
   if (typeof value === 'string' && numberRegex.test(value)) {
     return parseFloat(value);
   }

@@ -31,6 +31,8 @@ const video: tabris.Video = <tabris.Video background={[255, 255, 255]} autoPlay=
 const webView: tabris.WebView = <tabris.WebView background={new tabris.Color(255, 255, 255)} url='http://localhost/'/>;
 
 const noAttributes: tabris.Composite = <tabris.Composite/>;
+const shortHands1: tabris.Composite = <tabris.Composite centerX baseline/>;
+const shortHands2: tabris.Composite = <tabris.Composite centerX centerY/>;
 
 const compositeWithChildren: tabris.Composite = <tabris.Composite>{[
   new tabris.Button(), new tabris.WidgetCollection([new tabris.TextView()])
