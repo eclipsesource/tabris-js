@@ -1,6 +1,7 @@
 import Layout from './Layout';
 import LayoutData from './LayoutData';
 import {types} from './property-types';
+import Constraint from './Constraint';
 
 const Align = {
   left: 'left',
@@ -46,12 +47,21 @@ export default class StackLayout extends Layout {
   }
 
   /**
-   * @param {LayoutData} layoutData
-   * @param {import('./Widget').default} targetWidget
+   * @param {Array<import('./Widget').default>} children
+   * @param {Array<LayoutData>} allLayoutData
    * @param {number} index
    */
-  _getRawLayoutData(layoutData, targetWidget, index) {
+  _getRawLayoutData(children, allLayoutData, index) {
+    const targetWidget = children[index];
+    const layoutData = allLayoutData[index];
+    const prevLayoutData = allLayoutData[index - 1] || {bottom: 'auto'};
     const targetLayoutData = Object.assign({}, index === 0 ? this._firstLayoutData : this._defaultLayoutData);
+    this.applyLayoutDataX(layoutData, targetLayoutData);
+    this.applyLayoutDataY(layoutData, targetLayoutData, prevLayoutData);
+    return super._resolveAttributes(targetLayoutData, targetWidget);
+  }
+
+  applyLayoutDataX(layoutData, targetLayoutData) {
     if (layoutData.left !== 'auto' || layoutData.right !== 'auto' || layoutData.centerX !== 'auto') {
       targetLayoutData.left = layoutData.left;
       targetLayoutData.right = layoutData.right;
@@ -63,10 +73,18 @@ export default class StackLayout extends Layout {
         targetLayoutData.right = 'auto';
       }
     }
+  }
+
+  applyLayoutDataY(layoutData, targetLayoutData, prevLayoutData) {
     if (layoutData.height !== 'auto') {
       targetLayoutData.height = layoutData.height;
     }
-    return super._resolveAttributes(targetLayoutData, targetWidget);
+    if (layoutData.top !== 'auto' || prevLayoutData.bottom !== 'auto') {
+      const prevBottom = prevLayoutData.bottom !== 'auto' ? prevLayoutData.bottom.offset : 0;
+      const spacing = targetLayoutData.top.offset;
+      const top = layoutData.top !== 'auto' ? layoutData.top.offset : 0;
+      targetLayoutData.top = new Constraint(targetLayoutData.top.reference, prevBottom + spacing + top);
+    }
   }
 
 }

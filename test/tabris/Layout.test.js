@@ -32,7 +32,7 @@ describe('Layout', function() {
     }
 
     resolveReferences(layoutData, targetWidget) {
-      return this._getRawLayoutData(layoutData, targetWidget);
+      return this._resolveAttributes(layoutData, targetWidget);
     }
 
   }

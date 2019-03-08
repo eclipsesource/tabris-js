@@ -24,6 +24,7 @@ export default class Layout {
     this._addChild = this._addChild.bind(this);
     this._removeChild = this._removeChild.bind(this);
   }
+
   add(composite) {
     if (!composite || composite.layout !== this) {
       throw new Error(`Invalid layout target ${composite}. Do not call layout.add directly.`);
@@ -50,7 +51,11 @@ export default class Layout {
 
   render(composite) {
     if (composite.$children) {
-      composite.$children.forEach(this._renderLayoutData);
+      composite.$children.map(
+        (child, index) => this._getLayoutData(child, index)
+      ).forEach((layoutData, index, array) =>
+        this._renderLayoutData(composite.$children, array, index)
+      );
     }
   }
 
@@ -80,10 +85,14 @@ export default class Layout {
     this._layoutQueue.add(target._parent);
   }
 
-  _renderLayoutData(child, index) {
-    const layoutData = this._getLayoutData(child, index);
-    const rawLayoutData = this._getRawLayoutData(layoutData, child, index);
-    child._nativeSet('layoutData', rawLayoutData);
+  /**
+   * @param {Array<import('./Widget').default>} children
+   * @param {Array<LayoutData>} allLayoutData
+   * @param {number} index
+   */
+  _renderLayoutData(children, allLayoutData, index) {
+    const rawLayoutData = this._getRawLayoutData(children, allLayoutData, index);
+    children[index]._nativeSet('layoutData', rawLayoutData);
   }
 
   /**
@@ -128,13 +137,13 @@ export default class Layout {
   }
 
   /**
-   * @param {LayoutData} layoutData
-   * @param {import('./Widget').default} targetWidget
+   * @param {Array<import('./Widget').default>} children
+   * @param {Array<LayoutData>} allLayoutData
    * @param {number} index
    */
   // eslint-disable-next-line no-unused-vars
-  _getRawLayoutData(layoutData, targetWidget, index) {
-    return this._resolveAttributes(layoutData, targetWidget);
+  _getRawLayoutData(children, allLayoutData, index) {
+    return this._resolveAttributes(allLayoutData[index], children[index]);
   }
 
   /**

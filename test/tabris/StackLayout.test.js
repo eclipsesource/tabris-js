@@ -292,6 +292,53 @@ describe('StackLayout', function() {
 
     });
 
+    describe('with layoutData properties top/bottom', function() {
+
+      it('adds top to spacing', function() {
+        children[0].top = 10;
+        children[1].top = 10;
+        children[2].top = -10;
+        children[3].top = -20;
+
+        const all = render({spacing: 16, alignment: 'left'});
+
+        expect(all[0]).to.deep.equal({top: 10, left: 0});
+        expect(all[1]).to.deep.equal({top: [cid[0], 26], left: 0});
+        expect(all[2]).to.deep.equal({top: [cid[1], 6], left: 0});
+        expect(all[3]).to.deep.equal({top: [cid[2], -4], left: 0});
+        expect(all[4]).to.deep.equal({top: [cid[3], 16], left: 0});
+        expect(all[5]).to.deep.equal({top: [cid[4], 16], left: 0});
+      });
+
+      it('adds bottom to spacing', function() {
+        children[0].top = 10;
+        children[0].bottom = 10;
+        children[1].bottom = -10;
+        children[2].bottom = -20;
+
+        const all = render({spacing: 16, alignment: 'left'});
+
+        expect(all[0]).to.deep.equal({top: 10, left: 0});
+        expect(all[1]).to.deep.equal({top: [cid[0], 26], left: 0});
+        expect(all[2]).to.deep.equal({top: [cid[1], 6], left: 0});
+        expect(all[3]).to.deep.equal({top: [cid[2], -4], left: 0});
+        expect(all[4]).to.deep.equal({top: [cid[3], 16], left: 0});
+        expect(all[5]).to.deep.equal({top: [cid[4], 16], left: 0});
+      });
+
+      it('adds top and bottom to spacing', function() {
+        children[0].bottom = 10;
+        children[1].top = 10;
+
+        const all = render({spacing: 16, alignment: 'left'});
+
+        expect(all[0]).to.deep.equal({top: 0, left: 0});
+        expect(all[1]).to.deep.equal({top: [cid[0], 36], left: 0});
+        expect(all[2]).to.deep.equal({top: [cid[1], 16], left: 0});
+      });
+
+    });
+
   });
 
   describe('on Stack widget', function() {
