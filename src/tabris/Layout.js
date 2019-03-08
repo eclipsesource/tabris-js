@@ -51,11 +51,10 @@ export default class Layout {
 
   render(composite) {
     if (composite.$children) {
-      composite.$children.map(
+      const allLayoutData = composite.$children.map(
         (child, index) => this._getLayoutData(child, index)
-      ).forEach((layoutData, index, array) =>
-        this._renderLayoutData(composite.$children, array, index)
       );
+      this._renderLayoutData(composite.$children, allLayoutData);
     }
   }
 
@@ -88,11 +87,12 @@ export default class Layout {
   /**
    * @param {Array<import('./Widget').default>} children
    * @param {Array<LayoutData>} allLayoutData
-   * @param {number} index
    */
-  _renderLayoutData(children, allLayoutData, index) {
-    const rawLayoutData = this._getRawLayoutData(children, allLayoutData, index);
-    children[index]._nativeSet('layoutData', rawLayoutData);
+  _renderLayoutData(children, allLayoutData) {
+    for (let i = 0; i < children.length; i++) {
+      const rawLayoutData = this._resolveAttributes(allLayoutData[i], children[i]);
+      children[i]._nativeSet('layoutData', rawLayoutData);
+    }
   }
 
   /**
@@ -134,16 +134,6 @@ export default class Layout {
       result = LayoutData.from(Object.assign({}, result, {[property]: normalizedPropertyValue}));
     }
     return result;
-  }
-
-  /**
-   * @param {Array<import('./Widget').default>} children
-   * @param {Array<LayoutData>} allLayoutData
-   * @param {number} index
-   */
-  // eslint-disable-next-line no-unused-vars
-  _getRawLayoutData(children, allLayoutData, index) {
-    return this._resolveAttributes(allLayoutData[index], children[index]);
   }
 
   /**
