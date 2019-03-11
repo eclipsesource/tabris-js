@@ -22,11 +22,11 @@
     },
     "url": {
       "type": "string",
-      "description": "The URL of the web page to display. Relative URLs are resolved relative to 'package.json'. Returns empty string when content from *html* property is displayed."
+      "description": "The URL of the web page to display. Relative URLs are resolved relative to 'package.json'. Returns empty string when content from *html* property is displayed.\nNote: `urlChanged` event will not be fired on iOS when a page is using `history.pushState()` to navigate between pages."
     },
     "html": {
       "type": "string",
-      "description": "A complete HTML document to display. Always returns the last set value."
+      "description": "A complete HTML document to display. Always returns the last set value.\nNote: `htmlChanged` event will not be fired on iOS when a page is using `history.pushState()` to navigate between pages."
     },
     "canGoForward": {
       "type": "boolean",
@@ -41,7 +41,7 @@
   },
   "events": {
     "navigate": {
-      "description": "Fired when the WebView is about to navigate to a new URL.",
+      "description": "Fired when the WebView is about to navigate to a new URL.\nNote: This event will not be fired on iOS when a page is using `history.pushState()` to navigate between pages.",
       "parameters": {
         "preventDefault": {
           "description": "Call to intercept the navigation.  Not possible when the event is only an anchor navigation",
@@ -54,7 +54,7 @@
       }
     },
     "load": {
-      "description": "Fired when the url has been loaded."
+      "description": "Fired when the url has been loaded.\nNote: This event will not be fired on iOS when a page is using `history.pushState()` to navigate between pages."
     },
     "download": {
       "description": "Fired when the WebView requests a download. The download event provides the properties `url`, `mimeType`, `contentLength` and `contentDisposition`. Supported only on Android.",
