@@ -131,6 +131,24 @@ describe('StackLayout', function() {
         expect(all[4]).to.deep.equal({top: [cid[3], 16], centerX: 10});
       });
 
+      it('normalizes invalid layoutData with warning', function() {
+        stub(console, 'warn');
+        children[0].set({baseline: children[1], width: 100});
+        children[1].left = [children[0], 10];
+        children[2].right = [children[0], 10];
+        children[3].set({left: ['10%', 0], right: ['10%', 0], width: 0});
+        children[4].set({centerX: 10, centerY: 10, left: 10});
+
+        const all = render({spacing: 16, alignment: 'left'});
+
+        expect(all[0]).to.deep.equal({top: 0, left: 0, width: 100});
+        expect(all[1]).to.deep.equal({top: [cid[0], 16], left: 10});
+        expect(all[2]).to.deep.equal({top: [cid[1], 16], right: 10});
+        expect(all[3]).to.deep.equal({top: [cid[2], 16], left: 0, right: 0});
+        expect(all[4]).to.deep.equal({top: [cid[3], 16], centerX: 10});
+        expect(console.warn).to.have.been.called.callCount(8);
+      });
+
     });
 
     describe('with alignment centerX', function() {

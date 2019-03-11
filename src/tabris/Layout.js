@@ -193,6 +193,16 @@ export class LayoutQueue {
 
 }
 
+export function getPath(widget) {
+  const path = [widget];
+  let parent = widget.parent();
+  while (parent) {
+    path.unshift(parent);
+    parent = parent.parent();
+  }
+  return path.join(' > ');
+}
+
 function resolveAttribute(value, widget) {
   if (value instanceof Constraint) {
     return resolveConstraint(value, widget);
@@ -254,16 +264,6 @@ function makeAuto(layoutData, ...props) {
     override[props[i]] = 'auto';
   }
   return LayoutData.from(Object.assign({}, layoutData, override));
-}
-
-function getPath(widget) {
-  const path = [widget];
-  let parent = widget.parent();
-  while (parent) {
-    path.unshift(parent);
-    parent = parent.parent();
-  }
-  return path.join(' > ');
 }
 
 const emptyParent = {

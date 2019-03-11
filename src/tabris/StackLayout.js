@@ -1,8 +1,9 @@
-import Layout from './Layout';
+import Layout, {getPath} from './Layout';
 import LayoutData from './LayoutData';
 import {types} from './property-types';
 import Constraint from './Constraint';
 import Percent from './Percent';
+import {warn} from './Console';
 
 const Align = {
   left: 'left',
@@ -43,7 +44,20 @@ export default class StackLayout extends Layout {
   }
 
   _getLayoutData(child) {
-    return child.layoutData;
+    const result = child.layoutData;
+    ['left', 'top', 'right', 'bottom']
+      .filter(prop => !isValidConstraint(result[prop]))
+      .forEach(prop => layoutWarn(child, prop, 'StackLayout only supports "auto" and numeric offset.'));
+    ['centerY', 'baseline']
+      .filter(prop => result[prop] !== 'auto')
+      .forEach(prop => layoutWarn(child, prop, 'StackLayout only supports "auto".'));
+    if (result.centerX !== 'auto' && (result.left !== 'auto' || result.right !== 'auto')) {
+      warn('Inconsistent layoutData: centerX overrides left and right.\nTarget: ' + getPath(child));
+    }
+    if (result.left !== 'auto' && result.right !== 'auto' && result.width !== 'auto') {
+      warn('Inconsistent layoutData: left and right are set, ignore width.\nTarget: ' + getPath(child));
+    }
+    return result;
   }
 
   /**
@@ -73,11 +87,17 @@ export default class StackLayout extends Layout {
 
   _layoutX(layoutData, targetLayoutData) {
     if (layoutData.left !== 'auto' || layoutData.right !== 'auto' || layoutData.centerX !== 'auto') {
-      targetLayoutData.left = layoutData.left;
-      targetLayoutData.right = layoutData.right;
-      targetLayoutData.centerX = layoutData.centerX;
+      if (layoutData.centerX !== 'auto') {
+        Object.assign(targetLayoutData, {left: 'auto', right: 'auto', centerX: layoutData.centerX});
+      } else {
+        Object.assign(targetLayoutData, {
+          left: layoutData.left !== 'auto' ? new Constraint(zero, layoutData.left.offset) : 'auto',
+          right: layoutData.right !== 'auto' ? new Constraint(zero, layoutData.right.offset) : 'auto',
+          centerX: 'auto'
+        });
+      }
     }
-    if (layoutData.width !== 'auto') {
+    if (layoutData.width !== 'auto' && (layoutData.left === 'auto' || layoutData.right === 'auto')) {
       targetLayoutData.width = layoutData.width;
       if (this._alignment === Align.stretchX) {
         targetLayoutData.right = 'auto';
@@ -143,4 +163,18 @@ export default class StackLayout extends Layout {
     return allLayoutData[allLayoutData.length - 1].bottom !== 'auto';
   }
 
+}
+
+function isValidConstraint(constraint) {
+  if (constraint === 'auto') {
+    return true;
+  }
+  if (constraint.reference instanceof Percent && constraint.reference.percent === 0) {
+    return true;
+  }
+  return false;
+}
+
+function layoutWarn(child, prop, message) {
+  warn(`Unsupported value for "${prop}": ${message}\nTarget: ${getPath(child)}`);
 }
