@@ -40,10 +40,10 @@ const buttonRight = button.bounds.left + button.bounds.width;
 
 ### BoxDimensions
 
-* JavaScript Type: `Object`
+* JavaScript Type: `Object` or `string` or `Array`.
 * TypeScript Type: `tabris.BoxDimensions`
 
-The bounds of a rectangle in relation to the four edges of a containing element in DIP (device independent pixel). This is a plain object implementing the following interface:
+The bounds of a rectangle in relation to the four edges of a containing element in DIP (device independent pixel). By default it is a plain object implementing the following interface:
 
 ```ts
 interface BoxDimensions {
@@ -56,11 +56,27 @@ interface BoxDimensions {
 
 All properties are [`dimension`](#Dimension) and optional. Omitted properties are treated as `0`.
 
-Example:
+As a shorthand a list of four dimensions is also accepted. This follow the order of `[top, right, bottom, left]`, with missing entries being filled in by the entry of the opposing dimension. If only one entry is given it is used for all dimensions:
 
 ```js
-{left: 8, right: 8, top: 0, bottom: 0};
-{left: 10, right: 10};
+[1, 2, 3, 4] // {top: 1, right: 2, bottom: 3, left: 4};
+[1, 2, 3] // {top: 1, right: 2, bottom: 3, left: 2};
+[1, 2] // {top: 1, right: 2, bottom: 1, left: 2};
+[1] // {top: 1, right: 1, bottom: 1, left: 1};
+```
+
+A space separated string list is also accepted instead of an array, with or without `px` as a unit.
+
+Examples:
+
+```js
+widget.padding = {left: 8, right: 8, top: 0, bottom: 0};
+widget.padding = {left: 10, right: 10};
+widget.padding = [0, 8];
+widget.padding = [1, 10, 2, 10];
+widget.padding = '10px 11px 12px 13px';
+widget.padding = '10 11 12 13';
+widget.padding = '0 8';
 ```
 
 ### ConstraintValue

@@ -214,7 +214,7 @@
       "default": "'auto'"
     },
     "padding": {
-      "type": "BoxDimensions|number|null",
+      "type": "BoxDimensions|null",
       "const": true,
       "description": "Additional space to add inside the widgets bounds."
     },

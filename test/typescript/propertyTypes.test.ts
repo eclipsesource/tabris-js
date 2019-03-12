@@ -14,33 +14,34 @@ import {
   ConstraintValue,
   AnimationOptions,
   WidgetCollection,
-  SiblingReferenceValue
+  SiblingReferenceValue,
+  BoxDimensions
 } from 'tabris';
 
 let stringType: string = '';
 let stringOrUndefined: string | undefined;
 let numberType: number = 42;
 let numberOrUndefinedOrAuto: number | undefined | 'auto';
-let booleanType: boolean = false;
+const booleanType: boolean = false;
 let booleanOrUndefined: boolean | undefined;
 let constraintType: ConstraintValue|'auto' = ['#foo', 23];
 constraintType = [new Composite(), 23];
 constraintType = 23;
 constraintType = 'foo';
 constraintType = new Composite();
-let offsetType: Offset = 42;
+const offsetType: Offset = 42;
 let offsetOrAuto: Offset | 'auto';
-let dimensionType: Dimension = 42;
+const dimensionType: Dimension = 42;
 let dimensionOrAuto: Dimension | 'auto';
-let widgetOrSelector: Widget | Selector = new Button();
+const widgetOrSelector: Widget | Selector = new Button();
 let widgetOrSelectorOrAuto: SiblingReferenceValue | 'auto';
 
 // dimension
-let dimension: Dimension = numberType;
+const dimension: Dimension = numberType;
 numberType = dimension;
 
 // Offset
-let _offset: Offset = numberType;
+const _offset: Offset = numberType;
 numberType = _offset;
 
 // Image
@@ -56,15 +57,15 @@ numberOrUndefinedOrAuto = image.height;
 numberOrUndefinedOrAuto = image.scale;
 
 // Color
-let color: ColorValue = stringType;
+const color: ColorValue = stringType;
 stringType = color;
 
 // Font
-let font: FontValue = stringType;
+const font: FontValue = stringType;
 stringType = font;
 
 // Bounds
-let bounds: Bounds = {
+const bounds: Bounds = {
   left: numberType,
   top: numberType,
   width: numberType,
@@ -95,12 +96,12 @@ numberOrUndefinedOrAuto = transformation.translationZ;
 
 // SelectorFunction
 let selectorFunctionType: (widget: Widget, index: number, collection: WidgetCollection) => boolean = () => true;
-let selectorFunction: Selector = selectorFunctionType;
+const selectorFunction: Selector = selectorFunctionType;
 selectorFunctionType = selectorFunction as typeof selectorFunctionType;
 
 // Selector
 let selectorType: string | SelectorFunction<Widget> = '';
-let selector: Selector = selectorType;
+const selector: Selector = selectorType;
 selectorType = selector;
 
 // AnimationOptions
@@ -123,3 +124,17 @@ easingOrUndefined = animationOptions.easing;
 numberOrUndefinedOrAuto = animationOptions.repeat;
 booleanOrUndefined = animationOptions.reverse;
 stringOrUndefined = animationOptions.name;
+
+// BoxDimension
+let boxDim: BoxDimensions = {left: 0, top: 0, right: 0, bottom: 0};
+boxDim = {left: 0, top: 0, right: 0};
+boxDim = {left: 0, top: 0};
+boxDim = {left: 0};
+boxDim = {};
+boxDim = 8;
+boxDim = '1px 2px 3px 4px';
+boxDim = '1 2 3 4';
+boxDim = [1, 2, 3, 4];
+boxDim = [1, 2, 3];
+boxDim = [1, 2];
+boxDim = [1];

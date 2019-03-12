@@ -740,12 +740,40 @@ describe('property-types', function() {
 
     const encode = types.boxDimensions.encode;
 
-    it('passes objects', function() {
+    it('passes complete number objects', function() {
       expect(encode({left: 1, right: 2, top: 3, bottom: 4})).to.deep.equal({left: 1, right: 2, top: 3, bottom: 4});
+    });
+
+    it('normalizes object', function() {
+      expect(encode({left: 1, right: '2px', top: '3'})).to.deep.equal({left: 1, right: 2, top: 3, bottom: 0});
     });
 
     it('converts numbers to objects', function() {
       expect(encode(4)).to.deep.equal({left: 4, right: 4, top: 4, bottom: 4});
+    });
+
+    it('converts array of number to objects', function() {
+      expect(encode([1, 2, 3, 4])).to.deep.equal({left: 4, right: 2, top: 1, bottom: 3});
+      expect(encode([1, 2, 3])).to.deep.equal({left: 2, right: 2, top: 1, bottom: 3});
+      expect(encode([1, 2])).to.deep.equal({left: 2, right: 2, top: 1, bottom: 1});
+      expect(encode([1])).to.deep.equal({left: 1, right: 1, top: 1, bottom: 1});
+      expect(encode([null])).to.deep.equal({left: 0, right: 0, top: 0, bottom: 0});
+    });
+
+    it('converts array of string to objects', function() {
+      expect(encode(['1', '2px', 3, 4])).to.deep.equal({left: 4, right: 2, top: 1, bottom: 3});
+    });
+
+    it('converts space separated strings to objects', function() {
+      expect(encode('1 2  3 4')).to.deep.equal({left: 4, right: 2, top: 1, bottom: 3});
+      expect(encode('1 2 3 ')).to.deep.equal({left: 2, right: 2, top: 1, bottom: 3});
+      expect(encode(' 1 2')).to.deep.equal({left: 2, right: 2, top: 1, bottom: 1});
+      expect(encode(' 1 ')).to.deep.equal({left: 1, right: 1, top: 1, bottom: 1});
+    });
+
+    it('converts space separated strings with unit to objects', function() {
+      expect(encode('1px 2px 3px 4px')).to.deep.equal({left: 4, right: 2, top: 1, bottom: 3});
+      expect(encode('1px')).to.deep.equal({left: 1, right: 1, top: 1, bottom: 1});
     });
 
     it('converts null to 0', function() {
@@ -756,6 +784,9 @@ describe('property-types', function() {
       expect(() => encode('foo')).to.throw(Error, 'Invalid type: foo');
       expect(() => encode(false)).to.throw(Error, 'Invalid type: false');
       expect(() => encode(true)).to.throw(Error, 'Invalid type: true');
+      expect(() => encode([])).to.throw(Error, 'Invalid type: []');
+      expect(() => encode([1, 2, 3, 4, 5])).to.throw(Error, 'Invalid type: [ 1, 2, 3, 4, 5 ]');
+      expect(() => encode(['foo'])).to.throw(Error, 'Invalid type: [ \'foo\' ]');
     });
 
   });

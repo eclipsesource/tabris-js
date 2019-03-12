@@ -304,7 +304,7 @@ export type ConstraintValue = Constraint
 /**
  * Represents dimensions on four edges of a box, as used for padding.
  */
-export interface BoxDimensions {
+export type BoxDimensions = number | string | [number, number?, number?, number?] |  {
 
   /**
    * The left part, in dip.

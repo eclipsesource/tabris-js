@@ -5,6 +5,7 @@ import Color from './Color';
 import Image from './Image';
 import Font from './Font';
 import LinearGradient from './LinearGradient';
+import {format} from './Formatter';
 
 export const types = {
 
@@ -148,12 +149,29 @@ export const types = {
       if (value === null || typeof value === 'number') {
         return {left: value || 0, right: value || 0, top: value || 0, bottom: value || 0};
       }
+      if (value instanceof Array || typeof value === 'string') {
+        let arr = typeof value === 'string' ? value.trim().split(/\s+/) : value;
+        try {
+          if (arr.length === 0 || arr.length > 4) {
+            throw new Error();
+          }
+          arr = arr.map(encodePx);
+        } catch (ex) {
+          throw new Error('Invalid type: ' + format(value));
+        }
+        return {
+          top: arr[0],
+          right: arr.length > 1 ? arr[1] : arr[0],
+          bottom: arr.length > 2 ? arr[2] : arr[0],
+          left: arr.length > 3 ? arr[3] : arr.length > 1 ? arr[1] : arr[0]
+        };
+      }
       if (typeof value === 'object') {
         return {
-          left: typeof value.left === 'number' ? value.left : 0,
-          top: typeof value.top === 'number' ? value.top : 0,
-          right: typeof value.right === 'number' ? value.right : 0,
-          bottom: typeof value.bottom === 'number' ? value.bottom : 0
+          left: 'left' in value ? encodePx(value.left) : 0,
+          top: 'top' in value ? encodePx(value.top) : 0,
+          right: 'right' in value ? encodePx(value.right) : 0,
+          bottom: 'bottom' in value ? encodePx(value.bottom) : 0
         };
       }
       throw new Error('Invalid type: ' + value);
@@ -253,6 +271,16 @@ function throwNotAcceptedError(acceptable, given) {
   message.push(acceptable.join('", "'));
   message.push('", given was: "', given + '"');
   throw new Error(message.join(''));
+}
+
+function encodePx(value) {
+  if (value === null) {
+    return 0;
+  }
+  if (typeof value === 'string') {
+    return encodeNumber(value.trim().replace('px', ''));
+  }
+  return encodeNumber(value);
 }
 
 function encodeNumber(value) {
