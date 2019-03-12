@@ -4,6 +4,8 @@
 
 Changing the global appearance of an app is a common scenario to provide a brand specific look. We can change the appearance of a `Widget` via the Tabris.js API or use a native platform specific mechanism to change the apps style. The later mechanism is only available on Android, since iOS does not have the concept of an app theme.
 
+![Theming example image](img/theming-android.png)
+
 ## Android native theme
 
 When the Tabris.js API is not sufficient to style all aspects of a `Widget` it is possible to provide a native [theme on Android](https://developer.android.com/guide/topics/ui/look-and-feel/themes). The main use-case is to set the  primary and accent colors which are used throughout the apps widgets. These colors are also applied on the `StatusBar` and in the Android task switcher.
