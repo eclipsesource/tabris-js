@@ -1,6 +1,19 @@
 import {omit} from './util';
 import Listeners from './Listeners';
 
+const MARKUP = {
+  br: {text: false, attributes: {}},
+  b: {text: true, attributes: {}},
+  span: {text: true, attributes: {}},
+  big: {text: true, attributes: {}},
+  i: {text: true, attributes: {}},
+  small: {text: true, attributes: {}},
+  strong: {text: true, attributes: {}},
+  ins: {text: true, attributes: {}},
+  del: {text: true, attributes: {}},
+  a: {text: true, attributes: {href: 'string'}}
+};
+
 export const jsxFactory = Symbol('jsxFactory');
 
 export function createJsxProcessor() {
@@ -14,7 +27,7 @@ export default class JsxProcessor {
   }
 
   createElement(Type, attributes, ...children) {
-    if (!(Type instanceof Function)) {
+    if (!(Type instanceof Function) && typeof Type !== 'string') {
       throw new Error(`JSX: Unsupported type ${Type}`);
     }
     if (attributes && attributes.children && children && children.length) {
@@ -25,12 +38,38 @@ export default class JsxProcessor {
     if (attributes && attributes.children) {
       delete attributes.children;
     }
+    if (typeof Type === 'string') {
+      return this.createIntrinsicElement(Type, attributes, finalChildren);
+    }
     if (Type.prototype && Type.prototype[this.jsxFactory]) {
       return Type.prototype[this.jsxFactory].call(this, Type, attributes, finalChildren);
     } else if (!Type.prototype) {
       return Type.call(this, attributes, finalChildren);
     }
     throw new Error(`JSX: Unsupported type ${Type.name}`);
+  }
+
+  createIntrinsicElement(el, attributes, children) {
+    if (el in MARKUP) {
+      Object.keys(attributes || {}).forEach(attribute => {
+        const attrType = typeof attributes[attribute];
+        if (attrType !== MARKUP[el].attributes[attribute]) {
+          throw new Error(`Element ${el} does not a support attribute ${attribute} of type ${attrType}`);
+        }
+      });
+      if (children && children.length && !MARKUP[el].text) {
+        throw new Error(`Element ${el} can not have children`);
+      }
+      const text = this.joinTextContent(children, true);
+      const tagOpen = [el].concat(Object.keys(attributes || {}).map(
+        attribute => `${attribute}='${attributes[attribute]}'`
+      )).join(' ');
+      if (text) {
+        return `<${tagOpen}>${text}</${el}>`;
+      }
+      return `<${tagOpen}/>`;
+    }
+    throw new Error(`JSX: Unsupported type ${el}`);
   }
 
   createNativeObject(Type, attributes, children) {
@@ -60,11 +99,13 @@ export default class JsxProcessor {
     Listeners.getListenerStore(obj).on(this.getListeners(attributes));
   }
 
-  withContentText(attributes, content, property) {
+  withContentText(attributes, content, property, markupEnabled) {
     if (attributes && attributes[property] && content && content.length) {
       throw new Error(`JSX: ${property} given twice`);
     }
-    const text = attributes && attributes[property] ? attributes[property].toString() : (content || []).join(' ');
+    const text = attributes && attributes[property]
+      ? attributes[property].toString()
+      : this.joinTextContent(content || [], markupEnabled);
     return Object.assign(attributes || {}, text ? {[property]: text} : {});
   }
 
@@ -93,6 +134,13 @@ export default class JsxProcessor {
 
   isEventAttribute(attribute) {
     return attribute.startsWith('on') && attribute.charCodeAt(2) <= 90;
+  }
+
+  joinTextContent(textArr, markupEnabled) {
+    if (markupEnabled) {
+      return textArr.map(str => str.trim()).join(' ').replace(/\s*<br\s*\/>\s*/g, '<br/>');
+    }
+    return textArr.join(' ');
   }
 
 }

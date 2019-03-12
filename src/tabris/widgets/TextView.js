@@ -41,14 +41,19 @@ export default class TextView extends Widget {
 
   /** @this {import("../JsxProcessor").default} */
   [jsxFactory](Type, props, children) {
-    return super[jsxFactory](Type, this.withContentText(props, children, 'text'));
+    return super[jsxFactory](Type, this.withContentText(
+      props,
+      children,
+      'text',
+      props ? props.markupEnabled : false
+    ));
   }
 
 }
 
 NativeObject.defineProperties(TextView.prototype, {
   alignment: {type: ['choice', ['left', 'right', 'center']], default: 'left'},
-  markupEnabled: {type: 'boolean', default: false, const: true}, // TODO: readonly
+  markupEnabled: {type: 'boolean', default: false},
   lineSpacing: {type: 'number', default: 1},
   selectable: {type: 'boolean', default: false},
   maxLines: {

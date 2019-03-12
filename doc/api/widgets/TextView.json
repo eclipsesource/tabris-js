@@ -18,7 +18,7 @@
       "const": true,
       "readonly": true,
       "ts_only": true,
-      "type": "JSXProperties<this> & {children?: string}"
+      "type": "JSXProperties<this> & {children?: string|string[]}"
     },
     "alignment": {
       "type": "string",

@@ -298,6 +298,57 @@ describe('JsxProcessor', function() {
 
     });
 
+    describe('with intrinsic elements', function() {
+
+      it('renders a markup string', function() {
+        expect(jsx.createElement('b', {}, 'hello', 'world')).to.equal('<b>hello world</b>');
+        expect(jsx.createElement('span', {}, 'hello', 'world')).to.equal('<span>hello world</span>');
+        expect(jsx.createElement('big', {}, 'hello', 'world')).to.equal('<big>hello world</big>');
+        expect(jsx.createElement('i', {}, 'hello', 'world')).to.equal('<i>hello world</i>');
+        expect(jsx.createElement('small', {}, 'hello', 'world')).to.equal('<small>hello world</small>');
+        expect(jsx.createElement('strong', {}, 'hello', 'world')).to.equal('<strong>hello world</strong>');
+        expect(jsx.createElement('ins', {}, 'hello', 'world')).to.equal('<ins>hello world</ins>');
+        expect(jsx.createElement('del', {}, 'hello', 'world')).to.equal('<del>hello world</del>');
+        expect(jsx.createElement('a', {}, 'hello', 'world')).to.equal('<a>hello world</a>');
+      });
+
+      it('renders a with href string', function() {
+        expect(jsx.createElement('a', {href: 'foo'}, 'bar')).to.equal('<a href=\'foo\'>bar</a>');
+      });
+
+      it('throws for a with unsupported href type', function() {
+        expect(() => jsx.createElement('a', {href: true})).to.throw();
+      });
+
+      it('renders br as <br/>', function() {
+        expect(jsx.createElement('br')).to.equal('<br/>');
+      });
+
+      it('strips spaces around <br/>', function() {
+        expect(jsx.createElement('span', {},
+          ' foo  <br/> bar <br  />   baz '
+        )).to.equal('<span>foo<br/>bar<br/>baz</span>');
+      });
+
+      it('throws for br with content', function() {
+        expect(() => jsx.createElement('br', {}, 'foo')).to.throw();
+      });
+
+      it('throws for unsupported attributes', function() {
+        expect(() => jsx.createElement('br', {foo: 'bar'})).to.throw();
+        expect(() => jsx.createElement('b', {foo: 'bar'})).to.throw();
+        expect(() => jsx.createElement('span', {foo: 'bar'})).to.throw();
+        expect(() => jsx.createElement('big', {foo: 'bar'})).to.throw();
+        expect(() => jsx.createElement('i', {foo: 'bar'})).to.throw();
+        expect(() => jsx.createElement('small', {foo: 'bar'})).to.throw();
+        expect(() => jsx.createElement('strong', {foo: 'bar'})).to.throw();
+        expect(() => jsx.createElement('ins', {foo: 'bar'})).to.throw();
+        expect(() => jsx.createElement('del', {foo: 'bar'})).to.throw();
+        expect(() => jsx.createElement('a', {foo: 'bar'})).to.throw();
+      });
+
+    });
+
   });
 
 });

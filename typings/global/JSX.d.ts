@@ -26,6 +26,17 @@ declare namespace JSX {
     children: any;
   }
 
-  interface IntrinsicElements { }
+  interface IntrinsicElements {
+    br: {children?: never};
+    b: {children?: string|string[]};
+    span: {children?: string|string[]};
+    big: {children?: string|string[]};
+    i: {children?: string|string[]};
+    small: {children?: string|string[]};
+    strong: {children?: string|string[]};
+    ins: {children?: string|string[]};
+    del: {children?: string|string[]};
+    a: {href?: string, children?: string|string[]};
+  }
 
 }

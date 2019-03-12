@@ -139,3 +139,22 @@ let popover: tabris.Popover = <tabris.Popover width={100} height={200} anchor={c
 </tabris.Popover>;
 
 popover = <tabris.Popover onClose={() => {}} />;
+
+// markup
+
+const markup = <tabris.TextView markupEnabled>
+  normal text<br/><br/>
+  <b>bold</b>
+  <i>italic</i>
+  <big>big</big>
+  <small>small</small>
+  <strong>strong</strong>
+  <ins>inserted</ins>
+  <del>deleted</del>
+  <span>
+    multi
+    line
+  </span>
+  <a href='http://tabrisjs.com'>link</a>
+  <a>href optional</a>
+</tabris.TextView>;

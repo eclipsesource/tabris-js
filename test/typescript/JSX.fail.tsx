@@ -90,6 +90,13 @@ const noIntrinsicElements: any = <textInput />;
 <tabris.DateDialog>{new tabris.Button()}</tabris.DateDialog>;
 <tabris.TimeDialog>{new tabris.Button()}</tabris.TimeDialog>;
 
+const markup = <tabris.TextView markupEnabled>
+  <br>no children please</br>
+  <b>{23}</b>
+  <a href={false}>link</a>
+  <doesnotexist/>
+</tabris.TextView>;
+
 /*Expected
 (4,
 'number' is not assignable to type 'boolean'
@@ -146,4 +153,8 @@ const noIntrinsicElements: any = <textInput />;
 (89,
 (90,
 (91,
+(94,
+(95,
+(96,
+(97,
 */
