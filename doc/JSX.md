@@ -25,9 +25,11 @@ Add existing children|`new Composite().append(children)`|`<Composite>{children}<
 
 > :warning: In TypeScript JSX expressions themselves are type-safe, but their return type is `any`! So be extra careful when you assign them to a variable to give it the proper type.
 
-To add multiple children to an existing parent you group them using `WidgetCollection`:
+To add multiple children to an existing parent you group them using `WidgetCollection` or `$`:
 
 ```jsx
+import {contentView, Button, TextView, WidgetCollection, $};
+
 // JavaScript/TypeScript:
 contentView.append(
   new Button(),
@@ -40,6 +42,14 @@ contentView.append(
     <Button />
     <TextView />
   </WidgetCollection>
+);
+
+// "$" is an alias for WidgetCollection
+contentView.append(
+  <$>
+    <Button />
+    <TextView />
+  </$>
 );
 ```
 

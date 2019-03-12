@@ -147,6 +147,7 @@ const tabrisMain = Object.assign(new Tabris(), {
   WebView,
   Widget,
   WidgetCollection,
+  $: WidgetCollection,
   XMLHttpRequest,
   Worker,
   fetch,

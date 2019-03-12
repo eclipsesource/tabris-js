@@ -21,5 +21,6 @@ export {
   RequestConstructor as Request,
   ResponseConstructor as Response,
   HeadersConstructor as Headers,
-  fetchFunction as fetch
+  fetchFunction as fetch,
+  WidgetCollection as $
 };

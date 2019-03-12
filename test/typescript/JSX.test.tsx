@@ -1,5 +1,4 @@
 import * as tabris from 'tabris';
-import { Popover } from 'tabris';
 
 const onPanHandler: (event: tabris.WidgetPanEvent) => void = (event) => {};
 const onTextChangedHandler: (event: tabris.PropertyChangedEvent<tabris.TextInput, string>) => void = (event) => {};
@@ -80,8 +79,10 @@ const custom3: MyCustomWidgetWithUnpackedListeners = <MyCustomWidgetWithUnpacked
   />;
 
 // WidgetCollection
-let widgetCollection: tabris.WidgetCollection = <tabris.WidgetCollection>{[new tabris.Button(), new tabris.TextView()]}</tabris.WidgetCollection>;
+let widgetCollection: tabris.WidgetCollection = <tabris.WidgetCollection><tabris.Button/><tabris.TextView/></tabris.WidgetCollection>;
+widgetCollection = <tabris.WidgetCollection>{[new tabris.Button(), new tabris.TextView()]}</tabris.WidgetCollection>;
 widgetCollection = <tabris.WidgetCollection children={[new tabris.Button(), new tabris.TextView()]} />;
+widgetCollection = <tabris.$><tabris.Button/><tabris.TextView/></tabris.$>;
 
 // Popup
 

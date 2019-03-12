@@ -1,5 +1,5 @@
 // Create a collection view, initialize its cells and fill it with items
-import { CollectionView, Composite, WidgetCollection, ImageView, TextView, contentView, AlertDialog, Properties } from 'tabris';
+import { CollectionView, Composite, $, ImageView, TextView, contentView, AlertDialog, Properties } from 'tabris';
 
 type Person = {firstName: string, lastName: string};
 
@@ -27,10 +27,10 @@ class Cell extends Composite {
   constructor(properties?: Properties<Cell>) {
     super(properties);
     this.append(
-      <WidgetCollection>
+      <$>
         <ImageView top={16} centerX={0} width={200} height={200} />
         <TextView left={30} top='prev() 16' right={30} alignment='center'/>
-      </WidgetCollection>
+      </$>
     );
     this.onTap(this._handleTap);
   }

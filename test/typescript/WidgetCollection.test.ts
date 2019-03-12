@@ -1,4 +1,4 @@
-import {WidgetCollection, Transformation, AnimationOptions, Composite, Selector, Widget} from 'tabris';
+import {WidgetCollection, Transformation, AnimationOptions, Composite, Selector, Widget, $} from 'tabris';
 
 let widgetCollection: WidgetCollection = new WidgetCollection([new Composite()]);
 
@@ -13,6 +13,7 @@ class Foo extends Composite {
 }
 
 let fooCollection: WidgetCollection<Foo> = new WidgetCollection([new Foo()]);
+fooCollection = new $([new Foo()]);
 let properties: {transform?: Transformation, opacity?: number, bar?: 'bar', background?: string} = {};
 let options: AnimationOptions = {};
 let parent: Composite = new Composite();
